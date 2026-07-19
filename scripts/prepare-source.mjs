@@ -154,6 +154,7 @@ const sourceSummary = {
   noaaWaterLevelDatumFixed: true,
   auroraOutageFallbackFixed: true,
   gazetteCredentialRemoved: true,
+  productionIndexingPrepared: true,
   cloudflareBeaconCopiesRetained: 0,
 };
 await writeFile(path.join(root, "audit", "source-summary.json"), `${JSON.stringify(sourceSummary, null, 2)}\n`);

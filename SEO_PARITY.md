@@ -25,9 +25,9 @@ Baseline captured from `https://chrisizworski.com/` on 2026-07-19.
 
 ## Guardrails
 
-- The preview receives no custom domain and sends a temporary global `X-Robots-Tag: noindex, nofollow, noarchive` header.
+- Every `*.vercel.app` preview sends `X-Robots-Tag: noindex, nofollow, noarchive`; custom domains do not inherit that page-level block.
 - No canonical URL points to the preview hostname.
-- `npm run verify:production-ready` blocks cutover while the preview-only global `noindex` exists.
+- `npm run verify:production-ready` blocks cutover unless preview hosts remain `noindex`, custom domains remain indexable, APIs remain `noindex`, and global security headers remain intact.
 - The domain switch is blocked until automated and visual parity checks pass.
 - The old deployment remains available for immediate rollback.
 

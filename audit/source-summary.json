@@ -7,5 +7,6 @@
   "noaaWaterLevelDatumFixed": true,
   "auroraOutageFallbackFixed": true,
   "gazetteCredentialRemoved": true,
+  "productionIndexingPrepared": true,
   "cloudflareBeaconCopiesRetained": 0
 }

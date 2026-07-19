@@ -15,13 +15,13 @@ This site must be migrated as a controlled origin change, not as a redesign. The
 - Push this source to its own GitHub repository.
 - import that repository as a new Vercel preview project.
 - Do not attach `chrisizworski.com` or `www.chrisizworski.com` yet.
-- Keep the preview out of search results with its temporary global `X-Robots-Tag: noindex` response header and verify that header before sharing it.
+- Keep every `*.vercel.app` preview out of search results with a host-scoped `X-Robots-Tag: noindex` response header while leaving custom domains indexable.
 - Compare routes, response codes, titles, descriptions, canonicals, robots directives, structured data, sitemaps, images, internal links, APIs, layout, and mobile behavior against production.
 
 ## Stage 3: reversible cutover
 
 - Record the current Vercel project, deployment, domain assignments, and Cloudflare DNS values immediately before the switch.
-- Remove the preview-only global `X-Robots-Tag`, run `npm run verify:production-ready`, deploy that exact commit, and confirm that only the API paths remain `noindex`.
+- Run `npm run verify:production-ready`, deploy that exact commit, and confirm that Vercel preview hosts plus API paths remain `noindex` while the custom production host does not.
 - Promote the verified commit to production on the new Vercel project.
 - Move the two existing domains to that project without changing public URLs.
 - Purge only Cloudflare's cached HTML after the origin switch; retain normal image caching.
