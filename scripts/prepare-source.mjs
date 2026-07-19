@@ -105,6 +105,18 @@ circleTourPage = circleTourPage
   .replace("ft IGLD85 at Duluth", "ft above LWD at Duluth");
 await writeFile(circleTourPath, circleTourPage);
 
+const auroraPath = path.join(publicRoot, "northern-lights-michigan", "index.html");
+let auroraPage = await readFile(auroraPath, "utf8");
+if (!auroraPage.includes("NOAA Kp forecast unavailable")) {
+  const forecastBranch = "    if (kpRes.status === 'fulfilled') {";
+  if (!auroraPage.includes(forecastBranch)) throw new Error("Northern Lights NOAA forecast branch was not found");
+  auroraPage = auroraPage.replace(
+    forecastBranch,
+    "    if (kpRes.status !== 'fulfilled') throw new Error('NOAA Kp forecast unavailable');\n    \n" + forecastBranch,
+  );
+}
+await writeFile(auroraPath, auroraPage);
+
 const buoySnapshot = JSON.parse(await readFile(path.join(auditRoot, "snapshot", "api", "buoys.json"), "utf8"));
 await mkdir(path.join(root, "data"), { recursive: true });
 await writeFile(
@@ -124,6 +136,7 @@ const sourceSummary = {
   toolSchemaItems: 19,
   knownBrokenInternalLinksFixed: 3,
   noaaWaterLevelDatumFixed: true,
+  auroraOutageFallbackFixed: true,
   cloudflareBeaconCopiesRetained: 0,
 };
 await writeFile(path.join(root, "audit", "source-summary.json"), `${JSON.stringify(sourceSummary, null, 2)}\n`);

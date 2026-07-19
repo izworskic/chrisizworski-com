@@ -8,7 +8,13 @@ const root = path.resolve(import.meta.dirname, "..");
 const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
-const intentionalChanges = new Set(["/tools/", "/great-lakes-buoys/", "/lake-superior-circle-tour/", "/sitemap.xml"]);
+const intentionalChanges = new Set([
+  "/tools/",
+  "/great-lakes-buoys/",
+  "/lake-superior-circle-tour/",
+  "/northern-lights-michigan/",
+  "/sitemap.xml",
+]);
 
 function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
@@ -84,6 +90,11 @@ if (!circleTour.includes("datum=LWD") || !circleTour.includes("ft above LWD at D
   failures.push("Lake Superior Circle Tour is missing the valid NOAA LWD water-level datum");
 }
 if (circleTour.includes("datum=IGLD85")) failures.push("Lake Superior Circle Tour still requests NOAA's invalid IGLD85 datum");
+
+const aurora = await readFile(path.join(publicRoot, "northern-lights-michigan", "index.html"), "utf8");
+if (!aurora.includes("if (kpRes.status !== 'fulfilled') throw new Error('NOAA Kp forecast unavailable')")) {
+  failures.push("Northern Lights does not leave its loading state when the primary NOAA forecast is unavailable");
+}
 
 for (const forbidden of ["news-coverage", "prepared", "save-our-shoreline"]) {
   try {

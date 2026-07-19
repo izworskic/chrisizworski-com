@@ -18,6 +18,7 @@ Baseline captured from `https://chrisizworski.com/` on 2026-07-19.
 - Update only the Tools page modification date in its page schema and primary sitemap.
 - Correct three broken links on `/great-lakes-buoys/` and permanently redirect their obsolete targets to the existing destination pages.
 - Correct the Lake Superior Circle Tour's live NOAA water-level request to use station 9099064's supported LWD datum; the itinerary planner itself is unchanged.
+- Make the Northern Lights tool show its existing manual fallback instead of remaining on `loading` when NOAA's primary forecast feed is unreachable.
 - Remove duplicated copies of the Cloudflare Web Analytics script from saved source. Edge analytics can still be injected once by Cloudflare in production.
 - Replace the matchmaker's opaque deployment dependency with a deterministic, curated matcher that retains the same JSON fields and needs no secret.
 

@@ -10,3 +10,10 @@ test("Circle Tour requests NOAA water level with the station's supported datum",
   assert.ok(html.includes("ft above LWD at Duluth"));
   assert.ok(!html.includes("datum=IGLD85"));
 });
+
+test("Northern Lights falls back cleanly when the primary NOAA forecast is unavailable", () => {
+  const html = readFileSync(path.join(__dirname, "../public/northern-lights-michigan/index.html"), "utf8");
+  assert.ok(html.includes("if (kpRes.status !== 'fulfilled') throw new Error('NOAA Kp forecast unavailable')"));
+  assert.ok(html.includes("Live feed temporarily unavailable"));
+  assert.ok(html.includes("NOAA feed unavailable, see manual content below"));
+});

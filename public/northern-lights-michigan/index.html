@@ -695,6 +695,8 @@ async function loadAuroraData(){
       fetch(swUrl).then(r=>r.json()),
       fetch(kpCurrentUrl).then(r=>r.json())
     ]);
+
+    if (kpRes.status !== 'fulfilled') throw new Error('NOAA Kp forecast unavailable');
     
     if (kpRes.status === 'fulfilled') {
       const data = kpRes.value;
