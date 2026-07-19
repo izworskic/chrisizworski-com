@@ -1,0 +1,21 @@
+# ChrisIzworski.com source migration
+
+This repository is the staging area for converting the existing live site into a reproducible, GitHub-backed deployment without changing public URLs or search signals.
+
+The live-site audit is read-only:
+
+```bash
+node scripts/crawl-live.mjs
+```
+
+Production traffic must not be moved until the preview passes route, metadata, structured-data, redirect, asset, interaction, and visual parity checks.
+
+## Verification
+
+```bash
+npm run verify:all
+```
+
+The source verifier compares unchanged pages and assets with the clean live-site capture. The endpoint tests check the response contracts used by the buoy explorer and heirloom variety matchmaker.
+
+See [MIGRATION.md](MIGRATION.md) for the staged cutover and rollback procedure and [SEO_PARITY.md](SEO_PARITY.md) for the search-preservation record.
