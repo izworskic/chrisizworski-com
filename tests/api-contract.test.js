@@ -41,7 +41,23 @@ test("all dynamic endpoints retain their browser-facing JSON contracts", async (
     assert.equal(listResponse.statusCode, 200);
     assert.equal(listResponse.body.count, listResponse.body.stations.length);
     assert.ok(listResponse.body.stations.length > 100);
-    assert.equal(listResponse.body.stations.find((station) => station.id === "45001").wave_ht, 1);
+    const station = listResponse.body.stations.find((item) => item.id === "45001");
+    assert.equal(station.wave_ht, 1);
+    for (const field of ["id", "name", "lake", "lat", "lng", "obs_time", "wind_spd", "wave_ht", "water_t"]) {
+      assert.ok(Object.hasOwn(station, field), `station is missing ${field}`);
+    }
+
+    global.fetch = async () => {
+      throw new Error("simulated NOAA outage");
+    };
+    const fallbackResponse = responseRecorder();
+    await buoysHandler({ method: "GET" }, fallbackResponse);
+    assert.equal(fallbackResponse.statusCode, 200);
+    assert.equal(fallbackResponse.headers["x-data-fallback"], "snapshot");
+    assert.equal(fallbackResponse.body.count, fallbackResponse.body.stations.length);
+    assert.ok(fallbackResponse.body.stations.length > 100);
+
+    global.fetch = async () => new Response(history, { status: 200 });
 
     const detailResponse = responseRecorder();
     await buoyDetailHandler({ method: "GET", query: { id: "45001" } }, detailResponse);
