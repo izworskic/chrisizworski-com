@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Soo Locks Live Vessel Activity, Schedule, and Visitor Guide | Chris Izworski</title>
-<meta name="description" content="Live vessel activity at the Soo Locks in Sault Ste. Marie, Michigan. Real-time AIS map, current navigation season status, lock dimensions, the Poe lock replacement project, visitor information, and the freighters that transit between Lake Superior and the Lower Great Lakes.">
+<meta name="description" content="Live vessel activity at the Soo Locks in Sault Ste. Marie, Michigan. Direct AIS tracking links, current navigation season status, lock dimensions, the Poe lock replacement project, visitor information, and Great Lakes freighters.">
 <link rel="canonical" href="https://chrisizworski.com/soo-locks/">
 <meta property="og:title" content="Soo Locks Live Vessel Activity, Schedule, and Visitor Guide">
-<meta property="og:description" content="Live AIS map of vessels at the Soo Locks plus the visitor guide: lock dimensions, navigation season status, the Poe replacement project, and the freighters that pass between Lake Superior and the lower lakes.">
+<meta property="og:description" content="Live AIS vessel-tracking links for the Soo Locks plus navigation season status, lock dimensions, the Poe replacement project, and a complete visitor guide.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://chrisizworski.com/soo-locks/">
 <meta name="twitter:card" content="summary_large_image">
@@ -37,11 +37,11 @@
       "@type": "WebPage",
       "@id": "https://chrisizworski.com/soo-locks/",
       "name": "Soo Locks Live Vessel Activity and Visitor Guide",
-      "description": "Live AIS map, navigation season status, lock dimensions, and visitor information for the Soo Locks at Sault Ste. Marie, Michigan.",
+      "description": "Live AIS vessel-tracking links, navigation season status, lock dimensions, and visitor information for the Soo Locks at Sault Ste. Marie, Michigan.",
       "url": "https://chrisizworski.com/soo-locks/",
       "isPartOf": { "@id": "https://chrisizworski.com/#website" },
       "author": { "@id": "https://chrisizworski.com/#person" },
-      "dateModified": "2026-05-11",
+      "dateModified": "2026-07-19",
       "inLanguage": "en-US"
     },
     {
@@ -107,9 +107,17 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .status-progress-bar{background:#2c5f2d;height:100%;transition:width .4s}
 @media(max-width:540px){.status-panel{grid-template-columns:1fr}.status-icon{font-size:42px}}
 
-/* Map embed */
+/* Live vessel tracking handoff */
 .map-wrap{margin:20px 0 28px;border:1px solid #e0dbd2;border-radius:4px;overflow:hidden;background:#f4efe5}
-.map-wrap iframe{width:100%;height:480px;border:0;display:block}
+.live-map-panel{padding:28px;background:linear-gradient(135deg,#0d3545,#174f61);color:#dfe9f0}
+.live-map-kicker{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#8fd3e8;margin-bottom:6px}
+.live-map-panel h3{font-size:22px;font-weight:normal;color:#fff;margin-bottom:8px}
+.live-map-panel p{font-size:14px;color:#dfe9f0;margin-bottom:18px;max-width:680px}
+.live-map-actions{display:flex;flex-wrap:wrap;gap:10px}
+.live-map-button{display:inline-block;background:#fff;color:#0d3545;border:1px solid #fff;border-radius:3px;padding:10px 14px;font-size:13px;font-weight:bold;text-decoration:none}
+.live-map-button:hover{background:#e5f4f8;text-decoration:none}
+.live-map-button.secondary{background:transparent;color:#fff}
+.live-map-button.secondary:hover{background:rgba(255,255,255,.1)}
 .map-caption{font-size:12px;color:#888;padding:8px 14px;background:#f9f6ee;border-top:1px solid #e0dbd2}
 
 /* Stats */
@@ -149,7 +157,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .ext-list .desc{color:#666;font-size:13px;display:block;margin-top:2px}
 
 .footer{text-align:center;padding:24px;border-top:1px solid #e8e4dc;font-size:12px;color:#999;margin-top:48px}
-@media(max-width:640px){h1.page-title{font-size:26px}.body{padding:30px 16px 40px}h2.sh{font-size:18px}.map-wrap iframe{height:380px}}
+@media(max-width:640px){h1.page-title{font-size:26px}.body{padding:30px 16px 40px}h2.sh{font-size:18px}.live-map-panel{padding:22px 18px}.live-map-button{width:100%;text-align:center}}
 
 figure.fig{margin:22px 0 26px;border:1px solid #e0dbd2;background:#fff;border-radius:3px;overflow:hidden}
 figure.fig img{display:block;width:100%;height:auto}
@@ -180,7 +188,7 @@ figure.fig.hero{margin:6px 0 28px}
 
 <p>The Soo Locks at Sault Ste. Marie, Michigan are the busiest commercial lock system in the world by tonnage. Roughly 75 percent of all United States iron ore moves through here on its way from the Minnesota and Wisconsin head-of-lakes ports to the steel mills of Lower Lake Michigan, Lake Erie, and the Detroit River. The locks lift vessels 21 feet between Lake Superior and the lower Great Lakes, bypassing the rapids of the St. Marys River. The system is operated by the U.S. Army Corps of Engineers, Detroit District, and is open to the public during the navigation season.</p>
 
-<p>This page is a live tool. The status indicator above is calculated from the official Soo Locks operating calendar. The vessel map below shows real-time AIS positions of ships in the immediate lock area. Below the live data is the visitor guide: lock dimensions, the new Poe-replacement lock, how to watch a vessel transit, and what each ship category looks like when it comes through.</p>
+<p>This page is a live tool. The status indicator above is calculated from the official Soo Locks operating calendar. The vessel-tracking links below open real-time AIS views of ships in the immediate lock area. Below the live data is the visitor guide: lock dimensions, the new Poe-replacement lock, how to watch a vessel transit, and what each ship category looks like when it comes through.</p>
 
 <div class="status-panel" id="statusPanel">
   <div class="status-icon" id="statusIcon">🚢</div>
@@ -196,13 +204,22 @@ figure.fig.hero{margin:6px 0 28px}
 <p>Real-time AIS positions of vessels currently within the lock complex and the St. Marys River approach channels. Ships transiting downbound from Lake Superior approach from the upper right; upbound traffic from Lake Huron approaches from the lower right.</p>
 
 <div class="map-wrap">
-  <iframe src="https://www.marinetraffic.com/en/ais/embed/zoom:13/centery:46.5036/centerx:-84.36/maptype:4/shownames:false/mmsi:0/shipid:0/fleet:/fleet_id:/vtypes:/showmenu:false/remember:false" name="marinetraffic" scrolling="no" frameborder="0" loading="lazy" title="Soo Locks live AIS map"></iframe>
-  <div class="map-caption">Live AIS data via MarineTraffic. Click any vessel for ETA, destination, cargo, and recent track. Off-season: traffic drops to zero between mid-January and late March.</div>
+  <div class="live-map-panel">
+    <div class="live-map-kicker">Live Great Lakes AIS tracking</div>
+    <h3>Track vessels approaching the Soo Locks</h3>
+    <p>Open a live Great Lakes map or the Soo Locks passage list in a new tab. BoatNerd is built specifically for Great Lakes traffic; MarineTraffic provides a second worldwide AIS view. Off-season traffic drops to zero between mid-January and late March.</p>
+    <div class="live-map-actions">
+      <a class="live-map-button" href="https://ais.boatnerd.com/" target="_blank" rel="noopener">Open BoatNerd live map &#8599;</a>
+      <a class="live-map-button secondary" href="https://ais.boatnerd.com/passage/port/soo-locks" target="_blank" rel="noopener">Soo Locks passage list &#8599;</a>
+      <a class="live-map-button secondary" href="https://www.marinetraffic.com" target="_blank" rel="noopener">Open MarineTraffic &#8599;</a>
+    </div>
+  </div>
+  <div class="map-caption">These links replace an older embedded map that the provider no longer permits other sites to display.</div>
 </div>
 
 <div class="cta-card">
   <h3>Today's vessel detail</h3>
-  <p>For named vessel schedules and full lock transit listings, the daily <a href="https://gazette.chrisizworski.com">Great Lakes Gazette</a> publishes morning summaries during the navigation season. The Gazette tracks the same AIS feed shown above plus port reports across all five Great Lakes.</p>
+  <p>For named vessel schedules and full lock transit listings, the daily <a href="https://gazette.chrisizworski.com">Great Lakes Gazette</a> publishes morning summaries during the navigation season. The Gazette combines vessel reports with port data from across all five Great Lakes.</p>
 </div>
 
 <h2 class="sh">The Locks</h2>
@@ -309,7 +326,8 @@ figure.fig.hero{margin:6px 0 28px}
 
 <ul class="ext-list">
   <li><a href="https://www.lre.usace.army.mil/Missions/Recreation/Soo-Locks-Visitor-Center/" target="_blank" rel="noopener">USACE Soo Locks Visitor Center</a><span class="desc">Official site for visitor information, hours, and operational status</span></li>
-  <li><a href="https://www.marinetraffic.com" target="_blank" rel="noopener">MarineTraffic.com</a><span class="desc">Live AIS map source for the embed above; click any vessel for detail</span></li>
+  <li><a href="https://ais.boatnerd.com/" target="_blank" rel="noopener">BoatNerd AIS Map</a><span class="desc">Great Lakes-focused live vessel map and Soo Locks passage information</span></li>
+  <li><a href="https://www.marinetraffic.com" target="_blank" rel="noopener">MarineTraffic.com</a><span class="desc">Worldwide live AIS map; click any vessel for detail</span></li>
   <li><a href="https://www.boatnerd.com" target="_blank" rel="noopener">BoatNerd.com</a><span class="desc">Community-maintained Great Lakes vessel database and passage reports</span></li>
   <li><a href="https://gazette.chrisizworski.com" target="_blank" rel="noopener">Great Lakes Gazette</a><span class="desc">Daily maritime brief published from Bay City, Michigan</span></li>
   <li><a href="https://www.lre.usace.army.mil/Missions/Recreation/Soo-Locks-Visitor-Center/Soo-Locks-Schedule/" target="_blank" rel="noopener">Soo Locks Daily Schedule</a><span class="desc">Official daily vessel transit schedule from USACE</span></li>
@@ -349,7 +367,7 @@ figure.fig.hero{margin:6px 0 28px}
 </div>
 
 </div>
-<div class="footer">Bay City, Michigan &middot; Compiled by Chris Izworski &middot; Updated May 2026 &middot; <a href="/about/">About this site</a></div>
+<div class="footer">Bay City, Michigan &middot; Compiled by Chris Izworski &middot; Updated July 2026 &middot; <a href="/about/">About this site</a></div>
 <script>
 // Calculate live Soo Locks navigation season status
 (function(){

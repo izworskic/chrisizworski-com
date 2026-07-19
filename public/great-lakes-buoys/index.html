@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Great Lakes Buoy Dashboard: Live Wave Height, Wind, Water Temperature | Chris Izworski</title>
-<meta name="description" content="Live data from 115 NOAA buoys and coastal stations across all five Great Lakes. Wave height, wind speed, water temperature, air pressure on an interactive map. Activity filters for fishing, kayaking, swimming, sailing, diving. Built by Chris Izworski, Bay City Michigan.">
+<meta name="description" content="Live data from 100+ NOAA buoys and coastal stations across all five Great Lakes. Wave height, wind speed, water temperature, air pressure on an interactive map. Activity filters for fishing, kayaking, swimming, sailing, diving. Built by Chris Izworski, Bay City Michigan.">
 <link rel="canonical" href="https://chrisizworski.com/great-lakes-buoys/">
 <meta property="og:title" content="Great Lakes Buoy Dashboard: Live Wave, Wind, and Water Conditions">
-<meta property="og:description" content="Real-time data from 115 NOAA stations across Lakes Superior, Michigan, Huron, Erie, and Ontario. Interactive map, activity filters, geolocation-based recommendations.">
+<meta property="og:description" content="Real-time data from 100+ NOAA stations across Lakes Superior, Michigan, Huron, Erie, and Ontario. Interactive map, activity filters, geolocation-based recommendations.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://chrisizworski.com/great-lakes-buoys/">
 <meta property="og:site_name" content="Chris Izworski">
@@ -26,7 +26,7 @@
   "@graph": [
     {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},
     {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","givenName":"Chris","familyName":"Izworski","url":"https://chrisizworski.com/","sameAs":["https://www.wikidata.org/wiki/Q138283432","https://chrisizworski.com/","https://www.linkedin.com/in/chrisizworski"],"address":{"@type":"PostalAddress","addressLocality":"Bay City","addressRegion":"MI","addressCountry":"US"},"description":"Sales engineer at Prepared, former Bay County 911 Director (2013-2022) and Saginaw County 911 Executive Director (2022-2025), board member of Save Our Shoreline, lifelong Great Lakes researcher and writer based in Bay City, Michigan."},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/great-lakes-buoys/","name":"Great Lakes Buoy Dashboard","description":"Live data from 115 NOAA buoys across the Great Lakes with interactive map and activity-based viewing recommendations.","url":"https://chrisizworski.com/great-lakes-buoys/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-05-11","inLanguage":"en-US","mainContentOfPage":{"@type":"WebPageElement","cssSelector":"#buoyMap"}},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/great-lakes-buoys/","name":"Great Lakes Buoy Dashboard","description":"Live data from more than 100 NOAA buoys and coastal stations across the Great Lakes with an interactive map and activity-based viewing recommendations.","url":"https://chrisizworski.com/great-lakes-buoys/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-07-19","inLanguage":"en-US","mainContentOfPage":{"@type":"WebPageElement","cssSelector":"#buoyMap"}},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Great Lakes Buoys","item":"https://chrisizworski.com/great-lakes-buoys/"}]}
   ]
 }
@@ -220,14 +220,14 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 <div class="live-strip" id="liveStrip">
   <span class="live-dot" aria-hidden="true">&#9679;</span>
   <span class="live-label">Great Lakes Buoy Dashboard</span>
-  <span class="live-status" id="liveStatus">loading 115 stations...</span>
+  <span class="live-status" id="liveStatus">loading current stations...</span>
   <span class="refresh-info" id="refreshInfo"></span>
 </div>
 <div class="body">
 <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/tools/">Tools</a> &rsaquo; Great Lakes Buoy Dashboard</div>
 
 <h1 class="page-title">Great Lakes Buoy Dashboard</h1>
-<p class="sub">Live wave height, wind, and water temperature from 115 NOAA stations across Lakes Superior, Michigan, Huron, Erie, and Ontario</p>
+<p class="sub">Live wave height, wind, and water temperature from 100+ NOAA stations across Lakes Superior, Michigan, Huron, Erie, and Ontario</p>
 
 <div class="byline">
   <a href="/about/" aria-label="About Chris Izworski"><div class="byline-avatar">CI</div></a>
@@ -236,7 +236,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
   </div>
 </div>
 
-<p>This dashboard pulls real-time observations from the 115 active National Data Buoy Center (NDBC) stations across the Great Lakes basin: 25 open-water buoys, 87 coastal CMAN stations, and a handful of lighthouse and harbor sensors. Wave height, wind speed and gusts, water temperature, air temperature, and barometric pressure where each station reports them. The map below renders all of them at once. Tap any buoy on the map to open a detail view with current conditions and a 5-day history of wave height, wind speed, water temperature, air temperature, and pressure. Use the activity filter to color-code stations by safety thresholds for your specific Lake activity.</p>
+<p>This dashboard pulls real-time observations from more than 100 National Data Buoy Center (NDBC) buoys and coastal stations across the Great Lakes basin. The reporting total changes as stations are added, serviced, or seasonally retrieved. Wave height, wind speed and gusts, water temperature, air temperature, and barometric pressure appear wherever each station reports them. The map below renders the current set at once. Tap any buoy on the map to open a detail view with current conditions and a 5-day history of wave height, wind speed, water temperature, air temperature, and pressure. Use the activity filter to color-code stations by safety thresholds for your specific lake activity.</p>
 
 <p>I built this because I could not find a single tool that shows all Great Lakes buoys on one map with multi-parameter filtering. The official NDBC maps are clunky, the lake-by-lake aggregators miss CMAN stations, and the marine weather apps do not let you filter by activity. This is the tool I wanted as a Saginaw Bay sailor, ice fisherman, and freighter watcher. Operationally, the page hits a serverless function I run on this domain that fetches NDBC every ten minutes server-side and aggregates the result, so the page loads with a single request regardless of how many buoys are reporting.</p>
 
@@ -278,7 +278,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 
 <div class="geo-tool">
   <h3>Find the buoys nearest to you</h3>
-  <p>Share your location to get a distance-ranked list of all 115 stations. Useful for finding the closest reliable wave-height reading before a fishing trip, a paddle, or a launch.</p>
+  <p>Share your location to get a distance-ranked list of all currently reporting stations. Useful for finding the closest reliable wave-height reading before a fishing trip, a paddle, or a launch.</p>
   <button class="geo-btn" id="geoBtn">Use my location</button>
   <div class="geo-result" id="geoResult">
     <h4 id="geoResultTitle">Nearest stations</h4>
@@ -286,7 +286,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
   </div>
 </div>
 
-<h2 class="sh">All 115 Stations</h2>
+<h2 class="sh">All Reporting Great Lakes Stations</h2>
 <div class="station-table-wrap">
   <div class="station-table-controls">
     <div class="stc-count"><strong id="stcCount">--</strong> stations shown</div>
@@ -318,7 +318,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 <p><strong>Diving:</strong> Waves under 3 feet. Visibility is the real diving constraint, and NDBC stations do not report visibility data consistently. Use the wave threshold as a proxy for surface conditions and check local dive shops for actual visibility.</p>
 
 <h2 class="sh">Data and Coverage</h2>
-<p>The 115 stations include the 25 open-water Great Lakes NDBC buoys (45001 through 45216), 87 CMAN coastal stations on harbors and lighthouses, and approximately 3 lighthouse-adjacent specialty stations. The 45xxx open-water buoys are typically retrieved each year between November and December for winter maintenance and redeployed in late March or April. During the winter months, the map will show roughly 80 to 90 coastal stations as the active reporting set. The 45xxx buoys are the only Great Lakes stations that consistently report wave height.</p>
+<p>The station catalog combines open-water Great Lakes NDBC buoys with coastal CMAN stations on harbors, lighthouses, breakwaters, and shore-based towers across all five lakes. Reporting totals change as stations come online, go into maintenance, or are seasonally retrieved. The 45xxx open-water buoys are typically removed between November and December for winter maintenance and redeployed after ice clears in spring. Those open-water buoys are the Great Lakes stations most likely to report wave height consistently.</p>
 
 <p>The data feeds directly from NOAA NDBC at <a href="https://www.ndbc.noaa.gov" target="_blank" rel="noopener">ndbc.noaa.gov</a>. Refresh interval is 10 minutes server-side, observed values are typically 5 to 30 minutes old at the source. Wave height is in meters at the source and converted to feet for display. Wind is in meters per second at the source and converted to knots. Water temperature is in Celsius at the source and converted to Fahrenheit for display. Pressure is in hectopascals (same as millibars).</p>
 
@@ -716,7 +716,7 @@ async function init() {
   if (!data || !data.stations) {
     try {
       data = JSON.parse(document.getElementById('snapshotData').textContent);
-      document.getElementById('liveStatus').textContent = '115 stations (snapshot, API offline)';
+      document.getElementById('liveStatus').textContent = 'Snapshot data loaded; live API offline';
     } catch {
       document.getElementById('liveStatus').textContent = 'Data unavailable';
       return;

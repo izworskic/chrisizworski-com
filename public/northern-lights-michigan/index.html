@@ -24,7 +24,7 @@
   "@graph": [
     {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski"},
     {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/northern-lights-michigan/","name":"Northern Lights Michigan: Live Aurora Forecast and Interactive Viewing Tool","description":"Live NOAA Kp forecast, solar wind data, and the interactive viewing-location map for Michigan and the Upper Peninsula.","url":"https://chrisizworski.com/northern-lights-michigan/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-05-11","inLanguage":"en-US"},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/northern-lights-michigan/","name":"Northern Lights Michigan: Live Aurora Forecast and Interactive Viewing Tool","description":"Live NOAA Kp forecast, solar wind data, and the interactive viewing-location map for Michigan and the Upper Peninsula.","url":"https://chrisizworski.com/northern-lights-michigan/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-07-19","inLanguage":"en-US"},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Northern Lights Michigan","item":"https://chrisizworski.com/northern-lights-michigan/"}]}
   ]
 }
@@ -461,7 +461,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 </div>
 
 </div>
-<div class="footer">Bay City, Michigan &middot; Compiled by Chris Izworski &middot; Updated May 2026 &middot; <a href="/about/">About this site</a></div>
+<div class="footer">Bay City, Michigan &middot; Compiled by Chris Izworski &middot; Updated July 2026 &middot; <a href="/about/">About this site</a></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
@@ -533,7 +533,7 @@ function drawForecast(rows){
   const display = rows.slice(0,24);
   const barW = innerW / display.length;
   display.forEach((row,i)=>{
-    const t = new Date(row[0]+'Z');
+      const t = parseNoaaTime(row[0]);
     const kp = parseFloat(row[1]);
     const h = (kp/9)*innerH;
     const x = PAD_L + i*barW + 1;
@@ -682,6 +682,38 @@ function highlightKpStep(kp){
   if (target) target.classList.add('current');
 }
 
+// === NOAA response helpers ===
+// SWPC serves some products as header-plus-array rows and others as objects.
+// Normalizing both shapes keeps the live cards working when a product changes format.
+function normalizeNoaaRows(data, columns){
+  if (!Array.isArray(data)) return [];
+  const rows = data.filter(Boolean).map(row=>{
+    if (Array.isArray(row)) return row;
+    if (typeof row !== 'object') return [];
+    return columns.map(names=>{
+      for (const name of names){
+        if (row[name] !== undefined && row[name] !== null) return row[name];
+      }
+      return null;
+    });
+  });
+  return rows.filter(row=>String(row[0]||'').toLowerCase() !== 'time_tag');
+}
+
+function parseNoaaTime(value){
+  const text = String(value||'');
+  const hasZone = /(?:z|[+-]\d\d:?\d\d)$/i.test(text);
+  return new Date(hasZone ? text : text+'Z');
+}
+
+function markSpaceWeatherUnavailable(id){
+  const card = document.getElementById(id);
+  if (!card) return;
+  card.className = 'sw-card';
+  card.querySelector('.sw-val').textContent = '--';
+  card.querySelector('.sw-status').textContent = 'temporarily unavailable';
+}
+
 // === Main data fetch ===
 async function loadAuroraData(){
   const kpUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index-forecast.json';
@@ -700,19 +732,23 @@ async function loadAuroraData(){
     
     if (kpRes.status === 'fulfilled') {
       const data = kpRes.value;
-      const rows = data.slice(1);
-      const now = new Date();
-      const next24 = rows.filter(row=>{
-        const t = new Date(row[0]+'Z');
-        const hrs = (t-now)/3600000;
-        return hrs > -3 && hrs < 30;
+      const rows = normalizeNoaaRows(data, [['time_tag'],['kp','Kp']]).filter(row=>{
+        return Number.isFinite(parseFloat(row[1])) && !Number.isNaN(parseNoaaTime(row[0]).getTime());
       });
+      const now = new Date();
+      const next72 = rows.filter(row=>{
+        const t = parseNoaaTime(row[0]);
+        const hrs = (t-now)/3600000;
+        return hrs > -3 && hrs < 78;
+      });
+      const next24 = next72.filter(row=>((parseNoaaTime(row[0])-now)/3600000) < 30);
+      if (!next24.length) throw new Error('NOAA Kp forecast contains no current rows');
       const max24 = next24.reduce((m,r)=>Math.max(m, parseFloat(r[1])), 0);
-      const max72 = rows.slice(0,24).reduce((m,r)=>Math.max(m, parseFloat(r[1])), 0);
+      const max72 = next72.reduce((m,r)=>Math.max(m, parseFloat(r[1])), max24);
       
       currentKp = max24;
       updateGauge(max24);
-      drawForecast(rows);
+      drawForecast(next72);
       highlightKpStep(max24);
       updateSmartCta(max24);
       checkAndNotify(max24);
@@ -765,8 +801,8 @@ async function loadAuroraData(){
     if (swRes.status === 'fulfilled') {
       const sw = swRes.value;
       // Header row + data rows. Columns vary; bz_gsm is typically index 3 for mag-1-day
-      const swRows = sw.slice(1);
-      const recent = swRows.slice(-1)[0];
+      const swRows = normalizeNoaaRows(sw, [['time_tag'],['bx_gsm'],['by_gsm'],['bz_gsm'],['lon_gsm'],['lat_gsm'],['bt']]);
+      const recent = swRows.filter(row=>Number.isFinite(parseFloat(row[3]))).slice(-1)[0];
       if (recent) {
         // Schema: [time_tag, bx_gsm, by_gsm, bz_gsm, lon_gsm, lat_gsm, bt]
         const bz = parseFloat(recent[3]);
@@ -780,28 +816,28 @@ async function loadAuroraData(){
         else { bzStatus = 'Northward · unfavorable'; bzClass=''; }
         bzCard.className = 'sw-card ' + bzClass;
         bzCard.querySelector('.sw-status').textContent = bzStatus;
-      }
-    }
+      } else markSpaceWeatherUnavailable('swBz');
+    } else markSpaceWeatherUnavailable('swBz');
     
     if (kpCurRes.status === 'fulfilled') {
       const kpCur = kpCurRes.value;
       // Schema: [time_tag, kp, a_running, station_count]
-      const curRows = kpCur.slice(1);
-      const latestKp = curRows.slice(-1)[0];
+      const curRows = normalizeNoaaRows(kpCur, [['time_tag'],['Kp','kp'],['a_running'],['station_count']]);
+      const latestKp = curRows.filter(row=>Number.isFinite(parseFloat(row[1]))).slice(-1)[0];
       if (latestKp) {
         const nowKp = parseFloat(latestKp[1]);
         const curCard = document.getElementById('swKpNow');
         curCard.querySelector('.sw-val').textContent = nowKp.toFixed(1);
         curCard.querySelector('.sw-status').textContent = KP_STATUS[kpClass(nowKp)];
         if (nowKp >= 5) curCard.classList.add('alert');
-      }
-    }
+      } else markSpaceWeatherUnavailable('swKpNow');
+    } else markSpaceWeatherUnavailable('swKpNow');
     
     // Solar wind speed from plasma feed (separate call, optional)
     try {
       const plasma = await fetch('https://services.swpc.noaa.gov/products/solar-wind/plasma-1-day.json').then(r=>r.json());
-      const plasmaRows = plasma.slice(1);
-      const recent = plasmaRows.slice(-1)[0];
+      const plasmaRows = normalizeNoaaRows(plasma, [['time_tag'],['density'],['speed'],['temperature']]);
+      const recent = plasmaRows.filter(row=>Number.isFinite(parseFloat(row[2]))).slice(-1)[0];
       if (recent) {
         // Schema: [time_tag, density, speed, temperature]
         const speed = parseFloat(recent[2]);
@@ -812,12 +848,13 @@ async function loadAuroraData(){
         else if (speed > 450) speedStatus = 'Elevated';
         else speedStatus = 'Nominal';
         speedCard.querySelector('.sw-status').textContent = speedStatus;
-      }
-    } catch(e){/* optional */}
+      } else markSpaceWeatherUnavailable('swSpeed');
+    } catch(e){markSpaceWeatherUnavailable('swSpeed');}
     
     document.getElementById('refreshInfo').textContent = '· updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
     
   } catch (e) {
+    ['swBz','swSpeed','swKpNow','swKpPeak'].forEach(markSpaceWeatherUnavailable);
     document.getElementById('liveStatus').textContent = 'NOAA feed unavailable, see manual content below';
     document.getElementById('tonightHeadline').textContent = 'Live feed temporarily unavailable';
     document.getElementById('tonightDetail').innerHTML = 'Could not reach NOAA SWPC. Visit <a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener" style="color:#7bc8e8">noaa.gov/aurora-forecast</a> directly. The viewing guide and map below remain accurate.';

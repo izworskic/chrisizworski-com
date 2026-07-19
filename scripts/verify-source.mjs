@@ -9,11 +9,15 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  "/",
   "/tools/",
+  "/great-lakes/",
+  "/guides/",
   "/great-lakes-buoys/",
   "/great-lakes-gazette/",
   "/lake-superior-circle-tour/",
   "/northern-lights-michigan/",
+  "/soo-locks/",
   "/projects/",
   "/sitemap.xml",
 ]);
@@ -96,6 +100,28 @@ if (circleTour.includes("datum=IGLD85")) failures.push("Lake Superior Circle Tou
 const aurora = await readFile(path.join(publicRoot, "northern-lights-michigan", "index.html"), "utf8");
 if (!aurora.includes("if (kpRes.status !== 'fulfilled') throw new Error('NOAA Kp forecast unavailable')")) {
   failures.push("Northern Lights does not leave its loading state when the primary NOAA forecast is unavailable");
+}
+if (!aurora.includes("normalizeNoaaRows") || !aurora.includes("['kp','Kp']") || aurora.includes("const max72 = rows.slice(0,24)")) {
+  failures.push("Northern Lights does not support NOAA's current object response or current 72-hour forecast window");
+}
+if (!aurora.includes("temporarily unavailable")) {
+  failures.push("Northern Lights can leave optional solar-wind cards stuck in a loading state");
+}
+
+const buoys = await readFile(path.join(publicRoot, "great-lakes-buoys", "index.html"), "utf8");
+if (/115 NOAA|All 115 Stations|all 115 stations/i.test(buoys)) {
+  failures.push("Great Lakes Buoy Dashboard still publishes the stale 115-station claim");
+}
+if (!buoys.includes("All Reporting Great Lakes Stations")) {
+  failures.push("Great Lakes Buoy Dashboard is missing its count-safe reporting-stations heading");
+}
+
+const sooLocks = await readFile(path.join(publicRoot, "soo-locks", "index.html"), "utf8");
+if (/<iframe[^>]+marinetraffic/i.test(sooLocks)) {
+  failures.push("Soo Locks still contains the refused MarineTraffic iframe");
+}
+if (!sooLocks.includes("https://ais.boatnerd.com/passage/port/soo-locks")) {
+  failures.push("Soo Locks is missing the verified BoatNerd passage-list fallback");
 }
 
 const gazette = await readFile(path.join(publicRoot, "great-lakes-gazette", "index.html"), "utf8");
