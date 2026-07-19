@@ -4,5 +4,6 @@
   "toolAdded": true,
   "toolSchemaItems": 19,
   "knownBrokenInternalLinksFixed": 3,
+  "noaaWaterLevelDatumFixed": true,
   "cloudflareBeaconCopiesRetained": 0
 }

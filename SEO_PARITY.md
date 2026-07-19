@@ -17,6 +17,7 @@ Baseline captured from `https://chrisizworski.com/` on 2026-07-19.
 - Add `Michigan Outdoors Now` to `/tools/` as item 15 of 19, with visible `Built by Chris Izworski` attribution and matching structured data.
 - Update only the Tools page modification date in its page schema and primary sitemap.
 - Correct three broken links on `/great-lakes-buoys/` and permanently redirect their obsolete targets to the existing destination pages.
+- Correct the Lake Superior Circle Tour's live NOAA water-level request to use station 9099064's supported LWD datum; the itinerary planner itself is unchanged.
 - Remove duplicated copies of the Cloudflare Web Analytics script from saved source. Edge analytics can still be injected once by Cloudflare in production.
 - Replace the matchmaker's opaque deployment dependency with a deterministic, curated matcher that retains the same JSON fields and needs no secret.
 

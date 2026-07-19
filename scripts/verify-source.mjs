@@ -8,7 +8,7 @@ const root = path.resolve(import.meta.dirname, "..");
 const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
-const intentionalChanges = new Set(["/tools/", "/great-lakes-buoys/", "/sitemap.xml"]);
+const intentionalChanges = new Set(["/tools/", "/great-lakes-buoys/", "/lake-superior-circle-tour/", "/sitemap.xml"]);
 
 function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
@@ -78,6 +78,12 @@ const sitemap = await readFile(path.join(publicRoot, "sitemap.xml"), "utf8");
 if (!/<loc>https:\/\/chrisizworski\.com\/tools\/<\/loc>\s*<lastmod>2026-07-19<\/lastmod>/.test(sitemap)) {
   failures.push("Tools sitemap last-modified date was not updated");
 }
+
+const circleTour = await readFile(path.join(publicRoot, "lake-superior-circle-tour", "index.html"), "utf8");
+if (!circleTour.includes("datum=LWD") || !circleTour.includes("ft above LWD at Duluth")) {
+  failures.push("Lake Superior Circle Tour is missing the valid NOAA LWD water-level datum");
+}
+if (circleTour.includes("datum=IGLD85")) failures.push("Lake Superior Circle Tour still requests NOAA's invalid IGLD85 datum");
 
 for (const forbidden of ["news-coverage", "prepared", "save-our-shoreline"]) {
   try {

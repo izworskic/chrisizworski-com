@@ -1073,13 +1073,13 @@ document.getElementById('clearTrip').addEventListener('click',()=>{
 // Live Lake Superior water level from NOAA T&C (Duluth station 9099064)
 (async function loadLiveLevel(){
   try{
-    const url='https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?date=latest&station=9099064&product=water_level&datum=IGLD85&time_zone=lst&units=english&format=json';
+    const url='https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?date=latest&station=9099064&product=water_level&datum=LWD&time_zone=lst&units=english&format=json';
     const r=await fetch(url);
     const d=await r.json();
     if(d && d.data && d.data[0] && d.data[0].v){
       const v=parseFloat(d.data[0].v).toFixed(2);
       const t=(d.data[0].t||'').split(' ')[0];
-      document.getElementById('liveData').textContent = v+' ft IGLD85 at Duluth · '+t;
+      document.getElementById('liveData').textContent = v+' ft above LWD at Duluth · '+t;
     } else { throw new Error('no data'); }
   }catch(e){
     const el=document.getElementById('liveData');

@@ -98,6 +98,13 @@ buoyPage = buoyPage
   .replaceAll('href="/news-coverage/"', 'href="/chris-izworski-news-coverage/"');
 await writeFile(buoyPagePath, buoyPage);
 
+const circleTourPath = path.join(publicRoot, "lake-superior-circle-tour", "index.html");
+let circleTourPage = await readFile(circleTourPath, "utf8");
+circleTourPage = circleTourPage
+  .replace("datum=IGLD85", "datum=LWD")
+  .replace("ft IGLD85 at Duluth", "ft above LWD at Duluth");
+await writeFile(circleTourPath, circleTourPage);
+
 const buoySnapshot = JSON.parse(await readFile(path.join(auditRoot, "snapshot", "api", "buoys.json"), "utf8"));
 await mkdir(path.join(root, "data"), { recursive: true });
 await writeFile(
@@ -116,6 +123,7 @@ const sourceSummary = {
   toolAdded: toolsHtml.includes(toolUrl),
   toolSchemaItems: 19,
   knownBrokenInternalLinksFixed: 3,
+  noaaWaterLevelDatumFixed: true,
   cloudflareBeaconCopiesRetained: 0,
 };
 await writeFile(path.join(root, "audit", "source-summary.json"), `${JSON.stringify(sourceSummary, null, 2)}\n`);
