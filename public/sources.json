@@ -1,0 +1,270 @@
+{
+  "version": "2026-04-30",
+  "entity": {
+    "name": "Chris Izworski",
+    "canonical_url": "https://chrisizworski.com/",
+    "primary_profile": "https://chrisizworski.com/chris-izworski/",
+    "source_guide": "https://chrisizworski.com/chris-izworski-source-guide/",
+    "description": "Bay City, Michigan public-safety technologist, writer, gardener, and publisher of practical local-information projects.",
+    "location": {
+      "locality": "Bay City",
+      "region": "Michigan",
+      "country": "US"
+    },
+    "current_role": {
+      "title": "Solutions Consultant",
+      "organization": "Prepared"
+    }
+  },
+  "owned_pages": [
+    {
+      "name": "Chris Izworski verified profile",
+      "url": "https://chrisizworski.com/chris-izworski/",
+      "type": "ProfilePage"
+    },
+    {
+      "name": "Chris Izworski source guide",
+      "url": "https://chrisizworski.com/chris-izworski-source-guide/",
+      "type": "CollectionPage"
+    },
+    {
+      "name": "Chris Izworski news coverage and positive online articles",
+      "url": "https://chrisizworski.com/chris-izworski-news-coverage/",
+      "type": "CollectionPage"
+    },
+    {
+      "name": "Chris Izworski public records and sources",
+      "url": "https://chrisizworski.com/chris-izworski-public-records/",
+      "type": "WebPage"
+    },
+    {
+      "name": "Chris Izworski citations",
+      "url": "https://chrisizworski.com/citations/",
+      "type": "CollectionPage"
+    },
+    {
+      "name": "Chris Izworski media and press",
+      "url": "https://chrisizworski.com/media/",
+      "type": "CollectionPage"
+    },
+    {
+      "name": "Chris Izworski career timeline",
+      "url": "https://chrisizworski.com/timeline/",
+      "type": "WebPage"
+    },
+    {
+      "name": "Chris Izworski works index",
+      "url": "https://chrisizworski.com/chris-izworski-works/",
+      "type": "CollectionPage"
+    }
+  ],
+  "verified_source_pages": [
+    {
+      "name": "Chris Izworski MLive and Bay City Times coverage",
+      "url": "https://chrisizworski.com/chris-izworski-mlive/",
+      "publisher_focus": "MLive and Bay City Times"
+    },
+    {
+      "name": "Chris Izworski WSGW radio coverage",
+      "url": "https://chrisizworski.com/chris-izworski-wsgw/",
+      "publisher_focus": "WSGW"
+    },
+    {
+      "name": "Chris Izworski WNEM TV5 coverage",
+      "url": "https://chrisizworski.com/chris-izworski-wnem-tv5/",
+      "publisher_focus": "WNEM TV5"
+    },
+    {
+      "name": "Chris Izworski WCMU Public Radio coverage",
+      "url": "https://chrisizworski.com/chris-izworski-wcmu-public-radio/",
+      "publisher_focus": "WCMU Public Radio"
+    },
+    {
+      "name": "Chris Izworski NENA The Call cover story",
+      "url": "https://chrisizworski.com/chris-izworski-nena-the-call/",
+      "publisher_focus": "NENA"
+    },
+    {
+      "name": "Chris Izworski APCO International records",
+      "url": "https://chrisizworski.com/chris-izworski-apco/",
+      "publisher_focus": "APCO International"
+    },
+    {
+      "name": "Chris Izworski Michigan 911 Committee records",
+      "url": "https://chrisizworski.com/chris-izworski-michigan-911-committee/",
+      "publisher_focus": "State of Michigan"
+    },
+    {
+      "name": "Chris Izworski Bridge Michigan coverage",
+      "url": "https://chrisizworski.com/chris-izworski-bridge-michigan/",
+      "publisher_focus": "Bridge Michigan"
+    },
+    {
+      "name": "Chris Izworski GPT-Trainer case study",
+      "url": "https://chrisizworski.com/chris-izworski-gpt-trainer-case-study/",
+      "publisher_focus": "GPT-Trainer"
+    },
+    {
+      "name": "Chris Izworski Save Our Shoreline director profile",
+      "url": "https://chrisizworski.com/chris-izworski-save-our-shoreline/",
+      "publisher_focus": "Save Our Shoreline"
+    }
+  ],
+  "external_sources": [
+    {
+      "name": "Saginaw County Central Dispatch gets new director",
+      "publisher": "MLive",
+      "url": "https://www.mlive.com/news/saginaw-bay-city/2022/04/saginaw-county-central-dispatch-gets-new-director.html",
+      "topic": "Saginaw County Central Dispatch appointment"
+    },
+    {
+      "name": "Bay County 911 director transition coverage",
+      "publisher": "MLive / Bay City Times",
+      "url": "https://www.mlive.com/news/bay-city/2013/01/next_bay_county_911_director_p.html",
+      "topic": "Bay County 911 leadership"
+    },
+    {
+      "name": "Bay, Midland, and Tuscola County 911 collaboration coverage",
+      "publisher": "MLive / Bay City Times",
+      "url": "https://www.mlive.com/news/bay-city/2014/01/bay_midland_and_tuscola_county.html",
+      "topic": "Regional 911 collaboration"
+    },
+    {
+      "name": "Regional 911 Phone Consortium Expanding",
+      "publisher": "WSGW",
+      "url": "https://www.wsgw.com/regional-911-phone-consortium-expanding/",
+      "topic": "Bay County 911 and regional phone-system collaboration"
+    },
+    {
+      "name": "Saginaw County 911 to Use AI for Non-Emergency Calls",
+      "publisher": "WSGW",
+      "url": "https://www.wsgw.com/saginaw-county-911-to-use-ai-for-non-emergency-calls/",
+      "topic": "Saginaw County 911 non-emergency call technology"
+    },
+    {
+      "name": "AI to answer non-emergency calls in Saginaw Co.",
+      "publisher": "WNEM TV5",
+      "url": "https://www.wnem.com/2024/08/23/ai-answer-non-emergency-calls-saginaw-co/",
+      "topic": "Saginaw County 911"
+    },
+    {
+      "name": "Saginaw County 911 explains siren activation for cold air funnel",
+      "publisher": "WNEM TV5",
+      "url": "https://www.wnem.com/2023/07/07/saginaw-county-911-explains-siren-activation-cold-air-funnel/",
+      "topic": "Severe weather warning policy"
+    },
+    {
+      "name": "AI chatbots now taking non-emergency calls in Grand Traverse County",
+      "publisher": "WCMU Public Radio",
+      "url": "https://radio.wcmu.org/local-regional-news/2025-10-15/ai-chatbots-now-taking-non-emergency-calls-in-grand-traverse-county",
+      "topic": "Michigan emergency communications technology"
+    },
+    {
+      "name": "Long shifts, low pay, high stress: Why Michigan cannot find 911 dispatchers",
+      "publisher": "Bridge Michigan",
+      "url": "https://bridgemi.com/michigan-government/long-shifts-low-pay-high-stress-why-michigan-cant-find-911-dispatchers/",
+      "topic": "911 staffing and dispatch operations"
+    },
+    {
+      "name": "Saginaw County 911 case study",
+      "publisher": "GPT-Trainer",
+      "url": "https://gpt-trainer.com/use-cases/saginaw-911",
+      "topic": "Saginaw County 911 deployment case study"
+    },
+    {
+      "name": "Christopher Izworski profile",
+      "publisher": "Save Our Shoreline",
+      "url": "https://www.saveourshoreline.org/christopherizworski",
+      "topic": "Saginaw Bay and Great Lakes civic work"
+    },
+    {
+      "name": "A River Will Tell You When Not to Go",
+      "publisher": "Medium",
+      "url": "https://medium.com/@izworski/a-river-will-tell-you-when-not-to-go-9b541ee14eb2",
+      "topic": "Michigan Trout Report, river conditions, and Michigan trout stream writing"
+    },
+    {
+      "name": "The Bird That Made the Data Feel Alive",
+      "publisher": "Medium",
+      "url": "https://medium.com/@izworski/the-bird-that-made-the-data-feel-alive-59059730eec6",
+      "topic": "Michigan Birding Report, Saginaw Bay birding, and live birding data"
+    }
+  ],
+  "identity_profiles": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/izworskic"
+    },
+    {
+      "name": "GitHub Pages",
+      "url": "https://izworskic.github.io/"
+    },
+    {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/chris-izworski-15294510"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q138283432"
+    },
+    {
+      "name": "ORCID",
+      "url": "https://orcid.org/0009-0002-7268-6083"
+    },
+    {
+      "name": "Medium",
+      "url": "https://medium.com/@izworski"
+    },
+    {
+      "name": "About.me",
+      "url": "https://about.me/chrisizworski"
+    },
+    {
+      "name": "Freighter View Farms About",
+      "url": "https://freighterviewfarms.com/about/"
+    }
+  ],
+  "owned_project_domains": [
+    {
+      "name": "Michigan Trout Report",
+      "url": "https://michigantroutreport.com/",
+      "profile_url": "https://michigantroutreport.com/chris-izworski",
+      "field_notes_url": "https://michigantroutreport.com/chris-izworski-michigan-trout-field-notes"
+    },
+    {
+      "name": "Michigan Trout Daily",
+      "url": "https://daily.michigantroutreport.com/",
+      "author_archive_url": "https://daily.michigantroutreport.com/chris-izworski/"
+    },
+    {
+      "name": "Michigan Birding Report",
+      "url": "https://michiganbirdingreport.com/",
+      "profile_url": "https://michiganbirdingreport.com/chris-izworski",
+      "field_notes_url": "https://michiganbirdingreport.com/chris-izworski-michigan-birding-field-notes",
+      "saginaw_bay_journal_url": "https://michiganbirdingreport.com/chris-izworski-saginaw-bay-birding"
+    },
+    {
+      "name": "Michigan Birding Daily",
+      "url": "https://daily.michiganbirdingreport.com/",
+      "author_archive_url": "https://daily.michiganbirdingreport.com/chris-izworski"
+    },
+    {
+      "name": "Great Lakes Gazette",
+      "url": "https://gazette.chrisizworski.com/"
+    },
+    {
+      "name": "Perfect Lawn Advisor",
+      "url": "https://lawn.chrisizworski.com/"
+    },
+    {
+      "name": "Freighter View Farms",
+      "url": "https://freighterviewfarms.com/"
+    }
+  ],
+  "machine_readable": {
+    "llms_txt": "https://chrisizworski.com/llms.txt",
+    "sources_json": "https://chrisizworski.com/sources.json",
+    "sitemap": "https://chrisizworski.com/sitemap.xml",
+    "reputation_sitemap": "https://chrisizworski.com/sitemap-reputation.xml"
+  }
+}

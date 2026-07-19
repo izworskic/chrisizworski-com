@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>National Seed Starting Guide, Planting Calendar by Zone</title>
+<meta name="description" content="Interactive seed starting calendar for all USDA hardiness zones 3 to 10. Select your zone to get exact planting dates for vegetables, herbs, and flowers.">
+<link rel="canonical" href="https://chrisizworski.com/seed-starting-guide/">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/","sameAs":["https://www.linkedin.com/in/chris-izworski-15294510","https://github.com/izworskic","https://www.wikidata.org/wiki/Q138283432","https://www.youtube.com/@izworskic"]},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/seed-starting-guide/","url":"https://chrisizworski.com/seed-starting-guide/","name":"National Seed Starting Guide - Planting Calendar by Zone","description":"Interactive seed starting and transplant calendar for USDA hardiness zones 3a through 10b, with Michigan Zone 6a detail from Freighter View Farms.","isPartOf":{"@id":"https://chrisizworski.com/#website"},"about":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-04-28","inLanguage":"en-US"},{"@type":"BreadcrumbList","@id":"https://chrisizworski.com/seed-starting-guide/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Seed Starting Guide","item":"https://chrisizworski.com/seed-starting-guide/"}]},{"@type":"Dataset","name":"National Seed Starting Guide - Planting Calendar by Zone","description":"Interactive seed starting and transplant calendar for USDA hardiness zones 3a through 10b.","author":{"@type":"Person","name":"Chris Izworski"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/seed-starting-guide/#app","name":"Seed Starting Date Calculator","url":"https://chrisizworski.com/seed-starting-guide/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"}}]}</script>
+<style>
+/* ─── SITE HEADER / NAV ─── */
+.site-header {
+  text-align: center;
+  padding: 24px 20px 18px;
+  border-bottom: 1px solid #e8e4dc;
+  background: #fff;
+}
+.site-header .site-title{
+  font-size: 19px;
+  font-weight: normal;
+  color: #2c5f2d;
+  letter-spacing: .5px;
+}
+.site-header .site-title a{ color: #2c5f2d; text-decoration: none; }
+.site-nav {
+  text-align: center;
+  padding: 9px 20px;
+  border-bottom: 1px solid #e8e4dc;
+  background: #fff;
+  font-size: 13px;
+}
+.site-nav a {
+  color: #5a5a5a;
+  margin: 0 9px;
+  text-decoration: none;
+}
+.site-nav a:hover { color: #2c5f2d; }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#fff; color:#1a1a1a; line-height:1.6; }
+.wrap { max-width:980px; margin:0 auto; padding:48px 24px 80px; }
+.label { font-size:.72rem; text-transform:uppercase; letter-spacing:.12em; color:#999; margin-bottom:12px; }
+h1 { font-size:2rem; font-weight:600; margin-bottom:8px; }
+.meta { font-size:.88rem; color:#888; margin-bottom:32px; padding-bottom:20px; border-bottom:1px solid #eee; }
+.meta a { color:#2c5f2d; text-decoration:none; }
+
+.zone-bar { background:#f8f8f8; border-radius:10px; padding:24px; margin-bottom:28px; }
+.zone-bar h2 { font-size:1rem; font-weight:600; margin-bottom:4px; }
+.zone-bar p { font-size:.86rem; color:#666; margin-bottom:16px; }
+.zone-bar p a { color:#2c5f2d; }
+.zone-grid { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+.zbtn {
+  padding:7px 14px; border-radius:6px; border:2px solid #ddd;
+  background:#fff; cursor:pointer; font-size:.88rem; font-weight:500; color:#555;
+  transition:all .12s;
+}
+.zbtn:hover { border-color:#2c5f2d; color:#2c5f2d; }
+.zbtn.active { background:#2c5f2d; border-color:#2c5f2d; color:#fff; }
+
+.zone-desc { font-size:.82rem; color:#666; background:#fff; border:1px solid #e0e0e0; border-radius:6px; padding:10px 14px; }
+.zone-note { font-size:.83rem; color:#555; margin-top:6px; font-style:italic; }
+
+.frost-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:32px; }
+.fc { background:#f0f7f0; border-radius:8px; padding:16px; text-align:center; }
+.fc.warm { background:#fff7f0; }
+.fc-num { font-size:1.35rem; font-weight:700; display:block; }
+.fc-lbl { font-size:.76rem; color:#777; margin-top:2px; }
+
+.tabs { display:flex; border-bottom:2px solid #eee; margin-bottom:0; gap:0; }
+.tbtn {
+  padding:10px 20px; border:none; background:none; cursor:pointer;
+  font-size:.9rem; color:#999; font-weight:500;
+  border-bottom:2px solid transparent; margin-bottom:-2px; transition:all .12s;
+}
+.tbtn:hover { color:#2c5f2d; }
+.tbtn.active { color:#2c5f2d; border-bottom-color:#2c5f2d; }
+
+.tbl-wrap { overflow-x:auto; margin-top:20px; margin-bottom:32px; }
+table { width:100%; border-collapse:collapse; font-size:.89rem; }
+th { background:#f5f5f5; text-align:left; padding:10px 12px; font-weight:600; font-size:.8rem; color:#555; border-bottom:2px solid #e0e0e0; white-space:nowrap; }
+td { padding:9px 12px; border-bottom:1px solid #f0f0f0; vertical-align:top; color:#333; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:#fafafa; }
+
+.pill { display:inline-block; font-size:.72rem; padding:2px 7px; border-radius:10px; font-weight:600; white-space:nowrap; }
+.in  { background:#e8f5e9; color:#2e7d32; }
+.out { background:#e3f2fd; color:#1565c0; }
+.dir { background:#fff3e0; color:#e65100; }
+.fall{ background:#f3e5f5; color:#6a1b9a; }
+
+.credit { margin-top:32px; padding:16px 20px; background:#f8f8f8; border-radius:8px; font-size:.88rem; color:#555; }
+.credit a { color:#2c5f2d; text-decoration:none; font-weight:500; }
+.src { font-size:.78rem; color:#aaa; margin-top:20px; }
+
+@media(max-width:640px){
+  h1 { font-size:1.5rem; }
+  .frost-strip { grid-template-columns:repeat(2,1fr); }
+  .tbtn { padding:8px 12px; font-size:.82rem; }
+  th,td { padding:7px 8px; font-size:.8rem; }
+}
+</style>
+<meta property="og:title" content="National Seed Starting Guide, Planting Calendar by Zone">
+<meta property="og:description" content="Interactive seed starting calendar for all USDA hardiness zones 3 to 10. Select your zone to get exact planting dates for vegetables, herbs, and flowers.">
+<meta property="og:url" content="https://chrisizworski.com/seed-starting-guide/">
+<meta property="og:type" content="website">
+
+
+
+
+
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:image" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+<meta property="og:image:secure_url" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Chris Izworski gardening and Freighter View Farms preview image">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+<meta name="twitter:image:alt" content="Chris Izworski gardening and Freighter View Farms preview image">
+<meta name="thumbnail" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+<meta itemprop="image" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+</head>
+<body>
+<header class="site-header">
+  <p class="site-title"><a href="/">Chris Izworski</a></p>
+<p>Starting seeds indoors in Michigan requires working with the specific conditions of Zone 6a, a last frost date that typically falls between late April and mid-May, depending on your exact location and the year. Bay City and the Saginaw Bay shoreline run slightly warmer than inland zones, which affects timing.</p>
+<p>This guide covers the sequence from seed selection through transplant, with timing built around the Zone 6a calendar used at <a href="https://freighterviewfarms.com">Freighter View Farms</a> on Saginaw Bay. The interactive tool below works for all USDA zones, select your zone to get crop-specific start dates for vegetables, herbs, and flowers.</p>
+
+<h2>Why Timing Matters More Than Equipment</h2>
+<p>Most seed starting failures come from timing errors, not equipment. Starting tomatoes ten weeks before last frost instead of six produces leggy, root-bound transplants that struggle in the garden. Starting peppers too late means they never reach full production before the first fall frost. Getting the calendar right is more important than having the perfect grow light setup.</p>
+<p>For Zone 6a in Bay City and the Saginaw Bay region, the average last spring frost falls around May 6, though lakeshore locations can be a week earlier and inland spots occasionally later. The interactive planting calendar below uses these frost windows to calculate start dates for each crop. For the full frost date reference for Michigan cities, see the <a href="/michigan-frost-dates/">Michigan frost dates guide</a>.</p>
+
+<h2>Zone 6a Seed Starting Basics</h2>
+<p>Most warm-season crops, tomatoes, peppers, eggplant, need 6 to 10 weeks of indoor growing time before transplanting. Start them under lights in late March or early April for Bay City conditions. Brassicas, broccoli, cabbage, cauliflower, go in earlier, around 6 to 8 weeks before last frost, in mid-March. Squash, cucumbers, and melons need only 3 to 4 weeks indoors; starting them too early produces fast-growing vines that outgrow their containers before the soil warms enough to transplant safely.</p>
+<p>Soil temperature at planting matters as much as air temperature. Tomatoes planted in cold soil stall, they sit without growing until the ground warms above 60°F, and any head start from indoor growing evaporates. Waiting until soil hits 60-65°F, usually two weeks after the last frost date in Zone 6a, produces better results than calendar-based transplanting alone. The <a href="/zone-6a-planting-calendar/">Zone 6a planting calendar</a> covers transplant timing by crop.</p>
+
+<h2>Timing Your Start</h2>
+</header>
+<nav class="site-nav">
+  <a href="/about/">About</a>
+  <a href="/press/">Press</a>
+  <a href="/speaking/">Speaking</a>
+  <a href="/michigan-gardening/">Gardening</a>
+  <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms &#x2197;</a>
+</nav>
+<div class="wrap">
+  <div class="label">Interactive Reference</div>
+  <h1>National Seed Starting Guide</h1>
+  <div class="meta">Planting calendar for all USDA zones &nbsp;·&nbsp; Compiled by <a href="https://chrisizworski.com">Chris Izworski</a> &nbsp;·&nbsp; Updated April 2026</div>
+
+  <div class="zone-bar">
+    <h2>Select Your Hardiness Zone</h2>
+    <p>Not sure of your zone? <a href="https://planthardiness.ars.usda.gov/" target="_blank" rel="noopener">Look it up on the USDA map →</a></p>
+    <div class="zone-grid" id="zoneBtns"></div>
+    <div class="zone-desc" id="zoneDesc"></div>
+    <div class="zone-note" id="zoneNote"></div>
+  </div>
+
+  <div class="frost-strip" id="frostStrip"></div>
+
+  <div class="tabs">
+    <button class="tbtn active" onclick="showTab('veg',this)">Vegetables</button>
+    <button class="tbtn" onclick="showTab('herbs',this)">Herbs</button>
+    <button class="tbtn" onclick="showTab('flowers',this)">Flowers</button>
+    <button class="tbtn" onclick="showTab('warm',this)">Warm-Season</button>
+  </div>
+
+  <div class="tbl-wrap" id="tableArea"></div>
+
+  <div class="credit">
+    Data compiled by <a href="https://chrisizworski.com">Chris Izworski</a>, writer, technologist, and gardener based in Bay City, Michigan on Saginaw Bay. Related guides: <a href="https://chrisizworski.com/heirloom-seed-saving-guide/">Heirloom Seed Saving Guide</a> · <a href="https://chrisizworski.com/michigan-native-plants/">Michigan Native Plants</a> · <a href="https://chrisizworski.com/zone-6a-planting-calendar/">Zone 6a Planting Calendar</a>
+  </div>
+  <div class="src">Sources: USDA ARS Plant Hardiness Zone Map; Cornell Cooperative Extension; University of Minnesota Extension; Oregon State University Extension; Old Farmer's Almanac frost database; Seed Savers Exchange; Johnny's Selected Seeds variety trials.</div>
+</div>
+
+<script>
+const ZONES = {
+  "3a": { last:"May 25", first:"Sep 1",  days:99,  states:"Northern MN, ND, western MT, northern ME", note:"Very short season. Focus on cold-tolerant crops and fast-maturing varieties. Row covers and cold frames are essential tools." },
+  "3b": { last:"May 15", first:"Sep 10", days:118, states:"Northern MN, ND, MT, northern WI, northern ME", note:"Short season. Prioritize fast-maturing varieties. Cold frames can extend the season by 3 to 4 weeks on each end." },
+  "4a": { last:"May 10", first:"Sep 15", days:128, states:"Northern WI, Michigan UP, northern VT/NH/ME, high-elevation Rockies", note:"Short season. Select varieties carefully by days-to-maturity. Short-season corn and melon varieties only." },
+  "4b": { last:"May 5",  first:"Sep 22", days:140, states:"Southern WI, Michigan UP, northern NY/VT, northern ID/WA", note:"Moderate-short season. Most vegetables possible with careful variety selection. Perennials need heavy winter mulching." },
+  "5a": { last:"Apr 28", first:"Oct 1",  days:156, states:"Northern IL/IN/OH, central MI, central NY, northern NE/CO", note:"Moderate season. Wide variety selection possible. Most perennial herbs survive with mulching." },
+  "5b": { last:"Apr 20", first:"Oct 8",  days:171, states:"Chicago area, central MI, southern NY/PA, Denver area", note:"Good season length. Most vegetables succeed. Eggplant and peppers prefer warm, sheltered spots." },
+  "6a": { last:"May 10", first:"Oct 5",  days:148, states:"Central MI, central PA/NJ, southern NY, northern MO/KS", note:"Productive zone, Bay City / Saginaw Bay area. Most vegetables thrive. Lakeshore microclimates can extend the season." },
+  "6b": { last:"Apr 15", first:"Oct 22", days:190, states:"Southern MI, PA, NJ, OH, central MO/KS, central CO", note:"Excellent growing zone. Long season allows succession plantings. Most Mediterranean herbs overwinter with light protection." },
+  "7a": { last:"Apr 5",  first:"Nov 1",  days:209, states:"VA, TN, NC, AR, northern TX/OK, Pacific NW coast, NM", note:"Long season. Two full vegetable seasons possible spring and fall. Heat-tolerant varieties important for summer crops." },
+  "7b": { last:"Mar 25", first:"Nov 15", days:235, states:"Central VA/NC/TN, Willamette Valley OR, northern TX", note:"Long season. Fall gardens highly productive. Garlic planted October. Some vegetables overwinter with protection." },
+  "8a": { last:"Mar 15", first:"Nov 25", days:255, states:"Pacific NW lowlands, coastal CA, Gulf Coast inland, Atlanta area", note:"Very long season. Spring and fall gardens overlap. Cool-season crops thrive fall through spring. Heat management critical in summer." },
+  "8b": { last:"Mar 5",  first:"Dec 5",  days:275, states:"Portland OR, western WA lowlands, central CA, Gulf states, Atlanta", note:"Year-round growing possible for cool-season crops. Summer heat limits some crops July, August in hot interior areas." },
+  "9a": { last:"Feb 15", first:"Dec 15", days:303, states:"Central CA valleys, Gulf Coast, Phoenix area, Pacific coast cities", note:"Year-round gardening. Two complete vegetable seasons. Summer focuses on heat-lovers; cool-season crops fall through spring." },
+  "9b": { last:"Feb 5",  first:"Dec 25", days:323, states:"Southern CA coast, Gulf Coast cities, northern FL", note:"Essentially year-round growing. Plant cool-season crops October, February, warm-season March, September." },
+  "10a":{ last:"Jan 25", first:"Dec 31", days:340, states:"South Florida, Hawaii lowlands, southern CA desert, southernmost TX", note:"Year-round tropical growing. Cool-season crops November, February only. Focus on heat and humidity tolerance." },
+  "10b":{ last:"Jan 10", first:"Dec 31", days:355, states:"Miami, Hawaii coast, far south TX", note:"Essentially frost-free. Grow tropical vegetables year-round. Traditional cool-season crops November, February." },
+};
+
+// Weeks relative to last frost: negative = before, positive = after
+// [indoorStart, indoorEnd, transStart, transEnd, directStart, directEnd]
+// null = N/A
+const CROPS = {
+  veg:[
+    {n:"Tomatoes",        i:[-10,-8], t:[2,4],   d:null,    m:"it", notes:"After soil reaches 60°F"},
+    {n:"Peppers",         i:[-12,-10],t:[3,5],   d:null,    m:"it", notes:"Needs warm soil; very slow"},
+    {n:"Eggplant",        i:[-12,-10],t:[3,5],   d:null,    m:"it", notes:"Warm season; frost sensitive"},
+    {n:"Broccoli",        i:[-8,-6],  t:[-2,0],  d:null,    m:"it", notes:"Spring + fall crop possible"},
+    {n:"Cabbage",         i:[-8,-6],  t:[-2,0],  d:null,    m:"it", notes:"Hardy; tolerates frost"},
+    {n:"Cauliflower",     i:[-8,-6],  t:[-2,0],  d:null,    m:"it", notes:"Needs consistent moisture"},
+    {n:"Lettuce",         i:[-6,-4],  t:[-2,0],  d:[-2,2],  m:"e",  notes:"Bolt-resistant vars for summer"},
+    {n:"Spinach",         i:null,     t:null,    d:[-4,-2], m:"d",  notes:"Cool season; spring + fall"},
+    {n:"Kale",            i:[-6,-4],  t:[-2,0],  d:[-2,0],  m:"e",  notes:"Tolerates light frost"},
+    {n:"Peas",            i:null,     t:null,    d:[-4,-2], m:"d",  notes:"Plant as soon as soil workable"},
+    {n:"Beans (bush)",    i:null,     t:null,    d:[1,4],   m:"d",  notes:"Succession sow every 2 weeks"},
+    {n:"Beans (pole)",    i:null,     t:null,    d:[2,4],   m:"d",  notes:"Need trellis; longer season"},
+    {n:"Cucumbers",       i:[-3,-2],  t:[2,3],   d:[2,3],   m:"e",  notes:"Direct sow preferred"},
+    {n:"Summer Squash",   i:[-3,-2],  t:[2,3],   d:[2,3],   m:"e",  notes:"Direct sow preferred"},
+    {n:"Winter Squash",   i:null,     t:null,    d:[1,2],   m:"d",  notes:"Needs 90 to 110 days"},
+    {n:"Pumpkins",        i:null,     t:null,    d:[1,2],   m:"d",  notes:"Select variety by days-to-maturity"},
+    {n:"Melons",          i:[-3,-2],  t:[3,4],   d:null,    m:"it", notes:"Short-season vars for zones 5 to 6"},
+    {n:"Sweet Corn",      i:null,     t:null,    d:[2,4],   m:"d",  notes:"Soil must be 60°F+"},
+    {n:"Carrots",         i:null,     t:null,    d:[-2,2],  m:"d",  notes:"Loose deep soil; succession sow"},
+    {n:"Beets",           i:null,     t:null,    d:[-2,2],  m:"d",  notes:"Greens + roots both edible"},
+    {n:"Radishes",        i:null,     t:null,    d:[-4,0],  m:"d",  notes:"30-day crop; succession sow"},
+    {n:"Onions",          i:[-12,-10],t:[-2,0],  d:[-2,0],  m:"e",  notes:"Long season; start early indoors"},
+    {n:"Leeks",           i:[-12,-10],t:[-2,0],  d:null,    m:"it", notes:"Very frost hardy; long season"},
+    {n:"Potatoes",        i:null,     t:null,    d:[-2,0],  m:"d",  notes:"Plant seed potatoes 2 to 4 wks before frost"},
+    {n:"Garlic",          i:null,     t:null,    d:null,    m:"f",  notes:"Fall planting (Oct); harvest July"},
+    {n:"Celery",          i:[-12,-10],t:[2,4],   d:null,    m:"it", notes:"Slow; needs consistent moisture"},
+  ],
+  herbs:[
+    {n:"Basil",           i:[-4,-3],  t:[2,3],   d:[2,3],   m:"e",  notes:"Very frost sensitive"},
+    {n:"Parsley",         i:[-10,-8], t:[-1,0],  d:[-1,0],  m:"e",  notes:"Slow germinator; biennial"},
+    {n:"Dill",            i:null,     t:null,    d:[-2,0],  m:"d",  notes:"Does not transplant well"},
+    {n:"Cilantro",        i:null,     t:null,    d:[-2,0],  m:"d",  notes:"Bolts in heat; succession sow"},
+    {n:"Chives",          i:[-8,-6],  t:[-2,0],  d:[-2,0],  m:"e",  notes:"Perennial zones 3 to 9"},
+    {n:"Thyme",           i:[-8,-6],  t:[0,2],   d:null,    m:"it", notes:"Perennial zones 5 to 9"},
+    {n:"Sage",            i:[-8,-6],  t:[0,2],   d:null,    m:"it", notes:"Perennial zones 5 to 8"},
+    {n:"Oregano",         i:[-8,-6],  t:[0,2],   d:null,    m:"it", notes:"Perennial zones 5 to 10"},
+    {n:"Rosemary",        i:[-10,-8], t:[2,4],   d:null,    m:"it", notes:"Perennial zones 7 to 10; annual elsewhere"},
+    {n:"Lavender",        i:[-12,-10],t:[2,4],   d:null,    m:"it", notes:"Perennial zones 5 to 8"},
+    {n:"Mint",            i:[-8,-6],  t:[0,2],   d:null,    m:"it", notes:"Perennial; contains aggressively"},
+    {n:"Lemon Balm",      i:[-8,-6],  t:[0,2],   d:null,    m:"it", notes:"Perennial; self-seeds readily"},
+  ],
+  flowers:[
+    {n:"Zinnia",          i:[-3,-2],  t:[1,2],   d:[1,2],   m:"e",  notes:"Direct sow preferred after frost"},
+    {n:"Marigold",        i:[-6,-4],  t:[0,1],   d:[0,1],   m:"e",  notes:"Pest deterrent; prolific"},
+    {n:"Calendula",       i:[-6,-4],  t:[-1,0],  d:[-1,0],  m:"e",  notes:"Cool season; edible petals"},
+    {n:"Cosmos",          i:null,     t:null,    d:[0,2],   m:"d",  notes:"Direct sow after frost; self-seeds"},
+    {n:"Larkspur",        i:null,     t:null,    d:[-8,-4], m:"d",  notes:"Fall sow or very early spring"},
+    {n:"Nasturtium",      i:null,     t:null,    d:[0,2],   m:"d",  notes:"Edible flowers and leaves"},
+    {n:"Sunflower",       i:null,     t:null,    d:[0,2],   m:"d",  notes:"Direct sow after frost"},
+    {n:"Snapdragon",      i:[-10,-8], t:[-2,0],  d:null,    m:"it", notes:"Cool season; light frost tolerant"},
+    {n:"Petunia",         i:[-10,-8], t:[0,2],   d:null,    m:"it", notes:"Tiny seeds; needs light to germinate"},
+    {n:"Impatiens",       i:[-12,-10],t:[2,4],   d:null,    m:"it", notes:"Shade-tolerant; frost sensitive"},
+    {n:"Sweet Pea",       i:[-6,-4],  t:[-2,0],  d:[-4,-2], m:"e",  notes:"Cool season; frost tolerant"},
+    {n:"Bachelor Button", i:null,     t:null,    d:[-4,-2], m:"d",  notes:"Cool season; early spring sow"},
+    {n:"Celosia",         i:[-4,-3],  t:[2,3],   d:[2,3],   m:"e",  notes:"Heat lover; sow after frost"},
+  ],
+  warm:[
+    {n:"Watermelon",      i:[-3,-2],  t:[3,4],   d:null,    m:"it", notes:"Short-season vars for zones 4 to 6"},
+    {n:"Cantaloupe",      i:[-3,-2],  t:[3,4],   d:[2,3],   m:"e",  notes:"Needs 75 to 90 warm days"},
+    {n:"Sweet Potato",    i:null,     t:[3,5],   d:null,    m:"t",  notes:"Start slips indoors; warm soil essential"},
+    {n:"Okra",            i:[-3,-2],  t:[3,4],   d:[3,4],   m:"e",  notes:"Tropical; needs sustained heat"},
+    {n:"Edamame",         i:null,     t:null,    d:[2,4],   m:"d",  notes:"After soil warms; succession sow"},
+    {n:"Lima Beans",      i:null,     t:null,    d:[2,4],   m:"d",  notes:"Warm soil essential (60°F+)"},
+    {n:"Tomatillo",       i:[-8,-6],  t:[2,4],   d:null,    m:"it", notes:"Needs two plants to set fruit"},
+    {n:"Ground Cherry",   i:[-8,-6],  t:[2,4],   d:null,    m:"it", notes:"Like tomatillo; prolific self-seeder"},
+    {n:"Luffa",           i:[-6,-4],  t:[3,4],   d:null,    m:"it", notes:"Very long season; start early"},
+    {n:"Ginger",          i:[-12,-8], t:[4,6],   d:null,    m:"it", notes:"Tropical; container in zones below 8"},
+    {n:"Turmeric",        i:[-12,-8], t:[4,6],   d:null,    m:"it", notes:"Tropical; similar to ginger culture"},
+  ],
+};
+
+let zone = "6a", tab = "veg";
+
+function addWks(dateStr, wks) {
+  const months = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  const [m,d] = dateStr.split(" ");
+  const base = new Date(2026, months[m], +d);
+  base.setDate(base.getDate() + Math.round(wks*7));
+  return base.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+}
+
+function rng(dateStr, w1, w2) {
+  if (w1==null) return ", ";
+  return addWks(dateStr,w1) + " to " + addWks(dateStr,w2);
+}
+
+function buildZones() {
+  const el = document.getElementById('zoneBtns');
+  Object.keys(ZONES).forEach(z => {
+    const b = document.createElement('button');
+    b.className = 'zbtn' + (z===zone?' active':'');
+    b.textContent = z;
+    b.onclick = () => { zone=z; refresh(); document.querySelectorAll('.zbtn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); };
+    el.appendChild(b);
+  });
+}
+
+function refresh() {
+  const z = ZONES[zone];
+  document.getElementById('zoneDesc').innerHTML = `<strong>Zone ${zone}:</strong> ${z.states}`;
+  document.getElementById('zoneNote').textContent = z.note;
+  document.getElementById('frostStrip').innerHTML = `
+    <div class="fc"><span class="fc-num">${z.last}</span><span class="fc-lbl">Last Spring Frost</span></div>
+    <div class="fc warm"><span class="fc-num">${z.first}</span><span class="fc-lbl">First Fall Frost</span></div>
+    <div class="fc"><span class="fc-num">${z.days} days</span><span class="fc-lbl">Frost-Free Season</span></div>
+    <div class="fc"><span class="fc-num">Zone ${zone}</span><span class="fc-lbl">USDA Zone</span></div>
+  `;
+
+  const methodHTML = {
+    it: '<span class="pill in">Indoors</span> + <span class="pill out">Transplant</span>',
+    d:  '<span class="pill dir">Direct Sow</span>',
+    e:  '<span class="pill in">Indoors</span> or <span class="pill dir">Direct</span>',
+    t:  '<span class="pill out">Transplant</span>',
+    f:  '<span class="pill fall">Fall Plant</span>',
+  };
+
+  const rows = CROPS[tab].map(c => {
+    const lf = z.last;
+    const indoors   = c.i ? rng(lf, c.i[0], c.i[1]) : ", ";
+    const transplant= c.t ? rng(lf, c.t[0], c.t[1]) : ", ";
+    const direct    = c.d ? rng(lf, c.d[0], c.d[1]) : (c.m==='f' ? "Oct (fall)" : ", ");
+    return `<tr>
+      <td><strong>${c.n}</strong></td>
+      <td>${methodHTML[c.m]}</td>
+      <td>${indoors}</td>
+      <td>${transplant}</td>
+      <td>${direct}</td>
+      <td style="font-size:.8rem;color:#777">${c.notes}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('tableArea').innerHTML = `
+    <table>
+      <tr><th>Crop</th><th>Method</th><th>Start Indoors</th><th>Transplant Outside</th><th>Direct Sow</th><th>Notes</th></tr>
+      ${rows}
+    </table>`;
+}
+
+function showTab(t, btn) {
+  tab=t;
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  refresh();
+}
+
+buildZones();
+refresh();
+</script>
+<div style="max-width:860px;margin:0 auto;padding:0 20px">
+<h2 style="color:#2c5f2d">Seed starting in Michigan: the specifics</h2>
+<p>The calculator above works for any zone, but Michigan gardeners face a particular version of the problem. Most of the Lower Peninsula runs Zone 5b to 6b, and the frost tables tell the real story: the median last freeze ranges from late April in Detroit to June 20 in the northern interior. That range is the whole reason to start seed indoors here. Our summers are warm enough for tomatoes, peppers, and melons, but not long enough to grow those crops from seed sown outdoors. Starting them inside, four to ten weeks ahead depending on the crop, is how a short northern season grows long season fruit.</p>
+<p>Match the indoor lead time to the crop. Peppers and eggplant are the slowpokes at eight to ten weeks before your last frost; tomatoes want six to eight; the brassicas want four to six; and the fast movers like cucumbers, squash, and melons need only two to three weeks and resent sitting in a pot longer. The exact dates for your town are in the <a href="/zone-6a-planting-calendar/">Michigan planting calendar</a>, which computes every crop from your nearest of 78 frost stations.</p>
+<h3 style="color:#1a1a1a">Light is the thing most people get wrong</h3>
+<p>A sunny windowsill is not enough light for seedlings in a Michigan March, when the sun is low and the days are short. Starved for light, seedlings stretch, lean, and flop, and a leggy seedling never fully recovers. The fix is cheap and total: an ordinary shop light with LED or fluorescent tubes, hung two to three inches above the leaf tops and raised as the plants grow, running fourteen to sixteen hours a day on a timer. Closer than you think, longer than you think.</p>
+<h3 style="color:#1a1a1a">Warmth to germinate, cool to grow</h3>
+<p>Two temperatures matter. Most seeds germinate fastest with warm soil, 70 to 75 degrees, which usually means a heat mat under the tray because our basements run colder in early spring. Once the seedlings are up, they grow sturdier a little cooler, in the mid 60s, which keeps them compact instead of soft. Warm feet to sprout, cool air to grow.</p>
+<h3 style="color:#1a1a1a">Harden off, or lose the crop in a weekend</h3>
+<p>Seedlings raised indoors have never felt wind, direct sun, or a cold night, and moving them straight to the garden shocks them badly. Harden off over seven to ten days: start with an hour outdoors in shade and shelter, add time and exposure each day, bring them in on cold nights, then transplant. Skipping this step is the most common way a whole flat of healthy starts dies in the first weekend out.</p>
+<h2 style="color:#2c5f2d">More Michigan garden tools by Chris Izworski</h2>
+<ul style="margin:8px 0 24px 18px;font-size:15px;line-height:1.9">
+<li><a href="/zone-6a-planting-calendar/">Michigan planting calendar</a>: computed dates for 47 crops at your nearest of 78 frost stations</li>
+<li><a href="/michigan-frost-dates/">Michigan frost dates</a>: the full State Climatologist probability table, searchable, plus fall dates and season lengths</li>
+<li><a href="/heirloom-seed-saving-guide/">Heirloom seed saving guide</a>: close the loop and save your own seed</li>
+<li><a href="https://chrisizworski.com/heirloom-variety-matchmaker/">Heirloom variety matchmaker</a>: five questions, three varieties matched to your garden</li>
+<li><a href="https://freighterviewfarms.com" rel="noopener">Freighter View Farms</a>: the Bay City garden these tools grew out of</li>
+</ul>
+</div>
+<div style="text-align:center;padding:32px 20px 0;font-size:13px;">
+  <a href="/michigan-gardening/" style="color:#2c5f2d;text-decoration:none;">&#8592; Back to Michigan Gardening</a>
+</div>
+</body>
+</html>

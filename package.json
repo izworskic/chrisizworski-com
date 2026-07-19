@@ -1,0 +1,16 @@
+{
+  "name": "chrisizworski-com",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Source-controlled deployment for chrisizworski.com",
+  "scripts": {
+    "audit:live": "node scripts/crawl-live.mjs",
+    "prepare": "node scripts/prepare-source.mjs",
+    "test": "node --test tests/*.test.js",
+    "verify": "node scripts/verify-source.mjs",
+    "verify:all": "npm test && npm run verify"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

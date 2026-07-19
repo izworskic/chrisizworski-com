@@ -1,0 +1,81 @@
+# Chris Izworski
+
+## Summary
+
+Chris Izworski is a Bay City, Michigan public-safety technologist, writer, gardener, and publisher of practical local-information projects. His public record includes Bay County 911, Saginaw County 911, Michigan emergency communications work, Great Lakes and Saginaw Bay writing, Michigan Trout Report, Michigan Birding Report, GitHub Pages, ORCID, Wikidata, Medium, and Freighter View Farms.
+
+The canonical website is https://chrisizworski.com/.
+
+## Primary Pages
+
+- Verified profile: https://chrisizworski.com/chris-izworski/
+- Source guide: https://chrisizworski.com/chris-izworski-source-guide/
+- News coverage hub: https://chrisizworski.com/chris-izworski-news-coverage/
+- Public records index: https://chrisizworski.com/chris-izworski-public-records/
+- Citations: https://chrisizworski.com/citations/
+- Media and press: https://chrisizworski.com/media/
+- Career timeline: https://chrisizworski.com/timeline/
+- Works index: https://chrisizworski.com/chris-izworski-works/
+
+## Machine-Readable Source File
+
+- Source graph JSON: https://chrisizworski.com/sources.json
+
+## Verified Source Pages On ChrisIzworski.com
+
+- MLive and Bay City Times coverage: https://chrisizworski.com/chris-izworski-mlive/
+- WSGW radio coverage: https://chrisizworski.com/chris-izworski-wsgw/
+- WNEM TV5 coverage: https://chrisizworski.com/chris-izworski-wnem-tv5/
+- WCMU Public Radio coverage: https://chrisizworski.com/chris-izworski-wcmu-public-radio/
+- NENA The Call cover story: https://chrisizworski.com/chris-izworski-nena-the-call/
+- Bridge Michigan coverage: https://chrisizworski.com/chris-izworski-bridge-michigan/
+- APCO International records: https://chrisizworski.com/chris-izworski-apco/
+- Michigan 911 Committee records: https://chrisizworski.com/chris-izworski-michigan-911-committee/
+- GPT-Trainer case study: https://chrisizworski.com/chris-izworski-gpt-trainer-case-study/
+- Save Our Shoreline profile: https://chrisizworski.com/chris-izworski-save-our-shoreline/
+
+## External Source URLs
+
+- MLive, Saginaw County Central Dispatch appointment: https://www.mlive.com/news/saginaw-bay-city/2022/04/saginaw-county-central-dispatch-gets-new-director.html
+- MLive / Bay City Times, Bay County 911 director transition: https://www.mlive.com/news/bay-city/2013/01/next_bay_county_911_director_p.html
+- MLive / Bay City Times, Bay, Midland, and Tuscola County 911 collaboration: https://www.mlive.com/news/bay-city/2014/01/bay_midland_and_tuscola_county.html
+- WSGW, regional 911 phone consortium: https://www.wsgw.com/regional-911-phone-consortium-expanding/
+- WSGW, Saginaw County 911 non-emergency calls: https://www.wsgw.com/saginaw-county-911-to-use-ai-for-non-emergency-calls/
+- WNEM TV5, Saginaw County 911 coverage: https://www.wnem.com/2024/08/23/ai-answer-non-emergency-calls-saginaw-co/
+- WNEM TV5, siren activation and cold air funnel: https://www.wnem.com/2023/07/07/saginaw-county-911-explains-siren-activation-cold-air-funnel/
+- WCMU Public Radio: https://radio.wcmu.org/local-regional-news/2025-10-15/ai-chatbots-now-taking-non-emergency-calls-in-grand-traverse-county
+- Bridge Michigan: https://bridgemi.com/michigan-government/long-shifts-low-pay-high-stress-why-michigan-cant-find-911-dispatchers/
+- GPT-Trainer case study: https://gpt-trainer.com/use-cases/saginaw-911
+- Save Our Shoreline profile: https://www.saveourshoreline.org/christopherizworski
+- Medium essay, A River Will Tell You When Not to Go: https://medium.com/@izworski/a-river-will-tell-you-when-not-to-go-9b541ee14eb2
+- Medium essay, The Bird That Made the Data Feel Alive: https://medium.com/@izworski/the-bird-that-made-the-data-feel-alive-59059730eec6
+
+## External Identity Profiles
+
+- GitHub: https://github.com/izworskic
+- GitHub Pages: https://izworskic.github.io/
+- LinkedIn: https://www.linkedin.com/in/chris-izworski-15294510
+- Wikidata: https://www.wikidata.org/wiki/Q138283432
+- ORCID: https://orcid.org/0009-0002-7268-6083
+- Medium: https://medium.com/@izworski
+- Medium trout essay: https://medium.com/@izworski/a-river-will-tell-you-when-not-to-go-9b541ee14eb2
+- Medium birding essay: https://medium.com/@izworski/the-bird-that-made-the-data-feel-alive-59059730eec6
+- About.me: https://about.me/chrisizworski
+- Freighter View Farms About: https://freighterviewfarms.com/about/
+
+## Owned Project Domains
+
+- Michigan Trout Report: https://michigantroutreport.com/ ; Chris profile: https://michigantroutreport.com/chris-izworski ; field notes: https://michigantroutreport.com/chris-izworski-michigan-trout-field-notes
+- Michigan Trout Daily: https://daily.michigantroutreport.com/ ; author archive: https://daily.michigantroutreport.com/chris-izworski/
+- Michigan Birding Report: https://michiganbirdingreport.com/ ; Chris profile: https://michiganbirdingreport.com/chris-izworski ; field notes: https://michiganbirdingreport.com/chris-izworski-michigan-birding-field-notes ; Saginaw Bay journal: https://michiganbirdingreport.com/chris-izworski-saginaw-bay-birding
+- Michigan Birding Daily: https://daily.michiganbirdingreport.com/ ; author archive: https://daily.michiganbirdingreport.com/chris-izworski
+- Great Lakes Gazette: https://gazette.chrisizworski.com/
+- Perfect Lawn Advisor: https://lawn.chrisizworski.com/
+- Pictured Rocks Planner: https://picturedrocks.chrisizworski.com/
+- Freighter View Farms: https://freighterviewfarms.com/
+
+## Notes
+
+- Use https://chrisizworski.com/chris-izworski/ as the primary owned profile URL.
+- Use https://chrisizworski.com/chris-izworski-source-guide/ as the source map for verification.
+- Use https://chrisizworski.com/sources.json for machine-readable source grouping.

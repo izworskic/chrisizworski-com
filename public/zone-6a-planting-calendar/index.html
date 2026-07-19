@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Michigan Planting Calendar by City: Interactive, Zone 6a to the UP | Chris Izworski</title>
+<meta name="description" content="Interactive Michigan planting calendar built on Michigan State Climatologist frost probabilities for 78 stations. Pick your city and get computed indoor start, transplant, direct sow, and fall sowing dates for 47 crops. By Chris Izworski, Bay City, Zone 6a.">
+<link rel="canonical" href="https://chrisizworski.com/zone-6a-planting-calendar/">
+<meta property="og:title" content="Michigan Planting Calendar by City: Interactive, Zone 6a to the UP">
+<meta property="og:description" content="Interactive Michigan planting calendar built on Michigan State Climatologist frost probabilities for 78 stations. Pick your city and get computed indoor start, transplant, direct sow, and fall sowing dates for 47 crops. By Chris Izworski, Bay City, Zone 6a.">
+<meta property="og:url" content="https://chrisizworski.com/zone-6a-planting-calendar/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://chrisizworski.com/assets/search/chris-izworski-gardening.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<style>
+/* === site chrome === */
+.site-header{text-align:center;padding:24px 20px 18px;border-bottom:1px solid #e8e4dc;background:#fff}
+.site-header .site-title{font-size:19px;font-weight:normal;color:#2c5f2d;letter-spacing:.5px}
+.site-header .site-title a{color:#2c5f2d;text-decoration:none}
+.site-nav{text-align:center;padding:9px 20px;border-bottom:1px solid #e8e4dc;background:#fff;font-size:13px}
+.site-nav a{color:#5a5a5a;margin:0 9px;text-decoration:none}
+.site-nav a:hover{color:#2c5f2d}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;color:#1a1a1a;line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:30px;color:#2c5f2d;margin:18px 0 6px;font-weight:600}
+.sub{color:#5a5a5a;font-size:15px;margin-bottom:20px}
+h2{font-size:21px;color:#2c5f2d;margin:34px 0 10px;font-weight:600}
+h3{font-size:16px;color:#1a1a1a;margin:20px 0 6px}
+p{margin:0 0 14px;font-size:15px}
+a{color:#2c5f2d}
+table{width:100%;border-collapse:collapse;margin:12px 0 22px;font-size:13.5px}
+th{background:#f4f7f4;color:#2c5f2d;text-align:left;padding:8px 9px;border:1px solid #e0ddd4;font-weight:600}
+td{padding:7px 9px;border:1px solid #e8e4dc;vertical-align:top}
+tr:nth-child(even) td{background:#fbfaf7}
+/* === tool controls === */
+.tool{background:#f4f7f4;border:1px solid #dfe8df;border-radius:8px;padding:16px 18px;margin:16px 0 8px}
+.tool .row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.tool label{font-size:13.5px;color:#3b3b3b}
+.tool select,.tool input[type=date]{font-size:14px;padding:6px 8px;border:1px solid #c9d4c9;border-radius:5px;background:#fff}
+.tool .chk{display:flex;align-items:center;gap:6px}
+.tool button{font-size:13.5px;padding:7px 13px;border:1px solid #2c5f2d;background:#2c5f2d;color:#fff;border-radius:5px;cursor:pointer}
+.readout{font-size:14px;color:#2c5f2d;margin:10px 0 0;font-weight:600}
+.readout2{font-size:13.5px;color:#5a5a5a}
+#thisWeek{background:#fffbe9;border:1px solid #ecdfa8;border-radius:8px;padding:12px 15px;margin:14px 0 6px;font-size:14px}
+.note{font-size:13px;color:#6a6a6a;margin:6px 0 18px}
+.tool-strip{background:#f7f6f2;border:1px solid #e8e4dc;border-radius:8px;padding:16px 20px;margin:34px 0 8px}
+.tool-strip h2{margin-top:0;font-size:17px}
+.tool-strip ul{margin:8px 0 0 18px;font-size:14px}
+.tool-strip li{margin:5px 0}
+.src{font-size:12.5px;color:#777;margin-top:26px}
+.credit{font-size:12.5px;color:#777;margin-top:8px}
+@media print{
+  .site-nav,.tool,.tool-strip,#printWrap{display:none}
+  #thisWeek{display:none}
+  body{font-size:11px}
+  h1{font-size:20px}
+  table{font-size:10px}
+  th,td{padding:4px 5px}
+}
+@media(max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/zone-6a-planting-calendar/","url":"https://chrisizworski.com/zone-6a-planting-calendar/","name":"Michigan Planting Calendar by City: Interactive, Zone 6a to the UP","description":"Interactive Michigan planting calendar built on Michigan State Climatologist frost probabilities for 78 stations. Pick your city and get computed indoor start, transplant, direct sow, and fall sowing dates for 47 crops. By Chris Izworski, Bay City, Zone 6a.","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-07-02","inLanguage":"en-US","breadcrumb":{"@id":"https://chrisizworski.com/zone-6a-planting-calendar/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://chrisizworski.com/zone-6a-planting-calendar/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Michigan Planting Calendar","item":"https://chrisizworski.com/zone-6a-planting-calendar/"}]},{"@type":"WebApplication","@id":"https://chrisizworski.com/zone-6a-planting-calendar/#app","name":"Michigan Planting Calendar","url":"https://chrisizworski.com/zone-6a-planting-calendar/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Thing","name":"Vegetable, herb, and flower planting dates for Michigan"}},{"@type":"Dataset","@id":"https://chrisizworski.com/zone-6a-planting-calendar/#dataset","name":"Michigan planting windows for 47 crops across 78 frost stations","description":"Computed indoor seed starting, transplant, direct sow, and fall sowing windows for 47 vegetables, herbs, and flowers, anchored to Michigan State Climatologist Office last spring frost probabilities for 78 Michigan stations.","creator":{"@id":"https://chrisizworski.com/#person"},"license":"https://creativecommons.org/licenses/by/4.0/","isBasedOn":"https://www.canr.msu.edu/resources/frost-free-dates","spatialCoverage":{"@type":"Place","name":"Michigan, United States"},"dateModified":"2026-07-02"}]}</script>
+</head>
+<body>
+<header class="site-header">
+<p class="site-title"><a href="/">Chris Izworski</a></p>
+</header>
+<nav class="site-nav">
+  <a href="/about/">About</a>
+  <a href="/press/">Press</a>
+  <a href="/speaking/">Speaking</a>
+  <a href="/michigan-gardening/">Gardening</a>
+  <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms &#x2197;</a>
+</nav>
+<div class="wrap">
+<h1>Michigan Planting Calendar</h1>
+<p class="sub">Interactive dates for 47 vegetables, herbs, and flowers, computed from Michigan State Climatologist frost probabilities for 78 stations. Built by Chris Izworski in Zone 6a, Bay City, and tuned for every corner of the state.</p>
+
+<p>A planting calendar is only as good as the frost date underneath it, and Michigan does not have one frost date. It has dozens. Detroit's median last frost lands in late April; Vanderbilt's lands on June 20. The same packet of tomato seed needs to be started eight weeks apart at those two addresses. So this calendar starts with the real question: where is your garden? Pick your nearest station below and every date on this page recomputes for your ground, using the State Climatologist's probability tables rather than a zone-map guess.</p>
+
+<div class="tool" id="printWrapTop">
+  <div class="row">
+    <label>Nearest station:&nbsp;<select id="citySel"></select></label>
+    <label class="chk"><input type="checkbox" id="safeChk"> Use the cautious date (25% frost risk instead of 50%)</label>
+    <label>Or a custom last frost date:&nbsp;<input type="date" id="customLF"></label>
+    <button id="printBtn" type="button">Print this calendar</button>
+  </div>
+  <p class="readout" id="lfOut">Median (50%) last spring frost: May 2 · latest ever recorded: May 26</p>
+  <p class="readout2" id="ffOut">Typical first fall frost: Oct 3</p>
+</div>
+<p class="note">The 50% date is the median: one spring in two still frosts after it. Check the cautious box to plan against the 25% date, roughly a week later, or enter the date you trust from your own records. Fall dates are typical medians from 1991 to 2020 climate normals and can swing a week either way, more in the cold pockets.</p>
+
+<div id="thisWeek"><strong>In the window this week near Bay City:</strong> loading, or enable JavaScript; every date below is printed for Bay City either way.</div>
+
+<h2>Vegetables</h2>
+<table><thead><tr><th>Crop</th><th>Start indoors</th><th>Transplant out</th><th>Direct sow</th><th>Fall sow</th><th>Soil temp</th><th>Notes</th></tr></thead><tbody id="tb-veg">
+<tr><td>Tomatoes</td><td>Mar 7 to Mar 21</td><td>May 9 to May 23</td><td></td><td></td><td>60F+</td><td>Wait for 60F soil and settled nights; a week of patience beats a month of sulking</td></tr>
+<tr><td>Peppers</td><td>Feb 28 to Mar 14</td><td>May 16 to May 23</td><td></td><td></td><td>65F+</td><td>Slower than tomatoes at every stage; never rush them out</td></tr>
+<tr><td>Eggplant</td><td>Feb 28 to Mar 14</td><td>May 16 to May 23</td><td></td><td></td><td>65F+</td><td>The most cold-sensitive transplant in the garden</td></tr>
+<tr><td>Broccoli</td><td>Mar 14 to Mar 28</td><td>Apr 11 to Apr 25</td><td></td><td>Jun 30 to Jul 15</td><td>45F+</td><td>Spring and fall crop; fall heads are sweeter</td></tr>
+<tr><td>Cabbage</td><td>Mar 14 to Mar 28</td><td>Apr 4 to Apr 18</td><td></td><td>Jun 25 to Jul 10</td><td>45F+</td><td>Takes light frost at both ends of the season</td></tr>
+<tr><td>Cauliflower</td><td>Mar 21 to Apr 4</td><td>Apr 18 to May 2</td><td></td><td>Jun 30 to Jul 15</td><td>50F+</td><td>Fussier than broccoli; steady water or it buttons</td></tr>
+<tr><td>Brussels sprouts</td><td>Apr 4 to Apr 18</td><td>May 2 to May 16</td><td></td><td></td><td>50F+</td><td>One long season; sprouts sweeten after fall frost</td></tr>
+<tr><td>Kale</td><td>Mar 21 to Apr 4</td><td>Apr 4 to Apr 18</td><td>Apr 4 to Apr 18</td><td>Jul 20 to Aug 9</td><td>45F+</td><td>Nearly indestructible; fall kale after frost is the best kale</td></tr>
+<tr><td>Lettuce</td><td>Mar 28 to Apr 11</td><td>Apr 11 to Apr 25</td><td>Apr 4 to May 9</td><td>Aug 4 to Sep 3</td><td>40F+</td><td>Sow a short row every 2 weeks; bolts in July heat</td></tr>
+<tr><td>Spinach</td><td></td><td></td><td>Mar 21 to Apr 11</td><td>Aug 14 to Aug 29</td><td>40F+</td><td>Cold soil is fine; summer sowings bolt</td></tr>
+<tr><td>Swiss chard</td><td>Mar 28 to Apr 11</td><td>Apr 25 to May 9</td><td>Apr 18 to May 9</td><td>Jul 25 to Aug 9</td><td>50F+</td><td>One sowing cuts all season</td></tr>
+<tr><td>Peas</td><td></td><td></td><td>Mar 21 to Apr 4</td><td></td><td>40F+</td><td>As soon as soil crumbles; heat ends them by July</td></tr>
+<tr><td>Green beans</td><td></td><td></td><td>May 9 to May 23</td><td></td><td>60F+</td><td>Resow every 2 to 3 weeks into early July for a steady picking</td></tr>
+<tr><td>Sweet corn</td><td></td><td></td><td>May 9 to May 23</td><td></td><td>60F+</td><td>Cold soil rots the seed; blocks beat rows for pollination</td></tr>
+<tr><td>Cucumbers</td><td>Apr 11 to Apr 18</td><td>May 16 to May 23</td><td>May 9 to May 23</td><td></td><td>65F+</td><td>Direct sowing usually catches up to transplants</td></tr>
+<tr><td>Zucchini</td><td></td><td></td><td>May 9 to May 23</td><td></td><td>60F+</td><td>Two plants feed a neighborhood; resow in late June for fresh fall plants</td></tr>
+<tr><td>Winter squash</td><td></td><td></td><td>May 9 to May 16</td><td></td><td>60F+</td><td>Needs the full season; get it in promptly</td></tr>
+<tr><td>Pumpkins</td><td></td><td></td><td>May 9 to May 16</td><td></td><td>60F+</td><td>In the ground by mid-June even up north</td></tr>
+<tr><td>Melons</td><td>Apr 4 to Apr 11</td><td>May 16 to May 30</td><td></td><td></td><td>70F+</td><td>Michigan melons want black plastic or a very warm site</td></tr>
+<tr><td>Watermelon</td><td>Apr 4 to Apr 11</td><td>May 16 to May 30</td><td></td><td></td><td>70F+</td><td>Short-season varieties only; heat is everything</td></tr>
+<tr><td>Carrots</td><td></td><td></td><td>Apr 11 to May 16</td><td>Jul 10 to Jul 25</td><td>45F+</td><td>Slow to germinate; keep the row damp for 2 weeks</td></tr>
+<tr><td>Beets</td><td></td><td></td><td>Apr 4 to May 9</td><td>Jul 25 to Aug 9</td><td>45F+</td><td>Each seed is a cluster; thin without mercy</td></tr>
+<tr><td>Radishes</td><td></td><td></td><td>Mar 28 to May 2</td><td>Aug 19 to Sep 8</td><td>40F+</td><td>3 weeks seed to salad; sow small and often</td></tr>
+<tr><td>Turnips</td><td></td><td></td><td>Apr 4 to Apr 25</td><td>Jul 30 to Aug 14</td><td>45F+</td><td>The fall sowing is the good one</td></tr>
+<tr><td>Onions from seed</td><td>Feb 21 to Mar 7</td><td>Apr 4 to Apr 18</td><td></td><td></td><td>45F+</td><td>Start early or buy plants; day length ends bulbing in July</td></tr>
+<tr><td>Onion sets</td><td></td><td></td><td>Apr 4 to Apr 18</td><td></td><td>45F+</td><td>The easy path; plant when soil works</td></tr>
+<tr><td>Potatoes</td><td></td><td></td><td>Apr 18 to May 9</td><td></td><td>45F+</td><td>Sprouts take a light frost and regrow</td></tr>
+<tr><td>Garlic</td><td></td><td></td><td></td><td>Oct 3 to Oct 24</td><td></td><td>Plant in fall, after first light frost and before the ground freezes; harvest next July</td></tr>
+</tbody></table>
+
+<h2>Herbs</h2>
+<table><thead><tr><th>Crop</th><th>Start indoors</th><th>Transplant out</th><th>Direct sow</th><th>Fall sow</th><th>Soil temp</th><th>Notes</th></tr></thead><tbody id="tb-herb">
+<tr><td>Basil</td><td>Mar 21 to Apr 4</td><td>May 9 to May 16</td><td>May 16 to May 23</td><td></td><td>65F+</td><td>Sulks below 50F nights; the last thing out the door</td></tr>
+<tr><td>Parsley</td><td>Feb 21 to Mar 7</td><td>Apr 18 to May 2</td><td>Apr 11 to May 2</td><td></td><td>50F+</td><td>Painfully slow germination; soak seed overnight</td></tr>
+<tr><td>Cilantro</td><td></td><td></td><td>Apr 18 to May 9</td><td>Aug 9 to Aug 24</td><td>50F+</td><td>Bolts fast in heat; sow every 3 weeks and again for fall</td></tr>
+<tr><td>Dill</td><td></td><td></td><td>Apr 18 to May 9</td><td></td><td>50F+</td><td>Direct sow only; resents transplanting</td></tr>
+<tr><td>Chives</td><td>Mar 7 to Mar 21</td><td>Apr 18 to May 2</td><td></td><td></td><td>45F+</td><td>Perennial; one planting lasts decades</td></tr>
+<tr><td>Oregano</td><td>Mar 7 to Mar 21</td><td>May 2 to May 16</td><td></td><td></td><td>50F+</td><td>Perennial in most of Michigan with snow cover</td></tr>
+<tr><td>Thyme</td><td>Mar 7 to Mar 21</td><td>May 2 to May 16</td><td></td><td></td><td>50F+</td><td>Perennial; wants sharp drainage more than warmth</td></tr>
+<tr><td>Sage</td><td>Mar 7 to Mar 21</td><td>May 2 to May 16</td><td></td><td></td><td>50F+</td><td>Perennial; woody plants shrug off Zone 5 winters</td></tr>
+<tr><td>Rosemary</td><td>Feb 21 to Mar 7</td><td>May 16 to May 23</td><td></td><td></td><td>60F+</td><td>Not hardy here; pot it and bring it in by October</td></tr>
+</tbody></table>
+
+<h2>Flowers</h2>
+<table><thead><tr><th>Crop</th><th>Start indoors</th><th>Transplant out</th><th>Direct sow</th><th>Fall sow</th><th>Soil temp</th><th>Notes</th></tr></thead><tbody id="tb-flower">
+<tr><td>Zinnias</td><td>Apr 4 to Apr 11</td><td>May 9 to May 16</td><td>May 9 to May 16</td><td></td><td>60F+</td><td>Direct sowing works fine; cut hard for more blooms</td></tr>
+<tr><td>Marigolds</td><td>Mar 21 to Apr 4</td><td>May 9 to May 16</td><td>May 9 to May 16</td><td></td><td>60F+</td><td>Foolproof from seed either way</td></tr>
+<tr><td>Sunflowers</td><td></td><td></td><td>May 2 to May 23</td><td></td><td>55F+</td><td>Sow every 2 weeks for a rolling show</td></tr>
+<tr><td>Cosmos</td><td></td><td></td><td>May 2 to May 16</td><td></td><td>55F+</td><td>Thrives on neglect and poor soil</td></tr>
+<tr><td>Nasturtiums</td><td></td><td></td><td>May 2 to May 16</td><td></td><td>55F+</td><td>Soak the big seeds; lean soil means more flowers</td></tr>
+<tr><td>Sweet peas</td><td></td><td></td><td>Mar 28 to Apr 11</td><td></td><td>45F+</td><td>Cold-lovers; plant with the edible peas</td></tr>
+<tr><td>Snapdragons</td><td>Feb 21 to Mar 7</td><td>Apr 18 to May 2</td><td></td><td></td><td>45F+</td><td>Take light frost; among the first out</td></tr>
+<tr><td>Petunias</td><td>Feb 21 to Mar 7</td><td>May 9 to May 16</td><td></td><td></td><td>60F+</td><td>Tiny seed on the surface, light to germinate</td></tr>
+<tr><td>Calendula</td><td></td><td></td><td>Apr 11 to May 2</td><td></td><td>50F+</td><td>Self-sows once you have it</td></tr>
+<tr><td>Morning glories</td><td></td><td></td><td>May 9 to May 16</td><td></td><td>60F+</td><td>Nick and soak seed; do not start early or it strangles the shelf</td></tr>
+</tbody></table>
+
+<h2>How these dates are computed</h2>
+<p>Every window on this page is an offset from your station's last spring frost, or from the typical first fall frost for the fall sowings. The spring anchors come from the Michigan State Climatologist Office's probability table, published through <a href="https://www.canr.msu.edu/resources/frost-free-dates" rel="noopener">MSU Extension</a>, which gives the chance of 32 degrees or colder occurring on or after a given date for 78 Michigan stations. The offsets are standard horticultural timing: tomatoes start indoors six to eight weeks before the last frost and go out a week or two after it, peas go in the ground four to six weeks before it, and so on, the same arithmetic gardeners have always done on the back of a seed packet, done here for every crop and every station at once.</p>
+
+<h2>What the calendar cannot tell you</h2>
+<p>Soil temperature outranks any calendar. A Bay City May can hand you 60 degree soil on the 10th one year and cold mud on the 25th the next, and warm season seed sown into cold mud rots rather than waits. A ten dollar soil thermometer settles the argument: 40s are for peas and spinach, 50s bring in the brassicas and roots, 60 opens the door for beans, corn, and tomatoes, and the cucurbits and melons want 65 to 70. When the calendar says go and the thermometer says wait, the thermometer is right.</p>
+<p>Cold air drains downhill and pools, which is why the frost map of Michigan is really a map of landforms. Gardens on the Lake Michigan shore and around Saginaw Bay run later into fall than gardens ten miles inland; the high sandy interior around Grayling, Gaylord, and Vanderbilt can frost any month of the year. If your garden sits in a hollow, plan a week later in spring and a week earlier in fall than your station says. If it sits on a slope above open water, you are playing with house money.</p>
+<p>One more mapping note: the 2023 USDA hardiness zone update shifted much of lower Michigan about half a zone warmer on paper, and the Bay City area now sits on the 6a to 6b line. Hardiness zones describe winter lows for perennials; they say nothing about frost dates, which is why this calendar runs on frost probabilities instead.</p>
+
+<h2>Common questions</h2>
+<h3>When do I plant tomatoes in Michigan?</h3>
+<p>Start seed indoors six to eight weeks before your median last frost and transplant one to three weeks after it, once nights hold above 50 and the soil reads 60. In Bay City that means starting around mid March and planting out in mid to late May; in Detroit, two weeks earlier on both ends; in the northern interior, June planting is normal and nothing is wrong with your spring.</p>
+<h3>What can I plant before the last frost?</h3>
+<p>Plenty. Peas, spinach, radishes, lettuce, beets, carrots, onions, potatoes, sweet peas, and the brassica transplants all tolerate frost and prefer cool soil. Half the garden can be growing a month before the tomatoes are safe.</p>
+<h3>Is there time for a fall garden in Michigan?</h3>
+<p>Yes, and it is the most overlooked planting of the year. Count back from your first fall frost: kale, carrots, and beets sown in July, lettuce and spinach into August, radishes into September in the southern half of the state. The fall column above does that counting for your station.</p>
+<h3>When do I plant garlic?</h3>
+<p>In fall, after the first light frost and before the ground freezes: October for most of the Lower Peninsula, late September up north. It roots through winter and hands you bulbs the following July.</p>
+
+<div class="tool-strip">
+<h2>Michigan garden tools by Chris Izworski</h2>
+<ul>
+<li><a href="/michigan-frost-dates/">Michigan frost dates</a>: all 78 State Climatologist stations with probabilities, searchable</li>
+<li><a href="/seed-starting-guide/">Seed starting guide</a>: equipment, lights, and timing for any zone</li>
+<li><a href="/heirloom-seed-saving-guide/">Heirloom seed saving guide</a>: isolation, fermentation, viability, storage</li>
+<li><a href="https://chrisizworski.com/heirloom-variety-matchmaker/">Heirloom variety matchmaker</a>: five questions, three varieties matched to your garden</li>
+<li><a href="https://freighterviewfarms.com" rel="noopener">Freighter View Farms</a>: the garden these tools grew out of, in Bay City on Saginaw Bay</li>
+</ul>
+</div>
+
+<div class="src">Sources: Michigan State Climatologist Office frost probability table via MSU Extension; NOAA 1991 to 2020 climate normals for typical fall frost dates; USDA Plant Hardiness Zone Map, 2023 update; Freighter View Farms field records, Bay City, Michigan.</div>
+<div class="credit">Data compiled and maintained by <a href="https://chrisizworski.com">Chris Izworski</a>, writer, technologist, and gardener based in Bay City, Michigan.</div>
+</div>
+<script>const STATIONS=[{"s":"adrian","n":"Adrian","r":"Southeast","p50":"May 3","p25":"May 9","lx":"May 23","ff":"Oct 5"},{"s":"allegan","n":"Allegan","r":"Southwest","p50":"May 6","p25":"May 14","lx":"Jun 12","ff":"Oct 8"},{"s":"alma","n":"Alma","r":"Central","p50":"May 10","p25":"May 17","lx":"May 27","ff":"Sep 28"},{"s":"alpena-wso","n":"Alpena WSO","r":"Northeast Lower","p50":"May 31","p25":"Jun 8","lx":"Jun 21","ff":"Sep 25"},{"s":"alpena","n":"Alpena","r":"Northeast Lower","p50":"May 8","p25":"May 15","lx":"May 29","ff":"Sep 25"},{"s":"ann-arbor","n":"Ann Arbor","r":"Southeast","p50":"Apr 29","p25":"May 6","lx":"May 27","ff":"Oct 12"},{"s":"atlanta","n":"Atlanta","r":"Northeast Lower","p50":"Jun 2","p25":"Jun 11","lx":"Jul 6","ff":"Sep 8"},{"s":"bad-axe","n":"Bad Axe","r":"Thumb","p50":"May 15","p25":"May 22","lx":"Jun 8","ff":"Oct 3"},{"s":"battle-creek","n":"Battle Creek","r":"Southwest","p50":"May 5","p25":"May 11","lx":"May 27","ff":"Oct 6"},{"s":"bay-city","n":"Bay City","r":"Saginaw Valley","p50":"May 2","p25":"May 9","lx":"May 26","ff":"Oct 3"},{"s":"big-rapids","n":"Big Rapids","r":"West Central","p50":"May 20","p25":"May 26","lx":"Jun 12","ff":"Sep 22"},{"s":"bloomingdale","n":"Bloomingdale","r":"Southwest","p50":"May 10","p25":"May 19","lx":"Jun 12","ff":"Oct 8"},{"s":"cadillac","n":"Cadillac","r":"Northwest Lower","p50":"Jun 1","p25":"Jun 12","lx":"Jul 11","ff":"Sep 18"},{"s":"caro","n":"Caro","r":"Thumb","p50":"May 23","p25":"May 31","lx":"Jun 22","ff":"Oct 3"},{"s":"charlotte","n":"Charlotte","r":"Central","p50":"May 13","p25":"May 21","lx":"Jun 12","ff":"Oct 3"},{"s":"chatham","n":"Chatham","r":"Upper Peninsula","p50":"Jun 11","p25":"Jun 21","lx":"Jul 31","ff":"Sep 25"},{"s":"cheboygan","n":"Cheboygan","r":"Northeast Lower","p50":"May 17","p25":"May 24","lx":"Jun 21","ff":"Sep 28"},{"s":"coldwater","n":"Coldwater","r":"South Central","p50":"May 7","p25":"May 14","lx":"May 27","ff":"Oct 5"},{"s":"detroit-city","n":"Detroit city","r":"Southeast","p50":"Apr 24","p25":"Apr 30","lx":"May 12","ff":"Oct 25"},{"s":"detroit-metro","n":"Detroit Metro","r":"Southeast","p50":"May 3","p25":"May 11","lx":"May 29","ff":"Oct 15"},{"s":"east-jordan","n":"East Jordan","r":"Northwest Lower","p50":"May 30","p25":"Jun 6","lx":"Jun 22","ff":"Sep 8"},{"s":"east-tawas","n":"East Tawas","r":"Northeast Lower","p50":"May 22","p25":"May 30","lx":"Jun 14","ff":"Oct 3"},{"s":"eau-claire","n":"Eau Claire","r":"Southwest","p50":"May 2","p25":"May 9","lx":"May 29","ff":"Oct 15"},{"s":"escanaba","n":"Escanaba","r":"Upper Peninsula","p50":"May 11","p25":"May 17","lx":"May 30","ff":"Oct 3"},{"s":"fayette","n":"Fayette","r":"Upper Peninsula","p50":"May 16","p25":"May 23","lx":"Jun 8","ff":"Oct 3"},{"s":"fife-lake","n":"Fife Lake","r":"Northwest Lower","p50":"Jun 7","p25":"Jun 17","lx":"Jul 6","ff":"Sep 18"},{"s":"flint","n":"Flint","r":"East Central","p50":"May 8","p25":"May 15","lx":"May 27","ff":"Oct 5"},{"s":"frankfort","n":"Frankfort","r":"Northwest Lower","p50":"May 18","p25":"May 26","lx":"Jun 23","ff":"Oct 8"},{"s":"gladwin","n":"Gladwin","r":"North Central","p50":"May 20","p25":"May 28","lx":"Jun 22","ff":"Sep 22"},{"s":"grand-haven","n":"Grand Haven","r":"Lakeshore","p50":"May 1","p25":"May 8","lx":"May 18","ff":"Oct 15"},{"s":"grand-marais","n":"Grand Marais","r":"Upper Peninsula","p50":"Jun 4","p25":"Jun 15","lx":"Jul 20","ff":"Sep 12"},{"s":"grand-rapids","n":"Grand Rapids","r":"West","p50":"May 2","p25":"May 10","lx":"May 27","ff":"Oct 8"},{"s":"grayling","n":"Grayling","r":"North Central","p50":"May 31","p25":"Jun 10","lx":"Jul 21","ff":"Sep 12"},{"s":"greenville","n":"Greenville","r":"West","p50":"May 9","p25":"May 18","lx":"Jun 12","ff":"Oct 8"},{"s":"gull-lake","n":"Gull Lake","r":"Southwest","p50":"May 7","p25":"May 13","lx":"May 29","ff":"Oct 8"},{"s":"hale-loud-dam","n":"Hale Loud Dam","r":"Northeast Lower","p50":"May 23","p25":"May 30","lx":"Jun 20","ff":"Oct 3"},{"s":"harbor-beach","n":"Harbor Beach","r":"Thumb","p50":"May 9","p25":"May 16","lx":"May 26","ff":"Oct 3"},{"s":"harrisville","n":"Harrisville","r":"Northeast Lower","p50":"May 23","p25":"Jun 1","lx":"Jun 25","ff":"Sep 25"},{"s":"hart","n":"Hart","r":"Lakeshore","p50":"May 20","p25":"May 27","lx":"Jun 13","ff":"Oct 10"},{"s":"hastings","n":"Hastings","r":"Southwest","p50":"May 13","p25":"May 21","lx":"Jun 12","ff":"Oct 8"},{"s":"hillsdale","n":"Hillsdale","r":"South Central","p50":"May 12","p25":"May 20","lx":"Jun 12","ff":"Oct 5"},{"s":"holland","n":"Holland","r":"Lakeshore","p50":"May 8","p25":"May 17","lx":"Jun 12","ff":"Oct 12"},{"s":"houghton","n":"Houghton","r":"Upper Peninsula","p50":"May 23","p25":"May 31","lx":"Jul 10","ff":"Sep 28"},{"s":"houghton-lake","n":"Houghton Lake","r":"North Central","p50":"Jun 2","p25":"Jun 14","lx":"Jun 20","ff":"Sep 15"},{"s":"iron-mountain","n":"Iron Mountain","r":"Upper Peninsula","p50":"May 30","p25":"Jun 6","lx":"Jun 22","ff":"Sep 18"},{"s":"ironwood","n":"Ironwood","r":"Upper Peninsula","p50":"May 24","p25":"May 31","lx":"Jun 14","ff":"Sep 15"},{"s":"ishpeming","n":"Ishpeming","r":"Upper Peninsula","p50":"May 28","p25":"Jun 4","lx":"Jun 18","ff":"Oct 1"},{"s":"jackson","n":"Jackson","r":"South Central","p50":"May 8","p25":"May 15","lx":"May 31","ff":"Oct 5"},{"s":"kalamazoo","n":"Kalamazoo","r":"Southwest","p50":"May 3","p25":"May 11","lx":"May 27","ff":"Oct 8"},{"s":"lake-city","n":"Lake City","r":"North Central","p50":"May 29","p25":"Jun 8","lx":"Jul 11","ff":"Sep 18"},{"s":"lansing","n":"Lansing","r":"Central","p50":"May 8","p25":"May 17","lx":"Jun 12","ff":"Oct 3"},{"s":"lapeer","n":"Lapeer","r":"East Central","p50":"May 14","p25":"May 23","lx":"Jun 8","ff":"Oct 5"},{"s":"ludington","n":"Ludington","r":"Lakeshore","p50":"May 13","p25":"May 22","lx":"Jun 14","ff":"Oct 10"},{"s":"manistee","n":"Manistee","r":"Lakeshore","p50":"May 11","p25":"May 18","lx":"May 31","ff":"Oct 10"},{"s":"marquette-wso","n":"Marquette WSO","r":"Upper Peninsula","p50":"May 13","p25":"May 19","lx":"May 29","ff":"Oct 1"},{"s":"midland","n":"Midland","r":"Saginaw Valley","p50":"May 8","p25":"May 17","lx":"Jun 12","ff":"Oct 1"},{"s":"milford","n":"Milford","r":"Southeast","p50":"May 8","p25":"May 15","lx":"May 30","ff":"Oct 10"},{"s":"mio","n":"Mio","r":"Northeast Lower","p50":"Jun 1","p25":"Jun 10","lx":"Jun 21","ff":"Sep 12"},{"s":"monroe","n":"Monroe","r":"Southeast","p50":"Apr 26","p25":"May 2","lx":"May 13","ff":"Oct 15"},{"s":"mt-clemens","n":"Mt. Clemens","r":"Southeast","p50":"Apr 27","p25":"May 5","lx":"May 23","ff":"Oct 18"},{"s":"mt-pleasant","n":"Mt. Pleasant","r":"Central","p50":"May 14","p25":"May 21","lx":"May 30","ff":"Sep 28"},{"s":"munising","n":"Munising","r":"Upper Peninsula","p50":"Jun 10","p25":"Jun 17","lx":"Jul 4","ff":"Sep 25"},{"s":"muskegon","n":"Muskegon","r":"Lakeshore","p50":"May 6","p25":"May 14","lx":"Jun 12","ff":"Oct 12"},{"s":"newaygo","n":"Newaygo","r":"West Central","p50":"May 26","p25":"Jun 3","lx":"Jun 22","ff":"Sep 22"},{"s":"newberry","n":"Newberry","r":"Upper Peninsula","p50":"May 26","p25":"Jun 2","lx":"Jun 18","ff":"Sep 12"},{"s":"onaway","n":"Onaway","r":"Northeast Lower","p50":"May 25","p25":"Jun 1","lx":"Jun 15","ff":"Sep 28"},{"s":"owosso","n":"Owosso","r":"Central","p50":"May 12","p25":"May 19","lx":"May 30","ff":"Oct 3"},{"s":"paw-paw","n":"Paw Paw","r":"Southwest","p50":"May 11","p25":"May 19","lx":"Jun 12","ff":"Oct 8"},{"s":"pontiac","n":"Pontiac","r":"Southeast","p50":"May 6","p25":"May 13","lx":"May 25","ff":"Oct 10"},{"s":"port-huron","n":"Port Huron","r":"Thumb","p50":"May 3","p25":"May 11","lx":"Jun 5","ff":"Oct 12"},{"s":"saginaw","n":"Saginaw","r":"Saginaw Valley","p50":"May 4","p25":"May 11","lx":"May 28","ff":"Oct 5"},{"s":"sault-ste-marie","n":"Sault Ste. Marie","r":"Upper Peninsula","p50":"May 22","p25":"May 29","lx":"Jun 21","ff":"Sep 22"},{"s":"south-haven","n":"South Haven","r":"Southwest","p50":"May 3","p25":"May 9","lx":"May 23","ff":"Oct 15"},{"s":"three-rivers","n":"Three Rivers","r":"Southwest","p50":"May 8","p25":"May 15","lx":"May 29","ff":"Oct 8"},{"s":"traverse-city","n":"Traverse City","r":"Northwest Lower","p50":"May 23","p25":"Jun 1","lx":"Jul 6","ff":"Oct 8"},{"s":"vanderbilt","n":"Vanderbilt","r":"North Central","p50":"Jun 20","p25":"Jun 30","lx":"Jul 31","ff":"Sep 8"},{"s":"west-branch","n":"West Branch","r":"North Central","p50":"May 27","p25":"Jun 4","lx":"Jun 18","ff":"Sep 18"},{"s":"willis","n":"Willis","r":"Southeast","p50":"May 10","p25":"May 17","lx":"May 29","ff":"Oct 12"}];
+const CROPS=[{"n":"Tomatoes","c":"veg","i":[-56,-42],"t":[7,21],"d":null,"f":null,"s":60,"o":"Wait for 60F soil and settled nights; a week of patience beats a month of sulking"},{"n":"Peppers","c":"veg","i":[-63,-49],"t":[14,21],"d":null,"f":null,"s":65,"o":"Slower than tomatoes at every stage; never rush them out"},{"n":"Eggplant","c":"veg","i":[-63,-49],"t":[14,21],"d":null,"f":null,"s":65,"o":"The most cold-sensitive transplant in the garden"},{"n":"Broccoli","c":"veg","i":[-49,-35],"t":[-21,-7],"d":null,"f":[-95,-80],"s":45,"o":"Spring and fall crop; fall heads are sweeter"},{"n":"Cabbage","c":"veg","i":[-49,-35],"t":[-28,-14],"d":null,"f":[-100,-85],"s":45,"o":"Takes light frost at both ends of the season"},{"n":"Cauliflower","c":"veg","i":[-42,-28],"t":[-14,0],"d":null,"f":[-95,-80],"s":50,"o":"Fussier than broccoli; steady water or it buttons"},{"n":"Brussels sprouts","c":"veg","i":[-28,-14],"t":[0,14],"d":null,"f":null,"s":50,"o":"One long season; sprouts sweeten after fall frost"},{"n":"Kale","c":"veg","i":[-42,-28],"t":[-28,-14],"d":[-28,-14],"f":[-75,-55],"s":45,"o":"Nearly indestructible; fall kale after frost is the best kale"},{"n":"Lettuce","c":"veg","i":[-35,-21],"t":[-21,-7],"d":[-28,7],"f":[-60,-30],"s":40,"o":"Sow a short row every 2 weeks; bolts in July heat"},{"n":"Spinach","c":"veg","i":null,"t":null,"d":[-42,-21],"f":[-50,-35],"s":40,"o":"Cold soil is fine; summer sowings bolt"},{"n":"Swiss chard","c":"veg","i":[-35,-21],"t":[-7,7],"d":[-14,7],"f":[-70,-55],"s":50,"o":"One sowing cuts all season"},{"n":"Peas","c":"veg","i":null,"t":null,"d":[-42,-28],"f":null,"s":40,"o":"As soon as soil crumbles; heat ends them by July"},{"n":"Green beans","c":"veg","i":null,"t":null,"d":[7,21],"f":null,"s":60,"o":"Resow every 2 to 3 weeks into early July for a steady picking"},{"n":"Sweet corn","c":"veg","i":null,"t":null,"d":[7,21],"f":null,"s":60,"o":"Cold soil rots the seed; blocks beat rows for pollination"},{"n":"Cucumbers","c":"veg","i":[-21,-14],"t":[14,21],"d":[7,21],"f":null,"s":65,"o":"Direct sowing usually catches up to transplants"},{"n":"Zucchini","c":"veg","i":null,"t":null,"d":[7,21],"f":null,"s":60,"o":"Two plants feed a neighborhood; resow in late June for fresh fall plants"},{"n":"Winter squash","c":"veg","i":null,"t":null,"d":[7,14],"f":null,"s":60,"o":"Needs the full season; get it in promptly"},{"n":"Pumpkins","c":"veg","i":null,"t":null,"d":[7,14],"f":null,"s":60,"o":"In the ground by mid-June even up north"},{"n":"Melons","c":"veg","i":[-28,-21],"t":[14,28],"d":null,"f":null,"s":70,"o":"Michigan melons want black plastic or a very warm site"},{"n":"Watermelon","c":"veg","i":[-28,-21],"t":[14,28],"d":null,"f":null,"s":70,"o":"Short-season varieties only; heat is everything"},{"n":"Carrots","c":"veg","i":null,"t":null,"d":[-21,14],"f":[-85,-70],"s":45,"o":"Slow to germinate; keep the row damp for 2 weeks"},{"n":"Beets","c":"veg","i":null,"t":null,"d":[-28,7],"f":[-70,-55],"s":45,"o":"Each seed is a cluster; thin without mercy"},{"n":"Radishes","c":"veg","i":null,"t":null,"d":[-35,0],"f":[-45,-25],"s":40,"o":"3 weeks seed to salad; sow small and often"},{"n":"Turnips","c":"veg","i":null,"t":null,"d":[-28,-7],"f":[-65,-50],"s":45,"o":"The fall sowing is the good one"},{"n":"Onions from seed","c":"veg","i":[-70,-56],"t":[-28,-14],"d":null,"f":null,"s":45,"o":"Start early or buy plants; day length ends bulbing in July"},{"n":"Onion sets","c":"veg","i":null,"t":null,"d":[-28,-14],"f":null,"s":45,"o":"The easy path; plant when soil works"},{"n":"Potatoes","c":"veg","i":null,"t":null,"d":[-14,7],"f":null,"s":45,"o":"Sprouts take a light frost and regrow"},{"n":"Garlic","c":"veg","i":null,"t":null,"d":null,"f":[0,21],"s":null,"o":"Plant in fall, after first light frost and before the ground freezes; harvest next July"},{"n":"Basil","c":"herb","i":[-42,-28],"t":[7,14],"d":[14,21],"f":null,"s":65,"o":"Sulks below 50F nights; the last thing out the door"},{"n":"Parsley","c":"herb","i":[-70,-56],"t":[-14,0],"d":[-21,0],"f":null,"s":50,"o":"Painfully slow germination; soak seed overnight"},{"n":"Cilantro","c":"herb","i":null,"t":null,"d":[-14,7],"f":[-55,-40],"s":50,"o":"Bolts fast in heat; sow every 3 weeks and again for fall"},{"n":"Dill","c":"herb","i":null,"t":null,"d":[-14,7],"f":null,"s":50,"o":"Direct sow only; resents transplanting"},{"n":"Chives","c":"herb","i":[-56,-42],"t":[-14,0],"d":null,"f":null,"s":45,"o":"Perennial; one planting lasts decades"},{"n":"Oregano","c":"herb","i":[-56,-42],"t":[0,14],"d":null,"f":null,"s":50,"o":"Perennial in most of Michigan with snow cover"},{"n":"Thyme","c":"herb","i":[-56,-42],"t":[0,14],"d":null,"f":null,"s":50,"o":"Perennial; wants sharp drainage more than warmth"},{"n":"Sage","c":"herb","i":[-56,-42],"t":[0,14],"d":null,"f":null,"s":50,"o":"Perennial; woody plants shrug off Zone 5 winters"},{"n":"Rosemary","c":"herb","i":[-70,-56],"t":[14,21],"d":null,"f":null,"s":60,"o":"Not hardy here; pot it and bring it in by October"},{"n":"Zinnias","c":"flower","i":[-28,-21],"t":[7,14],"d":[7,14],"f":null,"s":60,"o":"Direct sowing works fine; cut hard for more blooms"},{"n":"Marigolds","c":"flower","i":[-42,-28],"t":[7,14],"d":[7,14],"f":null,"s":60,"o":"Foolproof from seed either way"},{"n":"Sunflowers","c":"flower","i":null,"t":null,"d":[0,21],"f":null,"s":55,"o":"Sow every 2 weeks for a rolling show"},{"n":"Cosmos","c":"flower","i":null,"t":null,"d":[0,14],"f":null,"s":55,"o":"Thrives on neglect and poor soil"},{"n":"Nasturtiums","c":"flower","i":null,"t":null,"d":[0,14],"f":null,"s":55,"o":"Soak the big seeds; lean soil means more flowers"},{"n":"Sweet peas","c":"flower","i":null,"t":null,"d":[-35,-21],"f":null,"s":45,"o":"Cold-lovers; plant with the edible peas"},{"n":"Snapdragons","c":"flower","i":[-70,-56],"t":[-14,0],"d":null,"f":null,"s":45,"o":"Take light frost; among the first out"},{"n":"Petunias","c":"flower","i":[-70,-56],"t":[7,14],"d":null,"f":null,"s":60,"o":"Tiny seed on the surface, light to germinate"},{"n":"Calendula","c":"flower","i":null,"t":null,"d":[-21,0],"f":null,"s":50,"o":"Self-sows once you have it"},{"n":"Morning glories","c":"flower","i":null,"t":null,"d":[7,14],"f":null,"s":60,"o":"Nick and soak seed; do not start early or it strangles the shelf"}];</script>
+<script>
+(function(){
+  var MO={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  var MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function pd(s){var p=s.split(" ");return new Date(2025,MO[p[0]],+p[1]);}
+  function fd(d){return MN[d.getMonth()]+" "+d.getDate();}
+  function add(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x;}
+  function win(base,off){return fd(add(base,off[0]))+" to "+fd(add(base,off[1]));}
+  function inWin(base,off,today){var a=add(base,off[0]),b=add(base,off[1]);var t=new Date(2025,today.getMonth(),today.getDate());return t>=a&&t<=b;}
+
+  var sel=document.getElementById("citySel"), safe=document.getElementById("safeChk"),
+      lfOut=document.getElementById("lfOut"), ffOut=document.getElementById("ffOut"),
+      week=document.getElementById("thisWeek"), custom=document.getElementById("customLF");
+
+  // populate select grouped by region
+  var regions={};
+  STATIONS.forEach(function(s){(regions[s.r]=regions[s.r]||[]).push(s);});
+  Object.keys(regions).sort().forEach(function(r){
+    var og=document.createElement("optgroup");og.label=r;
+    regions[r].forEach(function(s){
+      var o=document.createElement("option");o.value=s.s;o.textContent=s.n+" ("+s.p50+")";og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+
+  function current(){
+    var s=STATIONS.find(function(x){return x.s===sel.value;})||STATIONS.find(function(x){return x.s==="bay-city";});
+    var lf = custom.value ? new Date(2025, +custom.value.slice(5,7)-1, +custom.value.slice(8,10)) : pd(safe.checked?s.p25:s.p50);
+    return {s:s, lf:lf, ff:pd(s.ff)};
+  }
+
+  function render(){
+    var c=current();
+    lfOut.textContent=(custom.value?"Custom":"Median ("+(safe.checked?"cautious, 25%":"50%")+")")+" last spring frost: "+fd(c.lf)+(custom.value?"":" \u00b7 latest ever recorded: "+c.s.lx);
+    ffOut.textContent="Typical first fall frost: "+c.s.ff;
+    ["veg","herb","flower"].forEach(function(cat){
+      var tb=document.getElementById("tb-"+cat);
+      var html="";
+      CROPS.forEach(function(cr){
+        if(cr.c!==cat)return;
+        html+="<tr><td>"+cr.n+"</td><td>"+(cr.i?win(c.lf,cr.i):"")+"</td><td>"+(cr.t?win(c.lf,cr.t):"")+"</td><td>"+(cr.d?win(c.lf,cr.d):"")+"</td><td>"+(cr.f?win(c.ff,cr.f):"")+"</td><td>"+(cr.s?cr.s+"F+":"")+"</td><td>"+cr.o+"</td></tr>";
+      });
+      tb.innerHTML=html;
+    });
+    // this week
+    var now=new Date(), tasks=[];
+    CROPS.forEach(function(cr){
+      if(cr.i&&inWin(c.lf,cr.i,now))tasks.push("Start "+cr.n.toLowerCase()+" indoors");
+      if(cr.t&&inWin(c.lf,cr.t,now))tasks.push("Transplant "+cr.n.toLowerCase()+" outside");
+      if(cr.d&&inWin(c.lf,cr.d,now))tasks.push("Direct sow "+cr.n.toLowerCase());
+      if(cr.f&&inWin(c.ff,cr.f,now))tasks.push("Fall sow "+cr.n.toLowerCase());
+    });
+    week.innerHTML = tasks.length
+      ? "<strong>In the window this week near "+c.s.n+":</strong> "+tasks.slice(0,14).join("; ")+(tasks.length>14?"; and "+(tasks.length-14)+" more":"")
+      : "<strong>This week near "+c.s.n+":</strong> nothing is in a sowing or transplant window right now. Up north that means tend what is growing; in late fall it means order seed.";
+    var q="?city="+c.s.s+(safe.checked?"&safe=1":"");
+    history.replaceState(null,"",q);
+  }
+
+  sel.addEventListener("change",function(){custom.value="";render();});
+  safe.addEventListener("change",function(){custom.value="";render();});
+  custom.addEventListener("change",render);
+  document.getElementById("printBtn").addEventListener("click",function(){window.print();});
+
+  var q=new URLSearchParams(location.search);
+  var city=q.get("city");
+  if(city&&STATIONS.some(function(s){return s.s===city;}))sel.value=city;else sel.value="bay-city";
+  if(q.get("safe")==="1")safe.checked=true;
+  render();
+})();
+</script>
+</body>
+</html>

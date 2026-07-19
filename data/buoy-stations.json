@@ -1,0 +1,1080 @@
+[
+  {
+    "id": "4403585",
+    "name": "4403585",
+    "lake": "Erie",
+    "lat": 42.132,
+    "lng": -80.27
+  },
+  {
+    "id": "4403586",
+    "name": "4403586",
+    "lake": "Erie",
+    "lat": 42.847,
+    "lng": -78.904
+  },
+  {
+    "id": "45001",
+    "name": "45001",
+    "lake": "Superior",
+    "lat": 48.061,
+    "lng": -87.793
+  },
+  {
+    "id": "45002",
+    "name": "45002",
+    "lake": "Michigan",
+    "lat": 45.344,
+    "lng": -86.411
+  },
+  {
+    "id": "45004",
+    "name": "45004",
+    "lake": "Superior",
+    "lat": 47.583,
+    "lng": -86.586
+  },
+  {
+    "id": "45005",
+    "name": "45005",
+    "lake": "Erie",
+    "lat": 41.677,
+    "lng": -82.398
+  },
+  {
+    "id": "45006",
+    "name": "45006",
+    "lake": "Superior",
+    "lat": 47.335,
+    "lng": -89.793
+  },
+  {
+    "id": "45012",
+    "name": "45012",
+    "lake": "Ontario",
+    "lat": 43.621,
+    "lng": -77.401
+  },
+  {
+    "id": "45013",
+    "name": "ATW20 - Atwater Park, WI",
+    "lake": "Michigan",
+    "lat": 43.098,
+    "lng": -87.85
+  },
+  {
+    "id": "45022",
+    "name": "45022",
+    "lake": "Michigan",
+    "lat": 45.404,
+    "lng": -85.088
+  },
+  {
+    "id": "45023",
+    "name": "North Entry Buoy, North Keweenaw Peninsula, MI",
+    "lake": "Superior",
+    "lat": 47.27,
+    "lng": -88.607
+  },
+  {
+    "id": "45024",
+    "name": "45024",
+    "lake": "Michigan",
+    "lat": 43.98,
+    "lng": -86.56
+  },
+  {
+    "id": "45025",
+    "name": "South Entry Buoy, South Keweenaw Peninsula, MI",
+    "lake": "Superior",
+    "lat": 46.969,
+    "lng": -88.398
+  },
+  {
+    "id": "45026",
+    "name": "Cook Nuclear Plant Buoy, Stevensville, MI",
+    "lake": "Michigan",
+    "lat": 41.982,
+    "lng": -86.619
+  },
+  {
+    "id": "45029",
+    "name": "Holland Buoy, MI",
+    "lake": "Michigan",
+    "lat": 42.9,
+    "lng": -86.272
+  },
+  {
+    "id": "45132",
+    "name": "45132",
+    "lake": "Erie",
+    "lat": 42.46,
+    "lng": -81.22
+  },
+  {
+    "id": "45135",
+    "name": "45135",
+    "lake": "Ontario",
+    "lat": 43.78,
+    "lng": -76.87
+  },
+  {
+    "id": "45136",
+    "name": "45136",
+    "lake": "Superior",
+    "lat": 48.54,
+    "lng": -86.95
+  },
+  {
+    "id": "45137",
+    "name": "Georgian Bay",
+    "lake": "Huron",
+    "lat": 45.54,
+    "lng": -81.02
+  },
+  {
+    "id": "45139",
+    "name": "45139",
+    "lake": "Huron",
+    "lat": 43.25,
+    "lng": -79.53
+  },
+  {
+    "id": "45142",
+    "name": "45142",
+    "lake": "Erie",
+    "lat": 42.74,
+    "lng": -79.29
+  },
+  {
+    "id": "45143",
+    "name": "South Georgian Bay",
+    "lake": "Huron",
+    "lat": 44.94,
+    "lng": -80.627
+  },
+  {
+    "id": "45147",
+    "name": "45147",
+    "lake": "Erie",
+    "lat": 42.43,
+    "lng": -82.68
+  },
+  {
+    "id": "45149",
+    "name": "Southern Lake Huron",
+    "lake": "Huron",
+    "lat": 43.54,
+    "lng": -82.08
+  },
+  {
+    "id": "45152",
+    "name": "45152",
+    "lake": "Huron",
+    "lat": 46.23,
+    "lng": -79.72
+  },
+  {
+    "id": "45154",
+    "name": "45154",
+    "lake": "Huron",
+    "lat": 46.05,
+    "lng": -82.64
+  },
+  {
+    "id": "45159",
+    "name": "45159",
+    "lake": "Ontario",
+    "lat": 43.77,
+    "lng": -78.98
+  },
+  {
+    "id": "45161",
+    "name": "45161",
+    "lake": "Michigan",
+    "lat": 43.185,
+    "lng": -86.354
+  },
+  {
+    "id": "45164",
+    "name": "Cleveland Buoy, OH",
+    "lake": "Erie",
+    "lat": 41.748,
+    "lng": -81.698
+  },
+  {
+    "id": "45165",
+    "name": "45165",
+    "lake": "Erie",
+    "lat": 41.704,
+    "lng": -83.264
+  },
+  {
+    "id": "45167",
+    "name": "45167",
+    "lake": "Erie",
+    "lat": 42.185,
+    "lng": -80.135
+  },
+  {
+    "id": "45168",
+    "name": "South Haven Buoy, MI",
+    "lake": "Michigan",
+    "lat": 42.397,
+    "lng": -86.331
+  },
+  {
+    "id": "45170",
+    "name": "45170",
+    "lake": "Michigan",
+    "lat": 41.755,
+    "lng": -86.968
+  },
+  {
+    "id": "45174",
+    "name": "45174",
+    "lake": "Michigan",
+    "lat": 42.135,
+    "lng": -87.655
+  },
+  {
+    "id": "45175",
+    "name": "45175",
+    "lake": "Michigan",
+    "lat": 45.825,
+    "lng": -84.772
+  },
+  {
+    "id": "45176",
+    "name": "Cleveland Intake Crib Buoy, OH",
+    "lake": "Erie",
+    "lat": 41.55,
+    "lng": -81.765
+  },
+  {
+    "id": "45183",
+    "name": "45183",
+    "lake": "Michigan",
+    "lat": 44.982,
+    "lng": -85.831
+  },
+  {
+    "id": "45186",
+    "name": "Waukegan Buoy, IL",
+    "lake": "Michigan",
+    "lat": 42.368,
+    "lng": -87.795
+  },
+  {
+    "id": "45187",
+    "name": "Winthrop Harbor Buoy, IL",
+    "lake": "Michigan",
+    "lat": 42.491,
+    "lng": -87.779
+  },
+  {
+    "id": "45190",
+    "name": "45190",
+    "lake": "Ontario",
+    "lat": 43.282,
+    "lng": -76.961
+  },
+  {
+    "id": "45191",
+    "name": "45191",
+    "lake": "Ontario",
+    "lat": 43.388,
+    "lng": -78.192
+  },
+  {
+    "id": "45194",
+    "name": "45194",
+    "lake": "Michigan",
+    "lat": 45.803,
+    "lng": -84.792
+  },
+  {
+    "id": "45196",
+    "name": "Rocky River, OH",
+    "lake": "Erie",
+    "lat": 41.521,
+    "lng": -81.88
+  },
+  {
+    "id": "45197",
+    "name": "Euclid, OH",
+    "lake": "Erie",
+    "lat": 41.619,
+    "lng": -81.617
+  },
+  {
+    "id": "45198",
+    "name": "45198",
+    "lake": "Michigan",
+    "lat": 41.892,
+    "lng": -87.563
+  },
+  {
+    "id": "45199",
+    "name": "Salmon Unlimited Wisconsin",
+    "lake": "Michigan",
+    "lat": 42.702,
+    "lng": -87.647
+  },
+  {
+    "id": "45200",
+    "name": "45200",
+    "lake": "Erie",
+    "lat": 41.724,
+    "lng": -83.37
+  },
+  {
+    "id": "45201",
+    "name": "45201",
+    "lake": "Erie",
+    "lat": 41.601,
+    "lng": -82.781
+  },
+  {
+    "id": "45202",
+    "name": "45202",
+    "lake": "Erie",
+    "lat": 41.532,
+    "lng": -82.941
+  },
+  {
+    "id": "45203",
+    "name": "Huron Buoy",
+    "lake": "Erie",
+    "lat": 41.393,
+    "lng": -82.512
+  },
+  {
+    "id": "45204",
+    "name": "45204",
+    "lake": "Erie",
+    "lat": 41.508,
+    "lng": -82.115
+  },
+  {
+    "id": "45205",
+    "name": "45205",
+    "lake": "Erie",
+    "lat": 41.501,
+    "lng": -81.748
+  },
+  {
+    "id": "45206",
+    "name": "Euclid Beach Buoy",
+    "lake": "Erie",
+    "lat": 41.585,
+    "lng": -81.583
+  },
+  {
+    "id": "45207",
+    "name": "Fairport Harbor Buoy",
+    "lake": "Erie",
+    "lat": 41.731,
+    "lng": -81.367
+  },
+  {
+    "id": "45208",
+    "name": "Ashtabula Buoy",
+    "lake": "Erie",
+    "lat": 41.913,
+    "lng": -80.807
+  },
+  {
+    "id": "45209",
+    "name": "Lakeport Buoy, MI",
+    "lake": "Huron",
+    "lat": 43.129,
+    "lng": -82.391
+  },
+  {
+    "id": "45210",
+    "name": "Rawley Point East, WI (269)",
+    "lake": "Michigan",
+    "lat": 44.055,
+    "lng": -87.05
+  },
+  {
+    "id": "45211",
+    "name": "45211",
+    "lake": "Superior",
+    "lat": 46.973,
+    "lng": -86.568
+  },
+  {
+    "id": "45212",
+    "name": "North Huron Spotter",
+    "lake": "Huron",
+    "lat": 45.351,
+    "lng": -82.84
+  },
+  {
+    "id": "45213",
+    "name": "East Superior Spotter",
+    "lake": "Superior",
+    "lat": 47.588,
+    "lng": -86.588
+  },
+  {
+    "id": "45214",
+    "name": "South Michigan Spotter",
+    "lake": "Michigan",
+    "lat": 42.674,
+    "lng": -87.026
+  },
+  {
+    "id": "45215",
+    "name": "Oswego, NY (274)",
+    "lake": "Ontario",
+    "lat": 43.501,
+    "lng": -76.539
+  },
+  {
+    "id": "45216",
+    "name": "Ontonagon, MI",
+    "lake": "Superior",
+    "lat": 46.907,
+    "lng": -89.354
+  },
+  {
+    "id": "45217",
+    "name": "45217",
+    "lake": "Superior",
+    "lat": 46.708,
+    "lng": -92
+  },
+  {
+    "id": "45219",
+    "name": "45219",
+    "lake": "Superior",
+    "lat": 47.021,
+    "lng": -91.625
+  },
+  {
+    "id": "45220",
+    "name": "45220",
+    "lake": "Erie",
+    "lat": 42.561,
+    "lng": -79.432
+  },
+  {
+    "id": "45222",
+    "name": "45222",
+    "lake": "Erie",
+    "lat": 42.126,
+    "lng": -80.148
+  },
+  {
+    "id": "45223",
+    "name": "45223",
+    "lake": "Erie",
+    "lat": 42.144,
+    "lng": -80.139
+  },
+  {
+    "id": "AGCM4",
+    "name": "9014070 - Algonac, MI",
+    "lake": "Erie",
+    "lat": 42.621,
+    "lng": -82.527
+  },
+  {
+    "id": "APNM4",
+    "name": "Alpena Harbor Light, Alpena, MI",
+    "lake": "Huron",
+    "lat": 45.06,
+    "lng": -83.424
+  },
+  {
+    "id": "ASBO1",
+    "name": "Ashtabula Lighthouse",
+    "lake": "Erie",
+    "lat": 41.918,
+    "lng": -80.796
+  },
+  {
+    "id": "BARN6",
+    "name": "Barcelona Harbor, NY",
+    "lake": "Erie",
+    "lat": 42.345,
+    "lng": -79.595
+  },
+  {
+    "id": "BCTP1",
+    "name": "Beach 2 Tower",
+    "lake": "Erie",
+    "lat": 42.153,
+    "lng": -80.131
+  },
+  {
+    "id": "BHRI3",
+    "name": "Burns Harbor, IN",
+    "lake": "Michigan",
+    "lat": 41.646,
+    "lng": -87.147
+  },
+  {
+    "id": "BIGM4",
+    "name": "Big Bay, MI",
+    "lake": "Superior",
+    "lat": 46.827,
+    "lng": -87.727
+  },
+  {
+    "id": "BSBM4",
+    "name": "Big Sable Point, MI",
+    "lake": "Michigan",
+    "lat": 44.055,
+    "lng": -86.514
+  },
+  {
+    "id": "BUFN6",
+    "name": "9063020 - Buffalo, NY",
+    "lake": "Erie",
+    "lat": 42.878,
+    "lng": -78.89
+  },
+  {
+    "id": "CAVN6",
+    "name": "Cape Vincent",
+    "lake": "Ontario",
+    "lat": 44.13,
+    "lng": -76.333
+  },
+  {
+    "id": "CBLO1",
+    "name": "Conneaut Breakwater Light, OH",
+    "lake": "Erie",
+    "lat": 41.981,
+    "lng": -80.556
+  },
+  {
+    "id": "CHII2",
+    "name": "Harrison-Dever Crib, Chicago, IL",
+    "lake": "Michigan",
+    "lat": 41.916,
+    "lng": -87.572
+  },
+  {
+    "id": "CLSM4",
+    "name": "St. Clair Shores, MI",
+    "lake": "Erie",
+    "lat": 42.471,
+    "lng": -82.877
+  },
+  {
+    "id": "CMTI2",
+    "name": "9087044 - Calumet Harbor, IL",
+    "lake": "Michigan",
+    "lat": 41.73,
+    "lng": -87.538
+  },
+  {
+    "id": "CNDO1",
+    "name": "9063063 - Cleveland, OH",
+    "lake": "Erie",
+    "lat": 41.542,
+    "lng": -81.637
+  },
+  {
+    "id": "CNII2",
+    "name": "Northerly Isle, IL",
+    "lake": "Michigan",
+    "lat": 41.856,
+    "lng": -87.609
+  },
+  {
+    "id": "CWCI",
+    "name": "Caribou Island",
+    "lake": "Superior",
+    "lat": 47.334,
+    "lng": -85.833
+  },
+  {
+    "id": "CYGM4",
+    "name": "Cheboygan Marina, MI",
+    "lake": "Huron",
+    "lat": 45.658,
+    "lng": -84.464
+  },
+  {
+    "id": "DBLN6",
+    "name": "Dunkirk, NY",
+    "lake": "Erie",
+    "lat": 42.493,
+    "lng": -79.353
+  },
+  {
+    "id": "DTLM4",
+    "name": "9075099 - De Tour Village, MI",
+    "lake": "Huron",
+    "lat": 45.993,
+    "lng": -83.898
+  },
+  {
+    "id": "DULM5",
+    "name": "9099064 - Duluth, MN",
+    "lake": "Superior",
+    "lat": 46.776,
+    "lng": -92.092
+  },
+  {
+    "id": "FAIO1",
+    "name": "9063053 - Fairport, OH",
+    "lake": "Erie",
+    "lat": 41.764,
+    "lng": -81.281
+  },
+  {
+    "id": "FPTM4",
+    "name": "Fairport, MI",
+    "lake": "Michigan",
+    "lat": 45.619,
+    "lng": -86.66
+  },
+  {
+    "id": "FTGM4",
+    "name": "9014098 - Fort Gratiot, MI",
+    "lake": "Huron",
+    "lat": 43.007,
+    "lng": -82.422
+  },
+  {
+    "id": "GBWW3",
+    "name": "9087077 - Green Bay West, WI",
+    "lake": "Michigan",
+    "lat": 44.538,
+    "lng": -88.003
+  },
+  {
+    "id": "GDMM5",
+    "name": "9099090 - Grand Marais, MN",
+    "lake": "Superior",
+    "lat": 47.749,
+    "lng": -90.341
+  },
+  {
+    "id": "GRCM4",
+    "name": "GLRC Observatory",
+    "lake": "Superior",
+    "lat": 47.121,
+    "lng": -88.545
+  },
+  {
+    "id": "GRMM4",
+    "name": "Grand Marais, MI",
+    "lake": "Superior",
+    "lat": 46.684,
+    "lng": -85.972
+  },
+  {
+    "id": "GSLM4",
+    "name": "GSLM4",
+    "lake": "Huron",
+    "lat": 44.018,
+    "lng": -83.537
+  },
+  {
+    "id": "GTLM4",
+    "name": "Grand Traverse Light, MI",
+    "lake": "Michigan",
+    "lat": 45.211,
+    "lng": -85.55
+  },
+  {
+    "id": "HHLO1",
+    "name": "Huron Harbor Light, OH",
+    "lake": "Erie",
+    "lat": 41.401,
+    "lng": -82.545
+  },
+  {
+    "id": "HLNM4",
+    "name": "9087031 - Holland, MI",
+    "lake": "Michigan",
+    "lat": 42.773,
+    "lng": -86.213
+  },
+  {
+    "id": "HRBM4",
+    "name": "9075014 - Harbor Beach, MI",
+    "lake": "Huron",
+    "lat": 43.846,
+    "lng": -82.643
+  },
+  {
+    "id": "KGNA",
+    "name": "Bay of Grand Marais, MN",
+    "lake": "Superior",
+    "lat": 47.745,
+    "lng": -90.346
+  },
+  {
+    "id": "KP53",
+    "name": "Munising Lake Shore, MI",
+    "lake": "Superior",
+    "lat": 46.417,
+    "lng": -86.65
+  },
+  {
+    "id": "KP58",
+    "name": "Port Hope, MI",
+    "lake": "Huron",
+    "lat": 44.017,
+    "lng": -82.8
+  },
+  {
+    "id": "KP59",
+    "name": "Copper Harbor, MI",
+    "lake": "Superior",
+    "lat": 47.467,
+    "lng": -87.883
+  },
+  {
+    "id": "KWNW3",
+    "name": "9087069 - Kewaunee MET, WI",
+    "lake": "Michigan",
+    "lat": 44.465,
+    "lng": -87.496
+  },
+  {
+    "id": "LDTM4",
+    "name": "9087023 - Ludington, MI",
+    "lake": "Michigan",
+    "lat": 43.947,
+    "lng": -86.441
+  },
+  {
+    "id": "LPNM4",
+    "name": "9075065 - Alpena, MI",
+    "lake": "Huron",
+    "lat": 45.063,
+    "lng": -83.429
+  },
+  {
+    "id": "LTRM4",
+    "name": "9076033 - Little Rapids, MI",
+    "lake": "Superior",
+    "lat": 46.486,
+    "lng": -84.302
+  },
+  {
+    "id": "MACM4",
+    "name": "9075080 - Mackinaw City, MI",
+    "lake": "Michigan",
+    "lat": 45.777,
+    "lng": -84.721
+  },
+  {
+    "id": "MBRM4",
+    "name": "9014090 - Mouth of the Black River, MI",
+    "lake": "Erie",
+    "lat": 42.975,
+    "lng": -82.419
+  },
+  {
+    "id": "MCGM4",
+    "name": "9099018 - Marquette C.G., MI",
+    "lake": "Superior",
+    "lat": 46.546,
+    "lng": -87.379
+  },
+  {
+    "id": "MCYI3",
+    "name": "Michigan City Harbor Entrance Light, Michigan City, IN",
+    "lake": "Michigan",
+    "lat": 41.729,
+    "lng": -86.912
+  },
+  {
+    "id": "MKGM4",
+    "name": "Muskegon CG Station, Muskegon, MI",
+    "lake": "Michigan",
+    "lat": 43.228,
+    "lng": -86.339
+  },
+  {
+    "id": "MLWW3",
+    "name": "Port of Milwaukee",
+    "lake": "Michigan",
+    "lat": 43.005,
+    "lng": -87.884
+  },
+  {
+    "id": "MNMM4",
+    "name": "9087088 - Menominee, MI",
+    "lake": "Michigan",
+    "lat": 45.096,
+    "lng": -87.59
+  },
+  {
+    "id": "MRHO1",
+    "name": "9063079 - Marblehead, OH",
+    "lake": "Erie",
+    "lat": 41.544,
+    "lng": -82.731
+  },
+  {
+    "id": "NABM4",
+    "name": "Naubinway, MI",
+    "lake": "Michigan",
+    "lat": 46.087,
+    "lng": -85.444
+  },
+  {
+    "id": "NPDW3",
+    "name": "Northport Pier at Death's Door, WI",
+    "lake": "Michigan",
+    "lat": 45.291,
+    "lng": -86.977
+  },
+  {
+    "id": "NREP1",
+    "name": "Northeast Marina, PA",
+    "lake": "Erie",
+    "lat": 42.258,
+    "lng": -79.792
+  },
+  {
+    "id": "OKSI2",
+    "name": "Oak St., Chicago, IL",
+    "lake": "Michigan",
+    "lat": 41.912,
+    "lng": -87.624
+  },
+  {
+    "id": "OLCN6",
+    "name": "Olcott Harbor, NY",
+    "lake": "Ontario",
+    "lat": 43.341,
+    "lng": -78.719
+  },
+  {
+    "id": "OSGN6",
+    "name": "9052030 - Oswego, NY",
+    "lake": "Ontario",
+    "lat": 43.464,
+    "lng": -76.511
+  },
+  {
+    "id": "OWXO1",
+    "name": "Old Woman Creek, Old Woman Creek Reserve, OH",
+    "lake": "Erie",
+    "lat": 41.378,
+    "lng": -82.508
+  },
+  {
+    "id": "PILM4",
+    "name": "Passage Island, MI",
+    "lake": "Superior",
+    "lat": 48.223,
+    "lng": -88.366
+  },
+  {
+    "id": "PNGW3",
+    "name": "Port Wing, WI",
+    "lake": "Superior",
+    "lat": 46.792,
+    "lng": -91.386
+  },
+  {
+    "id": "PNLM4",
+    "name": "9087096 - Port Inland, MI",
+    "lake": "Michigan",
+    "lat": 45.968,
+    "lng": -85.869
+  },
+  {
+    "id": "PRIM4",
+    "name": "Presque Isle Light, MI",
+    "lake": "Huron",
+    "lat": 45.357,
+    "lng": -83.492
+  },
+  {
+    "id": "PSTN6",
+    "name": "9063028 - Sturgeon Point, NY",
+    "lake": "Erie",
+    "lat": 42.691,
+    "lng": -79.048
+  },
+  {
+    "id": "PTIM4",
+    "name": "9099004 - Point Iroquois, MI",
+    "lake": "Superior",
+    "lat": 46.485,
+    "lng": -84.631
+  },
+  {
+    "id": "PWAW3",
+    "name": "Port Washington, WI",
+    "lake": "Michigan",
+    "lat": 43.388,
+    "lng": -87.867
+  },
+  {
+    "id": "RCKM4",
+    "name": "9076024 - Rock Cut, MI",
+    "lake": "Huron",
+    "lat": 46.264,
+    "lng": -84.191
+  },
+  {
+    "id": "RCRN6",
+    "name": "9052058 - Rochester, NY",
+    "lake": "Ontario",
+    "lat": 43.269,
+    "lng": -77.626
+  },
+  {
+    "id": "ROAM4",
+    "name": "Rock of Ages, MI",
+    "lake": "Superior",
+    "lat": 47.867,
+    "lng": -89.315
+  },
+  {
+    "id": "RPRN6",
+    "name": "Rochester Coast Guard, NY",
+    "lake": "Ontario",
+    "lat": 43.263,
+    "lng": -77.598
+  },
+  {
+    "id": "SBIO1",
+    "name": "South Bass Island, OH",
+    "lake": "Erie",
+    "lat": 41.629,
+    "lng": -82.841
+  },
+  {
+    "id": "SBLM4",
+    "name": "Saginaw Bay Light #1, MI",
+    "lake": "Huron",
+    "lat": 43.81,
+    "lng": -83.72
+  },
+  {
+    "id": "SGNW3",
+    "name": "Sheboygan, WI",
+    "lake": "Michigan",
+    "lat": 43.749,
+    "lng": -87.693
+  },
+  {
+    "id": "SLVM5",
+    "name": "SLVM5",
+    "lake": "Superior",
+    "lat": 47.278,
+    "lng": -91.27
+  },
+  {
+    "id": "SPTM4",
+    "name": "Sturgeon Point Light, MI",
+    "lake": "Huron",
+    "lat": 44.713,
+    "lng": -83.273
+  },
+  {
+    "id": "SRLM4",
+    "name": "SRLM4",
+    "lake": "Huron",
+    "lat": 45.773,
+    "lng": -84.137
+  },
+  {
+    "id": "STDM4",
+    "name": "Stannard Rock, MI",
+    "lake": "Superior",
+    "lat": 47.184,
+    "lng": -87.225
+  },
+  {
+    "id": "SVNM4",
+    "name": "South Haven Light, South Haven, MI",
+    "lake": "Michigan",
+    "lat": 42.401,
+    "lng": -86.288
+  },
+  {
+    "id": "SWPM4",
+    "name": "9076070 - S.W. Pier, MI",
+    "lake": "Superior",
+    "lat": 46.501,
+    "lng": -84.372
+  },
+  {
+    "id": "SXHW3",
+    "name": "Saxon Harbor, WI",
+    "lake": "Superior",
+    "lat": 46.563,
+    "lng": -90.437
+  },
+  {
+    "id": "TAWM4",
+    "name": "Tawas Point, MI",
+    "lake": "Huron",
+    "lat": 44.254,
+    "lng": -83.449
+  },
+  {
+    "id": "TBIM4",
+    "name": "TBIM4",
+    "lake": "Huron",
+    "lat": 45.035,
+    "lng": -83.194
+  },
+  {
+    "id": "THLO1",
+    "name": "Toledo Light No. 2 OH",
+    "lake": "Erie",
+    "lat": 41.826,
+    "lng": -83.194
+  },
+  {
+    "id": "THRO1",
+    "name": "9063085 - Toledo, OH",
+    "lake": "Erie",
+    "lat": 41.694,
+    "lng": -83.473
+  },
+  {
+    "id": "TWCO1",
+    "name": "Toledo Crib, OH",
+    "lake": "Erie",
+    "lat": 41.699,
+    "lng": -83.259
+  },
+  {
+    "id": "VRMO1",
+    "name": "Vermilion River at Lake Erie, OH",
+    "lake": "Erie",
+    "lat": 41.428,
+    "lng": -82.364
+  },
+  {
+    "id": "WCRP1",
+    "name": "Walnut Creek Marina, PA",
+    "lake": "Erie",
+    "lat": 42.077,
+    "lng": -80.24
+  },
+  {
+    "id": "WHRI2",
+    "name": "Waukegan Harbor, IL",
+    "lake": "Michigan",
+    "lat": 42.361,
+    "lng": -87.813
+  },
+  {
+    "id": "WNEM4",
+    "name": "9076027 - West Neebish Island, MI",
+    "lake": "Huron",
+    "lat": 46.285,
+    "lng": -84.21
+  }
+]

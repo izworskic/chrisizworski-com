@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI in Public Safety | Chris Izworski</title>
+<meta name="description" content="Applied AI in public safety from Chris Izworski, covering live 911 deployment, operational lessons, public trust, and emergency communications workflows.">
+<link rel="canonical" href="https://chrisizworski.com/ai/">
+<meta property="og:title" content="AI in Public Safety | Chris Izworski">
+<meta property="og:description" content="Applied AI in public safety from Chris Izworski, covering live 911 deployment, operational lessons, public trust, and emergency communications workflows.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://chrisizworski.com/ai/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://chrisizworski.com/ai/",
+      "url": "https://chrisizworski.com/ai/",
+      "name": "AI in Public Safety, Implementation Notes | Chris Izworski",
+      "description": "Applied AI in public safety and 911 operations from Chris Izworski, direct deployment experience, NENA cover story, APCO presenter.",
+      "author": { "@type": "Person", "name": "Chris Izworski", "url": "https://chrisizworski.com/" },
+      "dateModified": "2026-04-28",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://chrisizworski.com/" },
+        { "@type": "ListItem", "position": 2, "name": "AI", "item": "https://chrisizworski.com/ai/" }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Georgia,'Times New Roman',serif;background:#faf9f6;color:#2c2c2c;line-height:1.75}
+a{color:#2c5f2d;text-decoration:none}
+a:hover{text-decoration:underline}
+.header{text-align:center;padding:32px 20px 24px;border-bottom:1px solid #e8e4dc}
+.header .site-title{font-size:22px;font-weight:normal;color:#2c5f2d;letter-spacing:1px}
+.nav{text-align:center;padding:12px 20px;border-bottom:1px solid #e8e4dc;font-size:14px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 0}
+.nav a{color:#5a5a5a;text-decoration:none;margin:4px 10px;letter-spacing:.4px;white-space:nowrap}
+.nav a:hover,.nav a.active{color:#2c5f2d}
+.nav a.active{font-weight:bold}
+.body{max-width:780px;margin:0 auto;padding:44px 20px 60px}
+.breadcrumb{font-size:13px;color:#999;margin-bottom:24px}
+.breadcrumb a{color:#999}
+h1.page-title{font-size:36px;font-weight:normal;color:#2c2c2c;margin-bottom:10px;line-height:1.2}
+.sub{font-size:17px;color:#6b6b6b;font-style:italic;margin-bottom:32px;border-bottom:1px solid #e8e4dc;padding-bottom:20px}
+.body p{font-size:16px;margin-bottom:18px;color:#3a3a3a}
+h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:36px 0 14px;border-bottom:1px solid #e8e4dc;padding-bottom:8px}
+.resource-row{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #f5f0e8}
+.resource-row:last-child{border-bottom:none}
+.resource-title{font-size:16px;color:#2c2c2c;margin-bottom:4px}
+.resource-title a{color:#2c2c2c}
+.resource-title a:hover{color:#2c5f2d}
+.resource-desc{font-size:14px;color:#666}
+.footer{text-align:center;padding:20px;border-top:1px solid #e8e4dc;font-size:13px;color:#999;margin-top:48px}
+@media(max-width:640px){h1.page-title{font-size:28px}}
+</style>
+
+
+
+
+
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:image" content="https://chrisizworski.com/assets/search/chris-izworski-public-safety.png">
+<meta property="og:image:secure_url" content="https://chrisizworski.com/assets/search/chris-izworski-public-safety.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Chris Izworski public safety technology preview image">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://chrisizworski.com/assets/search/chris-izworski-public-safety.png">
+<meta name="twitter:image:alt" content="Chris Izworski public safety technology preview image">
+<meta name="thumbnail" content="https://chrisizworski.com/assets/search/chris-izworski-public-safety.png">
+<meta itemprop="image" content="https://chrisizworski.com/assets/search/chris-izworski-public-safety.png">
+</head>
+<body>
+<div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
+<div class="nav">
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/start-here/">Start Here</a>
+<a href="/tools/">Tools</a>
+<a href="/press/">Press</a>
+<a href="/media/">Media</a>
+<a href="/timeline/">Timeline</a>
+<a href="/citations/">Citations</a>
+<a href="/case-studies/">Case Studies</a>
+<a href="/blog/">Blog</a>
+<a href="/ai/" class="active">AI</a>
+<a href="/guides/">Guides</a>
+</div>
+<div class="body">
+<div class="breadcrumb"><a href="/">Home</a> &rsaquo; AI</div>
+
+<h1 class="page-title">AI in Public Safety</h1>
+<p class="sub">Implementation notes from direct deployment experience in 911 operations.</p>
+
+<p>Most of what gets written about AI adoption in high-stakes environments focuses on potential, what AI might do, what it could enable, what the future looks like once the technology matures. This page focuses on what has been deployed, measured, and maintained. The distinction matters. A system that works well in a demo but creates new problems in a live dispatch environment is not a success. A system that handles two hundred routine calls a day reliably, transfers immediately when it detects emergency need, and frees dispatchers to focus on emergencies, that is.</p>
+
+<p>Chris Izworski led the deployment of one of Michigan's first AI-powered non-emergency call systems at Saginaw County 911 in 2024. The system used GPT-Trainer's AVA platform to handle calls about road conditions, noise complaints, court phone numbers, and general administrative questions. It ran live from day one, handling real call volume. WNEM TV5, WCMU Public Radio, and WSGW covered the launch. NENA published his account of the deployment as the cover story of The Call, Issue 51. He presented the case study at APCO International. He now works as a Solutions Consultant at Prepared, deploying audio capture and analysis systems at 911 centers nationwide.</p>
+
+<p>That firsthand context is what makes the operational guidance here different from what most AI content in public safety produces. The questions that matter in a real deployment, how do you brief union staff before go-live, what does the override process look like, how do you measure whether it is actually working, are not answered in vendor case studies or conference presentations. They come from doing it.</p>
+
+<h2 class="section-head">What Works in 911 AI Deployments</h2>
+
+<p>Narrow scope is the most important factor in whether a 911 AI deployment succeeds. The Saginaw County deployment worked because it was defined precisely: handle calls that require information but no dispatch action, and transfer immediately if the situation is unclear. That definition held throughout the deployment. The AI did not expand into dispatch support, caller verification, or any other function. It did one thing well and was measured on that one thing.</p>
+
+<p>The second factor is measurement from day one. Before the Saginaw deployment went live, the baseline was established, call volume in the affected categories, time per call, and how often calls were misclassified manually. After launch, the same metrics were tracked weekly. When the system was working, that was visible. When it was not, that was also visible. Deployment without measurement is not deployment, it is a pilot that never ends and never improves.</p>
+
+<p>The third factor is a functioning correction loop. Dispatchers could flag errors. Errors were reviewed. The system was updated based on what those reviews found. That feedback mechanism is what prevents drift, the gradual degradation of performance that happens when AI systems are deployed and then left alone.</p>
+
+<h2 class="section-head">Where 911 AI Fails</h2>
+
+<p>The most common failure mode is scope expansion without corresponding measurement. The non-emergency call system goes live, it works, stakeholders get excited, and someone proposes adding a new capability before the first one has been fully evaluated. Each expansion adds complexity and reduces the clarity of accountability. By the time something goes wrong, nobody is sure which part of the system caused it.</p>
+
+<p>The second failure mode is deploying without staff trust. Dispatchers who do not understand what the AI is doing, or who were not included in the briefing process before go-live, will work around it, disable it, or give callers inaccurate information about how it works. Building staff confidence takes time and deliberate communication, not a single training session the week before launch.</p>
+
+<p>The third failure mode is treating AI deployment as a technology project rather than an operational change. The technology is usually the easy part. The hard parts are the union conversation, the oversight board explanation, the first error that makes the local news, and the ongoing supervision that keeps the system honest. Organizations that approach AI as a software install tend to encounter all three of those hard parts without having prepared for any of them.</p>
+
+<h2 class="section-head">Resources and References</h2>
+
+<div class="resource-row">
+  <div class="resource-title"><a href="/case-studies/">Saginaw County 911, AI Non-Emergency Call Deployment</a></div>
+  <div class="resource-desc">Operational case summary covering deployment design, scope decisions, and outcomes.</div>
+</div>
+<div class="resource-row">
+  <div class="resource-title"><a href="/blog/ai-supporting-911-administrative-work/">How AI Supports 911 Administrative Workflows</a></div>
+  <div class="resource-desc">Practical guidance on where AI creates value in dispatch center operations and how to structure measurement and correction loops.</div>
+</div>
+<div class="resource-row">
+  <div class="resource-title"><a href="/blog/public-trust-ai-911-operations/">Building Public Trust While Introducing AI in 911 Operations</a></div>
+  <div class="resource-desc">How to communicate AI scope to the public, brief staff before go-live, and respond when errors occur.</div>
+</div>
+<div class="resource-row">
+  <div class="resource-title"><a href="/media/">Media Coverage, NENA, WNEM, WCMU, Fast Company</a></div>
+  <div class="resource-desc">The full public record of coverage on the Saginaw County AI deployment and Chris Izworski's work in 911 operations.</div>
+</div>
+<div class="resource-row">
+  <div class="resource-title"><a href="https://github.com/AgentBase1" target="_blank" rel="noopener">AgentBase, Open Agent Instruction Registry</a></div>
+  <div class="resource-desc">CC0-licensed system prompts, skills, workflows, and safety filters for AI agents. MCP-compatible. Built from the same implementation work that produced the Saginaw deployment.</div>
+</div>
+
+</div>
+<div class="footer">Bay City, Michigan &middot; Updated April 2026</div>
+<div class="related-cluster" style="margin-top:48px;padding:28px 24px;background:#f5f1e8;border-left:4px solid #1a5c3a">
+<h2 style="font-size:20px;font-weight:700;color:#111;margin-bottom:12px;border:none;padding:0">More about Chris Izworski</h2>
+<p style="margin-bottom:14px;color:#333;font-size:15px">Source-backed reference pages covering different aspects of Chris Izworski's work:</p>
+<ul style="margin:0 0 0 20px;padding:0;list-style:disc">
+<li style="margin-bottom:6px"><a href="/chris-izworski-bay-city/" style="color:#1a5c3a;font-weight:600">Chris Izworski, Bay City Michigan</a>: local roots and what comes out of Bay City</li>
+<li style="margin-bottom:6px"><a href="/chris-izworski-author/" style="color:#1a5c3a;font-weight:600">Chris Izworski, Author</a>: NENA cover story and daily publications</li>
+<li style="margin-bottom:6px"><a href="/chris-izworski-publications/" style="color:#1a5c3a;font-weight:600">Chris Izworski Publications</a>: sites and daily publications</li>
+<li style="margin-bottom:6px"><a href="/chris-izworski-emergency-management/" style="color:#1a5c3a;font-weight:600">Chris Izworski, Emergency Management</a>: Bay County 911 and public safety background</li>
+</ul>
+</div>
+
+
+</body>
+</html>

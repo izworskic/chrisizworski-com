@@ -1,0 +1,65 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "functions": {
+    "api/**/*.js": {
+      "maxDuration": 10
+    }
+  },
+  "redirects": [
+    {
+      "source": "/news-coverage",
+      "destination": "/chris-izworski-news-coverage/",
+      "permanent": true
+    },
+    {
+      "source": "/news-coverage/",
+      "destination": "/chris-izworski-news-coverage/",
+      "permanent": true
+    },
+    {
+      "source": "/prepared",
+      "destination": "/chris-izworski-prepared/",
+      "permanent": true
+    },
+    {
+      "source": "/prepared/",
+      "destination": "/chris-izworski-prepared/",
+      "permanent": true
+    },
+    {
+      "source": "/save-our-shoreline",
+      "destination": "/chris-izworski-save-our-shoreline/",
+      "permanent": true
+    },
+    {
+      "source": "/save-our-shoreline/",
+      "destination": "/chris-izworski-save-our-shoreline/",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "sourceOrigin": "https://chrisizworski.com/",
+  "generatedAt": "2026-07-19T13:19:19.950Z",
+  "fetchedCount": 356,
+  "queuedButNotFetchedCount": 0,
+  "statuses": {
+    "200": 350,
+    "404": 5,
+    "405": 1
+  },
+  "htmlPages": 166,
+  "redirects": 0,
+  "errors": 0
+}

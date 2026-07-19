@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Northern Lights Michigan, Tonight's Aurora Forecast and Viewing Tool | Chris Izworski</title>
+<meta name="description" content="Live interactive aurora forecast for Michigan. NOAA Kp index, solar wind Bz indicator, animated gauge, interactive viewing-location map for the Upper Peninsula, geolocation-based recommendations, and auto-refreshing real-time data from NOAA SWPC.">
+<link rel="canonical" href="https://chrisizworski.com/northern-lights-michigan/">
+<meta property="og:title" content="Northern Lights Michigan: Tonight's Aurora Forecast and Interactive Viewing Tool">
+<meta property="og:description" content="Live NOAA Kp gauge, solar wind data, interactive map of the best UP viewing locations, and geolocation-based aurora viewing recommendations.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://chrisizworski.com/northern-lights-michigan/">
+<meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://chrisizworski.com/northern-lights-michigan/og-card.png">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://chrisizworski.com/northern-lights-michigan/og-card.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski"},
+    {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/northern-lights-michigan/","name":"Northern Lights Michigan: Live Aurora Forecast and Interactive Viewing Tool","description":"Live NOAA Kp forecast, solar wind data, and the interactive viewing-location map for Michigan and the Upper Peninsula.","url":"https://chrisizworski.com/northern-lights-michigan/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-05-11","inLanguage":"en-US"},
+    {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Northern Lights Michigan","item":"https://chrisizworski.com/northern-lights-michigan/"}]}
+  ]
+}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Georgia,'Times New Roman',serif;background:#faf9f6;color:#2c2c2c;line-height:1.75}
+a{color:#2c5f2d;text-decoration:none}
+a:hover{text-decoration:underline}
+.header{text-align:center;padding:32px 20px 24px;border-bottom:1px solid #e8e4dc}
+.header .site-title{font-size:22px;font-weight:normal;color:#2c5f2d;letter-spacing:1px}
+.nav{text-align:center;padding:12px 20px;border-bottom:1px solid #e8e4dc;font-size:14px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 0}
+.nav a{color:#5a5a5a;text-decoration:none;margin:4px 10px;letter-spacing:.4px;white-space:nowrap}
+.nav a:hover{color:#2c5f2d}
+
+.live-strip{padding:11px 16px;background:linear-gradient(90deg,#0a1428 0%,#1a3a5a 50%,#0a1428 100%);color:#c8e0f0;font-size:12px;letter-spacing:.4px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+.live-strip .live-dot{font-size:10px;animation:pulse 2s infinite;color:#7bc8e8}
+.live-strip .live-dot.active{color:#5fc88f}
+.live-strip .live-dot.alert{color:#ff7858}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.live-strip .live-label{text-transform:uppercase}
+.live-strip .live-status{color:#fff;font-weight:bold}
+.live-strip .refresh-info{font-size:10px;color:#88a8c0;margin-left:8px}
+
+.body{max-width:880px;margin:0 auto;padding:38px 20px 60px}
+.breadcrumb{font-size:13px;color:#999;margin-bottom:22px}
+.breadcrumb a{color:#999}
+h1.page-title{font-size:34px;font-weight:normal;color:#2c2c2c;margin-bottom:8px;line-height:1.2}
+.sub{font-size:16px;color:#6b6b6b;font-style:italic;margin-bottom:24px;border-bottom:1px solid #e8e4dc;padding-bottom:18px}
+.body p{font-size:16px;margin-bottom:18px;color:#3a3a3a}
+h2.sh{font-size:22px;font-weight:normal;color:#2c5f2d;margin:36px 0 14px;border-bottom:1px solid #e8e4dc;padding-bottom:7px}
+h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
+
+/* Hero panel with gauge */
+.hero-panel{background:radial-gradient(ellipse at top right,#2a5580 0%,#0a1428 60%,#050810 100%);color:#fff;border-radius:8px;padding:28px 28px 24px;margin:8px 0 22px;border:1px solid #2a4a6a;position:relative;overflow:hidden}
+.hero-panel::before{content:'';position:absolute;top:-20%;right:-10%;width:60%;height:140%;background:radial-gradient(ellipse,rgba(91,200,140,.12) 0%,transparent 60%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;position:relative;z-index:1}
+.gauge-wrap{position:relative;width:200px;height:200px}
+.gauge-wrap svg{width:100%;height:100%;display:block}
+.gauge-bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:14}
+.gauge-fg{fill:none;stroke-width:14;stroke-linecap:round;transition:stroke-dasharray 1.5s cubic-bezier(.4,0,.2,1),stroke 1.5s}
+.gauge-num{font-family:Georgia,serif;font-size:54px;font-weight:normal;fill:#fff;text-anchor:middle;dominant-baseline:middle}
+.gauge-label{font-family:Georgia,serif;font-size:10px;letter-spacing:1.2px;fill:#88c8e8;text-anchor:middle;text-transform:uppercase}
+.gauge-status{font-family:Georgia,serif;font-size:11px;letter-spacing:.6px;fill:#aac8d8;text-anchor:middle;text-transform:uppercase}
+.hero-info .tonight-label{font-size:11px;color:#88c8e8;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px}
+.hero-info .tonight-headline{font-size:23px;font-weight:normal;color:#fff;margin-bottom:10px;line-height:1.3}
+.hero-info .tonight-detail{font-size:14px;color:#aac8d8;line-height:1.7;margin-bottom:14px}
+.hero-info .tonight-detail strong{color:#fff;font-style:normal}
+.hero-action-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.hero-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#fff;padding:9px 16px;border-radius:4px;font-family:Georgia,serif;font-size:13px;cursor:pointer;letter-spacing:.3px;transition:all .2s}
+.hero-btn:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4)}
+.hero-btn.primary{background:#5fc88f;border-color:#5fc88f;color:#0a1428;font-weight:bold}
+.hero-btn.primary:hover{background:#7fd8a8;border-color:#7fd8a8}
+@media(max-width:680px){.hero-grid{grid-template-columns:1fr;text-align:center}.gauge-wrap{margin:0 auto;width:170px;height:170px}.hero-action-row{justify-content:center}}
+
+/* Solar wind panel */
+.sw-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:0 0 28px}
+.sw-card{background:#fff;border:1px solid #e0dbd2;border-radius:4px;padding:13px 16px}
+.sw-card .sw-label{font-size:10px;color:#888;letter-spacing:.6px;text-transform:uppercase;margin-bottom:4px}
+.sw-card .sw-val{font-size:20px;color:#2c5f2d;font-weight:normal;line-height:1.2}
+.sw-card .sw-status{font-size:11px;color:#666;margin-top:3px;letter-spacing:.3px}
+.sw-card.alert{border-color:#5fc88f;background:#f4faf6}
+.sw-card.alert .sw-val{color:#2a8a5a}
+.sw-card.warn{border-color:#d09020;background:#fdf9ee}
+
+/* Forecast chart */
+.forecast-chart-wrap{background:#fff;border:1px solid #e0dbd2;border-radius:4px;padding:18px 16px;margin:8px 0 24px}
+.forecast-chart-wrap h4{font-size:13px;color:#2c5f2d;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px;font-weight:normal}
+.forecast-svg{width:100%;height:160px}
+.forecast-bar{transition:opacity .2s,filter .2s}
+.forecast-bar:hover{filter:brightness(1.15);cursor:pointer}
+.forecast-axis{stroke:#ddd;stroke-width:1}
+.forecast-tick{fill:#999;font-size:9px;font-family:Georgia,serif}
+.forecast-label{fill:#888;font-size:8px;font-family:Georgia,serif}
+.forecast-tooltip{position:absolute;background:#0d3545;color:#fff;padding:7px 11px;border-radius:3px;font-size:12px;pointer-events:none;display:none;line-height:1.4;z-index:100}
+.forecast-tooltip strong{color:#7bc8e8;display:block}
+.forecast-chart-wrap{position:relative}
+
+/* Smart CTA */
+.smart-cta{background:linear-gradient(135deg,#0d3545 0%,#1a4a60 100%);color:#fff;padding:20px 22px;border-radius:6px;margin:16px 0 28px;border:1px solid #2a4a6a;display:none}
+.smart-cta.show{display:block}
+.smart-cta.alert{background:linear-gradient(135deg,#5a2010 0%,#7a3018 100%);border-color:#8a4020;animation:alertPulse 2.5s infinite}
+@keyframes alertPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,120,88,.4)}50%{box-shadow:0 0 0 8px rgba(255,120,88,0)}}
+.smart-cta h3{font-size:14px;color:#7bc8e8;letter-spacing:.5px;text-transform:uppercase;font-weight:normal;margin-bottom:6px}
+.smart-cta.alert h3{color:#ffb0a0}
+.smart-cta .cta-headline{font-size:18px;color:#fff;margin-bottom:8px;font-weight:normal}
+.smart-cta p{font-size:14px;color:#dfe9f0;line-height:1.65;margin-bottom:12px}
+.smart-cta a{color:#fff;font-weight:bold;text-decoration:underline;text-decoration-color:#7bc8e8;text-underline-offset:3px}
+.smart-cta.alert a{text-decoration-color:#ffb0a0}
+.smart-cta a:hover{text-decoration-thickness:2px}
+
+/* Geo tool */
+.geo-tool{background:#fff;border:2px solid #2c5f2d;border-radius:6px;padding:18px 20px;margin:16px 0 24px}
+.geo-tool h3{font-size:15px;color:#2c5f2d;margin-bottom:6px;font-weight:bold}
+.geo-tool p{font-size:13px;color:#555;margin-bottom:12px;line-height:1.6}
+.geo-btn{background:#2c5f2d;color:#fff;border:0;padding:10px 18px;border-radius:4px;font-family:Georgia,serif;font-size:14px;cursor:pointer;letter-spacing:.3px}
+.geo-btn:hover{background:#1f4520}
+.geo-btn:disabled{background:#888;cursor:not-allowed}
+.geo-result{margin-top:14px;display:none;padding:14px 16px;background:#f4f8f3;border:1px solid #c8d8c8;border-radius:4px}
+.geo-result.show{display:block}
+.geo-result h4{font-size:14px;color:#2c5f2d;margin-bottom:8px;font-weight:bold}
+.geo-result-list{list-style:none;padding:0}
+.geo-result-list li{padding:9px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:13px;display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center}
+.geo-result-list li:last-child{border-bottom:none}
+.geo-result-list .gl-name{color:#2c5f2d;font-weight:bold}
+.geo-result-list .gl-dist{color:#666;font-size:12px;font-family:Georgia,serif}
+.geo-result-list .gl-bortle{font-size:10px;background:#0d3545;color:#fff;padding:3px 7px;border-radius:3px;letter-spacing:.3px}
+.geo-result-list .gl-bortle.b1{background:#000}
+.geo-result-list .gl-bortle.b2{background:#1a1a1a}
+.geo-result-list .gl-bortle.b3{background:#2d3a4d}
+.geo-result-list .gl-bortle.b4{background:#4d5a6d}
+
+/* Map */
+.map-section{margin:0 0 28px}
+.map-wrap{height:480px;border:1px solid #e0dbd2;border-radius:6px;overflow:hidden;position:relative;background:#0a1428}
+#auroraMap{width:100%;height:100%;background:#0a1428}
+.leaflet-popup-content-wrapper{background:#0d3545;color:#fff;border-radius:4px;border:1px solid #2a4a6a}
+.leaflet-popup-content{margin:10px 14px;font-family:Georgia,serif;font-size:13px;line-height:1.6;color:#dfe9f0}
+.leaflet-popup-content b{color:#7bc8e8}
+.leaflet-popup-tip{background:#0d3545;border-color:#2a4a6a}
+.leaflet-popup-close-button{color:#7bc8e8 !important}
+.leaflet-container a.leaflet-popup-close-button:hover{color:#fff !important}
+.map-legend{position:absolute;bottom:10px;right:10px;background:rgba(13,53,69,.92);color:#fff;padding:9px 12px;border-radius:4px;font-size:11px;line-height:1.7;z-index:1000;border:1px solid rgba(255,255,255,.15)}
+.map-legend .lg-row{display:flex;align-items:center;gap:8px}
+.map-legend .lg-dot{width:11px;height:11px;border-radius:50%;display:inline-block;border:1px solid rgba(255,255,255,.3)}
+
+/* Oval image */
+.oval-wrap{background:#0a1428;border:1px solid #2a4a6a;border-radius:6px;padding:14px;margin:0 0 28px;text-align:center}
+.oval-wrap h4{font-size:12px;color:#7bc8e8;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;font-weight:normal}
+.oval-wrap img{max-width:100%;height:auto;border-radius:4px;display:block;margin:0 auto;max-height:400px}
+.oval-wrap .oval-caption{font-size:11px;color:#88a8c0;margin-top:8px}
+
+/* Kp scale */
+.kp-scale{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;margin:14px 0 24px;font-size:11px}
+.kp-step{padding:8px 4px;text-align:center;color:#fff;border-radius:2px;line-height:1.4;transition:transform .15s}
+.kp-step:hover{transform:translateY(-2px)}
+.kp-step.current{outline:2px solid #fff;outline-offset:2px;animation:currentPulse 2s infinite}
+@keyframes currentPulse{0%,100%{outline-offset:2px}50%{outline-offset:4px}}
+.kp-step .kn{font-size:14px;font-weight:bold;display:block;margin-bottom:2px}
+.kp-step.kp0{background:#3a5d3a}
+.kp-step.kp1{background:#456b45}
+.kp-step.kp2{background:#5a7a5a}
+.kp-step.kp3{background:#a8a040}
+.kp-step.kp4{background:#c08030}
+.kp-step.kp5{background:#c06020}
+.kp-step.kp6{background:#a02020}
+.kp-step.kp7{background:#801818}
+.kp-step.kp8{background:#600808}
+@media(max-width:560px){.kp-scale{grid-template-columns:repeat(5,1fr)}.kp-step{padding:6px 2px}}
+
+/* Stats */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:14px 0 22px}
+.stat-box{background:#fff;border:1px solid #e0dbd2;border-radius:3px;padding:13px 16px}
+.stat-box .lbl{font-size:11px;color:#888;letter-spacing:.6px;text-transform:uppercase;margin-bottom:3px}
+.stat-box .val{font-size:18px;color:#2c5f2d;line-height:1.3}
+
+/* Location list */
+.loc-list{margin:14px 0 24px}
+.loc-card{background:#fff;border:1px solid #e0dbd2;border-radius:3px;padding:14px 17px;margin-bottom:10px;display:grid;grid-template-columns:1fr auto;gap:12px;transition:border-color .15s}
+.loc-card:hover{border-color:#2c5f2d}
+.loc-card h4{font-size:15px;font-weight:bold;color:#2c5f2d;margin-bottom:4px}
+.loc-card .loc-meta{font-size:11px;color:#888;letter-spacing:.4px;text-transform:uppercase;margin-bottom:6px}
+.loc-card .loc-desc{font-size:13px;color:#444;line-height:1.6}
+.loc-card .dark-rating{font-size:11px;background:#0d3545;color:#fff;padding:4px 8px;border-radius:3px;letter-spacing:.4px;text-transform:uppercase;align-self:start;white-space:nowrap}
+.loc-card .dark-rating.bortle1{background:#000}
+.loc-card .dark-rating.bortle2{background:#1a1a1a}
+.loc-card .dark-rating.bortle3{background:#2d3a4d}
+
+.faq-q{font-size:16px;font-weight:bold;color:#2c5f2d;margin:22px 0 8px}
+.related{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:24px 0 12px}
+.related a{display:block;border:1px solid #e0dbd2;background:#fff;padding:12px 14px;border-radius:3px;font-size:13px;line-height:1.5;color:#2c2c2c}
+.related a:hover{border-color:#2c5f2d;text-decoration:none}
+.related a strong{display:block;color:#2c5f2d;margin-bottom:3px;font-size:14px}
+.gear-list{margin:14px 0 22px;background:#fff;border:1px solid #e0dbd2;border-radius:3px;padding:14px 18px}
+.gear-list .gi{padding:7px 0;border-bottom:1px dotted #e0dbd2;font-size:14px;line-height:1.7}
+.gear-list .gi:last-child{border-bottom:none}
+.gear-list .gi strong{color:#2c5f2d}
+.footer{text-align:center;padding:24px;border-top:1px solid #e8e4dc;font-size:12px;color:#999;margin-top:48px}
+@media(max-width:640px){h1.page-title{font-size:26px}.body{padding:30px 16px 40px}h2.sh{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
+<div class="nav">
+<a href="/">Home</a><a href="/about/">About</a><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/great-lakes/">Great Lakes</a><a href="/great-lakes-gazette/">Gazette</a><a href="/blog/">Blog</a>
+</div>
+<div class="live-strip" id="liveStrip">
+  <span class="live-dot" id="liveDot" aria-hidden="true">&#9679;</span>
+  <span class="live-label">Aurora forecast</span>
+  <span class="live-status" id="liveStatus">loading NOAA SWPC data...</span>
+  <span class="refresh-info" id="refreshInfo"></span>
+</div>
+<div class="body">
+<div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/tools/">Tools</a> &rsaquo; Northern Lights Michigan</div>
+
+<h1 class="page-title">Northern Lights in Michigan</h1>
+<p class="sub">Live NOAA aurora forecast, interactive viewing-location map, and your personalized viewing odds for the Upper Peninsula and Lake Superior</p>
+
+<p>The aurora borealis is visible from Michigan more often than most Michiganders realize. The Upper Peninsula, particularly the Keweenaw Peninsula and the Lake Superior north shore, sees minor displays multiple times per month during the active years of the solar cycle. We are still within the high-activity window of Solar Cycle 25, which means aurora viewing odds are as good as they will be for another decade.</p>
+
+<p>The tool below pulls live data from the NOAA Space Weather Prediction Center: planetary K-index forecast, real-time solar wind magnetic field measurements (the Bz component is the actual predictor of aurora activity, often a better signal than Kp alone), and the auroral oval image. The map is interactive. Click any viewing location for detail, use the "find best viewing for me" button to get distance-sorted recommendations from your position, and the page auto-refreshes every 10 minutes so the data stays current.</p>
+
+<!-- Hero panel with animated SVG gauge -->
+<div class="hero-panel">
+  <div class="hero-grid">
+    <div class="gauge-wrap">
+      <svg viewBox="0 0 240 240" id="kpGauge">
+        <circle class="gauge-bg" cx="120" cy="120" r="100"></circle>
+        <circle class="gauge-fg" id="gaugeArc" cx="120" cy="120" r="100" stroke="#5fc88f" transform="rotate(-90 120 120)" stroke-dasharray="0 628"></circle>
+        <text class="gauge-label" x="120" y="92">Peak Kp · 24h</text>
+        <text class="gauge-num" id="gaugeNum" x="120" y="128">--</text>
+        <text class="gauge-status" id="gaugeStatus" x="120" y="158">loading</text>
+      </svg>
+    </div>
+    <div class="hero-info">
+      <div class="tonight-label">Tonight in Michigan</div>
+      <h2 class="tonight-headline" id="tonightHeadline" style="margin:0 0 10px;border:0;padding:0">Loading NOAA SWPC forecast...</h2>
+      <div class="tonight-detail" id="tonightDetail">Fetching planetary K-index forecast, solar wind magnetic field data, and aurora oval position.</div>
+      <div class="hero-action-row">
+        <button class="hero-btn primary" id="findBtn">Find viewing for my location</button>
+        <button class="hero-btn" id="notifyBtn">Alert me when Kp 5+</button>
+        <button class="hero-btn" id="refreshBtn">Refresh now</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Solar wind status -->
+<div class="sw-row" id="swRow">
+  <div class="sw-card" id="swBz"><div class="sw-label">Solar wind Bz</div><div class="sw-val">-- nT</div><div class="sw-status">loading...</div></div>
+  <div class="sw-card" id="swSpeed"><div class="sw-label">Solar wind speed</div><div class="sw-val">-- km/s</div><div class="sw-status">loading...</div></div>
+  <div class="sw-card" id="swKpNow"><div class="sw-label">Current Kp</div><div class="sw-val">--</div><div class="sw-status">loading...</div></div>
+  <div class="sw-card" id="swKpPeak"><div class="sw-label">Peak Kp 72h</div><div class="sw-val">--</div><div class="sw-status">loading...</div></div>
+</div>
+
+<!-- Smart CTA -->
+<div class="smart-cta" id="smartCta"></div>
+
+<!-- 3-day visual forecast -->
+<div class="forecast-chart-wrap">
+  <h4>3-Day Kp forecast · NOAA SWPC</h4>
+  <svg class="forecast-svg" id="forecastSvg" viewBox="0 0 800 160" preserveAspectRatio="xMidYMid meet"></svg>
+  <div class="forecast-tooltip" id="forecastTooltip"></div>
+</div>
+
+<!-- Geolocation tool -->
+<div class="geo-tool" id="geoTool">
+  <h3>Find the best viewing for your location</h3>
+  <p>Click below to share your location. The tool calculates straight-line distance to each viewing site, ranks them, and tells you what Kp threshold you would need to see aurora from each one based on geomagnetic latitude.</p>
+  <button class="geo-btn" id="geoBtn">Use my location</button>
+  <div class="geo-result" id="geoResult">
+    <h4 id="geoResultTitle">Distance from your location</h4>
+    <ul class="geo-result-list" id="geoResultList"></ul>
+  </div>
+</div>
+
+<!-- Interactive map -->
+<h2 class="sh">Viewing Locations</h2>
+<p>Click any marker for site detail. Markers are colored by Bortle dark-sky rating (darker = better aurora viewing). The Keweenaw, Lake Superior Provincial Park, and Whitefish Point are the three highest-leverage locations for serious aurora viewing.</p>
+<div class="map-section">
+  <div class="map-wrap">
+    <div id="auroraMap"></div>
+    <div class="map-legend">
+      <div class="lg-row"><span class="lg-dot" style="background:#000"></span>Bortle 1-2 darkest</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#1a3a5a"></span>Bortle 2-3 dark</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#5a7090"></span>Bortle 3-4 moderate</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#8090a0"></span>Bortle 4-5 limited</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#5fc88f"></span>Your location</div>
+    </div>
+  </div>
+</div>
+
+<!-- Aurora oval image -->
+<div class="oval-wrap">
+  <h4>Northern Hemisphere Auroral Oval · NOAA SWPC</h4>
+  <img id="ovalImg" src="https://services.swpc.noaa.gov/images/aurora-forecast-northern-hemisphere.jpg" alt="NOAA aurora oval forecast for the northern hemisphere" loading="lazy">
+  <div class="oval-caption">Updated every 5 minutes. Green band shows current aurora oval position. Brighter = more active.</div>
+</div>
+
+<h2 class="sh">The Kp Scale</h2>
+<p>The Kp index measures geomagnetic disturbance on a 0 to 9 scale. Higher Kp means the aurora oval has expanded south. The current peak forecast Kp is highlighted below.</p>
+<div class="kp-scale" id="kpScale">
+  <div class="kp-step kp0" data-kp="0"><span class="kn">0</span>Quiet</div>
+  <div class="kp-step kp1" data-kp="1"><span class="kn">1</span>Quiet</div>
+  <div class="kp-step kp2" data-kp="2"><span class="kn">2</span>Quiet</div>
+  <div class="kp-step kp3" data-kp="3"><span class="kn">3</span>Unsettled</div>
+  <div class="kp-step kp4" data-kp="4"><span class="kn">4</span>Active</div>
+  <div class="kp-step kp5" data-kp="5"><span class="kn">5</span>G1 Storm</div>
+  <div class="kp-step kp6" data-kp="6"><span class="kn">6</span>G2 Storm</div>
+  <div class="kp-step kp7" data-kp="7"><span class="kn">7</span>G3 Storm</div>
+  <div class="kp-step kp8" data-kp="8"><span class="kn">8-9</span>G4-G5</div>
+</div>
+
+<p><strong>Kp 4.</strong> Active conditions. Aurora visible low on the northern horizon from the northernmost Upper Peninsula on clear, moonless nights. Photography can capture color the eye does not see.</p>
+<p><strong>Kp 5 (G1 storm).</strong> Aurora reliably visible from the Upper Peninsula with the naked eye. This is when you should be paying attention.</p>
+<p><strong>Kp 6 (G2 storm).</strong> Strong UP visibility. Aurora may dance overhead at the northernmost locations. Visible low on the horizon from the northern Lower Peninsula on clear nights.</p>
+<p><strong>Kp 7 (G3 storm).</strong> Aurora visible across the entire Lower Peninsula. Bright overhead displays from the UP. The kind of night that makes the news.</p>
+<p><strong>Kp 8-9 (G4-G5).</strong> Rare. Aurora visible across most of the continental United States. Once-per-cycle events.</p>
+
+<h2 class="sh">Where to Watch</h2>
+<p>The list below complements the map above. Ordered roughly by darkness and northern-horizon access. Use the geolocation tool to get distance-sorted recommendations from your specific position.</p>
+
+<div class="loc-list">
+  <div class="loc-card">
+    <div>
+      <h4>Keweenaw Peninsula</h4>
+      <div class="loc-meta">Brockway Mountain &middot; Eagle Harbor &middot; Copper Harbor</div>
+      <div class="loc-desc">The northernmost reach of Michigan. Brockway Mountain at 1,338 feet provides a 360-degree horizon view. Eagle Harbor and Copper Harbor sit on the lakeshore with unbroken northern water horizon. Bortle 2 to 3 dark skies. This is the single best aurora-viewing area in Michigan.</div>
+    </div>
+    <div class="dark-rating bortle2">Bortle 2-3</div>
+  </div>
+  <div class="loc-card">
+    <div>
+      <h4>Lake Superior Provincial Park (Ontario)</h4>
+      <div class="loc-meta">80 mi north of Sault Ste. Marie</div>
+      <div class="loc-desc">Bortle 1 to 2 dark skies, the darkest viewing area within practical driving distance of Michigan. Old Woman Bay and Agawa Bay both offer northern lake horizons. Crossing the border requires a passport but the sky quality justifies the trip if a major storm is forecast.</div>
+    </div>
+    <div class="dark-rating bortle1">Bortle 1-2</div>
+  </div>
+  <div class="loc-card">
+    <div>
+      <h4>Whitefish Point</h4>
+      <div class="loc-meta">North-facing peninsula, Lake Superior</div>
+      <div class="loc-desc">Open lake horizon to the north and northwest, the directions the aurora is most visible from Michigan. Dark to the north over open water. Same site as the <a href="/edmund-fitzgerald/">Edmund Fitzgerald memorial</a> and the Great Lakes Shipwreck Museum, perfect for a daytime visit before nightfall.</div>
+    </div>
+    <div class="dark-rating bortle2">Bortle 2-3</div>
+  </div>
+  <div class="loc-card">
+    <div>
+      <h4>Pictured Rocks National Lakeshore</h4>
+      <div class="loc-meta">Munising area, Hurricane River, Twelvemile Beach</div>
+      <div class="loc-desc">Bortle 2 dark skies. Hurricane River campground and Twelvemile Beach face north over Lake Superior. Designated as an International Dark Sky Park in 2025.</div>
+    </div>
+    <div class="dark-rating bortle2">Bortle 2</div>
+  </div>
+  <div class="loc-card">
+    <div>
+      <h4>Headlands International Dark Sky Park</h4>
+      <div class="loc-meta">Mackinaw City, Lower Peninsula tip</div>
+      <div class="loc-desc">The most accessible certified dark sky park in Michigan, on the south side of the Straits of Mackinac. Bortle 3 to 4. Programs and observing nights run year-round.</div>
+    </div>
+    <div class="dark-rating bortle3">Bortle 3-4</div>
+  </div>
+  <div class="loc-card">
+    <div>
+      <h4>Marquette area</h4>
+      <div class="loc-meta">Presque Isle Park &middot; Sugarloaf Mountain</div>
+      <div class="loc-desc">Reasonably dark for a town of Marquette's size. Presque Isle Park has water horizons in three directions and is walkable from downtown.</div>
+    </div>
+    <div class="dark-rating bortle3">Bortle 3-4</div>
+  </div>
+  <div class="loc-card">
+    <div>
+      <h4>Porcupine Mountains Wilderness</h4>
+      <div class="loc-meta">Western UP &middot; Presque Isle River mouth</div>
+      <div class="loc-desc">Bortle 2 dark skies. Best aurora viewing is from the lakeshore at the Presque Isle River mouth or the Lake Superior beach at Union Bay.</div>
+    </div>
+    <div class="dark-rating bortle2">Bortle 2</div>
+  </div>
+  <div class="loc-card">
+    <div>
+      <h4>Sleeper State Park, Caseville</h4>
+      <div class="loc-meta">Thumb of Michigan, north shore of Saginaw Bay</div>
+      <div class="loc-desc">For Lower Peninsula viewers, the best aurora spot. North-facing water horizon over Saginaw Bay, Bortle 4 to 5, but at Kp 7+ you can still see the display low on the horizon. Two and a half hours from Detroit, 45 minutes from Bay City.</div>
+    </div>
+    <div class="dark-rating bortle3">Bortle 4-5</div>
+  </div>
+</div>
+
+<h2 class="sh">Best Months and Times</h2>
+<div class="stat-row">
+  <div class="stat-box"><div class="lbl">Best months</div><div class="val">Sep, Oct, Mar, Apr</div></div>
+  <div class="stat-box"><div class="lbl">Best hours</div><div class="val">10 PM to 2 AM</div></div>
+  <div class="stat-box"><div class="lbl">Worst months</div><div class="val">May to Aug</div></div>
+  <div class="stat-box"><div class="lbl">Moon phase</div><div class="val">New moon, 5 days</div></div>
+</div>
+<p>The fall and spring equinox periods (March through April and September through October) produce statistically more aurora activity due to favorable Earth-Sun magnetic alignment. The Russell-McPherron effect roughly doubles the probability of significant geomagnetic activity during these windows. Midsummer is the worst aurora viewing in Michigan, not because the aurora is less active but because Michigan does not get truly dark in June or July.</p>
+
+<h2 class="sh">Aurora Photography Basics</h2>
+<div class="gear-list">
+  <div class="gi"><strong>Camera:</strong> Any DSLR or mirrorless with manual mode. Modern phones (iPhone 12 Pro+, Pixel 6+, Samsung S22+) work in Night Mode but a dedicated camera produces better results.</div>
+  <div class="gi"><strong>Lens:</strong> Wide-angle. 14mm to 24mm full-frame equivalent. Fast aperture (f/2.8 or wider).</div>
+  <div class="gi"><strong>Tripod:</strong> Essential. Any tripod that holds steady in wind for 5 to 20 second exposures.</div>
+  <div class="gi"><strong>Settings starting point:</strong> ISO 1600 to 3200, aperture f/2.8 (or wider), shutter 8 to 15 seconds, manual focus on infinity.</div>
+  <div class="gi"><strong>Focus:</strong> Set focus to infinity in daylight or focus on a distant bright light. Autofocus will fail in the dark.</div>
+  <div class="gi"><strong>RAW format:</strong> Shoot RAW. Aurora has more dynamic range and color than the eye sees; RAW lets you recover and balance it in post-processing.</div>
+  <div class="gi"><strong>Foreground:</strong> Include a lake horizon, dock, lighthouse, or tree silhouette for scale.</div>
+  <div class="gi"><strong>White balance:</strong> Manual, 3500K to 4500K. Auto white balance often introduces yellow casts that dilute the aurora green.</div>
+</div>
+
+<h2 class="sh">The Science, Briefly</h2>
+<p>The aurora is produced when charged particles from the Sun (carried in the solar wind and the coronal mass ejections that periodically erupt from sunspots) reach Earth and are channeled along magnetic field lines into the upper atmosphere. The particles collide with atoms of nitrogen and oxygen at 60 to 200 miles altitude. The collisions excite the atoms; as they return to ground state they emit light, primarily the green of excited oxygen at 558 nanometers and the red of excited oxygen at higher altitudes. Purple and pink at the bottom edge of curtains come from nitrogen.</p>
+
+<p>The Kp index measures the global geomagnetic disturbance in three-hour intervals. The Bz component of the solar wind magnetic field is a better near-term predictor: when Bz is strongly southward (large negative values, typically below minus 10 nanoteslas), aurora is much more likely in the next 30 to 60 minutes regardless of what the Kp forecast said earlier. Solar Cycle 25 reached solar maximum in late 2024 and is now declining toward the next minimum around 2030. 2026 is still well within the high-activity window.</p>
+
+<h2 class="sh">Common Questions</h2>
+<p class="faq-q">How often can I see the aurora from Michigan?</p>
+<p>From the Upper Peninsula: Minor displays multiple times per month during solar maximum years. Substantial displays roughly monthly. Major displays visible to the naked eye 3 to 6 times per year. From the Lower Peninsula: Substantial displays 4 to 8 times per year during solar max, fewer at solar minimum.</p>
+
+<p class="faq-q">What does Kp need to be for me to see aurora from where I am?</p>
+<p>Rough rule of thumb: Kp 5 (G1) from the UP, Kp 6 (G2) from the northern LP, Kp 7 (G3) from central and southern LP, Kp 8 (G4) for anywhere south of Detroit. The geolocation tool above calculates your specific threshold based on geomagnetic latitude.</p>
+
+<p class="faq-q">Why is Bz important?</p>
+<p>The Bz is the north-south component of the solar wind's magnetic field. When Bz is strongly southward (negative), it couples with Earth's magnetic field and allows energy transfer into the magnetosphere, driving aurora. A G1 storm (Kp 5) with Bz of negative 15 nT will produce far more spectacular aurora than a G1 storm with Bz of zero. Watch the Bz panel above as your most reliable short-term indicator.</p>
+
+<p class="faq-q">How accurate is the 3-day Kp forecast?</p>
+<p>The 24-hour forecast is reasonably accurate. The 48 and 72-hour forecasts are less reliable. The NOAA 30-minute forecast (linked in external resources) is the most accurate near-term tool. Solar wind data (Bz, speed) is the leading indicator of aurora activity at the present moment.</p>
+
+<p class="faq-q">Can I see colors with my eyes?</p>
+<p>At Kp 5 or higher, yes. The classic green band is the most visible color to the naked eye. Red and purple may show in photos but be subtle to the eye. At Kp 7+ the colors become unambiguous.</p>
+
+<p class="faq-q">Will the notification feature work for me?</p>
+<p>If you enable notifications using the button at the top of the page, your browser will alert you when the live Kp data crosses 5 (G1 storm threshold) while you have the page open. For background alerts when the page is not open, third-party services like SpaceWeatherLive or AuroraAlerts apps are required.</p>
+
+<h2 class="sh">External Resources</h2>
+<div class="gear-list">
+  <div class="gi"><a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener"><strong>NOAA SWPC Aurora 30-Minute Forecast</strong></a> &middot; Short-term auroral oval visualization.</div>
+  <div class="gi"><a href="https://www.swpc.noaa.gov/products/3-day-forecast" target="_blank" rel="noopener"><strong>NOAA SWPC 3-Day Forecast</strong></a> &middot; Official 3-day Kp outlook.</div>
+  <div class="gi"><a href="https://www.spaceweatherlive.com" target="_blank" rel="noopener"><strong>SpaceWeatherLive.com</strong></a> &middot; Community-maintained space weather portal with alerts.</div>
+  <div class="gi"><a href="https://www.lightpollutionmap.info" target="_blank" rel="noopener"><strong>Light Pollution Map</strong></a> &middot; Bortle dark-sky ratings for any location worldwide.</div>
+  <div class="gi"><a href="https://www.weather.gov/mqt/" target="_blank" rel="noopener"><strong>NWS Marquette</strong></a> &middot; Cloud cover forecast for the Upper Peninsula.</div>
+  <div class="gi"><a href="https://gazette.chrisizworski.com" target="_blank" rel="noopener"><strong>Great Lakes Gazette</strong></a> &middot; Daily Great Lakes weather and conditions brief.</div>
+</div>
+
+<h2 class="sh">Related Pages on This Site</h2>
+<div class="related">
+  <a href="https://phenology.chrisizworski.com/"><strong>Michigan Phenology</strong>Live aurora Kp readings for Saginaw Bay and the north, alongside river, hatch, and bird conditions: the whole natural year on one dashboard.</a>
+  <a href="/lake-superior-circle-tour/"><strong>Lake Superior Circle Tour</strong>The 1,300-mile circumnavigation guide. The Circle Tour route hits most of the prime aurora viewing locations.</a>
+  <a href="/edmund-fitzgerald/"><strong>SS Edmund Fitzgerald</strong>Whitefish Point, the same dark beach that gives you the Lake Superior memorial in daylight, is one of the best aurora locations after dark.</a>
+  <a href="/soo-locks/"><strong>Soo Locks Live</strong>Sault Ste. Marie is the gateway to the eastern UP aurora viewing locations. Watch the freighters by day, the aurora by night.</a>
+  <a href="/great-lakes/"><strong>The Great Lakes</strong>Maritime, ecology, history, and weather across all five Great Lakes from a Bay City perspective.</a>
+  <a href="/great-lakes-gazette/"><strong>Great Lakes Gazette</strong>Daily maritime and weather brief, useful for checking cloud cover before an aurora trip.</a>
+  <a href="/great-lakes-lighthouses/"><strong>Great Lakes Lighthouses</strong>Many dark-sky viewing locations are at or near historic lighthouses on Lake Superior.</a>
+</div>
+
+</div>
+<div class="footer">Bay City, Michigan &middot; Compiled by Chris Izworski &middot; Updated May 2026 &middot; <a href="/about/">About this site</a></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const LOCATIONS = [{"name": "Brockway Mountain", "lat": 47.488, "lng": -87.886, "bortle": 2, "region": "Keweenaw", "desc": "1,338-foot summit, 360-degree horizon, the single best aurora location in Michigan"}, {"name": "Eagle Harbor", "lat": 47.461, "lng": -88.158, "bortle": 2, "region": "Keweenaw", "desc": "Lakeshore harbor, unbroken north water horizon, historic lighthouse foreground"}, {"name": "Copper Harbor", "lat": 47.47, "lng": -87.892, "bortle": 2, "region": "Keweenaw", "desc": "Northernmost village in Michigan, dark skies, lakeshore access"}, {"name": "Lake Superior Provincial Park", "lat": 47.348, "lng": -84.622, "bortle": 1, "region": "Ontario", "desc": "Bortle 1 darkness, Old Woman Bay and Agawa Bay both face north"}, {"name": "Whitefish Point", "lat": 46.77, "lng": -84.954, "bortle": 2, "region": "Eastern UP", "desc": "North-facing peninsula, open lake horizon, Edmund Fitzgerald memorial site"}, {"name": "Pictured Rocks (Hurricane River)", "lat": 46.66, "lng": -86.182, "bortle": 2, "region": "Central UP", "desc": "International Dark Sky Park (2025), beach access on Lake Superior"}, {"name": "Headlands Dark Sky Park", "lat": 45.787, "lng": -84.76, "bortle": 3, "region": "Northern LP", "desc": "Certified dark sky park on the Straits of Mackinac, most accessible from southern Michigan"}, {"name": "Marquette (Presque Isle Park)", "lat": 46.58, "lng": -87.395, "bortle": 3, "region": "Central UP", "desc": "Walkable from downtown Marquette, water horizons in three directions"}, {"name": "Porcupine Mountains", "lat": 46.787, "lng": -89.738, "bortle": 2, "region": "Western UP", "desc": "Bortle 2 darkness, Presque Isle River mouth has best northern view"}, {"name": "Tahquamenon Falls (Rivermouth)", "lat": 46.512, "lng": -85.02, "bortle": 2, "region": "Eastern UP", "desc": "Quiet park unit on Lake Superior, less foot traffic than Upper Falls"}, {"name": "Sleeper State Park", "lat": 43.991, "lng": -82.892, "bortle": 4, "region": "Thumb LP", "desc": "Best aurora location for Lower Peninsula viewers, Saginaw Bay north horizon"}];
+const KP_STATUS = ['Quiet','Quiet','Quiet','Unsettled','Active','G1 Storm','G2 Storm','G3 Storm','G4 Storm','G5 Storm'];
+const KP_COLORS = ['#5fc88f','#5fc88f','#7ac8a0','#a8a040','#c08030','#c06020','#a02020','#801818','#600808','#400404'];
+
+let currentKp = 0, userMarker = null, kpForecast = [], notifyEnabled = false;
+let auroraMap = null, markers = [];
+
+// === Format helpers ===
+function formatTime(d){return d.toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});}
+function haversine(lat1,lng1,lat2,lng2){const R=3958.8,toRad=x=>x*Math.PI/180;const dLat=toRad(lat2-lat1),dLng=toRad(lng2-lng1);const a=Math.sin(dLat/2)**2+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
+function kpClass(k){return Math.min(Math.floor(k),8);}
+function bortleColor(b){return b===1?'#000':b===2?'#1a1a1a':b===3?'#2d3a4d':b===4?'#5a7090':'#8090a0';}
+
+// === Kp threshold by latitude (rough geomagnetic) ===
+function kpThreshold(lat){
+  // Magnetic latitude offset for Michigan area is roughly lat - 7 degrees
+  // Aurora visible when geomagnetic latitude < (90 - 5 - Kp*2)
+  // Simplified: north of 47 = Kp 4 needed, north of 45 = Kp 5, north of 43 = Kp 6, north of 41 = Kp 7
+  if (lat > 47) return 4;
+  if (lat > 45) return 5;
+  if (lat > 43) return 6;
+  if (lat > 41) return 7;
+  return 8;
+}
+
+// === SVG Gauge ===
+function updateGauge(kp){
+  const arc = document.getElementById('gaugeArc');
+  const num = document.getElementById('gaugeNum');
+  const status = document.getElementById('gaugeStatus');
+  const circumference = 2*Math.PI*100;
+  const pct = Math.min(kp/9, 1);
+  const filled = circumference * pct * 0.83; // 83% to leave gap for label
+  arc.setAttribute('stroke-dasharray', filled + ' ' + circumference);
+  arc.setAttribute('stroke', KP_COLORS[kpClass(kp)]);
+  num.textContent = kp.toFixed(1);
+  status.textContent = KP_STATUS[kpClass(kp)];
+}
+
+// === Forecast SVG chart ===
+function drawForecast(rows){
+  const svg = document.getElementById('forecastSvg');
+  const tooltip = document.getElementById('forecastTooltip');
+  svg.innerHTML = '';
+  const W = 800, H = 160, PAD_L = 30, PAD_R = 12, PAD_T = 12, PAD_B = 30;
+  const innerW = W - PAD_L - PAD_R;
+  const innerH = H - PAD_T - PAD_B;
+  const ns = 'http://www.w3.org/2000/svg';
+  
+  // Y axis ticks (0, 3, 5, 7, 9)
+  [0,3,5,7,9].forEach(yv=>{
+    const y = PAD_T + innerH - (yv/9)*innerH;
+    const line = document.createElementNS(ns,'line');
+    line.setAttribute('x1',PAD_L);line.setAttribute('x2',W-PAD_R);
+    line.setAttribute('y1',y);line.setAttribute('y2',y);
+    line.setAttribute('class','forecast-axis');
+    line.setAttribute('stroke-dasharray',yv===0?'':'2,3');
+    svg.appendChild(line);
+    const t = document.createElementNS(ns,'text');
+    t.setAttribute('x',PAD_L-5);t.setAttribute('y',y+3);
+    t.setAttribute('text-anchor','end');t.setAttribute('class','forecast-tick');
+    t.textContent='Kp '+yv;svg.appendChild(t);
+  });
+  
+  // Plot bars
+  const display = rows.slice(0,24);
+  const barW = innerW / display.length;
+  display.forEach((row,i)=>{
+    const t = new Date(row[0]+'Z');
+    const kp = parseFloat(row[1]);
+    const h = (kp/9)*innerH;
+    const x = PAD_L + i*barW + 1;
+    const y = PAD_T + innerH - h;
+    const rect = document.createElementNS(ns,'rect');
+    rect.setAttribute('x',x);rect.setAttribute('y',y);
+    rect.setAttribute('width',barW-2);rect.setAttribute('height',h);
+    rect.setAttribute('fill',KP_COLORS[kpClass(kp)]);
+    rect.setAttribute('class','forecast-bar');
+    rect.setAttribute('rx','1');
+    rect.addEventListener('mousemove',e=>{
+      tooltip.style.display='block';
+      const rect2 = svg.getBoundingClientRect();
+      tooltip.style.left = (e.clientX - rect2.left + 10) + 'px';
+      tooltip.style.top = (e.clientY - rect2.top - 50 + window.scrollY) + 'px';
+      tooltip.innerHTML = '<strong>'+formatTime(t)+'</strong>Kp '+kp.toFixed(2)+' &middot; '+KP_STATUS[kpClass(kp)];
+    });
+    rect.addEventListener('mouseleave',()=>{tooltip.style.display='none';});
+    svg.appendChild(rect);
+    // X label every 6 bars
+    if (i%6===0){
+      const lt = document.createElementNS(ns,'text');
+      lt.setAttribute('x',x+barW/2);lt.setAttribute('y',H-10);
+      lt.setAttribute('text-anchor','middle');lt.setAttribute('class','forecast-label');
+      lt.textContent = t.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+t.getUTCHours()+'Z';
+      svg.appendChild(lt);
+    }
+  });
+}
+
+// === Smart CTA based on current Kp ===
+function updateSmartCta(maxKp){
+  const cta = document.getElementById('smartCta');
+  cta.classList.add('show');
+  cta.classList.remove('alert');
+  if (maxKp >= 5){
+    cta.classList.add('alert');
+    cta.innerHTML = '<h3>Active aurora alert</h3><div class="cta-headline">Drop everything tonight.</div><p>Peak forecast Kp of '+maxKp.toFixed(1)+' over the next 24 hours. Get to a dark location with a clear northern horizon. The <a href="#" onclick="document.querySelector(\'.map-wrap\').scrollIntoView({behavior:\'smooth\'});return false;">interactive map above</a> shows your options. The Keweenaw and Whitefish Point are the highest-leverage sites. Check cloud cover for your target location before driving.</p>';
+  } else if (maxKp >= 4){
+    cta.innerHTML = '<h3>Active conditions possible</h3><div class="cta-headline">Worth watching from the northernmost UP.</div><p>Peak Kp of '+maxKp.toFixed(1)+'. Faint aurora possible from the <strong>Keweenaw</strong>, <strong>Whitefish Point</strong>, or <strong>Lake Superior Provincial Park</strong> on clear, moonless nights. Photography will capture color the eye does not see. If you cannot get north tonight, the <a href="/edmund-fitzgerald/">Edmund Fitzgerald page</a> and <a href="/soo-locks/">live Soo Locks tool</a> are both connected to the same region.</p>';
+  } else {
+    cta.innerHTML = '<h3>Aurora is quiet tonight</h3><div class="cta-headline">Two other Lake Superior tools while you wait.</div><p>Peak Kp of '+maxKp.toFixed(1)+' is not enough to bring the aurora south of the high Arctic. While you are here, the <a href="/edmund-fitzgerald/">Edmund Fitzgerald page</a> covers the complete history of the 1975 wreck with the verified 29-name crew list and the bell-recovery story. The <a href="/soo-locks/">live Soo Locks tool</a> shows real-time freighter activity at Sault Ste. Marie. Bookmark this page and check back when geomagnetic activity picks up.</p>';
+  }
+}
+
+// === Map ===
+function initMap(){
+  auroraMap = L.map('auroraMap', {scrollWheelZoom:false}).setView([46.5, -87.0], 6);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap &copy; CARTO',
+    subdomains:'abcd', maxZoom:19
+  }).addTo(auroraMap);
+  
+  LOCATIONS.forEach(loc=>{
+    const marker = L.circleMarker([loc.lat, loc.lng], {
+      radius: 8, fillColor: bortleColor(loc.bortle), color:'#fff',
+      weight:1.5, opacity:1, fillOpacity:.9
+    }).addTo(auroraMap);
+    marker.bindPopup('<b>'+loc.name+'</b><br>Bortle '+loc.bortle+' &middot; '+loc.region+'<br>'+loc.desc+'<br><br><i>Kp threshold from this site: '+kpThreshold(loc.lat)+'</i>');
+    markers.push({marker,loc});
+  });
+}
+
+// === Geolocation handler ===
+function findMyViewing(){
+  const btn = document.getElementById('geoBtn');
+  const result = document.getElementById('geoResult');
+  const list = document.getElementById('geoResultList');
+  const title = document.getElementById('geoResultTitle');
+  if (!navigator.geolocation){
+    btn.textContent = 'Geolocation not available';
+    btn.disabled = true;
+    return;
+  }
+  btn.textContent = 'Finding...';
+  btn.disabled = true;
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const {latitude:lat, longitude:lng} = pos.coords;
+    const withDist = LOCATIONS.map(loc=>({...loc, dist: haversine(lat,lng,loc.lat,loc.lng), thresh: kpThreshold(loc.lat)})).sort((a,b)=>a.dist-b.dist);
+    title.textContent = 'Ranked by distance from your location · '+lat.toFixed(2)+', '+lng.toFixed(2);
+    list.innerHTML = withDist.map(l=>`
+      <li>
+        <div><span class="gl-name">${l.name}</span><br><span class="gl-dist">${Math.round(l.dist)} mi · ${l.region}</span></div>
+        <div style="font-size:11px;color:#666">Kp ${l.thresh}+ needed</div>
+        <span class="gl-bortle b${l.bortle}">B${l.bortle}</span>
+      </li>
+    `).join('');
+    result.classList.add('show');
+    btn.textContent = 'Update location';
+    btn.disabled = false;
+    // Add user marker to map
+    if (userMarker) userMarker.remove();
+    userMarker = L.circleMarker([lat,lng], {radius:9, fillColor:'#5fc88f', color:'#fff', weight:2, fillOpacity:.95}).addTo(auroraMap);
+    userMarker.bindPopup('<b>Your location</b><br>'+lat.toFixed(3)+', '+lng.toFixed(3)+'<br>Kp '+kpThreshold(lat)+'+ needed for aurora overhead');
+    auroraMap.fitBounds([[lat,lng]].concat(LOCATIONS.map(l=>[l.lat,l.lng])).reduce((b,p)=>(b.push(p),b),[]), {padding:[40,40]});
+  }, err=>{
+    btn.textContent = 'Location denied';
+    btn.disabled = false;
+    list.innerHTML = '<li><div>Location access denied. Enable in browser settings, or use the map above to estimate distance manually.</div></li>';
+    title.textContent = 'Could not get location';
+    result.classList.add('show');
+  });
+}
+
+// === Notification opt-in ===
+function setupNotifications(){
+  const btn = document.getElementById('notifyBtn');
+  if (!('Notification' in window)){
+    btn.disabled = true; btn.textContent = 'Notifications not supported'; return;
+  }
+  btn.addEventListener('click', async()=>{
+    if (Notification.permission === 'granted'){
+      notifyEnabled = !notifyEnabled;
+      btn.textContent = notifyEnabled ? 'Alerts ON · Kp 5+' : 'Alert me when Kp 5+';
+      btn.style.background = notifyEnabled ? '#5fc88f' : '';
+      btn.style.color = notifyEnabled ? '#0a1428' : '';
+    } else {
+      const perm = await Notification.requestPermission();
+      if (perm === 'granted'){
+        notifyEnabled = true;
+        btn.textContent = 'Alerts ON · Kp 5+';
+        btn.style.background = '#5fc88f';
+        btn.style.color = '#0a1428';
+        new Notification('Aurora alerts active', {body:'You will be notified when geomagnetic Kp reaches 5 or higher.'});
+      } else {
+        btn.textContent = 'Notification denied';
+      }
+    }
+  });
+}
+
+function checkAndNotify(maxKp){
+  if (notifyEnabled && maxKp >= 5 && Notification.permission === 'granted'){
+    const lastNotifyKp = parseFloat(sessionStorage.getItem('lastKp')||0);
+    if (lastNotifyKp < 5){
+      new Notification('Aurora alert · Kp '+maxKp.toFixed(1), {body:'G'+(Math.floor(maxKp)-4)+' geomagnetic storm forecast. Aurora may be visible from the UP tonight.'});
+      sessionStorage.setItem('lastKp', maxKp);
+    }
+  }
+}
+
+// === Highlight Kp scale ===
+function highlightKpStep(kp){
+  document.querySelectorAll('.kp-step').forEach(s=>s.classList.remove('current'));
+  const target = document.querySelector('.kp-step.kp'+kpClass(kp));
+  if (target) target.classList.add('current');
+}
+
+// === Main data fetch ===
+async function loadAuroraData(){
+  const kpUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index-forecast.json';
+  const swUrl = 'https://services.swpc.noaa.gov/products/solar-wind/mag-1-day.json';
+  const kpCurrentUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json';
+  
+  try {
+    // Fetch all three in parallel
+    const [kpRes, swRes, kpCurRes] = await Promise.allSettled([
+      fetch(kpUrl).then(r=>r.json()),
+      fetch(swUrl).then(r=>r.json()),
+      fetch(kpCurrentUrl).then(r=>r.json())
+    ]);
+    
+    if (kpRes.status === 'fulfilled') {
+      const data = kpRes.value;
+      const rows = data.slice(1);
+      const now = new Date();
+      const next24 = rows.filter(row=>{
+        const t = new Date(row[0]+'Z');
+        const hrs = (t-now)/3600000;
+        return hrs > -3 && hrs < 30;
+      });
+      const max24 = next24.reduce((m,r)=>Math.max(m, parseFloat(r[1])), 0);
+      const max72 = rows.slice(0,24).reduce((m,r)=>Math.max(m, parseFloat(r[1])), 0);
+      
+      currentKp = max24;
+      updateGauge(max24);
+      drawForecast(rows);
+      highlightKpStep(max24);
+      updateSmartCta(max24);
+      checkAndNotify(max24);
+      
+      // Update peak panel
+      const peakCard = document.getElementById('swKpPeak');
+      peakCard.querySelector('.sw-val').textContent = max72.toFixed(1);
+      peakCard.querySelector('.sw-status').textContent = KP_STATUS[kpClass(max72)];
+      if (max72 >= 5) peakCard.classList.add('alert');
+      
+      // Update live strip
+      const dot = document.getElementById('liveDot');
+      const status = document.getElementById('liveStatus');
+      dot.classList.remove('active','alert');
+      if (max24 >= 5){
+        dot.classList.add('alert');
+        status.textContent = 'ACTIVE · Kp '+max24.toFixed(1)+' · '+KP_STATUS[kpClass(max24)];
+      } else if (max24 >= 4){
+        dot.classList.add('active');
+        status.textContent = 'Watch · Kp '+max24.toFixed(1)+' peak 24h';
+      } else {
+        status.textContent = 'Quiet · Kp '+max24.toFixed(1)+' peak 24h';
+      }
+      
+      // Headline
+      let hl, det;
+      if (max24 < 4){
+        hl = 'Aurora is quiet tonight in Michigan';
+        det = 'Peak Kp of <strong>'+max24.toFixed(1)+'</strong> over the next 24 hours. Not enough to bring the aurora south of the high Arctic. Check back tomorrow, or watch the live solar wind Bz data below as a near-term indicator.';
+      } else if (max24 < 5){
+        hl = 'Active conditions, faint aurora possible from the UP';
+        det = 'Peak Kp of <strong>'+max24.toFixed(1)+'</strong>. Faint aurora possible from <strong>Keweenaw</strong>, <strong>Whitefish Point</strong>, or <strong>LSPP</strong> on clear nights. Photography will capture more than the eye sees.';
+      } else if (max24 < 6){
+        hl = 'Aurora reliably visible from the Upper Peninsula';
+        det = 'Peak Kp <strong>'+max24.toFixed(1)+'</strong> (G1 storm). Aurora visible to the naked eye from any UP dark-sky location with clear northern horizon. Use the map above to find your closest viewing site.';
+      } else if (max24 < 7){
+        hl = 'Strong UP display, possible northern Lower Peninsula viewing';
+        det = 'Peak Kp <strong>'+max24.toFixed(1)+'</strong> (G2 storm). Strong aurora across the UP. May be visible low on the horizon from northern LP at <strong>Sleeper State Park</strong> or <strong>Headlands DSP</strong>.';
+      } else if (max24 < 8){
+        hl = 'Major statewide display expected';
+        det = 'Peak Kp <strong>'+max24.toFixed(1)+'</strong> (G3 storm). Aurora visible across all of Michigan. Bright overhead from the UP. The kind of night that makes the news.';
+      } else {
+        hl = 'Severe geomagnetic storm';
+        det = 'Peak Kp <strong>'+max24.toFixed(1)+'</strong> (G4+). Aurora visible across most of the continental US. Once-per-cycle event. Get to a dark sky tonight.';
+      }
+      document.getElementById('tonightHeadline').textContent = hl;
+      document.getElementById('tonightDetail').innerHTML = det;
+    }
+    
+    if (swRes.status === 'fulfilled') {
+      const sw = swRes.value;
+      // Header row + data rows. Columns vary; bz_gsm is typically index 3 for mag-1-day
+      const swRows = sw.slice(1);
+      const recent = swRows.slice(-1)[0];
+      if (recent) {
+        // Schema: [time_tag, bx_gsm, by_gsm, bz_gsm, lon_gsm, lat_gsm, bt]
+        const bz = parseFloat(recent[3]);
+        const bt = parseFloat(recent[6]);
+        const bzCard = document.getElementById('swBz');
+        bzCard.querySelector('.sw-val').textContent = bz.toFixed(1)+' nT';
+        let bzStatus, bzClass;
+        if (bz < -10) { bzStatus = 'STRONG SOUTH · aurora driver'; bzClass='alert'; }
+        else if (bz < -5) { bzStatus = 'Moderate south · favorable'; bzClass='alert'; }
+        else if (bz < 0) { bzStatus = 'Slightly south'; bzClass=''; }
+        else { bzStatus = 'Northward · unfavorable'; bzClass=''; }
+        bzCard.className = 'sw-card ' + bzClass;
+        bzCard.querySelector('.sw-status').textContent = bzStatus;
+      }
+    }
+    
+    if (kpCurRes.status === 'fulfilled') {
+      const kpCur = kpCurRes.value;
+      // Schema: [time_tag, kp, a_running, station_count]
+      const curRows = kpCur.slice(1);
+      const latestKp = curRows.slice(-1)[0];
+      if (latestKp) {
+        const nowKp = parseFloat(latestKp[1]);
+        const curCard = document.getElementById('swKpNow');
+        curCard.querySelector('.sw-val').textContent = nowKp.toFixed(1);
+        curCard.querySelector('.sw-status').textContent = KP_STATUS[kpClass(nowKp)];
+        if (nowKp >= 5) curCard.classList.add('alert');
+      }
+    }
+    
+    // Solar wind speed from plasma feed (separate call, optional)
+    try {
+      const plasma = await fetch('https://services.swpc.noaa.gov/products/solar-wind/plasma-1-day.json').then(r=>r.json());
+      const plasmaRows = plasma.slice(1);
+      const recent = plasmaRows.slice(-1)[0];
+      if (recent) {
+        // Schema: [time_tag, density, speed, temperature]
+        const speed = parseFloat(recent[2]);
+        const speedCard = document.getElementById('swSpeed');
+        speedCard.querySelector('.sw-val').textContent = Math.round(speed)+' km/s';
+        let speedStatus;
+        if (speed > 600) speedStatus = 'Fast stream';
+        else if (speed > 450) speedStatus = 'Elevated';
+        else speedStatus = 'Nominal';
+        speedCard.querySelector('.sw-status').textContent = speedStatus;
+      }
+    } catch(e){/* optional */}
+    
+    document.getElementById('refreshInfo').textContent = '· updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+    
+  } catch (e) {
+    document.getElementById('liveStatus').textContent = 'NOAA feed unavailable, see manual content below';
+    document.getElementById('tonightHeadline').textContent = 'Live feed temporarily unavailable';
+    document.getElementById('tonightDetail').innerHTML = 'Could not reach NOAA SWPC. Visit <a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener" style="color:#7bc8e8">noaa.gov/aurora-forecast</a> directly. The viewing guide and map below remain accurate.';
+  }
+}
+
+// === Init ===
+window.addEventListener('DOMContentLoaded',()=>{
+  initMap();
+  setupNotifications();
+  document.getElementById('findBtn').addEventListener('click', findMyViewing);
+  document.getElementById('geoBtn').addEventListener('click', findMyViewing);
+  document.getElementById('refreshBtn').addEventListener('click', loadAuroraData);
+  loadAuroraData();
+  // Auto-refresh every 10 minutes
+  setInterval(loadAuroraData, 10*60*1000);
+});
+</script>
+</body>
+</html>

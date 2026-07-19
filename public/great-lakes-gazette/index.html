@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Great Lakes Gazette, Daily Maritime Brief | Chris Izworski</title>
+<meta name="description" content="The Great Lakes Gazette: daily vessel movements, water levels, and marine forecasts from all five Great Lakes. Published every morning from Bay City, Michigan.">
+<link rel="canonical" href="https://chrisizworski.com/great-lakes-gazette/">
+<meta property="og:title" content="Great Lakes Gazette, Daily Maritime Brief | Chris Izworski">
+<meta property="og:description" content="Daily vessel movements, water levels, and marine forecasts from all five Great Lakes. Free, no login, updated every morning.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://chrisizworski.com/great-lakes-gazette/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://chrisizworski.com/great-lakes-gazette/",
+      "url": "https://chrisizworski.com/great-lakes-gazette/",
+      "name": "Great Lakes Gazette, Daily Maritime Brief",
+      "description": "Daily Great Lakes vessel movements, water levels, and marine forecasts assembled from live AIS data and NOAA feeds each morning.",
+      "author": { "@type": "Person", "name": "Chris Izworski", "url": "https://chrisizworski.com/" },
+      "dateModified": "2026-04-28",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://chrisizworski.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Great Lakes Gazette", "item": "https://chrisizworski.com/great-lakes-gazette/" }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Georgia,'Times New Roman',serif;background:#faf9f6;color:#2c2c2c;line-height:1.75}
+a{color:#2c5f2d;text-decoration:none}
+a:hover{text-decoration:underline}
+.header{text-align:center;padding:32px 20px 24px;border-bottom:1px solid #e8e4dc}
+.header .site-title{font-size:22px;font-weight:normal;color:#2c5f2d;letter-spacing:1px}
+.nav{text-align:center;padding:12px 20px;border-bottom:1px solid #e8e4dc;font-size:14px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 0}
+.nav a{color:#5a5a5a;text-decoration:none;margin:4px 10px;letter-spacing:.4px;white-space:nowrap}
+.nav a:hover,.nav a.active{color:#2c5f2d}
+.nav a.active{font-weight:bold}
+.body{max-width:780px;margin:0 auto;padding:44px 20px 60px}
+.breadcrumb{font-size:13px;color:#999;margin-bottom:24px}
+.breadcrumb a{color:#999}
+h1.page-title{font-size:36px;font-weight:normal;color:#2c2c2c;margin-bottom:6px;line-height:1.2}
+.gazette-flag{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#1a6fc4;margin-bottom:24px;border-bottom:1px solid #e8e4dc;padding-bottom:18px}
+.body p{font-size:16px;margin-bottom:18px;color:#3a3a3a}
+/* Brief card */
+.brief-card{border:1px solid #d0dce8;border-radius:3px;background:#fff;margin-bottom:32px;overflow:hidden}
+.brief-masthead{background:#1a3a5c;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.brief-nameplate{font-size:16px;letter-spacing:1px;font-weight:normal}
+.brief-date{font-size:12px;color:#9ab;font-style:italic}
+.brief-inner{padding:22px 24px}
+.brief-headline{font-size:22px;font-weight:normal;color:#1a3a5c;margin-bottom:6px;line-height:1.3}
+.brief-dateline{font-size:13px;color:#888;font-style:italic;margin-bottom:16px}
+.brief-body{font-size:15px;color:#2c2c2c;line-height:1.8;white-space:pre-line}
+.brief-loading{padding:40px 24px;text-align:center;color:#888;font-style:italic;font-size:15px}
+.brief-error{padding:24px;color:#888;font-size:14px}
+/* Water levels strip */
+.levels-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:20px;padding-top:18px;border-top:1px solid #e8e4dc}
+.level-cell{text-align:center}
+.level-lake{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#999;margin-bottom:3px}
+.level-val{font-size:15px;color:#1a3a5c;font-weight:normal}
+.level-sign{font-size:12px;color:#888}
+/* Sections */
+h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 14px;border-bottom:1px solid #e8e4dc;padding-bottom:8px}
+.gazette-link-row{margin-top:20px}
+.gazette-link-row a{display:inline-block;background:#1a3a5c;color:#fff;padding:9px 20px;border-radius:2px;font-size:14px;letter-spacing:.3px}
+.gazette-link-row a:hover{background:#14304d;text-decoration:none}
+.source-row{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f5f0e8}
+.source-row:last-child{border-bottom:none}
+.source-name{font-size:15px;color:#2c2c2c;margin-bottom:3px}
+.source-desc{font-size:13px;color:#666}
+.footer{text-align:center;padding:20px;border-top:1px solid #e8e4dc;font-size:13px;color:#999;margin-top:48px}
+@media(max-width:640px){
+  h1.page-title{font-size:28px}
+  .levels-strip{grid-template-columns:repeat(3,1fr)}
+  .brief-masthead{flex-direction:column;gap:4px}
+}
+</style>
+
+
+
+
+
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:image" content="https://chrisizworski.com/assets/search/chris-izworski-great-lakes.jpg">
+<meta property="og:image:secure_url" content="https://chrisizworski.com/assets/search/chris-izworski-great-lakes.jpg">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Chris Izworski Great Lakes and Saginaw Bay preview image">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://chrisizworski.com/assets/search/chris-izworski-great-lakes.jpg">
+<meta name="twitter:image:alt" content="Chris Izworski Great Lakes and Saginaw Bay preview image">
+<meta name="thumbnail" content="https://chrisizworski.com/assets/search/chris-izworski-great-lakes.jpg">
+<meta itemprop="image" content="https://chrisizworski.com/assets/search/chris-izworski-great-lakes.jpg">
+</head>
+<body>
+<div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
+<div class="nav">
+<a href="/">Home</a>
+<a href="/about/">About</a>
+<a href="/start-here/">Start Here</a>
+<a href="/tools/">Tools</a>
+<a href="/press/">Press</a>
+<a href="/media/">Media</a>
+<a href="/timeline/">Timeline</a>
+<a href="/citations/">Citations</a>
+<a href="/case-studies/">Case Studies</a>
+<a href="/blog/">Blog</a>
+<a href="/ai/">AI</a>
+<a href="/guides/">Guides</a>
+</div>
+<div class="body">
+<div class="breadcrumb"><a href="/">Home</a> &rsaquo; Great Lakes Gazette</div>
+
+<h1 class="page-title">Great Lakes Gazette</h1>
+<div class="gazette-flag">⚓ Daily Maritime Brief &middot; Free &middot; No Login &middot; Bay City, Michigan</div>
+
+<!-- Live brief embed -->
+<div class="brief-card" id="briefCard">
+  <div class="brief-masthead">
+    <span class="brief-nameplate">Great Lakes Gazette</span>
+    <span class="brief-date" id="briefDate">Loading today's brief…</span>
+  </div>
+  <div class="brief-inner">
+    <div class="brief-loading" id="briefLoading">Fetching today's vessel movements and lake conditions…</div>
+    <div id="briefContent" style="display:none">
+      <div class="brief-headline" id="briefHeadline"></div>
+      <div class="brief-dateline" id="briefDateline"></div>
+      <div class="brief-body" id="briefBody"></div>
+      <div class="levels-strip" id="levelsStrip"></div>
+    </div>
+    <div class="brief-error" id="briefError" style="display:none">
+      Today's brief is loading. <a href="https://great-lakes-gazette.vercel.app" target="_blank" rel="noopener">Open the Gazette directly →</a>
+    </div>
+  </div>
+</div>
+
+<div class="gazette-link-row">
+  <a href="https://great-lakes-gazette.vercel.app" target="_blank" rel="noopener">Open the full Gazette ↗</a>
+</div>
+
+<h2 class="section-head">What the Gazette Covers</h2>
+
+<p>The Great Lakes Gazette is a free daily maritime publication built for anyone who watches the lakes. It pulls from four live data sources every morning, AIS vessel tracking, NOAA water levels, National Weather Service marine forecasts, and Great Lakes Now conservation news, and assembles them into a short readable brief that takes two minutes and tells you what is actually happening on the water today.</p>
+
+<p>The brief is written by AI (Claude Haiku) from the day's live data. No invented facts, no filler. If it is not in the data, it does not appear in the brief. The vessel movement data comes from publicly accessible AIS transponder networks. The water level data is published by NOAA under a public domain license. The forecasts are official NWS products. The Gazette is simply the assembly layer.</p>
+
+<div class="source-row">
+  <div class="source-name">⚓ AIS Vessel Passages</div>
+  <div class="source-desc">Real-time vessel tracking from seven Great Lakes chokepoints, Soo Locks, Welland Canal, Detroit River, Port Huron, Straits of Mackinac, Duluth, and Saginaw Bay, via BoatNerd's AIS tracking platform.</div>
+</div>
+<div class="source-row">
+  <div class="source-name">🌊 NOAA Water Levels</div>
+  <div class="source-desc">Daily mean water level readings from all five Great Lakes (Superior, Michigan, Huron, Erie, Ontario), referenced against Low Water Datum, from NOAA's Center for Operational Oceanographic Products and Services.</div>
+</div>
+<div class="source-row">
+  <div class="source-name">⛵ NWS Marine Forecasts</div>
+  <div class="source-desc">National Weather Service open-lake forecasts for each of the five lakes, wind speed, direction, and wave height, from official NWS marine forecast products issued four times daily.</div>
+</div>
+<div class="source-row">
+  <div class="source-name">🌿 Great Lakes Now</div>
+  <div class="source-desc">Environmental and conservation journalism from Detroit Public Television's Great Lakes beat, water quality, invasive species, climate, and the ecological stories of the basin.</div>
+</div>
+
+<h2 class="section-head">The Navigation Season</h2>
+
+<p>The Great Lakes navigation season runs from late March through January, anchored by the annual opening of the Soo Locks at Sault Ste. Marie. The locks are the only passage between Lake Superior and the lower lakes, every vessel moving iron ore, coal, grain, or limestone between Duluth and the lower ports passes through them. The Gazette tracks AIS vessel passages at the Soo and six other Great Lakes chokepoints throughout the season.</p>
+
+<p>For background on how to track freighters using live AIS data, vessel types on the Great Lakes, and the best viewing spots along the Saginaw River and Saginaw Bay, see the <a href="/great-lakes-freighter-tracking/">Great Lakes freighter tracking guide</a>.</p>
+
+<h2 class="section-head">About This Project</h2>
+
+<p>The Gazette exists because the information a Great Lakes watcher actually wants, what vessels are moving, what the water levels are doing, what the weather looks like on the open lake, is scattered across four or five separate sites, none of them built for a quick morning read. Living in Bay City on Saginaw Bay, the lakes are a daily presence. The Gazette pulls it all into one place.</p>
+
+<p>It is free, requires no login, and carries no advertising. It is a tool for anyone who pays attention to the lakes, whether you are watching vessels from the breakwall, planning time on the water, or just want to know what is moving on the Great Lakes today.</p>
+
+<p>The Gazette connects to a broader set of Great Lakes content on this site: <a href="/great-lakes-maritime-history/">Great Lakes maritime history</a>, <a href="/saginaw-bay-ecology/">Saginaw Bay ecology</a>, <a href="/great-lakes-shipwrecks/">Great Lakes shipwrecks</a>, and the <a href="/great-lakes-freighter-tracking/">freighter tracking guide</a>.</p>
+
+</div>
+<div class="footer">Bay City, Michigan &middot; Great Lakes Gazette &middot; Updated daily</div>
+
+<script>
+(async function() {
+  const API = 'https://great-lakes-gazette.vercel.app/api/generate';
+  
+  try {
+    const res = await fetch(API, {
+      headers: { 'Authorization': 'Bearer glg-cron-2026-secret-bay-city' }
+    });
+    if (!res.ok) throw new Error('API error');
+    const d = await res.json();
+    const b = d.brief || {};
+    const data = d.data || {};
+    
+    if (!b.headline) throw new Error('No brief');
+    
+    // Fill headline and body
+    document.getElementById('briefHeadline').textContent = b.headline;
+    document.getElementById('briefDateline').textContent = b.dateline || '';
+    document.getElementById('briefDate').textContent = b.dateline || '';
+    
+    // Format body, first 4 paragraphs max
+    const paras = (b.brief || '').split('\n\n').filter(p => p.trim()).slice(0, 4);
+    document.getElementById('briefBody').textContent = paras.join('\n\n');
+    
+    // Water levels
+    const lakes = data.waterLevels || [];
+    if (lakes.length) {
+      const strip = document.getElementById('levelsStrip');
+      strip.innerHTML = lakes.slice(0,5).map(lk => {
+        const lvl = lk.level_ft != null ? lk.level_ft : null;
+        const sign = lvl != null ? (lvl >= 0 ? '+' : '') : '';
+        const display = lvl != null ? `${sign}${lvl.toFixed(2)} ft` : 'N/A';
+        const name = (lk.lake || '').replace('Lake ','');
+        return `<div class="level-cell">
+          <div class="level-lake">${name}</div>
+          <div class="level-val">${display}</div>
+          <div class="level-sign">vs LWD</div>
+        </div>`;
+      }).join('');
+    } else {
+      document.getElementById('levelsStrip').style.display = 'none';
+    }
+    
+    document.getElementById('briefLoading').style.display = 'none';
+    document.getElementById('briefContent').style.display = 'block';
+    
+  } catch(e) {
+    document.getElementById('briefLoading').style.display = 'none';
+    document.getElementById('briefError').style.display = 'block';
+  }
+})();
+</script>
+</body>
+</html>

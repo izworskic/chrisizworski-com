@@ -1,0 +1,6 @@
+node_modules/
+.vercel/
+audit/live/snapshot/
+audit/preview/snapshot/
+audit/*.tmp
+

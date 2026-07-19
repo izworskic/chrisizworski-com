@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Great Lakes Buoy Dashboard: Live Wave Height, Wind, Water Temperature | Chris Izworski</title>
+<meta name="description" content="Live data from 115 NOAA buoys and coastal stations across all five Great Lakes. Wave height, wind speed, water temperature, air pressure on an interactive map. Activity filters for fishing, kayaking, swimming, sailing, diving. Built by Chris Izworski, Bay City Michigan.">
+<link rel="canonical" href="https://chrisizworski.com/great-lakes-buoys/">
+<meta property="og:title" content="Great Lakes Buoy Dashboard: Live Wave, Wind, and Water Conditions">
+<meta property="og:description" content="Real-time data from 115 NOAA stations across Lakes Superior, Michigan, Huron, Erie, and Ontario. Interactive map, activity filters, geolocation-based recommendations.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://chrisizworski.com/great-lakes-buoys/">
+<meta property="og:site_name" content="Chris Izworski">
+<meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://chrisizworski.com/great-lakes-buoys/og-card.png">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://chrisizworski.com/great-lakes-buoys/og-card.png">
+<meta name="author" content="Chris Izworski">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},
+    {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","givenName":"Chris","familyName":"Izworski","url":"https://chrisizworski.com/","sameAs":["https://www.wikidata.org/wiki/Q138283432","https://chrisizworski.com/","https://www.linkedin.com/in/chrisizworski"],"address":{"@type":"PostalAddress","addressLocality":"Bay City","addressRegion":"MI","addressCountry":"US"},"description":"Sales engineer at Prepared, former Bay County 911 Director (2013-2022) and Saginaw County 911 Executive Director (2022-2025), board member of Save Our Shoreline, lifelong Great Lakes researcher and writer based in Bay City, Michigan."},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/great-lakes-buoys/","name":"Great Lakes Buoy Dashboard","description":"Live data from 115 NOAA buoys across the Great Lakes with interactive map and activity-based viewing recommendations.","url":"https://chrisizworski.com/great-lakes-buoys/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-05-11","inLanguage":"en-US","mainContentOfPage":{"@type":"WebPageElement","cssSelector":"#buoyMap"}},
+    {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Great Lakes Buoys","item":"https://chrisizworski.com/great-lakes-buoys/"}]}
+  ]
+}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Georgia,'Times New Roman',serif;background:#faf9f6;color:#2c2c2c;line-height:1.7}
+a{color:#2c5f2d;text-decoration:none}
+a:hover{text-decoration:underline}
+.header{text-align:center;padding:32px 20px 24px;border-bottom:1px solid #e8e4dc}
+.header .site-title{font-size:22px;font-weight:normal;color:#2c5f2d;letter-spacing:1px}
+.nav{text-align:center;padding:12px 20px;border-bottom:1px solid #e8e4dc;font-size:14px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 0}
+.nav a{color:#5a5a5a;text-decoration:none;margin:4px 10px;letter-spacing:.4px;white-space:nowrap}
+.nav a:hover{color:#2c5f2d}
+
+.live-strip{padding:11px 16px;background:linear-gradient(90deg,#062a3a 0%,#0d4458 50%,#062a3a 100%);color:#a8d0e0;font-size:12px;letter-spacing:.4px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+.live-strip .live-dot{font-size:10px;animation:pulse 2s infinite;color:#5fc88f}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.live-strip .live-label{text-transform:uppercase}
+.live-strip .live-status{color:#fff;font-weight:bold}
+.live-strip .refresh-info{font-size:10px;color:#88a8c0;margin-left:8px}
+
+.body{max-width:920px;margin:0 auto;padding:38px 20px 60px}
+.breadcrumb{font-size:13px;color:#999;margin-bottom:18px}
+.breadcrumb a{color:#999}
+h1.page-title{font-size:34px;font-weight:normal;color:#2c2c2c;margin-bottom:8px;line-height:1.2}
+.sub{font-size:16px;color:#6b6b6b;font-style:italic;margin-bottom:18px}
+
+/* Byline */
+.byline{display:flex;align-items:center;gap:11px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid #e8e4dc;font-size:13px;color:#666}
+.byline-avatar{width:36px;height:36px;border-radius:50%;background:#2c5f2d;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:14px;font-weight:bold;flex-shrink:0}
+.byline a{color:#2c5f2d;font-weight:bold}
+.byline-meta{line-height:1.5}
+
+.body p{font-size:16px;margin-bottom:18px;color:#3a3a3a}
+h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-bottom:1px solid #e8e4dc;padding-bottom:7px}
+
+/* Lake summary cards */
+.lake-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:10px 0 24px}
+.lake-card{background:#fff;border:1px solid #e0dbd2;border-radius:4px;padding:13px 15px;text-align:center}
+.lake-card .lk-name{font-size:11px;color:#666;letter-spacing:.6px;text-transform:uppercase;margin-bottom:5px;font-weight:bold}
+.lake-card .lk-stats{font-size:12px;color:#666;line-height:1.55}
+.lake-card .lk-stats strong{color:#2c5f2d;font-size:14px}
+.lake-card .lk-count{font-size:22px;color:#2c5f2d;font-weight:normal;line-height:1}
+.lake-card .lk-active-bar{height:3px;background:#e0dbd2;border-radius:2px;margin-top:8px;overflow:hidden}
+.lake-card .lk-active-fill{height:100%;background:#5fc88f}
+
+/* Activity filter pills */
+.filter-bar{margin:20px 0;padding:16px 18px;background:#fff;border:1px solid #e0dbd2;border-radius:6px}
+.filter-bar .fb-label{font-size:11px;color:#666;letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px;font-weight:bold}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px}
+.pill{background:#f4efe5;border:1.5px solid #e0dbd2;color:#2c2c2c;padding:8px 14px;border-radius:24px;font-size:13px;cursor:pointer;font-family:Georgia,serif;transition:all .15s;display:inline-flex;align-items:center;gap:6px;line-height:1.2}
+.pill:hover{border-color:#2c5f2d;color:#2c5f2d}
+.pill.active{background:#2c5f2d;color:#fff;border-color:#2c5f2d}
+.pill .pill-icon{font-size:14px;line-height:1}
+.pill .pill-count{background:rgba(0,0,0,.1);padding:1px 7px;border-radius:10px;font-size:11px;font-weight:bold}
+.pill.active .pill-count{background:rgba(255,255,255,.25);color:#fff}
+.filter-help{margin-top:10px;font-size:12px;color:#666;line-height:1.55;font-style:italic}
+
+/* Map */
+.map-section{margin:0 0 28px;position:relative}
+.map-wrap{height:560px;border:1px solid #e0dbd2;border-radius:6px;overflow:hidden;background:#d8e4ec}
+#buoyMap{width:100%;height:100%;background:#d8e4ec}
+.leaflet-popup-content-wrapper{background:#0d3545;color:#fff;border-radius:6px;border:1px solid #2a4a6a;font-family:Georgia,serif}
+.leaflet-popup-content{margin:11px 15px;font-size:13px;line-height:1.6;color:#dfe9f0;min-width:200px}
+.leaflet-popup-content b{color:#7bc8e8}
+.leaflet-popup-content .ll-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:12px}
+.leaflet-popup-content .ll-row:last-child{border-bottom:none}
+.leaflet-popup-content .ll-row span:first-child{color:#88a8c0}
+.leaflet-popup-content .ll-row span:last-child{color:#fff;font-weight:bold}
+.leaflet-popup-content .ll-detail-btn{display:inline-block;margin-top:10px;padding:7px 14px;background:#5fc88f;color:#0a1428;font-size:12px;font-weight:bold;border-radius:3px;cursor:pointer;letter-spacing:.3px;text-decoration:none}
+.leaflet-popup-tip{background:#0d3545;border-color:#2a4a6a}
+.leaflet-popup-close-button{color:#7bc8e8 !important;font-size:18px !important}
+.leaflet-interactive{cursor:pointer !important}
+.buoy-tooltip{background:#0d3545 !important;color:#fff !important;border:1px solid #2a4a6a !important;border-radius:4px !important;padding:6px 10px !important;font-family:Georgia,serif !important;font-size:12px !important;box-shadow:0 2px 8px rgba(0,0,0,.25) !important;line-height:1.5 !important}
+.buoy-tooltip::before{border-top-color:#0d3545 !important}
+.leaflet-circle-marker-path{transition:stroke-width .12s, fill-opacity .12s}
+.leaflet-interactive:hover{stroke-width:2.5 !important;fill-opacity:1 !important}
+.map-legend{position:absolute;bottom:10px;right:10px;background:rgba(13,53,69,.94);color:#fff;padding:10px 12px;border-radius:5px;font-size:11px;line-height:1.8;z-index:1000;border:1px solid rgba(255,255,255,.15);max-width:200px}
+.map-legend .lg-title{font-size:10px;color:#7bc8e8;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;font-weight:bold}
+.map-legend .lg-row{display:flex;align-items:center;gap:8px}
+.map-legend .lg-dot{width:11px;height:11px;border-radius:50%;display:inline-block;border:1px solid rgba(255,255,255,.4)}
+
+/* Geolocation tool */
+.geo-tool{background:#fff;border:2px solid #2c5f2d;border-radius:6px;padding:18px 20px;margin:0 0 24px}
+.geo-tool h3{font-size:15px;color:#2c5f2d;margin-bottom:6px;font-weight:bold}
+.geo-tool p{font-size:13px;color:#555;margin-bottom:12px;line-height:1.6}
+.geo-btn{background:#2c5f2d;color:#fff;border:0;padding:10px 18px;border-radius:4px;font-family:Georgia,serif;font-size:14px;cursor:pointer;letter-spacing:.3px}
+.geo-btn:hover{background:#1f4520}
+.geo-result{margin-top:14px;display:none;padding:14px 16px;background:#f4f8f3;border:1px solid #c8d8c8;border-radius:4px}
+.geo-result.show{display:block}
+.geo-result h4{font-size:13px;color:#2c5f2d;margin-bottom:8px;font-weight:bold;letter-spacing:.3px;text-transform:uppercase}
+.geo-result-list{list-style:none;padding:0}
+.geo-result-list li{padding:9px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:13px;display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;cursor:pointer}
+.geo-result-list li:hover{background:rgba(44,95,45,.05)}
+.geo-result-list li:last-child{border-bottom:none}
+.geo-result-list .gl-name{color:#2c5f2d;font-weight:bold}
+.geo-result-list .gl-meta{color:#666;font-size:11px;display:block;margin-top:2px}
+.geo-result-list .gl-dist{color:#666;font-size:13px;font-family:Georgia,serif}
+
+/* Smart CTA */
+.smart-cta{background:linear-gradient(135deg,#0d3545 0%,#1a4a60 100%);color:#fff;padding:22px 24px;border-radius:6px;margin:18px 0 28px;border:1px solid #2a4a6a;display:none}
+.smart-cta.show{display:block}
+.smart-cta.alert{background:linear-gradient(135deg,#5a2010 0%,#7a3018 100%);border-color:#8a4020}
+.smart-cta h3{font-size:13px;color:#7bc8e8;letter-spacing:.5px;text-transform:uppercase;font-weight:normal;margin-bottom:8px}
+.smart-cta.alert h3{color:#ffb0a0}
+.smart-cta .cta-headline{font-size:19px;color:#fff;margin-bottom:10px;font-weight:normal;line-height:1.3}
+.smart-cta p{font-size:14px;color:#dfe9f0;line-height:1.65;margin-bottom:0}
+.smart-cta a{color:#fff;font-weight:bold;text-decoration:underline;text-decoration-color:#7bc8e8;text-underline-offset:3px}
+.smart-cta.alert a{text-decoration-color:#ffb0a0}
+
+/* Detail modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:8px;max-width:680px;width:100%;max-height:90vh;overflow-y:auto;border:1px solid #e0dbd2}
+.modal-header{padding:18px 22px;border-bottom:1px solid #e0dbd2;display:flex;justify-content:space-between;align-items:start;gap:12px;position:sticky;top:0;background:#fff;z-index:5}
+.modal-header h3{font-size:18px;color:#2c5f2d;margin-bottom:4px;font-weight:bold;line-height:1.3}
+.modal-header .modal-meta{font-size:12px;color:#888;letter-spacing:.4px}
+.modal-close{background:#f4efe5;border:0;border-radius:50%;width:32px;height:32px;font-size:20px;cursor:pointer;line-height:1;color:#666;flex-shrink:0}
+.modal-close:hover{background:#e0dbd2;color:#2c2c2c}
+.modal-body{padding:18px 22px 22px}
+.current-conditions{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:20px}
+.cc-card{background:#f9f6ee;border:1px solid #e0dbd2;border-radius:4px;padding:10px 12px;text-align:center}
+.cc-card .cc-lbl{font-size:10px;color:#888;letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px}
+.cc-card .cc-val{font-size:18px;color:#2c5f2d;font-weight:normal;line-height:1.2}
+.cc-card .cc-unit{font-size:10px;color:#888}
+.sparkline-section{margin-top:16px}
+.sparkline-section h4{font-size:12px;color:#666;letter-spacing:.5px;text-transform:uppercase;margin:14px 0 6px;font-weight:bold}
+.sparkline-wrap{background:#fafaf2;border:1px solid #e8e4dc;border-radius:3px;padding:8px;position:relative;height:60px}
+.sparkline-svg{width:100%;height:100%;display:block}
+.sparkline-label{position:absolute;top:6px;left:10px;font-size:10px;color:#888;letter-spacing:.3px}
+.sparkline-val{position:absolute;top:6px;right:10px;font-size:11px;color:#2c5f2d;font-weight:bold}
+.sparkline-loading{text-align:center;font-size:12px;color:#888;padding:20px;font-style:italic}
+
+/* Station list */
+.station-table-wrap{margin:12px 0 28px;border:1px solid #e0dbd2;border-radius:6px;overflow:hidden;background:#fff}
+.station-table-controls{padding:12px 16px;border-bottom:1px solid #e0dbd2;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.station-table-controls .stc-count{font-size:13px;color:#666}
+.station-table-controls .stc-count strong{color:#2c5f2d}
+.lake-pills{display:flex;flex-wrap:wrap;gap:6px}
+.lake-pill{background:transparent;border:1px solid #e0dbd2;padding:5px 11px;border-radius:14px;font-size:11px;cursor:pointer;font-family:Georgia,serif;color:#666;letter-spacing:.3px;text-transform:uppercase}
+.lake-pill:hover{border-color:#2c5f2d;color:#2c5f2d}
+.lake-pill.active{background:#2c5f2d;color:#fff;border-color:#2c5f2d}
+.station-list{max-height:480px;overflow-y:auto}
+.station-row{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;padding:10px 16px;border-bottom:1px solid #efeae0;cursor:pointer;align-items:center;font-size:13px}
+.station-row:hover{background:#fafaf2}
+.station-row:last-child{border-bottom:none}
+.station-row .sr-dot{width:9px;height:9px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+.station-row .sr-name{color:#2c2c2c;font-weight:bold;line-height:1.2}
+.station-row .sr-id{color:#999;font-size:11px;font-family:Georgia,serif;margin-left:6px}
+.station-row .sr-lake{font-size:11px;color:#666;margin-top:2px;letter-spacing:.3px;text-transform:uppercase}
+.station-row .sr-condition{font-size:12px;color:#666;text-align:right;line-height:1.4}
+.station-row .sr-condition b{color:#2c5f2d}
+.station-row .sr-link{font-size:11px;color:#999;letter-spacing:.3px;text-transform:uppercase}
+
+/* About box */
+.about-box{background:#f9f6ee;border:1px solid #e0dbd2;border-left:4px solid #2c5f2d;padding:18px 22px;margin:24px 0;border-radius:0 5px 5px 0}
+.about-box h3{font-size:14px;color:#2c5f2d;margin-bottom:6px;font-weight:bold;letter-spacing:.3px;text-transform:uppercase}
+.about-box p{font-size:14px;color:#3a3a3a;line-height:1.7;margin-bottom:10px}
+.about-box p:last-child{margin-bottom:0}
+.about-box a{color:#2c5f2d;font-weight:bold}
+
+/* Related */
+.related{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:24px 0 12px}
+.related a{display:block;border:1px solid #e0dbd2;background:#fff;padding:12px 14px;border-radius:3px;font-size:13px;line-height:1.5;color:#2c2c2c}
+.related a:hover{border-color:#2c5f2d;text-decoration:none}
+.related a strong{display:block;color:#2c5f2d;margin-bottom:3px;font-size:14px}
+
+.faq-q{font-size:16px;font-weight:bold;color:#2c5f2d;margin:22px 0 8px}
+
+.footer{text-align:center;padding:24px;border-top:1px solid #e8e4dc;font-size:12px;color:#999;margin-top:48px;line-height:1.7}
+.footer a{color:#666;font-weight:bold}
+.footer a:hover{color:#2c5f2d}
+
+@media(max-width:680px){
+  h1.page-title{font-size:26px}
+  .body{padding:30px 16px 40px}
+  h2.sh{font-size:18px}
+  .map-wrap{height:480px}
+  .modal{max-width:100%;border-radius:8px 8px 0 0;max-height:95vh;margin-top:auto}
+  .modal-overlay{align-items:flex-end;padding:0}
+  .current-conditions{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
+<div class="nav">
+<a href="/">Home</a><a href="/about/">About</a><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/great-lakes/">Great Lakes</a><a href="/great-lakes-gazette/">Gazette</a><a href="/blog/">Blog</a>
+</div>
+<div class="live-strip" id="liveStrip">
+  <span class="live-dot" aria-hidden="true">&#9679;</span>
+  <span class="live-label">Great Lakes Buoy Dashboard</span>
+  <span class="live-status" id="liveStatus">loading 115 stations...</span>
+  <span class="refresh-info" id="refreshInfo"></span>
+</div>
+<div class="body">
+<div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/tools/">Tools</a> &rsaquo; Great Lakes Buoy Dashboard</div>
+
+<h1 class="page-title">Great Lakes Buoy Dashboard</h1>
+<p class="sub">Live wave height, wind, and water temperature from 115 NOAA stations across Lakes Superior, Michigan, Huron, Erie, and Ontario</p>
+
+<div class="byline">
+  <a href="/about/" aria-label="About Chris Izworski"><div class="byline-avatar">CI</div></a>
+  <div class="byline-meta">
+    Built and maintained by <a href="/about/">Chris Izworski</a> in Bay City, Michigan. Data via NOAA NDBC (refreshed every 10 minutes). See also <a href="/">my other Great Lakes tools</a>.
+  </div>
+</div>
+
+<p>This dashboard pulls real-time observations from the 115 active National Data Buoy Center (NDBC) stations across the Great Lakes basin: 25 open-water buoys, 87 coastal CMAN stations, and a handful of lighthouse and harbor sensors. Wave height, wind speed and gusts, water temperature, air temperature, and barometric pressure where each station reports them. The map below renders all of them at once. Tap any buoy on the map to open a detail view with current conditions and a 5-day history of wave height, wind speed, water temperature, air temperature, and pressure. Use the activity filter to color-code stations by safety thresholds for your specific Lake activity.</p>
+
+<p>I built this because I could not find a single tool that shows all Great Lakes buoys on one map with multi-parameter filtering. The official NDBC maps are clunky, the lake-by-lake aggregators miss CMAN stations, and the marine weather apps do not let you filter by activity. This is the tool I wanted as a Saginaw Bay sailor, ice fisherman, and freighter watcher. Operationally, the page hits a serverless function I run on this domain that fetches NDBC every ten minutes server-side and aggregates the result, so the page loads with a single request regardless of how many buoys are reporting.</p>
+
+<h2 class="sh">Lake-by-Lake Summary</h2>
+<div class="lake-row" id="lakeRow">
+  <div class="lake-card"><div class="lk-name">Superior</div><div class="lk-count" id="cntSuperior">--</div><div class="lk-stats">stations reporting</div></div>
+  <div class="lake-card"><div class="lk-name">Michigan</div><div class="lk-count" id="cntMichigan">--</div><div class="lk-stats">stations reporting</div></div>
+  <div class="lake-card"><div class="lk-name">Huron</div><div class="lk-count" id="cntHuron">--</div><div class="lk-stats">stations reporting</div></div>
+  <div class="lake-card"><div class="lk-name">Erie</div><div class="lk-count" id="cntErie">--</div><div class="lk-stats">stations reporting</div></div>
+  <div class="lake-card"><div class="lk-name">Ontario</div><div class="lk-count" id="cntOntario">--</div><div class="lk-stats">stations reporting</div></div>
+</div>
+
+<h2 class="sh">Activity Filter</h2>
+<div class="filter-bar">
+  <div class="fb-label">Color-code stations by safe conditions for:</div>
+  <div class="pill-row" id="activityPills">
+    <button class="pill active" data-act="all"><span class="pill-icon">&#127754;</span>All conditions <span class="pill-count" id="cnt-all">--</span></button>
+    <button class="pill" data-act="fishing"><span class="pill-icon">&#127907;</span>Fishing <span class="pill-count" id="cnt-fishing">--</span></button>
+    <button class="pill" data-act="kayaking"><span class="pill-icon">&#128676;</span>Kayaking <span class="pill-count" id="cnt-kayaking">--</span></button>
+    <button class="pill" data-act="swimming"><span class="pill-icon">&#127946;</span>Swimming <span class="pill-count" id="cnt-swimming">--</span></button>
+    <button class="pill" data-act="sailing"><span class="pill-icon">&#9973;</span>Sailing <span class="pill-count" id="cnt-sailing">--</span></button>
+    <button class="pill" data-act="diving"><span class="pill-icon">&#129437;</span>Diving <span class="pill-count" id="cnt-diving">--</span></button>
+  </div>
+  <div class="filter-help" id="filterHelp">All conditions shown. Click a category to filter by safety thresholds for that activity.</div>
+</div>
+
+<div class="smart-cta" id="smartCta"></div>
+
+<h2 class="sh">Interactive Map</h2>
+<p style="font-size:13px;color:#666;margin-bottom:10px;font-style:italic">Tap any buoy on the map to view current conditions and 5-day sparkline history. Hover (on desktop) to preview the station name.</p>
+<div class="map-section">
+  <div class="map-wrap">
+    <div id="buoyMap"></div>
+    <div class="map-legend" id="mapLegend">
+      <div class="lg-title">Loading</div>
+    </div>
+  </div>
+</div>
+
+<div class="geo-tool">
+  <h3>Find the buoys nearest to you</h3>
+  <p>Share your location to get a distance-ranked list of all 115 stations. Useful for finding the closest reliable wave-height reading before a fishing trip, a paddle, or a launch.</p>
+  <button class="geo-btn" id="geoBtn">Use my location</button>
+  <div class="geo-result" id="geoResult">
+    <h4 id="geoResultTitle">Nearest stations</h4>
+    <ul class="geo-result-list" id="geoResultList"></ul>
+  </div>
+</div>
+
+<h2 class="sh">All 115 Stations</h2>
+<div class="station-table-wrap">
+  <div class="station-table-controls">
+    <div class="stc-count"><strong id="stcCount">--</strong> stations shown</div>
+    <div class="lake-pills" id="lakePills">
+      <button class="lake-pill active" data-lake="all">All</button>
+      <button class="lake-pill" data-lake="Superior">Superior</button>
+      <button class="lake-pill" data-lake="Michigan">Michigan</button>
+      <button class="lake-pill" data-lake="Huron">Huron</button>
+      <button class="lake-pill" data-lake="Erie">Erie</button>
+      <button class="lake-pill" data-lake="Ontario">Ontario</button>
+    </div>
+  </div>
+  <div class="station-list" id="stationList"></div>
+</div>
+
+<div class="about-box">
+  <h3>About this tool</h3>
+  <p>I am <a href="/about/">Chris Izworski</a>, sales engineer at <a href="/chris-izworski-prepared/">Prepared</a> and former Bay County 911 Director from 2013 to 2022, then Saginaw County 911 Executive Director from 2022 to October 2025. I run a network of Great Lakes data tools from Bay City, Michigan, including the <a href="/great-lakes-gazette/">Great Lakes Gazette</a> daily freighter and vessel-movement brief, the <a href="https://greatlakeslevels.org">Great Lakes Level Intelligence</a> shoreline-property water-level dashboard, the <a href="https://michigantroutreport.com">Michigan Trout Report</a>, and the <a href="https://michiganbirdingreport.com">Michigan Birding Report</a>. This buoy dashboard joins the network. If you find it useful, the rest of <a href="/">my Great Lakes work</a> is collected on this site.</p>
+  <p>I serve on the board of <a href="/chris-izworski-save-our-shoreline/">Save Our Shoreline</a>, the Bay City riparian rights organization. I wrote about Great Lakes water levels and the 1986 high-water emergency for <a href="/chris-izworski-news-coverage/">several Michigan publications</a>. The buoy dashboard combines my interests in operational marine data, public-safety adjacent infrastructure, and the lakes themselves.</p>
+</div>
+
+<h2 class="sh">Activity Threshold Rules</h2>
+<p>The activity filter applies the following safety thresholds. These are my judgment calls based on standard marine guidance, not Coast Guard or NWS rules. When in doubt, defer to the actual forecast at <a href="https://www.weather.gov/marine/" target="_blank" rel="noopener">weather.gov/marine</a>.</p>
+
+<p><strong>Fishing:</strong> Wind under 25 knots and waves under 4 feet. The fishing threshold is permissive because most lake fishing happens within sight of shore where small craft can run for harbor quickly.</p>
+<p><strong>Kayaking:</strong> Wind under 15 knots, waves under 2 feet, water temperature above 50 degrees Fahrenheit. Conservative because cold-water immersion in 50-degree water is life-threatening within 30 minutes without a drysuit.</p>
+<p><strong>Swimming:</strong> Water temperature above 65 degrees Fahrenheit and waves under 3 feet. Below 65 degrees, recreational swimming is uncomfortable and limited to short durations. Above 75 is genuinely warm; Lake Erie hits this regularly, the others rarely.</p>
+<p><strong>Sailing:</strong> Wind between 8 and 30 knots, waves under 6 feet. Below 8 knots most sailboats cannot make useful way. Above 30 is small-craft advisory territory.</p>
+<p><strong>Diving:</strong> Waves under 3 feet. Visibility is the real diving constraint, and NDBC stations do not report visibility data consistently. Use the wave threshold as a proxy for surface conditions and check local dive shops for actual visibility.</p>
+
+<h2 class="sh">Data and Coverage</h2>
+<p>The 115 stations include the 25 open-water Great Lakes NDBC buoys (45001 through 45216), 87 CMAN coastal stations on harbors and lighthouses, and approximately 3 lighthouse-adjacent specialty stations. The 45xxx open-water buoys are typically retrieved each year between November and December for winter maintenance and redeployed in late March or April. During the winter months, the map will show roughly 80 to 90 coastal stations as the active reporting set. The 45xxx buoys are the only Great Lakes stations that consistently report wave height.</p>
+
+<p>The data feeds directly from NOAA NDBC at <a href="https://www.ndbc.noaa.gov" target="_blank" rel="noopener">ndbc.noaa.gov</a>. Refresh interval is 10 minutes server-side, observed values are typically 5 to 30 minutes old at the source. Wave height is in meters at the source and converted to feet for display. Wind is in meters per second at the source and converted to knots. Water temperature is in Celsius at the source and converted to Fahrenheit for display. Pressure is in hectopascals (same as millibars).</p>
+
+<h2 class="sh">Common Questions</h2>
+
+<p class="faq-q">Why are some stations not reporting any data?</p>
+<p>Open-water 45xxx buoys are retrieved each winter and not redeployed until ice clears. CMAN coastal stations report year-round but can go offline for maintenance. Stations showing dashes for all values have not reported in the last few hours and may be down. Check the NDBC site directly for the station's status page.</p>
+
+<p class="faq-q">Why does the wave height show meters in the popup but feet in conversion?</p>
+<p>NDBC publishes wave height in meters. The dashboard displays the conversion to feet (1 meter is approximately 3.28 feet) because feet is the conventional unit on the U.S. Great Lakes. The underlying API endpoint returns metric units for any downstream tool that needs them.</p>
+
+<p class="faq-q">What is the difference between an open-water buoy and a CMAN station?</p>
+<p>Open-water buoys are floating platforms anchored in 200 to 1,000 feet of water. They report wave height, wave period, and wave direction in addition to wind and atmospheric data. CMAN stations are coastal automated meteorological stations, typically mounted on lighthouses, harbor cribs, breakwaters, or shore-based towers. They report wind and atmospheric data but rarely wave height (waves at a shoreline are not representative of open-lake conditions).</p>
+
+<p class="faq-q">How accurate is the activity filter?</p>
+<p>The thresholds are rules of thumb, not Coast Guard regulations. They use the closest buoy as a proxy for conditions in the area, which works well in open lake and less well in protected bays where local wind and waves can differ substantially from the offshore buoy. Always check the NWS marine forecast before going on the water. The dashboard is a quick-reference tool, not a substitute for marine safety planning.</p>
+
+<p class="faq-q">Where is the closest buoy to Bay City?</p>
+<p>The closest open-water buoy to Bay City is the 45149 Lake Huron station off Lakeport, about 75 nautical miles east. For Saginaw Bay specifically, the CMAN station at Tawas Point is the nearest. Use the geolocation tool above to compute exact distances from your current location.</p>
+
+<h2 class="sh">Related Pages on This Site</h2>
+<div class="related">
+  <a href="https://phenology.chrisizworski.com/"><strong>Michigan Phenology</strong>The Saginaw Bay buoy interpreted: water temperature, wind, and chop read against hatches, fish movement, and the season.</a>
+  <a href="/great-lakes-gazette/"><strong>Great Lakes Gazette</strong>Daily Great Lakes freighter and vessel-movement brief. Tracks bulk carriers, tankers, and tug-barge traffic across all five lakes, written from Bay City.</a>
+  <a href="/lake-superior-circle-tour/"><strong>Lake Superior Circle Tour</strong>The full 1,300-mile circumnavigation guide. Many Circle Tour stops are at or near these buoy locations.</a>
+  <a href="/edmund-fitzgerald/"><strong>Edmund Fitzgerald</strong>The 1975 loss on Lake Superior. The same lake, the same kind of November storm conditions these buoys would record today.</a>
+  <a href="/soo-locks/"><strong>Soo Locks Live</strong>Live AIS vessel activity at Sault Ste. Marie. Pair with this dashboard for full Great Lakes maritime situational awareness.</a>
+  <a href="/northern-lights-michigan/"><strong>Northern Lights Michigan</strong>Aurora forecast plus dark-sky viewing locations across the UP. Many overlap with these buoy-adjacent locations.</a>
+  <a href="https://greatlakeslevels.org" rel="noopener"><strong>Great Lakes Level Intelligence</strong>Long-term water levels, the companion data source to the buoys. NOAA water level stations versus NOAA buoy stations.</a>
+  <a href="https://michigantroutreport.com" rel="noopener"><strong>Michigan Trout Report</strong>110+ Michigan trout streams. Use the kayaking and fishing filter on this dashboard to check lake-mouth conditions before a trip.</a>
+  <a href="https://michiganbirdingreport.com" rel="noopener"><strong>Michigan Birding Report</strong>Bird observations on the same Great Lakes shorelines. Migration corridors follow the lake edges.</a>
+</div>
+
+</div>
+<div class="footer">
+  Built by <a href="/about/">Chris Izworski</a>, Bay City, Michigan.<br>
+  Updated daily. Data via NOAA NDBC. <a href="/">More Great Lakes tools</a>.
+</div>
+
+<!-- Detail modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-labelledby="modalTitle">
+    <div class="modal-header">
+      <div>
+        <h3 id="modalTitle">Loading...</h3>
+        <div class="modal-meta" id="modalMeta"></div>
+      </div>
+      <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script id="snapshotData" type="application/json">{"stations": [{"id": "45013", "name": "ATW20 - Atwater Park, WI", "type": "Buoy", "lake": "Michigan", "lat": 43.1, "lng": -87.85, "obs_time": "2026-05-12T09:00:00Z", "wind_dir": 210.0, "wind_spd": 4.0, "wind_gst": 5.0, "wave_ht": 0.3, "wave_per": 4.0, "wave_avg_per": null, "wave_dir": 55.0, "pres": 1021.6, "ptdy": -2.2, "air_t": 6.2, "water_t": 7.1, "dew": null, "vis": null}, {"id": "45023", "name": "North Entry Buoy, North Keweenaw Peninsula, MI", "type": "Moored Buoy", "lake": "Superior", "lat": 47.27, "lng": -88.607, "obs_time": "2026-05-12T10:20:00Z", "wind_dir": 170.0, "wind_spd": 9.0, "wind_gst": 13.0, "wave_ht": 0.3, "wave_per": 2.0, "wave_avg_per": null, "wave_dir": 20.0, "pres": 1012.4, "ptdy": null, "air_t": 6.1, "water_t": 2.9, "dew": -0.8, "vis": null}, {"id": "45025", "name": "South Entry Buoy, South Keweenaw Peninsula, MI", "type": "Buoy", "lake": "Superior", "lat": 46.969, "lng": -88.398, "obs_time": "2026-05-12T10:20:00Z", "wind_dir": 170.0, "wind_spd": 3.0, "wind_gst": 4.0, "wave_ht": 0.3, "wave_per": null, "wave_avg_per": null, "wave_dir": 159.0, "pres": 1013.4, "ptdy": null, "air_t": 4.9, "water_t": 2.6, "dew": 0.1, "vis": null}, {"id": "45026", "name": "Cook Nuclear Plant Buoy, Stevensville, MI", "type": "Buoy", "lake": "Michigan", "lat": 41.982, "lng": -86.619, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 180.0, "wind_spd": 4.0, "wind_gst": 5.0, "wave_ht": 0.4, "wave_per": 4.0, "wave_avg_per": null, "wave_dir": 2.0, "pres": 1021.7, "ptdy": null, "air_t": 7.1, "water_t": null, "dew": 0.0, "vis": null}, {"id": "45028", "name": "Western Lake Superior", "type": "Buoy", "lake": "Superior", "lat": 46.814, "lng": -91.829, "obs_time": "2026-05-12T09:40:00Z", "wind_dir": 50.0, "wind_spd": 12.0, "wind_gst": null, "wave_ht": 1.4, "wave_per": 5.0, "wave_avg_per": null, "wave_dir": 22.0, "pres": 1008.6, "ptdy": null, "air_t": 2.5, "water_t": 2.3, "dew": 0.2, "vis": null}, {"id": "45029", "name": "Holland Buoy, MI", "type": "Buoy", "lake": "Michigan", "lat": 42.9, "lng": -86.272, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 150.0, "wind_spd": 5.0, "wind_gst": 6.0, "wave_ht": 0.3, "wave_per": 2.0, "wave_avg_per": null, "wave_dir": 175.0, "pres": 1018.7, "ptdy": null, "air_t": 6.9, "water_t": 9.3, "dew": 3.0, "vis": null}, {"id": "45137", "name": "Georgian Bay", "type": "Buoy", "lake": "Huron", "lat": 45.54, "lng": -81.02, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 170.0, "wind_spd": 2.0, "wind_gst": 2.0, "wave_ht": 0.1, "wave_per": 3.0, "wave_avg_per": null, "wave_dir": null, "pres": 1024.1, "ptdy": -0.5, "air_t": 2.1, "water_t": 2.2, "dew": null, "vis": null}, {"id": "45143", "name": "South Georgian Bay", "type": "3-meter discus buoy", "lake": "Huron", "lat": 44.94, "lng": -80.627, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 230.0, "wind_spd": 2.0, "wind_gst": 2.0, "wave_ht": 0.1, "wave_per": 3.0, "wave_avg_per": null, "wave_dir": null, "pres": 1024.6, "ptdy": -0.3, "air_t": 2.2, "water_t": 1.9, "dew": null, "vis": null}, {"id": "45149", "name": "Southern Lake Huron", "type": "Buoy", "lake": "Huron", "lat": 43.54, "lng": -82.08, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 80.0, "wind_spd": 2.0, "wind_gst": null, "wave_ht": 0.2, "wave_per": 3.0, "wave_avg_per": null, "wave_dir": null, "pres": 1023.8, "ptdy": -0.7, "air_t": 3.0, "water_t": 2.8, "dew": null, "vis": null}, {"id": "45164", "name": "Cleveland Buoy, OH", "type": "Buoy", "lake": "Erie", "lat": 41.748, "lng": -81.698, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": null, "wind_spd": 4.0, "wind_gst": 6.0, "wave_ht": 0.3, "wave_per": 3.0, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 9.0, "water_t": 9.2, "dew": null, "vis": null}, {"id": "45168", "name": "South Haven Buoy, MI", "type": "Buoy", "lake": "Michigan", "lat": 42.397, "lng": -86.331, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 130.0, "wind_spd": 5.0, "wind_gst": 6.0, "wave_ht": 0.3, "wave_per": 4.0, "wave_avg_per": null, "wave_dir": 346.0, "pres": 1022.0, "ptdy": null, "air_t": 5.6, "water_t": 9.6, "dew": 0.5, "vis": null}, {"id": "45176", "name": "Cleveland Intake Crib Buoy, OH", "type": "Buoy", "lake": "Erie", "lat": 41.55, "lng": -81.765, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 130.0, "wind_spd": 3.0, "wind_gst": 4.0, "wave_ht": 0.4, "wave_per": 3.0, "wave_avg_per": null, "wave_dir": 36.0, "pres": 1021.3, "ptdy": null, "air_t": 9.0, "water_t": 12.1, "dew": 1.5, "vis": null}, {"id": "45186", "name": "Waukegan Buoy, IL", "type": "Moored Buoy", "lake": "Michigan", "lat": 42.368, "lng": -87.795, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 160.0, "wind_spd": 4.0, "wind_gst": 5.0, "wave_ht": 0.3, "wave_per": 4.0, "wave_avg_per": null, "wave_dir": 58.0, "pres": 1019.7, "ptdy": null, "air_t": 8.6, "water_t": 8.9, "dew": null, "vis": null}, {"id": "45187", "name": "Winthrop Harbor Buoy, IL", "type": "Moored Buoy", "lake": "Michigan", "lat": 42.491, "lng": -87.779, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": 0.4, "wave_per": 4.0, "wave_avg_per": null, "wave_dir": 27.0, "pres": 1018.4, "ptdy": null, "air_t": null, "water_t": 8.8, "dew": null, "vis": null}, {"id": "45196", "name": "Rocky River, OH", "type": "Buoy", "lake": "Erie", "lat": 41.521, "lng": -81.88, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 120.0, "wind_spd": 4.0, "wind_gst": 6.0, "wave_ht": 0.5, "wave_per": 4.0, "wave_avg_per": null, "wave_dir": 23.0, "pres": 1021.2, "ptdy": null, "air_t": 9.5, "water_t": 12.8, "dew": 2.3, "vis": null}, {"id": "45197", "name": "Euclid, OH", "type": "Buoy", "lake": "Erie", "lat": 41.619, "lng": -81.617, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 130.0, "wind_spd": 4.0, "wind_gst": 5.0, "wave_ht": 0.4, "wave_per": 3.0, "wave_avg_per": null, "wave_dir": 16.0, "pres": 1021.3, "ptdy": null, "air_t": 8.6, "water_t": 12.6, "dew": 2.1, "vis": null}, {"id": "45199", "name": "Salmon Unlimited Wisconsin", "type": "Buoy", "lake": "Michigan", "lat": 42.702, "lng": -87.647, "obs_time": "2026-05-12T09:00:00Z", "wind_dir": 190.0, "wind_spd": 3.0, "wind_gst": null, "wave_ht": 0.3, "wave_per": 4.0, "wave_avg_per": null, "wave_dir": 36.0, "pres": 1020.7, "ptdy": -2.0, "air_t": 3.5, "water_t": 5.8, "dew": null, "vis": null}, {"id": "45203", "name": "Huron Buoy", "type": "Moored Buoy", "lake": "Erie", "lat": 41.393, "lng": -82.512, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 100.0, "wind_spd": 2.0, "wind_gst": 4.0, "wave_ht": 0.3, "wave_per": 4.0, "wave_avg_per": null, "wave_dir": 23.0, "pres": null, "ptdy": null, "air_t": null, "water_t": 13.6, "dew": null, "vis": null}, {"id": "45206", "name": "Euclid Beach Buoy", "type": "Moored Buoy", "lake": "Erie", "lat": 41.585, "lng": -81.583, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": null, "wind_spd": 2.0, "wind_gst": 3.0, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1022.1, "ptdy": null, "air_t": 7.0, "water_t": 13.1, "dew": 0.9, "vis": null}, {"id": "45207", "name": "Fairport Harbor Buoy", "type": "Moored Buoy", "lake": "Erie", "lat": 41.731, "lng": -81.367, "obs_time": "2026-05-12T10:20:00Z", "wind_dir": 110.0, "wind_spd": 3.0, "wind_gst": 4.0, "wave_ht": 0.3, "wave_per": 3.0, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 5.4, "water_t": 12.3, "dew": null, "vis": null}, {"id": "45208", "name": "Ashtabula Buoy", "type": "Moored Buoy", "lake": "Erie", "lat": 41.913, "lng": -80.807, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 130.0, "wind_spd": 3.0, "wind_gst": 4.0, "wave_ht": 0.3, "wave_per": 3.0, "wave_avg_per": null, "wave_dir": 328.0, "pres": 1020.6, "ptdy": null, "air_t": 4.8, "water_t": 12.3, "dew": 2.0, "vis": null}, {"id": "45209", "name": "Lakeport Buoy, MI", "type": "Moored Buoy", "lake": "Huron", "lat": 43.129, "lng": -82.391, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 330.0, "wind_spd": 3.0, "wind_gst": 4.0, "wave_ht": 0.2, "wave_per": null, "wave_avg_per": null, "wave_dir": 29.0, "pres": null, "ptdy": null, "air_t": 6.0, "water_t": 7.3, "dew": 2.0, "vis": null}, {"id": "45210", "name": "Rawley Point East, WI (269)", "type": "Waverider Buoy", "lake": "Michigan", "lat": 44.055, "lng": -87.05, "obs_time": "2026-05-12T10:26:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": 0.3, "wave_per": 3.0, "wave_avg_per": 2.7, "wave_dir": 84.0, "pres": null, "ptdy": null, "air_t": null, "water_t": 3.1, "dew": null, "vis": null}, {"id": "45212", "name": "North Huron Spotter", "type": "Spotter Buoy", "lake": "Huron", "lat": 45.351, "lng": -82.84, "obs_time": "2026-05-12T10:15:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": 0.0, "wave_per": null, "wave_avg_per": null, "wave_dir": 301.0, "pres": null, "ptdy": null, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "45213", "name": "East Superior Spotter", "type": "Spotter Buoy", "lake": "Superior", "lat": 47.585, "lng": -86.585, "obs_time": "2026-05-12T10:25:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": 1.6, "wave_per": null, "wave_avg_per": null, "wave_dir": 150.0, "pres": null, "ptdy": null, "air_t": null, "water_t": 1.9, "dew": null, "vis": null}, {"id": "45214", "name": "South Michigan Spotter", "type": "Spotter Buoy", "lake": "Michigan", "lat": 42.674, "lng": -87.026, "obs_time": "2026-05-12T09:45:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": 0.3, "wave_per": null, "wave_avg_per": null, "wave_dir": 16.0, "pres": null, "ptdy": null, "air_t": null, "water_t": 4.4, "dew": null, "vis": null}, {"id": "45215", "name": "Oswego, NY (274)", "type": "Waverider Buoy", "lake": "Ontario", "lat": 43.501, "lng": -76.539, "obs_time": "2026-05-12T10:26:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": 0.3, "wave_per": 4.0, "wave_avg_per": 3.1, "wave_dir": 282.0, "pres": null, "ptdy": null, "air_t": 5.0, "water_t": 5.4, "dew": null, "vis": null}, {"id": "45216", "name": "Ontonagon, MI", "type": "Moored Buoy", "lake": "Superior", "lat": 46.907, "lng": -89.354, "obs_time": "2026-05-12T10:20:00Z", "wind_dir": 180.0, "wind_spd": 9.0, "wind_gst": null, "wave_ht": 0.4, "wave_per": null, "wave_avg_per": null, "wave_dir": 187.0, "pres": 1010.2, "ptdy": null, "air_t": 7.2, "water_t": 2.8, "dew": 0.7, "vis": null}, {"id": "AGCM4", "name": "9014070 - Algonac, MI", "type": "Water Level Observation Network", "lake": "Erie", "lat": 42.621, "lng": -82.527, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1022.7, "ptdy": null, "air_t": 2.4, "water_t": 8.6, "dew": null, "vis": null}, {"id": "ALXN6", "name": "8311062 - Alexandria Bay, NY", "type": "Water Level Observation Network", "lake": "StLawrence", "lat": 44.331, "lng": -75.934, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1023.4, "ptdy": null, "air_t": null, "water_t": 9.0, "dew": null, "vis": null}, {"id": "APNM4", "name": "Alpena Harbor Light, Alpena, MI", "type": "C-MAN Station", "lake": "Huron", "lat": 45.06, "lng": -83.424, "obs_time": "2026-05-12T10:50:00Z", "wind_dir": 180.0, "wind_spd": 4.6, "wind_gst": 5.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 5.1, "water_t": null, "dew": null, "vis": null}, {"id": "ASBO1", "name": "Ashtabula Lighthouse", "type": "", "lake": "Erie", "lat": 41.918, "lng": -80.796, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 170.0, "wind_spd": 1.5, "wind_gst": 2.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "BARN6", "name": "Barcelona Harbor, NY", "type": "GLOS Weather Station", "lake": "Erie", "lat": 42.345, "lng": -79.595, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 140.0, "wind_spd": 2.6, "wind_gst": 3.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1035.9, "ptdy": 0.3, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "BCTP1", "name": "Beach 2 Tower", "type": "Coastal Marine Station", "lake": "Erie", "lat": 42.153, "lng": -80.131, "obs_time": "2026-05-12T09:00:00Z", "wind_dir": 110.0, "wind_spd": 0.5, "wind_gst": 1.0, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 4.8, "water_t": null, "dew": 0.6, "vis": null}, {"id": "BHRI3", "name": "Burns Harbor, IN", "type": "GLOS Weather Station", "lake": "Michigan", "lat": 41.646, "lng": -87.147, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 180.0, "wind_spd": 2.1, "wind_gst": 3.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1021.7, "ptdy": null, "air_t": 5.9, "water_t": null, "dew": null, "vis": null}, {"id": "BIGM4", "name": "Big Bay, MI", "type": "GLOS Weather Station", "lake": "Superior", "lat": 46.827, "lng": -87.727, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 160.0, "wind_spd": 4.6, "wind_gst": 9.3, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1013.2, "ptdy": null, "air_t": 6.7, "water_t": null, "dew": null, "vis": null}, {"id": "BSBM4", "name": "Big Sable Point, MI", "type": "GLOS Weather Station", "lake": "Michigan", "lat": 44.055, "lng": -86.514, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 140.0, "wind_spd": 3.1, "wind_gst": 5.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1021.3, "ptdy": null, "air_t": 5.1, "water_t": null, "dew": null, "vis": null}, {"id": "BUFN6", "name": "9063020 - Buffalo, NY", "type": "Water Level Observation Network", "lake": "Erie", "lat": 42.878, "lng": -78.89, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 80.0, "wind_spd": 1.5, "wind_gst": 1.5, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1023.0, "ptdy": null, "air_t": 4.2, "water_t": null, "dew": 1.1, "vis": null}, {"id": "CAVN6", "name": "Cape Vincent", "type": "Water Level Observation Network", "lake": "Ontario", "lat": 44.13, "lng": -76.333, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 40.0, "wind_spd": 3.1, "wind_gst": 4.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1022.9, "ptdy": null, "air_t": 6.3, "water_t": 9.3, "dew": 0.6, "vis": null}, {"id": "CBLO1", "name": "Conneaut Breakwater Light, OH", "type": "GLOS Weather Station", "lake": "Erie", "lat": 41.981, "lng": -80.556, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 140.0, "wind_spd": 2.1, "wind_gst": 2.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "CHII2", "name": "Harrison-Dever Crib, Chicago, IL", "type": "C-MAN Station", "lake": "Michigan", "lat": 41.916, "lng": -87.572, "obs_time": "2026-05-12T10:50:00Z", "wind_dir": 180.0, "wind_spd": 6.2, "wind_gst": 7.2, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 9.2, "water_t": null, "dew": 1.8, "vis": null}, {"id": "CLSM4", "name": "St. Clair Shores, MI", "type": "GLOS Weather Station", "lake": "Erie", "lat": 42.471, "lng": -82.877, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 70.0, "wind_spd": 3.1, "wind_gst": 4.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1023.7, "ptdy": -0.3, "air_t": 6.4, "water_t": null, "dew": null, "vis": null}, {"id": "CMTI2", "name": "9087044 - Calumet Harbor, IL", "type": "Water Level Observation Network", "lake": "Michigan", "lat": 41.73, "lng": -87.538, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 170.0, "wind_spd": 3.1, "wind_gst": 4.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1020.5, "ptdy": null, "air_t": 7.1, "water_t": null, "dew": 0.2, "vis": null}, {"id": "CNDO1", "name": "9063063 - Cleveland, OH", "type": "Water Level Observation Network", "lake": "Erie", "lat": 41.542, "lng": -81.637, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": null, "wind_spd": 0.0, "wind_gst": 0.0, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1021.5, "ptdy": null, "air_t": 4.4, "water_t": 13.5, "dew": null, "vis": null}, {"id": "CNII2", "name": "Northerly Isle, IL", "type": "GLOS Weather Station", "lake": "Michigan", "lat": 41.856, "lng": -87.609, "obs_time": "2026-05-12T10:15:00Z", "wind_dir": 180.0, "wind_spd": 2.6, "wind_gst": 4.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 7.5, "water_t": null, "dew": -0.3, "vis": null}, {"id": "CWCI", "name": "Caribou Island", "type": "Weather Station", "lake": "Superior", "lat": 47.334, "lng": -85.833, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 130.0, "wind_spd": 6.2, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1019.8, "ptdy": null, "air_t": 1.9, "water_t": null, "dew": -0.7, "vis": null}, {"id": "CYGM4", "name": "Cheboygan Marina, MI", "type": "GLOS Weather Station", "lake": "Huron", "lat": 45.658, "lng": -84.464, "obs_time": "2026-05-12T11:00:00Z", "wind_dir": 160.0, "wind_spd": 4.1, "wind_gst": 7.7, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1021.0, "ptdy": -2.0, "air_t": 1.6, "water_t": null, "dew": -5.6, "vis": null}, {"id": "DBLN6", "name": "Dunkirk, NY", "type": "C-MAN Station", "lake": "Erie", "lat": 42.493, "lng": -79.353, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 130.0, "wind_spd": 2.1, "wind_gst": 2.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1023.7, "ptdy": 0.0, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "DTLM4", "name": "9075099 - De Tour Village, MI", "type": "Water Level Observation Network", "lake": "Huron", "lat": 45.993, "lng": -83.898, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 170.0, "wind_spd": 4.6, "wind_gst": 5.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1021.0, "ptdy": null, "air_t": 3.3, "water_t": 5.4, "dew": 0.0, "vis": null}, {"id": "DULM5", "name": "9099064 - Duluth, MN", "type": "Water Level Observation Network", "lake": "Superior", "lat": 46.776, "lng": -92.092, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 60.0, "wind_spd": 6.2, "wind_gst": 9.8, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1007.2, "ptdy": null, "air_t": 3.3, "water_t": 8.5, "dew": 0.3, "vis": null}, {"id": "FAIO1", "name": "9063053 - Fairport, OH", "type": "Water Level Observation Network", "lake": "Erie", "lat": 41.764, "lng": -81.281, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 140.0, "wind_spd": 2.6, "wind_gst": 3.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1022.1, "ptdy": null, "air_t": 3.7, "water_t": 14.8, "dew": 2.3, "vis": null}, {"id": "FPTM4", "name": "Fairport, MI", "type": "GLOS Weather Station", "lake": "Michigan", "lat": 45.619, "lng": -86.66, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 150.0, "wind_spd": 4.1, "wind_gst": 5.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 7.3, "water_t": null, "dew": null, "vis": null}, {"id": "FSTI2", "name": "Foster Ave., Chicago, IL", "type": "C-MAN Station", "lake": "Michigan", "lat": 41.976, "lng": -87.648, "obs_time": "2026-05-12T09:00:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 9.0, "water_t": null, "dew": null, "vis": null}, {"id": "FTGM4", "name": "9014098 - Fort Gratiot, MI", "type": "Water Level Observation Network", "lake": "Huron", "lat": 43.007, "lng": -82.422, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 120.0, "wind_spd": 2.6, "wind_gst": 3.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1022.5, "ptdy": null, "air_t": 4.2, "water_t": null, "dew": 0.6, "vis": null}, {"id": "GBWW3", "name": "9087077 - Green Bay West, WI", "type": "Water Level Observation Network", "lake": "Michigan", "lat": 44.538, "lng": -88.003, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 160.0, "wind_spd": 2.6, "wind_gst": 4.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1017.9, "ptdy": null, "air_t": 5.3, "water_t": null, "dew": null, "vis": null}, {"id": "GDMM5", "name": "9099090 - Grand Marais, MN", "type": "Water Level Observation Network", "lake": "Superior", "lat": 47.749, "lng": -90.341, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1012.2, "ptdy": null, "air_t": 3.5, "water_t": 5.8, "dew": null, "vis": null}, {"id": "GRCM4", "name": "GLRC Observatory", "type": "Coastal Marine Station", "lake": "Superior", "lat": 47.121, "lng": -88.545, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 60.0, "wind_spd": 3.6, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 4.6, "water_t": null, "dew": -1.2, "vis": null}, {"id": "GRMM4", "name": "Grand Marais, MI", "type": "GLOS Weather Station", "lake": "Superior", "lat": 46.684, "lng": -85.972, "obs_time": "2026-05-12T10:50:00Z", "wind_dir": 180.0, "wind_spd": 11.8, "wind_gst": 14.9, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "GTLM4", "name": "Grand Traverse Light, MI", "type": "GLOS Weather Station", "lake": "Michigan", "lat": 45.211, "lng": -85.55, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 170.0, "wind_spd": 2.1, "wind_gst": 5.7, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1020.7, "ptdy": null, "air_t": 3.1, "water_t": null, "dew": null, "vis": null}, {"id": "HHLO1", "name": "Huron Harbor Light, OH", "type": "GLOS Weather Station", "lake": "Erie", "lat": 41.401, "lng": -82.545, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 150.0, "wind_spd": 2.1, "wind_gst": 3.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 7.2, "water_t": null, "dew": null, "vis": null}, {"id": "HLNM4", "name": "9087031 - Holland, MI", "type": "Water Level Observation Network", "lake": "Michigan", "lat": 42.773, "lng": -86.213, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 120.0, "wind_spd": 4.6, "wind_gst": 6.2, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1019.9, "ptdy": null, "air_t": 5.7, "water_t": 12.4, "dew": null, "vis": null}, {"id": "HRBM4", "name": "9075014 - Harbor Beach, MI", "type": "Water Level Observation Network", "lake": "Huron", "lat": 43.846, "lng": -82.643, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 210.0, "wind_spd": 1.0, "wind_gst": 1.5, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1022.4, "ptdy": null, "air_t": 2.5, "water_t": 10.9, "dew": 1.9, "vis": null}, {"id": "KGNA", "name": "Bay of Grand Marais, MN", "type": "Weather Station", "lake": "Superior", "lat": 47.745, "lng": -90.346, "obs_time": "2026-05-12T10:56:00Z", "wind_dir": 90.0, "wind_spd": 7.7, "wind_gst": 11.8, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1011.4, "ptdy": null, "air_t": 3.3, "water_t": null, "dew": 1.1, "vis": null}, {"id": "KP53", "name": "Munising Lake Shore, MI", "type": "Weather Station", "lake": "Superior", "lat": 46.417, "lng": -86.65, "obs_time": "2026-05-12T10:56:00Z", "wind_dir": 190.0, "wind_spd": 4.6, "wind_gst": 7.7, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1019.2, "ptdy": null, "air_t": 2.8, "water_t": null, "dew": -2.8, "vis": null}, {"id": "KP58", "name": "Port Hope, MI", "type": "Weather Station", "lake": "Huron", "lat": 44.017, "lng": -82.8, "obs_time": "2026-05-12T10:55:00Z", "wind_dir": 140.0, "wind_spd": 2.6, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1023.3, "ptdy": null, "air_t": 2.2, "water_t": null, "dew": 0.6, "vis": null}, {"id": "KP59", "name": "Copper Harbor, MI", "type": "Weather Station", "lake": "Superior", "lat": 47.467, "lng": -87.883, "obs_time": "2026-05-12T10:51:00Z", "wind_dir": 200.0, "wind_spd": 5.7, "wind_gst": 10.8, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1014.2, "ptdy": null, "air_t": 4.4, "water_t": null, "dew": -1.7, "vis": null}, {"id": "KWNW3", "name": "9087069 - Kewaunee MET, WI", "type": "Water Level Observation Network", "lake": "Michigan", "lat": 44.465, "lng": -87.496, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 180.0, "wind_spd": 4.6, "wind_gst": 5.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1018.6, "ptdy": null, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "LDTM4", "name": "9087023 - Ludington, MI", "type": "Water Level Observation Network", "lake": "Michigan", "lat": 43.947, "lng": -86.441, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 110.0, "wind_spd": 1.5, "wind_gst": 3.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 5.0, "water_t": null, "dew": -1.6, "vis": null}, {"id": "LPNM4", "name": "9075065 - Alpena, MI", "type": "Water Level Observation Network", "lake": "Huron", "lat": 45.063, "lng": -83.429, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 200.0, "wind_spd": 2.6, "wind_gst": 3.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1021.6, "ptdy": null, "air_t": 3.8, "water_t": 8.6, "dew": -0.2, "vis": null}, {"id": "LTRM4", "name": "9076033 - Little Rapids, MI", "type": "Water Level Observation Network", "lake": "Superior", "lat": 46.486, "lng": -84.302, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 80.0, "wind_spd": 1.5, "wind_gst": 1.5, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1020.8, "ptdy": null, "air_t": 0.3, "water_t": 4.6, "dew": -6.1, "vis": null}, {"id": "MACM4", "name": "9075080 - Mackinaw City, MI", "type": "Water Level Observation Network", "lake": "Michigan", "lat": 45.777, "lng": -84.721, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 160.0, "wind_spd": 3.1, "wind_gst": 4.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1020.1, "ptdy": null, "air_t": 3.1, "water_t": 6.6, "dew": null, "vis": null}, {"id": "MBRM4", "name": "9014090 - Mouth of the Black River, MI", "type": "Water Level Observation Network", "lake": "Erie", "lat": 42.975, "lng": -82.419, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1021.5, "ptdy": null, "air_t": 4.2, "water_t": null, "dew": null, "vis": null}, {"id": "MCGM4", "name": "9099018 - Marquette C.G., MI", "type": "Water Level Observation Network", "lake": "Superior", "lat": 46.546, "lng": -87.379, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 190.0, "wind_spd": 3.6, "wind_gst": 7.7, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1017.5, "ptdy": null, "air_t": 3.7, "water_t": null, "dew": null, "vis": null}, {"id": "MCYI3", "name": "Michigan City Harbor Entrance Light, Michigan City, IN", "type": "C-MAN Station", "lake": "Michigan", "lat": 41.729, "lng": -86.912, "obs_time": "2026-05-12T10:50:00Z", "wind_dir": 160.0, "wind_spd": 3.6, "wind_gst": 4.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1020.8, "ptdy": null, "air_t": 5.9, "water_t": null, "dew": -1.2, "vis": null}, {"id": "MKGM4", "name": "Muskegon CG Station, Muskegon, MI", "type": "C-MAN Station", "lake": "Michigan", "lat": 43.228, "lng": -86.339, "obs_time": "2026-05-12T10:50:00Z", "wind_dir": 200.0, "wind_spd": 3.1, "wind_gst": 4.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1021.5, "ptdy": null, "air_t": 5.7, "water_t": null, "dew": -1.6, "vis": null}, {"id": "MLWW3", "name": "Port of Milwaukee", "type": "C-MAN Station", "lake": "Michigan", "lat": 43.005, "lng": -87.884, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 200.0, "wind_spd": 2.1, "wind_gst": 2.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 6.0, "water_t": null, "dew": null, "vis": null}, {"id": "MNMM4", "name": "9087088 - Menominee, MI", "type": "Water Level Observation Network", "lake": "Michigan", "lat": 45.096, "lng": -87.59, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 160.0, "wind_spd": 6.2, "wind_gst": 7.7, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1017.7, "ptdy": null, "air_t": 6.5, "water_t": 10.7, "dew": 1.2, "vis": null}, {"id": "MRHO1", "name": "9063079 - Marblehead, OH", "type": "Water Level Observation Network", "lake": "Erie", "lat": 41.544, "lng": -82.731, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 130.0, "wind_spd": 2.1, "wind_gst": 4.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1022.2, "ptdy": null, "air_t": 9.1, "water_t": 13.5, "dew": -2.4, "vis": null}, {"id": "NABM4", "name": "Naubinway, MI", "type": "GLOS Weather Station", "lake": "Michigan", "lat": 46.087, "lng": -85.444, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 160.0, "wind_spd": 6.2, "wind_gst": 7.2, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1019.6, "ptdy": null, "air_t": 5.2, "water_t": null, "dew": null, "vis": null}, {"id": "NPDW3", "name": "Northport Pier at Death's Door, WI", "type": "Weather Station", "lake": "Michigan", "lat": 45.291, "lng": -86.977, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 130.0, "wind_spd": 3.6, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1020.7, "ptdy": -1.7, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "NREP1", "name": "Northeast Marina, PA", "type": "C-MAN Station", "lake": "Erie", "lat": 42.258, "lng": -79.792, "obs_time": "2026-05-12T09:30:00Z", "wind_dir": 170.0, "wind_spd": 2.6, "wind_gst": 3.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "OBGN6", "name": "8311030 - Ogdensburg, NY", "type": "Water Level Observation Network", "lake": "StLawrence", "lat": 44.702, "lng": -75.494, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1023.3, "ptdy": null, "air_t": 3.6, "water_t": null, "dew": null, "vis": null}, {"id": "OKSI2", "name": "Oak St., Chicago, IL", "type": "C-MAN Station", "lake": "Michigan", "lat": 41.912, "lng": -87.624, "obs_time": "2026-05-12T09:00:00Z", "wind_dir": 110.0, "wind_spd": 1.0, "wind_gst": 3.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 10.1, "water_t": null, "dew": null, "vis": null}, {"id": "OLCN6", "name": "Olcott Harbor, NY", "type": "GLOS Weather Station", "lake": "Ontario", "lat": 43.341, "lng": -78.719, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 60.0, "wind_spd": 2.1, "wind_gst": 3.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1014.2, "ptdy": null, "air_t": 5.7, "water_t": null, "dew": null, "vis": null}, {"id": "OSGN6", "name": "9052030 - Oswego, NY", "type": "Water Level Observation Network", "lake": "Ontario", "lat": 43.464, "lng": -76.511, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 150.0, "wind_spd": 1.0, "wind_gst": 1.5, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1023.2, "ptdy": null, "air_t": 4.0, "water_t": null, "dew": 2.3, "vis": null}, {"id": "OTNM4", "name": "Ontonagon, MI", "type": "GLOS Weather Station", "lake": "Superior", "lat": 46.87, "lng": -89.33, "obs_time": "2026-05-12T10:50:00Z", "wind_dir": 200.0, "wind_spd": 6.2, "wind_gst": 12.4, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1009.8, "ptdy": null, "air_t": 7.5, "water_t": null, "dew": null, "vis": null}, {"id": "OWXO1", "name": "Old Woman Creek, Old Woman Creek Reserve, OH", "type": "NERRS Weather Station", "lake": "Erie", "lat": 41.378, "lng": -82.508, "obs_time": "2026-05-12T09:45:00Z", "wind_dir": null, "wind_spd": 0.0, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1022.0, "ptdy": null, "air_t": 3.2, "water_t": null, "dew": 1.9, "vis": null}, {"id": "PILM4", "name": "Passage Island, MI", "type": "C-MAN Station", "lake": "Superior", "lat": 48.223, "lng": -88.366, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 110.0, "wind_spd": 7.2, "wind_gst": 7.2, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1015.4, "ptdy": -3.6, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "PKBW3", "name": "Pokegama Bay, Lake Superior Reserve, WI", "type": "NERRS Weather Station", "lake": "Superior", "lat": 46.672, "lng": -92.136, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 150.0, "wind_spd": 2.1, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1008.0, "ptdy": -5.0, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "PNGW3", "name": "Port Wing, WI", "type": "GLOS Weather Station", "lake": "Superior", "lat": 46.792, "lng": -91.386, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 30.0, "wind_spd": 7.2, "wind_gst": 8.2, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1007.5, "ptdy": null, "air_t": 4.0, "water_t": null, "dew": null, "vis": null}, {"id": "PNLM4", "name": "9087096 - Port Inland, MI", "type": "Water Level Observation Network", "lake": "Michigan", "lat": 45.968, "lng": -85.869, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 170.0, "wind_spd": 6.2, "wind_gst": 7.2, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1019.5, "ptdy": null, "air_t": 4.1, "water_t": 7.8, "dew": null, "vis": null}, {"id": "PRIM4", "name": "Presque Isle Light, MI", "type": "GLOS Weather Station", "lake": "Huron", "lat": 45.357, "lng": -83.492, "obs_time": "2026-05-12T09:50:00Z", "wind_dir": null, "wind_spd": 2.6, "wind_gst": 5.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "PSTN6", "name": "9063028 - Sturgeon Point, NY", "type": "Water Level Observation Network", "lake": "Erie", "lat": 42.691, "lng": -79.048, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1023.0, "ptdy": null, "air_t": 3.0, "water_t": null, "dew": null, "vis": null}, {"id": "PTIM4", "name": "9099004 - Point Iroquois, MI", "type": "Water Level Observation Network", "lake": "Superior", "lat": 46.485, "lng": -84.631, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 130.0, "wind_spd": 3.1, "wind_gst": 5.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1020.3, "ptdy": null, "air_t": 1.0, "water_t": null, "dew": null, "vis": null}, {"id": "PWAW3", "name": "Port Washington, WI", "type": "GLOS Weather Station", "lake": "Michigan", "lat": 43.388, "lng": -87.867, "obs_time": "2026-05-12T10:50:00Z", "wind_dir": null, "wind_spd": 0.0, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1001.0, "ptdy": null, "air_t": 5.4, "water_t": null, "dew": null, "vis": null}, {"id": "RCKM4", "name": "9076024 - Rock Cut, MI", "type": "Water Level Observation Network", "lake": "Huron", "lat": 46.264, "lng": -84.191, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 320.0, "wind_spd": 0.5, "wind_gst": 1.0, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1020.8, "ptdy": null, "air_t": null, "water_t": 5.4, "dew": null, "vis": null}, {"id": "RCRN6", "name": "9052058 - Rochester, NY", "type": "Water Level Observation Network", "lake": "Ontario", "lat": 43.269, "lng": -77.626, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 3.1, "water_t": null, "dew": null, "vis": null}, {"id": "ROAM4", "name": "Rock of Ages, MI", "type": "C-MAN Station", "lake": "Superior", "lat": 47.867, "lng": -89.315, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 80.0, "wind_spd": 3.6, "wind_gst": 4.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1015.5, "ptdy": -2.7, "air_t": 3.9, "water_t": null, "dew": null, "vis": null}, {"id": "RPRN6", "name": "Rochester Coast Guard, NY", "type": "GLOS Weather Station", "lake": "Ontario", "lat": 43.263, "lng": -77.598, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 270.0, "wind_spd": 1.5, "wind_gst": 2.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1013.9, "ptdy": 0.0, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "SBIO1", "name": "South Bass Island, OH", "type": "C-MAN Station", "lake": "Erie", "lat": 41.629, "lng": -82.841, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 90.0, "wind_spd": 5.1, "wind_gst": 8.2, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1022.4, "ptdy": -0.8, "air_t": 9.9, "water_t": null, "dew": null, "vis": null}, {"id": "SBLM4", "name": "Saginaw Bay Light #1, MI", "type": "GLOS Weather Station", "lake": "Huron", "lat": 43.81, "lng": -83.72, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 140.0, "wind_spd": 7.7, "wind_gst": 8.2, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "SGNW3", "name": "Sheboygan, WI", "type": "C-MAN Station", "lake": "Michigan", "lat": 43.749, "lng": -87.693, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 200.0, "wind_spd": 4.1, "wind_gst": 4.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1020.4, "ptdy": -1.8, "air_t": 4.3, "water_t": null, "dew": -1.3, "vis": null}, {"id": "SPTM4", "name": "Sturgeon Point Light, MI", "type": "GLOS Weather Station", "lake": "Huron", "lat": 44.713, "lng": -83.273, "obs_time": "2026-05-12T09:50:00Z", "wind_dir": 200.0, "wind_spd": 0.5, "wind_gst": 2.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "STDM4", "name": "Stannard Rock, MI", "type": "C-MAN Station", "lake": "Superior", "lat": 47.184, "lng": -87.225, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": null, "wind_spd": 10.8, "wind_gst": 12.9, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1016.2, "ptdy": null, "air_t": 3.3, "water_t": null, "dew": 0.5, "vis": null}, {"id": "SVNM4", "name": "South Haven Light, South Haven, MI", "type": "C-MAN Station", "lake": "Michigan", "lat": 42.401, "lng": -86.288, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 120.0, "wind_spd": 4.6, "wind_gst": 5.7, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 3.6, "water_t": null, "dew": null, "vis": null}, {"id": "SWPM4", "name": "9076070 - S.W. Pier, MI", "type": "Water Level Observation Network", "lake": "Superior", "lat": 46.501, "lng": -84.372, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 90.0, "wind_spd": 2.6, "wind_gst": 3.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1020.2, "ptdy": null, "air_t": 0.5, "water_t": 4.1, "dew": null, "vis": null}, {"id": "SXHW3", "name": "Saxon Harbor, WI", "type": "GLOS Weather Station", "lake": "Superior", "lat": 46.563, "lng": -90.437, "obs_time": "2026-05-12T10:50:00Z", "wind_dir": 170.0, "wind_spd": 1.5, "wind_gst": 6.7, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1007.5, "ptdy": null, "air_t": 8.6, "water_t": null, "dew": null, "vis": null}, {"id": "TAWM4", "name": "Tawas Point, MI", "type": "GLOS Weather Station", "lake": "Huron", "lat": 44.254, "lng": -83.449, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": 130.0, "wind_spd": 4.1, "wind_gst": 4.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1023.0, "ptdy": null, "air_t": 5.3, "water_t": null, "dew": null, "vis": null}, {"id": "THLO1", "name": "Toledo Light No. 2 OH", "type": "C-MAN Station", "lake": "Erie", "lat": 41.826, "lng": -83.194, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 100.0, "wind_spd": 6.7, "wind_gst": 8.2, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1021.5, "ptdy": -0.8, "air_t": 10.0, "water_t": null, "dew": 0.4, "vis": null}, {"id": "THRO1", "name": "9063085 - Toledo, OH", "type": "Water Level Observation Network", "lake": "Erie", "lat": 41.694, "lng": -83.473, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": 160.0, "wind_spd": 3.6, "wind_gst": 4.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1021.9, "ptdy": null, "air_t": 8.7, "water_t": null, "dew": 1.7, "vis": null}, {"id": "TWCO1", "name": "Toledo Crib, OH", "type": "C-MAN Station", "lake": "Erie", "lat": 41.699, "lng": -83.259, "obs_time": "2026-05-12T10:40:00Z", "wind_dir": null, "wind_spd": null, "wind_gst": null, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 10.6, "water_t": null, "dew": 2.4, "vis": null}, {"id": "VRMO1", "name": "Vermilion River at Lake Erie, OH", "type": "", "lake": "Erie", "lat": 41.428, "lng": -82.364, "obs_time": "2026-05-12T10:10:00Z", "wind_dir": 150.0, "wind_spd": 2.6, "wind_gst": 3.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "WCRP1", "name": "Walnut Creek Marina, PA", "type": "", "lake": "Erie", "lat": 42.077, "lng": -80.24, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 140.0, "wind_spd": 2.1, "wind_gst": 2.6, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": 1.6, "water_t": null, "dew": null, "vis": null}, {"id": "WHRI2", "name": "Waukegan Harbor, IL", "type": "GLOS Weather Station", "lake": "Michigan", "lat": 42.361, "lng": -87.813, "obs_time": "2026-05-12T10:00:00Z", "wind_dir": 130.0, "wind_spd": 2.6, "wind_gst": 3.1, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": null, "ptdy": null, "air_t": null, "water_t": null, "dew": null, "vis": null}, {"id": "WNEM4", "name": "9076027 - West Neebish Island, MI", "type": "Water Level Observation Network", "lake": "Huron", "lat": 46.285, "lng": -84.21, "obs_time": "2026-05-12T10:30:00Z", "wind_dir": null, "wind_spd": 0.0, "wind_gst": 0.5, "wave_ht": null, "wave_per": null, "wave_avg_per": null, "wave_dir": null, "pres": 1020.6, "ptdy": null, "air_t": -1.6, "water_t": 5.1, "dew": -3.1, "vis": null}], "fetched_at": "2026-05-11T10:30:00Z", "count": 115, "source": "NOAA NDBC latest_obs (snapshot)"}</script>
+<script>
+// === Activity threshold rules ===
+const ACTIVITIES = {
+  all: { label: 'All conditions', test: () => true },
+  fishing: { label: 'Fishing', test: s => (s.wind_spd_kt == null || s.wind_spd_kt < 25) && (s.wave_ht_ft == null || s.wave_ht_ft < 4) },
+  kayaking: { label: 'Kayaking', test: s => (s.wind_spd_kt == null || s.wind_spd_kt < 15) && (s.wave_ht_ft == null || s.wave_ht_ft < 2) && (s.water_t_f == null || s.water_t_f > 50) },
+  swimming: { label: 'Swimming', test: s => s.water_t_f != null && s.water_t_f > 65 && (s.wave_ht_ft == null || s.wave_ht_ft < 3) },
+  sailing: { label: 'Sailing', test: s => s.wind_spd_kt != null && s.wind_spd_kt >= 8 && s.wind_spd_kt <= 30 && (s.wave_ht_ft == null || s.wave_ht_ft < 6) },
+  diving: { label: 'Diving', test: s => (s.wave_ht_ft == null || s.wave_ht_ft < 3) && s.water_t_f != null && s.water_t_f > 50 },
+};
+
+let allStations = [];
+let currentActivity = 'all';
+let currentLake = 'all';
+let buoyMap = null;
+let markers = [];
+let userMarker = null;
+let nameMap = {};
+
+// === Unit conversions ===
+function msToKt(v) { return v == null ? null : v * 1.94384; }
+function mToFt(v) { return v == null ? null : v * 3.28084; }
+function cToF(v) { return v == null ? null : v * 9/5 + 32; }
+function fmtKt(v) { return v == null ? '-' : v.toFixed(1) + ' kt'; }
+function fmtFt(v) { return v == null ? '-' : v.toFixed(1) + ' ft'; }
+function fmtF(v) { return v == null ? '-' : v.toFixed(0) + ' &deg;F'; }
+function fmtDir(v) { if (v == null) return '-'; const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW']; return dirs[Math.round(v / 22.5) % 16] + ' (' + Math.round(v) + ')'; }
+function fmtTime(iso) { if (!iso) return '-'; try { return new Date(iso).toLocaleString('en-US', {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}); } catch { return '-'; } }
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 3958.8, toRad = x => x * Math.PI / 180;
+  const dLat = toRad(lat2-lat1), dLng = toRad(lng2-lng1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// === Enrich raw station with converted units ===
+function enrich(s) {
+  return {
+    ...s,
+    wind_spd_kt: msToKt(s.wind_spd),
+    wind_gst_kt: msToKt(s.wind_gst),
+    wave_ht_ft: mToFt(s.wave_ht),
+    water_t_f: cToF(s.water_t),
+    air_t_f: cToF(s.air_t),
+  };
+}
+
+// === Color by status for current activity ===
+function stationColor(s, activity) {
+  // Has insufficient data
+  if (activity !== 'all' && !s.wind_spd && !s.wave_ht && !s.water_t) return '#6b6b6b';
+  // Activity filter
+  if (activity === 'all') {
+    // For all, color by wave height severity
+    if (s.wave_ht_ft == null) return '#475766';
+    if (s.wave_ht_ft < 2) return '#5fc88f';
+    if (s.wave_ht_ft < 4) return '#d0c060';
+    if (s.wave_ht_ft < 6) return '#d09040';
+    return '#c04030';
+  }
+  return ACTIVITIES[activity].test(s) ? '#5fc88f' : '#c04030';
+}
+
+// === Render map ===
+function renderMap(stations) {
+  if (!buoyMap) {
+    buoyMap = L.map('buoyMap', { scrollWheelZoom: false, minZoom: 4, maxZoom: 11 }).setView([45.5, -84.5], 5);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd', maxZoom: 19
+    }).addTo(buoyMap);
+  }
+  
+  // Clear old markers
+  markers.forEach(m => m.marker.remove());
+  markers = [];
+  
+  stations.forEach(s => {
+    if (currentLake !== 'all' && s.lake !== currentLake) return;
+    const color = stationColor(s, currentActivity);
+    const marker = L.circleMarker([s.lat, s.lng], {
+      radius: s.id.startsWith('45') ? 10 : 7,
+      fillColor: color, color: '#2c2c2c', weight: 1.5, opacity: 1, fillOpacity: .92,
+      bubblingMouseEvents: false
+    }).addTo(buoyMap);
+    
+    // Tooltip on hover (desktop) - quick name preview
+    marker.bindTooltip(`<b>${s.name}</b><br><span style="font-size:10px;color:#aac8d8">${s.id} &middot; Lake ${s.lake}${s.wave_ht_ft != null ? ' &middot; ' + s.wave_ht_ft.toFixed(1) + ' ft waves' : ''}</span>`, {
+      direction: 'top', offset: [0, -4], opacity: 0.95, className: 'buoy-tooltip'
+    });
+    
+    // Click anywhere on the marker opens the detail modal directly
+    marker.on('click', () => openDetail(s));
+    
+    // Cursor styling so users see it's clickable
+    if (marker._path) marker._path.style.cursor = 'pointer';
+    
+    markers.push({marker, station: s});
+  });
+}
+
+// === Render summary cards and pill counts ===
+function renderSummary(stations) {
+  const counts = {};
+  stations.forEach(s => { counts[s.lake] = (counts[s.lake] || 0) + 1; });
+  ['Superior','Michigan','Huron','Erie','Ontario'].forEach(lake => {
+    const el = document.getElementById('cnt' + lake);
+    if (el) el.textContent = counts[lake] || 0;
+  });
+  
+  Object.keys(ACTIVITIES).forEach(act => {
+    const cnt = stations.filter(s => ACTIVITIES[act].test(s)).length;
+    const el = document.getElementById('cnt-' + act);
+    if (el) el.textContent = cnt;
+  });
+}
+
+// === Render station list ===
+function renderList(stations) {
+  const list = document.getElementById('stationList');
+  const filtered = stations.filter(s => currentLake === 'all' || s.lake === currentLake);
+  document.getElementById('stcCount').textContent = filtered.length;
+  list.innerHTML = filtered.map(s => `
+    <div class="station-row" data-sid="${s.id}">
+      <div class="sr-dot" style="background:${stationColor(s, currentActivity)}"></div>
+      <div>
+        <div><span class="sr-name">${s.name}</span><span class="sr-id">${s.id}</span></div>
+        <div class="sr-lake">Lake ${s.lake}</div>
+      </div>
+      <div class="sr-condition">
+        ${s.wave_ht_ft != null ? '<b>' + s.wave_ht_ft.toFixed(1) + ' ft</b> wave<br>' : ''}
+        ${s.wind_spd_kt != null ? Math.round(s.wind_spd_kt) + ' kt wind ' : ''}
+        ${s.water_t_f != null ? Math.round(s.water_t_f) + '&deg;F' : ''}
+      </div>
+      <div class="sr-link">View &rarr;</div>
+    </div>
+  `).join('');
+  list.querySelectorAll('.station-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const s = stations.find(x => x.id === row.dataset.sid);
+      if (s) openDetail(s);
+    });
+  });
+}
+
+// === Smart CTA ===
+function renderSmartCta(stations) {
+  const cta = document.getElementById('smartCta');
+  const maxWave = Math.max(...stations.map(s => s.wave_ht_ft || 0));
+  const maxWind = Math.max(...stations.map(s => s.wind_spd_kt || 0));
+  const coldCount = stations.filter(s => s.water_t_f != null && s.water_t_f < 40).length;
+  const month = new Date().getUTCMonth();
+  const isWinter = month >= 10 || month <= 2;
+  
+  cta.classList.add('show');
+  cta.classList.remove('alert');
+  
+  if (maxWave > 8) {
+    cta.classList.add('alert');
+    cta.innerHTML = '<h3>Severe lake conditions</h3><div class="cta-headline">Open water is dangerous right now.</div><p>Peak wave height of <strong>' + maxWave.toFixed(1) + ' ft</strong> reported across the network with wind gusts up to <strong>' + Math.round(maxWind) + ' knots</strong>. November-grade conditions on at least one buoy. The <a href="/edmund-fitzgerald/">Edmund Fitzgerald page</a> covers what these storms can do. Stay off the water and watch from shore.</p>';
+  } else if (maxWave > 5) {
+    cta.innerHTML = '<h3>Elevated wave conditions</h3><div class="cta-headline">Big water on at least one lake.</div><p>Wave heights to <strong>' + maxWave.toFixed(1) + ' ft</strong> on open water. Small craft advisory territory. If you are headed out, stick to protected bays and harbors. See where the freighters are riding it out in the <a href="/great-lakes-gazette/">Great Lakes Gazette</a> daily brief.</p>';
+  } else if (isWinter && coldCount > 5) {
+    cta.innerHTML = '<h3>Winter conditions</h3><div class="cta-headline">Water temperatures near or below freezing.</div><p>The 45xxx open-water buoys are typically pulled for winter. Coastal stations continue reporting. For winter maritime context, the <a href="/soo-locks/">Soo Locks tool</a> tracks the navigation season closure and the <a href="/great-lakes-gazette/">Gazette</a> covers icebreaker activity.</p>';
+  } else if (maxWave < 2 && maxWind < 15) {
+    cta.innerHTML = '<h3>Calm across the basin</h3><div class="cta-headline">Good day to be on the water.</div><p>Light winds and small waves at most stations. Use the activity filter above to find stations safe for your trip. For trip planning beyond just conditions, the <a href="/lake-superior-circle-tour/">Lake Superior Circle Tour</a> and the <a href="https://michigantroutreport.com">Michigan Trout Report</a> are companion tools for the Great Lakes shoreline experience.</p>';
+  } else {
+    cta.innerHTML = '<h3>Mixed conditions</h3><div class="cta-headline">Check the activity filter for your specific plans.</div><p>Wave heights to <strong>' + maxWave.toFixed(1) + ' ft</strong>, peak wind <strong>' + Math.round(maxWind) + ' kt</strong>. Click an activity above to color-code stations for fishing, kayaking, sailing, swimming, or diving thresholds. The <a href="/great-lakes-gazette/">daily Gazette</a> tracks where freighters are working the lakes today.</p>';
+  }
+}
+
+// === Open detail modal with sparklines ===
+async function openDetail(station) {
+  const overlay = document.getElementById('modalOverlay');
+  const title = document.getElementById('modalTitle');
+  const meta = document.getElementById('modalMeta');
+  const body = document.getElementById('modalBody');
+  
+  title.textContent = station.name;
+  meta.innerHTML = `Station ${station.id} &middot; Lake ${station.lake} &middot; ${station.lat.toFixed(2)}, ${station.lng.toFixed(2)}`;
+  body.innerHTML = `
+    <div class="current-conditions">
+      <div class="cc-card"><div class="cc-lbl">Wave height</div><div class="cc-val">${station.wave_ht_ft != null ? station.wave_ht_ft.toFixed(1) : '-'}</div><div class="cc-unit">feet</div></div>
+      <div class="cc-card"><div class="cc-lbl">Wind</div><div class="cc-val">${station.wind_spd_kt != null ? Math.round(station.wind_spd_kt) : '-'}</div><div class="cc-unit">knots</div></div>
+      <div class="cc-card"><div class="cc-lbl">Gust</div><div class="cc-val">${station.wind_gst_kt != null ? Math.round(station.wind_gst_kt) : '-'}</div><div class="cc-unit">knots</div></div>
+      <div class="cc-card"><div class="cc-lbl">Direction</div><div class="cc-val">${station.wind_dir != null ? Math.round(station.wind_dir) : '-'}</div><div class="cc-unit">degrees</div></div>
+      <div class="cc-card"><div class="cc-lbl">Water temp</div><div class="cc-val">${station.water_t_f != null ? Math.round(station.water_t_f) : '-'}</div><div class="cc-unit">&deg;F</div></div>
+      <div class="cc-card"><div class="cc-lbl">Air temp</div><div class="cc-val">${station.air_t_f != null ? Math.round(station.air_t_f) : '-'}</div><div class="cc-unit">&deg;F</div></div>
+      <div class="cc-card"><div class="cc-lbl">Pressure</div><div class="cc-val">${station.pres != null ? station.pres.toFixed(0) : '-'}</div><div class="cc-unit">hPa</div></div>
+      <div class="cc-card"><div class="cc-lbl">Observed</div><div class="cc-val" style="font-size:13px">${fmtTime(station.obs_time)}</div><div class="cc-unit">last update</div></div>
+    </div>
+    <div class="sparkline-section">
+      <h4>5-day history</h4>
+      <div class="sparkline-loading" id="sparkLoading">Loading historical data from NDBC...</div>
+      <div id="sparkContainer"></div>
+    </div>
+    <div style="margin-top:18px;font-size:12px;color:#888;padding-top:14px;border-top:1px solid #efeae0">
+      Direct NDBC page: <a href="https://www.ndbc.noaa.gov/station_page.php?station=${station.id.toLowerCase()}" target="_blank" rel="noopener" style="color:#2c5f2d">ndbc.noaa.gov/${station.id}</a>
+    </div>
+  `;
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  
+  // Lazy-load sparklines
+  try {
+    const r = await fetch('/api/buoy/' + station.id.toLowerCase());
+    if (!r.ok) throw new Error('Detail unavailable');
+    const data = await r.json();
+    if (!data.samples || data.samples.length === 0) {
+      document.getElementById('sparkLoading').textContent = 'Historical data unavailable for this station.';
+      return;
+    }
+    document.getElementById('sparkLoading').style.display = 'none';
+    const container = document.getElementById('sparkContainer');
+    
+    const params = [
+      { key:'wave_ht', label:'Wave height (ft)', conv: v => v*3.28084, fmt: v => v.toFixed(1) },
+      { key:'wind_spd', label:'Wind speed (kt)', conv: v => v*1.94384, fmt: v => v.toFixed(0) },
+      { key:'water_t', label:'Water temperature (°F)', conv: v => v*9/5+32, fmt: v => v.toFixed(0) },
+      { key:'air_t', label:'Air temperature (°F)', conv: v => v*9/5+32, fmt: v => v.toFixed(0) },
+      { key:'pres', label:'Pressure (hPa)', conv: v => v, fmt: v => v.toFixed(1) },
+    ];
+    
+    params.forEach(p => {
+      const points = data.samples.filter(s => s[p.key] != null).map(s => ({ t: s.t, v: p.conv(s[p.key]) }));
+      if (points.length < 2) return;
+      const vals = points.map(p => p.v);
+      const min = Math.min(...vals), max = Math.max(...vals);
+      const range = max - min || 1;
+      const tMin = points[0].t, tMax = points[points.length-1].t;
+      const tRange = tMax - tMin || 1;
+      const W = 600, H = 56;
+      const padding = 8;
+      const path = points.map((pt, i) => {
+        const x = padding + ((pt.t - tMin) / tRange) * (W - padding*2);
+        const y = H - padding - ((pt.v - min) / range) * (H - padding*2);
+        return (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+      }).join(' ');
+      const lastVal = points[points.length-1].v;
+      
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <h4>${p.label}</h4>
+        <div class="sparkline-wrap">
+          <span class="sparkline-label">${points.length} obs &middot; ${p.fmt(min)} to ${p.fmt(max)}</span>
+          <span class="sparkline-val">now ${p.fmt(lastVal)}</span>
+          <svg class="sparkline-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+            <path d="${path}" fill="none" stroke="#2c5f2d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="${padding + (W - padding*2)}" cy="${H - padding - ((lastVal - min) / range) * (H - padding*2)}" r="2.5" fill="#2c5f2d"/>
+          </svg>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  } catch (e) {
+    document.getElementById('sparkLoading').innerHTML = 'Historical data unavailable: ' + e.message + '. <br>Try the <a href="https://www.ndbc.noaa.gov/station_page.php?station=' + station.id.toLowerCase() + '" target="_blank" rel="noopener">station page on ndbc.noaa.gov</a>.';
+  }
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// === Geolocation ===
+function findMyBuoys() {
+  const btn = document.getElementById('geoBtn');
+  const result = document.getElementById('geoResult');
+  const list = document.getElementById('geoResultList');
+  const title = document.getElementById('geoResultTitle');
+  if (!navigator.geolocation) {
+    btn.textContent = 'Geolocation not available'; btn.disabled = true; return;
+  }
+  btn.textContent = 'Finding...'; btn.disabled = true;
+  navigator.geolocation.getCurrentPosition(pos => {
+    const {latitude:lat, longitude:lng} = pos.coords;
+    const withDist = allStations.map(s => ({...s, dist: haversine(lat, lng, s.lat, s.lng)})).sort((a,b) => a.dist - b.dist).slice(0, 10);
+    title.textContent = '10 closest buoys to ' + lat.toFixed(2) + ', ' + lng.toFixed(2);
+    list.innerHTML = withDist.map(s => `
+      <li data-sid="${s.id}">
+        <div>
+          <span class="gl-name">${s.name}</span>
+          <span class="gl-meta">${s.id} &middot; Lake ${s.lake} &middot; ${s.wave_ht_ft != null ? s.wave_ht_ft.toFixed(1) + ' ft waves' : 'no wave data'}</span>
+        </div>
+        <span class="gl-dist">${Math.round(s.dist)} mi</span>
+      </li>
+    `).join('');
+    list.querySelectorAll('li').forEach(li => {
+      li.addEventListener('click', () => {
+        const s = allStations.find(x => x.id === li.dataset.sid);
+        if (s) openDetail(s);
+      });
+    });
+    result.classList.add('show');
+    btn.textContent = 'Update location'; btn.disabled = false;
+    
+    if (userMarker) userMarker.remove();
+    userMarker = L.circleMarker([lat, lng], { radius: 9, fillColor: '#2c5f2d', color: '#fff', weight: 2.5, fillOpacity: 1 }).addTo(buoyMap);
+    userMarker.bindPopup('<b>Your location</b><br>' + lat.toFixed(3) + ', ' + lng.toFixed(3));
+    const bounds = L.latLngBounds([lat, lng]).extend(withDist.slice(0, 5).map(s => [s.lat, s.lng]));
+    buoyMap.fitBounds(bounds, { padding: [40, 40] });
+  }, err => {
+    btn.textContent = 'Location denied'; btn.disabled = false;
+    list.innerHTML = '<li><div>Location access denied. Use the map directly to browse stations.</div></li>';
+    title.textContent = 'Could not get location';
+    result.classList.add('show');
+  });
+}
+
+// === Legend ===
+function updateLegend(activity) {
+  const legend = document.getElementById('mapLegend');
+  if (activity === 'all') {
+    legend.innerHTML = `
+      <div class="lg-title">Wave height</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#5fc88f"></span>Under 2 ft</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#d0c060"></span>2 to 4 ft</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#d09040"></span>4 to 6 ft</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#c04030"></span>Over 6 ft</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#475766"></span>No wave data</div>
+    `;
+  } else {
+    legend.innerHTML = `
+      <div class="lg-title">${ACTIVITIES[activity].label} conditions</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#5fc88f"></span>Safe</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#c04030"></span>Unsafe / too rough</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#6b6b6b"></span>Insufficient data</div>
+    `;
+  }
+}
+
+// === Initialize ===
+async function init() {
+  // Try API first, fall back to inline snapshot
+  let data = null;
+  try {
+    const r = await fetch('/api/buoys');
+    if (r.ok) data = await r.json();
+  } catch {}
+  if (!data || !data.stations) {
+    try {
+      data = JSON.parse(document.getElementById('snapshotData').textContent);
+      document.getElementById('liveStatus').textContent = '115 stations (snapshot, API offline)';
+    } catch {
+      document.getElementById('liveStatus').textContent = 'Data unavailable';
+      return;
+    }
+  }
+  
+  allStations = data.stations.map(enrich);
+  
+  // Update strip
+  document.getElementById('liveStatus').textContent = data.count + ' stations reporting';
+  document.getElementById('refreshInfo').textContent = '· fetched ' + fmtTime(data.fetched_at);
+  
+  // Render everything
+  renderSummary(allStations);
+  renderMap(allStations);
+  renderList(allStations);
+  renderSmartCta(allStations);
+  updateLegend(currentActivity);
+}
+
+// === Event handlers ===
+document.getElementById('activityPills').addEventListener('click', e => {
+  const btn = e.target.closest('.pill');
+  if (!btn) return;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  currentActivity = btn.dataset.act;
+  document.getElementById('filterHelp').textContent = currentActivity === 'all' ?
+    'All conditions shown. Color-coded by wave height severity.' :
+    'Showing ' + ACTIVITIES[currentActivity].label + ' safety thresholds. Green = safe, red = unsafe, gray = insufficient data.';
+  renderMap(allStations);
+  renderList(allStations);
+  updateLegend(currentActivity);
+});
+
+document.getElementById('lakePills').addEventListener('click', e => {
+  const btn = e.target.closest('.lake-pill');
+  if (!btn) return;
+  document.querySelectorAll('.lake-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  currentLake = btn.dataset.lake;
+  renderMap(allStations);
+  renderList(allStations);
+});
+
+document.getElementById('geoBtn').addEventListener('click', findMyBuoys);
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+window.addEventListener('DOMContentLoaded', () => {
+  init();
+  setInterval(init, 10 * 60 * 1000);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Public Trust and AI in 911 Operations | Chris Izworski</title>
+<meta name="description" content="Chris Izworski on building public trust while introducing AI in 911 operations, including communication, staff preparation, and error handling.">
+<link rel="canonical" href="https://chrisizworski.com/blog/public-trust-ai-911-operations/">
+<meta property="og:title" content="Public Trust and AI in 911 Operations | Chris Izworski">
+<meta property="og:description" content="Chris Izworski on building public trust while introducing AI in 911 operations, including communication, staff preparation, and error handling.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://chrisizworski.com/blog/public-trust-ai-911-operations/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://chrisizworski.com/#person",
+      "name": "Chris Izworski",
+      "url": "https://chrisizworski.com/",
+      "sameAs": [
+        "https://www.linkedin.com/in/chris-izworski-15294510",
+        "https://github.com/izworskic",
+        "https://www.wikidata.org/wiki/Q138283432",
+        "https://www.youtube.com/@izworskic"
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "@id": "https://chrisizworski.com/blog/public-trust-ai-911-operations/",
+      "headline": "Building Public Trust While Introducing AI in 911 Operations",
+      "description": "A practical framework for protecting public trust while introducing AI into emergency communications operations.",
+      "author": {
+        "@type": "Person",
+        "name": "Chris Izworski",
+        "url": "https://chrisizworski.com/about/"
+      },
+      "datePublished": "2026-02-25",
+      "dateModified": "2026-04-28",
+      "mainEntityOfPage": "https://chrisizworski.com/blog/public-trust-ai-911-operations/",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://chrisizworski.com/#website",
+      "name": "Chris Izworski",
+      "url": "https://chrisizworski.com/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://chrisizworski.com/blog/public-trust-ai-911-operations/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://chrisizworski.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Building Public Trust While Introducing AI in 911 Operations",
+          "item": "https://chrisizworski.com/blog/public-trust-ai-911-operations/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+body{font-family:Georgia,'Times New Roman',serif;background:#faf9f6;color:#2c2c2c;line-height:1.75;margin:0}
+a{color:#2c5f2d;text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:860px;margin:0 auto;padding:36px 20px}
+h1{font-weight:normal;font-size:34px;line-height:1.25;margin-bottom:12px}
+h2{font-weight:normal;font-size:24px;margin:30px 0 10px}
+.meta{font-size:14px;color:#666;margin-bottom:20px}
+ul{padding-left:20px}
+li{margin-bottom:8px}
+</style>
+
+
+
+
+
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:image" content="https://chrisizworski.com/assets/search/chris-izworski-public-safety.png">
+<meta property="og:image:secure_url" content="https://chrisizworski.com/assets/search/chris-izworski-public-safety.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Chris Izworski public safety technology preview image">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://chrisizworski.com/assets/search/chris-izworski-public-safety.png">
+<meta name="twitter:image:alt" content="Chris Izworski public safety technology preview image">
+<meta name="thumbnail" content="https://chrisizworski.com/assets/search/chris-izworski-public-safety.png">
+<meta itemprop="image" content="https://chrisizworski.com/assets/search/chris-izworski-public-safety.png">
+</head>
+<body>
+<div class="wrap">
+<p><a href="/blog/">Back to Blog</a></p>
+<h1>Building Public Trust While Introducing AI in 911 Operations</h1>
+<p class="meta">Updated February 25, 2026</p>
+<p>Public trust is earned through clarity and consistency. AI programs in emergency communications should be positioned as operator support systems, not replacements for professional judgment.</p>
+
+<h2>Trust Principles for Rollout</h2>
+<p>The four things that build trust in an AI deployment, transparency, accountability, auditability, and service quality, are not abstract values. They are operational requirements. Transparency means being specific about where AI is used and where it is not. Not "we use AI to improve service" but "we use AI to handle calls about road conditions, parking questions, and general information requests." Accountability means having a named person responsible for every automated workflow, someone who can explain what it does and answer for its errors. Auditability means keeping review logs and correction rates by process, so that drift is visible before it becomes a problem. Service quality first means that automation volume is never the goal, caller outcomes are the goal, and automation is only valuable when it supports those outcomes.</p>
+
+<h2>Operational Controls</h2>
+<p>Every automated workflow in a dispatch environment needs three things built in before it goes live: a confidence threshold below which it routes to a human, a manual override that any operator can trigger, and documented fallback behavior for the cases it cannot handle. If any of those three things cannot be defined, the workflow is not ready to be automated. If a workflow cannot be monitored reliably, if there is no practical way to review what it is doing and catch errors, it should not be automated.</p>
+<p>Use staged release gates with review checkpoints before expanding scope. Track false positives, false negatives, and manual intervention frequency from day one. Provide recurring staff briefings when anything changes, the system, the scope, or the observed error patterns. Staff who are surprised by what the AI is doing cannot communicate accurately about it to the public, and that is where trust problems start.</p>
+
+<h2>How to Communicate With Stakeholders</h2>
+<p>Publish a short policy statement, not a press release, a plain-language document, describing what is automated, what is not, and what the oversight process looks like. Report measured outcomes in plain language: how many calls the AI handled, what the error rate was, and what happened when errors occurred. Share corrective actions, not just wins. Stakeholders who see only the positive side of a deployment assume that the negative side is being hidden. Stakeholders who see the corrections build confidence that the system is being monitored honestly.</p>
+
+<h2>Related Resources</h2>
+<p>For the operational record behind this guidance, see the <a href="/case-studies/">Saginaw County 911 case studies</a>. The <a href="/blog/ai-supporting-911-administrative-work/">administrative workflows guide</a> covers the technical implementation side. For <a href="/media/">media coverage</a> of the Saginaw deployment and how it was communicated publicly, see the media page.</p>
+</div>
+
+<h2>What the Public Actually Worries About</h2>
+<p>When AI gets introduced into 911 operations, the public concern is almost always the same: will a machine decide whether to send help? The answer, that AI is handling administrative work and non-emergency classification, not dispatch decisions, is almost always reassuring once it is clearly explained. The problem is that it rarely gets explained clearly, because the organizations doing the work are often in an awkward position trying to talk about it.</p>
+<p>The framing that tends to work best is specific and bounded. Not "we are using AI to improve operations", that is vague enough to be alarming. Instead: "we use AI to handle routine information requests so that our staff can focus on emergencies." The specificity matters. People can evaluate a narrow claim. They cannot evaluate a broad one.</p>
+<h2>Communicating to Staff First</h2>
+<p>Public trust problems often start as internal trust problems. If dispatch staff are uncertain about what the AI is doing, that uncertainty surfaces in every public interaction, in the hesitant answer to a reporter's question, in the dispatcher who tells a caller "I am not sure, that's the computer." Staff who understand the system and are confident in its scope are the most credible communicators you have.</p>
+<p>Briefings that explain what the AI does, what it does not do, and what the override process looks like tend to reduce that uncertainty. The goal is not to sell the technology to staff, it is to give them accurate information so they can answer questions from the people they serve.</p>
+<h2>When Something Goes Wrong</h2>
+<p>Every AI deployment has errors. The question is not whether you will have one, it is how you will respond when you do. Organizations that have thought this through in advance, have a clear correction process, and can explain what happened and what changed tend to recover quickly. Organizations that treat errors as surprises tend not to.</p>
+<p>Building that response capacity before the first visible error is part of what responsible deployment looks like. It is also what allows you to be straightforward with the public when you need to be.</p>
+</body>
+</html>
