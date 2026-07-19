@@ -8,6 +8,8 @@ The live-site audit is read-only:
 node scripts/crawl-live.mjs
 ```
 
+After a fresh audit capture, rebuild the checked-in public source manually with `npm run prepare:source`. This is deliberately not named `prepare`, because npm automatically runs that lifecycle name during dependency installation.
+
 Production traffic must not be moved until the preview passes route, metadata, structured-data, redirect, asset, interaction, and visual parity checks.
 
 ## Verification
