@@ -18,4 +18,6 @@ npm run verify:all
 
 The source verifier compares unchanged pages and assets with the clean live-site capture. The endpoint tests check the response contracts used by the buoy explorer and heirloom variety matchmaker.
 
+The migration preview intentionally sends a global `X-Robots-Tag: noindex` header. `npm run verify:production-ready` must fail while that preview-only protection is present and must pass before either live domain can be attached.
+
 See [MIGRATION.md](MIGRATION.md) for the staged cutover and rollback procedure and [SEO_PARITY.md](SEO_PARITY.md) for the search-preservation record.

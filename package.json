@@ -8,7 +8,8 @@
     "prepare": "node scripts/prepare-source.mjs",
     "test": "node --test tests/*.test.js",
     "verify": "node scripts/verify-source.mjs",
-    "verify:all": "npm test && npm run verify"
+    "verify:all": "npm test && npm run verify",
+    "verify:production-ready": "node scripts/verify-production-ready.mjs"
   },
   "engines": {
     "node": ">=20"
