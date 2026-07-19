@@ -143,13 +143,13 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 14
       <div class="levels-strip" id="levelsStrip"></div>
     </div>
     <div class="brief-error" id="briefError" style="display:none">
-      Today's brief is loading. <a href="https://great-lakes-gazette.vercel.app" target="_blank" rel="noopener">Open the Gazette directly →</a>
+      Today's brief is loading. <a href="https://gazette.chrisizworski.com" target="_blank" rel="noopener">Open the Gazette directly →</a>
     </div>
   </div>
 </div>
 
 <div class="gazette-link-row">
-  <a href="https://great-lakes-gazette.vercel.app" target="_blank" rel="noopener">Open the full Gazette ↗</a>
+  <a href="https://gazette.chrisizworski.com" target="_blank" rel="noopener">Open the full Gazette ↗</a>
 </div>
 
 <h2 class="section-head">What the Gazette Covers</h2>
@@ -194,12 +194,10 @@ h2.section-head{font-size:21px;font-weight:normal;color:#2c5f2d;margin:40px 0 14
 
 <script>
 (async function() {
-  const API = 'https://great-lakes-gazette.vercel.app/api/generate';
+  const API = 'https://gazette.chrisizworski.com/api/latest';
   
   try {
-    const res = await fetch(API, {
-      headers: { 'Authorization': 'Bearer glg-cron-2026-secret-bay-city' }
-    });
+    const res = await fetch(API);
     if (!res.ok) throw new Error('API error');
     const d = await res.json();
     const b = d.brief || {};

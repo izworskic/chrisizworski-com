@@ -6,5 +6,6 @@
   "knownBrokenInternalLinksFixed": 3,
   "noaaWaterLevelDatumFixed": true,
   "auroraOutageFallbackFixed": true,
+  "gazetteCredentialRemoved": true,
   "cloudflareBeaconCopiesRetained": 0
 }

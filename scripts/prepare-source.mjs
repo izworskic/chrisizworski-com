@@ -117,6 +117,22 @@ if (!auroraPage.includes("NOAA Kp forecast unavailable")) {
 }
 await writeFile(auroraPath, auroraPage);
 
+const gazettePath = path.join(publicRoot, "great-lakes-gazette", "index.html");
+let gazettePage = await readFile(gazettePath, "utf8");
+gazettePage = gazettePage
+  .replaceAll("https://great-lakes-gazette.vercel.app", "https://gazette.chrisizworski.com")
+  .replace(/const API = ['"]https:\/\/gazette\.chrisizworski\.com\/api\/generate['"];/, "const API = 'https://gazette.chrisizworski.com/api/latest';")
+  .replace(
+    /fetch\(API,\s*\{\s*headers:\s*\{\s*['"]Authorization['"]:\s*['"][^'"]+['"]\s*\}\s*\}\)/,
+    "fetch(API)",
+  );
+await writeFile(gazettePath, gazettePage);
+
+const projectsPath = path.join(publicRoot, "projects", "index.html");
+let projectsPage = await readFile(projectsPath, "utf8");
+projectsPage = projectsPage.replaceAll("great-lakes-gazette.vercel.app", "gazette.chrisizworski.com");
+await writeFile(projectsPath, projectsPage);
+
 const buoySnapshot = JSON.parse(await readFile(path.join(auditRoot, "snapshot", "api", "buoys.json"), "utf8"));
 await mkdir(path.join(root, "data"), { recursive: true });
 await writeFile(
@@ -137,6 +153,7 @@ const sourceSummary = {
   knownBrokenInternalLinksFixed: 3,
   noaaWaterLevelDatumFixed: true,
   auroraOutageFallbackFixed: true,
+  gazetteCredentialRemoved: true,
   cloudflareBeaconCopiesRetained: 0,
 };
 await writeFile(path.join(root, "audit", "source-summary.json"), `${JSON.stringify(sourceSummary, null, 2)}\n`);

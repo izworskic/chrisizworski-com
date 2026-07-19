@@ -11,8 +11,10 @@ const failures = [];
 const intentionalChanges = new Set([
   "/tools/",
   "/great-lakes-buoys/",
+  "/great-lakes-gazette/",
   "/lake-superior-circle-tour/",
   "/northern-lights-michigan/",
+  "/projects/",
   "/sitemap.xml",
 ]);
 
@@ -94,6 +96,19 @@ if (circleTour.includes("datum=IGLD85")) failures.push("Lake Superior Circle Tou
 const aurora = await readFile(path.join(publicRoot, "northern-lights-michigan", "index.html"), "utf8");
 if (!aurora.includes("if (kpRes.status !== 'fulfilled') throw new Error('NOAA Kp forecast unavailable')")) {
   failures.push("Northern Lights does not leave its loading state when the primary NOAA forecast is unavailable");
+}
+
+const gazette = await readFile(path.join(publicRoot, "great-lakes-gazette", "index.html"), "utf8");
+if (!gazette.includes("https://gazette.chrisizworski.com/api/latest")) {
+  failures.push("Great Lakes Gazette does not use its public read-only latest-edition endpoint");
+}
+if (/authorization|\/api\/generate|great-lakes-gazette\.vercel\.app/i.test(gazette)) {
+  failures.push("Great Lakes Gazette still exposes a protected endpoint, authorization header, or legacy deployment URL");
+}
+
+const projects = await readFile(path.join(publicRoot, "projects", "index.html"), "utf8");
+if (!projects.includes("gazette.chrisizworski.com") || projects.includes("great-lakes-gazette.vercel.app")) {
+  failures.push("Projects page still identifies the Gazette by its legacy deployment hostname");
 }
 
 for (const forbidden of ["news-coverage", "prepared", "save-our-shoreline"]) {
