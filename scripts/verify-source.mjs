@@ -123,6 +123,12 @@ if (/<iframe[^>]+marinetraffic/i.test(sooLocks)) {
 if (!sooLocks.includes("https://ais.boatnerd.com/passage/port/soo-locks")) {
   failures.push("Soo Locks is missing the verified BoatNerd passage-list fallback");
 }
+if (!sooLocks.includes("https://embed.myshiptracking.com/embed?myst") || !sooLocks.includes("lat=46.5036") || !sooLocks.includes("lng=-84.36")) {
+  failures.push("Soo Locks is missing the official no-key live map centered on the lock complex");
+}
+if (/AISSTREAM_API_KEY|\/api\/soo-vessels|leaflet@1\.9\.4/.test(sooLocks)) {
+  failures.push("Soo Locks still depends on the retired keyed AIS implementation");
+}
 
 const gazette = await readFile(path.join(publicRoot, "great-lakes-gazette", "index.html"), "utf8");
 if (!gazette.includes("https://gazette.chrisizworski.com/api/latest")) {
