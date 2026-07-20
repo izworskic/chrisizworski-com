@@ -45,12 +45,17 @@ test("Northern Lights handles current NOAA object responses without NaN cards", 
   assert.equal(helpers.parseNoaaTime(rows[0][0]).toISOString(), "2026-07-19T21:00:00.000Z");
 });
 
-test("Soo Locks hands live tracking off cleanly instead of rendering a refused iframe", () => {
+test("Soo Locks renders a first-party vessel map without restoring the refused iframe", () => {
   const html = readFileSync(path.join(__dirname, "../public/soo-locks/index.html"), "utf8");
   assert.doesNotMatch(html, /<iframe[^>]+marinetraffic/i);
+  assert.ok(html.includes('id="sooVesselMap"'));
+  assert.ok(html.includes("fetch('/api/soo-vessels'"));
+  assert.ok(html.includes("leaflet@1.9.4"));
+  assert.ok(html.includes("AIS positions are informational"));
   assert.ok(html.includes("https://ais.boatnerd.com/"));
   assert.ok(html.includes("https://ais.boatnerd.com/passage/port/soo-locks"));
   assert.ok(html.includes("https://www.marinetraffic.com"));
+  assert.ok(!html.includes("AISSTREAM_API_KEY"));
 });
 
 test("Buoy copy stays accurate as the live reporting count changes", () => {

@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Soo Locks Live Vessel Activity, Schedule, and Visitor Guide | Chris Izworski</title>
-<meta name="description" content="Live vessel activity at the Soo Locks in Sault Ste. Marie, Michigan. Direct AIS tracking links, current navigation season status, lock dimensions, the Poe lock replacement project, visitor information, and Great Lakes freighters.">
+<meta name="description" content="Interactive live vessel map for the Soo Locks in Sault Ste. Marie, Michigan. Track nearby AIS-equipped ships, check navigation season status, and plan a freighter-watching visit.">
 <link rel="canonical" href="https://chrisizworski.com/soo-locks/">
 <meta property="og:title" content="Soo Locks Live Vessel Activity, Schedule, and Visitor Guide">
-<meta property="og:description" content="Live AIS vessel-tracking links for the Soo Locks plus navigation season status, lock dimensions, the Poe replacement project, and a complete visitor guide.">
+<meta property="og:description" content="Explore an interactive AIS vessel map at the Soo Locks, check navigation season status, and plan a Great Lakes freighter-watching visit.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://chrisizworski.com/soo-locks/">
 <meta name="twitter:card" content="summary_large_image">
@@ -17,6 +17,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -37,11 +38,11 @@
       "@type": "WebPage",
       "@id": "https://chrisizworski.com/soo-locks/",
       "name": "Soo Locks Live Vessel Activity and Visitor Guide",
-      "description": "Live AIS vessel-tracking links, navigation season status, lock dimensions, and visitor information for the Soo Locks at Sault Ste. Marie, Michigan.",
+      "description": "Interactive AIS vessel map, navigation season status, lock dimensions, and visitor information for the Soo Locks at Sault Ste. Marie, Michigan.",
       "url": "https://chrisizworski.com/soo-locks/",
       "isPartOf": { "@id": "https://chrisizworski.com/#website" },
       "author": { "@id": "https://chrisizworski.com/#person" },
-      "dateModified": "2026-07-19",
+      "dateModified": "2026-07-20",
       "inLanguage": "en-US"
     },
     {
@@ -107,11 +108,26 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .status-progress-bar{background:#2c5f2d;height:100%;transition:width .4s}
 @media(max-width:540px){.status-panel{grid-template-columns:1fr}.status-icon{font-size:42px}}
 
-/* Live vessel tracking handoff */
+/* First-party live vessel map */
 .map-wrap{margin:20px 0 28px;border:1px solid #e0dbd2;border-radius:4px;overflow:hidden;background:#f4efe5}
-.live-map-panel{padding:28px;background:linear-gradient(135deg,#0d3545,#174f61);color:#dfe9f0}
+.vessel-map-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;background:#0d3545;color:#dfe9f0;border-bottom:1px solid rgba(255,255,255,.14)}
+.vessel-map-status{display:flex;align-items:center;gap:8px;min-width:0;font-size:12px;line-height:1.45}
+.vessel-map-status>span:last-child{min-width:0}
+.vessel-map-status-dot{width:8px;height:8px;border-radius:50%;background:#e3b341;box-shadow:0 0 0 3px rgba(227,179,65,.18);flex:0 0 auto}
+.vessel-map-status-dot.live{background:#5fc88f;box-shadow:0 0 0 3px rgba(95,200,143,.18)}
+.vessel-map-status-dot.offline{background:#cf7f77;box-shadow:0 0 0 3px rgba(207,127,119,.18)}
+.vessel-map-count{color:#fff;font-weight:bold;white-space:nowrap}
+.map-refresh{border:1px solid rgba(255,255,255,.45);background:transparent;color:#fff;border-radius:3px;padding:7px 10px;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+.map-refresh:hover,.map-refresh:focus{background:rgba(255,255,255,.12)}
+.map-refresh:disabled{opacity:.55;cursor:wait}
+.vessel-map-stage{position:relative;background:#dce8e9}
+#sooVesselMap{width:100%;height:500px;background:#dce8e9;z-index:1}
+.vessel-map-notice{position:absolute;left:12px;right:12px;bottom:12px;z-index:500;background:rgba(13,53,69,.94);color:#fff;border:1px solid rgba(255,255,255,.24);border-radius:4px;padding:10px 12px;font-size:12px;line-height:1.5;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.vessel-map-notice[hidden]{display:none}
+.vessel-map-notice a{color:#bcecff;text-decoration:underline}
+.live-map-panel{padding:22px 24px;background:linear-gradient(135deg,#0d3545,#174f61);color:#dfe9f0}
 .live-map-kicker{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#8fd3e8;margin-bottom:6px}
-.live-map-panel h3{font-size:22px;font-weight:normal;color:#fff;margin-bottom:8px}
+.live-map-panel h3{font-size:20px;font-weight:normal;color:#fff;margin-bottom:8px}
 .live-map-panel p{font-size:14px;color:#dfe9f0;margin-bottom:18px;max-width:680px}
 .live-map-actions{display:flex;flex-wrap:wrap;gap:10px}
 .live-map-button{display:inline-block;background:#fff;color:#0d3545;border:1px solid #fff;border-radius:3px;padding:10px 14px;font-size:13px;font-weight:bold;text-decoration:none}
@@ -119,6 +135,15 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .live-map-button.secondary{background:transparent;color:#fff}
 .live-map-button.secondary:hover{background:rgba(255,255,255,.1)}
 .map-caption{font-size:12px;color:#888;padding:8px 14px;background:#f9f6ee;border-top:1px solid #e0dbd2}
+.map-caption a{font-weight:bold}
+.soo-lock-icon{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#0d3545;color:#fff;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.35);font-size:12px}
+.vessel-marker{width:26px;height:26px;display:grid;place-items:center}
+.vessel-marker-arrow{width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:20px solid #126b52;filter:drop-shadow(0 1px 2px rgba(0,0,0,.55));transform-origin:50% 52%}
+.vessel-marker.stopped .vessel-marker-arrow{border-left-width:9px;border-right-width:9px;border-bottom-width:18px;border-bottom-color:#7b5c20}
+.leaflet-popup-content{font-family:Georgia,'Times New Roman',serif;line-height:1.55;margin:12px 14px}
+.leaflet-popup-content strong{color:#2c5f2d;font-size:14px}
+.leaflet-popup-content .vessel-popup-meta{font-size:12px;color:#555;margin-top:5px}
+.leaflet-container a{color:#2c5f2d}
 
 /* Stats */
 .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:18px 0 26px}
@@ -157,7 +182,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .ext-list .desc{color:#666;font-size:13px;display:block;margin-top:2px}
 
 .footer{text-align:center;padding:24px;border-top:1px solid #e8e4dc;font-size:12px;color:#999;margin-top:48px}
-@media(max-width:640px){h1.page-title{font-size:26px}.body{padding:30px 16px 40px}h2.sh{font-size:18px}.live-map-panel{padding:22px 18px}.live-map-button{width:100%;text-align:center}}
+@media(max-width:640px){h1.page-title{font-size:26px}.body{padding:30px 16px 40px}h2.sh{font-size:18px}.vessel-map-toolbar{align-items:flex-start;flex-wrap:wrap}.vessel-map-status{font-size:11px;flex:1 1 220px}.map-refresh{padding:6px 8px}#sooVesselMap{height:410px}.live-map-panel{padding:20px 16px}.live-map-button{width:100%;text-align:center}}
 
 figure.fig{margin:22px 0 26px;border:1px solid #e0dbd2;background:#fff;border-radius:3px;overflow:hidden}
 figure.fig img{display:block;width:100%;height:auto}
@@ -188,7 +213,7 @@ figure.fig.hero{margin:6px 0 28px}
 
 <p>The Soo Locks at Sault Ste. Marie, Michigan are the busiest commercial lock system in the world by tonnage. Roughly 75 percent of all United States iron ore moves through here on its way from the Minnesota and Wisconsin head-of-lakes ports to the steel mills of Lower Lake Michigan, Lake Erie, and the Detroit River. The locks lift vessels 21 feet between Lake Superior and the lower Great Lakes, bypassing the rapids of the St. Marys River. The system is operated by the U.S. Army Corps of Engineers, Detroit District, and is open to the public during the navigation season.</p>
 
-<p>This page is a live tool. The status indicator above is calculated from the official Soo Locks operating calendar. The vessel-tracking links below open real-time AIS views of ships in the immediate lock area. Below the live data is the visitor guide: lock dimensions, the new Poe-replacement lock, how to watch a vessel transit, and what each ship category looks like when it comes through.</p>
+<p>This page is a live tool. The status indicator above is calculated from the official Soo Locks operating calendar. The interactive map below plots recent AIS position reports from ships in the immediate lock area without sending a private data credential to your browser. Below the live data is the visitor guide: lock dimensions, the new Poe-replacement lock, how to watch a vessel transit, and what each ship category looks like when it comes through.</p>
 
 <div class="status-panel" id="statusPanel">
   <div class="status-icon" id="statusIcon">🚢</div>
@@ -201,20 +226,33 @@ figure.fig.hero{margin:6px 0 28px}
 
 <h2 class="sh">Live Vessel Activity</h2>
 
-<p>Real-time AIS positions of vessels currently within the lock complex and the St. Marys River approach channels. Ships transiting downbound from Lake Superior approach from the upper right; upbound traffic from Lake Huron approaches from the lower right.</p>
+<p>Recent AIS positions of vessels within the lock complex and the St. Marys River approach channels. Downbound ships arrive from the Lake Superior side; upbound traffic follows the St. Marys River toward the locks from the lower lakes.</p>
 
 <div class="map-wrap">
+  <div class="vessel-map-toolbar">
+    <div class="vessel-map-status" role="status" aria-live="polite">
+      <span class="vessel-map-status-dot" id="vesselMapDot" aria-hidden="true"></span>
+      <span id="vesselMapStatus">Preparing the interactive Soo Locks map...</span>
+      <span class="vessel-map-count" id="vesselMapCount"></span>
+    </div>
+    <button class="map-refresh" id="vesselMapRefresh" type="button">Refresh ships</button>
+  </div>
+  <div class="vessel-map-stage">
+    <div id="sooVesselMap" role="region" aria-label="Interactive map of AIS-equipped vessels near the Soo Locks"></div>
+    <div class="vessel-map-notice" id="vesselMapNotice" hidden></div>
+    <noscript><div class="vessel-map-notice">JavaScript is required for the interactive map. Use the live tracking links below instead.</div></noscript>
+  </div>
   <div class="live-map-panel">
     <div class="live-map-kicker">Live Great Lakes AIS tracking</div>
-    <h3>Track vessels approaching the Soo Locks</h3>
-    <p>Open a live Great Lakes map or the Soo Locks passage list in a new tab. BoatNerd is built specifically for Great Lakes traffic; MarineTraffic provides a second worldwide AIS view. Off-season traffic drops to zero between mid-January and late March.</p>
+    <h3>Need the wider Great Lakes traffic picture?</h3>
+    <p>The map above focuses on the Soo Locks and nearby approaches. BoatNerd provides the full Great Lakes map and a dedicated Soo passage list; MarineTraffic provides a worldwide AIS view. Off-season traffic drops to zero between mid-January and late March.</p>
     <div class="live-map-actions">
       <a class="live-map-button" href="https://ais.boatnerd.com/" target="_blank" rel="noopener">Open BoatNerd live map &#8599;</a>
       <a class="live-map-button secondary" href="https://ais.boatnerd.com/passage/port/soo-locks" target="_blank" rel="noopener">Soo Locks passage list &#8599;</a>
       <a class="live-map-button secondary" href="https://www.marinetraffic.com" target="_blank" rel="noopener">Open MarineTraffic &#8599;</a>
     </div>
   </div>
-  <div class="map-caption">These links replace an older embedded map that the provider no longer permits other sites to display.</div>
+  <div class="map-caption">AIS positions are informational, may be delayed or incomplete, and must not be used for navigation. Live position data via <a href="https://aisstream.io" target="_blank" rel="noopener">AISStream.io</a>; basemap &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>.</div>
 </div>
 
 <div class="cta-card">
@@ -368,6 +406,7 @@ figure.fig.hero{margin:6px 0 28px}
 
 </div>
 <div class="footer">Bay City, Michigan &middot; Compiled by Chris Izworski &middot; Updated July 2026 &middot; <a href="/about/">About this site</a></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 // Calculate live Soo Locks navigation season status
 (function(){
@@ -411,6 +450,170 @@ figure.fig.hero{margin:6px 0 28px}
     detail.textContent = 'Annual maintenance and ice closure. Locks reopen ' + targetOpen.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'}) + ' (' + daysOut + ' days from today). No vessel transits during the closure.';
     bar.style.width = '0%';
   }
+})();
+
+// Render a first-party Soo Locks map and add recent AIS vessel positions.
+(function(){
+  const mapElement = document.getElementById('sooVesselMap');
+  const statusElement = document.getElementById('vesselMapStatus');
+  const countElement = document.getElementById('vesselMapCount');
+  const dotElement = document.getElementById('vesselMapDot');
+  const noticeElement = document.getElementById('vesselMapNotice');
+  const refreshButton = document.getElementById('vesselMapRefresh');
+  let loading = false;
+
+  function setMapState(state, status, count, notice) {
+    dotElement.className = 'vessel-map-status-dot' + (state ? ' ' + state : '');
+    statusElement.textContent = status;
+    countElement.textContent = count || '';
+    if (notice) {
+      noticeElement.innerHTML = notice;
+      noticeElement.hidden = false;
+    } else {
+      noticeElement.hidden = true;
+      noticeElement.textContent = '';
+    }
+  }
+
+  if (!window.L) {
+    setMapState(
+      'offline',
+      'The interactive map library did not load',
+      '',
+      'Use the <a href="https://ais.boatnerd.com/" target="_blank" rel="noopener">BoatNerd live map</a> instead.'
+    );
+    refreshButton.disabled = true;
+    return;
+  }
+
+  const map = L.map(mapElement, {
+    center: [46.5036, -84.36],
+    zoom: 12,
+    minZoom: 9,
+    maxZoom: 18,
+    scrollWheelZoom: false
+  });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  L.control.scale({imperial: true, metric: false}).addTo(map);
+
+  const lockIcon = L.divIcon({
+    className: '',
+    html: '<span class="soo-lock-icon" aria-hidden="true">⚓</span>',
+    iconSize: [22, 22],
+    iconAnchor: [11, 11]
+  });
+  L.marker([46.5036, -84.36], {icon: lockIcon, zIndexOffset: 1000})
+    .addTo(map)
+    .bindPopup('<strong>Soo Locks</strong><div class="vessel-popup-meta">Poe and MacArthur lock complex</div>');
+
+  const vesselLayer = L.layerGroup().addTo(map);
+
+  function escapeHtml(value) {
+    return String(value == null ? '' : value).replace(/[&<>'"]/g, function(character) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character];
+    });
+  }
+
+  function directionFor(vessel) {
+    const direction = Number(vessel.heading ?? vessel.course ?? 0);
+    return Number.isFinite(direction) && direction >= 0 && direction < 360 ? direction : 0;
+  }
+
+  function renderVessels(vessels) {
+    vesselLayer.clearLayers();
+    const bounds = L.latLngBounds([[46.5036, -84.36]]);
+
+    vessels.forEach(function(vessel) {
+      const latitude = Number(vessel.latitude);
+      const longitude = Number(vessel.longitude);
+      if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return;
+
+      const speed = vessel.speed == null ? null : Number(vessel.speed);
+      const stopped = Number.isFinite(speed) && speed < 0.5;
+      const direction = directionFor(vessel);
+      const name = escapeHtml(vessel.name || 'Unknown vessel');
+      const mmsi = escapeHtml(vessel.mmsi || 'Unavailable');
+      const speedText = Number.isFinite(speed) ? speed.toFixed(1) + ' knots' : 'Speed unavailable';
+      const courseText = vessel.course == null ? 'Course unavailable' : Math.round(Number(vessel.course)) + '&deg;';
+      const received = new Date(vessel.received_at);
+      const receivedText = Number.isNaN(received.getTime()) ? 'Recent AIS report' : 'Signal ' + received.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+      const icon = L.divIcon({
+        className: 'vessel-marker' + (stopped ? ' stopped' : ''),
+        html: '<span class="vessel-marker-arrow" style="transform:rotate(' + direction + 'deg)" aria-hidden="true"></span>',
+        iconSize: [26, 26],
+        iconAnchor: [13, 13]
+      });
+      const marker = L.marker([latitude, longitude], {icon: icon});
+      marker.bindTooltip(name, {direction:'top', offset:[0,-11]});
+      marker.bindPopup(
+        '<strong>' + name + '</strong>' +
+        '<div class="vessel-popup-meta">MMSI ' + mmsi + '<br>' +
+        escapeHtml(speedText) + ' &middot; ' + courseText + '<br>' + escapeHtml(receivedText) + '</div>'
+      );
+      marker.addTo(vesselLayer);
+      bounds.extend([latitude, longitude]);
+    });
+
+    if (vessels.length) map.fitBounds(bounds, {padding:[28,28], maxZoom:13});
+  }
+
+  async function loadVessels() {
+    if (loading) return;
+    loading = true;
+    refreshButton.disabled = true;
+    setMapState('', 'Requesting a fresh Soo Locks AIS snapshot...', '', '');
+
+    try {
+      const response = await fetch('/api/soo-vessels', {headers:{Accept:'application/json'}, cache:'no-store'});
+      if (!response.ok) throw new Error('AIS endpoint returned ' + response.status);
+      const data = await response.json();
+      const vessels = Array.isArray(data.vessels) ? data.vessels : [];
+
+      if (data.status === 'live') {
+        renderVessels(vessels);
+        if (vessels.length) {
+          setMapState('live', 'Live AIS snapshot received', vessels.length + (vessels.length === 1 ? ' vessel' : ' vessels'), '');
+        } else {
+          setMapState(
+            'live',
+            'Live AIS connected',
+            'No vessels in snapshot',
+            'No AIS-equipped vessels reported inside the immediate Soo Locks area during this short snapshot. The map refreshes automatically, or use the <a href="https://ais.boatnerd.com/passage/port/soo-locks" target="_blank" rel="noopener">Soo Locks passage list</a>.'
+          );
+        }
+      } else {
+        renderVessels([]);
+        setMapState(
+          'offline',
+          'Interactive map ready · live AIS temporarily unavailable',
+          '',
+          'The basemap remains usable. For current ship positions, open the <a href="https://ais.boatnerd.com/" target="_blank" rel="noopener">BoatNerd live map</a> or <a href="https://ais.boatnerd.com/passage/port/soo-locks" target="_blank" rel="noopener">Soo Locks passage list</a>.'
+        );
+      }
+    } catch (error) {
+      renderVessels([]);
+      setMapState(
+        'offline',
+        'Interactive map ready · live AIS temporarily unavailable',
+        '',
+        'The basemap remains usable. For current ship positions, open the <a href="https://ais.boatnerd.com/" target="_blank" rel="noopener">BoatNerd live map</a>.'
+      );
+    } finally {
+      loading = false;
+      refreshButton.disabled = false;
+    }
+  }
+
+  refreshButton.addEventListener('click', loadVessels);
+  loadVessels();
+  window.setInterval(function(){
+    if (document.visibilityState === 'visible') loadVessels();
+  }, 60_000);
 })();
 </script>
 </body>

@@ -4,6 +4,7 @@ const assert = require("node:assert/strict");
 const buoysHandler = require("../api/buoys");
 const buoyDetailHandler = require("../api/buoy/[id]");
 const matchmakerHandler = require("../api/matchmaker");
+const sooVesselsHandler = require("../api/soo-vessels");
 
 function responseRecorder() {
   return {
@@ -102,4 +103,120 @@ test("dynamic endpoints reject unsupported or malformed requests predictably", a
   const wrongMethodResponse = responseRecorder();
   await matchmakerHandler({ method: "GET" }, wrongMethodResponse);
   assert.equal(wrongMethodResponse.statusCode, 405);
+
+  const wrongSooMethodResponse = responseRecorder();
+  await sooVesselsHandler({ method: "POST" }, wrongSooMethodResponse);
+  assert.equal(wrongSooMethodResponse.statusCode, 405);
+  assert.equal(wrongSooMethodResponse.headers.allow, "GET");
+});
+
+test("Soo Locks AIS endpoint keeps missing credentials private and falls back safely", async () => {
+  const previousKey = process.env.AISSTREAM_API_KEY;
+  delete process.env.AISSTREAM_API_KEY;
+
+  try {
+    const response = responseRecorder();
+    await sooVesselsHandler({ method: "GET" }, response);
+    assert.equal(response.statusCode, 200);
+    assert.equal(response.headers["x-data-fallback"], "map-only");
+    assert.equal(response.body.status, "unavailable");
+    assert.equal(response.body.reason, "missing_configuration");
+    assert.deepEqual(response.body.vessels, []);
+    assert.ok(!JSON.stringify(response.body).includes("AISSTREAM_API_KEY"));
+  } finally {
+    if (previousKey === undefined) delete process.env.AISSTREAM_API_KEY;
+    else process.env.AISSTREAM_API_KEY = previousKey;
+  }
+});
+
+test("Soo Locks AIS parser accepts valid position reports and rejects bad coordinates", () => {
+  const valid = sooVesselsHandler.parseAisMessage({
+    MessageType: "PositionReport",
+    MetaData: {
+      MMSI: 366904930,
+      ShipName: "LAKE FREIGHTER@@@@",
+      time_utc: "2026-07-20T03:00:00Z",
+    },
+    Message: {
+      PositionReport: {
+        UserID: 366904930,
+        Latitude: 46.5036,
+        Longitude: -84.36,
+        Sog: 7.4,
+        Cog: 92.5,
+        TrueHeading: 91,
+      },
+    },
+  });
+
+  assert.deepEqual(valid, {
+    mmsi: "366904930",
+    name: "LAKE FREIGHTER",
+    latitude: 46.5036,
+    longitude: -84.36,
+    course: 92.5,
+    heading: 91,
+    speed: 7.4,
+    received_at: "2026-07-20T03:00:00Z",
+  });
+
+  assert.equal(
+    sooVesselsHandler.parseAisMessage({
+      MessageType: "PositionReport",
+      MetaData: { MMSI: 366904930 },
+      Message: { PositionReport: { Latitude: 0, Longitude: 0 } },
+    }),
+    null,
+  );
+});
+
+test("Soo Locks AIS snapshot sends a bounded server-side subscription and deduplicates vessels", async () => {
+  let subscription;
+
+  class FakeWebSocket {
+    constructor() {
+      this.readyState = 0;
+      setImmediate(() => {
+        this.readyState = 1;
+        this.onopen();
+      });
+    }
+
+    send(value) {
+      subscription = JSON.parse(value);
+      const message = JSON.stringify({
+        MessageType: "StandardClassBPositionReport",
+        MetaData: { MMSI: 316001234, ShipName: "TEST SHIP" },
+        Message: {
+          StandardClassBPositionReport: {
+            UserID: 316001234,
+            Latitude: 46.51,
+            Longitude: -84.35,
+            Sog: 3.2,
+            Cog: 180,
+          },
+        },
+      });
+      setImmediate(() => {
+        this.onmessage({ data: message });
+        this.onmessage({ data: message });
+      });
+    }
+
+    close() {
+      this.readyState = 3;
+    }
+  }
+
+  const vessels = await sooVesselsHandler.collectVesselSnapshot("server-only-key", {
+    WebSocketImpl: FakeWebSocket,
+    captureMs: 20,
+    connectTimeoutMs: 100,
+  });
+
+  assert.equal(subscription.APIKey, "server-only-key");
+  assert.deepEqual(subscription.BoundingBoxes, [[[46.36, -84.58], [46.66, -84.14]]]);
+  assert.ok(subscription.FilterMessageTypes.includes("PositionReport"));
+  assert.equal(vessels.length, 1);
+  assert.equal(vessels[0].name, "TEST SHIP");
 });
