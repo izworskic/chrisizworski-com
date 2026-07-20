@@ -136,8 +136,18 @@ h2.section-head{font-size:22px;font-weight:normal;color:#2c5f2d;margin:36px 0 14
 .link-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
 .link-row a{font-size:13px;color:#2c5f2d;border:1px solid #c8dfc8;border-radius:2px;padding:4px 10px;background:#f4f9f4}
 .link-row a:hover{background:#e4f2e4;text-decoration:none}
+.discovery-panel{margin:34px 0;padding:22px;border:1px solid #d9d3c8;border-top:4px solid #2c5f2d;border-radius:5px;background:#fff}
+.discovery-panel h2{font-size:22px;font-weight:normal;color:#2c5f2d;margin:0 0 8px}
+.discovery-panel>p{font-size:14px;margin-bottom:16px;color:#555}
+.home-tool-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.home-tool{display:flex;flex-direction:column;align-items:flex-start;border:1px solid #e5dfd5;border-radius:4px;padding:14px;background:#faf9f6}
+.home-tool strong{font-size:15px;line-height:1.35;color:#2c2c2c;margin-bottom:4px}
+.home-tool span{font-size:12px;line-height:1.45;color:#666;margin-bottom:10px}
+.home-tool a{display:inline-flex;align-items:center;min-height:38px;margin-top:auto;font:700 12px/1.2 Arial,sans-serif}
+.all-tools-cta{display:inline-flex;align-items:center;min-height:42px;padding:8px 14px;border-radius:3px;background:#2c5f2d;color:#fff;font:700 13px/1.2 Arial,sans-serif;text-decoration:none}
+.all-tools-cta:hover{background:#214a22;color:#fff;text-decoration:none}
 .footer{text-align:center;padding:20px;border-top:1px solid #e8e4dc;font-size:13px;color:#999;margin-top:48px}
-@media(max-width:640px){h1.page-title{font-size:28px}}
+@media(max-width:640px){h1.page-title{font-size:28px}.home-tool-grid{grid-template-columns:1fr}.all-tools-cta{width:100%;justify-content:center}}
 </style>
 
 
@@ -160,8 +170,12 @@ h2.section-head{font-size:22px;font-weight:normal;color:#2c5f2d;margin:36px 0 14
 <meta name="twitter:image:alt" content="Chris Izworski verified profile preview image">
 <meta name="thumbnail" content="https://chrisizworski.com/assets/search/chris-izworski-profile.png">
 <meta itemprop="image" content="https://chrisizworski.com/assets/search/chris-izworski-profile.png">
+<script defer src="/_vercel/insights/script.js"></script>
+<script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+<script defer src="/assets/tool-engagement.js"></script>
 </head>
-<body>
+<body data-analytics-page="home">
 <div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
 <div class="nav">
 <a href="/" class="active">Home</a>
@@ -194,6 +208,34 @@ h2.section-head{font-size:22px;font-weight:normal;color:#2c5f2d;margin:36px 0 14
 <p>He now works as a Solutions Consultant at Prepared, a technology company that deploys audio collection and analysis hardware at 911 centers nationwide. The work involves hands-on technical integration with call handling equipment from Motorola VESTA, Intrado Viper, Solacom, and other vendors, the systems inside dispatch centers that receive every emergency call.</p>
 
 <p>Chris presented the Saginaw County AI case study at APCO International, one of the largest public safety communications conferences in the world. He has spoken to state 911 committees, Michigan broadcast audiences, and national trade publications about what AI deployment actually looks like at the operational level, not as a concept, but as a live system handling real call volume. The <a href="/speaking/">speaking and presentation record is documented here</a>.</p>
+
+<section class="discovery-panel" aria-labelledby="live-tools-by-chris">
+  <h2 id="live-tools-by-chris">Live Michigan and Great Lakes tools by Chris Izworski</h2>
+  <p>Free, practical tools built around current vessel, weather, water, and outdoor conditions.</p>
+  <div class="home-tool-grid">
+    <div class="home-tool">
+      <strong>Soo Locks Live Vessel Map</strong>
+      <span>Ships near the locks, navigation status, and passage resources.</span>
+      <a href="/soo-locks/" data-track-tool="soo-locks" data-placement="home-featured">Open vessel map &rarr;</a>
+    </div>
+    <div class="home-tool">
+      <strong>Northern Lights Michigan</strong>
+      <span>Live NOAA aurora forecast and Michigan dark-sky locations.</span>
+      <a href="/northern-lights-michigan/" data-track-tool="northern-lights-michigan" data-placement="home-featured">Check tonight &rarr;</a>
+    </div>
+    <div class="home-tool">
+      <strong>Great Lakes Buoy Dashboard</strong>
+      <span>Reporting NOAA waves, wind, and water temperatures.</span>
+      <a href="/great-lakes-buoys/" data-track-tool="great-lakes-buoys" data-placement="home-featured">View conditions &rarr;</a>
+    </div>
+    <div class="home-tool">
+      <strong>Michigan Outdoors Now</strong>
+      <span>Three day-trip plans ranked for today's conditions and your group.</span>
+      <a href="https://michigan-outdoors-now.vercel.app" target="_blank" rel="noopener" data-track-tool="michigan-outdoors-now" data-placement="home-featured">Plan a day trip &rarr;</a>
+    </div>
+  </div>
+  <a class="all-tools-cta" href="/tools/" data-track-tool="all-tools" data-placement="home-featured">Browse all free tools &rarr;</a>
+</section>
 
 <h2 class="section-head">Background and Career</h2>
 

@@ -12,8 +12,10 @@ const intentionalChanges = new Set([
   "/",
   "/tools/",
   "/great-lakes/",
+  "/great-lakes-beaches/",
   "/guides/",
   "/great-lakes-buoys/",
+  "/great-lakes-freighter-tracking/",
   "/great-lakes-gazette/",
   "/lake-superior-circle-tour/",
   "/northern-lights-michigan/",
@@ -85,10 +87,57 @@ const toolsItemList = toolsJsonLd?.["@graph"]?.find((entry) => entry["@type"] ==
 if (toolsItemList?.numberOfItems !== 19 || toolsItemList?.itemListElement?.length !== 19) {
   failures.push("Tools ItemList does not contain exactly 19 entries");
 }
+if (!toolsHtml.includes("Free Michigan and Great Lakes Tools") || !toolsHtml.includes("Start with the live tools")) {
+  failures.push("Tools discovery title or featured-tools section is missing");
+}
+if ((toolsHtml.match(/data-featured-tool=/g) || []).length !== 6 || (toolsHtml.match(/class="tool-cta"/g) || []).length !== 6) {
+  failures.push("Tools page does not contain exactly six featured tool cards and calls to action");
+}
+if ((toolsHtml.match(/data-track-cluster=/g) || []).length < 5) {
+  failures.push("Tools page is missing category jump links");
+}
 
 const sitemap = await readFile(path.join(publicRoot, "sitemap.xml"), "utf8");
-if (!/<loc>https:\/\/chrisizworski\.com\/tools\/<\/loc>\s*<lastmod>2026-07-19<\/lastmod>/.test(sitemap)) {
+if (!/<loc>https:\/\/chrisizworski\.com\/tools\/<\/loc>\s*<lastmod>2026-07-20<\/lastmod>/.test(sitemap)) {
   failures.push("Tools sitemap last-modified date was not updated");
+}
+for (const route of [
+  "",
+  "great-lakes/",
+  "soo-locks/",
+  "northern-lights-michigan/",
+  "great-lakes-buoys/",
+  "great-lakes-beaches/",
+]) {
+  const escapedRoute = route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const pattern = new RegExp(`<loc>https:\\/\\/chrisizworski\\.com\\/${escapedRoute}<\\/loc>\\s*<lastmod>2026-07-20<\\/lastmod>`);
+  if (!pattern.test(sitemap)) failures.push(`Sitemap last-modified date is stale for /${route}`);
+}
+
+const discoveryPages = [
+  "index.html",
+  "tools/index.html",
+  "great-lakes/index.html",
+  "soo-locks/index.html",
+  "northern-lights-michigan/index.html",
+  "great-lakes-buoys/index.html",
+  "great-lakes-gazette/index.html",
+  "great-lakes-freighter-tracking/index.html",
+  "great-lakes-beaches/index.html",
+];
+for (const relativePath of discoveryPages) {
+  const html = await readFile(path.join(publicRoot, relativePath), "utf8");
+  if (!html.includes('/_vercel/insights/script.js')) failures.push(`${relativePath}: Web Analytics script is missing`);
+  if (!html.includes('/_vercel/speed-insights/script.js')) failures.push(`${relativePath}: Speed Insights script is missing`);
+}
+
+const greatLakesHub = await readFile(path.join(publicRoot, "great-lakes", "index.html"), "utf8");
+if ((greatLakesHub.match(/data-featured-tool=/g) || []).length !== 6) {
+  failures.push("Great Lakes hub does not contain exactly six featured live tools");
+}
+const historySection = greatLakesHub.match(/<h2 class="sh">History and Heritage<\/h2>([\s\S]*?)<h2 class="sh">/)?.[1] || "";
+if (/\/(?:soo-locks|northern-lights-michigan|great-lakes-buoys)\//.test(historySection)) {
+  failures.push("A live Great Lakes tool remains misclassified under History and Heritage");
 }
 
 const circleTour = await readFile(path.join(publicRoot, "lake-superior-circle-tour", "index.html"), "utf8");
