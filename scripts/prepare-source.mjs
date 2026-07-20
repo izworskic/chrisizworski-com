@@ -1,33 +1,47 @@
 #!/usr/bin/env node
 
-import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { access, copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
 const auditRoot = path.join(root, "audit", "live");
 const publicRoot = path.join(root, "public");
 const manifest = JSON.parse(await readFile(path.join(auditRoot, "manifest.json"), "utf8"));
+const snapshotRoot = path.join(auditRoot, "snapshot");
+let rebuildFromSnapshot = true;
 
-await rm(publicRoot, { recursive: true, force: true });
-await mkdir(publicRoot, { recursive: true });
+try {
+  await access(snapshotRoot);
+} catch {
+  rebuildFromSnapshot = false;
+}
 
 const copiedPaths = new Set();
-for (const record of manifest.records) {
-  if (record.status !== 200 || record.search || !record.snapshotPath) continue;
-  if (record.pathname.startsWith("/api/")) continue;
-  if (copiedPaths.has(record.pathname)) continue;
+if (rebuildFromSnapshot) {
+  await rm(publicRoot, { recursive: true, force: true });
+  await mkdir(publicRoot, { recursive: true });
 
-  const contentType = record.headers?.["content-type"] || "";
-  let destination;
-  if (record.pathname === "/") destination = path.join(publicRoot, "index.html");
-  else if (record.pathname.endsWith("/")) destination = path.join(publicRoot, record.pathname, "index.html");
-  else if (contentType.includes("text/html") && !path.extname(record.pathname)) {
-    destination = path.join(publicRoot, `${record.pathname}.html`);
-  } else destination = path.join(publicRoot, record.pathname);
+  for (const record of manifest.records) {
+    if (record.status !== 200 || record.search || !record.snapshotPath) continue;
+    if (record.pathname.startsWith("/api/")) continue;
+    if (copiedPaths.has(record.pathname)) continue;
 
-  await mkdir(path.dirname(destination), { recursive: true });
-  await copyFile(path.join(auditRoot, record.snapshotPath), destination);
-  copiedPaths.add(record.pathname);
+    const contentType = record.headers?.["content-type"] || "";
+    let destination;
+    if (record.pathname === "/") destination = path.join(publicRoot, "index.html");
+    else if (record.pathname.endsWith("/")) destination = path.join(publicRoot, record.pathname, "index.html");
+    else if (contentType.includes("text/html") && !path.extname(record.pathname)) {
+      destination = path.join(publicRoot, `${record.pathname}.html`);
+    } else destination = path.join(publicRoot, record.pathname);
+
+    await mkdir(path.dirname(destination), { recursive: true });
+    await copyFile(path.join(auditRoot, record.snapshotPath), destination);
+    copiedPaths.add(record.pathname);
+  }
+} else {
+  // Repositories created from a Vercel export may intentionally omit the large audit snapshot.
+  // In that case, preserve the checked-in public source instead of deleting a working site.
+  await access(path.join(publicRoot, "index.html"));
 }
 
 const toolsPath = path.join(publicRoot, "tools", "index.html");
@@ -66,7 +80,7 @@ if (!toolsHtml.includes(toolUrl)) {
     entry.position = index + 1;
   });
   itemList.numberOfItems = itemList.itemListElement.length;
-  collectionPage.dateModified = "2026-07-19";
+  collectionPage.dateModified = "2026-07-20";
   toolsHtml = toolsHtml.replace(match[1], JSON.stringify(structuredData));
 
   const tripPlannerHeading = '<h2 class="sh">Trip Planners</h2>';
@@ -84,10 +98,21 @@ await writeFile(toolsPath, toolsHtml);
 
 const sitemapPath = path.join(publicRoot, "sitemap.xml");
 let sitemap = await readFile(sitemapPath, "utf8");
-sitemap = sitemap.replace(
-  /(<loc>https:\/\/chrisizworski\.com\/tools\/<\/loc>\s*<lastmod>)[^<]+(<\/lastmod>)/,
-  "$12026-07-19$2",
-);
+for (const route of [
+  "",
+  "great-lakes/",
+  "tools/",
+  "soo-locks/",
+  "northern-lights-michigan/",
+  "great-lakes-buoys/",
+  "great-lakes-beaches/",
+]) {
+  const escapedRoute = route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  sitemap = sitemap.replace(
+    new RegExp(`(<loc>https:\\/\\/chrisizworski\\.com\\/${escapedRoute}<\\/loc>\\s*<lastmod>)[^<]+(<\\/lastmod>)`),
+    "$12026-07-20$2",
+  );
+}
 await writeFile(sitemapPath, sitemap);
 
 const buoyPagePath = path.join(publicRoot, "great-lakes-buoys", "index.html");
@@ -133,7 +158,10 @@ let projectsPage = await readFile(projectsPath, "utf8");
 projectsPage = projectsPage.replaceAll("great-lakes-gazette.vercel.app", "gazette.chrisizworski.com");
 await writeFile(projectsPath, projectsPage);
 
-const buoySnapshot = JSON.parse(await readFile(path.join(auditRoot, "snapshot", "api", "buoys.json"), "utf8"));
+const buoySnapshotPath = rebuildFromSnapshot
+  ? path.join(snapshotRoot, "api", "buoys.json")
+  : path.join(root, "data", "buoy-fallback.json");
+const buoySnapshot = JSON.parse(await readFile(buoySnapshotPath, "utf8"));
 await mkdir(path.join(root, "data"), { recursive: true });
 await writeFile(
   path.join(root, "data", "buoy-stations.json"),
@@ -148,6 +176,7 @@ await writeFile(path.join(root, "data", "buoy-fallback.json"), `${JSON.stringify
 const sourceSummary = {
   generatedAt: new Date().toISOString(),
   copiedPublicPaths: copiedPaths.size,
+  sourceMode: rebuildFromSnapshot ? "audit-snapshot" : "checked-in-public-fallback",
   toolAdded: toolsHtml.includes(toolUrl),
   toolSchemaItems: 19,
   knownBrokenInternalLinksFixed: 3,

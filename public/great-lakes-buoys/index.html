@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Great Lakes Buoy Dashboard: Live Wave Height, Wind, Water Temperature | Chris Izworski</title>
-<meta name="description" content="Live data from 100+ NOAA buoys and coastal stations across all five Great Lakes. Wave height, wind speed, water temperature, air pressure on an interactive map. Activity filters for fishing, kayaking, swimming, sailing, diving. Built by Chris Izworski, Bay City Michigan.">
+<title>Great Lakes Buoy Dashboard | Chris Izworski</title>
+<meta name="description" content="Check live NOAA Great Lakes buoy conditions on an interactive map: wave height, wind, water temperature, pressure, and filters for boating and fishing.">
 <link rel="canonical" href="https://chrisizworski.com/great-lakes-buoys/">
-<meta property="og:title" content="Great Lakes Buoy Dashboard: Live Wave, Wind, and Water Conditions">
+<meta property="og:title" content="Great Lakes Buoy Dashboard: Live Lake Conditions">
 <meta property="og:description" content="Real-time data from 100+ NOAA stations across Lakes Superior, Michigan, Huron, Erie, and Ontario. Interactive map, activity filters, geolocation-based recommendations.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://chrisizworski.com/great-lakes-buoys/">
@@ -26,7 +26,7 @@
   "@graph": [
     {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},
     {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","givenName":"Chris","familyName":"Izworski","url":"https://chrisizworski.com/","sameAs":["https://www.wikidata.org/wiki/Q138283432","https://chrisizworski.com/","https://www.linkedin.com/in/chrisizworski"],"address":{"@type":"PostalAddress","addressLocality":"Bay City","addressRegion":"MI","addressCountry":"US"},"description":"Sales engineer at Prepared, former Bay County 911 Director (2013-2022) and Saginaw County 911 Executive Director (2022-2025), board member of Save Our Shoreline, lifelong Great Lakes researcher and writer based in Bay City, Michigan."},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/great-lakes-buoys/","name":"Great Lakes Buoy Dashboard","description":"Live data from more than 100 NOAA buoys and coastal stations across the Great Lakes with an interactive map and activity-based viewing recommendations.","url":"https://chrisizworski.com/great-lakes-buoys/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-07-19","inLanguage":"en-US","mainContentOfPage":{"@type":"WebPageElement","cssSelector":"#buoyMap"}},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/great-lakes-buoys/","name":"Great Lakes Buoy Dashboard","description":"Live data from more than 100 NOAA buoys and coastal stations across the Great Lakes with an interactive map and activity-based viewing recommendations.","url":"https://chrisizworski.com/great-lakes-buoys/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-07-20","inLanguage":"en-US","mainContentOfPage":{"@type":"WebPageElement","cssSelector":"#buoyMap"}},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Great Lakes Buoys","item":"https://chrisizworski.com/great-lakes-buoys/"}]}
   ]
 }
@@ -211,6 +211,9 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
   .current-conditions{grid-template-columns:repeat(2,1fr)}
 }
 </style>
+<script defer src="/_vercel/insights/script.js"></script>
+<script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body>
 <div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>

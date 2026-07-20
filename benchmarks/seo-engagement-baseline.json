@@ -1,0 +1,62 @@
+{
+  "baselineDate": "2026-07-20",
+  "timezone": "America/Detroit",
+  "productionCommitBeforeRelease": "967ddc4a804709a9dbf2e4e7d030130d372f6fec",
+  "scope": [
+    "/",
+    "/tools/",
+    "/great-lakes/",
+    "/soo-locks/",
+    "/northern-lights-michigan/",
+    "/great-lakes-buoys/",
+    "/great-lakes-gazette/",
+    "/great-lakes-freighter-tracking/",
+    "/great-lakes-beaches/"
+  ],
+  "searchConsole": {
+    "status": "awaiting-28-day-export",
+    "clicks": null,
+    "impressions": null,
+    "ctr": null,
+    "averagePosition": null,
+    "note": "Null means not measured yet, not zero. Import a Google Search Console Pages and Queries export for the 28 days ending 2026-07-19."
+  },
+  "structuralBaseline": {
+    "toolsListed": 19,
+    "featuredToolCards": 0,
+    "explicitCallsToAction": 0,
+    "trackedToolLinks": 0,
+    "toolCategoryJumpLinks": 0,
+    "liveToolsMisclassifiedUnderHistory": 3,
+    "homeFeaturedToolLinks": 0,
+    "webAnalyticsScriptOnMeasuredPages": false,
+    "speedInsightsScriptOnMeasuredPages": false
+  },
+  "technicalGuardrails": {
+    "existingPublicUrlsRemoved": 0,
+    "canonicalUrlsChanged": 0,
+    "keyPagesExpectedStatus": 200,
+    "previewHostsExpectedRobotsHeader": "noindex, nofollow, noarchive"
+  },
+  "targets": {
+    "stretchOutcome": "10x 28-day organic clicks to the scoped tool cluster within 90-180 days",
+    "day30": {
+      "organicImpressionsMultiplier": 2,
+      "toolDestinationPageviewsMultiplier": 2,
+      "searchCtrRelativeLiftPercent": 25
+    },
+    "day60": {
+      "organicClicksMultiplier": 5,
+      "engagedToolVisitsMultiplier": 5
+    },
+    "day90To180": {
+      "organicClicksMultiplier": 10,
+      "engagedToolVisitsMultiplier": 10
+    },
+    "coreWebVitalsP75": {
+      "lcpMillisecondsMax": 2500,
+      "inpMillisecondsMax": 200,
+      "clsMax": 0.1
+    }
+  }
+}
