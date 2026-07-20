@@ -56,6 +56,11 @@ test("Soo Locks renders a first-party vessel map without restoring the refused i
   assert.ok(html.includes("https://ais.boatnerd.com/passage/port/soo-locks"));
   assert.ok(html.includes("https://www.marinetraffic.com"));
   assert.ok(!html.includes("AISSTREAM_API_KEY"));
+
+  const toolsHtml = readFileSync(path.join(__dirname, "../public/tools/index.html"), "utf8");
+  const guidesHtml = readFileSync(path.join(__dirname, "../public/guides/index.html"), "utf8");
+  assert.ok(toolsHtml.includes("Interactive live AIS vessel map at the Soo Locks"));
+  assert.ok(guidesHtml.includes("An interactive live AIS map for vessels near the Soo Locks"));
 });
 
 test("Buoy copy stays accurate as the live reporting count changes", () => {

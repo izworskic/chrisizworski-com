@@ -168,6 +168,14 @@ test("Soo Locks AIS parser accepts valid position reports and rejects bad coordi
     }),
     null,
   );
+
+  const missingMotion = sooVesselsHandler.parseAisMessage({
+    MessageType: "PositionReport",
+    MetaData: { MMSI: 366904930 },
+    Message: { PositionReport: { Latitude: 46.5036, Longitude: -84.36, Sog: null, Cog: null } },
+  });
+  assert.equal(missingMotion.speed, null);
+  assert.equal(missingMotion.course, null);
 });
 
 test("Soo Locks AIS snapshot sends a bounded server-side subscription and deduplicates vessels", async () => {
