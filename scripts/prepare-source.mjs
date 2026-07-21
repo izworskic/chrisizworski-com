@@ -46,7 +46,7 @@ if (rebuildFromSnapshot) {
 
 const toolsPath = path.join(publicRoot, "tools", "index.html");
 let toolsHtml = await readFile(toolsPath, "utf8");
-const toolUrl = "https://michigan-outdoors-now.vercel.app";
+const toolUrl = "https://michiganoutdoorsnow.chrisizworski.com";
 
 if (!toolsHtml.includes(toolUrl)) {
   const jsonLdPattern = /<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/i;
