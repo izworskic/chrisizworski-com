@@ -204,6 +204,14 @@ test("Mackinac endpoint combines official status, NOAA wind, and NWS forecast", 
     assert.equal(response.body.forecast.hours.length, 1);
     assert.equal(response.body.forecast.hours[0].gust_mph, 15);
     assert.equal(response.body.cameras.length, 2);
+    assert.deepEqual(
+      response.body.cameras.map((camera) => camera.id),
+      ["north", "south"],
+    );
+    assert.equal(
+      new Set(response.body.cameras.map((camera) => camera.image_url)).size,
+      2,
+    );
     assert.equal(response.body.thresholds[2].level, "escort");
     assert.match(response.headers["cache-control"], /s-maxage=60/);
   } finally {

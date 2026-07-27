@@ -61,6 +61,30 @@ test("the tool includes official NWS area radar without presenting it as bridge 
   assert.ok(js.includes("The NWS radar loop is temporarily unavailable"));
 });
 
+test("northbound and southbound selections stay aligned with distinct camera feeds", () => {
+  assert.match(
+    js,
+    /direction:\s*"northbound",\s*\n\s*camera:\s*"north"/,
+  );
+  assert.ok(js.includes('state.camera = direction === "southbound" ? "south" : "north"'));
+  assert.match(
+    html,
+    /aria-selected="true"[^>]*data-camera="north">Northbound — Mackinaw City looking north/,
+  );
+  assert.match(
+    html,
+    /data-camera="south">Southbound — St\. Ignace looking south/,
+  );
+  assert.match(
+    html,
+    /Choosing Northbound or Southbound above selects the matching approach view\./,
+  );
+  const cameraUrls = [...js.matchAll(/MacBridge_image\d+_[a-z]+\.jpg/g)].map(
+    (match) => match[0],
+  );
+  assert.equal(new Set(cameraUrls).size, 2);
+});
+
 test("the tool is responsive, reduced-motion aware, and analytics ready", () => {
   assert.ok(css.includes("@media (max-width: 680px)"));
   assert.ok(css.includes("@media (prefers-reduced-motion: reduce)"));

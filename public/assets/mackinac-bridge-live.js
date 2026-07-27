@@ -8,14 +8,14 @@
   var DETROIT_ZONE = "America/Detroit";
   var FALLBACK_CAMERAS = [
     {
-      id: "south",
-      label: "St. Ignace looking south",
-      image_url: "https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image2_large.jpg",
-    },
-    {
       id: "north",
       label: "Mackinaw City looking north",
       image_url: "https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image4_medium.jpg",
+    },
+    {
+      id: "south",
+      label: "St. Ignace looking south",
+      image_url: "https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image2_large.jpg",
     },
   ];
 
@@ -39,7 +39,7 @@
     data: null,
     vehicle: "car",
     direction: "northbound",
-    camera: "south",
+    camera: "north",
     selectedHour: null,
     loading: false,
   };
@@ -850,11 +850,14 @@
 
   function selectDirection(direction) {
     state.direction = direction;
+    state.camera = direction === "southbound" ? "south" : "north";
     document.querySelectorAll("[data-direction]").forEach(function (button) {
       var selected = button.dataset.direction === direction;
       button.classList.toggle("is-selected", selected);
       button.setAttribute("aria-pressed", String(selected));
     });
+    renderCameraTabs();
+    refreshCamera();
     if (state.data) {
       renderConfidence();
       renderPlanner();

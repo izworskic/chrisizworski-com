@@ -300,25 +300,25 @@
         <div>
           <p class="eyebrow">Current visual check</p>
           <h2 id="cameraHeading">Mackinac Bridge Webcam</h2>
-          <p>Official Bridge Authority camera images update about once each minute.</p>
+          <p>Official Bridge Authority camera images update about once each minute. Choosing Northbound or Southbound above selects the matching approach view.</p>
         </div>
         <a class="source-link" href="https://www.mackinacbridge.org/fares-traffic/bridge-cam/" target="_blank" rel="noopener">Open official camera page ↗</a>
       </div>
 
       <div class="camera-card">
         <div class="camera-tabs" role="tablist" aria-label="Bridge camera direction">
-          <button type="button" role="tab" aria-selected="true" class="camera-tab is-selected" data-camera="south">St. Ignace looking south</button>
-          <button type="button" role="tab" aria-selected="false" class="camera-tab" data-camera="north">Mackinaw City looking north</button>
+          <button type="button" role="tab" aria-selected="true" class="camera-tab is-selected" data-camera="north">Northbound — Mackinaw City looking north</button>
+          <button type="button" role="tab" aria-selected="false" class="camera-tab" data-camera="south">Southbound — St. Ignace looking south</button>
         </div>
         <div class="camera-frame">
-          <img id="cameraImage" alt="Current Mackinac Bridge camera view from St. Ignace looking south" width="1280" height="720">
+          <img id="cameraImage" alt="Current Mackinac Bridge camera view from Mackinaw City looking north" width="1280" height="720">
           <div class="camera-loading" id="cameraLoading">Loading the latest bridge image...</div>
           <div class="camera-overlay">
             <span><i class="camera-live-dot" aria-hidden="true"></i> Latest still image</span>
             <span id="cameraRefreshed">Refreshing...</span>
           </div>
         </div>
-        <p class="camera-caption" id="cameraCaption">Camera 2 from the St. Ignace dock looking south.</p>
+        <p class="camera-caption" id="cameraCaption">Camera 4 from Mackinaw City looking north.</p>
       </div>
     </section>
 
