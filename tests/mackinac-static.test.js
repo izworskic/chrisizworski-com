@@ -130,7 +130,7 @@ test("the tool includes official NWS area radar without presenting it as bridge 
   assert.ok(html.includes("https://radar.weather.gov/station/kapx/standard"));
   assert.match(html, /Radar shows precipitation, not bridge wind or crossing status/i);
   assert.ok(html.includes('id="radarImage"'));
-  assert.ok(js.includes("https://radar.weather.gov/ridge/standard/KAPX_loop.gif"));
+  assert.ok(js.includes('/api/mackinac-media?asset=radar'));
   assert.ok(js.includes("The NWS radar loop is temporarily unavailable"));
 });
 
@@ -152,10 +152,11 @@ test("northbound and southbound selections stay aligned with distinct camera fee
     html,
     /Choosing Northbound or Southbound above selects the matching approach view\./,
   );
-  const cameraUrls = [...js.matchAll(/MacBridge_image\d+_[a-z]+\.jpg/g)].map(
+  const cameraUrls = [...js.matchAll(/\/api\/mackinac-media\?asset=camera&direction=(?:north|south)/g)].map(
     (match) => match[0],
   );
   assert.equal(new Set(cameraUrls).size, 2);
+  assert.doesNotMatch(js, /mackinacbridge\.org\/wp-content\/camimages/);
 });
 
 test("the tool is responsive, reduced-motion aware, and analytics ready", () => {

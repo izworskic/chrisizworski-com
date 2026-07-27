@@ -2,6 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "functions": {
+    "api/mackinac-media.js": {
+      "maxDuration": 20
+    },
     "api/**/*.js": {
       "maxDuration": 10
     }
