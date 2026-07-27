@@ -8,11 +8,11 @@ This scorecard separates the tool build from the later site integration. The fea
 
 | Area | Weight | Current | Evidence |
 | --- | ---: | ---: | --- |
-| Immediate usefulness | 25 | 25 | Official status, nearby sustained wind and gust, two official cameras, 36-hour forecast, lane notes, vehicle answer, and best-window estimate |
-| Safety and data integrity | 25 | 25 | Official status is authoritative; nearby wind is labeled as a proxy; failures return unknown instead of open; MDOT sustained-wind thresholds are preserved |
+| Immediate usefulness | 25 | 25 | Official status, clearly labeled nearby wind and gust context, two official cameras, NWS KAPX radar, 36-hour approach forecast, lane notes, and a vehicle-specific answer |
+| Safety and data integrity | 25 | 25 | Official status is authoritative; no unpublished bridge-deck wind is inferred; nearby wind does not affect Crossing Confidence; failures return unknown instead of open |
 | Search readiness | 20 | 17 | Intent-led title, description, canonical, WebApplication schema, FAQ schema, and exact search-question headings are complete; internal hub links and sitemap are intentionally pending |
 | Experience and performance | 20 | 17 | Responsive controls, keyboard states, reduced-motion support, no client framework, and lightweight static assets are complete; production-preview visual signoff is pending |
-| Measurement | 10 | 10 | Vercel Web Analytics, Speed Insights, and vehicle, direction, forecast, camera, alert, refresh, and best-window interaction events |
+| Measurement | 10 | 10 | Vercel Web Analytics, Speed Insights, and vehicle, direction, forecast, camera, alert, and refresh interaction events |
 | **Total before integration** | **100** | **94** | The remaining six points are the preview visual signoff and the later Tools/sitemap integration |
 
 ## Live-data acceptance gates
@@ -20,8 +20,9 @@ This scorecard separates the tool build from the later site integration. The fea
 | Gate | Requirement |
 | --- | --- |
 | Official status | Read the current Mackinac Bridge Authority WordPress condition payload and normalize open, advisory, escort, partial, closed, or unknown |
-| Current wind | Choose the freshest usable NOAA observation from Mackinaw City or Mackinac Straits West |
-| Forecast | Return at least 24 hourly NWS periods when the feed is healthy and merge grid-based gust data |
+| Nearby wind context | Choose the freshest usable NOAA observation from Mackinaw City or Mackinac Straits West and never present it as a bridge-deck reading |
+| Forecast | Return at least 24 hourly NWS approach periods when the feed is healthy, merge grid-based gust data, and avoid predicting future bridge restrictions |
+| Radar | Load the official NWS Gaylord KAPX precipitation loop with an interactive-radar fallback and an explicit non-wind disclaimer |
 | Safe outage behavior | Never fall back to “all clear”; expose unavailable sources and cap confidence when official status cannot be confirmed |
 | Camera | Load official St. Ignace and Mackinaw City still images with a direct official-page fallback |
 | Vehicle logic | Distinguish passenger vehicles from MDOT high-profile categories and give direction-specific escort queue instructions |
@@ -38,7 +39,7 @@ This scorecard separates the tool build from the later site integration. The fea
 | Mackinac Bridge traffic today | Official lane notes, construction section, and Mi Drive link |
 | Mackinac Bridge weather | Hourly NWS wind, gust, precipitation, and condition cards |
 | Will the Mackinac Bridge close tomorrow? | Forecast threshold preview with an explicit no-prediction warning |
-| Best time to cross Mackinac Bridge | Vehicle-aware two-hour estimated crossing window |
+| Best time to cross Mackinac Bridge | Hourly approach-weather context plus an explicit warning that the tool cannot reliably forecast a best crossing window |
 
 ## Merge-day checklist
 
