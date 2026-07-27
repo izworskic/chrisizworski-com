@@ -37,10 +37,16 @@ test("Mackinac Bridge Live contains the complete crossing decision flow", () => 
 });
 
 test("the interface makes official status authoritative and nearby wind explicit", () => {
-  assert.match(html, /Bridge Authority status above controls/i);
-  assert.match(html, /nearest published NOAA observation, not the Authority's bridge-deck gauge/i);
+  assert.match(html, /Bridge Authority report controls/i);
+  assert.match(html, /Official bridge wind/i);
+  assert.match(html, /Nearby NOAA context/i);
+  assert.match(html, /exact bridge-deck wind or gust reading/i);
+  assert.ok(html.includes('id="windMismatchNotice"'));
   assert.match(html, /Planning aid, not an official safety decision/i);
   assert.ok(js.includes('var API_URL = "/api/mackinac"'));
+  assert.ok(js.includes("official?.bridge_wind"));
+  assert.ok(js.includes("windMismatch"));
+  assert.ok(js.includes("No confirmed crossing window"));
   assert.ok(js.includes("renderUnavailable"));
   assert.doesNotMatch(js, /title:\s*["']All Clear/i);
   assert.ok(js.includes("Notification.permission"));

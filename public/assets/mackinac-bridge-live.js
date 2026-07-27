@@ -167,6 +167,34 @@
     };
   }
 
+  function officialBridgeWind() {
+    return state.data?.official?.bridge_wind || null;
+  }
+
+  function windMismatch() {
+    var bridge = officialBridgeWind();
+    var nearby = state.data?.current_wind;
+    if (!bridge || !Number.isFinite(Number(bridge.min_mph))) return false;
+
+    var nearbyValues = [nearby?.wind_mph, nearby?.gust_mph]
+      .map(Number)
+      .filter(Number.isFinite);
+    if (!nearbyValues.length) return false;
+
+    return Number(bridge.min_mph) - Math.max.apply(null, nearbyValues) >= 5;
+  }
+
+  function formatNearbyWind(observation) {
+    if (!observation || !Number.isFinite(Number(observation.wind_mph))) {
+      return "Unavailable";
+    }
+    var value = Number(observation.wind_mph).toFixed(1) + " mph";
+    if (Number.isFinite(Number(observation.gust_mph))) {
+      value += " • gust " + Number(observation.gust_mph).toFixed(1) + " mph";
+    }
+    return value;
+  }
+
   function currentConfidence() {
     if (!state.data?.official) {
       return { score: 15, label: "Verify official status", level: "unknown" };
@@ -200,6 +228,13 @@
       if (gust >= 50) score -= highProfile ? 14 : 7;
       else if (gust >= 35) score -= highProfile ? 8 : 4;
       else if (gust >= 25) score -= highProfile ? 4 : 2;
+    }
+
+    var officialCaps = highProfile
+      ? { advisory: 55, escort: 30, partial: 0, closed: 0 }
+      : { advisory: 69, escort: 64, partial: 45, closed: 0 };
+    if (Number.isFinite(officialCaps[officialLevel])) {
+      score = Math.min(score, officialCaps[officialLevel]);
     }
 
     var currentHour = state.data.forecast?.hours?.[0];
@@ -262,6 +297,11 @@
   }
 
   function computeBestWindow() {
+    if (state.data?.official?.level !== "open") {
+      state.bestWindow = null;
+      return;
+    }
+
     var hours = state.data?.forecast?.hours || [];
     var now = Date.now() - 30 * 60 * 1000;
     var candidates = hours
@@ -326,11 +366,47 @@
         "The live Bridge Authority report could not be read. Open the official source before traveling.",
     );
 
+    var bridgeWind = officialBridgeWind();
+    if (bridgeWind) {
+      setText("bridgeWind", bridgeWind.label);
+      setText("bridgeWindDetail", "Authority warning band • sustained wind");
+    } else if (level === "open") {
+      setText("bridgeWind", "No wind restriction");
+      setText("bridgeWindDetail", "Exact bridge wind and gust are not published");
+    } else if (official?.wind_related) {
+      setText("bridgeWind", "Wind restriction active");
+      setText("bridgeWindDetail", "Exact bridge reading is not published");
+    } else {
+      setText("bridgeWind", "Not publicly reported");
+      setText("bridgeWindDetail", "Use the official status above");
+    }
+
     var wind = state.data?.current_wind;
-    setText("windSpeed", Number.isFinite(wind?.wind_mph) ? wind.wind_mph.toFixed(1) : "--");
-    setText("windGust", Number.isFinite(wind?.gust_mph) ? wind.gust_mph.toFixed(1) : "--");
-    setText("windDirection", wind ? cardinalDirection(wind.wind_direction_degrees) : "NOAA feed unavailable");
-    setText("windObserved", formatObserved(wind));
+    setText("nearbyWind", formatNearbyWind(wind));
+    setText(
+      "nearbyWindDetail",
+      wind
+        ? formatObserved(wind) + " • off-bridge • " + cardinalDirection(wind.wind_direction_degrees)
+        : "NOAA off-bridge feed unavailable",
+    );
+
+    var mismatchNotice = byId("windMismatchNotice");
+    if (windMismatch()) {
+      mismatchNotice.hidden = false;
+      mismatchNotice.textContent =
+        "Wind readings differ: the official report places bridge conditions in the " +
+        bridgeWind.label +
+        " sustained-wind band, while nearby off-bridge NOAA reports " +
+        Number(wind.wind_mph).toFixed(1) +
+        " mph sustained" +
+        (Number.isFinite(Number(wind.gust_mph))
+          ? " and a " + Number(wind.gust_mph).toFixed(1) + " mph gust"
+          : "") +
+        ". Use the official bridge report for crossing decisions.";
+    } else {
+      mismatchNotice.hidden = true;
+      mismatchNotice.textContent = "";
+    }
 
     var notes = official?.traffic_notes || [];
     setText("laneSummary", notes[0] || "No lane note posted");
@@ -454,10 +530,25 @@
     appendListItem(list, vehicleGuidance(official.level));
 
     var wind = state.data?.current_wind;
+    var bridgeWind = officialBridgeWind();
+    if (bridgeWind) {
+      appendListItem(
+        list,
+        "Official Authority wind band: " +
+          bridgeWind.label +
+          " sustained. This is the active restriction band, not an exact live gust.",
+      );
+    }
+    if (windMismatch()) {
+      appendListItem(
+        list,
+        "The off-bridge NOAA reading is much lower than the official bridge band. Do not use it to override the advisory or restriction.",
+      );
+    }
     if (wind && Number.isFinite(wind.wind_mph)) {
       appendListItem(
         list,
-        "Nearby NOAA reading: " +
+        "Nearby off-bridge NOAA context: " +
           wind.wind_mph.toFixed(1) +
           " mph sustained" +
           (Number.isFinite(wind.gust_mph) ? ", gusting " + wind.gust_mph.toFixed(1) + " mph" : "") +
@@ -559,12 +650,34 @@
   }
 
   function renderBestWindow() {
+    var officialLevel = state.data?.official?.level || "unknown";
+    var showWindowButton = byId("showWindowButton");
+    if (officialLevel !== "open") {
+      setText("bestWindow", "No confirmed crossing window");
+      setText("bestWindowShort", "No confirmed window");
+      setText(
+        "bestWindowReason",
+        officialLevel === "unknown" ? "Official status unavailable" : "Official restriction active",
+      );
+      setText(
+        "bestWindowDetail",
+        officialLevel === "unknown"
+          ? "A crossing window cannot be recommended until the official bridge status is available."
+          : "The bridge is under an official restriction. An off-bridge approach forecast cannot predict bridge-deck wind or when the Authority will change the status.",
+      );
+      showWindowButton.disabled = true;
+      showWindowButton.textContent = "No official window available";
+      return;
+    }
+
     var best = state.bestWindow;
     if (!best) {
       setText("bestWindow", "Hourly forecast unavailable");
       setText("bestWindowShort", "Unavailable");
       setText("bestWindowReason", "Check the NWS source");
       setText("bestWindowDetail", "No reliable hour-by-hour window can be calculated right now.");
+      showWindowButton.disabled = true;
+      showWindowButton.textContent = "Forecast unavailable";
       return;
     }
 
@@ -589,17 +702,13 @@
     setText("bestWindow", range);
     setText("bestWindowShort", range);
     setText("bestWindowReason", reason);
+    showWindowButton.disabled = false;
+    showWindowButton.textContent = "Show in forecast ↓";
 
-    var detail =
-      "This window has the strongest combined score for your vehicle, forecast wind, weather, and typical peak traffic timing.";
-    if (state.data?.official?.level === "closed") {
-      detail =
-        "The bridge is closed now. This is only the least-difficult weather window, not a reopening prediction.";
-    } else if (state.data?.official?.level === "partial" && isHighProfile()) {
-      detail =
-        "Your vehicle is restricted now. This forecast window does not replace an official reopening notice.";
-    }
-    setText("bestWindowDetail", detail);
+    setText(
+      "bestWindowDetail",
+      "This window has the strongest combined score for your vehicle, forecast wind, weather, and typical peak traffic timing.",
+    );
   }
 
   function renderTraffic() {
@@ -640,7 +749,9 @@
       return;
     }
 
-    var bestIndices = new Set(state.bestWindow?.indices || []);
+    var bestIndices = new Set(
+      state.data?.official?.level === "open" ? state.bestWindow?.indices || [] : [],
+    );
     hours.slice(0, 30).forEach(function (hour, index) {
       var band = hour.threshold_band || "normal";
       var button = document.createElement("button");

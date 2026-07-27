@@ -629,6 +629,24 @@ h1 {
   font-size: 10px;
 }
 
+.wind-mismatch-notice {
+  position: relative;
+  z-index: 1;
+  padding: 13px 24px;
+  color: #fff5dc;
+  background: #71421d;
+  border-top: 1px solid rgba(255, 238, 194, 0.28);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.wind-mismatch-notice[hidden] {
+  display: none;
+}
+
 .authority-note {
   padding: 13px 24px;
   color: rgba(255, 255, 255, 0.63);
@@ -955,6 +973,11 @@ legend {
   font-size: 10px;
   font-weight: 700;
   white-space: nowrap;
+}
+
+.text-button:disabled {
+  color: #8a938f;
+  cursor: not-allowed;
 }
 
 .camera-card {
@@ -1709,7 +1732,8 @@ legend {
     border-bottom: 0;
   }
 
-  .authority-note {
+  .authority-note,
+  .wind-mismatch-notice {
     padding-inline: 18px;
     text-align: left;
   }

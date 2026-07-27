@@ -5,6 +5,7 @@ const mackinacHandler = require("../api/mackinac");
 const {
   classifyBridgeStatus,
   mergeNwsForecast,
+  parseOfficialBridgeWind,
   parseOfficialConditions,
   parseWindSpeedMph,
   selectWindObservation,
@@ -45,6 +46,24 @@ const officialAllClear = {
   },
 };
 
+const officialHighWind = {
+  content: {
+    rendered: `
+      <div class="pf-content">
+        <h3 class="status">High Wind Warning</h3>
+        <div class="date">Monday, Jul 27 - 9:43 AM</div>
+        <div class="condition-description condition-2">
+          <p>Currently we are experiencing winds of sufficient force in the Straits area
+          (20 - 34 mph) to issue a warning to all motorists preparing to cross the Mackinac Bridge.</p>
+          <p>Motorists are instructed to reduce their speed to 20 miles per hour, turn on their
+          four way flashers, and utilize the outside lane.</p>
+          <p>The Mackinac Bridge Authority is monitoring wind speeds at various points along the structure.</p>
+          <p>Construction SB Lane</p>
+        </div>
+      </div>`,
+  },
+};
+
 const ndbcWind = `#YY  MM DD hh mm WDIR WSPD GST  WVHT DPD APD MWD PRES ATMP WTMP DEWP VIS PTDY TIDE
 #yr  mo dy hr mn degT m/s  m/s     m sec sec degT hPa degC degC degC nmi hPa ft
 2026 07 27 12 18 180  5.0  7.0    MM MM MM MM 1006.0 20.5 20.2 MM MM MM MM
@@ -56,8 +75,37 @@ test("official Bridge Authority HTML becomes a normalized live status", () => {
   assert.equal(parsed.level, "open");
   assert.equal(parsed.title, "All Clear, Have a Pleasant Trip!");
   assert.equal(parsed.updated_text, "Monday, Jul 27 - 8:49 AM");
+  assert.equal(parsed.bridge_wind, null);
+  assert.equal(parsed.wind_related, false);
   assert.deepEqual(parsed.traffic_notes, ["Construction SB Lane"]);
   assert.match(parsed.message, /no significant weather/i);
+});
+
+test("the official wind band outranks off-bridge weather without inventing an exact gust", () => {
+  const parsed = parseOfficialConditions(officialHighWind);
+  assert.equal(parsed.level, "advisory");
+  assert.equal(parsed.wind_related, true);
+  assert.deepEqual(parsed.bridge_wind, {
+    min_mph: 20,
+    max_mph: 34,
+    label: "20–34 mph",
+    basis: "sustained",
+    kind: "range",
+    exact: false,
+    is_bridge_gauge: true,
+    source_name: "Mackinac Bridge Authority",
+  });
+  assert.deepEqual(parsed.traffic_notes, ["Construction SB Lane"]);
+  assert.deepEqual(parseOfficialBridgeWind("Bridge Closed", "Winds of 65 mph and above"), {
+    min_mph: 65,
+    max_mph: null,
+    label: "65+ mph",
+    basis: "sustained",
+    kind: "minimum",
+    exact: false,
+    is_bridge_gauge: true,
+    source_name: "Mackinac Bridge Authority",
+  });
 });
 
 test("status classification preserves the official restriction hierarchy", () => {

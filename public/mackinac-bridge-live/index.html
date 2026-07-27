@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mackinac Bridge Conditions Live: Wind &amp; Camera | Chris Izworski</title>
-<meta name="description" content="Check Mackinac Bridge conditions now: official status, nearby wind and gusts, live cameras, hourly forecast, RV guidance, and the best crossing window.">
+<meta name="description" content="Check Mackinac Bridge conditions now: official status and wind band, off-bridge NOAA context, live cameras, hourly forecast, RV guidance, and crossing outlook.">
 <link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-live/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#123f36">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Mackinac Bridge Conditions Live">
-<meta property="og:description" content="Can you cross the Mackinac Bridge easily right now? See the official status, nearby wind, cameras, hourly forecast, and personalized RV or trailer guidance in one place.">
+<meta property="og:description" content="Can you cross the Mackinac Bridge easily right now? See the official wind status first, plus off-bridge weather context, cameras, forecast, and RV or trailer guidance.">
 <meta property="og:url" content="https://chrisizworski.com/mackinac-bridge-live/">
 <meta property="og:image" content="https://chrisizworski.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -44,7 +44,7 @@
       "@id": "https://chrisizworski.com/mackinac-bridge-live/#page",
       "url": "https://chrisizworski.com/mackinac-bridge-live/",
       "name": "Mackinac Bridge Conditions Live: Wind, Camera and Crossing Tool",
-      "description": "A real-time Mackinac Bridge crossing tool combining the official bridge status, nearby NOAA wind observations, National Weather Service forecast, bridge cameras, vehicle guidance, and lane restrictions.",
+      "description": "A real-time Mackinac Bridge crossing tool combining the official bridge status and published wind band, off-bridge NOAA observations, National Weather Service forecast, bridge cameras, vehicle guidance, and lane restrictions.",
       "isPartOf": {"@id": "https://chrisizworski.com/#website"},
       "author": {"@id": "https://chrisizworski.com/#person"},
       "dateModified": "2026-07-27",
@@ -71,7 +71,8 @@
       "author": {"@id": "https://chrisizworski.com/#person"},
       "featureList": [
         "Official Mackinac Bridge Authority crossing status",
-        "Nearby NOAA wind speed and gust observations",
+        "Official Mackinac Bridge Authority wind band when published",
+        "Clearly labeled off-bridge NOAA wind and gust context",
         "Hour-by-hour National Weather Service wind forecast",
         "Live Mackinac Bridge camera views",
         "RV, camper, trailer, van, and pickup guidance",
@@ -116,7 +117,7 @@
       "name": "What is the best time to cross the Mackinac Bridge?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Use the estimated best crossing window on this page. It compares the next 24 hours of forecast wind, gusts, hazardous weather, official lane notes, and typical peak traffic periods. It is a planning estimate, not an official reopening prediction."
+        "text": "When the official bridge status is open, the estimated best crossing window compares the next 24 hours of forecast wind, gusts, hazardous weather, official lane notes, and typical peak traffic periods. The tool suppresses that recommendation during an active official restriction because an approach forecast cannot predict a reopening."
       }
     },
     {
@@ -178,7 +179,7 @@
       <div>
         <p class="eyebrow">Live crossing conditions</p>
         <h1>Mackinac Bridge Conditions Live</h1>
-        <p class="lede">Can you cross safely and easily right now? Official bridge status, nearby wind, cameras, forecast, and vehicle-specific guidance in one view.</p>
+        <p class="lede">Can you cross safely and easily right now? Official bridge status and wind conditions come first, with off-bridge weather context, cameras, forecast, and vehicle-specific guidance in one view.</p>
       </div>
       <div class="intro-badge" aria-label="Data refreshes every minute">
         <span>Auto refresh</span>
@@ -222,14 +223,14 @@
 
       <div class="metric-grid">
         <div class="metric">
-          <span class="metric-label">Nearby sustained wind</span>
-          <strong><span id="windSpeed">--</span> <small>mph</small></strong>
-          <span class="metric-detail" id="windDirection">NOAA observation</span>
+          <span class="metric-label">Official bridge wind</span>
+          <strong class="metric-text" id="bridgeWind">Checking...</strong>
+          <span class="metric-detail" id="bridgeWindDetail">From the official condition report</span>
         </div>
         <div class="metric">
-          <span class="metric-label">Nearby gust</span>
-          <strong><span id="windGust">--</span> <small>mph</small></strong>
-          <span class="metric-detail" id="windObserved">Waiting for station</span>
+          <span class="metric-label">Nearby NOAA context</span>
+          <strong class="metric-text" id="nearbyWind">Checking...</strong>
+          <span class="metric-detail" id="nearbyWindDetail">Off-bridge observation</span>
         </div>
         <div class="metric">
           <span class="metric-label">Lane / construction note</span>
@@ -243,8 +244,10 @@
         </div>
       </div>
 
+      <div class="wind-mismatch-notice" id="windMismatchNotice" role="note" hidden></div>
+
       <div class="authority-note">
-        <strong>Important:</strong> The Bridge Authority status above controls. The wind shown here is the nearest published NOAA observation, not the Authority's bridge-deck gauge. MDOT thresholds are based on sustained wind, not gusts.
+        <strong>Important:</strong> The Bridge Authority report controls. When it publishes a wind band, that official band is shown first. Its public report does not provide an exact bridge-deck wind or gust reading. NOAA values are off-bridge context only, and MDOT restrictions use sustained wind—not gusts.
       </div>
     </section>
 
@@ -462,7 +465,7 @@
         </details>
         <details>
           <summary>Is the wind shown here measured on the bridge?</summary>
-          <p>No. The current numeric wind is the freshest nearby NOAA observation from Mackinaw City or the western Straits. The Bridge Authority has its own gauges on the bridge and uses those for restriction decisions. That is why the official status always outranks the nearby number shown here.</p>
+          <p>The official wind band, when published, comes from the Mackinac Bridge Authority condition report and reflects its on-bridge monitoring. It is a restriction band, not an exact live gust. The separate NOAA number comes from Mackinaw City or the western Straits and is clearly labeled as off-bridge context. The official bridge report always controls.</p>
         </details>
         <details>
           <summary>Will the Mackinac Bridge close tomorrow?</summary>
