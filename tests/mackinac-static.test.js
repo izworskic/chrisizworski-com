@@ -131,6 +131,7 @@ test("the tool includes official NWS area radar without presenting it as bridge 
   assert.match(html, /Radar shows precipitation, not bridge wind or crossing status/i);
   assert.ok(html.includes('id="radarImage"'));
   assert.ok(js.includes('/api/mackinac-media?asset=radar'));
+  assert.ok(js.includes('RADAR_LOOP_URL.includes("?") ? "&" : "?"'));
   assert.ok(js.includes("The NWS radar loop is temporarily unavailable"));
 });
 
