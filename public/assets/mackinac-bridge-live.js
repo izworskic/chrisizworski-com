@@ -1023,7 +1023,8 @@
     image.classList.remove("is-loaded");
     loading.hidden = false;
     loading.textContent = "Loading official NWS radar...";
-    image.src = RADAR_LOOP_URL + "?fiveMinute=" + Math.floor(Date.now() / 300_000);
+    var separator = RADAR_LOOP_URL.includes("?") ? "&" : "?";
+    image.src = RADAR_LOOP_URL + separator + "fiveMinute=" + Math.floor(Date.now() / 300_000);
     setText(
       "radarRefreshed",
       "Requested " + formatDetroitTime(Date.now(), { hour: "numeric", minute: "2-digit" }),
