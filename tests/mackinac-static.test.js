@@ -41,8 +41,13 @@ test("Mackinac Bridge Live contains the complete crossing decision flow", () => 
   assert.ok(html.includes("Nervous about crossing? Bridge staff can drive your vehicle."));
   assert.ok(html.includes("Approach-road incidents and construction"));
   assert.ok(html.includes("Status changes observed by this browser"));
-  assert.ok(html.includes("Share crossing report"));
-  assert.ok(html.includes("sms:67283?body=MacBridge"));
+});
+
+test("the SMS text-alert link and share-report button are not present", () => {
+  assert.ok(!html.includes("Share crossing report"));
+  assert.ok(!html.includes("sms:67283?body=MacBridge"));
+  assert.ok(!html.includes('id="shareButton"'));
+  assert.ok(!html.includes('id="shareStatus"'));
 });
 
 test("the interface makes official status authoritative and nearby wind explicit", () => {
@@ -71,20 +76,21 @@ test("Crossing Confidence is categorical, explainable, and does not use nearby w
   assert.match(js, /official condition report is unavailable, so this tool will not infer/i);
 });
 
-test("vehicle, toll, assistance, approach-road, history, and sharing differentiators are wired", () => {
+test("vehicle, toll, assistance, approach-road, and history differentiators are wired", () => {
   assert.equal((html.match(/data-vehicle-feature=/g) || []).length, 4);
   assert.equal((html.match(/data-comfort=/g) || []).length, 2);
   assert.ok(js.includes("classifyVehicleFeatures"));
   assert.ok(js.includes("calculateToll"));
   assert.ok(js.includes("renderApproachTraffic"));
   assert.ok(js.includes("recordStatusObservation"));
-  assert.ok(js.includes("navigator.share"));
-  assert.ok(js.includes("navigator.clipboard"));
-  assert.ok(js.includes('url.searchParams.set("vehicle"'));
   assert.ok(js.includes("result.dataset.classification = vehicle"));
   assert.doesNotMatch(js, /result\.dataset\.vehicle\s*=/);
   assert.match(html, /device-local history, not an official Bridge Authority archive/i);
   assert.match(html, /does not publish a live crossing wait-time feed/i);
+});
+
+test("the sharing feature (SMS link and share button) was removed by design and stays removed", () => {
+  assert.doesNotMatch(js, /navigator\.share|navigator\.clipboard|shareCrossingReport|shareUrl\(\)/);
 });
 
 test("the published toll formula handles passenger, trailer, motorhome, and auto-tow cases", () => {
