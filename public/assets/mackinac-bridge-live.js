@@ -874,56 +874,6 @@
     track("driver-assistance-preference", { selected: state.assistance });
   }
 
-  function shareUrl() {
-    var url = new URL(window.location.href);
-    url.search = "";
-    url.hash = "";
-    url.searchParams.set("vehicle", state.vehicle);
-    url.searchParams.set("direction", state.direction);
-    return url.toString();
-  }
-
-  async function shareCrossingReport() {
-    var official = state.data?.official;
-    var confidence = currentConfidence();
-    var direction = state.direction === "northbound" ? "northbound to the U.P." : "southbound to the L.P.";
-    var text =
-      "Mackinac Bridge: " +
-      (official?.title || "official status unavailable") +
-      ". " +
-      VEHICLES[state.vehicle].label +
-      ", " +
-      direction +
-      ": " +
-      confidence.label +
-      ". Checked " +
-      formatDetroitTime(Date.now(), { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) +
-      ". Recheck the official status before leaving.";
-    var payload = {
-      title: "Mackinac Bridge crossing report",
-      text: text,
-      url: shareUrl(),
-    };
-
-    try {
-      if (navigator.share) {
-        await navigator.share(payload);
-        setText("shareStatus", "Crossing report shared.");
-      } else if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(text + " " + payload.url);
-        setText("shareStatus", "Timestamped crossing report copied to your clipboard.");
-      } else {
-        window.prompt("Copy this crossing report:", text + " " + payload.url);
-        setText("shareStatus", "Crossing report ready to copy.");
-      }
-      track("share-report", { vehicle: state.vehicle, direction: state.direction });
-    } catch (error) {
-      if (error?.name !== "AbortError") {
-        setText("shareStatus", "Sharing was unavailable. Copy the page address instead.");
-      }
-    }
-  }
-
   function renderForecast() {
     var trackElement = byId("forecastTrack");
     var hours = state.data?.forecast?.hours || [];
@@ -1209,7 +1159,7 @@
       track("page-alerts", { enabled: true });
     } else {
       storageSet(ALERT_KEY, "off");
-      setText("alertExplainer", "Browser notifications were not allowed. Use the official text-alert button instead.");
+      setText("alertExplainer", "Browser notifications were not allowed. Check this browser's site settings if you want to turn them on.");
       updateAlertButton();
     }
   }
@@ -1256,7 +1206,6 @@
       loadData({ manual: true });
     });
     byId("alertButton").addEventListener("click", toggleAlerts);
-    byId("shareButton").addEventListener("click", shareCrossingReport);
 
     document.querySelectorAll("[data-vehicle]").forEach(function (button) {
       button.addEventListener("click", function () {
