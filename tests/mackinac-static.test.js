@@ -122,7 +122,7 @@ test("supporting search pages exist, cross-link, and use the real licensed photo
 
 test("the tool includes official NWS area radar without presenting it as bridge conditions", () => {
   assert.ok(html.includes("https://radar.weather.gov/station/kapx/standard"));
-  assert.match(html, /Radar shows precipitation—not bridge wind or crossing status/i);
+  assert.match(html, /Radar shows precipitation, not bridge wind or crossing status/i);
   assert.ok(html.includes('id="radarImage"'));
   assert.ok(js.includes("https://radar.weather.gov/ridge/standard/KAPX_loop.gif"));
   assert.ok(js.includes("The NWS radar loop is temporarily unavailable"));
@@ -136,11 +136,11 @@ test("northbound and southbound selections stay aligned with distinct camera fee
   assert.ok(js.includes('state.camera = direction === "southbound" ? "south" : "north"'));
   assert.match(
     html,
-    /aria-selected="true"[^>]*data-camera="north">Northbound — Mackinaw City looking north/,
+    /aria-selected="true"[^>]*data-camera="north">Northbound, Mackinaw City looking north/,
   );
   assert.match(
     html,
-    /data-camera="south">Southbound — St\. Ignace looking south/,
+    /data-camera="south">Southbound, St\. Ignace looking south/,
   );
   assert.match(
     html,
