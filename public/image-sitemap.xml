@@ -660,4 +660,32 @@
       <image:loc>https://chrisizworski.com/assets/michigan-boat-launches/saginaw-bay-hero.jpg</image:loc>
     </image:image>
   </url>
+  <url>
+    <loc>https://chrisizworski.com/mackinac-bridge-live/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/search/mackinac-bridge-live.jpg</image:loc>
+      <image:caption>Mackinac Bridge crossing the Straits of Mackinac</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/mackinac-bridge-rv-trailer-wind-rules/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/search/mackinac-bridge-live.jpg</image:loc>
+      <image:caption>Mackinac Bridge RV and trailer crossing guide</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/mackinac-bridge-driver-assistance/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/search/mackinac-bridge-live.jpg</image:loc>
+      <image:caption>Mackinac Bridge driver assistance guide</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/mackinac-bridge-tolls/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/search/mackinac-bridge-live.jpg</image:loc>
+      <image:caption>Mackinac Bridge toll calculator and fare guide</image:caption>
+    </image:image>
+  </url>
 </urlset>

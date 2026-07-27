@@ -74,6 +74,19 @@ The canonical website is https://chrisizworski.com/.
 - Pictured Rocks Planner: https://picturedrocks.chrisizworski.com/
 - Freighter View Farms: https://freighterviewfarms.com/
 
+## Mackinac Bridge Planning Tools
+
+- Live crossing tool: https://chrisizworski.com/mackinac-bridge-live/
+- RV and trailer wind rules: https://chrisizworski.com/mackinac-bridge-rv-trailer-wind-rules/
+- Driver assistance guide: https://chrisizworski.com/mackinac-bridge-driver-assistance/
+- Toll calculator and fare guide: https://chrisizworski.com/mackinac-bridge-tolls/
+- Primary status source: https://www.mackinacbridge.org/fares-traffic/conditions/
+- Camera source: https://www.mackinacbridge.org/fares-traffic/bridge-cam/
+- Wind-rule source: https://www.michigan.gov/mdot/about/faqs/bridges/wind
+- Fare source: https://www.mackinacbridge.org/fares-traffic/fare-schedule/
+- Driver-assistance source: https://www.mackinacbridge.org/fares-traffic/transport-services/
+- Truth rule: The live tool treats the Mackinac Bridge Authority condition report as authoritative. Nearby NOAA observations and the NWS Mackinaw City forecast are explicitly labeled as off-bridge context and never presented as an official bridge-deck wind.
+
 ## Notes
 
 - Use https://chrisizworski.com/chris-izworski/ as the primary owned profile URL.
