@@ -2,18 +2,18 @@
 
 Build date: July 27, 2026 (America/Detroit)
 
-This scorecard separates the tool build from the later site integration. The feature branch intentionally does not add the route to the Tools hub or sitemap. Those changes should happen only after the live preview is accepted and the pull request is ready to merge.
+This scorecard covers the finished tool and its search cluster. The live route, three supporting guides, site hubs, internal links, structured data, image sitemap, primary sitemap, and machine-readable site summary are included on the feature branch for review.
 
 ## Build-quality matrix
 
 | Area | Weight | Current | Evidence |
 | --- | ---: | ---: | --- |
-| Immediate usefulness | 25 | 25 | Official status, clearly labeled nearby wind and gust context, two official cameras, NWS KAPX radar, 36-hour approach forecast, lane notes, and a vehicle-specific answer |
-| Safety and data integrity | 25 | 25 | Official status is authoritative; no unpublished bridge-deck wind is inferred; nearby wind does not affect Crossing Confidence; failures return unknown instead of open |
-| Search readiness | 20 | 17 | Intent-led title, description, canonical, WebApplication schema, FAQ schema, and exact search-question headings are complete; internal hub links and sitemap are intentionally pending |
-| Experience and performance | 20 | 17 | Responsive controls, keyboard states, reduced-motion support, no client framework, and lightweight static assets are complete; production-preview visual signoff is pending |
-| Measurement | 10 | 10 | Vercel Web Analytics, Speed Insights, and vehicle, direction, forecast, camera, alert, and refresh interaction events |
-| **Total before integration** | **100** | **94** | The remaining six points are the preview visual signoff and the later Tools/sitemap integration |
+| Immediate usefulness | 25 | 25 | Official status, clearly labeled nearby wind and gust context, two official cameras, NWS KAPX radar, 36-hour approach forecast, lane notes, Mi Drive approach events, tolls, driver assistance, and a vehicle-specific answer |
+| Safety and data integrity | 25 | 25 | Official status is authoritative; no unpublished bridge-deck wind or best window is inferred; confidence is categorical and excludes nearby weather; failures return unknown instead of open |
+| Search readiness | 20 | 20 | Intent-led metadata, canonical URLs, WebApplication/WebPage/Breadcrumb schema, visible question answers, three supporting intent pages, real-photo social preview, hub links, image sitemap, primary sitemap, and llms.txt coverage |
+| Experience and performance | 20 | 19 | Responsive controls, keyboard states, reduced-motion support, no client framework, device-local status history, shareable selections, and lightweight static assets are complete; production-preview visual signoff remains a merge-day gate |
+| Measurement | 10 | 10 | Vercel Web Analytics, Speed Insights, and vehicle, direction, forecast, camera, alert, refresh, share, classification, toll, and assistance interaction events |
+| **Total before production preview** | **100** | **99** | One point remains for desktop and phone visual signoff on the deployed preview |
 
 ## Live-data acceptance gates
 
@@ -26,6 +26,9 @@ This scorecard separates the tool build from the later site integration. The fea
 | Safe outage behavior | Never fall back to “all clear”; expose unavailable sources and cap confidence when official status cannot be confirmed |
 | Camera | Load official St. Ignace and Mackinaw City still images with a direct official-page fallback |
 | Vehicle logic | Distinguish passenger vehicles from MDOT high-profile categories and give direction-specific escort queue instructions |
+| Approach roads | Return nearby Mi Drive incidents and construction without claiming a bridge queue or wait time |
+| History | Keep only device-local observations from the last 24 hours and label them as incomplete, non-official history |
+| Fare logic | Apply the published lead-vehicle axle rate and the motorhome-towing-auto exception |
 
 ## Search-intent coverage
 
@@ -36,17 +39,18 @@ This scorecard separates the tool build from the later site integration. The fea
 | Mackinac Bridge wind speed | Nearby NOAA sustained-wind and gust cards |
 | Mackinac Bridge webcam | Two-view official camera section |
 | Mackinac Bridge conditions for RV | Vehicle selector, personalized answer, threshold scale, and escort locations |
-| Mackinac Bridge traffic today | Official lane notes, construction section, and Mi Drive link |
+| Mackinac Bridge traffic today | Official lane notes plus nearby Mi Drive incidents and construction within 25 miles |
 | Mackinac Bridge weather | Hourly NWS wind, gust, precipitation, and condition cards |
 | Will the Mackinac Bridge close tomorrow? | Forecast threshold preview with an explicit no-prediction warning |
 | Best time to cross Mackinac Bridge | Hourly approach-weather context plus an explicit warning that the tool cannot reliably forecast a best crossing window |
+| Mackinac Bridge toll | Interactive calculator plus a dedicated fare, towing, and payment guide |
+| Mackinac Bridge driver assistance | Direction-specific request instructions, current cost and phone number, plus a dedicated guide |
 
 ## Merge-day checklist
 
 1. Review the Vercel preview at desktop and phone widths.
 2. Confirm the live endpoint has official status, current wind, and at least 24 forecast hours.
-3. Add the route to the Tools hub and Great Lakes live-tool cluster.
-4. Add the canonical route to the primary sitemap and update the relevant modification dates.
-5. Keep preview hosts `noindex`; verify the custom domain remains indexable.
-6. Re-run the dedicated tests and the repository verification suite, separating any pre-existing guardrail drift from this feature.
-7. Record the launch date and begin 7-day, 30-day, and 90-day pageview, query, engagement, and Core Web Vitals checks.
+3. Confirm all four Mackinac routes and the real social-preview photograph render on the preview.
+4. Keep preview hosts `noindex`; verify the custom domain remains indexable.
+5. Re-run the dedicated tests and the repository verification suite.
+6. Record the launch date and begin 7-day, 30-day, and 90-day pageview, query, engagement, and Core Web Vitals checks.

@@ -5,6 +5,7 @@
   var RADAR_LOOP_URL = "https://radar.weather.gov/ridge/standard/KAPX_loop.gif";
   var STATUS_KEY = "mackinac-bridge-live:last-status:v1";
   var ALERT_KEY = "mackinac-bridge-live:page-alerts:v1";
+  var HISTORY_KEY = "mackinac-bridge-live:status-history:v1";
   var DETROIT_ZONE = "America/Detroit";
   var FALLBACK_CAMERAS = [
     {
@@ -42,6 +43,9 @@
     camera: "north",
     selectedHour: null,
     loading: false,
+    assistance: false,
+    classifiedVehicle: "car",
+    tollDirty: false,
   };
 
   function byId(id) {
@@ -163,75 +167,94 @@
   }
 
   function currentConfidence() {
-    if (!state.data?.official) {
-      return { score: 15, label: "Verify official status", level: "unknown" };
+    var official = state.data?.official;
+    if (!official?.available) {
+      return {
+        code: "VERIFY",
+        label: "Verify official status",
+        level: "unknown",
+        basis: "The official condition report is unavailable, so this tool will not infer a crossing answer.",
+      };
     }
 
-    var officialLevel = state.data.official.level || "unknown";
+    var officialLevel = official.level || "unknown";
     var highProfile = isHighProfile();
-    var scores = highProfile
-      ? { open: 91, advisory: 56, escort: 30, partial: 0, closed: 0, unknown: 15 }
-      : { open: 95, advisory: 80, escort: 72, partial: 50, closed: 0, unknown: 20 };
-    var score = scores[officialLevel] ?? scores.unknown;
+    var impact = laneImpact();
+    var confidence = {
+      code: "VERIFY",
+      label: "Verify official status",
+      level: officialLevel,
+      basis: "The official condition level could not be classified.",
+    };
 
-    var officialCaps = highProfile
-      ? { advisory: 55, escort: 30, partial: 0, closed: 0 }
-      : { advisory: 69, escort: 64, partial: 45, closed: 0 };
-    if (Number.isFinite(officialCaps[officialLevel])) {
-      score = Math.min(score, officialCaps[officialLevel]);
+    if (officialLevel === "closed") {
+      confidence = {
+        code: "CLOSED",
+        label: "Cannot cross",
+        level: officialLevel,
+        basis: "The Bridge Authority reports a full closure for every vehicle.",
+      };
+    } else if (officialLevel === "partial" && highProfile) {
+      confidence = {
+        code: "NO",
+        label: "Vehicle prohibited",
+        level: officialLevel,
+        basis: "High-profile vehicles and vehicles towing are prohibited during a partial closure.",
+      };
+    } else if (officialLevel === "partial") {
+      confidence = {
+        code: "LIMITED",
+        label: "Strict limits",
+        level: officialLevel,
+        basis: "Only passenger vehicles not towing may cross, subject to the posted restriction.",
+      };
+    } else if (officialLevel === "escort" && highProfile) {
+      confidence = {
+        code: "ESCORT",
+        label: "Escort required",
+        level: officialLevel,
+        basis: "Your selected vehicle must wait for a Bridge Authority escort.",
+      };
+    } else if (officialLevel === "escort") {
+      confidence = {
+        code: "CAUTION",
+        label: "Restricted crossing",
+        level: officialLevel,
+        basis: "Passenger traffic may continue, but an official wind restriction is active.",
+      };
+    } else if (officialLevel === "advisory") {
+      confidence = {
+        code: "CAUTION",
+        label: highProfile && official.wind_related ? "Wind-sensitive trip" : "Use caution",
+        level: officialLevel,
+        basis: official.wind_related
+          ? "An official high-wind advisory is active; follow posted speed and lane instructions."
+          : "An official weather advisory is active; follow the condition report and posted instructions.",
+      };
+    } else if (officialLevel === "open" && impact.matching) {
+      confidence = {
+        code: "AWARE",
+        label: "Open with lane note",
+        level: officialLevel,
+        basis: "The bridge is open, but the official report names your travel direction in a lane note.",
+      };
+    } else if (officialLevel === "open" && impact.general) {
+      confidence = {
+        code: "AWARE",
+        label: "Open with traffic note",
+        level: officialLevel,
+        basis: "The bridge is open, with an official lane or construction note to review.",
+      };
+    } else if (officialLevel === "open") {
+      confidence = {
+        code: "CLEAR",
+        label: "High confidence",
+        level: officialLevel,
+        basis: "The official report says open and includes no current lane restriction for your selection.",
+      };
     }
 
-    var currentHour = state.data.forecast?.hours?.[0];
-    var weather = String(currentHour?.summary || "").toLowerCase();
-    if (/thunder|freezing|ice|snow|whiteout/.test(weather)) score -= 8;
-    else if (/fog|heavy rain/.test(weather)) score -= 4;
-
-    score -= laneImpact().penalty;
-    if (!state.data.official.available) score = Math.min(score, 20);
-    score = clamp(Math.round(score), 0, 100);
-
-    var label = "Do not proceed";
-    if (score >= 85) label = "High confidence";
-    else if (score >= 70) label = "Good with awareness";
-    else if (score >= 50) label = "Use caution";
-    else if (score >= 25) label = "Restrictions likely";
-
-    return { score: score, label: label, level: officialLevel };
-  }
-
-  function forecastWeatherScore(hour) {
-    if (!hour || !Number.isFinite(Number(hour.wind_mph))) return 0;
-    var highProfile = isHighProfile();
-    var wind = Number(hour.wind_mph);
-    var gust = Number(hour.gust_mph);
-    var score = 98;
-
-    if (highProfile) {
-      if (wind >= 65) score = 0;
-      else if (wind >= 50) score = 4;
-      else if (wind >= 35) score = 24;
-      else if (wind >= 20) score = 55;
-      else score -= wind * 0.75;
-    } else {
-      if (wind >= 65) score = 0;
-      else if (wind >= 50) score = 34;
-      else if (wind >= 35) score = 58;
-      else if (wind >= 20) score = 76;
-      else score -= wind * 0.45;
-    }
-
-    if (Number.isFinite(gust)) {
-      score -= highProfile ? Math.max(0, gust - 15) * 0.55 : Math.max(0, gust - 20) * 0.25;
-    }
-
-    var weather = String(hour.summary || "").toLowerCase();
-    if (/thunder/.test(weather)) score -= 20;
-    if (/freezing|ice|snow|whiteout/.test(weather)) score -= 25;
-    else if (/fog/.test(weather)) score -= 10;
-    else if (/rain|shower/.test(weather)) score -= 6;
-    if (Number(hour.precip_probability) >= 60) score -= 6;
-
-    return clamp(Math.round(score), 0, 100);
+    return confidence;
   }
 
   function setText(id, value) {
@@ -288,14 +311,15 @@
     var confidence = currentConfidence();
     var meta = STATUS_META[confidence.level] || STATUS_META.unknown;
     var ring = byId("confidenceRing");
-    ring.style.setProperty("--confidence", confidence.score);
     ring.style.setProperty("--ring-color", meta.ring);
-    setText("confidenceScore", String(confidence.score));
+    ring.dataset.level = confidence.level;
+    setText("confidenceScore", confidence.code);
     setText("confidenceLabel", confidence.label);
     setText(
       "confidenceContext",
       VEHICLES[state.vehicle].label + " • " + (state.direction === "northbound" ? "to U.P." : "to L.P."),
     );
+    setText("confidenceBasis", confidence.basis);
   }
 
   function appendListItem(list, text) {
@@ -318,6 +342,9 @@
         : "Passenger vehicles may cross, but follow the posted reduced speed and staff instructions.";
     }
     if (level === "advisory") {
+      if (!state.data?.official?.wind_related) {
+        return "An official weather advisory is active. Slow down and follow the posted condition-specific instructions.";
+      }
       return highProfile
         ? "Travel no faster than 20 mph, turn on your lights, and use the outside lane."
         : "Slow down, turn on your lights, and follow the posted wind instructions.";
@@ -350,7 +377,7 @@
     return "The approach forecast is below MDOT's first wind reference range, but it does not guarantee unrestricted bridge conditions.";
   }
 
-  function currentAnswerCopy(level, score) {
+  function currentAnswerCopy(level) {
     var highProfile = isHighProfile();
     if (level === "closed") {
       return {
@@ -382,21 +409,24 @@
     }
     if (level === "advisory") {
       return {
-        headline: highProfile
-          ? "You can cross, but expect a slow wind-sensitive trip."
-          : "You can cross, but slow down and stay alert.",
-        detail: "The Bridge Authority has an active advisory. Follow the posted 20 mph instructions where directed.",
+        headline:
+          highProfile && state.data?.official?.wind_related
+            ? "You can cross, but expect a slow wind-sensitive trip."
+            : "You can cross, but slow down and stay alert.",
+        detail: state.data?.official?.wind_related
+          ? "The Bridge Authority has an active wind advisory. Follow the posted 20 mph instructions where directed."
+          : "The Bridge Authority has an active weather advisory. Follow its condition-specific speed and lane instructions.",
       };
     }
     if (level === "open") {
-      return score >= 70
+      return laneImpact().general
         ? {
-            headline: "You should have a straightforward crossing right now.",
-            detail: "The Bridge Authority reports the bridge open without a weather restriction.",
+            headline: "The bridge is open; review the current lane note.",
+            detail: "The Bridge Authority reports no weather restriction, but it has posted traffic information.",
           }
         : {
-            headline: "The bridge is open, but conditions deserve extra attention.",
-            detail: "Nearby weather or lane information lowered the planning score even though the official status is open.",
+            headline: "You should have a straightforward crossing right now.",
+            detail: "The Bridge Authority reports the bridge open without a weather restriction.",
           };
     }
     return {
@@ -407,8 +437,25 @@
 
   function renderCurrentAnswer() {
     var official = state.data?.official || { level: "unknown", title: "Status unavailable" };
-    var confidence = currentConfidence();
-    var copy = currentAnswerCopy(official.level, confidence.score);
+    var copy = currentAnswerCopy(official.level);
+    if (state.assistance) {
+      if (official.level === "closed") {
+        copy = {
+          headline: "Driver assistance cannot operate during a closure.",
+          detail: "Wait for the official status to show that the bridge has reopened before requesting transport.",
+        };
+      } else if (official.level === "partial" && isHighProfile()) {
+        copy = {
+          headline: "Driver assistance does not override this vehicle restriction.",
+          detail: "Your selected high-profile vehicle remains prohibited during the reported partial closure.",
+        };
+      } else if (official.available) {
+        copy = {
+          headline: "Bridge Authority driver assistance is available 24/7.",
+          detail: "The service costs $10 plus the vehicle toll. Follow the direction-specific request instructions below.",
+        };
+      }
+    }
     var answer = byId("personalAnswer");
     answer.dataset.level = official.level || "unknown";
     setText("planningMode", "RIGHT NOW");
@@ -454,6 +501,23 @@
           : "Queue on the west side after the toll booths.",
       );
     }
+    if (state.assistance && !["closed", "unknown"].includes(official.level)) {
+      appendListItem(
+        list,
+        state.direction === "northbound"
+          ? "For northbound assistance, stop on the wide shoulder just north of Exit 339 near the booth and call 906-643-7600."
+          : "For southbound assistance, request service inside the administration building on the north side.",
+      );
+    }
+  }
+
+  function renderAssistanceDirection() {
+    setText(
+      "assistanceDirection",
+      state.direction === "northbound"
+        ? "Northbound to the U.P.: stop on the wide shoulder just north of Exit 339 near the booth, then call Bridge Services at 906-643-7600."
+        : "Southbound to the L.P.: request driver assistance inside the Bridge Authority administration building on the north side.",
+    );
   }
 
   function forecastBandForVehicle(hour) {
@@ -468,14 +532,12 @@
 
   function renderForecastAnswer(hour) {
     var band = forecastBandForVehicle(hour);
-    var score = forecastWeatherScore(hour);
     var headline;
     if (band === "closed") headline = "Approach wind is forecast at 65 mph or higher.";
     else if (band === "partial") headline = "Approach wind is forecast in MDOT's 50–64 mph reference range.";
     else if (band === "escort") headline = "Approach wind is forecast in MDOT's 35–49 mph reference range.";
     else if (band === "advisory") headline = "Approach wind is forecast in MDOT's 20–34 mph reference range.";
-    else if (score >= 75) headline = "The approach forecast shows lighter wind and weather.";
-    else headline = "The approach forecast calls for extra weather awareness.";
+    else headline = "The approach forecast is below MDOT's first wind reference range.";
 
     var answer = byId("personalAnswer");
     answer.dataset.level = band;
@@ -545,6 +607,320 @@
     } else {
       setText("trafficHeadline", "Official lane information is unavailable");
       appendListItem(list, "Use the Bridge Authority report and MDOT Mi Drive before traveling.");
+    }
+  }
+
+  function readStatusHistory() {
+    try {
+      var parsed = JSON.parse(storageGet(HISTORY_KEY) || "[]");
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (_error) {
+      return [];
+    }
+  }
+
+  function currentStatusHistory() {
+    var cutoff = Date.now() - 24 * 60 * 60 * 1000;
+    return readStatusHistory()
+      .filter(function (entry) {
+        return Number(entry?.lastSeen) >= cutoff;
+      })
+      .slice(-12);
+  }
+
+  function recordStatusObservation(official) {
+    if (!official?.available) return;
+    var now = Date.now();
+    var history = currentStatusHistory();
+    var signature = [official.level, official.title].join("|");
+    var latest = history[history.length - 1];
+
+    if (latest?.signature === signature) {
+      latest.lastSeen = now;
+    } else {
+      history.push({
+        signature: signature,
+        level: official.level || "unknown",
+        title: official.title || "Official status",
+        firstSeen: now,
+        lastSeen: now,
+      });
+    }
+    storageSet(HISTORY_KEY, JSON.stringify(history.slice(-12)));
+  }
+
+  function renderStatusHistory() {
+    var history = currentStatusHistory();
+    var list = byId("statusHistory");
+    if (!list) return;
+    list.replaceChildren();
+
+    if (!history.length) {
+      setText("historySummary", "History begins after this browser successfully checks the official status.");
+      return;
+    }
+
+    var changeCount = Math.max(0, history.length - 1);
+    var first = history[0];
+    setText(
+      "historySummary",
+      changeCount
+        ? changeCount +
+            (changeCount === 1 ? " status change" : " status changes") +
+            " observed on this device since " +
+            formatDetroitTime(first.firstSeen, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) +
+            "."
+        : "No status change observed on this device since " +
+            formatDetroitTime(first.firstSeen, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) +
+            ".",
+    );
+
+    history
+      .slice()
+      .reverse()
+      .forEach(function (entry, index) {
+        var item = document.createElement("li");
+        item.dataset.level = entry.level || "unknown";
+
+        var marker = document.createElement("i");
+        marker.setAttribute("aria-hidden", "true");
+        item.appendChild(marker);
+
+        var copy = document.createElement("div");
+        var title = document.createElement("strong");
+        title.textContent = entry.title;
+        copy.appendChild(title);
+        var time = document.createElement("span");
+        time.textContent =
+          (index === 0 ? "Latest check " : "First observed ") +
+          formatDetroitTime(index === 0 ? entry.lastSeen : entry.firstSeen, {
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+          });
+        copy.appendChild(time);
+        item.appendChild(copy);
+        list.appendChild(item);
+      });
+  }
+
+  function renderApproachTraffic() {
+    var approach = state.data?.approach_traffic;
+    var list = byId("approachEvents");
+    if (!list) return;
+    list.replaceChildren();
+
+    if (!approach?.available) {
+      setText("approachSummary", "The nearby Mi Drive feed is temporarily unavailable; use the direct map link.");
+      return;
+    }
+
+    var events = Array.isArray(approach.events) ? approach.events : [];
+    if (!events.length) {
+      setText(
+        "approachSummary",
+        approach.complete
+          ? "No active nearby event was returned by Mi Drive."
+          : "No nearby event was returned by the available portion of the Mi Drive feed.",
+      );
+      return;
+    }
+
+    setText(
+      "approachSummary",
+      events.length +
+        (events.length === 1 ? " active event" : " active events") +
+        " returned near the bridge. Review the direction and distance before traveling.",
+    );
+    events.forEach(function (event) {
+      var item = document.createElement("li");
+      var top = document.createElement("div");
+      var title = document.createElement("strong");
+      title.textContent = event.title || "Mi Drive event";
+      top.appendChild(title);
+      if (event.source_url) {
+        var link = document.createElement("a");
+        link.href = event.source_url;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = "Map ↗";
+        top.appendChild(link);
+      }
+      item.appendChild(top);
+
+      var meta = document.createElement("span");
+      var metaParts = [];
+      if (event.direction && event.direction !== "both") metaParts.push(event.direction.toUpperCase());
+      if (Number.isFinite(Number(event.distance_miles))) {
+        metaParts.push(Number(event.distance_miles).toFixed(1) + " mi from bridge");
+      }
+      meta.textContent = metaParts.join(" • ") || "Near the bridge";
+      item.appendChild(meta);
+
+      if (event.summary && event.summary !== event.title) {
+        var summary = document.createElement("p");
+        summary.textContent = event.summary;
+        item.appendChild(summary);
+      }
+      list.appendChild(item);
+    });
+  }
+
+  function classifyVehicleFeatures() {
+    var selected = Array.from(document.querySelectorAll("[data-vehicle-feature]:checked")).map(function (input) {
+      return input.dataset.vehicleFeature;
+    });
+    if (selected.includes("rv")) return "rv";
+    if (selected.includes("trailer")) return "trailer";
+    if (selected.includes("pickup") || selected.includes("equipment")) return "high";
+    return "car";
+  }
+
+  function renderVehicleChecker() {
+    var vehicle = classifyVehicleFeatures();
+    state.classifiedVehicle = vehicle;
+    var result = byId("vehicleCheckerResult");
+    if (!result) return;
+    var title = result.querySelector("strong");
+    var detail = result.querySelector("span");
+    var copy = {
+      car: [
+        "Passenger vehicle",
+        "A normal car, SUV, or empty pickup without the listed features is not treated as high-profile by this checker.",
+      ],
+      rv: [
+        "High-profile: RV or camper",
+        "Choose the RV or camper profile. Wind advisories, escorts, and partial-closure rules can apply.",
+      ],
+      trailer: [
+        "High-profile: towing",
+        "Choose the towing profile. Enclosed trailers and open trailers carrying anything are high-profile.",
+      ],
+      high: [
+        "High-profile: van or pickup",
+        "Choose the van / pickup profile because the selected cap, cargo, ladder, toolbox, or equipment catches wind.",
+      ],
+    }[vehicle];
+    title.textContent = copy[0];
+    detail.textContent = copy[1];
+    result.dataset.classification = vehicle;
+  }
+
+  function calculateToll(vehicleClass, leadAxles, towedAxles, motorhomeTowingAuto) {
+    var lead = clamp(Math.round(Number(leadAxles) || 2), 2, 12);
+    var towed = clamp(Math.round(Number(towedAxles) || 0), 0, 12);
+    var isOther = vehicleClass === "other";
+    var leadRate = isOther ? 5 : 2;
+    var towedRate = isOther && motorhomeTowingAuto && towed > 0 ? 2 : leadRate;
+    return {
+      total: lead * leadRate + towed * towedRate,
+      leadAxles: lead,
+      towedAxles: towed,
+      leadRate: leadRate,
+      towedRate: towedRate,
+      exceptionApplied: isOther && motorhomeTowingAuto && towed > 0,
+    };
+  }
+
+  function renderToll() {
+    var classInput = byId("tollClass");
+    var leadInput = byId("leadAxles");
+    var towedInput = byId("towedAxles");
+    var exceptionInput = byId("motorhomeTowingAuto");
+    if (!classInput || !leadInput || !towedInput || !exceptionInput) return;
+
+    var result = calculateToll(
+      classInput.value,
+      leadInput.value,
+      towedInput.value,
+      exceptionInput.checked,
+    );
+    leadInput.value = String(result.leadAxles);
+    towedInput.value = String(result.towedAxles);
+    exceptionInput.disabled = classInput.value !== "other" || result.towedAxles === 0;
+    if (exceptionInput.disabled) exceptionInput.checked = false;
+
+    setText("tollEstimate", "$" + result.total.toFixed(2));
+    var formula = result.leadAxles + " lead axles × $" + result.leadRate.toFixed(2);
+    if (result.towedAxles) {
+      formula += " + " + result.towedAxles + " towed axles × $" + result.towedRate.toFixed(2);
+    }
+    if (result.exceptionApplied) formula += " • motorhome/auto exception";
+    setText("tollFormula", formula);
+  }
+
+  function syncTollToVehicle() {
+    if (state.tollDirty) return;
+    var classInput = byId("tollClass");
+    var leadInput = byId("leadAxles");
+    var towedInput = byId("towedAxles");
+    if (!classInput || !leadInput || !towedInput) return;
+    classInput.value = state.vehicle === "rv" ? "other" : "passenger";
+    leadInput.value = "2";
+    towedInput.value = state.vehicle === "trailer" ? "2" : "0";
+    byId("motorhomeTowingAuto").checked = false;
+    renderToll();
+  }
+
+  function selectComfort(value) {
+    state.assistance = value === "assistance";
+    document.querySelectorAll("[data-comfort]").forEach(function (button) {
+      var selected = button.dataset.comfort === value;
+      button.classList.toggle("is-selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    });
+    if (state.data) renderPlanner();
+    track("driver-assistance-preference", { selected: state.assistance });
+  }
+
+  function shareUrl() {
+    var url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+    url.searchParams.set("vehicle", state.vehicle);
+    url.searchParams.set("direction", state.direction);
+    return url.toString();
+  }
+
+  async function shareCrossingReport() {
+    var official = state.data?.official;
+    var confidence = currentConfidence();
+    var direction = state.direction === "northbound" ? "northbound to the U.P." : "southbound to the L.P.";
+    var text =
+      "Mackinac Bridge: " +
+      (official?.title || "official status unavailable") +
+      ". " +
+      VEHICLES[state.vehicle].label +
+      ", " +
+      direction +
+      ": " +
+      confidence.label +
+      ". Checked " +
+      formatDetroitTime(Date.now(), { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) +
+      ". Recheck the official status before leaving.";
+    var payload = {
+      title: "Mackinac Bridge crossing report",
+      text: text,
+      url: shareUrl(),
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(payload);
+        setText("shareStatus", "Crossing report shared.");
+      } else if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text + " " + payload.url);
+        setText("shareStatus", "Timestamped crossing report copied to your clipboard.");
+      } else {
+        window.prompt("Copy this crossing report:", text + " " + payload.url);
+        setText("shareStatus", "Crossing report ready to copy.");
+      }
+      track("share-report", { vehicle: state.vehicle, direction: state.direction });
+    } catch (error) {
+      if (error?.name !== "AbortError") {
+        setText("shareStatus", "Sharing was unavailable. Copy the page address instead.");
+      }
     }
   }
 
@@ -710,6 +1086,10 @@
     renderPlanner();
     renderForecast();
     renderTraffic();
+    renderApproachTraffic();
+    renderStatusHistory();
+    renderAssistanceDirection();
+    renderToll();
     refreshCamera();
   }
 
@@ -729,6 +1109,7 @@
       current_wind: null,
       forecast: { hours: [] },
       cameras: FALLBACK_CAMERAS,
+      approach_traffic: { available: false, complete: false, events: [] },
     };
     state.selectedHour = null;
     renderAll();
@@ -755,8 +1136,9 @@
       ) {
         state.selectedHour = null;
       }
-      renderAll();
+      recordStatusObservation(data.official);
       checkRestrictionChange(data.official);
+      renderAll();
       if (manual) track("manual-refresh", { status: data.official?.level || "unknown" });
     } catch (_error) {
       if (!state.data) renderUnavailable();
@@ -840,6 +1222,7 @@
       button.classList.toggle("is-selected", selected);
       button.setAttribute("aria-pressed", String(selected));
     });
+    syncTollToVehicle();
     if (state.data) {
       renderConfidence();
       renderPlanner();
@@ -849,6 +1232,7 @@
   }
 
   function selectDirection(direction) {
+    if (!["northbound", "southbound"].includes(direction)) return;
     state.direction = direction;
     state.camera = direction === "southbound" ? "south" : "north";
     document.querySelectorAll("[data-direction]").forEach(function (button) {
@@ -858,6 +1242,7 @@
     });
     renderCameraTabs();
     refreshCamera();
+    renderAssistanceDirection();
     if (state.data) {
       renderConfidence();
       renderPlanner();
@@ -871,6 +1256,7 @@
       loadData({ manual: true });
     });
     byId("alertButton").addEventListener("click", toggleAlerts);
+    byId("shareButton").addEventListener("click", shareCrossingReport);
 
     document.querySelectorAll("[data-vehicle]").forEach(function (button) {
       button.addEventListener("click", function () {
@@ -880,6 +1266,34 @@
     document.querySelectorAll("[data-direction]").forEach(function (button) {
       button.addEventListener("click", function () {
         selectDirection(button.dataset.direction);
+      });
+    });
+    document.querySelectorAll("[data-comfort]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        selectComfort(button.dataset.comfort);
+      });
+    });
+    document.querySelectorAll("[data-vehicle-feature]").forEach(function (input) {
+      input.addEventListener("change", renderVehicleChecker);
+    });
+    byId("applyVehicleClassification").addEventListener("click", function () {
+      selectVehicle(state.classifiedVehicle);
+      track("vehicle-checker-apply", { vehicle: state.classifiedVehicle });
+    });
+
+    ["tollClass", "leadAxles", "towedAxles", "motorhomeTowingAuto"].forEach(function (id) {
+      var input = byId(id);
+      input.addEventListener("input", function () {
+        state.tollDirty = true;
+        renderToll();
+      });
+      input.addEventListener("change", function () {
+        state.tollDirty = true;
+        renderToll();
+        track("toll-calculator", {
+          vehicle_class: byId("tollClass").value,
+          towed: Number(byId("towedAxles").value) > 0,
+        });
       });
     });
     document.querySelectorAll(".camera-tab").forEach(function (button) {
@@ -922,11 +1336,22 @@
 
   }
 
+  function applySharedSelection() {
+    var params = new URLSearchParams(window.location.search);
+    var vehicle = params.get("vehicle");
+    var direction = params.get("direction");
+    if (VEHICLES[vehicle]) selectVehicle(vehicle);
+    else selectVehicle(state.vehicle);
+    if (["northbound", "southbound"].includes(direction)) selectDirection(direction);
+    else selectDirection(state.direction);
+  }
+
   function init() {
     setupEvents();
+    renderVehicleChecker();
+    renderToll();
+    applySharedSelection();
     updateAlertButton();
-    renderCameraTabs();
-    refreshCamera();
     refreshRadar();
     loadData();
     window.setInterval(loadData, 60_000);

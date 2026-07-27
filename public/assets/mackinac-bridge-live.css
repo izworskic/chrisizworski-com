@@ -514,7 +514,6 @@ h1 {
 }
 
 .confidence-ring {
-  --confidence: 0;
   --ring-color: var(--gold);
   width: 180px;
   height: 180px;
@@ -522,10 +521,7 @@ h1 {
   padding: 13px;
   display: grid;
   place-items: center;
-  background: conic-gradient(
-    var(--ring-color) calc(var(--confidence) * 1%),
-    rgba(255, 255, 255, 0.11) 0
-  );
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 50%;
   transition: background 0.45s ease;
 }
@@ -809,17 +805,17 @@ legend {
 .segment small {
   display: block;
   margin-top: 3px;
-  color: #7b8581;
+  color: #56615d;
   font-size: 9px;
 }
 
 .segment.is-selected small {
-  color: rgba(255, 255, 255, 0.62);
+  color: #d7e6e2;
 }
 
 .control-help {
   margin: 8px 0 0;
-  color: #7c8581;
+  color: #56615d;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 9px;
   line-height: 1.45;
@@ -1239,7 +1235,7 @@ legend {
 }
 
 .forecast-wind small {
-  color: #77817d;
+  color: #56615d;
   font-size: 8px;
   font-weight: 400;
 }
@@ -1275,7 +1271,7 @@ legend {
 
 .forecast-detail-time {
   display: block;
-  color: #69746f;
+  color: #56615d;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 9px;
   font-weight: 700;
@@ -1297,7 +1293,7 @@ legend {
 
 .forecast-disclaimer {
   margin: 10px 0 0;
-  color: #7b8581;
+  color: #56615d;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 9px;
   line-height: 1.55;
@@ -1429,7 +1425,7 @@ legend {
 }
 
 .traffic-status-label {
-  color: #75807b;
+  color: #56615d;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 8px;
   font-weight: 800;
@@ -1457,7 +1453,7 @@ legend {
 .traffic-footnote {
   margin: 12px 0 0;
   padding-top: 11px;
-  color: #7b8581;
+  color: #56615d;
   border-top: 1px solid #e2dfd6;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 9px;
@@ -1546,7 +1542,7 @@ legend {
 
 .source-grid span {
   display: block;
-  color: #7a847f;
+  color: #56615d;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 8px;
   letter-spacing: 0.1em;
@@ -1582,7 +1578,7 @@ legend {
 
 .site-footer {
   padding: 28px 20px 42px;
-  color: #7c8581;
+  color: #56615d;
   background: #ece9e1;
   border-top: 1px solid #d8d4ca;
   font-size: 11px;
@@ -1862,5 +1858,565 @@ legend {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Crossing decision, assistance, toll, approach-road, and methodology additions */
+.confidence-ring {
+  padding: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 8px solid var(--ring-color);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.16), inset 0 0 28px rgba(0, 0, 0, 0.16);
+}
+
+.confidence-center {
+  padding: 0 12px;
+  align-items: center;
+  text-align: center;
+}
+
+.confidence-center strong {
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  line-height: 1.05;
+}
+
+.confidence-basis {
+  max-width: 260px;
+  margin: 10px auto 0;
+  color: rgba(255, 255, 255, 0.62);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.share-status {
+  min-height: 14px;
+  margin: 7px 0 0;
+  color: #f4d99e;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+}
+
+.button-dark {
+  color: #fff;
+  background: var(--bridge);
+  border-color: var(--bridge);
+}
+
+.button-dark:hover {
+  color: #fff;
+  background: var(--bridge-dark);
+}
+
+.vehicle-checker {
+  margin-top: 24px;
+  background: #f7f5ef;
+  border: 1px solid #ddd9cf;
+  border-radius: 11px;
+}
+
+.vehicle-checker summary {
+  padding: 15px 48px 15px 17px;
+  position: relative;
+  color: var(--bridge-dark);
+  cursor: pointer;
+  font-size: 14px;
+  list-style: none;
+}
+
+.vehicle-checker summary::-webkit-details-marker {
+  display: none;
+}
+
+.vehicle-checker summary::after {
+  content: "+";
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  color: var(--bridge-light);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  transform: translateY(-50%);
+}
+
+.vehicle-checker[open] summary::after {
+  content: "−";
+}
+
+.vehicle-checker-body {
+  padding: 0 17px 17px;
+}
+
+.checker-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.checker-options label,
+.motorhome-exception {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #53605b;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.checker-options input,
+.motorhome-exception input {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  accent-color: var(--bridge);
+}
+
+.checker-result {
+  margin: 15px 0 12px;
+  padding: 13px 14px;
+  display: grid;
+  gap: 3px;
+  background: #e8f1ed;
+  border-left: 4px solid var(--bridge-light);
+  border-radius: 6px;
+}
+
+.checker-result strong {
+  color: var(--bridge-dark);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.checker-result span,
+.checker-source {
+  color: #4f5c57;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.checker-source {
+  margin: 10px 0 0;
+}
+
+.checker-source a {
+  color: var(--bridge-light);
+}
+
+.comfort-fieldset {
+  margin-top: 22px;
+}
+
+.comfort-control {
+  max-width: 520px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.driver-assistance-card {
+  margin-top: 18px;
+  padding: 21px;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 15px;
+  background: #fff8e7;
+  border: 1px solid #e7d5a8;
+  border-radius: 12px;
+}
+
+.assistance-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: #8a641d;
+  border-radius: 50%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 800;
+}
+
+.driver-assistance-card h3 {
+  margin: 1px 0 7px;
+  color: var(--bridge-dark);
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.driver-assistance-card p:not(.answer-overline, .control-help) {
+  margin: 6px 0;
+  color: #5c625d;
+  font-size: 12px;
+}
+
+.assistance-direction {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.7);
+  border-left: 3px solid var(--gold);
+}
+
+.assistance-actions {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.toll-section,
+.method-section {
+  margin-top: 54px;
+}
+
+.toll-section {
+  padding: clamp(24px, 4vw, 40px);
+  background: #eaf2ee;
+  border: 1px solid #c8ddd4;
+  border-radius: var(--radius);
+}
+
+.toll-calculator {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(220px, 0.6fr);
+  gap: 20px;
+}
+
+.toll-fields {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.6fr) repeat(2, minmax(110px, 0.55fr));
+  gap: 12px;
+}
+
+.toll-fields label {
+  color: #4d5b56;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.toll-fields select,
+.toll-fields input[type="number"] {
+  width: 100%;
+  min-height: 43px;
+  margin-top: 6px;
+  padding: 9px 10px;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid #b8cbc3;
+  border-radius: 7px;
+  font: inherit;
+}
+
+.motorhome-exception {
+  grid-column: 1 / -1;
+  align-items: center;
+  font-weight: 400 !important;
+}
+
+.motorhome-exception input:disabled + * {
+  opacity: 0.6;
+}
+
+.toll-result {
+  min-height: 132px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff;
+  background: var(--bridge);
+  border-radius: 11px;
+}
+
+.toll-result span {
+  color: rgba(255, 255, 255, 0.65);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.toll-result strong {
+  margin: 4px 0;
+  font-size: 36px;
+  font-weight: 400;
+}
+
+.toll-result small {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.toll-note {
+  margin: 16px 0 0;
+  color: #5d6964;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.approach-grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.approach-card,
+.history-card {
+  padding: 22px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+}
+
+.approach-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.approach-card h3,
+.history-card h3 {
+  margin: 4px 0 8px;
+  color: var(--bridge-dark);
+  font-size: 19px;
+  font-weight: 400;
+}
+
+.approach-card-heading a,
+.approach-list a {
+  flex: 0 0 auto;
+  color: var(--bridge-light);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.approach-card > p:not(.traffic-footnote),
+.history-card > p:not(.traffic-footnote) {
+  margin: 0 0 12px;
+  color: #626e69;
+  font-size: 11px;
+}
+
+.approach-list,
+.status-history {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  list-style: none;
+}
+
+.approach-list li {
+  padding: 11px 12px;
+  background: #f5f5f0;
+  border-left: 3px solid var(--gold);
+  border-radius: 5px;
+}
+
+.approach-list li > div {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.approach-list strong {
+  color: #34423d;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.approach-list span {
+  display: block;
+  margin-top: 4px;
+  color: #56615d;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.approach-list p {
+  margin: 5px 0 0;
+  color: #65706c;
+  font-size: 10px;
+}
+
+.status-history li {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.status-history i {
+  width: 10px;
+  height: 10px;
+  margin-top: 4px;
+  background: var(--normal);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #a4b4ad;
+}
+
+.status-history li[data-level="advisory"] i {
+  background: var(--advisory);
+}
+
+.status-history li[data-level="escort"] i {
+  background: var(--escort);
+}
+
+.status-history li[data-level="partial"] i,
+.status-history li[data-level="closed"] i {
+  background: var(--closed);
+}
+
+.status-history li[data-level="unknown"] i {
+  background: var(--unknown);
+}
+
+.status-history strong,
+.status-history span {
+  display: block;
+}
+
+.status-history strong {
+  color: #394741;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.status-history span {
+  margin-top: 2px;
+  color: #56615d;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+}
+
+.source-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.method-section {
+  padding: clamp(24px, 4vw, 36px);
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 34px;
+  background: var(--bridge-dark);
+  border-radius: var(--radius);
+}
+
+.method-section h2 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(26px, 4vw, 37px);
+  font-weight: 400;
+}
+
+.method-section .eyebrow {
+  color: #f0d590;
+}
+
+.method-section > div > p:not(.eyebrow) {
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.guide-links {
+  display: grid;
+  gap: 9px;
+}
+
+.guide-links a {
+  padding: 14px 15px;
+  display: grid;
+  gap: 2px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.guide-links a:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.guide-links strong {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.guide-links span {
+  color: rgba(255, 255, 255, 0.58);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+}
+
+.photo-credit {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+}
+
+@media (max-width: 930px) {
+  .toll-calculator,
+  .method-section {
+    grid-template-columns: 1fr;
+  }
+
+  .toll-fields {
+    grid-template-columns: minmax(220px, 1.4fr) repeat(2, minmax(100px, 0.6fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .toll-section,
+  .method-section {
+    margin-top: 42px;
+  }
+
+  .toll-section {
+    padding: 21px 16px;
+  }
+
+  .checker-options,
+  .toll-fields,
+  .approach-grid,
+  .source-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .comfort-control {
+    grid-template-columns: 1fr;
+  }
+
+  .driver-assistance-card {
+    grid-template-columns: 38px minmax(0, 1fr);
+    padding: 17px 15px;
+  }
+
+  .assistance-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .assistance-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .confidence-center strong {
+    font-size: 18px;
   }
 }

@@ -1,6 +1,7 @@
 const {
   WIND_THRESHOLDS,
   mergeNwsForecast,
+  normalizeMdotApproachEvents,
   parseOfficialConditions,
   selectWindObservation,
 } = require("../lib/mackinac");
@@ -11,6 +12,8 @@ const URLS = Object.freeze({
   straitsWind: "https://www.ndbc.noaa.gov/data/realtime2/45175.txt",
   nwsHourly: "https://api.weather.gov/gridpoints/APX/55,96/forecast/hourly",
   nwsGrid: "https://api.weather.gov/gridpoints/APX/55,96",
+  mdotIncidents: "https://mdotjboss.state.mi.us/MiDrive/incidents/AllForMap/",
+  mdotConstruction: "https://mdotjboss.state.mi.us/MiDrive/construction/AllForMap/",
 });
 
 const USER_AGENT =
@@ -46,13 +49,23 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const [officialResult, mackinawResult, straitsResult, hourlyResult, gridResult] =
+  const [
+    officialResult,
+    mackinawResult,
+    straitsResult,
+    hourlyResult,
+    gridResult,
+    incidentsResult,
+    constructionResult,
+  ] =
     await Promise.allSettled([
       fetchSource(URLS.official, "json"),
       fetchSource(URLS.mackinawCityWind, "text"),
       fetchSource(URLS.straitsWind, "text"),
       fetchSource(URLS.nwsHourly, "json"),
       fetchSource(URLS.nwsGrid, "json"),
+      fetchSource(URLS.mdotIncidents, "json"),
+      fetchSource(URLS.mdotConstruction, "json"),
     ]);
 
   const official =
@@ -85,6 +98,10 @@ module.exports = async function handler(req, res) {
           36,
         )
       : [];
+  const approachEvents = normalizeMdotApproachEvents(
+    incidentsResult.status === "fulfilled" ? incidentsResult.value : [],
+    constructionResult.status === "fulfilled" ? constructionResult.value : [],
+  );
 
   const sources = {
     official_status: sourceState(
@@ -102,6 +119,16 @@ module.exports = async function handler(req, res) {
       "National Weather Service",
       "https://forecast.weather.gov/MapClick.php?lat=45.779&lon=-84.726",
     ),
+    approach_traffic: {
+      name: "Michigan Department of Transportation Mi Drive",
+      url: "https://mdotjboss.state.mi.us/MiDrive/",
+      available:
+        incidentsResult.status === "fulfilled" ||
+        constructionResult.status === "fulfilled",
+      complete:
+        incidentsResult.status === "fulfilled" &&
+        constructionResult.status === "fulfilled",
+    },
   };
 
   return res.status(200).json({
@@ -117,6 +144,16 @@ module.exports = async function handler(req, res) {
           : null,
       hours: forecast,
       note: "Forecast winds are for the Mackinaw City approach. The Bridge Authority uses its own bridge-mounted gauges.",
+    },
+    approach_traffic: {
+      available: sources.approach_traffic.available,
+      complete: sources.approach_traffic.complete,
+      radius_miles: 25,
+      events: approachEvents,
+      note:
+        "Mi Drive incidents and construction within 25 miles of the bridge. This is approach-road information, not a bridge wait-time feed.",
+      source_name: sources.approach_traffic.name,
+      source_url: sources.approach_traffic.url,
     },
     cameras: [
       {

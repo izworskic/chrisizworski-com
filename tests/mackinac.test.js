@@ -4,7 +4,9 @@ const assert = require("node:assert/strict");
 const mackinacHandler = require("../api/mackinac");
 const {
   classifyBridgeStatus,
+  haversineMiles,
   mergeNwsForecast,
+  normalizeMdotApproachEvents,
   parseOfficialConditions,
   parseWindSpeedMph,
   selectWindObservation,
@@ -93,6 +95,7 @@ test("status classification preserves the official restriction hierarchy", () =>
   assert.equal(classifyBridgeStatus("Bridge Closed", "Closed to all traffic"), "closed");
   assert.equal(classifyBridgeStatus("High Wind Warning", "RVs will be escorted"), "escort");
   assert.equal(classifyBridgeStatus("High Wind Warning", "Reduce speed to 20 mph"), "advisory");
+  assert.equal(classifyBridgeStatus("Fog Warning", "Use caution while crossing"), "advisory");
   assert.equal(classifyBridgeStatus("All Clear", "Have a pleasant trip"), "open");
   assert.equal(classifyBridgeStatus("All Clear", "No current closures or advisories"), "open");
 });
@@ -154,6 +157,52 @@ test("the freshest nearby NOAA wind observation is selected and labeled as a pro
   assert.equal("threshold_band" in observation, false);
 });
 
+test("nearby Mi Drive events are filtered, sorted, and direction-labeled", () => {
+  const events = normalizeMdotApproachEvents(
+    [
+      {
+        id: "incident-near",
+        title: "NB I-75: Crash",
+        message: "<p>Right lane blocked near St. Ignace.</p>",
+        latitude: 45.84,
+        longitude: -84.73,
+      },
+      {
+        id: "incident-far",
+        title: "SB I-75: Crash",
+        message: "Far from the Straits",
+        latitude: 44.5,
+        longitude: -84.7,
+      },
+    ],
+    [
+      {
+        id: "construction-near",
+        title: "SB I-75: Single-Lane Closure",
+        message: "Construction south of the bridge",
+        active: true,
+        coordinatePoints: [[-84.72, 45.76]],
+      },
+      {
+        id: "inactive",
+        title: "US-2 construction",
+        message: "Inactive work",
+        active: false,
+        latitude: 45.85,
+        longitude: -84.73,
+      },
+    ],
+  );
+
+  assert.equal(events.length, 2);
+  assert.equal(events[0].id, "incident-near");
+  assert.equal(events[0].direction, "northbound");
+  assert.equal(events[1].direction, "southbound");
+  assert.match(events[0].summary, /Right lane blocked/);
+  assert.ok(events.every((event) => event.distance_miles <= 25));
+  assert.ok(haversineMiles(45.8174, -84.7278, 45.8174, -84.7278) < 0.001);
+});
+
 test("Mackinac endpoint combines official status, NOAA wind, and NWS forecast", async () => {
   const originalFetch = global.fetch;
   const hourly = {
@@ -181,6 +230,25 @@ test("Mackinac endpoint combines official status, NOAA wind, and NWS forecast", 
       },
     },
   };
+  const incidents = [
+    {
+      id: "incident-near",
+      title: "NB I-75: Crash",
+      message: "Right lane blocked",
+      latitude: 45.84,
+      longitude: -84.73,
+    },
+  ];
+  const construction = [
+    {
+      id: "construction-near",
+      title: "SB I-75: Single-Lane Closure",
+      message: "Bridge approach construction",
+      active: true,
+      latitude: 45.76,
+      longitude: -84.72,
+    },
+  ];
 
   global.fetch = async (url) => {
     const value = String(url);
@@ -189,6 +257,12 @@ test("Mackinac endpoint combines official status, NOAA wind, and NWS forecast", 
     if (value.includes("45175")) return new Response("", { status: 200 });
     if (value.endsWith("/forecast/hourly")) {
       return new Response(JSON.stringify(hourly), { status: 200 });
+    }
+    if (value.includes("/incidents/")) {
+      return new Response(JSON.stringify(incidents), { status: 200 });
+    }
+    if (value.includes("/construction/")) {
+      return new Response(JSON.stringify(construction), { status: 200 });
     }
     return new Response(JSON.stringify(grid), { status: 200 });
   };
@@ -213,6 +287,10 @@ test("Mackinac endpoint combines official status, NOAA wind, and NWS forecast", 
       2,
     );
     assert.equal(response.body.thresholds[2].level, "escort");
+    assert.equal(response.body.approach_traffic.available, true);
+    assert.equal(response.body.approach_traffic.complete, true);
+    assert.equal(response.body.approach_traffic.events.length, 2);
+    assert.match(response.body.approach_traffic.note, /not a bridge wait-time feed/i);
     assert.match(response.headers["cache-control"], /s-maxage=60/);
   } finally {
     global.fetch = originalFetch;
@@ -234,6 +312,8 @@ test("Mackinac endpoint fails safe when the official status source is unavailabl
     assert.equal(response.body.official.level, "unknown");
     assert.equal(response.body.current_wind, null);
     assert.deepEqual(response.body.forecast.hours, []);
+    assert.equal(response.body.approach_traffic.available, false);
+    assert.deepEqual(response.body.approach_traffic.events, []);
   } finally {
     global.fetch = originalFetch;
   }

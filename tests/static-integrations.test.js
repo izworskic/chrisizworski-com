@@ -87,28 +87,33 @@ test("Great Lakes Gazette reads the latest public edition without a browser cred
   assert.ok(!projects.includes("great-lakes-gazette.vercel.app"));
 });
 
-test("Tools hub makes six live tools prominent without changing its canonical or library size", () => {
+test("Tools hub makes eight live tools prominent and indexes the expanded library", () => {
   const html = readFileSync(path.join(__dirname, "../public/tools/index.html"), "utf8");
   assert.ok(html.includes("<title>Free Michigan &amp; Great Lakes Tools | Chris Izworski</title>"));
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/tools/">'));
-  assert.equal((html.match(/data-featured-tool=/g) || []).length, 6);
-  assert.equal((html.match(/class="tool-cta"/g) || []).length, 6);
+  assert.equal((html.match(/data-featured-tool=/g) || []).length, 8);
+  assert.equal((html.match(/class="tool-cta"/g) || []).length, 8);
   assert.ok((html.match(/data-track-cluster=/g) || []).length >= 5);
 
   const jsonLd = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
   const itemList = jsonLd["@graph"].find((entry) => entry["@type"] === "ItemList");
   const collection = jsonLd["@graph"].find((entry) => entry["@type"] === "CollectionPage");
-  assert.equal(itemList.numberOfItems, 19);
-  assert.equal(itemList.itemListElement.length, 19);
-  assert.equal(collection.dateModified, "2026-07-20");
+  assert.equal(itemList.numberOfItems, 35);
+  assert.equal(itemList.itemListElement.length, 35);
+  assert.equal(collection.dateModified, "2026-07-27");
   assert.equal(collection.author["@id"], "https://chrisizworski.com/#person");
+  assert.ok(
+    itemList.itemListElement.some(
+      (entry) => entry.item?.url === "https://chrisizworski.com/mackinac-bridge-live/",
+    ),
+  );
 });
 
 test("Great Lakes hub separates live conditions from history and gives each live tool a CTA", () => {
   const html = readFileSync(path.join(__dirname, "../public/great-lakes/index.html"), "utf8");
   assert.ok(html.includes("Live Great Lakes Conditions and Vessel Tools"));
-  assert.equal((html.match(/data-featured-tool=/g) || []).length, 6);
-  assert.equal((html.match(/class="tool-cta"/g) || []).length, 6);
+  assert.equal((html.match(/data-featured-tool=/g) || []).length, 7);
+  assert.equal((html.match(/class="tool-cta"/g) || []).length, 7);
 
   const history = html.match(/<h2 class="sh">History and Heritage<\/h2>([\s\S]*?)<h2 class="sh">/)[1];
   assert.doesNotMatch(history, /\/(?:soo-locks|northern-lights-michigan|great-lakes-buoys)\//);
@@ -126,6 +131,10 @@ test("Measured tool funnel pages include privacy-conscious analytics and real-us
     "great-lakes-gazette/index.html",
     "great-lakes-freighter-tracking/index.html",
     "great-lakes-beaches/index.html",
+    "mackinac-bridge-live/index.html",
+    "mackinac-bridge-driver-assistance/index.html",
+    "mackinac-bridge-rv-trailer-wind-rules/index.html",
+    "mackinac-bridge-tolls/index.html",
   ];
   for (const file of files) {
     const html = readFileSync(path.join(__dirname, "../public", file), "utf8");

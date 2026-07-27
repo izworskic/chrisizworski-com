@@ -103,8 +103,8 @@ for (const [key, expected] of Object.entries(expectedCanonicals)) {
   }
 }
 
-if (current.toolsListed !== baseline.structuralBaseline.toolsListed) {
-  failures.push(`Tools list changed from ${baseline.structuralBaseline.toolsListed} entries to ${current.toolsListed}`);
+if (current.toolsListed < baseline.structuralBaseline.toolsListed) {
+  failures.push(`Tools list shrank from ${baseline.structuralBaseline.toolsListed} entries to ${current.toolsListed}`);
 }
 if (current.featuredToolCards < 12) failures.push("Fewer than 12 featured tool cards are present across the hubs");
 if (current.explicitCallsToAction < 13) failures.push("Fewer than 13 explicit tool calls to action are present");
