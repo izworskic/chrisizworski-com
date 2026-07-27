@@ -5,7 +5,6 @@ const mackinacHandler = require("../api/mackinac");
 const {
   classifyBridgeStatus,
   mergeNwsForecast,
-  parseOfficialBridgeWind,
   parseOfficialConditions,
   parseWindSpeedMph,
   selectWindObservation,
@@ -75,37 +74,18 @@ test("official Bridge Authority HTML becomes a normalized live status", () => {
   assert.equal(parsed.level, "open");
   assert.equal(parsed.title, "All Clear, Have a Pleasant Trip!");
   assert.equal(parsed.updated_text, "Monday, Jul 27 - 8:49 AM");
-  assert.equal(parsed.bridge_wind, null);
+  assert.equal("bridge_wind" in parsed, false);
   assert.equal(parsed.wind_related, false);
   assert.deepEqual(parsed.traffic_notes, ["Construction SB Lane"]);
   assert.match(parsed.message, /no significant weather/i);
 });
 
-test("the official wind band outranks off-bridge weather without inventing an exact gust", () => {
+test("official high-wind status remains authoritative without inventing a bridge reading", () => {
   const parsed = parseOfficialConditions(officialHighWind);
   assert.equal(parsed.level, "advisory");
   assert.equal(parsed.wind_related, true);
-  assert.deepEqual(parsed.bridge_wind, {
-    min_mph: 20,
-    max_mph: 34,
-    label: "20–34 mph",
-    basis: "sustained",
-    kind: "range",
-    exact: false,
-    is_bridge_gauge: true,
-    source_name: "Mackinac Bridge Authority",
-  });
+  assert.equal("bridge_wind" in parsed, false);
   assert.deepEqual(parsed.traffic_notes, ["Construction SB Lane"]);
-  assert.deepEqual(parseOfficialBridgeWind("Bridge Closed", "Winds of 65 mph and above"), {
-    min_mph: 65,
-    max_mph: null,
-    label: "65+ mph",
-    basis: "sustained",
-    kind: "minimum",
-    exact: false,
-    is_bridge_gauge: true,
-    source_name: "Mackinac Bridge Authority",
-  });
 });
 
 test("status classification preserves the official restriction hierarchy", () => {
@@ -171,6 +151,7 @@ test("the freshest nearby NOAA wind observation is selected and labeled as a pro
   assert.equal(observation.gust_mph, 15.7);
   assert.equal(observation.age_minutes, 12);
   assert.equal(observation.is_bridge_gauge, false);
+  assert.equal("threshold_band" in observation, false);
 });
 
 test("Mackinac endpoint combines official status, NOAA wind, and NWS forecast", async () => {
@@ -218,6 +199,7 @@ test("Mackinac endpoint combines official status, NOAA wind, and NWS forecast", 
     assert.equal(response.statusCode, 200);
     assert.equal(response.body.degraded, false);
     assert.equal(response.body.official.level, "open");
+    assert.equal("bridge_wind" in response.body.official, false);
     assert.equal(response.body.current_wind.station_id, "MACM4");
     assert.equal(response.body.forecast.hours.length, 1);
     assert.equal(response.body.forecast.hours[0].gust_mph, 15);

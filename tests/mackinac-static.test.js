@@ -28,28 +28,37 @@ test("Mackinac Bridge Live contains the complete crossing decision flow", () => 
   assert.ok(html.includes("Will I have trouble crossing?"));
   assert.equal((html.match(/data-vehicle="/g) || []).length, 4);
   assert.equal((html.match(/data-direction="/g) || []).length, 2);
-  assert.ok(html.includes("Estimated best crossing window"));
+  assert.doesNotMatch(html, /Estimated best crossing window/i);
   assert.ok(html.includes("Mackinac Bridge Webcam"));
-  assert.ok(html.includes("Hour-by-Hour Mackinac Bridge Wind Forecast"));
+  assert.ok(html.includes("Straits of Mackinac Weather Radar"));
+  assert.ok(html.includes("Mackinac Bridge Area Hourly Wind Forecast"));
   assert.ok(html.includes("RV, Camper and Trailer Guidance"));
   assert.ok(html.includes("Mackinac Bridge Traffic Today"));
   assert.ok(html.includes("sms:67283?body=MacBridge"));
 });
 
 test("the interface makes official status authoritative and nearby wind explicit", () => {
-  assert.match(html, /Bridge Authority report controls/i);
-  assert.match(html, /Official bridge wind/i);
-  assert.match(html, /Nearby NOAA context/i);
-  assert.match(html, /exact bridge-deck wind or gust reading/i);
+  assert.match(html, /Bridge Authority report is the controlling source/i);
+  assert.match(html, /Nearby NOAA station/i);
+  assert.match(html, /does not publish a real-time bridge-deck wind or gust reading/i);
+  assert.doesNotMatch(html, /Official bridge wind/i);
   assert.ok(html.includes('id="windMismatchNotice"'));
   assert.match(html, /Planning aid, not an official safety decision/i);
   assert.ok(js.includes('var API_URL = "/api/mackinac"'));
-  assert.ok(js.includes("official?.bridge_wind"));
-  assert.ok(js.includes("windMismatch"));
-  assert.ok(js.includes("No confirmed crossing window"));
+  assert.ok(js.includes("showWindContextWarning"));
+  assert.doesNotMatch(js, /bridge_wind/);
+  assert.doesNotMatch(js, /bestWindow|showWindowButton|is-best/);
   assert.ok(js.includes("renderUnavailable"));
   assert.doesNotMatch(js, /title:\s*["']All Clear/i);
   assert.ok(js.includes("Notification.permission"));
+});
+
+test("the tool includes official NWS area radar without presenting it as bridge conditions", () => {
+  assert.ok(html.includes("https://radar.weather.gov/station/kapx/standard"));
+  assert.match(html, /Radar shows precipitation—not bridge wind or crossing status/i);
+  assert.ok(html.includes('id="radarImage"'));
+  assert.ok(js.includes("https://radar.weather.gov/ridge/standard/KAPX_loop.gif"));
+  assert.ok(js.includes("The NWS radar loop is temporarily unavailable"));
 });
 
 test("the tool is responsive, reduced-motion aware, and analytics ready", () => {

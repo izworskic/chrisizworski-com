@@ -4,23 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mackinac Bridge Conditions Live: Wind &amp; Camera | Chris Izworski</title>
-<meta name="description" content="Check Mackinac Bridge conditions now: official status and wind band, off-bridge NOAA context, live cameras, hourly forecast, RV guidance, and crossing outlook.">
+<meta name="description" content="Check Mackinac Bridge conditions now: official status, live cameras, NWS radar, clearly labeled off-bridge weather context, RV guidance, and lane restrictions.">
 <link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-live/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#123f36">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Mackinac Bridge Conditions Live">
-<meta property="og:description" content="Can you cross the Mackinac Bridge easily right now? See the official wind status first, plus off-bridge weather context, cameras, forecast, and RV or trailer guidance.">
+<meta property="og:description" content="Can you cross the Mackinac Bridge easily right now? See the official crossing status first, plus cameras, NWS radar, approach weather, and RV or trailer guidance.">
 <meta property="og:url" content="https://chrisizworski.com/mackinac-bridge-live/">
 <meta property="og:image" content="https://chrisizworski.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Mackinac Bridge Conditions Live">
-<meta name="twitter:description" content="Official bridge status, wind, camera, forecast, lane restrictions, and RV crossing guidance.">
+<meta name="twitter:description" content="Official bridge status, cameras, NWS radar, approach weather, lane restrictions, and RV crossing guidance.">
 <meta name="twitter:image" content="https://chrisizworski.com/og-image.png">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preconnect" href="https://www.mackinacbridge.org">
+<link rel="preconnect" href="https://radar.weather.gov">
 <link rel="stylesheet" href="/assets/mackinac-bridge-live.css">
 <script type="application/ld+json">
 {
@@ -44,7 +45,7 @@
       "@id": "https://chrisizworski.com/mackinac-bridge-live/#page",
       "url": "https://chrisizworski.com/mackinac-bridge-live/",
       "name": "Mackinac Bridge Conditions Live: Wind, Camera and Crossing Tool",
-      "description": "A real-time Mackinac Bridge crossing tool combining the official bridge status and published wind band, off-bridge NOAA observations, National Weather Service forecast, bridge cameras, vehicle guidance, and lane restrictions.",
+      "description": "A real-time Mackinac Bridge crossing tool combining the official bridge status, bridge cameras, National Weather Service radar and approach forecast, clearly labeled off-bridge NOAA observations, vehicle guidance, and lane restrictions.",
       "isPartOf": {"@id": "https://chrisizworski.com/#website"},
       "author": {"@id": "https://chrisizworski.com/#person"},
       "dateModified": "2026-07-27",
@@ -71,12 +72,11 @@
       "author": {"@id": "https://chrisizworski.com/#person"},
       "featureList": [
         "Official Mackinac Bridge Authority crossing status",
-        "Official Mackinac Bridge Authority wind band when published",
         "Clearly labeled off-bridge NOAA wind and gust context",
         "Hour-by-hour National Weather Service wind forecast",
+        "Official National Weather Service precipitation radar",
         "Live Mackinac Bridge camera views",
         "RV, camper, trailer, van, and pickup guidance",
-        "Estimated best crossing window",
         "Restriction-change alerts while the tool is open"
       ]
     }
@@ -110,14 +110,6 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "RVs, campers, and trailers are high-profile vehicles. During a 20 to 35 mph advisory they should travel no faster than 20 mph. At 35 to 50 mph they must wait for an escort. At 50 mph or more they are prohibited until the partial closure ends."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What is the best time to cross the Mackinac Bridge?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "When the official bridge status is open, the estimated best crossing window compares the next 24 hours of forecast wind, gusts, hazardous weather, official lane notes, and typical peak traffic periods. The tool suppresses that recommendation during an active official restriction because an approach forecast cannot predict a reopening."
       }
     },
     {
@@ -179,7 +171,7 @@
       <div>
         <p class="eyebrow">Live crossing conditions</p>
         <h1>Mackinac Bridge Conditions Live</h1>
-        <p class="lede">Can you cross safely and easily right now? Official bridge status and wind conditions come first, with off-bridge weather context, cameras, forecast, and vehicle-specific guidance in one view.</p>
+        <p class="lede">Can you cross safely and easily right now? The official bridge status comes first, with cameras, NWS radar, clearly labeled off-bridge weather context, and vehicle-specific guidance in one view.</p>
       </div>
       <div class="intro-badge" aria-label="Data refreshes every minute">
         <span>Auto refresh</span>
@@ -223,12 +215,7 @@
 
       <div class="metric-grid">
         <div class="metric">
-          <span class="metric-label">Official bridge wind</span>
-          <strong class="metric-text" id="bridgeWind">Checking...</strong>
-          <span class="metric-detail" id="bridgeWindDetail">From the official condition report</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Nearby NOAA context</span>
+          <span class="metric-label">Nearby NOAA station</span>
           <strong class="metric-text" id="nearbyWind">Checking...</strong>
           <span class="metric-detail" id="nearbyWindDetail">Off-bridge observation</span>
         </div>
@@ -237,17 +224,12 @@
           <strong class="metric-text" id="laneSummary">Checking...</strong>
           <span class="metric-detail">From the official report</span>
         </div>
-        <div class="metric">
-          <span class="metric-label">Estimated best window</span>
-          <strong class="metric-text" id="bestWindowShort">Calculating...</strong>
-          <span class="metric-detail" id="bestWindowReason">Next 24 hours</span>
-        </div>
       </div>
 
       <div class="wind-mismatch-notice" id="windMismatchNotice" role="note" hidden></div>
 
       <div class="authority-note">
-        <strong>Important:</strong> The Bridge Authority report controls. When it publishes a wind band, that official band is shown first. Its public report does not provide an exact bridge-deck wind or gust reading. NOAA values are off-bridge context only, and MDOT restrictions use sustained wind—not gusts.
+        <strong>Important:</strong> The Bridge Authority does not publish a real-time bridge-deck wind or gust reading in its public conditions feed. The NOAA number above describes weather near the Straits, not on the bridge, and cannot override the official status.
       </div>
     </section>
 
@@ -311,14 +293,6 @@
         </div>
       </div>
 
-      <div class="window-card" id="windowCard">
-        <div>
-          <span class="window-label">Estimated best crossing window</span>
-          <strong id="bestWindow">Waiting for hourly forecast...</strong>
-          <p id="bestWindowDetail">This weather-first estimate does not predict an official reopening or a live queue.</p>
-        </div>
-        <button type="button" class="text-button" id="showWindowButton">Show in forecast ↓</button>
-      </div>
     </section>
 
     <section class="camera-section" aria-labelledby="cameraHeading">
@@ -348,12 +322,35 @@
       </div>
     </section>
 
+    <section class="radar-section" aria-labelledby="radarHeading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">What weather is approaching</p>
+          <h2 id="radarHeading">Straits of Mackinac Weather Radar</h2>
+          <p>Official NWS Gaylord (KAPX) regional reflectivity loop covering the Straits. Radar shows precipitation—not bridge wind or crossing status.</p>
+        </div>
+        <a class="source-link" href="https://radar.weather.gov/station/kapx/standard" target="_blank" rel="noopener">Open interactive NWS radar ↗</a>
+      </div>
+
+      <div class="radar-card">
+        <div class="radar-frame">
+          <img id="radarImage" alt="National Weather Service Gaylord radar loop covering the Straits of Mackinac" width="600" height="550">
+          <div class="radar-loading" id="radarLoading">Loading official NWS radar...</div>
+          <div class="radar-overlay">
+            <span><i class="radar-live-dot" aria-hidden="true"></i> NWS KAPX loop</span>
+            <span id="radarRefreshed">Refreshing...</span>
+          </div>
+        </div>
+        <p class="radar-caption">Regional precipitation radar is useful for spotting rain or storms approaching the Straits. It does not measure conditions on the bridge deck.</p>
+      </div>
+    </section>
+
     <section class="forecast-section" id="forecastSection" aria-labelledby="forecastHeading">
       <div class="section-heading">
         <div>
           <p class="eyebrow">Plan before you leave</p>
-          <h2 id="forecastHeading">Hour-by-Hour Mackinac Bridge Wind Forecast</h2>
-          <p>Forecast for the Mackinaw City approach, with gusts added from the NWS forecast grid. Tap an hour to inspect it.</p>
+          <h2 id="forecastHeading">Mackinac Bridge Area Hourly Wind Forecast</h2>
+          <p>Forecast for the Mackinaw City approach, with gusts added from the NWS forecast grid. It is not a bridge-deck forecast. Tap an hour to inspect it.</p>
         </div>
         <div class="forecast-legend" aria-label="Wind forecast legend">
           <span><i class="legend-dot normal"></i> Below 20</span>
@@ -465,7 +462,7 @@
         </details>
         <details>
           <summary>Is the wind shown here measured on the bridge?</summary>
-          <p>The official wind band, when published, comes from the Mackinac Bridge Authority condition report and reflects its on-bridge monitoring. It is a restriction band, not an exact live gust. The separate NOAA number comes from Mackinaw City or the western Straits and is clearly labeled as off-bridge context. The official bridge report always controls.</p>
+          <p>No. The Bridge Authority does not publish a real-time bridge-deck wind or gust reading in the public conditions feed used by this tool. The NOAA number comes from Mackinaw City or the western Straits and is shown only as off-bridge weather context. The official bridge report always controls.</p>
         </details>
         <details>
           <summary>Will the Mackinac Bridge close tomorrow?</summary>
@@ -500,6 +497,10 @@
         <a href="https://forecast.weather.gov/MapClick.php?lat=45.779&amp;lon=-84.726" target="_blank" rel="noopener">
           <span>Hourly forecast</span>
           <strong>National Weather Service</strong>
+        </a>
+        <a href="https://radar.weather.gov/station/kapx/standard" target="_blank" rel="noopener">
+          <span>Area radar</span>
+          <strong>NWS Gaylord KAPX</strong>
         </a>
         <a href="https://www.michigan.gov/mdot/about/faqs/bridges/wind" target="_blank" rel="noopener">
           <span>Vehicle rules</span>

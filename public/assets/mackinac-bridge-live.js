@@ -2,6 +2,7 @@
   "use strict";
 
   var API_URL = "/api/mackinac";
+  var RADAR_LOOP_URL = "https://radar.weather.gov/ridge/standard/KAPX_loop.gif";
   var STATUS_KEY = "mackinac-bridge-live:last-status:v1";
   var ALERT_KEY = "mackinac-bridge-live:page-alerts:v1";
   var DETROIT_ZONE = "America/Detroit";
@@ -40,7 +41,6 @@
     direction: "northbound",
     camera: "south",
     selectedHour: null,
-    bestWindow: null,
     loading: false,
   };
 
@@ -103,23 +103,6 @@
     return observation.station_name;
   }
 
-  function detroitParts(value) {
-    var parts = new Intl.DateTimeFormat("en-US", {
-      timeZone: DETROIT_ZONE,
-      weekday: "short",
-      hour: "numeric",
-      hourCycle: "h23",
-    }).formatToParts(new Date(value));
-    var output = {};
-    parts.forEach(function (part) {
-      output[part.type] = part.value;
-    });
-    return {
-      weekday: output.weekday || "",
-      hour: Number.parseInt(output.hour, 10),
-    };
-  }
-
   function formatForecastTime(value) {
     var day = formatDetroitTime(value, { weekday: "short" });
     var time = formatDetroitTime(value, { hour: "numeric" });
@@ -134,16 +117,6 @@
       hour: "numeric",
       minute: "2-digit",
     });
-  }
-
-  function formatWindow(hours) {
-    if (!hours || !hours.length) return "No forecast window available";
-    var first = hours[0];
-    var last = hours[hours.length - 1];
-    var firstDay = formatDetroitTime(first.start_time, { weekday: "short", month: "short", day: "numeric" });
-    var firstTime = formatDetroitTime(first.start_time, { hour: "numeric" });
-    var endTime = formatDetroitTime(last.end_time, { hour: "numeric" });
-    return firstDay + ", " + firstTime + "–" + endTime;
   }
 
   function isHighProfile() {
@@ -167,21 +140,15 @@
     };
   }
 
-  function officialBridgeWind() {
-    return state.data?.official?.bridge_wind || null;
-  }
-
-  function windMismatch() {
-    var bridge = officialBridgeWind();
+  function showWindContextWarning() {
+    var official = state.data?.official;
     var nearby = state.data?.current_wind;
-    if (!bridge || !Number.isFinite(Number(bridge.min_mph))) return false;
-
-    var nearbyValues = [nearby?.wind_mph, nearby?.gust_mph]
-      .map(Number)
-      .filter(Number.isFinite);
-    if (!nearbyValues.length) return false;
-
-    return Number(bridge.min_mph) - Math.max.apply(null, nearbyValues) >= 5;
+    return Boolean(
+      official?.wind_related &&
+        !["open", "unknown"].includes(official.level) &&
+        (Number.isFinite(Number(nearby?.wind_mph)) ||
+          Number.isFinite(Number(nearby?.gust_mph))),
+    );
   }
 
   function formatNearbyWind(observation) {
@@ -206,29 +173,6 @@
       ? { open: 91, advisory: 56, escort: 30, partial: 0, closed: 0, unknown: 15 }
       : { open: 95, advisory: 80, escort: 72, partial: 50, closed: 0, unknown: 20 };
     var score = scores[officialLevel] ?? scores.unknown;
-    var observation = state.data.current_wind;
-    var wind = Number(observation?.wind_mph);
-    var gust = Number(observation?.gust_mph);
-
-    if (Number.isFinite(wind)) {
-      if (highProfile) {
-        if (wind >= 65) score = Math.min(score, 0);
-        else if (wind >= 50) score = Math.min(score, 5);
-        else if (wind >= 35) score = Math.min(score, 32);
-        else if (wind >= 20) score = Math.min(score, 58);
-      } else {
-        if (wind >= 65) score = Math.min(score, 5);
-        else if (wind >= 50) score = Math.min(score, 42);
-        else if (wind >= 35) score = Math.min(score, 62);
-        else if (wind >= 20) score = Math.min(score, 77);
-      }
-    }
-
-    if (Number.isFinite(gust)) {
-      if (gust >= 50) score -= highProfile ? 14 : 7;
-      else if (gust >= 35) score -= highProfile ? 8 : 4;
-      else if (gust >= 25) score -= highProfile ? 4 : 2;
-    }
 
     var officialCaps = highProfile
       ? { advisory: 55, escort: 30, partial: 0, closed: 0 }
@@ -243,7 +187,6 @@
     else if (/fog|heavy rain/.test(weather)) score -= 4;
 
     score -= laneImpact().penalty;
-    if (observation?.stale) score -= 8;
     if (!state.data.official.available) score = Math.min(score, 20);
     score = clamp(Math.round(score), 0, 100);
 
@@ -256,7 +199,7 @@
     return { score: score, label: label, level: officialLevel };
   }
 
-  function forecastSuitability(hour) {
+  function forecastWeatherScore(hour) {
     if (!hour || !Number.isFinite(Number(hour.wind_mph))) return 0;
     var highProfile = isHighProfile();
     var wind = Number(hour.wind_mph);
@@ -288,57 +231,7 @@
     else if (/rain|shower/.test(weather)) score -= 6;
     if (Number(hour.precip_probability) >= 60) score -= 6;
 
-    var parts = detroitParts(hour.start_time);
-    if (["Fri", "Sat", "Sun"].includes(parts.weekday) && parts.hour >= 10 && parts.hour < 16) {
-      score -= 12;
-    }
-    score -= laneImpact().penalty;
     return clamp(Math.round(score), 0, 100);
-  }
-
-  function computeBestWindow() {
-    if (state.data?.official?.level !== "open") {
-      state.bestWindow = null;
-      return;
-    }
-
-    var hours = state.data?.forecast?.hours || [];
-    var now = Date.now() - 30 * 60 * 1000;
-    var candidates = hours
-      .map(function (hour, index) {
-        return { hour: hour, index: index, score: forecastSuitability(hour) };
-      })
-      .filter(function (entry) {
-        return Date.parse(entry.hour.end_time) > now;
-      })
-      .slice(0, 24);
-
-    if (!candidates.length) {
-      state.bestWindow = null;
-      return;
-    }
-
-    var best = null;
-    candidates.forEach(function (entry, candidateIndex) {
-      var next = candidates[candidateIndex + 1];
-      var pair = next ? [entry, next] : [entry];
-      var average = pair.reduce(function (sum, item) {
-        return sum + item.score;
-      }, 0) / pair.length;
-      if (!best || average > best.score) {
-        best = { entries: pair, score: average };
-      }
-    });
-
-    state.bestWindow = {
-      indices: best.entries.map(function (entry) {
-        return entry.index;
-      }),
-      hours: best.entries.map(function (entry) {
-        return entry.hour;
-      }),
-      score: Math.round(best.score),
-    };
   }
 
   function setText(id, value) {
@@ -366,21 +259,6 @@
         "The live Bridge Authority report could not be read. Open the official source before traveling.",
     );
 
-    var bridgeWind = officialBridgeWind();
-    if (bridgeWind) {
-      setText("bridgeWind", bridgeWind.label);
-      setText("bridgeWindDetail", "Authority warning band • sustained wind");
-    } else if (level === "open") {
-      setText("bridgeWind", "No wind restriction");
-      setText("bridgeWindDetail", "Exact bridge wind and gust are not published");
-    } else if (official?.wind_related) {
-      setText("bridgeWind", "Wind restriction active");
-      setText("bridgeWindDetail", "Exact bridge reading is not published");
-    } else {
-      setText("bridgeWind", "Not publicly reported");
-      setText("bridgeWindDetail", "Use the official status above");
-    }
-
     var wind = state.data?.current_wind;
     setText("nearbyWind", formatNearbyWind(wind));
     setText(
@@ -391,18 +269,12 @@
     );
 
     var mismatchNotice = byId("windMismatchNotice");
-    if (windMismatch()) {
+    if (showWindContextWarning()) {
       mismatchNotice.hidden = false;
       mismatchNotice.textContent =
-        "Wind readings differ: the official report places bridge conditions in the " +
-        bridgeWind.label +
-        " sustained-wind band, while nearby off-bridge NOAA reports " +
-        Number(wind.wind_mph).toFixed(1) +
-        " mph sustained" +
-        (Number.isFinite(Number(wind.gust_mph))
-          ? " and a " + Number(wind.gust_mph).toFixed(1) + " mph gust"
-          : "") +
-        ". Use the official bridge report for crossing decisions.";
+        "Nearby NOAA is not a bridge reading. The Bridge Authority currently reports " +
+        official.title +
+        ". Even when the nearby number looks lower, use the official status for crossing decisions.";
     } else {
       mismatchNotice.hidden = true;
       mismatchNotice.textContent = "";
@@ -456,6 +328,26 @@
         : "Normal bridge rules apply. The posted maximum speed is 45 mph.";
     }
     return "Open the official Bridge Authority report before leaving.";
+  }
+
+  function forecastVehicleContext(level) {
+    if (level === "closed") {
+      return "MDOT closes the bridge at 65 mph sustained wind, but this approach forecast is not the Bridge Authority's deck reading.";
+    }
+    if (level === "partial") {
+      return isHighProfile()
+        ? "High-profile vehicles are prohibited during an official partial closure. This approach forecast cannot establish that restriction."
+        : "Only passenger vehicles not towing may cross during an official partial closure. This approach forecast cannot establish that restriction.";
+    }
+    if (level === "escort") {
+      return isHighProfile()
+        ? "High-profile vehicles need an escort when that official restriction is active. Check the current Bridge Authority report before leaving."
+        : "This range can prompt high-profile escorts when confirmed by the Bridge Authority. It does not predict a future restriction.";
+    }
+    if (level === "advisory") {
+      return "This overlaps MDOT's advisory reference range, but only the Bridge Authority can declare a bridge advisory.";
+    }
+    return "The approach forecast is below MDOT's first wind reference range, but it does not guarantee unrestricted bridge conditions.";
   }
 
   function currentAnswerCopy(level, score) {
@@ -530,19 +422,10 @@
     appendListItem(list, vehicleGuidance(official.level));
 
     var wind = state.data?.current_wind;
-    var bridgeWind = officialBridgeWind();
-    if (bridgeWind) {
+    if (showWindContextWarning()) {
       appendListItem(
         list,
-        "Official Authority wind band: " +
-          bridgeWind.label +
-          " sustained. This is the active restriction band, not an exact live gust.",
-      );
-    }
-    if (windMismatch()) {
-      appendListItem(
-        list,
-        "The off-bridge NOAA reading is much lower than the official bridge band. Do not use it to override the advisory or restriction.",
+        "The nearby NOAA number is not measured on the bridge and must not override the official advisory or restriction.",
       );
     }
     if (wind && Number.isFinite(wind.wind_mph)) {
@@ -585,21 +468,14 @@
 
   function renderForecastAnswer(hour) {
     var band = forecastBandForVehicle(hour);
-    var score = forecastSuitability(hour);
-    var highProfile = isHighProfile();
+    var score = forecastWeatherScore(hour);
     var headline;
-    if (band === "closed") headline = "Forecast wind reaches the full-closure range.";
-    else if (band === "partial") {
-      headline = highProfile
-        ? "Forecast wind reaches the no-high-profile-vehicle range."
-        : "Forecast wind reaches the partial-closure range.";
-    } else if (band === "escort") {
-      headline = highProfile
-        ? "Forecast wind reaches the escort range."
-        : "A wind-restricted crossing may be possible.";
-    } else if (band === "advisory") headline = "Forecast wind reaches the advisory range.";
-    else if (score >= 75) headline = "Forecast conditions look favorable for crossing.";
-    else headline = "Forecast weather calls for extra caution.";
+    if (band === "closed") headline = "Approach wind is forecast at 65 mph or higher.";
+    else if (band === "partial") headline = "Approach wind is forecast in MDOT's 50–64 mph reference range.";
+    else if (band === "escort") headline = "Approach wind is forecast in MDOT's 35–49 mph reference range.";
+    else if (band === "advisory") headline = "Approach wind is forecast in MDOT's 20–34 mph reference range.";
+    else if (score >= 75) headline = "The approach forecast shows lighter wind and weather.";
+    else headline = "The approach forecast calls for extra weather awareness.";
 
     var answer = byId("personalAnswer");
     answer.dataset.level = band;
@@ -633,7 +509,7 @@
           ? " with a " + hour.precip_probability + "% precipitation chance."
           : "."),
     );
-    appendListItem(list, vehicleGuidance(band));
+    appendListItem(list, forecastVehicleContext(band));
     appendListItem(list, "Recheck the official bridge status immediately before leaving.");
   }
 
@@ -647,68 +523,6 @@
     }
     state.selectedHour = null;
     renderCurrentAnswer();
-  }
-
-  function renderBestWindow() {
-    var officialLevel = state.data?.official?.level || "unknown";
-    var showWindowButton = byId("showWindowButton");
-    if (officialLevel !== "open") {
-      setText("bestWindow", "No confirmed crossing window");
-      setText("bestWindowShort", "No confirmed window");
-      setText(
-        "bestWindowReason",
-        officialLevel === "unknown" ? "Official status unavailable" : "Official restriction active",
-      );
-      setText(
-        "bestWindowDetail",
-        officialLevel === "unknown"
-          ? "A crossing window cannot be recommended until the official bridge status is available."
-          : "The bridge is under an official restriction. An off-bridge approach forecast cannot predict bridge-deck wind or when the Authority will change the status.",
-      );
-      showWindowButton.disabled = true;
-      showWindowButton.textContent = "No official window available";
-      return;
-    }
-
-    var best = state.bestWindow;
-    if (!best) {
-      setText("bestWindow", "Hourly forecast unavailable");
-      setText("bestWindowShort", "Unavailable");
-      setText("bestWindowReason", "Check the NWS source");
-      setText("bestWindowDetail", "No reliable hour-by-hour window can be calculated right now.");
-      showWindowButton.disabled = true;
-      showWindowButton.textContent = "Forecast unavailable";
-      return;
-    }
-
-    var range = formatWindow(best.hours);
-    var peakWind = Math.max.apply(
-      null,
-      best.hours.map(function (hour) {
-        return Number(hour.wind_mph) || 0;
-      }),
-    );
-    var peakGust = Math.max.apply(
-      null,
-      best.hours.map(function (hour) {
-        return Number(hour.gust_mph) || 0;
-      }),
-    );
-    var reason =
-      peakWind +
-      " mph forecast wind" +
-      (peakGust ? ", gusts up to " + peakGust + " mph" : "");
-
-    setText("bestWindow", range);
-    setText("bestWindowShort", range);
-    setText("bestWindowReason", reason);
-    showWindowButton.disabled = false;
-    showWindowButton.textContent = "Show in forecast ↓";
-
-    setText(
-      "bestWindowDetail",
-      "This window has the strongest combined score for your vehicle, forecast wind, weather, and typical peak traffic timing.",
-    );
   }
 
   function renderTraffic() {
@@ -749,9 +563,6 @@
       return;
     }
 
-    var bestIndices = new Set(
-      state.data?.official?.level === "open" ? state.bestWindow?.indices || [] : [],
-    );
     hours.slice(0, 30).forEach(function (hour, index) {
       var band = hour.threshold_band || "normal";
       var button = document.createElement("button");
@@ -759,7 +570,6 @@
       button.className = "forecast-hour " + band;
       button.dataset.index = String(index);
       button.setAttribute("aria-label", forecastAriaLabel(hour));
-      if (bestIndices.has(index)) button.classList.add("is-best");
       if (state.selectedHour === index) button.classList.add("is-selected");
 
       var time = document.createElement("span");
@@ -880,12 +690,24 @@
     });
   }
 
+  function refreshRadar() {
+    var image = byId("radarImage");
+    var loading = byId("radarLoading");
+    if (!image || !loading) return;
+    image.classList.remove("is-loaded");
+    loading.hidden = false;
+    loading.textContent = "Loading official NWS radar...";
+    image.src = RADAR_LOOP_URL + "?fiveMinute=" + Math.floor(Date.now() / 300_000);
+    setText(
+      "radarRefreshed",
+      "Requested " + formatDetroitTime(Date.now(), { hour: "numeric", minute: "2-digit" }),
+    );
+  }
+
   function renderAll() {
     renderOfficialStatus();
-    computeBestWindow();
     renderConfidence();
     renderPlanner();
-    renderBestWindow();
     renderForecast();
     renderTraffic();
     refreshCamera();
@@ -1019,10 +841,8 @@
       button.setAttribute("aria-pressed", String(selected));
     });
     if (state.data) {
-      computeBestWindow();
       renderConfidence();
       renderPlanner();
-      renderBestWindow();
       renderForecast();
     }
     track("vehicle", { vehicle: vehicle });
@@ -1036,10 +856,8 @@
       button.setAttribute("aria-pressed", String(selected));
     });
     if (state.data) {
-      computeBestWindow();
       renderConfidence();
       renderPlanner();
-      renderBestWindow();
       renderForecast();
     }
     track("direction", { direction: direction });
@@ -1081,6 +899,17 @@
         "The camera image is temporarily unavailable. Use the official camera-page link above.";
     });
 
+    byId("radarImage").addEventListener("load", function () {
+      byId("radarImage").classList.add("is-loaded");
+      byId("radarLoading").hidden = true;
+    });
+    byId("radarImage").addEventListener("error", function () {
+      byId("radarImage").classList.remove("is-loaded");
+      byId("radarLoading").hidden = false;
+      byId("radarLoading").textContent =
+        "The NWS radar loop is temporarily unavailable. Use the interactive-radar link above.";
+    });
+
     byId("clearForecastSelection").addEventListener("click", function () {
       state.selectedHour = null;
       renderForecast();
@@ -1088,14 +917,6 @@
       track("forecast-clear");
     });
 
-    byId("showWindowButton").addEventListener("click", function () {
-      byId("forecastSection").scrollIntoView({ behavior: "smooth", block: "start" });
-      window.setTimeout(function () {
-        var best = document.querySelector(".forecast-hour.is-best");
-        if (best) best.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-      }, 350);
-      track("best-window");
-    });
   }
 
   function init() {
@@ -1103,9 +924,11 @@
     updateAlertButton();
     renderCameraTabs();
     refreshCamera();
+    refreshRadar();
     loadData();
     window.setInterval(loadData, 60_000);
     window.setInterval(refreshCamera, 60_000);
+    window.setInterval(refreshRadar, 300_000);
   }
 
   if (document.readyState === "loading") {

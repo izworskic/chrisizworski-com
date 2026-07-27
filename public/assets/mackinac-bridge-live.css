@@ -574,7 +574,7 @@ h1 {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   background: rgba(0, 0, 0, 0.14);
   border-top: 1px solid rgba(255, 255, 255, 0.11);
 }
@@ -674,6 +674,7 @@ h1 {
 
 .planner-card,
 .camera-section,
+.radar-section,
 .forecast-section,
 .guidance-section,
 .traffic-section,
@@ -926,43 +927,6 @@ legend {
   margin: 4px 0;
 }
 
-.window-card {
-  margin-top: 13px;
-  padding: 17px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  background: #f7f5ee;
-  border: 1px solid #dfdbcf;
-  border-radius: 11px;
-}
-
-.window-label {
-  display: block;
-  color: #7c8581;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.window-card strong {
-  display: block;
-  margin-top: 2px;
-  color: var(--bridge);
-  font-size: 19px;
-  font-weight: 400;
-}
-
-.window-card p {
-  margin: 3px 0 0;
-  color: #737d79;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 10px;
-}
-
 .text-button {
   padding: 5px 0;
   color: var(--bridge-light);
@@ -1083,6 +1047,80 @@ legend {
   text-align: center;
 }
 
+.radar-card {
+  overflow: hidden;
+  background: var(--bridge-dark);
+  border: 1px solid #1a4a40;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.radar-frame {
+  position: relative;
+  min-height: 440px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 42%, #365d58, transparent 50%),
+    #0a2420;
+}
+
+.radar-frame img {
+  width: 100%;
+  max-height: 680px;
+  display: block;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.radar-frame img.is-loaded {
+  opacity: 1;
+}
+
+.radar-loading {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+}
+
+.radar-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 30px 15px 11px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: rgba(255, 255, 255, 0.82);
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.72));
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
+.radar-live-dot {
+  width: 7px;
+  height: 7px;
+  margin-right: 5px;
+  display: inline-block;
+  background: #76dda9;
+  border-radius: 50%;
+}
+
+.radar-caption {
+  margin: 0;
+  padding: 11px 15px 13px;
+  color: rgba(255, 255, 255, 0.65);
+  background: #0a302a;
+  font-size: 11px;
+  text-align: center;
+}
+
 .forecast-legend {
   display: flex;
   flex-wrap: wrap;
@@ -1179,21 +1217,6 @@ legend {
 .forecast-hour.is-selected {
   outline: 3px solid var(--bridge);
   outline-offset: 1px;
-}
-
-.forecast-hour.is-best::after {
-  content: "BEST";
-  position: absolute;
-  top: -11px;
-  right: 7px;
-  padding: 2px 5px;
-  color: #fff;
-  background: var(--bridge);
-  border-radius: 99px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 7px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
 }
 
 .forecast-time {
@@ -1504,7 +1527,7 @@ legend {
 
 .source-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 9px;
 }
 
@@ -1600,14 +1623,6 @@ legend {
 
   .metric-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .metric:nth-child(2) {
-    border-right: 0;
-  }
-
-  .metric:nth-child(-n + 2) {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .planner-controls {
@@ -1740,6 +1755,7 @@ legend {
 
   .planner-card,
   .camera-section,
+  .radar-section,
   .forecast-section,
   .guidance-section,
   .traffic-section,
@@ -1780,11 +1796,6 @@ legend {
     font-size: 19px;
   }
 
-  .window-card {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
   .camera-tabs {
     flex-direction: column;
   }
@@ -1796,6 +1807,10 @@ legend {
   .camera-frame {
     min-height: 225px;
     aspect-ratio: 4 / 3;
+  }
+
+  .radar-frame {
+    min-height: 300px;
   }
 
   .forecast-legend {
