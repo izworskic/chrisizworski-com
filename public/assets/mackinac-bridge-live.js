@@ -2,7 +2,7 @@
   "use strict";
 
   var API_URL = "/api/mackinac";
-  var RADAR_LOOP_URL = "https://radar.weather.gov/ridge/standard/KAPX_loop.gif";
+  var RADAR_LOOP_URL = "/api/mackinac-media?asset=radar";
   var STATUS_KEY = "mackinac-bridge-live:last-status:v1";
   var ALERT_KEY = "mackinac-bridge-live:page-alerts:v1";
   var HISTORY_KEY = "mackinac-bridge-live:status-history:v1";
@@ -11,12 +11,12 @@
     {
       id: "north",
       label: "Mackinaw City looking north",
-      image_url: "https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image4_medium.jpg",
+      image_url: "/api/mackinac-media?asset=camera&direction=north",
     },
     {
       id: "south",
       label: "St. Ignace looking south",
-      image_url: "https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image2_large.jpg",
+      image_url: "/api/mackinac-media?asset=camera&direction=south",
     },
   ];
 

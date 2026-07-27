@@ -159,14 +159,12 @@ module.exports = async function handler(req, res) {
       {
         id: "north",
         label: "Mackinaw City looking north",
-        image_url:
-          "https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image4_medium.jpg",
+        image_url: "/api/mackinac-media?asset=camera&direction=north",
       },
       {
         id: "south",
         label: "St. Ignace looking south",
-        image_url:
-          "https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image2_large.jpg",
+        image_url: "/api/mackinac-media?asset=camera&direction=south",
       },
     ],
     thresholds: WIND_THRESHOLDS,
