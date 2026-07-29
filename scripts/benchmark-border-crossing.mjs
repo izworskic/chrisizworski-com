@@ -293,10 +293,14 @@ check(
 );
 check(
   "searchAndAnswerReadiness",
-  "Real public-domain bridge photograph is used unchanged",
+  "Public-domain photograph is reserved for social previews, not the live-tool hero",
   createHash("sha256").update(image).digest("hex") ===
     "aa9eaba167b723c747f1438b42a4e70663ac7c90930490d461af7fde1815176e" &&
-    main.includes("U.S. EPA, public domain"),
+    main.includes(
+      '<meta property="og:image" content="https://chrisizworski.com/assets/search/michigan-border-crossings.jpg">',
+    ) &&
+    main.includes('"creditText": "U.S. Environmental Protection Agency, public domain"') &&
+    ![main, ...detailPages].some((html) => html.includes('class="hero-figure"')),
   2,
 );
 

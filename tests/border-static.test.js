@@ -39,7 +39,7 @@ test("Michigan border flagship has indexable metadata and honest application sch
   assert.ok(main.includes('"numberOfItems": 5'));
   assert.doesNotMatch(main, /"@type"\s*:\s*"FAQPage"/);
   assert.match(main, /dateModified": "2026-07-28"/);
-  assert.match(main, /U\.S\. EPA, public domain/);
+  assert.match(main, /"creditText": "U\.S\. Environmental Protection Agency, public domain"/);
   assert.equal(jsonLd(main).length, 1);
 });
 
@@ -125,12 +125,23 @@ test("the Sault page has operator live cameras and U.P.-specific travel context"
   assert.ok(html.includes('href="/soo-locks/"'));
 });
 
-test("real public-domain photograph is unchanged and front-end assets stay within benchmark budgets", () => {
+test("the hero stays text-first while the public-domain photograph remains a social preview asset", () => {
   const imagePath = path.join(root, "public/assets/search/michigan-border-crossings.jpg");
   const image = readFileSync(imagePath);
   const hash = createHash("sha256").update(image).digest("hex");
   assert.equal(hash, "aa9eaba167b723c747f1438b42a4e70663ac7c90930490d461af7fde1815176e");
   assert.equal(image.length, 203972);
+  for (const route of ["michigan-border-wait-times", ...Object.keys(detailRoutes)]) {
+    const html = readFileSync(path.join(root, "public", route, "index.html"), "utf8");
+    assert.doesNotMatch(html, /class="hero-figure"/, `${route} still has a visible hero photo`);
+    assert.ok(
+      html.includes(
+        '<meta property="og:image" content="https://chrisizworski.com/assets/search/michigan-border-crossings.jpg">',
+      ),
+      `${route} lost its social preview image`,
+    );
+  }
+  assert.doesNotMatch(css, /\.hero-figure/);
   assert.ok(statSync(path.join(root, "public/assets/michigan-border-crossings.js")).size < 75_000);
   assert.ok(statSync(path.join(root, "public/assets/michigan-border-crossings.css")).size < 90_000);
   assert.ok(css.includes("@media (max-width: 430px)"));
