@@ -21,6 +21,12 @@ const intentionalChanges = new Set([
   "/mackinac-bridge-driver-assistance/",
   "/mackinac-bridge-rv-trailer-wind-rules/",
   "/mackinac-bridge-tolls/",
+  "/michigan-border-wait-times/",
+  "/gordie-howe-bridge-wait-time/",
+  "/ambassador-bridge-wait-time/",
+  "/detroit-windsor-tunnel-wait-time/",
+  "/blue-water-bridge-wait-time/",
+  "/sault-ste-marie-border-wait-time/",
   "/lake-superior-circle-tour/",
   "/northern-lights-michigan/",
   "/soo-locks/",
@@ -90,34 +96,41 @@ if (!toolsHtml.includes("Built by Chris Izworski")) failures.push("The new Tools
 const toolsJsonLdMatch = toolsHtml.match(/<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/i);
 const toolsJsonLd = toolsJsonLdMatch ? JSON.parse(toolsJsonLdMatch[1]) : null;
 const toolsItemList = toolsJsonLd?.["@graph"]?.find((entry) => entry["@type"] === "ItemList");
-if (toolsItemList?.numberOfItems !== 35 || toolsItemList?.itemListElement?.length !== 35) {
-  failures.push("Tools ItemList does not contain exactly 35 entries");
+if (toolsItemList?.numberOfItems !== 36 || toolsItemList?.itemListElement?.length !== 36) {
+  failures.push("Tools ItemList does not contain exactly 36 entries");
 }
 if (!toolsHtml.includes("Free Michigan and Great Lakes Tools") || !toolsHtml.includes("Start with the live tools")) {
   failures.push("Tools discovery title or featured-tools section is missing");
 }
-if ((toolsHtml.match(/data-featured-tool=/g) || []).length !== 8 || (toolsHtml.match(/class="tool-cta"/g) || []).length !== 8) {
-  failures.push("Tools page does not contain exactly eight featured tool cards and calls to action");
+if ((toolsHtml.match(/data-featured-tool=/g) || []).length !== 9 || (toolsHtml.match(/class="tool-cta"/g) || []).length !== 9) {
+  failures.push("Tools page does not contain exactly nine featured tool cards and calls to action");
 }
 if ((toolsHtml.match(/data-track-cluster=/g) || []).length < 5) {
   failures.push("Tools page is missing category jump links");
 }
 
 const sitemap = await readFile(path.join(publicRoot, "sitemap.xml"), "utf8");
-if (!/<loc>https:\/\/chrisizworski\.com\/tools\/<\/loc>\s*<lastmod>2026-07-27<\/lastmod>/.test(sitemap)) {
+if (!/<loc>https:\/\/chrisizworski\.com\/tools\/<\/loc>\s*<lastmod>2026-07-28<\/lastmod>/.test(sitemap)) {
   failures.push("Tools sitemap last-modified date was not updated");
 }
 for (const [route, lastmod] of Object.entries({
-  "": "2026-07-27",
-  "great-lakes/": "2026-07-27",
-  "mackinac-bridge-live/": "2026-07-27",
+  "": "2026-07-28",
+  "great-lakes/": "2026-07-28",
+  "mackinac-bridge-live/": "2026-07-28",
   "mackinac-bridge-driver-assistance/": "2026-07-27",
   "mackinac-bridge-rv-trailer-wind-rules/": "2026-07-27",
   "mackinac-bridge-tolls/": "2026-07-27",
-  "soo-locks/": "2026-07-20",
+  "soo-locks/": "2026-07-28",
   "northern-lights-michigan/": "2026-07-20",
   "great-lakes-buoys/": "2026-07-20",
   "great-lakes-beaches/": "2026-07-20",
+  "lake-superior-circle-tour/": "2026-07-28",
+  "michigan-border-wait-times/": "2026-07-28",
+  "gordie-howe-bridge-wait-time/": "2026-07-28",
+  "ambassador-bridge-wait-time/": "2026-07-28",
+  "detroit-windsor-tunnel-wait-time/": "2026-07-28",
+  "blue-water-bridge-wait-time/": "2026-07-28",
+  "sault-ste-marie-border-wait-time/": "2026-07-28",
 })) {
   const escapedRoute = route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const pattern = new RegExp(`<loc>https:\\/\\/chrisizworski\\.com\\/${escapedRoute}<\\/loc>\\s*<lastmod>${lastmod}<\\/lastmod>`);
@@ -138,6 +151,12 @@ const discoveryPages = [
   "mackinac-bridge-driver-assistance/index.html",
   "mackinac-bridge-rv-trailer-wind-rules/index.html",
   "mackinac-bridge-tolls/index.html",
+  "michigan-border-wait-times/index.html",
+  "gordie-howe-bridge-wait-time/index.html",
+  "ambassador-bridge-wait-time/index.html",
+  "detroit-windsor-tunnel-wait-time/index.html",
+  "blue-water-bridge-wait-time/index.html",
+  "sault-ste-marie-border-wait-time/index.html",
 ];
 for (const relativePath of discoveryPages) {
   const html = await readFile(path.join(publicRoot, relativePath), "utf8");
@@ -146,12 +165,47 @@ for (const relativePath of discoveryPages) {
 }
 
 const greatLakesHub = await readFile(path.join(publicRoot, "great-lakes", "index.html"), "utf8");
-if ((greatLakesHub.match(/data-featured-tool=/g) || []).length !== 7) {
-  failures.push("Great Lakes hub does not contain exactly seven featured live tools");
+if ((greatLakesHub.match(/data-featured-tool=/g) || []).length !== 8) {
+  failures.push("Great Lakes hub does not contain exactly eight featured live tools");
 }
 const historySection = greatLakesHub.match(/<h2 class="sh">History and Heritage<\/h2>([\s\S]*?)<h2 class="sh">/)?.[1] || "";
 if (/\/(?:soo-locks|northern-lights-michigan|great-lakes-buoys)\//.test(historySection)) {
   failures.push("A live Great Lakes tool remains misclassified under History and Heritage");
+}
+
+const borderRoutes = [
+  "michigan-border-wait-times",
+  "gordie-howe-bridge-wait-time",
+  "ambassador-bridge-wait-time",
+  "detroit-windsor-tunnel-wait-time",
+  "blue-water-bridge-wait-time",
+  "sault-ste-marie-border-wait-time",
+];
+for (const route of borderRoutes) {
+  const html = await readFile(path.join(publicRoot, route, "index.html"), "utf8");
+  if (!html.includes(`<link rel="canonical" href="https://chrisizworski.com/${route}/">`)) {
+    failures.push(`${route}: canonical URL is missing or incorrect`);
+  }
+  if (!html.includes("/assets/michigan-border-crossings.js")) {
+    failures.push(`${route}: shared live border client is missing`);
+  }
+  if (!sitemap.includes(`https://chrisizworski.com/${route}/`)) {
+    failures.push(`${route}: sitemap entry is missing`);
+  }
+}
+const borderMain = await readFile(path.join(publicRoot, "michigan-border-wait-times", "index.html"), "utf8");
+if ((borderMain.match(/data-crossing-result=/g) || []).length !== 3) {
+  failures.push("Michigan border tool does not contain all three Detroit comparison cards");
+}
+if (!borderMain.includes('data-corridor-card="blue-water"') || !borderMain.includes('data-corridor-card="sault-ste-marie"')) {
+  failures.push("Michigan border tool is missing Blue Water or the Upper Peninsula crossing");
+}
+if ((borderMain.match(/data-camera="/g) || []).length !== 6) {
+  failures.push("Michigan border tool does not expose all six fail-soft camera choices");
+}
+const borderClient = await readFile(path.join(publicRoot, "assets", "michigan-border-crossings.js"), "utf8");
+if (/511on\.ca\/map\/Cctv|wtbwb\.ca\/approach/.test(borderClient)) {
+  failures.push("Michigan border client bypasses the same-origin camera proxy");
 }
 
 const circleTour = await readFile(path.join(publicRoot, "lake-superior-circle-tour", "index.html"), "utf8");

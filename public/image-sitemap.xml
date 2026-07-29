@@ -688,4 +688,46 @@
       <image:caption>Mackinac Bridge toll calculator and fare guide</image:caption>
     </image:image>
   </url>
+  <url>
+    <loc>https://chrisizworski.com/michigan-border-wait-times/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/search/michigan-border-crossings.jpg</image:loc>
+      <image:caption>Michigan Ontario border crossing wait times and live travel tool</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/gordie-howe-bridge-wait-time/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/search/michigan-border-crossings.jpg</image:loc>
+      <image:caption>Gordie Howe International Bridge wait time guide</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/ambassador-bridge-wait-time/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/search/michigan-border-crossings.jpg</image:loc>
+      <image:caption>Ambassador Bridge between Detroit and Windsor</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/detroit-windsor-tunnel-wait-time/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/search/michigan-border-crossings.jpg</image:loc>
+      <image:caption>Detroit Windsor Tunnel border wait time guide</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/blue-water-bridge-wait-time/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/search/michigan-border-crossings.jpg</image:loc>
+      <image:caption>Blue Water Bridge wait time and camera guide</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/sault-ste-marie-border-wait-time/</loc>
+    <image:image>
+      <image:loc>https://chrisizworski.com/assets/search/michigan-border-crossings.jpg</image:loc>
+      <image:caption>Sault Ste Marie International Bridge Upper Peninsula border wait guide</image:caption>
+    </image:image>
+  </url>
 </urlset>

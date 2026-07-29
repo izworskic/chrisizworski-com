@@ -2,6 +2,15 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "functions": {
+    "api/border-crossings.js": {
+      "maxDuration": 20
+    },
+    "api/border-media.js": {
+      "maxDuration": 20
+    },
+    "api/border-trends.js": {
+      "maxDuration": 20
+    },
     "api/mackinac-media.js": {
       "maxDuration": 20
     },

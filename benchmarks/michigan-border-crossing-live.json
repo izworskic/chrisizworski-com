@@ -1,0 +1,57 @@
+{
+  "name": "Michigan–Ontario Border Crossing Live",
+  "buildDate": "2026-07-28",
+  "timezone": "America/Detroit",
+  "launchThreshold": 95,
+  "targetScore": 99,
+  "criticalGatePolicy": "Every safety and data-integrity gate must pass regardless of total score.",
+  "weights": {
+    "immediateCrossingDecision": 25,
+    "dataIntegrityAndSafety": 25,
+    "liveReliability": 20,
+    "searchAndAnswerReadiness": 20,
+    "experienceAndMeasurement": 10
+  },
+  "inventory": {
+    "crossings": [
+      "gordie-howe",
+      "ambassador",
+      "detroit-windsor-tunnel",
+      "blue-water",
+      "sault-ste-marie"
+    ],
+    "detroitComparison": [
+      "gordie-howe",
+      "ambassador",
+      "detroit-windsor-tunnel"
+    ],
+    "directions": [
+      "to-canada",
+      "to-united-states"
+    ]
+  },
+  "budgets": {
+    "javascriptUncompressedBytes": 75000,
+    "cssUncompressedBytes": 90000,
+    "mobileWidthPx": 390,
+    "desktopWidthPx": 1440,
+    "seriousAccessibilityFindings": 0,
+    "criticalAccessibilityFindings": 0
+  },
+  "measurement": {
+    "searchConsoleBaseline": null,
+    "analyticsBaseline": null,
+    "baselineStatus": "Record after production launch; do not infer or manufacture.",
+    "reviewDays": [
+      7,
+      28,
+      90,
+      180
+    ],
+    "comparisonPages": [
+      "/northern-lights-michigan/",
+      "/soo-locks/",
+      "/mackinac-bridge-live/"
+    ]
+  }
+}
