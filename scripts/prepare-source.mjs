@@ -94,23 +94,69 @@ if (!toolsHtml.includes(toolUrl)) {
   toolsHtml = toolsHtml.replace(tripPlannerHeading, `${card}${tripPlannerHeading}`);
 }
 
+const borderToolUrl = "https://chrisizworski.com/michigan-border-wait-times/";
+{
+  const jsonLdPattern = /<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/i;
+  const match = toolsHtml.match(jsonLdPattern);
+  if (!match) throw new Error("Tools page JSON-LD block was not found for the border tool");
+
+  const structuredData = JSON.parse(match[1]);
+  const graph = structuredData["@graph"] || [];
+  const collectionPage = graph.find((entry) => entry["@type"] === "CollectionPage");
+  const itemList = graph.find((entry) => entry["@type"] === "ItemList" && entry["@id"]?.endsWith("#toollist"));
+  if (!collectionPage || !itemList) throw new Error("Tools page structured data is missing its CollectionPage or ItemList");
+
+  if (!itemList.itemListElement.some((entry) => entry.item?.url === borderToolUrl)) {
+    itemList.itemListElement.push({
+      "@type": "ListItem",
+      position: itemList.itemListElement.length + 1,
+      item: {
+        "@type": "WebApplication",
+        name: "Michigan Border Wait Times Live, All Five Crossings",
+        url: borderToolUrl,
+        description:
+          "Official waits entering Canada or the United States at all five Michigan–Ontario crossings, with a three-way Detroit comparison, cameras, warnings, tolls, and Upper Peninsula coverage.",
+        applicationCategory: "TravelApplication",
+        operatingSystem: "Any web browser",
+        isAccessibleForFree: true,
+        author: { "@id": "https://chrisizworski.com/#person" },
+      },
+    });
+  }
+  itemList.itemListElement.forEach((entry, index) => {
+    entry.position = index + 1;
+  });
+  itemList.numberOfItems = itemList.itemListElement.length;
+  collectionPage.dateModified = "2026-07-28";
+  toolsHtml = toolsHtml.replace(match[1], JSON.stringify(structuredData));
+}
+
 await writeFile(toolsPath, toolsHtml);
 
 const sitemapPath = path.join(publicRoot, "sitemap.xml");
 let sitemap = await readFile(sitemapPath, "utf8");
-for (const route of [
-  "",
-  "great-lakes/",
-  "tools/",
-  "soo-locks/",
-  "northern-lights-michigan/",
-  "great-lakes-buoys/",
-  "great-lakes-beaches/",
-]) {
+const sitemapDates = {
+  "": "2026-07-28",
+  "great-lakes/": "2026-07-28",
+  "tools/": "2026-07-28",
+  "soo-locks/": "2026-07-28",
+  "northern-lights-michigan/": "2026-07-20",
+  "great-lakes-buoys/": "2026-07-20",
+  "great-lakes-beaches/": "2026-07-20",
+  "lake-superior-circle-tour/": "2026-07-28",
+  "mackinac-bridge-live/": "2026-07-28",
+  "michigan-border-wait-times/": "2026-07-28",
+  "gordie-howe-bridge-wait-time/": "2026-07-28",
+  "ambassador-bridge-wait-time/": "2026-07-28",
+  "detroit-windsor-tunnel-wait-time/": "2026-07-28",
+  "blue-water-bridge-wait-time/": "2026-07-28",
+  "sault-ste-marie-border-wait-time/": "2026-07-28",
+};
+for (const [route, lastModified] of Object.entries(sitemapDates)) {
   const escapedRoute = route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   sitemap = sitemap.replace(
     new RegExp(`(<loc>https:\\/\\/chrisizworski\\.com\\/${escapedRoute}<\\/loc>\\s*<lastmod>)[^<]+(<\\/lastmod>)`),
-    "$12026-07-20$2",
+    (_match, prefix, suffix) => `${prefix}${lastModified}${suffix}`,
   );
 }
 await writeFile(sitemapPath, sitemap);
@@ -178,7 +224,7 @@ const sourceSummary = {
   copiedPublicPaths: copiedPaths.size,
   sourceMode: rebuildFromSnapshot ? "audit-snapshot" : "checked-in-public-fallback",
   toolAdded: toolsHtml.includes(toolUrl),
-  toolSchemaItems: 19,
+  toolSchemaItems: 36,
   knownBrokenInternalLinksFixed: 3,
   noaaWaterLevelDatumFixed: true,
   auroraOutageFallbackFixed: true,

@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "toll_snapshot_updated": "2026-07-28",
+  "crossings": [
+    {
+      "id": "gordie-howe",
+      "name": "Gordie Howe International Bridge",
+      "short_name": "Gordie Howe Bridge",
+      "region": "Detroit–Windsor",
+      "michigan_city": "Detroit",
+      "ontario_city": "Windsor",
+      "route": "I-75 / Highway 401",
+      "latitude": 42.285,
+      "longitude": -83.078,
+      "cbp_port_number": "380102",
+      "cbp_graph_id": "03380102",
+      "cbsa_name": "Gordie Howe International Bridge",
+      "detail_path": "/gordie-howe-bridge-wait-time/",
+      "operator_url": "https://www.gordiehoweinternationalbridge.com/",
+      "official_wait_url": "https://bwt.cbp.gov/details/03380102/POV",
+      "hours": "Open 24 hours",
+      "detroit_comparison": true,
+      "commercial_allowed": true,
+      "notes": [
+        "Direct freeway connection between I-75 and Highway 401.",
+        "Pedestrian and bicycle access are separate from vehicle border processing."
+      ],
+      "tolls": {
+        "to_canada": {
+          "amount": 5.75,
+          "currency": "USD",
+          "label": "$5.75 USD",
+          "effective": "2026-07-27",
+          "note": "Standard passenger vehicle; Breakaway account rate is lower."
+        },
+        "to_us": {
+          "amount": 8,
+          "currency": "CAD",
+          "label": "$8 CAD",
+          "effective": "2026-07-27",
+          "note": "Standard passenger vehicle; Breakaway account rate is lower."
+        },
+        "source_url": "https://www.gordiehoweinternationalbridge.com/en/toll-rates"
+      },
+      "cameras": [
+        {
+          "id": "gordie-ontario-approach",
+          "label": "Highway 401 at Ojibway Parkway",
+          "description": "Ontario approach near the bridge",
+          "type": "still",
+          "source_name": "Ontario 511",
+          "source_url": "https://511on.ca/",
+          "upstream_url": "https://511on.ca/map/Cctv/875"
+        }
+      ],
+      "camera_note": "The bridge operator has not yet published its own public traffic cameras. This Ontario 511 view shows the nearby approach."
+    },
+    {
+      "id": "ambassador",
+      "name": "Ambassador Bridge",
+      "short_name": "Ambassador Bridge",
+      "region": "Detroit–Windsor",
+      "michigan_city": "Detroit",
+      "ontario_city": "Windsor",
+      "route": "I-75 / Huron Church Road",
+      "latitude": 42.311,
+      "longitude": -83.074,
+      "cbp_port_number": "380001",
+      "cbp_graph_id": "03380001",
+      "cbsa_name": "Ambassador Bridge",
+      "detail_path": "/ambassador-bridge-wait-time/",
+      "operator_url": "https://www.ambassadorbridge.com/",
+      "official_wait_url": "https://bwt.cbp.gov/details/03380001/POV",
+      "hours": "Open 24 hours",
+      "detroit_comparison": true,
+      "commercial_allowed": true,
+      "notes": [
+        "Connects Detroit with Windsor by Huron Church Road.",
+        "Truck and passenger processing are reported separately."
+      ],
+      "tolls": {
+        "to_canada": {
+          "amount": 10,
+          "currency": "USD",
+          "label": "$10 USD",
+          "effective": "2026-04-19",
+          "note": "Standard passenger vehicle paying by E-ZPass, credit card or U.S. cash."
+        },
+        "to_us": {
+          "amount": 14,
+          "currency": "CAD",
+          "label": "$14 CAD",
+          "effective": "2026-04-19",
+          "note": "Standard passenger vehicle paying Canadian cash; payment options vary."
+        },
+        "source_url": "https://www.ambassadorbridge.com/auto-toll-rates/"
+      },
+      "cameras": [
+        {
+          "id": "ambassador-ontario-approach",
+          "label": "Wyandotte Street at Patricia Road",
+          "description": "Windsor approach near the bridge",
+          "type": "still",
+          "source_name": "Ontario 511",
+          "source_url": "https://511on.ca/",
+          "upstream_url": "https://511on.ca/map/Cctv/2820"
+        }
+      ],
+      "camera_note": "This is a nearby Ontario 511 approach view. Use the bridge operator links for its directional bridge-camera pages."
+    },
+    {
+      "id": "detroit-windsor-tunnel",
+      "name": "Detroit–Windsor Tunnel",
+      "short_name": "Detroit–Windsor Tunnel",
+      "region": "Detroit–Windsor",
+      "michigan_city": "Detroit",
+      "ontario_city": "Windsor",
+      "route": "Downtown Detroit / Downtown Windsor",
+      "latitude": 42.317,
+      "longitude": -83.039,
+      "cbp_port_number": "380002",
+      "cbp_graph_id": "03380002",
+      "cbsa_name": "Windsor and Detroit Tunnel",
+      "detail_path": "/detroit-windsor-tunnel-wait-time/",
+      "operator_url": "https://www.dwtunnel.com/",
+      "official_wait_url": "https://bwt.cbp.gov/details/03380002/POV",
+      "hours": "Open 24 hours",
+      "detroit_comparison": true,
+      "commercial_allowed": true,
+      "notes": [
+        "Most direct downtown-to-downtown option.",
+        "Oversize, hazardous-material and some commercial vehicles face tunnel restrictions."
+      ],
+      "tolls": {
+        "to_canada": {
+          "amount": 9,
+          "currency": "USD",
+          "label": "$9 USD",
+          "effective": "2026-01-01",
+          "note": "Standard passenger vehicle from Detroit to Windsor."
+        },
+        "to_us": {
+          "amount": 8.25,
+          "currency": "CAD",
+          "label": "$8.25 CAD",
+          "effective": "2026-01-01",
+          "note": "Standard passenger vehicle from Windsor to Detroit."
+        },
+        "source_url": "https://www.dwtunnel.com/tolls/"
+      },
+      "cameras": [
+        {
+          "id": "tunnel-ontario-approach",
+          "label": "Goyeau Street at Park Street",
+          "description": "Windsor downtown approach near the tunnel",
+          "type": "still",
+          "source_name": "Ontario 511",
+          "source_url": "https://511on.ca/",
+          "upstream_url": "https://511on.ca/map/Cctv/1511"
+        }
+      ],
+      "camera_note": "This Ontario 511 view shows a nearby downtown approach, not the inspection queue."
+    },
+    {
+      "id": "blue-water",
+      "name": "Blue Water Bridge",
+      "short_name": "Blue Water Bridge",
+      "region": "Port Huron–Sarnia",
+      "michigan_city": "Port Huron",
+      "ontario_city": "Point Edward / Sarnia",
+      "route": "I-94 / I-69 / Highway 402",
+      "latitude": 42.999,
+      "longitude": -82.424,
+      "cbp_port_number": "380201",
+      "cbp_graph_id": "03380201",
+      "cbsa_name": "Blue Water Bridge",
+      "detail_path": "/blue-water-bridge-wait-time/",
+      "operator_url": "https://www.michigan.gov/mdot/programs/bridges-and-structures/blue-water-bridge",
+      "official_wait_url": "https://bwt.cbp.gov/details/03380201/POV",
+      "hours": "Open 24 hours",
+      "detroit_comparison": false,
+      "commercial_allowed": true,
+      "notes": [
+        "Primary Michigan crossing for the I-94/I-69 and Highway 402 corridor.",
+        "Toll payment and rates differ by direction."
+      ],
+      "tolls": {
+        "to_canada": {
+          "amount": 5,
+          "currency": "USD",
+          "label": "$5 USD",
+          "effective": "2025-10-01",
+          "note": "Passenger vehicle from Michigan; the U.S. plaza is cashless."
+        },
+        "to_us": {
+          "amount": 7,
+          "currency": "CAD",
+          "label": "$7 CAD",
+          "effective": "2025-04-01",
+          "note": "Passenger vehicle by debit or credit card from Ontario; the Canadian plaza is cashless."
+        },
+        "source_url": "https://www.michigan.gov/mdot/programs/bridges-and-structures/blue-water-bridge/toll-rates",
+        "alternate_source_url": "https://bluewaterbridge.ca/toll-rates/"
+      },
+      "cameras": [
+        {
+          "id": "blue-water-queue",
+          "label": "Bridge queue camera",
+          "description": "Official bridge approach queue view",
+          "type": "still",
+          "source_name": "Blue Water Bridge",
+          "source_url": "https://bluewaterbridge.ca/traffic/",
+          "upstream_url": "https://wtbwb.ca/approach.jpg"
+        },
+        {
+          "id": "blue-water-ontario-approach",
+          "label": "Highway 402 at Front Street",
+          "description": "Ontario highway approach",
+          "type": "still",
+          "source_name": "Ontario 511",
+          "source_url": "https://511on.ca/",
+          "upstream_url": "https://511on.ca/map/Cctv/2414"
+        }
+      ],
+      "camera_note": "The official queue image and Ontario 511 highway view are context only; neither is a measured wait time."
+    },
+    {
+      "id": "sault-ste-marie",
+      "name": "Sault Ste. Marie International Bridge",
+      "short_name": "Sault Ste. Marie Bridge",
+      "region": "Upper Peninsula",
+      "michigan_city": "Sault Ste. Marie",
+      "ontario_city": "Sault Ste. Marie",
+      "route": "I-75 / Highway 17",
+      "latitude": 46.506,
+      "longitude": -84.36,
+      "cbp_port_number": "380301",
+      "cbp_graph_id": "03380301",
+      "cbsa_name": "Sault Ste. Marie",
+      "detail_path": "/sault-ste-marie-border-wait-time/",
+      "operator_url": "https://www.saultbridge.com/",
+      "official_wait_url": "https://bwt.cbp.gov/details/03380301/POV",
+      "hours": "Open 24 hours",
+      "detroit_comparison": false,
+      "commercial_allowed": true,
+      "notes": [
+        "Michigan's Upper Peninsula border crossing to Ontario.",
+        "Connects I-75 with Highway 17 through the twin Sault Ste. Marie communities."
+      ],
+      "tolls": {
+        "to_canada": {
+          "amount": 4.6,
+          "currency": "USD",
+          "label": "$4.60 USD",
+          "effective": "2026-04-01",
+          "note": "Passenger car, light truck or motorcycle."
+        },
+        "to_us": {
+          "amount": 6.4,
+          "currency": "CAD",
+          "label": "$6.40 CAD",
+          "effective": "2026-04-01",
+          "note": "Passenger car, light truck or motorcycle."
+        },
+        "source_url": "https://www.saultbridge.com/toll-rates/"
+      },
+      "cameras": [
+        {
+          "id": "sault-ontario-approach",
+          "label": "Highway 17 near Trunk Road",
+          "description": "Ontario approach looking west",
+          "type": "still",
+          "source_name": "Ontario 511",
+          "source_url": "https://511on.ca/",
+          "upstream_url": "https://511on.ca/map/Cctv/1250"
+        }
+      ],
+      "live_video": [
+        {
+          "id": "sault-canada-plaza",
+          "label": "Canada plaza live camera",
+          "url": "https://v.angelcam.com/iframe?v=p2lgz17orn",
+          "source_url": "https://www.saultbridge.com/live-cameras/"
+        },
+        {
+          "id": "sault-us-approach",
+          "label": "U.S. approach live camera",
+          "url": "https://v.angelcam.com/iframe?v=1nl8v4goy0",
+          "source_url": "https://www.saultbridge.com/live-cameras/"
+        }
+      ],
+      "camera_note": "The bridge operator provides live video for both plazas; the Ontario 511 still is a fail-soft approach view."
+    }
+  ]
+}

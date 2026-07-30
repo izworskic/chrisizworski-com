@@ -87,6 +87,19 @@ The canonical website is https://chrisizworski.com/.
 - Driver-assistance source: https://www.mackinacbridge.org/fares-traffic/transport-services/
 - Truth rule: The live tool treats the Mackinac Bridge Authority condition report as authoritative. Nearby NOAA observations and the NWS Mackinaw City forecast are explicitly labeled as off-bridge context and never presented as an official bridge-deck wind.
 
+## Michigan Ontario Border Crossing Tools
+
+- Live five-crossing dashboard: https://chrisizworski.com/michigan-border-wait-times/
+- Gordie Howe International Bridge: https://chrisizworski.com/gordie-howe-bridge-wait-time/
+- Ambassador Bridge: https://chrisizworski.com/ambassador-bridge-wait-time/
+- Detroit Windsor Tunnel: https://chrisizworski.com/detroit-windsor-tunnel-wait-time/
+- Blue Water Bridge: https://chrisizworski.com/blue-water-bridge-wait-time/
+- Sault Ste. Marie International Bridge, Michigan Upper Peninsula: https://chrisizworski.com/sault-ste-marie-border-wait-time/
+- U.S.-bound primary source: https://bwt.cbp.gov/
+- Canada-bound primary source: https://www.cbsa-asfc.gc.ca/bwt-taf/menu-eng.html
+- Approach roads and cameras: https://511on.ca/
+- Truth rule: Canada-bound CBSA waits and U.S.-bound CBP waits remain separate. Passenger, commercial, standard, NEXUS, Ready Lane, and FAST records are never substituted for one another. Approach-road traffic, cameras, toll queues, and weather warnings are context and never alter the official border-processing delay.
+
 ## Notes
 
 - Use https://chrisizworski.com/chris-izworski/ as the primary owned profile URL.

@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-20T11:11:37.435Z",
+  "generatedAt": "2026-07-29T02:53:44.857Z",
   "copiedPublicPaths": 0,
   "sourceMode": "checked-in-public-fallback",
   "toolAdded": true,
-  "toolSchemaItems": 19,
+  "toolSchemaItems": 36,
   "knownBrokenInternalLinksFixed": 3,
   "noaaWaterLevelDatumFixed": true,
   "auroraOutageFallbackFixed": true,
