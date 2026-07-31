@@ -137,7 +137,7 @@ function detailPage(beach) {
         <p>${html(beach.summary)}</p>
         <p>${html(beach.name)} is a ${html(beach.access.toLowerCase())} on ${html(beach.lake)} in ${html(beach.county)} County. Its report combines a local three-day weather forecast with the nearest relevant, recent NOAA lake observation and any matching Michigan BeachGuard or National Weather Service notice.</p>
         <h3>How to read this page</h3>
-        <p>The Beach Day Score compares day-trip potential, not whether entering the water is appropriate. Water temperature and waves are shown only when the selected NOAA observation is no more than six hours old. Open the named source, judge the station distance, and reassess actual shoreline conditions when you arrive.</p>
+        <p>The Beach Day Score compares day-trip potential, not whether entering the water is appropriate. It is N/A unless the required forecast values and both water temperature and wave height are present, with the NOAA observation no more than six hours old. Open the named source, judge the station distance, and reassess actual shoreline conditions when you arrive.</p>
       </article>
       <aside><div class="method-card"><h3>Beach character</h3><div class="condition-chips">${(beach.traits || []).map((trait) => `<span class="trait-chip">${html(trait)}</span>`).join("")}</div><p><strong>Access:</strong> ${html(beach.access)}<br><strong>Lake:</strong> ${html(beach.lake)}<br><strong>County:</strong> ${html(beach.county)}</p></div></aside>
     </section>

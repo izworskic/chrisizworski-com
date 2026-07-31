@@ -68,7 +68,11 @@
   }
 
   function scoreText(beach) {
-    return beach.rating && beach.rating.score != null ? String(beach.rating.score) : "—";
+    return beach.rating && beach.rating.score != null ? String(beach.rating.score) : "N/A";
+  }
+
+  function scoreMetricText(beach) {
+    return beach.rating && beach.rating.score != null ? String(beach.rating.score) + "/100" : "N/A";
   }
 
   function level(beach) {
@@ -407,7 +411,7 @@
       '<div class="dialog-score"><strong>' + escapeHtml(scoreText(beach)) + '</strong><span>' + escapeHtml(beach.rating.label) + '<br>Beach Day Score</span></div></div>' +
       '<div class="dialog-body"><div class="truth-status" data-state="' + escapeHtml(quality.state) + '"><strong>' + escapeHtml(quality.label || "Official status unavailable") + '</strong><p>' + escapeHtml(quality.interpretation || "Check the official source before entering the water.") + '</p></div>' +
       '<div class="metric-grid">' + metrics.map(function (metric) { return '<div class="metric"><span>' + escapeHtml(metric[0]) + '</span><strong>' + escapeHtml(metric[1]) + '</strong></div>'; }).join("") + '</div>' +
-      '<h3>Why this score</h3><ul class="reason-list">' + reasons.map(function (reason) { return '<li>' + escapeHtml(reason) + '</li>'; }).join("") + hazardMarkup + '</ul>' +
+      '<h3>Why this result</h3><ul class="reason-list">' + reasons.map(function (reason) { return '<li>' + escapeHtml(reason) + '</li>'; }).join("") + hazardMarkup + '</ul>' +
       (lake.station_id ? '<p><small>Lake observations: NOAA station ' + escapeHtml(lake.station_id) + (lake.distance_miles != null ? ", about " + escapeHtml(lake.distance_miles) + " miles away" : "") + (lake.observed_at ? ", observed " + escapeHtml(formatDate(lake.observed_at)) : "") + '.</small></p>' : "") +
       '<div class="dialog-actions"><a class="button" href="' + escapeHtml(beach.url) + '">Full beach page</a><a class="button button-secondary" href="' + escapeHtml(quality.official_url || "https://mienviro.michigan.gov/nsite/beach/map/results") + '" target="_blank" rel="noopener">Check BeachGuard</a></div></div>';
   }
@@ -438,7 +442,7 @@
     var today = beach.weather && beach.weather.today ? beach.weather.today : {};
     var lake = beach.lake_conditions || {};
     var metrics = [
-      ["Beach Day Score", scoreText(beach) + "/100"],
+      ["Beach Day Score", scoreMetricText(beach)],
       ["Today’s high", formatMetric(today.temperature_max_f, "°F", "—")],
       ["Rain chance", formatMetric(today.precipitation_probability_max, "%", "—")],
       ["Water temperature", lake.fresh ? formatMetric(lake.water_temp_f, "°F", "—") : "Not current"],
@@ -448,7 +452,7 @@
     container.innerHTML = '<h2>Conditions today</h2><p class="detail-summary">' + escapeHtml(beach.rating.label) + '. Updated ' + escapeHtml(formatDate(state.data.generated_at)) + '.</p>' +
       '<div class="truth-status" data-state="' + escapeHtml(quality.state) + '"><strong>' + escapeHtml(quality.label) + '</strong><p>' + escapeHtml(quality.interpretation) + '</p></div>' +
       '<div class="metric-grid">' + metrics.map(function (metric) { return '<div class="metric"><span>' + escapeHtml(metric[0]) + '</span><strong>' + escapeHtml(metric[1]) + '</strong></div>'; }).join("") + '</div>' +
-      '<h3>What is shaping the score</h3><ul class="reason-list">' + (beach.rating.reasons || []).map(function (reason) { return '<li>' + escapeHtml(reason) + '</li>'; }).join("") + '</ul>' +
+      '<h3>What is shaping this result</h3><ul class="reason-list">' + (beach.rating.reasons || []).map(function (reason) { return '<li>' + escapeHtml(reason) + '</li>'; }).join("") + '</ul>' +
       '<div class="dialog-actions"><a class="button" href="' + escapeHtml(quality.official_url) + '" target="_blank" rel="noopener">Check BeachGuard</a><a class="button button-secondary" href="/great-lakes-beaches/">Compare all beaches</a></div>';
   }
 

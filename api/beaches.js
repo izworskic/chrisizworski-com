@@ -254,7 +254,7 @@ module.exports = async function handler(req, res) {
   const eligible = rankingInputsLive
     ? hydrated
         .filter((beach) => beach.swimming)
-        .filter((beach) => beach.rating.score != null)
+        .filter((beach) => beach.rating.eligible === true)
         .filter((beach) => beach.water_quality.state === "no-active-alert")
         .filter((beach) => !beach.hazards.length)
         .sort((first, second) => second.rating.score - first.rating.score || first.name.localeCompare(second.name))
@@ -292,7 +292,7 @@ module.exports = async function handler(req, res) {
       explanation: !season.active
         ? "The daily ranking runs May 15 through September 15."
         : rankingInputsLive
-          ? "Official notice and hazard feeds returned for this ranking."
+          ? "Official notice and hazard feeds returned; only beaches with complete required score inputs are ranked."
           : "The daily ranking is withheld because an official notice, hazard, or forecast source did not return.",
     },
     daily_top_slugs: season.active ? eligible.slice(0, 10).map((beach) => beach.slug) : [],

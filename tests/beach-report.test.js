@@ -108,12 +108,51 @@ test("official closure and advisory states override an otherwise perfect plannin
   const closure = scoreBeach({ ...input, waterQuality: { state: "closure" } });
   assert.equal(closure.score, 0);
   assert.equal(closure.level, "closed");
+  assert.equal(closure.eligible, false);
   const advisory = scoreBeach({ ...input, waterQuality: { state: "advisory" } });
   assert.equal(advisory.score, 20);
   assert.equal(advisory.level, "advisory");
   const noAlert = scoreBeach({ ...input, waterQuality: { state: "no-active-alert" } });
   assert.equal(noAlert.score, 100);
+  assert.equal(noAlert.eligible, true);
   assert.ok(noAlert.reasons.every((reason) => !/safe to swim|water is safe/i.test(reason)));
+});
+
+test("missing, incomplete, and stale required inputs produce N/A instead of fallback points", () => {
+  const input = {
+    beach: { destinationScore: 15, swimming: true },
+    weather: { temperature_max_f: 82, precipitation_probability_max: 0, wind_gusts_max_mph: 8 },
+    waterQuality: { state: "no-active-alert" },
+    hazards: [],
+  };
+
+  const noLakeObservation = scoreBeach({ ...input, lakeConditions: null });
+  assert.equal(noLakeObservation.score, null);
+  assert.equal(noLakeObservation.label, "Insufficient current data");
+  assert.equal(noLakeObservation.eligible, false);
+  assert.equal(noLakeObservation.data_complete, false);
+
+  const incompleteObservation = scoreBeach({
+    ...input,
+    lakeConditions: { fresh: true, water_temp_f: 72, wave_height_ft: null },
+  });
+  assert.equal(incompleteObservation.score, null);
+  assert.match(incompleteObservation.reasons.join(" "), /does not include both water temperature and wave height/i);
+
+  const staleObservation = scoreBeach({
+    ...input,
+    lakeConditions: { fresh: false, water_temp_f: 72, wave_height_ft: 0.5 },
+  });
+  assert.equal(staleObservation.score, null);
+  assert.match(staleObservation.reasons.join(" "), /six hours old or newer/i);
+
+  const incompleteForecast = scoreBeach({
+    ...input,
+    weather: { temperature_max_f: 82, precipitation_probability_max: null, wind_gusts_max_mph: 8 },
+    lakeConditions: { fresh: true, water_temp_f: 72, wave_height_ft: 0.5 },
+  });
+  assert.equal(incompleteForecast.score, null);
+  assert.match(incompleteForecast.reasons.join(" "), /missing one or more required/i);
 });
 
 test("beach API keeps source truth and exclusion rules in its browser contract", async () => {

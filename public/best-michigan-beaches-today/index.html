@@ -46,7 +46,7 @@
           {
             "@type": "Question",
             "name": "How are Michigan beaches ranked today?",
-            "acceptedAnswer": {"@type": "Answer", "text": "Every eligible beach is scored with the same 100-point rubric: air comfort, rain, wind, recent water temperature, recent waves, and destination fit. Official closures, contamination advisories, and matching beach hazards override the score and remove a beach from the daily ranking."}
+            "acceptedAnswer": {"@type": "Answer", "text": "Every eligible beach is scored with the same 100-point rubric: air comfort, rain, wind, recent water temperature, recent waves, and destination fit. Every required weather input and both NOAA lake readings must be current and present; otherwise the score is N/A and the beach is not ranked. Official closures, contamination advisories, and matching beach hazards also remove a beach from the daily ranking."}
           },
           {
             "@type": "Question",
@@ -112,7 +112,7 @@
         <div>
           <p class="section-kicker">Recalculated from live inputs</p>
           <h2 id="ranking-heading">Today’s top 10</h2>
-          <p class="section-intro">Only designated swim beaches with a forecast and without a matched active closure, contamination advisory, or National Weather Service beach hazard are eligible.</p>
+          <p class="section-intro">Only designated swim beaches with every required forecast input, recent NOAA water-temperature and wave readings, and no matched active closure, contamination advisory, or National Weather Service beach hazard are eligible. Incomplete data is N/A, never a fallback score.</p>
         </div>
         <a href="/great-lakes-beaches/">Compare every beach →</a>
       </div>
@@ -125,7 +125,7 @@
       <article class="content-section">
         <p class="section-kicker">A benchmark, not a vibe</p>
         <h2 id="method-heading">How every beach is scored</h2>
-        <p>The Beach Day Score uses the same 100 available points everywhere: 25 for comfortable air, 20 for a dry forecast, 15 for manageable wind, 12 for recent water temperature, 13 for recent wave height, and 15 for destination fit. The ranking can change during the day as its inputs update.</p>
+        <p>The Beach Day Score uses the same 100 available points everywhere: 25 for comfortable air, 20 for a dry forecast, 15 for manageable wind, 12 for recent water temperature, 13 for recent wave height, and 15 for destination fit. A score is published only when all five condition inputs are present and the two NOAA readings are no more than six hours old. Otherwise it is N/A and excluded from the ranking. The ranking can change during the day as its inputs update.</p>
         <h3>Conditions that override the score</h3>
         <p>A Michigan BeachGuard closure sets the score to zero. A contamination advisory caps it at 20. Matching National Weather Service hazards, high observed waves, and very cold water also cap the recommendation. A feed failure is shown as unavailable; it is never converted into an all-clear.</p>
         <div class="safety-note"><strong>No-alert does not mean recently tested.</strong> Even the number-one beach requires an official-record check, posted-sign check, and real-world assessment on arrival.</div>
@@ -135,7 +135,7 @@
         <h3>Is the highest-scoring beach always the closest?</h3>
         <p>No. This ranking compares conditions and destination fit statewide. Use “Near me” in the year-round report to calculate distance on your device and sort all 50 locations.</p>
         <h3>How current are wave and water-temperature readings?</h3>
-        <p>They come from the nearest relevant NOAA buoy and count only when the observation is six hours old or newer. The beach detail names the station and distance so you can judge how representative it may be.</p>
+        <p>They come from the nearest relevant NOAA buoy and count only when the observation is six hours old or newer and includes both readings. If either is missing, the Beach Day Score is N/A. The beach detail names the station and distance so you can judge how representative it may be.</p>
       </article>
       <aside>
         <div class="source-card">

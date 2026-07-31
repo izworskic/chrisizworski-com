@@ -34,7 +34,7 @@
       "weight": 15,
       "checks": [
         {"id": "bounded_parallel_fetches", "points": 5, "description": "Upstream calls run in parallel with timeouts and cache policy."},
-        {"id": "stale_observation_guard", "points": 5, "description": "NOAA observations older than six hours are not treated as current score inputs."},
+        {"id": "stale_observation_guard", "points": 5, "description": "Missing, incomplete, or stale NOAA observations produce N/A rather than fallback points and are excluded from rankings."},
         {"id": "graceful_degradation", "points": 5, "description": "Each source has an explicit unavailable state and the UI keeps official-source fallbacks."}
       ]
     },

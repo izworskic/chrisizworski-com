@@ -64,7 +64,7 @@
             "name": "Which Michigan beach is best today?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "During the summer season, the Michigan Beach Report ranks eligible beaches each day using forecast air temperature, rain and wind, recent NOAA water temperature and waves, destination fit, active Michigan BeachGuard notices, and National Weather Service beach hazards. A closure or contamination advisory removes a beach from the daily picks."
+              "text": "During the summer season, the Michigan Beach Report ranks eligible beaches each day using forecast air temperature, rain and wind, recent NOAA water temperature and waves, destination fit, active Michigan BeachGuard notices, and National Weather Service beach hazards. A beach needs every required weather input plus a NOAA water-temperature and wave reading no more than six hours old; otherwise its score is N/A and it is not ranked."
             }
           },
           {
@@ -88,7 +88,7 @@
             "name": "What is the Beach Day Score?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "The Beach Day Score is a transparent 0–100 planning score based on air comfort, dry weather, wind, observed water temperature, observed waves, and destination fit. It is not a water-safety certification. Official closures, contamination advisories, and beach hazards override the score."
+              "text": "The Beach Day Score is a transparent 0–100 planning score based on air comfort, dry weather, wind, observed water temperature, observed waves, and destination fit. If any required condition input is missing, the score is N/A. It is not a water-safety certification. Official closures, contamination advisories, and beach hazards override the score."
             }
           }
         ]
@@ -170,7 +170,7 @@
         <div>
           <p class="section-kicker">Summer daily ranking</p>
           <h2 id="daily-heading">Best Michigan beaches today</h2>
-          <p class="section-intro">The top eligible picks balance comfortable weather, low rain and wind, recent lake observations, and destination quality. Active closures, contamination advisories, and beach hazards are excluded.</p>
+          <p class="section-intro">The top eligible picks balance comfortable weather, low rain and wind, recent lake observations, and destination quality. Beaches without every required input are shown as N/A and are not ranked; active closures, contamination advisories, and beach hazards are also excluded.</p>
         </div>
         <a href="/best-michigan-beaches-today/">How every beach ranks →</a>
       </div>
@@ -221,7 +221,7 @@
         <p class="section-kicker">Transparent by design</p>
         <h2 id="methodology-heading">What the Beach Day Score means</h2>
         <p>The 0–100 score answers one narrow question: <em>how promising does this beach look for an ordinary day trip?</em> It combines up to 25 points for air comfort, 20 for dry weather, 15 for wind, 12 for observed water temperature, 13 for observed waves, and 15 for the destination itself.</p>
-        <p>Recent NOAA observations are used only when they are no more than six hours old. Because offshore stations can be far from a beach, every detail view names the station, its distance, and observation time. Missing lake observations lower confidence instead of being presented as current.</p>
+        <p>A score is calculated only when the forecast includes air temperature, rain chance, and wind gusts and a NOAA observation no more than six hours old includes both water temperature and wave height. If any required input is missing, the score is N/A and the beach is excluded from the daily ranking. Because offshore stations can be far from a beach, every detail view names the station, its distance, and observation time.</p>
         <h3>Official notices override the number</h3>
         <p>An active Michigan BeachGuard closure sets the score to zero. A contamination advisory caps it at 20. A matching National Weather Service beach hazard or rough observed waves also limits the recommendation. Those beaches are not eligible for the daily top picks.</p>
         <div class="safety-note"><strong>The key truth rule:</strong> “No active EGLE alert found” does not mean a recent water sample exists and is not a guarantee of water quality. Check the official record, posted beach signs, changing weather, and your own conditions on arrival.</div>
@@ -233,7 +233,7 @@
         <h3>Which Michigan beach is best today?</h3>
         <p>There is no permanent winner. During summer, today’s top beaches appear above after current official notices and hazards are checked and the eligible locations are scored against the same weather and lake-condition rubric.</p>
         <h3>Why can water temperature or waves say “not current”?</h3>
-        <p>The report will not pass an old buoy observation off as live. A reading more than six hours old is withheld from the score and displayed as not current.</p>
+        <p>The report will not pass an old or incomplete buoy observation off as live. A reading more than six hours old—or one missing water temperature or wave height—makes the score N/A and is displayed as not current or unavailable.</p>
         <h3>Can I use this to decide whether to swim?</h3>
         <p>Use it to compare day-trip conditions, then check BeachGuard, National Weather Service hazards, lifeguard instructions, flags, posted notices, and actual conditions at the shoreline. Great Lakes waves and currents can change rapidly.</p>
       </article>

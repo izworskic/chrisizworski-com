@@ -17,6 +17,7 @@ test("Michigan Beach Report main page has answer-ready metadata and honest fallb
   assert.match(html, /does not mean a recent water sample exists/);
   assert.match(html, /<noscript>/);
   assert.match(html, /National Park Service/);
+  assert.match(html, /score is N\/A and the beach is excluded/i);
   assert.match(html, /\/assets\/beach-report\.js/);
   assert.doesNotMatch(html, />[^<]*(water is safe|safe to swim|safe for swimming)[^<]*</i);
 });
@@ -29,6 +30,7 @@ test("seasonal daily page is canonical but explains its automatic pause", () => 
   assert.match(html, /September 15/);
   assert.match(html, /year-round Michigan Beach Report remains live/i);
   assert.match(html, /id="dailyList"/);
+  assert.match(html, /Incomplete data is N\/A, never a fallback score/i);
 });
 
 test("every catalog beach has a structured, canonical detail page and sitemap entry", () => {
@@ -59,4 +61,6 @@ test("the browser client never renders missing lake observations as zero", () =>
   const client = read("public/assets/beach-report.js");
   assert.match(client, /value !== null && value !== undefined && value !== ""/);
   assert.match(client, /lake\.fresh \? formatMetric\(lake\.water_temp_f/);
+  assert.match(client, /score != null \? String\(beach\.rating\.score\) : "N\/A"/);
+  assert.match(client, /scoreMetricText/);
 });

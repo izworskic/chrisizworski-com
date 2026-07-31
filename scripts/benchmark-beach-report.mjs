@@ -65,10 +65,11 @@ const evaluators = {
   ),
   daily_decision: () => all(has(api, /daily_top_slugs/), has(dailyPage, /id="dailyList"/), has(client, /season\.active/)),
   official_overrides: () => all(
-    has(library, /waterQuality\?\.state === "closure"[\s\S]{0,100}score = 0/),
+    has(library, /if \(waterQuality\?\.state === "closure"\) \{[\s\S]{0,160}score: 0/),
     has(library, /waterQuality\?\.state === "advisory"[\s\S]{0,100}Math\.min\(score, 20\)/),
     has(library, /if \(hazards\.length\)/),
     has(api, /water_quality\.state === "no-active-alert"/),
+    has(api, /rating\.eligible === true/),
     has(api, /rankingInputsLive/),
   ),
   no_false_all_clear: () => all(
@@ -90,8 +91,11 @@ const evaluators = {
   ),
   stale_observation_guard: () => all(
     has(library, /ageHours != null && ageHours <= 6/),
-    has(library, /lakeConditions\?\.fresh \? lakeConditions\.water_temp_f : null/),
-    has(library, /lakeConditions\?\.fresh \? lakeConditions\.wave_height_ft : null/),
+    has(library, /const dataComplete = Boolean\(weatherComplete && lakeObservationComplete\)/),
+    has(library, /if \(!dataComplete\) \{[\s\S]{0,1600}score: null/),
+    has(library, /score: null,[\s\S]{0,500}eligible: false,[\s\S]{0,100}data_complete: false/),
+    has(api, /rating\.eligible === true/),
+    has(mainPage + dailyPage, /score is N\/A/i),
   ),
   graceful_degradation: () => all(
     has(api, /status: "unavailable"/),

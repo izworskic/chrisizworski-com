@@ -39,7 +39,7 @@ These are directional targets to evaluate after launch, not promises and not par
 - Do not launch below 90/100.
 - A closure, advisory, or matching hazard must outrank the numerical score every time.
 - “No active alert found” must never be described as a recent test or a guarantee of water quality.
-- A buoy observation older than six hours must not earn water-temperature or wave points.
+- A missing, incomplete, or more-than-six-hours-old NOAA observation must make the Beach Day Score N/A; it must never receive fallback points or ranking eligibility.
 - If BeachGuard is unavailable, the interface must say so and keep the official link visible.
 - Review the official BeachGuard integration and a sample of matched names at the start of every season.
 
