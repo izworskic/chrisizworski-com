@@ -54,3 +54,9 @@ test("the report is discoverable across the site and has a dedicated sitemap", (
   assert.match(read("public/robots.txt"), /Sitemap: https:\/\/chrisizworski\.com\/sitemap-beaches\.xml/);
   assert.match(read("public/sitemap.xml"), /best-michigan-beaches-today/);
 });
+
+test("the browser client never renders missing lake observations as zero", () => {
+  const client = read("public/assets/beach-report.js");
+  assert.match(client, /value !== null && value !== undefined && value !== ""/);
+  assert.match(client, /lake\.fresh \? formatMetric\(lake\.water_temp_f/);
+});

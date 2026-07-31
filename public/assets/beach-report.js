@@ -31,7 +31,7 @@
   }
 
   function finite(value) {
-    return Number.isFinite(Number(value));
+    return value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value));
   }
 
   function round(value) {
