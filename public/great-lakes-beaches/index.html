@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Michigan Beach Report: Live Conditions &amp; Closures | Chris Izworski</title>
-  <meta name="description" content="Compare 50 Michigan Great Lakes beaches using live closures, beach hazards, waves, water temperature, wind, rain, and a transparent Beach Day Score.">
+  <meta name="description" content="Compare 50 Michigan Great Lakes beaches using closures, NWS swim risk and alerts, waves, water temperature, wind, rain, and a transparent Beach Day Score.">
   <link rel="canonical" href="https://chrisizworski.com/great-lakes-beaches/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Michigan Beach Report: Live Conditions &amp; Closures">
@@ -39,7 +39,7 @@
         "@id": "https://chrisizworski.com/great-lakes-beaches/#report",
         "url": "https://chrisizworski.com/great-lakes-beaches/",
         "name": "Michigan Beach Report",
-        "description": "A year-round comparison of Michigan Great Lakes beaches using active BeachGuard notices, National Weather Service hazards, NOAA buoy observations, and weather forecasts.",
+        "description": "A year-round comparison of Michigan Great Lakes beaches using active BeachGuard notices, National Weather Service swim-risk forecasts and alerts, NOAA buoy observations, and weather forecasts.",
         "applicationCategory": "TravelApplication",
         "operatingSystem": "Any",
         "isAccessibleForFree": true,
@@ -64,7 +64,7 @@
             "name": "Which Michigan beach is best today?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "During the summer season, the Michigan Beach Report ranks eligible beaches each day using forecast air temperature, rain and wind, recent NOAA water temperature and waves, destination fit, active Michigan BeachGuard notices, and National Weather Service beach hazards. A beach needs every required weather input plus a NOAA water-temperature and wave reading no more than six hours old; otherwise its score is N/A and it is not ranked."
+              "text": "During the summer season, the Michigan Beach Report ranks beaches using forecast air temperature, rain and wind, recent NOAA water temperature and waves, and destination fit. A pick also needs no matched BeachGuard or relevant NWS alert and an explicit current low NWS swim risk. Missing inputs produce N/A or ranking exclusion, never a fallback all-clear."
             }
           },
           {
@@ -73,6 +73,14 @@
             "acceptedAnswer": {
               "@type": "Answer",
               "text": "No. No active alert found does not mean a recent sample exists and is not a guarantee of water quality. Open the official Michigan BeachGuard record and use posted signs at the beach."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does low NWS swim risk mean the beach has a green flag?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. NWS low, moderate, or high swim risk is forecast guidance. The physical flag posted at a Michigan beach can be changed by staff as conditions change and must be checked on arrival."
             }
           },
           {
@@ -88,7 +96,7 @@
             "name": "What is the Beach Day Score?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "The Beach Day Score is a transparent 0–100 planning score based on air comfort, dry weather, wind, observed water temperature, observed waves, and destination fit. If any required condition input is missing, the score is N/A. It is not a water-safety certification. Official closures, contamination advisories, and beach hazards override the score."
+              "text": "The Beach Day Score is a transparent 0–100 planning score based on air comfort, dry weather, wind, observed water temperature, observed waves, and destination fit. If any required condition input is missing, the score is N/A. It is not a water-safety certification. Official closures, contamination advisories, relevant NWS alerts, and moderate or high NWS swim risk override the recommendation."
             }
           }
         ]
@@ -115,15 +123,15 @@
     </div>
   </header>
 
-  <noscript><div class="noscript">Live comparisons require JavaScript. Check <a href="https://mienviro.michigan.gov/nsite/beach/map/results">Michigan BeachGuard</a> and <a href="https://www.weather.gov/greatlakes/beachhazards">National Weather Service beach hazards</a> directly.</div></noscript>
+  <noscript><div class="noscript">Live comparisons require JavaScript. Check <a href="https://mienviro.michigan.gov/nsite/beach/map/results">Michigan BeachGuard</a>, the <a href="https://www.weather.gov/greatlakes/beachhazards">National Weather Service beach forecast and alerts</a>, and posted flags directly.</div></noscript>
 
   <section class="hero" aria-labelledby="page-title">
     <div class="hero-inner">
       <div class="hero-copy">
         <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Live Michigan shoreline planner</p>
         <h1 id="page-title">Michigan Beach Report</h1>
-        <p class="hero-lede">Should we go to the beach today? Compare 50 Lake Michigan, Huron, Superior, and Erie beaches using official alerts, live lake observations, and the forecast.</p>
-        <p class="hero-truth">Planning tool, not a water-safety certification. Conditions change quickly—read posted signs and official notices at the beach.</p>
+        <p class="hero-lede">Should we go to the beach today? Compare 50 Lake Michigan, Huron, Superior, and Erie beaches using official water-quality notices, NWS swim risk and alerts, live lake observations, wind, and weather.</p>
+        <p class="hero-truth">Planning tool, not a water-safety certification. The NWS risk is a forecast—not the posted beach flag. Read flags, signs, and instructions on arrival.</p>
         <div class="search-deck" role="search" aria-label="Find a Michigan beach">
           <label class="search-field">
             <span class="sr-only">Beach, town, lake, or feature</span>
@@ -163,6 +171,11 @@
         <div><strong data-alert-title>Active official beach notices</strong><p data-alert-copy>Affected beaches are flagged below.</p></div>
         <a href="https://mienviro.michigan.gov/nsite/beach/map/results" target="_blank" rel="noopener">Open BeachGuard ↗</a>
       </div>
+      <div class="alert-panel" id="nwsAlertPanel" role="status">
+        <div class="season-icon" aria-hidden="true">!</div>
+        <div><strong data-nws-alert-title>Relevant NWS shoreline alerts</strong><p data-nws-alert-copy>Affected beaches are flagged below.</p></div>
+        <a href="https://www.weather.gov/greatlakes/beachhazards" target="_blank" rel="noopener">Open NWS forecast ↗</a>
+      </div>
     </section>
 
     <section class="section" aria-labelledby="daily-heading">
@@ -170,7 +183,7 @@
         <div>
           <p class="section-kicker">Summer daily ranking</p>
           <h2 id="daily-heading">Best Michigan beaches today</h2>
-          <p class="section-intro">The top eligible picks balance comfortable weather, low rain and wind, recent lake observations, and destination quality. Beaches without every required input are shown as N/A and are not ranked; active closures, contamination advisories, and beach hazards are also excluded.</p>
+          <p class="section-intro">The top picks balance comfortable weather, low rain and wind, recent lake observations, and destination quality. Eligibility also requires no active matched closure, advisory, or relevant NWS alert plus an explicit current <strong>low NWS swim risk</strong>. Missing risk is never treated as low.</p>
         </div>
         <a href="/best-michigan-beaches-today/">How every beach ranks →</a>
       </div>
@@ -223,19 +236,22 @@
         <p>The 0–100 score answers one narrow question: <em>how promising does this beach look for an ordinary day trip?</em> It combines up to 25 points for air comfort, 20 for dry weather, 15 for wind, 12 for observed water temperature, 13 for observed waves, and 15 for the destination itself.</p>
         <p>A score is calculated only when the forecast includes air temperature, rain chance, and wind gusts and a NOAA observation no more than six hours old includes both water temperature and wave height. If any required input is missing, the score is N/A and the beach is excluded from the daily ranking. Because offshore stations can be far from a beach, every detail view names the station, its distance, and observation time.</p>
         <h3>Official notices override the number</h3>
-        <p>An active Michigan BeachGuard closure sets the score to zero. A contamination advisory caps it at 20. A matching National Weather Service beach hazard or rough observed waves also limits the recommendation. Those beaches are not eligible for the daily top picks.</p>
-        <div class="safety-note"><strong>The key truth rule:</strong> “No active EGLE alert found” does not mean a recent water sample exists and is not a guarantee of water quality. Check the official record, posted beach signs, changing weather, and your own conditions on arrival.</div>
+        <p>An active Michigan BeachGuard closure sets the score to zero. A contamination advisory caps it at 20. A high NWS swim risk caps it at 20; moderate caps it at 45. Relevant NWS Beach Hazards Statements, Special Weather or Marine Statements, severe warnings, and lakeshore alerts also limit the result and exclude a beach from the daily picks. The daily Surf Zone Forecast matters because moderate swim risk can exist without an active Beach Hazards Statement.</p>
+        <p>The report checks both Michigan land alerts and Great Lakes marine areas. It filters Special Weather and Marine Statements for shoreline threats such as lightning, waterspouts, damaging winds, high waves, or dangerous currents; an unrelated statement or wildfire Red Flag Warning is not mislabeled as a swimming flag.</p>
+        <div class="safety-note"><strong>Three separate truths:</strong> BeachGuard reports water-quality closures and advisories. “No active EGLE alert found” does not mean a recent water sample exists. NWS reports forecast swim risk and weather or marine alerts. The flag physically posted at the beach can change during the day and must be checked on arrival; an NWS “low” forecast is not a green posted flag.</div>
 
         <h2>When the seasonal page turns on</h2>
         <p>The dedicated <a href="/best-michigan-beaches-today/">Best Michigan Beaches Today</a> ranking turns on automatically every May 15 and pauses after September 15. The core report on this page—search, map, weather, lake observations, and official notice checks—stays live through fall, winter, and spring.</p>
 
         <h2>Frequently asked questions</h2>
         <h3>Which Michigan beach is best today?</h3>
-        <p>There is no permanent winner. During summer, today’s top beaches appear above after current official notices and hazards are checked and the eligible locations are scored against the same weather and lake-condition rubric.</p>
+        <p>There is no permanent winner. During summer, today’s top beaches appear above only after current official notices and alerts are checked, a low NWS swim risk is matched, and the eligible locations are scored against the same weather and lake-condition rubric.</p>
         <h3>Why can water temperature or waves say “not current”?</h3>
         <p>The report will not pass an old or incomplete buoy observation off as live. A reading more than six hours old—or one missing water temperature or wave height—makes the score N/A and is displayed as not current or unavailable.</p>
+        <h3>Does low NWS swim risk mean a green beach flag?</h3>
+        <p>No. NWS low, moderate, or high risk is forecast guidance. At Michigan state-park flag sites, green means low hazard, yellow medium, red high, and double red means water access is closed. Staff can update the physical flag as conditions change, so this report leaves posted flag status unknown and tells you to check it on arrival.</p>
         <h3>Can I use this to decide whether to swim?</h3>
-        <p>Use it to compare day-trip conditions, then check BeachGuard, National Weather Service hazards, lifeguard instructions, flags, posted notices, and actual conditions at the shoreline. Great Lakes waves and currents can change rapidly.</p>
+        <p>Use it to compare day-trip conditions, then check BeachGuard, the NWS beach forecast, lifeguard instructions, the flag actually posted, notices, and shoreline conditions. Great Lakes rip, structural, channel, longshore, and outlet currents can change rapidly.</p>
       </article>
 
       <aside>
@@ -243,7 +259,9 @@
           <h3>Primary live sources</h3>
           <ul class="source-list">
             <li><a href="https://mienviro.michigan.gov/nsite/beach/map/results" target="_blank" rel="noopener">Michigan EGLE BeachGuard</a><span>Active closures and contamination advisories</span></li>
-            <li><a href="https://www.weather.gov/greatlakes/beachhazards" target="_blank" rel="noopener">National Weather Service</a><span>Beach, high-surf, and lakeshore hazards</span></li>
+            <li><a href="https://www.weather.gov/greatlakes/beachhazards" target="_blank" rel="noopener">NWS Surf Zone Forecasts</a><span>Low, moderate, or high swim risk by forecast zone</span></li>
+            <li><a href="https://www.weather.gov/greatlakes/beachhazards" target="_blank" rel="noopener">NWS land and marine alerts</a><span>Beach, severe-weather, marine, and lakeshore notices</span></li>
+            <li><a href="https://www.michigan.gov/dnr/education/safety-info/beach-safety" target="_blank" rel="noopener">Michigan beach flag safety</a><span>Posted green, yellow, red, and double-red flag meanings</span></li>
             <li><a href="https://www.ndbc.noaa.gov/" target="_blank" rel="noopener">NOAA National Data Buoy Center</a><span>Observed waves, water temperature, and wind</span></li>
             <li><a href="https://open-meteo.com/en/docs" target="_blank" rel="noopener">Open-Meteo</a><span>Local weather forecasts</span></li>
           </ul>

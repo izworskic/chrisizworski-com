@@ -6,8 +6,11 @@ const {
   getSeasonStatus,
   matchAlertToBeach,
   matchNwsAlertsToBeach,
+  matchNwsSwimRiskToBeach,
   normalizeBeachGuardAlerts,
   normalizeNwsAlerts,
+  parseNwsSurfForecast,
+  postedFlagStatus,
   scoreBeach,
 } = require("../lib/beach-report");
 
@@ -17,7 +20,11 @@ const BEACHGUARD_PAGE = "https://mienviro.michigan.gov/nsite/beach/map/results";
 const BEACHGUARD_SETTINGS = "https://mienviro.michigan.gov/nsite/api/settings/getWslSettings";
 const BEACHGUARD_SEARCH = "https://mienviro.michigan.gov/nsite/ss/explorersites";
 const NDBC_LATEST = "https://www.ndbc.noaa.gov/data/latest_obs/latest_obs.txt";
-const NWS_ALERTS = "https://api.weather.gov/alerts/active?area=MI";
+const NWS_ALERT_AREAS = ["MI", "LM", "LH", "LS", "LE", "LC"];
+const NWS_SURF_OFFICES = ["APX", "GRR", "DTX", "MQT", "IWX", "DLH"];
+const NWS_FORECAST_ZONES = "https://api.weather.gov/zones/forecast?area=MI&limit=500";
+const NWS_BEACH_FORECAST = "https://www.weather.gov/greatlakes/beachhazards";
+const DNR_BEACH_SAFETY = "https://www.michigan.gov/dnr/education/safety-info/beach-safety";
 
 async function fetchWithTimeout(url, options = {}, timeout = 15_000) {
   return fetch(url, { ...options, signal: AbortSignal.timeout(timeout) });
@@ -161,11 +168,76 @@ async function fetchBuoys() {
 }
 
 async function fetchNwsAlerts() {
-  const response = await fetchWithTimeout(NWS_ALERTS, {
-    headers: { "User-Agent": USER_AGENT, Accept: "application/geo+json" },
-  });
-  if (!response.ok) throw new Error("NWS returned " + response.status);
-  return normalizeNwsAlerts(await response.json());
+  const payloads = await Promise.all(
+    NWS_ALERT_AREAS.map(async (area) => {
+      const response = await fetchWithTimeout(
+        "https://api.weather.gov/alerts/active?area=" + encodeURIComponent(area),
+        { headers: { "User-Agent": USER_AGENT, Accept: "application/geo+json" } },
+      );
+      if (!response.ok) throw new Error("NWS alerts for " + area + " returned " + response.status);
+      return response.json();
+    }),
+  );
+  const features = [];
+  const seen = new Set();
+  for (const payload of payloads) {
+    for (const feature of payload?.features || []) {
+      const id = feature?.id || feature?.properties?.id || JSON.stringify(feature);
+      if (seen.has(id)) continue;
+      seen.add(id);
+      features.push(feature);
+    }
+  }
+  return normalizeNwsAlerts({ features });
+}
+
+async function fetchNwsSwimRisks(now = new Date()) {
+  const headers = { "User-Agent": USER_AGENT, Accept: "application/geo+json" };
+  const [zoneResponse, officeResults] = await Promise.all([
+    fetchWithTimeout(NWS_FORECAST_ZONES, { headers }),
+    Promise.allSettled(
+      NWS_SURF_OFFICES.map(async (office) => {
+        const response = await fetchWithTimeout(
+          "https://api.weather.gov/products/types/SRF/locations/" + office + "/latest",
+          { headers },
+        );
+        if (!response.ok) throw new Error("NWS surf forecast for " + office + " returned " + response.status);
+        return response.json();
+      }),
+    ),
+  ]);
+  if (!zoneResponse.ok) throw new Error("NWS forecast zones returned " + zoneResponse.status);
+
+  const zonePayload = await zoneResponse.json();
+  const zoneMetadata = new Map(
+    (zonePayload?.features || [])
+      .map((feature) => [
+        feature?.properties?.id,
+        { name: feature?.properties?.name, geometry: feature?.geometry || null },
+      ])
+      .filter(([id, metadata]) => id && metadata.name),
+  );
+  const forecasts = officeResults.flatMap((result) =>
+    result.status === "fulfilled" ? parseNwsSurfForecast(result.value, zoneMetadata, now) : [],
+  );
+  const fulfilledCount = officeResults.filter((result) => result.status === "fulfilled").length;
+  const issuedTimes = forecasts
+    .map((forecast) => forecast.issued_at)
+    .filter(Boolean)
+    .sort();
+  return {
+    status: !forecasts.length
+      ? "unavailable"
+      : fulfilledCount === NWS_SURF_OFFICES.length
+        ? "live"
+        : "partial",
+    forecasts,
+    latest_issued_at: issuedTimes.at(-1) || null,
+    office_status: NWS_SURF_OFFICES.map((office, index) => ({
+      office,
+      status: officeResults[index].status === "fulfilled" ? "live" : "unavailable",
+    })),
+  };
 }
 
 function sourceState(result, liveLabel) {
@@ -210,16 +282,18 @@ module.exports = async function handler(req, res) {
   if (!beaches.length) return res.status(404).json({ error: "Beach not found" });
 
   const now = new Date();
-  const [beachGuardResult, weatherResult, buoyResult, nwsResult] = await Promise.allSettled([
+  const [beachGuardResult, weatherResult, buoyResult, nwsResult, swimRiskResult] = await Promise.allSettled([
     fetchBeachGuardAlerts(),
     fetchWeather(beaches),
     fetchBuoys(),
     fetchNwsAlerts(),
+    fetchNwsSwimRisks(now),
   ]);
 
   const stations =
     buoyResult.status === "fulfilled" ? buoyResult.value.stations : fallbackBuoys.stations || [];
   const normalizedNwsAlerts = nwsResult.status === "fulfilled" ? nwsResult.value : [];
+  const nwsSwimForecasts = swimRiskResult.status === "fulfilled" ? swimRiskResult.value.forecasts : [];
   const weatherRows = weatherResult.status === "fulfilled" ? weatherResult.value : beaches.map(() => null);
   const season = getSeasonStatus(now);
 
@@ -228,12 +302,25 @@ module.exports = async function handler(req, res) {
     const lakeConditions = chooseNearestStation(beach, stations, now);
     const waterQuality = buildWaterQuality(beach, beachGuardResult);
     const hazards = matchNwsAlertsToBeach(beach, normalizedNwsAlerts);
+    const matchedSwimRisk = matchNwsSwimRiskToBeach(beach, nwsSwimForecasts);
+    const { geometry: _swimRiskGeometry, ...matchedSwimRiskFields } = matchedSwimRisk || {};
+    const swimRisk = matchedSwimRisk
+      ? matchedSwimRiskFields
+      : {
+          status: "unavailable",
+          label: "NWS swim risk not available for this beach",
+          interpretation:
+            "No current NWS Surf Zone Forecast matched this beach. Do not treat missing swim-risk data as low risk.",
+          official_url: NWS_BEACH_FORECAST,
+        };
+    const postedFlag = postedFlagStatus(beach);
     const rating = scoreBeach({
       beach,
       weather: weather?.today || null,
       lakeConditions,
       waterQuality,
       hazards,
+      swimRisk,
     });
     return {
       ...beach,
@@ -243,6 +330,8 @@ module.exports = async function handler(req, res) {
       lake_conditions: lakeConditions,
       water_quality: waterQuality,
       hazards,
+      swim_risk: swimRisk,
+      posted_flag: postedFlag,
       rating,
     };
   });
@@ -250,13 +339,17 @@ module.exports = async function handler(req, res) {
   const rankingInputsLive =
     beachGuardResult.status === "fulfilled" &&
     weatherResult.status === "fulfilled" &&
-    nwsResult.status === "fulfilled";
+    buoyResult.status === "fulfilled" &&
+    nwsResult.status === "fulfilled" &&
+    swimRiskResult.status === "fulfilled" &&
+    swimRiskResult.value.forecasts.length > 0;
   const eligible = rankingInputsLive
     ? hydrated
         .filter((beach) => beach.swimming)
         .filter((beach) => beach.rating.eligible === true)
         .filter((beach) => beach.water_quality.state === "no-active-alert")
         .filter((beach) => !beach.hazards.length)
+        .filter((beach) => beach.swim_risk.status === "low")
         .sort((first, second) => second.rating.score - first.rating.score || first.name.localeCompare(second.name))
     : [];
 
@@ -281,19 +374,48 @@ module.exports = async function handler(req, res) {
         official_url: "https://www.ndbc.noaa.gov/",
       },
       hazards: {
-        ...sourceState(nwsResult, "National Weather Service alerts"),
-        official_url: "https://www.weather.gov/greatlakes/beachhazards",
+        ...sourceState(nwsResult, "National Weather Service land and Great Lakes alerts"),
+        official_url: NWS_BEACH_FORECAST,
+        active_alert_count: nwsResult.status === "fulfilled" ? nwsResult.value.length : null,
+        truth_rule:
+          "Relevant beach, severe-weather, marine, and lakeshore alerts are matched; unrelated advisories are excluded.",
+      },
+      swim_risk: {
+        status: swimRiskResult.status === "fulfilled" ? swimRiskResult.value.status : "unavailable",
+        label:
+          swimRiskResult.status === "fulfilled" && swimRiskResult.value.status === "partial"
+            ? "Some National Weather Service Surf Zone Forecast offices are unavailable"
+            : swimRiskResult.status === "fulfilled" && swimRiskResult.value.status === "live"
+              ? "National Weather Service Surf Zone Forecasts"
+              : "National Weather Service swim-risk forecasts are unavailable",
+        official_url: NWS_BEACH_FORECAST,
+        latest_issued_at:
+          swimRiskResult.status === "fulfilled" ? swimRiskResult.value.latest_issued_at : null,
+        forecast_zone_count:
+          swimRiskResult.status === "fulfilled" ? swimRiskResult.value.forecasts.length : null,
+        office_status:
+          swimRiskResult.status === "fulfilled" ? swimRiskResult.value.office_status : [],
+        truth_rule:
+          "Low, moderate, or high NWS swim risk is a forecast; it is not the posted flag at the beach.",
+      },
+      posted_flags: {
+        status: "check-on-arrival",
+        label: "Posted beach flags must be checked on arrival",
+        official_url: DNR_BEACH_SAFETY,
+        truth_rule:
+          "Michigan park staff can change posted flags during the day, and this report does not claim a live statewide flag status.",
       },
     },
     active_alerts: beachGuardResult.status === "fulfilled" ? beachGuardResult.value : [],
+    active_nws_alerts: nwsResult.status === "fulfilled" ? nwsResult.value : [],
     daily_ranking: {
       available: season.active && rankingInputsLive,
       state: !season.active ? "off-season" : rankingInputsLive ? "live" : "source-unavailable",
       explanation: !season.active
         ? "The daily ranking runs May 15 through September 15."
         : rankingInputsLive
-          ? "Official notice and hazard feeds returned; only beaches with complete required score inputs are ranked."
-          : "The daily ranking is withheld because an official notice, hazard, or forecast source did not return.",
+          ? "Only beaches with complete score inputs, no matched official notice or alert, and an explicit low NWS swim risk are ranked."
+          : "The daily ranking is withheld because an official notice, alert, weather, or swim-risk source did not return usable data.",
     },
     daily_top_slugs: season.active ? eligible.slice(0, 10).map((beach) => beach.slug) : [],
     count: hydrated.length,
@@ -304,4 +426,6 @@ module.exports = async function handler(req, res) {
 };
 
 module.exports.fetchBeachGuardAlerts = fetchBeachGuardAlerts;
+module.exports.fetchNwsAlerts = fetchNwsAlerts;
+module.exports.fetchNwsSwimRisks = fetchNwsSwimRisks;
 module.exports.fetchWeather = fetchWeather;

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Best Michigan Beaches Today: Daily Summer Ranking | Chris Izworski</title>
-  <meta name="description" content="See today’s best Michigan beaches ranked by weather, waves, water temperature, official closures, and beach hazards. Active May 15–September 15.">
+  <meta name="description" content="See today’s best Michigan beaches ranked by weather, waves, water temperature, official closures and alerts, with low NWS swim risk required. Active May 15–September 15.">
   <link rel="canonical" href="https://chrisizworski.com/best-michigan-beaches-today/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Best Michigan Beaches Today">
@@ -26,7 +26,7 @@
         "@id": "https://chrisizworski.com/best-michigan-beaches-today/#page",
         "url": "https://chrisizworski.com/best-michigan-beaches-today/",
         "name": "Best Michigan Beaches Today",
-        "description": "A daily summer ranking of Michigan Great Lakes beaches using official beach notices, beach hazards, weather forecasts, and recent lake observations.",
+        "description": "A daily summer ranking of Michigan Great Lakes beaches using official beach notices, NWS swim-risk forecasts and alerts, weather forecasts, and recent lake observations.",
         "isPartOf": {"@id": "https://chrisizworski.com/#website"},
         "author": {"@id": "https://chrisizworski.com/#person"},
         "dateModified": "2026-07-31",
@@ -46,7 +46,7 @@
           {
             "@type": "Question",
             "name": "How are Michigan beaches ranked today?",
-            "acceptedAnswer": {"@type": "Answer", "text": "Every eligible beach is scored with the same 100-point rubric: air comfort, rain, wind, recent water temperature, recent waves, and destination fit. Every required weather input and both NOAA lake readings must be current and present; otherwise the score is N/A and the beach is not ranked. Official closures, contamination advisories, and matching beach hazards also remove a beach from the daily ranking."}
+            "acceptedAnswer": {"@type": "Answer", "text": "Every beach uses the same 100-point rubric: air comfort, rain, wind, recent water temperature, recent waves, and destination fit. Every required condition input must be present. Eligibility also requires no matched BeachGuard or relevant NWS alert and an explicit current low NWS swim risk. Missing data is never treated as an all-clear."}
           },
           {
             "@type": "Question",
@@ -56,7 +56,7 @@
           {
             "@type": "Question",
             "name": "Does the top score certify swimming conditions?",
-            "acceptedAnswer": {"@type": "Answer", "text": "No. The score is a day-trip planning aid, not a water-safety certification. Check Michigan BeachGuard, National Weather Service hazards, lifeguard instructions, posted signs, and shoreline conditions before entering the water."}
+            "acceptedAnswer": {"@type": "Answer", "text": "No. The score is a day-trip planning aid, not a water-safety certification. NWS swim risk is a forecast, not the posted beach flag. Check Michigan BeachGuard, NWS forecasts and alerts, lifeguard instructions, the posted flag, and shoreline conditions before entering the water."}
           }
         ]
       }
@@ -76,15 +76,15 @@
       <nav class="site-nav" aria-label="Primary navigation"><a href="/tools/">Tools</a><a href="/great-lakes/">Great Lakes</a><a href="/about/">About</a><a href="/great-lakes-beaches/">Beach report</a></nav>
     </div>
   </header>
-  <noscript><div class="noscript">Today’s live ranking requires JavaScript. Use the <a href="/great-lakes-beaches/">year-round Michigan Beach Report</a>, <a href="https://mienviro.michigan.gov/nsite/beach/map/results">Michigan BeachGuard</a>, and <a href="https://www.weather.gov/greatlakes/beachhazards">NWS beach hazards</a>.</div></noscript>
+  <noscript><div class="noscript">Today’s live ranking requires JavaScript. Use the <a href="/great-lakes-beaches/">year-round Michigan Beach Report</a>, <a href="https://mienviro.michigan.gov/nsite/beach/map/results">Michigan BeachGuard</a>, the <a href="https://www.weather.gov/greatlakes/beachhazards">NWS beach forecast and alerts</a>, and posted flags.</div></noscript>
 
   <section class="hero" aria-labelledby="page-title">
     <div class="hero-inner">
       <div class="hero-copy">
         <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> May 15–September 15</p>
         <h1 id="page-title">Best Michigan Beaches Today</h1>
-        <p class="hero-lede">One honest daily shortlist for choosing a Great Lakes beach—ranked only after official closures, contamination advisories, beach hazards, weather, and recent lake observations are checked.</p>
-        <p class="hero-truth">The number helps compare day trips. It does not certify water or swimming conditions.</p>
+        <p class="hero-lede">One honest daily shortlist for choosing a Great Lakes beach—ranked only after official water-quality notices, NWS swim risk and land or marine alerts, weather, and recent lake observations are checked.</p>
+        <p class="hero-truth">Every pick has an explicit low NWS swim risk, but low never means no risk and the forecast is not the posted flag.</p>
         <div class="search-deck">
           <a class="button" href="#ranking">See today’s ranking</a>
           <a class="button button-secondary" href="/great-lakes-beaches/">Search all 50 beaches</a>
@@ -105,6 +105,7 @@
         <a class="button" data-season-link href="/best-michigan-beaches-today/" hidden>Today’s ranking</a>
       </div>
       <div class="alert-panel" id="activeAlertPanel" role="status"><div class="season-icon" aria-hidden="true">!</div><div><strong data-alert-title>Active official beach notices</strong><p data-alert-copy>Affected beaches are excluded below.</p></div><a href="https://mienviro.michigan.gov/nsite/beach/map/results" target="_blank" rel="noopener">Open BeachGuard ↗</a></div>
+      <div class="alert-panel" id="nwsAlertPanel" role="status"><div class="season-icon" aria-hidden="true">!</div><div><strong data-nws-alert-title>Relevant NWS shoreline alerts</strong><p data-nws-alert-copy>Affected beaches are excluded below.</p></div><a href="https://www.weather.gov/greatlakes/beachhazards" target="_blank" rel="noopener">Open NWS forecast ↗</a></div>
     </section>
 
     <section class="section" id="ranking" aria-labelledby="ranking-heading">
@@ -112,7 +113,7 @@
         <div>
           <p class="section-kicker">Recalculated from live inputs</p>
           <h2 id="ranking-heading">Today’s top 10</h2>
-          <p class="section-intro">Only designated swim beaches with every required forecast input, recent NOAA water-temperature and wave readings, and no matched active closure, contamination advisory, or National Weather Service beach hazard are eligible. Incomplete data is N/A, never a fallback score.</p>
+          <p class="section-intro">Only designated swim beaches with every required condition input, recent NOAA water-temperature and wave readings, no matched closure, advisory, or relevant NWS alert, and an explicit current <strong>low NWS swim risk</strong> are eligible. Incomplete data is N/A, never a fallback score. Missing swim risk separately removes ranking eligibility.</p>
         </div>
         <a href="/great-lakes-beaches/">Compare every beach →</a>
       </div>
@@ -127,8 +128,8 @@
         <h2 id="method-heading">How every beach is scored</h2>
         <p>The Beach Day Score uses the same 100 available points everywhere: 25 for comfortable air, 20 for a dry forecast, 15 for manageable wind, 12 for recent water temperature, 13 for recent wave height, and 15 for destination fit. A score is published only when all five condition inputs are present and the two NOAA readings are no more than six hours old. Otherwise it is N/A and excluded from the ranking. The ranking can change during the day as its inputs update.</p>
         <h3>Conditions that override the score</h3>
-        <p>A Michigan BeachGuard closure sets the score to zero. A contamination advisory caps it at 20. Matching National Weather Service hazards, high observed waves, and very cold water also cap the recommendation. A feed failure is shown as unavailable; it is never converted into an all-clear.</p>
-        <div class="safety-note"><strong>No-alert does not mean recently tested.</strong> Even the number-one beach requires an official-record check, posted-sign check, and real-world assessment on arrival.</div>
+        <p>A Michigan BeachGuard closure sets the score to zero. A contamination advisory or high NWS swim risk caps it at 20; moderate NWS risk caps it at 45. Relevant NWS Beach Hazards Statements, Special Weather or Marine Statements, severe warnings, and lakeshore alerts also cap the recommendation and remove the beach from this ranking. A source failure is shown as unavailable, never converted into an all-clear.</p>
+        <div class="safety-note"><strong>Forecast is not flag status.</strong> NWS low, moderate, and high swim risk is forecast guidance. The physical green, yellow, red, or double-red flag can change during the day and must be checked at the beach. No BeachGuard alert also does not mean recently tested.</div>
         <h2>Why this page is seasonal</h2>
         <p>Daily “best beach” intent is strongest in Michigan’s summer season, so this leaderboard automatically runs from May 15 through September 15. Outside those dates, this page pauses the ranking instead of pretending winter scores are useful. The <a href="/great-lakes-beaches/">Michigan Beach Report</a> continues serving current conditions all year.</p>
         <h2>Frequently asked questions</h2>
@@ -142,7 +143,8 @@
           <h3>Check before you go</h3>
           <ul class="source-list">
             <li><a href="https://mienviro.michigan.gov/nsite/beach/map/results" target="_blank" rel="noopener">Michigan BeachGuard</a><span>Official closures and contamination advisories</span></li>
-            <li><a href="https://www.weather.gov/greatlakes/beachhazards" target="_blank" rel="noopener">NWS Great Lakes hazards</a><span>Beach and lakeshore hazard notices</span></li>
+            <li><a href="https://www.weather.gov/greatlakes/beachhazards" target="_blank" rel="noopener">NWS beach forecast and alerts</a><span>Swim risk plus relevant land and marine notices</span></li>
+            <li><a href="https://www.michigan.gov/dnr/education/safety-info/beach-safety" target="_blank" rel="noopener">Michigan beach flag safety</a><span>Posted flag meanings and double-red closures</span></li>
             <li><a href="/great-lakes-beaches/">Michigan Beach Report</a><span>Search, map, details, and year-round conditions</span></li>
           </ul>
         </div>

@@ -7,9 +7,12 @@ const {
   getSeasonStatus,
   matchAlertToBeach,
   matchNwsAlertsToBeach,
+  matchNwsSwimRiskToBeach,
   normalizeBeachGuardAlerts,
   normalizeNwsAlerts,
   parsePointWkt,
+  parseNwsSurfForecast,
+  postedFlagStatus,
   scoreBeach,
 } = require("../lib/beach-report");
 
@@ -60,7 +63,7 @@ test("BeachGuard point data normalizes and matches catalog names without broad p
   assert.equal(matchAlertToBeach({ name: "Unrelated Beach", aliases: [], lat: 44.5, lng: -84.2 }, alerts), null);
 });
 
-test("NWS hazards match a beach by geometry or its Michigan county", () => {
+test("NWS land and marine alerts include relevant statements without treating every advisory as a beach hazard", () => {
   const alerts = normalizeNwsAlerts({
     features: [
       {
@@ -75,15 +78,132 @@ test("NWS hazards match a beach by geometry or its Michigan county", () => {
         geometry: null,
       },
       {
+        id: "statement-1",
+        properties: {
+          event: "Special Weather Statement",
+          severity: "Moderate",
+          areaDesc: "Ottawa",
+          headline: "Strong thunderstorms with lightning moving toward Lake Michigan beaches",
+          description: "Sudden wind gusts and lightning are possible near the shoreline.",
+        },
+        geometry: null,
+      },
+      {
+        id: "marine-1",
+        properties: {
+          event: "Special Marine Warning",
+          severity: "Severe",
+          areaDesc: "Lake Huron nearshore waters",
+          headline: "Waterspouts and damaging winds observed",
+        },
+        geometry: {
+          type: "Polygon",
+          coordinates: [[[-83.5, 43.7], [-83.0, 43.7], [-83.0, 44.1], [-83.5, 44.1], [-83.5, 43.7]]],
+        },
+      },
+      {
+        id: "gale-1",
+        properties: {
+          event: "Gale Warning",
+          severity: "Severe",
+          areaDesc: "Lake Huron nearshore waters",
+          headline: "Gale force winds and high waves expected",
+        },
+        geometry: {
+          type: "Polygon",
+          coordinates: [[[-83.5, 43.7], [-83.0, 43.7], [-83.0, 44.1], [-83.5, 44.1], [-83.5, 43.7]]],
+        },
+      },
+      {
+        id: "small-craft-1",
+        properties: { event: "Small Craft Advisory", areaDesc: "Lake Huron nearshore waters" },
+        geometry: null,
+      },
+      {
+        id: "irrelevant-statement",
+        properties: {
+          event: "Special Weather Statement",
+          areaDesc: "Ottawa",
+          headline: "Patchy frost possible inland",
+        },
+        geometry: null,
+      },
+      {
+        id: "fire-weather-1",
+        properties: { event: "Red Flag Warning", areaDesc: "Ottawa" },
+        geometry: null,
+      },
+      {
         id: "winter-1",
         properties: { event: "Winter Weather Advisory", areaDesc: "Ottawa" },
         geometry: null,
       },
     ],
   });
-  assert.equal(alerts.length, 1);
-  assert.equal(matchNwsAlertsToBeach({ county: "Ottawa", lat: 43.05, lng: -86.25 }, alerts).length, 1);
-  assert.equal(matchNwsAlertsToBeach({ county: "Huron", lat: 43.94, lng: -83.27 }, alerts).length, 0);
+  assert.equal(alerts.length, 4);
+  assert.equal(matchNwsAlertsToBeach({ county: "Ottawa", lat: 43.05, lng: -86.25 }, alerts).length, 2);
+  assert.equal(matchNwsAlertsToBeach({ county: "Huron", lat: 43.94, lng: -83.27 }, alerts).length, 2);
+  assert.equal(alerts.find((alert) => alert.id === "statement-1").ranking_action, "exclude");
+  assert.ok(alerts.every((alert) => alert.id !== "fire-weather-1"));
+});
+
+test("NWS Surf Zone Forecast swim risk parses, stays fresh, and matches a beach", () => {
+  const now = new Date("2026-07-31T16:00:00Z");
+  const product = {
+    id: "surf-1",
+    issuingOffice: "KDTX",
+    issuanceTime: "2026-07-31T12:00:00Z",
+    productText: `MIZ049-312200-
+Huron-
+Including the beaches of Caseville County Park Beach and Port Crescent State Park
+1200 PM EDT Fri Jul 31 2026
+
+.REST OF TODAY...
+Swim Risk*..................Low.
+Wave Height.................1 foot or less.
+Water Temperature...........72 degrees.
+Weather.....................Sunny.
+Winds.......................North winds 5 mph.
+UV Index*...................Very high.
+
+&&
+$$`,
+  };
+  const forecasts = parseNwsSurfForecast(product, new Map([["MIZ049", "Huron"]]), now);
+  assert.equal(forecasts.length, 1);
+  assert.equal(forecasts[0].status, "low");
+  assert.equal(forecasts[0].wave_height, "1 foot or less");
+  assert.equal(forecasts[0].office, "DTX");
+  assert.equal(
+    matchNwsSwimRiskToBeach(
+      { name: "Caseville County Park", aliases: ["Caseville County Park Beach"], county: "Huron" },
+      forecasts,
+    ).zone_id,
+    "MIZ049",
+  );
+  assert.deepEqual(
+    parseNwsSurfForecast({ ...product, issuanceTime: "2026-07-29T12:00:00Z" }, { MIZ049: "Huron" }, now),
+    [],
+  );
+  assert.equal(
+    matchNwsSwimRiskToBeach(
+      { name: "Whitefish Point", aliases: [], county: "Chippewa", lake: "Lake Superior" },
+      [{ ...forecasts[0], zone_name: "Southeast Chippewa", including: "the Lake Huron beaches of Chippewa County" }],
+    ),
+    null,
+  );
+  assert.equal(
+    matchNwsSwimRiskToBeach(
+      { name: "Unrelated Beach", aliases: [], county: "Elsewhere", lake: "Lake Michigan" },
+      [{ ...forecasts[0], zone_name: "Other", including: "" }],
+    ),
+    null,
+  );
+
+  const flag = postedFlagStatus({ access: "State park" });
+  assert.equal(flag.status, "unknown");
+  assert.match(flag.label, /check at the beach/i);
+  assert.match(flag.interpretation, /not the posted flag/i);
 });
 
 test("fresh NOAA observations are converted while old readings never earn score points", () => {
@@ -104,6 +224,7 @@ test("official closure and advisory states override an otherwise perfect plannin
     weather: { temperature_max_f: 82, precipitation_probability_max: 0, wind_gusts_max_mph: 8 },
     lakeConditions: { fresh: true, water_temp_f: 72, wave_height_ft: 0.5 },
     hazards: [],
+    swimRisk: { status: "low" },
   };
   const closure = scoreBeach({ ...input, waterQuality: { state: "closure" } });
   assert.equal(closure.score, 0);
@@ -116,6 +237,29 @@ test("official closure and advisory states override an otherwise perfect plannin
   assert.equal(noAlert.score, 100);
   assert.equal(noAlert.eligible, true);
   assert.ok(noAlert.reasons.every((reason) => !/safe to swim|water is safe/i.test(reason)));
+
+  const moderateRisk = scoreBeach({ ...input, waterQuality: { state: "no-active-alert" }, swimRisk: { status: "moderate" } });
+  assert.equal(moderateRisk.score, 45);
+  assert.equal(moderateRisk.eligible, false);
+  assert.match(moderateRisk.label, /moderate nws swim risk/i);
+
+  const highRisk = scoreBeach({ ...input, waterQuality: { state: "no-active-alert" }, swimRisk: { status: "high" } });
+  assert.equal(highRisk.score, 20);
+  assert.equal(highRisk.level, "danger");
+  assert.equal(highRisk.eligible, false);
+
+  const missingRisk = scoreBeach({ ...input, waterQuality: { state: "no-active-alert" }, swimRisk: null });
+  assert.equal(missingRisk.eligible, false);
+  assert.match(missingRisk.reasons.join(" "), /not matched/i);
+
+  const severeMarineWarning = scoreBeach({
+    ...input,
+    waterQuality: { state: "no-active-alert" },
+    hazards: [{ event: "Special Marine Warning", headline: "Waterspouts observed", category: "severe-weather", severity: "Severe" }],
+  });
+  assert.equal(severeMarineWarning.score, 20);
+  assert.equal(severeMarineWarning.level, "danger");
+  assert.equal(severeMarineWarning.eligible, false);
 });
 
 test("missing, incomplete, and stale required inputs produce N/A instead of fallback points", () => {
@@ -124,6 +268,7 @@ test("missing, incomplete, and stale required inputs produce N/A instead of fall
     weather: { temperature_max_f: 82, precipitation_probability_max: 0, wind_gusts_max_mph: 8 },
     waterQuality: { state: "no-active-alert" },
     hazards: [],
+    swimRisk: { status: "low" },
   };
 
   const noLakeObservation = scoreBeach({ ...input, lakeConditions: null });
@@ -160,6 +305,24 @@ test("beach API keeps source truth and exclusion rules in its browser contract",
   const latest = `#STN LAT LON YYYY MM DD hh mm WDIR WSPD GST WVHT DPD APD MWD PRES PTDY ATMP WTMP DEWP VIS TIDE
 #text units units yr mo dy hr mn degT m/s m/s m sec sec degT hPa hPa degC degC degC nmi ft
 45163 43.984 -83.271 2026 07 31 12 00 240 3.0 4.0 0.4 5.0 MM 230 1015.3 MM 24.0 22.0 MM MM MM`;
+  const surfProduct = {
+    id: "surf-api-1",
+    issuingOffice: "KDTX",
+    issuanceTime: new Date().toISOString(),
+    productText: `MIZ049-312200-
+Huron-
+Including the beaches of Caseville County Park Beach
+1200 PM EDT Fri Jul 31 2026
+
+.REST OF TODAY...
+Swim Risk*..................Low.
+Wave Height.................1 foot or less.
+Water Temperature...........72 degrees.
+Winds.......................North winds 5 mph.
+
+&&
+$$`,
+  };
   global.fetch = async (url) => {
     const value = String(url);
     if (value.includes("getWslSettings")) return new Response("{}", { status: 200, headers: { "set-cookie": "ASP.NET_SessionId=test; path=/" } });
@@ -173,7 +336,13 @@ test("beach API keeps source truth and exclusion rules in its browser contract",
       }), { status: 200 });
     }
     if (value.includes("latest_obs.txt")) return new Response(latest, { status: 200 });
-    if (value.includes("api.weather.gov")) return new Response(JSON.stringify({ features: [] }), { status: 200 });
+    if (value.includes("/zones/forecast")) {
+      return new Response(JSON.stringify({ features: [{ properties: { id: "MIZ049", name: "Huron" } }] }), { status: 200 });
+    }
+    if (value.includes("/products/types/SRF/")) {
+      return new Response(JSON.stringify(surfProduct), { status: 200 });
+    }
+    if (value.includes("/alerts/active")) return new Response(JSON.stringify({ features: [] }), { status: 200 });
     throw new Error("unexpected URL " + value);
   };
 
@@ -183,11 +352,15 @@ test("beach API keeps source truth and exclusion rules in its browser contract",
     assert.equal(response.statusCode, 200);
     assert.equal(response.body.count, 1);
     assert.equal(response.body.beaches[0].water_quality.state, "closure");
+    assert.equal(response.body.beaches[0].swim_risk.status, "low");
+    assert.equal(response.body.beaches[0].posted_flag.status, "unknown");
     assert.equal(response.body.beaches[0].rating.score, 0);
     assert.deepEqual(response.body.daily_top_slugs, []);
     assert.equal(response.body.daily_ranking.available, true);
     assert.equal(response.body.daily_ranking.state, "live");
     assert.match(response.body.sources.beachguard.truth_rule, /not the same as a recent test/i);
+    assert.match(response.body.sources.swim_risk.truth_rule, /not the posted flag/i);
+    assert.equal(response.body.sources.hazards.active_alert_count, 0);
     assert.equal(response.headers["x-robots-tag"], "noindex, nofollow");
   } finally {
     global.fetch = originalFetch;

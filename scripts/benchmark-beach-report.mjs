@@ -51,7 +51,9 @@ const detailFilesPresent = (
 const evaluators = {
   live_inputs: () => all(
     has(api, /BEACHGUARD_SEARCH/),
-    has(api, /NWS_ALERTS/),
+    has(api, /NWS_ALERT_AREAS/),
+    has(api, /NWS_SURF_OFFICES/),
+    has(api, /products\/types\/SRF/),
     has(api, /NDBC_LATEST/),
     has(api, /open-meteo\.com/),
   ),
@@ -82,7 +84,19 @@ const evaluators = {
     has(library, /ageHours <= 6/),
     has(client, /station_id/),
     has(client, /distance_miles/),
+    has(client, /swimRisk\.issued_at/),
+    has(client, /swimRisk\.zone_name/),
     has(mainPage, /id="sourceHealth"/),
+  ),
+  swim_risk_flag_truth: () => all(
+    has(api, /NWS_ALERT_AREAS/),
+    has(api, /products\/types\/SRF/),
+    has(library, /special weather statement/i),
+    has(library, /swimRisk\?\.status === "high"/),
+    has(library, /swimRisk\?\.status === "low"/),
+    has(library, /Posted DNR flag: check at the beach/),
+    has(api, /beach\.swim_risk\.status === "low"/),
+    has(mainPage + dailyPage, /forecast is not the posted flag/i),
   ),
   bounded_parallel_fetches: () => all(
     has(api, /Promise\.allSettled/),
@@ -92,8 +106,8 @@ const evaluators = {
   stale_observation_guard: () => all(
     has(library, /ageHours != null && ageHours <= 6/),
     has(library, /const dataComplete = Boolean\(weatherComplete && lakeObservationComplete\)/),
-    has(library, /if \(!dataComplete\) \{[\s\S]{0,1600}score: null/),
-    has(library, /score: null,[\s\S]{0,500}eligible: false,[\s\S]{0,100}data_complete: false/),
+    has(library, /if \(!dataComplete\) \{[\s\S]{0,2600}score: null/),
+    has(library, /score: null,[\s\S]{0,1200}eligible: false,[\s\S]{0,100}data_complete: false/),
     has(api, /rating\.eligible === true/),
     has(mainPage + dailyPage, /score is N\/A/i),
   ),

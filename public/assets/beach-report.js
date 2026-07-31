@@ -38,6 +38,11 @@
     return finite(value) ? Math.round(Number(value)) : null;
   }
 
+  function titleCase(value) {
+    var text = String(value || "");
+    return text ? text.charAt(0).toUpperCase() + text.slice(1) : "—";
+  }
+
   function formatDate(value, options) {
     if (!value) return "Unknown";
     var date = new Date(value);
@@ -104,17 +109,27 @@
   function facts(beach) {
     var today = beach.weather && beach.weather.today ? beach.weather.today : {};
     var lake = beach.lake_conditions || {};
+    var swimRisk = beach.swim_risk || {};
     return [
       { label: "High", value: formatMetric(today.temperature_max_f, "°F", "—") },
       { label: "Water", value: lake.fresh ? formatMetric(lake.water_temp_f, "°F", "—") : "—" },
       { label: "Waves", value: lake.fresh ? formatMetric(lake.wave_height_ft, " ft", "—") : "—" },
+      { label: "NWS risk", value: ["low", "moderate", "high"].indexOf(swimRisk.status) !== -1 ? titleCase(swimRisk.status) : "—" },
     ];
   }
 
   function beachStatus(beach) {
     var quality = beach.water_quality || {};
+    var swimRisk = beach.swim_risk || {};
+    var seriousHazard = (beach.hazards || []).find(function (hazard) {
+      return hazard.category === "severe-weather" || /extreme|severe/i.test(hazard.severity || "");
+    });
     if (quality.state === "closure" || quality.state === "advisory") return quality.label;
+    if (seriousHazard) return seriousHazard.event || "Severe shoreline hazard in effect";
+    if (swimRisk.status === "high") return "High NWS swim risk: stay out of the water";
     if (beach.hazards && beach.hazards.length) return beach.hazards[0].event || "Beach hazard in effect";
+    if (swimRisk.status === "moderate") return "Moderate NWS swim risk";
+    if (swimRisk.status !== "low") return "NWS swim risk unavailable";
     return beach.rating && beach.rating.label ? beach.rating.label : "Conditions unavailable";
   }
 
@@ -143,6 +158,7 @@
       finite(today.temperature_max_f) ? round(today.temperature_max_f) + "°F high" : null,
       lake.fresh && finite(lake.water_temp_f) ? round(lake.water_temp_f) + "°F water" : null,
       lake.fresh && finite(lake.wave_height_ft) ? lake.wave_height_ft + " ft waves" : null,
+      beach.swim_risk && beach.swim_risk.status === "low" ? "Low NWS swim risk" : null,
     ].filter(Boolean);
     return '<article class="daily-card"><span class="daily-rank">' + (index + 1) + '</span><h3 class="daily-title">' + escapeHtml(beach.name) + '</h3>' +
       '<div class="daily-meta">' + escapeHtml(beach.region) + " · " + escapeHtml(beach.lake) + '</div>' +
@@ -157,6 +173,7 @@
       beach.region,
       finite(today.temperature_max_f) ? round(today.temperature_max_f) + "°F" : null,
       finite(today.precipitation_probability_max) ? round(today.precipitation_probability_max) + "% rain" : null,
+      beach.swim_risk && beach.swim_risk.status === "low" ? "Low NWS risk" : null,
     ].filter(Boolean).join(" · ");
     return '<button class="daily-list-row" type="button" data-open-beach="' + escapeHtml(beach.slug) + '" aria-label="Open ' + escapeHtml(beach.name) + '">' +
       '<span class="daily-list-rank">' + (index + 1) + '</span><span><span class="daily-list-title">' + escapeHtml(beach.name) + '</span><span class="daily-list-meta">' + escapeHtml(summary) + '</span></span>' +
@@ -189,10 +206,19 @@
     if (!state.data) return;
     if (updated) updated.textContent = "Updated " + formatDate(state.data.generated_at);
     if (!health) return;
-    var keys = ["beachguard", "weather", "buoys", "hazards"];
+    var keys = ["beachguard", "weather", "buoys", "hazards", "swim_risk"];
     health.innerHTML = keys.map(function (key) {
       var source = state.data.sources[key];
-      return '<span title="' + escapeHtml(source.label) + '"><span class="source-dot ' + escapeHtml(source.status) + '"></span> ' + escapeHtml(key === "beachguard" ? "BeachGuard" : key === "buoys" ? "NOAA buoys" : key === "hazards" ? "NWS hazards" : "Forecast") + '</span>';
+      var label = key === "beachguard"
+        ? "BeachGuard"
+        : key === "buoys"
+          ? "NOAA buoys"
+          : key === "hazards"
+            ? "NWS alerts"
+            : key === "swim_risk"
+              ? "NWS swim risk"
+              : "Forecast";
+      return '<span title="' + escapeHtml(source.label) + '"><span class="source-dot ' + escapeHtml(source.status) + '"></span> ' + escapeHtml(label) + '</span>';
     }).join("");
   }
 
@@ -216,6 +242,26 @@
     }
   }
 
+  function renderNwsAlertPanel() {
+    var panel = byId("nwsAlertPanel");
+    if (!panel || !state.data) return;
+    var source = state.data.sources.hazards;
+    var alerts = state.data.active_nws_alerts || [];
+    var title = panel.querySelector("[data-nws-alert-title]");
+    var copy = panel.querySelector("[data-nws-alert-copy]");
+    if (source.status === "unavailable") {
+      panel.classList.add("show");
+      if (title) title.textContent = "NWS land and Great Lakes alert feeds are unavailable";
+      if (copy) copy.textContent = "Check the official NWS forecast and posted conditions before entering the water.";
+    } else if (alerts.length) {
+      panel.classList.add("show");
+      if (title) title.textContent = alerts.length + " relevant NWS shoreline alert" + (alerts.length === 1 ? "" : "s") + " in effect";
+      if (copy) copy.textContent = (alerts[0].headline || alerts[0].event) + (alerts.length > 1 ? " Additional affected beaches are flagged below." : " Affected beaches are flagged below.");
+    } else {
+      panel.classList.remove("show");
+    }
+  }
+
   function topBeaches() {
     if (!state.data) return [];
     var lookup = new Map(state.beaches.map(function (beach) { return [beach.slug, beach]; }));
@@ -226,11 +272,11 @@
     var container = byId("dailyPicks");
     if (!container || !state.data) return;
     if (!state.data.season.active) {
-      container.innerHTML = '<div class="error-card" style="grid-column:1/-1"><h3>Daily picks return May 15</h3><p>The live explorer below remains available all year for forecasts, waves, water temperatures, BeachGuard notices, and National Weather Service hazards.</p></div>';
+      container.innerHTML = '<div class="error-card" style="grid-column:1/-1"><h3>Daily picks return May 15</h3><p>The live explorer below remains available all year for forecasts, waves, water temperatures, BeachGuard notices, NWS swim risk, and land or marine alerts.</p></div>';
       return;
     }
     if (state.data.daily_ranking && !state.data.daily_ranking.available) {
-      container.innerHTML = '<div class="error-card" style="grid-column:1/-1"><h3>Today’s ranking is temporarily withheld</h3><p>An official notice, hazard, or forecast source did not return. The explorer still shows the available inputs, and the official source links remain below.</p></div>';
+      container.innerHTML = '<div class="error-card" style="grid-column:1/-1"><h3>Today’s ranking is temporarily withheld</h3><p>An official notice, alert, weather, or NWS swim-risk source did not return usable data. The explorer still shows the available inputs and official links.</p></div>';
       return;
     }
     var beaches = topBeaches().slice(0, 3);
@@ -245,7 +291,7 @@
       return;
     }
     if (state.data.daily_ranking && !state.data.daily_ranking.available) {
-      container.innerHTML = '<div class="error-card"><h3>Today’s ranking is temporarily withheld</h3><p>An official notice, hazard, or forecast source did not return, so no “best” list is being published. Use the <a href="/great-lakes-beaches/">year-round report</a> and check the official links directly.</p></div>';
+      container.innerHTML = '<div class="error-card"><h3>Today’s ranking is temporarily withheld</h3><p>An official notice, alert, weather, or NWS swim-risk source did not return usable data, so no “best” list is being published. Use the <a href="/great-lakes-beaches/">year-round report</a> and check the official links directly.</p></div>';
       return;
     }
     var beaches = topBeaches().slice(0, 10);
@@ -293,7 +339,7 @@
 
   function markerColor(beach) {
     var value = level(beach);
-    if (value === "closed" || value === "advisory") return "#b42318";
+    if (value === "closed" || value === "advisory" || value === "danger") return "#b42318";
     if (value === "excellent" || value === "good") return "#177657";
     if (value === "mixed" || value === "caution") return "#9a6700";
     return "#68777a";
@@ -392,6 +438,8 @@
 
   function detailMarkup(beach) {
     var quality = beach.water_quality || {};
+    var swimRisk = beach.swim_risk || {};
+    var postedFlag = beach.posted_flag || {};
     var today = beach.weather && beach.weather.today ? beach.weather.today : {};
     var current = beach.weather && beach.weather.current ? beach.weather.current : {};
     var lake = beach.lake_conditions || {};
@@ -403,17 +451,25 @@
       ["Water", lake.fresh ? formatMetric(lake.water_temp_f, "°F", "—") : "Not current"],
       ["Waves", lake.fresh ? formatMetric(lake.wave_height_ft, " ft", "—") : "Not current"],
       ["Wind gusts", formatMetric(today.wind_gusts_max_mph, " mph", "—")],
+      ["NWS swim risk", ["low", "moderate", "high"].indexOf(swimRisk.status) !== -1 ? titleCase(swimRisk.status) : "Unavailable"],
     ];
     var hazardMarkup = (beach.hazards || []).map(function (hazard) {
       return '<li><a href="' + escapeHtml(hazard.official_url) + '" target="_blank" rel="noopener">' + escapeHtml(hazard.headline || hazard.event) + '</a></li>';
     }).join("");
     return '<div class="dialog-hero"><h2>' + escapeHtml(beach.name) + '</h2><p>' + escapeHtml(beach.region) + " · " + escapeHtml(beach.lake) + '</p>' +
       '<div class="dialog-score"><strong>' + escapeHtml(scoreText(beach)) + '</strong><span>' + escapeHtml(beach.rating.label) + '<br>Beach Day Score</span></div></div>' +
-      '<div class="dialog-body"><div class="truth-status" data-state="' + escapeHtml(quality.state) + '"><strong>' + escapeHtml(quality.label || "Official status unavailable") + '</strong><p>' + escapeHtml(quality.interpretation || "Check the official source before entering the water.") + '</p></div>' +
+      '<div class="dialog-body"><div class="truth-stack">' + safetyTruthMarkup(quality, "Official water-quality status unavailable") + safetyTruthMarkup(swimRisk, "NWS swim risk unavailable") + safetyTruthMarkup(postedFlag, "Posted flag: check on arrival") + '</div>' +
       '<div class="metric-grid">' + metrics.map(function (metric) { return '<div class="metric"><span>' + escapeHtml(metric[0]) + '</span><strong>' + escapeHtml(metric[1]) + '</strong></div>'; }).join("") + '</div>' +
       '<h3>Why this result</h3><ul class="reason-list">' + reasons.map(function (reason) { return '<li>' + escapeHtml(reason) + '</li>'; }).join("") + hazardMarkup + '</ul>' +
       (lake.station_id ? '<p><small>Lake observations: NOAA station ' + escapeHtml(lake.station_id) + (lake.distance_miles != null ? ", about " + escapeHtml(lake.distance_miles) + " miles away" : "") + (lake.observed_at ? ", observed " + escapeHtml(formatDate(lake.observed_at)) : "") + '.</small></p>' : "") +
-      '<div class="dialog-actions"><a class="button" href="' + escapeHtml(beach.url) + '">Full beach page</a><a class="button button-secondary" href="' + escapeHtml(quality.official_url || "https://mienviro.michigan.gov/nsite/beach/map/results") + '" target="_blank" rel="noopener">Check BeachGuard</a></div></div>';
+      (swimRisk.issued_at ? '<p><small>NWS Surf Zone Forecast: ' + escapeHtml(swimRisk.office || "NWS") + " · " + escapeHtml(swimRisk.zone_name || swimRisk.zone_id || "matched zone") + " · issued " + escapeHtml(formatDate(swimRisk.issued_at)) + '. This forecast is not the posted flag.</small></p>' : "") +
+      '<div class="dialog-actions"><a class="button" href="' + escapeHtml(beach.url) + '">Full beach page</a><a class="button button-secondary" href="' + escapeHtml(quality.official_url || "https://mienviro.michigan.gov/nsite/beach/map/results") + '" target="_blank" rel="noopener">Check BeachGuard</a><a class="button button-secondary" href="' + escapeHtml(swimRisk.official_url || "https://www.weather.gov/greatlakes/beachhazards") + '" target="_blank" rel="noopener">Open NWS forecast</a><a class="button button-secondary" href="' + escapeHtml(postedFlag.official_url || "https://www.michigan.gov/dnr/education/safety-info/beach-safety") + '" target="_blank" rel="noopener">Flag safety guide</a></div></div>';
+  }
+
+  function safetyTruthMarkup(item, fallbackLabel) {
+    var value = item || {};
+    var status = value.state || value.status || "unavailable";
+    return '<div class="truth-status" data-state="' + escapeHtml(status) + '"><strong>' + escapeHtml(value.label || fallbackLabel) + '</strong><p>' + escapeHtml(value.interpretation || "Check the official source and posted conditions before entering the water.") + '</p></div>';
   }
 
   function findBeach(slug) {
@@ -439,6 +495,8 @@
     if (!container || !state.beaches.length) return;
     var beach = state.beaches[0];
     var quality = beach.water_quality || {};
+    var swimRisk = beach.swim_risk || {};
+    var postedFlag = beach.posted_flag || {};
     var today = beach.weather && beach.weather.today ? beach.weather.today : {};
     var lake = beach.lake_conditions || {};
     var metrics = [
@@ -448,12 +506,17 @@
       ["Water temperature", lake.fresh ? formatMetric(lake.water_temp_f, "°F", "—") : "Not current"],
       ["Wave height", lake.fresh ? formatMetric(lake.wave_height_ft, " ft", "—") : "Not current"],
       ["Max wind gust", formatMetric(today.wind_gusts_max_mph, " mph", "—")],
+      ["NWS swim risk", ["low", "moderate", "high"].indexOf(swimRisk.status) !== -1 ? titleCase(swimRisk.status) : "Unavailable"],
     ];
+    var hazardMarkup = (beach.hazards || []).map(function (hazard) {
+      return '<li><a href="' + escapeHtml(hazard.official_url) + '" target="_blank" rel="noopener">' + escapeHtml(hazard.headline || hazard.event) + '</a></li>';
+    }).join("");
     container.innerHTML = '<h2>Conditions today</h2><p class="detail-summary">' + escapeHtml(beach.rating.label) + '. Updated ' + escapeHtml(formatDate(state.data.generated_at)) + '.</p>' +
-      '<div class="truth-status" data-state="' + escapeHtml(quality.state) + '"><strong>' + escapeHtml(quality.label) + '</strong><p>' + escapeHtml(quality.interpretation) + '</p></div>' +
+      '<div class="truth-stack">' + safetyTruthMarkup(quality, "Official water-quality status unavailable") + safetyTruthMarkup(swimRisk, "NWS swim risk unavailable") + safetyTruthMarkup(postedFlag, "Posted flag: check on arrival") + '</div>' +
       '<div class="metric-grid">' + metrics.map(function (metric) { return '<div class="metric"><span>' + escapeHtml(metric[0]) + '</span><strong>' + escapeHtml(metric[1]) + '</strong></div>'; }).join("") + '</div>' +
-      '<h3>What is shaping this result</h3><ul class="reason-list">' + (beach.rating.reasons || []).map(function (reason) { return '<li>' + escapeHtml(reason) + '</li>'; }).join("") + '</ul>' +
-      '<div class="dialog-actions"><a class="button" href="' + escapeHtml(quality.official_url) + '" target="_blank" rel="noopener">Check BeachGuard</a><a class="button button-secondary" href="/great-lakes-beaches/">Compare all beaches</a></div>';
+      '<h3>What is shaping this result</h3><ul class="reason-list">' + (beach.rating.reasons || []).map(function (reason) { return '<li>' + escapeHtml(reason) + '</li>'; }).join("") + hazardMarkup + '</ul>' +
+      (swimRisk.issued_at ? '<p><small>NWS Surf Zone Forecast: ' + escapeHtml(swimRisk.office || "NWS") + " · " + escapeHtml(swimRisk.zone_name || swimRisk.zone_id || "matched zone") + " · issued " + escapeHtml(formatDate(swimRisk.issued_at)) + '. This forecast is not the posted flag.</small></p>' : "") +
+      '<div class="dialog-actions"><a class="button" href="' + escapeHtml(quality.official_url) + '" target="_blank" rel="noopener">Check BeachGuard</a><a class="button button-secondary" href="' + escapeHtml(swimRisk.official_url || "https://www.weather.gov/greatlakes/beachhazards") + '" target="_blank" rel="noopener">Open NWS forecast</a><a class="button button-secondary" href="' + escapeHtml(postedFlag.official_url || "https://www.michigan.gov/dnr/education/safety-info/beach-safety") + '" target="_blank" rel="noopener">Flag safety guide</a><a class="button button-secondary" href="/great-lakes-beaches/">Compare all beaches</a></div>';
   }
 
   function bindControls() {
@@ -508,7 +571,7 @@
   }
 
   function errorHtml() {
-    return '<div class="error-card"><h3>Live conditions could not load</h3><p>Try again shortly, and check <a href="https://mienviro.michigan.gov/nsite/beach/map/results" target="_blank" rel="noopener">Michigan BeachGuard</a> plus <a href="https://www.weather.gov/greatlakes/beachhazards" target="_blank" rel="noopener">National Weather Service beach hazards</a> before entering the water.</p></div>';
+    return '<div class="error-card"><h3>Live conditions could not load</h3><p>Try again shortly, and check <a href="https://mienviro.michigan.gov/nsite/beach/map/results" target="_blank" rel="noopener">Michigan BeachGuard</a>, the <a href="https://www.weather.gov/greatlakes/beachhazards" target="_blank" rel="noopener">NWS beach forecast and alerts</a>, and posted flags before entering the water.</p></div>';
   }
 
   function renderError() {
@@ -545,6 +608,7 @@
       renderSeason();
       renderSourceHealth();
       renderAlertPanel();
+      renderNwsAlertPanel();
       if (pageType === "detail") renderIndividual();
       if (pageType === "daily") renderDailyList();
       if (pageType === "explorer") {

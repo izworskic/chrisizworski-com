@@ -14,7 +14,7 @@
       "name": "Decision usefulness",
       "weight": 25,
       "checks": [
-        {"id": "live_inputs", "points": 10, "description": "Combines BeachGuard, NWS, NOAA buoy, and weather inputs in one endpoint."},
+        {"id": "live_inputs", "points": 10, "description": "Combines BeachGuard, NWS land and marine alerts, NWS swim risk, NOAA buoy, and weather inputs in one endpoint."},
         {"id": "catalog_depth", "points": 4, "description": "Catalog covers at least 50 Michigan Great Lakes shoreline destinations."},
         {"id": "exploration_tools", "points": 6, "description": "Search, lake and trait filters, sorting, map, and on-device distance are implemented."},
         {"id": "daily_decision", "points": 5, "description": "An automatically seasonal daily ranking converts raw conditions into a useful shortlist."}
@@ -24,9 +24,10 @@
       "name": "Truth and safety",
       "weight": 20,
       "checks": [
-        {"id": "official_overrides", "points": 8, "description": "Closures, advisories, and hazards override scores and ranking eligibility."},
-        {"id": "no_false_all_clear", "points": 6, "description": "No-alert and unavailable states explicitly avoid implying a recent test or all-clear."},
-        {"id": "freshness_provenance", "points": 6, "description": "Observation freshness, station identity, distance, source links, and source health are visible."}
+        {"id": "official_overrides", "points": 6, "description": "Closures, advisories, and relevant NWS alerts override scores and ranking eligibility."},
+        {"id": "no_false_all_clear", "points": 5, "description": "No-alert and unavailable states explicitly avoid implying a recent test or all-clear."},
+        {"id": "freshness_provenance", "points": 4, "description": "Observation and forecast freshness, zone or station provenance, source links, and source health are visible."},
+        {"id": "swim_risk_flag_truth", "points": 5, "description": "Daily picks require explicit low NWS swim risk while forecast risk and the posted beach flag remain separate truths."}
       ]
     },
     {

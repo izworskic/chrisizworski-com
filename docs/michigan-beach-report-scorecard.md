@@ -12,8 +12,8 @@ npm run benchmark:beaches
 
 | Category | Weight | Launch standard |
 |---|---:|---|
-| Decision usefulness | 25 | Four live input classes, 50+ places, practical exploration, and a daily shortlist |
-| Truth and safety | 20 | Official notices override the score; no false all-clear; provenance and freshness are visible |
+| Decision usefulness | 25 | Water quality, NWS alerts and swim risk, weather, and lake conditions across 50+ places with a daily shortlist |
+| Truth and safety | 20 | Official notices and risk override the result; no false all-clear; forecast risk and posted flags stay separate |
 | Data reliability | 15 | Bounded parallel fetching, six-hour observation guard, and graceful per-source failure |
 | UX and accessibility | 15 | Responsive keyboard-ready interface with loading, empty, error, no-JS, and location-denial states |
 | Search and answer readiness | 15 | Structured primary pages, 50 canonical detail pages, sitemap, and strong internal discovery |
@@ -38,6 +38,9 @@ These are directional targets to evaluate after launch, not promises and not par
 
 - Do not launch below 90/100.
 - A closure, advisory, or matching hazard must outrank the numerical score every time.
+- Daily picks require an explicit, current **low NWS swim risk**. Moderate, high, or unavailable risk is never eligible.
+- A relevant NWS Beach Hazards Statement, Special Weather or Marine Statement, severe warning, or lakeshore alert excludes an affected beach. Unrelated statements and wildfire Red Flag Warnings must not be presented as swim flags.
+- The NWS swim-risk forecast and the physical flag posted at the beach are separate truths. Unknown posted flag status must never be represented as green or low.
 - “No active alert found” must never be described as a recent test or a guarantee of water quality.
 - A missing, incomplete, or more-than-six-hours-old NOAA observation must make the Beach Day Score N/A; it must never receive fallback points or ranking eligibility.
 - If BeachGuard is unavailable, the interface must say so and keep the official link visible.

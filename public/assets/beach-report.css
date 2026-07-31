@@ -349,6 +349,10 @@ button {
   background: var(--good);
 }
 
+.source-dot.partial {
+  background: var(--mixed);
+}
+
 .source-dot.unavailable {
   background: var(--danger);
 }
@@ -750,7 +754,8 @@ button {
 }
 
 .mini-score[data-level="closed"],
-.mini-score[data-level="advisory"] {
+.mini-score[data-level="advisory"],
+.mini-score[data-level="danger"] {
   background: var(--danger-soft);
   color: var(--danger);
 }
@@ -769,7 +774,7 @@ button {
 .card-facts {
   margin-top: 10px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 7px;
 }
 
@@ -1096,13 +1101,25 @@ button {
   color: #0d5a41;
 }
 
+.truth-stack {
+  display: grid;
+  gap: 10px;
+}
+
 .truth-status[data-state="closure"],
-.truth-status[data-state="advisory"] {
+.truth-status[data-state="advisory"],
+.truth-status[data-state="high"] {
   background: var(--danger-soft);
   color: #7c211a;
 }
 
-.truth-status[data-state="unavailable"] {
+.truth-status[data-state="moderate"] {
+  background: var(--mixed-soft);
+  color: #735407;
+}
+
+.truth-status[data-state="unavailable"],
+.truth-status[data-state="unknown"] {
   background: #edf0ef;
   color: var(--ink-soft);
 }
