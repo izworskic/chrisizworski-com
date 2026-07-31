@@ -1,0 +1,69 @@
+{
+  "name": "Michigan Beach Report launch benchmark",
+  "version": "2026-07-31",
+  "baseline": {
+    "score": 42,
+    "label": "Legacy regional beach guide",
+    "notes": "Useful static inventory and map, but no official water-quality notices, hazard overrides, daily decision layer, transparent score, source-health states, or dedicated beach landing pages."
+  },
+  "launch_threshold": 90,
+  "stretch_target": 95,
+  "maximum_score": 100,
+  "categories": [
+    {
+      "name": "Decision usefulness",
+      "weight": 25,
+      "checks": [
+        {"id": "live_inputs", "points": 10, "description": "Combines BeachGuard, NWS, NOAA buoy, and weather inputs in one endpoint."},
+        {"id": "catalog_depth", "points": 4, "description": "Catalog covers at least 50 Michigan Great Lakes shoreline destinations."},
+        {"id": "exploration_tools", "points": 6, "description": "Search, lake and trait filters, sorting, map, and on-device distance are implemented."},
+        {"id": "daily_decision", "points": 5, "description": "An automatically seasonal daily ranking converts raw conditions into a useful shortlist."}
+      ]
+    },
+    {
+      "name": "Truth and safety",
+      "weight": 20,
+      "checks": [
+        {"id": "official_overrides", "points": 8, "description": "Closures, advisories, and hazards override scores and ranking eligibility."},
+        {"id": "no_false_all_clear", "points": 6, "description": "No-alert and unavailable states explicitly avoid implying a recent test or all-clear."},
+        {"id": "freshness_provenance", "points": 6, "description": "Observation freshness, station identity, distance, source links, and source health are visible."}
+      ]
+    },
+    {
+      "name": "Data reliability",
+      "weight": 15,
+      "checks": [
+        {"id": "bounded_parallel_fetches", "points": 5, "description": "Upstream calls run in parallel with timeouts and cache policy."},
+        {"id": "stale_observation_guard", "points": 5, "description": "NOAA observations older than six hours are not treated as current score inputs."},
+        {"id": "graceful_degradation", "points": 5, "description": "Each source has an explicit unavailable state and the UI keeps official-source fallbacks."}
+      ]
+    },
+    {
+      "name": "UX and accessibility",
+      "weight": 15,
+      "checks": [
+        {"id": "responsive_accessible_ui", "points": 5, "description": "Responsive layouts, focus treatment, reduced-motion handling, labels, and semantic controls are present."},
+        {"id": "progressive_fallbacks", "points": 5, "description": "Loading, empty, error, geolocation denial, no-JavaScript, and dialog states are handled."},
+        {"id": "credible_visual", "points": 5, "description": "The experience uses a credited, public-domain National Park Service shoreline photograph."}
+      ]
+    },
+    {
+      "name": "Search and answer readiness",
+      "weight": 15,
+      "checks": [
+        {"id": "structured_main_pages", "points": 5, "description": "Main and daily pages have canonical metadata, concise answers, breadcrumbs, and FAQ structured data."},
+        {"id": "detail_index", "points": 6, "description": "Every catalog entry has a canonical, structured, unique detail page in a dedicated sitemap."},
+        {"id": "internal_discovery", "points": 4, "description": "Tools, Great Lakes hub, homepage copy, robots, and llms.txt point search systems and people to the report."}
+      ]
+    },
+    {
+      "name": "Seasonal engagement",
+      "weight": 10,
+      "checks": [
+        {"id": "season_switch", "points": 4, "description": "Daily ranking is active May 15–September 15 and pauses cleanly while the explorer stays live."},
+        {"id": "intent_analytics", "points": 3, "description": "Search, Near Me, detail-open, and daily-pick interactions emit analytics events."},
+        {"id": "measurement_plan", "points": 3, "description": "A documented KPI scorecard defines launch, adoption, retention, discovery, and truth targets."}
+      ]
+    }
+  ]
+}

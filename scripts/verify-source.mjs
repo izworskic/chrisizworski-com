@@ -34,6 +34,7 @@ const intentionalChanges = new Set([
   "/sitemap.xml",
   "/image-sitemap.xml",
   "/llms.txt",
+  "/robots.txt",
 ]);
 
 function sha256(value) {
@@ -123,7 +124,7 @@ for (const [route, lastmod] of Object.entries({
   "soo-locks/": "2026-07-28",
   "northern-lights-michigan/": "2026-07-20",
   "great-lakes-buoys/": "2026-07-20",
-  "great-lakes-beaches/": "2026-07-20",
+  "great-lakes-beaches/": "2026-07-31",
   "lake-superior-circle-tour/": "2026-07-28",
   "michigan-border-wait-times/": "2026-07-28",
   "gordie-howe-bridge-wait-time/": "2026-07-28",
