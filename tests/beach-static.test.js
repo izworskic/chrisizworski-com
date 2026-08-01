@@ -64,3 +64,12 @@ test("the browser client never renders missing lake observations as zero", () =>
   assert.match(client, /score != null \? String\(beach\.rating\.score\) : "N\/A"/);
   assert.match(client, /scoreMetricText/);
 });
+
+test("the beach map stays bounded instead of stretching to the full results list", () => {
+  const css = read("public/assets/beach-report.css");
+  assert.match(css, /\.explorer-layout\s*\{[^}]*align-items:\s*start;/s);
+  assert.match(css, /\.map-panel\s*\{[^}]*align-self:\s*start;[^}]*height:\s*clamp\(440px,[^;]+680px\);[^}]*min-height:\s*0;/s);
+  assert.match(css, /@media \(max-width:\s*960px\)[\s\S]*?\.map-panel\s*\{[^}]*height:\s*440px;[^}]*min-height:\s*0;/);
+  assert.match(css, /@media \(max-width:\s*720px\)[\s\S]*?\.map-panel\s*\{[^}]*height:\s*360px;/);
+  assert.doesNotMatch(css, /#beachMap\s*\{[^}]*min-height:\s*680px;/s);
+});
