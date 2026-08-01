@@ -14,6 +14,9 @@
     "api/mackinac-media.js": {
       "maxDuration": 20
     },
+    "api/beaches.js": {
+      "maxDuration": 25
+    },
     "api/**/*.js": {
       "maxDuration": 10
     }

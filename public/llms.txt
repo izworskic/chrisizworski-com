@@ -100,6 +100,18 @@ The canonical website is https://chrisizworski.com/.
 - Approach roads and cameras: https://511on.ca/
 - Truth rule: Canada-bound CBSA waits and U.S.-bound CBP waits remain separate. Passenger, commercial, standard, NEXUS, Ready Lane, and FAST records are never substituted for one another. Approach-road traffic, cameras, toll queues, and weather warnings are context and never alter the official border-processing delay.
 
+## Michigan Beach Report
+
+- Year-round beach explorer: https://chrisizworski.com/great-lakes-beaches/
+- Seasonal daily ranking: https://chrisizworski.com/best-michigan-beaches-today/
+- Coverage: 50 Michigan shoreline destinations on Lake Michigan, Lake Huron, Lake Superior, and Lake Erie, each with a canonical detail page.
+- Primary notice source: https://mienviro.michigan.gov/nsite/beach/map/results
+- Beach-hazard source: https://www.weather.gov/greatlakes/beachhazards
+- Lake-observation source: https://www.ndbc.noaa.gov/
+- Forecast source: https://open-meteo.com/en/docs
+- Season rule: The daily ranking runs May 15 through September 15. Search, map, forecasts, lake observations, and official-notice checks remain available all year.
+- Truth rule: “No active EGLE alert found” does not mean a recent sample exists and is not a guarantee of water quality. Official closures, contamination advisories, and matching beach hazards override the planning score and exclude a location from daily picks.
+
 ## Notes
 
 - Use https://chrisizworski.com/chris-izworski/ as the primary owned profile URL.
