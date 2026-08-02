@@ -726,7 +726,7 @@ function markSpaceWeatherUnavailable(id){
 // === Main data fetch ===
 async function loadAuroraData(){
   const kpUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index-forecast.json';
-  const swUrl = 'https://services.swpc.noaa.gov/products/solar-wind/mag-1-day.json';
+  const swUrl = 'https://services.swpc.noaa.gov/products/summary/solar-wind-mag-field.json';
   const kpCurrentUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json';
   
   try {
@@ -809,7 +809,7 @@ async function loadAuroraData(){
     
     if (swRes.status === 'fulfilled') {
       const sw = swRes.value;
-      // Header row + data rows. Columns vary; bz_gsm is typically index 3 for mag-1-day
+      // Rows may be arrays or objects; normalizeNoaaRows maps bz_gsm to index 3 and bt to index 6
       const swRows = normalizeNoaaRows(sw, [['time_tag'],['bx_gsm'],['by_gsm'],['bz_gsm'],['lon_gsm'],['lat_gsm'],['bt']]);
       const recent = swRows.filter(row=>Number.isFinite(parseFloat(row[3]))).slice(-1)[0];
       if (recent) {
@@ -842,10 +842,10 @@ async function loadAuroraData(){
       } else markSpaceWeatherUnavailable('swKpNow');
     } else markSpaceWeatherUnavailable('swKpNow');
     
-    // Solar wind speed from plasma feed (separate call, optional)
+    // Solar wind speed from the SWPC summary feed (separate call, optional)
     try {
-      const plasma = await fetch('https://services.swpc.noaa.gov/products/solar-wind/plasma-1-day.json').then(r=>r.json());
-      const plasmaRows = normalizeNoaaRows(plasma, [['time_tag'],['density'],['speed'],['temperature']]);
+      const plasma = await fetch('https://services.swpc.noaa.gov/products/summary/solar-wind-speed.json').then(r=>r.json());
+      const plasmaRows = normalizeNoaaRows(plasma, [['time_tag'],['density'],['speed','proton_speed'],['temperature']]);
       const recent = plasmaRows.filter(row=>Number.isFinite(parseFloat(row[2]))).slice(-1)[0];
       if (recent) {
         // Schema: [time_tag, density, speed, temperature]
