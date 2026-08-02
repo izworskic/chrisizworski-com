@@ -23,6 +23,26 @@
   },
   "redirects": [
     {
+      "source": "/chris-izworski-bay-city-michigan",
+      "destination": "/chris-izworski-bay-city/",
+      "permanent": true
+    },
+    {
+      "source": "/chris-izworski-bay-city-michigan/",
+      "destination": "/chris-izworski-bay-city/",
+      "permanent": true
+    },
+    {
+      "source": "/chris-izworski-speaking",
+      "destination": "/speaking/",
+      "permanent": true
+    },
+    {
+      "source": "/chris-izworski-speaking/",
+      "destination": "/speaking/",
+      "permanent": true
+    },
+    {
       "source": "/news-coverage",
       "destination": "/chris-izworski-news-coverage/",
       "permanent": true
