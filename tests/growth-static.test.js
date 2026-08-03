@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { readFileSync } = require("node:fs");
+const { existsSync, readFileSync } = require("node:fs");
 const path = require("node:path");
 
 const read = (file) => readFileSync(path.join(__dirname, "..", file), "utf8");
@@ -51,29 +51,24 @@ test("Aurora and Soo answers remain useful and source-safe before or outside cli
   assert.ok(soo.includes("does not copy or republish a third party's schedule"));
 });
 
-test("ad-first foundation is crawlable, privacy-ready, and measurable", () => {
-  const advertise = read("public/advertise/index.html");
-  const disclosure = read("public/disclosure/index.html");
-  const privacy = read("public/privacy/index.html");
+test("ad-first execution plan stays internal and measurable", () => {
+  const benchmark = JSON.parse(read("benchmarks/growth-100x-baseline.json"));
+  const plan = read("docs/adsense-launch-plan.md");
   const connect = read("public/connect/index.html");
   const sitemap = read("public/sitemap.xml");
   const tracker = read("public/assets/growth-cta.js");
 
-  assert.ok(advertise.includes("21,335"));
-  assert.ok(advertise.includes("Audience first. Google ads next. Sponsors later."));
-  assert.ok(advertise.includes("10,000 measured monthly pageviews"));
-  assert.ok(!advertise.includes("Founding tool sponsor"));
-  assert.ok(!advertise.includes("$500"));
-  assert.ok(disclosure.includes("labeled near the placement"));
-  assert.ok(disclosure.includes("25,000 measured monthly pageviews"));
-  assert.ok(privacy.includes("no Google AdSense or other programmatic display-ad network is active"));
-  assert.ok(privacy.includes("Google-certified consent-management platform"));
-  assert.ok(!privacy.includes("ca-pub-"));
-  assert.ok(connect.includes("Future Commercial Partnerships"));
-  assert.ok(connect.includes("Sponsor packages are not currently being sold"));
-  assert.ok(sitemap.includes("https://chrisizworski.com/advertise/"));
-  assert.ok(sitemap.includes("https://chrisizworski.com/disclosure/"));
-  assert.ok(sitemap.includes("https://chrisizworski.com/privacy/"));
+  assert.deepEqual(benchmark.revenueModel.sequence, ["search growth", "Google AdSense", "post-proof sponsorships"]);
+  assert.equal(benchmark.revenueModel.adsense.internalEconomicGate.measuredMonthlyPageviews, 10000);
+  assert.equal(benchmark.revenueModel.sponsorshipGate.measuredMonthlyPageviews, 25000);
+  assert.ok(plan.includes("10,000 measured pageviews"));
+  assert.ok(plan.includes("25,000 measured monthly pageviews"));
+  assert.ok(!plan.includes("ca-pub-"));
+  assert.ok(!connect.includes("advertising roadmap"));
+  for (const route of ["advertise", "disclosure", "privacy"]) {
+    assert.ok(!existsSync(path.join(__dirname, "..", "public", route, "index.html")), route);
+    assert.ok(!sitemap.includes(`https://chrisizworski.com/${route}/`), route);
+  }
   assert.ok(tracker.includes('name: "Growth CTA"'));
   assert.ok(!tracker.includes("localStorage"));
   assert.ok(!tracker.includes("document.cookie"));
@@ -97,9 +92,6 @@ test("FVF and birding form measurable internal growth clusters", () => {
 
 test("JSON-LD remains valid on every changed page", () => {
   const routes = [
-    "advertise",
-    "disclosure",
-    "privacy",
     "connect",
     "chris-izworski-freighter-view-farms",
     "michigan-gardening",

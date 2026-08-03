@@ -137,31 +137,19 @@ for (const page of pageChecks) {
   }
 }
 
-for (const route of ["advertise", "disclosure", "privacy"]) {
-  const file = `public/${route}/index.html`;
-  check(`/${route}/ page exists`, await exists(file));
-  const html = await read(file);
-  check(`/${route}/ canonical`, html.includes(`https://chrisizworski.com/${route}/`));
-  check(`/${route}/ sitemap entry`, sitemap.includes(`https://chrisizworski.com/${route}/`));
-  check(`/${route}/ analytics`, html.includes('/_vercel/insights/script.js'));
-}
-
 check("Growth CTA tracker exists", await exists("public/assets/growth-cta.js"));
-const advertise = await read("public/advertise/index.html");
-const disclosure = await read("public/disclosure/index.html");
-const privacy = await read("public/privacy/index.html");
+const adsensePlan = await read("docs/adsense-launch-plan.md");
 const fvf = await read("public/chris-izworski-freighter-view-farms/index.html");
 const birding = await read("public/great-lakes-birding/index.html");
-check("Roadmap states the exact 28-day baseline", advertise.includes("21,335"));
-check("Roadmap is explicitly ad-first", advertise.includes("Audience first. Google ads next. Sponsors later."));
-check("Roadmap states the measured ad gate", advertise.includes("10,000 measured monthly pageviews"));
-check("Roadmap does not sell sponsor packages", !advertise.includes("$500") && !advertise.includes("Founding tool sponsor"));
-check("No placeholder Google publisher ID exists", !advertise.includes("ca-pub-") && !privacy.includes("ca-pub-"));
 check(
-  "Disclosure defers sponsorship and promises visible labeling",
-  disclosure.includes("25,000 measured monthly pageviews") && disclosure.includes("labeled near the placement"),
+  "AdSense execution plan stays internal and contains the measured gate",
+  adsensePlan.includes("10,000 measured pageviews") && adsensePlan.includes("25,000 measured monthly pageviews"),
 );
-check("Privacy page states current no-ad status", privacy.includes("no Google AdSense or other programmatic display-ad network is active"));
+for (const route of ["advertise", "disclosure", "privacy"]) {
+  check(`/${route}/ strategy page is not published`, !(await exists(`public/${route}/index.html`)));
+  check(`/${route}/ is absent from the sitemap`, !sitemap.includes(`https://chrisizworski.com/${route}/`));
+}
+check("No placeholder Google publisher ID exists", !adsensePlan.includes("ca-pub-"));
 check(
   "FVF authority page links the gardening cluster",
   ["/michigan-gardening/", "/when-to-plant-tomatoes-michigan/", "/michigan-frost-dates/"].every((href) =>
