@@ -1,0 +1,164 @@
+[
+ {
+  "slug": "saginaw-bay",
+  "name": "Saginaw Bay",
+  "short": "Saginaw Bay",
+  "acis": "KMBS",
+  "acisName": "Saginaw MBS International Airport",
+  "nws": "KMBS",
+  "lake": "huron",
+  "lakeName": "Lake Huron",
+  "access": "Linwood, Pinconning, Quanicassee, Sebewaing, Bay Port, Caseville",
+  "blurb": "The largest and most heavily fished ice sheet in Michigan, and the one that puts the most people in the water. Saginaw Bay is shallow, wide open to wind, and it freezes and breaks up faster than almost anything else in the state. That combination is exactly what makes it productive and exactly what makes it dangerous.",
+  "detail": "Because the bay is shallow it gives up heat quickly, so it can lock up hard in a short cold stretch well before deeper water does. The same shallowness and the open fetch mean a single day of strong wind can shear the sheet, open leads a mile offshore, and push pressure ridges up overnight. People who were on good ice in the morning have been cut off from shore by afternoon. The Coast Guard flies rescues off this bay most winters, and the pattern is almost always the same: solid ice near shore, a working crack that opened with an offshore wind, and a group of anglers on the wrong side of it.",
+  "notes": [
+   [
+    "Offshore wind is the specific hazard",
+    "A west or southwest wind on Saginaw Bay pushes ice away from the west shore. That is the setup that opens leads behind people. Check wind direction before you walk out, not just temperature."
+   ],
+   [
+    "Shallow means fast both ways",
+    "The bay makes ice quickly in a cold snap and loses it just as quickly in a thaw. Cold accumulation from two weeks ago tells you very little about today if it has been above freezing since."
+   ],
+   [
+    "The DNR singles out Great Lakes bays",
+    "Michigan DNR states plainly that ice covering the bays of the Great Lakes will always be more fragile than inland lake ice at the same thickness. This is that ice."
+   ]
+  ]
+ },
+ {
+  "slug": "houghton-lake",
+  "name": "Houghton Lake",
+  "short": "Houghton Lake",
+  "acis": "KHTL",
+  "acisName": "Houghton Lake, Roscommon County",
+  "nws": "KHTL",
+  "lake": null,
+  "lakeName": null,
+  "access": "Houghton Lake town accesses, Prudenville, North Shore",
+  "blurb": "The largest inland lake in Michigan and the center of the state's ice fishing culture. Shallow, wind exposed for an inland lake, and surrounded by more shanties in February than anywhere else in Michigan.",
+  "detail": "Houghton Lake averages only around twenty feet deep, which is why it freezes early relative to the deep northern lakes and why the ice fishing tradition here is so entrenched. There is no satellite ice product for inland lakes at this scale, so the only signal this page can honestly offer is accumulated cold from the Houghton Lake climate station, which sits essentially on the water. That is a real signal for whether ice should be forming, and it is not a measurement of the ice.",
+  "notes": [
+   [
+    "No satellite coverage here",
+    "The NOAA ice cover product covers the Great Lakes, not inland lakes. For Houghton Lake this page shows accumulated cold only, and says so rather than implying more."
+   ],
+   [
+    "Shallow and early",
+    "At roughly twenty feet average depth this lake gives up heat fast and typically locks up ahead of the deeper northern lakes."
+   ],
+   [
+    "Crowds are their own hazard",
+    "Heavy shanty and vehicle traffic concentrates load and cuts holes across the sheet. Popular does not mean safe."
+   ]
+  ]
+ },
+ {
+  "slug": "lake-st-clair",
+  "name": "Lake St. Clair",
+  "short": "Lake St. Clair",
+  "acis": "KDET",
+  "acisName": "Detroit City Airport",
+  "lake": "stclair",
+  "lakeName": "Lake St. Clair",
+  "nws": "KDET",
+  "access": "Metro Beach, Selfridge, Anchor Bay, Fair Haven, Algonac",
+  "blurb": "Shallow, current driven, and the closest hard water to several million people. Lake St. Clair produces excellent perch and pike ice fishing and it has some of the least forgiving ice in the state because of the flow moving through it.",
+  "detail": "St. Clair is essentially a wide spot in a river system. Water moves through it constantly on its way from Lake Huron to the Detroit River, and moving water undermines ice from below where you cannot see it. The DNR specifically warns that ice formed over current is often dangerous, and this entire lake is over current. Anchor Bay in the northeast is the traditional ice fishing water because flow there is weakest, and even that varies year to year.",
+  "notes": [
+   [
+    "The whole lake is over current",
+    "Flow undermines ice from underneath and leaves thickness that looks fine from the top. This is the single most important fact about ice on St. Clair."
+   ],
+   [
+    "Anchor Bay is the traditional water",
+    "It sits away from the main flow path, which is why the ice fishing concentrates there. That is a relative statement, not an assurance."
+   ],
+   [
+    "Freighter tracks reopen",
+    "Shipping keeps channels open and moving. Stay far off any track and any lead that lines up with one."
+   ]
+  ]
+ },
+ {
+  "slug": "little-bay-de-noc",
+  "name": "Little Bay de Noc",
+  "short": "Little Bay de Noc",
+  "acis": "KESC",
+  "acisName": "Escanaba, Delta County Airport",
+  "lake": "michigan",
+  "lakeName": "Lake Michigan",
+  "nws": "KESC",
+  "access": "Escanaba, Gladstone, Kipling, Ford River",
+  "blurb": "The Upper Peninsula walleye destination, and the coldest of the regions on this page. Little Bay de Noc is a long protected arm off northern Lake Michigan that reliably makes better ice than anything in the Lower Peninsula, for the simple reason that it is much colder for much longer.",
+  "detail": "The protected shape and the northern latitude mean this bay accumulates cold earlier and holds it later than any of the southern waters. It also draws destination anglers from several states, which means a lot of people on the ice who do not know the local hazards. The Escanaba River and Ford River mouths carry current and are the usual soft spots, and the outer bay opens to Green Bay proper where wind driven ice movement is a real factor.",
+  "notes": [
+   [
+    "Colder and longer",
+    "This is the most reliable ice season of the regions here, which is why it draws destination traffic. Reliable is not the same as uniform."
+   ],
+   [
+    "River mouths are the soft spots",
+    "The Escanaba and Ford river mouths carry current under the ice. Treat any river influence as suspect regardless of the surrounding sheet."
+   ],
+   [
+    "The outer bay moves",
+    "Where Little Bay de Noc opens toward Green Bay, wind can move ice. The protected inner bay behaves very differently from the outer end."
+   ]
+  ]
+ },
+ {
+  "slug": "grand-traverse-bay",
+  "name": "Grand Traverse Bay",
+  "short": "Grand Traverse Bay",
+  "acis": "KTVC",
+  "acisName": "Traverse City Cherry Capital Airport",
+  "lake": "michigan",
+  "lakeName": "Lake Michigan",
+  "nws": "KTVC",
+  "access": "Suttons Bay, Bowers Harbor, Elk Rapids, Northport",
+  "blurb": "Deep, cold, and the least likely of these waters to lock up. Grand Traverse Bay only makes broad ice in genuinely hard winters, and when it does the whitefish and lake trout fishing is worth the wait.",
+  "detail": "The bay runs several hundred feet deep in places, and deep water holds an enormous amount of heat. That thermal mass means Grand Traverse Bay resists freezing long after shallower water has locked up, and in mild winters the main basin never freezes at all. What does freeze, and freezes first, is the shallow protected water: Suttons Bay, Bowers Harbor, the far south end of the west arm. Those are the traditional ice destinations and they are the only parts worth watching in most years.",
+  "notes": [
+   [
+    "Depth resists ice",
+    "Several hundred feet of water holds heat. In a mild winter the main basin simply does not freeze, and no amount of cold in December changes that quickly."
+   ],
+   [
+    "The protected pockets go first",
+    "Suttons Bay, Bowers Harbor, and the south end of the west arm are where ice forms and where the fishing happens."
+   ],
+   [
+    "Lake wide numbers mislead here",
+    "A Lake Michigan cover percentage is dominated by the far north and the shallows elsewhere. It says very little about this specific bay."
+   ]
+  ]
+ },
+ {
+  "slug": "burt-mullett",
+  "name": "Burt and Mullett Lakes",
+  "short": "Burt and Mullett",
+  "acis": "KAPN",
+  "acisName": "Alpena County Regional Airport",
+  "lake": null,
+  "lakeName": null,
+  "nws": "KAPN",
+  "access": "Indian River, Topinabee, Alanson, Mullett Lake Village",
+  "blurb": "Two large deep northern inland lakes connected by the Inland Waterway, known for walleye, perch, and a genuine big fish reputation. Deeper than Houghton, later to freeze, and complicated by the current moving between them.",
+  "detail": "Burt and Mullett are part of a connected chain, and chain of lakes systems are called out by the DNR as specifically unpredictable because water moves between the basins. The Indian River stretch between them carries current all winter and is never trustworthy. Both lakes are deep enough that they take real cold to lock up, and both have spring holes and inlet influence that keep local thickness inconsistent even in a hard winter.",
+  "notes": [
+   [
+    "Chain of lakes means moving water",
+    "The DNR flags chain systems as unpredictable for exactly this reason. The connecting water between Burt and Mullett is the hazard, not the open basins."
+   ],
+   [
+    "No satellite coverage",
+    "These are inland lakes with no NOAA ice product. Accumulated cold is the only signal here, and this page will not pretend otherwise."
+   ],
+   [
+    "Deep water, later ice",
+    "Both lakes are deep enough to resist early freeze up. Expect them to trail the shallow waters by weeks."
+   ]
+  ]
+ }
+]
