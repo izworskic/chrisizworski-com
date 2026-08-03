@@ -86,7 +86,7 @@ test("Tools hub makes nine live tools prominent and indexes the expanded library
   const collection = jsonLd["@graph"].find((entry) => entry["@type"] === "CollectionPage");
   assert.equal(itemList.numberOfItems, 36);
   assert.equal(itemList.itemListElement.length, 36);
-  assert.equal(collection.dateModified, "2026-07-28");
+  assert.equal(collection.dateModified, "2026-08-03");
   assert.equal(collection.author["@id"], "https://chrisizworski.com/#person");
   assert.ok(
     itemList.itemListElement.some(
