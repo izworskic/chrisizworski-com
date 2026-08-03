@@ -1,3 +1,4 @@
+import hashlib
 import os
 import json, pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
@@ -655,3 +656,15 @@ for p in sorted(OUT.rglob("*.html")):
 
 
 assert BASE == "/michigan-ice", "BASE and the hardcoded hrefs in these generators must agree"
+
+
+# Checksum manifest. The 10 pages under public/michigan-ice/ are generated, so a
+# hand edit there is silently destroyed on the next run. A Node test compares the
+# committed HTML against these hashes and fails if they drift, which turns an
+# invisible loss into a red build.
+manifest = {}
+for f in sorted(OUT.rglob("*.html")):
+    manifest[str(f.relative_to(OUT))] = hashlib.sha256(f.read_bytes()).hexdigest()
+(pathlib.Path(__file__).resolve().parent / "generated.json").write_text(
+    json.dumps({"outputDir": "public/michigan-ice", "files": manifest}, indent=2, sort_keys=True) + "\n")
+print(f"wrote checksum manifest for {len(manifest)} generated pages")

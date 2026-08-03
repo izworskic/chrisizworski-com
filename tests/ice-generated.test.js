@@ -1,0 +1,84 @@
+const test = require("node:test");
+const assert = require("node:assert");
+const { readFileSync, readdirSync, statSync } = require("node:fs");
+const { createHash } = require("node:crypto");
+const path = require("node:path");
+
+const root = path.join(__dirname, "..");
+const manifestPath = path.join(root, "scripts", "ice", "generated.json");
+const outDir = path.join(root, "public", "michigan-ice");
+
+function sha256(file) {
+  return createHash("sha256").update(readFileSync(file)).digest("hex");
+}
+
+function htmlFiles(dir, prefix = "") {
+  const found = [];
+  for (const entry of readdirSync(dir)) {
+    const full = path.join(dir, entry);
+    if (statSync(full).isDirectory()) found.push(...htmlFiles(full, path.join(prefix, entry)));
+    else if (entry.endsWith(".html")) found.push(path.join(prefix, entry));
+  }
+  return found;
+}
+
+// The pages under public/michigan-ice/ come out of scripts/ice/gen_site.py. Editing
+// one of them by hand looks like it worked and is then silently destroyed the next
+// time anyone runs `npm run generate:ice`. This turns that invisible loss into a
+// red build: if the committed HTML no longer matches what the generator produced,
+// somebody edited the wrong layer.
+test("generated ice pages match the generator output", () => {
+  const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+  const recorded = manifest.files;
+
+  const onDisk = htmlFiles(outDir).sort();
+  const listed = Object.keys(recorded).sort();
+
+  assert.deepEqual(
+    onDisk,
+    listed,
+    "public/michigan-ice/ and the checksum manifest disagree about which pages exist. " +
+      "Run: npm run generate:ice",
+  );
+
+  for (const rel of listed) {
+    const actual = sha256(path.join(outDir, rel));
+    assert.equal(
+      actual,
+      recorded[rel],
+      `public/michigan-ice/${rel} does not match the generator output. ` +
+        "Edit scripts/ice/gen_site.py or gen_chrome.py instead, then run: npm run generate:ice",
+    );
+  }
+});
+
+test("the ice generator stays pinned to its base path", () => {
+  const chrome = readFileSync(path.join(root, "scripts", "ice", "gen_chrome.py"), "utf8");
+  const site = readFileSync(path.join(root, "scripts", "ice", "gen_site.py"), "utf8");
+
+  assert.ok(chrome.includes('BASE = "/michigan-ice"'), "BASE must stay /michigan-ice");
+  assert.ok(
+    site.includes('assert BASE == "/michigan-ice"'),
+    "the generator must keep asserting BASE agrees with its hardcoded hrefs",
+  );
+  // Root-relative links would resolve off the subdirectory and 404.
+  for (const [name, src] of [["gen_chrome.py", chrome], ["gen_site.py", site]]) {
+    const stray = src.match(/href=\\?"\/(?!michigan-ice\/|api\/)[a-z]/g) || [];
+    assert.equal(stray.length, 0, `${name} has a root-relative href that escapes /michigan-ice/`);
+  }
+});
+
+test("every generated ice page stays inside the hub SERP limits", () => {
+  for (const rel of htmlFiles(outDir)) {
+    const html = readFileSync(path.join(outDir, rel), "utf8");
+    const title = (html.match(/<title>(.*?)<\/title>/s) || [])[1] || "";
+    const desc = (html.match(/<meta name="description" content="(.*?)"/s) || [])[1] || "";
+    assert.ok(title.length > 0 && title.length <= 60, `${rel} title is ${title.length} chars`);
+    assert.ok(desc.length > 0 && desc.length <= 158, `${rel} description is ${desc.length} chars`);
+    assert.ok(
+      html.includes("https://chrisizworski.com/#person"),
+      `${rel} must resolve to the canonical Person @id`,
+    );
+    assert.ok(!html.includes("ice.chrisizworski.com"), `${rel} still references the retired subdomain`);
+  }
+});
