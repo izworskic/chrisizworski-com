@@ -87,7 +87,7 @@ const committedDriftHashes = new Map([
   ["/edmund-fitzgerald/", "a722575cbf373e9e66c874d48a61dafb089e19a79f2df5e261053940ec3f3f04"],
   ["/heirloom-seed-saving-guide/", "2e5d3c53110102a7f6784f3c7f6ac86b1f9be6840f297a515ead80111c1b6e87"],
   ["/michigan-paddling/pere-marquette/", "9f5d099de514fc829c4315ac3487500f8572761596ba797d66ca463d8df00ec2"],
-  ["/sitemap-reputation.xml", "f12f909b7fd67a864bb957e544a6901455924fa6452b815fcb6c191a9b7c6034"],
+  ["/sitemap-reputation.xml", "eb339d08e40191c4825feaf088a6bf0b02f67606431ab02d20315d8b505174c0"],
   ["/zone-6a-planting-calendar/", "3b34180a82558e2df887dc238ad31dc8d1995e465b3e5d81972ddec260414565"],
 ]);
 
@@ -171,18 +171,18 @@ if (!/<loc>https:\/\/chrisizworski\.com\/tools\/<\/loc>\s*<lastmod>2026-07-28<\/
 }
 for (const [route, lastmod] of Object.entries({
   "": "2026-07-28",
-  "great-lakes/": "2026-07-28",
+  "great-lakes/": "2026-08-03",
   "mackinac-bridge-live/": "2026-08-03",
-  "mackinac-bridge-driver-assistance/": "2026-07-27",
-  "mackinac-bridge-rv-trailer-wind-rules/": "2026-07-27",
-  "mackinac-bridge-tolls/": "2026-07-27",
+  "mackinac-bridge-driver-assistance/": "2026-08-03",
+  "mackinac-bridge-rv-trailer-wind-rules/": "2026-08-03",
+  "mackinac-bridge-tolls/": "2026-08-03",
   "soo-locks/": "2026-08-03",
   "northern-lights-michigan/": "2026-08-03",
   "chris-izworski-freighter-view-farms/": "2026-08-03",
   "michigan-gardening/": "2026-08-03",
   "great-lakes-birding/": "2026-08-03",
   "great-lakes-buoys/": "2026-07-20",
-  "great-lakes-beaches/": "2026-07-31",
+  "great-lakes-beaches/": "2026-08-03",
   "lake-superior-circle-tour/": "2026-07-28",
   "michigan-border-wait-times/": "2026-07-28",
   "gordie-howe-bridge-wait-time/": "2026-07-28",
