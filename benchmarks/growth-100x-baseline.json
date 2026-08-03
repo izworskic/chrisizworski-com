@@ -1,5 +1,5 @@
 {
-  "benchmarkVersion": "1.0.0",
+  "benchmarkVersion": "1.1.0",
   "baselineCreated": "2026-08-03",
   "timezone": "America/Detroit",
   "source": {
@@ -72,6 +72,35 @@
     "topTenPageImpressionShare": 0.692,
     "topTenPageClickShare": 0.747
   },
+  "clusterEvidence": [
+    {
+      "name": "Freighter View Farms authority page",
+      "path": "/chris-izworski-freighter-view-farms/",
+      "clicks": 0,
+      "impressions": 10,
+      "ctr": 0,
+      "averagePosition": 9.9,
+      "role": "Use first-party experience and internal links to strengthen the Michigan gardening cluster; do not treat this as a traffic driver yet."
+    },
+    {
+      "name": "Michigan birding tool",
+      "url": "https://birding.chrisizworski.com/",
+      "clicks": 5,
+      "impressions": 111,
+      "ctr": 0.045,
+      "averagePosition": 7.32,
+      "role": "Protect the strong existing CTR and expand qualified impressions through the Great Lakes birding guide and contextual links."
+    },
+    {
+      "name": "Great Lakes birding guide",
+      "path": "/great-lakes-birding/",
+      "clicks": 1,
+      "impressions": 74,
+      "ctr": 0.0135,
+      "averagePosition": 11.01,
+      "role": "Improve intent matching and route readers into the live birding tool and Saginaw Bay resources."
+    }
+  ],
   "priorityPages": [
     {
       "path": "/northern-lights-michigan/",
@@ -125,48 +154,66 @@
       "impressionsPerDay": 2000,
       "ctr": 0.025,
       "monthlyGoogleClicks": 1500,
-      "commercialOutcome": "First $500 sponsor pilot"
+      "commercialOutcome": "AdSense technical readiness and owner application decision"
     },
     {
       "name": "Month 12",
       "impressionsPerDay": 10000,
       "ctr": 0.03,
       "monthlyGoogleClicks": 9000,
-      "commercialOutcome": "Repeatable multi-stream monthly revenue"
+      "commercialOutcome": "10,000+ measured monthly pageviews and a repeatable display-ad baseline"
     },
     {
       "name": "Month 24",
       "impressionsPerDay": 50000,
       "ctr": 0.0325,
       "monthlyGoogleClicks": 48750,
-      "commercialOutcome": "Premium ads plus sponsor portfolio"
+      "commercialOutcome": "Three months of ad and category data; sponsorship outreach becomes eligible"
     },
     {
       "name": "100x north star",
       "impressionsPerDay": 76196,
       "ctr": 0.035,
       "monthlyGoogleClicks": 80006,
-      "commercialOutcome": "$10,000+ modeled monthly net-contribution path"
+      "commercialOutcome": "Display ads plus post-proof sponsorship and product diversification"
     }
   ],
   "revenueModel": {
+    "sequence": ["search growth", "Google AdSense", "post-proof sponsorships"],
     "organicPageviewsPerGoogleClick": 1.25,
     "totalTrafficUplift": 1.2,
-    "offers": [
-      {"name": "Founding tool sponsor", "price": 500, "billing": "monthly"},
-      {"name": "Category sponsor", "price": 1250, "billing": "monthly"},
-      {"name": "Great Lakes network sponsor", "price": 2500, "billing": "monthly"},
-      {"name": "Michigan planting calendar", "price": 19, "billing": "one-time"},
-      {"name": "Seasonal data/media brief", "price": 249, "billing": "one-time"}
-    ],
+    "measuredMonthlyPageviews": null,
+    "measurementGap": "Search Console clicks are not pageviews. Record a complete 28-day pageview baseline before making an ad-revenue claim.",
+    "adsense": {
+      "googlePublishedMinimumTrafficRequirement": null,
+      "internalEconomicGate": {
+        "measuredMonthlyPageviews": 10000,
+        "minimumSearchCtr": 0.025,
+        "stableCoreWebVitalsDays": 28
+      },
+      "revenuePerThousandPageviewsScenarios": [3, 8, 15],
+      "activationRequirements": [
+        "Owner-approved and Google-approved AdSense account and site",
+        "Real publisher ID; never publish a placeholder",
+        "Privacy policy that matches the live ad configuration",
+        "Google-certified consent management for applicable visitors",
+        "ads.txt created only after the real publisher ID exists"
+      ]
+    },
+    "sponsorshipGate": {
+      "status": "deferred-until-proof",
+      "measuredMonthlyPageviews": 25000,
+      "consecutiveMonths": 3,
+      "minimumAdPerformanceHistoryMonths": 3
+    },
     "modeledMonthlyScenarios": [
-      {"milestone": "Baseline", "pageviews": 456, "grossRevenue": 3, "cost": 50, "netContribution": -47},
-      {"milestone": "Day 90", "pageviews": 2250, "grossRevenue": 538, "cost": 250, "netContribution": 288},
-      {"milestone": "Month 12", "pageviews": 13500, "grossRevenue": 2128, "cost": 750, "netContribution": 1378},
-      {"milestone": "Month 24", "pageviews": 73125, "grossRevenue": 8791, "cost": 2500, "netContribution": 6291},
-      {"milestone": "100x north star", "pageviews": 120009, "grossRevenue": 14740, "cost": 4000, "netContribution": 10740}
+      {"milestone": "Baseline", "modeledPageviews": 456, "displayAdRevenue": {"low": 1, "base": 4, "high": 7}, "sponsorRevenue": 0},
+      {"milestone": "Day 90", "modeledPageviews": 2250, "displayAdRevenue": {"low": 7, "base": 18, "high": 34}, "sponsorRevenue": 0},
+      {"milestone": "Month 12", "modeledPageviews": 13500, "displayAdRevenue": {"low": 41, "base": 108, "high": 203}, "sponsorRevenue": 0},
+      {"milestone": "Month 24", "modeledPageviews": 73125, "displayAdRevenue": {"low": 219, "base": 585, "high": 1097}, "sponsorRevenue": null},
+      {"milestone": "100x north star", "modeledPageviews": 120009, "displayAdRevenue": {"low": 360, "base": 960, "high": 1800}, "sponsorRevenue": null}
     ],
-    "note": "These are editable scenarios, not historical earnings or guarantees."
+    "note": "Display-ad figures use $3, $8, and $15 page-RPM scenarios. They are editable models, not historical earnings or guarantees. Null sponsor revenue means eligible for owner-led pricing after proof, not assumed revenue."
   },
   "guardrails": {
     "comparisonWindowDays": 28,
@@ -175,6 +222,9 @@
     "organicClickStopLossPercent": -20,
     "indexedPriorityPageStopLossPercent": -10,
     "maximumRevenueConcentration": 0.75,
+    "measuredPageviewsRequiredForAdClaims": true,
+    "placeholderAdPublisherId": false,
+    "sponsorshipBeforeProofGate": false,
     "automaticProductionMerge": false,
     "massGeneratedCityPages": false,
     "unlicensedNamedVesselData": false

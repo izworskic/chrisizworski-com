@@ -19,7 +19,7 @@ test("100x benchmark reconciles to the supplied Search Console baseline", () => 
   assert.notEqual(current.dailyImpressions, benchmark.measurement.unverifiedClaimedMaxDailyImpressions);
 });
 
-test("priority search pages preserve canonicals and expose direct first answers", () => {
+test("priority search pages preserve canonicals, direct answers, and internal depth", () => {
   const checks = [
     ["when-to-plant-tomatoes-michigan", "When to Plant Tomatoes in Michigan: 2026 Dates by Region", "tomato-quick-answer"],
     ["michigan-frost-dates", "Michigan Last Frost Dates by City: 2026 Planting Calendar", "frost-quick-answer"],
@@ -33,8 +33,8 @@ test("priority search pages preserve canonicals and expose direct first answers"
     assert.ok(html.includes(`<title>${title}</title>`), route);
     assert.ok(html.includes(`<link rel="canonical" href="https://chrisizworski.com/${route}/">`), route);
     assert.ok(html.includes(`id="${answerId}"`), route);
-    assert.ok(html.includes('href="/advertise/"'), route);
-    assert.ok(html.includes('href="/disclosure/"'), route);
+    assert.ok(html.includes("data-growth-cta="), route);
+    assert.ok(!html.includes('href="/advertise/"'), `${route} should not solicit sponsors before proof`);
     assert.ok(html.includes('/assets/growth-cta.js'), route);
   }
 });
@@ -51,32 +51,59 @@ test("Aurora and Soo answers remain useful and source-safe before or outside cli
   assert.ok(soo.includes("does not copy or republish a third party's schedule"));
 });
 
-test("commercial foundation is crawlable, labeled, and measurable", () => {
+test("ad-first foundation is crawlable, privacy-ready, and measurable", () => {
   const advertise = read("public/advertise/index.html");
   const disclosure = read("public/disclosure/index.html");
+  const privacy = read("public/privacy/index.html");
   const connect = read("public/connect/index.html");
   const sitemap = read("public/sitemap.xml");
   const tracker = read("public/assets/growth-cta.js");
 
   assert.ok(advertise.includes("21,335"));
-  assert.ok(advertise.includes("Founding tool sponsor"));
-  assert.ok(advertise.includes("$500"));
-  assert.ok(advertise.includes("Never included"));
+  assert.ok(advertise.includes("Audience first. Google ads next. Sponsors later."));
+  assert.ok(advertise.includes("10,000 measured monthly pageviews"));
+  assert.ok(!advertise.includes("Founding tool sponsor"));
+  assert.ok(!advertise.includes("$500"));
   assert.ok(disclosure.includes("labeled near the placement"));
-  assert.ok(disclosure.includes("Sponsors do not receive personally identifying visitor data"));
-  assert.ok(connect.includes("Sponsorships and Partnerships"));
+  assert.ok(disclosure.includes("25,000 measured monthly pageviews"));
+  assert.ok(privacy.includes("no Google AdSense or other programmatic display-ad network is active"));
+  assert.ok(privacy.includes("Google-certified consent-management platform"));
+  assert.ok(!privacy.includes("ca-pub-"));
+  assert.ok(connect.includes("Future Commercial Partnerships"));
+  assert.ok(connect.includes("Sponsor packages are not currently being sold"));
   assert.ok(sitemap.includes("https://chrisizworski.com/advertise/"));
   assert.ok(sitemap.includes("https://chrisizworski.com/disclosure/"));
+  assert.ok(sitemap.includes("https://chrisizworski.com/privacy/"));
   assert.ok(tracker.includes('name: "Growth CTA"'));
   assert.ok(!tracker.includes("localStorage"));
   assert.ok(!tracker.includes("document.cookie"));
+});
+
+test("FVF and birding form measurable internal growth clusters", () => {
+  const fvf = read("public/chris-izworski-freighter-view-farms/index.html");
+  const gardening = read("public/michigan-gardening/index.html");
+  const birding = read("public/great-lakes-birding/index.html");
+
+  assert.ok(fvf.includes("Freighter View Farms: Michigan Zone 6a Garden"));
+  assert.ok(fvf.includes('href="/michigan-gardening/"'));
+  assert.ok(fvf.includes('href="/when-to-plant-tomatoes-michigan/"'));
+  assert.ok(fvf.includes('href="/michigan-frost-dates/"'));
+  assert.ok(gardening.includes('href="/chris-izworski-freighter-view-farms/"'));
+  assert.ok(birding.includes('id="birding-quick-answer"'));
+  assert.ok((birding.match(/href="https:\/\/birding\.chrisizworski\.com\/"/g) || []).length >= 2);
+  assert.ok(fvf.includes('/assets/growth-cta.js'));
+  assert.ok(birding.includes('/assets/growth-cta.js'));
 });
 
 test("JSON-LD remains valid on every changed page", () => {
   const routes = [
     "advertise",
     "disclosure",
+    "privacy",
     "connect",
+    "chris-izworski-freighter-view-farms",
+    "michigan-gardening",
+    "great-lakes-birding",
     "when-to-plant-tomatoes-michigan",
     "michigan-frost-dates",
     "saginaw-bay-ecology",

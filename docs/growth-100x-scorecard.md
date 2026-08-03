@@ -23,12 +23,44 @@ The supplied export does not contain a 12,000-impression day. Its verified maxim
 
 | Milestone | Impressions/day | CTR | Google clicks/month | Commercial proof |
 | --- | ---: | ---: | ---: | --- |
-| Day 90 | 2,000 | 2.5% | 1,500 | First $500 sponsor pilot |
-| Month 12 | 10,000 | 3.0% | 9,000 | Repeatable multi-stream revenue |
-| Month 24 | 50,000 | 3.25% | 48,750 | Premium ads plus sponsor portfolio |
-| 100x north star | 76,196 | 3.5% | 80,006 | $10,000+ modeled monthly net-contribution path |
+| Day 90 | 2,000 | 2.5% | 1,500 | AdSense technical readiness and owner application decision |
+| Month 12 | 10,000 | 3.0% | 9,000 | 10,000+ measured monthly pageviews and a repeatable display-ad baseline |
+| Month 24 | 50,000 | 3.25% | 48,750 | Three months of ad and category data; sponsorship outreach becomes eligible |
+| 100x north star | 76,196 | 3.5% | 80,006 | Ads plus post-proof sponsorship and product diversification |
 
-Monthly clicks use a standardized 30-day month. Revenue is scenario modeling, not historical earnings.
+Monthly clicks use a standardized 30-day month. Search impressions, search clicks, and pageviews are different measures; the site must record a complete 28-day pageview baseline before making an ad-revenue claim.
+
+## Monetization sequence
+
+The operating order is search growth, Google AdSense, then sponsorships after proof. Google does not publish a minimum traffic requirement for AdSense eligibility. ChrisIzworski.com uses a stricter internal economic gate before activating ads:
+
+- At least 10,000 measured pageviews in a rolling 30-day period.
+- Search CTR at or above 2.5% in a complete comparable 28-day window.
+- Core Web Vitals stable for 28 days.
+- An owner-approved and Google-approved AdSense account, a real publisher ID, a privacy policy matching the live configuration, and consent controls where required.
+- No placeholder publisher ID or speculative `ads.txt` record.
+
+Sponsorship outreach stays paused until the site records at least 25,000 measured pageviews per month for three consecutive months and has at least three months of real ad/category performance data.
+
+| Modeled monthly pageviews | At $3 page RPM | At $8 page RPM | At $15 page RPM |
+| ---: | ---: | ---: | ---: |
+| 2,250 | $7 | $18 | $34 |
+| 10,000 | $30 | $80 | $150 |
+| 13,500 | $41 | $108 | $203 |
+| 73,125 | $219 | $585 | $1,097 |
+| 120,009 | $360 | $960 | $1,800 |
+
+These are planning scenarios, not historical earnings or guarantees. Page RPM varies materially by visitor geography, topic, season, viewability, and ad load.
+
+## FVF and birding cluster evidence
+
+| Asset | Clicks | Impressions | CTR | Position | Role now |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Freighter View Farms authority page | 0 | 10 | 0% | 9.90 | First-party authority and internal-link bridge into gardening; not yet a traffic driver |
+| Birding subdomain | 5 | 111 | 4.50% | 7.32 | Protect strong CTR and expand qualified impressions |
+| Great Lakes birding guide | 1 | 74 | 1.35% | 11.01 | Improve intent match and route readers to the live birding tool and Saginaw Bay resources |
+
+FVF should validate firsthand Michigan Zone 6a experience and feed the gardening hub, tomatoes, and frost tools. The birding guide should supply topical depth while the subdomain provides the live-use destination.
 
 ## First experiment portfolio
 
@@ -51,6 +83,8 @@ The page figures come from the Pages dimension in the supplied export, while the
 - Do not run multiple snippet experiments on the same page in one measurement window.
 - Pause new experiments after two comparable weekly click declines greater than 20%, an unexpected canonical/indexing change, or a material Core Web Vitals regression.
 - Never republish named vessel schedules or commercial AIS data without an official, licensed, or expressly permitted source.
+- Do not activate programmatic ads until the pageview, privacy, consent, and performance gates are met.
+- Do not sell sponsor inventory before the three-month traffic and ad-performance proof gate.
 
 ## Reproduce the release gate
 

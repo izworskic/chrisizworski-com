@@ -1,5 +1,5 @@
 {
-  "ledgerVersion": "1.0.0",
+  "ledgerVersion": "1.1.0",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
   "experiments": [
@@ -67,6 +67,33 @@
       "decisionDate": null,
       "result": null,
       "stopCondition": "Named-vessel data is republished without permission or the live map regresses."
+    },
+    {
+      "id": "2026-08-03-fvf-gardening-authority",
+      "path": "/chris-izworski-freighter-view-farms/",
+      "hypothesis": "A clearer Zone 6a title, first-party experience framing, and contextual links into the gardening hub, tomato guide, and frost tool will grow qualified impressions and send measurable readers deeper into the gardening cluster.",
+      "primaryMetric": "Search Console impressions and aggregate internal CTA clicks",
+      "baseline": {"impressions": 10, "clicks": 0, "ctr": 0, "averagePosition": 9.9},
+      "target": {"impressions": 100, "internalCtaClicks": 10},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "First-party claims, canonicals, or links to the independent Freighter View Farms blog become inaccurate."
+    },
+    {
+      "id": "2026-08-03-great-lakes-birding-cluster",
+      "path": "/great-lakes-birding/",
+      "hypothesis": "A migration-and-hotspot title, direct first answer, and prominent bridge to the live birding tool will lift guide CTR and expand impressions without weakening the birding subdomain's existing 4.5% CTR.",
+      "primaryMetric": "Search Console page impressions, CTR, and aggregate clicks to the live birding tool",
+      "baseline": {"impressions": 74, "clicks": 1, "ctr": 0.0135, "averagePosition": 11.01},
+      "supportingBaseline": {"url": "https://birding.chrisizworski.com/", "impressions": 111, "clicks": 5, "ctr": 0.045, "averagePosition": 7.32},
+      "target": {"impressions": 250, "ctr": 0.025, "liveToolClicks": 15},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "The guide loses indexability, the live-tool destination changes, or birding-subdomain CTR falls below 2.5% in a comparable 28-day window."
     }
   ]
 }
