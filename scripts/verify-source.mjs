@@ -9,6 +9,41 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // brand-entity + SERP-length pass, Aug 3 2026
+  "/ai/",
+  "/blog/",
+  "/blog/ai-supporting-911-administrative-work/",
+  "/case-studies/",
+  "/chris-izworski-ai-911/",
+  "/chris-izworski-bay-city-michigan/",
+  "/chris-izworski-bay-city/",
+  "/chris-izworski-emergency-management/",
+  "/chris-izworski-mlive/",
+  "/chris-izworski-news-coverage/",
+  "/chris-izworski-prepared/",
+  "/chris-izworski-public-records/",
+  "/chris-izworski-publications/",
+  "/chris-izworski-trout-fishing/",
+  "/chris-izworski-trout-rivers/",
+  "/chris-izworski/",
+  "/citations/",
+  "/companion-planting-zone-6a/",
+  "/great-lakes-beaches/lake-michigan/",
+  "/great-lakes-fish/",
+  "/heirloom-variety-matchmaker/",
+  "/media/",
+  "/michigan-911-executive-director/",
+  "/michigan-boat-launches/",
+  "/michigan-boat-launches/lake-michigan/",
+  "/michigan-boat-launches/saginaw-bay/",
+  "/michigan-last-spring-freeze/",
+  "/michigan-paddling/",
+  "/michigan-paddling/manistee-river/",
+  "/michigan-seed-libraries/",
+  "/michigan-trout-streams/",
+  "/press/",
+  "/speaking/",
+  "/start-here/",
   "/",
   "/tools/",
   "/great-lakes/",
@@ -48,12 +83,12 @@ const intentionalChanges = new Set([
 // Pin their exact source hashes so the known drift passes without broadly exempting
 // the routes from future parity checks.
 const committedDriftHashes = new Map([
-  ["/au-sable-river/", "99499a50cf3e4f276e4e6fcdde2def5a77be75130d44aa3873549836bf942098"],
-  ["/edmund-fitzgerald/", "2152a6ecf6c9ef063f145629471c7d8e797f85c0afb0807fcb611101c056158c"],
-  ["/heirloom-seed-saving-guide/", "cc9a0e6b16d134edb5f024985931a9260c18347f48b42ef30b8c832d8c5daaf4"],
-  ["/michigan-paddling/pere-marquette/", "e742bf252a6f4f55c4600484c314269d3efbc1af51e7acee6f4d114a3fc84944"],
+  ["/au-sable-river/", "fa36c47fb8f61618e4f52f8db6ba56e6f3d630e178cc137499f00a6fc4dfef42"],
+  ["/edmund-fitzgerald/", "a722575cbf373e9e66c874d48a61dafb089e19a79f2df5e261053940ec3f3f04"],
+  ["/heirloom-seed-saving-guide/", "2e5d3c53110102a7f6784f3c7f6ac86b1f9be6840f297a515ead80111c1b6e87"],
+  ["/michigan-paddling/pere-marquette/", "9f5d099de514fc829c4315ac3487500f8572761596ba797d66ca463d8df00ec2"],
   ["/sitemap-reputation.xml", "f12f909b7fd67a864bb957e544a6901455924fa6452b815fcb6c191a9b7c6034"],
-  ["/zone-6a-planting-calendar/", "6d3fd834dd15dd9e3098607ba88f75d0d2eec15e089f69259b3bb8e25c7d0580"],
+  ["/zone-6a-planting-calendar/", "3b34180a82558e2df887dc238ad31dc8d1995e465b3e5d81972ddec260414565"],
 ]);
 
 function sha256(value) {

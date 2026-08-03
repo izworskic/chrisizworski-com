@@ -30,9 +30,38 @@ function nearbyBeaches(beach) {
     .slice(0, 3);
 }
 
+const TITLE_LIMIT = 60;
+const DESCRIPTION_LIMIT = 158;
+
+// Google truncates around 60 characters. Keep the "| Chris Izworski" byline
+// whenever it survives that cut, and drop it only when it would be clipped —
+// the Person node in the graph and the visible byline carry attribution either way.
+function detailTitle(name) {
+  const base = `${name} Conditions Today`;
+  const candidates = [
+    `${base}: Waves, Water & Alerts | Chris Izworski`,
+    `${base}: Waves & Water Temp | Chris Izworski`,
+    `${base} | Chris Izworski`,
+    `${base}: Waves & Water Temp`,
+    base,
+  ];
+  return candidates.find((candidate) => candidate.length <= TITLE_LIMIT) || base;
+}
+
+function detailDescription(beach) {
+  const candidates = [
+    `Check ${beach.name} conditions today: BeachGuard status, NWS swim risk and alerts, ${beach.lake} waves and water temperature, wind, rain, and Beach Day Score.`,
+    `${beach.name} conditions today: BeachGuard status, NWS swim risk, ${beach.lake} waves, water temperature, and today's Beach Day Score.`,
+    `${beach.name} conditions today: swim risk, ${beach.lake} waves, water temperature, and today's Beach Day Score.`,
+    `${beach.name} today: swim risk, waves, water temperature, and Beach Day Score.`,
+  ];
+  return candidates.find((candidate) => candidate.length <= DESCRIPTION_LIMIT) || candidates[candidates.length - 1];
+}
+
 function detailPage(beach) {
   const canonical = `https://chrisizworski.com/great-lakes-beaches/${beach.slug}/`;
-  const description = `Check ${beach.name} conditions today: BeachGuard status, NWS swim risk and alerts, ${beach.lake} waves and water temperature, wind, rain, and Beach Day Score.`;
+  const description = detailDescription(beach);
+  const title = detailTitle(beach.name);
   const nearby = nearbyBeaches(beach);
   const schema = {
     "@context": "https://schema.org",
@@ -45,9 +74,16 @@ function detailPage(beach) {
         description,
         isPartOf: { "@id": "https://chrisizworski.com/#website" },
         author: { "@id": "https://chrisizworski.com/#person" },
+        publisher: { "@id": "https://chrisizworski.com/#person" },
         about: { "@id": `${canonical}#place` },
         dateModified: catalog.version,
         inLanguage: "en-US",
+      },
+      {
+        "@type": "Person",
+        "@id": "https://chrisizworski.com/#person",
+        name: "Chris Izworski",
+        url: "https://chrisizworski.com/",
       },
       {
         "@type": ["Place", "TouristAttraction"],
@@ -81,7 +117,7 @@ function detailPage(beach) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>${html(beach.name)} Conditions Today: Waves, Water &amp; Alerts | Chris Izworski</title>
+  <title>${html(title)}</title>
   <meta name="description" content="${html(description)}">
   <link rel="canonical" href="${canonical}">
   <meta property="og:type" content="website">
