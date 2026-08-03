@@ -76,8 +76,16 @@ and URL slug.
 
 The 50 beach detail pages under `public/great-lakes-beaches/*/` are **generated**
 by `scripts/generate-beach-pages.mjs`. Edit the generator and re-run
-`npm run generate:beaches`. Editing the output files directly gets wiped on the
-next regeneration.
+`npm run generate:beaches`.
+
+The 10 ice pages under `public/michigan-ice/` are **generated** by
+`scripts/ice/gen_site.py` (Python, run manually via `npm run generate:ice`; the
+output is committed, so Vercel never needs Python). Titles, descriptions and the
+`/michigan-ice` base path all live in `scripts/ice/gen_chrome.py` and
+`gen_site.py`. The `BASE` constant and the hardcoded `href="/michigan-ice/..."`
+strings must agree; there is an assertion at the bottom of `gen_site.py`.
+
+Editing generated output files directly gets wiped on the next regeneration.
 
 ## 5. Pinned expectations to keep in sync
 

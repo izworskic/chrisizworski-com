@@ -14,7 +14,8 @@
     "test": "node --test tests/*.test.js",
     "verify": "node scripts/verify-source.mjs",
     "verify:all": "npm test && npm run verify && npm run benchmark:beaches && npm run benchmark:growth && npm run benchmark:seo",
-    "verify:production-ready": "node scripts/verify-production-ready.mjs"
+    "verify:production-ready": "node scripts/verify-production-ready.mjs",
+    "generate:ice": "python3 scripts/ice/gen_site.py"
   },
   "engines": {
     "node": "22.x"
