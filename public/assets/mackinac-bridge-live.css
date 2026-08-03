@@ -2461,3 +2461,65 @@ legend {
     font-size: 18px;
   }
 }
+
+/* Annual Bridge Walk. The only scheduled closure on the calendar. */
+.bridge-walk {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px 24px 24px;
+  margin: 28px 0;
+}
+.bridge-walk__answer {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+.bridge-walk__date {
+  margin: 0 0 12px;
+  color: var(--ink);
+}
+.bridge-walk__date strong { color: var(--bridge-dark); }
+.bridge-walk__date [data-walk-countdown] { color: var(--muted); }
+.bridge-walk__state {
+  margin: 0 0 20px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.bridge-walk.is-walk-day {
+  border-left-color: var(--closed);
+  background: var(--gold-pale);
+}
+.bridge-walk.is-walk-day .bridge-walk__state {
+  color: var(--ink);
+  font-weight: 600;
+}
+.bridge-walk__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px 26px;
+  margin: 0 0 18px;
+}
+.bridge-walk__facts h3 {
+  font-size: 0.95rem;
+  margin: 0 0 6px;
+  color: var(--bridge-dark);
+}
+.bridge-walk__facts p {
+  margin: 0;
+  font-size: 0.93rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.bridge-walk__source {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 16px;
+}
+@media (max-width: 640px) {
+  .bridge-walk { padding: 18px 16px 20px; }
+  .bridge-walk__facts { grid-template-columns: 1fr; }
+}
