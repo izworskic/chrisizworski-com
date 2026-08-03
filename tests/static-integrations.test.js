@@ -13,36 +13,22 @@ test("Circle Tour requests NOAA water level with the station's supported datum",
 
 test("Northern Lights falls back cleanly when the primary NOAA forecast is unavailable", () => {
   const html = readFileSync(path.join(__dirname, "../public/northern-lights-michigan/index.html"), "utf8");
-  assert.ok(html.includes("if (kpRes.status !== 'fulfilled') throw new Error('NOAA Kp forecast unavailable')"));
-  assert.ok(html.includes("Live feed temporarily unavailable"));
-  assert.ok(html.includes("NOAA feed unavailable, see manual content below"));
+  assert.ok(html.includes("if (!response.ok) throw new Error('Aurora endpoint returned '+response.status)"));
+  assert.ok(html.includes("Live NOAA feed temporarily unavailable"));
+  assert.ok(html.includes("NOAA feed unavailable · manual guide active"));
+  assert.ok(html.includes("official NOAA 30-minute forecast"));
 });
 
-test("Northern Lights handles current NOAA object responses without NaN cards", () => {
+test("Northern Lights uses the normalized same-origin NOAA endpoint without NaN cards", () => {
   const html = readFileSync(path.join(__dirname, "../public/northern-lights-michigan/index.html"), "utf8");
-  assert.ok(html.includes("normalizeNoaaRows"));
-  assert.ok(html.includes("['kp','Kp']"));
-  assert.ok(html.includes("['Kp','kp']"));
+  assert.ok(html.includes("fetch('/api/aurora'"));
+  assert.ok(html.includes("function asFiniteNumber(value)"));
+  assert.ok(html.includes("value === null || value === undefined"));
+  assert.ok(html.includes("Number.isFinite(max24)"));
+  assert.ok(html.includes("renderRegionalOutlook"));
   assert.ok(html.includes("temporarily unavailable"));
+  assert.ok(!html.includes("fetch(kpUrl)"));
   assert.ok(!html.includes("const max72 = rows.slice(0,24)"));
-
-  const helperStart = html.indexOf("function normalizeNoaaRows");
-  const helperEnd = html.indexOf("// === Main data fetch ===");
-  const helpers = new Function(
-    `${html.slice(helperStart, helperEnd)}; return {normalizeNoaaRows, parseNoaaTime};`,
-  )();
-  const rows = helpers.normalizeNoaaRows(
-    [
-      { time_tag: "2026-07-19T21:00:00", kp: 1.67 },
-      { time_tag: "2026-07-20T00:00:00", kp: 1.33 },
-    ],
-    [["time_tag"], ["kp", "Kp"]],
-  );
-  assert.deepEqual(rows, [
-    ["2026-07-19T21:00:00", 1.67],
-    ["2026-07-20T00:00:00", 1.33],
-  ]);
-  assert.equal(helpers.parseNoaaTime(rows[0][0]).toISOString(), "2026-07-19T21:00:00.000Z");
 });
 
 test("Soo Locks renders an official no-key vessel map without restoring the refused MarineTraffic iframe", () => {

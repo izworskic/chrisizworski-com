@@ -147,7 +147,7 @@ const sitemapDates = {
   "great-lakes-buoys/": "2026-07-20",
   "great-lakes-beaches/": "2026-07-20",
   "lake-superior-circle-tour/": "2026-07-28",
-  "mackinac-bridge-live/": "2026-07-28",
+  "mackinac-bridge-live/": "2026-08-03",
   "michigan-border-wait-times/": "2026-07-28",
   "gordie-howe-bridge-wait-time/": "2026-07-28",
   "ambassador-bridge-wait-time/": "2026-07-28",
@@ -180,16 +180,10 @@ circleTourPage = circleTourPage
 await writeFile(circleTourPath, circleTourPage);
 
 const auroraPath = path.join(publicRoot, "northern-lights-michigan", "index.html");
-let auroraPage = await readFile(auroraPath, "utf8");
-if (!auroraPage.includes("NOAA Kp forecast unavailable")) {
-  const forecastBranch = "    if (kpRes.status === 'fulfilled') {";
-  if (!auroraPage.includes(forecastBranch)) throw new Error("Northern Lights NOAA forecast branch was not found");
-  auroraPage = auroraPage.replace(
-    forecastBranch,
-    "    if (kpRes.status !== 'fulfilled') throw new Error('NOAA Kp forecast unavailable');\n    \n" + forecastBranch,
-  );
+const auroraPage = await readFile(auroraPath, "utf8");
+if (!auroraPage.includes("fetch('/api/aurora'") || !auroraPage.includes("NOAA feed unavailable")) {
+  throw new Error("Northern Lights same-origin NOAA endpoint or visible outage fallback was not found");
 }
-await writeFile(auroraPath, auroraPage);
 
 const gazettePath = path.join(publicRoot, "great-lakes-gazette", "index.html");
 let gazettePage = await readFile(gazettePath, "utf8");

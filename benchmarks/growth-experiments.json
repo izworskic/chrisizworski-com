@@ -1,5 +1,5 @@
 {
-  "ledgerVersion": "1.1.0",
+  "ledgerVersion": "1.2.0",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
   "experiments": [
@@ -45,9 +45,14 @@
     {
       "id": "2026-08-03-aurora-resilient-answer",
       "path": "/northern-lights-michigan/",
-      "hypothesis": "A useful non-JavaScript tonight guide and intent-led title will lift CTR and prevent a loading-only first answer.",
+      "hypothesis": "A tonight-led title, crawlable regional Michigan outlooks, and a fail-soft same-origin NOAA feed will lift CTR from 1.85% toward 2.5% while answering city and regional intent without mass-producing thin location pages.",
       "primaryMetric": "Search Console page CTR",
       "baseline": {"impressions": 18461, "clicks": 341, "ctr": 0.01847, "averagePosition": 10.36},
+      "supportingEvidence": [
+        {"query": "northern lights michigan tonight", "impressions": 448, "clicks": 6, "ctr": 0.0134, "averagePosition": 9.72},
+        {"query": "northern lights upper peninsula tonight", "impressions": 187, "clicks": 5, "ctr": 0.0267, "averagePosition": 7.36},
+        {"query": "northern lights tonight near me", "impressions": 194, "clicks": 2, "ctr": 0.0103, "averagePosition": 7.91}
+      ],
       "target": {"ctr": 0.025},
       "status": "ready-for-review",
       "releaseDate": null,
@@ -58,15 +63,40 @@
     {
       "id": "2026-08-03-soo-schedule-intent",
       "path": "/soo-locks/",
-      "hypothesis": "Putting today's passage sources above the map will better satisfy schedule intent and lift CTR toward 2.5%.",
+      "hypothesis": "A schedule-today title plus an honest three-step source flow—BoatNerd named vessels, the official USACE hotline, and the live AIS map—will better satisfy today and tomorrow schedule intent and lift CTR from 1.26% toward 2.5%.",
       "primaryMetric": "Search Console page CTR",
       "baseline": {"impressions": 11919, "clicks": 150, "ctr": 0.01259, "averagePosition": 9.41},
+      "supportingEvidence": [
+        {"query": "soo locks schedule", "impressions": 1153, "clicks": 22, "ctr": 0.0191, "averagePosition": 8.09},
+        {"query": "soo locks schedule today", "impressions": 877, "clicks": 13, "ctr": 0.0148, "averagePosition": 9.01},
+        {"query": "soo locks ship schedule", "impressions": 514, "clicks": 5, "ctr": 0.0097, "averagePosition": 8.97},
+        {"query": "soo locks schedule tomorrow", "impressions": 144, "clicks": 5, "ctr": 0.0347, "averagePosition": 8.87}
+      ],
       "target": {"ctr": 0.025},
       "status": "ready-for-review",
       "releaseDate": null,
       "decisionDate": null,
       "result": null,
       "stopCondition": "Named-vessel data is republished without permission or the live map regresses."
+    },
+    {
+      "id": "2026-08-03-mackinac-conditions-page-one",
+      "path": "/mackinac-bridge-live/",
+      "hypothesis": "A conditions-today title, an immediate open-today answer, and contextual links from Soo Locks and Aurora will move the new page from average position 15.46 toward page one and lift CTR from 0.89% toward 2.0%.",
+      "primaryMetric": "Search Console page impressions, CTR, and average position",
+      "baseline": {"impressions": 224, "clicks": 2, "ctr": 0.00893, "averagePosition": 15.46},
+      "supportingEvidence": [
+        {"query": "mackinac bridge conditions today live", "impressions": 21, "averagePosition": 10.62},
+        {"query": "mackinac bridge conditions", "impressions": 9, "averagePosition": 10.33},
+        {"query": "mackinac bridge current conditions", "impressions": 8, "averagePosition": 11.75},
+        {"query": "mackinac bridge traffic today", "impressions": 6, "averagePosition": 10.17}
+      ],
+      "target": {"ctr": 0.02, "averagePosition": 10},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "The official Bridge Authority source, fail-safe open/closed logic, cameras, canonical, or live crossing flow regresses."
     },
     {
       "id": "2026-08-03-fvf-gardening-authority",

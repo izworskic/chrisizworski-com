@@ -66,13 +66,26 @@ FVF should validate firsthand Michigan Zone 6a experience and feed the gardening
 
 | Page | Export impressions | CTR | Position | Experiment | Target CTR |
 | --- | ---: | ---: | ---: | --- | ---: |
-| Northern Lights Michigan | 18,461 | 1.85% | 10.36 | Useful non-JavaScript tonight answer and intent-led title | 2.5% |
-| Soo Locks | 11,919 | 1.26% | 9.41 | Put today’s passage sources and schedule caveat above the map | 2.5% |
+| Northern Lights Michigan | 18,461 | 1.85% | 10.36 | Tonight title, crawlable regional outlooks, and fail-soft NOAA data | 2.5% |
+| Soo Locks | 11,919 | 1.26% | 9.41 | Schedule-today title and legitimate three-source passage flow | 2.5% |
 | Michigan tomatoes | 5,479 | 0.26% | 8.37 | Year-specific regional title and direct transplant answer | 2.0% |
 | Michigan frost dates | 2,651 | 0.11% | 9.56 | City-and-calendar title and statewide date range | 2.0% |
 | Saginaw Bay ecology | 1,671 | 0.54% | 11.13 | Depth title, H1, first answer, and FAQ alignment | 1.5% |
+| Mackinac Bridge Live | 224 | 0.89% | 15.46 | Conditions-today title, open-today first answer, and contextual links | 2.0% |
 
 The page figures come from the Pages dimension in the supplied export, while the headline baseline comes from property totals. Search Console can aggregate those views differently, so they are not forced to reconcile.
+
+## Validated live-conditions build
+
+The next build concentrates on the three Great Lakes pages that already show demand. It does not publish an audience roadmap or create thin city pages.
+
+| Page | Search evidence | Execution now | Measurement gate |
+| --- | --- | --- | --- |
+| Soo Locks | “schedule” has 1,153 impressions at position 8.09; “schedule today” has 877 at 9.01; “schedule tomorrow” has 144 at 8.87 | Match schedule-today language, lead with BoatNerd’s named-vessel list, the official USACE schedule hotline, and the existing live AIS map | Compare page CTR and the schedule-query group after one complete 28-day post-release window |
+| Northern Lights Michigan | The page has 18,461 impressions; tonight, near-me, Upper Peninsula, and city variants already rank near page one | Serve official NOAA Kp, solar-wind, and OVATION data through one fail-soft endpoint; expose eight crawlable Michigan regional answers on the flagship page | Target 2.5% page CTR; monitor regional-query impressions without launching mass-generated location URLs |
+| Mackinac Bridge Live | The new page has 224 impressions at position 15.46; “conditions today live” is already at 10.62 and “traffic today” at 10.17 | Align title and direct answer to conditions today while keeping the Bridge Authority status authoritative; add relevant links from Soo and Aurora | Target 2.0% CTR and average position 10 or better after a complete comparable window |
+
+No experiment is counted as released until its PR merges. Release dates stay null in the ledger until then, and results are judged only after a full comparable 28-day window.
 
 ## Decision rules
 

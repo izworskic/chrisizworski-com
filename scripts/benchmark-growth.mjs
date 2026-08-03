@@ -109,14 +109,20 @@ const pageChecks = [
   {
     file: "public/northern-lights-michigan/index.html",
     path: "/northern-lights-michigan/",
-    title: "Northern Lights Michigan Tonight | Chris Izworski",
+    title: "Northern Lights Michigan Tonight: Live Aurora Forecast",
     marker: 'id="aurora-static-answer"',
   },
   {
     file: "public/soo-locks/index.html",
     path: "/soo-locks/",
-    title: "Soo Locks Ship Schedule Today | Chris Izworski",
+    title: "Soo Locks Schedule Today: Ships &amp; Live Map",
     marker: 'id="soo-schedule-answer"',
+  },
+  {
+    file: "public/mackinac-bridge-live/index.html",
+    path: "/mackinac-bridge-live/",
+    title: "Mackinac Bridge Conditions Today: Live Status &amp; Cameras",
+    marker: 'id="mackinac-conditions-answer"',
   },
 ];
 
@@ -138,6 +144,24 @@ for (const page of pageChecks) {
 }
 
 check("Growth CTA tracker exists", await exists("public/assets/growth-cta.js"));
+check("Aurora same-origin endpoint exists", await exists("api/aurora.js"));
+check("Aurora source-normalization module exists", await exists("lib/aurora.js"));
+const aurora = await read("public/northern-lights-michigan/index.html");
+const auroraApi = await read("api/aurora.js");
+const soo = await read("public/soo-locks/index.html");
+check(
+  "Aurora build exposes regional answers and fail-soft NOAA data",
+  aurora.includes("Michigan aurora forecast by region tonight") &&
+    aurora.includes("fetch('/api/aurora'") &&
+    auroraApi.includes("Promise.allSettled") &&
+    auroraApi.includes("stale-while-revalidate=900"),
+);
+check(
+  "Soo schedule build uses legitimate current sources",
+  soo.includes("https://ais.boatnerd.com/passage/port/soo-locks") &&
+    soo.includes("tel:+19062021333") &&
+    !soo.includes("Soo-Locks-Schedule/"),
+);
 const adsensePlan = await read("docs/adsense-launch-plan.md");
 const fvf = await read("public/chris-izworski-freighter-view-farms/index.html");
 const birding = await read("public/great-lakes-birding/index.html");
