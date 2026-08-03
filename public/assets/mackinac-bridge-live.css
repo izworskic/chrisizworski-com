@@ -211,6 +211,44 @@ main {
   align-items: end;
 }
 
+.conditions-answer {
+  margin: 0 0 22px;
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
+  background: #eef5ef;
+  border: 1px solid #cadbce;
+  border-left: 5px solid var(--bridge-light);
+  border-radius: 0 12px 12px 0;
+}
+
+.conditions-answer h2 {
+  margin: 0 0 6px;
+  color: var(--bridge);
+  font-size: clamp(21px, 3vw, 27px);
+  line-height: 1.25;
+}
+
+.conditions-answer p:not(.eyebrow) {
+  margin: 0;
+  color: #43504b;
+  font-size: 14px;
+}
+
+.button.button-outline {
+  color: var(--bridge);
+  background: transparent;
+  border: 1px solid var(--bridge-light);
+  white-space: nowrap;
+}
+
+.button.button-outline:hover {
+  color: #fff;
+  background: var(--bridge);
+}
+
 .eyebrow {
   margin: 0 0 7px;
   color: var(--bridge-light);
@@ -1679,6 +1717,17 @@ legend {
   .tool-intro {
     grid-template-columns: 1fr;
     gap: 12px;
+  }
+
+  .conditions-answer {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 18px;
+  }
+
+  .button.button-outline {
+    width: 100%;
+    white-space: normal;
   }
 
   .intro-badge {

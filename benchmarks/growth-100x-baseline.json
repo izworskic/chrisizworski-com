@@ -1,5 +1,5 @@
 {
-  "benchmarkVersion": "1.1.0",
+  "benchmarkVersion": "1.2.0",
   "baselineCreated": "2026-08-03",
   "timezone": "America/Detroit",
   "source": {
@@ -101,6 +101,27 @@
       "role": "Improve intent matching and route readers into the live birding tool and Saginaw Bay resources."
     }
   ],
+  "validatedTrafficBuild": {
+    "selectedOn": "2026-08-03",
+    "selectionRule": "Prioritize pages already earning impressions near positions 4–15, then improve intent match and the first answer before creating new URLs.",
+    "pages": [
+      {
+        "path": "/northern-lights-michigan/",
+        "reason": "Largest visible page opportunity with tonight, near-me, Upper Peninsula, and Michigan city intent already ranking near page one.",
+        "execution": "One crawlable regional forecast section backed by a same-origin, fail-soft NOAA endpoint; no thin city-page rollout."
+      },
+      {
+        "path": "/soo-locks/",
+        "reason": "Second-largest visible page opportunity; schedule, today, ship-schedule, and tomorrow variants already rank around positions 8–10.",
+        "execution": "Put legitimate named-vessel, official hotline, and live-map sources into a clear schedule-today decision flow."
+      },
+      {
+        "path": "/mackinac-bridge-live/",
+        "reason": "A new page already has 224 impressions, with multiple conditions-today queries close to page one.",
+        "execution": "Align the snippet and first answer to conditions today, preserve the Bridge Authority as the controlling source, and add contextual links from the two established Great Lakes pages."
+      }
+    ]
+  },
   "priorityPages": [
     {
       "path": "/northern-lights-michigan/",
@@ -146,6 +167,15 @@
       "averagePosition": 11.13,
       "priority": "P1",
       "job": "Answer inner- and outer-bay depth immediately, then support it with ecology and fishing context."
+    },
+    {
+      "path": "/mackinac-bridge-live/",
+      "clicks": 2,
+      "impressions": 224,
+      "ctr": 0.00893,
+      "averagePosition": 15.46,
+      "priority": "P1",
+      "job": "Answer whether the bridge is open today, then preserve official status, cameras, vehicle restrictions, weather context, and traffic guidance."
     }
   ],
   "milestones": [

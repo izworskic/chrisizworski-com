@@ -137,7 +137,7 @@ if (!/<loc>https:\/\/chrisizworski\.com\/tools\/<\/loc>\s*<lastmod>2026-07-28<\/
 for (const [route, lastmod] of Object.entries({
   "": "2026-07-28",
   "great-lakes/": "2026-07-28",
-  "mackinac-bridge-live/": "2026-07-28",
+  "mackinac-bridge-live/": "2026-08-03",
   "mackinac-bridge-driver-assistance/": "2026-07-27",
   "mackinac-bridge-rv-trailer-wind-rules/": "2026-07-27",
   "mackinac-bridge-tolls/": "2026-07-27",
@@ -239,14 +239,19 @@ if (!circleTour.includes("datum=LWD") || !circleTour.includes("ft above LWD at D
 if (circleTour.includes("datum=IGLD85")) failures.push("Lake Superior Circle Tour still requests NOAA's invalid IGLD85 datum");
 
 const aurora = await readFile(path.join(publicRoot, "northern-lights-michigan", "index.html"), "utf8");
-if (!aurora.includes("if (kpRes.status !== 'fulfilled') throw new Error('NOAA Kp forecast unavailable')")) {
-  failures.push("Northern Lights does not leave its loading state when the primary NOAA forecast is unavailable");
+const auroraApi = await readFile(path.join(root, "api", "aurora.js"), "utf8");
+const auroraLib = await readFile(path.join(root, "lib", "aurora.js"), "utf8");
+if (!aurora.includes("fetch('/api/aurora'") || !aurora.includes("NOAA feed unavailable")) {
+  failures.push("Northern Lights is missing its same-origin NOAA request or visible fail-soft state");
 }
-if (!aurora.includes("normalizeNoaaRows") || !aurora.includes("['kp','Kp']") || aurora.includes("const max72 = rows.slice(0,24)")) {
-  failures.push("Northern Lights does not support NOAA's current object response or current 72-hour forecast window");
+if ((aurora.match(/<article[^>]+data-region-id=/g) || []).length !== 8 || !aurora.includes("Michigan aurora forecast by region tonight")) {
+  failures.push("Northern Lights does not expose all eight crawlable Michigan regional answers");
 }
-if (!aurora.includes("temporarily unavailable")) {
-  failures.push("Northern Lights can leave optional solar-wind cards stuck in a loading state");
+if (!auroraApi.includes("Promise.allSettled") || !auroraApi.includes("stale-while-revalidate=900")) {
+  failures.push("Aurora API is missing independent NOAA fallbacks or short CDN caching");
+}
+if (!auroraLib.includes("parseKpForecast") || !auroraLib.includes("parseOvation") || !auroraLib.includes("regionVerdict")) {
+  failures.push("Aurora normalization does not preserve current NOAA formats or conditional regional verdicts");
 }
 
 const buoys = await readFile(path.join(publicRoot, "great-lakes-buoys", "index.html"), "utf8");
@@ -263,6 +268,9 @@ if (/<iframe[^>]+marinetraffic/i.test(sooLocks)) {
 }
 if (!sooLocks.includes("https://ais.boatnerd.com/passage/port/soo-locks")) {
   failures.push("Soo Locks is missing the verified BoatNerd passage-list fallback");
+}
+if (!sooLocks.includes("tel:+19062021333") || sooLocks.includes("Soo-Locks-Schedule/")) {
+  failures.push("Soo Locks is missing the current official schedule hotline or still links the obsolete USACE schedule path");
 }
 if (!sooLocks.includes("https://embed.myshiptracking.com/embed?myst") || !sooLocks.includes("lat=46.5036") || !sooLocks.includes("lng=-84.36")) {
   failures.push("Soo Locks is missing the official no-key live map centered on the lock complex");

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Northern Lights Michigan Tonight | Chris Izworski</title>
-<meta name="description" content="Check whether the northern lights may be visible in Michigan tonight using live NOAA Kp and solar-wind data, cloud checks, and dark-sky locations.">
+<title>Northern Lights Michigan Tonight: Live Aurora Forecast</title>
+<meta name="description" content="Will the northern lights be visible in Michigan tonight? Check live NOAA Kp, solar wind, peak timing, and regional outlooks for the UP and Lower Peninsula.">
 <link rel="canonical" href="https://chrisizworski.com/northern-lights-michigan/">
 <meta property="og:title" content="Northern Lights Michigan Tonight: Live NOAA Aurora Forecast">
 <meta property="og:description" content="A live Michigan aurora verdict, NOAA Kp and solar-wind data, and dark-sky viewing locations across the Upper Peninsula.">
@@ -25,7 +25,8 @@
   "@graph": [
     {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski"},
     {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/northern-lights-michigan/","name":"Northern Lights Michigan Tonight: Live Aurora Forecast","description":"Live NOAA Kp forecast, solar wind data, and an immediate Michigan aurora viewing guide for tonight.","url":"https://chrisizworski.com/northern-lights-michigan/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-08-03","inLanguage":"en-US"},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/northern-lights-michigan/","name":"Northern Lights Michigan Tonight: Live Aurora Forecast","description":"Live NOAA Kp, solar-wind, OVATION nowcast, peak timing, and regional Michigan aurora outlooks for tonight.","url":"https://chrisizworski.com/northern-lights-michigan/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-08-03","inLanguage":"en-US"},
+    {"@type":"WebApplication","name":"Michigan Aurora Forecast","url":"https://chrisizworski.com/northern-lights-michigan/","applicationCategory":"WeatherApplication","operatingSystem":"Any","isAccessibleForFree":true,"description":"A live Michigan aurora planning tool using NOAA SWPC Kp, solar-wind, and OVATION products.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Northern Lights Michigan","item":"https://chrisizworski.com/northern-lights-michigan/"}]}
   ]
 }
@@ -90,6 +91,27 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .sw-card.alert{border-color:#5fc88f;background:#f4faf6}
 .sw-card.alert .sw-val{color:#2a8a5a}
 .sw-card.warn{border-color:#d09020;background:#fdf9ee}
+
+/* Regional outlook */
+.region-outlook{margin:24px 0 30px}
+.region-outlook-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:12px}
+.region-outlook-head h2{font-size:22px;font-weight:normal;color:#2c5f2d;line-height:1.3}
+.region-outlook-head p{font-size:12px;color:#6c756e;margin:0;text-align:right;max-width:340px}
+.region-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.region-card{background:#fff;border:1px solid #e0dbd2;border-left:4px solid #89948c;border-radius:0 4px 4px 0;padding:14px 16px}
+.region-card[data-level="active"]{border-left-color:#2a8a5a;background:#f4faf6}
+.region-card[data-level="possible"]{border-left-color:#4f7ca8}
+.region-card[data-level="watch"]{border-left-color:#c08030;background:#fdf9ee}
+.region-card[data-level="low"]{border-left-color:#89948c}
+.region-card[data-level="unavailable"]{border-left-color:#a55;background:#fcf6f6}
+.region-card h3{font-size:16px;color:#173c2c;margin:0 0 2px}
+.region-places{font-size:12px!important;color:#6c756e!important;margin:0 0 9px!important}
+.region-signal{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}
+.region-signal strong{font-size:12px;color:#24402d;text-align:right}
+.region-threshold{font-size:10px;color:#657068;text-transform:uppercase;letter-spacing:.45px;white-space:nowrap}
+.region-detail{font-size:12px!important;color:#4b554e!important;line-height:1.55;margin:0!important}
+.region-note{font-size:12px!important;color:#6c756e!important;line-height:1.6;margin:11px 0 0!important}
+@media(max-width:680px){.region-outlook-head{display:block}.region-outlook-head p{text-align:left;margin-top:5px}.region-grid{grid-template-columns:1fr}}
 
 /* Forecast chart */
 .forecast-chart-wrap{background:#fff;border:1px solid #e0dbd2;border-radius:4px;padding:18px 16px;margin:8px 0 24px}
@@ -213,7 +235,6 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 <script defer src="/assets/growth-cta.js"></script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How often can I see the aurora from Michigan?","acceptedAnswer":{"@type":"Answer","text":"From the Upper Peninsula: Minor displays multiple times per month during solar maximum years. Substantial displays roughly monthly. Major displays visible to the naked eye 3 to 6 times per year. From the Lower Peninsula: Substantial displays 4 to 8 times per year during solar max, fewer at solar minimum."}},{"@type":"Question","name":"What does Kp need to be for me to see aurora from where I am?","acceptedAnswer":{"@type":"Answer","text":"Rough rule of thumb: Kp 5 (G1) from the UP, Kp 6 (G2) from the northern LP, Kp 7 (G3) from central and southern LP, Kp 8 (G4) for anywhere south of Detroit. The geolocation tool above calculates your specific threshold based on geomagnetic latitude."}},{"@type":"Question","name":"Why is Bz important?","acceptedAnswer":{"@type":"Answer","text":"The Bz is the north-south component of the solar wind's magnetic field. When Bz is strongly southward (negative), it couples with Earth's magnetic field and allows energy transfer into the magnetosphere, driving aurora. A G1 storm (Kp 5) with Bz of negative 15 nT will produce far more spectacular aurora than a G1 storm with Bz of zero. Watch the Bz panel above as your most reliable short-term indicator."}},{"@type":"Question","name":"How accurate is the 3-day Kp forecast?","acceptedAnswer":{"@type":"Answer","text":"The 24-hour forecast is reasonably accurate. The 48 and 72-hour forecasts are less reliable. The NOAA 30-minute forecast (linked in external resources) is the most accurate near-term tool. Solar wind data (Bz, speed) is the leading indicator of aurora activity at the present moment."}},{"@type":"Question","name":"Can I see colors with my eyes?","acceptedAnswer":{"@type":"Answer","text":"At Kp 5 or higher, yes. The classic green band is the most visible color to the naked eye. Red and purple may show in photos but be subtle to the eye. At Kp 7+ the colors become unambiguous."}},{"@type":"Question","name":"Will the notification feature work for me?","acceptedAnswer":{"@type":"Answer","text":"If you enable notifications using the button at the top of the page, your browser will alert you when the live Kp data crosses 5 (G1 storm threshold) while you have the page open. For background alerts when the page is not open, third-party services like SpaceWeatherLive or AuroraAlerts apps are required."}},{"@type":"Question","name":"Is fall a good time to see the aurora in Michigan?","acceptedAnswer":{"@type":"Answer","text":"Yes, and specifically the weeks around the September equinox. Geomagnetic activity runs statistically higher near both equinoxes, a pattern called the Russell-McPherron effect, and fall brings longer nights than summer. In the Upper Peninsula that window also overlaps peak fall color. The tradeoff is cloud cover, which builds along the Lake Superior shoreline while the water is still warm."}}]}</script>
 </head>
 <body data-analytics-page="northern-lights-michigan">
 <div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
@@ -229,14 +250,14 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 <div class="body">
 <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/tools/">Tools</a> &rsaquo; Northern Lights Michigan</div>
 
-<h1 class="page-title">Northern Lights in Michigan Tonight</h1>
-<p class="sub">Live NOAA aurora forecast, immediate Kp guidance, and dark-sky viewing locations for the Upper Peninsula and Lower Peninsula</p>
+<h1 class="page-title">Northern Lights Michigan Tonight</h1>
+<p class="sub">Live NOAA aurora forecast, peak time, and regional outlooks for the Upper Peninsula and Lower Peninsula</p>
 
 <div class="static-answer" id="aurora-static-answer"><strong>Use this Michigan guide while the live NOAA verdict updates:</strong> Kp below 5 usually means low odds; Kp 5 to 6 favors dark northern Upper Peninsula locations; Kp 7 or higher can bring the aurora farther into the Lower Peninsula when skies are clear. Check cloud cover and the official NOAA watch before driving, and never treat a forecast as a visibility guarantee.</div>
 
-<p>The aurora borealis is visible from Michigan more often than most Michiganders realize. The Upper Peninsula, particularly the Keweenaw Peninsula and the Lake Superior north shore, sees minor displays multiple times per month during the active years of the solar cycle. We are still within the high-activity window of Solar Cycle 25, which means aurora viewing odds are as good as they will be for another decade.</p>
+<p>Michigan aurora visibility changes sharply by latitude, darkness, cloud cover, and the strength and timing of each geomagnetic disturbance. The Upper Peninsula has the best odds, while Lower Peninsula viewing usually requires a stronger event and an unobstructed northern horizon.</p>
 
-<p>The tool below pulls live data from the NOAA Space Weather Prediction Center: planetary K-index forecast, real-time solar wind magnetic field measurements (the Bz component is the actual predictor of aurora activity, often a better signal than Kp alone), and the auroral oval image. The map is interactive. Click any viewing location for detail, use the "find best viewing for me" button to get distance-sorted recommendations from your position, and the page auto-refreshes every 10 minutes so the data stays current.</p>
+<p>The tool below combines official NOAA Space Weather Prediction Center products: the planetary K-index outlook, real-time solar-wind measurements, and the 30-to-90-minute OVATION aurora model. Kp is a broad forecast and Bz is a useful near-term signal; neither guarantees local visibility. The page refreshes every 10 minutes, and the map ranks dark-sky viewing locations without collecting or storing your position.</p>
 
 <!-- Hero panel with animated SVG gauge -->
 <div class="hero-panel">
@@ -271,13 +292,31 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
   <div class="sw-card" id="swKpPeak"><div class="sw-label">Peak Kp 72h</div><div class="sw-val">--</div><div class="sw-status">loading...</div></div>
 </div>
 
+<section class="region-outlook" aria-labelledby="regionOutlookHeading">
+  <div class="region-outlook-head">
+    <h2 id="regionOutlookHeading">Michigan aurora forecast by region tonight</h2>
+    <p id="regionOutlookTime">Checking NOAA's 30-to-90-minute OVATION nowcast and the next 24 hours of Kp guidance.</p>
+  </div>
+  <div class="region-grid" id="regionGrid">
+    <article class="region-card" data-region-id="keweenaw" data-level="unavailable"><h3>Keweenaw Peninsula</h3><p class="region-places">Copper Harbor and Brockway Mountain</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 4</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Dark skies and a north-facing Lake Superior horizon make this Michigan's strongest viewing region.</p></article>
+    <article class="region-card" data-region-id="marquette" data-level="unavailable"><h3>Marquette</h3><p class="region-places">Marquette and the central Upper Peninsula</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 4</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Use Presque Isle or another dark north-facing shoreline and verify local clouds.</p></article>
+    <article class="region-card" data-region-id="munising" data-level="unavailable"><h3>Munising</h3><p class="region-places">Munising and Pictured Rocks</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 4</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Lake Superior beaches provide a dark northern horizon when park access and weather allow.</p></article>
+    <article class="region-card" data-region-id="sault-ste-marie" data-level="unavailable"><h3>Sault Ste. Marie</h3><p class="region-places">Sault Ste. Marie and Whitefish Point</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 5</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Whitefish Point offers darker skies than the city and a broad view over Lake Superior.</p></article>
+    <article class="region-card" data-region-id="mackinaw-city" data-level="unavailable"><h3>Mackinaw City</h3><p class="region-places">Mackinaw City and the Straits</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 5</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Headlands International Dark Sky Park is the strongest nearby viewing option.</p></article>
+    <article class="region-card" data-region-id="traverse-city" data-level="unavailable"><h3>Traverse City</h3><p class="region-places">Traverse City and the northern Lower Peninsula</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 6</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Seek a dark shoreline with an open northern horizon and little city glow.</p></article>
+    <article class="region-card" data-region-id="bay-city" data-level="unavailable"><h3>Bay City and Saginaw Bay</h3><p class="region-places">Bay City, the Thumb, and Saginaw Bay</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 7</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Sleeper State Park provides the best north-facing water horizon in this region.</p></article>
+    <article class="region-card" data-region-id="detroit" data-level="unavailable"><h3>Detroit and southern Michigan</h3><p class="region-places">Detroit and the southern Lower Peninsula</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 7</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Strong storms, darker rural skies, and a clear northern horizon are normally required.</p></article>
+  </div>
+  <p class="region-note">Regional Kp numbers are conservative trip-planning thresholds used by this guide, not NOAA visibility guarantees. OVATION models the aurora 30 to 90 minutes ahead and does not account for local clouds or darkness.</p>
+</section>
+
 <!-- Smart CTA -->
 <div class="smart-cta" id="smartCta"></div>
 
 <aside class="commercial-invite" aria-label="Related Great Lakes night and nature resources">
   <p class="commercial-eyebrow">Plan more than tonight's sky</p>
   <p>Pair the aurora forecast with Great Lakes migration timing, the live Michigan birding companion, and Upper Peninsula planning resources.</p>
-  <p class="commercial-actions"><a href="/great-lakes-birding/" data-growth-cta="aurora-birding-guide">Explore Great Lakes birding</a><a href="https://birding.chrisizworski.com/" data-growth-cta="aurora-live-birding">Open the live birding tool</a><a href="/lake-superior-circle-tour/" data-growth-cta="aurora-circle-tour">Plan a Lake Superior route</a></p>
+  <p class="commercial-actions"><a href="/mackinac-bridge-live/" data-growth-cta="aurora-mackinac-conditions">Check Mackinac Bridge conditions</a><a href="/soo-locks/" data-growth-cta="aurora-soo-locks">Open the Soo Locks tool</a><a href="/great-lakes-birding/" data-growth-cta="aurora-birding-guide">Explore Great Lakes birding</a><a href="/lake-superior-circle-tour/" data-growth-cta="aurora-circle-tour">Plan a Lake Superior route</a></p>
 </aside>
 
 <!-- 3-day visual forecast -->
@@ -335,11 +374,11 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
   <div class="kp-step kp8" data-kp="8"><span class="kn">8-9</span>G4-G5</div>
 </div>
 
-<p><strong>Kp 4.</strong> Active conditions. Aurora visible low on the northern horizon from the northernmost Upper Peninsula on clear, moonless nights. Photography can capture color the eye does not see.</p>
-<p><strong>Kp 5 (G1 storm).</strong> Aurora reliably visible from the Upper Peninsula with the naked eye. This is when you should be paying attention.</p>
-<p><strong>Kp 6 (G2 storm).</strong> Strong UP visibility. Aurora may dance overhead at the northernmost locations. Visible low on the horizon from the northern Lower Peninsula on clear nights.</p>
-<p><strong>Kp 7 (G3 storm).</strong> Aurora visible across the entire Lower Peninsula. Bright overhead displays from the UP. The kind of night that makes the news.</p>
-<p><strong>Kp 8-9 (G4-G5).</strong> Rare. Aurora visible across most of the continental United States. Once-per-cycle events.</p>
+<p><strong>Kp 4.</strong> Active conditions can support a low northern-horizon display from the northernmost Upper Peninsula when darkness, clouds, and local light pollution cooperate. A camera may capture color the eye misses.</p>
+<p><strong>Kp 5 (G1 storm).</strong> Worth monitoring from dark Upper Peninsula locations, but Kp alone does not guarantee a visible display.</p>
+<p><strong>Kp 6 (G2 storm).</strong> Can improve Upper Peninsula odds and may bring a low display to the northern Lower Peninsula on a clear, dark night.</p>
+<p><strong>Kp 7 (G3 storm).</strong> Can support viewing farther into the Lower Peninsula, especially away from city light with a clear northern horizon.</p>
+<p><strong>Kp 8-9 (G4-G5).</strong> Rare, severe-to-extreme geomagnetic storms that can push aurora much farther south. Local visibility still depends on darkness and weather.</p>
 
 <h2 class="sh">Where to Watch</h2>
 <p>The list below complements the map above. Ordered roughly by darkness and northern-horizon access. Use the geolocation tool to get distance-sorted recommendations from your specific position.</p>
@@ -439,19 +478,19 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 
 <h2 class="sh">Common Questions</h2>
 <p class="faq-q">How often can I see the aurora from Michigan?</p>
-<p>From the Upper Peninsula: Minor displays multiple times per month during solar maximum years. Substantial displays roughly monthly. Major displays visible to the naked eye 3 to 6 times per year. From the Lower Peninsula: Substantial displays 4 to 8 times per year during solar max, fewer at solar minimum.</p>
+<p>There is no dependable monthly count. Visibility changes with solar activity, latitude, cloud cover, darkness, moonlight, and local light pollution. The Upper Peninsula generally has more opportunities than southern Michigan, so use the live NOAA outlook and local sky conditions for each night.</p>
 
 <p class="faq-q">What does Kp need to be for me to see aurora from where I am?</p>
-<p>Rough rule of thumb: Kp 5 (G1) from the UP, Kp 6 (G2) from the northern LP, Kp 7 (G3) from central and southern LP, Kp 8 (G4) for anywhere south of Detroit. The geolocation tool above calculates your specific threshold based on geomagnetic latitude.</p>
+<p>This guide uses Kp 4 to 5 as an Upper Peninsula planning signal, Kp 6 for the northern Lower Peninsula, and Kp 7 or higher farther south. Those are conservative planning thresholds, not visibility guarantees. Always confirm the NOAA short-term oval, darkness, and local clouds.</p>
 
 <p class="faq-q">Why is Bz important?</p>
-<p>The Bz is the north-south component of the solar wind's magnetic field. When Bz is strongly southward (negative), it couples with Earth's magnetic field and allows energy transfer into the magnetosphere, driving aurora. A G1 storm (Kp 5) with Bz of negative 15 nT will produce far more spectacular aurora than a G1 storm with Bz of zero. Watch the Bz panel above as your most reliable short-term indicator.</p>
+<p>Bz is the north-south component of the solar wind's magnetic field. A sustained southward, negative Bz can help energy couple into Earth's magnetosphere, but it is only one input. Read it alongside solar-wind speed, Kp, the NOAA short-term oval, and local sky conditions.</p>
 
 <p class="faq-q">How accurate is the 3-day Kp forecast?</p>
-<p>The 24-hour forecast is reasonably accurate. The 48 and 72-hour forecasts are less reliable. The NOAA 30-minute forecast (linked in external resources) is the most accurate near-term tool. Solar wind data (Bz, speed) is the leading indicator of aurora activity at the present moment.</p>
+<p>Confidence generally falls as the forecast extends farther out. Use the three-day Kp outlook to plan, then recheck NOAA's 30-to-90-minute OVATION model, real-time solar wind, and local clouds before traveling.</p>
 
 <p class="faq-q">Can I see colors with my eyes?</p>
-<p>At Kp 5 or higher, yes. The classic green band is the most visible color to the naked eye. Red and purple may show in photos but be subtle to the eye. At Kp 7+ the colors become unambiguous.</p>
+<p>Sometimes. Cameras often capture more color than human vision, especially during a faint display. What you see depends on the display's strength, your dark adaptation, light pollution, and cloud cover—not a single Kp cutoff.</p>
 
 <p class="faq-q">Will the notification feature work for me?</p>
 <p>If you enable notifications using the button at the top of the page, your browser will alert you when the live Kp data crosses 5 (G1 storm threshold) while you have the page open. For background alerts when the page is not open, third-party services like SpaceWeatherLive or AuroraAlerts apps are required.</p>
@@ -461,8 +500,8 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 
 <h2 class="sh">External Resources</h2>
 <div class="gear-list">
-  <div class="gi"><a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener"><strong>NOAA SWPC Aurora 30-Minute Forecast</strong></a> &middot; Short-term auroral oval visualization.</div>
-  <div class="gi"><a href="https://www.swpc.noaa.gov/products/3-day-forecast" target="_blank" rel="noopener"><strong>NOAA SWPC 3-Day Forecast</strong></a> &middot; Official 3-day Kp outlook.</div>
+  <div class="gi"><a href="https://www.spaceweather.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener"><strong>NOAA SWPC Aurora 30-Minute Forecast</strong></a> &middot; Short-term auroral oval visualization.</div>
+  <div class="gi"><a href="https://www.spaceweather.gov/products/3-day-forecast" target="_blank" rel="noopener"><strong>NOAA SWPC 3-Day Forecast</strong></a> &middot; Official 3-day Kp outlook.</div>
   <div class="gi"><a href="https://www.spaceweatherlive.com" target="_blank" rel="noopener"><strong>SpaceWeatherLive.com</strong></a> &middot; Community-maintained space weather portal with alerts.</div>
   <div class="gi"><a href="https://www.lightpollutionmap.info" target="_blank" rel="noopener"><strong>Light Pollution Map</strong></a> &middot; Bortle dark-sky ratings for any location worldwide.</div>
   <div class="gi"><a href="https://www.weather.gov/mqt/" target="_blank" rel="noopener"><strong>NWS Marquette</strong></a> &middot; Cloud cover forecast for the Upper Peninsula.</div>
@@ -477,13 +516,14 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
   <a href="/lake-superior-circle-tour/"><strong>Lake Superior Circle Tour</strong>The 1,300-mile circumnavigation guide. The Circle Tour route hits most of the prime aurora viewing locations.</a>
   <a href="/edmund-fitzgerald/"><strong>SS Edmund Fitzgerald</strong>Whitefish Point, the same dark beach that gives you the Lake Superior memorial in daylight, is one of the best aurora locations after dark.</a>
   <a href="/soo-locks/"><strong>Soo Locks Live</strong>Sault Ste. Marie is the gateway to the eastern UP aurora viewing locations. Watch the freighters by day, the aurora by night.</a>
+  <a href="/mackinac-bridge-live/"><strong>Mackinac Bridge Conditions Today</strong>Check official bridge status and cameras before driving to the Straits or Headlands Dark Sky Park.</a>
   <a href="/great-lakes/"><strong>The Great Lakes</strong>Maritime, ecology, history, and weather across all five Great Lakes from a Bay City perspective.</a>
   <a href="/great-lakes-gazette/"><strong>Great Lakes Gazette</strong>Daily maritime and weather brief, useful for checking cloud cover before an aurora trip.</a>
   <a href="/great-lakes-lighthouses/"><strong>Great Lakes Lighthouses</strong>Many dark-sky viewing locations are at or near historic lighthouses on Lake Superior.</a>
 </div>
 
 </div>
-<div class="footer">Bay City, Michigan &middot; Compiled by Chris Izworski &middot; Updated July 2026 &middot; <a href="/about/">About this site</a></div>
+<div class="footer">Bay City, Michigan &middot; Compiled by Chris Izworski &middot; Updated August 2026 &middot; <a href="/about/">About this site</a></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
@@ -593,11 +633,11 @@ function updateSmartCta(maxKp){
   cta.classList.remove('alert');
   if (maxKp >= 5){
     cta.classList.add('alert');
-    cta.innerHTML = '<h3>Active aurora alert</h3><div class="cta-headline">Drop everything tonight.</div><p>Peak forecast Kp of '+maxKp.toFixed(1)+' over the next 24 hours. Get to a dark location with a clear northern horizon. The <a href="#" onclick="document.querySelector(\'.map-wrap\').scrollIntoView({behavior:\'smooth\'});return false;">interactive map above</a> shows your options. The Keweenaw and Whitefish Point are the highest-leverage sites. Check cloud cover for your target location before driving.</p>';
+    cta.innerHTML = '<h3>Elevated 24-hour Kp outlook</h3><div class="cta-headline">Check the short-term NOAA signal and local clouds.</div><p>Peak forecast Kp is '+maxKp.toFixed(1)+'. That can support Michigan viewing, especially from dark Upper Peninsula locations, but it does not guarantee a display. Compare the regional cards, the <a href="#" onclick="document.querySelector(\'.map-wrap\').scrollIntoView({behavior:\'smooth\'});return false;">viewing map</a>, and the official NOAA 30-minute oval before driving.</p>';
   } else if (maxKp >= 4){
-    cta.innerHTML = '<h3>Active conditions possible</h3><div class="cta-headline">Worth watching from the northernmost UP.</div><p>Peak Kp of '+maxKp.toFixed(1)+'. Faint aurora possible from the <strong>Keweenaw</strong>, <strong>Whitefish Point</strong>, or <strong>Lake Superior Provincial Park</strong> on clear, moonless nights. Photography will capture color the eye does not see. If you cannot get north tonight, the <a href="/edmund-fitzgerald/">Edmund Fitzgerald page</a> and <a href="/soo-locks/">live Soo Locks tool</a> are both connected to the same region.</p>';
+    cta.innerHTML = '<h3>Upper Peninsula watch</h3><div class="cta-headline">The forecast is worth monitoring from Michigan\'s far north.</div><p>Peak forecast Kp is '+maxKp.toFixed(1)+'. A dark northern horizon in the Keweenaw, near Whitefish Point, or along Lake Superior offers the best chance if the short-term signal strengthens and skies remain clear.</p>';
   } else {
-    cta.innerHTML = '<h3>Aurora is quiet tonight</h3><div class="cta-headline">Two other Lake Superior tools while you wait.</div><p>Peak Kp of '+maxKp.toFixed(1)+' is not enough to bring the aurora south of the high Arctic. While you are here, the <a href="/edmund-fitzgerald/">Edmund Fitzgerald page</a> covers the complete history of the 1975 wreck with the verified 29-name crew list and the bell-recovery story. The <a href="/soo-locks/">live Soo Locks tool</a> shows real-time freighter activity at Sault Ste. Marie. Bookmark this page and check back when geomagnetic activity picks up.</p>';
+    cta.innerHTML = '<h3>Low Kp outlook</h3><div class="cta-headline">Michigan viewing odds are limited in the current forecast.</div><p>Peak forecast Kp is '+maxKp.toFixed(1)+'. Keep the page bookmarked because solar-wind conditions and the 30-minute OVATION model can change faster than the three-day outlook.</p>';
   }
 }
 
@@ -607,7 +647,7 @@ function initMap(){
     const map = document.getElementById('auroraMap');
     map.classList.add('map-fallback');
     map.setAttribute('role', 'status');
-    map.innerHTML = '<strong>Interactive map temporarily unavailable.</strong><span>The ranked viewing-location guide below still works. You can also open the <a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener">official NOAA aurora forecast</a>.</span>';
+    map.innerHTML = '<strong>Interactive map temporarily unavailable.</strong><span>The ranked viewing-location guide below still works. You can also open the <a href="https://www.spaceweather.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener">official NOAA aurora forecast</a>.</span>';
     return false;
   }
   auroraMap = L.map('auroraMap', {scrollWheelZoom:false}).setView([46.5, -87.0], 6);
@@ -701,7 +741,7 @@ function checkAndNotify(maxKp){
   if (notifyEnabled && maxKp >= 5 && Notification.permission === 'granted'){
     const lastNotifyKp = parseFloat(sessionStorage.getItem('lastKp')||0);
     if (lastNotifyKp < 5){
-      new Notification('Aurora alert · Kp '+maxKp.toFixed(1), {body:'G'+(Math.floor(maxKp)-4)+' geomagnetic storm forecast. Aurora may be visible from the UP tonight.'});
+      new Notification('Aurora watch · Kp '+maxKp.toFixed(1), {body:'The NOAA Kp outlook is elevated. Check the 30-minute oval, darkness, and local clouds before traveling.'});
       sessionStorage.setItem('lastKp', maxKp);
     }
   }
@@ -715,21 +755,10 @@ function highlightKpStep(kp){
 }
 
 // === NOAA response helpers ===
-// SWPC serves some products as header-plus-array rows and others as objects.
-// Normalizing both shapes keeps the live cards working when a product changes format.
-function normalizeNoaaRows(data, columns){
-  if (!Array.isArray(data)) return [];
-  const rows = data.filter(Boolean).map(row=>{
-    if (Array.isArray(row)) return row;
-    if (typeof row !== 'object') return [];
-    return columns.map(names=>{
-      for (const name of names){
-        if (row[name] !== undefined && row[name] !== null) return row[name];
-      }
-      return null;
-    });
-  });
-  return rows.filter(row=>String(row[0]||'').toLowerCase() !== 'time_tag');
+function asFiniteNumber(value){
+  if (value === null || value === undefined || value === '') return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }
 
 function parseNoaaTime(value){
@@ -746,150 +775,108 @@ function markSpaceWeatherUnavailable(id){
   card.querySelector('.sw-status').textContent = 'temporarily unavailable';
 }
 
+function formatMichiganTime(value){
+  if (!value) return 'time unavailable';
+  return new Date(value).toLocaleString('en-US',{timeZone:'America/Detroit',weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+}
+
+function renderRegionalOutlook(ovation){
+  const forecastTime = ovation && ovation.forecast_time;
+  document.getElementById('regionOutlookTime').textContent = forecastTime
+    ? 'NOAA OVATION forecast time: '+formatMichiganTime(forecastTime)+' ET. Local clouds and darkness are not included.'
+    : 'The NOAA OVATION feed is temporarily unavailable; the planning thresholds below remain visible.';
+  (ovation && ovation.regions || []).forEach(region=>{
+    const card = document.querySelector('[data-region-id="'+region.id+'"]');
+    if (!card) return;
+    card.dataset.level = region.level;
+    card.querySelector('[data-region-label]').textContent = region.status_label;
+    const gridSignal = Number.isFinite(region.ovation_value) ? ' NOAA grid signal: '+region.ovation_value+'/100.' : '';
+    card.querySelector('[data-region-detail]').textContent = region.detail+gridSignal;
+  });
+}
+
+function renderSolarWind(solarWind){
+  if (!solarWind){
+    ['swBz','swSpeed'].forEach(markSpaceWeatherUnavailable);
+    return;
+  }
+  const bz = asFiniteNumber(solarWind.bz_gsm_nt);
+  const speed = asFiniteNumber(solarWind.speed_km_s);
+  const bzCard = document.getElementById('swBz');
+  if (Number.isFinite(bz)){
+    bzCard.querySelector('.sw-val').textContent = bz.toFixed(1)+' nT';
+    let status = 'Northward · less favorable', className = '';
+    if (bz < -10){status='Strongly southward · favorable signal';className='alert';}
+    else if (bz < -5){status='Southward · favorable signal';className='alert';}
+    else if (bz < 0){status='Slightly southward';}
+    bzCard.className = 'sw-card '+className;
+    bzCard.querySelector('.sw-status').textContent = status;
+  } else markSpaceWeatherUnavailable('swBz');
+
+  const speedCard = document.getElementById('swSpeed');
+  if (Number.isFinite(speed)){
+    speedCard.querySelector('.sw-val').textContent = Math.round(speed)+' km/s';
+    speedCard.querySelector('.sw-status').textContent = speed > 600 ? 'Fast stream' : speed > 450 ? 'Elevated' : 'Nominal';
+  } else markSpaceWeatherUnavailable('swSpeed');
+}
+
 // === Main data fetch ===
 async function loadAuroraData(){
-  const kpUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index-forecast.json';
-  const swUrl = 'https://services.swpc.noaa.gov/products/summary/solar-wind-mag-field.json';
-  const kpCurrentUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json';
-  
   try {
-    // Fetch all three in parallel
-    const [kpRes, swRes, kpCurRes] = await Promise.allSettled([
-      fetch(kpUrl).then(r=>r.json()),
-      fetch(swUrl).then(r=>r.json()),
-      fetch(kpCurrentUrl).then(r=>r.json())
-    ]);
+    const response = await fetch('/api/aurora',{headers:{accept:'application/json'}});
+    if (!response.ok) throw new Error('Aurora endpoint returned '+response.status);
+    const data = await response.json();
+    const max24 = asFiniteNumber(data.forecast && data.forecast.peak_24h);
+    const max72 = asFiniteNumber(data.forecast && data.forecast.peak_72h);
+    if (!Number.isFinite(max24)) throw new Error('NOAA Kp forecast unavailable');
 
-    if (kpRes.status !== 'fulfilled') throw new Error('NOAA Kp forecast unavailable');
-    
-    if (kpRes.status === 'fulfilled') {
-      const data = kpRes.value;
-      const rows = normalizeNoaaRows(data, [['time_tag'],['kp','Kp']]).filter(row=>{
-        return Number.isFinite(parseFloat(row[1])) && !Number.isNaN(parseNoaaTime(row[0]).getTime());
-      });
-      const now = new Date();
-      const next72 = rows.filter(row=>{
-        const t = parseNoaaTime(row[0]);
-        const hrs = (t-now)/3600000;
-        return hrs > -3 && hrs < 78;
-      });
-      const next24 = next72.filter(row=>((parseNoaaTime(row[0])-now)/3600000) < 30);
-      if (!next24.length) throw new Error('NOAA Kp forecast contains no current rows');
-      const max24 = next24.reduce((m,r)=>Math.max(m, parseFloat(r[1])), 0);
-      const max72 = next72.reduce((m,r)=>Math.max(m, parseFloat(r[1])), max24);
-      
-      currentKp = max24;
-      updateGauge(max24);
-      drawForecast(next72);
-      highlightKpStep(max24);
-      updateSmartCta(max24);
-      checkAndNotify(max24);
-      
-      // Update peak panel
-      const peakCard = document.getElementById('swKpPeak');
+    currentKp = max24;
+    updateGauge(max24);
+    drawForecast((data.forecast.periods || []).map(period=>[period.time_tag,period.kp]));
+    highlightKpStep(max24);
+    updateSmartCta(max24);
+    checkAndNotify(max24);
+    renderRegionalOutlook(data.ovation);
+    renderSolarWind(data.solar_wind);
+
+    const current = data.forecast.current && asFiniteNumber(data.forecast.current.kp);
+    const currentCard = document.getElementById('swKpNow');
+    if (Number.isFinite(current)){
+      currentCard.className = 'sw-card '+(current >= 5 ? 'alert' : '');
+      currentCard.querySelector('.sw-val').textContent = current.toFixed(1);
+      currentCard.querySelector('.sw-status').textContent = KP_STATUS[kpClass(current)];
+    } else markSpaceWeatherUnavailable('swKpNow');
+
+    const peakCard = document.getElementById('swKpPeak');
+    if (Number.isFinite(max72)){
+      peakCard.className = 'sw-card '+(max72 >= 5 ? 'alert' : '');
       peakCard.querySelector('.sw-val').textContent = max72.toFixed(1);
       peakCard.querySelector('.sw-status').textContent = KP_STATUS[kpClass(max72)];
-      if (max72 >= 5) peakCard.classList.add('alert');
-      
-      // Update live strip
-      const dot = document.getElementById('liveDot');
-      const status = document.getElementById('liveStatus');
-      dot.classList.remove('active','alert');
-      if (max24 >= 5){
-        dot.classList.add('alert');
-        status.textContent = 'ACTIVE · Kp '+max24.toFixed(1)+' · '+KP_STATUS[kpClass(max24)];
-      } else if (max24 >= 4){
-        dot.classList.add('active');
-        status.textContent = 'Watch · Kp '+max24.toFixed(1)+' peak 24h';
-      } else {
-        status.textContent = 'Quiet · Kp '+max24.toFixed(1)+' peak 24h';
-      }
-      
-      // Headline
-      let hl, det;
-      if (max24 < 4){
-        hl = 'Aurora is quiet tonight in Michigan';
-        det = 'Peak Kp of <strong>'+max24.toFixed(1)+'</strong> over the next 24 hours. Not enough to bring the aurora south of the high Arctic. Check back tomorrow, or watch the live solar wind Bz data below as a near-term indicator.';
-      } else if (max24 < 5){
-        hl = 'Active conditions, faint aurora possible from the UP';
-        det = 'Peak Kp of <strong>'+max24.toFixed(1)+'</strong>. Faint aurora possible from <strong>Keweenaw</strong>, <strong>Whitefish Point</strong>, or <strong>LSPP</strong> on clear nights. Photography will capture more than the eye sees.';
-      } else if (max24 < 6){
-        hl = 'Aurora reliably visible from the Upper Peninsula';
-        det = 'Peak Kp <strong>'+max24.toFixed(1)+'</strong> (G1 storm). Aurora visible to the naked eye from any UP dark-sky location with clear northern horizon. Use the map above to find your closest viewing site.';
-      } else if (max24 < 7){
-        hl = 'Strong UP display, possible northern Lower Peninsula viewing';
-        det = 'Peak Kp <strong>'+max24.toFixed(1)+'</strong> (G2 storm). Strong aurora across the UP. May be visible low on the horizon from northern LP at <strong>Sleeper State Park</strong> or <strong>Headlands DSP</strong>.';
-      } else if (max24 < 8){
-        hl = 'Major statewide display expected';
-        det = 'Peak Kp <strong>'+max24.toFixed(1)+'</strong> (G3 storm). Aurora visible across all of Michigan. Bright overhead from the UP. The kind of night that makes the news.';
-      } else {
-        hl = 'Severe geomagnetic storm';
-        det = 'Peak Kp <strong>'+max24.toFixed(1)+'</strong> (G4+). Aurora visible across most of the continental US. Once-per-cycle event. Get to a dark sky tonight.';
-      }
-      document.getElementById('tonightHeadline').textContent = hl;
-      document.getElementById('tonightDetail').innerHTML = det;
-    }
-    
-    if (swRes.status === 'fulfilled') {
-      const sw = swRes.value;
-      // Rows may be arrays or objects; normalizeNoaaRows maps bz_gsm to index 3 and bt to index 6
-      const swRows = normalizeNoaaRows(sw, [['time_tag'],['bx_gsm'],['by_gsm'],['bz_gsm'],['lon_gsm'],['lat_gsm'],['bt']]);
-      const recent = swRows.filter(row=>Number.isFinite(parseFloat(row[3]))).slice(-1)[0];
-      if (recent) {
-        // Schema: [time_tag, bx_gsm, by_gsm, bz_gsm, lon_gsm, lat_gsm, bt]
-        const bz = parseFloat(recent[3]);
-        const bt = parseFloat(recent[6]);
-        const bzCard = document.getElementById('swBz');
-        bzCard.querySelector('.sw-val').textContent = bz.toFixed(1)+' nT';
-        let bzStatus, bzClass;
-        if (bz < -10) { bzStatus = 'STRONG SOUTH · aurora driver'; bzClass='alert'; }
-        else if (bz < -5) { bzStatus = 'Moderate south · favorable'; bzClass='alert'; }
-        else if (bz < 0) { bzStatus = 'Slightly south'; bzClass=''; }
-        else { bzStatus = 'Northward · unfavorable'; bzClass=''; }
-        bzCard.className = 'sw-card ' + bzClass;
-        bzCard.querySelector('.sw-status').textContent = bzStatus;
-      } else markSpaceWeatherUnavailable('swBz');
-    } else markSpaceWeatherUnavailable('swBz');
-    
-    if (kpCurRes.status === 'fulfilled') {
-      const kpCur = kpCurRes.value;
-      // Schema: [time_tag, kp, a_running, station_count]
-      const curRows = normalizeNoaaRows(kpCur, [['time_tag'],['Kp','kp'],['a_running'],['station_count']]);
-      const latestKp = curRows.filter(row=>Number.isFinite(parseFloat(row[1]))).slice(-1)[0];
-      if (latestKp) {
-        const nowKp = parseFloat(latestKp[1]);
-        const curCard = document.getElementById('swKpNow');
-        curCard.querySelector('.sw-val').textContent = nowKp.toFixed(1);
-        curCard.querySelector('.sw-status').textContent = KP_STATUS[kpClass(nowKp)];
-        if (nowKp >= 5) curCard.classList.add('alert');
-      } else markSpaceWeatherUnavailable('swKpNow');
-    } else markSpaceWeatherUnavailable('swKpNow');
-    
-    // Solar wind speed from the SWPC summary feed (separate call, optional)
-    try {
-      const plasma = await fetch('https://services.swpc.noaa.gov/products/summary/solar-wind-speed.json').then(r=>r.json());
-      const plasmaRows = normalizeNoaaRows(plasma, [['time_tag'],['density'],['speed','proton_speed'],['temperature']]);
-      const recent = plasmaRows.filter(row=>Number.isFinite(parseFloat(row[2]))).slice(-1)[0];
-      if (recent) {
-        // Schema: [time_tag, density, speed, temperature]
-        const speed = parseFloat(recent[2]);
-        const speedCard = document.getElementById('swSpeed');
-        speedCard.querySelector('.sw-val').textContent = Math.round(speed)+' km/s';
-        let speedStatus;
-        if (speed > 600) speedStatus = 'Fast stream';
-        else if (speed > 450) speedStatus = 'Elevated';
-        else speedStatus = 'Nominal';
-        speedCard.querySelector('.sw-status').textContent = speedStatus;
-      } else markSpaceWeatherUnavailable('swSpeed');
-    } catch(e){markSpaceWeatherUnavailable('swSpeed');}
-    
-    document.getElementById('refreshInfo').textContent = '· updated '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-    
-  } catch (e) {
+    } else markSpaceWeatherUnavailable('swKpPeak');
+
+    const peakTime = formatMichiganTime(data.forecast.peak_24h_at);
+    const dot = document.getElementById('liveDot');
+    const status = document.getElementById('liveStatus');
+    dot.classList.remove('active','alert');
+    if (max24 >= 5){dot.classList.add('alert');status.textContent='Elevated · peak Kp '+max24.toFixed(1)+' in next 24h';}
+    else if (max24 >= 4){dot.classList.add('active');status.textContent='Watch · peak Kp '+max24.toFixed(1)+' in next 24h';}
+    else status.textContent='Low Kp outlook · peak '+max24.toFixed(1)+' in next 24h';
+
+    let headline;
+    if (max24 < 4) headline = 'Low aurora signal for Michigan in the current outlook';
+    else if (max24 < 5) headline = 'Upper Peninsula aurora watch in the current outlook';
+    else if (max24 < 6) headline = 'Upper Peninsula viewing may be possible';
+    else if (max24 < 7) headline = 'UP favored; northern Lower Peninsula should monitor';
+    else headline = 'Statewide aurora watch: verify short-term conditions';
+    document.getElementById('tonightHeadline').textContent = headline;
+    document.getElementById('tonightDetail').innerHTML = 'The next-24-hour NOAA forecast peaks at <strong>Kp '+max24.toFixed(1)+'</strong> around <strong>'+peakTime+' ET</strong>. This is broad geomagnetic guidance, not a visibility promise. Check the regional OVATION signal, darkness, and local cloud cover before driving.';
+    document.getElementById('refreshInfo').textContent = '· updated '+new Date(data.fetched_at || Date.now()).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  } catch (error) {
     ['swBz','swSpeed','swKpNow','swKpPeak'].forEach(markSpaceWeatherUnavailable);
-    document.getElementById('liveStatus').textContent = 'NOAA feed unavailable, see manual content below';
-    document.getElementById('tonightHeadline').textContent = 'Live feed temporarily unavailable';
-    document.getElementById('tonightDetail').innerHTML = 'Could not reach NOAA SWPC. Visit <a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener" style="color:#7bc8e8">noaa.gov/aurora-forecast</a> directly. The viewing guide and map below remain accurate.';
+    renderRegionalOutlook(null);
+    document.getElementById('liveStatus').textContent = 'NOAA feed unavailable · manual guide active';
+    document.getElementById('tonightHeadline').textContent = 'Live NOAA feed temporarily unavailable';
+    document.getElementById('tonightDetail').innerHTML = 'Open the <a href="https://www.spaceweather.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener" style="color:#7bc8e8">official NOAA 30-minute forecast</a>, then check local clouds. The regional thresholds and viewing-location guide below remain available.';
   }
 }
 

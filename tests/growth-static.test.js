@@ -7,6 +7,7 @@ const read = (file) => readFileSync(path.join(__dirname, "..", file), "utf8");
 
 test("100x benchmark reconciles to the supplied Search Console baseline", () => {
   const benchmark = JSON.parse(read("benchmarks/growth-100x-baseline.json"));
+  const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
   const current = benchmark.measurement.current28Days;
   const target = benchmark.milestones.find((item) => item.name === "100x north star");
 
@@ -17,6 +18,9 @@ test("100x benchmark reconciles to the supplied Search Console baseline", () => 
   assert.equal(target.monthlyGoogleClicks, Math.round(target.impressionsPerDay * 30 * target.ctr));
   assert.equal(benchmark.measurement.verifiedMaxDailyImpressions, 2056);
   assert.notEqual(current.dailyImpressions, benchmark.measurement.unverifiedClaimedMaxDailyImpressions);
+  assert.equal(benchmark.benchmarkVersion, "1.2.0");
+  assert.ok(benchmark.priorityPages.some((page) => page.path === "/mackinac-bridge-live/"));
+  assert.ok(ledger.experiments.some((experiment) => experiment.path === "/mackinac-bridge-live/"));
 });
 
 test("priority search pages preserve canonicals, direct answers, and internal depth", () => {
@@ -24,8 +28,9 @@ test("priority search pages preserve canonicals, direct answers, and internal de
     ["when-to-plant-tomatoes-michigan", "When to Plant Tomatoes in Michigan: 2026 Dates by Region", "tomato-quick-answer"],
     ["michigan-frost-dates", "Michigan Last Frost Dates by City: 2026 Planting Calendar", "frost-quick-answer"],
     ["saginaw-bay-ecology", "How Deep Is Saginaw Bay? Inner &amp; Outer Bay Depths", "saginaw-depth-answer"],
-    ["northern-lights-michigan", "Northern Lights Michigan Tonight | Chris Izworski", "aurora-static-answer"],
-    ["soo-locks", "Soo Locks Ship Schedule Today | Chris Izworski", "soo-schedule-answer"],
+    ["northern-lights-michigan", "Northern Lights Michigan Tonight: Live Aurora Forecast", "aurora-static-answer"],
+    ["soo-locks", "Soo Locks Schedule Today: Ships &amp; Live Map", "soo-schedule-answer"],
+    ["mackinac-bridge-live", "Mackinac Bridge Conditions Today: Live Status &amp; Cameras", "mackinac-conditions-answer"],
   ];
 
   for (const [route, title, answerId] of checks) {
@@ -43,12 +48,15 @@ test("Aurora and Soo answers remain useful and source-safe before or outside cli
   const aurora = read("public/northern-lights-michigan/index.html");
   assert.ok(aurora.includes("Kp below 5 usually means low odds"));
   assert.ok(aurora.includes("never treat a forecast as a visibility guarantee"));
+  assert.ok(aurora.includes("Michigan aurora forecast by region tonight"));
+  assert.ok(aurora.includes("fetch('/api/aurora'"));
   assert.ok(!aurora.includes('id="tonightHeadline" style="margin:0 0 10px;border:0;padding:0">Loading'));
 
   const soo = read("public/soo-locks/index.html");
   assert.ok(soo.includes("https://ais.boatnerd.com/passage/port/soo-locks"));
-  assert.ok(soo.includes("official USACE visitor schedule"));
-  assert.ok(soo.includes("does not copy or republish a third party's schedule"));
+  assert.ok(soo.includes("tel:+19062021333"));
+  assert.ok(soo.includes("does not copy or republish a third party's schedule") || soo.includes("rather than copying its named-vessel schedule"));
+  assert.ok(!soo.includes("Soo-Locks-Schedule/"));
 });
 
 test("ad-first execution plan stays internal and measurable", () => {
@@ -101,6 +109,7 @@ test("JSON-LD remains valid on every changed page", () => {
     "saginaw-bay-ecology",
     "northern-lights-michigan",
     "soo-locks",
+    "mackinac-bridge-live",
   ];
 
   for (const route of routes) {

@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mackinac Bridge Conditions Live | Status &amp; Cameras</title>
-<meta name="description" content="Is the Mackinac Bridge open? Check the official status, live cameras, RV and trailer restrictions, NWS radar, approach weather, and lane closures.">
+<title>Mackinac Bridge Conditions Today: Live Status &amp; Cameras</title>
+<meta name="description" content="Is the Mackinac Bridge open today? Check the official status, live cameras, RV and trailer restrictions, NWS weather, and approach-road events.">
 <link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-live/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#123f36">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Mackinac Bridge Conditions Live">
+<meta property="og:title" content="Mackinac Bridge Conditions Today: Live Status">
 <meta property="og:description" content="Can you cross the Mackinac Bridge easily right now? See the official crossing status first, plus cameras, NWS radar, approach weather, and RV or trailer guidance.">
 <meta property="og:url" content="https://chrisizworski.com/mackinac-bridge-live/">
 <meta property="og:image" content="https://chrisizworski.com/assets/search/mackinac-bridge-live.jpg">
@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Photograph of the Mackinac Bridge crossing the Straits of Mackinac">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Mackinac Bridge Conditions Live">
+<meta name="twitter:title" content="Mackinac Bridge Conditions Today: Live Status">
 <meta name="twitter:description" content="Official bridge status, cameras, NWS radar, approach weather, lane restrictions, and RV crossing guidance.">
 <meta name="twitter:image" content="https://chrisizworski.com/assets/search/mackinac-bridge-live.jpg">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -49,11 +49,11 @@
       "@type": "WebPage",
       "@id": "https://chrisizworski.com/mackinac-bridge-live/#page",
       "url": "https://chrisizworski.com/mackinac-bridge-live/",
-      "name": "Mackinac Bridge Conditions Live: Official Status and Cameras",
-      "description": "A real-time Mackinac Bridge crossing tool combining the official bridge status, cameras, National Weather Service radar and approach forecast, clearly labeled off-bridge NOAA observations, vehicle guidance, tolls, and approach-road restrictions.",
+      "name": "Mackinac Bridge Conditions Today: Live Status and Cameras",
+      "description": "A real-time Mackinac Bridge conditions tool combining the official bridge status, cameras, National Weather Service radar and approach forecast, clearly labeled off-bridge NOAA observations, vehicle guidance, tolls, and approach-road restrictions.",
       "isPartOf": {"@id": "https://chrisizworski.com/#website"},
       "author": {"@id": "https://chrisizworski.com/#person"},
-      "dateModified": "2026-07-28",
+      "dateModified": "2026-08-03",
       "inLanguage": "en-US",
       "breadcrumb": {"@id": "https://chrisizworski.com/mackinac-bridge-live/#breadcrumb"},
       "mainEntity": {"@id": "https://chrisizworski.com/mackinac-bridge-live/#app"},
@@ -93,7 +93,6 @@
         "High-profile vehicle checker and RV, camper, trailer, van, and pickup guidance",
         "Official driver-assistance instructions and toll calculator",
         "Nearby MDOT approach-road incidents and construction",
-        "Shareable, vehicle-specific crossing report",
         "Restriction-change alerts while the tool is open"
       ]
     }
@@ -104,6 +103,7 @@
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
+<script defer src="/assets/growth-cta.js"></script>
 <script defer src="/assets/mackinac-bridge-live.js"></script>
 </head>
 <body data-analytics-page="mackinac-bridge-live">
@@ -139,13 +139,22 @@
     <section class="tool-intro">
       <div>
         <p class="eyebrow">Live crossing conditions</p>
-        <h1>Mackinac Bridge Conditions Live</h1>
-        <p class="lede">Can you cross safely and easily right now? The official bridge status comes first, with both camera directions, NWS radar, clearly labeled off-bridge weather context, vehicle-specific guidance, nearby approach-road events, tolls, and driver assistance in one view.</p>
+        <h1>Mackinac Bridge Conditions Today</h1>
+        <p class="lede">Check the official live status first, then both camera directions, NWS weather, RV and trailer guidance, nearby approach-road events, tolls, and driver assistance.</p>
       </div>
       <div class="intro-badge" aria-label="Data refreshes every minute">
         <span>Auto refresh</span>
         <strong>60 sec</strong>
       </div>
+    </section>
+
+    <section class="conditions-answer" id="mackinac-conditions-answer" aria-labelledby="conditionsAnswerHeading">
+      <div>
+        <p class="eyebrow">Direct answer</p>
+        <h2 id="conditionsAnswerHeading">Is the Mackinac Bridge open today?</h2>
+        <p>The bridge normally operates 24 hours a day, but wind, weather, maintenance, or an incident can trigger an advisory, escort requirement, partial closure, or full closure. The live card below checks the Mackinac Bridge Authority condition report every minute and will not infer an “open” answer if that official source is unavailable.</p>
+      </div>
+      <a class="button button-outline" href="https://www.mackinacbridge.org/fares-traffic/conditions/" target="_blank" rel="noopener" data-growth-cta="mackinac-official-status">Open the official condition report ↗</a>
     </section>
 
     <section class="status-card is-loading" id="statusCard" aria-labelledby="officialStatusHeading">
@@ -622,6 +631,8 @@
         <a href="/mackinac-bridge-driver-assistance/"><strong>Driver assistance</strong><span>Where to stop, who to call, and current cost</span></a>
         <a href="/mackinac-bridge-tolls/"><strong>Tolls &amp; payments</strong><span>Calculate fares, towing charges, and card fees</span></a>
         <a href="/michigan-border-wait-times/"><strong>Crossing into Canada?</strong><span>Compare all five Michigan–Ontario border waits</span></a>
+        <a href="/soo-locks/" data-growth-cta="mackinac-soo-locks"><strong>Soo Locks schedule</strong><span>Named-vessel sources, official hotline, and live AIS map</span></a>
+        <a href="/northern-lights-michigan/" data-growth-cta="mackinac-aurora"><strong>Northern lights tonight</strong><span>NOAA aurora forecast for the Straits and all Michigan regions</span></a>
       </div>
     </section>
 
@@ -635,7 +646,7 @@
 <footer class="site-footer">
   <p>Mackinac Bridge Live was built by <a href="/about/">Chris Izworski</a> as a practical Michigan travel tool.</p>
   <p class="photo-credit">Preview photograph: <a href="https://www.publicdomainpictures.net/en/view-image.php?image=82614&amp;picture=mackinaw-bridge" target="_blank" rel="noopener">“Mackinaw Bridge” by Tammy Sue</a>, CC0 public domain.</p>
-  <p><a href="/tools/">All tools</a> · <a href="/great-lakes/">Great Lakes</a> · <a href="/connect/">Contact</a></p>
+  <p><a href="/tools/">All tools</a> · <a href="/great-lakes/">Great Lakes</a> · <a href="/soo-locks/">Soo Locks</a> · <a href="/northern-lights-michigan/">Aurora forecast</a> · <a href="/connect/">Contact</a></p>
 </footer>
 </body>
 </html>
