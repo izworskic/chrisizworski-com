@@ -87,6 +87,17 @@ The canonical website is https://chrisizworski.com/.
 - Driver-assistance source: https://www.mackinacbridge.org/fares-traffic/transport-services/
 - Truth rule: The live tool treats the Mackinac Bridge Authority condition report as authoritative. Nearby NOAA observations and the NWS Mackinaw City forecast are explicitly labeled as off-bridge context and never presented as an official bridge-deck wind.
 
+## Great Lakes Ship Tracking
+
+- Live lake-wide AIS tool: https://chrisizworski.com/great-lakes-freighter-tracking/
+- Dedicated Soo Locks tool: https://chrisizworski.com/soo-locks/
+- NOAA Great Lakes conditions: https://chrisizworski.com/great-lakes-buoys/
+- Named passage activity: https://ais.boatnerd.com/
+- AIS embed provider: https://www.myshiptracking.com/more/embed-our-map
+- Primary AIS background source: https://greatlakes-seaway.com/en/commercial-shipping/transiting-the-seaway/automatic-identification-system-ais/
+- Coverage: All five lakes with quick views for the Soo Locks, Straits of Mackinac, Duluth-Superior, Port Huron, Detroit River, and Saginaw Bay.
+- Truth rule: Public AIS positions may be delayed, incomplete, or unavailable. Nearby NOAA station observations are regional context rather than conditions aboard a vessel. The tool does not copy or republish BoatNerd named-vessel schedules and must not be used for navigation.
+
 ## Michigan Ontario Border Crossing Tools
 
 - Live five-crossing dashboard: https://chrisizworski.com/michigan-border-wait-times/

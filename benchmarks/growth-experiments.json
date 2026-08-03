@@ -10,8 +10,9 @@
       "primaryMetric": "Search Console page CTR",
       "baseline": {"impressions": 5479, "clicks": 14, "ctr": 0.00256, "averagePosition": 8.37},
       "target": {"ctr": 0.02},
-      "status": "ready-for-review",
-      "releaseDate": null,
+      "status": "running",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
       "decisionDate": null,
       "result": null,
       "stopCondition": "Canonical, structured data, or indexability changes unexpectedly."
@@ -23,8 +24,9 @@
       "primaryMetric": "Search Console page CTR",
       "baseline": {"impressions": 2651, "clicks": 3, "ctr": 0.00113, "averagePosition": 9.56},
       "target": {"ctr": 0.02},
-      "status": "ready-for-review",
-      "releaseDate": null,
+      "status": "running",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
       "decisionDate": null,
       "result": null,
       "stopCondition": "City table, filters, canonical, or indexability regress."
@@ -36,8 +38,9 @@
       "primaryMetric": "Search Console page CTR",
       "baseline": {"impressions": 1671, "clicks": 9, "ctr": 0.00539, "averagePosition": 11.13},
       "target": {"ctr": 0.015},
-      "status": "ready-for-review",
-      "releaseDate": null,
+      "status": "running",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
       "decisionDate": null,
       "result": null,
       "stopCondition": "Factual source links, canonical, or existing ecology query coverage regress."
@@ -54,8 +57,9 @@
         {"query": "northern lights tonight near me", "impressions": 194, "clicks": 2, "ctr": 0.0103, "averagePosition": 7.91}
       ],
       "target": {"ctr": 0.025},
-      "status": "ready-for-review",
-      "releaseDate": null,
+      "status": "running",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
       "decisionDate": null,
       "result": null,
       "stopCondition": "NOAA parsing, map behavior, or existing manual fallback regresses."
@@ -73,8 +77,9 @@
         {"query": "soo locks schedule tomorrow", "impressions": 144, "clicks": 5, "ctr": 0.0347, "averagePosition": 8.87}
       ],
       "target": {"ctr": 0.025},
-      "status": "ready-for-review",
-      "releaseDate": null,
+      "status": "running",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
       "decisionDate": null,
       "result": null,
       "stopCondition": "Named-vessel data is republished without permission or the live map regresses."
@@ -92,8 +97,9 @@
         {"query": "mackinac bridge traffic today", "impressions": 6, "averagePosition": 10.17}
       ],
       "target": {"ctr": 0.02, "averagePosition": 10},
-      "status": "ready-for-review",
-      "releaseDate": null,
+      "status": "running",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
       "decisionDate": null,
       "result": null,
       "stopCondition": "The official Bridge Authority source, fail-safe open/closed logic, cameras, canonical, or live crossing flow regresses."
@@ -105,8 +111,9 @@
       "primaryMetric": "Search Console impressions and aggregate internal CTA clicks",
       "baseline": {"impressions": 10, "clicks": 0, "ctr": 0, "averagePosition": 9.9},
       "target": {"impressions": 100, "internalCtaClicks": 10},
-      "status": "ready-for-review",
-      "releaseDate": null,
+      "status": "running",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
       "decisionDate": null,
       "result": null,
       "stopCondition": "First-party claims, canonicals, or links to the independent Freighter View Farms blog become inaccurate."
@@ -119,11 +126,32 @@
       "baseline": {"impressions": 74, "clicks": 1, "ctr": 0.0135, "averagePosition": 11.01},
       "supportingBaseline": {"url": "https://birding.chrisizworski.com/", "impressions": 111, "clicks": 5, "ctr": 0.045, "averagePosition": 7.32},
       "target": {"impressions": 250, "ctr": 0.025, "liveToolClicks": 15},
+      "status": "running",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "The guide loses indexability, the live-tool destination changes, or birding-subdomain CTR falls below 2.5% in a comparable 28-day window."
+    },
+    {
+      "id": "2026-08-03-great-lakes-ship-tracker",
+      "path": "/great-lakes-freighter-tracking/",
+      "hypothesis": "Replacing the passive guide with a live lake-wide AIS tool, corridor-specific views, nearby NOAA context, and a title matching ship-tracker intent will move the page toward the top 15 and lift CTR from 0.10% toward 1.5%.",
+      "primaryMetric": "Search Console page impressions, CTR, and average position",
+      "baseline": {"impressions": 996, "clicks": 1, "ctr": 0.001, "averagePosition": 23.87},
+      "supportingEvidence": [
+        {"query": "great lake freighter tracker", "impressions": 3, "averagePosition": 18},
+        {"query": "great lakes ships tracker", "impressions": 3, "averagePosition": 22.33},
+        {"query": "great lake ship tracker", "impressions": 3, "averagePosition": 28},
+        {"query": "track freighters great lakes", "impressions": 2, "averagePosition": 17.5},
+        {"query": "vessel tracker great lakes", "impressions": 2, "averagePosition": 21.5}
+      ],
+      "target": {"impressionsMultiple": 3, "ctr": 0.015, "averagePosition": 15, "measurementHorizonDays": 90},
       "status": "ready-for-review",
       "releaseDate": null,
       "decisionDate": null,
       "result": null,
-      "stopCondition": "The guide loses indexability, the live-tool destination changes, or birding-subdomain CTR falls below 2.5% in a comparable 28-day window."
+      "stopCondition": "The supported AIS embed, corridor switching, nearby NOAA context, canonical, or non-JavaScript source links regress."
     }
   ]
 }
