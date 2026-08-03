@@ -16,6 +16,7 @@ const exists = async (file) => {
 
 const benchmark = JSON.parse(await read("benchmarks/growth-100x-baseline.json"));
 const ledger = JSON.parse(await read("benchmarks/growth-experiments.json"));
+const gazetteBenchmark = JSON.parse(await read("benchmarks/gazette-daily-growth.json"));
 const sitemap = await read("public/sitemap.xml");
 const failures = [];
 
@@ -184,6 +185,38 @@ check(
   "Birding guide links the live birding tool and exposes a first answer",
   birding.includes('id="birding-quick-answer"') &&
     (birding.match(/href="https:\/\/birding\.chrisizworski\.com\/"/g) || []).length >= 2,
+);
+
+const gazetteExperiment = ledger.experiments.find(
+  (experiment) => experiment.id === "2026-08-03-great-lakes-gazette-daily",
+);
+const gazetteLanding = await read("public/great-lakes-gazette/index.html");
+const gazetteDistribution = await Promise.all(
+  gazetteBenchmark.scope.distributionPages.map(async (route) => {
+    const file = route === "/" ? "public/index.html" : `public${route}index.html`;
+    return read(file);
+  }),
+);
+check(
+  "Gazette search baseline remains unknown rather than fabricated",
+  gazetteBenchmark.baseline.searchConsole.landingPageImpressions === null &&
+    gazetteBenchmark.baseline.searchConsole.status === "not-isolated-in-visible-export",
+);
+check(
+  "Gazette landing matches daily shipping-news intent",
+  gazetteLanding.includes("<title>Great Lakes Shipping News Today | Great Lakes Gazette</title>") &&
+    gazetteLanding.includes("A Newspaper, Not Another Dashboard") &&
+    gazetteLanding.includes("https://gazette.chrisizworski.com/archive"),
+);
+check(
+  "Gazette current headline is distributed across six relevant pages",
+  gazetteDistribution.length === 6 &&
+    gazetteDistribution.every((html) => html.includes("data-gazette-latest")),
+);
+check(
+  "Gazette experiment gates reliability and engagement",
+  gazetteExperiment?.target?.dailyAvailability === 1 &&
+    gazetteExperiment?.target?.widgetEditionOpenRate === 0.02,
 );
 
 const report = {

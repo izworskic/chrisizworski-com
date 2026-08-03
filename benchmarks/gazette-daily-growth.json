@@ -1,0 +1,92 @@
+{
+  "benchmarkVersion": "1.0.0",
+  "created": "2026-08-03",
+  "timezone": "America/Detroit",
+  "scope": {
+    "landingPage": "/great-lakes-gazette/",
+    "publicationOrigin": "https://gazette.chrisizworski.com",
+    "distributionPages": [
+      "/",
+      "/great-lakes/",
+      "/great-lakes-freighter-tracking/",
+      "/soo-locks/",
+      "/mackinac-bridge-live/",
+      "/chris-izworski-freighter-view-farms/"
+    ],
+    "contextualPage": "/great-lakes-birding/"
+  },
+  "baseline": {
+    "searchConsole": {
+      "source": "Supplied Google Search Console workbook ending 2026-08-01",
+      "landingPageImpressions": null,
+      "landingPageClicks": null,
+      "landingPageCtr": null,
+      "averagePosition": null,
+      "status": "not-isolated-in-visible-export",
+      "rule": "Null means unmeasured, not zero. Record the first complete post-release 28-day page and query export before declaring a search result."
+    },
+    "publication": {
+      "archiveIssuesObserved": 92,
+      "archiveFirstDate": "2026-03-17",
+      "archiveLatestDate": "2026-08-03",
+      "currentStreakDays": 10,
+      "latestEditionGeneratedAtUtc": "2026-08-03T11:52:35.256Z",
+      "latestEditionGeneratedAfter7amEastern": true,
+      "aisHealthyPortsLatestEdition": 0,
+      "aisExpectedPorts": 7,
+      "incident": "BoatNerd retired the passage/getPassageData endpoint; the edition still published but all seven live passage calls failed."
+    },
+    "product": {
+      "landingHeadlineLinkedToDatedIssue": false,
+      "archiveLinkedAboveFold": false,
+      "rssLinkedAboveFold": false,
+      "latestHeadlineDistributionSurfaces": 0,
+      "dedicatedSourceHealthGate": false,
+      "duplicateSafeCrossSchedulerLock": false,
+      "hard48HourCurrentNewsFilter": false
+    }
+  },
+  "releaseGate": {
+    "product": [
+      "The landing title and first answer match Great Lakes shipping news today intent.",
+      "The live card links directly to the dated issue while retaining a crawlable fallback.",
+      "Archive and RSS links are visible without opening a menu.",
+      "Current headlines appear on six relevant owned distribution pages, with one contextual birding link.",
+      "No public audience roadmap, ad sales page, or sponsor solicitation is published."
+    ],
+    "publication": [
+      "At least five of seven AIS passage sources pass before distribution.",
+      "At least three NOAA water-level stations and three NWS lake forecasts pass.",
+      "Port reports and vessel news older than 48 hours cannot enter current-news context.",
+      "Multiple morning attempts cannot create a duplicate issue or WordPress draft.",
+      "A failed source-health check produces a visible failed workflow instead of a silent success."
+    ]
+  },
+  "targets": {
+    "first28Days": {
+      "dailyEditionAvailability": 1,
+      "publishedBy730amEastern": 0.96,
+      "editionsWithAtLeastFiveHealthyAisPorts": 0.95,
+      "widgetEditionOpenRate": 0.02,
+      "searchMeasurement": "Establish the first complete landing-page and non-brand query baseline; do not infer zero from absent rows."
+    },
+    "day90": {
+      "landingPageMinimumImpressionsForCtrDecision": 250,
+      "landingPageCtr": 0.02,
+      "returningVisitorShare": 0.15,
+      "note": "Targets are decision gates, not forecasts or guarantees."
+    }
+  },
+  "measurement": {
+    "searchWindow": "Compare complete 28-day Search Console windows only.",
+    "reliabilityWindow": "Record every scheduled date in America/Detroit, issue generation time, public URL, and source-health counts.",
+    "engagementNumerator": "Tool Open events where tool=great-lakes-gazette-edition.",
+    "engagementDenominator": "Pageviews across the six widget-bearing distribution pages.",
+    "stopConditions": [
+      "A duplicate dated issue or duplicate FVF draft is created.",
+      "The latest card points to the wrong date.",
+      "A stale vessel movement is framed as current news.",
+      "A widget materially regresses Core Web Vitals or blocks a live tool."
+    ]
+  }
+}

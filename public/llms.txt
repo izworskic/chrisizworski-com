@@ -98,6 +98,16 @@ The canonical website is https://chrisizworski.com/.
 - Coverage: All five lakes with quick views for the Soo Locks, Straits of Mackinac, Duluth-Superior, Port Huron, Detroit River, and Saginaw Bay.
 - Truth rule: Public AIS positions may be delayed, incomplete, or unavailable. Nearby NOAA station observations are regional context rather than conditions aboard a vessel. The tool does not copy or republish BoatNerd named-vessel schedules and must not be used for navigation.
 
+## Great Lakes Gazette
+
+- Daily newspaper landing page: https://chrisizworski.com/great-lakes-gazette/
+- Current edition: https://gazette.chrisizworski.com/
+- Permanent issue archive: https://gazette.chrisizworski.com/archive
+- RSS feed: https://gazette.chrisizworski.com/feed.xml
+- Latest edition data: https://gazette.chrisizworski.com/api/latest
+- Coverage: Current Great Lakes vessel movements, ports, NOAA lake levels, NWS marine forecasts, and one dated item to watch in the next edition.
+- Freshness rule: Vessel news and port reports older than 48 hours are excluded from the current-news context. Public AIS may be delayed or incomplete and is not a navigation source.
+
 ## Michigan Ontario Border Crossing Tools
 
 - Live five-crossing dashboard: https://chrisizworski.com/michigan-border-wait-times/

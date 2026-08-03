@@ -152,6 +152,20 @@
       "decisionDate": null,
       "result": null,
       "stopCondition": "The supported AIS embed, corridor switching, nearby NOAA context, canonical, or non-JavaScript source links regress."
+    },
+    {
+      "id": "2026-08-03-great-lakes-gazette-daily",
+      "path": "/great-lakes-gazette/",
+      "hypothesis": "A shipping-news-today title, direct link to the dated newspaper, visible archive and RSS, and current-headline distribution across relevant high-demand pages will establish qualified search demand and repeat edition opens while publication health prevents stale or silently broken issues.",
+      "primaryMetric": "Daily publication availability, widget edition-open rate, and Search Console landing-page CTR after a complete baseline window",
+      "baseline": {"impressions": null, "clicks": null, "ctr": null, "averagePosition": null, "status": "not-isolated-in-visible-export"},
+      "reliabilityBaseline": {"archiveIssues": 92, "currentStreakDays": 10, "latestGeneratedAfter7amEastern": true, "latestHealthyAisPorts": 0},
+      "target": {"dailyAvailability": 1, "publishedBy730amEastern": 0.96, "healthyAisPortRate": 0.95, "widgetEditionOpenRate": 0.02, "ctrAfter250Impressions": 0.02},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "A duplicate issue, wrong-date headline link, stale movement framed as current, source-health false positive, indexability change, or material live-tool performance regression occurs."
     }
   ]
 }
