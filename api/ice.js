@@ -13,7 +13,7 @@
 
 export const config = { runtime: 'edge' };
 
-const UA = { 'User-Agent': 'michigan-ice-report (ice.chrisizworski.com)' };
+const UA = { 'User-Agent': 'michigan-ice-report (chrisizworski.com/michigan-ice/)' };
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -155,7 +155,6 @@ async function coldFor(region, now) {
 }
 
 export default async function handler() {
-  res.setHeader("X-Robots-Tag", "noindex, nofollow");
   const now = new Date();
   const out = {
     ok: true,
@@ -185,7 +184,8 @@ export default async function handler() {
     status: 200,
     headers: {
       'content-type': 'application/json',
-      'cache-control': 'public, max-age=21600, stale-while-revalidate=86400'
+      'cache-control': 'public, max-age=21600, stale-while-revalidate=86400',
+      'x-robots-tag': 'noindex, nofollow'
     }
   });
 }

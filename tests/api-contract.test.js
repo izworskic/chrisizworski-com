@@ -1,5 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { readdirSync, readFileSync } = require("node:fs");
+const path = require("node:path");
 
 const buoysHandler = require("../api/buoys");
 const buoyDetailHandler = require("../api/buoy/[id]");
@@ -102,4 +104,42 @@ test("dynamic endpoints reject unsupported or malformed requests predictably", a
   const wrongMethodResponse = responseRecorder();
   await matchmakerHandler({ method: "GET" }, wrongMethodResponse);
   assert.equal(wrongMethodResponse.statusCode, 405);
+});
+
+// An edge-runtime function receives a Request and returns a Response. It has no
+// `res` object, so a Node-style res.setHeader() call there is a guaranteed
+// FUNCTION_INVOCATION_FAILED at runtime rather than a build error. This caught a
+// real 500 on /api/ice after that route moved onto the hub and picked up the
+// Node convention the other routes use.
+test("edge runtime API routes never use the Node res object, and still set noindex", () => {
+  const dir = path.join(__dirname, "..", "api");
+  const files = [];
+  (function walk(d) {
+    for (const entry of readdirSync(d, { withFileTypes: true })) {
+      const full = path.join(d, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.name.endsWith(".js")) files.push(full);
+    }
+  })(dir);
+
+  for (const file of files) {
+    const src = readFileSync(file, "utf8");
+    const isEdge = /runtime:\s*['"]edge['"]/.test(src);
+    const rel = path.relative(dir, file);
+    if (isEdge) {
+      assert.ok(
+        !/\bres\.(setHeader|status|json|send|end)\b/.test(src),
+        `${rel} is an edge function and must not use the Node res object`,
+      );
+      assert.ok(
+        /x-robots-tag/i.test(src),
+        `${rel} must set x-robots-tag on the Response it returns`,
+      );
+    } else {
+      assert.ok(
+        /X-Robots-Tag/i.test(src),
+        `${rel} must set the X-Robots-Tag noindex header`,
+      );
+    }
+  }
 });
