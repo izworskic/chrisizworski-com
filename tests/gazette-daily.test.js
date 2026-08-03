@@ -8,7 +8,7 @@ const read = (file) => readFileSync(path.join(__dirname, "..", file), "utf8");
 test("Gazette landing matches current shipping-news intent and opens the real newspaper", () => {
   const html = read("public/great-lakes-gazette/index.html");
 
-  assert.ok(html.includes("<title>Great Lakes Shipping News Today | Great Lakes Gazette</title>"));
+  assert.ok(html.includes("<title>Great Lakes Shipping News Today | Chris Izworski</title>"));
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/great-lakes-gazette/">'));
   assert.ok(html.includes("Looking for Great Lakes shipping news today?"));
   assert.ok(html.includes("https://gazette.chrisizworski.com/api/latest"));

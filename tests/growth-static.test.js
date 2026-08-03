@@ -27,9 +27,9 @@ test("priority search pages preserve canonicals, direct answers, and internal de
   const checks = [
     ["when-to-plant-tomatoes-michigan", "When to Plant Tomatoes in Michigan: 2026 Dates by Region", "tomato-quick-answer"],
     ["michigan-frost-dates", "Michigan Last Frost Dates by City: 2026 Planting Calendar", "frost-quick-answer"],
-    ["saginaw-bay-ecology", "How Deep Is Saginaw Bay? Inner &amp; Outer Bay Depths", "saginaw-depth-answer"],
-    ["northern-lights-michigan", "Northern Lights Michigan Tonight: Live Aurora Forecast", "aurora-static-answer"],
-    ["soo-locks", "Soo Locks Schedule Today: Ships &amp; Live Map", "soo-schedule-answer"],
+    ["saginaw-bay-ecology", "How Deep Is Saginaw Bay? Depth, Ecology &amp; Fishing", "saginaw-depth-answer"],
+    ["northern-lights-michigan", "Northern Lights Michigan Tonight: Aurora | Chris Izworski", "aurora-static-answer"],
+    ["soo-locks", "Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski", "soo-schedule-answer"],
     ["mackinac-bridge-live", "Mackinac Bridge Conditions Today: Live Status &amp; Cameras", "mackinac-conditions-answer"],
   ];
 

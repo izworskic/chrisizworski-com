@@ -104,19 +104,19 @@ const pageChecks = [
   {
     file: "public/saginaw-bay-ecology/index.html",
     path: "/saginaw-bay-ecology/",
-    title: "How Deep Is Saginaw Bay? Inner &amp; Outer Bay Depths",
+    title: "How Deep Is Saginaw Bay? Depth, Ecology &amp; Fishing",
     marker: 'id="saginaw-depth-answer"',
   },
   {
     file: "public/northern-lights-michigan/index.html",
     path: "/northern-lights-michigan/",
-    title: "Northern Lights Michigan Tonight: Live Aurora Forecast",
+    title: "Northern Lights Michigan Tonight: Aurora | Chris Izworski",
     marker: 'id="aurora-static-answer"',
   },
   {
     file: "public/soo-locks/index.html",
     path: "/soo-locks/",
-    title: "Soo Locks Schedule Today: Ships &amp; Live Map",
+    title: "Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski",
     marker: 'id="soo-schedule-answer"',
   },
   {
@@ -204,7 +204,7 @@ check(
 );
 check(
   "Gazette landing matches daily shipping-news intent",
-  gazetteLanding.includes("<title>Great Lakes Shipping News Today | Great Lakes Gazette</title>") &&
+  gazetteLanding.includes("<title>Great Lakes Shipping News Today | Chris Izworski</title>") &&
     gazetteLanding.includes("A Newspaper, Not Another Dashboard") &&
     gazetteLanding.includes("https://gazette.chrisizworski.com/archive"),
 );

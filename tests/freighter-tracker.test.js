@@ -8,7 +8,7 @@ const read = (file) => readFileSync(path.join(__dirname, "..", file), "utf8");
 test("Great Lakes ship tracker matches live search intent without changing the canonical", () => {
   const html = read("public/great-lakes-freighter-tracking/index.html");
 
-  assert.ok(html.includes("<title>Great Lakes Ship Tracker Live: Freighters &amp; AIS Map</title>"));
+  assert.ok(html.includes("<title>Great Lakes Ship Tracker Live: AIS Map | Chris Izworski</title>"));
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/great-lakes-freighter-tracking/">'));
   assert.ok(html.includes('id="freighter-tracker-answer"'));
   assert.ok(html.includes("Track Great Lakes Freighters Live"));
