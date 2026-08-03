@@ -7,12 +7,13 @@
     "audit:live": "node scripts/crawl-live.mjs",
     "benchmark:border": "node scripts/benchmark-border-crossing.mjs --check",
     "benchmark:beaches": "node scripts/benchmark-beach-report.mjs --check",
+    "benchmark:growth": "node scripts/benchmark-growth.mjs --check",
     "benchmark:seo": "node scripts/measure-discovery.mjs --check",
     "generate:beaches": "node scripts/generate-beach-pages.mjs",
     "prepare:source": "node scripts/prepare-source.mjs",
     "test": "node --test tests/*.test.js",
     "verify": "node scripts/verify-source.mjs",
-    "verify:all": "npm test && npm run verify && npm run benchmark:beaches",
+    "verify:all": "npm test && npm run verify && npm run benchmark:beaches && npm run benchmark:growth",
     "verify:production-ready": "node scripts/verify-production-ready.mjs"
   },
   "engines": {

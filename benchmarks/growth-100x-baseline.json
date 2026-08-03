@@ -1,0 +1,232 @@
+{
+  "benchmarkVersion": "1.1.0",
+  "baselineCreated": "2026-08-03",
+  "timezone": "America/Detroit",
+  "source": {
+    "type": "Google Search Console export",
+    "url": "https://docs.google.com/spreadsheets/d/10G1bscGWFzfURptcOAIkLrNtSRTOwuoKIKARZRYvIDU/edit",
+    "searchType": "Web",
+    "exportWindow": {
+      "start": "2026-02-12",
+      "end": "2026-08-01",
+      "days": 171
+    },
+    "note": "Property totals and page/query totals can differ because Search Console aggregates dimensions differently. Missing metrics are unknown, not zero."
+  },
+  "measurement": {
+    "fullWindow": {
+      "impressions": 55159,
+      "clicks": 851,
+      "ctr": 0.015428126,
+      "weightedAveragePosition": 12.48453997,
+      "dailyImpressions": 322.5672515,
+      "dailyClicks": 4.976608187
+    },
+    "current28Days": {
+      "start": "2026-07-05",
+      "end": "2026-08-01",
+      "days": 28,
+      "impressions": 21335,
+      "clicks": 284,
+      "ctr": 0.01331146,
+      "weightedAveragePosition": 11.94080267,
+      "dailyImpressions": 761.9642857,
+      "dailyClicks": 10.14285714
+    },
+    "previous28Days": {
+      "start": "2026-06-07",
+      "end": "2026-07-04",
+      "days": 28,
+      "impressions": 16758,
+      "clicks": 311,
+      "ctr": 0.0185583,
+      "weightedAveragePosition": 11.439315,
+      "dailyImpressions": 598.5,
+      "dailyClicks": 11.10714286
+    },
+    "currentVsPrevious": {
+      "impressionsPercent": 27.31232844,
+      "clicksPercent": -8.681672026,
+      "ctrPercent": -28.27195695,
+      "positionChange": 0.50148767
+    },
+    "current7Days": {
+      "impressions": 5450,
+      "clicks": 57,
+      "ctr": 0.010458716,
+      "weightedAveragePosition": 14.2226
+    },
+    "verifiedMaxDailyImpressions": 2056,
+    "unverifiedClaimedMaxDailyImpressions": 12000
+  },
+  "audience": {
+    "mobileShareOfImpressions": 0.6374,
+    "mobileShareOfClicks": 0.7309,
+    "unitedStatesShareOfVisibleImpressions": 0.9013,
+    "unitedStatesShareOfVisibleClicks": 0.9730,
+    "rootDomainShareOfPageImpressions": 0.95,
+    "pagesWithAtLeastOneClick": 88,
+    "visiblePageRows": 313,
+    "topTwoPageImpressionShare": 0.458,
+    "topTwoPageClickShare": 0.516,
+    "topTenPageImpressionShare": 0.692,
+    "topTenPageClickShare": 0.747
+  },
+  "clusterEvidence": [
+    {
+      "name": "Freighter View Farms authority page",
+      "path": "/chris-izworski-freighter-view-farms/",
+      "clicks": 0,
+      "impressions": 10,
+      "ctr": 0,
+      "averagePosition": 9.9,
+      "role": "Use first-party experience and internal links to strengthen the Michigan gardening cluster; do not treat this as a traffic driver yet."
+    },
+    {
+      "name": "Michigan birding tool",
+      "url": "https://birding.chrisizworski.com/",
+      "clicks": 5,
+      "impressions": 111,
+      "ctr": 0.045,
+      "averagePosition": 7.32,
+      "role": "Protect the strong existing CTR and expand qualified impressions through the Great Lakes birding guide and contextual links."
+    },
+    {
+      "name": "Great Lakes birding guide",
+      "path": "/great-lakes-birding/",
+      "clicks": 1,
+      "impressions": 74,
+      "ctr": 0.0135,
+      "averagePosition": 11.01,
+      "role": "Improve intent matching and route readers into the live birding tool and Saginaw Bay resources."
+    }
+  ],
+  "priorityPages": [
+    {
+      "path": "/northern-lights-michigan/",
+      "clicks": 341,
+      "impressions": 18461,
+      "ctr": 0.01847,
+      "averagePosition": 10.36,
+      "priority": "P0",
+      "job": "Answer whether the aurora may be visible tonight before client-side data loads."
+    },
+    {
+      "path": "/soo-locks/",
+      "clicks": 150,
+      "impressions": 11919,
+      "ctr": 0.01259,
+      "averagePosition": 9.41,
+      "priority": "P0",
+      "job": "Put today's ship-schedule and passage intent above the live map without republishing unlicensed vessel data."
+    },
+    {
+      "path": "/when-to-plant-tomatoes-michigan/",
+      "clicks": 14,
+      "impressions": 5479,
+      "ctr": 0.00256,
+      "averagePosition": 8.37,
+      "priority": "P0",
+      "job": "Use 2026 regional transplant dates in the title and first answer."
+    },
+    {
+      "path": "/michigan-frost-dates/",
+      "clicks": 3,
+      "impressions": 2651,
+      "ctr": 0.00113,
+      "averagePosition": 9.56,
+      "priority": "P0",
+      "job": "Lead with Michigan last-frost dates by city and the planting-calendar decision."
+    },
+    {
+      "path": "/saginaw-bay-ecology/",
+      "clicks": 9,
+      "impressions": 1671,
+      "ctr": 0.00539,
+      "averagePosition": 11.13,
+      "priority": "P1",
+      "job": "Answer inner- and outer-bay depth immediately, then support it with ecology and fishing context."
+    }
+  ],
+  "milestones": [
+    {
+      "name": "Day 90",
+      "impressionsPerDay": 2000,
+      "ctr": 0.025,
+      "monthlyGoogleClicks": 1500,
+      "commercialOutcome": "AdSense technical readiness and owner application decision"
+    },
+    {
+      "name": "Month 12",
+      "impressionsPerDay": 10000,
+      "ctr": 0.03,
+      "monthlyGoogleClicks": 9000,
+      "commercialOutcome": "10,000+ measured monthly pageviews and a repeatable display-ad baseline"
+    },
+    {
+      "name": "Month 24",
+      "impressionsPerDay": 50000,
+      "ctr": 0.0325,
+      "monthlyGoogleClicks": 48750,
+      "commercialOutcome": "Three months of ad and category data; sponsorship outreach becomes eligible"
+    },
+    {
+      "name": "100x north star",
+      "impressionsPerDay": 76196,
+      "ctr": 0.035,
+      "monthlyGoogleClicks": 80006,
+      "commercialOutcome": "Display ads plus post-proof sponsorship and product diversification"
+    }
+  ],
+  "revenueModel": {
+    "sequence": ["search growth", "Google AdSense", "post-proof sponsorships"],
+    "organicPageviewsPerGoogleClick": 1.25,
+    "totalTrafficUplift": 1.2,
+    "measuredMonthlyPageviews": null,
+    "measurementGap": "Search Console clicks are not pageviews. Record a complete 28-day pageview baseline before making an ad-revenue claim.",
+    "adsense": {
+      "googlePublishedMinimumTrafficRequirement": null,
+      "internalEconomicGate": {
+        "measuredMonthlyPageviews": 10000,
+        "minimumSearchCtr": 0.025,
+        "stableCoreWebVitalsDays": 28
+      },
+      "revenuePerThousandPageviewsScenarios": [3, 8, 15],
+      "activationRequirements": [
+        "Owner-approved and Google-approved AdSense account and site",
+        "Real publisher ID; never publish a placeholder",
+        "Privacy policy that matches the live ad configuration",
+        "Google-certified consent management for applicable visitors",
+        "ads.txt created only after the real publisher ID exists"
+      ]
+    },
+    "sponsorshipGate": {
+      "status": "deferred-until-proof",
+      "measuredMonthlyPageviews": 25000,
+      "consecutiveMonths": 3,
+      "minimumAdPerformanceHistoryMonths": 3
+    },
+    "modeledMonthlyScenarios": [
+      {"milestone": "Baseline", "modeledPageviews": 456, "displayAdRevenue": {"low": 1, "base": 4, "high": 7}, "sponsorRevenue": 0},
+      {"milestone": "Day 90", "modeledPageviews": 2250, "displayAdRevenue": {"low": 7, "base": 18, "high": 34}, "sponsorRevenue": 0},
+      {"milestone": "Month 12", "modeledPageviews": 13500, "displayAdRevenue": {"low": 41, "base": 108, "high": 203}, "sponsorRevenue": 0},
+      {"milestone": "Month 24", "modeledPageviews": 73125, "displayAdRevenue": {"low": 219, "base": 585, "high": 1097}, "sponsorRevenue": null},
+      {"milestone": "100x north star", "modeledPageviews": 120009, "displayAdRevenue": {"low": 360, "base": 960, "high": 1800}, "sponsorRevenue": null}
+    ],
+    "note": "Display-ad figures use $3, $8, and $15 page-RPM scenarios. They are editable models, not historical earnings or guarantees. Null sponsor revenue means eligible for owner-led pricing after proof, not assumed revenue."
+  },
+  "guardrails": {
+    "comparisonWindowDays": 28,
+    "leadingIndicatorWindowDays": 7,
+    "coreWebVitalsP75": {"lcpMillisecondsMax": 2500, "inpMillisecondsMax": 200, "clsMax": 0.1},
+    "organicClickStopLossPercent": -20,
+    "indexedPriorityPageStopLossPercent": -10,
+    "maximumRevenueConcentration": 0.75,
+    "measuredPageviewsRequiredForAdClaims": true,
+    "placeholderAdPublisherId": false,
+    "sponsorshipBeforeProofGate": false,
+    "automaticProductionMerge": false,
+    "massGeneratedCityPages": false,
+    "unlicensedNamedVesselData": false
+  }
+}

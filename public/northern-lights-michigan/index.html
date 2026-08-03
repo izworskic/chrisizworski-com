@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Northern Lights Michigan Forecast | Chris Izworski</title>
-<meta name="description" content="Check tonight's live Michigan aurora forecast using NOAA Kp and solar-wind data, then find dark-sky viewing locations across the Upper Peninsula.">
+<title>Northern Lights Michigan Tonight | Chris Izworski</title>
+<meta name="description" content="Check whether the northern lights may be visible in Michigan tonight using live NOAA Kp and solar-wind data, cloud checks, and dark-sky locations.">
 <link rel="canonical" href="https://chrisizworski.com/northern-lights-michigan/">
-<meta property="og:title" content="Northern Lights Michigan: Tonight's Live Aurora Forecast">
-<meta property="og:description" content="Live NOAA Kp gauge, solar wind data, interactive map of the best UP viewing locations, and geolocation-based aurora viewing recommendations.">
+<meta property="og:title" content="Northern Lights Michigan Tonight: Live NOAA Aurora Forecast">
+<meta property="og:description" content="A live Michigan aurora verdict, NOAA Kp and solar-wind data, and dark-sky viewing locations across the Upper Peninsula.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://chrisizworski.com/northern-lights-michigan/">
 <meta name="twitter:card" content="summary_large_image">
@@ -18,13 +18,14 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="/assets/growth-commercial.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski"},
     {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/northern-lights-michigan/","name":"Northern Lights Michigan: Live Aurora Forecast and Interactive Viewing Tool","description":"Live NOAA Kp forecast, solar wind data, and the interactive viewing-location map for Michigan and the Upper Peninsula.","url":"https://chrisizworski.com/northern-lights-michigan/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-07-20","inLanguage":"en-US"},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/northern-lights-michigan/","name":"Northern Lights Michigan Tonight: Live Aurora Forecast","description":"Live NOAA Kp forecast, solar wind data, and an immediate Michigan aurora viewing guide for tonight.","url":"https://chrisizworski.com/northern-lights-michigan/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-08-03","inLanguage":"en-US"},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Northern Lights Michigan","item":"https://chrisizworski.com/northern-lights-michigan/"}]}
   ]
 }
@@ -141,6 +142,8 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .map-section{margin:0 0 28px}
 .map-wrap{height:480px;border:1px solid #e0dbd2;border-radius:6px;overflow:hidden;position:relative;background:#0a1428}
 #auroraMap{width:100%;height:100%;background:#0a1428}
+.map-fallback{box-sizing:border-box;display:grid;place-content:center;gap:8px;padding:32px;text-align:center;color:#f6f3ec}
+.map-fallback a{color:#8edbb1}
 .leaflet-popup-content-wrapper{background:#0d3545;color:#fff;border-radius:4px;border:1px solid #2a4a6a}
 .leaflet-popup-content{margin:10px 14px;font-family:Georgia,serif;font-size:13px;line-height:1.6;color:#dfe9f0}
 .leaflet-popup-content b{color:#7bc8e8}
@@ -202,15 +205,17 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .gear-list .gi{padding:7px 0;border-bottom:1px dotted #e0dbd2;font-size:14px;line-height:1.7}
 .gear-list .gi:last-child{border-bottom:none}
 .gear-list .gi strong{color:#2c5f2d}
+.static-answer{background:#edf6f0;border-left:4px solid #2c5f2d;border-radius:0 5px 5px 0;padding:15px 17px;margin:16px 0 24px;color:#334239;font-size:14px;line-height:1.65}
 .footer{text-align:center;padding:24px;border-top:1px solid #e8e4dc;font-size:12px;color:#999;margin-top:48px}
 @media(max-width:640px){h1.page-title{font-size:26px}.body{padding:30px 16px 40px}h2.sh{font-size:18px}}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
+<script defer src="/assets/growth-cta.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How often can I see the aurora from Michigan?","acceptedAnswer":{"@type":"Answer","text":"From the Upper Peninsula: Minor displays multiple times per month during solar maximum years. Substantial displays roughly monthly. Major displays visible to the naked eye 3 to 6 times per year. From the Lower Peninsula: Substantial displays 4 to 8 times per year during solar max, fewer at solar minimum."}},{"@type":"Question","name":"What does Kp need to be for me to see aurora from where I am?","acceptedAnswer":{"@type":"Answer","text":"Rough rule of thumb: Kp 5 (G1) from the UP, Kp 6 (G2) from the northern LP, Kp 7 (G3) from central and southern LP, Kp 8 (G4) for anywhere south of Detroit. The geolocation tool above calculates your specific threshold based on geomagnetic latitude."}},{"@type":"Question","name":"Why is Bz important?","acceptedAnswer":{"@type":"Answer","text":"The Bz is the north-south component of the solar wind's magnetic field. When Bz is strongly southward (negative), it couples with Earth's magnetic field and allows energy transfer into the magnetosphere, driving aurora. A G1 storm (Kp 5) with Bz of negative 15 nT will produce far more spectacular aurora than a G1 storm with Bz of zero. Watch the Bz panel above as your most reliable short-term indicator."}},{"@type":"Question","name":"How accurate is the 3-day Kp forecast?","acceptedAnswer":{"@type":"Answer","text":"The 24-hour forecast is reasonably accurate. The 48 and 72-hour forecasts are less reliable. The NOAA 30-minute forecast (linked in external resources) is the most accurate near-term tool. Solar wind data (Bz, speed) is the leading indicator of aurora activity at the present moment."}},{"@type":"Question","name":"Can I see colors with my eyes?","acceptedAnswer":{"@type":"Answer","text":"At Kp 5 or higher, yes. The classic green band is the most visible color to the naked eye. Red and purple may show in photos but be subtle to the eye. At Kp 7+ the colors become unambiguous."}},{"@type":"Question","name":"Will the notification feature work for me?","acceptedAnswer":{"@type":"Answer","text":"If you enable notifications using the button at the top of the page, your browser will alert you when the live Kp data crosses 5 (G1 storm threshold) while you have the page open. For background alerts when the page is not open, third-party services like SpaceWeatherLive or AuroraAlerts apps are required."}},{"@type":"Question","name":"Is fall a good time to see the aurora in Michigan?","acceptedAnswer":{"@type":"Answer","text":"Yes, and specifically the weeks around the September equinox. Geomagnetic activity runs statistically higher near both equinoxes, a pattern called the Russell-McPherron effect, and fall brings longer nights than summer. In the Upper Peninsula that window also overlaps peak fall color. The tradeoff is cloud cover, which builds along the Lake Superior shoreline while the water is still warm."}}]}</script>
 </head>
-<body>
+<body data-analytics-page="northern-lights-michigan">
 <div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
 <div class="nav">
 <a href="/">Home</a><a href="/about/">About</a><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/great-lakes/">Great Lakes</a><a href="/great-lakes-gazette/">Gazette</a><a href="/blog/">Blog</a>
@@ -224,8 +229,10 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 <div class="body">
 <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/tools/">Tools</a> &rsaquo; Northern Lights Michigan</div>
 
-<h1 class="page-title">Northern Lights in Michigan</h1>
-<p class="sub">Live NOAA aurora forecast, interactive viewing-location map, and your personalized viewing odds for the Upper Peninsula and Lake Superior</p>
+<h1 class="page-title">Northern Lights in Michigan Tonight</h1>
+<p class="sub">Live NOAA aurora forecast, immediate Kp guidance, and dark-sky viewing locations for the Upper Peninsula and Lower Peninsula</p>
+
+<div class="static-answer" id="aurora-static-answer"><strong>Use this Michigan guide while the live NOAA verdict updates:</strong> Kp below 5 usually means low odds; Kp 5 to 6 favors dark northern Upper Peninsula locations; Kp 7 or higher can bring the aurora farther into the Lower Peninsula when skies are clear. Check cloud cover and the official NOAA watch before driving, and never treat a forecast as a visibility guarantee.</div>
 
 <p>The aurora borealis is visible from Michigan more often than most Michiganders realize. The Upper Peninsula, particularly the Keweenaw Peninsula and the Lake Superior north shore, sees minor displays multiple times per month during the active years of the solar cycle. We are still within the high-activity window of Solar Cycle 25, which means aurora viewing odds are as good as they will be for another decade.</p>
 
@@ -240,13 +247,13 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
         <circle class="gauge-fg" id="gaugeArc" cx="120" cy="120" r="100" stroke="#5fc88f" transform="rotate(-90 120 120)" stroke-dasharray="0 628"></circle>
         <text class="gauge-label" x="120" y="92">Peak Kp · 24h</text>
         <text class="gauge-num" id="gaugeNum" x="120" y="128">--</text>
-        <text class="gauge-status" id="gaugeStatus" x="120" y="158">loading</text>
+        <text class="gauge-status" id="gaugeStatus" x="120" y="158">guide</text>
       </svg>
     </div>
     <div class="hero-info">
       <div class="tonight-label">Tonight in Michigan</div>
-      <h2 class="tonight-headline" id="tonightHeadline" style="margin:0 0 10px;border:0;padding:0">Loading NOAA SWPC forecast...</h2>
-      <div class="tonight-detail" id="tonightDetail">Fetching planetary K-index forecast, solar wind magnetic field data, and aurora oval position.</div>
+      <h2 class="tonight-headline" id="tonightHeadline" style="margin:0 0 10px;border:0;padding:0">Checking tonight's live NOAA aurora forecast</h2>
+      <div class="tonight-detail" id="tonightDetail">Until the update completes: Kp 5 to 6 favors dark Upper Peninsula locations; Kp 7 or higher can reach farther south when skies are clear.</div>
       <div class="hero-action-row">
         <button class="hero-btn primary" id="findBtn">Find viewing for my location</button>
         <button class="hero-btn" id="notifyBtn">Alert me when Kp 5+</button>
@@ -266,6 +273,12 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 
 <!-- Smart CTA -->
 <div class="smart-cta" id="smartCta"></div>
+
+<aside class="commercial-invite" aria-label="Related Great Lakes night and nature resources">
+  <p class="commercial-eyebrow">Plan more than tonight's sky</p>
+  <p>Pair the aurora forecast with Great Lakes migration timing, the live Michigan birding companion, and Upper Peninsula planning resources.</p>
+  <p class="commercial-actions"><a href="/great-lakes-birding/" data-growth-cta="aurora-birding-guide">Explore Great Lakes birding</a><a href="https://birding.chrisizworski.com/" data-growth-cta="aurora-live-birding">Open the live birding tool</a><a href="/lake-superior-circle-tour/" data-growth-cta="aurora-circle-tour">Plan a Lake Superior route</a></p>
+</aside>
 
 <!-- 3-day visual forecast -->
 <div class="forecast-chart-wrap">
@@ -590,6 +603,13 @@ function updateSmartCta(maxKp){
 
 // === Map ===
 function initMap(){
+  if (typeof window.L === 'undefined') {
+    const map = document.getElementById('auroraMap');
+    map.classList.add('map-fallback');
+    map.setAttribute('role', 'status');
+    map.innerHTML = '<strong>Interactive map temporarily unavailable.</strong><span>The ranked viewing-location guide below still works. You can also open the <a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener">official NOAA aurora forecast</a>.</span>';
+    return false;
+  }
   auroraMap = L.map('auroraMap', {scrollWheelZoom:false}).setView([46.5, -87.0], 6);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap &copy; CARTO',
@@ -604,6 +624,7 @@ function initMap(){
     marker.bindPopup('<b>'+loc.name+'</b><br>Bortle '+loc.bortle+' &middot; '+loc.region+'<br>'+loc.desc+'<br><br><i>Kp threshold from this site: '+kpThreshold(loc.lat)+'</i>');
     markers.push({marker,loc});
   });
+  return true;
 }
 
 // === Geolocation handler ===
@@ -634,10 +655,12 @@ function findMyViewing(){
     btn.textContent = 'Update location';
     btn.disabled = false;
     // Add user marker to map
-    if (userMarker) userMarker.remove();
-    userMarker = L.circleMarker([lat,lng], {radius:9, fillColor:'#5fc88f', color:'#fff', weight:2, fillOpacity:.95}).addTo(auroraMap);
-    userMarker.bindPopup('<b>Your location</b><br>'+lat.toFixed(3)+', '+lng.toFixed(3)+'<br>Kp '+kpThreshold(lat)+'+ needed for aurora overhead');
-    auroraMap.fitBounds([[lat,lng]].concat(LOCATIONS.map(l=>[l.lat,l.lng])).reduce((b,p)=>(b.push(p),b),[]), {padding:[40,40]});
+    if (window.L && auroraMap) {
+      if (userMarker) userMarker.remove();
+      userMarker = L.circleMarker([lat,lng], {radius:9, fillColor:'#5fc88f', color:'#fff', weight:2, fillOpacity:.95}).addTo(auroraMap);
+      userMarker.bindPopup('<b>Your location</b><br>'+lat.toFixed(3)+', '+lng.toFixed(3)+'<br>Kp '+kpThreshold(lat)+'+ needed for aurora overhead');
+      auroraMap.fitBounds([[lat,lng]].concat(LOCATIONS.map(l=>[l.lat,l.lng])).reduce((b,p)=>(b.push(p),b),[]), {padding:[40,40]});
+    }
   }, err=>{
     btn.textContent = 'Location denied';
     btn.disabled = false;

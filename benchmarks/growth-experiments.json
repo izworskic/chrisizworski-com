@@ -1,0 +1,99 @@
+{
+  "ledgerVersion": "1.1.0",
+  "created": "2026-08-03",
+  "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
+  "experiments": [
+    {
+      "id": "2026-08-03-tomato-snippet",
+      "path": "/when-to-plant-tomatoes-michigan/",
+      "hypothesis": "A year-specific regional title and direct transplant-date first answer will lift CTR from 0.26% toward 2.0% without changing the canonical.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {"impressions": 5479, "clicks": 14, "ctr": 0.00256, "averagePosition": 8.37},
+      "target": {"ctr": 0.02},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Canonical, structured data, or indexability changes unexpectedly."
+    },
+    {
+      "id": "2026-08-03-frost-snippet",
+      "path": "/michigan-frost-dates/",
+      "hypothesis": "A city-and-calendar title plus an immediate statewide range will lift CTR from 0.11% toward 2.0%.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {"impressions": 2651, "clicks": 3, "ctr": 0.00113, "averagePosition": 9.56},
+      "target": {"ctr": 0.02},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "City table, filters, canonical, or indexability regress."
+    },
+    {
+      "id": "2026-08-03-saginaw-depth-intent",
+      "path": "/saginaw-bay-ecology/",
+      "hypothesis": "Matching the depth query in the title, H1, FAQ, and first answer will lift CTR from 0.54% toward 1.5%.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {"impressions": 1671, "clicks": 9, "ctr": 0.00539, "averagePosition": 11.13},
+      "target": {"ctr": 0.015},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Factual source links, canonical, or existing ecology query coverage regress."
+    },
+    {
+      "id": "2026-08-03-aurora-resilient-answer",
+      "path": "/northern-lights-michigan/",
+      "hypothesis": "A useful non-JavaScript tonight guide and intent-led title will lift CTR and prevent a loading-only first answer.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {"impressions": 18461, "clicks": 341, "ctr": 0.01847, "averagePosition": 10.36},
+      "target": {"ctr": 0.025},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "NOAA parsing, map behavior, or existing manual fallback regresses."
+    },
+    {
+      "id": "2026-08-03-soo-schedule-intent",
+      "path": "/soo-locks/",
+      "hypothesis": "Putting today's passage sources above the map will better satisfy schedule intent and lift CTR toward 2.5%.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {"impressions": 11919, "clicks": 150, "ctr": 0.01259, "averagePosition": 9.41},
+      "target": {"ctr": 0.025},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Named-vessel data is republished without permission or the live map regresses."
+    },
+    {
+      "id": "2026-08-03-fvf-gardening-authority",
+      "path": "/chris-izworski-freighter-view-farms/",
+      "hypothesis": "A clearer Zone 6a title, first-party experience framing, and contextual links into the gardening hub, tomato guide, and frost tool will grow qualified impressions and send measurable readers deeper into the gardening cluster.",
+      "primaryMetric": "Search Console impressions and aggregate internal CTA clicks",
+      "baseline": {"impressions": 10, "clicks": 0, "ctr": 0, "averagePosition": 9.9},
+      "target": {"impressions": 100, "internalCtaClicks": 10},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "First-party claims, canonicals, or links to the independent Freighter View Farms blog become inaccurate."
+    },
+    {
+      "id": "2026-08-03-great-lakes-birding-cluster",
+      "path": "/great-lakes-birding/",
+      "hypothesis": "A migration-and-hotspot title, direct first answer, and prominent bridge to the live birding tool will lift guide CTR and expand impressions without weakening the birding subdomain's existing 4.5% CTR.",
+      "primaryMetric": "Search Console page impressions, CTR, and aggregate clicks to the live birding tool",
+      "baseline": {"impressions": 74, "clicks": 1, "ctr": 0.0135, "averagePosition": 11.01},
+      "supportingBaseline": {"url": "https://birding.chrisizworski.com/", "impressions": 111, "clicks": 5, "ctr": 0.045, "averagePosition": 7.32},
+      "target": {"impressions": 250, "ctr": 0.025, "liveToolClicks": 15},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "The guide loses indexability, the live-tool destination changes, or birding-subdomain CTR falls below 2.5% in a comparable 28-day window."
+    }
+  ]
+}
