@@ -254,7 +254,7 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/connect/</loc>
-    <lastmod>2026-04-28</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -344,7 +344,7 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/michigan-frost-dates/</loc>
-    <lastmod>2026-07-02</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -386,7 +386,7 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/saginaw-bay-ecology/</loc>
-    <lastmod>2026-05-11</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -422,7 +422,7 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/when-to-plant-tomatoes-michigan/</loc>
-    <lastmod>2026-04-28</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -440,13 +440,13 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/soo-locks/</loc>
-    <lastmod>2026-07-28</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://chrisizworski.com/northern-lights-michigan/</loc>
-    <lastmod>2026-07-20</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
@@ -587,5 +587,17 @@
     <lastmod>2026-07-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/advertise/</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/disclosure/</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>

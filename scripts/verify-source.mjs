@@ -30,11 +30,27 @@ const intentionalChanges = new Set([
   "/lake-superior-circle-tour/",
   "/northern-lights-michigan/",
   "/soo-locks/",
+  "/when-to-plant-tomatoes-michigan/",
+  "/michigan-frost-dates/",
+  "/saginaw-bay-ecology/",
+  "/connect/",
   "/projects/",
   "/sitemap.xml",
   "/image-sitemap.xml",
   "/llms.txt",
   "/robots.txt",
+]);
+
+// These files were already committed on main after the crawl manifest was captured.
+// Pin their exact source hashes so the known drift passes without broadly exempting
+// the routes from future parity checks.
+const committedDriftHashes = new Map([
+  ["/au-sable-river/", "99499a50cf3e4f276e4e6fcdde2def5a77be75130d44aa3873549836bf942098"],
+  ["/edmund-fitzgerald/", "2152a6ecf6c9ef063f145629471c7d8e797f85c0afb0807fcb611101c056158c"],
+  ["/heirloom-seed-saving-guide/", "cc9a0e6b16d134edb5f024985931a9260c18347f48b42ef30b8c832d8c5daaf4"],
+  ["/michigan-paddling/pere-marquette/", "e742bf252a6f4f55c4600484c314269d3efbc1af51e7acee6f4d114a3fc84944"],
+  ["/sitemap-reputation.xml", "f12f909b7fd67a864bb957e544a6901455924fa6452b815fcb6c191a9b7c6034"],
+  ["/zone-6a-planting-calendar/", "6d3fd834dd15dd9e3098607ba88f75d0d2eec15e089f69259b3bb8e25c7d0580"],
 ]);
 
 function sha256(value) {
@@ -60,6 +76,7 @@ for (const record of canonicalRecords) {
   try {
     const body = await readFile(target);
     if (intentionalChanges.has(record.pathname)) continue;
+    if (committedDriftHashes.get(record.pathname) === sha256(body)) continue;
     const expectedHash = record.headers?.["content-type"]?.includes("text/html")
       ? record.fingerprint.cleanBodySha256
       : record.rawBodySha256;
@@ -121,8 +138,8 @@ for (const [route, lastmod] of Object.entries({
   "mackinac-bridge-driver-assistance/": "2026-07-27",
   "mackinac-bridge-rv-trailer-wind-rules/": "2026-07-27",
   "mackinac-bridge-tolls/": "2026-07-27",
-  "soo-locks/": "2026-07-28",
-  "northern-lights-michigan/": "2026-07-20",
+  "soo-locks/": "2026-08-03",
+  "northern-lights-michigan/": "2026-08-03",
   "great-lakes-buoys/": "2026-07-20",
   "great-lakes-beaches/": "2026-07-31",
   "lake-superior-circle-tour/": "2026-07-28",

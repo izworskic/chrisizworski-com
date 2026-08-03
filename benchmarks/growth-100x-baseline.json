@@ -1,0 +1,182 @@
+{
+  "benchmarkVersion": "1.0.0",
+  "baselineCreated": "2026-08-03",
+  "timezone": "America/Detroit",
+  "source": {
+    "type": "Google Search Console export",
+    "url": "https://docs.google.com/spreadsheets/d/10G1bscGWFzfURptcOAIkLrNtSRTOwuoKIKARZRYvIDU/edit",
+    "searchType": "Web",
+    "exportWindow": {
+      "start": "2026-02-12",
+      "end": "2026-08-01",
+      "days": 171
+    },
+    "note": "Property totals and page/query totals can differ because Search Console aggregates dimensions differently. Missing metrics are unknown, not zero."
+  },
+  "measurement": {
+    "fullWindow": {
+      "impressions": 55159,
+      "clicks": 851,
+      "ctr": 0.015428126,
+      "weightedAveragePosition": 12.48453997,
+      "dailyImpressions": 322.5672515,
+      "dailyClicks": 4.976608187
+    },
+    "current28Days": {
+      "start": "2026-07-05",
+      "end": "2026-08-01",
+      "days": 28,
+      "impressions": 21335,
+      "clicks": 284,
+      "ctr": 0.01331146,
+      "weightedAveragePosition": 11.94080267,
+      "dailyImpressions": 761.9642857,
+      "dailyClicks": 10.14285714
+    },
+    "previous28Days": {
+      "start": "2026-06-07",
+      "end": "2026-07-04",
+      "days": 28,
+      "impressions": 16758,
+      "clicks": 311,
+      "ctr": 0.0185583,
+      "weightedAveragePosition": 11.439315,
+      "dailyImpressions": 598.5,
+      "dailyClicks": 11.10714286
+    },
+    "currentVsPrevious": {
+      "impressionsPercent": 27.31232844,
+      "clicksPercent": -8.681672026,
+      "ctrPercent": -28.27195695,
+      "positionChange": 0.50148767
+    },
+    "current7Days": {
+      "impressions": 5450,
+      "clicks": 57,
+      "ctr": 0.010458716,
+      "weightedAveragePosition": 14.2226
+    },
+    "verifiedMaxDailyImpressions": 2056,
+    "unverifiedClaimedMaxDailyImpressions": 12000
+  },
+  "audience": {
+    "mobileShareOfImpressions": 0.6374,
+    "mobileShareOfClicks": 0.7309,
+    "unitedStatesShareOfVisibleImpressions": 0.9013,
+    "unitedStatesShareOfVisibleClicks": 0.9730,
+    "rootDomainShareOfPageImpressions": 0.95,
+    "pagesWithAtLeastOneClick": 88,
+    "visiblePageRows": 313,
+    "topTwoPageImpressionShare": 0.458,
+    "topTwoPageClickShare": 0.516,
+    "topTenPageImpressionShare": 0.692,
+    "topTenPageClickShare": 0.747
+  },
+  "priorityPages": [
+    {
+      "path": "/northern-lights-michigan/",
+      "clicks": 341,
+      "impressions": 18461,
+      "ctr": 0.01847,
+      "averagePosition": 10.36,
+      "priority": "P0",
+      "job": "Answer whether the aurora may be visible tonight before client-side data loads."
+    },
+    {
+      "path": "/soo-locks/",
+      "clicks": 150,
+      "impressions": 11919,
+      "ctr": 0.01259,
+      "averagePosition": 9.41,
+      "priority": "P0",
+      "job": "Put today's ship-schedule and passage intent above the live map without republishing unlicensed vessel data."
+    },
+    {
+      "path": "/when-to-plant-tomatoes-michigan/",
+      "clicks": 14,
+      "impressions": 5479,
+      "ctr": 0.00256,
+      "averagePosition": 8.37,
+      "priority": "P0",
+      "job": "Use 2026 regional transplant dates in the title and first answer."
+    },
+    {
+      "path": "/michigan-frost-dates/",
+      "clicks": 3,
+      "impressions": 2651,
+      "ctr": 0.00113,
+      "averagePosition": 9.56,
+      "priority": "P0",
+      "job": "Lead with Michigan last-frost dates by city and the planting-calendar decision."
+    },
+    {
+      "path": "/saginaw-bay-ecology/",
+      "clicks": 9,
+      "impressions": 1671,
+      "ctr": 0.00539,
+      "averagePosition": 11.13,
+      "priority": "P1",
+      "job": "Answer inner- and outer-bay depth immediately, then support it with ecology and fishing context."
+    }
+  ],
+  "milestones": [
+    {
+      "name": "Day 90",
+      "impressionsPerDay": 2000,
+      "ctr": 0.025,
+      "monthlyGoogleClicks": 1500,
+      "commercialOutcome": "First $500 sponsor pilot"
+    },
+    {
+      "name": "Month 12",
+      "impressionsPerDay": 10000,
+      "ctr": 0.03,
+      "monthlyGoogleClicks": 9000,
+      "commercialOutcome": "Repeatable multi-stream monthly revenue"
+    },
+    {
+      "name": "Month 24",
+      "impressionsPerDay": 50000,
+      "ctr": 0.0325,
+      "monthlyGoogleClicks": 48750,
+      "commercialOutcome": "Premium ads plus sponsor portfolio"
+    },
+    {
+      "name": "100x north star",
+      "impressionsPerDay": 76196,
+      "ctr": 0.035,
+      "monthlyGoogleClicks": 80006,
+      "commercialOutcome": "$10,000+ modeled monthly net-contribution path"
+    }
+  ],
+  "revenueModel": {
+    "organicPageviewsPerGoogleClick": 1.25,
+    "totalTrafficUplift": 1.2,
+    "offers": [
+      {"name": "Founding tool sponsor", "price": 500, "billing": "monthly"},
+      {"name": "Category sponsor", "price": 1250, "billing": "monthly"},
+      {"name": "Great Lakes network sponsor", "price": 2500, "billing": "monthly"},
+      {"name": "Michigan planting calendar", "price": 19, "billing": "one-time"},
+      {"name": "Seasonal data/media brief", "price": 249, "billing": "one-time"}
+    ],
+    "modeledMonthlyScenarios": [
+      {"milestone": "Baseline", "pageviews": 456, "grossRevenue": 3, "cost": 50, "netContribution": -47},
+      {"milestone": "Day 90", "pageviews": 2250, "grossRevenue": 538, "cost": 250, "netContribution": 288},
+      {"milestone": "Month 12", "pageviews": 13500, "grossRevenue": 2128, "cost": 750, "netContribution": 1378},
+      {"milestone": "Month 24", "pageviews": 73125, "grossRevenue": 8791, "cost": 2500, "netContribution": 6291},
+      {"milestone": "100x north star", "pageviews": 120009, "grossRevenue": 14740, "cost": 4000, "netContribution": 10740}
+    ],
+    "note": "These are editable scenarios, not historical earnings or guarantees."
+  },
+  "guardrails": {
+    "comparisonWindowDays": 28,
+    "leadingIndicatorWindowDays": 7,
+    "coreWebVitalsP75": {"lcpMillisecondsMax": 2500, "inpMillisecondsMax": 200, "clsMax": 0.1},
+    "organicClickStopLossPercent": -20,
+    "indexedPriorityPageStopLossPercent": -10,
+    "maximumRevenueConcentration": 0.75,
+    "automaticProductionMerge": false,
+    "massGeneratedCityPages": false,
+    "unlicensedNamedVesselData": false
+  }
+}

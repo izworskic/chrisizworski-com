@@ -1,0 +1,72 @@
+{
+  "ledgerVersion": "1.0.0",
+  "created": "2026-08-03",
+  "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
+  "experiments": [
+    {
+      "id": "2026-08-03-tomato-snippet",
+      "path": "/when-to-plant-tomatoes-michigan/",
+      "hypothesis": "A year-specific regional title and direct transplant-date first answer will lift CTR from 0.26% toward 2.0% without changing the canonical.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {"impressions": 5479, "clicks": 14, "ctr": 0.00256, "averagePosition": 8.37},
+      "target": {"ctr": 0.02},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Canonical, structured data, or indexability changes unexpectedly."
+    },
+    {
+      "id": "2026-08-03-frost-snippet",
+      "path": "/michigan-frost-dates/",
+      "hypothesis": "A city-and-calendar title plus an immediate statewide range will lift CTR from 0.11% toward 2.0%.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {"impressions": 2651, "clicks": 3, "ctr": 0.00113, "averagePosition": 9.56},
+      "target": {"ctr": 0.02},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "City table, filters, canonical, or indexability regress."
+    },
+    {
+      "id": "2026-08-03-saginaw-depth-intent",
+      "path": "/saginaw-bay-ecology/",
+      "hypothesis": "Matching the depth query in the title, H1, FAQ, and first answer will lift CTR from 0.54% toward 1.5%.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {"impressions": 1671, "clicks": 9, "ctr": 0.00539, "averagePosition": 11.13},
+      "target": {"ctr": 0.015},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Factual source links, canonical, or existing ecology query coverage regress."
+    },
+    {
+      "id": "2026-08-03-aurora-resilient-answer",
+      "path": "/northern-lights-michigan/",
+      "hypothesis": "A useful non-JavaScript tonight guide and intent-led title will lift CTR and prevent a loading-only first answer.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {"impressions": 18461, "clicks": 341, "ctr": 0.01847, "averagePosition": 10.36},
+      "target": {"ctr": 0.025},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "NOAA parsing, map behavior, or existing manual fallback regresses."
+    },
+    {
+      "id": "2026-08-03-soo-schedule-intent",
+      "path": "/soo-locks/",
+      "hypothesis": "Putting today's passage sources above the map will better satisfy schedule intent and lift CTR toward 2.5%.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {"impressions": 11919, "clicks": 150, "ctr": 0.01259, "averagePosition": 9.41},
+      "target": {"ctr": 0.025},
+      "status": "ready-for-review",
+      "releaseDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Named-vessel data is republished without permission or the live map regresses."
+    }
+  ]
+}

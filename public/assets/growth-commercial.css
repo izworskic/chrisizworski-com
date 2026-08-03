@@ -1,0 +1,25 @@
+.commercial-invite{
+  margin:28px 0;
+  padding:17px 19px;
+  border:1px solid #d7e3d7;
+  border-left:4px solid #2c5f2d;
+  border-radius:4px;
+  background:#f7fbf7;
+  color:#263328;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.commercial-invite .commercial-eyebrow{
+  margin:0 0 4px;
+  color:#2c5f2d;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.1em;
+  line-height:1.4;
+  text-transform:uppercase;
+}
+.commercial-invite p{margin:0 0 10px;color:#344038;font-size:14px;line-height:1.6}
+.commercial-invite p:last-child{margin-bottom:0}
+.commercial-invite a{font-weight:700;color:#2c5f2d;text-decoration:underline;text-underline-offset:2px}
+.commercial-invite .commercial-actions{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.commercial-invite .commercial-policy{font-size:12px;color:#667069}
+@media(max-width:640px){.commercial-invite{padding:15px 16px}}
