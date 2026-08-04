@@ -9,6 +9,15 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // ice section internal linking pass, Aug 4 2026. The Michigan Ice Report moved
+  // onto the hub with exactly one inbound internal link (/tools/), which is thin
+  // for a section that has to rank by December. These six add contextual links.
+  "/",
+  "/great-lakes/",
+  "/great-lakes-buoys/",
+  "/great-lakes-freighter-tracking/",
+  "/saginaw-bay-ecology/",
+  "/soo-locks/",
   // brand-entity + SERP-length pass, Aug 3 2026
   "/ai/",
   "/blog/",
@@ -224,8 +233,9 @@ for (const relativePath of discoveryPages) {
 }
 
 const greatLakesHub = await readFile(path.join(publicRoot, "great-lakes", "index.html"), "utf8");
-if ((greatLakesHub.match(/data-featured-tool=/g) || []).length !== 8) {
-  failures.push("Great Lakes hub does not contain exactly eight featured live tools");
+// 9 since Aug 4 2026: the Michigan Ice Report card was added to the live grid.
+if ((greatLakesHub.match(/data-featured-tool=/g) || []).length !== 9) {
+  failures.push("Great Lakes hub does not contain exactly nine featured live tools");
 }
 const historySection = greatLakesHub.match(/<h2 class="sh">History and Heritage<\/h2>([\s\S]*?)<h2 class="sh">/)?.[1] || "";
 if (/\/(?:soo-locks|northern-lights-michigan|great-lakes-buoys)\//.test(historySection)) {
