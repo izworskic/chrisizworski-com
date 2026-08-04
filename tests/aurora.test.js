@@ -97,9 +97,19 @@ test("regional verdicts stay conditional instead of promising visibility", () =>
 
 test("aurora endpoint combines official NOAA sources with CDN caching", async () => {
   const originalFetch = global.fetch;
+  // The handler filters forecast rows against the real clock, so a fixture with
+  // hardcoded dates only passes on the day it was written. Build the rows relative
+  // to now: one just-observed, then peaks inside the 24h and 72h windows.
+  const iso = (hours) => new Date(Date.now() + hours * 3_600_000).toISOString().replace(/\.\d+Z$/, "");
+  const relativeKpForecast = [
+    { time_tag: iso(-2), kp: 3.33, observed: "observed" },
+    { time_tag: iso(3), kp: 4.67, observed: "predicted" },
+    { time_tag: iso(15), kp: 6.0, observed: "predicted", noaa_scale: "G2" },
+    { time_tag: iso(40), kp: 4.0, observed: "predicted" },
+  ];
   global.fetch = async (url) => {
     const value = String(url);
-    if (value.includes("forecast.json")) return new Response(JSON.stringify(kpForecast), { status: 200 });
+    if (value.includes("forecast.json")) return new Response(JSON.stringify(relativeKpForecast), { status: 200 });
     if (value.endsWith("planetary-k-index.json")) return new Response(JSON.stringify(currentKp), { status: 200 });
     if (value.includes("mag-field")) return new Response(JSON.stringify(magnetic), { status: 200 });
     if (value.includes("wind-speed")) return new Response(JSON.stringify(speed), { status: 200 });
