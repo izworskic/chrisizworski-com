@@ -17,9 +17,6 @@
     "api/beaches.js": {
       "maxDuration": 25
     },
-    "api/**/*.js": {
-      "maxDuration": 10
-    },
     "api/fall-color-conditions.js": {
       "maxDuration": 30
     },
@@ -34,6 +31,9 @@
     },
     "api/fall-color-rss.js": {
       "maxDuration": 15
+    },
+    "api/**/*.js": {
+      "maxDuration": 10
     }
   },
   "redirects": [
