@@ -17,20 +17,8 @@
     "api/beaches.js": {
       "maxDuration": 25
     },
-    "api/fall-color-conditions.js": {
-      "maxDuration": 30
-    },
-    "api/fall-color-report.js": {
-      "maxDuration": 15
-    },
-    "api/fall-color-cron-report.js": {
+    "api/fall-color.js": {
       "maxDuration": 60
-    },
-    "api/fall-color-sitemap.js": {
-      "maxDuration": 10
-    },
-    "api/fall-color-rss.js": {
-      "maxDuration": 15
     },
     "api/**/*.js": {
       "maxDuration": 10
@@ -154,18 +142,26 @@
   ],
   "crons": [
     {
-      "path": "/api/fall-color-cron-report",
+      "path": "/api/fall-color?view=cron",
       "schedule": "0 11 * * *"
     }
   ],
   "rewrites": [
     {
+      "source": "/api/fall-color-conditions",
+      "destination": "/api/fall-color?view=conditions"
+    },
+    {
+      "source": "/api/fall-color-report",
+      "destination": "/api/fall-color?view=report"
+    },
+    {
       "source": "/fall-color/rss.xml",
-      "destination": "/api/fall-color-rss"
+      "destination": "/api/fall-color?view=rss"
     },
     {
       "source": "/fall-color/sitemap.xml",
-      "destination": "/api/fall-color-sitemap"
+      "destination": "/api/fall-color?view=sitemap"
     }
   ]
 }
