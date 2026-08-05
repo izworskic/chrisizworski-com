@@ -8,7 +8,7 @@
 <link rel="canonical" href="https://chrisizworski.com/fall-color/" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 <meta name="author" content="Chris Izworski" />
-<meta name="theme-color" content="#14110d" />
+<meta name="theme-color" content="#F5EEDF" />
 <meta name="geo.region" content="US-MI" />
 <meta name="geo.placename" content="Michigan" />
 <meta name="geo.position" content="44.9;-85.4" />
@@ -380,32 +380,32 @@
 </script>
 <style>
   :root{
-    --bg:#14110d; --panel:#1d1812; --panel2:#191510; --line:rgba(236,227,210,0.10);
-    --bone:#ece3d2; --soft:#cabfa9; --muted:#968c7d;
-    --gold:#c6a463; --amber:#cf9b54; --rust:#b06a43; --maple:#a8472f; --russet:#8a5a38;
-    --moss:#7d8a5e; --green:#5f7a4a; --water:#6f9aa0; --rain:#6f8a9a; --snow:#b9c4cc; --cloud:#8a8378;
+    --bg:#F5EEDF; --panel:#FFFCF5; --panel2:#EFE5D2; --line:#DFD1B4;
+    --ink:#2A2018; --body:#4B3F32; --muted:#726351;
+    --gold:#8E6410; --amber:#9E5F13; --rust:#9C4E27; --maple:#8E301C; --russet:#75512F;
+    --moss:#5A6B3A; --green:#4A6633; --water:#2A6070; --rain:#3E6070; --snow:#5B6B74; --cloud:#7C7263;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--bone);
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
     font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
     font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;font-feature-settings:"liga","kern"}
   .serif{font-family:"Fraunces",Georgia,'Times New Roman',serif}
   .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
   .wrap{max-width:680px;margin:0 auto;padding:34px 20px 64px}
   a{color:var(--water);text-underline-offset:2px}
-  h1{font-family:"Fraunces",Georgia,serif;font-weight:430;font-size:32px;line-height:1.05;letter-spacing:-.01em;margin:0;color:var(--bone)}
+  h1{font-family:"Fraunces",Georgia,serif;font-weight:430;font-size:32px;line-height:1.05;letter-spacing:-.01em;margin:0;color:var(--ink)}
   .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
-  .sub{color:var(--soft);font-size:15.5px;margin-top:10px;font-style:italic;font-family:"Fraunces",Georgia,serif;font-weight:400}
+  .sub{color:var(--body);font-size:15.5px;margin-top:10px;font-style:italic;font-family:"Fraunces",Georgia,serif;font-weight:400}
   .row{display:flex;gap:14px;align-items:flex-start;justify-content:space-between}
   .tag{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;padding:3px 7px;border-radius:4px;font-weight:600}
   .tabs{display:flex;gap:7px;flex-wrap:wrap;margin:26px 0 20px}
   .tab{padding:9px 14px;font-size:12.5px;letter-spacing:.02em;border-radius:999px;cursor:pointer;
-    background:transparent;color:var(--soft);border:1px solid var(--line);transition:.2s}
-  .tab:hover{color:var(--bone);border-color:rgba(236,227,210,.2)}
-  .tab.on{background:rgba(236,227,210,.92);color:#1a160f;border-color:transparent}
+    background:transparent;color:var(--body);border:1px solid var(--line);transition:.2s}
+  .tab:hover{color:var(--ink);border-color:rgba(236,227,210,.2)}
+  .tab.on{background:rgba(236,227,210,.92);color:#EFE5D2;border-color:transparent}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:16px}
   .pad{padding:20px}
-  .muted{color:var(--muted)} .soft{color:var(--soft)}
+  .muted{color:var(--muted)} .soft{color:var(--body)}
   .small{font-size:13.5px} .tiny{font-size:11.5px}
   .serif-h{font-family:"Fraunces",Georgia,serif;font-weight:480;letter-spacing:-.01em}
   .meter{height:5px;border-radius:6px;overflow:hidden;background:rgba(0,0,0,.30);margin-top:12px}
@@ -414,10 +414,10 @@
   .band button{width:100%;text-align:left;background:transparent;border:0;color:inherit;padding:16px 17px 14px;cursor:pointer}
   .bname{font-family:"Fraunces",Georgia,serif;font-size:19px;font-weight:480;letter-spacing:-.01em}
   .chips{display:flex;gap:8px;flex-wrap:wrap}
-  .chip{font-size:12.5px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);cursor:pointer;background:transparent;color:var(--soft);transition:.2s}
-  .chip:hover{color:var(--bone)}
-  .chip.on{background:rgba(236,227,210,.92);color:#1a160f;border-color:transparent}
-  .sig{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;padding:5px 9px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);color:var(--soft)}
+  .chip{font-size:12.5px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);cursor:pointer;background:transparent;color:var(--body);transition:.2s}
+  .chip:hover{color:var(--ink)}
+  .chip.on{background:rgba(236,227,210,.92);color:#EFE5D2;border-color:transparent}
+  .sig{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;padding:5px 9px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);color:var(--body)}
   .pick{padding:5px 0 5px 13px;margin:9px 0;border-left:2px solid var(--line)}
   .pick .lbl{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
   .pick p{margin:0;font-size:14.5px;line-height:1.45}
@@ -427,29 +427,29 @@
   .fday{flex:0 0 auto;width:64px;text-align:center;padding:10px 4px;border:1px solid var(--line);border-radius:11px;background:var(--panel2)}
   .fdow{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
   .fdot{width:7px;height:7px;border-radius:50%;margin:8px auto 7px}
-  .fhi{font-family:ui-monospace,monospace;font-size:15px;color:var(--bone);font-variant-numeric:tabular-nums}
+  .fhi{font-family:ui-monospace,monospace;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums}
   .flo{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
-  .fwx{font-size:10.5px;color:var(--soft);margin-top:6px;line-height:1.2}
+  .fwx{font-size:10.5px;color:var(--body);margin-top:6px;line-height:1.2}
   .fpop{font-size:10px;color:var(--rain);margin-top:3px}
   input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:6px;outline:none;
     background:linear-gradient(90deg,var(--green),var(--gold),var(--rust),var(--maple),var(--russet))}
   input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;
-    background:var(--bone);border:3px solid var(--bg);box-shadow:0 0 0 1px var(--line);cursor:pointer}
-  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--bone);border:3px solid var(--bg);cursor:pointer}
-  select,input[type=text]{width:100%;background:var(--panel2);color:var(--bone);border:1px solid var(--line);border-radius:10px;padding:12px 13px;font-size:14.5px;font-family:inherit}
-  .btn{display:block;width:100%;border:0;border-radius:10px;padding:14px;font-size:14px;letter-spacing:.02em;cursor:pointer;background:var(--rust);color:#1a160f;font-weight:600;transition:.2s}
+    background:var(--ink);border:3px solid var(--bg);box-shadow:0 0 0 1px var(--line);cursor:pointer}
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--ink);border:3px solid var(--bg);cursor:pointer}
+  select,input[type=text]{width:100%;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px 13px;font-size:14.5px;font-family:inherit}
+  .btn{display:block;width:100%;border:0;border-radius:10px;padding:14px;font-size:14px;letter-spacing:.02em;cursor:pointer;background:var(--rust);color:#EFE5D2;font-weight:600;transition:.2s}
   .btn:disabled{opacity:.7;cursor:default}
-  .near-big{font-family:"Fraunces",Georgia,serif;font-size:19px;color:var(--bone);letter-spacing:-.01em;line-height:1.15}
+  .near-big{font-family:"Fraunces",Georgia,serif;font-size:19px;color:var(--ink);letter-spacing:-.01em;line-height:1.15}
   .near-act{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
-  .near-act a{flex:1 1 30%;text-align:center;padding:11px 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--bone);text-decoration:none;font-size:13px;transition:.2s}
+  .near-act a{flex:1 1 30%;text-align:center;padding:11px 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--ink);text-decoration:none;font-size:13px;transition:.2s}
   .near-act a:hover{border-color:rgba(236,227,210,.22)}
-  .btn:hover{background:#bd7549}
+  .btn:hover{background:#9C4E27}
   .btn:disabled{opacity:.6;cursor:default}
   #map{height:360px;border-radius:14px;border:1px solid var(--line);overflow:hidden;margin-bottom:16px}
   .leaflet-popup-content{margin:11px 13px;font-size:13px;line-height:1.45;font-family:ui-sans-serif,system-ui,sans-serif}
-  .leaflet-container{background:#0e0c09;font-family:inherit}
+  .leaflet-container{background:#F5EEDF;font-family:inherit}
   .you{display:flex;justify-content:flex-end}
-  .guide-msg{white-space:pre-wrap;font-size:15px;line-height:1.65;color:var(--soft);font-family:"Fraunces",Georgia,serif;font-weight:400}
+  .guide-msg{white-space:pre-wrap;font-size:15px;line-height:1.65;color:var(--body);font-family:"Fraunces",Georgia,serif;font-weight:400}
   .hr{height:1px;background:var(--line);border:0;margin:18px 0}
   .axis{display:flex;align-items:center;gap:12px;margin:18px 2px 10px}
   .axis .l{flex:1;height:1px;background:var(--line)}
@@ -457,19 +457,19 @@
   .spin{animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
   .hidden{display:none}
-  .lede{color:var(--soft);font-size:15px;line-height:1.62;margin:16px 0 4px}
-  .prose{color:var(--soft);font-size:14.5px;line-height:1.62}
-  .prose h2{font-family:"Fraunces",Georgia,serif;font-weight:480;font-size:20px;color:var(--bone);letter-spacing:-.01em;margin:26px 0 8px}
-  .prose h3{font-family:"Fraunces",Georgia,serif;font-weight:480;font-size:16px;color:var(--bone);margin:18px 0 4px}
+  .lede{color:var(--body);font-size:15px;line-height:1.62;margin:16px 0 4px}
+  .prose{color:var(--body);font-size:14.5px;line-height:1.62}
+  .prose h2{font-family:"Fraunces",Georgia,serif;font-weight:480;font-size:20px;color:var(--ink);letter-spacing:-.01em;margin:26px 0 8px}
+  .prose h3{font-family:"Fraunces",Georgia,serif;font-weight:480;font-size:16px;color:var(--ink);margin:18px 0 4px}
   .prose p{margin:6px 0}
   .prose a{color:var(--water)}
   .ptable{width:100%;border-collapse:collapse;margin:12px 0 6px;font-size:12.5px}
   .ptable th,.ptable td{text-align:left;padding:9px 9px;border-bottom:1px solid var(--line);vertical-align:top}
   .ptable th{color:var(--muted);font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
-  .ptable td.r{color:var(--bone);font-family:"Fraunces",Georgia,serif;white-space:nowrap}
+  .ptable td.r{color:var(--ink);font-family:"Fraunces",Georgia,serif;white-space:nowrap}
   .ptable .pk{color:var(--gold)}
   .specrow{display:flex;gap:13px;align-items:flex-start;margin:11px 0}
-  .specrow .dot{width:11px;height:11px;border-radius:50%;margin-top:6px;flex:0 0 auto}
+  .specrow .dot{width:11px;height:11px;border-radius:50%;margin-top:6px;flex:0 0 auto;box-shadow:0 0 0 1px rgba(42,32,24,.22)}
   .faq{margin:14px 0}
   .faq h3{font-size:15.5px;margin-bottom:2px}
 </style>
@@ -573,7 +573,7 @@
   <section id="tab-guide" class="hidden">
     <div class="prose">
       <p class="small muted" style="margin:0 0 6px">What turns what color, and roughly when. The first reds are red maple in wet ground; the golds are aspen and birch; the late russets are oak and beech; and the last to turn is tamarack, the conifer that goes gold and lets its needles fall in the northern bogs.</p>
-      <div class="specrow"><span class="dot" style="background:#b06a43"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Sugar maple</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Peak weeks</span></div><p class="small muted" style="margin:3px 0 0">Orange to deep red. The quiet headliner, strongest up north.</p></div></div><div class="specrow"><span class="dot" style="background:#a8472f"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Red maple</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Early</span></div><p class="small muted" style="margin:3px 0 0">Deep scarlet, often the first red, in wet ground.</p></div></div><div class="specrow"><span class="dot" style="background:#c6a463"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Aspen and birch</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Early to peak</span></div><p class="small muted" style="margin:3px 0 0">Clear gold that stirs in any breeze.</p></div></div><div class="specrow"><span class="dot" style="background:#8a5a38"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Northern red oak</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Late</span></div><p class="small muted" style="margin:3px 0 0">Russet and bronze, holding on into November.</p></div></div><div class="specrow"><span class="dot" style="background:#a98a5e"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">American beech</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Late</span></div><p class="small muted" style="margin:3px 0 0">Coppery tan that lingers through early winter.</p></div></div><div class="specrow"><span class="dot" style="background:#cf9b54"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Tamarack</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Very late</span></div><p class="small muted" style="margin:3px 0 0">Gold needles in northern bogs, the season's last note in November.</p></div></div>
+      <div class="specrow"><span class="dot" style="background:#9C4E27"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Sugar maple</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Peak weeks</span></div><p class="small muted" style="margin:3px 0 0">Orange to deep red. The quiet headliner, strongest up north.</p></div></div><div class="specrow"><span class="dot" style="background:#8E301C"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Red maple</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Early</span></div><p class="small muted" style="margin:3px 0 0">Deep scarlet, often the first red, in wet ground.</p></div></div><div class="specrow"><span class="dot" style="background:#8E6410"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Aspen and birch</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Early to peak</span></div><p class="small muted" style="margin:3px 0 0">Clear gold that stirs in any breeze.</p></div></div><div class="specrow"><span class="dot" style="background:#75512F"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Northern red oak</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Late</span></div><p class="small muted" style="margin:3px 0 0">Russet and bronze, holding on into November.</p></div></div><div class="specrow"><span class="dot" style="background:#a98a5e"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">American beech</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Late</span></div><p class="small muted" style="margin:3px 0 0">Coppery tan that lingers through early winter.</p></div></div><div class="specrow"><span class="dot" style="background:#9E5F13"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Tamarack</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Very late</span></div><p class="small muted" style="margin:3px 0 0">Gold needles in northern bogs, the season's last note in November.</p></div></div>
 
       <h2>When does fall color peak in Michigan?</h2>
       <p>Michigan's fall color peaks from north to south over about four weeks. The Upper Peninsula turns first, usually in late September and the first week of October. Northern Lower Michigan, including the Tunnel of Trees, Sleeping Bear, and the Grayling and Au Sable country, peaks in the second and third weeks of October. Southern Michigan, including Grand Rapids, Ann Arbor, and the Irish Hills, peaks in the last week of October.</p>
@@ -620,10 +620,10 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const C={bg:"#14110d",panel:"#1d1812",panel2:"#191510",line:"rgba(236,227,210,0.10)",
-  bone:"#ece3d2",soft:"#cabfa9",muted:"#968c7d",
-  gold:"#c6a463",amber:"#cf9b54",rust:"#b06a43",maple:"#a8472f",russet:"#8a5a38",
-  moss:"#7d8a5e",green:"#5f7a4a",water:"#6f9aa0",rain:"#6f8a9a",snow:"#b9c4cc",cloud:"#8a8378"};
+const C={bg:"#F5EEDF",panel:"#FFFCF5",panel2:"#EFE5D2",line:"#DFD1B4",
+  bone:"#2A2018",soft:"#4B3F32",muted:"#726351",
+  gold:"#8E6410",amber:"#9E5F13",rust:"#9C4E27",maple:"#8E301C",russet:"#75512F",
+  moss:"#5A6B3A",green:"#4A6633",water:"#2A6070",rain:"#3E6070",snow:"#5B6B74",cloud:"#7C7263"};
 
 const REGIONS=[
   {id:"wup",name:"Western U.P.",area:"Porkies, Keweenaw, Ontonagon",lat:46.80,lon:-89.73,
@@ -690,12 +690,12 @@ const CANOE=[
 ];
 
 const SPECIES=[
-  {name:"Sugar maple",color:"#b06a43",when:"Peak weeks",desc:"Orange to deep red. The quiet headliner, strongest up north."},
-  {name:"Red maple",color:"#a8472f",when:"Early",desc:"Deep scarlet, often the first red, in wet ground."},
-  {name:"Aspen and birch",color:"#c6a463",when:"Early to peak",desc:"Clear gold that stirs in any breeze."},
-  {name:"Northern red oak",color:"#8a5a38",when:"Late",desc:"Russet and bronze, holding on into November."},
+  {name:"Sugar maple",color:"#9C4E27",when:"Peak weeks",desc:"Orange to deep red. The quiet headliner, strongest up north."},
+  {name:"Red maple",color:"#8E301C",when:"Early",desc:"Deep scarlet, often the first red, in wet ground."},
+  {name:"Aspen and birch",color:"#8E6410",when:"Early to peak",desc:"Clear gold that stirs in any breeze."},
+  {name:"Northern red oak",color:"#75512F",when:"Late",desc:"Russet and bronze, holding on into November."},
   {name:"American beech",color:"#a98a5e",when:"Late",desc:"Coppery tan that lingers through early winter."},
-  {name:"Tamarack",color:"#cf9b54",when:"Very late",desc:"Gold needles in northern bogs, the season's last note in November."},
+  {name:"Tamarack",color:"#9E5F13",when:"Very late",desc:"Gold needles in northern bogs, the season's last note in November."},
 ];
 
 // ---- model ----
@@ -867,9 +867,9 @@ let map,regionLayer,canoeLayer;
 function buildMap(){
   map=L.map("map",{zoomControl:true,attributionControl:false,maxZoom:15}).setView([44.9,-85.4],6);
   // Labeled dark basemap: cities, roads, highways, and water labels, kept on-brand dark.
-  const dark=L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{maxZoom:15,subdomains:"abcd"}).addTo(map);
+  const dark=L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{maxZoom:15,subdomains:"abcd"});
   // Full street map with maximum road and place detail, for when you want it.
-  const streets=L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{maxZoom:15,subdomains:"abcd"});
+  const streets=L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{maxZoom:15,subdomains:"abcd"}).addTo(map);
   const gibsDate=new Date(Date.now()-2*86400000).toISOString().slice(0,10);
   const sat=L.tileLayer(
     "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/"+gibsDate+"/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg",
@@ -922,7 +922,7 @@ function renderBands(){
           '<div style="min-width:0">'+
             '<div style="display:flex;align-items:baseline;gap:9px;flex-wrap:wrap">'+
               '<span class="bname">'+r.name+'</span>'+
-              (peak?'<span class="tag" style="background:'+col+';color:#1a160f">peak</span>':'')+
+              (peak?'<span class="tag" style="background:'+col+';color:#EFE5D2">peak</span>':'')+
               (d.live?'<span class="tag" style="background:'+hexA(C.water,0.18)+';color:var(--water)">live</span>':d.projected?'<span class="tag" style="color:var(--gold);border:1px solid rgba(198,164,99,.35)">projected</span>':'<span class="tag" style="color:var(--muted);border:1px solid var(--line)">typical</span>')+
             '</div>'+
             '<div class="small muted" style="margin-top:3px">'+r.area+'</div>'+
