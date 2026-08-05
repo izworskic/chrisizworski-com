@@ -9,6 +9,10 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // selected-tab fix and the seasonal map wash, Aug 5 2026. The selected tab and
+  // chip states still carried the old theme colour in rgba form, which the hex
+  // sweep missed, so the label vanished into its own pill.
+  "/fall-color/",
   // light autumn palette, Aug 5 2026. The whole /fall-color/ section moved off the
   // near-black ground onto warm paper. Every page in the section is touched.
   "/fall-color/",
