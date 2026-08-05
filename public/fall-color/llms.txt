@@ -1,0 +1,39 @@
+# Michigan Fall Color
+
+> A live field guide to Michigan's fall color season. It tracks where the leaves are turning from NASA MODIS satellite canopy data and Open-Meteo weather, shows a multi-day forecast by region, recommends where to go, and lists rivers to paddle through the color. Built and maintained by Chris Izworski, a Michigan outdoor writer.
+
+Site: https://chrisizworski.com/fall-color
+
+## When Michigan fall color peaks
+
+Michigan color turns from north to south over about four weeks. Typical peak by region:
+
+- Western Upper Peninsula (Porcupine Mountains, Keweenaw, Ontonagon): late September into the first week of October. The first color in the state.
+- Eastern Upper Peninsula (Tahquamenon, Hiawatha, Whitefish Point): first to second week of October.
+- Tip of the Mitt (Tunnel of Trees on M-119, Petoskey, Mackinaw): first to second week of October.
+- Northwest Lower Michigan (Sleeping Bear Dunes, Traverse City, Leelanau): second to third week of October.
+- Northeast Lower Michigan (Grayling, the Au Sable, Rifle River, Oscoda): second to third week of October.
+- Central Michigan and Saginaw Bay (Bay City, Midland, Mount Pleasant): mid to late October.
+- Southwest Lower Michigan (Grand Rapids, Saugatuck, Kalamazoo): third to fourth week of October.
+- Southeast Lower Michigan (Detroit, Ann Arbor, Irish Hills): the last week of October, with oaks holding russet into November.
+
+The last color is tamarack, a conifer that turns gold and drops its needles in northern bogs in early to mid November.
+
+## How the live color is measured
+
+- Satellite: NASA MODIS 16 day NDVI canopy greenness, compared to each region's summer maximum to estimate how far the canopy has turned.
+- Weather: Open-Meteo daily temperatures and frost dates, which pull the peak earlier after a run of cold nights.
+- A regional climatology model sets the typical timing, and the live satellite and weather readings adjust it from there.
+- A short daily color note is written through the season.
+
+## Rivers to paddle through the color
+
+- Au Sable River, the Holy Waters near Grayling.
+- Pine River and Manistee River near Wellston and Mesick.
+- Platte River and Crystal River near Sleeping Bear.
+- Two Hearted River in the eastern Upper Peninsula.
+- Huron River through Ann Arbor, the latest color of the year.
+
+## Author
+
+Chris Izworski is a Michigan angler and outdoor writer on Saginaw Bay who builds and maintains a family of Michigan field guides. Related work: Michigan Trout Report (https://michigantroutreport.com), Freighter View Farms (https://freighterviewfarms.com), and https://chrisizworski.com.

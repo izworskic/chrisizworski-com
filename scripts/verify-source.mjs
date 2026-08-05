@@ -9,6 +9,14 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // fall color migration, Aug 4 2026. The property moved from
+  // fallcolor.chrisizworski.com onto the hub at /fall-color/ with slugs preserved
+  // 1:1. These pages carried links to the old subdomain and now point in-tree.
+  "/",
+  "/tools/",
+  "/soo-locks/",
+  "/northern-lights-michigan/",
+  "/fall-color-northern-lights-michigan/",
   // query-gap pass, Aug 4 2026. Autocomplete shows the aurora page's demand is
   // dominated by "tonight time" and "this week", and the Soo demand splits into
   // visitor intent and "ships today / live cam" ship intent.
