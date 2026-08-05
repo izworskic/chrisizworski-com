@@ -87,26 +87,45 @@
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 <style>
-.pl-form{background:#fff;border:1px solid #e0dbd2;border-radius:4px;padding:16px;margin:18px 0}
-.pl-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:10px}
-.pl-field{flex:1 1 200px;min-width:180px}
-.pl-field label{display:block;font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:#888;margin-bottom:4px}
-.pl-field input,.pl-field select{width:100%;padding:9px 10px;border:1px solid #d8d2c8;border-radius:3px;font:inherit;font-size:15px;background:#fff}
-.pl-btn{padding:10px 16px;border:1px solid #2c5f2d;background:#2c5f2d;color:#fff;border-radius:3px;font:inherit;cursor:pointer}
-.pl-btn.ghost{background:#fff;color:#2c5f2d}
-.pl-note{font-size:13px;color:#777;line-height:1.6;margin:6px 0 0}
-.pl-result{margin:8px 0 0}
-.pl-card{background:#fff;border:1px solid #e0dbd2;border-left:4px solid #d8d2c8;border-radius:4px;padding:14px 16px;margin-bottom:10px}
-.pl-card.pick{border-left-color:#c8622a}
-.pl-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
-.pl-name{font-size:18px;color:#2c3e2d}
-.pl-when{font-size:13px;color:#888}
-.pl-bar{height:7px;background:#eee7dc;border-radius:4px;overflow:hidden;margin:9px 0 7px}
-.pl-bar span{display:block;height:100%;background:linear-gradient(90deg,#8fae5a,#e0a327,#c8622a)}
-.pl-stage{font-size:14px;color:#2c5f2d}
-.pl-meta{font-size:13px;color:#666;line-height:1.65;margin-top:6px}
-.pl-meta b{color:#3a3a3a;font-weight:600}
-.pl-rank{font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:#c8622a}
+/* Both of these pages were built with flat white cards on the section's dark
+   autumn ground, which is the wrong ancestor entirely. Everything below now comes
+   from the same token set as the landing page and the field guides: panel surfaces,
+   bone text, Fraunces for names, gold for the reading of conditions, maple to mark
+   the one row that matters. No new colours were invented. */
+.fc-panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:17px 18px;margin:18px 0}
+.fc-row{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
+.fc-field{flex:1 1 190px;min-width:170px}
+.fc-field.tight{flex:0 1 190px}
+.fc-field.auto{flex:0 0 auto}
+.fc-field label{display:block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.fc-field input,.fc-field select{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:9px;
+  font:inherit;font-size:15px;background:var(--panel2);color:var(--bone);color-scheme:dark}
+.fc-field input::placeholder{color:var(--muted)}
+.fc-field input:focus,.fc-field select:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:transparent}
+.fc-btn{padding:11px 17px;border-radius:9px;font:inherit;font-size:15px;cursor:pointer;
+  border:1px solid var(--gold);background:var(--gold);color:#14110d;font-weight:500}
+.fc-btn:hover{background:var(--amber);border-color:var(--amber)}
+.fc-btn.ghost{background:transparent;border-color:var(--line);color:var(--soft)}
+.fc-btn.ghost:hover{color:var(--bone);border-color:var(--soft)}
+.fc-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.fc-note{font-size:13.5px;color:var(--muted);line-height:1.65;margin:12px 0 0}
+
+.fc-card{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--russet);
+  border-radius:14px;padding:15px 17px;margin-bottom:11px}
+.fc-card.lead{border-left-color:var(--maple);background:var(--panel2)}
+.fc-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.fc-name{font-family:"Fraunces",Georgia,serif;font-weight:480;font-size:19px;color:var(--bone);letter-spacing:-.01em}
+.fc-meta{font-size:12.5px;color:var(--muted)}
+.fc-track{height:6px;background:rgba(236,227,210,.09);border-radius:3px;overflow:hidden;margin:11px 0 8px}
+.fc-track span{display:block;height:100%;border-radius:3px;
+  background:linear-gradient(90deg,var(--green),var(--gold),var(--maple))}
+.fc-stage{font-size:14.5px;color:var(--gold);line-height:1.5}
+.fc-body{font-size:14.5px;color:var(--soft);line-height:1.7;margin-top:8px}
+.fc-body b{color:var(--bone);font-weight:500}
+.fc-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-top:8px}
+.fc-eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--maple);margin-bottom:7px}
+.fc-map{height:440px;border:1px solid var(--line);border-radius:16px;margin:18px 0;background:var(--bg)}
+@media (max-width:560px){.fc-field{flex:1 1 100%}.fc-map{height:340px}}
 </style>
 </head>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Michigan Leaf Peeping Planner", "url": "https://chrisizworski.com/fall-color/michigan-leaf-peeping-planner", "applicationCategory": "TravelApplication", "operatingSystem": "Any", "description": "Tell it where you live and which weekend you can travel. It ranks Michigan's eight color regions by how close to peak they will be that weekend and how far you have to drive.", "isPartOf": {"@id": "https://chrisizworski.com/#website"}, "author": {"@id": "https://chrisizworski.com/#person"}, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}</script>
@@ -117,28 +136,28 @@
   <h1>Michigan Leaf Peeping Planner</h1>
   <p class="lede">Most color maps answer a question nobody asks: what is peaking <i>today</i>, statewide. The question people actually have is narrower. <b>I live here, I can get away on this weekend, where should I drive?</b> Tell it those two things and it ranks all eight Michigan color regions by how close to peak they should be on your dates and how far you have to go.</p>
 
-  <div class="pl-form">
-    <div class="pl-row">
-      <div class="pl-field">
+  <div class="fc-panel">
+    <div class="fc-row">
+      <div class="fc-field">
         <label for="plCity">Starting from</label>
         <input list="plCities" id="plCity" placeholder="Bay City" autocomplete="off">
         <datalist id="plCities"></datalist>
       </div>
-      <div class="pl-field" style="flex:0 1 190px">
+      <div class="fc-field tight">
         <label for="plDate">Weekend of</label>
         <input type="date" id="plDate">
       </div>
-      <div class="pl-field" style="flex:0 0 auto">
-        <button class="pl-btn" id="plGo">Plan my trip</button>
+      <div class="fc-field auto">
+        <button class="fc-btn" id="plGo">Plan my trip</button>
       </div>
-      <div class="pl-field" style="flex:0 0 auto">
-        <button class="pl-btn ghost" id="plHere">Use my location</button>
+      <div class="fc-field auto">
+        <button class="fc-btn ghost" id="plHere">Use my location</button>
       </div>
     </div>
-    <p class="pl-note" id="plNote">Peak timing comes from the same regional model behind the live map, adjusted by recent cool nights, frost, and satellite canopy readings when a forecast reaches your dates. Drive times are straight line distance with a road allowance, so treat them as a planning estimate rather than a routing answer.</p>
+    <p class="fc-note" id="plNote">Peak timing comes from the same regional model behind the live map, adjusted by recent cool nights, frost, and satellite canopy readings when a forecast reaches your dates. Drive times are straight line distance with a road allowance, so treat them as a planning estimate rather than a routing answer.</p>
   </div>
 
-  <div class="pl-result" id="plOut"></div>
+  <div class="fc-result" id="plOut"></div>
 
   <h2>How the ranking works</h2>
   <p>Each region carries its own historical peak window, and the U.P. runs roughly two to three weeks ahead of the southern Lower Peninsula. For your date the planner scores how near that region sits to full color, then it penalises distance, because a region at 96 percent four hours away is usually a worse Saturday than one at 88 percent forty minutes away. Regions that will already be bare are pushed down hard, since there is nothing to drive to.</p>
@@ -247,7 +266,7 @@
   function plan(){
     var o = resolveOrigin();
     if (!o){
-      elOut.innerHTML = '<div class="pl-card"><div class="pl-stage">Pick a starting city from the list, or use the location button. The list covers Michigan plus the nearest out of state metros.</div></div>';
+      elOut.innerHTML = '<div class="fc-card"><div class="fc-stage">Pick a starting city from the list, or use the location button. The list covers Michigan plus the nearest out of state metros.</div></div>';
       return;
     }
     var parts = (elDate.value || "").split("-");
@@ -255,7 +274,7 @@
     var mo = parseInt(parts[1],10), da = parseInt(parts[2],10), yr = parseInt(parts[0],10);
     var target = new Date(yr, mo-1, da);
     if (mo < 9 || mo > 11){
-      elOut.innerHTML = '<div class="pl-card"><div class="pl-stage">Michigan color runs from mid September into early November. Pick a date in that range and the ranking will mean something.</div></div>';
+      elOut.innerHTML = '<div class="fc-card"><div class="fc-stage">Michigan color runs from mid September into early November. Pick a date in that range and the ranking will mean something.</div></div>';
       return;
     }
     var idx = dayIndex(mo, da);
@@ -290,8 +309,8 @@
         var i2 = dayIndex(r.ps[0], r.ps[1]);
         if (i2 > idx && (!soonest || i2 < soonest.i)) soonest = { i: i2, r: r };
       });
-      lead = '<div class="pl-card"><div class="pl-rank">Nothing is close yet</div>' +
-        '<div class="pl-stage">On ' + when + ' every region is still green or barely started. ' +
+      lead = '<div class="fc-card"><div class="fc-eyebrow">Nothing is close yet</div>' +
+        '<div class="fc-stage">On ' + when + ' every region is still green or barely started. ' +
         (soonest ? 'The first Michigan colour arrives in the ' + soonest.r.n + ' around ' +
           MONTHS[soonest.r.ps[0]] + ' ' + soonest.r.ps[1] + '. Try a date on or after that.'
                  : 'The season has ended for this year.') +
@@ -300,14 +319,14 @@
 
     elOut.innerHTML = lead + rows.map(function(x, i){
       var r = x.r, st = x.st;
-      var rank = (i === 0 && !lead) ? '<div class="pl-rank">Best bet for ' + when + '</div>' : "";
-      return '<div class="pl-card' + (i === 0 ? " pick" : "") + '">' + rank +
-        '<div class="pl-head"><div class="pl-name">' + r.n + '</div>' +
-        '<div class="pl-when">' + fmtDrive(x.hours) + ' from ' + o.name + ' &middot; ' + Math.round(x.miles) + ' mi</div></div>' +
-        '<div class="pl-bar"><span style="width:' + st.pct + '%"></span></div>' +
-        '<div class="pl-stage">' + labelOf(st.pct, st.phase) + ' on ' + when + ', about ' + st.pct + '% turned' +
+      var rank = (i === 0 && !lead) ? '<div class="fc-eyebrow">Best bet for ' + when + '</div>' : "";
+      return '<div class="fc-card' + (i === 0 ? " pick" : "") + '">' + rank +
+        '<div class="fc-head"><div class="fc-name">' + r.n + '</div>' +
+        '<div class="fc-meta">' + fmtDrive(x.hours) + ' from ' + o.name + ' &middot; ' + Math.round(x.miles) + ' mi</div></div>' +
+        '<div class="fc-track"><span style="width:' + st.pct + '%"></span></div>' +
+        '<div class="fc-stage">' + labelOf(st.pct, st.phase) + ' on ' + when + ', about ' + st.pct + '% turned' +
           (x.shift ? ' (pulled forward by recent cold)' : '') + '</div>' +
-        '<div class="pl-meta">' + r.a + '. <b>Drive:</b> ' + r.drive + '. <b>Walk:</b> ' + r.hike +
+        '<div class="fc-body">' + r.a + '. <b>Drive:</b> ' + r.drive + '. <b>Walk:</b> ' + r.hike +
         '. <b>Paddle:</b> ' + r.paddle + ' <a href="/fall-color/' + r.page + '">Field guide</a></div></div>';
     }).join("");
   }
