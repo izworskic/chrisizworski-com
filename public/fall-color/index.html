@@ -401,8 +401,8 @@
   .tabs{display:flex;gap:7px;flex-wrap:wrap;margin:26px 0 20px}
   .tab{padding:9px 14px;font-size:12.5px;letter-spacing:.02em;border-radius:999px;cursor:pointer;
     background:transparent;color:var(--body);border:1px solid var(--line);transition:.2s}
-  .tab:hover{color:var(--ink);border-color:rgba(236,227,210,.2)}
-  .tab.on{background:rgba(236,227,210,.92);color:#EFE5D2;border-color:transparent}
+  .tab:hover{color:var(--ink);border-color:var(--russet)}
+  .tab.on{background:var(--maple);color:#FFFCF5;border-color:var(--maple);font-weight:500}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:16px}
   .pad{padding:20px}
   .muted{color:var(--muted)} .soft{color:var(--body)}
@@ -416,7 +416,7 @@
   .chips{display:flex;gap:8px;flex-wrap:wrap}
   .chip{font-size:12.5px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);cursor:pointer;background:transparent;color:var(--body);transition:.2s}
   .chip:hover{color:var(--ink)}
-  .chip.on{background:rgba(236,227,210,.92);color:#EFE5D2;border-color:transparent}
+  .chip.on{background:var(--maple);color:#FFFCF5;border-color:var(--maple);font-weight:500}
   .sig{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;padding:5px 9px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);color:var(--body)}
   .pick{padding:5px 0 5px 13px;margin:9px 0;border-left:2px solid var(--line)}
   .pick .lbl{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
@@ -442,7 +442,7 @@
   .near-big{font-family:"Fraunces",Georgia,serif;font-size:19px;color:var(--ink);letter-spacing:-.01em;line-height:1.15}
   .near-act{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
   .near-act a{flex:1 1 30%;text-align:center;padding:11px 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--ink);text-decoration:none;font-size:13px;transition:.2s}
-  .near-act a:hover{border-color:rgba(236,227,210,.22)}
+  .near-act a:hover{border-color:rgba(42,32,24,.28)}
   .btn:hover{background:#9C4E27}
   .btn:disabled{opacity:.6;cursor:default}
   #map{height:360px;border-radius:14px;border:1px solid var(--line);overflow:hidden;margin-bottom:16px}
@@ -863,7 +863,7 @@ function renderLiveStrip(){
 }
 
 // ---- map ----
-let map,regionLayer,canoeLayer;
+let map,regionLayer,canoeLayer,washLayer;
 function buildMap(){
   map=L.map("map",{zoomControl:true,attributionControl:false,maxZoom:15}).setView([44.9,-85.4],6);
   // Labeled dark basemap: cities, roads, highways, and water labels, kept on-brand dark.
@@ -874,13 +874,46 @@ function buildMap(){
   const sat=L.tileLayer(
     "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/"+gibsDate+"/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg",
     {maxNativeZoom:9,maxZoom:15});
+  // Washed underneath the markers: three concentric rings per region, no stroke, so
+  // neighbouring regions bleed into each other and the state reads as one gradient
+  // rather than eight discs. Added to the map first so it sits below everything.
+  washLayer=L.layerGroup().addTo(map);
   regionLayer=L.layerGroup().addTo(map);
   canoeLayer=L.layerGroup().addTo(map);
-  L.control.layers({"Map":dark,"Streets":streets,"Satellite":sat},{"Color by region":regionLayer,"Rivers":canoeLayer},{collapsed:true}).addTo(map);
+  L.control.layers({"Map":dark,"Streets":streets,"Satellite":sat},{"Color wash":washLayer,"Color by region":regionLayer,"Rivers":canoeLayer},{collapsed:true}).addTo(map);
   drawMarkers();
+}
+// How strongly a region tints the map. Green is a whisper, peak is the loudest the
+// page ever gets, bare pulls back to almost nothing. Kept deliberately low: the point
+// is to feel the season move across the state, not to hide the map under paint.
+function washAlpha(pct,phase){
+  if(phase==="bare"||phase==="down")return 0.05;
+  if(phase==="green")return 0.07;
+  if(pct>=85)return 0.20;
+  if(pct>=70)return 0.17;
+  if(pct>=50)return 0.14;
+  if(pct>=30)return 0.11;
+  return 0.09;
+}
+function drawWash(){
+  if(!washLayer)return;
+  washLayer.clearLayers();
+  REGIONS.forEach(r=>{
+    const d=bandData(r);
+    // colorOf falls through to green at a low percentage, which is right for a marker
+    // mid-season but wrong for bare trees. Bare washes russet, the colour of the litter.
+    const col=(d.phase==="bare"||d.phase==="down")?C.russet:colorOf(d.pct,d.phase);
+    const a=washAlpha(d.pct,d.phase);
+    // Three rings approximate a radial falloff, which Leaflet has no native support for.
+    [[125000,0.42],[88000,0.70],[52000,1.0]].forEach(function(ring){
+      L.circle([r.lat,r.lon],{radius:ring[0],stroke:false,fillColor:col,
+        fillOpacity:a*ring[1],interactive:false}).addTo(washLayer);
+    });
+  });
 }
 function drawMarkers(){
   if(!map)return;
+  drawWash();
   regionLayer.clearLayers();
   REGIONS.forEach(r=>{
     const d=bandData(r); const col=colorOf(d.pct,d.phase);
