@@ -9,6 +9,12 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // light autumn palette, Aug 5 2026. The whole /fall-color/ section moved off the
+  // near-black ground onto warm paper. Every page in the section is touched.
+  "/fall-color/",
+  "/fall-color/michigan-leaf-peeping-planner",
+  "/fall-color/michigan-fall-color-drives",
+  "/fall-color/when-do-leaves-peak-in-michigan",
   // palette repair, Aug 5 2026. The planner and the drives map were built with
   // flat white cards on the section's dark autumn ground. Both now use the same
   // tokens as the landing page and the field guides.
