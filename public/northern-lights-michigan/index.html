@@ -75,6 +75,12 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .hero-info .tonight-headline{font-size:23px;font-weight:normal;color:#fff;margin-bottom:10px;line-height:1.3}
 .hero-info .tonight-detail{font-size:14px;color:#aac8d8;line-height:1.7;margin-bottom:14px}
 .hero-info .tonight-detail strong{color:#fff;font-style:normal}
+.night-strip{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.night-strip .night{flex:1 1 120px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:4px;padding:9px 11px}
+.night-strip .night.best{border-color:#7bc8e8;background:rgba(123,200,232,.13)}
+.night-strip .night .n-day{font-size:11px;color:#88c8e8;letter-spacing:.7px;text-transform:uppercase;margin-bottom:3px}
+.night-strip .night .n-kp{font-size:17px;color:#fff;line-height:1.25}
+.night-strip .night .n-note{font-size:12px;color:#aac8d8;line-height:1.45;margin-top:2px}
 .hero-action-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
 .hero-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#fff;padding:9px 16px;border-radius:4px;font-family:Georgia,serif;font-size:13px;cursor:pointer;letter-spacing:.3px;transition:all .2s}
 .hero-btn:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4)}
@@ -275,6 +281,8 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
       <div class="tonight-label">Tonight in Michigan</div>
       <h2 class="tonight-headline" id="tonightHeadline" style="margin:0 0 10px;border:0;padding:0">Checking tonight's live NOAA aurora forecast</h2>
       <div class="tonight-detail" id="tonightDetail">Until the update completes: Kp 5 to 6 favors dark Upper Peninsula locations; Kp 7 or higher can reach farther south when skies are clear.</div>
+      <div class="tonight-detail" id="tonightWindow">Calculating tonight's dark window and the best hours to be outside.</div>
+      <div class="night-strip" id="nightStrip"></div>
       <div class="hero-action-row">
         <button class="hero-btn primary" id="findBtn">Find viewing for my location</button>
         <button class="hero-btn" id="notifyBtn">Alert me when Kp 5+</button>
@@ -490,7 +498,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 <p>Confidence generally falls as the forecast extends farther out. Use the three-day Kp outlook to plan, then recheck NOAA's 30-to-90-minute OVATION model, real-time solar wind, and local clouds before traveling.</p>
 
 <p class="faq-q">Can I see colors with my eyes?</p>
-<p>Sometimes. Cameras often capture more color than human vision, especially during a faint display. What you see depends on the display's strength, your dark adaptation, light pollution, and cloud cover—not a single Kp cutoff.</p>
+<p>Sometimes. Cameras often capture more color than human vision, especially during a faint display. What you see depends on the display's strength, your dark adaptation, light pollution, and cloud cover, not a single Kp cutoff.</p>
 
 <p class="faq-q">Will the notification feature work for me?</p>
 <p>If you enable notifications using the button at the top of the page, your browser will alert you when the live Kp data crosses 5 (G1 storm threshold) while you have the page open. For background alerts when the page is not open, third-party services like SpaceWeatherLive or AuroraAlerts apps are required.</p>
@@ -870,6 +878,8 @@ async function loadAuroraData(){
     else headline = 'Statewide aurora watch: verify short-term conditions';
     document.getElementById('tonightHeadline').textContent = headline;
     document.getElementById('tonightDetail').innerHTML = 'The next-24-hour NOAA forecast peaks at <strong>Kp '+max24.toFixed(1)+'</strong> around <strong>'+peakTime+' ET</strong>. This is broad geomagnetic guidance, not a visibility promise. Check the regional OVATION signal, darkness, and local cloud cover before driving.';
+    renderTonightWindow(data.forecast.periods);
+    renderNextNights(data.forecast.periods);
     document.getElementById('refreshInfo').textContent = '· updated '+new Date(data.fetched_at || Date.now()).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
   } catch (error) {
     ['swBz','swSpeed','swKpNow','swKpPeak'].forEach(markSpaceWeatherUnavailable);
@@ -877,7 +887,122 @@ async function loadAuroraData(){
     document.getElementById('liveStatus').textContent = 'NOAA feed unavailable · manual guide active';
     document.getElementById('tonightHeadline').textContent = 'Live NOAA feed temporarily unavailable';
     document.getElementById('tonightDetail').innerHTML = 'Open the <a href="https://www.spaceweather.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener" style="color:#7bc8e8">official NOAA 30-minute forecast</a>, then check local clouds. The regional thresholds and viewing-location guide below remain available.';
+    renderTonightWindow(null);
+    document.getElementById('nightStrip').innerHTML = '';
   }
+}
+
+// === Tonight's dark window and the next three nights ===
+// The two things people actually search for after "northern lights michigan" are
+// WHAT TIME tonight and WHETHER THIS WEEK is worth planning around. NOAA gives Kp
+// on a 3-hour grid for 3 days; darkness we compute ourselves so no extra feed can
+// break. Reference point is Headlands Dark Sky Park on the Straits, central to the
+// viewing area. Times are Michigan local (America/Detroit).
+const DARK_REF = { lat: 45.787, lng: -84.76, name: "the Straits of Mackinac" };
+
+// Sun altitude for a given instant, standard low-precision solar position.
+function sunAltitudeDeg(date, lat, lng) {
+  const rad = Math.PI / 180;
+  const days = (date.getTime() / 86400000) + 2440587.5 - 2451545.0;
+  const meanAnomaly = (357.5291 + 0.98560028 * days) * rad;
+  const center = (1.9148 * Math.sin(meanAnomaly) + 0.02 * Math.sin(2 * meanAnomaly)) * rad;
+  const eclipticLon = meanAnomaly + center + Math.PI + (102.9372 * rad);
+  const obliquity = 23.4397 * rad;
+  const declination = Math.asin(Math.sin(obliquity) * Math.sin(eclipticLon));
+  const rightAscension = Math.atan2(Math.sin(eclipticLon) * Math.cos(obliquity), Math.cos(eclipticLon));
+  const siderealTime = (280.16 + 360.9856235 * days) * rad - (-lng * rad);
+  const hourAngle = siderealTime - rightAscension;
+  const latRad = lat * rad;
+  return Math.asin(
+    Math.sin(latRad) * Math.sin(declination) +
+    Math.cos(latRad) * Math.cos(declination) * Math.cos(hourAngle)
+  ) / rad;
+}
+
+// Walk forward in 10-minute steps to find when the sun crosses a threshold.
+function findSunCrossing(from, hoursAhead, thresholdDeg, goingDown, lat, lng) {
+  const step = 10 * 60 * 1000;
+  let previous = sunAltitudeDeg(from, lat, lng);
+  for (let t = step; t <= hoursAhead * 3600000; t += step) {
+    const when = new Date(from.getTime() + t);
+    const altitude = sunAltitudeDeg(when, lat, lng);
+    const crossed = goingDown ? (previous > thresholdDeg && altitude <= thresholdDeg)
+                              : (previous < thresholdDeg && altitude >= thresholdDeg);
+    if (crossed) return when;
+    previous = altitude;
+  }
+  return null;
+}
+
+function michiganClock(date) {
+  return date.toLocaleTimeString('en-US', { timeZone: 'America/Detroit', hour: 'numeric', minute: '2-digit' });
+}
+function michiganDayLabel(date) {
+  return date.toLocaleDateString('en-US', { timeZone: 'America/Detroit', weekday: 'short' });
+}
+
+function renderTonightWindow(periods) {
+  const el = document.getElementById('tonightWindow');
+  const now = new Date();
+  // Astronomical dark, sun 18 degrees below the horizon. In high summer at this
+  // latitude that never arrives, which is a real answer, not an error.
+  const darkStart = findSunCrossing(now, 24, -18, true, DARK_REF.lat, DARK_REF.lng);
+  const darkEnd = darkStart ? findSunCrossing(darkStart, 14, -18, false, DARK_REF.lat, DARK_REF.lng) : null;
+
+  if (!darkStart || !darkEnd) {
+    el.innerHTML = 'Near ' + DARK_REF.name + ' the sky does not reach full astronomical darkness at this time of year, so aurora has to be bright to show through summer twilight. Darkness returns as the nights lengthen toward September.';
+    return;
+  }
+
+  let text = 'Tonight it is fully dark near ' + DARK_REF.name + ' from <strong>' +
+    michiganClock(darkStart) + '</strong> to <strong>' + michiganClock(darkEnd) + '</strong>.';
+
+  // The Kp peak only helps if it lands while the sky is dark. Say which it is.
+  const inDark = (periods || []).filter(function (row) {
+    const t = new Date(row.time_tag).getTime();
+    return t >= darkStart.getTime() && t <= darkEnd.getTime() && Number.isFinite(row.kp);
+  });
+  if (inDark.length) {
+    const best = inDark.reduce(function (a, b) { return b.kp > a.kp ? b : a; });
+    text += ' The strongest forecast Kp inside that window is <strong>' + best.kp.toFixed(1) +
+      '</strong> near <strong>' + michiganClock(new Date(best.time_tag)) +
+      '</strong>, which is the hour to be outside and facing north.';
+  } else {
+    text += ' NOAA has no forecast rows inside tonight\u2019s dark window yet, so treat the headline number as daytime guidance and recheck after sunset.';
+  }
+  el.innerHTML = text;
+}
+
+// Group the 3-day Kp grid into nights (8 PM to 6 AM Michigan time) so the answer to
+// "is this week worth it" is three verdicts instead of one number.
+function renderNextNights(periods) {
+  const el = document.getElementById('nightStrip');
+  if (!periods || !periods.length) { el.innerHTML = ''; return; }
+  const nights = new Map();
+  periods.forEach(function (row) {
+    const kp = asFiniteNumber(row.kp);
+    if (!Number.isFinite(kp)) return;
+    const when = new Date(row.time_tag);
+    const hour = Number(when.toLocaleString('en-US', { timeZone: 'America/Detroit', hour: 'numeric', hour12: false }));
+    if (hour >= 6 && hour < 20) return;
+    // Hours after midnight belong to the night that started the previous evening.
+    const anchor = new Date(when.getTime() - (hour < 6 ? 12 * 3600000 : 0));
+    const key = anchor.toLocaleDateString('en-US', { timeZone: 'America/Detroit' });
+    const current = nights.get(key);
+    if (!current || kp > current.kp) nights.set(key, { kp: kp, at: when, label: michiganDayLabel(anchor) });
+  });
+  const rows = Array.from(nights.values()).sort(function (a, b) { return a.at - b.at; }).slice(0, 3);
+  if (!rows.length) { el.innerHTML = ''; return; }
+  const bestKp = Math.max.apply(null, rows.map(function (r) { return r.kp; }));
+  el.innerHTML = rows.map(function (r, i) {
+    const note = r.kp >= 6 ? 'Northern Lower Peninsula should watch'
+      : r.kp >= 5 ? 'Upper Peninsula viewing possible'
+      : r.kp >= 4 ? 'Far north UP horizon only'
+      : 'Quiet, no Michigan display expected';
+    const best = (r.kp === bestKp && bestKp >= 4) ? ' best' : '';
+    return '<div class="night' + best + '"><div class="n-day">' + (i === 0 ? 'Tonight' : r.label) +
+      '</div><div class="n-kp">Kp ' + r.kp.toFixed(1) + '</div><div class="n-note">' + note + '</div></div>';
+  }).join('');
 }
 
 // === Init ===

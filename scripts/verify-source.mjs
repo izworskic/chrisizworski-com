@@ -9,6 +9,12 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // query-gap pass, Aug 4 2026. Autocomplete shows the aurora page's demand is
+  // dominated by "tonight time" and "this week", and the Soo demand splits into
+  // visitor intent and "ships today / live cam" ship intent.
+  "/northern-lights-michigan/",
+  "/soo-locks/",
+  "/great-lakes-freighter-tracking/",
   // ice section internal linking pass, Aug 4 2026. The Michigan Ice Report moved
   // onto the hub with exactly one inbound internal link (/tools/), which is thin
   // for a section that has to rank by December. These six add contextual links.
