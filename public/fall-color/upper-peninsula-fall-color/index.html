@@ -210,6 +210,13 @@
   .faq p{margin-top:3px}
   :focus-visible{outline:2px solid var(--water);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+    .field-camera{margin:1rem 0 1.4rem}
+    .field-camera .camera-shot{width:100%;height:auto;max-width:720px;border-radius:10px;display:block}
+    .field-camera[data-state="stale"] .camera-shot{filter:saturate(.55)}
+    .field-camera .camera-caption{margin:.45rem 0 .1rem;font-size:.9rem;opacity:.85}
+    .field-camera .camera-credit{margin:0;font-size:.8rem;opacity:.6}
+    .field-camera .camera-out{margin:0;font-size:.9rem;opacity:.7}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -248,7 +255,10 @@
   <h2>How to time your visit</h2>
   <p>For the western U.P., plan the last week of September into the first week of October. For the eastern U.P., aim for the first full week to ten days of October. Cold comes off Lake Superior fast, so build in a flexible morning for clear light. This page tracks the whole peninsula; use the live map to see where the color is strongest right now.</p>
 
-  <h2>Common questions</h2>
+  <h2 id="m28-seney-camera-heading">Live Camera on M-28</h2>
+<p>An MDOT road weather camera at the Seney rest area on M-28, the road that runs the width of the Upper Peninsula. It points at the highway, but the surrounding timber gives a live read on how far along the U.P. canopy is.</p>
+<div class="field-camera" data-field-camera="m28-seney"><p class="camera-out">Loading the camera...</p></div>
+<h2>Common questions</h2>
   <div class="faq">
     <h3>When is the best time to see fall color in the Upper Peninsula?</h3>
     <p>The U.P. peaks from late September into mid-October, west to east. The western U.P. around the Porcupine Mountains and Keweenaw is usually first, near the end of September; the eastern U.P. around Tahquamenon follows about a week later.</p>
@@ -323,5 +333,6 @@
   }).catch(function(){});
 })();
 </script>
+<script defer src="/assets/field-camera.js"></script>
 </body>
 </html>

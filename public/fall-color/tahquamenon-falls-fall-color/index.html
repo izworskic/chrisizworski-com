@@ -202,6 +202,13 @@
   .faq p{margin-top:3px}
   :focus-visible{outline:2px solid var(--water);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+    .field-camera{margin:1rem 0 1.4rem}
+    .field-camera .camera-shot{width:100%;height:auto;max-width:720px;border-radius:10px;display:block}
+    .field-camera[data-state="stale"] .camera-shot{filter:saturate(.55)}
+    .field-camera .camera-caption{margin:.45rem 0 .1rem;font-size:.9rem;opacity:.85}
+    .field-camera .camera-credit{margin:0;font-size:.8rem;opacity:.6}
+    .field-camera .camera-out{margin:0;font-size:.9rem;opacity:.7}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -240,7 +247,10 @@
   <h2>How to time your visit</h2>
   <p>Target the first week to ten days of October. The eastern U.P. turns about a week after the Porkies, and the cold comes in off Lake Superior, so pack for a sharp morning. Whitefish Point doubles the trip with one of the best fall bird migrations in the Great Lakes.</p>
 
-  <h2>Common questions</h2>
+  <h2 id="m123-tahquamenon-camera-heading">Live Camera on the Tahquamenon Road</h2>
+<p>An MDOT road weather camera where M-123 crosses the Luce and Chippewa county line, on the road most people drive to the falls. It looks at the highway, not the river, but the timber alongside gives you an honest read on the eastern U.P. canopy.</p>
+<div class="field-camera" data-field-camera="m123-tahquamenon"><p class="camera-out">Loading the camera...</p></div>
+<h2>Common questions</h2>
   <div class="faq">
     <h3>When do leaves peak at Tahquamenon Falls?</h3>
     <p>Tahquamenon Falls usually peaks around October 1 to 9. The eastern Upper Peninsula turns roughly a week after the western U.P., with the first lake-effect chill often arriving during peak.</p>
@@ -314,5 +324,6 @@
   }).catch(function(){});
 })();
 </script>
+<script defer src="/assets/field-camera.js"></script>
 </body>
 </html>

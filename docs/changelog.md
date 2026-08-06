@@ -15,6 +15,29 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-06 (eighth change) — live field cameras on Soo Locks and the fall colour regions
+Cluster: Soo Locks and five fall colour region pages.
+Probed three camera networks live before building anything, and the gaps are worth recording:
+- NO Au Sable River camera exists, from any source. The nearest is MDOT at the Grayling rest area
+  on I-75, which is Au Sable country but points at the highway. The page says exactly that.
+- NO usable trout camera. USGS has a Jordan River near East Jordan camera, a real trout stream,
+  but it is flagged hidden with no images published.
+- NO beach cameras in either network. Nothing was added there.
+What does exist and now ships:
+- USGS NIMS St Marys River at Sault Ste Marie on /soo-locks/, the highest-traffic page to receive
+  a camera. Per-camera USGS endpoints answer 403 without auth; the working route is to build the
+  image URL from the free /nims/cameras list using smallDir + camId + newestImageDT.
+- MDOT road weather cameras on five colour region pages: M-26 Keweenaw, M-123 at the Tahquamenon
+  road, M-22 in Leelanau, M-28 at Seney, and I-75 at Grayling. All verified fresh within 1 to 3
+  hours. The copy states plainly that these point at the roadway, not at scenic overlooks.
+- New lib/field-cameras.js and api/field-camera.js. Cameras are an ALLOWLIST; the query id selects
+  a registry entry and is never used to build an upstream URL, so this cannot become an open proxy.
+  Images are proxied, not hotlinked, matching api/mackinac-media.js.
+- Freshness is enforced on AGE, not on the publisher's hidden flag. Michigan has 27 USGS cameras,
+  22 pass the flag, and only about half carry an image from the last hour; one is 3.2 years stale.
+  A camera past 26 hours renders desaturated and says it may have stopped.
+- 5 new tests, 117 passing.
+
 ## 2026-08-06 (seventh change) — Mackinac Bridge query coverage, and a walk-day precision fix
 Cluster: Mackinac Bridge.
 Alphabet-expanded autocomplete, 246 unique suggestions. The cluster is in better shape than
