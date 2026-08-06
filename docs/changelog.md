@@ -15,6 +15,24 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-06 (third change) — fall color season opens three weeks early
+Cluster: fall color machinery (no page content changed).
+Verified first, by simulation and a real end-to-end run, that the September path works: the
+open-meteo and MODIS feeds return in about 13s, the model produces a sane seasonal progression
+(6% green in early September, western U.P. 75% and rising on Sep 28, Tip of the Mitt 97% at peak
+on Oct 12), and the daily AI writer returns 237 words with zero em dashes. Nothing was broken.
+The gap was timing, not correctness:
+- `inSeason()` opened September 10. Fall color is a freshness-sensitive query class and Google
+  decides who ranks for the season while demand ramps in late August. A section sitting static
+  until September 10 arrives after that decision. Opened to August 20.
+- Confirmed by test that the writer is honest pre-colour: asked to write with every region at 6%,
+  it says there is nothing to chase yet and gives the timeline, which is what an August searcher
+  actually wants. No prompt change needed.
+- The dynamic sitemap at /fall-color/sitemap.xml was emitting 12 URLs WITHOUT trailing slash,
+  contradicting the canonicals shipped this morning. Fixed.
+- That route also kept its own copy of the season window, using server-local time and a different
+  set of months. It now imports `inSeason()` so the sitemap and the writer cannot disagree.
+
 ## 2026-08-06 (second change, same day) — beach cluster de-orphaned
 Cluster: Great Lakes beaches (52 detail pages + hub).
 - The hub's beach explorer builds its list in the browser, so the 50 detail pages had NO inbound
