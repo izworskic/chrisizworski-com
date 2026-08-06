@@ -15,6 +15,27 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-06 (fifth change) — question coverage and a structured-data resync
+Cluster: fall colour pages.
+Audited first. The section already asks and answers well: 45 question-form headings and FAQPage
+schema on 14 of 16 pages. But it answered a narrow band, when and where colour peaks, and was
+invisible for three demand stems that autocomplete shows are real:
+- "foliage" appeared on 1 of 16 pages and in zero headings, yet Michigan searchers use it
+  ("michigan fall foliage map", "fall foliage upper peninsula", "where is fall foliage peaking now")
+- "report" appeared in body copy on 13 pages but in ZERO headings or titles, against repeated
+  demand for "michigan fall color report" and "fall color report upper peninsula"
+- "peaking now" and "prediction" appeared nowhere at all
+Two tool pages, the drives map and the trip planner, had ONE heading each, no questions and no
+FAQ schema, despite carrying 14 inbound links apiece.
+- Added 8 question headings with visible answers: 3 on the drives map, 3 on the planner, 2 on the
+  hub. 45 -> 53. Coverage now: foliage in 3 headings, report in 2, drive map and this weekend in 1.
+- SELF-INFLICTED BUG FIXED: PR #32 rewrote every title and meta description but not the JSON-LD,
+  so 13 of 16 pages described themselves two different ways and several still carried the
+  pre-slash URL. Structured data resynced from the shipped head on 15 pages. Drift now zero.
+Honest note for expectations: Google restricted FAQ rich results in 2023 to authoritative
+government and health sites, so this schema will not produce rich snippets here. The value is the
+visible question-and-answer content matching real query stems, not the markup.
+
 ## 2026-08-06 (fourth change) — canopy camera anchor, MODIS repair, and honest copy
 Cluster: fall colour data layer and its claims.
 Measured first: the ORNL MODIS subset service runs 65 to 75 days behind (MOD13Q1 latest
