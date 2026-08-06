@@ -1,0 +1,35 @@
+{
+  "benchmarkVersion": "1.0.0",
+  "baselineCreated": "2026-08-06",
+  "purpose": "Track ownership of the search surfaces that carry the Chris Izworski entity, so the name SERP cannot be contested and AI answer engines resolve the entity correctly. Runs alongside every build; it is never finished.",
+  "principle": "Eight of nine slots on the name SERP already belong to chrisizworski.com. That is a single point of failure, not a moat: Google generally shows at most two results per domain outside navigational queries. Durable ownership comes from INDEPENDENT third-party surfaces that agree with each other and link back, not from more pages on the owned domain.",
+  "selfOwnedDomains": ["chrisizworski.com","michigantroutreport.com","michiganbirdingreport.com","greatlakeslevels.org","freighterviewfarms.com","izworskic.github.io","aibreakdown5.wordpress.com"],
+  "botBlockedHosts": {
+    "www.linkedin.com": "returns HTTP 999 to all non-browser agents",
+    "medium.com": "returns HTTP 403 to bots",
+    "www.crunchbase.com": "bot challenge"
+  },
+  "independentSurfaces": [
+    { "id": "wikidata",  "url": "https://www.wikidata.org/wiki/Q138283432", "status": "owned",  "weight": 3, "note": "Feeds the Google Knowledge Panel and most AI answer engines. Highest leverage single surface. Needs current employer and missing properties." },
+    { "id": "linkedin",  "url": "https://www.linkedin.com/in/chris-izworski-15294510", "status": "owned", "weight": 3, "note": "Headline still reflects a prior role. Chris must fix; no API path." },
+    { "id": "github",    "url": "https://github.com/izworskic", "status": "owned", "weight": 2, "note": "Profile README can carry the entity description and sameAs links." },
+    { "id": "orcid",     "url": "https://orcid.org/0009-0002-7268-6083", "status": "owned", "weight": 2, "note": "Live but carries no backlink to chrisizworski.com. Add the site as a researcher URL." },
+    { "id": "youtube",   "url": "https://www.youtube.com/@izworskic", "status": "owned", "weight": 2, "note": "Live, no backlink detected. Channel description should carry the site URL." },
+    { "id": "medium",    "url": "https://medium.com/@izworski", "status": "owned", "weight": 1, "note": "Bot-blocked, cannot verify from CI." },
+    { "id": "aboutme",   "url": "https://about.me/chrisizworski", "status": "owned", "weight": 1, "note": "Low authority; keep, do not invest." },
+    { "id": "muckrack",  "url": null, "status": "absent", "weight": 2, "note": "CANDIDATE. Author profile; he wrote the January 2025 NENA cover story on AI. Ranks well for person-name queries." },
+    { "id": "crunchbase","url": null, "status": "absent", "weight": 1, "note": "CANDIDATE. Person profile tied to Prepared." },
+    { "id": "scholar",   "url": null, "status": "absent", "weight": 1, "note": "CANDIDATE. Google Scholar or Semantic Scholar profile for the NENA article, tied to the existing ORCID." },
+    { "id": "apco-nena", "url": null, "status": "absent", "weight": 2, "note": "CANDIDATE. Speaker or member profile on an APCO or NENA property. Independent, topically authoritative, and he has a 2021 APCO Michigan Director of the Year award to anchor it." }
+  ],
+  "gates": {
+    "minIndependentOwnedSurfaces": 7,
+    "maxDeadSameAs": 0,
+    "requireSinglePersonNode": true,
+    "requireJobTitleConsistency": true,
+    "minBacklinkRateAmongVerifiable": 0.8
+  },
+  "knownDrift": {
+    "jobTitle": "Person schema says Solutions Consultant. Memory and profile say sales engineer at Prepared. One of the two is stale. Resolve before adding surfaces, because every new surface copies whichever is live."
+  }
+}

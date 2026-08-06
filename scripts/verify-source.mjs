@@ -9,6 +9,12 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 6 2026: entity integrity. The #person node carried three conflicting jobTitle
+  // values under one @id ("Solutions Consultant", "Solutions Consultant at Prepared",
+  // "Writer and Publisher"), which reads as one entity contradicting itself. Normalised
+  // to the homepage canonical value. See benchmarks/entity-surface-baseline.json.
+  "/chris-izworski-author/",
+  "/chris-izworski-emergency-management/",
   // selected-tab fix and the seasonal map wash, Aug 5 2026. The selected tab and
   // chip states still carried the old theme colour in rgba form, which the hex
   // sweep missed, so the label vanished into its own pill.
