@@ -15,6 +15,29 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-06 (sixth change) — town-level fall colour demand
+Cluster: fall colour region pages.
+Alphabet-expanded Google autocomplete across "michigan fall color a" through "z" and "fall color
+michigan a" through "z", 265 unique suggestions. Michigan searchers name towns, not regions:
+petoskey (3 suggestions), cadillac (2), gaylord (2), holland (2), houghton (2), plus alpena,
+frankenmuth, grand rapids, ludington, manistee, marquette, munising, saugatuck.
+Audited what the section already named. Nine of those towns appeared NOWHERE on any page:
+Gaylord, Cadillac, Houghton, Marquette, Alpena, Ludington, Manistee, Frankenmuth, Charlevoix.
+Deliberately did NOT build a page per town. Nine thin city pages is the doorway pattern that
+already produced 37 crawled-not-indexed URLs here. Each town was instead mapped onto the region
+that already models it, and given a question and answer on that region's existing page:
+- Houghton and Hancock -> Keweenaw
+- Marquette -> Upper Peninsula
+- Gaylord and Alpena -> Au Sable / northeast Lower
+- Cadillac, Manistee, Ludington -> Sleeping Bear / northwest Lower
+- Frankenmuth -> Saginaw Bay
+- Charlevoix -> Tunnel of Trees
+Every peak window quoted comes from the model itself, not invented: wup Sep 28-Oct 6, eup Oct 1-9,
+tip Oct 5-13, nwl Oct 8-16, nel Oct 9-17, cen Oct 14-22, swl Oct 18-26, sel Oct 20-28. Each answer
+also explains the local lake effect, which is the actual reason a shoreline town runs behind its
+own region.
+Result: 13 of 13 demand towns now named, question headings 53 -> 59.
+
 ## 2026-08-06 (fifth change) — question coverage and a structured-data resync
 Cluster: fall colour pages.
 Audited first. The section already asks and answers well: 45 question-form headings and FAQPage
