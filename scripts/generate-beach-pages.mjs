@@ -3,6 +3,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+function escapeHtml(value) {
+  return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
 const catalog = JSON.parse(await readFile(path.join(root, "data", "beaches.json"), "utf8"));
 const publicRoot = path.join(root, "public");
 
@@ -197,6 +201,51 @@ for (const beach of catalog.beaches) {
   await mkdir(directory, { recursive: true });
   await writeFile(path.join(directory, "index.html"), detailPage(beach));
 }
+
+
+// --- Crawlable beach index on the hub page -------------------------------
+// The interactive explorer builds its list in the browser, so before this the
+// 50 detail pages had no inbound link from their own hub and 15 had none from
+// anywhere on the site. This writes a static, grouped index between the
+// markers below so it regenerates from data/beaches.json and never drifts.
+const START = "<!-- beach-index:start -->";
+const END = "<!-- beach-index:end -->";
+const lakeOrder = ["Lake Michigan", "Lake Huron", "Lake Superior", "Lake Erie"];
+const byLake = new Map(lakeOrder.map((l) => [l, []]));
+for (const beach of [...catalog.beaches].sort((a, b) => a.name.localeCompare(b.name))) {
+  if (!byLake.has(beach.lake)) byLake.set(beach.lake, []);
+  byLake.get(beach.lake).push(beach);
+}
+const indexHtml = [
+  START,
+  '<section class="section" id="beachIndex" aria-labelledby="beach-index-heading">',
+  '<div class="section-head"><div><p class="section-kicker">Every beach</p>',
+  `<h2 id="beach-index-heading">All ${catalog.beaches.length} Michigan beaches by lake</h2>`,
+  '<p class="section-intro">The full list, grouped by lake. Each one has its own page with conditions, water temperature, and what the shoreline is like.</p>',
+  "</div></div>",
+  ...[...byLake.entries()]
+    .filter(([, list]) => list.length)
+    .map(([lake, list]) =>
+      `<h3>${lake}</h3><ul class="beach-index-list">` +
+      list
+        .map((b) => `<li><a href="/great-lakes-beaches/${b.slug}/">${escapeHtml(b.name)}</a> <span>${escapeHtml(b.county)} County, ${escapeHtml(b.region)}</span></li>`)
+        .join("") +
+      "</ul>",
+    ),
+  "</section>",
+  END,
+].join("\n");
+
+const hubPath = path.join(publicRoot, "great-lakes-beaches", "index.html");
+let hub = await readFile(hubPath, "utf8");
+if (hub.includes(START)) {
+  hub = hub.replace(new RegExp(`${START}[\\s\\S]*?${END}`), indexHtml);
+} else {
+  const anchor = '<section class="section" id="beachExplorer"';
+  hub = hub.replace(anchor, `${indexHtml}\n${anchor}`);
+}
+await writeFile(hubPath, hub);
+console.log(`Wrote crawlable index of ${catalog.beaches.length} beaches into the hub page.`);
 
 const urls = [
   { loc: "https://chrisizworski.com/great-lakes-beaches/", priority: "0.9", changefreq: "daily" },

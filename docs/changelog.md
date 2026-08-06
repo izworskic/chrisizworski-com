@@ -15,6 +15,20 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-06 (second change, same day) — beach cluster de-orphaned
+Cluster: Great Lakes beaches (52 detail pages + hub).
+- The hub's beach explorer builds its list in the browser, so the 50 detail pages had NO inbound
+  link from their own hub, and 15 had none from anywhere on the site. Median inbound links was 2.
+- Added a static, crawlable index of all 50 beaches grouped by lake, generated from
+  data/beaches.json by scripts/generate-beach-pages.mjs between markers, so it regenerates and
+  cannot drift from the data.
+- Result: zero-inbound beach pages 15 -> 0, median inbound 2 -> 3.
+- Fixed a false positive in benchmark:ctr, which only read sitemap.xml and so reported the beach
+  pages as missing from the sitemap. They were always in sitemap-beaches.xml. It now reads all three.
+ATTRIBUTION NOTE: this breaks the one-cluster-per-day rule set earlier today. Accepted because
+beaches and fall color are disjoint query sets and GSC page rows separate them cleanly; the cost
+is only that site-wide daily totals for Aug 6 carry two causes.
+
 ## Prior, for reference
 - 2026-08-04 — aurora dark-window + Kp strip, Soo Locks routing, fall color migration. Three
   changes shipped together; the apparent 5x CTR jump that day is NOT attributable to any one of them.
