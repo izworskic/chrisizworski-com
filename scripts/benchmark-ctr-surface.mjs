@@ -52,7 +52,8 @@ for (const [, html] of source) {
   }
 }
 
-const sitemap = await readFile(path.join(publicRoot, "sitemap.xml"), "utf8");
+const sitemapFiles = ["sitemap.xml", "sitemap-beaches.xml", "sitemap-reputation.xml"];
+const sitemap = (await Promise.all(sitemapFiles.map((f) => readFile(path.join(publicRoot, f), "utf8").catch(() => "")))).join("\n");
 const norm = (u) => (u.length > 1 ? u.replace(/\/+$/, "") : u);
 const sitemapPaths = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
 const inSitemap = new Set(sitemapPaths.map(norm));
