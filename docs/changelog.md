@@ -15,6 +15,31 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-06 (fourth change) — canopy camera anchor, MODIS repair, and honest copy
+Cluster: fall colour data layer and its claims.
+Measured first: the ORNL MODIS subset service runs 65 to 75 days behind (MOD13Q1 latest
+2026-05-25, MYD13Q1 2026-06-02, VIIRS holdings two years stale). The model only blended NDVI
+inside 30 days, so the satellite input was being silently discarded. Proven by test: at a
+simulated Oct 5 the model returned 99% with the real data date, identical to no satellite at
+all. The tracker was a calendar with a weather nudge while the pages claimed otherwise.
+- NEW lib/fall-color/phenocam.js. PhenoCam canopy cameras publish Green Chromatic Coordinate
+  at about two days latency. Two usable anchor sites near Michigan: kempnrs (45.84, -89.68)
+  north, sanford (42.73, -84.46) south. It produces ONE number, how many days ahead of or
+  behind its own history this autumn is running, and shifts the whole climatology curve by it.
+  Guards: needs 10% senescence before it speaks, needs two prior years, caps at 10 days, goes
+  quiet once senescence passes 90%, and a camera outage can never break the page.
+  Backtested on 2025: shifts of -1 to -3 days, small and plausible.
+- MODIS query repaired: 1km box (81 pixels) instead of a single pixel that read 4% off its own
+  neighbourhood, plus the pixel_reliability band fetched in parallel to drop cloud and snow.
+  Same 13s total. ageDays now returned.
+- The hard 30-day satellite cutoff became a freshness ramp, full weight to 20 days, zero by 45,
+  and every snapshot now carries a `source` block naming what actually drove the number.
+- COPY CORRECTED across 9 files. Pages claimed live NASA MODIS satellite readings as the
+  primary driver, and one said the tool works "rather than repeating last year's calendar",
+  which is precisely what it was doing. Now describes climatology, weather and canopy cameras,
+  with MODIS named only as conditional on a recent composite.
+- 6 new tests. 112 passing.
+
 ## 2026-08-06 (third change) — fall color season opens three weeks early
 Cluster: fall color machinery (no page content changed).
 Verified first, by simulation and a real end-to-end run, that the September path works: the

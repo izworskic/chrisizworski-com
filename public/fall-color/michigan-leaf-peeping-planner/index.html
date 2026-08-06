@@ -154,7 +154,7 @@
         <button class="fc-btn ghost" id="plHere">Use my location</button>
       </div>
     </div>
-    <p class="fc-note" id="plNote">Peak timing comes from the same regional model behind the live map, adjusted by recent cool nights, frost, and satellite canopy readings when a forecast reaches your dates. Drive times are straight line distance with a road allowance, so treat them as a planning estimate rather than a routing answer.</p>
+    <p class="fc-note" id="plNote">Peak timing comes from the same regional model behind the live map, adjusted by recent cool nights, frost, and canopy camera readings when a forecast reaches your dates. Drive times are straight line distance with a road allowance, so treat them as a planning estimate rather than a routing answer.</p>
   </div>
 
   <div class="fc-result" id="plOut"></div>
@@ -297,7 +297,7 @@
 
     var when = MONTHS[mo] + " " + da;
     elNote.textContent = withinForecast
-      ? "Your dates fall inside the seven day forecast, so recent cool nights, frost, and satellite canopy readings are folded into the ranking."
+      ? "Your dates fall inside the seven day forecast, so recent cool nights, frost, and canopy camera readings are folded into the ranking."
       : "Your dates are beyond the seven day forecast, so this is the calendar model for each region. Check back within a week of the trip and the weather adjustment kicks in.";
 
     // If nothing is anywhere near colour on the chosen date, say so and point at the
