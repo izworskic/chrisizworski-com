@@ -26,6 +26,15 @@
     return { year: Number(parts.year), month: Number(parts.month), day: Number(parts.day) };
   }
 
+  // Hour in Michigan time, so walk day can distinguish "closed right now" from "reopened
+  // at noon". The section was previously day-granular and still read as closed at 3 p.m.
+  function michiganHour(date) {
+    return Number(
+      new Intl.DateTimeFormat("en-GB", { timeZone: ZONE, hour: "2-digit", hour12: false })
+        .formatToParts(date).find(function (p) { return p.type === "hour"; }).value,
+    );
+  }
+
   function dayKey(p) {
     return p.year + "-" + String(p.month).padStart(2, "0") + "-" + String(p.day).padStart(2, "0");
   }
@@ -115,11 +124,16 @@
     section.classList.toggle("is-walk-day", isToday);
 
     if (isToday) {
+      var hour = michiganHour(new Date());
       setText(
         "[data-walk-state]",
-        "The bridge is closed to public traffic until noon today. The live status card above reports the " +
-          "official condition once it reopens."
+        hour < 12
+          ? "The bridge is closed to public traffic until noon today. The live status card above reports the " +
+            "official condition once it reopens."
+          : "The walk is over and the bridge reopened to public traffic at noon today. The live status card " +
+            "above has the current official condition."
       );
+      section.classList.toggle("is-walk-open-again", hour >= 12);
     }
 
     var ld = document.createElement("script");
