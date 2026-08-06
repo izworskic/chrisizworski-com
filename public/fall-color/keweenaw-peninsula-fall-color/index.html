@@ -210,6 +210,13 @@
   .faq p{margin-top:3px}
   :focus-visible{outline:2px solid var(--water);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+    .field-camera{margin:1rem 0 1.4rem}
+    .field-camera .camera-shot{width:100%;height:auto;max-width:720px;border-radius:10px;display:block}
+    .field-camera[data-state="stale"] .camera-shot{filter:saturate(.55)}
+    .field-camera .camera-caption{margin:.45rem 0 .1rem;font-size:.9rem;opacity:.85}
+    .field-camera .camera-credit{margin:0;font-size:.8rem;opacity:.6}
+    .field-camera .camera-out{margin:0;font-size:.9rem;opacity:.7}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -248,7 +255,10 @@
   <h2>How to time your visit</h2>
   <p>Plan the last week of September into the first week of October, the same early window as the Porkies. As the northernmost land in Michigan, the Keweenaw gets cold first. Brockway is exposed and the wind off Superior is real, so a calm clear morning is the prize.</p>
 
-  <h2>Common questions</h2>
+  <h2 id="m26-keweenaw-camera-heading">Live Camera in the Keweenaw</h2>
+<p>An MDOT road weather camera on M-26 in Houghton County. It points at the highway rather than a scenic overlook, but the shoulders are hardwood, so through late September and early October it shows what the canopy is actually doing.</p>
+<div class="field-camera" data-field-camera="m26-keweenaw"><p class="camera-out">Loading the camera...</p></div>
+<h2>Common questions</h2>
   <div class="faq">
     <h3>When does fall color peak in the Keweenaw Peninsula?</h3>
     <p>The Keweenaw usually peaks around September 28 to October 6, among the earliest in Michigan. As the state's northernmost land, surrounded by Lake Superior, it gets the first cold of the season.</p>
@@ -322,5 +332,6 @@
   }).catch(function(){});
 })();
 </script>
+<script defer src="/assets/field-camera.js"></script>
 </body>
 </html>

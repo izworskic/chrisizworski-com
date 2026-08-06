@@ -210,6 +210,13 @@
   .faq p{margin-top:3px}
   :focus-visible{outline:2px solid var(--water);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+    .field-camera{margin:1rem 0 1.4rem}
+    .field-camera .camera-shot{width:100%;height:auto;max-width:720px;border-radius:10px;display:block}
+    .field-camera[data-state="stale"] .camera-shot{filter:saturate(.55)}
+    .field-camera .camera-caption{margin:.45rem 0 .1rem;font-size:.9rem;opacity:.85}
+    .field-camera .camera-credit{margin:0;font-size:.8rem;opacity:.6}
+    .field-camera .camera-out{margin:0;font-size:.9rem;opacity:.7}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -248,7 +255,10 @@
   <h2>How to time your visit</h2>
   <p>Mid-October is the reliable window, a week or so behind the northwest Lower Peninsula. Mornings on the river are still and often misted; the color is best with the sun up but low. Check livery hours, since canoe rental winds down as the season ends.</p>
 
-  <h2>Common questions</h2>
+  <h2 id="i75-grayling-camera-heading">Live Camera in the Au Sable Country</h2>
+<p>There is no camera on the Au Sable itself. This is the nearest one: an MDOT camera at the Grayling rest area on I-75, a few miles from the Holy Waters. It shows the weather and the roadside canopy around Grayling, not the river.</p>
+<div class="field-camera" data-field-camera="i75-grayling"><p class="camera-out">Loading the camera...</p></div>
+<h2>Common questions</h2>
   <div class="faq">
     <h3>When do leaves peak along the Au Sable River?</h3>
     <p>The Au Sable country around Grayling usually peaks around October 9 to 17, a week or so behind the northwest Lower Peninsula. Maple and aspen turn gold over the dark pine along the banks.</p>
@@ -322,5 +332,6 @@
   }).catch(function(){});
 })();
 </script>
+<script defer src="/assets/field-camera.js"></script>
 </body>
 </html>
