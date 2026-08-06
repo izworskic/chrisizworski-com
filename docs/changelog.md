@@ -15,6 +15,30 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-06 (seventh change) — Mackinac Bridge query coverage, and a walk-day precision fix
+Cluster: Mackinac Bridge.
+Alphabet-expanded autocomplete, 246 unique suggestions. The cluster is in better shape than
+expected: Bridge Walk, Labor Day, shuttle, tractor crossing, events, webcam, wait time, MacPass
+and the toll cluster are all covered, and the Bridge Walk has a full section with timing, start
+locations, getting back and accessibility. Four measured gaps, all small:
+- "open or closed" is a top query phrasing and appeared nowhere; now in the meta description
+- "live cam" appeared nowhere though "webcam" and "camera" did; camera heading now carries both
+- "how long" and "swaying in the wind" are recurring queries with no answer on the page; two
+  questions added. Facts checked: five miles total, 3,800 foot suspended span, 45 mph posted for
+  cars, about seven minutes to cross.
+REAL FIX: the Bridge Walk section was DAY-granular. On walk day at 3 p.m. it still read "the
+bridge is closed to public traffic until noon today" although the bridge reopened at noon. It is
+now window-aware using the same Michigan timezone helper, so after noon it says the walk is over
+and the bridge has reopened.
+WHAT WAS BUILT AND THEN BACKED OUT, recorded because the lesson is the point: a server-side
+scheduledClosure() was added to lib/mackinac.js and the API, with a banner on the page. Two
+existing tests caught it. One forbids a hardcoded year in the Bridge Walk section; the other
+forbids FAQPage schema on this page entirely. Both guardrails were right. Worse, the walk date
+logic ALREADY existed in public/assets/mackinac-bridge-walk.js, with proper Intl America/Detroit
+handling, better than the hardcoded UTC-4 offset in the new code. The whole addition was
+duplication of the exact kind flagged in the fall colour sitemap earlier the same day. Reverted
+in full; only the day-to-window precision fix was kept.
+
 ## 2026-08-06 (sixth change) — town-level fall colour demand
 Cluster: fall colour region pages.
 Alphabet-expanded Google autocomplete across "michigan fall color a" through "z" and "fall color
