@@ -1,6 +1,6 @@
 # Michigan Fall Color
 
-> A live field guide to Michigan's fall color season. It tracks where the leaves are turning from NASA MODIS satellite canopy data and Open-Meteo weather, shows a multi-day forecast by region, recommends where to go, and lists rivers to paddle through the color. Built and maintained by Chris Izworski, a Michigan outdoor writer.
+> A live field guide to Michigan's fall color season. It tracks where the leaves are turning from canopy camera canopy data and Open-Meteo weather, shows a multi-day forecast by region, recommends where to go, and lists rivers to paddle through the color. Built and maintained by Chris Izworski, a Michigan outdoor writer.
 
 Site: https://chrisizworski.com/fall-color
 
@@ -21,7 +21,8 @@ The last color is tamarack, a conifer that turns gold and drops its needles in n
 
 ## How the live color is measured
 
-- Satellite: NASA MODIS 16 day NDVI canopy greenness, compared to each region's summer maximum to estimate how far the canopy has turned.
+- Canopy cameras: PhenoCam green chromatic coordinate at two anchor sites, used to shift the climatology curve when the year runs early or late
+- Satellite (only when a recent composite exists): NASA MODIS 16 day NDVI canopy greenness, compared to each region's summer maximum to estimate how far the canopy has turned.
 - Weather: Open-Meteo daily temperatures and frost dates, which pull the peak earlier after a run of cold nights.
 - A regional climatology model sets the typical timing, and the live satellite and weather readings adjust it from there.
 - A short daily color note is written through the season.
