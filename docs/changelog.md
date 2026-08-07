@@ -15,6 +15,24 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-07 (third change) — four Saginaw Bay cameras registered on the hub API
+Cluster: field camera registry only. No hub page changed.
+Looked at all four images before registering any of them, which is now the standing rule after the
+Sylvania metadata lesson. All four are usable views of water, not of bridge undersides:
+- Saginaw River at Holland Avenue watches USGS 04157005, the exact gauge at the head of the
+  Saginaw Bay Report's documented turbidity cascade, so the number and a picture of the same
+  water now arrive together. Strongest fit of the four.
+- Kawkawlin at State Park Drive shows the marina, docks and water surface near Bay City State Park.
+- Sebewaing at Center Street sits essentially on Sebewaing Harbor Marina, already pinned on that
+  site's map.
+- Pine River at Pine River Road sits on the Pine River Access at Standish, also already pinned.
+Registered on the hub because api/field-camera.js already sets Access-Control-Allow-Origin *, so
+the separate saginaw-bay-report project can consume it rather than carrying a duplicate registry
+and proxy. Duplication of exactly that kind was the mistake made on the Mackinac cluster the day
+before. Each entry carries a `zone` matching that site's three-zone model, now exposed in ?meta=1.
+Honest limit to carry into the pages: these look at rivers and river mouths, not the open bay.
+They answer what the water looks like where you launch, not whether the bay is fishable.
+
 ## 2026-08-07 (second change) — aurora page, the biggest page finally audited
 Cluster: /northern-lights-michigan/, 18,461 impressions and 45.7% of all site impressions.
 Alphabet-expanded autocomplete across FOUR phrasings, "northern lights michigan", "michigan
