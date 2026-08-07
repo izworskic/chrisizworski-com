@@ -15,6 +15,25 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-07 (fourth change) — Soo Locks demand audit, the last big page unexamined
+Cluster: /soo-locks/, 11,919 impressions and 29.5% of site impressions.
+Alphabet-expanded autocomplete across four phrasings, "soo locks", "sault ste marie locks",
+"soo locks ships" and "soo locks michigan": 386 unique suggestions.
+- THE SYNONYM AGAIN, now three for three. "Sault Ste. Marie locks" is its own 88-suggestion family
+  and that exact phrase appeared NOWHERE on the page. The description mentioned Sault Ste. Marie
+  only as a place for visitor hours, never as the name of the locks themselves.
+- "webcam" absent though the page had "cam" and "live cam", against a 47-suggestion camera cluster.
+- Four top informational queries had no answer in the words people use, although every fact was
+  already ON the page: how many locks there are, how long they are, who owns them, and whether they
+  are open right now. The lock cards carry the specs and the navigation season block carries the
+  dates; nothing new was asserted, it was restated as questions.
+- Only TWO question headings on a page carrying 29.5% of impressions. Now seven.
+- The title was left alone: it is pinned in tests/growth-static.test.js. The synonym went into the
+  description instead, the same approach used on aurora.
+Not acted on: the campground, hotel and boat-tour clusters are real demand but belong to operators
+and booking sites, not to a conditions tool. benchmark:ctr still scores this page 100% on snippet
+surface, and its 123 modeled clicks at risk remain an INTENT question that needs GSC query rows.
+
 ## 2026-08-07 (third change) — four Saginaw Bay cameras registered on the hub API
 Cluster: field camera registry only. No hub page changed.
 Looked at all four images before registering any of them, which is now the standing rule after the
