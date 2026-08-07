@@ -9,6 +9,16 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 7 2026: the five Soo Locks photographs were AI generated. Replaced with real,
+  // freely licensed photographs of the actual locks, each with visible attribution:
+  // a panoramic aerial (CC BY 4.0), the MacArthur Lock (CC BY-SA 3.0), the 1,000-foot
+  // Burns Harbor in the Poe Lock and freighters waiting above the locks (both public
+  // domain, USACE), and the administration building (CC BY-SA 4.0).
+  "/assets/soo-locks/hero.jpg",
+  "/assets/soo-locks/lock-chamber.jpg",
+  "/assets/soo-locks/freighter.jpg",
+  "/assets/soo-locks/saltie.jpg",
+  "/assets/soo-locks/observation-deck.jpg",
   // Aug 6 2026: entity integrity. The #person node carried three conflicting jobTitle
   // values under one @id ("Solutions Consultant", "Solutions Consultant at Prepared",
   // "Writer and Publisher"), which reads as one entity contradicting itself. Normalised
