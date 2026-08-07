@@ -72,6 +72,7 @@ async function handler(req, res) {
         credit: camera.credit,
         credit_url: camera.creditUrl,
         region: camera.region || null,
+        zone: camera.zone || null,
         latitude: camera.latitude ?? null,
         longitude: camera.longitude ?? null,
         note: "Road weather cameras point at the roadway. They are shown for conditions, not as scenic overlooks.",
