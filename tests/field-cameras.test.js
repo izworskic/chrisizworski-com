@@ -6,9 +6,10 @@ test("every registered camera has a label, credit and a real upstream", () => {
   for (const [id, cam] of Object.entries(CAMERAS)) {
     assert.ok(cam.label, `${id} needs a label`);
     assert.ok(cam.credit && cam.creditUrl, `${id} needs attribution`);
-    assert.ok(["usgs", "mdot"].includes(cam.source), `${id} has an unknown source`);
+    assert.ok(["usgs", "mdot", "phenocam"].includes(cam.source), `${id} has an unknown source`);
     if (cam.source === "mdot") assert.match(cam.file, /^\d+\.jpg$/);
     if (cam.source === "usgs") assert.match(cam.camId, /^MI_/);
+    if (cam.source === "phenocam") assert.match(cam.site, /^[a-z0-9]+$/);
   }
 });
 
@@ -31,6 +32,12 @@ test("age, not the hidden flag, decides whether an image is usable", () => {
   assert.equal(isUsable(new Date(now - 72 * 3600000).toISOString(), 26), false, "three days is not");
   assert.equal(isUsable(new Date(now - 3 * 365 * 24 * 3600000).toISOString(), 26), false, "years-dead cameras must fail");
   assert.equal(isUsable(null, 26), false);
+});
+
+test("canopy cameras resolve to PhenoCam and nothing else", async () => {
+  const c = await resolveCamera("sylvania-canopy");
+  assert.ok(c.url.startsWith("https://phenocam.nau.edu/data/latest/"));
+  assert.equal(c.contentType, "image/jpeg");
 });
 
 test("every fall colour camera names the region page it belongs to", () => {

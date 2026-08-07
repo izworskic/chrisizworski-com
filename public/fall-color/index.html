@@ -488,6 +488,13 @@
   .specrow .dot{width:11px;height:11px;border-radius:50%;margin-top:6px;flex:0 0 auto;box-shadow:0 0 0 1px rgba(42,32,24,.22)}
   .faq{margin:14px 0}
   .faq h3{font-size:15.5px;margin-bottom:2px}
+
+    .field-camera{margin:1rem 0 1.4rem}
+    .field-camera .camera-shot{width:100%;height:auto;max-width:720px;border-radius:10px;display:block}
+    .field-camera[data-state="stale"] .camera-shot{filter:saturate(.55)}
+    .field-camera .camera-caption{margin:.45rem 0 .1rem;font-size:.9rem;opacity:.85}
+    .field-camera .camera-credit{margin:0;font-size:.8rem;opacity:.6}
+    .field-camera .camera-out{margin:0;font-size:.9rem;opacity:.7}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -604,7 +611,10 @@
       <h2>Best places to see fall color in Michigan</h2>
       <h3><a href="/fall-color/porcupine-mountains-fall-color/">The Porcupine Mountains</a></h3><p>Old-growth sugar maple above Lake of the Clouds, the first and one of the most intense turns in the state. Peaks late September to early October.</p><h3><a href="/fall-color/keweenaw-peninsula-fall-color/">The Keweenaw Peninsula</a></h3><p>Brockway Mountain Drive along a ridge over Lake Superior at Michigan's far northern tip. Peaks late September to early October.</p><h3><a href="/fall-color/tahquamenon-falls-fall-color/">Tahquamenon Falls</a></h3><p>Gold birch and maple over the amber water of the Upper Falls in the eastern U.P. Peaks the first week or so of October.</p><h3><a href="/fall-color/upper-peninsula-fall-color/">The Upper Peninsula</a></h3><p>How the whole peninsula turns, west to east, with the standout drives and overlooks. Peaks late September into mid-October.</p><h3><a href="/fall-color/tunnel-of-trees-fall-color/">The Tunnel of Trees</a></h3><p>The canopy drive on M-119 from Harbor Springs to Cross Village. Peaks early to mid-October.</p><h3><a href="/fall-color/mackinac-island-fall-color/">Mackinac Island</a></h3><p>Color without cars at the Straits, seen by bike along the bluffs. Peaks early to mid-October.</p><h3><a href="/fall-color/sleeping-bear-dunes-fall-color/">Sleeping Bear Dunes</a></h3><p>Hardwood color over dune and Lake Michigan on the Pierce Stocking drive. Peaks the second and third weeks of October.</p><h3><a href="/fall-color/au-sable-river-fall-color/">The Au Sable River</a></h3><p>Maple and aspen over dark pine, best by canoe on the Holy Waters near Grayling. Peaks mid-October.</p><h3><a href="/fall-color/saginaw-bay-fall-color/">Saginaw Bay and central Michigan</a></h3><p>Oak and maple on the bay flats around Bay City and Midland, timed with the waterfowl push. Peaks mid to late October.</p><h3><a href="/fall-color/saugatuck-southwest-michigan-fall-color/">Saugatuck and the southwest shore</a></h3><p>Late lakeshore color over the Lake Michigan dunes. Peaks the last week of October into early November.</p><h3><a href="/fall-color/ann-arbor-irish-hills-fall-color/">Ann Arbor and the Irish Hills</a></h3><p>The last color in the state, oaks holding russet into November. Peaks late October.</p>
 
-      <h2>Common questions about Michigan fall color</h2>
+      <h2 id="sylvania-canopy-heading">Live Canopy Camera in the Western U.P.</h2>
+<p>A research camera above the forest in the Sylvania Wilderness, looking out over mixed northern hardwood in Michigan's western Upper Peninsula. The map tells you the numbers; this shows you the trees.</p>
+<div class="field-camera" data-field-camera="sylvania-canopy"><p class="camera-out">Loading the camera...</p></div>
+<h2>Common questions about Michigan fall color</h2>
       <div class="faq"><h3>When is peak fall color in the Upper Peninsula?</h3><p>The Western Upper Peninsula, including the Porcupine Mountains and the Keweenaw, usually peaks in the last days of September and the first week of October, the earliest color in the state. The Eastern Upper Peninsula around Tahquamenon follows in the first and second weeks of October.</p><h3>Where is fall foliage peaking in Michigan right now?</h3><p>The map above shows all eight regions as they stand today. Michigan turns roughly north to south over about five weeks, so on any given weekend in October some part of the state is at peak even when your own county is not.</p><h3>Is there a daily Michigan fall color report?</h3><p>Yes. A short written report on where the colour stands is published every day from August 20 through November 15, and it is also available as an RSS feed.</p></div><div class="faq"><h3>Does northern Michigan peak before southern Michigan?</h3><p>Yes. Color runs north to south across roughly four weeks. The Upper Peninsula leads in late September, northern Lower Michigan peaks in mid October, and the southern border near Ann Arbor and the Irish Hills peaks in the last week of October.</p></div><div class="faq"><h3>What is the best week to see fall color in Michigan?</h3><p>For most of the Lower Peninsula north of Grand Rapids, the second and third weeks of October are the surest bet. For the Upper Peninsula, aim for the last week of September into early October. Southern Michigan is best in the final week of October.</p></div><div class="faq"><h3>When do the tamaracks turn gold?</h3><p>Tamarack is the last to turn. It goes gold and drops its needles in the northern bogs in early to mid November, a quiet second wave after the maples have fallen.</p></div><div class="faq"><h3>How does this map know where the color is?</h3><p>It blends a regional climatology model with Open-Meteo weather and PhenoCam canopy camera readings, plus NASA MODIS canopy greenness whenever a recent composite is available. The canopy readings show how far each region has turned, a run of cold nights pulls the peak earlier, and a short note is written each day through the season.</p></div><div class="faq"><h3>Can you canoe or kayak through fall color in Michigan?</h3><p>Yes. Rivers like the Au Sable Holy Waters near Grayling, the Pine near Wellston, the Platte and Crystal near Sleeping Bear, and the Two Hearted in the eastern Upper Peninsula run beneath hardwood canopy. The On the water tab shows the live color along each run.</p></div>
     </div>
 
@@ -1264,6 +1274,7 @@ function init(){
 }
 init();
 </script>
+<script defer src="/assets/field-camera.js"></script>
 </body>
 </html>
 

@@ -15,6 +15,28 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-07 — real Soo Locks photographs, and canopy cameras on fall colour
+Cluster: Soo Locks imagery and fall colour cameras.
+- The five Soo Locks photographs were AI generated. All five replaced with real, freely licensed
+  photographs of the actual locks, sourced from Wikimedia Commons and verified by eye before use:
+  a panoramic aerial showing the parallel chambers and the International Bridge (CC BY 4.0,
+  August Schwerdfeger); the MacArthur Lock (CC BY-SA 3.0, Gpwitteveen); the 1,000-foot Burns
+  Harbor in the Poe Lock at night in winter (public domain, Carmen Paris for USACE); freighters
+  waiting above the locks (public domain, USACE Detroit District); and the administration
+  building (CC BY-SA 4.0, Acroterion). Every image carries visible attribution with a licence
+  link, which CC BY and CC BY-SA both require.
+- Alt text rewritten to describe what each photograph actually shows rather than what the
+  generated image had been captioned as. The old "saltie" slot had no free equivalent, so it now
+  shows freighters waiting above the locks and says exactly that instead of claiming an
+  oceangoing vessel.
+- PHENOCAM ADDED as a third camera source. The Sylvania Wilderness camera in Gogebic County is
+  mounted above the forest and looks out over mixed northern hardwood, which makes it a better
+  fall colour image than any road camera. Placed on /fall-color/ and the Upper Peninsula page.
+  Worth recording: the site's primary vegetation code reads evergreen needleleaf, and on that
+  basis it had been written off as useless for colour. Opening the actual image showed mostly
+  hardwood. Look at the picture before trusting the metadata field.
+- 118 tests, seven gates green.
+
 ## 2026-08-06 (eighth change) — live field cameras on Soo Locks and the fall colour regions
 Cluster: Soo Locks and five fall colour region pages.
 Probed three camera networks live before building anything, and the gaps are worth recording:
