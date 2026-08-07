@@ -15,6 +15,37 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-07 (second change) — aurora page, the biggest page finally audited
+Cluster: /northern-lights-michigan/, 18,461 impressions and 45.7% of all site impressions.
+Alphabet-expanded autocomplete across FOUR phrasings, "northern lights michigan", "michigan
+northern lights", "aurora borealis michigan" and "michigan aurora", a through z: 530 unique
+suggestions, the largest demand set pulled for any page.
+Three gaps, all measured:
+- "aurora borealis" appeared ZERO times on the page, against 91 of 530 suggestions using that
+  exact phrase. The same synonym miss as "foliage" on fall colour.
+- "northern Michigan" is the single most common place term in the set, 18 mentions, and appeared
+  nowhere. "west Michigan" 8 and "southeast Michigan" 4 were also absent.
+- Demand is town-shaped again: Marquette 9, Houghton 5, Gaylord 4, Kalamazoo 4, Petoskey 4,
+  Munising 4, Alpena 3, Escanaba 3, Grand Rapids 3, Holland 3, Paradise 3, Lansing 6. Nine of
+  those appeared nowhere on the page.
+What shipped:
+- Region `places` strings in lib/aurora.js now name the towns, and the static cards on the page
+  were synced to match. Those strings existed in TWO places and had drifted, so the town names
+  were only reaching the page after the client fetched the API. tests/aurora-regions.test.js now
+  binds them together so they cannot drift again.
+- Deliberately did NOT add a west Michigan region. Latitude governs aurora visibility and Grand
+  Rapids sits 0.6 degrees from Detroit, so a separate region would add no real signal. The
+  cities are named inside the existing region instead.
+- THE TITLE WAS LEFT ALONE ON PURPOSE. It is pinned in two places, and this page already converts
+  ABOVE its modelled CTR for position 10, so a rewrite risks more than it gains. The synonym went
+  into the description instead: the title keeps "Northern Lights", the snippet now carries
+  "aurora borealis", and both halves of the demand are covered.
+- Three question headings added for phrasings with no match: can you see the northern lights in
+  Michigan, where is the best place to see the aurora borealis in Michigan, and what are the
+  northern lights doing this week. The last one surfaces the three-night outlook that already
+  existed but was never described in the words people search.
+- 121 tests, seven gates green.
+
 ## 2026-08-07 — real Soo Locks photographs, and canopy cameras on fall colour
 Cluster: Soo Locks imagery and fall colour cameras.
 - The five Soo Locks photographs were AI generated. All five replaced with real, freely licensed
