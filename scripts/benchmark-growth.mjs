@@ -28,6 +28,10 @@ function nearlyEqual(a, b, tolerance = 0.000001) {
   return Math.abs(a - b) <= tolerance;
 }
 
+function daysBetween(start, end) {
+  return Math.round((Date.parse(end) - Date.parse(start)) / 86400000);
+}
+
 const current = benchmark.measurement.current28Days;
 const previous = benchmark.measurement.previous28Days;
 const hundredX = benchmark.milestones.find((milestone) => milestone.name === "100x north star");
@@ -63,6 +67,29 @@ check(
     ledger.experiments.some((experiment) => experiment.path === page.path),
   ),
 );
+check(
+  "Experiment protocol requires a clean 28-day window",
+  ledger.measurementProtocol?.windowDays === 28 &&
+    ledger.measurementProtocol?.startOffsetDays === 1,
+);
+for (const experiment of ledger.experiments) {
+  if (experiment.status === "running") {
+    check(
+      `${experiment.id} has a valid running window`,
+      Boolean(experiment.releaseDate && experiment.evaluationWindow) &&
+        daysBetween(experiment.releaseDate, experiment.evaluationWindow.start) === 1 &&
+        daysBetween(experiment.evaluationWindow.start, experiment.evaluationWindow.end) + 1 === 28,
+    );
+  }
+  if (experiment.status === "pending-clean-window") {
+    check(
+      `${experiment.id} does not claim an unreleased measurement window`,
+      experiment.releaseDate === null &&
+        experiment.evaluationWindow === null &&
+        Boolean(experiment.lastSearchFacingChangeDate),
+    );
+  }
+}
 check(
   "Monetization sequence is ad-first",
   benchmark.revenueModel.sequence.join("|") === "search growth|Google AdSense|post-proof sponsorships",

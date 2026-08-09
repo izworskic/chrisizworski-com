@@ -3,6 +3,29 @@
 One dated entry per production change, so Search Console movement can be attributed to a cause
 instead of guessed at. Do not ship two page clusters on the same day.
 
+## 2026-08-09 — measurement integrity before the 28-day growth freeze
+Cluster: fall color (15 pages), Aurora, Soo Locks, and Mackinac Bridge.
+- Normalised every fall-color Person definition and reference to the canonical
+  `https://chrisizworski.com/#person` ID. The entity benchmark now fails if a second Person ID
+  appears; the previous configuration claimed this requirement but never enforced it.
+- Added full Person and WebPage definitions plus a visible Chris Izworski byline to the leaf
+  peeping planner and scenic-drive map. Their structured-data URLs now match their trailing-slash
+  canonicals.
+- Added privacy-safe Vercel events for planner runs, location outcomes, route filtering, map opens,
+  and field-guide clicks. This makes the two new fall tools measurable beyond raw pageviews.
+- Replaced stale structured-data and root-sitemap dates with reviewed modification dates. The
+  dynamic fall sitemap now includes all 15 pages and omits `lastmod`, because it cannot truthfully
+  infer that every crawlable page changed today.
+- Marked the Aurora, Soo Locks, and Mackinac experiments `pending-clean-window`; their August 3
+  evaluation dates were invalidated by later search-facing changes. The exact 28-day window begins
+  the day after this corrective release reaches production.
+- Titles, descriptions, H1s, direct answers, canonicals, and indexability were not changed in this
+  pass. This is the measurement lock that lets the next comparison mean something.
+
+Expected to affect: name-entity consistency immediately after recrawl, accurate fall-tool
+engagement reporting on release, and interpretable Aurora/Soo/Mackinac CTR comparisons after one
+complete 28-day window. NOT YET MEASURED.
+
 ## 2026-08-06 — fall color snippet repair + entity integrity
 Cluster: fall color (16 pages) and the identity cluster (2 pages).
 - 12 titles cut to 60 characters or fewer. Every over-length title on the site was a fall color page.

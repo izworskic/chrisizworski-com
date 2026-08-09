@@ -14,7 +14,7 @@ const check = process.argv.includes("--check");
 async function walk(d) { const o = []; for (const e of await readdir(d, { withFileTypes: true })) { const p = path.join(d, e.name); if (e.isDirectory()) o.push(...await walk(p)); else if (e.name === "index.html") o.push(p); } return o; }
 const files = await walk(publicRoot);
 
-let personNodes = 0, sameAs = [], jobTitles = new Set(), danglingRefs = 0, personIds = new Set();
+let personNodes = 0, sameAs = [], jobTitles = new Set(), personIds = new Set();
 for (const f of files) {
   const html = await readFile(f, "utf8");
   for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
@@ -24,7 +24,6 @@ for (const f of files) {
       if (n["@type"] === "Person") { personNodes += 1; personIds.add(id); if (n.jobTitle) jobTitles.add(n.jobTitle); if (Array.isArray(n.sameAs)) sameAs = [...new Set([...sameAs, ...n.sameAs])]; }
       else if (id.endsWith("#person")) { /* reference node */ }
     }
-    if (/"@id"\s*:\s*"[^"]*#person"/.test(m[1]) && !/"@type"\s*:\s*"Person"/.test(m[1])) danglingRefs += 0;
   }
 }
 
@@ -39,7 +38,11 @@ console.log(`\nsameAs entries: ${sameAs.length}`);
 console.log(`  self-owned domains : ${sameAs.length - independent.length}  (low entity weight, they only vouch for themselves)`);
 console.log(`  independent        : ${independent.length}  (this is the number that matters)`);
 console.log(`Person nodes with full definition: ${personNodes}   jobTitle values in use: ${[...jobTitles].join(", ") || "none"}`);
+console.log(`Person @id values: ${[...personIds].join(", ") || "none"}`);
 if (jobTitles.size > 1) console.log(`  WARNING: ${jobTitles.size} different job titles across the site. Every new surface copies whichever is live.`);
+if (personIds.size !== 1 || !personIds.has(b.canonicalPersonId)) {
+  console.log(`  WARNING: Person definitions must resolve to the single canonical @id ${b.canonicalPersonId}.`);
+}
 
 console.log(`\nOWNED INDEPENDENT SURFACES (${ownedIndependent.length} of gate ${b.gates.minIndependentOwnedSurfaces})`);
 for (const s of ownedIndependent) console.log(`  w${s.weight}  ${s.id.padEnd(11)} ${s.url}`);
@@ -75,6 +78,9 @@ console.log("");
 if (check) {
   const problems = [];
   if (ownedIndependent.length < b.gates.minIndependentOwnedSurfaces) problems.push(`${ownedIndependent.length} independent surfaces owned, gate is ${b.gates.minIndependentOwnedSurfaces}`);
+  if (b.gates.requireSinglePersonNode && (personIds.size !== 1 || !personIds.has(b.canonicalPersonId))) {
+    problems.push(`Person @id values are ${[...personIds].join(", ") || "missing"}; required ${b.canonicalPersonId}`);
+  }
   if (b.gates.requireJobTitleConsistency && jobTitles.size > 1) problems.push(`${jobTitles.size} conflicting jobTitle values`);
   if (dead.length > b.gates.maxDeadSameAs) problems.push(`${dead.length} dead sameAs URLs`);
   if (problems.length) { console.error("ENTITY BENCHMARK FAILED:"); problems.forEach((p) => console.error("  - " + p)); process.exit(1); }

@@ -1,7 +1,14 @@
 {
-  "ledgerVersion": "1.2.0",
+  "ledgerVersion": "1.3.0",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
+  "measurementProtocol": {
+    "windowDays": 28,
+    "startOffsetDays": 1,
+    "restartTrigger": "Any search-facing change to the title, description, H1, first answer, structured data, canonical, or indexability resets the window.",
+    "pendingWindowRule": "For pending-clean-window experiments, set releaseDate to the production merge date and evaluate the 28 complete days beginning the next day.",
+    "freezeDuringWindow": ["title", "metaDescription", "h1", "firstAnswer", "structuredData", "canonical", "indexability"]
+  },
   "experiments": [
     {
       "id": "2026-08-03-tomato-snippet",
@@ -57,9 +64,10 @@
         {"query": "northern lights tonight near me", "impressions": 194, "clicks": 2, "ctr": 0.0103, "averagePosition": 7.91}
       ],
       "target": {"ctr": 0.025},
-      "status": "running",
-      "releaseDate": "2026-08-03",
-      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-09",
       "decisionDate": null,
       "result": null,
       "stopCondition": "NOAA parsing, map behavior, or existing manual fallback regresses."
@@ -77,9 +85,10 @@
         {"query": "soo locks schedule tomorrow", "impressions": 144, "clicks": 5, "ctr": 0.0347, "averagePosition": 8.87}
       ],
       "target": {"ctr": 0.025},
-      "status": "running",
-      "releaseDate": "2026-08-03",
-      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-09",
       "decisionDate": null,
       "result": null,
       "stopCondition": "Named-vessel data is republished without permission or the live map regresses."
@@ -97,9 +106,10 @@
         {"query": "mackinac bridge traffic today", "impressions": 6, "averagePosition": 10.17}
       ],
       "target": {"ctr": 0.02, "averagePosition": 10},
-      "status": "running",
-      "releaseDate": "2026-08-03",
-      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-09",
       "decisionDate": null,
       "result": null,
       "stopCondition": "The official Bridge Authority source, fail-safe open/closed logic, cameras, canonical, or live crossing flow regresses."

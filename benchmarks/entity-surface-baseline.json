@@ -1,6 +1,7 @@
 {
-  "benchmarkVersion": "1.0.0",
+  "benchmarkVersion": "1.1.0",
   "baselineCreated": "2026-08-06",
+  "canonicalPersonId": "https://chrisizworski.com/#person",
   "purpose": "Track ownership of the search surfaces that carry the Chris Izworski entity, so the name SERP cannot be contested and AI answer engines resolve the entity correctly. Runs alongside every build; it is never finished.",
   "principle": "Eight of nine slots on the name SERP already belong to chrisizworski.com. That is a single point of failure, not a moat: Google generally shows at most two results per domain outside navigational queries. Durable ownership comes from INDEPENDENT third-party surfaces that agree with each other and link back, not from more pages on the owned domain.",
   "selfOwnedDomains": ["chrisizworski.com","michigantroutreport.com","michiganbirdingreport.com","greatlakeslevels.org","freighterviewfarms.com","izworskic.github.io","aibreakdown5.wordpress.com"],
