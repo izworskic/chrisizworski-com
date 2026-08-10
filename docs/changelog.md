@@ -38,6 +38,47 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-09 — dateModified told the truth for the first time
+Cluster: site-wide metadata, 103 pages. No visible content changed.
+Measured: every one of the 159 pages carrying a dateModified was UNDERSTATING it. None overstated.
+103 were behind by more than a week and the worst by 100 days, with pages edited on August 6 still
+claiming they had not changed since April 28. The stamps had been set by hand in bulk and drifted
+every time anything shipped.
+This matters more here than on most sites. Freshness is a citation signal in AI Overviews, current
+research puts cited content around 26% fresher than the organic top ten, and the whole proposition
+of this network is live conditions: the aurora page recomputes on every load and fall colour begins
+writing daily on August 20. Telling Google those pages had sat untouched since spring was the
+opposite of true, and it was costing nothing but honesty to fix.
+- NEW scripts/stamp-freshness.mjs derives each stamp from the file's last git commit, so it can
+  never drift again. `npm run freshness` rewrites, `npm run freshness -- --check` gates, and the
+  check is now the eighth step of verify:all. It tolerates 7 days of lag so that the commit which
+  writes a stamp does not immediately invalidate it.
+- Two tests pinned literal dates (2026-07-28 and 2026-08-03) and would have broken on the next
+  legitimate edit of those pages. They now assert the shape and that the date is not in the future,
+  which is the property that actually matters and cannot go stale.
+- Verified separately that nothing on the site blocks snippet extraction: max-snippet:-1 and
+  max-image-preview:large are already set, which is the single most common way a site accidentally
+  disqualifies itself from being cited.
+NOTE for the next run: audit/live/manifest.json stores hashes, not bodies, so the 103 stamp-only
+edits had to be declared in intentionalChanges. Re-run `npm run audit:live` after this deploys to
+refresh the snapshot, then those declarations can be removed.
+
+Follow-ups after rebasing onto PR #44, which landed mid-build:
+- The stamper is CONTENT-AWARE. A first version used the file's last commit outright, which made it
+  oscillate: it stamped a date, the commit carrying that stamp became the newest commit, and the
+  next run stamped that. A rebase made it stamp "today" on every page. It now walks back through
+  commits and ignores any whose diff for that file touches only dateModified or lastmod.
+- SITEMAP lastmod IS NOW OWNED BY THE SAME SCRIPT. PR #44's integrity test caught a real bug this
+  way: it changed mackinac-bridge-live's content on Aug 9 and left both its stamp and its sitemap
+  entry at Aug 6. Syncing found 124 sitemap entries disagreeing with their own page.
+- Three pinned-date tests were rewritten to assert the property rather than the literal: two now
+  check the shape and that the date is not in the future, and PR #44's now checks that sitemap
+  lastmod and dateModified AGREE, which is what it was really protecting and does not go stale.
+- verify-source carried a hardcoded map of about thirty route-to-lastmod pairs that had to be
+  hand-corrected on every edit. Replaced with a check that every sitemap entry matches its page's
+  dateModified. That is a strengthening: it covers every route rather than thirty, and maintains
+  itself.
+
 ## 2026-08-07 (fourth change) — Soo Locks demand audit, the last big page unexamined
 Cluster: /soo-locks/, 11,919 impressions and 29.5% of site impressions.
 Alphabet-expanded autocomplete across four phrasings, "soo locks", "sault ste marie locks",

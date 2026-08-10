@@ -72,7 +72,9 @@ test("ship tracker structured data and internal discovery surfaces are aligned",
   assert.ok(tools.includes("Great Lakes Ship Tracker Live, Freighters and AIS Map"));
   assert.ok(greatLakes.includes("Great Lakes Ship Tracker Live"));
   assert.ok(home.includes("Track freighters &rarr;"));
-  assert.match(sitemap, /great-lakes-freighter-tracking\/<\/loc>\s*<lastmod>2026-08-03<\/lastmod>[\s\S]*?<priority>0\.9<\/priority>/);
+  // lastmod is derived from git by scripts/stamp-freshness.mjs, so assert its shape and keep
+  // the priority pinned, which is the part this test is actually protecting.
+  assert.match(sitemap, /great-lakes-freighter-tracking\/<\/loc>\s*<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>[\s\S]*?<priority>0\.9<\/priority>/);
   assert.ok(llms.includes("## Great Lakes Ship Tracking"));
 });
 

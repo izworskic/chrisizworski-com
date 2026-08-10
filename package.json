@@ -11,11 +11,12 @@
     "benchmark:seo": "node scripts/measure-discovery.mjs --check",
     "benchmark:ctr": "node scripts/benchmark-ctr-surface.mjs",
     "benchmark:entity": "node scripts/benchmark-entity-surface.mjs",
+    "freshness": "node scripts/stamp-freshness.mjs",
     "generate:beaches": "node scripts/generate-beach-pages.mjs",
     "prepare:source": "node scripts/prepare-source.mjs",
     "test": "node --test tests/*.test.js",
     "verify": "node scripts/verify-source.mjs",
-    "verify:all": "npm test && npm run verify && npm run benchmark:beaches && npm run benchmark:growth && npm run benchmark:seo && npm run benchmark:ctr -- --check && npm run benchmark:entity -- --check",
+    "verify:all": "npm test && npm run verify && npm run benchmark:beaches && npm run benchmark:growth && npm run benchmark:seo && npm run benchmark:ctr -- --check && npm run benchmark:entity -- --check && npm run freshness -- --check",
     "verify:production-ready": "node scripts/verify-production-ready.mjs",
     "generate:ice": "python3 scripts/ice/gen_site.py"
   },

@@ -38,7 +38,11 @@ test("Michigan border flagship has indexable metadata and honest application sch
   assert.ok(main.includes('"@type": "ItemList"'));
   assert.ok(main.includes('"numberOfItems": 5'));
   assert.doesNotMatch(main, /"@type"\s*:\s*"FAQPage"/);
-  assert.match(main, /dateModified": "2026-07-28"/);
+  // Derived from git by scripts/stamp-freshness.mjs, so assert the shape rather than a
+  // literal date that goes stale the next time this page is legitimately edited.
+  const stamp = main.match(/dateModified": "(\d{4}-\d{2}-\d{2})"/);
+  assert.ok(stamp, "dateModified must be present");
+  assert.ok(Date.parse(stamp[1]) <= Date.now(), "dateModified must not be in the future");
   assert.match(main, /"creditText": "U\.S\. Environmental Protection Agency, public domain"/);
   assert.equal(jsonLd(main).length, 1);
 });

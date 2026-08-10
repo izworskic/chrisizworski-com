@@ -116,21 +116,27 @@ test("static and dynamic fall sitemaps make only supportable freshness claims", 
   assert.equal((body.match(/<url>/g) || []).length, 15);
 });
 
-test("priority-page schema and sitemap dates match their actual August edits", () => {
-  const expectations = [
-    ["northern-lights-michigan", "2026-08-07"],
-    ["soo-locks", "2026-08-07"],
-    ["mackinac-bridge-live", "2026-08-06"],
-  ];
+test("priority-page schema and sitemap dates agree and are not in the future", () => {
+  // This originally pinned literal dates (aurora and soo-locks 2026-08-07, mackinac 2026-08-06).
+  // The intent was right and it caught a real bug: PR #44 changed mackinac's content on Aug 9 and
+  // left both its stamp and its sitemap entry at Aug 6. But a literal pin goes stale on the next
+  // legitimate edit of any of these pages, so it now asserts the property that actually matters,
+  // which is that the two freshness signals agree with each other. scripts/stamp-freshness.mjs
+  // derives both from git and `npm run freshness -- --check` is the gate.
+  const routes = ["northern-lights-michigan", "soo-locks", "mackinac-bridge-live"];
   const sitemap = read("public/sitemap.xml");
 
-  for (const [route, date] of expectations) {
+  for (const route of routes) {
     const html = read(`public/${route}/index.html`);
-    assert.ok(html.includes(`"dateModified": "${date}"`) || html.includes(`"dateModified":"${date}"`), route);
-    assert.match(
-      sitemap,
-      new RegExp(`<loc>https:\\/\\/chrisizworski\\.com\\/${route}\\/<\\/loc>\\s*<lastmod>${date}<\\/lastmod>`),
-      route,
+    const stamp = html.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/);
+    assert.ok(stamp, `${route}: dateModified missing`);
+    assert.ok(Date.parse(stamp[1]) <= Date.now(), `${route}: dateModified is in the future`);
+
+    const entry = sitemap.match(
+      new RegExp(`<loc>https://chrisizworski\\.com/${route}/</loc>\\s*<lastmod>(\\d{4}-\\d{2}-\\d{2})</lastmod>`),
     );
+    assert.ok(entry, `${route}: missing sitemap entry with lastmod`);
+    assert.equal(entry[1], stamp[1], `${route}: sitemap lastmod disagrees with dateModified`);
   }
 });
+
