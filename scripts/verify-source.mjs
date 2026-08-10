@@ -9,119 +9,7 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
-  // Aug 9 2026: sitemap lastmod values are now derived alongside dateModified by
-  // scripts/stamp-freshness.mjs, because they had drifted apart on 124 URLs. Re-run
-  // `npm run audit:live` after this deploys and these three declarations can come out.
-  "/sitemap-reputation.xml",
 
-  // Aug 9 2026: dateModified stamps corrected. All 159 pages carrying one were UNDERSTATING it,
-  // 103 by more than a week and some by 100 days: pages edited on Aug 6 claimed they had not
-  // changed since Apr 28. None overstated. Freshness is a citation signal and this network sells
-  // live conditions, so the stamp is now DERIVED from git by scripts/stamp-freshness.mjs and
-  // gated by `npm run freshness -- --check`. Only the stamp changed in these files.
-  "/",
-  "/about/",
-  "/ai-adoption-statistics/",
-  "/ai-tools-small-business/",
-  "/ai/",
-  "/ambassador-bridge-wait-time/",
-  "/au-sable-river/",
-  "/best-michigan-beaches-today/",
-  "/blog/ai-supporting-911-administrative-work/",
-  "/blog/public-trust-ai-911-operations/",
-  "/blue-water-bridge-wait-time/",
-  "/case-studies/",
-  "/chris-izworski-911/",
-  "/chris-izworski-ai-911/",
-  "/chris-izworski-apco/",
-  "/chris-izworski-author/",
-  "/chris-izworski-bay-city-michigan/",
-  "/chris-izworski-bay-city/",
-  "/chris-izworski-biography/",
-  "/chris-izworski-bridge-michigan/",
-  "/chris-izworski-emergency-management/",
-  "/chris-izworski-gpt-trainer-case-study/",
-  "/chris-izworski-michigan-911-committee/",
-  "/chris-izworski-mlive/",
-  "/chris-izworski-nena-the-call/",
-  "/chris-izworski-news-coverage/",
-  "/chris-izworski-photos/",
-  "/chris-izworski-prepared/",
-  "/chris-izworski-prepared911/",
-  "/chris-izworski-public-records/",
-  "/chris-izworski-publications/",
-  "/chris-izworski-save-our-shoreline/",
-  "/chris-izworski-source-guide/",
-  "/chris-izworski-speaking/",
-  "/chris-izworski-trout-fishing/",
-  "/chris-izworski-trout-rivers/",
-  "/chris-izworski-wcmu-public-radio/",
-  "/chris-izworski-wnem-tv5/",
-  "/chris-izworski-works/",
-  "/chris-izworski-wsgw/",
-  "/chris-izworski/",
-  "/citations/",
-  "/companion-planting-zone-6a/",
-  "/connect/",
-  "/detroit-windsor-tunnel-wait-time/",
-  "/edmund-fitzgerald/",
-  "/fall-color-northern-lights-michigan/",
-  "/fall-color/",
-  "/fall-color/ann-arbor-irish-hills-fall-color/",
-  "/fall-color/au-sable-river-fall-color/",
-  "/fall-color/keweenaw-peninsula-fall-color/",
-  "/fall-color/mackinac-island-fall-color/",
-  "/fall-color/porcupine-mountains-fall-color/",
-  "/fall-color/saginaw-bay-fall-color/",
-  "/fall-color/saugatuck-southwest-michigan-fall-color/",
-  "/fall-color/sleeping-bear-dunes-fall-color/",
-  "/fall-color/tahquamenon-falls-fall-color/",
-  "/fall-color/tunnel-of-trees-fall-color/",
-  "/fall-color/upper-peninsula-fall-color/",
-  "/fall-color/when-do-leaves-peak-in-michigan/",
-  "/gordie-howe-bridge-wait-time/",
-  "/great-lakes-beaches/",
-  "/great-lakes-beaches/lake-michigan/",
-  "/great-lakes-beaches/saginaw-bay/",
-  "/great-lakes-buoys/",
-  "/great-lakes-fish/",
-  "/great-lakes-freighter-tracking/",
-  "/great-lakes-lighthouses/",
-  "/great-lakes-maritime-history/",
-  "/great-lakes-shipwrecks/",
-  "/great-lakes/",
-  "/guides/",
-  "/heirloom-seed-saving-guide/",
-  "/heirloom-tomatoes-michigan/",
-  "/heirloom-vs-hybrid-seeds/",
-  "/lake-superior-circle-tour/",
-  "/mackinac-bridge-driver-assistance/",
-  "/mackinac-bridge-live/",
-  "/mackinac-bridge-rv-trailer-wind-rules/",
-  "/mackinac-bridge-tolls/",
-  "/media/",
-  "/michigan-911-executive-director/",
-  "/michigan-boat-launches/",
-  "/michigan-boat-launches/lake-michigan/",
-  "/michigan-boat-launches/saginaw-bay/",
-  "/michigan-border-wait-times/",
-  "/michigan-last-spring-freeze/",
-  "/michigan-native-plants/",
-  "/michigan-paddling/",
-  "/michigan-paddling/manistee-river/",
-  "/michigan-paddling/pere-marquette/",
-  "/michigan-trout-streams/",
-  "/northern-lights-michigan/",
-  "/press/",
-  "/projects/",
-  "/saginaw-bay-ecology/",
-  "/sault-ste-marie-border-wait-time/",
-  "/seed-starting-guide/",
-  "/soo-locks/",
-  "/speaking/",
-  "/timeline/",
-  "/tools/",
-  "/zone-6a-planting-calendar/",
 
   // Aug 7 2026: the five Soo Locks photographs were AI generated. Replaced with real,
   // freely licensed photographs of the actual locks, each with visible attribution:
@@ -276,8 +164,14 @@ function publicPathFor(record) {
   return path.join(publicRoot, record.pathname);
 }
 
+// Paths that legitimately have no source file: /api/ handlers, scripts Vercel injects at the edge
+// (Web Analytics and Speed Insights), and feeds served by a rewrite rather than a static file.
+// These appeared the first time the audit was re-crawled after the freshness fix; they are not
+// drift, they are routes that were always dynamic.
+const NO_SOURCE_FILE = [/^\/api\//, /^\/_vercel\//, /^\/fall-color\/rss\.xml$/];
 const canonicalRecords = audit.records.filter(
-  (record) => record.status === 200 && !record.search && !record.pathname.startsWith("/api/") && record.snapshotPath,
+  (record) => record.status === 200 && !record.search && record.snapshotPath
+    && !NO_SOURCE_FILE.some((re) => re.test(record.pathname)),
 );
 
 for (const record of canonicalRecords) {
