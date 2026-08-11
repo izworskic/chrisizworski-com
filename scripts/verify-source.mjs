@@ -9,6 +9,9 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 11 2026: factual corrections plus additive FVF distribution from the home,
+  // About, and Guides pages. Re-crawl after deploy, then remove these declarations.
+  "/about/",
   // Aug 11 2026: citation pass on the remaining tools. Answer blocks restructured for
   // self-containment; michigan-ice gained a question surface via scripts/ice/gen_site.py.
   // Re-run `npm run audit:live` after deploy and remove these.
@@ -143,6 +146,7 @@ const intentionalChanges = new Set([
   "/connect/",
   "/projects/",
   "/sitemap.xml",
+  "/sitemap-reputation.xml",
   "/image-sitemap.xml",
   "/llms.txt",
   "/robots.txt",

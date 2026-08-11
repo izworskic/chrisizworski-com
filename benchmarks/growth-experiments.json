@@ -1,5 +1,5 @@
 {
-  "ledgerVersion": "1.3.0",
+  "ledgerVersion": "1.4.0",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
   "measurementProtocol": {
@@ -7,6 +7,7 @@
     "startOffsetDays": 1,
     "restartTrigger": "Any search-facing change to the title, description, H1, first answer, structured data, canonical, or indexability resets the window.",
     "pendingWindowRule": "For pending-clean-window experiments, set releaseDate to the production merge date and evaluate the 28 complete days beginning the next day.",
+    "parallelExecutionPolicy": "Measurement freezes and stop-loss actions are page-specific, not site-wide. Stop or roll back an affected experiment, then continue one non-overlapping reversible experiment on unaffected pages or distribution surfaces.",
     "freezeDuringWindow": ["title", "metaDescription", "h1", "firstAnswer", "structuredData", "canonical", "indexability"]
   },
   "experiments": [
@@ -45,9 +46,10 @@
       "primaryMetric": "Search Console page CTR",
       "baseline": {"impressions": 1671, "clicks": 9, "ctr": 0.00539, "averagePosition": 11.13},
       "target": {"ctr": 0.015},
-      "status": "running",
-      "releaseDate": "2026-08-03",
-      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-11",
       "decisionDate": null,
       "result": null,
       "stopCondition": "Factual source links, canonical, or existing ecology query coverage regress."
@@ -67,7 +69,7 @@
       "status": "pending-clean-window",
       "releaseDate": null,
       "evaluationWindow": null,
-      "lastSearchFacingChangeDate": "2026-08-09",
+      "lastSearchFacingChangeDate": "2026-08-11",
       "decisionDate": null,
       "result": null,
       "stopCondition": "NOAA parsing, map behavior, or existing manual fallback regresses."
@@ -88,7 +90,7 @@
       "status": "pending-clean-window",
       "releaseDate": null,
       "evaluationWindow": null,
-      "lastSearchFacingChangeDate": "2026-08-09",
+      "lastSearchFacingChangeDate": "2026-08-11",
       "decisionDate": null,
       "result": null,
       "stopCondition": "Named-vessel data is republished without permission or the live map regresses."
@@ -109,7 +111,7 @@
       "status": "pending-clean-window",
       "releaseDate": null,
       "evaluationWindow": null,
-      "lastSearchFacingChangeDate": "2026-08-09",
+      "lastSearchFacingChangeDate": "2026-08-11",
       "decisionDate": null,
       "result": null,
       "stopCondition": "The official Bridge Authority source, fail-safe open/closed logic, cameras, canonical, or live crossing flow regresses."
@@ -124,6 +126,18 @@
       "status": "running",
       "releaseDate": "2026-08-03",
       "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
+      "distributionExpansion": {
+        "status": "pending-release",
+        "proposedDate": "2026-08-11",
+        "releaseDate": null,
+        "evaluationWindow": null,
+        "sourcePaths": ["/", "/about/", "/guides/"],
+        "change": "Add measurable contextual links from established discovery pages into the FVF authority page without changing the destination title, H1, first answer, schema, canonical, or indexability.",
+        "baselineInboundInternalPages": 6,
+        "targetInboundInternalPages": 9,
+        "measurement": "Growth CTA events on the three source links plus FVF authority-page impressions and downstream gardening CTA clicks.",
+        "attributionNote": "This expands distribution while the original page experiment runs; it does not pause unrelated experiments or alter the active tomato and frost snippets."
+      },
       "decisionDate": null,
       "result": null,
       "stopCondition": "First-party claims, canonicals, or links to the independent Freighter View Farms blog become inaccurate."
