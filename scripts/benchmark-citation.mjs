@@ -42,22 +42,41 @@ const DEPENDENT = [
   /\bas (?:shown|described) above\b/i,
 ];
 
+// This site writes Q&A in THREE different markups and the first version of this benchmark only
+// saw one of them, so it reported "no question surface" on three pages that had one. All three
+// are matched now:
+//   <h3>Question?</h3><p>Answer</p>                      aurora, soo-locks
+//   <details><summary>Question?</summary><p>Answer</p>    freighter tracking, saginaw-bay-ecology
+//   <p class="faq-q">Question?</p><p>Answer</p>           buoys
 function answersIn(html) {
   const body = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, "");
+  const strip = (chunk) => chunk.replace(/<[^>]+>/g, " ").replace(/&[a-z]+;/g, " ").replace(/\s+/g, " ").trim();
+  const seen = new Set();
   const out = [];
-  const re = /<h[34][^>]*>([^<]*\?)<\/h[34]>([\s\S]*?)(?=<h[1-4]|<\/section)/g;
-  let m;
-  while ((m = re.exec(body))) {
-    const text = m[2].replace(/<[^>]+>/g, " ").replace(/&[a-z]+;/g, " ").replace(/\s+/g, " ").trim();
+  const push = (question, chunk, shape) => {
+    const q = question.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+    if (!q.endsWith("?") || seen.has(q)) return;
+    const text = strip(chunk);
     const words = text.split(/\s+/).filter(Boolean).length;
-    if (words < 4) continue;
+    if (words < 4) return;
+    seen.add(q);
     out.push({
-      question: m[1].replace(/\s+/g, " ").trim(),
-      words,
+      question: q, words, shape,
       inBand: words >= BAND[0] && words <= BAND[1],
-      dependent: DEPENDENT.filter((re2) => re2.test(text)).length > 0,
+      dependent: DEPENDENT.some((re2) => re2.test(text)),
     });
-  }
+  };
+
+  let m;
+  const heading = /<h[34][^>]*>([^<]*\?)<\/h[34]>([\s\S]*?)(?=<h[1-4]|<\/section)/g;
+  while ((m = heading.exec(body))) push(m[1], m[2], "heading");
+
+  const details = /<summary[^>]*>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/g;
+  while ((m = details.exec(body))) push(m[1], m[2], "details");
+
+  const faqP = /<p class="faq-q"[^>]*>([\s\S]*?)<\/p>([\s\S]*?)(?=<p class="faq-q"|<h[1-4]|<\/section)/g;
+  while ((m = faqP.exec(body))) push(m[1], m[2], "faq-p");
+
   return out;
 }
 

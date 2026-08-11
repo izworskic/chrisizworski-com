@@ -5,14 +5,9 @@
     167
   ],
   "tools": 9,
-  "answerBlocks": 24,
-  "selfContained": 8,
+  "answerBlocks": 71,
+  "selfContained": 17,
   "pageDependent": 3,
-  "toolsWithNoSurface": [
-    "great-lakes-freighter-tracking",
-    "michigan-ice",
-    "great-lakes-buoys",
-    "saginaw-bay-ecology"
-  ],
+  "toolsWithNoSurface": [],
   "note": "Ratchet baseline. self-contained may only rise, page-dependent may only fall."
 }

@@ -258,6 +258,39 @@ def build_index():
         'river, and inland lakes with no satellite coverage at all.</p>'
         '<div class="grid two">' + tiles + '</div>'
 
+        # The only tool on the network with no question surface at all. Every fact here is already
+        # stated elsewhere on this page: the accumulated cold method, the 54 year baseline, the six
+        # waters, the Great Lakes satellite split, and the DNR position on thickness rules. The
+        # safety framing is kept exactly as the page already words it, because a confident answer
+        # on this page could put someone on bad ice.
+        '<h2>Common questions about Michigan ice</h2>'
+        '<h3>Is the ice safe in Michigan right now?</h3>'
+        '<p>Nothing on this page can tell you that, and no site can. Everything here is accumulated weather data '
+        'and satellite observation, and none of it measures the ice under your feet. The Michigan DNR does not '
+        'recognize a reliable inch thickness rule and states that ice on the bays of the Great Lakes will always be '
+        'more fragile than ice on inland lakes. What accumulated cold can tell you is whether it has been cold '
+        'enough, for long enough, for ice to have formed at all, and whether this winter is running ahead of or '
+        'behind its own 54 year normal. That is a useful screen before you drive north and a useless substitute for '
+        'testing. Test with a spud bar or auger every few steps, on every trip, including water you fished last '
+        'week and found solid.</p>'
+        '<h3>How much cold does it take to make ice?</h3>'
+        '<p>Ice formation tracks accumulated cold rather than any single cold morning, which is why one hard '
+        'overnight freeze in December means much less than people expect. The measure used here is accumulated '
+        'freezing degree days: every day below freezing adds to a running total from freeze up, and that total is '
+        'compared against a 54 year baseline for the same date. A shallow, sheltered inland lake locks up on a '
+        'modest total. A wide, wind exposed body like Saginaw Bay needs far more, because wind keeps the water '
+        'moving and mixing, and moving water sheds cold instead of holding it. That is why two waters a hundred '
+        'miles apart sit at completely different stages in the same week, and why a single statewide ice number '
+        'would be worse than none at all.</p>'
+        '<h3>Which Michigan lakes have satellite ice cover data?</h3>'
+        '<p>Only the Great Lakes waters. NOAA publishes satellite derived ice cover for the Great Lakes, so for '
+        'Saginaw Bay, Grand Traverse Bay and the other Great Lakes waters tracked here there is an actual '
+        'observation of how much of the surface is frozen on a given day. Inland lakes have no comparable product. '
+        'Nobody flies a satellite ice analysis over Houghton Lake or Mullett Lake, so for those waters the '
+        'accumulated cold figure and the 54 year comparison are all there is. This is the most important limitation '
+        'to understand about this page. On the Great Lakes it can say something about ice that exists now. On '
+        'inland lakes it can only say whether the weather has been cold enough that ice ought to have formed.</p>'
+
         '<h2>More from the network</h2>'
         '<div class="anchor-list">'
         '<a href="/michigan-ice/ice-safety.html">Ice safety, and what the DNR actually says</a>'

@@ -38,6 +38,33 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-11 — the rest of the citation pass, and a benchmark that was lying
+Cluster: michigan-ice, saginaw-bay-ecology, mackinac-bridge-live, fall-color.
+FIRST, A CORRECTION. The benchmark shipped on Aug 10 only detected Q&A written as
+<h3>Question?</h3>, and this site writes it three ways. It also appears as
+<details><summary>Question?</summary> on the freighter and Saginaw Bay pages and as
+<p class="faq-q"> on the buoys page. So the claim that four tools had NO question surface was
+wrong: three of them had one all along, and the true total was 68 answer blocks, not 24. Only
+michigan-ice genuinely had none. The detector now matches all three markups.
+That correction changed the plan. Forcing all 68 blocks into the 134 to 167 word band would be
+padding, and a tight 40-word accordion answer is often better than a padded 150. The work targeted
+the questions that match real search demand on each page instead.
+- michigan-ice gained its first question surface: is the ice safe right now, how much cold does it
+  take to make ice, and which lakes have satellite coverage. Written into scripts/ice/gen_site.py,
+  not the output, after tests/ice-generated.test.js correctly caught an edit to the generated file.
+  The safety framing is the page's existing wording, unchanged, because a confident answer here
+  could put someone on bad ice.
+- saginaw-bay-ecology: the three highest-demand answers restructured. Its Q&A exists in TWO places,
+  a JSON-LD block and inline microdata, so each replacement was applied to both copies to stop them
+  desyncing the way head metadata and JSON-LD did in PR #36.
+- mackinac-bridge-live: toll, Bridge Walk closure and driver assistance. No FAQPage schema added;
+  tests/mackinac-static.test.js forbids it on this page and that was checked first.
+- fall-color: U.P. peak timing, and the "where is it peaking right now" answer no longer points at
+  a map it cannot carry with it. It now lists all eight region windows.
+Result: self-contained answers 8 -> 17, tools with no question surface 4 -> 0, page-dependent
+answers 4 -> 3. Still open and stated plainly: great-lakes-beaches 0 of 4, great-lakes-buoys 0 of 5,
+great-lakes-freighter-tracking 0 of 6.
+
 ## 2026-08-10 — answers that stand on their own
 Cluster: /northern-lights-michigan/ and /soo-locks/, the two pages carrying 75% of site impressions.
 Measured first across all twelve tools: exactly ONE answer block out of 28 fell in the 134 to 167
