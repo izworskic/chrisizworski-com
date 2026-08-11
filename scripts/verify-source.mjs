@@ -9,6 +9,16 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 11 2026: citation pass on the remaining tools. Answer blocks restructured for
+  // self-containment; michigan-ice gained a question surface via scripts/ice/gen_site.py.
+  // Re-run `npm run audit:live` after deploy and remove these.
+  "/fall-color/",
+  "/mackinac-bridge-live/",
+  "/michigan-ice/",
+  "/northern-lights-michigan/",
+  "/saginaw-bay-ecology/",
+  "/soo-locks/",
+
 
 
   // Aug 7 2026: the five Soo Locks photographs were AI generated. Replaced with real,
