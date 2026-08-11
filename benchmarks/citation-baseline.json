@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-08-11",
+  "band": [
+    134,
+    167
+  ],
+  "tools": 9,
+  "answerBlocks": 24,
+  "selfContained": 8,
+  "pageDependent": 3,
+  "toolsWithNoSurface": [
+    "great-lakes-freighter-tracking",
+    "michigan-ice",
+    "great-lakes-buoys",
+    "saginaw-bay-ecology"
+  ],
+  "note": "Ratchet baseline. self-contained may only rise, page-dependent may only fall."
+}

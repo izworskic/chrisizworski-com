@@ -38,6 +38,29 @@ Cluster: fall color (16 pages) and the identity cluster (2 pages).
 Expected to affect: fall color impressions and CTR from roughly 2026-08-20 onward, and entity
 resolution on the name query. NOT YET MEASURED.
 
+## 2026-08-10 — answers that stand on their own
+Cluster: /northern-lights-michigan/ and /soo-locks/, the two pages carrying 75% of site impressions.
+Measured first across all twelve tools: exactly ONE answer block out of 28 fell in the 134 to 167
+word band that current research associates with several times higher AI Overview citation, and
+median answers ran 28 to 69 words. Entity density was measured too and needed nothing: every tool
+already clears the 15-entity threshold, the lowest being michigan-ice at 27, so no work was done
+there.
+The rewrite target was self-containment, not length. The test is whether a block still answers its
+question when it is the only thing a reader or an assistant sees, and lifted out is exactly how an
+assistant encounters it. Three answers leaned on the page around them, saying things like "the live
+reading at the top of this page", which reads fine in place and answers nothing in isolation.
+Nothing new was asserted on either page. The Kp thresholds, the viewing sites, the lock dimensions,
+the season dates and the Corps ownership were all already stated; they were restated so each block
+carries its own context, plus the reason each fact matters, which is the part that was missing.
+- aurora 0 of 3 in band -> 3 of 3
+- soo locks 1 of 7 -> 5 of 7
+- NEW scripts/benchmark-citation.mjs and benchmarks/citation-baseline.json, `npm run
+  benchmark:citation [-- --check]`, now the NINTH gate of verify:all. It is a ratchet: the count of
+  self-contained answers may only rise and the count of page-dependent ones may only fall. It also
+  flags tools with no question surface at all, currently four.
+Deliberately excluded from the benchmark: /when-to-plant-tomatoes-michigan/ and
+/michigan-frost-dates/. Both are single-fact zero-click queries and no restructuring changes that.
+
 ## 2026-08-09 — dateModified told the truth for the first time
 Cluster: site-wide metadata, 103 pages. No visible content changed.
 Measured: every one of the 159 pages carrying a dateModified was UNDERSTATING it. None overstated.
