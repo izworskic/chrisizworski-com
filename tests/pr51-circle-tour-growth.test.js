@@ -118,10 +118,12 @@ test("the planner remains usable on mobile and creates shareable plans without b
   assert.match(circleTour, /\.map-frame\{[^}]*height:clamp\(380px,52vh,560px\)/);
   assert.match(circleTour, /height:clamp\(340px,46vh,480px\)/);
   assert.match(circleTour, /height:clamp\(300px,42vh,390px\)/);
+  assert.match(circleTour, /@media\(prefers-reduced-motion:reduce\)/);
   assert.match(planner, /new URLSearchParams\(window\.location\.search\)/);
   assert.match(planner, /history\.replaceState/);
   assert.match(planner, /navigator\.share/);
   assert.match(planner, /navigator\.clipboard/);
+  assert.match(planner, /event\.key !== "Tab"/);
   assert.match(planner, /google\.com\/maps\/dir/);
   assert.doesNotMatch(circleTour + planner + mapModule, /localStorage|sessionStorage|document\.cookie/);
 });

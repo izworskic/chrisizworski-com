@@ -411,7 +411,26 @@
   byId("mobileTripTrigger").addEventListener("click", openMobileTrip);
   byId("mobileTripClose").addEventListener("click", closeMobileTrip);
   byId("mobileTripBackdrop").addEventListener("click", closeMobileTrip);
-  document.addEventListener("keydown", (event) => { if (event.key === "Escape" && byId("mobileTripSheet").classList.contains("open")) closeMobileTrip(); });
+  document.addEventListener("keydown", (event) => {
+    const sheet = byId("mobileTripSheet");
+    if (!sheet.classList.contains("open")) return;
+    if (event.key === "Escape") {
+      closeMobileTrip();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const focusable = Array.from(sheet.querySelectorAll('button:not([disabled]),a[href]')).filter((element) => !element.hidden);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
 
   // Live Lake Superior water level from NOAA Tides & Currents, Duluth station 9099064.
   (async function loadLiveLevel() {

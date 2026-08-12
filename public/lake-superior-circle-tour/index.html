@@ -225,6 +225,11 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
   .map-selection-actions{justify-content:flex-start}
   .route-actions{grid-template-columns:1fr}
 }
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .live-dot{animation:none}
+  .mobile-trip-backdrop,.mobile-trip-sheet{transition:none}
+}
 
 /* Live conditions strip */
 .live-strip{display:flex;align-items:center;gap:10px;justify-content:center;flex-wrap:wrap;padding:9px 16px;background:#0d3545;color:#a8c8d8;font-size:12px;border-bottom:1px solid rgba(255,255,255,.1);letter-spacing:.4px}
