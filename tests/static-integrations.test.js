@@ -5,10 +5,12 @@ const path = require("node:path");
 
 test("Circle Tour requests NOAA water level with the station's supported datum", () => {
   const html = readFileSync(path.join(__dirname, "../public/lake-superior-circle-tour/index.html"), "utf8");
-  assert.ok(html.includes("station=9099064"));
-  assert.ok(html.includes("datum=LWD"));
-  assert.ok(html.includes("ft above LWD at Duluth"));
-  assert.ok(!html.includes("datum=IGLD85"));
+  const client = readFileSync(path.join(__dirname, "../public/assets/lake-superior-circle-tour.js"), "utf8");
+  const integration = html + client;
+  assert.ok(integration.includes("station=9099064"));
+  assert.ok(integration.includes("datum=LWD"));
+  assert.ok(integration.includes("ft above LWD at Duluth"));
+  assert.ok(!integration.includes("datum=IGLD85"));
 });
 
 test("Northern Lights falls back cleanly when the primary NOAA forecast is unavailable", () => {

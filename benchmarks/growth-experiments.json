@@ -167,7 +167,7 @@
     {
       "id": "2026-08-12-lake-superior-circle-tour-intent",
       "path": "/lake-superior-circle-tour/",
-      "hypothesis": "An itinerary-and-map title, an immediate 7/10/15-day route answer, accurate border guidance, and measurable planner actions will lift qualified CTR from 0.40% toward 1.5% and move average position from 17.52 toward 15 without weakening the existing 31-stop tool.",
+      "hypothesis": "A title aligned to map intent, a real interactive 31-stop map, continuous 7/10/15-day routes, daily direction links, and a no-login mobile/share planner will lift qualified CTR from 0.40% toward 1.5%, move average position from 17.52 toward 15, and turn more visits into measurable trip-planning sessions.",
       "primaryMetric": "Search Console page CTR and average position, with Vercel pageview-based planner engagement as a secondary metric",
       "baseline": {"impressions": 1005, "clicks": 4, "ctr": 0.004, "averagePosition": 17.52},
       "supportingEvidence": [
@@ -177,10 +177,12 @@
         "measuredPageviews": null,
         "plannerStarts": null,
         "itinerarySelections": null,
+        "mapInteractions": null,
+        "sharedTrips": null,
         "printedTrips": null,
         "status": "measurement-starts-after-analytics-reaches-production"
       },
-      "target": {"ctr": 0.015, "averagePosition": 15, "plannerStartRate": 0.03, "itinerarySelectionRate": 0.05},
+      "target": {"ctr": 0.015, "averagePosition": 15, "mapInteractionRate": 0.15, "plannerStartRate": 0.05, "itinerarySelectionRate": 0.08, "plannerCompletionRate": 0.02},
       "status": "pending-clean-window",
       "releaseDate": null,
       "evaluationWindow": null,
@@ -192,7 +194,7 @@
       },
       "decisionDate": null,
       "result": null,
-      "stopCondition": "The canonical, 31-stop planner, NOAA water-level feed, itinerary accessibility, official border-source links, Core Web Vitals, or indexability regresses."
+      "stopCondition": "Stop or revert if the canonical, crawlable 31-stop content, NOAA feed, itinerary continuity, official border links, keyboard access, indexability, or Core Web Vitals regress; if the external map fails, the written routes, stop cards, and daily direction links must remain usable."
     },
     {
       "id": "2026-08-12-great-lakes-buoys-live-intent",

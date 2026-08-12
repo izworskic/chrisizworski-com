@@ -345,10 +345,12 @@ if (/511on\.ca\/map\/Cctv|wtbwb\.ca\/approach/.test(borderClient)) {
 }
 
 const circleTour = await readFile(path.join(publicRoot, "lake-superior-circle-tour", "index.html"), "utf8");
-if (!circleTour.includes("datum=LWD") || !circleTour.includes("ft above LWD at Duluth")) {
+const circleTourClient = await readFile(path.join(publicRoot, "assets", "lake-superior-circle-tour.js"), "utf8");
+const circleTourIntegration = `${circleTour}\n${circleTourClient}`;
+if (!circleTourIntegration.includes("datum=LWD") || !circleTourIntegration.includes("ft above LWD at Duluth")) {
   failures.push("Lake Superior Circle Tour is missing the valid NOAA LWD water-level datum");
 }
-if (circleTour.includes("datum=IGLD85")) failures.push("Lake Superior Circle Tour still requests NOAA's invalid IGLD85 datum");
+if (circleTourIntegration.includes("datum=IGLD85")) failures.push("Lake Superior Circle Tour still requests NOAA's invalid IGLD85 datum");
 
 const aurora = await readFile(path.join(publicRoot, "northern-lights-michigan", "index.html"), "utf8");
 const auroraApi = await readFile(path.join(root, "api", "aurora.js"), "utf8");

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Lake Superior Circle Tour interactive map and itinerary planner</title>
+  <desc id="desc">A stylized map of the 1,300-mile route around Lake Superior with 31 stops and 7-, 10-, and 15-day itinerary options.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#082b3d"/>
+      <stop offset="1" stop-color="#164f5a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="148" cy="94" r="160" fill="#4ba3b5" opacity=".08"/>
+  <circle cx="675" cy="645" r="280" fill="#8ac39a" opacity=".07"/>
+  <g>
+    <polygon points="91,465 91,475 100,486 121,486 122,481 132,482 132,471 147,467 153,460 176,449 191,453 193,455 191,461 185,470 186,480 180,493 186,494 200,491 217,508 233,509 241,515 259,511 256,479 262,474 272,477 279,470 284,469 284,460 307,452 323,465 329,466 333,456 346,446 349,434 360,424 386,377 418,363 410,369 387,375 364,414 369,418 369,430 374,441 371,469 374,470 387,497 408,503 414,508 431,510 456,501 460,510 485,508 499,518 513,517 514,521 527,530 589,532 591,536 603,537 638,533 640,528 634,511 623,510 622,497 623,510 634,511 640,499 641,476 646,467 641,476 640,499 634,511 640,531 688,527 693,509 693,505 697,493 689,463 692,449 686,444 659,434 670,398 676,394 671,382 657,360 657,324 650,315 660,285 659,288 656,283 657,261 651,241 644,240 637,231 630,205 621,196 593,176 551,182 536,174 538,172 531,165 523,170 511,162 495,168 490,156 482,160 479,167 470,166 456,159 448,159 445,153 436,148 415,144 407,132 403,135 389,133 384,133 380,149 369,157 359,185 345,199 317,212 313,227 308,227 303,238 296,239 297,267 285,284 279,289 273,298 256,309 228,321 214,328 186,351 161,383 148,403 140,412 124,430" fill="#155d78" stroke="#77b8c8" stroke-width="3" opacity=".95"/>
+    <polyline points="91,465 91,475 100,486 121,486 122,481 132,482 132,471 147,467 153,460 176,449 191,453 193,455 191,461 185,470 186,480 180,493 186,494 200,491 217,508 233,509 241,515 259,511 256,479 262,474 272,477 279,470 284,469 284,460 307,452 323,465 329,466 333,456 346,446 349,434 360,424 386,377 418,363 410,369 387,375 364,414 369,418 369,430 374,441 371,469 374,470 387,497 408,503 414,508 431,510 456,501 460,510 485,508 499,518 513,517 514,521 527,530 589,532 591,536 603,537 638,533 640,528 634,511 623,510 622,497 623,510 634,511 640,499 641,476 646,467 641,476 640,499 634,511 640,531 688,527 693,509 693,505 697,493 689,463 692,449 686,444 659,434 670,398 676,394 671,382 657,360 657,324 650,315 660,285 659,288 656,283 657,261 651,241 644,240 637,231 630,205 621,196 593,176 551,182 536,174 538,172 531,165 523,170 511,162 495,168 490,156 482,160 479,167 470,166 456,159 448,159 445,153 436,148 415,144 407,132 403,135 389,133 384,133 380,149 369,157 359,185 345,199 317,212 313,227 308,227 303,238 296,239 297,267 285,284 279,289 273,298 256,309 228,321 214,328 186,351 161,383 148,403 140,412 124,430 91,465" fill="none" stroke="#f5f0cf" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="15" fill="#fff">
+    <circle cx="91" cy="465" r="12" fill="#1a6b8a" stroke="#fff" stroke-width="3"/><text x="110" y="471">Duluth</text>
+    <circle cx="191" cy="461" r="10" fill="#2d6b1a" stroke="#fff" stroke-width="3"/><text x="118" y="447">Bayfield</text>
+    <circle cx="456" cy="501" r="10" fill="#6b2d8a" stroke="#fff" stroke-width="3"/><text x="424" y="486">Marquette</text>
+    <circle cx="693" cy="505" r="10" fill="#6b2d8a" stroke="#fff" stroke-width="3"/><text x="536" y="558">Sault Ste. Marie</text>
+    <circle cx="651" cy="285" r="10" fill="#c85c00" stroke="#fff" stroke-width="3"/><text x="671" y="291">Wawa</text>
+    <circle cx="313" cy="227" r="10" fill="#c85c00" stroke="#fff" stroke-width="3"/><text x="207" y="213">Thunder Bay</text>
+    <circle cx="161" cy="383" r="10" fill="#1a6b8a" stroke="#fff" stroke-width="3"/><text x="71" y="370">Grand Marais</text>
+  </g>
+  <g transform="translate(775 82)" font-family="Georgia, 'Times New Roman', serif">
+    <text x="0" y="0" fill="#8fd0df" font-family="Arial, sans-serif" font-size="16" letter-spacing="2">INTERACTIVE ROAD-TRIP PLANNER</text>
+    <text x="0" y="66" fill="#fff" font-size="43">Lake Superior</text>
+    <text x="0" y="116" fill="#fff" font-size="43">Circle Tour</text>
+    <line x1="0" y1="147" x2="350" y2="147" stroke="#7bc8e8" stroke-width="2"/>
+    <text x="0" y="193" fill="#d9eef2" font-size="24">Map + complete itineraries</text>
+    <g transform="translate(0 240)" font-family="Arial, sans-serif">
+      <rect width="350" height="54" rx="5" fill="#fff" opacity=".1" stroke="#fff" stroke-opacity=".22"/>
+      <text x="22" y="35" fill="#fff" font-size="20">7 · 10 · 15 day routes</text>
+      <rect y="68" width="350" height="54" rx="5" fill="#fff" opacity=".1" stroke="#fff" stroke-opacity=".22"/>
+      <text x="22" y="103" fill="#fff" font-size="20">31 stops · ~1,300 miles</text>
+      <rect y="136" width="350" height="54" rx="5" fill="#2c5f2d" stroke="#9ad0a4" stroke-opacity=".7"/>
+      <text x="22" y="171" fill="#fff" font-size="20">Build + share, no account</text>
+    </g>
+    <text x="0" y="492" fill="#a8c8d8" font-family="Arial, sans-serif" font-size="17">chrisizworski.com</text>
+  </g>
+</svg>
