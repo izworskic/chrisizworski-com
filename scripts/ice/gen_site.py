@@ -159,7 +159,7 @@ def top_stats():
         '<div class="sub">accumulated F days</div></div>'
         '<div class="stat"><div class="lbl">Great Lakes ice</div><div class="val mono" id="s-cover">...</div>'
         '<div class="sub" id="s-cover-sub">satellite cover</div></div>'
-        '<div class="stat"><div class="lbl">Vs 54 year normal</div><div class="val mono" id="s-vsnorm">...</div>'
+        '<div class="stat"><div class="lbl">Huron vs 54 year normal</div><div class="val mono" id="s-vsnorm">...</div>'
         '<div class="sub">for today</div></div>'
         '</div>'
     )
@@ -169,14 +169,14 @@ def build_index():
     url = SITE + "/"
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "WebSite", "@id": SITE + "/#website", "name": "Michigan Ice Report", "url": SITE,
-         "description": "Michigan ice conditions tracked through accumulated freezing degree days, NOAA satellite "
-                        "ice cover, and 54 years of Great Lakes ice climatology.",
+         "description": "Michigan ice conditions using freezing degree days, ten-year station normals, NOAA "
+                        "lake-wide ice cover, and a 54-year Great Lakes ice climatology.",
          "author": {"@id": PERSON_ID}},
         {"@type": "WebPage", "@id": url + "#webpage", "url": url,
          "isPartOf": {"@id": SITE + "/#website"},
          "name": "Michigan Ice Report: Accumulated Cold and Great Lakes Ice Cover",
          "description": "Live Michigan ice conditions across six waters using accumulated freezing degree days, "
-                        "NOAA satellite ice cover, and a 54 year climatology baseline.",
+                        "ten-year station normals, and a 54-year Great Lakes ice climatology.",
          "inLanguage": "en-US", "author": {"@id": PERSON_ID},
          "breadcrumb": {"@id": url + "#breadcrumb"}},
         breadcrumb([("Michigan Ice Report", url)]),
@@ -216,7 +216,8 @@ def build_index():
         header("/") +
         '<p class="lede">Ice is not weather, it is history. A cold morning tells you almost nothing. What matters is '
         'how much cold has accumulated since freeze up, and whether this winter is running ahead of or behind normal. '
-        'This tracks both, across six Michigan waters, against a 54 year baseline.</p>'
+        'This compares accumulated cold across six Michigan waters with a ten year station normal, while Great '
+        'Lakes ice cover is compared with a 54 year climatology.</p>'
         + SAFETY_BANNER
         + top_stats() +
         '<div class="card read"><div class="kicker">The read</div>'
@@ -259,8 +260,8 @@ def build_index():
         '<div class="grid two">' + tiles + '</div>'
 
         # The only tool on the network with no question surface at all. Every fact here is already
-        # stated elsewhere on this page: the accumulated cold method, the 54 year baseline, the six
-        # waters, the Great Lakes satellite split, and the DNR position on thickness rules. The
+        # stated elsewhere on this page: the accumulated cold method, the ten year station normal,
+        # the 54 year Great Lakes ice climatology, the six waters, and the DNR position on thickness rules. The
         # safety framing is kept exactly as the page already words it, because a confident answer
         # on this page could put someone on bad ice.
         '<h2>Common questions about Michigan ice</h2>'
@@ -270,25 +271,27 @@ def build_index():
         'recognize a reliable inch thickness rule and states that ice on the bays of the Great Lakes will always be '
         'more fragile than ice on inland lakes. What accumulated cold can tell you is whether it has been cold '
         'enough, for long enough, for ice to have formed at all, and whether this winter is running ahead of or '
-        'behind its own 54 year normal. That is a useful screen before you drive north and a useless substitute for '
+        'behind its ten year accumulated-cold normal. Separately, the parent Great Lake can be compared with its '
+        '54 year ice-cover climatology. Those are useful screens before you drive north and useless substitutes for '
         'testing. Test with a spud bar or auger every few steps, on every trip, including water you fished last '
         'week and found solid.</p>'
         '<h3>How much cold does it take to make ice?</h3>'
         '<p>Ice formation tracks accumulated cold rather than any single cold morning, which is why one hard '
         'overnight freeze in December means much less than people expect. The measure used here is accumulated '
         'freezing degree days: every day below freezing adds to a running total from freeze up, and that total is '
-        'compared against a 54 year baseline for the same date. A shallow, sheltered inland lake locks up on a '
+        'compared against a ten year station average for the same date. A shallow, sheltered inland lake locks up on a '
         'modest total. A wide, wind exposed body like Saginaw Bay needs far more, because wind keeps the water '
         'moving and mixing, and moving water sheds cold instead of holding it. That is why two waters a hundred '
         'miles apart sit at completely different stages in the same week, and why a single statewide ice number '
         'would be worse than none at all.</p>'
         '<h3>Which Michigan lakes have satellite ice cover data?</h3>'
-        '<p>Only the Great Lakes waters. NOAA publishes satellite derived ice cover for the Great Lakes, so for '
-        'Saginaw Bay, Grand Traverse Bay and the other Great Lakes waters tracked here there is an actual '
-        'observation of how much of the surface is frozen on a given day. Inland lakes have no comparable product. '
+        '<p>Only the Great Lakes waters have a satellite product, and the data used here is lake-wide rather than '
+        'bay-specific. Saginaw Bay displays the Lake Huron average and Grand Traverse Bay displays the Lake Michigan '
+        'average, so each is a directional parent-lake signal rather than an observation of that bay. Inland lakes '
+        'have no comparable product. '
         'Nobody flies a satellite ice analysis over Houghton Lake or Mullett Lake, so for those waters the '
-        'accumulated cold figure and the 54 year comparison are all there is. This is the most important limitation '
-        'to understand about this page. On the Great Lakes it can say something about ice that exists now. On '
+        'accumulated cold figure and the ten year station comparison are all there is. This is the most important '
+        'limitation to understand about this page. On the Great Lakes it can describe whole-lake ice conditions. On '
         'inland lakes it can only say whether the weather has been cold enough that ice ought to have formed.</p>'
 
         '<h2>More from the network</h2>'

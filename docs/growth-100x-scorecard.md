@@ -94,7 +94,8 @@ No experiment is counted as released until its PR merges. Release dates stay nul
 - If impressions rise while clicks fall, repair title, description, first answer, and intent before adding more pages.
 - Prefer an existing page at position 4–15 with at least 250 impressions and weak CTR.
 - Do not run multiple snippet experiments on the same page in one measurement window.
-- Pause new experiments after two comparable weekly click declines greater than 20%, an unexpected canonical/indexing change, or a material Core Web Vitals regression.
+- Treat measurement freezes as page-specific, never site-wide. Continue one non-overlapping, reversible experiment on unaffected pages or distribution surfaces while another page accumulates its clean window.
+- Stop or roll back the affected experiment after two comparable weekly click declines greater than 20%, an unexpected canonical/indexing change, or a material Core Web Vitals regression. Keep one non-overlapping experiment moving elsewhere on the site.
 - Never republish named vessel schedules or commercial AIS data without an official, licensed, or expressly permitted source.
 - Do not activate programmatic ads until the pageview, privacy, consent, and performance gates are met.
 - Do not sell sponsor inventory before the three-month traffic and ad-performance proof gate.

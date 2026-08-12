@@ -43,7 +43,9 @@ test("every fall-color page defines the one canonical Chris Izworski entity", ()
     assert.ok(people.every((person) => person["@id"] === canonicalPersonId), relative);
     assert.ok(!html.includes("https://chrisizworski.com/#chris"), relative);
     assert.ok(html.slice(html.indexOf("<body")).includes("Chris Izworski"), `${relative} needs a visible byline`);
-    assert.ok(html.includes('"dateModified": "2026-08-09"'), `${relative} needs truthful schema freshness`);
+    const modified = html.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/);
+    assert.ok(modified, `${relative} needs schema freshness`);
+    assert.ok(Date.parse(modified[1]) <= Date.now(), `${relative} dateModified cannot be in the future`);
   }
 });
 
@@ -89,12 +91,15 @@ test("static and dynamic fall sitemaps make only supportable freshness claims", 
   const sitemap = read("public/sitemap.xml");
   const pages = fallPages();
   for (const file of pages) {
+    const html = readFileSync(file, "utf8");
+    const modified = html.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1];
+    assert.ok(modified, `${path.relative(root, file)} needs dateModified`);
     const relative = path.relative(fallRoot, path.dirname(file));
     const pathname = relative === "" ? "fall-color/" : `fall-color/${relative}/`;
     const escaped = pathname.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     assert.match(
       sitemap,
-      new RegExp(`<loc>https:\\/\\/chrisizworski\\.com\\/${escaped}<\\/loc>\\s*<lastmod>2026-08-09<\\/lastmod>`),
+      new RegExp(`<loc>https:\\/\\/chrisizworski\\.com\\/${escaped}<\\/loc>\\s*<lastmod>${modified}<\\/lastmod>`),
       pathname,
     );
   }
@@ -139,4 +144,3 @@ test("priority-page schema and sitemap dates agree and are not in the future", (
     assert.equal(entry[1], stamp[1], `${route}: sitemap lastmod disagrees with dateModified`);
   }
 });
-
