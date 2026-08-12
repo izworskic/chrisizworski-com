@@ -119,6 +119,7 @@ test("Measured tool funnel pages include privacy-conscious analytics and real-us
     "index.html",
     "tools/index.html",
     "great-lakes/index.html",
+    "lake-superior-circle-tour/index.html",
     "soo-locks/index.html",
     "northern-lights-michigan/index.html",
     "great-lakes-buoys/index.html",

@@ -165,6 +165,36 @@
       "stopCondition": "The guide loses indexability, the live-tool destination changes, or birding-subdomain CTR falls below 2.5% in a comparable 28-day window."
     },
     {
+      "id": "2026-08-12-lake-superior-circle-tour-intent",
+      "path": "/lake-superior-circle-tour/",
+      "hypothesis": "An itinerary-and-map title, an immediate 7/10/15-day route answer, accurate border guidance, and measurable planner actions will lift qualified CTR from 0.40% toward 1.5% and move average position from 17.52 toward 15 without weakening the existing 31-stop tool.",
+      "primaryMetric": "Search Console page CTR and average position, with Vercel pageview-based planner engagement as a secondary metric",
+      "baseline": {"impressions": 1005, "clicks": 4, "ctr": 0.004, "averagePosition": 17.52},
+      "supportingEvidence": [
+        {"query": "lake superior circle tour", "impressions": 62, "clicks": 1, "ctr": 0.0161, "averagePosition": 33.79}
+      ],
+      "engagementBaseline": {
+        "measuredPageviews": null,
+        "plannerStarts": null,
+        "itinerarySelections": null,
+        "printedTrips": null,
+        "status": "measurement-starts-after-analytics-reaches-production"
+      },
+      "target": {"ctr": 0.015, "averagePosition": 15, "plannerStartRate": 0.03, "itinerarySelectionRate": 0.05},
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-12",
+      "distributionMeasurement": {
+        "sourcePaths": ["/", "/guides/", "/great-lakes/"],
+        "change": "Measure clicks on three existing high-relevance Circle Tour links; do not add unrelated sitewide links.",
+        "measurement": "Growth CTA events by source path and destination, kept distinct from Search Console clicks and measured pageviews."
+      },
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "The canonical, 31-stop planner, NOAA water-level feed, itinerary accessibility, official border-source links, Core Web Vitals, or indexability regresses."
+    },
+    {
       "id": "2026-08-12-great-lakes-buoys-live-intent",
       "path": "/great-lakes-buoys/",
       "hypothesis": "Leading the title and H1 with Great Lakes buoys, then giving an immediate NOAA/NDBC conditions answer, will lift page CTR from 1.96% toward 2.5% and average position from 14.54 toward 12 without changing the canonical, live feed, map, or filters.",
