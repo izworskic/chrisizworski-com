@@ -8,6 +8,7 @@ from gen_chrome import (head, header, FOOTER, SAFETY_BANNER, breadcrumb,
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = pathlib.Path(os.environ.get("ICE_OUT", str(ROOT / "public" / "michigan-ice")))
 (OUT / "regions").mkdir(parents=True, exist_ok=True)
+ICE_ROOT_DATE_MODIFIED = "2026-08-12"
 
 REGIONS = [
     dict(
@@ -177,6 +178,7 @@ def build_index():
          "name": "Michigan Ice Report: Accumulated Cold and Great Lakes Ice Cover",
          "description": "Live Michigan ice conditions across six waters using accumulated freezing degree days, "
                         "ten-year station normals, and a 54-year Great Lakes ice climatology.",
+         "dateModified": ICE_ROOT_DATE_MODIFIED,
          "inLanguage": "en-US", "author": {"@id": PERSON_ID},
          "breadcrumb": {"@id": url + "#breadcrumb"}},
         breadcrumb([("Michigan Ice Report", url)]),

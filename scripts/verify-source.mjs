@@ -146,7 +146,6 @@ const intentionalChanges = new Set([
   "/connect/",
   "/projects/",
   "/sitemap.xml",
-  "/sitemap-reputation.xml",
   "/image-sitemap.xml",
   "/llms.txt",
   "/robots.txt",
@@ -160,7 +159,7 @@ const committedDriftHashes = new Map([
   ["/edmund-fitzgerald/", "a722575cbf373e9e66c874d48a61dafb089e19a79f2df5e261053940ec3f3f04"],
   ["/heirloom-seed-saving-guide/", "2e5d3c53110102a7f6784f3c7f6ac86b1f9be6840f297a515ead80111c1b6e87"],
   ["/michigan-paddling/pere-marquette/", "9f5d099de514fc829c4315ac3487500f8572761596ba797d66ca463d8df00ec2"],
-  ["/sitemap-reputation.xml", "eb339d08e40191c4825feaf088a6bf0b02f67606431ab02d20315d8b505174c0"],
+  ["/sitemap-reputation.xml", "be4c8974c0ee20a15468fa9104c1878e45ef247b05b29167e23b9683026dfcaa"],
   ["/zone-6a-planting-calendar/", "3b34180a82558e2df887dc238ad31dc8d1995e465b3e5d81972ddec260414565"],
 ]);
 

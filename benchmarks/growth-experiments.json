@@ -123,20 +123,27 @@
       "primaryMetric": "Search Console impressions and aggregate internal CTA clicks",
       "baseline": {"impressions": 10, "clicks": 0, "ctr": 0, "averagePosition": 9.9},
       "target": {"impressions": 100, "internalCtaClicks": 10},
-      "status": "running",
-      "releaseDate": "2026-08-03",
-      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-11",
+      "invalidatedWindow": {
+        "releaseDate": "2026-08-03",
+        "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
+        "invalidatedOn": "2026-08-11",
+        "reason": "The inbound-link distribution expansion shipped during the original window, changing qualified traffic to the same destination and confounding its impressions and CTA metrics. Restart the combined treatment after the analytics repair reaches production."
+      },
       "distributionExpansion": {
-        "status": "pending-release",
+        "status": "released",
         "proposedDate": "2026-08-11",
-        "releaseDate": null,
+        "releaseDate": "2026-08-11",
         "evaluationWindow": null,
         "sourcePaths": ["/", "/about/", "/guides/"],
         "change": "Add measurable contextual links from established discovery pages into the FVF authority page without changing the destination title, H1, first answer, schema, canonical, or indexability.",
         "baselineInboundInternalPages": 6,
         "targetInboundInternalPages": 9,
         "measurement": "Growth CTA events on the three source links plus FVF authority-page impressions and downstream gardening CTA clicks.",
-        "attributionNote": "This expands distribution while the original page experiment runs; it does not pause unrelated experiments or alter the active tomato and frost snippets."
+        "attributionNote": "This expanded distribution without altering the active tomato and frost snippets. About and Guides require the PR 50 analytics-loader repair before their CTA events are measurable, so the combined FVF window restarts after that repair reaches production."
       },
       "decisionDate": null,
       "result": null,
@@ -156,6 +163,24 @@
       "decisionDate": null,
       "result": null,
       "stopCondition": "The guide loses indexability, the live-tool destination changes, or birding-subdomain CTR falls below 2.5% in a comparable 28-day window."
+    },
+    {
+      "id": "2026-08-12-great-lakes-buoys-live-intent",
+      "path": "/great-lakes-buoys/",
+      "hypothesis": "Leading the title and H1 with Great Lakes buoys, then giving an immediate NOAA/NDBC conditions answer, will lift page CTR from 1.96% toward 2.5% and average position from 14.54 toward 12 without changing the canonical, live feed, map, or filters.",
+      "primaryMetric": "Search Console page CTR and average position",
+      "baseline": {"impressions": 1276, "clicks": 25, "ctr": 0.0196, "averagePosition": 14.54},
+      "supportingEvidence": [
+        {"query": "great lakes buoys", "impressions": 104, "clicks": 1, "ctr": 0.0096, "averagePosition": 11.49}
+      ],
+      "target": {"ctr": 0.025, "averagePosition": 12},
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-12",
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "The NOAA/NDBC attribution, canonical, live feed, map, station list, activity filters, accessibility, or performance regresses."
     },
     {
       "id": "2026-08-03-great-lakes-ship-tracker",
