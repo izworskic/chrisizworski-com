@@ -24,13 +24,13 @@ test("FVF source-page CTA tracking loads Vercel Analytics before the tracker", (
   }
 });
 
-test("the FVF experiment restarts instead of claiming a confounded window", () => {
+test("the FVF experiment runs on the clean post-PR-50 window", () => {
   const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
   const fvf = ledger.experiments.find((item) => item.id === "2026-08-03-fvf-gardening-authority");
 
-  assert.equal(fvf.status, "pending-clean-window");
-  assert.equal(fvf.releaseDate, null);
-  assert.equal(fvf.evaluationWindow, null);
+  assert.equal(fvf.status, "running");
+  assert.equal(fvf.releaseDate, "2026-08-12");
+  assert.deepEqual(fvf.evaluationWindow, { start: "2026-08-13", end: "2026-09-09" });
   assert.equal(fvf.lastSearchFacingChangeDate, "2026-08-11");
   assert.deepEqual(fvf.invalidatedWindow.evaluationWindow, {
     start: "2026-08-04",
@@ -39,6 +39,10 @@ test("the FVF experiment restarts instead of claiming a confounded window", () =
   assert.match(fvf.invalidatedWindow.reason, /confounding/);
   assert.equal(fvf.distributionExpansion.status, "released");
   assert.equal(fvf.distributionExpansion.releaseDate, "2026-08-11");
+  assert.deepEqual(fvf.distributionExpansion.evaluationWindow, {
+    start: "2026-08-13",
+    end: "2026-09-09",
+  });
 });
 
 test("the Michigan Ice root freshness signal is generated and matches the sitemap", () => {
@@ -96,9 +100,9 @@ test("Great Lakes Buoys matches live-buoy intent without regressing the tool", (
     averagePosition: 14.54,
   });
   assert.deepEqual(experiment.target, { ctr: 0.025, averagePosition: 12 });
-  assert.equal(experiment.status, "pending-clean-window");
-  assert.equal(experiment.releaseDate, null);
-  assert.equal(experiment.evaluationWindow, null);
+  assert.equal(experiment.status, "running");
+  assert.equal(experiment.releaseDate, "2026-08-12");
+  assert.deepEqual(experiment.evaluationWindow, { start: "2026-08-13", end: "2026-09-09" });
 });
 
 test("PR 50 page freshness stamps match sitemap.xml", () => {

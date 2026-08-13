@@ -1,5 +1,5 @@
 {
-  "ledgerVersion": "1.4.0",
+  "ledgerVersion": "1.4.1",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
   "measurementProtocol": {
@@ -123,9 +123,9 @@
       "primaryMetric": "Search Console impressions and aggregate internal CTA clicks",
       "baseline": {"impressions": 10, "clicks": 0, "ctr": 0, "averagePosition": 9.9},
       "target": {"impressions": 100, "internalCtaClicks": 10},
-      "status": "pending-clean-window",
-      "releaseDate": null,
-      "evaluationWindow": null,
+      "status": "running",
+      "releaseDate": "2026-08-12",
+      "evaluationWindow": {"start": "2026-08-13", "end": "2026-09-09"},
       "lastSearchFacingChangeDate": "2026-08-11",
       "invalidatedWindow": {
         "releaseDate": "2026-08-03",
@@ -137,13 +137,13 @@
         "status": "released",
         "proposedDate": "2026-08-11",
         "releaseDate": "2026-08-11",
-        "evaluationWindow": null,
+        "evaluationWindow": {"start": "2026-08-13", "end": "2026-09-09"},
         "sourcePaths": ["/", "/about/", "/guides/"],
         "change": "Add measurable contextual links from established discovery pages into the FVF authority page without changing the destination title, H1, first answer, schema, canonical, or indexability.",
         "baselineInboundInternalPages": 6,
         "targetInboundInternalPages": 9,
         "measurement": "Growth CTA events on the three source links plus FVF authority-page impressions and downstream gardening CTA clicks.",
-        "attributionNote": "This expanded distribution without altering the active tomato and frost snippets. About and Guides require the PR 50 analytics-loader repair before their CTA events are measurable, so the combined FVF window restarts after that repair reaches production."
+        "attributionNote": "This expanded distribution without altering the active tomato and frost snippets. The PR 50 analytics-loader repair reached production on August 12, so the clean combined FVF window begins August 13."
       },
       "decisionDate": null,
       "result": null,
@@ -174,9 +174,9 @@
         {"query": "great lakes buoys", "impressions": 104, "clicks": 1, "ctr": 0.0096, "averagePosition": 11.49}
       ],
       "target": {"ctr": 0.025, "averagePosition": 12},
-      "status": "pending-clean-window",
-      "releaseDate": null,
-      "evaluationWindow": null,
+      "status": "running",
+      "releaseDate": "2026-08-12",
+      "evaluationWindow": {"start": "2026-08-13", "end": "2026-09-09"},
       "lastSearchFacingChangeDate": "2026-08-12",
       "decisionDate": null,
       "result": null,
