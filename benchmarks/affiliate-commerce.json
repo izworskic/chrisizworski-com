@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "1.0.0",
+  "created": "2026-08-13",
+  "program": "Amazon Associates",
+  "trackingId": "websitetools06-20",
+  "measurement": {
+    "siteSource": "Vercel Web Analytics custom events",
+    "amazonSource": "Amazon Associates reports",
+    "events": [
+      "Affiliate Module View",
+      "Affiliate Click"
+    ],
+    "siteCanMeasure": [
+      "module views",
+      "outbound clicks",
+      "module click-through rate"
+    ],
+    "siteCannotMeasure": [
+      "ordered items",
+      "Amazon conversion rate",
+      "commission income"
+    ],
+    "primaryMetric": "Affiliate Clicks / Affiliate Module Views",
+    "decisionRule": "Do not judge a placement before 250 module views or one complete 28-day window, whichever is later."
+  },
+  "compliance": {
+    "disclosure": "As an Amazon Associate I earn from qualifying purchases.",
+    "linkLevelLabel": "Paid links",
+    "rel": [
+      "sponsored",
+      "nofollow",
+      "noopener"
+    ],
+    "noPrices": true,
+    "noAmazonImages": true,
+    "noRatings": true
+  },
+  "placements": [
+    {
+      "id": "aurora-field-gear",
+      "path": "/northern-lights-michigan/",
+      "selectionEvidence": {
+        "impressions": 18461,
+        "clicks": 341,
+        "ctr": 0.01847,
+        "averagePosition": 10.36
+      },
+      "context": "aurora",
+      "items": [
+        "camera-tripod",
+        "red-light-headlamp",
+        "hand-warmers",
+        "power-bank"
+      ],
+      "placement": "After Aurora Photography Basics",
+      "status": "pending-release",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "target": {
+        "moduleClickThroughRate": 0.03,
+        "minimumModuleViews": 250
+      },
+      "stopCondition": "Disclosure or link qualification is missing, accessibility or page performance regresses, or module CTR remains below 1% after 500 module views."
+    },
+    {
+      "id": "soo-locks-visitor-gear",
+      "path": "/soo-locks/",
+      "selectionEvidence": {
+        "impressions": 11919,
+        "clicks": 150,
+        "ctr": 0.01259,
+        "averagePosition": 9.41
+      },
+      "context": "soo-locks",
+      "items": [
+        "waterproof-binoculars",
+        "phone-tripod",
+        "rain-shell",
+        "power-bank"
+      ],
+      "placement": "After Visiting the Soo Locks",
+      "status": "pending-release",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "target": {
+        "moduleClickThroughRate": 0.03,
+        "minimumModuleViews": 250
+      },
+      "stopCondition": "Disclosure or link qualification is missing, accessibility or page performance regresses, or module CTR remains below 1% after 500 module views."
+    }
+  ]
+}
