@@ -75,13 +75,17 @@ test("FVF distribution grows from established pages without touching active snip
   const fvf = ledger.experiments.find((item) => item.id === "2026-08-03-fvf-gardening-authority");
   assert.equal(tomato.status, "running");
   assert.equal(frost.status, "running");
-  assert.equal(fvf.status, "pending-clean-window");
-  assert.equal(fvf.releaseDate, null);
-  assert.equal(fvf.evaluationWindow, null);
+  assert.equal(fvf.status, "running");
+  assert.equal(fvf.releaseDate, "2026-08-12");
+  assert.deepEqual(fvf.evaluationWindow, { start: "2026-08-13", end: "2026-09-09" });
   assert.equal(fvf.invalidatedWindow.invalidatedOn, "2026-08-11");
   assert.match(fvf.invalidatedWindow.reason, /confounding/);
   assert.equal(fvf.distributionExpansion.status, "released");
   assert.equal(fvf.distributionExpansion.releaseDate, "2026-08-11");
+  assert.deepEqual(fvf.distributionExpansion.evaluationWindow, {
+    start: "2026-08-13",
+    end: "2026-09-09",
+  });
   assert.deepEqual(fvf.distributionExpansion.sourcePaths, ["/", "/about/", "/guides/"]);
   assert.match(ledger.measurementProtocol.parallelExecutionPolicy, /page-specific, not site-wide/);
   assert.match(ledger.measurementProtocol.parallelExecutionPolicy, /Stop or roll back an affected experiment/);
