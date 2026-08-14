@@ -9,6 +9,12 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 14 2026: additive gallery pass. Seven new August 2026 garden photographs added to
+  // /chris-izworski-photos/ (Monte Gusto pole beans, zucchini + zucchini bread, onion harvest,
+  // herb butter). Figure count corrected 169 -> 164 to match the actual number of images on
+  // the page (157 before this pass). Re-crawl after deploy, then remove this declaration.
+  "/chris-izworski-photos/",
+
   // Aug 11 2026: factual corrections plus additive FVF distribution from the home,
   // About, and Guides pages. Re-crawl after deploy, then remove these declarations.
   "/about/",
