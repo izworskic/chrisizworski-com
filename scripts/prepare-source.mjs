@@ -140,7 +140,7 @@ const sitemapDates = {
   "great-lakes/": "2026-07-28",
   "tools/": "2026-07-28",
   "soo-locks/": "2026-08-07",
-  "northern-lights-michigan/": "2026-08-07",
+  "northern-lights-michigan/": "2026-08-14",
   "chris-izworski-freighter-view-farms/": "2026-08-03",
   "michigan-gardening/": "2026-08-03",
   "great-lakes-birding/": "2026-08-03",

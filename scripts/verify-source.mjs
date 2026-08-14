@@ -368,7 +368,16 @@ if ((aurora.match(/<article[^>]+data-region-id=/g) || []).length !== 8 || !auror
 if (!auroraApi.includes("Promise.allSettled") || !auroraApi.includes("stale-while-revalidate=900")) {
   failures.push("Aurora API is missing independent NOAA fallbacks or short CDN caching");
 }
-if (!auroraLib.includes("parseKpForecast") || !auroraLib.includes("parseOvation") || !auroraLib.includes("regionVerdict")) {
+if (!auroraApi.includes("api.weather.gov/gridpoints") || !auroraApi.includes("aa.usno.navy.mil/api")) {
+  failures.push("Aurora API is missing its authoritative NWS sky-cover or USNO moon source");
+}
+if (!aurora.includes('id="regionSelect"') || !aurora.includes('id="nextBestWindow"') || aurora.includes("New moon, 5 days")) {
+  failures.push("Northern Lights is missing the region decision controls or still hard-codes a moon phase");
+}
+if (!aurora.includes("Aurora Field Report") || /Aurora Location Used[^\n]+(?:lat|lng|latitude|longitude)/i.test(aurora)) {
+  failures.push("Aurora engagement measurement is missing or includes exact location data");
+}
+if (!auroraLib.includes("parseKpForecast") || !auroraLib.includes("parseOvation") || !auroraLib.includes("regionVerdict") || !auroraLib.includes("parseSkyCover") || !auroraLib.includes("parseMoon")) {
   failures.push("Aurora normalization does not preserve current NOAA formats or conditional regional verdicts");
 }
 
