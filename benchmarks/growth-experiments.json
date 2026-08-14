@@ -1,5 +1,5 @@
 {
-  "ledgerVersion": "1.4.1",
+  "ledgerVersion": "1.5.0",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
   "measurementProtocol": {
@@ -57,7 +57,7 @@
     {
       "id": "2026-08-03-aurora-resilient-answer",
       "path": "/northern-lights-michigan/",
-      "hypothesis": "A tonight-led title, crawlable regional Michigan outlooks, and a fail-soft same-origin NOAA feed will lift CTR from 1.85% toward 2.5% while answering city and regional intent without mass-producing thin location pages.",
+      "hypothesis": "A tonight-led title, crawlable regional Michigan outlooks, and a fail-soft decision engine that combines NOAA space weather with NWS clouds, USNO moonlight, and a selected-region best window will lift CTR from 1.85% toward 2.5% and improve qualified return use without mass-producing thin location pages.",
       "primaryMetric": "Search Console page CTR",
       "baseline": {"impressions": 18461, "clicks": 341, "ctr": 0.01847, "averagePosition": 10.36},
       "supportingEvidence": [
@@ -65,14 +65,15 @@
         {"query": "northern lights upper peninsula tonight", "impressions": 187, "clicks": 5, "ctr": 0.0267, "averagePosition": 7.36},
         {"query": "northern lights tonight near me", "impressions": 194, "clicks": 2, "ctr": 0.0103, "averagePosition": 7.91}
       ],
+      "engagementMetrics": ["Aurora Region Selected", "Aurora Location Used", "Aurora Manual Refresh", "Aurora Field Report"],
       "target": {"ctr": 0.025},
       "status": "pending-clean-window",
       "releaseDate": null,
       "evaluationWindow": null,
-      "lastSearchFacingChangeDate": "2026-08-13",
+      "lastSearchFacingChangeDate": "2026-08-14",
       "decisionDate": null,
       "result": null,
-      "stopCondition": "NOAA parsing, map behavior, or existing manual fallback regresses."
+      "stopCondition": "NOAA, NWS, or USNO parsing regresses; the map or manual fallback fails; exact coordinates enter analytics or storage; or the interface presents a forecast combination as a visibility probability."
     },
     {
       "id": "2026-08-03-soo-schedule-intent",

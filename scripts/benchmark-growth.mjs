@@ -178,10 +178,14 @@ const aurora = await read("public/northern-lights-michigan/index.html");
 const auroraApi = await read("api/aurora.js");
 const soo = await read("public/soo-locks/index.html");
 check(
-  "Aurora build exposes regional answers and fail-soft NOAA data",
+  "Aurora build exposes regional answers and fail-soft authoritative planning data",
   aurora.includes("Michigan aurora forecast by region tonight") &&
+    aurora.includes('id="regionSelect"') &&
+    aurora.includes('id="nextBestWindow"') &&
     aurora.includes("fetch('/api/aurora'") &&
     auroraApi.includes("Promise.allSettled") &&
+    auroraApi.includes("api.weather.gov/gridpoints") &&
+    auroraApi.includes("aa.usno.navy.mil/api") &&
     auroraApi.includes("stale-while-revalidate=900"),
 );
 check(

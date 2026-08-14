@@ -3,6 +3,26 @@
 One dated entry per production change, so Search Console movement can be attributed to a cause
 instead of guessed at. Do not ship two page clusters on the same day.
 
+## 2026-08-14 — Aurora regional decision engine
+Cluster: /northern-lights-michigan/ only.
+- Added official National Weather Service sky-cover forecasts for all eight Michigan regions and
+  U.S. Naval Observatory moon phase, illumination, rise, transit, and set data. Each feed fails
+  independently and the existing manual NOAA fallback remains available.
+- Added a saved regional selector, regional astronomical-darkness calculation, and a next-best
+  window. Cloud cover breaks ties only among similarly strong NOAA Kp periods; the result is
+  explicitly labeled planning guidance rather than a visibility probability.
+- Made geolocation choose the nearest forecast region while keeping exact coordinates in the
+  browser. Analytics receive only the coarse region ID, and the saved preference contains only
+  that ID.
+- Added privacy-safe events for region choice, manual refresh, alert permission, geolocation use,
+  and optional after-the-sky-check field reports so utility and repeat behavior can be measured.
+- Kept the title, meta description, H1, canonical, and crawlable first answer unchanged. Updated
+  only the structured description and reviewed freshness date; the Aurora experiment remains one
+  page-cluster test and restarts its clean window after production release.
+
+Expected to affect: useful repeat visits and qualified engagement immediately, plus CTR and
+regional-query impressions after recrawl. NOT YET MEASURED.
+
 ## 2026-08-09 — measurement integrity before the 28-day growth freeze
 Cluster: fall color (15 pages), Aurora, Soo Locks, and Mackinac Bridge.
 - Normalised every fall-color Person definition and reference to the canonical

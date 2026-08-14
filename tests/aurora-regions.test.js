@@ -30,3 +30,23 @@ test("both halves of the synonym are covered: northern lights and aurora boreali
   assert.match(html, /<title>[^<]*Northern Lights[^<]*<\/title>/i, "the title keeps the head term");
   assert.match(html, /name="description" content="[^"]*aurora borealis/i, "the description carries the synonym");
 });
+
+test("the regional decision engine uses authoritative sky factors without hard-coded promises", () => {
+  assert.ok(html.includes('id="regionSelect"'));
+  assert.ok(html.includes('id="selectedCloud"'));
+  assert.ok(html.includes('id="selectedMoon"'));
+  assert.ok(html.includes('id="nextBestWindow"'));
+  assert.ok(html.includes("bestPlanningPeriod"));
+  assert.ok(html.includes("not a visibility probability"));
+  assert.ok(html.includes("National Weather Service API"));
+  assert.ok(html.includes("U.S. Naval Observatory Data Services"));
+  assert.ok(!html.includes("New moon, 5 days"));
+});
+
+test("aurora measurement stores only a regional preference and never sends coordinates", () => {
+  assert.ok(html.includes("localStorage.setItem(REGION_PREF_KEY, id)"));
+  assert.ok(html.includes("trackAuroraEvent('Aurora Location Used', {region:nearestRegion.id})"));
+  assert.ok(html.includes("trackAuroraEvent('Aurora Field Report'"));
+  assert.doesNotMatch(html, /trackAuroraEvent\([^\n]+(?:latitude|longitude|\blat\b|\blng\b)/i);
+  assert.ok(!html.includes("lat.toFixed(2)+', '+lng.toFixed(2)"));
+});

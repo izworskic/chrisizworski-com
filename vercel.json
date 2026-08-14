@@ -20,6 +20,9 @@
     "api/fall-color.js": {
       "maxDuration": 60
     },
+    "api/aurora.js": {
+      "maxDuration": 20
+    },
     "api/**/*.js": {
       "maxDuration": 10
     }

@@ -26,8 +26,8 @@
   "@graph": [
     {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski"},
     {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/northern-lights-michigan/","name":"Northern Lights Michigan Tonight: Live Aurora Forecast","description":"Live NOAA Kp, solar-wind, OVATION nowcast, peak timing, and regional Michigan aurora outlooks for tonight.","url":"https://chrisizworski.com/northern-lights-michigan/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-08-13","inLanguage":"en-US"},
-    {"@type":"WebApplication","name":"Michigan Aurora Forecast","url":"https://chrisizworski.com/northern-lights-michigan/","applicationCategory":"WeatherApplication","operatingSystem":"Any","isAccessibleForFree":true,"description":"A live Michigan aurora planning tool using NOAA SWPC Kp, solar-wind, and OVATION products.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/northern-lights-michigan/","name":"Northern Lights Michigan Tonight: Live Aurora Forecast","description":"Live NOAA Kp, solar-wind, OVATION nowcast, NWS cloud cover, moonlight, peak timing, and regional Michigan aurora outlooks for tonight.","url":"https://chrisizworski.com/northern-lights-michigan/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-08-14","inLanguage":"en-US"},
+    {"@type":"WebApplication","name":"Michigan Aurora Forecast","url":"https://chrisizworski.com/northern-lights-michigan/","applicationCategory":"WeatherApplication","operatingSystem":"Any","isAccessibleForFree":true,"description":"A live Michigan aurora planning tool using NOAA SWPC Kp and OVATION products, NWS cloud forecasts, and USNO moon data.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Northern Lights Michigan","item":"https://chrisizworski.com/northern-lights-michigan/"}]}
   ]
 }
@@ -76,6 +76,13 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .hero-info .tonight-headline{font-size:23px;font-weight:normal;color:#fff;margin-bottom:10px;line-height:1.3}
 .hero-info .tonight-detail{font-size:14px;color:#aac8d8;line-height:1.7;margin-bottom:14px}
 .hero-info .tonight-detail strong{color:#fff;font-style:normal}
+.region-picker{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px}
+.region-picker label{font-size:11px;color:#88c8e8;letter-spacing:.7px;text-transform:uppercase}
+.region-picker select{max-width:100%;background:#102946;color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:8px 10px;font:13px Georgia,serif}
+.decision-factors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:0 0 13px}
+.decision-factor{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);border-radius:4px;padding:8px 10px}
+.decision-factor span{display:block;color:#88c8e8;font-size:9px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:3px}
+.decision-factor strong{display:block;color:#fff;font-size:12px;line-height:1.4}
 .night-strip{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
 .night-strip .night{flex:1 1 120px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:4px;padding:9px 11px}
 .night-strip .night.best{border-color:#7bc8e8;background:rgba(123,200,232,.13)}
@@ -87,7 +94,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .hero-btn:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4)}
 .hero-btn.primary{background:#5fc88f;border-color:#5fc88f;color:#0a1428;font-weight:bold}
 .hero-btn.primary:hover{background:#7fd8a8;border-color:#7fd8a8}
-@media(max-width:680px){.hero-grid{grid-template-columns:1fr;text-align:center}.gauge-wrap{margin:0 auto;width:170px;height:170px}.hero-action-row{justify-content:center}}
+@media(max-width:680px){.hero-grid{grid-template-columns:1fr;text-align:center}.gauge-wrap{margin:0 auto;width:170px;height:170px}.hero-action-row,.region-picker{justify-content:center}.decision-factors{grid-template-columns:1fr}}
 
 /* Solar wind panel */
 .sw-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:0 0 28px}
@@ -117,8 +124,16 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .region-signal strong{font-size:12px;color:#24402d;text-align:right}
 .region-threshold{font-size:10px;color:#657068;text-transform:uppercase;letter-spacing:.45px;white-space:nowrap}
 .region-detail{font-size:12px!important;color:#4b554e!important;line-height:1.55;margin:0!important}
+.region-weather{font-size:11px!important;color:#315f78!important;line-height:1.5;margin:7px 0 0!important}
 .region-note{font-size:12px!important;color:#6c756e!important;line-height:1.6;margin:11px 0 0!important}
 @media(max-width:680px){.region-outlook-head{display:block}.region-outlook-head p{text-align:left;margin-top:5px}.region-grid{grid-template-columns:1fr}}
+.field-report{background:#eef5f7;border:1px solid #cfdfe4;border-radius:5px;padding:17px 19px;margin:0 0 26px}
+.field-report h3{font-size:16px;color:#173c2c;margin:0 0 5px}
+.field-report p{font-size:12px;margin:0 0 9px;color:#57666a}
+.field-report .hero-action-row{margin-top:6px}
+.field-report .hero-btn{background:#fff;border-color:#9db6bf;color:#244755}
+.field-report .hero-btn:hover{background:#f7fbfc;border-color:#547d8c}
+.field-report .hero-btn:disabled{opacity:.58;cursor:default}
 
 /* Forecast chart */
 .forecast-chart-wrap{background:#fff;border:1px solid #e0dbd2;border-radius:4px;padding:18px 16px;margin:8px 0 24px}
@@ -265,7 +280,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 
 <p>Michigan aurora visibility changes sharply by latitude, darkness, cloud cover, and the strength and timing of each geomagnetic disturbance. The Upper Peninsula has the best odds, while Lower Peninsula viewing usually requires a stronger event and an unobstructed northern horizon.</p>
 
-<p>The tool below combines official NOAA Space Weather Prediction Center products: the planetary K-index outlook, real-time solar-wind measurements, and the 30-to-90-minute OVATION aurora model. Kp is a broad forecast and Bz is a useful near-term signal; neither guarantees local visibility. The page refreshes every 10 minutes, and the map ranks dark-sky viewing locations without collecting or storing your position.</p>
+<p>The tool below combines official NOAA Space Weather Prediction Center products with National Weather Service cloud forecasts and U.S. Naval Observatory moon data. Kp and Bz describe space weather; the added sky factors help answer when a regional trip is worth considering, without claiming a visibility probability. The page refreshes every 10 minutes, and the map ranks dark-sky viewing locations without collecting or storing your position.</p>
 
 <!-- Hero panel with animated SVG gauge -->
 <div class="hero-panel">
@@ -283,6 +298,8 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
       <div class="tonight-label">Tonight in Michigan</div>
       <h2 class="tonight-headline" id="tonightHeadline" style="margin:0 0 10px;border:0;padding:0">Checking tonight's live NOAA aurora forecast</h2>
       <div class="tonight-detail" id="tonightDetail">Until the update completes: Kp 5 to 6 favors dark Upper Peninsula locations; Kp 7 or higher can reach farther south when skies are clear.</div>
+      <div class="region-picker"><label for="regionSelect">Plan for</label><select id="regionSelect"><option value="keweenaw">Keweenaw Peninsula</option><option value="marquette">Marquette</option><option value="munising">Munising</option><option value="sault-ste-marie">Sault Ste. Marie</option><option value="mackinaw-city" selected>Mackinaw City / Straits</option><option value="traverse-city">Traverse City</option><option value="bay-city">Bay City / Saginaw Bay</option><option value="detroit">Detroit / southern Michigan</option></select></div>
+      <div class="decision-factors" aria-live="polite"><div class="decision-factor"><span>NWS forecast clouds</span><strong id="selectedCloud">Checking...</strong></div><div class="decision-factor"><span>USNO moon tonight</span><strong id="selectedMoon">Checking...</strong></div><div class="decision-factor"><span>Next best window</span><strong id="nextBestWindow">Calculating...</strong></div></div>
       <div class="tonight-detail" id="tonightWindow">Calculating tonight's dark window and the best hours to be outside.</div>
       <div class="night-strip" id="nightStrip"></div>
       <div class="hero-action-row">
@@ -317,7 +334,14 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
     <article class="region-card" data-region-id="bay-city" data-level="unavailable"><h3>Bay City and Saginaw Bay</h3><p class="region-places">Bay City, the Thumb, and Saginaw Bay</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 7</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Sleeper State Park provides the best north-facing water horizon in this region.</p></article>
     <article class="region-card" data-region-id="detroit" data-level="unavailable"><h3>Detroit and southern Michigan</h3><p class="region-places">Detroit, Lansing, Grand Rapids, and southeast and west Michigan</p><div class="region-signal"><span class="region-threshold">Planning threshold Kp 7</span><strong data-region-label>Checking NOAA</strong></div><p class="region-detail" data-region-detail>Strong storms, darker rural skies, and a clear northern horizon are normally required.</p></article>
   </div>
-  <p class="region-note">Regional Kp numbers are conservative trip-planning thresholds used by this guide, not NOAA visibility guarantees. OVATION models the aurora 30 to 90 minutes ahead and does not account for local clouds or darkness.</p>
+  <p class="region-note">Regional Kp numbers are conservative trip-planning thresholds used by this guide, not NOAA visibility guarantees. OVATION models the aurora 30 to 90 minutes ahead; the cloud percentages added here are NWS forecasts for representative regional grid points, not observations.</p>
+</section>
+
+<section class="field-report" aria-labelledby="fieldReportHeading">
+  <h3 id="fieldReportHeading">If you checked the sky tonight, what happened?</h3>
+  <p>Your answer helps measure whether this planning tool is useful. It does not send your location.</p>
+  <div class="hero-action-row"><button class="hero-btn field-report-btn" data-field-outcome="aurora-visible">Saw aurora</button><button class="hero-btn field-report-btn" data-field-outcome="clouds-blocked">Clouds blocked the view</button><button class="hero-btn field-report-btn" data-field-outcome="no-aurora-visible">No aurora visible</button></div>
+  <p id="fieldReportThanks" role="status"></p>
 </section>
 
 <!-- Smart CTA -->
@@ -339,7 +363,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 <!-- Geolocation tool -->
 <div class="geo-tool" id="geoTool">
   <h3>Find the best viewing for your location</h3>
-  <p>Click below to share your location. The tool calculates straight-line distance to each viewing site, ranks them, and tells you what Kp threshold you would need to see aurora from each one based on geomagnetic latitude.</p>
+  <p>Click below to share your location with this browser. The tool calculates straight-line distance to each viewing site and chooses the nearest forecast region. Exact coordinates stay in the browser; only the regional preference is saved on this device.</p>
   <button class="geo-btn" id="geoBtn">Use my location</button>
   <div class="geo-result" id="geoResult">
     <h4 id="geoResultTitle">Distance from your location</h4>
@@ -465,7 +489,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
   <div class="stat-box"><div class="lbl">Best months</div><div class="val">Sep, Oct, Mar, Apr</div></div>
   <div class="stat-box"><div class="lbl">Best hours</div><div class="val">10 PM to 2 AM</div></div>
   <div class="stat-box"><div class="lbl">Worst months</div><div class="val">May to Aug</div></div>
-  <div class="stat-box"><div class="lbl">Moon phase</div><div class="val">New moon, 5 days</div></div>
+  <div class="stat-box"><div class="lbl">Moon tonight</div><div class="val" id="moonPhaseValue">Checking USNO...</div></div>
 </div>
 <p>The fall and spring equinox periods (March through April and September through October) produce statistically more aurora activity due to favorable Earth-Sun magnetic alignment. The Russell-McPherron effect roughly doubles the probability of significant geomagnetic activity during these windows. Midsummer is the hardest aurora-viewing season in Michigan, not because the aurora is less active but because the fully dark window is much shorter than it is in fall and winter.</p>
 
@@ -541,6 +565,8 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 <div class="gear-list">
   <div class="gi"><a href="https://www.spaceweather.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener"><strong>NOAA SWPC Aurora 30-Minute Forecast</strong></a> &middot; Short-term auroral oval visualization.</div>
   <div class="gi"><a href="https://www.spaceweather.gov/products/3-day-forecast" target="_blank" rel="noopener"><strong>NOAA SWPC 3-Day Forecast</strong></a> &middot; Official 3-day Kp outlook.</div>
+  <div class="gi"><a href="https://www.weather.gov/documentation/services-web-api" target="_blank" rel="noopener"><strong>National Weather Service API</strong></a> &middot; Official digital sky-cover forecasts used for the regional planning windows.</div>
+  <div class="gi"><a href="https://aa.usno.navy.mil/data/api" target="_blank" rel="noopener"><strong>U.S. Naval Observatory Data Services</strong></a> &middot; Official moon phase, illumination, rise, and set data.</div>
   <div class="gi"><a href="https://www.spaceweatherlive.com" target="_blank" rel="noopener"><strong>SpaceWeatherLive.com</strong></a> &middot; Community-maintained space weather portal with alerts.</div>
   <div class="gi"><a href="https://www.lightpollutionmap.info" target="_blank" rel="noopener"><strong>Light Pollution Map</strong></a> &middot; Bortle dark-sky ratings for any location worldwide.</div>
   <div class="gi"><a href="https://www.weather.gov/mqt/" target="_blank" rel="noopener"><strong>NWS Marquette</strong></a> &middot; Cloud cover forecast for the Upper Peninsula.</div>
@@ -570,14 +596,51 @@ const LOCATIONS = [{"name": "Brockway Mountain", "lat": 47.488, "lng": -87.886, 
 const KP_STATUS = ['Quiet','Quiet','Quiet','Unsettled','Active','G1 Storm','G2 Storm','G3 Storm','G4 Storm','G5 Storm'];
 const KP_COLORS = ['#5fc88f','#5fc88f','#7ac8a0','#a8a040','#c08030','#c06020','#a02020','#801818','#600808','#400404'];
 
+const REGION_PREF_KEY = 'aurora-region-v1';
 let currentKp = 0, userMarker = null, kpForecast = [], notifyEnabled = false;
-let auroraMap = null, markers = [];
+let auroraMap = null, markers = [], latestAuroraData = null, selectedRegionId = 'mackinaw-city';
+
+try {
+  const savedRegion = localStorage.getItem(REGION_PREF_KEY);
+  if (savedRegion) selectedRegionId = savedRegion;
+} catch (error) {
+  // Storage can be disabled; the tool still works with the Straits default.
+}
 
 // === Format helpers ===
 function formatTime(d){return d.toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});}
 function haversine(lat1,lng1,lat2,lng2){const R=3958.8,toRad=x=>x*Math.PI/180;const dLat=toRad(lat2-lat1),dLng=toRad(lng2-lng1);const a=Math.sin(dLat/2)**2+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
 function kpClass(k){return Math.min(Math.floor(k),8);}
 function bortleColor(b){return b===1?'#000':b===2?'#1a1a1a':b===3?'#2d3a4d':b===4?'#5a7090':'#8090a0';}
+function trackAuroraEvent(name, data){
+  if (typeof window.va === 'function') window.va('event', {name:name, data:data||{}});
+}
+function selectedRegion(data){
+  const regions = data && data.ovation && data.ovation.regions || [];
+  return regions.find(function(region){return region.id===selectedRegionId;}) ||
+    regions.find(function(region){return region.id==='mackinaw-city';}) || null;
+}
+function skyCoverAt(region, value){
+  const timestamp = value instanceof Date ? value.getTime() : new Date(value).getTime();
+  if (!Number.isFinite(timestamp)) return null;
+  const periods = region && region.sky_cover && region.sky_cover.periods || [];
+  const match = periods.find(function(period){
+    const start = new Date(period.start_time).getTime();
+    const end = new Date(period.end_time).getTime();
+    return timestamp>=start && timestamp<end;
+  });
+  return match ? asFiniteNumber(match.percent) : null;
+}
+function setSelectedRegion(id, source, measure){
+  const select = document.getElementById('regionSelect');
+  if (!select) return;
+  if (!Array.from(select.options).some(function(option){return option.value===id;})) id='mackinaw-city';
+  selectedRegionId = id;
+  select.value = id;
+  try { localStorage.setItem(REGION_PREF_KEY, id); } catch (error) {}
+  if (measure !== false) trackAuroraEvent('Aurora Region Selected', {region:id, source:source||'selector'});
+  if (latestAuroraData) renderDecisionData(latestAuroraData);
+}
 
 // === Kp threshold by latitude (rough geomagnetic) ===
 function kpThreshold(lat){
@@ -722,7 +785,7 @@ function findMyViewing(){
   navigator.geolocation.getCurrentPosition(pos=>{
     const {latitude:lat, longitude:lng} = pos.coords;
     const withDist = LOCATIONS.map(loc=>({...loc, dist: haversine(lat,lng,loc.lat,loc.lng), thresh: kpThreshold(loc.lat)})).sort((a,b)=>a.dist-b.dist);
-    title.textContent = 'Ranked by distance from your location · '+lat.toFixed(2)+', '+lng.toFixed(2);
+    title.textContent = 'Ranked by distance from your location';
     list.innerHTML = withDist.map(l=>`
       <li>
         <div><span class="gl-name">${l.name}</span><br><span class="gl-dist">${Math.round(l.dist)} mi · ${l.region}</span></div>
@@ -733,11 +796,22 @@ function findMyViewing(){
     result.classList.add('show');
     btn.textContent = 'Update location';
     btn.disabled = false;
+    const regions = latestAuroraData && latestAuroraData.ovation && latestAuroraData.ovation.regions || [];
+    if (regions.length) {
+      const nearestRegion = regions.reduce(function(best, region){
+        const distance = haversine(lat,lng,region.latitude,region.longitude);
+        return !best || distance<best.distance ? {id:region.id,distance:distance} : best;
+      }, null);
+      if (nearestRegion) {
+        setSelectedRegion(nearestRegion.id, 'geolocation', false);
+        trackAuroraEvent('Aurora Location Used', {region:nearestRegion.id});
+      }
+    }
     // Add user marker to map
     if (window.L && auroraMap) {
       if (userMarker) userMarker.remove();
       userMarker = L.circleMarker([lat,lng], {radius:9, fillColor:'#5fc88f', color:'#fff', weight:2, fillOpacity:.95}).addTo(auroraMap);
-      userMarker.bindPopup('<b>Your location</b><br>'+lat.toFixed(3)+', '+lng.toFixed(3)+'<br>Kp '+kpThreshold(lat)+'+ needed for aurora overhead');
+      userMarker.bindPopup('<b>Your location</b><br>Kp '+kpThreshold(lat)+'+ planning threshold at this latitude');
       auroraMap.fitBounds([[lat,lng]].concat(LOCATIONS.map(l=>[l.lat,l.lng])).reduce((b,p)=>(b.push(p),b),[]), {padding:[40,40]});
     }
   }, err=>{
@@ -746,6 +820,7 @@ function findMyViewing(){
     list.innerHTML = '<li><div>Location access denied. Enable in browser settings, or use the map above to estimate distance manually.</div></li>';
     title.textContent = 'Could not get location';
     result.classList.add('show');
+    trackAuroraEvent('Aurora Location Result', {result:err && err.code===1?'denied':'unavailable'});
   });
 }
 
@@ -761,8 +836,10 @@ function setupNotifications(){
       btn.textContent = notifyEnabled ? 'Alerts ON · Kp 5+' : 'Alert me when Kp 5+';
       btn.style.background = notifyEnabled ? '#5fc88f' : '';
       btn.style.color = notifyEnabled ? '#0a1428' : '';
+      trackAuroraEvent('Aurora Alert Toggle', {enabled:notifyEnabled});
     } else {
       const perm = await Notification.requestPermission();
+      trackAuroraEvent('Aurora Alert Permission', {result:perm});
       if (perm === 'granted'){
         notifyEnabled = true;
         btn.textContent = 'Alerts ON · Kp 5+';
@@ -822,7 +899,7 @@ function formatMichiganTime(value){
 function renderRegionalOutlook(ovation){
   const forecastTime = ovation && ovation.forecast_time;
   document.getElementById('regionOutlookTime').textContent = forecastTime
-    ? 'NOAA OVATION forecast time: '+formatMichiganTime(forecastTime)+' ET. Local clouds and darkness are not included.'
+    ? 'NOAA OVATION: '+formatMichiganTime(forecastTime)+' ET. Regional cloud forecasts are from the NWS.'
     : 'The NOAA OVATION feed is temporarily unavailable; the planning thresholds below remain visible.';
   (ovation && ovation.regions || []).forEach(region=>{
     const card = document.querySelector('[data-region-id="'+region.id+'"]');
@@ -831,7 +908,35 @@ function renderRegionalOutlook(ovation){
     card.querySelector('[data-region-label]').textContent = region.status_label;
     const gridSignal = Number.isFinite(region.ovation_value) ? ' NOAA grid signal: '+region.ovation_value+'/100.' : '';
     card.querySelector('[data-region-detail]').textContent = region.detail+gridSignal;
+    let weather = card.querySelector('[data-region-weather]');
+    if (!weather) {
+      weather = document.createElement('p');
+      weather.className = 'region-weather';
+      weather.setAttribute('data-region-weather','');
+      card.appendChild(weather);
+    }
+    const clouds = skyCoverAt(region, new Date());
+    weather.textContent = Number.isFinite(clouds)
+      ? 'NWS forecast sky cover now: '+Math.round(clouds)+'%.'
+      : 'NWS cloud forecast temporarily unavailable for this region.';
   });
+}
+
+function renderMoon(moon){
+  const illumination = asFiniteNumber(moon && moon.illumination_percent);
+  const text = moon && moon.phase
+    ? moon.phase+(Number.isFinite(illumination)?' · '+Math.round(illumination)+'% illuminated':'')+(moon.rise_local?' · rises '+moon.rise_local:'')
+    : 'USNO data unavailable';
+  document.getElementById('selectedMoon').textContent = text;
+  document.getElementById('moonPhaseValue').textContent = text;
+}
+
+function renderDecisionData(data){
+  const region = selectedRegion(data);
+  renderRegionalOutlook(data && data.ovation);
+  renderMoon(data && data.moon);
+  renderTonightWindow(data && data.forecast && data.forecast.periods, region);
+  renderNextNights(data && data.forecast && data.forecast.periods, region);
 }
 
 function renderSolarWind(solarWind){
@@ -869,13 +974,14 @@ async function loadAuroraData(){
     const max72 = asFiniteNumber(data.forecast && data.forecast.peak_72h);
     if (!Number.isFinite(max24)) throw new Error('NOAA Kp forecast unavailable');
 
+    latestAuroraData = data;
+
     currentKp = max24;
     updateGauge(max24);
     drawForecast((data.forecast.periods || []).map(period=>[period.time_tag,period.kp]));
     highlightKpStep(max24);
     updateSmartCta(max24);
     checkAndNotify(max24);
-    renderRegionalOutlook(data.ovation);
     renderSolarWind(data.solar_wind);
 
     const current = data.forecast.current && asFiniteNumber(data.forecast.current.kp);
@@ -909,16 +1015,19 @@ async function loadAuroraData(){
     else headline = 'Statewide aurora watch: verify short-term conditions';
     document.getElementById('tonightHeadline').textContent = headline;
     document.getElementById('tonightDetail').innerHTML = 'The next-24-hour NOAA forecast peaks at <strong>Kp '+max24.toFixed(1)+'</strong> around <strong>'+peakTime+' ET</strong>. This is broad geomagnetic guidance, not a visibility promise. Check the regional OVATION signal, darkness, and local cloud cover before driving.';
-    renderTonightWindow(data.forecast.periods);
-    renderNextNights(data.forecast.periods);
+    renderDecisionData(data);
     document.getElementById('refreshInfo').textContent = '· updated '+new Date(data.fetched_at || Date.now()).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
   } catch (error) {
+    latestAuroraData = null;
     ['swBz','swSpeed','swKpNow','swKpPeak'].forEach(markSpaceWeatherUnavailable);
     renderRegionalOutlook(null);
     document.getElementById('liveStatus').textContent = 'NOAA feed unavailable · manual guide active';
     document.getElementById('tonightHeadline').textContent = 'Live NOAA feed temporarily unavailable';
     document.getElementById('tonightDetail').innerHTML = 'Open the <a href="https://www.spaceweather.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener" style="color:#7bc8e8">official NOAA 30-minute forecast</a>, then check local clouds. The regional thresholds and viewing-location guide below remain available.';
     renderTonightWindow(null);
+    renderMoon(null);
+    document.getElementById('selectedCloud').textContent = 'NWS data unavailable';
+    document.getElementById('nextBestWindow').textContent = 'Recheck after feed returns';
     document.getElementById('nightStrip').innerHTML = '';
   }
 }
@@ -926,9 +1035,8 @@ async function loadAuroraData(){
 // === Tonight's dark window and the next three nights ===
 // The two things people actually search for after "northern lights michigan" are
 // WHAT TIME tonight and WHETHER THIS WEEK is worth planning around. NOAA gives Kp
-// on a 3-hour grid for 3 days; darkness we compute ourselves so no extra feed can
-// break. Reference point is Headlands Dark Sky Park on the Straits, central to the
-// viewing area. Times are Michigan local (America/Detroit).
+// on a 3-hour grid for 3 days; darkness is computed locally, and NWS cloud cover
+// breaks ties only between similarly strong Kp windows. Times are Michigan local.
 const DARK_REF = { lat: 45.787, lng: -84.76, name: "the Straits of Mackinac" };
 
 // Sun altitude for a given instant, standard low-precision solar position.
@@ -972,21 +1080,43 @@ function michiganDayLabel(date) {
   return date.toLocaleDateString('en-US', { timeZone: 'America/Detroit', weekday: 'short' });
 }
 
-function renderTonightWindow(periods) {
+function bestPlanningPeriod(rows, region) {
+  if (!rows.length) return null;
+  const maxKp = Math.max.apply(null, rows.map(function(row){return row.kp;}));
+  const contenders = rows.filter(function(row){return row.kp>=maxKp-0.5;}).map(function(row){
+    return {row:row, cloud:skyCoverAt(region,row.time_tag)};
+  });
+  contenders.sort(function(a,b){
+    const aCloud = Number.isFinite(a.cloud) ? a.cloud : 101;
+    const bCloud = Number.isFinite(b.cloud) ? b.cloud : 101;
+    if (aCloud!==bCloud) return aCloud-bCloud;
+    if (b.row.kp!==a.row.kp) return b.row.kp-a.row.kp;
+    return new Date(a.row.time_tag)-new Date(b.row.time_tag);
+  });
+  return contenders[0];
+}
+
+function renderTonightWindow(periods, region) {
   const el = document.getElementById('tonightWindow');
   const now = new Date();
+  const reference = region || DARK_REF;
+  const lat = reference.latitude||reference.lat;
+  const lng = reference.longitude||reference.lng;
+  const name = reference.label||reference.name;
   // Astronomical dark: the sun is 18 degrees below the horizon. Even around the
   // summer solstice the Straits briefly cross this threshold, but the window is short.
-  const darkStart = findSunCrossing(now, 24, -18, true, DARK_REF.lat, DARK_REF.lng);
-  const darkEnd = darkStart ? findSunCrossing(darkStart, 14, -18, false, DARK_REF.lat, DARK_REF.lng) : null;
+  const alreadyDark = sunAltitudeDeg(now,lat,lng)<=-18;
+  const darkStart = alreadyDark ? now : findSunCrossing(now,24,-18,true,lat,lng);
+  const darkEnd = darkStart ? findSunCrossing(darkStart,14,-18,false,lat,lng) : null;
 
   if (!darkStart || !darkEnd) {
-    el.innerHTML = 'The astronomical-darkness window near ' + DARK_REF.name + ' could not be calculated for the next 24 hours. Check local twilight times before traveling, because summer darkness is brief even when the sun crosses 18 degrees below the horizon.';
+    el.innerHTML = 'The astronomical-darkness window near ' + name + ' could not be calculated for the next 24 hours. Check local twilight times before traveling, because summer darkness is brief even when the sun crosses 18 degrees below the horizon.';
+    document.getElementById('selectedCloud').textContent = 'No dark window calculated';
     return;
   }
 
-  let text = 'Tonight it is fully dark near ' + DARK_REF.name + ' from <strong>' +
-    michiganClock(darkStart) + '</strong> to <strong>' + michiganClock(darkEnd) + '</strong>.';
+  let text = alreadyDark ? 'It is fully dark now near ' + name + ' until <strong>' + michiganClock(darkEnd) + '</strong>.'
+    : 'Tonight it is fully dark near ' + name + ' from <strong>' + michiganClock(darkStart) + '</strong> to <strong>' + michiganClock(darkEnd) + '</strong>.';
 
   // The Kp peak only helps if it lands while the sky is dark. Say which it is.
   const inDark = (periods || []).filter(function (row) {
@@ -994,45 +1124,69 @@ function renderTonightWindow(periods) {
     return t >= darkStart.getTime() && t <= darkEnd.getTime() && Number.isFinite(row.kp);
   });
   if (inDark.length) {
-    const best = inDark.reduce(function (a, b) { return b.kp > a.kp ? b : a; });
-    text += ' The strongest forecast Kp inside that window is <strong>' + best.kp.toFixed(1) +
-      '</strong> near <strong>' + michiganClock(new Date(best.time_tag)) +
-      '</strong>, which is the hour to be outside and facing north.';
+    const choice = bestPlanningPeriod(inDark,region);
+    const best = choice.row;
+    const cloudText = Number.isFinite(choice.cloud) ? ' with about <strong>'+Math.round(choice.cloud)+'% forecast sky cover</strong>' : ' (the regional cloud feed is unavailable)';
+    text += ' The best planning window among the strongest forecast periods is around <strong>' +
+      michiganClock(new Date(best.time_tag)) + '</strong>: Kp <strong>' + best.kp.toFixed(1) +
+      '</strong>' + cloudText + '. This combines forecasts; it is not a visibility probability or a reason to ignore current conditions.';
+    document.getElementById('selectedCloud').textContent = Number.isFinite(choice.cloud)
+      ? Math.round(choice.cloud)+'% near '+michiganClock(new Date(best.time_tag))
+      : 'NWS data unavailable';
   } else {
     text += ' NOAA has no forecast rows inside tonight\u2019s dark window yet, so treat the headline number as daytime guidance and recheck after sunset.';
+    const startCloud = skyCoverAt(region,darkStart);
+    document.getElementById('selectedCloud').textContent = Number.isFinite(startCloud)
+      ? Math.round(startCloud)+'% at dark-window start'
+      : 'NWS data unavailable';
   }
   el.innerHTML = text;
 }
 
 // Group the 3-day Kp grid into nights (8 PM to 6 AM Michigan time) so the answer to
 // "is this week worth it" is three verdicts instead of one number.
-function renderNextNights(periods) {
+function renderNextNights(periods, region) {
   const el = document.getElementById('nightStrip');
-  if (!periods || !periods.length) { el.innerHTML = ''; return; }
+  if (!periods || !periods.length) { el.innerHTML = ''; document.getElementById('nextBestWindow').textContent='Forecast unavailable'; return; }
   const nights = new Map();
   periods.forEach(function (row) {
     const kp = asFiniteNumber(row.kp);
     if (!Number.isFinite(kp)) return;
     const when = new Date(row.time_tag);
-    const hour = Number(when.toLocaleString('en-US', { timeZone: 'America/Detroit', hour: 'numeric', hour12: false }));
+    const hour = Number(when.toLocaleString('en-US', { timeZone: 'America/Detroit', hour: 'numeric', hour12: false }))%24;
     if (hour >= 6 && hour < 20) return;
     // Hours after midnight belong to the night that started the previous evening.
     const anchor = new Date(when.getTime() - (hour < 6 ? 12 * 3600000 : 0));
     const key = anchor.toLocaleDateString('en-US', { timeZone: 'America/Detroit' });
-    const current = nights.get(key);
-    if (!current || kp > current.kp) nights.set(key, { kp: kp, at: when, label: michiganDayLabel(anchor) });
+    const current = nights.get(key) || {rows:[],label:michiganDayLabel(anchor),anchor:anchor};
+    current.rows.push({kp:kp,time_tag:row.time_tag});
+    nights.set(key,current);
   });
-  const rows = Array.from(nights.values()).sort(function (a, b) { return a.at - b.at; }).slice(0, 3);
+  const rows = Array.from(nights.values()).sort(function (a,b){return a.anchor-b.anchor;}).slice(0,3).map(function(night){
+    const choice = bestPlanningPeriod(night.rows,region);
+    return {kp:choice.row.kp,at:new Date(choice.row.time_tag),cloud:choice.cloud,label:night.label};
+  });
   if (!rows.length) { el.innerHTML = ''; return; }
   const bestKp = Math.max.apply(null, rows.map(function (r) { return r.kp; }));
+  const comparable = rows.filter(function(row){return row.kp>=bestKp-0.5;});
+  const withClouds = comparable.filter(function(row){return Number.isFinite(row.cloud);});
+  const bestRow = (withClouds.length?withClouds:comparable).reduce(function(best,row){
+    if (!best) return row;
+    if (Number.isFinite(row.cloud) && (!Number.isFinite(best.cloud) || row.cloud<best.cloud)) return row;
+    if ((!Number.isFinite(row.cloud) || row.cloud===best.cloud) && row.kp>best.kp) return row;
+    return best;
+  },null);
+  const bestIndex = rows.indexOf(bestRow);
+  document.getElementById('nextBestWindow').textContent = (bestIndex===0?'Tonight':bestRow.label)+' · '+michiganClock(bestRow.at)+(Number.isFinite(bestRow.cloud)?' · '+Math.round(bestRow.cloud)+'% clouds':'');
   el.innerHTML = rows.map(function (r, i) {
-    const note = r.kp >= 6 ? 'Northern Lower Peninsula should watch'
-      : r.kp >= 5 ? 'Upper Peninsula viewing possible'
-      : r.kp >= 4 ? 'Far north UP horizon only'
-      : 'Quiet, no Michigan display expected';
-    const best = (r.kp === bestKp && bestKp >= 4) ? ' best' : '';
+    const threshold = region && Number.isFinite(region.planning_kp) ? region.planning_kp : 5;
+    const note = r.kp >= threshold ? 'Meets this region\u2019s Kp planning threshold'
+      : r.kp >= threshold-1 ? 'Within one Kp point of this region\u2019s threshold'
+      : 'Below this region\u2019s planning threshold';
+    const cloud = Number.isFinite(r.cloud) ? ' · '+Math.round(r.cloud)+'% clouds' : ' · clouds unavailable';
+    const best = i===bestIndex ? ' best' : '';
     return '<div class="night' + best + '"><div class="n-day">' + (i === 0 ? 'Tonight' : r.label) +
-      '</div><div class="n-kp">Kp ' + r.kp.toFixed(1) + '</div><div class="n-note">' + note + '</div></div>';
+      '</div><div class="n-kp">Kp ' + r.kp.toFixed(1) + '</div><div class="n-note">' + note + cloud + '</div></div>';
   }).join('');
 }
 
@@ -1040,9 +1194,18 @@ function renderNextNights(periods) {
 window.addEventListener('DOMContentLoaded',()=>{
   initMap();
   setupNotifications();
+  setSelectedRegion(selectedRegionId,'saved',false);
+  document.getElementById('regionSelect').addEventListener('change',function(event){setSelectedRegion(event.target.value,'selector',true);});
   document.getElementById('findBtn').addEventListener('click', findMyViewing);
   document.getElementById('geoBtn').addEventListener('click', findMyViewing);
-  document.getElementById('refreshBtn').addEventListener('click', loadAuroraData);
+  document.getElementById('refreshBtn').addEventListener('click',function(){trackAuroraEvent('Aurora Manual Refresh',{region:selectedRegionId});loadAuroraData();});
+  document.querySelectorAll('.field-report-btn').forEach(function(button){
+    button.addEventListener('click',function(){
+      trackAuroraEvent('Aurora Field Report',{region:selectedRegionId,outcome:button.dataset.fieldOutcome});
+      document.querySelectorAll('.field-report-btn').forEach(function(item){item.disabled=true;});
+      document.getElementById('fieldReportThanks').textContent='Thank you. Your report was recorded without your coordinates.';
+    });
+  });
   loadAuroraData();
   // Auto-refresh every 10 minutes
   setInterval(loadAuroraData, 10*60*1000);
