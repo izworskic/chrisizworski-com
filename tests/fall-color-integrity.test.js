@@ -87,6 +87,32 @@ test("fall trip tools record useful, privacy-safe interactions", () => {
   assert.doesNotMatch(planner, /track\([^;]*(?:coords|latitude|longitude)/);
 });
 
+test("the browser and daily writer share the August 20 to November 15 reporting window", () => {
+  const { isFallReportSeason: serverInSeason } = require("../lib/fall-color/model.js");
+  const hub = read("public/fall-color/index.html");
+  const browserHelper = hub.match(
+    /function isFallReportSeason\(m,d\)\{return ([^;]+);\}/,
+  );
+  assert.ok(browserHelper, "fall hub needs a testable browser season helper");
+  const browserInSeason = Function("m", "d", `return ${browserHelper[1]};`);
+  const cases = [
+    [8, 19, false],
+    [8, 20, true],
+    [8, 31, true],
+    [9, 1, true],
+    [10, 31, true],
+    [11, 15, true],
+    [11, 16, false],
+    [12, 1, false],
+  ];
+
+  for (const [month, day, expected] of cases) {
+    assert.equal(serverInSeason(month, day), expected, `server ${month}/${day}`);
+    assert.equal(browserInSeason(month, day), expected, `browser ${month}/${day}`);
+  }
+  assert.match(hub, /const todayIdx=inSeason\?todayFromSep1:null;/);
+});
+
 test("static and dynamic fall sitemaps make only supportable freshness claims", () => {
   const sitemap = read("public/sitemap.xml");
   const pages = fallPages();

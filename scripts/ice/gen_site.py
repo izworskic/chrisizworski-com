@@ -8,7 +8,7 @@ from gen_chrome import (head, header, FOOTER, SAFETY_BANNER, breadcrumb,
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = pathlib.Path(os.environ.get("ICE_OUT", str(ROOT / "public" / "michigan-ice")))
 (OUT / "regions").mkdir(parents=True, exist_ok=True)
-ICE_ROOT_DATE_MODIFIED = "2026-08-12"
+ICE_ROOT_DATE_MODIFIED = "2026-08-15"
 
 REGIONS = [
     dict(
@@ -216,6 +216,11 @@ def build_index():
 
     body = (
         header("/") +
+        '<h1 class="page-title">Michigan ice conditions today</h1>'
+        '<p class="lede" id="ice-current-answer"><strong>Michigan\'s ice-tracking season runs November through '
+        'March.</strong> During that window, this report updates accumulated freezing degree days, nearby weather, '
+        'and NOAA Great Lakes ice cover across six waters. From April through October, it reports off season rather '
+        'than implying that ice exists.</p>'
         '<p class="lede">Ice is not weather, it is history. A cold morning tells you almost nothing. What matters is '
         'how much cold has accumulated since freeze up, and whether this winter is running ahead of or behind normal. '
         'This compares accumulated cold across six Michigan waters with a ten year station normal, while Great '

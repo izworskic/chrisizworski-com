@@ -82,3 +82,27 @@ test("every generated ice page stays inside the hub SERP limits", () => {
     assert.ok(!html.includes("ice.chrisizworski.com"), `${rel} still references the retired subdomain`);
   }
 });
+
+test("the generated ice section includes search and measurement foundations", () => {
+  const files = htmlFiles(outDir);
+  for (const rel of files) {
+    const html = readFileSync(path.join(outDir, rel), "utf8");
+    assert.equal(
+      (html.match(/\/_vercel\/insights\/script\.js/g) || []).length,
+      1,
+      `${rel} needs Web Analytics exactly once`,
+    );
+    assert.equal(
+      (html.match(/\/_vercel\/speed-insights\/script\.js/g) || []).length,
+      1,
+      `${rel} needs Speed Insights exactly once`,
+    );
+  }
+
+  const hub = readFileSync(path.join(outDir, "index.html"), "utf8");
+  assert.equal((hub.match(/<h1\b/g) || []).length, 1, "ice hub needs exactly one H1");
+  assert.match(hub, /<h1 class="page-title">Michigan ice conditions today<\/h1>/);
+  assert.match(hub, /id="ice-current-answer"/);
+  assert.match(hub, /ice-tracking season runs November through March/);
+  assert.match(hub, /reports off season rather than implying that ice exists/);
+});

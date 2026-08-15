@@ -30,6 +30,7 @@ body{font-family:"Newsreader",Georgia,"Iowan Old Style",serif;background:#dce8ec
 .wrap{max-width:1060px;margin:0 auto;padding:0 20px}
 .page{min-height:100vh;background:linear-gradient(180deg,#eef4f5 0%,#e3edf0 42%,#dce8ec 100%);padding-bottom:48px}
 h1,h2,h3{font-family:"Fraunces",Georgia,serif;line-height:1.24;letter-spacing:-.005em}
+.page-title{font-size:30px;margin:22px 0 0}
 a{color:#16606b}
 a:hover{color:#1d7a87}
 .site-header{padding-top:30px;padding-bottom:14px;border-bottom:2px solid #16606b}
@@ -119,6 +120,8 @@ def head(title, desc, canonical, ld_json):
         '<meta name="twitter:card" content="summary">'
         f'{FONTS}<style>{CSS}</style>'
         f'<script type="application/ld+json">{_j.dumps(ld_json, separators=(",", ":"))}</script>'
+        '<script defer src="/_vercel/insights/script.js"></script>'
+        '<script defer src="/_vercel/speed-insights/script.js"></script>'
         '</head>'
     )
 

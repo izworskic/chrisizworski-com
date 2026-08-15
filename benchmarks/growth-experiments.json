@@ -1,5 +1,5 @@
 {
-  "ledgerVersion": "1.5.0",
+  "ledgerVersion": "1.6.0",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
   "measurementProtocol": {
@@ -67,9 +67,9 @@
       ],
       "engagementMetrics": ["Aurora Region Selected", "Aurora Location Used", "Aurora Manual Refresh", "Aurora Field Report"],
       "target": {"ctr": 0.025},
-      "status": "pending-clean-window",
-      "releaseDate": null,
-      "evaluationWindow": null,
+      "status": "running",
+      "releaseDate": "2026-08-14",
+      "evaluationWindow": {"start": "2026-08-15", "end": "2026-09-11"},
       "lastSearchFacingChangeDate": "2026-08-14",
       "decisionDate": null,
       "result": null,
@@ -216,6 +216,26 @@
       "decisionDate": null,
       "result": null,
       "stopCondition": "A duplicate issue, wrong-date headline link, stale movement framed as current, source-health false positive, indexability change, or material live-tool performance regression occurs."
+    },
+    {
+      "id": "2026-08-15-tunnel-of-trees-peak-date-serp",
+      "path": "/fall-color/tunnel-of-trees-fall-color/",
+      "hypothesis": "Leading the description with the existing October 5-13 peak window will lift CTR from 0.79% toward the 2.5% site gate while the page holds its current page-one average position.",
+      "primaryMetric": "Search Console page CTR and average position",
+      "baseline": {"impressions": 127, "clicks": 1, "ctr": 0.0079, "averagePosition": 8.29},
+      "baselineSource": "Google Search Console six-month export ending 2026-08-13",
+      "treatment": {
+        "metaDescription": "Tunnel of Trees fall color typically peaks October 5–13. See the 2026 outlook, live regional conditions, and M-119 stops from Harbor Springs north.",
+        "preserved": ["title", "h1", "firstAnswer", "canonical", "liveConditions", "guideContent"]
+      },
+      "target": {"ctr": 0.025, "averagePosition": 10},
+      "status": "ready-for-review",
+      "proposedDate": "2026-08-15",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "CTR falls below 0.50% after at least 250 impressions, average position moves below page one in a comparable window, or the title, H1, first answer, canonical, live conditions, or guide content regresses."
     }
   ]
 }

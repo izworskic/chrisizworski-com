@@ -770,13 +770,15 @@ let LIVE=null;
 let LIVE_OFFSET={};   // r.id -> integer pct offset (live - predicted today)
 const now=new Date();
 const tm=now.getMonth()+1, td=now.getDate();
-const inSeason=(tm===9&&td>=1)||tm===10||(tm===11&&td<=15);
-// todayIdx: position on the Sep 1-Nov 15 color arc (null if outside that window)
-const todayIdx=inSeason?dayIndex(tm,td):null;
+function isFallReportSeason(m,d){return (m===8&&d>=20)||m===9||m===10||(m===11&&d<=15);}
+const inSeason=isFallReportSeason(tm,td);
 // todayFromSep1: days from Sep 1 to today; negative before Sep 1.
 // This is the universal slider anchor: the page always opens here.
 const SEP1=new Date(now.getFullYear(),8,1);
 const todayFromSep1=Math.floor((now.getTime()-SEP1.getTime())/86400000);
+// todayIdx follows that same arc, including negative August launch days, and is
+// null only outside the Aug 20-Nov 15 reporting window.
+const todayIdx=inSeason?todayFromSep1:null;
 let selIdx=todayFromSep1;   // always open on today
 let openBand=null;
 

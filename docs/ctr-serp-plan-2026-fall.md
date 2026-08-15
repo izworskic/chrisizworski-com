@@ -116,18 +116,27 @@ Everything that has to be true before Google's pre-season crawl.
 - **Pull a GSC query-level export for `/soo-locks/`.** This is the only way to resolve the intent
   split described in persona 2, and it costs nothing. Without it, any Soo Locks work is a guess.
 
-### Phase 2. Freeze. Aug 20 to Sept 20. Ship nothing.
-This is a deliberate instruction, not an absence of one.
+### Phase 2. Page-specific measurement locks. Aug 20 to Sept 20. Keep shipping.
+The lock follows the experiment, not the whole site. Search-facing changes to an experiment's
+title, description, H1, first answer, structured data, canonical, or indexability restart that
+page's 28-day window. Work on non-overlapping pages, reliability, measurement, accessibility, and
+performance continues.
 
-On Aug 4 changes shipped and CTR appeared to jump 5x the same day. That number could not be
-attributed to anything, because the migration, the aurora work, and the Soo Locks routing all
-landed together, and Google's most recent days of data are provisional. Continuing to ship during
-the traffic event guarantees the same problem at a larger scale.
+The Aug 4 traffic jump could not be attributed cleanly because the migration, Aurora work, and Soo
+Locks routing landed together while Google's newest data was still provisional. The correction is
+not a site-wide pause. It is one treatment per page, a recorded production date, and a clean window
+for that page in `benchmarks/growth-experiments.json`.
 
-Freezing for the peak buys a readable result: one set of changes, then a clean season, then an
-attributable answer. That answer is worth more than any single additional feature shipped in September.
+Current protections:
+- Keep the Aurora title, description, H1, first answer, structured data, and canonical unchanged
+  from Aug 15 through Sept 11 while the regional decision engine is measured.
+- Keep the already successful Fall hub, Porcupine Mountains, Upper Peninsula, and Mackinac Island
+  snippets unchanged.
+- Treat Tunnel of Trees as the single Fall snippet experiment. Its 28-day clock starts the day
+  after production release; unrelated Fall reliability work can continue.
 
-Exception: production breakage. Nothing else.
+Production breakage can always be repaired. Record the repair and restart only the affected page's
+window instead of stopping growth everywhere.
 
 ### Phase 3. Seasonally timed enhancements. Sept 20 to Oct 31.
 Only the two items from the previous list whose season is actually next:
@@ -161,4 +170,4 @@ network is at 36 properties. It does not need a 37th that does not earn.
   carries 95% of page impressions.
 - Snippet changes to `/northern-lights-michigan/`. It outperforms its modeled CTR. Leave it alone.
 - The remaining 8 thin identity stubs. Cheap to consolidate, worth roughly nothing either way.
-  Do it in the freeze if idle, not before Phase 0.
+  Do it only when that work does not touch a page with an active measurement window.
