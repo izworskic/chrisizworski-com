@@ -9,6 +9,26 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 15 2026: one reversible Fall CTR experiment. The Tunnel of Trees
+  // description now leads with its existing October 5-13 answer; title, H1,
+  // canonical, first answer, live conditions, and guide content are unchanged.
+  "/fall-color/tunnel-of-trees-fall-color/",
+
+  // Aug 15 2026: the generated Michigan Ice section gained the site's standard
+  // privacy-safe analytics and performance measurement. The hub also gained its
+  // missing H1 and an honest crawlable season answer. Re-crawl after deploy, then
+  // remove these declarations.
+  "/michigan-ice/",
+  "/michigan-ice/ice-safety.html",
+  "/michigan-ice/freezing-degree-days.html",
+  "/michigan-ice/ice-cover-history.html",
+  "/michigan-ice/regions/saginaw-bay.html",
+  "/michigan-ice/regions/houghton-lake.html",
+  "/michigan-ice/regions/lake-st-clair.html",
+  "/michigan-ice/regions/little-bay-de-noc.html",
+  "/michigan-ice/regions/grand-traverse-bay.html",
+  "/michigan-ice/regions/burt-mullett.html",
+
   // Aug 14 2026: additive gallery pass. Seven new August 2026 garden photographs added to
   // /chris-izworski-photos/ (Monte Gusto pole beans, zucchini + zucchini bread, onion harvest,
   // herb butter). Figure count corrected 169 -> 164 to match the actual number of images on
@@ -23,7 +43,6 @@ const intentionalChanges = new Set([
   // Re-run `npm run audit:live` after deploy and remove these.
   "/fall-color/",
   "/mackinac-bridge-live/",
-  "/michigan-ice/",
   "/northern-lights-michigan/",
   "/saginaw-bay-ecology/",
   "/soo-locks/",
@@ -288,6 +307,7 @@ const discoveryPages = [
   "great-lakes-gazette/index.html",
   "great-lakes-freighter-tracking/index.html",
   "great-lakes-beaches/index.html",
+  "michigan-ice/index.html",
   "mackinac-bridge-live/index.html",
   "mackinac-bridge-driver-assistance/index.html",
   "mackinac-bridge-rv-trailer-wind-rules/index.html",
