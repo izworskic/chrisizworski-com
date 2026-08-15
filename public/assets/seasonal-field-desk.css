@@ -1,0 +1,342 @@
+/*
+ * Michigan Seasonal Field Desk
+ *
+ * One decision language for Chris Izworski's seasonal tools, with each tool
+ * retaining its own visual character. The component is intentionally small,
+ * static, and dependency-free so it can also be loaded by the separately
+ * deployed XC skiing tool.
+ */
+.seasonal-fall {
+  --sfd-accent: #8e301c;
+  --sfd-accent-strong: #672316;
+  --sfd-surface: #fffaf0;
+  --sfd-surface-soft: #efe5d2;
+  --sfd-line: #dfd1b4;
+  --sfd-ink: #2a2018;
+  --sfd-muted: #726351;
+  --sfd-on-accent: #fffcf5;
+}
+
+.seasonal-ice {
+  --sfd-accent: #16606b;
+  --sfd-accent-strong: #104b54;
+  --sfd-surface: rgba(255, 255, 255, .72);
+  --sfd-surface-soft: rgba(235, 244, 246, .92);
+  --sfd-line: #bcd2d8;
+  --sfd-ink: #1f2a33;
+  --sfd-muted: #5c7280;
+  --sfd-on-accent: #fff;
+}
+
+.seasonal-xc {
+  --sfd-accent: #174f3b;
+  --sfd-accent-strong: #10392b;
+  --sfd-surface: #fff;
+  --sfd-surface-soft: #e9f0ed;
+  --sfd-line: #c4d2cc;
+  --sfd-ink: #15241e;
+  --sfd-muted: #5d6e67;
+  --sfd-on-accent: #fff;
+}
+
+.seasonal-desk {
+  margin: 22px 0;
+  overflow: hidden;
+  border: 1px solid var(--sfd-line);
+  border-radius: 16px;
+  background: var(--sfd-surface);
+  color: var(--sfd-ink);
+  box-shadow: 0 16px 45px rgba(23, 31, 28, .06);
+}
+
+.seasonal-desk__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 17px 18px 14px;
+  border-bottom: 1px solid var(--sfd-line);
+}
+
+.seasonal-desk__kicker,
+.seasonal-choice__persona,
+.seasonal-switcher__kicker {
+  display: block;
+  margin: 0 0 4px;
+  color: var(--sfd-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.seasonal-desk__title {
+  margin: 0;
+  color: var(--sfd-ink);
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 19px;
+  font-weight: 540;
+  line-height: 1.2;
+  letter-spacing: -.01em;
+}
+
+.seasonal-desk__note {
+  max-width: 280px;
+  margin: 1px 0 0;
+  color: var(--sfd-muted);
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: right;
+}
+
+.seasonal-desk__choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--sfd-line);
+}
+
+.seasonal-choice {
+  position: relative;
+  display: block;
+  min-width: 0;
+  padding: 16px 17px 17px;
+  background: var(--sfd-surface);
+  color: var(--sfd-ink);
+  text-decoration: none;
+  transition: background-color .18s ease, color .18s ease, transform .18s ease;
+}
+
+button.seasonal-choice {
+  width: 100%;
+  border: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.seasonal-choice::after {
+  content: "\2192";
+  position: absolute;
+  right: 15px;
+  bottom: 13px;
+  color: var(--sfd-accent);
+  font-size: 18px;
+  line-height: 1;
+  transition: transform .18s ease;
+}
+
+.seasonal-choice strong {
+  display: block;
+  padding-right: 24px;
+  color: inherit;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 16px;
+  font-weight: 550;
+  line-height: 1.2;
+}
+
+.seasonal-choice__detail {
+  display: block;
+  margin-top: 6px;
+  padding-right: 20px;
+  color: var(--sfd-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.seasonal-choice--primary {
+  background: var(--sfd-accent);
+  color: var(--sfd-on-accent);
+}
+
+.seasonal-choice--primary .seasonal-choice__persona,
+.seasonal-choice--primary .seasonal-choice__detail,
+.seasonal-choice--primary::after {
+  color: var(--sfd-on-accent);
+}
+
+.seasonal-choice:hover {
+  background: var(--sfd-surface-soft);
+  color: var(--sfd-ink);
+}
+
+.seasonal-choice--primary:hover {
+  background: var(--sfd-accent-strong);
+  color: var(--sfd-on-accent);
+}
+
+.seasonal-choice:hover::after {
+  transform: translateX(3px);
+}
+
+.seasonal-water-picker {
+  margin: 20px 0 24px;
+  scroll-margin-top: 16px;
+}
+
+.seasonal-water-picker__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 9px;
+}
+
+.seasonal-water-picker__head h2 {
+  margin: 0;
+}
+
+.seasonal-water-picker__head p {
+  margin: 0;
+  color: var(--sfd-muted);
+  font-size: 12px;
+}
+
+.seasonal-water-picker__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.seasonal-water-picker__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  border: 1px solid var(--sfd-line);
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: var(--sfd-surface);
+  color: var(--sfd-ink);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.seasonal-water-picker__links a:hover {
+  border-color: var(--sfd-accent);
+  color: var(--sfd-accent-strong);
+}
+
+.seasonal-switcher {
+  margin: 28px 0 8px;
+  border-top: 1px solid var(--sfd-line);
+  border-bottom: 1px solid var(--sfd-line);
+  padding: 17px 0 18px;
+}
+
+.seasonal-switcher__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.seasonal-switcher__head strong {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 16px;
+  font-weight: 540;
+}
+
+.seasonal-switcher__head span:last-child {
+  color: var(--sfd-muted);
+  font-size: 11px;
+}
+
+.seasonal-switcher__links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.seasonal-switcher__links a {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--sfd-line);
+  border-radius: 11px;
+  padding: 9px 11px;
+  background: var(--sfd-surface);
+  color: var(--sfd-ink);
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.25;
+  text-decoration: none;
+}
+
+.seasonal-switcher__links a::after {
+  content: "\2197";
+  color: var(--sfd-accent);
+  font-size: 15px;
+}
+
+.seasonal-switcher__links a[aria-current="page"] {
+  border-color: var(--sfd-accent);
+  background: var(--sfd-surface-soft);
+}
+
+.seasonal-switcher__links a:hover {
+  border-color: var(--sfd-accent);
+}
+
+.seasonal-desk :focus-visible,
+.seasonal-water-picker :focus-visible,
+.seasonal-switcher :focus-visible {
+  outline: 3px solid var(--sfd-accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .seasonal-desk__head {
+    display: block;
+  }
+
+  .seasonal-desk__note {
+    max-width: none;
+    margin-top: 7px;
+    text-align: left;
+  }
+
+  .seasonal-desk__choices {
+    grid-template-columns: none;
+    grid-auto-columns: minmax(235px, 82vw);
+    grid-auto-flow: column;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+    scrollbar-width: thin;
+  }
+
+  .seasonal-choice {
+    min-height: 126px;
+    scroll-snap-align: start;
+  }
+
+  .seasonal-water-picker__head,
+  .seasonal-switcher__head {
+    display: block;
+  }
+
+  .seasonal-water-picker__head p,
+  .seasonal-switcher__head span:last-child {
+    display: block;
+    margin-top: 4px;
+  }
+
+  .seasonal-switcher__links {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seasonal-choice,
+  .seasonal-choice::after {
+    transition: none;
+  }
+}

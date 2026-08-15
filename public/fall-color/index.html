@@ -38,6 +38,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="/assets/seasonal-field-desk.css" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -498,8 +499,9 @@
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
+<script defer src="/assets/seasonal-field-desk.js"></script>
 </head>
-<body>
+<body class="seasonal-fall" data-seasonal-tool="fall-color">
 <div class="wrap">
   <div class="row" style="align-items:baseline">
     <div class="kicker">Field guide</div>
@@ -509,21 +511,48 @@
   <div class="sub">Where the leaves are turning, and quiet places to find them.</div>
   <p class="lede">Michigan's fall color turns from north to south. It usually peaks in late September across the Upper Peninsula and the Keweenaw, through the second and third weeks of October in northern Michigan and the Lower Peninsula, and in the last week of October near Ann Arbor and the southern border. This guide follows the season from live canopy and weather data, with a multi-day forecast and rivers to paddle through the color.</p>
 
-  <div class="tabs">
-    <button class="tab on" data-tab="now">Color &amp; weather</button>
-    <button class="tab" data-tab="paddle">On the water</button>
-    <button class="tab" data-tab="plan">Plan a visit</button>
-    <button class="tab" data-tab="guide">Field notes</button>
+  <section class="seasonal-desk" data-seasonal-module="fall-day-decisions" aria-labelledby="fall-day-title">
+    <div class="seasonal-desk__head">
+      <div>
+        <span class="seasonal-desk__kicker">Plan the day</span>
+        <h2 class="seasonal-desk__title" id="fall-day-title">What are you trying to do?</h2>
+      </div>
+      <p class="seasonal-desk__note">Choose a path; the live statewide read stays below.</p>
+    </div>
+    <div class="seasonal-desk__choices">
+      <a class="seasonal-choice seasonal-choice--primary" href="#nearCard" data-seasonal-action="find-nearby-color" data-seasonal-persona="spontaneous-color-chaser" data-seasonal-placement="hero">
+        <span class="seasonal-choice__persona">Spontaneous / near me</span>
+        <strong>Find the closest color</strong>
+        <span class="seasonal-choice__detail">See what is turning near you and which way to drive.</span>
+      </a>
+      <a class="seasonal-choice" href="/fall-color/michigan-leaf-peeping-planner/" data-seasonal-action="rank-regions-for-dates" data-seasonal-persona="weekend-planner" data-seasonal-placement="hero">
+        <span class="seasonal-choice__persona">Dates set / weekend</span>
+        <strong>Rank regions for my dates</strong>
+        <span class="seasonal-choice__detail">Balance peak timing with how far you want to drive.</span>
+      </a>
+      <a class="seasonal-choice" href="/fall-color/michigan-fall-color-drives/" data-seasonal-action="choose-fall-drive" data-seasonal-persona="scenic-road-tripper" data-seasonal-placement="hero">
+        <span class="seasonal-choice__persona">Road trip / scenic</span>
+        <strong>Choose a fall color drive</strong>
+        <span class="seasonal-choice__detail">Compare twelve named Michigan routes for your day.</span>
+      </a>
+    </div>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="Fall color guide views">
+    <button class="tab on" id="tab-control-now" role="tab" aria-controls="tab-now" aria-selected="true" tabindex="0" data-tab="now" data-seasonal-action="view-color-weather" data-seasonal-persona="field-user" data-seasonal-placement="guide-tabs">Color &amp; weather</button>
+    <button class="tab" id="tab-control-paddle" role="tab" aria-controls="tab-paddle" aria-selected="false" tabindex="-1" data-tab="paddle" data-seasonal-action="view-paddle-color" data-seasonal-persona="paddler" data-seasonal-placement="guide-tabs">On the water</button>
+    <button class="tab" id="tab-control-plan" role="tab" aria-controls="tab-plan" aria-selected="false" tabindex="-1" data-tab="plan" data-seasonal-action="view-visit-planner" data-seasonal-persona="weekend-planner" data-seasonal-placement="guide-tabs">Plan a visit</button>
+    <button class="tab" id="tab-control-guide" role="tab" aria-controls="tab-guide" aria-selected="false" tabindex="-1" data-tab="guide" data-seasonal-action="view-field-notes" data-seasonal-persona="field-reader" data-seasonal-placement="guide-tabs">Field notes</button>
   </div>
 
   <!-- NOW -->
-  <section id="tab-now">
+  <section id="tab-now" role="tabpanel" aria-labelledby="tab-control-now">
     <div class="card pad" id="nearCard" style="margin-bottom:16px">
       <div class="kicker" style="margin-bottom:9px">Color near you</div>
       <div id="nearBody">
         <p class="small soft" style="margin:0 0 12px">See where the color stands closest to you, and which way to drive to find it sooner.</p>
-        <button class="btn" id="nearBtn">Show color near me</button>
-        <div id="nearPick" style="display:none;margin-top:11px"><select id="nearSel" aria-label="Choose your part of Michigan"></select></div>
+        <button class="btn" id="nearBtn" data-seasonal-action="use-nearby-color" data-seasonal-persona="spontaneous-color-chaser" data-seasonal-placement="near-card">Show color near me</button>
+        <div id="nearPick" style="display:none;margin-top:11px"><select id="nearSel" data-seasonal-select="fall-region" data-seasonal-placement="near-card" aria-label="Choose your part of Michigan"></select></div>
       </div>
     </div>
 
@@ -567,7 +596,7 @@
   </section>
 
   <!-- PADDLE -->
-  <section id="tab-paddle" class="hidden">
+  <section id="tab-paddle" class="hidden" role="tabpanel" aria-labelledby="tab-control-paddle" hidden>
     <div class="card pad" style="margin-bottom:16px">
       <div class="serif-h" style="font-size:17px;margin-bottom:8px">On the water</div>
       <p class="small muted" style="margin:0">A river is an unhurried way to see the color. You drift beneath the canopy with maple and aspen leaning over both banks and doubled in the water below. Each run carries the live color of its region, so you can see what is turning before you go. Levels and liveries change with the season, so it is worth a call ahead.</p>
@@ -576,7 +605,7 @@
   </section>
 
   <!-- PLAN -->
-  <section id="tab-plan" class="hidden">
+  <section id="tab-plan" class="hidden" role="tabpanel" aria-labelledby="tab-control-plan" hidden>
     <div class="card pad" style="margin-bottom:16px">
       <div class="row" style="align-items:baseline;margin-bottom:14px">
         <span class="kicker">A suggestion for</span>
@@ -593,7 +622,7 @@
   </section>
 
   <!-- GUIDE / FIELD NOTES (server-readable reference content) -->
-  <section id="tab-guide" class="hidden">
+  <section id="tab-guide" class="hidden" role="tabpanel" aria-labelledby="tab-control-guide" hidden>
     <div class="prose">
       <p class="small muted" style="margin:0 0 6px">What turns what color, and roughly when. The first reds are red maple in wet ground; the golds are aspen and birch; the late russets are oak and beech; and the last to turn is tamarack, the conifer that goes gold and lets its needles fall in the northern bogs.</p>
       <div class="specrow"><span class="dot" style="background:#9C4E27"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Sugar maple</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Peak weeks</span></div><p class="small muted" style="margin:3px 0 0">Orange to deep red. The quiet headliner, strongest up north.</p></div></div><div class="specrow"><span class="dot" style="background:#8E301C"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Red maple</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Early</span></div><p class="small muted" style="margin:3px 0 0">Deep scarlet, often the first red, in wet ground.</p></div></div><div class="specrow"><span class="dot" style="background:#8E6410"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Aspen and birch</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Early to peak</span></div><p class="small muted" style="margin:3px 0 0">Clear gold that stirs in any breeze.</p></div></div><div class="specrow"><span class="dot" style="background:#75512F"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Northern red oak</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Late</span></div><p class="small muted" style="margin:3px 0 0">Russet and bronze, holding on into November.</p></div></div><div class="specrow"><span class="dot" style="background:#a98a5e"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">American beech</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Late</span></div><p class="small muted" style="margin:3px 0 0">Coppery tan that lingers through early winter.</p></div></div><div class="specrow"><span class="dot" style="background:#9E5F13"></span><div><div style="display:flex;align-items:baseline;gap:9px"><span class="bname" style="font-size:16px">Tamarack</span><span class="tiny muted" style="text-transform:uppercase;letter-spacing:.1em">Very late</span></div><p class="small muted" style="margin:3px 0 0">Gold needles in northern bogs, the season's last note in November.</p></div></div>
@@ -633,6 +662,18 @@
       <p class="small muted" style="margin:0">Michigan Fall Color is built and kept by <a href="https://chrisizworski.com">Chris Izworski</a>, a Michigan angler and outdoor writer on Saginaw Bay. It is one of a family of Michigan field guides alongside the <a href="https://michigantroutreport.com">Michigan Trout Report</a> and <a href="https://freighterviewfarms.com">Freighter View Farms</a>. The color tracking is free and updated daily through the season. If you are chasing fall color on the Leelanau Peninsula, you can also plan a <a href="https://tcwine.chrisizworski.com/fall-color-wine-tour">fall color wine tour</a> through Traverse City wine country.</p>
     </div>
   </section>
+
+  <nav class="seasonal-switcher" data-seasonal-module="seasonal-tools" aria-label="Michigan seasonal field tools">
+    <div class="seasonal-switcher__head">
+      <strong>Michigan, season by season</strong>
+      <span>Fall &middot; snow &middot; ice</span>
+    </div>
+    <div class="seasonal-switcher__links">
+      <a href="/fall-color/" aria-current="page">Fall color</a>
+      <a href="https://xcski.chrisizworski.com/" data-seasonal-tool-open="xc-skiing" data-seasonal-placement="seasonal-switcher">Cross-country skiing</a>
+      <a href="/michigan-ice/" data-seasonal-tool-open="michigan-ice" data-seasonal-placement="seasonal-switcher">Ice conditions</a>
+    </div>
+  </nav>
 
   <div class="hr"></div>
   <p class="tiny muted" style="text-align:center;line-height:1.7">
@@ -1236,8 +1277,18 @@ function renderReport(j){
 
 // ---- tabs ----
 function setTab(name){
-  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.tab===name));
-  ["now","paddle","plan","guide"].forEach(n=>document.getElementById("tab-"+n).classList.toggle("hidden",n!==name));
+  document.querySelectorAll(".tab").forEach(t=>{
+    const selected=t.dataset.tab===name;
+    t.classList.toggle("on",selected);
+    t.setAttribute("aria-selected",String(selected));
+    t.tabIndex=selected?0:-1;
+  });
+  ["now","paddle","plan","guide"].forEach(n=>{
+    const panel=document.getElementById("tab-"+n);
+    const hidden=n!==name;
+    panel.classList.toggle("hidden",hidden);
+    panel.hidden=hidden;
+  });
   if(name==="now"&&map)setTimeout(()=>map.invalidateSize(),60);
 }
 
@@ -1263,7 +1314,18 @@ function init(){
   initChips(); wireNear(); syncScrub(); renderScrubAxis();
   document.getElementById("scrub").addEventListener("input",e=>{selIdx=+e.target.value;renderAll();});
   document.getElementById("scrub").addEventListener("change",rebuildIfShown);
-  document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>setTab(t.dataset.tab));
+  const tabs=[...document.querySelectorAll(".tab")];
+  tabs.forEach((t,index)=>{
+    t.onclick=()=>setTab(t.dataset.tab);
+    t.onkeydown=e=>{
+      if(!["ArrowLeft","ArrowRight","Home","End"].includes(e.key))return;
+      e.preventDefault();
+      const next=e.key==="Home"?0:e.key==="End"?tabs.length-1:
+        (index+(e.key==="ArrowRight"?1:-1)+tabs.length)%tabs.length;
+      setTab(tabs[next].dataset.tab);
+      tabs[next].focus();
+    };
+  });
   document.getElementById("planBtn").onclick=buildPlan;
   document.getElementById("planRegion").addEventListener("change",rebuildIfShown);
   buildMap(); renderAll();
