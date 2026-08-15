@@ -84,6 +84,8 @@ p{margin:12px 0}
 .anchor-list a{font-size:13px;border:1px solid #bcd2d8;border-radius:999px;padding:4px 12px;text-decoration:none;background:rgba(255,255,255,.6)}
 .safety-banner{margin-top:18px;border:2px solid #b4472b;border-radius:12px;padding:14px 18px;background:rgba(255,246,243,.9)}
 .safety-banner strong{color:#8f3a22}
+.seasonal-ice .safety-banner{border-width:1px;border-left-width:4px;padding:11px 15px;font-size:14px;line-height:1.5}
+#the-read-card,#water-picker,#season-cold{scroll-margin-top:18px}
 a:focus-visible,button:focus-visible{outline:3px solid #16606b;outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 .acc-fill{transition:width .6s ease}
@@ -118,10 +120,11 @@ def head(title, desc, canonical, ld_json):
         '<meta property="og:type" content="website">'
         '<meta property="og:site_name" content="Michigan Ice Report">'
         '<meta name="twitter:card" content="summary">'
-        f'{FONTS}<style>{CSS}</style>'
+        f'{FONTS}<link rel="stylesheet" href="/assets/seasonal-field-desk.css"><style>{CSS}</style>'
         f'<script type="application/ld+json">{_j.dumps(ld_json, separators=(",", ":"))}</script>'
         '<script defer src="/_vercel/insights/script.js"></script>'
         '<script defer src="/_vercel/speed-insights/script.js"></script>'
+        '<script defer src="/assets/seasonal-field-desk.js"></script>'
         '</head>'
     )
 
@@ -131,7 +134,7 @@ def header(current, stage="Off season"):
         f'<a href="{h}"{" aria-current=\"page\"" if h == current else ""}>{t}</a>'
         for h, t in NAV)
     return (
-        '<body><div class="page"><div class="wrap">'
+        '<body class="seasonal-ice" data-seasonal-tool="michigan-ice"><div class="page"><div class="wrap">'
         '<header class="site-header"><div class="brandrow">'
         '<span class="brand">Michigan Ice Report</span>'
         '<span class="tag">Accumulated cold, satellite ice cover, and 54 years of context</span>'
@@ -152,7 +155,22 @@ SAFETY_BANNER = (
     '</div>'
 )
 
+SEASONAL_SWITCHER = (
+    '<nav class="seasonal-switcher" data-seasonal-module="seasonal-tools" '
+    'aria-label="Michigan seasonal field tools">'
+    '<div class="seasonal-switcher__head"><strong>Michigan, season by season</strong>'
+    '<span>Fall &middot; snow &middot; ice</span></div>'
+    '<div class="seasonal-switcher__links">'
+    '<a href="/fall-color/" data-seasonal-tool-open="fall-color" '
+    'data-seasonal-placement="seasonal-switcher">Fall color</a>'
+    '<a href="https://xcski.chrisizworski.com/" data-seasonal-tool-open="xc-skiing" '
+    'data-seasonal-placement="seasonal-switcher">Cross-country skiing</a>'
+    '<a href="/michigan-ice/" aria-current="page">Ice conditions</a>'
+    '</div></nav>'
+)
+
 FOOTER = (
+    SEASONAL_SWITCHER +
     '<footer class="site-footer">'
     'Ice cover from the <a href="https://www.glerl.noaa.gov/data/ice/">NOAA Great Lakes Environmental Research '
     'Laboratory</a> ice climatology, built on National Ice Center analyses. Daily temperatures from the '

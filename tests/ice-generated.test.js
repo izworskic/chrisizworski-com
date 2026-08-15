@@ -61,9 +61,11 @@ test("the ice generator stays pinned to its base path", () => {
     site.includes('assert BASE == "/michigan-ice"'),
     "the generator must keep asserting BASE agrees with its hardcoded hrefs",
   );
-  // Root-relative links would resolve off the subdirectory and 404.
+  // Content links stay under /michigan-ice/. Shared /assets/ links and the
+  // deliberate cross-season /fall-color/ handoff are valid because this
+  // section is deployed inside the chrisizworski.com hub.
   for (const [name, src] of [["gen_chrome.py", chrome], ["gen_site.py", site]]) {
-    const stray = src.match(/href=\\?"\/(?!michigan-ice\/|api\/)[a-z]/g) || [];
+    const stray = src.match(/href=\\?"\/(?!michigan-ice\/|api\/|assets\/|fall-color\/)[a-z]/g) || [];
     assert.equal(stray.length, 0, `${name} has a root-relative href that escapes /michigan-ice/`);
   }
 });

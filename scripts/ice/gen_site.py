@@ -214,6 +214,11 @@ def build_index():
         f'<div class="tile"><h3><a href="/michigan-ice/regions/{r["slug"]}.html">{r["name"]}</a></h3>'
         f'<p>{r["blurb"][:210]}...</p></div>' for r in REGIONS)
 
+    water_picker = "".join(
+        f'<a href="/michigan-ice/regions/{r["slug"]}.html" data-seasonal-action="open-water" '
+        f'data-seasonal-persona="water-specific-angler" data-seasonal-placement="water-picker">'
+        f'{r["short"]}</a>' for r in REGIONS)
+
     body = (
         header("/") +
         '<h1 class="page-title">Michigan ice conditions today</h1>'
@@ -221,17 +226,43 @@ def build_index():
         'March.</strong> During that window, this report updates accumulated freezing degree days, nearby weather, '
         'and NOAA Great Lakes ice cover across six waters. From April through October, it reports off season rather '
         'than implying that ice exists.</p>'
+        + SAFETY_BANNER
+        + '<section class="seasonal-desk" data-seasonal-module="ice-trip-decisions" '
+        'aria-labelledby="ice-trip-title">'
+        '<div class="seasonal-desk__head"><div><span class="seasonal-desk__kicker">Screen the trip</span>'
+        '<h2 class="seasonal-desk__title" id="ice-trip-title">What do you need to know first?</h2></div>'
+        '<p class="seasonal-desk__note">Weather and satellite context only. Never a safety rating.</p></div>'
+        '<div class="seasonal-desk__choices">'
+        '<a class="seasonal-choice seasonal-choice--primary" href="#water-picker" '
+        'data-seasonal-action="choose-water" data-seasonal-persona="water-specific-angler" '
+        'data-seasonal-placement="hero"><span class="seasonal-choice__persona">Water already picked</span>'
+        '<strong>Check one water</strong><span class="seasonal-choice__detail">Open its cold, wind, and data limits.</span></a>'
+        '<a class="seasonal-choice" href="#the-read-card" data-seasonal-action="read-statewide-signal" '
+        'data-seasonal-persona="trip-screener" data-seasonal-placement="hero">'
+        '<span class="seasonal-choice__persona">Still deciding / statewide</span><strong>Read today\'s signal</strong>'
+        '<span class="seasonal-choice__detail">See whether the season is ahead, behind, or off.</span></a>'
+        '<a class="seasonal-choice" href="/michigan-ice/ice-safety.html" '
+        'data-seasonal-action="open-safety-boundary" data-seasonal-persona="cautious-newcomer" '
+        'data-seasonal-placement="hero"><span class="seasonal-choice__persona">New here / cautious</span>'
+        '<strong>Read the safety boundary</strong><span class="seasonal-choice__detail">What the Michigan DNR actually says.</span></a>'
+        '</div></section>'
+        '<div class="card read" id="the-read-card"><div class="kicker">The read</div>'
+        '<p style="margin:0;font-size:16px" id="the-read">Loading current conditions.</p>'
+        '<p class="note" style="margin-top:10px" id="read-stamp"></p></div>'
+
+        '<section class="seasonal-water-picker" id="water-picker" data-seasonal-module="ice-water-picker" '
+        'aria-labelledby="water-picker-title"><div class="seasonal-water-picker__head">'
+        '<h2 id="water-picker-title">Go straight to your water</h2>'
+        '<p>Each page states what is observed and what is only inferred.</p></div>'
+        '<div class="seasonal-water-picker__links">' + water_picker + '</div></section>'
+
+        + top_stats() +
         '<p class="lede">Ice is not weather, it is history. A cold morning tells you almost nothing. What matters is '
         'how much cold has accumulated since freeze up, and whether this winter is running ahead of or behind normal. '
         'This compares accumulated cold across six Michigan waters with a ten year station normal, while Great '
         'Lakes ice cover is compared with a 54 year climatology.</p>'
-        + SAFETY_BANNER
-        + top_stats() +
-        '<div class="card read"><div class="kicker">The read</div>'
-        '<p style="margin:0;font-size:16px" id="the-read">Loading current conditions.</p>'
-        '<p class="note" style="margin-top:10px" id="read-stamp"></p></div>'
 
-        '<h2>Season cold accumulation</h2>'
+        '<h2 id="season-cold">Season cold accumulation</h2>'
         '<p>The bar shows accumulated freezing degree days so far this season for each water. The marker is where a '
         'normal season sits on this calendar date. Ice growth follows the square root of accumulated cold, so this is '
         'the single most useful number for whether ice should be forming at all.</p>'

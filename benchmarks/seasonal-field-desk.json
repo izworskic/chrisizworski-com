@@ -1,0 +1,77 @@
+{
+  "benchmarkVersion": "1.0.0",
+  "created": "2026-08-15",
+  "timezone": "America/Detroit",
+  "purpose": "Ground the Fall, Ice, and XC experience system in observed search behavior and measurable in-product decisions.",
+  "source": {
+    "type": "Google Search Console spreadsheet export",
+    "url": "https://docs.google.com/spreadsheets/d/1UTJHLaV2vPnETwbhDxPhSDkUV5o4GYvs1lY-VZe2v64/edit",
+    "exportTitle": "chrisizworski.com-Performance-on-Search-2026-08-15",
+    "windowCaution": "The spreadsheet exposes aggregate query, page, country, and device rows but does not expose a comparable-window label in the tab data used here. Treat these as a directional snapshot, not a latest-28-day series."
+  },
+  "observed": {
+    "device": {
+      "allDerived": {"clicks": 1144, "impressions": 70860, "ctr": 0.016145, "averagePosition": 12.27},
+      "mobile": {"clicks": 856, "impressions": 46870, "ctr": 0.0183, "averagePosition": 8.15},
+      "desktop": {"clicks": 221, "impressions": 22760, "ctr": 0.0097, "averagePosition": 21.07},
+      "tablet": {"clicks": 67, "impressions": 1230, "ctr": 0.0545, "averagePosition": 6.56},
+      "designImplication": "Mobile contributes 66.1% of observed impressions. Decision hierarchy and horizontal choice controls must work at 390 pixels before desktop embellishment."
+    },
+    "fall": {
+      "hub": {"path": "/fall-color/", "clicks": 14, "impressions": 575, "ctr": 0.0243, "averagePosition": 11.17},
+      "supportingPages": [
+        {"path": "/fall-color/porcupine-mountains-fall-color/", "clicks": 7, "impressions": 118, "ctr": 0.0593, "averagePosition": 7.37},
+        {"path": "/fall-color/upper-peninsula-fall-color/", "clicks": 5, "impressions": 165, "ctr": 0.0303, "averagePosition": 10.64},
+        {"path": "/fall-color/mackinac-island-fall-color/", "clicks": 4, "impressions": 149, "ctr": 0.0268, "averagePosition": 6.48},
+        {"path": "/fall-color/tunnel-of-trees-fall-color/", "clicks": 1, "impressions": 127, "ctr": 0.0079, "averagePosition": 8.29, "experimentLocked": true},
+        {"path": "/fall-color/michigan-leaf-peeping-planner/", "clicks": 0, "impressions": 60, "ctr": 0, "averagePosition": 13.15}
+      ],
+      "queryEvidence": [
+        {"query": "michigan fall color map 2026", "clicks": 0, "impressions": 74, "ctr": 0, "averagePosition": 8.88},
+        {"query": "michigan fall colors 2026", "clicks": 0, "impressions": 15, "ctr": 0, "averagePosition": 10.33},
+        {"query": "michigan peak fall colors 2026", "clicks": 0, "impressions": 13, "ctr": 0, "averagePosition": 9.23}
+      ]
+    },
+    "ice": {
+      "hub": {"path": "/michigan-ice/", "clicks": 0, "impressions": 20, "ctr": 0, "averagePosition": 57.5},
+      "selectedPages": [
+        {"path": "/michigan-ice/regions/saginaw-bay.html", "clicks": 0, "impressions": 24, "ctr": 0, "averagePosition": 49.58},
+        {"path": "/michigan-ice/regions/houghton-lake.html", "clicks": 0, "impressions": 17, "ctr": 0, "averagePosition": 45.24},
+        {"path": "/michigan-ice/regions/grand-traverse-bay.html", "clicks": 1, "impressions": 6, "ctr": 0.1667, "averagePosition": 44.33},
+        {"path": "/michigan-ice/ice-safety.html", "clicks": 0, "impressions": 1, "ctr": 0, "averagePosition": 8}
+      ],
+      "caution": "The section is newly launched and the export predates meaningful in-season demand. Do not optimize snippets from this sample."
+    },
+    "xcSkiing": {
+      "url": "https://xcski.chrisizworski.com/",
+      "searchRows": "No unambiguous XC skiing page or query row appeared in the visible top-1000 export.",
+      "sourceStatus": "Live static page found; owning GitHub repository and Vercel project are not available in the connected workspace.",
+      "contentInventory": {"trailSystems": 48, "regions": 7, "liveSignal": ["modeled snow depth", "72-hour snowfall", "temperature"]}
+    }
+  },
+  "personas": {
+    "fall": {"name": "weekend color chaser", "job": "Choose the best reachable color for a date or spontaneous drive."},
+    "ice": {"name": "cautious trip screener", "job": "Decide whether conditions justify more local verification, never whether ice is safe."},
+    "xcSkiing": {"name": "Saturday skier", "job": "Narrow 48 trails by current snow signal, grooming style, and practical access."}
+  },
+  "measurement": {
+    "primaryEvent": "Seasonal Decision",
+    "denominatorEvent": "Seasonal Module View",
+    "supportingEvents": ["Seasonal Selection", "Seasonal Tool Open"],
+    "privacyBoundary": "Record controlled tool, persona, action, placement, module, and coarse fixed-region labels only. Never record coordinates, typed locations, destination URLs, or weather values.",
+    "internalDecisionThresholds": {
+      "decisionRate": 0.12,
+      "crossSeasonToolOpenRate": 0.03,
+      "fallHubCtrAfter500Impressions": 0.03,
+      "qualifiedImpressionsComparable28DayMultiple": 1.2,
+      "minimumImpressionsBeforeIceOrXcCtrDecision": 250
+    },
+    "performanceGates": {"lcpP75Ms": 2500, "inpP75Ms": 200, "clsP75": 0.1}
+  },
+  "frozenSurfaces": {
+    "fallHub": ["title", "metaDescription", "h1", "firstAnswer", "canonical", "structuredData"],
+    "tunnelOfTrees": ["all active search experiment surfaces"],
+    "ice": ["safety language", "source attributions", "canonical", "structured data", "data limitations"],
+    "xcSkiing": ["title", "metaDescription", "h1", "schema", "trail facts", "snow model"]
+  }
+}

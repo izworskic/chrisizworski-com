@@ -237,6 +237,36 @@
       "decisionDate": null,
       "result": null,
       "stopCondition": "CTR falls below 0.50% after at least 250 impressions, average position moves below page one in a comparable window, or the title, H1, first answer, canonical, live conditions, or guide content regresses."
+    },
+    {
+      "id": "2026-08-15-seasonal-field-desk-ux",
+      "paths": ["/fall-color/", "/michigan-ice/"],
+      "externalPathPrepared": "https://xcski.chrisizworski.com/",
+      "hypothesis": "A mobile-first persona decision surface, a useful-result-first Ice hierarchy, and explicit handoffs among Fall, XC skiing, and Ice will increase qualified tool use and cross-season discovery without changing the active Fall search snippets or weakening factual boundaries.",
+      "primaryMetric": "Seasonal Decision events divided by Seasonal Module View events",
+      "supportingMetrics": ["Seasonal Tool Open rate", "Search Console page impressions", "Search Console page CTR", "p75 Core Web Vitals"],
+      "baseline": {
+        "fallHub": {"impressions": 575, "clicks": 14, "ctr": 0.0243, "averagePosition": 11.17},
+        "iceHub": {"impressions": 20, "clicks": 0, "ctr": 0, "averagePosition": 57.5},
+        "decisionRate": null,
+        "crossSeasonToolOpenRate": null,
+        "note": "Search values are a directional August 15 export snapshot. Interaction baselines do not exist before instrumentation."
+      },
+      "target": {"decisionRate": 0.12, "crossSeasonToolOpenRate": 0.03, "fallHubCtrAfter500Impressions": 0.03, "qualifiedImpressionsMultiple": 1.2},
+      "treatment": {
+        "fall": "Three outing-intent paths, accessible tab state, and seasonal tool handoff.",
+        "ice": "Safety-first trip screen, current read before long explanation, six direct water choices, and seasonal tool handoff.",
+        "xcSkiing": "A non-overwriting adapter prepared and tested against the current live HTML; production source access remains required.",
+        "shared": "One dependency-free CSS and analytics layer with fixed-label, privacy-safe events."
+      },
+      "preserved": ["Fall title", "Fall meta description", "Fall H1", "Fall first answer", "Fall canonical", "Fall structured data", "Ice safety language", "Ice data limitations", "Ice source attributions", "Ice canonical", "Ice structured data", "Tunnel of Trees experiment", "Aurora experiment"],
+      "status": "ready-for-review",
+      "proposedDate": "2026-08-15",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "A frozen search surface changes; exact location enters analytics or storage; Ice implies safety; XC equates modeled snow with grooming; fewer than 5 decisions occur after 500 module views; Fall CTR falls at least 20% after 500 comparable impressions with stable position; or a p75 Core Web Vital remains outside the green range for seven days."
     }
   ]
 }
