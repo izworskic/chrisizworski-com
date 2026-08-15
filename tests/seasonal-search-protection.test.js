@@ -133,7 +133,10 @@ test("seasonal experiments use page-specific windows instead of a site-wide paus
   assert.equal(aurora?.status, "running");
   assert.equal(aurora?.releaseDate, "2026-08-14");
   assert.deepEqual(aurora?.evaluationWindow, { start: "2026-08-15", end: "2026-09-11" });
-  assert.equal(tunnel?.status, "ready-for-review");
+  assert.equal(tunnel?.status, "running");
+  assert.equal(tunnel?.releaseDate, "2026-08-15");
+  assert.deepEqual(tunnel?.evaluationWindow, { start: "2026-08-16", end: "2026-09-12" });
+  assert.equal(tunnel?.lastSearchFacingChangeDate, "2026-08-15");
   assert.deepEqual(tunnel?.baseline, {
     impressions: 127,
     clicks: 1,

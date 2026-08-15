@@ -3,6 +3,23 @@
 One dated entry per production change, so Search Console movement can be attributed to a cause
 instead of guessed at. Do not ship two page clusters on the same day.
 
+## 2026-08-15 — Fall and Ice seasonal growth foundations
+Clusters: /fall-color/ and /michigan-ice/. The only search-snippet treatment is the Tunnel of
+Trees description; the remaining changes repair season timing, measurement, and regression locks.
+- Aligned the Fall browser and daily report season to August 20 through November 15 so the public
+  page no longer hides a report that the server is already producing.
+- Started one Tunnel of Trees CTR experiment by leading its description with the existing October
+  5–13 peak window. Its title, H1, first answer, canonical, live conditions, and guide remain fixed.
+- Added a crawlable H1 and honest November-through-March/off-season answer to the Michigan Ice hub,
+  plus Vercel Analytics and Speed Insights across all ten generated Ice pages.
+- Froze the successful Fall hub, Porcupine Mountains, Upper Peninsula, and Mackinac Island snippets
+  with regression tests, and locked Aurora's search surface through its September 11 evaluation.
+- Verified all 12 affected public routes after deployment: HTTP 200, indexable production headers,
+  new copy present, and both measurement scripts present on every Ice page.
+
+Tunnel evaluation window: August 16–September 12, 2026. Baseline: 127 impressions, 1 click, 0.79%
+CTR, average position 8.29. Target: 2.5% CTR while remaining on page one. NOT YET MEASURED.
+
 ## 2026-08-14 — Aurora regional decision engine
 Cluster: /northern-lights-michigan/ only.
 - Added official National Weather Service sky-cover forecasts for all eight Michigan regions and
