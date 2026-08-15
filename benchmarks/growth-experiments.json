@@ -229,10 +229,11 @@
         "preserved": ["title", "h1", "firstAnswer", "canonical", "liveConditions", "guideContent"]
       },
       "target": {"ctr": 0.025, "averagePosition": 10},
-      "status": "ready-for-review",
+      "status": "running",
       "proposedDate": "2026-08-15",
-      "releaseDate": null,
-      "evaluationWindow": null,
+      "releaseDate": "2026-08-15",
+      "evaluationWindow": {"start": "2026-08-16", "end": "2026-09-12"},
+      "lastSearchFacingChangeDate": "2026-08-15",
       "decisionDate": null,
       "result": null,
       "stopCondition": "CTR falls below 0.50% after at least 250 impressions, average position moves below page one in a comparable window, or the title, H1, first answer, canonical, live conditions, or guide content regresses."
