@@ -1,0 +1,73 @@
+name: Fall color writer end-to-end test
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: fall-color-writer-end-to-end
+  cancel-in-progress: false
+
+jobs:
+  write-and-read-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Wait for production, run the writer, and read back its report
+        shell: bash
+        env:
+          OIDC_AUDIENCE: "https://chrisizworski.com/api/fall-color-writer-test"
+          WRITER_URL: "https://chrisizworski.com/api/fall-color?view=cron&test=1"
+          REPORT_URL: "https://chrisizworski.com/api/fall-color-report"
+        run: |
+          set -euo pipefail
+          response_file="$RUNNER_TEMP/fall-color-writer-response.json"
+          report_file="$RUNNER_TEMP/fall-color-report.json"
+
+          for attempt in $(seq 1 24); do
+            token_url="${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${OIDC_AUDIENCE}"
+            oidc_token="$(curl --fail --silent --show-error \
+              -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+              "$token_url" | jq --exit-status --raw-output '.value')"
+
+            status="$(curl --silent --show-error --max-time 70 \
+              --output "$response_file" --write-out '%{http_code}' \
+              -H "Authorization: Bearer ${oidc_token}" \
+              "$WRITER_URL")"
+            unset oidc_token
+
+            if [[ "$status" == "200" ]]; then
+              jq --exit-status '.ok == true and (.date | type == "string") and (.chars > 0)' "$response_file"
+              writer_date="$(jq --exit-status --raw-output '.date' "$response_file")"
+
+              curl --fail --silent --show-error --max-time 30 \
+                --output "$report_file" "${REPORT_URL}?verification=${GITHUB_SHA}"
+              jq --exit-status --arg date "$writer_date" \
+                '.date == $date and (.updated | type == "string") and (.body | type == "string") and (.body | length > 0)' \
+                "$report_file"
+
+              chars="$(jq --raw-output '.chars' "$response_file")"
+              {
+                echo "### Fall color writer verified"
+                echo ""
+                echo "Production generated and stored the ${writer_date} report (${chars} characters)."
+              } >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+
+            if [[ "$status" != "401" && "$status" != "404" ]]; then
+              echo "Writer failed with HTTP ${status}." >&2
+              jq . "$response_file" >&2 2>/dev/null || true
+              exit 1
+            fi
+
+            echo "Production has not reached this commit yet (HTTP ${status}); attempt ${attempt}/24."
+            sleep 15
+          done
+
+          echo "Production did not accept this workflow identity before the retry window closed." >&2
+          jq . "$response_file" >&2 2>/dev/null || true
+          exit 1
