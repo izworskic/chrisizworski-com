@@ -1,0 +1,23 @@
+name: Trigger fall color writer end-to-end test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/fall-color-writer-test.yml"
+      - ".github/workflows/fall-color-writer-trigger.yml"
+      - "lib/fall-color/github-actions-oidc.js"
+      - "lib/fall-color/routes/cron.js"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  test-production-writer:
+    uses: ./.github/workflows/fall-color-writer-test.yml
+    permissions:
+      contents: read
+      id-token: write
