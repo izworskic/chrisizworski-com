@@ -3,6 +3,25 @@
 One dated entry per production change, so Search Console movement can be attributed to a cause
 instead of guessed at. Do not ship two page clusters on the same day.
 
+## 2026-08-16 — the fall colour writer would have failed silently, four days before it opens
+Cluster: lib/fall-color/routes/cron.js. No visible content changed.
+Found while reviewing what shipped Aug 11-15. Every failure path in the daily writer returned HTTP
+200 with an error in the body: missing ANTHROPIC_API_KEY, an Anthropic API error, a fetch failure,
+an empty generation, and a failed Redis write all answered 200. Vercel's cron would have reported
+success every day while writing nothing.
+This is the same shape that let a dead GH_TOKEN sit unnoticed on the phenology project for 45 days.
+It matters more here because of the timing: the writer opens on August 20 and runs unattended
+through the October peak, the highest-traffic window of the year for this cluster, so a silent
+failure would not have surfaced until someone noticed reports were missing weeks later.
+- Configuration and write failures now return 500, upstream failures 502. The only remaining 200s
+  are the two genuine skips (off-season, already-generated) and genuine success.
+- The writer also silently substituted an empty region list when getConditions() threw, and would
+  then generate a report from nothing. That would read like a written assessment with no
+  observation behind it, which is worse than no report. It now returns 502 rather than inventing.
+- tests/fall-color-cron-integrity.test.js pins all four properties.
+- Checked the rest of the repo for the same pattern: no other route returns 200 with an error key.
+159 tests, nine gates green.
+
 ## 2026-08-15 — Fall and Ice seasonal growth foundations
 Clusters: /fall-color/ and /michigan-ice/. The only search-snippet treatment is the Tunnel of
 Trees description; the remaining changes repair season timing, measurement, and regression locks.
