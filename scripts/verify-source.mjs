@@ -9,6 +9,19 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 17 2026: additive Windy webcam context on selected beach, ice, and
+  // fall-color guides. Images stay labeled with their actual camera location
+  // and are explicitly not presented as safety or on-site-condition evidence.
+  "/assets/field-camera.js",
+  "/fall-color/keweenaw-peninsula-fall-color/",
+  "/great-lakes-beaches/saginaw-bay/",
+  "/great-lakes-beaches/bay-city-state-park/",
+  "/great-lakes-beaches/caseville-state-park/",
+  "/great-lakes-beaches/frankfort-beach/",
+  "/great-lakes-beaches/holland-state-park/",
+  "/great-lakes-beaches/ludington-state-park/",
+  "/great-lakes-beaches/south-haven-north/",
+
   // Aug 15 2026: one reversible Fall CTR experiment. The Tunnel of Trees
   // description now leads with its existing October 5-13 answer; title, H1,
   // canonical, first answer, live conditions, and guide content are unchanged.

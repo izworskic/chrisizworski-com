@@ -66,7 +66,16 @@ function detailPage(beach) {
   const canonical = `https://chrisizworski.com/great-lakes-beaches/${beach.slug}/`;
   const description = detailDescription(beach);
   const title = detailTitle(beach.name);
+  const detailModified = beach.camera ? "2026-08-17" : catalog.version;
   const nearby = nearbyBeaches(beach);
+  const cameraStylesheet = beach.camera ? '  <link rel="stylesheet" href="/assets/field-camera.css">\n' : "";
+  const cameraSection = beach.camera ? `    <section class="section" aria-labelledby="camera-heading">
+      <div class="section-head"><div><p class="section-kicker">Current shoreline context</p><h2 id="camera-heading">See the water now</h2><p class="section-intro">The caption names the camera's actual location. Use the image for broad visibility and surface context only; it cannot show the posted flag, water quality, or every condition at ${html(beach.name)}.</p></div></div>
+      <div class="field-camera" data-field-camera="${html(beach.camera)}"><p class="camera-out">Loading the camera...</p></div>
+    </section>
+
+` : "";
+  const cameraScript = beach.camera ? '  <script src="/assets/field-camera.js" defer></script>\n' : "";
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
@@ -80,7 +89,7 @@ function detailPage(beach) {
         author: { "@id": "https://chrisizworski.com/#person" },
         publisher: { "@id": "https://chrisizworski.com/#person" },
         about: { "@id": `${canonical}#place` },
-        dateModified: catalog.version,
+        dateModified: detailModified,
         inLanguage: "en-US",
       },
       {
@@ -135,7 +144,7 @@ function detailPage(beach) {
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/assets/beach-report.css">
-  <script type="application/ld+json">${json(schema)}</script>
+${cameraStylesheet}  <script type="application/ld+json">${json(schema)}</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
   <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
@@ -171,7 +180,7 @@ function detailPage(beach) {
       </aside>
     </div>
 
-    <section class="section content-grid" aria-labelledby="about-heading">
+${cameraSection}    <section class="section content-grid" aria-labelledby="about-heading">
       <article class="content-section">
         <p class="section-kicker">${html(beach.region)}</p>
         <h2 id="about-heading">About ${html(beach.name)}</h2>
@@ -191,7 +200,7 @@ function detailPage(beach) {
   <footer class="site-footer"><div class="site-footer-inner"><span>© 2026 Chris Izworski</span><span><a href="/great-lakes-beaches/">Michigan Beach Report</a> · <a href="/best-michigan-beaches-today/">Today’s ranking</a> · <a href="/privacy/">Privacy</a></span></div></footer>
   <script src="/assets/tool-engagement.js" defer></script>
   <script src="/assets/beach-report.js" defer></script>
-</body>
+${cameraScript}</body>
 </html>
 `;
 }
@@ -248,17 +257,18 @@ await writeFile(hubPath, hub);
 console.log(`Wrote crawlable index of ${catalog.beaches.length} beaches into the hub page.`);
 
 const urls = [
-  { loc: "https://chrisizworski.com/great-lakes-beaches/", priority: "0.9", changefreq: "daily" },
-  { loc: "https://chrisizworski.com/best-michigan-beaches-today/", priority: "0.9", changefreq: "daily" },
+  { loc: "https://chrisizworski.com/great-lakes-beaches/", priority: "0.9", changefreq: "daily", lastmod: "2026-08-10" },
+  { loc: "https://chrisizworski.com/best-michigan-beaches-today/", priority: "0.9", changefreq: "daily", lastmod: "2026-08-10" },
   ...catalog.beaches.map((beach) => ({
     loc: `https://chrisizworski.com/great-lakes-beaches/${beach.slug}/`,
     priority: "0.7",
     changefreq: "daily",
+    lastmod: beach.camera ? "2026-08-17" : catalog.version,
   })),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((entry) => `  <url>\n    <loc>${entry.loc}</loc>\n    <lastmod>${catalog.version}</lastmod>\n    <changefreq>${entry.changefreq}</changefreq>\n    <priority>${entry.priority}</priority>\n  </url>`).join("\n")}
+${urls.map((entry) => `  <url>\n    <loc>${entry.loc}</loc>\n    <lastmod>${entry.lastmod || catalog.version}</lastmod>\n    <changefreq>${entry.changefreq}</changefreq>\n    <priority>${entry.priority}</priority>\n  </url>`).join("\n")}
 </urlset>
 `;
 await writeFile(path.join(publicRoot, "sitemap-beaches.xml"), sitemap);
