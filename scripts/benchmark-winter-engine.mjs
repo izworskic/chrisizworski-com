@@ -3,8 +3,9 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import { fileURLToPath } from 'node:url';
 
-const root = path.resolve(new URL('..', import.meta.url).pathname, '..');
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const scorePath = path.join(root, 'benchmarks', 'winter-engine-scorecard.json');
 const doc = JSON.parse(readFileSync(scorePath, 'utf8'));
 const weights = Object.fromEntries(doc.scoring.dimensions.map((d) => [d.key, d.weight]));
