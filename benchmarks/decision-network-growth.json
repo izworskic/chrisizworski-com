@@ -1,0 +1,34 @@
+{
+  "version": "1.0.0",
+  "created": "2026-08-18",
+  "objective": "Turn existing Michigan and Great Lakes assets into a connected decision network while improving Boat Launches and Shipwrecks without thin URLs, search cannibalization, data overclaims, or active-experiment churn.",
+  "maxScore": 100,
+  "target": {"minimumEffectiveScore": 95, "maximumLoss": 5, "fatalPenaltyAllowed": false},
+  "dimensions": [
+    {"key":"authorityGraph","weight":20,"definition":"Safe hub pages expose crawlable task-based links into related tools and measure symbolic handoffs."},
+    {"key":"boatDecisionUsefulness","weight":20,"definition":"The existing 42-launch page becomes faster to search, filter, route and screen without pretending regional buoy data is ramp truth."},
+    {"key":"shipwreckExplorerDepth","weight":20,"definition":"The existing wreck database gains useful filtering, presets, orientation mapping and factual consistency without inventing exact coordinates."},
+    {"key":"searchIntegrity","weight":15,"definition":"Preserve canonical ownership, entity signals, concise snippets and the existing record-rich parent URLs instead of creating thin children."},
+    {"key":"trustAndPrivacy","weight":15,"definition":"No safety inference, false spatial precision, geolocation, cookies, browser storage or fingerprinting."},
+    {"key":"measurement","weight":10,"definition":"Measure filters, decisions and cross-tool handoffs using stable first-party event names and non-personal symbolic metadata."}
+  ],
+  "fatalPenalties": [
+    "A new thin or competing launch/shipwreck URL is created without query evidence and substantial unique value.",
+    "A nearest NDBC station is presented as on-ramp, harbor-specific, or boating-safety truth.",
+    "A regional shipwreck anchor is presented as an exact wreck, navigation, or dive coordinate.",
+    "Either parent canonical changes or the 42-launch / 60-plus-wreck source inventory materially shrinks.",
+    "New code collects precise location, cookies, local/session storage, fingerprinting, or personal identifiers.",
+    "Protected active-experiment search surfaces or the unrelated Circle Tour agent branch are modified for this build."
+  ],
+  "observedBaseline": {
+    "source":"Google Search Console export through 2026-08-15",
+    "boatLaunches":{"clicks":0,"impressions":346,"ctr":0,"averagePosition":12.08,"url":"https://chrisizworski.com/michigan-boat-launches/"},
+    "shipwrecks":{"clicks":2,"impressions":1206,"ctr":0.0017,"averagePosition":52.86,"url":"https://chrisizworski.com/great-lakes-shipwrecks/"}
+  },
+  "outcomeTargets": {
+    "principle":"Build scores are merge gates, not traffic forecasts. Search Console and first-party behavior after a clean window are the market test.",
+    "boatLaunches":{"ctr":0.015,"averagePosition":10,"note":"Target after enough comparable in-season impressions."},
+    "shipwrecks":{"ctr":0.0075,"averagePosition":30,"note":"First authority milestone; ranking depth matters more than snippet optimization at the current position."},
+    "network":{"metric":"Decision Network Handoff","goal":"Increase multi-tool sessions without altering protected destination snippets."}
+  }
+}
