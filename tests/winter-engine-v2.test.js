@@ -65,7 +65,7 @@ test('XC planning hub adds comparison and source hierarchy while preserving live
   assert.ok(html.includes('https://nordicskiracer.com/'));
   assert.ok(html.includes('https://www.skimichigan.org/'));
   assert.ok(html.includes('https://xcski.chrisizworski.com/'));
-  assert.match(html, /does not claim any trail is groomed today/i);
+  assert.match(html, /does not report today's grooming status/i);
   assert.doesNotMatch(html, /<img\b/i, 'static photo regression: keep the page utility-first');
   assert.match(html, /<title>Michigan Cross-Country Skiing: Trails &amp; Live Conditions<\/title>/);
   assert.match(html, /<h1>Michigan Cross-Country Skiing<\/h1>/);
