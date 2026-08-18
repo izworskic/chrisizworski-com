@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "created": "2026-08-18",
+  "objective": "Build two winter traffic engines before demand arrives: Michigan Ice for water-specific ice-condition intent and Michigan XC for planning plus conditions handoff. Score improvements against usefulness, search capture, freshness, differentiation, trust, and retention instead of shipping isolated features.",
+  "scoring": {
+    "maxScore": 100,
+    "dimensions": [
+      {"key":"searchCapture","weight":15,"definition":"Own distinct Michigan winter queries with indexable, non-cannibalizing search surfaces."},
+      {"key":"decisionUsefulness","weight":20,"definition":"Help a visitor make the next real decision quickly rather than merely presenting data."},
+      {"key":"liveDataDepth","weight":15,"definition":"Use current authoritative observations where they materially improve the decision."},
+      {"key":"localCoverage","weight":15,"definition":"Cover enough Michigan waters/trails and local differences to create a meaningful long-tail moat."},
+      {"key":"freshnessTransparency","weight":10,"definition":"Show source, recency, limitations, and off-season/no-data states honestly."},
+      {"key":"differentiation","weight":10,"definition":"Compose data and local context into something stronger than a directory or raw feed."},
+      {"key":"trustSafety","weight":10,"definition":"Never convert weather/model signals into unsupported grooming or ice-safety claims."},
+      {"key":"crossToolRetention","weight":5,"definition":"Give a useful next step into the other winter product without keyword cannibalization."}
+    ],
+    "fatalPenalties": [
+      {"key":"unsafeIceClaim","penalty":100,"trigger":"Any claim that modeled, weather, satellite, camera, or remote data makes ice safe or verifies local thickness."},
+      {"key":"unsupportedGroomingClaim","penalty":100,"trigger":"Any claim that a trail is open/groomed today based only on weather or snow data rather than an operator/groomer report."},
+      {"key":"unownedDeploymentMutation","penalty":50,"trigger":"Changing the xcski production deployment without recovering its source and deployment ownership."},
+      {"key":"generatedIceHandEdit","penalty":30,"trigger":"Editing generated Michigan Ice HTML rather than its generator and regenerating outputs."},
+      {"key":"searchSurfaceBreak","penalty":30,"trigger":"Breaking canonical/indexability or creating competing URLs for the same primary intent."},
+      {"key":"falseSpatialPrecision","penalty":30,"trigger":"Presenting parent-Great-Lake satellite ice cover as a measurement of a specific bay or fishing location."},
+      {"key":"staleLivePresentation","penalty":15,"trigger":"Presenting live-looking data without timestamps, no-data handling, or source transparency."}
+    ]
+  },
+  "baseline": {
+    "sourceWindow":"Google Search Console export through 2026-08-13 plus repository/product audit on 2026-08-18",
+    "ice": {
+      "observed":{"clicks":0,"impressions":20,"averagePosition":57.5,"regionalSignals":[{"name":"Saginaw Bay","impressions":24,"averagePosition":49.58},{"name":"Houghton Lake","impressions":17,"averagePosition":45.24},{"name":"Grand Traverse Bay","clicks":1,"impressions":6,"averagePosition":44.33}]},
+      "scores":{"searchCapture":5,"decisionUsefulness":17,"liveDataDepth":14,"localCoverage":9,"freshnessTransparency":9,"differentiation":9,"trustSafety":10,"crossToolRetention":3},
+      "rawScore":76,
+      "penalties":0,
+      "effectiveScore":76,
+      "loss":24,
+      "largestLosses":["Search visibility is far behind the quality of the product.","Only six water-specific search surfaces exist despite strong local differences.","The next-step winter handoff is present but not prominent on water pages."]
+    },
+    "xc": {
+      "observed":{"liveUrl":"https://xcski.chrisizworski.com/","liveClicks":0,"liveImpressions":36,"liveAveragePosition":22.14,"liveTrailheads":48,"sourceOwnershipRecovered":false,"authorityUrl":"https://chrisizworski.com/michigan-cross-country-skiing/"},
+      "scores":{"searchCapture":9,"decisionUsefulness":15,"liveDataDepth":10,"localCoverage":13,"freshnessTransparency":8,"differentiation":7,"trustSafety":10,"crossToolRetention":4},
+      "rawScore":76,
+      "penalties":15,
+      "penaltyReason":"A 15-point governance/operability penalty is applied while the live XC source and deployment are not recovered. This is not a content-quality penalty; it prevents claiming the live product is fully maintainable.",
+      "effectiveScore":61,
+      "loss":39,
+      "largestLosses":["Live source/deployment ownership is not recovered.","Grooming truth remains fragmented across operators and community reports.","The planning hub needs a faster comparison layer and clearer source hierarchy."]
+    }
+  },
+  "mergeTargets": {
+    "ice":{"minimumEffectiveScore":88,"maximumLoss":12},
+    "xcControlledSurface":{"minimumEffectiveScore":78,"maximumLoss":22,"note":"The ownership penalty remains until the actual xcski source/deployment is recovered."},
+    "fatalPenaltyAllowed":false
+  },
+  "activeSeasonOutcomeTargets": {
+    "iceHubAveragePosition":25,
+    "xcLiveAveragePosition":15,
+    "xcAuthorityAveragePosition":20,
+    "principle":"Use preseason scores as build-quality gates. Search Console outcomes remain the real market test once winter demand arrives."
+  }
+}
