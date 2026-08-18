@@ -1,12 +1,12 @@
 {
-  "recordedAt": "2026-08-16",
+  "recordedAt": "2026-08-18",
   "band": [
     134,
     167
   ],
   "tools": 9,
-  "answerBlocks": 72,
-  "selfContained": 17,
+  "answerBlocks": 74,
+  "selfContained": 19,
   "pageDependent": 3,
   "toolsWithNoSurface": [],
   "note": "Ratchet baseline. self-contained may only rise, page-dependent may only fall."
