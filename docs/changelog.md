@@ -26,6 +26,32 @@ sentence reads as hedging, not care, and it buries the thing the reader came for
   location is what stops a reader taking one shoreline for another.
 169 tests, nine gates green.
 
+## 2026-08-18 — the weekend gap, and what the demand pull actually said
+Cluster: /northern-lights-michigan/ and /fall-color/.
+Chris asked for a "must search before heading up north" tool. Pulled the demand first, alphabet
+expanded across "up north michigan", "northern michigan weekend", "michigan weekend trip" and
+"things to check before": 603 suggestions, 343 Michigan-relevant.
+THE PRE-TRIP CHECKLIST CONCEPT HAS ALMOST NO SEARCH DEMAND. The "is it worth going / conditions"
+cluster returned FIVE suggestions and all five are plain weather-forecast queries owned by
+weather.com and the NWS. What people actually search in that space is road-trip routes (59
+suggestions) and vacation rentals, which belong to travel blogs and booking sites, not to a
+conditions tool. Same call already made on the Soo Locks hotel and campground clusters.
+WHAT THE PULL DID FIND: "this weekend" is a real recurring modifier, and "weekend" appeared ZERO
+times on the aurora page, which carries 45.7% of site impressions. Five variants ask for it
+directly: northern lights michigan this weekend, northern lights in michigan this weekend,
+northern lights this weekend in michigan, northern lights in northern michigan tonight, and
+northern lights up north michigan. That is the timeframe-phrasing miss, and it is now four for four
+alongside foliage, aurora borealis and Sault Ste. Marie locks.
+- Aurora gained a self-contained answer for the weekend question, 140 words. It says plainly that
+  the three-night outlook already covers Friday and Saturday from a Thursday read, that aurora
+  forecasting is only reliable one to three days out so a Monday read of the weekend is guesswork,
+  and that a strong Kp still needs darkness, clear sky and a low moon.
+- Fall colour gained the same for "where should I go this weekend", 141 words, listing all eight
+  region peak windows so the answer stands alone.
+- Nothing new was asserted on either page. The Kp thresholds, the forecast horizon, the dark-window
+  logic and the eight region windows were all already stated.
+169 tests, nine gates green. Self-contained answers 17 to 19.
+
 ## 2026-08-17 — Windy webcams, finished and made safe to ship before the key exists
 Cluster: lib/field-cameras.js, api/field-camera.js, public/assets/field-camera.js, plus eight
 camera placements across the beach, ice and fall colour clusters.
