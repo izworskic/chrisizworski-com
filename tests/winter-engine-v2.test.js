@@ -22,9 +22,11 @@ test('winter loss-function benchmark is a real merge gate', () => {
   assert.equal(score.baseline.ice.effectiveScore, 76);
   assert.equal(score.baseline.xc.effectiveScore, 61);
   assert.equal(score.candidate.ice.effectiveScore, 92);
-  assert.equal(score.candidate.xc.rawScore, 90);
-  assert.equal(score.candidate.xc.effectiveScore, 75);
-  assert.equal(score.candidate.xc.penalties, 15, 'XC ownership penalty must remain until source ownership is recovered');
+  assert.equal(score.candidate.xc.rawScore, 94);
+  assert.equal(score.candidate.xc.effectiveScore, 94);
+  assert.equal(score.candidate.xc.penalties, 0, 'XC orphan penalty should remain removed only while source and Git deployment ownership stay recovered');
+  assert.equal(score.candidate.xc.observed.sourceOwnershipRecovered, true);
+  assert.equal(score.candidate.xc.observed.gitDeploymentRecovered, true);
   assert.equal(score.candidate.ice.fatalPenalty, false);
   assert.equal(score.candidate.xc.fatalPenalty, false);
   assert.match(read('package.json'), /benchmark:winter/);
