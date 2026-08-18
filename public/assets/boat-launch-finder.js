@@ -70,10 +70,9 @@
   if(params.get('q'))q.value=params.get('q').slice(0,60);
 
   const conditionRank=card=>{
-    const text=$('.conditions:not(.loading)',card)?.textContent?.toLowerCase()||'';
-    if(/rough|20 mph|21 mph|22 mph|23 mph|24 mph|25 mph|26 mph|27 mph|28 mph|29 mph|30 mph/.test(text))return 0;
-    if(/moderate|marginal/.test(text))return 1;
-    if(/ft waves|mph wind/.test(text))return 2;
+    if($('.conditions:not(.loading) .cond.caution',card))return 0;
+    if($('.conditions:not(.loading) .cond.marginal',card))return 1;
+    if($('.conditions:not(.loading) .cond.good',card))return 2;
     return 1;
   };
   const protectionRank=card=>card.dataset.protection==='protected'?2:card.dataset.protection==='mixed'?1:0;
