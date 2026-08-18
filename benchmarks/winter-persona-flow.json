@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "baselineDate": "2026-08-18",
-  "status": "verification-pending",
+  "status": "verified-candidate",
   "goal": "Route winter visitors by intent from the main site into one clear planning path, while preserving distinct search ownership for evergreen planning and live conditions.",
   "baseline": {
     "score": 52,
