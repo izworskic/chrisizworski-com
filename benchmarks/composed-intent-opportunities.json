@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "1.0.0",
+  "created": "2026-08-18",
+  "principle": "Compose existing first-party and authoritative data around a real decision query. Create a new URL only when the query family has demonstrated demand and is not already owned by a stronger page.",
+  "newUrlGate": {
+    "requiresDemandEvidence": true,
+    "requiresUnownedQueryFamily": true,
+    "requiresDistinctUserDecision": true,
+    "forbidCannibalization": true
+  },
+  "queryFamilies": [
+    {
+      "id": "soo-locks-schedule-today",
+      "question": "What is the Soo Locks ship schedule today?",
+      "owner": "/soo-locks/",
+      "demandEvidence": {
+        "source": "Search Console baseline stored in growth-experiments.json",
+        "queries": [
+          {"query": "soo locks schedule", "impressions": 1153, "averagePosition": 8.09},
+          {"query": "soo locks schedule today", "impressions": 877, "averagePosition": 9.01},
+          {"query": "soo locks ship schedule", "impressions": 514, "averagePosition": 8.97},
+          {"query": "soo locks schedule tomorrow", "impressions": 144, "averagePosition": 8.87}
+        ]
+      },
+      "composition": ["official USACE status/hotline", "live AIS map", "named passage source links", "Great Lakes Gazette context"],
+      "newUrlAllowed": false,
+      "action": "Enrich and measure the existing Soo Locks owner page; do not create a competing schedule page."
+    },
+    {
+      "id": "aurora-tonight-michigan",
+      "question": "Will the northern lights be visible in Michigan tonight?",
+      "owner": "/northern-lights-michigan/",
+      "demandEvidence": {
+        "source": "Search Console baseline stored in growth-experiments.json",
+        "queries": [
+          {"query": "northern lights michigan tonight", "impressions": 448, "averagePosition": 9.72},
+          {"query": "northern lights upper peninsula tonight", "impressions": 187, "averagePosition": 7.36},
+          {"query": "northern lights tonight near me", "impressions": 194, "averagePosition": 7.91}
+        ]
+      },
+      "composition": ["NOAA space weather", "NWS cloud forecast", "USNO moon context", "regional viewing logic"],
+      "newUrlAllowed": false,
+      "action": "Protected running experiment. Do not alter the frozen search surface or create regional thin pages."
+    },
+    {
+      "id": "mackinac-bridge-conditions-today",
+      "question": "What are Mackinac Bridge conditions today?",
+      "owner": "/mackinac-bridge-live/",
+      "demandEvidence": {
+        "source": "Search Console baseline stored in growth-experiments.json",
+        "queries": [
+          {"query": "mackinac bridge conditions today live", "impressions": 21, "averagePosition": 10.62},
+          {"query": "mackinac bridge conditions", "impressions": 9, "averagePosition": 10.33},
+          {"query": "mackinac bridge current conditions", "impressions": 8, "averagePosition": 11.75},
+          {"query": "mackinac bridge traffic today", "impressions": 6, "averagePosition": 10.17}
+        ]
+      },
+      "composition": ["official Mackinac Bridge Authority status", "bridge cameras", "NWS weather/radar", "approach traffic and vehicle guidance"],
+      "newUrlAllowed": false,
+      "action": "Keep the current conditions page as the sole owner and measure its pending clean window."
+    },
+    {
+      "id": "great-lakes-ship-tracker",
+      "question": "Where are Great Lakes freighters right now?",
+      "owner": "/great-lakes-freighter-tracking/",
+      "demandEvidence": {
+        "source": "Search Console baseline stored in growth-experiments.json",
+        "page": {"impressions": 996, "clicks": 1, "averagePosition": 23.87},
+        "queries": [
+          {"query": "great lake freighter tracker", "impressions": 3, "averagePosition": 18},
+          {"query": "great lakes ships tracker", "impressions": 3, "averagePosition": 22.33},
+          {"query": "great lake ship tracker", "impressions": 3, "averagePosition": 28}
+        ]
+      },
+      "composition": ["live AIS map", "corridor switching", "nearby NOAA observations", "passage links", "current Gazette edition"],
+      "newUrlAllowed": false,
+      "action": "Treat the existing live tracker as the composition; start/repair its measurement record rather than redesigning it."
+    },
+    {
+      "id": "great-lakes-shipping-news-today",
+      "question": "What is happening with Great Lakes shipping today?",
+      "owner": "/great-lakes-gazette/",
+      "demandEvidence": {
+        "source": "Gazette experiment baseline",
+        "status": "landing page not isolated in the earlier visible Search Console export; establish the first complete post-release baseline before claiming search lift"
+      },
+      "composition": ["current dated newspaper", "live ship tracker", "Soo Locks view", "NOAA levels", "NWS marine weather", "archive and feeds"],
+      "newUrlAllowed": false,
+      "action": "The Gazette landing page owns shipping-news-today intent. Improve publication reliability and rendering, not URL count."
+    },
+    {
+      "id": "up-north-pre-trip",
+      "question": "What should I check before going up north in Michigan?",
+      "owner": "/up-north-michigan/",
+      "demandEvidence": {
+        "source": "2026-08-18 autocomplete audit recorded in PR 63/64 commit history",
+        "status": "low direct checklist demand; broad conditions queries are dominated by generic weather and travel intent"
+      },
+      "composition": ["aurora", "fall color", "Mackinac Bridge", "Great Lakes water", "Michigan ice"],
+      "newUrlAllowed": false,
+      "action": "Use primarily as an engagement/distribution composition and measure it before expanding the pattern."
+    }
+  ]
+}
