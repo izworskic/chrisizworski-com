@@ -79,6 +79,7 @@ const decisions = `
       <span class="seasonal-choice__detail">Narrow the directory before you reach the 48 trail cards.</span>
     </a>
   </div>
+  <p class="seasonal-desk__note"><a href="https://chrisizworski.com/michigan-cross-country-skiing/" data-seasonal-action="open-xc-guide" data-seasonal-persona="trip-planner" data-seasonal-placement="hero">Planning a trip instead of checking today? Open the statewide Michigan XC ski guide →</a></p>
 </section>`;
 
 const switcher = `
