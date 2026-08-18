@@ -1,5 +1,5 @@
 {
-  "ledgerVersion": "1.6.0",
+  "ledgerVersion": "1.7.0",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
   "measurementProtocol": {
@@ -155,7 +155,7 @@
     {
       "id": "2026-08-03-soo-schedule-intent",
       "path": "/soo-locks/",
-      "hypothesis": "A schedule-today title plus an honest three-step source flow\u2014BoatNerd named vessels, the official USACE hotline, and the live AIS map\u2014will better satisfy today and tomorrow schedule intent and lift CTR from 1.26% toward 2.5%.",
+      "hypothesis": "A schedule-today title plus an honest three-step source flow—BoatNerd named vessels, the official USACE hotline, and the live AIS map—will better satisfy today and tomorrow schedule intent and lift CTR from 1.26% toward 2.5%.",
       "primaryMetric": "Search Console page CTR",
       "baseline": {
         "impressions": 11919,
@@ -415,8 +415,13 @@
         "averagePosition": 15,
         "measurementHorizonDays": 90
       },
-      "status": "ready-for-review",
-      "releaseDate": null,
+      "status": "running",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {
+        "start": "2026-08-04",
+        "end": "2026-08-31"
+      },
+      "lastSearchFacingChangeDate": "2026-08-03",
       "decisionDate": null,
       "result": null,
       "stopCondition": "The supported AIS embed, corridor switching, nearby NOAA context, canonical, or non-JavaScript source links regress."
@@ -446,8 +451,21 @@
         "widgetEditionOpenRate": 0.02,
         "ctrAfter250Impressions": 0.02
       },
-      "status": "ready-for-review",
-      "releaseDate": null,
+      "status": "running",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {
+        "start": "2026-08-04",
+        "end": "2026-08-31"
+      },
+      "lastSearchFacingChangeDate": "2026-08-03",
+      "publicationQualityRepairs": [
+        {
+          "date": "2026-08-09",
+          "repository": "izworskic/great-lakes-gazette",
+          "change": "Shipping-section relevance and stale/background-waterway filtering were repaired without changing this landing page's title, description, H1, first answer, canonical, or indexability.",
+          "measurementNote": "Treat publication reliability and engagement after August 9 as the corrected newspaper pipeline. The landing-page search treatment itself remains the August 3 release."
+        }
+      ],
       "decisionDate": null,
       "result": null,
       "stopCondition": "A duplicate issue, wrong-date headline link, stale movement framed as current, source-health false positive, indexability change, or material live-tool performance regression occurs."
@@ -465,7 +483,7 @@
       },
       "baselineSource": "Google Search Console six-month export ending 2026-08-13",
       "treatment": {
-        "metaDescription": "Tunnel of Trees fall color typically peaks October 5\u201313. See the 2026 outlook, live regional conditions, and M-119 stops from Harbor Springs north.",
+        "metaDescription": "Tunnel of Trees fall color typically peaks October 5–13. See the 2026 outlook, live regional conditions, and M-119 stops from Harbor Springs north.",
         "preserved": [
           "title",
           "h1",
