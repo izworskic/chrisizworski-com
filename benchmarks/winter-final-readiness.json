@@ -1,7 +1,7 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "date": "2026-08-18",
-  "objective": "Finish the controlled winter system, preserve the unrecovered XC ownership penalty, measure the real visitor funnel, capture existing winter search intent without thin URLs, and then freeze feature work until observed data or a defect justifies reopening it.",
+  "objective": "Finish the controlled winter system with recovered XC source and deployment ownership, preserve the model-vs-grooming and Ice safety boundaries, measure the real visitor funnel, capture existing winter search intent without thin URLs, and then freeze feature work until observed data or a defect justifies reopening it.",
   "baseline": {"score": 72, "loss": 28},
   "target": {"minimumScore": 95, "maximumLoss": 5},
   "scoring": {
@@ -15,18 +15,18 @@
     }
   },
   "fatalPenalties": [
-    "claiming the live XC source/deployment is recovered without evidence",
-    "mutating the unrecovered xcski production application",
+    "claiming XC source or Git-to-deployment ownership without recorded recovery and deployment evidence",
+    "losing or bypassing the controlled xcski build/deployment path",
     "creating a new indexable winter landing URL that competes with the existing XC or Ice owners",
     "weakening the Michigan Ice safety boundary or turning remote data into a safety rating",
-    "turning weather/snow data into an unsupported grooming claim",
-    "adding cookies, localStorage, fingerprinting, or personal data to winter funnel measurement",
-    "continuing winter feature churn after the final hardening merge without a documented reopen trigger"
+    "turning weather or modeled snow data into an unsupported grooming, opening, safety, or skiability claim",
+    "adding cookies, localStorage, fingerprinting, geolocation, or personal data to winter funnel measurement",
+    "continuing winter feature churn after the 2026-27 ownership hardening without a documented reopen trigger"
   ],
   "reopenTriggers": [
     "production bug or broken feed",
     "safety or trust defect",
-    "recovered XC source/deployment ownership",
+    "deployment ownership or control regression",
     "in-season Search Console or first-party behavior data identifies a measured loss",
     "material authoritative upstream data change"
   ],
