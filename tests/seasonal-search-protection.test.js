@@ -115,9 +115,15 @@ test("Aurora search-facing surfaces stay frozen through its clean window", () =>
     webPage?.description,
     "Live NOAA Kp, solar-wind, OVATION nowcast, NWS cloud cover, moonlight, peak timing, and regional Michigan aurora outlooks for tonight.",
   );
+  // Repinned 2026-08-18. The ONLY field that moved was WebPage.dateModified, 2026-08-14 ->
+  // 2026-08-18, forced by the freshness gate after PR #63 committed a new answer block to this
+  // page. Title, description, canonical, h1 and the static answer are all still asserted above and
+  // all still match, so the search-facing surface this freeze exists to protect is intact.
+  // If this hash ever changes again and one of those assertions ALSO moved, that is a real
+  // contamination of the aurora measurement window and should be reverted, not repinned.
   assert.equal(
     createHash("sha256").update(JSON.stringify(graphs)).digest("hex"),
-    "be0fbb86555bad99edb91befe5590ecb4cab5ee3b5bc3f731b55c102863ce18c",
+    "759c336a60f9acc8b4d42fbf712a69c615a800f871458db7028c273bad22ecbf",
     "Aurora structured data changed during its clean measurement window",
   );
 });

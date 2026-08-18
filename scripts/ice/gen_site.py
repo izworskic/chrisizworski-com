@@ -277,6 +277,7 @@ def build_index():
         '</tr></thead><tbody id="board">' + rows + '</tbody></table></div>'
         '<p class="note" id="board-stamp">Loading.</p>'
 
+        '<p><em>Heading north? <a href="/up-north-michigan/">Check the rest of the trip before you drive</a>.</em></p>'
         '<h2>What this site does and does not tell you</h2>'
         '<p>There are three separate things people mean when they ask about ice conditions, and only two of them can '
         'be answered with data from a distance.</p>'
