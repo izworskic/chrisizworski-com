@@ -1,0 +1,49 @@
+{
+  "version": "1.0.0",
+  "baselineDate": "2026-08-18",
+  "status": "verified-candidate",
+  "goal": "Route winter visitors by intent from the main site into one clear planning path, while preserving distinct search ownership for evergreen planning and live conditions.",
+  "baseline": {
+    "score": 52,
+    "loss": 48,
+    "observed": {
+      "toolsHubHasIceCard": true,
+      "toolsHubHasXcCard": true,
+      "toolsHubXcPrimaryPointsToPlanningHub": false,
+      "toolsHubHasWinterTaskRouter": false,
+      "homeHasXcWinterEntry": false,
+      "homeHasIceWinterEntry": true,
+      "xcAndIceReciprocalLinks": true
+    }
+  },
+  "target": {
+    "minimumScore": 95,
+    "maximumLoss": 5,
+    "requirements": [
+      "tools hub routes skier, ice checker, winter-day planner and undecided visitor by task",
+      "main-domain XC planning hub owns the primary XC entry from Tools and structured data",
+      "live xcski remains an explicit secondary live-conditions destination",
+      "homepage exposes both XC planning and Michigan Ice without displacing the general tools CTA",
+      "XC and Ice continue to cross-link without creating a competing winter landing URL",
+      "persona CTA interactions remain measurable through the existing privacy-safe tool engagement tracker"
+    ]
+  },
+  "scoring": {
+    "maxScore": 100,
+    "categories": {
+      "toolsIntentRouter": 25,
+      "searchIntentOwnership": 20,
+      "homepageEntry": 15,
+      "clusterContinuation": 20,
+      "measurementAndAccessibility": 10,
+      "searchSafety": 10
+    }
+  },
+  "fatalPenalties": [
+    "a new indexable winter landing URL competes with /michigan-cross-country-skiing/ or /michigan-ice/",
+    "the Tools primary XC entry bypasses the main-domain planning hub",
+    "the live XC subdomain is removed from the flow",
+    "the Michigan Ice safety boundary is weakened",
+    "existing title, H1 or canonical ownership is changed just to make the routing layer work"
+  ]
+}
