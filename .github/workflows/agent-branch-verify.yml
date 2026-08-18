@@ -23,13 +23,13 @@ jobs:
         with:
           node-version: '22'
       - name: Apply winter source migration
-        run: node scripts/apply-winter-engine-v2.mjs
+        run: node scripts/run-winter-engine-migration.mjs
       - name: Regenerate Michigan Ice
         run: npm run generate:ice
       - name: Restore normal workflow and remove one-shot files
         run: |
           git show origin/main:.github/workflows/agent-branch-verify.yml > .github/workflows/agent-branch-verify.yml
-          rm -f .github/workflows/winter-engine-regenerate.yml scripts/apply-winter-engine-v2.mjs
+          rm -f .github/workflows/winter-engine-regenerate.yml scripts/apply-winter-engine-v2.mjs scripts/run-winter-engine-migration.mjs
       - name: Commit generated winter build
         run: |
           git config user.name "github-actions[bot]"
