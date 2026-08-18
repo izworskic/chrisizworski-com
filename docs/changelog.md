@@ -26,6 +26,17 @@ sentence reads as hedging, not care, and it buries the thing the reader came for
   location is what stops a reader taking one shoreline for another.
 169 tests, nine gates green.
 
+## 2026-08-18 — freshness stamps corrected after PR #64
+Housekeeping, no content change. Three pages (/tools/, buoys, mackinac) carried a dateModified up
+to eight days behind their real last content commit, plus the matching sitemap lastmod entries.
+CAUSE, and it is the process bug flagged in PR #64: scripts/stamp-freshness.mjs derives each date
+from the last CONTENT commit, so running it before committing the content stamps the previous
+commit's date. Run it AFTER `git add`/`git commit`, or run it, commit, run it again.
+/northern-lights-michigan/ is deliberately untouched: it is inside the clean measurement window of
+experiment 2026-08-03-aurora-resilient-answer through 2026-09-11 and its structured-data hash is
+pinned by tests/seasonal-search-protection.test.js.
+169 tests, nine gates green on clean main.
+
 ## 2026-08-18 — /up-north-michigan/, the pre-trip read, and two subdomains it should retire
 New hub page composing FIVE EXISTING TOOLS rather than adding a sixth data source: aurora odds,
 fall colour stage, Mackinac Bridge wind, Great Lakes water, and ice. Every value is fetched live
