@@ -22,7 +22,8 @@ test("Michigan XC authority hub owns planning intent and hands live intent to th
   assert.ok(html.includes('href="/michigan-ice/"'));
   assert.match(html, /Start with snow, then verify grooming/i);
   assert.match(html, /operator or groomer remains the final word/i);
-  assert.doesNotMatch(html, /groomed today|open today|excellent today/i);
+  assert.match(html, /does not label a trail “open,” “groomed today,” or “excellent” from weather alone/i);
+  assert.doesNotMatch(html, /(?:is|are|looks|rated) (?:open today|groomed today|excellent today)/i);
   assert.ok(html.includes('/_vercel/insights/script.js'));
   assert.ok(html.includes('/_vercel/speed-insights/script.js'));
   assert.equal(jsonLd(html).length, 1);
