@@ -6,10 +6,10 @@
     "index.html": "887db84dd0c46c9e6d1ad3358f7ad43d0b6b7e2744a7c3402d859bc9136e4ba4",
     "regions/burt-mullett.html": "0f98737ef6ea2f17120f058d853b7667dd3a3da1950464111fadcad95c2d5861",
     "regions/grand-traverse-bay.html": "56676a8b7ace34240f358640d62f7bef1eb758f567cb67d97c9edf57688d1b98",
-    "regions/houghton-lake.html": "1e5818b95d04577a47c031ec2214de7339ce8c7cde5588fbd21aa7196575f3a6",
+    "regions/houghton-lake.html": "a803c4e0bd01016cf7898e5b744a94b90e8872b99964553273988b9037e70eef",
     "regions/lake-st-clair.html": "4f375eedeabeca25eef641dfc5005fb0b6899dbb87318765203b5c0fcaf98092",
     "regions/little-bay-de-noc.html": "cb584dbbb9c920fff33820060ff8a025224b2da9195083412eb26346488f6fd0",
-    "regions/saginaw-bay.html": "3e6cb52117bc6ab52e515bd4c662334b63e0b27a48245c895ddb779beaf82340"
+    "regions/saginaw-bay.html": "30f91f70478850d1e6246be3a7f9cab9c3f5dab58917fa6ea91159a0ccaf51c0"
   },
   "outputDir": "public/michigan-ice"
 }

@@ -673,9 +673,7 @@ def build_region(r):
         camera_section = (
             '<section aria-labelledby="surface-camera-heading">'
             '<h2 id="surface-camera-heading">Current surface views</h2>'
-            '<p class="note">A camera can show open water or broad surface cover at its named location. It cannot '
-            'show ice thickness, ice quality, current seams, cracks, or whether the ice is safe. Treat it as visual '
-            'context for the drive, never as permission to step onto the ice.</p>'
+            '<p class="note">Live views of the surface, updated through the day.</p>'
             f'<div class="field-camera-grid">{camera_cards}</div>'
             '</section>')
 
