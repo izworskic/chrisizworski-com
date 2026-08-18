@@ -6,21 +6,16 @@ const path = require("node:path");
 const root = path.join(__dirname, "..");
 const html = readFileSync(path.join(root, "public/michigan-cross-country-skiing/index.html"), "utf8");
 
-test("XC guide uses only explicitly sourced real photography", () => {
-  assert.match(html, /Corsair Trail System, Michigan/);
-  assert.match(html, /U\.S\. National Archives \/ Federal Highway Administration/);
-  assert.match(html, /public domain/i);
-  assert.match(html, /Huron River inside Huron Meadows Metropark/);
-  assert.match(html, /Dwight Burdette/);
-  assert.match(html, /creativecommons\.org\/licenses\/by\/3\.0/);
-
-  const imageSources = [...html.matchAll(/<img[^>]+src="([^"]+)"/g)].map((m) => m[1]);
-  assert.equal(imageSources.length, 2);
-  assert.ok(imageSources.every((src) => src.startsWith("https://upload.wikimedia.org/")));
-  assert.ok(imageSources.every((src) => !src.includes("michigan.gov")));
+test("XC guide has no static still-photo treatment", () => {
+  assert.doesNotMatch(html, /<img\b/i);
+  assert.doesNotMatch(html, /<figure\b/i);
+  assert.doesNotMatch(html, /og:image/i);
+  assert.doesNotMatch(html, /primaryImageOfPage/i);
+  assert.doesNotMatch(html, /upload\.wikimedia\.org/i);
+  assert.doesNotMatch(html, /commons\.wikimedia\.org/i);
 });
 
-test("XC guide prefers official webcam links and truthful regional camera context", () => {
+test("XC guide keeps official webcam links and truthful regional camera context", () => {
   assert.ok(html.includes('href="https://www.forbushcorner.com/webcam.html"'));
   assert.match(html, /LIVE TRAIL-SIDE VIEW/);
   assert.match(html, /image is not copied or stored here/i);
@@ -31,7 +26,7 @@ test("XC guide prefers official webcam links and truthful regional camera contex
   assert.match(html, /Regional snow context only, not a view of Forbush Corner, Tisdale Triangle, or trail grooming/);
 });
 
-test("XC media pass preserves the measured search surface", () => {
+test("XC visual cleanup preserves the measured search surface", () => {
   assert.match(html, /<title>Michigan Cross-Country Skiing: Trails &amp; Live Conditions<\/title>/);
   assert.match(html, /<h1>Michigan Cross-Country Skiing<\/h1>/);
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/michigan-cross-country-skiing/">'));
