@@ -1,5 +1,5 @@
 (()=>{
-  'use strict';
+  'use strict';window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};
   const PATH='/michigan-boat-launches/';
   if(location.pathname!==PATH)return;
   const $=(s,r=document)=>r.querySelector(s);

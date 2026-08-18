@@ -1,5 +1,5 @@
 (()=>{
-  'use strict';
+  'use strict';window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};
   if(location.pathname!=='/great-lakes-shipwrecks/')return;
   const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
   const rows=$$('#wrBody tr'); if(!rows.length)return;

@@ -9,6 +9,8 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 18 2026: shipwreck explorer/search-trust upgrade.
+  "/great-lakes-shipwrecks/",
   // Aug 17 2026: additive Windy webcam context on selected beach, ice, and
   // fall-color guides. Images stay labeled with their actual camera location
   // and are explicitly not presented as safety or on-site-condition evidence.
