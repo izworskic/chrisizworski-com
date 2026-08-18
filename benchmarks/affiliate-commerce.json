@@ -1,6 +1,7 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "created": "2026-08-13",
+  "lastReconciled": "2026-08-18",
   "program": "Amazon Associates",
   "trackingId": "websitetools06-20",
   "measurement": {
@@ -22,6 +23,11 @@
     ],
     "primaryMetric": "Affiliate Clicks / Affiliate Module Views",
     "decisionRule": "Do not judge a placement before 250 module views or one complete 28-day window, whichever is later."
+  },
+  "releasePolicy": {
+    "sourceOfTruth": "A placement is released when the treatment is merged to main and the affected custom-domain route is confirmed to contain it. A Vercel preview success alone is validation, not release evidence.",
+    "releaseCommit": "2c52f007d28afbe41df28cd0ee129fcb3c380f51",
+    "releaseDate": "2026-08-13"
   },
   "compliance": {
     "disclosure": "As an Amazon Associate I earn from qualifying purchases.",
@@ -53,9 +59,12 @@
         "power-bank"
       ],
       "placement": "After Aurora Photography Basics",
-      "status": "pending-release",
-      "releaseDate": null,
-      "evaluationWindow": null,
+      "status": "running",
+      "releaseDate": "2026-08-13",
+      "evaluationWindow": {
+        "start": "2026-08-14",
+        "end": "2026-09-10"
+      },
       "target": {
         "moduleClickThroughRate": 0.03,
         "minimumModuleViews": 250
@@ -79,9 +88,12 @@
         "power-bank"
       ],
       "placement": "After Visiting the Soo Locks",
-      "status": "pending-release",
-      "releaseDate": null,
-      "evaluationWindow": null,
+      "status": "running",
+      "releaseDate": "2026-08-13",
+      "evaluationWindow": {
+        "start": "2026-08-14",
+        "end": "2026-09-10"
+      },
       "target": {
         "moduleClickThroughRate": 0.03,
         "minimumModuleViews": 250

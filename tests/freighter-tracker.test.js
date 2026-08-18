@@ -78,7 +78,7 @@ test("ship tracker structured data and internal discovery surfaces are aligned",
   assert.ok(llms.includes("## Great Lakes Ship Tracking"));
 });
 
-test("freighter experiment starts from the supplied Search Console baseline", () => {
+test("freighter experiment is recorded as the released August 3 treatment", () => {
   const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
   const experiment = ledger.experiments.find((item) => item.id === "2026-08-03-great-lakes-ship-tracker");
 
@@ -87,5 +87,7 @@ test("freighter experiment starts from the supplied Search Console baseline", ()
   assert.equal(experiment.target.impressionsMultiple, 3);
   assert.equal(experiment.target.ctr, 0.015);
   assert.equal(experiment.target.averagePosition, 15);
-  assert.equal(experiment.status, "ready-for-review");
+  assert.equal(experiment.status, "running");
+  assert.equal(experiment.releaseDate, "2026-08-03");
+  assert.deepEqual(experiment.evaluationWindow, { start: "2026-08-04", end: "2026-08-31" });
 });

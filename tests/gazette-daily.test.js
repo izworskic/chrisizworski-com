@@ -62,7 +62,7 @@ test("current Gazette headline is distributed across six relevant owned pages", 
   assert.ok(birding.includes('data-growth-cta="birding-great-lakes-gazette"'));
 });
 
-test("Gazette benchmark records unknown search metrics honestly and gates reliability", () => {
+test("Gazette benchmark records unknown search metrics honestly and the released experiment window", () => {
   const benchmark = JSON.parse(read("benchmarks/gazette-daily-growth.json"));
   const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
   const experiment = ledger.experiments.find((item) => item.id === "2026-08-03-great-lakes-gazette-daily");
@@ -73,6 +73,9 @@ test("Gazette benchmark records unknown search metrics honestly and gates reliab
   assert.equal(benchmark.targets.first28Days.dailyEditionAvailability, 1);
   assert.equal(benchmark.targets.first28Days.editionsWithAtLeastFiveHealthyAisPorts, 0.95);
   assert.ok(experiment);
-  assert.equal(experiment.status, "ready-for-review");
+  assert.equal(experiment.status, "running");
+  assert.equal(experiment.releaseDate, "2026-08-03");
+  assert.deepEqual(experiment.evaluationWindow, { start: "2026-08-04", end: "2026-08-31" });
   assert.equal(experiment.target.widgetEditionOpenRate, 0.02);
+  assert.ok(experiment.publicationQualityRepairs.some((item) => item.date === "2026-08-09"));
 });
