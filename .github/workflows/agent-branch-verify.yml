@@ -9,7 +9,7 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   verify:
@@ -21,17 +21,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Apply final winter migration
-        if: ${{ github.ref == 'refs/heads/agent/winter-final-hardening' && !contains(github.event.head_commit.message, '[winter-final]') }}
-        run: node scripts/apply-winter-final-hardening.mjs
       - name: Run full repository gate
         run: npm run verify:all
-      - name: Commit durable winter result
-        if: ${{ github.ref == 'refs/heads/agent/winter-final-hardening' && !contains(github.event.head_commit.message, '[winter-final]') }}
-        run: |
-          git config user.name "winter-finalization-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add public/michigan-cross-country-skiing/index.html public/assets/michigan-xc-skiing.css scripts/ice/gen_chrome.py scripts/ice/gen_site.py public/michigan-ice benchmarks/winter-engine-scorecard.json
-          git diff --cached --quiet && exit 0
-          git commit -m "[winter-final] Apply final winter hardening"
-          git push origin HEAD:agent/winter-final-hardening
