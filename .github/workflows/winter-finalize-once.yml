@@ -1,0 +1,34 @@
+name: Winter finalization one-shot
+
+on:
+  push:
+    branches:
+      - agent/winter-final-hardening
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: ${{ !contains(github.event.head_commit.message, '[winter-final]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/winter-final-hardening
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Apply controlled finalization
+        run: node scripts/apply-winter-final-hardening.mjs
+      - name: Verify complete repository
+        run: npm run verify:all
+      - name: Commit durable winter result
+        run: |
+          git config user.name "winter-finalization-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add public/michigan-cross-country-skiing/index.html public/assets/michigan-xc-skiing.css scripts/ice/gen_chrome.py scripts/ice/gen_site.py public/michigan-ice benchmarks/winter-engine-scorecard.json
+          git diff --cached --quiet && exit 0
+          git commit -m "[winter-final] Apply final winter hardening"
+          git push origin HEAD:agent/winter-final-hardening
