@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1.0.0",
+  "created": "2026-08-18",
+  "purpose": "Keep release bookkeeping consistent when Vercel preview status and the custom-domain production path use different deployment labels.",
+  "releaseEvidenceOrder": [
+    "merged main commit containing the treatment",
+    "live custom-domain verification of the affected route or behavior",
+    "deployment/check status as supporting validation"
+  ],
+  "rules": {
+    "previewIsNotRelease": true,
+    "vercelProductionTargetIsNotSoleSourceOfTruth": true,
+    "mergeAloneIsNotSufficientWhenLiveVerificationIsPossible": true,
+    "releaseDate": "Use the date the merged treatment is confirmed on the live custom-domain route. If confirmation occurs the same day as merge, use the merge date.",
+    "searchExperimentWindow": "Begin the first complete day after release and preserve the repository experiment freeze rules.",
+    "agentCoordination": "Before changing a release record, refresh open PRs and recent main commits so another agent's in-flight work is not mislabeled as released."
+  },
+  "knownTopology": {
+    "repository": "izworskic/chrisizworski-com",
+    "defaultBranch": "main",
+    "customDomain": "https://chrisizworski.com",
+    "vercelRole": "Preview and deployment validation are visible in GitHub checks; the Vercel target=production label must not be used by itself to date custom-domain releases."
+  }
+}
