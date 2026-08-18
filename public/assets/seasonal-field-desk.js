@@ -79,9 +79,23 @@
     modules.forEach(function (module) { observer.observe(module); });
   }
 
+  function loadWinterFunnel() {
+    if (window.location.pathname.indexOf("/michigan-ice/") !== 0) return;
+    if (document.querySelector('script[data-winter-funnel-loader]')) return;
+    var funnel = document.createElement("script");
+    funnel.src = "/assets/winter-funnel.js";
+    funnel.defer = true;
+    funnel.dataset.winterFunnelLoader = "ice";
+    document.body.appendChild(funnel);
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", observeModules);
+    document.addEventListener("DOMContentLoaded", function () {
+      observeModules();
+      loadWinterFunnel();
+    });
   } else {
     observeModules();
+    loadWinterFunnel();
   }
 })();
