@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "created": "2026-08-18",
+  "objective": "Build a winter traffic engine before seasonal demand arrives while keeping live-condition claims source-safe.",
+  "source": {
+    "type": "Google Search Console export",
+    "file": "chrisizworski.com-Performance-on-Search-2026-08-15",
+    "windowCaution": "The observed values are preseason/off-season signals. They are evidence of early discovery, not a forecast of winter traffic."
+  },
+  "observed": {
+    "xcLive": {
+      "url": "https://xcski.chrisizworski.com/",
+      "clicks": 0,
+      "impressions": 36,
+      "averagePosition": 22.14,
+      "sourceOwnership": "The current main repository does not own the deployed XC source. The adapter remains fail-closed until that source is recovered."
+    },
+    "iceHub": {
+      "url": "https://chrisizworski.com/michigan-ice/",
+      "clicks": 0,
+      "impressions": 20,
+      "averagePosition": 57.5
+    },
+    "iceRegionSignals": [
+      {"path":"/michigan-ice/regions/saginaw-bay.html","clicks":0,"impressions":24,"averagePosition":49.58},
+      {"path":"/michigan-ice/regions/houghton-lake.html","clicks":0,"impressions":17,"averagePosition":45.24},
+      {"path":"/michigan-ice/regions/grand-traverse-bay.html","clicks":1,"impressions":6,"averagePosition":44.33}
+    ]
+  },
+  "newAuthoritySurface": {
+    "path": "/michigan-cross-country-skiing/",
+    "intent": "Broad Michigan XC trail planning and discovery",
+    "liveIntentOwner": "https://xcski.chrisizworski.com/",
+    "antiCannibalizationRule": "The main-domain guide must not claim to be the live grooming report. The live XC app owns conditions-today intent; the guide owns statewide planning intent.",
+    "releaseStatus": "ready-for-release"
+  },
+  "preseasonTargets": {
+    "by2026-10-15": [
+      "Authority hub indexed",
+      "Winter sitemap discovered",
+      "XC guide receiving query impressions before regular snow season"
+    ],
+    "by2026-11-15": [
+      "Establish a Search Console baseline for the new authority hub",
+      "Recover or identify ownership of the xcski production source",
+      "Confirm live XC-to-guide and guide-to-live handoff works in production"
+    ],
+    "activeSeason": {
+      "xcAuthorityAveragePositionTarget": 20,
+      "iceHubAveragePositionTarget": 25,
+      "decisionPrinciple": "Optimize for qualified clicks and useful second-page movement, not raw impressions alone."
+    }
+  },
+  "competitiveGap": "Michigan DNR points skiers to multiple third-party condition-report sources. The product opportunity is a single Michigan-first decision flow that uses snow as a regional signal and operator grooming reports as the trail-level truth.",
+  "safetyBoundary": "Weather, snow depth, freezing degree days and satellite ice cover are context. They never become an unsupported claim that a ski trail is groomed or that ice is safe."
+}
