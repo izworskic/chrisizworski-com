@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "created": "2026-08-18",
   "objective": "Build two winter traffic engines before demand arrives: Michigan Ice for water-specific ice-condition intent and Michigan XC for planning plus conditions handoff. Score improvements against usefulness, search capture, freshness, differentiation, trust, and retention instead of shipping isolated features.",
   "scoring": {
@@ -46,9 +46,42 @@
       "largestLosses":["Live source/deployment ownership is not recovered.","Grooming truth remains fragmented across operators and community reports.","The planning hub needs a faster comparison layer and clearer source hierarchy."]
     }
   },
+  "candidate": {
+    "ice": {
+      "scores":{"searchCapture":10,"decisionUsefulness":20,"liveDataDepth":14,"localCoverage":13,"freshnessTransparency":10,"differentiation":10,"trustSafety":10,"crossToolRetention":5},
+      "rawScore":92,
+      "penalties":0,
+      "effectiveScore":92,
+      "loss":8,
+      "fatalPenalty":false,
+      "evidence":[
+        "Generator adds a statewide six-water behavior matrix so visitors compare depth/current/exposure before comparing numbers.",
+        "Every generated water page receives three unique local decision questions grounded in that water's existing behavior and data limits.",
+        "Existing ACIS, NWS, GLERL, cameras, timestamps, off-season states, and safety language remain intact.",
+        "Every water page and the hub gain an explicit winter handoff to the XC planner/live snow signal without creating a competing ice URL.",
+        "Generated outputs remain checksum-protected and dateModified advances through the generator rather than a hand edit."
+      ]
+    },
+    "xc": {
+      "scores":{"searchCapture":11,"decisionUsefulness":20,"liveDataDepth":10,"localCoverage":15,"freshnessTransparency":10,"differentiation":9,"trustSafety":10,"crossToolRetention":5},
+      "rawScore":90,
+      "penalties":15,
+      "penaltyReason":"Live xcski source/deployment ownership is still not recovered, so the governance/operability penalty remains in full.",
+      "effectiveScore":75,
+      "loss":25,
+      "fatalPenalty":false,
+      "evidence":[
+        "The authority hub adds an eight-trail comparison table with technique/amenity distinctions and a direct next-source path.",
+        "A three-level source hierarchy separates operator/groomer truth, regional/community reporting, and weather/snow screening.",
+        "The 48-trail live tool remains the conditions owner and is linked prominently; the main-domain page does not make unsupported live grooming claims.",
+        "Grayling regional camera and Forbush trail-side webcam remain as visual context without static filler imagery.",
+        "Michigan Ice and XC remain cross-linked as complementary winter decisions rather than competing search pages."
+      ]
+    }
+  },
   "mergeTargets": {
-    "ice":{"minimumEffectiveScore":88,"maximumLoss":12},
-    "xcControlledSurface":{"minimumEffectiveScore":78,"maximumLoss":22,"note":"The ownership penalty remains until the actual xcski source/deployment is recovered."},
+    "ice":{"minimumRawScore":88,"minimumEffectiveScore":88,"maximumLoss":12},
+    "xcControlledSurface":{"minimumRawScore":90,"minimumEffectiveScore":75,"maximumLoss":25,"note":"The ownership penalty remains until the actual xcski source/deployment is recovered."},
     "fatalPenaltyAllowed":false
   },
   "activeSeasonOutcomeTargets": {
