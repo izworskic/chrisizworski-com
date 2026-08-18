@@ -8,7 +8,7 @@ from gen_chrome import (head, header, FOOTER, SAFETY_BANNER, breadcrumb,
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = pathlib.Path(os.environ.get("ICE_OUT", str(ROOT / "public" / "michigan-ice")))
 (OUT / "regions").mkdir(parents=True, exist_ok=True)
-ICE_ROOT_DATE_MODIFIED = "2026-08-17"
+ICE_ROOT_DATE_MODIFIED = "2026-08-18"
 
 REGIONS = [
     dict(
@@ -150,6 +150,69 @@ REGIONS = [
     ),
 ]
 
+REGION_DECISIONS = {
+    "saginaw-bay": {
+        "behavior": "Shallow, wind-exposed Great Lakes bay that can respond quickly to both cold and thaw.",
+        "watch": "Wind direction, working cracks, and rapid nearshore-to-offshore differences.",
+        "remote": "Accumulated cold + Lake Huron satellite context + surface cameras.",
+        "questions": [
+            ("Why can Saginaw Bay ice conditions change so quickly?", "The bay is shallow enough to lose heat quickly, but its wide open fetch also lets wind move and fracture a sheet. A cold total can describe the season while today's wind changes the trip decision in hours."),
+            ("What does the Lake Huron ice percentage tell me about Saginaw Bay?", "It is parent-lake context only. NOAA's lake-wide Lake Huron number does not measure the bay, a shoreline access, a crack, or the ice where an angler plans to stand."),
+            ("What should I check after the cold number?", "Check current wind direction and the available surface cameras, then verify conditions locally. On the west shore, offshore wind is a specific concern even after a long cold stretch."),
+        ],
+    },
+    "houghton-lake": {
+        "behavior": "Large but relatively shallow inland lake that generally responds to sustained cold earlier than deeper northern basins.",
+        "watch": "Thaw cycles, local variation, and concentrated shanty or vehicle traffic.",
+        "remote": "Accumulated cold + nearby weather + surface camera; no satellite lake-ice product.",
+        "questions": [
+            ("Why does Houghton Lake often freeze before deeper northern lakes?", "Its relatively shallow water gives up stored heat faster than a deep basin. That makes accumulated cold especially useful for screening the season, but it still does not measure local ice."),
+            ("Is there satellite ice coverage for Houghton Lake?", "No comparable NOAA lake-ice product exists for this inland lake. This report intentionally uses accumulated cold, nearby weather, and a surface view without pretending they are a thickness measurement."),
+            ("What can change Houghton Lake conditions fastest?", "Warm spells and heavy use matter. A prior cold total remains historical context after a thaw, and concentrated traffic can stress one part of a sheet differently from another."),
+        ],
+    },
+    "lake-st-clair": {
+        "behavior": "Shallow lake inside a flowing river system, so current is part of the ice problem everywhere.",
+        "watch": "Current, channels, river influence, and shipping-related open water.",
+        "remote": "Accumulated cold + Lake St. Clair satellite context + current weather.",
+        "questions": [
+            ("Why is Lake St. Clair ice different from a normal inland lake?", "Water is continually moving through the lake from Lake Huron toward the Detroit River. Current can undermine ice from below, so a cold winter does not remove the local flow hazard."),
+            ("Why do anglers watch Anchor Bay first?", "Anchor Bay is away from the strongest main flow and is the traditional hard-water area. That is a relative geographic pattern, not a statement that the ice there is safe."),
+            ("What should I distrust most on Lake St. Clair?", "Uniform-looking surface conditions. Current, channels, river influence, and freighter tracks can make nearby areas behave differently even when the air temperature is the same."),
+        ],
+    },
+    "little-bay-de-noc": {
+        "behavior": "Protected northern Lake Michigan bay with a long cold season and important river-mouth and outer-bay differences.",
+        "watch": "Escanaba and Ford river mouths plus wind-driven movement toward the outer bay.",
+        "remote": "Accumulated cold + Lake Michigan satellite context + current weather.",
+        "questions": [
+            ("Why does Little Bay de Noc usually build winter ice earlier than southern Michigan waters?", "Northern latitude and the protected bay shape allow it to accumulate cold earlier and hold it longer. The inner and outer bay still behave differently."),
+            ("Where are the obvious remote-data blind spots?", "River mouths and local current. A Lake Michigan cover percentage and an Escanaba weather station cannot describe the ice beside the Escanaba or Ford river mouths."),
+            ("What can change the outer bay quickly?", "Wind. Where Little Bay de Noc opens toward Green Bay, the sheet is more exposed to movement than the protected inner bay."),
+        ],
+    },
+    "grand-traverse-bay": {
+        "behavior": "Deep Great Lakes bay with large thermal mass; protected shallow pockets can behave very differently from the main basin.",
+        "watch": "Depth and the difference between protected pockets and the open main basin.",
+        "remote": "Accumulated cold + Lake Michigan satellite context + current weather.",
+        "questions": [
+            ("Why is Grand Traverse Bay slow to freeze?", "The main basin is very deep and stores far more heat than a shallow inland lake or bay. Sustained cold has to overcome that thermal mass before broad ice can develop."),
+            ("Which parts are worth watching first in a hard winter?", "The traditional early-watch areas are protected, shallower water such as Suttons Bay, Bowers Harbor, and the far south end of the west arm. That is a freeze pattern, not a safety rating."),
+            ("Why can the Lake Michigan ice percentage mislead here?", "The lake-wide number includes far-northern and shallow areas elsewhere. It is useful regional context but cannot tell you whether a specific Grand Traverse Bay pocket has ice."),
+        ],
+    },
+    "burt-mullett": {
+        "behavior": "Two deep inland lakes in a connected waterway, so depth delays freeze-up and connecting flow creates local uncertainty.",
+        "watch": "Indian River and other current or inlet influence between the basins.",
+        "remote": "Accumulated cold + nearby weather; no satellite lake-ice product.",
+        "questions": [
+            ("Why do Burt and Mullett Lakes freeze later than Houghton Lake?", "They are deeper and hold more heat, so they need a longer cold run before broad freeze-up. The connected waterway adds moving-water complications on top of the depth."),
+            ("Is there satellite ice coverage for Burt or Mullett Lake?", "No comparable NOAA lake-ice product exists for these inland lakes. The remote screen is accumulated cold and nearby weather, not observed local ice."),
+            ("What is the clearest local hazard in this chain?", "Moving water between the lakes. The Indian River connection and other inlet or spring influence can create conditions that do not match the open basin."),
+        ],
+    },
+}
+
 (pathlib.Path(__file__).resolve().parent / "regions.json").write_text(json.dumps(REGIONS, indent=1))
 
 
@@ -221,6 +284,13 @@ def build_index():
         f'data-seasonal-persona="water-specific-angler" data-seasonal-placement="water-picker">'
         f'{r["short"]}</a>' for r in REGIONS)
 
+    comparison_rows = "".join(
+        f'<tr><td><a href="/michigan-ice/regions/{r["slug"]}.html">{r["short"]}</a></td>'
+        f'<td>{REGION_DECISIONS[r["slug"]]["behavior"]}</td>'
+        f'<td>{REGION_DECISIONS[r["slug"]]["watch"]}</td>'
+        f'<td>{REGION_DECISIONS[r["slug"]]["remote"]}</td></tr>'
+        for r in REGIONS)
+
     body = (
         header("/") +
         '<h1 class="page-title">Michigan ice conditions today</h1>'
@@ -271,6 +341,11 @@ def build_index():
         '<div class="grid three">' + accs + '</div>'
         '<p class="note" id="acc-stamp">Loading daily temperature records.</p>'
 
+        '<h2 id="water-behavior">Which Michigan ice water behaves like what?</h2>'
+        '<p>Before comparing numbers, compare the water. Depth, current, exposure, and the kind of remote data available determine what the same cold spell can mean in six different places.</p>'
+        '<div class="tbl-wrap"><table><thead><tr><th>Water</th><th>Why it behaves differently</th><th>What can change the trip</th><th>Remote screen available</th></tr></thead><tbody>' + comparison_rows + '</tbody></table></div>'
+        '<p class="note">This matrix is a decision shortcut, not a ranking and never a safety rating. Open the water page for its current readings, camera availability, and data limits.</p>'
+
         '<h2>Conditions by water</h2>'
         '<div class="tbl-wrap"><table><thead><tr>'
         '<th>Water</th><th>Season cold</th><th>Air temp</th><th>Wind</th><th>Lake ice</th><th>Stage</th>'
@@ -278,6 +353,7 @@ def build_index():
         '<p class="note" id="board-stamp">Loading.</p>'
 
         '<p><em>Heading north? <a href="/up-north-michigan/">Check the rest of the trip before you drive</a>.</em></p>'
+        '<div class="card"><div class="kicker">Winter companion</div><p style="margin:0"><strong>Snow instead of ice?</strong> <a href="https://chrisizworski.com/michigan-cross-country-skiing/">Compare Michigan XC ski trails</a> or open <a href="https://xcski.chrisizworski.com/">live XC conditions</a>. The ski system treats snow as a regional signal and operator grooming reports as trail truth.</p></div>'
         '<h2>What this site does and does not tell you</h2>'
         '<p>There are three separate things people mean when they ask about ice conditions, and only two of them can '
         'be answered with data from a distance.</p>'
@@ -640,12 +716,17 @@ def build_region(r):
          "description": f"Accumulated freezing degree days, current temperature and wind, and ice context for "
                         f"{r['name']}.",
          "isPartOf": {"@id": SITE + "/#website"},
+         "dateModified": ICE_ROOT_DATE_MODIFIED,
          "inLanguage": "en-US", "author": {"@id": PERSON_ID},
          "breadcrumb": {"@id": url + "#breadcrumb"}},
         breadcrumb([("Michigan Ice Report", SITE + "/"), (r["name"], url)]),
         PERSON_NODE,
     ]}
     notes = "".join(f'<div class="tile"><h3>{t}</h3><p>{d}</p></div>' for t, d in r["notes"])
+    question_cards = "".join(
+        f'<div class="tile"><h3>{question}</h3><p>{answer}</p></div>'
+        for question, answer in REGION_DECISIONS[r["slug"]]["questions"])
+
     others = "".join(
         f'<div class="tile"><h3><a href="/michigan-ice/regions/{o["slug"]}.html">{o["short"]}</a></h3>'
         f'<p>{o["blurb"][:130]}...</p></div>'
@@ -714,6 +795,12 @@ def build_region(r):
 
         '<h2>What to know before you go</h2>'
         f'<div class="grid two">{notes}</div>'
+
+        f'<h2>{r["name"]} ice questions</h2>'
+        '<p>These answers describe how this water behaves and what remote data can or cannot tell you. They do not verify local thickness or safety.</p>'
+        f'<div class="grid two">{question_cards}</div>'
+        '<div class="card"><div class="kicker">Winter companion</div><p style="margin:0 0 8px"><strong>Planning a snow day instead of a hard-water trip?</strong> Compare Michigan cross-country ski regions, then use the live XC tool for the current snow signal.</p>'
+        '<p style="margin:0"><a href="https://chrisizworski.com/michigan-cross-country-skiing/">Michigan XC ski planner</a> &middot; <a href="https://xcski.chrisizworski.com/">Live XC conditions</a></p></div>'
 
         '<h2>The other waters</h2>'
         '<p>These six waters behave differently enough that a plan built for one can be wrong on another. Depth, '
