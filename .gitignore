@@ -3,4 +3,5 @@ node_modules/
 audit/live/snapshot/
 audit/preview/snapshot/
 audit/*.tmp
-
+__pycache__/
+*.pyc
