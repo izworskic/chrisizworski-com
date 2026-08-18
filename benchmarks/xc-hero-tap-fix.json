@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "date": "2026-08-18",
+  "issue": "The XC hero's Compare Michigan trails and Check Michigan ice actions were not reliably tappable on mobile.",
+  "fix": [
+    "decorative hero pseudo-element cannot receive pointer events",
+    "hero action layer is explicitly raised above decorative content",
+    "hero buttons opt into manipulation touch behavior",
+    "trail comparison target reserves scroll space below the sticky header"
+  ],
+  "guardrail": "tests/xc-hero-actions.test.js"
+}
