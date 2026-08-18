@@ -1,0 +1,67 @@
+{
+  "version": "1.0.0",
+  "created": "2026-08-18",
+  "source": {
+    "type": "Google Search Console export",
+    "file": "chrisizworski.com-Performance-on-Search-2026-08-15",
+    "note": "Baselines are observed search data, not traffic forecasts. Start each 28-day evaluation window on the first complete day after production release."
+  },
+  "strategy": "Build a 365-day transportation traffic engine without disturbing the pending Mackinac Bridge flagship conditions treatment.",
+  "experiments": [
+    {
+      "id": "mackinac-toll-price-led-ctr",
+      "path": "/mackinac-bridge-tolls/",
+      "status": "ready-for-release",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "hypothesis": "Leading the snippet and H1 with the current $4 passenger-car answer will capture existing page-one toll intent better than leading with generic calculator language.",
+      "baseline": {
+        "impressions": 637,
+        "clicks": 1,
+        "ctr": 0.00157,
+        "averagePosition": 8.62
+      },
+      "target": {
+        "ctr": 0.015,
+        "averagePositionMax": 10
+      },
+      "treatment": {
+        "title": "Mackinac Bridge Toll: $4 Car Fare & Calculator",
+        "h1": "Mackinac Bridge Toll: Current Fare & Calculator",
+        "firstAnswer": "A standard two-axle passenger car is $4 one way."
+      },
+      "stopCondition": "Official Mackinac Bridge Authority fare changes, calculator formula regresses, canonical changes, or average position falls materially below page one."
+    },
+    {
+      "id": "gordie-howe-wait-camera-ctr",
+      "path": "/gordie-howe-bridge-wait-time/",
+      "status": "ready-for-release",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "hypothesis": "Pairing official wait-time intent with the truthful live approach-camera intent already earning clicks will lift overall CTR while preserving the page's border-wait utility.",
+      "baseline": {
+        "impressions": 498,
+        "clicks": 17,
+        "ctr": 0.0341,
+        "averagePosition": 10.49
+      },
+      "supportingQuery": {
+        "query": "gordie howe bridge live camera",
+        "impressions": 79,
+        "clicks": 4,
+        "ctr": 0.0506,
+        "averagePosition": 9.75
+      },
+      "target": {
+        "ctr": 0.045,
+        "averagePositionMax": 11
+      },
+      "truthBoundary": "The Gordie Howe operator currently says its own live camera feeds are coming soon. The page must label the displayed Ontario 511 image as a live approach camera, never as an operator bridge camera.",
+      "stopCondition": "Official wait-time retrieval regresses, the Ontario 511 camera fails persistently, operator camera availability changes without the copy being updated, or the canonical changes."
+    }
+  ],
+  "protectedSurface": {
+    "path": "/mackinac-bridge-live/",
+    "reason": "Existing pending-clean-window conditions experiment; this branch must not change its title, description, H1, direct-answer block, schema, canonical or indexability."
+  }
+}
