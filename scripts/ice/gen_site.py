@@ -8,7 +8,7 @@ from gen_chrome import (head, header, FOOTER, SAFETY_BANNER, breadcrumb,
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = pathlib.Path(os.environ.get("ICE_OUT", str(ROOT / "public" / "michigan-ice")))
 (OUT / "regions").mkdir(parents=True, exist_ok=True)
-ICE_ROOT_DATE_MODIFIED = "2026-08-15"
+ICE_ROOT_DATE_MODIFIED = "2026-08-17"
 
 REGIONS = [
     dict(
@@ -16,6 +16,7 @@ REGIONS = [
         acis="KMBS", acisName="Saginaw MBS International Airport",
         nws="KMBS", lake="huron", lakeName="Lake Huron",
         access="Linwood, Pinconning, Quanicassee, Sebewaing, Bay Port, Caseville",
+        cameras=["windy-bay-city-yacht-club", "windy-caseville"],
         blurb=("The largest and most heavily fished ice sheet in Michigan, and the one that puts the most people in "
                "the water. Saginaw Bay is shallow, wide open to wind, and it freezes and breaks up faster than almost "
                "anything else in the state. That combination is exactly what makes it productive and exactly what "
@@ -42,6 +43,7 @@ REGIONS = [
         acis="KHTL", acisName="Houghton Lake, Roscommon County",
         nws="KHTL", lake=None, lakeName=None,
         access="Houghton Lake town accesses, Prudenville, North Shore",
+        cameras=["windy-houghton-lake"],
         blurb=("The largest inland lake in Michigan and the center of the state's ice fishing culture. Shallow, "
                "wind exposed for an inland lake, and surrounded by more shanties in February than anywhere else "
                "in Michigan."),
@@ -661,6 +663,22 @@ def build_region(r):
                       'only honest signal available from a distance is accumulated cold, and that is all this page '
                       'claims to show.')
 
+    cameras = r.get("cameras", [])
+    camera_section = ""
+    if cameras:
+        camera_cards = "".join(
+            f'<div class="field-camera" data-field-camera="{camera}">'
+            '<p class="camera-out">Loading the camera...</p></div>'
+            for camera in cameras)
+        camera_section = (
+            '<section aria-labelledby="surface-camera-heading">'
+            '<h2 id="surface-camera-heading">Current surface views</h2>'
+            '<p class="note">A camera can show open water or broad surface cover at its named location. It cannot '
+            'show ice thickness, ice quality, current seams, cracks, or whether the ice is safe. Treat it as visual '
+            'context for the drive, never as permission to step onto the ice.</p>'
+            f'<div class="field-camera-grid">{camera_cards}</div>'
+            '</section>')
+
     body = (
         header("/") +
         f'<h1 style="font-size:30px;margin:22px 0 0">{r["name"]} ice conditions</h1>'
@@ -689,6 +707,8 @@ def build_region(r):
         '<p style="margin:14px 0 0;font-size:15.5px" id="r-read">Loading.</p>'
         '<p class="note" id="r-stamp"></p>'
         '</div>'
+
+        + camera_section +
 
         f'<h2>What this water is like</h2><p>{r["detail"]}</p>'
         f'<p class="note">{cover_note}</p>'

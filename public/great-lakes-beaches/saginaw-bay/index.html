@@ -15,6 +15,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="/assets/field-camera.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -43,7 +44,7 @@
       "author": {
         "@id": "https://chrisizworski.com/#person"
       },
-      "dateModified": "2026-08-10",
+      "dateModified": "2026-08-17",
       "inLanguage": "en-US"
     },
     {
@@ -218,6 +219,13 @@ figure.fig.hero{margin:6px 0 28px}
 <p>These beaches are an underrated set. Most national "best Great Lakes beaches" lists barely mention them. The crowds reflect that: even at peak summer, Saginaw Bay beaches see a fraction of the traffic Holland or Grand Haven see. For families with small children, for boaters who want to swim near the launch, or for anyone who prefers warm water over the photogenic-but-cold Lake Michigan dune beaches, this is the right stretch.</p>
 <p>Most of the beaches below sit within a 45-minute drive of Bay City. They are best understood by lifelong residents of the area, not by guidebook writers passing through. The notes below try to capture the local knowledge: what the water looks like in June versus August, what happens with a strong north wind, where the walleye boats stage from each launch (for the corresponding launch page).</p>
 
+<h2 class="sh" id="bay-cameras">Live Views Across Saginaw Bay</h2>
+<p>These two views bracket the bay from Essexville and the Caseville side. They help answer what the water and sky broadly look like right now, but they do not show every beach, posted flags, water quality, or conditions between the cameras.</p>
+<div class="field-camera-grid">
+  <div class="field-camera" data-field-camera="windy-bay-city-yacht-club"><p class="camera-out">Loading the Essexville camera...</p></div>
+  <div class="field-camera" data-field-camera="windy-caseville"><p class="camera-out">Loading the Caseville camera...</p></div>
+</div>
+
 
 <div id="locmap-wrap">
   <div id="locmap" aria-label="Map of beach locations colored by current wave conditions"></div>
@@ -373,5 +381,6 @@ Chris Izworski &middot; <a href="/">chrisizworski.com</a>
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
 })();
 </script>
+<script src="/assets/field-camera.js" defer></script>
 </body>
 </html>

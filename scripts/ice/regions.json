@@ -9,6 +9,10 @@
   "lake": "huron",
   "lakeName": "Lake Huron",
   "access": "Linwood, Pinconning, Quanicassee, Sebewaing, Bay Port, Caseville",
+  "cameras": [
+   "windy-bay-city-yacht-club",
+   "windy-caseville"
+  ],
   "blurb": "The largest and most heavily fished ice sheet in Michigan, and the one that puts the most people in the water. Saginaw Bay is shallow, wide open to wind, and it freezes and breaks up faster than almost anything else in the state. That combination is exactly what makes it productive and exactly what makes it dangerous.",
   "detail": "Because the bay is shallow it gives up heat quickly, so it can lock up hard in a short cold stretch well before deeper water does. The same shallowness and the open fetch mean a single day of strong wind can shear the sheet, open leads a mile offshore, and push pressure ridges up overnight. People who were on good ice in the morning have been cut off from shore by afternoon. The Coast Guard flies rescues off this bay most winters, and the pattern is almost always the same: solid ice near shore, a working crack that opened with an offshore wind, and a group of anglers on the wrong side of it.",
   "notes": [
@@ -36,6 +40,9 @@
   "lake": null,
   "lakeName": null,
   "access": "Houghton Lake town accesses, Prudenville, North Shore",
+  "cameras": [
+   "windy-houghton-lake"
+  ],
   "blurb": "The largest inland lake in Michigan and the center of the state's ice fishing culture. Shallow, wind exposed for an inland lake, and surrounded by more shanties in February than anywhere else in Michigan.",
   "detail": "Houghton Lake averages only around twenty feet deep, which is why it freezes early relative to the deep northern lakes and why the ice fishing tradition here is so entrenched. There is no satellite ice product for inland lakes at this scale, so the only signal this page can honestly offer is accumulated cold from the Houghton Lake climate station, which sits essentially on the water. That is a real signal for whether ice should be forming, and it is not a measurement of the ice.",
   "notes": [

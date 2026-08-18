@@ -15,6 +15,32 @@ function first(value) {
   return Array.isArray(value) ? value[0] : value;
 }
 
+function metadataBody(camera, id, capturedAt, fresh) {
+  return {
+    id,
+    source: camera.source,
+    label: camera.label,
+    available: true,
+    fresh,
+    captured_at: capturedAt,
+    age_minutes: capturedAt ? Math.max(0, Math.round((Date.now() - new Date(capturedAt).getTime()) / 60000)) : null,
+    image_url: camera.directImage ? camera.url : `/api/field-camera?id=${encodeURIComponent(id)}`,
+    image_width: camera.imageWidth || 720,
+    image_height: camera.imageHeight || 405,
+    click_url: camera.clickUrl || null,
+    credit: camera.credit,
+    credit_url: camera.creditUrl,
+    add_url: camera.addUrl || null,
+    region: camera.region || null,
+    zone: camera.zone || null,
+    latitude: camera.latitude ?? null,
+    longitude: camera.longitude ?? null,
+    note: camera.note || (camera.source === "mdot"
+      ? "Road weather cameras point at the roadway. They are shown for conditions, not as scenic overlooks."
+      : null),
+  };
+}
+
 async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("X-Robots-Tag", "noindex, nofollow");
@@ -41,7 +67,22 @@ async function handler(req, res) {
   if (!camera.url) {
     res.setHeader("Cache-Control", "no-store");
     const body = { id, label: camera.label, available: false, reason: camera.reason || "no image published" };
+    // Distinguish "this site is not configured to reach the camera" from "the camera is down".
+    // The renderer hides the first and reports the second, because only the second is true of
+    // the camera itself and only the second is any of the reader's business.
+    if (camera.unconfigured) body.unconfigured = true;
     return res.status(wantsMeta ? 200 : 503).json(body);
+  }
+
+  // Windy's terms require the API-provided image URL to be used directly and linked back to
+  // its webcam page. Do not proxy or resize these images. The short cache keeps the free-tier
+  // URL well inside its expiry window while avoiding a discovery request for every DOM node.
+  if (camera.directImage) {
+    const fresh = camera.capturedAt ? isUsable(camera.capturedAt, MAX_AGE_HOURS) : true;
+    res.setHeader("Cache-Control", "public, max-age=30, s-maxage=60, stale-while-revalidate=120");
+    if (wantsMeta) return res.status(200).json(metadataBody(camera, id, camera.capturedAt, fresh));
+    res.setHeader("Location", camera.url);
+    return res.status(307).end();
   }
 
   try {
@@ -61,22 +102,7 @@ async function handler(req, res) {
 
     if (wantsMeta) {
       res.setHeader("Cache-Control", "public, max-age=120, s-maxage=300, stale-while-revalidate=900");
-      return res.status(200).json({
-        id,
-        label: camera.label,
-        available: true,
-        fresh,
-        captured_at: capturedAt,
-        age_minutes: capturedAt ? Math.round((Date.now() - new Date(capturedAt).getTime()) / 60000) : null,
-        image_url: `/api/field-camera?id=${encodeURIComponent(id)}`,
-        credit: camera.credit,
-        credit_url: camera.creditUrl,
-        region: camera.region || null,
-        zone: camera.zone || null,
-        latitude: camera.latitude ?? null,
-        longitude: camera.longitude ?? null,
-        note: "Road weather cameras point at the roadway. They are shown for conditions, not as scenic overlooks.",
-      });
+      return res.status(200).json(metadataBody(camera, id, capturedAt, fresh));
     }
 
     res.setHeader("Content-Type", type);

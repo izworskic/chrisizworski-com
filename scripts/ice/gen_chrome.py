@@ -120,7 +120,9 @@ def head(title, desc, canonical, ld_json):
         '<meta property="og:type" content="website">'
         '<meta property="og:site_name" content="Michigan Ice Report">'
         '<meta name="twitter:card" content="summary">'
-        f'{FONTS}<link rel="stylesheet" href="/assets/seasonal-field-desk.css"><style>{CSS}</style>'
+        f'{FONTS}<link rel="stylesheet" href="/assets/seasonal-field-desk.css">'
+        '<link rel="stylesheet" href="/assets/field-camera.css">'
+        f'<style>{CSS}</style>'
         f'<script type="application/ld+json">{_j.dumps(ld_json, separators=(",", ":"))}</script>'
         '<script defer src="/_vercel/insights/script.js"></script>'
         '<script defer src="/_vercel/speed-insights/script.js"></script>'
@@ -185,7 +187,8 @@ FOOTER = (
     'Built and maintained by <a href="https://chrisizworski.com">Chris Izworski</a>. '
     'This site reports weather and satellite data. It does not report ice safety, and it never will.'
     '</footer>'
-    '</div></div><script src="/michigan-ice/ice.js"></script></body></html>'
+    '</div></div><script src="/michigan-ice/ice.js"></script>'
+    '<script src="/assets/field-camera.js" defer></script></body></html>'
 )
 
 

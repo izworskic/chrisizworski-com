@@ -1,0 +1,61 @@
+.field-camera-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 18px;
+  align-items: start;
+  margin: 18px 0 28px;
+}
+
+.field-camera {
+  min-width: 0;
+  margin: 1rem 0 1.4rem;
+}
+
+.field-camera .camera-shot-link {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.field-camera .camera-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 720px;
+  border-radius: 10px;
+}
+
+.field-camera .camera-shot-link:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+
+.field-camera[data-state="stale"] .camera-shot {
+  filter: saturate(.55);
+}
+
+.field-camera .camera-caption {
+  margin: .45rem 0 .1rem;
+  font-size: .9rem;
+  opacity: .85;
+}
+
+.field-camera .camera-credit,
+.field-camera .camera-note {
+  margin: 0;
+  font-size: .8rem;
+  line-height: 1.45;
+  opacity: .68;
+}
+
+.field-camera .camera-note {
+  max-width: 720px;
+  margin-top: .35rem;
+}
+
+.field-camera .camera-out {
+  margin: 0;
+  font-size: .9rem;
+  opacity: .7;
+}

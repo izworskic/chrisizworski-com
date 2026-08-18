@@ -19,17 +19,21 @@
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (meta) {
         if (!meta || !meta.available) {
+          // An unconfigured upstream is a deployment state, not a camera state. Remove the block
+          // rather than telling the reader a working camera has stopped, which is not true.
+          if (meta && meta.unconfigured) { node.remove(); return; }
           node.innerHTML = '<p class="camera-out">This camera is not publishing right now.</p>';
           return;
         }
         var stale = meta.fresh === false;
         var img = document.createElement("img");
         img.src = meta.image_url;
-        img.alt = "Roadside camera view at " + meta.label;
+        img.alt = "Current camera view at " + meta.label;
         img.loading = "lazy";
         img.decoding = "async";
-        img.width = 720;
-        img.height = 405;
+        img.width = meta.image_width || 720;
+        img.height = meta.image_height || 405;
+        if (meta.source === "windy") img.style.maxWidth = (meta.image_width || 400) + "px";
         img.className = "camera-shot";
         img.addEventListener("error", function () {
           node.innerHTML = '<p class="camera-out">This camera is not publishing right now.</p>';
@@ -45,14 +49,40 @@
         credit.className = "camera-credit";
         var a = document.createElement("a");
         a.href = meta.credit_url; a.rel = "noopener"; a.textContent = meta.credit;
-        credit.appendChild(document.createTextNode("Image: "));
+        if (meta.source !== "windy") credit.appendChild(document.createTextNode("Image: "));
         credit.appendChild(a);
+        if (meta.add_url) {
+          var add = document.createElement("a");
+          add.href = meta.add_url; add.rel = "noopener"; add.textContent = "add a webcam";
+          credit.appendChild(document.createTextNode(" — "));
+          credit.appendChild(add);
+        }
+
+        var imageNode = img;
+        if (meta.click_url) {
+          var imageLink = document.createElement("a");
+          imageLink.href = meta.click_url;
+          imageLink.target = "_blank";
+          imageLink.rel = "noopener";
+          imageLink.className = "camera-shot-link";
+          imageLink.setAttribute("aria-label", "Open " + meta.label + " on Windy.com");
+          imageLink.appendChild(img);
+          imageNode = imageLink;
+        }
+
+        var note = null;
+        if (meta.note) {
+          note = document.createElement("p");
+          note.className = "camera-note";
+          note.textContent = meta.note;
+        }
 
         node.innerHTML = "";
         node.dataset.state = stale ? "stale" : "live";
-        node.appendChild(img);
+        node.appendChild(imageNode);
         node.appendChild(cap);
         node.appendChild(credit);
+        if (note) node.appendChild(note);
       })
       .catch(function () {
         node.innerHTML = '<p class="camera-out">This camera is not publishing right now.</p>';

@@ -23,6 +23,9 @@
     "api/aurora.js": {
       "maxDuration": 20
     },
+    "api/field-camera.js": {
+      "maxDuration": 20
+    },
     "api/**/*.js": {
       "maxDuration": 10
     }
