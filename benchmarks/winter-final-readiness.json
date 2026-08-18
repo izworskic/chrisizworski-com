@@ -1,0 +1,48 @@
+{
+  "version": "1.0.0",
+  "date": "2026-08-18",
+  "objective": "Finish the controlled winter system, preserve the unrecovered XC ownership penalty, measure the real visitor funnel, capture existing winter search intent without thin URLs, and then freeze feature work until observed data or a defect justifies reopening it.",
+  "baseline": {"score": 72, "loss": 28},
+  "target": {"minimumScore": 95, "maximumLoss": 5},
+  "scoring": {
+    "maxScore": 100,
+    "categories": {
+      "ownershipGovernance": 20,
+      "dailyDecisionFlow": 20,
+      "searchCapture": 20,
+      "measurement": 20,
+      "freezeDiscipline": 20
+    }
+  },
+  "fatalPenalties": [
+    "claiming the live XC source/deployment is recovered without evidence",
+    "mutating the unrecovered xcski production application",
+    "creating a new indexable winter landing URL that competes with the existing XC or Ice owners",
+    "weakening the Michigan Ice safety boundary or turning remote data into a safety rating",
+    "turning weather/snow data into an unsupported grooming claim",
+    "adding cookies, localStorage, fingerprinting, or personal data to winter funnel measurement",
+    "continuing winter feature churn after the final hardening merge without a documented reopen trigger"
+  ],
+  "reopenTriggers": [
+    "production bug or broken feed",
+    "safety or trust defect",
+    "recovered XC source/deployment ownership",
+    "in-season Search Console or first-party behavior data identifies a measured loss",
+    "material authoritative upstream data change"
+  ],
+  "outcomeMetrics": {
+    "principle": "The readiness score is a build gate. Real winter traffic and behavior are the market loss function.",
+    "events": ["Winter Surface View", "Winter Decision Stage", "Winter Handoff", "Winter Verification Open"],
+    "searchTargets": {
+      "iceHubAveragePosition": 25,
+      "xcLiveAveragePosition": 15,
+      "xcAuthorityAveragePosition": 20
+    },
+    "funnel": [
+      "winter surface view",
+      "decision stage reached",
+      "XC live or Ice regional handoff",
+      "operator/groomer verification open"
+    ]
+  }
+}
