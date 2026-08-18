@@ -1,6 +1,14 @@
 // Renders allowlisted field cameras. Every camera carries its capture time, and one that has
 // stopped updating says so rather than showing a stale picture as if it were current.
 (function () {
+  if (window.location.pathname.replace(/\/+$/, "") === "/michigan-cross-country-skiing" && !document.querySelector('script[data-winter-final-loader]')) {
+    var winterFinal = document.createElement("script");
+    winterFinal.src = "/assets/winter-final.js";
+    winterFinal.defer = true;
+    winterFinal.dataset.winterFinalLoader = "xc";
+    document.body.appendChild(winterFinal);
+  }
+
   var nodes = document.querySelectorAll("[data-field-camera]");
   if (!nodes.length) return;
 
