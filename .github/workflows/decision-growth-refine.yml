@@ -24,3 +24,4 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "Refine boat ranking and shipwreck access wording"
           git push origin HEAD:agent/decision-network-boat-shipwreck
+# retrigger
