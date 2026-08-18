@@ -70,7 +70,7 @@ function detailPage(beach) {
   const nearby = nearbyBeaches(beach);
   const cameraStylesheet = beach.camera ? '  <link rel="stylesheet" href="/assets/field-camera.css">\n' : "";
   const cameraSection = beach.camera ? `    <section class="section" aria-labelledby="camera-heading">
-      <div class="section-head"><div><p class="section-kicker">Current shoreline context</p><h2 id="camera-heading">See the water now</h2><p class="section-intro">The caption names the camera's actual location. Use the image for broad visibility and surface context only; it cannot show the posted flag, water quality, or every condition at ${html(beach.name)}.</p></div></div>
+      <div class="section-head"><div><p class="section-kicker">Current shoreline context</p><h2 id="camera-heading">See the water now</h2><p class="section-intro">A live view of the water, updated through the day.</p></div></div>
       <div class="field-camera" data-field-camera="${html(beach.camera)}"><p class="camera-out">Loading the camera...</p></div>
     </section>
 

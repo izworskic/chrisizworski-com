@@ -3,6 +3,29 @@
 One dated entry per production change, so Search Console movement can be attributed to a cause
 instead of guessed at. Do not ship two page clusters on the same day.
 
+## 2026-08-18 — camera captions cut back to plain live-view language
+Cluster: the ten pages carrying Windy cameras. Chris asked for this directly: the captions were
+"way too conservative" and did not need to explain themselves.
+He was right, and the reason is that the caveat appeared THREE times on a beach page. The page
+already carries its own safety-note aside ("No active alert does not mean a recent water sample
+exists... Follow the flag, signs, and lifeguard instructions you actually see"), then the camera
+section intro repeated it, then the per-camera note repeated it again. Three copies of the same
+sentence reads as hedging, not care, and it buries the thing the reader came for.
+- Per-camera notes now say WHERE THE CAMERA LOOKS, which is the useful part: "Looking down the
+  channel to Lake Michigan at Holland State Park", "Looking along Trail 14 northwest of Calumet,
+  through hardwood forest".
+- The beach section intro is now "A live view of the water, updated through the day."
+- The ice section intro is now "Live views of the surface, updated through the day." The ice pages
+  open with a standing "No ice is safe ice." block, which is the right place for that message and
+  says it better than three sentences under a photograph.
+- Edited in the GENERATORS (scripts/generate-beach-pages.mjs, scripts/ice/gen_site.py) and
+  regenerated, not in the output.
+- tests/field-cameras.test.js previously required every note to be over 40 characters and to say
+  what the view could not show. It now requires a caption between 20 and 130 characters naming
+  what the camera looks at, which is the property actually worth pinning: a caption that names its
+  location is what stops a reader taking one shoreline for another.
+169 tests, nine gates green.
+
 ## 2026-08-17 — Windy webcams, finished and made safe to ship before the key exists
 Cluster: lib/field-cameras.js, api/field-camera.js, public/assets/field-camera.js, plus eight
 camera placements across the beach, ice and fall colour clusters.

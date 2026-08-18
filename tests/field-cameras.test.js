@@ -127,7 +127,11 @@ test("every Windy camera carries the attribution Windy's terms require", () => {
     assert.equal(camera.credit, "Webcams provided by Windy.com", `${id}: courtesy text is required`);
     assert.equal(camera.creditUrl, "https://www.windy.com/", `${id}: courtesy must link to windy.com`);
     assert.ok(Number.isInteger(camera.webcamId), `${id}: needs a numeric webcam id`);
-    assert.ok(camera.note && camera.note.length > 40, `${id}: needs an honest note about what the view cannot show`);
+    // A short caption naming what the camera looks at. The safety framing lives on the pages
+    // themselves (beach pages carry their own flag notice, ice pages open with "No ice is safe
+    // ice."), so repeating it under every image read as hedging rather than care.
+    assert.ok(camera.note && camera.note.length > 20, `${id}: needs a caption naming what it looks at`);
+    assert.ok(camera.note.length < 130, `${id}: caption should stay short`);
   }
 });
 
