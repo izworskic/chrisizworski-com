@@ -6,6 +6,7 @@ const path = require('node:path');
 const root = path.join(__dirname, '..');
 const read = (rel) => readFileSync(path.join(root, rel), 'utf8');
 
+// Keep the candidate scores tied to concrete product evidence so the benchmark cannot drift into a self-awarded grade.
 const regions = [
   ['saginaw-bay', 'Saginaw Bay'],
   ['houghton-lake', 'Houghton Lake'],
