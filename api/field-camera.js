@@ -67,6 +67,10 @@ async function handler(req, res) {
   if (!camera.url) {
     res.setHeader("Cache-Control", "no-store");
     const body = { id, label: camera.label, available: false, reason: camera.reason || "no image published" };
+    // Distinguish "this site is not configured to reach the camera" from "the camera is down".
+    // The renderer hides the first and reports the second, because only the second is true of
+    // the camera itself and only the second is any of the reader's business.
+    if (camera.unconfigured) body.unconfigured = true;
     return res.status(wantsMeta ? 200 : 503).json(body);
   }
 

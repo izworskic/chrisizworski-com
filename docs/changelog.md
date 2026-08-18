@@ -3,6 +3,37 @@
 One dated entry per production change, so Search Console movement can be attributed to a cause
 instead of guessed at. Do not ship two page clusters on the same day.
 
+## 2026-08-17 — Windy webcams, finished and made safe to ship before the key exists
+Cluster: lib/field-cameras.js, api/field-camera.js, public/assets/field-camera.js, plus eight
+camera placements across the beach, ice and fall colour clusters.
+Codex built this on agent/add-windy-webcams: eight vetted Michigan webcams filling gaps the public
+USGS, MDOT and PhenoCam networks do not cover, with the API key held server-side, a 307 redirect
+instead of a proxy, and host allowlisting on both the image URL (imgproxy.windy.com) and the
+click-through URL (windy.com). The design is sound and the attribution matches what Windy's terms
+require: the image links to the webcam detail page, and the courtesy line reads "Webcams provided
+by Windy.com - add a webcam" with both links live.
+TWO THINGS FINISHED HERE.
+1. WINDY_WEBCAMS_API_KEY is not set in production, and no key exists on any project in the team.
+   In that state every one of the eleven placements rendered "This camera is not publishing right
+   now" on live pages. That sentence is FALSE: the cameras are fine and the site simply cannot
+   reach them. A missing key is our deployment state, not a fact about a camera. resolveWindy now
+   returns `unconfigured: true`, the API passes it through, and the renderer REMOVES the block
+   rather than printing a wrong notice. A camera that is genuinely down still says so, because
+   that is true and is worth telling the reader.
+   This is what makes the branch safe to merge before the key exists: with no key the pages simply
+   carry no Windy camera, and they light up the moment the key is added.
+2. Four tests pin the behaviour: the unconfigured flag, the renderer branch, the attribution every
+   Windy entry must carry, and a cache-window assertion. That last one matters because free-tier
+   image URLs carry a token that expires after ten minutes; the route's worst-case cached age is
+   180 seconds, and the test fails if anyone widens it past 300.
+Noted, not changed: Windy staff guidance in their community forum says every display should be one
+API request with no caching, while the formal terms only require responsible use and no
+inappropriate load. The 60 second discovery cache here reuses an image URL for at most three
+minutes, well inside the token window, and each page view still fetches the image itself from
+Windy's CDN. That reads as more responsible on bandwidth rather than less, but it is a deliberate
+divergence from the forum wording and is recorded as such.
+169 tests, nine gates green.
+
 ## 2026-08-16 — the fall colour writer would have failed silently, four days before it opens
 Cluster: lib/fall-color/routes/cron.js. No visible content changed.
 Found while reviewing what shipped Aug 11-15. Every failure path in the daily writer returned HTTP

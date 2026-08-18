@@ -19,6 +19,9 @@
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (meta) {
         if (!meta || !meta.available) {
+          // An unconfigured upstream is a deployment state, not a camera state. Remove the block
+          // rather than telling the reader a working camera has stopped, which is not true.
+          if (meta && meta.unconfigured) { node.remove(); return; }
           node.innerHTML = '<p class="camera-out">This camera is not publishing right now.</p>';
           return;
         }
