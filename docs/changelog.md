@@ -26,6 +26,52 @@ sentence reads as hedging, not care, and it buries the thing the reader came for
   location is what stops a reader taking one shoreline for another.
 169 tests, nine gates green.
 
+## 2026-08-18 — /up-north-michigan/, the pre-trip read, and two subdomains it should retire
+New hub page composing FIVE EXISTING TOOLS rather than adding a sixth data source: aurora odds,
+fall colour stage, Mackinac Bridge wind, Great Lakes water, and ice. Every value is fetched live
+at page load from this site's own APIs and every card links to the tool that produced it.
+WHY A HUB PAGE AND NOT A NEW PROPERTY: two properties already occupy this space and both are
+orphans. weekend.chrisizworski.com is 502 words, under the 600-word rule, and links to two hub
+tools. michiganoutdoorsnow.chrisizworski.com is 842 words and links to ZERO. Neither appears in
+growth-100x-baseline.json, so neither carries measured traffic. Ice and fall colour were already
+migrated off subdomains onto the hub; these two are the remaining orphans.
+- THREE API SHAPES WERE WRONG IN THE FIRST DRAFT AND WERE CAUGHT BY CHECKING THE LIVE RESPONSES.
+  Buoys report wave_ht in METRES, not feet: shipping that would have called a 1.6 m Superior sea
+  "1.6 ft", which is the difference between staying ashore and launching into it. Ice returns
+  per-lake keys under cover, not a `percent`. Fall colour exposes raw regional inputs and NO
+  computed stage, so the card reads ndvi.senescence and says plainly when nothing has started.
+- FAIL-SOFT IS THE DESIGN. A card whose feed is unreachable says so and keeps its link. A pre-trip
+  page that shows a stale or invented number is worse than one admitting it cannot reach a feed,
+  because someone may be deciding whether to tow a trailer over a bridge on the strength of it.
+- The ice card never implies ice is safe. It repeats "No ice is safe ice."
+- Inbound links from fall colour, buoys, Mackinac and the ice generator, plus a tools card. This is
+  the situational lateral linking diagnosed in August and not previously built.
+
+### THREE GUARDRAILS FIRED AND ALL THREE WERE RIGHT
+1. *** tests/seasonal-search-protection.test.js caught that /northern-lights-michigan/ is inside
+   the clean measurement window of experiment 2026-08-03-aurora-resilient-answer, which runs
+   Aug 15 to Sep 11. The planned inbound link to this new page was BACKED OUT of aurora entirely
+   rather than shipped, because adding an outbound link to a page under measurement is exactly the
+   contamination the 28-day rule exists to prevent. ***
+   The frozen surface is intact and still asserted: title, description, canonical, h1 and the
+   static answer block all unchanged. The hash was repinned because ONE field moved,
+   WebPage.dateModified 2026-08-14 to 2026-08-18, which the freshness gate forces. The reason is
+   written into the test so a future repin without that justification reads as suspicious.
+   *** SEPARATE FINDING, AND IT IS ABOUT PR #63 EARLIER TODAY: that PR added a weekend answer to
+   aurora DURING this same window. It is a genuine content change to a page under measurement. It
+   is now recorded in growth-experiments.json under midWindowContentChanges so the CTR result is
+   not later read as a clean single-variable window. ***
+   PROCESS FIX: run stamp-freshness AFTER committing content, not before. PR #63 ran it before the
+   commit existed, so aurora shipped with a dateModified that was already stale.
+2. tests/ice-generated.test.js caught a root-relative href escaping /michigan-ice/. The allowlist
+   was extended deliberately, matching the existing /fall-color/ cross-season handoff precedent,
+   rather than the assertion being weakened.
+3. The nine-featured-tools pin fired in both tests/static-integrations.test.js and
+   scripts/verify-source.mjs. Moved to ten on the tools page only. A first blanket edit also hit
+   the Great Lakes hub assertion, which counts the same class on a page that did not change; that
+   was restored to nine.
+169 tests, nine gates green.
+
 ## 2026-08-18 — the weekend gap, and what the demand pull actually said
 Cluster: /northern-lights-michigan/ and /fall-color/.
 Chris asked for a "must search before heading up north" tool. Pulled the demand first, alphabet

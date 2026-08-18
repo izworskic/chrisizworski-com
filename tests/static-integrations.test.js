@@ -73,12 +73,12 @@ test("Great Lakes Gazette reads the latest public edition without a browser cred
   assert.ok(!projects.includes("great-lakes-gazette.vercel.app"));
 });
 
-test("Tools hub makes nine live tools prominent and indexes the expanded library", () => {
+test("Tools hub makes ten live tools prominent and indexes the expanded library", () => {
   const html = readFileSync(path.join(__dirname, "../public/tools/index.html"), "utf8");
   assert.ok(html.includes("<title>Free Michigan &amp; Great Lakes Tools | Chris Izworski</title>"));
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/tools/">'));
-  assert.equal((html.match(/data-featured-tool=/g) || []).length, 9);
-  assert.equal((html.match(/class="tool-cta"/g) || []).length, 9);
+  assert.equal((html.match(/data-featured-tool=/g) || []).length, 10);
+  assert.equal((html.match(/class="tool-cta"/g) || []).length, 10);
   assert.ok((html.match(/data-track-cluster=/g) || []).length >= 5);
 
   const jsonLd = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);

@@ -274,8 +274,8 @@ if (toolsItemList?.numberOfItems !== 36 || toolsItemList?.itemListElement?.lengt
 if (!toolsHtml.includes("Free Michigan and Great Lakes Tools") || !toolsHtml.includes("Start with the live tools")) {
   failures.push("Tools discovery title or featured-tools section is missing");
 }
-if ((toolsHtml.match(/data-featured-tool=/g) || []).length !== 9 || (toolsHtml.match(/class="tool-cta"/g) || []).length !== 9) {
-  failures.push("Tools page does not contain exactly nine featured tool cards and calls to action");
+if ((toolsHtml.match(/data-featured-tool=/g) || []).length !== 10 || (toolsHtml.match(/class="tool-cta"/g) || []).length !== 10) {
+  failures.push("Tools page does not contain exactly ten featured tool cards and calls to action");
 }
 if ((toolsHtml.match(/data-track-cluster=/g) || []).length < 5) {
   failures.push("Tools page is missing category jump links");

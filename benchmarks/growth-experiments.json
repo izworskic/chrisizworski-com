@@ -8,7 +8,15 @@
     "restartTrigger": "Any search-facing change to the title, description, H1, first answer, structured data, canonical, or indexability resets the window.",
     "pendingWindowRule": "For pending-clean-window experiments, set releaseDate to the production merge date and evaluate the 28 complete days beginning the next day.",
     "parallelExecutionPolicy": "Measurement freezes and stop-loss actions are page-specific, not site-wide. Stop or roll back an affected experiment, then continue one non-overlapping reversible experiment on unaffected pages or distribution surfaces.",
-    "freezeDuringWindow": ["title", "metaDescription", "h1", "firstAnswer", "structuredData", "canonical", "indexability"]
+    "freezeDuringWindow": [
+      "title",
+      "metaDescription",
+      "h1",
+      "firstAnswer",
+      "structuredData",
+      "canonical",
+      "indexability"
+    ]
   },
   "experiments": [
     {
@@ -16,11 +24,21 @@
       "path": "/when-to-plant-tomatoes-michigan/",
       "hypothesis": "A year-specific regional title and direct transplant-date first answer will lift CTR from 0.26% toward 2.0% without changing the canonical.",
       "primaryMetric": "Search Console page CTR",
-      "baseline": {"impressions": 5479, "clicks": 14, "ctr": 0.00256, "averagePosition": 8.37},
-      "target": {"ctr": 0.02},
+      "baseline": {
+        "impressions": 5479,
+        "clicks": 14,
+        "ctr": 0.00256,
+        "averagePosition": 8.37
+      },
+      "target": {
+        "ctr": 0.02
+      },
       "status": "running",
       "releaseDate": "2026-08-03",
-      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
+      "evaluationWindow": {
+        "start": "2026-08-04",
+        "end": "2026-08-31"
+      },
       "decisionDate": null,
       "result": null,
       "stopCondition": "Canonical, structured data, or indexability changes unexpectedly."
@@ -30,11 +48,21 @@
       "path": "/michigan-frost-dates/",
       "hypothesis": "A city-and-calendar title plus an immediate statewide range will lift CTR from 0.11% toward 2.0%.",
       "primaryMetric": "Search Console page CTR",
-      "baseline": {"impressions": 2651, "clicks": 3, "ctr": 0.00113, "averagePosition": 9.56},
-      "target": {"ctr": 0.02},
+      "baseline": {
+        "impressions": 2651,
+        "clicks": 3,
+        "ctr": 0.00113,
+        "averagePosition": 9.56
+      },
+      "target": {
+        "ctr": 0.02
+      },
       "status": "running",
       "releaseDate": "2026-08-03",
-      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
+      "evaluationWindow": {
+        "start": "2026-08-04",
+        "end": "2026-08-31"
+      },
       "decisionDate": null,
       "result": null,
       "stopCondition": "City table, filters, canonical, or indexability regress."
@@ -44,8 +72,15 @@
       "path": "/saginaw-bay-ecology/",
       "hypothesis": "Matching the depth query in the title, H1, FAQ, and first answer will lift CTR from 0.54% toward 1.5%.",
       "primaryMetric": "Search Console page CTR",
-      "baseline": {"impressions": 1671, "clicks": 9, "ctr": 0.00539, "averagePosition": 11.13},
-      "target": {"ctr": 0.015},
+      "baseline": {
+        "impressions": 1671,
+        "clicks": 9,
+        "ctr": 0.00539,
+        "averagePosition": 11.13
+      },
+      "target": {
+        "ctr": 0.015
+      },
       "status": "pending-clean-window",
       "releaseDate": null,
       "evaluationWindow": null,
@@ -59,35 +94,108 @@
       "path": "/northern-lights-michigan/",
       "hypothesis": "A tonight-led title, crawlable regional Michigan outlooks, and a fail-soft decision engine that combines NOAA space weather with NWS clouds, USNO moonlight, and a selected-region best window will lift CTR from 1.85% toward 2.5% and improve qualified return use without mass-producing thin location pages.",
       "primaryMetric": "Search Console page CTR",
-      "baseline": {"impressions": 18461, "clicks": 341, "ctr": 0.01847, "averagePosition": 10.36},
+      "baseline": {
+        "impressions": 18461,
+        "clicks": 341,
+        "ctr": 0.01847,
+        "averagePosition": 10.36
+      },
       "supportingEvidence": [
-        {"query": "northern lights michigan tonight", "impressions": 448, "clicks": 6, "ctr": 0.0134, "averagePosition": 9.72},
-        {"query": "northern lights upper peninsula tonight", "impressions": 187, "clicks": 5, "ctr": 0.0267, "averagePosition": 7.36},
-        {"query": "northern lights tonight near me", "impressions": 194, "clicks": 2, "ctr": 0.0103, "averagePosition": 7.91}
+        {
+          "query": "northern lights michigan tonight",
+          "impressions": 448,
+          "clicks": 6,
+          "ctr": 0.0134,
+          "averagePosition": 9.72
+        },
+        {
+          "query": "northern lights upper peninsula tonight",
+          "impressions": 187,
+          "clicks": 5,
+          "ctr": 0.0267,
+          "averagePosition": 7.36
+        },
+        {
+          "query": "northern lights tonight near me",
+          "impressions": 194,
+          "clicks": 2,
+          "ctr": 0.0103,
+          "averagePosition": 7.91
+        }
       ],
-      "engagementMetrics": ["Aurora Region Selected", "Aurora Location Used", "Aurora Manual Refresh", "Aurora Field Report"],
-      "target": {"ctr": 0.025},
+      "engagementMetrics": [
+        "Aurora Region Selected",
+        "Aurora Location Used",
+        "Aurora Manual Refresh",
+        "Aurora Field Report"
+      ],
+      "target": {
+        "ctr": 0.025
+      },
       "status": "running",
       "releaseDate": "2026-08-14",
-      "evaluationWindow": {"start": "2026-08-15", "end": "2026-09-11"},
+      "evaluationWindow": {
+        "start": "2026-08-15",
+        "end": "2026-09-11"
+      },
       "lastSearchFacingChangeDate": "2026-08-14",
       "decisionDate": null,
       "result": null,
-      "stopCondition": "NOAA, NWS, or USNO parsing regresses; the map or manual fallback fails; exact coordinates enter analytics or storage; or the interface presents a forecast combination as a visibility probability."
+      "stopCondition": "NOAA, NWS, or USNO parsing regresses; the map or manual fallback fails; exact coordinates enter analytics or storage; or the interface presents a forecast combination as a visibility probability.",
+      "midWindowContentChanges": [
+        {
+          "date": "2026-08-18",
+          "pr": 63,
+          "change": "Added a self-contained answer for \"will the northern lights be visible in Michigan this weekend\", closing a timeframe-phrasing gap where the word weekend appeared zero times against five autocomplete variants.",
+          "searchFacingSurfaceChanged": false,
+          "note": "Title, description, canonical, h1 and the static answer block were all unchanged and remain pinned by tests/seasonal-search-protection.test.js. dateModified moved 2026-08-14 to 2026-08-18 because the freshness gate derives it from the last content commit. Read the CTR result with this addition in mind rather than as a clean single-variable window."
+        }
+      ]
     },
     {
       "id": "2026-08-03-soo-schedule-intent",
       "path": "/soo-locks/",
-      "hypothesis": "A schedule-today title plus an honest three-step source flow—BoatNerd named vessels, the official USACE hotline, and the live AIS map—will better satisfy today and tomorrow schedule intent and lift CTR from 1.26% toward 2.5%.",
+      "hypothesis": "A schedule-today title plus an honest three-step source flow\u2014BoatNerd named vessels, the official USACE hotline, and the live AIS map\u2014will better satisfy today and tomorrow schedule intent and lift CTR from 1.26% toward 2.5%.",
       "primaryMetric": "Search Console page CTR",
-      "baseline": {"impressions": 11919, "clicks": 150, "ctr": 0.01259, "averagePosition": 9.41},
+      "baseline": {
+        "impressions": 11919,
+        "clicks": 150,
+        "ctr": 0.01259,
+        "averagePosition": 9.41
+      },
       "supportingEvidence": [
-        {"query": "soo locks schedule", "impressions": 1153, "clicks": 22, "ctr": 0.0191, "averagePosition": 8.09},
-        {"query": "soo locks schedule today", "impressions": 877, "clicks": 13, "ctr": 0.0148, "averagePosition": 9.01},
-        {"query": "soo locks ship schedule", "impressions": 514, "clicks": 5, "ctr": 0.0097, "averagePosition": 8.97},
-        {"query": "soo locks schedule tomorrow", "impressions": 144, "clicks": 5, "ctr": 0.0347, "averagePosition": 8.87}
+        {
+          "query": "soo locks schedule",
+          "impressions": 1153,
+          "clicks": 22,
+          "ctr": 0.0191,
+          "averagePosition": 8.09
+        },
+        {
+          "query": "soo locks schedule today",
+          "impressions": 877,
+          "clicks": 13,
+          "ctr": 0.0148,
+          "averagePosition": 9.01
+        },
+        {
+          "query": "soo locks ship schedule",
+          "impressions": 514,
+          "clicks": 5,
+          "ctr": 0.0097,
+          "averagePosition": 8.97
+        },
+        {
+          "query": "soo locks schedule tomorrow",
+          "impressions": 144,
+          "clicks": 5,
+          "ctr": 0.0347,
+          "averagePosition": 8.87
+        }
       ],
-      "target": {"ctr": 0.025},
+      "target": {
+        "ctr": 0.025
+      },
       "status": "pending-clean-window",
       "releaseDate": null,
       "evaluationWindow": null,
@@ -101,14 +209,38 @@
       "path": "/mackinac-bridge-live/",
       "hypothesis": "A conditions-today title, an immediate open-today answer, and contextual links from Soo Locks and Aurora will move the new page from average position 15.46 toward page one and lift CTR from 0.89% toward 2.0%.",
       "primaryMetric": "Search Console page impressions, CTR, and average position",
-      "baseline": {"impressions": 224, "clicks": 2, "ctr": 0.00893, "averagePosition": 15.46},
+      "baseline": {
+        "impressions": 224,
+        "clicks": 2,
+        "ctr": 0.00893,
+        "averagePosition": 15.46
+      },
       "supportingEvidence": [
-        {"query": "mackinac bridge conditions today live", "impressions": 21, "averagePosition": 10.62},
-        {"query": "mackinac bridge conditions", "impressions": 9, "averagePosition": 10.33},
-        {"query": "mackinac bridge current conditions", "impressions": 8, "averagePosition": 11.75},
-        {"query": "mackinac bridge traffic today", "impressions": 6, "averagePosition": 10.17}
+        {
+          "query": "mackinac bridge conditions today live",
+          "impressions": 21,
+          "averagePosition": 10.62
+        },
+        {
+          "query": "mackinac bridge conditions",
+          "impressions": 9,
+          "averagePosition": 10.33
+        },
+        {
+          "query": "mackinac bridge current conditions",
+          "impressions": 8,
+          "averagePosition": 11.75
+        },
+        {
+          "query": "mackinac bridge traffic today",
+          "impressions": 6,
+          "averagePosition": 10.17
+        }
       ],
-      "target": {"ctr": 0.02, "averagePosition": 10},
+      "target": {
+        "ctr": 0.02,
+        "averagePosition": 10
+      },
       "status": "pending-clean-window",
       "releaseDate": null,
       "evaluationWindow": null,
@@ -122,15 +254,29 @@
       "path": "/chris-izworski-freighter-view-farms/",
       "hypothesis": "A clearer Zone 6a title, first-party experience framing, and contextual links into the gardening hub, tomato guide, and frost tool will grow qualified impressions and send measurable readers deeper into the gardening cluster.",
       "primaryMetric": "Search Console impressions and aggregate internal CTA clicks",
-      "baseline": {"impressions": 10, "clicks": 0, "ctr": 0, "averagePosition": 9.9},
-      "target": {"impressions": 100, "internalCtaClicks": 10},
+      "baseline": {
+        "impressions": 10,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 9.9
+      },
+      "target": {
+        "impressions": 100,
+        "internalCtaClicks": 10
+      },
       "status": "running",
       "releaseDate": "2026-08-12",
-      "evaluationWindow": {"start": "2026-08-13", "end": "2026-09-09"},
+      "evaluationWindow": {
+        "start": "2026-08-13",
+        "end": "2026-09-09"
+      },
       "lastSearchFacingChangeDate": "2026-08-11",
       "invalidatedWindow": {
         "releaseDate": "2026-08-03",
-        "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
+        "evaluationWindow": {
+          "start": "2026-08-04",
+          "end": "2026-08-31"
+        },
         "invalidatedOn": "2026-08-11",
         "reason": "The inbound-link distribution expansion shipped during the original window, changing qualified traffic to the same destination and confounding its impressions and CTA metrics. Restart the combined treatment after the analytics repair reaches production."
       },
@@ -138,8 +284,15 @@
         "status": "released",
         "proposedDate": "2026-08-11",
         "releaseDate": "2026-08-11",
-        "evaluationWindow": {"start": "2026-08-13", "end": "2026-09-09"},
-        "sourcePaths": ["/", "/about/", "/guides/"],
+        "evaluationWindow": {
+          "start": "2026-08-13",
+          "end": "2026-09-09"
+        },
+        "sourcePaths": [
+          "/",
+          "/about/",
+          "/guides/"
+        ],
         "change": "Add measurable contextual links from established discovery pages into the FVF authority page without changing the destination title, H1, first answer, schema, canonical, or indexability.",
         "baselineInboundInternalPages": 6,
         "targetInboundInternalPages": 9,
@@ -155,12 +308,30 @@
       "path": "/great-lakes-birding/",
       "hypothesis": "A migration-and-hotspot title, direct first answer, and prominent bridge to the live birding tool will lift guide CTR and expand impressions without weakening the birding subdomain's existing 4.5% CTR.",
       "primaryMetric": "Search Console page impressions, CTR, and aggregate clicks to the live birding tool",
-      "baseline": {"impressions": 74, "clicks": 1, "ctr": 0.0135, "averagePosition": 11.01},
-      "supportingBaseline": {"url": "https://birding.chrisizworski.com/", "impressions": 111, "clicks": 5, "ctr": 0.045, "averagePosition": 7.32},
-      "target": {"impressions": 250, "ctr": 0.025, "liveToolClicks": 15},
+      "baseline": {
+        "impressions": 74,
+        "clicks": 1,
+        "ctr": 0.0135,
+        "averagePosition": 11.01
+      },
+      "supportingBaseline": {
+        "url": "https://birding.chrisizworski.com/",
+        "impressions": 111,
+        "clicks": 5,
+        "ctr": 0.045,
+        "averagePosition": 7.32
+      },
+      "target": {
+        "impressions": 250,
+        "ctr": 0.025,
+        "liveToolClicks": 15
+      },
       "status": "running",
       "releaseDate": "2026-08-03",
-      "evaluationWindow": {"start": "2026-08-04", "end": "2026-08-31"},
+      "evaluationWindow": {
+        "start": "2026-08-04",
+        "end": "2026-08-31"
+      },
       "decisionDate": null,
       "result": null,
       "stopCondition": "The guide loses indexability, the live-tool destination changes, or birding-subdomain CTR falls below 2.5% in a comparable 28-day window."
@@ -170,14 +341,31 @@
       "path": "/great-lakes-buoys/",
       "hypothesis": "Leading the title and H1 with Great Lakes buoys, then giving an immediate NOAA/NDBC conditions answer, will lift page CTR from 1.96% toward 2.5% and average position from 14.54 toward 12 without changing the canonical, live feed, map, or filters.",
       "primaryMetric": "Search Console page CTR and average position",
-      "baseline": {"impressions": 1276, "clicks": 25, "ctr": 0.0196, "averagePosition": 14.54},
+      "baseline": {
+        "impressions": 1276,
+        "clicks": 25,
+        "ctr": 0.0196,
+        "averagePosition": 14.54
+      },
       "supportingEvidence": [
-        {"query": "great lakes buoys", "impressions": 104, "clicks": 1, "ctr": 0.0096, "averagePosition": 11.49}
+        {
+          "query": "great lakes buoys",
+          "impressions": 104,
+          "clicks": 1,
+          "ctr": 0.0096,
+          "averagePosition": 11.49
+        }
       ],
-      "target": {"ctr": 0.025, "averagePosition": 12},
+      "target": {
+        "ctr": 0.025,
+        "averagePosition": 12
+      },
       "status": "running",
       "releaseDate": "2026-08-12",
-      "evaluationWindow": {"start": "2026-08-13", "end": "2026-09-09"},
+      "evaluationWindow": {
+        "start": "2026-08-13",
+        "end": "2026-09-09"
+      },
       "lastSearchFacingChangeDate": "2026-08-12",
       "decisionDate": null,
       "result": null,
@@ -188,15 +376,45 @@
       "path": "/great-lakes-freighter-tracking/",
       "hypothesis": "Replacing the passive guide with a live lake-wide AIS tool, corridor-specific views, nearby NOAA context, and a title matching ship-tracker intent will move the page toward the top 15 and lift CTR from 0.10% toward 1.5%.",
       "primaryMetric": "Search Console page impressions, CTR, and average position",
-      "baseline": {"impressions": 996, "clicks": 1, "ctr": 0.001, "averagePosition": 23.87},
+      "baseline": {
+        "impressions": 996,
+        "clicks": 1,
+        "ctr": 0.001,
+        "averagePosition": 23.87
+      },
       "supportingEvidence": [
-        {"query": "great lake freighter tracker", "impressions": 3, "averagePosition": 18},
-        {"query": "great lakes ships tracker", "impressions": 3, "averagePosition": 22.33},
-        {"query": "great lake ship tracker", "impressions": 3, "averagePosition": 28},
-        {"query": "track freighters great lakes", "impressions": 2, "averagePosition": 17.5},
-        {"query": "vessel tracker great lakes", "impressions": 2, "averagePosition": 21.5}
+        {
+          "query": "great lake freighter tracker",
+          "impressions": 3,
+          "averagePosition": 18
+        },
+        {
+          "query": "great lakes ships tracker",
+          "impressions": 3,
+          "averagePosition": 22.33
+        },
+        {
+          "query": "great lake ship tracker",
+          "impressions": 3,
+          "averagePosition": 28
+        },
+        {
+          "query": "track freighters great lakes",
+          "impressions": 2,
+          "averagePosition": 17.5
+        },
+        {
+          "query": "vessel tracker great lakes",
+          "impressions": 2,
+          "averagePosition": 21.5
+        }
       ],
-      "target": {"impressionsMultiple": 3, "ctr": 0.015, "averagePosition": 15, "measurementHorizonDays": 90},
+      "target": {
+        "impressionsMultiple": 3,
+        "ctr": 0.015,
+        "averagePosition": 15,
+        "measurementHorizonDays": 90
+      },
       "status": "ready-for-review",
       "releaseDate": null,
       "decisionDate": null,
@@ -208,9 +426,26 @@
       "path": "/great-lakes-gazette/",
       "hypothesis": "A shipping-news-today title, direct link to the dated newspaper, visible archive and RSS, and current-headline distribution across relevant high-demand pages will establish qualified search demand and repeat edition opens while publication health prevents stale or silently broken issues.",
       "primaryMetric": "Daily publication availability, widget edition-open rate, and Search Console landing-page CTR after a complete baseline window",
-      "baseline": {"impressions": null, "clicks": null, "ctr": null, "averagePosition": null, "status": "not-isolated-in-visible-export"},
-      "reliabilityBaseline": {"archiveIssues": 92, "currentStreakDays": 10, "latestGeneratedAfter7amEastern": true, "latestHealthyAisPorts": 0},
-      "target": {"dailyAvailability": 1, "publishedBy730amEastern": 0.96, "healthyAisPortRate": 0.95, "widgetEditionOpenRate": 0.02, "ctrAfter250Impressions": 0.02},
+      "baseline": {
+        "impressions": null,
+        "clicks": null,
+        "ctr": null,
+        "averagePosition": null,
+        "status": "not-isolated-in-visible-export"
+      },
+      "reliabilityBaseline": {
+        "archiveIssues": 92,
+        "currentStreakDays": 10,
+        "latestGeneratedAfter7amEastern": true,
+        "latestHealthyAisPorts": 0
+      },
+      "target": {
+        "dailyAvailability": 1,
+        "publishedBy730amEastern": 0.96,
+        "healthyAisPortRate": 0.95,
+        "widgetEditionOpenRate": 0.02,
+        "ctrAfter250Impressions": 0.02
+      },
       "status": "ready-for-review",
       "releaseDate": null,
       "decisionDate": null,
@@ -222,17 +457,35 @@
       "path": "/fall-color/tunnel-of-trees-fall-color/",
       "hypothesis": "Leading the description with the existing October 5-13 peak window will lift CTR from 0.79% toward the 2.5% site gate while the page holds its current page-one average position.",
       "primaryMetric": "Search Console page CTR and average position",
-      "baseline": {"impressions": 127, "clicks": 1, "ctr": 0.0079, "averagePosition": 8.29},
+      "baseline": {
+        "impressions": 127,
+        "clicks": 1,
+        "ctr": 0.0079,
+        "averagePosition": 8.29
+      },
       "baselineSource": "Google Search Console six-month export ending 2026-08-13",
       "treatment": {
-        "metaDescription": "Tunnel of Trees fall color typically peaks October 5–13. See the 2026 outlook, live regional conditions, and M-119 stops from Harbor Springs north.",
-        "preserved": ["title", "h1", "firstAnswer", "canonical", "liveConditions", "guideContent"]
+        "metaDescription": "Tunnel of Trees fall color typically peaks October 5\u201313. See the 2026 outlook, live regional conditions, and M-119 stops from Harbor Springs north.",
+        "preserved": [
+          "title",
+          "h1",
+          "firstAnswer",
+          "canonical",
+          "liveConditions",
+          "guideContent"
+        ]
       },
-      "target": {"ctr": 0.025, "averagePosition": 10},
+      "target": {
+        "ctr": 0.025,
+        "averagePosition": 10
+      },
       "status": "running",
       "proposedDate": "2026-08-15",
       "releaseDate": "2026-08-15",
-      "evaluationWindow": {"start": "2026-08-16", "end": "2026-09-12"},
+      "evaluationWindow": {
+        "start": "2026-08-16",
+        "end": "2026-09-12"
+      },
       "lastSearchFacingChangeDate": "2026-08-15",
       "decisionDate": null,
       "result": null,
@@ -240,26 +493,63 @@
     },
     {
       "id": "2026-08-15-seasonal-field-desk-ux",
-      "paths": ["/fall-color/", "/michigan-ice/"],
+      "paths": [
+        "/fall-color/",
+        "/michigan-ice/"
+      ],
       "externalPathPrepared": "https://xcski.chrisizworski.com/",
       "hypothesis": "A mobile-first persona decision surface, a useful-result-first Ice hierarchy, and explicit handoffs among Fall, XC skiing, and Ice will increase qualified tool use and cross-season discovery without changing the active Fall search snippets or weakening factual boundaries.",
       "primaryMetric": "Seasonal Decision events divided by Seasonal Module View events",
-      "supportingMetrics": ["Seasonal Tool Open rate", "Search Console page impressions", "Search Console page CTR", "p75 Core Web Vitals"],
+      "supportingMetrics": [
+        "Seasonal Tool Open rate",
+        "Search Console page impressions",
+        "Search Console page CTR",
+        "p75 Core Web Vitals"
+      ],
       "baseline": {
-        "fallHub": {"impressions": 575, "clicks": 14, "ctr": 0.0243, "averagePosition": 11.17},
-        "iceHub": {"impressions": 20, "clicks": 0, "ctr": 0, "averagePosition": 57.5},
+        "fallHub": {
+          "impressions": 575,
+          "clicks": 14,
+          "ctr": 0.0243,
+          "averagePosition": 11.17
+        },
+        "iceHub": {
+          "impressions": 20,
+          "clicks": 0,
+          "ctr": 0,
+          "averagePosition": 57.5
+        },
         "decisionRate": null,
         "crossSeasonToolOpenRate": null,
         "note": "Search values are a directional August 15 export snapshot. Interaction baselines do not exist before instrumentation."
       },
-      "target": {"decisionRate": 0.12, "crossSeasonToolOpenRate": 0.03, "fallHubCtrAfter500Impressions": 0.03, "qualifiedImpressionsMultiple": 1.2},
+      "target": {
+        "decisionRate": 0.12,
+        "crossSeasonToolOpenRate": 0.03,
+        "fallHubCtrAfter500Impressions": 0.03,
+        "qualifiedImpressionsMultiple": 1.2
+      },
       "treatment": {
         "fall": "Three outing-intent paths, accessible tab state, and seasonal tool handoff.",
         "ice": "Safety-first trip screen, current read before long explanation, six direct water choices, and seasonal tool handoff.",
         "xcSkiing": "A non-overwriting adapter prepared and tested against the current live HTML; production source access remains required.",
         "shared": "One dependency-free CSS and analytics layer with fixed-label, privacy-safe events."
       },
-      "preserved": ["Fall title", "Fall meta description", "Fall H1", "Fall first answer", "Fall canonical", "Fall structured data", "Ice safety language", "Ice data limitations", "Ice source attributions", "Ice canonical", "Ice structured data", "Tunnel of Trees experiment", "Aurora experiment"],
+      "preserved": [
+        "Fall title",
+        "Fall meta description",
+        "Fall H1",
+        "Fall first answer",
+        "Fall canonical",
+        "Fall structured data",
+        "Ice safety language",
+        "Ice data limitations",
+        "Ice source attributions",
+        "Ice canonical",
+        "Ice structured data",
+        "Tunnel of Trees experiment",
+        "Aurora experiment"
+      ],
       "status": "ready-for-review",
       "proposedDate": "2026-08-15",
       "releaseDate": null,
