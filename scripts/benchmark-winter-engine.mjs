@@ -28,6 +28,9 @@ function evaluate(label, entry, target) {
   if (entry.loss !== loss) throw new Error(`${label}: loss ${entry.loss} != computed ${loss}`);
   if (entry.fatalPenalty === true) throw new Error(`${label}: fatal penalty is active`);
   if (target) {
+    if (Number.isFinite(target.minimumRawScore) && raw < target.minimumRawScore) {
+      throw new Error(`${label}: raw score ${raw} < target ${target.minimumRawScore}`);
+    }
     if (effective < target.minimumEffectiveScore) {
       throw new Error(`${label}: effective score ${effective} < target ${target.minimumEffectiveScore}`);
     }
