@@ -3,13 +3,13 @@
     "freezing-degree-days.html": "51c4cbf5e543800faea8fcd706048e3810bd55134a396b5f632471463c184602",
     "ice-cover-history.html": "30289ba79d78aa956f4c76721c74bf2e7db4775b956002ab8087b34c7fb5e751",
     "ice-safety.html": "8e119c1358d109300732106290f93c7dc848424875c14764f245bfe58c56d71e",
-    "index.html": "c3a2f2bcd07b7fcd8aad3053675939394559da132666003b47187791b7267919",
-    "regions/burt-mullett.html": "0f98737ef6ea2f17120f058d853b7667dd3a3da1950464111fadcad95c2d5861",
-    "regions/grand-traverse-bay.html": "56676a8b7ace34240f358640d62f7bef1eb758f567cb67d97c9edf57688d1b98",
-    "regions/houghton-lake.html": "a803c4e0bd01016cf7898e5b744a94b90e8872b99964553273988b9037e70eef",
-    "regions/lake-st-clair.html": "4f375eedeabeca25eef641dfc5005fb0b6899dbb87318765203b5c0fcaf98092",
-    "regions/little-bay-de-noc.html": "cb584dbbb9c920fff33820060ff8a025224b2da9195083412eb26346488f6fd0",
-    "regions/saginaw-bay.html": "30f91f70478850d1e6246be3a7f9cab9c3f5dab58917fa6ea91159a0ccaf51c0"
+    "index.html": "da3837171d7f937ed085758458d57dd3b88a9b83b645fcafa525d15d33819804",
+    "regions/burt-mullett.html": "bf9c735788356485fe73995ac8a5e1ad86d6d131b5261b8753361358bfa082a0",
+    "regions/grand-traverse-bay.html": "2112749ea99c674e14cd44d140bc14aa5c2386e7e38c61c1bd1c6eaa407af918",
+    "regions/houghton-lake.html": "cf34d81e2cf0ae428aeaf725b432d56fcc2c64c62db3351556ea00389a45d2f4",
+    "regions/lake-st-clair.html": "9d8263c34a5af8eca2c31b5b7f51d53a93923294ef50675c97c59b2ee8f3d36d",
+    "regions/little-bay-de-noc.html": "62b4c2705a9232061a1b4beb1a07fca9d821c555c3c71f327757db64eb989587",
+    "regions/saginaw-bay.html": "de1cb6cb978b87d2f734e2e72c9f6627b335b9cd9b05792ed9042c02c43457de"
   },
   "outputDir": "public/michigan-ice"
 }
