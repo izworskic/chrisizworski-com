@@ -57,8 +57,9 @@ test('shipwreck explorer preserves the database and keeps map precision honest',
   assert.match(html,/Daniel J\. Morrell<\/strong><\/td><td>Huron<\/td>/);
   assert.match(html,/Daniel J\. Morrell[\s\S]{0,500}Off Harbor Beach, MI/);
   assert.match(html,/Edmund Fitzgerald[\s\S]{0,500}Restricted \/ licensed/);
-  assert.match(html,/Hamilton &amp; Scourge[\s\S]{0,500}Restricted \/ licensed/);
+  assert.match(html,/Hamilton &(?:amp;)? Scourge[\s\S]{0,500}Restricted \/ licensed/);
   assert.doesNotMatch(html,/maritime graves \(Edmund Fitzgerald, Hamilton & Scourge\) prohibit diving by law/i);
+  assert.doesNotMatch(html,/designated a maritime burial ground, diving is prohibited/i);
 });
 
 test('growth benchmark is evidence-backed and part of the full merge gate',()=>{
