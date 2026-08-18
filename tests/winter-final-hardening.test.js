@@ -63,14 +63,19 @@ test('unified winter funnel loads on XC and Ice without personal storage', () =>
   assert.doesNotMatch(funnel + finalUx + seasonal, /localStorage|sessionStorage|document\.cookie|geolocation|getCurrentPosition|fingerprint/i);
 });
 
-test('XC ownership penalty and winter freeze rule remain explicit', () => {
+test('XC ownership recovery removes the orphan penalty and refreezes winter', () => {
   const score = JSON.parse(read('benchmarks/winter-engine-scorecard.json'));
   const ownership = read('docs/winter-xc-ownership.md');
   const readiness = JSON.parse(read('benchmarks/winter-final-readiness.json'));
-  assert.equal(score.candidate.xc.penalties, 15);
-  assert.match(score.candidate.xc.penaltyReason, /ownership/i);
-  assert.match(ownership, /not recovered/i);
+  assert.equal(score.candidate.xc.penalties, 0);
+  assert.equal(score.candidate.xc.observed.sourceOwnershipRecovered, true);
+  assert.equal(score.candidate.xc.observed.gitDeploymentRecovered, true);
+  assert.equal(score.candidate.xc.observed.sourceRepo, 'izworskic/xcski');
+  assert.match(ownership, /source ownership and Git-to-Vercel deployment ownership are \*\*recovered\*\*/i);
+  assert.match(ownership, /052cae8410847373da34c2ec7955061d3de7cae2/);
+  assert.match(ownership, /28171070eb3e2195af843e5e6e4e735c9ada8cc9/);
   assert.match(ownership, /Winter freeze rule/);
-  assert.match(ownership, /Do not change, replace, redeploy/i);
   assert.equal(readiness.reopenTriggers.length, 5);
+  assert.ok(readiness.reopenTriggers.includes('deployment ownership or control regression'));
+  assert.equal(existsSync(path.join(root, 'public/xcski/index.html')), false);
 });
