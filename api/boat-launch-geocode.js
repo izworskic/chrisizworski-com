@@ -10,10 +10,19 @@ function validCoordinate(value, min, max) {
   return Number.isFinite(n) && n >= min && n <= max;
 }
 
+function isMichiganCandidate(row = {}) {
+  const address = row.address || {};
+  const state = String(address.state || "").toLowerCase();
+  const stateCode = String(address['ISO3166-2-lvl4'] || address.state_code || "").toUpperCase();
+  const display = String(row.display_name || "").toLowerCase();
+  return state === "michigan" || stateCode === "US-MI" || stateCode === "MI" || /(?:^|,\s*)michigan(?:,|$)/.test(display);
+}
+
 function chooseCandidate(rows = []) {
   const valid = rows.filter(row =>
     validCoordinate(row?.lat, 41.5, 49.6) &&
-    validCoordinate(row?.lon, -90.6, -82.0)
+    validCoordinate(row?.lon, -90.6, -82.0) &&
+    isMichiganCandidate(row)
   );
   if (!valid.length) return null;
   const preferred = valid.find(row => {
@@ -80,4 +89,4 @@ module.exports = async function handler(req, res) {
   }
 };
 
-module.exports._test = { NOMINATIM, MICHIGAN_VIEWBOX, cleanQuery, validCoordinate, chooseCandidate };
+module.exports._test = { NOMINATIM, MICHIGAN_VIEWBOX, cleanQuery, validCoordinate, isMichiganCandidate, chooseCandidate };
