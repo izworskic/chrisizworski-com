@@ -25,7 +25,8 @@
     "generate:ice": "python3 scripts/ice/gen_site.py",
     "benchmark:decision-network": "node scripts/benchmark-decision-network-growth.mjs --check",
     "benchmark:map-insights": "node scripts/benchmark-map-insight-quality.mjs --check",
-    "benchmark:boat-launches": "node scripts/benchmark-boat-launch-usability.mjs --check"
+    "benchmark:boat-launches": "node scripts/benchmark-boat-launch-usability.mjs --check",
+    "benchmark:boat-launches-v3": "node scripts/benchmark-boat-launch-product-v3.mjs --check"
   },
   "engines": {
     "node": "22.x"
