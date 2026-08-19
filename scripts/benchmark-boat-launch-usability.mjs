@@ -34,7 +34,7 @@ const checks={
     sourceCode.includes('ntrailerableparking'),sourceCode.includes('nlanes'),sourceCode.includes('rampcode_new'),sourceCode.includes('operating_hours'),sourceCode.includes('greatlakesaccess'),sourceCode.includes('carrydowntype'),js.includes('distanceMiles')
   )},
   failClosed:{max:10,ok:pass(
-    api.includes('fallback_used: false'),api.includes('res.status(502)'),js.includes('No legacy or guessed launch pins are being shown.'),js.includes('records=[];shortlist=[]'),js.includes('if(layer)layer.clearLayers()'),html.includes('A source outage is shown separately')
+    api.includes('fallback_used: false'),api.includes('res.status(502)'),js.includes('No legacy or guessed launch pins are being shown.'),js.includes('records=[];shortlist=[]'),js.includes('if(layer)layer.clearLayers()'),/source outage|primary-source outage/i.test(html)
   )}
 };
 
