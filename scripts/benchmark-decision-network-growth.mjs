@@ -35,7 +35,7 @@ add('boatDecisionUsefulness',3,/URLSearchParams/.test(boatJs)&&/replaceState/.te
 const wreckRows=(wreck.match(/<tr><td><strong>/g)||[]).length;
 add('shipwreckExplorerDepth',5,wreckRows>=60,`wreck inventory fell below 60 (${wreckRows})`);
 add('shipwreckExplorerDepth',5,/shipwreck-explorer\.js/.test(wreck)&&/Great Storm of 1913/.test(wreckJs)&&/Lake Superior/.test(wreckJs)&&/Highest loss of life/.test(wreckJs),'shipwreck explorer presets are incomplete');
-add('shipwreckExplorerDepth',4,/named-place anchors/i.test(wreckJs)&&/not wreck coordinates/i.test(wreckJs),'shipwreck map precision boundary missing');
+add('shipwreckExplorerDepth',4,/named-place (?:story )?anchors/i.test(wreckJs)&&/not wreck coordinates/i.test(wreckJs),'shipwreck map precision boundary missing');
 add('shipwreckExplorerDepth',3,/Daniel J\. Morrell<\/strong><\/td><td>Huron<\/td>/.test(wreck)&&/Harbor Beach, MI/.test(wreck),'Daniel J. Morrell lake/location correction missing');
 add('shipwreckExplorerDepth',3,/Edmund Fitzgerald<\/strong>[\s\S]{0,500}Restricted \/ licensed/.test(wreck)&&/Hamilton &(?:amp;)? Scourge<\/strong>[\s\S]{0,500}Restricted \/ licensed/.test(wreck)&&!/designated a maritime burial ground, diving is prohibited/i.test(wreck),'prescribed Ontario wreck access labels or FAQ wording are inconsistent');
 

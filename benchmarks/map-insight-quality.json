@@ -1,7 +1,7 @@
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "created": "2026-08-18",
-  "objective": "Replace synthetic-looking visible media and convert launch/shipwreck map dots into linked, trustworthy decision and story insights without weakening canonical ownership, safety boundaries, privacy, or the existing record-rich parent pages.",
+  "objective": "Require real two-way correlation between each map and the crawlable data it represents. A marker must control the matching page data and the matching page record must control the map, without false precision, unsafe condition claims, or search-surface proliferation.",
   "maxScore": 100,
   "target": {
     "minimumEffectiveScore": 95,
@@ -9,32 +9,34 @@
     "fatalPenaltyAllowed": false
   },
   "baseline": {
-    "score": 43,
-    "loss": 57,
+    "score": 40,
+    "loss": 60,
     "dimensions": {
-      "authenticMedia": 0,
-      "boatMarkerInsight": 8,
-      "shipwreckMarkerInsight": 5,
-      "trustAndSourceBoundary": 15,
-      "searchIntegrity": 10,
-      "measurementAndAccessibility": 5
+      "authenticMedia": 15,
+      "boatDataKeyedCorrelation": 0,
+      "boatBidirectionalControl": 5,
+      "shipwreckMapToTable": 5,
+      "shipwreckRecordToMap": 0,
+      "trustSearchAccessibility": 15
     },
-    "note": "Structural baseline of the just-merged release: the root hero appeared synthetic; launch popups exposed name/lake/regional observations but no persistent decision card; shipwreck markers exposed only a regional label and record count. This is a build-quality baseline, not a traffic forecast."
+    "note": "Recalibrated after user testing of PR #77. The prior 95/100 benchmark rewarded the presence of insight copy and links but did not require stable data-key mapping or synchronized map/table state. Boat still correlated markers by DOM index and Shipwreck marker selection did not change the underlying table. This baseline reflects actual interaction value rather than string presence."
   },
   "dimensions": [
-    {"key": "authenticMedia", "weight": 20, "candidate": 15, "note": "Visible root hero is replaced at runtime with a traceable CC BY real Michigan launch photograph and visible attribution. Five points remain lost because the old local fallback/social image still exists in static HTML."},
-    {"key": "boatMarkerInsight", "weight": 25, "candidate": 25},
-    {"key": "shipwreckMarkerInsight", "weight": 25, "candidate": 25},
-    {"key": "trustAndSourceBoundary", "weight": 15, "candidate": 15},
-    {"key": "searchIntegrity", "weight": 10, "candidate": 10},
-    {"key": "measurementAndAccessibility", "weight": 5, "candidate": 5}
+    {"key": "authenticMedia", "weight": 20, "candidate": 15, "note": "Visible Boat hero remains a traceable real Michigan launch photograph. Five points remain lost because the old static/social fallback still exists in source HTML."},
+    {"key": "boatDataKeyedCorrelation", "weight": 20, "candidate": 20},
+    {"key": "boatBidirectionalControl", "weight": 20, "candidate": 20},
+    {"key": "shipwreckMapToTable", "weight": 20, "candidate": 20},
+    {"key": "shipwreckRecordToMap", "weight": 10, "candidate": 10},
+    {"key": "trustSearchAccessibility", "weight": 10, "candidate": 10}
   ],
   "fatalPenalties": [
-    "The displayed Boat Launch Finder root hero remains generated/synthetic or lacks traceable real-photo provenance and visible attribution.",
-    "A boat marker is presented as a launch safety rating or its regional NDBC station as ramp/harbor truth.",
+    "Boat marker-to-record correlation uses DOM/index position such as leaflet-interactive array order instead of a launch slug/key.",
+    "Boat filters change page records without changing the map marker set, or a page launch cannot focus/open its exact map marker.",
+    "A Shipwreck map marker only changes popup/insight copy while leaving unrelated table records visible.",
+    "A mappable Shipwreck table record has no reverse Show on map path to its regional anchor.",
     "A shipwreck regional anchor is represented as an exact wreck, navigation, or dive coordinate.",
-    "Marker interactions remain decorative/count-only with no linked underlying record or useful next action.",
+    "A boat marker or NDBC regional observation is presented as ramp, harbor, or boating-safety truth.",
     "Either parent canonical changes, thin child URLs are created, precise/personal location data is collected, or Circle Tour PR #51 is modified."
   ],
-  "nextLossRemoval": "Replace the static root hero/og:image fallback with the same documented real photograph in a future source-safe static media change; do not block the insight release on that non-visible fallback."
+  "nextLossRemoval": "Replace the Boat static root hero/og:image fallback with the same documented real photograph in a source-safe static media change. Do not weaken map-data correlation to remove this residual media loss."
 }

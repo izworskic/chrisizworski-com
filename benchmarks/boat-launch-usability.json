@@ -1,0 +1,32 @@
+{
+  "name": "Michigan Boat Launch Finder decision-usability benchmark",
+  "version": "1.0.0",
+  "baseline": {
+    "score": 30,
+    "loss": 70,
+    "note": "Pre-correction branch had map/card synchronization and a real visible photo, but legacy coordinates were treated as exact, condition data was mostly raw, personas were not served, and there was no alternative-launch decision layer."
+  },
+  "target": {
+    "minimumEffectiveScore": 95,
+    "maximumLoss": 5,
+    "fatalFailuresAllowed": 0
+  },
+  "dimensions": [
+    {"key": "authoritativeLocation", "weight": 25},
+    {"key": "conversationalDecisionValue", "weight": 20},
+    {"key": "conditionsInterpretation", "weight": 15},
+    {"key": "mapCardGoogleControl", "weight": 15},
+    {"key": "personaUsefulness", "weight": 10},
+    {"key": "nearbyAlternatives", "weight": 10},
+    {"key": "authenticMedia", "weight": 5}
+  ],
+  "fatalFailures": [
+    "legacy coordinates presented as verified without source",
+    "approximate coordinates used for turn-by-turn routing",
+    "map and launch card use different records",
+    "missing Google Maps handoff",
+    "raw NDBC data presented as ramp-local or safety truth",
+    "invented ramp amenities or suitability",
+    "synthetic launch image presented as a real place"
+  ]
+}
