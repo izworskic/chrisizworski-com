@@ -47,7 +47,6 @@ function endpoint(){
     where:WHERE,
     outFields:FIELDS.join(','),
     returnGeometry:'false',
-    orderByFields:'name',
     f:'json'
   });
   return `${DNR_LAYER}/query?${q}`;
@@ -69,6 +68,7 @@ function num(v){
 function yes(v){return String(v||'').toLowerCase()==='yes';}
 
 function dateText(v){
+  if(v===null||v===undefined||v==='')return '';
   const n=Number(v);
   if(!Number.isFinite(n))return '';
   const d=new Date(n);
