@@ -24,11 +24,10 @@ add('authorityGraph',3,/decision-network\.css/.test(tools)&&/decision-network\.c
 add('authorityGraph',3,/decision-network\.js/.test(tools)&&/decision-network\.js/.test(greatLakes),'shared handoff measurement is not loaded on both hubs');
 
 // Boat: 20
-const boatItems=(boat.match(/"@type":\s*"ListItem"/g)||[]).length;
-add('boatDecisionUsefulness',5,boatItems>=42,`boat schema inventory fell below 42 (${boatItems})`);
-add('boatDecisionUsefulness',5,/boat-launch-finder\.js/.test(boat)&&/Launch or county/.test(boatJs)&&/Great Lake/.test(boatJs)&&/Launch character/.test(boatJs),'boat finder filters are incomplete');
-add('boatDecisionUsefulness',4,/google\.com\/maps\/dir/.test(boatJs)&&/data-launch-action="directions"/.test(boatJs),'launch directions action missing');
-add('boatDecisionUsefulness',3,/screening tool, not a launch or boating safety rating/i.test(boatJs),'boat screening boundary missing');
+add('boatDecisionUsefulness',5,/PRDBASPublicView\/FeatureServer\/0/.test(boatJs)&&/launch_status='Open'/.test(boatJs)&&/greatlakesaccess LIKE 'Yes%'/.test(boatJs),'boat inventory is not source-first');
+add('boatDecisionUsefulness',5,!/id="locdata"/.test(boat)&&!/MANUAL_VERIFIED|ALIASES|bestMatch|nameSimilarity/.test(boatJs)&&!/Bay City State Park Launch/.test(boat),'legacy/fuzzy launch inventory remains');
+add('boatDecisionUsefulness',4,/const markerById=new Map\(\)/.test(boatJs)&&/google\.com\/maps\/dir/.test(boatJs)&&/data-launch-id/.test(boatJs),'map/card/directions correlation is incomplete');
+add('boatDecisionUsefulness',3,/ntrailerableparking/.test(boatJs)&&/nlanes/.test(boatJs)&&/rampcode_new/.test(boatJs)&&/operating_hours/.test(boatJs),'source-backed launch decision details are incomplete');
 add('boatDecisionUsefulness',3,/URLSearchParams/.test(boatJs)&&/replaceState/.test(boatJs),'shareable boat filter state missing');
 
 // Shipwreck: 20
@@ -52,11 +51,11 @@ add('searchIntegrity',2,launchChildren.join(',')==='lake-michigan,saginaw-bay',`
 const newCode=boatJs+'\n'+wreckJs+'\n'+networkJs;
 add('trustAndPrivacy',5,!/navigator\.geolocation|getCurrentPosition/i.test(newCode),'precise geolocation introduced');
 add('trustAndPrivacy',4,!/localStorage|sessionStorage|document\.cookie/i.test(newCode),'browser storage/cookies introduced');
-add('trustAndPrivacy',3,/nearest mapped NDBC station/i.test(boatJs)&&/can differ materially inside a river, marina, bay or harbor/i.test(boatJs),'regional buoy limitation is not explicit');
+add('trustAndPrivacy',3,/No legacy or guessed launch pins are being shown/.test(boatJs)&&/if\(layer\)layer\.clearLayers\(\)/.test(boatJs),'boat source failure does not fail closed');
 add('trustAndPrivacy',3,/not navigation coordinates, dive coordinates/i.test(wreckJs),'wreck regional map could imply operational coordinates');
 
 // Measurement: 10
-add('measurement',3,/Boat Launch Filter/.test(boatJs)&&/Boat Launch Pick/.test(boatJs)&&/Boat Launch Action/.test(boatJs),'boat decision events missing');
+add('measurement',3,/Boat Launch Filter/.test(boatJs)&&/Boat Launch Select/.test(boatJs)&&/Boat Launch Action/.test(boatJs),'boat decision events missing');
 add('measurement',3,/Shipwreck Explorer Filter/.test(wreckJs)&&/Shipwreck Explorer Preset/.test(wreckJs)&&/Shipwreck Detail Open/.test(wreckJs),'shipwreck events missing');
 add('measurement',4,/Decision Network Handoff/.test(networkJs)&&/destination:a\.dataset\.decisionNetwork/.test(networkJs)&&!/href/.test(networkJs),'network measurement must use symbolic destination metadata, not URLs');
 
