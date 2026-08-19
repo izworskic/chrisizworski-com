@@ -109,6 +109,7 @@ if(municipalSupplemental.length){
 
 console.log('\nAcceptance-destination samples (25-mile initial radius):');
 let zeroSourceBacked=0;
+const coverage=[];
 for(const [name,lat,lon] of ACCEPTANCE){
   const qualifiedNearby=nearby(sourceQualified,lat,lon);
   const reviewNearby=nearby(reviewInProgress,lat,lon);
@@ -120,13 +121,53 @@ for(const [name,lat,lon] of ACCEPTANCE){
     ...municipalNearby.map(a=>({...a,_tier:'MUNICIPAL'})),
   ].sort((a,b)=>a._mi-b._mi);
   if(!sourceBackedNearby.length)zeroSourceBacked++;
+  coverage.push({
+    destination:name,
+    latitude:lat,
+    longitude:lon,
+    sourceQualified:qualifiedNearby.length,
+    reviewInProgress:reviewNearby.length,
+    municipal:municipalNearby.length,
+    sourceBacked:sourceBackedNearby.length,
+    withheld:withheldNearby.length,
+    nearest:sourceBackedNearby.slice(0,8).map(a=>({tier:a._tier,miles:Number(a._mi.toFixed(2)),name:a.name,waterbody:a.waterbody||null,id:a.id||a.facilityid||a.globalid||a.OBJECTID})),
+  });
   console.log(`\n${name}: ${qualifiedNearby.length} DNR source-qualified + ${reviewNearby.length} DNR review-in-progress + ${municipalNearby.length} municipal = ${sourceBackedNearby.length} source-backed within 25 mi; ${withheldNearby.length} DNR withheld`);
   for(const a of sourceBackedNearby.slice(0,8))console.log(`  ${a._tier.padEnd(10)} ${a._mi.toFixed(1)} mi | ${a.name} | ${a.waterbody||'waterbody not listed'} | id=${a.id||a.facilityid||a.globalid||a.OBJECTID}`);
   for(const a of withheldNearby.slice(0,5))console.log(`  WITHHELD   ${a._mi.toFixed(1)} mi | ${a.name} | flag=${a.flag||'(blank)'} | comment=${String(a.flagcomments||'(none)').replace(/\s+/g,' ').slice(0,140)} | id=${a.facilityid||a.globalid||a.OBJECTID}`);
 }
 
 const falseBayCity=[...records,...SUPPLEMENTAL].filter(a=>String(a.name||'').trim().toLowerCase()==='bay city state park launch');
-if(falseBayCity.length)throw new Error('Known false Bay City State Park Launch reappeared in a source inventory');
-if(total.count<500||records.length<500||open.length<300||openGreatLakes.length<50||sourceQualified.length<20||usableDnr.length<50)throw new Error('DNR source audit returned implausibly low inventory counts');
-if(!municipalSupplemental.length)throw new Error('Expected at least one source-qualified municipal supplement for the documented DNR coverage gap');
-if(zeroSourceBacked>0)throw new Error(`Coverage audit found ${zeroSourceBacked} acceptance destinations with zero source-backed launches inside the initial 25-mile radius`);
+const report={
+  generatedAt:new Date().toISOString(),
+  dnrLayerLastEdit:metadata?.editingInfo?.lastEditDate||metadata?.lastEditDate||null,
+  counts:{
+    totalLayer:total.count,
+    boatingAccessSites:records.length,
+    open:open.length,
+    openGreatLakes:openGreatLakes.length,
+    sourceQualified:sourceQualified.length,
+    reviewInProgress:reviewInProgress.length,
+    usableDnr:usableDnr.length,
+    municipalSupplemental:municipalSupplemental.length,
+    sourceBacked:sourceBacked.length,
+    withheld:withheld.length,
+    nullFacilityId: nullFacility.length,
+  },
+  coverage,
+  falseBayCityStateParkRecords:falseBayCity.map(a=>({name:a.name,flag:a.flag||null,referenceonly:a.referenceonly||null,id:a.id||a.facilityid||a.globalid||a.OBJECTID||null})),
+  failures:{
+    falseBayCityStatePark:falseBayCity.length>0,
+    implausibleCounts:total.count<500||records.length<500||open.length<300||openGreatLakes.length<50||sourceQualified.length<20||usableDnr.length<50,
+    missingMunicipalSupplement:municipalSupplemental.length===0,
+    zeroCoverageDestinations:coverage.filter(x=>x.sourceBacked===0).map(x=>x.destination),
+  },
+};
+fs.mkdirSync('artifacts',{recursive:true});
+fs.writeFileSync('artifacts/boat-launch-source-audit.json',JSON.stringify(report,null,2));
+console.log('\nDiagnostic report: artifacts/boat-launch-source-audit.json');
+
+if(report.failures.falseBayCityStatePark)throw new Error(`Known false Bay City State Park Launch appears in raw/source inventory (${report.falseBayCityStateParkRecords.length} record)`);
+if(report.failures.implausibleCounts)throw new Error('DNR source audit returned implausibly low inventory counts');
+if(report.failures.missingMunicipalSupplement)throw new Error('Expected at least one source-qualified municipal supplement for the documented DNR coverage gap');
+if(report.failures.zeroCoverageDestinations.length)throw new Error(`Coverage audit found zero source-backed launches within 25 miles for: ${report.failures.zeroCoverageDestinations.join(', ')}`);
