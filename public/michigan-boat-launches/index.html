@@ -23,7 +23,7 @@
   "url":"https://chrisizworski.com/michigan-boat-launches/",
   "description":"A source-first finder for currently open Michigan Great Lakes boating access sites using Michigan DNR facility records.",
   "author":{"@type":"Person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
-  "dateModified":"2026-08-18",
+  "dateModified":"2026-08-19",
   "inLanguage":"en-US"
 }
 </script>
@@ -114,7 +114,7 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:clamp(36px,5vw,62px);line
   <section class="controls" aria-label="Launch filters">
     <div class="controls-grid">
       <div class="field"><label for="launch-search">Search launch, waterbody or county</label><input id="launch-search" type="search" autocomplete="off" placeholder="Saginaw River, Alpena, Bay…"></div>
-      <div class="field"><label for="access-filter">Great Lakes access</label><select id="access-filter"><option value="">Any verified access</option><option value="0.5">Within 0.5 mile</option><option value="2">0.5–2 miles</option></select></div>
+      <div class="field"><label for="access-filter">Great Lakes access</label><select id="access-filter"><option value="">Any source-qualified access</option><option value="0.5">Within 0.5 mile</option><option value="2">0.5–2 miles</option></select></div>
       <div class="field"><label for="ramp-filter">Ramp</label><select id="ramp-filter"><option value="">Any ramp</option><option value="1">Hard surface / most boats</option><option value="2">Hard surface / limited depth</option><option value="3">Gravel / smaller boats</option><option value="carry">Carry-down access</option></select></div>
       <div class="field"><label for="parking-filter">Trailer parking</label><select id="parking-filter"><option value="0">Any listed amount</option><option value="10">10+ spaces</option><option value="25">25+ spaces</option><option value="50">50+ spaces</option></select></div>
       <button class="reset" id="launch-reset" type="button">Reset</button>
@@ -124,7 +124,7 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:clamp(36px,5vw,62px);line
 
   <div class="workspace">
     <section class="results-panel" aria-labelledby="results-title">
-      <div class="results-head"><h2 id="results-title">Verified launch records</h2><span>Click a record to focus its DNR pin</span></div>
+      <div class="results-head"><h2 id="results-title">Source-qualified launch records</h2><span>Click a record to focus its DNR pin</span></div>
       <div class="results" id="launch-results"><div class="empty">Loading Michigan DNR boating access data…</div></div>
     </section>
     <section class="map-panel" aria-label="Michigan Great Lakes boat launch map">
