@@ -1,4 +1,5 @@
 const DNR_LAYER = "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/arcgis/rest/services/PRDBASPublicView/FeatureServer/0";
+const SUPPLEMENTAL = require("../data/boat-launch-supplemental.json");
 
 const WHERE = [
   "bas_type='Boating Access Site'",
@@ -62,9 +63,6 @@ function eligibleAttributes(a = {}) {
   if (!sourceId(a)) return false;
   if (optionalNumber(a.latitude) === null || optionalNumber(a.longitude) === null) return false;
   if (String(a.referenceonly || "").toLowerCase() === "yes") return false;
-  // DNR's InProgress code means the facility record is being reviewed. It is still
-  // an official open launch record and may be shown with an explicit provisional badge.
-  // Review Needed (Flag), unknown future flag values, and reference-only records stay withheld.
   if (reviewStatus(a) === "withhold") return false;
   return true;
 }
@@ -80,6 +78,7 @@ function normalizeFeature(feature, sourceUpdatedAt = null) {
     sourceId: identity.sourceId,
     sourceIdType: identity.idType,
     sourceUrl: DNR_LAYER,
+    sourceLabel: "Michigan DNR Parks & Recreation boating access data",
     verificationStatus: status,
     detailsUnderReview: status === "dnr-review-in-progress",
     reviewNote: status === "dnr-review-in-progress" && hasValue(a.flagcomments) ? String(a.flagcomments).trim() : null,
@@ -96,6 +95,7 @@ function normalizeFeature(feature, sourceUpdatedAt = null) {
     county: a.WaterbodyCounty || a.NameCounty || a.county || null,
     greatLakesAccess: a.greatlakesaccess || null,
     rampClass: optionalNumber(a.rampcode_new),
+    rampDescription: null,
     lanes: optionalNumber(a.nlanes),
     trailerParking: optionalNumber(a.ntrailerableparking),
     vehicleParking: optionalNumber(a.nvehicleonlyparking),
@@ -109,9 +109,12 @@ function normalizeFeature(feature, sourceUpdatedAt = null) {
     operatingHours: a.operating_hours || null,
     operator: a.dnradmin || a.maintby || a.ownedby || null,
     owner: a.ownedby || null,
+    seasonalStatus: null,
     grantInAid: String(a.gia || "").toLowerCase() === "yes",
     waterwaysConfirmed: String(a.waterwaysprogramconfirmation || "").toLowerCase() === "yes",
     coordinateCollection: optionalNumber(a.collecttype),
+    coordinatePrecision: null,
+    coordinateSourceUrl: null,
     dataSource: a.datasource || null,
     qaDate: a.qaqc_1_date ?? null,
     lastEditedDate: a.last_edited_date ?? null,
@@ -119,6 +122,43 @@ function normalizeFeature(feature, sourceUpdatedAt = null) {
     closureUrl: a.closures_url || null,
     localWatercraftControls: a.local_watercraft_controls || null,
     description: a.descrip || null,
+    address: null,
+  };
+}
+
+function normalizeSupplemental(record = {}) {
+  const latitude = optionalNumber(record.latitude);
+  const longitude = optionalNumber(record.longitude);
+  if (
+    record.sourceType !== "municipal-supplemental" ||
+    record.verificationStatus !== "municipal-source-qualified" ||
+    !hasValue(record.id) || !hasValue(record.name) || !hasValue(record.operator) ||
+    !hasValue(record.sourceUrl) || !hasValue(record.coordinateSourceUrl) ||
+    latitude === null || longitude === null
+  ) return null;
+  return {
+    ...record,
+    id: String(record.id),
+    sourceId: String(record.id),
+    sourceIdType: "supplemental-registry",
+    latitude,
+    longitude,
+    detailsUnderReview: false,
+    rampClass: optionalNumber(record.rampClass),
+    lanes: optionalNumber(record.lanes),
+    trailerParking: optionalNumber(record.trailerParking),
+    vehicleParking: optionalNumber(record.vehicleParking),
+    piers: optionalNumber(record.piers),
+    vaultToilets: optionalNumber(record.vaultToilets),
+    flushToilets: optionalNumber(record.flushToilets),
+    otherToilets: optionalNumber(record.otherToilets),
+    grantInAid: false,
+    waterwaysConfirmed: false,
+    carryDown: false,
+    coordinateCollection: null,
+    qaDate: null,
+    lastEditedDate: null,
+    sourceUpdatedAt: record.verifiedAt || null,
   };
 }
 
@@ -152,14 +192,17 @@ module.exports = async function handler(req, res) {
       fetchJson(`${DNR_LAYER}?f=json`).catch(() => null),
     ]);
     const sourceUpdatedAt = metadata?.editingInfo?.lastEditDate || metadata?.lastEditDate || null;
-    const launches = (query.features || []).map(f => normalizeFeature(f, sourceUpdatedAt)).filter(Boolean);
+    const dnrLaunches = (query.features || []).map(f => normalizeFeature(f, sourceUpdatedAt)).filter(Boolean);
+    const supplementalLaunches = SUPPLEMENTAL.map(normalizeSupplemental).filter(Boolean);
+    const launches = [...dnrLaunches, ...supplementalLaunches];
     const unique = [...new Map(launches.map(x => [x.id, x])).values()];
-    if (!unique.length) throw new Error("Michigan DNR returned no qualifying open Great Lakes-access sites");
+    if (!dnrLaunches.length) throw new Error("Michigan DNR returned no qualifying open Great Lakes-access sites");
     const sourceQualifiedCount = unique.filter(x => x.verificationStatus === "source-qualified").length;
     const reviewInProgressCount = unique.filter(x => x.verificationStatus === "dnr-review-in-progress").length;
+    const municipalSupplementalCount = unique.filter(x => x.verificationStatus === "municipal-source-qualified").length;
 
     return res.status(200).json({
-      source: "Michigan DNR Parks and Recreation boating access data",
+      source: "Michigan DNR boating access data plus source-qualified municipal supplements",
       source_url: DNR_LAYER,
       fetched_at: new Date().toISOString(),
       source_updated_at: sourceUpdatedAt,
@@ -169,14 +212,17 @@ module.exports = async function handler(req, res) {
         great_lakes_access: "Yes*",
         stable_id: "facilityid, otherwise globalid/OBJECTID",
         excludes_reference_only: true,
-        source_qualified: "blank facility review flag",
-        review_in_progress: "InProgress is displayed with provisional facility details",
-        withheld_review_status: "Review Needed and unknown flag values",
+        source_qualified: "blank DNR facility review flag",
+        review_in_progress: "DNR InProgress is displayed with provisional facility details",
+        withheld_review_status: "DNR Review Needed and unknown flag values",
+        municipal_supplemental: "owner/operator source plus independently documented launch-specific location evidence",
       },
       fallback_used: false,
       count: unique.length,
+      dnr_count: dnrLaunches.length,
       source_qualified_count: sourceQualifiedCount,
       review_in_progress_count: reviewInProgressCount,
+      municipal_supplemental_count: municipalSupplementalCount,
       launches: unique,
     });
   } catch (error) {
@@ -189,4 +235,4 @@ module.exports = async function handler(req, res) {
   }
 };
 
-module.exports._test = { DNR_LAYER, WHERE, FIELDS, hasValue, optionalNumber, sourceId, reviewStatus, eligibleAttributes, normalizeFeature, queryUrl };
+module.exports._test = { DNR_LAYER, WHERE, FIELDS, hasValue, optionalNumber, sourceId, reviewStatus, eligibleAttributes, normalizeFeature, normalizeSupplemental, queryUrl };
