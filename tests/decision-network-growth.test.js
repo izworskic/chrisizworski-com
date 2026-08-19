@@ -20,23 +20,29 @@ test('decision network is crawlable on safe hubs without altering protected dest
   assert.doesNotMatch(js,/destination.*href|href.*destination/);
 });
 
-test('boat launch finder preserves the 42-record parent and makes the decision faster',()=>{
+test('boat launch finder is source-first and makes the DNR record the map truth',()=>{
   const html=read('public/michigan-boat-launches/index.html');
   const js=read('public/assets/boat-launch-finder.js');
-  assert.match(html,/<title>Michigan Boat Launches Map &amp; Conditions \| Chris Izworski<\/title>/);
+  const api=read('api/boat-launches.js');
+  const code=js+'\n'+api;
+  assert.match(html,/<title>Michigan Great Lakes Boat Launch Finder \| Chris Izworski<\/title>/);
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/michigan-boat-launches/">'));
-  assert.match(html,/<h1 class="page-title">Michigan Boat Launch Finder<\/h1>/);
+  assert.match(html,/<h1>Great Lakes Boat Launch Finder<\/h1>/);
   assert.match(html,/assets\/boat-launch-finder\.js/);
-  const loc=JSON.parse((html.match(/<script id="locdata" type="application\/json">([\s\S]*?)<\/script>/)||[])[1]);
-  assert.equal(loc.length,42);
-  assert.equal(new Set(loc.map(x=>x.slug)).size,42);
-  assert.match(js,/Launch or county/);
-  assert.match(js,/Great Lake/);
-  assert.match(js,/Launch character/);
+  assert.doesNotMatch(html,/id="locdata"|Bay City State Park Launch|"numberOfItems": 42/);
+  assert.match(api,/PRDBASPublicView\/FeatureServer\/0/);
+  assert.match(api,/launch_status='Open'/);
+  assert.match(api,/greatlakesaccess LIKE 'Yes%'/);
+  assert.match(api,/facilityid IS NOT NULL/);
+  assert.match(api,/referenceonly/);
+  assert.match(api,/fallback_used: false/);
+  assert.match(js,/SOURCE_API='\/api\/boat-launches'/);
+  assert.match(js,/if\(!a\.facilityid\|\|!a\.name/);
+  assert.match(js,/Facility ID/);
   assert.match(js,/google\.com\/maps\/dir/);
-  assert.match(js,/screening tool, not a launch or boating safety rating/i);
-  assert.match(js,/nearest mapped NDBC station/i);
-  assert.doesNotMatch(js,/navigator\.geolocation|getCurrentPosition|localStorage|sessionStorage|document\.cookie/);
+  assert.match(js,/No legacy or guessed launch pins are being shown/);
+  assert.doesNotMatch(code,/MANUAL_VERIFIED|ALIASES|bestMatch|nameSimilarity/);
+  assert.doesNotMatch(code,/navigator\.geolocation|getCurrentPosition|localStorage|sessionStorage|document\.cookie/);
   const children=readdirSync(path.join(root,'public/michigan-boat-launches'),{withFileTypes:true}).filter(x=>x.isDirectory()).map(x=>x.name).sort();
   assert.deepEqual(children,['lake-michigan','saginaw-bay']);
 });
