@@ -20,11 +20,12 @@
     "prepare:source": "node scripts/prepare-source.mjs",
     "test": "node --test tests/*.test.js",
     "verify": "node scripts/verify-source.mjs",
-    "verify:all": "npm test && npm run verify && npm run benchmark:beaches && npm run benchmark:growth && npm run benchmark:seo && npm run benchmark:ctr -- --check && npm run benchmark:entity -- --check && npm run benchmark:winter -- --check && npm run benchmark:winter-flow -- --check && npm run benchmark:winter-final -- --check && npm run freshness -- --check && npm run benchmark:citation -- --check && npm run benchmark:decision-network && npm run benchmark:map-insights",
+    "verify:all": "npm test && npm run verify && npm run benchmark:beaches && npm run benchmark:growth && npm run benchmark:seo && npm run benchmark:ctr -- --check && npm run benchmark:entity -- --check && npm run benchmark:winter -- --check && npm run benchmark:winter-flow -- --check && npm run benchmark:winter-final -- --check && npm run freshness -- --check && npm run benchmark:citation -- --check && npm run benchmark:decision-network && npm run benchmark:map-insights && npm run benchmark:boat-launches",
     "verify:production-ready": "node scripts/verify-production-ready.mjs",
     "generate:ice": "python3 scripts/ice/gen_site.py",
     "benchmark:decision-network": "node scripts/benchmark-decision-network-growth.mjs --check",
-    "benchmark:map-insights": "node scripts/benchmark-map-insight-quality.mjs --check"
+    "benchmark:map-insights": "node scripts/benchmark-map-insight-quality.mjs --check",
+    "benchmark:boat-launches": "node scripts/benchmark-boat-launch-usability.mjs --check"
   },
   "engines": {
     "node": "22.x"
