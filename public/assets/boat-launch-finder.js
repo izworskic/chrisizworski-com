@@ -3,7 +3,7 @@
 if(location.pathname!=='/michigan-boat-launches/')return;
 
 const $=(s,r=document)=>r.querySelector(s);
-const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[m]));
 const emit=(name,props={})=>{try{window.va?.('event',{name,...props});}catch{}};
 
 const SOURCE_API='/api/boat-launches';
@@ -35,7 +35,7 @@ let selectedId='';
 let sourceReady=false;
 const markerById=new Map();
 
-function num(v){const n=Number(v);return Number.isFinite(n)?n:null;}
+function num(v){if(v===null||v===undefined||String(v).trim()==='')return null;const n=Number(v);return Number.isFinite(n)?n:null;}
 function dateText(v){
   if(v===null||v===undefined||v==='')return '';
   const n=Number(v);const d=Number.isFinite(n)?new Date(n):new Date(v);
@@ -48,8 +48,8 @@ function distanceMiles(lat1,lon1,lat2,lon2){
   return 2*R*Math.asin(Math.sqrt(a));
 }
 function roundRadius(mi){return Math.max(25,Math.ceil(mi/5)*5);}
-function yes(v){return v===true||String(v||'').toLowerCase()==='yes';}
 function operatorText(a){return a.operator||a.owner||'Not listed';}
+function isReview(a){return a.verificationStatus==='dnr-review-in-progress'||a.detailsUnderReview===true;}
 function rampText(a){
   const code=num(a.rampClass);
   if(code===1)return 'Hard-surface ramp · DNR class for most trailerable boats';
@@ -77,12 +77,14 @@ function accessMatches(a){
 }
 function rampMatches(a){
   if(!ramp.value)return true;
+  if(isReview(a))return false;
   if(ramp.value==='carry')return !!a.carryDown;
   return String(num(a.rampClass))===ramp.value;
 }
 function parkingMatches(a){
   const min=Number(parking.value||0);
   if(!min)return true;
+  if(isReview(a))return false;
   return (num(a.trailerParking)||0)>=min;
 }
 function launchNameMatches(a){
@@ -106,25 +108,30 @@ function chooseNearby(base){
 function cardHTML(a,index){
   const qa=dateText(a.qaDate),edited=dateText(a.lastEditedDate||a.sourceUpdatedAt);
   const restrooms=(num(a.vaultToilets)||0)+(num(a.flushToilets)||0)+(num(a.otherToilets)||0);
+  const review=isReview(a);
   const badges=[
     '<span class="badge open">DNR status: Open</span>',
+    review?'<span class="badge review">DNR review in progress</span>':'<span class="badge verified">Source-qualified</span>',
     a.waterwaysConfirmed?'<span class="badge confirmed">Waterways confirmed</span>':'',
     a.grantInAid?'<span class="badge">Grant-in-aid</span>':'',
     a.carryDown?'<span class="badge">Carry-down</span>':''
   ].filter(Boolean).join('');
-  return `<article class="launch-card${a.id===selectedId?' selected':''}" data-launch-id="${esc(a.id)}" tabindex="0">
+  const reviewCallout=review?'<div class="review-callout"><strong>Facility details under DNR review.</strong> This is an official open DNR launch record with published coordinates, but ramp, parking, fee, hours or other metadata may still be changing. Confirm those details before a trip.</div>':'';
+  const provisional=review?' · provisional':'';
+  return `<article class="launch-card${a.id===selectedId?' selected':''}${review?' under-review':''}" data-launch-id="${esc(a.id)}" tabindex="0">
     <div class="rank" aria-label="Result ${index+1}">${index+1}</div>
     <div class="card-body">
       <div class="card-top"><div><h3 class="card-title">${esc(a.name)}</h3><div class="waterbody">${esc(a.waterbody||a.county||'Waterbody not listed')}</div></div><strong class="distance">${a.distanceMiles.toFixed(1)} mi</strong></div>
       <div class="badges">${badges}</div>
-      <div class="decision-line">${esc(rampText(a))}</div>
+      ${reviewCallout}
+      <div class="decision-line">${esc(rampText(a))}${review?'<span class="provisional"> · provisional</span>':''}</div>
       <div class="facts">
-        <div class="fact"><b>Trailer parking</b><span>${a.trailerParking===null?'Not listed':esc(a.trailerParking)}</span></div>
-        <div class="fact"><b>Launch lanes</b><span>${a.lanes===null?'Not listed':esc(a.lanes)}</span></div>
-        <div class="fact"><b>Fee / pass</b><span>${esc(a.fee||'Not listed')}</span></div>
-        <div class="fact"><b>Hours</b><span>${esc(a.operatingHours||'Not listed')}</span></div>
+        <div class="fact"><b>Trailer parking</b><span>${a.trailerParking===null?'Not listed':esc(a.trailerParking)}${a.trailerParking!==null?provisional:''}</span></div>
+        <div class="fact"><b>Launch lanes</b><span>${a.lanes===null?'Not listed':esc(a.lanes)}${a.lanes!==null?provisional:''}</span></div>
+        <div class="fact"><b>Fee / pass</b><span>${esc(a.fee||'Not listed')}${a.fee?provisional:''}</span></div>
+        <div class="fact"><b>Hours</b><span>${esc(a.operatingHours||'Not listed')}${a.operatingHours?provisional:''}</span></div>
         <div class="fact"><b>Operator</b><span>${esc(operatorText(a))}</span></div>
-        <div class="fact"><b>Restrooms</b><span>${restrooms>0?'Listed':'Not listed'}</span></div>
+        <div class="fact"><b>Restrooms</b><span>${restrooms>0?`Listed${provisional}`:'Not listed'}</span></div>
       </div>
       <div class="note">${esc(a.greatLakesAccess||'Great Lakes access')} · ${esc(coordinateText(a))}${edited?` · source updated ${esc(edited)}`:''}${qa?` · QA ${esc(qa)}`:''}</div>
       <div class="actions">
@@ -138,7 +145,8 @@ function cardHTML(a,index){
 }
 
 function popupHTML(a,index){
-  return `<strong>${index+1}. ${esc(a.name)}</strong><br><span>${a.distanceMiles.toFixed(1)} mi from ${esc(destinationPoint?.label||'destination')}</span><br><small>${esc(a.waterbody||'Waterbody not listed')} · ${esc(rampText(a))}</small><div style="margin-top:7px"><a href="${directions(a)}" target="_blank" rel="noopener">Directions</a> · <a href="#" data-popup-card="${esc(a.id)}">Open result</a></div>`;
+  const review=isReview(a)?'<br><small><strong>DNR review in progress</strong> · facility details provisional</small>':'';
+  return `<strong>${index+1}. ${esc(a.name)}</strong><br><span>${a.distanceMiles.toFixed(1)} mi from ${esc(destinationPoint?.label||'destination')}</span><br><small>${esc(a.waterbody||'Waterbody not listed')} · ${esc(rampText(a))}</small>${review}<div style="margin-top:7px"><a href="${directions(a)}" target="_blank" rel="noopener">Directions</a> · <a href="#" data-popup-card="${esc(a.id)}">Open result</a></div>`;
 }
 
 function loadLeaflet(){
@@ -162,8 +170,8 @@ async function initMap(){
   drawMap(true);
 }
 
-function launchIcon(index,selected){
-  return L.divIcon({className:'launch-number-icon',html:`<span class="${selected?'is-selected':''}">${index+1}</span>`,iconSize:[30,30],iconAnchor:[15,15]});
+function launchIcon(index,selected,review){
+  return L.divIcon({className:'launch-number-icon',html:`<span class="${selected?'is-selected ':''}${review?'is-review':''}">${index+1}</span>`,iconSize:[30,30],iconAnchor:[15,15]});
 }
 
 function drawMap(fit=false){
@@ -175,7 +183,7 @@ function drawMap(fit=false){
     bounds.push([destinationPoint.latitude,destinationPoint.longitude]);
   }
   shortlist.forEach((a,index)=>{
-    const m=L.marker([a.latitude,a.longitude],{icon:launchIcon(index,a.id===selectedId)}).addTo(layer);
+    const m=L.marker([a.latitude,a.longitude],{icon:launchIcon(index,a.id===selectedId,isReview(a))}).addTo(layer);
     m.bindPopup(popupHTML(a,index),{maxWidth:330});
     m.on('click',()=>select(a.id,'marker'));
     markerById.set(a.id,m);bounds.push([a.latitude,a.longitude]);
@@ -186,20 +194,22 @@ function drawMap(fit=false){
 
 function render(){
   if(!destinationPoint){
-    resultsTitle.textContent='Nearby verified launches';
-    results.innerHTML='<div class="empty"><strong>Choose where you want to boat.</strong><br>Search a Michigan city, bay, lake, river or harbor. The finder will rank verified launches by distance.</div>';
-    summary.textContent=sourceReady?`${records.length} source-qualified Great Lakes access records ready to search.`:'Loading current Michigan DNR launch records…';
+    resultsTitle.textContent='Nearby DNR-listed launches';
+    results.innerHTML='<div class="empty"><strong>Choose where you want to boat.</strong><br>Search a Michigan city, bay, lake, river or harbor. The finder ranks official open DNR launch records by distance and clearly marks records whose facility details are still under DNR review.</div>';
+    summary.textContent=sourceReady?`${records.length} official open Great Lakes-access records ready to search.`:'Loading current Michigan DNR launch records…';
     shortlist=[];drawMap(true);return;
   }
   resultsTitle.textContent=`Launches near ${destinationPoint.label}`;
   if(!shortlist.length){
-    results.innerHTML='<div class="empty"><strong>No verified launches match these refinements.</strong><br>Reset the optional ramp, parking or launch-name filters to broaden the shortlist.</div>';
-    summary.innerHTML=`No source-qualified launch matches the selected refinements near <strong>${esc(destinationPoint.label)}</strong>.`;
+    results.innerHTML='<div class="empty"><strong>No DNR-listed launches match these refinements.</strong><br>Reset the optional ramp, parking or launch-name filters to broaden the shortlist.</div>';
+    summary.innerHTML=`No matching launch record remains near <strong>${esc(destinationPoint.label)}</strong> after these refinements.`;
     emit('Boat Launch Zero Result',{reason:'refinements'});
   }else{
     results.innerHTML=shortlist.map(cardHTML).join('');
-    const expanded=radiusUsed>25?` Search expanded to <strong>${radiusUsed} miles</strong> because fewer than three qualified choices were available within 25 miles.`:'';
-    summary.innerHTML=`Showing <strong>${shortlist.length}</strong> nearest verified launch${shortlist.length===1?'':'es'} for <strong>${esc(destinationPoint.label)}</strong>.${expanded}`;
+    const expanded=radiusUsed>25?` Search expanded to <strong>${radiusUsed} miles</strong> because fewer than three choices were available within 25 miles.`:'';
+    const reviews=shortlist.filter(isReview).length;
+    const reviewText=reviews?` <strong>${reviews}</strong> result${reviews===1?' is':'s are'} marked DNR review in progress.`:'';
+    summary.innerHTML=`Showing <strong>${shortlist.length}</strong> nearest official DNR launch record${shortlist.length===1?'':'s'} for <strong>${esc(destinationPoint.label)}</strong>.${expanded}${reviewText}`;
   }
   drawMap(true);
 }
@@ -208,14 +218,14 @@ function rerank(source='filter'){
   if(!destinationPoint){render();return;}
   const choice=chooseNearby(refinedRecords());
   shortlist=choice.items;radiusUsed=choice.radius;selectedId='';render();
-  emit('Boat Launch Filter',{filter:source,results:shortlist.length,radius:radiusUsed||0});
+  emit('Boat Launch Filter',{filter:source,results:shortlist.length,radius:radiusUsed||0,reviewInProgress:shortlist.filter(isReview).length});
 }
 
 async function searchDestination(source='form'){
   const q=destinationSearch.value.trim();
   if(q.length<2){destinationSearch.focus();return;}
   destinationSubmit.disabled=true;destinationSubmit.textContent='Finding…';
-  summary.textContent='Locating destination and ranking verified launches…';
+  summary.textContent='Locating destination and ranking official DNR launch records…';
   try{
     const r=await fetch(`${GEOCODE_API}?q=${encodeURIComponent(q)}`,{headers:{Accept:'application/json'}});
     const j=await r.json().catch(()=>({}));
@@ -223,7 +233,7 @@ async function searchDestination(source='form'){
     destinationPoint={latitude:Number(j.latitude),longitude:Number(j.longitude),label:compactDestination(j.displayName,q)};
     if(!Number.isFinite(destinationPoint.latitude)||!Number.isFinite(destinationPoint.longitude))throw new Error('Destination lookup returned invalid coordinates');
     rerank('destination');updateURL(q);
-    emit('Boat Launch Destination Search',{source,results:shortlist.length,radius:radiusUsed||0});
+    emit('Boat Launch Destination Search',{source,results:shortlist.length,radius:radiusUsed||0,reviewInProgress:shortlist.filter(isReview).length});
   }catch(err){
     destinationPoint=null;shortlist=[];radiusUsed=null;
     resultsTitle.textContent='Destination not found';
@@ -250,7 +260,7 @@ function select(id,source='card'){
   drawMap(false);
   const marker=markerById.get(id);
   if(map&&marker){map.flyTo([a.latitude,a.longitude],Math.max(map.getZoom(),12),{duration:.4});setTimeout(()=>marker.openPopup(),420);}
-  emit('Boat Launch Select',{source,rank:shortlist.findIndex(x=>x.id===id)+1});
+  emit('Boat Launch Select',{source,rank:shortlist.findIndex(x=>x.id===id)+1,reviewInProgress:isReview(a)});
 }
 
 function updateURL(destination=''){
@@ -287,12 +297,15 @@ async function load(){
     const r=await fetch(SOURCE_API,{signal:controller.signal,headers:{Accept:'application/json'}});clearTimeout(timeout);
     const j=await r.json().catch(()=>({}));
     if(!r.ok)throw new Error(j.detail||j.error||`Launch source returned ${r.status}`);
-    records=(j.launches||[]).filter(a=>a&&a.id&&a.name&&Number.isFinite(Number(a.latitude))&&Number.isFinite(Number(a.longitude))).map(a=>({...a,latitude:Number(a.latitude),longitude:Number(a.longitude)}));
+    records=(j.launches||[]).filter(a=>a&&a.id&&a.name&&num(a.latitude)!==null&&num(a.longitude)!==null).map(a=>({...a,latitude:num(a.latitude),longitude:num(a.longitude)}));
     records=[...new Map(records.map(a=>[a.id,a])).values()];
-    if(!records.length)throw new Error('Michigan DNR returned no source-qualified Great Lakes-access sites');
+    if(!records.length)throw new Error('Michigan DNR returned no usable open Great Lakes-access sites');
     sourceReady=true;
-    const updated=dateText(j.source_updated_at);sourceStatus.textContent=updated?`DNR source updated ${updated} · ${records.length} qualified records`:`Live Michigan DNR data · ${records.length} qualified records`;
-    render();emit('Boat Launch Source Load',{records:records.length,source:'PRDBASPublicView'});
+    const updated=dateText(j.source_updated_at);
+    const qualified=Number(j.source_qualified_count)||records.filter(a=>!isReview(a)).length;
+    const reviewing=Number(j.review_in_progress_count)||records.filter(isReview).length;
+    sourceStatus.textContent=updated?`DNR source updated ${updated} · ${qualified} source-qualified · ${reviewing} review in progress`:`Live Michigan DNR data · ${qualified} source-qualified · ${reviewing} review in progress`;
+    render();emit('Boat Launch Source Load',{records:records.length,sourceQualified:qualified,reviewInProgress:reviewing,source:'PRDBASPublicView'});
     const initial=new URLSearchParams(location.search).get('destination');
     if(initial){destinationSearch.value=initial.slice(0,100);searchDestination('url');}
   }catch(err){
