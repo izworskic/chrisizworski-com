@@ -6,25 +6,8 @@ const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const emit=(name,props={})=>{try{window.va?.('event',{name,...props});}catch{}};
 
-const DNR_LAYER='https://services3.arcgis.com/Jdnp1TjADvSDxMAX/arcgis/rest/services/PRDBASPublicView/FeatureServer/0';
+const SOURCE_API='/api/boat-launches';
 const DNR_FINDER='https://www.michigan.gov/dnr/things-to-do/boating';
-const WHERE=[
-  "bas_type='Boating Access Site'",
-  "launch_status='Open'",
-  "greatlakesaccess LIKE 'Yes%'",
-  'latitude IS NOT NULL',
-  'longitude IS NOT NULL'
-].join(' AND ');
-const FIELDS=[
-  'facilityid','legacyid','name','labelname','waterbody','waterbodytype','bas_type','descrip','condition',
-  'recpassport','rampcode_new','ownedby','dnradmin','maintby','collecttype','datasource','latitude','longitude',
-  'nlanes','carrydown','npiers','ntrailerableparking','nvehicleonlyparking','nvaulttoilets','nflushtoilets',
-  'nothertoilets','county','qaqc_1_date','qaqc_1_comments','referenceonly','gia','carrydowntype',
-  'ncarrydownlaunches','flag','flagcomments','staffed','contact','phone','greatlakesaccess','parkingsurface',
-  'waterwaysprogramconfirmation','operating_hours','launch_status','fish_cleaning_station',
-  'local_watercraft_controls','accessible_feat_piers','accessible_feat_park','accessible_feat_ped_route',
-  'accessible_feat_restroom','NameCounty','WaterbodyCounty','closures_url','last_edited_date'
-];
 
 const search=$('#launch-search');
 const access=$('#access-filter');
@@ -42,22 +25,8 @@ let layer=null;
 let selectedId='';
 const markerById=new Map();
 
-function endpoint(){
-  const q=new URLSearchParams({
-    where:WHERE,
-    outFields:FIELDS.join(','),
-    returnGeometry:'false',
-    f:'json'
-  });
-  return `${DNR_LAYER}/query?${q}`;
-}
-
 function slug(v){
   return String(v||'launch').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-}
-
-function idFor(a,index){
-  return String(a.facilityid||a.legacyid||`${slug(a.name)}-${index}`);
 }
 
 function num(v){
@@ -104,13 +73,13 @@ function regionLabel(a){
   return a.WaterbodyCounty||a.NameCounty||a.waterbody||'Michigan';
 }
 
-function cleanFeature(f,index){
+function cleanFeature(f){
   const a=f?.attributes||{};
   const lat=num(a.latitude),lng=num(a.longitude);
-  if(!a.name||lat===null||lng===null)return null;
+  if(!a.facilityid||!a.name||lat===null||lng===null)return null;
   if(String(a.referenceonly||'').toLowerCase()==='yes')return null;
   if(String(a.flag||'').trim())return null;
-  return {...a,id:idFor(a,index),latitude:lat,longitude:lng};
+  return {...a,id:String(a.facilityid),latitude:lat,longitude:lng};
 }
 
 function accessMatches(a){
@@ -166,7 +135,7 @@ function cardHTML(a){
     <div class="card-top"><div><h3 class="card-title">${esc(a.name)}</h3><div class="waterbody">${esc(a.waterbody||regionLabel(a))}</div></div></div>
     <div class="badges">${badges}</div>
     <div class="facts">${facts}</div>
-    <div class="note">${esc(accuracyText(a))}${qa?` · QA ${esc(qa)}`:''}${edited?` · record edited ${esc(edited)}`:''}</div>
+    <div class="note">Facility ID ${esc(a.id)} · ${esc(accuracyText(a))}${qa?` · QA ${esc(qa)}`:''}${edited?` · record edited ${esc(edited)}`:''}</div>
     <div class="actions">
       <a href="${directions(a)}" target="_blank" rel="noopener" data-action="directions">Directions</a>
       <a href="${satellite(a)}" target="_blank" rel="noopener" data-action="satellite">Satellite</a>
@@ -178,7 +147,7 @@ function cardHTML(a){
 
 function popupHTML(a){
   const trailer=num(a.ntrailerableparking);
-  return `<strong>${esc(a.name)}</strong><br><span>${esc(a.waterbody||regionLabel(a))}</span><br><small>${esc(rampText(a))}${trailer!==null?` · ${trailer} trailer spaces`:''}</small><div style="margin-top:7px"><a href="${directions(a)}" target="_blank" rel="noopener">Directions</a> · <a href="#launch-${esc(a.id)}" data-popup-card="${esc(a.id)}">Open record</a></div>`;
+  return `<strong>${esc(a.name)}</strong><br><span>${esc(a.waterbody||regionLabel(a))}</span><br><small>${esc(rampText(a))}${trailer!==null?` · ${trailer} trailer spaces`:''}</small><div style="margin-top:7px"><a href="${directions(a)}" target="_blank" rel="noopener">Directions</a> · <a href="#launch-${esc(a.id)}" data-popup-card="${esc(a.id)}">Open source record</a></div>`;
 }
 
 function loadLeaflet(){
@@ -306,20 +275,6 @@ function wire(){
   });
 }
 
-async function loadMetadata(){
-  try{
-    const r=await fetch(`${DNR_LAYER}?f=json`,{headers:{Accept:'application/json'}});
-    if(!r.ok)return;
-    const j=await r.json();
-    const stamp=j?.editingInfo?.lastEditDate||j?.lastEditDate;
-    if(stamp){
-      sourceStatus.textContent=`DNR layer updated ${dateText(stamp)}`;
-      return;
-    }
-    sourceStatus.textContent='Live Michigan DNR Parks & Recreation data';
-  }catch{sourceStatus.textContent='Live Michigan DNR Parks & Recreation data';}
-}
-
 async function load(){
   const params=new URLSearchParams(location.search);
   search.value=(params.get('q')||'').slice(0,80);
@@ -328,22 +283,21 @@ async function load(){
   parking.value=['10','25','50'].includes(params.get('parking'))?params.get('parking'):'0';
   wire();
   initMap();
-  loadMetadata();
   try{
     const controller=new AbortController();
-    const timeout=setTimeout(()=>controller.abort(),9000);
-    const r=await fetch(endpoint(),{signal:controller.signal,headers:{Accept:'application/json'}});
+    const timeout=setTimeout(()=>controller.abort(),10000);
+    const r=await fetch(SOURCE_API,{signal:controller.signal,headers:{Accept:'application/json'}});
     clearTimeout(timeout);
-    if(!r.ok)throw new Error(`DNR source returned ${r.status}`);
-    const j=await r.json();
-    if(j.error)throw new Error(j.error.message||'DNR source error');
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(j.detail||j.error||`Launch source returned ${r.status}`);
     const raw=(j.features||[]).map(cleanFeature).filter(Boolean);
     const unique=new Map();
     for(const a of raw)unique.set(a.id,a);
     records=[...unique.values()].sort((a,b)=>String(a.name).localeCompare(String(b.name)));
     filtered=[...records];
-    if(!records.length)throw new Error('DNR source returned no qualifying open Great Lakes-access records');
-    sourceStatus.textContent=sourceStatus.textContent||'Live Michigan DNR Parks & Recreation data';
+    if(!records.length)throw new Error('Michigan DNR returned no qualifying open Great Lakes-access sites');
+    const updated=dateText(j.source_updated_at);
+    sourceStatus.textContent=updated?`Michigan DNR source updated ${updated}`:'Live Michigan DNR Parks & Recreation data';
     apply('source-load');
     emit('Boat Launch Source Load',{records:records.length,source:'PRDBASPublicView'});
   }catch(err){
