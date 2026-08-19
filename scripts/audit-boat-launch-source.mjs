@@ -22,6 +22,9 @@ function distanceMiles(a,b,c,d){
   const x=Math.sin(dLat/2)**2+Math.cos(rad(a))*Math.cos(rad(c))*Math.sin(dLon/2)**2;
   return 2*R*Math.asin(Math.sqrt(x));
 }
+function hasCoordinate(a){
+  return a.latitude!==null&&a.latitude!==undefined&&String(a.latitude).trim()!==''&&a.longitude!==null&&a.longitude!==undefined&&String(a.longitude).trim()!==''&&Number.isFinite(Number(a.latitude))&&Number.isFinite(Number(a.longitude));
+}
 
 async function fetchJson(url){
   const r=await fetch(url,{headers:{accept:'application/json','user-agent':'ChrisIzworskiBoatLaunchAudit/3.0 (+https://chrisizworski.com/michigan-boat-launches/)'},signal:AbortSignal.timeout(20000)});
@@ -31,14 +34,12 @@ async function fetchJson(url){
   return j;
 }
 
-function queryUrl(params){
-  return `${LAYER}/query?${new URLSearchParams({...params,f:'json'})}`;
-}
+function queryUrl(params){return `${LAYER}/query?${new URLSearchParams({...params,f:'json'})}`;}
 
 const fields=[
   'OBJECTID','globalid','facilityid','legacyid','name','waterbody','bas_type','launch_status','greatlakesaccess',
-  'referenceonly','flag','gia','ownedby','dnradmin','latitude','longitude','rampcode_new','nlanes','ntrailerableparking',
-  'recpassport','operating_hours','waterwaysprogramconfirmation','last_edited_date'
+  'referenceonly','flag','flagcomments','gia','ownedby','dnradmin','maintby','latitude','longitude','rampcode_new','nlanes','ntrailerableparking',
+  'recpassport','operating_hours','waterwaysprogramconfirmation','qaqc_1_date','qaqc_1_comments','last_edited_date'
 ].join(',');
 
 const [metadata,total,recordsResponse]=await Promise.all([
@@ -49,16 +50,12 @@ const [metadata,total,recordsResponse]=await Promise.all([
 
 const records=(recordsResponse.features||[]).map(f=>f.attributes||{});
 const open=records.filter(a=>a.launch_status==='Open');
+const openGreatLakes=open.filter(a=>String(a.greatlakesaccess||'').startsWith('Yes')&&String(a.referenceonly||'').toLowerCase()!=='yes'&&hasCoordinate(a)&&a.name);
 const accessCounts=new Map();
 for(const a of open)accessCounts.set(a.greatlakesaccess??'(null)',(accessCounts.get(a.greatlakesaccess??'(null)')||0)+1);
 
-const eligible=open.filter(a=>
-  String(a.greatlakesaccess||'').startsWith('Yes') &&
-  String(a.referenceonly||'').toLowerCase()!=='yes' &&
-  !String(a.flag||'').trim() &&
-  Number.isFinite(Number(a.latitude)) && Number.isFinite(Number(a.longitude)) &&
-  a.name
-);
+const eligible=openGreatLakes.filter(a=>!String(a.flag||'').trim());
+const withheld=openGreatLakes.filter(a=>String(a.flag||'').trim());
 const nullFacility=eligible.filter(a=>!String(a.facilityid||'').trim());
 const referenceOnly=open.filter(a=>String(a.referenceonly||'').toLowerCase()==='yes');
 const flagged=open.filter(a=>String(a.flag||'').trim()==='Flag');
@@ -71,7 +68,9 @@ console.log(`Layer last edit: ${metadata?.editingInfo?.lastEditDate?new Date(met
 console.log(`Total layer records: ${total.count}`);
 console.log(`Boating Access Site records: ${records.length}`);
 console.log(`Open boating-access records: ${open.length}`);
+console.log(`Open Great Lakes-access records with usable coordinates before review-flag gating: ${openGreatLakes.length}`);
 console.log(`Source-qualified open Great Lakes-access records: ${eligible.length}`);
+console.log(`Withheld Great Lakes-access records because DNR flag is nonblank: ${withheld.length}`);
 console.log(`Eligible records with null/blank facilityid: ${nullFacility.length}`);
 console.log(`Open reference-only records: ${referenceOnly.length}`);
 console.log(`Open flag=Flag records: ${flagged.length}`);
@@ -86,14 +85,16 @@ if(nullFacility.length){
   for(const a of nullFacility.slice(0,8))console.log(`  ${a.name} | OBJECTID=${a.OBJECTID} | globalid=${a.globalid} | ${a.latitude},${a.longitude}`);
 }
 
-console.log('\nAcceptance-destination samples (source-qualified launches within 25 mi):');
+console.log('\nAcceptance-destination samples:');
 let zero=0;
 for(const [name,lat,lon] of ACCEPTANCE){
   const nearby=eligible.map(a=>({...a,_mi:distanceMiles(lat,lon,Number(a.latitude),Number(a.longitude))})).filter(a=>a._mi<=25).sort((a,b)=>a._mi-b._mi);
+  const withheldNearby=withheld.map(a=>({...a,_mi:distanceMiles(lat,lon,Number(a.latitude),Number(a.longitude))})).filter(a=>a._mi<=25).sort((a,b)=>a._mi-b._mi);
   if(!nearby.length)zero++;
-  console.log(`\n${name}: ${nearby.length} within 25 mi`);
-  for(const a of nearby.slice(0,5))console.log(`  ${a._mi.toFixed(1)} mi | ${a.name} | ${a.waterbody||'waterbody not listed'} | id=${a.facilityid||a.globalid||a.OBJECTID}`);
+  console.log(`\n${name}: ${nearby.length} qualified within 25 mi; ${withheldNearby.length} DNR records withheld by review flag within 25 mi`);
+  for(const a of nearby.slice(0,5))console.log(`  QUALIFIED ${a._mi.toFixed(1)} mi | ${a.name} | ${a.waterbody||'waterbody not listed'} | id=${a.facilityid||a.globalid||a.OBJECTID}`);
+  for(const a of withheldNearby.slice(0,8))console.log(`  WITHHELD  ${a._mi.toFixed(1)} mi | ${a.name} | ${a.waterbody||'waterbody not listed'} | flag=${a.flag||'(blank)'} | comment=${String(a.flagcomments||'(none)').replace(/\s+/g,' ').slice(0,180)} | owner=${a.ownedby||'(none)'} | id=${a.facilityid||a.globalid||a.OBJECTID}`);
 }
 
-if(total.count<500||records.length<500||open.length<300||eligible.length<20)throw new Error('DNR source audit returned implausibly low inventory counts');
+if(total.count<500||records.length<500||open.length<300||openGreatLakes.length<50||eligible.length<20)throw new Error('DNR source audit returned implausibly low inventory counts');
 if(zero>4)throw new Error(`DNR source audit found ${zero} acceptance destinations with zero qualifying launches within 25 mi; inspect source model before shipping`);
