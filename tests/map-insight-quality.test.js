@@ -33,9 +33,12 @@ test('boat inventory is created only from current Michigan DNR records without r
   assert.doesNotMatch(boatHtml,/id="locdata"|"numberOfItems": 42|Bay City State Park Launch/);
 });
 
-test('boat source quality rules reject flagged and reference-only records while preserving stable source identity',()=>{
+test('boat source quality rules distinguish DNR review states while preserving stable source identity',()=>{
   assert.match(boatApi,/referenceonly/);
-  assert.match(boatApi,/String\(a\.flag \|\| ""\)\.trim\(\)/);
+  assert.match(boatApi,/function reviewStatus/);
+  assert.match(boatApi,/flag === "InProgress"/);
+  assert.match(boatApi,/return "dnr-review-in-progress"/);
+  assert.match(boatApi,/return "withhold"/);
   assert.match(boatApi,/latitude IS NOT NULL/);
   assert.match(boatApi,/longitude IS NOT NULL/);
   assert.match(boatApi,/waterwaysprogramconfirmation/);
@@ -59,10 +62,10 @@ test('boat finder has no fuzzy-match or manual-coordinate launch fallback',()=>{
   assert.doesNotMatch(boatCode,/MANUAL_VERIFIED|ALIASES|bestMatch|nameSimilarity|tokenScore/);
   assert.match(boatApi,/fallback_used: false/);
   assert.match(boatJs,/No legacy or guessed launch pins are being shown/);
-  assert.match(boatHtml,/A source outage is shown separately/);
+  assert.match(boatHtml,/(?:A )?(?:primary-)?source outage is shown separately/i);
 });
 
-test('boat map and cards use one normalized DNR source identifier and one coordinate',()=>{
+test('boat map and cards use one normalized source identifier and one coordinate per record',()=>{
   assert.match(boatJs,/const markerById=new Map\(\)/);
   assert.match(boatJs,/markerById\.set\(a\.id,m\)/);
   assert.match(boatJs,/data-launch-id/);
