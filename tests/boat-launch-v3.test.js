@@ -60,11 +60,11 @@ test('flagged, reference-only, unnamed, and coordinate-less records cannot quali
 });
 
 test('DNR query no longer contains the nullable facilityid gate',()=>{
-  const url=boat.queryUrl();
-  assert.match(url,/bas_type%3D%27Boating%2BAccess%2BSite%27|bas_type%3D%27Boating\+Access\+Site%27/);
-  assert.doesNotMatch(decodeURIComponent(url),/facilityid IS NOT NULL/);
-  assert.match(decodeURIComponent(url),/latitude IS NOT NULL/);
-  assert.match(decodeURIComponent(url),/longitude IS NOT NULL/);
+  const decoded=decodeURIComponent(boat.queryUrl()).replace(/\+/g,' ');
+  assert.match(decoded,/bas_type='Boating Access Site'/);
+  assert.doesNotMatch(decoded,/facilityid IS NOT NULL/);
+  assert.match(decoded,/latitude IS NOT NULL/);
+  assert.match(decoded,/longitude IS NOT NULL/);
 });
 
 test('destination geocoder query is sanitized and capped',()=>{
@@ -72,21 +72,19 @@ test('destination geocoder query is sanitized and capped',()=>{
   assert.equal(geo.cleanQuery('x'.repeat(150)).length,100);
 });
 
-test('geocoder candidate must fall inside the Michigan bounding envelope',()=>{
+test('geocoder rejects nearby out-of-state results and accepts Michigan candidates',()=>{
   const picked=geo.chooseCandidate([
-    {display_name:'Chicago',lat:'41.8781',lon:'-87.6298',type:'city'},
-    {display_name:'Bay City, Michigan',lat:'43.5945',lon:'-83.8889',type:'city'}
+    {display_name:'Chicago, Illinois, United States',lat:'41.8781',lon:'-87.6298',type:'city',address:{state:'Illinois','ISO3166-2-lvl4':'US-IL'}},
+    {display_name:'Bay City, Bay County, Michigan, United States',lat:'43.5945',lon:'-83.8889',type:'city',address:{state:'Michigan','ISO3166-2-lvl4':'US-MI'}}
   ]);
-  assert.equal(picked.display_name,'Chicago');
-  // The envelope is deliberately broader than the state polygon; the server request is also bounded
-  // by Nominatim's Michigan-centered viewbox. This unit test only verifies numeric envelope rejection.
-  assert.equal(geo.chooseCandidate([{display_name:'Ohio',lat:'40.0',lon:'-83.0',type:'state'}]),null);
+  assert.equal(picked.display_name,'Bay City, Bay County, Michigan, United States');
+  assert.equal(geo.chooseCandidate([{display_name:'Toledo, Ohio',lat:'41.65',lon:'-83.54',type:'city',address:{state:'Ohio'}}]),null);
 });
 
-test('geocoder prefers useful named-place candidates over a generic result',()=>{
+test('geocoder prefers a useful Michigan named-place candidate',()=>{
   const picked=geo.chooseCandidate([
-    {display_name:'Generic feature',lat:'43.5',lon:'-84.0',type:'yes',class:'place'},
-    {display_name:'Saginaw Bay',lat:'43.8',lon:'-83.7',type:'bay',class:'natural'}
+    {display_name:'Michigan feature, Michigan, United States',lat:'43.5',lon:'-84.0',type:'yes',class:'misc',address:{state:'Michigan'}},
+    {display_name:'Saginaw Bay, Michigan, United States',lat:'43.8',lon:'-83.7',type:'bay',class:'natural',address:{state:'Michigan'}}
   ]);
-  assert.equal(picked.display_name,'Saginaw Bay');
+  assert.equal(picked.display_name,'Saginaw Bay, Michigan, United States');
 });
