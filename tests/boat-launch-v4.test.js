@@ -55,12 +55,14 @@ test('review workflow is explained as data verification, not launch condition',(
   assert.match(js,/This launch is listed Open by Michigan DNR/);
 });
 
-test('DNR facility condition is kept separate and drives only source-backed condition colors',()=>{
-  assert.match(js,/function conditionKey\(a\)/);
-  assert.match(js,/facilityCondition/);
-  assert.match(html,/green = good, amber = fair, red = poor/i);
-  assert.match(html,/blue-gray = not reported\/other/i);
-  assert.match(html,/DNR launches currently shown are source-reported Open/i);
+test('pin colors use only source-backed status and do not invent condition ratings',()=>{
+  assert.match(js,/isSupplemental\(a\)\?'municipal':'open'/);
+  assert.doesNotMatch(js,/function conditionKey\(a\)/);
+  assert.match(html,/Green = Michigan DNR currently lists the launch Open/i);
+  assert.match(html,/Violet = separately verified municipal launch/i);
+  assert.match(html,/Blue = your selected launch/i);
+  assert.match(html,/condition values are preserved and shown only when the source actually publishes one/i);
+  assert.doesNotMatch(html,/green = good|amber = fair|red = poor/i);
 });
 
 test('weather endpoint only accepts Michigan-area launch points',()=>{
