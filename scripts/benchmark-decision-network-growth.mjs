@@ -5,10 +5,10 @@ import path from 'node:path';
 const root=path.resolve(import.meta.dirname,'..');
 const read=rel=>readFile(path.join(root,rel),'utf8');
 const config=JSON.parse(await read('benchmarks/decision-network-growth.json'));
-const [tools,greatLakes,boat,wreck,boatJs,boatApi,wreckJs,networkJs,networkCss]=await Promise.all([
-  read('public/tools/index.html'),read('public/great-lakes/index.html'),read('public/michigan-boat-launches/index.html'),read('public/great-lakes-shipwrecks/index.html'),read('public/assets/boat-launch-finder.js'),read('api/boat-launches.js'),read('public/assets/shipwreck-explorer.js'),read('public/assets/decision-network.js'),read('public/assets/decision-network.css')
+const [tools,greatLakes,boat,wreck,boatJs,boatApi,boatGeo,wreckJs,networkJs,networkCss]=await Promise.all([
+  read('public/tools/index.html'),read('public/great-lakes/index.html'),read('public/michigan-boat-launches/index.html'),read('public/great-lakes-shipwrecks/index.html'),read('public/assets/boat-launch-finder.js'),read('api/boat-launches.js'),read('api/boat-launch-geocode.js'),read('public/assets/shipwreck-explorer.js'),read('public/assets/decision-network.js'),read('public/assets/decision-network.css')
 ]);
-const boatCode=boatJs+'\n'+boatApi;
+const boatCode=boatJs+'\n'+boatApi+'\n'+boatGeo;
 const failures=[];
 const score={authorityGraph:0,boatDecisionUsefulness:0,shipwreckExplorerDepth:0,searchIntegrity:0,trustAndPrivacy:0,measurement:0};
 const add=(key,pts,ok,msg)=>{if(ok)score[key]+=pts;else failures.push(`${key}: ${msg}`);};
@@ -25,11 +25,11 @@ add('authorityGraph',3,/decision-network\.css/.test(tools)&&/decision-network\.c
 add('authorityGraph',3,/decision-network\.js/.test(tools)&&/decision-network\.js/.test(greatLakes),'shared handoff measurement is not loaded on both hubs');
 
 // Boat: 20
-add('boatDecisionUsefulness',5,/PRDBASPublicView\/FeatureServer\/0/.test(boatApi)&&/launch_status='Open'/.test(boatApi)&&/greatlakesaccess LIKE 'Yes%'/.test(boatApi)&&/facilityid IS NOT NULL/.test(boatApi),'boat inventory is not source-first');
+add('boatDecisionUsefulness',5,/PRDBASPublicView\/FeatureServer\/0/.test(boatApi)&&/launch_status='Open'/.test(boatApi)&&/greatlakesaccess LIKE 'Yes%'/.test(boatApi)&&!/facilityid IS NOT NULL/.test(boatApi)&&/globalid/.test(boatApi)&&/OBJECTID/.test(boatApi),'boat inventory is not source-first with stable IDs');
 add('boatDecisionUsefulness',5,!/id="locdata"/.test(boat)&&!/MANUAL_VERIFIED|ALIASES|bestMatch|nameSimilarity/.test(boatCode)&&!/Bay City State Park Launch/.test(boat),'legacy/fuzzy launch inventory remains');
-add('boatDecisionUsefulness',4,/const SOURCE_API='\/api\/boat-launches'/.test(boatJs)&&/const markerById=new Map\(\)/.test(boatJs)&&/google\.com\/maps\/dir/.test(boatJs)&&/data-launch-id/.test(boatJs)&&/Facility ID/.test(boatJs),'source API/map/card/directions correlation is incomplete');
-add('boatDecisionUsefulness',3,/ntrailerableparking/.test(boatCode)&&/nlanes/.test(boatCode)&&/rampcode_new/.test(boatCode)&&/operating_hours/.test(boatCode),'source-backed launch decision details are incomplete');
-add('boatDecisionUsefulness',3,/URLSearchParams/.test(boatJs)&&/replaceState/.test(boatJs),'shareable boat filter state missing');
+add('boatDecisionUsefulness',4,/const SOURCE_API='\/api\/boat-launches'/.test(boatJs)&&/GEOCODE_API='\/api\/boat-launch-geocode'/.test(boatJs)&&/function distanceMiles/.test(boatJs)&&/chooseNearby/.test(boatJs)&&/const markerById=new Map\(\)/.test(boatJs)&&/google\.com\/maps\/dir/.test(boatJs),'destination/source/map/directions correlation is incomplete');
+add('boatDecisionUsefulness',3,/trailerParking/.test(boatJs)&&/\.lanes/.test(boatJs)&&/rampClass/.test(boatJs)&&/operatingHours/.test(boatJs)&&/distanceMiles\.toFixed/.test(boatJs),'source-backed nearby launch decision details are incomplete');
+add('boatDecisionUsefulness',3,/URLSearchParams/.test(boatJs)&&/replaceState/.test(boatJs)&&/destination/.test(boatJs),'shareable destination state missing');
 
 // Shipwreck: 20
 const wreckRows=(wreck.match(/<tr><td><strong>/g)||[]).length;
@@ -56,7 +56,7 @@ add('trustAndPrivacy',3,/fallback_used: false/.test(boatApi)&&/No legacy or gues
 add('trustAndPrivacy',3,/not navigation coordinates, dive coordinates/i.test(wreckJs),'wreck regional map could imply operational coordinates');
 
 // Measurement: 10
-add('measurement',3,/Boat Launch Filter/.test(boatJs)&&/Boat Launch Select/.test(boatJs)&&/Boat Launch Action/.test(boatJs),'boat decision events missing');
+add('measurement',3,/Boat Launch Destination Search/.test(boatJs)&&/Boat Launch Select/.test(boatJs)&&/Boat Launch Action/.test(boatJs),'boat decision events missing');
 add('measurement',3,/Shipwreck Explorer Filter/.test(wreckJs)&&/Shipwreck Explorer Preset/.test(wreckJs)&&/Shipwreck Detail Open/.test(wreckJs),'shipwreck events missing');
 add('measurement',4,/Decision Network Handoff/.test(networkJs)&&/destination:a\.dataset\.decisionNetwork/.test(networkJs)&&!/href/.test(networkJs),'network measurement must use symbolic destination metadata, not URLs');
 
