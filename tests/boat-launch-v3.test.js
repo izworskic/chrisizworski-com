@@ -1,5 +1,6 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
+const supplemental=require('../data/boat-launch-supplemental.json');
 const boat=require('../api/boat-launches.js')._test;
 const geo=require('../api/boat-launch-geocode.js')._test;
 
@@ -72,6 +73,33 @@ test('Review Needed, unknown flags, reference-only, unnamed and coordinate-less 
   assert.equal(boat.eligibleAttributes(attrs({name:null})),false);
   assert.equal(boat.eligibleAttributes(attrs({latitude:null})),false);
   assert.equal(boat.eligibleAttributes(attrs({facilityid:null,globalid:null,OBJECTID:null})),false);
+});
+
+test('South Haven supplemental is separately sourced and never normalized as DNR',()=>{
+  assert.equal(supplemental.length,1);
+  const raw=supplemental[0];
+  assert.equal(raw.id,'municipal:south-haven:black-river-park-launch');
+  assert.equal(raw.sourceType,'municipal-supplemental');
+  assert.equal(raw.verificationStatus,'municipal-source-qualified');
+  assert.match(raw.sourceUrl,/southhavenmi\.gov/);
+  assert.match(raw.coordinateSourceUrl,/outdoormichigan\.org\/feature\/3993/);
+  assert.ok(Array.isArray(raw.corroborationUrls)&&raw.corroborationUrls.some(x=>x.includes('michiganwatertrails.org')));
+  const normalized=boat.normalizeSupplemental(raw);
+  assert.equal(normalized.sourceType,'municipal-supplemental');
+  assert.equal(normalized.verificationStatus,'municipal-source-qualified');
+  assert.equal(normalized.operator,'City of South Haven');
+  assert.equal(normalized.latitude,42.41045);
+  assert.equal(normalized.longitude,-86.27276);
+  assert.equal(normalized.sourceIdType,'supplemental-registry');
+});
+
+test('supplemental normalization rejects incomplete or unsourced records',()=>{
+  const raw=supplemental[0];
+  assert.equal(boat.normalizeSupplemental({...raw,sourceUrl:null}),null);
+  assert.equal(boat.normalizeSupplemental({...raw,coordinateSourceUrl:null}),null);
+  assert.equal(boat.normalizeSupplemental({...raw,operator:null}),null);
+  assert.equal(boat.normalizeSupplemental({...raw,latitude:null}),null);
+  assert.equal(boat.normalizeSupplemental({...raw,verificationStatus:'source-qualified'}),null);
 });
 
 test('DNR query no longer contains the nullable facilityid gate',()=>{
