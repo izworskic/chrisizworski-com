@@ -45,11 +45,20 @@ add('mapAndMobileUX',5,/markerById=new Map\(\)/.test(js)&&/data-launch-id/.test(
 add('mapAndMobileUX',3,/fitBounds/.test(js),'map does not fit destination and results');
 add('mapAndMobileUX',3,/destinationMarker/.test(js)&&/destination-map-marker/.test(html+js),'destination is not distinct on the map');
 add('mapAndMobileUX',2,/@media\(max-width:|@media \(max-width:/.test(html),'mobile layout protection is missing');
-add('mapAndMobileUX',2,/google\.com\/maps\/dir/.test(js),'verified-coordinate directions action is missing');
+add('mapAndMobileUX',2,/google\.com\/maps\/dir/.test(js),'source-coordinate directions action is missing');
 
 // CONDITIONS + TRUST — 5
-add('conditionsAndTrust',3,!/safety score|safe to launch|safe boating score/i.test(code+html),'unsupported safety certainty is presented');
-add('conditionsAndTrust',2,/source record|Michigan DNR|source layer/i.test(html+js),'source/trust language is missing');
+const reviewTier=/flag === "InProgress"/.test(api)&&/return "dnr-review-in-progress"/.test(api)&&/return "withhold"/.test(api)&&/DNR review in progress/.test(html+js);
+const provisionalFilters=/function rampMatches[\s\S]*?if\(isReview\(a\)\)return false/.test(js)&&/function parkingMatches[\s\S]*?if\(isReview\(a\)\)return false/.test(js);
+const distinctReviewMap=/is-review/.test(js)&&/\.launch-number-icon span\.is-review/.test(html);
+add('conditionsAndTrust',1,!/safety score|safe to launch|safe boating score/i.test(code+html),'unsupported safety certainty is presented');
+add('conditionsAndTrust',1,/source record|Michigan DNR|source layer/i.test(html+js),'source/trust language is missing');
+add('conditionsAndTrust',1,reviewTier,'DNR Review In Progress is not a distinct visible trust state');
+add('conditionsAndTrust',1,provisionalFilters,'provisional DNR ramp/parking metadata can drive precise filters');
+add('conditionsAndTrust',1,distinctReviewMap,'review-in-progress map pins are not visually distinct');
+if(!reviewTier)fatals.push('DNR InProgress review records are not explicitly visible/provisional while Review Needed and unknown review states remain withheld.');
+if(!provisionalFilters)fatals.push('DNR review-in-progress records can satisfy precise ramp or trailer-parking filters.');
+if(!distinctReviewMap)fatals.push('DNR review-in-progress records are not visually distinguishable on the map.');
 
 // DISCOVERY + PERFORMANCE — 5
 add('discoveryPerformance',2,/canonical" href="https:\/\/chrisizworski\.com\/michigan-boat-launches\//.test(html),'canonical URL changed or is missing');
