@@ -109,6 +109,8 @@ function normalizeFeature(feature, sourceUpdatedAt = null) {
     greatLakesAccess: a.greatlakesaccess || null,
     waterScope: waterScope(a),
     connectionBasis: waterScope(a) === "great-lakes" ? "dnr-great-lakes-or-connecting-water" : "dnr-statewide-boating-access",
+    launchStatus: hasValue(a.launch_status) ? String(a.launch_status).trim() : null,
+    facilityCondition: hasValue(a.condition) ? String(a.condition).trim() : null,
     rampClass: optionalNumber(a.rampcode_new),
     rampDescription: null,
     lanes: optionalNumber(a.nlanes),
@@ -161,6 +163,8 @@ function normalizeSupplemental(record = {}) {
     detailsUnderReview: false,
     waterScope: record.waterScope || "great-lakes",
     connectionBasis: "municipal-operator-source",
+    launchStatus: record.launchStatus || "Open",
+    facilityCondition: record.facilityCondition || null,
     rampClass: optionalNumber(record.rampClass),
     lanes: optionalNumber(record.lanes),
     trailerParking: optionalNumber(record.trailerParking),
@@ -216,6 +220,11 @@ module.exports = async function handler(req, res) {
     const supplementalLaunches = SUPPLEMENTAL.map(normalizeSupplemental).filter(Boolean);
     const unique = [...new Map([...dnrLaunches, ...supplementalLaunches].map(x => [x.id, x])).values()];
     if (!dnrLaunches.length) throw new Error("Michigan DNR returned no qualifying open boating access sites");
+    const facilityConditionCounts = dnrLaunches.reduce((counts, launch) => {
+      const key = launch.facilityCondition || "Not reported";
+      counts[key] = (counts[key] || 0) + 1;
+      return counts;
+    }, {});
 
     return res.status(200).json({
       source: "Michigan DNR statewide boating access data plus source-qualified municipal supplements",
@@ -229,7 +238,7 @@ module.exports = async function handler(req, res) {
         stable_id: "facilityid, otherwise globalid/OBJECTID",
         excludes_reference_only: true,
         source_qualified: "blank DNR facility review flag",
-        review_in_progress: "DNR InProgress is displayed with provisional facility details",
+        review_in_progress: "DNR InProgress means facility data review is still underway; the launch remains source-reported Open",
         withheld_review_status: "DNR Review Needed and unknown flag values",
         municipal_supplemental: "owner/operator source plus independently documented launch-specific location evidence"
       },
@@ -241,6 +250,7 @@ module.exports = async function handler(req, res) {
       municipal_supplemental_count: unique.filter(x => x.verificationStatus === "municipal-source-qualified").length,
       great_lakes_count: unique.filter(x => x.waterScope === "great-lakes").length,
       inland_or_other_count: unique.filter(x => x.waterScope === "inland-or-other").length,
+      facility_condition_counts: facilityConditionCounts,
       launches: unique,
     });
   } catch (error) {
