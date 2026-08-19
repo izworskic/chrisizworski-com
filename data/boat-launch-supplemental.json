@@ -1,0 +1,33 @@
+[
+  {
+    "id": "municipal:south-haven:black-river-park-launch",
+    "sourceType": "municipal-supplemental",
+    "verificationStatus": "municipal-source-qualified",
+    "name": "Black River Park Launch Ramp",
+    "latitude": 42.41045,
+    "longitude": -86.27276,
+    "waterbody": "Black River → Lake Michigan",
+    "county": "Van Buren County",
+    "greatLakesAccess": "Black River connection to Lake Michigan",
+    "rampDescription": "Improved motor-boat launch ramps",
+    "lanes": null,
+    "trailerParking": null,
+    "fee": "Fee required; Michigan Water Trails lists a $7 launch gate — verify current rate",
+    "operatingHours": null,
+    "operator": "City of South Haven",
+    "owner": "City of South Haven",
+    "seasonalStatus": "Seasonal",
+    "sourceUrl": "https://www.southhavenmi.gov/parks_and_recreation/marinas.php",
+    "sourceLabel": "City of South Haven — Black River Park (Seasonal) Launch Ramp",
+    "coordinateSourceUrl": "https://outdoormichigan.org/feature/3993",
+    "coordinateSourceLabel": "Outdoor Michigan — Black River Park Boat Launch",
+    "coordinatePrecision": "Launch-specific secondary-source point; motor-ramp location corroborated by Michigan Water Trails and aerial imagery",
+    "corroborationUrls": [
+      "https://www.michiganwatertrails.org/trail.asp?aid=199&ait=av",
+      "https://www.southhaven.org/directory/black-river-park-and-boat-launch/"
+    ],
+    "address": "132 Dunkley Avenue, South Haven, MI 49090",
+    "verifiedAt": "2026-08-19",
+    "notes": "City source establishes the seasonal launch ramp. Michigan Water Trails establishes developed/improved motor-boat ramps inside the gated area. Launch-specific coordinates are independently published by Outdoor Michigan and are spatially distinct from the separate ADA carry-in launch."
+  }
+]
