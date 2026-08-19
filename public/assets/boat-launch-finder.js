@@ -3,7 +3,7 @@
 if(location.pathname!=='/michigan-boat-launches/')return;
 
 const $=(s,r=document)=>r.querySelector(s);
-const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[m]));
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const emit=(name,props={})=>{try{window.va?.('event',{name,...props});}catch{}};
 
 const SOURCE_API='/api/boat-launches';
