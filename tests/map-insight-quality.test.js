@@ -5,7 +5,8 @@ import fs from 'node:fs';
 const boatHtml=fs.readFileSync('public/michigan-boat-launches/index.html','utf8');
 const boatJs=fs.readFileSync('public/assets/boat-launch-finder.js','utf8');
 const boatApi=fs.readFileSync('api/boat-launches.js','utf8');
-const boatCode=boatJs+'\n'+boatApi;
+const boatGeocode=fs.readFileSync('api/boat-launch-geocode.js','utf8');
+const boatCode=boatJs+'\n'+boatApi+'\n'+boatGeocode;
 const wreckHtml=fs.readFileSync('public/great-lakes-shipwrecks/index.html','utf8');
 const wreckJs=fs.readFileSync('public/assets/shipwreck-explorer.js','utf8');
 const source=JSON.parse(fs.readFileSync('public/assets/michigan-boat-launches/hero-source.json','utf8'));
@@ -18,54 +19,70 @@ test('Boat Launch Finder uses a traceable real Michigan launch photograph',()=>{
   assert.match(boatHtml,/CC BY 3\.0/);
 });
 
-test('boat inventory is created only from the current Michigan DNR facility layer',()=>{
+test('boat inventory is created only from current Michigan DNR records without requiring nullable facilityid',()=>{
   assert.match(boatApi,/PRDBASPublicView\/FeatureServer\/0/);
   assert.match(boatApi,/bas_type='Boating Access Site'/);
   assert.match(boatApi,/launch_status='Open'/);
   assert.match(boatApi,/greatlakesaccess LIKE 'Yes%'/);
-  assert.match(boatApi,/facilityid IS NOT NULL/);
+  assert.doesNotMatch(boatApi,/facilityid IS NOT NULL/);
+  assert.match(boatApi,/globalid/);
+  assert.match(boatApi,/OBJECTID/);
+  assert.match(boatApi,/function sourceId/);
   assert.match(boatJs,/SOURCE_API='\/api\/boat-launches'/);
-  assert.match(boatJs,/const raw=\(j\.features\|\|\[\]\)\.map\(cleanFeature\)\.filter\(Boolean\)/);
-  assert.doesNotMatch(boatHtml,/id="locdata"/);
-  assert.doesNotMatch(boatHtml,/"numberOfItems": 42/);
-  assert.doesNotMatch(boatHtml,/Bay City State Park Launch/);
+  assert.match(boatJs,/j\.launches\|\|\[\]/);
+  assert.doesNotMatch(boatHtml,/id="locdata"|"numberOfItems": 42|Bay City State Park Launch/);
 });
 
-test('boat source quality rules reject flagged and reference-only records',()=>{
+test('boat source quality rules reject flagged and reference-only records while preserving stable source identity',()=>{
   assert.match(boatApi,/referenceonly/);
   assert.match(boatApi,/String\(a\.flag \|\| ""\)\.trim\(\)/);
   assert.match(boatApi,/latitude IS NOT NULL/);
   assert.match(boatApi,/longitude IS NOT NULL/);
   assert.match(boatApi,/waterwaysprogramconfirmation/);
   assert.match(boatApi,/qaqc_1_date/);
-  assert.match(boatJs,/if\(!a\.facilityid\|\|!a\.name/);
+  assert.match(boatApi,/facilityid[\s\S]{0,500}globalid[\s\S]{0,500}OBJECTID/);
 });
 
-test('boat finder has no fuzzy-match or manual-coordinate fallback',()=>{
+test('boat destination search resolves a place then ranks launches geographically',()=>{
+  assert.match(boatJs,/GEOCODE_API='\/api\/boat-launch-geocode'/);
+  assert.match(boatGeocode,/nominatim\.openstreetmap\.org\/search/);
+  assert.match(boatGeocode,/bounded/);
+  assert.match(boatJs,/function distanceMiles/);
+  assert.match(boatJs,/function chooseNearby/);
+  assert.match(boatJs,/within25/);
+  assert.match(boatJs,/radiusUsed/);
+  assert.doesNotMatch(boatJs,/hay\.includes\(q\)/);
+  assert.match(boatHtml,/Where do you want to launch\?/);
+});
+
+test('boat finder has no fuzzy-match or manual-coordinate launch fallback',()=>{
   assert.doesNotMatch(boatCode,/MANUAL_VERIFIED|ALIASES|bestMatch|nameSimilarity|tokenScore/);
   assert.match(boatApi,/fallback_used: false/);
   assert.match(boatJs,/No legacy or guessed launch pins are being shown/);
-  assert.match(boatHtml,/If the source cannot be reached, the map stays empty/);
+  assert.match(boatHtml,/A source outage is shown separately/);
 });
 
-test('boat map and cards use one DNR facility identifier and one coordinate',()=>{
+test('boat map and cards use one normalized DNR source identifier and one coordinate',()=>{
   assert.match(boatJs,/const markerById=new Map\(\)/);
   assert.match(boatJs,/markerById\.set\(a\.id,m\)/);
   assert.match(boatJs,/data-launch-id/);
   assert.match(boatJs,/m\.on\('click',\(\)=>select\(a\.id,'marker'\)\)/);
-  assert.match(boatJs,/Facility ID/);
+  assert.match(boatJs,/destinationMarker/);
   assert.match(boatJs,/google\.com\/maps\/dir/);
   assert.match(boatJs,/a\.latitude/);
   assert.match(boatJs,/a\.longitude/);
 });
 
-test('boat records expose useful source-backed facility details',()=>{
-  assert.match(boatCode,/ntrailerableparking/);
-  assert.match(boatCode,/nlanes/);
-  assert.match(boatCode,/rampcode_new/);
-  assert.match(boatCode,/operating_hours/);
-  assert.match(boatCode,/carrydowntype/);
-  assert.match(boatJs,/Great Lakes access:/);
+test('boat records expose useful source-backed decision details',()=>{
+  assert.match(boatApi,/ntrailerableparking/);
+  assert.match(boatApi,/nlanes/);
+  assert.match(boatApi,/rampcode_new/);
+  assert.match(boatApi,/operating_hours/);
+  assert.match(boatApi,/carrydowntype/);
+  assert.match(boatJs,/trailerParking/);
+  assert.match(boatJs,/rampClass/);
+  assert.match(boatJs,/operatingHours/);
+  assert.match(boatJs,/distanceMiles\.toFixed/);
 });
 
 test('shipwreck map selection changes the actual table record set',()=>{
