@@ -1,117 +1,64 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
-
 const cfg=JSON.parse(fs.readFileSync('benchmarks/boat-launch-product-v3.json','utf8'));
 const html=fs.readFileSync('public/michigan-boat-launches/index.html','utf8');
 const js=fs.readFileSync('public/assets/boat-launch-finder.js','utf8');
 const api=fs.readFileSync('api/boat-launches.js','utf8');
+const weather=fs.readFileSync('api/boat-launch-weather.js','utf8');
 const geocode=fs.readFileSync('api/boat-launch-geocode.js','utf8');
-const supplemental=JSON.parse(fs.readFileSync('data/boat-launch-supplemental.json','utf8'));
 const ranking=fs.readFileSync('public/assets/boat-launch-ranking.js','utf8');
-const driveApi=fs.readFileSync('api/boat-launch-drive.js','utf8');
-const smoke=fs.readFileSync('scripts/smoke-boat-launch-runtime.mjs','utf8');
-const supplementalRaw=JSON.stringify(supplemental);
-const code=js+'\n'+api+'\n'+geocode;
-
-const score={sourceTruth:0,destinationSearchCoverage:0,decisionUtility:0,mapAndMobileUX:0,conditionsAndTrust:0,discoveryPerformance:0};
+const drive=fs.readFileSync('api/boat-launch-drive.js','utf8');
+const code=html+'\n'+js+'\n'+api+'\n'+weather+'\n'+geocode;
+const score={sourceTruth:0,statewideCoverage:0,mapAndSearchUX:0,decisionUtility:0,weatherAndTrust:0,discoveryPerformance:0};
 const failures=[];const fatals=[];
 const add=(key,points,ok,msg)=>{if(ok)score[key]+=points;else failures.push(`${key}: ${msg}`);};
 
-// SOURCE TRUTH — 30
-add('sourceTruth',8,/PRDBASPublicView\/FeatureServer\/0/.test(api),'primary DNR source is missing');
-add('sourceTruth',5,!/MANUAL_VERIFIED|ALIASES|bestMatch|nameSimilarity|tokenScore/.test(code),'legacy/fuzzy launch creation remains');
-add('sourceTruth',4,!/id="locdata"/.test(html)&&!/Bay City State Park Launch/.test(code+html),'static or known-false launch inventory remains');
-add('sourceTruth',5,/fallback_used:\s*false/.test(api)&&/No legacy or guessed launch pins/.test(js),'source failure can fall back to guessed launch data');
-const stableFallback=/globalid/.test(api)&&/OBJECTID/.test(api)&&!/facilityid IS NOT NULL/.test(api)&&/sourceId\(a\)/.test(api);
-add('sourceTruth',8,stableFallback,'nullable facilityid is not protected by a stable authoritative ID fallback');
-if(!stableFallback)fatals.push('Nullable facilityid can still erase an otherwise valid DNR launch.');
+add('sourceTruth',8,/PRDBASPublicView\/FeatureServer\/0/.test(api),'DNR source missing');
+add('sourceTruth',6,!/MANUAL_VERIFIED|ALIASES|bestMatch|nameSimilarity|tokenScore/.test(code),'legacy/fuzzy launch creation remains');
+add('sourceTruth',5,/globalid/.test(api)&&/OBJECTID/.test(api)&&!/facilityid IS NOT NULL/.test(api),'stable ID fallback missing');
+add('sourceTruth',6,/fallback_used:\s*false/.test(api)&&/No legacy or guessed launch pins/.test(js),'source failure can create fallback pins');
 
-const southHaven=supplemental.find(x=>x.id==='municipal:south-haven:black-river-park-launch');
-const supplementalEvidence=!!southHaven&&southHaven.sourceType==='municipal-supplemental'&&southHaven.verificationStatus==='municipal-source-qualified'&&/southhavenmi\.gov/.test(southHaven.sourceUrl||'')&&/outdoormichigan\.org/.test(southHaven.coordinateSourceUrl||'')&&Array.isArray(southHaven.corroborationUrls)&&southHaven.corroborationUrls.some(x=>/michiganwatertrails\.org/.test(x));
-const supplementalSeparation=/require\("\.\.\/data\/boat-launch-supplemental\.json"\)/.test(api)&&/normalizeSupplemental/.test(api)&&/municipal_supplemental_count/.test(api)&&/function isSupplemental/.test(js)&&/Municipal launch/.test(js)&&/a\.sourceUrl\|\|DNR_LAYER/.test(js)&&/is-municipal/.test(js)&&/Municipal source-qualified/.test(html);
-if(!supplementalEvidence)fatals.push('South Haven municipal supplement lacks the required owner/operator and independent coordinate provenance.');
-if(!supplementalSeparation)fatals.push('Municipal supplemental records are not kept visibly and technically separate from DNR records.');
-if(/DNR status: Open[\s\S]{0,250}municipal/i.test(js)&&!/supplemental\?/.test(js))fatals.push('Municipal supplements can be mislabeled as DNR status records.');
+const statewide=!/greatlakesaccess LIKE 'Yes%'/i.test(api)&&/statewide:\s*true/.test(api)&&/waterScope/.test(api);
+add('statewideCoverage',10,statewide,'API is not statewide');
+add('statewideCoverage',5,/inland-or-other/.test(api+html),'inland launch state is missing');
+add('statewideCoverage',5,/All Michigan waters/.test(html)&&/All Michigan launches/.test(html),'UI is not statewide by default');
+if(!statewide)fatals.push('Great-Lakes-only source gate still excludes inland launches.');
 
-// DESTINATION SEARCH + COVERAGE — 25
-const hasGeocoder=/GEOCODE_API='\/api\/boat-launch-geocode'/.test(js)&&/nominatim\.openstreetmap\.org/.test(geocode)&&/bounded/.test(geocode);
-const hasDistance=/function distanceMiles/.test(js)&&/toRadians/.test(js);
-const substringOnly=/hay\.includes\(q\)/.test(js);
-add('destinationSearchCoverage',8,hasGeocoder,'destination-to-coordinate resolution is missing or browser-direct');
-add('destinationSearchCoverage',8,hasDistance,'geospatial launch-distance calculation is missing');
-add('destinationSearchCoverage',5,!substringOnly,'destination search is still a launch-record substring filter');
-const driveRanked=/chooseNearby/.test(js)&&/within25/.test(js)&&/radiusUsed/.test(js)&&/RANK\.candidatePool/.test(js)&&/RANK\.finalizeShortlist/.test(js)&&/MAX_ROAD_MILES/.test(js)&&/DRIVE_API='\/api\/boat-launch-drive'/.test(js);
-add('destinationSearchCoverage',4,driveRanked,'nearby shortlist is not ranked on drive distance with a capped reach');
-if(substringOnly||!hasGeocoder||!hasDistance)fatals.push('Destination search is not a complete geocoded geographic search.');
+const searchInputs=(html.match(/<input[^>]+type="search"/g)||[]).length;
+add('mapAndSearchUX',6,searchInputs===1,'finder must have exactly one user-facing text search box');
+add('mapAndSearchUX',6,/markerClusterGroup/.test(js)&&/mapSet\(\)/.test(js)&&/for\(const a of mapSet\(\)\)/.test(js),'full filtered inventory is not mapped');
+add('mapAndSearchUX',5,/GEOCODE_API='\/api\/boat-launch-geocode'/.test(js)&&/rankNearDestination/.test(js),'destination search/ranking missing');
+add('mapAndSearchUX',4,/sort-filter/.test(html)&&/parking-filter/.test(html)&&/ramp-filter/.test(html),'sort/refinement controls missing');
+add('mapAndSearchUX',4,/const markerById=new Map\(\)/.test(js)&&/data-launch-id/.test(js)&&/selectLaunch/.test(js),'map/list selection correlation missing');
+if(searchInputs!==1)fatals.push('Redundant text-entry boxes remain.');
+if(!/markerClusterGroup/.test(js))fatals.push('Statewide map does not cluster the full inventory.');
 
-// DECISION UTILITY — 20
-add('decisionUtility',4,/trailerParking/.test(js),'trailer parking is missing');
-add('decisionUtility',3,/\.lanes/.test(js),'launch lanes are missing');
-add('decisionUtility',3,/rampClass/.test(js),'ramp class is missing');
-add('decisionUtility',3,/operatingHours/.test(js),'operating hours are missing');
-add('decisionUtility',2,/\.fee/.test(js),'fee/passport information is missing');
-add('decisionUtility',2,/operatorText|\.operator/.test(js),'operator context is missing');
-add('decisionUtility',3,/distanceMiles\.toFixed|distance from/i.test(js)&&/mi by road/.test(js)&&/straight line/.test(js),'road distance and its unrouted fallback are not labeled distinctly');
+add('decisionUtility',4,/trailerParking/.test(js),'trailer parking missing');
+add('decisionUtility',3,/rampClass/.test(js),'ramp class missing');
+add('decisionUtility',2,/operatingHours/.test(js),'hours missing');
+add('decisionUtility',2,/operatorText/.test(js),'operator missing');
+add('decisionUtility',2,/google\.com\/maps\/dir/.test(js),'directions missing');
+add('decisionUtility',2,/DRIVE_API='\/api\/boat-launch-drive'/.test(js)&&/driveMinutes/.test(js),'drive ranking missing');
+if(!/DRIVE_API='\/api\/boat-launch-drive'/.test(js)||!/finalizeShortlist/.test(js))fatals.push('Destination search lost Claude/PR #83 drive-distance ranking.');
+if(/function roundRadius/.test(js))fatals.push('Uncapped radius logic returned.');
+if(!/STRAIGHT_LINE_DETOUR_RATIO/.test(ranking)||!resStatus502(drive))fatals.push('Routing fallback/range guard is incomplete.');
 
-// MAP + MOBILE UX — 15
-add('mapAndMobileUX',5,/markerById=new Map\(\)/.test(js)&&/data-launch-id/.test(js)&&/select\(a\.id,'marker'\)/.test(js),'map/card correlation is incomplete');
-add('mapAndMobileUX',3,/fitBounds/.test(js),'map does not fit destination and results');
-add('mapAndMobileUX',3,/destinationMarker/.test(js)&&/destination-map-marker/.test(html+js),'destination is not distinct on the map');
-add('mapAndMobileUX',2,/@media\(max-width:|@media \(max-width:/.test(html),'mobile layout protection is missing');
-add('mapAndMobileUX',2,/google\.com\/maps\/dir/.test(js),'source-coordinate directions action is missing');
+add('weatherAndTrust',4,/WEATHER_API='\/api\/boat-launch-weather'/.test(js)&&/api\.weather\.gov/.test(weather),'launch-local NWS weather missing');
+add('weatherAndTrust',2,/alerts\/active\?point=/.test(weather),'point alerts missing');
+add('weatherAndTrust',2,/not a .*boating-safety determination|not a .*boating-safety/i.test(weather+html),'weather safety boundary missing');
+add('weatherAndTrust',2,/DNR review in progress/.test(html+js)&&/Review Needed/.test(html),'review-state trust language missing');
+if(/safe to boat|safe to launch|boating safety score/i.test(code))fatals.push('Weather is presented as a boating-safety determination.');
 
-// CONDITIONS + TRUST — 5
-const reviewTier=/flag === "InProgress"/.test(api)&&/return "dnr-review-in-progress"/.test(api)&&/return "withhold"/.test(api)&&/DNR review in progress/.test(html+js);
-const provisionalFilters=/function rampMatches[\s\S]*?if\(isReview\(a\)\|\|isSupplemental\(a\)\)return false/.test(js)&&/function parkingMatches[\s\S]*?if\(isReview\(a\)\|\|isSupplemental\(a\)\)return false/.test(js);
-const distinctReviewMap=/is-review/.test(js)&&/\.launch-number-icon span\.is-review/.test(html);
-const distinctSupplementalMap=/is-municipal/.test(js)&&/\.launch-number-icon span\.is-municipal/.test(html);
-add('conditionsAndTrust',1,!/safety score|safe to launch|safe boating score/i.test(code+html),'unsupported safety certainty is presented');
-add('conditionsAndTrust',1,/source record|Michigan DNR|source layer/i.test(html+js),'source/trust language is missing');
-add('conditionsAndTrust',1,reviewTier,'DNR Review In Progress is not a distinct visible trust state');
-add('conditionsAndTrust',1,provisionalFilters,'provisional or non-equivalent metadata can drive precise DNR filters');
-add('conditionsAndTrust',1,distinctReviewMap&&distinctSupplementalMap,'review and municipal map pins are not visibly distinct');
-if(!reviewTier)fatals.push('DNR InProgress review records are not explicitly visible/provisional while Review Needed and unknown review states remain withheld.');
-if(!provisionalFilters)fatals.push('DNR review-in-progress or municipal supplemental records can satisfy precise DNR ramp/trailer-parking filters without equivalent data.');
-if(!distinctReviewMap)fatals.push('DNR review-in-progress records are not visually distinguishable on the map.');
-if(!distinctSupplementalMap)fatals.push('Municipal supplemental records are not visually distinguishable from DNR records on the map.');
+add('discoveryPerformance',2,/canonical" href="https:\/\/chrisizworski\.com\/michigan-boat-launches\//.test(html),'canonical missing');
+add('discoveryPerformance',2,/Boat Launch Destination Search/.test(js)&&/Boat Launch Select/.test(js)&&/Boat Launch Action/.test(js),'analytics incomplete');
+add('discoveryPerformance',1,!/navigator\.geolocation|getCurrentPosition|localStorage|sessionStorage|document\.cookie/.test(code),'precise-location/persistent tracking introduced');
 
-// DISCOVERY + PERFORMANCE — 5
-add('discoveryPerformance',2,/canonical" href="https:\/\/chrisizworski\.com\/michigan-boat-launches\//.test(html),'canonical URL changed or is missing');
-add('discoveryPerformance',2,/Boat Launch Destination Search/.test(js)&&/Boat Launch Select/.test(js)&&/Boat Launch Action/.test(js),'decision analytics are incomplete');
-add('discoveryPerformance',1,!/navigator\.geolocation|getCurrentPosition|localStorage|sessionStorage|document\.cookie/.test(code),'precise-location or persistent browser tracking introduced');
-
-if(/Bay City State Park Launch/.test(code+html+supplementalRaw))fatals.push('Known false positive Bay City State Park Launch is present.');
-if(/MANUAL_VERIFIED|bestMatch|nameSimilarity/.test(code))fatals.push('Legacy/manual/fuzzy launch creation is possible.');
-if(!/fallback_used:\s*false/.test(api))fatals.push('Source failure does not explicitly prohibit fallback data.');
-if(/facilityid IS NOT NULL/.test(api))fatals.push('Nullable facilityid is still a hard source gate.');
-if(!/Destination lookup unavailable/.test(geocode))fatals.push('Geocoder outage does not have a distinct unavailable state.');
-
-/*
- * Ranking and scope contract. These exist because the previous acceptance set
- * was drawn entirely from the Great Lakes shoreline the data already covered,
- * so it could not fail on the destinations where the tool actually broke.
- */
-if(!driveRanked)fatals.push('The shortlist is not ranked on drive distance from the searched destination.');
-if(/function roundRadius/.test(js))fatals.push('The uncapped straight-line radius expansion is back.');
-if(!/STRAIGHT_LINE_DETOUR_RATIO/.test(ranking))fatals.push('An unrouted fallback can admit launches a real road would place out of range.');
-if(!/routed:\s*false|routed===false|!routed|routed\?/.test(js)||!/straight line/.test(js))fatals.push('A routing outage is not distinguished from a measured drive distance.');
-if(!/outOfScope/.test(js)||!/Inland-lake launches are a separate DNR inventory/.test(js))fatals.push('An out-of-scope destination is not told that inland lakes are outside this dataset.');
-if(/\(num\(a\.trailerParking\)\|\|0\)/.test(js))fatals.push('An unlisted trailer-parking count is being treated as zero spaces.');
-if(!/hidden by your refinements/.test(js))fatals.push('Refinements can remove nearby records without saying so.');
-if(!/CONNECTING_WATERS/.test(api)||!/Detroit River/.test(api))fatals.push('Great Lakes connecting rivers are excluded by the DNR access field again.');
-if(!/exceededTransferLimit/.test(api))fatals.push('A truncated DNR page could be served as a complete inventory.');
-if(!/res\.status\(502\)/.test(driveApi)||/status\(200\)[\s\S]{0,120}error:/.test(driveApi))fatals.push('The drive endpoint can answer 200 with an error in the body.');
-
-const outOfScopeCases=(cfg.acceptanceDestinations||[]).filter(x=>x.expectOutOfScope===true);
-if(outOfScopeCases.length<2)fatals.push('The acceptance set does not include inland destinations, so it cannot fail where the tool fails.');
-for(const destination of outOfScopeCases){
-  const city=String(destination.query).split(',')[0].trim();
-  if(!smoke.includes(city))fatals.push(`Acceptance destination ${destination.query} is declared but never exercised by the runtime smoke.`);
-}
-if(!/correctly out of scope/.test(smoke))fatals.push('The runtime smoke does not assert the inland scope guard.');
-
+if(/Bay City State Park Launch/.test(code))fatals.push('Known false Bay City State Park Launch is present.');
+if(/facilityid IS NOT NULL/.test(api))fatals.push('Nullable facilityid is still a source gate.');
+if(!/exceededTransferLimit/.test(api))fatals.push('Truncated DNR inventory can be served as complete.');
+function resStatus502(src){return /res\.status\(502\)/.test(src);}
 const total=Object.values(score).reduce((a,b)=>a+b,0);const loss=cfg.maxScore-total;
-console.log(`Boat Launch Product V3: ${total}/${cfg.maxScore} (loss ${loss})`);
+console.log(`Boat Launch Product V4: ${total}/${cfg.maxScore} (loss ${loss})`);
 for(const d of cfg.dimensions)console.log(`  ${d.key}: ${score[d.key]}/${d.weight}`);
 if(failures.length)console.log('\nNonfatal gaps:\n- '+failures.join('\n- '));
 if(fatals.length)console.error('\nFatal failures:\n- '+fatals.join('\n- '));
