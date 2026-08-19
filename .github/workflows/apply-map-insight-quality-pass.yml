@@ -1,0 +1,30 @@
+name: Apply map insight quality pass
+on:
+  push:
+    branches: [agent/map-insight-quality-pass]
+permissions:
+  contents: write
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/map-insight-quality-pass
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/apply-map-insight-quality-pass.mjs
+      - run: node --check public/assets/boat-launch-finder.js
+      - run: node --check public/assets/shipwreck-explorer.js
+      - run: npm run benchmark:map-insights
+      - run: rm scripts/apply-map-insight-quality-pass.mjs .github/workflows/apply-map-insight-quality-pass.yml
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "Make launch and shipwreck maps insight-first"
+          git push origin HEAD:agent/map-insight-quality-pass
