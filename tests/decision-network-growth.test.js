@@ -20,28 +20,32 @@ test('decision network is crawlable on safe hubs without altering protected dest
   assert.doesNotMatch(js,/destination.*href|href.*destination/);
 });
 
-test('boat launch finder is source-first and makes the DNR record the map truth',()=>{
+test('boat launch finder is source-first, destination-first, and keeps the DNR record as map truth',()=>{
   const html=read('public/michigan-boat-launches/index.html');
   const js=read('public/assets/boat-launch-finder.js');
   const api=read('api/boat-launches.js');
-  const code=js+'\n'+api;
-  assert.match(html,/<title>Michigan Great Lakes Boat Launch Finder \| Chris Izworski<\/title>/);
+  const geocode=read('api/boat-launch-geocode.js');
+  const code=js+'\n'+api+'\n'+geocode;
+  assert.match(html,/<title>Michigan Boat Launch Finder \| Chris Izworski<\/title>/);
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/michigan-boat-launches/">'));
-  assert.match(html,/<h1>Great Lakes Boat Launch Finder<\/h1>/);
+  assert.match(html,/<h1>Find a boat launch near where you want to go<\/h1>/);
   assert.match(html,/assets\/boat-launch-finder\.js/);
   assert.doesNotMatch(html,/id="locdata"|Bay City State Park Launch|"numberOfItems": 42/);
   assert.match(api,/PRDBASPublicView\/FeatureServer\/0/);
   assert.match(api,/launch_status='Open'/);
   assert.match(api,/greatlakesaccess LIKE 'Yes%'/);
-  assert.match(api,/facilityid IS NOT NULL/);
+  assert.doesNotMatch(api,/facilityid IS NOT NULL/);
+  assert.match(api,/globalid/);
+  assert.match(api,/OBJECTID/);
   assert.match(api,/referenceonly/);
   assert.match(api,/fallback_used: false/);
   assert.match(js,/SOURCE_API='\/api\/boat-launches'/);
-  assert.match(js,/if\(!a\.facilityid\|\|!a\.name/);
-  assert.match(js,/Facility ID/);
+  assert.match(js,/GEOCODE_API='\/api\/boat-launch-geocode'/);
+  assert.match(js,/function distanceMiles/);
+  assert.match(js,/function chooseNearby/);
   assert.match(js,/google\.com\/maps\/dir/);
   assert.match(js,/No legacy or guessed launch pins are being shown/);
-  assert.doesNotMatch(code,/MANUAL_VERIFIED|ALIASES|bestMatch|nameSimilarity/);
+  assert.doesNotMatch(code,/MANUAL_VERIFIED|ALIASES|bestMatch|nameSimilarity|hay\.includes\(q\)/);
   assert.doesNotMatch(code,/navigator\.geolocation|getCurrentPosition|localStorage|sessionStorage|document\.cookie/);
   const children=readdirSync(path.join(root,'public/michigan-boat-launches'),{withFileTypes:true}).filter(x=>x.isDirectory()).map(x=>x.name).sort();
   assert.deepEqual(children,['lake-michigan','saginaw-bay']);
@@ -77,5 +81,6 @@ test('growth benchmark is evidence-backed and part of the full merge gate',()=>{
   assert.equal(score.observedBaseline.shipwrecks.impressions,1206);
   const pkg=JSON.parse(read('package.json'));
   assert.match(pkg.scripts['verify:all'],/benchmark:decision-network/);
+  assert.match(pkg.scripts['verify:all'],/benchmark:boat-launches-v3/);
   assert.equal(pkg.scripts['benchmark:decision-network'],'node scripts/benchmark-decision-network-growth.mjs --check');
 });
