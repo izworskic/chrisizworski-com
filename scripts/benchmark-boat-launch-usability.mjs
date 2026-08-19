@@ -27,7 +27,8 @@ const checks={
     api.includes('referenceonly'),api.includes('String(a.flag || "").trim()'),api.includes('latitude IS NOT NULL'),api.includes('longitude IS NOT NULL'),api.includes('waterwaysprogramconfirmation'),api.includes('qaqc_1_date'),api.includes('eligibleAttributes')
   )},
   mapRecordCorrelation:{max:15,ok:pass(
-    js.includes('const markerById=new Map()'),js.includes('markerById.set(a.id,m)'),js.includes('data-launch-id'),js.includes("m.on('click',()=>select(a.id,'marker'))"),js.includes('sourceId'),js.includes('Directions')
+    api.includes('sourceId: identity.sourceId'),api.includes('id: identity.id'),
+    js.includes('const markerById=new Map()'),js.includes('markerById.set(a.id,m)'),js.includes('data-launch-id'),js.includes("m.on('click',()=>select(a.id,'marker'))"),js.includes('Directions')
   )},
   decisionDetails:{max:10,ok:pass(
     sourceCode.includes('ntrailerableparking'),sourceCode.includes('nlanes'),sourceCode.includes('rampcode_new'),sourceCode.includes('operating_hours'),sourceCode.includes('greatlakesaccess'),sourceCode.includes('carrydowntype'),js.includes('distanceMiles')
