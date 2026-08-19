@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "created": "2026-08-18",
+  "objective": "Replace synthetic-looking visible media and convert launch/shipwreck map dots into linked, trustworthy decision and story insights without weakening canonical ownership, safety boundaries, privacy, or the existing record-rich parent pages.",
+  "maxScore": 100,
+  "target": {
+    "minimumEffectiveScore": 95,
+    "maximumLoss": 5,
+    "fatalPenaltyAllowed": false
+  },
+  "baseline": {
+    "score": 43,
+    "loss": 57,
+    "dimensions": {
+      "authenticMedia": 0,
+      "boatMarkerInsight": 8,
+      "shipwreckMarkerInsight": 5,
+      "trustAndSourceBoundary": 15,
+      "searchIntegrity": 10,
+      "measurementAndAccessibility": 5
+    },
+    "note": "Structural baseline of the just-merged release: the root hero appeared synthetic; launch popups exposed name/lake/regional observations but no persistent decision card; shipwreck markers exposed only a regional label and record count. This is a build-quality baseline, not a traffic forecast."
+  },
+  "dimensions": [
+    {"key": "authenticMedia", "weight": 20, "candidate": 15, "note": "Visible root hero is replaced at runtime with a traceable CC BY real Michigan launch photograph and visible attribution. Five points remain lost because the old local fallback/social image still exists in static HTML."},
+    {"key": "boatMarkerInsight", "weight": 25, "candidate": 25},
+    {"key": "shipwreckMarkerInsight", "weight": 25, "candidate": 25},
+    {"key": "trustAndSourceBoundary", "weight": 15, "candidate": 15},
+    {"key": "searchIntegrity", "weight": 10, "candidate": 10},
+    {"key": "measurementAndAccessibility", "weight": 5, "candidate": 5}
+  ],
+  "fatalPenalties": [
+    "The displayed Boat Launch Finder root hero remains generated/synthetic or lacks traceable real-photo provenance and visible attribution.",
+    "A boat marker is presented as a launch safety rating or its regional NDBC station as ramp/harbor truth.",
+    "A shipwreck regional anchor is represented as an exact wreck, navigation, or dive coordinate.",
+    "Marker interactions remain decorative/count-only with no linked underlying record or useful next action.",
+    "Either parent canonical changes, thin child URLs are created, precise/personal location data is collected, or Circle Tour PR #51 is modified."
+  ],
+  "nextLossRemoval": "Replace the static root hero/og:image fallback with the same documented real photograph in a future source-safe static media change; do not block the insight release on that non-visible fallback."
+}
