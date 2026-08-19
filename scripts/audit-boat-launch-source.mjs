@@ -1,6 +1,8 @@
 #!/usr/bin/env node
+import fs from 'node:fs';
 
 const LAYER='https://services3.arcgis.com/Jdnp1TjADvSDxMAX/arcgis/rest/services/PRDBASPublicView/FeatureServer/0';
+const SUPPLEMENTAL=JSON.parse(fs.readFileSync('data/boat-launch-supplemental.json','utf8'));
 const ACCEPTANCE=[
   ['Bay City, MI',43.5945,-83.8889],
   ['Tawas City, MI',44.2695,-83.5147],
@@ -63,32 +65,36 @@ const openGreatLakes=open.filter(a=>String(a.greatlakesaccess||'').startsWith('Y
 const sourceQualified=openGreatLakes.filter(a=>reviewStatus(a)==='source-qualified');
 const reviewInProgress=openGreatLakes.filter(a=>reviewStatus(a)==='dnr-review-in-progress');
 const withheld=openGreatLakes.filter(a=>reviewStatus(a)==='withhold');
-const usable=[...sourceQualified,...reviewInProgress];
+const usableDnr=[...sourceQualified,...reviewInProgress];
+const municipalSupplemental=SUPPLEMENTAL.filter(a=>a.sourceType==='municipal-supplemental'&&a.verificationStatus==='municipal-source-qualified'&&a.id&&a.name&&a.operator&&a.sourceUrl&&a.coordinateSourceUrl&&hasCoordinate(a));
+const sourceBacked=[...usableDnr,...municipalSupplemental];
 const accessCounts=new Map();
 for(const a of open)accessCounts.set(a.greatlakesaccess??'(null)',(accessCounts.get(a.greatlakesaccess??'(null)')||0)+1);
 
-const nullFacility=usable.filter(a=>!String(a.facilityid||'').trim());
+const nullFacility=usableDnr.filter(a=>!String(a.facilityid||'').trim());
 const referenceOnly=open.filter(a=>String(a.referenceonly||'').toLowerCase()==='yes');
 const reviewNeeded=open.filter(a=>String(a.flag||'').trim()==='Flag');
 const allInProgress=open.filter(a=>String(a.flag||'').trim()==='InProgress');
-const gia=usable.filter(a=>String(a.gia||'').toLowerCase()==='yes');
+const gia=usableDnr.filter(a=>String(a.gia||'').toLowerCase()==='yes');
 
-console.log('Michigan DNR boat launch source audit');
-console.log(`Layer last edit: ${metadata?.editingInfo?.lastEditDate?new Date(metadata.editingInfo.lastEditDate).toISOString():'unknown'}`);
-console.log(`Total layer records: ${total.count}`);
-console.log(`Boating Access Site records: ${records.length}`);
-console.log(`Open boating-access records: ${open.length}`);
-console.log(`Open Great Lakes-access records with usable coordinates: ${openGreatLakes.length}`);
-console.log(`Source-qualified Great Lakes records: ${sourceQualified.length}`);
+console.log('Michigan boat launch source + coverage audit');
+console.log(`DNR layer last edit: ${metadata?.editingInfo?.lastEditDate?new Date(metadata.editingInfo.lastEditDate).toISOString():'unknown'}`);
+console.log(`Total DNR layer records: ${total.count}`);
+console.log(`DNR Boating Access Site records: ${records.length}`);
+console.log(`Open DNR boating-access records: ${open.length}`);
+console.log(`Open DNR Great Lakes-access records with usable coordinates: ${openGreatLakes.length}`);
+console.log(`Source-qualified DNR Great Lakes records: ${sourceQualified.length}`);
 console.log(`DNR review-in-progress Great Lakes records: ${reviewInProgress.length}`);
-console.log(`Total usable official DNR Great Lakes records: ${usable.length}`);
-console.log(`Withheld Great Lakes records (Review Needed/unknown review state): ${withheld.length}`);
-console.log(`Usable records with null/blank facilityid: ${nullFacility.length}`);
-console.log(`Open reference-only records: ${referenceOnly.length}`);
-console.log(`All open Review Needed records: ${reviewNeeded.length}`);
-console.log(`All open Review In Progress records: ${allInProgress.length}`);
-console.log(`Usable Grant-In-Aid records: ${gia.length}`);
-console.log('\nGreat Lakes access values among open boating sites:');
+console.log(`Total usable official DNR Great Lakes records: ${usableDnr.length}`);
+console.log(`Source-qualified municipal supplements: ${municipalSupplemental.length}`);
+console.log(`Total source-backed Great Lakes launch records: ${sourceBacked.length}`);
+console.log(`Withheld DNR Great Lakes records (Review Needed/unknown review state): ${withheld.length}`);
+console.log(`Usable DNR records with null/blank facilityid: ${nullFacility.length}`);
+console.log(`Open DNR reference-only records: ${referenceOnly.length}`);
+console.log(`All open DNR Review Needed records: ${reviewNeeded.length}`);
+console.log(`All open DNR Review In Progress records: ${allInProgress.length}`);
+console.log(`Usable DNR Grant-In-Aid records: ${gia.length}`);
+console.log('\nGreat Lakes access values among open DNR boating sites:');
 for(const [k,v] of [...accessCounts.entries()].sort((a,b)=>String(a[0]).localeCompare(String(b[0]))))console.log(`  ${k}: ${v}`);
 
 if(nullFacility.length){
@@ -96,18 +102,31 @@ if(nullFacility.length){
   for(const a of nullFacility.slice(0,8))console.log(`  ${a.name} | review=${reviewStatus(a)} | OBJECTID=${a.OBJECTID} | globalid=${a.globalid} | ${a.latitude},${a.longitude}`);
 }
 
+if(municipalSupplemental.length){
+  console.log('\nMunicipal supplemental records admitted by the source contract:');
+  for(const a of municipalSupplemental)console.log(`  ${a.name} | operator=${a.operator} | ${a.latitude},${a.longitude} | source=${a.sourceUrl} | coordinate_source=${a.coordinateSourceUrl}`);
+}
+
 console.log('\nAcceptance-destination samples (25-mile initial radius):');
-let zeroUsable=0;
+let zeroSourceBacked=0;
 for(const [name,lat,lon] of ACCEPTANCE){
   const qualifiedNearby=nearby(sourceQualified,lat,lon);
   const reviewNearby=nearby(reviewInProgress,lat,lon);
+  const municipalNearby=nearby(municipalSupplemental,lat,lon);
   const withheldNearby=nearby(withheld,lat,lon);
-  const usableNearby=[...qualifiedNearby.map(a=>({...a,_tier:'QUALIFIED'})),...reviewNearby.map(a=>({...a,_tier:'REVIEWING'}))].sort((a,b)=>a._mi-b._mi);
-  if(!usableNearby.length)zeroUsable++;
-  console.log(`\n${name}: ${qualifiedNearby.length} source-qualified + ${reviewNearby.length} review-in-progress = ${usableNearby.length} usable within 25 mi; ${withheldNearby.length} withheld`);
-  for(const a of usableNearby.slice(0,8))console.log(`  ${a._tier.padEnd(9)} ${a._mi.toFixed(1)} mi | ${a.name} | ${a.waterbody||'waterbody not listed'} | id=${a.facilityid||a.globalid||a.OBJECTID}`);
-  for(const a of withheldNearby.slice(0,5))console.log(`  WITHHELD  ${a._mi.toFixed(1)} mi | ${a.name} | flag=${a.flag||'(blank)'} | comment=${String(a.flagcomments||'(none)').replace(/\s+/g,' ').slice(0,140)} | id=${a.facilityid||a.globalid||a.OBJECTID}`);
+  const sourceBackedNearby=[
+    ...qualifiedNearby.map(a=>({...a,_tier:'DNR OK'})),
+    ...reviewNearby.map(a=>({...a,_tier:'DNR REVIEW'})),
+    ...municipalNearby.map(a=>({...a,_tier:'MUNICIPAL'})),
+  ].sort((a,b)=>a._mi-b._mi);
+  if(!sourceBackedNearby.length)zeroSourceBacked++;
+  console.log(`\n${name}: ${qualifiedNearby.length} DNR source-qualified + ${reviewNearby.length} DNR review-in-progress + ${municipalNearby.length} municipal = ${sourceBackedNearby.length} source-backed within 25 mi; ${withheldNearby.length} DNR withheld`);
+  for(const a of sourceBackedNearby.slice(0,8))console.log(`  ${a._tier.padEnd(10)} ${a._mi.toFixed(1)} mi | ${a.name} | ${a.waterbody||'waterbody not listed'} | id=${a.id||a.facilityid||a.globalid||a.OBJECTID}`);
+  for(const a of withheldNearby.slice(0,5))console.log(`  WITHHELD   ${a._mi.toFixed(1)} mi | ${a.name} | flag=${a.flag||'(blank)'} | comment=${String(a.flagcomments||'(none)').replace(/\s+/g,' ').slice(0,140)} | id=${a.facilityid||a.globalid||a.OBJECTID}`);
 }
 
-if(total.count<500||records.length<500||open.length<300||openGreatLakes.length<50||sourceQualified.length<20||usable.length<50)throw new Error('DNR source audit returned implausibly low inventory counts');
-if(zeroUsable>2)throw new Error(`DNR source audit found ${zeroUsable} acceptance destinations with zero usable official launches inside the initial 25-mile radius; inspect coverage before shipping`);
+const falseBayCity=[...records,...SUPPLEMENTAL].filter(a=>String(a.name||'').trim().toLowerCase()==='bay city state park launch');
+if(falseBayCity.length)throw new Error('Known false Bay City State Park Launch reappeared in a source inventory');
+if(total.count<500||records.length<500||open.length<300||openGreatLakes.length<50||sourceQualified.length<20||usableDnr.length<50)throw new Error('DNR source audit returned implausibly low inventory counts');
+if(!municipalSupplemental.length)throw new Error('Expected at least one source-qualified municipal supplement for the documented DNR coverage gap');
+if(zeroSourceBacked>0)throw new Error(`Coverage audit found ${zeroSourceBacked} acceptance destinations with zero source-backed launches inside the initial 25-mile radius`);
