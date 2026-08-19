@@ -2,6 +2,8 @@ import fs from 'node:fs';
 
 const boatHtml=fs.readFileSync('public/michigan-boat-launches/index.html','utf8');
 const boatJs=fs.readFileSync('public/assets/boat-launch-finder.js','utf8');
+const boatApi=fs.readFileSync('api/boat-launches.js','utf8');
+const boatCode=boatJs+'\n'+boatApi;
 const wreckHtml=fs.readFileSync('public/great-lakes-shipwrecks/index.html','utf8');
 const wreckJs=fs.readFileSync('public/assets/shipwreck-explorer.js','utf8');
 const provenance=JSON.parse(fs.readFileSync('public/assets/michigan-boat-launches/hero-source.json','utf8'));
@@ -17,13 +19,16 @@ const checks={
     provenance.license==='CC BY 3.0'
   )},
   boatDataKeyedCorrelation:{max:20,earned:20,ok:pass(
-    boatJs.includes('PRDBASPublicView/FeatureServer/0'),
+    boatApi.includes('PRDBASPublicView/FeatureServer/0'),
+    boatApi.includes('facilityid IS NOT NULL'),
+    boatJs.includes("const SOURCE_API='/api/boat-launches'"),
     boatJs.includes('const markerById=new Map()'),
     boatJs.includes('markerById.set(a.id,m)'),
     boatJs.includes('data-launch-id'),
     boatJs.includes("m.on('click',()=>select(a.id,'marker'))"),
+    boatJs.includes('Facility ID'),
     !boatHtml.includes('id="locdata"'),
-    !boatJs.includes('bestMatch')
+    !boatCode.includes('bestMatch')
   )},
   boatBidirectionalControl:{max:20,earned:20,ok:pass(
     boatJs.includes('function select(id,source='),
@@ -51,8 +56,9 @@ const checks={
     wreckJs.includes('show on map →')
   )},
   trustSearchAccessibility:{max:10,earned:10,ok:pass(
+    boatApi.includes('fallback_used: false'),
     boatJs.includes('No legacy or guessed launch pins are being shown.'),
-    boatJs.includes("if(String(a.flag||'').trim())return null"),
+    boatApi.includes('String(a.flag || "").trim()'),
     boatHtml.includes('<link rel="canonical" href="https://chrisizworski.com/michigan-boat-launches/">'),
     wreckHtml.includes('<link rel="canonical" href="https://chrisizworski.com/great-lakes-shipwrecks/">'),
     wreckJs.includes('not wreck coordinates'),
