@@ -4,6 +4,8 @@ import fs from 'node:fs';
 
 const boatHtml=fs.readFileSync('public/michigan-boat-launches/index.html','utf8');
 const boatJs=fs.readFileSync('public/assets/boat-launch-finder.js','utf8');
+const boatApi=fs.readFileSync('api/boat-launches.js','utf8');
+const boatCode=boatJs+'\n'+boatApi;
 const wreckHtml=fs.readFileSync('public/great-lakes-shipwrecks/index.html','utf8');
 const wreckJs=fs.readFileSync('public/assets/shipwreck-explorer.js','utf8');
 const source=JSON.parse(fs.readFileSync('public/assets/michigan-boat-launches/hero-source.json','utf8'));
@@ -17,10 +19,12 @@ test('Boat Launch Finder uses a traceable real Michigan launch photograph',()=>{
 });
 
 test('boat inventory is created only from the current Michigan DNR facility layer',()=>{
-  assert.match(boatJs,/PRDBASPublicView\/FeatureServer\/0/);
-  assert.match(boatJs,/bas_type='Boating Access Site'/);
-  assert.match(boatJs,/launch_status='Open'/);
-  assert.match(boatJs,/greatlakesaccess LIKE 'Yes%'/);
+  assert.match(boatApi,/PRDBASPublicView\/FeatureServer\/0/);
+  assert.match(boatApi,/bas_type='Boating Access Site'/);
+  assert.match(boatApi,/launch_status='Open'/);
+  assert.match(boatApi,/greatlakesaccess LIKE 'Yes%'/);
+  assert.match(boatApi,/facilityid IS NOT NULL/);
+  assert.match(boatJs,/SOURCE_API='\/api\/boat-launches'/);
   assert.match(boatJs,/const raw=\(j\.features\|\|\[\]\)\.map\(cleanFeature\)\.filter\(Boolean\)/);
   assert.doesNotMatch(boatHtml,/id="locdata"/);
   assert.doesNotMatch(boatHtml,/"numberOfItems": 42/);
@@ -28,16 +32,18 @@ test('boat inventory is created only from the current Michigan DNR facility laye
 });
 
 test('boat source quality rules reject flagged and reference-only records',()=>{
-  assert.match(boatJs,/referenceonly/);
-  assert.match(boatJs,/if\(String\(a\.flag\|\|''\)\.trim\(\)\)return null/);
-  assert.match(boatJs,/latitude IS NOT NULL/);
-  assert.match(boatJs,/longitude IS NOT NULL/);
-  assert.match(boatJs,/waterwaysprogramconfirmation/);
-  assert.match(boatJs,/qaqc_1_date/);
+  assert.match(boatApi,/referenceonly/);
+  assert.match(boatApi,/String\(a\.flag \|\| ""\)\.trim\(\)/);
+  assert.match(boatApi,/latitude IS NOT NULL/);
+  assert.match(boatApi,/longitude IS NOT NULL/);
+  assert.match(boatApi,/waterwaysprogramconfirmation/);
+  assert.match(boatApi,/qaqc_1_date/);
+  assert.match(boatJs,/if\(!a\.facilityid\|\|!a\.name/);
 });
 
 test('boat finder has no fuzzy-match or manual-coordinate fallback',()=>{
-  assert.doesNotMatch(boatJs,/MANUAL_VERIFIED|ALIASES|bestMatch|nameSimilarity|tokenScore/);
+  assert.doesNotMatch(boatCode,/MANUAL_VERIFIED|ALIASES|bestMatch|nameSimilarity|tokenScore/);
+  assert.match(boatApi,/fallback_used: false/);
   assert.match(boatJs,/No legacy or guessed launch pins are being shown/);
   assert.match(boatHtml,/If the source cannot be reached, the map stays empty/);
 });
@@ -47,17 +53,18 @@ test('boat map and cards use one DNR facility identifier and one coordinate',()=
   assert.match(boatJs,/markerById\.set\(a\.id,m\)/);
   assert.match(boatJs,/data-launch-id/);
   assert.match(boatJs,/m\.on\('click',\(\)=>select\(a\.id,'marker'\)\)/);
+  assert.match(boatJs,/Facility ID/);
   assert.match(boatJs,/google\.com\/maps\/dir/);
   assert.match(boatJs,/a\.latitude/);
   assert.match(boatJs,/a\.longitude/);
 });
 
 test('boat records expose useful source-backed facility details',()=>{
-  assert.match(boatJs,/ntrailerableparking/);
-  assert.match(boatJs,/nlanes/);
-  assert.match(boatJs,/rampcode_new/);
-  assert.match(boatJs,/operating_hours/);
-  assert.match(boatJs,/carrydowntype/);
+  assert.match(boatCode,/ntrailerableparking/);
+  assert.match(boatCode,/nlanes/);
+  assert.match(boatCode,/rampcode_new/);
+  assert.match(boatCode,/operating_hours/);
+  assert.match(boatCode,/carrydowntype/);
   assert.match(boatJs,/Great Lakes access:/);
 });
 
@@ -81,6 +88,6 @@ test('mappable shipwreck records can drive the map back to their regional anchor
 test('map work preserves trust and canonical ownership',()=>{
   assert.match(boatHtml,/canonical" href="https:\/\/chrisizworski\.com\/michigan-boat-launches\//);
   assert.match(wreckHtml,/canonical" href="https:\/\/chrisizworski\.com\/great-lakes-shipwrecks\//);
-  assert.doesNotMatch(boatJs,/navigator\.geolocation|getCurrentPosition|localStorage|sessionStorage|document\.cookie/);
+  assert.doesNotMatch(boatCode,/navigator\.geolocation|getCurrentPosition|localStorage|sessionStorage|document\.cookie/);
   assert.match(wreckJs,/not wreck coordinates/);
 });
