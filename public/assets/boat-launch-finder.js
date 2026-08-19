@@ -8,6 +8,9 @@ const emit=(name,props={})=>{try{window.va?.('event',{name,...props});}catch{}};
 
 const SOURCE_API='/api/boat-launches';
 const GEOCODE_API='/api/boat-launch-geocode';
+const DRIVE_API='/api/boat-launch-drive';
+const RANK=window.BoatLaunchRanking;
+const MAX_ROAD_MILES=RANK?RANK.MAX_ROAD_MILES:60;
 const DNR_LAYER='https://services3.arcgis.com/Jdnp1TjADvSDxMAX/arcgis/rest/services/PRDBASPublicView/FeatureServer/0';
 
 const destinationForm=$('#destination-form');
@@ -30,6 +33,11 @@ let layer=null;
 let destinationMarker=null;
 let destinationPoint=null;
 let radiusUsed=null;
+let routed=false;
+let hidden={total:0,unknownParking:0,provisional:0};
+let outOfScope=false;
+let measuring=false;
+let comfortable=0;
 let selectedId='';
 let sourceReady=false;
 const markerById=new Map();
@@ -41,12 +49,15 @@ function dateText(v){
   return Number.isNaN(d.getTime())?'':d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
 }
 function toRadians(deg){return deg*Math.PI/180;}
-function distanceMiles(lat1,lon1,lat2,lon2){
-  const R=3958.7613,dLat=toRadians(lat2-lat1),dLon=toRadians(lon2-lon1);
-  const a=Math.sin(dLat/2)**2+Math.cos(toRadians(lat1))*Math.cos(toRadians(lat2))*Math.sin(dLon/2)**2;
-  return 2*R*Math.asin(Math.sqrt(a));
+function distanceMiles(lat1,lon1,lat2,lon2){return RANK.distanceMiles(lat1,lon1,lat2,lon2);}
+function reachMiles(a){return routed&&a.driveMiles!==null&&a.driveMiles!==undefined?a.driveMiles:a.distanceMiles;}
+function reachText(a){
+  if(routed&&a.driveMiles!==null&&a.driveMiles!==undefined){
+    const mins=a.driveMinutes===null||a.driveMinutes===undefined?null:Math.round(a.driveMinutes);
+    return `${a.driveMiles.toFixed(1)} mi by road${mins!==null?` · ${mins} min`:''}`;
+  }
+  return `${a.distanceMiles.toFixed(1)} mi straight line`;
 }
-function roundRadius(mi){return Math.max(25,Math.ceil(mi/5)*5);}
 function operatorText(a){return a.operator||a.owner||'Not listed';}
 function isReview(a){return a.verificationStatus==='dnr-review-in-progress'||a.detailsUnderReview===true;}
 function isSupplemental(a){return a.verificationStatus==='municipal-source-qualified'||a.sourceType==='municipal-supplemental';}
@@ -88,7 +99,12 @@ function parkingMatches(a){
   const min=Number(parking.value||0);
   if(!min)return true;
   if(isReview(a)||isSupplemental(a))return false;
-  return (num(a.trailerParking)||0)>=min;
+  const listed=num(a.trailerParking);
+  if(listed===null)return false;
+  return listed>=min;
+}
+function parkingUnknown(a){
+  return Number(parking.value||0)>0&&!isReview(a)&&!isSupplemental(a)&&num(a.trailerParking)===null;
 }
 function launchNameMatches(a){
   const q=launchName.value.trim().toLowerCase();
@@ -97,15 +113,73 @@ function launchNameMatches(a){
 }
 function refinedRecords(){return records.filter(a=>accessMatches(a)&&rampMatches(a)&&parkingMatches(a)&&launchNameMatches(a));}
 
-function chooseNearby(base){
-  if(!destinationPoint||!base.length)return {items:[],radius:null,expanded:false};
-  const ranked=base.map(a=>({...a,distanceMiles:distanceMiles(destinationPoint.latitude,destinationPoint.longitude,a.latitude,a.longitude)})).sort((a,b)=>a.distanceMiles-b.distanceMiles);
-  const within25=ranked.filter(a=>a.distanceMiles<=25);
-  if(within25.length>=3)return {items:within25.slice(0,5),radius:25,expanded:false};
-  const targetIndex=Math.min(2,ranked.length-1);
-  const radius=roundRadius(ranked[targetIndex].distanceMiles);
-  const nearby=ranked.filter(a=>a.distanceMiles<=radius).slice(0,5);
-  return {items:nearby.length?nearby:ranked.slice(0,Math.min(3,ranked.length)),radius,expanded:radius>25};
+/*
+ * A refinement that quietly removes half the local inventory is worse than one
+ * that removes it out loud. Provisional DNR records and municipal supplements
+ * cannot satisfy a precise DNR field, and an unlisted trailer-parking count is
+ * not the same as zero spaces, so both are counted and reported rather than
+ * disappearing.
+ */
+function measureHidden(){
+  if(!destinationPoint){return {total:0,unknownParking:0,provisional:0};}
+  const near=RANK.candidatePool(records,destinationPoint,RANK.WIDE_POOL_SIZE).pool;
+  const removed=near.filter(a=>!(accessMatches(a)&&rampMatches(a)&&parkingMatches(a)&&launchNameMatches(a)));
+  return {
+    total:removed.length,
+    unknownParking:removed.filter(parkingUnknown).length,
+    provisional:removed.filter(a=>(isReview(a)||isSupplemental(a))&&(ramp.value||Number(parking.value||0)>0||access.value)).length,
+  };
+}
+
+async function driveTable(point,pool){
+  if(!pool.length)return null;
+  const to=pool.map(a=>`${a.latitude},${a.longitude}`).join(';');
+  try{
+    const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),9000);
+    const r=await fetch(`${DRIVE_API}?from=${point.latitude},${point.longitude}&to=${encodeURIComponent(to)}`,{signal:controller.signal,headers:{Accept:'application/json'}});
+    clearTimeout(timeout);
+    if(!r.ok)return null;
+    return await r.json();
+  }catch{return null;}
+}
+
+/*
+ * Straight-line distance only picks the candidates, because it is a lower bound
+ * on road distance. The shortlist itself is ordered by how far it really is to
+ * tow a trailer there. If routing is unavailable the page falls back to
+ * straight-line order and says so rather than presenting it as drive distance.
+ */
+function shape(result){
+  return {
+    items:result.items,
+    radius:result.reach===null?null:Math.ceil(result.reach),
+    expanded:result.reach!==null&&result.reach>RANK.COMFORTABLE_MILES,
+    routed:result.routed,
+    reason:result.reason,
+    comfortable:result.within25,
+  };
+}
+
+/*
+ * Routing takes up to a few seconds on a free community service, so the
+ * straight-line shortlist paints first and is labeled as straight line. The
+ * drive-ordered answer replaces it as soon as the table returns. onFirstPaint
+ * is what keeps a slow router from turning into a slow page.
+ */
+async function chooseNearby(base,onFirstPaint){
+  if(!destinationPoint||!base.length)return {items:[],radius:null,expanded:false,routed:false,reason:base.length?null:'no-records'};
+  let {pool,nextStraightMiles}=RANK.candidatePool(base,destinationPoint,RANK.DEFAULT_POOL_SIZE);
+  if(typeof onFirstPaint==='function'){
+    onFirstPaint(shape(RANK.finalizeShortlist({pool,nextStraightMiles,drive:null,maxRoadMiles:MAX_ROAD_MILES})));
+  }
+  let drive=await driveTable(destinationPoint,pool);
+  let result=RANK.finalizeShortlist({pool,nextStraightMiles,drive,maxRoadMiles:MAX_ROAD_MILES});
+  if(result.needsWiderPool){
+    ({pool,nextStraightMiles}=RANK.candidatePool(base,destinationPoint,RANK.WIDE_POOL_SIZE));
+    drive=await driveTable(destinationPoint,pool);
+    result=RANK.finalizeShortlist({pool,nextStraightMiles,drive,maxRoadMiles:MAX_ROAD_MILES});
+  }
+  return shape(result);
 }
 
 function cardHTML(a,index){
@@ -132,7 +206,7 @@ function cardHTML(a,index){
   return `<article class="launch-card${a.id===selectedId?' selected':''}${review?' under-review':''}${supplemental?' municipal-record':''}" data-launch-id="${esc(a.id)}" tabindex="0">
     <div class="rank" aria-label="Result ${index+1}">${index+1}</div>
     <div class="card-body">
-      <div class="card-top"><div><h3 class="card-title">${esc(a.name)}</h3><div class="waterbody">${esc(a.waterbody||a.county||'Waterbody not listed')}</div></div><strong class="distance">${a.distanceMiles.toFixed(1)} mi</strong></div>
+      <div class="card-top"><div><h3 class="card-title">${esc(a.name)}</h3><div class="waterbody">${esc(a.waterbody||a.county||'Waterbody not listed')}</div></div><strong class="distance">${esc(reachText(a))}</strong></div>
       <div class="badges">${badges}</div>
       ${reviewCallout}${supplementalCallout}
       <div class="decision-line">${esc(rampText(a))}${review?'<span class="provisional"> · provisional</span>':''}</div>
@@ -158,7 +232,7 @@ function cardHTML(a,index){
 function popupHTML(a,index){
   const review=isReview(a)?'<br><small><strong>DNR review in progress</strong> · facility details provisional</small>':'';
   const municipal=isSupplemental(a)?'<br><small><strong>Municipal source-qualified supplement</strong> · not DNR data</small>':'';
-  return `<strong>${index+1}. ${esc(a.name)}</strong><br><span>${a.distanceMiles.toFixed(1)} mi from ${esc(destinationPoint?.label||'destination')}</span><br><small>${esc(a.waterbody||'Waterbody not listed')} · ${esc(rampText(a))}</small>${review}${municipal}<div style="margin-top:7px"><a href="${directions(a)}" target="_blank" rel="noopener">Directions</a> · <a href="#" data-popup-card="${esc(a.id)}">Open result</a></div>`;
+  return `<strong>${index+1}. ${esc(a.name)}</strong><br><span>${esc(reachText(a))} from ${esc(destinationPoint?.label||'destination')}</span><br><small>${esc(a.waterbody||'Waterbody not listed')} · ${esc(rampText(a))}</small>${review}${municipal}<div style="margin-top:7px"><a href="${directions(a)}" target="_blank" rel="noopener">Directions</a> · <a href="#" data-popup-card="${esc(a.id)}">Open result</a></div>`;
 }
 
 function loadLeaflet(){
@@ -207,32 +281,52 @@ function drawMap(fit=false){
 function render(){
   if(!destinationPoint){
     resultsTitle.textContent='Nearby launch choices';
-    results.innerHTML='<div class="empty"><strong>Choose where you want to boat.</strong><br>Search a Michigan city, bay, lake, river or harbor. The finder ranks official DNR launch records plus separately verified municipal supplements by distance, with each source type labeled.</div>';
-    summary.textContent=sourceReady?`${records.length} source-backed Great Lakes launch records ready to search.`:'Loading current launch records…';
+    results.innerHTML='<div class="empty"><strong>Choose where you want to boat.</strong><br>Search a Michigan city, bay, lake, river or harbor. The finder ranks official DNR launch records plus separately verified municipal supplements by driving distance, with each source type labeled.</div>';
+    summary.textContent=sourceReady?`${records.length} source-backed Great Lakes and connecting-water launch records ready to search.`:'Loading current launch records…';
     shortlist=[];drawMap(true);return;
   }
   resultsTitle.textContent=`Launches near ${destinationPoint.label}`;
+  const hiddenText=hidden.total?` <strong>${hidden.total}</strong> nearby record${hidden.total===1?' is':'s are'} hidden by your refinements${hidden.unknownParking?`, including ${hidden.unknownParking} whose trailer parking is simply not listed`:''}.`:'';
   if(!shortlist.length){
-    results.innerHTML='<div class="empty"><strong>No source-backed launches match these refinements.</strong><br>Reset the optional ramp, parking or launch-name filters to broaden the shortlist.</div>';
-    summary.innerHTML=`No matching launch record remains near <strong>${esc(destinationPoint.label)}</strong> after these refinements.`;
-    emit('Boat Launch Zero Result',{reason:'refinements'});
+    if(outOfScope){
+      results.innerHTML=`<div class="empty"><strong>No Great Lakes launch within a ${MAX_ROAD_MILES}-mile drive of ${esc(destinationPoint.label)}.</strong><br>This finder covers Michigan's Great Lakes shoreline and the Detroit, St. Clair and St. Marys connecting rivers. Inland-lake launches are a separate DNR inventory and are not in this dataset, so an inland destination will find nothing here even where the state runs launches on that lake.</div>`;
+      summary.innerHTML=`<strong>${esc(destinationPoint.label)}</strong> is outside this tool's Great Lakes coverage, not merely far from a launch.`;
+      emit('Boat Launch Zero Result',{reason:'out-of-scope'});
+    }else{
+      results.innerHTML=`<div class="empty"><strong>No source-backed launches match these refinements.</strong><br>Reset the optional ramp, parking or launch-name filters to broaden the shortlist.${hidden.total?` ${hidden.total} nearby record${hidden.total===1?'':'s'} would return without them.`:''}</div>`;
+      summary.innerHTML=`No matching launch record remains near <strong>${esc(destinationPoint.label)}</strong> after these refinements.`;
+      emit('Boat Launch Zero Result',{reason:'refinements'});
+    }
   }else{
     results.innerHTML=shortlist.map(cardHTML).join('');
-    const expanded=radiusUsed>25?` Search expanded to <strong>${radiusUsed} miles</strong> because fewer than three choices were available within 25 miles.`:'';
+    const rangeText=routed
+      ?` Ranked by driving distance; the farthest shown is about <strong>${radiusUsed} road miles</strong>.`
+      :measuring
+        ?' Ordered by <strong>straight-line distance</strong> while the drive to each one is measured.'
+        :' Road routing is unavailable right now, so these are ordered by <strong>straight-line distance</strong>, which understates any drive around a bay.';
+    const stretchText=!comfortable&&radiusUsed?` <strong>No Great Lakes launch is within a ${RANK.COMFORTABLE_MILES}-mile drive</strong> of here; the nearest is about a ${radiusUsed}-mile drive.`:'';
     const reviews=shortlist.filter(isReview).length;
     const supplements=shortlist.filter(isSupplemental).length;
     const reviewText=reviews?` <strong>${reviews}</strong> result${reviews===1?' is':'s are'} marked DNR review in progress.`:'';
     const supplementText=supplements?` <strong>${supplements}</strong> result${supplements===1?' is a':'s are'} separately source-qualified municipal supplement${supplements===1?'':'s'}.`:'';
-    summary.innerHTML=`Showing <strong>${shortlist.length}</strong> nearest source-backed launch choice${shortlist.length===1?'':'s'} for <strong>${esc(destinationPoint.label)}</strong>.${expanded}${reviewText}${supplementText}`;
+    summary.innerHTML=`Showing <strong>${shortlist.length}</strong> closest source-backed launch choice${shortlist.length===1?'':'s'} for <strong>${esc(destinationPoint.label)}</strong>.${rangeText}${stretchText}${reviewText}${supplementText}${hiddenText}`;
   }
   drawMap(true);
 }
 
-function rerank(source='filter'){
+function applyChoice(choice){
+  shortlist=choice.items;radiusUsed=choice.radius;routed=choice.routed;comfortable=choice.comfortable||0;
+  hidden=measureHidden();
+  outOfScope=!shortlist.length&&!hidden.total;
+  selectedId='';render();
+}
+
+async function rerank(source='filter'){
   if(!destinationPoint){render();return;}
-  const choice=chooseNearby(refinedRecords());
-  shortlist=choice.items;radiusUsed=choice.radius;selectedId='';render();
-  emit('Boat Launch Filter',{filter:source,results:shortlist.length,radius:radiusUsed||0,reviewInProgress:shortlist.filter(isReview).length,municipalSupplemental:shortlist.filter(isSupplemental).length});
+  const choice=await chooseNearby(refinedRecords(),first=>{measuring=true;applyChoice(first);});
+  measuring=false;
+  applyChoice(choice);
+  emit('Boat Launch Filter',{filter:source,results:shortlist.length,radius:radiusUsed||0,routed,outOfScope,hidden:hidden.total,reviewInProgress:shortlist.filter(isReview).length,municipalSupplemental:shortlist.filter(isSupplemental).length});
 }
 
 async function searchDestination(source='form'){
@@ -246,10 +340,10 @@ async function searchDestination(source='form'){
     if(!r.ok)throw new Error(j.error||j.detail||'Destination lookup failed');
     destinationPoint={latitude:Number(j.latitude),longitude:Number(j.longitude),label:compactDestination(j.displayName,q)};
     if(!Number.isFinite(destinationPoint.latitude)||!Number.isFinite(destinationPoint.longitude))throw new Error('Destination lookup returned invalid coordinates');
-    rerank('destination');updateURL(q);
-    emit('Boat Launch Destination Search',{source,results:shortlist.length,radius:radiusUsed||0,reviewInProgress:shortlist.filter(isReview).length,municipalSupplemental:shortlist.filter(isSupplemental).length});
+    await rerank('destination');updateURL(q);
+    emit('Boat Launch Destination Search',{source,results:shortlist.length,radius:radiusUsed||0,routed,outOfScope,reviewInProgress:shortlist.filter(isReview).length,municipalSupplemental:shortlist.filter(isSupplemental).length});
   }catch(err){
-    destinationPoint=null;shortlist=[];radiusUsed=null;
+    destinationPoint=null;shortlist=[];radiusUsed=null;outOfScope=false;
     resultsTitle.textContent='Destination not found';
     results.innerHTML=`<div class="empty error"><strong>Could not locate that Michigan destination.</strong><br>${esc(err.message)}. Try a nearby city, bay, lake or harbor name.</div>`;
     summary.textContent='Launch inventory is still available; only the destination lookup failed.';
@@ -319,12 +413,14 @@ async function load(){
     const qualified=Number(j.source_qualified_count)||records.filter(a=>a.verificationStatus==='source-qualified').length;
     const reviewing=Number(j.review_in_progress_count)||records.filter(isReview).length;
     const supplemental=Number(j.municipal_supplemental_count)||records.filter(isSupplemental).length;
-    sourceStatus.textContent=updated?`DNR source updated ${updated} · ${qualified} DNR source-qualified · ${reviewing} DNR review in progress · ${supplemental} municipal supplement${supplemental===1?'':'s'}`:`Live source data · ${qualified} DNR source-qualified · ${reviewing} DNR review in progress · ${supplemental} municipal supplement${supplemental===1?'':'s'}`;
+    const connecting=Number(j.connecting_water_count)||0;
+    const connectingText=connecting?` · ${connecting} on the Detroit, St. Clair and St. Marys connecting rivers`:'';
+    sourceStatus.textContent=(updated?`DNR source updated ${updated}`:'Live source data')+` · ${qualified} DNR source-qualified · ${reviewing} DNR review in progress · ${supplemental} municipal supplement${supplemental===1?'':'s'}${connectingText}`;
     render();emit('Boat Launch Source Load',{records:records.length,sourceQualified:qualified,reviewInProgress:reviewing,municipalSupplemental:supplemental,source:'PRDBASPublicView+municipal'});
     const initial=new URLSearchParams(location.search).get('destination');
-    if(initial){destinationSearch.value=initial.slice(0,100);searchDestination('url');}
+    if(initial){destinationSearch.value=initial.slice(0,100);await searchDestination('url');}
   }catch(err){
-    sourceReady=false;records=[];shortlist=[];destinationPoint=null;
+    sourceReady=false;records=[];shortlist=[];destinationPoint=null;outOfScope=false;
     results.innerHTML=`<div class="empty error"><strong>Launch data unavailable.</strong><br>${esc(err.message)}. No legacy or guessed launch pins are being shown.</div>`;
     summary.textContent='Primary Michigan DNR launch data could not be loaded.';sourceStatus.textContent='Source unavailable';
     if(layer)layer.clearLayers();emit('Boat Launch Source Error',{message:String(err.message).slice(0,80)});

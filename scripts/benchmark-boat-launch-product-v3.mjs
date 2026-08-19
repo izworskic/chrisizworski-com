@@ -7,6 +7,9 @@ const js=fs.readFileSync('public/assets/boat-launch-finder.js','utf8');
 const api=fs.readFileSync('api/boat-launches.js','utf8');
 const geocode=fs.readFileSync('api/boat-launch-geocode.js','utf8');
 const supplemental=JSON.parse(fs.readFileSync('data/boat-launch-supplemental.json','utf8'));
+const ranking=fs.readFileSync('public/assets/boat-launch-ranking.js','utf8');
+const driveApi=fs.readFileSync('api/boat-launch-drive.js','utf8');
+const smoke=fs.readFileSync('scripts/smoke-boat-launch-runtime.mjs','utf8');
 const supplementalRaw=JSON.stringify(supplemental);
 const code=js+'\n'+api+'\n'+geocode;
 
@@ -37,7 +40,8 @@ const substringOnly=/hay\.includes\(q\)/.test(js);
 add('destinationSearchCoverage',8,hasGeocoder,'destination-to-coordinate resolution is missing or browser-direct');
 add('destinationSearchCoverage',8,hasDistance,'geospatial launch-distance calculation is missing');
 add('destinationSearchCoverage',5,!substringOnly,'destination search is still a launch-record substring filter');
-add('destinationSearchCoverage',4,/chooseNearby/.test(js)&&/within25/.test(js)&&/radiusUsed/.test(js),'nearby shortlist/radius expansion is not implemented');
+const driveRanked=/chooseNearby/.test(js)&&/within25/.test(js)&&/radiusUsed/.test(js)&&/RANK\.candidatePool/.test(js)&&/RANK\.finalizeShortlist/.test(js)&&/MAX_ROAD_MILES/.test(js)&&/DRIVE_API='\/api\/boat-launch-drive'/.test(js);
+add('destinationSearchCoverage',4,driveRanked,'nearby shortlist is not ranked on drive distance with a capped reach');
 if(substringOnly||!hasGeocoder||!hasDistance)fatals.push('Destination search is not a complete geocoded geographic search.');
 
 // DECISION UTILITY — 20
@@ -47,7 +51,7 @@ add('decisionUtility',3,/rampClass/.test(js),'ramp class is missing');
 add('decisionUtility',3,/operatingHours/.test(js),'operating hours are missing');
 add('decisionUtility',2,/\.fee/.test(js),'fee/passport information is missing');
 add('decisionUtility',2,/operatorText|\.operator/.test(js),'operator context is missing');
-add('decisionUtility',3,/distanceMiles\.toFixed|distance from/i.test(js),'distance from destination is missing');
+add('decisionUtility',3,/distanceMiles\.toFixed|distance from/i.test(js)&&/mi by road/.test(js)&&/straight line/.test(js),'road distance and its unrouted fallback are not labeled distinctly');
 
 // MAP + MOBILE UX — 15
 add('mapAndMobileUX',5,/markerById=new Map\(\)/.test(js)&&/data-launch-id/.test(js)&&/select\(a\.id,'marker'\)/.test(js),'map/card correlation is incomplete');
@@ -81,6 +85,30 @@ if(/MANUAL_VERIFIED|bestMatch|nameSimilarity/.test(code))fatals.push('Legacy/man
 if(!/fallback_used:\s*false/.test(api))fatals.push('Source failure does not explicitly prohibit fallback data.');
 if(/facilityid IS NOT NULL/.test(api))fatals.push('Nullable facilityid is still a hard source gate.');
 if(!/Destination lookup unavailable/.test(geocode))fatals.push('Geocoder outage does not have a distinct unavailable state.');
+
+/*
+ * Ranking and scope contract. These exist because the previous acceptance set
+ * was drawn entirely from the Great Lakes shoreline the data already covered,
+ * so it could not fail on the destinations where the tool actually broke.
+ */
+if(!driveRanked)fatals.push('The shortlist is not ranked on drive distance from the searched destination.');
+if(/function roundRadius/.test(js))fatals.push('The uncapped straight-line radius expansion is back.');
+if(!/STRAIGHT_LINE_DETOUR_RATIO/.test(ranking))fatals.push('An unrouted fallback can admit launches a real road would place out of range.');
+if(!/routed:\s*false|routed===false|!routed|routed\?/.test(js)||!/straight line/.test(js))fatals.push('A routing outage is not distinguished from a measured drive distance.');
+if(!/outOfScope/.test(js)||!/Inland-lake launches are a separate DNR inventory/.test(js))fatals.push('An out-of-scope destination is not told that inland lakes are outside this dataset.');
+if(/\(num\(a\.trailerParking\)\|\|0\)/.test(js))fatals.push('An unlisted trailer-parking count is being treated as zero spaces.');
+if(!/hidden by your refinements/.test(js))fatals.push('Refinements can remove nearby records without saying so.');
+if(!/CONNECTING_WATERS/.test(api)||!/Detroit River/.test(api))fatals.push('Great Lakes connecting rivers are excluded by the DNR access field again.');
+if(!/exceededTransferLimit/.test(api))fatals.push('A truncated DNR page could be served as a complete inventory.');
+if(!/res\.status\(502\)/.test(driveApi)||/status\(200\)[\s\S]{0,120}error:/.test(driveApi))fatals.push('The drive endpoint can answer 200 with an error in the body.');
+
+const outOfScopeCases=(cfg.acceptanceDestinations||[]).filter(x=>x.expectOutOfScope===true);
+if(outOfScopeCases.length<2)fatals.push('The acceptance set does not include inland destinations, so it cannot fail where the tool fails.');
+for(const destination of outOfScopeCases){
+  const city=String(destination.query).split(',')[0].trim();
+  if(!smoke.includes(city))fatals.push(`Acceptance destination ${destination.query} is declared but never exercised by the runtime smoke.`);
+}
+if(!/correctly out of scope/.test(smoke))fatals.push('The runtime smoke does not assert the inland scope guard.');
 
 const total=Object.values(score).reduce((a,b)=>a+b,0);const loss=cfg.maxScore-total;
 console.log(`Boat Launch Product V3: ${total}/${cfg.maxScore} (loss ${loss})`);
