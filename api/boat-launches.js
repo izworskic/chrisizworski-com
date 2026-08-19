@@ -50,14 +50,22 @@ function sourceId(a) {
   return null;
 }
 
+function reviewStatus(a = {}) {
+  const flag = String(a.flag || "").trim();
+  if (!flag) return "source-qualified";
+  if (flag === "InProgress") return "dnr-review-in-progress";
+  return "withhold";
+}
+
 function eligibleAttributes(a = {}) {
   if (!hasValue(a.name)) return false;
   if (!sourceId(a)) return false;
   if (optionalNumber(a.latitude) === null || optionalNumber(a.longitude) === null) return false;
   if (String(a.referenceonly || "").toLowerCase() === "yes") return false;
-  // Any nonblank DNR review flag is withheld from verified results. That includes
-  // current Review Needed / Review in Progress coding and protects future values.
-  if (String(a.flag || "").trim()) return false;
+  // DNR's InProgress code means the facility record is being reviewed. It is still
+  // an official open launch record and may be shown with an explicit provisional badge.
+  // Review Needed (Flag), unknown future flag values, and reference-only records stay withheld.
+  if (reviewStatus(a) === "withhold") return false;
   return true;
 }
 
@@ -65,12 +73,16 @@ function normalizeFeature(feature, sourceUpdatedAt = null) {
   const a = feature?.attributes || {};
   if (!eligibleAttributes(a)) return null;
   const identity = sourceId(a);
+  const status = reviewStatus(a);
   return {
     id: identity.id,
     sourceType: "michigan-dnr",
     sourceId: identity.sourceId,
     sourceIdType: identity.idType,
     sourceUrl: DNR_LAYER,
+    verificationStatus: status,
+    detailsUnderReview: status === "dnr-review-in-progress",
+    reviewNote: status === "dnr-review-in-progress" && hasValue(a.flagcomments) ? String(a.flagcomments).trim() : null,
     facilityId: hasValue(a.facilityid) ? String(a.facilityid).trim() : null,
     globalId: hasValue(a.globalid) ? String(a.globalid).trim() : null,
     objectId: a.OBJECTID ?? null,
@@ -143,6 +155,8 @@ module.exports = async function handler(req, res) {
     const launches = (query.features || []).map(f => normalizeFeature(f, sourceUpdatedAt)).filter(Boolean);
     const unique = [...new Map(launches.map(x => [x.id, x])).values()];
     if (!unique.length) throw new Error("Michigan DNR returned no qualifying open Great Lakes-access sites");
+    const sourceQualifiedCount = unique.filter(x => x.verificationStatus === "source-qualified").length;
+    const reviewInProgressCount = unique.filter(x => x.verificationStatus === "dnr-review-in-progress").length;
 
     return res.status(200).json({
       source: "Michigan DNR Parks and Recreation boating access data",
@@ -155,10 +169,14 @@ module.exports = async function handler(req, res) {
         great_lakes_access: "Yes*",
         stable_id: "facilityid, otherwise globalid/OBJECTID",
         excludes_reference_only: true,
-        excludes_flagged_records: true,
+        source_qualified: "blank facility review flag",
+        review_in_progress: "InProgress is displayed with provisional facility details",
+        withheld_review_status: "Review Needed and unknown flag values",
       },
       fallback_used: false,
       count: unique.length,
+      source_qualified_count: sourceQualifiedCount,
+      review_in_progress_count: reviewInProgressCount,
       launches: unique,
     });
   } catch (error) {
@@ -171,4 +189,4 @@ module.exports = async function handler(req, res) {
   }
 };
 
-module.exports._test = { DNR_LAYER, WHERE, FIELDS, hasValue, optionalNumber, sourceId, eligibleAttributes, normalizeFeature, queryUrl };
+module.exports._test = { DNR_LAYER, WHERE, FIELDS, hasValue, optionalNumber, sourceId, reviewStatus, eligibleAttributes, normalizeFeature, queryUrl };
