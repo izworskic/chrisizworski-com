@@ -6,6 +6,8 @@ const html=fs.readFileSync('public/michigan-boat-launches/index.html','utf8');
 const js=fs.readFileSync('public/assets/boat-launch-finder.js','utf8');
 const api=fs.readFileSync('api/boat-launches.js','utf8');
 const geocode=fs.readFileSync('api/boat-launch-geocode.js','utf8');
+const supplemental=JSON.parse(fs.readFileSync('data/boat-launch-supplemental.json','utf8'));
+const supplementalRaw=JSON.stringify(supplemental);
 const code=js+'\n'+api+'\n'+geocode;
 
 const score={sourceTruth:0,destinationSearchCoverage:0,decisionUtility:0,mapAndMobileUX:0,conditionsAndTrust:0,discoveryPerformance:0};
@@ -20,6 +22,13 @@ add('sourceTruth',5,/fallback_used:\s*false/.test(api)&&/No legacy or guessed la
 const stableFallback=/globalid/.test(api)&&/OBJECTID/.test(api)&&!/facilityid IS NOT NULL/.test(api)&&/sourceId\(a\)/.test(api);
 add('sourceTruth',8,stableFallback,'nullable facilityid is not protected by a stable authoritative ID fallback');
 if(!stableFallback)fatals.push('Nullable facilityid can still erase an otherwise valid DNR launch.');
+
+const southHaven=supplemental.find(x=>x.id==='municipal:south-haven:black-river-park-launch');
+const supplementalEvidence=!!southHaven&&southHaven.sourceType==='municipal-supplemental'&&southHaven.verificationStatus==='municipal-source-qualified'&&/southhavenmi\.gov/.test(southHaven.sourceUrl||'')&&/outdoormichigan\.org/.test(southHaven.coordinateSourceUrl||'')&&Array.isArray(southHaven.corroborationUrls)&&southHaven.corroborationUrls.some(x=>/michiganwatertrails\.org/.test(x));
+const supplementalSeparation=/require\("\.\.\/data\/boat-launch-supplemental\.json"\)/.test(api)&&/normalizeSupplemental/.test(api)&&/municipal_supplemental_count/.test(api)&&/function isSupplemental/.test(js)&&/Municipal launch/.test(js)&&/a\.sourceUrl\|\|DNR_LAYER/.test(js)&&/is-municipal/.test(js)&&/Municipal source-qualified/.test(html);
+if(!supplementalEvidence)fatals.push('South Haven municipal supplement lacks the required owner/operator and independent coordinate provenance.');
+if(!supplementalSeparation)fatals.push('Municipal supplemental records are not kept visibly and technically separate from DNR records.');
+if(/DNR status: Open[\s\S]{0,250}municipal/i.test(js)&&!/supplemental\?/.test(js))fatals.push('Municipal supplements can be mislabeled as DNR status records.');
 
 // DESTINATION SEARCH + COVERAGE — 25
 const hasGeocoder=/GEOCODE_API='\/api\/boat-launch-geocode'/.test(js)&&/nominatim\.openstreetmap\.org/.test(geocode)&&/bounded/.test(geocode);
@@ -49,23 +58,25 @@ add('mapAndMobileUX',2,/google\.com\/maps\/dir/.test(js),'source-coordinate dire
 
 // CONDITIONS + TRUST — 5
 const reviewTier=/flag === "InProgress"/.test(api)&&/return "dnr-review-in-progress"/.test(api)&&/return "withhold"/.test(api)&&/DNR review in progress/.test(html+js);
-const provisionalFilters=/function rampMatches[\s\S]*?if\(isReview\(a\)\)return false/.test(js)&&/function parkingMatches[\s\S]*?if\(isReview\(a\)\)return false/.test(js);
+const provisionalFilters=/function rampMatches[\s\S]*?if\(isReview\(a\)\|\|isSupplemental\(a\)\)return false/.test(js)&&/function parkingMatches[\s\S]*?if\(isReview\(a\)\|\|isSupplemental\(a\)\)return false/.test(js);
 const distinctReviewMap=/is-review/.test(js)&&/\.launch-number-icon span\.is-review/.test(html);
+const distinctSupplementalMap=/is-municipal/.test(js)&&/\.launch-number-icon span\.is-municipal/.test(html);
 add('conditionsAndTrust',1,!/safety score|safe to launch|safe boating score/i.test(code+html),'unsupported safety certainty is presented');
 add('conditionsAndTrust',1,/source record|Michigan DNR|source layer/i.test(html+js),'source/trust language is missing');
 add('conditionsAndTrust',1,reviewTier,'DNR Review In Progress is not a distinct visible trust state');
-add('conditionsAndTrust',1,provisionalFilters,'provisional DNR ramp/parking metadata can drive precise filters');
-add('conditionsAndTrust',1,distinctReviewMap,'review-in-progress map pins are not visually distinct');
+add('conditionsAndTrust',1,provisionalFilters,'provisional or non-equivalent metadata can drive precise DNR filters');
+add('conditionsAndTrust',1,distinctReviewMap&&distinctSupplementalMap,'review and municipal map pins are not visibly distinct');
 if(!reviewTier)fatals.push('DNR InProgress review records are not explicitly visible/provisional while Review Needed and unknown review states remain withheld.');
-if(!provisionalFilters)fatals.push('DNR review-in-progress records can satisfy precise ramp or trailer-parking filters.');
+if(!provisionalFilters)fatals.push('DNR review-in-progress or municipal supplemental records can satisfy precise DNR ramp/trailer-parking filters without equivalent data.');
 if(!distinctReviewMap)fatals.push('DNR review-in-progress records are not visually distinguishable on the map.');
+if(!distinctSupplementalMap)fatals.push('Municipal supplemental records are not visually distinguishable from DNR records on the map.');
 
 // DISCOVERY + PERFORMANCE — 5
 add('discoveryPerformance',2,/canonical" href="https:\/\/chrisizworski\.com\/michigan-boat-launches\//.test(html),'canonical URL changed or is missing');
 add('discoveryPerformance',2,/Boat Launch Destination Search/.test(js)&&/Boat Launch Select/.test(js)&&/Boat Launch Action/.test(js),'decision analytics are incomplete');
 add('discoveryPerformance',1,!/navigator\.geolocation|getCurrentPosition|localStorage|sessionStorage|document\.cookie/.test(code),'precise-location or persistent browser tracking introduced');
 
-if(/Bay City State Park Launch/.test(code+html))fatals.push('Known false positive Bay City State Park Launch is present.');
+if(/Bay City State Park Launch/.test(code+html+supplementalRaw))fatals.push('Known false positive Bay City State Park Launch is present.');
 if(/MANUAL_VERIFIED|bestMatch|nameSimilarity/.test(code))fatals.push('Legacy/manual/fuzzy launch creation is possible.');
 if(!/fallback_used:\s*false/.test(api))fatals.push('Source failure does not explicitly prohibit fallback data.');
 if(/facilityid IS NOT NULL/.test(api))fatals.push('Nullable facilityid is still a hard source gate.');
