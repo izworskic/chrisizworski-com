@@ -7,307 +7,301 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&
 const emit=(name,props={})=>{try{window.va?.('event',{name,...props});}catch{}};
 
 const SOURCE_API='/api/boat-launches';
+const GEOCODE_API='/api/boat-launch-geocode';
 const DNR_FINDER='https://www.michigan.gov/dnr/things-to-do/boating';
+const DNR_LAYER='https://services3.arcgis.com/Jdnp1TjADvSDxMAX/arcgis/rest/services/PRDBASPublicView/FeatureServer/0';
 
-const search=$('#launch-search');
+const destinationForm=$('#destination-form');
+const destinationSearch=$('#destination-search');
+const destinationSubmit=$('#destination-submit');
+const launchName=$('#launch-name-filter');
 const access=$('#access-filter');
 const ramp=$('#ramp-filter');
 const parking=$('#parking-filter');
 const summary=$('#launch-summary');
 const sourceStatus=$('#launch-source-status');
 const results=$('#launch-results');
+const resultsTitle=$('#results-title');
 const reset=$('#launch-reset');
 
 let records=[];
-let filtered=[];
+let shortlist=[];
 let map=null;
 let layer=null;
+let destinationMarker=null;
+let destinationPoint=null;
+let radiusUsed=null;
 let selectedId='';
+let sourceReady=false;
 const markerById=new Map();
 
-function slug(v){
-  return String(v||'launch').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-}
-
-function num(v){
-  const n=Number(v);
-  return Number.isFinite(n)?n:null;
-}
-
-function yes(v){return String(v||'').toLowerCase()==='yes';}
-
+function num(v){const n=Number(v);return Number.isFinite(n)?n:null;}
 function dateText(v){
   if(v===null||v===undefined||v==='')return '';
-  const n=Number(v);
-  if(!Number.isFinite(n))return '';
-  const d=new Date(n);
+  const n=Number(v);const d=Number.isFinite(n)?new Date(n):new Date(v);
   return Number.isNaN(d.getTime())?'':d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
 }
-
+function toRadians(deg){return deg*Math.PI/180;}
+function distanceMiles(lat1,lon1,lat2,lon2){
+  const R=3958.7613,dLat=toRadians(lat2-lat1),dLon=toRadians(lon2-lon1);
+  const a=Math.sin(dLat/2)**2+Math.cos(toRadians(lat1))*Math.cos(toRadians(lat2))*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(a));
+}
+function roundRadius(mi){return Math.max(25,Math.ceil(mi/5)*5);}
+function yes(v){return v===true||String(v||'').toLowerCase()==='yes';}
+function operatorText(a){return a.operator||a.owner||'Not listed';}
 function rampText(a){
-  const code=num(a.rampcode_new);
-  if(code===1)return 'Hard-surface ramp; DNR class for most trailerable watercraft';
-  if(code===2)return 'Hard-surface ramp; limited depth can make larger boats difficult';
-  if(code===3)return 'Gravel ramp; DNR class for smaller watercraft';
-  if(yes(a.carrydown))return `Developed carry-down${a.carrydowntype?`: ${a.carrydowntype}`:''}`;
+  const code=num(a.rampClass);
+  if(code===1)return 'Hard-surface ramp · DNR class for most trailerable boats';
+  if(code===2)return 'Hard-surface ramp · DNR notes limited depth';
+  if(code===3)return 'Gravel ramp · DNR class for smaller boats';
+  if(a.carryDown)return `Carry-down${a.carryDownType?` · ${a.carryDownType}`:''}`;
   return 'Ramp class not listed';
 }
-
-function accuracyText(a){
-  const c=num(a.collecttype);
+function coordinateText(a){
+  const c=num(a.coordinateCollection);
   if(c===0)return 'DNR coordinate · smart-device collection (~5 m)';
-  if(c===1)return 'DNR coordinate · field observed (approximate)';
-  if(c===5)return 'DNR coordinate · aerial imagery (approximate)';
+  if(c===1)return 'DNR coordinate · field observed (approx.)';
+  if(c===5)return 'DNR coordinate · aerial imagery (approx.)';
   return 'DNR-published facility coordinate';
 }
-
-function directions(a){
-  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${a.latitude},${a.longitude}`)}`;
-}
-
-function satellite(a){
-  return `https://www.google.com/maps/@?api=1&map_action=map&center=${encodeURIComponent(`${a.latitude},${a.longitude}`)}&zoom=18&basemap=satellite`;
-}
-
-function regionLabel(a){
-  return a.WaterbodyCounty||a.NameCounty||a.waterbody||'Michigan';
-}
-
-function cleanFeature(f){
-  const a=f?.attributes||{};
-  const lat=num(a.latitude),lng=num(a.longitude);
-  if(!a.facilityid||!a.name||lat===null||lng===null)return null;
-  if(String(a.referenceonly||'').toLowerCase()==='yes')return null;
-  if(String(a.flag||'').trim())return null;
-  return {...a,id:String(a.facilityid),latitude:lat,longitude:lng};
-}
+function directions(a){return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${a.latitude},${a.longitude}`)}`;}
+function satellite(a){return `https://www.google.com/maps/@?api=1&map_action=map&center=${encodeURIComponent(`${a.latitude},${a.longitude}`)}&zoom=18&basemap=satellite`;}
 
 function accessMatches(a){
   if(!access.value)return true;
-  const t=String(a.greatlakesaccess||'').toLowerCase();
+  const t=String(a.greatLakesAccess||'').toLowerCase();
   if(access.value==='0.5')return t.includes('within 0.5');
   if(access.value==='2')return t.includes('0.5 - 2')||t.includes('0.5-2');
   return true;
 }
-
 function rampMatches(a){
   if(!ramp.value)return true;
-  if(ramp.value==='carry')return yes(a.carrydown);
-  return String(num(a.rampcode_new))===ramp.value;
+  if(ramp.value==='carry')return !!a.carryDown;
+  return String(num(a.rampClass))===ramp.value;
 }
-
 function parkingMatches(a){
   const min=Number(parking.value||0);
   if(!min)return true;
-  return (num(a.ntrailerableparking)||0)>=min;
+  return (num(a.trailerParking)||0)>=min;
 }
-
-function textMatches(a){
-  const q=search.value.trim().toLowerCase();
+function launchNameMatches(a){
+  const q=launchName.value.trim().toLowerCase();
   if(!q)return true;
-  const hay=[a.name,a.labelname,a.waterbody,a.NameCounty,a.WaterbodyCounty,a.dnradmin,a.ownedby,a.descrip].join(' ').toLowerCase();
-  return hay.includes(q);
+  return [a.name,a.labelName,a.waterbody,a.county].join(' ').toLowerCase().includes(q);
+}
+function refinedRecords(){return records.filter(a=>accessMatches(a)&&rampMatches(a)&&parkingMatches(a)&&launchNameMatches(a));}
+
+function chooseNearby(base){
+  if(!destinationPoint||!base.length)return {items:[],radius:null,expanded:false};
+  const ranked=base.map(a=>({...a,distanceMiles:distanceMiles(destinationPoint.latitude,destinationPoint.longitude,a.latitude,a.longitude)})).sort((a,b)=>a.distanceMiles-b.distanceMiles);
+  const within25=ranked.filter(a=>a.distanceMiles<=25);
+  if(within25.length>=3)return {items:within25.slice(0,5),radius:25,expanded:false};
+  const targetIndex=Math.min(2,ranked.length-1);
+  const radius=roundRadius(ranked[targetIndex].distanceMiles);
+  const nearby=ranked.filter(a=>a.distanceMiles<=radius).slice(0,5);
+  return {items:nearby.length?nearby:ranked.slice(0,Math.min(3,ranked.length)),radius,expanded:radius>25};
 }
 
-function cardHTML(a){
-  const lanes=num(a.nlanes),trailer=num(a.ntrailerableparking),piers=num(a.npiers);
-  const toilets=[num(a.nvaulttoilets),num(a.nflushtoilets),num(a.nothertoilets)].filter(v=>v!==null).reduce((x,y)=>x+y,0);
-  const confirmed=String(a.waterwaysprogramconfirmation||'').toLowerCase()==='yes';
-  const qa=dateText(a.qaqc_1_date);
-  const edited=dateText(a.last_edited_date);
+function cardHTML(a,index){
+  const qa=dateText(a.qaDate),edited=dateText(a.lastEditedDate||a.sourceUpdatedAt);
+  const restrooms=(num(a.vaultToilets)||0)+(num(a.flushToilets)||0)+(num(a.otherToilets)||0);
   const badges=[
     '<span class="badge open">DNR status: Open</span>',
-    confirmed?'<span class="badge confirmed">Waterways confirmed</span>':'',
-    yes(a.gia)?'<span class="badge">Grant-in-aid site</span>':'',
-    yes(a.carrydown)?'<span class="badge">Carry-down</span>':''
+    a.waterwaysConfirmed?'<span class="badge confirmed">Waterways confirmed</span>':'',
+    a.grantInAid?'<span class="badge">Grant-in-aid</span>':'',
+    a.carryDown?'<span class="badge">Carry-down</span>':''
   ].filter(Boolean).join('');
-  const facts=[
-    `<div class="fact"><b>Great Lakes access:</b> ${esc(a.greatlakesaccess||'Yes')}</div>`,
-    `<div class="fact"><b>Ramp:</b> ${esc(rampText(a))}</div>`,
-    `<div class="fact"><b>Launch lanes:</b> ${lanes===null?'not listed':lanes}</div>`,
-    `<div class="fact"><b>Trailer parking:</b> ${trailer===null?'not listed':trailer}</div>`,
-    `<div class="fact"><b>Piers:</b> ${piers===null?'not listed':piers}</div>`,
-    `<div class="fact"><b>Restrooms:</b> ${toilets>0?'listed':'not listed'}</div>`,
-    `<div class="fact"><b>Facility fee/passport:</b> ${esc(a.recpassport||'not listed')}</div>`,
-    `<div class="fact"><b>Hours:</b> ${esc(a.operating_hours||'not listed')}</div>`
-  ].join('');
-  return `<article class="launch-card${a.id===selectedId?' selected':''}" id="launch-${esc(a.id)}" data-launch-id="${esc(a.id)}" tabindex="0">
-    <div class="card-top"><div><h3 class="card-title">${esc(a.name)}</h3><div class="waterbody">${esc(a.waterbody||regionLabel(a))}</div></div></div>
-    <div class="badges">${badges}</div>
-    <div class="facts">${facts}</div>
-    <div class="note">Facility ID ${esc(a.id)} · ${esc(accuracyText(a))}${qa?` · QA ${esc(qa)}`:''}${edited?` · record edited ${esc(edited)}`:''}</div>
-    <div class="actions">
-      <a href="${directions(a)}" target="_blank" rel="noopener" data-action="directions">Directions</a>
-      <a href="${satellite(a)}" target="_blank" rel="noopener" data-action="satellite">Satellite</a>
-      <button type="button" data-action="map" data-launch-id="${esc(a.id)}">Show on map</button>
-      <a href="${DNR_FINDER}" target="_blank" rel="noopener" data-action="dnr">DNR boating finder</a>
+  return `<article class="launch-card${a.id===selectedId?' selected':''}" data-launch-id="${esc(a.id)}" tabindex="0">
+    <div class="rank" aria-label="Result ${index+1}">${index+1}</div>
+    <div class="card-body">
+      <div class="card-top"><div><h3 class="card-title">${esc(a.name)}</h3><div class="waterbody">${esc(a.waterbody||a.county||'Waterbody not listed')}</div></div><strong class="distance">${a.distanceMiles.toFixed(1)} mi</strong></div>
+      <div class="badges">${badges}</div>
+      <div class="decision-line">${esc(rampText(a))}</div>
+      <div class="facts">
+        <div class="fact"><b>Trailer parking</b><span>${a.trailerParking===null?'Not listed':esc(a.trailerParking)}</span></div>
+        <div class="fact"><b>Launch lanes</b><span>${a.lanes===null?'Not listed':esc(a.lanes)}</span></div>
+        <div class="fact"><b>Fee / pass</b><span>${esc(a.fee||'Not listed')}</span></div>
+        <div class="fact"><b>Hours</b><span>${esc(a.operatingHours||'Not listed')}</span></div>
+        <div class="fact"><b>Operator</b><span>${esc(operatorText(a))}</span></div>
+        <div class="fact"><b>Restrooms</b><span>${restrooms>0?'Listed':'Not listed'}</span></div>
+      </div>
+      <div class="note">${esc(a.greatLakesAccess||'Great Lakes access')} · ${esc(coordinateText(a))}${edited?` · source updated ${esc(edited)}`:''}${qa?` · QA ${esc(qa)}`:''}</div>
+      <div class="actions">
+        <a class="primary-action" href="${directions(a)}" target="_blank" rel="noopener" data-action="directions">Directions</a>
+        <button type="button" data-action="map" data-launch-id="${esc(a.id)}">Show on map</button>
+        <a href="${satellite(a)}" target="_blank" rel="noopener" data-action="satellite">Satellite</a>
+        <a href="${DNR_LAYER}" target="_blank" rel="noopener" data-action="source">DNR source</a>
+      </div>
     </div>
   </article>`;
 }
 
-function popupHTML(a){
-  const trailer=num(a.ntrailerableparking);
-  return `<strong>${esc(a.name)}</strong><br><span>${esc(a.waterbody||regionLabel(a))}</span><br><small>${esc(rampText(a))}${trailer!==null?` · ${trailer} trailer spaces`:''}</small><div style="margin-top:7px"><a href="${directions(a)}" target="_blank" rel="noopener">Directions</a> · <a href="#launch-${esc(a.id)}" data-popup-card="${esc(a.id)}">Open source record</a></div>`;
+function popupHTML(a,index){
+  return `<strong>${index+1}. ${esc(a.name)}</strong><br><span>${a.distanceMiles.toFixed(1)} mi from ${esc(destinationPoint?.label||'destination')}</span><br><small>${esc(a.waterbody||'Waterbody not listed')} · ${esc(rampText(a))}</small><div style="margin-top:7px"><a href="${directions(a)}" target="_blank" rel="noopener">Directions</a> · <a href="#" data-popup-card="${esc(a.id)}">Open result</a></div>`;
 }
 
 function loadLeaflet(){
   return new Promise((resolve,reject)=>{
     if(window.L){resolve();return;}
     if(!document.querySelector('link[data-launch-leaflet]')){
-      const css=document.createElement('link');
-      css.rel='stylesheet';css.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';css.dataset.launchLeaflet='1';document.head.append(css);
+      const css=document.createElement('link');css.rel='stylesheet';css.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';css.dataset.launchLeaflet='1';document.head.append(css);
     }
     let s=document.querySelector('script[data-launch-leaflet]');
-    if(!s){
-      s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';s.dataset.launchLeaflet='1';document.head.append(s);
-    }
+    if(!s){s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';s.dataset.launchLeaflet='1';document.head.append(s);}
     const start=Date.now();
-    const timer=setInterval(()=>{
-      if(window.L){clearInterval(timer);resolve();}
-      else if(Date.now()-start>8000){clearInterval(timer);reject(new Error('Leaflet failed to load'));}
-    },100);
+    const timer=setInterval(()=>{if(window.L){clearInterval(timer);resolve();}else if(Date.now()-start>8000){clearInterval(timer);reject(new Error('Map failed to load'));}},100);
   });
 }
 
 async function initMap(){
   try{await loadLeaflet();}catch{return;}
   map=L.map('launch-map',{scrollWheelZoom:false,zoomControl:true}).setView([44.6,-85.5],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-    attribution:'&copy; OpenStreetMap &copy; CARTO',subdomains:'abcd',maxZoom:19
-  }).addTo(map);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap contributors &copy; CARTO',subdomains:'abcd',maxZoom:19}).addTo(map);
   layer=L.layerGroup().addTo(map);
-  drawMarkers(true);
+  drawMap(true);
 }
 
-function drawMarkers(fit=false){
+function launchIcon(index,selected){
+  return L.divIcon({className:'launch-number-icon',html:`<span class="${selected?'is-selected':''}">${index+1}</span>`,iconSize:[30,30],iconAnchor:[15,15]});
+}
+
+function drawMap(fit=false){
   if(!map||!layer)return;
-  layer.clearLayers();markerById.clear();
+  layer.clearLayers();markerById.clear();destinationMarker=null;
   const bounds=[];
-  for(const a of filtered){
-    const m=L.circleMarker([a.latitude,a.longitude],{
-      radius:a.id===selectedId?9:7,
-      color:a.id===selectedId?'#173c24':'#fff',
-      weight:a.id===selectedId?3:1.5,
-      fillColor:'#2d6a3c',
-      fillOpacity:.92
-    }).addTo(layer);
-    m.bindPopup(popupHTML(a),{maxWidth:330});
-    m.on('click',()=>select(a.id,'marker'));
-    markerById.set(a.id,m);
-    bounds.push([a.latitude,a.longitude]);
+  if(destinationPoint){
+    destinationMarker=L.circleMarker([destinationPoint.latitude,destinationPoint.longitude],{radius:9,weight:3,fillOpacity:.9,className:'destination-map-marker'}).addTo(layer).bindTooltip(`Destination: ${esc(destinationPoint.label)}`);
+    bounds.push([destinationPoint.latitude,destinationPoint.longitude]);
   }
-  if(fit&&bounds.length)map.fitBounds(bounds,{padding:[28,28],maxZoom:8});
-}
-
-function updateURL(){
-  const u=new URL(location.href);
-  ['q','access','ramp','parking'].forEach(k=>u.searchParams.delete(k));
-  if(search.value.trim())u.searchParams.set('q',search.value.trim());
-  if(access.value)u.searchParams.set('access',access.value);
-  if(ramp.value)u.searchParams.set('ramp',ramp.value);
-  if(Number(parking.value)>0)u.searchParams.set('parking',parking.value);
-  if(selectedId)u.hash=`launch-${slug(selectedId)}`;else u.hash='';
-  history.replaceState(null,'',u.pathname+(u.searchParams.toString()?`?${u.searchParams}`:'')+u.hash);
+  shortlist.forEach((a,index)=>{
+    const m=L.marker([a.latitude,a.longitude],{icon:launchIcon(index,a.id===selectedId)}).addTo(layer);
+    m.bindPopup(popupHTML(a,index),{maxWidth:330});
+    m.on('click',()=>select(a.id,'marker'));
+    markerById.set(a.id,m);bounds.push([a.latitude,a.longitude]);
+  });
+  if(fit&&bounds.length>1)map.fitBounds(bounds,{padding:[32,32],maxZoom:11});
+  else if(fit&&bounds.length===1)map.setView(bounds[0],10);
 }
 
 function render(){
-  results.innerHTML=filtered.length?filtered.map(cardHTML).join(''):'<div class="empty">No currently open DNR Great Lakes-access records match these filters.</div>';
-  summary.innerHTML=`Showing <strong>${filtered.length}</strong> of <strong>${records.length}</strong> source-qualified launches.`;
-  drawMarkers(true);
-  updateURL();
+  if(!destinationPoint){
+    resultsTitle.textContent='Nearby verified launches';
+    results.innerHTML='<div class="empty"><strong>Choose where you want to boat.</strong><br>Search a Michigan city, bay, lake, river or harbor. The finder will rank verified launches by distance.</div>';
+    summary.textContent=sourceReady?`${records.length} source-qualified Great Lakes access records ready to search.`:'Loading current Michigan DNR launch records…';
+    shortlist=[];drawMap(true);return;
+  }
+  resultsTitle.textContent=`Launches near ${destinationPoint.label}`;
+  if(!shortlist.length){
+    results.innerHTML='<div class="empty"><strong>No verified launches match these refinements.</strong><br>Reset the optional ramp, parking or launch-name filters to broaden the shortlist.</div>';
+    summary.innerHTML=`No source-qualified launch matches the selected refinements near <strong>${esc(destinationPoint.label)}</strong>.`;
+    emit('Boat Launch Zero Result',{reason:'refinements'});
+  }else{
+    results.innerHTML=shortlist.map(cardHTML).join('');
+    const expanded=radiusUsed>25?` Search expanded to <strong>${radiusUsed} miles</strong> because fewer than three qualified choices were available within 25 miles.`:'';
+    summary.innerHTML=`Showing <strong>${shortlist.length}</strong> nearest verified launch${shortlist.length===1?'':'es'} for <strong>${esc(destinationPoint.label)}</strong>.${expanded}`;
+  }
+  drawMap(true);
 }
 
-function apply(source='filter'){
-  filtered=records.filter(a=>textMatches(a)&&accessMatches(a)&&rampMatches(a)&&parkingMatches(a));
-  if(selectedId&&!filtered.some(a=>a.id===selectedId))selectedId='';
-  render();
-  emit('Boat Launch Filter',{filter:source,results:filtered.length});
+function rerank(source='filter'){
+  if(!destinationPoint){render();return;}
+  const choice=chooseNearby(refinedRecords());
+  shortlist=choice.items;radiusUsed=choice.radius;selectedId='';render();
+  emit('Boat Launch Filter',{filter:source,results:shortlist.length,radius:radiusUsed||0});
+}
+
+async function searchDestination(source='form'){
+  const q=destinationSearch.value.trim();
+  if(q.length<2){destinationSearch.focus();return;}
+  destinationSubmit.disabled=true;destinationSubmit.textContent='Finding…';
+  summary.textContent='Locating destination and ranking verified launches…';
+  try{
+    const r=await fetch(`${GEOCODE_API}?q=${encodeURIComponent(q)}`,{headers:{Accept:'application/json'}});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(j.error||j.detail||'Destination lookup failed');
+    destinationPoint={latitude:Number(j.latitude),longitude:Number(j.longitude),label:compactDestination(j.displayName,q)};
+    if(!Number.isFinite(destinationPoint.latitude)||!Number.isFinite(destinationPoint.longitude))throw new Error('Destination lookup returned invalid coordinates');
+    rerank('destination');updateURL(q);
+    emit('Boat Launch Destination Search',{source,results:shortlist.length,radius:radiusUsed||0});
+  }catch(err){
+    destinationPoint=null;shortlist=[];radiusUsed=null;
+    resultsTitle.textContent='Destination not found';
+    results.innerHTML=`<div class="empty error"><strong>Could not locate that Michigan destination.</strong><br>${esc(err.message)}. Try a nearby city, bay, lake or harbor name.</div>`;
+    summary.textContent='Launch inventory is still available; only the destination lookup failed.';
+    drawMap(true);emit('Boat Launch Zero Result',{reason:'geocode'});
+  }finally{
+    destinationSubmit.disabled=false;destinationSubmit.textContent='Find launches';
+  }
+}
+
+function compactDestination(displayName,fallback){
+  const parts=String(displayName||fallback).split(',').map(x=>x.trim()).filter(Boolean);
+  const miIndex=parts.findIndex(x=>x==='Michigan'||x==='MI');
+  if(miIndex>0)return parts.slice(0,Math.min(miIndex+1,3)).join(', ');
+  return parts.slice(0,2).join(', ')||fallback;
 }
 
 function select(id,source='card'){
-  const a=records.find(x=>x.id===id);
-  if(!a)return;
+  const a=shortlist.find(x=>x.id===id);if(!a)return;
   selectedId=id;
   results.querySelectorAll('.launch-card.selected').forEach(x=>x.classList.remove('selected'));
-  const card=$(`[data-launch-id="${CSS.escape(id)}"]`,results);
-  card?.classList.add('selected');
-  drawMarkers(false);
-  const m=markerById.get(id);
-  if(map&&m){
-    map.flyTo([a.latitude,a.longitude],Math.max(map.getZoom(),11),{duration:.45});
-    setTimeout(()=>m.openPopup(),450);
-  }
-  updateURL();
-  emit('Boat Launch Select',{source,facility:id});
+  const card=results.querySelector(`[data-launch-id="${CSS.escape(id)}"]`);card?.classList.add('selected');
+  drawMap(false);
+  const marker=markerById.get(id);
+  if(map&&marker){map.flyTo([a.latitude,a.longitude],Math.max(map.getZoom(),12),{duration:.4});setTimeout(()=>marker.openPopup(),420);}
+  emit('Boat Launch Select',{source,rank:shortlist.findIndex(x=>x.id===id)+1});
+}
+
+function updateURL(destination=''){
+  const u=new URL(location.href);u.searchParams.delete('destination');
+  if(destination)u.searchParams.set('destination',destination.slice(0,100));
+  history.replaceState(null,'',u.pathname+(u.searchParams.toString()?`?${u.searchParams}`:''));
+}
+
+function resetRefinements(){
+  launchName.value='';access.value='';ramp.value='';parking.value='0';rerank('reset');
 }
 
 function wire(){
-  search.addEventListener('input',()=>apply('search'));
-  access.addEventListener('change',()=>apply('access'));
-  ramp.addEventListener('change',()=>apply('ramp'));
-  parking.addEventListener('change',()=>apply('parking'));
-  reset.addEventListener('click',()=>{
-    search.value='';access.value='';ramp.value='';parking.value='0';selectedId='';apply('reset');
-  });
+  destinationForm.addEventListener('submit',e=>{e.preventDefault();searchDestination('form');});
+  document.querySelectorAll('[data-destination]').forEach(btn=>btn.addEventListener('click',()=>{destinationSearch.value=btn.dataset.destination;searchDestination('example');}));
+  launchName.addEventListener('input',()=>rerank('launch-name'));
+  access.addEventListener('change',()=>rerank('access'));
+  ramp.addEventListener('change',()=>rerank('ramp'));
+  parking.addEventListener('change',()=>rerank('parking'));
+  reset.addEventListener('click',resetRefinements);
   results.addEventListener('click',e=>{
     const action=e.target.closest('[data-action]');
-    if(action){
-      const id=action.dataset.launchId;
-      emit('Boat Launch Action',{action:action.dataset.action});
-      if(action.dataset.action==='map'&&id){e.preventDefault();select(id,'map-button');}
-      return;
-    }
-    const card=e.target.closest('.launch-card');
-    if(card&&!e.target.closest('a,button'))select(card.dataset.launchId,'card');
+    if(action){emit('Boat Launch Action',{action:action.dataset.action});if(action.dataset.action==='map'){e.preventDefault();select(action.dataset.launchId,'map-button');}return;}
+    const card=e.target.closest('.launch-card');if(card&&!e.target.closest('a,button'))select(card.dataset.launchId,'card');
   });
-  results.addEventListener('keydown',e=>{
-    const card=e.target.closest('.launch-card');
-    if(card&&(e.key==='Enter'||e.key===' ')){e.preventDefault();select(card.dataset.launchId,'keyboard');}
-  });
-  document.addEventListener('click',e=>{
-    const p=e.target.closest('[data-popup-card]');
-    if(!p)return;
-    e.preventDefault();
-    const id=p.dataset.popupCard;
-    select(id,'popup');
-    const card=$(`[data-launch-id="${CSS.escape(id)}"]`,results);
-    card?.scrollIntoView({behavior:'smooth',block:'center'});
-  });
+  results.addEventListener('keydown',e=>{const card=e.target.closest('.launch-card');if(card&&(e.key==='Enter'||e.key===' ')){e.preventDefault();select(card.dataset.launchId,'keyboard');}});
+  document.addEventListener('click',e=>{const p=e.target.closest('[data-popup-card]');if(!p)return;e.preventDefault();const id=p.dataset.popupCard;select(id,'popup');results.querySelector(`[data-launch-id="${CSS.escape(id)}"]`)?.scrollIntoView({behavior:'smooth',block:'center'});});
 }
 
 async function load(){
-  const params=new URLSearchParams(location.search);
-  search.value=(params.get('q')||'').slice(0,80);
-  access.value=['0.5','2'].includes(params.get('access'))?params.get('access'):'';
-  ramp.value=['1','2','3','carry'].includes(params.get('ramp'))?params.get('ramp'):'';
-  parking.value=['10','25','50'].includes(params.get('parking'))?params.get('parking'):'0';
-  wire();
-  initMap();
+  wire();initMap();
   try{
-    const controller=new AbortController();
-    const timeout=setTimeout(()=>controller.abort(),10000);
-    const r=await fetch(SOURCE_API,{signal:controller.signal,headers:{Accept:'application/json'}});
-    clearTimeout(timeout);
+    const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
+    const r=await fetch(SOURCE_API,{signal:controller.signal,headers:{Accept:'application/json'}});clearTimeout(timeout);
     const j=await r.json().catch(()=>({}));
     if(!r.ok)throw new Error(j.detail||j.error||`Launch source returned ${r.status}`);
-    const raw=(j.features||[]).map(cleanFeature).filter(Boolean);
-    const unique=new Map();
-    for(const a of raw)unique.set(a.id,a);
-    records=[...unique.values()].sort((a,b)=>String(a.name).localeCompare(String(b.name)));
-    filtered=[...records];
-    if(!records.length)throw new Error('Michigan DNR returned no qualifying open Great Lakes-access sites');
-    const updated=dateText(j.source_updated_at);
-    sourceStatus.textContent=updated?`Michigan DNR source updated ${updated}`:'Live Michigan DNR Parks & Recreation data';
-    apply('source-load');
-    emit('Boat Launch Source Load',{records:records.length,source:'PRDBASPublicView'});
+    records=(j.launches||[]).filter(a=>a&&a.id&&a.name&&Number.isFinite(Number(a.latitude))&&Number.isFinite(Number(a.longitude))).map(a=>({...a,latitude:Number(a.latitude),longitude:Number(a.longitude)}));
+    records=[...new Map(records.map(a=>[a.id,a])).values()];
+    if(!records.length)throw new Error('Michigan DNR returned no source-qualified Great Lakes-access sites');
+    sourceReady=true;
+    const updated=dateText(j.source_updated_at);sourceStatus.textContent=updated?`DNR source updated ${updated} · ${records.length} qualified records`:`Live Michigan DNR data · ${records.length} qualified records`;
+    render();emit('Boat Launch Source Load',{records:records.length,source:'PRDBASPublicView'});
+    const initial=new URLSearchParams(location.search).get('destination');
+    if(initial){destinationSearch.value=initial.slice(0,100);searchDestination('url');}
   }catch(err){
-    records=[];filtered=[];
-    results.innerHTML=`<div class="empty error"><strong>Launch data unavailable.</strong><br>${esc(err.message||'The Michigan DNR source could not be reached.')}<br><br>No legacy or guessed launch pins are being shown.</div>`;
-    summary.innerHTML='Unable to load the authoritative launch dataset.';
-    sourceStatus.textContent='No fallback coordinates used';
-    if(layer)layer.clearLayers();
-    emit('Boat Launch Source Error',{message:String(err.message||err)});
+    sourceReady=false;records=[];shortlist=[];destinationPoint=null;
+    results.innerHTML=`<div class="empty error"><strong>Launch data unavailable.</strong><br>${esc(err.message)}. No legacy or guessed launch pins are being shown.</div>`;
+    summary.textContent='Authoritative Michigan DNR launch data could not be loaded.';sourceStatus.textContent='Source unavailable';
+    if(layer)layer.clearLayers();emit('Boat Launch Source Error',{message:String(err.message).slice(0,80)});
   }
 }
+
 load();
 })();
