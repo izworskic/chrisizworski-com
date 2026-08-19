@@ -30,10 +30,20 @@ function queryUrl() {
   return `${DNR_LAYER}/query?${params}`;
 }
 
+function hasValue(value) {
+  return value !== null && value !== undefined && String(value).trim() !== "";
+}
+
+function optionalNumber(value) {
+  if (!hasValue(value)) return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
 function sourceId(a) {
-  const facility = String(a.facilityid || "").trim();
-  const global = String(a.globalid || "").trim();
-  const object = String(a.OBJECTID || "").trim();
+  const facility = hasValue(a.facilityid) ? String(a.facilityid).trim() : "";
+  const global = hasValue(a.globalid) ? String(a.globalid).trim() : "";
+  const object = hasValue(a.OBJECTID) ? String(a.OBJECTID).trim() : "";
   if (facility) return { id: `facility:${facility}`, sourceId: facility, idType: "facilityid" };
   if (global) return { id: `global:${global}`, sourceId: global, idType: "globalid" };
   if (object) return { id: `object:${object}`, sourceId: object, idType: "OBJECTID" };
@@ -41,9 +51,9 @@ function sourceId(a) {
 }
 
 function eligibleAttributes(a = {}) {
-  if (!a.name) return false;
+  if (!hasValue(a.name)) return false;
   if (!sourceId(a)) return false;
-  if (!Number.isFinite(Number(a.latitude)) || !Number.isFinite(Number(a.longitude))) return false;
+  if (optionalNumber(a.latitude) === null || optionalNumber(a.longitude) === null) return false;
   if (String(a.referenceonly || "").toLowerCase() === "yes") return false;
   // Any nonblank DNR review flag is withheld from verified results. That includes
   // current Review Needed / Review in Progress coding and protects future values.
@@ -61,35 +71,35 @@ function normalizeFeature(feature, sourceUpdatedAt = null) {
     sourceId: identity.sourceId,
     sourceIdType: identity.idType,
     sourceUrl: DNR_LAYER,
-    facilityId: String(a.facilityid || "").trim() || null,
-    globalId: String(a.globalid || "").trim() || null,
+    facilityId: hasValue(a.facilityid) ? String(a.facilityid).trim() : null,
+    globalId: hasValue(a.globalid) ? String(a.globalid).trim() : null,
     objectId: a.OBJECTID ?? null,
     legacyId: a.legacyid ?? null,
-    name: a.name,
+    name: String(a.name).trim(),
     labelName: a.labelname || null,
-    latitude: Number(a.latitude),
-    longitude: Number(a.longitude),
+    latitude: optionalNumber(a.latitude),
+    longitude: optionalNumber(a.longitude),
     waterbody: a.waterbody || null,
     waterbodyType: a.waterbodytype || null,
     county: a.WaterbodyCounty || a.NameCounty || a.county || null,
     greatLakesAccess: a.greatlakesaccess || null,
-    rampClass: Number.isFinite(Number(a.rampcode_new)) ? Number(a.rampcode_new) : null,
-    lanes: Number.isFinite(Number(a.nlanes)) ? Number(a.nlanes) : null,
-    trailerParking: Number.isFinite(Number(a.ntrailerableparking)) ? Number(a.ntrailerableparking) : null,
-    vehicleParking: Number.isFinite(Number(a.nvehicleonlyparking)) ? Number(a.nvehicleonlyparking) : null,
+    rampClass: optionalNumber(a.rampcode_new),
+    lanes: optionalNumber(a.nlanes),
+    trailerParking: optionalNumber(a.ntrailerableparking),
+    vehicleParking: optionalNumber(a.nvehicleonlyparking),
     carryDown: String(a.carrydown || "").toLowerCase() === "yes",
     carryDownType: a.carrydowntype || null,
-    piers: Number.isFinite(Number(a.npiers)) ? Number(a.npiers) : null,
-    vaultToilets: Number.isFinite(Number(a.nvaulttoilets)) ? Number(a.nvaulttoilets) : null,
-    flushToilets: Number.isFinite(Number(a.nflushtoilets)) ? Number(a.nflushtoilets) : null,
-    otherToilets: Number.isFinite(Number(a.nothertoilets)) ? Number(a.nothertoilets) : null,
+    piers: optionalNumber(a.npiers),
+    vaultToilets: optionalNumber(a.nvaulttoilets),
+    flushToilets: optionalNumber(a.nflushtoilets),
+    otherToilets: optionalNumber(a.nothertoilets),
     fee: a.recpassport || null,
     operatingHours: a.operating_hours || null,
     operator: a.dnradmin || a.maintby || a.ownedby || null,
     owner: a.ownedby || null,
     grantInAid: String(a.gia || "").toLowerCase() === "yes",
     waterwaysConfirmed: String(a.waterwaysprogramconfirmation || "").toLowerCase() === "yes",
-    coordinateCollection: a.collecttype ?? null,
+    coordinateCollection: optionalNumber(a.collecttype),
     dataSource: a.datasource || null,
     qaDate: a.qaqc_1_date ?? null,
     lastEditedDate: a.last_edited_date ?? null,
@@ -161,4 +171,4 @@ module.exports = async function handler(req, res) {
   }
 };
 
-module.exports._test = { DNR_LAYER, WHERE, FIELDS, sourceId, eligibleAttributes, normalizeFeature, queryUrl };
+module.exports._test = { DNR_LAYER, WHERE, FIELDS, hasValue, optionalNumber, sourceId, eligibleAttributes, normalizeFeature, queryUrl };
