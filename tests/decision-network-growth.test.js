@@ -20,20 +20,22 @@ test('decision network is crawlable on safe hubs without altering protected dest
   assert.doesNotMatch(js,/destination.*href|href.*destination/);
 });
 
-test('boat launch finder is source-first, destination-first, and keeps the DNR record as map truth',()=>{
+test('boat launch finder is source-first, statewide, map-first, and keeps source records as map truth',()=>{
   const html=read('public/michigan-boat-launches/index.html');
   const js=read('public/assets/boat-launch-finder.js');
   const api=read('api/boat-launches.js');
   const geocode=read('api/boat-launch-geocode.js');
   const code=js+'\n'+api+'\n'+geocode;
-  assert.match(html,/<title>Michigan Boat Launch Finder \| Chris Izworski<\/title>/);
+  assert.match(html,/<title>Michigan Boat Launch Map & Finder \| Chris Izworski<\/title>/);
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/michigan-boat-launches/">'));
-  assert.match(html,/<h1>Find a boat launch near where you want to go<\/h1>/);
+  assert.match(html,/<h1>Michigan boat launches, on one map<\/h1>/);
+  assert.equal((html.match(/<input[^>]+type="search"/g)||[]).length,1);
   assert.match(html,/assets\/boat-launch-finder\.js/);
   assert.doesNotMatch(html,/id="locdata"|Bay City State Park Launch|"numberOfItems": 42/);
   assert.match(api,/PRDBASPublicView\/FeatureServer\/0/);
   assert.match(api,/launch_status='Open'/);
-  assert.match(api,/greatlakesaccess LIKE 'Yes%'/);
+  assert.doesNotMatch(api,/greatlakesaccess LIKE 'Yes%'/);
+  assert.match(api,/statewide: true/);
   assert.doesNotMatch(api,/facilityid IS NOT NULL/);
   assert.match(api,/globalid/);
   assert.match(api,/OBJECTID/);
@@ -42,10 +44,12 @@ test('boat launch finder is source-first, destination-first, and keeps the DNR r
   assert.match(js,/SOURCE_API='\/api\/boat-launches'/);
   assert.match(js,/GEOCODE_API='\/api\/boat-launch-geocode'/);
   assert.match(js,/function distanceMiles/);
-  assert.match(js,/function chooseNearby/);
+  assert.match(js,/rankNearDestination/);
+  assert.match(js,/markerClusterGroup/);
+  assert.match(js,/for\(const a of mapSet\(\)\)/);
   assert.match(js,/google\.com\/maps\/dir/);
-  assert.match(js,/No legacy or guessed launch pins are being shown/);
-  assert.doesNotMatch(code,/MANUAL_VERIFIED|ALIASES|bestMatch|nameSimilarity|hay\.includes\(q\)/);
+  assert.match(js,/No legacy or guessed launch pins are shown/);
+  assert.doesNotMatch(code,/MANUAL_VERIFIED|ALIASES|bestMatch|nameSimilarity/);
   assert.doesNotMatch(code,/navigator\.geolocation|getCurrentPosition|localStorage|sessionStorage|document\.cookie/);
   const children=readdirSync(path.join(root,'public/michigan-boat-launches'),{withFileTypes:true}).filter(x=>x.isDirectory()).map(x=>x.name).sort();
   assert.deepEqual(children,['lake-michigan','saginaw-bay']);
