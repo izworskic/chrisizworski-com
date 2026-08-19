@@ -1,0 +1,32 @@
+name: Boat launch live acceptance
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'api/boat-launches.js'
+      - 'api/boat-launch-geocode.js'
+      - 'data/boat-launch-supplemental.json'
+      - 'public/michigan-boat-launches/**'
+      - 'public/assets/boat-launch-finder.js'
+      - 'scripts/smoke-boat-launch-runtime.mjs'
+      - '.github/workflows/boat-launch-acceptance.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boat-launch-acceptance-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  runtime-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Exercise live launch and destination handlers
+        run: node scripts/smoke-boat-launch-runtime.mjs
