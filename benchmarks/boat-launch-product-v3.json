@@ -1,0 +1,102 @@
+{
+  "name": "Michigan Boat Launch Product V3",
+  "purpose": "Measure whether the finder helps a boater choose a real, usable launch near a destination without sacrificing source integrity.",
+  "maxScore": 100,
+  "target": {
+    "minimumEffectiveScore": 95,
+    "maximumLoss": 5,
+    "fatalFailuresAllowed": 0
+  },
+  "dimensions": [
+    {
+      "key": "sourceTruth",
+      "weight": 30,
+      "requirements": [
+        "Every launch shown has a canonical source record or approved supplemental source.",
+        "No launch may be created by fuzzy matching, guessed coordinates, tourism copy, search snippets, or legacy fallback data.",
+        "Routing coordinates must be the same verified coordinates used by the map record.",
+        "Nullable DNR facilityid must not be used as a reason to discard otherwise valid authoritative records; use a stable source identifier such as facilityid when present, otherwise globalid/OBJECTID with provenance.",
+        "Reference-only, closed, or review-needed records must be handled explicitly and never silently promoted to verified open launches.",
+        "Bay City State Park Launch must never appear unless a future authoritative operator source establishes an actual launch there."
+      ]
+    },
+    {
+      "key": "destinationSearchCoverage",
+      "weight": 25,
+      "requirements": [
+        "The primary input answers 'Where do you want to boat/launch?' by resolving a destination to coordinates and finding nearby launches geospatially.",
+        "Destination search must not depend on the destination text appearing in the launch name, waterbody, county, or description.",
+        "Default search radius is useful for trailered boaters and expands transparently when too few verified results exist.",
+        "Known coastal destination acceptance cases must return at least one verified result and should return a 3-5 launch shortlist when the source inventory supports it.",
+        "Launch-name search remains available as a secondary behavior."
+      ]
+    },
+    {
+      "key": "decisionUtility",
+      "weight": 20,
+      "requirements": [
+        "Each result answers distance from destination, access waterbody, ramp type/class, trailer parking, lanes, fee/passport, operator, hours/closure status when available, and source freshness.",
+        "Results explain why a launch may fit a trailer boat, smaller boat, or carry-down user using only source-backed facts.",
+        "Missing data is labeled unknown/not listed rather than inferred.",
+        "The first screen produces a usable shortlist without requiring the user to understand DNR field names."
+      ]
+    },
+    {
+      "key": "mapAndMobileUX",
+      "weight": 15,
+      "requirements": [
+        "Searching a destination recenters the map on that destination and its result set.",
+        "Map pins and cards are keyed bidirectionally to the same source record.",
+        "The selected destination is visually distinct from launch pins.",
+        "The default view never presents an empty-looking map when verified launches exist nearby.",
+        "Phone and tablet layouts keep map, shortlist, filters and directions usable without excessive scrolling.",
+        "Directions opens the verified launch coordinate, not the destination center or a guessed address."
+      ]
+    },
+    {
+      "key": "conditionsAndTrust",
+      "weight": 5,
+      "requirements": [
+        "Nearest relevant NOAA/NWS marine observations may help compare launches but are labeled regional and never converted into an unsupported safety guarantee.",
+        "Closures and official hazard sources outrank convenience scoring.",
+        "The interface distinguishes facility facts from live/regional conditions."
+      ]
+    },
+    {
+      "key": "discoveryPerformance",
+      "weight": 5,
+      "requirements": [
+        "Canonical URL, indexable explanatory copy, structured data and regional internal links remain intact.",
+        "Core destination interaction is fast on mobile and does not require loading the entire UI before showing useful status.",
+        "Analytics measure destination searches, zero-result searches, launch selections and directions clicks without storing precise user location."
+      ]
+    }
+  ],
+  "fatalFailures": [
+    "Any known false launch is displayed as real.",
+    "Any displayed launch lacks traceable source evidence.",
+    "A map or directions coordinate differs materially from the verified source coordinate without an explicit correction source.",
+    "A core acceptance destination returns zero launches when the verified inventory contains a launch within the configured search radius.",
+    "Destination search is implemented only as substring matching over launch-record text.",
+    "The production path can fall back to guessed, legacy, or fuzzy-matched launch coordinates.",
+    "The source API excludes valid authoritative records solely because a nullable human-facing facility ID is absent.",
+    "Source/API failure is rendered as a normal zero-result search rather than a distinct data-unavailable state."
+  ],
+  "acceptanceDestinations": [
+    {"query":"Bay City, MI","region":"Saginaw Bay","fatalIfZero":true,"desiredShortlist":3},
+    {"query":"Tawas City, MI","region":"Saginaw Bay / Lake Huron","fatalIfZero":true,"desiredShortlist":3},
+    {"query":"Alpena, MI","region":"Thunder Bay / Lake Huron","fatalIfZero":true,"desiredShortlist":3},
+    {"query":"Mackinaw City, MI","region":"Straits of Mackinac","fatalIfZero":true,"desiredShortlist":3},
+    {"query":"Petoskey, MI","region":"Little Traverse Bay","fatalIfZero":true,"desiredShortlist":3},
+    {"query":"Ludington, MI","region":"Lake Michigan","fatalIfZero":true,"desiredShortlist":3},
+    {"query":"Holland, MI","region":"Lake Michigan","fatalIfZero":true,"desiredShortlist":3},
+    {"query":"South Haven, MI","region":"Lake Michigan","fatalIfZero":true,"desiredShortlist":3},
+    {"query":"Munising, MI","region":"Lake Superior","fatalIfZero":true,"desiredShortlist":3},
+    {"query":"Marquette, MI","region":"Lake Superior","fatalIfZero":true,"desiredShortlist":3},
+    {"query":"Monroe, MI","region":"Lake Erie","fatalIfZero":true,"desiredShortlist":3}
+  ],
+  "knownFalsePositives": [
+    "Bay City State Park Launch"
+  ],
+  "releaseRule": "Do not merge or deploy unless score is at least 95/100, there are zero fatal failures, source queries have been runtime-verified, and the preview has been manually exercised for Bay City/Saginaw Bay plus at least four geographically diverse acceptance destinations on phone and desktop."
+}
