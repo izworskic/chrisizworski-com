@@ -25,6 +25,15 @@ function distanceMiles(a,b,c,d){
 function hasCoordinate(a){
   return a.latitude!==null&&a.latitude!==undefined&&String(a.latitude).trim()!==''&&a.longitude!==null&&a.longitude!==undefined&&String(a.longitude).trim()!==''&&Number.isFinite(Number(a.latitude))&&Number.isFinite(Number(a.longitude));
 }
+function reviewStatus(a){
+  const flag=String(a.flag||'').trim();
+  if(!flag)return 'source-qualified';
+  if(flag==='InProgress')return 'dnr-review-in-progress';
+  return 'withhold';
+}
+function nearby(records,lat,lon,radius=25){
+  return records.map(a=>({...a,_mi:distanceMiles(lat,lon,Number(a.latitude),Number(a.longitude))})).filter(a=>a._mi<=radius).sort((a,b)=>a._mi-b._mi);
+}
 
 async function fetchJson(url){
   const r=await fetch(url,{headers:{accept:'application/json','user-agent':'ChrisIzworskiBoatLaunchAudit/3.0 (+https://chrisizworski.com/michigan-boat-launches/)'},signal:AbortSignal.timeout(20000)});
@@ -51,50 +60,54 @@ const [metadata,total,recordsResponse]=await Promise.all([
 const records=(recordsResponse.features||[]).map(f=>f.attributes||{});
 const open=records.filter(a=>a.launch_status==='Open');
 const openGreatLakes=open.filter(a=>String(a.greatlakesaccess||'').startsWith('Yes')&&String(a.referenceonly||'').toLowerCase()!=='yes'&&hasCoordinate(a)&&a.name);
+const sourceQualified=openGreatLakes.filter(a=>reviewStatus(a)==='source-qualified');
+const reviewInProgress=openGreatLakes.filter(a=>reviewStatus(a)==='dnr-review-in-progress');
+const withheld=openGreatLakes.filter(a=>reviewStatus(a)==='withhold');
+const usable=[...sourceQualified,...reviewInProgress];
 const accessCounts=new Map();
 for(const a of open)accessCounts.set(a.greatlakesaccess??'(null)',(accessCounts.get(a.greatlakesaccess??'(null)')||0)+1);
 
-const eligible=openGreatLakes.filter(a=>!String(a.flag||'').trim());
-const withheld=openGreatLakes.filter(a=>String(a.flag||'').trim());
-const nullFacility=eligible.filter(a=>!String(a.facilityid||'').trim());
+const nullFacility=usable.filter(a=>!String(a.facilityid||'').trim());
 const referenceOnly=open.filter(a=>String(a.referenceonly||'').toLowerCase()==='yes');
-const flagged=open.filter(a=>String(a.flag||'').trim()==='Flag');
-const inProgress=open.filter(a=>String(a.flag||'').trim()==='InProgress');
-const gia=eligible.filter(a=>String(a.gia||'').toLowerCase()==='yes');
-const nonDnr=eligible.filter(a=>!String(a.ownedby||'').startsWith('DNR')||!String(a.dnradmin||'').toLowerCase().includes('dnr'));
+const reviewNeeded=open.filter(a=>String(a.flag||'').trim()==='Flag');
+const allInProgress=open.filter(a=>String(a.flag||'').trim()==='InProgress');
+const gia=usable.filter(a=>String(a.gia||'').toLowerCase()==='yes');
 
 console.log('Michigan DNR boat launch source audit');
 console.log(`Layer last edit: ${metadata?.editingInfo?.lastEditDate?new Date(metadata.editingInfo.lastEditDate).toISOString():'unknown'}`);
 console.log(`Total layer records: ${total.count}`);
 console.log(`Boating Access Site records: ${records.length}`);
 console.log(`Open boating-access records: ${open.length}`);
-console.log(`Open Great Lakes-access records with usable coordinates before review-flag gating: ${openGreatLakes.length}`);
-console.log(`Source-qualified open Great Lakes-access records: ${eligible.length}`);
-console.log(`Withheld Great Lakes-access records because DNR flag is nonblank: ${withheld.length}`);
-console.log(`Eligible records with null/blank facilityid: ${nullFacility.length}`);
+console.log(`Open Great Lakes-access records with usable coordinates: ${openGreatLakes.length}`);
+console.log(`Source-qualified Great Lakes records: ${sourceQualified.length}`);
+console.log(`DNR review-in-progress Great Lakes records: ${reviewInProgress.length}`);
+console.log(`Total usable official DNR Great Lakes records: ${usable.length}`);
+console.log(`Withheld Great Lakes records (Review Needed/unknown review state): ${withheld.length}`);
+console.log(`Usable records with null/blank facilityid: ${nullFacility.length}`);
 console.log(`Open reference-only records: ${referenceOnly.length}`);
-console.log(`Open flag=Flag records: ${flagged.length}`);
-console.log(`Open flag=InProgress records: ${inProgress.length}`);
-console.log(`Eligible Grant-In-Aid records: ${gia.length}`);
-console.log(`Eligible records with non-DNR ownership/admin signal: ${nonDnr.length}`);
+console.log(`All open Review Needed records: ${reviewNeeded.length}`);
+console.log(`All open Review In Progress records: ${allInProgress.length}`);
+console.log(`Usable Grant-In-Aid records: ${gia.length}`);
 console.log('\nGreat Lakes access values among open boating sites:');
 for(const [k,v] of [...accessCounts.entries()].sort((a,b)=>String(a[0]).localeCompare(String(b[0]))))console.log(`  ${k}: ${v}`);
 
 if(nullFacility.length){
   console.log('\nExamples where facilityid is blank but stable authoritative IDs exist:');
-  for(const a of nullFacility.slice(0,8))console.log(`  ${a.name} | OBJECTID=${a.OBJECTID} | globalid=${a.globalid} | ${a.latitude},${a.longitude}`);
+  for(const a of nullFacility.slice(0,8))console.log(`  ${a.name} | review=${reviewStatus(a)} | OBJECTID=${a.OBJECTID} | globalid=${a.globalid} | ${a.latitude},${a.longitude}`);
 }
 
-console.log('\nAcceptance-destination samples:');
-let zero=0;
+console.log('\nAcceptance-destination samples (25-mile initial radius):');
+let zeroUsable=0;
 for(const [name,lat,lon] of ACCEPTANCE){
-  const nearby=eligible.map(a=>({...a,_mi:distanceMiles(lat,lon,Number(a.latitude),Number(a.longitude))})).filter(a=>a._mi<=25).sort((a,b)=>a._mi-b._mi);
-  const withheldNearby=withheld.map(a=>({...a,_mi:distanceMiles(lat,lon,Number(a.latitude),Number(a.longitude))})).filter(a=>a._mi<=25).sort((a,b)=>a._mi-b._mi);
-  if(!nearby.length)zero++;
-  console.log(`\n${name}: ${nearby.length} qualified within 25 mi; ${withheldNearby.length} DNR records withheld by review flag within 25 mi`);
-  for(const a of nearby.slice(0,5))console.log(`  QUALIFIED ${a._mi.toFixed(1)} mi | ${a.name} | ${a.waterbody||'waterbody not listed'} | id=${a.facilityid||a.globalid||a.OBJECTID}`);
-  for(const a of withheldNearby.slice(0,8))console.log(`  WITHHELD  ${a._mi.toFixed(1)} mi | ${a.name} | ${a.waterbody||'waterbody not listed'} | flag=${a.flag||'(blank)'} | comment=${String(a.flagcomments||'(none)').replace(/\s+/g,' ').slice(0,180)} | owner=${a.ownedby||'(none)'} | id=${a.facilityid||a.globalid||a.OBJECTID}`);
+  const qualifiedNearby=nearby(sourceQualified,lat,lon);
+  const reviewNearby=nearby(reviewInProgress,lat,lon);
+  const withheldNearby=nearby(withheld,lat,lon);
+  const usableNearby=[...qualifiedNearby.map(a=>({...a,_tier:'QUALIFIED'})),...reviewNearby.map(a=>({...a,_tier:'REVIEWING'}))].sort((a,b)=>a._mi-b._mi);
+  if(!usableNearby.length)zeroUsable++;
+  console.log(`\n${name}: ${qualifiedNearby.length} source-qualified + ${reviewNearby.length} review-in-progress = ${usableNearby.length} usable within 25 mi; ${withheldNearby.length} withheld`);
+  for(const a of usableNearby.slice(0,8))console.log(`  ${a._tier.padEnd(9)} ${a._mi.toFixed(1)} mi | ${a.name} | ${a.waterbody||'waterbody not listed'} | id=${a.facilityid||a.globalid||a.OBJECTID}`);
+  for(const a of withheldNearby.slice(0,5))console.log(`  WITHHELD  ${a._mi.toFixed(1)} mi | ${a.name} | flag=${a.flag||'(blank)'} | comment=${String(a.flagcomments||'(none)').replace(/\s+/g,' ').slice(0,140)} | id=${a.facilityid||a.globalid||a.OBJECTID}`);
 }
 
-if(total.count<500||records.length<500||open.length<300||openGreatLakes.length<50||eligible.length<20)throw new Error('DNR source audit returned implausibly low inventory counts');
-if(zero>4)throw new Error(`DNR source audit found ${zero} acceptance destinations with zero qualifying launches within 25 mi; inspect source model before shipping`);
+if(total.count<500||records.length<500||open.length<300||openGreatLakes.length<50||sourceQualified.length<20||usable.length<50)throw new Error('DNR source audit returned implausibly low inventory counts');
+if(zeroUsable>2)throw new Error(`DNR source audit found ${zeroUsable} acceptance destinations with zero usable official launches inside the initial 25-mile radius; inspect coverage before shipping`);
