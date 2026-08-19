@@ -13,6 +13,7 @@ function attrs(overrides={}){
     longitude:-83.38175752,
     referenceonly:'No',
     flag:null,
+    flagcomments:null,
     waterbody:'Lake Huron',
     greatlakesaccess:'Yes, within 0.5 miles',
     launch_status:'Open',
@@ -26,6 +27,7 @@ function attrs(overrides={}){
 test('valid DNR launch survives a blank nullable facilityid by using globalid',()=>{
   const a=attrs();
   assert.equal(boat.eligibleAttributes(a),true);
+  assert.equal(boat.reviewStatus(a),'source-qualified');
   assert.deepEqual(boat.sourceId(a),{
     id:'global:6cd4ab1e-bda1-4c15-aa4f-a4b961476872',
     sourceId:'6cd4ab1e-bda1-4c15-aa4f-a4b961476872',
@@ -34,6 +36,8 @@ test('valid DNR launch survives a blank nullable facilityid by using globalid',(
   const normalized=boat.normalizeFeature({attributes:a},Date.UTC(2026,7,17));
   assert.equal(normalized.facilityId,null);
   assert.equal(normalized.globalId,a.globalid);
+  assert.equal(normalized.verificationStatus,'source-qualified');
+  assert.equal(normalized.detailsUnderReview,false);
   assert.equal(normalized.name,'Rockport');
   assert.equal(normalized.latitude,a.latitude);
   assert.equal(normalized.longitude,a.longitude);
@@ -50,9 +54,20 @@ test('OBJECTID is a last-resort authoritative source ID',()=>{
   assert.deepEqual(boat.sourceId(a),{id:'object:77',sourceId:'77',idType:'OBJECTID'});
 });
 
-test('flagged, reference-only, unnamed, and coordinate-less records cannot qualify',()=>{
-  assert.equal(boat.eligibleAttributes(attrs({flag:'InProgress'})),false);
-  assert.equal(boat.eligibleAttributes(attrs({flag:'Review Needed'})),false);
+test('DNR InProgress record remains visible but explicitly provisional',()=>{
+  const a=attrs({flag:'InProgress',flagcomments:'Confirm hours and parking.'});
+  assert.equal(boat.reviewStatus(a),'dnr-review-in-progress');
+  assert.equal(boat.eligibleAttributes(a),true);
+  const normalized=boat.normalizeFeature({attributes:a});
+  assert.equal(normalized.verificationStatus,'dnr-review-in-progress');
+  assert.equal(normalized.detailsUnderReview,true);
+  assert.equal(normalized.reviewNote,'Confirm hours and parking.');
+});
+
+test('Review Needed, unknown flags, reference-only, unnamed and coordinate-less records stay withheld',()=>{
+  assert.equal(boat.reviewStatus(attrs({flag:'Flag'})),'withhold');
+  assert.equal(boat.eligibleAttributes(attrs({flag:'Flag'})),false);
+  assert.equal(boat.eligibleAttributes(attrs({flag:'FutureStatus'})),false);
   assert.equal(boat.eligibleAttributes(attrs({referenceonly:'Yes'})),false);
   assert.equal(boat.eligibleAttributes(attrs({name:null})),false);
   assert.equal(boat.eligibleAttributes(attrs({latitude:null})),false);
