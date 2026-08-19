@@ -9,6 +9,13 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 19 2026: the boat launch finder now ranks on driving distance instead of
+  // straight-line distance, caps its reach, and tells an inland destination that
+  // it is outside the Great Lakes inventory. Re-crawl after deploy, then remove
+  // these declarations.
+  "/michigan-boat-launches/",
+  "/assets/boat-launch-finder.js",
+
   // Aug 18 2026: shipwreck explorer/search-trust upgrade.
   "/great-lakes-shipwrecks/",
   // Aug 17 2026: additive Windy webcam context on selected beach, ice, and

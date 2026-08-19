@@ -1,10 +1,22 @@
 const DNR_LAYER = "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/arcgis/rest/services/PRDBASPublicView/FeatureServer/0";
 const SUPPLEMENTAL = require("../data/boat-launch-supplemental.json");
 
+/*
+ * Michigan DNR's greatlakesaccess field mislabels every launch on the Great
+ * Lakes connecting channels as "does not connect (inland lake, etc.)". That is
+ * wrong for the Detroit, St. Clair and St. Marys rivers, which are Great Lakes
+ * connecting waters, and it silently dropped fourteen open DNR launches
+ * including Elizabeth Park, Belanger Park, Wyandotte, Algonac State Park and
+ * Brimley State Park. These waterbodies are readmitted by name; the DNR
+ * classification itself is preserved untouched on each record.
+ */
+const CONNECTING_WATERS = ["Detroit River", "Saint Clair River", "Saint Marys River"];
+const CONNECTING_WATERS_SQL = CONNECTING_WATERS.map(name => `'${name}'`).join(",");
+
 const WHERE = [
   "bas_type='Boating Access Site'",
   "launch_status='Open'",
-  "greatlakesaccess LIKE 'Yes%'",
+  `(greatlakesaccess LIKE 'Yes%' OR waterbody IN (${CONNECTING_WATERS_SQL}))`,
   "latitude IS NOT NULL",
   "longitude IS NOT NULL",
 ].join(" AND ");
@@ -58,12 +70,19 @@ function reviewStatus(a = {}) {
   return "withhold";
 }
 
+function connectionBasis(a = {}) {
+  if (String(a.greatlakesaccess || "").startsWith("Yes")) return "dnr-great-lakes-access";
+  if (CONNECTING_WATERS.includes(String(a.waterbody || "").trim())) return "great-lakes-connecting-water";
+  return null;
+}
+
 function eligibleAttributes(a = {}) {
   if (!hasValue(a.name)) return false;
   if (!sourceId(a)) return false;
   if (optionalNumber(a.latitude) === null || optionalNumber(a.longitude) === null) return false;
   if (String(a.referenceonly || "").toLowerCase() === "yes") return false;
   if (reviewStatus(a) === "withhold") return false;
+  if (!connectionBasis(a)) return false;
   return true;
 }
 
@@ -94,6 +113,7 @@ function normalizeFeature(feature, sourceUpdatedAt = null) {
     waterbodyType: a.waterbodytype || null,
     county: a.WaterbodyCounty || a.NameCounty || a.county || null,
     greatLakesAccess: a.greatlakesaccess || null,
+    connectionBasis: connectionBasis(a),
     rampClass: optionalNumber(a.rampcode_new),
     rampDescription: null,
     lanes: optionalNumber(a.nlanes),
@@ -144,6 +164,7 @@ function normalizeSupplemental(record = {}) {
     latitude,
     longitude,
     detailsUnderReview: false,
+    connectionBasis: "municipal-operator-source",
     rampClass: optionalNumber(record.rampClass),
     lanes: optionalNumber(record.lanes),
     trailerParking: optionalNumber(record.trailerParking),
@@ -192,6 +213,13 @@ module.exports = async function handler(req, res) {
       fetchJson(`${DNR_LAYER}?f=json`).catch(() => null),
     ]);
     const sourceUpdatedAt = metadata?.editingInfo?.lastEditDate || metadata?.lastEditDate || null;
+    /*
+     * A silently truncated page would look like a smaller state rather than a
+     * failure, so an exceeded transfer limit is treated as an outage.
+     */
+    if (query?.exceededTransferLimit === true) {
+      throw new Error("Michigan DNR truncated the result set; the inventory would be incomplete");
+    }
     const dnrLaunches = (query.features || []).map(f => normalizeFeature(f, sourceUpdatedAt)).filter(Boolean);
     const supplementalLaunches = SUPPLEMENTAL.map(normalizeSupplemental).filter(Boolean);
     const launches = [...dnrLaunches, ...supplementalLaunches];
@@ -200,6 +228,7 @@ module.exports = async function handler(req, res) {
     const sourceQualifiedCount = unique.filter(x => x.verificationStatus === "source-qualified").length;
     const reviewInProgressCount = unique.filter(x => x.verificationStatus === "dnr-review-in-progress").length;
     const municipalSupplementalCount = unique.filter(x => x.verificationStatus === "municipal-source-qualified").length;
+    const connectingWaterCount = unique.filter(x => x.connectionBasis === "great-lakes-connecting-water").length;
 
     return res.status(200).json({
       source: "Michigan DNR boating access data plus source-qualified municipal supplements",
@@ -216,6 +245,7 @@ module.exports = async function handler(req, res) {
         review_in_progress: "DNR InProgress is displayed with provisional facility details",
         withheld_review_status: "DNR Review Needed and unknown flag values",
         municipal_supplemental: "owner/operator source plus independently documented launch-specific location evidence",
+        connecting_waters: CONNECTING_WATERS.join(", ") + " are readmitted by waterbody because the DNR greatlakesaccess field misclassifies them",
       },
       fallback_used: false,
       count: unique.length,
@@ -223,6 +253,7 @@ module.exports = async function handler(req, res) {
       source_qualified_count: sourceQualifiedCount,
       review_in_progress_count: reviewInProgressCount,
       municipal_supplemental_count: municipalSupplementalCount,
+      connecting_water_count: connectingWaterCount,
       launches: unique,
     });
   } catch (error) {
@@ -235,4 +266,4 @@ module.exports = async function handler(req, res) {
   }
 };
 
-module.exports._test = { DNR_LAYER, WHERE, FIELDS, hasValue, optionalNumber, sourceId, reviewStatus, eligibleAttributes, normalizeFeature, normalizeSupplemental, queryUrl };
+module.exports._test = { DNR_LAYER, WHERE, FIELDS, CONNECTING_WATERS, hasValue, optionalNumber, sourceId, reviewStatus, connectionBasis, eligibleAttributes, normalizeFeature, normalizeSupplemental, queryUrl };

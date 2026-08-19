@@ -113,3 +113,60 @@ Before a launch-data release:
 4. Run the acceptance-destination set and record result counts, including how many are source-qualified versus DNR review in progress.
 5. Investigate known geographic gaps for Tier 2 evidence without inventing points.
 6. Do not merge if an unresolved location conflict is known.
+
+## Ranking policy, added 2026-08-19
+
+The shortlist is ordered by **driving distance from the searched destination**, not by
+straight-line distance.
+
+Straight-line distance is the wrong ranking key in a state made of water. Measured against live
+routing on 2026-08-19:
+
+- Northport to Elk Rapids is 18.7 miles across Grand Traverse Bay and a 46.5 mile, 73 minute drive
+  around it. A straight-line list placed it in the shortlist ahead of launches reachable in half
+  the time.
+- Bay City's straight-line nearest launch, Saginaw River Mouth at 3.6 miles, is a 17 minute drive,
+  while Jones Road at 4.5 straight-line miles is 15 minutes. The straight-line list put the slowest
+  of the four nearby launches first.
+
+Straight-line distance is still used to choose which launches are measured, because a road can
+never be shorter than the crow flies. That property is what makes the candidate pool safe: a
+launch outside the pool can only beat a kept one if its straight-line distance is already shorter
+than the worst road distance kept, and the ranking widens the pool when that is true.
+
+Rules:
+
+1. Road distance and drive time come from OSRM through `api/boat-launch-drive.js`, one small table
+   request per destination search, cached at the edge for a day. FOSSGIS serves the OpenStreetMap
+   community router and is the primary; the project-osrm demo host is a fallback only because
+   FOSSGIS queues and often takes about nine seconds. Real traffic should move to a hosted or
+   self-run routing service rather than leaning harder on either.
+2. A routing outage never becomes a fabricated number. The page falls back to straight-line order,
+   labels it straight line, and tightens its range cap by 1.25 because road distance is always at
+   least straight-line distance.
+3. Nothing beyond a 60 mile drive is presented as a nearby launch choice, and when nothing is
+   within a 25 mile drive the page says so rather than quietly widening.
+4. A destination with no launch in range is told that the finder covers the Great Lakes shoreline
+   and the connecting rivers, and that inland-lake launches are a separate DNR inventory. It is not
+   handed a launch an hour away explained as an expanded radius.
+
+## Connecting waters, added 2026-08-19
+
+Michigan DNR's `greatlakesaccess` field labels every launch on the Detroit, St. Clair and St. Marys
+rivers as "No, greater than 2 miles or does not connect (inland lake, etc.)". That is wrong: these
+are Great Lakes connecting channels. Trusting the field dropped fourteen open DNR launches,
+including Elizabeth Park, Belanger Park, Wyandotte, John David Dingell Jr., Algonac State Park and
+Brimley State Park, and left Detroit and Wyandotte searches with almost nothing.
+
+These three waterbodies are readmitted by name in the query. The DNR classification itself is
+preserved untouched on every record, each record carries `connectionBasis`, and the DNR distance
+refinements still only match records the DNR itself coded `Yes`. No launch is invented and no field
+is rewritten; only the exclusion is corrected.
+
+## Unlisted is not zero, added 2026-08-19
+
+A DNR record with no trailer-parking count is not a launch with no trailer parking. The refinement
+still cannot claim it meets a minimum, so it is withheld from that filtered list, but the page
+reports how many nearby records the refinements removed and how many of those were removed only
+because a count is unlisted.
+

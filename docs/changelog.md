@@ -3,6 +3,21 @@
 One dated entry per production change, so Search Console movement can be attributed to a cause
 instead of guessed at. Do not ship two page clusters on the same day.
 
+## 2026-08-19 - Boat launch finder ranked on driving distance
+
+- Shortlist now ranks by real driving distance and drive time (`api/boat-launch-drive.js`,
+  `public/assets/boat-launch-ranking.js`) instead of straight-line distance, which had ranked a 73
+  minute drive around Grand Traverse Bay above launches reachable in half the time.
+- Radius expansion is capped at a 60 mile drive. An inland destination is told the finder covers
+  the Great Lakes and connecting rivers rather than being handed a distant launch.
+- Great Lakes connecting rivers readmitted: 14 open DNR launches on the Detroit, St. Clair and St.
+  Marys rivers were dropped by a DNR field that misclassifies them. Inventory 131 to 145 DNR records.
+- An unlisted trailer-parking count is no longer treated as zero spaces, and refinements report what
+  they hid.
+- A truncated DNR page is now an outage rather than a quietly smaller inventory.
+- Acceptance set extended with inland destinations and the runtime smoke asserts the scope guard, so
+  the gate can fail on the destinations where the tool actually broke.
+
 ## 2026-08-18 — camera captions cut back to plain live-view language
 Cluster: the ten pages carrying Windy cameras. Chris asked for this directly: the captions were
 "way too conservative" and did not need to explain themselves.

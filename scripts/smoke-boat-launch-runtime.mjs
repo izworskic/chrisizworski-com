@@ -5,6 +5,8 @@ import { createRequire } from 'node:module';
 const require=createRequire(import.meta.url);
 const launchHandler=require('../api/boat-launches.js');
 const geocodeHandler=require('../api/boat-launch-geocode.js');
+const driveHandler=require('../api/boat-launch-drive.js');
+const ranking=require('../public/assets/boat-launch-ranking.js');
 
 function mockResponse(){
   return {
@@ -72,4 +74,49 @@ assert.equal(blackRiver.sourceType,'municipal-supplemental');
 assert.equal(blackRiver.verificationStatus,'municipal-source-qualified');
 console.log(`South Haven: ${southHavenNearby.length} within 25 mi; Black River Park ${blackRiver._mi.toFixed(2)} mi`);
 
-console.log(`Runtime smoke PASS — ${launchRes.body.launches.length} source-backed launches; live DNR handler + live Michigan destination geocoder + distance ranking verified.`);
+/*
+ * Outcome acceptance. These cases fail if the tool answers badly, not merely if
+ * a string is missing from the source.
+ */
+async function shortlistFor(point,records){
+  const {pool,nextStraightMiles}=ranking.candidatePool(records,point);
+  const driveRes=await invoke(driveHandler,{query:{from:`${point.latitude},${point.longitude}`,to:pool.map(a=>`${a.latitude},${a.longitude}`).join(';')}});
+  return ranking.finalizeShortlist({pool,nextStraightMiles,drive:driveRes.statusCode===200?driveRes.body:null});
+}
+
+const bayShortlist=await shortlistFor(bayPoint,launchRes.body.launches);
+assert.ok(bayShortlist.routed,'drive-distance routing did not answer for Bay City');
+const straightFirst=ranking.candidatePool(launchRes.body.launches,bayPoint).pool[0];
+const drivenFirst=bayShortlist.items[0];
+assert.ok(drivenFirst.driveMinutes!==null,'shortlist is missing drive time');
+assert.ok(
+  drivenFirst.driveMinutes<=straightFirst.distanceMiles*10,
+  'shortlist ordering ignored drive time'
+);
+for(let i=1;i<bayShortlist.items.length;i+=1){
+  assert.ok(
+    Math.round(bayShortlist.items[i].driveMinutes)>=Math.round(bayShortlist.items[i-1].driveMinutes),
+    `Bay City shortlist is not in drive-time order at position ${i+1}`
+  );
+}
+console.log(`Bay City drive order: ${bayShortlist.items.map(a=>`${a.name} ${Math.round(a.driveMinutes)}min`).join(', ')}`);
+
+const connecting=launchRes.body.launches.filter(a=>a.connectionBasis==='great-lakes-connecting-water');
+assert.ok(connecting.length>=10,`connecting-water launches missing: ${connecting.length}`);
+assert.ok(connecting.some(a=>a.name==='Elizabeth Park'),'Detroit River launches are still being dropped by the DNR access field');
+
+/*
+ * Inland destinations must be told they are out of scope rather than handed a
+ * Great Lakes launch an hour away with no explanation. These assertions are the
+ * reason the acceptance set is not only coastal towns.
+ */
+for(const inland of ['Lansing, MI','Jackson, MI']){
+  await new Promise(r=>setTimeout(r,1250));
+  const point=await geocode(inland);
+  const result=await shortlistFor(point,launchRes.body.launches);
+  assert.equal(result.items.length,0,`${inland} returned ${result.items.length} launches; an inland destination must fall out of a Great Lakes finder`);
+  assert.equal(result.reason,'out-of-range',`${inland} did not produce the out-of-scope state`);
+  console.log(`${inland}: correctly out of scope`);
+}
+
+console.log(`Runtime smoke PASS — ${launchRes.body.launches.length} source-backed launches; live DNR handler + live Michigan destination geocoder + drive-distance ranking, connecting-water repair and inland scope guard verified.`);
