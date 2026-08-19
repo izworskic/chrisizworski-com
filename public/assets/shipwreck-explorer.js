@@ -1,16 +1,21 @@
 (()=>{
-  'use strict';window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};
+  'use strict';
+  window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};
   if(location.pathname!=='/great-lakes-shipwrecks/')return;
   const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
   const rows=$$('#wrBody tr'); if(!rows.length)return;
   const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const emit=(name,props={})=>{try{window.va?.('event',{name,...props});}catch{}};
   const norm=s=>(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
-  const lakeSlug=s=>norm(s).replace(/ /g,'-');
   const era=y=>{y=Number(y)||0;return y<1800?'before-1800':y<1900?'1800s':y<1950?'1900-1949':'1950-plus';};
-  const access=t=>/maritime grave|restricted|no access|protected heritage/i.test(t)?'restricted':/tech dive/i.test(t)?'technical':/dive site/i.test(t)?'dive':'other';
+  const access=t=>/maritime grave|restricted|no access|protected heritage|licensed access/i.test(t)?'restricted':/tech dive/i.test(t)?'technical':/dive site/i.test(t)?'dive':'other';
   const cause=t=>{t=norm(t);if(t.includes('storm')||t.includes('squall'))return 'storm';if(t.includes('collision'))return 'collision';if(t.includes('grounding'))return 'grounding';if(t.includes('fire')||t.includes('explosion'))return 'fire';return 'other';};
-  const records=rows.map(row=>{const c=$$('td',row).map(x=>x.textContent.trim());return {row,name:c[0],lake:c[1],year:Number(c[2])||0,type:c[3],causeText:c[4],place:c[5],depth:c[6],deaths:Number(c[7])||0,accessText:c[8],era:era(c[2]),access:access(c[8]),cause:cause(c[4])};});
+  const records=rows.map((row,i)=>{
+    const c=$$('td',row).map(x=>x.textContent.trim());
+    const id='wreck-'+norm(`${c[0]}-${c[2]}`).replace(/ /g,'-')+'-'+i;
+    row.id=id;
+    return {row,id,name:c[0],lake:c[1],year:Number(c[2])||0,type:c[3],causeText:c[4],place:c[5],depth:c[6],deaths:Number(c[7])||0,accessText:c[8],era:era(c[2]),access:access(c[8]),cause:cause(c[4])};
+  });
 
   // Named-place anchors only. These are intentionally regional, not wreck coordinates.
   const anchors=[
@@ -24,16 +29,18 @@
   .we-presets{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 12px}.we-chip{border:1px solid #cfc9be;background:#faf9f6;border-radius:999px;padding:7px 10px;font:700 11px/1 Arial,sans-serif;color:#444;cursor:pointer}.we-chip[aria-pressed="true"]{border-color:#2c5f2d;background:#e8f2e8;color:#214a22}
   .we-grid{display:grid;grid-template-columns:1.2fr repeat(4,minmax(0,.8fr));gap:8px}.we-field{display:grid;gap:4px}.we-field label{font:700 10px/1.3 Arial,sans-serif;text-transform:uppercase;letter-spacing:.45px;color:#777}.we-field input,.we-field select{min-height:40px;border:1px solid #cfc9be;border-radius:5px;padding:7px 9px;background:#fff;font:13px Georgia,serif}.we-status{font-size:12px;color:#666;margin:10px 0 0}.we-map{height:350px;margin-top:13px;border:1px solid #ddd6cb;border-radius:5px;background:#efede8}.we-map-note{font-size:11px!important;color:#777!important;line-height:1.5!important;margin:7px 0 0!important}.we-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:12px}.we-stat{background:#faf9f6;border:1px solid #ebe6dc;border-radius:5px;padding:8px;text-align:center}.we-stat strong{font-size:17px;display:block}.we-stat span{font:10px Arial,sans-serif;color:#777;text-transform:uppercase;letter-spacing:.35px}
   #wrTable tr.we-focus{outline:2px solid #9fc4a2;outline-offset:-2px}.wreck-link{font-size:11px;margin-left:5px;font-weight:normal;white-space:nowrap}
+  .we-insight{margin-top:10px;padding:13px 14px;border:1px solid #ddd6cb;border-left:4px solid #2c5f2d;border-radius:6px;background:#fff}.we-insight h3{margin:0 0 4px;font-size:17px;color:#214a22}.we-insight-meta{font-size:11px;color:#777}.we-insight p{font-size:12px!important;line-height:1.5!important;margin:7px 0!important}.we-insight-list{margin:8px 0 0;padding-left:18px}.we-insight-list li{margin:5px 0;font-size:12px;line-height:1.35}.we-insight-list a{font-weight:bold}.we-insight-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:9px}.we-insight-actions a{font:700 11px/1.3 Arial,sans-serif}
   @media(max-width:850px){.we-grid{grid-template-columns:1fr 1fr 1fr}.we-field:first-child{grid-column:1/-1}}@media(max-width:600px){.we-grid{grid-template-columns:1fr 1fr}.we-map{height:290px}.we-summary{grid-template-columns:1fr 1fr}}
   `;document.head.append(style);
 
-  const explorer=document.createElement('section');explorer.className='wreck-explorer';explorer.setAttribute('aria-labelledby','wreck-explorer-title');
+  const explorer=document.createElement('section');
+  explorer.className='wreck-explorer';explorer.setAttribute('aria-labelledby','wreck-explorer-title');
   explorer.innerHTML=`<h2 id="wreck-explorer-title">Explore the Great Lakes shipwreck database</h2><p class="we-intro">Filter the existing documented wreck records by lake, era, cause and access. The map uses named-place anchors for orientation—not precise wreck coordinates.</p>
   <div class="we-presets" aria-label="Quick views"><button class="we-chip" data-preset="1913" aria-pressed="false">Great Storm of 1913</button><button class="we-chip" data-preset="superior" aria-pressed="false">Lake Superior</button><button class="we-chip" data-preset="huron" aria-pressed="false">Lake Huron</button><button class="we-chip" data-preset="dive" aria-pressed="false">Dive-listed wrecks</button><button class="we-chip" data-preset="fatal" aria-pressed="false">Highest loss of life</button></div>
   <div class="we-grid"><div class="we-field"><label for="we-q">Vessel or place</label><input id="we-q" type="search" placeholder="Fitzgerald, Whitefish Point…"></div><div class="we-field"><label for="we-lake">Lake</label><select id="we-lake"><option value="">All lakes</option>${['Superior','Michigan','Huron','Erie','Ontario'].map(x=>`<option>${x}</option>`).join('')}</select></div><div class="we-field"><label for="we-era">Era</label><select id="we-era"><option value="">All eras</option><option value="before-1800">Before 1800</option><option value="1800s">1800s</option><option value="1900-1949">1900–1949</option><option value="1950-plus">1950+</option></select></div><div class="we-field"><label for="we-cause">Cause</label><select id="we-cause"><option value="">All causes</option><option value="storm">Storm / squall</option><option value="collision">Collision</option><option value="grounding">Grounding</option><option value="fire">Fire / explosion</option><option value="other">Other / unknown</option></select></div><div class="we-field"><label for="we-access">Access</label><select id="we-access"><option value="">All statuses</option><option value="dive">Dive site</option><option value="technical">Technical dive</option><option value="restricted">Restricted / protected</option><option value="other">Historical / other</option></select></div></div>
-  <p class="we-status" id="we-status" aria-live="polite"></p><div class="we-summary" id="we-summary"></div><div class="we-map" id="we-map" role="img" aria-label="Regional map of filtered Great Lakes shipwreck records"></div><p class="we-map-note"><strong>Map precision:</strong> markers are grouped around named places from the table (for example Whitefish Point or Isle Royale). They are not navigation coordinates, dive coordinates or a claim of an exact wreck position. Use the cited preservation/agency sources for authoritative site information.</p>`;
-  const filters=$('.filter-bar'); if(filters)filters.before(explorer);else $('#wrTable')?.before(explorer);
-  const q=$('#we-q'),lake=$('#we-lake'),eraEl=$('#we-era'),causeEl=$('#we-cause'),accessEl=$('#we-access'),status=$('#we-status'),summary=$('#we-summary');
+  <p class="we-status" id="we-status" aria-live="polite"></p><div class="we-summary" id="we-summary"></div><div class="we-map" id="we-map" role="img" aria-label="Regional map of filtered Great Lakes shipwreck records"></div><aside class="we-insight" id="we-insight" aria-live="polite"><h3>Tap a regional marker to open the story underneath it.</h3><div class="we-insight-meta">Markers group documented wreck records around named places.</div><p>You’ll see the vessels behind the dot, era span, listed causes, recorded loss of life and access context, with links directly into the database below.</p></aside><p class="we-map-note"><strong>Map precision:</strong> markers are grouped around named places from the table (for example Whitefish Point or Isle Royale). They are not navigation coordinates, dive coordinates or a claim of an exact wreck position. Use the cited preservation/agency sources for authoritative site information.</p>`;
+  const filters=$('.filter-bar');if(filters)filters.before(explorer);else $('#wrTable')?.before(explorer);
+  const q=$('#we-q'),lake=$('#we-lake'),eraEl=$('#we-era'),causeEl=$('#we-cause'),accessEl=$('#we-access'),status=$('#we-status'),summary=$('#we-summary'),insight=$('#we-insight');
   let preset='';let map=null,layer=null;
   const params=new URLSearchParams(location.search);[['wreck',q],['lake',lake],['era',eraEl],['cause',causeEl],['access',accessEl]].forEach(([k,e])=>{if(params.get(k))e.value=params.get(k).slice(0,60);});
   const visible=()=>records.filter(r=>r.row.style.display!=='none');
@@ -41,13 +48,48 @@
   function syncURL(){const u=new URL(location.href);['wreck','lake','era','cause','access'].forEach(k=>u.searchParams.delete(k));if(q.value.trim())u.searchParams.set('wreck',q.value.trim());if(lake.value)u.searchParams.set('lake',lake.value);if(eraEl.value)u.searchParams.set('era',eraEl.value);if(causeEl.value)u.searchParams.set('cause',causeEl.value);if(accessEl.value)u.searchParams.set('access',accessEl.value);history.replaceState(null,'',u.pathname+(u.search?'?'+u.searchParams.toString():'')+u.hash);}
   function updateSummary(list){const deaths=list.reduce((a,r)=>a+r.deaths,0);const lakes=new Set(list.map(r=>r.lake)).size;const dives=list.filter(r=>r.access==='dive'||r.access==='technical').length;summary.innerHTML=`<div class="we-stat"><strong>${list.length}</strong><span>records shown</span></div><div class="we-stat"><strong>${lakes}</strong><span>lakes</span></div><div class="we-stat"><strong>${deaths.toLocaleString()}</strong><span>deaths in records</span></div><div class="we-stat"><strong>${dives}</strong><span>dive-listed</span></div>`;}
   function loadLeaflet(cb){if(window.L){cb();return;}if(document.querySelector('script[data-we-leaflet]'))return;const css=document.createElement('link');css.rel='stylesheet';css.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';document.head.append(css);const s=document.createElement('script');s.dataset.weLeaflet='1';s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';s.onload=cb;document.head.append(s);}
-  function renderMap(list){loadLeaflet(()=>{if(!window.L)return;if(!map){map=L.map('we-map',{scrollWheelZoom:false}).setView([45.3,-84.8],5);L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap, &copy; CARTO',subdomains:'abcd'}).addTo(map);}if(layer)layer.remove();layer=L.layerGroup().addTo(map);const groups=new Map();list.forEach(r=>{const a=anchorFor(r.place);if(!a)return;const key=a.label;if(!groups.has(key))groups.set(key,{...a,rs:[]});groups.get(key).rs.push(r);});const bounds=[];groups.forEach(g=>{const m=L.circleMarker([g.lat,g.lng],{radius:Math.min(13,5+Math.sqrt(g.rs.length)*2),weight:1.5,fillOpacity:.72}).addTo(layer);m.bindPopup(`<strong>${esc(g.label)}</strong><br>${g.rs.length} filtered record${g.rs.length===1?'':'s'}<br><span style="font-size:10px">regional anchor, not wreck coordinates</span>`);bounds.push([g.lat,g.lng]);});if(bounds.length)map.fitBounds(bounds,{padding:[25,25],maxZoom:7});});}
+  function groupInsight(g){
+    const sorted=[...g.rs].sort((a,b)=>b.deaths-a.deaths||a.year-b.year||a.name.localeCompare(b.name));
+    const years=g.rs.map(r=>r.year).filter(Boolean);const first=years.length?Math.min(...years):null,last=years.length?Math.max(...years):null;
+    const deaths=g.rs.reduce((n,r)=>n+r.deaths,0);
+    const causes=[...new Set(g.rs.map(r=>r.causeText).filter(Boolean))].slice(0,3);
+    const accessMix=[...new Set(g.rs.map(r=>r.accessText).filter(Boolean))].slice(0,3);
+    const sample=sorted.slice(0,6);
+    const list=sample.map(r=>`<li><a href="#${esc(r.id)}" data-wreck-row="${esc(r.id)}">${esc(r.name)}</a> — ${r.year||'year unknown'} · ${esc(r.causeText||'cause not listed')} · ${esc(r.accessText||'access not listed')}</li>`).join('');
+    const fitz=g.rs.find(r=>/edmund fitzgerald/i.test(r.name));
+    const more=g.rs.length>sample.length?`<p>${g.rs.length-sample.length} more filtered record${g.rs.length-sample.length===1?'':'s'} are in the database below.</p>`:'';
+    return `<h3>${esc(g.label)}</h3><div class="we-insight-meta">${g.rs.length} filtered record${g.rs.length===1?'':'s'} · regional story anchor, not wreck coordinates</div><p><strong>Why this marker matters:</strong> ${first&&last?`records span ${first}–${last}`:'record dates vary'}; ${deaths.toLocaleString()} recorded death${deaths===1?'':'s'} across the visible records.${causes.length?` Common listed causes here include ${esc(causes.join(', '))}.`:''}</p>${accessMix.length?`<p><strong>Access context:</strong> ${esc(accessMix.join(' · '))}. Treat the cited source/agency record as authoritative before any site visit or dive.</p>`:''}<ol class="we-insight-list">${list}</ol>${more}<div class="we-insight-actions"><a href="#wrTable">Open filtered database</a>${fitz?'<a href="/edmund-fitzgerald/" data-wreck-detail="fitzgerald">Read Fitzgerald story</a>':''}</div>`;
+  }
+  function renderGroupInsight(g){if(!insight)return;insight.innerHTML=groupInsight(g);emit('Shipwreck Map Insight',{anchor:norm(g.label),records:g.rs.length});}
+  function renderMap(list){
+    loadLeaflet(()=>{
+      if(!window.L)return;
+      if(!map){map=L.map('we-map',{scrollWheelZoom:false}).setView([45.3,-84.8],5);L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap, &copy; CARTO',subdomains:'abcd'}).addTo(map);}
+      if(layer)layer.remove();layer=L.layerGroup().addTo(map);
+      const groups=new Map();
+      list.forEach(r=>{const a=anchorFor(r.place);if(!a)return;const key=a.label;if(!groups.has(key))groups.set(key,{...a,rs:[]});groups.get(key).rs.push(r);});
+      const bounds=[];
+      groups.forEach(g=>{
+        const sorted=[...g.rs].sort((a,b)=>b.deaths-a.deaths||a.year-b.year);
+        const sample=sorted.slice(0,3).map(r=>`<a href="#${esc(r.id)}" data-wreck-row="${esc(r.id)}">${esc(r.name)} (${r.year||'?'})</a>`).join('<br>');
+        const deaths=g.rs.reduce((n,r)=>n+r.deaths,0);
+        const m=L.circleMarker([g.lat,g.lng],{radius:Math.min(13,5+Math.sqrt(g.rs.length)*2),weight:1.5,fillOpacity:.72}).addTo(layer);
+        m.bindPopup(`<strong>${esc(g.label)}</strong><br>${g.rs.length} filtered record${g.rs.length===1?'':'s'} · ${deaths.toLocaleString()} recorded death${deaths===1?'':'s'}<div style="margin-top:6px;line-height:1.45">${sample}</div><div style="margin-top:7px"><a href="#we-insight">Open marker insight</a> · <a href="#wrTable">Database</a></div><span style="display:block;margin-top:5px;font-size:10px;color:#777">regional anchor, not wreck coordinates</span>`,{maxWidth:340});
+        m.on('click',()=>renderGroupInsight(g));
+        m.on('add',()=>{const el=m.getElement();if(el){el.setAttribute('tabindex','0');el.setAttribute('role','button');el.setAttribute('aria-label',`Open shipwreck insight for ${g.label}`);el.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();m.openPopup();renderGroupInsight(g);}});}});
+        bounds.push([g.lat,g.lng]);
+      });
+      if(bounds.length)map.fitBounds(bounds,{padding:[25,25],maxZoom:7});
+    });
+  }
   function apply(source='filter'){records.forEach(r=>{r.row.style.display=matches(r)?'':'none';r.row.classList.remove('we-focus');});const list=visible();status.textContent=`Showing ${list.length} of ${records.length} documented wreck records.`;updateSummary(list);renderMap(list);syncURL();if(source!=='init')emit('Shipwreck Explorer Filter',{filter:source,results:list.length});}
   [q,lake,eraEl,causeEl,accessEl].forEach(el=>el.addEventListener(el===q?'input':'change',()=>{preset='';$$('.we-chip').forEach(b=>b.setAttribute('aria-pressed','false'));apply(el.id.replace('we-',''));}));
   $$('.we-chip').forEach(btn=>btn.addEventListener('click',()=>{const p=btn.dataset.preset;preset=preset===p?'':p;$$('.we-chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.preset===preset)));apply('preset');emit('Shipwreck Explorer Preset',{preset:preset||'cleared'});}));
   const fitz=records.find(r=>/edmund fitzgerald/i.test(r.name));if(fitz){const strong=$('strong',fitz.row);if(strong&&!$('.wreck-link',fitz.row)){const a=document.createElement('a');a.className='wreck-link';a.href='/edmund-fitzgerald/';a.textContent='story →';a.dataset.wreckDetail='fitzgerald';strong.after(a);}}
-  document.addEventListener('click',e=>{const a=e.target.closest('[data-wreck-detail]');if(a)emit('Shipwreck Detail Open',{wreck:a.dataset.wreckDetail});});
-  // Hide the legacy duplicate filters; the table remains the same crawlable data source.
+  document.addEventListener('click',e=>{
+    const detail=e.target.closest('[data-wreck-detail]');if(detail)emit('Shipwreck Detail Open',{wreck:detail.dataset.wreckDetail});
+    const rowLink=e.target.closest('[data-wreck-row]');if(rowLink){const row=document.getElementById(rowLink.dataset.wreckRow);if(row){records.forEach(r=>r.row.classList.remove('we-focus'));row.classList.add('we-focus');setTimeout(()=>row.classList.remove('we-focus'),4500);}emit('Shipwreck Map Record Open',{record:'table-row'});}
+  });
   const old=$('.filter-bar');if(old)old.hidden=true;
   apply('init');
 })();
