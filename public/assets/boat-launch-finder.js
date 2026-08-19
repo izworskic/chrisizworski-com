@@ -47,6 +47,20 @@ function distanceMiles(lat1,lon1,lat2,lon2){return RANK?RANK.distanceMiles(lat1,
 function isReview(a){return a.verificationStatus==='dnr-review-in-progress'||a.detailsUnderReview===true;}
 function isSupplemental(a){return a.verificationStatus==='municipal-source-qualified'||a.sourceType==='municipal-supplemental';}
 function operatorText(a){return a.operator||a.owner||'Not listed';}
+function launchStatusText(a){return String(a.launchStatus||'Open').trim()||'Open';}
+function conditionText(a){return String(a.facilityCondition||'').trim();}
+function conditionKey(a){
+  if(isSupplemental(a))return 'municipal';
+  const value=conditionText(a).toLowerCase();
+  if(/excellent|very good|good/.test(value))return 'condition-good';
+  if(/fair|moderate/.test(value))return 'condition-fair';
+  if(/poor|bad|failed|critical/.test(value))return 'condition-poor';
+  return 'condition-unknown';
+}
+function conditionLabel(a){
+  const value=conditionText(a);
+  return value?`DNR condition: ${value}`:'DNR condition not reported';
+}
 function rampText(a){
   if(isSupplemental(a)&&a.rampDescription)return a.rampDescription;
   const code=num(a.rampClass);
@@ -120,7 +134,7 @@ async function initMap(){
   drawMap(true);
 }
 function launchIcon(a){
-  const classes=[isReview(a)?'review is-review':'',isSupplemental(a)?'municipal is-municipal':'',a.id===selectedId?'active':''].filter(Boolean).join(' ');
+  const classes=[conditionKey(a),a.id===selectedId?'active':''].filter(Boolean).join(' ');
   return L.divIcon({className:'launch-dot',html:`<span class="${classes}"></span>`,iconSize:[20,20],iconAnchor:[10,10]});
 }
 function popupHTML(a){return `<strong>${esc(a.name)}</strong><br><small>${esc(a.waterbody||a.county||'Waterbody not listed')}</small><div style="margin-top:6px"><a href="#" data-popup-card="${esc(a.id)}">Open details</a> · <a href="${directions(a)}" target="_blank" rel="noopener">Directions</a></div>`;}
@@ -146,8 +160,8 @@ function drawMap(fit=false,fitRecords=null){
 
 function resultRow(a){
   const d=destinationPoint?reachText(a):'';
-  const status=isSupplemental(a)?'Municipal':isReview(a)?'DNR review':'DNR';
-  return `<button class="result-row${a.id===selectedId?' active':''}" type="button" data-launch-id="${esc(a.id)}"><span><span class="result-name">${esc(a.name)}</span><span class="result-meta">${esc(a.waterbody||a.county||'Waterbody not listed')} · ${status}${a.trailerParking!==null&&a.trailerParking!==undefined?` · ${esc(a.trailerParking)} trailer spaces`:''}</span></span><span class="result-distance">${esc(d)}</span></button>`;
+  const status=isSupplemental(a)?'Municipal source':launchStatusText(a);
+  return `<button class="result-row${a.id===selectedId?' active':''}" type="button" data-launch-id="${esc(a.id)}"><span><span class="result-name">${esc(a.name)}</span><span class="result-meta">${esc(a.waterbody||a.county||'Waterbody not listed')} · ${esc(status)}${a.trailerParking!==null&&a.trailerParking!==undefined?` · ${esc(a.trailerParking)} trailer spaces`:''}</span></span><span class="result-distance">${esc(d)}</span></button>`;
 }
 function renderResults(){
   displayed=sortList(displayed);
@@ -170,10 +184,10 @@ function renderSummary(){
 }
 
 function detailHTML(a){
-  const review=isReview(a),supplemental=isSupplemental(a);
+  const review=isReview(a),supplemental=isSupplemental(a),condition=conditionText(a);
   const sourceHref=a.sourceUrl||DNR_LAYER;
-  const badges=[supplemental?'<span class="badge municipal">Municipal source</span>':review?'<span class="badge review">DNR review in progress</span>':'<span class="badge good">DNR source-qualified</span>',a.waterScope==='great-lakes'?'<span class="badge">Great Lakes</span>':'<span class="badge">Inland / other</span>'].join('');
-  return `<h2>${esc(a.name)}</h2><div class="waterbody">${esc(a.waterbody||a.county||'Waterbody not listed')}${a.county?` · ${esc(a.county)}`:''}</div><div class="badges">${badges}</div><div class="facts"><div class="fact"><b>Ramp</b><span>${esc(rampText(a))}</span></div><div class="fact"><b>Trailer parking</b><span>${a.trailerParking===null||a.trailerParking===undefined?'Not listed':esc(a.trailerParking)}</span></div><div class="fact"><b>Launch lanes</b><span>${a.lanes===null||a.lanes===undefined?'Not listed':esc(a.lanes)}</span></div><div class="fact"><b>Fee / pass</b><span>${esc(a.fee||'Not listed')}</span></div><div class="fact"><b>Hours</b><span>${esc(a.operatingHours||a.seasonalStatus||'Not listed')}</span></div><div class="fact"><b>Operator</b><span>${esc(operatorText(a))}</span></div></div>${review?'<div class="source-note"><strong>Facility details are under DNR review.</strong> The official open launch and source coordinate are shown; amenity details may still change.</div>':''}${supplemental?'<div class="source-note"><strong>Municipal supplemental record.</strong> This launch is separately sourced and is not being presented as DNR data.</div>':''}<div class="detail-actions"><a class="primary" href="${directions(a)}" target="_blank" rel="noopener" data-detail-action="directions">Directions</a><a href="${satellite(a)}" target="_blank" rel="noopener" data-detail-action="satellite">Satellite</a><a href="${esc(sourceHref)}" target="_blank" rel="noopener" data-detail-action="source">Source</a></div><div class="source-note">Coordinates: ${Number(a.latitude).toFixed(5)}, ${Number(a.longitude).toFixed(5)} · Missing source fields are not guessed.</div><div class="weather" id="launch-weather"><div class="weather-title"><strong>Local weather</strong><span>National Weather Service</span></div><div class="weather-copy" style="margin-top:8px">Loading forecast and active alerts for this launch…</div></div>`;
+  const badges=[`<span class="badge open">${esc(launchStatusText(a))}</span>`,supplemental?'<span class="badge municipal">Municipal source</span>':'<span class="badge source">Michigan DNR</span>',condition?`<span class="badge ${conditionKey(a)}">${esc(conditionLabel(a))}</span>`:'',review?'<span class="badge verify">Some details being verified</span>':'',a.waterScope==='great-lakes'?'<span class="badge">Great Lakes</span>':'<span class="badge">Inland / other</span>'].filter(Boolean).join('');
+  return `<h2>${esc(a.name)}</h2><div class="waterbody">${esc(a.waterbody||a.county||'Waterbody not listed')}${a.county?` · ${esc(a.county)}`:''}</div><div class="badges">${badges}</div><div class="facts"><div class="fact"><b>Ramp</b><span>${esc(rampText(a))}</span></div><div class="fact"><b>Trailer parking</b><span>${a.trailerParking===null||a.trailerParking===undefined?'Not listed':esc(a.trailerParking)}</span></div><div class="fact"><b>Launch lanes</b><span>${a.lanes===null||a.lanes===undefined?'Not listed':esc(a.lanes)}</span></div><div class="fact"><b>DNR condition</b><span>${supplemental?'Municipal record':esc(condition||'Not reported')}</span></div><div class="fact"><b>Fee / pass</b><span>${esc(a.fee||'Not listed')}</span></div><div class="fact"><b>Hours</b><span>${esc(a.operatingHours||a.seasonalStatus||'Not listed')}</span></div><div class="fact"><b>Operator</b><span>${esc(operatorText(a))}</span></div></div>${review?'<div class="source-note"><strong>This launch is listed Open by Michigan DNR.</strong> DNR is still verifying some facility details, so amenity information such as parking or ramp details may change.</div>':''}${supplemental?'<div class="source-note"><strong>Municipal source.</strong> This launch is separately sourced and is not being presented as DNR data.</div>':''}<div class="detail-actions"><a class="primary" href="${directions(a)}" target="_blank" rel="noopener" data-detail-action="directions">Directions</a><a href="${satellite(a)}" target="_blank" rel="noopener" data-detail-action="satellite">Satellite</a><a href="${esc(sourceHref)}" target="_blank" rel="noopener" data-detail-action="source">Source</a></div><div class="source-note">Coordinates: ${Number(a.latitude).toFixed(5)}, ${Number(a.longitude).toFixed(5)} · Missing source fields are not guessed.</div><div class="weather" id="launch-weather"><div class="weather-title"><strong>Local weather</strong><span>National Weather Service</span></div><div class="weather-copy" style="margin-top:8px">Loading forecast and active alerts for this launch…</div></div>`;
 }
 function weatherTime(iso){const d=new Date(iso);return Number.isNaN(d.getTime())?'':d.toLocaleTimeString('en-US',{hour:'numeric'});}
 function weatherHTML(data){
@@ -191,18 +205,30 @@ async function loadWeather(a){
     weatherCache.set(a.id,j);if(selectedId===a.id&&$('#launch-weather'))$('#launch-weather').innerHTML=weatherHTML(j);
   }catch(err){if(selectedId===a.id&&$('#launch-weather'))$('#launch-weather').innerHTML=`<div class="weather-title"><strong>Local weather</strong><span>National Weather Service</span></div><div class="weather-copy" style="margin-top:8px">${esc(err.message)}. Launch details and directions still work.</div>`;}
 }
+function keepResultVisible(row){
+  if(!row||!results)return;
+  const top=row.offsetTop,bottom=top+row.offsetHeight,viewTop=results.scrollTop,viewBottom=viewTop+results.clientHeight;
+  if(top<viewTop)results.scrollTop=Math.max(0,top-8);
+  else if(bottom>viewBottom)results.scrollTop=bottom-results.clientHeight+8;
+}
+function focusSelectedForSmallScreen(source){
+  if(source!=='marker'&&source!=='popup')return;
+  if(!window.matchMedia('(max-width: 980px)').matches)return;
+  requestAnimationFrame(()=>selected.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}));
+}
 function selectLaunch(id,source='list'){
   const a=records.find(x=>x.id===id);if(!a)return;
   const old=selectedId;selectedId=id;
   selected.classList.remove('empty-detail');selected.innerHTML=detailHTML(a);loadWeather(a);
   const oldRow=old?results.querySelector(`[data-launch-id="${CSS.escape(old)}"]`):null;if(oldRow)oldRow.classList.remove('active');
-  const newRow=results.querySelector(`[data-launch-id="${CSS.escape(id)}"]`);if(newRow){newRow.classList.add('active');newRow.scrollIntoView({block:'nearest'});}
+  const newRow=results.querySelector(`[data-launch-id="${CSS.escape(id)}"]`);if(newRow){newRow.classList.add('active');keepResultVisible(newRow);}
   if(map){
     const oldMarker=markerById.get(old),newMarker=markerById.get(id);if(oldMarker)oldMarker.setIcon(launchIcon(records.find(x=>x.id===old)));if(newMarker)newMarker.setIcon(launchIcon(a));
     if(newMarker&&cluster&&typeof cluster.zoomToShowLayer==='function')cluster.zoomToShowLayer(newMarker,()=>{map.panTo(newMarker.getLatLng());newMarker.openPopup();});
     else if(newMarker){map.setView(newMarker.getLatLng(),Math.max(map.getZoom(),11));newMarker.openPopup();}
   }
-  emit('Boat Launch Select',{source,scope:a.waterScope||'unknown',review:isReview(a),municipal:isSupplemental(a)});
+  focusSelectedForSmallScreen(source);
+  emit('Boat Launch Select',{source,scope:a.waterScope||'unknown',review:isReview(a),municipal:isSupplemental(a),condition:conditionText(a)||'not-reported'});
 }
 
 async function driveTable(point,pool){
