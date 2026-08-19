@@ -51,7 +51,7 @@ test('shipwreck explorer preserves the database and keeps map precision honest',
   assert.ok((html.match(/<tr><td><strong>/g)||[]).length>=60);
   assert.match(js,/Great Storm of 1913/);
   assert.match(js,/Highest loss of life/);
-  assert.match(js,/named-place anchors/i);
+  assert.match(js,/named-place (?:story )?anchors/i);
   assert.match(js,/not navigation coordinates, dive coordinates/i);
   assert.doesNotMatch(js,/navigator\.geolocation|getCurrentPosition|localStorage|sessionStorage|document\.cookie/);
   assert.match(html,/Daniel J\. Morrell<\/strong><\/td><td>Huron<\/td>/);
