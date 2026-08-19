@@ -46,7 +46,8 @@ if(!/STRAIGHT_LINE_DETOUR_RATIO/.test(ranking)||!resStatus502(drive))fatals.push
 add('weatherAndTrust',4,/WEATHER_API='\/api\/boat-launch-weather'/.test(js)&&/api\.weather\.gov/.test(weather),'launch-local NWS weather missing');
 add('weatherAndTrust',2,/alerts\/active\?point=/.test(weather),'point alerts missing');
 add('weatherAndTrust',2,/not a .*boating-safety determination|not a .*boating-safety/i.test(weather+html),'weather safety boundary missing');
-add('weatherAndTrust',2,/DNR review in progress/.test(html+js)&&/Review Needed/.test(html),'review-state trust language missing');
+const reviewTrust=/Some details being verified/.test(html+js)&&/This launch is listed Open by Michigan DNR/.test(js)&&/does not mean the launch itself is closed or unsafe/i.test(html)&&/Review Needed/.test(html+api);
+add('weatherAndTrust',2,reviewTrust,'plain-English review-state trust language missing');
 if(/safe to boat|safe to launch|boating safety score/i.test(code))fatals.push('Weather is presented as a boating-safety determination.');
 
 add('discoveryPerformance',2,/canonical" href="https:\/\/chrisizworski\.com\/michigan-boat-launches\//.test(html),'canonical missing');
