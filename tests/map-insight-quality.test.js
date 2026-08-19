@@ -16,25 +16,46 @@ test('visible Boat Launch Finder hero uses a traceable real Michigan launch phot
   assert.match(boatJs,/CC BY 3\.0/);
 });
 
-test('boat map markers open launch-specific decision insights and verification paths',()=>{
-  assert.match(boatJs,/launch-map-insight/);
-  assert.match(boatJs,/Regional screening signal/);
-  assert.match(boatJs,/View launch details/);
-  assert.match(boatJs,/Verify access/);
+test('boat map uses stable launch slugs rather than Leaflet DOM order',()=>{
+  assert.match(boatJs,/const markerBySlug=new Map\(\)/);
+  assert.match(boatJs,/markerBySlug\.set\(loc\.slug,marker\)/);
+  assert.match(boatJs,/oldMap\.replaceWith\(mapLayout\)/);
+  assert.doesNotMatch(boatJs,/slice\(0,locations\.length\)/);
+  assert.doesNotMatch(boatJs,/leaflet-interactive['"]\)\[idx\]/);
+});
+
+test('boat map and detailed records control each other in both directions',()=>{
+  assert.match(boatJs,/function syncMapToVisible/);
+  assert.match(boatJs,/function jumpToRecord/);
+  assert.match(boatJs,/function focusMap/);
+  assert.match(boatJs,/Boat Launch Map To Record/);
+  assert.match(boatJs,/Boat Launch Record To Map/);
+  assert.match(boatJs,/classList\.add\('lf-selected'\)/);
+  assert.match(boatJs,/marker\.openPopup\(\)/);
+  assert.match(boatJs,/Show on map/);
+});
+
+test('shipwreck map selection changes the actual table record set',()=>{
+  assert.match(wreckJs,/anchorSelection\?baseList\.filter/);
+  assert.match(wreckJs,/visibleIds=new Set\(tableList\.map/);
+  assert.match(wreckJs,/row\.style\.display/);
+  assert.match(wreckJs,/Map selection:/);
+  assert.match(wreckJs,/Shipwreck Map To Records/);
+  assert.match(wreckJs,/data-wreck-clear-map/);
+});
+
+test('mappable shipwreck records can drive the map back to their regional anchor',()=>{
+  assert.match(wreckJs,/data-wreck-map/);
+  assert.match(wreckJs,/const markerByAnchor=new Map\(\)/);
+  assert.match(wreckJs,/function focusAnchor/);
+  assert.match(wreckJs,/Shipwreck Record To Map/);
+  assert.match(wreckJs,/show on map →/);
+});
+
+test('map correlation pass preserves trust and parent search ownership',()=>{
   assert.match(boatJs,/not ramp, marina, harbor or boating-safety truth/);
-  assert.match(boatJs,/Boat Launch Map Insight/);
-});
-
-test('shipwreck regional markers expose underlying vessels, context, and database links',()=>{
-  assert.match(wreckJs,/Why this marker matters:/);
-  assert.match(wreckJs,/data-wreck-row/);
-  assert.match(wreckJs,/recorded death/);
-  assert.match(wreckJs,/Open filtered database/);
-  assert.match(wreckJs,/regional anchor, not wreck coordinates/);
-  assert.match(wreckJs,/Shipwreck Map Insight/);
-});
-
-test('map insight quality pass preserves parent search ownership',()=>{
+  assert.match(wreckJs,/not wreck coordinates/);
+  assert.match(wreckJs,/cited source or agency remains authoritative/);
   assert.match(boatHtml,/canonical" href="https:\/\/chrisizworski\.com\/michigan-boat-launches\//);
   assert.match(wreckHtml,/canonical" href="https:\/\/chrisizworski\.com\/great-lakes-shipwrecks\//);
   assert.match(boatHtml,/"numberOfItems": 42/);
