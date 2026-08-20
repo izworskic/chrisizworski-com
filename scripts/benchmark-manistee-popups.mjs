@@ -27,11 +27,11 @@ section('Activity + facility utility',10,[
 section('Live river context',20,[
   t('Popup enriches from conditions API cache',/getConditions\(\)/.test(depth)&&/popupLiveHtml/.test(depth)),
   t('Nearest gauge is same-waterway',/g\.waterway===p\.waterway/.test(depth)),
-  t('Flow appears in popup',/Flow<\/span>/.test(depth)||/<span>Flow<\/span>/.test(depth)),
+  t('Flow appears in popup',/<span>Flow<\/span>/.test(depth)),
   t('Water temperature appears in popup',/Water \/ stage/.test(depth)),
   t('Gage height appears in popup',/gage_height_ft/.test(depth)),
   t('Freshness and measurement time appear',/Freshness/.test(depth)&&/freshness\(g\)/.test(depth)),
-  t('Optional turbidity and oxygen are conditional',/turbidity_fnu!=null\|\|g\?\.dissolved_oxygen_mgl!=null/.test(depth))
+  t('Optional turbidity and oxygen are conditional',/g\?\.turbidity_fnu!=null\|\|g\?\.dissolved_oxygen_mgl!=null/.test(depth))
 ]);
 section('Seasonal comparison',10,[
   t('Percent of seasonal median is visible',/percent_of_median/.test(depth)&&/% of seasonal median/.test(depth)),
@@ -61,7 +61,7 @@ section('Immediate actions',10,[
 section('Gauge popup depth',5,[
   t('Gauge markers use rich popup renderer',/gaugePopupHtml\(meta,g\)/.test(core)),
   t('Gauge popup includes seasonal median',/Seasonal median/.test(core)),
-  t('Gauge popup includes water and stage',/Water<\/span>|<span>Water<\/span>/.test(core)&&/Gage height/.test(core))
+  t('Gauge popup includes water and stage',/<span>Water<\/span>/.test(core)&&/Gage height/.test(core))
 ]);
 section('Resilience + mobile popup UX',5,[
   t('Static content exists before live enrichment',/accessPopupHtml/.test(core)&&/mrp-loading/.test(source)),
