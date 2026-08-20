@@ -74,6 +74,14 @@ The canonical website is https://chrisizworski.com/.
 - Pictured Rocks Planner: https://picturedrocks.chrisizworski.com/
 - Freighter View Farms: https://freighterviewfarms.com/
 
+## Michigan River Tools
+
+- Manistee River Field Map: https://chrisizworski.com/manistee-river-map/
+- Manistee River paddling guide: https://chrisizworski.com/michigan-paddling/manistee-river/
+- Au Sable Field Map: https://ausable.chrisizworski.com/
+- Au Sable River guide: https://chrisizworski.com/au-sable-river/
+- Manistee map coverage: Upper, Middle and Lower Manistee plus Pine River, with access points, campgrounds, trails, landmarks, live USGS river conditions, trip planning, guides and liveries.
+
 ## Mackinac Bridge Planning Tools
 
 - Live crossing tool: https://chrisizworski.com/mackinac-bridge-live/
