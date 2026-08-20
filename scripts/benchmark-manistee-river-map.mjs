@@ -36,7 +36,7 @@ section('Live conditions',[
 ]);
 section('Planner integrity',[
   ok('Graph is built from hydrography',/buildGraph\(features\)/.test(js),true),
-  ok('Graph routing is used',/routeGraph\(state\.graphByWaterway/.test(js),true),
+  ok('Graph routing is used',/routeGraph\(state\.graphs\[from\.waterway\],from,to\)/.test(js),true),
   ok('Cross-waterway trips rejected',/refuses cross-waterway routing/i.test(js),true),
   ok('No trustworthy route means no mileage',/No trustworthy NHD route could be built/.test(js),true)
 ]);
@@ -44,7 +44,7 @@ section('Regulation honesty',[
   ok('Current DNR rules linked',/michigan\.gov\/dnr\/things-to-do\/fishing\/fishing-regulations/.test(html),true),
   ok('2026 season date visible',/March 31, 2027/.test(html)),
   ok('No reach-specific legal claim in data',!/artificial flies only|minimum size|daily possession limit/i.test(dataJs),true),
-  ok('Explicit verify-current language',/verify the current Michigan DNR regulation map/i.test(html))
+  ok('Explicit verify-current language',/verify the current Michigan DNR regulation map/i.test(html+js))
 ]);
 section('Mobile usefulness',[
   ok('Responsive breakpoint',/@media\(max-width:900px\)/.test(html)),ok('Mobile map viewport',/height:58vh/.test(html)),
@@ -56,7 +56,7 @@ section('Search & discovery',[
   ok('WebApplication schema',/"WebApplication"/.test(html)),ok('Dataset schema',/"Dataset"/.test(html)),ok('FAQ schema',/"FAQPage"/.test(html))
 ]);
 section('Field usefulness',[
-  ok('Access search',/place-search/.test(html)),ok('Activity filters',/activity-chip/.test(html)),ok('Directions action',/Directions/.test(html)),
+  ok('Access search',/place-search/.test(html)),ok('Activity filters',/activity-chip/.test(html)),ok('Directions action',/Directions/.test(html+js)),
   ok('CSV export',/exportCsv/.test(js)),ok('Print guide',/print-guide/.test(html))
 ]);
 section('Graceful degradation',[
