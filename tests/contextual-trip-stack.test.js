@@ -28,13 +28,13 @@ test('fall loader and Manistee loader reuse one shared trip stack',()=>{
   assert.ok(manistee.includes('/assets/contextual-trip-stack.js'));
 });
 
-test('Circle Tour loads the shared network layer and repairs border-wait isolation',()=>{
-  const growth=read('public/assets/growth-cta.js');
+test('Circle Tour route asset loads the shared network layer and repairs border-wait isolation',()=>{
+  const routeAsset=read('public/assets/lake-superior-circle-tour.js');
   const stack=read('public/assets/contextual-trip-stack.js');
   const html=read('public/lake-superior-circle-tour/index.html');
-  assert.ok(html.includes('/assets/growth-cta.js'));
-  assert.ok(growth.includes('lake-superior-circle-tour'));
-  assert.ok(growth.includes('/assets/contextual-trip-stack.js'));
+  assert.ok(html.includes('/assets/lake-superior-circle-tour.js'));
+  assert.ok(routeAsset.includes('loadContextualTripStack'));
+  assert.ok(routeAsset.includes('/assets/contextual-trip-stack.js?v=20260820-registry1'));
   assert.ok(stack.includes("border:{label:'U.S.–Canada border wait times'"));
   assert.ok(stack.includes("const CIRCLE={title:'Before the next Circle Tour leg',keys:['border','soo','pictured','aurora']}"));
   assert.ok(stack.includes("path==='/lake-superior-circle-tour'"));
