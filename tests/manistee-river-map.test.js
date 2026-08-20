@@ -31,14 +31,16 @@ test('identity loss: place IDs are unique and directions use exact selected coor
 });
 
 test('hydrography loss: source geometry is bounded USGS NHD, not hand-drawn river coordinates',()=>{
-  const url=decodeURIComponent(hydro.queryUrl());
-  assert.match(url,/hydro\.nationalmap\.gov/);
-  assert.match(url,/GNIS_NAME='Manistee River'/);
-  assert.match(url,/GNIS_NAME='Pine River'/);
-  assert.match(url,/GNIS_NAME='Bear Creek'/);
-  assert.match(url,/GNIS_NAME='Little Manistee River'/);
-  assert.match(url,/-86\.35,44\.02,-84\.68,44\.95/);
-  assert.match(url,/f=geojson/);
+  const url=new URL(hydro.queryUrl());
+  const where=url.searchParams.get('where')||'';
+  assert.equal(url.hostname,'hydro.nationalmap.gov');
+  assert.match(where,/gnis_name='Manistee River'/);
+  assert.match(where,/gnis_name='Pine River'/);
+  assert.match(where,/gnis_name='Bear Creek'/);
+  assert.match(where,/gnis_name='Little Manistee River'/);
+  assert.equal(url.searchParams.get('geometry'),'-86.35,44.02,-84.68,44.95');
+  assert.equal(url.searchParams.get('outFields'),'gnis_name,reachcode,fcode');
+  assert.equal(url.searchParams.get('f'),'geojson');
   assert.doesNotMatch(dataSource,/riverGeometry\s*:/);
 });
 
@@ -114,12 +116,15 @@ test('graceful degradation loss: live-service failures preserve the static map g
   assert.match(html,/source-backed|field guide/i);
 });
 
-test('hydrography normalizer strips unrelated features and preserves source role',()=>{
+test('hydrography normalizer accepts live lowercase fields and alias-style fields',()=>{
   const result=hydro.cleanGeoJson({features:[
-    {type:'Feature',geometry:{type:'LineString',coordinates:[[-85,44],[-85.1,44.1]]},properties:{GNIS_NAME:'Manistee River',REACHCODE:'x',FCode:46006}},
-    {type:'Feature',geometry:{type:'LineString',coordinates:[[-80,40],[-80.1,40.1]]},properties:{GNIS_NAME:'Other River'}}
+    {type:'Feature',geometry:{type:'LineString',coordinates:[[-85,44],[-85.1,44.1]]},properties:{gnis_name:'Manistee River',reachcode:'x',fcode:46006}},
+    {type:'Feature',geometry:{type:'LineString',coordinates:[[-85.2,44.1],[-85.3,44.2]]},properties:{GNIS_NAME:'Pine River',REACHCODE:'y',FCode:46006}},
+    {type:'Feature',geometry:{type:'LineString',coordinates:[[-80,40],[-80.1,40.1]]},properties:{gnis_name:'Other River'}}
   ]});
-  assert.equal(result.features.length,1);assert.equal(result.features[0].properties.role,'mainstem');
+  assert.equal(result.features.length,2);
+  assert.equal(result.features[0].properties.role,'mainstem');
+  assert.equal(result.features[1].properties.role,'tributary');
 });
 
 test('USGS normalizer preserves missing values rather than fabricating readings',()=>{
