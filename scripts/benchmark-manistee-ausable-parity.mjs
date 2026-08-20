@@ -31,7 +31,7 @@ const advantages=[
   {name:'Source-backed NHD channel routing',ok:/buildGraph\(features\)/.test(map)&&/routeGraph\(state\.graphs\[from\.waterway\],from,to\)/.test(map)},
   {name:'No imported go/no-go fishing score',ok:!/Prime|Fishing Well|Blown Out|Drop everything and go|Stay home/.test(depth+conditions+weather)&&/not a fishing-quality or boating-safety score/.test(conditions)},
   {name:'Core works without enhancement',ok:/Optional decision layers are additive/.test(data)&&/access points and guide still work/.test(map)},
-  {name:'Current regulations remain a source handoff',ok:/2026 DNR fishing rules/.test(html)&&/does not turn a point location into a legal-rule claim/i.test(map)},
+  {name:'Current regulations remain a source handoff',ok:/Michigan DNR Fishing Regulations/.test(html)&&/michigan\.gov\/dnr\/things-to-do\/fishing\/fishing-regulations/.test(html)&&/does not turn a point location into a legal-rule claim/i.test(map)},
 ];
 
 const baseline=parity.reduce((n,x)=>n+x.baseline,0);

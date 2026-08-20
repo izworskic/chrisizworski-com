@@ -19,7 +19,10 @@ function assert(condition,message){if(!condition)throw new Error(message);}
 try{
   const page=await fetchText('/manistee-river-map/');
   assert(page.text.includes('<title>Manistee River Map & Trip Planner | Access, Flows, Fishing</title>'),'Manistee page title mismatch or stale HTML');
-  assert(page.text.includes('The Manistee River: A Field Map'),'Manistee field-map heading missing');
+  assert(page.text.includes('<h1>Manistee River Field Map</h1>'),'terse Manistee field-map heading missing');
+  assert(!page.text.includes('Manistee mainstem, Pine River and Bear Creek'),'verbose Manistee masthead paragraph is still deployed');
+  assert(!page.text.includes('<div class="source-strip">'),'Manistee masthead source strip is still deployed');
+  assert(!page.text.includes('Source checked Aug. 19, 2026'),'stale masthead source-check copy is still deployed');
   assert(page.text.includes('/assets/manistee-river-map.js'),'Manistee client asset missing from deployed page');
   assert(page.text.includes('/assets/manistee-river-data.js'),'Manistee data asset missing from deployed page');
 
@@ -50,7 +53,7 @@ try{
   const fieldUi=await fetchText('/assets/manistee-ausable-ui.js');
   for(const phrase of ['Manistee River Field Map','River reach filters','Plan by','Popular starts','Copy trip link','River, weather & field details','conditions-now-strip'])assert(fieldUi.text.includes(phrase),`Au Sable-style UI asset missing ${phrase}`);
   assert(fieldUi.text.includes("mast.dataset.compacted='true'"),'compact masthead state missing');
-  assert(fieldUi.text.includes("const intro=$(':scope > p',mast);intro?.remove()"),'verbose masthead intro is not removed');
+  assert(fieldUi.text.includes("const intro=$(':scope > p',mast);intro?.remove()"),'verbose masthead intro fallback removal is missing');
   assert(!fieldUi.text.includes('river: live data'),'old masthead status bar is still injected');
   assert(!fieldUi.text.includes('agency coordinates'),'old masthead count row is still injected');
   assert(fieldUi.text.includes("riverTab.textContent='River'"),'task nav does not normalize River label');
@@ -61,7 +64,7 @@ try{
   assert(fieldCss.text.includes('.shell{display:flex!important;flex-direction:column!important'),'map-first single-instrument shell missing');
   assert(fieldCss.text.includes('height:min(61vh,690px)!important'),'dominant desktop map height missing');
   assert(fieldCss.text.includes('.persona-deck{display:none!important}'),'persona wall is still visible in primary workflow');
-  assert(fieldCss.text.includes('.source-strip{display:none!important}'),'source pill wall is still visible in masthead');
+  assert(fieldCss.text.includes('.source-strip{display:none!important}'),'source pill wall fallback is missing');
   assert(fieldCss.text.includes('height:58svh!important'),'mobile map contract missing');
   assert(fieldCss.text.includes('min-height:44px!important'),'mobile touch-target contract missing');
 

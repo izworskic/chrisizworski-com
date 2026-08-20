@@ -75,15 +75,24 @@ test('planner loss: route distance uses a graph along NHD geometry and refuses c
   assert.match(js,/Planner refuses cross-waterway routing/);
   assert.match(js,/No trustworthy NHD route could be built/);
   assert.doesNotMatch(js,/straightLineDistance|crowFlies/);
-  assert.match(html,/measures along the river instead of drawing a straight line/i);
+  assert.match(html,/calculate a path along source-backed river geometry/i);
+  assert.match(html,/stops instead of substituting straight-line distance/i);
 });
 
 test('regulation loss: tool links current DNR rules instead of hardcoding reach-specific legal claims',()=>{
-  assert.match(html,/2026 DNR fishing rules/);
+  assert.match(html,/Michigan DNR Fishing Regulations/);
+  assert.match(html,/https:\/\/www\.michigan\.gov\/dnr\/things-to-do\/fishing\/fishing-regulations/);
   assert.match(html,/March 31, 2027/);
   assert.match(html+js,/does not replace Michigan fishing regulations|does not turn a point location into a legal-rule claim/i);
   assert.match(data.sources.regulations.url,/michigan\.gov\/dnr/);
   assert.doesNotMatch(dataSource,/artificial flies only|daily possession limit|minimum size/i);
+});
+
+test('masthead source HTML contains only the terse field-map title',()=>{
+  assert.match(html,/<header class="mast">\s*<h1>Manistee River Field Map<\/h1>\s*<\/header>/);
+  assert.doesNotMatch(html,/Manistee mainstem, Pine River and Bear Creek/);
+  assert.doesNotMatch(html,/<div class="source-strip">/);
+  assert.doesNotMatch(html,/Source checked Aug\. 19, 2026/);
 });
 
 test('mobile task loss: map, places, directions and planner have responsive affordances',()=>{
