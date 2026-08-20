@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-20",
+  "purpose": "Operational overlay for Tool Network Registry decisions that are actively being executed and measured. This file adds current relationships and experiments without rewriting historical search evidence.",
+  "relationships": [
+    {
+      "from": "circle-tour",
+      "to": "border-waits",
+      "type": "trip-prerequisite",
+      "strength": "strong",
+      "surface": "lake-superior-border-crossing",
+      "reason": "The complete Lake Superior Circle Tour crosses the U.S.-Canada border twice; current crossing wait intelligence is directly useful during route planning."
+    }
+  ],
+  "experiments": [
+    {
+      "id": "fall-river-window-v1",
+      "name": "Best Fall River Paddle Window",
+      "status": "running-contextual-test",
+      "candidateScore": 93,
+      "started": "2026-08-20",
+      "surfaces": ["fall-color", "fall-weekend", "manistee"],
+      "connectsTo": ["fall-color", "ausable-field-map", "manistee-field-map", "great-lakes-buoys"],
+      "hypothesis": "People planning Michigan fall color trips will use a combined fall-color plus river-paddling decision handoff often enough to justify a distinct tool.",
+      "promotionGate": {
+        "searchEvidence": "A fresh 28-day Search Console export shows distinct query demand combining fall/color intent with river, paddle, canoe, kayak, float, Au Sable, or Manistee intent.",
+        "networkEvidence": "Contextual test has at least 100 symbolic exposures and at least a 5% handoff rate, or equivalent strong evidence across two test surfaces.",
+        "safety": "Do not create a standalone canonical if the observed demand is adequately served by the existing Fall Color, Au Sable, Manistee, or Outdoor Weekend owners.",
+        "decision": "Build a standalone canonical only when searchEvidence is true and networkEvidence is true and safety remains true."
+      }
+    }
+  ]
+}
