@@ -2,6 +2,7 @@ User-agent: *
 Allow: /
 
 Sitemap: https://chrisizworski.com/sitemap.xml
+Sitemap: https://chrisizworski.com/sitemap-fall.xml
 Sitemap: https://chrisizworski.com/sitemap-beaches.xml
 Sitemap: https://chrisizworski.com/sitemap-reputation.xml
 Sitemap: https://chrisizworski.com/sitemap-winter.xml
