@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Manistee River Map & Trip Planner | Access, Flows, Fishing</title>
+<meta name="description" content="Explore the Manistee River and tributaries on a source-backed field map with public access, live USGS flows and water temperatures, NHD river geometry, Pine River access, trip planning and current Michigan DNR regulation links.">
+<link rel="canonical" href="https://chrisizworski.com/manistee-river-map/">
+<meta property="og:title" content="The Manistee River: A Field Map">
+<meta property="og:description" content="A detailed, source-backed Manistee River map with access, live gauges, tributaries and an NHD river-distance planner.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://chrisizworski.com/manistee-river-map/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://server.arcgisonline.com">
+<link rel="preconnect" href="https://unpkg.com">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3yn5pTnZL7H3p4y8K3S0Z7z4P2gY0=" crossorigin="anonymous">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {"@type":"WebApplication","name":"Manistee River Field Map","url":"https://chrisizworski.com/manistee-river-map/","applicationCategory":"TravelApplication","operatingSystem":"Any","description":"Interactive Manistee River and tributaries field map with source-backed access locations, USGS hydrography, current USGS river readings and trip planning."},
+    {"@type":"Dataset","name":"Manistee River Field Map source index","creator":{"@type":"Person","name":"Chris Izworski"},"isBasedOn":["https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer","https://waterdata.usgs.gov/","https://www.michigan.gov/dnr/things-to-do/fishing/fishing-regulations","https://www.fs.usda.gov/r09/huron-manistee"],"description":"A curated index of public river access and recreation locations with source and coordinate-confidence metadata."},
+    {"@type":"FAQPage","mainEntity":[
+      {"@type":"Question","name":"Does this map replace Michigan fishing regulations?","acceptedAnswer":{"@type":"Answer","text":"No. Fishing rules can change by reach and season. Use the linked current Michigan DNR fishing regulations and regulation map before fishing."}},
+      {"@type":"Question","name":"Where do the river lines come from?","acceptedAnswer":{"@type":"Answer","text":"River and tributary geometry is loaded from the U.S. Geological Survey National Hydrography Dataset rather than hand-drawn."}},
+      {"@type":"Question","name":"Are the flow and temperature readings live?","acceptedAnswer":{"@type":"Answer","text":"The tool requests provisional instantaneous readings from five active USGS stations on the Manistee and Pine rivers and labels stale or unavailable values instead of treating them as current."}}
+    ]}
+  ]
+}
+</script>
+<style>
+:root{--ink:#17221f;--muted:#5e6b65;--paper:#f4f1e8;--panel:#fffdf7;--line:#d9d4c7;--river:#0d5c63;--pine:#2f7d32;--rust:#a94f25;--blue:#2764a8;--red:#a52b2b;--shadow:0 14px 38px rgba(28,40,34,.12)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:var(--river)}button,input,select{font:inherit}.mast{padding:24px clamp(16px,3vw,42px) 18px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#173a34,#0d5c63);color:#fff}.crumb{font-size:12px;letter-spacing:.05em;text-transform:uppercase;opacity:.78}.crumb a{color:#fff}.mast h1{font-family:Georgia,serif;font-size:clamp(32px,5vw,61px);font-weight:500;line-height:.98;max-width:900px;margin:26px 0 12px}.mast p{max-width:810px;font-size:16px;line-height:1.55;color:#e5efeb;margin:0}.source-strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.source-strip span,.source-strip a{border:1px solid rgba(255,255,255,.26);border-radius:999px;padding:6px 10px;color:#e9f2ee;font-size:12px;text-decoration:none}.shell{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(340px,.75fr);min-height:740px;border-bottom:1px solid var(--line)}.map-wrap{position:sticky;top:0;height:100vh;min-height:680px;background:#d8ded9}.map-toolbar{position:absolute;z-index:700;left:14px;top:14px;display:flex;gap:8px}.map-toolbar button{background:#fff;border:1px solid #c7cdc8;border-radius:8px;padding:8px 10px;box-shadow:0 3px 10px rgba(0,0,0,.12);cursor:pointer}.map-status{position:absolute;z-index:650;left:14px;bottom:14px;max-width:460px;background:rgba(255,255,255,.94);border-radius:8px;padding:8px 11px;font-size:11px;color:#4a5650;box-shadow:0 3px 12px rgba(0,0,0,.12)}.map-status.ok{border-left:4px solid #2f7d32}.map-status.warn{border-left:4px solid #b46a22}#manistee-map{height:100%;width:100%}.panel{background:var(--panel);border-left:1px solid var(--line);min-width:0}.tabs{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:repeat(4,1fr);background:rgba(255,253,247,.97);border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}.tab-button{border:0;border-bottom:3px solid transparent;background:none;padding:15px 4px 12px;color:#53615b;font-size:13px;font-weight:700;cursor:pointer}.tab-button[aria-selected=true]{color:var(--river);border-color:var(--river)}.tab-panel{padding:20px}.eyebrow{color:var(--rust);font-weight:800;text-transform:uppercase;letter-spacing:.1em;font-size:11px}.tab-panel h2{font-family:Georgia,serif;font-weight:500;font-size:28px;line-height:1.1;margin:8px 0 10px}.lede{color:var(--muted);line-height:1.55;font-size:14px}.search{width:100%;border:1px solid #c9c8c0;background:#fff;border-radius:10px;padding:12px 13px;margin:8px 0 10px}.chips{display:flex;gap:7px;overflow:auto;padding:2px 0 10px;scrollbar-width:none}.activity-chip{white-space:nowrap;border:1px solid #c9c8c0;background:#fff;border-radius:999px;padding:7px 10px;color:#4a5650;font-size:12px;cursor:pointer}.activity-chip[aria-pressed=true]{background:#173a34;color:#fff;border-color:#173a34}.count{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#7b827e;margin:8px 0}.place-list{display:grid;gap:7px;max-height:320px;overflow:auto;border-top:1px solid var(--line);padding-top:9px}.place-row{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border:1px solid #e0ddd4;border-radius:8px;padding:10px;cursor:pointer}.place-row.active{border-color:var(--river);box-shadow:0 0 0 2px rgba(13,92,99,.12)}.place-row strong{display:block;font-size:13px}.place-row small{display:block;color:#737c77;margin-top:3px}.trust{display:inline-flex;align-items:center;border-radius:999px;background:#efeee8;padding:4px 7px;font-size:9px;line-height:1.1;text-transform:uppercase;letter-spacing:.04em;color:#53615b}.trust-agency{background:#e4f1e7;color:#285c35}.trust-mapped-agency-site{background:#e9eff4;color:#345267}.trust-community-verified{background:#f5eadc;color:#77522a}.detail{border-top:1px solid var(--line);margin-top:16px;padding-top:16px;scroll-margin-top:70px}.detail-kicker{font-size:11px;color:var(--rust);text-transform:uppercase;letter-spacing:.08em}.detail h2{margin:6px 0}.detail p{font-size:13px;line-height:1.55;color:#525e59}.detail-badges,.activity-line,.action-row{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0}.activity-line span{font-size:10px;background:#edf1ed;padding:4px 7px;border-radius:999px;text-transform:uppercase}.detail dl{margin:12px 0}.detail dl>div{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #ebe7dd;padding:7px 0;font-size:11px}.detail dt{color:#737c77}.detail dd{margin:0;text-align:right}.btn{display:inline-flex;border:1px solid #bcc5bf;border-radius:8px;padding:8px 10px;text-decoration:none;font-size:11px;font-weight:700;background:#fff}.btn.primary{background:var(--river);border-color:var(--river);color:#fff}.micro{font-size:10px!important;color:#747b77!important}.empty,.loading{font-size:13px;color:#777}.planner-form{display:grid;gap:12px}.field label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:800;margin-bottom:5px}.field select,.field input{width:100%;border:1px solid #c9c8c0;background:#fff;border-radius:9px;padding:10px}.speed-row{display:flex;align-items:center;gap:12px}.speed-row input{flex:1}.mini-actions{display:flex;gap:8px}.mini-actions button{border:1px solid #c9c8c0;background:#fff;border-radius:8px;padding:8px 10px;cursor:pointer}.plan-result{margin-top:18px;background:#eef4f1;border:1px solid #cfddd7;border-radius:12px;padding:16px}.plan-number{font-family:Georgia,serif;font-size:36px;color:var(--river)}.plan-result p{font-size:12px;line-height:1.5}.loss{border-left:4px solid var(--red);padding-left:10px;color:#692b2b!important}.callout{border:1px solid #ded8c9;background:#faf6eb;border-radius:12px;padding:14px;margin:16px 0}.callout strong{display:block;margin-bottom:6px}.callout p{font-size:12px;color:#59645f;line-height:1.5;margin:0}.gauge-cards{display:grid;gap:10px}.gauge-card{border:1px solid #d9d8d0;background:#fff;border-radius:10px;padding:12px}.gauge-card.muted{opacity:.75}.gauge-head{display:flex;justify-content:space-between;gap:10px}.fresh{font-size:9px;text-transform:uppercase;border-radius:999px;padding:3px 6px}.fresh.yes{background:#e2f1e4;color:#236335}.fresh.no{background:#eeeae4;color:#73675a}.gauge-numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}.gauge-numbers span{background:#f3f5f2;border-radius:7px;padding:7px;font-size:10px;color:#64706a}.gauge-numbers b{display:block;font-size:18px;color:#25332d}.gauge-card p,.gauge-card small{font-size:10px;color:#65706b;display:block}.gauge-card a{font-size:11px;font-weight:700}.source-note{font-size:10px;color:#777;margin:10px 0}.reach-list{display:grid;gap:10px}.reach{border-left:4px solid var(--river);background:#fff;border-radius:0 9px 9px 0;padding:11px}.reach.pine{border-color:var(--pine)}.reach h3{font-size:14px;margin:0 0 4px}.reach p{font-size:12px;line-height:1.5;color:#5f6964;margin:0}.guide{max-width:980px;margin:0 auto;padding:54px clamp(18px,4vw,52px) 80px}.guide h2{font-family:Georgia,serif;font-size:clamp(30px,4vw,46px);font-weight:500;margin:0 0 12px}.guide h3{font-family:Georgia,serif;font-size:24px;font-weight:500;margin:36px 0 10px}.guide p,.guide li{font-family:Georgia,serif;font-size:17px;line-height:1.72;color:#34423c}.guide-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin:25px 0}.guide-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}.guide-card h3{margin:0 0 8px;font-size:20px}.guide-card p{font-size:14px;margin:0}.sources{border-top:1px solid var(--line);margin-top:40px;padding-top:25px}.sources li{font-family:Inter,sans-serif;font-size:13px;margin:8px 0}.footer{border-top:1px solid var(--line);padding:22px;text-align:center;font-size:11px;color:#747b77}.notice{font-size:11px;background:#fff4dc;border:1px solid #e7d39e;border-radius:8px;padding:10px;line-height:1.5}.desktop-note{display:block}
+@media(max-width:900px){.shell{display:block}.map-wrap{position:relative;height:58vh;min-height:410px}.panel{border-left:0;border-top:1px solid var(--line)}.tabs{top:0}.place-list{max-height:none}.guide-grid{grid-template-columns:1fr}.desktop-note{display:none}.map-status{max-width:calc(100% - 28px)}}
+@media print{.mast{background:#fff!important;color:#111;padding:18px}.mast p,.crumb,.source-strip{color:#333}.shell{display:block}.map-wrap,.tabs,.chips,.search,.map-toolbar,.action-row,.mini-actions{display:none!important}.panel{border:0}.tab-panel{display:block!important}.tab-panel[hidden]{display:block!important}.place-list{max-height:none}.guide{padding-top:20px}.footer{display:none}}
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="crumb"><a href="/">Chris Izworski</a> / Michigan field maps</div>
+  <h1>The Manistee River: A Field Map</h1>
+  <p>Manistee mainstem, Pine River and Bear Creek — real USGS river geometry, sourced public access, live flow and water temperature, and a trip planner that measures along the river instead of drawing a straight line across the woods.</p>
+  <div class="source-strip"><span>USGS NHD geometry</span><span>5 current USGS gauges</span><a href="https://www.michigan.gov/dnr/things-to-do/fishing/fishing-regulations" target="_blank" rel="noopener">2026 DNR fishing rules</a><a href="https://www.fs.usda.gov/r09/huron-manistee" target="_blank" rel="noopener">Huron-Manistee NF</a><span>Source checked Aug. 19, 2026</span></div>
+</header>
+<main>
+<section class="shell" aria-label="Interactive Manistee River field map">
+  <div class="map-wrap">
+    <div id="manistee-map" role="application" aria-label="Interactive map of the Manistee River and tributaries"></div>
+    <div class="map-toolbar"><button id="locate-me" type="button">Nearest access</button><button id="export-csv" type="button">Export points</button></div>
+    <div id="hydro-status" class="map-status" aria-live="polite">Preparing map…</div>
+  </div>
+  <aside class="panel">
+    <nav class="tabs" aria-label="Map tools" role="tablist">
+      <button class="tab-button" data-tab="places" role="tab" aria-selected="true">Places</button>
+      <button class="tab-button" data-tab="plan" role="tab" aria-selected="false">Plan</button>
+      <button class="tab-button" data-tab="river" role="tab" aria-selected="false">River now</button>
+      <button class="tab-button" data-tab="guide" role="tab" aria-selected="false">Guide</button>
+    </nav>
+    <section id="panel-places" class="tab-panel" role="tabpanel">
+      <div class="eyebrow">Find your water</div><h2>Access that explains itself</h2>
+      <p class="lede">Every marker carries a coordinate source and a facility source. Agency coordinates are distinguished from sites whose facility is official but whose pin location is mapped from public geographic data.</p>
+      <input id="place-search" class="search" type="search" placeholder="Search access, river, camp, reach…" aria-label="Search mapped places">
+      <div class="chips" aria-label="Activity filters">
+        <button class="activity-chip" data-activity="all" aria-pressed="true">All</button><button class="activity-chip" data-activity="fish" aria-pressed="false">Fish</button><button class="activity-chip" data-activity="paddle" aria-pressed="false">Paddle</button><button class="activity-chip" data-activity="camp" aria-pressed="false">Camp</button><button class="activity-chip" data-activity="hike" aria-pressed="false">Hike</button><button class="activity-chip" data-activity="scenic" aria-pressed="false">Scenic</button>
+      </div>
+      <div id="nearest-note" class="source-note"></div><div id="place-count" class="count"></div><div id="place-list" class="place-list"></div>
+      <div id="place-detail" class="detail"><p class="lede">Tap a map marker or place to see coordinates, source, directions and regulation links.</p></div>
+    </section>
+    <section id="panel-plan" class="tab-panel" role="tabpanel" hidden>
+      <div class="eyebrow">NHD route engine</div><h2>Plan on the channel</h2>
+      <p class="lede">The planner snaps both access points to the USGS hydrography network and finds a path along the river. If the network does not support a trustworthy route, it refuses to invent mileage.</p>
+      <div class="planner-form">
+        <div class="field"><label for="plan-from">Put-in</label><select id="plan-from"></select></div>
+        <div class="field"><label for="plan-to">Takeout</label><select id="plan-to"></select></div>
+        <div class="field"><label for="plan-speed">Planning speed <span id="speed-value">3.0 mph</span></label><div class="speed-row"><span>1.5</span><input id="plan-speed" type="range" min="1.5" max="5" step="0.1" value="3"><span>5.0</span></div></div>
+        <div class="mini-actions"><button id="swap-plan" type="button">Swap put-in / takeout</button></div>
+      </div>
+      <div id="plan-result" class="plan-result"><p>Choose two access points on the same river.</p></div>
+      <p id="planner-status" class="source-note">Waiting for USGS hydrography…</p>
+      <div class="callout"><strong>What the estimate does not know</strong><p>Fishing time, wind, boat type, logs, portages, dam operations, backwater paddling and stops. Use the mileage as a planning primitive, then add your own margin.</p></div>
+    </section>
+    <section id="panel-river" class="tab-panel" role="tabpanel" hidden>
+      <div class="eyebrow">Measured, not inferred</div><h2>River now</h2>
+      <p class="lede">Instantaneous USGS readings at four points on the Manistee plus the Pine River. A gauge describes that location, not the entire reach.</p>
+      <div id="gauge-cards" class="gauge-cards"></div><p id="conditions-source" class="source-note"></p>
+      <div class="notice">Water temperature context is deliberately conservative: 65–67.9°F is flagged for extra trout-care judgment and 68°F+ as thermal-stress context. It is not a legal closure or a substitute for local conditions.</div>
+    </section>
+    <section id="panel-guide" class="tab-panel" role="tabpanel" hidden>
+      <div class="eyebrow">Five ways to read the system</div><h2>River reaches</h2>
+      <div class="reach-list">
+        <div class="reach"><h3>Upper Manistee</h3><p>Cold-water, intimate trout river with a dense access network and long float possibilities.</p></div>
+        <div class="reach"><h3>Middle / Hodenpyl</h3><p>Broader river and backwater country tied to the Manistee River Trail and North Country Trail.</p></div>
+        <div class="reach"><h3>Tippy transition</h3><p>Impoundment above the dam, then a major change in river character below it.</p></div>
+        <div class="reach"><h3>Lower Manistee</h3><p>National Recreation River corridor, developed Forest Service access and migratory salmonid water.</p></div>
+        <div class="reach pine"><h3>Pine River</h3><p>Cold, fast National Scenic River tributary with Forest Service carry-in landings and permit considerations.</p></div>
+      </div>
+      <p class="source-note">The Little Manistee is available as an optional companion layer. It enters Manistee Lake and is intentionally not mislabeled as a direct Manistee River tributary.</p>
+      <button id="print-guide" class="btn" type="button">Print / save field guide</button>
+    </section>
+  </aside>
+</section>
+<section class="guide" id="field-guide">
+  <div class="eyebrow">Field guide</div><h2>One river system, several different trips</h2>
+  <p>The Manistee changes character repeatedly on its way west. A day on the upper trout water is not the same planning problem as a Hodenpyl backwater trip or a lower-river salmon run. This map keeps those reaches separate while still letting you see the system as one connected watershed.</p>
+  <div class="guide-grid">
+    <article class="guide-card"><h3>For a trout day</h3><p>Start with the Upper Manistee tab, then check the Grayling gauge for temperature and discharge. Use access provenance before building a shuttle, and open the current DNR regulation map for the exact reach you intend to fish.</p></article>
+    <article class="guide-card"><h3>For a paddle</h3><p>Pick put-in and takeout on the same mapped river. The planner uses USGS NHD channel geometry for mileage and lets you set your own realistic travel speed. Pine River users should also confirm current Forest Service permit requirements.</p></article>
+    <article class="guide-card"><h3>For a camp / hike loop</h3><p>Seaton Creek anchors the Hodenpyl end of the Manistee River Trail. On National Forest land, dispersed camping rules differ from designated riverside sites; the Forest Service says general dispersed camping is not allowed within 200 feet of water unless otherwise designated.</p></article>
+    <article class="guide-card"><h3>For the lower river</h3><p>Tippy Dam is the hinge. Below it, the Forest Service-managed National Recreation River corridor includes High Bridge, Blacksmith Bayou, Bear Creek and Rainbow Bend access. Seasonal fishing pressure and boat traffic can be very different from the upper river.</p></article>
+  </div>
+  <h3>Regulations without pretending the map is the law</h3>
+  <p>Michigan's 2026 Fishing Regulations are in effect through March 31, 2027. The DNR's inland trout and salmon regulation map is the right place to identify Type 1–4, gear-restricted and other classified water. This tool links you there instead of copying a rule onto a marker and allowing it to go stale. The DNR's underlying 2026 stream-regulation GIS layer is based on Fisheries Orders 200 and 210 and was updated for the 2026–27 season.</p>
+  <h3>Why the lines matter</h3>
+  <p>The river geometry is not decorative. It comes from the USGS National Hydrography Dataset, which represents named flowlines and their network relationships. That lets the planner calculate a path along source-backed river geometry. If a point is too far from the mapped network or the network cannot connect the selected locations, the planner stops instead of substituting straight-line distance.</p>
+  <h3>Tributaries: what is actually connected</h3>
+  <p>The Pine River is a major Manistee tributary and an official National Scenic River. Bear Creek joins the lower Manistee and is recognized by the Forest Service as cold-water scenic-study water. The Little Manistee is useful context for anglers and paddlers in the same region, but it reaches Manistee Lake separately; the layer is therefore labeled “companion,” not “tributary.”</p>
+  <h3>Data honesty</h3>
+  <p>Three location-confidence labels are used. <strong>Agency coordinate</strong> means the managing agency publishes the location. <strong>Agency site · mapped coordinate</strong> means the facility is documented by an agency but the pin is taken from public geographic mapping. <strong>Community coordinate</strong> is reserved for useful access locations whose coordinates come from an identified local paddling source. That distinction is visible because a map should make uncertainty easier to see, not hide it.</p>
+  <div class="sources"><h3>Primary sources and verification links</h3><ul>
+    <li><a href="https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer" target="_blank" rel="noopener">USGS National Hydrography Dataset</a> — river geometry and network.</li>
+    <li><a href="https://waterdata.usgs.gov/" target="_blank" rel="noopener">USGS Water Data for the Nation</a> — flow, stage and water temperature.</li>
+    <li><a href="https://www.michigan.gov/dnr/things-to-do/fishing/fishing-regulations" target="_blank" rel="noopener">Michigan DNR Fishing Regulations</a> and <a href="https://www.michigan.gov/dnr/things-to-do/fishing/maps" target="_blank" rel="noopener">Inland Trout & Salmon regulation maps</a>.</li>
+    <li><a href="https://www.fs.usda.gov/r09/huron-manistee/recreation/pine-national-scenic-river-0" target="_blank" rel="noopener">Huron-Manistee National Forests — Pine National Scenic River</a>.</li>
+    <li><a href="https://www.fws.gov/rivers/river/manistee" target="_blank" rel="noopener">National Wild and Scenic Rivers System — Manistee River</a>.</li>
+    <li><a href="https://www.michigan.gov/recsearch/parks/TippyDam" target="_blank" rel="noopener">Michigan DNR — Tippy Dam Recreation Area</a>.</li>
+  </ul></div>
+</section>
+</main>
+<footer class="footer">Chris Izworski · Michigan field tools · Data sources retain their own limitations and update schedules.</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+<script src="/assets/manistee-river-data.js"></script>
+<script src="/assets/manistee-river-map.js"></script>
+</body>
+</html>

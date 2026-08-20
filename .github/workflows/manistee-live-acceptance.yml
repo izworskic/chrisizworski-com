@@ -1,0 +1,41 @@
+name: Manistee live source acceptance
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/manistee-river-map/**'
+      - 'public/assets/manistee-river-*.js'
+      - 'api/manistee-river-*.js'
+      - 'scripts/audit-manistee-live.mjs'
+      - '.github/workflows/manistee-live-acceptance.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'public/manistee-river-map/**'
+      - 'public/assets/manistee-river-*.js'
+      - 'api/manistee-river-*.js'
+      - 'scripts/audit-manistee-live.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  source-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify live USGS source contracts
+        run: node scripts/audit-manistee-live.mjs
+      - name: Upload source audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manistee-live-audit
+          path: artifacts/manistee-live-audit.json
+          if-no-files-found: error
+          retention-days: 14
