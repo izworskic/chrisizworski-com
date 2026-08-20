@@ -1,0 +1,54 @@
+{
+  "benchmarkVersion": "1.0.0",
+  "baselineCreated": "2026-08-20",
+  "timezone": "America/Detroit",
+  "source": {
+    "title": "chrisizworski.com-Performance-on-Search-2026-08-15",
+    "spreadsheetId": "1UTJHLaV2vPnETwbhDxPhSDkUV5o4GYvs1lY-VZe2v64",
+    "exportedThrough": "2026-08-13",
+    "note": "Search Console export supplied by the site owner. Targets are goals, not forecasts or guarantees."
+  },
+  "current28Days": {
+    "start": "2026-07-17",
+    "end": "2026-08-13",
+    "days": 28,
+    "clicks": 407,
+    "impressions": 27042,
+    "ctr": 0.0150506619,
+    "dailyClicks": 14.5357143,
+    "dailyImpressions": 965.7857143
+  },
+  "goals": {
+    "targetDate": "2026-10-01",
+    "dailyImpressionsFloor": 2500,
+    "dailyImpressionsStretch": 4000,
+    "qualifiedSiteCtr": 0.025,
+    "fallHubAveragePosition": 5,
+    "brandedChrisIzworskiPosition": 2,
+    "sameImpressionIncrementalClickGoal": 500,
+    "rule": "Judge released search treatments on complete comparable windows; do not reset active experiments casually."
+  },
+  "pages": [
+    {"path":"/northern-lights-michigan/","clicks":365,"impressions":20591,"ctr":0.0177,"position":10.42,"targetCtr":0.025,"priority":"P0","state":"frozen-active-experiment"},
+    {"path":"/soo-locks/","clicks":272,"impressions":15904,"ctr":0.0171,"position":9.04,"targetCtr":0.03,"priority":"P0","state":"frozen-active-experiment"},
+    {"path":"/when-to-plant-tomatoes-michigan/","clicks":15,"impressions":5967,"ctr":0.0025,"position":8.32,"targetCtr":0.015,"priority":"P0","state":"frozen-active-experiment"},
+    {"path":"/michigan-frost-dates/","clicks":4,"impressions":2808,"ctr":0.0014,"position":9.61,"targetCtr":0.015,"priority":"P0","state":"frozen-active-experiment"},
+    {"path":"/great-lakes-buoys/","clicks":29,"impressions":1530,"ctr":0.019,"position":14.44,"targetCtr":0.025,"priority":"P1","state":"measure-and-build-authority"},
+    {"path":"/great-lakes-freighter-tracking/","clicks":3,"impressions":1449,"ctr":0.0021,"position":20.68,"targetCtr":0.015,"priority":"P1","state":"frozen-active-experiment"},
+    {"path":"/mackinac-bridge-live/","clicks":6,"impressions":1161,"ctr":0.0052,"position":11.64,"targetCtr":0.02,"priority":"P1","state":"protect-current-treatment"},
+    {"path":"/fall-color/","clicks":14,"impressions":575,"ctr":0.0243,"position":11.17,"targetCtr":0.035,"priority":"P0-seasonal","state":"execute-now"}
+  ],
+  "queryOpportunities": [
+    {"query":"soo locks schedule","clicks":32,"impressions":1594,"ctr":0.0201,"position":7.81,"page":"/soo-locks/"},
+    {"query":"soo locks schedule today","clicks":28,"impressions":1174,"ctr":0.0239,"position":8.43,"page":"/soo-locks/"},
+    {"query":"when to plant tomatoes in michigan","clicks":0,"impressions":526,"ctr":0,"position":10.25,"page":"/when-to-plant-tomatoes-michigan/"},
+    {"query":"northern lights michigan tonight","clicks":6,"impressions":456,"ctr":0.0132,"position":9.93,"page":"/northern-lights-michigan/"},
+    {"query":"northern lights michigan","clicks":0,"impressions":299,"ctr":0,"position":14.89,"page":"/northern-lights-michigan/"},
+    {"query":"mackinac bridge conditions today live","clicks":0,"impressions":150,"ctr":0,"position":9.83,"page":"/mackinac-bridge-live/"},
+    {"query":"great lakes buoys","clicks":1,"impressions":109,"ctr":0.0092,"position":11.65,"page":"/great-lakes-buoys/"},
+    {"query":"michigan fall color map 2026","clicks":0,"impressions":74,"ctr":0,"position":8.88,"page":"/fall-color/"},
+    {"query":"michigan fall colors 2026","clicks":0,"impressions":15,"ctr":0,"position":10.33,"page":"/fall-color/"},
+    {"query":"michigan peak fall colors 2026","clicks":0,"impressions":13,"ctr":0,"position":9.23,"page":"/fall-color/"},
+    {"query":"zone 6a last frost date","clicks":0,"impressions":25,"ctr":0,"position":8.44,"page":"/michigan-frost-dates/"}
+  ]
+}
