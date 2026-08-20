@@ -1,0 +1,530 @@
+{
+  "generatedAt": "2026-08-20T00:40:24.579Z",
+  "dnrLayerLastEdit": 1786979205547,
+  "counts": {
+    "totalLayer": 1202,
+    "boatingAccessSites": 1189,
+    "open": 1152,
+    "usableDnr": 1151,
+    "greatLakes": 145,
+    "inlandOrOther": 1006,
+    "municipal": 1,
+    "sourceBacked": 1152,
+    "withheld": 0
+  },
+  "conditionCounts": {
+    "Not reported": 1151
+  },
+  "coverage": [
+    {
+      "destination": "Bay City, MI",
+      "count": 18,
+      "nearest": [
+        {
+          "name": "Veterans Memorial Park",
+          "miles": 0.37,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Independence County Park",
+          "miles": 1.63,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Smith Park",
+          "miles": 2.67,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Saginaw River Mouth",
+          "miles": 3.71,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Veterans Park",
+          "miles": 4.56,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Jones Road",
+          "miles": 4.58,
+          "scope": "great-lakes"
+        }
+      ]
+    },
+    {
+      "destination": "Tawas City, MI",
+      "count": 20,
+      "nearest": [
+        {
+          "name": "East Tawas",
+          "miles": 1.57,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Tawas Lake",
+          "miles": 1.69,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Floyd Lake",
+          "miles": 8.57,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Singing Bridge",
+          "miles": 9.1,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "East Branch Au Gres River",
+          "miles": 9.74,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Lower Foote Dam",
+          "miles": 12.21,
+          "scope": "inland-or-other"
+        }
+      ]
+    },
+    {
+      "destination": "Alpena, MI",
+      "count": 18,
+      "nearest": [
+        {
+          "name": "North Riverfront Park",
+          "miles": 0.22,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Alpena Marina",
+          "miles": 0.3,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Thunder Bay River State Forest Campground",
+          "miles": 6.85,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Long Lake Park",
+          "miles": 9.05,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Devil's River",
+          "miles": 9.55,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Rockport",
+          "miles": 10.02,
+          "scope": "great-lakes"
+        }
+      ]
+    },
+    {
+      "destination": "Mackinaw City, MI",
+      "count": 22,
+      "nearest": [
+        {
+          "name": "Straits State Harbor",
+          "miles": 0.18,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Paradise Lake",
+          "miles": 6.47,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "St. Ignace",
+          "miles": 6.71,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Wilderness State Park",
+          "miles": 8.98,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "O'Neal Lake",
+          "miles": 9.66,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Munro Lake",
+          "miles": 10.92,
+          "scope": "inland-or-other"
+        }
+      ]
+    },
+    {
+      "destination": "Petoskey, MI",
+      "count": 42,
+      "nearest": [
+        {
+          "name": "Petoskey Municipal",
+          "miles": 0.29,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Josephine D. Ford Park",
+          "miles": 4.09,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Round Lake",
+          "miles": 4.22,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Jones Landing Park",
+          "miles": 4.73,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Melrose Township",
+          "miles": 7.61,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Crooked Lake",
+          "miles": 8.13,
+          "scope": "inland-or-other"
+        }
+      ]
+    },
+    {
+      "destination": "Ludington, MI",
+      "count": 25,
+      "nearest": [
+        {
+          "name": "Loomis Street",
+          "miles": 0.45,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Peter Copeyon Park",
+          "miles": 0.88,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "US-31",
+          "miles": 2.61,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Hackert Lake",
+          "miles": 6.31,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Scottville Riverside Park",
+          "miles": 8.51,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "St. Marys Lake",
+          "miles": 11.62,
+          "scope": "inland-or-other"
+        }
+      ]
+    },
+    {
+      "destination": "Holland, MI",
+      "count": 25,
+      "nearest": [
+        {
+          "name": "Kollen Park",
+          "miles": 0.86,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Lake Macatawa",
+          "miles": 3.94,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Pigeon Lake",
+          "miles": 9.2,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "George Schutmaat Park",
+          "miles": 9.39,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Hacklander",
+          "miles": 10.8,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Bass River Recreation Area",
+          "miles": 15.82,
+          "scope": "inland-or-other"
+        }
+      ]
+    },
+    {
+      "destination": "South Haven, MI",
+      "count": 39,
+      "nearest": [
+        {
+          "name": "Black River Park Launch Ramp",
+          "miles": 0.51,
+          "scope": "municipal"
+        },
+        {
+          "name": "Van Auken Lake",
+          "miles": 11.17,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Saddle Lake",
+          "miles": 11.58,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Rush Lake",
+          "miles": 11.85,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Paw Paw Lake East",
+          "miles": 13.05,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Lake Eleven",
+          "miles": 13.23,
+          "scope": "inland-or-other"
+        }
+      ]
+    },
+    {
+      "destination": "Munising, MI",
+      "count": 13,
+      "nearest": [
+        {
+          "name": "Anna River Mouth",
+          "miles": 0.34,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Munising Municipal",
+          "miles": 1.05,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Deer Lake",
+          "miles": 15.26,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "South Gemini Lake State Forest Campground",
+          "miles": 17.07,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "North Gemini Lake State Forest Campground",
+          "miles": 17.2,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Canoe Lake State Forest Campground",
+          "miles": 17.29,
+          "scope": "inland-or-other"
+        }
+      ]
+    },
+    {
+      "destination": "Marquette, MI",
+      "count": 32,
+      "nearest": [
+        {
+          "name": "Cinder Pond Marina",
+          "miles": 0.47,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Marquette City",
+          "miles": 2.66,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Forestville",
+          "miles": 4.19,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Chocolay River M-28 Bridge",
+          "miles": 4.86,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "McClure Storage Basin",
+          "miles": 7.19,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Harlow Lake",
+          "miles": 7.48,
+          "scope": "inland-or-other"
+        }
+      ]
+    },
+    {
+      "destination": "Monroe, MI",
+      "count": 13,
+      "nearest": [
+        {
+          "name": "Hellenburg Park",
+          "miles": 1.11,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Bolles Harbor",
+          "miles": 3.09,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Sterling State Park Bartnik",
+          "miles": 3.22,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Dixie Highway - Swan Creek",
+          "miles": 7.88,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Luna Pier",
+          "miles": 8.32,
+          "scope": "great-lakes"
+        },
+        {
+          "name": "Humphries Unit",
+          "miles": 10.65,
+          "scope": "inland-or-other"
+        }
+      ]
+    },
+    {
+      "destination": "Lansing, MI",
+      "count": 23,
+      "nearest": [
+        {
+          "name": "Sweeney's Landing",
+          "miles": 0.64,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Moores Park",
+          "miles": 1.06,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Ferguson Park",
+          "miles": 6.5,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Park Lake",
+          "miles": 7.46,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Potter Lake",
+          "miles": 8.29,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Lake Lansing Park - North",
+          "miles": 8.45,
+          "scope": "inland-or-other"
+        }
+      ]
+    },
+    {
+      "destination": "Jackson, MI",
+      "count": 43,
+      "nearest": [
+        {
+          "name": "Gilletts Lake",
+          "miles": 4.58,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Center Lake",
+          "miles": 5.34,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Maple Grove Bridge",
+          "miles": 6.69,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Lime Lake County Park",
+          "miles": 9.01,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Crispell Lake",
+          "miles": 9.44,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Portage Lake",
+          "miles": 10.4,
+          "scope": "inland-or-other"
+        }
+      ]
+    },
+    {
+      "destination": "Houghton Lake, MI",
+      "count": 48,
+      "nearest": [
+        {
+          "name": "Houghton Lake South",
+          "miles": 1.9,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Houghton Lake West",
+          "miles": 2.3,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Houghton Lake East",
+          "miles": 5.27,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Reedsburg Dam State Forest Campground",
+          "miles": 5.62,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Dead Stream Flooding",
+          "miles": 5.88,
+          "scope": "inland-or-other"
+        },
+        {
+          "name": "Marl Lake",
+          "miles": 8.75,
+          "scope": "inland-or-other"
+        }
+      ]
+    }
+  ],
+  "falseBayCityStateParkRecords": [],
+  "failures": {
+    "falseBayCityStatePark": false,
+    "implausibleCounts": false,
+    "zeroCoverageDestinations": []
+  }
+}

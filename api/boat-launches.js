@@ -23,7 +23,7 @@ const FIELDS = [
   "ncarrydownlaunches","flag","flagcomments","staffed","contact","phone","greatlakesaccess","parkingsurface",
   "waterwaysprogramconfirmation","operating_hours","launch_status","fish_cleaning_station",
   "local_watercraft_controls","accessible_feat_piers","accessible_feat_park","accessible_feat_ped_route",
-  "accessible_feat_restroom","NameCounty","WaterbodyCounty","closures_url","last_edited_date"
+  "accessible_feat_restroom","NameCounty","WaterbodyCounty","controls_county","closures_url","last_edited_date"
 ];
 
 function queryUrl() {
@@ -80,6 +80,43 @@ function eligibleAttributes(a = {}) {
   return true;
 }
 
+/*
+ * Michigan DNR publishes no plain county-name field. `county` is an integer
+ * code, and NameCounty / WaterbodyCounty are display labels that append the
+ * county as a "(Bay Co.)" suffix — which is why mapping county straight from
+ * WaterbodyCounty printed "Saginaw River (Bay Co.)" as the county and made the
+ * field useless for filtering or grouping.
+ *
+ * The suffix is present on all 1,152 open records and DNR cases it correctly,
+ * including the awkward ones: Grand Traverse, Presque Isle, St. Clair,
+ * St. Joseph, Van Buren. So it is parsed rather than rebuilt from the lowercase
+ * controls_county slug, which concatenates those names ("grandtraverse",
+ * "stclair") and would need a hand-maintained casing map to undo.
+ */
+const COUNTY_SUFFIX = /\(([^()]+?)\s+Co\.\)\s*$/;
+
+function countyName(a = {}) {
+  for (const label of [a.WaterbodyCounty, a.NameCounty]) {
+    const match = COUNTY_SUFFIX.exec(String(label || "").trim());
+    if (match) return match[1].trim();
+  }
+  const slug = String(a.controls_county || "").trim();
+  return slug ? slug.charAt(0).toUpperCase() + slug.slice(1) : null;
+}
+
+/*
+ * Hand-maintained supplemental records are typed by a person, so they arrive as
+ * "Van Buren County" rather than the bare name the DNR path produces. Normalized
+ * here so the field means one thing across every source.
+ */
+function bareCounty(value) {
+  const text = String(value || "").trim();
+  if (!text) return null;
+  const suffix = COUNTY_SUFFIX.exec(text);
+  if (suffix) return suffix[1].trim();
+  return text.replace(/\s+Co(?:unty|\.)?$/i, "").trim() || null;
+}
+
 function normalizeFeature(feature, sourceUpdatedAt = null) {
   const a = feature?.attributes || {};
   if (!eligibleAttributes(a)) return null;
@@ -105,7 +142,7 @@ function normalizeFeature(feature, sourceUpdatedAt = null) {
     longitude: optionalNumber(a.longitude),
     waterbody: a.waterbody || null,
     waterbodyType: a.waterbodytype || null,
-    county: a.WaterbodyCounty || a.NameCounty || a.county || null,
+    county: countyName(a),
     greatLakesAccess: a.greatlakesaccess || null,
     waterScope: waterScope(a),
     connectionBasis: waterScope(a) === "great-lakes" ? "dnr-great-lakes-or-connecting-water" : "dnr-statewide-boating-access",
@@ -155,6 +192,7 @@ function normalizeSupplemental(record = {}) {
   ) return null;
   return {
     ...record,
+    county: bareCounty(record.county),
     id: String(record.id),
     sourceId: String(record.id),
     sourceIdType: "supplemental-registry",
@@ -263,4 +301,4 @@ module.exports = async function handler(req, res) {
   }
 };
 
-module.exports._test = { DNR_LAYER, WHERE, FIELDS, CONNECTING_WATERS, hasValue, optionalNumber, sourceId, reviewStatus, waterScope, eligibleAttributes, normalizeFeature, normalizeSupplemental, queryUrl };
+module.exports._test = { countyName, bareCounty, DNR_LAYER, WHERE, FIELDS, CONNECTING_WATERS, hasValue, optionalNumber, sourceId, reviewStatus, waterScope, eligibleAttributes, normalizeFeature, normalizeSupplemental, queryUrl };
