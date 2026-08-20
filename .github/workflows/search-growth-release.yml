@@ -1,0 +1,40 @@
+name: Search growth release
+
+on:
+  push:
+    branches:
+      - feat/search-growth-engine-fall-2026
+    paths:
+      - .github/workflows/search-growth-release.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/search-growth-engine-fall-2026
+          fetch-depth: 0
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Apply deterministic release migration
+        run: node scripts/apply-search-growth-release.mjs
+      - name: Run full repository release gate
+        run: npm run verify:all
+      - name: Commit verified release
+        run: |
+          git config user.name "search-growth-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No migration changes to commit."
+            exit 0
+          fi
+          git commit -m "Build search growth engine and fall decision network"
+          git push origin HEAD:feat/search-growth-engine-fall-2026
