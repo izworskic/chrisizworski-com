@@ -4,31 +4,40 @@ const NAMES=['Manistee River','Pine River','Bear Creek','Little Manistee River']
 
 function queryUrl(){
   const url=new URL(NHD);
-  url.searchParams.set('where',NAMES.map(n=>`GNIS_NAME='${n.replaceAll("'","''")}'`).join(' OR '));
+  url.searchParams.set('where',NAMES.map(n=>`gnis_name='${n.replaceAll("'","''")}'`).join(' OR '));
   url.searchParams.set('geometry',BBOX);
   url.searchParams.set('geometryType','esriGeometryEnvelope');
   url.searchParams.set('inSR','4326');
   url.searchParams.set('spatialRel','esriSpatialRelIntersects');
-  url.searchParams.set('outFields','GNIS_NAME,REACHCODE,FCode');
+  url.searchParams.set('outFields','gnis_name,reachcode,fcode');
   url.searchParams.set('returnGeometry','true');
   url.searchParams.set('outSR','4326');
   url.searchParams.set('f','geojson');
   return url.toString();
 }
+function property(properties={},lower,alias){
+  return properties[lower]??properties[alias]??null;
+}
 function cleanGeoJson(payload){
-  const features=(payload?.features||[]).filter(f=>f?.geometry&&NAMES.includes(f?.properties?.GNIS_NAME));
+  const features=(payload?.features||[]).filter(f=>{
+    const name=property(f?.properties,'gnis_name','GNIS_NAME');
+    return f?.geometry&&NAMES.includes(name);
+  });
   return {
     type:'FeatureCollection',
-    features:features.map(f=>({
-      type:'Feature',
-      geometry:f.geometry,
-      properties:{
-        name:f.properties.GNIS_NAME,
-        reachCode:f.properties.REACHCODE||null,
-        fCode:f.properties.FCode||null,
-        role:f.properties.GNIS_NAME==='Manistee River'?'mainstem':(f.properties.GNIS_NAME==='Little Manistee River'?'companion':'tributary')
-      }
-    }))
+    features:features.map(f=>{
+      const name=property(f.properties,'gnis_name','GNIS_NAME');
+      return {
+        type:'Feature',
+        geometry:f.geometry,
+        properties:{
+          name,
+          reachCode:property(f.properties,'reachcode','REACHCODE'),
+          fCode:property(f.properties,'fcode','FCode'),
+          role:name==='Manistee River'?'mainstem':(name==='Little Manistee River'?'companion':'tributary')
+        }
+      };
+    })
   };
 }
 
@@ -48,7 +57,7 @@ module.exports=async function handler(req,res){
     res.setHeader('Cache-Control','public, s-maxage=86400, stale-while-revalidate=604800');
     return res.status(200).json({
       source:'USGS The National Map — National Hydrography Dataset',
-      source_url:'https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer',
+      source_url:'https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6',
       fetched_at:new Date().toISOString(),
       bbox:BBOX.split(',').map(Number),
       ...geojson
@@ -59,4 +68,4 @@ module.exports=async function handler(req,res){
   }
 };
 
-module.exports._test={queryUrl,cleanGeoJson,NAMES,BBOX};
+module.exports._test={queryUrl,cleanGeoJson,property,NAMES,BBOX};
