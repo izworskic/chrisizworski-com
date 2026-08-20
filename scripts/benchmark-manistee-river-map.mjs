@@ -88,8 +88,8 @@ section('Mobile, sharing & discovery',[
   ok('Persona chooser asks the user job first',/What are you here to do\?/.test(personaJs),true)
 ]);
 section('Graceful degradation',[
-  ok('Persona enhancement loads additively',/persona layer is intentionally additive/i.test(dataJs),true),
-  ok('Core works without persona module',!html.includes('manistee-river-personas.js'),true),
+  ok('Persona and depth enhancements load additively',/Optional decision layers are additive/i.test(dataJs),true),
+  ok('Core works without optional modules',!html.includes('manistee-river-personas.js')&&!html.includes('manistee-river-live-depth.js'),true),
   ok('Hydro outage leaves guide usable',/access points and guide still work/.test(js),true),
   ok('USGS outage leaves static tool usable',/Static access, hydrography and source links remain usable/.test(js),true),
   ok('Unknown readings stay unknown',/discharge_cfs:null/.test(api),true)
