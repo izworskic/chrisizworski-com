@@ -15,6 +15,7 @@
   "experiments": [
     {
       "id": "fall-river-window-v1",
+      "candidateId": "fall-river-window",
       "name": "Best Fall River Paddle Window",
       "status": "running-contextual-test",
       "candidateScore": 93,
