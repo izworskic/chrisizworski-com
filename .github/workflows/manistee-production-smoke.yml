@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: read
+  statuses: write
 
 jobs:
   public-origin:
@@ -27,3 +28,16 @@ jobs:
           node-version: '22'
       - name: Verify public chrisizworski.com Manistee release
         run: node scripts/smoke-manistee-production.mjs
+      - name: Publish production smoke commit status
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.sha }}
+          STATE: ${{ job.status }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/statuses/${SHA}" \
+            -f state="${STATE}" \
+            -f context='Manistee production smoke' \
+            -f description="Public chrisizworski.com smoke: ${STATE}" \
+            -f target_url="${RUN_URL}"
