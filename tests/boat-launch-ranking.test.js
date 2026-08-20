@@ -154,3 +154,27 @@ test('inland destinations are first-class statewide searches instead of out-of-s
   assert.match(finderHtml,/All Michigan waters/);
   assert.match(finderJs,/rankNearDestination/);
 });
+
+test('county is a county, not the DNR display label', () => {
+  const { countyName, bareCounty } = launches._test;
+
+  /* The DNR label appends the county; mapping it straight through printed
+     "Saginaw River (Bay Co.)" into a field named county. */
+  assert.equal(countyName({ WaterbodyCounty: 'Saginaw River (Bay Co.)' }), 'Bay');
+  assert.equal(countyName({ NameCounty: 'Sand Point (Huron Co.)' }), 'Huron');
+
+  /* DNR cases the concatenated names correctly in the label; the lowercase
+     controls_county slug does not, which is why the label is parsed first. */
+  assert.equal(countyName({ WaterbodyCounty: 'Boardman River (Grand Traverse Co.)' }), 'Grand Traverse');
+  assert.equal(countyName({ WaterbodyCounty: 'Saint Clair River (St. Clair Co.)' }), 'St. Clair');
+  assert.equal(countyName({ WaterbodyCounty: 'Clear Lake (Van Buren Co.)' }), 'Van Buren');
+
+  assert.equal(countyName({ controls_county: 'iosco' }), 'Iosco', 'slug fallback when no label parses');
+  assert.equal(countyName({}), null, 'no county source means no county, not a guess');
+
+  /* Hand-typed supplemental records must mean the same thing as DNR ones. */
+  assert.equal(bareCounty('Van Buren County'), 'Van Buren');
+  assert.equal(bareCounty('Bay Co.'), 'Bay');
+  assert.equal(bareCounty('Ottawa'), 'Ottawa');
+  assert.equal(bareCounty(''), null);
+});
