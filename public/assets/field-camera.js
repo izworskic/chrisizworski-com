@@ -1,7 +1,24 @@
 // Renders allowlisted field cameras. Every camera carries its capture time, and one that has
 // stopped updating says so rather than showing a stale picture as if it were current.
 (function () {
-  if (window.location.pathname.replace(/\/+$/, "") === "/michigan-cross-country-skiing" && !document.querySelector('script[data-winter-final-loader]')) {
+  var pathname = window.location.pathname.replace(/\/+$/, "");
+
+  // Additive fall discovery surface. This intentionally leaves the fall hub's title,
+  // description, H1, first answer, canonical and live-map logic untouched while giving
+  // the distinct "this weekend" decision intent a direct handoff from the live tool.
+  if (pathname === "/fall-color" && !document.querySelector("[data-search-growth-weekend]")) {
+    var main = document.querySelector("main");
+    if (main) {
+      var weekend = document.createElement("aside");
+      weekend.dataset.searchGrowthWeekend = "true";
+      weekend.setAttribute("aria-label", "Fall color this weekend");
+      weekend.style.cssText = "max-width:1040px;margin:18px auto 22px;padding:16px 18px;border:1px solid #d6c8ae;border-radius:14px;background:#fbf6ea";
+      weekend.innerHTML = '<div style="font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;opacity:.68;margin-bottom:5px">Weekend decision</div><strong style="display:block;font-size:1.1rem;margin-bottom:5px">Where are Michigan fall colors best this weekend?</strong><span style="display:block;margin-bottom:8px">Rank the eight Michigan regions for the coming weekend, then open the live map before you leave.</span><a href="/fall-color/this-weekend/" style="font-weight:700">See the best fall-color region this weekend →</a>';
+      main.insertBefore(weekend, main.firstChild);
+    }
+  }
+
+  if (pathname === "/michigan-cross-country-skiing" && !document.querySelector('script[data-winter-final-loader]')) {
     var winterFinal = document.createElement("script");
     winterFinal.src = "/assets/winter-final.js";
     winterFinal.defer = true;
