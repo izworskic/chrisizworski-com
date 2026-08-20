@@ -5,7 +5,7 @@ const checks=[];
 
 async function fetchText(path,{expectNoindex=false}={}){
   const url=new URL(path,ORIGIN);
-  const response=await fetch(url,{redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/3.1'},signal:AbortSignal.timeout(15000)});
+  const response=await fetch(url,{redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/4.0'},signal:AbortSignal.timeout(15000)});
   const text=await response.text();
   const robots=(response.headers.get('x-robots-tag')||'').toLowerCase();
   if(!response.ok)throw new Error(`${path} returned ${response.status}`);
@@ -43,16 +43,30 @@ try{
   assert(client.text.includes('Location confidence'),'popup source/trust context missing');
 
   const data=await fetchText('/assets/manistee-river-data.js');
-  assert(data.text.includes('/assets/manistee-river-personas.js'),'persona layer loader missing from deployed data asset');
+  assert(data.text.includes('/assets/manistee-ausable-ui.js'),'Au Sable-style UI layer is not loaded by deployed Manistee data asset');
+  assert(data.text.includes('/assets/manistee-river-personas.js'),'persona data layer loader missing from deployed data asset');
   assert(data.text.includes('/assets/manistee-river-live-depth.js'),'live-depth layer loader missing from deployed data asset');
+
+  const fieldUi=await fetchText('/assets/manistee-ausable-ui.js');
+  for(const phrase of ['The Manistee Field Map','River reach filters','Plan by','Popular starts','Copy trip link','River, weather & field details','conditions-now-strip'])assert(fieldUi.text.includes(phrase),`Au Sable-style UI asset missing ${phrase}`);
+  assert(fieldUi.text.includes("riverTab.textContent='River'"),'task nav does not normalize River label');
+  assert(fieldUi.text.includes("searchParams.set('from'"),'shareable planner start state missing');
+  assert(fieldUi.text.includes("searchParams.set('to'"),'shareable planner end state missing');
+
+  const fieldCss=await fetchText('/assets/manistee-ausable-ui.css');
+  assert(fieldCss.text.includes('.shell{display:flex!important;flex-direction:column!important'),'map-first single-instrument shell missing');
+  assert(fieldCss.text.includes('height:min(61vh,690px)!important'),'dominant desktop map height missing');
+  assert(fieldCss.text.includes('.persona-deck{display:none!important}'),'persona wall is still visible in primary workflow');
+  assert(fieldCss.text.includes('.source-strip{display:none!important}'),'source pill wall is still visible in masthead');
+  assert(fieldCss.text.includes('height:58svh!important'),'mobile map contract missing');
+  assert(fieldCss.text.includes('min-height:44px!important'),'mobile touch-target contract missing');
 
   const persona=await fetchText('/assets/manistee-river-personas.js');
   for(const key of ['trout','salmon','paddle','camp','boat','family','access'])assert(persona.text.includes(`${key}:{`),`persona asset missing ${key} decision lens`);
-  assert(persona.text.includes('What are you here to do?'),'persona chooser prompt missing');
 
   const depth=await fetchText('/assets/manistee-river-live-depth.js');
   for(const phrase of ['River key','Plan from this exact access','River right now','Weather near this access','Before you go'])assert(depth.text.includes(phrase),`live-depth asset missing ${phrase}`);
-  assert(depth.text.includes('left:14px'),'river key is not pinned to the left');
+  assert(depth.text.includes('left:14px'),'river key source asset unexpectedly changed');
   assert(depth.text.includes('/api/manistee-river-weather?lat='),'selected-access weather request missing');
   assert(depth.text.includes('popupLiveHtml'),'popup live enrichment renderer missing');
   assert(depth.text.includes('Weather at this access'),'popup weather block missing');
