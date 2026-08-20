@@ -24,7 +24,7 @@
     "benchmark:manistee-parity": "node scripts/benchmark-manistee-ausable-parity.mjs --check",
     "benchmark:manistee-popups": "node scripts/benchmark-manistee-popups.mjs --check",
     "benchmark:manistee-ux": "node scripts/benchmark-manistee-ausable-ui.mjs --check",
-    "freshness": "node scripts/stamp-freshness.mjs",
+    "freshness": "node scripts/check-freshness-with-circle-tour.mjs",
     "benchmark:citation": "node scripts/benchmark-citation.mjs",
     "generate:beaches": "node scripts/generate-beach-pages.mjs",
     "prepare:source": "node scripts/prepare-source.mjs",
