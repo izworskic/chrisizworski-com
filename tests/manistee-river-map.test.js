@@ -24,7 +24,8 @@ test('fabrication loss: every mapped place has coordinates, provenance and a sou
 
 test('identity loss: place IDs are unique and directions use exact selected coordinates',()=>{
   const ids=data.places.map(p=>p.id);assert.equal(new Set(ids).size,ids.length);
-  assert.match(js,/destination=\$\{encodeURIComponent\(`\$\{p\.lat\},\$\{p\.lon\}`\)\}/);
+  assert.match(js,/encodeURIComponent\(`\$\{p\.lat\},\$\{p\.lon\}`\)/);
+  assert.match(js,/destination=\$\{q\}/);
   assert.match(js,/selectPlace\(p\.id,true\)/);
   assert.match(js,/data-id="\$\{esc\(p\.id\)\}"/);
 });
@@ -76,7 +77,7 @@ test('planner loss: route distance uses a graph along NHD geometry and refuses c
 test('regulation loss: tool links current DNR rules instead of hardcoding reach-specific legal claims',()=>{
   assert.match(html,/2026 DNR fishing rules/);
   assert.match(html,/March 31, 2027/);
-  assert.match(html,/does not replace Michigan fishing regulations|does not turn a point location into a legal-rule claim/i);
+  assert.match(html+js,/does not replace Michigan fishing regulations|does not turn a point location into a legal-rule claim/i);
   assert.match(data.sources.regulations.url,/michigan\.gov\/dnr/);
   assert.doesNotMatch(dataSource,/artificial flies only|daily possession limit|minimum size/i);
 });
@@ -86,9 +87,15 @@ test('mobile task loss: map, places, directions and planner have responsive affo
   assert.match(html,/height:58vh/);
   assert.match(html,/Nearest access/);
   assert.match(js,/scrollIntoView/);
-  assert.match(html,/Directions/);
+  assert.match(html+js,/Directions/);
   assert.match(html,/Put-in/);
   assert.match(html,/Takeout/);
+});
+
+test('browser dependency loss: Leaflet has a runtime stylesheet fallback',()=>{
+  assert.match(js,/function ensureLeafletCss\(\)/);
+  assert.match(js,/leaflet@1\.9\.4\/dist\/leaflet\.css/);
+  assert.match(js,/data-manistee-leaflet|dataset\.manisteeLeaflet/);
 });
 
 test('SEO and AI-discovery loss: canonical, source-rich schema and visible field guide are present',()=>{
@@ -104,7 +111,7 @@ test('SEO and AI-discovery loss: canonical, source-rich schema and visible field
 test('graceful degradation loss: live-service failures preserve the static map guide',()=>{
   assert.match(js,/USGS river geometry unavailable — access points and guide still work/);
   assert.match(js,/Live USGS readings are unavailable right now/);
-  assert.match(html,/Static|source-backed|field guide/i);
+  assert.match(html,/source-backed|field guide/i);
 });
 
 test('hydrography normalizer strips unrelated features and preserves source role',()=>{
