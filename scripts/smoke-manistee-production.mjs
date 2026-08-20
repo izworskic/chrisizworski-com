@@ -5,7 +5,7 @@ const checks=[];
 
 async function fetchText(path,{expectNoindex=false}={}){
   const url=new URL(path,ORIGIN);
-  const response=await fetch(url,{redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/1.0'},signal:AbortSignal.timeout(15000)});
+  const response=await fetch(url,{redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/2.0'},signal:AbortSignal.timeout(15000)});
   const text=await response.text();
   const robots=(response.headers.get('x-robots-tag')||'').toLowerCase();
   if(!response.ok)throw new Error(`${path} returned ${response.status}`);
@@ -14,7 +14,6 @@ async function fetchText(path,{expectNoindex=false}={}){
   checks.push({path,status:response.status,robots:robots||null});
   return {response,text};
 }
-
 function assert(condition,message){if(!condition)throw new Error(message);}
 
 try{
@@ -30,11 +29,17 @@ try{
   assert(client.text.includes('routeGraph(state.graphs[from.waterway],from,to)'),'NHD route planner missing from deployed client');
 
   const data=await fetchText('/assets/manistee-river-data.js');
-  assert(data.text.includes("personaScript.src='/assets/manistee-river-personas.js'"),'persona layer loader missing from deployed data asset');
+  assert(data.text.includes('/assets/manistee-river-personas.js'),'persona layer loader missing from deployed data asset');
+  assert(data.text.includes('/assets/manistee-river-live-depth.js'),'live-depth layer loader missing from deployed data asset');
+
   const persona=await fetchText('/assets/manistee-river-personas.js');
   for(const key of ['trout','salmon','paddle','camp','boat','family','access'])assert(persona.text.includes(`${key}:{`),`persona asset missing ${key} decision lens`);
   assert(persona.text.includes('What are you here to do?'),'persona chooser prompt missing');
-  assert(persona.text.includes("searchParams.set('persona'"),'persona share-state contract missing');
+
+  const depth=await fetchText('/assets/manistee-river-live-depth.js');
+  for(const phrase of ['River key','Plan from this exact access','River right now','Weather near this access','Before you go'])assert(depth.text.includes(phrase),`live-depth asset missing ${phrase}`);
+  assert(depth.text.includes('left:14px'),'river key is not pinned to the left');
+  assert(depth.text.includes('/api/manistee-river-weather?lat='),'selected-access weather request missing');
 
   const conditions=await fetchText('/api/manistee-river-conditions',{expectNoindex:true});
   const conditionsJson=JSON.parse(conditions.text);
@@ -42,6 +47,20 @@ try{
   assert(conditionsJson.gauges.length===5,`conditions API expected 5 gauges, got ${conditionsJson.gauges.length}`);
   const ids=new Set(conditionsJson.gauges.map(g=>g.id));
   for(const id of ['04123500','04124000','04124200','04125550','04125460'])assert(ids.has(id),`conditions API missing ${id}`);
+  for(const g of conditionsJson.gauges){
+    assert(Object.hasOwn(g,'seasonal_stats'),`conditions API missing seasonal_stats for ${g.id}`);
+    assert(Object.hasOwn(g,'flow_context'),`conditions API missing flow_context for ${g.id}`);
+    assert(Object.hasOwn(g,'turbidity_fnu'),`conditions API missing turbidity field for ${g.id}`);
+    assert(Object.hasOwn(g,'dissolved_oxygen_mgl'),`conditions API missing dissolved oxygen field for ${g.id}`);
+  }
+
+  const weather=await fetchText('/api/manistee-river-weather?lat=44.2642&lon=-85.9381',{expectNoindex:true});
+  const weatherJson=JSON.parse(weather.text);
+  assert(weatherJson.source==='National Weather Service','weather API source mismatch');
+  assert(Array.isArray(weatherJson.hourly)&&weatherJson.hourly.length>0,'weather API hourly periods missing');
+  assert(Array.isArray(weatherJson.forecast),'weather API forecast periods missing');
+  assert(Array.isArray(weatherJson.alerts),'weather API alerts contract missing');
+  assert(weatherJson.precipitation_context,'weather API precipitation context missing');
 
   const hydro=await fetchText('/api/manistee-river-hydrography',{expectNoindex:true});
   const hydroJson=JSON.parse(hydro.text);
@@ -52,7 +71,6 @@ try{
 
   const sitemap=await fetchText('/sitemap-manistee.xml');
   assert(sitemap.text.includes('<loc>https://chrisizworski.com/manistee-river-map/</loc>'),'Manistee sitemap is stale or missing route');
-
   const robots=await fetchText('/robots.txt');
   assert(robots.text.includes('Sitemap: https://chrisizworski.com/sitemap-manistee.xml'),'robots.txt does not advertise Manistee sitemap');
 
