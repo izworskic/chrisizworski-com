@@ -4,8 +4,11 @@ import path from 'node:path';
 
 const root=path.resolve(import.meta.dirname,'..');
 const registry=JSON.parse(await readFile(path.join(root,'benchmarks/tool-network-registry.json'),'utf8'));
+let actions={relationships:[],experiments:[]};
+try{actions=JSON.parse(await readFile(path.join(root,'benchmarks/tool-network-actions.json'),'utf8'));}catch{}
 const tools=registry.tools||[];
-const rels=registry.relationships||[];
+const rels=[...(registry.relationships||[]),...(actions.relationships||[])];
+const experiments=actions.experiments||[];
 const byId=new Map(tools.map(t=>[t.id,t]));
 const inbound=new Map(tools.map(t=>[t.id,[]]));
 const outbound=new Map(tools.map(t=>[t.id,[]]));
@@ -22,6 +25,7 @@ const degreeById=new Map(degree.map(d=>[d.id,d]));
 const isolated=degree.filter(d=>d.total===0&&byId.get(d.id)?.networkRole!=='leaf');
 const protectedTools=tools.filter(t=>t.searchTreatment?.status==='protected');
 const candidates=[...(registry.expansionOpportunities||[])].sort((a,b)=>b.bestFitScore-a.bestFitScore);
+const experimentByCandidate=new Map(experiments.filter(e=>e.candidateId).map(e=>[e.candidateId,e]));
 
 const focusArg=process.argv.find(arg=>arg.startsWith('--focus='));
 const focusId=focusArg?focusArg.slice('--focus='.length):null;
@@ -57,6 +61,8 @@ function isolatedPriority(d){
 const isolatedRanked=[...isolated].sort((a,b)=>isolatedPriority(b)-isolatedPriority(a)||a.name.localeCompare(b.name));
 
 function candidateDecision(c){
+  const experiment=experimentByCandidate.get(c.id);
+  if(experiment?.status==='running-contextual-test')return 'TEST RUNNING';
   const note=String(c.note||'');
   const evidenceGated=/only build if|if .*shows|if query data|first test|avoid creating|otherwise strengthen/i.test(note);
   if(c.bestFitScore>=(registry.bestFitScoring?.priorityThreshold||85)){
@@ -84,6 +90,11 @@ if(focusId){
   }
 }
 
+console.log('\nActive network experiments');
+if(experiments.length){
+  for(const e of experiments)console.log(`  ${e.status.toUpperCase()}  ${e.name} [${e.id}] · candidate ${e.candidateScore||'n/a'}/100 · surfaces ${(e.surfaces||[]).join(', ')}`);
+}else console.log('  None.');
+
 console.log('\nNetwork repair priority');
 if(isolatedRanked.length){
   for(const d of isolatedRanked){
@@ -100,7 +111,9 @@ if(candidates.length){
   const c=candidates[0];
   console.log(`  ${candidateDecision(c)}  ${c.bestFitScore}/100  ${c.name} [${c.id}]`);
   console.log(`  Connects to: ${(c.connectsTo||[]).join(', ')}`);
-  if(c.note)console.log(`  Gate: ${c.note}`);
+  const experiment=experimentByCandidate.get(c.id);
+  if(experiment?.promotionGate?.decision)console.log(`  Promotion gate: ${experiment.promotionGate.decision}`);
+  else if(c.note)console.log(`  Gate: ${c.note}`);
 }
 
 console.log('\nMost connected nodes');
