@@ -1,0 +1,47 @@
+{
+  "version": "1.0.0",
+  "created": "2026-08-20",
+  "objective": "Use existing Michigan tool authority as a connected trip-planning network so seasonal traffic can continue into relevant live tools without creating thin URLs or resetting active search experiments.",
+  "searchConsoleEvidence": {
+    "source": "chrisizworski.com-Performance-on-Search-2026-08-15",
+    "fall": [
+      {"query": "michigan fall color map 2026", "impressions": 74, "clicks": 0, "averagePosition": 8.88},
+      {"query": "michigan peak fall colors 2026", "impressions": 13, "clicks": 0, "averagePosition": 9.23}
+    ],
+    "rivers": [
+      {"query": "ausable river tubing map", "impressions": 43, "clicks": 0, "averagePosition": 9.0},
+      {"query": "ausable river float times map", "impressions": 16, "clicks": 0, "averagePosition": 9.25},
+      {"query": "manistee river canoeing", "impressions": 6, "clicks": 0, "averagePosition": 28.33}
+    ],
+    "protectedDestinations": [
+      {"query": "northern lights michigan tonight", "impressions": 456, "clicks": 6, "averagePosition": 9.93},
+      {"query": "mackinac bridge conditions today live", "impressions": 150, "clicks": 0, "averagePosition": 9.83}
+    ]
+  },
+  "releaseGate": {
+    "minimumScore": 95,
+    "fatalPenaltyAllowed": false
+  },
+  "dimensions": [
+    {"key": "fallDistribution", "weight": 20, "definition": "Fall pages load a contextual trip stack that routes by region into existing tools."},
+    {"key": "regionalUsefulness", "weight": 20, "definition": "At least eight Michigan region stacks map to useful, non-duplicative destinations."},
+    {"key": "weekendCrawlability", "weight": 15, "definition": "The fall-this-weekend page carries crawlable fallback links and upgrades to the best-region stack after ranking."},
+    {"key": "riverNetwork", "weight": 15, "definition": "The Manistee tool hands off into live trout, salmon, Au Sable and broader trip planning without changing its search ownership."},
+    {"key": "measurement", "weight": 10, "definition": "Cross-tool handoffs emit one stable symbolic event without precise location or personal data."},
+    {"key": "experimentProtection", "weight": 15, "definition": "Protected running search experiments retain their exact search-facing titles."},
+    {"key": "aiDiscovery", "weight": 5, "definition": "llms.txt describes the trip-network relationships for machine discovery."}
+  ],
+  "outcomeTargets": {
+    "primary": "Increase qualified multi-tool sessions and strengthen internal topical relationships while protected CTR tests finish.",
+    "search": "Use the next comparable Search Console exports to look for impression growth on linked river/trip tools and CTR movement on fall pages.",
+    "behavior": "Measure Contextual Tool Handoff by source surface and destination; establish a baseline before setting a conversion-rate target.",
+    "rule": "Build quality is a release gate, not a traffic forecast."
+  },
+  "fatalPenalties": [
+    "Create a new indexable landing URL only to join existing tools.",
+    "Change a protected title, description, H1, first answer, canonical, structured data or indexability during its measurement window.",
+    "Collect or transmit precise location, typed destination, cookies, local/session storage, fingerprinting or personal identifiers for the trip stack.",
+    "Replace a destination tool's primary decision with generic related-link clutter.",
+    "Touch the open Lake Superior Circle Tour agent branch source files."
+  ]
+}
