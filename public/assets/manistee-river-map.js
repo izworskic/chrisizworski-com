@@ -4,7 +4,7 @@ const DATA=window.MANISTEE_FIELD_DATA;
 if(!DATA)return;
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
-const state={map:null,layers:{},hydro:null,graphs:{},selected:null,routeLayer:null,gauges:new Map()};
+const state={map:null,layers:{},hydro:null,graphs:{},selected:null,routeLayer:null,gauges:new Map(),conditionsPromise:null};
 const colors={manistee:'#0d5c63',pine:'#2f7d32','bear-creek':'#7b5b2a','little-manistee':'#76558f',access:'#c56b28',camp:'#5d7046',gauge:'#2764a8'};
 
 function ensureLeafletCss(){
@@ -28,6 +28,7 @@ function confidenceLabel(conf){return {agency:'Agency coordinate','mapped-agency
 function typeLabel(type){return String(type||'access').replaceAll('-',' ').replace(/\b\w/g,c=>c.toUpperCase());}
 function activityLabel(activity){return String(activity||'').replace(/\b\w/g,c=>c.toUpperCase());}
 function directions(p){const q=encodeURIComponent(`${p.lat},${p.lon}`);return `https://www.google.com/maps/dir/?api=1&destination=${q}`;}
+function pointMap(latlng){const q=encodeURIComponent(`${latlng.lat},${latlng.lng}`);return `https://www.google.com/maps/search/?api=1&query=${q}`;}
 function hydroId(name){return name==='Manistee River'?'manistee':name==='Pine River'?'pine':name==='Bear Creek'?'bear-creek':name==='Little Manistee River'?'little-manistee':null;}
 function accessPopupHtml(p){
   const activities=p.activities.map(a=>`<span class="mrp-chip">${esc(activityLabel(a))}</span>`).join('');
@@ -68,6 +69,80 @@ function gaugePopupHtml(meta,g){
     <p class="mrp-source">${esc(freshness)} · provisional USGS data</p>
     <div class="mrp-actions"><a class="mrp-nav" href="${esc(meta.sourceUrl)}" target="_blank" rel="noopener">Open USGS station</a></div>
   </article>`;
+}
+function waterwayKind(id){
+  const kind=DATA.waterways.find(w=>w.id===id)?.kind||'river';
+  return kind==='mainstem'?'Mainstem':kind==='tributary'?'Tributary':kind==='companion'?'Companion river':typeLabel(kind);
+}
+function nearestRiverAccess(id,latlng){
+  let best=null,bestMiles=Infinity;
+  for(const p of DATA.places.filter(p=>p.waterway===id)){
+    const d=hav([latlng.lat,latlng.lng],[p.lat,p.lon]);
+    if(d<bestMiles){best=p;bestMiles=d;}
+  }
+  return best?{place:best,distance:bestMiles}:null;
+}
+function nearestRiverGauge(id,latlng){
+  let best=null,bestMiles=Infinity;
+  for(const meta of DATA.gauges.filter(g=>g.waterway===id&&!g.historic)){
+    const d=hav([latlng.lat,latlng.lng],[meta.lat,meta.lon]);
+    if(d<bestMiles){best=meta;bestMiles=d;}
+  }
+  return best?{meta:best,reading:state.gauges.get(best.id)||null,distance:bestMiles}:null;
+}
+function riverPopupHtml(id,name,latlng){
+  const water=DATA.waterways.find(w=>w.id===id)||{};
+  const access=nearestRiverAccess(id,latlng),gauge=nearestRiverGauge(id,latlng),g=gauge?.reading||null;
+  const stats=g?.seasonal_stats||{},fc=g?.flow_context||{};
+  const context=water.note||`${waterwayKind(id)} in the mapped Manistee River field system. The colored line is source-backed USGS hydrography, not a road or public-access claim.`;
+  const freshness=g?.measured_at?`${g.fresh?'Current':'Stale / verify'} · measured ${new Date(g.measured_at).toLocaleString()}`:'Live reading not loaded yet';
+  const gaugeRows=gauge?`
+      <li><span>Nearest active gauge</span><b>${esc(gauge.meta.name)}</b><small>${fmt(gauge.distance,1)} mi straight-line from this river point</small></li>
+      <li><span>Flow</span><b>${g?.discharge_cfs!=null?`${fmt(g.discharge_cfs,0)} cfs`:'Loading / unavailable'}</b><small>${fc.percent_of_median!=null?`${fc.percent_of_median}% of seasonal median${stats.p50!=null?` · median ${fmt(stats.p50,0)} cfs`:''}`:esc(fc.label||'Seasonal comparison loads with the USGS reading')}</small></li>
+      <li><span>Water / stage</span><b>${g?.water_temp_f!=null?`${fmt(g.water_temp_f,1)}°F`:'Temp not reported'} · ${g?.gage_height_ft!=null?`${fmt(g.gage_height_ft,2)} ft`:'stage not reported'}</b><small>${esc(g?.temperature_context?.label||freshness)}</small></li>
+      <li><span>Freshness</span><b>${esc(g?.fresh?'Live / recent':g?'Stale / verify':'Loading')}</b><small>${esc(freshness)}</small></li>`:
+      `<li><span>Live river gauge</span><b>No active gauge mapped to this waterway</b><small>Use the river/source links below for broader context.</small></li>`;
+  const accessRow=access?`<li><span>Nearest mapped access</span><b>${esc(access.place.name)}</b><small>${fmt(access.distance,1)} mi straight-line · ${esc(reachName(access.place.reach))}</small></li>`:
+    `<li><span>Mapped access</span><b>No access point cataloged on this waterway</b></li>`;
+  return `<article class="mrp-card mrp-river" data-manistee-river-popup="${esc(id)}">
+    <div class="mrp-kicker">${esc(waterwayKind(id))} · river point</div>
+    <h3>${esc(name)}</h3>
+    <p class="mrp-note">${esc(context)}</p>
+    <ul class="mrp-stat-list">
+      ${gaugeRows}
+      ${accessRow}
+    </ul>
+    <div class="mrp-actions">
+      <a class="mrp-nav" href="${pointMap(latlng)}" target="_blank" rel="noopener">Map this river point</a>
+      ${access?`<a href="${directions(access.place)}" target="_blank" rel="noopener">Directions to nearest mapped access</a>`:''}
+      ${gauge?`<a href="${esc(gauge.meta.sourceUrl)}" target="_blank" rel="noopener">Open USGS gauge</a>`:''}
+      <a href="${esc(DATA.sources.regulationMap.url)}" target="_blank" rel="noopener">DNR fishing map</a>
+      <a href="${esc(DATA.sources.hydrography.url)}" target="_blank" rel="noopener">USGS NHD source</a>
+    </div>
+    <p class="mrp-source">Clicked river point ${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)} · USGS NHD geometry. Gauge readings describe the gauge location, not this exact point. A river point is not necessarily public access.</p>
+  </article>`;
+}
+async function getConditionsPayload(){
+  if(!state.conditionsPromise){
+    state.conditionsPromise=fetch('/api/manistee-river-conditions').then(r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json();}).then(payload=>{
+      state.gauges=new Map((payload.gauges||[]).map(g=>[g.id,g]));
+      return payload;
+    }).catch(error=>{state.conditionsPromise=null;throw error;});
+  }
+  return state.conditionsPromise;
+}
+function openRiverPopup(id,name,latlng){
+  const popup=L.popup({className:'manistee-rich-popup manistee-river-popup',minWidth:285,maxWidth:360,maxHeight:520,autoPanPadding:[18,18]})
+    .setLatLng(latlng)
+    .setContent(riverPopupHtml(id,name,latlng))
+    .openOn(state.map);
+  if(!state.gauges.size){
+    getConditionsPayload().then(()=>{
+      if(popup.isOpen()&&state.map.hasLayer(popup))popup.setContent(riverPopupHtml(id,name,latlng)).update();
+    }).catch(()=>{
+      if(popup.isOpen()&&state.map.hasLayer(popup))popup.setContent(riverPopupHtml(id,name,latlng)).update();
+    });
+  }
 }
 
 function initMap(){
@@ -160,7 +235,12 @@ async function loadHydrography(){
     for(const f of payload.features||[]){
       const id=hydroId(f.properties?.name);if(!id)continue;grouped[id].push(f);
       const layer=id==='manistee'?state.layers.mainstem:id==='little-manistee'?state.layers.companion:state.layers.tributaries;
-      L.geoJSON(f,{style:{color:colors[id],weight:id==='manistee'?4:3,opacity:id==='little-manistee'?.65:.9,dashArray:id==='little-manistee'?'5 6':null}}).bindTooltip(`${f.properties.name} · USGS NHD`).addTo(layer);
+      const river=L.geoJSON(f,{style:{color:colors[id],weight:id==='manistee'?5:4,opacity:id==='little-manistee'?.68:.92,dashArray:id==='little-manistee'?'5 6':null}});
+      river.eachLayer(path=>{
+        if(window.matchMedia?.('(hover:hover) and (pointer:fine)').matches)path.bindTooltip(`${f.properties.name}`,{sticky:true,direction:'top'});
+        path.on('click',event=>openRiverPopup(id,f.properties.name,event.latlng));
+      });
+      river.addTo(layer);
     }
     for(const [id,features] of Object.entries(grouped))state.graphs[id]=buildGraph(features);
     status.textContent=`USGS NHD geometry loaded · ${payload.features.length} named flowline segments`;status.classList.add('ok');
@@ -197,8 +277,7 @@ function gaugeCard(meta,g){
 async function loadConditions(){
   const cards=$('#gauge-cards');cards.innerHTML='<p class="loading">Loading current USGS readings…</p>';
   try{
-    const r=await fetch('/api/manistee-river-conditions');if(!r.ok)throw new Error(`HTTP ${r.status}`);const payload=await r.json();
-    state.gauges=new Map(payload.gauges.map(g=>[g.id,g]));
+    const payload=await getConditionsPayload();
     cards.innerHTML=DATA.gauges.map(meta=>gaugeCard(meta,state.gauges.get(meta.id))).join('');
     state.layers.gauges.clearLayers();
     for(const meta of DATA.gauges.filter(g=>!g.historic)){
@@ -243,5 +322,5 @@ function bindUI(){
 function applyHash(){const id=decodeURIComponent(location.hash.slice(1));if(DATA.places.some(p=>p.id===id))selectPlace(id,false);}
 function init(){plannerOptions();bindUI();initMap();applyHash();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-window.ManisteeFieldMapTest={hav,nodeKey,geometryLines,buildGraph,nearestNode,routeGraph,directions,accessPopupHtml,gaugePopupHtml};
+window.ManisteeFieldMapTest={hav,nodeKey,geometryLines,buildGraph,nearestNode,routeGraph,directions,accessPopupHtml,gaugePopupHtml,riverPopupHtml,nearestRiverAccess,nearestRiverGauge};
 })();
