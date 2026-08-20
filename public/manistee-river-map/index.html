@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Manistee River Map & Trip Planner | Access, Flows, Fishing</title>
-<meta name="description" content="Explore the Manistee River and tributaries on a source-backed field map with public access, live USGS flows and water temperatures, NHD river geometry, Pine River access, trip planning and current Michigan DNR regulation links.">
+<meta name="description" content="Explore the Manistee River and tributaries with public access, live USGS flows and water temperatures, river geometry, Pine River access, trip planning and current Michigan DNR regulation links.">
 <link rel="canonical" href="https://chrisizworski.com/manistee-river-map/">
 <meta property="og:title" content="The Manistee River: A Field Map">
-<meta property="og:description" content="A detailed, source-backed Manistee River map with access, live gauges, tributaries and an NHD river-distance planner.">
+<meta property="og:description" content="Manistee River access, live gauges, tributaries and a river-distance trip planner.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://chrisizworski.com/manistee-river-map/">
 <meta name="twitter:card" content="summary">
@@ -19,12 +19,12 @@
 {
   "@context":"https://schema.org",
   "@graph":[
-    {"@type":"WebApplication","name":"Manistee River Field Map","url":"https://chrisizworski.com/manistee-river-map/","applicationCategory":"TravelApplication","operatingSystem":"Any","description":"Interactive Manistee River and tributaries field map with source-backed access locations, USGS hydrography, current USGS river readings and trip planning."},
-    {"@type":"Dataset","name":"Manistee River Field Map source index","creator":{"@type":"Person","name":"Chris Izworski"},"isBasedOn":["https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer","https://waterdata.usgs.gov/","https://www.michigan.gov/dnr/things-to-do/fishing/fishing-regulations","https://www.fs.usda.gov/r09/huron-manistee"],"description":"A curated index of public river access and recreation locations with source and coordinate-confidence metadata."},
+    {"@type":"WebApplication","name":"Manistee River Field Map","url":"https://chrisizworski.com/manistee-river-map/","applicationCategory":"TravelApplication","operatingSystem":"Any","description":"Interactive Manistee River and tributaries map with access locations, USGS hydrography, current river readings and trip planning."},
+    {"@type":"Dataset","name":"Manistee River Field Map source index","creator":{"@type":"Person","name":"Chris Izworski"},"isBasedOn":["https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer","https://waterdata.usgs.gov/","https://www.michigan.gov/dnr/things-to-do/fishing/fishing-regulations","https://www.fs.usda.gov/r09/huron-manistee"],"description":"A curated index of public river access and recreation locations with coordinate and facility metadata."},
     {"@type":"FAQPage","mainEntity":[
-      {"@type":"Question","name":"Does this map replace Michigan fishing regulations?","acceptedAnswer":{"@type":"Answer","text":"No. Fishing rules can change by reach and season. Use the linked current Michigan DNR fishing regulations and regulation map before fishing."}},
-      {"@type":"Question","name":"Where do the river lines come from?","acceptedAnswer":{"@type":"Answer","text":"River and tributary geometry is loaded from the U.S. Geological Survey National Hydrography Dataset rather than hand-drawn."}},
-      {"@type":"Question","name":"Are the flow and temperature readings live?","acceptedAnswer":{"@type":"Answer","text":"The tool requests provisional instantaneous readings from five active USGS stations on the Manistee and Pine rivers and labels stale or unavailable values instead of treating them as current."}}
+      {"@type":"Question","name":"Does this map replace Michigan fishing regulations?","acceptedAnswer":{"@type":"Answer","text":"No. Use the current Michigan DNR fishing regulations and regulation map for reach-specific rules."}},
+      {"@type":"Question","name":"Where do the river lines come from?","acceptedAnswer":{"@type":"Answer","text":"River and tributary geometry comes from the U.S. Geological Survey National Hydrography Dataset."}},
+      {"@type":"Question","name":"Are the flow and temperature readings live?","acceptedAnswer":{"@type":"Answer","text":"The tool requests current USGS readings from active stations on the Manistee and Pine rivers."}}
     ]}
   ]
 }
@@ -55,18 +55,18 @@
       <button class="tab-button" data-tab="guide" role="tab" aria-selected="false">Guide</button>
     </nav>
     <section id="panel-places" class="tab-panel" role="tabpanel">
-      <div class="eyebrow">Find your water</div><h2>Access that explains itself</h2>
-      <p class="lede">Every marker carries a coordinate source and a facility source. Agency coordinates are distinguished from sites whose facility is official but whose pin location is mapped from public geographic data.</p>
+      <div class="eyebrow">Find your water</div><h2>Access & places</h2>
+      <p class="lede">Put-ins, takeouts, camps, trails and services.</p>
       <input id="place-search" class="search" type="search" placeholder="Search access, river, camp, reach…" aria-label="Search mapped places">
       <div class="chips" aria-label="Activity filters">
         <button class="activity-chip" data-activity="all" aria-pressed="true">All</button><button class="activity-chip" data-activity="fish" aria-pressed="false">Fish</button><button class="activity-chip" data-activity="paddle" aria-pressed="false">Paddle</button><button class="activity-chip" data-activity="camp" aria-pressed="false">Camp</button><button class="activity-chip" data-activity="hike" aria-pressed="false">Hike</button><button class="activity-chip" data-activity="scenic" aria-pressed="false">Scenic</button>
       </div>
       <div id="nearest-note" class="source-note"></div><div id="place-count" class="count"></div><div id="place-list" class="place-list"></div>
-      <div id="place-detail" class="detail"><p class="lede">Tap a map marker or place to see coordinates, source, directions and regulation links.</p></div>
+      <div id="place-detail" class="detail"><p class="lede">Tap a marker or place for details and directions.</p></div>
     </section>
     <section id="panel-plan" class="tab-panel" role="tabpanel" hidden>
-      <div class="eyebrow">NHD route engine</div><h2>Plan on the channel</h2>
-      <p class="lede">The planner snaps both access points to the USGS hydrography network and finds a path along the river. If the network does not support a trustworthy route, it refuses to invent mileage.</p>
+      <div class="eyebrow">Trip planner</div><h2>Plan a float</h2>
+      <p class="lede">Choose a put-in and takeout for river mileage and estimated time.</p>
       <div class="planner-form">
         <div class="field"><label for="plan-from">Put-in</label><select id="plan-from"></select></div>
         <div class="field"><label for="plan-to">Takeout</label><select id="plan-to"></select></div>
@@ -74,17 +74,17 @@
         <div class="mini-actions"><button id="swap-plan" type="button">Swap put-in / takeout</button></div>
       </div>
       <div id="plan-result" class="plan-result"><p>Choose two access points on the same river.</p></div>
-      <p id="planner-status" class="source-note">Waiting for USGS hydrography…</p>
-      <div class="callout"><strong>What the estimate does not know</strong><p>Fishing time, wind, boat type, logs, portages, dam operations, backwater paddling and stops. Use the mileage as a planning primitive, then add your own margin.</p></div>
+      <p id="planner-status" class="source-note">Loading river routing…</p>
+      <div class="callout"><strong>Trip estimate</strong><p>Add time for fishing, wind, logs, portages, dam operations and stops.</p></div>
     </section>
     <section id="panel-river" class="tab-panel" role="tabpanel" hidden>
-      <div class="eyebrow">Measured, not inferred</div><h2>River now</h2>
-      <p class="lede">Instantaneous USGS readings at four points on the Manistee plus the Pine River. A gauge describes that location, not the entire reach.</p>
+      <div class="eyebrow">Live gauges</div><h2>River now</h2>
+      <p class="lede">USGS flow, stage and temperature at four Manistee gauges plus the Pine River.</p>
       <div id="gauge-cards" class="gauge-cards"></div><p id="conditions-source" class="source-note"></p>
-      <div class="notice">Water temperature context is deliberately conservative: 65–67.9°F is flagged for extra trout-care judgment and 68°F+ as thermal-stress context. It is not a legal closure or a substitute for local conditions.</div>
+      <div class="notice">Trout temperature: 65–67.9°F caution; 68°F+ thermal-stress range.</div>
     </section>
     <section id="panel-guide" class="tab-panel" role="tabpanel" hidden>
-      <div class="eyebrow">Five ways to read the system</div><h2>River reaches</h2>
+      <div class="eyebrow">Five reaches</div><h2>River reaches</h2>
       <div class="reach-list">
         <div class="reach"><h3>Upper Manistee</h3><p>Cold-water, intimate trout river with a dense access network and long float possibilities.</p></div>
         <div class="reach"><h3>Middle / Hodenpyl</h3><p>Broader river and backwater country tied to the Manistee River Trail and North Country Trail.</p></div>
@@ -92,29 +92,27 @@
         <div class="reach"><h3>Lower Manistee</h3><p>National Recreation River corridor, developed Forest Service access and migratory salmonid water.</p></div>
         <div class="reach pine"><h3>Pine River</h3><p>Cold, fast National Scenic River tributary with Forest Service carry-in landings and permit considerations.</p></div>
       </div>
-      <p class="source-note">The Little Manistee is available as an optional companion layer. It enters Manistee Lake and is intentionally not mislabeled as a direct Manistee River tributary.</p>
+      <p class="source-note">Little Manistee is shown as a companion river because it enters Manistee Lake separately.</p>
       <button id="print-guide" class="btn" type="button">Print / save field guide</button>
     </section>
   </aside>
 </section>
 <section class="guide" id="field-guide">
   <div class="eyebrow">Field guide</div><h2>One river system, several different trips</h2>
-  <p>The Manistee changes character repeatedly on its way west. A day on the upper trout water is not the same planning problem as a Hodenpyl backwater trip or a lower-river salmon run. This map keeps those reaches separate while still letting you see the system as one connected watershed.</p>
+  <p>The Manistee changes from upper trout water to broad backwaters and the lower recreation river. Use the reaches below to plan the right trip.</p>
   <div class="guide-grid">
-    <article class="guide-card"><h3>For a trout day</h3><p>Start with the Upper Manistee tab, then check the Grayling gauge for temperature and discharge. Use access provenance before building a shuttle, and open the current DNR regulation map for the exact reach you intend to fish.</p></article>
-    <article class="guide-card"><h3>For a paddle</h3><p>Pick put-in and takeout on the same mapped river. The planner uses USGS NHD channel geometry for mileage and lets you set your own realistic travel speed. Pine River users should also confirm current Forest Service permit requirements.</p></article>
-    <article class="guide-card"><h3>For a camp / hike loop</h3><p>Seaton Creek anchors the Hodenpyl end of the Manistee River Trail. On National Forest land, dispersed camping rules differ from designated riverside sites; the Forest Service says general dispersed camping is not allowed within 200 feet of water unless otherwise designated.</p></article>
-    <article class="guide-card"><h3>For the lower river</h3><p>Tippy Dam is the hinge. Below it, the Forest Service-managed National Recreation River corridor includes High Bridge, Blacksmith Bayou, Bear Creek and Rainbow Bend access. Seasonal fishing pressure and boat traffic can be very different from the upper river.</p></article>
+    <article class="guide-card"><h3>For a trout day</h3><p>Start with the Upper Manistee, check the Grayling gauge, then open the DNR regulation map for the reach you plan to fish.</p></article>
+    <article class="guide-card"><h3>For a paddle</h3><p>Choose a put-in and takeout, check river mileage and set your travel speed. Pine River trips may require a Forest Service permit.</p></article>
+    <article class="guide-card"><h3>For a camp / hike loop</h3><p>Seaton Creek anchors the Hodenpyl end of the Manistee River Trail. National Forest camping rules differ by site and corridor.</p></article>
+    <article class="guide-card"><h3>For the lower river</h3><p>Tippy Dam is the hinge. Below it are High Bridge, Blacksmith Bayou, Bear Creek and Rainbow Bend access.</p></article>
   </div>
-  <h3>Regulations without pretending the map is the law</h3>
-  <p>Michigan's 2026 Fishing Regulations are in effect through March 31, 2027. The DNR's inland trout and salmon regulation map is the right place to identify Type 1–4, gear-restricted and other classified water. This tool links you there instead of copying a rule onto a marker and allowing it to go stale. The DNR's underlying 2026 stream-regulation GIS layer is based on Fisheries Orders 200 and 210 and was updated for the 2026–27 season.</p>
-  <h3>Why the lines matter</h3>
-  <p>The river geometry is not decorative. It comes from the USGS National Hydrography Dataset, which represents named flowlines and their network relationships. That lets the planner calculate a path along source-backed river geometry. If a point is too far from the mapped network or the network cannot connect the selected locations, the planner stops instead of substituting straight-line distance.</p>
-  <h3>Tributaries: what is actually connected</h3>
-  <p>The Pine River is a major Manistee tributary and an official National Scenic River. Bear Creek joins the lower Manistee and is recognized by the Forest Service as cold-water scenic-study water. The Little Manistee is useful context for anglers and paddlers in the same region, but it reaches Manistee Lake separately; the layer is therefore labeled “companion,” not “tributary.”</p>
-  <h3>Data honesty</h3>
-  <p>Three location-confidence labels are used. <strong>Agency coordinate</strong> means the managing agency publishes the location. <strong>Agency site · mapped coordinate</strong> means the facility is documented by an agency but the pin is taken from public geographic mapping. <strong>Community coordinate</strong> is reserved for useful access locations whose coordinates come from an identified local paddling source. That distinction is visible because a map should make uncertainty easier to see, not hide it.</p>
-  <div class="sources"><h3>Primary sources and verification links</h3><ul>
+  <h3>Fishing regulations</h3>
+  <p>Michigan's 2026 fishing regulations run through March 31, 2027. Use the DNR regulation map for reach-specific rules.</p>
+  <h3>River routing</h3>
+  <p>Trip mileage follows the USGS river network rather than straight-line distance.</p>
+  <h3>River system</h3>
+  <p>Pine River and Bear Creek feed the Manistee. The Little Manistee reaches Manistee Lake separately and is shown as a companion river.</p>
+  <div class="sources"><h3>Sources</h3><ul>
     <li><a href="https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer" target="_blank" rel="noopener">USGS National Hydrography Dataset</a> — river geometry and network.</li>
     <li><a href="https://waterdata.usgs.gov/" target="_blank" rel="noopener">USGS Water Data for the Nation</a> — flow, stage and water temperature.</li>
     <li><a href="https://www.michigan.gov/dnr/things-to-do/fishing/fishing-regulations" target="_blank" rel="noopener">Michigan DNR Fishing Regulations</a> and <a href="https://www.michigan.gov/dnr/things-to-do/fishing/maps" target="_blank" rel="noopener">Inland Trout & Salmon regulation maps</a>.</li>
@@ -124,12 +122,12 @@
   </ul></div>
 </section>
 </main>
-<footer class="footer">Chris Izworski · Michigan field tools · Data sources retain their own limitations and update schedules.</footer>
+<footer class="footer">Chris Izworski · Michigan field tools</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
 <script src="/assets/manistee-river-data.js"></script>
 <script src="/assets/manistee-river-coverage.js?v=20260820-places1"></script>
 <script src="/assets/manistee-river-map.js"></script>
-<script src="/assets/manistee-river-coverage-ui.js?v=20260820-places1"></script>
+<script src="/assets/manistee-river-coverage-ui.js?v=20260820-crisp1"></script>
 <script src="/assets/manistee-map-flow-v2.js?v=20260820-1034"></script>
 </body>
 </html>

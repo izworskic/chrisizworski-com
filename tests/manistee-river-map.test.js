@@ -46,11 +46,11 @@ test('hydrography loss: source geometry is bounded USGS NHD, not hand-drawn rive
   assert.doesNotMatch(dataSource,/riverGeometry\s*:/);
 });
 
-test('tributary identity loss: Little Manistee is explicitly a companion, not a direct tributary',()=>{
+test('tributary identity: Little Manistee remains a companion river',()=>{
   const little=data.waterways.find(w=>w.id==='little-manistee');
   assert.equal(little.kind,'companion');
   assert.match(little.note,/separate|not labeled as a direct tributary/i);
-  assert.match(html,/companion.*not.*tributary|not mislabeled as a direct Manistee River tributary/is);
+  assert.match(html,/Little Manistee.*companion river.*Manistee Lake separately/is);
 });
 
 test('freshness loss: active USGS gauges include four Manistee stations and Pine',()=>{
@@ -61,22 +61,22 @@ test('freshness loss: active USGS gauges include four Manistee stations and Pine
   assert.match(js,/Stale \/ unavailable/);
 });
 
-test('temperature context is care guidance, never a legal closure or safety verdict',()=>{
+test('temperature context keeps care thresholds distinct from legal rules',()=>{
   assert.equal(conditions.tempContext(64).key,'cool');
   assert.equal(conditions.tempContext(66).key,'warm');
   assert.equal(conditions.tempContext(68).key,'thermal-stress');
-  assert.match(html,/not a legal closure/i);
+  assert.match(html,/Trout temperature: 65–67\.9°F caution; 68°F\+ thermal-stress range\./i);
+  assert.doesNotMatch(html,/temperature[^<]{0,120}(closed|unsafe|legal closure)/i);
   assert.doesNotMatch(js,/safe to fish|safe to paddle|river is safe/i);
 });
 
-test('planner loss: route distance uses a graph along NHD geometry and refuses cross-waterway routing',()=>{
+test('planner uses the NHD network and refuses cross-waterway routing',()=>{
   assert.match(js,/function buildGraph\(features\)/);
   assert.match(js,/function routeGraph\(graph,start,end\)/);
   assert.match(js,/Planner refuses cross-waterway routing/);
   assert.match(js,/No trustworthy NHD route could be built/);
   assert.doesNotMatch(js,/straightLineDistance|crowFlies/);
-  assert.match(html,/calculate a path along source-backed river geometry/i);
-  assert.match(html,/stops instead of substituting straight-line distance/i);
+  assert.match(html,/Trip mileage follows the USGS river network rather than straight-line distance/i);
 });
 
 test('regulation loss: tool links current DNR rules instead of hardcoding reach-specific legal claims',()=>{
@@ -111,14 +111,17 @@ test('browser dependency loss: Leaflet has a runtime stylesheet fallback',()=>{
   assert.match(js,/data-manistee-leaflet|dataset\.manisteeLeaflet/);
 });
 
-test('SEO and AI-discovery loss: canonical, source-rich schema and visible field guide are present',()=>{
+test('SEO and AI discovery retain canonical, source schema and field guide',()=>{
   assert.match(html,/<title>Manistee River Map & Trip Planner \| Access, Flows, Fishing<\/title>/);
   assert.match(html,/rel="canonical" href="https:\/\/chrisizworski\.com\/manistee-river-map\/"/);
   assert.match(html,/"@type":"WebApplication"/);
   assert.match(html,/"@type":"Dataset"/);
   assert.match(html,/"@type":"FAQPage"/);
-  assert.match(html,/Primary sources and verification links/);
-  assert.match(html,/Data honesty/);
+  assert.match(html,/"isBasedOn":\[/);
+  assert.match(html,/<div class="sources"><h3>Sources<\/h3>/);
+  assert.match(html,/hydro\.nationalmap\.gov/);
+  assert.match(html,/waterdata\.usgs\.gov/);
+  assert.match(html,/<section class="guide"/);
 });
 
 test('graceful degradation loss: live-service failures preserve the static map guide',()=>{
