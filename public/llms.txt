@@ -82,6 +82,16 @@ The canonical website is https://chrisizworski.com/.
 - Au Sable River guide: https://chrisizworski.com/au-sable-river/
 - Manistee map coverage: Upper, Middle and Lower Manistee plus Pine River, with access points, campgrounds, trails, landmarks, live USGS river conditions, trip planning, guides and liveries.
 
+## Michigan Fall 2026 Decision Pages
+
+- Michigan Fall Color Map: https://chrisizworski.com/fall-color/
+- Michigan Fall Color This Weekend: https://chrisizworski.com/fall-color/this-weekend/
+- Michigan Fall Peak Dates: https://chrisizworski.com/fall-color/when-do-leaves-peak-in-michigan/
+- Michigan Fall Color Drives: https://chrisizworski.com/fall-color/michigan-fall-color-drives/
+- Michigan Leaf-Peeping Planner: https://chrisizworski.com/fall-color/michigan-leaf-peeping-planner/
+- Decision flow: current regional status -> best region this weekend -> peak timing -> route planning.
+- Truth rule: seasonal timing is the base model. Live weather is a planning input and is not represented as a statewide direct leaf measurement.
+
 ## Mackinac Bridge Planning Tools
 
 - Live crossing tool: https://chrisizworski.com/mackinac-bridge-live/

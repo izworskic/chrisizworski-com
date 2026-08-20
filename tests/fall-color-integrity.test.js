@@ -30,7 +30,7 @@ function graphNodes(block) {
 
 test("every fall-color page defines the one canonical Chris Izworski entity", () => {
   const files = fallPages();
-  assert.equal(files.length, 15);
+  assert.equal(files.length, 16);
 
   for (const file of files) {
     const html = readFileSync(file, "utf8");
@@ -114,7 +114,10 @@ test("the browser and daily writer share the August 20 to November 15 reporting 
 });
 
 test("static and dynamic fall sitemaps make only supportable freshness claims", () => {
-  const sitemap = read("public/sitemap.xml");
+  // The primary sitemap carries the established fall cluster. New seasonal
+  // discovery pages can live in the dedicated fall sitemap so a release does
+  // not have to rewrite the large site-wide sitemap just to add one URL.
+  const sitemap = read("public/sitemap.xml") + "\n" + read("public/sitemap-fall.xml");
   const pages = fallPages();
   for (const file of pages) {
     const html = readFileSync(file, "utf8");
@@ -142,9 +145,10 @@ test("static and dynamic fall sitemaps make only supportable freshness claims", 
 
   assert.equal(statusCode, 200);
   assert.ok(!body.includes("<lastmod>"));
+  assert.ok(body.includes("/this-weekend/"));
   assert.ok(body.includes("/michigan-leaf-peeping-planner/"));
   assert.ok(body.includes("/michigan-fall-color-drives/"));
-  assert.equal((body.match(/<url>/g) || []).length, 15);
+  assert.equal((body.match(/<url>/g) || []).length, 16);
 });
 
 test("priority-page schema and sitemap dates agree and are not in the future", () => {
