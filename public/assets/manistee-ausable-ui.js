@@ -19,9 +19,11 @@ function ensureStyles(){
 }
 function augmentMarkup(){
   const mast=$('.mast');
-  if(mast&&!$('.field-brandbar',mast)){
-    mast.insertAdjacentHTML('afterbegin','<div class="field-brandbar"><strong>The Manistee Field Map</strong><span class="field-live-dot" aria-hidden="true"></span><span>river: live data</span><span class="field-secondary">·</span><a class="field-secondary" href="/">by Chris Izworski</a></div><p class="field-kicker">From headwaters trout water to Tippy and Lake Michigan</p>');
-    mast.insertAdjacentHTML('beforeend','<div class="field-counts"><span><b>'+DATA.places.filter(p=>p.confidence==='agency').length+'</b> agency coordinates</span><span><b>'+DATA.places.length+'</b> mapped places</span><span><b>'+DATA.gauges.filter(g=>!g.historic).length+'</b> live gauges</span></div>');
+  if(mast&&mast.dataset.compacted!=='true'){
+    const h1=$('h1',mast);if(h1)h1.textContent='Manistee River Field Map';
+    $$('.crumb,.source-strip,.field-brandbar,.field-kicker,.field-counts',mast).forEach(el=>el.remove());
+    const intro=$(':scope > p',mast);intro?.remove();
+    mast.dataset.compacted='true';
   }
   const riverTab=$('.tab-button[data-tab="river"]');if(riverTab)riverTab.textContent='River';
   const places=$('#panel-places');

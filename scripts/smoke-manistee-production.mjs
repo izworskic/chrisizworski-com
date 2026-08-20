@@ -48,7 +48,11 @@ try{
   assert(data.text.includes('/assets/manistee-river-live-depth.js'),'live-depth layer loader missing from deployed data asset');
 
   const fieldUi=await fetchText('/assets/manistee-ausable-ui.js');
-  for(const phrase of ['The Manistee Field Map','River reach filters','Plan by','Popular starts','Copy trip link','River, weather & field details','conditions-now-strip'])assert(fieldUi.text.includes(phrase),`Au Sable-style UI asset missing ${phrase}`);
+  for(const phrase of ['Manistee River Field Map','River reach filters','Plan by','Popular starts','Copy trip link','River, weather & field details','conditions-now-strip'])assert(fieldUi.text.includes(phrase),`Au Sable-style UI asset missing ${phrase}`);
+  assert(fieldUi.text.includes("mast.dataset.compacted='true'"),'compact masthead state missing');
+  assert(fieldUi.text.includes("const intro=$(':scope > p',mast);intro?.remove()"),'verbose masthead intro is not removed');
+  assert(!fieldUi.text.includes('river: live data'),'old masthead status bar is still injected');
+  assert(!fieldUi.text.includes('agency coordinates'),'old masthead count row is still injected');
   assert(fieldUi.text.includes("riverTab.textContent='River'"),'task nav does not normalize River label');
   assert(fieldUi.text.includes("searchParams.set('from'"),'shareable planner start state missing');
   assert(fieldUi.text.includes("searchParams.set('to'"),'shareable planner end state missing');
