@@ -21,8 +21,13 @@ try{
   const page=await fetchText('/manistee-river-map/');
   assert(page.text.includes('<title>Manistee River Map & Trip Planner | Access, Flows, Fishing</title>'),'Manistee page title mismatch or stale HTML');
   assert(page.text.includes('The Manistee River: A Field Map'),'Manistee field-map heading missing');
-  assert(page.text.includes('/api/manistee-river-conditions'),'conditions API reference missing from deployed client contract');
-  assert(page.text.includes('/api/manistee-river-hydrography'),'hydrography API reference missing from deployed client contract');
+  assert(page.text.includes('/assets/manistee-river-map.js'),'Manistee client asset missing from deployed page');
+  assert(page.text.includes('/assets/manistee-river-data.js'),'Manistee data asset missing from deployed page');
+
+  const client=await fetchText('/assets/manistee-river-map.js');
+  assert(client.text.includes("fetch('/api/manistee-river-conditions')"),'conditions API reference missing from deployed client');
+  assert(client.text.includes("fetch('/api/manistee-river-hydrography')"),'hydrography API reference missing from deployed client');
+  assert(client.text.includes('routeGraph(state.graphs[from.waterway],from,to)'),'NHD route planner missing from deployed client');
 
   const conditions=await fetchText('/api/manistee-river-conditions',{expectNoindex:true});
   const conditionsJson=JSON.parse(conditions.text);
