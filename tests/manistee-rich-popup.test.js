@@ -22,6 +22,42 @@ test('marker click keeps the popup as the primary interaction surface',()=>{
   assert.match(core,/maxHeight:520/);
 });
 
+test('colored river geometry opens a rich river popup instead of the old USGS NHD tooltip',()=>{
+  assert.match(core,/function riverPopupHtml\(id,name,latlng\)/);
+  assert.match(core,/path\.on\('click',event=>openRiverPopup\(id,f\.properties\.name,event\.latlng\)\)/);
+  assert.doesNotMatch(core,/bindTooltip\(`\$\{f\.properties\.name\} · USGS NHD`\)/);
+  assert.match(core,/data-manistee-river-popup/);
+  assert.match(core,/Nearest active gauge/);
+  assert.match(core,/Nearest mapped access/);
+  assert.match(core,/Map this river point/);
+  assert.match(core,/Directions to nearest mapped access/);
+});
+
+test('river geometry popup matches Au Sable condition depth without inventing point-specific readings',()=>{
+  assert.match(core,/<span>Flow<\/span>/);
+  assert.match(core,/percent_of_median/);
+  assert.match(core,/seasonal median/);
+  assert.match(core,/Water \/ stage/);
+  assert.match(core,/Freshness/);
+  assert.match(core,/Gauge readings describe the gauge location, not this exact point/);
+  assert.match(core,/A river point is not necessarily public access/);
+  assert.match(core,/USGS NHD source/);
+  assert.match(core,/DNR fishing map/);
+});
+
+test('river popup shares the conditions request instead of racing a second independent data path',()=>{
+  assert.match(core,/conditionsPromise/);
+  assert.match(core,/function getConditionsPayload\(\)/);
+  assert.match(core,/const payload=await getConditionsPayload\(\)/);
+  assert.match(core,/if\(!state\.gauges\.size\)/);
+  assert.match(core,/getConditionsPayload\(\)\.then/);
+});
+
+test('river name tooltip is hover-only on fine pointers so phone taps cannot get stuck on sparse text',()=>{
+  assert.match(core,/matchMedia\?\.\('\(hover:hover\) and \(pointer:fine\)'\)/);
+  assert.match(core,/path\.bindTooltip\(`\$\{f\.properties\.name\}`/);
+});
+
 test('every access popup can progressively add same-waterway USGS conditions',()=>{
   assert.match(depth,/function enrichPopup\(id\)/);
   assert.match(depth,/g\.waterway===p\.waterway/);
