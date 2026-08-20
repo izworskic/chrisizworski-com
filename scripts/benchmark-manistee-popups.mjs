@@ -44,7 +44,7 @@ section('Weather + alerts',15,[
   t('Wind appears',/Wind \/ precipitation/.test(depth)),
   t('Precipitation context appears',/precipitation_context/.test(depth)),
   t('NWS alert state appears',/NWS alerts/.test(depth)),
-  t('Weather is explicitly not river safety',/not a wading, paddling, boating or fishing-safety verdict/.test(depth))
+  t('Weather is explicitly not river safety',/(?:not|neither).*wading, paddling, boating or fishing.*safety verdict/is.test(depth))
 ]);
 section('Trust + provenance',10,[
   t('Location confidence appears',/Location confidence/.test(core)),
