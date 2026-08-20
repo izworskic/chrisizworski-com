@@ -29,6 +29,13 @@ try{
   assert(client.text.includes("fetch('/api/manistee-river-hydrography')"),'hydrography API reference missing from deployed client');
   assert(client.text.includes('routeGraph(state.graphs[from.waterway],from,to)'),'NHD route planner missing from deployed client');
 
+  const data=await fetchText('/assets/manistee-river-data.js');
+  assert(data.text.includes("personaScript.src='/assets/manistee-river-personas.js'"),'persona layer loader missing from deployed data asset');
+  const persona=await fetchText('/assets/manistee-river-personas.js');
+  for(const key of ['trout','salmon','paddle','camp','boat','family','access'])assert(persona.text.includes(`${key}:{`),`persona asset missing ${key} decision lens`);
+  assert(persona.text.includes('What are you here to do?'),'persona chooser prompt missing');
+  assert(persona.text.includes("searchParams.set('persona'"),'persona share-state contract missing');
+
   const conditions=await fetchText('/api/manistee-river-conditions',{expectNoindex:true});
   const conditionsJson=JSON.parse(conditions.text);
   assert(Array.isArray(conditionsJson.gauges),'conditions API gauges missing');
