@@ -20,7 +20,9 @@ check('Regional stacks span existing tool network',destKeys.filter(k=>asset.incl
 check('Weekend page has crawlable trip fallback',weekend.includes('data-contextual-trip-stack="fall-weekend"')&&['/northern-lights-michigan/','/mackinac-bridge-live/','https://picturedrocks.chrisizworski.com/','https://ausable.chrisizworski.com/','/manistee-river-map/','https://tcwine.chrisizworski.com/'].every(h=>weekend.includes(`href="${h}"`)),10);
 check('Weekend ranking upgrades trip stack',weekend.includes('fall-weekend-ranked')&&weekend.includes('bestId:best.id'),5);
 check('Manistee loads river continuation stack',manistee.includes('/assets/contextual-trip-stack.js')&&['trout','salmon','ausable','weekend'].every(k=>asset.includes(`'${k}'`)),15);
-check('Handoffs use symbolic analytics only',asset.includes("name:'Contextual Tool Handoff'")&&!/geolocation|latitude|longitude|localStorage|sessionStorage|document\.cookie|fingerprint/i.test(asset),10);
+const symbolicEvent=asset.includes("emit('Contextual Tool Handoff'")&&asset.includes("const destination=a.dataset.tripStackLink||'unknown'")&&asset.includes("const surface=a.dataset.tripStackSurface||'unknown'");
+const forbiddenAnalytics=/geolocation|latitude|longitude|localStorage|sessionStorage|document\.cookie|fingerprint/i.test(asset);
+check('Handoffs use symbolic analytics only',symbolicEvent&&!forbiddenAnalytics,10);
 const protectedTitles={
   'public/northern-lights-michigan/index.html':'Northern Lights Michigan Tonight: Aurora | Chris Izworski',
   'public/soo-locks/index.html':'Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski',

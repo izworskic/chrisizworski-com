@@ -5,6 +5,8 @@ import path from 'node:path';
 const root=path.resolve(import.meta.dirname,'..');
 const read=rel=>readFile(path.join(root,rel),'utf8');
 const registry=JSON.parse(await read('benchmarks/tool-network-registry.json'));
+let actions={relationships:[],experiments:[]};
+try{actions=JSON.parse(await read('benchmarks/tool-network-actions.json'));}catch{}
 const toolsHtml=await read('public/tools/index.html');
 const docs=await read('docs/TOOL_NETWORK_REGISTRY.md');
 const pkg=JSON.parse(await read('package.json'));
@@ -57,7 +59,7 @@ check('Registry covers at least the visible catalog',tools.length>=uniqueCards.l
 check('Non-catalog strategic nodes are allowed',tools.some(t=>t.id==='manistee-field-map')&&tools.some(t=>t.id==='boat-launches')&&tools.some(t=>t.id==='shipwrecks'),4,'strategic nodes missing');
 
 // Relationship integrity — 20
-const rels=registry.relationships||[];
+const rels=[...(registry.relationships||[]),...(actions.relationships||[])];
 const badTargets=rels.filter(r=>!idSet.has(r.from)||!idSet.has(r.to)||r.from===r.to);
 check('All relationships resolve to distinct nodes',badTargets.length===0,8,badTargets.map(r=>`${r.from}->${r.to}`).join(', '),true);
 const strengths=new Set(['essential','strong','optional','experimental']);
@@ -83,12 +85,14 @@ const weights=registry.bestFitScoring||{};
 const weightTotal=['distinctSearchIntent','networkFit','uniqueUtility','authorityAndSeasonFit','measurementPlan','cannibalizationSafety'].reduce((n,k)=>n+(weights[k]||0),0);
 check('Best-fit weights total 100',weightTotal===100&&weights.total===100,5,`weights total ${weightTotal}`,true);
 const candidates=registry.expansionOpportunities||[];
+const candidateIds=new Set(candidates.map(c=>c.id));
 const badCandidates=[];
 for(const c of candidates){
   const sum=Object.values(c.scores||{}).reduce((a,b)=>a+Number(b||0),0);
   if(sum!==c.bestFitScore||(c.connectsTo||[]).length<2||(c.connectsTo||[]).some(id=>!idSet.has(id)))badCandidates.push(c.id);
 }
-check('Candidate scores reconcile and connect into the network',badCandidates.length===0,6,badCandidates.join(', '),true);
+const badExperiments=(actions.experiments||[]).filter(e=>!e.id||!candidateIds.has(e.candidateId)||(e.connectsTo||[]).some(id=>!idSet.has(id))||!e.promotionGate?.searchEvidence||!e.promotionGate?.networkEvidence||!e.promotionGate?.safety||!e.promotionGate?.decision);
+check('Candidate scores reconcile and active experiment gates are explicit',badCandidates.length===0&&badExperiments.length===0,6,[...badCandidates,...badExperiments.map(e=>e.id||'unnamed-experiment')].join(', '),true);
 check('Registry contains priority-scored expansion options',candidates.some(c=>c.bestFitScore>=weights.priorityThreshold),4,'no priority candidate');
 
 // Operating model / release integration — 10
@@ -99,7 +103,7 @@ check('Registry benchmark is in full release gate',pkg.scripts['benchmark:tool-n
 console.log('\nTOOL NETWORK REGISTRY BENCHMARK');
 console.log('='.repeat(72));
 console.log(`Score: ${score}/100`);
-console.log(`Nodes: ${tools.length} · visible tool cards: ${uniqueCards.length} · relationships: ${rels.length} · candidates: ${candidates.length}`);
+console.log(`Nodes: ${tools.length} · visible tool cards: ${uniqueCards.length} · relationships: ${rels.length} · candidates: ${candidates.length} · active experiments: ${(actions.experiments||[]).length}`);
 if(missingCatalog.length)console.log(`Unregistered catalog URLs: ${missingCatalog.join(', ')}`);
 if(stranded.length)console.log(`Isolated non-leaf nodes: ${stranded.map(t=>t.id).join(', ')}`);
 if(failures.length){console.log('Non-fatal gaps:');failures.forEach(f=>console.log(` - ${f}`));}
