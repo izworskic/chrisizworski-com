@@ -12,7 +12,7 @@
     "benchmark:seo": "node scripts/measure-discovery.mjs --check",
     "benchmark:ctr": "node scripts/benchmark-ctr-surface.mjs",
     "benchmark:search-growth": "node scripts/benchmark-search-growth-engine.mjs",
-    "benchmark:trip-stack": "node scripts/benchmark-contextual-trip-stack.mjs",
+    "benchmark:trip-stack": "node scripts/benchmark-contextual-trip-stack-v2.mjs",
     "benchmark:entity": "node scripts/benchmark-entity-surface.mjs",
     "benchmark:winter": "node scripts/benchmark-winter-engine.mjs",
     "benchmark:winter-flow": "node scripts/benchmark-winter-persona-flow.mjs",
