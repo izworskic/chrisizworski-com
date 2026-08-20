@@ -18,6 +18,14 @@
     }
   }
 
+  if ((pathname === "/fall-color" || pathname.startsWith('/fall-color/')) && !document.querySelector('script[data-contextual-trip-stack-loader]')) {
+    var tripStack = document.createElement("script");
+    tripStack.src = "/assets/contextual-trip-stack.js?v=20260820-1";
+    tripStack.defer = true;
+    tripStack.dataset.contextualTripStackLoader = "fall";
+    document.body.appendChild(tripStack);
+  }
+
   if (pathname === "/michigan-cross-country-skiing" && !document.querySelector('script[data-winter-final-loader]')) {
     var winterFinal = document.createElement("script");
     winterFinal.src = "/assets/winter-final.js";
