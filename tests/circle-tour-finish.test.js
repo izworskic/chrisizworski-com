@@ -9,7 +9,7 @@ const html = read('public/lake-superior-circle-tour/index.html');
 const page = read('public/assets/lake-superior-circle-tour.js');
 const core = read('public/assets/lake-superior-circle-tour-core.js');
 const map = read('public/assets/lake-superior-circle-tour-map.js');
-const registry = JSON.parse(read('data/tool-network-registry.json'));
+const registry = JSON.parse(read('benchmarks/tool-network-registry.json'));
 
 test('Circle Tour is an interactive 31-stop route planner, not only a guide', () => {
   assert.match(html, /<title>Lake Superior Circle Tour Map: 7–15 Days \| Chris Izworski<\/title>/);
@@ -50,6 +50,14 @@ test('August 2026 finish layer corrects current travel facts and removes self-ju
   assert.match(page, /Sand Point Road and beach are open/);
   assert.match(page, /block\.remove\(\)/);
   assert.match(page, /article\.dateModified = RELEASE/);
+});
+
+test('Circle Tour keeps the live NOAA Lake Superior water-level signal', () => {
+  assert.match(html, /id="liveData"/);
+  assert.match(page, /station=9099064/);
+  assert.match(page, /datum=LWD/);
+  assert.match(page, /ft above LWD at Duluth/);
+  assert.doesNotMatch(page, /datum=IGLD85/);
 });
 
 test('Circle Tour is connected to the tool network with unique search ownership', () => {
