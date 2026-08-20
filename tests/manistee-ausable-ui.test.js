@@ -21,12 +21,15 @@ test('field shell is map-first instead of a permanent desktop sidebar',()=>{
   assert.doesNotMatch(css,/grid-template-columns:minmax\(0,1\.45fr\)/);
 });
 
-test('the oversized decorative hero is visually replaced by the compact field-map masthead',()=>{
-  assert.match(ui,/The Manistee Field Map/);
-  assert.match(ui,/river: live data/);
+test('masthead is deliberately terse and gives the screen back to the map',()=>{
+  assert.match(ui,/Manistee River Field Map/);
+  assert.match(ui,/mast\.dataset\.compacted='true'/);
+  assert.match(ui,/\.crumb,\.source-strip,\.field-brandbar,\.field-kicker,\.field-counts/);
+  assert.match(ui,/intro\?\.remove\(\)/);
+  assert.doesNotMatch(ui,/river: live data/);
+  assert.doesNotMatch(ui,/agency coordinates/);
   assert.match(css,/\.mast\{background:var\(--field-paper\)!important/);
   assert.match(css,/\.source-strip\{display:none!important/);
-  assert.match(css,/\.mast h1\{[^}]*font-size:clamp\(31px,4vw,52px\)!important/s);
 });
 
 test('one simple task switcher retains the Au Sable Places Plan River Guide model',()=>{
