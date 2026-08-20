@@ -5,7 +5,7 @@ const checks=[];
 
 async function fetchText(path,{expectNoindex=false}={}){
   const url=new URL(path,ORIGIN);
-  const response=await fetch(url,{redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/3.0'},signal:AbortSignal.timeout(15000)});
+  const response=await fetch(url,{redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/3.1'},signal:AbortSignal.timeout(15000)});
   const text=await response.text();
   const robots=(response.headers.get('x-robots-tag')||'').toLowerCase();
   if(!response.ok)throw new Error(`${path} returned ${response.status}`);
@@ -30,6 +30,15 @@ try{
   assert(client.text.includes('accessPopupHtml'),'rich access popup renderer missing from deployed client');
   assert(client.text.includes("m.bindPopup(()=>accessPopupHtml(p)"),'access markers are not using rich popups');
   assert(client.text.includes('gaugePopupHtml(meta,g)'),'USGS gauge rich popup renderer missing');
+  assert(client.text.includes('riverPopupHtml'),'rich river-geometry popup renderer missing from deployed client');
+  assert(client.text.includes("path.on('click',event=>openRiverPopup"),'colored river geometry is not wired to the rich popup');
+  assert(!client.text.includes('`${f.properties.name} · USGS NHD`'),'old sparse river-name-plus-USGS-NHD tooltip is still deployed');
+  assert(client.text.includes('Nearest active gauge'),'river popup nearest-gauge context missing');
+  assert(client.text.includes('Nearest mapped access'),'river popup nearest-access context missing');
+  assert(client.text.includes('Map this river point'),'river popup map action missing');
+  assert(client.text.includes('Directions to nearest mapped access'),'river popup access directions missing');
+  assert(client.text.includes('Gauge readings describe the gauge location, not this exact point'),'river popup gauge-location disclaimer missing');
+  assert(client.text.includes('A river point is not necessarily public access'),'river popup access disclaimer missing');
   assert(client.text.includes('Navigate here'),'popup navigation action missing');
   assert(client.text.includes('Location confidence'),'popup source/trust context missing');
 
