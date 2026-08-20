@@ -6,6 +6,8 @@ on:
     paths:
       - 'public/manistee-river-map/**'
       - 'public/assets/manistee-river-*.js'
+      - 'public/assets/manistee-ausable-ui.js'
+      - 'public/assets/manistee-ausable-ui.css'
       - 'api/manistee-river-*.js'
       - 'public/sitemap-manistee.xml'
       - 'public/robots.txt'

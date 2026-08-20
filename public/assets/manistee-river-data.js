@@ -129,9 +129,9 @@ window.MANISTEE_FIELD_DATA = {
 };
 
 // Optional decision layers are additive. The core source-backed map, access list,
-// live gauges and NHD planner remain usable if either enhancement fails to load.
+// live gauges and NHD planner remain usable if any enhancement fails to load.
 if(typeof document!=='undefined'){
-  for(const src of ['/assets/manistee-river-personas.js','/assets/manistee-river-live-depth.js']){
+  for(const src of ['/assets/manistee-ausable-ui.js','/assets/manistee-river-personas.js','/assets/manistee-river-live-depth.js']){
     const script=document.createElement('script');
     script.src=src;
     script.async=true;
