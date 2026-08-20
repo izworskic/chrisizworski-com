@@ -1,0 +1,29 @@
+name: Manistee production smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/manistee-river-map/**'
+      - 'public/assets/manistee-river-*.js'
+      - 'api/manistee-river-*.js'
+      - 'public/sitemap-manistee.xml'
+      - 'public/robots.txt'
+      - 'scripts/smoke-manistee-production.mjs'
+      - '.github/workflows/manistee-production-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-origin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify public chrisizworski.com Manistee release
+        run: node scripts/smoke-manistee-production.mjs
