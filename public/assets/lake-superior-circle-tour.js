@@ -11,6 +11,24 @@
     document.head.appendChild(style);
   }
 
+  async function loadLiveLevel() {
+    const el = document.getElementById('liveData');
+    if (!el) return;
+    try {
+      const url = 'https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?date=latest&station=9099064&product=water_level&datum=LWD&time_zone=lst&units=english&format=json';
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`NOAA water level returned ${response.status}`);
+      const data = await response.json();
+      const reading = data?.data?.[0];
+      const value = Number(reading?.v);
+      if (!Number.isFinite(value)) throw new Error('NOAA water level unavailable');
+      const date = String(reading?.t || '').split(' ')[0];
+      el.textContent = `${value.toFixed(2)} ft above LWD at Duluth${date ? ` · ${date}` : ''}`;
+    } catch {
+      el.innerHTML = '<a href="https://greatlakeslevels.org" target="_blank" rel="noopener" style="color:#7bc8e8">Check current level →</a>';
+    }
+  }
+
   function updateStructuredData() {
     const node = document.querySelector('script[type="application/ld+json"]');
     if (!node) return;
@@ -94,6 +112,7 @@
       addCurrentAlerts();
       flattenCompanionCards();
       markRelease();
+      loadLiveLevel();
     }
   }
 
