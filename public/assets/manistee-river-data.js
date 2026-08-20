@@ -127,3 +127,13 @@ window.MANISTEE_FIELD_DATA = {
     speedMph:{upper:3.0,middle:2.7,lower:3.0,pine:2.8}
   }
 };
+
+// The persona layer is intentionally additive. If it fails to load, the source-backed
+// map, access list, live gauges and NHD planner above remain fully usable.
+if(typeof document!=='undefined'){
+  const personaScript=document.createElement('script');
+  personaScript.src='/assets/manistee-river-personas.js';
+  personaScript.async=true;
+  personaScript.dataset.manisteePersonas='true';
+  document.head.appendChild(personaScript);
+}
