@@ -1,5 +1,5 @@
 window.MANISTEE_FIELD_DATA = {
-  version: '2026-08-19',
+  version: '2026-08-20',
   bbox: [-86.35, 44.02, -84.68, 44.95],
   waterways: [
     {id:'manistee',name:'Manistee River',kind:'mainstem',source:'USGS National Hydrography Dataset'},
@@ -128,12 +128,14 @@ window.MANISTEE_FIELD_DATA = {
   }
 };
 
-// The persona layer is intentionally additive. If it fails to load, the source-backed
-// map, access list, live gauges and NHD planner above remain fully usable.
+// Optional decision layers are additive. The core source-backed map, access list,
+// live gauges and NHD planner remain usable if either enhancement fails to load.
 if(typeof document!=='undefined'){
-  const personaScript=document.createElement('script');
-  personaScript.src='/assets/manistee-river-personas.js';
-  personaScript.async=true;
-  personaScript.dataset.manisteePersonas='true';
-  document.head.appendChild(personaScript);
+  for(const src of ['/assets/manistee-river-personas.js','/assets/manistee-river-live-depth.js']){
+    const script=document.createElement('script');
+    script.src=src;
+    script.async=true;
+    script.dataset.manisteeEnhancement='true';
+    document.head.appendChild(script);
+  }
 }
