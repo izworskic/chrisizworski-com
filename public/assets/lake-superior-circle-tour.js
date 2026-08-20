@@ -95,6 +95,15 @@
     });
   }
 
+  function loadContextualTripStack() {
+    if (document.querySelector('script[data-contextual-trip-stack-loader]')) return;
+    const script = document.createElement('script');
+    script.src = '/assets/contextual-trip-stack.js?v=20260820-registry1';
+    script.defer = true;
+    script.dataset.contextualTripStackLoader = 'circle-tour';
+    document.head.appendChild(script);
+  }
+
   function markRelease() {
     document.documentElement.dataset.circleTourRelease = RELEASE;
     const footer = document.querySelector('.footer');
@@ -111,6 +120,7 @@
       patchAgawaTrain();
       addCurrentAlerts();
       flattenCompanionCards();
+      loadContextualTripStack();
       markRelease();
       loadLiveLevel();
     }
