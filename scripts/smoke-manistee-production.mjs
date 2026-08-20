@@ -5,7 +5,7 @@ const checks=[];
 
 async function fetchText(path,{expectNoindex=false}={}){
   const url=new URL(path,ORIGIN);
-  const response=await fetch(url,{redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/5.0'},signal:AbortSignal.timeout(15000)});
+  const response=await fetch(url,{redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/5.1'},signal:AbortSignal.timeout(15000)});
   const text=await response.text();
   const robots=(response.headers.get('x-robots-tag')||'').toLowerCase();
   if(!response.ok)throw new Error(`${path} returned ${response.status}`);
@@ -25,15 +25,23 @@ try{
   assert(!page.text.includes('Source checked Aug. 19, 2026'),'stale masthead source-check copy is still deployed');
   assert(page.text.includes('/assets/manistee-river-map.js'),'Manistee client asset missing from deployed page');
   assert(page.text.includes('/assets/manistee-river-data.js'),'Manistee data asset missing from deployed page');
-  assert(page.text.includes('/assets/manistee-map-flow-v2.js?v=20260820-0933'),'versioned detached-map-flow asset is not directly loaded by public HTML');
+  assert(page.text.includes('/assets/manistee-map-flow-v2.js?v=20260820-1034'),'current card-flow asset is not directly loaded by public HTML');
 
-  const mapFlowV2=await fetchText('/assets/manistee-map-flow-v2.js?v=20260820-0933');
+  const mapFlowV2=await fetchText('/assets/manistee-map-flow-v2.js?v=20260820-1034');
   assert(mapFlowV2.text.includes('#manistee-river-key:not([data-v2-open="true"]){display:none!important}'),'public v2 flow does not collapse the river key by default');
+  assert(mapFlowV2.text.includes('#manistee-river-key{z-index:705!important}'),'public river key is not stacked below point cards');
+  assert(mapFlowV2.text.includes('.manistee-detached-card{position:absolute;z-index:780'),'public point cards do not stack above the river key');
   assert(mapFlowV2.text.includes('#manistee-map .leaflet-popup.manistee-rich-popup{opacity:0!important;pointer-events:none!important}'),'public v2 flow still exposes native anchored Leaflet popups');
   assert(mapFlowV2.text.includes("className='manistee-detached-card'"),'public v2 flow detached-card renderer missing');
   assert(mapFlowV2.text.includes('rightSpace>=leftSpace?anchorX+gap:anchorX-cr.width-gap'),'public v2 flow open-side card placement missing');
   assert(mapFlowV2.text.includes('width:min(560px,calc(100% - 32px))'),'public v2 flow wide-card layout missing');
   assert(mapFlowV2.text.includes('max-height:43vh!important'),'public v2 mobile card bound missing');
+  assert(mapFlowV2.text.includes('function hookLeafletPopups()'),'public card flow cannot capture selected Leaflet popup coordinates');
+  assert(mapFlowV2.text.includes('map.latLngToContainerPoint(popup.getLatLng())'),'public card flow does not track selected point visibility');
+  assert(mapFlowV2.text.includes('safeBottom=Math.min(safeBottom,cardTop-margin)'),'public mobile card flow does not reserve unobstructed map space');
+  assert(mapFlowV2.text.includes('const preferredY=safeTop+(safeBottom-safeTop)*.42'),'public selected point is not shifted toward the visible upper map area');
+  assert(mapFlowV2.text.includes('autoPan.x+=dx;autoPan.y+=dy'),'public card flow does not record its automatic pan');
+  assert(mapFlowV2.text.includes('const reverse={x:-autoPan.x,y:-autoPan.y}'),'public card close does not reverse only the automatic pan');
 
   const client=await fetchText('/assets/manistee-river-map.js');
   assert(client.text.includes("fetch('/api/manistee-river-conditions')"),'conditions API reference missing from deployed client');
