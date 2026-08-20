@@ -65,8 +65,14 @@ function hookLeafletPopups(){
   L.Popup.prototype._manisteeFlowV2Hooked=true;
   const onAdd=L.Popup.prototype.onAdd,onRemove=L.Popup.prototype.onRemove;
   L.Popup.prototype.onAdd=function(map){
+    const rich=String(this.options?.className||'').includes('manistee-rich-popup');
+    if(rich)this.options.autoPan=false;
     const result=onAdd.call(this,map);
-    if(String(this.options?.className||'').includes('manistee-rich-popup')){activePopup=this;activeMap=map;queueMicrotask(scan);}
+    if(rich){
+      activePopup=this;activeMap=map;
+      if(!map._manisteeFlowV2Tracked){map._manisteeFlowV2Tracked=true;map.on('move zoom',()=>{if(activeNative)positionCard(activeNative,false);});}
+      queueMicrotask(scan);
+    }
     return result;
   };
   L.Popup.prototype.onRemove=function(map){
