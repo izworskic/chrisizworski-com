@@ -5,7 +5,7 @@ const html = read('public/lake-superior-circle-tour/index.html');
 const page = read('public/assets/lake-superior-circle-tour.js');
 const core = read('public/assets/lake-superior-circle-tour-core.js');
 const map = read('public/assets/lake-superior-circle-tour-map.js');
-const registry = JSON.parse(read('data/tool-network-registry.json'));
+const registry = JSON.parse(read('benchmarks/tool-network-registry.json'));
 const check = process.argv.includes('--check');
 
 const sections = [];
@@ -39,10 +39,11 @@ section('Continuous route integrity', 20, [
   [has(core, 'google.com/maps/dir'), 'daily Google directions'],
 ]);
 
-section('Mobile, share and resilience', 15, [
+section('Mobile, live data and resilience', 15, [
   [has(html, 'id="mobileTripSheet"') && has(html, 'id="mobileTripTrigger"'), 'mobile trip sheet'],
   [has(core, 'navigator.share') && has(core, 'navigator.clipboard'), 'share/copy'],
   [has(core, 'printTrip'), 'print itinerary'],
+  [has(html, 'id="liveData"') && has(page, 'station=9099064') && has(page, 'datum=LWD') && has(page, 'ft above LWD at Duluth'), 'NOAA Duluth water level'],
   [!/(localStorage|sessionStorage|document\.cookie)/.test(html + page + core + map), 'no personal browser storage'],
   [has(core, 'The interactive map could not load.'), 'map failure fallback'],
 ]);
