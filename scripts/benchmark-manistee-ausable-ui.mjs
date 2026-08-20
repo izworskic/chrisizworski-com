@@ -38,9 +38,9 @@ if(!map.includes('Planner refuses cross-waterway routing'))fatal.push('planner t
 if(!/\.persona-deck\{display:none!important\}/.test(css))fatal.push('persona wall remains in primary workflow');
 if(!/\.shell\{display:flex!important;flex-direction:column!important/.test(css))fatal.push('permanent sidebar layout remains');
 
-console.log('Manistee human-UX / Au Sable interaction benchmark');
-console.log(`Previous interface baseline: 35/100 (capability-rich, interaction-heavy)`);
-console.log(`Candidate: ${score}/100`);
+console.log('Manistee human-UX / Au Sable interaction contract');
+console.log('Legacy structural failures: permanent sidebar, visible persona deck, explanation-first hierarchy, no reach-first Places flow.');
+console.log(`Candidate structural score: ${score}/100`);
 for(const c of checks)console.log(`${c.ok?'PASS':'FAIL'} ${String(c.ok?c.points:0).padStart(2)}/${c.points}  ${c.name}`);
 if(fatal.length)for(const f of fatal)console.log(`FATAL ${f}`);
 if(process.argv.includes('--check')&&(score<95||fatal.length))process.exit(1);
