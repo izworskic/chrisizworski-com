@@ -47,8 +47,7 @@ function selectTab(tab){$('.tab-button[data-tab="'+tab+'"]')?.click();}
 function setReach(button){
   $$('.reach-filter').forEach(b=>b.setAttribute('aria-pressed',b===button?'true':'false'));
   const input=$('#place-search');if(!input)return;
-  const reach=button.dataset.reach||'';
-  applyingReach=true;input.value=reach;input.dispatchEvent(new Event('input',{bubbles:true}));applyingReach=false;
+  const reach=button.dataset.reach||'';applyingReach=true;input.value=reach;input.dispatchEvent(new Event('input',{bubbles:true}));applyingReach=false;
 }
 function bindReachFilters(){
   $$('.reach-filter').forEach(b=>b.addEventListener('click',()=>setReach(b)));
@@ -68,15 +67,21 @@ function copyTrip(){
   else{history.replaceState(null,'',u);if(status)status.textContent='Trip is in the address bar; copy the URL.';}
 }
 function restoreTrip(){
-  const u=new URL(location.href),from=u.searchParams.get('from'),to=u.searchParams.get('to'),speed=u.searchParams.get('speed');if(!from||!to)return;
-  const a=$('#plan-from'),b=$('#plan-to'),s=$('#plan-speed');if(!a||!b||!a.querySelector('option[value="'+CSS.escape(from)+'"]')||!b.querySelector('option[value="'+CSS.escape(to)+'"]'))return;
+  const u=new URL(location.href),from=u.searchParams.get('from'),to=u.searchParams.get('to'),speed=u.searchParams.get('speed');if(!from||!to)return false;
+  const a=$('#plan-from'),b=$('#plan-to'),s=$('#plan-speed');if(!a||!b||!a.querySelector('option[value="'+CSS.escape(from)+'"]')||!b.querySelector('option[value="'+CSS.escape(to)+'"]'))return false;
   if(speed&&s){const n=Math.max(1.5,Math.min(5,Number(speed)||3));s.value=String(n);$('#speed-value').textContent=n.toFixed(1)+' mph';}
-  a.value=from;b.value=to;selectTab('plan');b.dispatchEvent(new Event('change',{bubbles:true}));
+  a.value=from;b.value=to;selectTab('plan');b.dispatchEvent(new Event('change',{bubbles:true}));return true;
 }
 function bindTripShare(){$('#copy-trip-link')?.addEventListener('click',copyTrip);}
 function groupPlaces(){
   const list=$('#place-list');if(!list||list.dataset.grouped==='true')return;
-  const observer=new MutationObserver(()=>requestAnimationFrame(()=>applyGroups(list)));observer.observe(list,{childList:true});applyGroups(list);list.dataset.grouped='true';
+  let queued=false;
+  const schedule=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;applyGroups(list);});};
+  const observer=new MutationObserver(mutations=>{
+    const rowsChanged=mutations.some(m=>[...m.addedNodes,...m.removedNodes].some(n=>n.nodeType===1&&(n.matches?.('.place-row')||n.querySelector?.('.place-row'))));
+    if(rowsChanged)schedule();
+  });
+  observer.observe(list,{childList:true});applyGroups(list);list.dataset.grouped='true';
 }
 function applyGroups(list){
   const rows=$$('.place-row',list);if(!rows.length)return;$$('.reach-divider',list).forEach(x=>x.remove());let last='';
@@ -99,7 +104,8 @@ function updateConditionsStrip(){
 }
 function syncMapHeight(){const map=$('#manistee-map');if(!map||!window.ResizeObserver)return;const ro=new ResizeObserver(()=>{try{window.dispatchEvent(new Event('resize'));}catch{}});ro.observe(map);}
 function init(){
-  ensureStyles();document.documentElement.classList.add('ausable-ui');augmentMarkup();bindReachFilters();bindPresets();bindTripShare();groupPlaces();compactDeepIntel();compactSystemDepth();updateConditionsStrip();syncMapHeight();restoreTrip();
+  ensureStyles();document.documentElement.classList.add('ausable-ui');augmentMarkup();bindReachFilters();bindPresets();bindTripShare();groupPlaces();compactDeepIntel();compactSystemDepth();updateConditionsStrip();syncMapHeight();
+  if(!restoreTrip())setTimeout(restoreTrip,120);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 window.ManisteeAuSableUITest={presets};
