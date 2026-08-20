@@ -5,7 +5,7 @@ const checks=[];
 
 async function fetchText(path,{expectNoindex=false}={}){
   const url=new URL(path,ORIGIN);
-  const response=await fetch(url,{redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/2.0'},signal:AbortSignal.timeout(15000)});
+  const response=await fetch(url,{redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/3.0'},signal:AbortSignal.timeout(15000)});
   const text=await response.text();
   const robots=(response.headers.get('x-robots-tag')||'').toLowerCase();
   if(!response.ok)throw new Error(`${path} returned ${response.status}`);
@@ -27,6 +27,11 @@ try{
   assert(client.text.includes("fetch('/api/manistee-river-conditions')"),'conditions API reference missing from deployed client');
   assert(client.text.includes("fetch('/api/manistee-river-hydrography')"),'hydrography API reference missing from deployed client');
   assert(client.text.includes('routeGraph(state.graphs[from.waterway],from,to)'),'NHD route planner missing from deployed client');
+  assert(client.text.includes('accessPopupHtml'),'rich access popup renderer missing from deployed client');
+  assert(client.text.includes("m.bindPopup(()=>accessPopupHtml(p)"),'access markers are not using rich popups');
+  assert(client.text.includes('gaugePopupHtml(meta,g)'),'USGS gauge rich popup renderer missing');
+  assert(client.text.includes('Navigate here'),'popup navigation action missing');
+  assert(client.text.includes('Location confidence'),'popup source/trust context missing');
 
   const data=await fetchText('/assets/manistee-river-data.js');
   assert(data.text.includes('/assets/manistee-river-personas.js'),'persona layer loader missing from deployed data asset');
@@ -40,6 +45,12 @@ try{
   for(const phrase of ['River key','Plan from this exact access','River right now','Weather near this access','Before you go'])assert(depth.text.includes(phrase),`live-depth asset missing ${phrase}`);
   assert(depth.text.includes('left:14px'),'river key is not pinned to the left');
   assert(depth.text.includes('/api/manistee-river-weather?lat='),'selected-access weather request missing');
+  assert(depth.text.includes('popupLiveHtml'),'popup live enrichment renderer missing');
+  assert(depth.text.includes('Weather at this access'),'popup weather block missing');
+  assert(depth.text.includes('Nearest gauge'),'popup nearest-gauge context missing');
+  assert(depth.text.includes('manistee:popup-open'),'popup enrichment event contract missing');
+  assert(depth.text.includes('MutationObserver'),'popup timing fallback missing');
+  assert(depth.text.includes('max-width:calc(100vw - 34px)'),'mobile popup width guard missing');
 
   const conditions=await fetchText('/api/manistee-river-conditions',{expectNoindex:true});
   const conditionsJson=JSON.parse(conditions.text);

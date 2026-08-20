@@ -22,11 +22,13 @@ test('fabrication loss: every mapped place has coordinates, provenance and a sou
   }
 });
 
-test('identity loss: place IDs are unique and directions use exact selected coordinates',()=>{
+test('identity loss: place IDs are unique and every selection surface keeps exact record identity',()=>{
   const ids=data.places.map(p=>p.id);assert.equal(new Set(ids).size,ids.length);
   assert.match(js,/encodeURIComponent\(`\$\{p\.lat\},\$\{p\.lon\}`\)/);
   assert.match(js,/destination=\$\{q\}/);
-  assert.match(js,/selectPlace\(p\.id,true\)/);
+  assert.match(js,/m\.bindPopup\(\(\)=>accessPopupHtml\(p\)/);
+  assert.match(js,/m\.on\('click',\(\)=>selectPlace\(p\.id,false\)\)/);
+  assert.match(js,/selectPlace\(b\.dataset\.id,true\)/);
   assert.match(js,/data-id="\$\{esc\(p\.id\)\}"/);
 });
 

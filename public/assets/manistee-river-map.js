@@ -22,9 +22,53 @@ function hav(a,b){const R=3958.7613,k=Math.PI/180,p1=a[0]*k,p2=b[0]*k,dp=(b[0]-a
 function nodeKey(c){return `${Number(c[1]).toFixed(5)},${Number(c[0]).toFixed(5)}`;}
 function waterwayName(id){return DATA.waterways.find(w=>w.id===id)?.name||id;}
 function reachName(id){return DATA.reaches.find(r=>r.id===id)?.name||id;}
+function reachSummary(id){return DATA.reaches.find(r=>r.id===id)?.summary||'';}
 function badge(conf){const label={agency:'Agency coordinate','mapped-agency-site':'Agency site · mapped coordinate','community-verified':'Community coordinate'}[conf]||conf;return `<span class="trust trust-${esc(conf)}">${esc(label)}</span>`;}
+function confidenceLabel(conf){return {agency:'Agency coordinate','mapped-agency-site':'Agency facility · mapped coordinate','community-verified':'Community-verified coordinate'}[conf]||conf;}
+function typeLabel(type){return String(type||'access').replaceAll('-',' ').replace(/\b\w/g,c=>c.toUpperCase());}
+function activityLabel(activity){return String(activity||'').replace(/\b\w/g,c=>c.toUpperCase());}
 function directions(p){const q=encodeURIComponent(`${p.lat},${p.lon}`);return `https://www.google.com/maps/dir/?api=1&destination=${q}`;}
 function hydroId(name){return name==='Manistee River'?'manistee':name==='Pine River'?'pine':name==='Bear Creek'?'bear-creek':name==='Little Manistee River'?'little-manistee':null;}
+function accessPopupHtml(p){
+  const activities=p.activities.map(a=>`<span class="mrp-chip">${esc(activityLabel(a))}</span>`).join('');
+  return `<article class="mrp-card" data-manistee-popup="${esc(p.id)}">
+    <div class="mrp-kicker">${esc(typeLabel(p.type))} · ${esc(waterwayName(p.waterway))}</div>
+    <h3>${esc(p.name)}</h3>
+    <div class="mrp-reach">${esc(reachName(p.reach))}</div>
+    <div class="mrp-chips">${activities}</div>
+    <p class="mrp-note">${esc(p.note)}</p>
+    <div class="mrp-facts">
+      <div><span>Reach</span><b>${esc(reachName(p.reach))}</b><small>${esc(reachSummary(p.reach))}</small></div>
+      <div><span>Location confidence</span><b>${esc(confidenceLabel(p.confidence))}</b><small>${esc(p.locationSource||'Source not listed')}</small></div>
+    </div>
+    <section class="mrp-live" data-popup-live="${esc(p.id)}"><div class="mrp-loading">Loading nearest USGS gauge and NWS weather…</div></section>
+    <div class="mrp-actions">
+      <a class="mrp-nav" href="${directions(p)}" target="_blank" rel="noopener">Navigate here</a>
+      <a href="${esc(p.source.url)}" target="_blank" rel="noopener">Official / location source</a>
+      ${p.activities.includes('fish')?`<a href="${esc(DATA.sources.regulationMap.url)}" target="_blank" rel="noopener">DNR fishing map</a>`:''}
+    </div>
+    <p class="mrp-source">${esc(p.source.name||p.locationSource||'Mapped source')} · exact point ${p.lat.toFixed(5)}, ${p.lon.toFixed(5)}</p>
+  </article>`;
+}
+function gaugePopupHtml(meta,g){
+  const stats=g?.seasonal_stats||{},fc=g?.flow_context||{};
+  const freshness=g?.measured_at?`${g?.fresh?'Current':'Stale / verify'} · ${new Date(g.measured_at).toLocaleString()}`:'No recent timestamp returned';
+  const optional=[g?.turbidity_fnu!=null?`<li><span>Turbidity</span><b>${fmt(g.turbidity_fnu,1)} FNU</b></li>`:'',g?.dissolved_oxygen_mgl!=null?`<li><span>Dissolved oxygen</span><b>${fmt(g.dissolved_oxygen_mgl,1)} mg/L</b></li>`:''].join('');
+  return `<article class="mrp-card mrp-gauge">
+    <div class="mrp-kicker">USGS river conditions · ${esc(waterwayName(meta.waterway))}</div>
+    <h3>${esc(meta.name)}</h3>
+    <div class="mrp-live-badge ${g?.fresh?'yes':'no'}">${g?.fresh?'Live / recent':'Stale / unavailable'}</div>
+    <ul class="mrp-stat-list">
+      <li><span>Flow</span><b>${g?.discharge_cfs!=null?`${fmt(g.discharge_cfs,0)} cfs`:'Not reported'}</b><small>${fc.percent_of_median!=null?`${fc.percent_of_median}% of seasonal median`:esc(fc.label||'Seasonal comparison unavailable')}</small></li>
+      <li><span>Seasonal median</span><b>${stats.p50!=null?`${fmt(stats.p50,0)} cfs`:'Unavailable'}</b><small>USGS daily p50 for this calendar date</small></li>
+      <li><span>Water</span><b>${g?.water_temp_f!=null?`${fmt(g.water_temp_f,1)}°F`:'Not reported'}</b><small>${esc(g?.temperature_context?.label||'Temperature context unavailable')}</small></li>
+      <li><span>Gage height</span><b>${g?.gage_height_ft!=null?`${fmt(g.gage_height_ft,2)} ft`:'Not reported'}</b></li>
+      ${optional}
+    </ul>
+    <p class="mrp-source">${esc(freshness)} · provisional USGS data</p>
+    <div class="mrp-actions"><a class="mrp-nav" href="${esc(meta.sourceUrl)}" target="_blank" rel="noopener">Open USGS station</a></div>
+  </article>`;
+}
 
 function initMap(){
   ensureLeafletCss();
@@ -43,7 +87,9 @@ function markerFor(p){
   const fill=p.type.includes('camp')?colors.camp:colors.access;
   const m=L.circleMarker([p.lat,p.lon],{radius:7,color:'#fff',weight:2,fillColor:fill,fillOpacity:.95});
   m.bindTooltip(p.name,{direction:'top'});
-  m.on('click',()=>selectPlace(p.id,true));
+  m.bindPopup(()=>accessPopupHtml(p),{className:'manistee-rich-popup',minWidth:285,maxWidth:360,maxHeight:520,autoPanPadding:[18,18]});
+  m.on('click',()=>selectPlace(p.id,false));
+  m.on('popupopen',()=>document.dispatchEvent(new CustomEvent('manistee:popup-open',{detail:{id:p.id}})));
   return m;
 }
 function currentActivities(){return $$('.activity-chip[aria-pressed="true"]').map(b=>b.dataset.activity).filter(x=>x!=='all');}
@@ -157,7 +203,7 @@ async function loadConditions(){
     state.layers.gauges.clearLayers();
     for(const meta of DATA.gauges.filter(g=>!g.historic)){
       const g=state.gauges.get(meta.id),fill=g?.temperature_context?.key==='thermal-stress'?'#b32727':g?.fresh?colors.gauge:'#777';
-      L.circleMarker([meta.lat,meta.lon],{radius:8,color:'#fff',weight:2,fillColor:fill,fillOpacity:.95}).bindPopup(`<strong>${esc(meta.name)}</strong><br>${g?.discharge_cfs!=null?`${fmt(g.discharge_cfs,0)} cfs`:''}${g?.water_temp_f!=null?` · ${fmt(g.water_temp_f,1)}°F`:''}<br><small>${g?.fresh?'current':'stale / unavailable'} · USGS</small>`).addTo(state.layers.gauges);
+      L.circleMarker([meta.lat,meta.lon],{radius:8,color:'#fff',weight:2,fillColor:fill,fillOpacity:.95}).bindPopup(()=>gaugePopupHtml(meta,g),{className:'manistee-rich-popup',minWidth:285,maxWidth:360,maxHeight:520,autoPanPadding:[18,18]}).addTo(state.layers.gauges);
     }
     $('#conditions-source').textContent=`Updated ${new Date(payload.fetched_at).toLocaleString()} · USGS provisional data`;
   }catch(e){cards.innerHTML='<p class="loss">Live USGS readings are unavailable right now. Static access, hydrography and source links remain usable.</p>';}
@@ -197,5 +243,5 @@ function bindUI(){
 function applyHash(){const id=decodeURIComponent(location.hash.slice(1));if(DATA.places.some(p=>p.id===id))selectPlace(id,false);}
 function init(){plannerOptions();bindUI();initMap();applyHash();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-window.ManisteeFieldMapTest={hav,nodeKey,geometryLines,buildGraph,nearestNode,routeGraph,directions};
+window.ManisteeFieldMapTest={hav,nodeKey,geometryLines,buildGraph,nearestNode,routeGraph,directions,accessPopupHtml,gaugePopupHtml};
 })();
