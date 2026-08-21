@@ -139,7 +139,7 @@ check(
     strategyDoc.includes("## AI-search and answer-engine readiness") &&
     strategyDoc.includes("## Measurement operating cadence") &&
     strategyDoc.includes("Useful decisions and durable authority"),
-  10,
+  5,
 );
 
 check(
