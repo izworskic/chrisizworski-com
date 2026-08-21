@@ -1,4 +1,5 @@
 name: Repair reputation sitemap pin
+# One-shot branch repair; remove after the pin commit lands.
 on:
   push:
     branches:
