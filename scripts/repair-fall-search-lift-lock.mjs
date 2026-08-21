@@ -26,14 +26,14 @@ const treatmentTitle = "Michigan Fall Color Map 2026: Where Color Is Now";
 const treatmentDescription = "Michigan fall color map for 2026 with today's statewide status, regional peak dates, live canopy and weather signals, and a forecast from the U.P. south.";
 
 let hub = await readFile(hubPath, "utf8");
-hub = replaceAllRequired(hub, treatmentTitle, protectedTitle, 3, "protected Fall title surfaces");
-hub = replaceAllRequired(hub, treatmentDescription, protectedDescription, 3, "protected Fall description surfaces");
 hub = replaceOnce(
   hub,
   '"name": "Michigan Fall Color Map 2026: Where Color Is Now"',
   '"name": "Michigan Fall Color Map 2026: Live Peak Conditions and Forecast"',
   "protected Fall WebPage name",
 );
+hub = replaceAllRequired(hub, treatmentTitle, protectedTitle, 3, "protected Fall title surfaces");
+hub = replaceAllRequired(hub, treatmentDescription, protectedDescription, 3, "protected Fall description surfaces");
 hub = replaceOnce(
   hub,
   '<h1 style="margin-top:7px">Michigan Fall Color Map 2026</h1>',
