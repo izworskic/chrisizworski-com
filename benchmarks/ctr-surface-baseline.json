@@ -1,56 +1,266 @@
 {
-  "benchmarkVersion": "1.0.0",
-  "baselineCreated": "2026-08-06",
+  "benchmarkVersion": "1.1.0",
+  "baselineCreated": "2026-08-21",
   "timezone": "America/Detroit",
   "purpose": "Score the controllable SERP snippet surface of pages that already earn impressions, weighted by impression share, so the number only moves when work happens where the traffic is.",
   "source": {
-    "gscRows": "benchmarks/growth-100x-baseline.json priorityPages, GSC export window 2026-02-12 to 2026-08-01 (171 days)",
-    "caution": "GSC rows are page-level only. No query rows and no Search Console API in session. Persona triggers come from Google autocomplete pulled 2026-08-04, which is a demand proxy, not GSC data."
+    "gscRows": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-08-21; page and query rows for 2026-08-13 through 2026-08-19",
+    "windowLabel": "GSC Aug 13-19, 2026 (7 complete days)",
+    "caution": "The fresh 7-day GSC window is directional. Low-volume page and query CTRs are volatile; use them to prioritize experiments, not as promises. The expected CTR curve remains modeled, not measured."
   },
   "expectedCtrCurve": {
     "note": "MODELED, NOT MEASURED. Blended organic CTR by average position, used as a relative yardstick to size headroom. Do not quote these as facts about this site.",
-    "byPosition": { "1": 0.27, "2": 0.15, "3": 0.11, "4": 0.08, "5": 0.06, "6": 0.045, "7": 0.035, "8": 0.03, "9": 0.025, "10": 0.02, "12": 0.015, "15": 0.012, "20": 0.008, "30": 0.004 },
-    "zeroClickDiscount": { "high": 0.2, "medium": 0.6, "low": 1.0 }
+    "byPosition": {
+      "1": 0.27,
+      "2": 0.15,
+      "3": 0.11,
+      "4": 0.08,
+      "5": 0.06,
+      "6": 0.045,
+      "7": 0.035,
+      "8": 0.03,
+      "9": 0.025,
+      "10": 0.02,
+      "12": 0.015,
+      "15": 0.012,
+      "20": 0.008,
+      "30": 0.004
+    },
+    "zeroClickDiscount": {
+      "high": 0.2,
+      "medium": 0.6,
+      "low": 1
+    }
   },
   "personas": {
-    "tonight-checker": { "triggers": ["tonight", "now", "time", "live", "tracker"], "device": "mobile-evening" },
-    "boat-watcher":    { "triggers": ["today", "live", "schedule", "cam", "map"],   "device": "mixed-daytime" },
-    "weekend-planner": { "triggers": ["2026", "peak", "map", "weekend", "when"],    "device": "mixed-thursday-saturday" },
-    "local-grower":    { "triggers": ["2026", "by city", "calendar", "date"],       "device": "desktop-spring" },
-    "field-user":      { "triggers": ["report", "conditions", "today", "map"],      "device": "mobile-seasonal" }
+    "tonight-checker": {
+      "triggers": [
+        "tonight",
+        "now",
+        "time",
+        "live",
+        "tracker"
+      ],
+      "device": "mobile-evening"
+    },
+    "boat-watcher": {
+      "triggers": [
+        "today",
+        "live",
+        "schedule",
+        "cam",
+        "map"
+      ],
+      "device": "mixed-daytime"
+    },
+    "weekend-planner": {
+      "triggers": [
+        "2026",
+        "peak",
+        "map",
+        "weekend",
+        "when"
+      ],
+      "device": "mixed-thursday-saturday"
+    },
+    "local-grower": {
+      "triggers": [
+        "2026",
+        "by city",
+        "calendar",
+        "date"
+      ],
+      "device": "desktop-spring"
+    },
+    "field-user": {
+      "triggers": [
+        "report",
+        "conditions",
+        "today",
+        "map"
+      ],
+      "device": "mobile-seasonal"
+    }
   },
   "measuredPages": [
-    { "path": "/northern-lights-michigan/",        "persona": "tonight-checker", "impressions": 18461, "clicks": 341, "ctr": 0.01847, "position": 10.36, "zeroClickRisk": "medium" },
-    { "path": "/soo-locks/",                       "persona": "boat-watcher",    "impressions": 11919, "clicks": 150, "ctr": 0.01259, "position": 9.41,  "zeroClickRisk": "low" },
-    { "path": "/when-to-plant-tomatoes-michigan/",  "persona": "local-grower",    "impressions": 5479,  "clicks": 14,  "ctr": 0.00256, "position": 8.37,  "zeroClickRisk": "high" },
-    { "path": "/michigan-frost-dates/",            "persona": "local-grower",    "impressions": 2651,  "clicks": 3,   "ctr": 0.00113, "position": 9.56,  "zeroClickRisk": "high" },
-    { "path": "/saginaw-bay-ecology/",             "persona": "field-user",      "impressions": 1671,  "clicks": 9,   "ctr": 0.00539, "position": 11.13, "zeroClickRisk": "high" },
-    { "path": "/mackinac-bridge-live/",            "persona": "boat-watcher",    "impressions": 224,   "clicks": 2,   "ctr": 0.00893, "position": 15.46, "zeroClickRisk": "low" }
+    {
+      "path": "/soo-locks/",
+      "persona": "boat-watcher",
+      "impressions": 2509,
+      "clicks": 81,
+      "ctr": 0.0323,
+      "position": 7.35,
+      "zeroClickRisk": "low"
+    },
+    {
+      "path": "/northern-lights-michigan/",
+      "persona": "tonight-checker",
+      "impressions": 1875,
+      "clicks": 15,
+      "ctr": 0.008,
+      "position": 9.69,
+      "zeroClickRisk": "medium"
+    },
+    {
+      "path": "/fall-color/",
+      "persona": "weekend-planner",
+      "impressions": 716,
+      "clicks": 6,
+      "ctr": 0.0084,
+      "position": 14.27,
+      "zeroClickRisk": "low"
+    },
+    {
+      "path": "/mackinac-bridge-live/",
+      "persona": "boat-watcher",
+      "impressions": 736,
+      "clicks": 2,
+      "ctr": 0.0027,
+      "position": 10.69,
+      "zeroClickRisk": "low"
+    },
+    {
+      "path": "/when-to-plant-tomatoes-michigan/",
+      "persona": "local-grower",
+      "impressions": 290,
+      "clicks": 2,
+      "ctr": 0.0069,
+      "position": 8.18,
+      "zeroClickRisk": "high"
+    },
+    {
+      "path": "/saginaw-bay-ecology/",
+      "persona": "field-user",
+      "impressions": 192,
+      "clicks": 3,
+      "ctr": 0.0156,
+      "position": 8.18,
+      "zeroClickRisk": "high"
+    },
+    {
+      "path": "/michigan-frost-dates/",
+      "persona": "local-grower",
+      "impressions": 18,
+      "clicks": 0,
+      "ctr": 0,
+      "position": 13.28,
+      "zeroClickRisk": "high"
+    }
   ],
   "seasonalWatchlist": {
-    "note": "No GSC history. Migrated to the hub 2026-08-04. Scored on snippet hygiene only, not impression weighted, because forecasting their impressions would be inventing numbers.",
+    "note": "The Fall hub now has measured GSC data and moved into measuredPages. The remaining Fall detail pages stay on the hygiene watchlist while their individual query samples mature.",
     "paths": [
-      "/fall-color/", "/fall-color/when-do-leaves-peak-in-michigan/", "/fall-color/michigan-fall-color-drives/",
-      "/fall-color/michigan-leaf-peeping-planner/", "/fall-color/upper-peninsula-fall-color/",
-      "/fall-color/tunnel-of-trees-fall-color/", "/fall-color/sleeping-bear-dunes-fall-color/",
-      "/fall-color/keweenaw-peninsula-fall-color/", "/fall-color/porcupine-mountains-fall-color/",
-      "/fall-color/tahquamenon-falls-fall-color/", "/fall-color/mackinac-island-fall-color/",
-      "/fall-color/au-sable-river-fall-color/", "/fall-color/saginaw-bay-fall-color/",
-      "/fall-color/saugatuck-southwest-michigan-fall-color/", "/fall-color/ann-arbor-irish-hills-fall-color/",
+      "/fall-color/when-do-leaves-peak-in-michigan/",
+      "/fall-color/michigan-fall-color-drives/",
+      "/fall-color/michigan-leaf-peeping-planner/",
+      "/fall-color/upper-peninsula-fall-color/",
+      "/fall-color/tunnel-of-trees-fall-color/",
+      "/fall-color/sleeping-bear-dunes-fall-color/",
+      "/fall-color/keweenaw-peninsula-fall-color/",
+      "/fall-color/porcupine-mountains-fall-color/",
+      "/fall-color/tahquamenon-falls-fall-color/",
+      "/fall-color/mackinac-island-fall-color/",
+      "/fall-color/au-sable-river-fall-color/",
+      "/fall-color/saginaw-bay-fall-color/",
+      "/fall-color/saugatuck-southwest-michigan-fall-color/",
+      "/fall-color/ann-arbor-irish-hills-fall-color/",
       "/fall-color-northern-lights-michigan/"
     ],
     "persona": "weekend-planner"
   },
   "gates": {
-    "titleMaxChars": 60, "titleMinChars": 30,
-    "descriptionMaxChars": 158, "descriptionMinChars": 110,
+    "titleMaxChars": 60,
+    "titleMinChars": 30,
+    "descriptionMaxChars": 158,
+    "descriptionMinChars": 110,
     "minInboundInternalLinks": 4,
     "requirePersonaTriggerInTitle": true,
     "requireCanonical": true,
-    "minWeightedScore": 0.80
+    "minWeightedScore": 0.8
   },
   "excludedFromCtrScoring": {
     "reason": "Brand-name identity cluster. The SERP is uncontested and further work there returns no revenue.",
-    "pathPrefixes": ["/chris-izworski", "/about", "/timeline", "/media", "/citations", "/speaking", "/prepared", "/apco"]
+    "pathPrefixes": [
+      "/chris-izworski",
+      "/about",
+      "/timeline",
+      "/media",
+      "/citations",
+      "/speaking",
+      "/prepared",
+      "/apco"
+    ]
+  },
+  "priorityQuerySignals": {
+    "observedWindow": "2026-08-13/2026-08-19",
+    "fallColorHub": {
+      "page": {
+        "impressions": 716,
+        "clicks": 6,
+        "ctr": 0.0084,
+        "position": 14.27
+      },
+      "queries": [
+        {
+          "query": "michigan fall color map 2026",
+          "impressions": 108,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.86
+        },
+        {
+          "query": "michigan peak fall colors 2026",
+          "impressions": 16,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 10.81
+        },
+        {
+          "query": "michigan fall colors 2026",
+          "impressions": 12,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 9.17
+        },
+        {
+          "query": "michigan fall foliage 2026",
+          "impressions": 5,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "query": "peak fall colors michigan 2026",
+          "impressions": 3,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.33
+        },
+        {
+          "query": "fall color calendar michigan 2026",
+          "impressions": 3,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.67
+        }
+      ],
+      "experiment": {
+        "hypothesis": "A dated crawlable statewide answer plus schema cleanup can improve answer quality while the Fall hub snippet remains frozen during the active Tunnel of Trees experiment.",
+        "primaryGuardrail": "Preserve the Fall hub title, description, canonical, and H1 through the Tunnel of Trees evaluation window ending 2026-09-12.",
+        "appliedTreatment": [
+          "crawlable dated statewide status before the interactive decision flow",
+          "static non-JavaScript seasonal baseline in the live-readings block",
+          "canonical WebSite entity reuse, correct Home breadcrumb, and Dataset mainEntity",
+          "fresh Aug. 13-19 page/query GSC data in the CTR benchmark"
+        ],
+        "queuedSnippetTest": {
+          "earliestDate": "2026-09-13",
+          "proposedTitle": "Michigan Fall Color Map 2026: Where Color Is Now",
+          "proposedDescription": "Michigan fall color map for 2026 with today's statewide status, regional peak dates, live canopy and weather signals, and a forecast from the U.P. south.",
+          "activationRule": "Re-evaluate after the Tunnel experiment closes; do not auto-ship if the current hub snippet has materially improved or the query mix changed."
+        },
+        "nextCheckpoint": "Compare the next 7 complete GSC days after deployment once the hub has at least 500 impressions; keep the snippet frozen until 2026-09-12."
+      }
+    }
   }
 }
