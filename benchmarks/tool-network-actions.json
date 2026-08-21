@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "updated": "2026-08-20",
   "purpose": "Operational overlay for Tool Network Registry decisions that are actively being executed and measured. This file adds current relationships and experiments without rewriting historical search evidence.",
   "relationships": [
@@ -66,6 +66,14 @@
       "strength": "optional",
       "surface": "fall-regional-central",
       "reason": "Central Michigan fall travelers entering deer season can continue into corn-harvest, rut-timing, and live whitetail conditions without changing Fall Color search ownership."
+    },
+    {
+      "from": "great-lakes-levels",
+      "to": "great-lakes-buoys",
+      "type": "companion-evidence",
+      "strength": "strong",
+      "surface": "great-lakes-levels-footer",
+      "reason": "The live Great Lakes Levels site explicitly hands users to the Great Lakes Buoy Dashboard for current wave, wind, and water-temperature observations."
     }
   ],
   "repairs": [

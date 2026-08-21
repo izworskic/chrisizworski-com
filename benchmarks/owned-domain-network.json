@@ -1,0 +1,47 @@
+{
+  "version": "1.1.0",
+  "updated": "2026-08-20",
+  "purpose": "Track Chris Izworski-owned web properties separately from the tool-only registry so a 100/100 tool score cannot hide an unconnected first-party domain.",
+  "canonicalPersonId": "https://chrisizworski.com/#person",
+  "roots": [
+    {"host":"chrisizworski.com","name":"Chris Izworski","role":"primary-hub","status":"active","coverage":"central"},
+    {"host":"michigantroutreport.com","name":"Michigan Trout Report","role":"flagship-live","status":"active","coverage":"cross-linked","measurement":"needs-network-events"},
+    {"host":"michiganbirdingreport.com","name":"Michigan Birding Report","role":"flagship-live","status":"active","coverage":"cross-linked","measurement":"released-symbolic-events"},
+    {"host":"greatlakeslevels.org","name":"Great Lakes Levels","role":"flagship-live","status":"active","coverage":"cross-linked","measurement":"released-symbolic-events"},
+    {"host":"freighterviewfarms.com","name":"Freighter View Farms","role":"editorial-gardening","status":"active","coverage":"backlink-present","measurement":"external-cms"},
+    {"host":"izworskic.github.io","name":"Chris Izworski GitHub Pages","role":"project-index","status":"active","coverage":"cross-linked","measurement":"not-required"},
+    {"host":"aibreakdown5.wordpress.com","name":"AI Breakdown","role":"legacy-writing","status":"legacy","coverage":"entity-surface","measurement":"not-required"}
+  ],
+  "observedLiveHandoffs": [
+    {"from":"chrisizworski.com","to":"michigantroutreport.com","surface":"projects"},
+    {"from":"chrisizworski.com","to":"michiganbirdingreport.com","surface":"projects"},
+    {"from":"chrisizworski.com","to":"greatlakeslevels.org","surface":"projects"},
+    {"from":"chrisizworski.com","to":"freighterviewfarms.com","surface":"projects"},
+    {"from":"chrisizworski.com","to":"izworskic.github.io","surface":"projects"},
+    {"from":"michiganbirdingreport.com","to":"michigantroutreport.com","surface":"site-footer"},
+    {"from":"michiganbirdingreport.com","to":"greatlakeslevels.org","surface":"site-footer"},
+    {"from":"michiganbirdingreport.com","to":"chrisizworski.com","surface":"site-footer"},
+    {"from":"michigantroutreport.com","to":"michiganbirdingreport.com","surface":"site-footer"},
+    {"from":"michigantroutreport.com","to":"greatlakeslevels.org","surface":"site-footer"},
+    {"from":"michigantroutreport.com","to":"chrisizworski.com","surface":"site-footer"},
+    {"from":"greatlakeslevels.org","to":"michigantroutreport.com","surface":"site-footer"},
+    {"from":"greatlakeslevels.org","to":"michiganbirdingreport.com","surface":"site-footer"},
+    {"from":"greatlakeslevels.org","to":"chrisizworski.com","surface":"site-footer"},
+    {"from":"greatlakeslevels.org","to":"chrisizworski.com","surface":"great-lakes-buoys-companion"},
+    {"from":"freighterviewfarms.com","to":"chrisizworski.com","surface":"site-footer"},
+    {"from":"izworskic.github.io","to":"michigantroutreport.com","surface":"project-index"},
+    {"from":"izworskic.github.io","to":"michiganbirdingreport.com","surface":"project-index"},
+    {"from":"izworskic.github.io","to":"chrisizworski.com","surface":"project-index"}
+  ],
+  "gates": {
+    "coverEveryEntityBaselineSelfOwnedDomain": true,
+    "noIsolatedActiveRoot": true,
+    "requireFlagshipCrossLinks": ["michigantroutreport.com","michiganbirdingreport.com","greatlakeslevels.org"],
+    "requireCentralProjectsIndex": ["michigantroutreport.com","michiganbirdingreport.com","greatlakeslevels.org","freighterviewfarms.com","izworskic.github.io"]
+  },
+  "nextRepairs": [
+    "Instrument symbolic cross-domain exposure and handoff events on Michigan Trout Report; Birding and Great Lakes Levels are now instrumented.",
+    "Prefer contextual in-content handoffs over generic footer-only links when the visitor decision genuinely continues across sites.",
+    "Keep Freighter View Farms in the owned-domain graph even though its live WordPress implementation is not controlled by the GitHub placeholder repository."
+  ]
+}
