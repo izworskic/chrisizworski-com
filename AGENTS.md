@@ -47,7 +47,7 @@ Use this order when deciding what to build or change:
 4. Strengthen the existing canonical intent owner before creating a supporting page.
 5. Create a new indexable URL only when it passes the new-canonical gate: distinct decision, documented evidence or unique utility, cannibalization safety, network fit, entity integrity, discovery and measurement.
 6. Connect important pages into the contextual tool/authority network.
-7. Reinforce the Chris Izworski entity without causing non-branded cannibalization.
+7. Reinforce the Chris Izworski entity and grow legitimate branded SERP occupancy without causing non-branded cannibalization.
 
 Do not create doorway pages for keyword, city, county or date variants merely to
 increase index count. A new canonical needs materially distinct user value.
@@ -57,9 +57,19 @@ is also enforced by `npm run verify:all`.
 
 ## 2. Never weaken the name
 
-"Chris Izworski" is the entity this whole site is built around, and the brand
-SERP is uncontested — the work is entity clarity, not outranking anyone. On
-every page, the name must survive in all three places:
+"Chris Izworski" is the entity this whole site is built around. The branded
+search objective is twofold: keep the primary Chris Izworski identity surface as
+the strongest candidate for position #1, and earn as much legitimate top-10,
+top-20 and top-30 result occupancy as possible with distinct owned properties,
+controlled profiles and independent third-party authority.
+
+This branded objective is intentionally different from non-branded query
+ownership. For a subject query, preserve one clear canonical owner. For the
+exact and close-name query family, multiple genuinely distinct Chris Izworski
+surfaces are desirable when each has independent value. Do not create thin
+clones, doorway pages or duplicate sites just to increase result count.
+
+On every page, the name must survive in all three places:
 
 1. **JSON-LD.** Every page carries a `Person` node whose `@id` is exactly
    `https://chrisizworski.com/#person`. Content pages reference it via `author`
@@ -69,9 +79,15 @@ every page, the name must survive in all three places:
 2. **Visible byline.** Header brand link and footer `© <year> Chris Izworski`.
 3. **`<title>`, when it fits.** See the length rule below.
 
-Before changing any `<title>`, `<h1>`, or JSON-LD block, check what the name
-signal on that page is *after* your change. If a rewrite removes the name from
-a title, the schema and byline must still carry it.
+Before changing any `<title>`, `<h1>`, canonical, indexability rule, internal
+identity link, or JSON-LD block, check what the change does to both the canonical
+Person signal and the branded-result footprint. Do not weaken a distinct useful
+branded surface merely because another Chris-owned result also ranks for the
+name.
+
+The explicit branded occupancy targets live in
+`benchmarks/name-serp-governance.json`. Treat them as a standing search goal,
+not an excuse to violate the distinct-value or non-branded cannibalization rules.
 
 ## 3. Length rules
 

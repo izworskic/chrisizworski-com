@@ -60,11 +60,23 @@ check(
 );
 
 check(
-  "Chris Izworski entity identity is stable across governance layers",
+  "Chris Izworski entity and branded SERP goals are stable across governance layers",
   governance.canonicalPersonId === "https://chrisizworski.com/#person" &&
     nameSerp.canonicalPersonId === governance.canonicalPersonId &&
+    governance.brandedSerp?.primaryQuery === "Chris Izworski" &&
+    governance.brandedSerp?.primarySitePositionTarget === 1 &&
+    governance.brandedSerp?.operatingOccupancyTargets?.top10 >= 8 &&
+    governance.brandedSerp?.operatingOccupancyTargets?.top20 >= 15 &&
+    governance.brandedSerp?.operatingOccupancyTargets?.top30 >= 20 &&
+    governance.brandedSerp?.stretchOccupancyTargets?.top30 === 30 &&
+    governance.brandedSerp?.distinctBrandedSurfacesAllowed === true &&
+    governance.brandedSerp?.nonBrandedSingleCanonicalOwnerStillRequired === true &&
+    nameSerp.occupancyTargets?.primarySitePosition === 1 &&
+    nameSerp.occupancyTargets?.stretch?.top30 === 30 &&
+    nameSerp.measurementProtocol?.depths?.includes(30) &&
     typeof nameSerp.rules?.entityConsistency === "string" &&
-    typeof nameSerp.rules?.searchOwnership === "string",
+    typeof nameSerp.rules?.searchOwnership === "string" &&
+    typeof nameSerp.rules?.brandedOccupancy === "string",
   10,
 );
 
@@ -143,13 +155,13 @@ check(
 );
 
 check(
-  "Owned properties reinforce brand without duplicate search ownership",
+  "Owned properties reinforce brand without duplicate non-branded search ownership",
   ownedDomains.canonicalPersonId === governance.canonicalPersonId &&
     typeof ownedDomains.purpose === "string" &&
     ownedDomains.purpose.length > 20 &&
     typeof nameSerp.rules?.distinctValue === "string" &&
     nameSerp.rules.distinctValue.includes("thin pages") &&
-    nameSerp.rules.searchOwnership.includes("must not cause"),
+    nameSerp.rules.searchOwnership.includes("non-branded"),
   5,
 );
 
@@ -165,6 +177,7 @@ console.log("=".repeat(72));
 console.log(`Score: ${score}/100`);
 console.log(`Primary measurement window: ${governance.measurement.primaryWindowDays} days`);
 console.log(`Canonical person: ${governance.canonicalPersonId}`);
+console.log(`Branded SERP target: #${governance.brandedSerp.primarySitePositionTarget} primary; ${governance.brandedSerp.operatingOccupancyTargets.top30}/30 operating, ${governance.brandedSerp.stretchOccupancyTargets.top30}/30 stretch`);
 console.log(`New canonical network target: ${canonicalGate.preferredMinimumNetworkRelationships} relationships`);
 if (failures.length) {
   console.log("Failures:");
