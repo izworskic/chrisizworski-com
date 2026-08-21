@@ -1,4 +1,5 @@
 name: Repair Works sitemap date
+# One-shot branch repair; remove after the truthful sitemap dates land.
 on:
   push:
     branches:
