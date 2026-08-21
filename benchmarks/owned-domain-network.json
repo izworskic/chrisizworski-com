@@ -1,6 +1,6 @@
 {
-  "version": "1.2.0",
-  "updated": "2026-08-20",
+  "version": "1.2.1",
+  "updated": "2026-08-21",
   "purpose": "Track Chris Izworski-owned web properties separately from the tool-only registry so a 100/100 tool score cannot hide an unconnected first-party domain or planned subproperty.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "roots": [
@@ -23,7 +23,8 @@
       "creatorEntity": "https://chrisizworski.com/#person",
       "publisher": "https://freighterviewfarms.com/",
       "measurement": "symbolic-network-events-after-launch",
-      "activationRule": "Do not count as an active owned property until the Vercel project exists, the custom domain resolves, and production route checks pass."
+      "hostingState": "vercel-project-created-production-verification-pending",
+      "activationRule": "The Vercel project has been created. Do not count this as an active owned property until garden.chrisizworski.com is attached and resolves, the production build is verified, and canonical route checks pass."
     }
   ],
   "observedLiveHandoffs": [
@@ -57,7 +58,7 @@
   },
   "nextRepairs": [
     "Instrument symbolic cross-domain exposure and handoff events on Michigan Trout Report; Birding and Great Lakes Levels are now instrumented.",
-    "Import the Freighter View Garden Planner into Vercel, attach garden.chrisizworski.com, verify production, then promote it from plannedSubproperties to active network coverage.",
+    "Attach garden.chrisizworski.com to the existing Freighter View Garden Planner Vercel project, verify production and canonical routes, then promote it from plannedSubproperties to active network coverage.",
     "Prefer contextual in-content handoffs over generic footer-only links when the visitor decision genuinely continues across sites.",
     "Keep Freighter View Farms in the owned-domain graph even though its live WordPress implementation is not controlled by the GitHub placeholder repository."
   ]
