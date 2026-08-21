@@ -45,11 +45,9 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://chrisizworski.com/fall-color/#website",
-      "url": "https://chrisizworski.com/fall-color/",
-      "name": "Michigan Fall Color",
-      "description": "Live Michigan fall color map, forecast, and rivers to paddle through the color.",
-      "inLanguage": "en-US",
+      "@id": "https://chrisizworski.com/#website",
+      "url": "https://chrisizworski.com/",
+      "name": "Chris Izworski",
       "publisher": {
         "@id": "https://chrisizworski.com/#person"
       }
@@ -63,7 +61,7 @@
       "url": "https://chrisizworski.com/fall-color/",
       "name": "Michigan Fall Color Map 2026: Live Peak Conditions and Forecast",
       "isPartOf": {
-        "@id": "https://chrisizworski.com/fall-color/#website"
+        "@id": "https://chrisizworski.com/#website"
       },
       "about": {
         "@type": "Thing",
@@ -78,12 +76,15 @@
         "height": 630
       },
       "datePublished": "2026-03-15",
-      "dateModified": "2026-08-18",
+      "dateModified": "2026-08-21",
       "author": {
         "@id": "https://chrisizworski.com/#person"
       },
       "breadcrumb": {
         "@id": "https://chrisizworski.com/fall-color/#breadcrumb"
+      },
+      "mainEntity": {
+        "@id": "https://chrisizworski.com/fall-color/#dataset"
       },
       "isAccessibleForFree": true
     },
@@ -95,7 +96,7 @@
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://chrisizworski.com/fall-color/"
+          "item": "https://chrisizworski.com/"
         },
         {
           "@type": "ListItem",
@@ -511,6 +512,15 @@
   <div class="sub">Where the leaves are turning, and quiet places to find them.</div>
   <p class="lede">Michigan's fall color turns from north to south. It usually peaks in late September across the Upper Peninsula and the Keweenaw, through the second and third weeks of October in northern Michigan and the Lower Peninsula, and in the last week of October near Ann Arbor and the southern border. This guide follows the season from live canopy and weather data, with a multi-day forecast and rivers to paddle through the color.</p>
 
+  <section class="card pad" id="statewideStatus" aria-labelledby="statewideStatusHeading" style="margin:16px 0">
+    <div class="row" style="align-items:baseline;margin-bottom:8px">
+      <span class="kicker">2026 statewide status</span>
+      <time class="mono tiny muted" id="statewideStatusUpdated" datetime="2026-08-21">Updated Aug 21</time>
+    </div>
+    <h2 id="statewideStatusHeading" class="serif-h" style="font-size:20px;line-height:1.2;margin:0 0 7px">Michigan is still predominantly green as the 2026 season begins.</h2>
+    <p class="small soft" id="statewideStatusBody" style="margin:0">The first meaningful color normally develops in the western Upper Peninsula in late September. For trip planning, target Sep 28&ndash;Oct 6 in the western U.P., Oct 5&ndash;17 across northern Lower Michigan, and Oct 18&ndash;28 in southern Michigan. Live canopy and weather readings below refine those windows as the season moves.</p>
+  </section>
+
   <section class="seasonal-desk" data-seasonal-module="fall-day-decisions" aria-labelledby="fall-day-title">
     <div class="seasonal-desk__head">
       <div>
@@ -566,7 +576,7 @@
 
     <div class="card pad" id="liveStrip" style="margin-bottom:16px">
       <div class="kicker" style="margin-bottom:11px">Live readings</div>
-      <div id="liveStripBody" class="small soft">Reading the latest canopy and weather data.</div>
+      <div id="liveStripBody" class="small soft">Seasonal baseline: western U.P. peak Sep 28&ndash;Oct 6; northern Lower Michigan Oct 5&ndash;17; southern Michigan Oct 18&ndash;28. Live readings refine these windows when available.</div>
     </div>
 
     <div id="map"></div>
@@ -915,7 +925,7 @@ function fc(regionId){
 // ---- render: live strip ----
 function renderLiveStrip(){
   const el=document.getElementById("liveStripBody");
-  if(!LIVE){el.textContent="Live data is not loading just now. The season guide below still applies.";return;}
+  if(!LIVE){el.textContent="Live feed unavailable just now. Use the dated statewide status above and the regional season bands below; neither will invent a live reading.";return;}
   let canopy=[],lows=[],dt=null,froze=false;
   REGIONS.forEach(r=>{const v=LIVE[r.id];if(v){if(v.ndvi){canopy.push(v.ndvi.canopyPct);dt=v.ndvi.date;}if(v.weather){if(v.weather.lowestRecent!=null)lows.push(v.weather.lowestRecent);if(v.weather.frostRecent)froze=true;}}});
   const avg=canopy.length?Math.round(canopy.reduce((a,b)=>a+b,0)/canopy.length):null;
@@ -929,6 +939,31 @@ function renderLiveStrip(){
     ?'The map and bands blend this canopy reading with recent frost and the typical season.'
     :'Quiet season. The canopy is full; the color tracking sharpens as the leaves begin to turn in mid September.')+'</div>';
   el.innerHTML=s;
+}
+
+// ---- render: statewide direct answer ----
+function renderStatewideStatus(){
+  const heading=document.getElementById("statewideStatusHeading");
+  const body=document.getElementById("statewideStatusBody");
+  const updated=document.getElementById("statewideStatusUpdated");
+  if(!heading||!body||!updated)return;
+  if(!LIVE||!Object.keys(LIVE).length)return;
+  const ranked=REGIONS.map(r=>({r,d:todayStage(r)})).sort((a,b)=>b.d.pct-a.d.pct);
+  const lead=ranked[0];
+  const peaks=ranked.filter(x=>x.d.phase==="peak"||x.d.pct>=85);
+  if(peaks.length){
+    heading.textContent=peaks.length===1
+      ? peaks[0].r.name+" is at or near peak now."
+      : "Peak color is strongest in "+listNames(peaks.slice(0,3).map(x=>x.r.name))+".";
+  }else if(lead.d.pct<20){
+    heading.textContent="Michigan is still mostly green. "+lead.r.name+" is leading the season.";
+  }else{
+    heading.textContent=lead.r.name+" is leading Michigan's fall color at about "+lead.d.pct+"%.";
+  }
+  body.textContent="The live model puts "+lead.r.name+" at about "+lead.d.pct+"% of peak, with its current peak window "+fmt(lead.d.ps)+" to "+fmt(lead.d.pe)+". The map and regional bands below show how the rest of Michigan compares.";
+  const stamp=new Date();
+  updated.textContent="Updated "+stamp.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+  updated.setAttribute("datetime",stamp.toISOString().slice(0,10));
 }
 
 // ---- map ----
@@ -1328,12 +1363,12 @@ function init(){
   });
   document.getElementById("planBtn").onclick=buildPlan;
   document.getElementById("planRegion").addEventListener("change",rebuildIfShown);
-  buildMap(); renderAll();
+  renderStatewideStatus(); buildMap(); renderAll();
   fetch("/api/fall-color-conditions").then(r=>r.json()).then(j=>{
     LIVE={}; (j.regions||[]).forEach(r=>LIVE[r.id]={weather:r.weather,ndvi:r.ndvi,forecast:r.forecast});
     computeLiveOffsets();
-    renderLiveStrip(); renderAll(); if(nearId)renderNearMe();
-  }).catch(()=>{renderLiveStrip();});
+    renderStatewideStatus(); renderLiveStrip(); renderAll(); if(nearId)renderNearMe();
+  }).catch(()=>{renderStatewideStatus();renderLiveStrip();});
   fetch("/api/fall-color-report").then(r=>r.json()).then(renderReport).catch(()=>{});
 }
 init();
