@@ -6,6 +6,8 @@ Updated: August 21, 2026 (America/Detroit)
 
 ChrisIzworski.com should win search by being the most useful answer for a focused set of Michigan, Great Lakes, outdoor, transportation, gardening, and Chris Izworski entity queries. The strategy is not to publish the most pages. It is to own useful decisions with first-party tools, live data, original synthesis, clear authorship, and a connected network of canonical pages.
 
+**Useful decisions and durable authority, not page-count growth.** That is the operating north star.
+
 Search growth is judged by qualified discovery and use, not by index count alone.
 
 ## What the site is building
