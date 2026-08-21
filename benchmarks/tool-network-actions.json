@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "updated": "2026-08-20",
   "purpose": "Operational overlay for Tool Network Registry decisions that are actively being executed and measured. This file adds current relationships and experiments without rewriting historical search evidence.",
   "relationships": [
@@ -16,7 +16,7 @@
       "to": "planting-calendar",
       "type": "property-planning-next",
       "strength": "strong",
-      "surface": "lawn-network",
+      "surface": "michigan-growing-season",
       "reason": "A property-specific lawn plan naturally hands Michigan gardeners to frost-station-based planting timing for the rest of the yard and garden."
     },
     {
@@ -24,7 +24,7 @@
       "to": "frost-dates",
       "type": "seasonal-evidence",
       "strength": "strong",
-      "surface": "lawn-network",
+      "surface": "michigan-growing-season",
       "reason": "Lawn work and garden timing both depend on local spring and fall frost timing."
     },
     {
@@ -32,7 +32,7 @@
       "to": "phenology",
       "type": "season-context",
       "strength": "optional",
-      "surface": "lawn-network",
+      "surface": "michigan-growing-season",
       "reason": "Michigan natural-season signals provide broader context for homeowners already planning outdoor property work."
     },
     {
@@ -40,16 +40,24 @@
       "to": "outdoor-weekend",
       "type": "trip-next",
       "strength": "strong",
-      "surface": "whitetail-footer",
-      "reason": "Michigan Whitetail Report already links hunters into the broader Michigan Outdoor Weekend planning network."
+      "surface": "preseason-next-checks",
+      "reason": "Michigan Whitetail Report hands hunters into the broader Michigan Outdoor Weekend planning network."
     },
     {
       "from": "whitetail",
       "to": "phenology",
       "type": "season-context",
       "strength": "strong",
-      "surface": "whitetail-footer",
-      "reason": "Michigan Whitetail Report already links to Michigan Phenology; seasonal natural signals complement rut, crop, and weather context."
+      "surface": "preseason-next-checks",
+      "reason": "Seasonal natural signals complement rut, crop, and weather context before deer-season demand ramps up."
+    },
+    {
+      "from": "whitetail",
+      "to": "fall-color",
+      "type": "season-context",
+      "strength": "optional",
+      "surface": "preseason-next-checks",
+      "reason": "Fall color progression provides broad seasonal context for October hunting travel without changing Whitetail search ownership."
     },
     {
       "from": "fall-color",
@@ -58,6 +66,28 @@
       "strength": "optional",
       "surface": "fall-regional-central",
       "reason": "Central Michigan fall travelers entering deer season can continue into corn-harvest, rut-timing, and live whitetail conditions without changing Fall Color search ownership."
+    }
+  ],
+  "repairs": [
+    {
+      "id": "perfect-lawn-network-repair",
+      "tool": "perfect-lawn",
+      "status": "released-measuring",
+      "released": "2026-08-20",
+      "implementationRepo": "izworskic/lawn-advisor",
+      "implementationPr": 4,
+      "measurement": ["Network Amplification Exposure", "Contextual Tool Handoff"],
+      "note": "The live product now exposes measured Michigan growing-season handoffs while preserving its address-specific lawn search ownership."
+    },
+    {
+      "id": "whitetail-preseason-network-repair",
+      "tool": "whitetail",
+      "status": "released-measuring",
+      "released": "2026-08-20",
+      "implementationRepo": "izworskic/michigan-whitetail-report",
+      "implementationPr": 1,
+      "measurement": ["Network Amplification Exposure", "Contextual Tool Handoff"],
+      "note": "The live product now exposes measured preseason handoffs; the central fall network also supplies a contextual inbound path."
     }
   ],
   "experiments": [
