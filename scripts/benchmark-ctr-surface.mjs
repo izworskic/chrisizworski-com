@@ -17,6 +17,7 @@ const baseline = JSON.parse(
   await readFile(path.join(root, "benchmarks", "ctr-surface-baseline.json"), "utf8"),
 );
 const G = baseline.gates;
+const gscWindow = baseline.source?.windowLabel || "configured GSC window";
 
 function decode(s) {
   return s
@@ -52,7 +53,7 @@ for (const [, html] of source) {
   }
 }
 
-const sitemapFiles = ["sitemap.xml", "sitemap-beaches.xml", "sitemap-reputation.xml"];
+const sitemapFiles = ["sitemap.xml", "sitemap-fall.xml", "sitemap-beaches.xml", "sitemap-reputation.xml", "sitemap-winter.xml", "sitemap-manistee.xml"];
 const sitemap = (await Promise.all(sitemapFiles.map((f) => readFile(path.join(publicRoot, f), "utf8").catch(() => "")))).join("\n");
 const norm = (u) => (u.length > 1 ? u.replace(/\/+$/, "") : u);
 const sitemapPaths = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
@@ -127,7 +128,7 @@ function fail(c) { return Object.entries(c).filter(([, v]) => !v).map(([k]) => k
 
 console.log("\nCTR SURFACE BENCHMARK  " + new Date().toISOString().slice(0, 10));
 console.log("=".repeat(78));
-console.log("\nMEASURED PAGES  (impression weighted, GSC window 171 days)\n");
+console.log(`\nMEASURED PAGES  (impression weighted, ${gscWindow})\n`);
 for (const p of [...measured].sort((a, b) => b.impressions - a.impressions)) {
   const share = ((p.impressions / totalImpressions) * 100).toFixed(1);
   console.log(`${p.pathname}`);
@@ -142,7 +143,7 @@ console.log(`WEIGHTED SNIPPET SCORE: ${(weightedScore * 100).toFixed(1)}%  (gate
 const totalRisk = measured.reduce((s, p) => s + p.clicksAtRisk, 0);
 console.log(`TOTAL CLICKS AT RISK across the window: ${totalRisk}  (modeled, see baseline caution)`);
 
-console.log("\nSEASONAL WATCHLIST  (no GSC history, hygiene only)\n");
+console.log("\nSEASONAL WATCHLIST  (hygiene for emerging seasonal pages)\n");
 const bad = watchlist.filter((p) => p.score < 1);
 for (const p of bad.sort((a, b) => a.score - b.score)) {
   console.log(`  ${(p.score * 100).toFixed(0).padStart(3)}%  title ${String(p.titleChars).padStart(3)}  links ${String(p.inboundLinks).padStart(2)}  ${p.pathname}`);
