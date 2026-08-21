@@ -1,16 +1,40 @@
 {
-  "version": "1.0.0",
-  "updated": "2026-08-20",
-  "objective": "Maximize legitimate branded search coverage for Chris Izworski by making every genuinely useful owned property reinforce one canonical person entity while preserving distinct subject/search ownership.",
+  "version": "1.1.0",
+  "updated": "2026-08-21",
+  "objective": "Make Chris Izworski the clear primary result for his name and maximize truthful, useful Chris Izworski visibility across the first 30 branded search results while preserving one canonical Person entity and distinct non-branded search ownership.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "primaryIdentitySurface": "https://chrisizworski.com/chris-izworski/",
+  "brandedQueryFamily": ["Chris Izworski", "Chris Izworski Michigan", "Chris Izworski AI", "Chris Izworski 911", "Chris Izworski public safety"],
+  "occupancyTargets": {
+    "primarySitePosition": 1,
+    "operating": {"top10": 8, "top20": 15, "top30": 20},
+    "stretch": {"top10": 10, "top20": 20, "top30": 30},
+    "principle": "Earn as much branded result coverage as possible through accurate, distinct, useful owned properties, profiles, and independent third-party references."
+  },
+  "resultClasses": {
+    "primaryOwned": "chrisizworski.com identity, source, project, and substantive author surfaces",
+    "independentOwned": "Distinct useful owned domains and subdomains that identify Chris as creator or author",
+    "controlledProfiles": "Legitimate professional, publishing, developer, video, and social profiles Chris controls",
+    "earnedThirdParty": "Independent news, government, association, conference, podcast, publication, and civic pages substantially about Chris",
+    "other": "Results not attributable to Chris or not useful to the branded entity footprint"
+  },
   "rules": {
     "entityConsistency": "Every active owned property with structured data should identify Chris Izworski as creator/author using the canonical Person entity or an unambiguous link to the primary identity surface.",
-    "distinctValue": "A property earns branded visibility by being useful and topically distinct; do not create thin pages or duplicate sites merely to occupy result slots.",
+    "distinctValue": "A property earns branded visibility by being useful and topically distinct; do not create thin pages or duplicate sites merely to increase result count.",
     "reciprocalDiscovery": "Active owned properties should link back to the main identity/property network where appropriate, and the central Projects/Works surfaces should discover meaningful active properties.",
-    "searchOwnership": "Subject intent ownership still controls page architecture. Branded entity reinforcement must not cause multiple owned pages to compete for the same non-branded query.",
+    "searchOwnership": "Subject intent ownership still controls non-branded page architecture. Multiple distinct surfaces may rank for the branded Chris Izworski query family, but branded reinforcement must not create non-branded cannibalization.",
+    "brandedOccupancy": "For exact and close-name searches, maximize distinct authoritative Chris Izworski results across the top 10, 20, and 30 while keeping every surface accurate and independently useful.",
+    "primaryIdentityPriority": "The main Chris Izworski identity surface should remain the strongest candidate for position #1 and the canonical Person entity must remain stable across supporting properties.",
     "launchDiscipline": "Do not add a planned property to crawlable central navigation until its owned canonical resolves and its production routes are verified.",
-    "measurement": "Use branded Search Console query families plus property-level impressions/CTR/rank to judge branded coverage. Distinguish observed data from targets."
+    "measurement": "Track exact-name and close-name result occupancy at depths 10, 20, and 30, classify each observed result, and pair the snapshot with branded Search Console impressions, CTR, and average position. Keep observed data separate from targets and expect locale/device variation."
+  },
+  "measurementProtocol": {
+    "cadence": "monthly-and-after-material-entity-change",
+    "primaryQuery": "Chris Izworski",
+    "depths": [10, 20, 30],
+    "classifyEveryObservedResult": true,
+    "separateObservedFromTarget": true,
+    "accountForLocaleAndDeviceVariation": true
   },
   "gardenPlanner": {
     "property": "https://garden.chrisizworski.com/",
