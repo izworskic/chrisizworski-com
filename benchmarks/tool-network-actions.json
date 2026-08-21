@@ -1,6 +1,6 @@
 {
-  "version": "1.4.0",
-  "updated": "2026-08-20",
+  "version": "1.4.1",
+  "updated": "2026-08-21",
   "purpose": "Operational overlay for Tool Network Registry decisions that are actively being executed and measured. This file adds current relationships, repairs, experiments, and launch gates without rewriting historical search evidence.",
   "relationships": [
     {
@@ -108,6 +108,17 @@
       "implementationPr": 1,
       "creatorEntity": "https://chrisizworski.com/#person",
       "publisher": "https://freighterviewfarms.com/",
+      "hosting": {
+        "provider": "Vercel",
+        "projectName": "freighter-view-garden-planner",
+        "projectCreation": "accepted-2026-08-21",
+        "productionDeploymentRequested": "2026-08-21",
+        "latestDeploymentId": "dpl_CTDH24WgbbECqR7MtRXneEsMHQUe",
+        "latestDeploymentUrl": "https://freighter-view-garden-planner-q33j6a2ca.vercel.app",
+        "sourceCommit": "b9b50cea0c2d2af2095c7b25d2dfbfe27192f5fb",
+        "verification": "blocked-by-vercel-connector-read-permission",
+        "note": "Vercel accepted the production deployment write. The connected Vercel read surface returns permission/not-found responses for the newly created project, so build readiness and routes remain unverified and must not be promoted as live."
+      },
       "searchOwnership": {
         "primary": "square foot garden planner",
         "supporting": ["seed starting planner", "annual flower garden planner"],
@@ -117,9 +128,9 @@
       "plannedHandoffs": ["freighter-view-farms", "planting-calendar", "frost-dates", "seed-saving", "phenology", "heirloom-matchmaker"],
       "measurementAfterLaunch": ["Network Amplification Exposure", "Contextual Tool Handoff"],
       "blockers": [
-        "Create/import a Vercel project from izworskic/freighter-view-garden-planner.",
-        "Attach garden.chrisizworski.com and verify the owned canonical resolves.",
-        "Verify /, /square-foot-garden-planner, /robots.txt, and /sitemap.xml on production."
+        "Attach garden.chrisizworski.com to the Vercel project and verify the owned canonical resolves.",
+        "Verify /, /square-foot-garden-planner, /robots.txt, and /sitemap.xml on production.",
+        "Obtain a successful production-read/build verification before promoting the planner from launch-blocked."
       ],
       "promotionGate": {
         "from": "launch-blocked",
