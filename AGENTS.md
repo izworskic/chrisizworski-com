@@ -11,10 +11,11 @@ Read this file before making any change.
 npm run verify:all
 ```
 
-That runs, in order: `npm test`, `npm run verify`, `benchmark:beaches`,
-`benchmark:growth`, `benchmark:seo`.
+That runs the repository tests, source verification, and every product/search
+benchmark registered in `package.json`, including the site-wide search strategy
+governance gate.
 
-**All five must pass.** They are merge gates, not advisory output. If any one of
+**Every gate must pass.** They are merge gates, not advisory output. If any one of
 them fails, fix the cause or explain why the expectation itself should change —
 do not merge past a red gate.
 
@@ -28,6 +29,31 @@ fails if the `<title>` of these pages does not contain "Chris Izworski":
 
 It also pins the canonical URL on those pages. Both checks exist because a
 previous pass silently stripped the byline from all four.
+
+## Search strategy operating system
+
+Before any search-facing change, read `docs/SEARCH_STRATEGY.md` and
+`benchmarks/search-strategy-governance.json`. Then check the current measured
+state in `benchmarks/search-growth-engine-2026-08-15.json`, the experiment
+ledger in `benchmarks/growth-experiments.json`, the canonical intent owners in
+`benchmarks/tool-network-registry.json`, and branded governance in
+`benchmarks/name-serp-governance.json`.
+
+Use this order when deciding what to build or change:
+
+1. Protect crawl/index/canonical integrity, factual accuracy, structured data and usability.
+2. Protect active experiment windows.
+3. Improve meaningful-impression pages already near page one before creating adjacent keyword URLs.
+4. Strengthen the existing canonical intent owner before creating a supporting page.
+5. Create a new indexable URL only when it passes the new-canonical gate: distinct decision, documented evidence or unique utility, cannibalization safety, network fit, entity integrity, discovery and measurement.
+6. Connect important pages into the contextual tool/authority network.
+7. Reinforce the Chris Izworski entity without causing non-branded cannibalization.
+
+Do not create doorway pages for keyword, city, county or date variants merely to
+increase index count. A new canonical needs materially distinct user value.
+
+Run `npm run benchmark:search-strategy -- --check` for search-strategy work; it
+is also enforced by `npm run verify:all`.
 
 ## 2. Never weaken the name
 

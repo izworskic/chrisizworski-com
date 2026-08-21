@@ -1,0 +1,96 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-21",
+  "timezone": "America/Detroit",
+  "objective": "Grow qualified organic discovery by owning distinct Michigan, Great Lakes, outdoor, gardening, transportation, and Chris Izworski entity intents with useful canonical pages, first-party utility, measurement discipline, and a connected authority network.",
+  "northStar": "Useful decisions and durable authority, not page-count growth.",
+  "canonicalPersonId": "https://chrisizworski.com/#person",
+  "measurement": {
+    "primaryWindowDays": 28,
+    "leadingIndicatorWindowDays": 7,
+    "separateBrandAndNonBrand": true,
+    "doNotDeclareWinnerEarly": true,
+    "baselineSource": "benchmarks/search-growth-engine-2026-08-15.json",
+    "experimentLedger": "benchmarks/growth-experiments.json"
+  },
+  "pillars": {
+    "measurementTruthAndExperimentDiscipline": 20,
+    "technicalCrawlIndexCanonicalIntegrity": 15,
+    "queryOwnershipAndCannibalizationControl": 15,
+    "serpConversionAndIntentMatch": 15,
+    "internalNetworkAndAuthorityDistribution": 10,
+    "entityAndBrandedSerpIntegrity": 10,
+    "aiSearchAndStructuredDiscoveryReadiness": 10,
+    "seasonalReadinessAndFreshness": 5
+  },
+  "priorityOrder": [
+    "Protect crawlability, canonical integrity, structured data, performance, and factual accuracy.",
+    "Protect active experiments and clean measurement windows.",
+    "Improve meaningful-impression pages already near page one before creating adjacent keyword URLs.",
+    "Strengthen the canonical intent owner before creating supporting pages.",
+    "Create a new canonical only for a distinct decision, evidence-backed demand, or genuinely unique utility.",
+    "Connect every important page into the tool and authority network.",
+    "Reinforce the Chris Izworski entity without creating non-branded cannibalization."
+  ],
+  "newCanonicalGate": {
+    "requiresDistinctIntentOrDecision": true,
+    "requiresDocumentedEvidenceOrUniqueUtility": true,
+    "requiresCannibalizationReview": true,
+    "requiresNetworkFit": true,
+    "preferredMinimumNetworkRelationships": 2,
+    "requiresEntityIntegrity": true,
+    "requiresIntentionalDiscovery": true,
+    "requiresMeasurementPlan": true,
+    "doorwayVariantPagesAllowed": false,
+    "exception": "A geographic, date, or keyword-variant page may launch only when it carries materially unique useful information and a distinct decision not served cleanly by the canonical owner."
+  },
+  "serpRules": {
+    "queryFirstWhenUseful": true,
+    "titleMaxCharacters": 60,
+    "metaDescriptionMaxCharacters": 158,
+    "alignTitleH1FirstAnswer": true,
+    "protectRunningExperiments": true,
+    "prioritizeMeaningfulImpressionsAndWeakCtr": true
+  },
+  "technicalRules": {
+    "singleIntendedCanonical": true,
+    "previewHostsNoindex": true,
+    "crawlableCoreAnswer": true,
+    "nonDanglingStructuredDataEntities": true,
+    "intentionalSitemapOrInternalDiscovery": true,
+    "stableRedirectsForMovedUrls": true,
+    "mobileUsabilityRequired": true
+  },
+  "aiSearchRules": {
+    "llmsTxtMustReflectRealCanonicals": true,
+    "crawlableDirectAnswerPreferred": true,
+    "structuredEntityRelationshipsRequiredWhenApplicable": true,
+    "sourceContextForFreshOrRiskSensitiveClaims": true,
+    "noAiSeoFiller": true
+  },
+  "seasonalPipeline": {
+    "leadTimeWeeks": [6, 10],
+    "lateSummerFall": ["fall-color", "fall-drives", "paddling", "salmon-steelhead", "whitetail", "aurora"],
+    "fallWinter": ["michigan-ice", "cross-country-skiing", "winter-outdoors", "great-lakes-winter"],
+    "lateWinterSpring": ["frost", "planting", "tomatoes", "lawn", "phenology", "trout"],
+    "lateSpringSummer": ["beaches", "boating", "boat-launches", "paddling", "mackinac-up-travel", "great-lakes-recreation"]
+  },
+  "sourceOfTruth": {
+    "humanStrategy": "docs/SEARCH_STRATEGY.md",
+    "measuredOpportunity": "benchmarks/search-growth-engine-2026-08-15.json",
+    "experimentLedger": "benchmarks/growth-experiments.json",
+    "toolNetwork": "benchmarks/tool-network-registry.json",
+    "toolActions": "benchmarks/tool-network-actions.json",
+    "nameSerp": "benchmarks/name-serp-governance.json",
+    "ownedDomains": "benchmarks/owned-domain-network.json",
+    "robots": "public/robots.txt",
+    "llms": "public/llms.txt"
+  },
+  "releaseGate": {
+    "benchmarkScript": "scripts/benchmark-search-strategy-governance.mjs",
+    "npmScript": "benchmark:search-strategy",
+    "minimumScore": 95,
+    "noFatalFailures": true,
+    "partOfVerifyAll": true
+  }
+}
