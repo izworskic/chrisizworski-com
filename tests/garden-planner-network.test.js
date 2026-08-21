@@ -18,9 +18,18 @@ test('Garden Planner stays launch-blocked until the owned production domain is v
   assert.ok(launch.promotionGate.requires.includes('owned-domain-resolves'));
 });
 
+test('Garden Planner records Vercel hosting progress without claiming production verification',()=>{
+  assert.equal(launch.hosting?.provider,'Vercel');
+  assert.equal(launch.hosting?.projectName,'freighter-view-garden-planner');
+  assert.equal(launch.hosting?.projectCreation,'accepted-2026-08-21');
+  assert.equal(launch.hosting?.sourceCommit,'b9b50cea0c2d2af2095c7b25d2dfbfe27192f5fb');
+  assert.equal(launch.hosting?.verification,'blocked-by-vercel-connector-read-permission');
+});
+
 test('planned Garden Planner reinforces one Chris Izworski entity without claiming live coverage',()=>{
   assert.ok(planned,'garden planner planned subproperty is missing');
   assert.equal(planned.status,'launch-blocked');
+  assert.equal(planned.hostingState,'vercel-project-created-production-verification-pending');
   assert.equal(planned.creatorEntity,owned.canonicalPersonId);
   assert.equal(brand.canonicalPersonId,owned.canonicalPersonId);
   assert.equal(brand.gardenPlanner.creatorRequirement,owned.canonicalPersonId);
