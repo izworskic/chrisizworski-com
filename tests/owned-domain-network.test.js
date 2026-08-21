@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 
 const entity=JSON.parse(await readFile(new URL('../benchmarks/entity-surface-baseline.json',import.meta.url),'utf8'));
 const owned=JSON.parse(await readFile(new URL('../benchmarks/owned-domain-network.json',import.meta.url),'utf8'));
-const works=await readFile(new URL('../public/chris-izworski-works/index.html',import.meta.url),'utf8');
+const projects=await readFile(new URL('../public/projects/index.html',import.meta.url),'utf8');
 
 const roots=new Map(owned.roots.map(item=>[item.host,item]));
 const handoffs=owned.observedLiveHandoffs||[];
@@ -26,6 +26,6 @@ test('flagship external domains are mutually discoverable through observed live 
   }
 });
 
-test('central works index names every current flagship owned domain',()=>{
-  for(const host of owned.gates.requireCentralWorksIndex) assert.match(works,new RegExp(host.replaceAll('.','\\.')));
+test('central Projects hub names every current flagship owned domain',()=>{
+  for(const host of owned.gates.requireCentralProjectsIndex) assert.match(projects,new RegExp(host.replaceAll('.','\\.')));
 });
