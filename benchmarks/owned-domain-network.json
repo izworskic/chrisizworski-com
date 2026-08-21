@@ -1,7 +1,7 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "updated": "2026-08-20",
-  "purpose": "Track Chris Izworski-owned web properties separately from the tool-only registry so a 100/100 tool score cannot hide an unconnected first-party domain.",
+  "purpose": "Track Chris Izworski-owned web properties separately from the tool-only registry so a 100/100 tool score cannot hide an unconnected first-party domain or planned subproperty.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "roots": [
     {"host":"chrisizworski.com","name":"Chris Izworski","role":"primary-hub","status":"active","coverage":"central"},
@@ -11,6 +11,20 @@
     {"host":"freighterviewfarms.com","name":"Freighter View Farms","role":"editorial-gardening","status":"active","coverage":"backlink-present","measurement":"external-cms"},
     {"host":"izworskic.github.io","name":"Chris Izworski GitHub Pages","role":"project-index","status":"active","coverage":"cross-linked","measurement":"not-required"},
     {"host":"aibreakdown5.wordpress.com","name":"AI Breakdown","role":"legacy-writing","status":"legacy","coverage":"entity-surface","measurement":"not-required"}
+  ],
+  "plannedSubproperties": [
+    {
+      "host": "garden.chrisizworski.com",
+      "name": "Freighter View Garden Planner",
+      "role": "interactive-gardening",
+      "status": "launch-blocked",
+      "parentRoot": "chrisizworski.com",
+      "repository": "izworskic/freighter-view-garden-planner",
+      "creatorEntity": "https://chrisizworski.com/#person",
+      "publisher": "https://freighterviewfarms.com/",
+      "measurement": "symbolic-network-events-after-launch",
+      "activationRule": "Do not count as an active owned property until the Vercel project exists, the custom domain resolves, and production route checks pass."
+    }
   ],
   "observedLiveHandoffs": [
     {"from":"chrisizworski.com","to":"michigantroutreport.com","surface":"projects"},
@@ -36,11 +50,14 @@
   "gates": {
     "coverEveryEntityBaselineSelfOwnedDomain": true,
     "noIsolatedActiveRoot": true,
+    "plannedSubpropertiesDoNotCountAsLive": true,
+    "requireCanonicalPersonEntityOnNewProperties": true,
     "requireFlagshipCrossLinks": ["michigantroutreport.com","michiganbirdingreport.com","greatlakeslevels.org"],
     "requireCentralProjectsIndex": ["michigantroutreport.com","michiganbirdingreport.com","greatlakeslevels.org","freighterviewfarms.com","izworskic.github.io"]
   },
   "nextRepairs": [
     "Instrument symbolic cross-domain exposure and handoff events on Michigan Trout Report; Birding and Great Lakes Levels are now instrumented.",
+    "Import the Freighter View Garden Planner into Vercel, attach garden.chrisizworski.com, verify production, then promote it from plannedSubproperties to active network coverage.",
     "Prefer contextual in-content handoffs over generic footer-only links when the visitor decision genuinely continues across sites.",
     "Keep Freighter View Farms in the owned-domain graph even though its live WordPress implementation is not controlled by the GitHub placeholder repository."
   ]
