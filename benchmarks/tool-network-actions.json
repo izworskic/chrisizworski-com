@@ -1,7 +1,7 @@
 {
-  "version": "1.3.0",
+  "version": "1.4.0",
   "updated": "2026-08-20",
-  "purpose": "Operational overlay for Tool Network Registry decisions that are actively being executed and measured. This file adds current relationships and experiments without rewriting historical search evidence.",
+  "purpose": "Operational overlay for Tool Network Registry decisions that are actively being executed and measured. This file adds current relationships, repairs, experiments, and launch gates without rewriting historical search evidence.",
   "relationships": [
     {
       "from": "circle-tour",
@@ -96,6 +96,37 @@
       "implementationPr": 1,
       "measurement": ["Network Amplification Exposure", "Contextual Tool Handoff"],
       "note": "The live product now exposes measured preseason handoffs; the central fall network also supplies a contextual inbound path."
+    }
+  ],
+  "launches": [
+    {
+      "id": "garden-planner-network-launch",
+      "name": "Freighter View Garden Planner",
+      "status": "launch-blocked",
+      "intendedCanonical": "https://garden.chrisizworski.com/",
+      "implementationRepo": "izworskic/freighter-view-garden-planner",
+      "implementationPr": 1,
+      "creatorEntity": "https://chrisizworski.com/#person",
+      "publisher": "https://freighterviewfarms.com/",
+      "searchOwnership": {
+        "primary": "square foot garden planner",
+        "supporting": ["seed starting planner", "annual flower garden planner"],
+        "protectedAdjacentOwners": ["planting-calendar", "frost-dates", "tomato-planting", "seed-saving"],
+        "rule": "Planner owns interactive planning decisions; chrisizworski.com owns Michigan informational timing/reference intent; Freighter View Farms owns firsthand garden experience."
+      },
+      "plannedHandoffs": ["freighter-view-farms", "planting-calendar", "frost-dates", "seed-saving", "phenology", "heirloom-matchmaker"],
+      "measurementAfterLaunch": ["Network Amplification Exposure", "Contextual Tool Handoff"],
+      "blockers": [
+        "Create/import a Vercel project from izworskic/freighter-view-garden-planner.",
+        "Attach garden.chrisizworski.com and verify the owned canonical resolves.",
+        "Verify /, /square-foot-garden-planner, /robots.txt, and /sitemap.xml on production."
+      ],
+      "promotionGate": {
+        "from": "launch-blocked",
+        "to": "measure",
+        "requires": ["production-ready", "owned-domain-resolves", "canonical-route-checks-pass"],
+        "afterPromotion": "Add the planner as an active Tool Network Registry node and only then add crawlable inbound links/cards from central owned properties."
+      }
     }
   ],
   "experiments": [
