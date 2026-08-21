@@ -206,7 +206,7 @@ const committedDriftHashes = new Map([
   ["/edmund-fitzgerald/", "a722575cbf373e9e66c874d48a61dafb089e19a79f2df5e261053940ec3f3f04"],
   ["/heirloom-seed-saving-guide/", "2e5d3c53110102a7f6784f3c7f6ac86b1f9be6840f297a515ead80111c1b6e87"],
   ["/michigan-paddling/pere-marquette/", "9f5d099de514fc829c4315ac3487500f8572761596ba797d66ca463d8df00ec2"],
-  ["/sitemap-reputation.xml", "28c519666de392d6e66596ce609d52993a593eed1877fd9ab1c769bb667e4899"],
+  ["/sitemap-reputation.xml", "b1143d07b15323a5c4748f5f8e3851ef2813dc0bce3133365535d93714579ddd"],
   // Aug 19 2026: stamp-freshness corrected dateModified and the matching sitemap
   // lastmod on these routes to their real last content commit. Verified line by
   // line that nothing but those date stamps moved. Re-crawl after deploy and
@@ -255,7 +255,7 @@ const committedDriftHashes = new Map([
   ["/great-lakes-beaches/wenonah-park/", "92ef0e15291a5bfebf4e89bb3c75226e8352867d0b7fcb35c631178059c176ff"],
   ["/great-lakes-beaches/whitefish-point/", "1dfa103faf8c639a4235ba668a55393b17623793710471579ffb0eb7ccb11a20"],
   ["/great-lakes-beaches/wilderness-state-park/", "6341bdb514bd1ab07c01233bdc8442e2e84e320bcebe2ec7c182b23b19ab5bb1"],
-  ["/sitemap-reputation.xml", "28c519666de392d6e66596ce609d52993a593eed1877fd9ab1c769bb667e4899"],
+  ["/sitemap-reputation.xml", "b1143d07b15323a5c4748f5f8e3851ef2813dc0bce3133365535d93714579ddd"],
   ["/zone-6a-planting-calendar/", "3b34180a82558e2df887dc238ad31dc8d1995e465b3e5d81972ddec260414565"],
 ]);
 
@@ -465,7 +465,8 @@ if (!auroraApi.includes("api.weather.gov/gridpoints") || !auroraApi.includes("aa
 if (!aurora.includes('id="regionSelect"') || !aurora.includes('id="nextBestWindow"') || aurora.includes("New moon, 5 days")) {
   failures.push("Northern Lights is missing the region decision controls or still hard-codes a moon phase");
 }
-if (!aurora.includes("Aurora Field Report") || /Aurora Location Used[^\n]+(?:lat|lng|latitude|longitude)/i.test(aurora)) {
+if (!aurora.includes("Aurora Field Report") || /Aurora Location Used[^\
+]+(?:lat|lng|latitude|longitude)/i.test(aurora)) {
   failures.push("Aurora engagement measurement is missing or includes exact location data");
 }
 if (!auroraLib.includes("parseKpForecast") || !auroraLib.includes("parseOvation") || !auroraLib.includes("regionVerdict") || !auroraLib.includes("parseSkyCover") || !auroraLib.includes("parseMoon")) {
@@ -528,5 +529,6 @@ const summary = {
   failures,
 };
 
-process.stdout.write(`${JSON.stringify(summary, null, 2)}\n`);
+process.stdout.write(`${JSON.stringify(summary, null, 2)}\
+`);
 if (failures.length > 0) process.exitCode = 1;
