@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: feat/owned-domain-network
-      - name: Update exact reputation sitemap integrity pin
+      - name: Update exact reputation sitemap integrity pins
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -22,8 +22,8 @@ jobs:
           s = p.read_text()
           old = 'f6624b50bd277e91c805f59b96a3f44a7ac760bf9cf53b689d5756e670555bfa'
           new = '28c519666de392d6e66596ce609d52993a593eed1877fd9ab1c769bb667e4899'
-          if s.count(old) != 1:
-              raise SystemExit(f'expected exactly one old pin, found {s.count(old)}')
+          if s.count(old) != 2:
+              raise SystemExit(f'expected exactly two old pins, found {s.count(old)}')
           p.write_text(s.replace(old, new))
           PY
       - name: Commit pin repair
