@@ -465,8 +465,7 @@ if (!auroraApi.includes("api.weather.gov/gridpoints") || !auroraApi.includes("aa
 if (!aurora.includes('id="regionSelect"') || !aurora.includes('id="nextBestWindow"') || aurora.includes("New moon, 5 days")) {
   failures.push("Northern Lights is missing the region decision controls or still hard-codes a moon phase");
 }
-if (!aurora.includes("Aurora Field Report") || /Aurora Location Used[^\
-]+(?:lat|lng|latitude|longitude)/i.test(aurora)) {
+if (!aurora.includes("Aurora Field Report") || /Aurora Location Used[^\n]+(?:lat|lng|latitude|longitude)/i.test(aurora)) {
   failures.push("Aurora engagement measurement is missing or includes exact location data");
 }
 if (!auroraLib.includes("parseKpForecast") || !auroraLib.includes("parseOvation") || !auroraLib.includes("regionVerdict") || !auroraLib.includes("parseSkyCover") || !auroraLib.includes("parseMoon")) {
@@ -529,6 +528,5 @@ const summary = {
   failures,
 };
 
-process.stdout.write(`${JSON.stringify(summary, null, 2)}\
-`);
+process.stdout.write(`${JSON.stringify(summary, null, 2)}\n`);
 if (failures.length > 0) process.exitCode = 1;
