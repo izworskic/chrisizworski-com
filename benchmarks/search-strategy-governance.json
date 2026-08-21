@@ -1,8 +1,8 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "updated": "2026-08-21",
   "timezone": "America/Detroit",
-  "objective": "Grow qualified organic discovery by owning distinct Michigan, Great Lakes, outdoor, gardening, transportation, and Chris Izworski entity intents with useful canonical pages, first-party utility, measurement discipline, and a connected authority network.",
+  "objective": "Grow qualified organic discovery by owning distinct Michigan, Great Lakes, outdoor, gardening, transportation, and Chris Izworski entity intents with useful canonical pages, first-party utility, measurement discipline, a connected authority network, and maximum legitimate branded SERP coverage for Chris Izworski.",
   "northStar": "Useful decisions and durable authority, not page-count growth.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "measurement": {
@@ -30,8 +30,18 @@
     "Strengthen the canonical intent owner before creating supporting pages.",
     "Create a new canonical only for a distinct decision, evidence-backed demand, or genuinely unique utility.",
     "Connect every important page into the tool and authority network.",
-    "Reinforce the Chris Izworski entity without creating non-branded cannibalization."
+    "Reinforce the Chris Izworski entity, keep the primary identity surface strongest for #1, and maximize legitimate branded top-30 occupancy without creating non-branded cannibalization."
   ],
+  "brandedSerp": {
+    "primaryQuery": "Chris Izworski",
+    "primarySitePositionTarget": 1,
+    "operatingOccupancyTargets": {"top10": 8, "top20": 15, "top30": 20},
+    "stretchOccupancyTargets": {"top10": 10, "top20": 20, "top30": 30},
+    "distinctBrandedSurfacesAllowed": true,
+    "nonBrandedSingleCanonicalOwnerStillRequired": true,
+    "thinDuplicateSurfacesAllowed": false,
+    "sourceOfTruth": "benchmarks/name-serp-governance.json"
+  },
   "newCanonicalGate": {
     "requiresDistinctIntentOrDecision": true,
     "requiresDocumentedEvidenceOrUniqueUtility": true,
