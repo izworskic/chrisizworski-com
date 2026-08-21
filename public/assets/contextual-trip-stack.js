@@ -18,6 +18,7 @@ const DEST={
   salmon:{label:'Salmon & steelhead run tracker',detail:'Check run timing and live conditions on major rivers.',href:'https://michigantroutreport.com/salmon-run/'},
   birding:{label:'Michigan Birding Report',detail:'See live sightings and nearby hotspots.',href:'https://michiganbirdingreport.com/'},
   saginaw:{label:'Saginaw Bay Report',detail:'Check wind, lee shore and current bay conditions.',href:'https://saginawbay.chrisizworski.com/'},
+  whitetail:{label:'Michigan Whitetail Report',detail:'Check corn harvest, rut timing and live deer movement conditions.',href:'https://whitetail.chrisizworski.com/'},
   beaches:{label:'Michigan Beach Report',detail:'Check beach hazards, lake observations and notices.',href:'/great-lakes-beaches/'},
   buoys:{label:'Great Lakes buoy conditions',detail:'Check live wind, waves and nearby Lake Michigan conditions.',href:'/great-lakes-buoys/'},
   fall:{label:'Michigan fall color',detail:'Check current color timing before choosing the river day.',href:'/fall-color/'},
@@ -29,7 +30,7 @@ const REGION={
   tip:{title:'Build the rest of a Straits trip',keys:['bridge','aurora','weekend','outdoors']},
   nwl:{title:'Build the rest of a northwest Michigan trip',keys:['wine','outdoors','aurora','weekend']},
   nel:{title:'Build the rest of a northeast Michigan trip',keys:['ausable','manistee','trout','aurora']},
-  cen:{title:'Build the rest of a central Michigan trip',keys:['saginaw','birding','outdoors','weekend']},
+  cen:{title:'Build the rest of a central Michigan trip',keys:['saginaw','birding','whitetail','outdoors','weekend']},
   swl:{title:'Build the rest of a west Michigan trip',keys:['beaches','birding','outdoors','weekend']},
   sel:{title:'Build the rest of a southeast Michigan trip',keys:['birding','outdoors','weekend','tools']},
   generic:{title:'Build the rest of the Michigan trip',keys:['aurora','bridge','outdoors','weekend']}
