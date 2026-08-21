@@ -145,8 +145,8 @@ check(
 check(
   "Owned properties reinforce brand without duplicate search ownership",
   ownedDomains.canonicalPersonId === governance.canonicalPersonId &&
-    typeof ownedDomains.objective === "string" &&
-    ownedDomains.objective.length > 20 &&
+    typeof ownedDomains.purpose === "string" &&
+    ownedDomains.purpose.length > 20 &&
     typeof nameSerp.rules?.distinctValue === "string" &&
     nameSerp.rules.distinctValue.includes("thin pages") &&
     nameSerp.rules.searchOwnership.includes("must not cause"),
