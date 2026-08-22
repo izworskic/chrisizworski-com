@@ -16,12 +16,42 @@
       "averagePosition": 9.16
     },
     "sitewideQuerySignals": [
-      {"query": "au sable river map", "impressions": 13, "clicks": 1, "position": 8.92},
-      {"query": "au sable river access points map", "impressions": 5, "clicks": 0, "position": 6.8},
-      {"query": "au sable river access points", "impressions": 6, "clicks": 0, "position": 7.17},
-      {"query": "au sable river public access", "impressions": 3, "clicks": 0, "position": 13.67},
-      {"query": "au sable river fishing map", "impressions": 3, "clicks": 0, "position": 10.33},
-      {"query": "au sable river kayaking map", "impressions": 3, "clicks": 0, "position": 9.33}
+      {
+        "query": "au sable river map",
+        "impressions": 13,
+        "clicks": 1,
+        "position": 8.92
+      },
+      {
+        "query": "au sable river access points map",
+        "impressions": 5,
+        "clicks": 0,
+        "position": 6.8
+      },
+      {
+        "query": "au sable river access points",
+        "impressions": 6,
+        "clicks": 0,
+        "position": 7.17
+      },
+      {
+        "query": "au sable river public access",
+        "impressions": 3,
+        "clicks": 0,
+        "position": 13.67
+      },
+      {
+        "query": "au sable river fishing map",
+        "impressions": 3,
+        "clicks": 0,
+        "position": 10.33
+      },
+      {
+        "query": "au sable river kayaking map",
+        "impressions": 3,
+        "clicks": 0,
+        "position": 9.33
+      }
     ],
     "queryAttributionCaution": "Query rows are sitewide directional evidence and are not treated as a page-query join."
   },
@@ -46,10 +76,19 @@
   },
   "measurement": {
     "primaryWindowDays": 28,
-    "primaryMetrics": ["page impressions", "map/access query diversity", "average position"],
+    "primaryMetrics": [
+      "page impressions",
+      "map/access query diversity",
+      "average position"
+    ],
     "ctrGuardrail": 0.025,
     "positionGuardrail": 12.5,
-    "decisionRule": "Keep the expansion if impressions or map/access query diversity grow while average position stays at or better than 12.5 and page CTR remains at or above 2.5%. Because the snippet is frozen, a sharp CTR decline is a diagnostic signal rather than an intended tradeoff."
+    "decisionRule": "Keep the expansion if impressions or map/access query diversity grow while average position stays at or better than 12.5 and page CTR remains at or above 2.5%. Because the snippet is frozen, a sharp CTR decline is a diagnostic signal rather than an intended tradeoff.",
+    "baselineWindowDays": 7,
+    "normalizedPrimaryMetric": "average daily page impressions",
+    "targetAverageDailyImpressions": 80,
+    "ctrFloor": 0.025,
+    "comparisonRule": "Compare average daily impressions, not raw 7-day versus 28-day totals; treat seasonal demand as context and preserve the position guardrail."
   },
   "protected": [
     "title",

@@ -9,6 +9,8 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 22 2026: measured Au Sable map/public-access authority expansion on the existing canonical guide. Re-crawl after production release, then remove this declaration.
+  "/au-sable-river/",
   // Aug 19 2026: the boat launch finder now ranks on driving distance instead of
   // straight-line distance, caps its reach, and tells an inland destination that
   // it is outside the Great Lakes inventory. Re-crawl after deploy, then remove

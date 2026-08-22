@@ -40,7 +40,7 @@
       "clicks": 1,
       "impressions": 22,
       "ctr": 0.0455,
-      "averagePosition": 1.0,
+      "averagePosition": 1,
       "rule": "Protect chrisizworski.com as the primary branded result while expanding legitimate distinct top-30 occupancy."
     }
   },
@@ -51,47 +51,389 @@
     "distinctBrandedSurfacesMayCoexist": true,
     "noDoorwayPages": true,
     "preferExistingDemandNearPageOne": true,
-    "seasonalLeadTimeWeeks": [6, 10],
+    "seasonalLeadTimeWeeks": [
+      6,
+      10
+    ],
     "everyActiveToolGetsAnAction": true,
     "everyActiveOwnedRootGetsAnAction": true,
     "externalAuthorityCountsWhenIndependentAndAccurate": true
   },
   "focusPortfolio": [
-    {"id":"brand-home","surface":"https://chrisizworski.com/","priorityScore":85,"action":"PROTECT","next":"Keep homepage as the strongest branded result; use the identity page and other distinct surfaces as supporting branded occupancy rather than forcing them to replace the homepage.","observed":{"impressions":29,"clicks":3,"ctr":0.1034,"position":1.59}},
-    {"id":"fall-color","toolId":"fall-color","surface":"https://chrisizworski.com/fall-color/","priorityScore":96,"action":"PROTECT","next":"Hold the active experiment through its clean window, then push the statewide hub using the measured 2026 fall query family.","observed":{"impressions":716,"clicks":6,"ctr":0.0084,"position":14.27}},
-    {"id":"soo-locks","toolId":"soo-locks","surface":"https://chrisizworski.com/soo-locks/","priorityScore":95,"action":"PROTECT","next":"Preserve the active treatment; after the window closes, test the remaining schedule-query CTR headroom without weakening utility.","observed":{"impressions":2509,"clicks":81,"ctr":0.0323,"position":7.35}},
-    {"id":"northern-lights","toolId":"aurora","surface":"https://chrisizworski.com/northern-lights-michigan/","priorityScore":94,"action":"PROTECT","next":"Do not churn the active Aurora treatment. Queue a post-window push because position is near page one while CTR remains weak.","observed":{"impressions":1875,"clicks":15,"ctr":0.008,"position":9.69}},
-    {"id":"mackinac-tolls","surface":"https://chrisizworski.com/mackinac-bridge-tolls/","priorityScore":93,"action":"PROTECT","next":"Measure the 2026 toll-cost CTR treatment for a complete 28-day window after production release; freeze title, meta description, H1, first answer, schema, canonical and indexability unless the stop-loss fires.","observed":{"impressions":490,"clicks":0,"ctr":0,"position":7.44}},
-    {"id":"ship-tracker","toolId":"ship-tracker","surface":"https://chrisizworski.com/great-lakes-freighter-tracking/","priorityScore":92,"action":"PROTECT","next":"Keep the active experiment intact, then push live-map/tracker intent and answer-engine citation readiness.","observed":{"impressions":872,"clicks":11,"ctr":0.0126,"position":9.68}},
-    {"id":"mackinac-live","toolId":"mackinac-bridge","surface":"https://chrisizworski.com/mackinac-bridge-live/","priorityScore":91,"action":"PROTECT","next":"Protect the current treatment; next test should target live conditions/traffic CTR after measurement clears.","observed":{"impressions":736,"clicks":2,"ctr":0.0027,"position":10.69}},
-    {"id":"beach-report","toolId":"beach-report","surface":"https://chrisizworski.com/great-lakes-beaches/","priorityScore":90,"action":"PUSH","next":"Improve the statewide hub for current beach conditions while preserving genuinely useful beach detail pages and avoiding location doorway behavior.","observed":{"impressions":273,"clicks":2,"ctr":0.0073,"position":9.12}},
-    {"id":"great-lakes-buoys","toolId":"great-lakes-buoys","surface":"https://chrisizworski.com/great-lakes-buoys/","priorityScore":88,"action":"PROTECT","next":"Hold the active Great Lakes Buoys title/H1/direct-answer treatment through its clean 28-day window ending September 9; do not add ranking-distribution changes that would confound position during the test.","observed":{"impressions":219,"clicks":7,"ctr":0.032,"position":12.28}},
-    {"id":"ausable-field-map","toolId":"ausable-field-map","surface":"https://ausable.chrisizworski.com/","priorityScore":87,"action":"EXPAND","next":"Protect the useful map experience and expand crawlable access/float-time authority around the measured Au Sable map queries.","observed":{"impressions":475,"clicks":16,"ctr":0.0337,"position":9.16}},
-    {"id":"border-waits","toolId":"border-waits","surface":"https://chrisizworski.com/michigan-border-wait-times/","priorityScore":86,"action":"PUSH","next":"Strengthen the statewide border-wait owner and route intent to the existing crossing detail pages without multiplying near-duplicate canonicals.","observed":{"impressions":284,"clicks":2,"ctr":0.007,"position":11.98}},
-    {"id":"garden-planner","surface":"https://garden.chrisizworski.com/","priorityScore":84,"action":"BUILD_NEXT","next":"Complete custom-domain attachment and production/canonical verification, then activate it in the owned-property graph. Do not count or promote it before those gates pass.","observed":{"state":"launch-blocked"}},
-    {"id":"boat-launches","toolId":"boat-launches","surface":"https://chrisizworski.com/michigan-boat-launches/","priorityScore":83,"action":"EXPAND","next":"The new statewide launch finder is already surfacing near page one; build authority and destination usefulness before creating more access pages.","observed":{"impressions":77,"clicks":0,"ctr":0,"position":13.17}},
-    {"id":"michigan-ice","toolId":"michigan-ice","surface":"https://chrisizworski.com/michigan-ice/","priorityScore":82,"action":"EXPAND","next":"Begin winter authority preparation 6-10 weeks before demand: source verification, crawlable statewide answer, regional handoffs and season transition messaging.","observed":{"impressions":26,"clicks":0,"ctr":0,"position":46.35}},
-    {"id":"outdoors-now","toolId":"outdoors-now","surface":"https://michiganoutdoorsnow.chrisizworski.com/","priorityScore":82,"action":"EXPAND","next":"Turn the planner into a stronger discovery hub around real activity decisions, especially family/day-trip intent, without generating generic destination filler.","observed":{"query":"michigan day trips for families","impressions":9,"position":31.33}},
-    {"id":"trout-report","toolId":"trout-report","surface":"https://michigantroutreport.com/","priorityScore":80,"action":"EXPAND","next":"Treat as an independent flagship authority property: strengthen reciprocal contextual discovery, original condition evidence and branded creator signals without making it a duplicate of the main site."},
-    {"id":"manistee","toolId":"manistee-field-map","surface":"https://chrisizworski.com/manistee-river-map/","priorityScore":79,"action":"EXPAND","next":"Grow from map completeness into river-trip authority and measured query coverage, using the Au Sable experience as a quality benchmark rather than cloning its copy."},
-    {"id":"circle-tour","toolId":"circle-tour","surface":"https://chrisizworski.com/lake-superior-circle-tour/","priorityScore":78,"action":"EXPAND","next":"Improve itinerary utility and Great Lakes network links; current visibility is meaningful but sits on page two/three.","observed":{"impressions":53,"clicks":0,"ctr":0,"position":21.38}},
-    {"id":"xc-live","toolId":"xc-live","surface":"https://xcski.chrisizworski.com/","priorityScore":77,"action":"EXPAND","next":"Prepare early for winter demand and connect live snow conditions to the statewide XC planning owner.","observed":{"impressions":17,"clicks":1,"ctr":0.0588,"position":18.71}},
-    {"id":"saginaw-bay-ecology","surface":"https://chrisizworski.com/saginaw-bay-ecology/","priorityScore":76,"action":"PROTECT","next":"Keep the strong depth/ecology intent performance and use it as an authority source into Saginaw Bay live tools.","observed":{"impressions":192,"clicks":3,"ctr":0.0156,"position":8.18}},
-    {"id":"great-lakes-levels","toolId":"great-lakes-levels","surface":"https://greatlakeslevels.org/","priorityScore":75,"action":"CONNECT","next":"Increase contextual handoffs with buoys, beaches and shoreline decisions while preserving independent domain authority."},
-    {"id":"gazette","toolId":"gazette","surface":"https://gazette.chrisizworski.com/","priorityScore":74,"action":"CONNECT","next":"Use accurate daily journalism and author surfaces to reinforce shipping authority and Chris Izworski authorship; do not turn the paper into SEO explanation copy.","observed":{"impressions":22,"clicks":1,"ctr":0.0455,"position":28.59}},
-    {"id":"phenology","toolId":"phenology","surface":"https://phenology.chrisizworski.com/","priorityScore":73,"action":"CONNECT","next":"Strengthen its bridge role across gardening, birding, morels, trout and seasonal planning; current search discovery is weak but entity/network value is high.","observed":{"impressions":2,"clicks":1,"ctr":0.5,"position":40}},
-    {"id":"freighter-view-farms","surface":"https://freighterviewfarms.com/","priorityScore":72,"action":"CONNECT","next":"Use authentic gardening authorship and the Garden Planner relationship to strengthen independent entity authority rather than duplicating main-site garden pages."},
-    {"id":"birding-report","surface":"https://michiganbirdingreport.com/","priorityScore":71,"action":"CONNECT","next":"Maintain independent birding utility, cross-property attribution and seasonal handoffs; measure its own search property separately when data is available."},
-    {"id":"pictured-rocks","toolId":"pictured-rocks","surface":"https://picturedrocks.chrisizworski.com/","priorityScore":70,"action":"REPAIR","next":"Improve search intent clarity, crawlable trip-decision value and internal authority before expanding destination coverage.","observed":{"impressions":13,"clicks":0,"ctr":0,"position":25.54}},
-    {"id":"tc-wine","toolId":"tc-wine","surface":"https://tcwine.chrisizworski.com/","priorityScore":68,"action":"REPAIR","next":"Child pages are receiving impressions but weak positions; clarify the planner's unique decision value and strengthen topical authority before adding more venue pages."},
-    {"id":"shipwrecks","toolId":"shipwrecks","surface":"https://chrisizworski.com/great-lakes-shipwrecks/","priorityScore":67,"action":"REPAIR","next":"The explorer is indexed but far from competitive. Improve answer architecture, dataset authority, internal links and search intent fit before expansion.","observed":{"impressions":80,"clicks":0,"ctr":0,"position":65.22}},
-    {"id":"edmund-fitzgerald","toolId":"edmund-fitzgerald","surface":"https://chrisizworski.com/edmund-fitzgerald/","priorityScore":66,"action":"REPAIR","next":"Strengthen source-backed historical authority and Great Lakes history network connections ahead of November demand.","observed":{"impressions":72,"clicks":0,"ctr":0,"position":62.21}},
-    {"id":"perfect-lawn","toolId":"perfect-lawn","surface":"https://lawn.chrisizworski.com/","priorityScore":65,"action":"REPAIR","next":"Search discovery is weak despite distinct utility; tighten the Michigan lawn decision proposition, crawlable answer and network links without cannibalizing planting/frost pages.","observed":{"childImpressions":30,"childPosition":62.7}}
+    {
+      "id": "brand-home",
+      "surface": "https://chrisizworski.com/",
+      "priorityScore": 85,
+      "action": "PROTECT",
+      "next": "Keep homepage as the strongest branded result; use the identity page and other distinct surfaces as supporting branded occupancy rather than forcing them to replace the homepage.",
+      "observed": {
+        "impressions": 29,
+        "clicks": 3,
+        "ctr": 0.1034,
+        "position": 1.59
+      }
+    },
+    {
+      "id": "fall-color",
+      "toolId": "fall-color",
+      "surface": "https://chrisizworski.com/fall-color/",
+      "priorityScore": 96,
+      "action": "PROTECT",
+      "next": "Hold the active experiment through its clean window, then push the statewide hub using the measured 2026 fall query family.",
+      "observed": {
+        "impressions": 716,
+        "clicks": 6,
+        "ctr": 0.0084,
+        "position": 14.27
+      }
+    },
+    {
+      "id": "soo-locks",
+      "toolId": "soo-locks",
+      "surface": "https://chrisizworski.com/soo-locks/",
+      "priorityScore": 95,
+      "action": "PROTECT",
+      "next": "Preserve the active treatment; after the window closes, test the remaining schedule-query CTR headroom without weakening utility.",
+      "observed": {
+        "impressions": 2509,
+        "clicks": 81,
+        "ctr": 0.0323,
+        "position": 7.35
+      }
+    },
+    {
+      "id": "northern-lights",
+      "toolId": "aurora",
+      "surface": "https://chrisizworski.com/northern-lights-michigan/",
+      "priorityScore": 94,
+      "action": "PROTECT",
+      "next": "Do not churn the active Aurora treatment. Queue a post-window push because position is near page one while CTR remains weak.",
+      "observed": {
+        "impressions": 1875,
+        "clicks": 15,
+        "ctr": 0.008,
+        "position": 9.69
+      }
+    },
+    {
+      "id": "mackinac-tolls",
+      "surface": "https://chrisizworski.com/mackinac-bridge-tolls/",
+      "priorityScore": 93,
+      "action": "PROTECT",
+      "next": "Measure the 2026 toll-cost CTR treatment for a complete 28-day window after production release; freeze title, meta description, H1, first answer, schema, canonical and indexability unless the stop-loss fires.",
+      "observed": {
+        "impressions": 490,
+        "clicks": 0,
+        "ctr": 0,
+        "position": 7.44
+      }
+    },
+    {
+      "id": "ship-tracker",
+      "toolId": "ship-tracker",
+      "surface": "https://chrisizworski.com/great-lakes-freighter-tracking/",
+      "priorityScore": 92,
+      "action": "PROTECT",
+      "next": "Keep the active experiment intact, then push live-map/tracker intent and answer-engine citation readiness.",
+      "observed": {
+        "impressions": 872,
+        "clicks": 11,
+        "ctr": 0.0126,
+        "position": 9.68
+      }
+    },
+    {
+      "id": "mackinac-live",
+      "toolId": "mackinac-bridge",
+      "surface": "https://chrisizworski.com/mackinac-bridge-live/",
+      "priorityScore": 91,
+      "action": "PROTECT",
+      "next": "Protect the current treatment; next test should target live conditions/traffic CTR after measurement clears.",
+      "observed": {
+        "impressions": 736,
+        "clicks": 2,
+        "ctr": 0.0027,
+        "position": 10.69
+      }
+    },
+    {
+      "id": "beach-report",
+      "toolId": "beach-report",
+      "surface": "https://chrisizworski.com/great-lakes-beaches/",
+      "priorityScore": 90,
+      "action": "PROTECT",
+      "next": "Measure the Beach Conditions CTR treatment for a complete 28-day window; freeze title, meta, H1, first answer, schema, canonical and indexability unless the stop-loss fires.",
+      "observed": {
+        "impressions": 273,
+        "clicks": 2,
+        "ctr": 0.0073,
+        "position": 9.12
+      }
+    },
+    {
+      "id": "great-lakes-buoys",
+      "toolId": "great-lakes-buoys",
+      "surface": "https://chrisizworski.com/great-lakes-buoys/",
+      "priorityScore": 88,
+      "action": "PROTECT",
+      "next": "Hold the active Great Lakes Buoys title/H1/direct-answer treatment through its clean 28-day window ending September 9; do not add ranking-distribution changes that would confound position during the test.",
+      "observed": {
+        "impressions": 219,
+        "clicks": 7,
+        "ctr": 0.032,
+        "position": 12.28
+      }
+    },
+    {
+      "id": "ausable-field-map",
+      "toolId": "ausable-field-map",
+      "surface": "https://ausable.chrisizworski.com/",
+      "priorityScore": 87,
+      "action": "PROTECT",
+      "next": "Protect the Au Sable field-map ecosystem and the /au-sable-river/ map/access expansion during its 28-day authority window; do not churn the strong guide snippet.",
+      "observed": {
+        "impressions": 475,
+        "clicks": 16,
+        "ctr": 0.0337,
+        "position": 9.16
+      }
+    },
+    {
+      "id": "border-waits",
+      "toolId": "border-waits",
+      "surface": "https://chrisizworski.com/michigan-border-wait-times/",
+      "priorityScore": 86,
+      "action": "PROTECT",
+      "next": "Measure the statewide Border Waits CTR treatment for a complete 28-day window while preserving crossing-specific canonical ownership.",
+      "observed": {
+        "impressions": 284,
+        "clicks": 2,
+        "ctr": 0.007,
+        "position": 11.98
+      }
+    },
+    {
+      "id": "garden-planner",
+      "surface": "https://garden.chrisizworski.com/",
+      "priorityScore": 84,
+      "action": "BUILD_NEXT",
+      "next": "Complete custom-domain attachment and production/canonical verification, then activate it in the owned-property graph. Do not count or promote it before those gates pass.",
+      "observed": {
+        "state": "launch-blocked"
+      }
+    },
+    {
+      "id": "boat-launches",
+      "toolId": "boat-launches",
+      "surface": "https://chrisizworski.com/michigan-boat-launches/",
+      "priorityScore": 83,
+      "action": "PROTECT",
+      "next": "Measure the crawlable boat-launch authority expansion using normalized daily impressions and position; do not alter its snippet or map-first product during the window.",
+      "observed": {
+        "impressions": 77,
+        "clicks": 0,
+        "ctr": 0,
+        "position": 13.17
+      }
+    },
+    {
+      "id": "michigan-ice",
+      "toolId": "michigan-ice",
+      "surface": "https://chrisizworski.com/michigan-ice/",
+      "priorityScore": 82,
+      "action": "EXPAND",
+      "next": "Begin winter authority preparation 6-10 weeks before demand: source verification, crawlable statewide answer, regional handoffs and season transition messaging.",
+      "observed": {
+        "impressions": 26,
+        "clicks": 0,
+        "ctr": 0,
+        "position": 46.35
+      }
+    },
+    {
+      "id": "outdoors-now",
+      "toolId": "outdoors-now",
+      "surface": "https://michiganoutdoorsnow.chrisizworski.com/",
+      "priorityScore": 82,
+      "action": "EXPAND",
+      "next": "Turn the planner into a stronger discovery hub around real activity decisions, especially family/day-trip intent, without generating generic destination filler.",
+      "observed": {
+        "query": "michigan day trips for families",
+        "impressions": 9,
+        "position": 31.33
+      }
+    },
+    {
+      "id": "trout-report",
+      "toolId": "trout-report",
+      "surface": "https://michigantroutreport.com/",
+      "priorityScore": 80,
+      "action": "EXPAND",
+      "next": "Treat as an independent flagship authority property: strengthen reciprocal contextual discovery, original condition evidence and branded creator signals without making it a duplicate of the main site."
+    },
+    {
+      "id": "manistee",
+      "toolId": "manistee-field-map",
+      "surface": "https://chrisizworski.com/manistee-river-map/",
+      "priorityScore": 79,
+      "action": "EXPAND",
+      "next": "Grow from map completeness into river-trip authority and measured query coverage, using the Au Sable experience as a quality benchmark rather than cloning its copy."
+    },
+    {
+      "id": "circle-tour",
+      "toolId": "circle-tour",
+      "surface": "https://chrisizworski.com/lake-superior-circle-tour/",
+      "priorityScore": 78,
+      "action": "EXPAND",
+      "next": "Improve itinerary utility and Great Lakes network links; current visibility is meaningful but sits on page two/three.",
+      "observed": {
+        "impressions": 53,
+        "clicks": 0,
+        "ctr": 0,
+        "position": 21.38
+      }
+    },
+    {
+      "id": "xc-live",
+      "toolId": "xc-live",
+      "surface": "https://xcski.chrisizworski.com/",
+      "priorityScore": 77,
+      "action": "EXPAND",
+      "next": "Prepare early for winter demand and connect live snow conditions to the statewide XC planning owner.",
+      "observed": {
+        "impressions": 17,
+        "clicks": 1,
+        "ctr": 0.0588,
+        "position": 18.71
+      }
+    },
+    {
+      "id": "saginaw-bay-ecology",
+      "surface": "https://chrisizworski.com/saginaw-bay-ecology/",
+      "priorityScore": 76,
+      "action": "PROTECT",
+      "next": "Keep the strong depth/ecology intent performance and use it as an authority source into Saginaw Bay live tools.",
+      "observed": {
+        "impressions": 192,
+        "clicks": 3,
+        "ctr": 0.0156,
+        "position": 8.18
+      }
+    },
+    {
+      "id": "great-lakes-levels",
+      "toolId": "great-lakes-levels",
+      "surface": "https://greatlakeslevels.org/",
+      "priorityScore": 75,
+      "action": "CONNECT",
+      "next": "Increase contextual handoffs with buoys, beaches and shoreline decisions while preserving independent domain authority."
+    },
+    {
+      "id": "gazette",
+      "toolId": "gazette",
+      "surface": "https://gazette.chrisizworski.com/",
+      "priorityScore": 74,
+      "action": "CONNECT",
+      "next": "Use accurate daily journalism and author surfaces to reinforce shipping authority and Chris Izworski authorship; do not turn the paper into SEO explanation copy.",
+      "observed": {
+        "impressions": 22,
+        "clicks": 1,
+        "ctr": 0.0455,
+        "position": 28.59
+      }
+    },
+    {
+      "id": "phenology",
+      "toolId": "phenology",
+      "surface": "https://phenology.chrisizworski.com/",
+      "priorityScore": 73,
+      "action": "CONNECT",
+      "next": "Strengthen its bridge role across gardening, birding, morels, trout and seasonal planning; current search discovery is weak but entity/network value is high.",
+      "observed": {
+        "impressions": 2,
+        "clicks": 1,
+        "ctr": 0.5,
+        "position": 40
+      }
+    },
+    {
+      "id": "freighter-view-farms",
+      "surface": "https://freighterviewfarms.com/",
+      "priorityScore": 72,
+      "action": "CONNECT",
+      "next": "Use authentic gardening authorship and the Garden Planner relationship to strengthen independent entity authority rather than duplicating main-site garden pages."
+    },
+    {
+      "id": "birding-report",
+      "surface": "https://michiganbirdingreport.com/",
+      "priorityScore": 71,
+      "action": "CONNECT",
+      "next": "Maintain independent birding utility, cross-property attribution and seasonal handoffs; measure its own search property separately when data is available."
+    },
+    {
+      "id": "pictured-rocks",
+      "toolId": "pictured-rocks",
+      "surface": "https://picturedrocks.chrisizworski.com/",
+      "priorityScore": 70,
+      "action": "REPAIR",
+      "next": "Improve search intent clarity, crawlable trip-decision value and internal authority before expanding destination coverage.",
+      "observed": {
+        "impressions": 13,
+        "clicks": 0,
+        "ctr": 0,
+        "position": 25.54
+      }
+    },
+    {
+      "id": "tc-wine",
+      "toolId": "tc-wine",
+      "surface": "https://tcwine.chrisizworski.com/",
+      "priorityScore": 68,
+      "action": "REPAIR",
+      "next": "Child pages are receiving impressions but weak positions; clarify the planner's unique decision value and strengthen topical authority before adding more venue pages."
+    },
+    {
+      "id": "shipwrecks",
+      "toolId": "shipwrecks",
+      "surface": "https://chrisizworski.com/great-lakes-shipwrecks/",
+      "priorityScore": 67,
+      "action": "REPAIR",
+      "next": "The explorer is indexed but far from competitive. Improve answer architecture, dataset authority, internal links and search intent fit before expansion.",
+      "observed": {
+        "impressions": 80,
+        "clicks": 0,
+        "ctr": 0,
+        "position": 65.22
+      }
+    },
+    {
+      "id": "edmund-fitzgerald",
+      "toolId": "edmund-fitzgerald",
+      "surface": "https://chrisizworski.com/edmund-fitzgerald/",
+      "priorityScore": 66,
+      "action": "REPAIR",
+      "next": "Strengthen source-backed historical authority and Great Lakes history network connections ahead of November demand.",
+      "observed": {
+        "impressions": 72,
+        "clicks": 0,
+        "ctr": 0,
+        "position": 62.21
+      }
+    },
+    {
+      "id": "perfect-lawn",
+      "toolId": "perfect-lawn",
+      "surface": "https://lawn.chrisizworski.com/",
+      "priorityScore": 65,
+      "action": "REPAIR",
+      "next": "Search discovery is weak despite distinct utility; tighten the Michigan lawn decision proposition, crawlable answer and network links without cannibalizing planting/frost pages.",
+      "observed": {
+        "childImpressions": 30,
+        "childPosition": 62.7
+      }
+    }
   ],
   "immediateQueue": [
-    "PUSH beach-report: statewide hub is near page one with weak CTR; improve the canonical owner, not page count.",
-    "PUSH border-waits: strengthen statewide owner and crossing handoffs.",
-    "EXPAND ausable-field-map and boat-launches with useful crawlable decision content and contextual links.",
     "BUILD_NEXT garden-planner only after custom-domain and production canonical verification.",
     "START winter authority work now for Michigan Ice and XC because the 6-10 week lead-time window is approaching.",
     "CONNECT independent owned roots and earned authority so successful tools reinforce the Chris Izworski entity and each other."
@@ -103,7 +445,11 @@
     "Fall Color statewide hub",
     "Mackinac Bridge Live current treatment",
     "Great Lakes Buoys",
-    "Mackinac Bridge Tolls 2026 CTR treatment"
+    "Mackinac Bridge Tolls 2026 CTR treatment",
+    "Michigan Beach Conditions CTR treatment",
+    "Michigan Border Wait Times CTR treatment",
+    "Michigan Boat Launch authority expansion",
+    "Au Sable map/access authority expansion"
   ],
   "sourceOfTruth": {
     "strategy": "docs/SEARCH_STRATEGY.md",

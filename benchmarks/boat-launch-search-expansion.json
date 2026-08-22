@@ -16,11 +16,36 @@
       "averagePosition": 13.17
     },
     "sitewideQuerySignals": [
-      {"query": "boat launches in michigan", "impressions": 2, "clicks": 0, "position": 37.5},
-      {"query": "boat launches", "impressions": 1, "clicks": 0, "position": 6},
-      {"query": "ausable river boat launches", "impressions": 1, "clicks": 0, "position": 11},
-      {"query": "saginaw bay boat launches", "impressions": 1, "clicks": 0, "position": 11},
-      {"query": "michigan boat launches", "impressions": 1, "clicks": 0, "position": 34}
+      {
+        "query": "boat launches in michigan",
+        "impressions": 2,
+        "clicks": 0,
+        "position": 37.5
+      },
+      {
+        "query": "boat launches",
+        "impressions": 1,
+        "clicks": 0,
+        "position": 6
+      },
+      {
+        "query": "ausable river boat launches",
+        "impressions": 1,
+        "clicks": 0,
+        "position": 11
+      },
+      {
+        "query": "saginaw bay boat launches",
+        "impressions": 1,
+        "clicks": 0,
+        "position": 11
+      },
+      {
+        "query": "michigan boat launches",
+        "impressions": 1,
+        "clicks": 0,
+        "position": 34
+      }
     ],
     "queryAttributionCaution": "Query rows are sitewide directional evidence and are not treated as a page-query join."
   },
@@ -42,10 +67,18 @@
   },
   "measurement": {
     "primaryWindowDays": 28,
-    "primaryMetrics": ["page impressions", "query diversity", "average position"],
+    "primaryMetrics": [
+      "page impressions",
+      "query diversity",
+      "average position"
+    ],
     "leadingBaseline": "77 impressions / 0 clicks / position 13.17 over the latest 7 complete days",
     "successRule": "Look for materially higher impressions and a broader non-duplicate query footprint while average position holds or improves. Do not attribute normal seasonal change to the treatment without a comparable baseline.",
-    "positionGuardrail": 18
+    "positionGuardrail": 18,
+    "baselineWindowDays": 7,
+    "normalizedPrimaryMetric": "average daily page impressions",
+    "targetAverageDailyImpressions": 15,
+    "comparisonRule": "Compare average daily impressions, not raw 7-day versus 28-day totals; treat seasonal demand as context and preserve the position guardrail."
   },
   "protected": [
     "title",
