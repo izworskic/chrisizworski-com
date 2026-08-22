@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "updated": "2026-08-22",
   "timezone": "America/Detroit",
   "objective": "Build Chris Izworski as a durable entity and grow a connected Michigan/Great Lakes search authority network by prioritizing real demand, useful first-party utility, independent authority, branded occupancy, and cross-property reinforcement instead of isolated page-count growth.",
@@ -61,11 +61,11 @@
     {"id":"fall-color","toolId":"fall-color","surface":"https://chrisizworski.com/fall-color/","priorityScore":96,"action":"PROTECT","next":"Hold the active experiment through its clean window, then push the statewide hub using the measured 2026 fall query family.","observed":{"impressions":716,"clicks":6,"ctr":0.0084,"position":14.27}},
     {"id":"soo-locks","toolId":"soo-locks","surface":"https://chrisizworski.com/soo-locks/","priorityScore":95,"action":"PROTECT","next":"Preserve the active treatment; after the window closes, test the remaining schedule-query CTR headroom without weakening utility.","observed":{"impressions":2509,"clicks":81,"ctr":0.0323,"position":7.35}},
     {"id":"northern-lights","toolId":"aurora","surface":"https://chrisizworski.com/northern-lights-michigan/","priorityScore":94,"action":"PROTECT","next":"Do not churn the active Aurora treatment. Queue a post-window push because position is near page one while CTR remains weak.","observed":{"impressions":1875,"clicks":15,"ctr":0.008,"position":9.69}},
-    {"id":"mackinac-tolls","surface":"https://chrisizworski.com/mackinac-bridge-tolls/","priorityScore":93,"action":"PUSH","next":"Highest clean-window SERP conversion opportunity: align title, first answer and snippet to toll-cost intent while preserving the Mackinac Live canonical owner for conditions.","observed":{"impressions":490,"clicks":0,"ctr":0,"position":7.44}},
+    {"id":"mackinac-tolls","surface":"https://chrisizworski.com/mackinac-bridge-tolls/","priorityScore":93,"action":"PROTECT","next":"Measure the 2026 toll-cost CTR treatment for a complete 28-day window after production release; freeze title, meta description, H1, first answer, schema, canonical and indexability unless the stop-loss fires.","observed":{"impressions":490,"clicks":0,"ctr":0,"position":7.44}},
     {"id":"ship-tracker","toolId":"ship-tracker","surface":"https://chrisizworski.com/great-lakes-freighter-tracking/","priorityScore":92,"action":"PROTECT","next":"Keep the active experiment intact, then push live-map/tracker intent and answer-engine citation readiness.","observed":{"impressions":872,"clicks":11,"ctr":0.0126,"position":9.68}},
     {"id":"mackinac-live","toolId":"mackinac-bridge","surface":"https://chrisizworski.com/mackinac-bridge-live/","priorityScore":91,"action":"PROTECT","next":"Protect the current treatment; next test should target live conditions/traffic CTR after measurement clears.","observed":{"impressions":736,"clicks":2,"ctr":0.0027,"position":10.69}},
     {"id":"beach-report","toolId":"beach-report","surface":"https://chrisizworski.com/great-lakes-beaches/","priorityScore":90,"action":"PUSH","next":"Improve the statewide hub for current beach conditions while preserving genuinely useful beach detail pages and avoiding location doorway behavior.","observed":{"impressions":273,"clicks":2,"ctr":0.0073,"position":9.12}},
-    {"id":"great-lakes-buoys","toolId":"great-lakes-buoys","surface":"https://chrisizworski.com/great-lakes-buoys/","priorityScore":88,"action":"PUSH","next":"CTR is already healthy; focus on position, source authority, contextual links from boating/beach/levels surfaces, and concise answer blocks.","observed":{"impressions":219,"clicks":7,"ctr":0.032,"position":12.28}},
+    {"id":"great-lakes-buoys","toolId":"great-lakes-buoys","surface":"https://chrisizworski.com/great-lakes-buoys/","priorityScore":88,"action":"PROTECT","next":"Hold the active Great Lakes Buoys title/H1/direct-answer treatment through its clean 28-day window ending September 9; do not add ranking-distribution changes that would confound position during the test.","observed":{"impressions":219,"clicks":7,"ctr":0.032,"position":12.28}},
     {"id":"ausable-field-map","toolId":"ausable-field-map","surface":"https://ausable.chrisizworski.com/","priorityScore":87,"action":"EXPAND","next":"Protect the useful map experience and expand crawlable access/float-time authority around the measured Au Sable map queries.","observed":{"impressions":475,"clicks":16,"ctr":0.0337,"position":9.16}},
     {"id":"border-waits","toolId":"border-waits","surface":"https://chrisizworski.com/michigan-border-wait-times/","priorityScore":86,"action":"PUSH","next":"Strengthen the statewide border-wait owner and route intent to the existing crossing detail pages without multiplying near-duplicate canonicals.","observed":{"impressions":284,"clicks":2,"ctr":0.007,"position":11.98}},
     {"id":"garden-planner","surface":"https://garden.chrisizworski.com/","priorityScore":84,"action":"BUILD_NEXT","next":"Complete custom-domain attachment and production/canonical verification, then activate it in the owned-property graph. Do not count or promote it before those gates pass.","observed":{"state":"launch-blocked"}},
@@ -89,10 +89,8 @@
     {"id":"perfect-lawn","toolId":"perfect-lawn","surface":"https://lawn.chrisizworski.com/","priorityScore":65,"action":"REPAIR","next":"Search discovery is weak despite distinct utility; tighten the Michigan lawn decision proposition, crawlable answer and network links without cannibalizing planting/frost pages.","observed":{"childImpressions":30,"childPosition":62.7}}
   ],
   "immediateQueue": [
-    "PUSH mackinac-tolls: clean-window high-impression zero-CTR opportunity near position 7.",
     "PUSH beach-report: statewide hub is near page one with weak CTR; improve the canonical owner, not page count.",
     "PUSH border-waits: strengthen statewide owner and crossing handoffs.",
-    "PUSH great-lakes-buoys: focus on position, evidence and authority distribution rather than CTR churn.",
     "EXPAND ausable-field-map and boat-launches with useful crawlable decision content and contextual links.",
     "BUILD_NEXT garden-planner only after custom-domain and production canonical verification.",
     "START winter authority work now for Michigan Ice and XC because the 6-10 week lead-time window is approaching.",
@@ -103,7 +101,9 @@
     "Soo Locks Live",
     "Great Lakes Ship Tracker",
     "Fall Color statewide hub",
-    "Mackinac Bridge Live current treatment"
+    "Mackinac Bridge Live current treatment",
+    "Great Lakes Buoys",
+    "Mackinac Bridge Tolls 2026 CTR treatment"
   ],
   "sourceOfTruth": {
     "strategy": "docs/SEARCH_STRATEGY.md",
@@ -112,6 +112,7 @@
     "ownedDomains": "benchmarks/owned-domain-network.json",
     "nameSerp": "benchmarks/name-serp-governance.json",
     "experiments": "benchmarks/growth-experiments.json",
+    "mackinacTollCtrExperiment": "benchmarks/mackinac-toll-ctr-experiment.json",
     "searchGrowth": "benchmarks/search-growth-engine-2026-08-15.json"
   }
 }
