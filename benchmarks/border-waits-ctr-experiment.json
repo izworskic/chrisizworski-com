@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-22",
+  "timezone": "America/Detroit",
+  "id": "michigan-border-waits-ctr-2026-08-22",
+  "surface": "https://chrisizworski.com/michigan-border-wait-times/",
+  "status": "ready-for-production-release",
+  "hypothesis": "The statewide border-wait owner already sits near page one but under-signals current/today intent and its Detroit, Port Huron and Sault Ste. Marie coverage. Making those distinctions explicit should improve CTR and broad statewide relevance without competing with the five crossing-specific canonical pages.",
+  "evidence": {
+    "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-08-21",
+    "exportedThrough": "2026-08-19",
+    "windowDays": 7,
+    "page": {
+      "impressions": 284,
+      "clicks": 2,
+      "ctr": 0.007,
+      "averagePosition": 11.98
+    },
+    "sitewideQuerySignals": [
+      {"query": "detroit border wait times", "impressions": 1, "clicks": 0, "position": 34},
+      {"query": "border wait times port huron", "impressions": 1, "clicks": 0, "position": 40},
+      {"query": "sault ste marie border crossing wait time", "impressions": 1, "clicks": 0, "position": 12},
+      {"query": "windsor detroit tunnel wait times camera", "impressions": 2, "clicks": 0, "position": 10.5}
+    ],
+    "queryAttributionCaution": "The exported Queries tab is sitewide and is used only as directional language evidence. It does not prove that each listed query was served by the statewide page."
+  },
+  "treatment": {
+    "title": "Michigan Border Wait Times Today: Detroit & All 5 Crossings",
+    "metaDescription": "Michigan border wait times today for Detroit, Port Huron and Sault Ste. Marie. Compare official Canada- and U.S.-bound waits at all five crossings.",
+    "h1": "Michigan Border Wait Times Today",
+    "firstAnswerMustContain": [
+      "all five Michigan–Ontario crossings",
+      "Gordie Howe Bridge",
+      "Ambassador Bridge",
+      "Detroit–Windsor Tunnel",
+      "Blue Water Bridge at Port Huron",
+      "Sault Ste. Marie International Bridge",
+      "Canada-bound and U.S.-bound official waits stay separate"
+    ],
+    "ownershipBoundary": "The statewide page owns all-crossings comparison intent. The five existing detail pages remain canonical owners of crossing-specific intent; do not add duplicate crossing canonicals."
+  },
+  "measurement": {
+    "primaryWindowDays": 28,
+    "windowStarts": "first complete America/Detroit day after production release",
+    "primaryMetric": "page CTR",
+    "targetCtr": 0.015,
+    "stretchCtr": 0.025,
+    "positionGuardrail": 15,
+    "decisionRule": "Keep if CTR improves materially while average position remains at or better than 15 and crossing-specific ownership stays intact. Revert or redesign if the position guardrail breaks or the statewide page begins cannibalizing a protected crossing-specific treatment."
+  },
+  "freeze": [
+    "title",
+    "metaDescription",
+    "h1",
+    "firstAnswer",
+    "structuredData",
+    "canonical",
+    "indexability"
+  ]
+}

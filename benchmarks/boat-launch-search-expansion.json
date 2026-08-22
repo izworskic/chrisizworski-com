@@ -1,0 +1,58 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-22",
+  "id": "boat-launch-search-expansion-2026-08-22",
+  "surface": "https://chrisizworski.com/michigan-boat-launches/",
+  "status": "ready-for-production-release",
+  "strategy": "Expand crawlable search coverage and internal authority without changing the current title, meta description, H1, canonical or dynamic statewide finder.",
+  "evidence": {
+    "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-08-21",
+    "exportedThrough": "2026-08-19",
+    "windowDays": 7,
+    "page": {
+      "impressions": 77,
+      "clicks": 0,
+      "ctr": 0,
+      "averagePosition": 13.17
+    },
+    "sitewideQuerySignals": [
+      {"query": "boat launches in michigan", "impressions": 2, "clicks": 0, "position": 37.5},
+      {"query": "boat launches", "impressions": 1, "clicks": 0, "position": 6},
+      {"query": "ausable river boat launches", "impressions": 1, "clicks": 0, "position": 11},
+      {"query": "saginaw bay boat launches", "impressions": 1, "clicks": 0, "position": 11},
+      {"query": "michigan boat launches", "impressions": 1, "clicks": 0, "position": 34}
+    ],
+    "queryAttributionCaution": "Query rows are sitewide directional evidence and are not treated as a page-query join."
+  },
+  "treatment": {
+    "snippetFrozen": true,
+    "requiredDiscoveryLinks": [
+      "#launch-app",
+      "/michigan-boat-launches/saginaw-bay/",
+      "/michigan-boat-launches/lake-michigan/",
+      "/au-sable-river/"
+    ],
+    "requiredLanguage": [
+      "Michigan boat launches by water",
+      "Great Lakes, connecting rivers and inland waters",
+      "Saginaw Bay boat launches",
+      "Lake Michigan boat launches",
+      "Au Sable River access"
+    ]
+  },
+  "measurement": {
+    "primaryWindowDays": 28,
+    "primaryMetrics": ["page impressions", "query diversity", "average position"],
+    "leadingBaseline": "77 impressions / 0 clicks / position 13.17 over the latest 7 complete days",
+    "successRule": "Look for materially higher impressions and a broader non-duplicate query footprint while average position holds or improves. Do not attribute normal seasonal change to the treatment without a comparable baseline.",
+    "positionGuardrail": 18
+  },
+  "protected": [
+    "title",
+    "metaDescription",
+    "h1",
+    "canonical",
+    "finderBehavior",
+    "sourceTruth"
+  ]
+}
