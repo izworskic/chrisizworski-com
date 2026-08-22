@@ -35,6 +35,7 @@
     "prepare:source": "node scripts/prepare-source.mjs",
     "test": "node --test tests/*.test.js",
     "verify": "node scripts/verify-source-with-circle-tour.mjs",
+    "preverify:all": "node scripts/compose-manistee-page-one.mjs",
     "verify:all": "npm test && npm run verify && npm run benchmark:beaches && npm run benchmark:beach-ctr && npm run benchmark:border-ctr && npm run benchmark:growth && npm run benchmark:seo && npm run benchmark:ctr -- --check && npm run benchmark:search-growth -- --check && npm run benchmark:search-strategy -- --check && npm run benchmark:search-authority -- --check && npm run benchmark:mackinac-toll-ctr && npm run benchmark:trip-stack -- --check && npm run benchmark:tool-network -- --check && npm run benchmark:circle-tour && npm run benchmark:entity -- --check && npm run benchmark:winter -- --check && npm run benchmark:winter-flow -- --check && npm run benchmark:winter-final -- --check && npm run freshness -- --check && npm run benchmark:citation -- --check && npm run benchmark:decision-network && npm run benchmark:map-insights && npm run benchmark:boat-launches && npm run audit:boat-launch-source && npm run benchmark:boat-launches-v3 && npm run benchmark:boat-launch-search && npm run benchmark:manistee && npm run benchmark:manistee-parity && npm run benchmark:manistee-popups && npm run benchmark:manistee-ux && npm run benchmark:au-sable-search",
     "verify:production-ready": "node scripts/verify-production-ready.mjs",
     "generate:ice": "python3 scripts/ice/gen_site.py",
