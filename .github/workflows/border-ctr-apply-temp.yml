@@ -1,0 +1,55 @@
+name: Temporary border CTR treatment
+
+on:
+  push:
+    branches:
+      - feat/border-waits-ctr-2026-08-22
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply measured treatment
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const p = 'public/michigan-border-wait-times/index.html';
+          let s = fs.readFileSync(p, 'utf8');
+          const replacements = [
+            ['<title>Michigan Border Wait Times Live | All 5 Crossings</title>', '<title>Michigan Border Wait Times Today: Detroit &amp; All 5 Crossings</title>'],
+            ['<meta name="description" content="Compare live Michigan–Ontario border wait times for Gordie Howe, Ambassador, Detroit Tunnel, Blue Water and Sault Ste. Marie crossings.">', '<meta name="description" content="Michigan border wait times today for Detroit, Port Huron and Sault Ste. Marie. Compare official Canada- and U.S.-bound waits at all five crossings.">'],
+            ['<meta property="og:title" content="Michigan Border Wait Times Live">', '<meta property="og:title" content="Michigan Border Wait Times Today: All 5 Crossings">'],
+            ['<meta property="og:description" content="Which Detroit crossing is shortest right now? Compare official waits in both directions, then check Blue Water and the Upper Peninsula crossing, live cameras, warnings and tolls.">', '<meta property="og:description" content="Compare official Canada- and U.S.-bound waits at Detroit, Port Huron and Sault Ste. Marie, plus live approach cameras, warnings and tolls.">'],
+            ['<meta name="twitter:title" content="Michigan Border Wait Times Live">', '<meta name="twitter:title" content="Michigan Border Wait Times Today: All 5 Crossings">'],
+            ['<meta name="twitter:description" content="Official U.S.- and Canada-bound waits for all five Michigan–Ontario crossings, plus cameras, warnings and tolls.">', '<meta name="twitter:description" content="Official Canada- and U.S.-bound waits at all five Michigan–Ontario crossings, including Detroit, Port Huron and Sault Ste. Marie.">'],
+            ['"name": "Michigan Border Wait Times Live: All Five Michigan–Ontario Crossings"', '"name": "Michigan Border Wait Times Today: All Five Michigan–Ontario Crossings"'],
+            ['"description": "A live comparison of official U.S.-bound and Canada-bound border waits for the Gordie Howe International Bridge, Ambassador Bridge, Detroit–Windsor Tunnel, Blue Water Bridge and Sault Ste. Marie International Bridge."', '"description": "Current official Canada-bound and U.S.-bound border wait times for all five Michigan–Ontario crossings in Detroit, Port Huron and Sault Ste. Marie."'],
+            ['"dateModified": "2026-08-10"', '"dateModified": "2026-08-22"'],
+            ['"name": "Michigan Border Wait Times Live"', '"name": "Michigan Border Wait Times Today"'],
+            ['<h1>Michigan Border Wait Times Live</h1>', '<h1>Michigan Border Wait Times Today</h1>'],
+            ['<p class="lede">Which Detroit crossing should you take right now? Compare the Gordie Howe Bridge, Ambassador Bridge and Detroit–Windsor Tunnel on the same official basis—then check Blue Water Bridge and Michigan’s Upper Peninsula crossing at Sault Ste. Marie.</p>', '<p class="lede">Check current border wait times at all five Michigan–Ontario crossings. Compare the Gordie Howe Bridge, Ambassador Bridge and Detroit–Windsor Tunnel in Detroit, then check Blue Water Bridge at Port Huron and the Sault Ste. Marie International Bridge. Canada-bound and U.S.-bound official waits stay separate.</p>']
+          ];
+          for (const [from, to] of replacements) {
+            if (!s.includes(from)) throw new Error(`Expected treatment source not found: ${from.slice(0, 80)}`);
+            s = s.replace(from, to);
+          }
+          fs.writeFileSync(p, s);
+          NODE
+          node scripts/stamp-freshness.mjs
+      - name: Commit treatment and derived freshness
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/michigan-border-wait-times/index.html public/sitemap.xml public/sitemap-beaches.xml public/sitemap-reputation.xml
+          git commit -m "Align border wait hub with current statewide intent"
+          git push
