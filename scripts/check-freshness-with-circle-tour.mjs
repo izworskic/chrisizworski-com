@@ -7,7 +7,7 @@ import path from 'node:path';
 const root = path.resolve(import.meta.dirname, '..');
 const htmlPath = path.join(root, 'public', 'lake-superior-circle-tour', 'index.html');
 const sitemapPath = path.join(root, 'public', 'sitemap.xml');
-const release = '2026-08-20';
+const release = '2026-08-22';
 
 const originalHtml = await readFile(htmlPath, 'utf8');
 const originalSitemap = await readFile(sitemapPath, 'utf8');

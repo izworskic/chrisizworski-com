@@ -1,0 +1,45 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-22",
+  "timezone": "America/Detroit",
+  "objective": "Move the existing Upper Peninsula fall-color regional owner from the page-one threshold into the top 10 through contextual internal authority, without rewriting the destination snippet or the protected statewide Fall Color hub.",
+  "source": {
+    "title": "chrisizworski.com-Performance-on-Search-2026-08-21",
+    "spreadsheetId": "1lrFEAxYT7whMAx2Gnrq-IRfUHr7cjshU542FWwJ7Kfw",
+    "exportedThrough": "2026-08-19",
+    "windowDays": 7
+  },
+  "target": "/fall-color/upper-peninsula-fall-color/",
+  "sourcePaths": [
+    "/up-north-michigan/",
+    "/lake-superior-circle-tour/"
+  ],
+  "baseline": {
+    "impressions": 78,
+    "clicks": 1,
+    "ctr": 0.0128,
+    "averagePosition": 11.88
+  },
+  "treatment": {
+    "type": "distribution-only-rank-push",
+    "destinationSearchFacingFieldsChanged": false,
+    "protectedStatewideHubChanged": false,
+    "links": [
+      {
+        "source": "/up-north-michigan/",
+        "context": "fall-color trip check"
+      },
+      {
+        "source": "/lake-superior-circle-tour/",
+        "context": "September / Michigan U.P. trip planning"
+      }
+    ]
+  },
+  "targets": {
+    "evaluationWindowDays": 28,
+    "averagePositionAtOrBetterThan": 10,
+    "stretchAveragePositionAtOrBetterThan": 8,
+    "ctrFloor": 0.01,
+    "stopLossAveragePositionWorseThan": 15
+  }
+}
