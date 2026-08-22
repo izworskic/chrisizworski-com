@@ -12,10 +12,11 @@ function title(html) {
 
 test("Mackinac toll page leads with the page-one price answer", () => {
   const html = read("public/mackinac-bridge-tolls/index.html");
-  assert.equal(title(html), "Mackinac Bridge Toll: $4 Car Fare &amp; Calculator");
-  assert.ok(title(html).length <= 60);
-  assert.match(html, /<h1>Mackinac Bridge Toll: Current Fare &amp; Calculator<\/h1>/);
-  assert.match(html, /standard two-axle passenger car is \$4 one way/i);
+  assert.equal(title(html), "Mackinac Bridge Toll Cost 2026: $4 Car Fare &amp; Calculator");
+  assert.ok(title(html).replaceAll("&amp;", "&").length <= 60);
+  assert.match(html, /<meta name="description" content="Mackinac Bridge toll 2026: \$4 one way for a standard car, \$8 round trip\./);
+  assert.match(html, /<h1>Mackinac Bridge Toll Cost: 2026 Fares &amp; Calculator<\/h1>/);
+  assert.match(html, /The Mackinac Bridge toll is \$4 one way, or \$8 round trip, for a standard two-axle passenger car in 2026\./i);
   assert.match(html, /Passenger vehicles are \$2 per axle/i);
   assert.match(html, /Vehicles outside the passenger classification.*\$5 per axle/is);
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-tolls/">'));
@@ -39,6 +40,11 @@ test("365 transport experiment records observed baselines and a page-specific fr
   const gordie = benchmark.experiments.find((item) => item.id === "gordie-howe-wait-camera-ctr");
   assert.equal(toll.baseline.impressions, 637);
   assert.equal(toll.baseline.clicks, 1);
+  assert.equal(toll.latestLeadingSignal.page.impressions, 490);
+  assert.equal(toll.latestLeadingSignal.page.clicks, 0);
+  assert.equal(toll.latestLeadingSignal.page.averagePosition, 7.44);
+  assert.equal(toll.target.ctr, 0.02);
+  assert.deepEqual(toll.freezeDuringWindow, ["title", "metaDescription", "h1", "firstAnswer", "structuredData", "canonical", "indexability"]);
   assert.equal(gordie.baseline.impressions, 498);
   assert.equal(gordie.baseline.clicks, 17);
   assert.equal(gordie.supportingQuery.impressions, 79);

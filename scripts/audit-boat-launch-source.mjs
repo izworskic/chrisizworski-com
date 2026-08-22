@@ -11,7 +11,29 @@ function hasCoordinate(a){return a.latitude!==null&&a.latitude!==undefined&&Stri
 function reviewStatus(a){const flag=String(a.flag||'').trim();if(!flag)return 'source-qualified';if(flag==='InProgress')return 'dnr-review-in-progress';return 'withhold';}
 function scopeOf(a){return String(a.greatlakesaccess||'').startsWith('Yes')||CONNECTING.has(String(a.waterbody||'').trim())?'great-lakes':'inland-or-other';}
 function nearby(records,lat,lon,radius=25){return records.map(a=>({...a,_mi:distanceMiles(lat,lon,Number(a.latitude),Number(a.longitude))})).filter(a=>a._mi<=radius).sort((a,b)=>a._mi-b._mi);}
-async function fetchJson(url){const r=await fetch(url,{headers:{accept:'application/json','user-agent':'ChrisIzworskiBoatLaunchAudit/4.0 (+https://chrisizworski.com/michigan-boat-launches/)'},signal:AbortSignal.timeout(20000)});if(!r.ok)throw new Error(`HTTP ${r.status} for ${url}`);const j=await r.json();if(j?.error)throw new Error(j.error.message||'ArcGIS query error');return j;}
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function fetchJson(url){
+  let lastError;
+  for(let attempt=1;attempt<=3;attempt++){
+    try{
+      const r=await fetch(url,{headers:{accept:'application/json','user-agent':'ChrisIzworskiBoatLaunchAudit/4.0 (+https://chrisizworski.com/michigan-boat-launches/)'},signal:AbortSignal.timeout(20000)});
+      if(!r.ok){
+        const error=new Error(`HTTP ${r.status} for ${url}`);
+        if(r.status!==408&&r.status!==429&&r.status<500)throw error;
+        throw error;
+      }
+      const j=await r.json();if(j?.error)throw new Error(j.error.message||'ArcGIS query error');return j;
+    }catch(error){
+      lastError=error;
+      const status=Number(String(error?.message||'').match(/^HTTP (\d{3})/)?.[1]||0);
+      const permanentHttp=status&&status!==408&&status!==429&&status<500;
+      if(permanentHttp||attempt===3)throw error;
+      console.warn(`[boat-launch-audit] transient source failure; retry ${attempt}/2`,error?.message||error);
+      await sleep(500*attempt);
+    }
+  }
+  throw lastError;
+}
 function queryUrl(params){return `${LAYER}/query?${new URLSearchParams({...params,f:'json'})}`;}
 const fields='OBJECTID,globalid,facilityid,name,waterbody,bas_type,launch_status,condition,greatlakesaccess,referenceonly,flag,flagcomments,latitude,longitude,ntrailerableparking,rampcode_new';
 const [metadata,total,recordsResponse]=await Promise.all([fetchJson(`${LAYER}?f=json`),fetchJson(queryUrl({where:'1=1',returnCountOnly:'true'})),fetchJson(queryUrl({where:"bas_type='Boating Access Site'",outFields:fields,returnGeometry:'false',resultRecordCount:'2000'}))]);
