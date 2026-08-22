@@ -1,8 +1,8 @@
 {
-  "version": "1.1.0",
-  "updated": "2026-08-21",
+  "version": "1.2.0",
+  "updated": "2026-08-22",
   "timezone": "America/Detroit",
-  "objective": "Grow qualified organic discovery by owning distinct Michigan, Great Lakes, outdoor, gardening, transportation, and Chris Izworski entity intents with useful canonical pages, first-party utility, measurement discipline, a connected authority network, and maximum legitimate branded SERP coverage for Chris Izworski.",
+  "objective": "Grow qualified organic discovery by owning distinct Michigan, Great Lakes, outdoor, gardening, transportation, and Chris Izworski entity intents with useful canonical pages, first-party utility, measurement discipline, a connected authority network, maximum legitimate branded SERP coverage, and portfolio-level prioritization of the highest-leverage work.",
   "northStar": "Useful decisions and durable authority, not page-count growth.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "measurement": {
@@ -11,6 +11,7 @@
     "separateBrandAndNonBrand": true,
     "doNotDeclareWinnerEarly": true,
     "baselineSource": "benchmarks/search-growth-engine-2026-08-15.json",
+    "leadingSnapshot": "benchmarks/search-console-snapshot-2026-08-21.json",
     "experimentLedger": "benchmarks/growth-experiments.json"
   },
   "pillars": {
@@ -26,14 +27,16 @@
   "priorityOrder": [
     "Protect crawlability, canonical integrity, structured data, performance, and factual accuracy.",
     "Protect active experiments and clean measurement windows.",
+    "Use the Search Authority Portfolio to compare opportunity cost across the whole ecosystem, not just within one page or cluster.",
     "Improve meaningful-impression pages already near page one before creating adjacent keyword URLs.",
     "Strengthen the canonical intent owner before creating supporting pages.",
     "Create a new canonical only for a distinct decision, evidence-backed demand, or genuinely unique utility.",
     "Connect every important page into the tool and authority network.",
-    "Reinforce the Chris Izworski entity, keep the primary identity surface strongest for #1, and maximize legitimate branded top-30 occupancy without creating non-branded cannibalization."
+    "Keep a first-party ChrisIzworski.com surface strongest for #1 and maximize legitimate branded top-30 occupancy without creating non-branded cannibalization."
   ],
   "brandedSerp": {
     "primaryQuery": "Chris Izworski",
+    "primarySiteSurface": "https://chrisizworski.com/",
     "primarySitePositionTarget": 1,
     "operatingOccupancyTargets": {"top10": 8, "top20": 15, "top30": 20},
     "stretchOccupancyTargets": {"top10": 10, "top20": 20, "top30": 30},
@@ -87,6 +90,9 @@
   },
   "sourceOfTruth": {
     "humanStrategy": "docs/SEARCH_STRATEGY.md",
+    "authorityPortfolio": "benchmarks/search-authority-portfolio.json",
+    "authorityPortfolioDoc": "docs/SEARCH_AUTHORITY_PORTFOLIO.md",
+    "freshSearchConsole": "benchmarks/search-console-snapshot-2026-08-21.json",
     "measuredOpportunity": "benchmarks/search-growth-engine-2026-08-15.json",
     "experimentLedger": "benchmarks/growth-experiments.json",
     "toolNetwork": "benchmarks/tool-network-registry.json",
