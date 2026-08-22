@@ -12,6 +12,7 @@ const toolNetwork = await readJson(portfolio.sourceOfTruth.toolNetwork);
 const ownedDomains = await readJson(portfolio.sourceOfTruth.ownedDomains);
 const nameSerp = await readJson(portfolio.sourceOfTruth.nameSerp);
 const experiments = await readJson(portfolio.sourceOfTruth.experiments);
+const mackinacTollExperiment = await readJson(portfolio.sourceOfTruth.mackinacTollCtrExperiment);
 const strategyGovernance = await readJson("benchmarks/search-strategy-governance.json");
 const packageJson = await readJson("package.json");
 const strategyDoc = await read(portfolio.sourceOfTruth.portfolioStrategy);
@@ -42,7 +43,8 @@ check(
     portfolio.measurement.latestLeadingSnapshot?.exportedThrough === "2026-08-19" &&
     portfolio.measurement.latestLeadingSnapshot?.windowDays === 7 &&
     portfolio.measurement.decisionWindowDays === 28 &&
-    experiments.measurementProtocol?.windowDays === 28,
+    experiments.measurementProtocol?.windowDays === 28 &&
+    mackinacTollExperiment.measurement?.windowDays === 28,
   10,
 );
 
@@ -120,18 +122,27 @@ check(
 
 const immediateText = portfolio.immediateQueue.join(" ").toLowerCase();
 const protectedText = portfolio.protectedQueue.join(" ").toLowerCase();
+const mackinacTollFocus = portfolio.focusPortfolio.find((item) => item.id === "mackinac-tolls");
+const buoyFocus = portfolio.focusPortfolio.find((item) => item.id === "great-lakes-buoys");
 check(
   "Immediate queue advances eligible leverage while protected work stays separate",
-  immediateText.includes("mackinac-tolls") &&
-    immediateText.includes("beach-report") &&
+  immediateText.includes("beach-report") &&
     immediateText.includes("border-waits") &&
-    immediateText.includes("great-lakes-buoys") &&
+    immediateText.includes("ausable-field-map") &&
+    immediateText.includes("boat-launches") &&
     immediateText.includes("garden-planner") &&
     immediateText.includes("winter") &&
+    !immediateText.includes("mackinac-tolls") &&
+    !immediateText.includes("great-lakes-buoys") &&
     protectedText.includes("northern lights") &&
     protectedText.includes("soo locks") &&
     protectedText.includes("ship tracker") &&
-    protectedText.includes("fall color"),
+    protectedText.includes("fall color") &&
+    protectedText.includes("great lakes buoys") &&
+    protectedText.includes("mackinac bridge tolls") &&
+    mackinacTollFocus?.action === "PROTECT" &&
+    buoyFocus?.action === "PROTECT" &&
+    mackinacTollExperiment.status === "ready-for-release",
   10,
 );
 
