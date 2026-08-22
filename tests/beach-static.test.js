@@ -9,7 +9,7 @@ const catalog = JSON.parse(read("data/beaches.json"));
 
 test("Michigan Beach Report main page has answer-ready metadata and honest fallbacks", () => {
   const html = read("public/great-lakes-beaches/index.html");
-  assert.match(html, /<title>Michigan Beach Conditions Today:/);
+  assert.match(html, /<title>Michigan Beach Conditions Today \| Chris Izworski<\/title>/);
   assert.match(html, /rel="canonical" href="https:\/\/chrisizworski\.com\/great-lakes-beaches\/"/);
   assert.match(html, /"@type": \["WebApplication", "WebPage"\]/);
   assert.match(html, /"@type": "FAQPage"/);
