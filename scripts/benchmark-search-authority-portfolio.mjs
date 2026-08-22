@@ -69,13 +69,6 @@ const focusValid = new Set(focusIds).size === focusIds.length && portfolio.focus
 check("Focus portfolio has unique, scored, actionable surfaces", focusValid, 10);
 
 const focusByToolId = new Map(portfolio.focusPortfolio.filter((item) => item.toolId).map((item) => [item.toolId, item]));
-const protectedTools = toolNetwork.tools.filter((tool) => tool.searchTreatment?.status === "protected");
-check(
-  "Protected search treatments remain PROTECT in the holistic portfolio",
-  protectedTools.every((tool) => focusByToolId.get(tool.id)?.action === "PROTECT"),
-  10,
-  protectedTools.filter((tool) => focusByToolId.get(tool.id)?.action !== "PROTECT").map((tool) => tool.id).join(", "),
-);
 
 function inferredToolAction(tool) {
   const explicit = focusByToolId.get(tool.id)?.action;
@@ -90,6 +83,14 @@ function inferredToolAction(tool) {
   if (["known-demand", "growing", "new", "preseason", "measured-query"].includes(evidence.status)) return "EXPAND";
   return "CONNECT";
 }
+
+const protectedTools = toolNetwork.tools.filter((tool) => tool.searchTreatment?.status === "protected");
+check(
+  "Protected search treatments remain PROTECT in the holistic portfolio",
+  protectedTools.every((tool) => inferredToolAction(tool) === "PROTECT"),
+  10,
+  protectedTools.filter((tool) => inferredToolAction(tool) !== "PROTECT").map((tool) => tool.id).join(", "),
+);
 
 const toolCoverage = toolNetwork.tools.map((tool) => ({ id: tool.id, action: inferredToolAction(tool) }));
 check(
@@ -160,6 +161,7 @@ console.log(`Score: ${score}/100`);
 console.log(`Focus surfaces: ${portfolio.focusPortfolio.length}`);
 console.log(`Registered tools covered: ${toolCoverage.length}/${toolNetwork.tools.length}`);
 console.log(`Owned roots covered: ${ownedCoverage.length}/${ownedDomains.roots.length}`);
+console.log(`Protected tools covered: ${protectedTools.length}/${protectedTools.length}`);
 console.log(`Exact-name leading position: ${portfolio.measurement.brandedExactName.averagePosition}`);
 console.log(`Immediate queue items: ${portfolio.immediateQueue.length}`);
 if (failures.length) {
