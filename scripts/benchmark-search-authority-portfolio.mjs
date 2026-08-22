@@ -140,8 +140,8 @@ check(
     portfolio.aiSearchProgram?.currentCitationBaseline?.answerBlocks === citation.answerBlocks &&
     portfolio.aiSearchProgram?.currentCitationBaseline?.selfContained === citation.selfContained &&
     portfolio.aiSearchProgram?.currentCitationBaseline?.pageDependent === citation.pageDependent &&
-    portfolio.aiSearchProgram?.rule?.includes("no filler") === false &&
-    portfolio.aiSearchProgram?.rule?.includes("human usefulness"),
+    portfolio.aiSearchProgram?.rule?.includes("human usefulness") &&
+    portfolio.aiSearchProgram?.rule?.includes("no filler"),
   10,
 );
 
