@@ -1,8 +1,8 @@
 {
-  "version": "1.1.0",
-  "updated": "2026-08-21",
+  "version": "1.2.0",
+  "updated": "2026-08-22",
   "timezone": "America/Detroit",
-  "objective": "Grow qualified organic discovery by owning distinct Michigan, Great Lakes, outdoor, gardening, transportation, and Chris Izworski entity intents with useful canonical pages, first-party utility, measurement discipline, a connected authority network, and maximum legitimate branded SERP coverage for Chris Izworski.",
+  "objective": "Grow qualified organic discovery by owning distinct Michigan, Great Lakes, outdoor, gardening, transportation, and Chris Izworski entity intents with useful canonical pages, first-party utility, measurement discipline, a connected authority network, maximum legitimate branded SERP coverage, and a portfolio-level operating model for deciding what to protect, push, expand, connect, repair, build, or retire.",
   "northStar": "Useful decisions and durable authority, not page-count growth.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "measurement": {
@@ -26,14 +26,16 @@
   "priorityOrder": [
     "Protect crawlability, canonical integrity, structured data, performance, and factual accuracy.",
     "Protect active experiments and clean measurement windows.",
+    "Use the authority portfolio to separate opportunity priority from permission to change a surface.",
     "Improve meaningful-impression pages already near page one before creating adjacent keyword URLs.",
     "Strengthen the canonical intent owner before creating supporting pages.",
     "Create a new canonical only for a distinct decision, evidence-backed demand, or genuinely unique utility.",
     "Connect every important page into the tool and authority network.",
-    "Reinforce the Chris Izworski entity, keep the primary identity surface strongest for #1, and maximize legitimate branded top-30 occupancy without creating non-branded cannibalization."
+    "Reinforce the Chris Izworski entity, protect chrisizworski.com as the primary branded #1 result when it is already winning, and maximize legitimate branded top-30 occupancy without creating non-branded cannibalization."
   ],
   "brandedSerp": {
     "primaryQuery": "Chris Izworski",
+    "primaryBrandResult": "https://chrisizworski.com/",
     "primarySitePositionTarget": 1,
     "operatingOccupancyTargets": {"top10": 8, "top20": 15, "top30": 20},
     "stretchOccupancyTargets": {"top10": 10, "top20": 20, "top30": 30},
@@ -87,6 +89,8 @@
   },
   "sourceOfTruth": {
     "humanStrategy": "docs/SEARCH_STRATEGY.md",
+    "authorityPortfolioStrategy": "docs/SEARCH_AUTHORITY_PORTFOLIO.md",
+    "authorityPortfolio": "benchmarks/search-authority-portfolio.json",
     "measuredOpportunity": "benchmarks/search-growth-engine-2026-08-15.json",
     "experimentLedger": "benchmarks/growth-experiments.json",
     "toolNetwork": "benchmarks/tool-network-registry.json",
