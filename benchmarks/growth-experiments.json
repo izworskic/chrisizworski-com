@@ -756,7 +756,7 @@
       "status": "pending-clean-window",
       "releaseDate": null,
       "evaluationWindow": null,
-      "lastSearchFacingChangeDate": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
       "decisionDate": null,
       "result": null,
       "stopCondition": "Average position worsens beyond 15 after a meaningful sample, CTR falls below 1%, the destination snippet changes, or the statewide Fall Color owner is altered during its protected window."
