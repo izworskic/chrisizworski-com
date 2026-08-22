@@ -1,1 +1,0 @@
-Trigger the temporary August 22 governance composer after the workflow exists on the branch.
