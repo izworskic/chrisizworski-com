@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-22",
+  "timezone": "America/Detroit",
+  "objective": "Convert an existing page-one Michigan fall-color planner result into qualified clicks by describing the weekend decision in plain language while preserving the live statewide Fall Color tracker as the current-conditions owner.",
+  "source": {
+    "title": "chrisizworski.com-Performance-on-Search-2026-08-21",
+    "spreadsheetId": "1lrFEAxYT7whMAx2Gnrq-IRfUHr7cjshU542FWwJ7Kfw",
+    "exportedThrough": "2026-08-19",
+    "windowDays": 7,
+    "note": "Page metrics are page-scoped. No sitewide query row is attributed to this page because the export does not provide a page-query join."
+  },
+  "path": "/fall-color/michigan-leaf-peeping-planner/",
+  "canonical": "https://chrisizworski.com/fall-color/michigan-leaf-peeping-planner/",
+  "distinctIntent": "Choose where in Michigan to drive for fall color on a specific weekend from a specific starting point.",
+  "protectedNeighbor": "https://chrisizworski.com/fall-color/",
+  "baseline": {
+    "impressions": 54,
+    "clicks": 0,
+    "ctr": 0,
+    "averagePosition": 10.07
+  },
+  "treatment": {
+    "type": "page-one-ctr",
+    "title": "Michigan Fall Color Weekend Planner 2026 | Where to Go",
+    "h1": "Michigan Fall Color Weekend Planner",
+    "productIdentityPreserved": "Michigan Leaf Peeping Planner",
+    "firstAnswer": "Choose your Michigan starting city and the weekend you can travel; the planner ranks eight regions by expected closeness to peak and drive distance.",
+    "liveTrackerHandoff": "/fall-color/",
+    "protectedStatewideHubChanged": false
+  },
+  "targets": {
+    "evaluationWindowDays": 28,
+    "ctrAtOrAbove": 0.02,
+    "stretchCtrAtOrAbove": 0.03,
+    "averagePositionAtOrBetterThan": 12,
+    "stopLossAveragePositionWorseThan": 15
+  }
+}
