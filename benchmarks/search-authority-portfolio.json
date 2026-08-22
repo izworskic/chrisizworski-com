@@ -273,11 +273,16 @@
     },
     {
       "id": "manistee",
-      "toolId": "manistee-field-map",
-      "surface": "https://chrisizworski.com/manistee-river-map/",
+      "surface": "https://chrisizworski.com/michigan-paddling/manistee-river/",
       "priorityScore": 79,
-      "action": "EXPAND",
-      "next": "Grow from map completeness into river-trip authority and measured query coverage, using the Au Sable experience as a quality benchmark rather than cloning its copy."
+      "action": "PROTECT",
+      "next": "Measure the August 22 Manistee River paddling page-one treatment for a clean 28-day window; keep the guide as the search owner and the field map as the utility destination.",
+      "observed": {
+        "impressions": 72,
+        "clicks": 0,
+        "ctr": 0,
+        "position": 11.4
+      }
     },
     {
       "id": "circle-tour",
@@ -435,7 +440,6 @@
   ],
   "immediateQueue": [
     "winter — EXPAND Michigan Ice and XC preseason authority now: grow crawlable statewide/regional coverage and contextual handoffs before seasonal demand, without rewriting safety truth or creating duplicate live-condition owners.",
-    "manistee — EXPAND the existing Manistee River owner from its zero-click near-page-one signal into stronger map/access/trip-planning authority; coordinate with the live field-map work and do not clone Au Sable copy.",
     "garden-planner — BUILD_NEXT only after custom-domain attachment, production response, canonical, indexability and owned-network verification all pass.",
     "AI citation — run live answer-engine spot checks against the highest-value unprotected authority surfaces and feed only evidence-backed gaps back into existing canonical owners."
   ],
@@ -450,7 +454,8 @@
     "Michigan Beach Conditions CTR treatment",
     "Michigan Border Wait Times CTR treatment",
     "Michigan Boat Launch authority expansion",
-    "Au Sable map/access authority expansion"
+    "Au Sable map/access authority expansion",
+    "Manistee River paddling guide page-one treatment — guide search owner + field-map utility handoff"
   ],
   "sourceOfTruth": {
     "strategy": "docs/SEARCH_STRATEGY.md",
