@@ -48,12 +48,18 @@ function escapeHtml(value) {
     .replaceAll("'", '&#039;');
 }
 
+function escapeJson(value) {
+  return JSON.stringify(String(value)).slice(1, -1);
+}
+
 export function applyBeachDetailSearchOverride(source, override) {
   let html = source;
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(override.title)}</title>`);
   html = html.replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="${escapeHtml(override.description)}">`);
   html = html.replace(/<meta property="og:title" content="[^"]*">/, `<meta property="og:title" content="${escapeHtml(override.title)}">`);
   html = html.replace(/<meta property="og:description" content="[^"]*">/, `<meta property="og:description" content="${escapeHtml(override.description)}">`);
+  html = html.replace(/("@type": "WebPage",[\s\S]*?"name": ")[^"]+("\s*,)/, `$1${escapeJson(override.h1)}$2`);
+  html = html.replace(/("@type": "WebPage",[\s\S]*?"description": ")[^"]+("\s*,)/, `$1${escapeJson(override.description)}$2`);
   html = html.replace(/<h1 id="page-title">[^<]*<\/h1>/, `<h1 id="page-title">${escapeHtml(override.h1)}</h1>`);
   html = html.replace(/<p class="hero-lede">[^<]*<\/p>/, `<p class="hero-lede">${escapeHtml(override.firstAnswer)}</p>`);
   html = html.replace(/"dateModified":\s*"\d{4}-\d{2}-\d{2}"/, '"dateModified": "2026-08-22"');
