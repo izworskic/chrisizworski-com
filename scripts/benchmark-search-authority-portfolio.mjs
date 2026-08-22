@@ -12,7 +12,8 @@ const toolNetwork = await readJson(portfolio.sourceOfTruth.toolNetwork);
 const ownedDomains = await readJson(portfolio.sourceOfTruth.ownedDomains);
 const nameSerp = await readJson(portfolio.sourceOfTruth.nameSerp);
 const experiments = await readJson(portfolio.sourceOfTruth.experiments);
-const mackinacTollExperiment = await readJson(portfolio.sourceOfTruth.mackinacTollCtrExperiment);
+const transportGrowth = await readJson("benchmarks/transport-365-growth.json");
+const mackinacTollExperiment = transportGrowth.experiments.find((item) => item.id === "mackinac-toll-price-led-ctr");
 const strategyGovernance = await readJson("benchmarks/search-strategy-governance.json");
 const packageJson = await readJson("package.json");
 const strategyDoc = await read(portfolio.sourceOfTruth.portfolioStrategy);
@@ -44,7 +45,8 @@ check(
     portfolio.measurement.latestLeadingSnapshot?.windowDays === 7 &&
     portfolio.measurement.decisionWindowDays === 28 &&
     experiments.measurementProtocol?.windowDays === 28 &&
-    mackinacTollExperiment.measurement?.windowDays === 28,
+    mackinacTollExperiment?.latestLeadingSignal?.windowDays === 7 &&
+    mackinacTollExperiment?.latestLeadingSignal?.purpose?.includes("original pre-release baseline remains"),
   10,
 );
 
@@ -142,7 +144,7 @@ check(
     protectedText.includes("mackinac bridge tolls") &&
     mackinacTollFocus?.action === "PROTECT" &&
     buoyFocus?.action === "PROTECT" &&
-    mackinacTollExperiment.status === "ready-for-release",
+    mackinacTollExperiment?.status === "ready-for-release",
   10,
 );
 
