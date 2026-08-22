@@ -1,0 +1,101 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-22",
+  "id": "au-sable-map-access-expansion-2026-08-22",
+  "surface": "https://chrisizworski.com/au-sable-river/",
+  "status": "ready-for-production-release",
+  "strategy": "Expand crawlable map, public-access, fishing-access and paddling-map answers inside the existing Au Sable owner while preserving its already-healthy snippet.",
+  "evidence": {
+    "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-08-21",
+    "exportedThrough": "2026-08-19",
+    "windowDays": 7,
+    "page": {
+      "impressions": 475,
+      "clicks": 16,
+      "ctr": 0.0337,
+      "averagePosition": 9.16
+    },
+    "sitewideQuerySignals": [
+      {
+        "query": "au sable river map",
+        "impressions": 13,
+        "clicks": 1,
+        "position": 8.92
+      },
+      {
+        "query": "au sable river access points map",
+        "impressions": 5,
+        "clicks": 0,
+        "position": 6.8
+      },
+      {
+        "query": "au sable river access points",
+        "impressions": 6,
+        "clicks": 0,
+        "position": 7.17
+      },
+      {
+        "query": "au sable river public access",
+        "impressions": 3,
+        "clicks": 0,
+        "position": 13.67
+      },
+      {
+        "query": "au sable river fishing map",
+        "impressions": 3,
+        "clicks": 0,
+        "position": 10.33
+      },
+      {
+        "query": "au sable river kayaking map",
+        "impressions": 3,
+        "clicks": 0,
+        "position": 9.33
+      }
+    ],
+    "queryAttributionCaution": "Query rows are sitewide directional evidence and are not treated as a page-query join."
+  },
+  "treatment": {
+    "snippetFrozen": true,
+    "requiredHeading": "Au Sable River map and public access points",
+    "requiredLanguage": [
+      "70 verified locations from Grayling to Oscoda",
+      "canoe and kayak put-ins, take-outs, fishing access",
+      "Grayling Public Access",
+      "Burton's Landing",
+      "Keystone Landing",
+      "Stephan Bridge",
+      "Wakeley Bridge",
+      "Public fishing access",
+      "Canoe and kayak planning"
+    ],
+    "requiredLinks": [
+      "https://ausable.chrisizworski.com/",
+      "/michigan-boat-launches/"
+    ]
+  },
+  "measurement": {
+    "primaryWindowDays": 28,
+    "primaryMetrics": [
+      "page impressions",
+      "map/access query diversity",
+      "average position"
+    ],
+    "ctrGuardrail": 0.025,
+    "positionGuardrail": 12.5,
+    "decisionRule": "Keep the expansion if impressions or map/access query diversity grow while average position stays at or better than 12.5 and page CTR remains at or above 2.5%. Because the snippet is frozen, a sharp CTR decline is a diagnostic signal rather than an intended tradeoff.",
+    "baselineWindowDays": 7,
+    "normalizedPrimaryMetric": "average daily page impressions",
+    "targetAverageDailyImpressions": 80,
+    "ctrFloor": 0.025,
+    "comparisonRule": "Compare average daily impressions, not raw 7-day versus 28-day totals; treat seasonal demand as context and preserve the position guardrail."
+  },
+  "protected": [
+    "title",
+    "metaDescription",
+    "h1",
+    "canonical",
+    "existingFloatAnswers",
+    "sourceTruth"
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "ledgerVersion": "1.7.0",
+  "ledgerVersion": "1.8.0",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
   "measurementProtocol": {
@@ -575,6 +575,106 @@
       "decisionDate": null,
       "result": null,
       "stopCondition": "A frozen search surface changes; exact location enters analytics or storage; Ice implies safety; XC equates modeled snow with grooming; fewer than 5 decisions occur after 500 module views; Fall CTR falls at least 20% after 500 comparable impressions with stable position; or a p75 Core Web Vital remains outside the green range for seven days."
+    },
+    {
+      "id": "2026-08-22-beach-conditions-ctr",
+      "path": "/great-lakes-beaches/",
+      "hypothesis": "Leading with Michigan beach conditions today while preserving official-source and flag-status truth boundaries will lift CTR on an existing page-one surface.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 273,
+        "clicks": 2,
+        "ctr": 0.0073,
+        "averagePosition": 9.12
+      },
+      "target": {
+        "ctr": 0.015,
+        "stretchCtr": 0.025,
+        "averagePositionMax": 12.5
+      },
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Average position falls below 12.5, canonical/indexability changes, or the page weakens its explicit boundary between NWS swim risk and physical posted flag status."
+    },
+    {
+      "id": "2026-08-22-border-waits-ctr",
+      "path": "/michigan-border-wait-times/",
+      "hypothesis": "Today/Detroit/all-five-crossings framing will lift statewide border-wait CTR while five crossing-specific pages retain their own canonical intent.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 284,
+        "clicks": 2,
+        "ctr": 0.007,
+        "averagePosition": 11.98
+      },
+      "target": {
+        "ctr": 0.015,
+        "stretchCtr": 0.025,
+        "averagePositionMax": 15
+      },
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Average position falls below 15, directional source truth regresses, or the statewide page begins cannibalizing a crossing-specific canonical owner."
+    },
+    {
+      "id": "2026-08-22-boat-launch-authority",
+      "path": "/michigan-boat-launches/",
+      "hypothesis": "Crawlable destination guidance beneath the map will expand qualified discovery without changing the winning map-first product or its snippet.",
+      "primaryMetric": "Search Console average daily page impressions",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 77,
+        "averageDailyImpressions": 11,
+        "clicks": 0,
+        "averagePosition": 13.17
+      },
+      "target": {
+        "averageDailyImpressions": 15,
+        "averagePositionMax": 18
+      },
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Average position falls below 18, finder behavior/source truth regresses, or new doorway destination canonicals are introduced."
+    },
+    {
+      "id": "2026-08-22-au-sable-map-access-authority",
+      "path": "/au-sable-river/",
+      "hypothesis": "A crawlable map/public-access answer inside the existing Au Sable owner will expand map, access, fishing and paddling discovery without touching the strong snippet.",
+      "primaryMetric": "Search Console average daily page impressions",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 475,
+        "averageDailyImpressions": 67.86,
+        "clicks": 16,
+        "ctr": 0.0337,
+        "averagePosition": 9.16
+      },
+      "target": {
+        "averageDailyImpressions": 80,
+        "ctrFloor": 0.025,
+        "averagePositionMax": 12.5
+      },
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Average position falls below 12.5, CTR falls below 2.5% in a comparable window, canonical/snippet changes, or access claims lose source support."
     }
   ]
 }

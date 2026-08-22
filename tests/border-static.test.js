@@ -26,14 +26,14 @@ function jsonLd(html) {
 test("Michigan border flagship has indexable metadata and honest application schema", () => {
   assert.match(
     main,
-    /<title>Michigan Border Wait Times Live \| All 5 Crossings<\/title>/,
+    /<title>Michigan Border Wait Times Today: Detroit &amp; All 5 Crossings<\/title>/,
   );
   assert.ok(
     main.includes(
       '<link rel="canonical" href="https://chrisizworski.com/michigan-border-wait-times/">',
     ),
   );
-  assert.match(main, /name="description" content="[^"]*Gordie Howe[^"]*Sault Ste\. Marie/i);
+  assert.match(main, /name="description" content="[^"]*Detroit[^"]*Port Huron[^"]*Sault Ste\. Marie/i);
   assert.ok(main.includes('"@type": "WebApplication"'));
   assert.ok(main.includes('"@type": "ItemList"'));
   assert.ok(main.includes('"numberOfItems": 5'));
