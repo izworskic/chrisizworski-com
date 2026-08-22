@@ -1,8 +1,9 @@
 {
-  "version": "1.1.0",
-  "updated": "2026-08-21",
+  "version": "1.2.0",
+  "updated": "2026-08-22",
   "objective": "Make Chris Izworski the clear primary result for his name and maximize truthful, useful Chris Izworski visibility across the first 30 branded search results while preserving one canonical Person entity and distinct non-branded search ownership.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
+  "primaryBrandResult": "https://chrisizworski.com/",
   "primaryIdentitySurface": "https://chrisizworski.com/chris-izworski/",
   "brandedQueryFamily": ["Chris Izworski", "Chris Izworski Michigan", "Chris Izworski AI", "Chris Izworski 911", "Chris Izworski public safety"],
   "occupancyTargets": {
@@ -24,7 +25,7 @@
     "reciprocalDiscovery": "Active owned properties should link back to the main identity/property network where appropriate, and the central Projects/Works surfaces should discover meaningful active properties.",
     "searchOwnership": "Subject intent ownership still controls non-branded page architecture. Multiple distinct surfaces may rank for the branded Chris Izworski query family, but branded reinforcement must not create non-branded cannibalization.",
     "brandedOccupancy": "For exact and close-name searches, maximize distinct authoritative Chris Izworski results across the top 10, 20, and 30 while keeping every surface accurate and independently useful.",
-    "primaryIdentityPriority": "The main Chris Izworski identity surface should remain the strongest candidate for position #1 and the canonical Person entity must remain stable across supporting properties.",
+    "primaryIdentityPriority": "The chrisizworski.com homepage should remain the strongest candidate for branded position #1 when it is already winning. The /chris-izworski/ identity surface reinforces the canonical Person entity and adds branded authority; do not force it to displace a winning homepage.",
     "launchDiscipline": "Do not add a planned property to crawlable central navigation until its owned canonical resolves and its production routes are verified.",
     "measurement": "Track exact-name and close-name result occupancy at depths 10, 20, and 30, classify each observed result, and pair the snapshot with branded Search Console impressions, CTR, and average position. Keep observed data separate from targets and expect locale/device variation."
   },
