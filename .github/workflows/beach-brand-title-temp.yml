@@ -1,0 +1,44 @@
+name: Temporary beach branded title sync
+
+on:
+  push:
+    branches:
+      - feat/beach-ctr-push-2026-08-22
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Align query-first title with site attribution gate
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const title = 'Michigan Beach Conditions Today | Chris Izworski';
+          const page = 'public/great-lakes-beaches/index.html';
+          let html = fs.readFileSync(page, 'utf8');
+          if (!html.includes('<title>Michigan Beach Conditions Today: Warnings &amp; Water Temp</title>')) throw new Error('Expected old beach title missing');
+          html = html.replace('<title>Michigan Beach Conditions Today: Warnings &amp; Water Temp</title>', `<title>${title}</title>`);
+          fs.writeFileSync(page, html);
+
+          const cfgPath = 'benchmarks/beach-conditions-ctr-experiment.json';
+          const cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
+          cfg.treatment.title = title;
+          fs.writeFileSync(cfgPath, JSON.stringify(cfg, null, 2) + '\n');
+
+          const testPath = 'tests/beach-static.test.js';
+          let test = fs.readFileSync(testPath, 'utf8');
+          test = test.replace('/<title>Michigan Beach Conditions Today:/', '/<title>Michigan Beach Conditions Today \\| Chris Izworski<\\/title>/');
+          fs.writeFileSync(testPath, test);
+          NODE
+      - name: Commit alignment
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/great-lakes-beaches/index.html benchmarks/beach-conditions-ctr-experiment.json tests/beach-static.test.js
+          git commit -m "Keep beach CTR title query-first and brand-aligned"
+          git push
