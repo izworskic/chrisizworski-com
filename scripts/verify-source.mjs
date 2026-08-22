@@ -9,6 +9,8 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 22 2026: contextual distribution for the Upper Peninsula fall-color rank experiment. Re-crawl after production release, then remove.
+  "/up-north-michigan/",
   // Aug 22 2026: measured Manistee River paddling page-one treatment on the existing canonical guide. Re-crawl after production release, then remove this declaration.
   "/michigan-paddling/manistee-river/",
   // Aug 22 2026: measured Au Sable map/public-access authority expansion on the existing canonical guide. Re-crawl after production release, then remove this declaration.

@@ -88,6 +88,19 @@
       }
     },
     {
+      "id": "upper-peninsula-fall",
+      "surface": "https://chrisizworski.com/fall-color/upper-peninsula-fall-color/",
+      "priorityScore": 89,
+      "action": "PROTECT",
+      "next": "Measure the August 22 contextual-authority rank push for a clean 28-day window; keep the regional destination snippet frozen and leave the statewide Fall Color experiment untouched.",
+      "observed": {
+        "impressions": 78,
+        "clicks": 1,
+        "ctr": 0.0128,
+        "position": 11.88
+      }
+    },
+    {
       "id": "soo-locks",
       "toolId": "soo-locks",
       "surface": "https://chrisizworski.com/soo-locks/",
@@ -456,7 +469,8 @@
     "Michigan Boat Launch authority expansion",
     "Au Sable map/access authority expansion",
     "Manistee River paddling guide page-one treatment — guide search owner + field-map utility handoff",
-    "Fall Color + Northern Lights crossover CTR treatment — position 8.28 baseline, protect through clean 28-day window"
+    "Fall Color + Northern Lights crossover CTR treatment — position 8.28 baseline, protect through clean 28-day window",
+    "Upper Peninsula Fall Color rank-distribution treatment — position 11.88 baseline, destination snippet frozen"
   ],
   "sourceOfTruth": {
     "strategy": "docs/SEARCH_STRATEGY.md",

@@ -1,5 +1,5 @@
 {
-  "ledgerVersion": "1.11.0",
+  "ledgerVersion": "1.12.0",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
   "measurementProtocol": {
@@ -729,6 +729,37 @@
       "decisionDate": null,
       "result": null,
       "stopCondition": "Average position worsens beyond 12.5 after a meaningful sample, CTR remains effectively zero after the clean window, canonical changes, or the treatment weakens the protected Fall Color or Northern Lights owners."
+    },
+    {
+      "id": "2026-08-22-upper-peninsula-fall-rank",
+      "paths": [
+        "/fall-color/upper-peninsula-fall-color/"
+      ],
+      "sourcePaths": [
+        "/up-north-michigan/",
+        "/lake-superior-circle-tour/"
+      ],
+      "hypothesis": "Two contextual links from relevant northern-Michigan and Lake Superior planning surfaces will move the existing regional fall-color owner from average position 11.88 into the top 10 without changing its already-strong snippet.",
+      "primaryMetric": "Search Console average position for /fall-color/upper-peninsula-fall-color/",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 78,
+        "clicks": 1,
+        "ctr": 0.0128,
+        "averagePosition": 11.88
+      },
+      "target": {
+        "averagePositionAtOrBetterThan": 10,
+        "stretchAveragePositionAtOrBetterThan": 8,
+        "ctrFloor": 0.01
+      },
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Average position worsens beyond 15 after a meaningful sample, CTR falls below 1%, the destination snippet changes, or the statewide Fall Color owner is altered during its protected window."
     }
   ]
 }
