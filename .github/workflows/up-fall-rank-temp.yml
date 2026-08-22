@@ -1,0 +1,21 @@
+name: Temporary Upper Peninsula fall rank composer
+
+on:
+  push:
+    branches:
+      - feat/up-fall-page-one-rank-2026-08-22
+
+permissions:
+  contents: write
+
+jobs:
+  compose:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compose Upper Peninsula fall rank treatment
+        run: node scripts/compose-up-fall-rank.mjs
