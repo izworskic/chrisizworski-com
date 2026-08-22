@@ -128,12 +128,13 @@ const mackinacTollFocus = portfolio.focusPortfolio.find((item) => item.id === "m
 const buoyFocus = portfolio.focusPortfolio.find((item) => item.id === "great-lakes-buoys");
 check(
   "Immediate queue advances eligible leverage while protected work stays separate",
-  immediateText.includes("beach-report") &&
-    immediateText.includes("border-waits") &&
-    immediateText.includes("ausable-field-map") &&
-    immediateText.includes("boat-launches") &&
-    immediateText.includes("garden-planner") &&
+  immediateText.includes("garden-planner") &&
     immediateText.includes("winter") &&
+    immediateText.includes("manistee") &&
+    !immediateText.includes("beach-report") &&
+    !immediateText.includes("border-waits") &&
+    !immediateText.includes("ausable-field-map") &&
+    !immediateText.includes("boat-launches") &&
     !immediateText.includes("mackinac-tolls") &&
     !immediateText.includes("great-lakes-buoys") &&
     protectedText.includes("northern lights") &&
@@ -142,6 +143,10 @@ check(
     protectedText.includes("fall color") &&
     protectedText.includes("great lakes buoys") &&
     protectedText.includes("mackinac bridge tolls") &&
+    protectedText.includes("beach conditions") &&
+    protectedText.includes("border wait") &&
+    protectedText.includes("boat launch") &&
+    protectedText.includes("au sable") &&
     mackinacTollFocus?.action === "PROTECT" &&
     buoyFocus?.action === "PROTECT" &&
     mackinacTollExperiment?.status === "ready-for-release",
