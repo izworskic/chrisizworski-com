@@ -1,0 +1,35 @@
+name: Temporary Au Sable package gate
+
+on:
+  push:
+    branches:
+      - feat/au-sable-map-access-expansion-2026-08-22
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wire Au Sable benchmark into verify all
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const p = 'package.json';
+          const pkg = JSON.parse(fs.readFileSync(p, 'utf8'));
+          pkg.scripts['benchmark:au-sable-search'] = 'node scripts/benchmark-au-sable-map-access-expansion.mjs';
+          if (!pkg.scripts['verify:all'].includes('benchmark:au-sable-search')) {
+            pkg.scripts['verify:all'] += ' && npm run benchmark:au-sable-search';
+          }
+          fs.writeFileSync(p, JSON.stringify(pkg, null, 2) + '\n');
+          NODE
+      - name: Commit gate wiring
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json
+          git commit -m "Gate Au Sable map and access search expansion"
+          git push
