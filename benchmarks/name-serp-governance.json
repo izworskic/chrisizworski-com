@@ -1,8 +1,9 @@
 {
-  "version": "1.1.0",
-  "updated": "2026-08-21",
-  "objective": "Make Chris Izworski the clear primary result for his name and maximize truthful, useful Chris Izworski visibility across the first 30 branded search results while preserving one canonical Person entity and distinct non-branded search ownership.",
+  "version": "1.2.0",
+  "updated": "2026-08-22",
+  "objective": "Keep a first-party ChrisIzworski.com surface at position #1 for Chris Izworski and maximize truthful, useful Chris Izworski visibility across the first 30 branded search results while preserving one canonical Person entity and distinct non-branded search ownership.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
+  "primarySiteSurface": "https://chrisizworski.com/",
   "primaryIdentitySurface": "https://chrisizworski.com/chris-izworski/",
   "brandedQueryFamily": ["Chris Izworski", "Chris Izworski Michigan", "Chris Izworski AI", "Chris Izworski 911", "Chris Izworski public safety"],
   "occupancyTargets": {
@@ -10,6 +11,13 @@
     "operating": {"top10": 8, "top20": 15, "top30": 20},
     "stretch": {"top10": 10, "top20": 20, "top30": 30},
     "principle": "Earn as much branded result coverage as possible through accurate, distinct, useful owned properties, profiles, and independent third-party references."
+  },
+  "observedLeadingSignal": {
+    "source": "benchmarks/search-console-snapshot-2026-08-21.json",
+    "window": "2026-08-13/2026-08-19",
+    "exactNameAveragePosition": 1.0,
+    "homepageAveragePosition": 1.59,
+    "note": "Leading Search Console evidence, not a full top-30 SERP occupancy snapshot."
   },
   "resultClasses": {
     "primaryOwned": "chrisizworski.com identity, source, project, and substantive author surfaces",
@@ -24,7 +32,8 @@
     "reciprocalDiscovery": "Active owned properties should link back to the main identity/property network where appropriate, and the central Projects/Works surfaces should discover meaningful active properties.",
     "searchOwnership": "Subject intent ownership still controls non-branded page architecture. Multiple distinct surfaces may rank for the branded Chris Izworski query family, but branded reinforcement must not create non-branded cannibalization.",
     "brandedOccupancy": "For exact and close-name searches, maximize distinct authoritative Chris Izworski results across the top 10, 20, and 30 while keeping every surface accurate and independently useful.",
-    "primaryIdentityPriority": "The main Chris Izworski identity surface should remain the strongest candidate for position #1 and the canonical Person entity must remain stable across supporting properties.",
+    "primarySitePriority": "A first-party ChrisIzworski.com surface should own position #1. Prefer the homepage while observed evidence shows it is the strongest first-party result; do not force the biography page to displace a winning homepage.",
+    "identitySurfaceRole": "The primary identity surface is the deep biographical and entity-reference page even when the homepage is the stronger navigational search result.",
     "launchDiscipline": "Do not add a planned property to crawlable central navigation until its owned canonical resolves and its production routes are verified.",
     "measurement": "Track exact-name and close-name result occupancy at depths 10, 20, and 30, classify each observed result, and pair the snapshot with branded Search Console impressions, CTR, and average position. Keep observed data separate from targets and expect locale/device variation."
   },
