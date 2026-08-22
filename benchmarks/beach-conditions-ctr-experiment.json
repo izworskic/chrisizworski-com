@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-22",
+  "timezone": "America/Detroit",
+  "id": "beach-conditions-ctr-2026-08-22",
+  "surface": "https://chrisizworski.com/great-lakes-beaches/",
+  "status": "ready-for-production-release",
+  "hypothesis": "The statewide beach hub is already near page one, but its generic report framing under-signals the query family Google is showing. Leading with Michigan beach conditions today, official warnings, swim risk and water temperature should increase CTR without changing the page's truthful safety boundaries or creating new canonicals.",
+  "evidence": {
+    "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-08-21",
+    "exportedThrough": "2026-08-19",
+    "windowDays": 7,
+    "page": {
+      "impressions": 273,
+      "clicks": 2,
+      "ctr": 0.0073,
+      "averagePosition": 9.12
+    },
+    "querySignals": [
+      {"query": "beach warnings today near me", "impressions": 10, "clicks": 0, "position": 8.8},
+      {"query": "michigan beach conditions", "impressions": 4, "clicks": 0, "position": 9.25},
+      {"query": "beach reports near me", "impressions": 4, "clicks": 0, "position": 8.25},
+      {"query": "pere marquette beach flag color today", "impressions": 7, "clicks": 0, "position": 7.14},
+      {"query": "new buffalo beach flag today", "impressions": 9, "clicks": 0, "position": 9.67},
+      {"query": "luna pier beach water quality today", "impressions": 10, "clicks": 0, "position": 9.9}
+    ]
+  },
+  "treatment": {
+    "title": "Michigan Beach Conditions Today: Warnings & Water Temp",
+    "metaDescription": "Check Michigan beach conditions today: BeachGuard notices, NWS swim risk and warnings, water temperature, waves, wind and weather for 50 Great Lakes beaches.",
+    "h1": "Michigan Beach Conditions Today",
+    "firstAnswerMustContain": [
+      "50 Lake Michigan, Huron, Superior, and Erie beaches",
+      "BeachGuard notices",
+      "NWS swim risk",
+      "water temperature",
+      "Near me"
+    ],
+    "truthBoundary": "Do not claim the physical posted flag color is live or known. NWS swim risk is forecast guidance and posted flags must be checked on arrival."
+  },
+  "measurement": {
+    "primaryWindowDays": 28,
+    "windowStarts": "first complete America/Detroit day after production release",
+    "primaryMetric": "page CTR",
+    "targetCtr": 0.015,
+    "stretchCtr": 0.025,
+    "positionGuardrail": 12.5,
+    "decisionRule": "Keep the treatment if CTR materially improves while average position remains at or better than 12.5. Revert or redesign if the position guardrail breaks or truthful safety framing is weakened. Because late-summer demand is seasonal, do not use raw impression decline alone as a stop-loss."
+  },
+  "freeze": [
+    "title",
+    "metaDescription",
+    "h1",
+    "firstAnswer",
+    "structuredData",
+    "canonical",
+    "indexability"
+  ]
+}
