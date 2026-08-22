@@ -18,7 +18,11 @@ source = source.replace(
 );
 source = source.replace(
   'unlinkSync("scripts/compose-manistee-page-one.mjs");',
-  'unlinkSync("scripts/compose-manistee-page-one.mjs");\nunlinkSync("scripts/run-manistee-composer.mjs");'
+  'unlinkSync("scripts/compose-manistee-page-one.mjs");\nunlinkSync("scripts/run-manistee-composer.mjs");\nunlinkSync(".github/workflows/manistee-page-one-temp.yml");'
+);
+source = source.replace(
+  'execFileSync("git", ["push"], { stdio: "inherit" });',
+  'execFileSync("git", ["push", "origin", "HEAD:feat/manistee-page-one-push-2026-08-22"], { stdio: "inherit" });'
 );
 writeFileSync(path, source);
 await import("./compose-manistee-page-one.mjs?fixed=1");
