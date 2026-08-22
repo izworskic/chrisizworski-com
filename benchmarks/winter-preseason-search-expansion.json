@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-22",
+  "timezone": "America/Detroit",
+  "id": "winter-preseason-authority-2026-08-22",
+  "status": "ready-for-production-release",
+  "objective": "Build Michigan winter search authority before demand arrives by expanding the existing Michigan Ice and cross-country ski owners rather than creating duplicate condition pages.",
+  "evidence": {
+    "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-08-21",
+    "spreadsheetId": "1lrFEAxYT7whMAx2Gnrq-IRfUHr7cjshU542FWwJ7Kfw",
+    "exportedThrough": "2026-08-19",
+    "windowDays": 7,
+    "pages": {
+      "michiganIce": {"impressions": 26, "clicks": 0, "ctr": 0, "averagePosition": 46.35},
+      "saginawBayIceRegion": {"impressions": 21, "clicks": 0, "ctr": 0, "averagePosition": 45.52},
+      "xcPlanning": {"impressions": 8, "clicks": 0, "ctr": 0, "averagePosition": 43.88},
+      "xcLive": {"impressions": 17, "clicks": 1, "ctr": 0.0588, "averagePosition": 18.71}
+    },
+    "querySignals": [
+      {"query": "saginaw bay ice conditions", "impressions": 3, "clicks": 0, "averagePosition": 18.33},
+      {"query": "ice report saginaw bay", "impressions": 2, "clicks": 0, "averagePosition": 37},
+      {"query": "great lakes ice conditions", "impressions": 1, "clicks": 0, "averagePosition": 35},
+      {"query": "michigan lake ice", "impressions": 1, "clicks": 0, "averagePosition": 35},
+      {"query": "cross country skiing michigan", "impressions": 3, "clicks": 0, "averagePosition": 66.67},
+      {"query": "cross-country ski trail report", "impressions": 1, "clicks": 0, "averagePosition": 61}
+    ],
+    "interpretation": "This is an authority/rank problem, not a CTR problem yet. The strongest early wedge is Saginaw Bay ice-condition intent; statewide ice and XC terms are still mostly several pages deep."
+  },
+  "treatment": {
+    "iceHub": [
+      "Add a crawlable Saginaw Bay ice-conditions entry point on the existing Michigan Ice hub.",
+      "Explicitly distinguish Great Lakes lake-wide ice coverage from local ice conditions and from safety.",
+      "Keep Michigan DNR safety boundaries and the existing six-water architecture intact."
+    ],
+    "xcPlanning": [
+      "Add crawlable region-first Michigan cross-country ski planning coverage inside the existing statewide owner.",
+      "Keep live regional snow conditions on xcski.chrisizworski.com and operator grooming reports as trail truth.",
+      "Do not create regional keyword-doorway URLs."
+    ],
+    "snippetPolicy": "Do not rewrite title, meta description, H1 or canonical on either owner in this authority phase."
+  },
+  "measurement": {
+    "primaryWindowDays": 28,
+    "windowStarts": "first complete America/Detroit day after production release",
+    "primaryMetrics": ["average position", "qualified winter impressions", "winter query diversity"],
+    "milestones": {
+      "saginawBayIceConditionsQueryPosition": 15,
+      "michiganIcePagePosition": 35,
+      "xcPlanningPagePosition": 35
+    },
+    "guardrails": {
+      "xcLiveDistinctOwner": true,
+      "noSafetyRatingClaims": true,
+      "noNewDoorwayCanonicals": true,
+      "iceGeneratorRemainsSourceOfTruth": true
+    },
+    "seasonalityRule": "August demand is intentionally sparse. Judge normalized impressions, rank movement and query diversity together; do not declare failure from raw volume before winter demand ramps."
+  },
+  "freeze": ["title", "metaDescription", "h1", "canonical", "indexability", "iceSafetyBoundary", "xcLiveOwnership"]
+}
