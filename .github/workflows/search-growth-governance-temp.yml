@@ -1,0 +1,130 @@
+name: Temporary search growth governance composition
+
+on:
+  push:
+    branches:
+      - feat/search-growth-consolidation-2026-08-22
+
+permissions:
+  contents: write
+
+jobs:
+  govern:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Protect treatments and reconcile source parity
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+
+          // Source parity: this is an intentional crawlable body expansion, not unexplained drift.
+          const verifyPath = 'scripts/verify-source.mjs';
+          let verify = fs.readFileSync(verifyPath, 'utf8');
+          const marker = 'const intentionalChanges = new Set([\n';
+          const note = '  // Aug 22 2026: measured Au Sable map/public-access authority expansion on the existing canonical guide. Re-crawl after production release, then remove this declaration.\n  "/au-sable-river/",\n';
+          if (!verify.includes(note.trim())) {
+            if (!verify.includes(marker)) throw new Error('intentionalChanges marker missing');
+            verify = verify.replace(marker, marker + note);
+            fs.writeFileSync(verifyPath, verify);
+          }
+
+          // Central experiment ledger.
+          const ledgerPath = 'benchmarks/growth-experiments.json';
+          const ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+          const entries = [
+            {
+              id:'2026-08-22-beach-conditions-ctr', path:'/great-lakes-beaches/',
+              hypothesis:'Leading with Michigan beach conditions today while preserving official-source and flag-status truth boundaries will lift CTR on an existing page-one surface.',
+              primaryMetric:'Search Console page CTR',
+              baseline:{windowDays:7,impressions:273,clicks:2,ctr:0.0073,averagePosition:9.12},
+              target:{ctr:0.015,stretchCtr:0.025,averagePositionMax:12.5},
+              status:'pending-clean-window', releaseDate:null, evaluationWindow:null, lastSearchFacingChangeDate:'2026-08-22', decisionDate:null, result:null,
+              stopCondition:'Average position falls below 12.5, canonical/indexability changes, or the page weakens its explicit boundary between NWS swim risk and physical posted flag status.'
+            },
+            {
+              id:'2026-08-22-border-waits-ctr', path:'/michigan-border-wait-times/',
+              hypothesis:'Today/Detroit/all-five-crossings framing will lift statewide border-wait CTR while five crossing-specific pages retain their own canonical intent.',
+              primaryMetric:'Search Console page CTR',
+              baseline:{windowDays:7,impressions:284,clicks:2,ctr:0.007,averagePosition:11.98},
+              target:{ctr:0.015,stretchCtr:0.025,averagePositionMax:15},
+              status:'pending-clean-window', releaseDate:null, evaluationWindow:null, lastSearchFacingChangeDate:'2026-08-22', decisionDate:null, result:null,
+              stopCondition:'Average position falls below 15, directional source truth regresses, or the statewide page begins cannibalizing a crossing-specific canonical owner.'
+            },
+            {
+              id:'2026-08-22-boat-launch-authority', path:'/michigan-boat-launches/',
+              hypothesis:'Crawlable destination guidance beneath the map will expand qualified discovery without changing the winning map-first product or its snippet.',
+              primaryMetric:'Search Console average daily page impressions',
+              baseline:{windowDays:7,impressions:77,averageDailyImpressions:11,clicks:0,averagePosition:13.17},
+              target:{averageDailyImpressions:15,averagePositionMax:18},
+              status:'pending-clean-window', releaseDate:null, evaluationWindow:null, lastSearchFacingChangeDate:'2026-08-22', decisionDate:null, result:null,
+              stopCondition:'Average position falls below 18, finder behavior/source truth regresses, or new doorway destination canonicals are introduced.'
+            },
+            {
+              id:'2026-08-22-au-sable-map-access-authority', path:'/au-sable-river/',
+              hypothesis:'A crawlable map/public-access answer inside the existing Au Sable owner will expand map, access, fishing and paddling discovery without touching the strong snippet.',
+              primaryMetric:'Search Console average daily page impressions',
+              baseline:{windowDays:7,impressions:475,averageDailyImpressions:67.86,clicks:16,ctr:0.0337,averagePosition:9.16},
+              target:{averageDailyImpressions:80,ctrFloor:0.025,averagePositionMax:12.5},
+              status:'pending-clean-window', releaseDate:null, evaluationWindow:null, lastSearchFacingChangeDate:'2026-08-22', decisionDate:null, result:null,
+              stopCondition:'Average position falls below 12.5, CTR falls below 2.5% in a comparable window, canonical/snippet changes, or access claims lose source support.'
+            }
+          ];
+          for (const entry of entries) if (!ledger.experiments.some(x => x.id === entry.id)) ledger.experiments.push(entry);
+          ledger.ledgerVersion = '1.8.0';
+          fs.writeFileSync(ledgerPath, JSON.stringify(ledger, null, 2) + '\n');
+
+          // Search-authority portfolio permissions.
+          const portfolioPath = 'benchmarks/search-authority-portfolio.json';
+          const portfolio = JSON.parse(fs.readFileSync(portfolioPath, 'utf8'));
+          const updates = {
+            'beach-report':'Measure the Beach Conditions CTR treatment for a complete 28-day window; freeze title, meta, H1, first answer, schema, canonical and indexability unless the stop-loss fires.',
+            'border-waits':'Measure the statewide Border Waits CTR treatment for a complete 28-day window while preserving crossing-specific canonical ownership.',
+            'boat-launches':'Measure the crawlable boat-launch authority expansion using normalized daily impressions and position; do not alter its snippet or map-first product during the window.',
+            'ausable-field-map':'Protect the Au Sable field-map ecosystem and the /au-sable-river/ map/access expansion during its 28-day authority window; do not churn the strong guide snippet.'
+          };
+          for (const item of portfolio.focusPortfolio) if (updates[item.id]) { item.action='PROTECT'; item.next=updates[item.id]; }
+          portfolio.immediateQueue = portfolio.immediateQueue.filter(x => !/beach-report|border-waits|ausable-field-map|boat-launches/i.test(x));
+          for (const label of ['Michigan Beach Conditions CTR treatment','Michigan Border Wait Times CTR treatment','Michigan Boat Launch authority expansion','Au Sable map/access authority expansion']) if (!portfolio.protectedQueue.includes(label)) portfolio.protectedQueue.push(label);
+          fs.writeFileSync(portfolioPath, JSON.stringify(portfolio, null, 2) + '\n');
+
+          // Tool registry: make page-specific protection visible to future agents.
+          const registryPath = 'benchmarks/tool-network-registry.json';
+          const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+          for (const id of ['beach-report','border-waits','boat-launches','ausable-guide']) {
+            const tool = registry.tools.find(x => x.id === id);
+            if (!tool) throw new Error('Missing registry tool ' + id);
+            tool.searchTreatment = {status:'protected',experiment:'active'};
+          }
+          registry.updated = '2026-08-22';
+          fs.writeFileSync(registryPath, JSON.stringify(registry, null, 2) + '\n');
+
+          // Tighten the standalone expansion records so 7-day and 28-day windows are comparable.
+          for (const [path, daily, pos, ctrFloor] of [
+            ['benchmarks/boat-launch-search-expansion.json',15,18,null],
+            ['benchmarks/au-sable-map-access-expansion.json',80,12.5,0.025]
+          ]) {
+            const cfg = JSON.parse(fs.readFileSync(path,'utf8'));
+            cfg.measurement = cfg.measurement || {};
+            cfg.measurement.baselineWindowDays = 7;
+            cfg.measurement.primaryWindowDays = 28;
+            cfg.measurement.normalizedPrimaryMetric = 'average daily page impressions';
+            cfg.measurement.targetAverageDailyImpressions = daily;
+            cfg.measurement.positionGuardrail = pos;
+            if (ctrFloor != null) cfg.measurement.ctrFloor = ctrFloor;
+            cfg.measurement.comparisonRule = 'Compare average daily impressions, not raw 7-day versus 28-day totals; treat seasonal demand as context and preserve the position guardrail.';
+            fs.writeFileSync(path, JSON.stringify(cfg,null,2)+'\n');
+          }
+          NODE
+          node -e "for (const f of ['benchmarks/growth-experiments.json','benchmarks/search-authority-portfolio.json','benchmarks/tool-network-registry.json','benchmarks/boat-launch-search-expansion.json','benchmarks/au-sable-map-access-expansion.json']) JSON.parse(require('fs').readFileSync(f,'utf8'))"
+      - name: Commit governance composition
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/verify-source.mjs benchmarks/growth-experiments.json benchmarks/search-authority-portfolio.json benchmarks/tool-network-registry.json benchmarks/boat-launch-search-expansion.json benchmarks/au-sable-map-access-expansion.json
+          git commit -m "Protect August 22 growth measurement windows"
+          git push
