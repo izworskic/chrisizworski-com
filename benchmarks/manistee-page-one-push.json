@@ -1,0 +1,70 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-22",
+  "timezone": "America/Detroit",
+  "objective": "Move the existing Manistee River paddling guide from the page-one threshold into the top 10 and convert its existing impressions into qualified visits without creating a competing Manistee canonical.",
+  "source": {
+    "title": "chrisizworski.com-Performance-on-Search-2026-08-21",
+    "spreadsheetId": "1lrFEAxYT7whMAx2Gnrq-IRfUHr7cjshU542FWwJ7Kfw",
+    "exportedThrough": "2026-08-19",
+    "windowDays": 7,
+    "note": "Page metrics are page-scoped. Query rows are sitewide directional evidence and are not treated as a page-query join."
+  },
+  "owner": "https://chrisizworski.com/michigan-paddling/manistee-river/",
+  "utilityDestination": "https://chrisizworski.com/manistee-river-map/",
+  "baseline": {
+    "impressions": 72,
+    "clicks": 0,
+    "ctr": 0,
+    "averagePosition": 11.4
+  },
+  "directionalQueries": [
+    {
+      "query": "manistee river",
+      "impressions": 2,
+      "clicks": 0,
+      "position": 27.5
+    },
+    {
+      "query": "upper manistee river",
+      "impressions": 2,
+      "clicks": 0,
+      "position": 27.5
+    },
+    {
+      "query": "canoeing manistee river",
+      "impressions": 1,
+      "clicks": 0,
+      "position": 28
+    },
+    {
+      "query": "manistee river kayaking",
+      "impressions": 1,
+      "clicks": 0,
+      "position": 29
+    }
+  ],
+  "treatment": {
+    "type": "combined-page-one-rank-and-ctr",
+    "changes": [
+      "query-led title and meta description",
+      "H1 alignment",
+      "crawlable direct trip-planning answer above the hero image",
+      "explicit field-map handoff for put-ins and take-outs",
+      "visible and structured FAQ coverage for map/access intent"
+    ],
+    "unchanged": [
+      "canonical URL",
+      "existing section guide",
+      "field-map canonical and product",
+      "no city/access-point doorway URLs"
+    ]
+  },
+  "targets": {
+    "evaluationWindowDays": 28,
+    "averagePositionAtOrBetterThan": 10,
+    "stretchAveragePositionAtOrBetterThan": 8,
+    "ctrAtOrAbove": 0.015,
+    "stopLossAveragePositionWorseThan": 15
+  }
+}

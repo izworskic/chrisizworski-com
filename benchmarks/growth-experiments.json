@@ -1,5 +1,5 @@
 {
-  "ledgerVersion": "1.8.0",
+  "ledgerVersion": "1.10.0",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
   "measurementProtocol": {
@@ -675,6 +675,33 @@
       "decisionDate": null,
       "result": null,
       "stopCondition": "Average position falls below 12.5, CTR falls below 2.5% in a comparable window, canonical/snippet changes, or access claims lose source support."
+    },
+    {
+      "id": "2026-08-22-manistee-paddling-page-one",
+      "paths": [
+        "/michigan-paddling/manistee-river/"
+      ],
+      "hypothesis": "A query-led snippet, direct trip-planning answer and explicit field-map handoff will move the existing Manistee River guide from the page-one threshold into the top 10 and turn current impressions into qualified clicks.",
+      "primaryMetric": "Search Console average position and CTR for /michigan-paddling/manistee-river/",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 72,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 11.4
+      },
+      "target": {
+        "averagePositionAtOrBetterThan": 10,
+        "ctrAtOrAbove": 0.015,
+        "stretchAveragePositionAtOrBetterThan": 8
+      },
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Average position worsens beyond 15 after a meaningful impression sample, CTR remains effectively zero after the clean window, or the field map begins competing as a duplicate search owner."
     }
   ]
 }

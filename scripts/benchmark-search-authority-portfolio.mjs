@@ -130,7 +130,7 @@ check(
   "Immediate queue advances eligible leverage while protected work stays separate",
   immediateText.includes("garden-planner") &&
     immediateText.includes("winter") &&
-    immediateText.includes("manistee") &&
+    !immediateText.includes("manistee") &&
     !immediateText.includes("beach-report") &&
     !immediateText.includes("border-waits") &&
     !immediateText.includes("ausable-field-map") &&
@@ -147,6 +147,7 @@ check(
     protectedText.includes("border wait") &&
     protectedText.includes("boat launch") &&
     protectedText.includes("au sable") &&
+    protectedText.includes("manistee river paddling") &&
     mackinacTollFocus?.action === "PROTECT" &&
     buoyFocus?.action === "PROTECT" &&
     mackinacTollExperiment?.status === "ready-for-release",
