@@ -1,0 +1,68 @@
+{
+  "version": "1.0.0",
+  "captured": "2026-08-21",
+  "window": {
+    "start": "2026-08-13",
+    "end": "2026-08-19",
+    "days": 7,
+    "clicks": 207,
+    "impressions": 12567,
+    "ctr": 0.01647
+  },
+  "source": {
+    "title": "chrisizworski.com-Performance-on-Search-2026-08-21",
+    "spreadsheetId": "1lrFEAxYT7whMAx2Gnrq-IRfUHr7cjshU542FWwJ7Kfw",
+    "note": "Owner-supplied Google Search Console export. This is an observed snapshot, not a forecast."
+  },
+  "topStrategicPages": [
+    {"url":"https://chrisizworski.com/soo-locks/","clicks":81,"impressions":2509,"ctr":0.0323,"position":7.35},
+    {"url":"https://chrisizworski.com/northern-lights-michigan/","clicks":15,"impressions":1875,"ctr":0.0080,"position":9.69},
+    {"url":"https://chrisizworski.com/great-lakes-freighter-tracking/","clicks":11,"impressions":872,"ctr":0.0126,"position":9.68},
+    {"url":"https://chrisizworski.com/fall-color/","clicks":6,"impressions":716,"ctr":0.0084,"position":14.27},
+    {"url":"https://chrisizworski.com/mackinac-bridge-live/","clicks":2,"impressions":736,"ctr":0.0027,"position":10.69},
+    {"url":"https://ausable.chrisizworski.com/","clicks":16,"impressions":475,"ctr":0.0337,"position":9.16},
+    {"url":"https://chrisizworski.com/mackinac-bridge-tolls/","clicks":0,"impressions":490,"ctr":0.0,"position":7.44},
+    {"url":"https://chrisizworski.com/gordie-howe-bridge-wait-time/","clicks":11,"impressions":290,"ctr":0.0379,"position":10.15},
+    {"url":"https://chrisizworski.com/when-to-plant-tomatoes-michigan/","clicks":2,"impressions":290,"ctr":0.0069,"position":8.18},
+    {"url":"https://chrisizworski.com/michigan-border-wait-times/","clicks":2,"impressions":284,"ctr":0.0070,"position":11.98},
+    {"url":"https://chrisizworski.com/great-lakes-beaches/","clicks":2,"impressions":273,"ctr":0.0073,"position":9.12},
+    {"url":"https://chrisizworski.com/great-lakes-buoys/","clicks":7,"impressions":219,"ctr":0.0320,"position":12.28},
+    {"url":"https://chrisizworski.com/saginaw-bay-ecology/","clicks":3,"impressions":192,"ctr":0.0156,"position":8.18},
+    {"url":"https://chrisizworski.com/fall-color/porcupine-mountains-fall-color/","clicks":4,"impressions":177,"ctr":0.0226,"position":8.10},
+    {"url":"https://chrisizworski.com/fall-color/mackinac-island-fall-color/","clicks":3,"impressions":167,"ctr":0.0180,"position":7.34},
+    {"url":"https://chrisizworski.com/fall-color/tunnel-of-trees-fall-color/","clicks":4,"impressions":134,"ctr":0.0299,"position":8.35},
+    {"url":"https://chrisizworski.com/michigan-boat-launches/","clicks":0,"impressions":77,"ctr":0.0,"position":13.17},
+    {"url":"https://chrisizworski.com/michigan-paddling/manistee-river/","clicks":0,"impressions":72,"ctr":0.0,"position":11.40},
+    {"url":"https://chrisizworski.com/","clicks":3,"impressions":29,"ctr":0.1034,"position":1.59},
+    {"url":"https://gazette.chrisizworski.com/","clicks":1,"impressions":22,"ctr":0.0455,"position":28.59},
+    {"url":"https://xcski.chrisizworski.com/","clicks":1,"impressions":17,"ctr":0.0588,"position":18.71},
+    {"url":"https://chrisizworski.com/michigan-ice/","clicks":0,"impressions":26,"ctr":0.0,"position":46.35},
+    {"url":"https://phenology.chrisizworski.com/","clicks":1,"impressions":2,"ctr":0.5,"position":40.0}
+  ],
+  "querySignals": [
+    {"query":"soo locks schedule today","clicks":8,"impressions":149,"ctr":0.0537,"position":6.41},
+    {"query":"soo locks schedule","clicks":2,"impressions":271,"ctr":0.0074,"position":7.28},
+    {"query":"great lakes ship tracker","clicks":2,"impressions":87,"ctr":0.0230,"position":9.64},
+    {"query":"mackinac bridge conditions today live","clicks":1,"impressions":107,"ctr":0.0093,"position":9.11},
+    {"query":"chris izworski","clicks":1,"impressions":22,"ctr":0.0455,"position":1.0},
+    {"query":"michigan fall color map 2026","clicks":0,"impressions":108,"ctr":0.0,"position":8.86},
+    {"query":"great lakes freighter tracker","clicks":0,"impressions":84,"ctr":0.0,"position":10.45},
+    {"query":"mackinac bridge conditions","clicks":0,"impressions":49,"ctr":0.0,"position":10.06},
+    {"query":"great lakes ship tracking","clicks":0,"impressions":44,"ctr":0.0,"position":8.82},
+    {"query":"northern lights upper peninsula tonight","clicks":0,"impressions":33,"ctr":0.0,"position":8.94},
+    {"query":"ausable river float times map","clicks":0,"impressions":31,"ctr":0.0,"position":8.74},
+    {"query":"northern lights tonight near me","clicks":0,"impressions":29,"ctr":0.0,"position":7.45},
+    {"query":"when to plant tomatoes in michigan","clicks":0,"impressions":28,"ctr":0.0,"position":6.89},
+    {"query":"great lakes buoys","clicks":0,"impressions":16,"ctr":0.0,"position":9.06},
+    {"query":"michigan fall colors 2026","clicks":0,"impressions":12,"ctr":0.0,"position":9.17},
+    {"query":"how deep is saginaw bay","clicks":0,"impressions":9,"ctr":0.0,"position":2.89},
+    {"query":"michigan day trips for families","clicks":0,"impressions":9,"ctr":0.0,"position":31.33},
+    {"query":"saginaw bay ice conditions","clicks":0,"impressions":3,"ctr":0.0,"position":18.33}
+  ],
+  "interpretationRules": [
+    "A seven-day snapshot is a leading indicator, not enough to declare experiment winners.",
+    "Pages with active experiment freezes keep their search-facing treatment unchanged until the recorded window closes or a stop-loss fires.",
+    "Low CTR at a strong position can indicate a snippet, intent, zero-click, or SERP-feature problem; diagnose before rewriting.",
+    "No observed impressions means unknown demand in this property export, not proof of no demand."
+  ]
+}
