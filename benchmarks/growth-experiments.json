@@ -1,5 +1,5 @@
 {
-  "ledgerVersion": "1.12.0",
+  "ledgerVersion": "1.13.0",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
   "measurementProtocol": {
@@ -760,6 +760,33 @@
       "decisionDate": null,
       "result": null,
       "stopCondition": "Average position worsens beyond 15 after a meaningful sample, CTR falls below 1%, the destination snippet changes, or the statewide Fall Color owner is altered during its protected window."
+    },
+    {
+      "id": "2026-08-22-fall-weekend-planner-ctr",
+      "paths": [
+        "/fall-color/michigan-leaf-peeping-planner/"
+      ],
+      "hypothesis": "Plain-language weekend-planning search copy will lift an existing position-10 planner from zero clicks while preserving the live Fall Color hub as the statewide current-conditions owner.",
+      "primaryMetric": "Search Console page CTR while holding page-one/near-page-one average position",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 54,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 10.07
+      },
+      "target": {
+        "ctr": 0.02,
+        "stretchCtr": 0.03,
+        "averagePositionMax": 12
+      },
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Average position worsens beyond 15 after a meaningful sample, CTR remains effectively zero after the clean window, planner behavior regresses, or the page begins competing with the statewide live Fall Color current-conditions owner."
     }
   ]
 }
