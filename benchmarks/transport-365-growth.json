@@ -1,6 +1,7 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "created": "2026-08-18",
+  "updated": "2026-08-22",
   "source": {
     "type": "Google Search Console export",
     "file": "chrisizworski.com-Performance-on-Search-2026-08-15",
@@ -14,21 +15,48 @@
       "status": "ready-for-release",
       "releaseDate": null,
       "evaluationWindow": null,
-      "hypothesis": "Leading the snippet and H1 with the current $4 passenger-car answer will capture existing page-one toll intent better than leading with generic calculator language.",
+      "hypothesis": "Leading the snippet, H1 and direct answer with the observed toll-cost query language — 2026, $4 one way and $8 round trip — will convert existing page-one impressions better than the earlier generic fare/calculator treatment.",
       "baseline": {
         "impressions": 637,
         "clicks": 1,
         "ctr": 0.00157,
         "averagePosition": 8.62
       },
+      "latestLeadingSignal": {
+        "source": "chrisizworski.com-Performance-on-Search-2026-08-21",
+        "exportedThrough": "2026-08-19",
+        "windowDays": 7,
+        "purpose": "Treatment refinement and prioritization only; the original pre-release baseline remains the experiment baseline.",
+        "page": {
+          "impressions": 490,
+          "clicks": 0,
+          "ctr": 0,
+          "averagePosition": 7.44
+        },
+        "queries": [
+          {"query": "how much to cross the mackinac bridge", "impressions": 6, "clicks": 0, "averagePosition": 8.33},
+          {"query": "how much is the toll to cross the mackinac bridge", "impressions": 6, "clicks": 0, "averagePosition": 10.17},
+          {"query": "how much is the toll for the mackinac bridge", "impressions": 6, "clicks": 0, "averagePosition": 10.5},
+          {"query": "mackinac bridge toll both ways", "impressions": 5, "clicks": 0, "averagePosition": 10.6},
+          {"query": "tolls for mackinac bridge", "impressions": 4, "clicks": 0, "averagePosition": 9.25}
+        ]
+      },
       "target": {
-        "ctr": 0.015,
+        "ctr": 0.02,
         "averagePositionMax": 10
       },
       "treatment": {
-        "title": "Mackinac Bridge Toll: $4 Car Fare & Calculator",
-        "h1": "Mackinac Bridge Toll: Current Fare & Calculator",
-        "firstAnswer": "A standard two-axle passenger car is $4 one way."
+        "title": "Mackinac Bridge Toll Cost 2026: $4 Car Fare & Calculator",
+        "metaDescription": "Mackinac Bridge toll 2026: $4 one way for a standard car, $8 round trip. Calculate RV, trailer and motorhome costs from official axle rates.",
+        "h1": "Mackinac Bridge Toll Cost: 2026 Fares & Calculator",
+        "firstAnswer": "The Mackinac Bridge toll is $4 one way, or $8 round trip, for a standard two-axle passenger car in 2026."
+      },
+      "freezeDuringWindow": ["title", "metaDescription", "h1", "firstAnswer", "structuredData", "canonical", "indexability"],
+      "officialFareGuardrail": {
+        "source": "https://www.mackinacbridge.org/fares-traffic/fare-schedule/",
+        "passengerCarOneWayUsd": 4,
+        "passengerRatePerAxleUsd": 2,
+        "otherVehicleRatePerAxleUsd": 5
       },
       "stopCondition": "Official Mackinac Bridge Authority fare changes, calculator formula regresses, canonical changes, or average position falls materially below page one."
     },
