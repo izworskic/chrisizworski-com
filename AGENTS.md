@@ -13,7 +13,7 @@ npm run verify:all
 
 That runs the repository tests, source verification, and every product/search
 benchmark registered in `package.json`, including the site-wide search strategy
-governance gate.
+and holistic search-authority portfolio governance gates.
 
 **Every gate must pass.** They are merge gates, not advisory output. If any one of
 them fails, fix the cause or explain why the expectation itself should change —
@@ -32,36 +32,56 @@ previous pass silently stripped the byline from all four.
 
 ## Search strategy operating system
 
-Before any search-facing change, read `docs/SEARCH_STRATEGY.md` and
-`benchmarks/search-strategy-governance.json`. Then check the current measured
+Before any search-facing change, read `docs/SEARCH_STRATEGY.md`,
+`docs/SEARCH_AUTHORITY_PORTFOLIO.md`, `benchmarks/search-strategy-governance.json`,
+and `benchmarks/search-authority-portfolio.json`. Then check the current measured
 state in `benchmarks/search-growth-engine-2026-08-15.json`, the experiment
 ledger in `benchmarks/growth-experiments.json`, the canonical intent owners in
-`benchmarks/tool-network-registry.json`, and branded governance in
+`benchmarks/tool-network-registry.json`, the owned-property graph in
+`benchmarks/owned-domain-network.json`, and branded governance in
 `benchmarks/name-serp-governance.json`.
+
+The authority portfolio is the operating backlog. Every active tool/property
+resolves to one of these actions: `PROTECT`, `PUSH`, `EXPAND`, `CONNECT`,
+`REPAIR`, `BUILD_NEXT`, or `RETIRE`. Priority and permission are separate: a
+high-opportunity page under a running experiment remains `PROTECT` until its
+measurement window closes.
 
 Use this order when deciding what to build or change:
 
 1. Protect crawl/index/canonical integrity, factual accuracy, structured data and usability.
 2. Protect active experiment windows.
-3. Improve meaningful-impression pages already near page one before creating adjacent keyword URLs.
-4. Strengthen the existing canonical intent owner before creating a supporting page.
-5. Create a new indexable URL only when it passes the new-canonical gate: distinct decision, documented evidence or unique utility, cannibalization safety, network fit, entity integrity, discovery and measurement.
-6. Connect important pages into the contextual tool/authority network.
-7. Reinforce the Chris Izworski entity and grow legitimate branded SERP occupancy without causing non-branded cannibalization.
+3. Check the current portfolio action before touching the surface.
+4. Improve meaningful-impression pages already near page one before creating adjacent keyword URLs.
+5. Strengthen the existing canonical intent owner before creating a supporting page.
+6. Create a new indexable URL only when it passes the new-canonical gate: distinct decision, documented evidence or unique utility, cannibalization safety, network fit, entity integrity, discovery and measurement.
+7. Connect important pages into the contextual tool/authority network.
+8. Reinforce the Chris Izworski entity and legitimate branded SERP occupancy without causing non-branded cannibalization.
 
 Do not create doorway pages for keyword, city, county or date variants merely to
 increase index count. A new canonical needs materially distinct user value.
 
-Run `npm run benchmark:search-strategy -- --check` for search-strategy work; it
-is also enforced by `npm run verify:all`.
+Run both search governance gates for search-strategy work:
+
+```
+npm run benchmark:search-strategy -- --check
+npm run benchmark:search-authority -- --check
+```
+
+Both are enforced by `npm run verify:all`.
 
 ## 2. Never weaken the name
 
 "Chris Izworski" is the entity this whole site is built around. The branded
-search objective is twofold: keep the primary Chris Izworski identity surface as
-the strongest candidate for position #1, and earn as much legitimate top-10,
-top-20 and top-30 result occupancy as possible with distinct owned properties,
-controlled profiles and independent third-party authority.
+search objective is twofold: keep `https://chrisizworski.com/` as the strongest
+candidate for position #1 when it is already winning, and earn as much
+legitimate top-10, top-20 and top-30 result occupancy as possible with distinct
+owned properties, controlled profiles and independent third-party authority.
+
+`https://chrisizworski.com/chris-izworski/` remains the primary identity surface
+for entity clarity, but do not force it to displace a winning homepage. It should
+reinforce the canonical Person entity and add a distinct branded authority
+surface.
 
 This branded objective is intentionally different from non-branded query
 ownership. For a subject query, preserve one clear canonical owner. For the
