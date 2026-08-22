@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-22",
+  "timezone": "America/Detroit",
+  "objective": "Convert an existing page-one fall-color plus northern-lights crossover result into qualified clicks without changing the protected Fall Color hub or Northern Lights page.",
+  "source": {
+    "title": "chrisizworski.com-Performance-on-Search-2026-08-21",
+    "spreadsheetId": "1lrFEAxYT7whMAx2Gnrq-IRfUHr7cjshU542FWwJ7Kfw",
+    "exportedThrough": "2026-08-19",
+    "windowDays": 7,
+    "note": "The page baseline is page-scoped. The export does not provide a page-query join, so no sitewide query row is attributed to this page."
+  },
+  "path": "/fall-color-northern-lights-michigan/",
+  "baseline": {
+    "impressions": 90,
+    "clicks": 0,
+    "ctr": 0,
+    "averagePosition": 8.28
+  },
+  "treatment": {
+    "type": "page-one-ctr",
+    "title": "Michigan Fall Color & Northern Lights 2026: Best Overlap",
+    "h1": "Michigan Fall Color and Northern Lights: Best Overlap Window",
+    "firstAnswer": "The best chance to combine Michigan fall color and northern lights is late September into early October in the Upper Peninsula.",
+    "utilityHandoffs": [
+      "/fall-color/",
+      "/northern-lights-michigan/"
+    ],
+    "protectedNeighborsUnchanged": [
+      "/fall-color/",
+      "/northern-lights-michigan/"
+    ]
+  },
+  "targets": {
+    "evaluationWindowDays": 28,
+    "ctrAtOrAbove": 0.02,
+    "stretchCtrAtOrAbove": 0.03,
+    "averagePositionAtOrBetterThan": 10,
+    "stopLossAveragePositionWorseThan": 12.5
+  }
+}
