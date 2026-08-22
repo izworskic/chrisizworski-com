@@ -4,12 +4,16 @@ on:
   push:
     branches:
       - feat/beach-detail-page-one-ctr-2026-08-22
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
 
 jobs:
   compose:
+    if: github.head_ref == 'feat/beach-detail-page-one-ctr-2026-08-22' || github.ref_name == 'feat/beach-detail-page-one-ctr-2026-08-22'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
