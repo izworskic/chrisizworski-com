@@ -1,0 +1,46 @@
+name: Temporary Au Sable map and access expansion
+
+on:
+  push:
+    branches:
+      - feat/au-sable-map-access-expansion-2026-08-22
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Add crawlable map and access answers
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const p = 'public/au-sable-river/index.html';
+          let s = fs.readFileSync(p, 'utf8');
+          const cssAnchor = '.floats{list-style:none;margin:0 0 18px}';
+          const css = `.map-answers{border:1px solid #d9e1d5;background:#f5f8f3;border-radius:8px;padding:20px 22px;margin:26px 0}.map-answers h2{font-size:21px;font-weight:normal;color:#2c5f2d;margin:0 0 10px}.map-answers p{margin:0 0 12px}.map-answers ul{margin-bottom:0}.map-answers a{font-weight:bold}`;
+          if (!s.includes(cssAnchor)) throw new Error('Au Sable CSS anchor missing');
+          if (!s.includes('.map-answers{')) s = s.replace(cssAnchor, css + cssAnchor);
+          const htmlAnchor = '<h2 class="sh">The river, segment by segment</h2>';
+          const block = `<section class="map-answers" aria-labelledby="au-sable-map-access-heading"><h2 id="au-sable-map-access-heading">Au Sable River map and public access points</h2><p>The <a href="https://ausable.chrisizworski.com/" target="_blank" rel="noopener">interactive Au Sable River map</a> covers 70 verified locations from Grayling to Oscoda, including canoe and kayak put-ins, take-outs, fishing access, campgrounds, dams, liveries, gauges, and other river landmarks. It is the best starting point if you searched for an Au Sable River map, fishing map, kayaking map, or public access.</p><ul><li><strong>Grayling and the Holy Water:</strong> Grayling Public Access, Burton's Landing, Louie's Landing, Keystone Landing, Stephan Bridge, Thendara Road, and Wakeley Bridge are mapped with trip-planning context.</li><li><strong>Public fishing access:</strong> the field map distinguishes access and fishing-oriented locations instead of treating every pin as a boat launch.</li><li><strong>Canoe and kayak planning:</strong> choose a put-in and take-out in the trip planner to see the mapped reach, estimated distance and float time, then check current USGS flow before leaving.</li><li><strong>Trailerable boat launches:</strong> use the <a href="/michigan-boat-launches/">Michigan Boat Launch Finder</a> when you need a DNR-backed statewide ramp search rather than a river-access point.</li></ul></section>`;
+          if (!s.includes(htmlAnchor)) throw new Error('Au Sable content anchor missing');
+          if (!s.includes('id="au-sable-map-access-heading"')) s = s.replace(htmlAnchor, block + '\n\n' + htmlAnchor);
+          s = s.replace('"dateModified":"2026-08-10"', '"dateModified":"2026-08-22"');
+          fs.writeFileSync(p, s);
+          NODE
+          node scripts/stamp-freshness.mjs
+      - name: Commit authority expansion and freshness
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/au-sable-river/index.html public/sitemap.xml public/sitemap-beaches.xml public/sitemap-reputation.xml
+          git commit -m "Expand Au Sable map and public access answers"
+          git push
