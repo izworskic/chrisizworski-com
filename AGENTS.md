@@ -13,7 +13,7 @@ npm run verify:all
 
 That runs the repository tests, source verification, and every product/search
 benchmark registered in `package.json`, including the site-wide search strategy
-governance gate.
+and holistic Search Authority Portfolio governance gates.
 
 **Every gate must pass.** They are merge gates, not advisory output. If any one of
 them fails, fix the cause or explain why the expectation itself should change —
@@ -32,36 +32,72 @@ previous pass silently stripped the byline from all four.
 
 ## Search strategy operating system
 
-Before any search-facing change, read `docs/SEARCH_STRATEGY.md` and
-`benchmarks/search-strategy-governance.json`. Then check the current measured
-state in `benchmarks/search-growth-engine-2026-08-15.json`, the experiment
-ledger in `benchmarks/growth-experiments.json`, the canonical intent owners in
-`benchmarks/tool-network-registry.json`, and branded governance in
-`benchmarks/name-serp-governance.json`.
+Before any search-facing change or proposal for a new indexable build, read:
+
+- `docs/SEARCH_AUTHORITY_PORTFOLIO.md`
+- `benchmarks/search-authority-portfolio.json`
+- `benchmarks/search-console-snapshot-2026-08-21.json`
+- `docs/SEARCH_STRATEGY.md`
+- `benchmarks/search-strategy-governance.json`
+- `benchmarks/search-growth-engine-2026-08-15.json`
+- `benchmarks/growth-experiments.json`
+- `benchmarks/tool-network-registry.json`
+- `benchmarks/name-serp-governance.json`
+- `benchmarks/entity-surface-baseline.json`
+- `benchmarks/citation-baseline.json`
+
+The Search Authority Portfolio is the **opportunity-cost layer**. The page-level
+SEO strategy tells you how to make a search change safely; the portfolio tells
+you whether that page or build deserves the next unit of effort at all.
+
+Classify meaningful search work using the portfolio action classes: `protect`,
+`protect-then-push`, `push-rank`, `repair-serp-conversion`, `diagnose-zero-click`,
+`expand-authority`, `connect`, `seasonal-build`, `launch-gated`, or `deprioritize`.
+Do not invent a new priority system in a one-off PR when the portfolio already
+contains the relevant asset or cluster.
 
 Use this order when deciding what to build or change:
 
 1. Protect crawl/index/canonical integrity, factual accuracy, structured data and usability.
 2. Protect active experiment windows.
-3. Improve meaningful-impression pages already near page one before creating adjacent keyword URLs.
-4. Strengthen the existing canonical intent owner before creating a supporting page.
-5. Create a new indexable URL only when it passes the new-canonical gate: distinct decision, documented evidence or unique utility, cannibalization safety, network fit, entity integrity, discovery and measurement.
-6. Connect important pages into the contextual tool/authority network.
-7. Reinforce the Chris Izworski entity and grow legitimate branded SERP occupancy without causing non-branded cannibalization.
+3. Compare the proposed work against the P0/P1 Search Authority Portfolio and its opportunity cost.
+4. Improve meaningful-impression pages already near page one before creating adjacent keyword URLs.
+5. Strengthen the existing canonical intent owner before creating a supporting page.
+6. Create a new indexable URL only when it passes the new-canonical gate: distinct decision, documented evidence or unique utility, cannibalization safety, network fit, entity integrity, discovery and measurement.
+7. Connect important pages into the contextual tool/authority network and strengthen the relevant topical cluster.
+8. Reinforce the Chris Izworski entity and grow legitimate branded SERP occupancy through real work and independent authority without causing non-branded cannibalization.
+
+A new build must beat the opportunity cost of improving an existing near-page-one
+asset. Prefer a new build only when it serves a distinct decision or unique
+first-party utility, fits a cluster, has a measurement plan, and normally connects
+to at least two useful portfolio nodes.
 
 Do not create doorway pages for keyword, city, county or date variants merely to
 increase index count. A new canonical needs materially distinct user value.
 
-Run `npm run benchmark:search-strategy -- --check` for search-strategy work; it
-is also enforced by `npm run verify:all`.
+Run both of these for portfolio/search strategy work:
+
+```
+npm run benchmark:search-strategy -- --check
+npm run benchmark:authority-portfolio -- --check
+```
+
+Both are also enforced by `npm run verify:all`.
 
 ## 2. Never weaken the name
 
 "Chris Izworski" is the entity this whole site is built around. The branded
-search objective is twofold: keep the primary Chris Izworski identity surface as
-the strongest candidate for position #1, and earn as much legitimate top-10,
-top-20 and top-30 result occupancy as possible with distinct owned properties,
-controlled profiles and independent third-party authority.
+search objective is to keep a first-party `chrisizworski.com` surface at position
+#1 and earn as much legitimate top-10, top-20 and top-30 result occupancy as
+possible with distinct owned properties, controlled profiles and independent
+third-party authority.
+
+Fresh Search Console evidence currently shows the exact-name query at average
+position 1.0 and the homepage at average position 1.59. **Do not force the deep
+biography page to replace a homepage that is already the stronger first-party
+navigational result.** `/chris-izworski/` remains the canonical deep biography
+and entity-reference surface; the homepage may remain the #1 branded landing
+surface while observed evidence supports it.
 
 This branded objective is intentionally different from non-branded query
 ownership. For a subject query, preserve one clear canonical owner. For the
@@ -88,6 +124,11 @@ name.
 The explicit branded occupancy targets live in
 `benchmarks/name-serp-governance.json`. Treat them as a standing search goal,
 not an excuse to violate the distinct-value or non-branded cannibalization rules.
+
+Independent authority matters more than another owned clone. Legitimate
+association, government, employer, author, conference, podcast, news and
+professional surfaces that corroborate Chris and his work are part of the
+portfolio. Never fabricate or mass-create low-authority profiles for backlinks.
 
 ## 3. Length rules
 

@@ -1,0 +1,311 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-22",
+  "timezone": "America/Detroit",
+  "objective": "Grow Chris Izworski's Michigan and Great Lakes search authority as one connected portfolio: win useful non-branded decisions with differentiated tools, compound topical authority across related properties, earn independent references, strengthen AI citation readiness, and make branded SERP dominance an outcome of real authority rather than a standalone page-count tactic.",
+  "northStar": "Useful tools create demand; evidence and earned authority create trust; the network compounds both.",
+  "canonicalPersonId": "https://chrisizworski.com/#person",
+  "sourceOfTruth": {
+    "freshSearchConsole": "benchmarks/search-console-snapshot-2026-08-21.json",
+    "searchStrategy": "benchmarks/search-strategy-governance.json",
+    "searchGrowth": "benchmarks/search-growth-engine-2026-08-15.json",
+    "experiments": "benchmarks/growth-experiments.json",
+    "toolNetwork": "benchmarks/tool-network-registry.json",
+    "toolActions": "benchmarks/tool-network-actions.json",
+    "ownedDomains": "benchmarks/owned-domain-network.json",
+    "entitySurface": "benchmarks/entity-surface-baseline.json",
+    "nameSerp": "benchmarks/name-serp-governance.json",
+    "citationReadiness": "benchmarks/citation-baseline.json",
+    "humanPlan": "docs/SEARCH_AUTHORITY_PORTFOLIO.md"
+  },
+  "scoreModel": {
+    "demandAndSearchOpportunity": 20,
+    "currentRankLeverage": 15,
+    "uniqueUtilityAndDataMoat": 15,
+    "topicalAuthorityAndLinkability": 15,
+    "networkMultiplier": 10,
+    "entityContribution": 10,
+    "aiAnswerReadiness": 5,
+    "engagementAndMonetizationPotential": 5,
+    "seasonalTiming": 5
+  },
+  "hardGates": {
+    "technicalHealthIsGateNotTradeoff": true,
+    "protectActiveExperiments": true,
+    "oneCanonicalOwnerForNonBrandedIntent": true,
+    "allowMultipleDistinctBrandedSurfaces": true,
+    "noDoorwayOrThinOccupancyPages": true,
+    "factualAccuracyRequired": true,
+    "newBuildRequiresPortfolioFit": true,
+    "newBuildPreferredMinimumRelationships": 2
+  },
+  "actionTaxonomy": {
+    "protect": "The asset is winning or inside a clean experiment window. Preserve search-facing treatment and reliability while collecting evidence.",
+    "protect-then-push": "Do not disturb the current measurement window; queue the next ranking or CTR treatment for the first eligible window.",
+    "push-rank": "The asset has demonstrated demand and acceptable conversion but sits near page one. Prioritize authority, usefulness, links, and intent depth before creating adjacent canonicals.",
+    "repair-serp-conversion": "The asset has meaningful impressions at a useful position but weak CTR. Diagnose query/snippet/SERP-feature mismatch and test the smallest eligible treatment.",
+    "diagnose-zero-click": "The page ranks but receives little or no traffic. Determine whether Google is satisfying the query in-SERP, whether intent is mismatched, and whether a richer decision is needed before rewriting.",
+    "expand-authority": "The asset has a differentiated moat or topical role but needs stronger evidence, original synthesis, links, sources, or supporting coverage.",
+    "connect": "The asset is strategically useful but under-discovered. Improve contextual handoffs, entity linkage, feeds, and network role before adding more pages.",
+    "seasonal-build": "Prepare data, sources, crawlable answers, authority links, and discovery before demand rises; do not wait for the seasonal peak.",
+    "launch-gated": "The asset is strategically valid but may not be promoted until production, canonical, source, and measurement gates pass.",
+    "deprioritize": "Do not spend near-term search effort unless new evidence changes the opportunity."
+  },
+  "portfolioPriorities": [
+    {
+      "tier": "P0",
+      "asset": "Soo Locks Live",
+      "canonical": "https://chrisizworski.com/soo-locks/",
+      "action": "protect",
+      "evidence": {"impressions7d":2509,"clicks7d":81,"ctr7d":0.0323,"position7d":7.35},
+      "why": "Largest current search demand and strong conversion. Protect the active experiment and data reliability; earn rank through authority rather than title churn."
+    },
+    {
+      "tier": "P0",
+      "asset": "Northern Lights Michigan",
+      "canonical": "https://chrisizworski.com/northern-lights-michigan/",
+      "action": "protect-then-push",
+      "evidence": {"impressions7d":1875,"clicks7d":15,"ctr7d":0.0080,"position7d":9.69},
+      "why": "High demand and page-one-edge ranking with substantial CTR headroom. Preserve the current experiment, then make this one of the first eligible SERP-conversion/rank treatments."
+    },
+    {
+      "tier": "P0",
+      "asset": "Great Lakes Ship Tracker",
+      "canonical": "https://chrisizworski.com/great-lakes-freighter-tracking/",
+      "action": "protect",
+      "evidence": {"impressions7d":872,"clicks7d":11,"ctr7d":0.0126,"position7d":9.68},
+      "why": "Now sitting on the page-one boundary with growing clicks. Do not reset the active experiment; reinforce the maritime cluster around it."
+    },
+    {
+      "tier": "P0",
+      "asset": "Mackinac Bridge Live",
+      "canonical": "https://chrisizworski.com/mackinac-bridge-live/",
+      "action": "repair-serp-conversion",
+      "eligibility": "Only after confirming the current protected treatment is eligible to change.",
+      "evidence": {"impressions7d":736,"clicks7d":2,"ctr7d":0.0027,"position7d":10.69},
+      "why": "This is the clearest near-page-one conversion gap in the fresh window. The next treatment should be query-driven and minimal, not a redesign."
+    },
+    {
+      "tier": "P0",
+      "asset": "Michigan Fall Color",
+      "canonical": "https://chrisizworski.com/fall-color/",
+      "action": "protect-then-push",
+      "evidence": {"impressions7d":716,"clicks7d":6,"ctr7d":0.0084,"position7d":14.27},
+      "why": "Seasonal demand is rising and regional child pages are already ranking well. Protect the active Fall experiment, then use the hub to consolidate topical authority and distribute trips to distinct regional pages."
+    },
+    {
+      "tier": "P0",
+      "asset": "Au Sable Field Map",
+      "canonical": "https://ausable.chrisizworski.com/",
+      "action": "push-rank",
+      "evidence": {"impressions7d":475,"clicks7d":16,"ctr7d":0.0337,"position7d":9.16},
+      "why": "Strong CTR proves product-market fit. The leverage is authority and ranking depth, especially access, float-time, camping, outfitter, and live-condition relationships, not snippet repair."
+    },
+    {
+      "tier": "P0",
+      "asset": "Mackinac Bridge Tolls",
+      "canonical": "https://chrisizworski.com/mackinac-bridge-tolls/",
+      "action": "diagnose-zero-click",
+      "evidence": {"impressions7d":490,"clicks7d":0,"ctr7d":0.0,"position7d":7.44},
+      "why": "Ranking is already strong, so zero clicks may be a direct-answer SERP effect. Diagnose before spending authority or creating more toll pages."
+    },
+    {
+      "tier": "P0",
+      "asset": "Gordie Howe Bridge Wait Time",
+      "canonical": "https://chrisizworski.com/gordie-howe-bridge-wait-time/",
+      "action": "push-rank",
+      "evidence": {"impressions7d":290,"clicks7d":11,"ctr7d":0.0379,"position7d":10.15},
+      "why": "Healthy CTR and page-one-edge rank. Strengthen official-source utility, cameras, crossing comparison, and internal authority from the border hub."
+    },
+    {
+      "tier": "P0",
+      "asset": "Great Lakes Buoy Dashboard",
+      "canonical": "https://chrisizworski.com/great-lakes-buoys/",
+      "action": "push-rank",
+      "evidence": {"impressions7d":219,"clicks7d":7,"ctr7d":0.0320,"position7d":12.28},
+      "why": "Conversion is already good. Improve position through evidence-hub authority and contextual links from beaches, boating, Saginaw Bay, lake levels, and outdoor planning."
+    },
+    {
+      "tier": "P0",
+      "asset": "Michigan Beach Report",
+      "canonical": "https://chrisizworski.com/great-lakes-beaches/",
+      "action": "repair-serp-conversion",
+      "evidence": {"impressions7d":273,"clicks7d":2,"ctr7d":0.0073,"position7d":9.12},
+      "why": "The hub is already on page one but under-converting while several beach detail pages rank well. Diagnose hub intent and make the hub a stronger current-condition decision surface."
+    },
+    {
+      "tier": "P0",
+      "asset": "Michigan Border Wait Times",
+      "canonical": "https://chrisizworski.com/michigan-border-wait-times/",
+      "action": "repair-serp-conversion",
+      "evidence": {"impressions7d":284,"clicks7d":2,"ctr7d":0.0070,"position7d":11.98},
+      "why": "The cluster has clear demand and Gordie Howe converts well. Improve hub positioning and crossing-choice value without duplicating each crossing's canonical intent."
+    },
+    {
+      "tier": "P1",
+      "asset": "When to Plant Tomatoes in Michigan",
+      "canonical": "https://chrisizworski.com/when-to-plant-tomatoes-michigan/",
+      "action": "protect-then-push",
+      "evidence": {"impressions7d":290,"clicks7d":2,"ctr7d":0.0069,"position7d":8.18},
+      "why": "Strong position and known demand with weak CTR. Preserve the active experiment; later connect it more tightly to frost, planting calendar, Freighter View Farms, and the Garden Planner."
+    },
+    {
+      "tier": "P1",
+      "asset": "Michigan Boat Launch Finder",
+      "canonical": "https://chrisizworski.com/michigan-boat-launches/",
+      "action": "push-rank",
+      "evidence": {"impressions7d":77,"clicks7d":0,"ctr7d":0.0,"position7d":13.17},
+      "why": "A new utility already has meaningful impressions near page one. Prioritize discoverability, use-case depth, and boating-network authority before expanding the page count."
+    },
+    {
+      "tier": "P1",
+      "asset": "Manistee River Planning Cluster",
+      "canonical": "https://chrisizworski.com/michigan-paddling/manistee-river/",
+      "action": "push-rank",
+      "evidence": {"impressions7d":72,"clicks7d":0,"ctr7d":0.0,"position7d":11.40},
+      "why": "Fresh evidence says the river topic is much closer to page one than the older map-only signal implied. Build one coherent Manistee authority cluster around the comprehensive field map rather than duplicate river pages."
+    },
+    {
+      "tier": "P1",
+      "asset": "Saginaw Bay Ecology",
+      "canonical": "https://chrisizworski.com/saginaw-bay-ecology/",
+      "action": "expand-authority",
+      "evidence": {"impressions7d":192,"clicks7d":3,"ctr7d":0.0156,"position7d":8.18},
+      "why": "Already ranks strongly for depth/ecology questions. Original diagrams, datasets, citations, and links can turn this into a durable Saginaw Bay authority node feeding conditions, fishing, beaches, and phenology."
+    },
+    {
+      "tier": "P1",
+      "asset": "Great Lakes Gazette",
+      "canonical": "https://gazette.chrisizworski.com/",
+      "action": "connect",
+      "evidence": {"impressions7d":22,"clicks7d":1,"ctr7d":0.0455,"position7d":28.59},
+      "why": "The Gazette's main strategic value is recurring original maritime publishing, freshness, authorship, feedability, and links into the shipping cluster. Editorial accuracy and useful reporting matter more than page-volume growth."
+    },
+    {
+      "tier": "P1",
+      "asset": "Michigan Outdoors Now",
+      "canonical": "https://michiganoutdoorsnow.chrisizworski.com/",
+      "action": "connect",
+      "why": "This is the portfolio's decision hub: it can distribute search users into beaches, rivers, aurora, fall, winter, and trip tools. Its first job is useful handoffs and authority consolidation; generic city-page expansion is not the strategy."
+    },
+    {
+      "tier": "P1",
+      "asset": "Michigan Phenology",
+      "canonical": "https://phenology.chrisizworski.com/",
+      "action": "expand-authority",
+      "evidence": {"impressions7d":2,"clicks7d":1,"ctr7d":0.5,"position7d":40.0},
+      "why": "Search demand is not yet established, but the property has a rare first-party data/synthesis moat connecting gardening, fishing, birding, weather, and the natural year. Treat it as an authority bridge, not a short-term traffic play."
+    },
+    {
+      "tier": "P1",
+      "asset": "Chris Izworski Entity and Earned Authority",
+      "canonical": "https://chrisizworski.com/",
+      "action": "expand-authority",
+      "evidence": {"exactNameQueryPosition7d":1.0,"exactNameQueryImpressions7d":22,"homepagePosition7d":1.59},
+      "why": "The primary site already wins the exact-name query. The next leverage comes from independent authority and distinct properties, not forcing a bio page to replace a winning homepage."
+    },
+    {
+      "tier": "P2",
+      "asset": "Michigan Cross-Country Skiing and XC Live",
+      "canonical": "https://xcski.chrisizworski.com/",
+      "action": "seasonal-build",
+      "evidence": {"impressions7d":17,"clicks7d":1,"position7d":18.71},
+      "why": "Off-season impressions already exist. Harden data, answer surfaces, source provenance, and network links before winter demand accelerates."
+    },
+    {
+      "tier": "P2",
+      "asset": "Michigan Ice",
+      "canonical": "https://chrisizworski.com/michigan-ice/",
+      "action": "seasonal-build",
+      "evidence": {"impressions7d":26,"clicks7d":0,"position7d":46.35},
+      "why": "Winter demand is ahead, not absent. Use preseason to strengthen methodology, source trust, regional intent ownership, and cross-links so the site is ready before freeze-up searches begin."
+    },
+    {
+      "tier": "P2",
+      "asset": "Freighter View Garden Planner",
+      "canonical": "https://garden.chrisizworski.com/",
+      "action": "launch-gated",
+      "why": "The planner fits the gardening authority cluster and branded network, but it must remain unpromoted until production domain, canonical routes, source behavior, and measurement are verified."
+    }
+  ],
+  "clusterStrategy": [
+    {
+      "cluster": "great-lakes-shipping",
+      "job": "Defend the Soo Locks winner, push ship tracking to page one, and use the Gazette as a recurring original-publishing authority layer.",
+      "anchorAssets": ["Soo Locks Live","Great Lakes Ship Tracker","Great Lakes Gazette","SS Edmund Fitzgerald","Great Lakes Shipwreck Explorer"]
+    },
+    {
+      "cluster": "michigan-live-decisions",
+      "job": "Own immediate go/no-go and route decisions with live data rather than generic travel prose.",
+      "anchorAssets": ["Northern Lights Michigan","Mackinac Bridge Live","Michigan Border Wait Times","Gordie Howe Bridge Wait Time","Michigan Beach Report","Great Lakes Buoy Dashboard"]
+    },
+    {
+      "cluster": "fall-and-trip-planning",
+      "job": "Use Fall Color as the seasonal demand engine and hand visitors into genuinely distinct regional, river, Pictured Rocks, wine-country, and weekend decisions.",
+      "anchorAssets": ["Michigan Fall Color","Michigan Outdoors Now","Michigan Outdoor Weekend","Pictured Rocks Planner","Traverse City Wine Country Planner","Lake Superior Circle Tour"]
+    },
+    {
+      "cluster": "rivers-fishing-and-access",
+      "job": "Build destination-level authority from access, float planning, live conditions, fishing conditions, campgrounds, outfitters, and source-backed river intelligence.",
+      "anchorAssets": ["Au Sable Field Map","Au Sable River Guide","Manistee River Planning Cluster","Michigan Trout Report","Michigan Salmon and Steelhead Run Tracker"]
+    },
+    {
+      "cluster": "gardening-and-natural-year",
+      "job": "Connect high-demand planting/frost intent to original garden experience, calculators, the future Garden Planner, and Michigan Phenology rather than publishing disconnected how-to pages.",
+      "anchorAssets": ["When to Plant Tomatoes in Michigan","Michigan Frost Dates","Zone 6a Planting Calculator","Freighter View Farms","Michigan Phenology","Freighter View Garden Planner"]
+    },
+    {
+      "cluster": "winter",
+      "job": "Prepare before demand: ice intelligence, XC planning, live snow conditions, and winter outdoor handoffs should be technically and editorially ready before the first major freeze/snow cycle.",
+      "anchorAssets": ["Michigan Ice","Michigan Cross-Country Skiing","Northern Michigan XC Live Conditions","Michigan Outdoor Weekend"]
+    },
+    {
+      "cluster": "entity-and-earned-authority",
+      "job": "Make independent, accurate external references corroborate the same Chris Izworski entity while distinct owned properties demonstrate real work across public safety, Great Lakes, outdoor data, and gardening.",
+      "anchorAssets": ["ChrisIzworski.com","Wikidata","LinkedIn","GitHub","ORCID","YouTube","government and association references"]
+    }
+  ],
+  "externalAuthorityProgram": {
+    "principle": "Owned sites prove output; independent sources prove authority. Prioritize legitimate external surfaces that can independently corroborate the person, expertise, work, or citations.",
+    "alreadyOwned": ["Wikidata","LinkedIn","GitHub","ORCID","YouTube","Medium","About.me"],
+    "nextCandidates": [
+      {"surface":"APCO or NENA speaker/member/author profile","priority":"high","reason":"Topically authoritative public-safety entity corroboration."},
+      {"surface":"Muck Rack author profile","priority":"high","reason":"Independent author identity tied to published 911/AI work."},
+      {"surface":"Google Scholar or Semantic Scholar linkage","priority":"medium","reason":"Connect published work and ORCID where appropriate."},
+      {"surface":"Prepared/Axon public speaker or author surface","priority":"high","reason":"Current professional corroboration from the employer domain when editorially legitimate."},
+      {"surface":"Podcast, conference, news, government and association pages","priority":"high","reason":"Earned third-party references can rank for the name and strengthen topical trust simultaneously."}
+    ],
+    "doNot": [
+      "Do not mass-create low-authority profiles solely for backlinks.",
+      "Do not fabricate press, bios, awards, affiliations, or citations.",
+      "Do not force every external mention to use exact-match anchor text.",
+      "Do not sacrifice a useful non-branded property to make it look like a personal bio site."
+    ]
+  },
+  "aiSearchProgram": {
+    "currentCitationBaseline": {"trackedTools":9,"answerBlocks":74,"selfContained":19,"pageDependent":3},
+    "priority": "Increase the proportion of truly self-contained, source-aware answers on high-impression tools without modifying protected first-answer or structured-data surfaces during active experiments.",
+    "nextEligibleTargets": ["Michigan Beach Report","Great Lakes Buoy Dashboard","Great Lakes Ship Tracker","Mackinac Bridge Live"],
+    "rule": "AI-answer readiness must improve human usefulness and factual clarity; no filler blocks written only for model extraction."
+  },
+  "measurementCadence": {
+    "weekly": [
+      "Refresh leading Search Console page/query signals when a new owner export is available.",
+      "Review P0 pages for rank, CTR, index/canonical drift, source failures, and experiment eligibility.",
+      "Review cross-property handoffs and newly emerging queries before proposing new canonicals."
+    ],
+    "monthly": [
+      "Score the portfolio by cluster and action class.",
+      "Take a top-30 branded SERP occupancy snapshot and classify every observed result.",
+      "Review independent entity surfaces and earned-reference opportunities.",
+      "Promote or demote priorities based on evidence rather than sunk effort."
+    ],
+    "seasonal": "Begin meaningful seasonal readiness 6-10 weeks before expected search demand and complete source/crawl/measurement checks before the first demand spike."
+  },
+  "releaseGate": {
+    "benchmarkScript": "scripts/benchmark-search-authority-portfolio.mjs",
+    "npmScript": "benchmark:authority-portfolio",
+    "minimumScore": 100,
+    "partOfVerifyAll": true
+  }
+}
