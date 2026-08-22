@@ -1,0 +1,134 @@
+name: Temporary winter preseason authority composer
+
+on:
+  push:
+    branches:
+      - feat/winter-preseason-authority-2026-08-22
+
+permissions:
+  contents: write
+
+jobs:
+  compose:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Expand winter authority without rewriting snippets
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+
+          // Michigan Ice generator is the source of truth.
+          const genPath = 'scripts/ice/gen_site.py';
+          let gen = fs.readFileSync(genPath,'utf8');
+          gen = gen.replace('ICE_ROOT_DATE_MODIFIED = "2026-08-18"', 'ICE_ROOT_DATE_MODIFIED = "2026-08-22"');
+          const iceAnchor = '        + top_stats() +';
+          const iceBlock = `        '<section class="card" id="winter-search-answers"><div class="kicker">Winter search guide</div>'\n        '<h2 style="margin-top:4px">Saginaw Bay ice conditions and Great Lakes ice coverage</h2>'\n        '<p><strong>Saginaw Bay is the strongest early-season Michigan ice-conditions search on this report.</strong> Open the <a href="/michigan-ice/regions/saginaw-bay.html">Saginaw Bay ice conditions page</a> for accumulated cold, current wind, surface cameras, and the limits of the remote data before you drive.</p>'\n        '<p>For broader <strong>Great Lakes ice conditions</strong>, this report uses NOAA lake-wide ice coverage only as regional context. Lake Huron or Lake Michigan coverage does not measure a bay, shoreline access, crack, pressure ridge, or the ice under a person. Lake-wide ice coverage and local ice conditions are different questions, and neither is a safety rating.</p>'\n        '<p><a href="/michigan-ice/ice-cover-history.html">Compare Great Lakes ice-cover history</a> · <a href="/michigan-ice/ice-safety.html">Read the Michigan ice safety boundary</a></p></section>'\n`;
+          if (!gen.includes('id="winter-search-answers"')) {
+            if (!gen.includes(iceAnchor)) throw new Error('Ice hub insertion anchor missing');
+            gen = gen.replace(iceAnchor, iceBlock + iceAnchor);
+          }
+          fs.writeFileSync(genPath, gen);
+
+          // XC remains the statewide planning owner; the live subdomain remains the live-snow owner.
+          const xcPath = 'public/michigan-cross-country-skiing/index.html';
+          let xc = fs.readFileSync(xcPath,'utf8');
+          xc = xc.replace('"dateModified":"2026-08-18"', '"dateModified":"2026-08-22"');
+          const xcAnchor = '<section class="section" id="how-to-pick">';
+          const xcBlock = `<section class="section alt" id="xc-regions"><div class="wrap"><p class="eyebrow">Plan by snowbelt and drive</p><h2>Where to cross-country ski in Michigan by region</h2><p class="section-intro">A Michigan cross-country ski trail report starts with two separate questions: where the regional snow is holding, and whether the specific trail was actually groomed. Use the <a href="https://xcski.chrisizworski.com/">live XC conditions tool</a> for the regional snow screen, then confirm grooming with the operator before leaving.</p><div class="decision-grid"><article class="decision"><span class="num">Southeast Michigan</span><h3>Detroit and Ann Arbor day-trip skiing</h3><p>Start with Huron Meadows when low natural snow makes snowmaking and daily local updates more important than chasing a statewide forecast.</p></article><article class="decision"><span class="num">Northern Lower Peninsula</span><h3>Grayling, Frederic, Roscommon and Cadillac</h3><p>Forbush Corner, Tisdale Triangle and Cadillac Pathway form the strongest northern-Lower cluster here: dedicated Nordic terrain, groomed public pathways and better odds of natural snow.</p></article><article class="decision"><span class="num">Traverse City</span><h3>Vasa Pathway and northwest Lower Michigan</h3><p>Use the Vasa Pathway as the Traverse City anchor, then verify TART or DNR grooming information because regional snowfall does not prove the trail surface was reset.</p></article><article class="decision"><span class="num">Tip of the Mitt</span><h3>Indian River and classic-focused skiing</h3><p>Wildwood Hills is the clear classic-oriented reference in this set. Match technique to the trail instead of treating every Michigan XC system as interchangeable.</p></article><article class="decision"><span class="num">Upper Peninsula</span><h3>Marquette and Sault Ste. Marie</h3><p>Blueberry Ridge and Algonquin Pathway provide two U.P. anchors where deeper seasonal snow can extend the ski window. The operator or DNR trail report remains the grooming truth.</p></article></div></div></section>`;
+          if (!xc.includes('id="xc-regions"')) {
+            if (!xc.includes(xcAnchor)) throw new Error('XC insertion anchor missing');
+            xc = xc.replace(xcAnchor, xcBlock + '\n' + xcAnchor);
+          }
+          fs.writeFileSync(xcPath, xc);
+
+          // Explicit source-parity bookkeeping for the new XC body expansion.
+          const verifyPath = 'scripts/verify-source.mjs';
+          let verify = fs.readFileSync(verifyPath,'utf8');
+          const verifyMarker = 'const intentionalChanges = new Set([\n';
+          const verifyNote = '  // Aug 22 2026: measured winter preseason authority expansion on the existing statewide XC planning owner. Re-crawl after production release, then remove this declaration.\n  "/michigan-cross-country-skiing/",\n';
+          if (!verify.includes('/michigan-cross-country-skiing/')) {
+            if (!verify.includes(verifyMarker)) throw new Error('Source parity marker missing');
+            verify = verify.replace(verifyMarker, verifyMarker + verifyNote);
+            fs.writeFileSync(verifyPath, verify);
+          }
+
+          // Full-gate wiring.
+          const pkgPath = 'package.json';
+          const pkg = JSON.parse(fs.readFileSync(pkgPath,'utf8'));
+          pkg.scripts['benchmark:winter-search'] = 'node scripts/benchmark-winter-preseason-search.mjs';
+          if (!pkg.scripts['verify:all'].includes('benchmark:winter-search')) {
+            pkg.scripts['verify:all'] = pkg.scripts['verify:all'].replace('npm run benchmark:winter-final -- --check', 'npm run benchmark:winter-final -- --check && npm run benchmark:winter-search -- --check');
+          }
+          fs.writeFileSync(pkgPath, JSON.stringify(pkg,null,2)+'\n');
+
+          // Central measurement ledger.
+          const ledgerPath = 'benchmarks/growth-experiments.json';
+          const ledger = JSON.parse(fs.readFileSync(ledgerPath,'utf8'));
+          if (!ledger.experiments.some(x => x.id === '2026-08-22-winter-preseason-authority')) {
+            ledger.experiments.push({
+              id:'2026-08-22-winter-preseason-authority',
+              paths:['/michigan-ice/','/michigan-cross-country-skiing/'],
+              hypothesis:'Saginaw Bay ice-query ownership plus region-first XC planning coverage will build winter authority before seasonal demand without changing snippets or creating duplicate live-condition owners.',
+              primaryMetric:'Search Console winter rank and qualified impressions',
+              baseline:{windowDays:7,michiganIcePosition:46.35,saginawBayIceQueryPosition:18.33,xcPlanningPosition:43.88,xcLivePosition:18.71},
+              target:{saginawBayIceQueryPosition:15,michiganIcePosition:35,xcPlanningPosition:35},
+              status:'pending-clean-window',releaseDate:null,evaluationWindow:null,lastSearchFacingChangeDate:'2026-08-22',decisionDate:null,result:null,
+              stopCondition:'Safety truth weakens, XC live ownership is blurred, a doorway canonical is introduced, or winter rank materially regresses after demand becomes measurable.'
+            });
+            ledger.ledgerVersion = '1.9.0';
+            fs.writeFileSync(ledgerPath, JSON.stringify(ledger,null,2)+'\n');
+          }
+
+          // Advance the portfolio state machine: winter leaves immediate execution and enters measurement protection.
+          const portfolioPath = 'benchmarks/search-authority-portfolio.json';
+          const portfolio = JSON.parse(fs.readFileSync(portfolioPath,'utf8'));
+          const iceFocus = portfolio.focusPortfolio.find(x => x.id === 'michigan-ice');
+          if (!iceFocus) throw new Error('Michigan Ice focus surface missing');
+          iceFocus.action = 'PROTECT';
+          iceFocus.next = 'Measure the August 22 winter preseason authority treatment: protect the Michigan Ice hub answer expansion while Saginaw Bay and statewide ice queries establish a clean rank/impression window.';
+          portfolio.immediateQueue = portfolio.immediateQueue.filter(x => !x.toLowerCase().includes('winter'));
+          if (!portfolio.protectedQueue.some(x => x.toLowerCase().includes('winter preseason'))) portfolio.protectedQueue.push('Winter preseason authority treatment — Michigan Ice hub + statewide XC planning body expansion');
+          fs.writeFileSync(portfolioPath, JSON.stringify(portfolio,null,2)+'\n');
+
+          // Protect Michigan Ice in the tool registry. XC live remains a distinct live owner and is not rewritten here.
+          const registryPath = 'benchmarks/tool-network-registry.json';
+          const registry = JSON.parse(fs.readFileSync(registryPath,'utf8'));
+          const iceTool = registry.tools.find(x => x.id === 'michigan-ice');
+          if (!iceTool) throw new Error('Michigan Ice registry node missing');
+          iceTool.searchTreatment = {status:'protected',experiment:'active'};
+          registry.updated = '2026-08-22';
+          fs.writeFileSync(registryPath, JSON.stringify(registry,null,2)+'\n');
+
+          // Search-authority benchmark follows the lifecycle transition instead of requiring winter to stay executable.
+          const authorityBenchPath = 'scripts/benchmark-search-authority-portfolio.mjs';
+          let authorityBench = fs.readFileSync(authorityBenchPath,'utf8');
+          authorityBench = authorityBench.replace('    immediateText.includes("winter") &&\n', '    !immediateText.includes("winter") &&\n');
+          if (!authorityBench.includes('protectedText.includes("winter preseason")')) {
+            authorityBench = authorityBench.replace('    protectedText.includes("au sable") &&\n', '    protectedText.includes("au sable") &&\n    protectedText.includes("winter preseason") &&\n');
+          }
+          fs.writeFileSync(authorityBenchPath, authorityBench);
+
+          // Main sitemap freshness only for the two search owners actually changed.
+          const sitemapPath = 'public/sitemap.xml';
+          let sitemap = fs.readFileSync(sitemapPath,'utf8');
+          for (const loc of ['michigan-ice/','michigan-cross-country-skiing/']) {
+            const escaped = loc.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+            const re = new RegExp('(<loc>https://chrisizworski\\.com/' + escaped + '<\\/loc>\\s*<lastmod>)[^<]+(<\\/lastmod>)');
+            sitemap = sitemap.replace(re, '$1' + '2026-08-22' + '$2');
+          }
+          fs.writeFileSync(sitemapPath, sitemap);
+          NODE
+          python3 scripts/ice/gen_site.py
+          node scripts/benchmark-winter-preseason-search.mjs --check
+      - name: Commit winter authority treatment
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/ice/gen_site.py public/michigan-ice public/michigan-cross-country-skiing/index.html scripts/verify-source.mjs package.json benchmarks/growth-experiments.json benchmarks/search-authority-portfolio.json benchmarks/tool-network-registry.json scripts/benchmark-search-authority-portfolio.mjs public/sitemap.xml
+          git commit -m "Expand winter preseason search authority"
+          git push
