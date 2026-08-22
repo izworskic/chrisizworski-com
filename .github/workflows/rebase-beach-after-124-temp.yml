@@ -1,0 +1,53 @@
+name: Temporary compose beach growth after toll merge
+
+on:
+  push:
+    branches:
+      - feat/beach-ctr-push-2026-08-22
+
+permissions:
+  contents: write
+
+jobs:
+  compose:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Merge current main and resolve shared generated files deliberately
+        run: |
+          git fetch origin main
+          set +e
+          git merge origin/main --no-edit --no-commit
+          merge_code=$?
+          set -e
+          if [ "$merge_code" -ne 0 ]; then
+            node <<'NODE'
+            const fs = require('fs');
+            const cp = require('child_process');
+            const mainPkg = JSON.parse(cp.execFileSync('git', ['show','origin/main:package.json'], {encoding:'utf8'}));
+            mainPkg.scripts['benchmark:beach-ctr'] = 'node scripts/benchmark-beach-conditions-ctr.mjs';
+            if (!mainPkg.scripts['verify:all'].includes('npm run benchmark:beach-ctr')) {
+              mainPkg.scripts['verify:all'] = mainPkg.scripts['verify:all'].replace('npm run benchmark:beaches', 'npm run benchmark:beaches && npm run benchmark:beach-ctr');
+            }
+            fs.writeFileSync('package.json', JSON.stringify(mainPkg, null, 2) + '\n');
+
+            let sitemap = cp.execFileSync('git', ['show','origin/main:public/sitemap.xml'], {encoding:'utf8'});
+            sitemap = sitemap.replace(/(<loc>https:\/\/chrisizworski\.com\/great-lakes-beaches\/<\/loc>\s*<lastmod>)[^<]+(<\/lastmod>)/, '$1' + '2026-08-22' + '$2');
+            fs.writeFileSync('public/sitemap.xml', sitemap);
+            NODE
+            git add package.json public/sitemap.xml
+          fi
+          if git diff --name-only --diff-filter=U | grep -q .; then
+            echo 'Unresolved conflicts remain:'
+            git diff --name-only --diff-filter=U
+            exit 1
+          fi
+          git add -A
+          git commit -m "Compose beach CTR treatment after Mackinac toll merge"
+          git push
