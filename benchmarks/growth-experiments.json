@@ -1,5 +1,5 @@
 {
-  "ledgerVersion": "1.10.0",
+  "ledgerVersion": "1.11.0",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
   "measurementProtocol": {
@@ -702,6 +702,33 @@
       "decisionDate": null,
       "result": null,
       "stopCondition": "Average position worsens beyond 15 after a meaningful impression sample, CTR remains effectively zero after the clean window, or the field map begins competing as a duplicate search owner."
+    },
+    {
+      "id": "2026-08-22-fall-aurora-overlap-ctr",
+      "paths": [
+        "/fall-color-northern-lights-michigan/"
+      ],
+      "hypothesis": "A clearer overlap-window snippet plus immediate handoffs to the live fall-color and aurora tools will convert an existing position-8 result that currently earns impressions but no clicks.",
+      "primaryMetric": "Search Console page CTR while holding page-one average position",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 90,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 8.28
+      },
+      "target": {
+        "ctr": 0.02,
+        "stretchCtr": 0.03,
+        "averagePositionMax": 10
+      },
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Average position worsens beyond 12.5 after a meaningful sample, CTR remains effectively zero after the clean window, canonical changes, or the treatment weakens the protected Fall Color or Northern Lights owners."
     }
   ]
 }
