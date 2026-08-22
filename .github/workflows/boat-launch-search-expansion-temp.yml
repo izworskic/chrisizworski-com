@@ -1,0 +1,46 @@
+name: Temporary boat launch search expansion
+
+on:
+  push:
+    branches:
+      - feat/boat-launch-search-expansion-2026-08-22
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Add crawlable launch-area discovery
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const p = 'public/michigan-boat-launches/index.html';
+          let s = fs.readFileSync(p, 'utf8');
+          const cssAnchor = '.trust{max-width:1440px;margin:0 auto;padding:0 20px 45px}';
+          const css = `.launch-coverage{max-width:1440px;margin:0 auto;padding:0 20px 24px}.launch-coverage-inner{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px}.launch-coverage h2{font:600 24px Georgia,serif;margin:4px 0 8px}.launch-coverage>div>p{margin:0;color:var(--muted);font-size:13px;line-height:1.55;max-width:900px}.launch-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:14px}.launch-link{display:block;border:1px solid var(--line);border-radius:10px;padding:12px;text-decoration:none;background:#fafcf9}.launch-link strong{display:block;color:var(--green2);font:600 15px Georgia,serif;margin-bottom:4px}.launch-link span{display:block;color:var(--muted);font-size:11px;line-height:1.45}@media(max-width:900px){.launch-links{grid-template-columns:1fr 1fr}}@media(max-width:560px){.launch-links{grid-template-columns:1fr}}`;
+          if (!s.includes(cssAnchor)) throw new Error('Boat launch trust CSS anchor missing');
+          if (!s.includes('.launch-coverage{')) s = s.replace(cssAnchor, css + cssAnchor);
+          const htmlAnchor = '<div class="trust"><details>';
+          const block = `<section class="launch-coverage" aria-labelledby="launch-coverage-heading"><div class="launch-coverage-inner"><div class="eyebrow">Find the water first</div><h2 id="launch-coverage-heading">Michigan boat launches by water</h2><p>The statewide finder includes Great Lakes, connecting rivers and inland waters. Search any city, lake, river, harbor or launch above, or start with one of these existing guides for high-use Michigan waters.</p><div class="launch-links"><a class="launch-link" href="#launch-app"><strong>All Michigan boat launches</strong><span>Search the statewide source-backed map by destination, waterbody, ramp type or trailer parking.</span></a><a class="launch-link" href="/michigan-boat-launches/saginaw-bay/"><strong>Saginaw Bay boat launches</strong><span>Start with the Bay-specific launch guide, then compare source details and directions.</span></a><a class="launch-link" href="/michigan-boat-launches/lake-michigan/"><strong>Lake Michigan boat launches</strong><span>Browse public access for Lake Michigan trip planning without leaving the statewide launch system.</span></a><a class="launch-link" href="/au-sable-river/"><strong>Au Sable River access</strong><span>Plan Au Sable put-ins, take-outs, float segments and river access, then use the statewide finder for trailerable launches.</span></a></div></div></section>`;
+          if (!s.includes(htmlAnchor)) throw new Error('Boat launch trust section anchor missing');
+          if (!s.includes('id="launch-coverage-heading"')) s = s.replace(htmlAnchor, block + '\n\n' + htmlAnchor);
+          s = s.replace('"dateModified":"2026-08-19"', '"dateModified":"2026-08-22"');
+          fs.writeFileSync(p, s);
+          NODE
+          node scripts/stamp-freshness.mjs
+      - name: Commit authority expansion and freshness
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/michigan-boat-launches/index.html public/sitemap.xml public/sitemap-beaches.xml public/sitemap-reputation.xml
+          git commit -m "Expand crawlable Michigan boat launch discovery"
+          git push
