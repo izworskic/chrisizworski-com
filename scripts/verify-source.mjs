@@ -341,7 +341,7 @@ const toolsItemList = toolsJsonLd?.["@graph"]?.find((entry) => entry["@type"] ==
 if (toolsItemList?.numberOfItems !== 36 || toolsItemList?.itemListElement?.length !== 36) {
   failures.push("Tools ItemList does not contain exactly 36 entries");
 }
-if (!toolsHtml.includes("Free Michigan and Great Lakes Tools") || !toolsHtml.includes("Start with the live tools")) {
+if (!toolsHtml.includes("Michigan &amp; Great Lakes Live Tools") || !toolsHtml.includes("Start with the live tools")) {
   failures.push("Tools discovery title or featured-tools section is missing");
 }
 if ((toolsHtml.match(/data-featured-tool=/g) || []).length !== 10 || (toolsHtml.match(/class="tool-cta"/g) || []).length !== 10) {
