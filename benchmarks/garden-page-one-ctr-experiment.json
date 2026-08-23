@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-22",
+  "timezone": "America/Detroit",
+  "objective": "Convert two unprotected gardening pages already at the page-one threshold into qualified clicks without changing the active tomato-planting or frost-date experiments.",
+  "source": {
+    "title": "chrisizworski.com-Performance-on-Search-2026-08-22",
+    "spreadsheetId": "1dm2AC6FN4lU9P0viRs3mhVtg098AuvwEdNbKw-PsEVw",
+    "exportedThrough": "2026-08-20",
+    "windowDays": 7,
+    "note": "Page baselines are page-scoped. The export does not provide a page-query join, so no sitewide query row is attributed to either page."
+  },
+  "protectedNeighbors": [
+    "/when-to-plant-tomatoes-michigan/",
+    "/michigan-frost-dates/"
+  ],
+  "pages": [
+    {
+      "id": "zone-6a-calendar",
+      "path": "/zone-6a-planting-calendar/",
+      "canonical": "https://chrisizworski.com/zone-6a-planting-calendar/",
+      "distinctIntent": "Michigan planting dates for many crops by city and frost station, with Zone 6a as the primary regional framing.",
+      "baseline": {
+        "impressions": 34,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 8.26
+      },
+      "treatment": {
+        "title": "Michigan Zone 6a Planting Calendar by City | Chris Izworski",
+        "h1": "Michigan Zone 6a Planting Calendar by City",
+        "firstAnswer": "Pick your nearest Michigan city and compute planting windows for 47 crops from local frost probabilities."
+      },
+      "target": {
+        "ctr": 0.02,
+        "stretchCtr": 0.03,
+        "averagePositionMax": 10.5,
+        "stopLossAveragePositionWorseThan": 13
+      }
+    },
+    {
+      "id": "heirloom-tomatoes",
+      "path": "/heirloom-tomatoes-michigan/",
+      "canonical": "https://chrisizworski.com/heirloom-tomatoes-michigan/",
+      "distinctIntent": "Choose heirloom tomato varieties that perform well in Michigan and understand their Zone 6a tradeoffs.",
+      "baseline": {
+        "impressions": 30,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 10.37
+      },
+      "treatment": {
+        "title": "Best Heirloom Tomatoes for Michigan | Chris Izworski",
+        "h1": "Best Heirloom Tomatoes for Michigan",
+        "firstAnswer": "Name the strongest Michigan choices immediately, then compare 10 varieties by maturity, reliability, disease pressure, flavor, and use."
+      },
+      "target": {
+        "ctr": 0.02,
+        "stretchCtr": 0.03,
+        "averagePositionMax": 12,
+        "stopLossAveragePositionWorseThan": 15
+      }
+    }
+  ]
+}
