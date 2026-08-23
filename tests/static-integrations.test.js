@@ -78,7 +78,7 @@ test("Great Lakes Gazette reads the latest public edition without a browser cred
 
 test("Tools hub makes ten live tools prominent and indexes the expanded library", () => {
   const html = readFileSync(path.join(__dirname, "../public/tools/index.html"), "utf8");
-  assert.ok(html.includes("<title>Free Michigan &amp; Great Lakes Tools | Chris Izworski</title>"));
+  assert.ok(html.includes("<title>Michigan &amp; Great Lakes Live Tools | Chris Izworski</title>"));
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/tools/">'));
   assert.equal((html.match(/data-featured-tool=/g) || []).length, 10);
   assert.equal((html.match(/class="tool-cta"/g) || []).length, 10);
