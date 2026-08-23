@@ -1,0 +1,82 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-22",
+  "timezone": "America/Detroit",
+  "id": "beach-detail-page-one-ctr-2026-08-22",
+  "status": "ready-for-production-release",
+  "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-08-21, complete through 2026-08-19",
+  "hypothesis": "Five individual Michigan beach pages already rank on page one but their search-facing openings under-answer local conditions, water-quality and posted-flag intent. Query-specific titles, H1s and direct first answers should convert existing visibility into clicks while the statewide Beach Report root remains unchanged.",
+  "aggregateBaseline": {
+    "impressions": 299,
+    "clicks": 1,
+    "ctr": 0.0033444816053511705,
+    "weightedAveragePosition": 8.988963210702342
+  },
+  "pages": [
+    {
+      "path": "/great-lakes-beaches/warren-dunes-state-park/",
+      "impressions": 124,
+      "clicks": 1,
+      "ctr": 0.0081,
+      "averagePosition": 9.28,
+      "title": "Warren Dunes Beach Conditions Today: Waves & Swim Risk",
+      "h1": "Warren Dunes Beach Conditions Today"
+    },
+    {
+      "path": "/great-lakes-beaches/luna-pier/",
+      "impressions": 56,
+      "clicks": 0,
+      "ctr": 0,
+      "averagePosition": 9.59,
+      "title": "Luna Pier Beach Water Quality & Conditions Today",
+      "h1": "Luna Pier Beach Water Quality & Conditions Today"
+    },
+    {
+      "path": "/great-lakes-beaches/new-buffalo-beach/",
+      "impressions": 46,
+      "clicks": 0,
+      "ctr": 0,
+      "averagePosition": 9.04,
+      "title": "New Buffalo Beach Conditions Today: Swim Risk & Waves",
+      "h1": "New Buffalo Beach Conditions Today"
+    },
+    {
+      "path": "/great-lakes-beaches/pj-hoffmaster-state-park/",
+      "impressions": 37,
+      "clicks": 0,
+      "ctr": 0,
+      "averagePosition": 8.46,
+      "title": "P.J. Hoffmaster Beach Conditions Today: Waves & Water",
+      "h1": "P.J. Hoffmaster Beach Conditions Today"
+    },
+    {
+      "path": "/great-lakes-beaches/oscoda-beach-park/",
+      "impressions": 36,
+      "clicks": 0,
+      "ctr": 0,
+      "averagePosition": 7.53,
+      "title": "Oscoda Beach Park Conditions Today: Waves & Water",
+      "h1": "Oscoda Beach Park Conditions Today"
+    }
+  ],
+  "measurement": {
+    "primaryWindowDays": 28,
+    "windowStarts": "first complete America/Detroit day after production release",
+    "primaryMetric": "aggregate and page-level Search Console CTR",
+    "targetAggregateCtr": 0.015,
+    "stretchAggregateCtr": 0.025,
+    "weightedPositionGuardrail": 10.5,
+    "decisionRule": "Keep the treatment if aggregate CTR materially improves while the five-page weighted average position remains at or better than 10.5. Evaluate page-level outliers separately rather than reverting the whole cluster for one weak page."
+  },
+  "truthBoundary": "Never claim a physical posted beach flag is known remotely or that BeachGuard or NWS data certifies a beach safe to swim. Posted signs, flags, lifeguards, official closures and onsite conditions remain authoritative.",
+  "rootGuardrail": "Do not change /great-lakes-beaches/ while its statewide Beach Conditions CTR experiment is protected.",
+  "freeze": [
+    "title",
+    "metaDescription",
+    "h1",
+    "firstAnswer",
+    "structuredData",
+    "canonical",
+    "indexability"
+  ]
+}
