@@ -1,0 +1,39 @@
+name: Fix reputation sitemap integrity pin
+
+on:
+  push:
+    branches:
+      - feat/entity-discovery-runtime-ctr-2026-08-23
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/entity-discovery-runtime-ctr-2026-08-23
+          fetch-depth: 0
+      - name: Pin exact current reputation sitemap hash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/verify-source.mjs')
+          s = p.read_text()
+          old = 'b1143d07b15323a5c4748f5f8e3851ef2813dc0bce3133365535d93714579ddd'
+          new = '15fe61649b57dd1e75996fba240430dfcd7afde82a89724ff3195e8462ecfd03'
+          count = s.count(old)
+          if count < 1:
+              raise SystemExit('reputation sitemap pin not found')
+          p.write_text(s.replace(old, new))
+          print(f'updated {count} reputation sitemap pin occurrence(s)')
+          PY
+          git rm .github/workflows/fix-reputation-pin-temp.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/verify-source.mjs
+          git commit -m 'Pin updated reputation sitemap hash'
+          git push origin HEAD
