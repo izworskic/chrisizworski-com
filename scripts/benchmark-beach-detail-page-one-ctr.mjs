@@ -27,7 +27,7 @@ check(config.measurement.stretchAggregateCtr >= 0.025, 'stretch CTR target was w
 check(config.measurement.weightedPositionGuardrail <= 10.5, 'rank guardrail was weakened');
 
 check(rootHtml.includes('<title>Michigan Beach Conditions Today | Chris Izworski</title>'), 'protected statewide Beach Report title changed');
-check(rootHtml.includes('<h1>Michigan Beach Conditions Today</h1>'), 'protected statewide Beach Report H1 changed');
+check(rootHtml.includes('<h1 id="page-title">Michigan Beach Conditions Today</h1>'), 'protected statewide Beach Report H1 changed');
 
 for (const page of config.pages) {
   const slug = page.path.split('/').filter(Boolean).at(-1);
