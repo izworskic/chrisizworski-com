@@ -1,0 +1,37 @@
+name: Fix entity CTR source check
+
+on:
+  push:
+    branches:
+      - feat/entity-discovery-runtime-ctr-2026-08-23
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/entity-discovery-runtime-ctr-2026-08-23
+          fetch-depth: 0
+      - name: Align source verifier with measured Tools title
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/verify-source.mjs')
+          s = p.read_text()
+          old = 'toolsHtml.includes("Free Michigan and Great Lakes Tools")'
+          new = 'toolsHtml.includes("Michigan &amp; Great Lakes Live Tools")'
+          if old not in s:
+              raise SystemExit('old Tools verifier string not found')
+          p.write_text(s.replace(old, new, 1))
+          PY
+          git rm .github/workflows/fix-entity-source-check-temp.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/verify-source.mjs
+          git commit -m 'Align source verifier with Tools CTR treatment'
+          git push origin HEAD
