@@ -1,5 +1,5 @@
 {
-  "ledgerVersion": "1.13.0",
+  "ledgerVersion": "1.14.0",
   "created": "2026-08-03",
   "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
   "measurementProtocol": {
@@ -787,6 +787,60 @@
       "decisionDate": null,
       "result": null,
       "stopCondition": "Average position worsens beyond 15 after a meaningful sample, CTR remains effectively zero after the clean window, planner behavior regresses, or the page begins competing with the statewide live Fall Color current-conditions owner."
+    },
+    {
+      "id": "2026-08-22-zone-6a-calendar-ctr",
+      "paths": [
+        "/zone-6a-planting-calendar/"
+      ],
+      "hypothesis": "A Zone 6a + by-city search promise and immediate multi-crop answer will convert an existing position-8 planting-calendar result into clicks without changing the active tomato or frost owners.",
+      "primaryMetric": "Search Console page CTR while holding page-one average position",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 34,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 8.26
+      },
+      "target": {
+        "ctr": 0.02,
+        "stretchCtr": 0.03,
+        "averagePositionMax": 10.5
+      },
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "CTR remains effectively zero after the clean window, average position worsens beyond 13 after a meaningful sample, or the page begins competing with the protected tomato or frost owners."
+    },
+    {
+      "id": "2026-08-22-heirloom-tomatoes-ctr",
+      "paths": [
+        "/heirloom-tomatoes-michigan/"
+      ],
+      "hypothesis": "Leading with best-variety intent and a first-party Zone 6a answer will convert an existing position-10 heirloom result into clicks without changing the active tomato-planting experiment.",
+      "primaryMetric": "Search Console page CTR while holding near-page-one average position",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 30,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 10.37
+      },
+      "target": {
+        "ctr": 0.02,
+        "stretchCtr": 0.03,
+        "averagePositionMax": 12
+      },
+      "status": "pending-clean-window",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "CTR remains effectively zero after the clean window, average position worsens beyond 15 after a meaningful sample, factual variety claims regress, or the page begins competing with the protected tomato-timing owner."
     }
   ]
 }

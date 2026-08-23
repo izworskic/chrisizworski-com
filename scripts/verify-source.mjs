@@ -9,6 +9,10 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 22 2026: measured Zone 6a planting-calendar page-one CTR treatment. Re-crawl after production release, then remove.
+  "/zone-6a-planting-calendar/",
+  // Aug 22 2026: measured page-one CTR treatment. Re-crawl after production release, then remove.
+  "/heirloom-tomatoes-michigan/",
   // Aug 22 2026: measured CTR treatment for the distinct Michigan Fall Color Weekend Planner. Re-crawl after production release, then remove.
   "/fall-color/michigan-leaf-peeping-planner/",
   // Aug 22 2026: contextual distribution for the Upper Peninsula fall-color rank experiment. Re-crawl after production release, then remove.

@@ -11,9 +11,11 @@
 // and the fall colour section writes daily from August 20. Telling Google those pages have sat
 // untouched since spring is the opposite of what is true.
 //
-// The stamp is the date of the last commit that touched the file, so it is derived rather than
-// declared and cannot drift again. Running this changes only the stamp; the gate below tolerates a
-// few days of lag so that the commit which writes the stamp does not immediately invalidate it.
+// The stamp is the America/Detroit calendar date of the last commit that touched the file, so it is
+// derived rather than declared and cannot drift again. Normalizing the commit timestamp into the
+// site's timezone matters for GitHub Actions commits just after midnight UTC, which are still the
+// prior Michigan calendar day. Running this changes only the stamp; the gate below tolerates a few
+// days of lag so that the commit which writes the stamp does not immediately invalidate it.
 //
 // Usage: node scripts/stamp-freshness.mjs [--check]
 //   default   rewrite stamps that are older than the file's real last-commit date
@@ -28,6 +30,25 @@ const root = path.resolve(import.meta.dirname, "..");
 const publicRoot = path.join(root, "public");
 const CHECK = process.argv.includes("--check");
 const TOLERANCE_DAYS = 7;
+const SITE_TIME_ZONE = "America/Detroit";
+const siteDateFormatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: SITE_TIME_ZONE,
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+function dateInSiteTimeZone(timestamp) {
+  const parsed = new Date(timestamp);
+  if (Number.isNaN(parsed.getTime())) return null;
+  const parts = Object.fromEntries(
+    siteDateFormatter
+      .formatToParts(parsed)
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, part.value]),
+  );
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
 
 function walk(dir) {
   const out = [];
@@ -48,14 +69,18 @@ function lastContentCommitDate(file) {
   const rel = path.relative(root, file);
   let hashes;
   try {
-    hashes = execFileSync("git", ["log", "-12", "--format=%H %cs", "--", rel], {
+    hashes = execFileSync("git", ["log", "-12", "--format=%H %cI", "--", rel], {
       cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"],
     }).trim().split("\n").filter(Boolean);
   } catch { return null; }
   if (!hashes.length) return null;
 
   for (const row of hashes) {
-    const [hash, date] = row.split(" ");
+    const separator = row.indexOf(" ");
+    const hash = separator > 0 ? row.slice(0, separator) : row;
+    const timestamp = separator > 0 ? row.slice(separator + 1) : "";
+    const date = dateInSiteTimeZone(timestamp);
+    if (!date) continue;
     let diff = "";
     try {
       diff = execFileSync("git", ["show", "--format=", "--unified=0", hash, "--", rel], {
@@ -67,7 +92,9 @@ function lastContentCommitDate(file) {
     if (changed.some((l) => !STAMP_ONLY.test(l))) return date; // a real content change
   }
   // Every recent commit touched only the stamp; fall back to the oldest one we looked at.
-  return hashes[hashes.length - 1].split(" ")[1];
+  const oldest = hashes[hashes.length - 1];
+  const separator = oldest.indexOf(" ");
+  return dateInSiteTimeZone(separator > 0 ? oldest.slice(separator + 1) : "");
 }
 const lastCommitDate = lastContentCommitDate;
 

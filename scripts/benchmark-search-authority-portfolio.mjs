@@ -40,8 +40,8 @@ check(
 
 check(
   "Fresh leading Search Console signal is explicit and does not replace experiment windows",
-  portfolio.measurement.latestLeadingSnapshot?.spreadsheetId === "1lrFEAxYT7whMAx2Gnrq-IRfUHr7cjshU542FWwJ7Kfw" &&
-    portfolio.measurement.latestLeadingSnapshot?.exportedThrough === "2026-08-19" &&
+  portfolio.measurement.latestLeadingSnapshot?.spreadsheetId === "1dm2AC6FN4lU9P0viRs3mhVtg098AuvwEdNbKw-PsEVw" &&
+    portfolio.measurement.latestLeadingSnapshot?.exportedThrough === "2026-08-20" &&
     portfolio.measurement.latestLeadingSnapshot?.windowDays === 7 &&
     portfolio.measurement.decisionWindowDays === 28 &&
     experiments.measurementProtocol?.windowDays === 28 &&
