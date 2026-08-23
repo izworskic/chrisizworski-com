@@ -1,0 +1,85 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-23",
+  "timezone": "America/Detroit",
+  "objective": "Move the existing Lake Superior Circle Tour planner toward page one by strengthening relevant internal authority without changing the destination search snippet or product.",
+  "source": {
+    "title": "chrisizworski.com-Performance-on-Search-2026-08-22",
+    "spreadsheetId": "1dm2AC6FN4lU9P0viRs3mhVtg098AuvwEdNbKw-PsEVw",
+    "exportedThrough": "2026-08-20",
+    "windowDays": 7
+  },
+  "destination": {
+    "path": "/lake-superior-circle-tour/",
+    "baseline": {
+      "impressions": 56,
+      "clicks": 0,
+      "ctr": 0,
+      "averagePosition": 21.16
+    },
+    "queryEvidence": [
+      {
+        "query": "lake superior circle tour app",
+        "impressions": 1,
+        "averagePosition": 25
+      },
+      {
+        "query": "lake superior circle tour guide 2026",
+        "impressions": 1,
+        "averagePosition": 28
+      },
+      {
+        "query": "lake superior circle tour map",
+        "impressions": 1,
+        "averagePosition": 32
+      },
+      {
+        "query": "best time of year for lake superior circle tour",
+        "impressions": 1,
+        "averagePosition": 35
+      },
+      {
+        "query": "map of lake superior circle tour",
+        "impressions": 1,
+        "averagePosition": 35
+      },
+      {
+        "query": "lake superior circle tour adventure guide",
+        "impressions": 1,
+        "averagePosition": 45
+      }
+    ],
+    "target": {
+      "averagePositionMax": 15,
+      "stretchAveragePositionMax": 10,
+      "impressionsMin": 100
+    },
+    "freeze": [
+      "title",
+      "metaDescription",
+      "h1",
+      "firstAnswer",
+      "structuredData",
+      "canonical",
+      "indexability"
+    ]
+  },
+  "distribution": [
+    {
+      "sourcePath": "/great-lakes/",
+      "surface": "Lake Superior Circle Tour Map & 7–15 Day Planner",
+      "role": "Great Lakes authority hub"
+    },
+    {
+      "sourcePath": "/great-lakes-lighthouses/",
+      "surface": "Lake Superior Circle Tour map and 7–15 day planner",
+      "role": "Lake Superior road-trip context"
+    }
+  ],
+  "measurement": {
+    "decisionWindowDays": 28,
+    "releaseDate": null,
+    "evaluationWindow": null
+  },
+  "stopCondition": "Average position worsens beyond 28 after a meaningful sample, the Circle Tour destination search surface changes, or either inbound link becomes contextually misleading."
+}
