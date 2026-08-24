@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "observed": "2026-08-24",
+  "query": "Chris Izworski",
+  "purpose": "Record a public-search audit separately from the durable exact-name SERP targets. This is an observation snapshot, not a ranking guarantee.",
+  "limitations": "Result order and inclusion vary by engine, locale, device, personalization, and crawl timing. Do not infer stable rank from this file.",
+  "controlledOrSupportingSurfacesObserved": [
+    {"origin": "chrisizworski.com", "surface": "https://chrisizworski.com/", "class": "controlled"},
+    {"origin": "linkedin.com", "surface": "Chris Izworski LinkedIn presence", "class": "controlled"},
+    {"origin": "github.io", "surface": "https://izworskic.github.io/", "class": "supportingOwned", "coalescedWith": "GitHub controlled identity"},
+    {"origin": "freighterviewfarms.com", "surface": "https://freighterviewfarms.com/about/", "class": "controlled"},
+    {"origin": "about.me", "surface": "https://about.me/chrisizworski", "class": "controlled"},
+    {"origin": "medium.com", "surface": "https://medium.com/@izworski", "class": "controlled"}
+  ],
+  "additionalControlledOriginsToPush": [
+    {"origin": "github.com", "surface": "https://github.com/izworskic"},
+    {"origin": "youtube.com", "surface": "https://www.youtube.com/@izworskic"},
+    {"origin": "orcid.org", "surface": "https://orcid.org/0009-0002-7268-6083"}
+  ],
+  "earnedOrExternalAuthorityObserved": [
+    {
+      "origin": "saveourshoreline.org",
+      "surface": "https://www.saveourshoreline.org/board-of-directors",
+      "class": "favorableEarned",
+      "repair": "Board heading is misspelled as Chris Izworki while the bio text uses Christopher Izworski."
+    }
+  ],
+  "nextMeasurement": "After profile normalization and the Save Our Shoreline correction, resnapshot the top 10, 20, and 30 and calculate unique controlled-origin occupancy using benchmarks/name-serp-governance.json."
+}
