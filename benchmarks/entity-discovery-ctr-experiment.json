@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-08-23",
+  "updated": "2026-08-24",
   "timezone": "America/Detroit",
   "objective": "Convert three already-high-ranking discovery/entity surfaces from zero clicks into qualified visits while preserving the homepage as the primary branded result.",
   "source": {
@@ -72,10 +72,25 @@
     "ctr": 0
   },
   "measurement": {
+    "status": "running",
     "decisionWindowDays": 28,
-    "releaseDate": null,
-    "evaluationWindow": null,
+    "releaseDate": "2026-08-24",
+    "evaluationWindow": {
+      "start": "2026-08-25",
+      "end": "2026-09-21"
+    },
+    "decisionDate": null,
+    "result": null,
     "rule": "Set production merge date as releaseDate; evaluate 28 complete days beginning the next day."
+  },
+  "productionEvidence": {
+    "mergeCommitSha": "15f13329278b4c441df3b211d998e2895e066f9c",
+    "customDomainVerifiedDate": "2026-08-24",
+    "routes": [
+      "https://chrisizworski.com/timeline/",
+      "https://chrisizworski.com/tools/",
+      "https://chrisizworski.com/press/"
+    ]
   },
   "freeze": [
     "title",
