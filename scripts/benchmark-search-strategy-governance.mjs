@@ -14,6 +14,7 @@ const toolNetwork = await readJson(governance.sourceOfTruth.toolNetwork);
 const nameSerp = await readJson(governance.sourceOfTruth.nameSerp);
 const ownedDomains = await readJson(governance.sourceOfTruth.ownedDomains);
 const strategyDoc = await read(governance.sourceOfTruth.humanStrategy);
+const nameSerpPlaybook = await read(governance.sourceOfTruth.nameSerpPlaybook);
 const robots = await read(governance.sourceOfTruth.robots);
 const llms = await read(governance.sourceOfTruth.llms);
 const packageJson = await readJson("package.json");
@@ -69,14 +70,33 @@ check(
     governance.brandedSerp?.operatingOccupancyTargets?.top20 >= 15 &&
     governance.brandedSerp?.operatingOccupancyTargets?.top30 >= 20 &&
     governance.brandedSerp?.stretchOccupancyTargets?.top30 === 30 &&
+    governance.brandedSerp?.controlledIndependentTop10Floor === 7 &&
+    governance.brandedSerp?.controlledIndependentTop10Target === 8 &&
+    governance.brandedSerp?.favorableEarnedTop10Target === 2 &&
+    governance.brandedSerp?.oneControlledSlotPerIndependentOrigin === true &&
+    governance.brandedSerp?.coalesceSameRegistrableDomain === true &&
+    governance.brandedSerp?.coalesceSamePlatformAccount === true &&
+    governance.brandedSerp?.sameRootAdditionalSlotsCounted === 0 &&
+    governance.brandedSerp?.samePlatformAdditionalSlotsCounted === 0 &&
     governance.brandedSerp?.distinctBrandedSurfacesAllowed === true &&
     governance.brandedSerp?.nonBrandedSingleCanonicalOwnerStillRequired === true &&
     nameSerp.occupancyTargets?.primarySitePosition === 1 &&
     nameSerp.occupancyTargets?.stretch?.top30 === 30 &&
+    nameSerp.moatTargets?.controlledIndependentTop10Floor === 7 &&
+    nameSerp.moatTargets?.controlledIndependentTop10Target === 8 &&
+    nameSerp.moatTargets?.sameRootAdditionalSlotsCounted === 0 &&
+    nameSerp.moatTargets?.samePlatformAdditionalSlotsCounted === 0 &&
+    nameSerp.slotCountingRules?.oneControlledSlotPerIndependentOrigin === true &&
+    nameSerp.slotCountingRules?.coalesceSameRegistrableDomain === true &&
+    nameSerp.slotCountingRules?.coalesceSamePlatformAccount === true &&
     nameSerp.measurementProtocol?.depths?.includes(30) &&
+    nameSerp.measurementProtocol?.countUniqueControlledOrigins === true &&
+    nameSerp.measurementProtocol?.reportControlledAndEarnedSeparately === true &&
     typeof nameSerp.rules?.entityConsistency === "string" &&
     typeof nameSerp.rules?.searchOwnership === "string" &&
-    typeof nameSerp.rules?.brandedOccupancy === "string",
+    typeof nameSerp.rules?.brandedOccupancy === "string" &&
+    typeof nameSerp.rules?.controlledMoat === "string" &&
+    typeof nameSerp.rules?.earnedAuthority === "string",
   10,
 );
 
@@ -150,7 +170,12 @@ check(
     strategyDoc.includes("## Technical SEO standard") &&
     strategyDoc.includes("## AI-search and answer-engine readiness") &&
     strategyDoc.includes("## Measurement operating cadence") &&
-    strategyDoc.includes("Useful decisions and durable authority"),
+    strategyDoc.includes("Useful decisions and durable authority") &&
+    nameSerpPlaybook.includes("## What counts as one controlled moat slot") &&
+    nameSerpPlaybook.includes("7 of 10 as the minimum acceptable moat") &&
+    nameSerpPlaybook.includes("8 of the top 10 results") &&
+    nameSerpPlaybook.includes("same root domain") &&
+    nameSerpPlaybook.includes("favorableEarned"),
   5,
 );
 
@@ -161,7 +186,9 @@ check(
     ownedDomains.purpose.length > 20 &&
     typeof nameSerp.rules?.distinctValue === "string" &&
     nameSerp.rules.distinctValue.includes("thin pages") &&
-    nameSerp.rules.searchOwnership.includes("non-branded"),
+    nameSerp.rules.searchOwnership.includes("non-branded") &&
+    nameSerp.controlledOriginInventory?.length >= nameSerp.moatTargets?.controlledIndependentTop10Target &&
+    nameSerp.knownEntityRepairs?.some((repair) => repair.status === "external-fix-required"),
   5,
 );
 
@@ -177,7 +204,7 @@ console.log("=".repeat(72));
 console.log(`Score: ${score}/100`);
 console.log(`Primary measurement window: ${governance.measurement.primaryWindowDays} days`);
 console.log(`Canonical person: ${governance.canonicalPersonId}`);
-console.log(`Branded SERP target: #${governance.brandedSerp.primarySitePositionTarget} primary; ${governance.brandedSerp.operatingOccupancyTargets.top30}/30 operating, ${governance.brandedSerp.stretchOccupancyTargets.top30}/30 stretch`);
+console.log(`Branded SERP target: #${governance.brandedSerp.primarySitePositionTarget} primary; ${governance.brandedSerp.controlledIndependentTop10Target}/10 independently controlled; ${governance.brandedSerp.operatingOccupancyTargets.top30}/30 operating, ${governance.brandedSerp.stretchOccupancyTargets.top30}/30 stretch`);
 console.log(`New canonical network target: ${canonicalGate.preferredMinimumNetworkRelationships} relationships`);
 if (failures.length) {
   console.log("Failures:");
