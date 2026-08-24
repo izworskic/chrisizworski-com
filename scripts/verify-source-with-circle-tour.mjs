@@ -40,6 +40,10 @@ function preparedVerifier(source) {
     '  "/great-lakes-beaches/new-buffalo-beach/",',
     '  "/great-lakes-beaches/pj-hoffmaster-state-park/",',
     '  "/great-lakes-beaches/oscoda-beach-park/",',
+    '  // Aug 23 2026: measured CTR treatment for three distinct entity/discovery surfaces.',
+    '  "/timeline/",',
+    '  "/tools/",',
+    '  "/press/",',
     '',
   ].join('\n');
   if (!source.includes(marker)) throw new Error('verify-source intentionalChanges marker not found');
