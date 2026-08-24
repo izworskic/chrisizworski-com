@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-08-23",
+  "updated": "2026-08-24",
   "timezone": "America/Detroit",
   "objective": "Move the existing Lake Superior Circle Tour planner toward page one by strengthening relevant internal authority without changing the destination search snippet or product.",
   "source": {
@@ -77,9 +77,24 @@
     }
   ],
   "measurement": {
+    "status": "running",
     "decisionWindowDays": 28,
-    "releaseDate": null,
-    "evaluationWindow": null
+    "releaseDate": "2026-08-24",
+    "evaluationWindow": {
+      "start": "2026-08-25",
+      "end": "2026-09-21"
+    },
+    "decisionDate": null,
+    "result": null
+  },
+  "productionEvidence": {
+    "mergeCommitSha": "8a0f2e66130993887d5421ad989ed23b9f5d9d6e",
+    "customDomainVerifiedDate": "2026-08-24",
+    "routes": [
+      "https://chrisizworski.com/lake-superior-circle-tour/",
+      "https://chrisizworski.com/great-lakes/",
+      "https://chrisizworski.com/great-lakes-lighthouses/"
+    ]
   },
   "stopCondition": "Average position worsens beyond 28 after a meaningful sample, the Circle Tour destination search surface changes, or either inbound link becomes contextually misleading."
 }
