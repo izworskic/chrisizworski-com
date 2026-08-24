@@ -1,0 +1,89 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-23",
+  "timezone": "America/Detroit",
+  "objective": "Convert three already-high-ranking discovery/entity surfaces from zero clicks into qualified visits while preserving the homepage as the primary branded result.",
+  "source": {
+    "title": "chrisizworski.com-Performance-on-Search-2026-08-22",
+    "spreadsheetId": "1dm2AC6FN4lU9P0viRs3mhVtg098AuvwEdNbKw-PsEVw",
+    "exportedThrough": "2026-08-20",
+    "windowDays": 7
+  },
+  "homepageGuardrail": {
+    "path": "/",
+    "primaryBrandedOwner": true
+  },
+  "pages": [
+    {
+      "id": "timeline",
+      "path": "/timeline/",
+      "baseline": {
+        "impressions": 52,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 5.4
+      },
+      "target": {
+        "ctr": 0.02,
+        "stretchCtr": 0.04,
+        "averagePositionMax": 8
+      },
+      "title": "Chris Izworski Timeline: 911, AI & Public Safety",
+      "h1": "Chris Izworski Career Timeline"
+    },
+    {
+      "id": "tools",
+      "path": "/tools/",
+      "baseline": {
+        "impressions": 26,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 4.92
+      },
+      "target": {
+        "ctr": 0.02,
+        "stretchCtr": 0.04,
+        "averagePositionMax": 8
+      },
+      "title": "Michigan & Great Lakes Live Tools | Chris Izworski",
+      "h1": "Michigan & Great Lakes Live Tools"
+    },
+    {
+      "id": "press",
+      "path": "/press/",
+      "baseline": {
+        "impressions": 23,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 2.52
+      },
+      "target": {
+        "ctr": 0.02,
+        "stretchCtr": 0.04,
+        "averagePositionMax": 6
+      },
+      "title": "Chris Izworski Press & Media: 911, AI, Public Safety",
+      "h1": "Chris Izworski Press & Media"
+    }
+  ],
+  "aggregateBaseline": {
+    "impressions": 101,
+    "clicks": 0,
+    "ctr": 0
+  },
+  "measurement": {
+    "decisionWindowDays": 28,
+    "releaseDate": null,
+    "evaluationWindow": null,
+    "rule": "Set production merge date as releaseDate; evaluate 28 complete days beginning the next day."
+  },
+  "freeze": [
+    "title",
+    "metaDescription",
+    "h1",
+    "firstAnswer",
+    "structuredData",
+    "canonical",
+    "indexability"
+  ]
+}
