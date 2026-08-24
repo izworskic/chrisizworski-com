@@ -17,7 +17,7 @@ A controlled slot is one of:
 - one independently controlled root domain with a substantive Chris Izworski identity or authorship surface; or
 - one independently controlled profile/account on a third-party platform.
 
-For moat accounting:
+For moat accounting, multiple pages or subdomains on the same root domain still represent one controlled origin, not extra moat slots.
 
 - multiple URLs on `chrisizworski.com` count as one controlled origin;
 - subdomains of an already-counted registrable domain are supporting surfaces, not additional controlled slots;
