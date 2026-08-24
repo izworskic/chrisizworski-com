@@ -136,6 +136,8 @@ const intentionalChanges = new Set([
   // for a section that has to rank by December. These six add contextual links.
   "/",
   "/great-lakes/",
+  // Aug 23 2026: contextual Circle Tour rank-distribution handoff from lighthouse directory.
+  "/great-lakes-lighthouses/",
   "/great-lakes-buoys/",
   "/great-lakes-freighter-tracking/",
   "/saginaw-bay-ecology/",
