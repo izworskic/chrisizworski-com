@@ -1,33 +1,152 @@
 {
-  "version": "1.2.0",
-  "updated": "2026-08-22",
-  "objective": "Make Chris Izworski the clear primary result for his name and maximize truthful, useful Chris Izworski visibility across the first 30 branded search results while preserving one canonical Person entity and distinct non-branded search ownership.",
+  "version": "1.3.0",
+  "updated": "2026-08-24",
+  "objective": "Make Chris Izworski the clear primary result for his name and build a durable page-one moat of independently controlled, truthful, useful Chris Izworski properties while preserving strong earned authority, one canonical Person entity, and distinct non-branded search ownership.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "primaryBrandResult": "https://chrisizworski.com/",
   "primaryIdentitySurface": "https://chrisizworski.com/chris-izworski/",
-  "brandedQueryFamily": ["Chris Izworski", "Chris Izworski Michigan", "Chris Izworski AI", "Chris Izworski 911", "Chris Izworski public safety"],
+  "playbook": "docs/NAME_SERP_MOAT.md",
+  "brandedQueryFamily": [
+    "Chris Izworski",
+    "Chris Izworski Michigan",
+    "Chris Izworski AI",
+    "Chris Izworski 911",
+    "Chris Izworski public safety"
+  ],
   "occupancyTargets": {
     "primarySitePosition": 1,
     "operating": {"top10": 8, "top20": 15, "top30": 20},
     "stretch": {"top10": 10, "top20": 20, "top30": 30},
     "principle": "Earn as much branded result coverage as possible through accurate, distinct, useful owned properties, profiles, and independent third-party references."
   },
+  "moatTargets": {
+    "controlledIndependentTop10Floor": 7,
+    "controlledIndependentTop10Target": 8,
+    "favorableEarnedTop10Target": 2,
+    "sameRootAdditionalSlotsCounted": 0,
+    "samePlatformAdditionalSlotsCounted": 0,
+    "principle": "Page-one ownership is measured by independently controllable origins, not by how many URLs exist under one site or account."
+  },
+  "slotCountingRules": {
+    "oneControlledSlotPerIndependentOrigin": true,
+    "coalesceSameRegistrableDomain": true,
+    "coalesceSamePlatformAccount": true,
+    "sameRootPagesAreSupportingOnly": true,
+    "sameRootSubdomainsAreSupportingOnly": true,
+    "earnedThirdPartyNeverCountsAsControlled": true,
+    "definition": "A controlled moat slot is one independently controllable root domain or one independently controllable account/profile on a third-party platform. Additional URLs, subdomains, author pages, or project pages on the same root or platform can reinforce the entity but do not create another controlled moat slot."
+  },
   "resultClasses": {
-    "primaryOwned": "chrisizworski.com identity, source, project, and substantive author surfaces",
-    "independentOwned": "Distinct useful owned domains and subdomains that identify Chris as creator or author",
-    "controlledProfiles": "Legitimate professional, publishing, developer, video, and social profiles Chris controls",
-    "earnedThirdParty": "Independent news, government, association, conference, podcast, publication, and civic pages substantially about Chris",
+    "primaryOwned": "chrisizworski.com identity, source, project, and substantive author surfaces; only one controlled moat slot for the root",
+    "independentOwned": "Distinct useful owned root domains that identify Chris as creator or author; each independent root can earn one controlled moat slot",
+    "controlledProfiles": "Legitimate professional, publishing, developer, video, identity, and social accounts Chris controls; each platform account can earn one controlled moat slot",
+    "supportingOwned": "Additional pages or subdomains on an already-counted root or platform; useful for entity reinforcement but not an additional controlled moat slot",
+    "earnedThirdParty": "Independent news, government, association, conference, podcast, publication, and civic pages substantially about Chris; favorable authority but not controlled",
     "other": "Results not attributable to Chris or not useful to the branded entity footprint"
   },
+  "controlledOriginInventory": [
+    {
+      "origin": "chrisizworski.com",
+      "url": "https://chrisizworski.com/",
+      "type": "primaryOwned",
+      "role": "primary branded result",
+      "verification": "production site"
+    },
+    {
+      "origin": "linkedin.com",
+      "url": "https://www.linkedin.com/in/chris-izworski-15294510",
+      "type": "controlledProfiles",
+      "role": "professional authority",
+      "verification": "canonical Person sameAs and public search discovery"
+    },
+    {
+      "origin": "github.com",
+      "url": "https://github.com/izworskic",
+      "type": "controlledProfiles",
+      "role": "developer authority",
+      "verification": "canonical Person sameAs"
+    },
+    {
+      "origin": "freighterviewfarms.com",
+      "url": "https://freighterviewfarms.com/about/",
+      "type": "independentOwned",
+      "role": "gardening and Great Lakes author authority",
+      "verification": "owned-domain network and public search discovery"
+    },
+    {
+      "origin": "about.me",
+      "url": "https://about.me/chrisizworski",
+      "type": "controlledProfiles",
+      "role": "independent profile",
+      "verification": "public search discovery"
+    },
+    {
+      "origin": "medium.com",
+      "url": "https://medium.com/@izworski",
+      "type": "controlledProfiles",
+      "role": "publishing authority",
+      "verification": "canonical Person sameAs and public search discovery"
+    },
+    {
+      "origin": "youtube.com",
+      "url": "https://www.youtube.com/@izworskic",
+      "type": "controlledProfiles",
+      "role": "video authority",
+      "verification": "canonical Person sameAs"
+    },
+    {
+      "origin": "orcid.org",
+      "url": "https://orcid.org/0009-0002-7268-6083",
+      "type": "controlledProfiles",
+      "role": "persistent identity authority",
+      "verification": "canonical Person sameAs"
+    }
+  ],
+  "supportingControlledProperties": [
+    {
+      "origin": "izworskic.github.io",
+      "url": "https://izworskic.github.io/",
+      "reason": "Useful branded project profile, but conservatively coalesced with the same GitHub-controlled identity for moat accounting."
+    },
+    {
+      "origin": "michigantroutreport.com",
+      "url": "https://michigantroutreport.com/chris-izworski",
+      "reason": "Independent owned root with a distinct product mission; use as entity support and allow it to earn branded visibility naturally rather than converting it into a name-only site."
+    },
+    {
+      "origin": "michiganbirdingreport.com",
+      "url": "https://michiganbirdingreport.com/chris-izworski",
+      "reason": "Independent owned root with a distinct product mission; use as entity support and allow it to earn branded visibility naturally rather than converting it into a name-only site."
+    },
+    {
+      "origin": "greatlakeslevels.org",
+      "url": "https://greatlakeslevels.org/",
+      "reason": "Independent owned root that can reinforce creator authority when truthful, but its non-branded utility remains the primary purpose."
+    }
+  ],
+  "knownEntityRepairs": [
+    {
+      "priority": "P0",
+      "property": "Save Our Shoreline board of directors",
+      "url": "https://www.saveourshoreline.org/board-of-directors",
+      "observedLabel": "Chris Izworki",
+      "correctLabel": "Chris Izworski",
+      "status": "external-fix-required",
+      "reason": "This is an independent civic authority surface. The misspelled board heading fragments exact-name entity consistency even though the accompanying bio uses the correct surname."
+    }
+  ],
   "rules": {
     "entityConsistency": "Every active owned property with structured data should identify Chris Izworski as creator/author using the canonical Person entity or an unambiguous link to the primary identity surface.",
     "distinctValue": "A property earns branded visibility by being useful and topically distinct; do not create thin pages or duplicate sites merely to increase result count.",
     "reciprocalDiscovery": "Active owned properties should link back to the main identity/property network where appropriate, and the central Projects/Works surfaces should discover meaningful active properties.",
     "searchOwnership": "Subject intent ownership still controls non-branded page architecture. Multiple distinct surfaces may rank for the branded Chris Izworski query family, but branded reinforcement must not create non-branded cannibalization.",
     "brandedOccupancy": "For exact and close-name searches, maximize distinct authoritative Chris Izworski results across the top 10, 20, and 30 while keeping every surface accurate and independently useful.",
+    "controlledMoat": "Judge page-one ownership by unique independently controlled origins or platform accounts. Same-root pages and subdomains are supporting signals, not extra controlled moat slots.",
+    "earnedAuthority": "Preserve strong independent government, association, news, publication, and civic results when they corroborate the entity. The objective is not 10/10 self-published results at the expense of credibility.",
+    "exactNameConsistency": "Use the exact public name Chris Izworski consistently across controlled profiles and pursue corrections when authoritative third-party surfaces contain material misspellings.",
     "primaryIdentityPriority": "The chrisizworski.com homepage should remain the strongest candidate for branded position #1 when it is already winning. The /chris-izworski/ identity surface reinforces the canonical Person entity and adds branded authority; do not force it to displace a winning homepage.",
     "launchDiscipline": "Do not add a planned property to crawlable central navigation until its owned canonical resolves and its production routes are verified.",
-    "measurement": "Track exact-name and close-name result occupancy at depths 10, 20, and 30, classify each observed result, and pair the snapshot with branded Search Console impressions, CTR, and average position. Keep observed data separate from targets and expect locale/device variation."
+    "measurement": "Track exact-name and close-name result occupancy at depths 10, 20, and 30, classify every observed result, coalesce same-root and same-platform controlled URLs for moat accounting, and pair the snapshot with branded Search Console impressions, CTR, and average position. Keep observed data separate from targets and expect locale/device variation."
   },
   "measurementProtocol": {
     "cadence": "monthly-and-after-material-entity-change",
@@ -35,7 +154,11 @@
     "depths": [10, 20, 30],
     "classifyEveryObservedResult": true,
     "separateObservedFromTarget": true,
-    "accountForLocaleAndDeviceVariation": true
+    "accountForLocaleAndDeviceVariation": true,
+    "countUniqueControlledOrigins": true,
+    "coalesceSameRegistrableDomain": true,
+    "coalesceSamePlatformAccount": true,
+    "reportControlledAndEarnedSeparately": true
   },
   "gardenPlanner": {
     "property": "https://garden.chrisizworski.com/",
@@ -43,6 +166,6 @@
     "creatorRequirement": "https://chrisizworski.com/#person",
     "subjectOwner": "interactive square-foot garden planning",
     "supportingBrand": "Freighter View Farms",
-    "activation": "After production verification, add it to central owned-property discovery and begin measuring branded and non-branded search performance."
+    "activation": "After production verification, add it to central owned-property discovery and begin measuring branded and non-branded search performance. It remains part of the chrisizworski.com root for controlled-moat accounting."
   }
 }
