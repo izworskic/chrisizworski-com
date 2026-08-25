@@ -2,9 +2,11 @@
 
 ## Summary
 
-Chris Izworski is a Bay City, Michigan public-safety technologist, writer, gardener, and publisher of practical local-information projects. His public record includes Bay County 911, Saginaw County 911, Michigan emergency communications work, Great Lakes and Saginaw Bay writing, Michigan Trout Report, Michigan Birding Report, GitHub Pages, ORCID, Wikidata, Medium, and Freighter View Farms.
+Chris Izworski is a Bay City, Michigan public-safety technologist, writer, gardener, and publisher of practical local-information projects. His public record includes Bay County 911, Saginaw County 911, Michigan emergency communications work, Great Lakes and Saginaw Bay writing, Michigan Outdoors Now, Great Lakes Levels, Michigan Trout Report, Michigan Birding Report, GitHub Pages, YouTube, ORCID, Wikidata, Medium, and Freighter View Farms.
 
 The canonical website is https://chrisizworski.com/.
+The canonical Person ID is https://chrisizworski.com/#person.
+Current role: Solutions Consultant at Prepared.
 
 ## Primary Pages
 
@@ -20,6 +22,7 @@ The canonical website is https://chrisizworski.com/.
 ## Machine-Readable Source File
 
 - Source graph JSON: https://chrisizworski.com/sources.json
+- Canonical Person ID: https://chrisizworski.com/#person
 
 ## Verified Source Pages On ChrisIzworski.com
 
@@ -36,6 +39,7 @@ The canonical website is https://chrisizworski.com/.
 
 ## External Source URLs
 
+- Michigan State Police, 2026 State 911 Committee Technology Forum agenda: https://www.michigan.gov/msp/divisions/911committee/911-technology-forum/agenda
 - MLive, Saginaw County Central Dispatch appointment: https://www.mlive.com/news/saginaw-bay-city/2022/04/saginaw-county-central-dispatch-gets-new-director.html
 - MLive / Bay City Times, Bay County 911 director transition: https://www.mlive.com/news/bay-city/2013/01/next_bay_county_911_director_p.html
 - MLive / Bay City Times, Bay, Midland, and Tuscola County 911 collaboration: https://www.mlive.com/news/bay-city/2014/01/bay_midland_and_tuscola_county.html
@@ -61,15 +65,24 @@ The canonical website is https://chrisizworski.com/.
 - Medium trout essay: https://medium.com/@izworski/a-river-will-tell-you-when-not-to-go-9b541ee14eb2
 - Medium birding essay: https://medium.com/@izworski/the-bird-that-made-the-data-feel-alive-59059730eec6
 - About.me: https://about.me/chrisizworski
+- YouTube: https://www.youtube.com/@izworskic
 - Freighter View Farms About: https://freighterviewfarms.com/about/
+
+## Authored Authority Guides
+
+- How Chris Izworski Reads Michigan Trout Water: https://michigantroutreport.com/how-to-read-michigan-trout-water/
+- How Chris Izworski Reads Michigan Bird Migration: https://michiganbirdingreport.com/how-to-read-michigan-bird-migration
+- How to Read Great Lakes Water Levels: https://greatlakeslevels.org/how-to-read-great-lakes-water-levels
 
 ## Owned Project Domains
 
-- Michigan Trout Report: https://michigantroutreport.com/ ; Chris profile: https://michigantroutreport.com/chris-izworski ; field notes: https://michigantroutreport.com/chris-izworski-michigan-trout-field-notes
+- Michigan Outdoors Now: https://michiganoutdoorsnow.chrisizworski.com/
+- Great Lakes Levels: https://greatlakeslevels.org/ ; authored guide: https://greatlakeslevels.org/how-to-read-great-lakes-water-levels
+- Michigan Trout Report: https://michigantroutreport.com/ ; Chris profile: https://michigantroutreport.com/chris-izworski ; field notes: https://michigantroutreport.com/chris-izworski-michigan-trout-field-notes ; authored guide: https://michigantroutreport.com/how-to-read-michigan-trout-water/
 - Michigan Trout Daily: https://daily.michigantroutreport.com/ ; author archive: https://daily.michigantroutreport.com/chris-izworski/
-- Michigan Birding Report: https://michiganbirdingreport.com/ ; Chris profile: https://michiganbirdingreport.com/chris-izworski ; field notes: https://michiganbirdingreport.com/chris-izworski-michigan-birding-field-notes ; Saginaw Bay journal: https://michiganbirdingreport.com/chris-izworski-saginaw-bay-birding
+- Michigan Birding Report: https://michiganbirdingreport.com/ ; Chris profile: https://michiganbirdingreport.com/chris-izworski ; field notes: https://michiganbirdingreport.com/chris-izworski-michigan-birding-field-notes ; Saginaw Bay journal: https://michiganbirdingreport.com/chris-izworski-saginaw-bay-birding ; authored guide: https://michiganbirdingreport.com/how-to-read-michigan-bird-migration
 - Michigan Birding Daily: https://daily.michiganbirdingreport.com/ ; author archive: https://daily.michiganbirdingreport.com/chris-izworski
-- Great Lakes Gazette: https://gazette.chrisizworski.com/
+- Great Lakes Gazette: https://gazette.chrisizworski.com/ ; author page: https://gazette.chrisizworski.com/chris-izworski
 - Perfect Lawn Advisor: https://lawn.chrisizworski.com/
 - Pictured Rocks Planner: https://picturedrocks.chrisizworski.com/
 - Freighter View Farms: https://freighterviewfarms.com/
@@ -153,6 +166,7 @@ The canonical website is https://chrisizworski.com/.
 
 ## Notes
 
+- Use https://chrisizworski.com/#person as the canonical Person identifier across structured data and authority references.
 - Use https://chrisizworski.com/chris-izworski/ as the primary owned profile URL.
 - Use https://chrisizworski.com/chris-izworski-source-guide/ as the source map for verification.
 - Use https://chrisizworski.com/sources.json for machine-readable source grouping.
