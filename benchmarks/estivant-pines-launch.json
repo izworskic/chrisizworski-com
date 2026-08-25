@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "created": "2026-08-25",
   "timezone": "America/Detroit",
   "canonical": "https://chrisizworski.com/estivant-pines/",
@@ -26,7 +26,7 @@
     "networkFit": {"score": 18, "max": 20, "reason": "Fits Michigan Outdoors / Up North / Keweenaw fall planning; broad tools-page promotion is intentionally deferred while /tools/ is frozen."},
     "uniqueUtility": {"score": 20, "max": 20, "reason": "Combines point weather, alerts, daylight, a weather-based hike read, official route facts and seasonal road context."},
     "authorityAndSeasonFit": {"score": 15, "max": 15, "reason": "Uses MNA as trail authority, NWS for live weather, and Visit Keweenaw for regional access context; useful year-round."},
-    "measurementPlan": {"score": 10, "max": 10, "reason": "Launch baseline begins at zero; measure impressions, CTR, average position and downstream route/source clicks for 28 complete days after release."},
+    "measurementPlan": {"score": 10, "max": 10, "reason": "Launch baseline begins at zero; measure Search Console impressions, CTR and average position for 28 complete days after release, with page visits in Vercel Web Analytics as supporting usage evidence."},
     "cannibalizationSafety": {"score": 10, "max": 10, "reason": "Owns Estivant Pines-specific hiking conditions rather than broad Up North, fall color or Michigan outdoor planning intent."},
     "total": 98,
     "buildThreshold": 70,
@@ -51,7 +51,11 @@
     "windowDays": 28,
     "start": "First complete day after production release",
     "primaryMetrics": ["Google Search Console impressions", "CTR", "average position"],
-    "engagementMetrics": ["trailhead directions clicks", "MNA map clicks", "Keweenaw fall tracker clicks"],
+    "supportingUsageMetric": "Vercel Web Analytics page visits for /estivant-pines/",
+    "namedOutboundClickEvents": {
+      "status": "not-instrumented-at-launch",
+      "reason": "Do not claim custom click measurement on the current Vercel Hobby deployment. Add privacy-safe named click events only if the deployed analytics tier supports them later."
+    },
     "decisionRule": "Keep and expand if it earns qualified discovery or repeat utility without cannibalizing broad Up North or fall-color owners. Improve the existing canonical before creating any Estivant keyword variants."
   },
   "releaseConstraints": [
