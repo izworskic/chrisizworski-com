@@ -1,6 +1,6 @@
 (() => {
-  const LAT = 47.44614;
-  const LON = -87.86015;
+  const LAT = 47.4456;
+  const LON = -87.8776;
   const NWS = 'https://api.weather.gov';
   const $ = (id) => document.getElementById(id);
   const fmtTime = (value) => {
