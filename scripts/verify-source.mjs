@@ -224,30 +224,29 @@ const intentionalChanges = new Set([
 // These files were already committed on main after the crawl manifest was captured.
 // Pin their exact source hashes so the known drift passes without broadly exempting
 // the routes from future parity checks.
-const committedDriftHashes = new Map([
+const committedDriftHashEntries = [
   // Aug 25 2026: Person entity consolidated. The canonical @id carried FIVE different
   // description values, two url values and an alumniOf that dropped a school on two of three
   // pages. Verified semantically (parsed JSON-LD compared property by property) that nothing but
   // url / description / alumniOf moved on these routes. Re-crawl after deploy and these pins can
   // go back to the live snapshot.
-  ["/chris-izworski-biography/", "42fd88c0245525ff8878d9c309feb41e89ba3431871ddba319fee8d78cead7b7"],
-  ["/chris-izworski-works/", "efef4ca8612a6a008ed3e99d462d5d5f8fa7d6d4558831ff8d429816631427d9"],
-  ["/fall-color/ann-arbor-irish-hills-fall-color/", "f00f9388ec8f1dfa2f2b28ada9a9f058cdd1aaec32e4a2696f93f262f4b88fcb"],
-  ["/fall-color/au-sable-river-fall-color/", "95e6960b8fe387727ff9828e24b8418eb18f6c3b221555b3ca426f372e8b0e12"],
-  ["/fall-color/mackinac-island-fall-color/", "3c12a19b86b21cfb266e5a5dd37633e10d68ec8de35b201bdba682b7c941f2e4"],
-  ["/fall-color/porcupine-mountains-fall-color/", "5029dd042854e734f4778c87f04eef373eb8038f17ed105db4f9b61190b6379a"],
-  ["/fall-color/saginaw-bay-fall-color/", "b4ac2832231dfefbc8a9e2cc0b7dde75f2c5542c8afaf2c95711aec60d6c9ab9"],
-  ["/fall-color/saugatuck-southwest-michigan-fall-color/", "362fe4929402440a967ecfd63713c7cb0600d52010f1f3382e130870f3d62c2e"],
-  ["/fall-color/sleeping-bear-dunes-fall-color/", "bab474892820fdc868887afae747b1d6d3eebfb516490c7c4e51d8e0bdcf1eb3"],
-  ["/fall-color/tahquamenon-falls-fall-color/", "494ffd24692567e82375c9e256043fdacf22b2798e577705bbdee32b915925a4"],
-  ["/fall-color/upper-peninsula-fall-color/", "fac44449fb92c3ca5715b73193c59e89219da972510cf0aa6cc60570abec852a"],
-  ["/fall-color/when-do-leaves-peak-in-michigan/", "9ed1bbfe0d2a19da1e98233d908cae73badd5beac1edc0fd1b1a14042b934f40"],
-  ["/great-lakes-maritime-history/", "489cadd216c072ad34b0a72f6db215bde6719d5a468b201ea861af3433504fcc"],
+  ["/chris-izworski-biography/", "2191b790b006cd1c9ff20308aff607b319f9b79cfbec3cd0e0515ffd78c3d526"],
+  ["/chris-izworski-works/", "af21c1ee61fbc79af0830839fe26640caab69ad8b37fcd8cc6e9af0b074b75b5"],
+  ["/fall-color/ann-arbor-irish-hills-fall-color/", "634fefef781139739d04e38bdedfbd284218117ec6d605efa8f324c2ecd87a12"],
+  ["/fall-color/au-sable-river-fall-color/", "b3dcd933063da636e26b0f2560784ab6fcdf0a7a039a2df1e09a1da6bcd89711"],
+  ["/fall-color/mackinac-island-fall-color/", "55015e97be6c220c37ba1f2ee5e8f838327544f01c8337b8116c7b6247b415c3"],
+  ["/fall-color/porcupine-mountains-fall-color/", "1e567e04859ad4e439b065ade09752951ad8749edbd95eb125f7d5c9869144d6"],
+  ["/fall-color/saginaw-bay-fall-color/", "1ea75e836c9f79708789c8268191cdc3f8c2936309f7ff325b5561ac1956b373"],
+  ["/fall-color/saugatuck-southwest-michigan-fall-color/", "87f53ccb48579f6997348408ff1469da25ab0c4f18b7dc3f714776df74fd44cf"],
+  ["/fall-color/sleeping-bear-dunes-fall-color/", "daed7021f8a3420896e5aaaf57697dcb5e4981925f2495d9a9867ee6f4d3ce08"],
+  ["/fall-color/tahquamenon-falls-fall-color/", "053ceed528fa1af060a7b726bfc3ef625aea88e5139b17ca15b3cc17d9804765"],
+  ["/fall-color/upper-peninsula-fall-color/", "1b596e7ef4b40a7a69c817b49964fed92b5976c86d588fa397caed351cb57185"],
+  ["/fall-color/when-do-leaves-peak-in-michigan/", "b54711940707b4d78ddcb9cbd6e7be03a7b5780e90edd67ae882654fd0a577eb"],
+  ["/great-lakes-maritime-history/", "9bb601c956924248b5906620e61a5af905235c2c89b8324ae30dc6fcc2fd52f2"],
   ["/au-sable-river/", "fa36c47fb8f61618e4f52f8db6ba56e6f3d630e178cc137499f00a6fc4dfef42"],
   ["/edmund-fitzgerald/", "a722575cbf373e9e66c874d48a61dafb089e19a79f2df5e261053940ec3f3f04"],
   ["/heirloom-seed-saving-guide/", "2e5d3c53110102a7f6784f3c7f6ac86b1f9be6840f297a515ead80111c1b6e87"],
   ["/michigan-paddling/pere-marquette/", "9f5d099de514fc829c4315ac3487500f8572761596ba797d66ca463d8df00ec2"],
-  ["/sitemap-reputation.xml", "15fe61649b57dd1e75996fba240430dfcd7afde82a89724ff3195e8462ecfd03"],
   // Aug 19 2026: stamp-freshness corrected dateModified and the matching sitemap
   // lastmod on these routes to their real last content commit. Verified line by
   // line that nothing but those date stamps moved. Re-crawl after deploy and
@@ -296,9 +295,28 @@ const committedDriftHashes = new Map([
   ["/great-lakes-beaches/wenonah-park/", "92ef0e15291a5bfebf4e89bb3c75226e8352867d0b7fcb35c631178059c176ff"],
   ["/great-lakes-beaches/whitefish-point/", "1dfa103faf8c639a4235ba668a55393b17623793710471579ffb0eb7ccb11a20"],
   ["/great-lakes-beaches/wilderness-state-park/", "6341bdb514bd1ab07c01233bdc8442e2e84e320bcebe2ec7c182b23b19ab5bb1"],
-  ["/sitemap-reputation.xml", "15fe61649b57dd1e75996fba240430dfcd7afde82a89724ff3195e8462ecfd03"],
+  ["/sitemap-reputation.xml", "6e76de8c0eb8b2ff0ae207584024de70b871d8c661d9be488fb8ae7a6b213ceb"],
   ["/zone-6a-planting-calendar/", "3b34180a82558e2df887dc238ad31dc8d1995e465b3e5d81972ddec260414565"],
-]);
+];
+
+// A Map built from an array silently keeps the LAST value for a duplicate key, so a stale pin added
+// lower down overrides a fresh one and the route fails while the hash you can see where you edited
+// looks correct. That cost a debugging cycle on Aug 25 2026. The check has to run on the ARRAY:
+// once new Map() has collapsed the duplicates, iterating the Map can never find them.
+{
+  const seen = new Set();
+  const dupes = [];
+  for (const [route] of committedDriftHashEntries) {
+    if (seen.has(route)) dupes.push(route);
+    seen.add(route);
+  }
+  if (dupes.length) {
+    console.error(`verify-source: duplicate committedDriftHashes keys: ${[...new Set(dupes)].join(", ")}`);
+    console.error("The later entry silently wins. Keep exactly one pin per route.");
+    process.exit(1);
+  }
+}
+const committedDriftHashes = new Map(committedDriftHashEntries);
 
 function sha256(value) {
   return createHash("sha256").update(value).digest("hex");

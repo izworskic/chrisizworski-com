@@ -27,7 +27,12 @@ test("Fall hub reuses canonical site entities and correct breadcrumb ownership",
   assert.doesNotMatch(html, /https:\/\/chrisizworski\.com\/fall-color\/#website/);
   assert.match(html, /"name": "Home",\s*"item": "https:\/\/chrisizworski\.com\/"/);
   assert.match(html, /"mainEntity": {\s*"@id": "https:\/\/chrisizworski\.com\/fall-color\/#dataset"/);
-  assert.match(html, /"dateModified": "2026-08-21"/);
+  // Assert the PROPERTY, not a literal date. PR #45 converted four pinned-date tests for exactly
+  // this reason: a literal breaks on the next legitimate edit, which is what happened on Aug 25
+  // 2026 when the Person entity was consolidated and the stamper moved this page honestly.
+  const stamp = html.match(/"dateModified": "(\d{4}-\d{2}-\d{2})"/);
+  assert.ok(stamp, "fall hub carries a dateModified");
+  assert.ok(stamp[1] <= new Date().toISOString().slice(0, 10), "fall hub dateModified is not in the future");
 });
 
 test("Fall search benchmark uses the fresh query-level GSC window", () => {
@@ -45,6 +50,13 @@ test("Fall search benchmark uses the fresh query-level GSC window", () => {
 });
 
 test("Fall hub schema date and sitemap freshness agree", () => {
+  // The thing worth pinning is AGREEMENT between the page stamp and the sitemap entry, which is
+  // what PR #44 caught drifting. Pinning a literal date asserts neither and breaks on every edit.
+  const html = read("public/fall-color/index.html");
   const sitemap = read("public/sitemap.xml");
-  assert.match(sitemap, /<loc>https:\/\/chrisizworski\.com\/fall-color\/<\/loc>\s*<lastmod>2026-08-21<\/lastmod>/);
+  const stamp = html.match(/"dateModified": "(\d{4}-\d{2}-\d{2})"/);
+  const entry = sitemap.match(/<loc>https:\/\/chrisizworski\.com\/fall-color\/<\/loc>\s*<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/);
+  assert.ok(stamp, "fall hub carries a dateModified");
+  assert.ok(entry, "fall hub has a sitemap lastmod");
+  assert.equal(entry[1], stamp[1], "sitemap lastmod must equal the page dateModified");
 });
