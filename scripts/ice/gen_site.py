@@ -437,6 +437,7 @@ def build_safety():
          "description": "Michigan DNR rejects the standard inch thickness guide for ice safety. Here is what it says "
                         "instead, why Great Lakes bay ice is treated as more fragile, and how to test ice yourself.",
          "author": {"@id": PERSON_ID}, "publisher": {"@id": PERSON_ID},
+         "dateModified": ICE_ROOT_DATE_MODIFIED,
          "inLanguage": "en-US", "mainEntityOfPage": url,
          "isPartOf": {"@id": SITE + "/#website"}},
         breadcrumb([("Michigan Ice Report", SITE + "/"), ("Ice safety", url)]),
@@ -538,6 +539,7 @@ def build_method():
          "description": "What accumulated freezing degree days are, how the modified Stefan equation converts them to "
                         "an ice thickness estimate, and why that estimate overpredicts thin early season ice.",
          "author": {"@id": PERSON_ID}, "publisher": {"@id": PERSON_ID},
+         "dateModified": ICE_ROOT_DATE_MODIFIED,
          "inLanguage": "en-US", "mainEntityOfPage": url,
          "isPartOf": {"@id": SITE + "/#website"}},
         breadcrumb([("Michigan Ice Report", SITE + "/"), ("How it works", url)]),
@@ -635,6 +637,7 @@ def build_history():
          "description": "What the NOAA GLERL ice climatology record shows about Great Lakes ice cover since 1973, "
                         "when ice peaks, and how variable Michigan winters actually are.",
          "author": {"@id": PERSON_ID}, "publisher": {"@id": PERSON_ID},
+         "dateModified": ICE_ROOT_DATE_MODIFIED,
          "inLanguage": "en-US", "mainEntityOfPage": url,
          "isPartOf": {"@id": SITE + "/#website"}},
         breadcrumb([("Michigan Ice Report", SITE + "/"), ("54 year history", url)]),

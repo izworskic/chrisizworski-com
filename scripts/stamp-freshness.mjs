@@ -101,20 +101,46 @@ const lastCommitDate = lastContentCommitDate;
 // The sitemap carries its own lastmod per URL and drifts independently. PR #44's integrity test
 // caught exactly that: a page whose dateModified moved while its sitemap entry did not. Both are
 // freshness signals and they must agree, so the stamper owns both.
-const SITEMAPS = ["sitemap.xml", "sitemap-beaches.xml", "sitemap-reputation.xml"];
+// Every page sitemap robots.txt declares. This list was three of seven, so sitemap-fall.xml,
+// sitemap-manistee.xml and sitemap-winter.xml drifted with nothing checking them. If you add a
+// sitemap to robots.txt, add it here in the same commit. image-sitemap.xml is deliberately out:
+// it indexes images, not pages, so it has no page dateModified to agree with.
+const SITEMAPS = [
+  "sitemap.xml",
+  "sitemap-beaches.xml",
+  "sitemap-reputation.xml",
+  "sitemap-fall.xml",
+  "sitemap-manistee.xml",
+  "sitemap-winter.xml",
+];
 async function syncSitemaps(dateByRoute) {
   let updated = 0;
   for (const name of SITEMAPS) {
     const file = path.join(publicRoot, name);
     let xml;
     try { xml = await readFile(file, "utf8"); } catch { continue; }
-    const next = xml.replace(
+    let next = xml.replace(
       /<loc>https:\/\/chrisizworski\.com([^<]*)<\/loc>(\s*)<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/g,
       (whole, route, gap, current) => {
         const want = dateByRoute.get(route) || dateByRoute.get(route.replace(/\/$/, "") + "/");
         if (!want || want === current) return whole;
         updated += 1;
         return `<loc>https://chrisizworski.com${route}</loc>${gap}<lastmod>${want}</lastmod>`;
+      },
+    );
+    // An entry with NO lastmod was previously invisible: the regex above only matches entries that
+    // already have one, so sitemap-winter.xml shipped 11 URLs with no freshness signal at all and
+    // nothing reported it. Insert the page's real date instead of skipping.
+    // Capture the whitespace AND whatever tag follows, so the "no lastmod here" test cannot be
+    // satisfied by the regex backtracking \s* down to zero. An anchored lookahead alone duplicated
+    // every existing entry (247 lastmod for 124 urls) because \s* simply gave back characters.
+    next = next.replace(
+      /<loc>https:\/\/chrisizworski\.com([^<]*)<\/loc>(\s*)<(?!lastmod>)/g,
+      (whole, route, gap) => {
+        const want = dateByRoute.get(route) || dateByRoute.get(route.replace(/\/$/, "") + "/");
+        if (!want) return whole;
+        updated += 1;
+        return `<loc>https://chrisizworski.com${route}</loc>${gap}<lastmod>${want}</lastmod>${gap}<`;
       },
     );
     if (next !== xml && !CHECK) await writeFile(file, next);
@@ -127,11 +153,17 @@ const dateByRoute = new Map();
 const lagging = [];
 let rewritten = 0;
 let skippedNoHistory = 0;
+const unstamped = [];
 
 for (const file of files) {
   const html = await readFile(file, "utf8");
   const match = html.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})/);
-  if (!match) continue;
+  if (!match) {
+    // A page with no stamp can never be "behind", so it silently left the freshness system
+    // entirely. That is how /connect/ sat 14 days stale and unreported. Record it and fail below.
+    unstamped.push("/" + path.relative(publicRoot, file).replace(/\\/g, "/").replace(/index\.html$/, ""));
+    continue;
+  }
   const claimed = match[1];
   const real = lastCommitDate(file);
   if (!real) { skippedNoHistory += 1; continue; }
@@ -161,6 +193,21 @@ if (CHECK) {
   if (skippedNoHistory) console.log(`  ${skippedNoHistory} skipped, no git history (shallow clone?)`);
   for (const l of bad.slice(0, 12)) console.log(`  ${String(l.lagDays).padStart(4)}d behind  claims ${l.claimed}, real ${l.real}  ${l.rel}`);
   if (bad.length > 12) console.log(`  ...and ${bad.length - 12} more`);
+  // Only pages we actually submit to Google have to carry a stamp. An unlisted page is allowed to
+  // have none; a sitemap-listed one is not, because its lastmod would then have nothing to agree with.
+  const listed = new Set();
+  for (const name of SITEMAPS) {
+    let xml;
+    try { xml = await readFile(path.join(publicRoot, name), "utf8"); } catch { continue; }
+    for (const m of xml.matchAll(/<loc>https:\/\/chrisizworski\.com([^<]*)<\/loc>/g)) listed.add(m[1]);
+  }
+  const unstampedListed = unstamped.filter((r) => listed.has(r));
+  if (unstampedListed.length) {
+    console.error(`\nFRESHNESS CHECK FAILED: ${unstampedListed.length} sitemap-listed pages carry no dateModified.`);
+    for (const r of unstampedListed) console.error(`  ${r}`);
+    console.error("Add a dateModified to the page's WebPage node, then run: node scripts/stamp-freshness.mjs");
+    process.exit(1);
+  }
   if (sitemapDrift) {
     console.error(`\nFRESHNESS CHECK FAILED: ${sitemapDrift} sitemap lastmod entries disagree with their page's dateModified.`);
     console.error("Run: node scripts/stamp-freshness.mjs");
