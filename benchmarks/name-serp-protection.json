@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-24",
+  "objective": "Prevent accidental edits to Chris Izworski search surfaces that are already winning or are inside active measurement windows.",
+  "overrideLabel": "serp-protected-change-approved",
+  "policy": "Protected files may change only in a pull request carrying the explicit override label. New files remain allowed by default so branded authority can grow additively.",
+  "protectedPaths": [
+    {
+      "path": "public/index.html",
+      "reason": "Primary exact-name branded owner; current public search winner."
+    },
+    {
+      "path": "public/chris-izworski/index.html",
+      "reason": "Canonical identity surface and Person entity reinforcement."
+    },
+    {
+      "path": "public/connect/index.html",
+      "reason": "Recently restored after a destructive replacement; preserve current production surface."
+    },
+    {
+      "path": "public/timeline/index.html",
+      "reason": "Active 28-day entity/discovery CTR measurement window through 2026-09-21."
+    },
+    {
+      "path": "public/tools/index.html",
+      "reason": "Active 28-day entity/discovery CTR measurement window through 2026-09-21."
+    },
+    {
+      "path": "public/press/index.html",
+      "reason": "Active 28-day entity/discovery CTR measurement window through 2026-09-21."
+    }
+  ]
+}
