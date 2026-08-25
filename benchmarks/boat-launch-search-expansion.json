@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-08-22",
+  "updated": "2026-08-25",
   "id": "boat-launch-search-expansion-2026-08-22",
   "surface": "https://chrisizworski.com/michigan-boat-launches/",
   "status": "ready-for-production-release",
@@ -87,5 +87,7 @@
     "canonical",
     "finderBehavior",
     "sourceTruth"
-  ]
+  ],
+  "releaseDateModified": "2026-08-25",
+  "releaseDateModifiedNote": "The dateModified the treated surface must carry. Was hardcoded as 2026-08-22 in the benchmark script, which broke the moment stamp-freshness told the truth about a later content change. Keep it here so the pin and the config cannot disagree. Bump it whenever the treatment re-ships before its window opens; do not bump it once status is running. Same fix as benchmarks/beach-detail-page-one-ctr.json."
 }

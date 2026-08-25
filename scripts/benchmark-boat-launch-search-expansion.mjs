@@ -25,7 +25,9 @@ for (const phrase of config.treatment.requiredLanguage) {
 if (!html.includes('id="launch-coverage-heading"')) failures.push('crawlable launch coverage section missing');
 if (!html.includes('Great Lakes and inland public launches are in the same tool.')) failures.push('statewide finder promise drifted');
 if (!html.includes('Michigan DNR is the primary source.')) failures.push('source-truth boundary missing');
-if (!html.includes('"dateModified":"2026-08-22"')) failures.push('freshness stamp not aligned');
+if (!html.includes(`"dateModified":"${config.releaseDateModified}"`)) {
+  failures.push(`freshness stamp not aligned (expected ${config.releaseDateModified})`);
+}
 if (config.evidence.page.impressions !== 77 || config.evidence.page.clicks !== 0 || config.evidence.page.averagePosition !== 13.17) failures.push('leading baseline drift');
 if (!config.evidence.queryAttributionCaution) failures.push('sitewide query attribution caution missing');
 if (!config.treatment.snippetFrozen) failures.push('snippet must remain frozen for this expansion');

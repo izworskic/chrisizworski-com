@@ -741,10 +741,18 @@
       "status": "pending-clean-window",
       "releaseDate": null,
       "evaluationWindow": null,
-      "lastSearchFacingChangeDate": "2026-08-22",
+      "lastSearchFacingChangeDate": "2026-08-25",
       "decisionDate": null,
       "result": null,
-      "stopCondition": "Average position worsens beyond 12.5 after a meaningful sample, CTR remains effectively zero after the clean window, canonical changes, or the treatment weakens the protected Fall Color or Northern Lights owners."
+      "stopCondition": "Average position worsens beyond 12.5 after a meaningful sample, CTR remains effectively zero after the clean window, canonical changes, or the treatment weakens the protected Fall Color or Northern Lights owners.",
+      "preWindowContentChanges": [
+        {
+          "date": "2026-08-25",
+          "path": "/fall-color/",
+          "change": "added a contextual inbound link from the fall hub peak-timing section",
+          "why": "The fall hub was the one obvious entry point NOT linking to this page, which sits at position 8.28 with 90 impressions and zero clicks. Added before the clock started, so the window opens with the link in place and the CTR result stays single-variable. The destination page itself was not touched, and no inbound link was added to /northern-lights-michigan/, which is frozen until 2026-09-11."
+        }
+      ]
     },
     {
       "id": "2026-08-22-upper-peninsula-fall-rank",
