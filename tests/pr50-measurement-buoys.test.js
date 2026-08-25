@@ -66,12 +66,12 @@ test("the reputation sitemap uses a pinned source hash, not a parity exemption",
   const intentionalStart = verifier.indexOf("const intentionalChanges");
   const intentionalEnd = verifier.indexOf("// These files were already committed", intentionalStart);
   const intentionalChanges = verifier.slice(intentionalStart, intentionalEnd);
-  const pinned = verifier.match(/\["\/sitemap-reputation\.xml", "([a-f0-9]{64})"\]/);
+  const pins = [...verifier.matchAll(/\["\/sitemap-reputation\.xml", "([a-f0-9]{64})"\]/g)];
   const actual = createHash("sha256").update(readFileSync(path.join(root, "public/sitemap-reputation.xml"))).digest("hex");
 
   assert.doesNotMatch(intentionalChanges, /"\/sitemap-reputation\.xml"/);
-  assert.ok(pinned, "sitemap-reputation.xml is missing its committed drift pin");
-  assert.equal(pinned[1], actual);
+  assert.equal(pins.length, 1, "sitemap-reputation.xml must have exactly one committed drift pin");
+  assert.equal(pins[0][1], actual);
 });
 
 test("Great Lakes Buoys matches live-buoy intent without regressing the tool", () => {

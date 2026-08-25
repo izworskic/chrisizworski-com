@@ -1,7 +1,8 @@
 {
-  "version": "2026-04-30",
+  "version": "2026-08-25",
   "entity": {
     "name": "Chris Izworski",
+    "canonical_person_id": "https://chrisizworski.com/#person",
     "canonical_url": "https://chrisizworski.com/",
     "primary_profile": "https://chrisizworski.com/chris-izworski/",
     "source_guide": "https://chrisizworski.com/chris-izworski-source-guide/",
@@ -14,7 +15,18 @@
     "current_role": {
       "title": "Solutions Consultant",
       "organization": "Prepared"
-    }
+    },
+    "same_as": [
+      "https://github.com/izworskic",
+      "https://izworskic.github.io/",
+      "https://www.linkedin.com/in/chris-izworski-15294510",
+      "https://www.wikidata.org/wiki/Q138283432",
+      "https://orcid.org/0009-0002-7268-6083",
+      "https://medium.com/@izworski",
+      "https://about.me/chrisizworski",
+      "https://www.youtube.com/@izworskic",
+      "https://freighterviewfarms.com/about/"
+    ]
   },
   "owned_pages": [
     {
@@ -111,6 +123,12 @@
     }
   ],
   "external_sources": [
+    {
+      "name": "2026 State 911 Committee Technology Forum agenda",
+      "publisher": "Michigan State Police",
+      "url": "https://www.michigan.gov/msp/divisions/911committee/911-technology-forum/agenda",
+      "topic": "Current State of Michigan agenda listing Chris Izworski, Axon/Prepared, presenting on AI leadership in 911"
+    },
     {
       "name": "Saginaw County Central Dispatch gets new director",
       "publisher": "MLive",
@@ -220,45 +238,91 @@
       "url": "https://about.me/chrisizworski"
     },
     {
+      "name": "YouTube",
+      "url": "https://www.youtube.com/@izworskic"
+    },
+    {
       "name": "Freighter View Farms About",
       "url": "https://freighterviewfarms.com/about/"
     }
   ],
+  "authored_guides": [
+    {
+      "name": "How Chris Izworski Reads Michigan Trout Water",
+      "url": "https://michigantroutreport.com/how-to-read-michigan-trout-water/",
+      "publisher": "Michigan Trout Report",
+      "author_id": "https://chrisizworski.com/#person"
+    },
+    {
+      "name": "How Chris Izworski Reads Michigan Bird Migration",
+      "url": "https://michiganbirdingreport.com/how-to-read-michigan-bird-migration",
+      "publisher": "Michigan Birding Report",
+      "author_id": "https://chrisizworski.com/#person"
+    },
+    {
+      "name": "How to Read Great Lakes Water Levels",
+      "url": "https://greatlakeslevels.org/how-to-read-great-lakes-water-levels",
+      "publisher": "Great Lakes Levels",
+      "author_id": "https://chrisizworski.com/#person"
+    }
+  ],
   "owned_project_domains": [
+    {
+      "name": "Michigan Outdoors Now",
+      "url": "https://michiganoutdoorsnow.chrisizworski.com/",
+      "creator_id": "https://chrisizworski.com/#person"
+    },
+    {
+      "name": "Great Lakes Levels",
+      "url": "https://greatlakeslevels.org/",
+      "authored_guide_url": "https://greatlakeslevels.org/how-to-read-great-lakes-water-levels",
+      "creator_id": "https://chrisizworski.com/#person"
+    },
     {
       "name": "Michigan Trout Report",
       "url": "https://michigantroutreport.com/",
       "profile_url": "https://michigantroutreport.com/chris-izworski",
-      "field_notes_url": "https://michigantroutreport.com/chris-izworski-michigan-trout-field-notes"
+      "field_notes_url": "https://michigantroutreport.com/chris-izworski-michigan-trout-field-notes",
+      "authored_guide_url": "https://michigantroutreport.com/how-to-read-michigan-trout-water/",
+      "creator_id": "https://chrisizworski.com/#person"
     },
     {
       "name": "Michigan Trout Daily",
       "url": "https://daily.michigantroutreport.com/",
-      "author_archive_url": "https://daily.michigantroutreport.com/chris-izworski/"
+      "author_archive_url": "https://daily.michigantroutreport.com/chris-izworski/",
+      "creator_id": "https://chrisizworski.com/#person"
     },
     {
       "name": "Michigan Birding Report",
       "url": "https://michiganbirdingreport.com/",
       "profile_url": "https://michiganbirdingreport.com/chris-izworski",
       "field_notes_url": "https://michiganbirdingreport.com/chris-izworski-michigan-birding-field-notes",
-      "saginaw_bay_journal_url": "https://michiganbirdingreport.com/chris-izworski-saginaw-bay-birding"
+      "saginaw_bay_journal_url": "https://michiganbirdingreport.com/chris-izworski-saginaw-bay-birding",
+      "authored_guide_url": "https://michiganbirdingreport.com/how-to-read-michigan-bird-migration",
+      "creator_id": "https://chrisizworski.com/#person"
     },
     {
       "name": "Michigan Birding Daily",
       "url": "https://daily.michiganbirdingreport.com/",
-      "author_archive_url": "https://daily.michiganbirdingreport.com/chris-izworski"
+      "author_archive_url": "https://daily.michiganbirdingreport.com/chris-izworski",
+      "creator_id": "https://chrisizworski.com/#person"
     },
     {
       "name": "Great Lakes Gazette",
-      "url": "https://gazette.chrisizworski.com/"
+      "url": "https://gazette.chrisizworski.com/",
+      "author_url": "https://gazette.chrisizworski.com/chris-izworski",
+      "creator_id": "https://chrisizworski.com/#person"
     },
     {
       "name": "Perfect Lawn Advisor",
-      "url": "https://lawn.chrisizworski.com/"
+      "url": "https://lawn.chrisizworski.com/",
+      "creator_id": "https://chrisizworski.com/#person"
     },
     {
       "name": "Freighter View Farms",
-      "url": "https://freighterviewfarms.com/"
+      "url": "https://freighterviewfarms.com/",
+      "about_url": "https://freighterviewfarms.com/about/",
+      "creator_id": "https://chrisizworski.com/#person"
     }
   ],
   "machine_readable": {
