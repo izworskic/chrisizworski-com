@@ -295,7 +295,7 @@ const committedDriftHashEntries = [
   ["/great-lakes-beaches/wenonah-park/", "92ef0e15291a5bfebf4e89bb3c75226e8352867d0b7fcb35c631178059c176ff"],
   ["/great-lakes-beaches/whitefish-point/", "1dfa103faf8c639a4235ba668a55393b17623793710471579ffb0eb7ccb11a20"],
   ["/great-lakes-beaches/wilderness-state-park/", "6341bdb514bd1ab07c01233bdc8442e2e84e320bcebe2ec7c182b23b19ab5bb1"],
-  ["/sitemap-reputation.xml", "6e76de8c0eb8b2ff0ae207584024de70b871d8c661d9be488fb8ae7a6b213ceb"],
+  ["/sitemap-reputation.xml", "be5f37c6eddb3e971a378d334cfe690bc7d273b609c1ac5e016fed72216f830b"],
   ["/zone-6a-planting-calendar/", "3b34180a82558e2df887dc238ad31dc8d1995e465b3e5d81972ddec260414565"],
 ];
 
