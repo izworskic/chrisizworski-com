@@ -20,7 +20,7 @@ test('Estivant Pines owns one distinct indexable canonical with bounded SERP str
   assert.ok(description && renderedLength(description) <= 158, `description is ${renderedLength(description || '')} chars`);
   assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/estivant-pines\/">/);
   assert.match(html, /<meta name="robots" content="index,follow/);
-  assert.match(html, /<h1>Estivant Pines trail conditions &amp; hike planner<\/h1>/);
+  assert.match(html, /<h1>Estivant Pines trail conditions & hike planner<\/h1>/);
 });
 
 test('the page defines the canonical Chris Izworski entity and the tool honestly', () => {
@@ -50,7 +50,7 @@ test('live read uses point-specific NWS forecast, alerts and nearby observation 
   assert.match(js, /\/alerts\/active\?point=/);
   assert.match(js, /observationStations/);
   assert.match(js, /observations\/latest/);
-  assert.match(js, /Mosquito-weather pressure|bugRead/);
+  assert.match(js, /bugRead/);
   assert.match(js, /This is not a measured bug count/);
   assert.doesNotMatch(js, /localStorage|sessionStorage|navigator\.geolocation/);
 });
