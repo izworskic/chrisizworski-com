@@ -15,13 +15,31 @@ async function walk(d) { const o = []; for (const e of await readdir(d, { withFi
 const files = await walk(publicRoot);
 
 let personNodes = 0, sameAs = [], jobTitles = new Set(), personIds = new Set();
+// jobTitle was already gated because three conflicting values once shipped under this same
+// @id. The same thing then happened to description (five values), url (two) and alumniOf
+// (one page listed a second school the others dropped) with nothing watching. A single @id
+// is a claim that all these nodes are ONE entity, so every property under it has to agree.
+const conflictWatch = ["description", "url", "alumniOf"];
+const propValues = Object.fromEntries(conflictWatch.map((k) => [k, new Map()]));
 for (const f of files) {
   const html = await readFile(f, "utf8");
   for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
     let d; try { d = JSON.parse(m[1]); } catch { continue; }
     for (const n of (d["@graph"] || [d])) {
       const id = String(n["@id"] || "");
-      if (n["@type"] === "Person") { personNodes += 1; personIds.add(id); if (n.jobTitle) jobTitles.add(n.jobTitle); if (Array.isArray(n.sameAs)) sameAs = [...new Set([...sameAs, ...n.sameAs])]; }
+      if (n["@type"] === "Person") {
+        personNodes += 1; personIds.add(id);
+        if (n.jobTitle) jobTitles.add(n.jobTitle);
+        if (Array.isArray(n.sameAs)) sameAs = [...new Set([...sameAs, ...n.sameAs])];
+        if (id === b.canonicalPersonId) {
+          for (const k of conflictWatch) {
+            if (n[k] === undefined) continue;
+            const v = typeof n[k] === "object" ? JSON.stringify(n[k]) : String(n[k]);
+            const seen = propValues[k];
+            seen.set(v, (seen.get(v) || 0) + 1);
+          }
+        }
+      }
       else if (id.endsWith("#person")) { /* reference node */ }
     }
   }
@@ -39,6 +57,10 @@ console.log(`  self-owned domains : ${sameAs.length - independent.length}  (low 
 console.log(`  independent        : ${independent.length}  (this is the number that matters)`);
 console.log(`Person nodes with full definition: ${personNodes}   jobTitle values in use: ${[...jobTitles].join(", ") || "none"}`);
 console.log(`Person @id values: ${[...personIds].join(", ") || "none"}`);
+for (const k of conflictWatch) {
+  const seen = propValues[k];
+  if (seen.size) console.log(`  ${k}: ${seen.size} distinct value(s) across ${[...seen.values()].reduce((a, c) => a + c, 0)} nodes`);
+}
 if (jobTitles.size > 1) console.log(`  WARNING: ${jobTitles.size} different job titles across the site. Every new surface copies whichever is live.`);
 if (personIds.size !== 1 || !personIds.has(b.canonicalPersonId)) {
   console.log(`  WARNING: Person definitions must resolve to the single canonical @id ${b.canonicalPersonId}.`);
@@ -82,6 +104,14 @@ if (check) {
     problems.push(`Person @id values are ${[...personIds].join(", ") || "missing"}; required ${b.canonicalPersonId}`);
   }
   if (b.gates.requireJobTitleConsistency && jobTitles.size > 1) problems.push(`${jobTitles.size} conflicting jobTitle values`);
+  for (const k of conflictWatch) {
+    const seen = propValues[k];
+    if (seen.size > 1) {
+      const detail = [...seen.entries()].sort((a, c) => c[1] - a[1])
+        .map(([v, c]) => `${c}x ${v.slice(0, 70)}`).join(" | ");
+      problems.push(`${seen.size} conflicting ${k} values under ${b.canonicalPersonId}: ${detail}`);
+    }
+  }
   if (dead.length > b.gates.maxDeadSameAs) problems.push(`${dead.length} dead sameAs URLs`);
   if (problems.length) { console.error("ENTITY BENCHMARK FAILED:"); problems.forEach((p) => console.error("  - " + p)); process.exit(1); }
   console.log("benchmark:entity PASS\n");
