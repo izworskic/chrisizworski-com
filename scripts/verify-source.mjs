@@ -9,6 +9,10 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 25 2026: current State 911 authority source plus the synchronized
+  // machine-readable entity graph. Re-crawl after production release, then remove.
+  "/chris-izworski-michigan-911-committee/",
+  "/sources.json",
   // Aug 22 2026: measured page-one CTR treatment for five distinct beach detail pages.
   // Re-crawl after production release, then remove these declarations.
   "/great-lakes-beaches/warren-dunes-state-park/",
