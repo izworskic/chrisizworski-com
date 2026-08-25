@@ -225,6 +225,24 @@ const intentionalChanges = new Set([
 // Pin their exact source hashes so the known drift passes without broadly exempting
 // the routes from future parity checks.
 const committedDriftHashes = new Map([
+  // Aug 25 2026: Person entity consolidated. The canonical @id carried FIVE different
+  // description values, two url values and an alumniOf that dropped a school on two of three
+  // pages. Verified semantically (parsed JSON-LD compared property by property) that nothing but
+  // url / description / alumniOf moved on these routes. Re-crawl after deploy and these pins can
+  // go back to the live snapshot.
+  ["/chris-izworski-biography/", "42fd88c0245525ff8878d9c309feb41e89ba3431871ddba319fee8d78cead7b7"],
+  ["/chris-izworski-works/", "efef4ca8612a6a008ed3e99d462d5d5f8fa7d6d4558831ff8d429816631427d9"],
+  ["/fall-color/ann-arbor-irish-hills-fall-color/", "f00f9388ec8f1dfa2f2b28ada9a9f058cdd1aaec32e4a2696f93f262f4b88fcb"],
+  ["/fall-color/au-sable-river-fall-color/", "95e6960b8fe387727ff9828e24b8418eb18f6c3b221555b3ca426f372e8b0e12"],
+  ["/fall-color/mackinac-island-fall-color/", "3c12a19b86b21cfb266e5a5dd37633e10d68ec8de35b201bdba682b7c941f2e4"],
+  ["/fall-color/porcupine-mountains-fall-color/", "5029dd042854e734f4778c87f04eef373eb8038f17ed105db4f9b61190b6379a"],
+  ["/fall-color/saginaw-bay-fall-color/", "b4ac2832231dfefbc8a9e2cc0b7dde75f2c5542c8afaf2c95711aec60d6c9ab9"],
+  ["/fall-color/saugatuck-southwest-michigan-fall-color/", "362fe4929402440a967ecfd63713c7cb0600d52010f1f3382e130870f3d62c2e"],
+  ["/fall-color/sleeping-bear-dunes-fall-color/", "bab474892820fdc868887afae747b1d6d3eebfb516490c7c4e51d8e0bdcf1eb3"],
+  ["/fall-color/tahquamenon-falls-fall-color/", "494ffd24692567e82375c9e256043fdacf22b2798e577705bbdee32b915925a4"],
+  ["/fall-color/upper-peninsula-fall-color/", "fac44449fb92c3ca5715b73193c59e89219da972510cf0aa6cc60570abec852a"],
+  ["/fall-color/when-do-leaves-peak-in-michigan/", "9ed1bbfe0d2a19da1e98233d908cae73badd5beac1edc0fd1b1a14042b934f40"],
+  ["/great-lakes-maritime-history/", "489cadd216c072ad34b0a72f6db215bde6719d5a468b201ea861af3433504fcc"],
   ["/au-sable-river/", "fa36c47fb8f61618e4f52f8db6ba56e6f3d630e178cc137499f00a6fc4dfef42"],
   ["/edmund-fitzgerald/", "a722575cbf373e9e66c874d48a61dafb089e19a79f2df5e261053940ec3f3f04"],
   ["/heirloom-seed-saving-guide/", "2e5d3c53110102a7f6784f3c7f6ac86b1f9be6840f297a515ead80111c1b6e87"],
