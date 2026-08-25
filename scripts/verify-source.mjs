@@ -9,6 +9,15 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 22 2026: measured page-one CTR treatment for five distinct beach detail pages.
+  // Re-crawl after production release, then remove these declarations.
+  "/great-lakes-beaches/warren-dunes-state-park/",
+  "/great-lakes-beaches/luna-pier/",
+  "/great-lakes-beaches/new-buffalo-beach/",
+  "/great-lakes-beaches/pj-hoffmaster-state-park/",
+  "/great-lakes-beaches/oscoda-beach-park/",
+  // Aug 23 2026: measured entity/discovery CTR treatment. Re-crawl after release, then remove.
+  "/timeline/",
   // Aug 22 2026: measured Zone 6a planting-calendar page-one CTR treatment. Re-crawl after production release, then remove.
   "/zone-6a-planting-calendar/",
   // Aug 22 2026: measured page-one CTR treatment. Re-crawl after production release, then remove.
@@ -455,11 +464,20 @@ if (/511on\.ca\/map\/Cctv|wtbwb\.ca\/approach/.test(borderClient)) {
   failures.push("Michigan border client bypasses the same-origin camera proxy");
 }
 
+// The NOAA water-level request lives in the client asset, not the page HTML. This check used to
+// read index.html, which no longer carries the datum, so it failed on honest input and was being
+// papered over by a wrapper that injected the attributes at verify time. Check the real file.
 const circleTour = await readFile(path.join(publicRoot, "lake-superior-circle-tour", "index.html"), "utf8");
-if (!circleTour.includes("datum=LWD") || !circleTour.includes("ft above LWD at Duluth")) {
+const circleTourClient = await readFile(path.join(publicRoot, "assets", "lake-superior-circle-tour.js"), "utf8");
+if (!circleTourClient.includes("datum=LWD") || !circleTourClient.includes("ft above LWD at Duluth")) {
   failures.push("Lake Superior Circle Tour is missing the valid NOAA LWD water-level datum");
 }
-if (circleTour.includes("datum=IGLD85")) failures.push("Lake Superior Circle Tour still requests NOAA's invalid IGLD85 datum");
+if (!circleTourClient.includes("station=9099064")) {
+  failures.push("Lake Superior Circle Tour is not requesting NOAA station 9099064 (Duluth)");
+}
+if (circleTourClient.includes("datum=IGLD85") || circleTour.includes("datum=IGLD85")) {
+  failures.push("Lake Superior Circle Tour still requests NOAA's invalid IGLD85 datum");
+}
 
 const aurora = await readFile(path.join(publicRoot, "northern-lights-michigan", "index.html"), "utf8");
 const auroraApi = await readFile(path.join(root, "api", "aurora.js"), "utf8");

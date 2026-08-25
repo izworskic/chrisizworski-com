@@ -37,7 +37,10 @@ for (const page of config.pages) {
   check(html.includes(`<title>${expectedTitle}</title>`) || html.includes(`<title>${page.title}</title>`), `${slug}: title drift`);
   check(html.includes(`<h1 id="page-title">${expectedH1}</h1>`) || html.includes(`<h1 id="page-title">${page.h1}</h1>`), `${slug}: H1 drift`);
   check(html.includes(`<link rel="canonical" href="https://chrisizworski.com${page.path}">`), `${slug}: canonical drift`);
-  check(html.includes('"dateModified": "2026-08-22"'), `${slug}: dateModified is not aligned to release`);
+  check(
+    html.includes(`"dateModified": "${config.releaseDateModified}"`),
+    `${slug}: dateModified is not aligned to release (expected ${config.releaseDateModified})`,
+  );
   check(html.includes('NWS swim risk is a forecast, not the posted flag'), `${slug}: posted-flag truth boundary missing`);
   check(overrideSource.includes(`'${slug}'`), `${slug}: durable generator override missing`);
 }

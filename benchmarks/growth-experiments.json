@@ -596,10 +596,18 @@
       "status": "pending-clean-window",
       "releaseDate": null,
       "evaluationWindow": null,
-      "lastSearchFacingChangeDate": "2026-08-22",
+      "lastSearchFacingChangeDate": "2026-08-25",
       "decisionDate": null,
       "result": null,
-      "stopCondition": "Average position falls below 12.5, canonical/indexability changes, or the page weakens its explicit boundary between NWS swim risk and physical posted flag status."
+      "stopCondition": "Average position falls below 12.5, canonical/indexability changes, or the page weakens its explicit boundary between NWS swim risk and physical posted flag status.",
+      "preWindowContentChanges": [
+        {
+          "date": "2026-08-25",
+          "path": "/great-lakes-beaches/new-buffalo-beach/",
+          "change": "meta description trimmed to <=158 chars",
+          "why": "2026-08-25: meta description trimmed to the 158-char limit BEFORE this experiment's clock started (status was pending-clean-window with releaseDate null), so the window opens on the corrected string and the result stays single-variable. This is not a mid-window change."
+        }
+      ]
     },
     {
       "id": "2026-08-22-border-waits-ctr",
@@ -698,10 +706,18 @@
       "status": "pending-clean-window",
       "releaseDate": null,
       "evaluationWindow": null,
-      "lastSearchFacingChangeDate": "2026-08-22",
+      "lastSearchFacingChangeDate": "2026-08-25",
       "decisionDate": null,
       "result": null,
-      "stopCondition": "Average position worsens beyond 15 after a meaningful impression sample, CTR remains effectively zero after the clean window, or the field map begins competing as a duplicate search owner."
+      "stopCondition": "Average position worsens beyond 15 after a meaningful impression sample, CTR remains effectively zero after the clean window, or the field map begins competing as a duplicate search owner.",
+      "preWindowContentChanges": [
+        {
+          "date": "2026-08-25",
+          "path": "/michigan-paddling/manistee-river/",
+          "change": "meta description trimmed to <=158 chars",
+          "why": "2026-08-25: meta description trimmed to the 158-char limit BEFORE this experiment's clock started (status was pending-clean-window with releaseDate null), so the window opens on the corrected string and the result stays single-variable. This is not a mid-window change."
+        }
+      ]
     },
     {
       "id": "2026-08-22-fall-aurora-overlap-ctr",
@@ -756,10 +772,18 @@
       "status": "pending-clean-window",
       "releaseDate": null,
       "evaluationWindow": null,
-      "lastSearchFacingChangeDate": "2026-08-22",
+      "lastSearchFacingChangeDate": "2026-08-25",
       "decisionDate": null,
       "result": null,
-      "stopCondition": "Average position worsens beyond 15 after a meaningful sample, CTR falls below 1%, the destination snippet changes, or the statewide Fall Color owner is altered during its protected window."
+      "stopCondition": "Average position worsens beyond 15 after a meaningful sample, CTR falls below 1%, the destination snippet changes, or the statewide Fall Color owner is altered during its protected window.",
+      "preWindowContentChanges": [
+        {
+          "date": "2026-08-25",
+          "path": "/up-north-michigan/ (source path only; destination snippet untouched)",
+          "change": "meta description trimmed to <=158 chars",
+          "why": "2026-08-25: meta description trimmed to the 158-char limit BEFORE this experiment's clock started (status was pending-clean-window with releaseDate null), so the window opens on the corrected string and the result stays single-variable. This is not a mid-window change."
+        }
+      ]
     },
     {
       "id": "2026-08-22-fall-weekend-planner-ctr",

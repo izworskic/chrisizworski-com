@@ -134,6 +134,16 @@ Michigan Tonight", "How Deep Is Saginaw Bay?" all outperform a bare topic. Just
 keep the byline when it fits, and keep the title consistent with the page's H1
 and URL slug.
 
+`benchmark:serp-length` enforces both limits on every page. Two things about it:
+
+**It measures the rendered string, not the source.** `&amp;` is five characters
+in the file and one on the SERP; `&#x27;` is six and one. Count what Google
+renders or you will chase titles that were never over.
+
+**Count before you rewrite.** Three "over limit" findings in the August 25 pass
+were entity-encoding artifacts, not real overages. Measuring first is cheaper
+than reverting.
+
 ## 4. Generated files
 
 The 50 beach detail pages under `public/great-lakes-beaches/*/` are **generated**
@@ -174,6 +184,82 @@ Watch specifically for:
 - internal links into the `/chris-izworski-*` identity cluster (roughly 450 across the site)
 - sitemap URL count
 - third-party embeds: `loading="lazy"`, never `eager`
+
+## 6b. Changing a page that is inside an experiment
+
+`benchmarks/growth-experiments.json` and the per-experiment files record a
+`status`, a `releaseDate` and an `evaluationWindow`. Before you decide a page is
+untouchable, read those three fields, because they mean different things.
+
+**`pending-clean-window` with `releaseDate: null` means the clock has NOT
+started.** Nothing is being measured yet. This is the cheapest possible moment to
+fix a defect: correct it now and the window opens on the corrected page, still
+single-variable. Deferring a fix here buys nothing and costs a worse page for
+28 days. On 2026-08-25 three descriptions were trimmed in exactly this state and
+recorded under `preWindowContentChanges`.
+
+**`status: running` with a live `evaluationWindow` means the clock IS running,**
+and if the page carries a `freeze` list you must not touch anything on it. The
+description, title and first answer are usually the treatment itself, so editing
+them does not contaminate the measurement, it *replaces* the thing being
+measured, and the 28 days are spent.
+
+So the rule is not "never touch an experiment". It is:
+
+| state | do |
+| --- | --- |
+| `pending-clean-window`, no release date | fix it now, record under `preWindowContentChanges` |
+| `running`, page not in a `freeze` list | fix non-treatment defects, record under `midWindowContentChanges` |
+| `running`, field is in the `freeze` list | wait for the window, and make the wait expire on its own |
+
+That last row is the one worth getting right. `/tools/` has a 160-character
+description against a 158 limit, and its window runs to 2026-09-21 with
+`metaDescription` frozen. Two characters are not worth a 28-day measurement, so
+it is exempt in `scripts/benchmark-serp-length.mjs` — but the exemption carries
+`until: "2026-09-21"` and the gate starts failing on 2026-09-22. **Schedule the
+fix, do not forgive it.** An exemption with no end date is just a hidden failure.
+
+## 6c. Never let a gate see input that was not committed
+
+Two wrapper scripts, `verify-source-with-circle-tour.mjs` and
+`check-freshness-with-circle-tour.mjs`, rewrote page HTML, the sitemap and
+`verify-source.mjs` itself on disk, ran the real gate against the doctored files,
+then restored the originals in a `finally` block. `npm run verify:all` exited 0
+while the real verifier exited 1 with seven failures, and eight routes were
+exempted from drift detection with no declaration visible anywhere in the repo.
+Both scripts are deleted. Do not reintroduce the pattern under any name.
+
+If a gate fails on honest input there are exactly two legitimate moves:
+
+1. **Fix the code** so the assertion passes.
+2. **Fix the assertion** if it is measuring the wrong thing, in a commit that says
+   so. The Circle Tour NOAA check was reading `index.html` after the water-level
+   request had moved to `public/assets/lake-superior-circle-tour.js`. The product
+   was correct the whole time; the gate was reading the wrong file. That is a
+   one-line fix to the gate, not a reason to fake the input.
+
+If a page legitimately differs from the live snapshot, declare it in
+`intentionalChanges` **in the committed file**, where a reviewer can see it.
+
+## 6d. A missing field is not a passing check
+
+`stamp-freshness.mjs` used to `continue` past any page with no `dateModified`. A
+page with no stamp can never be reported as stale, so removing the field removed
+the page from the freshness system entirely. `/connect/` lost its `dateModified`
+in a revert on 2026-08-24 and sat 14 days stale with every gate green.
+
+The check now fails when a **sitemap-listed** page carries no `dateModified`.
+Unlisted pages may still have none, because their `lastmod` has nothing to
+disagree with.
+
+Same class of bug in the sitemap sync: `SITEMAPS` listed three files while
+`robots.txt` declared seven, so `sitemap-fall.xml`, `sitemap-manistee.xml` and
+`sitemap-winter.xml` drifted unchecked, and `sitemap-winter.xml` shipped eleven
+URLs with no `<lastmod>` at all. **If you add a sitemap to `robots.txt`, add it
+to `SITEMAPS` in the same commit.**
+
+When you write a check, ask what it does with an absent value. Skipping is the
+wrong answer more often than it looks.
 
 ## 7. Open a PR, do not push to main
 

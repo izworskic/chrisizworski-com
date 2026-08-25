@@ -9,6 +9,10 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = pathlib.Path(os.environ.get("ICE_OUT", str(ROOT / "public" / "michigan-ice")))
 (OUT / "regions").mkdir(parents=True, exist_ok=True)
 ICE_ROOT_DATE_MODIFIED = "2026-08-18"
+# Sub-pages (ice safety, freezing degree days, ice cover history) gained their
+# dateModified on 2026-08-25. Keep this separate from the root/region date: the stamper
+# only corrects stamps FORWARD, so an overstated date would never be walked back.
+ICE_SUBPAGE_DATE_MODIFIED = "2026-08-25"
 
 REGIONS = [
     dict(
@@ -437,6 +441,7 @@ def build_safety():
          "description": "Michigan DNR rejects the standard inch thickness guide for ice safety. Here is what it says "
                         "instead, why Great Lakes bay ice is treated as more fragile, and how to test ice yourself.",
          "author": {"@id": PERSON_ID}, "publisher": {"@id": PERSON_ID},
+         "dateModified": ICE_SUBPAGE_DATE_MODIFIED,
          "inLanguage": "en-US", "mainEntityOfPage": url,
          "isPartOf": {"@id": SITE + "/#website"}},
         breadcrumb([("Michigan Ice Report", SITE + "/"), ("Ice safety", url)]),
@@ -538,6 +543,7 @@ def build_method():
          "description": "What accumulated freezing degree days are, how the modified Stefan equation converts them to "
                         "an ice thickness estimate, and why that estimate overpredicts thin early season ice.",
          "author": {"@id": PERSON_ID}, "publisher": {"@id": PERSON_ID},
+         "dateModified": ICE_SUBPAGE_DATE_MODIFIED,
          "inLanguage": "en-US", "mainEntityOfPage": url,
          "isPartOf": {"@id": SITE + "/#website"}},
         breadcrumb([("Michigan Ice Report", SITE + "/"), ("How it works", url)]),
@@ -635,6 +641,7 @@ def build_history():
          "description": "What the NOAA GLERL ice climatology record shows about Great Lakes ice cover since 1973, "
                         "when ice peaks, and how variable Michigan winters actually are.",
          "author": {"@id": PERSON_ID}, "publisher": {"@id": PERSON_ID},
+         "dateModified": ICE_SUBPAGE_DATE_MODIFIED,
          "inLanguage": "en-US", "mainEntityOfPage": url,
          "isPartOf": {"@id": SITE + "/#website"}},
         breadcrumb([("Michigan Ice Report", SITE + "/"), ("54 year history", url)]),

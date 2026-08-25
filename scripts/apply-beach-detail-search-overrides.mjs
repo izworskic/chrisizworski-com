@@ -21,7 +21,7 @@ export const BEACH_DETAIL_SEARCH_OVERRIDES = {
   },
   'new-buffalo-beach': {
     title: 'New Buffalo Beach Conditions Today: Swim Risk & Waves',
-    description: 'Check New Buffalo Beach conditions today: NWS swim risk, Lake Michigan waves and water temperature, BeachGuard notices and weather. Confirm the posted flag onsite.',
+    description: 'New Buffalo Beach conditions today: NWS swim risk, Lake Michigan waves and water temperature, BeachGuard notices and weather. Confirm the posted flag onsite.',
     h1: 'New Buffalo Beach Conditions Today',
     firstAnswer: "Looking for today's flag? Check current NWS swim risk, BeachGuard notices, Lake Michigan waves, water temperature, and weather here, then confirm the physical posted flag when you arrive."
   },

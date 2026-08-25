@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Manistee River Map & Trip Planner | Access, Flows, Fishing</title>
-<meta name="description" content="Explore the Manistee River and tributaries with public access, live USGS flows and water temperatures, river geometry, Pine River access, trip planning and current Michigan DNR regulation links.">
+<meta name="description" content="Manistee River and tributaries map with public access sites, live USGS flow and water temperature, Pine River access and Michigan DNR regulation links.">
 <link rel="canonical" href="https://chrisizworski.com/manistee-river-map/">
 <meta property="og:title" content="The Manistee River: A Field Map">
 <meta property="og:description" content="Manistee River access, live gauges, tributaries and a river-distance trip planner.">
@@ -19,8 +19,15 @@
 {
   "@context":"https://schema.org",
   "@graph":[
-    {"@type":"WebApplication","name":"Manistee River Field Map","url":"https://chrisizworski.com/manistee-river-map/","applicationCategory":"TravelApplication","operatingSystem":"Any","description":"Interactive Manistee River and tributaries map with access locations, USGS hydrography, current river readings and trip planning."},
-    {"@type":"Dataset","name":"Manistee River Field Map source index","creator":{"@type":"Person","name":"Chris Izworski"},"isBasedOn":["https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer","https://waterdata.usgs.gov/","https://www.michigan.gov/dnr/things-to-do/fishing/fishing-regulations","https://www.fs.usda.gov/r09/huron-manistee"],"description":"A curated index of public river access and recreation locations with coordinate and facility metadata."},
+    {
+    "@type": "Person",
+    "@id": "https://chrisizworski.com/#person",
+    "name": "Chris Izworski",
+    "url": "https://chrisizworski.com/"
+   },
+   {"@type":"WebApplication","name":"Manistee River Field Map","url":"https://chrisizworski.com/manistee-river-map/",
+  "dateModified":"2026-08-25","applicationCategory":"TravelApplication","operatingSystem":"Any","description":"Interactive Manistee River and tributaries map with access locations, USGS hydrography, current river readings and trip planning."},
+    {"@type":"Dataset","name":"Manistee River Field Map source index","creator": {"@id": "https://chrisizworski.com/#person"},"isBasedOn":["https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer","https://waterdata.usgs.gov/","https://www.michigan.gov/dnr/things-to-do/fishing/fishing-regulations","https://www.fs.usda.gov/r09/huron-manistee"],"description":"A curated index of public river access and recreation locations with coordinate and facility metadata."},
     {"@type":"FAQPage","mainEntity":[
       {"@type":"Question","name":"Does this map replace Michigan fishing regulations?","acceptedAnswer":{"@type":"Answer","text":"No. Use the current Michigan DNR fishing regulations and regulation map for reach-specific rules."}},
       {"@type":"Question","name":"Where do the river lines come from?","acceptedAnswer":{"@type":"Answer","text":"River and tributary geometry comes from the U.S. Geological Survey National Hydrography Dataset."}},
