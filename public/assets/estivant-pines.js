@@ -1,6 +1,6 @@
 (() => {
-  const LAT = 47.44614;
-  const LON = -87.86015;
+  const LAT = 47.4456;
+  const LON = -87.8776;
   const NWS = 'https://api.weather.gov';
   const $ = (id) => document.getElementById(id);
   const fmtTime = (value) => {
@@ -16,7 +16,7 @@
   const cToF = (c) => Number.isFinite(Number(c)) ? Math.round((Number(c) * 9 / 5) + 32) : null;
   const msToMph = (ms) => Number.isFinite(Number(ms)) ? Math.round(Number(ms) * 2.23694) : null;
   const finite = (v) => Number.isFinite(Number(v)) ? Number(v) : null;
-  const esc = (s) => String(s ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const esc = (s) => String(s ?? '').replace(/[&<>'\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[c]));
 
   function parseWind(text) {
     const nums = String(text || '').match(/\d+(?:\.\d+)?/g);
