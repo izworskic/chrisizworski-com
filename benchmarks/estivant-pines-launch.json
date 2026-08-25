@@ -1,0 +1,62 @@
+{
+  "version": "1.0.0",
+  "created": "2026-08-25",
+  "timezone": "America/Detroit",
+  "canonical": "https://chrisizworski.com/estivant-pines/",
+  "toolId": "estivant-pines",
+  "name": "Estivant Pines Hike Planner",
+  "decision": "Should I hike Estivant Pines now, which official loop fits my time, and what weather or seasonal access factors could change the trip?",
+  "evidence": {
+    "qualitative": [
+      "Michigan Nature Association describes Estivant Pines as one of its most popular sanctuaries and maintains two intersecting marked trail loops.",
+      "Visit Keweenaw publishes destination guidance for Estivant Pines but no dedicated live trail decision tool was found in the public research pass on 2026-08-25.",
+      "The user hiked Estivant Pines in August 2026 and identified a practical gap around current weather, trail choice, access and seasonal conditions."
+    ],
+    "officialSources": [
+      "https://www.michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=110",
+      "https://www.michigannature.org/fileLibrary/Estivant%20Pines%20Nature%20Sanctuary%20Fact%20Sheet.pdf",
+      "https://www.weather.gov/"
+    ],
+    "regionalSources": [
+      "https://www.visitkeweenaw.com/outdoors/hiking-trails-nature-areas/"
+    ]
+  },
+  "newCanonicalGate": {
+    "distinctSearchIntent": {"score": 25, "max": 25, "reason": "A destination-specific live hike decision is not owned by an existing site canonical."},
+    "networkFit": {"score": 18, "max": 20, "reason": "Fits Michigan Outdoors / Up North / Keweenaw fall planning; broad tools-page promotion is intentionally deferred while /tools/ is frozen."},
+    "uniqueUtility": {"score": 20, "max": 20, "reason": "Combines point weather, alerts, daylight, a weather-based hike read, official route facts and seasonal road context."},
+    "authorityAndSeasonFit": {"score": 15, "max": 15, "reason": "Uses MNA as trail authority, NWS for live weather, and Visit Keweenaw for regional access context; useful year-round."},
+    "measurementPlan": {"score": 10, "max": 10, "reason": "Launch baseline begins at zero; measure impressions, CTR, average position and downstream route/source clicks for 28 complete days after release."},
+    "cannibalizationSafety": {"score": 10, "max": 10, "reason": "Owns Estivant Pines-specific hiking conditions rather than broad Up North, fall color or Michigan outdoor planning intent."},
+    "total": 98,
+    "buildThreshold": 70,
+    "priorityThreshold": 85,
+    "passes": true
+  },
+  "searchOwnership": {
+    "primaryIntent": "Estivant Pines trail conditions and hike planning",
+    "doesNotOwn": [
+      "Keweenaw fall color",
+      "general Copper Harbor travel",
+      "Michigan hiking statewide",
+      "Upper Peninsula trip planning"
+    ]
+  },
+  "liveData": {
+    "nationalWeatherService": "Direct browser read from api.weather.gov point forecast, alerts and nearest observation station.",
+    "fallColor": "Optional seasonal handoff from the site's existing fall-color conditions endpoint.",
+    "trailSensor": "None. The page must never describe its weather inference as an inspected or official live trail condition."
+  },
+  "measurement": {
+    "windowDays": 28,
+    "start": "First complete day after production release",
+    "primaryMetrics": ["Google Search Console impressions", "CTR", "average position"],
+    "engagementMetrics": ["trailhead directions clicks", "MNA map clicks", "Keweenaw fall tracker clicks"],
+    "decisionRule": "Keep and expand if it earns qualified discovery or repeat utility without cannibalizing broad Up North or fall-color owners. Improve the existing canonical before creating any Estivant keyword variants."
+  },
+  "releaseConstraints": [
+    "Do not touch /tools/ while its active CTR experiment is frozen through 2026-09-21.",
+    "Do not change the Keweenaw fall-color destination's protected search-facing treatment merely to promote this tool.",
+    "Add broader tool-network promotion only on eligible source surfaces after their measurement windows allow it."
+  ]
+}
