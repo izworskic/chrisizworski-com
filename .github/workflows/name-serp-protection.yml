@@ -1,0 +1,57 @@
+name: Name SERP surface protection
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+jobs:
+  protect-existing-winners:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Block unapproved edits to protected search surfaces
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import subprocess
+          import sys
+
+          with open('benchmarks/name-serp-protection.json', encoding='utf-8') as f:
+              config = json.load(f)
+          with open(os.environ['GITHUB_EVENT_PATH'], encoding='utf-8') as f:
+              event = json.load(f)
+
+          labels = {item['name'] for item in event['pull_request'].get('labels', [])}
+          override = config['overrideLabel']
+          if override in labels:
+              print(f'Explicit override label present: {override}')
+              sys.exit(0)
+
+          base_sha = event['pull_request']['base']['sha']
+          head_sha = event['pull_request']['head']['sha']
+          changed = set(subprocess.check_output(
+              ['git', 'diff', '--name-only', f'{base_sha}...{head_sha}'],
+              text=True,
+          ).splitlines())
+
+          protected = {item['path']: item['reason'] for item in config['protectedPaths']}
+          blocked = [(path, protected[path]) for path in sorted(changed & protected.keys())]
+          if blocked:
+              print('Protected branded-search surfaces changed without explicit approval:')
+              for path, reason in blocked:
+                  print(f'  - {path}: {reason}')
+              print(f'If Chris explicitly approves changing one of these surfaces, add the PR label: {override}')
+              sys.exit(1)
+
+          print('No protected branded-search surface was modified. Additive work is clear to proceed.')
+          PY
