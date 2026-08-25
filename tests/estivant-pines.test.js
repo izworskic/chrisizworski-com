@@ -44,6 +44,15 @@ test('route facts use Michigan Nature Association as the trail authority', () =>
   assert.match(html, /Burma Road/);
 });
 
+test('trailhead coordinate is consistent across schema, map, directions and NWS point', () => {
+  assert.match(html, /"latitude":47\.4456,"longitude":-87\.8776/);
+  assert.match(html, /marker=47\.4456%2C-87\.8776/);
+  assert.match(html, /query=47\.4456,-87\.8776/);
+  assert.match(js, /const LAT = 47\.4456;/);
+  assert.match(js, /const LON = -87\.8776;/);
+  assert.doesNotMatch(html + js, /47\.44614|-87\.86015/);
+});
+
 test('live read uses point-specific NWS forecast, alerts and nearby observation without a new serverless route', () => {
   assert.match(js, /https:\/\/api\.weather\.gov/);
   assert.match(js, /\/points\/\$\{LAT\.toFixed\(4\)\},\$\{LON\.toFixed\(4\)\}/);
