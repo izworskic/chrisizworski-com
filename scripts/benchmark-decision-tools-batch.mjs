@@ -1,6 +1,46 @@
 #!/usr/bin/env node
-import {readFile} from "node:fs/promises";import path from "node:path";
-const root=path.resolve(import.meta.dirname,".."),b=JSON.parse(await readFile(path.join(root,"benchmarks/decision-tools-batch-2026-08-26.json"),"utf8")),js=await readFile(path.join(root,"public/assets/decision-tool-batch.js"),"utf8");let fail=[],rows=[];
-for(const t of b.tools){const h=await readFile(path.join(root,"public",t.slug,"index.html"),"utf8");const truthMissing=!/Truth boundary|Boundary:|does not|not a trail|not measured|not a claim/i.test(h),forbidden=/safe to hike|trail is safe|guaranteed agates|ships are here now|waterfall flow is [0-9]/i.test(h),sourceMissing=!/Sources<\/h2>/.test(h),failSoftMissing=!/fails soft|fail soft|failed soft|temporarily unavailable/i.test(h+js);const truth=(truthMissing?25:0)+(forbidden?50:0)+(sourceMissing?20:0)+(failSoftMissing?15:0);let decision=0;for(const x of ['id="location"','id="verdictValue"','id="liveValue"','id="timingValue"','id="hours"','id="refresh"'])if(!h.includes(x))decision+=20;const title=h.match(/<title>([^<]+)<\/title>/)?.[1]||"",meta=h.match(/<meta name="description" content="([^"]+)"/)?.[1]||"";if(title.length>60)fail.push(t.id+": title "+title.length);if(meta.length>158)fail.push(t.id+": meta "+meta.length);if(!h.includes('rel="canonical" href="'+t.canonical+'"'))fail.push(t.id+": canonical");if(!h.includes('"@id":"https://chrisizworski.com/#person"'))fail.push(t.id+": person entity");if(!h.includes('"dateModified":"2026-08-26"'))fail.push(t.id+": dateModified");if(/localStorage|sessionStorage|navigator\.geolocation/.test(h+js))fail.push(t.id+": privacy storage/location");if(t.bestFitScore<70)fail.push(t.id+": build score");if(truth>b.lossFunctions.truthLoss.max)fail.push(t.id+": truth loss "+truth);if(decision>b.lossFunctions.decisionLoss.max)fail.push(t.id+": decision loss "+decision);rows.push({id:t.id,bestFit:t.bestFitScore,truthLoss:truth,decisionLoss:decision})}
-for(const token of ["forecastGridData","skyCover","snowfallAmount","quantitativePrecipitation","waterservices.usgs.gov","embed.myshiptracking.com","/api/buoys","/api/buoy/","air-quality-api.open-meteo.com"])if(!js.includes(token))fail.push("engine missing "+token);
-console.log(JSON.stringify({benchmark:"decision-tools-batch",rows,lossThresholds:b.lossFunctions,failures:fail},null,2));if(fail.length)process.exitCode=1;
+import {readFile} from "node:fs/promises";
+import path from "node:path";
+const root=path.resolve(import.meta.dirname,"..");
+const b=JSON.parse(await readFile(path.join(root,"benchmarks/decision-tools-batch-2026-08-26.json"),"utf8"));
+const baseJs=await readFile(path.join(root,"public/assets/decision-tool-batch.js"),"utf8");
+const depthJs=await readFile(path.join(root,"public/assets/decision-tool-depth-v2.js"),"utf8");
+let fail=[],rows=[],features=[];
+for(const t of b.tools){
+  const h=await readFile(path.join(root,"public",t.slug,"index.html"),"utf8");
+  const truthMissing=!/Truth boundary|Boundary:|does not|not a trail|not measured|not a claim/i.test(h);
+  const forbidden=/safe to hike|trail is safe|guaranteed agates|ships are here now|waterfall flow is [0-9]/i.test(h);
+  const sourceMissing=!/Sources<\/h2>/.test(h);
+  const failSoftMissing=!/fails soft|fail soft|failed soft|temporarily unavailable/i.test(h+baseJs+depthJs);
+  const truth=(truthMissing?25:0)+(forbidden?50:0)+(sourceMissing?20:0)+(failSoftMissing?15:0);
+  let decision=0;
+  for(const x of ['id="location"','id="verdictValue"','id="liveValue"','id="timingValue"','id="hours"','id="refresh"']) if(!h.includes(x)) decision+=20;
+  let depth=0;
+  for(const x of ['id="compareAll"','id="rankings"','id="bestWindow"','id="windowBars"','id="scoreBreakdown"','id="dataStack"','id="siteMap"']) if(!h.includes(x)) depth+=15;
+  if(!h.includes('/assets/decision-tool-depth-v2.css')||!h.includes('/assets/decision-tool-depth-v2.js')) depth+=25;
+  const feature=h.match(/data-v2-feature="([^"]+)"/)?.[1]||"";
+  features.push({id:t.id,feature});
+  let homogeneity=0;
+  if(!feature||feature!==t.v2Feature) homogeneity+=30;
+  if(!depthJs.includes('cfg.id==="'+t.id+'"')) homogeneity+=30;
+  const title=h.match(/<title>([^<]+)<\/title>/)?.[1]||"";
+  const meta=h.match(/<meta name="description" content="([^"]+)"/)?.[1]||"";
+  if(title.length>60) fail.push(t.id+": title "+title.length);
+  if(meta.length>158) fail.push(t.id+": meta "+meta.length);
+  if(!h.includes('rel="canonical" href="'+t.canonical+'"')) fail.push(t.id+": canonical");
+  if(!h.includes('"@id":"https://chrisizworski.com/#person"')) fail.push(t.id+": person entity");
+  if(!h.includes('"dateModified":"2026-08-26"')) fail.push(t.id+": dateModified");
+  if(/localStorage|sessionStorage|navigator\.geolocation/.test(h+baseJs+depthJs)) fail.push(t.id+": privacy storage/location");
+  if(t.bestFitScore<70) fail.push(t.id+": build score");
+  if(truth>b.lossFunctions.truthLoss.max) fail.push(t.id+": truth loss "+truth);
+  if(decision>b.lossFunctions.decisionLoss.max) fail.push(t.id+": decision loss "+decision);
+  if(depth>b.lossFunctions.depthLoss.max) fail.push(t.id+": depth loss "+depth);
+  if(homogeneity>b.lossFunctions.homogeneityLoss.max) fail.push(t.id+": homogeneity loss "+homogeneity);
+  rows.push({id:t.id,bestFit:t.bestFitScore,truthLoss:truth,decisionLoss:decision,depthLoss:depth,homogeneityLoss:homogeneity});
+}
+const featureNames=features.map(x=>x.feature).filter(Boolean);
+if(new Set(featureNames).size!==b.tools.length) fail.push("V2 features are not unique across all six tools");
+for(const token of ["forecastGridData","skyCover","snowfallAmount","quantitativePrecipitation","waterservices.usgs.gov","embed.myshiptracking.com","/api/buoys","/api/buoy/","air-quality-api.open-meteo.com"]) if(!(baseJs+depthJs).includes(token)) fail.push("engine missing "+token);
+for(const token of ["compareAll","bestBlock","scoreBreakdown","dataStack","openstreetmap.org/export/embed.html"]) if(!depthJs.includes(token)) fail.push("V2 depth engine missing "+token);
+console.log(JSON.stringify({benchmark:"decision-tools-batch-v2",rows,features,lossThresholds:b.lossFunctions,failures:fail},null,2));
+if(fail.length) process.exitCode=1;
