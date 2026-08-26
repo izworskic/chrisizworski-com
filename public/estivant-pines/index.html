@@ -88,7 +88,7 @@
 
 <section class="section" id="hike-clock">
 <h2>Sunrise, sunset & when to start</h2>
-<p class="section-intro">This is the practical daylight clock. Sunrise and sunset come from the U.S. Naval Observatory for the Estivant Pines trailhead. The start-by times below are planning estimates, not official MNA hike times: they allow a deliberately relaxed forest pace plus a 30-minute daylight margin.</p>
+<p class="section-intro">This is the practical daylight clock. Sunrise, sunset and civil twilight are calculated directly in the browser from the Estivant Pines trailhead coordinates and date, so the clock does not depend on a separate astronomy service being reachable. The start-by times below are planning estimates, not official MNA hike times: they allow a deliberately relaxed forest pace plus a 30-minute daylight margin.</p>
 <div class="note" id="sunTimes">Loading today's sun times.</div>
 <div class="timing-grid" id="routeTiming" style="margin-top:12px">
 <div class="timing"><span>Cathedral Grove</span><strong>Checking</strong><span>75-minute planning allowance + 30-minute buffer</span></div>
@@ -145,7 +145,7 @@
 <ul class="source-list">
 <li><a href="https://www.michigannature.org/index.cfm?action=listing&amp;fuseaction=locationgallery&amp;listing=110" target="_blank" rel="noopener">Michigan Nature Association</a> for sanctuary size, official trail descriptions, old-growth facts and access directions.</li>
 <li><a href="https://www.weather.gov/" target="_blank" rel="noopener">National Weather Service</a> for the live point forecast, nearby observation, active weather alerts and raw grid snowfall guidance.</li>
-<li><a href="https://aa.usno.navy.mil/data/api.html" target="_blank" rel="noopener">U.S. Naval Observatory Astronomical Applications</a> for trailhead-specific sunrise, sunset and civil twilight.</li>
+<li><a href="https://gml.noaa.gov/grad/solcalc/calcdetails.html" target="_blank" rel="noopener">NOAA solar calculation details</a> for the astronomical basis used by the local sunrise/sunset calculation.</li>
 <li><a href="https://www.visitkeweenaw.com/outdoors/hiking-trails-nature-areas/" target="_blank" rel="noopener">Visit Keweenaw</a> for regional visitor context and winter-access guidance.</li>
 <li><a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a> for the orientation map.</li>
 </ul>
@@ -154,6 +154,7 @@
 </main>
 <footer class="footer">Built by Chris Izworski after hiking Estivant Pines · Bay City, Michigan</footer>
 <script src="/assets/estivant-pines.js"></script>
+<script src="/assets/estivant-sun-local.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
