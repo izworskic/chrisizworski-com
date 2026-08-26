@@ -124,6 +124,24 @@
     }
   }
 
+  function simplifySnowUI() {
+    const snowCard = $('snowCard');
+    const snowSection = $('snow-read');
+    if (snowCard) snowCard.hidden = true;
+    if (snowSection) snowSection.hidden = true;
+    if (!document.getElementById('estivant-four-card-grid')) {
+      const style = document.createElement('style');
+      style.id = 'estivant-four-card-grid';
+      style.textContent = '@media(min-width:1001px){.status-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}';
+      document.head.appendChild(style);
+    }
+  }
+
+  // Snowfall is intentionally not a headline decision card here. In the Keweenaw,
+  // persistent winter snow makes a generic snow read noisy; seasonal access guidance
+  // remains on the page where snow materially changes the hike decision.
+  simplifySnowUI();
+
   // Local calculation is authoritative for this UI so the hike clock does not depend
   // on a cross-site astronomy request. Re-apply briefly in case the older async call
   // finishes after this script while cached clients transition to the local calculator.
