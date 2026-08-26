@@ -1,7 +1,7 @@
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "date": "2026-08-26",
-  "objective": "Launch six distinct live-data decision tools without touching the protected /tools/ catalog before September 22.",
+  "objective": "Ship six destination-grade live decision tools with comparison, best-window analysis, score anatomy, map/access context and explicit source typing, while keeping /tools/ protected until September 22.",
   "buildThreshold": 70,
   "lossFunctions": {
     "truthLoss": {
@@ -18,6 +18,14 @@
     "decisionLoss": {
       "max": 20,
       "description": "Penalizes pages that do not convert data into a destination-specific verdict, live signal, context, timing, selector and next action."
+    },
+    "depthLoss": {
+      "max": 10,
+      "description": "Penalizes thin tools that lack live comparison, best-window analysis, score anatomy, source typing, map/access context or the V2 depth engine."
+    },
+    "homogeneityLoss": {
+      "max": 10,
+      "description": "Penalizes six near-identical shells by requiring a distinct V2 decision feature and distinct scoring intent for every tool."
     }
   },
   "tools": [
@@ -40,7 +48,10 @@
         "primary": "Search Console qualified impressions and clicks",
         "secondary": "privacy-safe selector changes and outbound decision handoffs"
       },
-      "launchGate": "truthLoss <= 10; decisionLoss <= 20; bestFitScore >= 70; full repo verify green"
+      "launchGate": "truthLoss <= 10; decisionLoss <= 20; depthLoss <= 10; homogeneityLoss <= 10; bestFitScore >= 70; full repo verify green",
+      "v2Feature": "astronomical-darkness",
+      "depthLossTarget": 0,
+      "homogeneityLossTarget": 0
     },
     {
       "id": "keweenaw-hiking",
@@ -60,7 +71,10 @@
         "primary": "Search Console qualified impressions and clicks",
         "secondary": "privacy-safe selector changes and outbound decision handoffs"
       },
-      "launchGate": "truthLoss <= 10; decisionLoss <= 20; bestFitScore >= 70; full repo verify green"
+      "launchGate": "truthLoss <= 10; decisionLoss <= 20; depthLoss <= 10; homogeneityLoss <= 10; bestFitScore >= 70; full repo verify green",
+      "v2Feature": "route-fit",
+      "depthLossTarget": 0,
+      "homogeneityLossTarget": 0
     },
     {
       "id": "snowshoe",
@@ -80,7 +94,10 @@
         "primary": "Search Console qualified impressions and clicks",
         "secondary": "privacy-safe selector changes and outbound decision handoffs"
       },
-      "launchGate": "truthLoss <= 10; decisionLoss <= 20; bestFitScore >= 70; full repo verify green"
+      "launchGate": "truthLoss <= 10; decisionLoss <= 20; depthLoss <= 10; homogeneityLoss <= 10; bestFitScore >= 70; full repo verify green",
+      "v2Feature": "snow-horizons",
+      "depthLossTarget": 0,
+      "homogeneityLossTarget": 0
     },
     {
       "id": "waterfalls",
@@ -100,7 +117,10 @@
         "primary": "Search Console qualified impressions and clicks",
         "secondary": "privacy-safe selector changes and outbound decision handoffs"
       },
-      "launchGate": "truthLoss <= 10; decisionLoss <= 20; bestFitScore >= 70; full repo verify green"
+      "launchGate": "truthLoss <= 10; decisionLoss <= 20; depthLoss <= 10; homogeneityLoss <= 10; bestFitScore >= 70; full repo verify green",
+      "v2Feature": "flow-driver",
+      "depthLossTarget": 0,
+      "homogeneityLossTarget": 0
     },
     {
       "id": "freighter-viewing",
@@ -121,7 +141,10 @@
         "primary": "Search Console qualified impressions and clicks",
         "secondary": "privacy-safe selector changes and outbound decision handoffs"
       },
-      "launchGate": "truthLoss <= 10; decisionLoss <= 20; bestFitScore >= 70; full repo verify green"
+      "launchGate": "truthLoss <= 10; decisionLoss <= 20; depthLoss <= 10; homogeneityLoss <= 10; bestFitScore >= 70; full repo verify green",
+      "v2Feature": "viewing-corridor",
+      "depthLossTarget": 0,
+      "homogeneityLossTarget": 0
     },
     {
       "id": "agate",
@@ -142,7 +165,10 @@
         "primary": "Search Console qualified impressions and clicks",
         "secondary": "privacy-safe selector changes and outbound decision handoffs"
       },
-      "launchGate": "truthLoss <= 10; decisionLoss <= 20; bestFitScore >= 70; full repo verify green"
+      "launchGate": "truthLoss <= 10; decisionLoss <= 20; depthLoss <= 10; homogeneityLoss <= 10; bestFitScore >= 70; full repo verify green",
+      "v2Feature": "wave-turnover",
+      "depthLossTarget": 0,
+      "homogeneityLossTarget": 0
     }
   ]
 }
