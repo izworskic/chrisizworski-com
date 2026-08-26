@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-08-22",
+  "updated": "2026-08-26",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -1447,6 +1447,240 @@
       "searchEvidence": {
         "status": "unknown"
       }
+    },
+    {
+      "id": "estivant-pines",
+      "name": "Estivant Pines Hike Planner",
+      "canonical": "https://chrisizworski.com/estivant-pines/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "michigan-outdoors",
+      "primaryIntent": "Estivant Pines trail conditions and hike planning",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "geographies": [
+        "keweenaw"
+      ],
+      "personas": [
+        "hiker",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "launch"
+      }
+    },
+    {
+      "id": "stargazing",
+      "name": "Michigan Stargazing Tonight",
+      "canonical": "https://chrisizworski.com/michigan-stargazing-tonight/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "nature-night-sky",
+      "primaryIntent": "Michigan stargazing conditions tonight",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "stargazer",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "researched"
+      }
+    },
+    {
+      "id": "keweenaw-hiking",
+      "name": "Keweenaw Hiking Conditions",
+      "canonical": "https://chrisizworski.com/keweenaw-hiking-conditions/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "michigan-outdoors",
+      "primaryIntent": "Keweenaw hiking weather and daylight conditions",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "geographies": [
+        "keweenaw"
+      ],
+      "personas": [
+        "hiker",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "researched"
+      }
+    },
+    {
+      "id": "snowshoe",
+      "name": "Michigan Snowshoe Conditions",
+      "canonical": "https://chrisizworski.com/michigan-snowshoe-conditions/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "winter-recreation",
+      "primaryIntent": "Michigan snowshoe conditions and fresh snow planning",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3,
+        4
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "snowshoer",
+        "winter-traveler"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "researched"
+      }
+    },
+    {
+      "id": "waterfalls",
+      "name": "Michigan Waterfall Conditions",
+      "canonical": "https://chrisizworski.com/michigan-waterfall-conditions/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "michigan-outdoors",
+      "primaryIntent": "Michigan waterfall flow potential and visit conditions",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "geographies": [
+        "upper-peninsula"
+      ],
+      "personas": [
+        "hiker",
+        "road-tripper"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "researched"
+      }
+    },
+    {
+      "id": "freighter-viewing",
+      "name": "Great Lakes Freighter Viewing Planner",
+      "canonical": "https://chrisizworski.com/great-lakes-freighter-viewing/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "great-lakes-shipping",
+      "primaryIntent": "where and when to watch Great Lakes freighters",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "great-lakes"
+      ],
+      "personas": [
+        "ship-watcher",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "known-demand"
+      }
+    },
+    {
+      "id": "agate",
+      "name": "Lake Superior Agate Hunting Conditions",
+      "canonical": "https://chrisizworski.com/lake-superior-agate-conditions/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "lake-superior-outdoors",
+      "primaryIntent": "Lake Superior agate hunting conditions after wave turnover",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "geographies": [
+        "lake-superior"
+      ],
+      "personas": [
+        "rockhound",
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "researched"
+      }
     }
   ],
   "relationships": [
@@ -1929,6 +2163,118 @@
       "strength": "optional",
       "surface": "birding",
       "reason": "Live sightings can deepen into a county-specific morning report."
+    },
+    {
+      "from": "stargazing",
+      "to": "aurora",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "night-sky",
+      "reason": "Stargazing visitors can check geomagnetic activity without conflating ordinary stars with aurora."
+    },
+    {
+      "from": "stargazing",
+      "to": "outdoors-now",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "night-sky",
+      "reason": "A poor night-sky window can hand back to daytime outdoor trip planning."
+    },
+    {
+      "from": "keweenaw-hiking",
+      "to": "estivant-pines",
+      "type": "destination-deep-dive",
+      "strength": "essential",
+      "surface": "keweenaw-hiking",
+      "reason": "Regional hiking planning hands Estivant visitors to the dedicated sanctuary route and access tool."
+    },
+    {
+      "from": "keweenaw-hiking",
+      "to": "outdoors-now",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "keweenaw-hiking",
+      "reason": "Regional weather planning connects to broader Michigan outdoor alternatives."
+    },
+    {
+      "from": "estivant-pines",
+      "to": "keweenaw-hiking",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "estivant-related",
+      "reason": "Estivant visitors can compare other Keweenaw hikes without duplicating sanctuary-specific guidance."
+    },
+    {
+      "from": "snowshoe",
+      "to": "xc-planning",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "winter-recreation",
+      "reason": "Snowshoe users can compare cross-country ski options when conditions favor groomed travel."
+    },
+    {
+      "from": "snowshoe",
+      "to": "michigan-ice",
+      "type": "seasonal-context",
+      "strength": "optional",
+      "surface": "winter-recreation",
+      "reason": "Winter travelers can open the separate ice owner without implying ice safety from snowfall."
+    },
+    {
+      "from": "waterfalls",
+      "to": "circle-tour",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "waterfall-roadtrip",
+      "reason": "Upper Peninsula waterfall visits naturally expand into Lake Superior road-trip planning."
+    },
+    {
+      "from": "waterfalls",
+      "to": "outdoors-now",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "waterfall-roadtrip",
+      "reason": "Low-flow or poor-weather days can hand back to alternate outdoor plans."
+    },
+    {
+      "from": "freighter-viewing",
+      "to": "ship-tracker",
+      "type": "live-state",
+      "strength": "essential",
+      "surface": "ship-watching",
+      "reason": "Viewing weather is separate from vessel position, so this planner hands users to the canonical live tracker."
+    },
+    {
+      "from": "freighter-viewing",
+      "to": "great-lakes-buoys",
+      "type": "conditions-deep-dive",
+      "strength": "strong",
+      "surface": "ship-watching",
+      "reason": "Shoreside viewing uses nearby NOAA context and hands detailed marine conditions to the buoy owner."
+    },
+    {
+      "from": "freighter-viewing",
+      "to": "soo-locks",
+      "type": "destination-deep-dive",
+      "strength": "strong",
+      "surface": "ship-watching",
+      "reason": "Soo viewing users can open the dedicated lock schedule and visitor tool."
+    },
+    {
+      "from": "agate",
+      "to": "great-lakes-buoys",
+      "type": "conditions-deep-dive",
+      "strength": "strong",
+      "surface": "rockhounding",
+      "reason": "Wave-turnover context comes from the existing NOAA buoy network."
+    },
+    {
+      "from": "agate",
+      "to": "circle-tour",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "rockhounding",
+      "reason": "Lake Superior rockhounding can expand into a broader shoreline road trip."
     }
   ],
   "cannibalizationGroups": [
@@ -1987,6 +2333,14 @@
         "seed-starting"
       ],
       "rule": "Calendar owns full-season planning; supports own distinct frost, tomato, and technique questions."
+    },
+    {
+      "intent": "Keweenaw hiking planning",
+      "owner": "keweenaw-hiking",
+      "supports": [
+        "estivant-pines"
+      ],
+      "rule": "The regional owner compares multiple trailhead weather and daylight decisions; Estivant retains the destination-specific sanctuary route and access intent."
     }
   ],
   "expansionOpportunities": [
