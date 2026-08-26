@@ -1,11 +1,11 @@
 {
-  "version": "1.0.1",
+  "version": "1.1.0",
   "created": "2026-08-25",
   "timezone": "America/Detroit",
   "canonical": "https://chrisizworski.com/estivant-pines/",
   "toolId": "estivant-pines",
   "name": "Estivant Pines Hike Planner",
-  "decision": "Should I hike Estivant Pines now, which official loop fits my time, and what weather or seasonal access factors could change the trip?",
+  "decision": "Should I hike Estivant Pines now, which official loop fits my time, can I finish before dark, and what weather, snow or seasonal access factors could change the trip?",
   "evidence": {
     "qualitative": [
       "Michigan Nature Association describes Estivant Pines as one of its most popular sanctuaries and maintains two intersecting marked trail loops.",
@@ -15,7 +15,8 @@
     "officialSources": [
       "https://www.michigannature.org/index.cfm?action=listing&fuseaction=locationgallery&listing=110",
       "https://www.michigannature.org/fileLibrary/Estivant%20Pines%20Nature%20Sanctuary%20Fact%20Sheet.pdf",
-      "https://www.weather.gov/"
+      "https://www.weather.gov/",
+      "https://aa.usno.navy.mil/data/api.html"
     ],
     "regionalSources": [
       "https://www.visitkeweenaw.com/outdoors/hiking-trails-nature-areas/"
@@ -24,8 +25,8 @@
   "newCanonicalGate": {
     "distinctSearchIntent": {"score": 25, "max": 25, "reason": "A destination-specific live hike decision is not owned by an existing site canonical."},
     "networkFit": {"score": 18, "max": 20, "reason": "Fits Michigan Outdoors / Up North / Keweenaw fall planning; broad tools-page promotion is intentionally deferred while /tools/ is frozen."},
-    "uniqueUtility": {"score": 20, "max": 20, "reason": "Combines point weather, alerts, daylight, a weather-based hike read, official route facts and seasonal road context."},
-    "authorityAndSeasonFit": {"score": 15, "max": 15, "reason": "Uses MNA as trail authority, NWS for live weather, and Visit Keweenaw for regional access context; useful year-round."},
+    "uniqueUtility": {"score": 20, "max": 20, "reason": "Combines point weather, alerts, USNO sunrise/sunset, buffered route start times, NWS grid snowfall, official route facts and seasonal road context."},
+    "authorityAndSeasonFit": {"score": 15, "max": 15, "reason": "Uses MNA as trail authority, NWS for live weather and snowfall, USNO for sun times, and Visit Keweenaw for regional access context; useful year-round."},
     "measurementPlan": {"score": 10, "max": 10, "reason": "Launch baseline begins at zero; measure Search Console impressions, CTR and average position for 28 complete days after release, with page visits in Vercel Web Analytics as supporting usage evidence."},
     "cannibalizationSafety": {"score": 10, "max": 10, "reason": "Owns Estivant Pines-specific hiking conditions rather than broad Up North, fall color or Michigan outdoor planning intent."},
     "total": 98,
@@ -43,18 +44,28 @@
     ]
   },
   "liveData": {
-    "nationalWeatherService": "Direct browser read from api.weather.gov point forecast, alerts and nearest observation station.",
+    "nationalWeatherService": "Direct browser read from api.weather.gov point forecast, alerts, nearest observation station and forecastGridData.",
+    "snowfall": "NWS forecastGridData snowfallAmount is converted into 24-hour and 48-hour planning totals; nearby observed snowDepth is shown only when the station actually reports it.",
+    "sunriseSunset": "U.S. Naval Observatory one-day rise/set API at the corrected Estivant Pines trailhead, with route start-by calculations using a 30-minute daylight buffer.",
     "fallColor": "Optional seasonal handoff from the site's existing fall-color conditions endpoint.",
-    "trailSensor": "None. The page must never describe its weather inference as an inspected or official live trail condition."
+    "trailSensor": "None. The page must never describe weather or snow inference as an inspected or official live trail condition."
   },
+  "preWindowEnhancements": [
+    {
+      "date": "2026-08-25",
+      "change": "Added USNO sunrise/sunset, buffered start-by times for all three route choices, NWS grid snowfall guidance and optional nearby snow-depth context on the same launch day before the first complete measurement day.",
+      "searchFacingSurfaceChanged": false,
+      "note": "Title, meta description, H1, canonical and indexability remain unchanged. The 28-complete-day baseline begins after this launch-completion merge."
+    }
+  ],
   "measurement": {
     "windowDays": 28,
-    "start": "First complete day after production release",
+    "start": "First complete day after final launch-completion production release",
     "primaryMetrics": ["Google Search Console impressions", "CTR", "average position"],
     "supportingUsageMetric": "Vercel Web Analytics page visits for /estivant-pines/",
     "namedOutboundClickEvents": {
       "status": "not-instrumented-at-launch",
-      "reason": "Do not claim custom click measurement on the current Vercel Hobby deployment. Add privacy-safe named click events only if the deployed analytics tier supports them later."
+      "reason": "Do not claim custom click measurement on the current Vercel deployment. Add privacy-safe named click events only if the deployed analytics tier supports them later."
     },
     "decisionRule": "Keep and expand if it earns qualified discovery or repeat utility without cannibalizing broad Up North or fall-color owners. Improve the existing canonical before creating any Estivant keyword variants."
   },
