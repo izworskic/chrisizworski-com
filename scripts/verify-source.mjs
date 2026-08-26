@@ -9,6 +9,16 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 26 2026: V2 depth pass on the six new standalone decision tools. Re-crawl after production release, then remove.
+  "/michigan-stargazing-tonight/",
+  "/keweenaw-hiking-conditions/",
+  "/michigan-snowshoe-conditions/",
+  "/michigan-waterfall-conditions/",
+  "/great-lakes-freighter-viewing/",
+  "/lake-superior-agate-conditions/",
+  "/assets/decision-tool-depth-v2.css",
+  "/assets/decision-tool-depth-v2.js",
+
   // Aug 26 2026: Estivant and six new standalone decision tools entered the sitemap. Re-crawl after production release, then remove.
   "/sitemap.xml",
   // Aug 25 2026: current State 911 authority source plus the synchronized
