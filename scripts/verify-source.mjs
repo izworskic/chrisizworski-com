@@ -9,6 +9,8 @@ const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
 const intentionalChanges = new Set([
+  // Aug 26 2026: Estivant and six new standalone decision tools entered the sitemap. Re-crawl after production release, then remove.
+  "/sitemap.xml",
   // Aug 25 2026: current State 911 authority source plus the synchronized
   // machine-readable entity graph. Re-crawl after production release, then remove.
   "/chris-izworski-michigan-911-committee/",

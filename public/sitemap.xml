@@ -739,4 +739,46 @@
     <priority>0.8</priority>
   </url>
 <url><loc>https://chrisizworski.com/up-north-michigan/</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url>
+    <loc>https://chrisizworski.com/estivant-pines/</loc>
+    <lastmod>2026-08-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/michigan-stargazing-tonight/</loc>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/keweenaw-hiking-conditions/</loc>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/michigan-snowshoe-conditions/</loc>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/michigan-waterfall-conditions/</loc>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/great-lakes-freighter-viewing/</loc>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/lake-superior-agate-conditions/</loc>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.75</priority>
+  </url>
 </urlset>
