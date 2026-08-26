@@ -53,15 +53,36 @@ test('trailhead coordinate is consistent across schema, map, directions and NWS 
   assert.doesNotMatch(html + js, /47\.44614|-87\.86015/);
 });
 
-test('live read uses point-specific NWS forecast, alerts and nearby observation without a new serverless route', () => {
+test('live read uses point-specific NWS forecast, alerts, snow grid and nearby observation', () => {
   assert.match(js, /https:\/\/api\.weather\.gov/);
   assert.match(js, /\/points\/\$\{LAT\.toFixed\(4\)\},\$\{LON\.toFixed\(4\)\}/);
   assert.match(js, /\/alerts\/active\?point=/);
   assert.match(js, /observationStations/);
   assert.match(js, /observations\/latest/);
+  assert.match(js, /forecastGridData/);
+  assert.match(js, /snowfallAmount/);
+  assert.match(js, /snowDepth/);
   assert.match(js, /bugRead/);
   assert.match(js, /This is not a measured bug count/);
   assert.doesNotMatch(js, /localStorage|sessionStorage|navigator\.geolocation/);
+});
+
+test('USNO sunrise sunset drives a buffered hike clock', () => {
+  assert.match(js, /aa\.usno\.navy\.mil\/api\/rstt\/oneday/);
+  assert.match(html, /Sunrise, sunset & when to start/);
+  assert.match(html, /30-minute daylight margin/);
+  assert.match(js, /Cathedral Grove.*allowance:75/s);
+  assert.match(js, /Bertha Daubendiek.*allowance:90/s);
+  assert.match(js, /Both loops.*allowance:150/s);
+  assert.match(js, /set - r\.allowance - 30/);
+  assert.match(html, /U\.S\. Naval Observatory Astronomical Applications/);
+});
+
+test('snow is described as forecast context rather than an inspected trail measurement', () => {
+  assert.match(html, /Snow & winter trail read/);
+  assert.match(html, /not a measurement of snow on the Estivant Pines trail/);
+  assert.match(js, /Not a trail measurement/);
+  assert.match(js, /NWS grid and nearby-station context, not an on-trail sensor/);
 });
 
 test('new canonical gate passes with a measurement plan and cannibalization boundary', () => {
@@ -71,5 +92,6 @@ test('new canonical gate passes with a measurement plan and cannibalization boun
   assert.equal(benchmark.searchOwnership.primaryIntent, 'Estivant Pines trail conditions and hike planning');
   assert.ok(benchmark.searchOwnership.doesNotOwn.includes('Keweenaw fall color'));
   assert.equal(benchmark.measurement.windowDays, 28);
+  assert.ok(benchmark.preWindowEnhancements.some(x => x.date === '2026-08-25' && /sunrise/i.test(x.change)));
   assert.ok(benchmark.releaseConstraints.some(x => x.includes('/tools/')));
 });
