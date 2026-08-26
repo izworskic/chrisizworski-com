@@ -15,7 +15,7 @@ test('registry sees Circle Tour amplification executed, network repairs complete
 
   assert.match(output, /Focus recommendation/);
   assert.match(output, /AMPLIFY \+ MEASURE\s+Lake Superior Circle Tour \[circle-tour\]/);
-  assert.match(output, /2 inbound \/ 3 outbound · search evidence unknown · in season/);
+  assert.match(output, /4 inbound \/ 3 outbound · search evidence unknown · in season/);
   assert.match(output, /Active network experiments/);
   assert.match(output, /RUNNING-CONTEXTUAL-TEST\s+Best Fall River Paddle Window \[fall-river-window-v1\]/);
   assert.match(output, /Network repair priority/);
