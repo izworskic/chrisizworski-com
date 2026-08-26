@@ -8,18 +8,25 @@ const root = path.resolve(import.meta.dirname, "..");
 const publicRoot = path.join(root, "public");
 const audit = JSON.parse(await readFile(path.join(root, "audit", "live", "manifest.json"), "utf8"));
 const failures = [];
-const intentionalChanges = new Set([
-  // Aug 26 2026: V2 depth pass on the six new standalone decision tools. Re-crawl after production release, then remove.
+const intentionalRetirements = new Set([
+  // Aug 26 2026: same-day rollback of six experimental decision tools. These paths
+  // are intentionally absent from source while the clean-live audit still remembers
+  // their pre-retirement 200 responses. After the next production crawl no record
+  // should remain here.
   "/michigan-stargazing-tonight/",
   "/keweenaw-hiking-conditions/",
   "/michigan-snowshoe-conditions/",
   "/michigan-waterfall-conditions/",
   "/great-lakes-freighter-viewing/",
   "/lake-superior-agate-conditions/",
+  "/assets/decision-tool-batch.css",
+  "/assets/decision-tool-batch.js",
   "/assets/decision-tool-depth-v2.css",
   "/assets/decision-tool-depth-v2.js",
+]);
 
-  // Aug 26 2026: Estivant and six new standalone decision tools entered the sitemap. Re-crawl after production release, then remove.
+const intentionalChanges = new Set([
+  // Aug 26 2026: Estivant entered discovery and six same-day experimental tools were retired. Re-crawl after production release, then remove.
   "/sitemap.xml",
   // Aug 25 2026: current State 911 authority source plus the synchronized
   // machine-readable entity graph. Re-crawl after production release, then remove.
@@ -360,6 +367,15 @@ const canonicalRecords = audit.records.filter(
 
 for (const record of canonicalRecords) {
   const target = publicPathFor(record);
+  if (intentionalRetirements.has(record.pathname)) {
+    try {
+      await access(target);
+      failures.push(`${record.pathname}: retired route still has a source file`);
+    } catch {
+      // Expected during the one-crawl retirement transition.
+    }
+    continue;
+  }
   try {
     const body = await readFile(target);
     if (intentionalChanges.has(record.pathname)) continue;
@@ -373,7 +389,10 @@ for (const record of canonicalRecords) {
   }
 }
 
-const htmlFiles = canonicalRecords.filter((record) => record.headers?.["content-type"]?.includes("text/html"));
+const htmlFiles = canonicalRecords.filter(
+  (record) => record.headers?.["content-type"]?.includes("text/html")
+    && !intentionalRetirements.has(record.pathname),
+);
 let validJsonLdBlocks = 0;
 let beaconReferences = 0;
 let brokenLegacyLinks = 0;
@@ -609,6 +628,7 @@ const summary = {
   htmlRoutesChecked: htmlFiles.length,
   validJsonLdBlocks,
   intentionalContentChanges: [...intentionalChanges],
+  intentionalRetirements: [...intentionalRetirements],
   failures,
 };
 
