@@ -6,6 +6,7 @@ const path = require('node:path');
 const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'public', 'estivant-pines', 'index.html'), 'utf8');
 const js = fs.readFileSync(path.join(root, 'public', 'assets', 'estivant-pines.js'), 'utf8');
+const sunJs = fs.readFileSync(path.join(root, 'public', 'assets', 'estivant-sun-local.js'), 'utf8');
 const benchmark = JSON.parse(fs.readFileSync(path.join(root, 'benchmarks', 'estivant-pines-launch.json'), 'utf8'));
 
 function renderedLength(value) {
@@ -67,15 +68,16 @@ test('live read uses point-specific NWS forecast, alerts, snow grid and nearby o
   assert.doesNotMatch(js, /localStorage|sessionStorage|navigator\.geolocation/);
 });
 
-test('USNO sunrise sunset drives a buffered hike clock', () => {
-  assert.match(js, /aa\.usno\.navy\.mil\/api\/rstt\/oneday/);
+test('network-independent sunrise sunset drives a buffered hike clock', () => {
   assert.match(html, /Sunrise, sunset & when to start/);
   assert.match(html, /30-minute daylight margin/);
-  assert.match(js, /Cathedral Grove.*allowance:75/s);
-  assert.match(js, /Bertha Daubendiek.*allowance:90/s);
-  assert.match(js, /Both loops.*allowance:150/s);
-  assert.match(js, /set - r\.allowance - 30/);
-  assert.match(html, /U\.S\. Naval Observatory Astronomical Applications/);
+  assert.match(html, /estivant-sun-local\.js/);
+  assert.match(sunJs, /Cathedral Grove.*allowance: 75/s);
+  assert.match(sunJs, /Bertha Daubendiek.*allowance: 90/s);
+  assert.match(sunJs, /Both loops.*allowance: 150/s);
+  assert.match(sunJs, /sunset - r\.allowance - 30/);
+  assert.match(html, /NOAA solar calculation details/);
+  assert.doesNotMatch(sunJs, /fetch\(|aa\.usno\.navy\.mil/);
 });
 
 test('snow is described as forecast context rather than an inspected trail measurement', () => {
