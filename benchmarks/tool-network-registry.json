@@ -1472,7 +1472,7 @@
         "hiker",
         "trip-planner"
       ],
-      "networkRole": "destination",
+      "networkRole": "leaf",
       "searchTreatment": {
         "status": "active"
       },
