@@ -30,6 +30,7 @@ const intentionalChanges = new Set([
   // These are additive identity/project links plus freshness stamps; re-crawl after production release, then remove.
   "/chris-izworski/",
   "/projects/",
+  "/sitemap-reputation.xml",
   // Aug 26 2026: Estivant entered discovery and six same-day experimental tools were retired. Re-crawl after production release, then remove.
   "/sitemap.xml",
   // Aug 25 2026: current State 911 authority source plus the synchronized
