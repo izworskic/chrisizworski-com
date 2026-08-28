@@ -921,14 +921,18 @@
         },
         "completeWindowDays": 28
       },
-      "status": "ready-for-release",
+      "status": "running",
       "proposedDate": "2026-08-28",
-      "releaseDate": null,
-      "evaluationWindow": null,
+      "releaseDate": "2026-08-28",
+      "evaluationWindow": {
+        "start": "2026-08-29",
+        "end": "2026-09-25"
+      },
       "lastSearchFacingChangeDate": "2026-08-28",
       "decisionDate": null,
       "result": null,
-      "stopCondition": "A family is expanded from impressions alone; location pages become near-duplicate doorway variants; protected beach/freighter/birding owners are cannibalized; exact location or free-text semantic queries enter analytics; or canonical/entity integrity regresses."
+      "stopCondition": "A family is expanded from impressions alone; location pages become near-duplicate doorway variants; protected beach/freighter/birding owners are cannibalized; exact location or free-text semantic queries enter analytics; or canonical/entity integrity regresses.",
+      "implementationMergeCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150"
     }
   ]
 }
