@@ -1,6 +1,6 @@
 {
   "version": "1.1.0",
-  "updated": "2026-08-22",
+  "updated": "2026-08-28",
   "timezone": "America/Detroit",
   "objective": "Build Chris Izworski as a durable entity and grow a connected Michigan/Great Lakes search authority network by prioritizing real demand, useful first-party utility, independent authority, branded occupancy, and cross-property reinforcement instead of isolated page-count growth.",
   "northStar": "Own useful Michigan and Great Lakes decisions; let branded SERP dominance emerge from real authority.",
@@ -269,11 +269,14 @@
       "surface": "https://michiganoutdoorsnow.chrisizworski.com/",
       "priorityScore": 82,
       "action": "EXPAND",
-      "next": "Turn the planner into a stronger discovery hub around real activity decisions, especially family/day-trip intent, without generating generic destination filler.",
+      "next": "Launch the quality-gated location-intent cluster, measure query × page impressions/CTR/position after indexing, push only families that earn demand, and keep beach, freighter, and birding authority with their existing canonical owners.",
       "observed": {
         "query": "michigan day trips for families",
         "impressions": 9,
-        "position": 31.33
+        "clicks": 0,
+        "ctr": 0,
+        "position": 31.33,
+        "window": "7-day leading snapshot through 2026-08-20"
       }
     },
     {

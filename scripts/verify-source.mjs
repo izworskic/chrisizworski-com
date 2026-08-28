@@ -26,6 +26,10 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Aug 28 2026: Michigan Outdoors Now joined the canonical Chris entity/project network.
+  // These are additive identity/project links plus freshness stamps; re-crawl after production release, then remove.
+  "/chris-izworski/",
+  "/projects/",
   // Aug 26 2026: Estivant entered discovery and six same-day experimental tools were retired. Re-crawl after production release, then remove.
   "/sitemap.xml",
   // Aug 25 2026: current State 911 authority source plus the synchronized
@@ -318,7 +322,7 @@ const committedDriftHashEntries = [
   ["/great-lakes-beaches/wenonah-park/", "92ef0e15291a5bfebf4e89bb3c75226e8352867d0b7fcb35c631178059c176ff"],
   ["/great-lakes-beaches/whitefish-point/", "1dfa103faf8c639a4235ba668a55393b17623793710471579ffb0eb7ccb11a20"],
   ["/great-lakes-beaches/wilderness-state-park/", "6341bdb514bd1ab07c01233bdc8442e2e84e320bcebe2ec7c182b23b19ab5bb1"],
-  ["/sitemap-reputation.xml", "be5f37c6eddb3e971a378d334cfe690bc7d273b609c1ac5e016fed72216f830b"],
+  ["/sitemap-reputation.xml", "aaa224c567dc3a3821f492f69511e7c3a691be95256eb800b83aa1c804d4f0a4"],
   ["/zone-6a-planting-calendar/", "3b34180a82558e2df887dc238ad31dc8d1995e465b3e5d81972ddec260414565"],
 ];
 

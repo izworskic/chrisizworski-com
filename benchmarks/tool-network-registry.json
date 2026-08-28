@@ -852,7 +852,12 @@
         "status": "active"
       },
       "searchEvidence": {
-        "status": "unknown"
+        "status": "measured-query",
+        "query": "michigan day trips for families",
+        "impressions": 9,
+        "averagePosition": 31.33,
+        "evidenceWindow": "7-day leading snapshot through 2026-08-20",
+        "nextMeasurement": "Track new qualified location-intent landing pages by query, page, impressions, CTR, and position after indexing."
       }
     },
     {

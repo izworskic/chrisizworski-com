@@ -1,16 +1,74 @@
 {
   "version": "1.2.1",
-  "updated": "2026-08-21",
+  "updated": "2026-08-28",
   "purpose": "Track Chris Izworski-owned web properties separately from the tool-only registry so a 100/100 tool score cannot hide an unconnected first-party domain or planned subproperty.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "roots": [
-    {"host":"chrisizworski.com","name":"Chris Izworski","role":"primary-hub","status":"active","coverage":"central"},
-    {"host":"michigantroutreport.com","name":"Michigan Trout Report","role":"flagship-live","status":"active","coverage":"cross-linked","measurement":"needs-network-events"},
-    {"host":"michiganbirdingreport.com","name":"Michigan Birding Report","role":"flagship-live","status":"active","coverage":"cross-linked","measurement":"released-symbolic-events"},
-    {"host":"greatlakeslevels.org","name":"Great Lakes Levels","role":"flagship-live","status":"active","coverage":"cross-linked","measurement":"released-symbolic-events"},
-    {"host":"freighterviewfarms.com","name":"Freighter View Farms","role":"editorial-gardening","status":"active","coverage":"backlink-present","measurement":"external-cms"},
-    {"host":"izworskic.github.io","name":"Chris Izworski GitHub Pages","role":"project-index","status":"active","coverage":"cross-linked","measurement":"not-required"},
-    {"host":"aibreakdown5.wordpress.com","name":"AI Breakdown","role":"legacy-writing","status":"legacy","coverage":"entity-surface","measurement":"not-required"}
+    {
+      "host": "chrisizworski.com",
+      "name": "Chris Izworski",
+      "role": "primary-hub",
+      "status": "active",
+      "coverage": "central"
+    },
+    {
+      "host": "michigantroutreport.com",
+      "name": "Michigan Trout Report",
+      "role": "flagship-live",
+      "status": "active",
+      "coverage": "cross-linked",
+      "measurement": "needs-network-events"
+    },
+    {
+      "host": "michiganbirdingreport.com",
+      "name": "Michigan Birding Report",
+      "role": "flagship-live",
+      "status": "active",
+      "coverage": "cross-linked",
+      "measurement": "released-symbolic-events"
+    },
+    {
+      "host": "greatlakeslevels.org",
+      "name": "Great Lakes Levels",
+      "role": "flagship-live",
+      "status": "active",
+      "coverage": "cross-linked",
+      "measurement": "released-symbolic-events"
+    },
+    {
+      "host": "freighterviewfarms.com",
+      "name": "Freighter View Farms",
+      "role": "editorial-gardening",
+      "status": "active",
+      "coverage": "backlink-present",
+      "measurement": "external-cms"
+    },
+    {
+      "host": "izworskic.github.io",
+      "name": "Chris Izworski GitHub Pages",
+      "role": "project-index",
+      "status": "active",
+      "coverage": "cross-linked",
+      "measurement": "not-required"
+    },
+    {
+      "host": "aibreakdown5.wordpress.com",
+      "name": "AI Breakdown",
+      "role": "legacy-writing",
+      "status": "legacy",
+      "coverage": "entity-surface",
+      "measurement": "not-required"
+    },
+    {
+      "host": "michiganoutdoorsnow.chrisizworski.com",
+      "name": "Michigan Outdoors Now",
+      "role": "flagship-planner",
+      "status": "active",
+      "coverage": "cross-linked",
+      "parentRoot": "chrisizworski.com",
+      "creatorEntity": "https://chrisizworski.com/#person",
+      "measurement": "vercel-analytics-plus-search-console"
+    }
   ],
   "plannedSubproperties": [
     {
@@ -28,33 +86,134 @@
     }
   ],
   "observedLiveHandoffs": [
-    {"from":"chrisizworski.com","to":"michigantroutreport.com","surface":"projects"},
-    {"from":"chrisizworski.com","to":"michiganbirdingreport.com","surface":"projects"},
-    {"from":"chrisizworski.com","to":"greatlakeslevels.org","surface":"projects"},
-    {"from":"chrisizworski.com","to":"freighterviewfarms.com","surface":"projects"},
-    {"from":"chrisizworski.com","to":"izworskic.github.io","surface":"projects"},
-    {"from":"michiganbirdingreport.com","to":"michigantroutreport.com","surface":"site-footer"},
-    {"from":"michiganbirdingreport.com","to":"greatlakeslevels.org","surface":"site-footer"},
-    {"from":"michiganbirdingreport.com","to":"chrisizworski.com","surface":"site-footer"},
-    {"from":"michigantroutreport.com","to":"michiganbirdingreport.com","surface":"site-footer"},
-    {"from":"michigantroutreport.com","to":"greatlakeslevels.org","surface":"site-footer"},
-    {"from":"michigantroutreport.com","to":"chrisizworski.com","surface":"site-footer"},
-    {"from":"greatlakeslevels.org","to":"michigantroutreport.com","surface":"site-footer"},
-    {"from":"greatlakeslevels.org","to":"michiganbirdingreport.com","surface":"site-footer"},
-    {"from":"greatlakeslevels.org","to":"chrisizworski.com","surface":"site-footer"},
-    {"from":"greatlakeslevels.org","to":"chrisizworski.com","surface":"great-lakes-buoys-companion"},
-    {"from":"freighterviewfarms.com","to":"chrisizworski.com","surface":"site-footer"},
-    {"from":"izworskic.github.io","to":"michigantroutreport.com","surface":"project-index"},
-    {"from":"izworskic.github.io","to":"michiganbirdingreport.com","surface":"project-index"},
-    {"from":"izworskic.github.io","to":"chrisizworski.com","surface":"project-index"}
+    {
+      "from": "chrisizworski.com",
+      "to": "michigantroutreport.com",
+      "surface": "projects"
+    },
+    {
+      "from": "chrisizworski.com",
+      "to": "michiganbirdingreport.com",
+      "surface": "projects"
+    },
+    {
+      "from": "chrisizworski.com",
+      "to": "greatlakeslevels.org",
+      "surface": "projects"
+    },
+    {
+      "from": "chrisizworski.com",
+      "to": "freighterviewfarms.com",
+      "surface": "projects"
+    },
+    {
+      "from": "chrisizworski.com",
+      "to": "izworskic.github.io",
+      "surface": "projects"
+    },
+    {
+      "from": "michiganbirdingreport.com",
+      "to": "michigantroutreport.com",
+      "surface": "site-footer"
+    },
+    {
+      "from": "michiganbirdingreport.com",
+      "to": "greatlakeslevels.org",
+      "surface": "site-footer"
+    },
+    {
+      "from": "michiganbirdingreport.com",
+      "to": "chrisizworski.com",
+      "surface": "site-footer"
+    },
+    {
+      "from": "michigantroutreport.com",
+      "to": "michiganbirdingreport.com",
+      "surface": "site-footer"
+    },
+    {
+      "from": "michigantroutreport.com",
+      "to": "greatlakeslevels.org",
+      "surface": "site-footer"
+    },
+    {
+      "from": "michigantroutreport.com",
+      "to": "chrisizworski.com",
+      "surface": "site-footer"
+    },
+    {
+      "from": "greatlakeslevels.org",
+      "to": "michigantroutreport.com",
+      "surface": "site-footer"
+    },
+    {
+      "from": "greatlakeslevels.org",
+      "to": "michiganbirdingreport.com",
+      "surface": "site-footer"
+    },
+    {
+      "from": "greatlakeslevels.org",
+      "to": "chrisizworski.com",
+      "surface": "site-footer"
+    },
+    {
+      "from": "greatlakeslevels.org",
+      "to": "chrisizworski.com",
+      "surface": "great-lakes-buoys-companion"
+    },
+    {
+      "from": "freighterviewfarms.com",
+      "to": "chrisizworski.com",
+      "surface": "site-footer"
+    },
+    {
+      "from": "izworskic.github.io",
+      "to": "michigantroutreport.com",
+      "surface": "project-index"
+    },
+    {
+      "from": "izworskic.github.io",
+      "to": "michiganbirdingreport.com",
+      "surface": "project-index"
+    },
+    {
+      "from": "izworskic.github.io",
+      "to": "chrisizworski.com",
+      "surface": "project-index"
+    },
+    {
+      "from": "chrisizworski.com",
+      "to": "michiganoutdoorsnow.chrisizworski.com",
+      "surface": "tools"
+    },
+    {
+      "from": "chrisizworski.com",
+      "to": "michiganoutdoorsnow.chrisizworski.com",
+      "surface": "projects"
+    },
+    {
+      "from": "chrisizworski.com",
+      "to": "michiganoutdoorsnow.chrisizworski.com",
+      "surface": "identity"
+    }
   ],
   "gates": {
     "coverEveryEntityBaselineSelfOwnedDomain": true,
     "noIsolatedActiveRoot": true,
     "plannedSubpropertiesDoNotCountAsLive": true,
     "requireCanonicalPersonEntityOnNewProperties": true,
-    "requireFlagshipCrossLinks": ["michigantroutreport.com","michiganbirdingreport.com","greatlakeslevels.org"],
-    "requireCentralProjectsIndex": ["michigantroutreport.com","michiganbirdingreport.com","greatlakeslevels.org","freighterviewfarms.com","izworskic.github.io"]
+    "requireFlagshipCrossLinks": [
+      "michigantroutreport.com",
+      "michiganbirdingreport.com",
+      "greatlakeslevels.org"
+    ],
+    "requireCentralProjectsIndex": [
+      "michigantroutreport.com",
+      "michiganbirdingreport.com",
+      "greatlakeslevels.org",
+      "freighterviewfarms.com",
+      "izworskic.github.io"
+    ]
   },
   "nextRepairs": [
     "Instrument symbolic cross-domain exposure and handoff events on Michigan Trout Report; Birding and Great Lakes Levels are now instrumented.",
