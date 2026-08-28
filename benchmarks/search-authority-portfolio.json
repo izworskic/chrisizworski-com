@@ -278,7 +278,12 @@
         "position": 31.33,
         "window": "7-day leading snapshot through 2026-08-20"
       },
-      "measurementContract": "benchmarks/outdoors-now-growth-system.json"
+      "measurementContract": "benchmarks/outdoors-now-growth-system.json",
+      "measurementWindow": {
+        "start": "2026-08-29",
+        "end": "2026-09-25"
+      },
+      "releaseCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150"
     },
     {
       "id": "trout-report",
