@@ -26,6 +26,10 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Aug 28 2026: Michigan Outdoors Now joined the canonical Chris entity/project network.
+  // These are additive identity/project links plus freshness stamps; re-crawl after production release, then remove.
+  "/chris-izworski/",
+  "/projects/",
   // Aug 26 2026: Estivant entered discovery and six same-day experimental tools were retired. Re-crawl after production release, then remove.
   "/sitemap.xml",
   // Aug 25 2026: current State 911 authority source plus the synchronized
