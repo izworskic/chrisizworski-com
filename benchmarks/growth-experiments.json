@@ -873,6 +873,62 @@
       "decisionDate": null,
       "result": null,
       "stopCondition": "CTR remains effectively zero after the clean window, average position worsens beyond 15 after a meaningful sample, factual variety claims regress, or the page begins competing with the protected tomato-timing owner."
+    },
+    {
+      "id": "2026-08-28-outdoors-now-growth-system",
+      "surface": "https://michiganoutdoorsnow.chrisizworski.com/",
+      "externalRepository": "izworskic/michigan-outdoors-now",
+      "hypothesis": "A bounded set of high-value location-intent pages, attributed through the real planner/decision funnel and governed by canonical ownership, will grow qualified Michigan outdoor impressions and clicks without creating doorway pages or rewarding traffic that does not become useful planning.",
+      "primaryMetric": "Search Console page × query impressions, CTR, and average position joined with attributed planner completion and directions behavior",
+      "baseline": {
+        "search": {
+          "query": "michigan day trips for families",
+          "impressions": 9,
+          "clicks": 0,
+          "ctr": 0,
+          "averagePosition": 31.33,
+          "window": "7-day leading snapshot through 2026-08-20"
+        },
+        "product": {
+          "status": "none-before-attribution-release"
+        }
+      },
+      "treatment": {
+        "locationIntentPages": 54,
+        "families": [
+          "family-day-trips",
+          "hiking",
+          "paddling",
+          "dog-friendly",
+          "lower-barrier"
+        ],
+        "attribution": "surface + origin slug + intent slug + page key",
+        "semanticFunnel": "search → result → keep/compare → trust → departure → directions",
+        "searchCollection": "weekly Search Console page × query workflow",
+        "previewCreative": "query-specific location-intent OpenGraph image"
+      },
+      "protectedAdjacentOwners": {
+        "beaches": "/great-lakes-beaches/",
+        "freighters": "/great-lakes-freighter-tracking/",
+        "birding": "https://michiganbirdingreport.com/"
+      },
+      "target": {
+        "familyExpansionGate": {
+          "impressions": 250,
+          "clicks": 5,
+          "plannerCompletions": 10,
+          "directionsOpens": 3
+        },
+        "completeWindowDays": 28
+      },
+      "status": "ready-for-release",
+      "proposedDate": "2026-08-28",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-28",
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "A family is expanded from impressions alone; location pages become near-duplicate doorway variants; protected beach/freighter/birding owners are cannibalized; exact location or free-text semantic queries enter analytics; or canonical/entity integrity regresses."
     }
   ]
 }
