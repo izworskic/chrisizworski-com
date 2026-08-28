@@ -852,7 +852,12 @@
         "status": "active-measurement-window",
         "launchPages": 54,
         "launchDate": "2026-08-28",
-        "measurementContract": "https://michiganoutdoorsnow.chrisizworski.com/growth-manifest.json"
+        "measurementContract": "https://michiganoutdoorsnow.chrisizworski.com/growth-manifest.json",
+        "releaseCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150",
+        "evaluationWindow": {
+          "start": "2026-08-29",
+          "end": "2026-09-25"
+        }
       },
       "searchEvidence": {
         "status": "measured-query",
