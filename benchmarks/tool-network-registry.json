@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-08-26",
+  "updated": "2026-08-28",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -849,7 +849,10 @@
       ],
       "networkRole": "hub",
       "searchTreatment": {
-        "status": "active"
+        "status": "active-measurement-window",
+        "launchPages": 54,
+        "launchDate": "2026-08-28",
+        "measurementContract": "https://michiganoutdoorsnow.chrisizworski.com/growth-manifest.json"
       },
       "searchEvidence": {
         "status": "measured-query",
@@ -857,7 +860,13 @@
         "impressions": 9,
         "averagePosition": 31.33,
         "evidenceWindow": "7-day leading snapshot through 2026-08-20",
-        "nextMeasurement": "Track new qualified location-intent landing pages by query, page, impressions, CTR, and position after indexing."
+        "nextMeasurement": "Hold the 54-page cluster stable, collect page × query Search Console evidence plus attributed planner/departure/directions events, then expand only families that pass both demand and downstream-value gates."
+      },
+      "measurement": {
+        "search": "Google Search Console page × query",
+        "product": "Vercel fixed-label events",
+        "decisionWindowDays": 28,
+        "privacy": "No exact coordinates, device location, or free-text semantic query in growth analytics."
       }
     },
     {
