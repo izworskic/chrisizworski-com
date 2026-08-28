@@ -17,7 +17,9 @@
       "paddling",
       "dog-friendly",
       "lower-barrier"
-    ]
+    ],
+    "growthInstrumentationMergeCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150",
+    "growthInstrumentationStatus": "released"
   },
   "canonicalOwnership": {
     "creator": "https://chrisizworski.com/#person",
@@ -66,6 +68,11 @@
         "fixed category",
         "counts"
       ]
+    },
+    "releaseDate": "2026-08-28",
+    "evaluationWindow": {
+      "start": "2026-08-29",
+      "end": "2026-09-25"
     }
   },
   "decisionRules": {
