@@ -106,7 +106,7 @@
     {
       "id": "outdoors-now-growth-operating-system",
       "tool": "outdoors-now",
-      "status": "ready-for-release",
+      "status": "released-measuring",
       "proposed": "2026-08-28",
       "implementationRepo": "izworskic/michigan-outdoors-now",
       "implementationPr": 40,
@@ -119,7 +119,10 @@
         "Directions Opened"
       ],
       "contract": "https://michiganoutdoorsnow.chrisizworski.com/growth-manifest.json",
-      "note": "Joins acquisition and downstream decision behavior so Outdoors Now cannot justify more search pages from impressions alone."
+      "note": "Joins acquisition and downstream decision behavior so Outdoors Now cannot justify more search pages from impressions alone.",
+      "releaseDate": "2026-08-28",
+      "mergeCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150",
+      "next": "Verify weekly Search Console + Vercel collection configuration, then hold the 54-page cluster stable through the complete attributed window."
     }
   ],
   "launches": [
