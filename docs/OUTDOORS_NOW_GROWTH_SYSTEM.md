@@ -1,6 +1,6 @@
 # Michigan Outdoors Now Growth System
 
-Updated: August 28, 2026
+Updated: August 29, 2026
 
 Michigan Outdoors Now is now managed as one part of the broader Chris Izworski search operating system.
 
@@ -47,6 +47,16 @@ The acquisition launch is 54 pages across 11 Michigan starting cities in five fa
 The launch deliberately excludes beach, freighter, and birding city variants because those search intents have stronger existing canonical owners elsewhere in the network.
 
 No additional location-intent family should launch during the first complete attributed measurement window unless a factual/crawlability defect requires repair.
+
+### Trail Truth search harvest during the protected window
+
+The statewide Trail Truth cluster has six existing crawlable hiking canonicals. PR #52 deepens those six pages in place with route-count evidence, represented-destination links, mileage ranges, route-shape distribution, and official-source coverage.
+
+Potential future trail families are held as **noindex candidates**, not pages. They stay out of the sitemap and static route generation through the current measurement window. The first planned expansion decision is September 25, 2026.
+
+A candidate family does not become crawlable from keyword intuition. It must pass the same 250 impressions / 5 clicks / 10 planner completions / 3 directions opens gate plus the global new-canonical and cannibalization review.
+
+This is the operating pattern for impression growth: harvest more relevance from a proven canonical first, measure query demand and user value, then add a new canonical only when the evidence shows a distinct job.
 
 ## Measurement loop
 
