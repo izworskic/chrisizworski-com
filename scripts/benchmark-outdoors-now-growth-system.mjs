@@ -51,7 +51,7 @@ check(
   contract.tool.locationIntentPages === 54 &&
     contract.tool.originsCovered === 11 &&
     contract.tool.families.length === 5,
-  15,
+  10,
 );
 
 check(
@@ -62,6 +62,22 @@ check(
       "https://chrisizworski.com/great-lakes-freighter-tracking/" &&
     contract.canonicalOwnership.protectedAdjacentOwners.birding ===
       "https://michiganbirdingreport.com/",
+  10,
+);
+
+check(
+  "Trail Truth search harvest deepens existing canonicals without contaminating the window",
+  contract.tool.trailSearchHarvest?.releasePr === 52 &&
+    contract.tool.trailSearchHarvest?.existingCanonicalPages === 6 &&
+    contract.tool.trailSearchHarvest?.state === "released-measuring" &&
+    contract.tool.trailSearchHarvest?.candidateFamilyState === "blocked-until-expansion-gate" &&
+    contract.tool.trailSearchHarvest?.candidateFamiliesNoindex === true &&
+    contract.tool.trailSearchHarvest?.candidateFamiliesExcludedFromSitemap === true &&
+    contract.tool.trailSearchHarvest?.candidateFamiliesExcludedFromStaticParams === true &&
+    contract.tool.trailSearchHarvest?.firstExpansionDecisionDate === "2026-09-25" &&
+    authorityEntry?.trailSearchHarvest?.status === "released-measuring" &&
+    authorityEntry?.trailSearchHarvest?.canonicalPages === 6 &&
+    authorityEntry?.trailSearchHarvest?.expansionDecisionNotBefore === "2026-09-25",
   10,
 );
 
