@@ -269,7 +269,7 @@
       "surface": "https://michiganoutdoorsnow.chrisizworski.com/",
       "priorityScore": 82,
       "action": "PROTECT",
-      "next": "Hold the 54-page location-intent launch through the first complete attributed 28-day window. Use weekly leading indicators to diagnose CTR, authority, or UX issues, but do not add another search family until the Search Console + product-value EXPAND_FAMILY gate passes. Preserve beach, freighter, and birding canonical owners.",
+      "next": "Protect the 54-page location-intent launch through September 25. The six existing statewide Trail Truth hiking canonicals may deepen in-place, but candidate trail families remain noindex and out of the sitemap/static route set until the Search Console + product-value EXPAND_FAMILY gate passes. Preserve beach, freighter, and birding canonical owners.",
       "observed": {
         "query": "michigan day trips for families",
         "impressions": 9,
@@ -283,7 +283,13 @@
         "start": "2026-08-29",
         "end": "2026-09-25"
       },
-      "releaseCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150"
+      "releaseCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150",
+      "trailSearchHarvest": {
+        "status": "released-measuring",
+        "releasePr": 52,
+        "canonicalPages": 6,
+        "expansionDecisionNotBefore": "2026-09-25"
+      }
     },
     {
       "id": "trout-report",
