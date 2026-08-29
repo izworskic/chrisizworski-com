@@ -92,6 +92,10 @@ check(
     nameSerp.measurementProtocol?.depths?.includes(30) &&
     nameSerp.measurementProtocol?.countUniqueControlledOrigins === true &&
     nameSerp.measurementProtocol?.reportControlledAndEarnedSeparately === true &&
+    nameSerp.entityGraphContract?.canonicalProfile === "https://chrisizworski.com/chris-izworski/" &&
+    nameSerp.entityGraphContract?.requiredMainEntity === governance.canonicalPersonId &&
+    nameSerp.entityGraphContract?.visibleMarkupParity === true &&
+    nameSerp.entityGraphContract?.requiredIdentityProfiles?.length >= 7 &&
     typeof nameSerp.rules?.entityConsistency === "string" &&
     typeof nameSerp.rules?.searchOwnership === "string" &&
     typeof nameSerp.rules?.brandedOccupancy === "string" &&
