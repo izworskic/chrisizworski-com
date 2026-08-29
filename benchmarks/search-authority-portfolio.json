@@ -268,8 +268,8 @@
       "toolId": "outdoors-now",
       "surface": "https://michiganoutdoorsnow.chrisizworski.com/",
       "priorityScore": 82,
-      "action": "EXPAND",
-      "next": "Launch the quality-gated location-intent cluster, measure query × page impressions/CTR/position after indexing, push only families that earn demand, and keep beach, freighter, and birding authority with their existing canonical owners.",
+      "action": "PROTECT",
+      "next": "Hold the 54-page location-intent launch through the first complete attributed 28-day window. Use weekly leading indicators to diagnose CTR, authority, or UX issues, but do not add another search family until the Search Console + product-value EXPAND_FAMILY gate passes. Preserve beach, freighter, and birding canonical owners.",
       "observed": {
         "query": "michigan day trips for families",
         "impressions": 9,
@@ -277,7 +277,13 @@
         "ctr": 0,
         "position": 31.33,
         "window": "7-day leading snapshot through 2026-08-20"
-      }
+      },
+      "measurementContract": "benchmarks/outdoors-now-growth-system.json",
+      "measurementWindow": {
+        "start": "2026-08-29",
+        "end": "2026-09-25"
+      },
+      "releaseCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150"
     },
     {
       "id": "trout-report",

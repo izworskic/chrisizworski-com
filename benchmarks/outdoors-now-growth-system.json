@@ -1,0 +1,115 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-28",
+  "tool": {
+    "id": "outdoors-now",
+    "name": "Michigan Outdoors Now",
+    "repository": "izworskic/michigan-outdoors-now",
+    "canonical": "https://michiganoutdoorsnow.chrisizworski.com/",
+    "growthManifest": "https://michiganoutdoorsnow.chrisizworski.com/growth-manifest.json",
+    "locationIntentLaunchPr": 39,
+    "growthInstrumentationPr": 40,
+    "locationIntentPages": 54,
+    "originsCovered": 11,
+    "families": [
+      "family-day-trips",
+      "hiking",
+      "paddling",
+      "dog-friendly",
+      "lower-barrier"
+    ],
+    "growthInstrumentationMergeCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150",
+    "growthInstrumentationStatus": "released"
+  },
+  "canonicalOwnership": {
+    "creator": "https://chrisizworski.com/#person",
+    "toolPrimaryIntent": "best Michigan outdoor day trip for current conditions",
+    "protectedAdjacentOwners": {
+      "beaches": "https://chrisizworski.com/great-lakes-beaches/",
+      "freighters": "https://chrisizworski.com/great-lakes-freighter-tracking/",
+      "birding": "https://michiganbirdingreport.com/"
+    }
+  },
+  "measurement": {
+    "searchSource": "Google Search Console page × query dimensions",
+    "productSource": "Vercel fixed-label custom events",
+    "weeklyUse": "leading indicators only",
+    "decisionWindowDays": 28,
+    "plannedWindow": {
+      "start": "2026-08-29",
+      "end": "2026-09-25"
+    },
+    "searchMetrics": [
+      "impressions",
+      "clicks",
+      "ctr",
+      "averagePosition"
+    ],
+    "productFunnel": [
+      "search_landing_viewed",
+      "planner_started",
+      "planner_completed",
+      "semantic_result_opened",
+      "comparison_opened",
+      "departure_mode_opened",
+      "directions_opened"
+    ],
+    "privacy": {
+      "forbidden": [
+        "exact coordinates",
+        "device location",
+        "free-text semantic query"
+      ],
+      "allowed": [
+        "surface",
+        "origin slug",
+        "intent slug",
+        "page key",
+        "fixed category",
+        "counts"
+      ]
+    },
+    "releaseDate": "2026-08-28",
+    "evaluationWindow": {
+      "start": "2026-08-29",
+      "end": "2026-09-25"
+    }
+  },
+  "decisionRules": {
+    "pageActions": [
+      "PUSH_CTR",
+      "BUILD_AUTHORITY",
+      "UX_REPAIR",
+      "PROTECT",
+      "HOLD"
+    ],
+    "expandFamilyRequires": {
+      "impressions": 250,
+      "clicks": 5,
+      "plannerCompletions": 10,
+      "directionsOpens": 3,
+      "plusExistingNewCanonicalGate": true
+    },
+    "doNotExpandWhen": {
+      "minimumImpressions": 500,
+      "minimumLandingViews": 100,
+      "plannerStartRateBelow": 0.02
+    },
+    "rule": "Search visibility alone cannot authorize new Outdoors Now pages. Expansion requires both qualified search demand and demonstrated downstream planning value."
+  },
+  "baseline": {
+    "search": {
+      "query": "michigan day trips for families",
+      "impressions": 9,
+      "clicks": 0,
+      "ctr": 0,
+      "averagePosition": 31.33,
+      "window": "7-day leading snapshot through 2026-08-20",
+      "note": "Pre-location-intent launch evidence."
+    },
+    "product": {
+      "status": "none-before-attribution-release",
+      "note": "No attributed product funnel existed before the growth instrumentation release. Do not backfill invented counts."
+    }
+  }
+}

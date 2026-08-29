@@ -1,6 +1,6 @@
 {
-  "version": "1.4.1",
-  "updated": "2026-08-21",
+  "version": "1.5.0",
+  "updated": "2026-08-28",
   "purpose": "Operational overlay for Tool Network Registry decisions that are actively being executed and measured. This file adds current relationships, repairs, experiments, and launch gates without rewriting historical search evidence.",
   "relationships": [
     {
@@ -84,7 +84,10 @@
       "released": "2026-08-20",
       "implementationRepo": "izworskic/lawn-advisor",
       "implementationPr": 4,
-      "measurement": ["Network Amplification Exposure", "Contextual Tool Handoff"],
+      "measurement": [
+        "Network Amplification Exposure",
+        "Contextual Tool Handoff"
+      ],
       "note": "The live product now exposes measured Michigan growing-season handoffs while preserving its address-specific lawn search ownership."
     },
     {
@@ -94,8 +97,32 @@
       "released": "2026-08-20",
       "implementationRepo": "izworskic/michigan-whitetail-report",
       "implementationPr": 1,
-      "measurement": ["Network Amplification Exposure", "Contextual Tool Handoff"],
+      "measurement": [
+        "Network Amplification Exposure",
+        "Contextual Tool Handoff"
+      ],
       "note": "The live product now exposes measured preseason handoffs; the central fall network also supplies a contextual inbound path."
+    },
+    {
+      "id": "outdoors-now-growth-operating-system",
+      "tool": "outdoors-now",
+      "status": "released-measuring",
+      "proposed": "2026-08-28",
+      "implementationRepo": "izworskic/michigan-outdoors-now",
+      "implementationPr": 40,
+      "measurement": [
+        "Google Search Console page × query impressions/CTR/position",
+        "Search Landing View",
+        "Planner Started",
+        "Planner Completed",
+        "Departure Mode Opened",
+        "Directions Opened"
+      ],
+      "contract": "https://michiganoutdoorsnow.chrisizworski.com/growth-manifest.json",
+      "note": "Joins acquisition and downstream decision behavior so Outdoors Now cannot justify more search pages from impressions alone.",
+      "releaseDate": "2026-08-28",
+      "mergeCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150",
+      "next": "Verify weekly Search Console + Vercel collection configuration, then hold the 54-page cluster stable through the complete attributed window."
     }
   ],
   "launches": [
@@ -121,12 +148,30 @@
       },
       "searchOwnership": {
         "primary": "square foot garden planner",
-        "supporting": ["seed starting planner", "annual flower garden planner"],
-        "protectedAdjacentOwners": ["planting-calendar", "frost-dates", "tomato-planting", "seed-saving"],
+        "supporting": [
+          "seed starting planner",
+          "annual flower garden planner"
+        ],
+        "protectedAdjacentOwners": [
+          "planting-calendar",
+          "frost-dates",
+          "tomato-planting",
+          "seed-saving"
+        ],
         "rule": "Planner owns interactive planning decisions; chrisizworski.com owns Michigan informational timing/reference intent; Freighter View Farms owns firsthand garden experience."
       },
-      "plannedHandoffs": ["freighter-view-farms", "planting-calendar", "frost-dates", "seed-saving", "phenology", "heirloom-matchmaker"],
-      "measurementAfterLaunch": ["Network Amplification Exposure", "Contextual Tool Handoff"],
+      "plannedHandoffs": [
+        "freighter-view-farms",
+        "planting-calendar",
+        "frost-dates",
+        "seed-saving",
+        "phenology",
+        "heirloom-matchmaker"
+      ],
+      "measurementAfterLaunch": [
+        "Network Amplification Exposure",
+        "Contextual Tool Handoff"
+      ],
       "blockers": [
         "Attach garden.chrisizworski.com to the Vercel project and verify the owned canonical resolves.",
         "Verify /, /square-foot-garden-planner, /robots.txt, and /sitemap.xml on production.",
@@ -135,7 +180,11 @@
       "promotionGate": {
         "from": "launch-blocked",
         "to": "measure",
-        "requires": ["production-ready", "owned-domain-resolves", "canonical-route-checks-pass"],
+        "requires": [
+          "production-ready",
+          "owned-domain-resolves",
+          "canonical-route-checks-pass"
+        ],
         "afterPromotion": "Add the planner as an active Tool Network Registry node and only then add crawlable inbound links/cards from central owned properties."
       }
     }
@@ -148,8 +197,17 @@
       "status": "running-contextual-test",
       "candidateScore": 93,
       "started": "2026-08-20",
-      "surfaces": ["fall-color", "fall-weekend", "manistee"],
-      "connectsTo": ["fall-color", "ausable-field-map", "manistee-field-map", "great-lakes-buoys"],
+      "surfaces": [
+        "fall-color",
+        "fall-weekend",
+        "manistee"
+      ],
+      "connectsTo": [
+        "fall-color",
+        "ausable-field-map",
+        "manistee-field-map",
+        "great-lakes-buoys"
+      ],
       "hypothesis": "People planning Michigan fall color trips will use a combined fall-color plus river-paddling decision handoff often enough to justify a distinct tool.",
       "promotionGate": {
         "searchEvidence": "A fresh 28-day Search Console export shows distinct query demand combining fall/color intent with river, paddle, canoe, kayak, float, Au Sable, or Manistee intent.",

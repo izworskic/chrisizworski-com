@@ -183,6 +183,8 @@ Future agents should consult these together before a search-facing change:
 - `benchmarks/tool-network-actions.json` — current network actions and promotion gates.
 - `benchmarks/name-serp-governance.json` — branded/entity rules.
 - `benchmarks/owned-domain-network.json` — owned-property discovery governance.
+- `benchmarks/outdoors-now-growth-system.json` — Michigan Outdoors Now cross-repo acquisition + product-value measurement contract.
+- `docs/OUTDOORS_NOW_GROWTH_SYSTEM.md` — operating cadence, expansion gates, and division of responsibility between the tool and central portfolio.
 - `public/robots.txt`, sitemaps, and `public/llms.txt` — production discovery surfaces.
 
 Run `npm run benchmark:search-strategy -- --check` before merging search-strategy changes. The benchmark is also part of `npm run verify:all`.
