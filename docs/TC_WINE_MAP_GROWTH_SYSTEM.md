@@ -77,7 +77,7 @@ The wine property identifies Chris Izworski as author/creator and links to the c
 
 Central governance treats `tcwine.chrisizworski.com` as a supporting controlled property on the existing chrisizworski.com root. It reinforces the branded entity but does not count as a separate controlled SERP-moat slot.
 
-The primary branded homepage, canonical profile, and /tools/ page remain protected through their active measurement windows. Do not modify those surfaces simply to force wine authority. The unprotected Works page and machine-readable tool/name governance provide the additive connection during the protected period.
+The primary branded homepage, canonical profile, /tools/, and other snapshot-governed Chris surfaces remain protected through their active measurement windows. Do not modify those surfaces simply to force wine authority. Existing public discovery plus machine-readable tool/name governance provide the additive connection during the protected period.
 
 After the protected window closes, central discovery can be reconsidered based on measured search value rather than urgency.
 
@@ -98,9 +98,22 @@ Product:
 - `wine_filter_changed`;
 - `wine_stop_toggled`;
 - `wine_starter_loaded`;
-- `wine_route_built`.
+- `wine_route_built`;
+- `wine_plan_saved`;
+- `wine_plan_removed`;
+- `wine_plan_resumed`;
+- `wine_plan_shared`;
+- `wine_summary_copied`.
 
-Events use fixed landing/filter/category/area values and counts. They do not send free text, precise user location, names of selected venues, or personal identifiers.
+My Wine Day is the continuity layer beneath acquisition. It stores the latest and explicitly saved plans only in the browser, shares exact plans through a URL fragment, and rebuilds a restored plan against current routing and hours rather than treating old timing as permanently valid.
+
+Continuity targets after a meaningful sample:
+- >=8% route-build to save rate;
+- >=5% route-build to exact-share rate;
+- >=20% of resumed/shared plans rebuild into a usable route;
+- no regression in map-load or route-build rates.
+
+Events use fixed landing/filter/category/area/share-source values and bounded counts. They do not send free text, precise user location, selected venue IDs or names, exact plan hashes, trip dates/times, or personal identifiers.
 
 ## 28-day treatment
 
@@ -154,6 +167,6 @@ A new indexable map state requires all of:
 
 The win is not page count. It is a repeatable funnel:
 
-**query → compelling winery-map result → useful mapped answer → stop selection → routed day**
+**query → compelling winery-map result → useful mapped answer → stop selection → routed day → save/share → return/resume**
 
 At scale, daily impressions and clicks should grow from multiple related map/decision queries while one clear canonical owner remains responsible for each family.

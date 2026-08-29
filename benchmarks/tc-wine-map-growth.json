@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "updated": "2026-08-29",
   "id": "tc-wine-map-growth",
   "property": "https://tcwine.chrisizworski.com/",
@@ -50,8 +50,32 @@
     "forbiddenAnalytics": [
       "free-text search",
       "precise user location",
+      "selected venue ids",
       "selected venue names",
+      "exact plan url or hash",
+      "trip date or exact time",
       "personal identifiers"
     ]
+  },
+  "continuity": {
+    "layer": "my-wine-day",
+    "purpose": "increase route commitment, return use, and group sharing without changing the active search treatment",
+    "localOnly": true,
+    "indexableUserPlanPages": false,
+    "shareTransport": "url-fragment",
+    "events": [
+      "wine_plan_saved",
+      "wine_plan_removed",
+      "wine_plan_resumed",
+      "wine_plan_shared",
+      "wine_summary_copied"
+    ],
+    "initialTargets": {
+      "routeBuildToSaveRate": 0.08,
+      "routeBuildToShareRate": 0.05,
+      "resumedOrSharedPlanRebuildRate": 0.2,
+      "allowMapLoadRegression": false,
+      "allowRouteBuildRegression": false
+    }
   }
 }
