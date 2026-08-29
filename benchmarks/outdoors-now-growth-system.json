@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "updated": "2026-08-28",
+  "version": "1.1.0",
+  "updated": "2026-08-29",
   "tool": {
     "id": "outdoors-now",
     "name": "Michigan Outdoors Now",
@@ -19,7 +19,26 @@
       "lower-barrier"
     ],
     "growthInstrumentationMergeCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150",
-    "growthInstrumentationStatus": "released"
+    "growthInstrumentationStatus": "released",
+    "trailSearchHarvest": {
+      "releasePr": 52,
+      "releaseCommit": "9b67e960acd9a3f00e24ccefd7cffe76c2f4e102",
+      "existingCanonicalPages": 6,
+      "state": "released-measuring",
+      "strategy": "Deepen existing statewide hiking canonicals during the protected 28-day window; do not create candidate trail families.",
+      "candidateFamilyState": "blocked-until-expansion-gate",
+      "candidateFamiliesNoindex": true,
+      "candidateFamiliesExcludedFromSitemap": true,
+      "candidateFamiliesExcludedFromStaticParams": true,
+      "firstExpansionDecisionDate": "2026-09-25",
+      "expansionGate": {
+        "impressions": 250,
+        "clicks": 5,
+        "plannerCompletions": 10,
+        "directionsOpens": 3,
+        "plusExistingNewCanonicalGate": true
+      }
+    }
   },
   "canonicalOwnership": {
     "creator": "https://chrisizworski.com/#person",
