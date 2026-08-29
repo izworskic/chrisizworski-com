@@ -1,6 +1,6 @@
 {
-  "version": "1.2.1",
-  "updated": "2026-08-28",
+  "version": "1.3.0",
+  "updated": "2026-08-29",
   "purpose": "Track Chris Izworski-owned web properties separately from the tool-only registry so a 100/100 tool score cannot hide an unconnected first-party domain or planned subproperty.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "roots": [
@@ -195,6 +195,16 @@
       "from": "chrisizworski.com",
       "to": "michiganoutdoorsnow.chrisizworski.com",
       "surface": "identity"
+    },
+    {
+      "from": "michiganoutdoorsnow.chrisizworski.com",
+      "to": "chrisizworski.com",
+      "surface": "site-footer-author-link"
+    },
+    {
+      "from": "michiganoutdoorsnow.chrisizworski.com",
+      "to": "chrisizworski.com",
+      "surface": "trail-search-author-profile"
     }
   ],
   "gates": {

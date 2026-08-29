@@ -1,5 +1,5 @@
 {
-  "version": "1.4.0",
+  "version": "1.5.0",
   "updated": "2026-08-29",
   "objective": "Make Chris Izworski the clear primary result for his name and build a durable page-one moat of independently controlled, truthful, useful Chris Izworski properties while preserving strong earned authority, one canonical Person entity, and distinct non-branded search ownership.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
@@ -189,5 +189,22 @@
     "subjectOwner": "interactive square-foot garden planning",
     "supportingBrand": "Freighter View Farms",
     "activation": "After production verification, add it to central owned-property discovery and begin measuring branded and non-branded search performance. It remains part of the chrisizworski.com root for controlled-moat accounting."
+  },
+  "entityGraphContract": {
+    "canonicalProfile": "https://chrisizworski.com/chris-izworski/",
+    "profileType": "ProfilePage",
+    "requiredMainEntity": "https://chrisizworski.com/#person",
+    "sameAsRole": "Identity profiles and pages that unambiguously describe the same person; do not use product homepages merely because Chris created them.",
+    "worksRole": "Distinct authored or created projects belong in ProfilePage.hasPart or creator/author relationships.",
+    "visibleMarkupParity": true,
+    "requiredIdentityProfiles": [
+      "https://github.com/izworskic",
+      "https://www.linkedin.com/in/chris-izworski-15294510",
+      "https://www.wikidata.org/wiki/Q138283432",
+      "https://orcid.org/0009-0002-7268-6083",
+      "https://medium.com/@izworski",
+      "https://about.me/chrisizworski",
+      "https://www.youtube.com/@izworskic"
+    ]
   }
 }

@@ -1,6 +1,6 @@
 # Chris Izworski Exact-Name SERP Moat
 
-Updated: August 24, 2026 (America/Detroit)
+Updated: August 29, 2026 (America/Detroit)
 
 ## Objective
 
@@ -43,6 +43,20 @@ The current portfolio already contains enough legitimate assets to pursue the 8/
 | ORCID | `0009-0002-7268-6083` | Persistent identity authority | CONNECT |
 
 Useful independent product roots such as Michigan Trout Report, Michigan Birding Report, and Great Lakes Levels should reinforce creator identity when truthful. They should not be converted into name-only properties or weakened for their non-branded search missions just to occupy a branded result.
+
+## Canonical entity graph
+
+The branded moat uses one canonical Person ID: `https://chrisizworski.com/#person`.
+
+The primary identity page at `/chris-izworski/` should use Google-compatible `ProfilePage` markup with that Person as `mainEntity`. Keep relationship types honest:
+
+- use `sameAs` for external profiles or pages that unambiguously describe the same Chris Izworski entity;
+- use `ProfilePage.hasPart`, `author`, or `creator` for projects and authored work;
+- do not add a product homepage to `sameAs` merely because Chris created the product;
+- keep the structured graph visible in the page content so machine-readable relationships match what a visitor can verify;
+- active owned properties should link back to the canonical identity surface while preserving their own non-branded purpose.
+
+This distinction matters because a strong entity graph is not a list of every URL Chris controls. It is a set of accurate identity, authorship, and ownership relationships that independent search systems can reconcile.
 
 ## Page-one operating model
 
