@@ -1,0 +1,57 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-29",
+  "id": "tc-wine-map-growth",
+  "property": "https://tcwine.chrisizworski.com/",
+  "canonicalPerson": "https://chrisizworski.com/#person",
+  "objective": "Earn large-scale non-branded Traverse City winery-map discovery while strengthening truthful Chris Izworski authorship and preserving one canonical owner per intent.",
+  "northStar": {
+    "dailyImpressions": 1000,
+    "dailyClicks": 100,
+    "status": "aspirational-not-guaranteed"
+  },
+  "treatment": {
+    "start": "2026-08-29",
+    "minimumWindowDays": 28,
+    "freeze": [
+      "canonical",
+      "title",
+      "h1",
+      "core meta description",
+      "winery counts",
+      "primary schema identity",
+      "indexability"
+    ]
+  },
+  "canonicalFamilies": [
+    "traverse-city-winery-map",
+    "old-mission-winery-map",
+    "leelanau-winery-map",
+    "old-mission-vs-leelanau",
+    "wineries-with-food",
+    "wineries-with-views",
+    "fall-color-winery-map",
+    "tasting-room-hours"
+  ],
+  "truth": {
+    "totalWineries": 40,
+    "oldMissionWineries": 11,
+    "leelanauWineries": 27,
+    "traverseCityOtherWineries": 2
+  },
+  "expansionGate": {
+    "queryFamilyImpressions": 250,
+    "clicks": 5,
+    "mapLoads": 10,
+    "routeBuilds": 3,
+    "requiresCannibalizationCheck": true
+  },
+  "privacy": {
+    "forbiddenAnalytics": [
+      "free-text search",
+      "precise user location",
+      "selected venue names",
+      "personal identifiers"
+    ]
+  }
+}
