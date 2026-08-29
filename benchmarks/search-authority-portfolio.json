@@ -1,6 +1,6 @@
 {
-  "version": "1.1.0",
-  "updated": "2026-08-28",
+  "version": "1.2.0",
+  "updated": "2026-08-29",
   "timezone": "America/Detroit",
   "objective": "Build Chris Izworski as a durable entity and grow a connected Michigan/Great Lakes search authority network by prioritizing real demand, useful first-party utility, independent authority, branded occupancy, and cross-property reinforcement instead of isolated page-count growth.",
   "northStar": "Own useful Michigan and Great Lakes decisions; let branded SERP dominance emerge from real authority.",
@@ -415,9 +415,13 @@
       "id": "tc-wine",
       "toolId": "tc-wine",
       "surface": "https://tcwine.chrisizworski.com/",
-      "priorityScore": 68,
-      "action": "REPAIR",
-      "next": "Child pages are receiving impressions but weak positions; clarify the planner's unique decision value and strengthen topical authority before adding more venue pages."
+      "priorityScore": 86,
+      "action": "PUSH",
+      "next": "Release the map-first canonical treatment around Traverse City winery map, Old Mission winery map, and Leelanau winery map; hold search-facing titles/H1s/canonicals for a clean 28-day window, measure tcwine Search Console separately, and only expand additional map states when query evidence and route-building behavior support them.",
+      "observed": {
+        "status": "pre-map-first-baseline",
+        "note": "Existing child pages have received impressions at weak positions; no claim of breakout traffic until the new 28-day window is measured."
+      }
     },
     {
       "id": "shipwrecks",
@@ -463,7 +467,8 @@
   "immediateQueue": [
     "winter — EXPAND Michigan Ice and XC preseason authority now: grow crawlable statewide/regional coverage and contextual handoffs before seasonal demand, without rewriting safety truth or creating duplicate live-condition owners.",
     "garden-planner — BUILD_NEXT only after custom-domain attachment, production response, canonical, indexability and owned-network verification all pass.",
-    "AI citation — run live answer-engine spot checks against the highest-value unprotected authority surfaces and feed only evidence-backed gaps back into existing canonical owners."
+    "AI citation — run live answer-engine spot checks against the highest-value unprotected authority surfaces and feed only evidence-backed gaps back into existing canonical owners.",
+    "TC Wine — PUSH the map-first winery search treatment, strengthen Chris Izworski authored-tool authority, and hold expansion until the 28-day search/product window is measurable."
   ],
   "protectedQueue": [
     "Northern Lights Michigan",
