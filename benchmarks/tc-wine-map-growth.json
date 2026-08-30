@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "updated": "2026-08-29",
   "id": "tc-wine-map-growth",
   "property": "https://tcwine.chrisizworski.com/",
@@ -111,6 +111,22 @@
       "paid links",
       "scaled reciprocal link exchanges",
       "low-quality directory blasts"
-    ]
+    ],
+    "partnerEmbeds": {
+      "stablePartners": [
+        "grand-traverse-resort",
+        "cherry-tree-inn",
+        "traverse-city-tourism"
+      ],
+      "wineryFocusedEmbeds": true,
+      "currentWineryEmbedCount": 43,
+      "indexable": false
+    },
+    "originalDataAsset": {
+      "canonicalPage": "/old-mission-vs-leelanau-wineries",
+      "export": "/api/publisher/driving-reality.json",
+      "exportIndexable": false,
+      "keyFinding": "Old Mission and Leelanau have nearly identical median nearest-neighbor spacing, but Leelanau has materially larger overall winery-pair separation and geographic spread."
+    }
   }
 }
