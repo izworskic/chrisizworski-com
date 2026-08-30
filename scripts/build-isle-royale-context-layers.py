@@ -477,24 +477,63 @@ def fingerprint(path):
 
 def main():
     built = {}
-    quiet_path, quiet_meta = build_quiet_no_wake()
-    built["quiet_no_wake"] = {**fingerprint(quiet_path), **quiet_meta}
+    errors = {}
 
-    veg_path, veg_meta = build_science_layer(VEG_PARENT, VEG_DOI, "vegetation-change", "vegetation-change-1996-2017.geojson")
-    built["vegetation_change"] = {
-        **fingerprint(veg_path),
-        **veg_meta,
-        "vintage": "2017 high-resolution imagery compared with the 2000 NPS vegetation map (1994/1996 imagery)",
-        "interpretation_note": "Shows mapped vegetation cover type, density or pattern change and proposed reasons from the USGS release; not a present-day 2026 vegetation map.",
-    }
+    try:
+        quiet_path, quiet_meta = build_quiet_no_wake()
+        built["quiet_no_wake"] = {"status": "generated", **fingerprint(quiet_path), **quiet_meta}
+    except Exception as exc:
+        errors["quiet_no_wake"] = str(exc)
+        built["quiet_no_wake"] = {
+            "status": "unresolved-upstream",
+            "source": QUIET_PAGE,
+            "regulatory_source": QUIET_COMPENDIUM,
+            "datastore_collection": QUIET_DATASTORE,
+            "expected_features": 22,
+            "quiet_no_wake_features": 19,
+            "no_wake_features": 3,
+            "reason": str(exc),
+            "note": "Current NPS builder config exposes the correct 22-zone metadata, but its legacy Carto geometry endpoint is unavailable. Do not substitute hand-drawn polygons.",
+        }
+        print(f"quiet/no-wake geometry unresolved: {exc}", file=sys.stderr)
 
-    fire_path, fire_meta = build_science_layer(FIRE_PARENT, FIRE_DOI, "horne-fire", "horne-fire-burn-severity.geojson")
-    built["horne_fire"] = {
-        **fingerprint(fire_path),
-        **fire_meta,
-        "vintage": "2021 Horne Fire; USGS data release published 2024",
-        "interpretation_note": "Burn-severity assessment derived from pre/post-fire high-resolution imagery; use as historical ecological context, not a current fire-status layer.",
-    }
+    try:
+        veg_path, veg_meta = build_science_layer(VEG_PARENT, VEG_DOI, "vegetation-change", "vegetation-change-1996-2017.geojson")
+        built["vegetation_change"] = {
+            "status": "generated",
+            **fingerprint(veg_path),
+            **veg_meta,
+            "vintage": "2017 high-resolution imagery compared with the 2000 NPS vegetation map (1994/1996 imagery)",
+            "interpretation_note": "Shows mapped vegetation cover type, density or pattern change and proposed reasons from the USGS release; not a present-day 2026 vegetation map.",
+        }
+    except Exception as exc:
+        errors["vegetation_change"] = str(exc)
+        built["vegetation_change"] = {
+            "status": "unresolved-upstream",
+            "source": f"https://doi.org/{VEG_DOI}",
+            "sciencebase_parent": f"https://www.sciencebase.gov/catalog/item/{VEG_PARENT}",
+            "reason": str(exc),
+        }
+        print(f"vegetation-change layer unresolved: {exc}", file=sys.stderr)
+
+    try:
+        fire_path, fire_meta = build_science_layer(FIRE_PARENT, FIRE_DOI, "horne-fire", "horne-fire-burn-severity.geojson")
+        built["horne_fire"] = {
+            "status": "generated",
+            **fingerprint(fire_path),
+            **fire_meta,
+            "vintage": "2021 Horne Fire; USGS data release published 2024",
+            "interpretation_note": "Burn-severity assessment derived from pre/post-fire high-resolution imagery; use as historical ecological context, not a current fire-status layer.",
+        }
+    except Exception as exc:
+        errors["horne_fire"] = str(exc)
+        built["horne_fire"] = {
+            "status": "unresolved-upstream",
+            "source": f"https://doi.org/{FIRE_DOI}",
+            "sciencebase_parent": f"https://www.sciencebase.gov/catalog/item/{FIRE_PARENT}",
+            "reason": str(exc),
+        }
+        print(f"Horne Fire layer unresolved: {exc}", file=sys.stderr)
 
     manifest_path = OUT / "context-layer-manifest.json"
     previous = {}
@@ -504,16 +543,27 @@ def main():
         except Exception:
             previous = {}
     previous_layers = previous.get("layers") or {}
-    same = all(previous_layers.get(k, {}).get("sha256") == v.get("sha256") for k, v in built.items())
+    same = all(
+        previous_layers.get(k, {}).get("sha256") == v.get("sha256")
+        and previous_layers.get(k, {}).get("status") == v.get("status")
+        and previous_layers.get(k, {}).get("reason") == v.get("reason")
+        for k, v in built.items()
+    )
     generated_at = previous.get("generated_at") if same and previous.get("generated_at") else datetime.datetime.now(datetime.timezone.utc).isoformat()
     manifest = {
         "schema_version": 1,
         "generated_at": generated_at,
-        "derivation": "Official NPS ArcGIS quiet/no-wake geometry plus USGS ScienceBase geospatial releases normalized to EPSG:4326 and simplified for opt-in web display.",
+        "derivation": "Official NPS boating-restriction sources plus USGS ScienceBase geospatial releases normalized to EPSG:4326 and simplified for opt-in web display. Each layer is independent; unresolved upstream geometry is never fabricated.",
         "layers": built,
+        "errors": errors,
     }
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(manifest, indent=2))
+
+    # At least the two USGS layers must resolve for this build to be considered useful.
+    missing_usgs = [key for key in ("vegetation_change", "horne_fire") if built.get(key, {}).get("status") != "generated"]
+    if missing_usgs:
+        raise SystemExit("USGS context layers unresolved: " + ", ".join(missing_usgs))
 
 
 if __name__ == "__main__":
