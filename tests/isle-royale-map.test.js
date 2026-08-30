@@ -12,6 +12,8 @@ const catalog = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-m
 const deepManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/deep-layer-manifest.json'), 'utf8'));
 const contextManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/context-layer-manifest.json'), 'utf8'));
 const contextBuilder = fs.readFileSync(path.join(root, 'scripts/build-isle-royale-context-layers.py'), 'utf8');
+const circleTour = fs.readFileSync(path.join(root, 'public/lake-superior-circle-tour/index.html'), 'utf8');
+const upNorth = fs.readFileSync(path.join(root, 'public/up-north-michigan/index.html'), 'utf8');
 const deepWorkflow = fs.readFileSync(path.join(root, '.github/workflows/isle-royale-deep-data.yml'), 'utf8');
 const contextWorkflow = fs.readFileSync(path.join(root, '.github/workflows/isle-royale-context-data.yml'), 'utf8');
 
@@ -208,4 +210,11 @@ test('GIS workflows validate on PRs and only rebuild or write on explicit dispat
   }
   assert.match(deepWorkflow, /vegetation-overview-2000\.geojson/);
   assert.match(contextWorkflow, /quiet-no-wake-zones\.geojson/);
+});
+
+
+test('Isle Royale has protected internal discovery paths outside the frozen tools experiment', () => {
+  assert.match(circleTour, /href="\/isle-royale-map\/"[^>]*>Isle Royale interactive map/);
+  assert.match(circleTour, /href="\/isle-royale-map\/" class="ext-link">Isle Royale map/);
+  assert.match(upNorth, /href="\/isle-royale-map\/"[^>]*>Isle Royale interactive map/);
 });
