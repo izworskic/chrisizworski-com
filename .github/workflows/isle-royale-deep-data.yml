@@ -6,6 +6,10 @@ on:
       - ".github/workflows/isle-royale-deep-data.yml"
       - "scripts/build-isle-royale-deep-layers.sh"
       - "scripts/derive-isle-royale-vegetation-overview.py"
+      - "public/isle-royale-map/data/geology-units.geojson"
+      - "public/isle-royale-map/data/vegetation-baseline-2000.geojson"
+      - "public/isle-royale-map/data/vegetation-overview-2000.geojson"
+      - "public/isle-royale-map/data/deep-layer-manifest.json"
   workflow_dispatch:
 
 permissions:
@@ -16,52 +20,63 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-deep-layers:
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+  validate-or-build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out PR branch
+      - name: Check out target branch
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
           fetch-depth: 0
 
-      - name: Install GDAL
+      - name: Install GDAL for explicit rebuild
+        if: github.event_name == 'workflow_dispatch'
         run: |
           sudo apt-get update
           sudo apt-get install -y gdal-bin python3-gdal unzip
 
-      - name: Build normalized federal GIS derivatives
+      - name: Rebuild normalized federal GIS derivatives
+        if: github.event_name == 'workflow_dispatch'
         run: bash scripts/build-isle-royale-deep-layers.sh
 
-      - name: Validate generated GeoJSON
+      - name: Validate committed deep GIS
         run: |
-          python - <<'PY'
-          import json, pathlib, sys
+          python3 - <<'PY'
+          import hashlib, json, pathlib
           root=pathlib.Path("public/isle-royale-map/data")
-          expected=[
-              root/"geology-units.geojson",
-              root/"vegetation-baseline-2000.geojson",
-              root/"vegetation-overview-2000.geojson",
-              root/"deep-layer-manifest.json",
-          ]
-          for path in expected:
-              if not path.exists() or path.stat().st_size < 100:
-                  raise SystemExit(f"missing/empty generated file: {path}")
-          for path in expected[:3]:
-              data=json.loads(path.read_text())
-              if data.get("type")!="FeatureCollection" or not data.get("features"):
-                  raise SystemExit(f"invalid/empty FeatureCollection: {path}")
-              print(path, len(data["features"]), path.stat().st_size)
-          manifest=json.loads(expected[3].read_text())
-          for key in ("geology","vegetation","vegetation_overview"):
-              sha=manifest["sources"][key].get("sha256","")
-              if len(sha)!=64:
-                  raise SystemExit(f"missing sha256 for {key}")
+          manifest=json.loads((root/"deep-layer-manifest.json").read_text())
+          expected={
+              "geology":("geology-units.geojson",1900,25000000),
+              "vegetation":("vegetation-baseline-2000.geojson",38,25000000),
+              "vegetation_overview":("vegetation-overview-2000.geojson",3,8000000),
+          }
+          counts={}
+          sizes={}
+          for key,(filename,min_features,max_bytes) in expected.items():
+              meta=manifest["sources"][key]
+              path=root/filename
+              data=path.read_bytes()
+              fc=json.loads(data)
+              assert fc["type"]=="FeatureCollection", (key,"not FeatureCollection")
+              count=len(fc["features"])
+              assert count>=min_features, (key,count,min_features)
+              if key=="vegetation":
+                  assert count==38, count
+              if key=="vegetation_overview":
+                  assert count<=10, count
+              assert len(data)<=max_bytes, (key,len(data),max_bytes)
+              assert meta["file"]==filename
+              assert meta["bytes"]==len(data)
+              assert meta["features"]==count
+              assert meta["sha256"]==hashlib.sha256(data).hexdigest()
+              counts[key]=count
+              sizes[key]=len(data)
+              print(key,count,len(data),meta["sha256"])
+          assert sizes["vegetation_overview"] < sizes["vegetation"] / 2, sizes
           PY
 
-      - name: Commit normalized layers to feature branch
-        if: github.event_name == 'pull_request'
+      - name: Commit rebuilt layers
+        if: github.event_name == 'workflow_dispatch'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -74,9 +89,11 @@ jobs:
             exit 0
           fi
           git commit -m "Generate Isle Royale deep GIS layers"
-          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
 
-      - name: Upload normalized GIS artifact
+      - name: Upload rebuilt GIS artifact
+        if: github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
           name: isle-royale-deep-gis
