@@ -1694,8 +1694,9 @@
       if(record.category!=='campground'||!record.boater||record.liveAlert)continue;
       const point=recordRoutePoint(record);
       if(!point)continue;
+      const pinned=route.points.some(routePoint=>routePoint.kind==='campground'&&routePoint.sourceBackedBoatIn&&distanceMiles(routePoint,point)<.08);
       camps.push({
-        id:'camp-'+i,record_index:i,name:record.name,lat:point.lat,lng:point.lng,closed:false,
+        id:'camp-'+i,record_index:i,name:record.name,lat:point.lat,lng:point.lng,closed:false,pinned,
         dock_depth:record.boater.dock_depth||'',shelters:record.boater.shelters||'',tent_sites:record.boater.tent_sites||'',
         stay_limit:record.boater.consecutive_night_limit||'',food_storage_lockers:record.boater.food_storage_lockers||''
       });
