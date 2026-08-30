@@ -2006,11 +2006,12 @@
       }).addTo(routeLayerGroup);
       if(route.mode!=='hike') {
         route.line.on('click',event=>{
-          if(route.adding)return;
+          if(!route.adding)return;
           if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
           const index=nearestControlSegmentIndex(event.latlng);
-          route.points.splice(index,0,{lat:event.latlng.lat,lng:event.latlng.lng,label:`Via ${index}`});
+          route.points.splice(index,0,{lat:event.latlng.lat,lng:event.latlng.lng,label:`Via ${index}`,kind:'map-point'});
           reroute();
+          status('Shaping point added to the route. Keep clicking to refine the trip.');
         });
       }
     }
@@ -2018,7 +2019,7 @@
     route.points.forEach((point,index)=>{
       const marker=L.marker([point.lat,point.lng],{
         pane:'routePane',
-        icon:routeWaypointIcon(index,route.points.length),
+        icon:routeWaypointIcon(index,route.points.length,point),
         keyboard:true,
         draggable:true,
         autoPan:true,
@@ -2070,26 +2071,36 @@
   function setRouteAdding(active) {
     route.adding=Boolean(active);
     document.body.classList.toggle('route-building',route.adding);
-    els.routeAddButton.textContent=route.adding?'Stop map picking':route.points.length?'Add via point on map':'Start on map';
-    els.routeModeButton.textContent=route.adding?'Finish picking':'Plan route';
+    els.routeAddButton.textContent=route.adding?'Done building':'Build on map';
+    els.routeModeButton.textContent='Build route';
     els.routeAddButton.setAttribute('aria-pressed',String(route.adding));
     els.routeModeButton.setAttribute('aria-pressed',String(route.adding));
+    els.exploreModeButton?.setAttribute('aria-pressed',String(!route.adding));
+    if(els.routeMapGuide) {
+      els.routeMapGuide.innerHTML=route.adding
+        ? '<strong>Build route:</strong> click the map for waypoints, click campsites to add trip stops, click the route line to shape it. Choose Explore when finished.'
+        : '<strong>Explore:</strong> click features for details. Switch to Build route when you want map clicks to edit the trip.';
+    }
     status(route.adding
-      ? route.points.length?'Tap the map to add a via point.':'Tap the map for your route start.'
-      : 'Map picking stopped.');
+      ? route.points.length
+        ? 'Build route is on. Click the map, campsites, or route line to keep extending the trip.'
+        : 'Build route is on. Click the map or a campsite for your route start.'
+      : 'Explore mode. Map clicks inspect features without changing the trip.');
   }
 
-  function addRoutePoint(latlng,label='') {
+  function addRoutePoint(latlng,label='',meta={}) {
     if(!latlng||!Number.isFinite(latlng.lat)||!Number.isFinite(latlng.lng))return;
     route.points.push({
       lat:Number(latlng.lat),
       lng:Number(latlng.lng),
-      label:cleanText(label)||`Waypoint ${route.points.length+1}`
+      label:cleanText(label)||`Waypoint ${route.points.length+1}`,
+      kind:cleanText(meta.kind||'map-point'),
+      sourceBackedBoatIn:Boolean(meta.sourceBackedBoatIn),
+      sourceLabel:cleanText(meta.sourceLabel||''),
+      liveAlert:Boolean(meta.liveAlert)
     });
     reroute('Route changed. Re-run the weather analysis for the updated path.');
-    emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode});
-    document.getElementById('route-planner')?.scrollIntoView({behavior:'smooth',block:'nearest'});
-    if(route.points.length===2)setRouteAdding(false);
+    emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode,point_kind:cleanText(meta.kind||'map-point')});
   }
 
   function reverseRoute() {
