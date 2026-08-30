@@ -1412,6 +1412,96 @@
     return {ok:true,points:resolved,trailNames,accessMiles};
   }
 
+  async function ensureWaterRouter() {
+    if(waterIntel.router)return waterIntel.router;
+    if(waterIntel.promise)return waterIntel.promise;
+    if(!window.IsleRoyaleWaterIntel?.create)throw new Error('water-routing engine is unavailable');
+    waterIntel.state='loading';
+    waterIntel.promise=fetchJSON(CONFIG.waterIntelEndpoint,48000)
+      .then(data=>{
+        if(!Array.isArray(data?.lines)||!data.lines.length)throw new Error('shoreline source returned no coastline geometry');
+        waterIntel.router=window.IsleRoyaleWaterIntel.create(data.lines);
+        if(!waterIntel.router?.segment_count)throw new Error('shoreline index is empty');
+        waterIntel.source=data;
+        waterIntel.state='loaded';
+        return waterIntel.router;
+      })
+      .catch(error=>{waterIntel.state='error';waterIntel.error=cleanText(error?.message||error);throw error;})
+      .finally(()=>{waterIntel.promise=null;});
+    return waterIntel.promise;
+  }
+
+  async function ensureRouteQuietZones() {
+    if(waterIntel.quietZones)return waterIntel.quietZones;
+    if(waterIntel.quietPromise)return waterIntel.quietPromise;
+    waterIntel.quietPromise=fetchJSON(CONFIG.contextLayers['quiet-no-wake'],30000)
+      .then(data=>{waterIntel.quietZones=Array.isArray(data?.features)?data.features:[];return waterIntel.quietZones;})
+      .catch(()=>[])
+      .finally(()=>{waterIntel.quietPromise=null;});
+    return waterIntel.quietPromise;
+  }
+
+  function recordRoutePoint(record) {
+    if(record?.latlng&&Number.isFinite(record.latlng.lat)&&Number.isFinite(record.latlng.lng))return {lat:record.latlng.lat,lng:record.latlng.lng};
+    try {
+      const bounds=record?.layer?.getBounds?.();
+      if(bounds?.isValid?.()){const c=bounds.getCenter();if(Number.isFinite(c.lat)&&Number.isFinite(c.lng))return {lat:c.lat,lng:c.lng};}
+    } catch (_) {}
+    return null;
+  }
+
+  function nearbyRouteRefuges(path) {
+    const api=window.IsleRoyaleWaterIntel;
+    if(!api?.pathDistance||!Array.isArray(path)||path.length<2)return [];
+    const maxDistance=route.mode==='paddle'?2.0:4.0;
+    const rows=[];
+    for(const record of featureIndex){
+      const hay=(record.name+' '+record.category+' '+record.description+' '+JSON.stringify(record.properties||{})).toLowerCase();
+      const useful=record.category==='campground'||(record.category==='visitor-service'&&/dock|pier|harbor|ranger|visitor|lodge|shelter|camp/.test(hay));
+      if(!useful)continue;
+      const point=recordRoutePoint(record);
+      if(!point)continue;
+      const distance=api.pathDistance(point,path);
+      if(Number.isFinite(distance)&&distance<=maxDistance)rows.push({name:record.name,distance,category:record.category});
+    }
+    rows.sort((a,b)=>a.distance-b.distance||a.name.localeCompare(b.name));
+    const seen=new Set();
+    return rows.filter(row=>{const key=row.name.toLowerCase();if(seen.has(key))return false;seen.add(key);return true;}).slice(0,5);
+  }
+
+  async function resolveWaterRouteAsync() {
+    if(route.mode==='hike'||route.points.length<2)return;
+    const token=++route.waterToken;
+    route.smartState='water-loading';
+    route.waterReason='';
+    route.waterStats=null;
+    route.waterAccessMiles=0;
+    renderRoute();
+    try {
+      const [router,zones]=await Promise.all([ensureWaterRouter(),ensureRouteQuietZones()]);
+      if(token!==route.waterToken||route.mode==='hike'||route.points.length<2)return;
+      await new Promise(resolve=>setTimeout(resolve,0));
+      const result=router.route(route.points,route.mode);
+      if(token!==route.waterToken)return;
+      route.resolvedPoints=result.points;
+      route.waterAccessMiles=Number(result.access_miles)||0;
+      const stats=router.analyze(route.resolvedPoints);
+      stats.quiet_zones=window.IsleRoyaleWaterIntel.zonesAlongPath(route.resolvedPoints,zones);
+      stats.refuges=nearbyRouteRefuges(route.resolvedPoints);
+      route.waterStats=stats;
+      route.smartState='water-aware';
+      route.waterReason='';
+      renderRoute();
+      emitEvent('isle_royale_water_route',{mode:route.mode,quiet_zone_count:stats.quiet_zones.length,refuge_count:stats.refuges.length});
+    } catch(error) {
+      if(token!==route.waterToken)return;
+      route.resolvedPoints=[...route.points];
+      route.waterStats=null;
+      route.smartState='water-fallback';
+      route.waterReason=cleanText(error?.message||'shoreline intelligence unavailable');
+      renderRoute();
+    }
+  }
   function resolveRoute() {
     route.trailNames=[];
     route.accessMiles=0;
