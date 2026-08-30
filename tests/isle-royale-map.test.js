@@ -97,7 +97,7 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
   assert.match(js, /NPS ferry, seaplane & transportation/);
   assert.match(js, /NPS lighthouses & places to go/);
   assert.match(js, /Open map-data source/);
-  assert.match(html, /Tap any point to open its available attributes, coordinates, source links and related NPS planning information/);
+  assert.match(html, /Build the trip on the map/);
   assert.match(html, /\.popup-action\{[^}]*min-height:42px/);
   assert.match(html, /\.isle-detail-popup \.leaflet-popup-content/);
 });
@@ -194,7 +194,7 @@ test('map-first route builder separates Explore from persistent Build mode and m
   assert.match(html, /id="route-mode"[^>]*>Build route/);
   assert.match(html, /id="route-map-guide"/);
   assert.match(html, /id="route-stop-list"/);
-  assert.match(html, /clicking a campground adds that campsite to the trip/i);
+  assert.match(html, /Click the map\. Add camps\. See leg distances/i);
   assert.match(js, /function addFeatureToRoute/);
   assert.match(js, /route\.adding&&record\.latlng/);
   assert.match(js, /record\.category==='campground'&&record\.liveAlert/);
