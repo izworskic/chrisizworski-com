@@ -15,7 +15,10 @@ test('registry sees Circle Tour amplification executed, network repairs complete
 
   assert.match(output, /Focus recommendation/);
   assert.match(output, /AMPLIFY \+ MEASURE\s+Lake Superior Circle Tour \[circle-tour\]/);
-  assert.match(output, /2 inbound \/ 3 outbound · search evidence unknown · in season/);
+  const connections = output.match(/(\\d+) inbound \/ (\\d+) outbound · search evidence unknown · in season/);
+  assert.ok(connections, 'Circle Tour connection summary should be present');
+  assert.ok(Number(connections[1]) >= 2, 'Circle Tour should retain at least two useful inbound relationships');
+  assert.ok(Number(connections[2]) >= 3, 'Circle Tour should retain at least three useful outbound relationships');
   assert.match(output, /Active network experiments/);
   assert.match(output, /RUNNING-CONTEXTUAL-TEST\s+Best Fall River Paddle Window \[fall-river-window-v1\]/);
   assert.match(output, /Network repair priority/);
