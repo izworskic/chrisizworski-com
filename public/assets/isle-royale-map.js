@@ -593,6 +593,7 @@
       status((point.label||'Campground')+' is not in the current NPS Boat-In campground feed, so it cannot be fixed as a water-trip day end.');
       return false;
     }
+    rememberRouteEdit();
     point.manualDayEnd=Boolean(active);
     reroute((point.label||'Campground')+(active?' set as an explicit day end.':' returned to a normal route stop.'));
     const day=manualDayNumber(point);
@@ -2105,9 +2106,9 @@
     return 'Via point';
   }
 
-  function renderRouteStops() {
-    if(!els.routeStopList)return;
-    els.routeStopList.replaceChildren();
+  function renderRouteStopsInto(container) {
+    if(!container)return;
+    container.replaceChildren();
     if(!route.points.length)return;
     route.points.forEach((point,index)=>{
       const row=document.createElement('div');
@@ -2137,6 +2138,7 @@
       remove.setAttribute('aria-label','Remove '+(point.label||'route point'));
       remove.textContent='×';
       remove.addEventListener('click',()=>{
+        rememberRouteEdit();
         route.points.splice(index,1);
         reroute('Route stop removed. Re-run weather after the route resolves.');
         status((point.label||'Route point')+' removed from trip.');
@@ -2151,10 +2153,14 @@
         row.appendChild(dayEnd);
       }
       row.appendChild(remove);
-      els.routeStopList.appendChild(row);
+      container.appendChild(row);
     });
   }
 
+  function renderRouteStops() {
+    renderRouteStopsInto(els.routeStopList);
+    renderRouteStopsInto(els.cockpitStops);
+  }
   function renderRoute() {
     routeLayerGroup.clearLayers();
     route.markers=[];
