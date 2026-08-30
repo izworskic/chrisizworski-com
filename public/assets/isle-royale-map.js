@@ -11,7 +11,7 @@
     operationsEndpoint: '/api/isle-royale',
     currentConditionsUrl: 'https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm',
     boatInUrl: 'https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm',
-    offTrailUrl: 'https://www.nps.gov/isro/planyourvisit/crosscountry-camping.htm',
+    offTrailUrl: 'https://www.nps.gov/isro/planyourvisit/off-trail-camping.htm',
     deepManifest: '/isle-royale-map/data/deep-layer-manifest.json',
     deepLayers: {
       geology: '/isle-royale-map/data/geology-units.geojson',
