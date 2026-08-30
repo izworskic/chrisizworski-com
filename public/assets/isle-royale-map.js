@@ -1926,8 +1926,8 @@
       if(leg.final){
         const finish=document.createElement('div');finish.className='itinerary-stop';finish.innerHTML='<b>Finish at route destination</b><small>Final leg reaches the selected destination rather than forcing another campground.</small>';card.appendChild(finish);
       }else if(leg.stop){
-        const stop=document.createElement('div');stop.className='itinerary-stop';stop.innerHTML='<b></b><small></small>';stop.querySelector('b').textContent='Best loaded overnight fit: '+leg.stop.name;
-        const facts=campFactsText(leg.stop);stop.querySelector('small').textContent='NPS Boat-In campground · '+leg.stop.distance_miles.toFixed(1)+' mi from current planned line'+(facts?' · '+facts:'')+'. Planning candidate, not an availability claim.';card.appendChild(stop);
+        const stop=document.createElement('div');stop.className='itinerary-stop';stop.innerHTML='<b></b><small></small>';stop.querySelector('b').textContent=(leg.stop.pinned?'Chosen map campsite: ':'Best loaded overnight fit: ')+leg.stop.name;
+        const facts=campFactsText(leg.stop);stop.querySelector('small').textContent='NPS Boat-In campground · '+leg.stop.distance_miles.toFixed(1)+' mi from current planned line'+(facts?' · '+facts:'')+(leg.pinned?' · pinned because you selected it on the map':'')+(leg.over_target?' · this chosen stop creates a longer-than-profile travel day':'')+'. Planning candidate, not an availability claim.';card.appendChild(stop);
         const actions=document.createElement('div');actions.className='itinerary-actions';
         const use=document.createElement('button');use.type='button';use.className='primary';use.textContent='Route through '+leg.stop.name;use.addEventListener('click',()=>insertItineraryCampStop(leg.stop));actions.appendChild(use);
         for(const alt of (leg.alternatives||[]).slice(0,2)){const b=document.createElement('button');b.type='button';b.textContent='Try '+alt.name;b.addEventListener('click',()=>insertItineraryCampStop(alt));actions.appendChild(b);}card.appendChild(actions);
