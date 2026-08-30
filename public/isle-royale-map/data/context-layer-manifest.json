@@ -168,7 +168,7 @@
       "license": "CC0 1.0 Universal / U.S. public domain",
       "features": 2738,
       "selection_score": 150,
-      "selected_source_path": "/tmp/tmppszkira7/65c24a77d34ef4b119ca6c97/ISRO_Veg_Change_Selected_Sites_unzipped/ISRO_Veg_Change_Selected_Sites.shp",
+      "selected_source_path": "/tmp/tmpybtr7opi/65c24a77d34ef4b119ca6c97/ISRO_Veg_Change_Selected_Sites_unzipped/ISRO_Veg_Change_Selected_Sites.shp",
       "selected_layer": "ISRO_Veg_Change_Selected_Sites",
       "vintage": "2017 high-resolution imagery compared with the 2000 NPS vegetation map (1994/1996 imagery)",
       "interpretation_note": "Shows mapped vegetation cover type, density or pattern change and proposed reasons from the USGS release; not a present-day 2026 vegetation map."
@@ -183,7 +183,7 @@
       "license": "CC0 1.0 Universal / U.S. public domain",
       "features": 93,
       "selection_score": 256,
-      "selected_source_path": "/tmp/tmp62qx7jsk/6659f2cfd34ef3137d36a465/ISRO_Post_HorneFire_unzipped/ISRO_Post_HorneFire.shp",
+      "selected_source_path": "/tmp/tmpg8t7yhaw/6659f2cfd34ef3137d36a465/ISRO_Post_HorneFire_unzipped/ISRO_Post_HorneFire.shp",
       "selected_layer": "ISRO_Post_HorneFire",
       "vintage": "2021 Horne Fire; USGS data release published 2024",
       "interpretation_note": "Burn-severity assessment derived from pre/post-fire high-resolution imagery; use as historical ecological context, not a current fire-status layer."
