@@ -2129,6 +2129,26 @@
     return samples;
   }
 
+  function routeScheduledForecastSamples(departure,speed,max=8){
+    const path=routePathPoints();
+    if(route.itinerary?.legs?.length&&window.IsleRoyaleWaterIntel?.slicePath){
+      const samples=[];
+      for(const leg of route.itinerary.legs){
+        if(samples.length>=max)break;
+        const midpoint=(leg.start_miles+leg.end_miles)/2;
+        const part=window.IsleRoyaleWaterIntel.slicePath(path,Math.max(0,midpoint-.01),midpoint);
+        const point=part[part.length-1];
+        if(!point)continue;
+        const legElapsed=(leg.distance_miles/2)/Math.max(.5,speed);
+        const target=new Date(departure.getTime()+(leg.day-1)*24*3600000+legElapsed*3600000);
+        const fullLeg=window.IsleRoyaleWaterIntel.slicePath(path,leg.start_miles,leg.end_miles);
+        const bearing=fullLeg.length>1?bearingDegrees(fullLeg[0],fullLeg[fullLeg.length-1]):null;
+        samples.push({lat:point.lat,lng:point.lng,label:'Day '+leg.day+' midpoint',distance_miles:midpoint,bearing_deg:bearing,target_time:target.toISOString(),day:leg.day});
+      }
+      if(samples.length>=2)return samples;
+    }
+    return routeForecastSamples(max);
+  }
   function relativeWind(windFromDeg,travelBearing) {
     const wind=Number(windFromDeg),bearing=Number(travelBearing);
     if(!Number.isFinite(wind)||!Number.isFinite(bearing))return '';
@@ -2257,10 +2277,10 @@
     }
     const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
     const itineraryDays=route.itinerary?.legs?.length||1;
-    const samples=routeForecastSamples(Math.min(8,Math.max(5,itineraryDays*2)));
+    const samples=routeScheduledForecastSamples(departure,speed,Math.min(8,Math.max(5,itineraryDays*2)));
     els.routeWeatherButton.disabled=true;
     els.routeWeatherButton.textContent='Loading NWS marine forecast…';
-    clearRouteWeather('Sampling NWS marine forecast conditions along your route and checking Passage Island / Rock of Ages winds…');
+    clearRouteWeather('Sampling NWS marine forecast conditions on the active trip schedule and checking Passage Island / Rock of Ages winds…',true);
     try {
       const response=await fetch(CONFIG.routeWeatherEndpoint,{
         method:'POST',
@@ -2268,14 +2288,17 @@
         body:JSON.stringify({
           departure:departure.toISOString(),
           speed_mph:speed,
-          waypoints:samples.map(p=>({lat:p.lat,lon:p.lng,label:p.label,distance_miles:p.distance_miles,bearing_deg:p.bearing_deg}))
+          waypoints:samples.map(p=>({lat:p.lat,lon:p.lng,label:p.label,distance_miles:p.distance_miles,bearing_deg:p.bearing_deg,target_time:p.target_time||null}))
         })
       });
       const data=await response.json();
       if(!response.ok)throw new Error(data?.error||`${response.status} route forecast failed`);
       route.weather=data;
       route.itineraryWeather=summarizeItineraryWeather(route.itinerary,data.forecasts||[]);
+      const activeScenario=scenarioById(route.activeScenario);
+      if(activeScenario)route.scenarioWeather[route.activeScenario]=summarizeScenarioForecast(data,activeScenario);
       renderRouteWeather(data,samples);
+      renderRouteScenarios();
       renderRouteItinerary();
       emitEvent('isle_royale_route_weather',{sample_count:data.summary?.forecast_samples||0,mode:route.mode});
       status('Route weather loaded from NWS marine grid data with live NDBC wind observations.');
