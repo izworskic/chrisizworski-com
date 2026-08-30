@@ -942,7 +942,6 @@
     }
     if (input.checked && deepConfig[id]) loadDeepLayer(id);
     if (input.checked && contextConfig[id]) loadContextLayer(id);
-    emitEvent('isle_royale_layer_toggle', {layer:id, state:input.checked ? 'on' : 'off'});
     renderFeatureList();
   });
 
