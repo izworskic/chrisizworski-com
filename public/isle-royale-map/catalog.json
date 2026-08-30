@@ -11,22 +11,178 @@
     "Explicitly labeled derived geometry"
   ],
   "items": [
-    {"id":"visitor-web-map","npmapsCategory":"current park map","label":"Current visitor map geometry","kind":"vector","state":"live","publisher":"National Park Service / ArcGIS Online","source":"https://www.arcgis.com/home/item.html?id=75e3ceba038a45f7b4d5a9d7c6a46ccf","notes":"Primary runtime source for trails, campgrounds, ferry routes and visitor POIs when exposed by the public web map."},
-    {"id":"visitor-web-map-fallback","npmapsCategory":"current park map","label":"Visitor map fallback item","kind":"vector","state":"fallback","publisher":"National Park Service / ArcGIS Online","source":"https://www.arcgis.com/home/item.html?id=57a5a514a8cd40f098b2f99029d118cf","notes":"Secondary public web map item if the primary item changes or fails."},
-    {"id":"regional-map","npmapsCategory":"regional map","label":"Regional access and transportation map","kind":"document","state":"cataloged","publisher":"National Park Service","source":"https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm","notes":"Use as a planning/reference source; operational transportation information must be verified against current NPS and operators."},
-    {"id":"rock-harbor","npmapsCategory":"Rock Harbor detail","label":"Rock Harbor area guide","kind":"document","state":"cataloged","publisher":"National Park Service","source":"https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm","notes":"Detail guide for Rock Harbor visitor facilities and nearby trails."},
-    {"id":"windigo","npmapsCategory":"Windigo detail","label":"Windigo area guide","kind":"document","state":"cataloged","publisher":"National Park Service","source":"https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm","notes":"Detail guide for Windigo visitor facilities and nearby trails."},
-    {"id":"camping-zones","npmapsCategory":"camping zones","label":"Off-trail camping zones","kind":"polygon/reference","state":"cataloged","publisher":"National Park Service","source":"https://www.nps.gov/isro/planyourvisit/crosscountry-camping.htm","notes":"Regulation-sensitive layer. Do not infer current rules from an old brochure."},
-    {"id":"transportation","npmapsCategory":"transportation map","label":"Ferry, seaplane and water access","kind":"line/reference","state":"runtime-plus-reference","publisher":"National Park Service","source":"https://www.nps.gov/isro/planyourvisit/directions.htm","notes":"Public web-map routes may render at runtime; current schedules remain external operational data."},
-    {"id":"shipwrecks","npmapsCategory":"dive / shipwreck map","label":"Shipwrecks and dive sites","kind":"point","state":"cataloged","publisher":"National Park Service","source":"https://www.nps.gov/isro/learn/historyculture/maritime.htm","notes":"Publish only public visitor-facing wreck locations. Never expose sensitive resource fields by default."},
-    {"id":"relief","npmapsCategory":"relief map","label":"Relief / terrain reference","kind":"raster-derived","state":"cataloged","publisher":"National Park Service / USGS","source":"https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm","notes":"Prefer a licensed/self-hosted terrain source over scraping presentation artwork."},
-    {"id":"lighthouses","npmapsCategory":"lighthouse map","label":"Isle Royale lighthouses","kind":"point","state":"runtime-plus-reference","publisher":"National Park Service","source":"https://www.nps.gov/isro/learn/historyculture/lighthouses.htm","notes":"Four lighthouse locations; current access restrictions must come from current NPS information."},
-    {"id":"geology","npmapsCategory":"geologic map","label":"Geology","kind":"polygon","state":"etl-ready","publisher":"National Park Service Geologic Resources Inventory","source":"https://catalog.data.gov/dataset/digital-geologic-gis-map-of-isle-royale-national-park-and-vicinity-michigan-nps-grd-g-1996","notes":"Prefer GeoPackage or file geodatabase over reduced KML for publication tiles."},
-    {"id":"vegetation-detailed","npmapsCategory":"detailed vegetation map","label":"Vegetation inventory — detailed","kind":"polygon","state":"etl-ready","publisher":"National Park Service","source":"https://catalog.data.gov/dataset/geospatial-data-for-the-vegetation-mapping-inventory-project-of-isle-royale-national-park","vintage":"2000 inventory","notes":"The dataset vintage must be visible so users do not mistake inventory-era vegetation for current conditions."},
-    {"id":"vegetation-simple","npmapsCategory":"simplified vegetation map","label":"Vegetation inventory — simplified","kind":"derived polygon","state":"derive-from-detailed","publisher":"Derived from NPS vegetation inventory","source":"https://catalog.data.gov/dataset/geospatial-data-for-the-vegetation-mapping-inventory-project-of-isle-royale-national-park","notes":"Generate from detailed classes when possible instead of digitizing the simplified artwork."},
-    {"id":"quiet-no-wake","npmapsCategory":"assorted / boating","label":"Quiet / no-wake zones","kind":"polygon","state":"gis-download-known","publisher":"National Park Service","source":"https://www.nps.gov/isro/planyourvisit/quiet-no-wake-zones.htm","notes":"NPS provides a GIS-data download from the current quiet/no-wake page. Treat as regulation-sensitive."},
-    {"id":"anchorage-zones","npmapsCategory":"assorted / boating","label":"Anchorage zones","kind":"polygon/reference","state":"cataloged","publisher":"National Park Service","source":"https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm","notes":"Boating planning layer; verify current restrictions before publication."},
-    {"id":"historic-brochure","npmapsCategory":"historical map","label":"Archived brochure map","kind":"raster/document","state":"reference-only","publisher":"National Park Service; discovered via NPMaps","source":"https://npmaps.com/isle-royale/","notes":"Historical/reference layer only. Never present old route or regulation information as current."},
-    {"id":"historic-windigo","npmapsCategory":"historical map","label":"Historic Windigo Nature Trail map","kind":"raster/document","state":"reference-only","publisher":"National Park Service; discovered via NPMaps","source":"https://npmaps.com/isle-royale/","notes":"Date-stamp and keep disabled by default if later georeferenced."}
+    {
+      "id": "visitor-web-map",
+      "npmapsCategory": "current park map",
+      "label": "Current visitor map geometry",
+      "kind": "vector",
+      "state": "live",
+      "publisher": "National Park Service / ArcGIS Online",
+      "source": "https://www.arcgis.com/home/item.html?id=75e3ceba038a45f7b4d5a9d7c6a46ccf",
+      "notes": "Primary runtime source is the public visitor web map when readable. If it fails, the tool can fall back to a public 2021 Isle Royale FeatureServer with POIs, trails, and park boundary before using approximate local anchors. Current closures, regulations, transportation, and campground status always hand off to current NPS pages.",
+      "dataServiceFallback": "https://services1.arcgis.com/XBhYkoXKJCRHbe7M/arcgis/rest/services/Isle_Royale_WFL1/FeatureServer",
+      "fallbackVintage": "2021-04-22"
+    },
+    {
+      "id": "visitor-web-map-fallback",
+      "npmapsCategory": "current park map",
+      "label": "Visitor map fallback item",
+      "kind": "vector",
+      "state": "fallback",
+      "publisher": "National Park Service / ArcGIS Online",
+      "source": "https://www.arcgis.com/home/item.html?id=57a5a514a8cd40f098b2f99029d118cf",
+      "notes": "Secondary public web map item. If both web-map items fail, a public 2021 FeatureServer is tried before any approximate local anchors."
+    },
+    {
+      "id": "regional-map",
+      "npmapsCategory": "regional map",
+      "label": "Regional access and transportation map",
+      "kind": "document",
+      "state": "cataloged",
+      "publisher": "National Park Service",
+      "source": "https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm",
+      "notes": "Use as a planning/reference source; operational transportation information must be verified against current NPS and operators."
+    },
+    {
+      "id": "rock-harbor",
+      "npmapsCategory": "Rock Harbor detail",
+      "label": "Rock Harbor area guide",
+      "kind": "document",
+      "state": "cataloged",
+      "publisher": "National Park Service",
+      "source": "https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm",
+      "notes": "Detail guide for Rock Harbor visitor facilities and nearby trails."
+    },
+    {
+      "id": "windigo",
+      "npmapsCategory": "Windigo detail",
+      "label": "Windigo area guide",
+      "kind": "document",
+      "state": "cataloged",
+      "publisher": "National Park Service",
+      "source": "https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm",
+      "notes": "Detail guide for Windigo visitor facilities and nearby trails."
+    },
+    {
+      "id": "camping-zones",
+      "npmapsCategory": "camping zones",
+      "label": "Off-trail camping zones",
+      "kind": "polygon/reference",
+      "state": "cataloged",
+      "publisher": "National Park Service",
+      "source": "https://www.nps.gov/isro/planyourvisit/crosscountry-camping.htm",
+      "notes": "Regulation-sensitive layer. Do not infer current rules from an old brochure."
+    },
+    {
+      "id": "transportation",
+      "npmapsCategory": "transportation map",
+      "label": "Ferry, seaplane and water access",
+      "kind": "line/reference",
+      "state": "runtime-plus-reference",
+      "publisher": "National Park Service",
+      "source": "https://www.nps.gov/isro/planyourvisit/directions.htm",
+      "notes": "Public web-map routes may render at runtime; current schedules remain external operational data."
+    },
+    {
+      "id": "shipwrecks",
+      "npmapsCategory": "dive / shipwreck map",
+      "label": "Shipwrecks and dive sites",
+      "kind": "point",
+      "state": "cataloged",
+      "publisher": "National Park Service",
+      "source": "https://www.nps.gov/isro/learn/historyculture/maritime.htm",
+      "notes": "Publish only public visitor-facing wreck locations. Never expose sensitive resource fields by default."
+    },
+    {
+      "id": "relief",
+      "npmapsCategory": "relief map",
+      "label": "Relief / terrain reference",
+      "kind": "raster-derived",
+      "state": "cataloged",
+      "publisher": "National Park Service / USGS",
+      "source": "https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm",
+      "notes": "Prefer a licensed/self-hosted terrain source over scraping presentation artwork."
+    },
+    {
+      "id": "lighthouses",
+      "npmapsCategory": "lighthouse map",
+      "label": "Isle Royale lighthouses",
+      "kind": "point",
+      "state": "runtime-plus-reference",
+      "publisher": "National Park Service",
+      "source": "https://www.nps.gov/isro/learn/historyculture/lighthouses.htm",
+      "notes": "Four lighthouse locations; current access restrictions must come from current NPS information."
+    },
+    {
+      "id": "geology",
+      "npmapsCategory": "geologic map",
+      "label": "Geology",
+      "kind": "polygon",
+      "state": "etl-ready",
+      "publisher": "National Park Service Geologic Resources Inventory",
+      "source": "https://catalog.data.gov/dataset/digital-geologic-gis-map-of-isle-royale-national-park-and-vicinity-michigan-nps-grd-g-1996",
+      "notes": "Prefer GeoPackage or file geodatabase over reduced KML for publication tiles."
+    },
+    {
+      "id": "vegetation-detailed",
+      "npmapsCategory": "detailed vegetation map",
+      "label": "Vegetation inventory — detailed",
+      "kind": "polygon",
+      "state": "etl-ready",
+      "publisher": "National Park Service",
+      "source": "https://catalog.data.gov/dataset/geospatial-data-for-the-vegetation-mapping-inventory-project-of-isle-royale-national-park",
+      "vintage": "2000 inventory",
+      "notes": "The dataset vintage must be visible so users do not mistake inventory-era vegetation for current conditions."
+    },
+    {
+      "id": "vegetation-simple",
+      "npmapsCategory": "simplified vegetation map",
+      "label": "Vegetation inventory — simplified",
+      "kind": "derived polygon",
+      "state": "derive-from-detailed",
+      "publisher": "Derived from NPS vegetation inventory",
+      "source": "https://catalog.data.gov/dataset/geospatial-data-for-the-vegetation-mapping-inventory-project-of-isle-royale-national-park",
+      "notes": "Generate from detailed classes when possible instead of digitizing the simplified artwork."
+    },
+    {
+      "id": "quiet-no-wake",
+      "npmapsCategory": "assorted / boating",
+      "label": "Quiet / no-wake zones",
+      "kind": "polygon",
+      "state": "gis-download-known",
+      "publisher": "National Park Service",
+      "source": "https://www.nps.gov/isro/planyourvisit/quiet-no-wake-zones.htm",
+      "notes": "NPS provides a GIS-data download from the current quiet/no-wake page. Treat as regulation-sensitive."
+    },
+    {
+      "id": "anchorage-zones",
+      "npmapsCategory": "assorted / boating",
+      "label": "Anchorage zones",
+      "kind": "polygon/reference",
+      "state": "cataloged",
+      "publisher": "National Park Service",
+      "source": "https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm",
+      "notes": "Boating planning layer; verify current restrictions before publication."
+    },
+    {
+      "id": "historic-brochure",
+      "npmapsCategory": "historical map",
+      "label": "Archived brochure map",
+      "kind": "raster/document",
+      "state": "reference-only",
+      "publisher": "National Park Service; discovered via NPMaps",
+      "source": "https://npmaps.com/isle-royale/",
+      "notes": "Historical/reference layer only. Never present old route or regulation information as current."
+    },
+    {
+      "id": "historic-windigo",
+      "npmapsCategory": "historical map",
+      "label": "Historic Windigo Nature Trail map",
+      "kind": "raster/document",
+      "state": "reference-only",
+      "publisher": "National Park Service; discovered via NPMaps",
+      "source": "https://npmaps.com/isle-royale/",
+      "notes": "Date-stamp and keep disabled by default if later georeferenced."
+    }
   ]
 }
