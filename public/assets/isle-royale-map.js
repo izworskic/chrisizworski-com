@@ -509,6 +509,31 @@
     container.appendChild(a);
   }
 
+  function routePointMetaForRecord(record) {
+    return {
+      kind:record?.category || 'map-point',
+      sourceBackedBoatIn:Boolean(record?.boater),
+      sourceLabel:cleanText(record?.sourceLabel || ''),
+      liveAlert:Boolean(record?.liveAlert)
+    };
+  }
+
+  function addFeatureToRoute(record) {
+    if(!record?.latlng||!Number.isFinite(record.latlng.lat)||!Number.isFinite(record.latlng.lng))return false;
+    if(record.category==='campground'&&record.liveAlert) {
+      status(record.name+' is currently flagged closed by NPS and was not added as a campsite. Open its details for the current closure.');
+      selectRecord(record);
+      return false;
+    }
+    addRoutePoint(record.latlng,record.name,routePointMetaForRecord(record));
+    map.closePopup();
+    const type=record.category==='campground'
+      ? (record.boater?'NPS Boat-In campsite':'campground')
+      : (layerLabels[record.category]||'map point');
+    status(record.name+' added to route as '+type+'. Keep clicking the map to extend the trip, or choose Explore when finished.');
+    return true;
+  }
+
   function popupNode(record) {
     const wrap = document.createElement('div');
     wrap.className = 'popup-detail';
@@ -563,12 +588,17 @@
       const routeAction = document.createElement('button');
       routeAction.type = 'button';
       routeAction.className = 'popup-action popup-route-action';
-      routeAction.textContent = route.points.length===0 ? 'Start route here' : route.points.length===1 ? 'Route to here' : 'Add as route stop';
+      const closedCamp=record.category==='campground'&&record.liveAlert;
+      routeAction.disabled=closedCamp;
+      routeAction.textContent = closedCamp
+        ? 'Campground currently flagged closed'
+        : record.category==='campground'
+          ? (route.points.length===0?'Start trip at this campsite':'Add campsite to route')
+          : route.points.length===0 ? 'Start route here' : route.points.length===1 ? 'Route to here' : 'Add as route stop';
       routeAction.addEventListener('click', event => {
         event.preventDefault();
         event.stopPropagation();
-        addRoutePoint(record.latlng, record.name);
-        map.closePopup();
+        if(!closedCamp)addFeatureToRoute(record);
       });
       wrap.appendChild(routeAction);
     }
@@ -684,7 +714,14 @@
         };
         enrichRecord(record);
         layer.bindPopup(() => popupNode(record), {maxWidth:390, minWidth:280, autoPanPadding:[28,28], className:'isle-detail-popup'});
-        layer.on('click', () => selectRecord(record));
+        layer.on('click', event => {
+          if(route.adding&&record.latlng) {
+            if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
+            addFeatureToRoute(record);
+            return;
+          }
+          selectRecord(record);
+        });
       }
     });
     if(category==='trail' && /LineString/.test(feature.geometry.type || '')) registerTrailGeometry(feature,name);
