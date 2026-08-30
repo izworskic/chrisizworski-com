@@ -188,6 +188,23 @@ test('marine forecast sampling grows with route distance rather than control-poi
   assert.doesNotMatch(js, /Math\.min\(max,Math\.max\(2,route\.points\.length\)\)/);
 });
 
+test('map-first route builder separates Explore from persistent Build mode and makes camps clickable trip stops', () => {
+  assert.match(html, /id="explore-mode"[^>]*aria-pressed="true"[^>]*>Explore/);
+  assert.match(html, /id="route-mode"[^>]*>Build route/);
+  assert.match(html, /id="route-map-guide"/);
+  assert.match(html, /id="route-stop-list"/);
+  assert.match(html, /click a campground adds that campsite to the trip/i);
+  assert.match(js, /function addFeatureToRoute/);
+  assert.match(js, /route\.adding&&record\.latlng/);
+  assert.match(js, /record\.category==='campground'&&record\.liveAlert/);
+  assert.match(js, /sourceBackedBoatIn:Boolean\(record\?\.boater\)/);
+  assert.match(js, /if\(!route\.adding\)return;/);
+  assert.match(js, /function renderRouteStops/);
+  assert.match(js, /routePoint\.kind==='campground'&&routePoint\.sourceBackedBoatIn/);
+  assert.doesNotMatch(js, /route\.points\.length===2\)setRouteAdding\(false\)/);
+  assert.doesNotMatch(js, /scrollIntoView\(\{behavior:'smooth'.*route-planner/);
+});
+
 test('scenario planner compares three trip structures without turning them into safety scores', () => {
   assert.match(html, /id="route-scenarios"/);
   assert.match(html, /Balanced day/);
