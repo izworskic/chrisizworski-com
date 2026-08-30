@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Isle Royale Interactive Map | Chris Izworski</title>
+<meta name="description" content="Explore Isle Royale trails, campgrounds, ferry routes, lighthouses, boating zones and source-backed map layers in one interactive planning map.">
+<link rel="canonical" href="https://chrisizworski.com/isle-royale-map/">
+<meta property="og:title" content="Isle Royale Interactive Map">
+<meta property="og:description" content="One source-aware map for Isle Royale trails, camps, access, maritime history, boating and deep reference layers.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://chrisizworski.com/isle-royale-map/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://unpkg.com">
+<link rel="preconnect" href="https://tile.openstreetmap.org">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
+    {"@type":"WebApplication","@id":"https://chrisizworski.com/isle-royale-map/#app","name":"Isle Royale Interactive Map","url":"https://chrisizworski.com/isle-royale-map/","dateModified":"2026-08-30","applicationCategory":"TravelApplication","operatingSystem":"Any","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"description":"Interactive Isle Royale planning map combining source-backed visitor geography with a catalog for boating, maritime history, geology, vegetation and historical maps."},
+    {"@type":"Dataset","name":"Isle Royale map source catalog","url":"https://chrisizworski.com/isle-royale-map/catalog.json","dateModified":"2026-08-30","creator":{"@id":"https://chrisizworski.com/#person"},"isBasedOn":["https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm","https://www.arcgis.com/home/item.html?id=75e3ceba038a45f7b4d5a9d7c6a46ccf","https://catalog.data.gov/dataset/geospatial-data-for-the-vegetation-mapping-inventory-project-of-isle-royale-national-park","https://catalog.data.gov/dataset/digital-geologic-gis-map-of-isle-royale-national-park-and-vicinity-michigan-nps-grd-g-1996"],"description":"A provenance-aware catalog of visitor, boating, science, history and reference map sources for Isle Royale National Park."}
+  ]
+}
+</script>
+<style>
+:root{--ink:#17211d;--muted:#5e6964;--paper:#f2efe6;--panel:#fffdf7;--line:#d9d3c7;--deep:#18352f;--lake:#1f6772;--moss:#476a4f;--rust:#9b512b;--sky:#386b8d;--violet:#65547c}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:var(--lake)}button,input{font:inherit}button{cursor:pointer}:focus-visible{outline:3px solid #111;outline-offset:3px}.mast{padding:20px clamp(16px,3vw,42px) 18px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#172f2a,#1f5b61);color:#fff}.crumb{font-size:12px;letter-spacing:.06em;text-transform:uppercase;opacity:.84}.crumb a{color:#fff}.mast-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end}.mast h1{font-family:Georgia,serif;font-size:clamp(34px,5vw,64px);font-weight:500;line-height:.96;max-width:880px;margin:24px 0 10px}.mast p{max-width:860px;font-size:16px;line-height:1.55;color:#e8f0ed;margin:0}.source-strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.source-strip span,.source-strip a{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:6px 10px;color:#edf4f1;font-size:12px;text-decoration:none}.mast-note{max-width:290px;border-left:1px solid rgba(255,255,255,.28);padding-left:18px;color:#e5ece9;font-size:12px;line-height:1.55}.shell{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(340px,.72fr);min-height:760px;border-bottom:1px solid var(--line)}.map-wrap{position:sticky;top:0;height:100vh;min-height:650px;background:#d8dfdc;overflow:hidden}.map-toolbar{position:absolute;z-index:700;left:12px;top:12px;display:flex;gap:7px;flex-wrap:wrap;max-width:calc(100% - 24px)}.map-toolbar button{background:#fff;border:1px solid #c5cbc6;border-radius:9px;padding:8px 10px;box-shadow:0 3px 10px rgba(0,0,0,.13);font-weight:700;font-size:12px}.map-status{position:absolute;z-index:680;left:12px;bottom:12px;max-width:min(540px,calc(100% - 24px));background:rgba(255,255,255,.95);border:1px solid #d1d6d2;border-radius:9px;padding:8px 11px;font-size:11px;color:#43514b;box-shadow:0 3px 12px rgba(0,0,0,.14)}#isle-map{height:100%;width:100%}.panel{background:var(--panel);border-left:1px solid var(--line);min-width:0}.panel-inner{padding:18px}.eyebrow{color:var(--rust);font-weight:800;text-transform:uppercase;letter-spacing:.11em;font-size:10px}.panel h2,.guide h2{font-family:Georgia,serif;font-weight:500;font-size:28px;line-height:1.08;margin:7px 0 9px}.lede{color:var(--muted);line-height:1.55;font-size:13px}.search{width:100%;border:1px solid #c8c7bf;background:#fff;border-radius:10px;padding:11px 12px;margin:9px 0 12px}.filter-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}.filter{display:flex;align-items:center;gap:7px;border:1px solid #ddd8cc;background:#fff;border-radius:9px;padding:8px 9px;font-size:12px}.filter span{display:grid;gap:1px}.filter small{font-size:9px;font-weight:500;color:#7b827e;line-height:1.25}.filter input{accent-color:#18352f}.count{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#7b827e;margin:10px 0 7px}.feature-list{display:grid;gap:7px;max-height:330px;overflow:auto;border-top:1px solid var(--line);padding-top:9px}.feature-row{width:100%;text-align:left;background:#fff;border:1px solid #e1ddd3;border-radius:9px;padding:9px 10px}.feature-row strong{display:block;font-size:13px}.feature-row span{display:block;color:#6a746f;font-size:11px;margin-top:3px}.feature-row:hover{border-color:#8b9b93}.panel-block{border-top:1px solid var(--line);padding:15px 0}.panel-block h3{font-size:14px;margin:0 0 7px}.small{font-size:11px;color:#69736e;line-height:1.5}.ops-summary{display:grid;gap:7px}.context-status{margin-top:7px}.ops-alert{border:1px solid #c9987b;background:#fff5ec;border-radius:9px;padding:9px 10px;color:#63351f;font-size:11px;line-height:1.45}.ops-ok{border:1px solid #c6d4ca;background:#f4f8f4;border-radius:9px;padding:9px 10px;color:#365143;font-size:11px;line-height:1.45}.ops-source{font-size:10px;color:#737c77;line-height:1.45}.popup-alert{margin:8px 0;border:1px solid #c9987b;background:#fff3e8;border-radius:7px;padding:7px 8px;color:#63351f}.popup-alert strong{display:block;margin-bottom:2px}.popup-facts{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px;margin:8px 0;padding:8px;border-radius:7px;background:#f3f5f1}.popup-fact{font-size:10px;color:#4c5953}.popup-fact b{display:block;color:#1e2d27;font-size:11px}.popup-link{display:block;margin-top:6px;font-size:10px}.btn-row{display:flex;flex-wrap:wrap;gap:7px}.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid #bfc7c1;background:#fff;color:#22312b;border-radius:9px;padding:8px 10px;font-size:12px;font-weight:700;text-decoration:none}.btn.primary{background:var(--deep);border-color:var(--deep);color:#fff}.guide{max-width:1280px;margin:0 auto;padding:44px clamp(16px,4vw,54px) 60px}.guide-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 30px}.guide-card,.source-card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px;box-shadow:0 7px 20px rgba(28,40,34,.06)}.guide-card h3,.source-card h3{margin:0 0 7px;font-size:15px}.guide-card p,.source-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}.source-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.source-card a{word-break:break-word}.catalog-wrap{margin-top:28px;border-top:1px solid var(--line);padding-top:22px}.catalog-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);font-size:12px}.catalog-table th,.catalog-table td{text-align:left;vertical-align:top;padding:9px;border-bottom:1px solid #e5e1d7}.catalog-table th{background:#f7f4ec}.status-pill{display:inline-block;border-radius:999px;padding:3px 7px;background:#edf1ee;color:#405149;font-size:10px;font-weight:800}.footer{padding:22px clamp(16px,4vw,54px);border-top:1px solid var(--line);background:#eae6db;color:#4d5954;font-size:12px}.footer a{margin-left:8px}.leaflet-popup-content{font:12px/1.45 Inter,ui-sans-serif,system-ui,sans-serif}.popup-title{font-weight:800;font-size:14px;margin-bottom:4px}.popup-meta{color:#68736e;font-size:11px}.popup-source{margin-top:8px;padding-top:7px;border-top:1px solid #e1e1dc;font-size:10px;color:#68736e}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:980px){.mast-grid{grid-template-columns:1fr}.mast-note{max-width:none;border-left:0;border-top:1px solid rgba(255,255,255,.25);padding:12px 0 0}.shell{grid-template-columns:1fr}.map-wrap{position:relative;height:68vh;min-height:520px}.panel{border-left:0;border-top:1px solid var(--line)}.feature-list{max-height:280px}.guide-grid{grid-template-columns:1fr 1fr}.source-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.mast h1{font-size:39px}.map-wrap{height:62vh;min-height:450px}.filter-grid{grid-template-columns:1fr}.guide-grid,.source-grid{grid-template-columns:1fr}.catalog-table{font-size:11px}.catalog-table th:nth-child(3),.catalog-table td:nth-child(3){display:none}}
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="mast-grid">
+    <div>
+      <div class="crumb"><a href="/">Chris Izworski</a> / Michigan field tools / Isle Royale</div>
+      <h1>One Isle Royale map. Every layer keeps its source.</h1>
+      <p>Search trails, campgrounds, visitor places and water routes first, then step into lighthouses, shipwrecks, boating zones, vegetation, geology and historical maps without confusing old reference cartography with current visitor information.</p>
+      <div class="source-strip">
+        <span>NPS / federal sources first</span>
+        <span>Keyless map</span>
+        <span>Fail-soft layers</span>
+        <a href="#source-catalog">Source catalog</a>
+      </div>
+    </div>
+    <div class="mast-note"><strong>Planning tool, not a navigation chart.</strong><br>Use current National Park Service maps, alerts, regulations and on-island guidance for official decisions. Historic and science layers can be older than current visitor conditions.</div>
+  </div>
+</header>
+<main>
+<section class="shell" aria-label="Interactive Isle Royale map and controls">
+  <div class="map-wrap">
+    <div id="isle-map" aria-label="Interactive map of Isle Royale National Park"></div>
+    <div class="map-toolbar">
+      <button id="fit-island" type="button">Fit island</button>
+      <button id="load-osm" type="button">Add OSM visitor context</button>
+      <button id="clear-selection" type="button">Clear selection</button>
+    </div>
+    <div id="map-status" class="map-status" role="status" aria-live="polite">Starting keyless basemap and source-aware visitor layers…</div>
+  </div>
+  <aside class="panel" aria-label="Map controls and searchable feature list">
+    <div class="panel-inner">
+      <div class="eyebrow">Find your way around</div>
+      <h2>Start with the decision, not the legend.</h2>
+      <p class="lede">Search a place or turn whole families of features on and off. Loaded features stay available in the list even when a remote source fails.</p>
+      <label for="feature-search" class="sr-only">Search Isle Royale features</label>
+      <input id="feature-search" class="search" type="search" placeholder="Search Rock Harbor, camp, lighthouse…" autocomplete="off">
+      <div id="layer-filters" class="filter-grid" aria-label="Map layer filters">
+        <label class="filter"><input type="checkbox" data-layer="trail" checked> Trails & portages</label>
+        <label class="filter"><input type="checkbox" data-layer="campground" checked> Campgrounds</label>
+        <label class="filter"><input type="checkbox" data-layer="visitor-service" checked> Visitor places</label>
+        <label class="filter"><input type="checkbox" data-layer="water-route" checked> Water routes</label>
+        <label class="filter"><input type="checkbox" data-layer="maritime-history" checked> Maritime history</label>
+        <label class="filter"><input type="checkbox" data-layer="quiet-no-wake"> <span>Quiet / no-wake zones<small>22 current NPS zones · opt-in</small></span></label>
+        <label class="filter"><input type="checkbox" data-layer="geology"> <span>Geology<small>NPS GRI · opt-in</small></span></label>
+        <label class="filter"><input type="checkbox" data-layer="vegetation-baseline"> <span>Vegetation baseline (2000)<small>Historical inventory · opt-in</small></span></label>
+        <label class="filter"><input type="checkbox" data-layer="vegetation-change"> <span>Vegetation change 1996–2017<small>USGS change analysis · opt-in</small></span></label>
+        <label class="filter"><input type="checkbox" data-layer="horne-fire"> <span>2021 Horne Fire<small>USGS burn severity · opt-in</small></span></label>
+        <label class="filter"><input type="checkbox" data-layer="science-reference"> Other science / reference</label>
+        <label class="filter"><input type="checkbox" data-layer="other"> Other public features</label>
+      </div>
+      <div id="feature-count" class="count">Loading features…</div>
+      <div id="feature-list" class="feature-list" aria-label="Loaded Isle Royale map features"></div>
+      <div class="panel-block">
+        <h3>Current NPS park state</h3>
+        <div id="park-live-status" class="ops-summary" role="status" aria-live="polite">
+          <div class="ops-ok">Checking current NPS conditions and boat-in campground data…</div>
+        </div>
+      </div>
+      <div class="panel-block">
+        <h3>Deep & context layers</h3>
+        <div id="deep-layer-status" class="ops-summary" role="status" aria-live="polite">
+          <div class="ops-ok">Deep geology, vegetation, boating-zone and change layers stay off until you choose them. File size, vintage and source notes load from verified build manifests.</div>
+        </div>
+        <div id="context-layer-status" class="ops-summary context-status" role="status" aria-live="polite"></div>
+      </div>
+      <div class="panel-block">
+        <h3>Data status</h3>
+        <p id="source-status" class="small">The NPS/ArcGIS visitor web map is the preferred live geometry source. A small set of clearly labeled approximate reference anchors appears only if the public web map cannot be read.</p>
+      </div>
+      <div class="panel-block">
+        <h3>Official planning handoffs</h3>
+        <div class="btn-row">
+          <a class="btn primary" href="https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm" target="_blank" rel="noopener">NPS maps & brochures</a>
+          <a class="btn" href="https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm" target="_blank" rel="noopener">Current conditions</a>
+          <a class="btn" href="https://www.nps.gov/isro/planyourvisit/quiet-no-wake.htm" target="_blank" rel="noopener">Quiet / no-wake</a>
+        </div>
+      </div>
+      <div class="panel-block">
+        <h3>Continue through the Great Lakes tools</h3>
+        <div class="btn-row">
+          <a class="btn" href="/lake-superior-circle-tour/">Lake Superior Circle Tour</a>
+          <a class="btn" href="/great-lakes-lighthouses/">Great Lakes Lighthouses</a>
+          <a class="btn" href="https://michiganoutdoorsnow.chrisizworski.com/">Michigan Outdoors Now</a>
+        </div>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<section class="guide">
+  <div class="eyebrow">What this map is built to answer</div>
+  <h2>Isle Royale is one island, but not one kind of trip.</h2>
+  <div class="guide-grid">
+    <article class="guide-card"><h3>First visit</h3><p>Orient Rock Harbor and Windigo, then see how trails, camps, docks and visitor facilities relate before picking an itinerary.</p></article>
+    <article class="guide-card"><h3>Backpacking</h3><p>Start with the trail/camp network. Use the current NPS mileage table and camping rules for the distances and restrictions that actually govern the trip.</p></article>
+    <article class="guide-card"><h3>Boating & paddling</h3><p>Turn on the 22 official NPS Quiet/No-Wake polygons to see regulated water beside docks and routes, then verify the current NPS boating and anchorage rules before operating.</p></article>
+    <article class="guide-card"><h3>Deep exploration</h3><p>Compare geologic units, the 2000 vegetation baseline, 1996–2017 vegetation change and the 2021 Horne Fire while keeping every layer's date and derivation visible.</p></article>
+  </div>
+  <div class="eyebrow">Source strategy</div>
+  <h2>The map keeps discovery, geometry and authority separate.</h2>
+  <div class="source-grid">
+    <article class="source-card"><h3>NPMaps = completeness checklist</h3><p>The NPMaps Isle Royale collection is useful because it exposes the breadth of available map products. It is not treated as the authoritative feature database.</p><p><a href="https://npmaps.com/isle-royale/" target="_blank" rel="noopener">View NPMaps Isle Royale collection</a></p></article>
+    <article class="source-card"><h3>NPS = current visitor authority</h3><p>The current NPS Maps & Brochures hub remains the handoff for park guides, boating maps, off-trail camping and trail mileage.</p><p><a href="https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm" target="_blank" rel="noopener">Open current NPS map resources</a></p></article>
+    <article class="source-card"><h3>Federal GIS = deep layers</h3><p>Geology and vegetation are resolved to actual GIS products rather than traced from brochure pixels. Their original vintage remains part of the user-facing metadata.</p><p><a href="https://catalog.data.gov/dataset/geospatial-data-for-the-vegetation-mapping-inventory-project-of-isle-royale-national-park" target="_blank" rel="noopener">Vegetation GIS</a> · <a href="https://catalog.data.gov/dataset/digital-geologic-gis-map-of-isle-royale-national-park-and-vicinity-michigan-nps-grd-g-1996" target="_blank" rel="noopener">Geology GIS</a></p></article>
+  </div>
+  <div class="catalog-wrap" id="source-catalog">
+    <div class="eyebrow">Machine-readable source desk</div>
+    <h2>Every major map family has a destination.</h2>
+    <p class="lede">“Live” means the browser can currently request vector features. “ETL-ready” means the source is resolved to real GIS but belongs in the normalized tile pipeline before it should be turned on as a large web layer. The complete machine-readable manifest is also available as <a href="/isle-royale-map/catalog.json">raw source catalog JSON</a>.</p>
+    <table class="catalog-table">
+      <thead><tr><th>Layer family</th><th>Status</th><th>Publisher / source</th><th>Why it is handled this way</th></tr></thead>
+      <tbody id="catalog-body"><tr><td>Current visitor map geometry</td><td><span class="status-pill">live</span></td><td><a href="https://www.arcgis.com/home/item.html?id=75e3ceba038a45f7b4d5a9d7c6a46ccf" target="_blank" rel="noopener">National Park Service / ArcGIS Online</a></td><td>Primary runtime source is the public visitor web map when readable. If it fails, the tool can fall back to a public 2021 Isle Royale FeatureServer with POIs, trails, and park boundary before using approximate local anchors. Current closures, regulations, transportation, and campground status always hand off to current NPS pages.</td></tr><tr><td>Visitor map fallback item</td><td><span class="status-pill">fallback</span></td><td><a href="https://www.arcgis.com/home/item.html?id=57a5a514a8cd40f098b2f99029d118cf" target="_blank" rel="noopener">National Park Service / ArcGIS Online</a></td><td>Secondary public web map item. If both web-map items fail, a public 2021 FeatureServer is tried before any approximate local anchors.</td></tr><tr><td>Regional access and transportation map</td><td><span class="status-pill">cataloged</span></td><td><a href="https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm" target="_blank" rel="noopener">National Park Service</a></td><td>Use as a planning/reference source; operational transportation information must be verified against current NPS and operators.</td></tr><tr><td>Rock Harbor area guide</td><td><span class="status-pill">cataloged</span></td><td><a href="https://www.nps.gov/isro/planyourvisit/upload/ISRO_Web_Accessible_Rock_Harbor_Area_Guide_2015.pdf" target="_blank" rel="noopener">National Park Service</a></td><td>Direct NPS Rock Harbor Area Guide (2015). Use for facility/orientation context; current operational status still comes from current NPS pages.</td></tr><tr><td>Windigo area guide</td><td><span class="status-pill">cataloged</span></td><td><a href="https://www.nps.gov/isro/planyourvisit/upload/ISRO_Web_Accessible_Windigo_Area_Guide_2015.pdf" target="_blank" rel="noopener">National Park Service</a></td><td>Direct NPS Windigo Area Guide (2015). Use for facility/orientation context; current operational status still comes from current NPS pages.</td></tr><tr><td>Off-trail camping zones</td><td><span class="status-pill">current-status-plus-reference</span></td><td><a href="https://www.nps.gov/isro/planyourvisit/off-trail-camping.htm" target="_blank" rel="noopener">National Park Service</a></td><td>Isle Royale uses 46 off-trail camping zones on the permit map. Current closure zone numbers are parsed from the NPS Current Conditions feed and surfaced as operational status without inventing polygon geometry; verify the current permit map and conditions before departure.</td></tr><tr><td>Ferry, seaplane and water access</td><td><span class="status-pill">runtime-plus-reference</span></td><td><a href="https://www.nps.gov/isro/planyourvisit/directions.htm" target="_blank" rel="noopener">National Park Service</a></td><td>Public web-map routes may render at runtime; current schedules remain external operational data.</td></tr><tr><td>Shipwrecks and dive sites</td><td><span class="status-pill">cataloged</span></td><td><a href="https://www.nps.gov/isro/learn/historyculture/maritime.htm" target="_blank" rel="noopener">National Park Service</a></td><td>Publish only public visitor-facing wreck locations. Never expose sensitive resource fields by default.</td></tr><tr><td>Relief / terrain reference</td><td><span class="status-pill">cataloged</span></td><td><a href="https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm" target="_blank" rel="noopener">National Park Service / USGS</a></td><td>Prefer a licensed/self-hosted terrain source over scraping presentation artwork.</td></tr><tr><td>Isle Royale lighthouses</td><td><span class="status-pill">runtime-plus-reference</span></td><td><a href="https://www.nps.gov/isro/learn/historyculture/lighthouses.htm" target="_blank" rel="noopener">National Park Service</a></td><td>Four lighthouse locations; current access restrictions must come from current NPS information.</td></tr><tr><td>Geology</td><td><span class="status-pill">generated-runtime</span></td><td><a href="https://catalog.data.gov/dataset/digital-geologic-gis-map-of-isle-royale-national-park-and-vicinity-michigan-nps-grd-g-1996" target="_blank" rel="noopener">National Park Service Geologic Resources Inventory</a></td><td>NPS GRI digital release 2021; older source mapping. Generated from the NPS GRI GeoPackage: 1,975 geologic-unit features, reprojected and simplified for web use. Manifest records SHA-256 and source accuracy caveat; not survey-grade.</td></tr><tr><td>Vegetation baseline (2000)</td><td><span class="status-pill">generated-runtime</span></td><td><a href="https://catalog.data.gov/dataset/geospatial-data-for-the-vegetation-mapping-inventory-project-of-isle-royale-national-park" target="_blank" rel="noopener">National Park Service</a></td><td>2000 inventory; imagery primarily 1994/1996. Historical baseline only. The 19,072 source polygons are dissolved into 38 TNC_DESCRI vegetation classes and simplified for opt-in web display. Do not interpret as current forest condition.</td></tr><tr><td>Vegetation inventory — simplified</td><td><span class="status-pill">derive-from-detailed</span></td><td><a href="https://catalog.data.gov/dataset/geospatial-data-for-the-vegetation-mapping-inventory-project-of-isle-royale-national-park" target="_blank" rel="noopener">Derived from NPS vegetation inventory</a></td><td>Generate from detailed classes when possible instead of digitizing the simplified artwork.</td></tr><tr><td>Quiet / no-wake zones</td><td><span class="status-pill">gis-download-known</span></td><td><a href="https://www.nps.gov/isro/planyourvisit/quiet-no-wake-zones.htm" target="_blank" rel="noopener">National Park Service</a></td><td>NPS provides a GIS-data download from the current quiet/no-wake page. Treat as regulation-sensitive.</td></tr><tr><td>Anchorage zones</td><td><span class="status-pill">cataloged</span></td><td><a href="https://www.nps.gov/isro/planyourvisit/upload/ISRO_Web__Accessible_Boating_Anchorage_Zones_Map_2018.pdf" target="_blank" rel="noopener">National Park Service</a></td><td>Direct NPS Anchorage Zones map (2018), retained as an official boating-planning reference. Verify current restrictions and conditions before acting.</td></tr><tr><td>Archived brochure map</td><td><span class="status-pill">reference-only</span></td><td><a href="https://npmaps.com/isle-royale/" target="_blank" rel="noopener">National Park Service; discovered via NPMaps</a></td><td>Historical/reference layer only. Never present old route or regulation information as current.</td></tr><tr><td>Historic Windigo Nature Trail map</td><td><span class="status-pill">reference-only</span></td><td><a href="https://npmaps.com/isle-royale/" target="_blank" rel="noopener">National Park Service; discovered via NPMaps</a></td><td>Date-stamp and keep disabled by default if later georeferenced.</td></tr><tr><td>Boat-in campground facilities</td><td><span class="status-pill">live-api</span></td><td><a href="https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm" target="_blank" rel="noopener">National Park Service</a></td><td>page updated June 23, 2026. Fetched through the same-origin Isle Royale API and matched to mapped campgrounds by normalized public place name. Includes dock depth, shelters, tent sites, food lockers, stay limit, fire/grill and generator fields when NPS supplies them.</td></tr><tr><td>Current Isle Royale conditions and closures</td><td><span class="status-pill">live-api</span></td><td><a href="https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm" target="_blank" rel="noopener">National Park Service</a></td><td>Fetched through the same-origin Isle Royale API. The tool detects only closure patterns it knows how to parse and never treats a no-match result as proof that the park has no alerts.</td></tr></tbody>
+    </table>
+    <noscript><p class="small">JavaScript is not required to inspect the source desk above. Interactive map controls require JavaScript.</p></noscript>
+  </div>
+</section>
+</main>
+<footer class="footer">© 2026 Chris Izworski · Michigan and Great Lakes field tools <a href="/tools/">All tools</a></footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
+<script src="/assets/isle-royale-map.js?v=20260830-4"></script>
+</body>
+</html>

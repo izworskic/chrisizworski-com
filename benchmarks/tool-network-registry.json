@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-08-29",
+  "updated": "2026-08-30",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -1503,6 +1503,41 @@
       "searchEvidence": {
         "status": "launch"
       }
+    },
+    {
+      "id": "isle-royale-map",
+      "name": "Isle Royale Interactive Map",
+      "canonical": "https://chrisizworski.com/isle-royale-map/",
+      "aliases": [],
+      "kind": "flagship-map",
+      "cluster": "michigan-outdoors",
+      "primaryIntent": "interactive Isle Royale map with trails campgrounds access and source-backed specialty layers",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "geographies": [
+        "isle-royale",
+        "lake-superior"
+      ],
+      "personas": [
+        "trip-planner",
+        "backpacker",
+        "boater",
+        "history-reader"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "new"
+      }
     }
   ],
   "relationships": [
@@ -1985,6 +2020,38 @@
       "strength": "optional",
       "surface": "birding",
       "reason": "Live sightings can deepen into a county-specific morning report."
+    },
+    {
+      "from": "isle-royale-map",
+      "to": "circle-tour",
+      "type": "trip-depth",
+      "strength": "strong",
+      "surface": "isle-royale",
+      "reason": "Isle Royale is a major Lake Superior destination and the map deepens a Circle Tour planning journey."
+    },
+    {
+      "from": "isle-royale-map",
+      "to": "lighthouses",
+      "type": "history-depth",
+      "strength": "strong",
+      "surface": "isle-royale",
+      "reason": "Four Isle Royale lighthouses connect naturally into Great Lakes lighthouse exploration."
+    },
+    {
+      "from": "isle-royale-map",
+      "to": "outdoors-now",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "isle-royale",
+      "reason": "Visitors exploring Isle Royale can continue into broader Michigan outdoor trip discovery."
+    },
+    {
+      "from": "circle-tour",
+      "to": "isle-royale-map",
+      "type": "destination-depth",
+      "strength": "strong",
+      "surface": "lake-superior",
+      "reason": "The Circle Tour guide can hand off to a dedicated Isle Royale map when the island is part of the trip."
     }
   ],
   "cannibalizationGroups": [

@@ -1,0 +1,1050 @@
+(() => {
+  'use strict';
+
+  const CONFIG = {
+    primaryWebMap: '75e3ceba038a45f7b4d5a9d7c6a46ccf',
+    fallbackWebMap: '57a5a514a8cd40f098b2f99029d118cf',
+    visitorFeatureService: 'https://services1.arcgis.com/XBhYkoXKJCRHbe7M/arcgis/rest/services/Isle_Royale_WFL1/FeatureServer',
+    islandBounds: [[47.79, -89.36], [48.33, -88.18]],
+    arcgisRoot: 'https://www.arcgis.com/sharing/rest/content/items/',
+    overpass: 'https://overpass-api.de/api/interpreter',
+    operationsEndpoint: '/api/isle-royale',
+    currentConditionsUrl: 'https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm',
+    boatInUrl: 'https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm',
+    offTrailUrl: 'https://www.nps.gov/isro/planyourvisit/off-trail-camping.htm',
+    deepManifest: '/isle-royale-map/data/deep-layer-manifest.json',
+    deepLayers: {
+      geology: '/isle-royale-map/data/geology-units.geojson',
+      'vegetation-baseline': '/isle-royale-map/data/vegetation-baseline-2000.geojson'
+    },
+    contextManifest: '/isle-royale-map/data/context-layer-manifest.json',
+    contextLayers: {
+      'quiet-no-wake': '/isle-royale-map/data/quiet-no-wake-zones.geojson',
+      'vegetation-change': '/isle-royale-map/data/vegetation-change-1996-2017.geojson',
+      'horne-fire': '/isle-royale-map/data/horne-fire-burn-severity.geojson'
+    }
+  };
+
+  const els = {
+    status: document.getElementById('map-status'),
+    sourceStatus: document.getElementById('source-status'),
+    search: document.getElementById('feature-search'),
+    list: document.getElementById('feature-list'),
+    count: document.getElementById('feature-count'),
+    filters: document.getElementById('layer-filters'),
+    catalog: document.getElementById('catalog-body'),
+    liveStatus: document.getElementById('park-live-status'),
+    deepStatus: document.getElementById('deep-layer-status'),
+    contextStatus: document.getElementById('context-layer-status')
+  };
+
+  const map = L.map('isle-map', {preferCanvas:true, zoomControl:false, minZoom:6, maxZoom:18});
+  L.control.zoom({position:'topright'}).addTo(map);
+  map.fitBounds(CONFIG.islandBounds, {padding:[10,10]});
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+  }).addTo(map);
+
+  const layerGroups = {
+    trail: L.layerGroup().addTo(map),
+    campground: L.layerGroup().addTo(map),
+    'visitor-service': L.layerGroup().addTo(map),
+    'water-route': L.layerGroup().addTo(map),
+    'maritime-history': L.layerGroup().addTo(map),
+    'quiet-no-wake': L.layerGroup(),
+    geology: L.layerGroup(),
+    'vegetation-baseline': L.layerGroup(),
+    'vegetation-change': L.layerGroup(),
+    'horne-fire': L.layerGroup(),
+    'science-reference': L.layerGroup(),
+    other: L.layerGroup()
+  };
+
+  const layerLabels = {
+    trail: 'trail / portage',
+    campground: 'campground / shelter',
+    'visitor-service': 'visitor place',
+    'water-route': 'water / transport route',
+    'maritime-history': 'maritime / history',
+    'quiet-no-wake': 'quiet / no-wake zone',
+    geology: 'geologic unit',
+    'vegetation-baseline': 'vegetation baseline (2000)',
+    'vegetation-change': 'vegetation change 1996–2017',
+    'horne-fire': '2021 Horne Fire burn severity',
+    'science-reference': 'science / reference',
+    other: 'other public feature'
+  };
+
+  const featureIndex = [];
+  let selectedLayer = null;
+  let searchEventTimer = null;
+  let osmContextLoaded = false;
+  let visitorGeometrySettled = false;
+  const osmSeen = new Set();
+  const sourceStatus = {arcgis:'starting', osm:'not loaded', fallback:false};
+  const operational = {
+    boaterByName: new Map(),
+    alerts: [],
+    shipwrecks: [],
+    shipwrecksAdded: false,
+    fetchedAt: null,
+    sources: {},
+    loaded: false
+  };
+  const deep = {
+    manifest: null,
+    manifestPromise: null,
+    geology: {state:'available', count:0, error:''},
+    'vegetation-baseline': {state:'available', count:0, error:''}
+  };
+  const deepConfig = {
+    geology: {
+      manifestKey:'geology',
+      label:'Geology',
+      sourceLabel:'National Park Service Geologic Resources Inventory',
+      sourceKind:'generated NPS GRI web derivative'
+    },
+    'vegetation-baseline': {
+      manifestKey:'vegetation',
+      label:'Vegetation baseline (2000)',
+      sourceLabel:'National Park Service vegetation inventory',
+      sourceKind:'generated historical NPS inventory derivative'
+    }
+  };
+  const contextLayers = {
+    manifest: null,
+    manifestPromise: null,
+    'quiet-no-wake': {state:'available', count:0, error:''},
+    'vegetation-change': {state:'available', count:0, error:''},
+    'horne-fire': {state:'available', count:0, error:''}
+  };
+  const contextConfig = {
+    'quiet-no-wake': {
+      manifestKey:'quiet_no_wake',
+      label:'Quiet / No-Wake zones',
+      sourceLabel:'National Park Service — IRMA DataStore Collection 9705',
+      sourceKind:'official NPS regulatory polygons',
+      timeout:30000
+    },
+    'vegetation-change': {
+      manifestKey:'vegetation_change',
+      label:'Vegetation change 1996–2017',
+      sourceLabel:'U.S. Geological Survey',
+      sourceKind:'USGS change-analysis polygons',
+      timeout:45000
+    },
+    'horne-fire': {
+      manifestKey:'horne_fire',
+      label:'2021 Horne Fire burn severity',
+      sourceLabel:'U.S. Geological Survey',
+      sourceKind:'USGS historical burn-severity polygons',
+      timeout:30000
+    }
+  };
+
+  const categoryStyle = {
+    trail: {color:'#9b512b', weight:3, opacity:.9},
+    campground: {color:'#476a4f', fillColor:'#476a4f'},
+    'visitor-service': {color:'#18352f', fillColor:'#18352f'},
+    'water-route': {color:'#386b8d', weight:3, opacity:.78, dashArray:'7 6'},
+    'maritime-history': {color:'#65547c', fillColor:'#65547c'},
+    'quiet-no-wake': {color:'#7f4f78', fillColor:'#a86b9e', weight:2, opacity:.85, fillOpacity:.14},
+    geology: {color:'#786a58', fillColor:'#9a8b76', weight:1.2, opacity:.72, fillOpacity:.16},
+    'vegetation-baseline': {color:'#586a58', fillColor:'#71806b', weight:.8, opacity:.58, fillOpacity:.20},
+    'vegetation-change': {color:'#4f6b61', fillColor:'#729184', weight:1, opacity:.68, fillOpacity:.18},
+    'horne-fire': {color:'#7b4f3e', fillColor:'#9d6952', weight:1.2, opacity:.78, fillOpacity:.22},
+    'science-reference': {color:'#467778', weight:2, fillOpacity:.12},
+    other: {color:'#59645f', fillColor:'#59645f'}
+  };
+
+  function status(message) { els.status.textContent = message; }
+
+  function emitEvent(name, props={}) {
+    const safe = {};
+    for (const [key, value] of Object.entries(props)) {
+      if (['string','number','boolean'].includes(typeof value)) safe[key] = value;
+    }
+    try {
+      window.dispatchEvent(new CustomEvent('chrisizworski:tool-event', {detail:{event:name, ...safe}}));
+    } catch (_) {}
+    try {
+      if (Array.isArray(window.dataLayer)) window.dataLayer.push({event:name, ...safe});
+    } catch (_) {}
+    try {
+      if (typeof window.plausible === 'function') window.plausible(name, {props:safe});
+    } catch (_) {}
+  }
+
+  function sourceFamily(record) {
+    const label = String(record?.sourceLabel || '').toLowerCase();
+    if (label.includes('openstreetmap')) return 'osm';
+    if (label.includes('arcgis')) return 'nps-arcgis';
+    if (label.includes('geologic')) return 'nps-gri';
+    if (label.includes('u.s. geological survey') || label.includes('usgs')) return 'usgs';
+    if (label.includes('vegetation')) return 'nps-vegetation';
+    if (label.includes('national park service') || label.includes('nps')) return 'nps';
+    if (label.includes('fallback') || label.includes('approximate')) return 'derived-fallback';
+    return 'other-public';
+  }
+
+  function searchCategory(term='') {
+    const q = String(term).toLowerCase();
+    if (/camp|shelter/.test(q)) return 'camping';
+    if (/trail|portage|ridge|minong|greenstone|feldtmann/.test(q)) return 'trail';
+    if (/harbor|windigo|dock|visitor|ranger|store|lodge/.test(q)) return 'visitor-place';
+    if (/light|wreck|historic/.test(q)) return 'history';
+    if (/ferry|boat|water|seaplane|anchorage|wake/.test(q)) return 'boating';
+    if (/fire|burn|geolog|vegetation|forest|rock/.test(q)) return 'science';
+    return q.length < 3 ? 'short' : 'other';
+  }
+
+  function cleanText(value, fallback='') {
+    const text = value == null ? fallback : String(value);
+    return text.replace(/[<>]/g, '').trim();
+  }
+
+  function firstProp(props, keys) {
+    for (const k of keys) {
+      if (props && props[k] != null && String(props[k]).trim()) return String(props[k]).trim();
+    }
+    return '';
+  }
+
+  function featureName(feature, layerTitle='Isle Royale feature') {
+    const p = feature.properties || {};
+    return firstProp(p, ['name','Name','NAME','title','Title','MAPLABEL','LABEL','label','TRLALTNAME','TRLNAME','TRAILNAME','TRAIL_NAME','POINAME','FACILITY','SITE_NAME','UNIT_NAME']) || layerTitle || 'Isle Royale feature';
+  }
+
+  function classify(feature, layerTitle='') {
+    const p = feature.properties || {};
+    const hay = `${layerTitle} ${featureName(feature,'')} ${Object.values(p).slice(0,16).join(' ')}`.toLowerCase();
+    if (/vegetation|geolog|bedrock|surficial|relief|ecolog|science/.test(hay)) return 'science-reference';
+    if (/lighthouse|light station|shipwreck|ship wreck|wreck|fishery|historic|historic site|cemeter/.test(hay)) return 'maritime-history';
+    if (/ferry|seaplane|water taxi|boat route|transport.*route|shipping route/.test(hay)) return 'water-route';
+    if (/campground|camp ground|campsite|camp site|shelter|group site/.test(hay)) return 'campground';
+    if (/trail|portage|greenstone|minong|feldtmann|ishpeming|ridge route|footpath/.test(hay)) return 'trail';
+    if (/visitor|ranger|dock|pier|marina|store|lodge|lodging|shower|toilet|restroom|information|headquarters|lookout|viewpoint|station/.test(hay)) return 'visitor-service';
+    return 'other';
+  }
+
+  function geometryStyle(category, feature) {
+    const base = categoryStyle[category] || categoryStyle.other;
+    const isPolygon = feature.geometry && /Polygon/.test(feature.geometry.type);
+    return {...base, fillOpacity:isPolygon ? (category === 'science-reference' ? .12 : .18) : .8};
+  }
+
+  function pointMarker(category, latlng) {
+    const style = categoryStyle[category] || categoryStyle.other;
+    return L.circleMarker(latlng, {radius:category === 'campground' ? 5.5 : 5, weight:2, color:style.color, fillColor:style.fillColor || style.color, fillOpacity:.86});
+  }
+  function normalizePlaceName(value='') {
+    return String(value)
+      .toLowerCase()
+      .replace(/\b(campground|camp ground|overnight dock|dock|campsite|camp site)\b/g, ' ')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim()
+      .replace(/\s+/g, ' ');
+  }
+
+  function placeAliases(value='') {
+    const normalized = normalizePlaceName(value);
+    const out = new Set([normalized]);
+    if (normalized.includes('ozaagaateng')) out.add(normalized.replace(/ozaagaateng/g, 'windigo').trim());
+    if (normalized.includes('windigo')) out.add(normalized.replace(/windigo/g, 'ozaagaateng').trim());
+    return [...out].filter(Boolean);
+  }
+
+  function findBoaterRecord(name) {
+    for (const alias of placeAliases(name)) {
+      if (operational.boaterByName.has(alias)) return operational.boaterByName.get(alias);
+    }
+    return null;
+  }
+
+  function findOperationalAlert(name) {
+    const aliases = placeAliases(name);
+    for (const alert of operational.alerts) {
+      for (const place of alert.places || []) {
+        const placeNames = placeAliases(place);
+        if (aliases.some(alias => placeNames.includes(alias))) return alert;
+      }
+    }
+    return null;
+  }
+
+  function enrichRecord(record) {
+    if (!record) return;
+    record.boater = record.category === 'campground' ? findBoaterRecord(record.name) : null;
+    record.liveAlert = findOperationalAlert(record.name);
+    if (record.liveAlert && record.layer && record.layer.setStyle) {
+      try { record.layer.setStyle({color:'#8c3e23', weight:4, fillColor:'#b25b35', fillOpacity:.9}); } catch (_) {}
+    }
+  }
+
+  function addPopupFact(container, label, value) {
+    if (value == null || String(value).trim() === '') return;
+    const fact = document.createElement('div');
+    fact.className = 'popup-fact';
+    const strong = document.createElement('b');
+    strong.textContent = String(value);
+    const caption = document.createElement('span');
+    caption.textContent = label;
+    fact.append(strong, caption);
+    container.appendChild(fact);
+  }
+
+  function popupNode(record) {
+    const wrap = document.createElement('div');
+    const title = document.createElement('div');
+    title.className = 'popup-title';
+    title.textContent = record.name;
+    wrap.appendChild(title);
+
+    const meta = document.createElement('div');
+    meta.className = 'popup-meta';
+    meta.textContent = layerLabels[record.category] || record.category;
+    wrap.appendChild(meta);
+
+    if (record.liveAlert) {
+      const alert = document.createElement('div');
+      alert.className = 'popup-alert';
+      const strong = document.createElement('strong');
+      strong.textContent = 'Current NPS closure signal';
+      const detail = document.createElement('span');
+      detail.textContent = `${record.liveAlert.title}. ${record.liveAlert.detail || ''}`;
+      alert.append(strong, detail);
+      wrap.appendChild(alert);
+    }
+
+    if (record.description) {
+      const desc = document.createElement('p');
+      desc.textContent = record.description;
+      wrap.appendChild(desc);
+    }
+
+    if (record.boater) {
+      const facts = document.createElement('div');
+      facts.className = 'popup-facts';
+      addPopupFact(facts, 'Dock depth', record.boater.dock_depth);
+      addPopupFact(facts, 'Shelters', record.boater.shelters);
+      addPopupFact(facts, 'Tent sites', record.boater.tent_sites);
+      addPopupFact(facts, 'Food lockers', record.boater.food_storage_lockers);
+      addPopupFact(facts, 'Stay limit', record.boater.consecutive_night_limit);
+      addPopupFact(facts, 'Generator use', record.boater.onboard_generator_use);
+      addPopupFact(facts, 'Fire ring / grill', record.boater.fire_ring_grill);
+      if (facts.childElementCount) wrap.appendChild(facts);
+
+      const boatLink = document.createElement('a');
+      boatLink.className = 'popup-link';
+      boatLink.href = CONFIG.boatInUrl;
+      boatLink.target = '_blank';
+      boatLink.rel = 'noopener';
+      boatLink.textContent = 'Verify NPS boat-in campground details';
+      wrap.appendChild(boatLink);
+    }
+
+    if (record.liveAlert) {
+      const conditionLink = document.createElement('a');
+      conditionLink.className = 'popup-link';
+      conditionLink.href = CONFIG.currentConditionsUrl;
+      conditionLink.target = '_blank';
+      conditionLink.rel = 'noopener';
+      conditionLink.textContent = 'Verify current NPS conditions';
+      wrap.appendChild(conditionLink);
+    }
+
+    if (record.deepMeta) {
+      const deepNote = document.createElement('div');
+      deepNote.className = 'popup-source';
+      const provenanceNote = record.deepMeta.accuracy_note || record.deepMeta.interpretation_note || record.deepMeta.regulation_note || '';
+      deepNote.textContent = `Vintage: ${record.deepMeta.vintage || 'see source manifest'}. ${provenanceNote}`.trim();
+      wrap.appendChild(deepNote);
+    }
+
+    const source = document.createElement('div');
+    source.className = 'popup-source';
+    source.textContent = `Map source: ${record.sourceLabel}. Geometry status: ${record.sourceKind}.`;
+    if (record.boater) source.textContent += ' Campground facts: NPS Boat-In Campgrounds dataset, page updated June 23, 2026.';
+    if (record.liveAlert) source.textContent += ' Closure signal: current NPS conditions feed fetched through this site.';
+    wrap.appendChild(source);
+    return wrap;
+  }
+
+  function addGeoJSONFeature(feature, context={}) {
+    if (!feature || !feature.geometry) return 0;
+    const name = cleanText(featureName(feature, context.layerTitle));
+    const category = context.category || classify(feature, context.layerTitle);
+    const sourceLabel = cleanText(context.sourceLabel || 'Public map source');
+    const sourceKind = cleanText(context.sourceKind || 'source vector');
+    const props = feature.properties || {};
+    const description = cleanText(firstProp(props, ['description','Description','DESC','DESCRIPT','notes','NOTES','DETAILS']));
+    let record;
+    const geo = L.geoJSON(feature, {
+      style: () => geometryStyle(category, feature),
+      pointToLayer: (_f, latlng) => pointMarker(category, latlng),
+      onEachFeature: (_f, layer) => {
+        record = {name, category, layer, sourceLabel, sourceKind, description, sourceUrl:context.sourceUrl || '', deepMeta:context.deepMeta || null};
+        enrichRecord(record);
+        layer.bindPopup(() => popupNode(record));
+        layer.on('click', () => selectRecord(record));
+      }
+    });
+    const target = layerGroups[category] || layerGroups.other;
+    geo.eachLayer(layer => target.addLayer(layer));
+    if (record) featureIndex.push(record);
+    return record ? 1 : 0;
+  }
+
+  function esriGeometryToGeoJSON(g) {
+    if (!g) return null;
+    if (Number.isFinite(g.x) && Number.isFinite(g.y)) return {type:'Point', coordinates:[g.x,g.y]};
+    if (Array.isArray(g.paths)) return {type:g.paths.length === 1 ? 'LineString' : 'MultiLineString', coordinates:g.paths.length === 1 ? g.paths[0] : g.paths};
+    if (Array.isArray(g.rings)) return {type:'Polygon', coordinates:g.rings};
+    if (Array.isArray(g.points)) return {type:'MultiPoint', coordinates:g.points};
+    return null;
+  }
+
+  function esriFeatureToGeoJSON(f) {
+    const geometry = esriGeometryToGeoJSON(f.geometry);
+    return geometry ? {type:'Feature', geometry, properties:f.attributes || {}} : null;
+  }
+
+  async function fetchJSON(url, timeoutMs=14000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, {signal:controller.signal, headers:{'Accept':'application/json'}});
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      return await res.json();
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  function serviceLayerUrl(url, id) { return `${url.replace(/\/$/,'')}/${id}`; }
+
+  async function queryArcGISLayer(url, layerTitle, sourceLabel='Public ArcGIS visitor data', sourceKind='public service vector') {
+    const query = new URL(`${url.replace(/\/$/,'')}/query`);
+    query.searchParams.set('where','1=1');
+    query.searchParams.set('outFields','*');
+    query.searchParams.set('returnGeometry','true');
+    query.searchParams.set('outSR','4326');
+    query.searchParams.set('f','geojson');
+    query.searchParams.set('resultRecordCount','2000');
+    const data = await fetchJSON(query.toString());
+    if (!data || !Array.isArray(data.features)) return 0;
+    let added = 0;
+    for (const feature of data.features) {
+      added += addGeoJSONFeature(feature, {layerTitle, sourceLabel:`${sourceLabel} — ${layerTitle}`, sourceKind, sourceUrl:url});
+    }
+    return added;
+  }
+
+  async function loadArcGISService(url, title='Isle Royale map layer', sourceLabel='Public ArcGIS visitor data', sourceKind='public service vector') {
+    const clean = url.replace(/\/$/,'');
+    let meta;
+    try { meta = await fetchJSON(`${clean}?f=json`); } catch { meta = null; }
+    const isSublayer = /\/(?:FeatureServer|MapServer)\/\d+$/.test(clean);
+    if (!isSublayer && meta && Array.isArray(meta.layers) && meta.layers.length) {
+      let total = 0;
+      for (const layer of meta.layers) {
+        try { total += await queryArcGISLayer(serviceLayerUrl(clean, layer.id), layer.name || title, sourceLabel, sourceKind); } catch (_) {}
+      }
+      return total;
+    }
+    return queryArcGISLayer(clean, title, sourceLabel, sourceKind);
+  }
+
+  async function ingestOperationalLayer(op) {
+    let added = 0;
+    const title = op.title || 'NPS visitor layer';
+    if (op.featureCollection && Array.isArray(op.featureCollection.layers)) {
+      for (const fc of op.featureCollection.layers) {
+        const layerTitle = (fc.layerDefinition && fc.layerDefinition.name) || title;
+        const features = (fc.featureSet && fc.featureSet.features) || [];
+        for (const ef of features) {
+          const gj = esriFeatureToGeoJSON(ef);
+          if (gj) added += addGeoJSONFeature(gj, {layerTitle, sourceLabel:`NPS / ArcGIS — ${layerTitle}`, sourceKind:'embedded public web-map vector'});
+        }
+      }
+    }
+    if (op.url && /(?:FeatureServer|MapServer)/.test(op.url)) {
+      try { added += await loadArcGISService(op.url, title, 'Public ArcGIS web-map source', 'public web-map service vector'); } catch (_) {}
+    }
+    if (Array.isArray(op.layers)) {
+      for (const nested of op.layers) added += await ingestOperationalLayer(nested);
+    }
+    return added;
+  }
+
+  async function loadWebMap(itemId) {
+    const data = await fetchJSON(`${CONFIG.arcgisRoot}${itemId}/data?f=json`);
+    const layers = data && Array.isArray(data.operationalLayers) ? data.operationalLayers : [];
+    let added = 0;
+    for (const op of layers) added += await ingestOperationalLayer(op);
+    return added;
+  }
+
+  function loadFallbackAnchors() {
+    const fallback = {
+      type:'FeatureCollection',
+      features:[
+        {type:'Feature',properties:{name:'Rock Harbor',kind:'visitor service',note:'Approximate reference anchor; public NPS/ArcGIS geometry is preferred.'},geometry:{type:'Point',coordinates:[-88.553,48.145]}},
+        {type:'Feature',properties:{name:'Windigo',kind:'visitor service',note:'Approximate reference anchor; public NPS/ArcGIS geometry is preferred.'},geometry:{type:'Point',coordinates:[-89.151,47.911]}},
+        {type:'Feature',properties:{name:'Mott Island',kind:'ranger station',note:'Approximate reference anchor; public NPS/ArcGIS geometry is preferred.'},geometry:{type:'Point',coordinates:[-88.527,48.107]}},
+        {type:'Feature',properties:{name:'Passage Island',kind:'lighthouse area',note:'Approximate reference anchor; verify official NPS maps.'},geometry:{type:'Point',coordinates:[-88.248,48.222]}}
+      ]
+    };
+    let n = 0;
+    for (const f of fallback.features) {
+      const cat = /lighthouse/i.test(f.properties.kind) ? 'maritime-history' : 'visitor-service';
+      n += addGeoJSONFeature(f, {category:cat, layerTitle:f.properties.kind, sourceLabel:'Local fail-soft reference anchor', sourceKind:'approximate reference — not authoritative NPS GIS'});
+    }
+    sourceStatus.fallback = true;
+    return n;
+  }
+
+  async function loadVisitorGeometry() {
+    status('Loading public Isle Royale visitor-map geometry…');
+    let added = 0;
+    for (const itemId of [CONFIG.primaryWebMap, CONFIG.fallbackWebMap]) {
+      try {
+        added = await loadWebMap(itemId);
+        if (added > 0) {
+          sourceStatus.arcgis = `loaded ${added} public visitor features`;
+          els.sourceStatus.textContent = `Preferred NPS/ArcGIS visitor geometry loaded (${added} features). Deep science and regulation-sensitive polygon layers remain separately cataloged until normalized.`;
+          status(`Loaded ${added} public visitor features. Search or filter the map; deep layers remain source-cataloged below.`);
+          visitorGeometrySettled = true;
+          addPendingShipwrecks();
+          renderFeatureList();
+          return;
+        }
+      } catch (_) {}
+    }
+    try {
+      added = await loadArcGISService(
+        CONFIG.visitorFeatureService,
+        'Isle Royale visitor dataset',
+        'Public ArcGIS Isle Royale visitor dataset (2021 snapshot)',
+        'public service vector — 2021 snapshot'
+      );
+      if (added > 0) {
+        sourceStatus.arcgis = `loaded ${added} visitor features from 2021 public fallback service`;
+        els.sourceStatus.textContent = `The preferred visitor web-map source was unavailable, so ${added} features were loaded from a public 2021 Isle Royale ArcGIS fallback dataset. Use current NPS pages for closures, regulations, campground status, transportation and other operational decisions.`;
+        status(`Loaded ${added} public visitor features from the 2021 fallback dataset. Current operational decisions still hand off to NPS.`);
+        visitorGeometrySettled = true;
+        addPendingShipwrecks();
+        renderFeatureList();
+        return;
+      }
+    } catch (_) {}
+
+    added = loadFallbackAnchors();
+    sourceStatus.arcgis = 'remote visitor geometry unavailable';
+    els.sourceStatus.textContent = 'The public visitor web map could not be read in this browser, so only clearly labeled approximate reference anchors are shown. Official NPS map links remain available.';
+    status(`Remote visitor geometry unavailable. Showing ${added} approximate reference anchors and the full source catalog instead.`);
+    visitorGeometrySettled = true;
+    addPendingShipwrecks();
+    renderFeatureList();
+  }
+
+  function osmFeatureToGeoJSON(el) {
+    const tags = el.tags || {};
+    const lat = el.lat ?? (el.center && el.center.lat);
+    const lon = el.lon ?? (el.center && el.center.lon);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+    return {type:'Feature',geometry:{type:'Point',coordinates:[lon,lat]},properties:{...tags, osm_id:`${el.type}/${el.id}`}};
+  }
+
+  async function loadOsmContext() {
+    const btn = document.getElementById('load-osm');
+    if (osmContextLoaded) {
+      btn.disabled = true;
+      status('OpenStreetMap visitor context is already loaded.');
+      return;
+    }
+    btn.disabled = true;
+    status('Adding supplementary OpenStreetMap visitor context…');
+    const q = `[out:json][timeout:25];(nwr["tourism"~"camp_site|viewpoint|information|museum"](47.79,-89.36,48.33,-88.18);nwr["amenity"~"shelter|toilets|drinking_water"](47.79,-89.36,48.33,-88.18);nwr["man_made"="lighthouse"](47.79,-89.36,48.33,-88.18);nwr["man_made"="pier"](47.79,-89.36,48.33,-88.18););out center tags;`;
+    try {
+      const url = `${CONFIG.overpass}?data=${encodeURIComponent(q)}`;
+      const data = await fetchJSON(url, 26000);
+      let added = 0;
+      for (const el of data.elements || []) {
+        const f = osmFeatureToGeoJSON(el);
+        if (!f) continue;
+        const osmId = f.properties?.osm_id;
+        if (osmId && osmSeen.has(osmId)) continue;
+        if (osmId) osmSeen.add(osmId);
+        added += addGeoJSONFeature(f, {layerTitle:'OpenStreetMap visitor context', sourceLabel:'OpenStreetMap contributors', sourceKind:'supplementary public OSM point'});
+      }
+      osmContextLoaded = true;
+      sourceStatus.osm = `loaded ${added}`;
+      btn.textContent = 'OSM context added';
+      status(`Added ${added} supplementary OpenStreetMap visitor points.`);
+      emitEvent('isle_royale_osm_context', {result:'success'});
+      renderFeatureList();
+    } catch (_) {
+      sourceStatus.osm = 'unavailable';
+      status('OpenStreetMap supplementary context could not be loaded. Core map and source catalog are unaffected.');
+      emitEvent('isle_royale_osm_context', {result:'failure'});
+      btn.disabled = false;
+    } finally {
+      if (!osmContextLoaded) btn.disabled = false;
+    }
+  }
+
+  function renderOperationalStatus() {
+    if (!els.liveStatus) return;
+    els.liveStatus.replaceChildren();
+
+    const conditionsAvailable = Boolean(operational.sources.current_conditions?.available);
+    const boaterAvailable = Boolean(operational.sources.boater_campgrounds?.available);
+    const shipwreckAvailable = Boolean(operational.sources.shipwreck_buoys?.available);
+    const alertCount = operational.alerts.length;
+
+    const state = document.createElement('div');
+    state.className = conditionsAvailable && alertCount === 0 ? 'ops-ok' : alertCount ? 'ops-alert' : 'ops-ok';
+    if (!operational.loaded) {
+      state.textContent = 'Checking current NPS conditions and boat-in campground data…';
+    } else if (!conditionsAvailable) {
+      state.className = 'ops-alert';
+      state.textContent = 'Current NPS conditions could not be reached. Do not infer that the park has no closures; verify NPS before acting.';
+    } else if (alertCount) {
+      state.textContent = `${alertCount} current NPS closure signal${alertCount === 1 ? '' : 's'} detected in the operational feed. Matching mapped places are flagged.`;
+    } else {
+      state.textContent = 'Current NPS conditions source reached; no closure pattern currently matched by this tool. This is not a declaration that the park has no alerts.';
+    }
+    els.liveStatus.appendChild(state);
+
+    const closedZones = [...new Set(operational.alerts.flatMap(alert => Array.isArray(alert.zones) ? alert.zones : alert.id === 'off-trail-zone-9' ? [9] : []))]
+      .filter(Number.isFinite)
+      .sort((a,b) => a-b);
+    if (closedZones.length) {
+      const zones = document.createElement('div');
+      zones.className = 'ops-alert';
+      zones.innerHTML = '<strong></strong><span></span>';
+      zones.querySelector('strong').textContent = `Off-trail camping zones currently flagged closed: ${closedZones.join(', ')}`;
+      zones.querySelector('span').textContent = 'This is a current NPS operational signal, not mapped polygon geometry. Verify the permit map and current conditions before departure.';
+      els.liveStatus.appendChild(zones);
+
+      const zoneLink = document.createElement('a');
+      zoneLink.className = 'popup-link';
+      zoneLink.href = CONFIG.offTrailUrl;
+      zoneLink.target = '_blank';
+      zoneLink.rel = 'noopener';
+      zoneLink.textContent = 'Open NPS off-trail camping guidance and zone map';
+      els.liveStatus.appendChild(zoneLink);
+    }
+
+    const data = document.createElement('div');
+    data.className = 'ops-source';
+    const boaterCount = operational.boaterByName.size;
+    const fetched = operational.fetchedAt ? new Date(operational.fetchedAt).toLocaleString([], {dateStyle:'medium', timeStyle:'short'}) : null;
+    const wreckCount = operational.shipwrecks.length;
+    data.textContent = boaterAvailable
+      ? `${boaterCount} NPS boat-in campground records available for popup enrichment${fetched ? ` · checked ${fetched}` : ''}. Page data updated June 23, 2026.`
+      : `Boat-in campground enrichment unavailable${fetched ? ` · checked ${fetched}` : ''}.`;
+    if (shipwreckAvailable) data.textContent += ` ${wreckCount} NPS shipwreck/dive buoy record${wreckCount === 1 ? '' : 's'} available for the maritime layer.`;
+    els.liveStatus.appendChild(data);
+
+    const link = document.createElement('a');
+    link.className = 'popup-link';
+    link.href = CONFIG.currentConditionsUrl;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.textContent = 'Open current NPS conditions';
+    els.liveStatus.appendChild(link);
+  }
+
+  function enrichExistingRecords() {
+    for (const record of featureIndex) enrichRecord(record);
+    renderFeatureList();
+  }
+
+  function hasMappedNamedFeature(name, category) {
+    const aliases = new Set(placeAliases(name));
+    return featureIndex.some(record => {
+      if (category && record.category !== category) return false;
+      return placeAliases(record.name).some(alias => aliases.has(alias));
+    });
+  }
+
+  function shipwreckDescription(wreck) {
+    const facts = [];
+    if (wreck.vessel_type) facts.push(wreck.vessel_type);
+    if (wreck.depth) facts.push(`depth ${wreck.depth} ft`);
+    if (wreck.buoy_on) facts.push(`buoy status ${wreck.buoy_on}`);
+    if (wreck.buoy_attachment) facts.push(`buoy attachment ${wreck.buoy_attachment}`);
+    return facts.length
+      ? facts.join(' · ')
+      : 'NPS shipwreck/dive buoy location. Verify current NPS diving guidance before use.';
+  }
+
+  function addPendingShipwrecks() {
+    if (!operational.loaded || !visitorGeometrySettled || operational.shipwrecksAdded) return 0;
+    let added = 0;
+    for (const wreck of operational.shipwrecks || []) {
+      const lat = Number(wreck.lat);
+      const lon = Number(wreck.lon);
+      if (!wreck.name || !Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+      if (hasMappedNamedFeature(wreck.name, 'maritime-history')) continue;
+      added += addGeoJSONFeature({
+        type:'Feature',
+        geometry:{type:'Point', coordinates:[lon,lat]},
+        properties:{
+          name:wreck.name,
+          description:shipwreckDescription(wreck),
+          vessel_type:wreck.vessel_type || '',
+          buoy_status:wreck.buoy_on || '',
+          depth:wreck.depth || '',
+          buoy_attachment:wreck.buoy_attachment || ''
+        }
+      }, {
+        category:'maritime-history',
+        layerTitle:'NPS shipwreck / dive buoy',
+        sourceLabel:'National Park Service — Shipwreck Buoys',
+        sourceKind:'current NPS dive-site / mooring reference point',
+        sourceUrl:'https://www.nps.gov/isro/planyourvisit/scuba-diving.htm'
+      });
+    }
+    operational.shipwrecksAdded = true;
+    if (added) renderFeatureList();
+    return added;
+  }
+
+  async function loadOperationalData() {
+    renderOperationalStatus();
+    try {
+      const data = await fetchJSON(CONFIG.operationsEndpoint, 12000);
+      operational.boaterByName.clear();
+      for (const campground of data.boater_campgrounds || []) {
+        for (const alias of placeAliases(campground.name)) operational.boaterByName.set(alias, campground);
+      }
+      operational.alerts = Array.isArray(data.current_alerts) ? data.current_alerts : [];
+      operational.shipwrecks = Array.isArray(data.shipwrecks) ? data.shipwrecks : [];
+      operational.fetchedAt = data.fetched_at || null;
+      operational.sources = data.sources || {};
+      operational.loaded = true;
+      enrichExistingRecords();
+      addPendingShipwrecks();
+      renderOperationalStatus();
+    } catch (_) {
+      operational.loaded = true;
+      operational.sources = {};
+      operational.alerts = [];
+      operational.shipwrecks = [];
+      renderOperationalStatus();
+    }
+  }
+
+  function formatBytes(bytes) {
+    const n = Number(bytes);
+    if (!Number.isFinite(n) || n <= 0) return 'size unavailable';
+    return n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)} MB` : `${Math.round(n / 1000)} KB`;
+  }
+
+  async function loadDeepManifest() {
+    if (deep.manifest) return deep.manifest;
+    if (deep.manifestPromise) return deep.manifestPromise;
+    deep.manifestPromise = fetchJSON(CONFIG.deepManifest, 12000)
+      .then(data => {
+        deep.manifest = data;
+        renderDeepStatus();
+        return data;
+      })
+      .catch(error => {
+        deep.manifestPromise = null;
+        renderDeepStatus();
+        throw error;
+      });
+    return deep.manifestPromise;
+  }
+
+  function renderDeepStatus() {
+    if (!els.deepStatus) return;
+    els.deepStatus.replaceChildren();
+    const manifestSources = deep.manifest?.sources || {};
+
+    for (const id of ['geology','vegetation-baseline']) {
+      const cfg = deepConfig[id];
+      const state = deep[id];
+      const meta = manifestSources[cfg.manifestKey] || {};
+      const row = document.createElement('div');
+      row.className = state.state === 'error' ? 'ops-alert' : 'ops-ok';
+      const size = formatBytes(meta.bytes);
+      if (state.state === 'loading') {
+        row.textContent = `${cfg.label}: loading ${size} generated layer…`;
+      } else if (state.state === 'loaded') {
+        row.textContent = `${cfg.label}: ${state.count.toLocaleString()} mapped feature${state.count === 1 ? '' : 's'} loaded · ${size}.`;
+      } else if (state.state === 'error') {
+        row.textContent = `${cfg.label}: could not load. ${state.error || 'Source file unavailable.'}`;
+      } else {
+        row.textContent = `${cfg.label}: off by default · ${size}${meta.vintage ? ` · ${meta.vintage}` : ''}.`;
+      }
+      els.deepStatus.appendChild(row);
+    }
+
+    const caveat = document.createElement('div');
+    caveat.className = 'ops-source';
+    caveat.textContent = 'Vegetation is a historical inventory baseline, not present-day forest condition. Geology is interpretive mapping, not survey-grade. Both layers are loaded only when selected.';
+    els.deepStatus.appendChild(caveat);
+  }
+
+  async function loadDeepLayer(id) {
+    const cfg = deepConfig[id];
+    const state = deep[id];
+    if (!cfg || !state || state.state === 'loading' || state.state === 'loaded') return;
+    state.state = 'loading';
+    state.error = '';
+    renderDeepStatus();
+
+    try {
+      const manifest = await loadDeepManifest();
+      const meta = manifest?.sources?.[cfg.manifestKey] || {};
+      const data = await fetchJSON(CONFIG.deepLayers[id], id === 'vegetation-baseline' ? 60000 : 30000);
+      if (!data || !Array.isArray(data.features) || !data.features.length) throw new Error('generated GeoJSON is empty');
+
+      let added = 0;
+      for (const feature of data.features) {
+        added += addGeoJSONFeature(feature, {
+          category:id,
+          layerTitle:cfg.label,
+          sourceLabel:cfg.sourceLabel,
+          sourceKind:cfg.sourceKind,
+          sourceUrl:meta.source || '',
+          deepMeta:meta
+        });
+      }
+      state.state = 'loaded';
+      state.count = added;
+      renderDeepStatus();
+      renderFeatureList();
+      status(`${cfg.label} loaded: ${added.toLocaleString()} mapped feature${added === 1 ? '' : 's'}.`);
+    } catch (error) {
+      state.state = 'error';
+      state.error = cleanText(error?.message || 'load failed');
+      const checkbox = els.filters.querySelector(`input[data-layer="${id}"]`);
+      if (checkbox) checkbox.checked = false;
+      const group = layerGroups[id];
+      if (group && map.hasLayer(group)) map.removeLayer(group);
+      renderDeepStatus();
+      status(`${cfg.label} could not be loaded. Core visitor map remains available.`);
+    }
+  }
+
+  async function loadContextManifest() {
+    if (contextLayers.manifest) return contextLayers.manifest;
+    if (contextLayers.manifestPromise) return contextLayers.manifestPromise;
+    contextLayers.manifestPromise = fetchJSON(CONFIG.contextManifest, 12000)
+      .then(data => {
+        contextLayers.manifest = data;
+        renderContextStatus();
+        return data;
+      })
+      .catch(error => {
+        contextLayers.manifestPromise = null;
+        renderContextStatus();
+        throw error;
+      });
+    return contextLayers.manifestPromise;
+  }
+
+  function renderContextStatus() {
+    if (!els.contextStatus) return;
+    els.contextStatus.replaceChildren();
+    const layers = contextLayers.manifest?.layers || {};
+
+    for (const id of ['quiet-no-wake','vegetation-change','horne-fire']) {
+      const cfg = contextConfig[id];
+      const state = contextLayers[id];
+      const meta = layers[cfg.manifestKey] || {};
+      const row = document.createElement('div');
+      row.className = state.state === 'error' ? 'ops-alert' : 'ops-ok';
+      const size = formatBytes(meta.bytes);
+
+      if (state.state === 'loading') {
+        row.textContent = `${cfg.label}: loading ${size} verified layer…`;
+      } else if (state.state === 'loaded') {
+        row.textContent = `${cfg.label}: ${state.count.toLocaleString()} mapped feature${state.count === 1 ? '' : 's'} loaded · ${size}.`;
+      } else if (state.state === 'error') {
+        row.textContent = `${cfg.label}: could not load. ${state.error || 'Source file unavailable.'}`;
+      } else {
+        const count = Number(meta.features);
+        const countText = Number.isFinite(count) ? `${count.toLocaleString()} features · ` : '';
+        row.textContent = `${cfg.label}: off by default · ${countText}${size}${meta.vintage ? ` · ${meta.vintage}` : ''}.`;
+      }
+      els.contextStatus.appendChild(row);
+    }
+
+    const caveat = document.createElement('div');
+    caveat.className = 'ops-source';
+    caveat.textContent = 'Quiet/No-Wake polygons are official NPS regulatory geometry. Vegetation change and Horne Fire are historical USGS context, not present-day operational conditions.';
+    els.contextStatus.appendChild(caveat);
+  }
+
+  async function loadContextLayer(id) {
+    const cfg = contextConfig[id];
+    const state = contextLayers[id];
+    if (!cfg || !state || state.state === 'loading' || state.state === 'loaded') return;
+    state.state = 'loading';
+    state.error = '';
+    renderContextStatus();
+
+    try {
+      const manifest = await loadContextManifest();
+      const meta = manifest?.layers?.[cfg.manifestKey] || {};
+      if (meta.status && meta.status !== 'generated') throw new Error(`manifest state: ${meta.status}`);
+      const data = await fetchJSON(CONFIG.contextLayers[id], cfg.timeout);
+      if (!data || !Array.isArray(data.features) || !data.features.length) throw new Error('generated GeoJSON is empty');
+
+      let added = 0;
+      for (const feature of data.features) {
+        added += addGeoJSONFeature(feature, {
+          category:id,
+          layerTitle:cfg.label,
+          sourceLabel:cfg.sourceLabel,
+          sourceKind:cfg.sourceKind,
+          sourceUrl:meta.source || meta.regulatory_source || '',
+          deepMeta:meta
+        });
+      }
+
+      state.state = 'loaded';
+      state.count = added;
+      renderContextStatus();
+      renderFeatureList();
+      status(`${cfg.label} loaded: ${added.toLocaleString()} mapped feature${added === 1 ? '' : 's'}.`);
+    } catch (error) {
+      state.state = 'error';
+      state.error = cleanText(error?.message || 'load failed');
+      const checkbox = els.filters.querySelector(`input[data-layer="${id}"]`);
+      if (checkbox) checkbox.checked = false;
+      const group = layerGroups[id];
+      if (group && map.hasLayer(group)) map.removeLayer(group);
+      renderContextStatus();
+      status(`${cfg.label} could not be loaded. Core visitor map remains available.`);
+    }
+  }
+
+  function isCategoryVisible(category) {
+    const checkbox = els.filters.querySelector(`input[data-layer="${category}"]`);
+    return checkbox ? checkbox.checked : true;
+  }
+
+  function selectRecord(record) {
+    if (!record || !record.layer) return;
+    emitEvent('isle_royale_feature_open', {feature_class:record.category, source_family:sourceFamily(record)});
+    selectedLayer = record.layer;
+    try {
+      const bounds = record.layer.getBounds && record.layer.getBounds();
+      if (bounds && bounds.isValid && bounds.isValid()) map.fitBounds(bounds.pad(.6), {maxZoom:14});
+      else if (record.layer.getLatLng) map.flyTo(record.layer.getLatLng(), Math.max(map.getZoom(), 13));
+      record.layer.openPopup();
+    } catch (_) {}
+  }
+
+  function flyToFeature(index) {
+    const record = featureIndex[index];
+    if (record) selectRecord(record);
+  }
+  window.flyToFeature = flyToFeature;
+
+  function renderFeatureList() {
+    const term = els.search.value.trim().toLowerCase();
+    const matches = [];
+    for (let i=0;i<featureIndex.length;i++) {
+      const r = featureIndex[i];
+      const hay = `${r.name} ${r.category} ${r.sourceLabel} ${r.description}`.toLowerCase();
+      if (!isCategoryVisible(r.category)) continue;
+      if (term && !hay.includes(term)) continue;
+      matches.push({r,i});
+    }
+    matches.sort((a,b) => a.r.name.localeCompare(b.r.name));
+    els.list.replaceChildren();
+    for (const {r,i} of matches.slice(0,160)) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'feature-row';
+      b.innerHTML = '<strong></strong><span></span>';
+      b.querySelector('strong').textContent = r.name;
+      b.querySelector('span').textContent = r.liveAlert
+        ? `Current NPS closure signal · ${layerLabels[r.category] || r.category}`
+        : r.boater
+          ? `${layerLabels[r.category] || r.category} · NPS campground details available`
+          : `${layerLabels[r.category] || r.category} · ${r.sourceKind}`;
+      b.addEventListener('click', () => flyToFeature(i));
+      els.list.appendChild(b);
+    }
+    els.count.textContent = `${matches.length} matching feature${matches.length === 1 ? '' : 's'} · ${featureIndex.length} loaded`;
+    if (!matches.length) {
+      const p = document.createElement('p');
+      p.className = 'small';
+      p.textContent = featureIndex.length ? 'No loaded features match those filters.' : 'Visitor geometry is still loading. The source catalog below is available immediately.';
+      els.list.appendChild(p);
+    }
+    return matches.length;
+  }
+
+  els.search.addEventListener('input', () => {
+    const count = renderFeatureList();
+    clearTimeout(searchEventTimer);
+    searchEventTimer = setTimeout(() => {
+      const term = els.search.value.trim();
+      if (!term) return;
+      emitEvent('isle_royale_search', {query_category:searchCategory(term), result_count:count});
+    }, 400);
+  });
+  els.filters.addEventListener('change', (event) => {
+    const input = event.target.closest('input[data-layer]');
+    if (!input) return;
+    const id = input.dataset.layer;
+    emitEvent('isle_royale_layer_toggle', {layer_id:id, enabled:Boolean(input.checked)});
+    const group = layerGroups[id];
+    if (group) {
+      if (input.checked && !map.hasLayer(group)) group.addTo(map);
+      if (!input.checked && map.hasLayer(group)) map.removeLayer(group);
+    }
+    if (input.checked && deepConfig[id]) loadDeepLayer(id);
+    if (input.checked && contextConfig[id]) loadContextLayer(id);
+    renderFeatureList();
+  });
+
+  document.getElementById('fit-island').addEventListener('click', () => map.fitBounds(CONFIG.islandBounds,{padding:[10,10]}));
+  document.getElementById('load-osm').addEventListener('click', loadOsmContext);
+  document.getElementById('clear-selection').addEventListener('click', () => {
+    if (selectedLayer && selectedLayer.closePopup) selectedLayer.closePopup();
+    selectedLayer = null;
+    map.closePopup();
+  });
+
+  async function loadCatalog() {
+    try {
+      const res = await fetch('/isle-royale-map/catalog.json');
+      if (!res.ok) throw new Error(String(res.status));
+      const data = await res.json();
+      els.catalog.replaceChildren();
+      for (const item of data.items || []) {
+        const tr = document.createElement('tr');
+        const td1 = document.createElement('td'); td1.textContent = item.label;
+        const td2 = document.createElement('td'); const pill = document.createElement('span'); pill.className='status-pill'; pill.textContent=item.state; td2.appendChild(pill);
+        const td3 = document.createElement('td'); const a=document.createElement('a'); a.href=item.source; a.target='_blank'; a.rel='noopener'; a.textContent=item.publisher; a.addEventListener('click', () => emitEvent('isle_royale_source_open', {source_id:item.id || 'catalog-source'})); td3.appendChild(a);
+        const td4 = document.createElement('td'); td4.textContent = item.vintage ? `${item.vintage}. ${item.notes}` : item.notes;
+        tr.append(td1,td2,td3,td4);
+        els.catalog.appendChild(tr);
+      }
+    } catch (_) {
+      els.catalog.innerHTML = '<tr><td>Source catalog could not be loaded.</td><td></td><td><a href="/isle-royale-map/catalog.json">Open raw catalog</a></td><td>The interactive map remains available.</td></tr>';
+    }
+  }
+
+  renderFeatureList();
+  loadCatalog();
+  loadOperationalData();
+  renderDeepStatus();
+  loadDeepManifest().catch(() => {});
+  renderContextStatus();
+  loadContextManifest().catch(() => {});
+  loadVisitorGeometry();
+})();

@@ -332,7 +332,7 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/lake-superior-circle-tour/</loc>
-    <lastmod>2026-08-25</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -746,4 +746,10 @@
     <priority>0.75</priority>
   </url>
 
+  <url>
+    <loc>https://chrisizworski.com/isle-royale-map/</loc>
+    <lastmod>2026-08-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

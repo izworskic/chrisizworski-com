@@ -1,0 +1,127 @@
+{
+  "version": "1.1.0",
+  "updated": "2026-08-30",
+  "route": "/isle-royale-map/",
+  "objective": "Build the most useful source-transparent Isle Royale planning map in the Chris Izworski tool network without pretending static cartography is authoritative GIS.",
+  "valueFunction": {
+    "formula": "V = .24D + .20T + .14U + .12P + .10R + .08A + .07S + .05N",
+    "dimensions": {
+      "D": {
+        "name": "decisionUtility",
+        "weight": 24,
+        "question": "Can a visitor make a better access, hiking, camping, boating or orientation decision?"
+      },
+      "T": {
+        "name": "dataTruthCoverage",
+        "weight": 20,
+        "question": "Are important layers present with authority/vintage/uncertainty represented honestly?"
+      },
+      "U": {
+        "name": "mapUsability",
+        "weight": 14,
+        "question": "Can users search, filter, inspect, zoom and recover without fighting the interface?"
+      },
+      "P": {
+        "name": "provenanceFreshness",
+        "weight": 12,
+        "question": "Can users tell where a feature came from, when it was updated, and whether it is current/reference/derived?"
+      },
+      "R": {
+        "name": "reliabilityPerformance",
+        "weight": 10,
+        "question": "Does the tool fail soft, avoid API keys, and remain useful when a remote layer fails?"
+      },
+      "A": {
+        "name": "accessibility",
+        "weight": 8,
+        "question": "Is core information reachable by keyboard and through a non-map feature list?"
+      },
+      "S": {
+        "name": "searchDiscovery",
+        "weight": 7,
+        "question": "Does the canonical page answer the Isle Royale map intent with strong entity/schema/discovery signals?"
+      },
+      "N": {
+        "name": "networkFit",
+        "weight": 5,
+        "question": "Does this connect cleanly to the existing Michigan/Great Lakes tool journey without cannibalization?"
+      }
+    },
+    "releaseTarget": 88,
+    "stretchTarget": 94
+  },
+  "benchmark": [
+    {
+      "id": "source-catalog",
+      "weight": 12,
+      "target": "All 16 NPMaps product families remain explicitly accounted for in the source manifest, with preferred upstream authority and a crawlable source desk/raw catalog link."
+    },
+    {
+      "id": "visitor-geometry",
+      "weight": 13,
+      "target": "Runtime visitor web-map ingestion supports trails, camps, routes and POIs without a commercial map key."
+    },
+    {
+      "id": "planning-flow",
+      "weight": 15,
+      "target": "Search + layer filters + feature details make the map useful before the user scrolls into documentation, and the five privacy-safe product events are emitted."
+    },
+    {
+      "id": "provenance",
+      "weight": 10,
+      "target": "Every live/derived layer exposes source and status; science layers expose dataset vintage."
+    },
+    {
+      "id": "safety",
+      "weight": 10,
+      "target": "No NPS Park Tiles reuse, no navigation claim, no unlabeled manually-derived geometry, regulation-sensitive layers point to current NPS."
+    },
+    {
+      "id": "fail-soft",
+      "weight": 10,
+      "target": "The map still loads a basemap, source catalog and fallback anchors if ArcGIS/OpenStreetMap supplementary services fail."
+    },
+    {
+      "id": "accessibility",
+      "weight": 8,
+      "target": "Keyboard controls, visible focus, status region and feature-list alternative are present."
+    },
+    {
+      "id": "search-entity",
+      "weight": 8,
+      "target": "Canonical, title/meta limits, Person node, WebApplication/Dataset schema and dateModified pass repo rules."
+    },
+    {
+      "id": "network",
+      "weight": 6,
+      "target": "At least three contextual links into relevant existing tools or authority surfaces."
+    },
+    {
+      "id": "deep-data-path",
+      "weight": 8,
+      "target": "Geology, vegetation, historic raster and boating-zone layers have explicit ETL/publication paths rather than fake client-side pins."
+    }
+  ],
+  "hardGates": [
+    "Do not use or hotlink NPS Park Tiles as the public basemap.",
+    "Do not present the map as a navigation chart or replacement for official NPS information.",
+    "Do not label approximate/manual fallback geometry as authoritative NPS GIS.",
+    "Do not expose newly discovered sensitive cultural/natural-resource coordinates automatically.",
+    "Do not ship a current-regulation layer without current NPS provenance.",
+    "Do not create a second canonical page for the same Isle Royale interactive-map intent.",
+    "Do not remove or silently substitute any of the 16 NPMaps completeness records.",
+    "Do not hide the entire source catalog behind JavaScript; preserve crawlable source rows and a raw catalog link.",
+    "Do not claim the measurement plan is complete unless all five privacy-safe Isle Royale product events are wired."
+  ],
+  "initialBuildFit": {
+    "distinctSearchIntent": 24,
+    "networkFit": 19,
+    "uniqueUtility": 20,
+    "authorityAndSeasonFit": 14,
+    "measurementPlan": 10,
+    "cannibalizationSafety": 10,
+    "total": 97,
+    "threshold": 85,
+    "decision": "PRIORITY BUILD"
+  }
+}

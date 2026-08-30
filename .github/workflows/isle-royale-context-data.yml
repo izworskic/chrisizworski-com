@@ -1,0 +1,119 @@
+name: Isle Royale context GIS build
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/isle-royale-context-data.yml"
+      - "scripts/build-isle-royale-context-layers.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: isle-royale-gis-writer-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-context-layers:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Install GDAL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gdal-bin python3-gdal unzip
+
+      - name: Build regulatory and change-context layers
+        run: python3 scripts/build-isle-royale-context-layers.py
+
+      - name: Validate generated context GIS
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib
+          root=pathlib.Path("public/isle-royale-map/data")
+          manifest_path=root/"context-layer-manifest.json"
+          assert manifest_path.exists(), "context-layer-manifest.json missing"
+          manifest=json.loads(manifest_path.read_text())
+          layers=manifest["layers"]
+
+          # USGS layers are hard requirements for this workflow.
+          required={
+              "vegetation_change":("vegetation-change-1996-2017.geojson",1,15_000_000),
+              "horne_fire":("horne-fire-burn-severity.geojson",1,15_000_000),
+          }
+          for key,(filename,min_features,max_bytes) in required.items():
+              meta=layers[key]
+              assert meta["status"]=="generated", (key,meta)
+              path=root/filename
+              assert path.exists(), (key,"missing generated file")
+              data=path.read_bytes()
+              fc=json.loads(data)
+              assert fc["type"]=="FeatureCollection", (key,"not FeatureCollection")
+              assert len(fc["features"])>=min_features, (key,len(fc["features"]))
+              assert len(data)<=max_bytes, (key,len(data),max_bytes)
+              assert meta["file"]==filename
+              assert meta["bytes"]==len(data)
+              assert meta["sha256"]==hashlib.sha256(data).hexdigest()
+              print(key,len(fc["features"]),len(data),meta["sha256"])
+
+          # NPS quiet/no-wake geometry is allowed to remain unresolved only when
+          # the manifest preserves the current regulatory truth and explains why.
+          quiet=layers["quiet_no_wake"]
+          quiet_path=root/"quiet-no-wake-zones.geojson"
+          if quiet["status"]=="generated":
+              assert quiet_path.exists(), "generated quiet/no-wake file missing"
+              data=quiet_path.read_bytes()
+              fc=json.loads(data)
+              assert fc["type"]=="FeatureCollection"
+              assert len(fc["features"])==22, len(fc["features"])
+              assert quiet["features"]==22
+              assert quiet["quiet_no_wake_features"]==19
+              assert quiet["no_wake_features"]==3
+              assert quiet["bytes"]==len(data)
+              assert quiet["sha256"]==hashlib.sha256(data).hexdigest()
+              print("quiet_no_wake",22,len(data),quiet["sha256"])
+          else:
+              assert quiet["status"]=="unresolved-upstream", quiet
+              assert quiet["expected_features"]==22, quiet
+              assert quiet["quiet_no_wake_features"]==19, quiet
+              assert quiet["no_wake_features"]==3, quiet
+              assert "hand-drawn" in quiet["note"].lower(), quiet
+              print("quiet_no_wake unresolved-upstream:", quiet["reason"])
+          PY
+
+      - name: Commit normalized context layers to feature branch
+        if: github.event_name == 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for file in             context-layer-manifest.json             quiet-no-wake-zones.geojson             vegetation-change-1996-2017.geojson             horne-fire-burn-severity.geojson
+          do
+            path="public/isle-royale-map/data/$file"
+            if [ -e "$path" ]; then
+              git add "$path"
+            fi
+          done
+          if git diff --cached --quiet; then
+            echo "No generated context GIS changes to commit."
+            exit 0
+          fi
+          git commit -m "Generate Isle Royale context GIS layers"
+          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+
+      - name: Upload context GIS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: isle-royale-context-gis
+          path: |
+            public/isle-royale-map/data/quiet-no-wake-zones.geojson
+            public/isle-royale-map/data/vegetation-change-1996-2017.geojson
+            public/isle-royale-map/data/horne-fire-burn-severity.geojson
+            public/isle-royale-map/data/context-layer-manifest.json
+          retention-days: 14
