@@ -148,7 +148,11 @@
     waterReason:'',
     waterAccessMiles:0,
     itinerary:null,
-    itineraryWeather:null
+    itineraryWeather:null,
+    scenarios:[],
+    activeScenario:'balanced',
+    scenarioWeather:{},
+    scenarioWeatherLoading:false
   };
   const waterIntel = {
     state:'idle',
