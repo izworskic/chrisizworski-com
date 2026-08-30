@@ -171,9 +171,35 @@ def compact_quiet_zones(fc):
     return {"type": "FeatureCollection", "features": out}
 
 
+def nps_quiet_diagnostics():
+    for url in [
+        QUIET_PAGE,
+        f"https://www.nps.gov/maps/embed.html?mapId={QUIET_WEBMAP}",
+        f"https://www.nps.gov/maps/full.html?mapId={QUIET_WEBMAP}",
+    ]:
+        try:
+            html = fetch_bytes(url, timeout=30).decode("utf-8", errors="replace")
+        except Exception as exc:
+            print(f"NPS diagnostic fetch failed {url}: {exc}", file=sys.stderr)
+            continue
+        print(f"NPS diagnostic {url} bytes={len(html)}", file=sys.stderr)
+        links = re.findall(r'''(?:href|src)=["']([^"']+)["']''', html, flags=re.I)
+        for link in links:
+            low = link.lower()
+            if any(token in low for token in ["9705", "downloadfile", "datastore", "quiet", "wake", "map", "gis", "api"]):
+                print(f"  link {link}", file=sys.stderr)
+        for match in re.finditer(r".{0,180}(?:9705|DownloadFile|quiet|wake|mapId|FeatureServer|MapServer|DataStore).{0,260}", html, flags=re.I | re.S):
+            snippet = re.sub(r"\s+", " ", match.group(0)).strip()
+            print(f"  snippet {snippet[:700]}", file=sys.stderr)
+
+
 def build_quiet_no_wake():
     data_url = f"https://www.arcgis.com/sharing/rest/content/items/{QUIET_WEBMAP}/data?f=json"
-    webmap = fetch_json(data_url)
+    try:
+        webmap = fetch_json(data_url)
+    except Exception as exc:
+        print(f"ArcGIS interpretation of NPS map id failed: {exc}", file=sys.stderr)
+        webmap = {}
     candidates = []
     for layer in webmap.get("operationalLayers") or []:
         collect_embedded_feature_sets(layer, candidates)
@@ -207,6 +233,7 @@ def build_quiet_no_wake():
             combined.extend(c[3].get("features") or [])
             chosen_sources.append(c[2])
         if len(combined) != 17:
+            nps_quiet_diagnostics()
             raise RuntimeError(f"Could not reconcile NPS quiet/no-wake geometry to 17 zones; polygon candidates={[(c[1],len(c[3].get('features') or []),c[0]) for c in scored]}")
         fc = {"type": "FeatureCollection", "features": combined}
 
