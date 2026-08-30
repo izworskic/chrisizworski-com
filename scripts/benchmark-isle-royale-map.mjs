@@ -133,7 +133,7 @@ const scenarioRuntime = /id="route-scenarios"/.test(html)
   && /Weather-conservative/.test(waterJs)
   && /Balanced/.test(waterJs)
   && /Ambitious/.test(waterJs)
-  && /target_time:Number\.isFinite\(targetMs\)/.test(routeWeatherApi)
+  && /if\(Number\.isFinite\(targetMs\)\)out\.target_time/.test(routeWeatherApi)
   && /Scheduled route sample falls outside the supported NWS forecast window/.test(routeWeatherApi);
 
 const reliefRuntime = /USGSShadedReliefOnly\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/.test(js)
