@@ -27,8 +27,39 @@ if [[ -z "$GPKG" ]]; then
   exit 3
 fi
 
-GEO_LAYER="$(ogrinfo -ro "$GPKG" 2>/dev/null | sed -nE 's/^[0-9]+: (.*ISROGLG.*)$/\1/ip' | head -n1)"
-GEO_LAYER="${GEO_LAYER:-ISROGLG}"
+GEO_LAYER="$(python3 - "$GPKG" <<'PY'
+from osgeo import ogr
+import re, sys
+
+path=sys.argv[1]
+ds=ogr.Open(path, 0)
+if ds is None:
+    raise SystemExit("Could not open geology GeoPackage")
+
+candidates=[]
+for i in range(ds.GetLayerCount()):
+    layer=ds.GetLayerByIndex(i)
+    name=layer.GetName()
+    geom=ogr.GeometryTypeToName(layer.GetLayerDefn().GetGeomType())
+    count=layer.GetFeatureCount()
+    print(f"geology layer[{i}] name={name!r} geometry={geom} features={count}", file=sys.stderr)
+    key=re.sub(r'[^a-z0-9]+','',name.lower())
+    score=0
+    if 'isroglg' in key: score+=100
+    if 'geolog' in key: score+=40
+    if 'unit' in key or 'glg' in key: score+=20
+    if 'polygon' in geom.lower(): score+=15
+    candidates.append((score, count if count >= 0 else 0, name, geom))
+
+candidates.sort(reverse=True)
+for score,count,name,geom in candidates:
+    if score >= 15 and 'polygon' in geom.lower():
+        print(name)
+        break
+else:
+    raise SystemExit("No polygon geology layer found in GeoPackage")
+PY
+)"
 echo "Using geology layer: $GEO_LAYER"
 ogrinfo -ro -so "$GPKG" "$GEO_LAYER" >/dev/null
 
@@ -40,30 +71,51 @@ echo "Downloading NPS vegetation inventory package..."
 curl --fail --location --retry 3 --retry-delay 2 --user-agent 'ChrisIzworskiIsleRoyaleGIS/1.0' "$VEGETATION_URL" -o "$WORK/vegetation.zip"
 unzip -q "$WORK/vegetation.zip" -d "$WORK/vegetation"
 
-VEG_SHP=""
-VEG_COUNT=-1
-while IFS= read -r shp; do
-  layer="$(basename "$shp" .shp)"
-  info="$(ogrinfo -ro -so "$shp" "$layer" 2>/dev/null || true)"
-  if ! grep -Eqi 'Geometry: (Multi )?Polygon|Geometry: Polygon|Geometry: Multi Polygon' <<<"$info"; then
-    continue
-  fi
-  count="$(sed -nE 's/.*Feature Count: ([0-9]+).*/\1/p' <<<"$info" | head -n1)"
-  count="${count:-0}"
-  if (( count > VEG_COUNT )); then
-    VEG_COUNT="$count"
-    VEG_SHP="$shp"
-  fi
-done < <(find "$WORK/vegetation" -type f -iname '*.shp' -print)
+readarray -t VEG_PICK < <(python3 - "$WORK/vegetation" <<'PY'
+from osgeo import ogr
+import pathlib, re, sys
 
-if [[ -z "$VEG_SHP" ]]; then
+root=pathlib.Path(sys.argv[1])
+candidates=[]
+for shp in root.rglob("*.shp"):
+    ds=ogr.Open(str(shp), 0)
+    if ds is None or ds.GetLayerCount() < 1:
+        continue
+    layer=ds.GetLayerByIndex(0)
+    name=layer.GetName()
+    geom=ogr.GeometryTypeToName(layer.GetLayerDefn().GetGeomType())
+    count=layer.GetFeatureCount()
+    key=re.sub(r'[^a-z0-9]+','',f"{shp.name} {name}".lower())
+    print(f"vegetation candidate path={shp} layer={name!r} geometry={geom} features={count}", file=sys.stderr)
+    if 'polygon' not in geom.lower():
+        continue
+    score=0
+    if 'veget' in key or 'veg' in key: score+=100
+    if 'map' in key or 'class' in key or 'cover' in key: score+=20
+    candidates.append((score, count if count >= 0 else 0, str(shp), name))
+
+if not candidates:
+    raise SystemExit("No polygon shapefile found in NPS vegetation package")
+
+candidates.sort(reverse=True)
+score,count,path,name=candidates[0]
+print(path)
+print(name)
+print(count)
+PY
+)
+VEG_SHP="${VEG_PICK[0]:-}"
+VEG_LAYER="${VEG_PICK[1]:-}"
+VEG_COUNT="${VEG_PICK[2]:-0}"
+
+if [[ -z "$VEG_SHP" || -z "$VEG_LAYER" ]]; then
   echo "No polygon shapefile found in NPS vegetation package" >&2
-  find "$WORK/vegetation" -maxdepth 3 -type f -print >&2
+  find "$WORK/vegetation" -maxdepth 4 -type f -print >&2
   exit 4
 fi
 
-VEG_LAYER="$(basename "$VEG_SHP" .shp)"
-echo "Using vegetation layer: $VEG_LAYER ($VEG_COUNT source features)"
+echo "Using vegetation layer: $VEG_LAYER ($VEG_COUNT source features) from $VEG_SHP"
+
 ogr2ogr -f GeoJSON "$WORK/vegetation.raw.geojson" "$VEG_SHP" "$VEG_LAYER" \
   -t_srs EPSG:4326 -makevalid -simplify 0.00018 \
   -lco RFC7946=YES -lco COORDINATE_PRECISION=5
