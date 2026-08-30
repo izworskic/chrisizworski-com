@@ -1812,19 +1812,26 @@
     renderRouteScenarios();
     try{
       const results=await Promise.all(route.scenarios.map(async scenario=>{
-        const samples=scenarioForecastSamples(scenario,departure,speed);
-        if(!samples.length)return [scenario.id,null];
-        const response=await fetch(CONFIG.routeWeatherEndpoint,{
-          method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-          body:JSON.stringify({departure:departure.toISOString(),speed_mph:speed,waypoints:samples})
-        });
-        const data=await response.json();
-        if(!response.ok)throw new Error(data?.error||response.status+' scenario forecast failed');
-        return [scenario.id,summarizeScenarioForecast(data,scenario)];
+        try{
+          const samples=scenarioForecastSamples(scenario,departure,speed);
+          if(!samples.length)return [scenario.id,{error:'No itinerary samples available'}];
+          const response=await fetch(CONFIG.routeWeatherEndpoint,{
+            method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+            body:JSON.stringify({departure:departure.toISOString(),speed_mph:speed,waypoints:samples})
+          });
+          const data=await response.json();
+          if(!response.ok)throw new Error(data?.error||response.status+' scenario forecast failed');
+          return [scenario.id,summarizeScenarioForecast(data,scenario)];
+        }catch(error){
+          return [scenario.id,{error:cleanText(error?.message||'forecast unavailable')}];
+        }
       }));
-      route.scenarioWeather=Object.fromEntries(results.filter(([,value])=>value));
-      emitEvent('isle_royale_scenario_weather',{scenario_count:Object.keys(route.scenarioWeather).length,mode:route.mode});
-      status('Scenario forecast comparison loaded using each plan’s actual day schedule.');
+      route.scenarioWeather=Object.fromEntries(results);
+      const available=Object.values(route.scenarioWeather).filter(value=>!value.error).length;
+      emitEvent('isle_royale_scenario_weather',{scenario_count:available,mode:route.mode});
+      status(available
+        ? 'Scenario forecast comparison loaded using each plan’s actual day schedule.'
+        : 'Scenario forecast comparison could not load; trip structures remain available.');
     }catch(error){
       route.scenarioWeather={};
       status('Scenario forecast comparison unavailable: '+cleanText(error?.message||error));
@@ -1853,7 +1860,8 @@
       const camps=document.createElement('div');camps.className='scenario-camps';camps.textContent=campNames.length?'Overnights: '+campNames.join(' → '):'No overnight campground required for this route.';card.appendChild(camps);
       if(summary.gaps){const warning=document.createElement('div');warning.className='scenario-warning';warning.textContent=summary.gaps+' day-end window'+(summary.gaps===1?' has':'s have')+' no qualified NPS Boat-In campground. The planner leaves that gap explicit.';card.appendChild(warning);}
       const forecast=route.scenarioWeather?.[scenario.id];
-      if(forecast){const w=document.createElement('div');w.className='scenario-weather';const bits=[];if(Number.isFinite(Number(forecast.peak_wind_kt)))bits.push('peak sampled wind/gust '+Math.round(forecast.peak_wind_kt)+' kt');if(Number.isFinite(Number(forecast.peak_wave_ft)))bits.push('peak sampled wave '+Number(forecast.peak_wave_ft).toFixed(1)+' ft');if(Number.isFinite(Number(forecast.precip_pct)))bits.push('precip up to '+Math.round(forecast.precip_pct)+'%');if(forecast.alert_count)bits.push(forecast.alert_count+' active NWS alert'+(forecast.alert_count===1?'':'s'));w.textContent='Forecast comparison: '+bits.join(' · ')+'.';card.appendChild(w);}
+      if(forecast?.error){const w=document.createElement('div');w.className='scenario-warning';w.textContent='Forecast comparison unavailable for this scenario: '+forecast.error+'.';card.appendChild(w);}
+      else if(forecast){const w=document.createElement('div');w.className='scenario-weather';const bits=[];if(Number.isFinite(Number(forecast.peak_wind_kt)))bits.push('peak sampled wind/gust '+Math.round(forecast.peak_wind_kt)+' kt');if(Number.isFinite(Number(forecast.peak_wave_ft)))bits.push('peak sampled wave '+Number(forecast.peak_wave_ft).toFixed(1)+' ft');if(Number.isFinite(Number(forecast.precip_pct)))bits.push('precip up to '+Math.round(forecast.precip_pct)+'%');if(forecast.alert_count)bits.push(forecast.alert_count+' active NWS alert'+(forecast.alert_count===1?'':'s'));w.textContent='Forecast comparison: '+bits.join(' · ')+'.';card.appendChild(w);}
       const actions=document.createElement('div');actions.className='scenario-actions';const use=document.createElement('button');use.type='button';use.className='primary';use.textContent=route.activeScenario===scenario.id?'Reapply this plan':'Use this plan';use.addEventListener('click',()=>applyScenarioPlan(scenario));actions.appendChild(use);card.appendChild(actions);
       grid.appendChild(card);
     }
