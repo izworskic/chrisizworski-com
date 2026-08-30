@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Free Michigan Tool Embeds for Publishers | Chris Izworski</title>
+<meta name="description" content="Free publisher-ready Michigan and Great Lakes tools from Chris Izworski, including aurora, bridge, buoy, fall color, shipping, beach and river resources.">
+<meta name="robots" content="noindex,follow,noarchive">
+<link rel="canonical" href="https://chrisizworski.com/for-publishers/">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f6f5f1;color:#263129;font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:980px;margin:0 auto;padding:48px 20px 80px}.kicker{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#657469}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;color:#173c2c;font-weight:500}h1{font-size:40px;line-height:1.1;margin:.25rem 0 1rem}
+h2{margin-top:2.4rem}.lede{font-size:19px;max-width:760px}.notice{background:#fff;border-left:4px solid #2c5f2d;padding:16px 18px;margin:24px 0;border-radius:0 8px 8px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}.card{background:#fff;border:1px solid #dfe4de;border-radius:10px;padding:18px}
+.card h3{margin:0 0 7px;font-size:20px}.card p{margin:.4rem 0}.card a{color:#2c5f2d;font-weight:650}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#17231c;color:#eef7f0;padding:16px;border-radius:8px;font-size:13px}
+.small{font-size:13px;color:#617067}a{color:#2c5f2d}.footer{margin-top:48px;padding-top:20px;border-top:1px solid #d9ded8}
+</style>
+</head>
+<body>
+<main>
+<div class="kicker">Publisher resources</div>
+<h1>Put a useful Michigan tool on your site.</h1>
+<p class="lede">These are free, lightweight Michigan and Great Lakes planning tools built by Chris Izworski. Use a compact widget, a clean source link, or the Fall Color RSS feed. There is no charge and no commercial requirement.</p>
+
+<div class="notice">
+<strong>Privacy:</strong> the shared widget does not use cookies, geolocation, free-text visitor input or personal information on your site. It only loads public tool data and adds a publisher source tag when a visitor chooses to open a tool.
+</div>
+
+<h2>Publisher-ready tools</h2>
+<div class="grid">
+  <div class="card"><h3>Northern Lights Michigan</h3><p>Live NOAA-based aurora planning for tonight and the next few nights.</p><p><a href="/northern-lights-michigan/">Open tool</a></p><p class="small">Widget key: <code>aurora</code></p></div>
+  <div class="card"><h3>Mackinac Bridge Live</h3><p>Official bridge status, current wind, forecast wind and approach-road context.</p><p><a href="/mackinac-bridge-live/">Open tool</a></p><p class="small">Widget key: <code>mackinac-bridge</code></p></div>
+  <div class="card"><h3>Great Lakes Buoys</h3><p>Live NOAA/NDBC stations for waves, wind and water temperature.</p><p><a href="/great-lakes-buoys/">Open tool</a></p><p class="small">Widget key: <code>buoys</code></p></div>
+  <div class="card"><h3>Michigan Fall Color</h3><p>Live regional color, timing guidance, trip ideas and a daily seasonal note.</p><p><a href="/fall-color/">Open tool</a> · <a href="/fall-color/rss.xml">RSS feed</a></p><p class="small">Widget key: <code>fall-color</code></p></div>
+  <div class="card"><h3>Soo Locks Live</h3><p>Ship-schedule sources, vessel map, webcams and visitor planning.</p><p><a href="/soo-locks/">Open tool</a></p><p class="small">Widget key: <code>soo-locks</code></p></div>
+  <div class="card"><h3>Great Lakes Ship Tracker</h3><p>Great Lakes freighter discovery and live ship-watching tools.</p><p><a href="/great-lakes-freighter-tracking/">Open tool</a></p><p class="small">Widget key: <code>ship-tracker</code></p></div>
+  <div class="card"><h3>Michigan Beach Report</h3><p>Great Lakes beach-condition planning across Michigan.</p><p><a href="/great-lakes-beaches/">Open tool</a></p><p class="small">Widget key: <code>beaches</code></p></div>
+  <div class="card"><h3>Michigan Boat Launch Finder</h3><p>Find public boat-launch options before the drive.</p><p><a href="/michigan-boat-launches/">Open tool</a></p><p class="small">Widget key: <code>boat-launches</code></p></div>
+  <div class="card"><h3>Manistee River Guide</h3><p>River access, paddling and trip-planning guidance.</p><p><a href="/michigan-paddling/manistee-river/">Open tool</a></p><p class="small">Widget key: <code>manistee</code></p></div>
+  <div class="card"><h3>Au Sable Field Map</h3><p>Au Sable access, paddling, fishing and field-map planning.</p><p><a href="https://ausable.chrisizworski.com/">Open tool</a></p><p class="small">Widget key: <code>au-sable</code></p></div>
+</div>
+
+<h2>Copy-and-paste widget</h2>
+<p>Change <code>aurora</code> to any widget key above and replace <code>YOUR_SITE</code> with a short identifier for your publication or organization.</p>
+<pre>&lt;div
+  data-chris-tool-widget
+  data-tool="aurora"
+  data-source="YOUR_SITE"
+&gt;
+  &lt;a href="https://chrisizworski.com/northern-lights-michigan/"&gt;Northern Lights Michigan&lt;/a&gt;
+  by &lt;a href="https://chrisizworski.com/chris-izworski/"&gt;Chris Izworski&lt;/a&gt;
+&lt;/div&gt;
+&lt;script async src="https://chrisizworski.com/publisher-widget.js"&gt;&lt;/script&gt;</pre>
+
+<h2>Fall Color RSS</h2>
+<p>Newsletters, lodging sites and travel publishers can also consume the daily Michigan Fall Color feed directly:</p>
+<pre>https://chrisizworski.com/fall-color/rss.xml</pre>
+
+<h2>How to use these</h2>
+<p>Use the tool where it genuinely helps your visitor make a decision. A Sault Ste. Marie page might use Soo Locks Live. A dark-sky lodging page might use Northern Lights Michigan. A marina or fishing page might use Great Lakes Buoys. A fall travel page can use the Fall Color widget or RSS feed.</p>
+<p>These are not paid-link placements. Keep the tool only if it improves the page for your readers.</p>
+
+<div class="footer">
+<p>Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>. For the full collection, see <a href="https://chrisizworski.com/tools/">Michigan &amp; Great Lakes Tools</a>.</p>
+</div>
+</main>
+</body>
+</html>
