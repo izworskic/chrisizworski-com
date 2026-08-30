@@ -60,6 +60,9 @@
     cockpitRedo: document.getElementById('cockpit-redo'),
     cockpitReverse: document.getElementById('cockpit-reverse'),
     cockpitWeather: document.getElementById('cockpit-weather'),
+    cockpitSave: document.getElementById('cockpit-save'),
+    cockpitShare: document.getElementById('cockpit-share'),
+    cockpitGpx: document.getElementById('cockpit-gpx'),
     cockpitClear: document.getElementById('cockpit-clear'),
     cockpitSummary: document.getElementById('cockpit-route-summary'),
     cockpitStops: document.getElementById('cockpit-route-stops'),
@@ -68,6 +71,10 @@
     routeUndo: document.getElementById('route-undo'),
     routeRedo: document.getElementById('route-redo'),
     routeClear: document.getElementById('route-clear'),
+    routeSave: document.getElementById('route-save'),
+    routeRestore: document.getElementById('route-restore'),
+    routeShare: document.getElementById('route-share'),
+    routeExportGpx: document.getElementById('route-export-gpx'),
     routeModeSelect: document.getElementById('route-mode-select'),
     routeSpeed: document.getElementById('route-speed'),
     routeDayHours: document.getElementById('route-day-hours'),
@@ -2271,6 +2278,7 @@
   }
 
   function rememberRouteEdit() {
+    if(window.location.hash.startsWith('#trip='))window.history.replaceState(null,'',window.location.pathname+window.location.search);
     route.history.push(captureRouteSnapshot());
     if(route.history.length>40)route.history.shift();
     route.future=[];
@@ -2330,6 +2338,14 @@
     if(els.cockpitWeather)els.cockpitWeather.disabled=Boolean(els.routeWeatherButton?.disabled);
     if(els.cockpitReverse)els.cockpitReverse.disabled=route.points.length<2;
     if(els.cockpitClear)els.cockpitClear.disabled=!route.points.length;
+    if(els.cockpitSave)els.cockpitSave.disabled=!route.points.length;
+    if(els.cockpitShare)els.cockpitShare.disabled=!route.points.length;
+    const gpxReady=route.points.length>=2&&(route.mode==='hike'?route.smartState==='trail-snapped':route.smartState==='water-aware');
+    if(els.cockpitGpx)els.cockpitGpx.disabled=!gpxReady;
+    if(els.routeSave)els.routeSave.disabled=!route.points.length;
+    if(els.routeShare)els.routeShare.disabled=!route.points.length;
+    if(els.routeExportGpx)els.routeExportGpx.disabled=!gpxReady;
+    if(els.routeRestore)els.routeRestore.disabled=!hasSavedTrip();
     if(els.cockpitSummary) {
       const summary=els.routeSummary?.textContent||'No route yet.';
       const days=route.itinerary?.legs?.length;
@@ -2337,6 +2353,152 @@
       els.cockpitSummary.textContent=summary+(days?' · '+days+' day'+(days===1?'':'s'):'')+(scenario?' · '+scenario:'');
     }
     updateHistoryControls();
+  }
+  const TRIP_STORAGE_KEY='isle-royale-trip-v1';
+
+  function tripState() {
+    const center=map.getCenter();
+    return {
+      version:1,
+      saved_at:new Date().toISOString(),
+      mode:route.mode,
+      speed:Number(els.routeSpeed.value)||3,
+      hours:Number(els.routeDayHours?.value)||6,
+      departure:els.routeDeparture.value||'',
+      activeScenario:route.activeScenario||'balanced',
+      points:cloneRoutePoints().slice(0,40).map(point=>({
+        lat:Number(point.lat),lng:Number(point.lng),label:cleanText(point.label||'').slice(0,100),
+        kind:cleanText(point.kind||'map-point').slice(0,40),sourceBackedBoatIn:Boolean(point.sourceBackedBoatIn),
+        liveAlert:Boolean(point.liveAlert),manualDayEnd:Boolean(point.manualDayEnd),scenarioGenerated:Boolean(point.scenarioGenerated),
+        scenarioId:cleanText(point.scenarioId||'').slice(0,40),campId:cleanText(point.campId||'').slice(0,100)
+      })),
+      map:{lat:center.lat,lng:center.lng,zoom:map.getZoom()}
+    };
+  }
+
+  function normalizeTripState(raw) {
+    if(!raw||typeof raw!=='object'||Number(raw.version)!==1)return null;
+    const mode=['paddle','hike','powerboat'].includes(raw.mode)?raw.mode:'paddle';
+    const bounds={south:CONFIG.islandBounds[0][0]-.35,west:CONFIG.islandBounds[0][1]-.35,north:CONFIG.islandBounds[1][0]+.35,east:CONFIG.islandBounds[1][1]+.35};
+    const points=(Array.isArray(raw.points)?raw.points:[]).slice(0,40).map(item=>{
+      const lat=Number(item?.lat),lng=Number(item?.lng);
+      if(!Number.isFinite(lat)||!Number.isFinite(lng)||lat<bounds.south||lat>bounds.north||lng<bounds.west||lng>bounds.east)return null;
+      return {
+        lat,lng,label:cleanText(item?.label||'Waypoint').slice(0,100),kind:cleanText(item?.kind||'map-point').slice(0,40),
+        sourceBackedBoatIn:false,liveAlert:false,manualDayEnd:Boolean(item?.manualDayEnd),
+        scenarioGenerated:Boolean(item?.scenarioGenerated),scenarioId:cleanText(item?.scenarioId||'').slice(0,40),campId:cleanText(item?.campId||'').slice(0,100)
+      };
+    }).filter(Boolean);
+    const speed=Math.max(.5,Math.min(60,Number(raw.speed)||3));
+    const hours=Math.max(2,Math.min(12,Number(raw.hours)||6));
+    const mapState=raw.map&&Number.isFinite(Number(raw.map.lat))&&Number.isFinite(Number(raw.map.lng))
+      ? {lat:Number(raw.map.lat),lng:Number(raw.map.lng),zoom:Math.max(6,Math.min(18,Number(raw.map.zoom)||10))}:null;
+    return {version:1,mode,speed,hours,departure:cleanText(raw.departure||'').slice(0,40),activeScenario:cleanText(raw.activeScenario||'balanced').slice(0,40),points,map:mapState};
+  }
+
+  function applyTripState(raw,{remember=true,message='Trip restored.'}={}) {
+    const state=normalizeTripState(raw);
+    if(!state)return false;
+    if(remember)rememberRouteEdit();
+    route.waterToken++;
+    route.points=cloneRoutePoints(state.points);
+    route.mode=state.mode;
+    route.activeScenario=state.activeScenario||'balanced';
+    els.routeModeSelect.value=state.mode;
+    els.routeSpeed.value=String(state.speed);
+    if(els.routeDayHours)els.routeDayHours.value=String(state.hours);
+    if(state.departure&&Number.isFinite(new Date(state.departure).getTime()))els.routeDeparture.value=state.departure;
+    route.resolvedPoints=[];route.trailNames=[];route.waterStats=null;route.waterReason='';route.scenarios=[];route.scenarioWeather={};route.itinerary=null;route.itineraryWeather=null;
+    reroute(message+' Re-run weather for the restored schedule.');
+    if(state.map)window.setTimeout(()=>map.setView([state.map.lat,state.map.lng],state.map.zoom,{animate:false}),260);
+    syncCockpitControls();
+    return true;
+  }
+
+  function hasSavedTrip() {
+    try{return Boolean(localStorage.getItem(TRIP_STORAGE_KEY));}catch(_){return false;}
+  }
+
+  function saveTripToDevice() {
+    if(!route.points.length){status('Add at least one route point before saving.');return;}
+    try{
+      localStorage.setItem(TRIP_STORAGE_KEY,JSON.stringify(tripState()));
+      status('Trip saved on this device. It is not uploaded to the server.');
+      emitEvent('isle_royale_trip_save',{point_count:route.points.length,mode:route.mode});
+      syncCockpitControls();
+    }catch(_){status('This browser could not save the trip locally.');}
+  }
+
+  function restoreSavedTrip() {
+    try{
+      const raw=localStorage.getItem(TRIP_STORAGE_KEY);
+      if(!raw){status('No saved Isle Royale trip was found on this device.');return;}
+      const state=JSON.parse(raw);
+      if(!applyTripState(state,{remember:true,message:'Saved trip restored.'}))throw new Error('invalid trip');
+      emitEvent('isle_royale_trip_restore',{point_count:route.points.length,mode:route.mode});
+    }catch(_){status('The saved trip could not be restored.');}
+  }
+
+  function encodeTripState(state) {
+    const bytes=new TextEncoder().encode(JSON.stringify(state));
+    let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
+    return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  }
+
+  function decodeTripState(payload) {
+    try{
+      let base=String(payload||'').replace(/-/g,'+').replace(/_/g,'/');
+      while(base.length%4)base+='=';
+      const binary=atob(base),bytes=Uint8Array.from(binary,char=>char.charCodeAt(0));
+      return JSON.parse(new TextDecoder().decode(bytes));
+    }catch(_){return null;}
+  }
+
+  async function copyText(value) {
+    try{await navigator.clipboard.writeText(value);return true;}catch(_){
+      try{const area=document.createElement('textarea');area.value=value;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();const ok=document.execCommand('copy');area.remove();return ok;}catch(__){return false;}
+    }
+  }
+
+  async function copyTripShareLink() {
+    if(!route.points.length){status('Build a route before creating a share link.');return;}
+    const url=new URL(window.location.href);
+    url.hash='trip='+encodeTripState(tripState());
+    window.history.replaceState(null,'',url.toString());
+    const copied=await copyText(url.toString());
+    status(copied?'Share link copied. The route is encoded only in the URL fragment.':'Could not copy automatically; use your browser address bar after creating the share link.');
+    emitEvent('isle_royale_trip_share',{point_count:route.points.length,mode:route.mode,result:copied?'copied':'copy-failed'});
+  }
+
+  function loadSharedTripFromHash() {
+    const hash=window.location.hash||'';
+    if(!hash.startsWith('#trip='))return false;
+    const raw=decodeTripState(hash.slice(6));
+    if(!raw||!applyTripState(raw,{remember:false,message:'Shared trip loaded from this link.'})){status('The shared trip link is invalid or no longer readable.');return false;}
+    emitEvent('isle_royale_trip_open',{point_count:route.points.length,mode:route.mode});
+    return true;
+  }
+
+  function xmlEscape(value) {
+    return String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+  }
+
+  function exportRouteGpx() {
+    const path=routePathPoints();
+    if(path.length<2){status('Build a route with at least two points before exporting GPX.');return;}
+    const resolved=route.mode==='hike'?route.smartState==='trail-snapped':route.smartState==='water-aware';
+    if(!resolved){status('Wait for the mapped trail/water-aware route to finish before exporting GPX; temporary fallback sketches are not exported.');return;}
+    const desc='Planning export from Chris Izworski Isle Royale Map. Not a navigation chart. Verify current NPS maps, regulations, conditions and marine guidance before travel.';
+    const waypoints=route.points.map((point,index)=>{
+      const role=routePointRole(point,index,route.points.length);
+      return '<wpt lat="'+point.lat.toFixed(6)+'" lon="'+point.lng.toFixed(6)+'"><name>'+xmlEscape(point.label||role)+'</name><type>'+xmlEscape(role)+'</type><desc>'+xmlEscape(point.manualDayEnd?'Manual '+role:role)+'</desc></wpt>';
+    }).join('');
+    const track=path.map(point=>'<trkpt lat="'+Number(point.lat).toFixed(6)+'" lon="'+Number(point.lng).toFixed(6)+'"></trkpt>').join('');
+    const gpx='<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="Chris Izworski Isle Royale Map" xmlns="http://www.topografix.com/GPX/1/1"><metadata><name>Isle Royale planning route</name><desc>'+xmlEscape(desc)+'</desc></metadata>'+waypoints+'<trk><name>Isle Royale '+xmlEscape(route.mode)+' planning route</name><desc>'+xmlEscape(desc)+'</desc><trkseg>'+track+'</trkseg></trk></gpx>';
+    const blob=new Blob([gpx],{type:'application/gpx+xml;charset=utf-8'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+    link.href=url;link.download='isle-royale-trip.gpx';document.body.appendChild(link);link.click();link.remove();window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+    status('GPX planning export created with route geometry and trip-stop waypoints.');
+    emitEvent('isle_royale_trip_export',{format:'gpx',point_count:route.points.length,mode:route.mode});
   }
   function resizePlanningMap() {
     window.setTimeout(()=>map.invalidateSize({pan:false}),230);
@@ -2790,6 +2952,13 @@
   els.cockpitReverse?.addEventListener('click',reverseRoute);
   els.cockpitWeather?.addEventListener('click',analyzeRouteWeather);
   els.cockpitClear?.addEventListener('click',clearRoute);
+  els.cockpitSave?.addEventListener('click',saveTripToDevice);
+  els.cockpitShare?.addEventListener('click',copyTripShareLink);
+  els.cockpitGpx?.addEventListener('click',exportRouteGpx);
+  els.routeSave?.addEventListener('click',saveTripToDevice);
+  els.routeRestore?.addEventListener('click',restoreSavedTrip);
+  els.routeShare?.addEventListener('click',copyTripShareLink);
+  els.routeExportGpx?.addEventListener('click',exportRouteGpx);
   els.cockpitMode?.addEventListener('change',()=>{
     if(els.cockpitMode.value===els.routeModeSelect.value)return;
     els.routeModeSelect.value=els.cockpitMode.value;
@@ -2872,7 +3041,8 @@
   setDefaultRouteDeparture();
   els.exploreModeButton?.setAttribute('aria-pressed','true');
   els.routeModeButton?.setAttribute('aria-pressed','false');
-  renderRoute();
+  const sharedTripLoaded=loadSharedTripFromHash();
+  if(!sharedTripLoaded)renderRoute();
   updateHistoryControls();
   syncCockpitControls();
   renderFeatureList();

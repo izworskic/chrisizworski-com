@@ -207,6 +207,27 @@ test('map-first route builder separates Explore from persistent Build mode and m
   assert.doesNotMatch(js, /scrollIntoView\(\{behavior:'smooth'.*route-planner/);
 });
 
+test('trip persistence stays local/share-fragment based and GPX exports only resolved geometry', () => {
+  assert.match(html, /id="route-save"/);
+  assert.match(html, /id="route-restore"/);
+  assert.match(html, /id="route-share"/);
+  assert.match(html, /id="route-export-gpx"/);
+  assert.match(html, /id="cockpit-save"/);
+  assert.match(html, /id="cockpit-share"/);
+  assert.match(html, /id="cockpit-gpx"/);
+  assert.match(js, /TRIP_STORAGE_KEY='isle-royale-trip-v1'/);
+  assert.match(js, /localStorage\.setItem\(TRIP_STORAGE_KEY/);
+  assert.match(js, /url\.hash='trip='/);
+  assert.match(js, /window\.history\.replaceState\(null,'',url\.toString\(\)\)/);
+  assert.match(js, /window\.location\.hash\.startsWith\('#trip='\)/);
+  assert.match(js, /sourceBackedBoatIn:false,liveAlert:false/);
+  assert.match(js, /function exportRouteGpx/);
+  assert.match(js, /application\/gpx\+xml/);
+  assert.match(js, /temporary fallback sketches are not exported/);
+  assert.match(js, /Planning export from Chris Izworski Isle Royale Map\. Not a navigation chart/);
+  assert.match(js, /const gpxReady=route\.points\.length>=2/);
+});
+
 test('focus map becomes a real planning cockpit with shared controls and reversible edits', () => {
   assert.match(html, /id="planning-cockpit"/);
   assert.match(html, /id="cockpit-route-mode"/);

@@ -1,5 +1,5 @@
 {
-  "version": "1.8.0",
+  "version": "1.9.0",
   "updated": "2026-08-30",
   "route": "/isle-royale-map/",
   "objective": "Build the most useful source-transparent Isle Royale planning map in the Chris Izworski tool network without pretending static cartography is authoritative GIS.",
@@ -64,7 +64,7 @@
     {
       "id": "planning-flow",
       "weight": 15,
-      "target": "Focus map must be a real planning cockpit, not just a larger map. It must expose synchronized mode/speed/day controls, route-stop/day-end editing, reverse/clear/weather actions, and true undo/redo history that restores route points, camp choices, manual day ends, scenario-inserted stops, mode and travel assumptions."
+      "target": "Trip planning must survive beyond one browser moment: local-only save/restore, deliberate URL-fragment sharing, and GPX export of resolved route geometry plus campsite/day-end waypoints. Restored/shared state must not trust stale Boat-In or closure flags; current NPS enrichment re-establishes those claims."
     },
     {
       "id": "provenance",
@@ -118,7 +118,8 @@
     "Do not call map-first routing complete if Build mode auto-exits after two points, map clicks scroll the user away from the map, campground clicks do not become explicit route stops, or map-selected NPS Boat-In camps can be silently replaced by scenario generation.",
     "Do not call day-end planning complete unless users can explicitly set and clear campsite day ends from the route-building experience, those anchors override automatic day splitting across all scenarios, trip starts cannot become day ends, and water-trip day ends remain constrained by current NPS Boat-In/closure truth.",
     "Do not call the route planner usable if the map remains reference-sized during Build mode, landscape tablet planning is constrained to a short viewport, full-map focus is unavailable, or Leaflet is not invalidated after responsive/focus layout changes.",
-    "Do not call Focus map complete if users must leave it to edit the trip, if its controls can drift from the side panel, or if Undo only deletes the last point instead of restoring full route-edit state with Redo support."
+    "Do not call Focus map complete if users must leave it to edit the trip, if its controls can drift from the side panel, or if Undo only deletes the last point instead of restoring full route-edit state with Redo support.",
+    "Do not call trip handoff complete if saving uploads route state, sharing puts route data in the server-visible query string, restored trips trust stale closure/Boat-In flags, or GPX can export a temporary straight fallback before trail/water routing resolves."
   ],
   "initialBuildFit": {
     "distinctSearchIntent": 24,
