@@ -15,8 +15,10 @@
     deepManifest: '/isle-royale-map/data/deep-layer-manifest.json',
     deepLayers: {
       geology: '/isle-royale-map/data/geology-units.geojson',
+      'vegetation-overview': '/isle-royale-map/data/vegetation-overview-2000.geojson',
       'vegetation-baseline': '/isle-royale-map/data/vegetation-baseline-2000.geojson'
     },
+    reliefTiles: 'https://basemap.nationalmap.gov/arcgis/rest/services/USGSShadedReliefOnly/MapServer/tile/{z}/{y}/{x}',
     contextManifest: '/isle-royale-map/data/context-layer-manifest.json',
     contextLayers: {
       'quiet-no-wake': '/isle-royale-map/data/quiet-no-wake-zones.geojson',
@@ -46,7 +48,19 @@
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
   }).addTo(map);
 
+  map.createPane('reliefPane');
+  map.getPane('reliefPane').style.zIndex = '250';
+  map.getPane('reliefPane').style.pointerEvents = 'none';
+  const reliefLayer = L.tileLayer(CONFIG.reliefTiles, {
+    pane:'reliefPane',
+    maxZoom:18,
+    maxNativeZoom:16,
+    opacity:.48,
+    attribution:'USGS The National Map · 3DEP / GMTED2010'
+  });
+
   const layerGroups = {
+    relief: reliefLayer,
     trail: L.layerGroup().addTo(map),
     campground: L.layerGroup().addTo(map),
     'visitor-service': L.layerGroup().addTo(map),
@@ -54,6 +68,7 @@
     'maritime-history': L.layerGroup().addTo(map),
     'quiet-no-wake': L.layerGroup(),
     geology: L.layerGroup(),
+    'vegetation-overview': L.layerGroup(),
     'vegetation-baseline': L.layerGroup(),
     'vegetation-change': L.layerGroup(),
     'horne-fire': L.layerGroup(),
@@ -67,9 +82,11 @@
     'visitor-service': 'visitor place',
     'water-route': 'water / transport route',
     'maritime-history': 'maritime / history',
+    relief: 'USGS shaded relief',
     'quiet-no-wake': 'quiet / no-wake zone',
     geology: 'geologic unit',
-    'vegetation-baseline': 'vegetation baseline (2000)',
+    'vegetation-overview': 'vegetation overview (2000)',
+    'vegetation-baseline': 'vegetation detailed baseline (2000)',
     'vegetation-change': 'vegetation change 1996–2017',
     'horne-fire': '2021 Horne Fire burn severity',
     'science-reference': 'science / reference',
@@ -96,6 +113,7 @@
     manifest: null,
     manifestPromise: null,
     geology: {state:'available', count:0, error:''},
+    'vegetation-overview': {state:'available', count:0, error:''},
     'vegetation-baseline': {state:'available', count:0, error:''}
   };
   const deepConfig = {
@@ -105,9 +123,15 @@
       sourceLabel:'National Park Service Geologic Resources Inventory',
       sourceKind:'generated NPS GRI web derivative'
     },
+    'vegetation-overview': {
+      manifestKey:'vegetation_overview',
+      label:'Vegetation overview (2000)',
+      sourceLabel:'National Park Service vegetation inventory',
+      sourceKind:'derived six-class historical NPS vegetation overview'
+    },
     'vegetation-baseline': {
       manifestKey:'vegetation',
-      label:'Vegetation baseline (2000)',
+      label:'Vegetation detailed (2000)',
       sourceLabel:'National Park Service vegetation inventory',
       sourceKind:'generated historical NPS inventory derivative'
     }
@@ -151,6 +175,7 @@
     'maritime-history': {color:'#65547c', fillColor:'#65547c'},
     'quiet-no-wake': {color:'#7f4f78', fillColor:'#a86b9e', weight:2, opacity:.85, fillOpacity:.14},
     geology: {color:'#786a58', fillColor:'#9a8b76', weight:1.2, opacity:.72, fillOpacity:.16},
+    'vegetation-overview': {color:'#445e4c', fillColor:'#6e826f', weight:1.1, opacity:.72, fillOpacity:.24},
     'vegetation-baseline': {color:'#586a58', fillColor:'#71806b', weight:.8, opacity:.58, fillOpacity:.20},
     'vegetation-change': {color:'#4f6b61', fillColor:'#729184', weight:1, opacity:.68, fillOpacity:.18},
     'horne-fire': {color:'#7b4f3e', fillColor:'#9d6952', weight:1.2, opacity:.78, fillOpacity:.22},
@@ -513,7 +538,7 @@
         added = await loadWebMap(itemId);
         if (added > 0) {
           sourceStatus.arcgis = `loaded ${added} public visitor features`;
-          els.sourceStatus.textContent = `Preferred NPS/ArcGIS visitor geometry loaded (${added} features). Deep science and regulation-sensitive polygon layers remain separately cataloged until normalized.`;
+          els.sourceStatus.textContent = `Preferred NPS/ArcGIS visitor geometry loaded (${added} features). Verified NPS boating zones and federal science layers are available as independent opt-in overlays.`;
           status(`Loaded ${added} public visitor features. Search or filter the map; deep layers remain source-cataloged below.`);
           visitorGeometrySettled = true;
           addPendingShipwrecks();
@@ -767,7 +792,7 @@
     els.deepStatus.replaceChildren();
     const manifestSources = deep.manifest?.sources || {};
 
-    for (const id of ['geology','vegetation-baseline']) {
+    for (const id of ['geology','vegetation-overview','vegetation-baseline']) {
       const cfg = deepConfig[id];
       const state = deep[id];
       const meta = manifestSources[cfg.manifestKey] || {};
@@ -788,7 +813,7 @@
 
     const caveat = document.createElement('div');
     caveat.className = 'ops-source';
-    caveat.textContent = 'Vegetation is a historical inventory baseline, not present-day forest condition. Geology is interpretive mapping, not survey-grade. Both layers are loaded only when selected.';
+    caveat.textContent = 'Both vegetation views are historical 2000-inventory derivatives, not present-day forest condition. The 844 KB overview is intended for orientation; the 24.9 MB detailed view exposes all 38 mapped classes. Geology is interpretive mapping, not survey-grade.';
     els.deepStatus.appendChild(caveat);
   }
 
@@ -1017,6 +1042,10 @@
     if (selectedLayer && selectedLayer.closePopup) selectedLayer.closePopup();
     selectedLayer = null;
     map.closePopup();
+  });
+
+  document.querySelectorAll('.map-shelf a[href]').forEach(link => {
+    link.addEventListener('click', () => emitEvent('isle_royale_source_open', {source_id:'reference-shelf'}));
   });
 
   async function loadCatalog() {
