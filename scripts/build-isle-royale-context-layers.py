@@ -194,7 +194,8 @@ def nps_quiet_diagnostics():
 
     for asset in [
         "https://www.nps.gov/maps/assets/js/load.min.js",
-        "https://www.nps.gov/maps/assets/libs/reqwest.min.js",
+        f"https://www.nps.gov/maps/builder/configs/{QUIET_WEBMAP}.jsonp?callback=callback",
+        "https://www.nps.gov/maps/builder/configs/588bfb2d-4858-4723-a761-3d253edbb8c0.jsonp?callback=callback",
     ]:
         try:
             body = fetch_bytes(asset, timeout=30).decode("utf-8", errors="replace")
