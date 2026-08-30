@@ -40,7 +40,7 @@ jobs:
           root=pathlib.Path("public/isle-royale-map/data")
           manifest=json.loads((root/"context-layer-manifest.json").read_text())
           expected={
-              "quiet_no_wake":("quiet-no-wake-zones.geojson",17,5_000_000),
+              "quiet_no_wake":("quiet-no-wake-zones.geojson",22,5_000_000),
               "vegetation_change":("vegetation-change-1996-2017.geojson",1,15_000_000),
               "horne_fire":("horne-fire-burn-severity.geojson",1,15_000_000),
           }
@@ -52,7 +52,9 @@ jobs:
               assert fc["type"]=="FeatureCollection", (key,"not FeatureCollection")
               assert len(fc["features"])>=min_features, (key,len(fc["features"]))
               if key=="quiet_no_wake":
-                  assert len(fc["features"])==17, len(fc["features"])
+                  assert len(fc["features"])==22, len(fc["features"])
+                  assert meta["quiet_no_wake_features"]==19, meta
+                  assert meta["no_wake_features"]==3, meta
               assert len(data)<=max_bytes, (key,len(data),max_bytes)
               assert meta["file"]==filename
               assert meta["bytes"]==len(data)
