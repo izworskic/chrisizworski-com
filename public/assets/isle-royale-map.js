@@ -1737,6 +1737,125 @@
     return facts.join(' · ');
   }
 
+  function scenarioById(id){return route.scenarios.find(scenario=>scenario.id===id)||null;}
+
+  function scenarioForecastSamples(scenario,departure,speed){
+    const path=routePathPoints();
+    const samples=[];
+    for(const leg of scenario?.itinerary?.legs||[]){
+      if(samples.length>=8)break;
+      const midpoint=(leg.start_miles+leg.end_miles)/2;
+      const part=window.IsleRoyaleWaterIntel.slicePath(path,Math.max(0,midpoint-.01),midpoint);
+      const point=part[part.length-1];
+      if(!point)continue;
+      const legElapsedHours=(leg.distance_miles/2)/Math.max(.5,speed);
+      const target=new Date(departure.getTime()+(leg.day-1)*24*3600000+legElapsedHours*3600000);
+      const fullLeg=window.IsleRoyaleWaterIntel.slicePath(path,leg.start_miles,leg.end_miles);
+      const bearing=fullLeg.length>1?bearingDegrees(fullLeg[0],fullLeg[fullLeg.length-1]):null;
+      samples.push({
+        lat:point.lat,lon:point.lng,label:scenario.title+' · Day '+leg.day,
+        distance_miles:midpoint,bearing_deg:bearing,target_time:target.toISOString(),day:leg.day
+      });
+    }
+    return samples;
+  }
+
+  function summarizeScenarioForecast(data,scenario){
+    const forecasts=(data?.forecasts||[]).filter(f=>!f.error);
+    const peakWind=forecasts.reduce((m,f)=>Math.max(m,Number(f.wind_gust_kt)||Number(f.wind_speed_kt)||0),0)||null;
+    const peakWave=forecasts.reduce((m,f)=>Math.max(m,Number(f.wave_height_ft)||0),0)||null;
+    const precip=forecasts.reduce((m,f)=>Math.max(m,Number(f.precip_probability_pct)||0),0);
+    return {
+      peak_wind_kt:peakWind,peak_wave_ft:peakWave,precip_pct:precip,
+      samples:forecasts.length,alert_count:(data?.alerts||[]).length,
+      days:summarizeItineraryWeather(scenario.itinerary,data?.forecasts||[])
+    };
+  }
+
+  function applyScenarioPlan(scenario){
+    if(!scenario?.itinerary||route.points.length<2)return;
+    const path=routePathPoints();
+    const base=route.points.filter(point=>!point.scenarioGenerated);
+    if(base.length<2)return;
+    const start=base[0],end=base[base.length-1];
+    const entries=[];
+    for(const point of base.slice(1,-1)){
+      const projection=window.IsleRoyaleWaterIntel.projectPointToPath(point,path);
+      entries.push({along:projection?.along_miles??Infinity,point});
+    }
+    for(const leg of scenario.itinerary.legs||[]){
+      const camp=leg.stop;
+      if(!camp)continue;
+      entries.push({
+        along:Number(camp.along_miles)||Number(leg.end_miles)||Infinity,
+        point:{lat:Number(camp.lat),lng:Number(camp.lng),label:camp.name,scenarioGenerated:true,scenarioId:scenario.id,campId:camp.id}
+      });
+    }
+    entries.sort((a,b)=>a.along-b.along);
+    route.points=[start,...entries.map(entry=>entry.point),end];
+    route.activeScenario=scenario.id;
+    reroute(scenario.title+' scenario applied. Source-backed overnight stops were added; re-run forecast comparison after the route resolves.');
+    emitEvent('isle_royale_scenario_apply',{scenario:scenario.id,mode:route.mode,overnights:scenario.itinerary.summary?.overnights||0});
+  }
+
+  async function compareScenarioWeather(){
+    if(route.mode==='hike'||route.smartState!=='water-aware'||!route.scenarios.length)return;
+    const departure=new Date(els.routeDeparture.value);
+    if(!Number.isFinite(departure.getTime())){status('Choose a valid departure time before comparing scenario forecasts.');return;}
+    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    route.scenarioWeatherLoading=true;
+    route.scenarioWeather={};
+    renderRouteScenarios();
+    try{
+      const results=await Promise.all(route.scenarios.map(async scenario=>{
+        const samples=scenarioForecastSamples(scenario,departure,speed);
+        if(!samples.length)return [scenario.id,null];
+        const response=await fetch(CONFIG.routeWeatherEndpoint,{
+          method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+          body:JSON.stringify({departure:departure.toISOString(),speed_mph:speed,waypoints:samples})
+        });
+        const data=await response.json();
+        if(!response.ok)throw new Error(data?.error||response.status+' scenario forecast failed');
+        return [scenario.id,summarizeScenarioForecast(data,scenario)];
+      }));
+      route.scenarioWeather=Object.fromEntries(results.filter(([,value])=>value));
+      emitEvent('isle_royale_scenario_weather',{scenario_count:Object.keys(route.scenarioWeather).length,mode:route.mode});
+      status('Scenario forecast comparison loaded using each plan’s actual day schedule.');
+    }catch(error){
+      route.scenarioWeather={};
+      status('Scenario forecast comparison unavailable: '+cleanText(error?.message||error));
+    }finally{route.scenarioWeatherLoading=false;renderRouteScenarios();}
+  }
+
+  function renderRouteScenarios(){
+    if(!els.routeScenarios)return;
+    els.routeScenarios.replaceChildren();
+    if(route.mode==='hike'||route.smartState!=='water-aware'||!route.scenarios.length)return;
+    const toolbar=document.createElement('div');toolbar.className='scenario-toolbar';
+    const label=document.createElement('strong');label.textContent='Compare trip styles';toolbar.appendChild(label);
+    const compare=document.createElement('button');compare.type='button';compare.disabled=route.scenarioWeatherLoading;
+    compare.textContent=route.scenarioWeatherLoading?'Comparing NWS forecast…':'Compare forecast across scenarios';
+    compare.addEventListener('click',compareScenarioWeather);toolbar.appendChild(compare);els.routeScenarios.appendChild(toolbar);
+    const grid=document.createElement('div');grid.className='scenario-grid';
+    for(const scenario of route.scenarios){
+      const summary=scenario.itinerary.summary||{};
+      const card=document.createElement('article');card.className='scenario-card'+(route.activeScenario===scenario.id?' active':'');
+      const title=document.createElement('h4');title.textContent=scenario.title;card.appendChild(title);
+      const kicker=document.createElement('div');kicker.className='scenario-kicker';kicker.textContent=scenario.short;card.appendChild(kicker);
+      const metrics=document.createElement('div');metrics.className='scenario-metrics';
+      const metricData=[[scenario.hours.toFixed(1)+'h','travel day'],[String(summary.days||0),'days'],[(summary.max_day_miles||0).toFixed(1)+' mi','longest day'],[(summary.max_daily_exposed_stretch_miles||0).toFixed(1)+' mi','max exposed stretch']];
+      for(const [value,name] of metricData){const box=document.createElement('div');box.className='scenario-metric';box.innerHTML='<b></b><span></span>';box.querySelector('b').textContent=value;box.querySelector('span').textContent=name;metrics.appendChild(box);}card.appendChild(metrics);
+      const campNames=(scenario.itinerary.legs||[]).filter(leg=>leg.stop).map(leg=>leg.stop.name);
+      const camps=document.createElement('div');camps.className='scenario-camps';camps.textContent=campNames.length?'Overnights: '+campNames.join(' → '):'No overnight campground required for this route.';card.appendChild(camps);
+      if(summary.gaps){const warning=document.createElement('div');warning.className='scenario-warning';warning.textContent=summary.gaps+' day-end window'+(summary.gaps===1?' has':'s have')+' no qualified NPS Boat-In campground. The planner leaves that gap explicit.';card.appendChild(warning);}
+      const forecast=route.scenarioWeather?.[scenario.id];
+      if(forecast){const w=document.createElement('div');w.className='scenario-weather';const bits=[];if(Number.isFinite(Number(forecast.peak_wind_kt)))bits.push('peak sampled wind/gust '+Math.round(forecast.peak_wind_kt)+' kt');if(Number.isFinite(Number(forecast.peak_wave_ft)))bits.push('peak sampled wave '+Number(forecast.peak_wave_ft).toFixed(1)+' ft');if(Number.isFinite(Number(forecast.precip_pct)))bits.push('precip up to '+Math.round(forecast.precip_pct)+'%');if(forecast.alert_count)bits.push(forecast.alert_count+' active NWS alert'+(forecast.alert_count===1?'':'s'));w.textContent='Forecast comparison: '+bits.join(' · ')+'.';card.appendChild(w);}
+      const actions=document.createElement('div');actions.className='scenario-actions';const use=document.createElement('button');use.type='button';use.className='primary';use.textContent=route.activeScenario===scenario.id?'Reapply this plan':'Use this plan';use.addEventListener('click',()=>applyScenarioPlan(scenario));actions.appendChild(use);card.appendChild(actions);
+      grid.appendChild(card);
+    }
+    els.routeScenarios.appendChild(grid);
+    const note=document.createElement('div');note.className='route-intelligence-meta';note.textContent='Scenario names describe trip structure, not safety. Forecast comparison samples each plan on its own day schedule and remains planning context, not a go/no-go recommendation.';els.routeScenarios.appendChild(note);
+  }
   function renderRouteItinerary(){
     if(!els.routeItinerary)return;
     els.routeItinerary.replaceChildren();
