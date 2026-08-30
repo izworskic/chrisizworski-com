@@ -1617,6 +1617,61 @@
     if(route.mode!=='hike'&&route.points.length>=2)resolveWaterRouteAsync();
   }
 
+  function routeDayMarkers(path) {
+    if(!window.IsleRoyaleWaterIntel?.dayEnds||path.length<2)return [];
+    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    const hours=Math.max(2,Number(els.routeDayHours?.value)||6);
+    return window.IsleRoyaleWaterIntel.dayEnds(path,speed,hours);
+  }
+
+  function renderRouteIntelligence() {
+    if(!els.routeIntelligence)return;
+    els.routeIntelligence.replaceChildren();
+    if(route.points.length<2)return;
+    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    const dayHours=Math.max(2,Number(els.routeDayHours?.value)||6);
+    const total=routeTotalMiles();
+    const daily=speed*dayHours;
+    const travel=document.createElement('div');
+    travel.className='route-intelligence-card';
+    const days=total>0?Math.max(1,Math.ceil(total/daily)):1;
+    travel.innerHTML='<strong></strong><span></span>';
+    travel.querySelector('strong').textContent='Travel Assistant';
+    travel.querySelector('span').textContent=dayHours+'h travel day at '+speed.toFixed(1)+' mph ≈ '+daily.toFixed(1)+' mi/day · about '+days+' travel day'+(days===1?'':'s')+' for this route, before breaks or camp chores.';
+    els.routeIntelligence.appendChild(travel);
+
+    if(route.mode==='hike')return;
+    if(route.smartState==='water-loading'||route.smartState==='water-pending'){
+      const loading=document.createElement('div');loading.className='route-intelligence-card';
+      loading.innerHTML='<strong>Water intelligence</strong><span>Checking coastline geometry, exposure and nearby refuge options…</span>';
+      els.routeIntelligence.appendChild(loading);return;
+    }
+    if(route.smartState==='water-fallback'){
+      const fallback=document.createElement('div');fallback.className='route-intelligence-card route-warning';
+      fallback.innerHTML='<strong>Planning geometry unavailable</strong><span></span>';
+      fallback.querySelector('span').textContent='The editable sketch remains visible, but coastline avoidance and exposure analysis are unavailable. Verify an official chart/map before operating.';
+      els.routeIntelligence.appendChild(fallback);return;
+    }
+    if(route.smartState!=='water-aware'||!route.waterStats)return;
+    const stats=route.waterStats;
+    const exposure=document.createElement('div');exposure.className='route-intelligence-card';
+    exposure.innerHTML='<strong>Open-water exposure model</strong><span></span>';
+    exposure.querySelector('span').textContent='Farthest sampled point from mapped shoreline: '+Number(stats.max_offshore_miles||0).toFixed(1)+' mi · modeled travel >1.5 mi offshore: '+Number(stats.exposed_miles||0).toFixed(1)+' mi · longest continuous exposed stretch: '+Number(stats.longest_exposed_miles||0).toFixed(1)+' mi.';
+    els.routeIntelligence.appendChild(exposure);
+    const zones=Array.isArray(stats.quiet_zones)?stats.quiet_zones:[];
+    const regulation=document.createElement('div');regulation.className='route-intelligence-card';
+    regulation.innerHTML='<strong>NPS boating-zone check</strong><span></span>';
+    regulation.querySelector('span').textContent=zones.length?('Route samples intersect '+zones.map(z=>z.name+' ('+z.type+')').join(', ')+'. Verify the current NPS rule before departure.'):'No sampled intersection with the 22 current Quiet/No-Wake polygons was detected. This is not a declaration that no boating rule applies.';
+    els.routeIntelligence.appendChild(regulation);
+    const refuges=Array.isArray(stats.refuges)?stats.refuges:[];
+    const refuge=document.createElement('div');refuge.className='route-intelligence-card';
+    refuge.innerHTML='<strong>Nearby mapped refuge / stopping options</strong><span></span>';
+    refuge.querySelector('span').textContent=refuges.length?refuges.map(r=>r.name+' ('+r.distance.toFixed(1)+' mi from route)').join(' · '):'No nearby campground/dock/visitor-place candidate was found in the currently loaded map data.';
+    els.routeIntelligence.appendChild(refuge);
+    const meta=document.createElement('div');meta.className='route-intelligence-meta';
+    meta.textContent='Planning model only. Coastline comes from OpenStreetMap; regulatory polygons remain NPS/IRMA authority. No depth, shoal, surf, current or safe-passage determination is made.';
+    els.routeIntelligence.appendChild(meta);
+  }
   function renderRoute() {
     routeLayerGroup.clearLayers();
     route.markers=[];
