@@ -106,6 +106,19 @@ const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js
   && /dayEnds/.test(waterJs)
   && /natural"="coastline/.test(waterApi)
   && /planning shoreline geometry only/i.test(waterApi);
+const itineraryRuntime = /id="route-itinerary"/.test(html)
+  && /function sourceBackedWaterCamps/.test(js)
+  && /record\.boater\|\|record\.liveAlert/.test(js)
+  && /function buildRouteItinerary/.test(js)
+  && /function summarizeItineraryWeather/.test(js)
+  && /function insertItineraryCampStop/.test(js)
+  && /isle_royale_itinerary_stop/.test(js)
+  && /planning candidate, not an availability claim/i.test(js)
+  && /function buildItinerary/.test(waterJs)
+  && /function projectPointToPath/.test(waterJs)
+  && /function slicePath/.test(waterJs)
+  && /\.slice\(0,8\)/.test(routeWeatherApi);
+
 const reliefRuntime = /USGSShadedReliefOnly\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/.test(js)
   && /data-layer="relief"/.test(html)
   && catalog.items.some(x => x.id === 'relief' && x.state === 'live-tile');
@@ -118,7 +131,7 @@ const referenceShelfComplete = /class="map-shelf"/.test(html)
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && waterIntelligenceRuntime, 'guided start/destination planning + trail-network hiking routes + mapped-coastline-aware water routing + Travel Assistant day reaches + route-time NWS wind/wave/weather + NPS zone/refuge/exposure intelligence');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && waterIntelligenceRuntime && itineraryRuntime, 'guided start/destination planning + trail-network hiking routes + mapped-coastline-aware water routing + Travel Assistant day reaches + source-backed NPS camp-first multi-day itinerary + per-day weather/exposure/regulation context');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -176,6 +189,7 @@ if (!osmToggleRuntime) hardFailures.push('OSM context is not a reversible layer'
 if (!routePlanningRuntime) hardFailures.push('route-aware marine planning runtime missing');
 if (!smartRoutingRuntime) hardFailures.push('smart trail routing runtime missing');
 if (!waterIntelligenceRuntime) hardFailures.push('water intelligence runtime missing or reduced to a draggable straight-line sketch');
+if (!itineraryRuntime) hardFailures.push('multi-day water itinerary is not source-backed by open NPS Boat-In campgrounds with per-day context');
 if (!reliefRuntime) hardFailures.push('keyless USGS relief runtime missing');
 if (!referenceShelfComplete) hardFailures.push('official/reference map shelf incomplete');
 if (deepManifest.sources?.vegetation_overview?.features !== 6 || deepManifest.sources?.vegetation_overview?.bytes >= deepManifest.sources?.vegetation?.bytes / 2) hardFailures.push('vegetation overview reduction gate failed');
