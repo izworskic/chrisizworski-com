@@ -207,6 +207,19 @@ test('map-first route builder separates Explore from persistent Build mode and m
   assert.doesNotMatch(js, /scrollIntoView\(\{behavior:'smooth'.*route-planner/);
 });
 
+test('manual campsite day ends are explicit, source-aware route decisions', () => {
+  assert.match(js, /function setCampDayEnd/);
+  assert.match(js, /End next day here/);
+  assert.match(js, /End day here/);
+  assert.match(js, /manualDayEnd/);
+  assert.match(js, /manual_day_end/);
+  assert.match(js, /not in the current NPS Boat-In campground feed/);
+  assert.match(js, /CURRENT NPS CLOSURE/);
+  assert.match(waterIntelJs, /nextManual=candidates\.find/);
+  assert.match(waterIntelJs, /manual_day_end:Boolean\(chosen\?\.manual_day_end\)/);
+  assert.match(waterIntelJs, /under_target:Boolean\(chosen\?\.manual_day_end/);
+});
+
 test('scenario planner compares three trip structures without turning them into safety scores', () => {
   assert.match(html, /id="route-scenarios"/);
   assert.match(html, /Balanced day/);

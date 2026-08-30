@@ -299,8 +299,9 @@
     let current=0,day=1;
     while(current<total-.05&&day<=maxDays){
       const remaining=total-current;
+      const nextManual=candidates.find(c=>c.manual_day_end&&!used.has(c.id)&&c.along_miles>current+.35)||null;
       const nextPinned=candidates.find(c=>c.pinned&&!used.has(c.id)&&c.along_miles>current+.35)||null;
-      if(remaining<=daily*1.15&&!nextPinned){
+      if(remaining<=daily*1.15&&!nextPinned&&!nextManual){
         legs.push({day,start_miles:current,end_miles:total,distance_miles:remaining,stop:null,alternatives:[],final:true,gap:false});
         current=total;
         break;
@@ -308,8 +309,9 @@
       const ideal=Math.min(total,current+daily);
       const minAdvance=Math.max(1,daily*.45),maxAdvance=daily*1.35;
       const minAlong=current+minAdvance;
-      const maxAlong=Math.min(total-.35,current+maxAdvance,nextPinned?nextPinned.along_miles:Infinity);
-      const viable=candidates.filter(c=>!used.has(c.id)&&!c.pinned&&c.along_miles>current+.5&&c.along_miles>=minAlong&&c.along_miles<=maxAlong);
+      const fixedBoundary=nextManual?.along_miles??nextPinned?.along_miles??Infinity;
+      const maxAlong=Math.min(total-.35,current+maxAdvance,fixedBoundary);
+      const viable=candidates.filter(c=>!used.has(c.id)&&!c.pinned&&!c.manual_day_end&&c.along_miles>current+.5&&c.along_miles>=minAlong&&c.along_miles<=maxAlong);
       const ranked=viable.map(c=>{
         const idealPenalty=Math.abs(c.along_miles-ideal)/Math.max(1,daily);
         const detourPenalty=c.distance_miles/Math.max(.25,maxDetour);
@@ -319,9 +321,11 @@
       }).sort((a,b)=>a.score-b.score||a.along_miles-b.along_miles);
 
       const pinnedWithinDay=nextPinned&&(nextPinned.along_miles-current)<=maxAdvance;
-      const chosen=pinnedWithinDay
-        ? nextPinned
-        : ranked[0]||nextPinned||null;
+      const chosen=nextManual
+        ? nextManual
+        : pinnedWithinDay
+          ? nextPinned
+          : ranked[0]||nextPinned||null;
       const end=chosen?chosen.along_miles:ideal;
       if(chosen)used.add(chosen.id);
       legs.push({
@@ -334,7 +338,9 @@
         final:false,
         gap:!chosen,
         pinned:Boolean(chosen?.pinned),
-        over_target:Boolean(chosen?.pinned&&(end-current)>maxAdvance)
+        manual_day_end:Boolean(chosen?.manual_day_end),
+        over_target:Boolean((chosen?.pinned||chosen?.manual_day_end)&&(end-current)>maxAdvance),
+        under_target:Boolean(chosen?.manual_day_end&&(end-current)<minAdvance)
       });
       current=end;
       day++;

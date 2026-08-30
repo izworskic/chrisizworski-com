@@ -543,6 +543,49 @@
     return true;
   }
 
+  function routePointForRecord(record) {
+    if(!record?.latlng)return null;
+    return route.points.find(point=>point.kind==='campground'&&distanceMiles(point,record.latlng)<.08)||null;
+  }
+
+  function manualDayNumber(point) {
+    let day=0;
+    for(const routePoint of route.points) {
+      if(routePoint.manualDayEnd)day++;
+      if(routePoint===point)return routePoint.manualDayEnd?day:null;
+    }
+    return null;
+  }
+
+  function setCampDayEnd(recordOrPoint,active=true) {
+    let point=recordOrPoint?.latlng ? routePointForRecord(recordOrPoint) : recordOrPoint;
+    if(!point&&recordOrPoint?.latlng) {
+      addFeatureToRoute(recordOrPoint);
+      point=routePointForRecord(recordOrPoint);
+    }
+    if(!point||point.kind!=='campground')return false;
+    if(active&&route.points[0]===point) {
+      status((point.label||'Campground')+' is the trip start, so it cannot also be a manual day end.');
+      return false;
+    }
+    if(point.liveAlert) {
+      status((point.label||'Campground')+' is currently flagged closed by NPS and cannot be used as a day end.');
+      return false;
+    }
+    if(active&&route.mode!=='hike'&&operational.loaded&&!point.sourceBackedBoatIn) {
+      status((point.label||'Campground')+' is not in the current NPS Boat-In campground feed, so it cannot be fixed as a water-trip day end.');
+      return false;
+    }
+    point.manualDayEnd=Boolean(active);
+    reroute((point.label||'Campground')+(active?' set as an explicit day end.':' returned to a normal route stop.'));
+    const day=manualDayNumber(point);
+    status(active
+      ? (point.label||'Campground')+' is now End Day '+day+'.'
+      : (point.label||'Campground')+' is no longer a fixed day end.');
+    emitEvent('isle_royale_manual_day_end',{active:Boolean(active),day:day||null,mode:route.mode});
+    return true;
+  }
+
   function popupNode(record) {
     const wrap = document.createElement('div');
     wrap.className = 'popup-detail';
@@ -610,6 +653,22 @@
         if(!closedCamp)addFeatureToRoute(record);
       });
       wrap.appendChild(routeAction);
+      if(record.category==='campground'&&!closedCamp) {
+        const dayEndAction=document.createElement('button');
+        dayEndAction.type='button';
+        dayEndAction.className='popup-action popup-route-action';
+        const existing=routePointForRecord(record);
+        dayEndAction.textContent=existing?.manualDayEnd
+          ? 'Remove fixed day end'
+          : 'End next day here';
+        dayEndAction.addEventListener('click',event=>{
+          event.preventDefault();
+          event.stopPropagation();
+          setCampDayEnd(record,!routePointForRecord(record)?.manualDayEnd);
+          map.closePopup();
+        });
+        wrap.appendChild(dayEndAction);
+      }
     }
 
     const links = relatedLinks(record);
@@ -1038,6 +1097,9 @@
       point.sourceBackedBoatIn=Boolean(match.boater);
       point.liveAlert=Boolean(match.liveAlert);
       point.sourceLabel=cleanText(match.sourceLabel||point.sourceLabel||'');
+      if(point.manualDayEnd&&route.mode!=='hike'&&operational.loaded&&(!point.sourceBackedBoatIn||point.liveAlert)) {
+        point.manualDayEnd=false;
+      }
     }
     renderFeatureList();
     if(route.points.length)renderRoute();
@@ -1605,8 +1667,9 @@
 
   function routeWaypointIcon(index,total,point={}) {
     const isCamp=point.kind==='campground';
+    const day=point.manualDayEnd?manualDayNumber(point):null;
     const cls=index===0?'is-start':index===total-1?'is-end':isCamp?'is-camp':'';
-    const label=index===0?'S':index===total-1?'D':isCamp?'C':String(index);
+    const label=index===0?'S':index===total-1?'D':day?'D'+day:isCamp?'C':String(index);
     return L.divIcon({
       className:'',
       html:`<span class="route-waypoint-icon ${cls}">${label}</span>`,
@@ -1716,9 +1779,11 @@
       if(record.category!=='campground'||!record.boater||record.liveAlert)continue;
       const point=recordRoutePoint(record);
       if(!point)continue;
-      const pinned=route.points.some(routePoint=>routePoint.kind==='campground'&&distanceMiles(routePoint,point)<.08);
+      const routePoint=route.points.find(routePoint=>routePoint.kind==='campground'&&distanceMiles(routePoint,point)<.08)||null;
+      const pinned=Boolean(routePoint);
+      const manual_day_end=Boolean(routePoint?.manualDayEnd);
       camps.push({
-        id:'camp-'+i,record_index:i,name:record.name,lat:point.lat,lng:point.lng,closed:false,pinned,
+        id:'camp-'+i,record_index:i,name:record.name,lat:point.lat,lng:point.lng,closed:false,pinned,manual_day_end,
         dock_depth:record.boater.dock_depth||'',shelters:record.boater.shelters||'',tent_sites:record.boater.tent_sites||'',
         stay_limit:record.boater.consecutive_night_limit||'',food_storage_lockers:record.boater.food_storage_lockers||''
       });
@@ -1948,7 +2013,7 @@
       if(leg.final){
         const finish=document.createElement('div');finish.className='itinerary-stop';finish.innerHTML='<b>Finish at route destination</b><small>Final leg reaches the selected destination rather than forcing another campground.</small>';card.appendChild(finish);
       }else if(leg.stop){
-        const stop=document.createElement('div');stop.className='itinerary-stop';stop.innerHTML='<b></b><small></small>';stop.querySelector('b').textContent=(leg.stop.pinned?'Chosen map campsite: ':'Best loaded overnight fit: ')+leg.stop.name;
+        const stop=document.createElement('div');stop.className='itinerary-stop';stop.innerHTML='<b></b><small></small>';stop.querySelector('b').textContent=(leg.manual_day_end?'Fixed day end: ':leg.stop.pinned?'Chosen map campsite: ':'Best loaded overnight fit: ')+leg.stop.name;
         const facts=campFactsText(leg.stop);stop.querySelector('small').textContent='NPS Boat-In campground · '+leg.stop.distance_miles.toFixed(1)+' mi from current planned line'+(facts?' · '+facts:'')+(leg.pinned?' · pinned because you selected it on the map':'')+(leg.over_target?' · this chosen stop creates a longer-than-profile travel day':'')+'. Planning candidate, not an availability claim.';card.appendChild(stop);
         const actions=document.createElement('div');actions.className='itinerary-actions';
         const use=document.createElement('button');use.type='button';use.className='primary';use.textContent='Route through '+leg.stop.name;use.addEventListener('click',()=>insertItineraryCampStop(leg.stop));actions.appendChild(use);
@@ -2015,7 +2080,10 @@
   function routePointRole(point,index,total) {
     if(index===0)return 'Start';
     if(index===total-1)return 'Destination';
-    if(point.kind==='campground')return point.sourceBackedBoatIn?'Boat-In campsite':'Campground stop';
+    if(point.kind==='campground') {
+      if(point.manualDayEnd)return 'End Day '+manualDayNumber(point);
+      return point.sourceBackedBoatIn?'Boat-In campsite':'Campground stop';
+    }
     if(point.kind==='visitor-service')return 'Place stop';
     return 'Via point';
   }
@@ -2026,10 +2094,10 @@
     if(!route.points.length)return;
     route.points.forEach((point,index)=>{
       const row=document.createElement('div');
-      row.className='route-stop-row'+(point.kind==='campground'?' is-camp':'');
+      row.className='route-stop-row'+(point.kind==='campground'?' is-camp':'')+(point.manualDayEnd?' is-day-end':'');
       const token=document.createElement('div');
       token.className='route-stop-token';
-      token.textContent=index===0?'S':index===route.points.length-1?'D':point.kind==='campground'?'C':String(index);
+      token.textContent=index===0?'S':index===route.points.length-1?'D':point.manualDayEnd?'D'+manualDayNumber(point):point.kind==='campground'?'C':String(index);
       const textWrap=document.createElement('button');
       textWrap.type='button';
       textWrap.className='route-stop-text';
@@ -2056,7 +2124,16 @@
         reroute('Route stop removed. Re-run weather after the route resolves.');
         status((point.label||'Route point')+' removed from trip.');
       });
-      row.append(token,textWrap,remove);
+      row.append(token,textWrap);
+      if(point.kind==='campground'&&index>0) {
+        const dayEnd=document.createElement('button');
+        dayEnd.type='button';
+        dayEnd.className='route-day-end-button';
+        dayEnd.textContent=point.manualDayEnd?'Clear day end':'End day here';
+        dayEnd.addEventListener('click',()=>setCampDayEnd(point,!point.manualDayEnd));
+        row.appendChild(dayEnd);
+      }
+      row.appendChild(remove);
       els.routeStopList.appendChild(row);
     });
   }
@@ -2163,18 +2240,21 @@
   }
 
   function addRoutePoint(latlng,label='',meta={}) {
-    if(!latlng||!Number.isFinite(latlng.lat)||!Number.isFinite(latlng.lng))return;
-    route.points.push({
+    if(!latlng||!Number.isFinite(latlng.lat)||!Number.isFinite(latlng.lng))return null;
+    const point={
       lat:Number(latlng.lat),
       lng:Number(latlng.lng),
       label:cleanText(label)||`Waypoint ${route.points.length+1}`,
       kind:cleanText(meta.kind||'map-point'),
       sourceBackedBoatIn:Boolean(meta.sourceBackedBoatIn),
       sourceLabel:cleanText(meta.sourceLabel||''),
-      liveAlert:Boolean(meta.liveAlert)
-    });
+      liveAlert:Boolean(meta.liveAlert),
+      manualDayEnd:Boolean(meta.manualDayEnd)
+    };
+    route.points.push(point);
     reroute('Route changed. Re-run the weather analysis for the updated path.');
     emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode,point_kind:cleanText(meta.kind||'map-point')});
+    return point;
   }
 
   function reverseRoute() {
