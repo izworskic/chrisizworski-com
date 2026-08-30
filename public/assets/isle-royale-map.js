@@ -1047,6 +1047,7 @@
       enrichExistingRecords();
       addPendingShipwrecks();
       renderOperationalStatus();
+      if(route.points.length>=2)renderRoute();
     } catch (_) {
       operational.loaded = true;
       operational.sources = {};
@@ -1552,6 +1553,7 @@
 
   function clearRouteWeather(message='') {
     route.weather=null;
+    route.itineraryWeather=null;
     els.routeWeather.replaceChildren();
     if(message) {
       const note=document.createElement('div');
@@ -1784,6 +1786,7 @@
     route.markers=[];
     route.line=null;
     const path=routePathPoints();
+    buildRouteItinerary(path);
 
     if(path.length) {
       route.line=L.polyline(path.map(p=>[p.lat,p.lng]),{
@@ -1829,6 +1832,13 @@
       }).bindTooltip('Day '+dayEnd.day+' reach · '+dayEnd.distance_miles.toFixed(1)+' mi',{direction:'top'})
         .addTo(routeLayerGroup);
     }
+    for(const leg of route.itinerary?.legs||[]) {
+      if(!leg.stop)continue;
+      L.circleMarker([leg.stop.lat,leg.stop.lng],{
+        pane:'routePane',radius:7,weight:2,fillOpacity:.95,interactive:true
+      }).bindTooltip('Day '+leg.day+' overnight candidate · '+leg.stop.name,{direction:'top'})
+        .addTo(routeLayerGroup);
+    }
 
     renderSmartStatus();
     const miles=routeTotalMiles();
@@ -1853,6 +1863,7 @@
       els.routeWeatherButton.disabled=false;
     }
     renderRouteIntelligence();
+    renderRouteItinerary();
   }
 
   function setRouteAdding(active) {
@@ -2098,7 +2109,9 @@
       const data=await response.json();
       if(!response.ok)throw new Error(data?.error||`${response.status} route forecast failed`);
       route.weather=data;
+      route.itineraryWeather=summarizeItineraryWeather(route.itinerary,data.forecasts||[]);
       renderRouteWeather(data,samples);
+      renderRouteItinerary();
       emitEvent('isle_royale_route_weather',{sample_count:data.summary?.forecast_samples||0,mode:route.mode});
       status('Route weather loaded from NWS marine grid data with live NDBC wind observations.');
     } catch(error) {
