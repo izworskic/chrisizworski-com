@@ -113,14 +113,14 @@ test('route builder turns geometry into a time-aware planning outcome', () => {
   for (const id of ['route-planner','route-mode-select','route-speed','route-departure','route-summary','route-weather-button','route-weather']) {
     assert.ok(html.includes(`id="${id}"`), id);
   }
-  assert.match(html, /Build a route \+ check marine conditions/);
-  assert.match(html, /NWS \+ NDBC/);
+  assert.match(html, /<h3>Plan a route<\/h3>/);
+  assert.match(html, /SMART ROUTE/);
   assert.match(js, /function addRoutePoint/);
   assert.match(js, /function distanceMiles/);
   assert.match(js, /function bearingDegrees/);
   assert.match(js, /function routeForecastSamples/);
   assert.match(js, /function relativeWind/);
-  assert.match(js, /Add this point to route/);
+  assert.match(js, /Start route here/);
   assert.match(js, /isle_royale_route_weather/);
   assert.match(js, /\/api\/isle-royale-route-weather/);
 });
