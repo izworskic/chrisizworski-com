@@ -1788,9 +1788,11 @@
     for(const leg of scenario.itinerary.legs||[]){
       const camp=leg.stop;
       if(!camp)continue;
+      const target={lat:Number(camp.lat),lng:Number(camp.lng)};
+      if(base.some(point=>distanceMiles(point,target)<.08))continue;
       entries.push({
         along:Number(camp.along_miles)||Number(leg.end_miles)||Infinity,
-        point:{lat:Number(camp.lat),lng:Number(camp.lng),label:camp.name,scenarioGenerated:true,scenarioId:scenario.id,campId:camp.id}
+        point:{...target,label:camp.name,scenarioGenerated:true,scenarioId:scenario.id,campId:camp.id}
       });
     }
     entries.sort((a,b)=>a.along-b.along);
@@ -1985,15 +1987,8 @@
 
     for(const dayEnd of routeDayMarkers(path)) {
       L.circleMarker([dayEnd.lat,dayEnd.lng],{
-        pane:'routePane',radius:6,weight:2,fillOpacity:.9,interactive:true
-      }).bindTooltip('Day '+dayEnd.day+' reach · '+dayEnd.distance_miles.toFixed(1)+' mi',{direction:'top'})
-        .addTo(routeLayerGroup);
-    }
-    for(const leg of route.itinerary?.legs||[]) {
-      if(!leg.stop)continue;
-      L.circleMarker([leg.stop.lat,leg.stop.lng],{
         pane:'routePane',radius:7,weight:2,fillOpacity:.95,interactive:true
-      }).bindTooltip('Day '+leg.day+' overnight candidate · '+leg.stop.name,{direction:'top'})
+      }).bindTooltip('Day '+dayEnd.day+' · '+dayEnd.label+' · '+dayEnd.distance_miles.toFixed(1)+' mi',{direction:'top'})
         .addTo(routeLayerGroup);
     }
 
