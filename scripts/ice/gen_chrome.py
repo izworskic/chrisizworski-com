@@ -6,7 +6,7 @@ PERSON_NODE = {
     "@type": "Person",
     "@id": PERSON_ID,
     "name": "Chris Izworski",
-    "url": "https://chrisizworski.com/chris-izworski/",
+    "url": "https://chrisizworski.com/",
     "sameAs": [
         "https://chrisizworski.com",
         "https://michigantroutreport.com/chris-izworski/",
