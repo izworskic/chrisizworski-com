@@ -193,7 +193,7 @@ test('map-first route builder separates Explore from persistent Build mode and m
   assert.match(html, /id="route-mode"[^>]*>Build route/);
   assert.match(html, /id="route-map-guide"/);
   assert.match(html, /id="route-stop-list"/);
-  assert.match(html, /click a campground adds that campsite to the trip/i);
+  assert.match(html, /clicking a campground adds that campsite to the trip/i);
   assert.match(js, /function addFeatureToRoute/);
   assert.match(js, /route\.adding&&record\.latlng/);
   assert.match(js, /record\.category==='campground'&&record\.liveAlert/);
@@ -375,11 +375,11 @@ test('smart route planner snaps hiking to mapped trails and keeps water routes e
   assert.match(js, /function reverseRoute/);
 });
 
-test('route point workflow is start destination first and weather follows resolved geometry', () => {
+test('route point workflow stays map-first and weather follows resolved geometry', () => {
   assert.match(js, /Start route here/);
   assert.match(js, /Route to here/);
   assert.match(js, /Add as route stop/);
-  assert.match(js, /if\(route\.points\.length===2\)setRouteAdding\(false\)/);
+  assert.doesNotMatch(js, /if\(route\.points\.length===2\)setRouteAdding\(false\)/);
   assert.match(js, /function routePathPoints/);
   assert.match(js, /return route\.resolvedPoints\.length \? route\.resolvedPoints : route\.points/);
   assert.match(js, /const points=routePathPoints\(\)/);
