@@ -8,6 +8,7 @@ const html = fs.readFileSync(path.join(root, 'public/isle-royale-map/index.html'
 const js = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 'utf8');
 const api = fs.readFileSync(path.join(root, 'api/isle-royale.js'), 'utf8');
 const catalog = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/catalog.json'), 'utf8'));
+const deepManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/deep-layer-manifest.json'), 'utf8'));
 
 function rendered(s) { return s.replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"'); }
 
@@ -44,12 +45,12 @@ test('catalog covers the NPMaps source families and deep layers', () => {
   for (const term of ['current park map','regional map','rock harbor','windigo','camping','transportation','shipwreck','relief','lighthouse','geologic','vegetation','historical']) {
     assert.ok(cats.includes(term), `missing ${term}`);
   }
-  assert.ok(catalog.items.some(x => x.id === 'geology' && x.state === 'etl-ready'));
-  assert.ok(catalog.items.some(x => x.id === 'vegetation-detailed' && x.vintage));
+  assert.ok(catalog.items.some(x => x.id === 'geology' && x.state === 'generated-runtime'));
+  assert.ok(catalog.items.some(x => x.id === 'vegetation-detailed' && x.state === 'generated-runtime' && /1994\/1996/.test(x.vintage)));
 });
 
 test('planning, provenance, accessibility and safety hooks exist', () => {
-  for (const id of ['feature-search','layer-filters','feature-list','map-status','park-live-status','source-catalog']) assert.ok(html.includes(`id="${id}"`), id);
+  for (const id of ['feature-search','layer-filters','feature-list','map-status','park-live-status','deep-layer-status','source-catalog']) assert.ok(html.includes(`id="${id}"`), id);
   assert.match(html, /not a navigation chart/i);
   assert.match(html, /National Park Service/i);
   assert.match(js, /sourceStatus/);
@@ -67,4 +68,25 @@ test('live operations feed is fail-soft and never claims no alerts from a parser
   assert.match(api, /degraded:/);
   assert.match(js, /not a declaration that the park has no alerts/i);
   assert.match(js, /Verify current NPS conditions/i);
+});
+
+
+test('generated deep science layers are real, opt-in, hashed and visibly dated', () => {
+  assert.match(html, /data-layer="geology"/);
+  assert.match(html, /data-layer="vegetation-baseline"/);
+  assert.match(html, /Vegetation baseline \(2000\)/);
+  assert.match(js, /geology-units\.geojson/);
+  assert.match(js, /vegetation-baseline-2000\.geojson/);
+  assert.match(js, /async function loadDeepLayer/);
+  assert.match(js, /historical inventory baseline/i);
+  for (const key of ['geology','vegetation']) {
+    const meta = deepManifest.sources[key];
+    assert.ok(meta && /^[a-f0-9]{64}$/.test(meta.sha256), `${key} sha256`);
+    const file = path.join(root, 'public/isle-royale-map/data', meta.file);
+    assert.ok(fs.existsSync(file), `${key} generated file`);
+    assert.equal(fs.statSync(file).size, meta.bytes, `${key} byte count`);
+  }
+  assert.ok(deepManifest.sources.geology.features >= 1900);
+  assert.equal(deepManifest.sources.vegetation.features, 38);
+  assert.match(deepManifest.sources.vegetation.accuracy_note, /Historical baseline/i);
 });
