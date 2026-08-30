@@ -41,15 +41,15 @@ test("generated ice pages match the generator output", () => {
       "Run: npm run generate:ice",
   );
 
-  for (const rel of listed) {
-    const actual = sha256(path.join(outDir, rel));
-    assert.equal(
-      actual,
-      recorded[rel],
-      `public/michigan-ice/${rel} does not match the generator output. ` +
-        "Edit scripts/ice/gen_site.py or gen_chrome.py instead, then run: npm run generate:ice",
-    );
-  }
+  const actualHashes = Object.fromEntries(
+    listed.map(rel => [rel, sha256(path.join(outDir, rel))]),
+  );
+  assert.deepEqual(
+    actualHashes,
+    recorded,
+    "public/michigan-ice/ does not match the generator checksum manifest. " +
+      "Edit scripts/ice/gen_site.py or gen_chrome.py, regenerate, and refresh generated.json.",
+  );
 });
 
 test("the ice generator stays pinned to its base path", () => {
