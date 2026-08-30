@@ -1446,6 +1446,57 @@
     return c.length?c[c.length-1]:0;
   }
 
+  function projectControlPointAlongPath(point,path,cumulative,startSegment=0) {
+    if(!point||!Array.isArray(path)||path.length<2)return {along_miles:0,segment_index:0,distance_miles:0};
+    let best=null;
+    const first=Math.max(0,Math.min(path.length-2,startSegment));
+    for(let i=first;i<path.length-1;i++) {
+      const a=path[i],b=path[i+1];
+      const ref=toRadians((point.lat+a.lat+b.lat)/3);
+      const sx=69.172*Math.cos(ref),sy=69;
+      const px=point.lng*sx,py=point.lat*sy,ax=a.lng*sx,ay=a.lat*sy,bx=b.lng*sx,by=b.lat*sy;
+      const dx=bx-ax,dy=by-ay,den=dx*dx+dy*dy||1;
+      const t=Math.max(0,Math.min(1,((px-ax)*dx+(py-ay)*dy)/den));
+      const projected={lat:a.lat+(b.lat-a.lat)*t,lng:a.lng+(b.lng-a.lng)*t};
+      const offset=distanceMiles(point,projected);
+      const along=(cumulative[i]||0)+distanceMiles(a,projected);
+      if(!best||offset<best.distance_miles)best={along_miles:along,segment_index:i,distance_miles:offset};
+    }
+    return best||{along_miles:0,segment_index:first,distance_miles:Infinity};
+  }
+
+  function routeControlDistances() {
+    const path=routePathPoints();
+    if(!route.points.length)return [];
+    if(path.length<2)return route.points.map(()=>({leg_miles:0,total_miles:0}));
+    const cumulative=cumulativeFor(path),total=cumulative[cumulative.length-1]||0;
+    const projected=[];
+    let segment=0,lastAlong=0;
+    route.points.forEach((point,index)=>{
+      let along;
+      if(index===0)along=0;
+      else if(index===route.points.length-1)along=total;
+      else {
+        const hit=projectControlPointAlongPath(point,path,cumulative,segment);
+        segment=Math.max(segment,hit.segment_index);
+        along=Math.max(lastAlong,Math.min(total,hit.along_miles));
+      }
+      projected.push({leg_miles:Math.max(0,along-lastAlong),total_miles:along});
+      lastAlong=along;
+    });
+    return projected;
+  }
+
+  function removeRoutePoint(index) {
+    if(index<0||index>=route.points.length)return;
+    const point=route.points[index];
+    rememberRouteEdit();
+    route.points.splice(index,1);
+    map.closePopup();
+    reroute('Route stop removed. Re-run weather after the route resolves.');
+    status((point.label||'Route point')+' removed from trip.');
+  }
+
   function routeHours() {
     const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
     return routeTotalMiles()/speed;
@@ -2119,6 +2170,7 @@
     if(!container)return;
     container.replaceChildren();
     if(!route.points.length)return;
+    const distances=routeControlDistances();
     route.points.forEach((point,index)=>{
       const row=document.createElement('div');
       row.className='route-stop-row'+(point.kind==='campground'?' is-camp':'')+(point.manualDayEnd?' is-day-end':'');
@@ -2132,26 +2184,25 @@
       textWrap.style.background='transparent';
       textWrap.style.padding='0';
       textWrap.style.textAlign='left';
-      textWrap.innerHTML='<b></b><span></span>';
+      textWrap.innerHTML='<b></b><span></span><span class="route-distance"></span>';
       textWrap.querySelector('b').textContent=point.label||('Waypoint '+(index+1));
-      textWrap.querySelector('span').textContent=routePointRole(point,index,route.points.length)
+      textWrap.querySelector('span:not(.route-distance)').textContent=routePointRole(point,index,route.points.length)
         +(point.sourceBackedBoatIn?' · current NPS Boat-In record':'')
         +(point.liveAlert?' · CURRENT NPS CLOSURE':'');
+      const d=distances[index]||{leg_miles:0,total_miles:0};
+      textWrap.querySelector('.route-distance').textContent=index===0
+        ? '0.0 mi start'
+        : '+'+d.leg_miles.toFixed(1)+' mi leg · '+d.total_miles.toFixed(1)+' mi total';
       textWrap.addEventListener('click',()=>{
         map.flyTo([point.lat,point.lng],Math.max(map.getZoom(),13));
-        route.markers[index]?.openTooltip?.();
+        route.markers[index]?.openPopup?.();
       });
       const remove=document.createElement('button');
       remove.type='button';
       remove.className='route-stop-remove';
       remove.setAttribute('aria-label','Remove '+(point.label||'route point'));
-      remove.textContent='×';
-      remove.addEventListener('click',()=>{
-        rememberRouteEdit();
-        route.points.splice(index,1);
-        reroute('Route stop removed. Re-run weather after the route resolves.');
-        status((point.label||'Route point')+' removed from trip.');
-      });
+      remove.textContent='Remove';
+      remove.addEventListener('click',()=>removeRoutePoint(index));
       row.append(token,textWrap);
       if(point.kind==='campground'&&index>0) {
         const dayEnd=document.createElement('button');
@@ -2165,7 +2216,6 @@
       container.appendChild(row);
     });
   }
-
   function renderRouteStops() {
     renderRouteStopsInto(els.routeStopList);
     renderRouteStopsInto(els.cockpitStops);
@@ -2199,6 +2249,7 @@
       }
     }
 
+    const controlDistances=routeControlDistances();
     route.points.forEach((point,index)=>{
       const marker=L.marker([point.lat,point.lng],{
         pane:'routePane',
@@ -2208,6 +2259,18 @@
         autoPan:true,
         title:index===0?'Route start':index===route.points.length-1?'Route destination':`Route via point ${index}`
       }).addTo(routeLayerGroup);
+      const popup=document.createElement('div');
+      popup.className='popup-detail';
+      const title=document.createElement('div');title.className='popup-title';title.textContent=point.label||('Waypoint '+(index+1));popup.appendChild(title);
+      const d=controlDistances[index]||{leg_miles:0,total_miles:0};
+      const meta=document.createElement('div');meta.className='popup-meta';meta.textContent=routePointRole(point,index,route.points.length)+(index?(' · +'+d.leg_miles.toFixed(1)+' mi · '+d.total_miles.toFixed(1)+' mi total'):' · route start');popup.appendChild(meta);
+      const actions=document.createElement('div');actions.className='popup-actions';
+      if(point.kind==='campground'&&index>0){
+        const day=document.createElement('button');day.type='button';day.className='popup-action';day.textContent=point.manualDayEnd?'Clear day end':'End day here';day.addEventListener('click',()=>{setCampDayEnd(point,!point.manualDayEnd);map.closePopup();});actions.appendChild(day);
+      }
+      const remove=document.createElement('button');remove.type='button';remove.className='popup-action';remove.textContent='Remove from route';remove.addEventListener('click',()=>removeRoutePoint(index));actions.appendChild(remove);
+      popup.appendChild(actions);
+      marker.bindPopup(popup,{maxWidth:300,className:'isle-detail-popup'});
       marker.on('dragend',()=>{
         const ll=marker.getLatLng();
         rememberRouteEdit();

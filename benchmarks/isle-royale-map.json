@@ -1,5 +1,5 @@
 {
-  "version": "1.9.0",
+  "version": "2.0.0",
   "updated": "2026-08-30",
   "route": "/isle-royale-map/",
   "objective": "Build the most useful source-transparent Isle Royale planning map in the Chris Izworski tool network without pretending static cartography is authoritative GIS.",
@@ -64,7 +64,7 @@
     {
       "id": "planning-flow",
       "weight": 15,
-      "target": "Trip planning must survive beyond one browser moment: local-only save/restore, deliberate URL-fragment sharing, and GPX export of resolved route geometry plus campsite/day-end waypoints. Restored/shared state must not trust stale Boat-In or closure flags; current NPS enrichment re-establishes those claims."
+      "target": "The primary surface is a trip planner, not a GIS showcase: route planner before feature browsing; every route stop shows leg and cumulative distance; deletion is obvious from both stop list and route-marker popup; primary map controls expose only decision-useful layers (trails, camps, visitor/dock places, water/transport, maritime history, quiet/no-wake, relief). Original research-only science families remain provenance-cataloged but absent from planning controls."
     },
     {
       "id": "provenance",
@@ -119,7 +119,8 @@
     "Do not call day-end planning complete unless users can explicitly set and clear campsite day ends from the route-building experience, those anchors override automatic day splitting across all scenarios, trip starts cannot become day ends, and water-trip day ends remain constrained by current NPS Boat-In/closure truth.",
     "Do not call the route planner usable if the map remains reference-sized during Build mode, landscape tablet planning is constrained to a short viewport, full-map focus is unavailable, or Leaflet is not invalidated after responsive/focus layout changes.",
     "Do not call Focus map complete if users must leave it to edit the trip, if its controls can drift from the side panel, or if Undo only deletes the last point instead of restoring full route-edit state with Redo support.",
-    "Do not call trip handoff complete if saving uploads route state, sharing puts route data in the server-visible query string, restored trips trust stale closure/Boat-In flags, or GPX can export a temporary straight fallback before trail/water routing resolves."
+    "Do not call trip handoff complete if saving uploads route state, sharing puts route data in the server-visible query string, restored trips trust stale closure/Boat-In flags, or GPX can export a temporary straight fallback before trail/water routing resolves.",
+    "Do not call the planning surface usable if vegetation/change/fire controls reappear, if route stops lack leg+cumulative miles, if stop deletion depends on a tiny or hidden control, or if route planning is visually subordinate to feature browsing/prose."
   ],
   "initialBuildFit": {
     "distinctSearchIntent": 24,

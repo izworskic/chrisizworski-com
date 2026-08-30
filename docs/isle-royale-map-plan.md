@@ -97,6 +97,19 @@ Supporting terms (not separate canonicals): Isle Royale trail map, campground ma
 - Publish stable PMTiles/MBTiles for large layers; do not send huge polygon GeoJSON to every browser.
 - Georeference historic/NPMaps-only map artwork only when no better vector source exists; record RMSE and derived status.
 
+### Planning-surface simplification — route utility over GIS showcase
+
+The deep-research catalog still preserves the original 16 NPMaps/NPS product families, but the primary map UI must expose only layers that materially improve a trip decision.
+
+- **Primary controls:** trails/portages, campgrounds, docks/visitor places, ferry/water routes, lighthouses/shipwrecks, Quiet/No-Wake zones, and terrain relief.
+- **Official research handoffs:** regional/access map, Rock Harbor guide, Windigo guide, anchorage zones, off-trail camping zones, and historic references remain one compact drawer.
+- **Retired from planning controls:** geology, vegetation overview/detailed, vegetation change, and Horne Fire. Generated assets may remain as provenance-audited research artifacts, but they must not occupy the route-planning interface.
+- **Route readability:** every selected stop must expose previous-leg mileage and cumulative mileage on the resolved route.
+- **Deletion:** every route stop must have an obvious text removal action in the stop stack and a direct Remove action from the marker popup.
+- **Hierarchy:** route planning precedes feature browsing; the feature browser is secondary/collapsible; explanatory/source prose stays below the planning workspace.
+
+This is an application of the value function, especially **D (Decision utility)** and **U (Map usability)**. Source completeness does not justify low-value clutter on the primary interaction surface.
+
 ### Release 2.5 — Water Intelligence
 
 The route planner must become a trip-decision tool rather than a line-drawing widget.

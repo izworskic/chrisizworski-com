@@ -51,38 +51,39 @@ test('runtime supports source-backed web-map ingestion and fail-soft fallback', 
   assert.match(js, /loadArcGISService/);
 });
 
-test('catalog covers the NPMaps source families and deep layers', () => {
+test('catalog preserves original research families while retiring non-planning science layers', () => {
   const cats = catalog.items.map(x => x.npmapsCategory.toLowerCase()).join(' ');
   for (const term of ['current park map','regional map','rock harbor','windigo','camping','transportation','shipwreck','relief','lighthouse','geologic','vegetation','historical']) {
     assert.ok(cats.includes(term), `missing ${term}`);
   }
-  assert.ok(catalog.items.some(x => x.id === 'geology' && x.state === 'generated-runtime'));
-  assert.ok(catalog.items.some(x => x.id === 'vegetation-detailed' && x.state === 'generated-runtime' && /1994\/1996/.test(x.vintage)));
-  assert.ok(catalog.items.some(x => x.id === 'vegetation-simple' && x.state === 'generated-runtime' && /6 broad classes/i.test(x.label)));
+  for (const id of ['geology','vegetation-detailed','vegetation-simple','vegetation-change-1996-2017','horne-fire-2021']) {
+    assert.ok(catalog.items.some(x => x.id === id && x.state === 'research-only'), id);
+  }
   assert.ok(catalog.items.some(x => x.id === 'relief' && x.state === 'live-tile' && /U\.S\. Geological Survey/.test(x.publisher)));
   assert.ok(catalog.items.some(x => x.id === 'quiet-no-wake' && x.state === 'generated-runtime' && /22 official polygons/i.test(x.label)));
-  assert.ok(catalog.items.some(x => x.id === 'vegetation-change-1996-2017' && x.state === 'generated-runtime'));
-  assert.ok(catalog.items.some(x => x.id === 'horne-fire-2021' && x.state === 'generated-runtime'));
   assert.ok(catalog.items.some(x => x.id === 'shipwrecks' && x.state === 'live-api'));
+  assert.doesNotMatch(html, /data-layer="vegetation-(?:overview|baseline|change)"/);
+  assert.doesNotMatch(html, /data-layer="horne-fire"/);
 });
 
 test('planning, provenance, accessibility and safety hooks exist', () => {
-  for (const id of ['feature-search','layer-filters','feature-list','map-status','park-live-status','deep-layer-status','context-layer-status','source-catalog']) assert.ok(html.includes(`id="${id}"`), id);
+  for (const id of ['feature-search','layer-filters','feature-list','map-status','park-live-status','source-catalog','route-planner']) assert.ok(html.includes(`id="${id}"`), id);
   assert.match(html, /not a navigation chart/i);
   assert.match(html, /National Park Service/i);
-  assert.match(html, /class="map-shelf"/);
-  assert.match(html, /Rock Harbor area guide/);
+  assert.match(html, /Official maps from the original research/);
+  assert.match(html, /Rock Harbor map/);
+  assert.match(html, /Windigo map/);
   assert.match(html, /Anchorage zones/);
-  assert.match(html, /Historic \/ archived map references/);
+  assert.match(html, /Off-trail camping zones/);
+  assert.match(html, /Regional access \+ trail mileage/);
+  assert.match(html, /Historic maps/);
   assert.match(js, /sourceStatus/);
   assert.match(js, /\/api\/isle-royale/);
   assert.match(js, /boater_campgrounds/);
   assert.match(js, /current_alerts/);
   assert.match(api, /National Park Service — Boat-In Campgrounds/);
   assert.match(api, /detectCurrentClosures/);
-  assert.match(html, /aria-live/);
 });
-
 
 test('map points have large pointer tolerance and data-rich detail popups', () => {
   assert.match(js, /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \? 14 : 9\}\)/);
@@ -96,7 +97,7 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
   assert.match(js, /NPS ferry, seaplane & transportation/);
   assert.match(js, /NPS lighthouses & places to go/);
   assert.match(js, /Open map-data source/);
-  assert.match(html, /Tap any point to open its available attributes, coordinates, source links and related NPS planning information/);
+  assert.match(html, /Build the trip on the map/);
   assert.match(html, /\.popup-action\{[^}]*min-height:42px/);
   assert.match(html, /\.isle-detail-popup \.leaflet-popup-content/);
 });
@@ -193,7 +194,7 @@ test('map-first route builder separates Explore from persistent Build mode and m
   assert.match(html, /id="route-mode"[^>]*>Build route/);
   assert.match(html, /id="route-map-guide"/);
   assert.match(html, /id="route-stop-list"/);
-  assert.match(html, /clicking a campground adds that campsite to the trip/i);
+  assert.match(html, /Click the map\. Add camps\. See leg distances/i);
   assert.match(js, /function addFeatureToRoute/);
   assert.match(js, /route\.adding&&record\.latlng/);
   assert.match(js, /record\.category==='campground'&&record\.liveAlert/);
@@ -318,17 +319,12 @@ test('current NPS off-trail camping zone closures are parsed without fabricating
   assert.match(js, /off-trail-camping\.htm/);
 });
 
-test('generated deep science layers are real, opt-in, hashed and visibly dated', () => {
-  assert.match(html, /data-layer="geology"/);
-  assert.match(html, /data-layer="vegetation-overview"/);
-  assert.match(html, /data-layer="vegetation-baseline"/);
-  assert.match(html, /Vegetation overview \(2000\)/);
-  assert.match(html, /Vegetation detailed \(2000\)/);
-  assert.match(js, /geology-units\.geojson/);
-  assert.match(js, /vegetation-overview-2000\.geojson/);
-  assert.match(js, /vegetation-baseline-2000\.geojson/);
-  assert.match(js, /async function loadDeepLayer/);
-  assert.match(js, /historical 2000-inventory derivatives/i);
+test('retired science assets remain provenance-auditable but are absent from the planner', () => {
+  assert.doesNotMatch(html, /data-layer="geology"/);
+  assert.doesNotMatch(html, /data-layer="vegetation-overview"/);
+  assert.doesNotMatch(html, /data-layer="vegetation-baseline"/);
+  assert.doesNotMatch(html, /data-layer="vegetation-change"/);
+  assert.doesNotMatch(html, /data-layer="horne-fire"/);
   for (const key of ['geology','vegetation','vegetation_overview']) {
     const meta = deepManifest.sources[key];
     assert.ok(meta && /^[a-f0-9]{64}$/.test(meta.sha256), `${key} sha256`);
@@ -336,27 +332,18 @@ test('generated deep science layers are real, opt-in, hashed and visibly dated',
     assert.ok(fs.existsSync(file), `${key} generated file`);
     assert.equal(fs.statSync(file).size, meta.bytes, `${key} byte count`);
   }
-  assert.ok(deepManifest.sources.geology.features >= 1900);
   assert.equal(deepManifest.sources.vegetation.features, 38);
   assert.equal(deepManifest.sources.vegetation_overview.features, 6);
-  assert.ok(deepManifest.sources.vegetation_overview.bytes < deepManifest.sources.vegetation.bytes / 2);
-  assert.ok(deepManifest.sources.vegetation_overview.bytes < 8_000_000);
-  assert.match(deepManifest.sources.vegetation.accuracy_note, /Historical baseline/i);
-  assert.match(deepManifest.sources.vegetation_overview.accuracy_note, /Broad thematic derivative/i);
 });
 
-
 test('verified NPS and USGS context layers are lazy, hashed and integrity-gated', () => {
-  for (const id of ['quiet-no-wake','vegetation-change','horne-fire']) {
-    assert.match(html, new RegExp(`data-layer="${id}"`));
-  }
+  assert.match(html, /data-layer="quiet-no-wake"/);
+  assert.doesNotMatch(html, /data-layer="vegetation-change"/);
+  assert.doesNotMatch(html, /data-layer="horne-fire"/);
   assert.match(js, /context-layer-manifest\.json/);
   assert.match(js, /quiet-no-wake-zones\.geojson/);
-  assert.match(js, /vegetation-change-1996-2017\.geojson/);
-  assert.match(js, /horne-fire-burn-severity\.geojson/);
   assert.match(js, /async function loadContextLayer/);
   assert.match(js, /official NPS regulatory geometry/i);
-  assert.match(js, /historical USGS context/i);
 
   const expected = {
     quiet_no_wake: 22,
@@ -426,12 +413,23 @@ test('Isle Royale has protected internal discovery paths outside the frozen tool
 });
 
 
+test('route stops expose leg and cumulative distances and can be deleted from list or marker', () => {
+  assert.match(js, /function routeControlDistances/);
+  assert.match(js, /function projectControlPointAlongPath/);
+  assert.match(js, /function removeRoutePoint/);
+  assert.match(js, /mi leg · .*mi total/);
+  assert.match(html, /\.route-distance/);
+  assert.match(js, /Remove from route/);
+  assert.match(js, /marker\.bindPopup/);
+  assert.match(js, /remove\.textContent='Remove'/);
+});
+
 test('smart route planner snaps hiking to mapped trails and keeps water routes editable', () => {
   assert.match(html, /<h3>Plan a route<\/h3>/);
   assert.match(html, /id="route-smart-status"/);
   assert.match(html, /id="route-reverse"/);
-  assert.match(html, /Hiking follows the mapped trail network/);
-  assert.match(html, /Paddle and motorboat modes use a planning shoreline model/);
+  assert.match(html, /Build on the map/);
+  assert.match(html, /Every stop shows leg distance and total distance/);
   assert.match(js, /const trailGraph = \{/);
   assert.match(js, /function registerTrailGeometry/);
   assert.match(js, /function shortestTrailPath/);

@@ -79,6 +79,14 @@ const routePlanningRuntime = /id="route-planner"/.test(html)
   && /PILM4/.test(routeWeatherApi)
   && /ROAM4/.test(routeWeatherApi)
   && /alerts\/active\?point=/.test(routeWeatherApi);
+const routeEditingRuntime = /function routeControlDistances/.test(js)
+  && /function projectControlPointAlongPath/.test(js)
+  && /function removeRoutePoint/.test(js)
+  && /mi leg · .*mi total/.test(js)
+  && /Remove from route/.test(js)
+  && /marker\.bindPopup/.test(js)
+  && /\.route-distance/.test(html);
+
 const smartRoutingRuntime = /const trailGraph = \{/.test(js)
   && /function registerTrailGeometry/.test(js)
   && /function shortestTrailPath/.test(js)
@@ -204,16 +212,17 @@ const largePlanningCanvasRuntime = /id="focus-map"[^>]*aria-pressed="false"/.tes
 const reliefRuntime = /USGSShadedReliefOnly\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/.test(js)
   && /data-layer="relief"/.test(html)
   && catalog.items.some(x => x.id === 'relief' && x.state === 'live-tile');
-const referenceShelfComplete = /class="map-shelf"/.test(html)
-  && /Rock Harbor area guide/.test(html)
-  && /Windigo area guide/.test(html)
+const referenceShelfComplete = /Official maps from the original research/.test(html)
+  && /Rock Harbor map/.test(html)
+  && /Windigo map/.test(html)
   && /Anchorage zones/.test(html)
   && /Off-trail camping zones/.test(html)
-  && /Historic \/ archived map references/.test(html);
+  && /Regional access \+ trail mileage/.test(html)
+  && /Historic maps/.test(html);
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime, 'large planning canvas + full-map cockpit + undo/redo + local save/share-fragment/GPX handoff + pinned camps/day ends + water intelligence');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && routeEditingRuntime, 'map-first route planning with leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -226,31 +235,15 @@ add('deep-data-path', 8,
     && deepManifest.sources.geology.features >= 1900
     && deepManifest.sources.vegetation.features === 38
     && deepManifest.sources.vegetation_overview.features === 6
-    && deepManifest.sources.vegetation_overview.bytes < deepManifest.sources.vegetation.bytes / 2
     && contextManifest.layers.quiet_no_wake.quiet_no_wake_features === 19
     && contextManifest.layers.quiet_no_wake.no_wake_features === 3
-    && /loadDeepLayer/.test(js)
-    && /loadContextLayer/.test(js)
-    && /geology-units\.geojson/.test(js)
-    && /vegetation-overview-2000\.geojson/.test(js)
-    && /vegetation-baseline-2000\.geojson/.test(js)
     && /quiet-no-wake-zones\.geojson/.test(js)
-    && /vegetation-change-1996-2017\.geojson/.test(js)
-    && /horne-fire-burn-severity\.geojson/.test(js)
-    && /Vegetation overview \(2000\)/.test(html)
-    && /Vegetation detailed \(2000\)/.test(html)
     && /data-layer="quiet-no-wake"/.test(html)
-    && /data-layer="vegetation-change"/.test(html)
-    && /data-layer="horne-fire"/.test(html)
-    && /historical 2000-inventory derivatives/i.test(js)
-    && /historical USGS context/i.test(js)
-    && catalog.items.some(x => x.id === 'geology' && x.state === 'generated-runtime')
-    && catalog.items.some(x => x.id === 'vegetation-simple' && x.state === 'generated-runtime')
-    && catalog.items.some(x => x.id === 'vegetation-detailed' && x.state === 'generated-runtime')
-    && catalog.items.some(x => x.id === 'quiet-no-wake' && x.state === 'generated-runtime')
-    && catalog.items.some(x => x.id === 'vegetation-change-1996-2017' && x.state === 'generated-runtime')
-    && catalog.items.some(x => x.id === 'horne-fire-2021' && x.state === 'generated-runtime'),
-  `verified geology + detailed/overview vegetation + 22 NPS boating zones + USGS relief/change/fire layers, hashes, size gates and lazy loaders`
+    && !/data-layer="vegetation-(?:overview|baseline|change)"/.test(html)
+    && !/data-layer="horne-fire"/.test(html)
+    && ['geology','vegetation-detailed','vegetation-simple','vegetation-change-1996-2017','horne-fire-2021']
+      .every(id => catalog.items.some(x => x.id === id && x.state === 'research-only')),
+  'original deep-research assets remain integrity-audited; planner exposes only decision-useful regulatory/terrain layers'
 );
 
 const score = checks.reduce((sum, c) => sum + (c.ok ? c.weight : 0), 0);
@@ -261,7 +254,6 @@ if (!/approximate reference/i.test(js)) hardFailures.push('fallback derivation l
 if (!deepSourceChecks.every(Boolean)) hardFailures.push('deep GIS file/hash/size integrity failed');
 if (!contextSourceChecks.every(Boolean)) hardFailures.push('context GIS file/hash/count/size integrity failed');
 if (contextManifest.layers?.quiet_no_wake?.quiet_no_wake_features !== 19 || contextManifest.layers?.quiet_no_wake?.no_wake_features !== 3) hardFailures.push('quiet/no-wake 19+3 regulatory reconciliation failed');
-if (!/historical 2000-inventory derivatives/i.test(js) || !/Vegetation detailed \(2000\)/.test(html) || !/Vegetation overview \(2000\)/.test(html)) hardFailures.push('vegetation freshness/derivation warning missing');
 if (!npmapsComplete) hardFailures.push('16-product NPMaps completeness gate failed');
 if (!catalogCrawlable) hardFailures.push('crawlable source catalog/raw manifest link missing');
 if (!measurementComplete) hardFailures.push('planned privacy-safe Isle Royale measurement events missing');
@@ -278,9 +270,11 @@ if (!manualDayEndRuntime) hardFailures.push('manual campsite day-end control is 
 if (!largePlanningCanvasRuntime) hardFailures.push('planning map is too constrained or missing full-viewport focus mode and Leaflet resize handling');
 if (!focusCockpitRuntime) hardFailures.push('Focus map is missing shared route controls, stop/day-end editing, or true undo/redo route history');
 if (!tripPersistenceRuntime) hardFailures.push('trip persistence/handoff is missing local-only save, share-fragment restore, or resolved-route GPX export safeguards');
+if (!routeEditingRuntime) hardFailures.push('route planning is missing leg/cumulative distances or obvious stop deletion from the map/list');
+if (/data-layer="vegetation-(?:overview|baseline|change)"|data-layer="horne-fire"/.test(html)) hardFailures.push('retired vegetation/ecology layers leaked back into the planning controls');
+if (!['geology','vegetation-detailed','vegetation-simple','vegetation-change-1996-2017','horne-fire-2021'].every(id => catalog.items.some(x => x.id === id && x.state === 'research-only'))) hardFailures.push('retired research layers are not clearly marked research-only in the source catalog');
 if (!reliefRuntime) hardFailures.push('keyless USGS relief runtime missing');
 if (!referenceShelfComplete) hardFailures.push('official/reference map shelf incomplete');
-if (deepManifest.sources?.vegetation_overview?.features !== 6 || deepManifest.sources?.vegetation_overview?.bytes >= deepManifest.sources?.vegetation?.bytes / 2) hardFailures.push('vegetation overview reduction gate failed');
 
 console.log(`Isle Royale map benchmark: ${score}/100 (release target ${spec.valueFunction.releaseTarget})`);
 for (const c of checks) console.log(`${c.ok ? 'PASS' : 'FAIL'} ${String(c.weight).padStart(2)} ${c.id} — ${c.evidence}`);

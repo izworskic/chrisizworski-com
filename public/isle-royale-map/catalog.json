@@ -120,10 +120,10 @@
       "npmapsCategory": "geologic map",
       "label": "Geology",
       "kind": "polygon",
-      "state": "generated-runtime",
+      "state": "research-only",
       "publisher": "National Park Service Geologic Resources Inventory",
       "source": "https://catalog.data.gov/dataset/digital-geologic-gis-map-of-isle-royale-national-park-and-vicinity-michigan-nps-grd-g-1996",
-      "notes": "Generated from the NPS GRI GeoPackage: 1,975 geologic-unit features, reprojected and simplified for web use. Manifest records SHA-256 and source accuracy caveat; not survey-grade.",
+      "notes": "Generated from the NPS GRI GeoPackage: 1,975 geologic-unit features, reprojected and simplified for web use. Manifest records SHA-256 and source accuracy caveat; not survey-grade. Retained in the source/research catalog but intentionally removed from the trip-planning layer controls because it does not improve route decisions.",
       "vintage": "NPS GRI digital release 2021; older source mapping",
       "web_path": "/isle-royale-map/data/geology-units.geojson"
     },
@@ -132,11 +132,11 @@
       "npmapsCategory": "detailed vegetation map",
       "label": "Vegetation baseline (2000)",
       "kind": "polygon",
-      "state": "generated-runtime",
+      "state": "research-only",
       "publisher": "National Park Service",
       "source": "https://catalog.data.gov/dataset/geospatial-data-for-the-vegetation-mapping-inventory-project-of-isle-royale-national-park",
       "vintage": "2000 inventory; imagery primarily 1994/1996",
-      "notes": "Historical baseline only. The 19,072 source polygons are dissolved into 38 TNC_DESCRI vegetation classes and simplified for opt-in web display. Do not interpret as current forest condition.",
+      "notes": "Historical baseline only. The 19,072 source polygons are dissolved into 38 TNC_DESCRI vegetation classes and simplified for opt-in web display. Do not interpret as current forest condition. Retained in the source/research catalog but intentionally removed from the trip-planning layer controls because it does not improve route decisions.",
       "web_path": "/isle-royale-map/data/vegetation-baseline-2000.geojson"
     },
     {
@@ -144,10 +144,10 @@
       "npmapsCategory": "simplified vegetation map",
       "label": "Vegetation overview (2000) — 6 broad classes",
       "kind": "derived polygon",
-      "state": "generated-runtime",
+      "state": "research-only",
       "publisher": "Derived from NPS vegetation inventory",
       "source": "https://catalog.data.gov/dataset/geospatial-data-for-the-vegetation-mapping-inventory-project-of-isle-royale-national-park",
-      "notes": "Six visitor-facing classes derived from the verified detailed NPS inventory, dissolved by broad family and simplified for web orientation. Historical baseline only, not current vegetation.",
+      "notes": "Six visitor-facing classes derived from the verified detailed NPS inventory, dissolved by broad family and simplified for web orientation. Historical baseline only, not current vegetation. Retained in the source/research catalog but intentionally removed from the trip-planning layer controls because it does not improve route decisions.",
       "web_path": "/isle-royale-map/data/vegetation-overview-2000.geojson",
       "vintage": "Derived overview of the 2000 NPS vegetation inventory; imagery primarily 1994/1996"
     },
@@ -221,24 +221,24 @@
       "npmapsCategory": "science / ecological change",
       "label": "Vegetation change, 1996–2017",
       "kind": "polygon",
-      "state": "generated-runtime",
+      "state": "research-only",
       "publisher": "U.S. Geological Survey",
       "source": "https://doi.org/10.5066/P9393VFK",
       "web_path": "/isle-royale-map/data/vegetation-change-1996-2017.geojson",
       "vintage": "2017 high-resolution imagery compared with the 2000 NPS vegetation map (1994/1996 imagery)",
-      "notes": "Shows mapped vegetation cover type, density or pattern change and proposed reasons from the USGS release; not a present-day 2026 vegetation map."
+      "notes": "Shows mapped vegetation cover type, density or pattern change and proposed reasons from the USGS release; not a present-day 2026 vegetation map. Retained in the source/research catalog but intentionally removed from the trip-planning layer controls because it does not improve route decisions."
     },
     {
       "id": "horne-fire-2021",
       "npmapsCategory": "science / wildfire history",
       "label": "2021 Horne Fire burn severity",
       "kind": "polygon",
-      "state": "generated-runtime",
+      "state": "research-only",
       "publisher": "U.S. Geological Survey",
       "source": "https://doi.org/10.5066/P13QWXNI",
       "web_path": "/isle-royale-map/data/horne-fire-burn-severity.geojson",
       "vintage": "2021 Horne Fire; USGS data release published 2024",
-      "notes": "Burn-severity assessment derived from pre/post-fire high-resolution imagery; use as historical ecological context, not a current fire-status layer."
+      "notes": "Burn-severity assessment derived from pre/post-fire high-resolution imagery; use as historical ecological context, not a current fire-status layer. Retained in the source/research catalog but intentionally removed from the trip-planning layer controls because it does not improve route decisions."
     }
   ],
   "updated": "2026-08-30"
