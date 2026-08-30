@@ -183,6 +183,29 @@
       "publisher": "National Park Service; discovered via NPMaps",
       "source": "https://npmaps.com/isle-royale/",
       "notes": "Date-stamp and keep disabled by default if later georeferenced."
+    },
+    {
+      "id": "boat-in-campgrounds-live",
+      "npmapsCategory": "boating / campground operations",
+      "label": "Boat-in campground facilities",
+      "kind": "tabular",
+      "state": "live-api",
+      "publisher": "National Park Service",
+      "source": "https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm",
+      "dataset": "https://www.nps.gov/common/uploads/sortable_dataset/isro/2DF94ED6-9CAA-9B24-8BD6A700012D59F3/isro-BoaterTable.csv",
+      "vintage": "page updated June 23, 2026",
+      "notes": "Fetched through the same-origin Isle Royale API and matched to mapped campgrounds by normalized public place name. Includes dock depth, shelters, tent sites, food lockers, stay limit, fire/grill and generator fields when NPS supplies them."
+    },
+    {
+      "id": "current-conditions-live",
+      "npmapsCategory": "current park operations",
+      "label": "Current Isle Royale conditions and closures",
+      "kind": "operational reference",
+      "state": "live-api",
+      "publisher": "National Park Service",
+      "source": "https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm",
+      "notes": "Fetched through the same-origin Isle Royale API. The tool detects only closure patterns it knows how to parse and never treats a no-match result as proof that the park has no alerts."
     }
-  ]
+  ],
+  "updated": "2026-08-30"
 }
