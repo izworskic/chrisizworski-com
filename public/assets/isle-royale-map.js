@@ -532,7 +532,7 @@
       const routeAction = document.createElement('button');
       routeAction.type = 'button';
       routeAction.className = 'popup-action popup-route-action';
-      routeAction.textContent = 'Add this point to route';
+      routeAction.textContent = route.points.length===0 ? 'Start route here' : route.points.length===1 ? 'Route to here' : 'Add as route stop';
       routeAction.addEventListener('click', event => {
         event.preventDefault();
         event.stopPropagation();
@@ -785,6 +785,7 @@
           status(`Loaded ${added} public visitor features. Search or filter the map; deep layers remain source-cataloged below.`);
           visitorGeometrySettled = true;
           addPendingShipwrecks();
+          if(route.mode==='hike'&&route.points.length>=2){resolveRoute();renderRoute();}
           renderFeatureList();
           return;
         }
@@ -814,6 +815,7 @@
     status(`Remote visitor geometry unavailable. Showing ${added} approximate reference anchors and the full source catalog instead.`);
     visitorGeometrySettled = true;
     addPendingShipwrecks();
+    if(route.mode==='hike'&&route.points.length>=2){resolveRoute();renderRoute();}
     renderFeatureList();
   }
 
@@ -1896,6 +1898,7 @@
   els.routeModeSelect.addEventListener('change',()=>{
     route.mode=els.routeModeSelect.value;
     els.routeSpeed.value=routeSpeedDefaults[route.mode]||3;
+    resolveRoute();
     clearRouteWeather('Travel mode changed. Re-run route weather after confirming speed and departure.');
     renderRoute();
   });
@@ -1909,6 +1912,7 @@
     document.getElementById('route-planner')?.scrollIntoView({behavior:'smooth',block:'nearest'});
     setRouteAdding(!route.adding);
   });
+  els.routeReverse.addEventListener('click',reverseRoute);
   els.routeUndo.addEventListener('click',undoRoutePoint);
   els.routeClear.addEventListener('click',clearRoute);
   els.routeWeatherButton.addEventListener('click',analyzeRouteWeather);
