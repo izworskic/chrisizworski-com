@@ -4,6 +4,9 @@ const assert = require('node:assert/strict');
 const {
   parseCsv,
   normalizeBoaterCsv,
+  parseLatLon,
+  extractSortableDatasetUrl,
+  normalizeShipwreckCsv,
   extractLastUpdated,
   detectCurrentClosures,
 } = require('../api/isle-royale.js')._test;
@@ -50,4 +53,36 @@ test('current NPS condition parser detects named campground and off-trail closur
 test('current NPS page updated date is extracted when published in standard page copy', () => {
   assert.equal(extractLastUpdated('<div>Last updated: August 30, 2026</div>'), 'August 30, 2026');
   assert.equal(extractLastUpdated('<div>No update marker</div>'), null);
+});
+
+
+test('NPS shipwreck buoy coordinates parse from degrees and decimal minutes', () => {
+  const point = parseLatLon("N 48° 06.431' W 088° 32.335'");
+  assert.ok(point);
+  assert.ok(Math.abs(point.lat - 48.1071833) < 0.00001, point.lat);
+  assert.ok(Math.abs(point.lon - (-88.5389167)) < 0.00001, point.lon);
+});
+
+test('NPS scuba page sortable dataset URL is discovered without hard-coding a volatile asset id', () => {
+  const html = '<a href="/common/uploads/sortable_dataset/isro/ABC123/isro-Shipwreck-Buoys.csv">Download</a>';
+  assert.equal(
+    extractSortableDatasetUrl(html),
+    'https://www.nps.gov/common/uploads/sortable_dataset/isro/ABC123/isro-Shipwreck-Buoys.csv'
+  );
+});
+
+test('shipwreck buoy CSV normalizes only records with defensible coordinates', () => {
+  const csv = [
+    'Dive Site,Vessel Type,Buoy GPS Coordinates,Buoy On? (Y/N),Depth Min/Max in Feet,Buoy Attachment',
+    '"SS America","Package Freighter","N 47° 53.628\' W 089° 13.345\'",Y,2-80,Bow',
+    '"No Coordinate","Unknown","",N,10-20,None',
+  ].join('\n');
+  const rows = normalizeShipwreckCsv(csv);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].name, 'SS America');
+  assert.equal(rows[0].vessel_type, 'Package Freighter');
+  assert.equal(rows[0].buoy_on, 'Y');
+  assert.equal(rows[0].depth, '2-80');
+  assert.ok(Math.abs(rows[0].lat - 47.8938) < 0.0001, rows[0].lat);
+  assert.ok(Math.abs(rows[0].lon - (-89.2224167)) < 0.0001, rows[0].lon);
 });
