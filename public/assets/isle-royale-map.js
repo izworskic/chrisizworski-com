@@ -579,7 +579,7 @@
         layer.on('click', () => selectRecord(record));
       }
     });
-    const target = layerGroups[category] || layerGroups.other;
+    const target = context.targetGroup || layerGroups[category] || layerGroups.other;
     geo.eachLayer(layer => target.addLayer(layer));
     if (record) featureIndex.push(record);
     return record ? 1 : 0;
@@ -747,14 +747,34 @@
     return {type:'Feature',geometry:{type:'Point',coordinates:[lon,lat]},properties:{...tags, osm_id:`${el.type}/${el.id}`}};
   }
 
+  function setOsmContextVisible(visible) {
+    osmContextVisible = Boolean(visible);
+    const btn = document.getElementById('load-osm');
+    if (osmContextVisible) {
+      if (!map.hasLayer(osmContextGroup)) osmContextGroup.addTo(map);
+      btn.textContent = 'Hide OSM context';
+      btn.setAttribute('aria-pressed','true');
+      sourceStatus.osm = osmContextLoaded ? 'visible' : sourceStatus.osm;
+    } else {
+      if (map.hasLayer(osmContextGroup)) map.removeLayer(osmContextGroup);
+      btn.textContent = 'Show OSM context';
+      btn.setAttribute('aria-pressed','false');
+      sourceStatus.osm = osmContextLoaded ? 'hidden' : sourceStatus.osm;
+    }
+    renderFeatureList();
+  }
+
   async function loadOsmContext() {
     const btn = document.getElementById('load-osm');
     if (osmContextLoaded) {
-      btn.disabled = true;
-      status('OpenStreetMap visitor context is already loaded.');
+      setOsmContextVisible(!osmContextVisible);
+      status(osmContextVisible ? 'OpenStreetMap visitor context shown.' : 'OpenStreetMap visitor context hidden.');
+      emitEvent('isle_royale_osm_context', {result:osmContextVisible ? 'shown' : 'hidden'});
       return;
     }
+
     btn.disabled = true;
+    btn.textContent = 'Loading OSM context…';
     status('Adding supplementary OpenStreetMap visitor context…');
     const q = `[out:json][timeout:25];(nwr["tourism"~"camp_site|viewpoint|information|museum"](47.79,-89.36,48.33,-88.18);nwr["amenity"~"shelter|toilets|drinking_water"](47.79,-89.36,48.33,-88.18);nwr["man_made"="lighthouse"](47.79,-89.36,48.33,-88.18);nwr["man_made"="pier"](47.79,-89.36,48.33,-88.18););out center tags;`;
     try {
@@ -767,21 +787,25 @@
         const osmId = f.properties?.osm_id;
         if (osmId && osmSeen.has(osmId)) continue;
         if (osmId) osmSeen.add(osmId);
-        added += addGeoJSONFeature(f, {layerTitle:'OpenStreetMap visitor context', sourceLabel:'OpenStreetMap contributors', sourceKind:'supplementary public OSM point'});
+        added += addGeoJSONFeature(f, {
+          layerTitle:'OpenStreetMap visitor context',
+          sourceLabel:'OpenStreetMap contributors',
+          sourceKind:'supplementary public OSM point',
+          targetGroup:osmContextGroup
+        });
       }
       osmContextLoaded = true;
-      sourceStatus.osm = `loaded ${added}`;
-      btn.textContent = 'OSM context added';
-      status(`Added ${added} supplementary OpenStreetMap visitor points.`);
+      setOsmContextVisible(true);
+      status(`Added ${added} supplementary OpenStreetMap visitor points. Use the same button to hide or show them.`);
       emitEvent('isle_royale_osm_context', {result:'success'});
-      renderFeatureList();
     } catch (_) {
       sourceStatus.osm = 'unavailable';
       status('OpenStreetMap supplementary context could not be loaded. Core map and source catalog are unaffected.');
       emitEvent('isle_royale_osm_context', {result:'failure'});
-      btn.disabled = false;
+      btn.textContent = 'Retry OSM context';
+      btn.setAttribute('aria-pressed','false');
     } finally {
-      if (!osmContextLoaded) btn.disabled = false;
+      btn.disabled = false;
     }
   }
 
@@ -1148,6 +1172,7 @@
       const r = featureIndex[i];
       const hay = `${r.name} ${r.category} ${r.sourceLabel} ${r.description}`.toLowerCase();
       if (!isCategoryVisible(r.category)) continue;
+      if (r.sourceKind === 'supplementary public OSM point' && !osmContextVisible) continue;
       if (term && !hay.includes(term)) continue;
       matches.push({r,i});
     }
