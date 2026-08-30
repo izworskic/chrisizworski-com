@@ -58,6 +58,7 @@
     routeSmartStatus: document.getElementById('route-smart-status'),
     routeSummary: document.getElementById('route-summary'),
     routeIntelligence: document.getElementById('route-intelligence'),
+    routeScenarios: document.getElementById('route-scenarios'),
     routeItinerary: document.getElementById('route-itinerary'),
     routeWeatherButton: document.getElementById('route-weather-button'),
     routeWeather: document.getElementById('route-weather')
