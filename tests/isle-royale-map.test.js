@@ -31,6 +31,9 @@ test('public basemap is keyless and not restricted NPS map tiles', () => {
 test('runtime supports source-backed web-map ingestion and fail-soft fallback', () => {
   assert.match(js, /75e3ceba038a45f7b4d5a9d7c6a46ccf/);
   assert.match(js, /57a5a514a8cd40f098b2f99029d118cf/);
+  assert.match(js, /services1\.arcgis\.com\/XBhYkoXKJCRHbe7M\/arcgis\/rest\/services\/Isle_Royale_WFL1\/FeatureServer/);
+  assert.match(js, /MAPLABEL/);
+  assert.match(js, /TRLALTNAME/);
   assert.match(js, /loadFallbackAnchors/);
   assert.match(js, /loadArcGISService/);
 });
