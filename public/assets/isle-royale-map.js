@@ -1031,7 +1031,16 @@
 
   function enrichExistingRecords() {
     for (const record of featureIndex) enrichRecord(record);
+    for(const point of route.points) {
+      if(point.kind!=='campground')continue;
+      const match=featureIndex.find(record=>record.category==='campground'&&record.latlng&&distanceMiles(point,record.latlng)<.08);
+      if(!match)continue;
+      point.sourceBackedBoatIn=Boolean(match.boater);
+      point.liveAlert=Boolean(match.liveAlert);
+      point.sourceLabel=cleanText(match.sourceLabel||point.sourceLabel||'');
+    }
     renderFeatureList();
+    if(route.points.length)renderRoute();
   }
 
   function hasMappedNamedFeature(name, category) {
@@ -1707,7 +1716,7 @@
       if(record.category!=='campground'||!record.boater||record.liveAlert)continue;
       const point=recordRoutePoint(record);
       if(!point)continue;
-      const pinned=route.points.some(routePoint=>routePoint.kind==='campground'&&routePoint.sourceBackedBoatIn&&distanceMiles(routePoint,point)<.08);
+      const pinned=route.points.some(routePoint=>routePoint.kind==='campground'&&distanceMiles(routePoint,point)<.08);
       camps.push({
         id:'camp-'+i,record_index:i,name:record.name,lat:point.lat,lng:point.lng,closed:false,pinned,
         dock_depth:record.boater.dock_depth||'',shelters:record.boater.shelters||'',tent_sites:record.boater.tent_sites||'',
@@ -2030,7 +2039,9 @@
       textWrap.style.textAlign='left';
       textWrap.innerHTML='<b></b><span></span>';
       textWrap.querySelector('b').textContent=point.label||('Waypoint '+(index+1));
-      textWrap.querySelector('span').textContent=routePointRole(point,index,route.points.length)+(point.sourceBackedBoatIn?' · current NPS Boat-In record':'');
+      textWrap.querySelector('span').textContent=routePointRole(point,index,route.points.length)
+        +(point.sourceBackedBoatIn?' · current NPS Boat-In record':'')
+        +(point.liveAlert?' · CURRENT NPS CLOSURE':'');
       textWrap.addEventListener('click',()=>{
         map.flyTo([point.lat,point.lng],Math.max(map.getZoom(),13));
         route.markers[index]?.openTooltip?.();
