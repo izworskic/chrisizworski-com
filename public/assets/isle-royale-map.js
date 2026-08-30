@@ -574,6 +574,55 @@
     return wrap;
   }
 
+  function trailNodeKey(lat,lng) {
+    return `${Number(lat).toFixed(4)},${Number(lng).toFixed(4)}`;
+  }
+
+  function ensureTrailNode(lat,lng) {
+    const key=trailNodeKey(lat,lng);
+    if(!trailGraph.nodes.has(key)) {
+      trailGraph.nodes.set(key,{key,lat:Number(lat),lng:Number(lng)});
+      trailGraph.adjacency.set(key,[]);
+    }
+    return key;
+  }
+
+  function addTrailEdge(a,b,name='Mapped trail') {
+    if(a===b)return;
+    const pair=a<b?`${a}|${b}`:`${b}|${a}`;
+    const edgeKey=`${pair}|${cleanText(name).toLowerCase()}`;
+    if(trailGraph.edgeKeys.has(edgeKey))return;
+    const na=trailGraph.nodes.get(a),nb=trailGraph.nodes.get(b);
+    if(!na||!nb)return;
+    const distance=distanceMiles(na,nb);
+    if(!Number.isFinite(distance)||distance<=0||distance>1.5)return;
+    trailGraph.edgeKeys.add(edgeKey);
+    trailGraph.adjacency.get(a).push({to:b,distance,name:cleanText(name)||'Mapped trail'});
+    trailGraph.adjacency.get(b).push({to:a,distance,name:cleanText(name)||'Mapped trail'});
+    trailGraph.segments++;
+  }
+
+  function registerTrailGeometry(feature,name='Mapped trail') {
+    const geometry=feature?.geometry;
+    if(!geometry)return;
+    const lines=geometry.type==='LineString'
+      ? [geometry.coordinates]
+      : geometry.type==='MultiLineString'
+        ? geometry.coordinates
+        : [];
+    for(const line of lines) {
+      if(!Array.isArray(line)||line.length<2)continue;
+      let previous=null;
+      for(const coord of line) {
+        const lng=Number(coord?.[0]),lat=Number(coord?.[1]);
+        if(!Number.isFinite(lat)||!Number.isFinite(lng))continue;
+        const key=ensureTrailNode(lat,lng);
+        if(previous)addTrailEdge(previous,key,name);
+        previous=key;
+      }
+    }
+  }
+
   function addGeoJSONFeature(feature, context={}) {
     if (!feature || !feature.geometry) return 0;
     const name = cleanText(featureName(feature, context.layerTitle));
@@ -599,6 +648,7 @@
           deepMeta:context.deepMeta || null,
           properties:{...props},
           geometryType:feature.geometry.type || '',
+          geometry:feature.geometry,
           latlng
         };
         enrichRecord(record);
@@ -606,6 +656,7 @@
         layer.on('click', () => selectRecord(record));
       }
     });
+    if(category==='trail' && /LineString/.test(feature.geometry.type || '')) registerTrailGeometry(feature,name);
     const target = context.targetGroup || layerGroups[category] || layerGroups.other;
     geo.eachLayer(layer => target.addLayer(layer));
     if (record) featureIndex.push(record);
