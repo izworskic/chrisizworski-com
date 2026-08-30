@@ -7,6 +7,7 @@ const read = p => fs.readFileSync(path.join(root, p), 'utf8');
 const html = read('public/isle-royale-map/index.html');
 const js = read('public/assets/isle-royale-map.js');
 const api = read('api/isle-royale.js');
+const routeWeatherApi = read('api/isle-royale-route-weather.js');
 const catalog = JSON.parse(read('public/isle-royale-map/catalog.json'));
 const spec = JSON.parse(read('benchmarks/isle-royale-map.json'));
 const deepManifest = JSON.parse(read('public/isle-royale-map/data/deep-layer-manifest.json'));
@@ -57,6 +58,24 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /Related information/.test(js)
   && /Open this coordinate in OpenStreetMap/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
+const osmToggleRuntime = /const osmContextGroup = L\.layerGroup\(\)/.test(js)
+  && /function setOsmContextVisible/.test(js)
+  && /Hide OSM context/.test(js)
+  && /Show OSM context/.test(js)
+  && /targetGroup:osmContextGroup/.test(js);
+const routePlanningRuntime = /id="route-planner"/.test(html)
+  && /Build a route \+ check marine conditions/.test(html)
+  && /function addRoutePoint/.test(js)
+  && /function routeForecastSamples/.test(js)
+  && /function relativeWind/.test(js)
+  && /Add this point to route/.test(js)
+  && /\/api\/isle-royale-route-weather/.test(js)
+  && /forecastGridData/.test(routeWeatherApi)
+  && /waveHeight/.test(routeWeatherApi)
+  && /wavePeriod/.test(routeWeatherApi)
+  && /PILM4/.test(routeWeatherApi)
+  && /ROAM4/.test(routeWeatherApi)
+  && /alerts\/active\?point=/.test(routeWeatherApi);
 const reliefRuntime = /USGSShadedReliefOnly\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/.test(js)
   && /data-layer="relief"/.test(html)
   && catalog.items.some(x => x.id === 'relief' && x.state === 'live-tile');
@@ -69,7 +88,7 @@ const referenceShelfComplete = /class="map-shelf"/.test(html)
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime, 'search + filters + large point hit targets + data-rich point details + current NPS park-state + USGS relief + five privacy-safe product events');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime, 'search + reversible OSM context + route building + route-time NWS wind/wave/weather + large point details + current NPS park-state');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -123,6 +142,8 @@ if (!catalogCrawlable) hardFailures.push('crawlable source catalog/raw manifest 
 if (!measurementComplete) hardFailures.push('planned privacy-safe Isle Royale measurement events missing');
 if (!currentShipwreckRuntime) hardFailures.push('current NPS shipwreck buoy runtime missing');
 if (!pointDetailRuntime) hardFailures.push('point hit-target/detail popup runtime missing');
+if (!osmToggleRuntime) hardFailures.push('OSM context is not a reversible layer');
+if (!routePlanningRuntime) hardFailures.push('route-aware marine planning runtime missing');
 if (!reliefRuntime) hardFailures.push('keyless USGS relief runtime missing');
 if (!referenceShelfComplete) hardFailures.push('official/reference map shelf incomplete');
 if (deepManifest.sources?.vegetation_overview?.features !== 6 || deepManifest.sources?.vegetation_overview?.bytes >= deepManifest.sources?.vegetation?.bytes / 2) hardFailures.push('vegetation overview reduction gate failed');
