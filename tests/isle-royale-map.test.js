@@ -120,7 +120,7 @@ test('generated deep science layers are real, opt-in, hashed and visibly dated',
   assert.match(js, /vegetation-overview-2000\.geojson/);
   assert.match(js, /vegetation-baseline-2000\.geojson/);
   assert.match(js, /async function loadDeepLayer/);
-  assert.match(js, /historical inventory baseline/i);
+  assert.match(js, /historical 2000-inventory derivatives/i);
   for (const key of ['geology','vegetation','vegetation_overview']) {
     const meta = deepManifest.sources[key];
     assert.ok(meta && /^[a-f0-9]{64}$/.test(meta.sha256), `${key} sha256`);
