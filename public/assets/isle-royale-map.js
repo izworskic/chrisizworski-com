@@ -543,6 +543,41 @@
     return true;
   }
 
+  function routePointForRecord(record) {
+    if(!record?.latlng)return null;
+    return route.points.find(point=>point.kind==='campground'&&distanceMiles(point,record.latlng)<.08)||null;
+  }
+
+  function manualDayNumber(point) {
+    let day=0;
+    for(const routePoint of route.points) {
+      if(routePoint.manualDayEnd)day++;
+      if(routePoint===point)return routePoint.manualDayEnd?day:null;
+    }
+    return null;
+  }
+
+  function setCampDayEnd(recordOrPoint,active=true) {
+    let point=recordOrPoint?.latlng ? routePointForRecord(recordOrPoint) : recordOrPoint;
+    if(!point&&recordOrPoint?.latlng) {
+      addFeatureToRoute(recordOrPoint);
+      point=routePointForRecord(recordOrPoint);
+    }
+    if(!point||point.kind!=='campground')return false;
+    if(point.liveAlert) {
+      status((point.label||'Campground')+' is currently flagged closed by NPS and cannot be used as a day end.');
+      return false;
+    }
+    point.manualDayEnd=Boolean(active);
+    reroute((point.label||'Campground')+(active?' set as an explicit day end.':' returned to a normal route stop.'));
+    const day=manualDayNumber(point);
+    status(active
+      ? (point.label||'Campground')+' is now End Day '+day+'.'
+      : (point.label||'Campground')+' is no longer a fixed day end.');
+    emitEvent('isle_royale_manual_day_end',{active:Boolean(active),day:day||null,mode:route.mode});
+    return true;
+  }
+
   function popupNode(record) {
     const wrap = document.createElement('div');
     wrap.className = 'popup-detail';
@@ -610,6 +645,22 @@
         if(!closedCamp)addFeatureToRoute(record);
       });
       wrap.appendChild(routeAction);
+      if(record.category==='campground'&&!closedCamp) {
+        const dayEndAction=document.createElement('button');
+        dayEndAction.type='button';
+        dayEndAction.className='popup-action popup-route-action';
+        const existing=routePointForRecord(record);
+        dayEndAction.textContent=existing?.manualDayEnd
+          ? 'Remove fixed day end'
+          : 'End next day here';
+        dayEndAction.addEventListener('click',event=>{
+          event.preventDefault();
+          event.stopPropagation();
+          setCampDayEnd(record,!routePointForRecord(record)?.manualDayEnd);
+          map.closePopup();
+        });
+        wrap.appendChild(dayEndAction);
+      }
     }
 
     const links = relatedLinks(record);
@@ -2163,18 +2214,21 @@
   }
 
   function addRoutePoint(latlng,label='',meta={}) {
-    if(!latlng||!Number.isFinite(latlng.lat)||!Number.isFinite(latlng.lng))return;
-    route.points.push({
+    if(!latlng||!Number.isFinite(latlng.lat)||!Number.isFinite(latlng.lng))return null;
+    const point={
       lat:Number(latlng.lat),
       lng:Number(latlng.lng),
       label:cleanText(label)||`Waypoint ${route.points.length+1}`,
       kind:cleanText(meta.kind||'map-point'),
       sourceBackedBoatIn:Boolean(meta.sourceBackedBoatIn),
       sourceLabel:cleanText(meta.sourceLabel||''),
-      liveAlert:Boolean(meta.liveAlert)
-    });
+      liveAlert:Boolean(meta.liveAlert),
+      manualDayEnd:Boolean(meta.manualDayEnd)
+    };
+    route.points.push(point);
     reroute('Route changed. Re-run the weather analysis for the updated path.');
     emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode,point_kind:cleanText(meta.kind||'map-point')});
+    return point;
   }
 
   function reverseRoute() {
