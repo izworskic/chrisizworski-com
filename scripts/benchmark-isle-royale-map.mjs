@@ -99,6 +99,8 @@ const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js
   && /isle-royale-water-intelligence\.js/.test(html)
   && /function routeSegment/.test(waterJs)
   && /crosses\(n,nn\)/.test(waterJs)
+  && /waterKeys/.test(waterJs)
+  && /outside-water routing component/.test(waterJs)
   && /weatherSamples/.test(waterJs)
   && /zonesAlongPath/.test(waterJs)
   && /dayEnds/.test(waterJs)
