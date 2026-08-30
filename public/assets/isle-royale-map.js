@@ -49,6 +49,7 @@
     exploreModeButton: document.getElementById('explore-mode'),
     routeModeButton: document.getElementById('route-mode'),
     routeMapGuide: document.getElementById('route-map-guide'),
+    focusMapButton: document.getElementById('focus-map'),
     routeAddButton: document.getElementById('route-add-mode'),
     routeReverse: document.getElementById('route-reverse'),
     routeUndo: document.getElementById('route-undo'),
@@ -2219,6 +2220,24 @@
     renderRouteItinerary();
   }
 
+  function resizePlanningMap() {
+    window.setTimeout(()=>map.invalidateSize({pan:false}),230);
+  }
+
+  function setMapFocus(active) {
+    const focused=Boolean(active);
+    document.body.classList.toggle('map-focus',focused);
+    if(els.focusMapButton) {
+      els.focusMapButton.textContent=focused?'Exit map focus':'Focus map';
+      els.focusMapButton.setAttribute('aria-pressed',String(focused));
+    }
+    resizePlanningMap();
+    status(focused
+      ? 'Map focus is on. The map now fills the viewport for route planning; use Exit map focus or Escape to return.'
+      : 'Map focus closed. Your route and map position are preserved.');
+    emitEvent('isle_royale_map_focus',{active:focused,mode:route.mode,building:route.adding});
+  }
+
   function setRouteAdding(active) {
     route.adding=Boolean(active);
     document.body.classList.toggle('route-building',route.adding);
@@ -2237,6 +2256,7 @@
         ? 'Build route is on. Click the map, campsites, or route line to keep extending the trip.'
         : 'Build route is on. Click the map or a campsite for your route start.'
       : 'Explore mode. Map clicks inspect features without changing the trip.');
+    resizePlanningMap();
   }
 
   function addRoutePoint(latlng,label='',meta={}) {
@@ -2645,10 +2665,16 @@
     status(label+' added. Keep clicking to extend the route or click a campground to make it a trip stop.');
   });
   document.addEventListener('keydown',event=>{
-    if(event.key==='Escape'&&route.adding)setRouteAdding(false);
+    if(event.key!=='Escape')return;
+    if(document.body.classList.contains('map-focus')) {
+      setMapFocus(false);
+      return;
+    }
+    if(route.adding)setRouteAdding(false);
   });
 
-  document.getElementById('fit-island').addEventListener('click', () => map.fitBounds(CONFIG.islandBounds,{padding:[10,10]}));
+  document.getElementById('fit-island').addEventListener('click', () => map.fitBounds(CONFIG.islandBounds,{padding:[18,18]}));
+  els.focusMapButton?.addEventListener('click',()=>setMapFocus(!document.body.classList.contains('map-focus')));
   document.getElementById('load-osm').addEventListener('click', loadOsmContext);
   document.getElementById('clear-selection').addEventListener('click', () => {
     if (selectedLayer && selectedLayer.closePopup) selectedLayer.closePopup();

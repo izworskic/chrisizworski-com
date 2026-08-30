@@ -119,6 +119,7 @@ The route planner must become a trip-decision tool rather than a line-drawing wi
 - **Clicked campsite ownership:** a user-selected current NPS Boat-In campground is a pinned itinerary decision, not a suggestion. Scenario generation must preserve that stop and surface when the choice creates a longer-than-profile day.
 - **Explicit day ends:** any selected campground can be promoted to an explicit `End Day N` boundary. Manual day ends override automatic daily splitting and must persist across Conservative/Balanced/Ambitious scenarios. For water trips, the designation remains subject to current NPS Boat-In and closure truth; the trip start cannot also be a day end.
 - **Visible route stack:** mirror map edits in a compact Start / Camp / Via / Destination sequence with direct remove/focus actions so the map remains the primary editor without becoming opaque.
+- **Planning-sized canvas:** Build route must materially enlarge the map. Desktop should devote most of the workspace width to the map; landscape tablet/mobile should use most of the dynamic viewport height. Provide a Focus map mode that takes the map to the full viewport while preserving route state, and always call Leaflet `invalidateSize` after layout transitions.
 - **Failure mode:** if shoreline geometry or routing fails, preserve the editable sketch and clearly label water intelligence unavailable.
 - **Source separation:** OpenStreetMap coastline may support the planning land mask; current NPS/IRMA remains the authority for regulations.
 

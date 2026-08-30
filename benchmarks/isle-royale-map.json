@@ -1,5 +1,5 @@
 {
-  "version": "1.6.0",
+  "version": "1.7.0",
   "updated": "2026-08-30",
   "route": "/isle-royale-map/",
   "objective": "Build the most useful source-transparent Isle Royale planning map in the Chris Izworski tool network without pretending static cartography is authoritative GIS.",
@@ -64,7 +64,7 @@
     {
       "id": "planning-flow",
       "weight": 15,
-      "target": "Explore remains the default. Build route mode stays persistent and map-first. Campgrounds can be added as explicit trip stops, and a campground can be designated as an explicit End Day N anchor. Manual day ends override automatic day splitting, remain fixed across Conservative/Balanced/Ambitious scenarios, and retain Boat-In/closure truth gates for water trips."
+      "target": "The map must be sized as a real planning workspace: Build route materially expands the map relative to the side panel on desktop, increases planning height on tablet/mobile, and offers a full-dynamic-viewport Focus map mode. Leaflet must invalidate its size after every layout transition so route geometry and click targets stay aligned."
     },
     {
       "id": "provenance",
@@ -116,7 +116,8 @@
     "Do not call a multi-day water itinerary complete unless overnight recommendations require a current NPS Boat-In campground record, exclude current closure signals, and explicitly show a gap instead of inventing a campsite when no qualified stop fits the travel day.",
     "Do not call scenario planning complete unless conservative, balanced, and ambitious plans are structurally distinct, applying a scenario preserves manual route points, source-backed overnight-stop truth gates remain intact, and scenario weather uses explicit itinerary target times across overnight layovers.",
     "Do not call map-first routing complete if Build mode auto-exits after two points, map clicks scroll the user away from the map, campground clicks do not become explicit route stops, or map-selected NPS Boat-In camps can be silently replaced by scenario generation.",
-    "Do not call day-end planning complete unless users can explicitly set and clear campsite day ends from the route-building experience, those anchors override automatic day splitting across all scenarios, trip starts cannot become day ends, and water-trip day ends remain constrained by current NPS Boat-In/closure truth."
+    "Do not call day-end planning complete unless users can explicitly set and clear campsite day ends from the route-building experience, those anchors override automatic day splitting across all scenarios, trip starts cannot become day ends, and water-trip day ends remain constrained by current NPS Boat-In/closure truth.",
+    "Do not call the route planner usable if the map remains reference-sized during Build mode, landscape tablet planning is constrained to a short viewport, full-map focus is unavailable, or Leaflet is not invalidated after responsive/focus layout changes."
   ],
   "initialBuildFit": {
     "distinctSearchIntent": 24,
