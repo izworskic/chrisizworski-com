@@ -50,8 +50,8 @@
       "kind": "document",
       "state": "cataloged",
       "publisher": "National Park Service",
-      "source": "https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm",
-      "notes": "Detail guide for Rock Harbor visitor facilities and nearby trails."
+      "source": "https://www.nps.gov/isro/planyourvisit/upload/ISRO_Web_Accessible_Rock_Harbor_Area_Guide_2015.pdf",
+      "notes": "Direct NPS Rock Harbor Area Guide (2015). Use for facility/orientation context; current operational status still comes from current NPS pages."
     },
     {
       "id": "windigo",
@@ -60,8 +60,8 @@
       "kind": "document",
       "state": "cataloged",
       "publisher": "National Park Service",
-      "source": "https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm",
-      "notes": "Detail guide for Windigo visitor facilities and nearby trails."
+      "source": "https://www.nps.gov/isro/planyourvisit/upload/ISRO_Web_Accessible_Windigo_Area_Guide_2015.pdf",
+      "notes": "Direct NPS Windigo Area Guide (2015). Use for facility/orientation context; current operational status still comes from current NPS pages."
     },
     {
       "id": "camping-zones",
@@ -70,7 +70,7 @@
       "kind": "polygon/reference",
       "state": "current-status-plus-reference",
       "publisher": "National Park Service",
-      "source": "https://www.nps.gov/isro/planyourvisit/crosscountry-camping.htm",
+      "source": "https://www.nps.gov/isro/planyourvisit/off-trail-camping.htm",
       "notes": "Isle Royale uses 46 off-trail camping zones on the permit map. Current closure zone numbers are parsed from the NPS Current Conditions feed and surfaced as operational status without inventing polygon geometry; verify the current permit map and conditions before departure."
     },
     {
@@ -164,8 +164,8 @@
       "kind": "polygon/reference",
       "state": "cataloged",
       "publisher": "National Park Service",
-      "source": "https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm",
-      "notes": "Boating planning layer; verify current restrictions before publication."
+      "source": "https://www.nps.gov/isro/planyourvisit/upload/ISRO_Web__Accessible_Boating_Anchorage_Zones_Map_2018.pdf",
+      "notes": "Direct NPS Anchorage Zones map (2018), retained as an official boating-planning reference. Verify current restrictions and conditions before acting."
     },
     {
       "id": "historic-brochure",
