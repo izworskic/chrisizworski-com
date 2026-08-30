@@ -85,3 +85,20 @@ test('scenario set compares different day counts without reintroducing closed ca
   assert.ok(days.conservative >= days.balanced);
   assert.ok(days.balanced >= days.ambitious);
 });
+
+
+test('map-selected pinned Boat-In camps remain explicit stops across all three scenarios', () => {
+  const api = loadIntel();
+  const path = [{lat:48,lng:-89.0},{lat:48,lng:-88.5}];
+  const camps = [
+    {id:'chosen',name:'Chosen Camp',lat:48,lng:-88.80,closed:false,pinned:true,shelters:'2'},
+    {id:'other',name:'Other Camp',lat:48,lng:-88.68,closed:false}
+  ];
+  const scenarios = api.buildScenarioSet(path,camps,3,6,{mode:'paddle',maxDays:8});
+  assert.equal(scenarios.length,3);
+  for (const scenario of scenarios) {
+    const pinnedLeg = scenario.itinerary.legs.find(leg => leg.stop?.id === 'chosen');
+    assert.ok(pinnedLeg, scenario.id + ' should preserve the map-selected campsite');
+    assert.equal(pinnedLeg.pinned,true);
+  }
+});
