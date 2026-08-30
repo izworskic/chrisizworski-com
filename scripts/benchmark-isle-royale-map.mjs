@@ -51,6 +51,12 @@ const currentShipwreckRuntime = /fetchShipwreckDataset/.test(api)
   && /addPendingShipwrecks/.test(js)
   && /visitorGeometrySettled/.test(js)
   && catalog.items.some(x => x.id === 'shipwrecks' && x.state === 'live-api');
+const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \? 14 : 9\}\)/.test(js)
+  && /radius:category === 'campground' \? 7\.5 : 7/.test(js)
+  && /collectFeatureFacts/.test(js)
+  && /Related information/.test(js)
+  && /Open this coordinate in OpenStreetMap/.test(js)
+  && /\.popup-action\{[^}]*min-height:42px/.test(html);
 const reliefRuntime = /USGSShadedReliefOnly\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/.test(js)
   && /data-layer="relief"/.test(html)
   && catalog.items.some(x => x.id === 'relief' && x.state === 'live-tile');
@@ -63,7 +69,7 @@ const referenceShelfComplete = /class="map-shelf"/.test(html)
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime, 'search + filters + list + map focus + current NPS park-state + USGS relief + five privacy-safe product events');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime, 'search + filters + large point hit targets + data-rich point details + current NPS park-state + USGS relief + five privacy-safe product events');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -116,6 +122,7 @@ if (!npmapsComplete) hardFailures.push('16-product NPMaps completeness gate fail
 if (!catalogCrawlable) hardFailures.push('crawlable source catalog/raw manifest link missing');
 if (!measurementComplete) hardFailures.push('planned privacy-safe Isle Royale measurement events missing');
 if (!currentShipwreckRuntime) hardFailures.push('current NPS shipwreck buoy runtime missing');
+if (!pointDetailRuntime) hardFailures.push('point hit-target/detail popup runtime missing');
 if (!reliefRuntime) hardFailures.push('keyless USGS relief runtime missing');
 if (!referenceShelfComplete) hardFailures.push('official/reference map shelf incomplete');
 if (deepManifest.sources?.vegetation_overview?.features !== 6 || deepManifest.sources?.vegetation_overview?.bytes >= deepManifest.sources?.vegetation?.bytes / 2) hardFailures.push('vegetation overview reduction gate failed');
