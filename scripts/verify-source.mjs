@@ -323,7 +323,7 @@ const committedDriftHashEntries = [
   ["/great-lakes-beaches/whitefish-point/", "1dfa103faf8c639a4235ba668a55393b17623793710471579ffb0eb7ccb11a20"],
   ["/great-lakes-beaches/wilderness-state-park/", "6341bdb514bd1ab07c01233bdc8442e2e84e320bcebe2ec7c182b23b19ab5bb1"],
   // Authorized Aug. 29 branded-profile freshness update; keep this as a pinned hash, not an exemption.
-  ["/sitemap-reputation.xml", "24418605d1b0353b75835f9b69a632a3f9375cc1bbfe2b303bb3ab452e048e19"],
+  ["/sitemap-reputation.xml", "3998e4406e9a1f234168c27b4536b670cd094df1078d7cafb61e4e2a5a016ad4"],
   ["/zone-6a-planting-calendar/", "3b34180a82558e2df887dc238ad31dc8d1995e465b3e5d81972ddec260414565"],
 ];
 
