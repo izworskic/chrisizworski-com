@@ -265,6 +265,8 @@ compact(args[0],args[1],args[2])
 compact(args[3],args[4],args[5])
 PY
 
+python3 "$ROOT/scripts/derive-isle-royale-vegetation-overview.py"
+
 python3 - "$OUT" <<'PY'
 import hashlib,json,os,sys,datetime
 out=sys.argv[1]
@@ -282,6 +284,13 @@ sources={
    'download':'https://irma.nps.gov/DataStore/DownloadFile/612177?Reference=2233314',
    'vintage':'NPS vegetation inventory published 2000; project imagery primarily 1994/1996',
    'accuracy_note':'Historical baseline inventory, not a current vegetation-condition map.'
+ },
+ 'vegetation_overview':{
+   'file':'vegetation-overview-2000.geojson',
+   'source':'https://catalog.data.gov/dataset/geospatial-data-for-the-vegetation-mapping-inventory-project-of-isle-royale-national-park',
+   'download':'derived from vegetation-baseline-2000.geojson',
+   'vintage':'Derived overview of the 2000 NPS vegetation inventory; imagery primarily 1994/1996',
+   'accuracy_note':'Broad thematic derivative for orientation. Historical baseline only; not a current vegetation-condition map.'
  }
 }
 for item in sources.values():
@@ -312,7 +321,7 @@ generated_at=previous.get('generated_at') if same_payload and previous.get('gene
 manifest={
  'schema_version':1,
  'generated_at':generated_at,
- 'derivation':'Downloaded federal source packages, reprojected to EPSG:4326, geometry made valid, geology simplified for web display, vegetation dissolved by its detected source class field and simplified for web display, attributes reduced to visitor-facing science context.',
+ 'derivation':'Downloaded federal source packages, reprojected to EPSG:4326, geometry made valid, geology simplified for web display, vegetation dissolved by its detected source class field, and a broad vegetation overview derived by grouping/dissolving those verified classes.',
  'sources':sources
 }
 with open(manifest_path,'w',encoding='utf-8') as f:
@@ -328,5 +337,16 @@ for f in "$OUT/geology-units.geojson" "$OUT/vegetation-baseline-2000.geojson"; d
     exit 5
   fi
 done
+
+overview_size="$(wc -c < "$OUT/vegetation-overview-2000.geojson")"
+if (( overview_size > 8000000 )); then
+  echo "Vegetation overview failed lightweight payload gate: $overview_size bytes" >&2
+  exit 6
+fi
+baseline_size="$(wc -c < "$OUT/vegetation-baseline-2000.geojson")"
+if (( overview_size >= baseline_size / 2 )); then
+  echo "Vegetation overview did not materially reduce the detailed payload: overview=$overview_size baseline=$baseline_size" >&2
+  exit 7
+fi
 
 echo "Isle Royale deep layers built successfully."
