@@ -134,6 +134,10 @@ Authority assets:
 
 The publisher surfaces must remain outside the sitemap and noindex. Their purpose is off-page authority acquisition, not additional search inventory.
 
+The authority layer now also includes partner-specific embeds for Grand Traverse Resort, Cherry Tree Inn, and Traverse City Tourism plus winery-centered embeds for every current winery. These are noindex utility surfaces.
+
+The existing Old Mission-vs.-Leelanau canonical page also contains an original coordinate-based "driving reality" analysis. It does not change the frozen title/H1/canonical treatment. The analysis provides a citeable finding: local nearest-neighbor spacing is almost identical on both peninsulas, while Leelanau's overall pairwise separation and geographic footprint are materially larger. A noindex JSON export supports journalists and publishers without creating another search owner.
+
 Initial 30-day authority targets:
 - 5 legitimate new referring domains;
 - 2 live publisher embeds;
