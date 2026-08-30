@@ -395,17 +395,14 @@ def normalize_irma_quiet_candidate(candidate, target):
 
 
 def irma_zone_feature(path, display_name, zone_type):
-    with tempfile.NamedTemporaryFile(suffix=".geojson", delete=False) as tmp_handle:
-        tmp_path = pathlib.Path(tmp_handle.name)
-    try:
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_path = pathlib.Path(tmp_dir) / "zone.geojson"
         subprocess.run([
             "ogr2ogr", "-f", "GeoJSON", str(tmp_path), str(path),
             "-t_srs", "EPSG:4326", "-makevalid",
             "-lco", "RFC7946=YES", "-lco", "COORDINATE_PRECISION=6",
         ], check=True, stdout=subprocess.DEVNULL)
         fc = json.loads(tmp_path.read_text(encoding="utf-8"))
-    finally:
-        tmp_path.unlink(missing_ok=True)
 
     geometries = []
     source_props = {}
