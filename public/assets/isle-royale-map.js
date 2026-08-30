@@ -2340,10 +2340,11 @@
     if(els.cockpitClear)els.cockpitClear.disabled=!route.points.length;
     if(els.cockpitSave)els.cockpitSave.disabled=!route.points.length;
     if(els.cockpitShare)els.cockpitShare.disabled=!route.points.length;
-    if(els.cockpitGpx)els.cockpitGpx.disabled=route.points.length<2;
+    const gpxReady=route.points.length>=2&&(route.mode==='hike'?route.smartState==='trail-snapped':route.smartState==='water-aware');
+    if(els.cockpitGpx)els.cockpitGpx.disabled=!gpxReady;
     if(els.routeSave)els.routeSave.disabled=!route.points.length;
     if(els.routeShare)els.routeShare.disabled=!route.points.length;
-    if(els.routeExportGpx)els.routeExportGpx.disabled=route.points.length<2;
+    if(els.routeExportGpx)els.routeExportGpx.disabled=!gpxReady;
     if(els.routeRestore)els.routeRestore.disabled=!hasSavedTrip();
     if(els.cockpitSummary) {
       const summary=els.routeSummary?.textContent||'No route yet.';
