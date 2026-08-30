@@ -77,7 +77,7 @@
 
   function featureName(feature, layerTitle='Isle Royale feature') {
     const p = feature.properties || {};
-    return firstProp(p, ['name','Name','NAME','title','Title','LABEL','label','UNIT_NAME','TRAILNAME','TRAIL_NAME','POINAME','FACILITY','SITE_NAME']) || layerTitle || 'Isle Royale feature';
+    return firstProp(p, ['name','Name','NAME','title','Title','MAPLABEL','LABEL','label','TRLALTNAME','TRLNAME','TRAILNAME','TRAIL_NAME','POINAME','FACILITY','SITE_NAME','UNIT_NAME']) || layerTitle || 'Isle Royale feature';
   }
 
   function classify(feature, layerTitle='') {
