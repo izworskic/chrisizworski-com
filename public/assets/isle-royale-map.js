@@ -1556,9 +1556,10 @@
     });
   }
 
-  function clearRouteWeather(message='') {
+  function clearRouteWeather(message='',preserveScenario=false) {
     route.weather=null;
     route.itineraryWeather=null;
+    if(!preserveScenario)route.scenarioWeather={};
     els.routeWeather.replaceChildren();
     if(message) {
       const note=document.createElement('div');
@@ -1567,6 +1568,7 @@
       els.routeWeather.appendChild(note);
     }
     renderRouteItinerary();
+    renderRouteScenarios();
   }
 
   function renderSmartStatus() {
@@ -2018,6 +2020,7 @@
       els.routeWeatherButton.disabled=false;
     }
     renderRouteIntelligence();
+    renderRouteScenarios();
     renderRouteItinerary();
   }
 
@@ -2066,6 +2069,12 @@
     route.trailNames=[];
     route.waterStats=null;
     route.waterReason='';
+    route.scenarios=[];
+    route.activeScenario='balanced';
+    route.scenarioWeather={};
+    route.scenarioWeatherLoading=false;
+    route.itinerary=null;
+    route.itineraryWeather=null;
     route.smartState='idle';
     setRouteAdding(false);
     clearRouteWeather();
@@ -2377,6 +2386,7 @@
   const routeSpeedDefaults={paddle:3,hike:2,powerboat:15};
   els.routeModeSelect.addEventListener('change',()=>{
     route.mode=els.routeModeSelect.value;
+    route.activeScenario='balanced';
     els.routeSpeed.value=routeSpeedDefaults[route.mode]||3;
     reroute('Travel mode changed. Re-run route weather after confirming speed and departure.');
   });
@@ -2385,7 +2395,8 @@
     renderRoute();
   });
   els.routeDayHours?.addEventListener('change',()=>{
-    clearRouteWeather('Travel-day length changed. Re-run route weather so each day gets the right forecast window.');
+    route.activeScenario='balanced';
+    clearRouteWeather('Balanced travel-day length changed. Scenario plans were rebuilt; re-run forecast comparison for the new schedules.');
     renderRoute();
   });
   els.routeDeparture.addEventListener('change',()=>clearRouteWeather('Departure changed. Re-run route weather for the new time.'));
