@@ -68,10 +68,10 @@
       "npmapsCategory": "camping zones",
       "label": "Off-trail camping zones",
       "kind": "polygon/reference",
-      "state": "cataloged",
+      "state": "current-status-plus-reference",
       "publisher": "National Park Service",
       "source": "https://www.nps.gov/isro/planyourvisit/crosscountry-camping.htm",
-      "notes": "Regulation-sensitive layer. Do not infer current rules from an old brochure."
+      "notes": "Isle Royale uses 46 off-trail camping zones on the permit map. Current closure zone numbers are parsed from the NPS Current Conditions feed and surfaced as operational status without inventing polygon geometry; verify the current permit map and conditions before departure."
     },
     {
       "id": "transportation",
