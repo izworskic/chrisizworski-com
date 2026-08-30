@@ -1506,11 +1506,17 @@
     route.trailNames=[];
     route.accessMiles=0;
     if(route.points.length<2) {
+      route.waterToken++;
+      route.waterStats=null;
+      route.waterReason='';
       route.resolvedPoints=[...route.points];
       route.smartState=route.points.length?'need-destination':'idle';
       return;
     }
     if(route.mode==='hike') {
+      route.waterToken++;
+      route.waterStats=null;
+      route.waterReason='';
       const smart=resolveHikingRoute();
       if(smart?.ok) {
         route.resolvedPoints=smart.points;
@@ -1524,7 +1530,9 @@
       }
     } else {
       route.resolvedPoints=[...route.points];
-      route.smartState='water-shaped';
+      route.waterStats=null;
+      route.waterReason='';
+      route.smartState='water-pending';
     }
   }
 
@@ -1593,6 +1601,7 @@
     resolveRoute();
     clearRouteWeather(message);
     renderRoute();
+    if(route.mode!=='hike'&&route.points.length>=2)resolveWaterRouteAsync();
   }
 
   function renderRoute() {
@@ -1680,9 +1689,7 @@
       lng:Number(latlng.lng),
       label:cleanText(label)||`Waypoint ${route.points.length+1}`
     });
-    resolveRoute();
-    clearRouteWeather('Route changed. Re-run the weather analysis for the updated path.');
-    renderRoute();
+    reroute('Route changed. Re-run the weather analysis for the updated path.');
     emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode});
     document.getElementById('route-planner')?.scrollIntoView({behavior:'smooth',block:'nearest'});
     if(route.points.length===2)setRouteAdding(false);
@@ -1702,9 +1709,12 @@
   }
 
   function clearRoute() {
+    route.waterToken++;
     route.points=[];
     route.resolvedPoints=[];
     route.trailNames=[];
+    route.waterStats=null;
+    route.waterReason='';
     route.smartState='idle';
     setRouteAdding(false);
     clearRouteWeather();
