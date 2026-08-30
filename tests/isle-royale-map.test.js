@@ -2,6 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const crypto = require('node:crypto');
 
 const root = path.resolve(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'public/isle-royale-map/index.html'), 'utf8');
@@ -9,6 +10,7 @@ const js = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 
 const api = fs.readFileSync(path.join(root, 'api/isle-royale.js'), 'utf8');
 const catalog = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/catalog.json'), 'utf8'));
 const deepManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/deep-layer-manifest.json'), 'utf8'));
+const contextManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/context-layer-manifest.json'), 'utf8'));
 const contextBuilder = fs.readFileSync(path.join(root, 'scripts/build-isle-royale-context-layers.py'), 'utf8');
 
 function rendered(s) { return s.replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"'); }
@@ -48,10 +50,13 @@ test('catalog covers the NPMaps source families and deep layers', () => {
   }
   assert.ok(catalog.items.some(x => x.id === 'geology' && x.state === 'generated-runtime'));
   assert.ok(catalog.items.some(x => x.id === 'vegetation-detailed' && x.state === 'generated-runtime' && /1994\/1996/.test(x.vintage)));
+  assert.ok(catalog.items.some(x => x.id === 'quiet-no-wake' && x.state === 'generated-runtime' && /22 official polygons/i.test(x.label)));
+  assert.ok(catalog.items.some(x => x.id === 'vegetation-change-1996-2017' && x.state === 'generated-runtime'));
+  assert.ok(catalog.items.some(x => x.id === 'horne-fire-2021' && x.state === 'generated-runtime'));
 });
 
 test('planning, provenance, accessibility and safety hooks exist', () => {
-  for (const id of ['feature-search','layer-filters','feature-list','map-status','park-live-status','deep-layer-status','source-catalog']) assert.ok(html.includes(`id="${id}"`), id);
+  for (const id of ['feature-search','layer-filters','feature-list','map-status','park-live-status','deep-layer-status','context-layer-status','source-catalog']) assert.ok(html.includes(`id="${id}"`), id);
   assert.match(html, /not a navigation chart/i);
   assert.match(html, /National Park Service/i);
   assert.match(js, /sourceStatus/);
@@ -114,4 +119,42 @@ test('generated deep science layers are real, opt-in, hashed and visibly dated',
   assert.ok(deepManifest.sources.geology.features >= 1900);
   assert.equal(deepManifest.sources.vegetation.features, 38);
   assert.match(deepManifest.sources.vegetation.accuracy_note, /Historical baseline/i);
+});
+
+
+test('verified NPS and USGS context layers are lazy, hashed and integrity-gated', () => {
+  for (const id of ['quiet-no-wake','vegetation-change','horne-fire']) {
+    assert.match(html, new RegExp(`data-layer="${id}"`));
+  }
+  assert.match(js, /context-layer-manifest\.json/);
+  assert.match(js, /quiet-no-wake-zones\.geojson/);
+  assert.match(js, /vegetation-change-1996-2017\.geojson/);
+  assert.match(js, /horne-fire-burn-severity\.geojson/);
+  assert.match(js, /async function loadContextLayer/);
+  assert.match(js, /official NPS regulatory geometry/i);
+  assert.match(js, /historical USGS context/i);
+
+  const expected = {
+    quiet_no_wake: 22,
+    vegetation_change: 2738,
+    horne_fire: 93,
+  };
+
+  for (const [key, count] of Object.entries(expected)) {
+    const meta = contextManifest.layers[key];
+    assert.equal(meta.status, 'generated', key);
+    assert.equal(meta.features, count, `${key} feature count`);
+    assert.match(meta.sha256, /^[a-f0-9]{64}$/);
+    const file = path.join(root, 'public/isle-royale-map/data', meta.file);
+    assert.ok(fs.existsSync(file), `${key} generated file`);
+    const data = fs.readFileSync(file);
+    assert.equal(data.length, meta.bytes, `${key} byte count`);
+    assert.equal(crypto.createHash('sha256').update(data).digest('hex'), meta.sha256, `${key} sha256`);
+  }
+
+  assert.equal(contextManifest.layers.quiet_no_wake.quiet_no_wake_features, 19);
+  assert.equal(contextManifest.layers.quiet_no_wake.no_wake_features, 3);
+  assert.match(contextManifest.layers.quiet_no_wake.geometry_source, /irmaservices\.nps\.gov/);
+  assert.match(contextManifest.layers.vegetation_change.license, /CC0/);
+  assert.match(contextManifest.layers.horne_fire.license, /CC0/);
 });
