@@ -1561,6 +1561,7 @@
       note.textContent=message;
       els.routeWeather.appendChild(note);
     }
+    renderRouteItinerary();
   }
 
   function renderSmartStatus() {
@@ -2092,7 +2093,8 @@
       return;
     }
     const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
-    const samples=routeForecastSamples(5);
+    const itineraryDays=route.itinerary?.legs?.length||1;
+    const samples=routeForecastSamples(Math.min(8,Math.max(5,itineraryDays*2)));
     els.routeWeatherButton.disabled=true;
     els.routeWeatherButton.textContent='Loading NWS marine forecast…';
     clearRouteWeather('Sampling NWS marine forecast conditions along your route and checking Passage Island / Rock of Ages winds…');
@@ -2228,7 +2230,10 @@
     clearRouteWeather('Planning speed changed. Re-run route weather for updated arrival times.');
     renderRoute();
   });
-  els.routeDayHours?.addEventListener('change',renderRoute);
+  els.routeDayHours?.addEventListener('change',()=>{
+    clearRouteWeather('Travel-day length changed. Re-run route weather so each day gets the right forecast window.');
+    renderRoute();
+  });
   els.routeDeparture.addEventListener('change',()=>clearRouteWeather('Departure changed. Re-run route weather for the new time.'));
   els.routeAddButton.addEventListener('click',()=>setRouteAdding(!route.adding));
   els.routeModeButton.addEventListener('click',()=>{
