@@ -2244,6 +2244,7 @@
     renderRouteIntelligence();
     renderRouteScenarios();
     renderRouteItinerary();
+    syncCockpitControls();
   }
 
   function cloneRoutePoints(points=route.points) {
@@ -2348,6 +2349,7 @@
       els.focusMapButton.textContent=focused?'Exit map focus':'Focus map';
       els.focusMapButton.setAttribute('aria-pressed',String(focused));
     }
+    syncCockpitControls();
     resizePlanningMap();
     status(focused
       ? 'Map focus is on. The map now fills the viewport for route planning; use Exit map focus or Escape to return.'
@@ -2373,6 +2375,7 @@
         ? 'Build route is on. Click the map, campsites, or route line to keep extending the trip.'
         : 'Build route is on. Click the map or a campsite for your route start.'
       : 'Explore mode. Map clicks inspect features without changing the trip.');
+    syncCockpitControls();
     resizePlanningMap();
   }
 
@@ -2754,16 +2757,19 @@
 
   const routeSpeedDefaults={paddle:3,hike:2,powerboat:15};
   els.routeModeSelect.addEventListener('change',()=>{
+    rememberRouteEdit();
     route.mode=els.routeModeSelect.value;
     route.activeScenario='balanced';
     els.routeSpeed.value=routeSpeedDefaults[route.mode]||3;
     reroute('Travel mode changed. Re-run route weather after confirming speed and departure.');
   });
   els.routeSpeed.addEventListener('change',()=>{
+    rememberRouteEdit();
     clearRouteWeather('Planning speed changed. Re-run route weather for updated arrival times.');
     renderRoute();
   });
   els.routeDayHours?.addEventListener('change',()=>{
+    rememberRouteEdit();
     route.activeScenario='balanced';
     clearRouteWeather('Balanced travel-day length changed. Scenario plans were rebuilt; re-run forecast comparison for the new schedules.');
     renderRoute();
@@ -2774,8 +2780,33 @@
   els.exploreModeButton?.addEventListener('click',()=>setRouteAdding(false));
   els.routeReverse.addEventListener('click',reverseRoute);
   els.routeUndo.addEventListener('click',undoRoutePoint);
+  els.routeRedo?.addEventListener('click',redoRouteEdit);
   els.routeClear.addEventListener('click',clearRoute);
   els.routeWeatherButton.addEventListener('click',analyzeRouteWeather);
+  els.cockpitExit?.addEventListener('click',()=>setMapFocus(false));
+  els.cockpitBuild?.addEventListener('click',()=>setRouteAdding(!route.adding));
+  els.cockpitUndo?.addEventListener('click',undoRouteEdit);
+  els.cockpitRedo?.addEventListener('click',redoRouteEdit);
+  els.cockpitReverse?.addEventListener('click',reverseRoute);
+  els.cockpitWeather?.addEventListener('click',analyzeRouteWeather);
+  els.cockpitClear?.addEventListener('click',clearRoute);
+  els.cockpitMode?.addEventListener('change',()=>{
+    if(els.cockpitMode.value===els.routeModeSelect.value)return;
+    els.routeModeSelect.value=els.cockpitMode.value;
+    els.routeModeSelect.dispatchEvent(new Event('change'));
+  });
+  els.cockpitSpeed?.addEventListener('change',()=>{
+    const value=Number(els.cockpitSpeed.value);
+    if(!Number.isFinite(value)||value<.5)return;
+    els.routeSpeed.value=String(value);
+    els.routeSpeed.dispatchEvent(new Event('change'));
+  });
+  els.cockpitHours?.addEventListener('change',()=>{
+    const value=Number(els.cockpitHours.value);
+    if(!Number.isFinite(value)||value<2)return;
+    els.routeDayHours.value=String(value);
+    els.routeDayHours.dispatchEvent(new Event('change'));
+  });
   map.on('click',event=>{
     if(!route.adding)return;
     const label=route.points.length===0?'Map start':`Map waypoint ${route.points.length+1}`;
@@ -2783,6 +2814,19 @@
     status(label+' added. Keep clicking to extend the route or click a campground to make it a trip stop.');
   });
   document.addEventListener('keydown',event=>{
+    const tag=event.target?.tagName?.toLowerCase();
+    const typing=tag==='input'||tag==='select'||tag==='textarea'||event.target?.isContentEditable;
+    if(!typing&&(event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z') {
+      event.preventDefault();
+      if(event.shiftKey)redoRouteEdit();
+      else undoRouteEdit();
+      return;
+    }
+    if(!typing&&(event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='y') {
+      event.preventDefault();
+      redoRouteEdit();
+      return;
+    }
     if(event.key!=='Escape')return;
     if(document.body.classList.contains('map-focus')) {
       setMapFocus(false);
@@ -2828,6 +2872,8 @@
   els.exploreModeButton?.setAttribute('aria-pressed','true');
   els.routeModeButton?.setAttribute('aria-pressed','false');
   renderRoute();
+  updateHistoryControls();
+  syncCockpitControls();
   renderFeatureList();
   loadCatalog();
   loadOperationalData();
