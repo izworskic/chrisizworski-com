@@ -171,6 +171,9 @@ test('water intelligence is a real coastline-aware planning layer, not a draggab
   assert.match(js, /Nearby mapped refuge \/ stopping options/);
   assert.match(waterIntelJs, /function routeSegment/);
   assert.match(waterIntelJs, /crosses\(n,nn\)/);
+  assert.match(waterIntelJs, /waterKeys/);
+  assert.match(waterIntelJs, /outside-water routing component/);
+  assert.match(waterIntelJs, /nearShore/);
   assert.match(waterIntelJs, /weatherSamples/);
   assert.match(waterIntelJs, /zonesAlongPath/);
   assert.match(waterIntelJs, /dayEnds/);
