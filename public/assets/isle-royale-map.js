@@ -568,6 +568,10 @@
       status((point.label||'Campground')+' is currently flagged closed by NPS and cannot be used as a day end.');
       return false;
     }
+    if(active&&route.mode!=='hike'&&operational.loaded&&!point.sourceBackedBoatIn) {
+      status((point.label||'Campground')+' is not in the current NPS Boat-In campground feed, so it cannot be fixed as a water-trip day end.');
+      return false;
+    }
     point.manualDayEnd=Boolean(active);
     reroute((point.label||'Campground')+(active?' set as an explicit day end.':' returned to a normal route stop.'));
     const day=manualDayNumber(point);
@@ -1089,6 +1093,9 @@
       point.sourceBackedBoatIn=Boolean(match.boater);
       point.liveAlert=Boolean(match.liveAlert);
       point.sourceLabel=cleanText(match.sourceLabel||point.sourceLabel||'');
+      if(point.manualDayEnd&&route.mode!=='hike'&&operational.loaded&&(!point.sourceBackedBoatIn||point.liveAlert)) {
+        point.manualDayEnd=false;
+      }
     }
     renderFeatureList();
     if(route.points.length)renderRoute();
