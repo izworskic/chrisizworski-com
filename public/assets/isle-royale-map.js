@@ -10,6 +10,7 @@
     overpass: 'https://overpass-api.de/api/interpreter',
     operationsEndpoint: '/api/isle-royale',
     routeWeatherEndpoint: '/api/isle-royale-route-weather',
+    waterIntelEndpoint: '/api/isle-royale-water-intelligence',
     currentConditionsUrl: 'https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm',
     boatInUrl: 'https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm',
     campingUrl: 'https://www.nps.gov/isro/planyourvisit/camping.htm',
@@ -55,6 +56,7 @@
     routeDeparture: document.getElementById('route-departure'),
     routeSmartStatus: document.getElementById('route-smart-status'),
     routeSummary: document.getElementById('route-summary'),
+    routeIntelligence: document.getElementById('route-intelligence'),
     routeWeatherButton: document.getElementById('route-weather-button'),
     routeWeather: document.getElementById('route-weather')
   };
@@ -137,7 +139,23 @@
     mode:'paddle',
     smartState:'idle',
     trailNames:[],
-    accessMiles:0
+    accessMiles:0,
+    waterToken:0,
+    waterStats:null,
+    waterReason:'',
+    waterAccessMiles:0
+  };
+  const waterIntel = {
+    state:'idle',
+    promise:null,
+    source:null,
+    lines:[],
+    segments:[],
+    buckets:new Map(),
+    latBands:new Map(),
+    quietPromise:null,
+    quietZones:null,
+    error:''
   };
   const trailGraph = {
     nodes:new Map(),
