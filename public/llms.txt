@@ -87,6 +87,15 @@ Current role: Solutions Consultant at Prepared.
 - Pictured Rocks Planner: https://picturedrocks.chrisizworski.com/
 - Freighter View Farms: https://freighterviewfarms.com/
 
+
+## Isle Royale Interactive Map
+
+- Canonical tool: https://chrisizworski.com/isle-royale-map/
+- Source catalog: https://chrisizworski.com/isle-royale-map/catalog.json
+- Primary purpose: source-transparent Isle Royale planning map for trails, campgrounds, visitor places, water routes, lighthouses, shipwrecks, boating zones, geology, vegetation, and historical maps.
+- Current visitor authority: https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm
+- Truth rule: current NPS/federal/open GIS is preferred over static map artwork; historical, science, and derived layers retain visible source/vintage status; the tool is not a navigation chart.
+
 ## Michigan River Tools
 
 - Manistee River Field Map: https://chrisizworski.com/manistee-river-map/
