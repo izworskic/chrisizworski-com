@@ -53,7 +53,7 @@ jobs:
               if data.get("type")!="FeatureCollection" or not data.get("features"):
                   raise SystemExit(f"invalid/empty FeatureCollection: {path}")
               print(path, len(data["features"]), path.stat().st_size)
-          manifest=json.loads(expected[2].read_text())
+          manifest=json.loads(expected[3].read_text())
           for key in ("geology","vegetation","vegetation_overview"):
               sha=manifest["sources"][key].get("sha256","")
               if len(sha)!=64:
