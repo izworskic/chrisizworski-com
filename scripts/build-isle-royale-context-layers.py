@@ -26,6 +26,7 @@ USER_AGENT = "ChrisIzworskiIsleRoyaleContextGIS/1.0 (+https://chrisizworski.com/
 QUIET_WEBMAP = "900def55-d66d-4761-8898-634feaea5cd8"
 QUIET_PAGE = "https://www.nps.gov/isro/planyourvisit/quiet-no-wake.htm"
 QUIET_DATASTORE = "https://irma.nps.gov/DataStore/Collection/Profile/9705"
+QUIET_COMPENDIUM = "https://www.nps.gov/isro/learn/management/superintendents-compendium.htm"
 VEG_PARENT = "65c246f9d34ef4b119ca6c8b"
 VEG_DOI = "10.5066/P9393VFK"
 FIRE_PARENT = "6659f2cfd34ef3137d36a465"
@@ -205,63 +206,100 @@ def nps_quiet_diagnostics():
             print(f"NPS map asset fetch failed {asset}: {exc}", file=sys.stderr)
 
 
+def parse_jsonp(text):
+    match = re.match(r"^[^(]+\((.*)\);?\s*$", text.strip(), flags=re.S)
+    if not match:
+        raise ValueError("Unexpected JSONP payload")
+    return json.loads(match.group(1))
+
+
+def fetch_nps_builder_config(map_id):
+    url = f"https://www.nps.gov/maps/builder/configs/{map_id}.jsonp?callback=callback"
+    text = fetch_bytes(url, timeout=45).decode("utf-8", errors="replace")
+    return parse_jsonp(text), url
+
+
+def fetch_carto_zone_geometry(user, table):
+    if not re.fullmatch(r"[A-Za-z0-9_]+", table or ""):
+        raise ValueError(f"Unsafe Carto table name: {table!r}")
+    sql = f'SELECT ST_Union(the_geom) AS the_geom FROM "{table}"'
+    errors = []
+    for host in [f"https://{user}.carto.com", f"https://{user}.cartodb.com"]:
+        url = host + "/api/v2/sql?" + urllib.parse.urlencode({"q": sql, "format": "GeoJSON"})
+        try:
+            data = fetch_json(url, timeout=45)
+            features = data.get("features") or []
+            if features and features[0].get("geometry"):
+                return features[0]["geometry"], url
+        except Exception as exc:
+            errors.append(f"{url}: {exc}")
+    raise RuntimeError("Carto geometry unavailable: " + " | ".join(errors))
+
+
 def build_quiet_no_wake():
-    data_url = f"https://www.arcgis.com/sharing/rest/content/items/{QUIET_WEBMAP}/data?f=json"
-    try:
-        webmap = fetch_json(data_url)
-    except Exception as exc:
-        print(f"ArcGIS interpretation of NPS map id failed: {exc}", file=sys.stderr)
-        webmap = {}
-    candidates = []
-    for layer in webmap.get("operationalLayers") or []:
-        collect_embedded_feature_sets(layer, candidates)
-        url = layer.get("url")
-        if url and re.search(r"(FeatureServer|MapServer)", url, re.I):
-            candidates.extend(collect_arcgis_service(url, layer.get("title") or "NPS quiet/no-wake"))
-        for child in layer.get("layers") or []:
-            url = child.get("url")
-            if url and re.search(r"(FeatureServer|MapServer)", url, re.I):
-                candidates.extend(collect_arcgis_service(url, child.get("title") or layer.get("title") or "NPS quiet/no-wake"))
+    config, config_url = fetch_nps_builder_config(QUIET_WEBMAP)
+    overlays = [
+        item for item in (config.get("overlays") or [])
+        if item.get("type") == "cartodb" and str(item.get("table") or "").startswith("isro_nwz_")
+    ]
+    print(f"NPS builder config quiet/no-wake overlays={len(overlays)} modified={config.get('modified')}", file=sys.stderr)
+    if len(overlays) != 22:
+        nps_quiet_diagnostics()
+        raise RuntimeError(f"Current NPS builder config expected 22 regulatory overlays from the 2026 compendium; found {len(overlays)}")
 
-    scored = []
-    for title, source, fc in candidates:
-        if not isinstance(fc, dict) or not fc.get("features"):
-            continue
-        score = wake_score(title, fc)
-        print(f"quiet candidate title={title!r} features={len(fc.get('features') or [])} score={score} source={source}", file=sys.stderr)
-        if feature_collection_polygon(fc):
-            scored.append((score, title, source, fc))
+    features = []
+    geometry_sources = []
+    quiet_count = 0
+    no_wake_count = 0
+    for overlay in overlays:
+        user = overlay.get("user")
+        table = overlay.get("table")
+        if not user or not table:
+            raise RuntimeError(f"Missing Carto source metadata for overlay {overlay.get('name')}")
+        geometry, geometry_url = fetch_carto_zone_geometry(user, table)
+        styles = overlay.get("styles") or {}
+        fill = str(styles.get("fill") or "").lower()
+        is_no_wake_only = fill in {"#2e3192", "#2e3192".lower()}
+        zone_type = "No-Wake" if is_no_wake_only else "Quiet/No-Wake"
+        if is_no_wake_only:
+            no_wake_count += 1
+        else:
+            quiet_count += 1
+        popup = overlay.get("popup") or {}
+        name = popup.get("title") or overlay.get("name") or table
+        description = popup.get("description") or ""
+        features.append({
+            "type": "Feature",
+            "geometry": geometry,
+            "properties": {
+                "name": name,
+                "zone_type": zone_type,
+                "speed_limit_mph": 5,
+                "boundary_description": description,
+                "nps_overlay_name": overlay.get("name") or "",
+                "nps_table": table,
+                "nps_map_id": QUIET_WEBMAP,
+            },
+        })
+        geometry_sources.append(geometry_url)
+        print(f"quiet zone {zone_type}: {name} <- {table}", file=sys.stderr)
 
-    exact = [c for c in scored if len(c[3].get("features") or []) == 17]
-    if exact:
-        chosen = max(exact, key=lambda x: x[0])
-        fc = chosen[3]
-        chosen_sources = [chosen[2]]
-    else:
-        wake_layers = [c for c in scored if c[0] >= 100]
-        combined = []
-        chosen_sources = []
-        for c in sorted(wake_layers, reverse=True):
-            combined.extend(c[3].get("features") or [])
-            chosen_sources.append(c[2])
-        if len(combined) != 17:
-            nps_quiet_diagnostics()
-            raise RuntimeError(f"Could not reconcile NPS quiet/no-wake geometry to 17 zones; polygon candidates={[(c[1],len(c[3].get('features') or []),c[0]) for c in scored]}")
-        fc = {"type": "FeatureCollection", "features": combined}
+    if len(features) != 22 or quiet_count != 19 or no_wake_count != 3:
+        raise RuntimeError(f"NPS regulatory set mismatch: total={len(features)} quiet/no-wake={quiet_count} no-wake={no_wake_count}")
 
-    compact = compact_quiet_zones(fc)
-    if len(compact["features"]) != 17:
-        raise RuntimeError("Quiet/no-wake output must contain exactly 17 zones")
     target = OUT / "quiet-no-wake-zones.geojson"
-    target.write_text(json.dumps(compact, separators=(",", ":")), encoding="utf-8")
+    target.write_text(json.dumps({"type": "FeatureCollection", "features": features}, separators=(",", ":")), encoding="utf-8")
     return target, {
         "source": QUIET_PAGE,
-        "geometry_source": data_url,
+        "regulatory_source": QUIET_COMPENDIUM,
+        "geometry_source": config_url,
         "datastore_collection": QUIET_DATASTORE,
-        "vintage": "Official NPS quiet/no-wake web map; page last updated April 22, 2025",
-        "regulation_note": "NPS states 17 zones; vessels in designated zones must not exceed 5 mph or create a wake greater than lake conditions. Verify current park regulations before operating.",
-        "features": 17,
-        "geometry_sources": chosen_sources,
+        "vintage": f"NPS builder map modified {config.get('modified')}; regulatory set verified against 2026 Superintendent's Compendium",
+        "regulation_note": "Current 2026 compendium enumerates 19 Quiet/No-Wake zones plus 3 additional No-Wake zones. All designated zones limit vessels to 5 mph and no wake greater than lake conditions. The older NPS map description still says 17 zones; this build follows the enumerated current compendium and 22-overlay NPS map config.",
+        "features": 22,
+        "quiet_no_wake_features": quiet_count,
+        "no_wake_features": no_wake_count,
+        "geometry_sources": geometry_sources,
     }
 
 
