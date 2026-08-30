@@ -11,6 +11,12 @@
     operationsEndpoint: '/api/isle-royale',
     currentConditionsUrl: 'https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm',
     boatInUrl: 'https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm',
+    campingUrl: 'https://www.nps.gov/isro/planyourvisit/camping.htm',
+    dayHikingUrl: 'https://www.nps.gov/isro/planyourvisit/day-hiking.htm',
+    directionsUrl: 'https://www.nps.gov/isro/planyourvisit/directions.htm',
+    placesUrl: 'https://www.nps.gov/isro/planyourvisit/placestogo.htm',
+    mapsUrl: 'https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm',
+    scubaUrl: 'https://www.nps.gov/isro/planyourvisit/scuba-diving.htm',
     offTrailUrl: 'https://www.nps.gov/isro/planyourvisit/off-trail-camping.htm',
     deepManifest: '/isle-royale-map/data/deep-layer-manifest.json',
     deepLayers: {
@@ -40,7 +46,9 @@
     contextStatus: document.getElementById('context-layer-status')
   };
 
-  const map = L.map('isle-map', {preferCanvas:true, zoomControl:false, minZoom:6, maxZoom:18});
+  const coarsePointer = typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
+  const vectorRenderer = L.canvas({padding:.5, tolerance:coarsePointer ? 14 : 9});
+  const map = L.map('isle-map', {renderer:vectorRenderer, zoomControl:false, minZoom:6, maxZoom:18});
   L.control.zoom({position:'topright'}).addTo(map);
   map.fitBounds(CONFIG.islandBounds, {padding:[10,10]});
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -236,6 +244,100 @@
     return '';
   }
 
+  function safeHttpUrl(value='') {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+    const candidate = /^www\./i.test(raw) ? `https://${raw}` : raw;
+    try {
+      const url = new URL(candidate, window.location.href);
+      return /^https?:$/.test(url.protocol) ? url.href : '';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  function humanizeKey(key='') {
+    return String(key)
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .replace(/[_-]+/g, ' ')
+      .replace(/\b\w/g, ch => ch.toUpperCase())
+      .trim();
+  }
+
+  function featureUrls(props={}) {
+    const links = [];
+    const seen = new Set();
+    for (const [key, value] of Object.entries(props)) {
+      if (!/(^|_|:)(url|website|web|link|homepage|more_info|info_url)($|_|:)/i.test(key)) continue;
+      const href = safeHttpUrl(value);
+      if (!href || seen.has(href)) continue;
+      seen.add(href);
+      links.push({href, label:humanizeKey(key)});
+    }
+    return links.slice(0, 4);
+  }
+
+  function collectFeatureFacts(record) {
+    const props = record?.properties || {};
+    const facts = [];
+    const seen = new Set();
+    const ignored = /^(objectid|fid|globalid|shape|shape_length|shape_area|id|osm_id|name|title|label|maplabel|description|desc|descript|notes|details)$/i;
+    const priority = /(type|kind|class|facility|site|trail|length|mile|distance|elev|depth|shelter|tent|dock|water|toilet|amenity|operator|access|season|status|historic|location|area|island|harbor|capacity|use)/i;
+    for (const [key, value] of Object.entries(props)) {
+      if (facts.length >= 8) break;
+      if (ignored.test(key) || !priority.test(key)) continue;
+      if (value == null || typeof value === 'object') continue;
+      const text = cleanText(value);
+      if (!text || text.length > 100 || safeHttpUrl(text)) continue;
+      const fingerprint = text.toLowerCase();
+      if (seen.has(fingerprint) || fingerprint === String(record.name || '').toLowerCase()) continue;
+      seen.add(fingerprint);
+      facts.push({label:humanizeKey(key), value:text});
+    }
+    return facts;
+  }
+
+  function relatedLinks(record) {
+    const links = [];
+    const seen = new Set();
+    const add = (href, label, sourceId='related') => {
+      const safe = safeHttpUrl(href);
+      if (!safe || seen.has(safe)) return;
+      seen.add(safe);
+      links.push({href:safe, label, sourceId});
+    };
+
+    for (const item of featureUrls(record.properties)) add(item.href, item.label || 'Feature website', 'feature-attribute');
+
+    if (record.category === 'campground') {
+      add(CONFIG.campingUrl, 'NPS camping & campground guidance', 'nps-camping');
+      if (record.boater) add(CONFIG.boatInUrl, 'NPS boat-in campground details', 'nps-boat-in');
+    } else if (record.category === 'trail') {
+      add(CONFIG.dayHikingUrl, 'NPS hiking guidance', 'nps-hiking');
+    } else if (record.category === 'water-route') {
+      add(CONFIG.directionsUrl, 'NPS ferry, seaplane & transportation', 'nps-transportation');
+    } else if (record.category === 'visitor-service') {
+      add(CONFIG.placesUrl, 'NPS places to go & visitor areas', 'nps-places');
+    } else if (record.category === 'maritime-history') {
+      if (/shipwreck|wreck|scuba|dive/i.test(`${record.name} ${record.sourceLabel}`)) add(CONFIG.scubaUrl, 'NPS shipwreck & diving guidance', 'nps-scuba');
+      add(CONFIG.placesUrl, 'NPS lighthouses & places to go', 'nps-places');
+    }
+
+    if (record.sourceUrl) add(record.sourceUrl, /nps\.gov\/isro/i.test(record.sourceUrl) ? 'Open official source page' : 'Open map-data source', 'feature-source');
+
+    const osmId = String(record.properties?.osm_id || '');
+    if (/^(node|way|relation)\/\d+$/.test(osmId)) add(`https://www.openstreetmap.org/${osmId}`, 'Open this OpenStreetMap feature', 'osm-feature');
+
+    if (record.latlng && Number.isFinite(record.latlng.lat) && Number.isFinite(record.latlng.lng)) {
+      const lat = record.latlng.lat.toFixed(6);
+      const lng = record.latlng.lng.toFixed(6);
+      add(`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng}`, 'Open this coordinate in OpenStreetMap', 'coordinate');
+    }
+
+    add(CONFIG.currentConditionsUrl, 'Check current NPS conditions', 'nps-current-conditions');
+    return links.slice(0, 6);
+  }
+
   function featureName(feature, layerTitle='Isle Royale feature') {
     const p = feature.properties || {};
     return firstProp(p, ['name','Name','NAME','title','Title','MAPLABEL','LABEL','label','TRLALTNAME','TRLNAME','TRAILNAME','TRAIL_NAME','POINAME','FACILITY','SITE_NAME','UNIT_NAME']) || layerTitle || 'Isle Royale feature';
@@ -261,7 +363,14 @@
 
   function pointMarker(category, latlng) {
     const style = categoryStyle[category] || categoryStyle.other;
-    return L.circleMarker(latlng, {radius:category === 'campground' ? 5.5 : 5, weight:2, color:style.color, fillColor:style.fillColor || style.color, fillOpacity:.86});
+    return L.circleMarker(latlng, {
+      radius:category === 'campground' ? 7.5 : 7,
+      weight:2.5,
+      color:style.color,
+      fillColor:style.fillColor || style.color,
+      fillOpacity:.9,
+      renderer:vectorRenderer
+    });
   }
   function normalizePlaceName(value='') {
     return String(value)
@@ -319,8 +428,21 @@
     container.appendChild(fact);
   }
 
+  function addPopupLink(container, link) {
+    const a = document.createElement('a');
+    a.className = 'popup-action';
+    a.href = link.href;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = link.label;
+    a.addEventListener('click', () => emitEvent('isle_royale_source_open', {source_id:link.sourceId || 'popup-related'}));
+    container.appendChild(a);
+  }
+
   function popupNode(record) {
     const wrap = document.createElement('div');
+    wrap.className = 'popup-detail';
+
     const title = document.createElement('div');
     title.className = 'popup-title';
     title.textContent = record.name;
@@ -344,13 +466,19 @@
 
     if (record.description) {
       const desc = document.createElement('p');
+      desc.className = 'popup-description';
       desc.textContent = record.description;
       wrap.appendChild(desc);
     }
 
+    const facts = document.createElement('div');
+    facts.className = 'popup-facts';
+    if (record.latlng && Number.isFinite(record.latlng.lat) && Number.isFinite(record.latlng.lng)) {
+      addPopupFact(facts, 'Coordinates', `${record.latlng.lat.toFixed(5)}, ${record.latlng.lng.toFixed(5)}`);
+    }
+    for (const fact of collectFeatureFacts(record)) addPopupFact(facts, fact.label, fact.value);
+
     if (record.boater) {
-      const facts = document.createElement('div');
-      facts.className = 'popup-facts';
       addPopupFact(facts, 'Dock depth', record.boater.dock_depth);
       addPopupFact(facts, 'Shelters', record.boater.shelters);
       addPopupFact(facts, 'Tent sites', record.boater.tent_sites);
@@ -358,25 +486,22 @@
       addPopupFact(facts, 'Stay limit', record.boater.consecutive_night_limit);
       addPopupFact(facts, 'Generator use', record.boater.onboard_generator_use);
       addPopupFact(facts, 'Fire ring / grill', record.boater.fire_ring_grill);
-      if (facts.childElementCount) wrap.appendChild(facts);
-
-      const boatLink = document.createElement('a');
-      boatLink.className = 'popup-link';
-      boatLink.href = CONFIG.boatInUrl;
-      boatLink.target = '_blank';
-      boatLink.rel = 'noopener';
-      boatLink.textContent = 'Verify NPS boat-in campground details';
-      wrap.appendChild(boatLink);
     }
+    if (facts.childElementCount) wrap.appendChild(facts);
 
-    if (record.liveAlert) {
-      const conditionLink = document.createElement('a');
-      conditionLink.className = 'popup-link';
-      conditionLink.href = CONFIG.currentConditionsUrl;
-      conditionLink.target = '_blank';
-      conditionLink.rel = 'noopener';
-      conditionLink.textContent = 'Verify current NPS conditions';
-      wrap.appendChild(conditionLink);
+    const links = relatedLinks(record);
+    if (links.length) {
+      const related = document.createElement('div');
+      related.className = 'popup-related';
+      const heading = document.createElement('div');
+      heading.className = 'popup-related-title';
+      heading.textContent = 'Related information';
+      related.appendChild(heading);
+      const actions = document.createElement('div');
+      actions.className = 'popup-actions';
+      for (const link of links) addPopupLink(actions, link);
+      related.appendChild(actions);
+      wrap.appendChild(related);
     }
 
     if (record.deepMeta) {
@@ -409,9 +534,22 @@
       style: () => geometryStyle(category, feature),
       pointToLayer: (_f, latlng) => pointMarker(category, latlng),
       onEachFeature: (_f, layer) => {
-        record = {name, category, layer, sourceLabel, sourceKind, description, sourceUrl:context.sourceUrl || '', deepMeta:context.deepMeta || null};
+        const latlng = layer.getLatLng ? layer.getLatLng() : null;
+        record = {
+          name,
+          category,
+          layer,
+          sourceLabel,
+          sourceKind,
+          description,
+          sourceUrl:context.sourceUrl || '',
+          deepMeta:context.deepMeta || null,
+          properties:{...props},
+          geometryType:feature.geometry.type || '',
+          latlng
+        };
         enrichRecord(record);
-        layer.bindPopup(() => popupNode(record));
+        layer.bindPopup(() => popupNode(record), {maxWidth:390, minWidth:280, autoPanPadding:[28,28], className:'isle-detail-popup'});
         layer.on('click', () => selectRecord(record));
       }
     });
@@ -481,7 +619,7 @@
     return queryArcGISLayer(clean, title, sourceLabel, sourceKind);
   }
 
-  async function ingestOperationalLayer(op) {
+  async function ingestOperationalLayer(op, parentSourceUrl='') {
     let added = 0;
     const title = op.title || 'NPS visitor layer';
     if (op.featureCollection && Array.isArray(op.featureCollection.layers)) {
@@ -490,7 +628,7 @@
         const features = (fc.featureSet && fc.featureSet.features) || [];
         for (const ef of features) {
           const gj = esriFeatureToGeoJSON(ef);
-          if (gj) added += addGeoJSONFeature(gj, {layerTitle, sourceLabel:`NPS / ArcGIS — ${layerTitle}`, sourceKind:'embedded public web-map vector'});
+          if (gj) added += addGeoJSONFeature(gj, {layerTitle, sourceLabel:`NPS / ArcGIS — ${layerTitle}`, sourceKind:'embedded public web-map vector', sourceUrl:op.url || parentSourceUrl});
         }
       }
     }
@@ -498,7 +636,7 @@
       try { added += await loadArcGISService(op.url, title, 'Public ArcGIS web-map source', 'public web-map service vector'); } catch (_) {}
     }
     if (Array.isArray(op.layers)) {
-      for (const nested of op.layers) added += await ingestOperationalLayer(nested);
+      for (const nested of op.layers) added += await ingestOperationalLayer(nested, op.url || parentSourceUrl);
     }
     return added;
   }
@@ -507,7 +645,8 @@
     const data = await fetchJSON(`${CONFIG.arcgisRoot}${itemId}/data?f=json`);
     const layers = data && Array.isArray(data.operationalLayers) ? data.operationalLayers : [];
     let added = 0;
-    for (const op of layers) added += await ingestOperationalLayer(op);
+    const itemUrl = `https://www.arcgis.com/home/item.html?id=${itemId}`;
+    for (const op of layers) added += await ingestOperationalLayer(op, itemUrl);
     return added;
   }
 
@@ -524,7 +663,7 @@
     let n = 0;
     for (const f of fallback.features) {
       const cat = /lighthouse/i.test(f.properties.kind) ? 'maritime-history' : 'visitor-service';
-      n += addGeoJSONFeature(f, {category:cat, layerTitle:f.properties.kind, sourceLabel:'Local fail-soft reference anchor', sourceKind:'approximate reference — not authoritative NPS GIS'});
+      n += addGeoJSONFeature(f, {category:cat, layerTitle:f.properties.kind, sourceLabel:'Local fail-soft reference anchor', sourceKind:'approximate reference — not authoritative NPS GIS', sourceUrl:CONFIG.mapsUrl});
     }
     sourceStatus.fallback = true;
     return n;
