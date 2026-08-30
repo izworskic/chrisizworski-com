@@ -53,6 +53,7 @@
     routeClear: document.getElementById('route-clear'),
     routeModeSelect: document.getElementById('route-mode-select'),
     routeSpeed: document.getElementById('route-speed'),
+    routeDayHours: document.getElementById('route-day-hours'),
     routeDeparture: document.getElementById('route-departure'),
     routeSmartStatus: document.getElementById('route-smart-status'),
     routeSummary: document.getElementById('route-summary'),
@@ -155,6 +156,7 @@
     latBands:new Map(),
     quietPromise:null,
     quietZones:null,
+    router:null,
     error:''
   };
   const trailGraph = {
