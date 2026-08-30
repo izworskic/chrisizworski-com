@@ -53,6 +53,7 @@ test('catalog covers the NPMaps source families and deep layers', () => {
   assert.ok(catalog.items.some(x => x.id === 'quiet-no-wake' && x.state === 'generated-runtime' && /22 official polygons/i.test(x.label)));
   assert.ok(catalog.items.some(x => x.id === 'vegetation-change-1996-2017' && x.state === 'generated-runtime'));
   assert.ok(catalog.items.some(x => x.id === 'horne-fire-2021' && x.state === 'generated-runtime'));
+  assert.ok(catalog.items.some(x => x.id === 'shipwrecks' && x.state === 'live-api'));
 });
 
 test('planning, provenance, accessibility and safety hooks exist', () => {
@@ -157,4 +158,16 @@ test('verified NPS and USGS context layers are lazy, hashed and integrity-gated'
   assert.match(contextManifest.layers.quiet_no_wake.geometry_source, /irmaservices\.nps\.gov/);
   assert.match(contextManifest.layers.vegetation_change.license, /CC0/);
   assert.match(contextManifest.layers.horne_fire.license, /CC0/);
+});
+
+
+test('current NPS shipwreck buoy points are coordinated with visitor geometry without duplicate race', () => {
+  assert.match(api, /fetchShipwreckDataset/);
+  assert.match(api, /shipwrecks,/);
+  assert.match(api, /National Park Service — Shipwreck Buoys/);
+  assert.match(js, /visitorGeometrySettled/);
+  assert.match(js, /addPendingShipwrecks/);
+  assert.match(js, /hasMappedNamedFeature/);
+  assert.match(js, /National Park Service — Shipwreck Buoys/);
+  assert.match(js, /current NPS dive-site \/ mooring reference point/);
 });
