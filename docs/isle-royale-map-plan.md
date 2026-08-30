@@ -112,6 +112,9 @@ The route planner must become a trip-decision tool rather than a line-drawing wi
 - **Camp-first itinerary:** for paddle/motorboat routes, qualify overnight recommendations only from loaded campground features that also match the current NPS Boat-In Campgrounds feed; exclude current closure signals, rank candidates around the selected daily travel target, show alternatives, and explicitly render a gap when no qualified camp fits.
 - **Per-day context:** split the resolved route into itinerary legs and carry modeled exposure, NPS Quiet/No-Wake intersections, and sampled NWS wind/wave/precipitation context into each day.
 - **Scenario editing:** let the user route through a recommended or alternate campground, then recompute water geometry, day plan and forecast samples rather than treating the recommendation as a static report.
+- **Scenario comparison:** generate Weather-conservative, Balanced, and Ambitious trip structures from the same source-backed campground set. Conservative means shorter days and more campground flexibility; Ambitious means longer days and fewer stops. These labels describe structure, not safety.
+- **Overnight-aware forecast clock:** forecast comparison must sample each scenario on its actual itinerary day after overnight layovers; never use continuous elapsed route time across a multi-day trip.
+- **Scenario application:** applying a scenario may replace prior scenario-generated campground waypoints, but it must preserve user-created manual route points and then rerun the coastline-aware route.
 - **Failure mode:** if shoreline geometry or routing fails, preserve the editable sketch and clearly label water intelligence unavailable.
 - **Source separation:** OpenStreetMap coastline may support the planning land mask; current NPS/IRMA remains the authority for regulations.
 

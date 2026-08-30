@@ -58,3 +58,30 @@ test('distance-based weather sampling can produce more than five samples for lon
   assert.equal(samples[0].distance_miles,0);
   assert.ok(samples[7].distance_miles > samples[1].distance_miles);
 });
+
+
+test('scenario profiles create distinct conservative balanced and ambitious travel structures', () => {
+  const api = loadIntel();
+  const profiles = api.scenarioProfiles(6,'paddle');
+  assert.deepEqual(profiles.map(p=>p.id),['conservative','balanced','ambitious']);
+  assert.ok(profiles[0].hours < profiles[1].hours);
+  assert.ok(profiles[1].hours < profiles[2].hours);
+  assert.ok(profiles[0].max_detour_miles > profiles[1].max_detour_miles);
+  assert.ok(profiles[2].max_detour_miles < profiles[1].max_detour_miles);
+});
+
+test('scenario set compares different day counts without reintroducing closed camps', () => {
+  const api = loadIntel();
+  const path = [{lat:48,lng:-89.15},{lat:48,lng:-88.45}];
+  const camps = [
+    {id:'a',name:'Camp A',lat:48,lng:-88.95,closed:false},
+    {id:'b',name:'Camp B',lat:48,lng:-88.72,closed:false},
+    {id:'closed',name:'Closed Camp',lat:48,lng:-88.58,closed:true}
+  ];
+  const scenarios = api.buildScenarioSet(path,camps,3,6,{mode:'paddle',maxDays:10});
+  assert.equal(scenarios.length,3);
+  assert.ok(scenarios.every(scenario => !scenario.itinerary.candidates.some(c=>c.name==='Closed Camp')));
+  const days = Object.fromEntries(scenarios.map(scenario=>[scenario.id,scenario.itinerary.legs.length]));
+  assert.ok(days.conservative >= days.balanced);
+  assert.ok(days.balanced >= days.ambitious);
+});

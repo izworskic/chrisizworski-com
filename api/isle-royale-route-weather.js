@@ -168,11 +168,14 @@ function normalizeWaypoint(item,index){
   const lat=number(item?.lat),lon=number(item?.lon);
   const distance=number(item?.distance_miles);
   if(!validPoint(lat,lon))return null;
-  return {
+  const targetMs=Date.parse(item?.target_time);
+  const out={
     lat,lon,
     label:String(item?.label||`Route sample ${index+1}`).slice(0,80),
     distance_miles:distance===null?0:Math.max(0,distance)
   };
+  if(Number.isFinite(targetMs))out.target_time=new Date(targetMs).toISOString();
+  return out;
 }
 
 module.exports=async function handler(req,res){
@@ -206,7 +209,13 @@ module.exports=async function handler(req,res){
 
   try{
     const pointLookups=await Promise.allSettled(waypoints.map(async wp=>{
-      const arrival=new Date(departure+(wp.distance_miles/speedMph)*3600000).toISOString();
+      const targetMs=wp.target_time?Date.parse(wp.target_time):NaN;
+      if(Number.isFinite(targetMs)&&(targetMs<departure-2*3600000||targetMs>now+8*24*3600000)){
+        throw new Error('Scheduled route sample falls outside the supported NWS forecast window');
+      }
+      const arrival=Number.isFinite(targetMs)
+        ? new Date(targetMs).toISOString()
+        : new Date(departure+(wp.distance_miles/speedMph)*3600000).toISOString();
       const point=await getJson(`${NWS}/points/${wp.lat.toFixed(4)},${wp.lon.toFixed(4)}`);
       const props=point?.properties||{};
       if(!props.forecastGridData)throw new Error('NWS point did not expose marine grid data');
@@ -275,7 +284,7 @@ module.exports=async function handler(req,res){
         peak_forecast_wave_ft:peakWave||null,
         forecast_samples:usable.length
       },
-      disclaimer:'Route lines are planning sketches, not navigational routes. Marine forecasts are planning guidance, not a go/no-go determination. Verify current NWS/NPS information before departure.'
+      disclaimer:'Route lines are planning sketches, not navigational routes. Multi-day samples may use explicit itinerary target times after overnight stops. Marine forecasts are planning guidance, not a go/no-go determination. Verify current NWS/NPS information before departure.'
     });
   }catch(error){
     res.setHeader('Cache-Control','no-store');

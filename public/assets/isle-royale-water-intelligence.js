@@ -338,6 +338,23 @@
     return {legs,candidates,total_miles:total,daily_target_miles:daily,max_detour_miles:maxDetour};
   }
 
+  function scenarioProfiles(baseHours,mode='paddle'){
+    const base=Math.max(2,Math.min(12,+baseHours||6));
+    const detourBase=mode==='powerboat'?3:1.75;
+    return [
+      {id:'conservative',title:'Weather-conservative',short:'Shorter days · more camp flexibility',hours:Math.max(2,Math.round(base*.72*2)/2),max_detour_miles:detourBase*1.25},
+      {id:'balanced',title:'Balanced',short:'Your baseline travel day',hours:base,max_detour_miles:detourBase},
+      {id:'ambitious',title:'Ambitious',short:'Longer days · fewer overnight stops',hours:Math.min(12,Math.round(base*1.28*2)/2),max_detour_miles:detourBase*.82}
+    ];
+  }
+
+  function buildScenarioSet(points,camps,speedMph,baseHours,options={}){
+    const mode=options.mode||'paddle';
+    return scenarioProfiles(baseHours,mode).map(profile=>({
+      ...profile,
+      itinerary:buildItinerary(points,camps,speedMph,profile.hours,{...options,mode,maxDetourMiles:profile.max_detour_miles})
+    }));
+  }
   function dayEnds(points,speedMph,hoursPerDay){
     const cum=cumulative(points),total=cum[cum.length-1]||0,step=Math.max(.5,+speedMph||3)*Math.max(1,+hoursPerDay||6);
     const out=[];let day=1;
@@ -345,5 +362,5 @@
     return out;
   }
 
-  window.IsleRoyaleWaterIntel={create,weatherSamples,zonesAlongPath,pathDistance,projectPointToPath,slicePath,buildItinerary,dayEnds,miles};
+  window.IsleRoyaleWaterIntel={create,weatherSamples,zonesAlongPath,pathDistance,projectPointToPath,slicePath,buildItinerary,scenarioProfiles,buildScenarioSet,dayEnds,miles};
 })();
