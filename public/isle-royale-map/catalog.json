@@ -97,12 +97,13 @@
     {
       "id": "relief",
       "npmapsCategory": "relief map",
-      "label": "Relief / terrain reference",
-      "kind": "raster-derived",
-      "state": "cataloged",
-      "publisher": "National Park Service / USGS",
-      "source": "https://www.nps.gov/isro/planyourvisit/mapsbrochures.htm",
-      "notes": "Prefer a licensed/self-hosted terrain source over scraping presentation artwork."
+      "label": "USGS shaded relief / terrain",
+      "kind": "raster tile",
+      "state": "live-tile",
+      "publisher": "U.S. Geological Survey",
+      "source": "https://basemap.nationalmap.gov/arcgis/rest/services/USGSShadedReliefOnly/MapServer",
+      "notes": "Keyless cached relief overlay derived from 3DEP at larger scales and GMTED2010 at smaller scales. Used as an optional terrain context layer, not as navigation data.",
+      "vintage": "USGS The National Map shaded relief; data refreshed April 2025"
     },
     {
       "id": "lighthouses",
@@ -141,12 +142,14 @@
     {
       "id": "vegetation-simple",
       "npmapsCategory": "simplified vegetation map",
-      "label": "Vegetation inventory — simplified",
+      "label": "Vegetation overview (2000) — 6 broad classes",
       "kind": "derived polygon",
-      "state": "derive-from-detailed",
+      "state": "generated-runtime",
       "publisher": "Derived from NPS vegetation inventory",
       "source": "https://catalog.data.gov/dataset/geospatial-data-for-the-vegetation-mapping-inventory-project-of-isle-royale-national-park",
-      "notes": "Generate from detailed classes when possible instead of digitizing the simplified artwork."
+      "notes": "Six visitor-facing classes derived from the verified detailed NPS inventory, dissolved by broad family and simplified for web orientation. Historical baseline only, not current vegetation.",
+      "web_path": "/isle-royale-map/data/vegetation-overview-2000.geojson",
+      "vintage": "Derived overview of the 2000 NPS vegetation inventory; imagery primarily 1994/1996"
     },
     {
       "id": "quiet-no-wake",

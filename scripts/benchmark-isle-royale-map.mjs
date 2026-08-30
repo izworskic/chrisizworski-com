@@ -13,13 +13,14 @@ const deepManifest = JSON.parse(read('public/isle-royale-map/data/deep-layer-man
 const contextManifest = JSON.parse(read('public/isle-royale-map/data/context-layer-manifest.json'));
 const deepPath = file => path.join(root, 'public/isle-royale-map/data', file);
 const sha256 = file => crypto.createHash('sha256').update(fs.readFileSync(deepPath(file))).digest('hex');
-const deepSourceChecks = ['geology','vegetation'].map(key => {
+const deepCaps = {geology:25_000_000, vegetation:25_000_000, vegetation_overview:8_000_000};
+const deepSourceChecks = Object.entries(deepCaps).map(([key, cap]) => {
   const meta = deepManifest.sources?.[key];
   if (!meta || !meta.file || !/^[a-f0-9]{64}$/.test(meta.sha256 || '')) return false;
   const file = deepPath(meta.file);
   if (!fs.existsSync(file)) return false;
   const stat = fs.statSync(file);
-  return stat.size === meta.bytes && stat.size <= 25_000_000 && sha256(meta.file) === meta.sha256;
+  return stat.size === meta.bytes && stat.size <= cap && sha256(meta.file) === meta.sha256;
 });
 const contextExpected = {quiet_no_wake:22, vegetation_change:2738, horne_fire:93};
 const contextSourceChecks = Object.entries(contextExpected).map(([key, expected]) => {
@@ -50,10 +51,19 @@ const currentShipwreckRuntime = /fetchShipwreckDataset/.test(api)
   && /addPendingShipwrecks/.test(js)
   && /visitorGeometrySettled/.test(js)
   && catalog.items.some(x => x.id === 'shipwrecks' && x.state === 'live-api');
+const reliefRuntime = /USGSShadedReliefOnly\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/.test(js)
+  && /data-layer="relief"/.test(html)
+  && catalog.items.some(x => x.id === 'relief' && x.state === 'live-tile');
+const referenceShelfComplete = /class="map-shelf"/.test(html)
+  && /Rock Harbor area guide/.test(html)
+  && /Windigo area guide/.test(html)
+  && /Anchorage zones/.test(html)
+  && /Off-trail camping zones/.test(html)
+  && /Historic \/ archived map references/.test(html);
 
-add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable raw/source table`);
+add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete, 'search + filters + list + map focus + current NPS park-state surface + five privacy-safe product events');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime, 'search + filters + list + map focus + current NPS park-state + USGS relief + five privacy-safe product events');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -65,27 +75,32 @@ add('deep-data-path', 8,
     && contextSourceChecks.every(Boolean)
     && deepManifest.sources.geology.features >= 1900
     && deepManifest.sources.vegetation.features === 38
+    && deepManifest.sources.vegetation_overview.features === 6
+    && deepManifest.sources.vegetation_overview.bytes < deepManifest.sources.vegetation.bytes / 2
     && contextManifest.layers.quiet_no_wake.quiet_no_wake_features === 19
     && contextManifest.layers.quiet_no_wake.no_wake_features === 3
     && /loadDeepLayer/.test(js)
     && /loadContextLayer/.test(js)
     && /geology-units\.geojson/.test(js)
+    && /vegetation-overview-2000\.geojson/.test(js)
     && /vegetation-baseline-2000\.geojson/.test(js)
     && /quiet-no-wake-zones\.geojson/.test(js)
     && /vegetation-change-1996-2017\.geojson/.test(js)
     && /horne-fire-burn-severity\.geojson/.test(js)
-    && /Vegetation baseline \(2000\)/.test(html)
+    && /Vegetation overview \(2000\)/.test(html)
+    && /Vegetation detailed \(2000\)/.test(html)
     && /data-layer="quiet-no-wake"/.test(html)
     && /data-layer="vegetation-change"/.test(html)
     && /data-layer="horne-fire"/.test(html)
-    && /historical inventory baseline/i.test(js)
+    && /historical 2000-inventory derivatives/i.test(js)
     && /historical USGS context/i.test(js)
     && catalog.items.some(x => x.id === 'geology' && x.state === 'generated-runtime')
+    && catalog.items.some(x => x.id === 'vegetation-simple' && x.state === 'generated-runtime')
     && catalog.items.some(x => x.id === 'vegetation-detailed' && x.state === 'generated-runtime')
     && catalog.items.some(x => x.id === 'quiet-no-wake' && x.state === 'generated-runtime')
     && catalog.items.some(x => x.id === 'vegetation-change-1996-2017' && x.state === 'generated-runtime')
     && catalog.items.some(x => x.id === 'horne-fire-2021' && x.state === 'generated-runtime'),
-  `verified geology + vegetation + 22 NPS boating zones + USGS change/fire layers, hashes, size gates and lazy runtime loaders`
+  `verified geology + detailed/overview vegetation + 22 NPS boating zones + USGS relief/change/fire layers, hashes, size gates and lazy loaders`
 );
 
 const score = checks.reduce((sum, c) => sum + (c.ok ? c.weight : 0), 0);
@@ -96,11 +111,14 @@ if (!/approximate reference/i.test(js)) hardFailures.push('fallback derivation l
 if (!deepSourceChecks.every(Boolean)) hardFailures.push('deep GIS file/hash/size integrity failed');
 if (!contextSourceChecks.every(Boolean)) hardFailures.push('context GIS file/hash/count/size integrity failed');
 if (contextManifest.layers?.quiet_no_wake?.quiet_no_wake_features !== 19 || contextManifest.layers?.quiet_no_wake?.no_wake_features !== 3) hardFailures.push('quiet/no-wake 19+3 regulatory reconciliation failed');
-if (!/historical inventory baseline/i.test(js) || !/Vegetation baseline \(2000\)/.test(html)) hardFailures.push('vegetation baseline freshness warning missing');
+if (!/historical 2000-inventory derivatives/i.test(js) || !/Vegetation detailed \(2000\)/.test(html) || !/Vegetation overview \(2000\)/.test(html)) hardFailures.push('vegetation freshness/derivation warning missing');
 if (!npmapsComplete) hardFailures.push('16-product NPMaps completeness gate failed');
 if (!catalogCrawlable) hardFailures.push('crawlable source catalog/raw manifest link missing');
 if (!measurementComplete) hardFailures.push('planned privacy-safe Isle Royale measurement events missing');
 if (!currentShipwreckRuntime) hardFailures.push('current NPS shipwreck buoy runtime missing');
+if (!reliefRuntime) hardFailures.push('keyless USGS relief runtime missing');
+if (!referenceShelfComplete) hardFailures.push('official/reference map shelf incomplete');
+if (deepManifest.sources?.vegetation_overview?.features !== 6 || deepManifest.sources?.vegetation_overview?.bytes >= deepManifest.sources?.vegetation?.bytes / 2) hardFailures.push('vegetation overview reduction gate failed');
 
 console.log(`Isle Royale map benchmark: ${score}/100 (release target ${spec.valueFunction.releaseTarget})`);
 for (const c of checks) console.log(`${c.ok ? 'PASS' : 'FAIL'} ${String(c.weight).padStart(2)} ${c.id} — ${c.evidence}`);
