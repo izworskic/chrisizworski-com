@@ -93,7 +93,7 @@ test('current NPS off-trail camping zone closures are parsed without fabricating
   const zones = [...new Set(alerts.flatMap(alert => alert.zones || (alert.id === 'off-trail-zone-9' ? [9] : [])))].sort((a,b) => a-b);
   assert.deepEqual(zones, [9,10,11,12,13,30,31,32,33,34,35,36,37,38]);
   assert.match(js, /not mapped polygon geometry/i);
-  assert.match(js, /off-trail-camping\\.htm/);
+  assert.match(js, /off-trail-camping\.htm/);
 });
 
 test('generated deep science layers are real, opt-in, hashed and visibly dated', () => {
