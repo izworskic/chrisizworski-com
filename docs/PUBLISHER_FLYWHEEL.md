@@ -85,6 +85,42 @@ Do not conduct outreach to:
 - Go Great Lakes Bay.
 - Pure Michigan.
 
+## Outreach ledger
+
+Sent in the current publisher campaign:
+
+| Recipient | Primary fit |
+| --- | --- |
+| Travel Marquette | Michigan Outdoors Now |
+| Visit Alpena | Michigan Outdoors Now |
+| Visit Keweenaw | Michigan Outdoors Now |
+| West Michigan Tourist Association | Michigan Outdoors Now |
+| UP Travel | Michigan Outdoors Now |
+| Petoskey Area Visitors Bureau | Michigan Outdoors Now |
+| Gaylord Area Convention & Tourism Bureau | Michigan Outdoors Now |
+| Cadillac Area Visitors Bureau | Michigan Outdoors Now |
+| Mackinaw Area Visitors Bureau | Michigan Outdoors Now |
+| Leelanau Peninsula Wine Trail | Traverse City Wine |
+| Sault Ste. Marie visitor organization | Soo Locks Live |
+| Grayling visitor organization | Au Sable Field Map + Michigan Outdoors Now |
+| Paradise Area Chamber | Fall Color + Northern Lights + Michigan Outdoors Now |
+| St. Ignace visitor organization | Mackinac Bridge Live + Northern Lights + Michigan Outdoors Now |
+
+Do not duplicate these contacts unless the next action is a deliberate follow-up after an appropriate interval or a direct reply.
+
+## Additional flywheel channels
+
+1. **Publisher widgets** — compact live utilities placed where a publisher's audience already has the decision.
+2. **RSS and machine-readable feeds** — let newsletters, travel sites and niche publishers consume useful updates with canonical attribution.
+3. **Data citations** — publish stable, source-backed JSON/data assets when a tool has genuinely original synthesis worth citing.
+4. **Journalist resource kits** — make live status, maps and methodology easy to reference during seasonal or breaking-interest moments.
+5. **Cross-tool handoffs** — connect a visitor's next decision across the owned network without changing protected search treatments.
+6. **Shareable states** — give users useful deep links/cards worth sending to companions, groups and social audiences.
+7. **Return loops** — alerts, saved plans and seasonal reminders where the product has a legitimate reason for repeat use.
+8. **Partner-specific landing states** — start the tool in the geography or decision state that matches a host publisher, while keeping one canonical search owner.
+9. **Creator attribution** — every legitimate placement can reinforce the Chris Izworski entity naturally, without turning product pages into name-only SEO pages.
+10. **Proof-driven expansion** — promote the tools and publisher types that produce qualified use, not merely the largest number of links.
+
 ## Next expansion
 
 After the first placements establish proof, add publisher modules for river conditions, trout, winter ice, cross-country skiing, border waits, and Great Lakes levels where the underlying data contract is stable and the host-page utility is clear.
