@@ -1627,6 +1627,110 @@
     return window.IsleRoyaleWaterIntel.dayEnds(path,speed,hours);
   }
 
+  function sourceBackedWaterCamps() {
+    const camps=[];
+    for(let i=0;i<featureIndex.length;i++){
+      const record=featureIndex[i];
+      if(record.category!=='campground'||!record.boater||record.liveAlert)continue;
+      const point=recordRoutePoint(record);
+      if(!point)continue;
+      camps.push({
+        id:'camp-'+i,record_index:i,name:record.name,lat:point.lat,lng:point.lng,closed:false,
+        dock_depth:record.boater.dock_depth||'',shelters:record.boater.shelters||'',tent_sites:record.boater.tent_sites||'',
+        stay_limit:record.boater.consecutive_night_limit||'',food_storage_lockers:record.boater.food_storage_lockers||''
+      });
+    }
+    return camps;
+  }
+
+  function buildRouteItinerary(path){
+    route.itinerary=null;
+    if(route.mode==='hike'||route.smartState!=='water-aware'||!window.IsleRoyaleWaterIntel?.buildItinerary||path.length<2)return null;
+    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    const hours=Math.max(2,Number(els.routeDayHours?.value)||6);
+    const itinerary=window.IsleRoyaleWaterIntel.buildItinerary(path,sourceBackedWaterCamps(),speed,hours,{mode:route.mode,maxDetourMiles:route.mode==='powerboat'?3:1.75,maxDays:10});
+    for(const leg of itinerary.legs||[]){
+      const legPath=window.IsleRoyaleWaterIntel.slicePath(path,leg.start_miles,leg.end_miles);
+      leg.exposure=waterIntel.router?.analyze&&legPath.length>1?waterIntel.router.analyze(legPath):null;
+      leg.quiet_zones=window.IsleRoyaleWaterIntel.zonesAlongPath(legPath,waterIntel.quietZones||[]);
+    }
+    route.itinerary=itinerary;
+    return itinerary;
+  }
+
+  function summarizeItineraryWeather(itinerary,forecasts){
+    const out={};
+    for(const leg of itinerary?.legs||[]){
+      let rows=(forecasts||[]).filter(f=>!f.error&&Number.isFinite(Number(f.distance_miles))&&Number(f.distance_miles)>=leg.start_miles-.01&&Number(f.distance_miles)<=leg.end_miles+.01);
+      if(!rows.length){
+        const mid=(leg.start_miles+leg.end_miles)/2;
+        const nearest=(forecasts||[]).filter(f=>!f.error&&Number.isFinite(Number(f.distance_miles))).sort((a,b)=>Math.abs(Number(a.distance_miles)-mid)-Math.abs(Number(b.distance_miles)-mid))[0];
+        if(nearest)rows=[nearest];
+      }
+      if(!rows.length)continue;
+      out[leg.day]={
+        peak_wind_kt:rows.reduce((m,f)=>Math.max(m,Number(f.wind_gust_kt)||Number(f.wind_speed_kt)||0),0)||null,
+        peak_wave_ft:rows.reduce((m,f)=>Math.max(m,Number(f.wave_height_ft)||0),0)||null,
+        precip_pct:rows.reduce((m,f)=>Math.max(m,Number(f.precip_probability_pct)||0),0),samples:rows.length
+      };
+    }
+    return out;
+  }
+
+  function insertItineraryCampStop(camp){
+    if(!camp||route.points.length<2)return;
+    const target={lat:Number(camp.lat),lng:Number(camp.lng),label:camp.name};
+    if(route.points.some(p=>distanceMiles(p,target)<.08)){status(camp.name+' is already a route stop.');return;}
+    const api=window.IsleRoyaleWaterIntel,path=routePathPoints(),projection=api.projectPointToPath(target,path);
+    if(!projection)return;
+    let insertAt=route.points.length-1;
+    for(let i=1;i<route.points.length;i++){const cp=api.projectPointToPath(route.points[i],path);if(cp&&cp.along_miles>projection.along_miles){insertAt=i;break;}}
+    route.points.splice(insertAt,0,target);
+    reroute(camp.name+' added as an overnight route stop. Re-run weather after the water route resolves.');
+    emitEvent('isle_royale_itinerary_stop',{mode:route.mode,source:'nps-boat-in'});
+  }
+
+  function campFactsText(camp){
+    const facts=[];
+    if(camp.dock_depth)facts.push('dock '+camp.dock_depth);
+    if(camp.shelters)facts.push(camp.shelters+' shelter(s)');
+    if(camp.tent_sites)facts.push(camp.tent_sites+' tent site(s)');
+    if(camp.stay_limit)facts.push('stay limit '+camp.stay_limit);
+    return facts.join(' · ');
+  }
+
+  function renderRouteItinerary(){
+    if(!els.routeItinerary)return;
+    els.routeItinerary.replaceChildren();
+    if(route.mode==='hike'||route.points.length<2)return;
+    if(route.smartState==='water-loading'||route.smartState==='water-pending'){
+      const row=document.createElement('div');row.className='route-intelligence-card';row.innerHTML='<strong>Building multi-day trip</strong><span>Waiting for the water-aware route before matching NPS boat-in campgrounds to daily reach.</span>';els.routeItinerary.appendChild(row);return;
+    }
+    if(route.smartState!=='water-aware'||!route.itinerary)return;
+    const heading=document.createElement('div');heading.className='itinerary-heading';heading.innerHTML='<strong>Camp-first multi-day itinerary</strong><span></span>';heading.querySelector('span').textContent='NPS Boat-In candidates · target '+route.itinerary.daily_target_miles.toFixed(1)+' mi/day';els.routeItinerary.appendChild(heading);
+    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    for(const leg of route.itinerary.legs||[]){
+      const card=document.createElement('div');card.className='itinerary-day';
+      const head=document.createElement('div');head.className='itinerary-day-head';head.innerHTML='<strong></strong><span></span>';head.querySelector('strong').textContent='Day '+leg.day;head.querySelector('span').textContent=leg.distance_miles.toFixed(1)+' mi · ~'+formatDuration(leg.distance_miles/speed);card.appendChild(head);
+      if(leg.final){
+        const finish=document.createElement('div');finish.className='itinerary-stop';finish.innerHTML='<b>Finish at route destination</b><small>Final leg reaches the selected destination rather than forcing another campground.</small>';card.appendChild(finish);
+      }else if(leg.stop){
+        const stop=document.createElement('div');stop.className='itinerary-stop';stop.innerHTML='<b></b><small></small>';stop.querySelector('b').textContent='Best loaded overnight fit: '+leg.stop.name;
+        const facts=campFactsText(leg.stop);stop.querySelector('small').textContent='NPS Boat-In campground · '+leg.stop.distance_miles.toFixed(1)+' mi from current planned line'+(facts?' · '+facts:'')+'. Planning candidate, not an availability claim.';card.appendChild(stop);
+        const actions=document.createElement('div');actions.className='itinerary-actions';
+        const use=document.createElement('button');use.type='button';use.className='primary';use.textContent='Route through '+leg.stop.name;use.addEventListener('click',()=>insertItineraryCampStop(leg.stop));actions.appendChild(use);
+        for(const alt of (leg.alternatives||[]).slice(0,2)){const b=document.createElement('button');b.type='button';b.textContent='Try '+alt.name;b.addEventListener('click',()=>insertItineraryCampStop(alt));actions.appendChild(b);}card.appendChild(actions);
+      }else if(leg.gap){
+        const gap=document.createElement('div');gap.className='itinerary-gap';gap.textContent='No open, source-backed NPS Boat-In campground in this day-end window. Adjust travel hours or add a campground manually; the tool will not invent an overnight stop.';card.appendChild(gap);
+      }
+      const meta=document.createElement('div');meta.className='route-intelligence-meta';const bits=[];
+      if(leg.exposure){bits.push('max sampled offshore '+Number(leg.exposure.max_offshore_miles||0).toFixed(1)+' mi');bits.push('longest exposed stretch '+Number(leg.exposure.longest_exposed_miles||0).toFixed(1)+' mi');}
+      if((leg.quiet_zones||[]).length)bits.push('NPS zones: '+leg.quiet_zones.map(z=>z.name).join(', '));meta.textContent=bits.join(' · ');if(meta.textContent)card.appendChild(meta);
+      const weather=route.itineraryWeather?.[leg.day];if(weather){const w=document.createElement('div');w.className='itinerary-weather';const wb=[];if(Number.isFinite(Number(weather.peak_wind_kt)))wb.push('sampled peak wind/gust '+Math.round(weather.peak_wind_kt)+' kt');if(Number.isFinite(Number(weather.peak_wave_ft)))wb.push('sampled peak wave '+Number(weather.peak_wave_ft).toFixed(1)+' ft');if(Number.isFinite(Number(weather.precip_pct)))wb.push('precip up to '+Math.round(weather.precip_pct)+'%');w.textContent='Forecast context: '+wb.join(' · ')+'.';card.appendChild(w);}
+      els.routeItinerary.appendChild(card);
+    }
+    const note=document.createElement('div');note.className='route-intelligence-meta';note.textContent='Overnight candidates require a current NPS Boat-In campground record and are excluded when current NPS conditions flag the campground closed. Re-check permits, rules, conditions and weather before departure.';els.routeItinerary.appendChild(note);
+  }
   function renderRouteIntelligence() {
     if(!els.routeIntelligence)return;
     els.routeIntelligence.replaceChildren();
