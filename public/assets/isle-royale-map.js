@@ -16,6 +16,12 @@
     deepLayers: {
       geology: '/isle-royale-map/data/geology-units.geojson',
       'vegetation-baseline': '/isle-royale-map/data/vegetation-baseline-2000.geojson'
+    },
+    contextManifest: '/isle-royale-map/data/context-layer-manifest.json',
+    contextLayers: {
+      'quiet-no-wake': '/isle-royale-map/data/quiet-no-wake-zones.geojson',
+      'vegetation-change': '/isle-royale-map/data/vegetation-change-1996-2017.geojson',
+      'horne-fire': '/isle-royale-map/data/horne-fire-burn-severity.geojson'
     }
   };
 
@@ -28,7 +34,8 @@
     filters: document.getElementById('layer-filters'),
     catalog: document.getElementById('catalog-body'),
     liveStatus: document.getElementById('park-live-status'),
-    deepStatus: document.getElementById('deep-layer-status')
+    deepStatus: document.getElementById('deep-layer-status'),
+    contextStatus: document.getElementById('context-layer-status')
   };
 
   const map = L.map('isle-map', {preferCanvas:true, zoomControl:false, minZoom:6, maxZoom:18});
@@ -45,8 +52,11 @@
     'visitor-service': L.layerGroup().addTo(map),
     'water-route': L.layerGroup().addTo(map),
     'maritime-history': L.layerGroup().addTo(map),
+    'quiet-no-wake': L.layerGroup(),
     geology: L.layerGroup(),
     'vegetation-baseline': L.layerGroup(),
+    'vegetation-change': L.layerGroup(),
+    'horne-fire': L.layerGroup(),
     'science-reference': L.layerGroup(),
     other: L.layerGroup()
   };
@@ -57,8 +67,11 @@
     'visitor-service': 'visitor place',
     'water-route': 'water / transport route',
     'maritime-history': 'maritime / history',
+    'quiet-no-wake': 'quiet / no-wake zone',
     geology: 'geologic unit',
     'vegetation-baseline': 'vegetation baseline (2000)',
+    'vegetation-change': 'vegetation change 1996–2017',
+    'horne-fire': '2021 Horne Fire burn severity',
     'science-reference': 'science / reference',
     other: 'other public feature'
   };
@@ -96,6 +109,36 @@
       sourceKind:'generated historical NPS inventory derivative'
     }
   };
+  const contextLayers = {
+    manifest: null,
+    manifestPromise: null,
+    'quiet-no-wake': {state:'available', count:0, error:''},
+    'vegetation-change': {state:'available', count:0, error:''},
+    'horne-fire': {state:'available', count:0, error:''}
+  };
+  const contextConfig = {
+    'quiet-no-wake': {
+      manifestKey:'quiet_no_wake',
+      label:'Quiet / No-Wake zones',
+      sourceLabel:'National Park Service — IRMA DataStore Collection 9705',
+      sourceKind:'official NPS regulatory polygons',
+      timeout:30000
+    },
+    'vegetation-change': {
+      manifestKey:'vegetation_change',
+      label:'Vegetation change 1996–2017',
+      sourceLabel:'U.S. Geological Survey',
+      sourceKind:'USGS change-analysis polygons',
+      timeout:45000
+    },
+    'horne-fire': {
+      manifestKey:'horne_fire',
+      label:'2021 Horne Fire burn severity',
+      sourceLabel:'U.S. Geological Survey',
+      sourceKind:'USGS historical burn-severity polygons',
+      timeout:30000
+    }
+  };
 
   const categoryStyle = {
     trail: {color:'#9b512b', weight:3, opacity:.9},
@@ -103,8 +146,11 @@
     'visitor-service': {color:'#18352f', fillColor:'#18352f'},
     'water-route': {color:'#386b8d', weight:3, opacity:.78, dashArray:'7 6'},
     'maritime-history': {color:'#65547c', fillColor:'#65547c'},
+    'quiet-no-wake': {color:'#7f4f78', fillColor:'#a86b9e', weight:2, opacity:.85, fillOpacity:.14},
     geology: {color:'#786a58', fillColor:'#9a8b76', weight:1.2, opacity:.72, fillOpacity:.16},
     'vegetation-baseline': {color:'#586a58', fillColor:'#71806b', weight:.8, opacity:.58, fillOpacity:.20},
+    'vegetation-change': {color:'#4f6b61', fillColor:'#729184', weight:1, opacity:.68, fillOpacity:.18},
+    'horne-fire': {color:'#7b4f3e', fillColor:'#9d6952', weight:1.2, opacity:.78, fillOpacity:.22},
     'science-reference': {color:'#467778', weight:2, fillOpacity:.12},
     other: {color:'#59645f', fillColor:'#59645f'}
   };
@@ -132,6 +178,7 @@
     if (label.includes('openstreetmap')) return 'osm';
     if (label.includes('arcgis')) return 'nps-arcgis';
     if (label.includes('geologic')) return 'nps-gri';
+    if (label.includes('u.s. geological survey') || label.includes('usgs')) return 'usgs';
     if (label.includes('vegetation')) return 'nps-vegetation';
     if (label.includes('national park service') || label.includes('nps')) return 'nps';
     if (label.includes('fallback') || label.includes('approximate')) return 'derived-fallback';
@@ -145,7 +192,7 @@
     if (/harbor|windigo|dock|visitor|ranger|store|lodge/.test(q)) return 'visitor-place';
     if (/light|wreck|historic/.test(q)) return 'history';
     if (/ferry|boat|water|seaplane|anchorage|wake/.test(q)) return 'boating';
-    if (/geolog|vegetation|forest|rock/.test(q)) return 'science';
+    if (/fire|burn|geolog|vegetation|forest|rock/.test(q)) return 'science';
     return q.length < 3 ? 'short' : 'other';
   }
 
@@ -307,7 +354,8 @@
     if (record.deepMeta) {
       const deepNote = document.createElement('div');
       deepNote.className = 'popup-source';
-      deepNote.textContent = `Vintage: ${record.deepMeta.vintage || 'see source manifest'}. ${record.deepMeta.accuracy_note || ''}`.trim();
+      const provenanceNote = record.deepMeta.accuracy_note || record.deepMeta.interpretation_note || record.deepMeta.regulation_note || '';
+      deepNote.textContent = `Vintage: ${record.deepMeta.vintage || 'see source manifest'}. ${provenanceNote}`.trim();
       wrap.appendChild(deepNote);
     }
 
@@ -720,6 +768,100 @@
     }
   }
 
+  async function loadContextManifest() {
+    if (contextLayers.manifest) return contextLayers.manifest;
+    if (contextLayers.manifestPromise) return contextLayers.manifestPromise;
+    contextLayers.manifestPromise = fetchJSON(CONFIG.contextManifest, 12000)
+      .then(data => {
+        contextLayers.manifest = data;
+        renderContextStatus();
+        return data;
+      })
+      .catch(error => {
+        contextLayers.manifestPromise = null;
+        renderContextStatus();
+        throw error;
+      });
+    return contextLayers.manifestPromise;
+  }
+
+  function renderContextStatus() {
+    if (!els.contextStatus) return;
+    els.contextStatus.replaceChildren();
+    const layers = contextLayers.manifest?.layers || {};
+
+    for (const id of ['quiet-no-wake','vegetation-change','horne-fire']) {
+      const cfg = contextConfig[id];
+      const state = contextLayers[id];
+      const meta = layers[cfg.manifestKey] || {};
+      const row = document.createElement('div');
+      row.className = state.state === 'error' ? 'ops-alert' : 'ops-ok';
+      const size = formatBytes(meta.bytes);
+
+      if (state.state === 'loading') {
+        row.textContent = `${cfg.label}: loading ${size} verified layer…`;
+      } else if (state.state === 'loaded') {
+        row.textContent = `${cfg.label}: ${state.count.toLocaleString()} mapped feature${state.count === 1 ? '' : 's'} loaded · ${size}.`;
+      } else if (state.state === 'error') {
+        row.textContent = `${cfg.label}: could not load. ${state.error || 'Source file unavailable.'}`;
+      } else {
+        const count = Number(meta.features);
+        const countText = Number.isFinite(count) ? `${count.toLocaleString()} features · ` : '';
+        row.textContent = `${cfg.label}: off by default · ${countText}${size}${meta.vintage ? ` · ${meta.vintage}` : ''}.`;
+      }
+      els.contextStatus.appendChild(row);
+    }
+
+    const caveat = document.createElement('div');
+    caveat.className = 'ops-source';
+    caveat.textContent = 'Quiet/No-Wake polygons are official NPS regulatory geometry. Vegetation change and Horne Fire are historical USGS context, not present-day operational conditions.';
+    els.contextStatus.appendChild(caveat);
+  }
+
+  async function loadContextLayer(id) {
+    const cfg = contextConfig[id];
+    const state = contextLayers[id];
+    if (!cfg || !state || state.state === 'loading' || state.state === 'loaded') return;
+    state.state = 'loading';
+    state.error = '';
+    renderContextStatus();
+
+    try {
+      const manifest = await loadContextManifest();
+      const meta = manifest?.layers?.[cfg.manifestKey] || {};
+      if (meta.status && meta.status !== 'generated') throw new Error(`manifest state: ${meta.status}`);
+      const data = await fetchJSON(CONFIG.contextLayers[id], cfg.timeout);
+      if (!data || !Array.isArray(data.features) || !data.features.length) throw new Error('generated GeoJSON is empty');
+
+      let added = 0;
+      for (const feature of data.features) {
+        added += addGeoJSONFeature(feature, {
+          category:id,
+          layerTitle:cfg.label,
+          sourceLabel:cfg.sourceLabel,
+          sourceKind:cfg.sourceKind,
+          sourceUrl:meta.source || meta.regulatory_source || '',
+          deepMeta:meta
+        });
+      }
+
+      state.state = 'loaded';
+      state.count = added;
+      renderContextStatus();
+      renderFeatureList();
+      status(`${cfg.label} loaded: ${added.toLocaleString()} mapped feature${added === 1 ? '' : 's'}.`);
+    } catch (error) {
+      state.state = 'error';
+      state.error = cleanText(error?.message || 'load failed');
+      const checkbox = els.filters.querySelector(`input[data-layer="${id}"]`);
+      if (checkbox) checkbox.checked = false;
+      const group = layerGroups[id];
+      if (group && map.hasLayer(group)) map.removeLayer(group);
+      renderContextStatus();
+      status(`${cfg.label} could not be loaded. Core visitor map remains available.`);
+    }
+  }
+
   function isCategoryVisible(category) {
     const checkbox = els.filters.querySelector(`input[data-layer="${category}"]`);
     return checkbox ? checkbox.checked : true;
@@ -799,6 +941,8 @@
       if (!input.checked && map.hasLayer(group)) map.removeLayer(group);
     }
     if (input.checked && deepConfig[id]) loadDeepLayer(id);
+    if (input.checked && contextConfig[id]) loadContextLayer(id);
+    emitEvent('isle_royale_layer_toggle', {layer:id, state:input.checked ? 'on' : 'off'});
     renderFeatureList();
   });
 
@@ -835,5 +979,7 @@
   loadOperationalData();
   renderDeepStatus();
   loadDeepManifest().catch(() => {});
+  renderContextStatus();
+  loadContextManifest().catch(() => {});
   loadVisitorGeometry();
 })();
