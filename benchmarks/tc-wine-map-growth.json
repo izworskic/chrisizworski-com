@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "updated": "2026-08-29",
   "id": "tc-wine-map-growth",
   "property": "https://tcwine.chrisizworski.com/",
@@ -37,7 +37,9 @@
     "totalWineries": 40,
     "oldMissionWineries": 11,
     "leelanauWineries": 27,
-    "traverseCityOtherWineries": 2
+    "traverseCityOtherWineries": 2,
+    "scope": "search-treatment-baseline",
+    "note": "The active map-first search treatment launched on the earlier 40-location dataset and its search-facing count is protected during the measurement window."
   },
   "expansionGate": {
     "queryFamilyImpressions": 250,
@@ -77,5 +79,38 @@
       "allowMapLoadRegression": false,
       "allowRouteBuildRegression": false
     }
+  },
+  "directoryTruth": {
+    "mappedWineryTastingRoomLocations": 43,
+    "oldMission": 11,
+    "leelanau": 30,
+    "traverseCity": 2,
+    "scope": "current-production-directory",
+    "note": "Geographic directory inclusion is distinct from official wine-trail association membership."
+  },
+  "authorityFlywheel": {
+    "diagnosis": "BUILD_AUTHORITY",
+    "publisherKit": "/for-publishers",
+    "embed": "/embed/traverse-city-winery-map",
+    "indexablePublisherSurfaces": false,
+    "recommendedAttribution": "Chris Izworski's Traverse City Winery Map",
+    "events": [
+      "wine_embed_loaded",
+      "wine_embed_planner_opened",
+      "wine_publisher_embed_copied",
+      "wine_publisher_data_opened"
+    ],
+    "targets30d": {
+      "newReferringDomains": 5,
+      "livePublisherEmbeds": 2,
+      "qualifiedReferralSessions": 100,
+      "referralRouteBuilds": 20,
+      "externalChrisIzworskiCitations": 1
+    },
+    "prohibited": [
+      "paid links",
+      "scaled reciprocal link exchanges",
+      "low-quality directory blasts"
+    ]
   }
 }
