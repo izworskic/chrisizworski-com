@@ -5,6 +5,7 @@ on:
     paths:
       - ".github/workflows/isle-royale-deep-data.yml"
       - "scripts/build-isle-royale-deep-layers.sh"
+      - "scripts/derive-isle-royale-vegetation-overview.py"
   workflow_dispatch:
 
 permissions:
@@ -28,7 +29,7 @@ jobs:
       - name: Install GDAL
         run: |
           sudo apt-get update
-          sudo apt-get install -y gdal-bin unzip
+          sudo apt-get install -y gdal-bin python3-gdal unzip
 
       - name: Build normalized federal GIS derivatives
         run: bash scripts/build-isle-royale-deep-layers.sh
@@ -41,18 +42,19 @@ jobs:
           expected=[
               root/"geology-units.geojson",
               root/"vegetation-baseline-2000.geojson",
+              root/"vegetation-overview-2000.geojson",
               root/"deep-layer-manifest.json",
           ]
           for path in expected:
               if not path.exists() or path.stat().st_size < 100:
                   raise SystemExit(f"missing/empty generated file: {path}")
-          for path in expected[:2]:
+          for path in expected[:3]:
               data=json.loads(path.read_text())
               if data.get("type")!="FeatureCollection" or not data.get("features"):
                   raise SystemExit(f"invalid/empty FeatureCollection: {path}")
               print(path, len(data["features"]), path.stat().st_size)
           manifest=json.loads(expected[2].read_text())
-          for key in ("geology","vegetation"):
+          for key in ("geology","vegetation","vegetation_overview"):
               sha=manifest["sources"][key].get("sha256","")
               if len(sha)!=64:
                   raise SystemExit(f"missing sha256 for {key}")
@@ -65,6 +67,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/isle-royale-map/data/geology-units.geojson
           git add public/isle-royale-map/data/vegetation-baseline-2000.geojson
+          git add public/isle-royale-map/data/vegetation-overview-2000.geojson
           git add public/isle-royale-map/data/deep-layer-manifest.json
           if git diff --cached --quiet; then
             echo "No generated GIS changes to commit."
@@ -80,5 +83,6 @@ jobs:
           path: |
             public/isle-royale-map/data/geology-units.geojson
             public/isle-royale-map/data/vegetation-baseline-2000.geojson
+            public/isle-royale-map/data/vegetation-overview-2000.geojson
             public/isle-royale-map/data/deep-layer-manifest.json
           retention-days: 14
