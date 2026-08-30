@@ -1,0 +1,88 @@
+name: Isle Royale context GIS build
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/isle-royale-context-data.yml"
+      - "scripts/build-isle-royale-context-layers.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: isle-royale-context-data-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-context-layers:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Install GDAL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gdal-bin python3-gdal unzip
+
+      - name: Build regulatory and change-context layers
+        run: python3 scripts/build-isle-royale-context-layers.py
+
+      - name: Validate generated context GIS
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib
+          root=pathlib.Path("public/isle-royale-map/data")
+          manifest=json.loads((root/"context-layer-manifest.json").read_text())
+          expected={
+              "quiet_no_wake":("quiet-no-wake-zones.geojson",17,5_000_000),
+              "vegetation_change":("vegetation-change-1996-2017.geojson",1,15_000_000),
+              "horne_fire":("horne-fire-burn-severity.geojson",1,15_000_000),
+          }
+          for key,(filename,min_features,max_bytes) in expected.items():
+              meta=manifest["layers"][key]
+              path=root/filename
+              data=path.read_bytes()
+              fc=json.loads(data)
+              assert fc["type"]=="FeatureCollection", (key,"not FeatureCollection")
+              assert len(fc["features"])>=min_features, (key,len(fc["features"]))
+              if key=="quiet_no_wake":
+                  assert len(fc["features"])==17, len(fc["features"])
+              assert len(data)<=max_bytes, (key,len(data),max_bytes)
+              assert meta["file"]==filename
+              assert meta["bytes"]==len(data)
+              assert meta["sha256"]==hashlib.sha256(data).hexdigest()
+              print(key,len(fc["features"]),len(data),meta["sha256"])
+          PY
+
+      - name: Commit normalized context layers to feature branch
+        if: github.event_name == 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/isle-royale-map/data/quiet-no-wake-zones.geojson
+          git add public/isle-royale-map/data/vegetation-change-1996-2017.geojson
+          git add public/isle-royale-map/data/horne-fire-burn-severity.geojson
+          git add public/isle-royale-map/data/context-layer-manifest.json
+          if git diff --cached --quiet; then
+            echo "No generated context GIS changes to commit."
+            exit 0
+          fi
+          git commit -m "Generate Isle Royale context GIS layers"
+          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+
+      - name: Upload context GIS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: isle-royale-context-gis
+          path: |
+            public/isle-royale-map/data/quiet-no-wake-zones.geojson
+            public/isle-royale-map/data/vegetation-change-1996-2017.geojson
+            public/isle-royale-map/data/horne-fire-burn-severity.geojson
+            public/isle-royale-map/data/context-layer-manifest.json
+          retention-days: 14
