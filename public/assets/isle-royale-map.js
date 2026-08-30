@@ -50,9 +50,23 @@
     routeModeButton: document.getElementById('route-mode'),
     routeMapGuide: document.getElementById('route-map-guide'),
     focusMapButton: document.getElementById('focus-map'),
+    cockpit: document.getElementById('planning-cockpit'),
+    cockpitExit: document.getElementById('cockpit-exit'),
+    cockpitMode: document.getElementById('cockpit-route-mode'),
+    cockpitSpeed: document.getElementById('cockpit-route-speed'),
+    cockpitHours: document.getElementById('cockpit-route-hours'),
+    cockpitBuild: document.getElementById('cockpit-build'),
+    cockpitUndo: document.getElementById('cockpit-undo'),
+    cockpitRedo: document.getElementById('cockpit-redo'),
+    cockpitReverse: document.getElementById('cockpit-reverse'),
+    cockpitWeather: document.getElementById('cockpit-weather'),
+    cockpitClear: document.getElementById('cockpit-clear'),
+    cockpitSummary: document.getElementById('cockpit-route-summary'),
+    cockpitStops: document.getElementById('cockpit-route-stops'),
     routeAddButton: document.getElementById('route-add-mode'),
     routeReverse: document.getElementById('route-reverse'),
     routeUndo: document.getElementById('route-undo'),
+    routeRedo: document.getElementById('route-redo'),
     routeClear: document.getElementById('route-clear'),
     routeModeSelect: document.getElementById('route-mode-select'),
     routeSpeed: document.getElementById('route-speed'),
@@ -156,7 +170,9 @@
     scenarios:[],
     activeScenario:'balanced',
     scenarioWeather:{},
-    scenarioWeatherLoading:false
+    scenarioWeatherLoading:false,
+    history:[],
+    future:[]
   };
   const waterIntel = {
     state:'idle',
@@ -577,6 +593,7 @@
       status((point.label||'Campground')+' is not in the current NPS Boat-In campground feed, so it cannot be fixed as a water-trip day end.');
       return false;
     }
+    rememberRouteEdit();
     point.manualDayEnd=Boolean(active);
     reroute((point.label||'Campground')+(active?' set as an explicit day end.':' returned to a normal route stop.'));
     const day=manualDayNumber(point);
@@ -1849,12 +1866,13 @@
 
   function insertItineraryCampStop(camp){
     if(!camp||route.points.length<2)return;
-    const target={lat:Number(camp.lat),lng:Number(camp.lng),label:camp.name};
+    const target={lat:Number(camp.lat),lng:Number(camp.lng),label:camp.name,kind:'campground',sourceBackedBoatIn:true};
     if(route.points.some(p=>distanceMiles(p,target)<.08)){status(camp.name+' is already a route stop.');return;}
     const api=window.IsleRoyaleWaterIntel,path=routePathPoints(),projection=api.projectPointToPath(target,path);
     if(!projection)return;
     let insertAt=route.points.length-1;
     for(let i=1;i<route.points.length;i++){const cp=api.projectPointToPath(route.points[i],path);if(cp&&cp.along_miles>projection.along_miles){insertAt=i;break;}}
+    rememberRouteEdit();
     route.points.splice(insertAt,0,target);
     reroute(camp.name+' added as an overnight route stop. Re-run weather after the water route resolves.');
     emitEvent('isle_royale_itinerary_stop',{mode:route.mode,source:'nps-boat-in'});
@@ -1922,10 +1940,11 @@
       if(base.some(point=>distanceMiles(point,target)<.08))continue;
       entries.push({
         along:Number(camp.along_miles)||Number(leg.end_miles)||Infinity,
-        point:{...target,label:camp.name,scenarioGenerated:true,scenarioId:scenario.id,campId:camp.id}
+        point:{...target,label:camp.name,kind:'campground',sourceBackedBoatIn:true,scenarioGenerated:true,scenarioId:scenario.id,campId:camp.id}
       });
     }
     entries.sort((a,b)=>a.along-b.along);
+    rememberRouteEdit();
     route.points=[start,...entries.map(entry=>entry.point),end];
     route.activeScenario=scenario.id;
     reroute(scenario.title+' scenario applied. Source-backed overnight stops were added; re-run forecast comparison after the route resolves.');
@@ -2089,9 +2108,9 @@
     return 'Via point';
   }
 
-  function renderRouteStops() {
-    if(!els.routeStopList)return;
-    els.routeStopList.replaceChildren();
+  function renderRouteStopsInto(container) {
+    if(!container)return;
+    container.replaceChildren();
     if(!route.points.length)return;
     route.points.forEach((point,index)=>{
       const row=document.createElement('div');
@@ -2121,6 +2140,7 @@
       remove.setAttribute('aria-label','Remove '+(point.label||'route point'));
       remove.textContent='×';
       remove.addEventListener('click',()=>{
+        rememberRouteEdit();
         route.points.splice(index,1);
         reroute('Route stop removed. Re-run weather after the route resolves.');
         status((point.label||'Route point')+' removed from trip.');
@@ -2135,10 +2155,14 @@
         row.appendChild(dayEnd);
       }
       row.appendChild(remove);
-      els.routeStopList.appendChild(row);
+      container.appendChild(row);
     });
   }
 
+  function renderRouteStops() {
+    renderRouteStopsInto(els.routeStopList);
+    renderRouteStopsInto(els.cockpitStops);
+  }
   function renderRoute() {
     routeLayerGroup.clearLayers();
     route.markers=[];
@@ -2160,6 +2184,7 @@
           if(!route.adding)return;
           if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
           const index=nearestControlSegmentIndex(event.latlng);
+          rememberRouteEdit();
           route.points.splice(index,0,{lat:event.latlng.lat,lng:event.latlng.lng,label:`Via ${index}`,kind:'map-point'});
           reroute();
           status('Shaping point added to the route. Keep clicking to refine the trip.');
@@ -2178,6 +2203,7 @@
       }).addTo(routeLayerGroup);
       marker.on('dragend',()=>{
         const ll=marker.getLatLng();
+        rememberRouteEdit();
         route.points[index]={...route.points[index],lat:ll.lat,lng:ll.lng};
         reroute();
       });
@@ -2218,8 +2244,100 @@
     renderRouteIntelligence();
     renderRouteScenarios();
     renderRouteItinerary();
+    syncCockpitControls();
   }
 
+  function cloneRoutePoints(points=route.points) {
+    return (points||[]).map(point=>({...point}));
+  }
+
+  function captureRouteSnapshot() {
+    return {
+      points:cloneRoutePoints(),
+      mode:route.mode,
+      speed:Number(els.routeSpeed.value)||3,
+      hours:Number(els.routeDayHours?.value)||6,
+      activeScenario:route.activeScenario||'balanced'
+    };
+  }
+
+  function updateHistoryControls() {
+    const canUndo=route.history.length>0;
+    const canRedo=route.future.length>0;
+    if(els.routeUndo)els.routeUndo.disabled=!canUndo;
+    if(els.routeRedo)els.routeRedo.disabled=!canRedo;
+    if(els.cockpitUndo)els.cockpitUndo.disabled=!canUndo;
+    if(els.cockpitRedo)els.cockpitRedo.disabled=!canRedo;
+  }
+
+  function rememberRouteEdit() {
+    route.history.push(captureRouteSnapshot());
+    if(route.history.length>40)route.history.shift();
+    route.future=[];
+    updateHistoryControls();
+  }
+
+  function restoreRouteSnapshot(snapshot,message) {
+    if(!snapshot)return;
+    route.waterToken++;
+    route.points=cloneRoutePoints(snapshot.points);
+    route.mode=snapshot.mode||'paddle';
+    route.activeScenario=snapshot.activeScenario||'balanced';
+    els.routeModeSelect.value=route.mode;
+    els.routeSpeed.value=String(snapshot.speed||3);
+    if(els.routeDayHours)els.routeDayHours.value=String(snapshot.hours||6);
+    route.resolvedPoints=[];
+    route.trailNames=[];
+    route.waterStats=null;
+    route.waterReason='';
+    route.scenarios=[];
+    route.scenarioWeather={};
+    route.itinerary=null;
+    route.itineraryWeather=null;
+    route.smartState=route.points.length<2?(route.points.length?'need-destination':'idle'):(route.mode==='hike'?'trail-pending':'water-pending');
+    reroute(message);
+    updateHistoryControls();
+  }
+
+  function undoRouteEdit() {
+    if(!route.history.length)return;
+    const current=captureRouteSnapshot();
+    const previous=route.history.pop();
+    route.future.push(current);
+    if(route.future.length>40)route.future.shift();
+    restoreRouteSnapshot(previous,'Undo restored the previous trip state. Re-run weather for the restored route.');
+    status('Undid the last route edit.');
+  }
+
+  function redoRouteEdit() {
+    if(!route.future.length)return;
+    const current=captureRouteSnapshot();
+    const next=route.future.pop();
+    route.history.push(current);
+    if(route.history.length>40)route.history.shift();
+    restoreRouteSnapshot(next,'Redo restored the next trip state. Re-run weather for the restored route.');
+    status('Redid the route edit.');
+  }
+
+  function syncCockpitControls() {
+    if(els.cockpitMode)els.cockpitMode.value=route.mode;
+    if(els.cockpitSpeed)els.cockpitSpeed.value=els.routeSpeed.value;
+    if(els.cockpitHours)els.cockpitHours.value=els.routeDayHours?.value||'6';
+    if(els.cockpitBuild) {
+      els.cockpitBuild.textContent=route.adding?'Explore':'Build route';
+      els.cockpitBuild.classList.toggle('primary',!route.adding);
+    }
+    if(els.cockpitWeather)els.cockpitWeather.disabled=Boolean(els.routeWeatherButton?.disabled);
+    if(els.cockpitReverse)els.cockpitReverse.disabled=route.points.length<2;
+    if(els.cockpitClear)els.cockpitClear.disabled=!route.points.length;
+    if(els.cockpitSummary) {
+      const summary=els.routeSummary?.textContent||'No route yet.';
+      const days=route.itinerary?.legs?.length;
+      const scenario=route.scenarios.find(item=>item.id===route.activeScenario)?.title;
+      els.cockpitSummary.textContent=summary+(days?' · '+days+' day'+(days===1?'':'s'):'')+(scenario?' · '+scenario:'');
+    }
+    updateHistoryControls();
+  }
   function resizePlanningMap() {
     window.setTimeout(()=>map.invalidateSize({pan:false}),230);
   }
@@ -2231,6 +2349,7 @@
       els.focusMapButton.textContent=focused?'Exit map focus':'Focus map';
       els.focusMapButton.setAttribute('aria-pressed',String(focused));
     }
+    syncCockpitControls();
     resizePlanningMap();
     status(focused
       ? 'Map focus is on. The map now fills the viewport for route planning; use Exit map focus or Escape to return.'
@@ -2256,6 +2375,7 @@
         ? 'Build route is on. Click the map, campsites, or route line to keep extending the trip.'
         : 'Build route is on. Click the map or a campsite for your route start.'
       : 'Explore mode. Map clicks inspect features without changing the trip.');
+    syncCockpitControls();
     resizePlanningMap();
   }
 
@@ -2271,6 +2391,7 @@
       liveAlert:Boolean(meta.liveAlert),
       manualDayEnd:Boolean(meta.manualDayEnd)
     };
+    rememberRouteEdit();
     route.points.push(point);
     reroute('Route changed. Re-run the weather analysis for the updated path.');
     emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode,point_kind:cleanText(meta.kind||'map-point')});
@@ -2279,18 +2400,18 @@
 
   function reverseRoute() {
     if(route.points.length<2)return;
+    rememberRouteEdit();
     route.points.reverse();
     reroute();
     status('Route direction reversed.');
   }
 
   function undoRoutePoint() {
-    if(!route.points.length)return;
-    route.points.pop();
-    reroute();
+    undoRouteEdit();
   }
 
   function clearRoute() {
+    if(route.points.length)rememberRouteEdit();
     route.waterToken++;
     route.points=[];
     route.resolvedPoints=[];
@@ -2636,16 +2757,19 @@
 
   const routeSpeedDefaults={paddle:3,hike:2,powerboat:15};
   els.routeModeSelect.addEventListener('change',()=>{
+    rememberRouteEdit();
     route.mode=els.routeModeSelect.value;
     route.activeScenario='balanced';
     els.routeSpeed.value=routeSpeedDefaults[route.mode]||3;
     reroute('Travel mode changed. Re-run route weather after confirming speed and departure.');
   });
   els.routeSpeed.addEventListener('change',()=>{
+    rememberRouteEdit();
     clearRouteWeather('Planning speed changed. Re-run route weather for updated arrival times.');
     renderRoute();
   });
   els.routeDayHours?.addEventListener('change',()=>{
+    rememberRouteEdit();
     route.activeScenario='balanced';
     clearRouteWeather('Balanced travel-day length changed. Scenario plans were rebuilt; re-run forecast comparison for the new schedules.');
     renderRoute();
@@ -2656,8 +2780,33 @@
   els.exploreModeButton?.addEventListener('click',()=>setRouteAdding(false));
   els.routeReverse.addEventListener('click',reverseRoute);
   els.routeUndo.addEventListener('click',undoRoutePoint);
+  els.routeRedo?.addEventListener('click',redoRouteEdit);
   els.routeClear.addEventListener('click',clearRoute);
   els.routeWeatherButton.addEventListener('click',analyzeRouteWeather);
+  els.cockpitExit?.addEventListener('click',()=>setMapFocus(false));
+  els.cockpitBuild?.addEventListener('click',()=>setRouteAdding(!route.adding));
+  els.cockpitUndo?.addEventListener('click',undoRouteEdit);
+  els.cockpitRedo?.addEventListener('click',redoRouteEdit);
+  els.cockpitReverse?.addEventListener('click',reverseRoute);
+  els.cockpitWeather?.addEventListener('click',analyzeRouteWeather);
+  els.cockpitClear?.addEventListener('click',clearRoute);
+  els.cockpitMode?.addEventListener('change',()=>{
+    if(els.cockpitMode.value===els.routeModeSelect.value)return;
+    els.routeModeSelect.value=els.cockpitMode.value;
+    els.routeModeSelect.dispatchEvent(new Event('change'));
+  });
+  els.cockpitSpeed?.addEventListener('change',()=>{
+    const value=Number(els.cockpitSpeed.value);
+    if(!Number.isFinite(value)||value<.5)return;
+    els.routeSpeed.value=String(value);
+    els.routeSpeed.dispatchEvent(new Event('change'));
+  });
+  els.cockpitHours?.addEventListener('change',()=>{
+    const value=Number(els.cockpitHours.value);
+    if(!Number.isFinite(value)||value<2)return;
+    els.routeDayHours.value=String(value);
+    els.routeDayHours.dispatchEvent(new Event('change'));
+  });
   map.on('click',event=>{
     if(!route.adding)return;
     const label=route.points.length===0?'Map start':`Map waypoint ${route.points.length+1}`;
@@ -2665,6 +2814,20 @@
     status(label+' added. Keep clicking to extend the route or click a campground to make it a trip stop.');
   });
   document.addEventListener('keydown',event=>{
+    const tag=event.target?.tagName?.toLowerCase();
+    const typing=tag==='input'||tag==='select'||tag==='textarea'||event.target?.isContentEditable;
+    const planningHotkeys=route.adding||document.body.classList.contains('map-focus');
+    if(planningHotkeys&&!typing&&(event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z') {
+      event.preventDefault();
+      if(event.shiftKey)redoRouteEdit();
+      else undoRouteEdit();
+      return;
+    }
+    if(planningHotkeys&&!typing&&(event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='y') {
+      event.preventDefault();
+      redoRouteEdit();
+      return;
+    }
     if(event.key!=='Escape')return;
     if(document.body.classList.contains('map-focus')) {
       setMapFocus(false);
@@ -2710,6 +2873,8 @@
   els.exploreModeButton?.setAttribute('aria-pressed','true');
   els.routeModeButton?.setAttribute('aria-pressed','false');
   renderRoute();
+  updateHistoryControls();
+  syncCockpitControls();
   renderFeatureList();
   loadCatalog();
   loadOperationalData();

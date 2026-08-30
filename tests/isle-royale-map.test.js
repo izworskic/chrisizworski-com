@@ -207,6 +207,30 @@ test('map-first route builder separates Explore from persistent Build mode and m
   assert.doesNotMatch(js, /scrollIntoView\(\{behavior:'smooth'.*route-planner/);
 });
 
+test('focus map becomes a real planning cockpit with shared controls and reversible edits', () => {
+  assert.match(html, /id="planning-cockpit"/);
+  assert.match(html, /id="cockpit-route-mode"/);
+  assert.match(html, /id="cockpit-route-speed"/);
+  assert.match(html, /id="cockpit-route-hours"/);
+  assert.match(html, /id="cockpit-route-stops"/);
+  assert.match(html, /id="cockpit-undo"/);
+  assert.match(html, /id="cockpit-redo"/);
+  assert.match(html, /id="route-redo"/);
+  assert.match(js, /function captureRouteSnapshot/);
+  assert.match(js, /function rememberRouteEdit/);
+  assert.match(js, /function undoRouteEdit/);
+  assert.match(js, /function redoRouteEdit/);
+  assert.match(js, /function restoreRouteSnapshot/);
+  assert.match(js, /renderRouteStopsInto\(els\.cockpitStops\)/);
+  assert.match(js, /els\.cockpitMode\?\.addEventListener\('change'/);
+  assert.match(js, /els\.cockpitWeather\?\.addEventListener\('click',analyzeRouteWeather\)/);
+  assert.match(js, /rememberRouteEdit\(\);[\s\S]{0,120}route\.points\.splice/);
+  assert.match(js, /rememberRouteEdit\(\);[\s\S]{0,120}route\.points\[index\]=/);
+  assert.match(js, /rememberRouteEdit\(\);[\s\S]{0,120}route\.points\.reverse/);
+  assert.match(js, /scenarioGenerated:true/);
+  assert.match(js, /sourceBackedBoatIn:true/);
+});
+
 test('planning map expands for route building and supports a full-viewport focus mode', () => {
   assert.match(html, /id="focus-map"[^>]*aria-pressed="false"[^>]*>Focus map/);
   assert.match(html, /\.route-building \.shell\{grid-template-columns:minmax\(0,2\.45fr\)/);
