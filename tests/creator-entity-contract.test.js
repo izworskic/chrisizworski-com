@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const contract = JSON.parse(await readFile(new URL('../benchmarks/creator-entity-contract.json', import.meta.url), 'utf8'));
 const registry = JSON.parse(await readFile(new URL('../benchmarks/tool-network-registry.json', import.meta.url), 'utf8'));
@@ -9,6 +10,7 @@ const registry = JSON.parse(await readFile(new URL('../benchmarks/tool-network-r
 const PERSON = 'https://chrisizworski.com/#person';
 const PROFILE = 'https://chrisizworski.com/chris-izworski/';
 const byHost = new Map(contract.properties.map(item => [item.host, item]));
+const PUBLIC_DIR = fileURLToPath(new URL('../public/', import.meta.url));
 
 function hostOf(url) {
   return String(url).replace(/^https:\/\//, '').split('/')[0];
@@ -55,7 +57,7 @@ test('every separate-host first-party tool is covered by the creator contract', 
 });
 
 test('main-site HTML never mints a competing Chris Person fragment', async () => {
-  const files = await htmlFiles(new URL('../public/', import.meta.url));
+  const files = await htmlFiles(PUBLIC_DIR);
   const violations = [];
   const idPattern = /"@id"\s*:\s*"([^"]*#person)"/g;
   for (const file of files) {
