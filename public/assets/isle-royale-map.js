@@ -9,6 +9,7 @@
     arcgisRoot: 'https://www.arcgis.com/sharing/rest/content/items/',
     overpass: 'https://overpass-api.de/api/interpreter',
     operationsEndpoint: '/api/isle-royale',
+    routeWeatherEndpoint: '/api/isle-royale-route-weather',
     currentConditionsUrl: 'https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm',
     boatInUrl: 'https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm',
     campingUrl: 'https://www.nps.gov/isro/planyourvisit/camping.htm',
@@ -43,7 +44,17 @@
     catalog: document.getElementById('catalog-body'),
     liveStatus: document.getElementById('park-live-status'),
     deepStatus: document.getElementById('deep-layer-status'),
-    contextStatus: document.getElementById('context-layer-status')
+    contextStatus: document.getElementById('context-layer-status'),
+    routeModeButton: document.getElementById('route-mode'),
+    routeAddButton: document.getElementById('route-add-mode'),
+    routeUndo: document.getElementById('route-undo'),
+    routeClear: document.getElementById('route-clear'),
+    routeModeSelect: document.getElementById('route-mode-select'),
+    routeSpeed: document.getElementById('route-speed'),
+    routeDeparture: document.getElementById('route-departure'),
+    routeSummary: document.getElementById('route-summary'),
+    routeWeatherButton: document.getElementById('route-weather-button'),
+    routeWeather: document.getElementById('route-weather')
   };
 
   const coarsePointer = typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
@@ -66,6 +77,12 @@
     opacity:.48,
     attribution:'USGS The National Map · 3DEP / GMTED2010'
   });
+
+  map.createPane('routePane');
+  map.getPane('routePane').style.zIndex = '610';
+
+  const osmContextGroup = L.layerGroup();
+  const routeLayerGroup = L.layerGroup().addTo(map);
 
   const layerGroups = {
     relief: reliefLayer,
@@ -105,8 +122,17 @@
   let selectedLayer = null;
   let searchEventTimer = null;
   let osmContextLoaded = false;
+  let osmContextVisible = false;
   let visitorGeometrySettled = false;
   const osmSeen = new Set();
+  const route = {
+    adding:false,
+    points:[],
+    line:null,
+    markers:[],
+    weather:null,
+    mode:'paddle'
+  };
   const sourceStatus = {arcgis:'starting', osm:'not loaded', fallback:false};
   const operational = {
     boaterByName: new Map(),
