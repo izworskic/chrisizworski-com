@@ -11,6 +11,7 @@
     operationsEndpoint: '/api/isle-royale',
     currentConditionsUrl: 'https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm',
     boatInUrl: 'https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm',
+    offTrailUrl: 'https://www.nps.gov/isro/planyourvisit/crosscountry-camping.htm',
     deepManifest: '/isle-royale-map/data/deep-layer-manifest.json',
     deepLayers: {
       geology: '/isle-royale-map/data/geology-units.geojson',
@@ -558,6 +559,26 @@
       state.textContent = 'Current NPS conditions source reached; no closure pattern currently matched by this tool. This is not a declaration that the park has no alerts.';
     }
     els.liveStatus.appendChild(state);
+
+    const closedZones = [...new Set(operational.alerts.flatMap(alert => Array.isArray(alert.zones) ? alert.zones : alert.id === 'off-trail-zone-9' ? [9] : []))]
+      .filter(Number.isFinite)
+      .sort((a,b) => a-b);
+    if (closedZones.length) {
+      const zones = document.createElement('div');
+      zones.className = 'ops-alert';
+      zones.innerHTML = '<strong></strong><span></span>';
+      zones.querySelector('strong').textContent = `Off-trail camping zones currently flagged closed: ${closedZones.join(', ')}`;
+      zones.querySelector('span').textContent = 'This is a current NPS operational signal, not mapped polygon geometry. Verify the permit map and current conditions before departure.';
+      els.liveStatus.appendChild(zones);
+
+      const zoneLink = document.createElement('a');
+      zoneLink.className = 'popup-link';
+      zoneLink.href = CONFIG.offTrailUrl;
+      zoneLink.target = '_blank';
+      zoneLink.rel = 'noopener';
+      zoneLink.textContent = 'Open NPS off-trail camping guidance and zone map';
+      els.liveStatus.appendChild(zoneLink);
+    }
 
     const data = document.createElement('div');
     data.className = 'ops-source';
