@@ -12,8 +12,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: isle-royale-deep-data-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: isle-royale-gis-writer-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build-deep-layers:
