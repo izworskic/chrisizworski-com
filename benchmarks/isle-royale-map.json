@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.4.0",
   "updated": "2026-08-30",
   "route": "/isle-royale-map/",
   "objective": "Build the most useful source-transparent Isle Royale planning map in the Chris Izworski tool network without pretending static cartography is authoritative GIS.",
@@ -64,7 +64,7 @@
     {
       "id": "planning-flow",
       "weight": 15,
-      "target": "Search + layer filters + feature details + real trip planning are useful before documentation. Hiking follows the mapped trail graph. Water routing avoids mapped coastline crossings and must support source-backed multi-day planning from current NPS Boat-In campground records, excluding current closure signals, with day-level exposure, regulation and marine-weather context."
+      "target": "Search + layer filters + feature details + real trip planning are useful before documentation. Water planning must support source-backed camp-first multi-day itineraries plus side-by-side Weather-conservative, Balanced, and Ambitious scenarios with distinct travel-day structures, preserved manual waypoints, explicit campground gaps, and NWS forecast samples timed to each actual itinerary day after overnight stops."
     },
     {
       "id": "provenance",
@@ -113,7 +113,8 @@
     "Do not hide the entire source catalog behind JavaScript; preserve crawlable source rows and a raw catalog link.",
     "Do not claim the measurement plan is complete unless all five privacy-safe Isle Royale product events are wired.",
     "Do not call water routing smart if it is only a draggable straight-line sketch; water intelligence requires mapped-coastline avoidance plus route exposure/regulation/refuge analysis.",
-    "Do not call a multi-day water itinerary complete unless overnight recommendations require a current NPS Boat-In campground record, exclude current closure signals, and explicitly show a gap instead of inventing a campsite when no qualified stop fits the travel day."
+    "Do not call a multi-day water itinerary complete unless overnight recommendations require a current NPS Boat-In campground record, exclude current closure signals, and explicitly show a gap instead of inventing a campsite when no qualified stop fits the travel day.",
+    "Do not call scenario planning complete unless conservative, balanced, and ambitious plans are structurally distinct, applying a scenario preserves manual route points, source-backed overnight-stop truth gates remain intact, and scenario weather uses explicit itinerary target times across overnight layovers."
   ],
   "initialBuildFit": {
     "distinctSearchIntent": 24,
