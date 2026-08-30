@@ -299,15 +299,17 @@
     let current=0,day=1;
     while(current<total-.05&&day<=maxDays){
       const remaining=total-current;
-      if(remaining<=daily*1.15){
+      const nextPinned=candidates.find(c=>c.pinned&&!used.has(c.id)&&c.along_miles>current+.35)||null;
+      if(remaining<=daily*1.15&&!nextPinned){
         legs.push({day,start_miles:current,end_miles:total,distance_miles:remaining,stop:null,alternatives:[],final:true,gap:false});
         current=total;
         break;
       }
       const ideal=Math.min(total,current+daily);
       const minAdvance=Math.max(1,daily*.45),maxAdvance=daily*1.35;
-      const minAlong=current+minAdvance,maxAlong=Math.min(total-.35,current+maxAdvance);
-      const viable=candidates.filter(c=>!used.has(c.id)&&c.along_miles>current+.5&&c.along_miles>=minAlong&&c.along_miles<=maxAlong);
+      const minAlong=current+minAdvance;
+      const maxAlong=Math.min(total-.35,current+maxAdvance,nextPinned?nextPinned.along_miles:Infinity);
+      const viable=candidates.filter(c=>!used.has(c.id)&&!c.pinned&&c.along_miles>current+.5&&c.along_miles>=minAlong&&c.along_miles<=maxAlong);
       const ranked=viable.map(c=>{
         const idealPenalty=Math.abs(c.along_miles-ideal)/Math.max(1,daily);
         const detourPenalty=c.distance_miles/Math.max(.25,maxDetour);
@@ -316,7 +318,10 @@
         return {...c,score:idealPenalty*1.25+detourPenalty*.75+shelterBonus+dockBonus};
       }).sort((a,b)=>a.score-b.score||a.along_miles-b.along_miles);
 
-      const chosen=ranked[0]||null;
+      const pinnedWithinDay=nextPinned&&(nextPinned.along_miles-current)<=maxAdvance;
+      const chosen=pinnedWithinDay
+        ? nextPinned
+        : ranked[0]||nextPinned||null;
       const end=chosen?chosen.along_miles:ideal;
       if(chosen)used.add(chosen.id);
       legs.push({
@@ -325,9 +330,11 @@
         end_miles:end,
         distance_miles:end-current,
         stop:chosen,
-        alternatives:ranked.slice(chosen?1:0,4),
+        alternatives:chosen?.pinned?ranked.slice(0,3):ranked.slice(chosen?1:0,4),
         final:false,
-        gap:!chosen
+        gap:!chosen,
+        pinned:Boolean(chosen?.pinned),
+        over_target:Boolean(chosen?.pinned&&(end-current)>maxAdvance)
       });
       current=end;
       day++;
