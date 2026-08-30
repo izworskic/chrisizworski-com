@@ -1559,7 +1559,7 @@
   }
 
   function renderSmartStatus() {
-    els.routeSmartStatus.classList.toggle('route-warning',route.smartState==='trail-fallback');
+    els.routeSmartStatus.classList.toggle('route-warning',route.smartState==='trail-fallback'||route.smartState==='water-fallback');
     if(!route.points.length) {
       els.routeSmartStatus.textContent='Choose a start. Tap a map point and use “Start route here,” or press Start on map.';
       return;
@@ -1576,6 +1576,19 @@
     }
     if(route.mode==='hike') {
       els.routeSmartStatus.textContent=route.smartReason||'Smart trail routing is unavailable for these points; showing a straight planning sketch.';
+      return;
+    }
+    if(route.smartState==='water-loading'||route.smartState==='water-pending') {
+      els.routeSmartStatus.innerHTML='<strong>Building water route:</strong> checking mapped coastline and route shape. The straight line is temporary.';
+      return;
+    }
+    if(route.smartState==='water-aware') {
+      const access=route.waterAccessMiles>0.05?` · ${route.waterAccessMiles.toFixed(1)} mi endpoint access to the routing grid`:'';
+      els.routeSmartStatus.innerHTML=`<strong>Water-aware planning route:</strong> avoids mapped coastline crossings and uses a ${route.mode==='paddle'?'shoreline-biased':'more direct'} path${access}. Drag endpoints or tap the line to compare another scenario.`;
+      return;
+    }
+    if(route.smartState==='water-fallback') {
+      els.routeSmartStatus.textContent=`Water intelligence unavailable (${route.waterReason||'unknown source issue'}). Showing an editable straight planning sketch; do not treat it as a navigable route.`;
       return;
     }
     els.routeSmartStatus.innerHTML='<strong>Editable water route:</strong> drag S / D / numbered handles to reshape it. Tap the route line to add another shaping point.';
