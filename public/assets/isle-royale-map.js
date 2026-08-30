@@ -1585,9 +1585,10 @@
     }
   }
 
-  function routeWaypointIcon(index,total) {
-    const cls=index===0?'is-start':index===total-1?'is-end':'';
-    const label=index===0?'S':index===total-1?'D':String(index);
+  function routeWaypointIcon(index,total,point={}) {
+    const isCamp=point.kind==='campground';
+    const cls=index===0?'is-start':index===total-1?'is-end':isCamp?'is-camp':'';
+    const label=index===0?'S':index===total-1?'D':isCamp?'C':String(index);
     return L.divIcon({
       className:'',
       html:`<span class="route-waypoint-icon ${cls}">${label}</span>`,
