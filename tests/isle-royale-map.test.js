@@ -207,6 +207,18 @@ test('map-first route builder separates Explore from persistent Build mode and m
   assert.doesNotMatch(js, /scrollIntoView\(\{behavior:'smooth'.*route-planner/);
 });
 
+test('planning map expands for route building and supports a full-viewport focus mode', () => {
+  assert.match(html, /id="focus-map"[^>]*aria-pressed="false"[^>]*>Focus map/);
+  assert.match(html, /\.route-building \.shell\{grid-template-columns:minmax\(0,2\.45fr\)/);
+  assert.match(html, /\.route-building \.map-wrap\{height:clamp\(660px,86dvh,940px\)/);
+  assert.match(html, /@media\(max-width:620px\)[\s\S]*\.route-building \.map-wrap\{height:clamp\(540px,82dvh,780px\)/);
+  assert.match(html, /body\.map-focus \.map-wrap\{position:fixed;inset:0/);
+  assert.match(js, /function setMapFocus/);
+  assert.match(js, /map\.invalidateSize\(\{pan:false\}\)/);
+  assert.match(js, /isle_royale_map_focus/);
+  assert.match(js, /if\(document\.body\.classList\.contains\('map-focus'\)\)/);
+});
+
 test('manual campsite day ends are explicit, source-aware route decisions', () => {
   assert.match(js, /function setCampDayEnd/);
   assert.match(js, /End next day here/);
