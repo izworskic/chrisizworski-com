@@ -33,14 +33,24 @@ FIRE_PARENT = "6659f2cfd34ef3137d36a465"
 FIRE_DOI = "10.5066/P13QWXNI"
 
 
-def fetch_bytes(url, timeout=60):
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"})
-    with urllib.request.urlopen(req, timeout=timeout) as response:
-        return response.read()
+def fetch_bytes(url, timeout=120, attempts=4):
+    last = None
+    for attempt in range(1, attempts + 1):
+        req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"})
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as response:
+                return response.read()
+        except Exception as exc:
+            last = exc
+            print(f"fetch attempt {attempt}/{attempts} failed {url}: {exc}", file=sys.stderr)
+            if attempt < attempts:
+                import time
+                time.sleep(min(8, attempt * 2))
+    raise last
 
 
-def fetch_json(url, timeout=60):
-    return json.loads(fetch_bytes(url, timeout).decode("utf-8"))
+def fetch_json(url, timeout=120, attempts=4):
+    return json.loads(fetch_bytes(url, timeout=timeout, attempts=attempts).decode("utf-8"))
 
 
 def arcgis_query(url):
@@ -304,37 +314,58 @@ def build_quiet_no_wake():
 
 
 def sciencebase_descendants(parent_id):
-    found = []
-    queue = [parent_id]
-    seen = set()
-    while queue:
-        item_id = queue.pop(0)
-        if item_id in seen:
+    # One descendants query is materially faster and less failure-prone than
+    # recursively walking every folder. ScienceBase documents the ancestors
+    # filter as the way to retrieve all descendants of a release.
+    parent = fetch_json(f"https://www.sciencebase.gov/catalog/item/{parent_id}?format=json", timeout=120)
+    url = "https://www.sciencebase.gov/catalog/items?" + urllib.parse.urlencode({
+        "q": "",
+        "filter": f"ancestors={parent_id}",
+        "format": "json",
+        "max": "1000",
+    })
+    listing = fetch_json(url, timeout=180)
+    items = [parent]
+    seen = {parent_id}
+    for summary in listing.get("items") or []:
+        item_id = summary.get("id")
+        if not item_id or item_id in seen:
             continue
         seen.add(item_id)
-        item = fetch_json(f"https://www.sciencebase.gov/catalog/item/{item_id}?format=json")
-        found.append(item)
-        url = "https://www.sciencebase.gov/catalog/items?" + urllib.parse.urlencode({
-            "filter": f"parentId={item_id}",
-            "format": "json",
-            "max": "100",
-        })
         try:
-            children = fetch_json(url).get("items") or []
+            item = fetch_json(f"https://www.sciencebase.gov/catalog/item/{item_id}?format=json", timeout=120)
         except Exception as exc:
-            print(f"ScienceBase child listing failed for {item_id}: {exc}", file=sys.stderr)
-            children = []
-        for child in children:
-            cid = child.get("id")
-            if cid and cid not in seen:
-                queue.append(cid)
-    return found
+            print(f"ScienceBase item detail failed {item_id}: {exc}; using search summary", file=sys.stderr)
+            item = summary
+        items.append(item)
+    return items
 
 
-def download_sciencebase_tree(parent_id, dest):
+def plausible_geospatial_file(entry, purpose):
+    name = str(entry.get("name") or "").lower()
+    content = str(entry.get("contentType") or "").lower()
+    title = str(entry.get("title") or "").lower()
+    hay = f"{name} {title} {content}"
+    suffix = pathlib.Path(name).suffix.lower()
+
+    # Skip obvious documentation/preview material. Keep ZIP archives because
+    # USGS commonly packages shapefiles/geodatabases in them.
+    if suffix in {".xml", ".pdf", ".txt", ".html", ".htm", ".jpg", ".jpeg", ".png", ".gif"}:
+        return False
+    if suffix in {".zip", ".gpkg", ".shp", ".geojson", ".json", ".gdb", ".sqlite"}:
+        return True
+    if "shapefile" in hay or "geodatabase" in hay or "geojson" in hay:
+        return True
+    # The Horne release may include image products, but the current runtime
+    # wants vector classifications. Do not download multi-GB imagery blindly.
+    return False
+
+
+def download_sciencebase_tree(parent_id, dest, purpose):
     dest.mkdir(parents=True, exist_ok=True)
     items = sciencebase_descendants(parent_id)
-    print(f"ScienceBase {parent_id}: {len(items)} items discovered", file=sys.stderr)
+    print(f"ScienceBase {parent_id}: {len(items)} release/descendant items discovered", file=sys.stderr)
+    downloaded = 0
     for item in items:
         item_id = item.get("id") or "unknown"
         title = item.get("title") or ""
@@ -346,12 +377,13 @@ def download_sciencebase_tree(parent_id, dest):
         for entry in files:
             url = entry.get("url")
             name = entry.get("name")
-            if not url or not name:
+            if not url or not name or not plausible_geospatial_file(entry, purpose):
                 continue
             safe = pathlib.Path(name).name
             path = item_dir / safe
             try:
-                path.write_bytes(fetch_bytes(url, timeout=120))
+                path.write_bytes(fetch_bytes(url, timeout=240, attempts=4))
+                downloaded += 1
                 print(f"    downloaded {safe} {path.stat().st_size} bytes", file=sys.stderr)
                 if zipfile.is_zipfile(path):
                     unzip = item_dir / (path.stem + "_unzipped")
@@ -359,7 +391,9 @@ def download_sciencebase_tree(parent_id, dest):
                     with zipfile.ZipFile(path) as z:
                         z.extractall(unzip)
             except Exception as exc:
-                print(f"    download failed {safe}: {exc}", file=sys.stderr)
+                print(f"    geospatial download failed {safe}: {exc}", file=sys.stderr)
+    if downloaded == 0:
+        raise RuntimeError(f"ScienceBase release {parent_id} exposed no downloadable geospatial package candidates")
     return items
 
 
@@ -450,7 +484,7 @@ def normalize_vector(candidate, target, purpose):
 def build_science_layer(parent_id, doi, purpose, filename):
     with tempfile.TemporaryDirectory() as td:
         root = pathlib.Path(td)
-        download_sciencebase_tree(parent_id, root)
+        download_sciencebase_tree(parent_id, root, purpose)
         candidates = vector_candidates(root, purpose)
         threshold = 110 if purpose == "vegetation-change" else 130
         if not candidates or candidates[0][0] < threshold:
