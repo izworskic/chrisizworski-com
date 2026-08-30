@@ -80,6 +80,24 @@ test('planning, provenance, accessibility and safety hooks exist', () => {
 });
 
 
+test('map points have large pointer tolerance and data-rich detail popups', () => {
+  assert.match(js, /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \? 14 : 9\}\)/);
+  assert.match(js, /radius:category === 'campground' \? 7\.5 : 7/);
+  assert.match(js, /collectFeatureFacts/);
+  assert.match(js, /properties:\{\.\.\.props\}/);
+  assert.match(js, /Related information/);
+  assert.match(js, /Open this coordinate in OpenStreetMap/);
+  assert.match(js, /NPS camping & campground guidance/);
+  assert.match(js, /NPS hiking guidance/);
+  assert.match(js, /NPS ferry, seaplane & transportation/);
+  assert.match(js, /NPS lighthouses & places to go/);
+  assert.match(js, /Open map-data source/);
+  assert.match(html, /Tap any point to open its available attributes, coordinates, source links and related NPS planning information/);
+  assert.match(html, /\.popup-action\{[^}]*min-height:42px/);
+  assert.match(html, /\.isle-detail-popup \.leaflet-popup-content/);
+});
+
+
 test('live operations feed is fail-soft and never claims no alerts from a parser no-match', () => {
   assert.match(api, /Promise\.allSettled/);
   assert.match(api, /degraded:/);
