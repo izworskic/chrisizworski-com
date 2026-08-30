@@ -4,6 +4,7 @@
   const CONFIG = {
     primaryWebMap: '75e3ceba038a45f7b4d5a9d7c6a46ccf',
     fallbackWebMap: '57a5a514a8cd40f098b2f99029d118cf',
+    visitorFeatureService: 'https://services1.arcgis.com/XBhYkoXKJCRHbe7M/arcgis/rest/services/Isle_Royale_WFL1/FeatureServer',
     islandBounds: [[47.79, -89.36], [48.33, -88.18]],
     arcgisRoot: 'https://www.arcgis.com/sharing/rest/content/items/',
     overpass: 'https://overpass-api.de/api/interpreter'
@@ -176,7 +177,7 @@
 
   function serviceLayerUrl(url, id) { return `${url.replace(/\/$/,'')}/${id}`; }
 
-  async function queryArcGISLayer(url, layerTitle) {
+  async function queryArcGISLayer(url, layerTitle, sourceLabel='Public ArcGIS visitor data', sourceKind='public service vector') {
     const query = new URL(`${url.replace(/\/$/,'')}/query`);
     query.searchParams.set('where','1=1');
     query.searchParams.set('outFields','*');
@@ -188,12 +189,12 @@
     if (!data || !Array.isArray(data.features)) return 0;
     let added = 0;
     for (const feature of data.features) {
-      added += addGeoJSONFeature(feature, {layerTitle, sourceLabel:`NPS / ArcGIS — ${layerTitle}`, sourceKind:'public service vector', sourceUrl:url});
+      added += addGeoJSONFeature(feature, {layerTitle, sourceLabel:`${sourceLabel} — ${layerTitle}`, sourceKind, sourceUrl:url});
     }
     return added;
   }
 
-  async function loadArcGISService(url, title='NPS map layer') {
+  async function loadArcGISService(url, title='Isle Royale map layer', sourceLabel='Public ArcGIS visitor data', sourceKind='public service vector') {
     const clean = url.replace(/\/$/,'');
     let meta;
     try { meta = await fetchJSON(`${clean}?f=json`); } catch { meta = null; }
@@ -201,11 +202,11 @@
     if (!isSublayer && meta && Array.isArray(meta.layers) && meta.layers.length) {
       let total = 0;
       for (const layer of meta.layers) {
-        try { total += await queryArcGISLayer(serviceLayerUrl(clean, layer.id), layer.name || title); } catch (_) {}
+        try { total += await queryArcGISLayer(serviceLayerUrl(clean, layer.id), layer.name || title, sourceLabel, sourceKind); } catch (_) {}
       }
       return total;
     }
-    return queryArcGISLayer(clean, title);
+    return queryArcGISLayer(clean, title, sourceLabel, sourceKind);
   }
 
   async function ingestOperationalLayer(op) {
@@ -222,7 +223,7 @@
       }
     }
     if (op.url && /(?:FeatureServer|MapServer)/.test(op.url)) {
-      try { added += await loadArcGISService(op.url, title); } catch (_) {}
+      try { added += await loadArcGISService(op.url, title, 'Public ArcGIS web-map source', 'public web-map service vector'); } catch (_) {}
     }
     if (Array.isArray(op.layers)) {
       for (const nested of op.layers) added += await ingestOperationalLayer(nested);
@@ -272,6 +273,22 @@
         }
       } catch (_) {}
     }
+    try {
+      added = await loadArcGISService(
+        CONFIG.visitorFeatureService,
+        'Isle Royale visitor dataset',
+        'Public ArcGIS Isle Royale visitor dataset (2021 snapshot)',
+        'public service vector — 2021 snapshot'
+      );
+      if (added > 0) {
+        sourceStatus.arcgis = `loaded ${added} visitor features from 2021 public fallback service`;
+        els.sourceStatus.textContent = `The preferred visitor web-map source was unavailable, so ${added} features were loaded from a public 2021 Isle Royale ArcGIS fallback dataset. Use current NPS pages for closures, regulations, campground status, transportation and other operational decisions.`;
+        status(`Loaded ${added} public visitor features from the 2021 fallback dataset. Current operational decisions still hand off to NPS.`);
+        renderFeatureList();
+        return;
+      }
+    } catch (_) {}
+
     added = loadFallbackAnchors();
     sourceStatus.arcgis = 'remote visitor geometry unavailable';
     els.sourceStatus.textContent = 'The public visitor web map could not be read in this browser, so only clearly labeled approximate reference anchors are shown. Official NPS map links remain available.';
