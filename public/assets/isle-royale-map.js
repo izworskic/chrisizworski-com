@@ -1629,10 +1629,19 @@
   }
 
   function routeDayMarkers(path) {
-    if(!window.IsleRoyaleWaterIntel?.dayEnds||path.length<2)return [];
-    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
-    const hours=Math.max(2,Number(els.routeDayHours?.value)||6);
-    return window.IsleRoyaleWaterIntel.dayEnds(path,speed,hours);
+    if(!route.itinerary?.legs?.length||!window.IsleRoyaleWaterIntel?.slicePath||path.length<2)return [];
+    const markers=[];
+    for(const leg of route.itinerary.legs) {
+      if(leg.final)continue;
+      if(leg.stop&&Number.isFinite(Number(leg.stop.lat))&&Number.isFinite(Number(leg.stop.lng))) {
+        markers.push({lat:Number(leg.stop.lat),lng:Number(leg.stop.lng),distance_miles:leg.end_miles,day:leg.day,label:leg.stop.name});
+        continue;
+      }
+      const part=window.IsleRoyaleWaterIntel.slicePath(path,Math.max(0,leg.end_miles-.01),leg.end_miles);
+      const point=part[part.length-1];
+      if(point)markers.push({...point,distance_miles:leg.end_miles,day:leg.day,label:'planned day end'});
+    }
+    return markers;
   }
 
   function sourceBackedWaterCamps() {
@@ -1651,19 +1660,40 @@
     return camps;
   }
 
-  function buildRouteItinerary(path){
-    route.itinerary=null;
-    if(route.mode==='hike'||route.smartState!=='water-aware'||!window.IsleRoyaleWaterIntel?.buildItinerary||path.length<2)return null;
-    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
-    const hours=Math.max(2,Number(els.routeDayHours?.value)||6);
-    const itinerary=window.IsleRoyaleWaterIntel.buildItinerary(path,sourceBackedWaterCamps(),speed,hours,{mode:route.mode,maxDetourMiles:route.mode==='powerboat'?3:1.75,maxDays:10});
-    for(const leg of itinerary.legs||[]){
+  function enrichItinerary(itinerary,path){
+    for(const leg of itinerary?.legs||[]){
       const legPath=window.IsleRoyaleWaterIntel.slicePath(path,leg.start_miles,leg.end_miles);
       leg.exposure=waterIntel.router?.analyze&&legPath.length>1?waterIntel.router.analyze(legPath):null;
       leg.quiet_zones=window.IsleRoyaleWaterIntel.zonesAlongPath(legPath,waterIntel.quietZones||[]);
     }
-    route.itinerary=itinerary;
+    const legs=itinerary?.legs||[];
+    itinerary.summary={
+      days:legs.length,
+      gaps:legs.filter(leg=>leg.gap).length,
+      overnights:legs.filter(leg=>leg.stop).length,
+      max_day_miles:legs.reduce((m,leg)=>Math.max(m,Number(leg.distance_miles)||0),0),
+      max_daily_offshore_miles:legs.reduce((m,leg)=>Math.max(m,Number(leg.exposure?.max_offshore_miles)||0),0),
+      max_daily_exposed_stretch_miles:legs.reduce((m,leg)=>Math.max(m,Number(leg.exposure?.longest_exposed_miles)||0),0),
+      quiet_zone_days:legs.filter(leg=>(leg.quiet_zones||[]).length).length
+    };
     return itinerary;
+  }
+
+  function buildRouteItinerary(path){
+    route.itinerary=null;
+    route.scenarios=[];
+    if(route.mode==='hike'||route.smartState!=='water-aware'||!window.IsleRoyaleWaterIntel?.buildScenarioSet||path.length<2)return null;
+    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    const baseHours=Math.max(2,Number(els.routeDayHours?.value)||6);
+    const camps=sourceBackedWaterCamps();
+    route.scenarios=window.IsleRoyaleWaterIntel.buildScenarioSet(path,camps,speed,baseHours,{mode:route.mode,maxDays:10})
+      .map(scenario=>({...scenario,itinerary:enrichItinerary(scenario.itinerary,path)}));
+    const active=route.scenarios.find(scenario=>scenario.id===route.activeScenario)
+      || route.scenarios.find(scenario=>scenario.id==='balanced')
+      || route.scenarios[0];
+    if(active)route.activeScenario=active.id;
+    route.itinerary=active?.itinerary||null;
+    return route.itinerary;
   }
 
   function summarizeItineraryWeather(itinerary,forecasts){
