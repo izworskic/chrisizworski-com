@@ -58,6 +58,7 @@
     routeSmartStatus: document.getElementById('route-smart-status'),
     routeSummary: document.getElementById('route-summary'),
     routeIntelligence: document.getElementById('route-intelligence'),
+    routeItinerary: document.getElementById('route-itinerary'),
     routeWeatherButton: document.getElementById('route-weather-button'),
     routeWeather: document.getElementById('route-weather')
   };
@@ -144,7 +145,9 @@
     waterToken:0,
     waterStats:null,
     waterReason:'',
-    waterAccessMiles:0
+    waterAccessMiles:0,
+    itinerary:null,
+    itineraryWeather:null
   };
   const waterIntel = {
     state:'idle',
