@@ -77,11 +77,14 @@
         <button id="cockpit-redo" type="button">Redo</button>
         <button id="cockpit-reverse" type="button">Reverse</button>
         <button id="cockpit-weather" type="button">Weather</button>
+        <button id="cockpit-save" type="button">Save</button>
+        <button id="cockpit-share" type="button">Share</button>
+        <button id="cockpit-gpx" type="button">GPX</button>
         <button id="cockpit-clear" type="button">Clear</button>
       </div>
       <div id="cockpit-route-summary" class="cockpit-summary">No route yet.</div>
       <div id="cockpit-route-stops" class="cockpit-stops" aria-label="Route stops in focused map"></div>
-      <div class="cockpit-note">Camp day-end controls remain available here. Undo/redo restores route points, camp choices, manual day ends and scenario-inserted stops.</div>
+      <div class="cockpit-note">Camp day-end controls remain available here. Save stays on this device; Share creates a deliberate URL fragment that is not sent to the server. GPX is a planning export, not a navigation chart.</div>
     </section>
     <div id="map-status" class="map-status" role="status" aria-live="polite">Starting keyless basemap and source-aware visitor layers…</div>
   </div>
@@ -143,6 +146,12 @@
           <button class="btn" id="route-undo" type="button">Undo</button>
           <button class="btn" id="route-redo" type="button">Redo</button>
           <button class="btn" id="route-clear" type="button">Clear</button>
+        </div>
+        <div class="btn-row route-actions">
+          <button class="btn" id="route-save" type="button">Save on this device</button>
+          <button class="btn" id="route-restore" type="button">Restore saved</button>
+          <button class="btn" id="route-share" type="button">Copy share link</button>
+          <button class="btn" id="route-export-gpx" type="button">Export GPX</button>
         </div>
         <div id="route-stop-list" class="route-stop-list" aria-label="Selected route points and campsites"></div>
         <div id="route-summary" class="route-summary" aria-live="polite">No route yet.</div>
@@ -230,6 +239,6 @@
 <footer class="footer">© 2026 Chris Izworski · Michigan and Great Lakes field tools <a href="/tools/">All tools</a></footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
 <script src="/assets/isle-royale-water-intelligence.js?v=20260830-4"></script>
-<script src="/assets/isle-royale-map.js?v=20260830-15"></script>
+<script src="/assets/isle-royale-map.js?v=20260830-16"></script>
 </body>
 </html>
