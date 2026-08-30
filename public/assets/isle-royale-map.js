@@ -2278,6 +2278,7 @@
   }
 
   function rememberRouteEdit() {
+    if(window.location.hash.startsWith('#trip='))window.history.replaceState(null,'',window.location.pathname+window.location.search);
     route.history.push(captureRouteSnapshot());
     if(route.history.length>40)route.history.shift();
     route.future=[];
@@ -2376,7 +2377,7 @@
       if(!Number.isFinite(lat)||!Number.isFinite(lng)||lat<bounds.south||lat>bounds.north||lng<bounds.west||lng>bounds.east)return null;
       return {
         lat,lng,label:cleanText(item?.label||'Waypoint').slice(0,100),kind:cleanText(item?.kind||'map-point').slice(0,40),
-        sourceBackedBoatIn:Boolean(item?.sourceBackedBoatIn),liveAlert:Boolean(item?.liveAlert),manualDayEnd:Boolean(item?.manualDayEnd),
+        sourceBackedBoatIn:false,liveAlert:false,manualDayEnd:Boolean(item?.manualDayEnd),
         scenarioGenerated:Boolean(item?.scenarioGenerated),scenarioId:cleanText(item?.scenarioId||'').slice(0,40),campId:cleanText(item?.campId||'').slice(0,100)
       };
     }).filter(Boolean);
@@ -2455,6 +2456,7 @@
     if(!route.points.length){status('Build a route before creating a share link.');return;}
     const url=new URL(window.location.href);
     url.hash='trip='+encodeTripState(tripState());
+    window.history.replaceState(null,'',url.toString());
     const copied=await copyText(url.toString());
     status(copied?'Share link copied. The route is encoded only in the URL fragment.':'Could not copy automatically; use your browser address bar after creating the share link.');
     emitEvent('isle_royale_trip_share',{point_count:route.points.length,mode:route.mode,result:copied?'copied':'copy-failed'});
@@ -2476,6 +2478,8 @@
   function exportRouteGpx() {
     const path=routePathPoints();
     if(path.length<2){status('Build a route with at least two points before exporting GPX.');return;}
+    const resolved=route.mode==='hike'?route.smartState==='trail-snapped':route.smartState==='water-aware';
+    if(!resolved){status('Wait for the mapped trail/water-aware route to finish before exporting GPX; temporary fallback sketches are not exported.');return;}
     const desc='Planning export from Chris Izworski Isle Royale Map. Not a navigation chart. Verify current NPS maps, regulations, conditions and marine guidance before travel.';
     const waypoints=route.points.map((point,index)=>{
       const role=routePointRole(point,index,route.points.length);
