@@ -1579,6 +1579,42 @@
     renderFeatureList();
   });
 
+  function setDefaultRouteDeparture() {
+    if(els.routeDeparture.value)return;
+    const d=new Date(Date.now()+60*60*1000);
+    d.setMinutes(0,0,0);
+    const local=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);
+    els.routeDeparture.value=local;
+    const max=new Date(Date.now()+7*24*60*60*1000);
+    els.routeDeparture.min=new Date(Date.now()-60*60*1000-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
+    els.routeDeparture.max=new Date(max.getTime()-max.getTimezoneOffset()*60000).toISOString().slice(0,16);
+  }
+
+  const routeSpeedDefaults={paddle:3,hike:2,powerboat:15};
+  els.routeModeSelect.addEventListener('change',()=>{
+    route.mode=els.routeModeSelect.value;
+    els.routeSpeed.value=routeSpeedDefaults[route.mode]||3;
+    clearRouteWeather('Travel mode changed. Re-run route weather after confirming speed and departure.');
+    renderRoute();
+  });
+  els.routeSpeed.addEventListener('change',()=>{
+    clearRouteWeather('Planning speed changed. Re-run route weather for updated arrival times.');
+    renderRoute();
+  });
+  els.routeDeparture.addEventListener('change',()=>clearRouteWeather('Departure changed. Re-run route weather for the new time.'));
+  els.routeAddButton.addEventListener('click',()=>setRouteAdding(!route.adding));
+  els.routeModeButton.addEventListener('click',()=>{
+    document.getElementById('route-planner')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+    setRouteAdding(!route.adding);
+  });
+  els.routeUndo.addEventListener('click',undoRoutePoint);
+  els.routeClear.addEventListener('click',clearRoute);
+  els.routeWeatherButton.addEventListener('click',analyzeRouteWeather);
+  map.on('click',event=>{
+    if(!route.adding)return;
+    addRoutePoint(event.latlng,`Waypoint ${route.points.length+1}`);
+  });
+
   document.getElementById('fit-island').addEventListener('click', () => map.fitBounds(CONFIG.islandBounds,{padding:[10,10]}));
   document.getElementById('load-osm').addEventListener('click', loadOsmContext);
   document.getElementById('clear-selection').addEventListener('click', () => {
@@ -1611,6 +1647,8 @@
     }
   }
 
+  setDefaultRouteDeparture();
+  renderRoute();
   renderFeatureList();
   loadCatalog();
   loadOperationalData();
