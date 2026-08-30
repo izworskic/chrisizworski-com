@@ -200,7 +200,9 @@ test('map-first route builder separates Explore from persistent Build mode and m
   assert.match(js, /sourceBackedBoatIn:Boolean\(record\?\.boater\)/);
   assert.match(js, /if\(!route\.adding\)return;/);
   assert.match(js, /function renderRouteStops/);
-  assert.match(js, /routePoint\.kind==='campground'&&routePoint\.sourceBackedBoatIn/);
+  assert.match(js, /routePoint\.kind==='campground'&&distanceMiles\(routePoint,point\)<\.08/);
+  assert.match(js, /point\.sourceBackedBoatIn=Boolean\(match\.boater\)/);
+  assert.match(js, /point\.liveAlert=Boolean\(match\.liveAlert\)/);
   assert.doesNotMatch(js, /route\.points\.length===2\)setRouteAdding\(false\)/);
   assert.doesNotMatch(js, /scrollIntoView\(\{behavior:'smooth'.*route-planner/);
 });
