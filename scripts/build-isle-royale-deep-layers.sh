@@ -116,9 +116,12 @@ fi
 
 echo "Using vegetation layer: $VEG_LAYER ($VEG_COUNT source features) from $VEG_SHP"
 
+# The source contains 19k+ detailed inventory polygons. This is an opt-in
+# island-scale baseline, not a survey/current-conditions layer, so generalize
+# far enough to remain usable on phones while retaining the inventory classes.
 ogr2ogr -f GeoJSON "$WORK/vegetation.raw.geojson" "$VEG_SHP" "$VEG_LAYER" \
-  -t_srs EPSG:4326 -makevalid -simplify 0.00018 \
-  -lco RFC7946=YES -lco COORDINATE_PRECISION=5
+  -t_srs EPSG:4326 -makevalid -simplify 0.00075 \
+  -lco RFC7946=YES -lco COORDINATE_PRECISION=4
 
 python3 - "$WORK/geology.raw.geojson" "$OUT/geology-units.geojson" geology \
           "$WORK/vegetation.raw.geojson" "$OUT/vegetation-baseline-2000.geojson" vegetation <<'PY'
