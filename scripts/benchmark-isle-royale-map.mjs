@@ -159,6 +159,22 @@ const manualDayEndRuntime = /function setCampDayEnd/.test(js)
   && /manual_day_end:Boolean\(chosen\?\.manual_day_end\)/.test(waterJs)
   && /under_target:Boolean\(chosen\?\.manual_day_end/.test(waterJs);
 
+const tripPersistenceRuntime = /id="route-save"/.test(html)
+  && /id="route-restore"/.test(html)
+  && /id="route-share"/.test(html)
+  && /id="route-export-gpx"/.test(html)
+  && /id="cockpit-save"/.test(html)
+  && /id="cockpit-share"/.test(html)
+  && /id="cockpit-gpx"/.test(html)
+  && /TRIP_STORAGE_KEY='isle-royale-trip-v1'/.test(js)
+  && /localStorage\.setItem\(TRIP_STORAGE_KEY/.test(js)
+  && /url\.hash='trip='/.test(js)
+  && /window\.location\.hash\.startsWith\('#trip='\)/.test(js)
+  && /sourceBackedBoatIn:false,liveAlert:false/.test(js)
+  && /function exportRouteGpx/.test(js)
+  && /application\/gpx\+xml/.test(js)
+  && /temporary fallback sketches are not exported/.test(js);
+
 const focusCockpitRuntime = /id="planning-cockpit"/.test(html)
   && /id="cockpit-route-mode"/.test(html)
   && /id="cockpit-route-stops"/.test(html)
@@ -197,7 +213,7 @@ const referenceShelfComplete = /class="map-shelf"/.test(html)
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime, 'large planning canvas + full-map planning cockpit + reversible route edits + clickable/pinned campsites + explicit day ends + mapped-coastline-aware routing + source-backed scenarios');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime, 'large planning canvas + full-map cockpit + undo/redo + local save/share-fragment/GPX handoff + pinned camps/day ends + water intelligence');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -261,6 +277,7 @@ if (!mapFirstRoutingRuntime) hardFailures.push('map-first route building is miss
 if (!manualDayEndRuntime) hardFailures.push('manual campsite day-end control is missing or can bypass Boat-In/closure truth gates');
 if (!largePlanningCanvasRuntime) hardFailures.push('planning map is too constrained or missing full-viewport focus mode and Leaflet resize handling');
 if (!focusCockpitRuntime) hardFailures.push('Focus map is missing shared route controls, stop/day-end editing, or true undo/redo route history');
+if (!tripPersistenceRuntime) hardFailures.push('trip persistence/handoff is missing local-only save, share-fragment restore, or resolved-route GPX export safeguards');
 if (!reliefRuntime) hardFailures.push('keyless USGS relief runtime missing');
 if (!referenceShelfComplete) hardFailures.push('official/reference map shelf incomplete');
 if (deepManifest.sources?.vegetation_overview?.features !== 6 || deepManifest.sources?.vegetation_overview?.bytes >= deepManifest.sources?.vegetation?.bytes / 2) hardFailures.push('vegetation overview reduction gate failed');
