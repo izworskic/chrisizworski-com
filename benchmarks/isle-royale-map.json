@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "updated": "2026-08-30",
   "route": "/isle-royale-map/",
   "objective": "Build the most useful source-transparent Isle Royale planning map in the Chris Izworski tool network without pretending static cartography is authoritative GIS.",
@@ -64,7 +64,7 @@
     {
       "id": "planning-flow",
       "weight": 15,
-      "target": "Search + layer filters + feature details make the map useful before the user scrolls into documentation, and the five privacy-safe product events are emitted."
+      "target": "Search + layer filters + feature details + real trip planning are useful before documentation. Hiking must follow the mapped trail graph; water routing must avoid mapped coastline crossings, expose day-reach/travel-time guidance, sample marine weather by route distance, and summarize NPS zone intersections, open-water exposure and nearby mapped refuge options."
     },
     {
       "id": "provenance",
@@ -111,7 +111,8 @@
     "Do not create a second canonical page for the same Isle Royale interactive-map intent.",
     "Do not remove or silently substitute any of the 16 NPMaps completeness records.",
     "Do not hide the entire source catalog behind JavaScript; preserve crawlable source rows and a raw catalog link.",
-    "Do not claim the measurement plan is complete unless all five privacy-safe Isle Royale product events are wired."
+    "Do not claim the measurement plan is complete unless all five privacy-safe Isle Royale product events are wired.",
+    "Do not call water routing smart if it is only a draggable straight-line sketch; water intelligence requires mapped-coastline avoidance plus route exposure/regulation/refuge analysis."
   ],
   "initialBuildFit": {
     "distinctSearchIntent": 24,

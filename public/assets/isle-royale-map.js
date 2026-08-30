@@ -10,6 +10,7 @@
     overpass: 'https://overpass-api.de/api/interpreter',
     operationsEndpoint: '/api/isle-royale',
     routeWeatherEndpoint: '/api/isle-royale-route-weather',
+    waterIntelEndpoint: '/api/isle-royale-water-intelligence',
     currentConditionsUrl: 'https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm',
     boatInUrl: 'https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm',
     campingUrl: 'https://www.nps.gov/isro/planyourvisit/camping.htm',
@@ -52,9 +53,11 @@
     routeClear: document.getElementById('route-clear'),
     routeModeSelect: document.getElementById('route-mode-select'),
     routeSpeed: document.getElementById('route-speed'),
+    routeDayHours: document.getElementById('route-day-hours'),
     routeDeparture: document.getElementById('route-departure'),
     routeSmartStatus: document.getElementById('route-smart-status'),
     routeSummary: document.getElementById('route-summary'),
+    routeIntelligence: document.getElementById('route-intelligence'),
     routeWeatherButton: document.getElementById('route-weather-button'),
     routeWeather: document.getElementById('route-weather')
   };
@@ -137,7 +140,24 @@
     mode:'paddle',
     smartState:'idle',
     trailNames:[],
-    accessMiles:0
+    accessMiles:0,
+    waterToken:0,
+    waterStats:null,
+    waterReason:'',
+    waterAccessMiles:0
+  };
+  const waterIntel = {
+    state:'idle',
+    promise:null,
+    source:null,
+    lines:[],
+    segments:[],
+    buckets:new Map(),
+    latBands:new Map(),
+    quietPromise:null,
+    quietZones:null,
+    router:null,
+    error:''
   };
   const trailGraph = {
     nodes:new Map(),
@@ -1392,15 +1412,111 @@
     return {ok:true,points:resolved,trailNames,accessMiles};
   }
 
+  async function ensureWaterRouter() {
+    if(waterIntel.router)return waterIntel.router;
+    if(waterIntel.promise)return waterIntel.promise;
+    if(!window.IsleRoyaleWaterIntel?.create)throw new Error('water-routing engine is unavailable');
+    waterIntel.state='loading';
+    waterIntel.promise=fetchJSON(CONFIG.waterIntelEndpoint,48000)
+      .then(data=>{
+        if(!Array.isArray(data?.lines)||!data.lines.length)throw new Error('shoreline source returned no coastline geometry');
+        waterIntel.router=window.IsleRoyaleWaterIntel.create(data.lines);
+        if(!waterIntel.router?.segment_count)throw new Error('shoreline index is empty');
+        waterIntel.source=data;
+        waterIntel.state='loaded';
+        return waterIntel.router;
+      })
+      .catch(error=>{waterIntel.state='error';waterIntel.error=cleanText(error?.message||error);throw error;})
+      .finally(()=>{waterIntel.promise=null;});
+    return waterIntel.promise;
+  }
+
+  async function ensureRouteQuietZones() {
+    if(waterIntel.quietZones)return waterIntel.quietZones;
+    if(waterIntel.quietPromise)return waterIntel.quietPromise;
+    waterIntel.quietPromise=fetchJSON(CONFIG.contextLayers['quiet-no-wake'],30000)
+      .then(data=>{waterIntel.quietZones=Array.isArray(data?.features)?data.features:[];return waterIntel.quietZones;})
+      .catch(()=>[])
+      .finally(()=>{waterIntel.quietPromise=null;});
+    return waterIntel.quietPromise;
+  }
+
+  function recordRoutePoint(record) {
+    if(record?.latlng&&Number.isFinite(record.latlng.lat)&&Number.isFinite(record.latlng.lng))return {lat:record.latlng.lat,lng:record.latlng.lng};
+    try {
+      const bounds=record?.layer?.getBounds?.();
+      if(bounds?.isValid?.()){const c=bounds.getCenter();if(Number.isFinite(c.lat)&&Number.isFinite(c.lng))return {lat:c.lat,lng:c.lng};}
+    } catch (_) {}
+    return null;
+  }
+
+  function nearbyRouteRefuges(path) {
+    const api=window.IsleRoyaleWaterIntel;
+    if(!api?.pathDistance||!Array.isArray(path)||path.length<2)return [];
+    const maxDistance=route.mode==='paddle'?2.0:4.0;
+    const rows=[];
+    for(const record of featureIndex){
+      const hay=(record.name+' '+record.category+' '+record.description+' '+JSON.stringify(record.properties||{})).toLowerCase();
+      const useful=record.category==='campground'||(record.category==='visitor-service'&&/dock|pier|harbor|ranger|visitor|lodge|shelter|camp/.test(hay));
+      if(!useful)continue;
+      const point=recordRoutePoint(record);
+      if(!point)continue;
+      const distance=api.pathDistance(point,path);
+      if(Number.isFinite(distance)&&distance<=maxDistance)rows.push({name:record.name,distance,category:record.category});
+    }
+    rows.sort((a,b)=>a.distance-b.distance||a.name.localeCompare(b.name));
+    const seen=new Set();
+    return rows.filter(row=>{const key=row.name.toLowerCase();if(seen.has(key))return false;seen.add(key);return true;}).slice(0,5);
+  }
+
+  async function resolveWaterRouteAsync() {
+    if(route.mode==='hike'||route.points.length<2)return;
+    const token=++route.waterToken;
+    route.smartState='water-loading';
+    route.waterReason='';
+    route.waterStats=null;
+    route.waterAccessMiles=0;
+    renderRoute();
+    try {
+      const [router,zones]=await Promise.all([ensureWaterRouter(),ensureRouteQuietZones()]);
+      if(token!==route.waterToken||route.mode==='hike'||route.points.length<2)return;
+      await new Promise(resolve=>setTimeout(resolve,0));
+      const result=router.route(route.points,route.mode);
+      if(token!==route.waterToken)return;
+      route.resolvedPoints=result.points;
+      route.waterAccessMiles=Number(result.access_miles)||0;
+      const stats=router.analyze(route.resolvedPoints);
+      stats.quiet_zones=window.IsleRoyaleWaterIntel.zonesAlongPath(route.resolvedPoints,zones);
+      stats.refuges=nearbyRouteRefuges(route.resolvedPoints);
+      route.waterStats=stats;
+      route.smartState='water-aware';
+      route.waterReason='';
+      renderRoute();
+      emitEvent('isle_royale_water_route',{mode:route.mode,quiet_zone_count:stats.quiet_zones.length,refuge_count:stats.refuges.length});
+    } catch(error) {
+      if(token!==route.waterToken)return;
+      route.resolvedPoints=[...route.points];
+      route.waterStats=null;
+      route.smartState='water-fallback';
+      route.waterReason=cleanText(error?.message||'shoreline intelligence unavailable');
+      renderRoute();
+    }
+  }
   function resolveRoute() {
     route.trailNames=[];
     route.accessMiles=0;
     if(route.points.length<2) {
+      route.waterToken++;
+      route.waterStats=null;
+      route.waterReason='';
       route.resolvedPoints=[...route.points];
       route.smartState=route.points.length?'need-destination':'idle';
       return;
     }
     if(route.mode==='hike') {
+      route.waterToken++;
+      route.waterStats=null;
+      route.waterReason='';
       const smart=resolveHikingRoute();
       if(smart?.ok) {
         route.resolvedPoints=smart.points;
@@ -1414,7 +1530,9 @@
       }
     } else {
       route.resolvedPoints=[...route.points];
-      route.smartState='water-shaped';
+      route.waterStats=null;
+      route.waterReason='';
+      route.smartState='water-pending';
     }
   }
 
@@ -1441,7 +1559,7 @@
   }
 
   function renderSmartStatus() {
-    els.routeSmartStatus.classList.toggle('route-warning',route.smartState==='trail-fallback');
+    els.routeSmartStatus.classList.toggle('route-warning',route.smartState==='trail-fallback'||route.smartState==='water-fallback');
     if(!route.points.length) {
       els.routeSmartStatus.textContent='Choose a start. Tap a map point and use “Start route here,” or press Start on map.';
       return;
@@ -1458,6 +1576,19 @@
     }
     if(route.mode==='hike') {
       els.routeSmartStatus.textContent=route.smartReason||'Smart trail routing is unavailable for these points; showing a straight planning sketch.';
+      return;
+    }
+    if(route.smartState==='water-loading'||route.smartState==='water-pending') {
+      els.routeSmartStatus.innerHTML='<strong>Building water route:</strong> checking mapped coastline and route shape. The straight line is temporary.';
+      return;
+    }
+    if(route.smartState==='water-aware') {
+      const access=route.waterAccessMiles>0.05?` · ${route.waterAccessMiles.toFixed(1)} mi endpoint access to the routing grid`:'';
+      els.routeSmartStatus.innerHTML=`<strong>Water-aware planning route:</strong> avoids mapped coastline crossings and uses a ${route.mode==='paddle'?'shoreline-biased':'more direct'} path${access}. Drag endpoints or tap the line to compare another scenario.`;
+      return;
+    }
+    if(route.smartState==='water-fallback') {
+      els.routeSmartStatus.textContent=`Water intelligence unavailable (${route.waterReason||'unknown source issue'}). Showing an editable straight planning sketch; do not treat it as a navigable route.`;
       return;
     }
     els.routeSmartStatus.innerHTML='<strong>Editable water route:</strong> drag S / D / numbered handles to reshape it. Tap the route line to add another shaping point.';
@@ -1483,8 +1614,64 @@
     resolveRoute();
     clearRouteWeather(message);
     renderRoute();
+    if(route.mode!=='hike'&&route.points.length>=2)resolveWaterRouteAsync();
   }
 
+  function routeDayMarkers(path) {
+    if(!window.IsleRoyaleWaterIntel?.dayEnds||path.length<2)return [];
+    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    const hours=Math.max(2,Number(els.routeDayHours?.value)||6);
+    return window.IsleRoyaleWaterIntel.dayEnds(path,speed,hours);
+  }
+
+  function renderRouteIntelligence() {
+    if(!els.routeIntelligence)return;
+    els.routeIntelligence.replaceChildren();
+    if(route.points.length<2)return;
+    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    const dayHours=Math.max(2,Number(els.routeDayHours?.value)||6);
+    const total=routeTotalMiles();
+    const daily=speed*dayHours;
+    const travel=document.createElement('div');
+    travel.className='route-intelligence-card';
+    const days=total>0?Math.max(1,Math.ceil(total/daily)):1;
+    travel.innerHTML='<strong></strong><span></span>';
+    travel.querySelector('strong').textContent='Travel Assistant';
+    travel.querySelector('span').textContent=dayHours+'h travel day at '+speed.toFixed(1)+' mph ≈ '+daily.toFixed(1)+' mi/day · about '+days+' travel day'+(days===1?'':'s')+' for this route, before breaks or camp chores.';
+    els.routeIntelligence.appendChild(travel);
+
+    if(route.mode==='hike')return;
+    if(route.smartState==='water-loading'||route.smartState==='water-pending'){
+      const loading=document.createElement('div');loading.className='route-intelligence-card';
+      loading.innerHTML='<strong>Water intelligence</strong><span>Checking coastline geometry, exposure and nearby refuge options…</span>';
+      els.routeIntelligence.appendChild(loading);return;
+    }
+    if(route.smartState==='water-fallback'){
+      const fallback=document.createElement('div');fallback.className='route-intelligence-card route-warning';
+      fallback.innerHTML='<strong>Planning geometry unavailable</strong><span></span>';
+      fallback.querySelector('span').textContent='The editable sketch remains visible, but coastline avoidance and exposure analysis are unavailable. Verify an official chart/map before operating.';
+      els.routeIntelligence.appendChild(fallback);return;
+    }
+    if(route.smartState!=='water-aware'||!route.waterStats)return;
+    const stats=route.waterStats;
+    const exposure=document.createElement('div');exposure.className='route-intelligence-card';
+    exposure.innerHTML='<strong>Open-water exposure model</strong><span></span>';
+    exposure.querySelector('span').textContent='Farthest sampled point from mapped shoreline: '+Number(stats.max_offshore_miles||0).toFixed(1)+' mi · modeled travel >1.5 mi offshore: '+Number(stats.exposed_miles||0).toFixed(1)+' mi · longest continuous exposed stretch: '+Number(stats.longest_exposed_miles||0).toFixed(1)+' mi.';
+    els.routeIntelligence.appendChild(exposure);
+    const zones=Array.isArray(stats.quiet_zones)?stats.quiet_zones:[];
+    const regulation=document.createElement('div');regulation.className='route-intelligence-card';
+    regulation.innerHTML='<strong>NPS boating-zone check</strong><span></span>';
+    regulation.querySelector('span').textContent=zones.length?('Route samples intersect '+zones.map(z=>z.name+' ('+z.type+')').join(', ')+'. Verify the current NPS rule before departure.'):'No sampled intersection with the 22 current Quiet/No-Wake polygons was detected. This is not a declaration that no boating rule applies.';
+    els.routeIntelligence.appendChild(regulation);
+    const refuges=Array.isArray(stats.refuges)?stats.refuges:[];
+    const refuge=document.createElement('div');refuge.className='route-intelligence-card';
+    refuge.innerHTML='<strong>Nearby mapped refuge / stopping options</strong><span></span>';
+    refuge.querySelector('span').textContent=refuges.length?refuges.map(r=>r.name+' ('+r.distance.toFixed(1)+' mi from route)').join(' · '):'No nearby campground/dock/visitor-place candidate was found in the currently loaded map data.';
+    els.routeIntelligence.appendChild(refuge);
+    const meta=document.createElement('div');meta.className='route-intelligence-meta';
+    meta.textContent='Planning model only. Coastline comes from OpenStreetMap; regulatory polygons remain NPS/IRMA authority. No depth, shoal, surf, current or safe-passage determination is made.';
+    els.routeIntelligence.appendChild(meta);
+  }
   function renderRoute() {
     routeLayerGroup.clearLayers();
     route.markers=[];
@@ -1497,7 +1684,7 @@
         color:route.mode==='hike'&&route.smartState==='trail-snapped'?'#8b4f2d':'#173d36',
         weight:route.mode==='hike'?5:4,
         opacity:.94,
-        dashArray:route.mode==='hike'&&route.smartState==='trail-snapped'?null:'9 6',
+        dashArray:(route.mode==='hike'&&route.smartState==='trail-snapped')||route.smartState==='water-aware'?null:'9 6',
         interactive:route.mode!=='hike'
       }).addTo(routeLayerGroup);
       if(route.mode!=='hike') {
@@ -1529,6 +1716,13 @@
       route.markers.push(marker);
     });
 
+    for(const dayEnd of routeDayMarkers(path)) {
+      L.circleMarker([dayEnd.lat,dayEnd.lng],{
+        pane:'routePane',radius:6,weight:2,fillOpacity:.9,interactive:true
+      }).bindTooltip('Day '+dayEnd.day+' reach · '+dayEnd.distance_miles.toFixed(1)+' mi',{direction:'top'})
+        .addTo(routeLayerGroup);
+    }
+
     renderSmartStatus();
     const miles=routeTotalMiles();
     const hours=routeHours();
@@ -1545,10 +1739,13 @@
         ? 'mapped-trail path'
         : route.mode==='hike'
           ? 'straight fallback sketch'
-          : 'editable water sketch';
+          : route.smartState==='water-aware'
+            ? 'mapped-coastline-aware water path'
+            : 'editable water sketch';
       els.routeSummary.innerHTML=`<strong>${miles.toFixed(1)} mi</strong> · ~${formatDuration(hours)} at ${speed.toFixed(1)} mph · overall ${compassLabel(bearing)} (${Math.round(bearing)}°) · ${method}.`;
       els.routeWeatherButton.disabled=false;
     }
+    renderRouteIntelligence();
   }
 
   function setRouteAdding(active) {
@@ -1570,9 +1767,7 @@
       lng:Number(latlng.lng),
       label:cleanText(label)||`Waypoint ${route.points.length+1}`
     });
-    resolveRoute();
-    clearRouteWeather('Route changed. Re-run the weather analysis for the updated path.');
-    renderRoute();
+    reroute('Route changed. Re-run the weather analysis for the updated path.');
     emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode});
     document.getElementById('route-planner')?.scrollIntoView({behavior:'smooth',block:'nearest'});
     if(route.points.length===2)setRouteAdding(false);
@@ -1592,9 +1787,12 @@
   }
 
   function clearRoute() {
+    route.waterToken++;
     route.points=[];
     route.resolvedPoints=[];
     route.trailNames=[];
+    route.waterStats=null;
+    route.waterReason='';
     route.smartState='idle';
     setRouteAdding(false);
     clearRouteWeather();
@@ -1628,17 +1826,23 @@
 
   function routeForecastSamples(max=5) {
     const points=routePathPoints();
-    const cumulative=routeCumulative();
-    const total=cumulative[cumulative.length-1]||0;
-    const count=Math.min(max,Math.max(2,route.points.length));
-    const samples=[];
-    for(let i=0;i<count;i++) {
-      const distance=count===1?0:total*i/(count-1);
-      const p=interpolateRoutePoint(distance,cumulative);
-      if(!p)continue;
-      if(i===0)p.label=route.points[0]?.label||'Route start';
-      if(i===count-1)p.label=route.points[route.points.length-1]?.label||'Route end';
-      samples.push(p);
+    let samples=[];
+    if(window.IsleRoyaleWaterIntel?.weatherSamples) {
+      samples=window.IsleRoyaleWaterIntel.weatherSamples(points,max);
+    } else {
+      const cumulative=routeCumulative();
+      const total=cumulative[cumulative.length-1]||0;
+      const count=Math.min(max,Math.max(2,Math.ceil(total/4)+1));
+      for(let i=0;i<count;i++) {
+        const distance=count===1?0:total*i/(count-1);
+        const p=interpolateRoutePoint(distance,cumulative);
+        if(p)samples.push(p);
+      }
+    }
+    if(samples.length) {
+      samples[0].label=route.points[0]?.label||'Route start';
+      samples[samples.length-1].label=route.points[route.points.length-1]?.label||'Route end';
+      for(let i=1;i<samples.length-1;i++)samples[i].label=Math.round(samples[i].distance_miles)+' mi along route';
     }
     return samples;
   }
@@ -1898,14 +2102,13 @@
   els.routeModeSelect.addEventListener('change',()=>{
     route.mode=els.routeModeSelect.value;
     els.routeSpeed.value=routeSpeedDefaults[route.mode]||3;
-    resolveRoute();
-    clearRouteWeather('Travel mode changed. Re-run route weather after confirming speed and departure.');
-    renderRoute();
+    reroute('Travel mode changed. Re-run route weather after confirming speed and departure.');
   });
   els.routeSpeed.addEventListener('change',()=>{
     clearRouteWeather('Planning speed changed. Re-run route weather for updated arrival times.');
     renderRoute();
   });
+  els.routeDayHours?.addEventListener('change',renderRoute);
   els.routeDeparture.addEventListener('change',()=>clearRouteWeather('Departure changed. Re-run route weather for the new time.'));
   els.routeAddButton.addEventListener('click',()=>setRouteAdding(!route.adding));
   els.routeModeButton.addEventListener('click',()=>{
