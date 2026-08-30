@@ -80,11 +80,14 @@
   let selectedLayer = null;
   let searchEventTimer = null;
   let osmContextLoaded = false;
+  let visitorGeometrySettled = false;
   const osmSeen = new Set();
   const sourceStatus = {arcgis:'starting', osm:'not loaded', fallback:false};
   const operational = {
     boaterByName: new Map(),
     alerts: [],
+    shipwrecks: [],
+    shipwrecksAdded: false,
     fetchedAt: null,
     sources: {},
     loaded: false
@@ -512,6 +515,8 @@
           sourceStatus.arcgis = `loaded ${added} public visitor features`;
           els.sourceStatus.textContent = `Preferred NPS/ArcGIS visitor geometry loaded (${added} features). Deep science and regulation-sensitive polygon layers remain separately cataloged until normalized.`;
           status(`Loaded ${added} public visitor features. Search or filter the map; deep layers remain source-cataloged below.`);
+          visitorGeometrySettled = true;
+          addPendingShipwrecks();
           renderFeatureList();
           return;
         }
@@ -528,6 +533,8 @@
         sourceStatus.arcgis = `loaded ${added} visitor features from 2021 public fallback service`;
         els.sourceStatus.textContent = `The preferred visitor web-map source was unavailable, so ${added} features were loaded from a public 2021 Isle Royale ArcGIS fallback dataset. Use current NPS pages for closures, regulations, campground status, transportation and other operational decisions.`;
         status(`Loaded ${added} public visitor features from the 2021 fallback dataset. Current operational decisions still hand off to NPS.`);
+        visitorGeometrySettled = true;
+        addPendingShipwrecks();
         renderFeatureList();
         return;
       }
@@ -537,6 +544,8 @@
     sourceStatus.arcgis = 'remote visitor geometry unavailable';
     els.sourceStatus.textContent = 'The public visitor web map could not be read in this browser, so only clearly labeled approximate reference anchors are shown. Official NPS map links remain available.';
     status(`Remote visitor geometry unavailable. Showing ${added} approximate reference anchors and the full source catalog instead.`);
+    visitorGeometrySettled = true;
+    addPendingShipwrecks();
     renderFeatureList();
   }
 
@@ -592,6 +601,7 @@
 
     const conditionsAvailable = Boolean(operational.sources.current_conditions?.available);
     const boaterAvailable = Boolean(operational.sources.boater_campgrounds?.available);
+    const shipwreckAvailable = Boolean(operational.sources.shipwreck_buoys?.available);
     const alertCount = operational.alerts.length;
 
     const state = document.createElement('div');
@@ -632,9 +642,11 @@
     data.className = 'ops-source';
     const boaterCount = operational.boaterByName.size;
     const fetched = operational.fetchedAt ? new Date(operational.fetchedAt).toLocaleString([], {dateStyle:'medium', timeStyle:'short'}) : null;
+    const wreckCount = operational.shipwrecks.length;
     data.textContent = boaterAvailable
       ? `${boaterCount} NPS boat-in campground records available for popup enrichment${fetched ? ` · checked ${fetched}` : ''}. Page data updated June 23, 2026.`
       : `Boat-in campground enrichment unavailable${fetched ? ` · checked ${fetched}` : ''}.`;
+    if (shipwreckAvailable) data.textContent += ` ${wreckCount} NPS shipwreck/dive buoy record${wreckCount === 1 ? '' : 's'} available for the maritime layer.`;
     els.liveStatus.appendChild(data);
 
     const link = document.createElement('a');
@@ -651,6 +663,57 @@
     renderFeatureList();
   }
 
+  function hasMappedNamedFeature(name, category) {
+    const aliases = new Set(placeAliases(name));
+    return featureIndex.some(record => {
+      if (category && record.category !== category) return false;
+      return placeAliases(record.name).some(alias => aliases.has(alias));
+    });
+  }
+
+  function shipwreckDescription(wreck) {
+    const facts = [];
+    if (wreck.vessel_type) facts.push(wreck.vessel_type);
+    if (wreck.depth) facts.push(`depth ${wreck.depth} ft`);
+    if (wreck.buoy_on) facts.push(`buoy status ${wreck.buoy_on}`);
+    if (wreck.buoy_attachment) facts.push(`buoy attachment ${wreck.buoy_attachment}`);
+    return facts.length
+      ? facts.join(' · ')
+      : 'NPS shipwreck/dive buoy location. Verify current NPS diving guidance before use.';
+  }
+
+  function addPendingShipwrecks() {
+    if (!operational.loaded || !visitorGeometrySettled || operational.shipwrecksAdded) return 0;
+    let added = 0;
+    for (const wreck of operational.shipwrecks || []) {
+      const lat = Number(wreck.lat);
+      const lon = Number(wreck.lon);
+      if (!wreck.name || !Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+      if (hasMappedNamedFeature(wreck.name, 'maritime-history')) continue;
+      added += addGeoJSONFeature({
+        type:'Feature',
+        geometry:{type:'Point', coordinates:[lon,lat]},
+        properties:{
+          name:wreck.name,
+          description:shipwreckDescription(wreck),
+          vessel_type:wreck.vessel_type || '',
+          buoy_status:wreck.buoy_on || '',
+          depth:wreck.depth || '',
+          buoy_attachment:wreck.buoy_attachment || ''
+        }
+      }, {
+        category:'maritime-history',
+        layerTitle:'NPS shipwreck / dive buoy',
+        sourceLabel:'National Park Service — Shipwreck Buoys',
+        sourceKind:'current NPS dive-site / mooring reference point',
+        sourceUrl:'https://www.nps.gov/isro/planyourvisit/scuba-diving.htm'
+      });
+    }
+    operational.shipwrecksAdded = true;
+    if (added) renderFeatureList();
+    return added;
+  }
+
   async function loadOperationalData() {
     renderOperationalStatus();
     try {
@@ -660,15 +723,18 @@
         for (const alias of placeAliases(campground.name)) operational.boaterByName.set(alias, campground);
       }
       operational.alerts = Array.isArray(data.current_alerts) ? data.current_alerts : [];
+      operational.shipwrecks = Array.isArray(data.shipwrecks) ? data.shipwrecks : [];
       operational.fetchedAt = data.fetched_at || null;
       operational.sources = data.sources || {};
       operational.loaded = true;
       enrichExistingRecords();
+      addPendingShipwrecks();
       renderOperationalStatus();
     } catch (_) {
       operational.loaded = true;
       operational.sources = {};
       operational.alerts = [];
+      operational.shipwrecks = [];
       renderOperationalStatus();
     }
   }
