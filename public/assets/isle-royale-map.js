@@ -1866,12 +1866,13 @@
 
   function insertItineraryCampStop(camp){
     if(!camp||route.points.length<2)return;
-    const target={lat:Number(camp.lat),lng:Number(camp.lng),label:camp.name};
+    const target={lat:Number(camp.lat),lng:Number(camp.lng),label:camp.name,kind:'campground',sourceBackedBoatIn:true};
     if(route.points.some(p=>distanceMiles(p,target)<.08)){status(camp.name+' is already a route stop.');return;}
     const api=window.IsleRoyaleWaterIntel,path=routePathPoints(),projection=api.projectPointToPath(target,path);
     if(!projection)return;
     let insertAt=route.points.length-1;
     for(let i=1;i<route.points.length;i++){const cp=api.projectPointToPath(route.points[i],path);if(cp&&cp.along_miles>projection.along_miles){insertAt=i;break;}}
+    rememberRouteEdit();
     route.points.splice(insertAt,0,target);
     reroute(camp.name+' added as an overnight route stop. Re-run weather after the water route resolves.');
     emitEvent('isle_royale_itinerary_stop',{mode:route.mode,source:'nps-boat-in'});
@@ -1943,6 +1944,7 @@
       });
     }
     entries.sort((a,b)=>a.along-b.along);
+    rememberRouteEdit();
     route.points=[start,...entries.map(entry=>entry.point),end];
     route.activeScenario=scenario.id;
     reroute(scenario.title+' scenario applied. Source-backed overnight stops were added; re-run forecast comparison after the route resolves.');
@@ -2182,6 +2184,7 @@
           if(!route.adding)return;
           if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
           const index=nearestControlSegmentIndex(event.latlng);
+          rememberRouteEdit();
           route.points.splice(index,0,{lat:event.latlng.lat,lng:event.latlng.lng,label:`Via ${index}`,kind:'map-point'});
           reroute();
           status('Shaping point added to the route. Keep clicking to refine the trip.');
@@ -2200,6 +2203,7 @@
       }).addTo(routeLayerGroup);
       marker.on('dragend',()=>{
         const ll=marker.getLatLng();
+        rememberRouteEdit();
         route.points[index]={...route.points[index],lat:ll.lat,lng:ll.lng};
         reroute();
       });
@@ -2384,6 +2388,7 @@
       liveAlert:Boolean(meta.liveAlert),
       manualDayEnd:Boolean(meta.manualDayEnd)
     };
+    rememberRouteEdit();
     route.points.push(point);
     reroute('Route changed. Re-run the weather analysis for the updated path.');
     emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode,point_kind:cleanText(meta.kind||'map-point')});
@@ -2392,18 +2397,18 @@
 
   function reverseRoute() {
     if(route.points.length<2)return;
+    rememberRouteEdit();
     route.points.reverse();
     reroute();
     status('Route direction reversed.');
   }
 
   function undoRoutePoint() {
-    if(!route.points.length)return;
-    route.points.pop();
-    reroute();
+    undoRouteEdit();
   }
 
   function clearRoute() {
+    if(route.points.length)rememberRouteEdit();
     route.waterToken++;
     route.points=[];
     route.resolvedPoints=[];
