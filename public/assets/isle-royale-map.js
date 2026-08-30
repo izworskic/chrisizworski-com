@@ -50,6 +50,19 @@
     routeModeButton: document.getElementById('route-mode'),
     routeMapGuide: document.getElementById('route-map-guide'),
     focusMapButton: document.getElementById('focus-map'),
+    cockpit: document.getElementById('planning-cockpit'),
+    cockpitExit: document.getElementById('cockpit-exit'),
+    cockpitMode: document.getElementById('cockpit-route-mode'),
+    cockpitSpeed: document.getElementById('cockpit-route-speed'),
+    cockpitHours: document.getElementById('cockpit-route-hours'),
+    cockpitBuild: document.getElementById('cockpit-build'),
+    cockpitUndo: document.getElementById('cockpit-undo'),
+    cockpitRedo: document.getElementById('cockpit-redo'),
+    cockpitReverse: document.getElementById('cockpit-reverse'),
+    cockpitWeather: document.getElementById('cockpit-weather'),
+    cockpitClear: document.getElementById('cockpit-clear'),
+    cockpitSummary: document.getElementById('cockpit-route-summary'),
+    cockpitStops: document.getElementById('cockpit-route-stops'),
     routeAddButton: document.getElementById('route-add-mode'),
     routeReverse: document.getElementById('route-reverse'),
     routeUndo: document.getElementById('route-undo'),
@@ -156,7 +169,9 @@
     scenarios:[],
     activeScenario:'balanced',
     scenarioWeather:{},
-    scenarioWeatherLoading:false
+    scenarioWeatherLoading:false,
+    history:[],
+    future:[]
   };
   const waterIntel = {
     state:'idle',
