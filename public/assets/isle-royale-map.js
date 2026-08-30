@@ -47,11 +47,13 @@
     contextStatus: document.getElementById('context-layer-status'),
     routeModeButton: document.getElementById('route-mode'),
     routeAddButton: document.getElementById('route-add-mode'),
+    routeReverse: document.getElementById('route-reverse'),
     routeUndo: document.getElementById('route-undo'),
     routeClear: document.getElementById('route-clear'),
     routeModeSelect: document.getElementById('route-mode-select'),
     routeSpeed: document.getElementById('route-speed'),
     routeDeparture: document.getElementById('route-departure'),
+    routeSmartStatus: document.getElementById('route-smart-status'),
     routeSummary: document.getElementById('route-summary'),
     routeWeatherButton: document.getElementById('route-weather-button'),
     routeWeather: document.getElementById('route-weather')
@@ -128,10 +130,20 @@
   const route = {
     adding:false,
     points:[],
+    resolvedPoints:[],
     line:null,
     markers:[],
     weather:null,
-    mode:'paddle'
+    mode:'paddle',
+    smartState:'idle',
+    trailNames:[],
+    accessMiles:0
+  };
+  const trailGraph = {
+    nodes:new Map(),
+    adjacency:new Map(),
+    edgeKeys:new Set(),
+    segments:0
   };
   const sourceStatus = {arcgis:'starting', osm:'not loaded', fallback:false};
   const operational = {
