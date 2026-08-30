@@ -9,6 +9,7 @@ const js = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 
 const api = fs.readFileSync(path.join(root, 'api/isle-royale.js'), 'utf8');
 const catalog = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/catalog.json'), 'utf8'));
 const deepManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/deep-layer-manifest.json'), 'utf8'));
+const contextBuilder = fs.readFileSync(path.join(root, 'scripts/build-isle-royale-context-layers.py'), 'utf8');
 
 function rendered(s) { return s.replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"'); }
 
@@ -70,6 +71,16 @@ test('live operations feed is fail-soft and never claims no alerts from a parser
   assert.match(js, /Verify current NPS conditions/i);
 });
 
+
+test('quiet/no-wake ETL is IRMA-first and fails closed on a stale regulatory set', () => {
+  assert.match(contextBuilder, /irmaservices\.nps\.gov\/datastore\/v8\/rest/);
+  assert.match(contextBuilder, /SavedCollection\/Profile/);
+  assert.match(contextBuilder, /DigitalFiles/);
+  assert.match(contextBuilder, /count != 22/);
+  assert.match(contextBuilder, /quiet_count != 19/);
+  assert.match(contextBuilder, /no_wake_count != 3/);
+  assert.match(contextBuilder, /refusing to promote older\/mismatched geometry/);
+});
 
 test('current NPS off-trail camping zone closures are parsed without fabricating polygons', () => {
   const detector = require('../api/isle-royale.js')._test.detectCurrentClosures;
