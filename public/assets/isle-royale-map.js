@@ -334,7 +334,7 @@
       add(`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng}`, 'Open this coordinate in OpenStreetMap', 'coordinate');
     }
 
-    add(CONFIG.currentConditionsUrl, 'Check current NPS conditions', 'nps-current-conditions');
+    add(CONFIG.currentConditionsUrl, 'Verify current NPS conditions', 'nps-current-conditions');
     return links.slice(0, 6);
   }
 
