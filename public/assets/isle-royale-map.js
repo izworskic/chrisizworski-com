@@ -1940,7 +1940,7 @@
       if(base.some(point=>distanceMiles(point,target)<.08))continue;
       entries.push({
         along:Number(camp.along_miles)||Number(leg.end_miles)||Infinity,
-        point:{...target,label:camp.name,scenarioGenerated:true,scenarioId:scenario.id,campId:camp.id}
+        point:{...target,label:camp.name,kind:'campground',sourceBackedBoatIn:true,scenarioGenerated:true,scenarioId:scenario.id,campId:camp.id}
       });
     }
     entries.sort((a,b)=>a.along-b.along);
@@ -2816,13 +2816,14 @@
   document.addEventListener('keydown',event=>{
     const tag=event.target?.tagName?.toLowerCase();
     const typing=tag==='input'||tag==='select'||tag==='textarea'||event.target?.isContentEditable;
-    if(!typing&&(event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z') {
+    const planningHotkeys=route.adding||document.body.classList.contains('map-focus');
+    if(planningHotkeys&&!typing&&(event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z') {
       event.preventDefault();
       if(event.shiftKey)redoRouteEdit();
       else undoRouteEdit();
       return;
     }
-    if(!typing&&(event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='y') {
+    if(planningHotkeys&&!typing&&(event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='y') {
       event.preventDefault();
       redoRouteEdit();
       return;
