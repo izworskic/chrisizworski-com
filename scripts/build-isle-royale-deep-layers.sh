@@ -135,7 +135,8 @@ fields=[defn.GetFieldDefn(i).GetNameRef() for i in range(defn.GetFieldCount())]
 semantic_exact={
     'mapclass':180,'vegclass':180,'vegetationclass':180,'mapunit':170,
     'vegtype':165,'vegetationtype':165,'community':160,'association':155,
-    'alliance':150,'maplabel':145,'veglabel':145,'label':130,'class':130
+    'alliance':150,'tncdescri':220,'pidescrip':175,'ecogroup':150,
+    'maplabel':145,'veglabel':145,'label':130,'class':130
 }
 bad=re.compile(r'(^|_)(objectid|fid|id|shape|area|length|perimeter|acres?)($|_)',re.I)
 
