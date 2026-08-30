@@ -293,13 +293,29 @@ for item in sources.values():
         item['features']=len(json.loads(data).get('features',[]))
     except Exception:
         item['features']=None
+manifest_path=os.path.join(out,'deep-layer-manifest.json')
+previous={}
+if os.path.exists(manifest_path):
+    try:
+        with open(manifest_path,encoding='utf-8') as f:
+            previous=json.load(f)
+    except Exception:
+        previous={}
+
+previous_sources=previous.get('sources') or {}
+same_payload=all(
+    previous_sources.get(key,{}).get('sha256') == value.get('sha256')
+    for key,value in sources.items()
+)
+generated_at=previous.get('generated_at') if same_payload and previous.get('generated_at') else datetime.datetime.now(datetime.timezone.utc).isoformat()
+
 manifest={
  'schema_version':1,
- 'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'generated_at':generated_at,
  'derivation':'Downloaded federal source packages, reprojected to EPSG:4326, geometry made valid, geology simplified for web display, vegetation dissolved by its detected source class field and simplified for web display, attributes reduced to visitor-facing science context.',
  'sources':sources
 }
-with open(os.path.join(out,'deep-layer-manifest.json'),'w',encoding='utf-8') as f:
+with open(manifest_path,'w',encoding='utf-8') as f:
     json.dump(manifest,f,indent=2)
     f.write('\n')
 print(json.dumps(manifest,indent=2))
