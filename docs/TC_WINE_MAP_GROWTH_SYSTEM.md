@@ -115,6 +115,40 @@ Continuity targets after a meaningful sample:
 
 Events use fixed landing/filter/category/area/share-source values and bounded counts. They do not send free text, precise user location, selected venue IDs or names, exact plan hashes, trip dates/times, or personal identifiers.
 
+## Authority breakthrough layer
+
+The current ranking diagnosis is **BUILD AUTHORITY**, not "publish more pages."
+
+Live SERP review on August 29 showed three durable classes of incumbent:
+- official wine-trail organizations with institutional authority;
+- Guided Wino, which surrounds its map pages with a broad wine-content graph;
+- regional travel publishers with established domain authority and current Traverse City winery guides.
+
+The owned product already has enough depth to compete on usefulness. The breakthrough mechanism is a publisher asset that can earn real referring domains and referral traffic.
+
+Authority assets:
+- `/for-publishers` — noindex publisher kit;
+- `/embed/traverse-city-winery-map` — noindex embeddable map;
+- current GeoJSON and CSV directory exports;
+- recommended attribution: **Chris Izworski's Traverse City Winery Map** linking to the canonical planner.
+
+The publisher surfaces must remain outside the sitemap and noindex. Their purpose is off-page authority acquisition, not additional search inventory.
+
+Initial 30-day authority targets:
+- 5 legitimate new referring domains;
+- 2 live publisher embeds;
+- 100 qualified referral sessions;
+- 20 referral-origin route builds;
+- at least 1 external citation that naturally co-occurs with Chris Izworski attribution.
+
+Do not buy links, trade reciprocal links at scale, or submit to low-quality directories. The flywheel must be earned through utility.
+
+### Directory truth vs. frozen search treatment
+
+The production directory later expanded to **43 mapped winery/tasting-room locations**: 11 Old Mission, 30 Leelanau, and 2 Traverse City.
+
+The original map-first search treatment was launched with the earlier 40-location count. Because its title/H1/meta count is inside the protected measurement window, treat the 40 figure as the **search-treatment baseline**, not the current directory total. Do not silently rewrite the frozen search treatment solely to chase freshness; reconcile the public count at the next approved search-treatment decision point or sooner only if it becomes a factual-risk issue.
+
 ## 28-day treatment
 
 Start: 2026-08-29
@@ -167,6 +201,6 @@ A new indexable map state requires all of:
 
 The win is not page count. It is a repeatable funnel:
 
-**query → compelling winery-map result → useful mapped answer → stop selection → routed day → save/share → return/resume**
+**query → compelling winery-map result → useful mapped answer → stop selection → routed day → save/share → return/resume → external citation/embed → stronger authority → more qualified discovery**
 
 At scale, daily impressions and clicks should grow from multiple related map/decision queries while one clear canonical owner remains responsible for each family.
