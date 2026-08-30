@@ -26,6 +26,8 @@ USER_AGENT = "ChrisIzworskiIsleRoyaleContextGIS/1.0 (+https://chrisizworski.com/
 QUIET_WEBMAP = "900def55-d66d-4761-8898-634feaea5cd8"
 QUIET_PAGE = "https://www.nps.gov/isro/planyourvisit/quiet-no-wake.htm"
 QUIET_DATASTORE = "https://irma.nps.gov/DataStore/Collection/Profile/9705"
+IRMA_API = "https://irmaservices.nps.gov/datastore/v8/rest"
+QUIET_COLLECTION_ID = 9705
 QUIET_COMPENDIUM = "https://www.nps.gov/isro/learn/management/superintendents-compendium.htm"
 VEG_PARENT = "65c246f9d34ef4b119ca6c8b"
 VEG_DOI = "10.5066/P9393VFK"
@@ -229,6 +231,207 @@ def fetch_nps_builder_config(map_id):
     return parse_jsonp(text), url
 
 
+
+def absolute_url(base, value):
+    if not value:
+        return None
+    value = str(value).strip()
+    if value.startswith("//"):
+        return "https:" + value
+    return urllib.parse.urljoin(base, value)
+
+
+def irma_quiet_resources():
+    profile_url = f"{IRMA_API}/SavedCollection/Profile/{QUIET_COLLECTION_ID}"
+    profile = fetch_json(profile_url, timeout=90)
+    refs = profile.get("references") or []
+    resources = []
+    seen = set()
+
+    def add_resource(ref_id, ref_title, item):
+        name = str(item.get("fileName") or "").strip()
+        url = item.get("downloadLink") or item.get("url")
+        url = absolute_url("https://irmaservices.nps.gov/", url)
+        if not name or not url:
+            return
+        ext = pathlib.Path(name).suffix.lower()
+        if ext not in {".zip", ".shp", ".shx", ".dbf", ".prj", ".cpg", ".gpkg", ".geojson", ".json"}:
+            return
+        key = (ref_id, name, url)
+        if key in seen:
+            return
+        seen.add(key)
+        resources.append({
+            "reference_id": ref_id,
+            "reference_title": ref_title,
+            "file_name": name,
+            "file_size": item.get("fileSize"),
+            "download_url": url,
+        })
+
+    for ref in refs:
+        ref_id = ref.get("referenceId")
+        ref_title = str(ref.get("title") or "")
+        for item in ref.get("linkedResources") or []:
+            resource_type = str(item.get("resourceType") or "").lower()
+            if "file" in resource_type or item.get("fileName"):
+                add_resource(ref_id, ref_title, item)
+
+        if ref_id:
+            try:
+                digital = fetch_json(f"{IRMA_API}/Reference/{ref_id}/DigitalFiles", timeout=60)
+                for item in digital if isinstance(digital, list) else []:
+                    add_resource(ref_id, ref_title, item)
+            except Exception as exc:
+                print(f"IRMA DigitalFiles lookup failed reference={ref_id}: {exc}", file=sys.stderr)
+
+    return profile_url, refs, resources
+
+
+def safe_extract_zip(path, dest):
+    with zipfile.ZipFile(path) as archive:
+        root = dest.resolve()
+        for member in archive.infolist():
+            target = (dest / member.filename).resolve()
+            if root != target and root not in target.parents:
+                raise RuntimeError(f"Unsafe zip path in {path.name}: {member.filename}")
+        archive.extractall(dest)
+
+
+def download_irma_quiet_collection(dest):
+    profile_url, refs, resources = irma_quiet_resources()
+    if not resources:
+        raise RuntimeError(f"IRMA collection {QUIET_COLLECTION_ID} returned no public geospatial digital files")
+
+    downloaded = []
+    for item in resources:
+        size = item.get("file_size")
+        if isinstance(size, (int, float)) and size > 120_000_000:
+            print(f"IRMA skip oversized {item['file_name']} size={size}", file=sys.stderr)
+            continue
+        ref_dir = dest / f"ref-{item.get('reference_id') or 'unknown'}"
+        ref_dir.mkdir(parents=True, exist_ok=True)
+        path = ref_dir / pathlib.Path(item["file_name"]).name
+        try:
+            path.write_bytes(fetch_bytes(item["download_url"], timeout=180, attempts=3))
+        except Exception as exc:
+            print(f"IRMA download failed {item['download_url']}: {exc}", file=sys.stderr)
+            continue
+        downloaded.append({**item, "local_path": str(path)})
+        print(f"IRMA downloaded ref={item.get('reference_id')} {path.name} bytes={path.stat().st_size}", file=sys.stderr)
+        if zipfile.is_zipfile(path):
+            unzip = ref_dir / (path.stem + "_unzipped")
+            unzip.mkdir(exist_ok=True)
+            safe_extract_zip(path, unzip)
+
+    if not downloaded:
+        raise RuntimeError(f"IRMA collection {QUIET_COLLECTION_ID} geospatial resources were discovered but none could be downloaded")
+    return profile_url, refs, resources, downloaded
+
+
+def quiet_vector_candidates(root):
+    candidates = []
+    vector_paths = []
+    for suffix in ("*.shp", "*.gpkg", "*.geojson", "*.json"):
+        vector_paths.extend(root.rglob(suffix))
+    for path in sorted(set(vector_paths)):
+        ds = ogr.Open(str(path), 0)
+        if ds is None:
+            continue
+        for i in range(ds.GetLayerCount()):
+            layer = ds.GetLayerByIndex(i)
+            geom = ogr.GeometryTypeToName(layer.GetLayerDefn().GetGeomType())
+            if "polygon" not in geom.lower():
+                continue
+            count = layer.GetFeatureCount()
+            defn = layer.GetLayerDefn()
+            fields = [defn.GetFieldDefn(j).GetNameRef() for j in range(defn.GetFieldCount())]
+            samples = []
+            layer.ResetReading()
+            for _ in range(min(30, max(1, count))):
+                feature = layer.GetNextFeature()
+                if feature is None:
+                    break
+                for field in fields[:20]:
+                    value = feature.GetField(field)
+                    if value is not None and str(value).strip():
+                        samples.append(str(value).strip())
+            hay = " ".join([str(path), layer.GetName(), " ".join(fields), " ".join(samples)]).lower()
+            score = 20
+            if "quiet" in hay: score += 100
+            if "wake" in hay: score += 120
+            if "isle" in hay or "isro" in hay: score += 25
+            if count == 22: score += 500
+            elif count == 17: score += 240
+            elif 15 <= count <= 25: score += 80
+            candidates.append((score, count, path, layer.GetName()))
+            print(f"IRMA quiet candidate score={score} features={count} path={path} layer={layer.GetName()!r}", file=sys.stderr)
+    return sorted(candidates, reverse=True, key=lambda x: (x[0], x[1]))
+
+
+def normalize_irma_quiet_candidate(candidate, target):
+    _score, _count, path, layer_name = candidate
+    tmp = target.with_suffix(".irma.raw.geojson")
+    subprocess.run([
+        "ogr2ogr", "-f", "GeoJSON", str(tmp), str(path), layer_name,
+        "-t_srs", "EPSG:4326", "-makevalid",
+        "-lco", "RFC7946=YES", "-lco", "COORDINATE_PRECISION=6",
+    ], check=True)
+    fc = json.loads(tmp.read_text(encoding="utf-8"))
+    tmp.unlink(missing_ok=True)
+    compact = compact_quiet_zones(fc)
+
+    no_wake_names = ("mott island", "snug harbor", "washington harbor")
+    for feature in compact.get("features") or []:
+        props = feature.get("properties") or {}
+        name = str(props.get("name") or "").lower()
+        if any(token in name for token in no_wake_names):
+            props["zone_type"] = "No-Wake"
+
+    target.write_text(json.dumps(compact, separators=(",", ":")), encoding="utf-8")
+    quiet_count = sum(1 for f in compact["features"] if (f.get("properties") or {}).get("zone_type") != "No-Wake")
+    no_wake_count = len(compact["features"]) - quiet_count
+    return len(compact["features"]), quiet_count, no_wake_count, str(path), layer_name
+
+
+def build_irma_quiet_no_wake():
+    with tempfile.TemporaryDirectory() as td:
+        root = pathlib.Path(td)
+        profile_url, refs, resources, downloaded = download_irma_quiet_collection(root)
+        candidates = quiet_vector_candidates(root)
+        if not candidates:
+            raise RuntimeError("official IRMA collection contains no readable polygon layer")
+        best = candidates[0]
+        target = OUT / "quiet-no-wake-zones.geojson"
+        count, quiet_count, no_wake_count, source_path, layer_name = normalize_irma_quiet_candidate(best, target)
+        if count != 22 or quiet_count != 19 or no_wake_count != 3:
+            target.unlink(missing_ok=True)
+            raise RuntimeError(
+                f"official IRMA GIS is not the current 22-zone regulatory set "
+                f"(features={count}, quiet/no-wake={quiet_count}, no-wake={no_wake_count}, "
+                f"top_layer={layer_name!r}); refusing to promote older/mismatched geometry"
+            )
+        return target, {
+            "source": QUIET_PAGE,
+            "regulatory_source": QUIET_COMPENDIUM,
+            "geometry_source": profile_url,
+            "datastore_collection": QUIET_DATASTORE,
+            "irma_api_collection": profile_url,
+            "irma_reference_ids": [r.get("referenceId") for r in refs if r.get("referenceId")],
+            "irma_public_geospatial_files": [
+                {"reference_id": x.get("reference_id"), "file_name": x.get("file_name"), "download_url": x.get("download_url")}
+                for x in resources
+            ],
+            "selected_source_path": source_path,
+            "selected_layer": layer_name,
+            "vintage": "Official NPS DataStore Collection 9705; regulatory set validated against the 2026 Superintendent's Compendium",
+            "regulation_note": "Validated as the current 19 Quiet/No-Wake plus 3 No-Wake regulatory zones before publication.",
+            "features": 22,
+            "quiet_no_wake_features": quiet_count,
+            "no_wake_features": no_wake_count,
+        }
+
+
 def fetch_carto_zone_geometry(user, table):
     if not re.fullmatch(r"[A-Za-z0-9_]+", table or ""):
         raise ValueError(f"Unsafe Carto table name: {table!r}")
@@ -247,6 +450,13 @@ def fetch_carto_zone_geometry(user, table):
 
 
 def build_quiet_no_wake():
+    irma_error = None
+    try:
+        return build_irma_quiet_no_wake()
+    except Exception as exc:
+        irma_error = str(exc)
+        print(f"official IRMA quiet/no-wake path unresolved: {exc}", file=sys.stderr)
+
     config, config_url = fetch_nps_builder_config(QUIET_WEBMAP)
     overlays = [
         item for item in (config.get("overlays") or [])
@@ -266,7 +476,10 @@ def build_quiet_no_wake():
         table = overlay.get("table")
         if not user or not table:
             raise RuntimeError(f"Missing Carto source metadata for overlay {overlay.get('name')}")
-        geometry, geometry_url = fetch_carto_zone_geometry(user, table)
+        try:
+            geometry, geometry_url = fetch_carto_zone_geometry(user, table)
+        except Exception as exc:
+            raise RuntimeError(f"IRMA path: {irma_error} | current NPS builder legacy geometry: {exc}") from exc
         styles = overlay.get("styles") or {}
         fill = str(styles.get("fill") or "").lower()
         is_no_wake_only = fill in {"#2e3192", "#2e3192".lower()}
@@ -527,7 +740,7 @@ def main():
             "quiet_no_wake_features": 19,
             "no_wake_features": 3,
             "reason": str(exc),
-            "note": "Current NPS builder config exposes the correct 22-zone metadata, but its legacy Carto geometry endpoint is unavailable. Do not substitute hand-drawn polygons.",
+            "note": "The build checks official NPS IRMA Collection 9705 first, then the current NPS builder configuration. Geometry is published only if it validates as the current 22-zone regulatory set; older/mismatched GIS and dead legacy services fail closed.",
         }
         print(f"quiet/no-wake geometry unresolved: {exc}", file=sys.stderr)
 
