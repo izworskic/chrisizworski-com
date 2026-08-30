@@ -244,6 +244,100 @@
     for(let i=1;i<(path?.length||0);i++)best=Math.min(best,pointSegmentMiles(point,path[i-1],path[i]));
     return best;
   }
+  function projectPointToPath(point,path){
+    if(!point||!Array.isArray(path)||path.length<2)return null;
+    const cum=cumulative(path);
+    let best=null;
+    for(let i=1;i<path.length;i++){
+      const a=path[i-1],b=path[i];
+      const ref=rad((point.lat+a.lat+b.lat)/3),sx=69.172*Math.cos(ref),sy=69;
+      const px=point.lng*sx,py=point.lat*sy,ax=a.lng*sx,ay=a.lat*sy,bx=b.lng*sx,by=b.lat*sy;
+      const dx=bx-ax,dy=by-ay,den=dx*dx+dy*dy||1;
+      const t=Math.max(0,Math.min(1,((px-ax)*dx+(py-ay)*dy)/den));
+      const projected={lat:a.lat+(b.lat-a.lat)*t,lng:a.lng+(b.lng-a.lng)*t};
+      const detour=miles(point,projected);
+      if(!best||detour<best.distance_miles){
+        best={
+          distance_miles:detour,
+          along_miles:cum[i-1]+miles(a,projected),
+          point:projected,
+          segment_index:i-1,
+          segment_t:t
+        };
+      }
+    }
+    return best;
+  }
+
+  function slicePath(points,startMiles,endMiles){
+    if(!Array.isArray(points)||points.length<2)return points||[];
+    const cum=cumulative(points),total=cum[cum.length-1]||0;
+    const start=Math.max(0,Math.min(total,+startMiles||0));
+    const end=Math.max(start,Math.min(total,+endMiles||0));
+    const out=[pointAt(points,cum,start)];
+    for(let i=1;i<points.length-1;i++){
+      if(cum[i]>start&&cum[i]<end)out.push({...points[i],distance_miles:cum[i]});
+    }
+    out.push(pointAt(points,cum,end));
+    return out.filter(Boolean);
+  }
+
+  function buildItinerary(points,camps,speedMph,hoursPerDay,options={}){
+    if(!Array.isArray(points)||points.length<2)return {legs:[],candidates:[],total_miles:0,daily_target_miles:0};
+    const cum=cumulative(points),total=cum[cum.length-1]||0;
+    const speed=Math.max(.5,+speedMph||3),hours=Math.max(2,+hoursPerDay||6);
+    const daily=speed*hours;
+    const maxDetour=Math.max(.25,+options.maxDetourMiles||(options.mode==='powerboat'?3:1.75));
+    const maxDays=Math.max(1,Math.min(12,+options.maxDays||10));
+    const candidates=(camps||[]).map(camp=>{
+      const projection=projectPointToPath(camp,points);
+      return projection?{...camp,...projection}:null;
+    }).filter(c=>c&&!c.closed&&c.along_miles>.35&&c.along_miles<total-.35&&c.distance_miles<=maxDetour)
+      .sort((a,b)=>a.along_miles-b.along_miles||a.distance_miles-b.distance_miles);
+
+    const used=new Set(),legs=[];
+    let current=0,day=1;
+    while(current<total-.05&&day<=maxDays){
+      const remaining=total-current;
+      if(remaining<=daily*1.15){
+        legs.push({day,start_miles:current,end_miles:total,distance_miles:remaining,stop:null,alternatives:[],final:true,gap:false});
+        current=total;
+        break;
+      }
+      const ideal=Math.min(total,current+daily);
+      const minAdvance=Math.max(1,daily*.45),maxAdvance=daily*1.35;
+      const minAlong=current+minAdvance,maxAlong=Math.min(total-.35,current+maxAdvance);
+      const viable=candidates.filter(c=>!used.has(c.id)&&c.along_miles>current+.5&&c.along_miles>=minAlong&&c.along_miles<=maxAlong);
+      const ranked=viable.map(c=>{
+        const idealPenalty=Math.abs(c.along_miles-ideal)/Math.max(1,daily);
+        const detourPenalty=c.distance_miles/Math.max(.25,maxDetour);
+        const shelterBonus=c.shelters?-.06:0;
+        const dockBonus=c.dock_depth?-.03:0;
+        return {...c,score:idealPenalty*1.25+detourPenalty*.75+shelterBonus+dockBonus};
+      }).sort((a,b)=>a.score-b.score||a.along_miles-b.along_miles);
+
+      const chosen=ranked[0]||null;
+      const end=chosen?chosen.along_miles:ideal;
+      if(chosen)used.add(chosen.id);
+      legs.push({
+        day,
+        start_miles:current,
+        end_miles:end,
+        distance_miles:end-current,
+        stop:chosen,
+        alternatives:ranked.slice(chosen?1:0,4),
+        final:false,
+        gap:!chosen
+      });
+      current=end;
+      day++;
+    }
+    if(current<total-.05){
+      legs.push({day,start_miles:current,end_miles:total,distance_miles:total-current,stop:null,alternatives:[],final:true,gap:false});
+    }
+    return {legs,candidates,total_miles:total,daily_target_miles:daily,max_detour_miles:maxDetour};
+  }
+
   function dayEnds(points,speedMph,hoursPerDay){
     const cum=cumulative(points),total=cum[cum.length-1]||0,step=Math.max(.5,+speedMph||3)*Math.max(1,+hoursPerDay||6);
     const out=[];let day=1;
@@ -251,5 +345,5 @@
     return out;
   }
 
-  window.IsleRoyaleWaterIntel={create,weatherSamples,zonesAlongPath,pathDistance,dayEnds,miles};
+  window.IsleRoyaleWaterIntel={create,weatherSamples,zonesAlongPath,pathDistance,projectPointToPath,slicePath,buildItinerary,dayEnds,miles};
 })();

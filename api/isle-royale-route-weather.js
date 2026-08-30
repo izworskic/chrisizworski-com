@@ -190,7 +190,7 @@ module.exports=async function handler(req,res){
   const departure=Date.parse(body.departure);
   const speedMph=clamp(number(body.speed_mph)||3,0.5,60);
   const waypoints=(Array.isArray(body.waypoints)?body.waypoints:[])
-    .slice(0,5)
+    .slice(0,8)
     .map(normalizeWaypoint)
     .filter(Boolean);
 
