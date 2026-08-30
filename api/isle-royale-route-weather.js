@@ -169,12 +169,13 @@ function normalizeWaypoint(item,index){
   const distance=number(item?.distance_miles);
   if(!validPoint(lat,lon))return null;
   const targetMs=Date.parse(item?.target_time);
-  return {
+  const out={
     lat,lon,
     label:String(item?.label||`Route sample ${index+1}`).slice(0,80),
-    distance_miles:distance===null?0:Math.max(0,distance),
-    target_time:Number.isFinite(targetMs)?new Date(targetMs).toISOString():null
+    distance_miles:distance===null?0:Math.max(0,distance)
   };
+  if(Number.isFinite(targetMs))out.target_time=new Date(targetMs).toISOString();
+  return out;
 }
 
 module.exports=async function handler(req,res){
