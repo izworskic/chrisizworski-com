@@ -12,6 +12,8 @@ const catalog = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-m
 const deepManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/deep-layer-manifest.json'), 'utf8'));
 const contextManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/context-layer-manifest.json'), 'utf8'));
 const contextBuilder = fs.readFileSync(path.join(root, 'scripts/build-isle-royale-context-layers.py'), 'utf8');
+const toolsPage = fs.readFileSync(path.join(root, 'public/tools/index.html'), 'utf8');
+const circleTour = fs.readFileSync(path.join(root, 'public/lake-superior-circle-tour/index.html'), 'utf8');
 const deepWorkflow = fs.readFileSync(path.join(root, '.github/workflows/isle-royale-deep-data.yml'), 'utf8');
 const contextWorkflow = fs.readFileSync(path.join(root, '.github/workflows/isle-royale-context-data.yml'), 'utf8');
 
@@ -208,4 +210,14 @@ test('GIS workflows validate on PRs and only rebuild or write on explicit dispat
   }
   assert.match(deepWorkflow, /vegetation-overview-2000\.geojson/);
   assert.match(contextWorkflow, /quiet-no-wake-zones\.geojson/);
+});
+
+
+test('Isle Royale is discoverable from the main tools library and Lake Superior authority path', () => {
+  assert.match(toolsPage, /search all 37 tools/i);
+  assert.match(toolsPage, /href="\/isle-royale-map\/"/);
+  assert.match(toolsPage, /Isle Royale Interactive Map, Trails, Camps, Boating Zones, Shipwrecks, and Deep GIS/);
+  assert.match(toolsPage, /"position":37[^]*?"url":"https:\/\/chrisizworski\.com\/isle-royale-map\/"/);
+  assert.match(circleTour, /href="\/isle-royale-map\/"[^>]*>Isle Royale interactive map/);
+  assert.match(circleTour, /href="\/isle-royale-map\/" class="ext-link">Isle Royale map/);
 });
