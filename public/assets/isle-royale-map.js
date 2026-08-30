@@ -30,7 +30,8 @@
     deepStatus: document.getElementById('deep-layer-status')
   };
 
-  const map = L.map('isle-map', {preferCanvas:true, zoomControl:true, minZoom:6, maxZoom:18});
+  const map = L.map('isle-map', {preferCanvas:true, zoomControl:false, minZoom:6, maxZoom:18});
+  L.control.zoom({position:'topright'}).addTo(map);
   map.fitBounds(CONFIG.islandBounds, {padding:[10,10]});
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -63,6 +64,9 @@
 
   const featureIndex = [];
   let selectedLayer = null;
+  let searchEventTimer = null;
+  let osmContextLoaded = false;
+  const osmSeen = new Set();
   const sourceStatus = {arcgis:'starting', osm:'not loaded', fallback:false};
   const operational = {
     boaterByName: new Map(),
@@ -105,6 +109,44 @@
   };
 
   function status(message) { els.status.textContent = message; }
+
+  function emitEvent(name, props={}) {
+    const safe = {};
+    for (const [key, value] of Object.entries(props)) {
+      if (['string','number','boolean'].includes(typeof value)) safe[key] = value;
+    }
+    try {
+      window.dispatchEvent(new CustomEvent('chrisizworski:tool-event', {detail:{event:name, ...safe}}));
+    } catch (_) {}
+    try {
+      if (Array.isArray(window.dataLayer)) window.dataLayer.push({event:name, ...safe});
+    } catch (_) {}
+    try {
+      if (typeof window.plausible === 'function') window.plausible(name, {props:safe});
+    } catch (_) {}
+  }
+
+  function sourceFamily(record) {
+    const label = String(record?.sourceLabel || '').toLowerCase();
+    if (label.includes('openstreetmap')) return 'osm';
+    if (label.includes('arcgis')) return 'nps-arcgis';
+    if (label.includes('geologic')) return 'nps-gri';
+    if (label.includes('vegetation')) return 'nps-vegetation';
+    if (label.includes('national park service') || label.includes('nps')) return 'nps';
+    if (label.includes('fallback') || label.includes('approximate')) return 'derived-fallback';
+    return 'other-public';
+  }
+
+  function searchCategory(term='') {
+    const q = String(term).toLowerCase();
+    if (/camp|shelter/.test(q)) return 'camping';
+    if (/trail|portage|ridge|minong|greenstone|feldtmann/.test(q)) return 'trail';
+    if (/harbor|windigo|dock|visitor|ranger|store|lodge/.test(q)) return 'visitor-place';
+    if (/light|wreck|historic/.test(q)) return 'history';
+    if (/ferry|boat|water|seaplane|anchorage|wake/.test(q)) return 'boating';
+    if (/geolog|vegetation|forest|rock/.test(q)) return 'science';
+    return q.length < 3 ? 'short' : 'other';
+  }
 
   function cleanText(value, fallback='') {
     const text = value == null ? fallback : String(value);
@@ -459,6 +501,11 @@
 
   async function loadOsmContext() {
     const btn = document.getElementById('load-osm');
+    if (osmContextLoaded) {
+      btn.disabled = true;
+      status('OpenStreetMap visitor context is already loaded.');
+      return;
+    }
     btn.disabled = true;
     status('Adding supplementary OpenStreetMap visitor context…');
     const q = `[out:json][timeout:25];(nwr["tourism"~"camp_site|viewpoint|information|museum"](47.79,-89.36,48.33,-88.18);nwr["amenity"~"shelter|toilets|drinking_water"](47.79,-89.36,48.33,-88.18);nwr["man_made"="lighthouse"](47.79,-89.36,48.33,-88.18);nwr["man_made"="pier"](47.79,-89.36,48.33,-88.18););out center tags;`;
@@ -469,16 +516,24 @@
       for (const el of data.elements || []) {
         const f = osmFeatureToGeoJSON(el);
         if (!f) continue;
+        const osmId = f.properties?.osm_id;
+        if (osmId && osmSeen.has(osmId)) continue;
+        if (osmId) osmSeen.add(osmId);
         added += addGeoJSONFeature(f, {layerTitle:'OpenStreetMap visitor context', sourceLabel:'OpenStreetMap contributors', sourceKind:'supplementary public OSM point'});
       }
+      osmContextLoaded = true;
       sourceStatus.osm = `loaded ${added}`;
+      btn.textContent = 'OSM context added';
       status(`Added ${added} supplementary OpenStreetMap visitor points.`);
+      emitEvent('isle_royale_osm_context', {result:'success'});
       renderFeatureList();
     } catch (_) {
       sourceStatus.osm = 'unavailable';
       status('OpenStreetMap supplementary context could not be loaded. Core map and source catalog are unaffected.');
-    } finally {
+      emitEvent('isle_royale_osm_context', {result:'failure'});
       btn.disabled = false;
+    } finally {
+      if (!osmContextLoaded) btn.disabled = false;
     }
   }
 
@@ -651,6 +706,7 @@
 
   function selectRecord(record) {
     if (!record || !record.layer) return;
+    emitEvent('isle_royale_feature_open', {feature_class:record.category, source_family:sourceFamily(record)});
     selectedLayer = record.layer;
     try {
       const bounds = record.layer.getBounds && record.layer.getBounds();
@@ -699,13 +755,23 @@
       p.textContent = featureIndex.length ? 'No loaded features match those filters.' : 'Visitor geometry is still loading. The source catalog below is available immediately.';
       els.list.appendChild(p);
     }
+    return matches.length;
   }
 
-  els.search.addEventListener('input', renderFeatureList);
+  els.search.addEventListener('input', () => {
+    const count = renderFeatureList();
+    clearTimeout(searchEventTimer);
+    searchEventTimer = setTimeout(() => {
+      const term = els.search.value.trim();
+      if (!term) return;
+      emitEvent('isle_royale_search', {query_category:searchCategory(term), result_count:count});
+    }, 400);
+  });
   els.filters.addEventListener('change', (event) => {
     const input = event.target.closest('input[data-layer]');
     if (!input) return;
     const id = input.dataset.layer;
+    emitEvent('isle_royale_layer_toggle', {layer_id:id, enabled:Boolean(input.checked)});
     const group = layerGroups[id];
     if (group) {
       if (input.checked && !map.hasLayer(group)) group.addTo(map);
@@ -733,7 +799,7 @@
         const tr = document.createElement('tr');
         const td1 = document.createElement('td'); td1.textContent = item.label;
         const td2 = document.createElement('td'); const pill = document.createElement('span'); pill.className='status-pill'; pill.textContent=item.state; td2.appendChild(pill);
-        const td3 = document.createElement('td'); const a=document.createElement('a'); a.href=item.source; a.target='_blank'; a.rel='noopener'; a.textContent=item.publisher; td3.appendChild(a);
+        const td3 = document.createElement('td'); const a=document.createElement('a'); a.href=item.source; a.target='_blank'; a.rel='noopener'; a.textContent=item.publisher; a.addEventListener('click', () => emitEvent('isle_royale_source_open', {source_id:item.id || 'catalog-source'})); td3.appendChild(a);
         const td4 = document.createElement('td'); td4.textContent = item.vintage ? `${item.vintage}. ${item.notes}` : item.notes;
         tr.append(td1,td2,td3,td4);
         els.catalog.appendChild(tr);
