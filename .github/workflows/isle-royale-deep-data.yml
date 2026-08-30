@@ -1,0 +1,84 @@
+name: Isle Royale deep GIS build
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/isle-royale-deep-data.yml"
+      - "scripts/build-isle-royale-deep-layers.sh"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: isle-royale-deep-data-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-deep-layers:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Install GDAL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gdal-bin unzip
+
+      - name: Build normalized federal GIS derivatives
+        run: bash scripts/build-isle-royale-deep-layers.sh
+
+      - name: Validate generated GeoJSON
+        run: |
+          python - <<'PY'
+          import json, pathlib, sys
+          root=pathlib.Path("public/isle-royale-map/data")
+          expected=[
+              root/"geology-units.geojson",
+              root/"vegetation-baseline-2000.geojson",
+              root/"deep-layer-manifest.json",
+          ]
+          for path in expected:
+              if not path.exists() or path.stat().st_size < 100:
+                  raise SystemExit(f"missing/empty generated file: {path}")
+          for path in expected[:2]:
+              data=json.loads(path.read_text())
+              if data.get("type")!="FeatureCollection" or not data.get("features"):
+                  raise SystemExit(f"invalid/empty FeatureCollection: {path}")
+              print(path, len(data["features"]), path.stat().st_size)
+          manifest=json.loads(expected[2].read_text())
+          for key in ("geology","vegetation"):
+              sha=manifest["sources"][key].get("sha256","")
+              if len(sha)!=64:
+                  raise SystemExit(f"missing sha256 for {key}")
+          PY
+
+      - name: Commit normalized layers to feature branch
+        if: github.event_name == 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/isle-royale-map/data/geology-units.geojson
+          git add public/isle-royale-map/data/vegetation-baseline-2000.geojson
+          git add public/isle-royale-map/data/deep-layer-manifest.json
+          if git diff --cached --quiet; then
+            echo "No generated GIS changes to commit."
+            exit 0
+          fi
+          git commit -m "Generate Isle Royale deep GIS layers"
+          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+
+      - name: Upload normalized GIS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: isle-royale-deep-gis
+          path: |
+            public/isle-royale-map/data/geology-units.geojson
+            public/isle-royale-map/data/vegetation-baseline-2000.geojson
+            public/isle-royale-map/data/deep-layer-manifest.json
+          retention-days: 14
