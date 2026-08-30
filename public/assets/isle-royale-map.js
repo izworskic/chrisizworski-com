@@ -1826,17 +1826,23 @@
 
   function routeForecastSamples(max=5) {
     const points=routePathPoints();
-    const cumulative=routeCumulative();
-    const total=cumulative[cumulative.length-1]||0;
-    const count=Math.min(max,Math.max(2,route.points.length));
-    const samples=[];
-    for(let i=0;i<count;i++) {
-      const distance=count===1?0:total*i/(count-1);
-      const p=interpolateRoutePoint(distance,cumulative);
-      if(!p)continue;
-      if(i===0)p.label=route.points[0]?.label||'Route start';
-      if(i===count-1)p.label=route.points[route.points.length-1]?.label||'Route end';
-      samples.push(p);
+    let samples=[];
+    if(window.IsleRoyaleWaterIntel?.weatherSamples) {
+      samples=window.IsleRoyaleWaterIntel.weatherSamples(points,max);
+    } else {
+      const cumulative=routeCumulative();
+      const total=cumulative[cumulative.length-1]||0;
+      const count=Math.min(max,Math.max(2,Math.ceil(total/4)+1));
+      for(let i=0;i<count;i++) {
+        const distance=count===1?0:total*i/(count-1);
+        const p=interpolateRoutePoint(distance,cumulative);
+        if(p)samples.push(p);
+      }
+    }
+    if(samples.length) {
+      samples[0].label=route.points[0]?.label||'Route start';
+      samples[samples.length-1].label=route.points[route.points.length-1]?.label||'Route end';
+      for(let i=1;i<samples.length-1;i++)samples[i].label=Math.round(samples[i].distance_miles)+' mi along route';
     }
     return samples;
   }
@@ -2096,14 +2102,13 @@
   els.routeModeSelect.addEventListener('change',()=>{
     route.mode=els.routeModeSelect.value;
     els.routeSpeed.value=routeSpeedDefaults[route.mode]||3;
-    resolveRoute();
-    clearRouteWeather('Travel mode changed. Re-run route weather after confirming speed and departure.');
-    renderRoute();
+    reroute('Travel mode changed. Re-run route weather after confirming speed and departure.');
   });
   els.routeSpeed.addEventListener('change',()=>{
     clearRouteWeather('Planning speed changed. Re-run route weather for updated arrival times.');
     renderRoute();
   });
+  els.routeDayHours?.addEventListener('change',renderRoute);
   els.routeDeparture.addEventListener('change',()=>clearRouteWeather('Departure changed. Re-run route weather for the new time.'));
   els.routeAddButton.addEventListener('click',()=>setRouteAdding(!route.adding));
   els.routeModeButton.addEventListener('click',()=>{
