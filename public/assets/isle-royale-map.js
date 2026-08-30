@@ -395,7 +395,8 @@
       color:style.color,
       fillColor:style.fillColor || style.color,
       fillOpacity:.9,
-      renderer:vectorRenderer
+      renderer:vectorRenderer,
+      bubblingMouseEvents:false
     });
   }
   function normalizePlaceName(value='') {
@@ -514,6 +515,20 @@
       addPopupFact(facts, 'Fire ring / grill', record.boater.fire_ring_grill);
     }
     if (facts.childElementCount) wrap.appendChild(facts);
+
+    if (record.latlng && Number.isFinite(record.latlng.lat) && Number.isFinite(record.latlng.lng)) {
+      const routeAction = document.createElement('button');
+      routeAction.type = 'button';
+      routeAction.className = 'popup-action popup-route-action';
+      routeAction.textContent = 'Add this point to route';
+      routeAction.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        addRoutePoint(record.latlng, record.name);
+        map.closePopup();
+      });
+      wrap.appendChild(routeAction);
+    }
 
     const links = relatedLinks(record);
     if (links.length) {
@@ -1139,6 +1154,344 @@
       if (group && map.hasLayer(group)) map.removeLayer(group);
       renderContextStatus();
       status(`${cfg.label} could not be loaded. Core visitor map remains available.`);
+    }
+  }
+
+  function routeModeLabel() {
+    const labels={paddle:'Paddle / small craft',hike:'Hike / backpack',powerboat:'Motorboat'};
+    return labels[route.mode] || 'Route';
+  }
+
+  function toRadians(value) { return value * Math.PI / 180; }
+  function toDegrees(value) { return value * 180 / Math.PI; }
+
+  function distanceMiles(a,b) {
+    const R=3958.7613;
+    const dLat=toRadians(b.lat-a.lat);
+    const dLon=toRadians(b.lng-a.lng);
+    const lat1=toRadians(a.lat), lat2=toRadians(b.lat);
+    const h=Math.sin(dLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLon/2)**2;
+    return 2*R*Math.asin(Math.min(1,Math.sqrt(h)));
+  }
+
+  function bearingDegrees(a,b) {
+    const lat1=toRadians(a.lat),lat2=toRadians(b.lat),dLon=toRadians(b.lng-a.lng);
+    const y=Math.sin(dLon)*Math.cos(lat2);
+    const x=Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon);
+    return (toDegrees(Math.atan2(y,x))+360)%360;
+  }
+
+  function compassLabel(value) {
+    const n=Number(value);
+    if(!Number.isFinite(n)) return '';
+    const dirs=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+    return dirs[Math.round(((n%360)+360)%360/22.5)%16];
+  }
+
+  function routeCumulative() {
+    const out=[0];
+    for(let i=1;i<route.points.length;i++) out.push(out[i-1]+distanceMiles(route.points[i-1],route.points[i]));
+    return out;
+  }
+
+  function routeTotalMiles() {
+    const c=routeCumulative();
+    return c.length?c[c.length-1]:0;
+  }
+
+  function routeHours() {
+    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    return routeTotalMiles()/speed;
+  }
+
+  function formatDuration(hours) {
+    if(!Number.isFinite(hours)||hours<=0)return '0 min';
+    const whole=Math.floor(hours),mins=Math.round((hours-whole)*60);
+    return whole?`${whole}h ${mins}m`:`${mins} min`;
+  }
+
+  function routeWaypointIcon(index) {
+    return L.divIcon({
+      className:'',
+      html:`<span class="route-waypoint-icon">${index+1}</span>`,
+      iconSize:[28,28],
+      iconAnchor:[14,14]
+    });
+  }
+
+  function clearRouteWeather(message='') {
+    route.weather=null;
+    els.routeWeather.replaceChildren();
+    if(message) {
+      const note=document.createElement('div');
+      note.className='ops-source';
+      note.textContent=message;
+      els.routeWeather.appendChild(note);
+    }
+  }
+
+  function renderRoute() {
+    routeLayerGroup.clearLayers();
+    route.markers=[];
+    route.line=null;
+
+    if(route.points.length) {
+      const latlngs=route.points.map(p=>[p.lat,p.lng]);
+      route.line=L.polyline(latlngs,{pane:'routePane',color:'#173d36',weight:4,opacity:.92,dashArray:'9 6',interactive:false}).addTo(routeLayerGroup);
+      route.points.forEach((point,index)=>{
+        const marker=L.marker([point.lat,point.lng],{pane:'routePane',icon:routeWaypointIcon(index),keyboard:false,interactive:false}).addTo(routeLayerGroup);
+        route.markers.push(marker);
+      });
+    }
+
+    const miles=routeTotalMiles();
+    const hours=routeHours();
+    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    if(route.points.length<2) {
+      els.routeSummary.textContent=route.points.length
+        ? 'One waypoint added. Add at least one more point to create a route.'
+        : 'No route yet. Start adding points, click the map, or use “Add to route” from a point popup.';
+      els.routeWeatherButton.disabled=true;
+    } else {
+      const start=route.points[0],end=route.points[route.points.length-1];
+      const bearing=bearingDegrees(start,end);
+      els.routeSummary.innerHTML=`<strong>${miles.toFixed(1)} mi</strong> · ${route.points.length} waypoints · ~${formatDuration(hours)} at ${speed.toFixed(1)} mph · overall ${compassLabel(bearing)} (${Math.round(bearing)}°). <span>Sketch distance only; place waypoints along the intended trail or water path.</span>`;
+      els.routeWeatherButton.disabled=false;
+    }
+  }
+
+  function setRouteAdding(active) {
+    route.adding=Boolean(active);
+    document.body.classList.toggle('route-building',route.adding);
+    els.routeAddButton.textContent=route.adding?'Stop adding points':'Start adding points';
+    els.routeModeButton.textContent=route.adding?'Finish route':'Build route';
+    els.routeAddButton.setAttribute('aria-pressed',String(route.adding));
+    els.routeModeButton.setAttribute('aria-pressed',String(route.adding));
+    status(route.adding?'Route mode: click the map to add ordered waypoints.':'Route point adding stopped.');
+  }
+
+  function addRoutePoint(latlng,label='') {
+    if(!latlng||!Number.isFinite(latlng.lat)||!Number.isFinite(latlng.lng))return;
+    route.points.push({
+      lat:Number(latlng.lat),
+      lng:Number(latlng.lng),
+      label:cleanText(label)||`Waypoint ${route.points.length+1}`
+    });
+    clearRouteWeather('Route changed. Re-run the weather analysis for the updated path.');
+    renderRoute();
+    emitEvent('isle_royale_route_point',{point_count:route.points.length});
+    if(route.points.length===1) {
+      document.getElementById('route-planner')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
+  }
+
+  function undoRoutePoint() {
+    if(!route.points.length)return;
+    route.points.pop();
+    clearRouteWeather('Route changed. Re-run the weather analysis for the updated path.');
+    renderRoute();
+  }
+
+  function clearRoute() {
+    route.points=[];
+    setRouteAdding(false);
+    clearRouteWeather();
+    renderRoute();
+    status('Route cleared.');
+  }
+
+  function interpolateRoutePoint(targetDistance,cumulative) {
+    if(!route.points.length)return null;
+    if(targetDistance<=0)return {...route.points[0],distance_miles:0,bearing_deg:route.points[1]?bearingDegrees(route.points[0],route.points[1]):null};
+    const total=cumulative[cumulative.length-1];
+    if(targetDistance>=total) {
+      const last=route.points.length-1;
+      return {...route.points[last],distance_miles:total,bearing_deg:last?bearingDegrees(route.points[last-1],route.points[last]):null};
+    }
+    let segment=1;
+    while(segment<cumulative.length&&cumulative[segment]<targetDistance)segment++;
+    const prev=segment-1;
+    const span=cumulative[segment]-cumulative[prev]||1;
+    const t=(targetDistance-cumulative[prev])/span;
+    const a=route.points[prev],b=route.points[segment];
+    return {
+      lat:a.lat+(b.lat-a.lat)*t,
+      lng:a.lng+(b.lng-a.lng)*t,
+      label:`${Math.round(targetDistance/total*100)}% along route`,
+      distance_miles:targetDistance,
+      bearing_deg:bearingDegrees(a,b)
+    };
+  }
+
+  function routeForecastSamples(max=5) {
+    const cumulative=routeCumulative();
+    const total=cumulative[cumulative.length-1]||0;
+    const count=Math.min(max,Math.max(2,route.points.length));
+    const samples=[];
+    for(let i=0;i<count;i++) {
+      const distance=count===1?0:total*i/(count-1);
+      const p=interpolateRoutePoint(distance,cumulative);
+      if(!p)continue;
+      if(i===0)p.label=route.points[0].label||'Route start';
+      if(i===count-1)p.label=route.points[route.points.length-1].label||'Route end';
+      samples.push(p);
+    }
+    return samples;
+  }
+
+  function relativeWind(windFromDeg,travelBearing) {
+    const wind=Number(windFromDeg),bearing=Number(travelBearing);
+    if(!Number.isFinite(wind)||!Number.isFinite(bearing))return '';
+    let diff=Math.abs(((wind-bearing+540)%360)-180);
+    if(diff<=45)return 'headwind tendency';
+    if(diff>=135)return 'tailwind tendency';
+    return 'crosswind tendency';
+  }
+
+  function metric(container,label,value) {
+    if(value==null||value==='')return;
+    const div=document.createElement('div');
+    div.className='route-weather-metric';
+    div.innerHTML='<b></b><span></span>';
+    div.querySelector('b').textContent=value;
+    div.querySelector('span').textContent=label;
+    container.appendChild(div);
+  }
+
+  function renderRouteWeather(data,samples) {
+    els.routeWeather.replaceChildren();
+
+    for(const item of data.alerts||[]) {
+      const alert=document.createElement('div');
+      alert.className='route-alert';
+      alert.innerHTML='<strong></strong><div></div>';
+      alert.querySelector('strong').textContent=item.event||'Active NWS alert';
+      alert.querySelector('div').textContent=item.headline||item.description||'Open the NWS forecast for details.';
+      els.routeWeather.appendChild(alert);
+    }
+
+    if(Array.isArray(data.observations)&&data.observations.length) {
+      const heading=document.createElement('div');
+      heading.className='popup-related-title';
+      heading.textContent='Live wind reality check';
+      els.routeWeather.appendChild(heading);
+      const observations=document.createElement('div');
+      observations.className='route-observations';
+      for(const obs of data.observations) {
+        const card=document.createElement('a');
+        card.className='route-observation';
+        card.href=obs.source_url;
+        card.target='_blank';
+        card.rel='noopener';
+        const wind=Number.isFinite(Number(obs.wind_speed_kt))?`${obs.wind_direction||''} ${Math.round(obs.wind_speed_kt)} kt`:'wind unavailable';
+        const gust=Number.isFinite(Number(obs.wind_gust_kt))?` · gust ${Math.round(obs.wind_gust_kt)} kt`:'';
+        card.innerHTML='<strong></strong><span></span>';
+        card.querySelector('strong').textContent=obs.name;
+        card.querySelector('span').textContent=`${wind}${gust}`;
+        observations.appendChild(card);
+      }
+      els.routeWeather.appendChild(observations);
+    }
+
+    const summary=document.createElement('div');
+    summary.className='route-summary';
+    const peakWind=Number(data.summary?.peak_forecast_wind_kt);
+    const peakWave=Number(data.summary?.peak_forecast_wave_ft);
+    const bits=[];
+    if(Number.isFinite(peakWind))bits.push(`peak forecast wind/gust ${Math.round(peakWind)} kt`);
+    if(Number.isFinite(peakWave))bits.push(`highest sampled wave ${peakWave.toFixed(1)} ft`);
+    summary.textContent=bits.length?`Route forecast summary: ${bits.join(' · ')}.`:'Route forecast loaded; some marine fields are unavailable at these samples.';
+    els.routeWeather.appendChild(summary);
+
+    (data.forecasts||[]).forEach((forecast,index)=>{
+      const card=document.createElement('div');
+      card.className='route-weather-card';
+      const head=document.createElement('div');
+      head.className='route-weather-head';
+      head.innerHTML='<strong></strong><span></span>';
+      head.querySelector('strong').textContent=forecast.label||`Route sample ${index+1}`;
+      head.querySelector('span').textContent=forecast.target_time
+        ? new Date(forecast.target_time).toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'})
+        : 'forecast unavailable';
+      card.appendChild(head);
+
+      if(forecast.error) {
+        const err=document.createElement('div');
+        err.className='ops-source';
+        err.textContent=forecast.error;
+        card.appendChild(err);
+        els.routeWeather.appendChild(card);
+        return;
+      }
+
+      const metrics=document.createElement('div');
+      metrics.className='route-weather-metrics';
+      const wind=Number(forecast.wind_speed_kt);
+      const gust=Number(forecast.wind_gust_kt);
+      const wave=Number(forecast.wave_height_ft);
+      const period=Number(forecast.wave_period_sec);
+      const sample=samples[index]||{};
+      metric(metrics,'Wind',Number.isFinite(wind)?`${forecast.wind_direction||''} ${Math.round(wind)} kt`:null);
+      metric(metrics,'Gust',Number.isFinite(gust)?`${Math.round(gust)} kt`:null);
+      metric(metrics,'Wind vs route',relativeWind(forecast.wind_direction_deg,sample.bearing_deg));
+      metric(metrics,'Waves',Number.isFinite(wave)?`${wave.toFixed(1)} ft${Number.isFinite(period)?` @ ${Math.round(period)}s`:''}`:null);
+      metric(metrics,'Wave direction',forecast.wave_direction||null);
+      metric(metrics,'Temperature',Number.isFinite(Number(forecast.temperature_f))?`${Math.round(forecast.temperature_f)}°F`:null);
+      metric(metrics,'Precip chance',Number.isFinite(Number(forecast.precip_probability_pct))?`${Math.round(forecast.precip_probability_pct)}%`:null);
+      metric(metrics,'Weather',forecast.weather||null);
+      card.appendChild(metrics);
+
+      if(forecast.forecast_url) {
+        const source=document.createElement('div');
+        source.className='route-weather-source';
+        const a=document.createElement('a');
+        a.href=forecast.forecast_url;a.target='_blank';a.rel='noopener';a.textContent='Open this NWS marine point forecast';
+        source.appendChild(a);
+        card.appendChild(source);
+      }
+      els.routeWeather.appendChild(card);
+    });
+
+    const caveat=document.createElement('div');
+    caveat.className='ops-source';
+    caveat.textContent=data.disclaimer||'Marine forecast is planning context; verify current NWS and NPS information before departure.';
+    els.routeWeather.appendChild(caveat);
+  }
+
+  async function analyzeRouteWeather() {
+    if(route.points.length<2)return;
+    const departure=new Date(els.routeDeparture.value);
+    if(!Number.isFinite(departure.getTime())) {
+      status('Choose a valid departure time before analyzing route weather.');
+      return;
+    }
+    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    const samples=routeForecastSamples(5);
+    els.routeWeatherButton.disabled=true;
+    els.routeWeatherButton.textContent='Loading NWS marine forecast…';
+    clearRouteWeather('Sampling NWS marine forecast conditions along your route and checking Passage Island / Rock of Ages winds…');
+    try {
+      const response=await fetch(CONFIG.routeWeatherEndpoint,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body:JSON.stringify({
+          departure:departure.toISOString(),
+          speed_mph:speed,
+          waypoints:samples.map(p=>({lat:p.lat,lon:p.lng,label:p.label,distance_miles:p.distance_miles,bearing_deg:p.bearing_deg}))
+        })
+      });
+      const data=await response.json();
+      if(!response.ok)throw new Error(data?.error||`${response.status} route forecast failed`);
+      route.weather=data;
+      renderRouteWeather(data,samples);
+      emitEvent('isle_royale_route_weather',{sample_count:data.summary?.forecast_samples||0,mode:route.mode});
+      status('Route weather loaded from NWS marine grid data with live NDBC wind observations.');
+    } catch(error) {
+      clearRouteWeather(`Route weather unavailable: ${cleanText(error?.message||error)}. Your route remains on the map.`);
+      status('Route weather could not be loaded. Route geometry remains available.');
+    } finally {
+      els.routeWeatherButton.disabled=route.points.length<2;
+      els.routeWeatherButton.textContent='Analyze route weather, wind & waves';
     }
   }
 
