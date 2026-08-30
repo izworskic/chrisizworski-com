@@ -192,6 +192,17 @@ def nps_quiet_diagnostics():
             snippet = re.sub(r"\s+", " ", match.group(0)).strip()
             print(f"  snippet {snippet[:700]}", file=sys.stderr)
 
+    for asset in [
+        "https://www.nps.gov/maps/assets/js/load.min.js",
+        "https://www.nps.gov/maps/assets/libs/reqwest.min.js",
+    ]:
+        try:
+            body = fetch_bytes(asset, timeout=30).decode("utf-8", errors="replace")
+            print(f"NPS map asset {asset} bytes={len(body)}", file=sys.stderr)
+            print(body[:16000], file=sys.stderr)
+        except Exception as exc:
+            print(f"NPS map asset fetch failed {asset}: {exc}", file=sys.stderr)
+
 
 def build_quiet_no_wake():
     data_url = f"https://www.arcgis.com/sharing/rest/content/items/{QUIET_WEBMAP}/data?f=json"
