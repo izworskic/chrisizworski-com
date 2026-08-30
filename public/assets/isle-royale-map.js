@@ -1989,6 +1989,53 @@
     meta.textContent='Planning model only. Coastline comes from OpenStreetMap; regulatory polygons remain NPS/IRMA authority. No depth, shoal, surf, current or safe-passage determination is made.';
     els.routeIntelligence.appendChild(meta);
   }
+  function routePointRole(point,index,total) {
+    if(index===0)return 'Start';
+    if(index===total-1)return 'Destination';
+    if(point.kind==='campground')return point.sourceBackedBoatIn?'Boat-In campsite':'Campground stop';
+    if(point.kind==='visitor-service')return 'Place stop';
+    return 'Via point';
+  }
+
+  function renderRouteStops() {
+    if(!els.routeStopList)return;
+    els.routeStopList.replaceChildren();
+    if(!route.points.length)return;
+    route.points.forEach((point,index)=>{
+      const row=document.createElement('div');
+      row.className='route-stop-row'+(point.kind==='campground'?' is-camp':'');
+      const token=document.createElement('div');
+      token.className='route-stop-token';
+      token.textContent=index===0?'S':index===route.points.length-1?'D':point.kind==='campground'?'C':String(index);
+      const textWrap=document.createElement('button');
+      textWrap.type='button';
+      textWrap.className='route-stop-text';
+      textWrap.style.border='0';
+      textWrap.style.background='transparent';
+      textWrap.style.padding='0';
+      textWrap.style.textAlign='left';
+      textWrap.innerHTML='<b></b><span></span>';
+      textWrap.querySelector('b').textContent=point.label||('Waypoint '+(index+1));
+      textWrap.querySelector('span').textContent=routePointRole(point,index,route.points.length)+(point.sourceBackedBoatIn?' · current NPS Boat-In record':'');
+      textWrap.addEventListener('click',()=>{
+        map.flyTo([point.lat,point.lng],Math.max(map.getZoom(),13));
+        route.markers[index]?.openTooltip?.();
+      });
+      const remove=document.createElement('button');
+      remove.type='button';
+      remove.className='route-stop-remove';
+      remove.setAttribute('aria-label','Remove '+(point.label||'route point'));
+      remove.textContent='×';
+      remove.addEventListener('click',()=>{
+        route.points.splice(index,1);
+        reroute('Route stop removed. Re-run weather after the route resolves.');
+        status((point.label||'Route point')+' removed from trip.');
+      });
+      row.append(token,textWrap,remove);
+      els.routeStopList.appendChild(row);
+    });
+  }
+
   function renderRoute() {
     routeLayerGroup.clearLayers();
     route.markers=[];
@@ -2042,6 +2089,7 @@
         .addTo(routeLayerGroup);
     }
 
+    renderRouteStops();
     renderSmartStatus();
     const miles=routeTotalMiles();
     const hours=routeHours();
