@@ -10,7 +10,12 @@
     overpass: 'https://overpass-api.de/api/interpreter',
     operationsEndpoint: '/api/isle-royale',
     currentConditionsUrl: 'https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm',
-    boatInUrl: 'https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm'
+    boatInUrl: 'https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm',
+    deepManifest: '/isle-royale-map/data/deep-layer-manifest.json',
+    deepLayers: {
+      geology: '/isle-royale-map/data/geology-units.geojson',
+      'vegetation-baseline': '/isle-royale-map/data/vegetation-baseline-2000.geojson'
+    }
   };
 
   const els = {
@@ -21,7 +26,8 @@
     count: document.getElementById('feature-count'),
     filters: document.getElementById('layer-filters'),
     catalog: document.getElementById('catalog-body'),
-    liveStatus: document.getElementById('park-live-status')
+    liveStatus: document.getElementById('park-live-status'),
+    deepStatus: document.getElementById('deep-layer-status')
   };
 
   const map = L.map('isle-map', {preferCanvas:true, zoomControl:true, minZoom:6, maxZoom:18});
@@ -37,6 +43,8 @@
     'visitor-service': L.layerGroup().addTo(map),
     'water-route': L.layerGroup().addTo(map),
     'maritime-history': L.layerGroup().addTo(map),
+    geology: L.layerGroup(),
+    'vegetation-baseline': L.layerGroup(),
     'science-reference': L.layerGroup(),
     other: L.layerGroup()
   };
@@ -47,6 +55,8 @@
     'visitor-service': 'visitor place',
     'water-route': 'water / transport route',
     'maritime-history': 'maritime / history',
+    geology: 'geologic unit',
+    'vegetation-baseline': 'vegetation baseline (2000)',
     'science-reference': 'science / reference',
     other: 'other public feature'
   };
@@ -61,6 +71,26 @@
     sources: {},
     loaded: false
   };
+  const deep = {
+    manifest: null,
+    manifestPromise: null,
+    geology: {state:'available', count:0, error:''},
+    'vegetation-baseline': {state:'available', count:0, error:''}
+  };
+  const deepConfig = {
+    geology: {
+      manifestKey:'geology',
+      label:'Geology',
+      sourceLabel:'National Park Service Geologic Resources Inventory',
+      sourceKind:'generated NPS GRI web derivative'
+    },
+    'vegetation-baseline': {
+      manifestKey:'vegetation',
+      label:'Vegetation baseline (2000)',
+      sourceLabel:'National Park Service vegetation inventory',
+      sourceKind:'generated historical NPS inventory derivative'
+    }
+  };
 
   const categoryStyle = {
     trail: {color:'#9b512b', weight:3, opacity:.9},
@@ -68,6 +98,8 @@
     'visitor-service': {color:'#18352f', fillColor:'#18352f'},
     'water-route': {color:'#386b8d', weight:3, opacity:.78, dashArray:'7 6'},
     'maritime-history': {color:'#65547c', fillColor:'#65547c'},
+    geology: {color:'#786a58', fillColor:'#9a8b76', weight:1.2, opacity:.72, fillOpacity:.16},
+    'vegetation-baseline': {color:'#586a58', fillColor:'#71806b', weight:.8, opacity:.58, fillOpacity:.20},
     'science-reference': {color:'#467778', weight:2, fillOpacity:.12},
     other: {color:'#59645f', fillColor:'#59645f'}
   };
@@ -229,6 +261,13 @@
       wrap.appendChild(conditionLink);
     }
 
+    if (record.deepMeta) {
+      const deepNote = document.createElement('div');
+      deepNote.className = 'popup-source';
+      deepNote.textContent = `Vintage: ${record.deepMeta.vintage || 'see source manifest'}. ${record.deepMeta.accuracy_note || ''}`.trim();
+      wrap.appendChild(deepNote);
+    }
+
     const source = document.createElement('div');
     source.className = 'popup-source';
     source.textContent = `Map source: ${record.sourceLabel}. Geometry status: ${record.sourceKind}.`;
@@ -251,7 +290,7 @@
       style: () => geometryStyle(category, feature),
       pointToLayer: (_f, latlng) => pointMarker(category, latlng),
       onEachFeature: (_f, layer) => {
-        record = {name, category, layer, sourceLabel, sourceKind, description, sourceUrl:context.sourceUrl || ''};
+        record = {name, category, layer, sourceLabel, sourceKind, description, sourceUrl:context.sourceUrl || '', deepMeta:context.deepMeta || null};
         enrichRecord(record);
         layer.bindPopup(() => popupNode(record));
         layer.on('click', () => selectRecord(record));
@@ -510,6 +549,101 @@
     }
   }
 
+  function formatBytes(bytes) {
+    const n = Number(bytes);
+    if (!Number.isFinite(n) || n <= 0) return 'size unavailable';
+    return n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)} MB` : `${Math.round(n / 1000)} KB`;
+  }
+
+  async function loadDeepManifest() {
+    if (deep.manifest) return deep.manifest;
+    if (deep.manifestPromise) return deep.manifestPromise;
+    deep.manifestPromise = fetchJSON(CONFIG.deepManifest, 12000)
+      .then(data => {
+        deep.manifest = data;
+        renderDeepStatus();
+        return data;
+      })
+      .catch(error => {
+        deep.manifestPromise = null;
+        renderDeepStatus();
+        throw error;
+      });
+    return deep.manifestPromise;
+  }
+
+  function renderDeepStatus() {
+    if (!els.deepStatus) return;
+    els.deepStatus.replaceChildren();
+    const manifestSources = deep.manifest?.sources || {};
+
+    for (const id of ['geology','vegetation-baseline']) {
+      const cfg = deepConfig[id];
+      const state = deep[id];
+      const meta = manifestSources[cfg.manifestKey] || {};
+      const row = document.createElement('div');
+      row.className = state.state === 'error' ? 'ops-alert' : 'ops-ok';
+      const size = formatBytes(meta.bytes);
+      if (state.state === 'loading') {
+        row.textContent = `${cfg.label}: loading ${size} generated layer…`;
+      } else if (state.state === 'loaded') {
+        row.textContent = `${cfg.label}: ${state.count.toLocaleString()} mapped feature${state.count === 1 ? '' : 's'} loaded · ${size}.`;
+      } else if (state.state === 'error') {
+        row.textContent = `${cfg.label}: could not load. ${state.error || 'Source file unavailable.'}`;
+      } else {
+        row.textContent = `${cfg.label}: off by default · ${size}${meta.vintage ? ` · ${meta.vintage}` : ''}.`;
+      }
+      els.deepStatus.appendChild(row);
+    }
+
+    const caveat = document.createElement('div');
+    caveat.className = 'ops-source';
+    caveat.textContent = 'Vegetation is a historical inventory baseline, not present-day forest condition. Geology is interpretive mapping, not survey-grade. Both layers are loaded only when selected.';
+    els.deepStatus.appendChild(caveat);
+  }
+
+  async function loadDeepLayer(id) {
+    const cfg = deepConfig[id];
+    const state = deep[id];
+    if (!cfg || !state || state.state === 'loading' || state.state === 'loaded') return;
+    state.state = 'loading';
+    state.error = '';
+    renderDeepStatus();
+
+    try {
+      const manifest = await loadDeepManifest();
+      const meta = manifest?.sources?.[cfg.manifestKey] || {};
+      const data = await fetchJSON(CONFIG.deepLayers[id], id === 'vegetation-baseline' ? 60000 : 30000);
+      if (!data || !Array.isArray(data.features) || !data.features.length) throw new Error('generated GeoJSON is empty');
+
+      let added = 0;
+      for (const feature of data.features) {
+        added += addGeoJSONFeature(feature, {
+          category:id,
+          layerTitle:cfg.label,
+          sourceLabel:cfg.sourceLabel,
+          sourceKind:cfg.sourceKind,
+          sourceUrl:meta.source || '',
+          deepMeta:meta
+        });
+      }
+      state.state = 'loaded';
+      state.count = added;
+      renderDeepStatus();
+      renderFeatureList();
+      status(`${cfg.label} loaded: ${added.toLocaleString()} mapped feature${added === 1 ? '' : 's'}.`);
+    } catch (error) {
+      state.state = 'error';
+      state.error = cleanText(error?.message || 'load failed');
+      const checkbox = els.filters.querySelector(`input[data-layer="${id}"]`);
+      if (checkbox) checkbox.checked = false;
+      const group = layerGroups[id];
+      if (group && map.hasLayer(group)) map.removeLayer(group);
+      renderDeepStatus();
+      status(`${cfg.label} could not be loaded. Core visitor map remains available.`);
+    }
+  }
+
   function isCategoryVisible(category) {
     const checkbox = els.filters.querySelector(`input[data-layer="${category}"]`);
     return checkbox ? checkbox.checked : true;
@@ -577,6 +711,7 @@
       if (input.checked && !map.hasLayer(group)) group.addTo(map);
       if (!input.checked && map.hasLayer(group)) map.removeLayer(group);
     }
+    if (input.checked && deepConfig[id]) loadDeepLayer(id);
     renderFeatureList();
   });
 
@@ -611,5 +746,7 @@
   renderFeatureList();
   loadCatalog();
   loadOperationalData();
+  renderDeepStatus();
+  loadDeepManifest().catch(() => {});
   loadVisitorGeometry();
 })();
