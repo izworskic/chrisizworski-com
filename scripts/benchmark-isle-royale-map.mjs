@@ -10,6 +10,7 @@ const api = read('api/isle-royale.js');
 const catalog = JSON.parse(read('public/isle-royale-map/catalog.json'));
 const spec = JSON.parse(read('benchmarks/isle-royale-map.json'));
 const deepManifest = JSON.parse(read('public/isle-royale-map/data/deep-layer-manifest.json'));
+const contextManifest = JSON.parse(read('public/isle-royale-map/data/context-layer-manifest.json'));
 const deepPath = file => path.join(root, 'public/isle-royale-map/data', file);
 const sha256 = file => crypto.createHash('sha256').update(fs.readFileSync(deepPath(file))).digest('hex');
 const deepSourceChecks = ['geology','vegetation'].map(key => {
@@ -19,6 +20,15 @@ const deepSourceChecks = ['geology','vegetation'].map(key => {
   if (!fs.existsSync(file)) return false;
   const stat = fs.statSync(file);
   return stat.size === meta.bytes && stat.size <= 25_000_000 && sha256(meta.file) === meta.sha256;
+});
+const contextExpected = {quiet_no_wake:22, vegetation_change:2738, horne_fire:93};
+const contextSourceChecks = Object.entries(contextExpected).map(([key, expected]) => {
+  const meta = contextManifest.layers?.[key];
+  if (!meta || meta.status !== 'generated' || meta.features !== expected || !meta.file || !/^[a-f0-9]{64}$/.test(meta.sha256 || '')) return false;
+  const file = deepPath(meta.file);
+  if (!fs.existsSync(file)) return false;
+  const stat = fs.statSync(file);
+  return stat.size === meta.bytes && stat.size <= 15_000_000 && sha256(meta.file) === meta.sha256;
 });
 
 const checks = [];
@@ -47,16 +57,30 @@ add('search-entity', 8, /https:\/\/chrisizworski\.com\/#person/.test(html) && /W
 add('network', 6, (html.match(/chrisizworski\.com\//g) || []).length >= 4 && /great-lakes-lighthouses|lake-superior-circle-tour|michiganoutdoorsnow/.test(html), 'contextual existing-tool links');
 add('deep-data-path', 8,
   deepSourceChecks.every(Boolean)
+    && contextSourceChecks.every(Boolean)
     && deepManifest.sources.geology.features >= 1900
     && deepManifest.sources.vegetation.features === 38
+    && contextManifest.layers.quiet_no_wake.quiet_no_wake_features === 19
+    && contextManifest.layers.quiet_no_wake.no_wake_features === 3
     && /loadDeepLayer/.test(js)
+    && /loadContextLayer/.test(js)
     && /geology-units\.geojson/.test(js)
     && /vegetation-baseline-2000\.geojson/.test(js)
+    && /quiet-no-wake-zones\.geojson/.test(js)
+    && /vegetation-change-1996-2017\.geojson/.test(js)
+    && /horne-fire-burn-severity\.geojson/.test(js)
     && /Vegetation baseline \(2000\)/.test(html)
+    && /data-layer="quiet-no-wake"/.test(html)
+    && /data-layer="vegetation-change"/.test(html)
+    && /data-layer="horne-fire"/.test(html)
     && /historical inventory baseline/i.test(js)
+    && /historical USGS context/i.test(js)
     && catalog.items.some(x => x.id === 'geology' && x.state === 'generated-runtime')
-    && catalog.items.some(x => x.id === 'vegetation-detailed' && x.state === 'generated-runtime'),
-  `generated geology + vegetation files, manifest hashes, <=25MB gates, lazy runtime loader`
+    && catalog.items.some(x => x.id === 'vegetation-detailed' && x.state === 'generated-runtime')
+    && catalog.items.some(x => x.id === 'quiet-no-wake' && x.state === 'generated-runtime')
+    && catalog.items.some(x => x.id === 'vegetation-change-1996-2017' && x.state === 'generated-runtime')
+    && catalog.items.some(x => x.id === 'horne-fire-2021' && x.state === 'generated-runtime'),
+  `verified geology + vegetation + 22 NPS boating zones + USGS change/fire layers, hashes, size gates and lazy runtime loaders`
 );
 
 const score = checks.reduce((sum, c) => sum + (c.ok ? c.weight : 0), 0);
@@ -65,6 +89,8 @@ if (/nps\.gov\/maps\/pmtiles/i.test(html + js)) hardFailures.push('Restricted NP
 if (!/not a navigation chart/i.test(html)) hardFailures.push('navigation disclaimer missing');
 if (!/approximate reference/i.test(js)) hardFailures.push('fallback derivation label missing');
 if (!deepSourceChecks.every(Boolean)) hardFailures.push('deep GIS file/hash/size integrity failed');
+if (!contextSourceChecks.every(Boolean)) hardFailures.push('context GIS file/hash/count/size integrity failed');
+if (contextManifest.layers?.quiet_no_wake?.quiet_no_wake_features !== 19 || contextManifest.layers?.quiet_no_wake?.no_wake_features !== 3) hardFailures.push('quiet/no-wake 19+3 regulatory reconciliation failed');
 if (!/historical inventory baseline/i.test(js) || !/Vegetation baseline \(2000\)/.test(html)) hardFailures.push('vegetation baseline freshness warning missing');
 if (!npmapsComplete) hardFailures.push('16-product NPMaps completeness gate failed');
 if (!catalogCrawlable) hardFailures.push('crawlable source catalog/raw manifest link missing');
