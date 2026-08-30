@@ -278,3 +278,34 @@ test('Isle Royale has protected internal discovery paths outside the frozen tool
   assert.match(circleTour, /href="\/isle-royale-map\/" class="ext-link">Isle Royale map/);
   assert.match(upNorth, /href="\/isle-royale-map\/"[^>]*>Isle Royale interactive map/);
 });
+
+
+test('smart route planner snaps hiking to mapped trails and keeps water routes editable', () => {
+  assert.match(html, /<h3>Plan a route<\/h3>/);
+  assert.match(html, /id="route-smart-status"/);
+  assert.match(html, /id="route-reverse"/);
+  assert.match(html, /Hiking automatically follows the mapped trail network/);
+  assert.match(js, /const trailGraph = \{/);
+  assert.match(js, /function registerTrailGeometry/);
+  assert.match(js, /function shortestTrailPath/);
+  assert.match(js, /function resolveHikingRoute/);
+  assert.match(js, /function nearestTrailNode/);
+  assert.match(js, /trail-snapped/);
+  assert.match(js, /Those points are not connected through the currently loaded trail network/);
+  assert.match(js, /draggable:true/);
+  assert.match(js, /nearestControlSegmentIndex/);
+  assert.match(js, /route\.points\.splice\(index,0/);
+  assert.match(js, /function reverseRoute/);
+});
+
+test('route point workflow is start destination first and weather follows resolved geometry', () => {
+  assert.match(js, /Start route here/);
+  assert.match(js, /Route to here/);
+  assert.match(js, /Add as route stop/);
+  assert.match(js, /if\(route\.points\.length===2\)setRouteAdding\(false\)/);
+  assert.match(js, /function routePathPoints/);
+  assert.match(js, /return route\.resolvedPoints\.length \? route\.resolvedPoints : route\.points/);
+  assert.match(js, /const points=routePathPoints\(\)/);
+  assert.match(js, /Smart hiking route:/);
+  assert.match(js, /Editable water route:/);
+});
