@@ -118,21 +118,24 @@
       "npmapsCategory": "geologic map",
       "label": "Geology",
       "kind": "polygon",
-      "state": "etl-ready",
+      "state": "generated-runtime",
       "publisher": "National Park Service Geologic Resources Inventory",
       "source": "https://catalog.data.gov/dataset/digital-geologic-gis-map-of-isle-royale-national-park-and-vicinity-michigan-nps-grd-g-1996",
-      "notes": "Prefer GeoPackage or file geodatabase over reduced KML for publication tiles."
+      "notes": "Generated from the NPS GRI GeoPackage: 1,975 geologic-unit features, reprojected and simplified for web use. Manifest records SHA-256 and source accuracy caveat; not survey-grade.",
+      "vintage": "NPS GRI digital release 2021; older source mapping",
+      "web_path": "/isle-royale-map/data/geology-units.geojson"
     },
     {
       "id": "vegetation-detailed",
       "npmapsCategory": "detailed vegetation map",
-      "label": "Vegetation inventory — detailed",
+      "label": "Vegetation baseline (2000)",
       "kind": "polygon",
-      "state": "etl-ready",
+      "state": "generated-runtime",
       "publisher": "National Park Service",
       "source": "https://catalog.data.gov/dataset/geospatial-data-for-the-vegetation-mapping-inventory-project-of-isle-royale-national-park",
-      "vintage": "2000 inventory",
-      "notes": "The dataset vintage must be visible so users do not mistake inventory-era vegetation for current conditions."
+      "vintage": "2000 inventory; imagery primarily 1994/1996",
+      "notes": "Historical baseline only. The 19,072 source polygons are dissolved into 38 TNC_DESCRI vegetation classes and simplified for opt-in web display. Do not interpret as current forest condition.",
+      "web_path": "/isle-royale-map/data/vegetation-baseline-2000.geojson"
     },
     {
       "id": "vegetation-simple",
