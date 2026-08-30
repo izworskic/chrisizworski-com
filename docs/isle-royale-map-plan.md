@@ -97,6 +97,23 @@ Supporting terms (not separate canonicals): Isle Royale trail map, campground ma
 - Publish stable PMTiles/MBTiles for large layers; do not send huge polygon GeoJSON to every browser.
 - Georeference historic/NPMaps-only map artwork only when no better vector source exists; record RMSE and derived status.
 
+### Release 2.5 — Water Intelligence
+
+The route planner must become a trip-decision tool rather than a line-drawing widget.
+
+- **Hiking:** keep the mapped-trail graph + shortest-path behavior.
+- **Paddle / small craft:** build a mapped-coastline-aware planning path, bias modestly toward shoreline, and never claim chart-quality navigation.
+- **Motorboat:** use the same coastline-crossing guard with a more direct-path bias.
+- **Travel Assistant:** turn speed + chosen travel-day hours into day-end markers and a practical multi-day travel estimate.
+- **Marine sampling:** choose forecast samples from route distance, not merely the number of manually placed control points.
+- **Exposure:** report maximum sampled distance from mapped shoreline and long exposed stretches as descriptive planning context, never as a go/no-go score.
+- **Regulations:** reconcile the planned path with the current 22 NPS Quiet/No-Wake polygons.
+- **Refuge / stops:** surface nearby mapped campgrounds, docks, harbors and visitor places as planning options.
+- **Failure mode:** if shoreline geometry or routing fails, preserve the editable sketch and clearly label water intelligence unavailable.
+- **Source separation:** OpenStreetMap coastline may support the planning land mask; current NPS/IRMA remains the authority for regulations.
+
+Product inspiration may come from Paddle Planner's route-first workflow, Travel Time Assistant, day-end thinking, route editing, details and scenario comparison. Do not copy Paddle Planner proprietary data, code, branding, reviews or map assets.
+
 ### Release 3 — durable data desk
 
 - Automated source-change checks.
