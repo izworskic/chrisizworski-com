@@ -2338,6 +2338,13 @@
     if(els.cockpitWeather)els.cockpitWeather.disabled=Boolean(els.routeWeatherButton?.disabled);
     if(els.cockpitReverse)els.cockpitReverse.disabled=route.points.length<2;
     if(els.cockpitClear)els.cockpitClear.disabled=!route.points.length;
+    if(els.cockpitSave)els.cockpitSave.disabled=!route.points.length;
+    if(els.cockpitShare)els.cockpitShare.disabled=!route.points.length;
+    if(els.cockpitGpx)els.cockpitGpx.disabled=route.points.length<2;
+    if(els.routeSave)els.routeSave.disabled=!route.points.length;
+    if(els.routeShare)els.routeShare.disabled=!route.points.length;
+    if(els.routeExportGpx)els.routeExportGpx.disabled=route.points.length<2;
+    if(els.routeRestore)els.routeRestore.disabled=!hasSavedTrip();
     if(els.cockpitSummary) {
       const summary=els.routeSummary?.textContent||'No route yet.';
       const days=route.itinerary?.legs?.length;
@@ -2944,6 +2951,13 @@
   els.cockpitReverse?.addEventListener('click',reverseRoute);
   els.cockpitWeather?.addEventListener('click',analyzeRouteWeather);
   els.cockpitClear?.addEventListener('click',clearRoute);
+  els.cockpitSave?.addEventListener('click',saveTripToDevice);
+  els.cockpitShare?.addEventListener('click',copyTripShareLink);
+  els.cockpitGpx?.addEventListener('click',exportRouteGpx);
+  els.routeSave?.addEventListener('click',saveTripToDevice);
+  els.routeRestore?.addEventListener('click',restoreSavedTrip);
+  els.routeShare?.addEventListener('click',copyTripShareLink);
+  els.routeExportGpx?.addEventListener('click',exportRouteGpx);
   els.cockpitMode?.addEventListener('change',()=>{
     if(els.cockpitMode.value===els.routeModeSelect.value)return;
     els.routeModeSelect.value=els.cockpitMode.value;
@@ -3026,7 +3040,8 @@
   setDefaultRouteDeparture();
   els.exploreModeButton?.setAttribute('aria-pressed','true');
   els.routeModeButton?.setAttribute('aria-pressed','false');
-  renderRoute();
+  const sharedTripLoaded=loadSharedTripFromHash();
+  if(!sharedTripLoaded)renderRoute();
   updateHistoryControls();
   syncCockpitControls();
   renderFeatureList();
