@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-30T13:34:37.002178+00:00",
+  "generated_at": "2026-08-30T13:43:04.436563+00:00",
   "derivation": "Downloaded federal source packages, reprojected to EPSG:4326, geometry made valid, geology simplified for web display, vegetation dissolved by its detected source class field and simplified for web display, attributes reduced to visitor-facing science context.",
   "sources": {
     "geology": {
