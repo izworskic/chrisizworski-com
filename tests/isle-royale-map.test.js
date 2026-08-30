@@ -117,7 +117,7 @@ test('route builder turns geometry into a time-aware planning outcome', () => {
     assert.ok(html.includes(`id="${id}"`), id);
   }
   assert.match(html, /<h3>Plan a route<\/h3>/);
-  assert.match(html, /SMART ROUTE/);
+  assert.match(html, /ROUTE INTELLIGENCE/);
   assert.match(js, /function addRoutePoint/);
   assert.match(js, /function distanceMiles/);
   assert.match(js, /function bearingDegrees/);
@@ -311,7 +311,8 @@ test('smart route planner snaps hiking to mapped trails and keeps water routes e
   assert.match(html, /<h3>Plan a route<\/h3>/);
   assert.match(html, /id="route-smart-status"/);
   assert.match(html, /id="route-reverse"/);
-  assert.match(html, /Hiking automatically follows the mapped trail network/);
+  assert.match(html, /Hiking follows the mapped trail network/);
+  assert.match(html, /Paddle and motorboat modes use a planning shoreline model/);
   assert.match(js, /const trailGraph = \{/);
   assert.match(js, /function registerTrailGeometry/);
   assert.match(js, /function shortestTrailPath/);
