@@ -188,6 +188,33 @@ test('marine forecast sampling grows with route distance rather than control-poi
   assert.doesNotMatch(js, /Math\.min\(max,Math\.max\(2,route\.points\.length\)\)/);
 });
 
+test('scenario planner compares three trip structures without turning them into safety scores', () => {
+  assert.match(html, /id="route-scenarios"/);
+  assert.match(html, /Balanced day/);
+  assert.match(js, /function renderRouteScenarios/);
+  assert.match(js, /function compareScenarioWeather/);
+  assert.match(js, /function applyScenarioPlan/);
+  assert.match(js, /filter\(point=>!point\.scenarioGenerated\)/);
+  assert.match(js, /isle_royale_scenario_apply/);
+  assert.match(js, /isle_royale_scenario_weather/);
+  assert.match(js, /Scenario names describe trip structure, not safety/);
+  assert.match(waterIntelJs, /Weather-conservative/);
+  assert.match(waterIntelJs, /Balanced/);
+  assert.match(waterIntelJs, /Ambitious/);
+  assert.match(isleBenchmark, /scenarioRuntime/);
+});
+
+test('multi-day route weather accepts explicit itinerary target times after overnight stops', () => {
+  const normalizeWaypoint = require('../api/isle-royale-route-weather.js')._test.normalizeWaypoint;
+  const target = '2026-09-02T14:30:00.000Z';
+  const waypoint = normalizeWaypoint({lat:48.05,lon:-88.75,distance_miles:12,target_time:target},0);
+  assert.equal(waypoint.target_time,target);
+  assert.match(routeWeatherApi, /Scheduled route sample falls outside the supported NWS forecast window/);
+  assert.match(routeWeatherApi, /Multi-day samples may use explicit itinerary target times after overnight stops/);
+  assert.match(js, /function routeScheduledForecastSamples/);
+  assert.match(js, /target_time:p\.target_time\|\|null/);
+});
+
 test('current NPS off-trail camping zone closures are parsed without fabricating polygons', () => {
   const detector = require('../api/isle-royale.js')._test.detectCurrentClosures;
   const sample = `
