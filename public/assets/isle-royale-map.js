@@ -66,6 +66,7 @@
     routeAddButton: document.getElementById('route-add-mode'),
     routeReverse: document.getElementById('route-reverse'),
     routeUndo: document.getElementById('route-undo'),
+    routeRedo: document.getElementById('route-redo'),
     routeClear: document.getElementById('route-clear'),
     routeModeSelect: document.getElementById('route-mode-select'),
     routeSpeed: document.getElementById('route-speed'),
