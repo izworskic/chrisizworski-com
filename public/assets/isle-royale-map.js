@@ -2236,6 +2236,97 @@
     renderRouteItinerary();
   }
 
+  function cloneRoutePoints(points=route.points) {
+    return (points||[]).map(point=>({...point}));
+  }
+
+  function captureRouteSnapshot() {
+    return {
+      points:cloneRoutePoints(),
+      mode:route.mode,
+      speed:Number(els.routeSpeed.value)||3,
+      hours:Number(els.routeDayHours?.value)||6,
+      activeScenario:route.activeScenario||'balanced'
+    };
+  }
+
+  function updateHistoryControls() {
+    const canUndo=route.history.length>0;
+    const canRedo=route.future.length>0;
+    if(els.routeUndo)els.routeUndo.disabled=!canUndo;
+    if(els.routeRedo)els.routeRedo.disabled=!canRedo;
+    if(els.cockpitUndo)els.cockpitUndo.disabled=!canUndo;
+    if(els.cockpitRedo)els.cockpitRedo.disabled=!canRedo;
+  }
+
+  function rememberRouteEdit() {
+    route.history.push(captureRouteSnapshot());
+    if(route.history.length>40)route.history.shift();
+    route.future=[];
+    updateHistoryControls();
+  }
+
+  function restoreRouteSnapshot(snapshot,message) {
+    if(!snapshot)return;
+    route.waterToken++;
+    route.points=cloneRoutePoints(snapshot.points);
+    route.mode=snapshot.mode||'paddle';
+    route.activeScenario=snapshot.activeScenario||'balanced';
+    els.routeModeSelect.value=route.mode;
+    els.routeSpeed.value=String(snapshot.speed||3);
+    if(els.routeDayHours)els.routeDayHours.value=String(snapshot.hours||6);
+    route.resolvedPoints=[];
+    route.trailNames=[];
+    route.waterStats=null;
+    route.waterReason='';
+    route.scenarios=[];
+    route.scenarioWeather={};
+    route.itinerary=null;
+    route.itineraryWeather=null;
+    route.smartState=route.points.length<2?(route.points.length?'need-destination':'idle'):(route.mode==='hike'?'trail-pending':'water-pending');
+    reroute(message);
+    updateHistoryControls();
+  }
+
+  function undoRouteEdit() {
+    if(!route.history.length)return;
+    const current=captureRouteSnapshot();
+    const previous=route.history.pop();
+    route.future.push(current);
+    if(route.future.length>40)route.future.shift();
+    restoreRouteSnapshot(previous,'Undo restored the previous trip state. Re-run weather for the restored route.');
+    status('Undid the last route edit.');
+  }
+
+  function redoRouteEdit() {
+    if(!route.future.length)return;
+    const current=captureRouteSnapshot();
+    const next=route.future.pop();
+    route.history.push(current);
+    if(route.history.length>40)route.history.shift();
+    restoreRouteSnapshot(next,'Redo restored the next trip state. Re-run weather for the restored route.');
+    status('Redid the route edit.');
+  }
+
+  function syncCockpitControls() {
+    if(els.cockpitMode)els.cockpitMode.value=route.mode;
+    if(els.cockpitSpeed)els.cockpitSpeed.value=els.routeSpeed.value;
+    if(els.cockpitHours)els.cockpitHours.value=els.routeDayHours?.value||'6';
+    if(els.cockpitBuild) {
+      els.cockpitBuild.textContent=route.adding?'Explore':'Build route';
+      els.cockpitBuild.classList.toggle('primary',!route.adding);
+    }
+    if(els.cockpitWeather)els.cockpitWeather.disabled=Boolean(els.routeWeatherButton?.disabled);
+    if(els.cockpitReverse)els.cockpitReverse.disabled=route.points.length<2;
+    if(els.cockpitClear)els.cockpitClear.disabled=!route.points.length;
+    if(els.cockpitSummary) {
+      const summary=els.routeSummary?.textContent||'No route yet.';
+      const days=route.itinerary?.legs?.length;
+      const scenario=route.scenarios.find(item=>item.id===route.activeScenario)?.title;
+      els.cockpitSummary.textContent=summary+(days?' · '+days+' day'+(days===1?'':'s'):'')+(scenario?' · '+scenario:'');
+    }
+    updateHistoryControls();
+  }
   function resizePlanningMap() {
     window.setTimeout(()=>map.invalidateSize({pan:false}),230);
   }
