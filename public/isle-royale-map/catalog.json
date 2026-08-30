@@ -86,12 +86,13 @@
     {
       "id": "shipwrecks",
       "npmapsCategory": "dive / shipwreck map",
-      "label": "Shipwrecks and dive sites",
+      "label": "Shipwrecks and current dive buoys",
       "kind": "point",
-      "state": "cataloged",
+      "state": "live-api",
       "publisher": "National Park Service",
-      "source": "https://www.nps.gov/isro/learn/historyculture/maritime.htm",
-      "notes": "Publish only public visitor-facing wreck locations. Never expose sensitive resource fields by default."
+      "source": "https://www.nps.gov/isro/planyourvisit/scuba-diving.htm",
+      "notes": "Runtime discovers the current NPS Shipwreck Buoys sortable dataset, maps only rows with parseable NPS buoy GPS coordinates, and retains depth/vessel/buoy details in the maritime layer. Buoys and dive conditions can change; verify NPS before diving.",
+      "vintage": "current NPS scuba page / downloadable buoy dataset"
     },
     {
       "id": "relief",
