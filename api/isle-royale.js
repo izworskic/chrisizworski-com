@@ -2,6 +2,7 @@ const URLS = Object.freeze({
   boaterCampgrounds: "https://www.nps.gov/common/uploads/sortable_dataset/isro/2DF94ED6-9CAA-9B24-8BD6A700012D59F3/isro-BoaterTable.csv",
   currentConditions: "https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm",
   boaterPage: "https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm",
+  scubaPage: "https://www.nps.gov/isro/planyourvisit/scuba-diving.htm",
 });
 
 const USER_AGENT =
@@ -112,6 +113,67 @@ function normalizeBoaterCsv(text = "") {
   }).filter(Boolean);
 }
 
+function parseLatLon(value = "") {
+  const text = decodeHtml(String(value)).replace(/[′’']/g, "'").replace(/[″”"]/g, '"').trim();
+
+  const decimal = text.match(/(-?\d{1,2}\.\d+)\s*[,;/ ]+\s*(-?\d{1,3}\.\d+)/);
+  if (decimal) {
+    const lat = Number(decimal[1]);
+    const lon = Number(decimal[2]);
+    if (Math.abs(lat) <= 90 && Math.abs(lon) <= 180) return { lat, lon };
+  }
+
+  const dm = text.match(/([NS])\s*(\d{1,2})\D+(\d{1,2}(?:\.\d+)?)\D+([EW])\s*(\d{1,3})\D+(\d{1,2}(?:\.\d+)?)/i);
+  if (dm) {
+    let lat = Number(dm[2]) + Number(dm[3]) / 60;
+    let lon = Number(dm[5]) + Number(dm[6]) / 60;
+    if (dm[1].toUpperCase() === "S") lat *= -1;
+    if (dm[4].toUpperCase() === "W") lon *= -1;
+    if (Math.abs(lat) <= 90 && Math.abs(lon) <= 180) return { lat, lon };
+  }
+
+  return null;
+}
+
+function extractSortableDatasetUrl(html = "") {
+  const decoded = decodeHtml(String(html));
+  const direct = decoded.match(/(?:https?:)?\/\/[^"'\s<>]+\/common\/uploads\/sortable_dataset\/[^"'\s<>]+\.csv(?:\?[^"'\s<>]*)?/i);
+  if (direct) return direct[0].startsWith("//") ? `https:${direct[0]}` : direct[0];
+
+  const relative = decoded.match(/["'](\/common\/uploads\/sortable_dataset\/[^"']+\.csv(?:\?[^"']*)?)["']/i);
+  if (relative) return new URL(relative[1], "https://www.nps.gov").toString();
+
+  return null;
+}
+
+function normalizeShipwreckCsv(text = "") {
+  const parsed = parseCsv(text);
+  if (parsed.length < 2) return [];
+  const headers = parsed[0].map((header, index) => String(header || `column_${index + 1}`).trim());
+
+  return parsed.slice(1).map(values => {
+    const row = {};
+    headers.forEach((header, index) => { row[header] = values[index] ?? ""; });
+    const name = firstValue(row, [/^divesite$/, /^shipwreck$/, /^wreckname$/, /^wreck$/, /^name$/])
+      || String(values[0] || "").trim()
+      || null;
+    const coordinateText = firstValue(row, [/buoygpscoordinates?/, /gpscoordinates?/, /^coordinates?$/]);
+    const coords = parseLatLon(coordinateText || "");
+    if (!name || !coords) return null;
+
+    return {
+      name,
+      lat: coords.lat,
+      lon: coords.lon,
+      vessel_type: firstValue(row, [/vesseltype/, /^type$/]),
+      buoy_coordinates: coordinateText,
+      buoy_on: firstValue(row, [/buoyon/, /buoystatus/]),
+      depth: firstValue(row, [/depthminmax/, /^depth$/]),
+      buoy_attachment: firstValue(row, [/buoyattachment/, /attachment/]),
+    };
+  }).filter(Boolean);
+}
+
 function extractLastUpdated(html = "") {
   const text = stripHtml(html);
   const match = text.match(/Last updated:\s*([A-Z][a-z]+\s+\d{1,2},\s+\d{4})/i);
@@ -175,6 +237,19 @@ async function fetchText(url, accept) {
   return response.text();
 }
 
+async function fetchShipwreckDataset() {
+  const html = await fetchText(URLS.scubaPage, "text/html,application/xhtml+xml");
+  const datasetUrl = extractSortableDatasetUrl(html);
+  if (!datasetUrl) throw new Error("NPS shipwreck dataset link was not discoverable");
+  const csv = await fetchText(datasetUrl, "text/csv,text/plain;q=0.9,*/*;q=0.5");
+  return {
+    html,
+    csv,
+    datasetUrl,
+    pageLastUpdated: extractLastUpdated(html),
+  };
+}
+
 function sourceState(result, name, url, extra = {}) {
   return {
     name,
@@ -194,9 +269,10 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const [boaterResult, conditionsResult] = await Promise.allSettled([
+  const [boaterResult, conditionsResult, shipwreckResult] = await Promise.allSettled([
     fetchText(URLS.boaterCampgrounds, "text/csv,text/plain;q=0.9,*/*;q=0.5"),
     fetchText(URLS.currentConditions, "text/html,application/xhtml+xml"),
+    fetchShipwreckDataset(),
   ]);
 
   const boaterCampgrounds = boaterResult.status === "fulfilled"
@@ -205,6 +281,10 @@ module.exports = async function handler(req, res) {
 
   const alerts = conditionsResult.status === "fulfilled"
     ? detectCurrentClosures(conditionsResult.value)
+    : [];
+
+  const shipwrecks = shipwreckResult.status === "fulfilled"
+    ? normalizeShipwreckCsv(shipwreckResult.value.csv)
     : [];
 
   const conditionsUpdated = conditionsResult.status === "fulfilled"
@@ -224,13 +304,26 @@ module.exports = async function handler(req, res) {
       URLS.currentConditions,
       { upstream_last_updated: conditionsUpdated },
     ),
+    shipwreck_buoys: sourceState(
+      shipwreckResult,
+      "National Park Service — Shipwreck Buoys",
+      URLS.scubaPage,
+      shipwreckResult.status === "fulfilled"
+        ? {
+            dataset_url: shipwreckResult.value.datasetUrl,
+            upstream_last_updated: shipwreckResult.value.pageLastUpdated,
+            mapped_records: shipwrecks.length,
+          }
+        : {},
+    ),
   };
 
   return res.status(200).json({
     fetched_at: new Date().toISOString(),
-    degraded: boaterResult.status !== "fulfilled" || conditionsResult.status !== "fulfilled",
+    degraded: boaterResult.status !== "fulfilled" || conditionsResult.status !== "fulfilled" || shipwreckResult.status !== "fulfilled",
     boater_campgrounds: boaterCampgrounds,
     current_alerts: alerts,
+    shipwrecks,
     sources,
     disclaimer:
       "Operational data is fetched from current NPS public pages. Source availability and page structure can change. Always verify current park conditions, permits, closures, regulations, weather and on-island guidance before acting.",
@@ -242,6 +335,9 @@ module.exports._test = {
   stripHtml,
   parseCsv,
   normalizeBoaterCsv,
+  parseLatLon,
+  extractSortableDatasetUrl,
+  normalizeShipwreckCsv,
   extractLastUpdated,
   detectCurrentClosures,
 };
