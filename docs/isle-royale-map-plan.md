@@ -8,6 +8,57 @@ The page should not be another brochure viewer. It should be the place where a v
 
 NPMaps is used as the completeness checklist. NPS and other federal/open GIS are used as the preferred geometry sources.
 
+## Research contract / anti-drift gates
+
+This implementation is governed by the deep-research report **“Aggregating NPMaps and Official Isle Royale Map Resources into a Single Interactive Web Map.”** The build must preserve its central rule: the product is a provenance-aware GIS system, not a screen-scraped NPMaps clone.
+
+Two questions must remain independently answerable for every published feature or layer:
+
+1. **What does the map show?**
+2. **Where did this geometry come from, how old is it, and is it current, reference, or derived?**
+
+### NPMaps completeness gate
+
+The source manifest must continue to account for the 16 NPMaps product families represented by these canonical catalog records:
+
+- `visitor-web-map`
+- `regional-map`
+- `rock-harbor`
+- `windigo`
+- `camping-zones`
+- `transportation`
+- `shipwrecks`
+- `relief`
+- `lighthouses`
+- `geology`
+- `vegetation-detailed`
+- `vegetation-simple`
+- `quiet-no-wake`
+- `anchorage-zones`
+- `historic-brochure`
+- `historic-windigo`
+
+Operational/fallback records may be added, but they do not replace any of those 16 completeness records.
+
+### Value function
+
+`V = .24D + .20T + .14U + .12P + .10R + .08A + .07S + .05N`
+
+- **D — Decision utility (24%)**: better access, hiking, camping, boating, or orientation decisions.
+- **T — Data truth coverage (20%)**: important layers present with authority, vintage, uncertainty, and gaps represented honestly.
+- **U — Map usability (14%)**: search, filter, inspect, zoom, recover, tablet/mobile usability.
+- **P — Provenance/freshness (12%)**: source, vintage, retrieval/derivation status are visible.
+- **R — Reliability/performance (10%)**: fail-soft behavior, no required commercial API key, large layers lazy/tiled.
+- **A — Accessibility (8%)**: keyboard, focus, status, and non-map/tabular alternative.
+- **S — Search/discovery (7%)**: one canonical Isle Royale intent with crawlable value, schema, and source desk.
+- **N — Network fit (5%)**: useful Michigan/Great Lakes handoffs without cannibalizing other tools.
+
+**Release target: 88. Stretch target: 94.** A high score never overrides a hard gate.
+
+### Reach / discovery objective
+
+The page should earn discovery by being the best source-transparent answer for the broad **Isle Royale map** intent and its supporting map needs, while keeping one canonical URL. Reach comes from crawlable layer-family coverage, authoritative citations/provenance, first-party inbound links, schema/entity clarity, and measured behavior after launch—not from spinning up thin duplicate canonicals.
+
 ## Canonical intent
 
 **Owner:** `https://chrisizworski.com/isle-royale-map/`
