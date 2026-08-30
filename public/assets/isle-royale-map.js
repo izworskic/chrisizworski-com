@@ -47,11 +47,13 @@
     contextStatus: document.getElementById('context-layer-status'),
     routeModeButton: document.getElementById('route-mode'),
     routeAddButton: document.getElementById('route-add-mode'),
+    routeReverse: document.getElementById('route-reverse'),
     routeUndo: document.getElementById('route-undo'),
     routeClear: document.getElementById('route-clear'),
     routeModeSelect: document.getElementById('route-mode-select'),
     routeSpeed: document.getElementById('route-speed'),
     routeDeparture: document.getElementById('route-departure'),
+    routeSmartStatus: document.getElementById('route-smart-status'),
     routeSummary: document.getElementById('route-summary'),
     routeWeatherButton: document.getElementById('route-weather-button'),
     routeWeather: document.getElementById('route-weather')
@@ -128,10 +130,20 @@
   const route = {
     adding:false,
     points:[],
+    resolvedPoints:[],
     line:null,
     markers:[],
     weather:null,
-    mode:'paddle'
+    mode:'paddle',
+    smartState:'idle',
+    trailNames:[],
+    accessMiles:0
+  };
+  const trailGraph = {
+    nodes:new Map(),
+    adjacency:new Map(),
+    edgeKeys:new Set(),
+    segments:0
   };
   const sourceStatus = {arcgis:'starting', osm:'not loaded', fallback:false};
   const operational = {
@@ -520,7 +532,7 @@
       const routeAction = document.createElement('button');
       routeAction.type = 'button';
       routeAction.className = 'popup-action popup-route-action';
-      routeAction.textContent = 'Add this point to route';
+      routeAction.textContent = route.points.length===0 ? 'Start route here' : route.points.length===1 ? 'Route to here' : 'Add as route stop';
       routeAction.addEventListener('click', event => {
         event.preventDefault();
         event.stopPropagation();
@@ -562,6 +574,55 @@
     return wrap;
   }
 
+  function trailNodeKey(lat,lng) {
+    return `${Number(lat).toFixed(4)},${Number(lng).toFixed(4)}`;
+  }
+
+  function ensureTrailNode(lat,lng) {
+    const key=trailNodeKey(lat,lng);
+    if(!trailGraph.nodes.has(key)) {
+      trailGraph.nodes.set(key,{key,lat:Number(lat),lng:Number(lng)});
+      trailGraph.adjacency.set(key,[]);
+    }
+    return key;
+  }
+
+  function addTrailEdge(a,b,name='Mapped trail') {
+    if(a===b)return;
+    const pair=a<b?`${a}|${b}`:`${b}|${a}`;
+    const edgeKey=`${pair}|${cleanText(name).toLowerCase()}`;
+    if(trailGraph.edgeKeys.has(edgeKey))return;
+    const na=trailGraph.nodes.get(a),nb=trailGraph.nodes.get(b);
+    if(!na||!nb)return;
+    const distance=distanceMiles(na,nb);
+    if(!Number.isFinite(distance)||distance<=0||distance>1.5)return;
+    trailGraph.edgeKeys.add(edgeKey);
+    trailGraph.adjacency.get(a).push({to:b,distance,name:cleanText(name)||'Mapped trail'});
+    trailGraph.adjacency.get(b).push({to:a,distance,name:cleanText(name)||'Mapped trail'});
+    trailGraph.segments++;
+  }
+
+  function registerTrailGeometry(feature,name='Mapped trail') {
+    const geometry=feature?.geometry;
+    if(!geometry)return;
+    const lines=geometry.type==='LineString'
+      ? [geometry.coordinates]
+      : geometry.type==='MultiLineString'
+        ? geometry.coordinates
+        : [];
+    for(const line of lines) {
+      if(!Array.isArray(line)||line.length<2)continue;
+      let previous=null;
+      for(const coord of line) {
+        const lng=Number(coord?.[0]),lat=Number(coord?.[1]);
+        if(!Number.isFinite(lat)||!Number.isFinite(lng))continue;
+        const key=ensureTrailNode(lat,lng);
+        if(previous)addTrailEdge(previous,key,name);
+        previous=key;
+      }
+    }
+  }
+
   function addGeoJSONFeature(feature, context={}) {
     if (!feature || !feature.geometry) return 0;
     const name = cleanText(featureName(feature, context.layerTitle));
@@ -587,6 +648,7 @@
           deepMeta:context.deepMeta || null,
           properties:{...props},
           geometryType:feature.geometry.type || '',
+          geometry:feature.geometry,
           latlng
         };
         enrichRecord(record);
@@ -594,6 +656,7 @@
         layer.on('click', () => selectRecord(record));
       }
     });
+    if(category==='trail' && /LineString/.test(feature.geometry.type || '')) registerTrailGeometry(feature,name);
     const target = context.targetGroup || layerGroups[category] || layerGroups.other;
     geo.eachLayer(layer => target.addLayer(layer));
     if (record) featureIndex.push(record);
@@ -722,6 +785,7 @@
           status(`Loaded ${added} public visitor features. Search or filter the map; deep layers remain source-cataloged below.`);
           visitorGeometrySettled = true;
           addPendingShipwrecks();
+          if(route.mode==='hike'&&route.points.length>=2){resolveRoute();renderRoute();}
           renderFeatureList();
           return;
         }
@@ -751,6 +815,7 @@
     status(`Remote visitor geometry unavailable. Showing ${added} approximate reference anchors and the full source catalog instead.`);
     visitorGeometrySettled = true;
     addPendingShipwrecks();
+    if(route.mode==='hike'&&route.points.length>=2){resolveRoute();renderRoute();}
     renderFeatureList();
   }
 
@@ -1188,10 +1253,18 @@
     return dirs[Math.round(((n%360)+360)%360/22.5)%16];
   }
 
-  function routeCumulative() {
+  function routePathPoints() {
+    return route.resolvedPoints.length ? route.resolvedPoints : route.points;
+  }
+
+  function cumulativeFor(points) {
     const out=[0];
-    for(let i=1;i<route.points.length;i++) out.push(out[i-1]+distanceMiles(route.points[i-1],route.points[i]));
+    for(let i=1;i<points.length;i++) out.push(out[i-1]+distanceMiles(points[i-1],points[i]));
     return out;
+  }
+
+  function routeCumulative() {
+    return cumulativeFor(routePathPoints());
   }
 
   function routeTotalMiles() {
@@ -1210,12 +1283,149 @@
     return whole?`${whole}h ${mins}m`:`${mins} min`;
   }
 
-  function routeWaypointIcon(index) {
+  function nearestTrailNode(point) {
+    let best=null,bestDistance=Infinity;
+    for(const node of trailGraph.nodes.values()) {
+      const d=distanceMiles(point,node);
+      if(d<bestDistance) {
+        best=node;
+        bestDistance=d;
+      }
+    }
+    return best ? {...best,distance:bestDistance} : null;
+  }
+
+  function heapPush(heap,item) {
+    heap.push(item);
+    let i=heap.length-1;
+    while(i>0) {
+      const p=Math.floor((i-1)/2);
+      if(heap[p].cost<=item.cost)break;
+      heap[i]=heap[p];
+      i=p;
+    }
+    heap[i]=item;
+  }
+
+  function heapPop(heap) {
+    if(!heap.length)return null;
+    const root=heap[0];
+    const last=heap.pop();
+    if(heap.length&&last) {
+      let i=0;
+      while(true) {
+        const left=i*2+1,right=left+1;
+        if(left>=heap.length)break;
+        let child=right<heap.length&&heap[right].cost<heap[left].cost?right:left;
+        if(heap[child].cost>=last.cost)break;
+        heap[i]=heap[child];
+        i=child;
+      }
+      heap[i]=last;
+    }
+    return root;
+  }
+
+  function shortestTrailPath(startKey,endKey) {
+    if(startKey===endKey)return {keys:[startKey],names:[],distance:0};
+    const distances=new Map([[startKey,0]]);
+    const previous=new Map();
+    const previousEdge=new Map();
+    const heap=[];
+    heapPush(heap,{key:startKey,cost:0});
+    while(heap.length) {
+      const current=heapPop(heap);
+      if(!current)break;
+      if(current.cost!==distances.get(current.key))continue;
+      if(current.key===endKey)break;
+      for(const edge of trailGraph.adjacency.get(current.key)||[]) {
+        const next=current.cost+edge.distance;
+        if(next<(distances.get(edge.to)??Infinity)) {
+          distances.set(edge.to,next);
+          previous.set(edge.to,current.key);
+          previousEdge.set(edge.to,edge);
+          heapPush(heap,{key:edge.to,cost:next});
+        }
+      }
+    }
+    if(!distances.has(endKey))return null;
+    const keys=[];
+    const names=[];
+    let cursor=endKey;
+    while(cursor) {
+      keys.push(cursor);
+      const edge=previousEdge.get(cursor);
+      if(edge?.name)names.push(edge.name);
+      if(cursor===startKey)break;
+      cursor=previous.get(cursor);
+    }
+    keys.reverse();
+    names.reverse();
+    return {keys,names,distance:distances.get(endKey)};
+  }
+
+  function resolveHikingRoute() {
+    if(route.points.length<2)return null;
+    if(trailGraph.nodes.size<2)return {ok:false,reason:'Trail network is still loading. The route will snap automatically when mapped trails are ready.'};
+    const resolved=[];
+    const trailNames=[];
+    let accessMiles=0;
+    for(let i=1;i<route.points.length;i++) {
+      const a=route.points[i-1],b=route.points[i];
+      const snapA=nearestTrailNode(a),snapB=nearestTrailNode(b);
+      if(!snapA||!snapB)return {ok:false,reason:'Mapped trail geometry is unavailable near this route.'};
+      if(snapA.distance>.7||snapB.distance>.7) {
+        return {ok:false,reason:'One of your route points is too far from the mapped trail network. Move it closer to a trail or campground.'};
+      }
+      const path=shortestTrailPath(snapA.key,snapB.key);
+      if(!path)return {ok:false,reason:'Those points are not connected through the currently loaded trail network. Add a via point or adjust the endpoints.'};
+      accessMiles+=snapA.distance+snapB.distance;
+      if(!resolved.length)resolved.push({lat:a.lat,lng:a.lng,label:a.label});
+      const segmentNodes=path.keys.map(key=>trailGraph.nodes.get(key)).filter(Boolean).map(node=>({lat:node.lat,lng:node.lng}));
+      for(const p of segmentNodes) {
+        const last=resolved[resolved.length-1];
+        if(!last||distanceMiles(last,p)>.005)resolved.push(p);
+      }
+      resolved.push({lat:b.lat,lng:b.lng,label:b.label});
+      for(const name of path.names)if(name&&!trailNames.includes(name))trailNames.push(name);
+    }
+    return {ok:true,points:resolved,trailNames,accessMiles};
+  }
+
+  function resolveRoute() {
+    route.trailNames=[];
+    route.accessMiles=0;
+    if(route.points.length<2) {
+      route.resolvedPoints=[...route.points];
+      route.smartState=route.points.length?'need-destination':'idle';
+      return;
+    }
+    if(route.mode==='hike') {
+      const smart=resolveHikingRoute();
+      if(smart?.ok) {
+        route.resolvedPoints=smart.points;
+        route.trailNames=smart.trailNames;
+        route.accessMiles=smart.accessMiles;
+        route.smartState='trail-snapped';
+      } else {
+        route.resolvedPoints=[...route.points];
+        route.smartState='trail-fallback';
+        route.smartReason=smart?.reason||'Smart trail routing unavailable.';
+      }
+    } else {
+      route.resolvedPoints=[...route.points];
+      route.smartState='water-shaped';
+    }
+  }
+
+  function routeWaypointIcon(index,total) {
+    const cls=index===0?'is-start':index===total-1?'is-end':'';
+    const label=index===0?'S':index===total-1?'D':String(index);
     return L.divIcon({
       className:'',
-      html:`<span class="route-waypoint-icon">${index+1}</span>`,
-      iconSize:[28,28],
-      iconAnchor:[14,14]
+      html:`<span class="route-waypoint-icon ${cls}">${label}</span>`,
+      iconSize:[32,32],
+      iconAnchor:[16,16]
     });
   }
 
@@ -1230,32 +1440,113 @@
     }
   }
 
+  function renderSmartStatus() {
+    els.routeSmartStatus.classList.toggle('route-warning',route.smartState==='trail-fallback');
+    if(!route.points.length) {
+      els.routeSmartStatus.textContent='Choose a start. Tap a map point and use “Start route here,” or press Start on map.';
+      return;
+    }
+    if(route.points.length===1) {
+      els.routeSmartStatus.textContent=`Start: ${route.points[0].label||'selected point'}. Now choose a destination.`;
+      return;
+    }
+    if(route.mode==='hike'&&route.smartState==='trail-snapped') {
+      const names=route.trailNames.slice(0,4).join(' → ');
+      const access=route.accessMiles>0.05?` · about ${route.accessMiles.toFixed(1)} mi total access from your selected points to mapped trail`:'';
+      els.routeSmartStatus.innerHTML=`<strong>Smart hiking route:</strong> snapped to the mapped trail network${names?` · via ${cleanText(names)}`:''}${access}.`;
+      return;
+    }
+    if(route.mode==='hike') {
+      els.routeSmartStatus.textContent=route.smartReason||'Smart trail routing is unavailable for these points; showing a straight planning sketch.';
+      return;
+    }
+    els.routeSmartStatus.innerHTML='<strong>Editable water route:</strong> drag S / D / numbered handles to reshape it. Tap the route line to add another shaping point.';
+  }
+
+  function nearestControlSegmentIndex(latlng) {
+    if(route.points.length<2)return route.points.length;
+    let bestIndex=1,best=Infinity;
+    const px=latlng.lng,py=latlng.lat;
+    for(let i=1;i<route.points.length;i++) {
+      const a=route.points[i-1],b=route.points[i];
+      const dx=b.lng-a.lng,dy=b.lat-a.lat;
+      const denom=dx*dx+dy*dy||1;
+      const t=Math.max(0,Math.min(1,((px-a.lng)*dx+(py-a.lat)*dy)/denom));
+      const x=a.lng+t*dx,y=a.lat+t*dy;
+      const d=(px-x)**2+(py-y)**2;
+      if(d<best){best=d;bestIndex=i;}
+    }
+    return bestIndex;
+  }
+
+  function reroute(message='Route changed. Re-run the weather analysis for the updated path.') {
+    resolveRoute();
+    clearRouteWeather(message);
+    renderRoute();
+  }
+
   function renderRoute() {
     routeLayerGroup.clearLayers();
     route.markers=[];
     route.line=null;
+    const path=routePathPoints();
 
-    if(route.points.length) {
-      const latlngs=route.points.map(p=>[p.lat,p.lng]);
-      route.line=L.polyline(latlngs,{pane:'routePane',color:'#173d36',weight:4,opacity:.92,dashArray:'9 6',interactive:false}).addTo(routeLayerGroup);
-      route.points.forEach((point,index)=>{
-        const marker=L.marker([point.lat,point.lng],{pane:'routePane',icon:routeWaypointIcon(index),keyboard:false,interactive:false}).addTo(routeLayerGroup);
-        route.markers.push(marker);
-      });
+    if(path.length) {
+      route.line=L.polyline(path.map(p=>[p.lat,p.lng]),{
+        pane:'routePane',
+        color:route.mode==='hike'&&route.smartState==='trail-snapped'?'#8b4f2d':'#173d36',
+        weight:route.mode==='hike'?5:4,
+        opacity:.94,
+        dashArray:route.mode==='hike'&&route.smartState==='trail-snapped'?null:'9 6',
+        interactive:route.mode!=='hike'
+      }).addTo(routeLayerGroup);
+      if(route.mode!=='hike') {
+        route.line.on('click',event=>{
+          if(route.adding)return;
+          if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
+          const index=nearestControlSegmentIndex(event.latlng);
+          route.points.splice(index,0,{lat:event.latlng.lat,lng:event.latlng.lng,label:`Via ${index}`});
+          reroute();
+        });
+      }
     }
 
+    route.points.forEach((point,index)=>{
+      const marker=L.marker([point.lat,point.lng],{
+        pane:'routePane',
+        icon:routeWaypointIcon(index,route.points.length),
+        keyboard:true,
+        draggable:true,
+        autoPan:true,
+        title:index===0?'Route start':index===route.points.length-1?'Route destination':`Route via point ${index}`
+      }).addTo(routeLayerGroup);
+      marker.on('dragend',()=>{
+        const ll=marker.getLatLng();
+        route.points[index]={...route.points[index],lat:ll.lat,lng:ll.lng};
+        reroute();
+      });
+      marker.on('click',event=>{if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);});
+      route.markers.push(marker);
+    });
+
+    renderSmartStatus();
     const miles=routeTotalMiles();
     const hours=routeHours();
     const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
     if(route.points.length<2) {
       els.routeSummary.textContent=route.points.length
-        ? 'One waypoint added. Add at least one more point to create a route.'
-        : 'No route yet. Start adding points, click the map, or use “Add to route” from a point popup.';
+        ? 'Start selected. Pick a destination from a map point or tap the map.'
+        : 'No route yet.';
       els.routeWeatherButton.disabled=true;
     } else {
-      const start=route.points[0],end=route.points[route.points.length-1];
+      const start=path[0],end=path[path.length-1];
       const bearing=bearingDegrees(start,end);
-      els.routeSummary.innerHTML=`<strong>${miles.toFixed(1)} mi</strong> · ${route.points.length} waypoints · ~${formatDuration(hours)} at ${speed.toFixed(1)} mph · overall ${compassLabel(bearing)} (${Math.round(bearing)}°). <span>Sketch distance only; place waypoints along the intended trail or water path.</span>`;
+      const method=route.mode==='hike'&&route.smartState==='trail-snapped'
+        ? 'mapped-trail path'
+        : route.mode==='hike'
+          ? 'straight fallback sketch'
+          : 'editable water sketch';
+      els.routeSummary.innerHTML=`<strong>${miles.toFixed(1)} mi</strong> · ~${formatDuration(hours)} at ${speed.toFixed(1)} mph · overall ${compassLabel(bearing)} (${Math.round(bearing)}°) · ${method}.`;
       els.routeWeatherButton.disabled=false;
     }
   }
@@ -1263,11 +1554,13 @@
   function setRouteAdding(active) {
     route.adding=Boolean(active);
     document.body.classList.toggle('route-building',route.adding);
-    els.routeAddButton.textContent=route.adding?'Stop adding points':'Start adding points';
-    els.routeModeButton.textContent=route.adding?'Finish route':'Build route';
+    els.routeAddButton.textContent=route.adding?'Stop map picking':route.points.length?'Add via point on map':'Start on map';
+    els.routeModeButton.textContent=route.adding?'Finish picking':'Plan route';
     els.routeAddButton.setAttribute('aria-pressed',String(route.adding));
     els.routeModeButton.setAttribute('aria-pressed',String(route.adding));
-    status(route.adding?'Route mode: click the map to add ordered waypoints.':'Route point adding stopped.');
+    status(route.adding
+      ? route.points.length?'Tap the map to add a via point.':'Tap the map for your route start.'
+      : 'Map picking stopped.');
   }
 
   function addRoutePoint(latlng,label='') {
@@ -1277,23 +1570,32 @@
       lng:Number(latlng.lng),
       label:cleanText(label)||`Waypoint ${route.points.length+1}`
     });
+    resolveRoute();
     clearRouteWeather('Route changed. Re-run the weather analysis for the updated path.');
     renderRoute();
-    emitEvent('isle_royale_route_point',{point_count:route.points.length});
-    if(route.points.length===1) {
-      document.getElementById('route-planner')?.scrollIntoView({behavior:'smooth',block:'nearest'});
-    }
+    emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode});
+    document.getElementById('route-planner')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+    if(route.points.length===2)setRouteAdding(false);
+  }
+
+  function reverseRoute() {
+    if(route.points.length<2)return;
+    route.points.reverse();
+    reroute();
+    status('Route direction reversed.');
   }
 
   function undoRoutePoint() {
     if(!route.points.length)return;
     route.points.pop();
-    clearRouteWeather('Route changed. Re-run the weather analysis for the updated path.');
-    renderRoute();
+    reroute();
   }
 
   function clearRoute() {
     route.points=[];
+    route.resolvedPoints=[];
+    route.trailNames=[];
+    route.smartState='idle';
     setRouteAdding(false);
     clearRouteWeather();
     renderRoute();
@@ -1301,19 +1603,20 @@
   }
 
   function interpolateRoutePoint(targetDistance,cumulative) {
-    if(!route.points.length)return null;
-    if(targetDistance<=0)return {...route.points[0],distance_miles:0,bearing_deg:route.points[1]?bearingDegrees(route.points[0],route.points[1]):null};
+    const points=routePathPoints();
+    if(!points.length)return null;
+    if(targetDistance<=0)return {...points[0],distance_miles:0,bearing_deg:points[1]?bearingDegrees(points[0],points[1]):null};
     const total=cumulative[cumulative.length-1];
     if(targetDistance>=total) {
-      const last=route.points.length-1;
-      return {...route.points[last],distance_miles:total,bearing_deg:last?bearingDegrees(route.points[last-1],route.points[last]):null};
+      const last=points.length-1;
+      return {...points[last],distance_miles:total,bearing_deg:last?bearingDegrees(points[last-1],points[last]):null};
     }
     let segment=1;
     while(segment<cumulative.length&&cumulative[segment]<targetDistance)segment++;
     const prev=segment-1;
     const span=cumulative[segment]-cumulative[prev]||1;
     const t=(targetDistance-cumulative[prev])/span;
-    const a=route.points[prev],b=route.points[segment];
+    const a=points[prev],b=points[segment];
     return {
       lat:a.lat+(b.lat-a.lat)*t,
       lng:a.lng+(b.lng-a.lng)*t,
@@ -1324,6 +1627,7 @@
   }
 
   function routeForecastSamples(max=5) {
+    const points=routePathPoints();
     const cumulative=routeCumulative();
     const total=cumulative[cumulative.length-1]||0;
     const count=Math.min(max,Math.max(2,route.points.length));
@@ -1332,8 +1636,8 @@
       const distance=count===1?0:total*i/(count-1);
       const p=interpolateRoutePoint(distance,cumulative);
       if(!p)continue;
-      if(i===0)p.label=route.points[0].label||'Route start';
-      if(i===count-1)p.label=route.points[route.points.length-1].label||'Route end';
+      if(i===0)p.label=route.points[0]?.label||'Route start';
+      if(i===count-1)p.label=route.points[route.points.length-1]?.label||'Route end';
       samples.push(p);
     }
     return samples;
@@ -1342,7 +1646,7 @@
   function relativeWind(windFromDeg,travelBearing) {
     const wind=Number(windFromDeg),bearing=Number(travelBearing);
     if(!Number.isFinite(wind)||!Number.isFinite(bearing))return '';
-    let diff=Math.abs(((wind-bearing+540)%360)-180);
+    const diff=Math.abs(((wind-bearing+540)%360)-180);
     if(diff<=45)return 'headwind tendency';
     if(diff>=135)return 'tailwind tendency';
     return 'crosswind tendency';
@@ -1594,6 +1898,7 @@
   els.routeModeSelect.addEventListener('change',()=>{
     route.mode=els.routeModeSelect.value;
     els.routeSpeed.value=routeSpeedDefaults[route.mode]||3;
+    resolveRoute();
     clearRouteWeather('Travel mode changed. Re-run route weather after confirming speed and departure.');
     renderRoute();
   });
@@ -1607,6 +1912,7 @@
     document.getElementById('route-planner')?.scrollIntoView({behavior:'smooth',block:'nearest'});
     setRouteAdding(!route.adding);
   });
+  els.routeReverse.addEventListener('click',reverseRoute);
   els.routeUndo.addEventListener('click',undoRoutePoint);
   els.routeClear.addEventListener('click',clearRoute);
   els.routeWeatherButton.addEventListener('click',analyzeRouteWeather);
