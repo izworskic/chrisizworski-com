@@ -481,8 +481,17 @@
     if (!record) return;
     record.boater = record.category === 'campground' ? findBoaterRecord(record.name) : null;
     record.liveAlert = findOperationalAlert(record.name);
+    if(record.boater&&record.layer) {
+      try {
+        if(record.layer.setRadius)record.layer.setRadius(9);
+        if(record.layer.setStyle)record.layer.setStyle({weight:3});
+      } catch (_) {}
+    }
     if (record.liveAlert && record.layer && record.layer.setStyle) {
-      try { record.layer.setStyle({color:'#8c3e23', weight:4, fillColor:'#b25b35', fillOpacity:.9}); } catch (_) {}
+      try {
+        if(record.layer.setRadius)record.layer.setRadius(10);
+        record.layer.setStyle({color:'#8c3e23', weight:4, fillColor:'#b25b35', fillOpacity:.9});
+      } catch (_) {}
     }
   }
 
@@ -1615,11 +1624,15 @@
   function renderSmartStatus() {
     els.routeSmartStatus.classList.toggle('route-warning',route.smartState==='trail-fallback'||route.smartState==='water-fallback');
     if(!route.points.length) {
-      els.routeSmartStatus.textContent='Choose a start. Tap a map point and use “Start route here,” or press Start on map.';
+      els.routeSmartStatus.textContent=route.adding
+        ? 'Build route is on. Click the map or a campsite for your start.'
+        : 'Explore mode is on. Choose Build route, then click the map or a campsite for your start.';
       return;
     }
     if(route.points.length===1) {
-      els.routeSmartStatus.textContent=`Start: ${route.points[0].label||'selected point'}. Now choose a destination.`;
+      els.routeSmartStatus.textContent=route.adding
+        ? `Start: ${route.points[0].label||'selected point'}. Keep clicking the map or a campsite to extend the trip.`
+        : `Start: ${route.points[0].label||'selected point'}. Switch to Build route to keep adding trip points.`;
       return;
     }
     if(route.mode==='hike'&&route.smartState==='trail-snapped') {
