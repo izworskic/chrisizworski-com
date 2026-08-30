@@ -2527,17 +2527,20 @@
   });
   els.routeDeparture.addEventListener('change',()=>clearRouteWeather('Departure changed. Re-run route weather for the new time.'));
   els.routeAddButton.addEventListener('click',()=>setRouteAdding(!route.adding));
-  els.routeModeButton.addEventListener('click',()=>{
-    document.getElementById('route-planner')?.scrollIntoView({behavior:'smooth',block:'nearest'});
-    setRouteAdding(!route.adding);
-  });
+  els.routeModeButton.addEventListener('click',()=>setRouteAdding(true));
+  els.exploreModeButton?.addEventListener('click',()=>setRouteAdding(false));
   els.routeReverse.addEventListener('click',reverseRoute);
   els.routeUndo.addEventListener('click',undoRoutePoint);
   els.routeClear.addEventListener('click',clearRoute);
   els.routeWeatherButton.addEventListener('click',analyzeRouteWeather);
   map.on('click',event=>{
     if(!route.adding)return;
-    addRoutePoint(event.latlng,`Waypoint ${route.points.length+1}`);
+    const label=route.points.length===0?'Map start':`Map waypoint ${route.points.length+1}`;
+    addRoutePoint(event.latlng,label,{kind:'map-point'});
+    status(label+' added. Keep clicking to extend the route or click a campground to make it a trip stop.');
+  });
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&route.adding)setRouteAdding(false);
   });
 
   document.getElementById('fit-island').addEventListener('click', () => map.fitBounds(CONFIG.islandBounds,{padding:[10,10]}));
@@ -2573,6 +2576,8 @@
   }
 
   setDefaultRouteDeparture();
+  els.exploreModeButton?.setAttribute('aria-pressed','true');
+  els.routeModeButton?.setAttribute('aria-pressed','false');
   renderRoute();
   renderFeatureList();
   loadCatalog();
