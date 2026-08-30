@@ -6,6 +6,7 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'public/isle-royale-map/index.html'), 'utf8');
 const js = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 'utf8');
+const api = fs.readFileSync(path.join(root, 'api/isle-royale.js'), 'utf8');
 const catalog = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/catalog.json'), 'utf8'));
 
 function rendered(s) { return s.replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"'); }
@@ -48,9 +49,22 @@ test('catalog covers the NPMaps source families and deep layers', () => {
 });
 
 test('planning, provenance, accessibility and safety hooks exist', () => {
-  for (const id of ['feature-search','layer-filters','feature-list','map-status','source-catalog']) assert.ok(html.includes(`id="${id}"`), id);
+  for (const id of ['feature-search','layer-filters','feature-list','map-status','park-live-status','source-catalog']) assert.ok(html.includes(`id="${id}"`), id);
   assert.match(html, /not a navigation chart/i);
   assert.match(html, /National Park Service/i);
   assert.match(js, /sourceStatus/);
+  assert.match(js, /\/api\/isle-royale/);
+  assert.match(js, /boater_campgrounds/);
+  assert.match(js, /current_alerts/);
+  assert.match(api, /National Park Service — Boat-In Campgrounds/);
+  assert.match(api, /detectCurrentClosures/);
   assert.match(html, /aria-live/);
+});
+
+
+test('live operations feed is fail-soft and never claims no alerts from a parser no-match', () => {
+  assert.match(api, /Promise\.allSettled/);
+  assert.match(api, /degraded:/);
+  assert.match(js, /not a declaration that the park has no alerts/i);
+  assert.match(js, /Verify current NPS conditions/i);
 });
