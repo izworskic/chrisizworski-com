@@ -45,9 +45,14 @@ const catalogCrawlable = /href=["']\/isle-royale-map\/catalog\.json/.test(html) 
 const measurementComplete = [
   'isle_royale_layer_toggle','isle_royale_search','isle_royale_feature_open','isle_royale_source_open','isle_royale_osm_context'
 ].every(eventName => js.includes(eventName));
+const currentShipwreckRuntime = /fetchShipwreckDataset/.test(api)
+  && /shipwrecks,/.test(api)
+  && /addPendingShipwrecks/.test(js)
+  && /visitorGeometrySettled/.test(js)
+  && catalog.items.some(x => x.id === 'shipwrecks' && x.state === 'live-api');
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable raw/source table`);
-add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js), 'public ArcGIS web-map + service ingestion');
+add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
 add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete, 'search + filters + list + map focus + current NPS park-state surface + five privacy-safe product events');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
@@ -95,6 +100,7 @@ if (!/historical inventory baseline/i.test(js) || !/Vegetation baseline \(2000\)
 if (!npmapsComplete) hardFailures.push('16-product NPMaps completeness gate failed');
 if (!catalogCrawlable) hardFailures.push('crawlable source catalog/raw manifest link missing');
 if (!measurementComplete) hardFailures.push('planned privacy-safe Isle Royale measurement events missing');
+if (!currentShipwreckRuntime) hardFailures.push('current NPS shipwreck buoy runtime missing');
 
 console.log(`Isle Royale map benchmark: ${score}/100 (release target ${spec.valueFunction.releaseTarget})`);
 for (const c of checks) console.log(`${c.ok ? 'PASS' : 'FAIL'} ${String(c.weight).padStart(2)} ${c.id} — ${c.evidence}`);
