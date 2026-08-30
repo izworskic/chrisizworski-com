@@ -115,6 +115,9 @@ The route planner must become a trip-decision tool rather than a line-drawing wi
 - **Scenario comparison:** generate Weather-conservative, Balanced, and Ambitious trip structures from the same source-backed campground set. Conservative means shorter days and more campground flexibility; Ambitious means longer days and fewer stops. These labels describe structure, not safety.
 - **Overnight-aware forecast clock:** forecast comparison must sample each scenario on its actual itinerary day after overnight layovers; never use continuous elapsed route time across a multi-day trip.
 - **Scenario application:** applying a scenario may replace prior scenario-generated campground waypoints, but it must preserve user-created manual route points and then rerun the coastline-aware route.
+- **Map-first trip building:** default to Explore so ordinary clicks inspect the map. Build route mode must be explicit and persistent; bare-map clicks add waypoints, campground clicks add campsite stops, and route-line clicks add shaping points until the user returns to Explore.
+- **Clicked campsite ownership:** a user-selected current NPS Boat-In campground is a pinned itinerary decision, not a suggestion. Scenario generation must preserve that stop and surface when the choice creates a longer-than-profile day.
+- **Visible route stack:** mirror map edits in a compact Start / Camp / Via / Destination sequence with direct remove/focus actions so the map remains the primary editor without becoming opaque.
 - **Failure mode:** if shoreline geometry or routing fails, preserve the editable sketch and clearly label water intelligence unavailable.
 - **Source separation:** OpenStreetMap coastline may support the planning land mask; current NPS/IRMA remains the authority for regulations.
 
