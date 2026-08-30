@@ -12,6 +12,8 @@ const catalog = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-m
 const deepManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/deep-layer-manifest.json'), 'utf8'));
 const contextManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/context-layer-manifest.json'), 'utf8'));
 const contextBuilder = fs.readFileSync(path.join(root, 'scripts/build-isle-royale-context-layers.py'), 'utf8');
+const deepWorkflow = fs.readFileSync(path.join(root, '.github/workflows/isle-royale-deep-data.yml'), 'utf8');
+const contextWorkflow = fs.readFileSync(path.join(root, '.github/workflows/isle-royale-context-data.yml'), 'utf8');
 
 function rendered(s) { return s.replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"'); }
 
@@ -50,6 +52,8 @@ test('catalog covers the NPMaps source families and deep layers', () => {
   }
   assert.ok(catalog.items.some(x => x.id === 'geology' && x.state === 'generated-runtime'));
   assert.ok(catalog.items.some(x => x.id === 'vegetation-detailed' && x.state === 'generated-runtime' && /1994\/1996/.test(x.vintage)));
+  assert.ok(catalog.items.some(x => x.id === 'vegetation-simple' && x.state === 'generated-runtime' && /6 broad classes/i.test(x.label)));
+  assert.ok(catalog.items.some(x => x.id === 'relief' && x.state === 'live-tile' && /U\.S\. Geological Survey/.test(x.publisher)));
   assert.ok(catalog.items.some(x => x.id === 'quiet-no-wake' && x.state === 'generated-runtime' && /22 official polygons/i.test(x.label)));
   assert.ok(catalog.items.some(x => x.id === 'vegetation-change-1996-2017' && x.state === 'generated-runtime'));
   assert.ok(catalog.items.some(x => x.id === 'horne-fire-2021' && x.state === 'generated-runtime'));
@@ -60,6 +64,10 @@ test('planning, provenance, accessibility and safety hooks exist', () => {
   for (const id of ['feature-search','layer-filters','feature-list','map-status','park-live-status','deep-layer-status','context-layer-status','source-catalog']) assert.ok(html.includes(`id="${id}"`), id);
   assert.match(html, /not a navigation chart/i);
   assert.match(html, /National Park Service/i);
+  assert.match(html, /class="map-shelf"/);
+  assert.match(html, /Rock Harbor area guide/);
+  assert.match(html, /Anchorage zones/);
+  assert.match(html, /Historic \/ archived map references/);
   assert.match(js, /sourceStatus/);
   assert.match(js, /\/api\/isle-royale/);
   assert.match(js, /boater_campgrounds/);
@@ -104,13 +112,16 @@ test('current NPS off-trail camping zone closures are parsed without fabricating
 
 test('generated deep science layers are real, opt-in, hashed and visibly dated', () => {
   assert.match(html, /data-layer="geology"/);
+  assert.match(html, /data-layer="vegetation-overview"/);
   assert.match(html, /data-layer="vegetation-baseline"/);
-  assert.match(html, /Vegetation baseline \(2000\)/);
+  assert.match(html, /Vegetation overview \(2000\)/);
+  assert.match(html, /Vegetation detailed \(2000\)/);
   assert.match(js, /geology-units\.geojson/);
+  assert.match(js, /vegetation-overview-2000\.geojson/);
   assert.match(js, /vegetation-baseline-2000\.geojson/);
   assert.match(js, /async function loadDeepLayer/);
   assert.match(js, /historical inventory baseline/i);
-  for (const key of ['geology','vegetation']) {
+  for (const key of ['geology','vegetation','vegetation_overview']) {
     const meta = deepManifest.sources[key];
     assert.ok(meta && /^[a-f0-9]{64}$/.test(meta.sha256), `${key} sha256`);
     const file = path.join(root, 'public/isle-royale-map/data', meta.file);
@@ -119,7 +130,11 @@ test('generated deep science layers are real, opt-in, hashed and visibly dated',
   }
   assert.ok(deepManifest.sources.geology.features >= 1900);
   assert.equal(deepManifest.sources.vegetation.features, 38);
+  assert.equal(deepManifest.sources.vegetation_overview.features, 6);
+  assert.ok(deepManifest.sources.vegetation_overview.bytes < deepManifest.sources.vegetation.bytes / 2);
+  assert.ok(deepManifest.sources.vegetation_overview.bytes < 8_000_000);
   assert.match(deepManifest.sources.vegetation.accuracy_note, /Historical baseline/i);
+  assert.match(deepManifest.sources.vegetation_overview.accuracy_note, /Broad thematic derivative/i);
 });
 
 
@@ -170,4 +185,27 @@ test('current NPS shipwreck buoy points are coordinated with visitor geometry wi
   assert.match(js, /hasMappedNamedFeature/);
   assert.match(js, /National Park Service — Shipwreck Buoys/);
   assert.match(js, /current NPS dive-site \/ mooring reference point/);
+});
+
+
+test('USGS relief is a keyless opt-in layer below vectors', () => {
+  assert.match(html, /data-layer="relief"/);
+  assert.match(js, /USGSShadedReliefOnly\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/);
+  assert.match(js, /reliefPane/);
+  assert.match(js, /USGS The National Map · 3DEP \/ GMTED2010/);
+  assert.doesNotMatch(js, /nps\.gov\/maps\/pmtiles/i);
+  const relief = catalog.items.find(x => x.id === 'relief');
+  assert.equal(relief.state, 'live-tile');
+  assert.match(relief.source, /basemap\.nationalmap\.gov/);
+});
+
+test('GIS workflows validate on PRs and only rebuild or write on explicit dispatch', () => {
+  for (const workflow of [deepWorkflow, contextWorkflow]) {
+    assert.match(workflow, /workflow_dispatch:/);
+    assert.match(workflow, /if: github\.event_name == 'workflow_dispatch'/);
+    assert.match(workflow, /Validate committed/);
+    assert.match(workflow, /git pull --rebase origin/);
+  }
+  assert.match(deepWorkflow, /vegetation-overview-2000\.geojson/);
+  assert.match(contextWorkflow, /quiet-no-wake-zones\.geojson/);
 });
