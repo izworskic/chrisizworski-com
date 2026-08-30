@@ -8,6 +8,8 @@ const html = read('public/isle-royale-map/index.html');
 const js = read('public/assets/isle-royale-map.js');
 const api = read('api/isle-royale.js');
 const routeWeatherApi = read('api/isle-royale-route-weather.js');
+const waterApi = read('api/isle-royale-water-intelligence.js');
+const waterJs = read('public/assets/isle-royale-water-intelligence.js');
 const catalog = JSON.parse(read('public/isle-royale-map/catalog.json'));
 const spec = JSON.parse(read('benchmarks/isle-royale-map.json'));
 const deepManifest = JSON.parse(read('public/isle-royale-map/data/deep-layer-manifest.json'));
@@ -86,6 +88,22 @@ const smartRoutingRuntime = /const trailGraph = \{/.test(js)
   && /nearestControlSegmentIndex/.test(js)
   && /function reverseRoute/.test(js)
   && /route\.resolvedPoints\.length \? route\.resolvedPoints : route\.points/.test(js);
+const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js)
+  && /function resolveWaterRouteAsync/.test(js)
+  && /water-aware/.test(js)
+  && /Open-water exposure model/.test(js)
+  && /NPS boating-zone check/.test(js)
+  && /Nearby mapped refuge \/ stopping options/.test(js)
+  && /id="route-day-hours"/.test(html)
+  && /id="route-intelligence"/.test(html)
+  && /isle-royale-water-intelligence\.js/.test(html)
+  && /function routeSegment/.test(waterJs)
+  && /crosses\(n,nn\)/.test(waterJs)
+  && /weatherSamples/.test(waterJs)
+  && /zonesAlongPath/.test(waterJs)
+  && /dayEnds/.test(waterJs)
+  && /natural"="coastline/.test(waterApi)
+  && /planning shoreline geometry only/i.test(waterApi);
 const reliefRuntime = /USGSShadedReliefOnly\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/.test(js)
   && /data-layer="relief"/.test(html)
   && catalog.items.some(x => x.id === 'relief' && x.state === 'live-tile');
@@ -98,7 +116,7 @@ const referenceShelfComplete = /class="map-shelf"/.test(html)
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime, 'guided start/destination planning + trail-network hiking routes + draggable water routes + route-time NWS wind/wave/weather + reversible OSM context');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && waterIntelligenceRuntime, 'guided start/destination planning + trail-network hiking routes + mapped-coastline-aware water routing + Travel Assistant day reaches + route-time NWS wind/wave/weather + NPS zone/refuge/exposure intelligence');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -154,7 +172,8 @@ if (!currentShipwreckRuntime) hardFailures.push('current NPS shipwreck buoy runt
 if (!pointDetailRuntime) hardFailures.push('point hit-target/detail popup runtime missing');
 if (!osmToggleRuntime) hardFailures.push('OSM context is not a reversible layer');
 if (!routePlanningRuntime) hardFailures.push('route-aware marine planning runtime missing');
-if (!smartRoutingRuntime) hardFailures.push('smart trail/water routing runtime missing');
+if (!smartRoutingRuntime) hardFailures.push('smart trail routing runtime missing');
+if (!waterIntelligenceRuntime) hardFailures.push('water intelligence runtime missing or reduced to a draggable straight-line sketch');
 if (!reliefRuntime) hardFailures.push('keyless USGS relief runtime missing');
 if (!referenceShelfComplete) hardFailures.push('official/reference map shelf incomplete');
 if (deepManifest.sources?.vegetation_overview?.features !== 6 || deepManifest.sources?.vegetation_overview?.bytes >= deepManifest.sources?.vegetation?.bytes / 2) hardFailures.push('vegetation overview reduction gate failed');
