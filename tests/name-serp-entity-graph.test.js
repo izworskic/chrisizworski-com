@@ -25,7 +25,7 @@ test("canonical Chris profile uses Google ProfilePage mainEntity semantics", () 
   assert.ok(person);
   assert.ok(profile);
   assert.deepEqual(profile.mainEntity, { "@id": "https://chrisizworski.com/#person" });
-  assert.equal(profile.dateModified, "2026-08-29");
+  assert.equal(profile.dateModified, "2026-08-30");
 });
 
 test("sameAs is identity-oriented while authored projects live in hasPart", () => {
@@ -56,6 +56,7 @@ test("sameAs is identity-oriented while authored projects live in hasPart", () =
 
   const workUrls = new Set(profile.hasPart.map((work) => work.url));
   assert.ok(workUrls.has("https://michiganoutdoorsnow.chrisizworski.com/"));
+  assert.ok(workUrls.has("https://tcwine.chrisizworski.com/"));
   assert.ok(workUrls.has("https://gazette.chrisizworski.com/"));
   assert.ok(workUrls.has("https://michigantroutreport.com/"));
   assert.ok(workUrls.has("https://michiganbirdingreport.com/"));
@@ -66,6 +67,7 @@ test("canonical profile exposes rel-me identity links and visible work", () => {
   assert.match(html, /rel="me" href="https:\/\/orcid\.org\/0009-0002-7268-6083"/);
   assert.match(html, /Selected Work and Live Projects/);
   assert.match(html, /Michigan Outdoors Now/);
+  assert.match(html, /Traverse City Wine Country/);
   assert.match(html, /Great Lakes Gazette/);
   assert.match(html, /identity verification/);
 });
