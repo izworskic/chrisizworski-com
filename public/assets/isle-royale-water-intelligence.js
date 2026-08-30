@@ -137,10 +137,35 @@
       const nodes=new Map();
       function nkey(r,c){return r+':'+c;}
       for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)nodes.set(nkey(r,c),{r,c,lat:south+r*latStep,lng:west+c*lngStep});
+
+      const boundary=[...nodes.values()].filter(n=>n.r===0||n.c===0||n.r===rows-1||n.c===cols-1);
+      let seed=null,seedClearance=-1;
+      for(const n of boundary){
+        const clearance=coastDistance(n);
+        const score=Number.isFinite(clearance)?clearance:99;
+        if(score>seedClearance){seed=n;seedClearance=score;}
+      }
+      if(!seed)throw new Error('Could not establish an outside-water routing component');
+      const waterKeys=new Set([nkey(seed.r,seed.c)]),queue=[seed];
+      for(let qi=0;qi<queue.length;qi++){
+        const n=queue[qi];
+        for(const d of [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1],[1,-1],[1,1]]){
+          const nk=nkey(n.r+d[0],n.c+d[1]),nn=nodes.get(nk);
+          if(!nn||waterKeys.has(nk)||crosses(n,nn))continue;
+          waterKeys.add(nk);queue.push(nn);
+        }
+      }
+      if(waterKeys.size<8)throw new Error('Mapped coastline did not produce a usable outside-water component');
+
       function nearest(p){
         let best=null,bd=Infinity;
-        for(const n of nodes.values()){
-          const d=miles(p,n);if(d>=bd||d>1.5||crosses(p,n))continue;best=n;bd=d;
+        const shorelineDistance=coastDistance(p);
+        const nearShore=Number.isFinite(shorelineDistance)&&shorelineDistance<=0.35;
+        for(const nk of waterKeys){
+          const n=nodes.get(nk),d=miles(p,n);
+          if(d>=bd||d>1.5)continue;
+          if(crosses(p,n)&&!(nearShore&&d<=0.55))continue;
+          best=n;bd=d;
         }
         if(!best)throw new Error('Selected point is not connected to mapped water within the routing grid');
         return {...best,access:bd};
@@ -156,7 +181,7 @@
         if(cur.key===bk)break;loops++;
         const n=nodes.get(cur.key);
         for(const d of dirs){
-          const nk=nkey(n.r+d[0],n.c+d[1]),nn=nodes.get(nk);if(!nn||crosses(n,nn))continue;
+          const nk=nkey(n.r+d[0],n.c+d[1]),nn=nodes.get(nk);if(!nn||!waterKeys.has(nk)||crosses(n,nn))continue;
           const edge=miles(n,nn),shore=coastDistance({lat:(n.lat+nn.lat)/2,lng:(n.lng+nn.lng)/2});
           const threshold=mode==='paddle'?1.25:4.5;
           const excess=Number.isFinite(shore)?Math.max(0,shore-threshold):3;
