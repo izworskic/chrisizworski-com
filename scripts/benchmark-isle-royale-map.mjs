@@ -24,10 +24,21 @@ const deepSourceChecks = ['geology','vegetation'].map(key => {
 const checks = [];
 const add = (id, weight, ok, evidence) => checks.push({id, weight, ok:Boolean(ok), evidence});
 const cat = catalog.items.map(x => `${x.id} ${x.npmapsCategory} ${x.state}`.toLowerCase()).join(' ');
+const requiredNpMapsIds = [
+  'visitor-web-map','regional-map','rock-harbor','windigo','camping-zones','transportation',
+  'shipwrecks','relief','lighthouses','geology','vegetation-detailed','vegetation-simple',
+  'quiet-no-wake','anchorage-zones','historic-brochure','historic-windigo'
+];
+const catalogIds = new Set(catalog.items.map(x => x.id));
+const npmapsComplete = requiredNpMapsIds.every(id => catalogIds.has(id));
+const catalogCrawlable = /href=["']\/isle-royale-map\/catalog\.json/.test(html) && (html.match(/<tbody id="catalog-body">[\s\S]*?<tr>/g) || []).length >= 1;
+const measurementComplete = [
+  'isle_royale_layer_toggle','isle_royale_search','isle_royale_feature_open','isle_royale_source_open','isle_royale_osm_context'
+].every(eventName => js.includes(eventName));
 
-add('source-catalog', 12, catalog.items.length >= 17 && ['regional map','rock harbor','windigo','shipwreck','relief','geologic','vegetation','historical'].every(x => cat.includes(x)), `${catalog.items.length} catalog entries`);
+add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable raw/source table`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js), 'public ArcGIS web-map + service ingestion');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js), 'search + filters + list + map focus + current NPS park-state surface');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete, 'search + filters + list + map focus + current NPS park-state surface + five privacy-safe product events');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -55,6 +66,9 @@ if (!/not a navigation chart/i.test(html)) hardFailures.push('navigation disclai
 if (!/approximate reference/i.test(js)) hardFailures.push('fallback derivation label missing');
 if (!deepSourceChecks.every(Boolean)) hardFailures.push('deep GIS file/hash/size integrity failed');
 if (!/historical inventory baseline/i.test(js) || !/Vegetation baseline \(2000\)/.test(html)) hardFailures.push('vegetation baseline freshness warning missing');
+if (!npmapsComplete) hardFailures.push('16-product NPMaps completeness gate failed');
+if (!catalogCrawlable) hardFailures.push('crawlable source catalog/raw manifest link missing');
+if (!measurementComplete) hardFailures.push('planned privacy-safe Isle Royale measurement events missing');
 
 console.log(`Isle Royale map benchmark: ${score}/100 (release target ${spec.valueFunction.releaseTarget})`);
 for (const c of checks) console.log(`${c.ok ? 'PASS' : 'FAIL'} ${String(c.weight).padStart(2)} ${c.id} — ${c.evidence}`);
