@@ -394,13 +394,114 @@ def normalize_irma_quiet_candidate(candidate, target):
     return len(compact["features"]), quiet_count, no_wake_count, str(path), layer_name
 
 
+def irma_zone_feature(path, display_name, zone_type):
+    with tempfile.NamedTemporaryFile(suffix=".geojson", delete=False) as tmp_handle:
+        tmp_path = pathlib.Path(tmp_handle.name)
+    try:
+        subprocess.run([
+            "ogr2ogr", "-f", "GeoJSON", str(tmp_path), str(path),
+            "-t_srs", "EPSG:4326", "-makevalid",
+            "-lco", "RFC7946=YES", "-lco", "COORDINATE_PRECISION=6",
+        ], check=True, stdout=subprocess.DEVNULL)
+        fc = json.loads(tmp_path.read_text(encoding="utf-8"))
+    finally:
+        tmp_path.unlink(missing_ok=True)
+
+    geometries = []
+    source_props = {}
+    for feature in fc.get("features") or []:
+        geometry = feature.get("geometry")
+        if geometry:
+            parsed = ogr.CreateGeometryFromJson(json.dumps(geometry))
+            if parsed is not None and not parsed.IsEmpty():
+                geometries.append(parsed)
+        for key, value in (feature.get("properties") or {}).items():
+            if len(source_props) >= 12 or value is None or str(value).strip() == "":
+                continue
+            safe_key = re.sub(r"[^a-z0-9]+", "_", str(key).lower()).strip("_")[:48]
+            if safe_key and safe_key not in source_props:
+                source_props[safe_key] = value
+
+    if not geometries:
+        raise RuntimeError(f"IRMA zone file has no usable geometry: {path.name}")
+
+    merged = geometries[0].Clone()
+    for geometry in geometries[1:]:
+        merged = merged.Union(geometry)
+    if merged is None or merged.IsEmpty():
+        raise RuntimeError(f"IRMA zone union failed: {path.name}")
+
+    props = {
+        "name": display_name,
+        "zone_type": zone_type,
+        "speed_limit_mph": 5,
+        "nps_source_file": path.name,
+        **source_props,
+    }
+    return {
+        "type": "Feature",
+        "geometry": json.loads(merged.ExportToJson()),
+        "properties": props,
+    }
+
+
 def build_irma_quiet_no_wake():
     with tempfile.TemporaryDirectory() as td:
         root = pathlib.Path(td)
         profile_url, refs, resources, downloaded = download_irma_quiet_collection(root)
+
+        # Collection 9705 currently publishes one GeoJSON file per regulatory
+        # zone. Some zone files contain multiple polygon parts, so each file is
+        # unioned into one zone feature before the 22-zone collection is built.
+        zone_files = {}
+        for item in downloaded:
+            local_path = pathlib.Path(item["local_path"])
+            if local_path.suffix.lower() != ".geojson":
+                continue
+            zone_files[local_path.stem.strip()] = local_path
+
+        expected_no_wake = {"mott", "rock harbor", "washington harbor"}
+        normalized_names = {name.lower(): name for name in zone_files}
+        if len(zone_files) == 22 and expected_no_wake.issubset(normalized_names):
+            features = []
+            source_files = []
+            for name in sorted(zone_files):
+                zone_type = "No-Wake" if name.lower() in expected_no_wake else "Quiet/No-Wake"
+                features.append(irma_zone_feature(zone_files[name], name, zone_type))
+                source_files.append(zone_files[name].name)
+
+            quiet_count = sum(1 for feature in features if feature["properties"]["zone_type"] == "Quiet/No-Wake")
+            no_wake_count = sum(1 for feature in features if feature["properties"]["zone_type"] == "No-Wake")
+            if len(features) == 22 and quiet_count == 19 and no_wake_count == 3:
+                target = OUT / "quiet-no-wake-zones.geojson"
+                target.write_text(json.dumps({"type": "FeatureCollection", "features": features}, separators=(",", ":")), encoding="utf-8")
+                return target, {
+                    "source": QUIET_PAGE,
+                    "regulatory_source": QUIET_COMPENDIUM,
+                    "geometry_source": profile_url,
+                    "datastore_collection": QUIET_DATASTORE,
+                    "irma_api_collection": profile_url,
+                    "irma_reference_ids": [r.get("referenceId") for r in refs if r.get("referenceId")],
+                    "irma_public_geospatial_files": [
+                        {"reference_id": x.get("reference_id"), "file_name": x.get("file_name"), "download_url": x.get("download_url")}
+                        for x in resources
+                    ],
+                    "selected_source_files": source_files,
+                    "vintage": "Official NPS DataStore Collection 9705; 22 per-zone GeoJSON files validated against the 2026 Superintendent's Compendium",
+                    "regulation_note": "The 22 official NPS zone files are assembled one-zone-per-file. Mott, Rock Harbor/Snug Harbor, and Washington Harbor are classified as the three No-Wake zones from the current compendium; the remaining 19 are Quiet/No-Wake zones.",
+                    "features": 22,
+                    "quiet_no_wake_features": quiet_count,
+                    "no_wake_features": no_wake_count,
+                }
+
+        # Retain a secondary single-layer detector because the official
+        # collection packaging can change over time. It is still fail-closed.
         candidates = quiet_vector_candidates(root)
         if not candidates:
-            raise RuntimeError("official IRMA collection contains no readable polygon layer")
+            raise RuntimeError(
+                f"official IRMA collection did not expose the expected 22 per-zone GeoJSON files "
+                f"(found={sorted(zone_files)}) and contains no readable polygon layer"
+            )
         best = candidates[0]
         target = OUT / "quiet-no-wake-zones.geojson"
         count, quiet_count, no_wake_count, source_path, layer_name = normalize_irma_quiet_candidate(best, target)
@@ -408,8 +509,8 @@ def build_irma_quiet_no_wake():
             target.unlink(missing_ok=True)
             raise RuntimeError(
                 f"official IRMA GIS is not the current 22-zone regulatory set "
-                f"(features={count}, quiet/no-wake={quiet_count}, no-wake={no_wake_count}, "
-                f"top_layer={layer_name!r}); refusing to promote older/mismatched geometry"
+                f"(zone_files={len(zone_files)}, best_features={count}, quiet/no-wake={quiet_count}, "
+                f"no-wake={no_wake_count}, top_layer={layer_name!r}); refusing to promote older/mismatched geometry"
             )
         return target, {
             "source": QUIET_PAGE,
@@ -418,10 +519,6 @@ def build_irma_quiet_no_wake():
             "datastore_collection": QUIET_DATASTORE,
             "irma_api_collection": profile_url,
             "irma_reference_ids": [r.get("referenceId") for r in refs if r.get("referenceId")],
-            "irma_public_geospatial_files": [
-                {"reference_id": x.get("reference_id"), "file_name": x.get("file_name"), "download_url": x.get("download_url")}
-                for x in resources
-            ],
             "selected_source_path": source_path,
             "selected_layer": layer_name,
             "vintage": "Official NPS DataStore Collection 9705; regulatory set validated against the 2026 Superintendent's Compendium",
