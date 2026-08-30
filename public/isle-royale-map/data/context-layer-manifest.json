@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-30T14:04:31.461749+00:00",
+  "derivation": "Official NPS boating-restriction sources plus USGS ScienceBase geospatial releases normalized to EPSG:4326 and simplified for opt-in web display. Each layer is independent; unresolved upstream geometry is never fabricated.",
+  "layers": {
+    "quiet_no_wake": {
+      "status": "unresolved-upstream",
+      "source": "https://www.nps.gov/isro/planyourvisit/quiet-no-wake.htm",
+      "regulatory_source": "https://www.nps.gov/isro/learn/management/superintendents-compendium.htm",
+      "datastore_collection": "https://irma.nps.gov/DataStore/Collection/Profile/9705",
+      "expected_features": 22,
+      "quiet_no_wake_features": 19,
+      "no_wake_features": 3,
+      "reason": "Carto geometry unavailable: https://williamroth.carto.com/api/v2/sql?q=SELECT+ST_Union%28the_geom%29+AS+the_geom+FROM+%22isro_nwz_barnum_island%22&format=GeoJSON: HTTP Error 404: Not Found | https://williamroth.cartodb.com/api/v2/sql?q=SELECT+ST_Union%28the_geom%29+AS+the_geom+FROM+%22isro_nwz_barnum_island%22&format=GeoJSON: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'williamroth.cartodb.com'. (_ssl.c:1000)>",
+      "note": "Current NPS builder config exposes the correct 22-zone metadata, but its legacy Carto geometry endpoint is unavailable. Do not substitute hand-drawn polygons."
+    },
+    "vegetation_change": {
+      "status": "generated",
+      "file": "vegetation-change-1996-2017.geojson",
+      "bytes": 5966512,
+      "sha256": "1ddc38bf1fceb7bc69acc3c893435c0396eb80477bdf1f20fed3727545342871",
+      "source": "https://doi.org/10.5066/P9393VFK",
+      "sciencebase_parent": "https://www.sciencebase.gov/catalog/item/65c246f9d34ef4b119ca6c8b",
+      "license": "CC0 1.0 Universal / U.S. public domain",
+      "features": 2738,
+      "selection_score": 150,
+      "selected_source_path": "/tmp/tmpalojalbc/65c24a77d34ef4b119ca6c97/ISRO_Veg_Change_Selected_Sites_unzipped/ISRO_Veg_Change_Selected_Sites.shp",
+      "selected_layer": "ISRO_Veg_Change_Selected_Sites",
+      "vintage": "2017 high-resolution imagery compared with the 2000 NPS vegetation map (1994/1996 imagery)",
+      "interpretation_note": "Shows mapped vegetation cover type, density or pattern change and proposed reasons from the USGS release; not a present-day 2026 vegetation map."
+    },
+    "horne_fire": {
+      "status": "generated",
+      "file": "horne-fire-burn-severity.geojson",
+      "bytes": 2210153,
+      "sha256": "052d4594bded429ffe9065d0a1a6dac226831fd3d4ab00290ad770aeae777d6f",
+      "source": "https://doi.org/10.5066/P13QWXNI",
+      "sciencebase_parent": "https://www.sciencebase.gov/catalog/item/6659f2cfd34ef3137d36a465",
+      "license": "CC0 1.0 Universal / U.S. public domain",
+      "features": 93,
+      "selection_score": 256,
+      "selected_source_path": "/tmp/tmpl43p5oa4/6659f2cfd34ef3137d36a465/ISRO_Post_HorneFire_unzipped/ISRO_Post_HorneFire.shp",
+      "selected_layer": "ISRO_Post_HorneFire",
+      "vintage": "2021 Horne Fire; USGS data release published 2024",
+      "interpretation_note": "Burn-severity assessment derived from pre/post-fire high-resolution imagery; use as historical ecological context, not a current fire-status layer."
+    }
+  },
+  "errors": {
+    "quiet_no_wake": "Carto geometry unavailable: https://williamroth.carto.com/api/v2/sql?q=SELECT+ST_Union%28the_geom%29+AS+the_geom+FROM+%22isro_nwz_barnum_island%22&format=GeoJSON: HTTP Error 404: Not Found | https://williamroth.cartodb.com/api/v2/sql?q=SELECT+ST_Union%28the_geom%29+AS+the_geom+FROM+%22isro_nwz_barnum_island%22&format=GeoJSON: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'williamroth.cartodb.com'. (_ssl.c:1000)>"
+  }
+}
