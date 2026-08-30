@@ -564,6 +564,10 @@
       point=routePointForRecord(recordOrPoint);
     }
     if(!point||point.kind!=='campground')return false;
+    if(active&&route.points[0]===point) {
+      status((point.label||'Campground')+' is the trip start, so it cannot also be a manual day end.');
+      return false;
+    }
     if(point.liveAlert) {
       status((point.label||'Campground')+' is currently flagged closed by NPS and cannot be used as a day end.');
       return false;
