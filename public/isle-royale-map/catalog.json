@@ -150,12 +150,15 @@
     {
       "id": "quiet-no-wake",
       "npmapsCategory": "assorted / boating",
-      "label": "Quiet / no-wake zones",
+      "label": "Quiet / No-Wake zones — 22 official polygons",
       "kind": "polygon",
-      "state": "gis-download-known",
+      "state": "generated-runtime",
       "publisher": "National Park Service",
-      "source": "https://www.nps.gov/isro/planyourvisit/quiet-no-wake-zones.htm",
-      "notes": "NPS provides a GIS-data download from the current quiet/no-wake page. Treat as regulation-sensitive."
+      "source": "https://www.nps.gov/isro/planyourvisit/quiet-no-wake.htm",
+      "notes": "The 22 official NPS zone files are assembled one-zone-per-file. Mott, Rock Harbor/Snug Harbor, and Washington Harbor are classified as the three No-Wake zones from the current compendium; the remaining 19 are Quiet/No-Wake zones.",
+      "web_path": "/isle-royale-map/data/quiet-no-wake-zones.geojson",
+      "vintage": "Official NPS DataStore Collection 9705; 22 per-zone GeoJSON files validated against the 2026 Superintendent's Compendium",
+      "dataset": "https://irmaservices.nps.gov/datastore/v8/rest/SavedCollection/Profile/9705"
     },
     {
       "id": "anchorage-zones",
@@ -208,6 +211,30 @@
       "publisher": "National Park Service",
       "source": "https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm",
       "notes": "Fetched through the same-origin Isle Royale API. The tool detects only closure patterns it knows how to parse and never treats a no-match result as proof that the park has no alerts."
+    },
+    {
+      "id": "vegetation-change-1996-2017",
+      "npmapsCategory": "science / ecological change",
+      "label": "Vegetation change, 1996–2017",
+      "kind": "polygon",
+      "state": "generated-runtime",
+      "publisher": "U.S. Geological Survey",
+      "source": "https://doi.org/10.5066/P9393VFK",
+      "web_path": "/isle-royale-map/data/vegetation-change-1996-2017.geojson",
+      "vintage": "2017 high-resolution imagery compared with the 2000 NPS vegetation map (1994/1996 imagery)",
+      "notes": "Shows mapped vegetation cover type, density or pattern change and proposed reasons from the USGS release; not a present-day 2026 vegetation map."
+    },
+    {
+      "id": "horne-fire-2021",
+      "npmapsCategory": "science / wildfire history",
+      "label": "2021 Horne Fire burn severity",
+      "kind": "polygon",
+      "state": "generated-runtime",
+      "publisher": "U.S. Geological Survey",
+      "source": "https://doi.org/10.5066/P13QWXNI",
+      "web_path": "/isle-royale-map/data/horne-fire-burn-severity.geojson",
+      "vintage": "2021 Horne Fire; USGS data release published 2024",
+      "notes": "Burn-severity assessment derived from pre/post-fire high-resolution imagery; use as historical ecological context, not a current fire-status layer."
     }
   ],
   "updated": "2026-08-30"
