@@ -1684,7 +1684,7 @@
         color:route.mode==='hike'&&route.smartState==='trail-snapped'?'#8b4f2d':'#173d36',
         weight:route.mode==='hike'?5:4,
         opacity:.94,
-        dashArray:route.mode==='hike'&&route.smartState==='trail-snapped'?null:'9 6',
+        dashArray:(route.mode==='hike'&&route.smartState==='trail-snapped')||route.smartState==='water-aware'?null:'9 6',
         interactive:route.mode!=='hike'
       }).addTo(routeLayerGroup);
       if(route.mode!=='hike') {
@@ -1716,6 +1716,13 @@
       route.markers.push(marker);
     });
 
+    for(const dayEnd of routeDayMarkers(path)) {
+      L.circleMarker([dayEnd.lat,dayEnd.lng],{
+        pane:'routePane',radius:6,weight:2,fillOpacity:.9,interactive:true
+      }).bindTooltip('Day '+dayEnd.day+' reach · '+dayEnd.distance_miles.toFixed(1)+' mi',{direction:'top'})
+        .addTo(routeLayerGroup);
+    }
+
     renderSmartStatus();
     const miles=routeTotalMiles();
     const hours=routeHours();
@@ -1732,10 +1739,13 @@
         ? 'mapped-trail path'
         : route.mode==='hike'
           ? 'straight fallback sketch'
-          : 'editable water sketch';
+          : route.smartState==='water-aware'
+            ? 'mapped-coastline-aware water path'
+            : 'editable water sketch';
       els.routeSummary.innerHTML=`<strong>${miles.toFixed(1)} mi</strong> · ~${formatDuration(hours)} at ${speed.toFixed(1)} mph · overall ${compassLabel(bearing)} (${Math.round(bearing)}°) · ${method}.`;
       els.routeWeatherButton.disabled=false;
     }
+    renderRouteIntelligence();
   }
 
   function setRouteAdding(active) {
