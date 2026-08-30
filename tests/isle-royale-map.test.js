@@ -13,6 +13,9 @@ const catalog = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-m
 const deepManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/deep-layer-manifest.json'), 'utf8'));
 const contextManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/context-layer-manifest.json'), 'utf8'));
 const contextBuilder = fs.readFileSync(path.join(root, 'scripts/build-isle-royale-context-layers.py'), 'utf8');
+const waterIntelJs = fs.readFileSync(path.join(root, 'public/assets/isle-royale-water-intelligence.js'), 'utf8');
+const waterIntelApi = fs.readFileSync(path.join(root, 'api/isle-royale-water-intelligence.js'), 'utf8');
+const isleBenchmark = fs.readFileSync(path.join(root, 'scripts/benchmark-isle-royale-map.mjs'), 'utf8');
 const circleTour = fs.readFileSync(path.join(root, 'public/lake-superior-circle-tour/index.html'), 'utf8');
 const upNorth = fs.readFileSync(path.join(root, 'public/up-north-michigan/index.html'), 'utf8');
 const deepWorkflow = fs.readFileSync(path.join(root, '.github/workflows/isle-royale-deep-data.yml'), 'utf8');
@@ -156,6 +159,30 @@ test('quiet/no-wake ETL is IRMA-first and fails closed on a stale regulatory set
   assert.match(contextBuilder, /quiet_count != 19/);
   assert.match(contextBuilder, /no_wake_count != 3/);
   assert.match(contextBuilder, /refusing to promote older\/mismatched geometry/);
+});
+
+test('water intelligence is a real coastline-aware planning layer, not a draggable-line benchmark shortcut', () => {
+  assert.match(html, /id="route-day-hours"/);
+  assert.match(html, /id="route-intelligence"/);
+  assert.match(html, /isle-royale-water-intelligence\.js/);
+  assert.match(js, /function resolveWaterRouteAsync/);
+  assert.match(js, /Open-water exposure model/);
+  assert.match(js, /NPS boating-zone check/);
+  assert.match(js, /Nearby mapped refuge \/ stopping options/);
+  assert.match(waterIntelJs, /function routeSegment/);
+  assert.match(waterIntelJs, /crosses\(n,nn\)/);
+  assert.match(waterIntelJs, /weatherSamples/);
+  assert.match(waterIntelJs, /zonesAlongPath/);
+  assert.match(waterIntelJs, /dayEnds/);
+  assert.match(waterIntelApi, /natural"="coastline/);
+  assert.match(waterIntelApi, /not a navigation chart/i);
+  assert.match(isleBenchmark, /waterIntelligenceRuntime/);
+  assert.match(isleBenchmark, /water intelligence runtime missing or reduced to a draggable straight-line sketch/);
+});
+
+test('marine forecast sampling grows with route distance rather than control-point count', () => {
+  assert.match(js, /Math\.ceil\(total\/4\)\+1/);
+  assert.doesNotMatch(js, /Math\.min\(max,Math\.max\(2,route\.points\.length\)\)/);
 });
 
 test('current NPS off-trail camping zone closures are parsed without fabricating polygons', () => {
