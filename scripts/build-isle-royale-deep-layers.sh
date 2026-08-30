@@ -225,8 +225,8 @@ def compact(src, dst, kind):
             name=name or (f'Geologic unit {symbol}' if symbol else 'Geologic unit')
             keep_patterns=(r'unit',r'glg',r'symbol',r'label',r'name',r'desc',r'lith',r'age',r'formation',r'group')
         else:
-            symbol=pick(p,[r'^mapclass
-            name=pick(p,[r'^mapclass
+            symbol=pick(p,[r'^mapclass$',r'mapclass',r'classcode',r'vegcode',r'^code$'])
+            name=pick(p,[r'^mapclass$',r'mapclassname',r'vegname',r'association',r'community',r'alliance',r'classname',r'^name$',r'label'])
             desc=pick(p,[r'description',r'descript',r'vegdesc',r'physiogn'])
             name=name or (f'Vegetation class {symbol}' if symbol else 'Vegetation class')
             keep_patterns=(r'veg',r'class',r'community',r'association',r'alliance',r'name',r'label',r'desc',r'physiog',r'cover',r'code')
