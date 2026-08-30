@@ -8,6 +8,7 @@ const root = path.resolve(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'public/isle-royale-map/index.html'), 'utf8');
 const js = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 'utf8');
 const api = fs.readFileSync(path.join(root, 'api/isle-royale.js'), 'utf8');
+const routeWeatherApi = fs.readFileSync(path.join(root, 'api/isle-royale-route-weather.js'), 'utf8');
 const catalog = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/catalog.json'), 'utf8'));
 const deepManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/deep-layer-manifest.json'), 'utf8'));
 const contextManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/context-layer-manifest.json'), 'utf8'));
@@ -95,6 +96,47 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
   assert.match(html, /Tap any point to open its available attributes, coordinates, source links and related NPS planning information/);
   assert.match(html, /\.popup-action\{[^}]*min-height:42px/);
   assert.match(html, /\.isle-detail-popup \.leaflet-popup-content/);
+});
+
+
+test('OSM context behaves as a reversible layer rather than a permanently disabled one-shot button', () => {
+  assert.match(html, /id="load-osm"[^>]*aria-pressed="false"[^>]*>Show OSM context/);
+  assert.match(js, /const osmContextGroup = L\.layerGroup\(\)/);
+  assert.match(js, /function setOsmContextVisible/);
+  assert.match(js, /Hide OSM context/);
+  assert.match(js, /Show OSM context/);
+  assert.match(js, /targetGroup:osmContextGroup/);
+  assert.match(js, /btn\.disabled = false/);
+});
+
+test('route builder turns geometry into a time-aware planning outcome', () => {
+  for (const id of ['route-planner','route-mode-select','route-speed','route-departure','route-summary','route-weather-button','route-weather']) {
+    assert.ok(html.includes(`id="${id}"`), id);
+  }
+  assert.match(html, /Build a route \+ check marine conditions/);
+  assert.match(html, /NWS \+ NDBC/);
+  assert.match(js, /function addRoutePoint/);
+  assert.match(js, /function distanceMiles/);
+  assert.match(js, /function bearingDegrees/);
+  assert.match(js, /function routeForecastSamples/);
+  assert.match(js, /function relativeWind/);
+  assert.match(js, /Add this point to route/);
+  assert.match(js, /isle_royale_route_weather/);
+  assert.match(js, /\/api\/isle-royale-route-weather/);
+});
+
+test('route weather uses NWS marine grid data and Isle Royale NDBC wind stations', () => {
+  assert.match(routeWeatherApi, /api\.weather\.gov/);
+  assert.match(routeWeatherApi, /forecastGridData/);
+  assert.match(routeWeatherApi, /waveHeight/);
+  assert.match(routeWeatherApi, /wavePeriod/);
+  assert.match(routeWeatherApi, /waveDirection/);
+  assert.match(routeWeatherApi, /windSpeed/);
+  assert.match(routeWeatherApi, /windDirection/);
+  assert.match(routeWeatherApi, /PILM4/);
+  assert.match(routeWeatherApi, /ROAM4/);
+  assert.match(routeWeatherApi, /alerts\/active\?point=/);
+  assert.match(routeWeatherApi, /planning sketches, not navigational routes/i);
 });
 
 
