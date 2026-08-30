@@ -7,7 +7,10 @@
     visitorFeatureService: 'https://services1.arcgis.com/XBhYkoXKJCRHbe7M/arcgis/rest/services/Isle_Royale_WFL1/FeatureServer',
     islandBounds: [[47.79, -89.36], [48.33, -88.18]],
     arcgisRoot: 'https://www.arcgis.com/sharing/rest/content/items/',
-    overpass: 'https://overpass-api.de/api/interpreter'
+    overpass: 'https://overpass-api.de/api/interpreter',
+    operationsEndpoint: '/api/isle-royale',
+    currentConditionsUrl: 'https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm',
+    boatInUrl: 'https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm'
   };
 
   const els = {
@@ -17,7 +20,8 @@
     list: document.getElementById('feature-list'),
     count: document.getElementById('feature-count'),
     filters: document.getElementById('layer-filters'),
-    catalog: document.getElementById('catalog-body')
+    catalog: document.getElementById('catalog-body'),
+    liveStatus: document.getElementById('park-live-status')
   };
 
   const map = L.map('isle-map', {preferCanvas:true, zoomControl:true, minZoom:6, maxZoom:18});
@@ -50,6 +54,13 @@
   const featureIndex = [];
   let selectedLayer = null;
   const sourceStatus = {arcgis:'starting', osm:'not loaded', fallback:false};
+  const operational = {
+    boaterByName: new Map(),
+    alerts: [],
+    fetchedAt: null,
+    sources: {},
+    loaded: false
+  };
 
   const categoryStyle = {
     trail: {color:'#9b512b', weight:3, opacity:.9},
@@ -102,6 +113,61 @@
     const style = categoryStyle[category] || categoryStyle.other;
     return L.circleMarker(latlng, {radius:category === 'campground' ? 5.5 : 5, weight:2, color:style.color, fillColor:style.fillColor || style.color, fillOpacity:.86});
   }
+  function normalizePlaceName(value='') {
+    return String(value)
+      .toLowerCase()
+      .replace(/\b(campground|camp ground|overnight dock|dock|campsite|camp site)\b/g, ' ')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim()
+      .replace(/\s+/g, ' ');
+  }
+
+  function placeAliases(value='') {
+    const normalized = normalizePlaceName(value);
+    const out = new Set([normalized]);
+    if (normalized.includes('ozaagaateng')) out.add(normalized.replace(/ozaagaateng/g, 'windigo').trim());
+    if (normalized.includes('windigo')) out.add(normalized.replace(/windigo/g, 'ozaagaateng').trim());
+    return [...out].filter(Boolean);
+  }
+
+  function findBoaterRecord(name) {
+    for (const alias of placeAliases(name)) {
+      if (operational.boaterByName.has(alias)) return operational.boaterByName.get(alias);
+    }
+    return null;
+  }
+
+  function findOperationalAlert(name) {
+    const aliases = placeAliases(name);
+    for (const alert of operational.alerts) {
+      for (const place of alert.places || []) {
+        const placeNames = placeAliases(place);
+        if (aliases.some(alias => placeNames.includes(alias))) return alert;
+      }
+    }
+    return null;
+  }
+
+  function enrichRecord(record) {
+    if (!record) return;
+    record.boater = record.category === 'campground' ? findBoaterRecord(record.name) : null;
+    record.liveAlert = findOperationalAlert(record.name);
+    if (record.liveAlert && record.layer && record.layer.setStyle) {
+      try { record.layer.setStyle({color:'#8c3e23', weight:4, fillColor:'#b25b35', fillOpacity:.9}); } catch (_) {}
+    }
+  }
+
+  function addPopupFact(container, label, value) {
+    if (value == null || String(value).trim() === '') return;
+    const fact = document.createElement('div');
+    fact.className = 'popup-fact';
+    const strong = document.createElement('b');
+    strong.textContent = String(value);
+    const caption = document.createElement('span');
+    caption.textContent = label;
+    fact.append(strong, caption);
+    container.appendChild(fact);
+  }
 
   function popupNode(record) {
     const wrap = document.createElement('div');
@@ -109,18 +175,65 @@
     title.className = 'popup-title';
     title.textContent = record.name;
     wrap.appendChild(title);
+
     const meta = document.createElement('div');
     meta.className = 'popup-meta';
     meta.textContent = layerLabels[record.category] || record.category;
     wrap.appendChild(meta);
+
+    if (record.liveAlert) {
+      const alert = document.createElement('div');
+      alert.className = 'popup-alert';
+      const strong = document.createElement('strong');
+      strong.textContent = 'Current NPS closure signal';
+      const detail = document.createElement('span');
+      detail.textContent = `${record.liveAlert.title}. ${record.liveAlert.detail || ''}`;
+      alert.append(strong, detail);
+      wrap.appendChild(alert);
+    }
+
     if (record.description) {
       const desc = document.createElement('p');
       desc.textContent = record.description;
       wrap.appendChild(desc);
     }
+
+    if (record.boater) {
+      const facts = document.createElement('div');
+      facts.className = 'popup-facts';
+      addPopupFact(facts, 'Dock depth', record.boater.dock_depth);
+      addPopupFact(facts, 'Shelters', record.boater.shelters);
+      addPopupFact(facts, 'Tent sites', record.boater.tent_sites);
+      addPopupFact(facts, 'Food lockers', record.boater.food_storage_lockers);
+      addPopupFact(facts, 'Stay limit', record.boater.consecutive_night_limit);
+      addPopupFact(facts, 'Generator use', record.boater.onboard_generator_use);
+      addPopupFact(facts, 'Fire ring / grill', record.boater.fire_ring_grill);
+      if (facts.childElementCount) wrap.appendChild(facts);
+
+      const boatLink = document.createElement('a');
+      boatLink.className = 'popup-link';
+      boatLink.href = CONFIG.boatInUrl;
+      boatLink.target = '_blank';
+      boatLink.rel = 'noopener';
+      boatLink.textContent = 'Verify NPS boat-in campground details';
+      wrap.appendChild(boatLink);
+    }
+
+    if (record.liveAlert) {
+      const conditionLink = document.createElement('a');
+      conditionLink.className = 'popup-link';
+      conditionLink.href = CONFIG.currentConditionsUrl;
+      conditionLink.target = '_blank';
+      conditionLink.rel = 'noopener';
+      conditionLink.textContent = 'Verify current NPS conditions';
+      wrap.appendChild(conditionLink);
+    }
+
     const source = document.createElement('div');
     source.className = 'popup-source';
-    source.textContent = `Source: ${record.sourceLabel}. Status: ${record.sourceKind}.`;
+    source.textContent = `Map source: ${record.sourceLabel}. Geometry status: ${record.sourceKind}.`;
+    if (record.boater) source.textContent += ' Campground facts: NPS Boat-In Campgrounds dataset, page updated June 23, 2026.';
+    if (record.liveAlert) source.textContent += ' Closure signal: current NPS conditions feed fetched through this site.';
     wrap.appendChild(source);
     return wrap;
   }
@@ -139,6 +252,7 @@
       pointToLayer: (_f, latlng) => pointMarker(category, latlng),
       onEachFeature: (_f, layer) => {
         record = {name, category, layer, sourceLabel, sourceKind, description, sourceUrl:context.sourceUrl || ''};
+        enrichRecord(record);
         layer.bindPopup(() => popupNode(record));
         layer.on('click', () => selectRecord(record));
       }
@@ -329,6 +443,73 @@
     }
   }
 
+  function renderOperationalStatus() {
+    if (!els.liveStatus) return;
+    els.liveStatus.replaceChildren();
+
+    const conditionsAvailable = Boolean(operational.sources.current_conditions?.available);
+    const boaterAvailable = Boolean(operational.sources.boater_campgrounds?.available);
+    const alertCount = operational.alerts.length;
+
+    const state = document.createElement('div');
+    state.className = conditionsAvailable && alertCount === 0 ? 'ops-ok' : alertCount ? 'ops-alert' : 'ops-ok';
+    if (!operational.loaded) {
+      state.textContent = 'Checking current NPS conditions and boat-in campground data…';
+    } else if (!conditionsAvailable) {
+      state.className = 'ops-alert';
+      state.textContent = 'Current NPS conditions could not be reached. Do not infer that the park has no closures; verify NPS before acting.';
+    } else if (alertCount) {
+      state.textContent = `${alertCount} current NPS closure signal${alertCount === 1 ? '' : 's'} detected in the operational feed. Matching mapped places are flagged.`;
+    } else {
+      state.textContent = 'Current NPS conditions source reached; no closure pattern currently matched by this tool. This is not a declaration that the park has no alerts.';
+    }
+    els.liveStatus.appendChild(state);
+
+    const data = document.createElement('div');
+    data.className = 'ops-source';
+    const boaterCount = operational.boaterByName.size;
+    const fetched = operational.fetchedAt ? new Date(operational.fetchedAt).toLocaleString([], {dateStyle:'medium', timeStyle:'short'}) : null;
+    data.textContent = boaterAvailable
+      ? `${boaterCount} NPS boat-in campground records available for popup enrichment${fetched ? ` · checked ${fetched}` : ''}. Page data updated June 23, 2026.`
+      : `Boat-in campground enrichment unavailable${fetched ? ` · checked ${fetched}` : ''}.`;
+    els.liveStatus.appendChild(data);
+
+    const link = document.createElement('a');
+    link.className = 'popup-link';
+    link.href = CONFIG.currentConditionsUrl;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.textContent = 'Open current NPS conditions';
+    els.liveStatus.appendChild(link);
+  }
+
+  function enrichExistingRecords() {
+    for (const record of featureIndex) enrichRecord(record);
+    renderFeatureList();
+  }
+
+  async function loadOperationalData() {
+    renderOperationalStatus();
+    try {
+      const data = await fetchJSON(CONFIG.operationsEndpoint, 12000);
+      operational.boaterByName.clear();
+      for (const campground of data.boater_campgrounds || []) {
+        for (const alias of placeAliases(campground.name)) operational.boaterByName.set(alias, campground);
+      }
+      operational.alerts = Array.isArray(data.current_alerts) ? data.current_alerts : [];
+      operational.fetchedAt = data.fetched_at || null;
+      operational.sources = data.sources || {};
+      operational.loaded = true;
+      enrichExistingRecords();
+      renderOperationalStatus();
+    } catch (_) {
+      operational.loaded = true;
+      operational.sources = {};
+      operational.alerts = [];
+      renderOperationalStatus();
+    }
+  }
+
   function isCategoryVisible(category) {
     const checkbox = els.filters.querySelector(`input[data-layer="${category}"]`);
     return checkbox ? checkbox.checked : true;
@@ -369,7 +550,11 @@
       b.className = 'feature-row';
       b.innerHTML = '<strong></strong><span></span>';
       b.querySelector('strong').textContent = r.name;
-      b.querySelector('span').textContent = `${layerLabels[r.category] || r.category} · ${r.sourceKind}`;
+      b.querySelector('span').textContent = r.liveAlert
+        ? `Current NPS closure signal · ${layerLabels[r.category] || r.category}`
+        : r.boater
+          ? `${layerLabels[r.category] || r.category} · NPS campground details available`
+          : `${layerLabels[r.category] || r.category} · ${r.sourceKind}`;
       b.addEventListener('click', () => flyToFeature(i));
       els.list.appendChild(b);
     }
@@ -425,5 +610,6 @@
 
   renderFeatureList();
   loadCatalog();
+  loadOperationalData();
   loadVisitorGeometry();
 })();
