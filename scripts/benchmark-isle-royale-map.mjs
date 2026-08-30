@@ -144,7 +144,8 @@ const mapFirstRoutingRuntime = /id="explore-mode"[^>]*aria-pressed="true"/.test(
   && /route\.adding&&record\.latlng/.test(js)
   && /function renderRouteStops/.test(js)
   && /if\(!route\.adding\)return;/.test(js)
-  && /routePoint\.kind==='campground'&&routePoint\.sourceBackedBoatIn/.test(js)
+  && /routePoint\.kind==='campground'&&distanceMiles\(routePoint,point\)<\.08/.test(js)
+  && /point\.sourceBackedBoatIn=Boolean\(match\.boater\)/.test(js)
   && !/route\.points\.length===2\)setRouteAdding\(false\)/.test(js)
   && /nextPinned=candidates\.find/.test(waterJs)
   && /pinned:Boolean\(chosen\?\.pinned\)/.test(waterJs);
