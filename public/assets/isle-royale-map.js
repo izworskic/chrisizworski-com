@@ -2125,7 +2125,7 @@
         status((point.label||'Route point')+' removed from trip.');
       });
       row.append(token,textWrap);
-      if(point.kind==='campground'&&index>0&&index<route.points.length-1) {
+      if(point.kind==='campground'&&index>0) {
         const dayEnd=document.createElement('button');
         dayEnd.type='button';
         dayEnd.className='route-day-end-button';
