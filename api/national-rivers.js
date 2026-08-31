@@ -7,11 +7,11 @@ const {
   sourceMeta,
 } = require("../lib/national-outdoor");
 
-const SITE = "https://waterservices.usgs.gov/nwis/site/";
 const IV = "https://waterservices.usgs.gov/nwis/iv/";
 const STAT = "https://waterservices.usgs.gov/nwis/stat/";
 const NWPS = "https://api.water.noaa.gov/nwps/v1";
-const UA = "ChrisIzworskiNationalRiverConditions/2.0 (+https://chrisizworski.com/national-tools/rivers/)";
+const UA = "ChrisIzworskiNationalRiverConditions/2.1 (+https://chrisizworski.com/national-tools/rivers/)";
+const SEARCH_SPANS = Object.freeze([0.6, 1.5, 2.4]);
 
 function haversine(a, b, c, d) {
   const r = 3958.7613;
@@ -21,96 +21,71 @@ function haversine(a, b, c, d) {
   const q = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a)) * Math.cos(toRad(c)) * Math.sin(dLon / 2) ** 2;
   return 2 * r * Math.asin(Math.sqrt(q));
 }
-async function fetchText(url) {
+function bbox(lat, lon, span) {
+  const north = Math.min(90, lat + span);
+  const south = Math.max(-90, lat - span);
+  const west = Math.max(-180, lon - span);
+  const east = Math.min(180, lon + span);
+  return {
+    north,
+    south,
+    west,
+    east,
+    product: Math.abs(east - west) * Math.abs(north - south),
+    value: `${west},${south},${east},${north}`,
+  };
+}
+async function fetchText(url, timeoutMs = 6000) {
   const r = await fetch(url, {
     headers: { accept: "text/plain", "user-agent": UA },
-    signal: AbortSignal.timeout(10000),
+    signal: AbortSignal.timeout(timeoutMs),
   });
   if (!r.ok) throw new Error(`${new URL(url).hostname} returned ${r.status}`);
   return r.text();
 }
-async function fetchJson(url) {
+async function fetchJson(url, timeoutMs = 6500, options = {}) {
   const r = await fetch(url, {
     headers: { accept: "application/json", "user-agent": UA },
-    signal: AbortSignal.timeout(10000),
+    signal: AbortSignal.timeout(timeoutMs),
   });
+  if (r.status === 404 && options.allow404) return null;
   if (!r.ok) throw new Error(`${new URL(url).hostname} returned ${r.status}`);
-  return r.json();
-}
-function parseRdb(body) {
-  const lines = String(body || "").split(/\r?\n/).filter(Boolean);
-  const hi = lines.findIndex((x) => !x.startsWith("#") && x.includes("site_no") && x.includes("station_nm"));
-  if (hi < 0) return [];
-  const h = lines[hi].split("\t");
-  const latI = h.indexOf("dec_lat_va"), lonI = h.indexOf("dec_long_va");
-  const idI = h.indexOf("site_no"), nameI = h.indexOf("station_nm");
-  return lines.slice(hi + 2)
-    .filter((x) => !x.startsWith("#"))
-    .map((x) => x.split("\t"))
-    .map((p) => ({
-      id: p[idI],
-      name: p[nameI],
-      latitude: finite(p[latI], -90, 90),
-      longitude: finite(p[lonI], -180, 180),
-    }))
-    .filter((x) => x.id && x.latitude != null && x.longitude != null);
-}
-function parseStatsRdb(body, now = new Date()) {
-  const lines = String(body || "").split(/\r?\n/).filter(Boolean);
-  const hi = lines.findIndex((x) => !x.startsWith("#") && x.includes("site_no") && x.includes("month_nu") && x.includes("day_nu"));
-  if (hi < 0) return new Map();
-  const headers = lines[hi].split("\t");
-  const index = (name) => headers.indexOf(name);
-  const month = now.getUTCMonth() + 1;
-  const day = now.getUTCDate();
-  const out = new Map();
-  for (const line of lines.slice(hi + 2)) {
-    if (!line || line.startsWith("#")) continue;
-    const p = line.split("\t");
-    if (Number(p[index("month_nu")]) !== month || Number(p[index("day_nu")]) !== day) continue;
-    const id = p[index("site_no")];
-    if (!id) continue;
-    out.set(id, {
-      p10: finite(p[index("p10_va")]),
-      p25: finite(p[index("p25_va")]),
-      p50: finite(p[index("p50_va")]),
-      p75: finite(p[index("p75_va")]),
-      p90: finite(p[index("p90_va")]),
-      begin_year: finite(p[index("begin_yr")]),
-      end_year: finite(p[index("end_yr")]),
-      count: finite(p[index("count_nu")]),
-      month,
-      day,
-    });
+  const type = String(r.headers.get("content-type") || "").toLowerCase();
+  const text = await r.text();
+  if (!type.includes("json")) throw new Error(`${new URL(url).hostname} returned non-JSON content`);
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(`${new URL(url).hostname} returned invalid JSON`);
   }
-  return out;
-}
-async function findSites(lat, lon) {
-  for (const span of [0.6, 1.5, 3]) {
-    const n = Math.min(90, lat + span), s = Math.max(-90, lat - span);
-    const w = Math.max(-180, lon - span), e = Math.min(180, lon + span);
-    const u = new URL(SITE);
-    u.searchParams.set("format", "rdb");
-    u.searchParams.set("bBox", `${w},${s},${e},${n}`);
-    u.searchParams.set("siteType", "ST");
-    u.searchParams.set("siteStatus", "active");
-    u.searchParams.set("hasDataTypeCd", "iv");
-    u.searchParams.set("parameterCd", "00060");
-    const rows = parseRdb(await fetchText(u));
-    if (rows.length) {
-      return rows
-        .map((x) => ({ ...x, distance_miles: haversine(lat, lon, x.latitude, x.longitude) }))
-        .sort((a, b) => a.distance_miles - b.distance_miles)
-        .slice(0, 10);
-    }
-  }
-  return [];
 }
 function code(series) {
   return series.variable?.variableCode?.[0]?.value || null;
 }
 function siteId(series) {
   return series.sourceInfo?.siteCode?.[0]?.value || null;
+}
+function siteMeta(series) {
+  const id = siteId(series);
+  const geo = series.sourceInfo?.geoLocation?.geogLocation || {};
+  const latitude = finite(geo.latitude, -90, 90);
+  const longitude = finite(geo.longitude, -180, 180);
+  if (!id || latitude == null || longitude == null) return null;
+  return {
+    id,
+    name: series.sourceInfo?.siteName || id,
+    latitude,
+    longitude,
+  };
+}
+function sitesFromPayload(payload) {
+  const by = new Map();
+  for (const series of payload?.value?.timeSeries || []) {
+    if (code(series) !== "00060") continue;
+    const meta = siteMeta(series);
+    if (meta && !by.has(meta.id)) by.set(meta.id, meta);
+  }
+  return [...by.values()];
 }
 function validPoints(series) {
   return (series.values?.[0]?.value || [])
@@ -164,28 +139,84 @@ function normalize(payload, sites) {
     return { ...gauge, ...fresh, fresh: fresh.status === "current", provisional: true };
   });
 }
-async function observations(sites) {
-  if (!sites.length) return [];
-  const u = new URL(IV);
-  u.searchParams.set("format", "json");
-  u.searchParams.set("sites", sites.map((x) => x.id).join(","));
-  u.searchParams.set("parameterCd", "00060,00065,00010");
-  u.searchParams.set("period", "P1D");
-  u.searchParams.set("siteStatus", "all");
-  return normalize(await fetchJson(u), sites);
+async function nearbyObservations(lat, lon) {
+  const errors = [];
+  let successfulWindows = 0;
+  for (const span of SEARCH_SPANS) {
+    const box = bbox(lat, lon, span);
+    if (box.product > 25.000001) continue;
+    const u = new URL(IV);
+    u.searchParams.set("format", "json");
+    u.searchParams.set("bBox", box.value);
+    u.searchParams.set("siteType", "ST");
+    u.searchParams.set("siteStatus", "active");
+    u.searchParams.set("parameterCd", "00060,00065,00010");
+    u.searchParams.set("period", "P1D");
+    try {
+      const payload = await fetchJson(u, 7000, { allow404: true });
+      successfulWindows += 1;
+      if (!payload) continue;
+      const sites = sitesFromPayload(payload);
+      if (!sites.length) continue;
+      const gauges = normalize(payload, sites)
+        .filter((gauge) => gauge.discharge_cfs != null)
+        .map((gauge) => ({
+          ...gauge,
+          distance_miles: haversine(lat, lon, gauge.latitude, gauge.longitude),
+        }))
+        .sort((a, b) => a.distance_miles - b.distance_miles)
+        .slice(0, 10);
+      if (gauges.length) return gauges;
+    } catch (error) {
+      errors.push(`span ${span}: ${String(error?.message || error)}`);
+    }
+  }
+  if (successfulWindows > 0) return [];
+  throw new Error(errors.length ? errors.join(" | ") : "USGS instantaneous values unavailable");
+}
+function parseStatsRdb(body, now = new Date()) {
+  const lines = String(body || "").split(/\r?\n/).filter(Boolean);
+  const hi = lines.findIndex((x) => !x.startsWith("#") && x.includes("site_no") && x.includes("month_nu") && x.includes("day_nu"));
+  if (hi < 0) return new Map();
+  const headers = lines[hi].split("\t");
+  const index = (name) => headers.indexOf(name);
+  const month = now.getUTCMonth() + 1;
+  const day = now.getUTCDate();
+  const out = new Map();
+  for (const line of lines.slice(hi + 2)) {
+    if (!line || line.startsWith("#")) continue;
+    const p = line.split("\t");
+    if (Number(p[index("month_nu")]) !== month || Number(p[index("day_nu")]) !== day) continue;
+    const id = p[index("site_no")];
+    if (!id) continue;
+    out.set(id, {
+      p10: finite(p[index("p10_va")]),
+      p25: finite(p[index("p25_va")]),
+      p50: finite(p[index("p50_va")]),
+      p75: finite(p[index("p75_va")]),
+      p90: finite(p[index("p90_va")]),
+      begin_year: finite(p[index("begin_yr")]),
+      end_year: finite(p[index("end_yr")]),
+      count: finite(p[index("count_nu")]),
+      month,
+      day,
+    });
+  }
+  return out;
 }
 async function dailyStatistics(sites) {
   const ids = sites.slice(0, 4).map((x) => x.id);
   if (!ids.length) return new Map();
   const u = new URL(STAT);
+  u.searchParams.set("format", "rdb");
   u.searchParams.set("sites", ids.join(","));
   u.searchParams.set("parameterCd", "00060");
   u.searchParams.set("statReportType", "daily");
-  u.searchParams.set("statType", "P10,P25,P50,P75,P90");
-  return parseStatsRdb(await fetchText(u));
+  u.searchParams.set("statTypeCd", "p10,p25,p50,p75,p90");
+  return parseStatsRdb(await fetchText(u, 5500));
 }
 async function nwpsGaugeIndex(lat, lon) {
-  const span = 3;
+  const span = 2.4;
   const params = new URLSearchParams({
     "bbox.xmin": String(Math.max(-180, lon - span)),
     "bbox.ymin": String(Math.max(-90, lat - span)),
@@ -193,7 +224,7 @@ async function nwpsGaugeIndex(lat, lon) {
     "bbox.ymax": String(Math.min(90, lat + span)),
     srid: "EPSG_4326",
   });
-  const data = await fetchJson(`${NWPS}/gauges?${params}`);
+  const data = await fetchJson(`${NWPS}/gauges?${params}`, 5500);
   return Array.isArray(data?.gauges) ? data.gauges : [];
 }
 function normalizeNwps(metadata, forecast) {
@@ -225,8 +256,8 @@ async function nwpsEnrichment(lat, lon, gauges) {
       try {
         const lid = match.lid;
         const [metadata, forecast] = await Promise.all([
-          fetchJson(`${NWPS}/gauges/${encodeURIComponent(lid)}`),
-          fetchJson(`${NWPS}/gauges/${encodeURIComponent(lid)}/stageflow/forecast`).catch(() => null),
+          fetchJson(`${NWPS}/gauges/${encodeURIComponent(lid)}`, 5000),
+          fetchJson(`${NWPS}/gauges/${encodeURIComponent(lid)}/stageflow/forecast`, 5000, { allow404: true }).catch(() => null),
         ]);
         return [gauge.id, normalizeNwps(metadata, forecast)];
       } catch {
@@ -258,8 +289,7 @@ module.exports = async function handler(req, res) {
   if (lat == null || lon == null) return res.status(400).json({ error: "Valid latitude and longitude are required" });
 
   try {
-    const sites = await findSites(lat, lon);
-    const gauges = await observations(sites);
+    const gauges = await nearbyObservations(lat, lon);
     const [statsResult, nwpsResult] = await Promise.allSettled([
       dailyStatistics(gauges),
       nwpsEnrichment(lat, lon, gauges),
@@ -287,6 +317,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({
       retrieved_at: now,
       degraded: statsResult.status === "rejected" || nwpsResult.status === "rejected",
+      discovery: "USGS instantaneous-values bbox",
       location: { latitude: lat, longitude: lon },
       gauges: enriched,
       sources: [
@@ -318,19 +349,22 @@ module.exports = async function handler(req, res) {
   } catch (error) {
     res.setHeader("Cache-Control", "no-store");
     return res.status(502).json({
-      error: "River conditions unavailable",
+      error: "River observations unavailable from USGS",
       detail: String(error?.message || error),
     });
   }
 };
 
 module.exports._test = {
+  SEARCH_SPANS,
   atAgo,
+  bbox,
   haversine,
   normalize,
   normalizeNwps,
-  parseRdb,
   parseStatsRdb,
   sampleSeries,
+  siteMeta,
+  sitesFromPayload,
   trendLabel,
 };
