@@ -60,14 +60,15 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /collectFeatureFacts/.test(js)
   && /Related information/.test(js)
   && /Open this coordinate on the source map/.test(js)
-  && /\.popup-actioconst interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-floating-inspector-1/.test(html)
+  && /\.popup-action\{[^}]*min-height:42px/.test(html);
+
+const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-floating-inspector-1/.test(html)
   && !/isle-royale-map\.js\?v=20260830-19/.test(html)
   && /"source": "\/assets\/isle-royale-map\.js"/.test(vercel)
   && /"key": "Cache-Control"[\s\S]{0,120}"value": "no-store, max-age=0"/.test(vercel)
   && /"key": "CDN-Cache-Control"[\s\S]{0,120}"value": "no-store"/.test(vercel)
   && /"key": "Vercel-CDN-Cache-Control"[\s\S]{0,120}"value": "no-store"/.test(vercel);
 
-n\{[^}]*min-height:42px/.test(html);
 const popupReadabilityRuntime = /id="map-inspector"/.test(html)
   && /id="map-inspector-body"/.test(html)
   && /id="map-inspector-center-point"/.test(html)
