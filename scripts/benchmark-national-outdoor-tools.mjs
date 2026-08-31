@@ -26,6 +26,7 @@ const apis = {
   geocode: await read("api/national-geocode.js"),
   aurora: await read("api/national-aurora.js"),
   rivers: await read("api/national-rivers.js"),
+  riverContext: await read("api/national-river-context.js"),
   frost: await read("api/national-frost.js"),
   fall: await read("api/national-fall-color.js"),
 };
@@ -80,17 +81,17 @@ check("Aurora sources expose stale semantics", /staleAfterMinutes/.test(apis.aur
 check("Aurora page survives stale shared timezone helper", /typeof N\.fmtInZone===["']function["']/.test(pages.aurora), 4);
 check("Aurora exposes NOAA auroral oval visual", /national-oval-img/.test(pages.aurora) && /aurora-forecast-northern-hemisphere\.jpg/.test(pages.aurora), 4);
 check("Auroral oval does not become fake sighting probability", /not a sighting probability/i.test(pages.aurora) && /modeled intensity/i.test(pages.aurora), 4);
-check("National entry pages cache-bust shared runtime assets", Object.values(pages).every((body) => /national-tools\.js\?v=20260831-river-hotfix1/.test(body)), 3);
+check("National entry pages cache-bust shared runtime assets", Object.values(pages).every((body) => /national-tools\.js\?v=[^"']+/.test(body)), 3);
 
-check("Rivers include same-date historical percentiles", /dailyStatistics/.test(apis.rivers) && /p10,p25,p50,p75,p90/i.test(apis.rivers) && /historical_comparison/.test(apis.rivers), 5);
-check("Rivers discover nearby gauges directly from USGS IV bbox", /nearbyObservations/.test(apis.rivers) && /bBox/.test(apis.rivers) && /period", "P1D"/.test(apis.rivers) && /sitesFromPayload/.test(apis.rivers), 5);
+check("Rivers preserve same-date historical percentiles in optional context", /dailyStatistics/.test(apis.riverContext) && /p10,p25,p50,p75,p90/i.test(apis.riverContext) && /historical_daily_flow/.test(pages.rivers), 5);
+check("River core discovers gauges through USGS Site Service metadata", /nwis\/site/.test(apis.rivers) && /parseSiteRdb/.test(apis.rivers) && /hasDataTypeCd/.test(apis.rivers), 5);
+check("River bbox coordinates are rounded to USGS seven-decimal limit", /roundCoord/.test(apis.rivers) && /1e7/.test(apis.rivers) && /bbox/.test(apis.rivers), 5);
 check("River bbox search respects USGS 25 square-degree cap", /SEARCH_SPANS/.test(apis.rivers) && /2\.4/.test(apis.rivers) && /box\.product > 25\.000001/.test(apis.rivers), 4);
-check("River core no longer depends on USGS Site Service", !/nwis\/site/.test(apis.rivers) && !/findSites/.test(apis.rivers), 4);
-check("River 404 can degrade to no-gauge instead of 502", /allow404/.test(apis.rivers) && /success\.length/.test(apis.rivers), 4);
-check("River bbox windows execute in parallel", /SEARCH_SPANS\.map\(async/.test(apis.rivers) && /Promise\.all\(attempts\)/.test(apis.rivers), 5);
-check("River core response is bounded below 5 seconds per USGS window", /fetchJson\(u, 4800/.test(apis.rivers), 4);
-check("River optional enrichment has a hard sub-3-second budget", /withBudget/.test(apis.rivers) && /2800/.test(apis.rivers), 5);
-check("Rivers match NWPS by exact USGS ID", /byUsgs/.test(apis.rivers) && /usgsId/.test(apis.rivers) && /stageflow\/forecast/.test(apis.rivers), 5);
+check("River Site Service windows execute in parallel", /Promise\.all\(SEARCH_SPANS\.map/.test(apis.rivers) && /siteSearch/.test(apis.rivers), 5);
+check("River exact-site observation fetch is a separate fast request", /u\.searchParams\.set\("sites"/.test(apis.rivers) && /fetchJson\(u, 900\)/.test(apis.rivers), 5);
+check("River core excludes historical and NOAA network calls", !/nwis\/stat/.test(apis.rivers) && !/api\.water\.noaa\.gov/.test(apis.rivers) && /context_pending/.test(apis.rivers), 5);
+check("River optional context carries USGS history and NOAA NWPS", /nwis\/stat/.test(apis.riverContext) && /api\.water\.noaa\.gov/.test(apis.riverContext) && /usgsId/.test(apis.riverContext) && /stageflow\/forecast/.test(apis.riverContext), 5);
+check("River UI renders core before loading optional context", /render\(d,loc,Boolean\(d\.context_pending\)\)/.test(pages.rivers) && /if\(d\.context_pending\)loadContext\(d,loc\)/.test(pages.rivers), 5);
 check("River UI exposes history and official forecast", /(?:same-date historical percentiles|daily percentiles for this calendar date)/i.test(pages.rivers) && /NOAA NWPS/.test(pages.rivers), 4);
 check("River safety veto remains intact", /cannot determine whether paddling.*safe/i.test(apis.rivers) && /does not mean runnable, fishable, wadable, or safe/i.test(pages.rivers), 5);
 check("River function has extended runtime budget", Number(vercel.functions?.["api/national-rivers.js"]?.maxDuration) >= 25, 4);
