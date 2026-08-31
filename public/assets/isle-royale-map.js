@@ -82,6 +82,7 @@
     routePortageTransition: document.getElementById('route-portage-transition'),
     routeStrokeRate: document.getElementById('route-stroke-rate'),
     routeFeetPerStroke: document.getElementById('route-feet-per-stroke'),
+    routeDerivedSpeed: document.getElementById('route-derived-speed'),
     routeSpeed: document.getElementById('route-speed'),
     routeDayHours: document.getElementById('route-day-hours'),
     routeDeparture: document.getElementById('route-departure'),
@@ -2003,6 +2004,7 @@
   }
 
   function renderRouteBuildFlow() {
+    if(els.routeDerivedSpeed)els.routeDerivedSpeed.textContent=paddleSpeedFromStrokes().toFixed(1)+' mph modeled';
     const bar=els.routeBuildBar;
     if(!bar)return;
     const active=route.adding||route.reviewing;
@@ -2049,6 +2051,7 @@
     route.reviewing=true;
     setRouteAdding(false,{preserveReview:true});
     renderRoute();
+    renderSavedTrips();
     status(routeIsResolved()
       ? 'Route build finished. Review the route distance and stops, then save, share or export GPX.'
       : 'Route build finished. Review your points while the mapped route finishes resolving; GPX unlocks when route geometry is ready.');
