@@ -714,7 +714,7 @@ test('canoe runtime promotes strong mapped matches to official NPS portages with
 test('official NPS portages are first-class atomic canoe trip steps', () => {
   assert.match(html, /data-layer="official-portage" checked/);
   assert.match(html, /16 NPS 2026 carries/);
-  assert.match(html, /tap a brown <strong>P#<\/strong> to add that entire portage as one trip step/i);
+  assert.match(html, /Tap a brown <strong>P#<\/strong> for the whole portage/);
   assert.match(js, /function officialPortageMappedGeometry/);
   assert.match(js, /function officialPortageLandingPair/);
   assert.match(js, /router\.landingNear/);
