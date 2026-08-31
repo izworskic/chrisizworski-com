@@ -2096,35 +2096,63 @@
     status((point.label||'Route point')+' removed from trip.');
   }
 
+  const PADDLE_PACES=Object.freeze({
+    easy:{label:'Easy',mph:2.5},
+    average:{label:'Average',mph:3},
+    strong:{label:'Strong',mph:3.5}
+  });
+  const PORTAGE_PACES=Object.freeze({
+    easy:{label:'Easy',mph:1.5},
+    average:{label:'Average',mph:2},
+    strong:{label:'Strong',mph:2.5}
+  });
+
+  function paceKey(value,fallback='average') {
+    const key=cleanText(value||'').toLowerCase();
+    return ['easy','average','strong'].includes(key)?key:fallback;
+  }
+
+  function paddlePaceSpeed() {
+    return PADDLE_PACES[paceKey(route.paddlePace)]?.mph||3;
+  }
+
+  function portagePaceSpeed() {
+    return PORTAGE_PACES[paceKey(route.portagePace)]?.mph||2;
+  }
+
+  function paddlePaceLabel() {
+    const pace=PADDLE_PACES[paceKey(route.paddlePace)]||PADDLE_PACES.average;
+    return pace.label+' · '+pace.mph.toFixed(1)+' mph';
+  }
+
+  function portagePaceLabel() {
+    const pace=PORTAGE_PACES[paceKey(route.portagePace)]||PORTAGE_PACES.average;
+    return pace.label+' · '+pace.mph.toFixed(1)+' mph';
+  }
+
+  function normalizeCarryTrips(value) {
+    const trips=Number(value);
+    if(trips>=2.5)return 3;
+    if(trips>=1.5)return 2;
+    return 1;
+  }
+
   function portageWalkMultiplier() {
-    const trips=Math.max(1,Number(route.portageTrips)||1);
-    if(Math.abs(trips-1.5)<.01)return 2;
+    const trips=normalizeCarryTrips(route.portageTrips);
     return Math.max(1,2*trips-1);
   }
 
   function carryLabel() {
-    const trips=Number(route.portageTrips)||1;
-    if(Math.abs(trips-1.5)<.01)return '1½ carry';
-    if(trips>=3)return 'triple carry';
-    if(trips>=2)return 'double carry';
+    const trips=normalizeCarryTrips(route.portageTrips);
+    if(trips===3)return 'triple carry';
+    if(trips===2)return 'double carry';
     return 'single carry';
-  }
-
-  function paddleSpeedFromStrokes() {
-    const cadence=Math.max(20,Math.min(80,Number(route.strokeRate)||40));
-    const feet=Math.max(3,Math.min(12,Number(route.feetPerStroke)||6.6));
-    return Math.max(.5,Math.min(6.5,cadence*feet*60/5280));
   }
 
   function planningTravelSpeed() {
     return route.mode==='paddle'||route.mode==='canoe'
-      ? paddleSpeedFromStrokes()
+      ? paddlePaceSpeed()
       : Math.max(.5,Number(route.speed)||3);
-  }
-
-  function strokeCountForMiles(miles) {
-    const feet=Math.max(3,Math.min(12,Number(route.feetPerStroke)||6.6));
-    return Math.max(0,Number(miles)||0)*5280/feet;
   }
 
   function portageTerrainFactor(leg) {
