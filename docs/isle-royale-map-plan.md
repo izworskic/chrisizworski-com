@@ -97,6 +97,18 @@ Supporting terms (not separate canonicals): Isle Royale trail map, campground ma
 - Publish stable PMTiles/MBTiles for large layers; do not send huge polygon GeoJSON to every browser.
 - Georeference historic/NPMaps-only map artwork only when no better vector source exists; record RMSE and derived status.
 
+### Water-route geometry contract — water stays on water
+
+For paddle and motorboat modes, the displayed route line is a validated water path, never an illustrative straight sketch.
+
+- Selected camps/docks may be on shoreline/land coordinates, but the **water route geometry begins/ends at a snapped outside-water point**. The on-land selection remains a marker; it is not appended to the navigable water polyline.
+- Grid edges may not cross mapped coastline, and route simplification may not remove intermediate nodes if the shortcut would cross shoreline.
+- Multi-stop routing must preserve water continuity between legs rather than reconnecting through the selected on-land via/camp coordinate.
+- Run a final crossing-count validation on the complete route. **Accepted water routes require 0 mapped shoreline crossings.**
+- If routing or validation fails, show the selected route markers and an error state, but **draw no water route line and make no water-mileage claim**.
+- Once validated, identify water distance in three places: total water miles in the summary, leg + cumulative water miles in the stop stack, and a leg-mile badge directly on the map.
+- Endpoint/access offset from a selected shoreline marker to the water routing grid is reported separately and never included as a drawn across-land water segment.
+
 ### Route history contract — Undo must match the user's mental model
 
 Undo/Redo is part of route planning, not a generic point-pop mechanism.

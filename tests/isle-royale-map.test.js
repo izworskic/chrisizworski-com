@@ -440,11 +440,31 @@ test('Isle Royale has protected internal discovery paths outside the frozen tool
 });
 
 
+test('water routes hide unverified straight sketches and label only zero-crossing water distance', () => {
+  assert.match(js, /if\(route\.mode!=='hike'&&route\.points\.length>=2&&route\.smartState!=='water-aware'\)return \[\]/);
+  assert.match(js, /route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/);
+  assert.match(js, /route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-pending'/);
+  assert.match(js, /Water route failed zero-land-crossing validation/);
+  assert.match(js, /stats\.land_crossings!==0/);
+  assert.match(js, /No route line or mileage is shown until a zero-land-crossing path is validated/);
+  assert.match(js, /0 mapped shoreline crossings/);
+  assert.match(js, /route-distance-badge/);
+  assert.match(js, /Water · .*mi/);
+  assert.match(js, /Calculating water distance/);
+  assert.match(js, /Water distance unavailable/);
+  assert.match(html, /\.route-distance-badge/);
+  assert.match(waterIntelJs, /function crossingCount/);
+  assert.match(waterIntelJs, /shortcutSafe=!crosses/);
+  assert.match(waterIntelJs, /if\(crossingCount\(safe\)>0\)throw new Error\('Generated route intersects mapped shoreline'\)/);
+  assert.match(waterIntelJs, /if\(landCrossings>0\)throw new Error\('Water route failed final coastline validation'\)/);
+  assert.match(waterIntelJs, /return \{points:out,access_miles:access,land_crossings:landCrossings\}/);
+});
+
 test('route stops expose leg and cumulative distances and can be deleted from list or marker', () => {
   assert.match(js, /function routeControlDistances/);
   assert.match(js, /function projectControlPointAlongPath/);
   assert.match(js, /function removeRoutePoint/);
-  assert.match(js, /mi leg · .*mi total/);
+  assert.match(js, /mi (?:leg|water).*mi total/);
   assert.match(html, /\.route-distance/);
   assert.match(js, /Remove from route/);
   assert.match(js, /marker\.bindPopup/);

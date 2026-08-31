@@ -133,3 +133,59 @@ test('manual day end can intentionally create a longer-than-profile day without 
   assert.equal(leg.stop.id,'far');
   assert.equal(leg.over_target,true);
 });
+
+
+test('water router goes around synthetic island and returns zero shoreline crossings', () => {
+  const api = loadIntel();
+  const island = [[
+    [-88.90,47.95],
+    [-88.70,47.95],
+    [-88.70,48.05],
+    [-88.90,48.05],
+    [-88.90,47.95]
+  ]];
+  const router = api.create(island);
+  const start = {lat:48.00,lng:-89.05};
+  const end = {lat:48.00,lng:-88.55};
+  const direct = api.miles(start,end);
+  const result = router.route([start,end],'paddle');
+  assert.equal(result.land_crossings,0);
+  assert.equal(router.crossingCount(result.points),0);
+  assert.ok(result.points.length >= 3);
+  const routed = result.points.slice(1).reduce((sum,p,i)=>sum+api.miles(result.points[i],p),0);
+  assert.ok(routed > direct, 'route should detour around the island instead of crossing it');
+});
+
+test('near-shore land-selected endpoint snaps route line to water instead of drawing across shoreline', () => {
+  const api = loadIntel();
+  const island = [[
+    [-88.90,47.95],
+    [-88.70,47.95],
+    [-88.70,48.05],
+    [-88.90,48.05],
+    [-88.90,47.95]
+  ]];
+  const router = api.create(island);
+  const shoreCamp = {lat:48.00,lng:-88.895};
+  const waterEnd = {lat:48.00,lng:-89.05};
+  const result = router.route([shoreCamp,waterEnd],'paddle');
+  assert.equal(result.land_crossings,0);
+  assert.equal(router.crossingCount(result.points),0);
+  assert.ok(api.miles(shoreCamp,result.points[0]) > 0.01, 'water path should begin at a snapped water point, not the on-land camp coordinate');
+  assert.ok(result.access_miles > 0);
+});
+
+test('safe compaction cannot shortcut a water route back across mapped land', () => {
+  const api = loadIntel();
+  const island = [[
+    [-88.94,47.97],
+    [-88.66,47.97],
+    [-88.66,48.03],
+    [-88.94,48.03],
+    [-88.94,47.97]
+  ]];
+  const router = api.create(island);
+  const result = router.route([{lat:48,lng:-89.08},{lat:48,lng:-88.52}],'powerboat');
+  assert.equal(router.crossingCount(result.points),0);
+  for (let i=1;i<result.points.length;i++) assert.equal(router.crosses(result.points[i-1],result.points[i]),false);
+});
