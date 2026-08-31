@@ -1963,7 +1963,7 @@
 
   function routeIsResolved() {
     if(route.points.length<2)return false;
-    if(route.mode==='hike')return route.smartState==='trail-snapped'||route.smartState==='trail-fallback';
+    if(route.mode==='hike')return route.smartState==='trail-snapped';
     if(route.mode==='canoe')return route.smartState==='canoe-aware';
     return route.smartState==='water-aware';
   }
@@ -2019,6 +2019,13 @@
       els.routeFinishBuild.disabled=pointCount<2;
     }
     if(els.routeReviewActions)els.routeReviewActions.hidden=!route.reviewing;
+    const building=route.adding;
+    if(els.routeSave)els.routeSave.disabled=building||pointCount<1;
+    if(els.routeShare)els.routeShare.disabled=building||pointCount<2;
+    if(els.routeExportGpx)els.routeExportGpx.disabled=building||!routeIsResolved();
+    if(els.cockpitSave)els.cockpitSave.disabled=building||pointCount<1;
+    if(els.cockpitShare)els.cockpitShare.disabled=building||pointCount<2;
+    if(els.cockpitGpx)els.cockpitGpx.disabled=building||!routeIsResolved();
     if(els.routeReviewGpx)els.routeReviewGpx.disabled=!routeIsResolved();
   }
 
@@ -3399,7 +3406,7 @@
     route.line=null;
     const path=routePathPoints();
     const displayPath=routeDisplayPoints();
-    const draftDisplay=path.length<2&&displayPath.length>=2;
+    const draftDisplay=!routeIsResolved()&&displayPath.length>=2;
     buildRouteItinerary(path);
 
     if(displayPath.length>=2) {
@@ -3407,11 +3414,24 @@
         pane:'routePane',
         color:draftDisplay?'#a46a2c':route.mode==='hike'&&route.smartState==='trail-snapped'?'#8b4f2d':'#173d36',
         weight:draftDisplay?4:(route.mode==='hike'?5:4),
-        opacity:draftDisplay?.86:.94,
+        opacity:draftDisplay ? .86 : .94,
         dashArray:draftDisplay?'8 7':((route.mode==='hike'&&route.smartState==='trail-snapped')||route.smartState==='water-aware'?null:'9 6'),
         interactive:route.mode!=='hike'
       }).addTo(routeLayerGroup);
-      if(draftDisplay)route.line.bindTooltip('Draft route · straight between selected points while mapped routing verifies',{sticky:true});
+      if(draftDisplay) {
+        route.line.bindTooltip('Draft route · straight between selected points while mapped routing verifies',{sticky:true});
+        for(let i=1;i<route.points.length;i++) {
+          const a=route.points[i-1],b=route.points[i];
+          const leg=distanceMiles(a,b);
+          const mid={lat:(a.lat+b.lat)/2,lng:(a.lng+b.lng)/2};
+          L.marker([mid.lat,mid.lng],{
+            pane:'routePane',
+            interactive:false,
+            keyboard:false,
+            icon:L.divIcon({className:'',html:'<span class="route-distance-badge route-distance-draft">Draft '+leg.toFixed(1)+' mi</span>',iconSize:[96,24],iconAnchor:[48,12]})
+          }).addTo(routeLayerGroup);
+        }
+      }
       if(route.mode!=='hike') {
         route.line.on('click',event=>{
           if(!route.adding)return;
@@ -3939,6 +3959,7 @@
     };
     rememberRouteEdit(point.historyAction||(point.kind==='campground'?'add '+point.label:'add route point'));
     delete point.historyAction;
+    route.reviewing=false;
     route.points.push(point);
     reroute('Route changed. Re-run the weather analysis for the updated path.');
     emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode,point_kind:cleanText(meta.kind||'map-point')});
