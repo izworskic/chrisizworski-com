@@ -2894,7 +2894,7 @@
     }
     if(route.mode==='canoe') {
       if(route.smartState==='canoe-loading'||route.smartState==='canoe-pending') {
-        els.routeSmartStatus.innerHTML='<strong>Building canoe trip:</strong> checking each point-to-point leg for a mapped portage or water leg.';
+        els.routeSmartStatus.innerHTML='<strong>Building canoe trip:</strong> the dashed draft legs stay visible with draft distances while each point-to-point leg resolves as paddle or portage.';
         return;
       }
       if(route.smartState==='canoe-aware') {
@@ -3715,19 +3715,20 @@
     if(els.cockpitSpeed)els.cockpitSpeed.value=els.routeSpeed.value;
     if(els.cockpitHours)els.cockpitHours.value=els.routeDayHours?.value||'6';
     if(els.cockpitBuild) {
-      els.cockpitBuild.textContent=route.adding?'Explore':'Build route';
-      els.cockpitBuild.classList.toggle('primary',!route.adding);
+      els.cockpitBuild.textContent=route.adding?'Finish & review':route.reviewing?'Edit route':'Build route';
+      els.cockpitBuild.classList.toggle('primary',route.adding||route.reviewing);
     }
     if(els.cockpitWeather)els.cockpitWeather.disabled=Boolean(els.routeWeatherButton?.disabled);
     if(els.cockpitReverse)els.cockpitReverse.disabled=route.points.length<2;
     if(els.cockpitClear)els.cockpitClear.disabled=!route.points.length;
-    if(els.cockpitSave)els.cockpitSave.disabled=!route.points.length;
-    if(els.cockpitShare)els.cockpitShare.disabled=!route.points.length;
-    const gpxReady=route.points.length>=2&&(route.mode==='hike'?route.smartState==='trail-snapped':route.mode==='canoe'?route.smartState==='canoe-aware':route.smartState==='water-aware');
-    if(els.cockpitGpx)els.cockpitGpx.disabled=!gpxReady;
-    if(els.routeSave)els.routeSave.disabled=!route.points.length;
-    if(els.routeShare)els.routeShare.disabled=!route.points.length;
-    if(els.routeExportGpx)els.routeExportGpx.disabled=!gpxReady;
+    const building=route.adding;
+    const gpxReady=routeIsResolved();
+    if(els.cockpitSave)els.cockpitSave.disabled=building||!route.points.length;
+    if(els.cockpitShare)els.cockpitShare.disabled=building||route.points.length<2;
+    if(els.cockpitGpx)els.cockpitGpx.disabled=building||!gpxReady;
+    if(els.routeSave)els.routeSave.disabled=building||!route.points.length;
+    if(els.routeShare)els.routeShare.disabled=building||route.points.length<2;
+    if(els.routeExportGpx)els.routeExportGpx.disabled=building||!gpxReady;
     if(els.routeRestore)els.routeRestore.disabled=!hasSavedTrip();
     if(els.cockpitSummary) {
       const summary=els.routeSummary?.textContent||'No route yet.';
