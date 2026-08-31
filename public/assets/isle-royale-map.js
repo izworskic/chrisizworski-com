@@ -3330,8 +3330,8 @@
   function routeWaypointIcon(index,total,point={}) {
     const isCamp=point.kind==='campground';
     const day=point.manualDayEnd?manualDayNumber(point):null;
-    const cls=index===0?'is-start':index===total-1?'is-end':isCamp?'is-camp':'';
-    const label=index===0?'S':index===total-1?'D':day?'D'+day:isCamp?'C':String(index);
+    const cls=index===0?'is-start':day?'is-day-end':index===total-1?'is-end':isCamp?'is-camp':'';
+    const label=index===0?'S':day?'D'+day:index===total-1?'D':isCamp?'C':String(index);
     return L.divIcon({
       className:'',
       html:`<span class="route-waypoint-icon ${cls}">${label}</span>`,
@@ -3823,7 +3823,7 @@
       row.className='route-stop-row'+(point.kind==='campground'?' is-camp':'')+(point.manualDayEnd?' is-day-end':'')+(canoeLeg?' is-'+canoeLeg.type:'');
       const token=document.createElement('div');
       token.className='route-stop-token';
-      token.textContent=index===0?'S':index===route.points.length-1?'D':point.manualDayEnd?'D'+manualDayNumber(point):point.kind==='campground'?'C':String(index);
+      token.textContent=index===0?'S':point.manualDayEnd?'D'+manualDayNumber(point):index===route.points.length-1?'D':point.kind==='campground'?'C':String(index);
       const textWrap=document.createElement('button');
       textWrap.type='button';
       textWrap.className='route-stop-text';
