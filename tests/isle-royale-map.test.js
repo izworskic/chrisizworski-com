@@ -651,8 +651,8 @@ test('watercraft routes keep only verified safe prefixes and never fall back ove
   assert.doesNotMatch(js, /Draft route · straight between selected points while mapped routing verifies/);
   assert.match(waterIntelJs, /function crossingCount/);
   assert.match(waterIntelJs, /shortcutSafe=!crosses/);
-  assert.match(waterIntelJs, /if\(crossingCount\(safe\)>0\)throw new Error\('Generated route intersects mapped shoreline'\)/);
-  assert.match(waterIntelJs, /if\(landCrossings>0\)throw new Error\('Water route failed final coastline validation'\)/);
+  assert.match(waterIntelJs, /if\(crossingCount\(safe\)>0\)throw new Error\('Generated checkpoint route intersects mapped land or a water boundary'\)/);
+  assert.match(waterIntelJs, /if\(landCrossings>0\)throw new Error\('Multi-point water route failed final land-crossing validation'\)/);
 });
 
 test('2026 NPS portage dataset is complete, source-backed, and keeps anchors non-navigational', () => {
@@ -692,12 +692,12 @@ test('canoe runtime promotes strong mapped matches to official NPS portages with
 test('official NPS portages are first-class atomic canoe trip steps', () => {
   assert.match(html, /data-layer="official-portage" checked/);
   assert.match(html, /16 NPS 2026 carries/);
-  assert.match(html, /Tap a brown <strong>P#<\/strong> for the whole portage/);
+  assert.match(html, /Click a brown <strong>P#<\/strong> when you want that portage/);
   assert.match(js, /function officialPortageMappedGeometry/);
   assert.match(js, /function officialPortageLandingPair/);
   assert.match(js, /router\.landingNear/);
   assert.match(waterIntelJs, /function landingNear/);
-  assert.match(waterIntelJs, /return \{route,landingNear,analyze/);
+  assert.match(waterIntelJs, /route,landingNear,analyze,coastDistance,boundaryDistance/);
   assert.match(js, /function selectedOfficialPortageLeg/);
   assert.match(js, /officialMatchMethod:'selected-portage-trip-node'/);
   assert.match(js, /async function addOfficialPortageToTrip/);
@@ -747,8 +747,8 @@ test('smart route planner stays map-built while preserving hiking and canoe rout
   assert.match(html, /<h3>Trip criteria<\/h3>/);
   assert.match(html, /id="route-smart-status"/);
   assert.match(html, /id="route-reverse"/);
-  assert.match(html, /Tap any mapped location to add it/);
-  assert.match(html, /Tap a brown <strong>P#<\/strong> for the whole portage/);
+  assert.match(html, /Click as many points along the water as you need/);
+  assert.match(html, /Click a brown <strong>P#<\/strong> when you want that portage/);
   assert.match(js, /const trailGraph = \{/);
   assert.match(js, /function registerTrailGeometry/);
   assert.match(js, /function shortestTrailPath/);
@@ -771,7 +771,7 @@ test('route point workflow stays map-first and weather follows resolved geometry
   assert.match(js, /return route\.resolvedPoints\.length \? route\.resolvedPoints : route\.points/);
   assert.match(js, /const points=routePathPoints\(\)/);
   assert.match(js, /Smart hiking route:/);
-  assert.match(js, /Editable water route:/);
+  assert.match(js, /Editable multi-point route:/);
 });
 
 
