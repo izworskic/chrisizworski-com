@@ -356,3 +356,7 @@ The first five tools now share a common user journey. Future work must preserve 
 7. Maps are supporting spatial context. Core decisions and source truth must remain usable if the basemap fails.
 8. No national location page becomes indexable until it passes `benchmarks/national-location-admission.json`, including the hard vetoes and minimum score.
 9. Do not add a new national product family merely to increase breadth while these five still have material decision, reliability, or network gaps.
+
+
+### Core-before-enrichment rule
+Core decision data must not wait on optional enrichment. If a tool has a fast authoritative observation and slower secondary context, render the observation first and load enrichment independently. Secondary-source latency or failure must never blank the primary decision surface.
