@@ -6,6 +6,7 @@ const root = process.cwd();
 const read = p => fs.readFileSync(path.join(root, p), 'utf8');
 const html = read('public/isle-royale-map/index.html');
 const js = read('public/assets/isle-royale-map.js');
+const vercel = read('vercel.json');
 const api = read('api/isle-royale.js');
 const routeWeatherApi = read('api/isle-royale-route-weather.js');
 const waterApi = read('api/isle-royale-water-intelligence.js');
@@ -61,6 +62,14 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /Related information/.test(js)
   && /Open this coordinate on the source map/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
+
+const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-floating-inspector-1/.test(html)
+  && !/isle-royale-map\.js\?v=20260830-19/.test(html)
+  && /"source": "\/assets\/isle-royale-map\.js"/.test(vercel)
+  && /"key": "Cache-Control"[\s\S]{0,120}"value": "no-store, max-age=0"/.test(vercel)
+  && /"key": "CDN-Cache-Control"[\s\S]{0,120}"value": "no-store"/.test(vercel)
+  && /"key": "Vercel-CDN-Cache-Control"[\s\S]{0,120}"value": "no-store"/.test(vercel);
+
 const popupReadabilityRuntime = /id="map-inspector"/.test(html)
   && /id="map-inspector-body"/.test(html)
   && /id="map-inspector-center-point"/.test(html)
@@ -397,6 +406,7 @@ if (!catalogCrawlable) hardFailures.push('crawlable source catalog/raw manifest 
 if (!measurementComplete) hardFailures.push('planned privacy-safe Isle Royale measurement events missing');
 if (!currentShipwreckRuntime) hardFailures.push('current NPS shipwreck buoy runtime missing');
 if (!pointDetailRuntime) hardFailures.push('point hit-target/detail popup runtime missing');
+if (!interactionAssetFresh) hardFailures.push('live Isle Royale interaction asset is stale-cacheable or using an old version token');
 if (!popupReadabilityRuntime) hardFailures.push('rich detail cards are not promoted into the unobstructed floating map inspector');
 if (!popupDragRuntime) hardFailures.push('floating inspector cannot move the card itself independently of the map for points and official portages');
 if (!campgroundDetailRuntime) hardFailures.push('campground cards are missing official NPS capacity profiles or truthful supplemental numbered site/shelter identifiers');

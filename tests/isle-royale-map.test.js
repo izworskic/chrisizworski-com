@@ -105,6 +105,18 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
 });
 
 
+test('Isle Royale interaction script is cache-busted and not stored during active development', () => {
+  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-floating-inspector-1/);
+  assert.doesNotMatch(html, /isle-royale-map\.js\?v=20260830-19/);
+  const vercel = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
+  const rule = (vercel.headers || []).find(item => item.source === '/assets/isle-royale-map.js');
+  assert.ok(rule, 'isle royale script cache rule');
+  const headers = Object.fromEntries((rule.headers || []).map(item => [item.key, item.value]));
+  assert.equal(headers['Cache-Control'], 'no-store, max-age=0');
+  assert.equal(headers['CDN-Cache-Control'], 'no-store');
+  assert.equal(headers['Vercel-CDN-Cache-Control'], 'no-store');
+});
+
 test('rich map cards promote into a readable floating inspector', () => {
   for (const id of ['map-inspector','map-inspector-drag','map-inspector-body','map-inspector-center-point','map-inspector-center-card','map-inspector-close']) {
     assert.ok(html.includes(`id="${id}"`), id);
