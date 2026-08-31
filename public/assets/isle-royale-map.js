@@ -586,9 +586,12 @@
 
   function setCampDayEnd(recordOrPoint,active=true) {
     let point=recordOrPoint?.latlng ? routePointForRecord(recordOrPoint) : recordOrPoint;
+    let addedForDayEnd=false;
     if(!point&&recordOrPoint?.latlng) {
+      const beforeCount=route.points.length;
       addFeatureToRoute(recordOrPoint);
       point=routePointForRecord(recordOrPoint);
+      addedForDayEnd=Boolean(point&&route.points.length>beforeCount);
     }
     if(!point||point.kind!=='campground')return false;
     if(active&&route.points[0]===point) {
@@ -603,7 +606,8 @@
       status((point.label||'Campground')+' is not in the current NPS Boat-In campground feed, so it cannot be fixed as a water-trip day end.');
       return false;
     }
-    rememberRouteEdit();
+    if(Boolean(point.manualDayEnd)===Boolean(active))return true;
+    if(!addedForDayEnd)rememberRouteEdit((active?'set ':'clear ')+(point.label||'campground')+' day end');
     point.manualDayEnd=Boolean(active);
     reroute((point.label||'Campground')+(active?' set as an explicit day end.':' returned to a normal route stop.'));
     const day=manualDayNumber(point);
@@ -2403,7 +2407,7 @@
     els.routeModeSelect.value=route.mode;
     els.routeSpeed.value=String(route.speed);
     if(els.routeDayHours)els.routeDayHours.value=String(route.hours);
-    if(els.routeDeparture&&route.departure)els.routeDeparture.value=route.departure;
+    if(els.routeDeparture)els.routeDeparture.value=route.departure;
     route.resolvedPoints=[];
     route.trailNames=[];
     route.waterStats=null;
@@ -2515,15 +2519,18 @@
   function applyTripState(raw,{remember=true,message='Trip restored.'}={}) {
     const state=normalizeTripState(raw);
     if(!state)return false;
-    if(remember)rememberRouteEdit();
+    if(remember)rememberRouteEdit('restore saved trip');
     route.waterToken++;
     route.points=cloneRoutePoints(state.points);
     route.mode=state.mode;
+    route.speed=state.speed;
+    route.hours=state.hours;
+    route.departure=state.departure||'';
     route.activeScenario=state.activeScenario||'balanced';
     els.routeModeSelect.value=state.mode;
-    els.routeSpeed.value=String(state.speed);
-    if(els.routeDayHours)els.routeDayHours.value=String(state.hours);
-    if(state.departure&&Number.isFinite(new Date(state.departure).getTime()))els.routeDeparture.value=state.departure;
+    els.routeSpeed.value=String(route.speed);
+    if(els.routeDayHours)els.routeDayHours.value=String(route.hours);
+    if(els.routeDeparture)els.routeDeparture.value=route.departure;
     route.resolvedPoints=[];route.trailNames=[];route.waterStats=null;route.waterReason='';route.scenarios=[];route.scenarioWeather={};route.itinerary=null;route.itineraryWeather=null;
     reroute(message+' Re-run weather for the restored schedule.');
     if(state.map)window.setTimeout(()=>map.setView([state.map.lat,state.map.lng],state.map.zoom,{animate:false}),260);
