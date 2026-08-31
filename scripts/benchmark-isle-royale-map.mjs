@@ -63,7 +63,7 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /Open this coordinate on the source map/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
 
-const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-map-above-criteria-1/.test(html)
+const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-multipoint-water-1/.test(html)
   && !/isle-royale-map\.js\?v=20260830-19/.test(html)
   && /"source": "\/assets\/isle-royale-map\.js"/.test(vercel)
   && /"key": "Cache-Control"[\s\S]{0,120}"value": "no-store, max-age=0"/.test(vercel)
@@ -283,11 +283,16 @@ const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js
   && /function routeSegment/.test(waterJs)
   && /crosses\(n,nn\)/.test(waterJs)
   && /waterKeys/.test(waterJs)
-  && /outside-water routing component/.test(waterJs)
+  && /function isMappedWater/.test(waterJs)
+  && /function centerlineRoute/.test(waterJs)
+  && /function gridSpec/.test(waterJs)
+  && /direct<=2\)\{step=\.0007/.test(waterJs)
+  && /waterPolygons/.test(waterJs)
+  && /landPolygons/.test(waterJs)
   && /function crossingCount/.test(waterJs)
   && /shortcutSafe=!crosses/.test(waterJs)
-  && /Generated route intersects mapped shoreline/.test(waterJs)
-  && /Water route failed final coastline validation/.test(waterJs)
+  && /Generated checkpoint route intersects mapped land or a water boundary/.test(waterJs)
+  && /Multi-point water route failed final land-crossing validation/.test(waterJs)
   && /land_crossings:landCrossings/.test(waterJs)
   && /Water route failed zero-land-crossing validation/.test(js)
   && /stats\.land_crossings!==0/.test(js)
@@ -306,7 +311,12 @@ const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js
   && /zonesAlongPath/.test(waterJs)
   && /dayEnds/.test(waterJs)
   && /natural"="coastline/.test(waterApi)
-  && /planning shoreline geometry only/i.test(waterApi);
+  && /natural"="water"/.test(waterApi)
+  && /waterway"~"river\|stream\|canal\|riverbank"/.test(waterApi)
+  && /land_polygons/.test(waterApi)
+  && /water_polygons/.test(waterApi)
+  && /water_centerlines/.test(waterApi)
+  && /planning water geometry only/i.test(waterApi);
 
 const itineraryRuntime = /id="route-itinerary"/.test(html)
   && /function sourceBackedWaterCamps/.test(js)
@@ -337,6 +347,24 @@ const scenarioRuntime = /id="route-scenarios"/.test(html)
   && /Ambitious/.test(waterJs)
   && /if\(Number\.isFinite\(targetMs\)\)out\.target_time/.test(routeWeatherApi)
   && /Scheduled route sample falls outside the supported NWS forecast window/.test(routeWeatherApi);
+
+const multiPointCheckpointRuntime = /Trace the trip with checkpoints/.test(html)
+  && /Click as many points along the water as you need/.test(html)
+  && /Distance and time accumulate through every checkpoint/.test(html)
+  && /You do not need to stop at two points/.test(html)
+  && /kind:watercraft\?'water-checkpoint':'map-point'/.test(js)
+  && /Water checkpoint/.test(js)
+  && /async function resolveWaterRouteAsync\(seedLegs=\[\]\)/.test(js)
+  && /async function resolveCanoeRouteAsync\(seedLegs=\[\]\)/.test(js)
+  && /preserveVerifiedPrefix/.test(js)
+  && /const waterSeed=preserve\?\[\.\.\.\(route\.waterLegs\|\|\[\]\)\]:\[\]/.test(js)
+  && /const mixedSeed=preserve\?\[\.\.\.\(route\.mixedLegs\|\|\[\]\)\]:\[\]/.test(js)
+  && /for\(let i=legs\.length\+1;i<route\.points\.length;i\+\+\)/.test(js)
+  && /point\.kind==='water-checkpoint'/.test(js)
+  && /isCheckpoint\?'is-checkpoint'/.test(js)
+  && /function gridSpec/.test(waterJs)
+  && /function centerlineRoute/.test(waterJs)
+  && /function isMappedWater/.test(waterJs);
 
 const mapFirstRoutingRuntime = /id="explore-mode"[^>]*aria-pressed="true"/.test(html)
   && /id="route-mode"[^>]*>Build route/.test(html)
@@ -505,7 +533,7 @@ const referenceShelfComplete = /Official reference maps/.test(html)
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && popupReadabilityRuntime && popupDragRuntime && campgroundDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && tripIntelligenceRuntime && routeEditingRuntime && tripCreationRuntime && mapOnlyCriteriaRuntime, 'single-surface trip construction with a full-width map above a compact criteria strip, any mapped feature selectable, and atomic P# portages');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && popupReadabilityRuntime && popupDragRuntime && campgroundDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && tripIntelligenceRuntime && routeEditingRuntime && tripCreationRuntime && mapOnlyCriteriaRuntime && multiPointCheckpointRuntime, 'single-surface multi-point water trip construction with cumulative checkpoint routing, inland-water geometry, atomic P# portages, and a compact criteria strip');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -557,6 +585,7 @@ if (!itineraryRuntime) hardFailures.push('multi-day water itinerary is not sourc
 if (!scenarioRuntime) hardFailures.push('scenario planning is missing side-by-side trip structures or overnight-aware forecast comparison');
 if (!mapFirstRoutingRuntime) hardFailures.push('map-first route building is missing persistent Build mode, clickable campsite stops, or pinned campsite itinerary behavior');
 if (!mapOnlyCriteriaRuntime) hardFailures.push('criteria are not below the full-width map, a second cockpit/build surface is visible, or non-point mapped features cannot be selected at the clicked map location');
+if (!multiPointCheckpointRuntime) hardFailures.push('water trip creation has regressed to a two-point/destination model, drops verified prefix legs, or lacks fine inland-water/waterway checkpoint routing');
 if (!manualDayEndRuntime) hardFailures.push('manual campsite day-end control is missing or can bypass Boat-In/closure truth gates');
 if (!largePlanningCanvasRuntime) hardFailures.push('planning map is not the dominant full-width surface above criteria or is missing full-viewport focus mode');
 if (!focusCockpitRuntime) hardFailures.push('Focus map reintroduces a second cockpit or loses the single shared route bar and route-edit history');
