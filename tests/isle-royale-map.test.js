@@ -183,7 +183,7 @@ test('campground cards combine official NPS capacity with only explicit mapped s
 test('floating inspector drag moves the card itself instead of panning the map', () => {
   assert.match(js, /function inspectorPosition/);
   assert.match(js, /function wireFloatingInspectorDrag/);
-  assert.match(js, /Drag this card anywhere on the map/);
+  assert.match(html, /Drag this card anywhere on the map/);
   assert.match(js, /function centerInspectorPoint/);
   assert.match(js, /Center card/);
   assert.match(js, /Center point/);
