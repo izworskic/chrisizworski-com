@@ -2130,8 +2130,29 @@
     return pace.label+' · '+pace.mph.toFixed(1)+' mph';
   }
 
+  function nearestPaceKey(mph,presets) {
+    const value=Number(mph);
+    if(!Number.isFinite(value))return 'average';
+    return Object.entries(presets)
+      .map(([key,preset])=>({key,delta:Math.abs(value-preset.mph)}))
+      .sort((a,b)=>a.delta-b.delta)[0]?.key||'average';
+  }
+
+  function legacyPaddlePace(raw={}) {
+    if(raw.paddlePace)return paceKey(raw.paddlePace);
+    const cadence=Number(raw.strokeRate),feet=Number(raw.feetPerStroke);
+    if(Number.isFinite(cadence)&&Number.isFinite(feet))return nearestPaceKey(cadence*feet*60/5280,PADDLE_PACES);
+    return nearestPaceKey(Number(raw.speed)||3,PADDLE_PACES);
+  }
+
+  function legacyPortagePace(raw={}) {
+    if(raw.portagePace)return paceKey(raw.portagePace);
+    return nearestPaceKey(Number(raw.portageSpeed)||2,PORTAGE_PACES);
+  }
+
   function normalizeCarryTrips(value) {
     const trips=Number(value);
+    if(!Number.isFinite(trips))return 2;
     if(trips>=2.5)return 3;
     if(trips>=1.5)return 2;
     return 1;
