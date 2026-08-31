@@ -1,5 +1,5 @@
 {
-  "version": "2.3.0",
+  "version": "2.4.0",
   "updated": "2026-08-31",
   "route": "/isle-royale-map/",
   "objective": "Build the most useful source-transparent Isle Royale planning map in the Chris Izworski tool network without pretending static cartography is authoritative GIS.",
@@ -64,7 +64,7 @@
     {
       "id": "planning-flow",
       "weight": 15,
-      "target": "The primary surface is a canoe trip builder, not a GIS showcase: route planner before feature browsing; water points, qualified campgrounds, and designated NPS portages are selectable trip objects. A mapped portage is one logical route step with water-side entry/exit landings and NPS-published carry distance. Every resolved leg shows leg+cumulative distance and active travel time during construction; verified prefixes remain visible while the newest leg resolves. Camps can close days during construction and the next day continues from the same camp. Deletion/Undo/Redo are obvious and atomic for compound portage/day-end actions. Paddle/motorboat mileage is valid only after zero-shoreline-crossing routing resolves; no straight overland fallback is ever drawn."
+      "target": "Map-only trip construction is primary. Build mode accepts any mappable feature at the clicked map position, plus open-map points and atomic P# portages. The side/lower panel is criteria-only (mode, pace/speed, carry workload, hours/day, departure, search and layer filters); route stops, reports, scenarios, saved-trip management and weather outputs do not compete with map construction. Focus/review overlays may expose route editing and handoff after or during construction."
     },
     {
       "id": "provenance",
@@ -125,7 +125,9 @@
     "Do not call water routing complete if route simplification can shortcut across coastline, selected on-land endpoints are drawn into the water route, failed water routing falls back to a straight line, or mileage is shown before a zero-crossing route resolves.",
     "Do not call canoe trip creation complete if a designated mapped portage cannot be selected directly as one logical route step with entry landing, carry, and exit landing.",
     "Do not call canoe trip creation time-aware if the builder shows miles but withholds active paddle/portage travel time until after the trip is finished.",
-    "Do not expose internal portage landing coordinates as two independent user trip stops; the canoeist-facing stop list must present the carry as one atomic P# step."
+    "Do not expose internal portage landing coordinates as two independent user trip stops; the canoeist-facing stop list must present the carry as one atomic P# step.",
+    "Do not duplicate the primary route-building workflow in the side/lower panel; map controls and map selections are the route builder.",
+    "Do not restrict route selection to feature records that already contain a point coordinate when a line/area feature supplies a valid clicked map coordinate."
   ],
   "initialBuildFit": {
     "distinctSearchIntent": 24,
@@ -186,6 +188,8 @@
     "releaseTarget": 92,
     "stretchTarget": 97,
     "principles": [
+      "The map is the construction surface; the adjacent/lower panel sets criteria and filters, not a second route-building workflow.",
+      "Every mappable visitor feature can be selected directly while Build mode is active; line and area features use the exact clicked map position.",
       "The route is the product: trip construction happens continuously on the map.",
       "Plan by realistic active travel time as well as distance.",
       "Portages are transitions between water networks, not decorative trail overlays.",
@@ -194,6 +198,8 @@
       "Detailed trip information follows the route the user actually built."
     ],
     "hardGates": [
+      "The visible route panel must be criteria-only: mode, pace/speed, carry workload, hours/day, departure, search and layer filters; route stops, reports, scenarios, save/export controls and weather analysis must not compete with map construction there.",
+      "While Build mode is active, any loaded mappable feature geometry must be selectable directly from the map, including point, line and area features; official P# portages retain their dedicated atomic behavior.",
       "A mapped designated portage must be selectable directly during Build mode as one logical trip step.",
       "A canoe portage trip step must include a water-side entry landing, official portage corridor/distance, and water-side exit landing; never require the user to invent land-crossing pins.",
       "Adding a new choice must preserve all previously verified route geometry, mileage and travel time while only the newest leg resolves.",

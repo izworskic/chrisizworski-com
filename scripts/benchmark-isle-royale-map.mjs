@@ -63,7 +63,7 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /Open this coordinate on the source map/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
 
-const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-canoe-trip-graph-1/.test(html)
+const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-map-only-builder-1/.test(html)
   && !/isle-royale-map\.js\?v=20260830-19/.test(html)
   && /"source": "\/assets\/isle-royale-map\.js"/.test(vercel)
   && /"key": "Cache-Control"[\s\S]{0,120}"value": "no-store, max-age=0"/.test(vercel)
@@ -135,7 +135,7 @@ const osmToggleRuntime = /const osmContextGroup = L\.layerGroup\(\)/.test(js)
   && /targetGroup:osmContextGroup/.test(js)
   && !/>Show OSM context</.test(html);
 const routePlanningRuntime = /id="route-planner"/.test(html)
-  && /Plan a route/.test(html)
+  && /Trip criteria/.test(html)
   && /function addRoutePoint/.test(js)
   && /function routeForecastSamples/.test(js)
   && /function relativeWind/.test(js)
@@ -181,7 +181,7 @@ const smartRoutingRuntime = /const trailGraph = \{/.test(js)
   && /function shortestTrailPath/.test(js)
   && /function resolveHikingRoute/.test(js)
   && /trail-snapped/.test(js)
-  && /draggable:true/.test(js)
+  && /draggable:point\.kind!=='official-portage-landing'/.test(js)
   && /nearestControlSegmentIndex/.test(js)
   && /function reverseRoute/.test(js)
   && /!\['canoe-aware','canoe-partial'\]\.includes\(route\.smartState\)/.test(js)
@@ -266,7 +266,8 @@ const tripCreationRuntime = spec.tripCreationValueFunction?.releaseTarget === 92
   && /function currentDayVerifiedHours/.test(js)
   && /active travel/.test(js)
   && /portageGroupId:cleanText\(point\.portageGroupId/.test(js)
-  && /water → portage → water → camp/.test(html)
+  && /Build from the map/.test(html)
+  && /Tap a brown <strong>P#<\/strong> for the whole portage/.test(html)
   && /function landingNear/.test(waterJs)
   && /return \{route,landingNear,analyze/.test(waterJs);
 
@@ -352,7 +353,9 @@ const mapFirstRoutingRuntime = /id="explore-mode"[^>]*aria-pressed="true"/.test(
   && /Finish day/.test(html)
   && /Finish trip/.test(html)
   && /function addFeatureToRoute/.test(js)
-  && /route\.adding&&record\.latlng/.test(js)
+  && /function featureRoutePoint/.test(js)
+  && /if\(route\.adding\) \{/.test(js)
+  && /addFeatureToRoute\(record,\{latlng:event\.latlng\|\|recordRoutePoint\(record\)\}\)/.test(js)
   && /function renderRouteStops/.test(js)
   && /function renderRouteBuildFlow/.test(js)
   && /function finishCurrentDay/.test(js)
@@ -370,6 +373,20 @@ const mapFirstRoutingRuntime = /id="explore-mode"[^>]*aria-pressed="true"/.test(
   && !/route\.points\.length===2\)setRouteAdding\(false\)/.test(js)
   && /nextPinned=candidates\.find/.test(waterJs)
   && /pinned:Boolean\(chosen\?\.pinned\)/.test(waterJs);
+
+const mapOnlyCriteriaRuntime = /<h2>Select on the map\. Set criteria here\.<\/h2>/.test(html)
+  && /<h3>Trip criteria<\/h3>/.test(html)
+  && /These settings change the math\. They do not build the route/.test(html)
+  && /Map selections define the trip\. Criteria only change pace, effort and day-planning estimates/.test(html)
+  && /class="route-fields criteria-fields"/.test(html)
+  && /\.route-compat-controls\{display:none!important\}/.test(html)
+  && /\.shell\{display:grid;grid-template-columns:minmax\(0,2\.25fr\) minmax\(310px,\.52fr\)/.test(html)
+  && !/<details class="saved-trip-panel" open>/.test(html)
+  && !/<span class="route-badge">ROUTE INTELLIGENCE<\/span>/.test(html)
+  && /function featureRoutePoint/.test(js)
+  && /clickedLatLng&&Number\.isFinite\(clickedLatLng\.lat\)/.test(js)
+  && /if\(route\.adding\) \{[\s\S]{0,220}addFeatureToRoute\(record,\{latlng:event\.latlng\|\|recordRoutePoint\(record\)\}\)/.test(js)
+  && !/route\.adding&&record\.latlng/.test(js);
 
 const manualDayEndRuntime = /function setCampDayEnd/.test(js)
   && /End next day here/.test(js)
@@ -391,9 +408,8 @@ const tripIntelligenceRuntime = /id="route-paddle-pace"/.test(html)
   && /Easy · 1\.5 mph/.test(html)
   && /Average · 2\.0 mph/.test(html)
   && /Strong · 2\.5 mph/.test(html)
-  && /2 loads · double carry · walk 3×/.test(html)
-  && /3 loads · triple carry · walk 5×/.test(html)
-  && /standard 10 minutes per portage/.test(html)
+  && /2 · double carry/.test(html)
+  && /3 · triple carry/.test(html)
   && !/id="route-stroke-rate"|id="route-feet-per-stroke"|id="route-portage-speed"|id="route-portage-transition"/.test(html)
   && /const PADDLE_PACES=Object\.freeze/.test(js)
   && /easy:\{label:'Easy',mph:2\.5\}/.test(js)
@@ -497,7 +513,7 @@ const referenceShelfComplete = /Official maps from the original research/.test(h
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && popupReadabilityRuntime && popupDragRuntime && campgroundDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && tripIntelligenceRuntime && routeEditingRuntime && tripCreationRuntime, 'canoe-first trip construction with water/portage continuity, atomic P# trip steps, live distance/time, day ends, editing, persistence and water intelligence');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && popupReadabilityRuntime && popupDragRuntime && campgroundDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && tripIntelligenceRuntime && routeEditingRuntime && tripCreationRuntime && mapOnlyCriteriaRuntime, 'map-only trip construction with any mapped feature selectable, atomic P# portages, and a criteria-only side panel');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -548,6 +564,7 @@ if (!waterIntelligenceRuntime) hardFailures.push('water intelligence runtime mis
 if (!itineraryRuntime) hardFailures.push('multi-day water itinerary is not source-backed by open NPS Boat-In campgrounds with per-day context');
 if (!scenarioRuntime) hardFailures.push('scenario planning is missing side-by-side trip structures or overnight-aware forecast comparison');
 if (!mapFirstRoutingRuntime) hardFailures.push('map-first route building is missing persistent Build mode, clickable campsite stops, or pinned campsite itinerary behavior');
+if (!mapOnlyCriteriaRuntime) hardFailures.push('route construction is duplicated outside the map, the criteria panel is too busy, or non-point mapped features cannot be selected at the clicked map location');
 if (!manualDayEndRuntime) hardFailures.push('manual campsite day-end control is missing or can bypass Boat-In/closure truth gates');
 if (!largePlanningCanvasRuntime) hardFailures.push('planning map is too constrained or missing full-viewport focus mode and Leaflet resize handling');
 if (!focusCockpitRuntime) hardFailures.push('Focus map is missing shared route controls, stop/day-end editing, or true undo/redo route history');

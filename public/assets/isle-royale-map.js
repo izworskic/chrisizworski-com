@@ -965,19 +965,27 @@
     };
   }
 
+  function featureRoutePoint(record,clickedLatLng=null) {
+    if(clickedLatLng&&Number.isFinite(clickedLatLng.lat)&&Number.isFinite(clickedLatLng.lng)) {
+      return {lat:Number(clickedLatLng.lat),lng:Number(clickedLatLng.lng)};
+    }
+    return recordRoutePoint(record);
+  }
+
   function addFeatureToRoute(record,options={}) {
-    if(!record?.latlng||!Number.isFinite(record.latlng.lat)||!Number.isFinite(record.latlng.lng))return false;
+    const routePoint=featureRoutePoint(record,options.latlng||null);
+    if(!routePoint)return false;
     if(record.category==='campground'&&record.liveAlert) {
       status(record.name+' is currently flagged closed by NPS and was not added as a campsite. Open its details for the current closure.');
       selectRecord(record);
       return false;
     }
-    addRoutePoint(record.latlng,record.name,{...routePointMetaForRecord(record),historyAction:cleanText(options.historyAction||'')});
+    addRoutePoint(routePoint,record.name,{...routePointMetaForRecord(record),historyAction:cleanText(options.historyAction||'')});
     map.closePopup();
     const type=record.category==='campground'
       ? (record.boater?'NPS Boat-In campsite':'campground')
-      : (layerLabels[record.category]||'map point');
-    status(record.name+' added to route as '+type+'. Keep clicking the map to extend the trip, or choose Explore when finished.');
+      : (layerLabels[record.category]||'map location');
+    status(record.name+' added from the map as '+type+'. Select another mapped location, portage, campsite, or open map point to keep building.');
     return true;
   }
 
@@ -1091,7 +1099,8 @@
     if (facts.childElementCount) wrap.appendChild(facts);
     appendCampSiteIdentifiers(wrap,record);
 
-    if (record.latlng && Number.isFinite(record.latlng.lat) && Number.isFinite(record.latlng.lng)) {
+    const popupRoutePoint=recordRoutePoint(record);
+    if (popupRoutePoint) {
       const routeAction = document.createElement('button');
       routeAction.type = 'button';
       routeAction.className = 'popup-action popup-route-action';
@@ -1243,9 +1252,9 @@
         enrichRecord(record);
         layer.bindPopup(() => popupNode(record), {maxWidth:390, minWidth:280, autoPan:false, className:'isle-detail-popup'});
         layer.on('click', event => {
-          if(route.adding&&record.latlng) {
+          if(route.adding) {
             if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
-            addFeatureToRoute(record);
+            addFeatureToRoute(record,{latlng:event.latlng||recordRoutePoint(record)});
             return;
           }
           selectRecord(record);
@@ -3499,14 +3508,14 @@
     els.routeSmartStatus.classList.toggle('route-warning',route.smartState==='trail-fallback'||route.smartState==='water-fallback'||route.smartState==='canoe-fallback');
     if(!route.points.length) {
       els.routeSmartStatus.textContent=route.adding
-        ? 'Build route is on. Click the map or a campsite for your start.'
-        : 'Explore mode is on. Choose Build route, then click the map or a campsite for your start.';
+        ? 'Build is on. Select any mapped location, campsite, P# portage, or open point on the map for your start.'
+        : 'Choose Build route on the map, then select locations directly from the map. The panel below only sets trip criteria.';
       return;
     }
     if(route.points.length===1) {
       els.routeSmartStatus.textContent=route.adding
-        ? `Start: ${route.points[0].label||'selected point'}. Keep clicking the map or a campsite to extend the trip.`
-        : `Start: ${route.points[0].label||'selected point'}. Switch to Build route to keep adding trip points.`;
+        ? `Start: ${route.points[0].label||'selected point'}. Select the next mapped location, portage, campsite, or map point.`
+        : `Start: ${route.points[0].label||'selected point'}. Use Build route on the map to keep adding locations.`;
       return;
     }
     if(route.mode==='canoe') {
