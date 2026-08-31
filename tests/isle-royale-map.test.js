@@ -372,8 +372,8 @@ test('trip intelligence uses researched pace presets and automatic carry math', 
   assert.match(html, /Easy · 1\.5 mph/);
   assert.match(html, /Average · 2\.0 mph/);
   assert.match(html, /Strong · 2\.5 mph/);
-  assert.match(html, /Double · walk trail 3×/);
-  assert.match(html, /Triple · walk trail 5×/);
+  assert.match(html, /2 loads · double carry · walk 3×/);
+  assert.match(html, /3 loads · triple carry · walk 5×/);
   assert.match(html, /standard 10 minutes per portage/);
   assert.match(js, /const PADDLE_PACES=Object\.freeze/);
   assert.match(js, /easy:\{label:'Easy',mph:2\.5\}/);
