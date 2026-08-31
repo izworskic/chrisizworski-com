@@ -61,6 +61,7 @@ async function fetchState(stateFips) {
         headers: { accept: "text/plain", "user-agent": UA },
         signal: AbortSignal.timeout(TIMEOUT_MS),
       });
+      if (response.status === 404) return [];
       if (!response.ok) throw new Error(`USGS site service returned ${response.status}`);
       const body = await response.text();
       return parseRdb(body, stateFips);
