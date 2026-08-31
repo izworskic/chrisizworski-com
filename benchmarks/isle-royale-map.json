@@ -1,5 +1,5 @@
 {
-  "version": "2.4.0",
+  "version": "2.5.0",
   "updated": "2026-08-31",
   "route": "/isle-royale-map/",
   "objective": "Build the most useful source-transparent Isle Royale planning map in the Chris Izworski tool network without pretending static cartography is authoritative GIS.",
@@ -64,7 +64,7 @@
     {
       "id": "planning-flow",
       "weight": 15,
-      "target": "Map-only trip construction is primary. Build mode accepts any mappable feature at the clicked map position, plus open-map points and atomic P# portages. The side/lower panel is criteria-only (mode, pace/speed, carry workload, hours/day, departure, search and layer filters); route stops, reports, scenarios, saved-trip management and weather outputs do not compete with map construction. Focus/review overlays may expose route editing and handoff after or during construction."
+      "target": "One full-width map is the trip-building surface. The compact criteria strip sits below the map. Build mode accepts any mappable feature at the clicked map position, open-map points, camps, and atomic P# portages. Focus mode reuses the same route bar rather than opening a second cockpit. Search/layers and current NPS state are secondary collapsed controls below the criteria strip."
     },
     {
       "id": "provenance",
@@ -127,7 +127,9 @@
     "Do not call canoe trip creation time-aware if the builder shows miles but withholds active paddle/portage travel time until after the trip is finished.",
     "Do not expose internal portage landing coordinates as two independent user trip stops; the canoeist-facing stop list must present the carry as one atomic P# step.",
     "Do not duplicate the primary route-building workflow in the side/lower panel; map controls and map selections are the route builder.",
-    "Do not restrict route selection to feature records that already contain a point coordinate when a line/area feature supplies a valid clicked map coordinate."
+    "Do not restrict route selection to feature records that already contain a point coordinate when a line/area feature supplies a valid clicked map coordinate.",
+    "Do not call the interface map-first if the map shares the primary horizontal space with a persistent planner/criteria sidebar.",
+    "Do not keep a second visible Focus Map cockpit after the route bar can perform the same trip-building actions."
   ],
   "initialBuildFit": {
     "distinctSearchIntent": 24,
@@ -188,6 +190,8 @@
     "releaseTarget": 92,
     "stretchTarget": 97,
     "principles": [
+      "The map occupies the primary full-width surface; trip criteria sit below it rather than beside it.",
+      "Focus mode reuses the same route bar; there is no second planning cockpit.",
       "The map is the construction surface; the adjacent/lower panel sets criteria and filters, not a second route-building workflow.",
       "Every mappable visitor feature can be selected directly while Build mode is active; line and area features use the exact clicked map position.",
       "The route is the product: trip construction happens continuously on the map.",
@@ -198,6 +202,8 @@
       "Detailed trip information follows the route the user actually built."
     ],
     "hardGates": [
+      "The primary layout must be full-width map first, criteria below; do not put trip criteria in a competing side column.",
+      "Focus Map must not reveal a second planning cockpit. The same map route bar handles Back, Finish day, Finish trip, and review actions.",
       "The visible route panel must be criteria-only: mode, pace/speed, carry workload, hours/day, departure, search and layer filters; route stops, reports, scenarios, save/export controls and weather analysis must not compete with map construction there.",
       "While Build mode is active, any loaded mappable feature geometry must be selectable directly from the map, including point, line and area features; official P# portages retain their dedicated atomic behavior.",
       "A mapped designated portage must be selectable directly during Build mode as one logical trip step.",

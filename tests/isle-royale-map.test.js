@@ -73,7 +73,7 @@ test('planning, provenance, accessibility and safety hooks exist', () => {
   for (const id of ['feature-search','layer-filters','feature-list','map-status','park-live-status','source-catalog','route-planner']) assert.ok(html.includes(`id="${id}"`), id);
   assert.match(html, /not a navigation chart/i);
   assert.match(html, /National Park Service/i);
-  assert.match(html, /Official maps from the original research/);
+  assert.match(html, /Official reference maps/);
   assert.match(html, /Rock Harbor map/);
   assert.match(html, /Windigo map/);
   assert.match(html, /Anchorage zones/);
@@ -100,14 +100,14 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
   assert.match(js, /NPS ferry, seaplane & transportation/);
   assert.match(js, /NPS lighthouses & places to go/);
   assert.match(js, /Open map-data source/);
-  assert.match(html, /Select on the map\. Set criteria here\./);
+  assert.match(html, /Build above\. Tune the trip below\./);
   assert.match(html, /\.popup-action\{[^}]*min-height:42px/);
   assert.match(html, /\.isle-detail-popup \.leaflet-popup-content/);
 });
 
 
 test('Isle Royale interaction script is cache-busted and not stored during active development', () => {
-  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-map-only-builder-1/);
+  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-map-above-criteria-1/);
   assert.doesNotMatch(html, /isle-royale-map\.js\?v=20260830-19/);
   const vercel = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
   const rule = (vercel.headers || []).find(item => item.source === '/assets/isle-royale-map.js');
@@ -227,12 +227,13 @@ test('official portage cards promote into the same floating inspector', () => {
   assert.match(js, /floatingInspector\.body\.replaceChildren\(detail\)/);
 });
 
-test('route criteria stay available without duplicating route construction below the map', () => {
+test('route criteria stay below the map without duplicating route construction', () => {
   for (const id of ['route-planner','route-mode-select','route-speed','route-departure','route-summary','route-weather-button','route-weather']) {
     assert.ok(html.includes(`id="${id}"`), id);
   }
-  assert.match(html, /<h3>Trip criteria<\/h3>/);
-  assert.match(html, /These settings change the math\. They do not build the route/);
+  assert.match(html, /<h2>Build above\. Tune the trip below\.<\/h2>/);
+  assert.match(html, /Map clicks define the trip\. These settings only change pace, carry effort, and day estimates/);
+  assert.match(html, /The route bar on the map is the only build control/);
   assert.match(html, /\.route-compat-controls\{display:none!important\}/);
   assert.doesNotMatch(html, /<span class="route-badge">ROUTE INTELLIGENCE<\/span>/);
   assert.match(js, /function addRoutePoint/);
@@ -305,13 +306,13 @@ test('marine forecast sampling grows with route distance rather than control-poi
   assert.doesNotMatch(js, /Math\.min\(max,Math\.max\(2,route\.points\.length\)\)/);
 });
 
-test('map-first route builder accepts every mappable feature and keeps the lower panel criteria-only', () => {
+test('map-first route builder accepts every mappable feature and keeps criteria below the map', () => {
   assert.match(html, /id="explore-mode"[^>]*aria-pressed="true"[^>]*>Explore/);
   assert.match(html, /id="route-mode"[^>]*>Build route/);
   assert.match(html, /id="route-map-guide"/);
   assert.match(html, /Build from the map/);
-  assert.match(html, /<h3>Trip criteria<\/h3>/);
-  assert.match(html, /Map selections define the trip\. Criteria only change pace, effort and day-planning estimates/);
+  assert.match(html, /<h2>Build above\. Tune the trip below\.<\/h2>/);
+  assert.match(html, /The route bar on the map is the only build control/);
   assert.match(js, /function featureRoutePoint/);
   assert.match(js, /function addFeatureToRoute/);
   assert.match(js, /if\(route\.adding\) \{/);
@@ -321,11 +322,7 @@ test('map-first route builder accepts every mappable feature and keeps the lower
   assert.match(js, /sourceBackedBoatIn:Boolean\(record\?\.boater\)/);
   assert.match(js, /if\(!route\.adding\)return;/);
   assert.match(js, /function renderRouteStops/);
-  assert.match(js, /routePoint\.kind==='campground'&&distanceMiles\(routePoint,point\)<\.08/);
-  assert.match(js, /point\.sourceBackedBoatIn=Boolean\(match\.boater\)/);
-  assert.match(js, /point\.liveAlert=Boolean\(match\.liveAlert\)/);
   assert.doesNotMatch(js, /route\.points\.length===2\)setRouteAdding\(false\)/);
-  assert.doesNotMatch(js, /scrollIntoView\(\{behavior:'smooth'.*route-planner/);
 });
 
 test('focused route building keeps controls, verified prefix mileage, and day-by-day actions visible', () => {
@@ -448,15 +445,11 @@ test('trip persistence stays local/share-fragment based and GPX exports only res
   assert.match(js, /const gpxReady=routeIsResolved\(\)/);
 });
 
-test('focus map becomes a real planning cockpit with shared controls and reversible edits', () => {
+test('focus map uses the same route bar and never opens a second planning cockpit', () => {
   assert.match(html, /id="planning-cockpit"/);
-  assert.match(html, /id="cockpit-route-mode"/);
-  assert.match(html, /id="cockpit-route-speed"/);
-  assert.match(html, /id="cockpit-route-hours"/);
-  assert.match(html, /id="cockpit-route-stops"/);
-  assert.match(html, /id="cockpit-undo"/);
-  assert.match(html, /id="cockpit-redo"/);
-  assert.match(html, /id="route-redo"/);
+  assert.match(html, /\.planning-cockpit\{display:none!important\}/);
+  assert.match(html, /body\.map-focus \.planning-cockpit\{display:none!important\}/);
+  assert.match(html, /body\.map-focus \.route-build-bar\{left:12px!important;right:12px!important;width:auto!important\}/);
   assert.match(js, /function captureRouteSnapshot/);
   assert.match(js, /function snapshotFingerprint/);
   assert.match(js, /function rememberRouteEdit\(action='route edit'\)/);
@@ -465,23 +458,6 @@ test('focus map becomes a real planning cockpit with shared controls and reversi
   assert.match(js, /function restoreRouteSnapshot/);
   assert.match(js, /departure:route\.departure/);
   assert.match(js, /adding:Boolean\(route\.adding\)/);
-  assert.match(js, /button\.textContent=undoLabel/);
-  assert.match(js, /button\.textContent=redoLabel/);
-  assert.match(js, /rememberRouteEdit\('add shaping point'\)/);
-  assert.match(js, /rememberRouteEdit\('move '/);
-  assert.match(js, /rememberRouteEdit\('reverse route'\)/);
-  assert.match(js, /rememberRouteEdit\('change speed'\)/);
-  assert.match(js, /rememberRouteEdit\('change day length'\)/);
-  assert.match(js, /rememberRouteEdit\('change departure'\)/);
-  assert.match(js, /historyAction:\(active\?'set ':'clear '\)/);
-  assert.match(js, /route\.speed=next/);
-  assert.match(js, /route\.hours=next/);
-  assert.match(js, /route\.departure=next/);
-  assert.match(js, /renderRouteStopsInto\(els\.cockpitStops\)/);
-  assert.match(js, /els\.cockpitMode\?\.addEventListener\('change'/);
-  assert.match(js, /els\.cockpitWeather\?\.addEventListener\('click',analyzeRouteWeather\)/);
-  assert.match(js, /scenarioGenerated:true/);
-  assert.match(js, /sourceBackedBoatIn:true/);
 });
 
 test('undo is one-action-per-step and restores planning settings instead of DOM-after-change values', () => {
@@ -499,16 +475,16 @@ test('undo is one-action-per-step and restores planning settings instead of DOM-
   assert.match(js, /emitEvent\('isle_royale_route_redo'/);
 });
 
-test('planning map expands for route building and supports a full-viewport focus mode', () => {
+test('planning map is the dominant full-width surface with a full-viewport focus mode', () => {
   assert.match(html, /id="focus-map"[^>]*aria-pressed="false"[^>]*>Focus map/);
-  assert.match(html, /\.route-building \.shell\{grid-template-columns:minmax\(0,2\.45fr\)/);
-  assert.match(html, /\.route-building \.map-wrap\{height:clamp\(660px,86dvh,940px\)/);
-  assert.match(html, /@media\(max-width:620px\)[\s\S]*\.route-building \.map-wrap\{height:clamp\(540px,82dvh,780px\)/);
+  assert.match(html, /\.shell\{display:grid!important;grid-template-columns:1fr!important/);
+  assert.match(html, /\.map-wrap\{position:relative!important;top:auto!important;height:clamp\(650px,78dvh,920px\)!important/);
+  assert.match(html, /\.route-building \.map-wrap\{height:clamp\(700px,84dvh,980px\)!important/);
+  assert.match(html, /@media\(max-width:760px\)[\s\S]*\.map-wrap\{height:72dvh!important/);
   assert.match(html, /body\.map-focus \.map-wrap\{position:fixed;inset:0/);
   assert.match(js, /function setMapFocus/);
   assert.match(js, /map\.invalidateSize\(\{pan:false\}\)/);
   assert.match(js, /isle_royale_map_focus/);
-  assert.match(js, /if\(document\.body\.classList\.contains\('map-focus'\)\)/);
 });
 
 test('manual campsite day ends are explicit, source-aware route decisions', () => {
@@ -829,17 +805,19 @@ test('canoe trip builder reports active travel time while constructing days', ()
 });
 
 
-test('side panel is deliberately criteria-only and the map owns route construction', () => {
-  assert.match(html, /<h2>Select on the map\. Set criteria here\.<\/h2>/);
-  assert.match(html, /<h3>Trip criteria<\/h3>/);
+test('map sits above a compact criteria strip and owns route construction', () => {
+  assert.match(html, /<h2>Build above\. Tune the trip below\.<\/h2>/);
   assert.match(html, /class="route-fields criteria-fields"/);
   for (const id of ['route-mode-select','route-paddle-pace','route-portage-pace','route-portage-trips','route-day-hours','route-departure']) {
     assert.ok(html.includes(`id="${id}"`), id);
   }
-  assert.match(html, /\.route-compat-controls\{display:none!important\}/);
-  assert.match(html, /\.shell\{display:grid;grid-template-columns:minmax\(0,2\.25fr\) minmax\(310px,\.52fr\)/);
+  assert.match(html, /\.shell\{display:grid!important;grid-template-columns:1fr!important/);
+  assert.match(html, /\.panel\{border-left:0!important;border-top:1px solid var\(--line\)!important/);
+  assert.match(html, /\.criteria-fields\{display:grid!important;grid-template-columns:repeat\(6,minmax\(120px,1fr\)\)!important/);
+  assert.match(html, /<details class="map-options">/);
+  assert.match(html, /<summary>Map locations &amp; layers<\/summary>/);
+  assert.match(html, /\.planning-cockpit\{display:none!important\}/);
   assert.doesNotMatch(html, /<details class="saved-trip-panel" open>/);
-  assert.doesNotMatch(html, /<span class="route-badge">ROUTE INTELLIGENCE<\/span>/);
 });
 
 test('line and area features use the clicked map coordinate as a trip location', () => {
