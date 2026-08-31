@@ -209,3 +209,51 @@ test('water router resolves a near-shore portage landing without drawing onto la
   assert.ok(api.miles(trailEndNearShore,landing) < 1.0);
   assert.ok(landing.access_miles > 0);
 });
+
+
+test('multi-point water checkpoints route through mapped inland water and accumulate distance', () => {
+  const api = loadIntel();
+  const land = [[
+    [-89.10,47.90],[-88.70,47.90],[-88.70,48.10],[-89.10,48.10],[-89.10,47.90]
+  ]];
+  const lake = [[
+    [-88.98,47.96],[-88.80,47.96],[-88.80,48.04],[-88.98,48.04],[-88.98,47.96]
+  ]];
+  const router = api.create({
+    lines: land,
+    land_polygons: land,
+    water_polygons: lake,
+    water_boundaries: lake,
+    water_centerlines: []
+  });
+  const checkpoints=[
+    {lat:48.00,lng:-88.96},
+    {lat:48.025,lng:-88.90},
+    {lat:48.00,lng:-88.82}
+  ];
+  const result=router.route(checkpoints,'paddle');
+  assert.equal(result.land_crossings,0);
+  assert.equal(router.crossingCount(result.points),0);
+  assert.ok(result.points.length>=3);
+  const routed=result.points.slice(1).reduce((sum,p,i)=>sum+api.miles(result.points[i],p),0);
+  assert.ok(routed>0.1);
+  for(const p of result.points) assert.equal(router.isMappedWater(p),true);
+});
+
+test('mapped waterway centerline can guide short checkpoint legs', () => {
+  const api = loadIntel();
+  const coast = [[
+    [-89.10,47.90],[-88.70,47.90],[-88.70,48.10],[-89.10,48.10],[-89.10,47.90]
+  ]];
+  const river=[[-88.95,47.99],[-88.90,48.00],[-88.85,48.01]];
+  const router=api.create({
+    lines: coast,
+    land_polygons: [],
+    water_polygons: [],
+    water_boundaries: [],
+    water_centerlines:[river]
+  });
+  const result=router.route([{lat:47.99,lng:-88.95},{lat:48.01,lng:-88.85}],'paddle');
+  assert.equal(result.land_crossings,0);
+  assert.ok(result.points.length>=3);
+});
