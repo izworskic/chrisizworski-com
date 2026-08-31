@@ -3,7 +3,7 @@
 <title>U.S. River Levels & Flow | Chris Izworski</title>
 <meta name="description" content="Find nearby USGS river gauges with current flow, trend, historical daily range and official NOAA flood forecasts where matched.">
 <link rel="canonical" href="https://chrisizworski.com/national-tools/rivers/"><meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="stylesheet" href="/assets/national-tools.css?v=20260831-river-hotfix1">
+<link rel="stylesheet" href="/assets/national-tools.css?v=20260831-river-core2">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/rivers/#page","url":"https://chrisizworski.com/national-tools/rivers/","name":"U.S. River Levels, Flow & Conditions","description":"Find nearby USGS river gauges with current flow, trend, historical daily range and official NOAA flood forecasts where matched.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
 </head><body>
 <header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
@@ -43,11 +43,23 @@ document.addEventListener("DOMContentLoaded",function(){
    const path=coords.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
    return '<svg class="spark" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="Recent 24 hour flow trend"><path d="'+path+'" fill="none" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"></path></svg>';
  }
- function historical(g){
-   const h=g.historical_daily_flow;if(!h)return '<p class="small">Approved same-date USGS historical percentiles are unavailable for this gauge.</p>';
-   return '<div class="range-line"><strong>'+N.esc(g.historical_comparison?.label||"Historical comparison")+'</strong><span>10th '+flow(h.p10)+' · median '+flow(h.p50)+' · 90th '+flow(h.p90)+'</span></div>';
+ function historyComparison(g){
+   const h=g.historical_daily_flow,v=Number(g.discharge_cfs);
+   if(!h||!Number.isFinite(v)||![h.p10,h.p25,h.p50,h.p75,h.p90].every(x=>Number.isFinite(Number(x))))return {label:"Historical comparison unavailable",code:"unknown",confidence:"low"};
+   if(v<Number(h.p10))return {label:"Very low for this date",code:"very-low",confidence:"high"};
+   if(v<Number(h.p25))return {label:"Low for this date",code:"low",confidence:"high"};
+   if(v<=Number(h.p75))return {label:"Within the usual middle range",code:"typical",confidence:"high"};
+   if(v<=Number(h.p90))return {label:"High for this date",code:"high",confidence:"high"};
+   return {label:"Very high for this date",code:"very-high",confidence:"high"};
  }
- function nwps(g){
+ function historical(g,loading){
+   if(loading)return '<p class="small">Loading approved same-date USGS historical percentiles…</p>';
+   const h=g.historical_daily_flow;if(!h)return '<p class="small">Approved same-date USGS historical percentiles are unavailable for this gauge.</p>';
+   const comparison=g.historical_comparison||historyComparison(g);
+   return '<div class="range-line"><strong>'+N.esc(comparison.label||"Historical comparison")+'</strong><span>10th '+flow(h.p10)+' · median '+flow(h.p50)+' · 90th '+flow(h.p90)+'</span></div>';
+ }
+ function nwps(g,loading){
+   if(loading)return '<div class="forecast-box muted-box"><strong>Loading NOAA forecast context…</strong><span>Current USGS observations are already available.</span></div>';
    const n=g.nwps;if(!n)return '<div class="forecast-box muted-box"><strong>NOAA forecast match unavailable</strong><span>This card remains USGS observation-only.</span></div>';
    let message=n.observed_category||"NOAA gauge matched";
    if(n.forecast_crest){
@@ -55,10 +67,10 @@ document.addEventListener("DOMContentLoaded",function(){
    }else if(!n.forecast_available){message+=" · official forecast series not available";}
    return '<div class="forecast-box"><strong>'+N.esc(message)+'</strong><span>NOAA NWPS '+N.esc(n.lid||"")+'</span>'+(n.official_url?'<a href="'+N.esc(n.official_url)+'">Open official NOAA hydrograph ↗</a>':"")+'</div>';
  }
- function gaugeCard(g,primary){
+ function gaugeCard(g,primary,loading){
    return '<article class="river-card '+(primary?"primary":"")+'"><div class="river-title"><div><span class="tool-kicker">'+g.distance_miles.toFixed(1)+' mi from search point</span><h3>'+N.esc(g.name)+'</h3></div><span class="pill '+(g.stale?"danger":"")+'">'+(g.age_minutes==null?"age unknown":g.age_minutes+" min old")+'</span></div>'+
    '<div class="metrics"><div class="metric"><b>'+flow(g.discharge_cfs)+'</b><span>'+N.esc(trend(g))+'</span></div><div class="metric"><b>'+stage(g.gage_height_ft)+'</b><span>gauge height</span></div><div class="metric"><b>'+temp(g.water_temp_f)+'</b><span>water temperature</span></div></div>'+
-   spark(g.flow_series_24h)+historical(g)+nwps(g)+'<div class="map-actions"><button type="button" class="map-btn" data-map-lat="'+g.latitude+'" data-map-lon="'+g.longitude+'" data-map-name="'+N.esc(g.name)+'">Show this gauge on map</button></div></article>';
+   spark(g.flow_series_24h)+historical(g,loading)+nwps(g,loading)+'<div class="map-actions"><button type="button" class="map-btn" data-map-lat="'+g.latitude+'" data-map-lon="'+g.longitude+'" data-map-name="'+N.esc(g.name)+'">Show this gauge on map</button></div></article>';
  }
  function setMap(g){
    if(!g||!Number.isFinite(Number(g.latitude))||!Number.isFinite(Number(g.longitude)))return;
@@ -76,25 +88,47 @@ document.addEventListener("DOMContentLoaded",function(){
      if(match){setMap(match);document.getElementById("river-map").scrollIntoView({behavior:"smooth",block:"nearest"})}
    })});
  }
+ function render(d,loc,loading){
+  document.getElementById("result").hidden=false;
+  if(!d.gauges.length){document.getElementById("answer").textContent="No active USGS streamflow gauge found nearby";document.getElementById("primary-gauge").innerHTML="";document.getElementById("gauges").innerHTML="";document.getElementById("forecast-pill").textContent="USGS observation only";return}
+  const first=d.gauges[0],comparison=first.historical_daily_flow?(first.historical_comparison||historyComparison(first)):null;
+  document.getElementById("answer").textContent=(comparison?.label||"Current river conditions")+" · "+first.trend_label+" near "+N.label(loc);
+  document.getElementById("primary-gauge").innerHTML=gaugeCard(first,true,loading);
+  document.getElementById("gauges").innerHTML=d.gauges.slice(1).map(g=>gaugeCard(g,false,loading)).join("");
+  setMap(first);bindMapButtons(d.gauges);
+  document.getElementById("forecast-pill").textContent=loading?"Loading USGS history + NOAA context":(d.gauges.some(g=>g.nwps)?"NOAA NWPS match available":"USGS observation · optional context unavailable");
+  document.getElementById("updated").textContent=d.disclaimer+" Retrieved "+N.fmtDate(d.retrieved_at)+".";
+ }
+ async function loadContext(d,loc){
+  const ids=d.gauges.slice(0,6).map(g=>g.id).join(",");
+  if(!ids)return;
+  const url="/api/national-river-context?lat="+encodeURIComponent(loc.latitude)+"&lon="+encodeURIComponent(loc.longitude)+"&sites="+encodeURIComponent(ids);
+  try{
+    const response=await fetch(url);
+    const context=typeof N.readJsonResponse==="function"?await N.readJsonResponse(response,"River history and NOAA context unavailable"):await response.json();
+    d.gauges=d.gauges.map(function(g){
+      const extra=context.context?.[g.id]||{};
+      const merged={...g,...extra};
+      if(merged.historical_daily_flow)merged.historical_comparison=historyComparison(merged);
+      return merged;
+    });
+    render(d,loc,false);
+  }catch(_error){
+    render(d,loc,false);
+  }
+ }
  async function run(loc){
   const r=await fetch("/api/national-rivers?lat="+loc.latitude+"&lon="+loc.longitude);
   const d=typeof N.readJsonResponse==="function"
     ? await N.readJsonResponse(r,"River conditions unavailable")
     : await r.json();
   if(!r.ok)throw new Error(d.error||"River data unavailable");
-  document.getElementById("result").hidden=false;
-  if(!d.gauges.length){document.getElementById("answer").textContent="No active USGS streamflow gauge found nearby";document.getElementById("primary-gauge").innerHTML="";document.getElementById("gauges").innerHTML="";return}
-  const first=d.gauges[0];
-  document.getElementById("answer").textContent=(first.historical_comparison?.label||"Current river conditions")+" · "+first.trend_label+" near "+N.label(loc);
-  document.getElementById("primary-gauge").innerHTML=gaugeCard(first,true);
-  document.getElementById("gauges").innerHTML=d.gauges.slice(1).map(g=>gaugeCard(g,false)).join("");
-  setMap(first);bindMapButtons(d.gauges);
-  document.getElementById("forecast-pill").textContent=d.gauges.some(g=>g.nwps)?"NOAA NWPS match available":"USGS observation only";
-  document.getElementById("updated").textContent=d.disclaimer+" Retrieved "+N.fmtDate(d.retrieved_at)+".";
+  render(d,loc,Boolean(d.context_pending));
+  if(d.context_pending)loadContext(d,loc);
  }
  N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
 });
 </script>
 </main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Built around public scientific and government data, with sources shown where the answer is derived.</div></footer>
-<script src="/assets/national-tools.js?v=20260831-river-hotfix1"></script></body></html>
+<script src="/assets/national-tools.js?v=20260831-river-core2"></script></body></html>
