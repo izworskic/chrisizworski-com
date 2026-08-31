@@ -237,6 +237,18 @@
       if(landCrossings>0)throw new Error('Water route failed final coastline validation');
       return {points:out,access_miles:access,land_crossings:landCrossings};
     }
+    function landingNear(shorePoint,waterReference,mode='paddle'){
+      if(!shorePoint||!waterReference)throw new Error('Portage landing needs both a shore point and waterbody reference');
+      const part=routeSegment(waterReference,shorePoint,mode);
+      const landing=part.points?.[part.points.length-1];
+      if(!landing)throw new Error('Could not resolve a mapped-water landing beside the portage');
+      return {
+        lat:Number(landing.lat),lng:Number(landing.lng),
+        access_miles:Number(part.end_access_miles)||0,
+        reference_miles:miles(waterReference,landing),
+        land_crossings:crossingCount(part.points)
+      };
+    }
     function analyze(path){
       const samples=sample(path,.25);let maxOff=0,exposed=0,longest=0,current=0;
       for(let i=0;i<samples.length;i++){
@@ -247,7 +259,7 @@
       }
       return {max_offshore_miles:maxOff,exposed_miles:exposed,longest_exposed_miles:longest,land_crossings:crossingCount(path)};
     }
-    return {route,analyze,coastDistance,crosses,crossingCount,segment_count:segments.length};
+    return {route,landingNear,analyze,coastDistance,crosses,crossingCount,segment_count:segments.length};
   }
 
   function weatherSamples(points,maxSamples){

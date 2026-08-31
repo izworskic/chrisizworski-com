@@ -14,6 +14,7 @@ const catalog = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-m
 const deepManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/deep-layer-manifest.json'), 'utf8'));
 const contextManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/context-layer-manifest.json'), 'utf8'));
 const officialPortages = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/official-portages-2026.json'), 'utf8'));
+const benchmarkSpec = JSON.parse(fs.readFileSync(path.join(root, 'benchmarks/isle-royale-map.json'), 'utf8'));
 const contextBuilder = fs.readFileSync(path.join(root, 'scripts/build-isle-royale-context-layers.py'), 'utf8');
 const waterIntelJs = fs.readFileSync(path.join(root, 'public/assets/isle-royale-water-intelligence.js'), 'utf8');
 const waterIntelApi = fs.readFileSync(path.join(root, 'api/isle-royale-water-intelligence.js'), 'utf8');
@@ -106,7 +107,7 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
 
 
 test('Isle Royale interaction script is cache-busted and not stored during active development', () => {
-  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-focus-live-days-1/);
+  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-canoe-trip-graph-1/);
   assert.doesNotMatch(html, /isle-royale-map\.js\?v=20260830-19/);
   const vercel = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
   const rule = (vercel.headers || []).find(item => item.source === '/assets/isle-royale-map.js');
@@ -703,50 +704,47 @@ test('canoe runtime promotes strong mapped matches to official NPS portages with
   assert.doesNotMatch(js, /L\.polyline\([^\n]*endpoint_anchors/);
 });
 
-test('official NPS portages are visually selectable map objects with truthful add-to-trip behavior', () => {
+test('official NPS portages are first-class atomic canoe trip steps', () => {
   assert.match(html, /data-layer="official-portage" checked/);
-  assert.match(html, /Official portages/);
   assert.match(html, /16 NPS 2026 carries/);
-  assert.match(html, /official-portage-badge/);
-  assert.match(html, /Route through this portage/);
-  assert.match(js, /map\.createPane\('portagePane'\)/);
-  assert.match(js, /'official-portage': L\.layerGroup\(\)\.addTo\(map\)/);
+  assert.match(html, /tap a brown <strong>P#<\/strong> to add that entire portage as one trip step/i);
   assert.match(js, /function officialPortageMappedGeometry/);
-  assert.match(js, /function renderOfficialPortageLayer/);
-  assert.match(js, /function officialPortagePopup/);
-  assert.match(js, /function addOfficialPortageToTrip/);
-  assert.match(js, /weight:20,opacity:\.001,interactive:true/);
-  assert.match(js, /icon:L\.divIcon\(\{className:'official-portage-badge'/);
-  assert.match(js, /className:'official-portage-badge unresolved'/);
-  assert.match(js, /mapped trail corridor could not be resolved/i);
-  assert.match(js, /not a landing/i);
-  assert.match(js, /officialPortageId/);
-  assert.match(js, /selected mapped portage corridor/);
-  assert.match(js, /isle_royale_portage_open/);
+  assert.match(js, /function officialPortageLandingPair/);
+  assert.match(js, /router\.landingNear/);
+  assert.match(waterIntelJs, /function landingNear/);
+  assert.match(waterIntelJs, /return \{route,landingNear,analyze/);
+  assert.match(js, /function selectedOfficialPortageLeg/);
+  assert.match(js, /officialMatchMethod:'selected-portage-trip-node'/);
+  assert.match(js, /async function addOfficialPortageToTrip/);
+  assert.match(js, /kind:'official-portage-landing'/);
+  assert.match(js, /portageGroupId:groupId/);
+  assert.match(js, /portageRole:role/);
+  assert.match(js, /portageSide:side/);
+  assert.match(js, /if\(route\.adding\) \{[\s\S]{0,180}addOfficialPortageToTrip\(portage\.id\)/);
+  assert.match(js, /function removePortageGroup/);
+  assert.match(js, /route\.points=route\.points\.filter\(point=>point\.portageGroupId!==groupId\)/);
+  assert.match(js, /draggable:point\.kind!=='official-portage-landing'/);
+  assert.match(js, /P'\+\(point\.portageNumber/);
+  assert.match(js, /one canoe trip step/);
   assert.match(js, /isle_royale_portage_add/);
+  assert.match(js, /isle_royale_portage_remove/);
   assert.doesNotMatch(js, /officialPortageMappedGeometry[\s\S]{0,1600}L\.polyline\([^\n]*endpoint_anchors/);
 });
 
-test('canoe planner permits only verified water legs and designated NPS portages', () => {
+test('canoe planner connects water to atomic official portages and back to water', () => {
   assert.match(html, /<option value="canoe">Canoe \+ portage<\/option>/);
-  assert.match(html, /id="route-portage-trips"/);
-  assert.match(html, /id="route-portage-pace"/);
   assert.match(js, /function resolveCanoeRouteAsync/);
-  assert.match(js, /function canoeTrailLegCandidate/);
-  assert.match(js, /if\(!official\)return null/);
   assert.match(js, /function canoeWaterLegCandidate/);
-  assert.match(js, /crossings!==0/);
+  assert.match(js, /function selectedOfficialPortageLeg/);
+  assert.match(js, /selectedLeg=b\.officialPortageId&&selectedOfficialPortageStillMatches/);
+  assert.match(js, /const trail=selectedLeg\|\|canoeTrailLegCandidate/);
+  assert.match(js, /if\(direct<=\.08&&!router\.crosses\(a,b\)\)/);
   assert.match(js, /Watercraft routes never cross land except on a designated brown P# portage/);
   assert.match(js, /attempts an overland crossing that is not a designated NPS portage/);
-  assert.match(js, /Land crossings are limited to designated NPS portages/);
-  assert.match(js, /Route through this portage/);
   assert.match(js, /route\.mixedLegs\.every\(leg=>leg\?\.verified/);
+  assert.match(js, /distanceBasis:'nps-published'/);
   assert.doesNotMatch(js, /function canoeManualLeg/);
   assert.doesNotMatch(js, /drawn water leg/);
-  assert.match(js, /actual walking distance/);
-  assert.match(js, /NPS P'\+number/);
-  assert.match(js, /Water only/);
-  assert.match(js, /legType:\['water','portage'\]\.includes/);
 });
 
 test('route stops expose leg and cumulative distances and can be deleted from list or marker', () => {
@@ -764,9 +762,9 @@ test('smart route planner snaps hiking to mapped trails and keeps water routes e
   assert.match(html, /<h3>Plan a route<\/h3>/);
   assert.match(html, /id="route-smart-status"/);
   assert.match(html, /id="route-reverse"/);
-  assert.match(html, /Build point to point/);
+  assert.match(html, /water → portage → water → camp/);
   assert.match(html, /brown P# portage/i);
-  assert.match(html, /Route through this portage/);
+  assert.match(html, /tap a brown <strong>P#<\/strong> to add that entire portage as one trip step/i);
   assert.match(js, /const trailGraph = \{/);
   assert.match(js, /function registerTrailGeometry/);
   assert.match(js, /function shortestTrailPath/);
@@ -774,7 +772,7 @@ test('smart route planner snaps hiking to mapped trails and keeps water routes e
   assert.match(js, /function nearestTrailNode/);
   assert.match(js, /trail-snapped/);
   assert.match(js, /Those points are not connected through the currently loaded trail network/);
-  assert.match(js, /draggable:true/);
+  assert.match(js, /draggable:point\.kind!=='official-portage-landing'/);
   assert.match(js, /nearestControlSegmentIndex/);
   assert.match(js, /route\.points\.splice\(index,0/);
   assert.match(js, /function reverseRoute/);
@@ -790,4 +788,36 @@ test('route point workflow stays map-first and weather follows resolved geometry
   assert.match(js, /const points=routePathPoints\(\)/);
   assert.match(js, /Smart hiking route:/);
   assert.match(js, /Editable water route:/);
+});
+
+
+test('canoe trip creation has its own weighted north-star value function', () => {
+  const vf = benchmarkSpec.tripCreationValueFunction;
+  assert.ok(vf);
+  assert.equal(vf.formula,'TC = .25C + .20P + .15F + .15D + .10E + .07R + .05T + .03H');
+  assert.equal(vf.releaseTarget,92);
+  assert.equal(vf.stretchTarget,97);
+  assert.equal(Object.values(vf.dimensions).reduce((sum,item)=>sum+item.weight,0),100);
+  assert.equal(vf.dimensions.C.name,'travelContinuity');
+  assert.equal(vf.dimensions.P.name,'portageIntegration');
+  assert.ok(vf.hardGates.some(gate=>/portage.*one logical trip step/i.test(gate)));
+  assert.ok(vf.hardGates.some(gate=>/active travel time/i.test(gate)));
+});
+
+test('saved canoe trips count a compound portage as one logical trip step', () => {
+  assert.match(js, /function logicalRoutePointCount/);
+  assert.match(js, /seenPortages\.has\(point\.portageGroupId\)/);
+  assert.match(js, /cloneRoutePoints\(\)\.slice\(0,80\)/);
+  assert.match(js, /raw\.points\)\?raw\.points:\[\]\)\.slice\(0,80\)/);
+  assert.match(js, /logicalRoutePointCount\(normalized\.points\).*trip steps/);
+});
+
+test('canoe trip builder reports active travel time while constructing days', () => {
+  assert.match(js, /function canoeLegActiveHours/);
+  assert.match(js, /function verifiedTripActiveHours/);
+  assert.match(js, /function currentDayVerifiedHours/);
+  assert.match(js, /formatDuration\(dayHours\).*active travel/);
+  assert.match(js, /active_hours:Number\(hours\.toFixed\(2\)\)/);
+  assert.match(js, /Designated NPS portage · one canoe trip step/);
+  assert.match(js, /mi walked · ~'\+formatDuration\(hours\)/);
 });

@@ -41,6 +41,27 @@ Release target: `V >= 88`. Stretch target: `V >= 94`.
 
 A feature that adds pins but reduces truth, usability or provenance can LOWER value. Prefer fewer verified features over a large opaque pile.
 
+### Canoe trip-creation value function
+
+For changes that touch route construction, optimize this subordinate north star before adding secondary map features:
+
+`TC = .25C + .20P + .15F + .15D + .10E + .07R + .05T + .03H`
+
+- **C — Travel continuity (25%)**: paddle stays on water; land transitions occur only on designated portages; the route resumes from the correct water network.
+- **P — Portage integration (20%)**: a portage is one first-class trip step with entry landing, carry, exit landing, official distance and workload/time.
+- **F — Immediate feedback (15%)**: each choice yields a verified line, leg/cumulative mileage and active travel time while the trip is still being built.
+- **D — Day-by-day planning (15%)**: build Day 1, end at a qualified camp, continue Day 2 from that same camp.
+- **E — Editability/recovery (10%)**: remove, reverse, undo, redo and reshape without rebuilding valid work.
+- **R — Effort realism (7%)**: paddle pace, portage pace, carry count, terrain and loading time.
+- **T — Truth/safety (5%)**: never invent water crossings, landings, camps or official portage geometry.
+- **H — Handoff/reuse (3%)**: save/restore/share/export retains portage and day identity.
+
+Trip-creation release target: **TC >= 92**. Stretch: **97**.
+
+Principle inspiration may come from mature canoe planners, including workflows that emphasize realistic paddle/portage settings, travel-time-based day planning, explicit day ends, route adjustment and reusable routes. Do not copy another planner's interface, code, wording or proprietary route data. Apply the underlying planning principles to Isle Royale's NPS-grounded geography.
+
+A mapped NPS portage is not a decorative layer and not two user waypoints. In Build mode it must behave as one atomic canoe transition: **water landing → carry → water landing**.
+
 ## Parallel workstreams
 
 When a sub-agent runner is available, fan work into these bounded agents. Each agent must return evidence, file-level recommendations, risks and a score against the relevant value-function dimensions. The orchestrator reconciles conflicts before committing.

@@ -55,6 +55,28 @@ Operational/fallback records may be added, but they do not replace any of those 
 
 **Release target: 88. Stretch target: 94.** A high score never overrides a hard gate.
 
+#### Canoe trip-creation north star
+
+For route-building work, use:
+
+`TC = .25C + .20P + .15F + .15D + .10E + .07R + .05T + .03H`
+
+| Dimension | Weight | Canoeist outcome |
+| --- | ---: | --- |
+| Travel continuity | 25 | Water → designated portage → water remains physically coherent |
+| Portage integration | 20 | P# is one selectable trip step with entry/carry/exit |
+| Immediate feedback | 15 | Live safe line, miles and active travel time after each choice |
+| Day-by-day planning | 15 | Finish a day at camp and keep building the next day |
+| Editability/recovery | 10 | Back out or reshape choices without losing valid route work |
+| Effort realism | 7 | Paddle/portage pace, carry multiplier, terrain and transitions |
+| Truth/safety | 5 | No invented land crossings, landings, camps or route certainty |
+| Handoff/reuse | 3 | Save/restore/share/export preserves the actual trip structure |
+
+**Trip-creation release target: 92. Stretch target: 97.**
+
+The design principle is not “copy Paddle Planner.” The useful transferable principles are continuous map-based route construction, realistic travel settings, explicit multi-day boundaries, immediate route feedback, manual adjustment and reusable trip plans. Isle Royale's implementation should be its own product, grounded in NPS portages/camps and water-routing truth.
+
+
 ### Reach / discovery objective
 
 The page should earn discovery by being the best source-transparent answer for the broad **Isle Royale map** intent and its supporting map needs, while keeping one canonical URL. Reach comes from crawlable layer-family coverage, authoritative citations/provenance, first-party inbound links, schema/entity clarity, and measured behavior after launch—not from spinning up thin duplicate canonicals.

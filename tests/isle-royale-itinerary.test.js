@@ -189,3 +189,23 @@ test('safe compaction cannot shortcut a water route back across mapped land', ()
   assert.equal(router.crossingCount(result.points),0);
   for (let i=1;i<result.points.length;i++) assert.equal(router.crosses(result.points[i-1],result.points[i]),false);
 });
+
+
+test('water router resolves a near-shore portage landing without drawing onto land', () => {
+  const api = loadIntel();
+  const island = [[
+    [-88.90,47.95],
+    [-88.70,47.95],
+    [-88.70,48.05],
+    [-88.90,48.05],
+    [-88.90,47.95]
+  ]];
+  const router = api.create(island);
+  const waterReference = {lat:48.00,lng:-89.05};
+  const trailEndNearShore = {lat:48.00,lng:-88.895};
+  const landing = router.landingNear(trailEndNearShore,waterReference,'paddle');
+  assert.equal(landing.land_crossings,0);
+  assert.ok(api.miles(trailEndNearShore,landing) > 0.01);
+  assert.ok(api.miles(trailEndNearShore,landing) < 1.0);
+  assert.ok(landing.access_miles > 0);
+});
