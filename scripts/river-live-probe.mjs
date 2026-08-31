@@ -1,0 +1,39 @@
+async function probe(label,url){
+  const start=Date.now();
+  try{
+    const r=await fetch(url,{headers:{'user-agent':'ChrisIzworskiRiverProbe/1.0','accept':'application/json'}});
+    const text=await r.text();
+    console.log('\n### '+label);
+    console.log('URL',url);
+    console.log('STATUS',r.status);
+    console.log('CTYPE',r.headers.get('content-type'));
+    console.log('ELAPSED_MS',Date.now()-start);
+    console.log('BODY',text.slice(0,5000));
+    return {r,text};
+  }catch(e){
+    console.log('\n### '+label+' ERROR');
+    console.log('URL',url);
+    console.log('ELAPSED_MS',Date.now()-start);
+    console.log(String(e?.stack||e));
+    return null;
+  }
+}
+const geo=await probe('PRODUCTION GEOCODE','https://chrisizworski.com/api/national-geocode?q=West%20Branch%2C%20MI');
+let lat=44.2764,lon=-84.2386;
+try{
+  const j=JSON.parse(geo.text);
+  lat=Number(j.latitude);lon=Number(j.longitude);
+}catch{}
+console.log('\nRESOLVED',JSON.stringify({lat,lon}));
+await probe('PRODUCTION RIVERS',`https://chrisizworski.com/api/national-rivers?lat=${lat}&lon=${lon}&probe=${Date.now()}`);
+for(const span of [0.6,1.5,2.4]){
+  const west=Math.max(-180,lon-span),east=Math.min(180,lon+span),south=Math.max(-90,lat-span),north=Math.min(90,lat+span);
+  const u=new URL('https://waterservices.usgs.gov/nwis/iv/');
+  u.searchParams.set('format','json');
+  u.searchParams.set('bBox',`${west},${south},${east},${north}`);
+  u.searchParams.set('siteType','ST');
+  u.searchParams.set('siteStatus','active');
+  u.searchParams.set('parameterCd','00060,00065,00010');
+  u.searchParams.set('period','P1D');
+  await probe('USGS IV span '+span,u.toString());
+}
