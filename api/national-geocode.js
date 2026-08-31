@@ -1,4 +1,6 @@
 const NOMINATIM = "https://nominatim.openstreetmap.org/search";
+const NWS_POINTS = "https://api.weather.gov/points";
+const USER_AGENT = "ChrisIzworskiNationalOutdoorTools/2.0 (+https://chrisizworski.com/national-tools/)";
 
 function cleanQuery(value) {
   return String(value || "").trim().replace(/\s+/g, " ").slice(0, 100);
@@ -21,9 +23,21 @@ function chooseCandidate(rows = []) {
   if (!valid.length) return null;
   const preferred = valid.find((row) => {
     const type = String(row.type || "").toLowerCase();
-    return ["city","town","village","hamlet","administrative","postcode"].some((x) => type.includes(x));
+    return ["city", "town", "village", "hamlet", "administrative", "postcode"].some((x) => type.includes(x));
   });
   return preferred || valid[0];
+}
+async function fetchJson(url) {
+  const response = await fetch(url, {
+    headers: {
+      accept: "application/geo+json, application/json",
+      "accept-language": "en-US,en;q=0.8",
+      "user-agent": USER_AGENT,
+    },
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!response.ok) throw new Error(`${new URL(url).hostname} returned ${response.status}`);
+  return response.json();
 }
 async function geocode(query) {
   const params = new URLSearchParams({
@@ -33,16 +47,21 @@ async function geocode(query) {
     countrycodes: "us",
     addressdetails: "1",
   });
-  const response = await fetch(`${NOMINATIM}?${params}`, {
-    headers: {
-      accept: "application/json",
-      "accept-language": "en-US,en;q=0.8",
-      "user-agent": "ChrisIzworskiNationalOutdoorTools/1.0 (+https://chrisizworski.com/national-tools/)",
-    },
-    signal: AbortSignal.timeout(8000),
-  });
-  if (!response.ok) throw new Error(`Geocoder returned ${response.status}`);
-  return chooseCandidate(await response.json());
+  return chooseCandidate(await fetchJson(`${NOMINATIM}?${params}`));
+}
+async function nwsContext(latitude, longitude) {
+  try {
+    const data = await fetchJson(`${NWS_POINTS}/${latitude.toFixed(4)},${longitude.toFixed(4)}`);
+    return {
+      timeZone: data?.properties?.timeZone || null,
+      forecastOffice: data?.properties?.cwa || null,
+      radarStation: data?.properties?.radarStation || null,
+      forecastZone: data?.properties?.forecastZone || null,
+      county: data?.properties?.county || null,
+    };
+  } catch {
+    return { timeZone: null, forecastOffice: null, radarStation: null, forecastZone: null, county: null };
+  }
 }
 
 module.exports = async function handler(req, res) {
@@ -54,11 +73,17 @@ module.exports = async function handler(req, res) {
   }
   const q = cleanQuery(req.query?.q);
   if (q.length < 2) return res.status(400).json({ error: "Enter a U.S. city or ZIP code" });
+
   try {
     const row = await geocode(q);
     if (!row) return res.status(404).json({ error: "Location not found in the United States" });
+
     const address = row.address || {};
+    const latitude = finite(row.lat);
+    const longitude = finite(row.lon);
     const stateCode = String(address["ISO3166-2-lvl4"] || "").replace(/^US-/, "") || null;
+    const context = latitude != null && longitude != null ? await nwsContext(latitude, longitude) : {};
+
     return res.status(200).json({
       query: q,
       displayName: row.display_name || q,
@@ -66,16 +91,23 @@ module.exports = async function handler(req, res) {
       state: address.state || null,
       stateCode,
       postcode: address.postcode || null,
-      latitude: finite(row.lat),
-      longitude: finite(row.lon),
+      latitude,
+      longitude,
+      timeZone: context.timeZone || null,
+      elevation_m: null,
+      forecastOffice: context.forecastOffice || null,
+      radarStation: context.radarStation || null,
       type: row.type || null,
-      attribution: "Geocoding © OpenStreetMap contributors via Nominatim",
+      attribution: "Geocoding © OpenStreetMap contributors via Nominatim; timezone context from the National Weather Service.",
       retrieved_at: new Date().toISOString(),
     });
   } catch (error) {
     res.setHeader("Cache-Control", "no-store");
-    return res.status(502).json({ error: "Location lookup unavailable", detail: String(error?.message || error) });
+    return res.status(502).json({
+      error: "Location lookup unavailable",
+      detail: String(error?.message || error),
+    });
   }
 };
 
-module.exports._test = { cleanQuery, finite, isUsCandidate, placeName, chooseCandidate };
+module.exports._test = { cleanQuery, finite, isUsCandidate, placeName, chooseCandidate, nwsContext };
