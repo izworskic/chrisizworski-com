@@ -1,0 +1,71 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-31",
+  "objective": "Ship a separate U.S. outdoor decision network without weakening Michigan canonicals, source truth, or search quality.",
+  "lossFunction": {
+    "factualDataIntegrity": 25,
+    "michiganCannibalizationExperimentProtection": 20,
+    "decisionUsefulness": 15,
+    "freshnessFailureTransparency": 10,
+    "sourceLicensingIntegrity": 10,
+    "searchDistinctValue": 10,
+    "performanceAccessibility": 5,
+    "sharedPlatformMaintainability": 5,
+    "total": 100
+  },
+  "hardVetoes": [
+    "no-fake-live-values",
+    "no-river-safety-score",
+    "no-kp-as-local-probability",
+    "no-hardiness-as-frost-date",
+    "no-fake-foliage-precision",
+    "no-doorway-location-pages",
+    "no-michigan-canonical-clones",
+    "no-silent-stale-defaults"
+  ],
+  "phase1": [
+    {
+      "id": "national-aurora",
+      "route": "/national-tools/aurora/",
+      "api": "/api/national-aurora",
+      "status": "live"
+    },
+    {
+      "id": "national-rivers",
+      "route": "/national-tools/rivers/",
+      "api": "/api/national-rivers",
+      "status": "live"
+    },
+    {
+      "id": "national-frost",
+      "route": "/national-tools/frost/",
+      "api": "/api/national-frost",
+      "status": "live"
+    },
+    {
+      "id": "national-planting",
+      "route": "/national-tools/planting/",
+      "api": "/api/national-frost",
+      "status": "live"
+    },
+    {
+      "id": "national-fall-color",
+      "route": "/national-tools/fall-color/",
+      "api": "/api/national-fall-color",
+      "status": "calibration-beta"
+    }
+  ],
+  "indexPolicy": {
+    "hub": true,
+    "phase1EntryPages": true,
+    "generatedLocationPages": false,
+    "zipCropDatePages": false
+  },
+  "protectedMichiganRoutes": [
+    "/tools/",
+    "/northern-lights-michigan/",
+    "/fall-color/",
+    "/michigan-frost-dates/",
+    "/zone-6a-planting-calendar/"
+  ]
+}
