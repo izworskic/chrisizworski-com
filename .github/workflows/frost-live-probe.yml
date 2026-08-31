@@ -62,6 +62,44 @@ jobs:
             await probe('NCEI SEARCH span '+span,s.toString());
           }
 
+
+          {
+            const s=new URL('https://www.ncei.noaa.gov/access/services/search/v1/data');
+            s.searchParams.set('dataset','normals-annualseasonal-1991-2020');
+            s.searchParams.set('bbox','44.626408,-84.588613,43.926408,-83.888613');
+            s.searchParams.set('dataTypes','ANN-TMIN-PRBLST-T32FP50,ANN-TMIN-PRBFST-T32FP50');
+            s.searchParams.set('limit','20');
+            s.searchParams.set('offset','0');
+            const rr=await fetch(s,{headers:{'user-agent':'ChrisIzworskiFrostProbe/1.0'}});
+            const jj=await rr.json();
+            console.log('\n### SEARCH SHAPE');
+            console.log('TOP_KEYS',Object.keys(jj));
+            console.log('RESULTS',JSON.stringify((jj.results||[]).slice(0,8)));
+            console.log('STATIONS',JSON.stringify(jj.stations||null));
+            console.log('FILES',JSON.stringify((jj.files||[]).slice?.(0,8)||jj.files||null));
+            const ids=[];
+            for(const item of (jj.results||[])){
+              for(const candidate of [item.station,item.stationId,item.id,item.name,item.identifier]){
+                if(typeof candidate==='string' && /^(?:USC|USW|USR|USS|GHCND:)/.test(candidate)) ids.push(candidate.replace(/^GHCND:/,''));
+              }
+            }
+            for(const bucket of (jj.stations?.buckets||[])){
+              if(bucket?.key) ids.push(String(bucket.key).replace(/^GHCND:/,''));
+            }
+            const unique=[...new Set(ids)].slice(0,12);
+            console.log('EXTRACTED_STATION_IDS',JSON.stringify(unique));
+            if(unique.length){
+              const d=new URL('https://www.ncei.noaa.gov/access/services/data/v1');
+              d.searchParams.set('dataset','normals-annualseasonal-1991-2020');
+              d.searchParams.set('stations',unique.join(','));
+              d.searchParams.set('format','json');
+              d.searchParams.set('includeStationName','1');
+              d.searchParams.set('includeStationLocation','1');
+              d.searchParams.set('dataTypes',types.join(','));
+              await probe('NCEI EXPLICIT STATIONS',d.toString());
+            }
+          }
+
           const z=new URL('https://services1.arcgis.com/SyUSN23vOoYdfLC8/arcgis/rest/services/PHZM_2023_Zip_Code_Table/FeatureServer/296/query');
           z.searchParams.set('where',"ZIP_CODE='48661'");
           z.searchParams.set('outFields','ZIP_CODE,ZONE_CODE,MAJORITY,Class,Class_Code');
