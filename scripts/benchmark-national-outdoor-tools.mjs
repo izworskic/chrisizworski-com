@@ -49,6 +49,8 @@ check("National tools registered",["national-aurora","national-rivers","national
 const groups=registry.cannibalizationGroups||[];
 check("National/Michigan cannibalization rules encoded",groups.some(g=>g.owner==="national-aurora"&&(g.supports||[]).includes("aurora"))&&groups.some(g=>g.owner==="national-frost"&&(g.supports||[]).includes("frost-dates"))&&groups.some(g=>g.owner==="national-fall-color"&&(g.supports||[]).includes("fall-color")),5);
 check("Master loss-function prompt exists",(await read("docs/NATIONAL_OUTDOOR_TOOLS_MASTER_PROMPT.md")).includes("## Loss function"),4);
-const summary={score,max:100,failures,hardVetoes:contract.hardVetoes};
+const maxPoints=119;
+const normalizedScore=Math.round((score/maxPoints)*100);
+const summary={score:normalizedScore,rawScore:score,maxPoints,failures,hardVetoes:contract.hardVetoes};
 process.stdout.write(JSON.stringify(summary,null,2)+"\n");
-if(process.argv.includes("--check")&&(failures.length||score!==100))process.exit(1);
+if(process.argv.includes("--check")&&failures.length)process.exit(1);
