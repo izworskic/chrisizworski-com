@@ -113,6 +113,9 @@
     attribution:'USGS The National Map · 3DEP / GMTED2010'
   });
 
+  map.createPane('portagePane');
+  map.getPane('portagePane').style.zIndex = '555';
+
   map.createPane('routePane');
   map.getPane('routePane').style.zIndex = '610';
 
@@ -121,6 +124,7 @@
 
   const layerGroups = {
     relief: reliefLayer,
+    'official-portage': L.layerGroup().addTo(map),
     trail: L.layerGroup().addTo(map),
     campground: L.layerGroup().addTo(map),
     'visitor-service': L.layerGroup().addTo(map),
@@ -137,7 +141,8 @@
   };
 
   const layerLabels = {
-    trail: 'trail / portage',
+    'official-portage': 'official NPS portage',
+    trail: 'trail',
     campground: 'campground / shelter',
     'visitor-service': 'visitor place',
     'water-route': 'water / transport route',
@@ -216,7 +221,8 @@
     portages:[],
     anchors:{},
     source:null,
-    error:''
+    error:'',
+    visuals:new Map()
   };
   const sourceStatus = {arcgis:'starting', osm:'not loaded', fallback:false};
   const operational = {
@@ -972,6 +978,7 @@
           status(`Loaded ${added} public visitor features. Search or filter the map; deep layers remain source-cataloged below.`);
           visitorGeometrySettled = true;
           addPendingShipwrecks();
+          renderOfficialPortageLayer();
           if((route.mode==='hike'||route.mode==='canoe')&&route.points.length>=2)reroute('Mapped trail geometry updated; route classification refreshed.');
           renderFeatureList();
           return;
@@ -991,6 +998,7 @@
         status(`Loaded ${added} public visitor features from the 2021 fallback dataset. Current operational decisions still hand off to NPS.`);
         visitorGeometrySettled = true;
         addPendingShipwrecks();
+        renderOfficialPortageLayer();
         renderFeatureList();
         return;
       }
@@ -1002,6 +1010,7 @@
     status(`Remote visitor geometry unavailable. Showing ${added} approximate reference anchors and the full source catalog instead.`);
     visitorGeometrySettled = true;
     addPendingShipwrecks();
+    renderOfficialPortageLayer();
     if((route.mode==='hike'||route.mode==='canoe')&&route.points.length>=2)reroute('Mapped trail geometry updated; route classification refreshed.');
     renderFeatureList();
   }
@@ -1664,6 +1673,251 @@
     return {label,spatial,radius};
   }
 
+
+  function officialPortageById(id) {
+    return officialPortages.portages.find(portage=>portage.id===id)||null;
+  }
+
+  function officialPortageMappedGeometry(portage) {
+    if(!portage?.from_anchor_id||!portage?.to_anchor_id)return null;
+    const from=officialPortages.anchors?.[portage.from_anchor_id];
+    const to=officialPortages.anchors?.[portage.to_anchor_id];
+    if(!from||!to||trailGraph.nodes.size<2)return null;
+    const a=nearestTrailNode(from),b=nearestTrailNode(to);
+    if(!a||!b)return null;
+    const fromLimit=Math.max(.35,Math.min(3.25,Number(from.match_radius_miles)||1));
+    const toLimit=Math.max(.35,Math.min(3.25,Number(to.match_radius_miles)||1));
+    if(a.distance>fromLimit||b.distance>toLimit)return null;
+    const trail=shortestTrailPath(a.key,b.key);
+    if(!trail||!Number.isFinite(trail.distance)||trail.distance<=0)return null;
+    const officialMiles=Number(portage.distance_miles)||0;
+    const delta=Math.abs(trail.distance-officialMiles);
+    const maxDelta=Math.max(.12,Math.min(.36,officialMiles*.32));
+    if(delta>maxDelta)return null;
+    const points=(trail.keys||[]).map(key=>trailGraph.nodes.get(key)).filter(Boolean)
+      .map(point=>({lat:Number(point.lat),lng:Number(point.lng)}));
+    if(points.length<2)return null;
+    return {
+      points,
+      mapped_miles:Number(trail.distance),
+      official_miles:officialMiles,
+      distance_delta_miles:delta,
+      trail_names:[...new Set((trail.names||[]).map(cleanText).filter(Boolean))],
+      from_snap_miles:Number(a.distance)||0,
+      to_snap_miles:Number(b.distance)||0
+    };
+  }
+
+  function pointAlongPolyline(points,fraction=.5) {
+    if(!Array.isArray(points)||!points.length)return null;
+    if(points.length===1)return points[0];
+    const cumulative=cumulativeFor(points);
+    const total=cumulative[cumulative.length-1]||0;
+    if(total<=0)return points[Math.floor(points.length/2)];
+    const target=total*Math.max(0,Math.min(1,fraction));
+    for(let i=1;i<points.length;i++) {
+      if(cumulative[i]<target)continue;
+      const span=Math.max(.000001,cumulative[i]-cumulative[i-1]);
+      const t=(target-cumulative[i-1])/span;
+      return {
+        lat:points[i-1].lat+(points[i].lat-points[i-1].lat)*t,
+        lng:points[i-1].lng+(points[i].lng-points[i-1].lng)*t
+      };
+    }
+    return points[points.length-1];
+  }
+
+  function officialPortagePopup(portage,visual) {
+    const wrap=document.createElement('div');
+    wrap.className='popup-detail official-portage-popup';
+    const title=document.createElement('div');
+    title.className='popup-title';
+    title.textContent='NPS Portage #'+portage.number;
+    wrap.appendChild(title);
+    const meta=document.createElement('div');
+    meta.className='popup-meta';
+    meta.textContent=portage.official_label;
+    wrap.appendChild(meta);
+
+    const facts=document.createElement('div');
+    facts.className='popup-facts';
+    addPopupFact(facts,'NPS distance',Number(portage.distance_miles).toFixed(1)+' mi');
+    addPopupFact(facts,'Elevation change',Number(portage.elevation_change_ft)+' ft');
+    addPopupFact(facts,'Terrain',portage.terrain);
+    if(visual?.geometryResolved)addPopupFact(facts,'Mapped trail geometry',Number(visual.mapped_miles).toFixed(2)+' mi');
+    wrap.appendChild(facts);
+
+    const note=document.createElement('p');
+    note.className='popup-description';
+    note.textContent=visual?.geometryResolved
+      ? 'Selectable corridor follows the currently loaded public trail geometry associated with this official NPS portage. Trip accounting uses the NPS-published distance.'
+      : 'Official NPS portage facts are available, but a mapped trail corridor could not be resolved from the currently loaded visitor trail network. The map badge is only an approximate waterbody reference, not a landing.';
+    wrap.appendChild(note);
+
+    if(visual?.geometryResolved) {
+      const add=document.createElement('button');
+      add.type='button';
+      add.className='popup-action popup-route-action';
+      add.textContent='Add this portage to trip';
+      add.addEventListener('click',event=>{
+        event.preventDefault();
+        event.stopPropagation();
+        addOfficialPortageToTrip(portage.id);
+        map.closePopup();
+      });
+      wrap.appendChild(add);
+    }
+
+    if(portage.detail_url) {
+      const detail=document.createElement('a');
+      detail.className='popup-link';
+      detail.href=portage.detail_url;
+      detail.target='_blank';
+      detail.rel='noopener';
+      detail.textContent='Open NPS portage detail';
+      wrap.appendChild(detail);
+    }
+    const source=document.createElement('a');
+    source.className='popup-link';
+    source.href=officialPortages.source?.url||CONFIG.mapsUrl;
+    source.target='_blank';
+    source.rel='noopener';
+    source.textContent='Open 2026 NPS Greenstone source';
+    wrap.appendChild(source);
+
+    const provenance=document.createElement('div');
+    provenance.className='popup-source';
+    provenance.textContent=visual?.geometryResolved
+      ? 'Official facts: NPS 2026 Greenstone, p. 6. Corridor: mapped public visitor trail geometry. Planning only.'
+      : 'Official facts: NPS 2026 Greenstone, p. 6. Reference badge location is approximate and is not a portage landing.';
+    wrap.appendChild(provenance);
+    return wrap;
+  }
+
+  function addOfficialPortageToTrip(portageId) {
+    const portage=officialPortageById(portageId);
+    const visual=officialPortages.visuals.get(portageId);
+    if(!portage||!visual?.geometryResolved||!Array.isArray(visual.points)||visual.points.length<2) {
+      status('That official portage does not have a resolved mapped trail corridor yet, so it was not added to the trip.');
+      return false;
+    }
+    rememberRouteEdit('add NPS portage #'+portage.number);
+    if(route.mode!=='canoe') {
+      route.mode='canoe';
+      route.speed=3;
+      els.routeModeSelect.value='canoe';
+      els.routeSpeed.value='3';
+      if(els.cockpitMode)els.cockpitMode.value='canoe';
+      document.body.classList.add('canoe-mode');
+    }
+    const first=visual.points[0],last=visual.points[visual.points.length-1];
+    const current=route.points[route.points.length-1]||null;
+    const reverse=Boolean(current&&distanceMiles(current,last)<distanceMiles(current,first));
+    const near=reverse?last:first;
+    const far=reverse?first:last;
+    const nearLabel=reverse?portage.to:portage.from;
+    const farLabel=reverse?portage.from:portage.to;
+    const make=(point,label,legType='auto',officialId='')=>({
+      lat:Number(point.lat),lng:Number(point.lng),
+      label:cleanText(label+' · Portage #'+portage.number),
+      kind:'official-portage-end',
+      sourceBackedBoatIn:false,
+      sourceLabel:'NPS 2026 Greenstone official portage',
+      liveAlert:false,
+      manualDayEnd:false,
+      legType,
+      officialPortageId:officialId
+    });
+    if(!current||distanceMiles(current,near)>.12)route.points.push(make(near,nearLabel,'auto',''));
+    route.points.push(make(far,farLabel,'portage',portage.id));
+    route.activeScenario='balanced';
+    setRouteAdding(true);
+    reroute('NPS Portage #'+portage.number+' added. The portage leg uses the published NPS distance and mapped trail corridor.');
+    status('Added NPS Portage #'+portage.number+' · '+portage.official_label+' · '+Number(portage.distance_miles).toFixed(1)+' mi.');
+    emitEvent('isle_royale_portage_add',{portage_number:portage.number,distance_miles:Number(portage.distance_miles),route_points:route.points.length});
+    return true;
+  }
+
+  function renderOfficialPortageLayer() {
+    const group=layerGroups['official-portage'];
+    if(!group||officialPortages.state!=='ready')return;
+    group.clearLayers();
+    officialPortages.visuals.clear();
+    for(let i=featureIndex.length-1;i>=0;i--)if(featureIndex[i].category==='official-portage')featureIndex.splice(i,1);
+
+    for(const portage of officialPortages.portages) {
+      const geometry=officialPortageMappedGeometry(portage);
+      let primaryLayer=null;
+      let visual=null;
+      if(geometry) {
+        const latlngs=geometry.points.map(point=>[point.lat,point.lng]);
+        const hit=L.polyline(latlngs,{pane:'portagePane',color:'#9b512b',weight:20,opacity:.001,interactive:true});
+        const line=L.polyline(latlngs,{pane:'portagePane',color:'#9b512b',weight:5,opacity:.94,dashArray:'8 5',interactive:true});
+        const mid=pointAlongPolyline(geometry.points,.5);
+        const badge=L.marker([mid.lat,mid.lng],{
+          pane:'portagePane',
+          interactive:true,
+          keyboard:true,
+          title:'NPS Portage #'+portage.number+' — '+portage.official_label,
+          icon:L.divIcon({className:'official-portage-badge',html:'<span>P'+portage.number+'</span>',iconSize:[30,24],iconAnchor:[15,12]})
+        });
+        visual={geometryResolved:true,points:geometry.points,mapped_miles:geometry.mapped_miles,line,badge};
+        const open=event=>{
+          if(event?.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
+          line.setStyle({weight:7});
+          line.bindPopup(()=>officialPortagePopup(portage,visual),{maxWidth:390,minWidth:280,className:'isle-detail-popup'}).openPopup();
+          emitEvent('isle_royale_portage_open',{portage_number:portage.number,mapped:true});
+        };
+        line.on('click',open);
+        hit.on('click',open);
+        badge.on('click',open);
+        line.on('popupclose',()=>line.setStyle({weight:5}));
+        line.bindTooltip('P'+portage.number+' · '+portage.official_label+' · '+Number(portage.distance_miles).toFixed(1)+' mi',{sticky:true});
+        badge.bindTooltip(portage.official_label+' · '+Number(portage.distance_miles).toFixed(1)+' mi',{direction:'top'});
+        group.addLayer(hit);group.addLayer(line);group.addLayer(badge);
+        primaryLayer=line;
+      } else {
+        const anchorId=portage.from_anchor_id||portage.to_anchor_id;
+        const anchorPoint=anchorId?officialPortages.anchors?.[anchorId]:null;
+        if(anchorPoint) {
+          const marker=L.marker([anchorPoint.lat,anchorPoint.lng],{
+            pane:'portagePane',
+            interactive:true,
+            keyboard:true,
+            title:'NPS Portage #'+portage.number+' reference — mapped corridor unresolved',
+            icon:L.divIcon({className:'official-portage-badge unresolved',html:'<span>P'+portage.number+'?</span>',iconSize:[34,24],iconAnchor:[17,12]})
+          });
+          visual={geometryResolved:false,points:[],mapped_miles:null,marker,referenceAnchor:anchorPoint};
+          marker.bindPopup(()=>officialPortagePopup(portage,visual),{maxWidth:390,minWidth:280,className:'isle-detail-popup'});
+          marker.bindTooltip('P'+portage.number+' · official portage · mapped corridor unresolved',{direction:'top'});
+          marker.on('click',event=>{
+            if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
+            emitEvent('isle_royale_portage_open',{portage_number:portage.number,mapped:false});
+          });
+          group.addLayer(marker);
+          primaryLayer=marker;
+        }
+      }
+      officialPortages.visuals.set(portage.id,visual||{geometryResolved:false,points:[],mapped_miles:null});
+      if(primaryLayer) {
+        featureIndex.push({
+          name:'NPS Portage #'+portage.number+' — '+portage.official_label,
+          category:'official-portage',
+          layer:primaryLayer,
+          sourceLabel:'National Park Service — 2026 Greenstone',
+          sourceKind:visual?.geometryResolved?'official facts + matched public trail corridor':'official facts + unresolved reference badge',
+          description:Number(portage.distance_miles).toFixed(1)+' mi · '+portage.elevation_change_ft+' ft · '+portage.terrain,
+          sourceUrl:officialPortages.source?.url||'',
+          properties:{...portage},
+          geometryType:visual?.geometryResolved?'LineString':'Point',
+          geometry:visual?.geometryResolved?{type:'LineString',coordinates:visual.points.map(point=>[point.lng,point.lat])}:null,
+          latlng:primaryLayer.getLatLng?primaryLayer.getLatLng():null
+        });
+      }
+    }
+    renderFeatureList();
+  }
+
   function matchOfficialPortage(a,b,mappedMiles) {
     if(officialPortages.state!=='ready'||!Number.isFinite(Number(mappedMiles)))return null;
     let best=null;
@@ -1721,6 +1975,7 @@
         officialPortages.state='ready';
         officialPortages.error='';
         emitEvent('isle_royale_portage_dataset',{count:rows.length,total_miles:Number(total.toFixed(1)),vintage:officialPortages.source.vintage});
+        renderOfficialPortageLayer();
         if(route.mode==='canoe'&&route.points.length>=2)reroute('Official 2026 NPS portage data loaded; canoe legs were rechecked.');
         return officialPortages;
       } catch(error) {
@@ -1831,6 +2086,14 @@
         const a=route.points[i-1],b=route.points[i];
         const override=b.legType||'auto';
         const trail=canoeTrailLegCandidate(a,b);
+        const selectedOfficial=b.officialPortageId?officialPortageById(b.officialPortageId):null;
+        if(trail&&selectedOfficial) {
+          trail.officialPortage=selectedOfficial;
+          trail.officialHint=true;
+          trail.miles=Number(selectedOfficial.distance_miles);
+          trail.distanceBasis='nps-published';
+          trail.source='NPS 2026 Greenstone + selected mapped portage corridor';
+        }
         const water=canoeWaterLegCandidate(router,a,b);
         let leg;
         if(override==='portage')leg=trail||canoeManualLeg(a,b,'portage');
@@ -2751,7 +3014,7 @@
       points:(snapshot?.points||[]).map(point=>({
         lat:Number(point.lat).toFixed(6),lng:Number(point.lng).toFixed(6),label:point.label||'',kind:point.kind||'',
         sourceBackedBoatIn:Boolean(point.sourceBackedBoatIn),liveAlert:Boolean(point.liveAlert),manualDayEnd:Boolean(point.manualDayEnd),
-        scenarioGenerated:Boolean(point.scenarioGenerated),scenarioId:point.scenarioId||'',campId:point.campId||'',legType:point.legType||'auto'
+        scenarioGenerated:Boolean(point.scenarioGenerated),scenarioId:point.scenarioId||'',campId:point.campId||'',legType:point.legType||'auto',officialPortageId:point.officialPortageId||''
       })),
       mode:snapshot?.mode||'paddle',
       speed:Number(snapshot?.speed)||3,
@@ -2911,7 +3174,8 @@
         kind:cleanText(point.kind||'map-point').slice(0,40),sourceBackedBoatIn:Boolean(point.sourceBackedBoatIn),
         liveAlert:Boolean(point.liveAlert),manualDayEnd:Boolean(point.manualDayEnd),scenarioGenerated:Boolean(point.scenarioGenerated),
         scenarioId:cleanText(point.scenarioId||'').slice(0,40),campId:cleanText(point.campId||'').slice(0,100),
-        legType:['water','portage'].includes(point.legType)?point.legType:'auto'
+        legType:['water','portage'].includes(point.legType)?point.legType:'auto',
+        officialPortageId:cleanText(point.officialPortageId||'').slice(0,80)
       })),
       map:{lat:center.lat,lng:center.lng,zoom:map.getZoom()}
     };
@@ -2928,7 +3192,8 @@
         lat,lng,label:cleanText(item?.label||'Waypoint').slice(0,100),kind:cleanText(item?.kind||'map-point').slice(0,40),
         sourceBackedBoatIn:false,liveAlert:false,manualDayEnd:Boolean(item?.manualDayEnd),
         scenarioGenerated:Boolean(item?.scenarioGenerated),scenarioId:cleanText(item?.scenarioId||'').slice(0,40),campId:cleanText(item?.campId||'').slice(0,100),
-        legType:['water','portage'].includes(item?.legType)?item.legType:'auto'
+        legType:['water','portage'].includes(item?.legType)?item.legType:'auto',
+        officialPortageId:cleanText(item?.officialPortageId||'').slice(0,80)
       };
     }).filter(Boolean);
     const speed=Math.max(.5,Math.min(60,Number(raw.speed)||3));
@@ -3102,7 +3367,8 @@
       liveAlert:Boolean(meta.liveAlert),
       historyAction:cleanText(meta.historyAction||''),
       manualDayEnd:Boolean(meta.manualDayEnd),
-      legType:['water','portage'].includes(meta.legType)?meta.legType:'auto'
+      legType:['water','portage'].includes(meta.legType)?meta.legType:'auto',
+      officialPortageId:cleanText(meta.officialPortageId||'').slice(0,80)
     };
     rememberRouteEdit(point.historyAction||(point.kind==='campground'?'add '+point.label:'add route point'));
     delete point.historyAction;
