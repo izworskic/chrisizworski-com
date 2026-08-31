@@ -184,7 +184,7 @@ test('open map cards can be dragged or centered after Leaflet finishes rendering
   assert.match(js, /function ensurePopupDragHandle/);
   assert.match(js, /function wirePopupDrag/);
   assert.match(js, /function schedulePopupInteractionSetup/);
-  assert.match(js, /Drag card to reposition it on the map/);
+  assert.match(js, /Drag this card to reposition it on the map/);
   assert.match(js, /Center card/);
   assert.match(js, /window\.addEventListener\('pointermove',move/);
   assert.match(js, /window\.addEventListener\('pointerup',end/);
