@@ -74,6 +74,35 @@ const popupReadabilityRuntime = /function popupSafeBounds/.test(js)
   && /body\.map-focus\.detail-popup-open \.planning-cockpit\{display:none\}/.test(html)
   && /touch-action:pan-y/.test(html);
 
+const popupDragRuntime = /function ensurePopupDragHandle/.test(js)
+  && /function wirePopupDrag/.test(js)
+  && /Drag card to reposition map/.test(js)
+  && /handle\.addEventListener\('pointerdown'/.test(js)
+  && /handle\.addEventListener\('pointermove'/.test(js)
+  && /map\.panBy\(\[-dx,-dy\]/.test(js)
+  && /popupUserPositioned=true/.test(js)
+  && /wirePopupDrag\(popup\)/.test(js)
+  && /\.popup-drag-handle\{/.test(html)
+  && /cursor:grab/.test(html)
+  && /touch-action:none/.test(html);
+
+const campgroundDetailRuntime = /trail-accessible-campgrounds\.htm/.test(api)
+  && /lake-superior-accessible-campgrounds\.htm/.test(api)
+  && /inland-lake-paddling-campgrounds\.htm/.test(api)
+  && /function normalizeCampgroundProfiles/.test(api)
+  && /campground_profiles:/.test(api)
+  && /campgroundByName: new Map\(\)/.test(js)
+  && /function findCampgroundProfile/.test(js)
+  && /function loadCampSiteIdentifiers/.test(js)
+  && /function campgroundSiteIdentifierLabel/.test(js)
+  && /function campSiteIdentifiersFor/.test(js)
+  && /Numbered sites & shelters/.test(js)
+  && /This may not be a complete site inventory/.test(js)
+  && /Site\/shelter identifiers: OpenStreetMap contributors \(supplemental\)/.test(js)
+  && /addPopupFact\(facts, 'Total sites'/.test(js)
+  && /addPopupFact\(facts, 'Group sites'/.test(js)
+  && /loadCampSiteIdentifiers\(\)\.catch/.test(js);
+
 const osmToggleRuntime = /const osmContextGroup = L\.layerGroup\(\)/.test(js)
   && /function setOsmContextVisible/.test(js)
   && /Hide supplemental data/.test(js)
@@ -318,7 +347,7 @@ const referenceShelfComplete = /Official maps from the original research/.test(h
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && popupReadabilityRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && routeEditingRuntime, 'map-first route planning with paddle/portage leg accounting, leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && popupReadabilityRuntime && popupDragRuntime && campgroundDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && routeEditingRuntime, 'map-first route planning with paddle/portage leg accounting, leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -356,6 +385,8 @@ if (!measurementComplete) hardFailures.push('planned privacy-safe Isle Royale me
 if (!currentShipwreckRuntime) hardFailures.push('current NPS shipwreck buoy runtime missing');
 if (!pointDetailRuntime) hardFailures.push('point hit-target/detail popup runtime missing');
 if (!popupReadabilityRuntime) hardFailures.push('rich detail popup can open outside the unobstructed readable map viewport');
+if (!popupDragRuntime) hardFailures.push('open detail cards cannot be manually dragged to reposition the anchored map popup');
+if (!campgroundDetailRuntime) hardFailures.push('campground cards are missing official NPS capacity profiles or truthful supplemental numbered site/shelter identifiers');
 if (!osmToggleRuntime) hardFailures.push('supplemental-data layer is not reversible or leaks source plumbing into user-facing labels');
 if (!routePlanningRuntime) hardFailures.push('route-aware marine planning runtime missing');
 if (!smartRoutingRuntime) hardFailures.push('smart trail routing runtime missing');
