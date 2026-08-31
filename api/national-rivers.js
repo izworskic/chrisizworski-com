@@ -3,11 +3,10 @@ const {
   freshness,
   sourceMeta,
 } = require("../lib/national-outdoor");
+const siteIndex = require("../public/data/national-usgs-streamflow-sites.json");
 
-const SITE = "https://waterservices.usgs.gov/nwis/site/";
 const IV = "https://waterservices.usgs.gov/nwis/iv/";
-const UA = "ChrisIzworskiNationalRiverConditions/3.0 (+https://chrisizworski.com/national-tools/rivers/)";
-const SEARCH_SPANS = Object.freeze([0.6, 1.5, 2.4]);
+const UA = "ChrisIzworskiNationalRiverConditions/4.0 (+https://chrisizworski.com/national-tools/rivers/)";
 
 function haversine(a, b, c, d) {
   const r = 3958.7613;
@@ -17,99 +16,34 @@ function haversine(a, b, c, d) {
   const q = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a)) * Math.cos(toRad(c)) * Math.sin(dLon / 2) ** 2;
   return 2 * r * Math.asin(Math.sqrt(q));
 }
-function roundCoord(value) {
-  return Math.round(Number(value) * 1e7) / 1e7;
+function nearestSites(lat, lon, limit = 10) {
+  const sites = Array.isArray(siteIndex?.sites) ? siteIndex.sites : [];
+  return sites
+    .map((site) => ({
+      id: site.id,
+      name: site.name,
+      latitude: finite(site.latitude, -90, 90),
+      longitude: finite(site.longitude, -180, 180),
+      distance_miles: haversine(lat, lon, Number(site.latitude), Number(site.longitude)),
+    }))
+    .filter((site) => site.id && site.latitude != null && site.longitude != null && Number.isFinite(site.distance_miles))
+    .sort((a, b) => a.distance_miles - b.distance_miles)
+    .slice(0, Math.max(1, Math.min(20, Number(limit) || 10)));
 }
-function bbox(lat, lon, span) {
-  const north = roundCoord(Math.min(90, lat + span));
-  const south = roundCoord(Math.max(-90, lat - span));
-  const west = roundCoord(Math.max(-180, lon - span));
-  const east = roundCoord(Math.min(180, lon + span));
-  return {
-    north,
-    south,
-    west,
-    east,
-    product: Math.abs(east - west) * Math.abs(north - south),
-    value: `${west},${south},${east},${north}`,
-  };
-}
-async function fetchText(url, timeoutMs = 3900) {
-  const r = await fetch(url, {
-    headers: { accept: "text/plain", "user-agent": UA },
-    signal: AbortSignal.timeout(timeoutMs),
-  });
-  if (!r.ok) throw new Error(`${new URL(url).hostname} returned ${r.status}`);
-  return r.text();
-}
-async function fetchJson(url, timeoutMs = 900) {
-  const r = await fetch(url, {
+async function fetchJson(url, timeoutMs = 2500) {
+  const response = await fetch(url, {
     headers: { accept: "application/json", "user-agent": UA },
     signal: AbortSignal.timeout(timeoutMs),
   });
-  if (!r.ok) throw new Error(`${new URL(url).hostname} returned ${r.status}`);
-  const type = String(r.headers.get("content-type") || "").toLowerCase();
-  const text = await r.text();
+  if (!response.ok) throw new Error(`${new URL(url).hostname} returned ${response.status}`);
+  const type = String(response.headers.get("content-type") || "").toLowerCase();
+  const text = await response.text();
   if (!type.includes("json")) throw new Error(`${new URL(url).hostname} returned non-JSON content`);
   try {
     return JSON.parse(text);
   } catch {
     throw new Error(`${new URL(url).hostname} returned invalid JSON`);
   }
-}
-function parseSiteRdb(body) {
-  const lines = String(body || "").split(/\r?\n/).filter(Boolean);
-  const hi = lines.findIndex((line) => !line.startsWith("#") && line.includes("site_no") && line.includes("station_nm"));
-  if (hi < 0) return [];
-  const headers = lines[hi].split("\t");
-  const index = (name) => headers.indexOf(name);
-  const idI = index("site_no");
-  const nameI = index("station_nm");
-  const latI = index("dec_lat_va");
-  const lonI = index("dec_long_va");
-  if ([idI, nameI, latI, lonI].some((i) => i < 0)) return [];
-  return lines.slice(hi + 2)
-    .filter((line) => line && !line.startsWith("#"))
-    .map((line) => line.split("\t"))
-    .map((parts) => ({
-      id: parts[idI],
-      name: parts[nameI],
-      latitude: finite(parts[latI], -90, 90),
-      longitude: finite(parts[lonI], -180, 180),
-    }))
-    .filter((site) => site.id && site.latitude != null && site.longitude != null);
-}
-async function siteSearch(lat, lon, span) {
-  const box = bbox(lat, lon, span);
-  if (box.product > 25.000001) return { span, ok: false, rows: [], error: "bbox exceeds USGS limit" };
-  const u = new URL(SITE);
-  u.searchParams.set("format", "rdb");
-  u.searchParams.set("bBox", box.value);
-  u.searchParams.set("siteType", "ST");
-  u.searchParams.set("siteStatus", "active");
-  u.searchParams.set("hasDataTypeCd", "iv");
-  u.searchParams.set("parameterCd", "00060");
-  try {
-    return { span, ok: true, rows: parseSiteRdb(await fetchText(u, 3900)) };
-  } catch (error) {
-    return { span, ok: false, rows: [], error: String(error?.message || error) };
-  }
-}
-async function findSites(lat, lon) {
-  const results = await Promise.all(SEARCH_SPANS.map((span) => siteSearch(lat, lon, span)));
-  const successful = results.filter((result) => result.ok).sort((a, b) => a.span - b.span);
-  const match = successful.find((result) => result.rows.length);
-  if (!match) {
-    if (successful.length) return [];
-    throw new Error(results.map((result) => `span ${result.span}: ${result.error || "failed"}`).join(" | "));
-  }
-  return match.rows
-    .map((site) => ({
-      ...site,
-      distance_miles: haversine(lat, lon, site.latitude, site.longitude),
-    }))
-    .sort((a, b) => a.distance_miles - b.distance_miles)
-    .slice(0, 10);
 }
 function code(series) {
   return series.variable?.variableCode?.[0]?.value || null;
@@ -193,13 +127,13 @@ function normalize(payload, sites) {
 }
 async function observations(sites) {
   if (!sites.length) return [];
-  const u = new URL(IV);
-  u.searchParams.set("format", "json");
-  u.searchParams.set("sites", sites.map((site) => site.id).join(","));
-  u.searchParams.set("parameterCd", "00060,00065,00010");
-  u.searchParams.set("period", "P1D");
-  u.searchParams.set("siteStatus", "all");
-  return normalize(await fetchJson(u, 900), sites);
+  const url = new URL(IV);
+  url.searchParams.set("format", "json");
+  url.searchParams.set("sites", sites.map((site) => site.id).join(","));
+  url.searchParams.set("parameterCd", "00060,00065,00010");
+  url.searchParams.set("period", "P1D");
+  url.searchParams.set("siteStatus", "all");
+  return normalize(await fetchJson(url, 2500), sites);
 }
 
 module.exports = async function handler(req, res) {
@@ -216,7 +150,7 @@ module.exports = async function handler(req, res) {
   if (lat == null || lon == null) return res.status(400).json({ error: "Valid latitude and longitude are required" });
 
   try {
-    const sites = await findSites(lat, lon);
+    const sites = nearestSites(lat, lon, 10);
     const gauges = await observations(sites);
     const now = new Date().toISOString();
     const newestObserved = gauges.map((gauge) => gauge.measured_at).filter(Boolean).sort().at(-1) || null;
@@ -224,7 +158,13 @@ module.exports = async function handler(req, res) {
       retrieved_at: now,
       degraded: false,
       context_pending: Boolean(gauges.length),
-      discovery: "USGS Site Service metadata + exact-site instantaneous values",
+      discovery: "Local USGS active-streamflow site index + exact-site instantaneous values",
+      discovery_index: {
+        generated_at: siteIndex.generated_at || null,
+        site_count: finite(siteIndex.site_count),
+        source_name: siteIndex.source_name || "USGS Site Service",
+        source_url: siteIndex.source_url || "https://waterservices.usgs.gov/nwis/site/",
+      },
       location: { latitude: lat, longitude: lon },
       gauges,
       sources: [
@@ -237,7 +177,7 @@ module.exports = async function handler(req, res) {
           status: "provisional observations",
         }),
       ],
-      disclaimer: "USGS readings are provisional and subject to revision. Historical percentiles and NOAA forecast/flood context load separately so they cannot delay current observations. Flow or stage alone cannot determine whether paddling, swimming, wading, fishing, or boating is safe.",
+      disclaimer: "Nearest-gauge discovery uses a periodically refreshed index of active USGS streamflow sites; displayed readings are fetched live from USGS by exact site ID and remain provisional. Historical percentiles and NOAA forecast/flood context load separately. Flow or stage alone cannot determine whether paddling, swimming, wading, fishing, or boating is safe.",
     });
   } catch (error) {
     res.setHeader("Cache-Control", "no-store");
@@ -250,15 +190,10 @@ module.exports = async function handler(req, res) {
 };
 
 module.exports._test = {
-  SEARCH_SPANS,
   atAgo,
-  bbox,
-  findSites,
   haversine,
+  nearestSites,
   normalize,
-  parseSiteRdb,
-  roundCoord,
   sampleSeries,
-  siteSearch,
   trendLabel,
 };
