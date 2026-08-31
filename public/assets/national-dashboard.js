@@ -11,10 +11,8 @@
       return {ok:false,error:String(error&&error.message||error)};
     }
   }
-  function formatClock(value){
-    if(!value)return "unknown";
-    const d=new Date(value);
-    return Number.isNaN(d.getTime())?"unknown":d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+  function formatClock(value,timeZone){
+    return N().fmtInZone(value,timeZone,{hour:"numeric",minute:"2-digit"});
   }
   function statusClass(level){
     if(["hard-freeze","freeze","cloudy","danger","major","moderate","minor"].includes(level))return "danger";
@@ -33,7 +31,7 @@
     const level=d.verdict&&d.verdict.level||"";
     const priority=level==="strong"?95:level==="cloudy"?80:level==="watch"?70:20;
     const facts=[];
-    if(w)facts.push("Best dark-weather window "+formatClock(w.start_time)+"–"+formatClock(w.end_time)+" · "+w.average_cloud_percent+"% cloud");
+    if(w)facts.push("Best dark-weather window "+formatClock(w.start_time,d.location&&d.location.timeZone||loc.timeZone)+"–"+formatClock(w.end_time,d.location&&d.location.timeZone||loc.timeZone)+" · "+w.average_cloud_percent+"% cloud");
     if(d.geomagnetic&&d.geomagnetic.peak_24h_kp!=null)facts.push("Peak 24h Kp "+d.geomagnetic.peak_24h_kp+" · context only");
     const src=sourceFootnote(d);
     return {id:"aurora",priority:priority,kicker:"Tonight",title:d.verdict&&d.verdict.label||"Aurora outlook",detail:d.verdict&&d.verdict.detail||"Local aurora context is available.",level:level,href:N().withQuery("/national-tools/aurora/",loc),facts:facts,source:src.available+"/"+(src.total||src.available)+" sources available"+(src.stale?" · "+src.stale+" stale":"")};
@@ -61,7 +59,7 @@
     const priority=v.level==="hard-freeze"?98:v.level==="freeze"?90:25;
     const level=v.level==="hard-freeze"||v.level==="freeze"?"danger":"";
     const facts=[];
-    if(w&&w.min_7d_f!=null)facts.push("7-day low "+Math.round(w.min_7d_f)+"°F"+(w.min_7d_at?" · "+formatClock(w.min_7d_at):""));
+    if(w&&w.min_7d_f!=null)facts.push("7-day low "+Math.round(w.min_7d_f)+"°F"+(w.min_7d_at?" · "+formatClock(w.min_7d_at,d.location&&d.location.timeZone||loc.timeZone):""));
     if(c&&c.dates&&c.dates.fall_50&&c.dates.fall_50.mmdd)facts.push("Median first 32°F freeze "+c.dates.fall_50.mmdd.replace("-","/"));
     if(c&&c.dates&&c.dates.spring_10&&c.dates.spring_10.mmdd)facts.push("Cautious spring 10% date "+c.dates.spring_10.mmdd.replace("-","/"));
     return {id:"frost",priority:priority,kicker:"Freeze risk",title:v.label||"Freeze outlook",detail:c?"NOAA station "+(c.distance_miles==null?"distance unknown":c.distance_miles.toFixed(1)+" mi away")+" · "+c.confidence+" station confidence":"Historical climatology unavailable",level:level,href:N().withQuery("/national-tools/frost/",loc),facts:facts,source:w&&w.updated_at?"NWS updated "+N().fmtDate(w.updated_at):"NWS update time unavailable"};
