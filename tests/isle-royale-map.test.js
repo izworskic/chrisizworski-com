@@ -106,7 +106,7 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
 
 
 test('Isle Royale interaction script is cache-busted and not stored during active development', () => {
-  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-route-builder-1/);
+  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-trip-intelligence-1/);
   assert.doesNotMatch(html, /isle-royale-map\.js\?v=20260830-19/);
   const vercel = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
   const rule = (vercel.headers || []).find(item => item.source === '/assets/isle-royale-map.js');
@@ -361,6 +361,57 @@ test('canoe resolved leg distance labels use the current route leg index', () =>
   assert.doesNotMatch(js, /route\.mixedLegs\[i-1\]\|\|null:null/);
 });
 
+test('trip intelligence turns the route into paddle, carry, time, and day-plan math', () => {
+  for (const id of ['route-stroke-rate','route-feet-per-stroke','route-portage-transition','route-trip-brief','route-export-plan']) {
+    assert.ok(html.includes(`id="${id}"`), id);
+  }
+  assert.match(html, /<option value="3">Triple<\/option>/);
+  assert.match(html, /Effective travel \/ stroke/);
+  assert.match(js, /function paddleSpeedFromStrokes/);
+  assert.match(js, /cadence\*feet\*60\/5280/);
+  assert.match(js, /function planningTravelSpeed/);
+  assert.match(js, /function strokeCountForMiles/);
+  assert.match(js, /function portageWalkMultiplier/);
+  assert.match(js, /Math\.abs\(trips-1\.5\)<\.01\)return 2/);
+  assert.match(js, /2\*trips-1/);
+  assert.match(js, /function portageTerrainFactor/);
+  assert.match(js, /extremely steep/);
+  assert.match(js, /wet/);
+  assert.match(js, /rocky/);
+  assert.match(js, /function tripSegmentMetrics/);
+  assert.match(js, /walkingHours\+transitionHours/);
+  assert.match(js, /function tripEffortSummary/);
+  assert.match(js, /function tripDays/);
+  assert.match(js, /endpoint\.kind==='campground'&&current\.hours>=target\*\.70/);
+  assert.match(js, /function tripDescription/);
+  assert.match(js, /function renderTripBrief/);
+  assert.match(js, /estimated stroke cycles/);
+  assert.match(js, /Portage terrain adjustments are planning heuristics/);
+  assert.match(html, /\.trip-brief\{/);
+  assert.match(html, /\.trip-day\{/);
+});
+
+test('saved trips are visible, named, recoverable, and portable beyond one hidden localStorage slot', () => {
+  for (const id of ['route-trip-name','route-save-named','route-saved-list']) {
+    assert.ok(html.includes(`id="${id}"`), id);
+  }
+  assert.match(html, /Saved trips on this device/);
+  assert.match(js, /TRIP_LIBRARY_KEY='isle-royale-trip-library-v1'/);
+  assert.match(js, /TRIP_AUTOSAVE_KEY='isle-royale-trip-autosave-v1'/);
+  assert.match(js, /function readTripLibrary/);
+  assert.match(js, /function writeTripLibrary/);
+  assert.match(js, /function autosaveTripDraft/);
+  assert.match(js, /function renderSavedTrips/);
+  assert.match(js, /Working route · autosaved/);
+  assert.match(js, /Saved “'\+name\+'” on this device/);
+  assert.match(js, /library_count:next\.length/);
+  assert.match(js, /function tripPlanHtml/);
+  assert.match(js, /function downloadTripPlan/);
+  assert.match(js, /format:'html-plan'/);
+  assert.match(js, /link\.download=name\+'-plan\.html'/);
+  assert.match(js, /renderSavedTrips\(\)/);
+});
+
 test('trip persistence stays local/share-fragment based and GPX exports only resolved geometry', () => {
   assert.match(html, /id="route-save"/);
   assert.match(html, /id="route-restore"/);
@@ -370,6 +421,8 @@ test('trip persistence stays local/share-fragment based and GPX exports only res
   assert.match(html, /id="cockpit-share"/);
   assert.match(html, /id="cockpit-gpx"/);
   assert.match(js, /TRIP_STORAGE_KEY='isle-royale-trip-v1'/);
+  assert.match(js, /TRIP_LIBRARY_KEY='isle-royale-trip-library-v1'/);
+  assert.match(js, /TRIP_AUTOSAVE_KEY='isle-royale-trip-autosave-v1'/);
   assert.match(js, /localStorage\.setItem\(TRIP_STORAGE_KEY/);
   assert.match(js, /url\.hash='trip='/);
   assert.match(js, /window\.history\.replaceState\(null,'',url\.toString\(\)\)/);
