@@ -745,7 +745,7 @@ test('official NPS portages are visually selectable map objects with truthful ad
 test('canoe planner separates paddle and portage legs and keeps a truthful trip total', () => {
   assert.match(html, /<option value="canoe">Canoe \+ portage<\/option>/);
   assert.match(html, /id="route-portage-trips"/);
-  assert.match(html, /id="route-portage-speed"/);
+  assert.match(html, /id="route-portage-pace"/);
   assert.match(js, /function resolveCanoeRouteAsync/);
   assert.match(js, /function canoeTrailLegCandidate/);
   assert.match(js, /function canoeWaterLegCandidate/);
