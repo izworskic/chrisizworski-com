@@ -1529,7 +1529,10 @@
     const point=route.points[index];
     rememberRouteEdit('remove '+(point.label||'route point'));
     route.points.splice(index,1);
-    if(route.mode==='canoe'&&index>0&&index<route.points.length)route.points[index].legType='auto';
+    if(route.mode==='canoe'&&index>0&&index<route.points.length) {
+      route.points[index].legType='auto';
+      route.points[index].officialPortageId='';
+    }
     map.closePopup();
     reroute('Route stop removed. Re-run weather after the route resolves.');
     status((point.label||'Route point')+' removed from trip.');
@@ -1862,10 +1865,12 @@
           icon:L.divIcon({className:'official-portage-badge',html:'<span>P'+portage.number+'</span>',iconSize:[30,24],iconAnchor:[15,12]})
         });
         visual={geometryResolved:true,points:geometry.points,mapped_miles:geometry.mapped_miles,line,badge};
+        line.bindPopup(()=>officialPortagePopup(portage,visual),{maxWidth:390,minWidth:280,className:'isle-detail-popup'});
+        badge.bindPopup(()=>officialPortagePopup(portage,visual),{maxWidth:390,minWidth:280,className:'isle-detail-popup'});
         const open=event=>{
           if(event?.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
           line.setStyle({weight:7});
-          line.bindPopup(()=>officialPortagePopup(portage,visual),{maxWidth:390,minWidth:280,className:'isle-detail-popup'}).openPopup();
+          line.openPopup();
           emitEvent('isle_royale_portage_open',{portage_number:portage.number,mapped:true});
         };
         line.on('click',open);
@@ -3381,11 +3386,17 @@
   function reverseRoute() {
     if(route.points.length<2)return;
     rememberRouteEdit('reverse route');
-    const canoeTypes=route.mode==='canoe'?route.points.slice(1).map(point=>point.legType||'auto').reverse():null;
+    const canoeSegments=route.mode==='canoe'
+      ? route.points.slice(1).map(point=>({legType:point.legType||'auto',officialPortageId:point.officialPortageId||''})).reverse()
+      : null;
     route.points.reverse();
-    if(canoeTypes) {
+    if(canoeSegments) {
       route.points[0].legType='auto';
-      for(let i=1;i<route.points.length;i++)route.points[i].legType=canoeTypes[i-1]||'auto';
+      route.points[0].officialPortageId='';
+      for(let i=1;i<route.points.length;i++) {
+        route.points[i].legType=canoeSegments[i-1]?.legType||'auto';
+        route.points[i].officialPortageId=canoeSegments[i-1]?.officialPortageId||'';
+      }
     }
     reroute();
     status('Route direction reversed.');
