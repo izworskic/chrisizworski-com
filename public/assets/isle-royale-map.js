@@ -3285,11 +3285,14 @@
       route.waterToken++;
       route.waterStats=null;
       route.waterReason='';
+      route.waterLegs=[];
+      route.mixedLegs=[];
       route.resolvedPoints=[...route.points];
       route.smartState=route.points.length?'need-destination':'idle';
       return;
     }
     if(route.mode==='canoe') {
+      route.waterLegs=[];
       route.mixedLegs=[];
       route.mixedReason='';
       route.resolvedPoints=[];
@@ -3298,6 +3301,7 @@
       route.smartState='canoe-pending';
     } else if(route.mode==='hike') {
       route.waterToken++;
+      route.waterLegs=[];
       route.mixedLegs=[];
       route.mixedReason='';
       route.waterStats=null;
@@ -3314,6 +3318,8 @@
         route.smartReason=smart?.reason||'Smart trail routing unavailable.';
       }
     } else {
+      route.waterLegs=[];
+      route.mixedLegs=[];
       route.resolvedPoints=[];
       route.waterStats=null;
       route.waterReason='';
@@ -3368,6 +3374,11 @@
         els.routeSmartStatus.innerHTML='<strong>Building canoe trip:</strong> each leg must resolve on mapped water or match a designated NPS portage. No straight line is drawn across land while routing verifies.';
         return;
       }
+      if(route.smartState==='canoe-partial') {
+        const totals=canoeTotals();
+        els.routeSmartStatus.innerHTML='<strong>Verified route so far:</strong> '+totals.total.toFixed(1)+' mi across '+route.mixedLegs.length+' safe leg'+(route.mixedLegs.length===1?'':'s')+'. The newest leg is still verifying or blocked'+(route.mixedReason?' ('+cleanText(route.mixedReason)+')':'')+'. Earlier lines and measurements remain valid.';
+        return;
+      }
       if(route.smartState==='canoe-aware') {
         const totals=canoeTotals();
         const inferred=route.mixedLegs.filter(leg=>leg.override==='auto').length;
@@ -3391,6 +3402,10 @@
     }
     if(route.smartState==='water-loading'||route.smartState==='water-pending') {
       els.routeSmartStatus.innerHTML='<strong>Building water route:</strong> mapped coastline routing is finding a zero-land-crossing path. Selected points stay visible, but no straight line is drawn across land while routing verifies.';
+      return;
+    }
+    if(route.smartState==='water-partial') {
+      els.routeSmartStatus.innerHTML='<strong>Verified water route so far:</strong> '+verifiedRouteMiles().toFixed(1)+' mi. The newest leg is still verifying or blocked'+(route.waterReason?' ('+cleanText(route.waterReason)+')':'')+'. Earlier safe-water lines and measurements remain on the map.';
       return;
     }
     if(route.smartState==='water-aware') {
@@ -3924,7 +3939,7 @@
       }
     }
 
-    if(route.mode==='canoe'&&route.smartState==='canoe-aware') {
+    if(route.mode==='canoe'&&['canoe-aware','canoe-partial'].includes(route.smartState)) {
       route.mixedLegs.forEach(leg=>{
         if(!leg.points?.length)return;
         const isPortage=leg.type==='portage';
@@ -3978,7 +3993,7 @@
       route.markers.push(marker);
     });
 
-    if(path.length>=2&&(route.mode==='hike'||route.smartState==='water-aware'||route.smartState==='canoe-aware')) {
+    if(path.length>=2&&(route.mode==='hike'||['water-aware','water-partial','canoe-aware','canoe-partial'].includes(route.smartState))) {
       const cumulative=routeCumulative();
       for(let index=1;index<controlDistances.length;index++) {
         const d=controlDistances[index],previous=controlDistances[index-1];
@@ -4018,12 +4033,18 @@
         : 'No route yet.';
       els.routeWeatherButton.disabled=true;
     } else if(route.mode==='canoe'&&route.smartState!=='canoe-aware') {
-      els.routeSummary.innerHTML='<strong>'+route.points.length+' selected route points.</strong> No canoe route is drawn until every paddle leg is verified on water and every land crossing uses a designated NPS portage.'+(route.mixedReason?' '+cleanText(route.mixedReason):'');
+      const verified=verifiedRouteMiles();
+      els.routeSummary.innerHTML=route.smartState==='canoe-partial'
+        ? '<strong>'+verified.toFixed(1)+' mi verified so far.</strong> '+route.mixedLegs.length+' completed leg'+(route.mixedLegs.length===1?'':'s')+' remain drawn and measured; only the newest leg is unresolved.'+(route.mixedReason?' '+cleanText(route.mixedReason):'')
+        : '<strong>'+route.points.length+' selected route points.</strong> The first canoe leg is still verifying. No straight overland fallback is drawn.'+(route.mixedReason?' '+cleanText(route.mixedReason):'');
       els.routeWeatherButton.disabled=true;
     } else if(route.mode!=='hike'&&route.mode!=='canoe'&&route.smartState!=='water-aware') {
-      els.routeSummary.innerHTML=route.smartState==='water-fallback'
-        ? '<strong>'+route.points.length+' selected route points.</strong> A zero-land-crossing water route could not be verified. No straight overland fallback is drawn.'
-        : '<strong>'+route.points.length+' selected route points.</strong> Shoreline routing is verifying a water-only path. No straight line is drawn across land while it resolves.';
+      const verified=verifiedRouteMiles();
+      els.routeSummary.innerHTML=route.smartState==='water-partial'
+        ? '<strong>'+verified.toFixed(1)+' mi verified water so far.</strong> Earlier safe-water legs remain drawn and measured; only the newest leg is unresolved.'+(route.waterReason?' '+cleanText(route.waterReason):'')
+        : route.smartState==='water-fallback'
+          ? '<strong>'+route.points.length+' selected route points.</strong> The first zero-land-crossing water leg could not be verified. No straight overland fallback is drawn.'
+          : '<strong>'+route.points.length+' selected route points.</strong> Shoreline routing is verifying the first water-only leg.';
       els.routeWeatherButton.disabled=true;
     } else if(route.mode==='canoe') {
       const totals=canoeTotals();
@@ -4165,6 +4186,7 @@
     route.trailNames=[];
     route.waterStats=null;
     route.waterReason='';
+    route.waterLegs=[];
     route.mixedLegs=[];
     route.mixedReason='';
     route.scenarios=[];
@@ -4323,7 +4345,7 @@
     if(els.routeTripName)els.routeTripName.value=route.tripName;
     document.body.classList.toggle('canoe-mode',route.mode==='canoe');
     document.body.classList.toggle('human-paddle-mode',route.mode==='canoe'||route.mode==='paddle');
-    route.resolvedPoints=[];route.trailNames=[];route.waterStats=null;route.waterReason='';route.scenarios=[];route.scenarioWeather={};route.itinerary=null;route.itineraryWeather=null;
+    route.resolvedPoints=[];route.trailNames=[];route.waterStats=null;route.waterReason='';route.waterLegs=[];route.mixedLegs=[];route.scenarios=[];route.scenarioWeather={};route.itinerary=null;route.itineraryWeather=null;
     reroute(message+' Re-run weather for the restored schedule.');
     if(state.map)window.setTimeout(()=>map.setView([state.map.lat,state.map.lng],state.map.zoom,{animate:false}),260);
     syncCockpitControls();
