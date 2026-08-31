@@ -185,8 +185,8 @@ test('floating inspector drag moves the card itself instead of panning the map',
   assert.match(js, /function wireFloatingInspectorDrag/);
   assert.match(html, /Drag this card anywhere on the map/);
   assert.match(js, /function centerInspectorPoint/);
-  assert.match(js, /Center card/);
-  assert.match(js, /Center point/);
+  assert.match(html, /Center card/);
+  assert.match(html, /Center point/);
   assert.match(js, /window\.addEventListener\('pointermove',move/);
   assert.match(js, /window\.addEventListener\('pointerup',end/);
   assert.match(js, /shell\.style\.left=.*\+'px'/);
