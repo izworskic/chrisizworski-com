@@ -82,7 +82,7 @@ const routePlanningRuntime = /id="route-planner"/.test(html)
 const routeEditingRuntime = /function routeControlDistances/.test(js)
   && /function projectControlPointAlongPath/.test(js)
   && /function removeRoutePoint/.test(js)
-  && /mi leg · .*mi total/.test(js)
+  && /mi (?:leg|water).*mi total/.test(js)
   && /Remove from route/.test(js)
   && /marker\.bindPopup/.test(js)
   && /\.route-distance/.test(html);
