@@ -59,7 +59,7 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /radius:category === 'campground' \? 7\.5 : 7/.test(js)
   && /collectFeatureFacts/.test(js)
   && /Related information/.test(js)
-  && /Open this coordinate in OpenStreetMap/.test(js)
+  && /Open this coordinate on the source map/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
 const popupReadabilityRuntime = /function popupSafeBounds/.test(js)
   && /function movePopupFullyIntoView/.test(js)
@@ -76,9 +76,13 @@ const popupReadabilityRuntime = /function popupSafeBounds/.test(js)
 
 const osmToggleRuntime = /const osmContextGroup = L\.layerGroup\(\)/.test(js)
   && /function setOsmContextVisible/.test(js)
-  && /Hide OSM context/.test(js)
-  && /Show OSM context/.test(js)
-  && /targetGroup:osmContextGroup/.test(js);
+  && /Hide supplemental data/.test(js)
+  && /Show supplemental data/.test(js)
+  && /function supplementalFeatureType/.test(js)
+  && /Supplemental data source:/.test(js)
+  && /community-mapped context, not an NPS operational source/.test(js)
+  && /targetGroup:osmContextGroup/.test(js)
+  && !/>Show OSM context</.test(html);
 const routePlanningRuntime = /id="route-planner"/.test(html)
   && /Plan a route/.test(html)
   && /function addRoutePoint/.test(js)
@@ -352,7 +356,7 @@ if (!measurementComplete) hardFailures.push('planned privacy-safe Isle Royale me
 if (!currentShipwreckRuntime) hardFailures.push('current NPS shipwreck buoy runtime missing');
 if (!pointDetailRuntime) hardFailures.push('point hit-target/detail popup runtime missing');
 if (!popupReadabilityRuntime) hardFailures.push('rich detail popup can open outside the unobstructed readable map viewport');
-if (!osmToggleRuntime) hardFailures.push('OSM context is not a reversible layer');
+if (!osmToggleRuntime) hardFailures.push('supplemental-data layer is not reversible or leaks source plumbing into user-facing labels');
 if (!routePlanningRuntime) hardFailures.push('route-aware marine planning runtime missing');
 if (!smartRoutingRuntime) hardFailures.push('smart trail routing runtime missing');
 if (!canoePortageRuntime) hardFailures.push('canoe route planning is missing mixed paddle/portage leg detection, distance accounting, carry settings, or manual leg override');
