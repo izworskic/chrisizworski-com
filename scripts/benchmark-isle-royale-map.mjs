@@ -266,7 +266,8 @@ const tripCreationRuntime = spec.tripCreationValueFunction?.releaseTarget === 92
   && /function currentDayVerifiedHours/.test(js)
   && /active travel/.test(js)
   && /portageGroupId:cleanText\(point\.portageGroupId/.test(js)
-  && /water → portage → water → camp/.test(html)
+  && /Build from the map/.test(html)
+  && /Tap a brown <strong>P#<\/strong> for the whole portage/.test(html)
   && /function landingNear/.test(waterJs)
   && /return \{route,landingNear,analyze/.test(waterJs);
 
