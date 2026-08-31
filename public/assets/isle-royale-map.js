@@ -2376,7 +2376,7 @@
     if(effort.portageMiles>0)values.push([effort.portageMiles.toFixed(1)+' mi','portage trail']);
     if(effort.walkedMiles>0)values.push([effort.walkedMiles.toFixed(1)+' mi','walked with carry pattern']);
     values.push([formatDuration(effort.totalHours),'active travel']);
-    if(effort.paddleSpeed)values.push([effort.paddleSpeed.toFixed(1)+' mph','modeled paddle speed']);
+    if(effort.paddleSpeed)values.push([effort.paddleSpeed.toFixed(1)+' mph',paddlePaceLabel().split(' · ')[0]+' paddling pace']);
         if(effort.portages)values.push([String(effort.portages),'portages']);
     values.push([String(days.length),'planned travel day'+(days.length===1?'':'s')]);
     for(const pair of values) {
