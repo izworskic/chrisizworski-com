@@ -348,9 +348,10 @@ module.exports = async function handler(req, res) {
     });
   } catch (error) {
     res.setHeader("Cache-Control", "no-store");
+    const detail = String(error?.message || error).slice(0, 240);
     return res.status(502).json({
-      error: "River observations unavailable from USGS",
-      detail: String(error?.message || error),
+      error: "River observations unavailable from USGS · " + detail,
+      detail,
     });
   }
 };
