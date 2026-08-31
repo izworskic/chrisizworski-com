@@ -61,6 +61,19 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /Related information/.test(js)
   && /Open this coordinate in OpenStreetMap/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
+const popupReadabilityRuntime = /function popupSafeBounds/.test(js)
+  && /function movePopupFullyIntoView/.test(js)
+  && /function schedulePopupReadability/.test(js)
+  && /map\.on\('popupopen'/.test(js)
+  && /map\.panBy\(\[-shiftX,-shiftY\]/.test(js)
+  && /content\.style\.maxHeight=available\+'px'/.test(js)
+  && /visibleMapOverlay\('\.planning-cockpit'\)/.test(js)
+  && /\['\.map-toolbar','\.route-map-guide'\]/.test(js)
+  && /visibleMapOverlay\('\.map-status'\)/.test(js)
+  && /autoPan:false,className:'isle-detail-popup'/.test(js)
+  && /body\.map-focus\.detail-popup-open \.planning-cockpit\{display:none\}/.test(html)
+  && /touch-action:pan-y/.test(html);
+
 const osmToggleRuntime = /const osmContextGroup = L\.layerGroup\(\)/.test(js)
   && /function setOsmContextVisible/.test(js)
   && /Hide OSM context/.test(js)
@@ -301,7 +314,7 @@ const referenceShelfComplete = /Official maps from the original research/.test(h
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && routeEditingRuntime, 'map-first route planning with paddle/portage leg accounting, leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && popupReadabilityRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && routeEditingRuntime, 'map-first route planning with paddle/portage leg accounting, leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -338,6 +351,7 @@ if (!catalogCrawlable) hardFailures.push('crawlable source catalog/raw manifest 
 if (!measurementComplete) hardFailures.push('planned privacy-safe Isle Royale measurement events missing');
 if (!currentShipwreckRuntime) hardFailures.push('current NPS shipwreck buoy runtime missing');
 if (!pointDetailRuntime) hardFailures.push('point hit-target/detail popup runtime missing');
+if (!popupReadabilityRuntime) hardFailures.push('rich detail popup can open outside the unobstructed readable map viewport');
 if (!osmToggleRuntime) hardFailures.push('OSM context is not a reversible layer');
 if (!routePlanningRuntime) hardFailures.push('route-aware marine planning runtime missing');
 if (!smartRoutingRuntime) hardFailures.push('smart trail routing runtime missing');

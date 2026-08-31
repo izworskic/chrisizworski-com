@@ -102,6 +102,95 @@
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
   }).addTo(map);
 
+  let activeReadablePopup=null;
+  let popupReadabilityTimer=null;
+
+  function visibleMapOverlay(selector) {
+    const el=document.querySelector(selector);
+    if(!el)return null;
+    const style=window.getComputedStyle(el);
+    const rect=el.getBoundingClientRect();
+    if(style.display==='none'||style.visibility==='hidden'||Number(style.opacity)===0||rect.width<2||rect.height<2)return null;
+    return {el,rect};
+  }
+
+  function popupSafeBounds(popupEl) {
+    const mapRect=map.getContainer().getBoundingClientRect();
+    const gap=14;
+    let left=mapRect.left+gap;
+    let right=mapRect.right-gap;
+    let top=mapRect.top+gap;
+    let bottom=mapRect.bottom-gap;
+
+    for(const selector of ['.map-toolbar','.route-map-guide']) {
+      const overlay=visibleMapOverlay(selector);
+      if(!overlay)continue;
+      if(overlay.rect.top<mapRect.top+mapRect.height*.35)top=Math.max(top,overlay.rect.bottom+10);
+    }
+    const mapStatus=visibleMapOverlay('.map-status');
+    if(mapStatus&&mapStatus.rect.bottom>mapRect.bottom-mapRect.height*.30)bottom=Math.min(bottom,mapStatus.rect.top-10);
+
+    const cockpit=visibleMapOverlay('.planning-cockpit');
+    if(cockpit&&document.body.classList.contains('map-focus')) {
+      const isBottomSheet=cockpit.rect.width>mapRect.width*.64&&cockpit.rect.top>mapRect.top+mapRect.height*.35;
+      if(isBottomSheet)bottom=Math.min(bottom,cockpit.rect.top-10);
+      else if(cockpit.rect.left>mapRect.left+mapRect.width*.42)right=Math.min(right,cockpit.rect.left-10);
+    }
+
+    if(right-left<240) {
+      left=mapRect.left+gap;
+      right=mapRect.right-gap;
+    }
+    if(bottom-top<180) {
+      top=mapRect.top+gap;
+      bottom=mapRect.bottom-gap;
+    }
+    return {left,right,top,bottom,mapRect};
+  }
+
+  function movePopupFullyIntoView(popup) {
+    const popupEl=popup?.getElement?.();
+    if(!popupEl||!popupEl.classList.contains('isle-detail-popup')||!document.body.contains(popupEl))return;
+    const content=popupEl.querySelector('.leaflet-popup-content');
+    let safe=popupSafeBounds(popupEl);
+    if(content) {
+      const available=Math.max(150,Math.min(520,(safe.bottom-safe.top)-58));
+      content.style.maxHeight=available+'px';
+    }
+    const rect=popupEl.getBoundingClientRect();
+    safe=popupSafeBounds(popupEl);
+    let shiftX=0,shiftY=0;
+    if(rect.left<safe.left)shiftX=safe.left-rect.left;
+    else if(rect.right>safe.right)shiftX=safe.right-rect.right;
+    if(rect.top<safe.top)shiftY=safe.top-rect.top;
+    else if(rect.bottom>safe.bottom)shiftY=safe.bottom-rect.bottom;
+    if(Math.abs(shiftX)>1||Math.abs(shiftY)>1) {
+      map.panBy([-shiftX,-shiftY],{animate:true,duration:.2,noMoveStart:true});
+    }
+  }
+
+  function schedulePopupReadability(popup) {
+    if(!popup)return;
+    window.clearTimeout(popupReadabilityTimer);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>movePopupFullyIntoView(popup)));
+    popupReadabilityTimer=window.setTimeout(()=>movePopupFullyIntoView(popup),260);
+  }
+
+  map.on('popupopen',event=>{
+    const popup=event.popup;
+    const el=popup?.getElement?.();
+    if(!el?.classList.contains('isle-detail-popup'))return;
+    activeReadablePopup=popup;
+    document.body.classList.add('detail-popup-open');
+    schedulePopupReadability(popup);
+    emitEvent('isle_royale_popup_readable',{mode:route?.mode||'unknown'});
+  });
+  map.on('popupclose',event=>{
+    if(activeReadablePopup===event.popup)activeReadablePopup=null;
+    document.body.classList.remove('detail-popup-open');
+  });
+  window.addEventListener('resize',()=>{if(activeReadablePopup)schedulePopupReadability(activeReadablePopup);},{passive:true});
+
   map.createPane('reliefPane');
   map.getPane('reliefPane').style.zIndex = '250';
   map.getPane('reliefPane').style.pointerEvents = 'none';
@@ -838,7 +927,7 @@
           latlng
         };
         enrichRecord(record);
-        layer.bindPopup(() => popupNode(record), {maxWidth:390, minWidth:280, autoPanPadding:[28,28], className:'isle-detail-popup'});
+        layer.bindPopup(() => popupNode(record), {maxWidth:390, minWidth:280, autoPan:false, className:'isle-detail-popup'});
         layer.on('click', event => {
           if(route.adding&&record.latlng) {
             if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
@@ -1865,8 +1954,8 @@
           icon:L.divIcon({className:'official-portage-badge',html:'<span>P'+portage.number+'</span>',iconSize:[30,24],iconAnchor:[15,12]})
         });
         visual={geometryResolved:true,points:geometry.points,mapped_miles:geometry.mapped_miles,line,badge};
-        line.bindPopup(()=>officialPortagePopup(portage,visual),{maxWidth:390,minWidth:280,className:'isle-detail-popup'});
-        badge.bindPopup(()=>officialPortagePopup(portage,visual),{maxWidth:390,minWidth:280,className:'isle-detail-popup'});
+        line.bindPopup(()=>officialPortagePopup(portage,visual),{maxWidth:390,minWidth:280,autoPan:false,className:'isle-detail-popup'});
+        badge.bindPopup(()=>officialPortagePopup(portage,visual),{maxWidth:390,minWidth:280,autoPan:false,className:'isle-detail-popup'});
         const open=event=>{
           if(event?.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
           line.setStyle({weight:7});
@@ -1893,7 +1982,7 @@
             icon:L.divIcon({className:'official-portage-badge unresolved',html:'<span>P'+portage.number+'?</span>',iconSize:[34,24],iconAnchor:[17,12]})
           });
           visual={geometryResolved:false,points:[],mapped_miles:null,marker,referenceAnchor:anchorPoint};
-          marker.bindPopup(()=>officialPortagePopup(portage,visual),{maxWidth:390,minWidth:280,className:'isle-detail-popup'});
+          marker.bindPopup(()=>officialPortagePopup(portage,visual),{maxWidth:390,minWidth:280,autoPan:false,className:'isle-detail-popup'});
           marker.bindTooltip('P'+portage.number+' · official portage · mapped corridor unresolved',{direction:'top'});
           marker.on('click',event=>{
             if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
@@ -2924,7 +3013,7 @@
       }
       const remove=document.createElement('button');remove.type='button';remove.className='popup-action';remove.textContent='Remove from route';remove.addEventListener('click',()=>removeRoutePoint(index));actions.appendChild(remove);
       popup.appendChild(actions);
-      marker.bindPopup(popup,{maxWidth:300,className:'isle-detail-popup'});
+      marker.bindPopup(popup,{maxWidth:300,autoPan:false,className:'isle-detail-popup'});
       marker.on('dragend',()=>{
         const ll=marker.getLatLng();
         rememberRouteEdit('move '+(route.points[index].label||'route point'));

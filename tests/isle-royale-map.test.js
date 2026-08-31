@@ -104,6 +104,25 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
 });
 
 
+test('rich map cards recenter into the actually readable map viewport', () => {
+  assert.match(js, /function popupSafeBounds/);
+  assert.match(js, /function movePopupFullyIntoView/);
+  assert.match(js, /function schedulePopupReadability/);
+  assert.match(js, /map\.on\('popupopen'/);
+  assert.match(js, /document\.body\.classList\.add\('detail-popup-open'\)/);
+  assert.match(js, /map\.panBy\(\[-shiftX,-shiftY\]/);
+  assert.match(js, /content\.style\.maxHeight=available\+'px'/);
+  assert.match(js, /visibleMapOverlay\('\.planning-cockpit'\)/);
+  assert.match(js, /\['\.map-toolbar','\.route-map-guide'\]/);
+  assert.match(js, /visibleMapOverlay\('\.map-status'\)/);
+  assert.match(js, /autoPan:false,className:'isle-detail-popup'/);
+  assert.match(html, /body\.map-focus\.detail-popup-open \.planning-cockpit\{display:none\}/);
+  assert.match(html, /touch-action:pan-y/);
+  assert.match(html, /scrollbar-gutter:stable/);
+});
+
+
+
 test('OSM context behaves as a reversible layer rather than a permanently disabled one-shot button', () => {
   assert.match(html, /id="load-osm"[^>]*aria-pressed="false"[^>]*>Show OSM context/);
   assert.match(js, /const osmContextGroup = L\.layerGroup\(\)/);
