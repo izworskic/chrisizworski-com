@@ -2117,6 +2117,12 @@
     return Math.max(.5,Math.min(6.5,cadence*feet*60/5280));
   }
 
+  function planningTravelSpeed() {
+    return route.mode==='paddle'||route.mode==='canoe'
+      ? paddleSpeedFromStrokes()
+      : Math.max(.5,Number(route.speed)||3);
+  }
+
   function strokeCountForMiles(miles) {
     const feet=Math.max(3,Math.min(12,Number(route.feetPerStroke)||6.6));
     return Math.max(0,Number(miles)||0)*5280/feet;
@@ -3259,7 +3265,7 @@
     route.itinerary=null;
     route.scenarios=[];
     if(route.mode==='hike'||route.mode==='canoe'||route.smartState!=='water-aware'||!window.IsleRoyaleWaterIntel?.buildScenarioSet||path.length<2)return null;
-    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    const speed=planningTravelSpeed();
     const baseHours=Math.max(2,Number(els.routeDayHours?.value)||6);
     const camps=sourceBackedWaterCamps();
     route.scenarios=window.IsleRoyaleWaterIntel.buildScenarioSet(path,camps,speed,baseHours,{mode:route.mode,maxDays:10})
@@ -3382,7 +3388,7 @@
     if(route.mode==='hike'||route.smartState!=='water-aware'||!route.scenarios.length)return;
     const departure=new Date(els.routeDeparture.value);
     if(!Number.isFinite(departure.getTime())){status('Choose a valid departure time before comparing scenario forecasts.');return;}
-    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    const speed=planningTravelSpeed();
     route.scenarioWeatherLoading=true;
     route.scenarioWeather={};
     renderRouteScenarios();
@@ -3453,7 +3459,7 @@
     }
     if(route.smartState!=='water-aware'||!route.itinerary)return;
     const heading=document.createElement('div');heading.className='itinerary-heading';heading.innerHTML='<strong>Camp-first multi-day itinerary</strong><span></span>';heading.querySelector('span').textContent='NPS Boat-In candidates · target '+route.itinerary.daily_target_miles.toFixed(1)+' mi/day';els.routeItinerary.appendChild(heading);
-    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    const speed=planningTravelSpeed();
     for(const leg of route.itinerary.legs||[]){
       const card=document.createElement('div');card.className='itinerary-day';
       const head=document.createElement('div');head.className='itinerary-day-head';head.innerHTML='<strong></strong><span></span>';head.querySelector('strong').textContent='Day '+leg.day;head.querySelector('span').textContent=leg.distance_miles.toFixed(1)+' mi · ~'+formatDuration(leg.distance_miles/speed);card.appendChild(head);
@@ -3480,7 +3486,7 @@
     if(!els.routeIntelligence)return;
     els.routeIntelligence.replaceChildren();
     if(route.points.length<2)return;
-    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    const speed=planningTravelSpeed();
     const dayHours=Math.max(2,Number(els.routeDayHours?.value)||6);
     const total=routeTotalMiles();
     const daily=speed*dayHours;
@@ -3775,7 +3781,7 @@
     renderRouteBuildFlow();
     const miles=routeTotalMiles();
     const hours=routeHours();
-    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    const speed=planningTravelSpeed();
     if(route.points.length<2) {
       els.routeSummary.textContent=route.points.length
         ? 'Start selected. Pick a destination from a map point or tap the map.'
@@ -3974,7 +3980,12 @@
 
   function syncCockpitControls() {
     if(els.cockpitMode)els.cockpitMode.value=route.mode;
-    if(els.cockpitSpeed)els.cockpitSpeed.value=els.routeSpeed.value;
+    if(els.cockpitSpeed) {
+      const human=route.mode==='paddle'||route.mode==='canoe';
+      els.cockpitSpeed.value=human?paddleSpeedFromStrokes().toFixed(1):els.routeSpeed.value;
+      els.cockpitSpeed.disabled=human;
+      els.cockpitSpeed.title=human?'Modeled from paddle cadence and effective travel per stroke':'Planning speed';
+    }
     if(els.cockpitHours)els.cockpitHours.value=els.routeDayHours?.value||'6';
     if(els.cockpitBuild) {
       els.cockpitBuild.textContent=route.adding?'Finish & review':route.reviewing?'Edit route':'Build route';
@@ -4614,7 +4625,7 @@
       status('Choose a valid departure time before analyzing route weather.');
       return;
     }
-    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    const speed=planningTravelSpeed();
     const itineraryDays=route.itinerary?.legs?.length||1;
     const samples=routeScheduledForecastSamples(departure,speed,Math.min(8,Math.max(5,itineraryDays*2)));
     els.routeWeatherButton.disabled=true;
@@ -4758,17 +4769,47 @@
     rememberRouteEdit('change travel mode');
     route.mode=nextMode;
     document.body.classList.toggle('canoe-mode',route.mode==='canoe');
+    document.body.classList.toggle('human-paddle-mode',route.mode==='canoe'||route.mode==='paddle');
     route.activeScenario='balanced';
     route.speed=routeSpeedDefaults[route.mode]||3;
     els.routeSpeed.value=String(route.speed);
     reroute('Travel mode changed. Re-run route weather after confirming speed and departure.');
   });
   els.routePortageTrips?.addEventListener('change',()=>{
-    const next=Math.max(1,Math.min(2,Number(els.routePortageTrips.value)||1));
+    const next=Math.max(1,Math.min(3,Number(els.routePortageTrips.value)||1));
     if(Math.abs(next-route.portageTrips)<.001)return;
     rememberRouteEdit('change portage carry');
     route.portageTrips=next;
     renderRoute();
+  });
+  els.routePortageTransition?.addEventListener('change',()=>{
+    const next=Math.max(0,Math.min(60,Number(els.routePortageTransition.value)||0));
+    if(Math.abs(next-route.portageTransitionMinutes)<.001){els.routePortageTransition.value=String(route.portageTransitionMinutes);return;}
+    rememberRouteEdit('change portage load unload');
+    route.portageTransitionMinutes=next;
+    els.routePortageTransition.value=String(route.portageTransitionMinutes);
+    renderRoute();
+  });
+  els.routeStrokeRate?.addEventListener('change',()=>{
+    const next=Math.max(20,Math.min(80,Number(els.routeStrokeRate.value)||40));
+    if(Math.abs(next-route.strokeRate)<.001){els.routeStrokeRate.value=String(route.strokeRate);return;}
+    rememberRouteEdit('change paddle cadence');
+    route.strokeRate=next;
+    els.routeStrokeRate.value=String(route.strokeRate);
+    clearRouteWeather('Paddle cadence changed. Re-run route weather for updated travel timing.');
+    renderRoute();
+  });
+  els.routeFeetPerStroke?.addEventListener('change',()=>{
+    const next=Math.max(3,Math.min(12,Number(els.routeFeetPerStroke.value)||6.6));
+    if(Math.abs(next-route.feetPerStroke)<.001){els.routeFeetPerStroke.value=String(route.feetPerStroke);return;}
+    rememberRouteEdit('change paddle efficiency');
+    route.feetPerStroke=next;
+    els.routeFeetPerStroke.value=String(route.feetPerStroke);
+    clearRouteWeather('Paddle efficiency changed. Re-run route weather for updated travel timing.');
+    renderRoute();
+  });
+  els.routeTripName?.addEventListener('change',()=>{
+    route.tripName=cleanText(els.routeTripName.value||'').slice(0,80);
   });
   els.routePortageSpeed?.addEventListener('change',()=>{
     const next=Math.max(.5,Math.min(5,Number(els.routePortageSpeed.value)||2));
@@ -4829,9 +4870,11 @@
   els.cockpitShare?.addEventListener('click',copyTripShareLink);
   els.cockpitGpx?.addEventListener('click',exportRouteGpx);
   els.routeSave?.addEventListener('click',saveTripToDevice);
+  els.routeSaveNamed?.addEventListener('click',saveTripToDevice);
   els.routeRestore?.addEventListener('click',restoreSavedTrip);
   els.routeShare?.addEventListener('click',copyTripShareLink);
   els.routeExportGpx?.addEventListener('click',exportRouteGpx);
+  els.routeExportPlan?.addEventListener('click',downloadTripPlan);
   els.cockpitMode?.addEventListener('change',()=>{
     if(els.cockpitMode.value===els.routeModeSelect.value)return;
     els.routeModeSelect.value=els.cockpitMode.value;
@@ -4916,6 +4959,8 @@
 
   setDefaultRouteDeparture();
   document.body.classList.toggle('canoe-mode',route.mode==='canoe');
+  document.body.classList.toggle('human-paddle-mode',route.mode==='canoe'||route.mode==='paddle');
+  renderSavedTrips();
   els.exploreModeButton?.setAttribute('aria-pressed','true');
   els.routeModeButton?.setAttribute('aria-pressed','false');
   const sharedTripLoaded=loadSharedTripFromHash();
