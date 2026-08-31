@@ -71,9 +71,11 @@ function validPoints(series) {
     .map((point) => ({ value: finite(point.value), time: point.dateTime, qualifiers: point.qualifiers || [] }))
     .filter((point) => point.value != null && point.value !== -999999 && Date.parse(point.time));
 }
-function atAgo(points, hours) {
+function atAgo(points, hours, referenceTime = null) {
   if (!points.length) return null;
-  const target = Date.now() - hours * 3600000;
+  const reference = Date.parse(referenceTime || points.at(-1)?.time || "");
+  if (!Number.isFinite(reference)) return null;
+  const target = reference - hours * 3600000;
   return points.reduce((best, point) =>
     !best || Math.abs(Date.parse(point.time) - target) < Math.abs(Date.parse(best.time) - target) ? point : best, null);
 }
@@ -110,7 +112,7 @@ function sensorSummary(series, options = {}) {
     .filter((point) => Number.isFinite(point.converted));
   if (!converted.length) return null;
   const last = converted.at(-1);
-  const prior = atAgo(converted.map((point) => ({ value: point.converted, time: point.time })), 24);
+  const prior = atAgo(converted.map((point) => ({ value: point.converted, time: point.time })), 24, last.time);
   const values = converted.map((point) => point.converted);
   const summary = {
     value: last.converted,
@@ -167,8 +169,8 @@ function normalize(payload, sites) {
 
     if (parameter === PARAMETERS.discharge) {
       gauge.discharge_cfs = last.value;
-      const old6 = atAgo(points, 6);
-      const old24 = atAgo(points, 24);
+      const old6 = atAgo(points, 6, last.time);
+      const old24 = atAgo(points, 24, last.time);
       gauge.flow_6h_ago = old6?.value ?? null;
       gauge.flow_24h_ago = old24?.value ?? null;
       gauge.trend_percent_6h = changePercent(last.value, old6?.value);
@@ -177,7 +179,7 @@ function normalize(payload, sites) {
     }
     if (parameter === PARAMETERS.gageHeight) {
       gauge.gage_height_ft = last.value;
-      const old24 = atAgo(points, 24);
+      const old24 = atAgo(points, 24, last.time);
       gauge.gage_height_change_24h_ft = changeAbsolute(last.value, old24?.value, 2);
       gauge.stage_series_24h = sampleSeries(points);
     }
