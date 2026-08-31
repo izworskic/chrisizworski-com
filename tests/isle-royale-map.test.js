@@ -73,7 +73,7 @@ test('planning, provenance, accessibility and safety hooks exist', () => {
   for (const id of ['feature-search','layer-filters','feature-list','map-status','park-live-status','source-catalog','route-planner']) assert.ok(html.includes(`id="${id}"`), id);
   assert.match(html, /not a navigation chart/i);
   assert.match(html, /National Park Service/i);
-  assert.match(html, /Official maps from the original research/);
+  assert.match(html, /Official reference maps/);
   assert.match(html, /Rock Harbor map/);
   assert.match(html, /Windigo map/);
   assert.match(html, /Anchorage zones/);
