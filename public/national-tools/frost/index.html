@@ -3,7 +3,7 @@
 <title>U.S. Frost Dates & Freeze Risk | Chris Izworski</title>
 <meta name="description" content="Find first and last frost dates by U.S. location using NOAA climate normals, plus the current NWS seven-day freeze forecast.">
 <link rel="canonical" href="https://chrisizworski.com/national-tools/frost/"><meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="stylesheet" href="/assets/national-tools.css">
+<link rel="stylesheet" href="/assets/national-tools.css?v=20260831-aurora-hotfix1">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/frost/#page","url":"https://chrisizworski.com/national-tools/frost/","name":"First & Last Frost Dates by Location","description":"Find first and last frost dates by U.S. location using NOAA climate normals, plus the current NWS seven-day freeze forecast.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
 </head><body>
 <header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
@@ -45,6 +45,7 @@
 <script>
 document.addEventListener("DOMContentLoaded",function(){
  const N=window.NationalTools,form=document.getElementById("loc");
+ function fmtZone(value,tz,options){if(typeof N.fmtInZone==="function")return N.fmtInZone(value,tz,options);if(!value)return "Unknown";const d=new Date(value);if(Number.isNaN(d.getTime()))return String(value);try{return d.toLocaleString([],{...(options||{}),timeZone:tz||undefined})}catch(_){return d.toLocaleString([],options||{})}}
  function dateLabel(mmdd){if(!mmdd)return "Unavailable";const [m,d]=mmdd.split("-").map(Number);return new Date(new Date().getFullYear(),m-1,d,12).toLocaleDateString([],{month:"short",day:"numeric"})}
  async function run(loc){
   const r=await fetch("/api/national-frost?lat="+loc.latitude+"&lon="+loc.longitude),x=await r.json();if(!r.ok)throw new Error(x.error||"Frost data unavailable");
@@ -56,7 +57,7 @@ document.addEventListener("DOMContentLoaded",function(){
   document.getElementById("forecast-low").textContent=w?.min_7d_f==null?"Unavailable":Math.round(w.min_7d_f)+"°F";
   document.getElementById("freeze-hours").textContent=w?.freeze_hours?.length??"—";
   document.getElementById("hard-freeze-hours").textContent=w?.hard_freeze_hours?.length??"—";
-  document.getElementById("forecast-time").textContent=w?.min_7d_at?"Lowest returned hour: "+N.fmtInZone(w.min_7d_at,x.location?.timeZone||loc.timeZone,{dateStyle:"medium",timeStyle:"short"}):"NWS hourly minimum time unavailable.";
+  document.getElementById("forecast-time").textContent=w?.min_7d_at?"Lowest returned hour: "+fmtZone(w.min_7d_at,x.location?.timeZone||loc.timeZone,{dateStyle:"medium",timeStyle:"short"}):"NWS hourly minimum time unavailable.";
   const pill=document.getElementById("live-pill");pill.textContent=v.label||"Live forecast unavailable";pill.className="pill "+((v.level==="freeze"||v.level==="hard-freeze")?"danger":"");
   document.getElementById("station").textContent=c?"NOAA normals station: "+c.name+(c.distance_miles==null?"":" · "+c.distance_miles.toFixed(1)+" mi away")+" · station confidence "+c.confidence:"NOAA station climatology unavailable for this lookup.";
   document.getElementById("explain").textContent=c?.distance_miles>40?x.interpretation.station_distance:"Historical dates and the live seven-day forecast are intentionally separate. A forecast freeze overrides a comfortable-looking calendar date for the immediate decision.";
@@ -67,4 +68,4 @@ document.addEventListener("DOMContentLoaded",function(){
 </script>
 </main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Public data turned into clearer outdoor decisions, with source and uncertainty shown.</div></footer>
-<script src="/assets/national-tools.js"></script></body></html>
+<script src="/assets/national-tools.js?v=20260831-aurora-hotfix1"></script></body></html>
