@@ -78,11 +78,8 @@
     routeExportGpx: document.getElementById('route-export-gpx'),
     routeModeSelect: document.getElementById('route-mode-select'),
     routePortageTrips: document.getElementById('route-portage-trips'),
-    routePortageSpeed: document.getElementById('route-portage-speed'),
-    routePortageTransition: document.getElementById('route-portage-transition'),
-    routeStrokeRate: document.getElementById('route-stroke-rate'),
-    routeFeetPerStroke: document.getElementById('route-feet-per-stroke'),
-    routeDerivedSpeed: document.getElementById('route-derived-speed'),
+    routePortagePace: document.getElementById('route-portage-pace'),
+    routePaddlePace: document.getElementById('route-paddle-pace'),
     routeSpeed: document.getElementById('route-speed'),
     routeDayHours: document.getElementById('route-day-hours'),
     routeDeparture: document.getElementById('route-departure'),
@@ -483,11 +480,10 @@
     waterAccessMiles:0,
     mixedLegs:[],
     mixedReason:'',
-    portageTrips:1,
-    portageSpeed:2,
+    portageTrips:2,
+    paddlePace:'average',
+    portagePace:'average',
     portageTransitionMinutes:10,
-    strokeRate:40,
-    feetPerStroke:6.6,
     tripName:'',
     itinerary:null,
     itineraryWeather:null,
@@ -2004,7 +2000,6 @@
   }
 
   function renderRouteBuildFlow() {
-    if(els.routeDerivedSpeed)els.routeDerivedSpeed.textContent=paddleSpeedFromStrokes().toFixed(1)+' mph modeled';
     const bar=els.routeBuildBar;
     if(!bar)return;
     const active=route.adding||route.reviewing;
@@ -2100,35 +2095,84 @@
     status((point.label||'Route point')+' removed from trip.');
   }
 
+  const PADDLE_PACES=Object.freeze({
+    easy:{label:'Easy',mph:2.5},
+    average:{label:'Average',mph:3},
+    strong:{label:'Strong',mph:3.5}
+  });
+  const PORTAGE_PACES=Object.freeze({
+    easy:{label:'Easy',mph:1.5},
+    average:{label:'Average',mph:2},
+    strong:{label:'Strong',mph:2.5}
+  });
+
+  function paceKey(value,fallback='average') {
+    const key=cleanText(value||'').toLowerCase();
+    return ['easy','average','strong'].includes(key)?key:fallback;
+  }
+
+  function paddlePaceSpeed() {
+    return PADDLE_PACES[paceKey(route.paddlePace)]?.mph||3;
+  }
+
+  function portagePaceSpeed() {
+    return PORTAGE_PACES[paceKey(route.portagePace)]?.mph||2;
+  }
+
+  function paddlePaceLabel() {
+    const pace=PADDLE_PACES[paceKey(route.paddlePace)]||PADDLE_PACES.average;
+    return pace.label+' · '+pace.mph.toFixed(1)+' mph';
+  }
+
+  function portagePaceLabel() {
+    const pace=PORTAGE_PACES[paceKey(route.portagePace)]||PORTAGE_PACES.average;
+    return pace.label+' · '+pace.mph.toFixed(1)+' mph';
+  }
+
+  function nearestPaceKey(mph,presets) {
+    const value=Number(mph);
+    if(!Number.isFinite(value))return 'average';
+    return Object.entries(presets)
+      .map(([key,preset])=>({key,delta:Math.abs(value-preset.mph)}))
+      .sort((a,b)=>a.delta-b.delta)[0]?.key||'average';
+  }
+
+  function legacyPaddlePace(raw={}) {
+    if(raw.paddlePace)return paceKey(raw.paddlePace);
+    const cadence=Number(raw.strokeRate),feet=Number(raw.feetPerStroke);
+    if(Number.isFinite(cadence)&&Number.isFinite(feet))return nearestPaceKey(cadence*feet*60/5280,PADDLE_PACES);
+    return nearestPaceKey(Number(raw.speed)||3,PADDLE_PACES);
+  }
+
+  function legacyPortagePace(raw={}) {
+    if(raw.portagePace)return paceKey(raw.portagePace);
+    return nearestPaceKey(Number(raw.portageSpeed)||2,PORTAGE_PACES);
+  }
+
+  function normalizeCarryTrips(value) {
+    const trips=Number(value);
+    if(!Number.isFinite(trips))return 2;
+    if(trips>=2.5)return 3;
+    if(trips>=1.5)return 2;
+    return 1;
+  }
+
   function portageWalkMultiplier() {
-    const trips=Math.max(1,Number(route.portageTrips)||1);
-    if(Math.abs(trips-1.5)<.01)return 2;
+    const trips=normalizeCarryTrips(route.portageTrips);
     return Math.max(1,2*trips-1);
   }
 
   function carryLabel() {
-    const trips=Number(route.portageTrips)||1;
-    if(Math.abs(trips-1.5)<.01)return '1½ carry';
-    if(trips>=3)return 'triple carry';
-    if(trips>=2)return 'double carry';
+    const trips=normalizeCarryTrips(route.portageTrips);
+    if(trips===3)return 'triple carry';
+    if(trips===2)return 'double carry';
     return 'single carry';
-  }
-
-  function paddleSpeedFromStrokes() {
-    const cadence=Math.max(20,Math.min(80,Number(route.strokeRate)||40));
-    const feet=Math.max(3,Math.min(12,Number(route.feetPerStroke)||6.6));
-    return Math.max(.5,Math.min(6.5,cadence*feet*60/5280));
   }
 
   function planningTravelSpeed() {
     return route.mode==='paddle'||route.mode==='canoe'
-      ? paddleSpeedFromStrokes()
+      ? paddlePaceSpeed()
       : Math.max(.5,Number(route.speed)||3);
-  }
-
-  function strokeCountForMiles(miles) {
-    const feet=Math.max(3,Math.min(12,Number(route.feetPerStroke)||6.6));
-    return Math.max(0,Number(miles)||0)*5280/feet;
   }
 
   function portageTerrainFactor(leg) {
@@ -2156,8 +2200,8 @@
   function tripSegmentMetrics() {
     if(!routeIsResolved()||route.points.length<2)return [];
     if(route.mode==='canoe') {
-      const paddleSpeed=paddleSpeedFromStrokes();
-      const basePortageSpeed=Math.max(.5,Number(route.portageSpeed)||2);
+      const paddleSpeed=paddlePaceSpeed();
+      const basePortageSpeed=portagePaceSpeed();
       const transitionMinutes=Math.max(0,Number(route.portageTransitionMinutes)||0);
       return (route.mixedLegs||[]).map((leg,zeroIndex)=>{
         const index=zeroIndex+1;
@@ -2174,30 +2218,27 @@
             index,type:'portage',from,to,miles,walkedMiles,
             hours:walkingHours+transitionHours,walkingHours,transitionHours,
             effectivePortageSpeed,terrainFactor:factor,
-            officialPortage:leg.officialPortage||null,verified:Boolean(leg.verified),
-            strokes:0
+            officialPortage:leg.officialPortage||null,verified:Boolean(leg.verified)
           };
         }
         const hours=miles/Math.max(.5,paddleSpeed);
         return {
           index,type:'paddle',from,to,miles,walkedMiles:0,hours,
           walkingHours:0,transitionHours:0,effectivePortageSpeed:null,
-          terrainFactor:1,officialPortage:null,verified:Boolean(leg.verified),
-          strokes:strokeCountForMiles(miles),paddleSpeed
+          terrainFactor:1,officialPortage:null,verified:Boolean(leg.verified),paddleSpeed
         };
       });
     }
 
     const distances=routeControlDistances();
     const human=route.mode==='paddle';
-    const speed=human?paddleSpeedFromStrokes():Math.max(.5,Number(route.speed)||3);
+    const speed=human?paddlePaceSpeed():Math.max(.5,Number(route.speed)||3);
     return route.points.slice(1).map((point,zeroIndex)=>{
       const index=zeroIndex+1;
       const miles=Number(distances[index]?.leg_miles)||0;
       return {
         index,type:human?'paddle':route.mode,from:route.points[index-1],to:point,miles,
-        walkedMiles:0,hours:miles/speed,walkingHours:0,transitionHours:0,
-        strokes:human?strokeCountForMiles(miles):0,paddleSpeed:human?speed:null,
+        walkedMiles:0,hours:miles/speed,walkingHours:0,transitionHours:0,paddleSpeed:human?speed:null,
         verified:true
       };
     });
@@ -2212,12 +2253,11 @@
     const walkingHours=segments.reduce((sum,x)=>sum+x.walkingHours,0);
     const transitionHours=segments.reduce((sum,x)=>sum+x.transitionHours,0);
     const totalHours=segments.reduce((sum,x)=>sum+x.hours,0);
-    const strokes=segments.reduce((sum,x)=>sum+x.strokes,0);
-    const portages=segments.filter(x=>x.type==='portage').length;
+        const portages=segments.filter(x=>x.type==='portage').length;
     const longestPortage=segments.filter(x=>x.type==='portage').sort((a,b)=>b.miles-a.miles)[0]||null;
     return {
-      segments,paddleMiles,portageMiles,walkedMiles,paddleHours,walkingHours,transitionHours,totalHours,strokes,portages,longestPortage,
-      paddleSpeed:(route.mode==='paddle'||route.mode==='canoe')?paddleSpeedFromStrokes():null
+      segments,paddleMiles,portageMiles,walkedMiles,paddleHours,walkingHours,transitionHours,totalHours,portages,longestPortage,
+      paddleSpeed:(route.mode==='paddle'||route.mode==='canoe')?paddlePaceSpeed():null
     };
   }
 
@@ -2239,13 +2279,13 @@
     const target=Math.max(2,Number(route.hours)||6);
     const hasManual=route.points.some(point=>point.manualDayEnd);
     const days=[];
-    let current={day:1,segments:[],hours:0,miles:0,paddleMiles:0,portageMiles:0,walkedMiles:0,strokes:0,end:null,explicit:false,provisional:false};
+    let current={day:1,segments:[],hours:0,miles:0,paddleMiles:0,portageMiles:0,walkedMiles:0,end:null,explicit:false,provisional:false};
     const closeDay=(endPoint,{explicit=false,provisional=false}={})=>{
       current.end=endPoint||current.segments[current.segments.length-1]?.to||null;
       current.explicit=explicit;
       current.provisional=provisional;
       days.push(current);
-      current={day:days.length+1,segments:[],hours:0,miles:0,paddleMiles:0,portageMiles:0,walkedMiles:0,strokes:0,end:null,explicit:false,provisional:false};
+      current={day:days.length+1,segments:[],hours:0,miles:0,paddleMiles:0,portageMiles:0,walkedMiles:0,end:null,explicit:false,provisional:false};
     };
     for(let i=0;i<segments.length;i++) {
       const seg=segments[i];
@@ -2255,7 +2295,6 @@
       current.paddleMiles+=seg.type==='paddle'?seg.miles:0;
       current.portageMiles+=seg.type==='portage'?seg.miles:0;
       current.walkedMiles+=seg.walkedMiles||0;
-      current.strokes+=seg.strokes||0;
       const endpoint=seg.to||{};
       const isLast=i===segments.length-1;
       const manual=Boolean(endpoint.manualDayEnd);
@@ -2282,12 +2321,10 @@
     const start=cleanText(route.points[0]?.label||'the route start');
     const end=cleanText(route.points[route.points.length-1]?.label||'the route end');
     if(route.mode==='canoe') {
-      const stroke=Math.round(route.strokeRate||40);
-      const feet=Number(route.feetPerStroke||6.6).toFixed(1);
-      return start+' to '+end+' is a '+effort.paddleMiles.toFixed(1)+' mi paddle + '+effort.portageMiles.toFixed(1)+' mi portage route. At '+stroke+' strokes/min and '+feet+' ft of effective boat travel per stroke, modeled paddling speed is '+effort.paddleSpeed.toFixed(1)+' mph. '+effort.portages+' portage'+(effort.portages===1?'':'s')+' with '+carryLabel()+' turn '+effort.portageMiles.toFixed(1)+' trail mi into '+effort.walkedMiles.toFixed(1)+' walked mi. Estimated active travel time is '+formatDuration(effort.totalHours)+' before meal breaks, fishing, weather holds and camp chores.';
+      return start+' to '+end+' is a '+effort.paddleMiles.toFixed(1)+' mi paddle + '+effort.portageMiles.toFixed(1)+' mi portage route. '+paddlePaceLabel()+' paddling and '+portagePaceLabel()+' portaging are used as the planning pace. '+effort.portages+' portage'+(effort.portages===1?'':'s')+' with '+carryLabel()+' turn '+effort.portageMiles.toFixed(1)+' trail mi into '+effort.walkedMiles.toFixed(1)+' walked mi. Estimated active travel time is '+formatDuration(effort.totalHours)+' before meal breaks, fishing, weather holds and camp chores.';
     }
     if(route.mode==='paddle') {
-      return start+' to '+end+' is '+effort.paddleMiles.toFixed(1)+' routed mi. At '+Math.round(route.strokeRate||40)+' strokes/min and '+Number(route.feetPerStroke||6.6).toFixed(1)+' ft of effective boat travel per stroke, modeled cruising speed is '+effort.paddleSpeed.toFixed(1)+' mph with about '+Math.round(effort.strokes).toLocaleString()+' stroke cycles and '+formatDuration(effort.totalHours)+' of active paddling.';
+      return start+' to '+end+' is '+effort.paddleMiles.toFixed(1)+' routed mi at the '+paddlePaceLabel().toLowerCase()+' planning pace, or about '+formatDuration(effort.totalHours)+' of active paddling.';
     }
     return start+' to '+end+' is '+routeTotalMiles().toFixed(1)+' routed mi with about '+formatDuration(effort.totalHours)+' of active travel at the selected planning pace.';
   }
@@ -2339,9 +2376,8 @@
     if(effort.portageMiles>0)values.push([effort.portageMiles.toFixed(1)+' mi','portage trail']);
     if(effort.walkedMiles>0)values.push([effort.walkedMiles.toFixed(1)+' mi','walked with carry pattern']);
     values.push([formatDuration(effort.totalHours),'active travel']);
-    if(effort.paddleSpeed)values.push([effort.paddleSpeed.toFixed(1)+' mph','modeled paddle speed']);
-    if(effort.strokes>0)values.push([Math.round(effort.strokes).toLocaleString(),'estimated stroke cycles']);
-    if(effort.portages)values.push([String(effort.portages),'portages']);
+    if(effort.paddleSpeed)values.push([effort.paddleSpeed.toFixed(1)+' mph',paddlePaceLabel().split(' · ')[0]+' paddling pace']);
+        if(effort.portages)values.push([String(effort.portages),'portages']);
     values.push([String(days.length),'planned travel day'+(days.length===1?'':'s')]);
     for(const pair of values) {
       const box=document.createElement('div');box.className='trip-metric';
@@ -2368,7 +2404,7 @@
           span.textContent=seg.miles.toFixed(1)+' mi trail · '+seg.walkedMiles.toFixed(1)+' mi walked · '+carryLabel()+' · '+formatDuration(seg.walkingHours)+' walking + '+Math.round(seg.transitionHours*60)+' min load/unload'+(official?.terrain?(' · '+official.terrain):'');
         } else {
           b.textContent=from+' → '+to;
-          span.textContent=seg.miles.toFixed(1)+' mi '+(seg.type==='paddle'?'paddle':'travel')+' · '+formatDuration(seg.hours)+(seg.strokes?' · ~'+Math.round(seg.strokes).toLocaleString()+' strokes':'');
+          span.textContent=seg.miles.toFixed(1)+' mi '+(seg.type==='paddle'?'paddle':'travel')+' · '+formatDuration(seg.hours);
         }
         row.append(b,document.createElement('br'),span);card.appendChild(row);
       }
@@ -3526,7 +3562,7 @@
     travel.innerHTML='<strong></strong><span></span>';
     travel.querySelector('strong').textContent='Travel Assistant';
     travel.querySelector('span').textContent=route.mode==='canoe'
-      ? dayHours+'h moving day · paddle '+speed.toFixed(1)+' mph · portage '+Number(route.portageSpeed||2).toFixed(1)+' mph · '+(Number(route.portageTrips)===2?'double carry':Number(route.portageTrips)===1.5?'1½ carry':'single carry')+' · about '+days+' travel day'+(days===1?'':'s')+' before loading, unloading, breaks or camp chores.'
+      ? dayHours+'h moving day · '+paddlePaceLabel()+' paddling · '+portagePaceLabel()+' portaging · '+carryLabel()+' · about '+days+' travel day'+(days===1?'':'s')+' before breaks or camp chores.'
       : dayHours+'h travel day at '+speed.toFixed(1)+' mph ≈ '+daily.toFixed(1)+' mi/day · about '+days+' travel day'+(days===1?'':'s')+' for this route, before breaks or camp chores.';
     els.routeIntelligence.appendChild(travel);
 
@@ -3828,7 +3864,7 @@
       const carry=carryLabel();
       const estimated=route.mixedLegs.filter(leg=>!leg.verified).length;
       const effort=tripEffortSummary();
-      els.routeSummary.innerHTML='<strong>'+totals.total.toFixed(1)+' mi trip</strong> · '+totals.paddle.toFixed(1)+' mi paddling · '+totals.portage.toFixed(1)+' mi portage trail · '+totals.walked.toFixed(1)+' mi walked ('+carry+') · ~'+formatDuration(hours)+' active travel · '+effort.paddleSpeed.toFixed(1)+' mph modeled paddle speed · ~'+Math.round(effort.strokes).toLocaleString()+' strokes'+(estimated?' · '+estimated+' drawn leg'+(estimated===1?'':'s')+' need map verification':'')+'.';
+      els.routeSummary.innerHTML='<strong>'+totals.total.toFixed(1)+' mi trip</strong> · '+totals.paddle.toFixed(1)+' mi paddling · '+totals.portage.toFixed(1)+' mi portage trail · '+totals.walked.toFixed(1)+' mi walked ('+carry+') · ~'+formatDuration(hours)+' active travel · '+paddlePaceLabel()+(estimated?' · '+estimated+' drawn leg'+(estimated===1?'':'s')+' need map verification':'')+'.';
       els.routeWeatherButton.disabled=!route.mixedLegs.some(leg=>leg.type==='paddle');
     } else {
       const start=path[0],end=path[path.length-1];
@@ -3863,11 +3899,10 @@
       speed:Number(route.speed)||3,
       hours:Number(route.hours)||6,
       departure:route.departure||els.routeDeparture?.value||'',
-      portageTrips:Number(route.portageTrips)||1,
-      portageSpeed:Number(route.portageSpeed)||2,
-      portageTransitionMinutes:Number(route.portageTransitionMinutes)||10,
-      strokeRate:Number(route.strokeRate)||40,
-      feetPerStroke:Number(route.feetPerStroke)||6.6,
+      portageTrips:normalizeCarryTrips(route.portageTrips),
+      paddlePace:paceKey(route.paddlePace),
+      portagePace:paceKey(route.portagePace),
+      portageTransitionMinutes:10,
       tripName:route.tripName||'',
       activeScenario:route.activeScenario||'balanced',
       adding:Boolean(route.adding)
@@ -3885,11 +3920,10 @@
       speed:Number(snapshot?.speed)||3,
       hours:Number(snapshot?.hours)||6,
       departure:snapshot?.departure||'',
-      portageTrips:Number(snapshot?.portageTrips)||1,
-      portageSpeed:Number(snapshot?.portageSpeed)||2,
-      portageTransitionMinutes:Number(snapshot?.portageTransitionMinutes)||10,
-      strokeRate:Number(snapshot?.strokeRate)||40,
-      feetPerStroke:Number(snapshot?.feetPerStroke)||6.6,
+      portageTrips:normalizeCarryTrips(snapshot?.portageTrips),
+      paddlePace:paceKey(snapshot?.paddlePace),
+      portagePace:paceKey(snapshot?.portagePace),
+      portageTransitionMinutes:10,
       tripName:snapshot?.tripName||'',
       activeScenario:snapshot?.activeScenario||'balanced',
       adding:Boolean(snapshot?.adding)
@@ -3942,28 +3976,24 @@
     route.speed=Math.max(.5,Number(snapshot.speed)||3);
     route.hours=Math.max(2,Number(snapshot.hours)||6);
     route.departure=snapshot.departure||'';
-    route.portageTrips=Math.max(1,Math.min(3,Number(snapshot.portageTrips)||1));
-    route.portageSpeed=Math.max(.5,Number(snapshot.portageSpeed)||2);
-    route.portageTransitionMinutes=Math.max(0,Number(snapshot.portageTransitionMinutes)||10);
-    route.strokeRate=Math.max(20,Math.min(80,Number(snapshot.strokeRate)||40));
-    route.feetPerStroke=Math.max(3,Math.min(12,Number(snapshot.feetPerStroke)||6.6));
+    route.portageTrips=normalizeCarryTrips(snapshot.portageTrips);
+    route.paddlePace=paceKey(snapshot.paddlePace||legacyPaddlePace(snapshot));
+    route.portagePace=paceKey(snapshot.portagePace||legacyPortagePace(snapshot));
+    route.portageTransitionMinutes=10;
     route.tripName=cleanText(snapshot.tripName||'').slice(0,80);
     route.activeScenario=snapshot.activeScenario||'balanced';
     route.adding=Boolean(snapshot.adding);
     els.routeModeSelect.value=route.mode;
     els.routeSpeed.value=String(route.speed);
     if(els.routePortageTrips)els.routePortageTrips.value=String(route.portageTrips);
-    if(els.routePortageSpeed)els.routePortageSpeed.value=String(route.portageSpeed);
-    if(els.routePortageTransition)els.routePortageTransition.value=String(route.portageTransitionMinutes);
-    if(els.routeStrokeRate)els.routeStrokeRate.value=String(route.strokeRate);
-    if(els.routeFeetPerStroke)els.routeFeetPerStroke.value=String(route.feetPerStroke);
+    if(els.routePaddlePace)els.routePaddlePace.value=route.paddlePace;
+    if(els.routePortagePace)els.routePortagePace.value=route.portagePace;
     if(els.routeTripName)els.routeTripName.value=route.tripName;
     document.body.classList.toggle('canoe-mode',route.mode==='canoe');
     document.body.classList.toggle('human-paddle-mode',route.mode==='canoe'||route.mode==='paddle');
     if(els.routeDayHours)els.routeDayHours.value=String(route.hours);
     if(els.routeDeparture)els.routeDeparture.value=route.departure;
     if(els.routePortageTrips)els.routePortageTrips.value=String(route.portageTrips);
-    if(els.routePortageSpeed)els.routePortageSpeed.value=String(route.portageSpeed);
     document.body.classList.toggle('canoe-mode',route.mode==='canoe');
     route.resolvedPoints=[];
     route.trailNames=[];
@@ -4010,9 +4040,9 @@
     if(els.cockpitMode)els.cockpitMode.value=route.mode;
     if(els.cockpitSpeed) {
       const human=route.mode==='paddle'||route.mode==='canoe';
-      els.cockpitSpeed.value=human?paddleSpeedFromStrokes().toFixed(1):els.routeSpeed.value;
+      els.cockpitSpeed.value=human?paddlePaceSpeed().toFixed(1):els.routeSpeed.value;
       els.cockpitSpeed.disabled=human;
-      els.cockpitSpeed.title=human?'Modeled from paddle cadence and effective travel per stroke':'Planning speed';
+      els.cockpitSpeed.title=human?'Paddling pace preset: '+paddlePaceLabel():'Planning speed';
     }
     if(els.cockpitHours)els.cockpitHours.value=els.routeDayHours?.value||'6';
     if(els.cockpitBuild) {
@@ -4053,11 +4083,10 @@
       speed:Number(route.speed)||3,
       hours:Number(route.hours)||6,
       departure:route.departure||'',
-      portageTrips:Number(route.portageTrips)||1,
-      portageSpeed:Number(route.portageSpeed)||2,
-      portageTransitionMinutes:Number(route.portageTransitionMinutes)||10,
-      strokeRate:Number(route.strokeRate)||40,
-      feetPerStroke:Number(route.feetPerStroke)||6.6,
+      portageTrips:normalizeCarryTrips(route.portageTrips),
+      paddlePace:paceKey(route.paddlePace),
+      portagePace:paceKey(route.portagePace),
+      portageTransitionMinutes:10,
       activeScenario:route.activeScenario||'balanced',
       points:cloneRoutePoints().slice(0,40).map(point=>({
         lat:Number(point.lat),lng:Number(point.lng),label:cleanText(point.label||'').slice(0,100),
@@ -4090,13 +4119,12 @@
     const hours=Math.max(2,Math.min(12,Number(raw.hours)||6));
     const mapState=raw.map&&Number.isFinite(Number(raw.map.lat))&&Number.isFinite(Number(raw.map.lng))
       ? {lat:Number(raw.map.lat),lng:Number(raw.map.lng),zoom:Math.max(6,Math.min(18,Number(raw.map.zoom)||10))}:null;
-    const portageTrips=Math.max(1,Math.min(3,Number(raw.portageTrips)||1));
-    const portageSpeed=Math.max(.5,Math.min(5,Number(raw.portageSpeed)||2));
-    const portageTransitionMinutes=Math.max(0,Math.min(60,Number(raw.portageTransitionMinutes)||10));
-    const strokeRate=Math.max(20,Math.min(80,Number(raw.strokeRate)||40));
-    const feetPerStroke=Math.max(3,Math.min(12,Number(raw.feetPerStroke)||6.6));
+    const portageTrips=normalizeCarryTrips(raw.portageTrips);
+    const paddlePace=legacyPaddlePace(raw);
+    const portagePace=legacyPortagePace(raw);
+    const portageTransitionMinutes=10;
     const tripName=cleanText(raw.tripName||'').slice(0,80);
-    return {version:1,mode,speed,hours,portageTrips,portageSpeed,portageTransitionMinutes,strokeRate,feetPerStroke,tripName,departure:cleanText(raw.departure||'').slice(0,40),activeScenario:cleanText(raw.activeScenario||'balanced').slice(0,40),points,map:mapState};
+    return {version:1,mode,speed,hours,portageTrips,paddlePace,portagePace,portageTransitionMinutes,tripName,departure:cleanText(raw.departure||'').slice(0,40),activeScenario:cleanText(raw.activeScenario||'balanced').slice(0,40),points,map:mapState};
   }
 
   function applyTripState(raw,{remember=true,message='Trip restored.'}={}) {
@@ -4108,11 +4136,10 @@
     route.mode=state.mode;
     route.speed=state.speed;
     route.hours=state.hours;
-    route.portageTrips=state.portageTrips||1;
-    route.portageSpeed=state.portageSpeed||2;
-    route.portageTransitionMinutes=state.portageTransitionMinutes||10;
-    route.strokeRate=state.strokeRate||40;
-    route.feetPerStroke=state.feetPerStroke||6.6;
+    route.portageTrips=state.portageTrips||2;
+    route.paddlePace=paceKey(state.paddlePace);
+    route.portagePace=paceKey(state.portagePace);
+    route.portageTransitionMinutes=10;
     route.tripName=state.tripName||'';
     route.departure=state.departure||'';
     route.activeScenario=state.activeScenario||'balanced';
@@ -4121,10 +4148,8 @@
     if(els.routeDayHours)els.routeDayHours.value=String(route.hours);
     if(els.routeDeparture)els.routeDeparture.value=route.departure;
     if(els.routePortageTrips)els.routePortageTrips.value=String(route.portageTrips);
-    if(els.routePortageSpeed)els.routePortageSpeed.value=String(route.portageSpeed);
-    if(els.routePortageTransition)els.routePortageTransition.value=String(route.portageTransitionMinutes);
-    if(els.routeStrokeRate)els.routeStrokeRate.value=String(route.strokeRate);
-    if(els.routeFeetPerStroke)els.routeFeetPerStroke.value=String(route.feetPerStroke);
+    if(els.routePaddlePace)els.routePaddlePace.value=route.paddlePace;
+    if(els.routePortagePace)els.routePortagePace.value=route.portagePace;
     if(els.routeTripName)els.routeTripName.value=route.tripName;
     document.body.classList.toggle('canoe-mode',route.mode==='canoe');
     document.body.classList.toggle('human-paddle-mode',route.mode==='canoe'||route.mode==='paddle');
@@ -4293,14 +4318,14 @@
           const text=seg.miles.toFixed(1)+' mi trail · '+seg.walkedMiles.toFixed(1)+' mi walked · '+carryLabel()+' · '+formatDuration(seg.walkingHours)+' walking + '+Math.round(seg.transitionHours*60)+' min load/unload'+(official?.terrain?(' · '+official.terrain):'');
           return '<li><strong>'+xmlEscape(title)+'</strong><br>'+xmlEscape(text)+'</li>';
         }
-        return '<li><strong>'+xmlEscape(from+' → '+to)+'</strong><br>'+xmlEscape(seg.miles.toFixed(1)+' mi '+(seg.type==='paddle'?'paddle':'travel')+' · '+formatDuration(seg.hours)+(seg.strokes?' · ~'+Math.round(seg.strokes).toLocaleString()+' strokes':''))+'</li>';
+        return '<li><strong>'+xmlEscape(from+' → '+to)+'</strong><br>'+xmlEscape(seg.miles.toFixed(1)+' mi '+(seg.type==='paddle'?'paddle':'travel')+' · '+formatDuration(seg.hours))+'</li>';
       }).join('');
       const end=cleanText(day.end?.label||'planned end');
       const facts=day.end?.kind==='campground'?campgroundTripFacts(day.end):{text:'',alert:''};
       const caveat=day.provisional?'<p><em>Provisional day break — confirm a legal overnight campground.</em></p>':(facts.text?'<p><strong>Campground:</strong> '+xmlEscape(facts.text)+'</p>':'')+(facts.alert?'<p><strong>Current NPS alert:</strong> '+xmlEscape(facts.alert)+'</p>':'');
       return '<section><h2>Day '+day.day+' · '+xmlEscape(end)+'</h2><p>'+xmlEscape(formatDuration(day.hours)+' · '+day.miles.toFixed(1)+' route mi')+'</p><ol>'+legs+'</ol>'+caveat+'</section>';
     }).join('');
-    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+xmlEscape(name)+'</title><style>body{font-family:system-ui,sans-serif;max-width:820px;margin:40px auto;padding:0 20px;color:#24342d;line-height:1.5}h1,h2{font-family:Georgia,serif}header{border-bottom:2px solid #173d36;padding-bottom:18px;margin-bottom:22px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}.metrics div{border:1px solid #ccd6d0;border-radius:8px;padding:9px}.metrics b{display:block;font-size:1.15rem}section{border-top:1px solid #d8ded9;padding-top:14px;margin-top:18px}li{margin:8px 0}.note{font-size:.9rem;color:#65716b;background:#f5f7f5;padding:10px;border-radius:8px}@media(max-width:650px){.metrics{grid-template-columns:1fr 1fr}}</style></head><body><header><h1>'+xmlEscape(name)+'</h1><p>'+xmlEscape(tripDescription())+'</p></header><div class="metrics"><div><b>'+xmlEscape(formatDuration(effort.totalHours))+'</b>active travel</div><div><b>'+xmlEscape(effort.paddleMiles.toFixed(1)+' mi')+'</b>paddling</div><div><b>'+xmlEscape(effort.portageMiles.toFixed(1)+' mi')+'</b>portage trail</div><div><b>'+xmlEscape(effort.walkedMiles.toFixed(1)+' mi')+'</b>walked carrying</div><div><b>'+xmlEscape(effort.paddleSpeed?effort.paddleSpeed.toFixed(1)+' mph':'—')+'</b>modeled paddle speed</div><div><b>'+xmlEscape(effort.strokes?Math.round(effort.strokes).toLocaleString():'—')+'</b>stroke cycles</div></div>'+rows+'<p class="note">Planning estimate only. Active travel time includes paddling, portage walking and selected load/unload time. It excludes breaks, meals, fishing, weather holds, route-finding, landing congestion and camp setup. Verify current NPS rules, maps and conditions. This is not a navigation chart.</p></body></html>';
+    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+xmlEscape(name)+'</title><style>body{font-family:system-ui,sans-serif;max-width:820px;margin:40px auto;padding:0 20px;color:#24342d;line-height:1.5}h1,h2{font-family:Georgia,serif}header{border-bottom:2px solid #173d36;padding-bottom:18px;margin-bottom:22px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}.metrics div{border:1px solid #ccd6d0;border-radius:8px;padding:9px}.metrics b{display:block;font-size:1.15rem}section{border-top:1px solid #d8ded9;padding-top:14px;margin-top:18px}li{margin:8px 0}.note{font-size:.9rem;color:#65716b;background:#f5f7f5;padding:10px;border-radius:8px}@media(max-width:650px){.metrics{grid-template-columns:1fr 1fr}}</style></head><body><header><h1>'+xmlEscape(name)+'</h1><p>'+xmlEscape(tripDescription())+'</p></header><div class="metrics"><div><b>'+xmlEscape(formatDuration(effort.totalHours))+'</b>active travel</div><div><b>'+xmlEscape(effort.paddleMiles.toFixed(1)+' mi')+'</b>paddling</div><div><b>'+xmlEscape(effort.portageMiles.toFixed(1)+' mi')+'</b>portage trail</div><div><b>'+xmlEscape(effort.walkedMiles.toFixed(1)+' mi')+'</b>walked carrying</div><div><b>'+xmlEscape(effort.paddleSpeed?effort.paddleSpeed.toFixed(1)+' mph':'—')+'</b>paddling pace</div><div><b>'+xmlEscape(route.mode==='canoe'?portagePaceSpeed().toFixed(1)+' mph':'—')+'</b>portage pace</div></div>'+rows+'<p class="note">Planning estimate only. Active travel time includes paddling, portage walking and selected load/unload time. It excludes breaks, meals, fishing, weather holds, route-finding, landing congestion and camp setup. Verify current NPS rules, maps and conditions. This is not a navigation chart.</p></body></html>';
   }
 
   function downloadTripPlan() {
@@ -4807,48 +4832,30 @@
     reroute('Travel mode changed. Re-run route weather after confirming speed and departure.');
   });
   els.routePortageTrips?.addEventListener('change',()=>{
-    const next=Math.max(1,Math.min(3,Number(els.routePortageTrips.value)||1));
-    if(Math.abs(next-route.portageTrips)<.001)return;
+    const next=normalizeCarryTrips(els.routePortageTrips.value);
+    if(next===route.portageTrips)return;
     rememberRouteEdit('change portage carry');
     route.portageTrips=next;
+    els.routePortageTrips.value=String(next);
     renderRoute();
   });
-  els.routePortageTransition?.addEventListener('change',()=>{
-    const next=Math.max(0,Math.min(60,Number(els.routePortageTransition.value)||0));
-    if(Math.abs(next-route.portageTransitionMinutes)<.001){els.routePortageTransition.value=String(route.portageTransitionMinutes);return;}
-    rememberRouteEdit('change portage load unload');
-    route.portageTransitionMinutes=next;
-    els.routePortageTransition.value=String(route.portageTransitionMinutes);
+  els.routePaddlePace?.addEventListener('change',()=>{
+    const next=paceKey(els.routePaddlePace.value);
+    if(next===route.paddlePace)return;
+    rememberRouteEdit('change paddling pace');
+    route.paddlePace=next;
+    clearRouteWeather('Paddling pace changed. Re-run route weather for updated travel timing.');
     renderRoute();
   });
-  els.routeStrokeRate?.addEventListener('change',()=>{
-    const next=Math.max(20,Math.min(80,Number(els.routeStrokeRate.value)||40));
-    if(Math.abs(next-route.strokeRate)<.001){els.routeStrokeRate.value=String(route.strokeRate);return;}
-    rememberRouteEdit('change paddle cadence');
-    route.strokeRate=next;
-    els.routeStrokeRate.value=String(route.strokeRate);
-    clearRouteWeather('Paddle cadence changed. Re-run route weather for updated travel timing.');
-    renderRoute();
-  });
-  els.routeFeetPerStroke?.addEventListener('change',()=>{
-    const next=Math.max(3,Math.min(12,Number(els.routeFeetPerStroke.value)||6.6));
-    if(Math.abs(next-route.feetPerStroke)<.001){els.routeFeetPerStroke.value=String(route.feetPerStroke);return;}
-    rememberRouteEdit('change paddle efficiency');
-    route.feetPerStroke=next;
-    els.routeFeetPerStroke.value=String(route.feetPerStroke);
-    clearRouteWeather('Paddle efficiency changed. Re-run route weather for updated travel timing.');
+  els.routePortagePace?.addEventListener('change',()=>{
+    const next=paceKey(els.routePortagePace.value);
+    if(next===route.portagePace)return;
+    rememberRouteEdit('change portage pace');
+    route.portagePace=next;
     renderRoute();
   });
   els.routeTripName?.addEventListener('change',()=>{
     route.tripName=cleanText(els.routeTripName.value||'').slice(0,80);
-  });
-  els.routePortageSpeed?.addEventListener('change',()=>{
-    const next=Math.max(.5,Math.min(5,Number(els.routePortageSpeed.value)||2));
-    if(Math.abs(next-route.portageSpeed)<.001){els.routePortageSpeed.value=String(route.portageSpeed);return;}
-    rememberRouteEdit('change portage pace');
-    route.portageSpeed=next;
-    els.routePortageSpeed.value=String(route.portageSpeed);
-    renderRoute();
   });
   els.routeSpeed.addEventListener('change',()=>{
     const next=Math.max(.5,Number(els.routeSpeed.value)||3);

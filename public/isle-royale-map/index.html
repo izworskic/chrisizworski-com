@@ -159,27 +159,29 @@
           <label class="non-canoe-only">Planning speed
             <span class="route-input-unit"><input id="route-speed" type="number" min="0.5" max="60" step="0.5" value="3"> mph</span>
           </label>
-          <label class="human-paddle-only">Paddle cadence
-            <span class="route-input-unit"><input id="route-stroke-rate" type="number" min="20" max="80" step="1" value="40"> strokes/min</span>
-          </label>
-          <label class="human-paddle-only">Effective travel / stroke
-            <span class="route-input-unit"><input id="route-feet-per-stroke" type="number" min="3" max="12" step=".1" value="6.6"> ft</span>
-          </label>
-          <div class="trip-model-note human-paddle-only">The stroke model estimates boat speed from cadence × effective boat travel per stroke. “Feet per stroke” is boat progress, not paddle length. <strong id="route-derived-speed">3.0 mph modeled</strong>. Calibrate it from a trip you know.</div>
-          <label class="canoe-only">Portage carry
-            <select id="route-portage-trips">
-              <option value="1">Single</option>
-              <option value="1.5">1½ carry</option>
-              <option value="2">Double</option>
-              <option value="3">Triple</option>
+          <label class="human-paddle-only">Paddling pace
+            <select id="route-paddle-pace">
+              <option value="easy">Easy · 2.5 mph</option>
+              <option value="average" selected>Average · 3.0 mph</option>
+              <option value="strong">Strong · 3.5 mph</option>
             </select>
           </label>
+          <div class="trip-model-note human-paddle-only"><strong>Average is the default.</strong> These are planning speeds for loaded canoe travel in ordinary conditions. Wind, waves and route-finding can make the real trip slower.</div>
           <label class="canoe-only">Portage pace
-            <span class="route-input-unit"><input id="route-portage-speed" type="number" min="0.5" max="5" step="0.25" value="2"> mph</span>
+            <select id="route-portage-pace">
+              <option value="easy">Easy · 1.5 mph</option>
+              <option value="average" selected>Average · 2.0 mph</option>
+              <option value="strong">Strong · 2.5 mph</option>
+            </select>
           </label>
-          <label class="canoe-only">Load / unload per portage
-            <span class="route-input-unit"><input id="route-portage-transition" type="number" min="0" max="60" step="1" value="10"> min</span>
+          <label class="canoe-only">How many carry loads?
+            <select id="route-portage-trips">
+              <option value="1">1 load · single carry · walk 1×</option>
+              <option value="2" selected>2 loads · double carry · walk 3×</option>
+              <option value="3">3 loads · triple carry · walk 5×</option>
+            </select>
           </label>
+          <div class="trip-model-note canoe-only">Count how many separate loads your group needs to move canoe and gear across the portage. The planner adds the return walks automatically. A standard 10 minutes per portage is included for unloading and reloading.</div>
           <label>Balanced day
             <span class="route-input-unit"><input id="route-day-hours" type="number" min="2" max="12" step=".5" value="6"> hours</span>
           </label>
@@ -272,6 +274,6 @@
 <footer class="footer">© 2026 Chris Izworski · Michigan and Great Lakes field tools <a href="/tools/">All tools</a></footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
 <script src="/assets/isle-royale-water-intelligence.js?v=20260830-5"></script>
-<script src="/assets/isle-royale-map.js?v=20260831-trip-intelligence-1"></script>
+<script src="/assets/isle-royale-map.js?v=20260831-simple-pace-1"></script>
 </body>
 </html>

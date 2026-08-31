@@ -106,7 +106,7 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
 
 
 test('Isle Royale interaction script is cache-busted and not stored during active development', () => {
-  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-trip-intelligence-1/);
+  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-simple-pace-1/);
   assert.doesNotMatch(html, /isle-royale-map\.js\?v=20260830-19/);
   const vercel = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
   const rule = (vercel.headers || []).find(item => item.source === '/assets/isle-royale-map.js');
@@ -361,32 +361,45 @@ test('canoe resolved leg distance labels use the current route leg index', () =>
   assert.doesNotMatch(js, /route\.mixedLegs\[i-1\]\|\|null:null/);
 });
 
-test('trip intelligence turns the route into paddle, carry, time, and day-plan math', () => {
-  for (const id of ['route-stroke-rate','route-feet-per-stroke','route-portage-transition','route-trip-brief','route-export-plan']) {
+test('trip intelligence uses researched pace presets and automatic carry math', () => {
+  for (const id of ['route-paddle-pace','route-portage-pace','route-portage-trips','route-trip-brief','route-export-plan']) {
     assert.ok(html.includes(`id="${id}"`), id);
   }
-  assert.match(html, /<option value="3">Triple<\/option>/);
-  assert.match(html, /Effective travel \/ stroke/);
-  assert.match(js, /function paddleSpeedFromStrokes/);
-  assert.match(js, /cadence\*feet\*60\/5280/);
-  assert.match(js, /function planningTravelSpeed/);
-  assert.match(js, /function strokeCountForMiles/);
-  assert.match(js, /function portageWalkMultiplier/);
-  assert.match(js, /Math\.abs\(trips-1\.5\)<\.01\)return 2/);
+  assert.doesNotMatch(html, /id="route-stroke-rate"|id="route-feet-per-stroke"|id="route-portage-speed"|id="route-portage-transition"/);
+  assert.match(html, /Easy · 2\.5 mph/);
+  assert.match(html, /Average · 3\.0 mph/);
+  assert.match(html, /Strong · 3\.5 mph/);
+  assert.match(html, /Easy · 1\.5 mph/);
+  assert.match(html, /Average · 2\.0 mph/);
+  assert.match(html, /Strong · 2\.5 mph/);
+  assert.match(html, /2 loads · double carry · walk 3×/);
+  assert.match(html, /3 loads · triple carry · walk 5×/);
+  assert.match(html, /standard 10 minutes per portage/);
+  assert.match(js, /const PADDLE_PACES=Object\.freeze/);
+  assert.match(js, /easy:\{label:'Easy',mph:2\.5\}/);
+  assert.match(js, /average:\{label:'Average',mph:3\}/);
+  assert.match(js, /strong:\{label:'Strong',mph:3\.5\}/);
+  assert.match(js, /const PORTAGE_PACES=Object\.freeze/);
+  assert.match(js, /easy:\{label:'Easy',mph:1\.5\}/);
+  assert.match(js, /average:\{label:'Average',mph:2\}/);
+  assert.match(js, /strong:\{label:'Strong',mph:2\.5\}/);
+  assert.match(js, /function paddlePaceSpeed/);
+  assert.match(js, /function portagePaceSpeed/);
+  assert.match(js, /function legacyPaddlePace/);
+  assert.match(js, /function legacyPortagePace/);
+  assert.match(js, /function normalizeCarryTrips/);
   assert.match(js, /2\*trips-1/);
   assert.match(js, /function portageTerrainFactor/);
   assert.match(js, /extremely steep/);
   assert.match(js, /wet/);
   assert.match(js, /rocky/);
-  assert.match(js, /function tripSegmentMetrics/);
   assert.match(js, /walkingHours\+transitionHours/);
   assert.match(js, /function tripEffortSummary/);
   assert.match(js, /function tripDays/);
-  assert.match(js, /endpoint\.kind==='campground'&&current\.hours>=target\*\.70/);
   assert.match(js, /function tripDescription/);
   assert.match(js, /function renderTripBrief/);
-  assert.match(js, /estimated stroke cycles/);
   assert.match(js, /Portage terrain adjustments are planning heuristics/);
+  assert.doesNotMatch(js, /paddleSpeedFromStrokes|strokeCountForMiles|estimated stroke cycles|strokes\/min|feet per stroke/);
   assert.match(html, /\.trip-brief\{/);
   assert.match(html, /\.trip-day\{/);
 });
@@ -732,7 +745,7 @@ test('official NPS portages are visually selectable map objects with truthful ad
 test('canoe planner separates paddle and portage legs and keeps a truthful trip total', () => {
   assert.match(html, /<option value="canoe">Canoe \+ portage<\/option>/);
   assert.match(html, /id="route-portage-trips"/);
-  assert.match(html, /id="route-portage-speed"/);
+  assert.match(html, /id="route-portage-pace"/);
   assert.match(js, /function resolveCanoeRouteAsync/);
   assert.match(js, /function canoeTrailLegCandidate/);
   assert.match(js, /function canoeWaterLegCandidate/);
