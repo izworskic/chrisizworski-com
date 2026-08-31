@@ -266,10 +266,10 @@ const tripCreationRuntime = spec.tripCreationValueFunction?.releaseTarget === 92
   && /function currentDayVerifiedHours/.test(js)
   && /active travel/.test(js)
   && /portageGroupId:cleanText\(point\.portageGroupId/.test(js)
-  && /Build from the map/.test(html)
-  && /Tap a brown <strong>P#<\/strong> for the whole portage/.test(html)
+  && /Trace the trip with checkpoints/.test(html)
+  && /Click a brown <strong>P#<\/strong> when you want that portage/.test(html)
   && /function landingNear/.test(waterJs)
-  && /return \{route,landingNear,analyze/.test(waterJs);
+  && /route,landingNear,analyze,coastDistance,boundaryDistance/.test(waterJs);
 
 const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js)
   && /function resolveWaterRouteAsync/.test(js)
@@ -304,7 +304,7 @@ const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js
   && !/Draft route · straight between selected points while mapped routing verifies/.test(js)
   && /function routeIsResolved/.test(js)
   && /function landingNear/.test(waterJs)
-  && /return \{route,landingNear,analyze/.test(waterJs)
+  && /route,landingNear,analyze,coastDistance,boundaryDistance/.test(waterJs)
   && /route-distance-badge/.test(js)
   && /Water · .*mi/.test(js)
   && /weatherSamples/.test(waterJs)
@@ -403,7 +403,7 @@ const mapFirstRoutingRuntime = /id="explore-mode"[^>]*aria-pressed="true"/.test(
   && /pinned:Boolean\(chosen\?\.pinned\)/.test(waterJs);
 
 const mapOnlyCriteriaRuntime = /<h2>Build above\. Tune the trip below\.<\/h2>/.test(html)
-  && /Map clicks define the trip\. These settings only change pace, carry effort, and day estimates/.test(html)
+  && /Water clicks are ordered checkpoints\. Distance and time accumulate through every checkpoint/.test(html)
   && /The route bar on the map is the only build control/.test(html)
   && /class="route-fields criteria-fields"/.test(html)
   && /\.route-compat-controls\{display:none!important\}/.test(html)
@@ -596,7 +596,7 @@ if (!routeEditingRuntime) hardFailures.push('route planning is missing leg/cumul
 if (!tripCreationRuntime) hardFailures.push('canoe trip creation is missing first-class portage transitions, live travel-time feedback, logical trip-step persistence, or water-side landing resolution');
 if (!tripIntelligenceRuntime) hardFailures.push('trip intelligence is missing simple researched pace presets, carry math, day planning, named saves, autosave recovery, or portable trip-plan export');
 if (!/id="route-finish-day"/.test(html) || !/function finishCurrentDay/.test(js) || !/id="route-finish-build"/.test(html) || !/function finishRouteBuild/.test(js) || !/route\.reviewing=true/.test(js)) hardFailures.push('route builder is missing day-by-day completion or final trip review controls');
-if (!/function crossingCount/.test(waterJs) || !/Water route failed final coastline validation/.test(waterJs) || !/route\.smartState=legs\.length\?'water-partial':'water-fallback'/.test(js)) hardFailures.push('water routing can still promote an unsafe route or discard the verified prefix when a later leg fails');
+if (!/function crossingCount/.test(waterJs) || !/Multi-point water route failed final land-crossing validation/.test(waterJs) || !/route\.smartState=legs\.length\?'water-partial':'water-fallback'/.test(js) || !/preserveVerifiedPrefix/.test(js)) hardFailures.push('water routing can still promote an unsafe route or discard the verified prefix when a later leg fails');
 if (!/route-distance-badge/.test(js) || !/Water · .*mi/.test(js) || !/verified this day/.test(js) || !/Earlier safe-water lines and measurements remain on the map/.test(js)) hardFailures.push('live verified leg/day mileage is not preserved while the newest water leg resolves');
 if (/data-layer="vegetation-(?:overview|baseline|change)"|data-layer="horne-fire"/.test(html)) hardFailures.push('retired vegetation/ecology layers leaked back into the planning controls');
 if (!['geology','vegetation-detailed','vegetation-simple','vegetation-change-1996-2017','horne-fire-2021'].every(id => catalog.items.some(x => x.id === id && x.state === 'research-only'))) hardFailures.push('retired research layers are not clearly marked research-only in the source catalog');
