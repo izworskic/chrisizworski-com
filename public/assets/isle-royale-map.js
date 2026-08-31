@@ -4240,6 +4240,40 @@
     return String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
   }
 
+  function tripPlanHtml() {
+    if(!routeIsResolved())return '';
+    const effort=tripEffortSummary();
+    const days=tripDays();
+    const name=cleanText(route.tripName||els.routeTripName?.value||tripNameFallback()).slice(0,80)||tripNameFallback();
+    const rows=days.map(day=>{
+      const legs=day.segments.map(seg=>{
+        const from=cleanText(seg.from?.label||'Start'),to=cleanText(seg.to?.label||'Next point');
+        if(seg.type==='portage') {
+          const official=seg.officialPortage;
+          const title=(official?('NPS Portage #'+official.number+' · '):'')+from+' → '+to;
+          const text=seg.miles.toFixed(1)+' mi trail · '+seg.walkedMiles.toFixed(1)+' mi walked · '+carryLabel()+' · '+formatDuration(seg.walkingHours)+' walking + '+Math.round(seg.transitionHours*60)+' min load/unload'+(official?.terrain?(' · '+official.terrain):'');
+          return '<li><strong>'+xmlEscape(title)+'</strong><br>'+xmlEscape(text)+'</li>';
+        }
+        return '<li><strong>'+xmlEscape(from+' → '+to)+'</strong><br>'+xmlEscape(seg.miles.toFixed(1)+' mi '+(seg.type==='paddle'?'paddle':'travel')+' · '+formatDuration(seg.hours)+(seg.strokes?' · ~'+Math.round(seg.strokes).toLocaleString()+' strokes':''))+'</li>';
+      }).join('');
+      const end=cleanText(day.end?.label||'planned end');
+      const caveat=day.provisional?'<p><em>Provisional day break — confirm a legal overnight campground.</em></p>':'';
+      return '<section><h2>Day '+day.day+' · '+xmlEscape(end)+'</h2><p>'+xmlEscape(formatDuration(day.hours)+' · '+day.miles.toFixed(1)+' route mi')+'</p><ol>'+legs+'</ol>'+caveat+'</section>';
+    }).join('');
+    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+xmlEscape(name)+'</title><style>body{font-family:system-ui,sans-serif;max-width:820px;margin:40px auto;padding:0 20px;color:#24342d;line-height:1.5}h1,h2{font-family:Georgia,serif}header{border-bottom:2px solid #173d36;padding-bottom:18px;margin-bottom:22px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}.metrics div{border:1px solid #ccd6d0;border-radius:8px;padding:9px}.metrics b{display:block;font-size:1.15rem}section{border-top:1px solid #d8ded9;padding-top:14px;margin-top:18px}li{margin:8px 0}.note{font-size:.9rem;color:#65716b;background:#f5f7f5;padding:10px;border-radius:8px}@media(max-width:650px){.metrics{grid-template-columns:1fr 1fr}}</style></head><body><header><h1>'+xmlEscape(name)+'</h1><p>'+xmlEscape(tripDescription())+'</p></header><div class="metrics"><div><b>'+xmlEscape(formatDuration(effort.totalHours))+'</b>active travel</div><div><b>'+xmlEscape(effort.paddleMiles.toFixed(1)+' mi')+'</b>paddling</div><div><b>'+xmlEscape(effort.portageMiles.toFixed(1)+' mi')+'</b>portage trail</div><div><b>'+xmlEscape(effort.walkedMiles.toFixed(1)+' mi')+'</b>walked carrying</div><div><b>'+xmlEscape(effort.paddleSpeed?effort.paddleSpeed.toFixed(1)+' mph':'—')+'</b>modeled paddle speed</div><div><b>'+xmlEscape(effort.strokes?Math.round(effort.strokes).toLocaleString():'—')+'</b>stroke cycles</div></div>'+rows+'<p class="note">Planning estimate only. Active travel time includes paddling, portage walking and selected load/unload time. It excludes breaks, meals, fishing, weather holds, route-finding, landing congestion and camp setup. Verify current NPS rules, maps and conditions. This is not a navigation chart.</p></body></html>';
+  }
+
+  function downloadTripPlan() {
+    if(!routeIsResolved()){status('Finish a resolved route before downloading the trip plan.');return;}
+    const html=tripPlanHtml();
+    if(!html)return;
+    const name=cleanText(route.tripName||els.routeTripName?.value||tripNameFallback()).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'isle-royale-trip';
+    const blob=new Blob([html],{type:'text/html;charset=utf-8'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+    link.href=url;link.download=name+'-plan.html';document.body.appendChild(link);link.click();link.remove();window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+    status('Trip plan downloaded as a standalone HTML file.');
+    emitEvent('isle_royale_trip_export',{format:'html-plan',point_count:route.points.length,mode:route.mode});
+  }
+
   function exportRouteGpx() {
     const path=routePathPoints();
     if(path.length<2){status('Build a route with at least two points before exporting GPX.');return;}
