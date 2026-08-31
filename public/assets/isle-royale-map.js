@@ -2956,7 +2956,7 @@
     route.activeScenario='balanced';
     route.reviewing=false;
     setRouteAdding(true);
-    reroute('Portage #'+portage.number+' added as one canoe trip step: paddle to landing, carry, then continue from the opposite landing.');
+    reroute('Portage #'+portage.number+' added as one canoe trip step: paddle to landing, carry, then continue from the opposite landing.',{preserveVerifiedPrefix:true});
     status('P'+portage.number+' added · '+portage.official_label+' · '+Number(portage.distance_miles).toFixed(1)+' mi carry. Continue paddling from the exit landing.');
     emitEvent('isle_royale_portage_add',{portage_number:portage.number,distance_miles:Number(portage.distance_miles),route_points:route.points.length});
     return true;
@@ -3217,20 +3217,20 @@
     setCanoeLegType(index,current==='water'?'auto':'water');
   }
 
-  async function resolveCanoeRouteAsync() {
+  async function resolveCanoeRouteAsync(seedLegs=[]) {
     if(route.mode!=='canoe'||route.points.length<2)return;
     const token=++route.waterToken;
-    route.smartState='canoe-loading';
+    const legs=(seedLegs||[]).filter((leg,index)=>leg?.verified&&Number(leg.index)===index+1&&index<route.points.length-1);
+    route.smartState=legs.length?'canoe-partial':'canoe-loading';
     route.mixedReason='';
-    route.mixedLegs=[];
-    route.resolvedPoints=[];
+    route.mixedLegs=[...legs];
+    route.resolvedPoints=combineCanoeLegs(legs);
     renderRoute();
     let router=null;
     try { router=await ensureWaterRouter(); } catch (_) {}
     if(token!==route.waterToken||route.mode!=='canoe')return;
-    const legs=[];
     try {
-      for(let i=1;i<route.points.length;i++) {
+      for(let i=legs.length+1;i<route.points.length;i++) {
         const a=route.points[i-1],b=route.points[i];
         const override=b.legType||'auto';
         const selectedLeg=b.officialPortageId&&selectedOfficialPortageStillMatches(a,b,b.officialPortageId)
@@ -3316,8 +3316,8 @@
     waterIntel.promise=fetchJSON(CONFIG.waterIntelEndpoint,48000)
       .then(data=>{
         if(!Array.isArray(data?.lines)||!data.lines.length)throw new Error('shoreline source returned no coastline geometry');
-        waterIntel.router=window.IsleRoyaleWaterIntel.create(data.lines);
-        if(!waterIntel.router?.segment_count)throw new Error('shoreline index is empty');
+        waterIntel.router=window.IsleRoyaleWaterIntel.create(data);
+        if(!waterIntel.router?.segment_count)throw new Error('water-boundary index is empty');
         waterIntel.source=data;
         waterIntel.state='loaded';
         return waterIntel.router;
@@ -3365,21 +3365,21 @@
     return rows.filter(row=>{const key=row.name.toLowerCase();if(seen.has(key))return false;seen.add(key);return true;}).slice(0,5);
   }
 
-  async function resolveWaterRouteAsync() {
+  async function resolveWaterRouteAsync(seedLegs=[]) {
     if(route.mode==='hike'||route.mode==='canoe'||route.points.length<2)return;
     const token=++route.waterToken;
-    route.smartState='water-loading';
+    const legs=(seedLegs||[]).filter((leg,index)=>leg?.verified&&Number(leg.index)===index+1&&index<route.points.length-1);
+    route.smartState=legs.length?'water-partial':'water-loading';
     route.waterReason='';
     route.waterStats=null;
-    route.waterAccessMiles=0;
-    route.waterLegs=[];
-    route.resolvedPoints=[];
+    route.waterAccessMiles=legs.reduce((sum,item)=>sum+(Number(item.access_miles)||0),0);
+    route.waterLegs=[...legs];
+    route.resolvedPoints=combineCanoeLegs(legs);
     renderRoute();
-    const legs=[];
     try {
       const [router,zones]=await Promise.all([ensureWaterRouter(),ensureRouteQuietZones()]);
       if(token!==route.waterToken||route.mode==='hike'||route.mode==='canoe'||route.points.length<2)return;
-      for(let i=1;i<route.points.length;i++) {
+      for(let i=legs.length+1;i<route.points.length;i++) {
         const a=route.points[i-1],b=route.points[i];
         const result=router.route([a,b],route.mode);
         const crossings=Number(result.land_crossings ?? router.crossingCount?.(result.points) ?? 0);
@@ -3426,9 +3426,11 @@
     }
   }
 
-  function resolveRoute() {
+  function resolveRoute(options={}) {
     route.trailNames=[];
     route.accessMiles=0;
+    const keepWater=options.preserveVerifiedPrefix?(route.waterLegs||[]).filter(leg=>leg?.verified):[];
+    const keepMixed=options.preserveVerifiedPrefix?(route.mixedLegs||[]).filter(leg=>leg?.verified):[];
     if(route.points.length<2) {
       route.waterToken++;
       route.waterStats=null;
@@ -3441,12 +3443,12 @@
     }
     if(route.mode==='canoe') {
       route.waterLegs=[];
-      route.mixedLegs=[];
+      route.mixedLegs=[...keepMixed];
       route.mixedReason='';
-      route.resolvedPoints=[];
+      route.resolvedPoints=combineCanoeLegs(keepMixed);
       route.waterStats=null;
       route.waterReason='';
-      route.smartState='canoe-pending';
+      route.smartState=keepMixed.length?'canoe-partial':'canoe-pending';
     } else if(route.mode==='hike') {
       route.waterToken++;
       route.waterLegs=[];
@@ -3466,21 +3468,23 @@
         route.smartReason=smart?.reason||'Smart trail routing unavailable.';
       }
     } else {
-      route.waterLegs=[];
+      route.waterLegs=[...keepWater];
       route.mixedLegs=[];
-      route.resolvedPoints=[];
+      route.resolvedPoints=combineCanoeLegs(keepWater);
       route.waterStats=null;
       route.waterReason='';
-      route.smartState='water-pending';
+      route.smartState=keepWater.length?'water-partial':'water-pending';
     }
   }
 
   function routeWaypointIcon(index,total,point={}) {
     const isCamp=point.kind==='campground';
     const isPortage=point.kind==='official-portage-landing';
+    const isCheckpoint=point.kind==='water-checkpoint';
     const day=point.manualDayEnd?manualDayNumber(point):null;
-    const cls=isPortage?'is-portage':index===0?'is-start':day?'is-day-end':index===total-1?'is-end':isCamp?'is-camp':'';
-    const label=isPortage?'P'+(point.portageNumber||'?'):index===0?'S':day?'D'+day:index===total-1?'D':isCamp?'C':String(index);
+    const finishedEnd=index===total-1&&route.reviewing&&!isCheckpoint;
+    const cls=isPortage?'is-portage':index===0?'is-start':day?'is-day-end':finishedEnd?'is-end':isCamp?'is-camp':isCheckpoint?'is-checkpoint':'';
+    const label=isPortage?'P'+(point.portageNumber||'?'):index===0?'S':day?'D'+day:finishedEnd?'D':isCamp?'C':String(index);
     return L.divIcon({
       className:'',
       html:`<span class="route-waypoint-icon ${cls}">${label}</span>`,
@@ -3520,7 +3524,7 @@
     }
     if(route.mode==='canoe') {
       if(route.smartState==='canoe-loading'||route.smartState==='canoe-pending') {
-        els.routeSmartStatus.innerHTML='<strong>Building canoe trip:</strong> each leg must resolve on mapped water or match a designated NPS portage. No straight line is drawn across land while routing verifies.';
+        els.routeSmartStatus.innerHTML='<strong>Building canoe route:</strong> click as many water checkpoints as needed to follow the route you want. Each consecutive checkpoint is solved on mapped water; land is crossed only on a designated NPS portage.';
         return;
       }
       if(route.smartState==='canoe-partial') {
@@ -3536,7 +3540,7 @@
         els.routeSmartStatus.innerHTML='<strong>Canoe + portage route:</strong> '+route.mixedLegs.length+' legs · '+totals.paddle.toFixed(1)+' mi paddling · '+totals.portage.toFixed(1)+' mi official portage trail. '+official+' designated NPS portage'+(official===1?'':'s')+' · '+mapped+' mapped carry'+(mapped===1?'':'ies')+' · '+inferred+' automatically resolved leg'+(inferred===1?'':'s')+'. Land crossings are allowed only on the brown P# portages.';
         return;
       }
-      els.routeSmartStatus.textContent='Canoe route blocked'+(route.mixedReason?' ('+route.mixedReason+')':'')+'. Move the water point, add another water waypoint, or select a brown P# official portage. Straight overland fallback is disabled.';
+      els.routeSmartStatus.textContent='Canoe route blocked'+(route.mixedReason?' ('+route.mixedReason+')':'')+'. Add another checkpoint along the water you intend to follow, move the last checkpoint, or select a brown P# portage. Straight overland fallback is disabled.';
       return;
     }
     if(route.mode==='hike'&&route.smartState==='trail-snapped') {
@@ -3559,14 +3563,14 @@
     }
     if(route.smartState==='water-aware') {
       const access=route.waterAccessMiles>0.05?` · ${route.waterAccessMiles.toFixed(1)} mi endpoint access to the routing grid`:'';
-      els.routeSmartStatus.innerHTML=`<strong>Water-aware planning route:</strong> 0 mapped shoreline crossings · ${route.mode==='paddle'?'shoreline-biased':'more direct'} water path${access}. Drag endpoints or tap the line to compare another scenario.`;
+      els.routeSmartStatus.innerHTML=`<strong>Multi-point water route:</strong> ${route.waterLegs.length} verified checkpoint leg${route.waterLegs.length===1?'':'s'} · 0 mapped land crossings${access}. Keep clicking along the water to extend it; tap the route line to insert another checkpoint.`;
       return;
     }
     if(route.smartState==='water-fallback') {
-      els.routeSmartStatus.textContent=`Water route unavailable (${route.waterReason||'unknown source issue'}). No overland fallback is drawn. Adjust the water points until a zero-land-crossing route resolves.`;
+      els.routeSmartStatus.textContent=`Water route unavailable (${route.waterReason||'unknown source issue'}). No overland fallback is drawn. Add or move a checkpoint along the water you want to follow.`;
       return;
     }
-    els.routeSmartStatus.innerHTML='<strong>Editable water route:</strong> drag S / D / numbered handles to reshape it. Tap the route line to add another shaping point.';
+    els.routeSmartStatus.innerHTML='<strong>Editable multi-point route:</strong> each numbered handle is a water checkpoint. Add, drag, delete, or insert checkpoints to make the path follow the water you intend to travel.';
   }
 
   function nearestControlSegmentIndex(latlng) {
@@ -3585,12 +3589,15 @@
     return bestIndex;
   }
 
-  function reroute(message='Route changed. Re-run the weather analysis for the updated path.') {
-    resolveRoute();
+  function reroute(message='Route changed. Re-run the weather analysis for the updated path.',options={}) {
+    const preserve=Boolean(options.preserveVerifiedPrefix);
+    const waterSeed=preserve?[...(route.waterLegs||[])]:[];
+    const mixedSeed=preserve?[...(route.mixedLegs||[])]:[];
+    resolveRoute({preserveVerifiedPrefix:preserve});
     clearRouteWeather(message);
     renderRoute();
-    if(route.mode==='canoe'&&route.points.length>=2)resolveCanoeRouteAsync();
-    else if(route.mode!=='hike'&&route.points.length>=2)resolveWaterRouteAsync();
+    if(route.mode==='canoe'&&route.points.length>=2)resolveCanoeRouteAsync(mixedSeed);
+    else if(route.mode!=='hike'&&route.points.length>=2)resolveWaterRouteAsync(waterSeed);
   }
 
   function routeDayMarkers(path) {
@@ -3953,7 +3960,8 @@
   function routePointRole(point,index,total) {
     if(point.kind==='official-portage-landing')return 'Portage P'+(point.portageNumber||'?')+' '+(point.portageRole==='entry'?'entry landing':'exit landing');
     if(index===0)return 'Start';
-    if(index===total-1)return 'Destination';
+    if(point.kind==='water-checkpoint')return route.adding?'Water checkpoint':'Water checkpoint';
+    if(index===total-1)return route.reviewing?'Destination':'Route point';
     if(point.kind==='campground') {
       if(point.manualDayEnd)return 'End Day '+manualDayNumber(point);
       return point.sourceBackedBoatIn?'Boat-In campsite':'Campground stop';
@@ -3977,7 +3985,7 @@
       row.className='route-stop-row'+(point.kind==='campground'?' is-camp':'')+(point.manualDayEnd?' is-day-end':'')+(isPortageStep?' is-portage':'')+(canoeLeg&&!isPortageStep?' is-'+canoeLeg.type:'');
       const token=document.createElement('div');
       token.className='route-stop-token';
-      token.textContent=isPortageStep?'P'+(point.portageNumber||portage?.number||'?'):index===0?'S':point.manualDayEnd?'D'+manualDayNumber(point):index===route.points.length-1?'D':point.kind==='campground'?'C':String(index);
+      token.textContent=isPortageStep?'P'+(point.portageNumber||portage?.number||'?'):index===0?'S':point.manualDayEnd?'D'+manualDayNumber(point):(index===route.points.length-1&&route.reviewing&&point.kind!=='water-checkpoint')?'D':point.kind==='campground'?'C':String(index);
       const textWrap=document.createElement('button');
       textWrap.type='button';
       textWrap.className='route-stop-text';
@@ -4011,7 +4019,9 @@
               ? '+'+canoeLeg.miles.toFixed(1)+' mi '+(canoeLeg.type==='portage'?'portage':'paddle')+(canoeLeg.officialPortage?' · NPS #'+canoeLeg.officialPortage.number:'')+' · '+d.total_miles.toFixed(1)+' mi trip'
               : waterPending
                 ? (route.smartState==='water-fallback'?'water-only route blocked':'verifying water-only route')
-                : '+'+d.leg_miles.toFixed(1)+(route.mode==='hike'?' mi leg':' mi water')+' · '+d.total_miles.toFixed(1)+' mi total';
+                : '+'+d.leg_miles.toFixed(1)+(route.mode==='hike'?' mi leg':' mi water')
+                  +(route.mode==='paddle'?' · ~'+formatDuration(d.leg_miles/Math.max(.5,paddlePaceSpeed())):'')
+                  +' · '+d.total_miles.toFixed(1)+' mi total';
       }
       textWrap.addEventListener('click',()=>{
         map.flyTo([point.lat,point.lng],Math.max(map.getZoom(),13));
@@ -4097,7 +4107,7 @@
           if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
           const index=nearestControlSegmentIndex(event.latlng);
           rememberRouteEdit('add shaping point');
-          route.points.splice(index,0,{lat:event.latlng.lat,lng:event.latlng.lng,label:`Via ${index}`,kind:'map-point'});
+          route.points.splice(index,0,{lat:event.latlng.lat,lng:event.latlng.lng,label:`Water checkpoint ${index+1}`,kind:'water-checkpoint'});
           reroute();
           status('Shaping point added to the route. Keep clicking to refine the trip.');
         });
@@ -4144,7 +4154,7 @@
       const meta=document.createElement('div');meta.className='popup-meta';
       meta.textContent=point.kind==='official-portage-landing'
         ? routePointRole(point,index,route.points.length)+(point.portageRole==='exit'&&d.resolved?' · '+d.total_miles.toFixed(1)+' mi trip total':'')
-        : routePointRole(point,index,route.points.length)+(index?(pendingWater?' · route distance pending water-only verification':(' · +'+d.leg_miles.toFixed(1)+(route.mode==='hike'?' mi':' mi water')+' · '+d.total_miles.toFixed(1)+' mi total')):' · route start');
+        : routePointRole(point,index,route.points.length)+(index?(pendingWater?' · route distance pending water-only verification':(' · +'+d.leg_miles.toFixed(1)+(route.mode==='hike'?' mi':' mi water')+(route.mode==='paddle'?' · ~'+formatDuration(d.leg_miles/Math.max(.5,paddlePaceSpeed())):'')+' · '+d.total_miles.toFixed(1)+' mi total')):' · route start');
       popup.appendChild(meta);
       const actions=document.createElement('div');actions.className='popup-actions';
       if(point.kind==='campground'&&index>0){
@@ -4804,7 +4814,7 @@
     delete point.historyAction;
     route.reviewing=false;
     route.points.push(point);
-    reroute('Route changed. Re-run the weather analysis for the updated path.');
+    reroute('Checkpoint added. The verified route behind it stays fixed while the new leg resolves.',{preserveVerifiedPrefix:true});
     emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode,point_kind:cleanText(meta.kind||'map-point')});
     return point;
   }
@@ -5348,9 +5358,13 @@
   });
   map.on('click',event=>{
     if(!route.adding)return;
-    const label=route.points.length===0?'Map start':`Map waypoint ${route.points.length+1}`;
-    addRoutePoint(event.latlng,label,{kind:'map-point'});
-    status(label+' selected. Watercraft legs will draw only after a water-only path resolves; use a brown P# for any land crossing.');
+    const watercraft=route.mode==='canoe'||route.mode==='paddle'||route.mode==='powerboat';
+    const checkpointNumber=logicalRoutePointCount()+1;
+    const label=route.points.length===0?'Route start':watercraft?`Water checkpoint ${checkpointNumber}`:`Route point ${checkpointNumber}`;
+    addRoutePoint(event.latlng,label,{kind:watercraft?'water-checkpoint':'map-point'});
+    status(route.points.length===1
+      ? 'Start selected. Keep clicking along the water you want to travel.'
+      : label+' added. That click constrains the next water leg; distance and travel time accumulate across all verified checkpoints.');
   });
   document.addEventListener('keydown',event=>{
     const tag=event.target?.tagName?.toLowerCase();

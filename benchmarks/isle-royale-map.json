@@ -1,5 +1,5 @@
 {
-  "version": "2.5.0",
+  "version": "2.6.0",
   "updated": "2026-08-31",
   "route": "/isle-royale-map/",
   "objective": "Build the most useful source-transparent Isle Royale planning map in the Chris Izworski tool network without pretending static cartography is authoritative GIS.",
@@ -64,7 +64,7 @@
     {
       "id": "planning-flow",
       "weight": 15,
-      "target": "One full-width map is the trip-building surface. The compact criteria strip sits below the map. Build mode accepts any mappable feature at the clicked map position, open-map points, camps, and atomic P# portages. Focus mode reuses the same route bar rather than opening a second cockpit. Search/layers and current NPS state are secondary collapsed controls below the criteria strip."
+      "target": "One full-width map is the trip-building surface. Watercraft routes are built from any number of ordered checkpoints: each click constrains the next mapped-water leg and live cumulative distance/time. Previously verified checkpoint legs remain fixed when a new checkpoint is appended. The water engine supports Lake Superior coastline, inland-water polygons, and mapped waterway centerlines. Camps and mapped places can be checkpoints; P# portages remain atomic selectable transitions. Criteria sit below the map."
     },
     {
       "id": "provenance",
@@ -129,7 +129,9 @@
     "Do not duplicate the primary route-building workflow in the side/lower panel; map controls and map selections are the route builder.",
     "Do not restrict route selection to feature records that already contain a point coordinate when a line/area feature supplies a valid clicked map coordinate.",
     "Do not call the interface map-first if the map shares the primary horizontal space with a persistent planner/criteria sidebar.",
-    "Do not keep a second visible Focus Map cockpit after the route bar can perform the same trip-building actions."
+    "Do not keep a second visible Focus Map cockpit after the route bar can perform the same trip-building actions.",
+    "Do not label the newest ordinary water checkpoint as the final destination while Build mode is active.",
+    "Do not treat intermediate water clicks as an error-recovery feature only; they are a primary route-building interaction."
   ],
   "initialBuildFit": {
     "distinctSearchIntent": 24,
@@ -190,6 +192,9 @@
     "releaseTarget": 92,
     "stretchTarget": 97,
     "principles": [
+      "A real paddle route is an ordered sequence of user-chosen checkpoints, not merely a start and destination.",
+      "Intermediate water clicks are normal planning inputs: each one constrains the next leg, accumulates distance/time, and helps the paddler explore winding water.",
+      "Appending a checkpoint preserves every already-verified leg; only the unresolved tail may be recalculated.",
       "The map occupies the primary full-width surface; trip criteria sit below it rather than beside it.",
       "Focus mode reuses the same route bar; there is no second planning cockpit.",
       "The map is the construction surface; the adjacent/lower panel sets criteria and filters, not a second route-building workflow.",
@@ -202,6 +207,9 @@
       "Detailed trip information follows the route the user actually built."
     ],
     "hardGates": [
+      "Watercraft Build mode must allow an arbitrary number of ordered water checkpoints and continuously accumulate verified distance and travel time through them.",
+      "Adding checkpoint N must preserve the verified geometry and measurements for checkpoints 1 through N-1 rather than clearing and rebuilding the whole route.",
+      "The water router must understand both Lake Superior coastline and mapped inland-water/waterway geometry; coastline-only routing is insufficient for Isle Royale canoe planning.",
       "The primary layout must be full-width map first, criteria below; do not put trip criteria in a competing side column.",
       "Focus Map must not reveal a second planning cockpit. The same map route bar handles Back, Finish day, Finish trip, and review actions.",
       "The visible route panel must be criteria-only: mode, pace/speed, carry workload, hours/day, departure, search and layer filters; route stops, reports, scenarios, save/export controls and weather analysis must not compete with map construction there.",
