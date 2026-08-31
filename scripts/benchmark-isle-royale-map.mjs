@@ -63,7 +63,7 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /Open this coordinate on the source map/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
 
-const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-floating-inspector-1/.test(html)
+const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-route-builder-1/.test(html)
   && !/isle-royale-map\.js\?v=20260830-19/.test(html)
   && /"source": "\/assets\/isle-royale-map\.js"/.test(vercel)
   && /"key": "Cache-Control"[\s\S]{0,120}"value": "no-store, max-age=0"/.test(vercel)
@@ -151,10 +151,21 @@ const routePlanningRuntime = /id="route-planner"/.test(html)
 const routeEditingRuntime = /function routeControlDistances/.test(js)
   && /function projectControlPointAlongPath/.test(js)
   && /function removeRoutePoint/.test(js)
-  && /mi (?:leg|water).*mi total/.test(js)
+  && /function draftRouteDistances/.test(js)
+  && /function draftRouteTotalMiles/.test(js)
+  && /function routeDisplayPoints/.test(js)
+  && /function routeIsResolved/.test(js)
+  && /const displayPath=routeDisplayPoints\(\)/.test(js)
+  && /const draftDisplay=!routeIsResolved\(\)&&displayPath\.length>=2/.test(js)
+  && /route\.line=L\.polyline\(displayPath\.map/.test(js)
+  && /Draft route · straight between selected points while mapped routing verifies/.test(js)
+  && /route-distance-draft/.test(js)
+  && /if\(path\.length<2\)return draftRouteDistances\(\)/.test(js)
+  && /mi draft total/.test(js)
   && /Remove from route/.test(js)
   && /marker\.bindPopup/.test(js)
-  && /\.route-distance/.test(html);
+  && /\.route-distance/.test(html)
+  && /\.route-distance-badge\.route-distance-draft\{/.test(html);
 
 const smartRoutingRuntime = /const trailGraph = \{/.test(js)
   && /function registerTrailGeometry/.test(js)
@@ -243,7 +254,9 @@ const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js
   && /Water route failed zero-land-crossing validation/.test(js)
   && /stats\.land_crossings!==0/.test(js)
   && /route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/.test(js)
-  && /No route line or mileage is shown until a zero-land-crossing path is validated/.test(js)
+  && /Draft route · straight between selected points while mapped routing verifies/.test(js)
+  && /route-distance-draft/.test(js)
+  && /function routeIsResolved/.test(js)
   && /route-distance-badge/.test(js)
   && /Water · .*mi/.test(js)
   && /weatherSamples/.test(waterJs)
@@ -285,9 +298,19 @@ const mapFirstRoutingRuntime = /id="explore-mode"[^>]*aria-pressed="true"/.test(
   && /id="route-mode"[^>]*>Build route/.test(html)
   && /id="route-map-guide"/.test(html)
   && /id="route-stop-list"/.test(html)
+  && /id="route-build-bar"/.test(html)
+  && /id="route-finish-build"/.test(html)
+  && /id="route-review-actions"/.test(html)
+  && /Finish &amp; review/.test(html)
   && /function addFeatureToRoute/.test(js)
   && /route\.adding&&record\.latlng/.test(js)
   && /function renderRouteStops/.test(js)
+  && /function renderRouteBuildFlow/.test(js)
+  && /function finishRouteBuild/.test(js)
+  && /function resumeRouteBuild/.test(js)
+  && /route\.reviewing=true/.test(js)
+  && /setRouteAdding\(false,\{preserveReview:true\}\)/.test(js)
+  && /route\.adding\?finishRouteBuild\(\):setRouteAdding\(true\)/.test(js)
   && /if\(!route\.adding\)return;/.test(js)
   && /routePoint\.kind==='campground'&&distanceMiles\(routePoint,point\)<\.08/.test(js)
   && /point\.sourceBackedBoatIn=Boolean\(match\.boater\)/.test(js)
@@ -427,8 +450,9 @@ if (!/speed:Number\(route\.speed\)\|\|3/.test(js) || !/hours:Number\(route\.hour
 if (!/button\.textContent=undoLabel/.test(js) || !/last\?\.fingerprint===fingerprint/.test(js)) hardFailures.push('Undo is missing action labels or no-op history deduplication');
 if (!tripPersistenceRuntime) hardFailures.push('trip persistence/handoff is missing local-only save, share-fragment restore, or resolved-route GPX export safeguards');
 if (!routeEditingRuntime) hardFailures.push('route planning is missing leg/cumulative distances or obvious stop deletion from the map/list');
-if (!/function crossingCount/.test(waterJs) || !/Water route failed final coastline validation/.test(waterJs) || !/route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/.test(js)) hardFailures.push('water routing can still display an unverified line or accept a mapped shoreline crossing');
-if (!/route-distance-badge/.test(js) || !/Water · .*mi/.test(js) || !/Calculating water distance/.test(js)) hardFailures.push('water distance is not clearly identified on the resolved route');
+if (!/id="route-finish-build"/.test(html) || !/function finishRouteBuild/.test(js) || !/route\.reviewing=true/.test(js)) hardFailures.push('route builder is missing explicit Finish & review transition before save/share/export');
+if (!/function crossingCount/.test(waterJs) || !/Water route failed final coastline validation/.test(waterJs) || !/route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/.test(js)) hardFailures.push('water routing can still promote an unverified construction sketch as a verified route or accept a mapped shoreline crossing');
+if (!/route-distance-badge/.test(js) || !/Water · .*mi/.test(js) || !/mi draft span/.test(js)) hardFailures.push('route distance is not visible during draft building and on the resolved route');
 if (/data-layer="vegetation-(?:overview|baseline|change)"|data-layer="horne-fire"/.test(html)) hardFailures.push('retired vegetation/ecology layers leaked back into the planning controls');
 if (!['geology','vegetation-detailed','vegetation-simple','vegetation-change-1996-2017','horne-fire-2021'].every(id => catalog.items.some(x => x.id === id && x.state === 'research-only'))) hardFailures.push('retired research layers are not clearly marked research-only in the source catalog');
 if (!reliefRuntime) hardFailures.push('keyless USGS relief runtime missing');
