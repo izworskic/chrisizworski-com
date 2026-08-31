@@ -6,6 +6,8 @@ const root = path.resolve(import.meta.dirname, "..");
 const read = (rel) => readFile(path.join(root, rel), "utf8");
 const contract = JSON.parse(await read("benchmarks/national-outdoor-tools.json"));
 const cropData = JSON.parse(await read("public/data/national-planting-crops.json"));
+const riverIndex = JSON.parse(await read("public/data/national-usgs-streamflow-sites.json"));
+const riverIndexGenerator = await read("scripts/generate-national-usgs-streamflow-index.mjs");
 const shared = await read("lib/national-outdoor.js");
 const client = await read("public/assets/national-tools.js");
 const dashboard = await read("public/assets/national-dashboard.js");
@@ -84,11 +86,13 @@ check("Auroral oval does not become fake sighting probability", /not a sighting 
 check("National entry pages cache-bust shared runtime assets", Object.values(pages).every((body) => /national-tools\.js\?v=[^"']+/.test(body)), 3);
 
 check("Rivers preserve same-date historical percentiles in optional context", /dailyStatistics/.test(apis.riverContext) && /p10,p25,p50,p75,p90/i.test(apis.riverContext) && /historical_daily_flow/.test(pages.rivers), 5);
-check("River core discovers gauges through USGS Site Service metadata", /nwis\/site/.test(apis.rivers) && /parseSiteRdb/.test(apis.rivers) && /hasDataTypeCd/.test(apis.rivers), 5);
-check("River bbox coordinates are rounded to USGS seven-decimal limit", /roundCoord/.test(apis.rivers) && /1e7/.test(apis.rivers) && /bbox/.test(apis.rivers), 5);
-check("River bbox search respects USGS 25 square-degree cap", /SEARCH_SPANS/.test(apis.rivers) && /2\.4/.test(apis.rivers) && /box\.product > 25\.000001/.test(apis.rivers), 4);
-check("River Site Service windows execute in parallel", /Promise\.all\(SEARCH_SPANS\.map/.test(apis.rivers) && /siteSearch/.test(apis.rivers), 5);
-check("River exact-site observation fetch is a separate fast request", /u\.searchParams\.set\("sites"/.test(apis.rivers) && /fetchJson\(u, 900\)/.test(apis.rivers), 5);
+check("River discovery index has national depth", riverIndex.site_count >= 9000 && Array.isArray(riverIndex.sites) && riverIndex.sites.length === riverIndex.site_count, 5, String(riverIndex.site_count));
+check("River discovery index is source-backed active USGS streamflow inventory", riverIndex.source_name === "USGS Site Service" && /waterservices\.usgs\.gov\/nwis\/site/.test(riverIndex.source_url || "") && riverIndex.criteria?.siteType === "ST" && riverIndex.criteria?.siteStatus === "active" && riverIndex.criteria?.hasDataTypeCd === "iv" && riverIndex.criteria?.parameterCd === "00060", 5);
+check("River index generator preserves USGS source criteria", /nwis\/site/.test(riverIndexGenerator) && /siteStatus.*active/s.test(riverIndexGenerator) && /parameterCd.*00060/s.test(riverIndexGenerator) && /siteType.*ST/s.test(riverIndexGenerator), 4);
+check("River core uses local index for nearest-gauge discovery", /national-usgs-streamflow-sites\.json/.test(apis.rivers) && /function nearestSites/.test(apis.rivers) && /distance_miles/.test(apis.rivers), 5);
+check("River core has no live gauge-discovery network call", !/const\s+SITE\s*=/.test(apis.rivers) && !/new URL\([^)]*nwis\/site/.test(apis.rivers) && !/bBox/.test(apis.rivers) && !/siteSearch/.test(apis.rivers), 6);
+check("River live request is exact-site USGS IV only", /nwis\/iv/.test(apis.rivers) && /searchParams\.set\("sites"/.test(apis.rivers) && /searchParams\.set\("period", "P1D"\)/.test(apis.rivers), 5);
+check("River exact-site observation request has bounded timeout", /fetchJson\(url, 2500\)/.test(apis.rivers), 4);
 check("River core excludes historical and NOAA network calls", !/nwis\/stat/.test(apis.rivers) && !/api\.water\.noaa\.gov/.test(apis.rivers) && /context_pending/.test(apis.rivers), 5);
 check("River optional context carries USGS history and NOAA NWPS", /nwis\/stat/.test(apis.riverContext) && /api\.water\.noaa\.gov/.test(apis.riverContext) && /usgsId/.test(apis.riverContext) && /stageflow\/forecast/.test(apis.riverContext), 5);
 check("River UI renders core before loading optional context", /render\(d,loc,Boolean\(d\.context_pending\)\)/.test(pages.rivers) && /if\(d\.context_pending\)loadContext\(d,loc\)/.test(pages.rivers), 5);
@@ -133,7 +137,7 @@ check("Location admission weights total 100", admissionWeight === 100 && admissi
 check("Location admission has hard vetoes and critical minimums", Array.isArray(admission.hardVetoes) && admission.hardVetoes.length >= 5 && admission.criticalMinimums?.cannibalizationSafety === 10, 4);
 check("Saved places are explicitly not fake alerts", contract.phase3?.alerts?.status === "deferred-until-real-delivery-channel", 4);
 const masterPrompt = await read("docs/NATIONAL_OUTDOOR_TOOLS_MASTER_PROMPT.md");
-check("Master prompt remains the build doctrine", masterPrompt.includes("## Loss function") && masterPrompt.includes("## Phase 3 platform interpretation") && masterPrompt.includes("Core decision data must not wait on optional enrichment"), 4);
+check("Master prompt remains the build doctrine", masterPrompt.includes("## Loss function") && masterPrompt.includes("## Phase 3 platform interpretation") && masterPrompt.includes("Core decision data must not wait on optional enrichment") && masterPrompt.includes("Slow discovery may be precomputed"), 4);
 
 const score = Math.round((rawScore / maxPoints) * 100);
 const summary = { score, rawScore, maxPoints, failures, hardVetoes: contract.hardVetoes };

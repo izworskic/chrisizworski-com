@@ -2,6 +2,7 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const rivers=require('../api/national-rivers.js')._test;
 const context=require('../api/national-river-context.js')._test;
+const index=require('../public/data/national-usgs-streamflow-sites.json');
 
 function series({id='04157000',name='SAGINAW RIVER AT SAGINAW, MI',lat=43.43,lon=-83.94,code='00060',values=[['1000','2026-08-31T12:00:00.000-04:00']] }={}){
   return {
@@ -15,35 +16,34 @@ function series({id='04157000',name='SAGINAW RIVER AT SAGINAW, MI',lat=43.43,lon
   };
 }
 
-test('USGS bbox search stays under 25 square degrees and at seven decimals or fewer',()=>{
-  for(const lat of [0,44.276408,71,-71]){
-    for(const lon of [-179,-84.238613,0,179]){
-      for(const span of rivers.SEARCH_SPANS){
-        const box=rivers.bbox(lat,lon,span);
-        assert.ok(box.product<=25.000001,JSON.stringify({lat,lon,span,box}));
-        for(const value of box.value.split(',')){
-          const decimals=(String(value).split('.')[1]||'').length;
-          assert.ok(decimals<=7,`${box.value} has >7 decimals`);
-        }
-      }
-    }
+test('local USGS streamflow index is national, source-backed and internally consistent',()=>{
+  assert.equal(index.source_name,'USGS Site Service');
+  assert.match(index.source_url,/waterservices\.usgs\.gov\/nwis\/site/);
+  assert.equal(index.criteria.siteType,'ST');
+  assert.equal(index.criteria.siteStatus,'active');
+  assert.equal(index.criteria.hasDataTypeCd,'iv');
+  assert.equal(index.criteria.parameterCd,'00060');
+  assert.ok(Date.parse(index.generated_at));
+  assert.ok(index.site_count>=9000,index.site_count);
+  assert.equal(index.sites.length,index.site_count);
+  assert.equal(new Set(index.sites.map(site=>site.id)).size,index.site_count);
+  for(const site of index.sites){
+    assert.ok(/^\d{5,15}$/.test(site.id),site.id);
+    assert.ok(site.name,site.id);
+    assert.ok(Number.isFinite(site.latitude)&&site.latitude>=-90&&site.latitude<=90,site.id);
+    assert.ok(Number.isFinite(site.longitude)&&site.longitude>=-180&&site.longitude<=180,site.id);
   }
-  assert.equal(rivers.bbox(44.276408,-84.238613,0.6).value,'-84.838613,43.676408,-83.638613,44.876408');
 });
 
-test('Site Service RDB parser extracts active gauge metadata without fabrication',()=>{
-  const body=[
-    '# US Geological Survey',
-    'agency_cd\tsite_no\tstation_nm\tsite_tp_cd\tdec_lat_va\tdec_long_va',
-    '5s\t15s\t50s\t7s\t16s\t16s',
-    'USGS\t04135700\tSOUTH BRANCH AU SABLE RIVER NEAR LUZERNE, MI\tST\t44.61473849\t-84.455575',
-    'USGS\t04142000\tRIFLE RIVER NEAR STERLING, MI\tST\t44.0725203\t-84.0199939'
-  ].join('\n');
-  const sites=rivers.parseSiteRdb(body);
-  assert.equal(sites.length,2);
-  assert.equal(sites[0].id,'04135700');
-  assert.equal(sites[1].name,'RIFLE RIVER NEAR STERLING, MI');
-  assert.equal(sites[1].latitude,44.0725203);
+test('West Branch Michigan nearest-gauge lookup is local and returns real nearby USGS stations',()=>{
+  const nearby=rivers.nearestSites(44.276408,-84.238613,10);
+  assert.equal(nearby.length,10);
+  assert.equal(nearby[0].id,'04152049');
+  assert.equal(nearby[1].id,'04142000');
+  assert.match(nearby[0].name,/TITTABAWASSEE RIVER AT SECORD DAM/i);
+  assert.match(nearby[1].name,/RIFLE RIVER NEAR STERLING/i);
+  assert.ok(nearby[0].distance_miles<18);
+  for(let i=1;i<nearby.length;i++)assert.ok(nearby[i].distance_miles>=nearby[i-1].distance_miles);
 });
 
 test('normalizer keeps exact-site flow, stage and temperature on one gauge',()=>{
@@ -63,7 +63,7 @@ test('normalizer keeps exact-site flow, stage and temperature on one gauge',()=>
   assert.equal(g.nwps,null);
 });
 
-test('normalizer excludes metadata-only sites that have no live discharge',()=>{
+test('normalizer excludes indexed sites that do not return a live discharge reading',()=>{
   const sites=[{id:'04157000',name:'SAGINAW RIVER',latitude:43.43,longitude:-83.94,distance_miles:2.5}];
   const payload={value:{timeSeries:[series({code:'00010'})]}};
   assert.deepEqual(rivers.normalize(payload,sites),[]);
