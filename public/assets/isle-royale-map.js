@@ -85,6 +85,15 @@
     routeSmartStatus: document.getElementById('route-smart-status'),
     routeStopList: document.getElementById('route-stop-list'),
     routeSummary: document.getElementById('route-summary'),
+    routeBuildBar: document.getElementById('route-build-bar'),
+    routeBuildPhase: document.getElementById('route-build-phase'),
+    routeBuildMetrics: document.getElementById('route-build-metrics'),
+    routeFinishBuild: document.getElementById('route-finish-build'),
+    routeReviewActions: document.getElementById('route-review-actions'),
+    routeReviewEdit: document.getElementById('route-review-edit'),
+    routeReviewSave: document.getElementById('route-review-save'),
+    routeReviewShare: document.getElementById('route-review-share'),
+    routeReviewGpx: document.getElementById('route-review-gpx'),
     routeIntelligence: document.getElementById('route-intelligence'),
     routeScenarios: document.getElementById('route-scenarios'),
     routeItinerary: document.getElementById('route-itinerary'),
@@ -446,6 +455,7 @@
   const osmSeen = new Set();
   const route = {
     adding:false,
+    reviewing:false,
     points:[],
     resolvedPoints:[],
     line:null,
@@ -1951,10 +1961,91 @@
     return best||{along_miles:0,segment_index:first,distance_miles:Infinity};
   }
 
+  function routeIsResolved() {
+    if(route.points.length<2)return false;
+    if(route.mode==='hike')return route.smartState==='trail-snapped'||route.smartState==='trail-fallback';
+    if(route.mode==='canoe')return route.smartState==='canoe-aware';
+    return route.smartState==='water-aware';
+  }
+
+  function draftRouteDistances() {
+    if(!route.points.length)return [];
+    const out=[{leg_miles:0,total_miles:0,resolved:false,draft:true}];
+    let total=0;
+    for(let i=1;i<route.points.length;i++) {
+      const leg=distanceMiles(route.points[i-1],route.points[i]);
+      total+=leg;
+      out.push({leg_miles:leg,total_miles:total,resolved:false,draft:true});
+    }
+    return out;
+  }
+
+  function draftRouteTotalMiles() {
+    const rows=draftRouteDistances();
+    return rows.length?rows[rows.length-1].total_miles:0;
+  }
+
+  function routeDisplayPoints() {
+    const resolved=routePathPoints();
+    return resolved.length>=2?resolved:route.points;
+  }
+
+  function renderRouteBuildFlow() {
+    const bar=els.routeBuildBar;
+    if(!bar)return;
+    const active=route.adding||route.reviewing;
+    bar.hidden=!active;
+    if(!active)return;
+    const pointCount=route.points.length;
+    const resolved=routeIsResolved();
+    const draftMiles=draftRouteTotalMiles();
+    const routedMiles=resolved?routeTotalMiles():0;
+    if(els.routeBuildPhase)els.routeBuildPhase.textContent=route.reviewing?'Route review':'Building route';
+    if(els.routeBuildMetrics) {
+      if(pointCount===0)els.routeBuildMetrics.textContent='Tap the map or a campground to set the start.';
+      else if(pointCount===1)els.routeBuildMetrics.textContent='Start set. Add the next point to draw the first leg.';
+      else if(resolved) {
+        const qualifier=route.mode==='canoe'?'routed trip':route.mode==='hike'?'mapped route':'verified route';
+        els.routeBuildMetrics.textContent=pointCount+' points · '+routedMiles.toFixed(1)+' mi '+qualifier;
+      } else {
+        const state=route.smartState==='water-fallback'||route.smartState==='canoe-fallback'
+          ? 'routing unavailable — adjust points or leg type'
+          : 'verifying route…';
+        els.routeBuildMetrics.textContent=pointCount+' points · '+draftMiles.toFixed(1)+' mi draft span · '+state;
+      }
+    }
+    if(els.routeFinishBuild) {
+      els.routeFinishBuild.hidden=route.reviewing;
+      els.routeFinishBuild.disabled=pointCount<2;
+    }
+    if(els.routeReviewActions)els.routeReviewActions.hidden=!route.reviewing;
+    if(els.routeReviewGpx)els.routeReviewGpx.disabled=!routeIsResolved();
+  }
+
+  function finishRouteBuild() {
+    if(route.points.length<2) {
+      status('Add at least a start and one destination before finishing the route.');
+      return;
+    }
+    route.reviewing=true;
+    setRouteAdding(false,{preserveReview:true});
+    renderRoute();
+    status(routeIsResolved()
+      ? 'Route build finished. Review the route distance and stops, then save, share or export GPX.'
+      : 'Route build finished. Review your points while the mapped route finishes resolving; GPX unlocks when route geometry is ready.');
+    emitEvent('isle_royale_route_review',{point_count:route.points.length,mode:route.mode,resolved:routeIsResolved()});
+  }
+
+  function resumeRouteBuild() {
+    route.reviewing=false;
+    setRouteAdding(true);
+    status('Route editing resumed. Keep clicking the map, campsites, or route line to extend or reshape the trip.');
+  }
+
   function routeControlDistances() {
     const path=routePathPoints();
     if(!route.points.length)return [];
-    if(path.length<2)return route.points.map(()=>({leg_miles:0,total_miles:0,resolved:false}));
+    if(path.length<2)return draftRouteDistances();
     const cumulative=cumulativeFor(path),total=cumulative[cumulative.length-1]||0;
     const projected=[];
     let segment=0,lastAlong=0;
@@ -2821,7 +2912,7 @@
       return;
     }
     if(route.smartState==='water-loading'||route.smartState==='water-pending') {
-      els.routeSmartStatus.innerHTML='<strong>Building water route:</strong> checking mapped coastline. No route line or mileage is shown until a zero-land-crossing path is validated.';
+      els.routeSmartStatus.innerHTML='<strong>Building water route:</strong> the dashed draft line and draft span stay visible while mapped coastline routing verifies the actual water path.';
       return;
     }
     if(route.smartState==='water-aware') {
@@ -2830,7 +2921,7 @@
       return;
     }
     if(route.smartState==='water-fallback') {
-      els.routeSmartStatus.textContent=`Water route unavailable (${route.waterReason||'unknown source issue'}). No route line or mileage is shown because a land-safe path could not be verified.`;
+      els.routeSmartStatus.textContent=`Water route unavailable (${route.waterReason||'unknown source issue'}). The dashed draft line remains only as a point-to-point construction sketch; adjust the route before GPX export.`;
       return;
     }
     els.routeSmartStatus.innerHTML='<strong>Editable water route:</strong> drag S / D / numbered handles to reshape it. Tap the route line to add another shaping point.';
@@ -3258,11 +3349,11 @@
       textWrap.querySelector('.route-distance').textContent=index===0
         ? '0.0 mi start'
         : canoePending
-          ? 'canoe leg calculating…'
+          ? '+'+d.leg_miles.toFixed(1)+' mi draft · '+d.total_miles.toFixed(1)+' mi draft total · resolving canoe leg'
           : route.mode==='canoe'&&canoeLeg
             ? '+'+canoeLeg.miles.toFixed(1)+' mi '+(canoeLeg.type==='portage'?'portage':'paddle')+(canoeLeg.officialPortage?' · NPS #'+canoeLeg.officialPortage.number:'')+' · '+d.total_miles.toFixed(1)+' mi trip'
             : waterPending
-              ? (route.smartState==='water-fallback'?'water distance unavailable':'water distance routing…')
+              ? '+'+d.leg_miles.toFixed(1)+' mi draft · '+d.total_miles.toFixed(1)+' mi draft total · '+(route.smartState==='water-fallback'?'routing unavailable':'verifying water route')
               : '+'+d.leg_miles.toFixed(1)+(route.mode==='hike'?' mi leg':' mi water')+' · '+d.total_miles.toFixed(1)+' mi total';
       textWrap.addEventListener('click',()=>{
         map.flyTo([point.lat,point.lng],Math.max(map.getZoom(),13));
@@ -3307,17 +3398,20 @@
     route.markers=[];
     route.line=null;
     const path=routePathPoints();
+    const displayPath=routeDisplayPoints();
+    const draftDisplay=path.length<2&&displayPath.length>=2;
     buildRouteItinerary(path);
 
-    if(path.length>=2) {
-      route.line=L.polyline(path.map(p=>[p.lat,p.lng]),{
+    if(displayPath.length>=2) {
+      route.line=L.polyline(displayPath.map(p=>[p.lat,p.lng]),{
         pane:'routePane',
-        color:route.mode==='hike'&&route.smartState==='trail-snapped'?'#8b4f2d':'#173d36',
-        weight:route.mode==='hike'?5:4,
-        opacity:.94,
-        dashArray:(route.mode==='hike'&&route.smartState==='trail-snapped')||route.smartState==='water-aware'?null:'9 6',
+        color:draftDisplay?'#a46a2c':route.mode==='hike'&&route.smartState==='trail-snapped'?'#8b4f2d':'#173d36',
+        weight:draftDisplay?4:(route.mode==='hike'?5:4),
+        opacity:draftDisplay?.86:.94,
+        dashArray:draftDisplay?'8 7':((route.mode==='hike'&&route.smartState==='trail-snapped')||route.smartState==='water-aware'?null:'9 6'),
         interactive:route.mode!=='hike'
       }).addTo(routeLayerGroup);
+      if(draftDisplay)route.line.bindTooltip('Draft route · straight between selected points while mapped routing verifies',{sticky:true});
       if(route.mode!=='hike') {
         route.line.on('click',event=>{
           if(!route.adding)return;
@@ -3366,7 +3460,7 @@
       const title=document.createElement('div');title.className='popup-title';title.textContent=point.label||('Waypoint '+(index+1));popup.appendChild(title);
       const d=controlDistances[index]||{leg_miles:0,total_miles:0,resolved:false};
       const pendingWater=route.mode!=='hike'&&route.points.length>=2&&!d.resolved;
-      const meta=document.createElement('div');meta.className='popup-meta';meta.textContent=routePointRole(point,index,route.points.length)+(index?(pendingWater?' · water distance pending':(' · +'+d.leg_miles.toFixed(1)+(route.mode==='hike'?' mi':' mi water')+' · '+d.total_miles.toFixed(1)+' mi total')):' · route start');popup.appendChild(meta);
+      const meta=document.createElement('div');meta.className='popup-meta';meta.textContent=routePointRole(point,index,route.points.length)+(index?(pendingWater?(' · +'+d.leg_miles.toFixed(1)+' mi draft · '+d.total_miles.toFixed(1)+' mi draft total'):(' · +'+d.leg_miles.toFixed(1)+(route.mode==='hike'?' mi':' mi water')+' · '+d.total_miles.toFixed(1)+' mi total')):' · route start');popup.appendChild(meta);
       const actions=document.createElement('div');actions.className='popup-actions';
       if(point.kind==='campground'&&index>0){
         const day=document.createElement('button');day.type='button';day.className='popup-action';day.textContent=point.manualDayEnd?'Clear day end':'End day here';day.addEventListener('click',()=>{setCampDayEnd(point,!point.manualDayEnd);map.closePopup();});actions.appendChild(day);
@@ -3385,7 +3479,7 @@
       route.markers.push(marker);
     });
 
-    if(path.length>=2&&(route.mode==='hike'||route.smartState==='water-aware')) {
+    if(path.length>=2&&(route.mode==='hike'||route.smartState==='water-aware'||route.smartState==='canoe-aware')) {
       const cumulative=routeCumulative();
       for(let index=1;index<controlDistances.length;index++) {
         const d=controlDistances[index],previous=controlDistances[index-1];
@@ -3393,7 +3487,7 @@
         const midpoint=(Number(previous?.total_miles)||0)+d.leg_miles/2;
         const p=interpolateRoutePoint(midpoint,cumulative);
         if(!p)continue;
-        const canoeLeg=route.mode==='canoe'?route.mixedLegs[i-1]||null:null;
+        const canoeLeg=route.mode==='canoe'?route.mixedLegs[index-1]||null:null;
         const label=canoeLeg
           ? (canoeLeg.type==='portage'?'Portage · ':'Paddle · ')+canoeLeg.miles.toFixed(1)+' mi'
           : (route.mode==='hike'?'': 'Water · ')+d.leg_miles.toFixed(1)+' mi';
@@ -3415,6 +3509,7 @@
 
     renderRouteStops();
     renderSmartStatus();
+    renderRouteBuildFlow();
     const miles=routeTotalMiles();
     const hours=routeHours();
     const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
@@ -3424,12 +3519,12 @@
         : 'No route yet.';
       els.routeWeatherButton.disabled=true;
     } else if(route.mode==='canoe'&&route.smartState!=='canoe-aware') {
-      els.routeSummary.innerHTML='<strong>Calculating paddle + portage legs…</strong> Each point-to-point leg will be measured and added to the trip total.';
+      els.routeSummary.innerHTML='<strong>'+draftRouteTotalMiles().toFixed(1)+' mi draft span.</strong> Paddle + portage routing is resolving each leg; the dashed draft line is not a navigation route.';
       els.routeWeatherButton.disabled=true;
     } else if(route.mode!=='hike'&&route.mode!=='canoe'&&route.smartState!=='water-aware') {
       els.routeSummary.innerHTML=route.smartState==='water-fallback'
-        ? '<strong>Water distance unavailable.</strong> No line is drawn because a zero-land-crossing route could not be verified.'
-        : '<strong>Calculating water distance…</strong> The route line appears only after coastline validation.';
+        ? '<strong>'+draftRouteTotalMiles().toFixed(1)+' mi draft span.</strong> A zero-land-crossing water route could not be verified. Keep the selected points visible and adjust them before export.'
+        : '<strong>'+draftRouteTotalMiles().toFixed(1)+' mi draft span.</strong> The dashed line connects your selected points immediately while shoreline routing verifies the actual water distance.';
       els.routeWeatherButton.disabled=true;
     } else if(route.mode==='canoe') {
       const totals=canoeTotals();
@@ -3800,24 +3895,29 @@
     emitEvent('isle_royale_map_focus',{active:focused,mode:route.mode,building:route.adding});
   }
 
-  function setRouteAdding(active) {
+  function setRouteAdding(active,{preserveReview=false}={}) {
     route.adding=Boolean(active);
+    if(route.adding)route.reviewing=false;
+    else if(!preserveReview)route.reviewing=false;
     document.body.classList.toggle('route-building',route.adding);
-    els.routeAddButton.textContent=route.adding?'Done building':'Build on map';
+    els.routeAddButton.textContent=route.adding?'Finish & review':'Start building';
     els.routeModeButton.textContent='Build route';
     els.routeAddButton.setAttribute('aria-pressed',String(route.adding));
     els.routeModeButton.setAttribute('aria-pressed',String(route.adding));
     els.exploreModeButton?.setAttribute('aria-pressed',String(!route.adding));
     if(els.routeMapGuide) {
       els.routeMapGuide.innerHTML=route.adding
-        ? '<strong>Build route:</strong> click the map for waypoints, click campsites to add trip stops, click the route line to shape it. Choose Explore when finished.'
-        : '<strong>Explore:</strong> click features for details. Switch to Build route when you want map clicks to edit the trip.';
+        ? '<strong>Build route:</strong> every click draws a draft leg immediately. Keep adding the complete trip, then choose <strong>Finish & review</strong>.'
+        : route.reviewing
+          ? '<strong>Review route:</strong> inspect the route, distance and stops. Edit again or save, share and export when ready.'
+          : '<strong>Explore:</strong> click features for details. Switch to Build route when you want map clicks to edit the trip.';
     }
-    status(route.adding
+    if(!preserveReview)status(route.adding
       ? route.points.length
-        ? 'Build route is on. Click the map, campsites, or route line to keep extending the trip.'
+        ? 'Build route is on. Keep clicking to extend the complete trip; a draft line and running distance appear immediately.'
         : 'Build route is on. Click the map or a campsite for your route start.'
       : 'Explore mode. Map clicks inspect features without changing the trip.');
+    renderRouteBuildFlow();
     syncCockpitControls();
     resizePlanningMap();
   }
@@ -3885,6 +3985,7 @@
     route.itinerary=null;
     route.itineraryWeather=null;
     route.smartState='idle';
+    route.reviewing=false;
     setRouteAdding(false);
     clearRouteWeather();
     renderRoute();
@@ -4288,8 +4389,13 @@
     clearRouteWeather('Departure changed. Re-run route weather for the new time.');
     renderRoute();
   });
-  els.routeAddButton.addEventListener('click',()=>setRouteAdding(!route.adding));
+  els.routeAddButton.addEventListener('click',()=>route.adding?finishRouteBuild():setRouteAdding(true));
   els.routeModeButton.addEventListener('click',()=>setRouteAdding(true));
+  els.routeFinishBuild?.addEventListener('click',finishRouteBuild);
+  els.routeReviewEdit?.addEventListener('click',resumeRouteBuild);
+  els.routeReviewSave?.addEventListener('click',saveTripToDevice);
+  els.routeReviewShare?.addEventListener('click',copyTripShareLink);
+  els.routeReviewGpx?.addEventListener('click',exportRouteGpx);
   els.exploreModeButton?.addEventListener('click',()=>setRouteAdding(false));
   els.routeReverse.addEventListener('click',reverseRoute);
   els.routeUndo.addEventListener('click',undoRoutePoint);
@@ -4297,7 +4403,7 @@
   els.routeClear.addEventListener('click',clearRoute);
   els.routeWeatherButton.addEventListener('click',analyzeRouteWeather);
   els.cockpitExit?.addEventListener('click',()=>setMapFocus(false));
-  els.cockpitBuild?.addEventListener('click',()=>setRouteAdding(!route.adding));
+  els.cockpitBuild?.addEventListener('click',()=>route.adding?finishRouteBuild():setRouteAdding(true));
   els.cockpitUndo?.addEventListener('click',undoRouteEdit);
   els.cockpitRedo?.addEventListener('click',redoRouteEdit);
   els.cockpitReverse?.addEventListener('click',reverseRoute);
@@ -4353,7 +4459,10 @@
       setMapFocus(false);
       return;
     }
-    if(route.adding)setRouteAdding(false);
+    if(route.adding) {
+      if(route.points.length>=2)finishRouteBuild();
+      else setRouteAdding(false);
+    }
   });
 
   document.getElementById('fit-island').addEventListener('click', () => map.fitBounds(CONFIG.islandBounds,{padding:[18,18]}));
