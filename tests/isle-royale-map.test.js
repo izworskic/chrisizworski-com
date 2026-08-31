@@ -166,6 +166,8 @@ test('campground cards combine official NPS capacity with only explicit mapped s
   assert.match(js, /function findCampgroundProfile/);
   assert.match(js, /function loadCampSiteIdentifiers/);
   assert.match(js, /function campgroundSiteIdentifierLabel/);
+  assert.match(js, /tourism"~"camp_site\|camp_pitch"/);
+  assert.match(js, /Numbered campsite \/ pitch/);
   assert.match(js, /function campSiteIdentifiersFor/);
   assert.match(js, /Numbered sites & shelters/);
   assert.match(js, /This may not be a complete site inventory/);
