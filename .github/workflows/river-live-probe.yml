@@ -44,27 +44,13 @@ jobs:
           const round7=n=>Math.round(n*1e7)/1e7;
           for(const span of [0.6,1.5,2.4]){
             const west=round7(Math.max(-180,lon-span)),east=round7(Math.min(180,lon+span)),south=round7(Math.max(-90,lat-span)),north=round7(Math.min(90,lat+span));
-            const u=new URL('https://waterservices.usgs.gov/nwis/iv/');
-            u.searchParams.set('format','json');
-            u.searchParams.set('bBox',`${west},${south},${east},${north}`);
-            u.searchParams.set('siteType','ST');
-            u.searchParams.set('siteStatus','active');
-            u.searchParams.set('parameterCd','00060');
-            u.searchParams.set('period','PT2H');
-            const result=await probe('USGS DISCOVERY span '+span,u.toString());
-            try{
-              const data=JSON.parse(result.text);
-              const ids=[...new Set((data.value?.timeSeries||[]).map(s=>s.sourceInfo?.siteCode?.[0]?.value).filter(Boolean))];
-              console.log('DISCOVERED_IDS',ids.slice(0,20).join(','));
-              if(ids.length){
-                const detail=new URL('https://waterservices.usgs.gov/nwis/iv/');
-                detail.searchParams.set('format','json');
-                detail.searchParams.set('sites',ids.slice(0,10).join(','));
-                detail.searchParams.set('parameterCd','00060,00065,00010');
-                detail.searchParams.set('period','P1D');
-                detail.searchParams.set('siteStatus','all');
-                await probe('USGS DETAIL span '+span,detail.toString());
-              }
-            }catch{}
+            const site=new URL('https://waterservices.usgs.gov/nwis/site/');
+            site.searchParams.set('format','rdb');
+            site.searchParams.set('bBox',`${west},${south},${east},${north}`);
+            site.searchParams.set('siteType','ST');
+            site.searchParams.set('siteStatus','active');
+            site.searchParams.set('hasDataTypeCd','iv');
+            site.searchParams.set('parameterCd','00060');
+            await probe('USGS SITE span '+span,site.toString());
           }
           NODE
