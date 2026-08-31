@@ -1,0 +1,38 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-31",
+  "purpose": "Prevent national city/state/river/crop URL expansion until a candidate earns indexability through measured demand and distinct local utility.",
+  "minimumScore": 80,
+  "weights": {
+    "searchEvidence": 25,
+    "uniqueLocalData": 20,
+    "decisionUsefulness": 20,
+    "repeatUsePotential": 10,
+    "networkFit": 10,
+    "cannibalizationSafety": 10,
+    "dataReliability": 5
+  },
+  "hardVetoes": [
+    "no-measured-query-or-clearly-documented-user-demand",
+    "duplicates-an-existing-michigan-or-national-canonical-intent",
+    "local-output-is-only-template-copy-without-materially-local-data",
+    "source-freshness-or-coverage-is-not-reliable-enough-for-the-claim",
+    "page-exists-mainly-to-capture-a-city-state-zip-keyword-variant"
+  ],
+  "criticalMinimums": {
+    "searchEvidence": 15,
+    "uniqueLocalData": 14,
+    "decisionUsefulness": 14,
+    "cannibalizationSafety": 10,
+    "dataReliability": 4
+  },
+  "requiredEvidence": [
+    "query_or_impression_evidence",
+    "distinct_decision_statement",
+    "local_data_fields",
+    "canonical_owner_check",
+    "internal_network_entry_and_exit",
+    "measurement_target"
+  ],
+  "rule": "A score of 80 is necessary but not sufficient. Any hard veto blocks indexing. Until admitted, location state remains query/local-storage state on the canonical tool URL."
+}

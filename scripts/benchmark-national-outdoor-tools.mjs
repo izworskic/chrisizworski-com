@@ -7,6 +7,10 @@ const read = (rel) => readFile(path.join(root, rel), "utf8");
 const contract = JSON.parse(await read("benchmarks/national-outdoor-tools.json"));
 const cropData = JSON.parse(await read("public/data/national-planting-crops.json"));
 const shared = await read("lib/national-outdoor.js");
+const client = await read("public/assets/national-tools.js");
+const dashboard = await read("public/assets/national-dashboard.js");
+const nationalCss = await read("public/assets/national-tools.css");
+const admission = JSON.parse(await read("benchmarks/national-location-admission.json"));
 const sitemap = await read("public/sitemap.xml");
 const registry = JSON.parse(await read("benchmarks/tool-network-registry.json"));
 const pages = {
@@ -39,6 +43,7 @@ const lossTotal = Object.entries(contract.lossFunction)
   .reduce((sum, [, value]) => sum + value, 0);
 check("Loss function totals 100", lossTotal === 100 && contract.lossFunction.total === 100, 5, String(lossTotal));
 check("Phase 2 adds no indexable route family", contract.indexPolicy?.phase2AddsIndexableRoutes === false, 4);
+check("Phase 3 adds no indexable route family", contract.indexPolicy?.phase3AddsIndexableRoutes === false, 4);
 
 const routes = [
   "/national-tools/",
@@ -63,6 +68,9 @@ for (const [name, body] of Object.entries(pages)) {
 
 check("Shared data helpers expose freshness contract", /sourceMeta/.test(shared) && /stale_after_minutes/.test(shared) && /source_status/.test(shared), 5);
 check("Location object includes timezone context", /timeZone/.test(apis.geocode) && /api\.weather\.gov\/points/.test(apis.geocode), 3);
+check("National client persists saved places locally", /PLACES_STORE/.test(client) && /savedPlaces/.test(client) && /savePlace/.test(client), 4);
+check("Location continuity crosses national tools without new canonicals", /function propagate/.test(client) && /withQuery/.test(client) && /a\[href\^="\/national-tools\/"\]/.test(client), 4);
+check("Decision times can render in searched timezone", /fmtInZone/.test(client) && /timeZone/.test(client), 3);
 
 check("Aurora has best dark weather window", /bestCloudWindow/.test(apis.aurora) && /best_dark_window/.test(apis.aurora) && /Best weather window after dark/.test(pages.aurora), 5);
 check("Aurora separates Kp from visibility", /Kp is not a local visibility forecast|Kp is not a local visibility probability|Kp is not a local forecast/.test(pages.aurora + apis.aurora), 4);
@@ -89,13 +97,26 @@ check("Fall weather is explicitly separate", /do not mathematically shift the hi
 check("Fall beta rejects fake current color", /not an observed 2026 leaf-color reading/.test(apis.fall) && /fake peak percentage|fake peak|invented/i.test(pages.fall), 5);
 check("Fall exposes variability confidence", /median_absolute_deviation_days/.test(apis.fall) && /confidence/.test(apis.fall), 3);
 
+check("Hub is a live multi-signal decision surface", /national-dashboard\.js/.test(pages.hub) && /Your outdoor desk/.test(pages.hub) && /data-desk-grid/.test(pages.hub), 5);
+check("Dashboard loads all five platform inputs independently", ["/api/national-aurora","/api/national-rivers","/api/national-frost","/api/national-fall-color","/data/national-planting-crops.json"].every((needle) => dashboard.includes(needle)) && /getJson/.test(dashboard), 5);
+check("Dashboard orders by decision urgency, not a safety score", /sort\(function\(a,b\)\{return b\.priority-a\.priority\}/.test(dashboard) && /not a universal safety score/i.test(pages.hub), 4);
+check("Dashboard shows independent source degradation", /if\(!result\.ok\)/.test(dashboard) && /platform inputs available/.test(dashboard), 4);
+check("Hub exposes saved places without calling them alerts", /Saved places/.test(pages.hub) && /Save this place/.test(pages.hub) && !/alert me|notify me/i.test(pages.hub), 4);
+check("River spatial context is keyless and fail-soft", /openstreetmap\.org\/export\/embed/.test(pages.rivers) && /orientation context only/.test(pages.rivers) && /primary-gauge/.test(pages.rivers), 4);
+check("Phase 3 responsive decision UI exists", /decision-grid/.test(nationalCss) && /river-map-shell/.test(nationalCss), 2);
+
 check("All APIs are noindex", Object.values(apis).every((x) => /X-Robots-Tag",\s*"noindex, nofollow"/.test(x)), 5);
 check("Michigan handoffs remain", pages.aurora.includes("/northern-lights-michigan/") && pages.frost.includes("/michigan-frost-dates/") && pages.planting.includes("/zone-6a-planting-calendar/") && pages.fall.includes("/fall-color/"), 5);
 
 const ids = new Set(registry.tools.map((tool) => tool.id));
 check("National tools remain registered", ["national-aurora","national-rivers","national-frost","national-planting","national-fall-color"].every((id) => ids.has(id)), 4);
 check("Smoke/AQ remains source-key gated", contract.phase2?.smokeAirQuality?.status === "source-key-gated" && contract.phase2?.smokeAirQuality?.indexableRouteCreated === false, 4);
-check("Master prompt remains the build doctrine", (await read("docs/NATIONAL_OUTDOOR_TOOLS_MASTER_PROMPT.md")).includes("## Loss function"), 3);
+const admissionWeight = Object.values(admission.weights || {}).reduce((sum, value) => sum + value, 0);
+check("Location admission weights total 100", admissionWeight === 100 && admission.minimumScore === 80, 4, String(admissionWeight));
+check("Location admission has hard vetoes and critical minimums", Array.isArray(admission.hardVetoes) && admission.hardVetoes.length >= 5 && admission.criticalMinimums?.cannibalizationSafety === 10, 4);
+check("Saved places are explicitly not fake alerts", contract.phase3?.alerts?.status === "deferred-until-real-delivery-channel", 4);
+const masterPrompt = await read("docs/NATIONAL_OUTDOOR_TOOLS_MASTER_PROMPT.md");
+check("Master prompt remains the build doctrine", masterPrompt.includes("## Loss function") && masterPrompt.includes("## Phase 3 platform interpretation"), 4);
 
 const score = Math.round((rawScore / maxPoints) * 100);
 const summary = { score, rawScore, maxPoints, failures, hardVetoes: contract.hardVetoes };

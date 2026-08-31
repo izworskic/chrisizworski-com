@@ -17,6 +17,7 @@
 <div id="result" class="result" hidden>
   <div class="result-head"><span class="pill">USGS observations</span><span id="forecast-pill" class="pill">NOAA forecast where available</span></div>
   <div id="answer" class="answer"></div>
+  <div id="river-map" class="river-map-shell" hidden><div class="river-map-head"><div><span class="tool-kicker">Spatial context</span><strong id="map-gauge-name">Selected USGS gauge</strong></div><div class="map-actions"><a id="map-open" class="map-btn" href="#" target="_blank" rel="noopener">Open in OpenStreetMap ↗</a></div></div><iframe id="river-map-frame" title="Map of selected river gauge" loading="lazy"></iframe><div class="map-attribution">Basemap © OpenStreetMap contributors. The gauge observations still come from USGS; the map is orientation context only.</div></div>
   <div id="primary-gauge"></div>
   <details class="more-gauges"><summary>Other nearby USGS gauges</summary><div id="gauges"></div></details>
   <p class="small" id="updated"></p>
@@ -57,7 +58,23 @@ document.addEventListener("DOMContentLoaded",function(){
  function gaugeCard(g,primary){
    return '<article class="river-card '+(primary?"primary":"")+'"><div class="river-title"><div><span class="tool-kicker">'+g.distance_miles.toFixed(1)+' mi from search point</span><h3>'+N.esc(g.name)+'</h3></div><span class="pill '+(g.stale?"danger":"")+'">'+(g.age_minutes==null?"age unknown":g.age_minutes+" min old")+'</span></div>'+
    '<div class="metrics"><div class="metric"><b>'+flow(g.discharge_cfs)+'</b><span>'+N.esc(trend(g))+'</span></div><div class="metric"><b>'+stage(g.gage_height_ft)+'</b><span>gauge height</span></div><div class="metric"><b>'+temp(g.water_temp_f)+'</b><span>water temperature</span></div></div>'+
-   spark(g.flow_series_24h)+historical(g)+nwps(g)+'</article>';
+   spark(g.flow_series_24h)+historical(g)+nwps(g)+'<div class="map-actions"><button type="button" class="map-btn" data-map-lat="'+g.latitude+'" data-map-lon="'+g.longitude+'" data-map-name="'+N.esc(g.name)+'">Show this gauge on map</button></div></article>';
+ }
+ function setMap(g){
+   if(!g||!Number.isFinite(Number(g.latitude))||!Number.isFinite(Number(g.longitude)))return;
+   const lat=Number(g.latitude),lon=Number(g.longitude),span=.08;
+   const bbox=[lon-span,lat-span,lon+span,lat+span].join(",");
+   const frame=document.getElementById("river-map-frame"),shell=document.getElementById("river-map");
+   frame.src="https://www.openstreetmap.org/export/embed.html?bbox="+encodeURIComponent(bbox)+"&layer=mapnik&marker="+encodeURIComponent(lat+","+lon);
+   document.getElementById("map-gauge-name").textContent=g.name;
+   document.getElementById("map-open").href="https://www.openstreetmap.org/?mlat="+encodeURIComponent(lat)+"&mlon="+encodeURIComponent(lon)+"#map=13/"+encodeURIComponent(lat)+"/"+encodeURIComponent(lon);
+   shell.hidden=false;
+ }
+ function bindMapButtons(gauges){
+   document.querySelectorAll("[data-map-lat]").forEach(function(button){button.addEventListener("click",function(){
+     const match=gauges.find(function(g){return String(g.latitude)===button.dataset.mapLat&&String(g.longitude)===button.dataset.mapLon});
+     if(match){setMap(match);document.getElementById("river-map").scrollIntoView({behavior:"smooth",block:"nearest"})}
+   })});
  }
  async function run(loc){
   const r=await fetch("/api/national-rivers?lat="+loc.latitude+"&lon="+loc.longitude),d=await r.json();if(!r.ok)throw new Error(d.error||"River data unavailable");
@@ -67,6 +84,7 @@ document.addEventListener("DOMContentLoaded",function(){
   document.getElementById("answer").textContent=(first.historical_comparison?.label||"Current river conditions")+" · "+first.trend_label+" near "+N.label(loc);
   document.getElementById("primary-gauge").innerHTML=gaugeCard(first,true);
   document.getElementById("gauges").innerHTML=d.gauges.slice(1).map(g=>gaugeCard(g,false)).join("");
+  setMap(first);bindMapButtons(d.gauges);
   document.getElementById("forecast-pill").textContent=d.gauges.some(g=>g.nwps)?"NOAA NWPS match available":"USGS observation only";
   document.getElementById("updated").textContent=d.disclaimer+" Retrieved "+N.fmtDate(d.retrieved_at)+".";
  }

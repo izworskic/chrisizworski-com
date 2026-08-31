@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "updated": "2026-08-31",
   "objective": "Ship a separate U.S. outdoor decision network without weakening Michigan canonicals, source truth, or search quality.",
   "lossFunction": {
@@ -60,7 +60,8 @@
     "phase1EntryPages": true,
     "generatedLocationPages": false,
     "zipCropDatePages": false,
-    "phase2AddsIndexableRoutes": false
+    "phase2AddsIndexableRoutes": false,
+    "phase3AddsIndexableRoutes": false
   },
   "protectedMichiganRoutes": [
     "/tools/",
@@ -91,5 +92,27 @@
       ],
       "indexableRouteCreated": false
     }
+  },
+  "phase3": {
+    "principle": "Make the five tools behave like one decision platform before adding another product family or location-page surface.",
+    "capabilities": [
+      "live-multi-signal-outdoor-desk",
+      "decision-urgency-ordering-without-universal-safety-score",
+      "independent-feed-degradation",
+      "saved-place-local-device-state",
+      "cross-tool-location-continuity",
+      "searched-location-timezone-rendering",
+      "keyless-fail-soft-river-spatial-context",
+      "location-page-admission-gate"
+    ],
+    "alerts": {
+      "status": "deferred-until-real-delivery-channel",
+      "rule": "Do not label saved places, local state, or passive UI as alerts. Ship alerts only when the system can actually deliver a future notification and preserve source/freshness semantics."
+    },
+    "measurement": {
+      "status": "use-existing-search-and-product-measurement-before-location-expansion",
+      "rule": "Do not create a new tracking endpoint merely to manufacture telemetry. Location-page admission requires real query/impression or documented user-demand evidence."
+    },
+    "locationAdmissionContract": "benchmarks/national-location-admission.json"
   }
 }
