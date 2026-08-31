@@ -106,64 +106,166 @@
   let popupReadabilityTimer=null;
   let popupUserPositioned=false;
 
-  function ensurePopupDragHandle(popup) {
+  function popupInteractionElements(popup) {
     const popupEl=popup?.getElement?.();
     const detail=popupEl?.querySelector?.('.popup-detail');
-    if(!detail)return null;
+    if(!popupEl||!detail)return null;
+    return {popupEl,detail};
+  }
+
+  function centerPopupInReadableArea(popup,{animate=true}={}) {
+    const parts=popupInteractionElements(popup);
+    if(!parts)return false;
+    const safe=popupSafeBounds(parts.popupEl);
+    const rect=parts.popupEl.getBoundingClientRect();
+    const targetX=(safe.left+safe.right)/2;
+    const targetY=(safe.top+safe.bottom)/2;
+    const currentX=(rect.left+rect.right)/2;
+    const currentY=(rect.top+rect.bottom)/2;
+    const dx=targetX-currentX;
+    const dy=targetY-currentY;
+    if(Math.abs(dx)>1||Math.abs(dy)>1) {
+      map.panBy([-dx,-dy],animate?{animate:true,duration:.2,noMoveStart:true}:{animate:false,noMoveStart:true});
+    }
+    return true;
+  }
+
+  function ensurePopupDragHandle(popup) {
+    const parts=popupInteractionElements(popup);
+    if(!parts)return null;
+    const {detail}=parts;
     let handle=detail.querySelector('.popup-drag-handle');
     if(handle)return handle;
     handle=document.createElement('div');
     handle.className='popup-drag-handle';
-    handle.setAttribute('role','button');
-    handle.setAttribute('tabindex','0');
-    handle.setAttribute('aria-label','Drag this card to reposition it on the map');
+    handle.setAttribute('aria-label','Move or center this map card');
+
+    const dragZone=document.createElement('div');
+    dragZone.className='popup-drag-zone';
+    dragZone.setAttribute('role','button');
+    dragZone.setAttribute('tabindex','0');
+    dragZone.setAttribute('aria-label','Drag this card to reposition it on the map');
+
     const grip=document.createElement('span');
     grip.className='popup-drag-grip';
     grip.setAttribute('aria-hidden','true');
     const cue=document.createElement('span');
     cue.className='popup-drag-cue';
-    cue.textContent='Drag card to reposition map';
-    handle.append(grip,cue);
+    cue.textContent='Drag card';
+    dragZone.append(grip,cue);
+
+    const center=document.createElement('button');
+    center.type='button';
+    center.className='popup-center-button';
+    center.textContent='Center card';
+    center.setAttribute('aria-label','Center this card in the readable map area');
+    center.addEventListener('click',event=>{
+      event.preventDefault();
+      event.stopPropagation();
+      popupUserPositioned=true;
+      centerPopupInReadableArea(popup);
+      emitEvent('isle_royale_popup_center',{mode:route?.mode||'unknown'});
+    });
+
+    handle.append(dragZone,center);
     detail.prepend(handle);
     return handle;
   }
 
   function wirePopupDrag(popup) {
     const handle=ensurePopupDragHandle(popup);
-    if(!handle||handle.dataset.dragReady==='true')return;
-    handle.dataset.dragReady='true';
+    const dragZone=handle?.querySelector?.('.popup-drag-zone');
+    if(!dragZone||dragZone.dataset.dragReady==='true')return false;
+    dragZone.dataset.dragReady='true';
+    L.DomEvent.disableClickPropagation(handle);
+    L.DomEvent.disableScrollPropagation(handle);
+
+    let active=false;
     let pointerId=null;
     let lastX=0,lastY=0;
+    let restoreMapDragging=false;
+
+    const move=event=>{
+      if(!active||event.pointerId!==pointerId)return;
+      const dx=event.clientX-lastX;
+      const dy=event.clientY-lastY;
+      lastX=event.clientX;
+      lastY=event.clientY;
+      if(Math.abs(dx)+Math.abs(dy)>.5) {
+        map.panBy([-dx,-dy],{animate:false,noMoveStart:true});
+      }
+      event.preventDefault();
+      event.stopPropagation();
+    };
+
     const end=event=>{
-      if(pointerId==null)return;
-      try{handle.releasePointerCapture?.(pointerId);}catch(_){}
+      if(!active)return;
+      if(event&&event.pointerId!=null&&event.pointerId!==pointerId)return;
+      active=false;
       pointerId=null;
-      handle.classList.remove('dragging');
+      dragZone.classList.remove('dragging');
+      window.removeEventListener('pointermove',move,true);
+      window.removeEventListener('pointerup',end,true);
+      window.removeEventListener('pointercancel',end,true);
+      if(restoreMapDragging&&map.dragging&&!map.dragging.enabled())map.dragging.enable();
+      restoreMapDragging=false;
       if(event){event.preventDefault();event.stopPropagation();}
       emitEvent('isle_royale_popup_drag',{mode:route?.mode||'unknown'});
     };
-    handle.addEventListener('pointerdown',event=>{
+
+    dragZone.addEventListener('pointerdown',event=>{
       if(event.button!=null&&event.button!==0)return;
       window.clearTimeout(popupReadabilityTimer);
       popupUserPositioned=true;
+      active=true;
       pointerId=event.pointerId;
-      lastX=event.clientX;lastY=event.clientY;
-      try{handle.setPointerCapture?.(pointerId);}catch(_){}
-      handle.classList.add('dragging');
+      lastX=event.clientX;
+      lastY=event.clientY;
+      restoreMapDragging=Boolean(map.dragging?.enabled?.());
+      if(restoreMapDragging)map.dragging.disable();
+      dragZone.classList.add('dragging');
+      window.addEventListener('pointermove',move,{capture:true,passive:false});
+      window.addEventListener('pointerup',end,{capture:true,passive:false});
+      window.addEventListener('pointercancel',end,{capture:true,passive:false});
       event.preventDefault();
       event.stopPropagation();
     });
-    handle.addEventListener('pointermove',event=>{
-      if(pointerId==null||event.pointerId!==pointerId)return;
-      const dx=event.clientX-lastX,dy=event.clientY-lastY;
-      lastX=event.clientX;lastY=event.clientY;
-      if(Math.abs(dx)+Math.abs(dy)>.5)map.panBy([-dx,-dy],{animate:false,noMoveStart:true});
+
+    dragZone.addEventListener('keydown',event=>{
+      const step=event.shiftKey?80:30;
+      let dx=0,dy=0;
+      if(event.key==='ArrowLeft')dx=-step;
+      else if(event.key==='ArrowRight')dx=step;
+      else if(event.key==='ArrowUp')dy=-step;
+      else if(event.key==='ArrowDown')dy=step;
+      else if(event.key==='Enter'||event.key===' ') {
+        event.preventDefault();
+        popupUserPositioned=true;
+        centerPopupInReadableArea(popup);
+        return;
+      } else return;
       event.preventDefault();
-      event.stopPropagation();
+      popupUserPositioned=true;
+      map.panBy([-dx,-dy],{animate:false,noMoveStart:true});
     });
-    handle.addEventListener('pointerup',end);
-    handle.addEventListener('pointercancel',end);
-    handle.addEventListener('lostpointercapture',()=>{pointerId=null;handle.classList.remove('dragging');});
+    return true;
+  }
+
+  function schedulePopupInteractionSetup(popup) {
+    let attempts=0;
+    const attach=()=>{
+      if(!popup||popup!==activeReadablePopup)return;
+      attempts++;
+      const wired=wirePopupDrag(popup);
+      if(wired||popupInteractionElements(popup)) {
+        schedulePopupReadability(popup,{force:attempts===1});
+        return;
+      }
+      if(attempts<8)window.setTimeout(attach,attempts<3?0:35);
+    };
+    requestAnimationFrame(()=>requestAnimationFrame(attach));
+    window.setTimeout(attach,80);
+    window.setTimeout(attach,220);
   }
 
   function visibleMapOverlay(selector) {
@@ -244,7 +346,7 @@
     activeReadablePopup=popup;
     popupUserPositioned=false;
     document.body.classList.add('detail-popup-open');
-    wirePopupDrag(popup);
+    schedulePopupInteractionSetup(popup);
     schedulePopupReadability(popup);
     emitEvent('isle_royale_popup_readable',{mode:route?.mode||'unknown'});
   });
