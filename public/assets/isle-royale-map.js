@@ -59,6 +59,8 @@
     cockpitBuild: document.getElementById('cockpit-build'),
     cockpitUndo: document.getElementById('cockpit-undo'),
     cockpitBackPoint: document.getElementById('cockpit-back-point'),
+    cockpitFinishDay: document.getElementById('cockpit-finish-day'),
+    cockpitFinishTrip: document.getElementById('cockpit-finish-trip'),
     cockpitRedo: document.getElementById('cockpit-redo'),
     cockpitReverse: document.getElementById('cockpit-reverse'),
     cockpitWeather: document.getElementById('cockpit-weather'),
@@ -92,6 +94,7 @@
     routeBuildMetrics: document.getElementById('route-build-metrics'),
     routeFinishBuild: document.getElementById('route-finish-build'),
     routeBackPoint: document.getElementById('route-back-point'),
+    routeFinishDay: document.getElementById('route-finish-day'),
     routeReviewActions: document.getElementById('route-review-actions'),
     routeReviewEdit: document.getElementById('route-review-edit'),
     routeReviewSave: document.getElementById('route-review-save'),
@@ -480,6 +483,7 @@
     waterStats:null,
     waterReason:'',
     waterAccessMiles:0,
+    waterLegs:[],
     mixedLegs:[],
     mixedReason:'',
     portageTrips:2,
@@ -1933,8 +1937,8 @@
   }
 
   function routePathPoints() {
-    if(route.mode==='canoe'&&route.points.length>=2&&route.smartState!=='canoe-aware')return [];
-    if(route.mode!=='hike'&&route.mode!=='canoe'&&route.points.length>=2&&route.smartState!=='water-aware')return [];
+    if(route.mode==='canoe'&&route.points.length>=2&&!['canoe-aware','canoe-partial'].includes(route.smartState))return [];
+    if(route.mode!=='hike'&&route.mode!=='canoe'&&route.points.length>=2&&!['water-aware','water-partial'].includes(route.smartState))return [];
     return route.resolvedPoints.length ? route.resolvedPoints : route.points;
   }
 
@@ -2079,10 +2083,31 @@
   function routeControlDistances() {
     const path=routePathPoints();
     if(!route.points.length)return [];
-    if(path.length<2) {
-      if(route.mode==='hike')return draftRouteDistances();
-      return route.points.map(()=>({leg_miles:0,total_miles:0,resolved:false,pending:true}));
+    if(route.mode==='canoe'&&route.points.length>=2) {
+      const out=[{leg_miles:0,total_miles:0,resolved:true}];
+      let total=0;
+      for(let index=1;index<route.points.length;index++) {
+        const leg=route.mixedLegs[index-1];
+        if(leg?.verified&&Number.isFinite(Number(leg.miles))) {
+          total+=Number(leg.miles);
+          out.push({leg_miles:Number(leg.miles),total_miles:total,resolved:true});
+        } else out.push({leg_miles:0,total_miles:total,resolved:false,pending:true});
+      }
+      return out;
     }
+    if(route.mode!=='hike'&&route.points.length>=2) {
+      const out=[{leg_miles:0,total_miles:0,resolved:true}];
+      let total=0;
+      for(let index=1;index<route.points.length;index++) {
+        const leg=route.waterLegs[index-1];
+        if(leg?.verified&&Number.isFinite(Number(leg.miles))) {
+          total+=Number(leg.miles);
+          out.push({leg_miles:Number(leg.miles),total_miles:total,resolved:true});
+        } else out.push({leg_miles:0,total_miles:total,resolved:false,pending:true});
+      }
+      return out;
+    }
+    if(path.length<2)return draftRouteDistances();
     const cumulative=cumulativeFor(path),total=cumulative[cumulative.length-1]||0;
     const projected=[];
     let segment=0,lastAlong=0;
@@ -2099,6 +2124,45 @@
       lastAlong=along;
     });
     return projected;
+  }
+
+  function completedRouteDays() {
+    return route.points.reduce((count,point)=>count+(point.manualDayEnd?1:0),0);
+  }
+
+  function activeRouteDayNumber() {
+    return completedRouteDays()+1;
+  }
+
+  function currentDayStartIndex() {
+    let start=0;
+    for(let index=1;index<route.points.length;index++)if(route.points[index].manualDayEnd)start=index;
+    return start;
+  }
+
+  function verifiedRouteMiles() {
+    const rows=routeControlDistances();
+    let total=0;
+    for(const row of rows)if(row?.resolved)total=Math.max(total,Number(row.total_miles)||0);
+    return total;
+  }
+
+  function currentDayVerifiedMiles() {
+    const rows=routeControlDistances();
+    if(!rows.length)return 0;
+    const startIndex=currentDayStartIndex();
+    const start=Number(rows[startIndex]?.total_miles)||0;
+    let end=start;
+    for(let index=startIndex+1;index<rows.length;index++)if(rows[index]?.resolved)end=Math.max(end,Number(rows[index].total_miles)||0);
+    return Math.max(0,end-start);
+  }
+
+  function canFinishCurrentDay() {
+    if(!route.adding||route.points.length<2||!routeIsResolved())return false;
+    const last=route.points[route.points.length-1];
+    if(!last||last.kind!=='campground'||last.manualDayEnd||last.liveAlert)return false;
+    if(route.mode!=='hike'&&operational.loaded&&!last.sourceBackedBoatIn)return false;
+    return true;
   }
 
   function removeRoutePoint(index) {
