@@ -2218,16 +2218,14 @@
             index,type:'portage',from,to,miles,walkedMiles,
             hours:walkingHours+transitionHours,walkingHours,transitionHours,
             effectivePortageSpeed,terrainFactor:factor,
-            officialPortage:leg.officialPortage||null,verified:Boolean(leg.verified),
-            strokes:0
+            officialPortage:leg.officialPortage||null,verified:Boolean(leg.verified)
           };
         }
         const hours=miles/Math.max(.5,paddleSpeed);
         return {
           index,type:'paddle',from,to,miles,walkedMiles:0,hours,
           walkingHours:0,transitionHours:0,effectivePortageSpeed:null,
-          terrainFactor:1,officialPortage:null,verified:Boolean(leg.verified),
-          strokes:0,paddleSpeed
+          terrainFactor:1,officialPortage:null,verified:Boolean(leg.verified),paddleSpeed
         };
       });
     }
@@ -2240,8 +2238,7 @@
       const miles=Number(distances[index]?.leg_miles)||0;
       return {
         index,type:human?'paddle':route.mode,from:route.points[index-1],to:point,miles,
-        walkedMiles:0,hours:miles/speed,walkingHours:0,transitionHours:0,
-        strokes:0,paddleSpeed:human?speed:null,
+        walkedMiles:0,hours:miles/speed,walkingHours:0,transitionHours:0,paddleSpeed:human?speed:null,
         verified:true
       };
     });
@@ -3867,7 +3864,7 @@
       const carry=carryLabel();
       const estimated=route.mixedLegs.filter(leg=>!leg.verified).length;
       const effort=tripEffortSummary();
-      els.routeSummary.innerHTML='<strong>'+totals.total.toFixed(1)+' mi trip</strong> · '+totals.paddle.toFixed(1)+' mi paddling · '+totals.portage.toFixed(1)+' mi portage trail · '+totals.walked.toFixed(1)+' mi walked ('+carry+') · ~'+formatDuration(hours)+' active travel · '+effort.paddleSpeed.toFixed(1)+' mph modeled paddle speed · ~'+Math.round(effort.strokes).toLocaleString()+' strokes'+(estimated?' · '+estimated+' drawn leg'+(estimated===1?'':'s')+' need map verification':'')+'.';
+      els.routeSummary.innerHTML='<strong>'+totals.total.toFixed(1)+' mi trip</strong> · '+totals.paddle.toFixed(1)+' mi paddling · '+totals.portage.toFixed(1)+' mi portage trail · '+totals.walked.toFixed(1)+' mi walked ('+carry+') · ~'+formatDuration(hours)+' active travel · '+paddlePaceLabel()+(estimated?' · '+estimated+' drawn leg'+(estimated===1?'':'s')+' need map verification':'')+'.';
       els.routeWeatherButton.disabled=!route.mixedLegs.some(leg=>leg.type==='paddle');
     } else {
       const start=path[0],end=path[path.length-1];
@@ -4328,7 +4325,7 @@
       const caveat=day.provisional?'<p><em>Provisional day break — confirm a legal overnight campground.</em></p>':(facts.text?'<p><strong>Campground:</strong> '+xmlEscape(facts.text)+'</p>':'')+(facts.alert?'<p><strong>Current NPS alert:</strong> '+xmlEscape(facts.alert)+'</p>':'');
       return '<section><h2>Day '+day.day+' · '+xmlEscape(end)+'</h2><p>'+xmlEscape(formatDuration(day.hours)+' · '+day.miles.toFixed(1)+' route mi')+'</p><ol>'+legs+'</ol>'+caveat+'</section>';
     }).join('');
-    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+xmlEscape(name)+'</title><style>body{font-family:system-ui,sans-serif;max-width:820px;margin:40px auto;padding:0 20px;color:#24342d;line-height:1.5}h1,h2{font-family:Georgia,serif}header{border-bottom:2px solid #173d36;padding-bottom:18px;margin-bottom:22px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}.metrics div{border:1px solid #ccd6d0;border-radius:8px;padding:9px}.metrics b{display:block;font-size:1.15rem}section{border-top:1px solid #d8ded9;padding-top:14px;margin-top:18px}li{margin:8px 0}.note{font-size:.9rem;color:#65716b;background:#f5f7f5;padding:10px;border-radius:8px}@media(max-width:650px){.metrics{grid-template-columns:1fr 1fr}}</style></head><body><header><h1>'+xmlEscape(name)+'</h1><p>'+xmlEscape(tripDescription())+'</p></header><div class="metrics"><div><b>'+xmlEscape(formatDuration(effort.totalHours))+'</b>active travel</div><div><b>'+xmlEscape(effort.paddleMiles.toFixed(1)+' mi')+'</b>paddling</div><div><b>'+xmlEscape(effort.portageMiles.toFixed(1)+' mi')+'</b>portage trail</div><div><b>'+xmlEscape(effort.walkedMiles.toFixed(1)+' mi')+'</b>walked carrying</div><div><b>'+xmlEscape(effort.paddleSpeed?effort.paddleSpeed.toFixed(1)+' mph':'—')+'</b>modeled paddle speed</div><div><b>'+xmlEscape(effort.strokes?Math.round(effort.strokes).toLocaleString():'—')+'</b>stroke cycles</div></div>'+rows+'<p class="note">Planning estimate only. Active travel time includes paddling, portage walking and selected load/unload time. It excludes breaks, meals, fishing, weather holds, route-finding, landing congestion and camp setup. Verify current NPS rules, maps and conditions. This is not a navigation chart.</p></body></html>';
+    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+xmlEscape(name)+'</title><style>body{font-family:system-ui,sans-serif;max-width:820px;margin:40px auto;padding:0 20px;color:#24342d;line-height:1.5}h1,h2{font-family:Georgia,serif}header{border-bottom:2px solid #173d36;padding-bottom:18px;margin-bottom:22px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}.metrics div{border:1px solid #ccd6d0;border-radius:8px;padding:9px}.metrics b{display:block;font-size:1.15rem}section{border-top:1px solid #d8ded9;padding-top:14px;margin-top:18px}li{margin:8px 0}.note{font-size:.9rem;color:#65716b;background:#f5f7f5;padding:10px;border-radius:8px}@media(max-width:650px){.metrics{grid-template-columns:1fr 1fr}}</style></head><body><header><h1>'+xmlEscape(name)+'</h1><p>'+xmlEscape(tripDescription())+'</p></header><div class="metrics"><div><b>'+xmlEscape(formatDuration(effort.totalHours))+'</b>active travel</div><div><b>'+xmlEscape(effort.paddleMiles.toFixed(1)+' mi')+'</b>paddling</div><div><b>'+xmlEscape(effort.portageMiles.toFixed(1)+' mi')+'</b>portage trail</div><div><b>'+xmlEscape(effort.walkedMiles.toFixed(1)+' mi')+'</b>walked carrying</div><div><b>'+xmlEscape(effort.paddleSpeed?effort.paddleSpeed.toFixed(1)+' mph':'—')+'</b>paddling pace</div><div><b>'+xmlEscape(route.mode==='canoe'?portagePaceSpeed().toFixed(1)+' mph':'—')+'</b>portage pace</div></div>'+rows+'<p class="note">Planning estimate only. Active travel time includes paddling, portage walking and selected load/unload time. It excludes breaks, meals, fishing, weather holds, route-finding, landing congestion and camp setup. Verify current NPS rules, maps and conditions. This is not a navigation chart.</p></body></html>';
   }
 
   function downloadTripPlan() {
