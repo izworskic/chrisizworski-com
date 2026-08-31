@@ -117,16 +117,24 @@
       }
       return Number.isFinite(best)?best:null;
     }
+    function crossingCount(points){
+      let count=0;
+      for(let i=1;i<(points?.length||0);i++)if(crosses(points[i-1],points[i]))count++;
+      return count;
+    }
     function compact(points){
       if(points.length<=2)return points;
       const out=[points[0]];
       for(let i=1;i<points.length-1;i++){
-        const turn=Math.abs(((bearing(points[i],points[i+1])-bearing(points[i-1],points[i])+540)%360)-180);
-        if(turn>10||miles(out[out.length-1],points[i])>1.25)out.push(points[i]);
+        const current=points[i],next=points[i+1],last=out[out.length-1];
+        const turn=Math.abs(((bearing(current,next)-bearing(points[i-1],current)+540)%360)-180);
+        const shortcutSafe=!crosses(last,next);
+        if(!shortcutSafe||turn>10||miles(last,current)>1.25)out.push(current);
       }
-      out.push(points[points.length-1]);return out;
+      out.push(points[points.length-1]);
+      return crossingCount(out)===0?out:points;
     }
-    function routeSegment(start,end,mode){
+    function routeSegment(start,end,mode,forcedStart=null){
       if(!segments.length)throw new Error('No shoreline geometry loaded');
       const direct=miles(start,end),margin=mode==='paddle'?.18:.13,mid=(start.lat+end.lat)/2;
       let south=Math.max(BOUNDS.south,Math.min(start.lat,end.lat)-margin),north=Math.min(BOUNDS.north,Math.max(start.lat,end.lat)+margin);
@@ -157,20 +165,21 @@
       }
       if(waterKeys.size<8)throw new Error('Mapped coastline did not produce a usable outside-water component');
 
-      function nearest(p){
+      function nearest(p,allowShoreAccess=true){
         let best=null,bd=Infinity;
         const shorelineDistance=coastDistance(p);
         const nearShore=Number.isFinite(shorelineDistance)&&shorelineDistance<=0.35;
         for(const nk of waterKeys){
           const n=nodes.get(nk),d=miles(p,n);
           if(d>=bd||d>1.5)continue;
-          if(crosses(p,n)&&!(nearShore&&d<=0.55))continue;
+          const blocked=crosses(p,n);
+          if(blocked&&!(allowShoreAccess&&nearShore&&d<=0.55))continue;
           best=n;bd=d;
         }
         if(!best)throw new Error('Selected point is not connected to mapped water within the routing grid');
         return {...best,access:bd};
       }
-      const a=nearest(start),b=nearest(end),ak=nkey(a.r,a.c),bk=nkey(b.r,b.c);
+      const a=nearest(forcedStart||start,!forcedStart),b=nearest(end,true),ak=nkey(a.r,a.c),bk=nkey(b.r,b.c);
       const dist=new Map([[ak,0]]),prev=new Map(),heap=[];
       heapPush(heap,{key:ak,travel:0,score:miles(a,b)});
       const dirs=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
@@ -197,17 +206,35 @@
       const raw=[];let cursor=bk;
       while(cursor){const n=nodes.get(cursor);if(n)raw.push({lat:n.lat,lng:n.lng});if(cursor===ak)break;cursor=prev.get(cursor);}
       raw.reverse();
-      return {points:[{...start},...compact(raw),{...end}],access_miles:a.access+b.access};
+      const safe=compact(raw);
+      if(forcedStart&&miles(forcedStart,safe[0])>.01){
+        if(crosses(forcedStart,safe[0]))throw new Error('Could not reconnect the continued water route without crossing mapped land');
+        safe.unshift({...forcedStart});
+      }
+      if(crossingCount(safe)>0)throw new Error('Generated route intersects mapped shoreline');
+      return {
+        points:safe,
+        access_miles:(forcedStart?0:a.access)+b.access,
+        start_access_miles:forcedStart?0:a.access,
+        end_access_miles:b.access,
+        land_crossings:0
+      };
     }
     function route(controlPoints,mode){
       if(!Array.isArray(controlPoints)||controlPoints.length<2)throw new Error('Two route points are required');
-      const out=[];let access=0;
+      const out=[];let access=0,previousWaterEnd=null;
       for(let i=1;i<controlPoints.length;i++){
-        const part=routeSegment(controlPoints[i-1],controlPoints[i],mode);
+        const part=routeSegment(controlPoints[i-1],controlPoints[i],mode,previousWaterEnd);
         access+=part.access_miles;
-        for(const p of part.points){const last=out[out.length-1];if(!last||miles(last,p)>.01)out.push(p);}
+        for(const p of part.points){
+          const last=out[out.length-1];
+          if(!last||miles(last,p)>.01)out.push(p);
+        }
+        previousWaterEnd=part.points[part.points.length-1]||previousWaterEnd;
       }
-      return {points:out,access_miles:access};
+      const landCrossings=crossingCount(out);
+      if(landCrossings>0)throw new Error('Water route failed final coastline validation');
+      return {points:out,access_miles:access,land_crossings:landCrossings};
     }
     function analyze(path){
       const samples=sample(path,.25);let maxOff=0,exposed=0,longest=0,current=0;
@@ -217,9 +244,9 @@
         const span=samples[i].distance_miles-samples[i-1].distance_miles;
         if(Number.isFinite(d)&&d>1.5){exposed+=span;current+=span;longest=Math.max(longest,current);}else current=0;
       }
-      return {max_offshore_miles:maxOff,exposed_miles:exposed,longest_exposed_miles:longest};
+      return {max_offshore_miles:maxOff,exposed_miles:exposed,longest_exposed_miles:longest,land_crossings:crossingCount(path)};
     }
-    return {route,analyze,coastDistance,crosses,segment_count:segments.length};
+    return {route,analyze,coastDistance,crosses,crossingCount,segment_count:segments.length};
   }
 
   function weatherSamples(points,maxSamples){
