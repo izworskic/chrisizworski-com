@@ -4,8 +4,9 @@
   async function getJson(url){
     try{
       const response=await fetch(url);
-      const data=await response.json();
-      if(!response.ok)throw new Error(data.error||"Unavailable");
+      const data=typeof N().readJsonResponse==="function"
+        ? await N().readJsonResponse(response,"Outdoor data source unavailable")
+        : await response.json();
       return {ok:true,data:data};
     }catch(error){
       return {ok:false,error:String(error&&error.message||error)};
