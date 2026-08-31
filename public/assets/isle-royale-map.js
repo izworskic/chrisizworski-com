@@ -1493,7 +1493,7 @@
   function removeRoutePoint(index) {
     if(index<0||index>=route.points.length)return;
     const point=route.points[index];
-    rememberRouteEdit();
+    rememberRouteEdit('remove '+(point.label||'route point'));
     route.points.splice(index,1);
     map.closePopup();
     reroute('Route stop removed. Re-run weather after the route resolves.');
@@ -1933,7 +1933,7 @@
     if(!projection)return;
     let insertAt=route.points.length-1;
     for(let i=1;i<route.points.length;i++){const cp=api.projectPointToPath(route.points[i],path);if(cp&&cp.along_miles>projection.along_miles){insertAt=i;break;}}
-    rememberRouteEdit();
+    rememberRouteEdit('add '+camp.name);
     route.points.splice(insertAt,0,target);
     reroute(camp.name+' added as an overnight route stop. Re-run weather after the water route resolves.');
     emitEvent('isle_royale_itinerary_stop',{mode:route.mode,source:'nps-boat-in'});
@@ -2005,7 +2005,7 @@
       });
     }
     entries.sort((a,b)=>a.along-b.along);
-    rememberRouteEdit();
+    rememberRouteEdit('apply '+scenario.title+' scenario');
     route.points=[start,...entries.map(entry=>entry.point),end];
     route.activeScenario=scenario.id;
     reroute(scenario.title+' scenario applied. Source-backed overnight stops were added; re-run forecast comparison after the route resolves.');
@@ -2244,7 +2244,7 @@
           if(!route.adding)return;
           if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
           const index=nearestControlSegmentIndex(event.latlng);
-          rememberRouteEdit();
+          rememberRouteEdit('add shaping point');
           route.points.splice(index,0,{lat:event.latlng.lat,lng:event.latlng.lng,label:`Via ${index}`,kind:'map-point'});
           reroute();
           status('Shaping point added to the route. Keep clicking to refine the trip.');
@@ -2276,7 +2276,7 @@
       marker.bindPopup(popup,{maxWidth:300,className:'isle-detail-popup'});
       marker.on('dragend',()=>{
         const ll=marker.getLatLng();
-        rememberRouteEdit();
+        rememberRouteEdit('move '+(route.points[index].label||'route point'));
         route.points[index]={...route.points[index],lat:ll.lat,lng:ll.lng};
         reroute();
       });
@@ -2669,7 +2669,7 @@
       liveAlert:Boolean(meta.liveAlert),
       manualDayEnd:Boolean(meta.manualDayEnd)
     };
-    rememberRouteEdit();
+    rememberRouteEdit(point.kind==='campground'?'add '+point.label:'add route point');
     route.points.push(point);
     reroute('Route changed. Re-run the weather analysis for the updated path.');
     emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode,point_kind:cleanText(meta.kind||'map-point')});
@@ -2678,7 +2678,7 @@
 
   function reverseRoute() {
     if(route.points.length<2)return;
-    rememberRouteEdit();
+    rememberRouteEdit('reverse route');
     route.points.reverse();
     reroute();
     status('Route direction reversed.');
@@ -2689,7 +2689,7 @@
   }
 
   function clearRoute() {
-    if(route.points.length)rememberRouteEdit();
+    if(route.points.length)rememberRouteEdit('clear route');
     route.waterToken++;
     route.points=[];
     route.resolvedPoints=[];
@@ -3023,11 +3023,15 @@
   });
 
   function setDefaultRouteDeparture() {
-    if(els.routeDeparture.value)return;
+    if(els.routeDeparture.value) {
+      route.departure=els.routeDeparture.value;
+      return;
+    }
     const d=new Date(Date.now()+60*60*1000);
     d.setMinutes(0,0,0);
     const local=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);
     els.routeDeparture.value=local;
+    route.departure=local;
     const max=new Date(Date.now()+7*24*60*60*1000);
     els.routeDeparture.min=new Date(Date.now()-60*60*1000-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
     els.routeDeparture.max=new Date(max.getTime()-max.getTimezoneOffset()*60000).toISOString().slice(0,16);
@@ -3035,24 +3039,42 @@
 
   const routeSpeedDefaults={paddle:3,hike:2,powerboat:15};
   els.routeModeSelect.addEventListener('change',()=>{
-    rememberRouteEdit();
-    route.mode=els.routeModeSelect.value;
+    const nextMode=els.routeModeSelect.value;
+    if(nextMode===route.mode)return;
+    rememberRouteEdit('change travel mode');
+    route.mode=nextMode;
     route.activeScenario='balanced';
-    els.routeSpeed.value=routeSpeedDefaults[route.mode]||3;
+    route.speed=routeSpeedDefaults[route.mode]||3;
+    els.routeSpeed.value=String(route.speed);
     reroute('Travel mode changed. Re-run route weather after confirming speed and departure.');
   });
   els.routeSpeed.addEventListener('change',()=>{
-    rememberRouteEdit();
+    const next=Math.max(.5,Number(els.routeSpeed.value)||3);
+    if(Math.abs(next-route.speed)<.001){els.routeSpeed.value=String(route.speed);return;}
+    rememberRouteEdit('change speed');
+    route.speed=next;
+    els.routeSpeed.value=String(route.speed);
     clearRouteWeather('Planning speed changed. Re-run route weather for updated arrival times.');
     renderRoute();
   });
   els.routeDayHours?.addEventListener('change',()=>{
-    rememberRouteEdit();
+    const next=Math.max(2,Number(els.routeDayHours.value)||6);
+    if(Math.abs(next-route.hours)<.001){els.routeDayHours.value=String(route.hours);return;}
+    rememberRouteEdit('change day length');
+    route.hours=next;
+    els.routeDayHours.value=String(route.hours);
     route.activeScenario='balanced';
     clearRouteWeather('Balanced travel-day length changed. Scenario plans were rebuilt; re-run forecast comparison for the new schedules.');
     renderRoute();
   });
-  els.routeDeparture.addEventListener('change',()=>clearRouteWeather('Departure changed. Re-run route weather for the new time.'));
+  els.routeDeparture.addEventListener('change',()=>{
+    const next=els.routeDeparture.value||'';
+    if(next===route.departure)return;
+    rememberRouteEdit('change departure');
+    route.departure=next;
+    clearRouteWeather('Departure changed. Re-run route weather for the new time.');
+    renderRoute();
+  });
   els.routeAddButton.addEventListener('click',()=>setRouteAdding(!route.adding));
   els.routeModeButton.addEventListener('click',()=>setRouteAdding(true));
   els.exploreModeButton?.addEventListener('click',()=>setRouteAdding(false));
