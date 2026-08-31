@@ -1273,7 +1273,7 @@
     if(campSiteIdentifiers.promise)return campSiteIdentifiers.promise;
     campSiteIdentifiers.state='loading';
     campSiteIdentifiers.promise=(async()=>{
-      const q='[out:json][timeout:25];(nwr["amenity"="shelter"](47.79,-89.36,48.33,-88.18);nwr["tourism"="camp_site"](47.79,-89.36,48.33,-88.18););out center tags;';
+      const q='[out:json][timeout:25];(nwr["amenity"="shelter"](47.79,-89.36,48.33,-88.18);nwr["tourism"~"camp_site|camp_pitch"](47.79,-89.36,48.33,-88.18););out center tags;';
       try {
         const data=await fetchJSON(CONFIG.overpass+'?data='+encodeURIComponent(q),26000);
         const items=[];
@@ -1315,6 +1315,7 @@
     const amenity=cleanText(props.amenity||'').toLowerCase();
     const manMade=cleanText(props.man_made||'').toLowerCase();
     const information=cleanText(props.information||'').toLowerCase();
+    if(tourism==='camp_pitch')return 'Numbered campsite / pitch';
     if(tourism==='camp_site')return 'Campsite';
     if(tourism==='viewpoint')return 'Viewpoint';
     if(tourism==='information'||information)return 'Visitor information';
@@ -1332,7 +1333,8 @@
     const lat = el.lat ?? (el.center && el.center.lat);
     const lon = el.lon ?? (el.center && el.center.lon);
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
-    return {type:'Feature',geometry:{type:'Point',coordinates:[lon,lat]},properties:{...tags, osm_id:`${el.type}/${el.id}`}};
+    const siteLabel=campgroundSiteIdentifierLabel(tags);
+    return {type:'Feature',geometry:{type:'Point',coordinates:[lon,lat]},properties:{...tags,...(siteLabel?{name:siteLabel}:{}), osm_id:`${el.type}/${el.id}`}};
   }
 
   function setOsmContextVisible(visible) {
@@ -1364,7 +1366,7 @@
     btn.disabled = true;
     btn.textContent = 'Loading supplemental data…';
     status('Adding supplemental visitor features…');
-    const q = `[out:json][timeout:25];(nwr["tourism"~"camp_site|viewpoint|information|museum"](47.79,-89.36,48.33,-88.18);nwr["amenity"~"shelter|toilets|drinking_water"](47.79,-89.36,48.33,-88.18);nwr["man_made"="lighthouse"](47.79,-89.36,48.33,-88.18);nwr["man_made"="pier"](47.79,-89.36,48.33,-88.18););out center tags;`;
+    const q = `[out:json][timeout:25];(nwr["tourism"~"camp_site|camp_pitch|viewpoint|information|museum"](47.79,-89.36,48.33,-88.18);nwr["amenity"~"shelter|toilets|drinking_water"](47.79,-89.36,48.33,-88.18);nwr["man_made"="lighthouse"](47.79,-89.36,48.33,-88.18);nwr["man_made"="pier"](47.79,-89.36,48.33,-88.18););out center tags;`;
     try {
       const url = `${CONFIG.overpass}?data=${encodeURIComponent(q)}`;
       const data = await fetchJSON(url, 26000);
