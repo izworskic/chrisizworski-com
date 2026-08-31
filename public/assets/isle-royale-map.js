@@ -3791,10 +3791,10 @@
       els.routeWeatherButton.disabled=true;
     } else if(route.mode==='canoe') {
       const totals=canoeTotals();
-      const trips=Number(route.portageTrips)||1;
-      const carry=trips===1?'single carry':trips===1.5?'1½ carry':'double carry';
+      const carry=carryLabel();
       const estimated=route.mixedLegs.filter(leg=>!leg.verified).length;
-      els.routeSummary.innerHTML='<strong>'+totals.total.toFixed(1)+' mi trip</strong> · '+totals.paddle.toFixed(1)+' mi paddling · '+totals.portage.toFixed(1)+' mi portage trail · '+totals.walked.toFixed(1)+' mi walked ('+carry+') · ~'+formatDuration(hours)+' moving time'+(estimated?' · '+estimated+' drawn leg'+(estimated===1?'':'s')+' need map verification':'')+'.';
+      const effort=tripEffortSummary();
+      els.routeSummary.innerHTML='<strong>'+totals.total.toFixed(1)+' mi trip</strong> · '+totals.paddle.toFixed(1)+' mi paddling · '+totals.portage.toFixed(1)+' mi portage trail · '+totals.walked.toFixed(1)+' mi walked ('+carry+') · ~'+formatDuration(hours)+' active travel · '+effort.paddleSpeed.toFixed(1)+' mph modeled paddle speed · ~'+Math.round(effort.strokes).toLocaleString()+' strokes'+(estimated?' · '+estimated+' drawn leg'+(estimated===1?'':'s')+' need map verification':'')+'.';
       els.routeWeatherButton.disabled=!route.mixedLegs.some(leg=>leg.type==='paddle');
     } else {
       const start=path[0],end=path[path.length-1];
@@ -3810,6 +3810,8 @@
       els.routeSummary.innerHTML=`<strong>${miles.toFixed(1)} ${distanceName}</strong> · ~${formatDuration(hours)} at ${speed.toFixed(1)} mph · overall ${compassLabel(bearing)} (${Math.round(bearing)}°) · ${method}${crossingNote}${access}.`;
       els.routeWeatherButton.disabled=false;
     }
+    renderTripBrief();
+    autosaveTripDraft();
     renderRouteIntelligence();
     renderRouteScenarios();
     renderRouteItinerary();
@@ -3829,6 +3831,10 @@
       departure:route.departure||els.routeDeparture?.value||'',
       portageTrips:Number(route.portageTrips)||1,
       portageSpeed:Number(route.portageSpeed)||2,
+      portageTransitionMinutes:Number(route.portageTransitionMinutes)||10,
+      strokeRate:Number(route.strokeRate)||40,
+      feetPerStroke:Number(route.feetPerStroke)||6.6,
+      tripName:route.tripName||'',
       activeScenario:route.activeScenario||'balanced',
       adding:Boolean(route.adding)
     };
@@ -3847,6 +3853,10 @@
       departure:snapshot?.departure||'',
       portageTrips:Number(snapshot?.portageTrips)||1,
       portageSpeed:Number(snapshot?.portageSpeed)||2,
+      portageTransitionMinutes:Number(snapshot?.portageTransitionMinutes)||10,
+      strokeRate:Number(snapshot?.strokeRate)||40,
+      feetPerStroke:Number(snapshot?.feetPerStroke)||6.6,
+      tripName:snapshot?.tripName||'',
       activeScenario:snapshot?.activeScenario||'balanced',
       adding:Boolean(snapshot?.adding)
     });
