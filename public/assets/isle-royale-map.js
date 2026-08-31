@@ -1923,6 +1923,15 @@
     renderFeatureList();
   }
 
+  function selectedOfficialPortageStillMatches(a,b,portageId) {
+    const visual=officialPortages.visuals.get(portageId);
+    if(!visual?.geometryResolved||!visual.points?.length)return false;
+    const first=visual.points[0],last=visual.points[visual.points.length-1];
+    const direct=Math.max(distanceMiles(a,first),distanceMiles(b,last));
+    const reverse=Math.max(distanceMiles(a,last),distanceMiles(b,first));
+    return Math.min(direct,reverse)<=.25;
+  }
+
   function matchOfficialPortage(a,b,mappedMiles) {
     if(officialPortages.state!=='ready'||!Number.isFinite(Number(mappedMiles)))return null;
     let best=null;
@@ -1942,6 +1951,7 @@
       const labels=Math.max(directLabels,reverseLabels);
       const spatial=Math.max(directSpatial,reverseSpatial);
       const pickerelSingle=portage.number===12&&(at.label||at.spatial||bt.label||bt.spatial);
+      if(!pickerelSingle&&spatial<1)continue;
       if(labels<1&&spatial<2&&!pickerelSingle)continue;
       const score=labels*6+spatial*2+(1-delta/Math.max(maxDelta,.01))*3;
       if(!best||score>best.score) {
@@ -2091,7 +2101,9 @@
         const a=route.points[i-1],b=route.points[i];
         const override=b.legType||'auto';
         const trail=canoeTrailLegCandidate(a,b);
-        const selectedOfficial=b.officialPortageId?officialPortageById(b.officialPortageId):null;
+        const selectedOfficial=b.officialPortageId&&selectedOfficialPortageStillMatches(a,b,b.officialPortageId)
+          ? officialPortageById(b.officialPortageId)
+          : null;
         if(trail&&selectedOfficial) {
           trail.officialPortage=selectedOfficial;
           trail.officialHint=true;
@@ -2916,7 +2928,8 @@
       marker.on('dragend',()=>{
         const ll=marker.getLatLng();
         rememberRouteEdit('move '+(route.points[index].label||'route point'));
-        route.points[index]={...route.points[index],lat:ll.lat,lng:ll.lng};
+        route.points[index]={...route.points[index],lat:ll.lat,lng:ll.lng,officialPortageId:''};
+        if(route.mode==='canoe'&&route.points[index+1])route.points[index+1].officialPortageId='';
         reroute();
       });
       marker.on('click',event=>{if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);});
