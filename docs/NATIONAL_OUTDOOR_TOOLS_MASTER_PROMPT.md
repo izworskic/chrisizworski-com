@@ -360,3 +360,5 @@ The first five tools now share a common user journey. Future work must preserve 
 
 ### Core-before-enrichment rule
 Core decision data must not wait on optional enrichment. If a tool has a fast authoritative observation and slower secondary context, render the observation first and load enrichment independently. Secondary-source latency or failure must never blank the primary decision surface.
+
+Slow discovery may be precomputed, but condition values must remain live. If an authoritative discovery endpoint cannot reliably meet the interaction latency budget, maintain a source-backed local index for identifiers and coordinates, refresh it deliberately, and still fetch current observations live from the authoritative source by exact identifier.
