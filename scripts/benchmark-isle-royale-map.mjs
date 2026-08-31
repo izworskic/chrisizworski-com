@@ -14,6 +14,7 @@ const catalog = JSON.parse(read('public/isle-royale-map/catalog.json'));
 const spec = JSON.parse(read('benchmarks/isle-royale-map.json'));
 const deepManifest = JSON.parse(read('public/isle-royale-map/data/deep-layer-manifest.json'));
 const contextManifest = JSON.parse(read('public/isle-royale-map/data/context-layer-manifest.json'));
+const officialPortages = JSON.parse(read('public/isle-royale-map/data/official-portages-2026.json'));
 const deepPath = file => path.join(root, 'public/isle-royale-map/data', file);
 const sha256 = file => crypto.createHash('sha256').update(fs.readFileSync(deepPath(file))).digest('hex');
 const deepCaps = {geology:25_000_000, vegetation:25_000_000, vegetation_overview:8_000_000};
@@ -114,6 +115,26 @@ const canoePortageRuntime = /<option value="canoe">Canoe \+ portage<\/option>/.t
   && /route\.mode==='hike'\|\|route\.mode==='canoe'\|\|route\.smartState!=='water-aware'/.test(js)
   && /\['paddle','canoe','hike','powerboat'\]/.test(js)
   && /legType:\['water','portage'\]\.includes/.test(js);
+
+const officialPortageDatasetRuntime = officialPortages?.schema_version === 1
+  && officialPortages?.source_vintage === 2026
+  && officialPortages?.source_page === 6
+  && /National Park Service/.test(officialPortages?.authority || '')
+  && Array.isArray(officialPortages?.portages)
+  && officialPortages.portages.length === 16
+  && Math.abs(officialPortages.portages.reduce((sum,p)=>sum+(Number(p.distance_miles)||0),0)-9.5) < .001
+  && Math.max(...officialPortages.portages.map(p=>Number(p.distance_miles)||0)) === 2
+  && Math.max(...officialPortages.portages.map(p=>Number(p.elevation_change_ft)||0)) === 175
+  && new Set(officialPortages.portages.map(p=>p.id)).size === 16
+  && /not landing coordinates/i.test(officialPortages?.disclaimer || '')
+  && /officialPortages: '\/isle-royale-map\/data\/official-portages-2026\.json'/.test(js)
+  && /function loadOfficialPortages/.test(js)
+  && /function matchOfficialPortage/.test(js)
+  && /distanceBasis:official\?'nps-published':'mapped-trail'/.test(js)
+  && /mapped_miles:mappedMiles/.test(js)
+  && /officialPortage:official/.test(js)
+  && /NPS Portage #/.test(js)
+  && /Official portage dataset/.test(html);
 
 const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js)
   && /function resolveWaterRouteAsync/.test(js)
@@ -262,7 +283,7 @@ const referenceShelfComplete = /Official maps from the original research/.test(h
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && routeEditingRuntime, 'map-first route planning with paddle/portage leg accounting, leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && routeEditingRuntime, 'map-first route planning with paddle/portage leg accounting, leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -303,6 +324,7 @@ if (!osmToggleRuntime) hardFailures.push('OSM context is not a reversible layer'
 if (!routePlanningRuntime) hardFailures.push('route-aware marine planning runtime missing');
 if (!smartRoutingRuntime) hardFailures.push('smart trail routing runtime missing');
 if (!canoePortageRuntime) hardFailures.push('canoe route planning is missing mixed paddle/portage leg detection, distance accounting, carry settings, or manual leg override');
+if (!officialPortageDatasetRuntime) hardFailures.push('official 2026 NPS portage dataset is incomplete, unvalidated, or disconnected from canoe route matching');
 if (!waterIntelligenceRuntime) hardFailures.push('water intelligence runtime missing or reduced to a draggable straight-line sketch');
 if (!itineraryRuntime) hardFailures.push('multi-day water itinerary is not source-backed by open NPS Boat-In campgrounds with per-day context');
 if (!scenarioRuntime) hardFailures.push('scenario planning is missing side-by-side trip structures or overnight-aware forecast comparison');

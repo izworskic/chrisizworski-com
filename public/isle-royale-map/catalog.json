@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-30",
+  "version": "2026-08-31",
   "parkCode": "isro",
   "title": "Isle Royale source and layer catalog",
   "sourcePriority": [
@@ -82,6 +82,18 @@
       "publisher": "National Park Service",
       "source": "https://www.nps.gov/isro/planyourvisit/directions.htm",
       "notes": "Public web-map routes may render at runtime; current schedules remain external operational data."
+    },
+    {
+      "id": "official-portages-2026",
+      "npmapsCategory": "paddling / portages",
+      "label": "Official Isle Royale portages — 16 NPS Greenstone carries",
+      "kind": "structured planning dataset",
+      "state": "generated-runtime",
+      "publisher": "National Park Service",
+      "source": "https://www.nps.gov/isro/upload/Web-Accessible_Optimized_2026-Greenstone.pdf",
+      "notes": "Machine-readable transcription of the 16 portages on page 6 of the 2026 Greenstone. Runtime uses published NPS distance, elevation change, and terrain wording when a canoe leg strongly matches an official corridor. Approximate endpoint anchors are discovery aids only and are never treated as landing or navigation coordinates.",
+      "vintage": "2026 Greenstone",
+      "web_path": "/isle-royale-map/data/official-portages-2026.json"
     },
     {
       "id": "shipwrecks",
