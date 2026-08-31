@@ -190,10 +190,20 @@ const focusCockpitRuntime = /id="planning-cockpit"/.test(html)
   && /id="cockpit-redo"/.test(html)
   && /id="route-redo"/.test(html)
   && /function captureRouteSnapshot/.test(js)
-  && /function rememberRouteEdit/.test(js)
+  && /function snapshotFingerprint/.test(js)
+  && /function rememberRouteEdit\(action='route edit'\)/.test(js)
   && /function undoRouteEdit/.test(js)
   && /function redoRouteEdit/.test(js)
   && /function restoreRouteSnapshot/.test(js)
+  && /departure:route\.departure/.test(js)
+  && /adding:Boolean\(route\.adding\)/.test(js)
+  && /button\.textContent=undoLabel/.test(js)
+  && /button\.textContent=redoLabel/.test(js)
+  && /rememberRouteEdit\('change speed'\)/.test(js)
+  && /rememberRouteEdit\('change day length'\)/.test(js)
+  && /rememberRouteEdit\('change departure'\)/.test(js)
+  && /last\?\.fingerprint===fingerprint/.test(js)
+  && /historyAction:\(active\?'set ':'clear '\)/.test(js)
   && /renderRouteStopsInto\(els\.cockpitStops\)/.test(js)
   && /els\.cockpitMode\?\.addEventListener\('change'/.test(js)
   && /els\.cockpitWeather\?\.addEventListener\('click',analyzeRouteWeather\)/.test(js)
@@ -269,6 +279,8 @@ if (!mapFirstRoutingRuntime) hardFailures.push('map-first route building is miss
 if (!manualDayEndRuntime) hardFailures.push('manual campsite day-end control is missing or can bypass Boat-In/closure truth gates');
 if (!largePlanningCanvasRuntime) hardFailures.push('planning map is too constrained or missing full-viewport focus mode and Leaflet resize handling');
 if (!focusCockpitRuntime) hardFailures.push('Focus map is missing shared route controls, stop/day-end editing, or true undo/redo route history');
+if (!/speed:Number\(route\.speed\)\|\|3/.test(js) || !/hours:Number\(route\.hours\)\|\|6/.test(js) || !/departure:route\.departure/.test(js)) hardFailures.push('Undo snapshots are reading post-change DOM values instead of committed route settings');
+if (!/button\.textContent=undoLabel/.test(js) || !/last\?\.fingerprint===fingerprint/.test(js)) hardFailures.push('Undo is missing action labels or no-op history deduplication');
 if (!tripPersistenceRuntime) hardFailures.push('trip persistence/handoff is missing local-only save, share-fragment restore, or resolved-route GPX export safeguards');
 if (!routeEditingRuntime) hardFailures.push('route planning is missing leg/cumulative distances or obvious stop deletion from the map/list');
 if (/data-layer="vegetation-(?:overview|baseline|change)"|data-layer="horne-fire"/.test(html)) hardFailures.push('retired vegetation/ecology layers leaked back into the planning controls');

@@ -165,6 +165,9 @@
     markers:[],
     weather:null,
     mode:'paddle',
+    speed:3,
+    hours:6,
+    departure:'',
     smartState:'idle',
     trailNames:[],
     accessMiles:0,
@@ -551,14 +554,14 @@
     };
   }
 
-  function addFeatureToRoute(record) {
+  function addFeatureToRoute(record,options={}) {
     if(!record?.latlng||!Number.isFinite(record.latlng.lat)||!Number.isFinite(record.latlng.lng))return false;
     if(record.category==='campground'&&record.liveAlert) {
       status(record.name+' is currently flagged closed by NPS and was not added as a campsite. Open its details for the current closure.');
       selectRecord(record);
       return false;
     }
-    addRoutePoint(record.latlng,record.name,routePointMetaForRecord(record));
+    addRoutePoint(record.latlng,record.name,{...routePointMetaForRecord(record),historyAction:cleanText(options.historyAction||'')});
     map.closePopup();
     const type=record.category==='campground'
       ? (record.boater?'NPS Boat-In campsite':'campground')
@@ -583,9 +586,16 @@
 
   function setCampDayEnd(recordOrPoint,active=true) {
     let point=recordOrPoint?.latlng ? routePointForRecord(recordOrPoint) : recordOrPoint;
+    let addedForDayEnd=false;
     if(!point&&recordOrPoint?.latlng) {
-      addFeatureToRoute(recordOrPoint);
+      if(active&&!route.points.length) {
+        status('Choose a route start first, then use End day here on a later campsite.');
+        return false;
+      }
+      const beforeCount=route.points.length;
+      addFeatureToRoute(recordOrPoint,{historyAction:(active?'set ':'clear ')+(recordOrPoint.name||'campground')+' day end'});
       point=routePointForRecord(recordOrPoint);
+      addedForDayEnd=Boolean(point&&route.points.length>beforeCount);
     }
     if(!point||point.kind!=='campground')return false;
     if(active&&route.points[0]===point) {
@@ -600,7 +610,8 @@
       status((point.label||'Campground')+' is not in the current NPS Boat-In campground feed, so it cannot be fixed as a water-trip day end.');
       return false;
     }
-    rememberRouteEdit();
+    if(Boolean(point.manualDayEnd)===Boolean(active))return true;
+    if(!addedForDayEnd)rememberRouteEdit((active?'set ':'clear ')+(point.label||'campground')+' day end');
     point.manualDayEnd=Boolean(active);
     reroute((point.label||'Campground')+(active?' set as an explicit day end.':' returned to a normal route stop.'));
     const day=manualDayNumber(point);
@@ -1490,7 +1501,7 @@
   function removeRoutePoint(index) {
     if(index<0||index>=route.points.length)return;
     const point=route.points[index];
-    rememberRouteEdit();
+    rememberRouteEdit('remove '+(point.label||'route point'));
     route.points.splice(index,1);
     map.closePopup();
     reroute('Route stop removed. Re-run weather after the route resolves.');
@@ -1930,7 +1941,7 @@
     if(!projection)return;
     let insertAt=route.points.length-1;
     for(let i=1;i<route.points.length;i++){const cp=api.projectPointToPath(route.points[i],path);if(cp&&cp.along_miles>projection.along_miles){insertAt=i;break;}}
-    rememberRouteEdit();
+    rememberRouteEdit('add '+camp.name);
     route.points.splice(insertAt,0,target);
     reroute(camp.name+' added as an overnight route stop. Re-run weather after the water route resolves.');
     emitEvent('isle_royale_itinerary_stop',{mode:route.mode,source:'nps-boat-in'});
@@ -2002,7 +2013,7 @@
       });
     }
     entries.sort((a,b)=>a.along-b.along);
-    rememberRouteEdit();
+    rememberRouteEdit('apply '+scenario.title+' scenario');
     route.points=[start,...entries.map(entry=>entry.point),end];
     route.activeScenario=scenario.id;
     reroute(scenario.title+' scenario applied. Source-backed overnight stops were added; re-run forecast comparison after the route resolves.');
@@ -2241,7 +2252,7 @@
           if(!route.adding)return;
           if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);
           const index=nearestControlSegmentIndex(event.latlng);
-          rememberRouteEdit();
+          rememberRouteEdit('add shaping point');
           route.points.splice(index,0,{lat:event.latlng.lat,lng:event.latlng.lng,label:`Via ${index}`,kind:'map-point'});
           reroute();
           status('Shaping point added to the route. Keep clicking to refine the trip.');
@@ -2273,7 +2284,7 @@
       marker.bindPopup(popup,{maxWidth:300,className:'isle-detail-popup'});
       marker.on('dragend',()=>{
         const ll=marker.getLatLng();
-        rememberRouteEdit();
+        rememberRouteEdit('move '+(route.points[index].label||'route point'));
         route.points[index]={...route.points[index],lat:ll.lat,lng:ll.lng};
         reroute();
       });
@@ -2325,27 +2336,66 @@
     return {
       points:cloneRoutePoints(),
       mode:route.mode,
-      speed:Number(els.routeSpeed.value)||3,
-      hours:Number(els.routeDayHours?.value)||6,
-      activeScenario:route.activeScenario||'balanced'
+      speed:Number(route.speed)||3,
+      hours:Number(route.hours)||6,
+      departure:route.departure||els.routeDeparture?.value||'',
+      activeScenario:route.activeScenario||'balanced',
+      adding:Boolean(route.adding)
     };
   }
 
-  function updateHistoryControls() {
-    const canUndo=route.history.length>0;
-    const canRedo=route.future.length>0;
-    if(els.routeUndo)els.routeUndo.disabled=!canUndo;
-    if(els.routeRedo)els.routeRedo.disabled=!canRedo;
-    if(els.cockpitUndo)els.cockpitUndo.disabled=!canUndo;
-    if(els.cockpitRedo)els.cockpitRedo.disabled=!canRedo;
+  function snapshotFingerprint(snapshot) {
+    return JSON.stringify({
+      points:(snapshot?.points||[]).map(point=>({
+        lat:Number(point.lat).toFixed(6),lng:Number(point.lng).toFixed(6),label:point.label||'',kind:point.kind||'',
+        sourceBackedBoatIn:Boolean(point.sourceBackedBoatIn),liveAlert:Boolean(point.liveAlert),manualDayEnd:Boolean(point.manualDayEnd),
+        scenarioGenerated:Boolean(point.scenarioGenerated),scenarioId:point.scenarioId||'',campId:point.campId||''
+      })),
+      mode:snapshot?.mode||'paddle',
+      speed:Number(snapshot?.speed)||3,
+      hours:Number(snapshot?.hours)||6,
+      departure:snapshot?.departure||'',
+      activeScenario:snapshot?.activeScenario||'balanced',
+      adding:Boolean(snapshot?.adding)
+    });
   }
 
-  function rememberRouteEdit() {
+  function historyLabel(entry,fallback='route edit') {
+    return cleanText(entry?.action||fallback).slice(0,48);
+  }
+
+  function updateHistoryControls() {
+    const undoEntry=route.history[route.history.length-1]||null;
+    const redoEntry=route.future[route.future.length-1]||null;
+    const canUndo=Boolean(undoEntry);
+    const canRedo=Boolean(redoEntry);
+    const undoLabel=canUndo?'Undo '+historyLabel(undoEntry):'Undo';
+    const redoLabel=canRedo?'Redo '+historyLabel(redoEntry):'Redo';
+    for(const button of [els.routeUndo,els.cockpitUndo]) {
+      if(!button)continue;
+      button.disabled=!canUndo;
+      button.textContent=undoLabel;
+      button.title=canUndo?undoLabel:'Nothing to undo';
+    }
+    for(const button of [els.routeRedo,els.cockpitRedo]) {
+      if(!button)continue;
+      button.disabled=!canRedo;
+      button.textContent=redoLabel;
+      button.title=canRedo?redoLabel:'Nothing to redo';
+    }
+  }
+
+  function rememberRouteEdit(action='route edit') {
     if(window.location.hash.startsWith('#trip='))window.history.replaceState(null,'',window.location.pathname+window.location.search);
-    route.history.push(captureRouteSnapshot());
+    const snapshot=captureRouteSnapshot();
+    const fingerprint=snapshotFingerprint(snapshot);
+    const last=route.history[route.history.length-1];
+    if(last?.fingerprint===fingerprint)return false;
+    route.history.push({snapshot,action:historyLabel({action}),fingerprint});
     if(route.history.length>40)route.history.shift();
     route.future=[];
     updateHistoryControls();
+    return true;
   }
 
   function restoreRouteSnapshot(snapshot,message) {
@@ -2353,10 +2403,15 @@
     route.waterToken++;
     route.points=cloneRoutePoints(snapshot.points);
     route.mode=snapshot.mode||'paddle';
+    route.speed=Math.max(.5,Number(snapshot.speed)||3);
+    route.hours=Math.max(2,Number(snapshot.hours)||6);
+    route.departure=snapshot.departure||'';
     route.activeScenario=snapshot.activeScenario||'balanced';
+    route.adding=Boolean(snapshot.adding);
     els.routeModeSelect.value=route.mode;
-    els.routeSpeed.value=String(snapshot.speed||3);
-    if(els.routeDayHours)els.routeDayHours.value=String(snapshot.hours||6);
+    els.routeSpeed.value=String(route.speed);
+    if(els.routeDayHours)els.routeDayHours.value=String(route.hours);
+    if(els.routeDeparture)els.routeDeparture.value=route.departure;
     route.resolvedPoints=[];
     route.trailNames=[];
     route.waterStats=null;
@@ -2366,28 +2421,34 @@
     route.itinerary=null;
     route.itineraryWeather=null;
     route.smartState=route.points.length<2?(route.points.length?'need-destination':'idle'):(route.mode==='hike'?'trail-pending':'water-pending');
+    els.routeModeButton?.setAttribute('aria-pressed',String(route.adding));
+    els.exploreModeButton?.setAttribute('aria-pressed',String(!route.adding));
+    document.body.classList.toggle('route-building',route.adding);
     reroute(message);
     updateHistoryControls();
+    resizePlanningMap();
   }
 
   function undoRouteEdit() {
     if(!route.history.length)return;
+    const entry=route.history.pop();
     const current=captureRouteSnapshot();
-    const previous=route.history.pop();
-    route.future.push(current);
+    route.future.push({snapshot:current,action:entry.action,fingerprint:snapshotFingerprint(current)});
     if(route.future.length>40)route.future.shift();
-    restoreRouteSnapshot(previous,'Undo restored the previous trip state. Re-run weather for the restored route.');
-    status('Undid the last route edit.');
+    restoreRouteSnapshot(entry.snapshot,'Undo restored the previous trip state. Re-run weather for the restored route.');
+    status('Undid '+historyLabel(entry)+'.');
+    emitEvent('isle_royale_route_undo',{action:historyLabel(entry),history_depth:route.history.length});
   }
 
   function redoRouteEdit() {
     if(!route.future.length)return;
+    const entry=route.future.pop();
     const current=captureRouteSnapshot();
-    const next=route.future.pop();
-    route.history.push(current);
+    route.history.push({snapshot:current,action:entry.action,fingerprint:snapshotFingerprint(current)});
     if(route.history.length>40)route.history.shift();
-    restoreRouteSnapshot(next,'Redo restored the next trip state. Re-run weather for the restored route.');
-    status('Redid the route edit.');
+    restoreRouteSnapshot(entry.snapshot,'Redo restored the next trip state. Re-run weather for the restored route.');
+    status('Redid '+historyLabel(entry)+'.');
+    emitEvent('isle_royale_route_redo',{action:historyLabel(entry),redo_depth:route.future.length});
   }
 
   function syncCockpitControls() {
@@ -2425,9 +2486,9 @@
       version:1,
       saved_at:new Date().toISOString(),
       mode:route.mode,
-      speed:Number(els.routeSpeed.value)||3,
-      hours:Number(els.routeDayHours?.value)||6,
-      departure:els.routeDeparture.value||'',
+      speed:Number(route.speed)||3,
+      hours:Number(route.hours)||6,
+      departure:route.departure||'',
       activeScenario:route.activeScenario||'balanced',
       points:cloneRoutePoints().slice(0,40).map(point=>({
         lat:Number(point.lat),lng:Number(point.lng),label:cleanText(point.label||'').slice(0,100),
@@ -2462,15 +2523,18 @@
   function applyTripState(raw,{remember=true,message='Trip restored.'}={}) {
     const state=normalizeTripState(raw);
     if(!state)return false;
-    if(remember)rememberRouteEdit();
+    if(remember)rememberRouteEdit('restore saved trip');
     route.waterToken++;
     route.points=cloneRoutePoints(state.points);
     route.mode=state.mode;
+    route.speed=state.speed;
+    route.hours=state.hours;
+    route.departure=state.departure||'';
     route.activeScenario=state.activeScenario||'balanced';
     els.routeModeSelect.value=state.mode;
-    els.routeSpeed.value=String(state.speed);
-    if(els.routeDayHours)els.routeDayHours.value=String(state.hours);
-    if(state.departure&&Number.isFinite(new Date(state.departure).getTime()))els.routeDeparture.value=state.departure;
+    els.routeSpeed.value=String(route.speed);
+    if(els.routeDayHours)els.routeDayHours.value=String(route.hours);
+    if(els.routeDeparture)els.routeDeparture.value=route.departure;
     route.resolvedPoints=[];route.trailNames=[];route.waterStats=null;route.waterReason='';route.scenarios=[];route.scenarioWeather={};route.itinerary=null;route.itineraryWeather=null;
     reroute(message+' Re-run weather for the restored schedule.');
     if(state.map)window.setTimeout(()=>map.setView([state.map.lat,state.map.lng],state.map.zoom,{animate:false}),260);
@@ -2614,9 +2678,11 @@
       sourceBackedBoatIn:Boolean(meta.sourceBackedBoatIn),
       sourceLabel:cleanText(meta.sourceLabel||''),
       liveAlert:Boolean(meta.liveAlert),
+      historyAction:cleanText(meta.historyAction||''),
       manualDayEnd:Boolean(meta.manualDayEnd)
     };
-    rememberRouteEdit();
+    rememberRouteEdit(point.historyAction||(point.kind==='campground'?'add '+point.label:'add route point'));
+    delete point.historyAction;
     route.points.push(point);
     reroute('Route changed. Re-run the weather analysis for the updated path.');
     emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode,point_kind:cleanText(meta.kind||'map-point')});
@@ -2625,7 +2691,7 @@
 
   function reverseRoute() {
     if(route.points.length<2)return;
-    rememberRouteEdit();
+    rememberRouteEdit('reverse route');
     route.points.reverse();
     reroute();
     status('Route direction reversed.');
@@ -2636,7 +2702,7 @@
   }
 
   function clearRoute() {
-    if(route.points.length)rememberRouteEdit();
+    if(route.points.length)rememberRouteEdit('clear route');
     route.waterToken++;
     route.points=[];
     route.resolvedPoints=[];
@@ -2970,11 +3036,15 @@
   });
 
   function setDefaultRouteDeparture() {
-    if(els.routeDeparture.value)return;
+    if(els.routeDeparture.value) {
+      route.departure=els.routeDeparture.value;
+      return;
+    }
     const d=new Date(Date.now()+60*60*1000);
     d.setMinutes(0,0,0);
     const local=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);
     els.routeDeparture.value=local;
+    route.departure=local;
     const max=new Date(Date.now()+7*24*60*60*1000);
     els.routeDeparture.min=new Date(Date.now()-60*60*1000-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
     els.routeDeparture.max=new Date(max.getTime()-max.getTimezoneOffset()*60000).toISOString().slice(0,16);
@@ -2982,24 +3052,42 @@
 
   const routeSpeedDefaults={paddle:3,hike:2,powerboat:15};
   els.routeModeSelect.addEventListener('change',()=>{
-    rememberRouteEdit();
-    route.mode=els.routeModeSelect.value;
+    const nextMode=els.routeModeSelect.value;
+    if(nextMode===route.mode)return;
+    rememberRouteEdit('change travel mode');
+    route.mode=nextMode;
     route.activeScenario='balanced';
-    els.routeSpeed.value=routeSpeedDefaults[route.mode]||3;
+    route.speed=routeSpeedDefaults[route.mode]||3;
+    els.routeSpeed.value=String(route.speed);
     reroute('Travel mode changed. Re-run route weather after confirming speed and departure.');
   });
   els.routeSpeed.addEventListener('change',()=>{
-    rememberRouteEdit();
+    const next=Math.max(.5,Number(els.routeSpeed.value)||3);
+    if(Math.abs(next-route.speed)<.001){els.routeSpeed.value=String(route.speed);return;}
+    rememberRouteEdit('change speed');
+    route.speed=next;
+    els.routeSpeed.value=String(route.speed);
     clearRouteWeather('Planning speed changed. Re-run route weather for updated arrival times.');
     renderRoute();
   });
   els.routeDayHours?.addEventListener('change',()=>{
-    rememberRouteEdit();
+    const next=Math.max(2,Number(els.routeDayHours.value)||6);
+    if(Math.abs(next-route.hours)<.001){els.routeDayHours.value=String(route.hours);return;}
+    rememberRouteEdit('change day length');
+    route.hours=next;
+    els.routeDayHours.value=String(route.hours);
     route.activeScenario='balanced';
     clearRouteWeather('Balanced travel-day length changed. Scenario plans were rebuilt; re-run forecast comparison for the new schedules.');
     renderRoute();
   });
-  els.routeDeparture.addEventListener('change',()=>clearRouteWeather('Departure changed. Re-run route weather for the new time.'));
+  els.routeDeparture.addEventListener('change',()=>{
+    const next=els.routeDeparture.value||'';
+    if(next===route.departure)return;
+    rememberRouteEdit('change departure');
+    route.departure=next;
+    clearRouteWeather('Departure changed. Re-run route weather for the new time.');
+    renderRoute();
+  });
   els.routeAddButton.addEventListener('click',()=>setRouteAdding(!route.adding));
   els.routeModeButton.addEventListener('click',()=>setRouteAdding(true));
   els.exploreModeButton?.addEventListener('click',()=>setRouteAdding(false));

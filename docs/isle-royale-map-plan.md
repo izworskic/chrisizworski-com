@@ -97,6 +97,18 @@ Supporting terms (not separate canonicals): Isle Royale trail map, campground ma
 - Publish stable PMTiles/MBTiles for large layers; do not send huge polygon GeoJSON to every browser.
 - Georeference historic/NPMaps-only map artwork only when no better vector source exists; record RMSE and derived status.
 
+### Route history contract — Undo must match the user's mental model
+
+Undo/Redo is part of route planning, not a generic point-pop mechanism.
+
+- Capture the **committed route model before the edit**, never the already-changed input value.
+- History state includes route points/camps/day ends, travel mode, speed, hours/day, departure time, active scenario and Build/Explore mode.
+- Every history entry carries a human-readable action so controls can say what will happen: e.g. **Undo remove Lane Cove**, **Undo move waypoint**, **Redo change speed**.
+- Deduplicate identical snapshots so no-op input changes do not consume a history step.
+- A compound UI action is one history action. For example, using **End day here** on an unpinned campground may add the camp and set the day end, but one Undo must reverse the whole click.
+- New edits after Undo clear the redo branch.
+- Async water-routing results must remain token-cancelled so stale routing cannot overwrite an undone route.
+
 ### Planning-surface simplification — route utility over GIS showcase
 
 The deep-research catalog still preserves the original 16 NPMaps/NPS product families, but the primary map UI must expose only layers that materially improve a trip decision.
