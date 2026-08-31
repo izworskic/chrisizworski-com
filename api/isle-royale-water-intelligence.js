@@ -2,7 +2,7 @@ const OVERPASS_ENDPOINTS = [
   'https://overpass-api.de/api/interpreter',
   'https://overpass.kumi.systems/api/interpreter'
 ];
-const USER_AGENT = 'ChrisIzworskiIsleRoyaleWaterIntelligence/1.0 (https://chrisizworski.com/isle-royale-map/)';
+const USER_AGENT = 'ChrisIzworskiIsleRoyaleWaterIntelligence/2.0 (https://chrisizworski.com/isle-royale-map/)';
 const BBOX = Object.freeze({south:47.74, west:-89.46, north:48.38, east:-88.08});
 
 function number(value) {
@@ -22,7 +22,7 @@ function sqSegDistance(point, a, b) {
   return dx * dx + dy * dy;
 }
 
-function simplifyLine(points, tolerance = 0.00035) {
+function simplifyLine(points, tolerance = 0.0002) {
   if (!Array.isArray(points) || points.length <= 2) return points || [];
   const sqTolerance = tolerance * tolerance;
   const keep = new Uint8Array(points.length);
@@ -44,32 +44,111 @@ function simplifyLine(points, tolerance = 0.00035) {
   return points.filter((_, i) => keep[i]);
 }
 
-function normalizeWays(data) {
-  const lines = [];
-  for (const element of data?.elements || []) {
-    if (element?.type !== 'way' || !Array.isArray(element.geometry)) continue;
-    const points = element.geometry
-      .map(p => [number(p.lon), number(p.lat)])
-      .filter(p => p[0] !== null && p[1] !== null);
-    if (points.length < 2) continue;
-    const simplified = simplifyLine(points);
-    if (simplified.length >= 2) lines.push(simplified);
+function geometryPoints(geometry) {
+  return (geometry || [])
+    .map(p => [number(p.lon), number(p.lat)])
+    .filter(p => p[0] !== null && p[1] !== null);
+}
+
+function closeEnough(a,b,tolerance=0.00003) {
+  return Boolean(a&&b&&Math.abs(a[0]-b[0])<=tolerance&&Math.abs(a[1]-b[1])<=tolerance);
+}
+
+function closedRing(points) {
+  if (!Array.isArray(points) || points.length < 4) return null;
+  const ring = [...points];
+  if (!closeEnough(ring[0], ring[ring.length - 1])) return null;
+  ring[ring.length - 1] = [...ring[0]];
+  return ring;
+}
+
+function stitchRings(lines) {
+  const pending = (lines || []).filter(line => Array.isArray(line) && line.length >= 2).map(line => [...line]);
+  const rings = [];
+  while (pending.length) {
+    let ring = pending.shift();
+    let changed = true;
+    while (changed && !closeEnough(ring[0], ring[ring.length - 1])) {
+      changed = false;
+      for (let i = 0; i < pending.length; i++) {
+        const line = pending[i];
+        if (closeEnough(ring[ring.length - 1], line[0])) {
+          ring = ring.concat(line.slice(1)); pending.splice(i,1); changed = true; break;
+        }
+        if (closeEnough(ring[ring.length - 1], line[line.length - 1])) {
+          ring = ring.concat([...line].reverse().slice(1)); pending.splice(i,1); changed = true; break;
+        }
+        if (closeEnough(ring[0], line[line.length - 1])) {
+          ring = line.slice(0,-1).concat(ring); pending.splice(i,1); changed = true; break;
+        }
+        if (closeEnough(ring[0], line[0])) {
+          ring = [...line].reverse().slice(0,-1).concat(ring); pending.splice(i,1); changed = true; break;
+        }
+      }
+    }
+    const closed = closedRing(ring);
+    if (closed) rings.push(closed);
   }
-  return lines;
+  return rings;
+}
+
+function normalizeWaterData(data) {
+  const coastlines = [];
+  const waterPolygons = [];
+  const waterCenterlines = [];
+  for (const element of data?.elements || []) {
+    const tags = element?.tags || {};
+    if (element?.type === 'way' && Array.isArray(element.geometry)) {
+      const points = geometryPoints(element.geometry);
+      if (points.length < 2) continue;
+      if (tags.natural === 'coastline') {
+        const simplified = simplifyLine(points, 0.0002);
+        if (simplified.length >= 2) coastlines.push(simplified);
+        continue;
+      }
+      if (tags.natural === 'water' || ['riverbank','canal'].includes(tags.waterway)) {
+        const ring = closedRing(points);
+        if (ring) waterPolygons.push(simplifyLine(ring, 0.00012));
+      }
+      if (['river','stream','canal'].includes(tags.waterway)) {
+        const simplified = simplifyLine(points, 0.00008);
+        if (simplified.length >= 2) waterCenterlines.push(simplified);
+      }
+      continue;
+    }
+    if (element?.type === 'relation' && (tags.natural === 'water' || tags.waterway === 'riverbank')) {
+      const outerLines = [];
+      for (const member of element.members || []) {
+        if (member?.type !== 'way' || member.role === 'inner' || !Array.isArray(member.geometry)) continue;
+        const points = geometryPoints(member.geometry);
+        if (points.length >= 2) outerLines.push(points);
+      }
+      for (const ring of stitchRings(outerLines)) waterPolygons.push(simplifyLine(ring, 0.00012));
+    }
+  }
+  return {coastlines, waterPolygons, waterCenterlines};
 }
 
 async function fetchOverpass(endpoint) {
-  const query = `[out:json][timeout:35];way["natural"="coastline"](${BBOX.south},${BBOX.west},${BBOX.north},${BBOX.east});out geom;`;
+  const query = `[out:json][timeout:40];
+(
+  way["natural"="coastline"](${BBOX.south},${BBOX.west},${BBOX.north},${BBOX.east});
+  way["natural"="water"](${BBOX.south},${BBOX.west},${BBOX.north},${BBOX.east});
+  relation["natural"="water"](${BBOX.south},${BBOX.west},${BBOX.north},${BBOX.east});
+  way["waterway"~"river|stream|canal|riverbank"](${BBOX.south},${BBOX.west},${BBOX.north},${BBOX.east});
+  relation["waterway"="riverbank"](${BBOX.south},${BBOX.west},${BBOX.north},${BBOX.east});
+);
+out geom;`;
   const url = endpoint + '?data=' + encodeURIComponent(query);
   const response = await fetch(url, {
     headers: {accept:'application/json', 'user-agent':USER_AGENT},
-    signal: AbortSignal.timeout(42000)
+    signal: AbortSignal.timeout(47000)
   });
   if (!response.ok) throw new Error(`Overpass returned ${response.status}`);
   const data = await response.json();
-  const lines = normalizeWays(data);
-  if (!lines.length) throw new Error('Overpass returned no coastline geometry');
-  return {lines, endpoint};
+  const normalized = normalizeWaterData(data);
+  if (!normalized.coastlines.length) throw new Error('Overpass returned no coastline geometry');
+  return {...normalized, endpoint};
 }
 
 module.exports = async function handler(req, res) {
@@ -86,17 +165,25 @@ module.exports = async function handler(req, res) {
   for (const endpoint of OVERPASS_ENDPOINTS) {
     try {
       const result = await fetchOverpass(endpoint);
-      const pointCount = result.lines.reduce((sum, line) => sum + line.length, 0);
+      const coastlinePointCount = result.coastlines.reduce((sum, line) => sum + line.length, 0);
+      const inlandPointCount = result.waterPolygons.reduce((sum, ring) => sum + ring.length, 0);
+      const centerlinePointCount = result.waterCenterlines.reduce((sum, line) => sum + line.length, 0);
       res.setHeader('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800');
       return res.status(200).json({
-        source:'OpenStreetMap coastline geometry via Overpass',
+        source:'OpenStreetMap coastline + inland water geometry via Overpass',
         source_url:'https://www.openstreetmap.org/copyright',
         fetched_at:new Date().toISOString(),
         bbox:BBOX,
-        line_count:result.lines.length,
-        point_count:pointCount,
-        lines:result.lines,
-        caveat:'Planning shoreline geometry only. This is not a navigation chart and does not establish water depth, hazards, access rights, or a safe route.'
+        line_count:result.coastlines.length,
+        point_count:coastlinePointCount,
+        inland_water_count:result.waterPolygons.length,
+        inland_water_point_count:inlandPointCount,
+        water_centerline_count:result.waterCenterlines.length,
+        water_centerline_point_count:centerlinePointCount,
+        lines:result.coastlines,
+        water_polygons:result.waterPolygons,
+        water_centerlines:result.waterCenterlines,
+        caveat:'Planning water geometry only. This is not a navigation chart and does not establish water depth, hazards, access rights, or a safe route.'
       });
     } catch (error) {
       errors.push(`${endpoint}: ${String(error?.message || error)}`);
@@ -105,9 +192,9 @@ module.exports = async function handler(req, res) {
 
   res.setHeader('Cache-Control', 'no-store');
   return res.status(502).json({
-    error:'Isle Royale shoreline geometry unavailable',
+    error:'Isle Royale water geometry unavailable',
     detail:errors.join(' | ')
   });
 };
 
-module.exports._test = {number, sqSegDistance, simplifyLine, normalizeWays, BBOX};
+module.exports._test = {number, sqSegDistance, simplifyLine, geometryPoints, closeEnough, closedRing, stitchRings, normalizeWaterData, BBOX};
