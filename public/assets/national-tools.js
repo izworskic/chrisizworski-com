@@ -51,7 +51,15 @@
   }
   function withQuery(path,loc){
     const q=loc?.query||label(loc);
-    return path+(path.includes("?")?"&":"?")+"q="+encodeURIComponent(q);
+    const base=String(path||"").split("?")[0];
+    return base+"?q="+encodeURIComponent(q);
+  }
+  function propagate(loc,root){
+    if(!loc)return;
+    (root||document).querySelectorAll('a[href^="/national-tools/"]').forEach(function(anchor){
+      const href=anchor.getAttribute("href")||"";
+      if(href.startsWith("/national-tools/"))anchor.setAttribute("href",withQuery(href,loc));
+    });
   }
   async function geocode(q){
     const r=await fetch("/api/national-geocode?q="+encodeURIComponent(q));
@@ -67,12 +75,12 @@
     form.addEventListener("submit",async e=>{
       e.preventDefault();const q=input.value.trim();if(!q)return;
       button.disabled=true;if(status)status.textContent="Finding "+q+"…";
-      try{const loc=await geocode(q);if(status)status.textContent=label(loc);await onLocation(loc)}
+      try{const loc=await geocode(q);if(status)status.textContent=label(loc);propagate(loc);await onLocation(loc)}
       catch(err){if(status)status.innerHTML='<span class="error">'+esc(err.message)+"</span>"}
       finally{button.disabled=false}
     });
   }
   window.NationalTools={
-    $,fmtDate,esc,geocode,label,bind,saved,savedPlaces,savePlace,removePlace,locationKey,remember,withQuery
+    $,fmtDate,esc,geocode,label,bind,saved,savedPlaces,savePlace,removePlace,locationKey,remember,withQuery,propagate
   };
 })();
