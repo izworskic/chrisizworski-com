@@ -71,13 +71,14 @@
       <button id="load-osm" type="button" aria-pressed="false">Show supplemental data</button>
       <button id="clear-selection" type="button">Clear selection</button>
     </div>
-    <div id="route-map-guide" class="route-map-guide" aria-live="polite"><strong>Build route:</strong> click water/land for a waypoint, click campsites for trip stops, or click a brown <strong>P#</strong> portage to inspect it and add the whole official carry. Click the route line to add shaping points.</div>
+    <div id="route-map-guide" class="route-map-guide" aria-live="polite"><strong>Build route:</strong> for canoe, paddle or motorboat trips, select points on the water. The planner will not draw a route across land. To cross between lakes, click a brown <strong>P#</strong> portage and choose <strong>Route through this portage</strong>. Use <strong>Back one point</strong> whenever you want to change direction.</div>
     <div id="route-build-bar" class="route-build-bar" aria-live="polite" hidden>
       <div class="route-build-state">
         <strong id="route-build-phase">Building route</strong>
         <span id="route-build-metrics">Choose a start point.</span>
       </div>
       <div class="route-build-controls">
+        <button id="route-back-point" type="button" disabled>Back one point</button>
         <button id="route-finish-build" class="primary" type="button" disabled>Finish &amp; review</button>
         <div id="route-review-actions" class="route-review-actions" hidden>
           <button id="route-review-edit" type="button">Edit route</button>
@@ -96,6 +97,7 @@
       </div>
       <div class="cockpit-actions">
         <button id="cockpit-build" type="button" class="primary">Build route</button>
+        <button id="cockpit-back-point" type="button">Back point</button>
         <button id="cockpit-undo" type="button">Undo</button>
         <button id="cockpit-redo" type="button">Redo</button>
         <button id="cockpit-reverse" type="button">Reverse</button>
@@ -143,7 +145,7 @@
         <div class="route-heading">
           <div>
             <h3>Plan a route</h3>
-            <p class="small">Build point to point, or click a brown P# portage on the map and choose <strong>Add this portage to trip</strong>. Official portage objects show NPS distance, elevation change and terrain; unresolved P#? badges never invent a trail line.</p>
+            <p class="small">Build point to point on the water. Canoe, paddle and motorboat routes are blocked from crossing land. The only canoe land crossings are the 16 designated brown P# portages; click one and choose <strong>Route through this portage</strong>. Portage distance uses the official NPS distance while the map follows the resolved portage corridor.</p>
           </div>
           <span class="route-badge">ROUTE INTELLIGENCE</span>
         </div>
@@ -189,7 +191,7 @@
             <input id="route-departure" type="datetime-local">
           </label>
         </div>
-        <div id="route-smart-status" class="route-smart-status" aria-live="polite">Switch to Build route, then click the map for your start. In Canoe + portage mode each new leg is detected as paddle or portage; you can override the leg type from the stop list.</div>
+        <div id="route-smart-status" class="route-smart-status" aria-live="polite">Switch to Build route, then click the map for your start. Watercraft legs must resolve entirely on water. For a land crossing in Canoe + portage mode, select a designated brown P# portage.</div>
         <div class="btn-row route-actions">
           <button class="btn primary" id="route-add-mode" type="button">Start building</button>
           <button class="btn" id="route-reverse" type="button">Reverse</button>
@@ -197,7 +199,7 @@
           <button class="btn" id="route-redo" type="button">Redo</button>
           <button class="btn" id="route-clear" type="button">Clear</button>
         </div>
-        <div class="route-review-hint"><strong>Build first.</strong> Add the complete route on the map, choose <strong>Finish &amp; review</strong>, then save, share or export the verified route.</div>
+        <div class="route-review-hint"><strong>Build first.</strong> Add the complete route on the map. Use <strong>Back one point</strong> to undo the most recent route selection. Finish is enabled only after watercraft routes are verified as water-only except for designated NPS portages.</div>
         <div class="btn-row route-actions">
           <button class="btn" id="route-save" type="button">Save named trip</button>
           <button class="btn" id="route-restore" type="button">Restore latest</button>
@@ -274,6 +276,6 @@
 <footer class="footer">© 2026 Chris Izworski · Michigan and Great Lakes field tools <a href="/tools/">All tools</a></footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
 <script src="/assets/isle-royale-water-intelligence.js?v=20260830-5"></script>
-<script src="/assets/isle-royale-map.js?v=20260831-simple-pace-1"></script>
+<script src="/assets/isle-royale-map.js?v=20260831-hard-water-routing-1"></script>
 </body>
 </html>
