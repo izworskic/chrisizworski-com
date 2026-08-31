@@ -63,7 +63,7 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /Open this coordinate on the source map/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
 
-const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-hard-water-routing-1/.test(html)
+const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-focus-live-days-1/.test(html)
   && !/isle-royale-map\.js\?v=20260830-19/.test(html)
   && /"source": "\/assets\/isle-royale-map\.js"/.test(vercel)
   && /"key": "Cache-Control"[\s\S]{0,120}"value": "no-store, max-age=0"/.test(vercel)
@@ -153,17 +153,24 @@ const routeEditingRuntime = /function routeControlDistances/.test(js)
   && /function removeRoutePoint/.test(js)
   && /function routeDisplayPoints/.test(js)
   && /function routeIsResolved/.test(js)
-  && /if\(route\.mode==='hike'\)return route\.points/.test(js)
-  && /return route\.points\.length<2\?route\.points:\[\]/.test(js)
-  && /const draftDisplay=route\.mode==='hike'&&!routeIsResolved\(\)&&displayPath\.length>=2/.test(js)
+  && /function verifiedRouteMiles/.test(js)
+  && /function currentDayVerifiedMiles/.test(js)
+  && /function finishCurrentDay/.test(js)
   && /function backOneRoutePoint/.test(js)
   && /route\.points\.pop\(\)/.test(js)
   && /id="route-back-point"/.test(html)
+  && /id="route-finish-day"/.test(html)
   && /id="cockpit-back-point"/.test(html)
+  && /id="cockpit-finish-day"/.test(html)
+  && /id="cockpit-finish-trip"/.test(html)
   && /Back one point/.test(html)
+  && /Finish day/.test(html)
+  && /Finish trip/.test(html)
   && /routeFinishBuild\.disabled=pointCount<2\|\|/.test(js)
-  && /Finish is blocked until every paddle leg resolves on water/.test(js)
-  && /No straight line is drawn across land/i.test(js)
+  && /isle_royale_finish_day/.test(js)
+  && /verified this day/.test(js)
+  && /body\.map-focus \.route-build-bar\{display:flex!important/.test(html)
+  && !/body\.map-focus \.route-build-bar\{display:none!important/.test(html)
   && !/Draft route · straight between selected points while mapped routing verifies/.test(js)
   && /Remove from route/.test(js)
   && /marker\.bindPopup/.test(js)
@@ -177,9 +184,10 @@ const smartRoutingRuntime = /const trailGraph = \{/.test(js)
   && /draggable:true/.test(js)
   && /nearestControlSegmentIndex/.test(js)
   && /function reverseRoute/.test(js)
-  && /route\.resolvedPoints\.length \? route\.resolvedPoints : route\.points/.test(js)
-  && /if\(route\.mode==='canoe'&&route\.points\.length>=2&&route\.smartState!=='canoe-aware'\)return \[\]/.test(js)
-  && /if\(route\.mode!=='hike'&&route\.mode!=='canoe'&&route\.points\.length>=2&&route\.smartState!=='water-aware'\)return \[\]/.test(js);
+  && /!\['canoe-aware','canoe-partial'\]\.includes\(route\.smartState\)/.test(js)
+  && /!\['water-aware','water-partial'\]\.includes\(route\.smartState\)/.test(js)
+  && /route\.smartState=legs\.length\?'canoe-partial':'canoe-fallback'/.test(js)
+  && /route\.smartState=legs\.length\?'water-partial':'water-fallback'/.test(js);
 const canoePortageRuntime = /<option value="canoe">Canoe \+ portage<\/option>/.test(html)
   && /id="route-portage-trips"/.test(html)
   && /id="route-portage-pace"/.test(html)
@@ -310,20 +318,26 @@ const mapFirstRoutingRuntime = /id="explore-mode"[^>]*aria-pressed="true"/.test(
   && /id="route-build-bar"/.test(html)
   && /id="route-back-point"/.test(html)
   && /id="cockpit-back-point"/.test(html)
+  && /id="route-finish-day"/.test(html)
   && /id="route-finish-build"/.test(html)
+  && /id="cockpit-finish-day"/.test(html)
+  && /id="cockpit-finish-trip"/.test(html)
   && /id="route-review-actions"/.test(html)
-  && /Finish &amp; review/.test(html)
+  && /Finish day/.test(html)
+  && /Finish trip/.test(html)
   && /function addFeatureToRoute/.test(js)
   && /route\.adding&&record\.latlng/.test(js)
   && /function renderRouteStops/.test(js)
   && /function renderRouteBuildFlow/.test(js)
+  && /function finishCurrentDay/.test(js)
   && /function finishRouteBuild/.test(js)
   && /function resumeRouteBuild/.test(js)
   && /function backOneRoutePoint/.test(js)
   && /isle_royale_route_back_point/.test(js)
   && /route\.reviewing=true/.test(js)
   && /setRouteAdding\(false,\{preserveReview:true\}\)/.test(js)
-  && /route\.adding\?finishRouteBuild\(\):setRouteAdding\(true\)/.test(js)
+  && /els\.cockpitFinishDay\?\.addEventListener\('click',finishCurrentDay\)/.test(js)
+  && /els\.cockpitFinishTrip\?\.addEventListener\('click',finishRouteBuild\)/.test(js)
   && /if\(!route\.adding\)return;/.test(js)
   && /routePoint\.kind==='campground'&&distanceMiles\(routePoint,point\)<\.08/.test(js)
   && /point\.sourceBackedBoatIn=Boolean\(match\.boater\)/.test(js)
@@ -510,9 +524,9 @@ if (!/button\.textContent=undoLabel/.test(js) || !/last\?\.fingerprint===fingerp
 if (!tripPersistenceRuntime) hardFailures.push('trip persistence/handoff is missing local-only save, share-fragment restore, or resolved-route GPX export safeguards');
 if (!routeEditingRuntime) hardFailures.push('route planning is missing leg/cumulative distances or obvious stop deletion from the map/list');
 if (!tripIntelligenceRuntime) hardFailures.push('trip intelligence is missing simple researched pace presets, carry math, day planning, named saves, autosave recovery, or portable trip-plan export');
-if (!/id="route-finish-build"/.test(html) || !/function finishRouteBuild/.test(js) || !/route\.reviewing=true/.test(js)) hardFailures.push('route builder is missing explicit Finish & review transition before save/share/export');
-if (!/function crossingCount/.test(waterJs) || !/Water route failed final coastline validation/.test(waterJs) || !/route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/.test(js)) hardFailures.push('water routing can still promote an unverified construction sketch as a verified route or accept a mapped shoreline crossing');
-if (!/route-distance-badge/.test(js) || !/Water · .*mi/.test(js) || !/verifying water-only route|water-only \/ official-portage leg pending/.test(js)) hardFailures.push('route distance is missing from resolved geometry or unresolved water legs do not clearly remain pending');
+if (!/id="route-finish-day"/.test(html) || !/function finishCurrentDay/.test(js) || !/id="route-finish-build"/.test(html) || !/function finishRouteBuild/.test(js) || !/route\.reviewing=true/.test(js)) hardFailures.push('route builder is missing day-by-day completion or final trip review controls');
+if (!/function crossingCount/.test(waterJs) || !/Water route failed final coastline validation/.test(waterJs) || !/route\.smartState=legs\.length\?'water-partial':'water-fallback'/.test(js)) hardFailures.push('water routing can still promote an unsafe route or discard the verified prefix when a later leg fails');
+if (!/route-distance-badge/.test(js) || !/Water · .*mi/.test(js) || !/verified this day/.test(js) || !/Earlier safe-water lines and measurements remain on the map/.test(js)) hardFailures.push('live verified leg/day mileage is not preserved while the newest water leg resolves');
 if (/data-layer="vegetation-(?:overview|baseline|change)"|data-layer="horne-fire"/.test(html)) hardFailures.push('retired vegetation/ecology layers leaked back into the planning controls');
 if (!['geology','vegetation-detailed','vegetation-simple','vegetation-change-1996-2017','horne-fire-2021'].every(id => catalog.items.some(x => x.id === id && x.state === 'research-only'))) hardFailures.push('retired research layers are not clearly marked research-only in the source catalog');
 if (!reliefRuntime) hardFailures.push('keyless USGS relief runtime missing');
