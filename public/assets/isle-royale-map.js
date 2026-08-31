@@ -963,7 +963,7 @@
           status(`Loaded ${added} public visitor features. Search or filter the map; deep layers remain source-cataloged below.`);
           visitorGeometrySettled = true;
           addPendingShipwrecks();
-          if(route.mode==='hike'&&route.points.length>=2){resolveRoute();renderRoute();}
+          if((route.mode==='hike'||route.mode==='canoe')&&route.points.length>=2)reroute('Mapped trail geometry updated; route classification refreshed.');
           renderFeatureList();
           return;
         }
@@ -993,7 +993,7 @@
     status(`Remote visitor geometry unavailable. Showing ${added} approximate reference anchors and the full source catalog instead.`);
     visitorGeometrySettled = true;
     addPendingShipwrecks();
-    if(route.mode==='hike'&&route.points.length>=2){resolveRoute();renderRoute();}
+    if((route.mode==='hike'||route.mode==='canoe')&&route.points.length>=2)reroute('Mapped trail geometry updated; route classification refreshed.');
     renderFeatureList();
   }
 
@@ -2296,10 +2296,14 @@
     const daily=speed*dayHours;
     const travel=document.createElement('div');
     travel.className='route-intelligence-card';
-    const days=total>0?Math.max(1,Math.ceil(total/daily)):1;
+    const days=route.mode==='canoe'
+      ? Math.max(1,Math.ceil(routeHours()/dayHours))
+      : total>0?Math.max(1,Math.ceil(total/daily)):1;
     travel.innerHTML='<strong></strong><span></span>';
     travel.querySelector('strong').textContent='Travel Assistant';
-    travel.querySelector('span').textContent=dayHours+'h travel day at '+speed.toFixed(1)+' mph ≈ '+daily.toFixed(1)+' mi/day · about '+days+' travel day'+(days===1?'':'s')+' for this route, before breaks or camp chores.';
+    travel.querySelector('span').textContent=route.mode==='canoe'
+      ? dayHours+'h moving day · paddle '+speed.toFixed(1)+' mph · portage '+Number(route.portageSpeed||2).toFixed(1)+' mph · '+(Number(route.portageTrips)===2?'double carry':Number(route.portageTrips)===1.5?'1½ carry':'single carry')+' · about '+days+' travel day'+(days===1?'':'s')+' before loading, unloading, breaks or camp chores.'
+      : dayHours+'h travel day at '+speed.toFixed(1)+' mph ≈ '+daily.toFixed(1)+' mi/day · about '+days+' travel day'+(days===1?'':'s')+' for this route, before breaks or camp chores.';
     els.routeIntelligence.appendChild(travel);
 
     if(route.mode==='canoe') {
