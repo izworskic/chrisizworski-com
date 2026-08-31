@@ -92,7 +92,7 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
   assert.match(js, /collectFeatureFacts/);
   assert.match(js, /properties:\{\.\.\.props\}/);
   assert.match(js, /Related information/);
-  assert.match(js, /Open this coordinate in OpenStreetMap/);
+  assert.match(js, /Open this coordinate on the source map/);
   assert.match(js, /NPS camping & campground guidance/);
   assert.match(js, /NPS hiking guidance/);
   assert.match(js, /NPS ferry, seaplane & transportation/);
@@ -123,12 +123,22 @@ test('rich map cards recenter into the actually readable map viewport', () => {
 
 
 
-test('OSM context behaves as a reversible layer rather than a permanently disabled one-shot button', () => {
-  assert.match(html, /id="load-osm"[^>]*aria-pressed="false"[^>]*>Show OSM context/);
+test('supplemental data is reversible and labels the feature before the data source', () => {
+  assert.match(html, /id="load-osm"[^>]*aria-pressed="false"[^>]*>Show supplemental data/);
   assert.match(js, /const osmContextGroup = L\.layerGroup\(\)/);
   assert.match(js, /function setOsmContextVisible/);
-  assert.match(js, /Hide OSM context/);
-  assert.match(js, /Show OSM context/);
+  assert.match(js, /Hide supplemental data/);
+  assert.match(js, /Show supplemental data/);
+  assert.match(js, /function supplementalFeatureType/);
+  for (const label of ['Campsite','Viewpoint','Visitor information','Museum \/ historic place','Shelter','Restrooms','Drinking water','Lighthouse','Pier \/ dock']) {
+    assert.match(js, new RegExp(label));
+  }
+  assert.match(js, /record\.supplemental[\s\S]{0,180}record\.displayType/);
+  assert.match(js, /Supplemental data source:/);
+  assert.match(js, /community-mapped context, not an NPS operational source/);
+  assert.match(js, /Supplemental data/);
+  assert.doesNotMatch(html, />Show OSM context</);
+  assert.doesNotMatch(js, /textContent = 'Hide OSM context'|textContent = 'Show OSM context'|Loading OSM context/);
   assert.match(js, /targetGroup:osmContextGroup/);
   assert.match(js, /btn\.disabled = false/);
 });
