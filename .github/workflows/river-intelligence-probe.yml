@@ -1,5 +1,8 @@
 name: River intelligence live probe
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - build/national-river-intelligence
