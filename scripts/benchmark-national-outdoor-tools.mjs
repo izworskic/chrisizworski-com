@@ -11,6 +11,7 @@ const client = await read("public/assets/national-tools.js");
 const dashboard = await read("public/assets/national-dashboard.js");
 const nationalCss = await read("public/assets/national-tools.css");
 const admission = JSON.parse(await read("benchmarks/national-location-admission.json"));
+const vercel = JSON.parse(await read("vercel.json"));
 const sitemap = await read("public/sitemap.xml");
 const registry = JSON.parse(await read("benchmarks/tool-network-registry.json"));
 const pages = {
@@ -79,12 +80,16 @@ check("Aurora sources expose stale semantics", /staleAfterMinutes/.test(apis.aur
 check("Aurora page survives stale shared timezone helper", /typeof N\.fmtInZone===["']function["']/.test(pages.aurora), 4);
 check("Aurora exposes NOAA auroral oval visual", /national-oval-img/.test(pages.aurora) && /aurora-forecast-northern-hemisphere\.jpg/.test(pages.aurora), 4);
 check("Auroral oval does not become fake sighting probability", /not a sighting probability/i.test(pages.aurora) && /modeled intensity/i.test(pages.aurora), 4);
-check("National entry pages cache-bust shared runtime assets", Object.values(pages).every((body) => /national-tools\.js\?v=20260831-aurora-hotfix1/.test(body)), 3);
+check("National entry pages cache-bust shared runtime assets", Object.values(pages).every((body) => /national-tools\.js\?v=20260831-river-hotfix1/.test(body)), 3);
 
 check("Rivers include same-date historical percentiles", /dailyStatistics/.test(apis.rivers) && /P10,P25,P50,P75,P90/.test(apis.rivers) && /historical_comparison/.test(apis.rivers), 5);
 check("Rivers match NWPS by exact USGS ID", /byUsgs/.test(apis.rivers) && /usgsId/.test(apis.rivers) && /stageflow\/forecast/.test(apis.rivers), 5);
 check("River UI exposes history and official forecast", /(?:same-date historical percentiles|daily percentiles for this calendar date)/i.test(pages.rivers) && /NOAA NWPS/.test(pages.rivers), 4);
 check("River safety veto remains intact", /cannot determine whether paddling.*safe/i.test(apis.rivers) && /does not mean runnable, fishable, wadable, or safe/i.test(pages.rivers), 5);
+check("River function has extended runtime budget", Number(vercel.functions?.["api/national-rivers.js"]?.maxDuration) >= 25, 4);
+check("River UI rejects non-JSON server responses cleanly", /readJsonResponse/.test(pages.rivers) && /River conditions unavailable/.test(pages.rivers), 4);
+check("Shared national client parses API responses defensively", /async function readJsonResponse/.test(client) && /content-type/.test(client) && /HTTP /.test(client), 4);
+check("National dashboard isolates non-JSON upstream failures", /readJsonResponse/.test(dashboard) && /Outdoor data source unavailable/.test(dashboard), 3);
 
 check("Frost includes spring and fall probabilities", /fall_10/.test(apis.frost) && /fall_50/.test(apis.frost) && /median first 32°F freeze/.test(pages.frost), 5);
 check("Frost includes hard-freeze forecast", /hard_freeze_hours/.test(apis.frost) && /hours at or below 28°F/.test(pages.frost), 4);

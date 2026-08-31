@@ -26,6 +26,9 @@
     "api/field-camera.js": {
       "maxDuration": 20
     },
+    "api/national-rivers.js": {
+      "maxDuration": 30
+    },
     "api/**/*.js": {
       "maxDuration": 10
     }
