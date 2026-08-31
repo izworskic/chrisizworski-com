@@ -27,3 +27,4 @@ jobs:
           git add public/data/national-usgs-streamflow-sites.json
           git commit -m "Generate national USGS streamflow site index"
           git push origin HEAD:fix/national-rivers-local-index
+# retry after empty-state handling
