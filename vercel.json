@@ -28,6 +28,9 @@
     },
     "api/**/*.js": {
       "maxDuration": 10
+    },
+    "api/national-rivers.js": {
+      "maxDuration": 30
     }
   },
   "redirects": [
