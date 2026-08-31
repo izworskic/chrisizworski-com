@@ -61,44 +61,41 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /Related information/.test(js)
   && /Open this coordinate on the source map/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
-const popupReadabilityRuntime = /function popupSafeBounds/.test(js)
-  && /function movePopupFullyIntoView/.test(js)
-  && /function schedulePopupReadability/.test(js)
-  && /map\.on\('popupopen'/.test(js)
-  && /map\.panBy\(\[-shiftX,-shiftY\]/.test(js)
-  && /content\.style\.maxHeight=available\+'px'/.test(js)
-  && /visibleMapOverlay\('\.planning-cockpit'\)/.test(js)
-  && /\['\.map-toolbar','\.route-map-guide'\]/.test(js)
-  && /visibleMapOverlay\('\.map-status'\)/.test(js)
-  && /autoPan:false,className:'isle-detail-popup'/.test(js)
-  && /body\.map-focus\.detail-popup-open \.planning-cockpit\{display:none\}/.test(html)
-  && /touch-action:pan-y/.test(html);
+const popupReadabilityRuntime = /id="map-inspector"/.test(html)
+  && /id="map-inspector-body"/.test(html)
+  && /id="map-inspector-center-point"/.test(html)
+  && /id="map-inspector-center-card"/.test(html)
+  && /function popupSafeBounds/.test(js)
+  && /function promotePopupToFloatingInspector/.test(js)
+  && /function scheduleFloatingInspectorPromotion/.test(js)
+  && /function sizeFloatingInspector/.test(js)
+  && /function centerFloatingInspector/.test(js)
+  && /floatingInspector\.body\.replaceChildren\(detail\)/.test(js)
+  && /popupEl\.classList\.add\('isle-popup-promoted'\)/.test(js)
+  && /scheduleFloatingInspectorPromotion\(popup\)/.test(js)
+  && /\.map-inspector\{/.test(html)
+  && /\.map-inspector-body\{[^}]*overflow:auto/.test(html)
+  && /\.isle-popup-promoted\{visibility:hidden!important/.test(html)
+  && /body\.map-focus\.detail-popup-open \.planning-cockpit\{display:none\}/.test(html);
 
-const popupDragRuntime = /function popupInteractionElements/.test(js)
-  && /function centerPopupInReadableArea/.test(js)
-  && /function ensurePopupDragHandle/.test(js)
-  && /function wirePopupDrag/.test(js)
-  && /function schedulePopupInteractionSetup/.test(js)
-  && /Drag this card to reposition it on the map/.test(js)
-  && /Center card/.test(js)
+const popupDragRuntime = /function inspectorPosition/.test(js)
+  && /function wireFloatingInspectorDrag/.test(js)
+  && /function centerInspectorPoint/.test(js)
+  && /Drag this card anywhere on the map/.test(html)
+  && /Center card/.test(html)
+  && /Center point/.test(html)
   && /window\.addEventListener\('pointermove',move/.test(js)
   && /window\.addEventListener\('pointerup',end/.test(js)
-  && /map\.dragging\.disable\(\)/.test(js)
-  && /map\.panBy\(\[-dx,-dy\]/.test(js)
-  && /popupUserPositioned=true/.test(js)
-  && /requestAnimationFrame\(\(\)=>requestAnimationFrame\(attach\)\)/.test(js)
-  && /window\.setTimeout\(attach,80\)/.test(js)
-  && /window\.setTimeout\(attach,220\)/.test(js)
-  && /schedulePopupInteractionSetup\(popup\)/.test(js)
+  && /shell\.style\.left=.*\+'px'/.test(js)
+  && /shell\.style\.top=.*\+'px'/.test(js)
+  && /\.map-inspector-drag\{/.test(html)
+  && /cursor:grab/.test(html)
+  && /touch-action:none/.test(html)
   && /function officialPortagePopup/.test(js)
   && /wrap\.className='popup-detail official-portage-popup'/.test(js)
   && /line\.bindPopup\(\(\)=>officialPortagePopup\(portage,visual\)/.test(js)
   && /badge\.bindPopup\(\(\)=>officialPortagePopup\(portage,visual\)/.test(js)
-  && /marker\.bindPopup\(\(\)=>officialPortagePopup\(portage,visual\)/.test(js)
-  && /\.popup-drag-zone\{/.test(html)
-  && /\.popup-center-button\{/.test(html)
-  && /cursor:grab/.test(html)
-  && /touch-action:none/.test(html);
+  && /marker\.bindPopup\(\(\)=>officialPortagePopup\(portage,visual\)/.test(js);
 
 const campgroundDetailRuntime = /trail-accessible-campgrounds\.htm/.test(api)
   && /lake-superior-accessible-campgrounds\.htm/.test(api)
@@ -400,8 +397,8 @@ if (!catalogCrawlable) hardFailures.push('crawlable source catalog/raw manifest 
 if (!measurementComplete) hardFailures.push('planned privacy-safe Isle Royale measurement events missing');
 if (!currentShipwreckRuntime) hardFailures.push('current NPS shipwreck buoy runtime missing');
 if (!pointDetailRuntime) hardFailures.push('point hit-target/detail popup runtime missing');
-if (!popupReadabilityRuntime) hardFailures.push('rich detail popup can open outside the unobstructed readable map viewport');
-if (!popupDragRuntime) hardFailures.push('open detail cards, including official portages, cannot reliably attach post-render drag/center controls');
+if (!popupReadabilityRuntime) hardFailures.push('rich detail cards are not promoted into the unobstructed floating map inspector');
+if (!popupDragRuntime) hardFailures.push('floating inspector cannot move the card itself independently of the map for points and official portages');
 if (!campgroundDetailRuntime) hardFailures.push('campground cards are missing official NPS capacity profiles or truthful supplemental numbered site/shelter identifiers');
 if (!osmToggleRuntime) hardFailures.push('supplemental-data layer is not reversible or leaks source plumbing into user-facing labels');
 if (!routePlanningRuntime) hardFailures.push('route-aware marine planning runtime missing');
