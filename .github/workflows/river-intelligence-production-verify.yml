@@ -1,5 +1,8 @@
 name: River Intelligence production verify
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - debug/river-intelligence-production-verify
