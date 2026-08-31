@@ -1480,7 +1480,7 @@
   function routeControlDistances() {
     const path=routePathPoints();
     if(!route.points.length)return [];
-    if(path.length<2)return route.points.map(()=>({leg_miles:0,total_miles:0}));
+    if(path.length<2)return route.points.map(()=>({leg_miles:0,total_miles:0,resolved:false}));
     const cumulative=cumulativeFor(path),total=cumulative[cumulative.length-1]||0;
     const projected=[];
     let segment=0,lastAlong=0;
@@ -1493,7 +1493,7 @@
         segment=Math.max(segment,hit.segment_index);
         along=Math.max(lastAlong,Math.min(total,hit.along_miles));
       }
-      projected.push({leg_miles:Math.max(0,along-lastAlong),total_miles:along});
+      projected.push({leg_miles:Math.max(0,along-lastAlong),total_miles:along,resolved:true});
       lastAlong=along;
     });
     return projected;
@@ -2205,10 +2205,13 @@
       textWrap.querySelector('span:not(.route-distance)').textContent=routePointRole(point,index,route.points.length)
         +(point.sourceBackedBoatIn?' · current NPS Boat-In record':'')
         +(point.liveAlert?' · CURRENT NPS CLOSURE':'');
-      const d=distances[index]||{leg_miles:0,total_miles:0};
+      const d=distances[index]||{leg_miles:0,total_miles:0,resolved:false};
+      const waterPending=route.mode!=='hike'&&route.points.length>=2&&!d.resolved;
       textWrap.querySelector('.route-distance').textContent=index===0
         ? '0.0 mi start'
-        : '+'+d.leg_miles.toFixed(1)+' mi leg · '+d.total_miles.toFixed(1)+' mi total';
+        : waterPending
+          ? (route.smartState==='water-fallback'?'water distance unavailable':'water distance routing…')
+          : '+'+d.leg_miles.toFixed(1)+(route.mode==='hike'?' mi leg':' mi water')+' · '+d.total_miles.toFixed(1)+' mi total';
       textWrap.addEventListener('click',()=>{
         map.flyTo([point.lat,point.lng],Math.max(map.getZoom(),13));
         route.markers[index]?.openPopup?.();
@@ -2243,7 +2246,7 @@
     const path=routePathPoints();
     buildRouteItinerary(path);
 
-    if(path.length) {
+    if(path.length>=2) {
       route.line=L.polyline(path.map(p=>[p.lat,p.lng]),{
         pane:'routePane',
         color:route.mode==='hike'&&route.smartState==='trail-snapped'?'#8b4f2d':'#173d36',
@@ -2278,8 +2281,9 @@
       const popup=document.createElement('div');
       popup.className='popup-detail';
       const title=document.createElement('div');title.className='popup-title';title.textContent=point.label||('Waypoint '+(index+1));popup.appendChild(title);
-      const d=controlDistances[index]||{leg_miles:0,total_miles:0};
-      const meta=document.createElement('div');meta.className='popup-meta';meta.textContent=routePointRole(point,index,route.points.length)+(index?(' · +'+d.leg_miles.toFixed(1)+' mi · '+d.total_miles.toFixed(1)+' mi total'):' · route start');popup.appendChild(meta);
+      const d=controlDistances[index]||{leg_miles:0,total_miles:0,resolved:false};
+      const pendingWater=route.mode!=='hike'&&route.points.length>=2&&!d.resolved;
+      const meta=document.createElement('div');meta.className='popup-meta';meta.textContent=routePointRole(point,index,route.points.length)+(index?(pendingWater?' · water distance pending':(' · +'+d.leg_miles.toFixed(1)+(route.mode==='hike'?' mi':' mi water')+' · '+d.total_miles.toFixed(1)+' mi total')):' · route start');popup.appendChild(meta);
       const actions=document.createElement('div');actions.className='popup-actions';
       if(point.kind==='campground'&&index>0){
         const day=document.createElement('button');day.type='button';day.className='popup-action';day.textContent=point.manualDayEnd?'Clear day end':'End day here';day.addEventListener('click',()=>{setCampDayEnd(point,!point.manualDayEnd);map.closePopup();});actions.appendChild(day);
@@ -2296,6 +2300,24 @@
       marker.on('click',event=>{if(event.originalEvent)L.DomEvent.stopPropagation(event.originalEvent);});
       route.markers.push(marker);
     });
+
+    if(path.length>=2&&(route.mode==='hike'||route.smartState==='water-aware')) {
+      const cumulative=routeCumulative();
+      for(let index=1;index<controlDistances.length;index++) {
+        const d=controlDistances[index],previous=controlDistances[index-1];
+        if(!d?.resolved||d.leg_miles<.05)continue;
+        const midpoint=(Number(previous?.total_miles)||0)+d.leg_miles/2;
+        const p=interpolateRoutePoint(midpoint,cumulative);
+        if(!p)continue;
+        const label=(route.mode==='hike'?'': 'Water · ')+d.leg_miles.toFixed(1)+' mi';
+        L.marker([p.lat,p.lng],{
+          pane:'routePane',
+          interactive:false,
+          keyboard:false,
+          icon:L.divIcon({className:'',html:'<span class="route-distance-badge">'+label+'</span>',iconSize:[86,24],iconAnchor:[43,12]})
+        }).addTo(routeLayerGroup);
+      }
+    }
 
     for(const dayEnd of routeDayMarkers(path)) {
       L.circleMarker([dayEnd.lat,dayEnd.lng],{
@@ -2314,6 +2336,11 @@
         ? 'Start selected. Pick a destination from a map point or tap the map.'
         : 'No route yet.';
       els.routeWeatherButton.disabled=true;
+    } else if(route.mode!=='hike'&&route.smartState!=='water-aware') {
+      els.routeSummary.innerHTML=route.smartState==='water-fallback'
+        ? '<strong>Water distance unavailable.</strong> No line is drawn because a zero-land-crossing route could not be verified.'
+        : '<strong>Calculating water distance…</strong> The route line appears only after coastline validation.';
+      els.routeWeatherButton.disabled=true;
     } else {
       const start=path[0],end=path[path.length-1];
       const bearing=bearingDegrees(start,end);
@@ -2321,10 +2348,11 @@
         ? 'mapped-trail path'
         : route.mode==='hike'
           ? 'straight fallback sketch'
-          : route.smartState==='water-aware'
-            ? 'mapped-coastline-aware water path'
-            : 'editable water sketch';
-      els.routeSummary.innerHTML=`<strong>${miles.toFixed(1)} mi</strong> · ~${formatDuration(hours)} at ${speed.toFixed(1)} mph · overall ${compassLabel(bearing)} (${Math.round(bearing)}°) · ${method}.`;
+          : 'mapped-coastline-safe water path';
+      const access=route.mode!=='hike'&&route.waterAccessMiles>0.05?' · '+route.waterAccessMiles.toFixed(1)+' mi shore-access offset':'';
+      const distanceName=route.mode==='hike'?'mi':'mi water';
+      const crossingNote=route.mode!=='hike'?' · 0 mapped shoreline crossings':'';
+      els.routeSummary.innerHTML=`<strong>${miles.toFixed(1)} ${distanceName}</strong> · ~${formatDuration(hours)} at ${speed.toFixed(1)} mph · overall ${compassLabel(bearing)} (${Math.round(bearing)}°) · ${method}${crossingNote}${access}.`;
       els.routeWeatherButton.disabled=false;
     }
     renderRouteIntelligence();
