@@ -2,6 +2,9 @@ const URLS = Object.freeze({
   boaterCampgrounds: "https://www.nps.gov/common/uploads/sortable_dataset/isro/2DF94ED6-9CAA-9B24-8BD6A700012D59F3/isro-BoaterTable.csv",
   currentConditions: "https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm",
   boaterPage: "https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm",
+  trailCampgrounds: "https://www.nps.gov/isro/planyourvisit/trail-accessible-campgrounds.htm",
+  lakeSuperiorCampgrounds: "https://www.nps.gov/isro/planyourvisit/lake-superior-accessible-campgrounds.htm",
+  inlandCampgrounds: "https://www.nps.gov/isro/planyourvisit/inland-lake-paddling-campgrounds.htm",
   scubaPage: "https://www.nps.gov/isro/planyourvisit/scuba-diving.htm",
 });
 
@@ -111,6 +114,96 @@ function normalizeBoaterCsv(text = "") {
       raw: row,
     };
   }).filter(Boolean);
+}
+
+
+function campgroundProfileKey(value = "") {
+  return key(String(value).replace(/\bcampground\b/gi, "").replace(/\blake\s+ritchie\b/gi, "lake richie"));
+}
+
+function campgroundField(block = "", pattern) {
+  const match = String(block).match(pattern);
+  return match ? String(match[1] || "").trim().replace(/\s+/g, " ") : null;
+}
+
+function campgroundCount(block = "", label) {
+  const escaped = String(label).replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+  const match = String(block).match(new RegExp(escaped + "\\s*:\\s*(\\d+)", "i"));
+  return match ? Number(match[1]) : null;
+}
+
+function normalizeCampgroundProfiles(html = "", sourceUrl = "") {
+  const text = stripHtml(html);
+  const lines = text.split("\n").map(line => line.trim()).filter(Boolean);
+  const headings = [];
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].replace(/^#+\s*/, "").trim();
+    if (/^[A-Z0-9][A-Za-z0-9’'&().,\- /]{1,90}\sCampground$/.test(line)) headings.push({ index:i, name:line });
+  }
+  const profiles = [];
+  for (let h = 0; h < headings.length; h++) {
+    const start = headings[h].index + 1;
+    const end = h + 1 < headings.length ? headings[h + 1].index : lines.length;
+    const section = lines.slice(start, end).join("\n");
+    const totalSites = campgroundCount(section, "TOTAL SITES");
+    const tentSites = campgroundCount(section, "Tent Only");
+    const groupSites = campgroundCount(section, "Group");
+    const shelters = campgroundCount(section, "Shelters");
+    const stayLimit = campgroundField(section, /Stay Limit:\s*([^\n]+)/i);
+    const access = campgroundField(section, /Access:\s*([^\n]+)/i);
+    const dockDepth = campgroundField(section, /Depth at dock[^:]*:\s*([^\n]+)/i);
+    if (totalSites == null && tentSites == null && groupSites == null && shelters == null && !stayLimit && !access) continue;
+    profiles.push({
+      name: headings[h].name,
+      total_sites: totalSites,
+      tent_sites: tentSites,
+      group_sites: groupSites,
+      shelters,
+      stay_limit: stayLimit,
+      access,
+      dock_depth: dockDepth,
+      source_url: sourceUrl,
+    });
+  }
+  return profiles;
+}
+
+function mergeCampgroundProfiles(groups = []) {
+  const merged = new Map();
+  for (const profiles of groups) {
+    for (const profile of profiles || []) {
+      const id = campgroundProfileKey(profile.name);
+      if (!id) continue;
+      const previous = merged.get(id) || { name:profile.name, source_urls:[] };
+      const next = { ...previous };
+      for (const field of ["total_sites","tent_sites","group_sites","shelters","stay_limit","access","dock_depth"]) {
+        if ((next[field] == null || next[field] === "") && profile[field] != null && profile[field] !== "") next[field] = profile[field];
+      }
+      if (profile.source_url && !next.source_urls.includes(profile.source_url)) next.source_urls.push(profile.source_url);
+      merged.set(id, next);
+    }
+  }
+  return [...merged.values()].sort((a,b) => a.name.localeCompare(b.name));
+}
+
+async function fetchCampgroundProfiles() {
+  const pages = [
+    URLS.trailCampgrounds,
+    URLS.lakeSuperiorCampgrounds,
+    URLS.inlandCampgrounds,
+  ];
+  const results = await Promise.allSettled(
+    pages.map(url => fetchText(url, "text/html,application/xhtml+xml")),
+  );
+  const groups = results.map((result, index) =>
+    result.status === "fulfilled" ? normalizeCampgroundProfiles(result.value, pages[index]) : []
+  );
+  const profiles = mergeCampgroundProfiles(groups);
+  if (!profiles.length) throw new Error("NPS campground profile pages did not yield any campground records");
+  return {
+    profiles,
+    pages: pages.map((url,index) => ({ url, available:results[index].status === "fulfilled" })),
+  };
 }
 
 function parseLatLon(value = "") {
@@ -269,10 +362,11 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const [boaterResult, conditionsResult, shipwreckResult] = await Promise.allSettled([
+  const [boaterResult, conditionsResult, shipwreckResult, campgroundResult] = await Promise.allSettled([
     fetchText(URLS.boaterCampgrounds, "text/csv,text/plain;q=0.9,*/*;q=0.5"),
     fetchText(URLS.currentConditions, "text/html,application/xhtml+xml"),
     fetchShipwreckDataset(),
+    fetchCampgroundProfiles(),
   ]);
 
   const boaterCampgrounds = boaterResult.status === "fulfilled"
@@ -291,6 +385,10 @@ module.exports = async function handler(req, res) {
     ? extractLastUpdated(conditionsResult.value)
     : null;
 
+  const campgroundProfiles = campgroundResult.status === "fulfilled"
+    ? campgroundResult.value.profiles
+    : [];
+
   const sources = {
     boater_campgrounds: sourceState(
       boaterResult,
@@ -303,6 +401,14 @@ module.exports = async function handler(req, res) {
       "National Park Service — Current Conditions",
       URLS.currentConditions,
       { upstream_last_updated: conditionsUpdated },
+    ),
+    campground_profiles: sourceState(
+      campgroundResult,
+      "National Park Service — Campground Profiles",
+      URLS.trailCampgrounds,
+      campgroundResult.status === "fulfilled"
+        ? { profile_count:campgroundProfiles.length, pages:campgroundResult.value.pages }
+        : {},
     ),
     shipwreck_buoys: sourceState(
       shipwreckResult,
@@ -320,8 +426,9 @@ module.exports = async function handler(req, res) {
 
   return res.status(200).json({
     fetched_at: new Date().toISOString(),
-    degraded: boaterResult.status !== "fulfilled" || conditionsResult.status !== "fulfilled" || shipwreckResult.status !== "fulfilled",
+    degraded: boaterResult.status !== "fulfilled" || conditionsResult.status !== "fulfilled" || shipwreckResult.status !== "fulfilled" || campgroundResult.status !== "fulfilled",
     boater_campgrounds: boaterCampgrounds,
+    campground_profiles: campgroundProfiles,
     current_alerts: alerts,
     shipwrecks,
     sources,
@@ -335,6 +442,8 @@ module.exports._test = {
   stripHtml,
   parseCsv,
   normalizeBoaterCsv,
+  normalizeCampgroundProfiles,
+  mergeCampgroundProfiles,
   parseLatLon,
   extractSortableDatasetUrl,
   normalizeShipwreckCsv,
