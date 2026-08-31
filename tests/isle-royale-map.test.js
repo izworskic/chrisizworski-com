@@ -496,6 +496,30 @@ test('canoe runtime promotes strong mapped matches to official NPS portages with
   assert.doesNotMatch(js, /L\.polyline\([^\n]*endpoint_anchors/);
 });
 
+test('official NPS portages are visually selectable map objects with truthful add-to-trip behavior', () => {
+  assert.match(html, /data-layer="official-portage" checked/);
+  assert.match(html, /Official portages/);
+  assert.match(html, /16 NPS 2026 carries/);
+  assert.match(html, /official-portage-badge/);
+  assert.match(html, /Add this portage to trip/);
+  assert.match(js, /map\.createPane\('portagePane'\)/);
+  assert.match(js, /'official-portage': L\.layerGroup\(\)\.addTo\(map\)/);
+  assert.match(js, /function officialPortageMappedGeometry/);
+  assert.match(js, /function renderOfficialPortageLayer/);
+  assert.match(js, /function officialPortagePopup/);
+  assert.match(js, /function addOfficialPortageToTrip/);
+  assert.match(js, /weight:20,opacity:\.001,interactive:true/);
+  assert.match(js, /icon:L\.divIcon\(\{className:'official-portage-badge'/);
+  assert.match(js, /className:'official-portage-badge unresolved'/);
+  assert.match(js, /mapped trail corridor could not be resolved/i);
+  assert.match(js, /not a landing/i);
+  assert.match(js, /officialPortageId/);
+  assert.match(js, /selected mapped portage corridor/);
+  assert.match(js, /isle_royale_portage_open/);
+  assert.match(js, /isle_royale_portage_add/);
+  assert.doesNotMatch(js, /officialPortageMappedGeometry[\s\S]{0,1600}L\.polyline\([^\n]*endpoint_anchors/);
+});
+
 test('canoe planner separates paddle and portage legs and keeps a truthful trip total', () => {
   assert.match(html, /<option value="canoe">Canoe \+ portage<\/option>/);
   assert.match(html, /id="route-portage-trips"/);
@@ -532,7 +556,7 @@ test('smart route planner snaps hiking to mapped trails and keeps water routes e
   assert.match(html, /id="route-smart-status"/);
   assert.match(html, /id="route-reverse"/);
   assert.match(html, /Build point to point/);
-  assert.match(html, /Canoe mode separates paddle legs from portages/i);
+  assert.match(html, /click a brown P# portage/i);
   assert.match(js, /const trailGraph = \{/);
   assert.match(js, /function registerTrailGeometry/);
   assert.match(js, /function shortestTrailPath/);
