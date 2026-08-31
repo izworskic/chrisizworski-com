@@ -140,11 +140,9 @@ function normalize(payload, sites) {
   });
 }
 async function nearbyObservations(lat, lon) {
-  const errors = [];
-  let successfulWindows = 0;
-  for (const span of SEARCH_SPANS) {
+  const attempts = SEARCH_SPANS.map(async (span) => {
     const box = bbox(lat, lon, span);
-    if (box.product > 25.000001) continue;
+    if (box.product > 25.000001) return { span, ok: false, skipped: true, gauges: [] };
     const u = new URL(IV);
     u.searchParams.set("format", "json");
     u.searchParams.set("bBox", box.value);
@@ -153,11 +151,9 @@ async function nearbyObservations(lat, lon) {
     u.searchParams.set("parameterCd", "00060,00065,00010");
     u.searchParams.set("period", "P1D");
     try {
-      const payload = await fetchJson(u, 7000, { allow404: true });
-      successfulWindows += 1;
-      if (!payload) continue;
+      const payload = await fetchJson(u, 4800, { allow404: true });
+      if (!payload) return { span, ok: true, gauges: [] };
       const sites = sitesFromPayload(payload);
-      if (!sites.length) continue;
       const gauges = normalize(payload, sites)
         .filter((gauge) => gauge.discharge_cfs != null)
         .map((gauge) => ({
@@ -166,13 +162,18 @@ async function nearbyObservations(lat, lon) {
         }))
         .sort((a, b) => a.distance_miles - b.distance_miles)
         .slice(0, 10);
-      if (gauges.length) return gauges;
+      return { span, ok: true, gauges };
     } catch (error) {
-      errors.push(`span ${span}: ${String(error?.message || error)}`);
+      return { span, ok: false, gauges: [], error: String(error?.message || error) };
     }
-  }
-  if (successfulWindows > 0) return [];
-  throw new Error(errors.length ? errors.join(" | ") : "USGS instantaneous values unavailable");
+  });
+
+  const results = await Promise.all(attempts);
+  const success = results.filter((x) => x.ok).sort((a, b) => a.span - b.span);
+  const withGauges = success.find((x) => x.gauges.length);
+  if (withGauges) return withGauges.gauges;
+  if (success.length) return [];
+  throw new Error(results.map((x) => `span ${x.span}: ${x.error || "failed"}`).join(" | "));
 }
 function parseStatsRdb(body, now = new Date()) {
   const lines = String(body || "").split(/\r?\n/).filter(Boolean);
@@ -275,6 +276,17 @@ function trendLabel(percent) {
   if (Math.abs(value) < 3) return "Roughly steady";
   return value > 0 ? "Rising" : "Falling";
 }
+async function withBudget(promise, ms, fallback) {
+  let timer;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise((resolve) => { timer = setTimeout(() => resolve(fallback), ms); }),
+    ]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
 
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -290,12 +302,10 @@ module.exports = async function handler(req, res) {
 
   try {
     const gauges = await nearbyObservations(lat, lon);
-    const [statsResult, nwpsResult] = await Promise.allSettled([
-      dailyStatistics(gauges),
-      nwpsEnrichment(lat, lon, gauges),
+    const [stats, nwps] = await Promise.all([
+      withBudget(dailyStatistics(gauges).catch(() => new Map()), 2800, new Map()),
+      withBudget(nwpsEnrichment(lat, lon, gauges).catch(() => new Map()), 2800, new Map()),
     ]);
-    const stats = statsResult.status === "fulfilled" ? statsResult.value : new Map();
-    const nwps = nwpsResult.status === "fulfilled" ? nwpsResult.value : new Map();
 
     const enriched = gauges.map((gauge) => {
       const historical = stats.get(gauge.id) || null;
@@ -316,7 +326,7 @@ module.exports = async function handler(req, res) {
     const newestObserved = enriched.map((g) => g.measured_at).filter(Boolean).sort().at(-1) || null;
     return res.status(200).json({
       retrieved_at: now,
-      degraded: statsResult.status === "rejected" || nwpsResult.status === "rejected",
+      degraded: stats.size === 0 || [...nwps.values()].every((value) => !value),
       discovery: "USGS instantaneous-values bbox",
       location: { latitude: lat, longitude: lon },
       gauges: enriched,
@@ -333,7 +343,7 @@ module.exports = async function handler(req, res) {
           name: "USGS approved daily statistics",
           url: "https://waterservices.usgs.gov/docs/statistics/",
           updatedAt: null,
-          available: statsResult.status === "fulfilled" && stats.size > 0,
+          available: stats.size > 0,
           status: "historical climatology",
         }),
         sourceMeta({
@@ -368,4 +378,5 @@ module.exports._test = {
   siteMeta,
   sitesFromPayload,
   trendLabel,
+  withBudget,
 };
