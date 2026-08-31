@@ -96,7 +96,25 @@ const smartRoutingRuntime = /const trailGraph = \{/.test(js)
   && /nearestControlSegmentIndex/.test(js)
   && /function reverseRoute/.test(js)
   && /route\.resolvedPoints\.length \? route\.resolvedPoints : route\.points/.test(js)
-  && /if\(route\.mode!=='hike'&&route\.points\.length>=2&&route\.smartState!=='water-aware'\)return \[\]/.test(js);
+  && /if\(route\.mode==='canoe'&&route\.points\.length>=2&&route\.smartState!=='canoe-aware'\)return \[\]/.test(js)
+  && /if\(route\.mode!=='hike'&&route\.mode!=='canoe'&&route\.points\.length>=2&&route\.smartState!=='water-aware'\)return \[\]/.test(js);
+const canoePortageRuntime = /<option value="canoe">Canoe \+ portage<\/option>/.test(html)
+  && /id="route-portage-trips"/.test(html)
+  && /id="route-portage-speed"/.test(html)
+  && /function resolveCanoeRouteAsync/.test(js)
+  && /function canoeTrailLegCandidate/.test(js)
+  && /function canoeWaterLegCandidate/.test(js)
+  && /function canoeTotals/.test(js)
+  && /function cycleCanoeLegType/.test(js)
+  && /canoe-aware/.test(js)
+  && /Portage · /.test(js)
+  && /Paddle · /.test(js)
+  && /drawn water leg/.test(js)
+  && /actual walking distance/.test(js)
+  && /route\.mode==='hike'\|\|route\.mode==='canoe'\|\|route\.smartState!=='water-aware'/.test(js)
+  && /\['paddle','canoe','hike','powerboat'\]/.test(js)
+  && /legType:\['water','portage'\]\.includes/.test(js);
+
 const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js)
   && /function resolveWaterRouteAsync/.test(js)
   && /water-aware/.test(js)
@@ -244,7 +262,7 @@ const referenceShelfComplete = /Official maps from the original research/.test(h
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && routeEditingRuntime, 'map-first route planning with leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && routeEditingRuntime, 'map-first route planning with paddle/portage leg accounting, leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -284,6 +302,7 @@ if (!pointDetailRuntime) hardFailures.push('point hit-target/detail popup runtim
 if (!osmToggleRuntime) hardFailures.push('OSM context is not a reversible layer');
 if (!routePlanningRuntime) hardFailures.push('route-aware marine planning runtime missing');
 if (!smartRoutingRuntime) hardFailures.push('smart trail routing runtime missing');
+if (!canoePortageRuntime) hardFailures.push('canoe route planning is missing mixed paddle/portage leg detection, distance accounting, carry settings, or manual leg override');
 if (!waterIntelligenceRuntime) hardFailures.push('water intelligence runtime missing or reduced to a draggable straight-line sketch');
 if (!itineraryRuntime) hardFailures.push('multi-day water itinerary is not source-backed by open NPS Boat-In campgrounds with per-day context');
 if (!scenarioRuntime) hardFailures.push('scenario planning is missing side-by-side trip structures or overnight-aware forecast comparison');

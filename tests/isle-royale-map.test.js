@@ -26,7 +26,7 @@ function rendered(s) { return s.replace(/&amp;/g, '&').replace(/&#39;/g, "'").re
 test('canonical and Chris Izworski entity are present', () => {
   assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/isle-royale-map\/">/);
   assert.match(html, /https:\/\/chrisizworski\.com\/#person/);
-  assert.match(html, /"dateModified":"2026-08-30"/);
+  assert.match(html, /"dateModified":"2026-08-31"/);
 });
 
 test('SERP strings fit repository limits', () => {
@@ -441,7 +441,8 @@ test('Isle Royale has protected internal discovery paths outside the frozen tool
 
 
 test('water routes hide unverified straight sketches and label only zero-crossing water distance', () => {
-  assert.match(js, /if\(route\.mode!=='hike'&&route\.points\.length>=2&&route\.smartState!=='water-aware'\)return \[\]/);
+  assert.match(js, /if\(route\.mode==='canoe'&&route\.points\.length>=2&&route\.smartState!=='canoe-aware'\)return \[\]/);
+  assert.match(js, /if\(route\.mode!=='hike'&&route\.mode!=='canoe'&&route\.points\.length>=2&&route\.smartState!=='water-aware'\)return \[\]/);
   assert.match(js, /route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/);
   assert.match(js, /route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-pending'/);
   assert.match(js, /Water route failed zero-land-crossing validation/);
@@ -460,6 +461,26 @@ test('water routes hide unverified straight sketches and label only zero-crossin
   assert.match(waterIntelJs, /return \{points:out,access_miles:access,land_crossings:landCrossings\}/);
 });
 
+test('canoe planner separates paddle and portage legs and keeps a truthful trip total', () => {
+  assert.match(html, /<option value="canoe">Canoe \+ portage<\/option>/);
+  assert.match(html, /id="route-portage-trips"/);
+  assert.match(html, /id="route-portage-speed"/);
+  assert.match(js, /function resolveCanoeRouteAsync/);
+  assert.match(js, /function canoeTrailLegCandidate/);
+  assert.match(js, /function canoeWaterLegCandidate/);
+  assert.match(js, /function canoeTotals/);
+  assert.match(js, /function cycleCanoeLegType/);
+  assert.match(js, /canoe-aware/);
+  assert.match(js, /Portage · /);
+  assert.match(js, /Paddle · /);
+  assert.match(js, /drawn water leg/);
+  assert.match(js, /actual walking distance/);
+  assert.match(js, /\['paddle','canoe','hike','powerboat'\]/);
+  assert.match(js, /route\.mode==='hike'\|\|route\.mode==='canoe'\|\|route\.smartState!=='water-aware'/);
+  assert.match(js, /if\(route\.mode==='canoe'&&route\.smartState==='canoe-aware'\)/);
+  assert.match(js, /legType:\['water','portage'\]\.includes/);
+});
+
 test('route stops expose leg and cumulative distances and can be deleted from list or marker', () => {
   assert.match(js, /function routeControlDistances/);
   assert.match(js, /function projectControlPointAlongPath/);
@@ -475,8 +496,8 @@ test('smart route planner snaps hiking to mapped trails and keeps water routes e
   assert.match(html, /<h3>Plan a route<\/h3>/);
   assert.match(html, /id="route-smart-status"/);
   assert.match(html, /id="route-reverse"/);
-  assert.match(html, /Build on the map/);
-  assert.match(html, /Every stop shows leg distance and total distance/);
+  assert.match(html, /Build point to point/);
+  assert.match(html, /Canoe mode separates paddle legs from portages/i);
   assert.match(js, /const trailGraph = \{/);
   assert.match(js, /function registerTrailGeometry/);
   assert.match(js, /function shortestTrailPath/);
