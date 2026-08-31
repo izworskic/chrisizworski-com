@@ -3882,11 +3882,10 @@
       speed:Number(route.speed)||3,
       hours:Number(route.hours)||6,
       departure:route.departure||els.routeDeparture?.value||'',
-      portageTrips:Number(route.portageTrips)||1,
-      portageSpeed:Number(route.portageSpeed)||2,
-      portageTransitionMinutes:Number(route.portageTransitionMinutes)||10,
-      strokeRate:Number(route.strokeRate)||40,
-      feetPerStroke:Number(route.feetPerStroke)||6.6,
+      portageTrips:normalizeCarryTrips(route.portageTrips),
+      paddlePace:paceKey(route.paddlePace),
+      portagePace:paceKey(route.portagePace),
+      portageTransitionMinutes:10,
       tripName:route.tripName||'',
       activeScenario:route.activeScenario||'balanced',
       adding:Boolean(route.adding)
@@ -3904,11 +3903,10 @@
       speed:Number(snapshot?.speed)||3,
       hours:Number(snapshot?.hours)||6,
       departure:snapshot?.departure||'',
-      portageTrips:Number(snapshot?.portageTrips)||1,
-      portageSpeed:Number(snapshot?.portageSpeed)||2,
-      portageTransitionMinutes:Number(snapshot?.portageTransitionMinutes)||10,
-      strokeRate:Number(snapshot?.strokeRate)||40,
-      feetPerStroke:Number(snapshot?.feetPerStroke)||6.6,
+      portageTrips:normalizeCarryTrips(snapshot?.portageTrips),
+      paddlePace:paceKey(snapshot?.paddlePace),
+      portagePace:paceKey(snapshot?.portagePace),
+      portageTransitionMinutes:10,
       tripName:snapshot?.tripName||'',
       activeScenario:snapshot?.activeScenario||'balanced',
       adding:Boolean(snapshot?.adding)
@@ -3961,28 +3959,24 @@
     route.speed=Math.max(.5,Number(snapshot.speed)||3);
     route.hours=Math.max(2,Number(snapshot.hours)||6);
     route.departure=snapshot.departure||'';
-    route.portageTrips=Math.max(1,Math.min(3,Number(snapshot.portageTrips)||1));
-    route.portageSpeed=Math.max(.5,Number(snapshot.portageSpeed)||2);
-    route.portageTransitionMinutes=Math.max(0,Number(snapshot.portageTransitionMinutes)||10);
-    route.strokeRate=Math.max(20,Math.min(80,Number(snapshot.strokeRate)||40));
-    route.feetPerStroke=Math.max(3,Math.min(12,Number(snapshot.feetPerStroke)||6.6));
+    route.portageTrips=normalizeCarryTrips(snapshot.portageTrips);
+    route.paddlePace=paceKey(snapshot.paddlePace||legacyPaddlePace(snapshot));
+    route.portagePace=paceKey(snapshot.portagePace||legacyPortagePace(snapshot));
+    route.portageTransitionMinutes=10;
     route.tripName=cleanText(snapshot.tripName||'').slice(0,80);
     route.activeScenario=snapshot.activeScenario||'balanced';
     route.adding=Boolean(snapshot.adding);
     els.routeModeSelect.value=route.mode;
     els.routeSpeed.value=String(route.speed);
     if(els.routePortageTrips)els.routePortageTrips.value=String(route.portageTrips);
-    if(els.routePortageSpeed)els.routePortageSpeed.value=String(route.portageSpeed);
-    if(els.routePortageTransition)els.routePortageTransition.value=String(route.portageTransitionMinutes);
-    if(els.routeStrokeRate)els.routeStrokeRate.value=String(route.strokeRate);
-    if(els.routeFeetPerStroke)els.routeFeetPerStroke.value=String(route.feetPerStroke);
+    if(els.routePaddlePace)els.routePaddlePace.value=route.paddlePace;
+    if(els.routePortagePace)els.routePortagePace.value=route.portagePace;
     if(els.routeTripName)els.routeTripName.value=route.tripName;
     document.body.classList.toggle('canoe-mode',route.mode==='canoe');
     document.body.classList.toggle('human-paddle-mode',route.mode==='canoe'||route.mode==='paddle');
     if(els.routeDayHours)els.routeDayHours.value=String(route.hours);
     if(els.routeDeparture)els.routeDeparture.value=route.departure;
     if(els.routePortageTrips)els.routePortageTrips.value=String(route.portageTrips);
-    if(els.routePortageSpeed)els.routePortageSpeed.value=String(route.portageSpeed);
     document.body.classList.toggle('canoe-mode',route.mode==='canoe');
     route.resolvedPoints=[];
     route.trailNames=[];
