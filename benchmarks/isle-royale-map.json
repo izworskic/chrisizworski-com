@@ -1,5 +1,5 @@
 {
-  "version": "2.1.0",
+  "version": "2.2.0",
   "updated": "2026-08-30",
   "route": "/isle-royale-map/",
   "objective": "Build the most useful source-transparent Isle Royale planning map in the Chris Izworski tool network without pretending static cartography is authoritative GIS.",
@@ -64,7 +64,7 @@
     {
       "id": "planning-flow",
       "weight": 15,
-      "target": "The primary surface is a trip planner, not a GIS showcase: route planner before feature browsing; every route stop shows leg and cumulative distance; deletion is obvious from both stop list and route-marker popup; primary map controls expose only decision-useful layers (trails, camps, visitor/dock places, water/transport, maritime history, quiet/no-wake, relief). Original research-only science families remain provenance-cataloged but absent from planning controls. Undo/Redo must be action-aware: capture committed route state before each edit, restore geometry + mode + speed + hours/day + departure + Build/Explore state, label the next undo/redo action, dedupe no-op snapshots, and make compound campsite/day-end actions one history step."
+      "target": "The primary surface is a trip planner, not a GIS showcase: route planner before feature browsing; every route stop shows leg and cumulative distance; deletion is obvious from both stop list and route-marker popup; primary map controls expose only decision-useful layers (trails, camps, visitor/dock places, water/transport, maritime history, quiet/no-wake, relief). Original research-only science families remain provenance-cataloged but absent from planning controls. Undo/Redo must be action-aware: capture committed route state before each edit, restore geometry + mode + speed + hours/day + departure + Build/Explore state, label the next undo/redo action, dedupe no-op snapshots, and make compound campsite/day-end actions one history step. For paddle/motorboat mode, mileage is only valid after a zero-mapped-shoreline-crossing route resolves; each selected leg must be labeled on-map with its resolved water miles, and no straight fallback line may be drawn when water routing fails."
     },
     {
       "id": "provenance",
@@ -121,7 +121,8 @@
     "Do not call Focus map complete if users must leave it to edit the trip, if its controls can drift from the side panel, or if Undo only deletes the last point instead of restoring full route-edit state with Redo support.",
     "Do not call trip handoff complete if saving uploads route state, sharing puts route data in the server-visible query string, restored trips trust stale closure/Boat-In flags, or GPX can export a temporary straight fallback before trail/water routing resolves.",
     "Do not call the planning surface usable if vegetation/change/fire controls reappear, if route stops lack leg+cumulative miles, if stop deletion depends on a tiny or hidden control, or if route planning is visually subordinate to feature browsing/prose.",
-    "Do not call Undo usable if speed/day/departure changes snapshot post-change DOM values, one click creates multiple history steps, no-op edits consume Undo, or the buttons cannot tell the user what action will be undone/redone."
+    "Do not call Undo usable if speed/day/departure changes snapshot post-change DOM values, one click creates multiple history steps, no-op edits consume Undo, or the buttons cannot tell the user what action will be undone/redone.",
+    "Do not call water routing complete if route simplification can shortcut across coastline, selected on-land endpoints are drawn into the water route, failed water routing falls back to a straight line, or mileage is shown before a zero-crossing route resolves."
   ],
   "initialBuildFit": {
     "distinctSearchIntent": 24,
