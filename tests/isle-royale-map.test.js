@@ -772,7 +772,7 @@ test('smart route planner snaps hiking to mapped trails and keeps water routes e
   assert.match(js, /function nearestTrailNode/);
   assert.match(js, /trail-snapped/);
   assert.match(js, /Those points are not connected through the currently loaded trail network/);
-  assert.match(js, /draggable:true/);
+  assert.match(js, /draggable:point\.kind!=='official-portage-landing'/);
   assert.match(js, /nearestControlSegmentIndex/);
   assert.match(js, /route\.points\.splice\(index,0/);
   assert.match(js, /function reverseRoute/);
