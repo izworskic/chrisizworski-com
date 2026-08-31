@@ -184,3 +184,14 @@ test('River Intelligence inline client parses as JavaScript',()=>{
     assert.ok(page.includes(phrase),phrase);
   }
 });
+
+
+test('trend windows anchor to latest observation time rather than server wall clock',()=>{
+  const points=[
+    {value:800,time:'2026-08-30T12:00:00.000-04:00'},
+    {value:900,time:'2026-08-31T06:00:00.000-04:00'},
+    {value:1000,time:'2026-08-31T12:00:00.000-04:00'}
+  ];
+  assert.equal(rivers.atAgo(points,6,'2026-08-31T12:00:00.000-04:00').value,900);
+  assert.equal(rivers.atAgo(points,24,'2026-08-31T12:00:00.000-04:00').value,800);
+});
