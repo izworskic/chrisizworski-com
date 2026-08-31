@@ -51,6 +51,17 @@ jobs:
             u.searchParams.set('endDate','9996-12-31');
             await probe('NCEI DATED span '+span,u.toString());
           }
+
+          for(const span of [0.35,0.8,1.8]){
+            const s=new URL('https://www.ncei.noaa.gov/access/services/search/v1/data');
+            s.searchParams.set('dataset','normals-annualseasonal-1991-2020');
+            s.searchParams.set('bbox',`${Math.min(90,lat+span)},${Math.max(-180,lon-span)},${Math.max(-90,lat-span)},${Math.min(180,lon+span)}`);
+            s.searchParams.set('dataTypes','ANN-TMIN-PRBLST-T32FP50,ANN-TMIN-PRBFST-T32FP50');
+            s.searchParams.set('limit','20');
+            s.searchParams.set('offset','0');
+            await probe('NCEI SEARCH span '+span,s.toString());
+          }
+
           const z=new URL('https://services1.arcgis.com/SyUSN23vOoYdfLC8/arcgis/rest/services/PHZM_2023_Zip_Code_Table/FeatureServer/296/query');
           z.searchParams.set('where',"ZIP_CODE='48661'");
           z.searchParams.set('outFields','ZIP_CODE,ZONE_CODE,MAJORITY,Class,Class_Code');
