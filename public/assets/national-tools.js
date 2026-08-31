@@ -9,6 +9,12 @@
     const d=new Date(value);
     return Number.isNaN(d.getTime())?String(value):d.toLocaleString([], {dateStyle:"medium",timeStyle:"short"});
   }
+  function fmtInZone(value,timeZone,options){
+    if(!value)return "Unknown";
+    const d=new Date(value);if(Number.isNaN(d.getTime()))return String(value);
+    const base=options||{dateStyle:"medium",timeStyle:"short"};
+    try{return d.toLocaleString([],{...base,timeZone:timeZone||undefined})}catch(_){return d.toLocaleString([],base)}
+  }
   function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
   function read(key){try{return JSON.parse(localStorage.getItem(key)||"null")}catch(_){return null}}
   function write(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch(_){return false}}
@@ -81,6 +87,6 @@
     });
   }
   window.NationalTools={
-    $,fmtDate,esc,geocode,label,bind,saved,savedPlaces,savePlace,removePlace,locationKey,remember,withQuery,propagate
+    $,fmtDate,fmtInZone,esc,geocode,label,bind,saved,savedPlaces,savePlace,removePlace,locationKey,remember,withQuery,propagate
   };
 })();
