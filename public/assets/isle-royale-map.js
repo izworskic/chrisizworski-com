@@ -2224,6 +2224,140 @@
     return whole?`${whole}h ${mins}m`:`${mins} min`;
   }
 
+  function tripDays() {
+    const segments=tripSegmentMetrics();
+    if(!segments.length)return [];
+    const target=Math.max(2,Number(route.hours)||6);
+    const hasManual=route.points.some(point=>point.manualDayEnd);
+    const days=[];
+    let current={day:1,segments:[],hours:0,miles:0,paddleMiles:0,portageMiles:0,walkedMiles:0,strokes:0,end:null,explicit:false,provisional:false};
+    const closeDay=(endPoint,{explicit=false,provisional=false}={})=>{
+      current.end=endPoint||current.segments[current.segments.length-1]?.to||null;
+      current.explicit=explicit;
+      current.provisional=provisional;
+      days.push(current);
+      current={day:days.length+1,segments:[],hours:0,miles:0,paddleMiles:0,portageMiles:0,walkedMiles:0,strokes:0,end:null,explicit:false,provisional:false};
+    };
+    for(let i=0;i<segments.length;i++) {
+      const seg=segments[i];
+      current.segments.push(seg);
+      current.hours+=seg.hours;
+      current.miles+=seg.miles;
+      current.paddleMiles+=seg.type==='paddle'?seg.miles:0;
+      current.portageMiles+=seg.type==='portage'?seg.miles:0;
+      current.walkedMiles+=seg.walkedMiles||0;
+      current.strokes+=seg.strokes||0;
+      const endpoint=seg.to||{};
+      const isLast=i===segments.length-1;
+      const manual=Boolean(endpoint.manualDayEnd);
+      const goodCamp=endpoint.kind==='campground'&&current.hours>=target*.70;
+      const overTarget=current.hours>=target*1.15;
+      if(isLast)closeDay(endpoint,{explicit:true,provisional:false});
+      else if(manual)closeDay(endpoint,{explicit:true,provisional:false});
+      else if(!hasManual&&goodCamp)closeDay(endpoint,{explicit:false,provisional:false});
+      else if(!hasManual&&overTarget)closeDay(endpoint,{explicit:false,provisional:endpoint.kind!=='campground'});
+    }
+    if(current.segments.length)closeDay(current.segments[current.segments.length-1]?.to,{provisional:true});
+    return days;
+  }
+
+  function tripNameFallback() {
+    const start=cleanText(route.points[0]?.label||'Isle Royale');
+    const end=cleanText(route.points[route.points.length-1]?.label||'trip');
+    return start===end?start+' route':start+' → '+end;
+  }
+
+  function tripDescription() {
+    if(!routeIsResolved())return '';
+    const effort=tripEffortSummary();
+    const start=cleanText(route.points[0]?.label||'the route start');
+    const end=cleanText(route.points[route.points.length-1]?.label||'the route end');
+    if(route.mode==='canoe') {
+      const stroke=Math.round(route.strokeRate||40);
+      const feet=Number(route.feetPerStroke||6.6).toFixed(1);
+      return start+' to '+end+' is a '+effort.paddleMiles.toFixed(1)+' mi paddle + '+effort.portageMiles.toFixed(1)+' mi portage route. At '+stroke+' strokes/min and '+feet+' ft of effective boat travel per stroke, modeled paddling speed is '+effort.paddleSpeed.toFixed(1)+' mph. '+effort.portages+' portage'+(effort.portages===1?'':'s')+' with '+carryLabel()+' turn '+effort.portageMiles.toFixed(1)+' trail mi into '+effort.walkedMiles.toFixed(1)+' walked mi. Estimated active travel time is '+formatDuration(effort.totalHours)+' before meal breaks, fishing, weather holds and camp chores.';
+    }
+    if(route.mode==='paddle') {
+      return start+' to '+end+' is '+effort.paddleMiles.toFixed(1)+' routed mi. At '+Math.round(route.strokeRate||40)+' strokes/min and '+Number(route.feetPerStroke||6.6).toFixed(1)+' ft of effective boat travel per stroke, modeled cruising speed is '+effort.paddleSpeed.toFixed(1)+' mph with about '+Math.round(effort.strokes).toLocaleString()+' stroke cycles and '+formatDuration(effort.totalHours)+' of active paddling.';
+    }
+    return start+' to '+end+' is '+routeTotalMiles().toFixed(1)+' routed mi with about '+formatDuration(effort.totalHours)+' of active travel at the selected planning pace.';
+  }
+
+  function renderTripBrief() {
+    const root=els.routeTripBrief;
+    if(!root)return;
+    root.replaceChildren();
+    if(!routeIsResolved()) {
+      root.hidden=true;
+      if(els.routeExportPlan)els.routeExportPlan.disabled=true;
+      return;
+    }
+    root.hidden=false;
+    if(els.routeExportPlan)els.routeExportPlan.disabled=false;
+    const effort=tripEffortSummary();
+    const days=tripDays();
+
+    const head=document.createElement('div');head.className='trip-brief-head';
+    const title=document.createElement('h4');title.textContent='Trip brief';
+    const qualifier=document.createElement('span');qualifier.textContent='active travel model · not a navigation chart';
+    head.append(title,qualifier);root.appendChild(head);
+
+    const overview=document.createElement('div');overview.className='trip-overview';overview.textContent=tripDescription();root.appendChild(overview);
+
+    const metrics=document.createElement('div');metrics.className='trip-metrics';
+    const values=[];
+    if(effort.paddleMiles>0)values.push([effort.paddleMiles.toFixed(1)+' mi','paddling']);
+    if(effort.portageMiles>0)values.push([effort.portageMiles.toFixed(1)+' mi','portage trail']);
+    if(effort.walkedMiles>0)values.push([effort.walkedMiles.toFixed(1)+' mi','walked with carry pattern']);
+    values.push([formatDuration(effort.totalHours),'active travel']);
+    if(effort.paddleSpeed)values.push([effort.paddleSpeed.toFixed(1)+' mph','modeled paddle speed']);
+    if(effort.strokes>0)values.push([Math.round(effort.strokes).toLocaleString(),'estimated stroke cycles']);
+    if(effort.portages)values.push([String(effort.portages),'portages']);
+    values.push([String(days.length),'planned travel day'+(days.length===1?'':'s')]);
+    for(const pair of values) {
+      const box=document.createElement('div');box.className='trip-metric';
+      const b=document.createElement('b');b.textContent=pair[0];
+      const span=document.createElement('span');span.textContent=pair[1];
+      box.append(b,span);metrics.appendChild(box);
+    }
+    root.appendChild(metrics);
+
+    for(const day of days) {
+      const card=document.createElement('article');card.className='trip-day';
+      const dh=document.createElement('div');dh.className='trip-day-head';
+      const dtitle=document.createElement('strong');dtitle.textContent='Day '+day.day+' · '+cleanText(day.end?.label||'planned end');
+      const dmeta=document.createElement('span');dmeta.textContent=formatDuration(day.hours)+' · '+day.miles.toFixed(1)+' route mi';
+      dh.append(dtitle,dmeta);card.appendChild(dh);
+      for(const seg of day.segments) {
+        const row=document.createElement('div');row.className='trip-leg '+seg.type;
+        const from=cleanText(seg.from?.label||'Start'),to=cleanText(seg.to?.label||'Next point');
+        const b=document.createElement('b');
+        const span=document.createElement('span');
+        if(seg.type==='portage') {
+          const official=seg.officialPortage;
+          b.textContent=(official?('NPS #'+official.number+' · '):'')+from+' → '+to;
+          span.textContent=seg.miles.toFixed(1)+' mi trail · '+seg.walkedMiles.toFixed(1)+' mi walked · '+carryLabel()+' · '+formatDuration(seg.walkingHours)+' walking + '+Math.round(seg.transitionHours*60)+' min load/unload'+(official?.terrain?(' · '+official.terrain):'');
+        } else {
+          b.textContent=from+' → '+to;
+          span.textContent=seg.miles.toFixed(1)+' mi '+(seg.type==='paddle'?'paddle':'travel')+' · '+formatDuration(seg.hours)+(seg.strokes?' · ~'+Math.round(seg.strokes).toLocaleString()+' strokes':'');
+        }
+        row.append(b,document.createElement('br'),span);card.appendChild(row);
+      }
+      if(day.provisional) {
+        const warn=document.createElement('div');warn.className='trip-caveat';warn.textContent='Provisional day break: this endpoint is not marked as a campground. Choose a legal overnight stop before treating this as an itinerary.';
+        card.appendChild(warn);
+      } else if(day.end?.kind==='campground') {
+        const camp=document.createElement('div');camp.className='trip-caveat';camp.textContent='Planned day end: '+cleanText(day.end.label)+(day.end.manualDayEnd?' · explicitly selected':' · campground stop near the travel-day target')+'.';
+        card.appendChild(camp);
+      }
+      root.appendChild(card);
+    }
+
+    const caveat=document.createElement('div');caveat.className='trip-caveat';
+    caveat.textContent='Time model includes modeled paddling, portage walking, and the selected load/unload allowance. It does not include breaks, lunch, fishing, wind delays, route-finding, landing congestion or camp setup. Portage terrain adjustments are planning heuristics applied to NPS terrain descriptions, not measured walking-time observations.';
+    root.appendChild(caveat);
+  }
+
   function nearestTrailNode(point) {
     let best=null,bestDistance=Infinity;
     for(const node of trailGraph.nodes.values()) {
