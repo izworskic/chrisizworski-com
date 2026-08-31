@@ -106,7 +106,7 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
 
 
 test('Isle Royale interaction script is cache-busted and not stored during active development', () => {
-  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-floating-inspector-1/);
+  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-route-builder-1/);
   assert.doesNotMatch(html, /isle-royale-map\.js\?v=20260830-19/);
   const vercel = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
   const rule = (vercel.headers || []).find(item => item.source === '/assets/isle-royale-map.js');
@@ -321,6 +321,46 @@ test('map-first route builder separates Explore from persistent Build mode and m
   assert.doesNotMatch(js, /scrollIntoView\(\{behavior:'smooth'.*route-planner/);
 });
 
+test('route building draws immediately, shows running draft distance, and finishes into review', () => {
+  for (const id of ['route-build-bar','route-build-phase','route-build-metrics','route-finish-build','route-review-actions','route-review-edit','route-review-save','route-review-share','route-review-gpx']) {
+    assert.ok(html.includes(`id="${id}"`), id);
+  }
+  assert.match(html, /Finish &amp; review/);
+  assert.match(html, /Build first\./);
+  assert.match(js, /reviewing:false/);
+  assert.match(js, /function draftRouteDistances/);
+  assert.match(js, /function draftRouteTotalMiles/);
+  assert.match(js, /function routeDisplayPoints/);
+  assert.match(js, /function routeIsResolved/);
+  assert.match(js, /function renderRouteBuildFlow/);
+  assert.match(js, /function finishRouteBuild/);
+  assert.match(js, /function resumeRouteBuild/);
+  assert.match(js, /const displayPath=routeDisplayPoints\(\)/);
+  assert.match(js, /const draftDisplay=!routeIsResolved\(\)&&displayPath\.length>=2/);
+  assert.match(js, /route\.line=L\.polyline\(displayPath\.map/);
+  assert.match(js, /Draft route · straight between selected points while mapped routing verifies/);
+  assert.match(js, /Draft '\+leg\.toFixed\(1\)\+' mi/);
+  assert.match(js, /route-distance-draft/);
+  assert.match(js, /if\(path\.length<2\)return draftRouteDistances\(\)/);
+  assert.match(js, /mi draft total/);
+  assert.match(js, /Finish & review/);
+  assert.match(js, /route\.reviewing=true/);
+  assert.match(js, /setRouteAdding\(false,\{preserveReview:true\}\)/);
+  assert.match(js, /route\.adding\?finishRouteBuild\(\):setRouteAdding\(true\)/);
+  assert.match(js, /els\.routeReviewGpx\.disabled=!routeIsResolved\(\)/);
+  assert.match(js, /if\(els\.routeSave\)els\.routeSave\.disabled=building/);
+  assert.match(js, /if\(els\.routeExportGpx\)els\.routeExportGpx\.disabled=building\|\|!routeIsResolved\(\)/);
+  assert.match(html, /\.route-build-bar\{/);
+  assert.match(html, /\.route-distance-badge\.route-distance-draft\{/);
+  assert.match(html, /body\.map-focus \.route-build-bar\{display:none!important\}/);
+});
+
+test('canoe resolved leg distance labels use the current route leg index', () => {
+  assert.match(js, /route\.smartState==='canoe-aware'/);
+  assert.match(js, /const canoeLeg=route\.mode==='canoe'\?route\.mixedLegs\[index-1\]\|\|null:null/);
+  assert.doesNotMatch(js, /route\.mixedLegs\[i-1\]\|\|null:null/);
+});
+
 test('trip persistence stays local/share-fragment based and GPX exports only resolved geometry', () => {
   assert.match(html, /id="route-save"/);
   assert.match(html, /id="route-restore"/);
@@ -339,7 +379,7 @@ test('trip persistence stays local/share-fragment based and GPX exports only res
   assert.match(js, /application\/gpx\+xml/);
   assert.match(js, /temporary fallback sketches are not exported/);
   assert.match(js, /Planning export from Chris Izworski Isle Royale Map\. Not a navigation chart/);
-  assert.match(js, /const gpxReady=route\.points\.length>=2/);
+  assert.match(js, /const gpxReady=routeIsResolved\(\)/);
 });
 
 test('focus map becomes a real planning cockpit with shared controls and reversible edits', () => {
