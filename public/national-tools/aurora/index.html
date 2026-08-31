@@ -42,7 +42,7 @@
 <script>
 document.addEventListener("DOMContentLoaded",function(){
  const N=window.NationalTools,form=document.getElementById("loc");
- function timeRange(w){if(!w)return "Unavailable";return new Date(w.start_time).toLocaleTimeString([],{hour:"numeric"})+"–"+new Date(w.end_time).toLocaleTimeString([],{hour:"numeric"})}
+ function timeRange(w,tz){if(!w)return "Unavailable";return N.fmtInZone(w.start_time,tz,{hour:"numeric"})+"–"+N.fmtInZone(w.end_time,tz,{hour:"numeric"})}
  async function run(loc){
   const r=await fetch("/api/national-aurora?lat="+loc.latitude+"&lon="+loc.longitude),d=await r.json();if(!r.ok)throw new Error(d.error||"Aurora data unavailable");
   document.getElementById("result").hidden=false;
@@ -52,12 +52,12 @@ document.addEventListener("DOMContentLoaded",function(){
   document.getElementById("detail").textContent=d.verdict.detail;
   document.getElementById("reasons").innerHTML=(d.reasons||[]).map(r=>'<div class="mini-card"><span class="tool-kicker">'+N.esc(r.label)+'</span><strong>'+N.esc(r.value)+'</strong><small>'+N.esc(r.detail)+'</small></div>').join("");
   const w=d.local_signal?.best_dark_window;
-  document.getElementById("window").textContent=timeRange(w);
+  document.getElementById("window").textContent=timeRange(w,d.location?.timeZone||loc.timeZone);
   document.getElementById("cloud").textContent=w?.average_cloud_percent==null?"Unknown":Math.round(w.average_cloud_percent)+"%";
   document.getElementById("moon").textContent=d.moon?.illumination_percent==null?"Unknown":Math.round(d.moon.illumination_percent)+"%";
   document.getElementById("ovation").textContent=d.local_signal?.ovation_value==null?"Unavailable":Math.round(d.local_signal.ovation_value);
   document.getElementById("kp").textContent=d.geomagnetic?.peak_24h_kp==null?"Unknown":d.geomagnetic.peak_24h_kp;
-  document.getElementById("signal-time").textContent=d.local_signal?.ovation_forecast_at?new Date(d.local_signal.ovation_forecast_at).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}):"Unknown";
+  document.getElementById("signal-time").textContent=d.local_signal?.ovation_forecast_at?N.fmtInZone(d.local_signal.ovation_forecast_at,d.location?.timeZone||loc.timeZone,{hour:"numeric",minute:"2-digit"}):"Unknown";
   const stale=(d.sources||[]).filter(s=>s.stale===true).map(s=>s.source_name);
   document.getElementById("updated").textContent="Retrieved "+N.fmtDate(d.retrieved_at)+(d.degraded?" · one or more upstream feeds are degraded":"")+(stale.length?" · stale: "+stale.join(", "):"");
   document.getElementById("mi").hidden=loc.stateCode!=="MI";
