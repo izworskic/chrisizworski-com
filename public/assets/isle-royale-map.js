@@ -4181,9 +4181,12 @@
     }
     if(els.cockpitHours)els.cockpitHours.value=els.routeDayHours?.value||'6';
     if(els.cockpitBuild) {
-      els.cockpitBuild.textContent=route.adding?'Finish & review':route.reviewing?'Edit route':'Build route';
+      els.cockpitBuild.textContent=route.adding?'Build mode on':route.reviewing?'Edit trip':'Build route';
       els.cockpitBuild.classList.toggle('primary',route.adding||route.reviewing);
+      els.cockpitBuild.disabled=route.adding;
     }
+    if(els.cockpitFinishDay)els.cockpitFinishDay.disabled=!canFinishCurrentDay();
+    if(els.cockpitFinishTrip)els.cockpitFinishTrip.disabled=route.points.length<2||!routeIsResolved();
     if(els.cockpitWeather)els.cockpitWeather.disabled=Boolean(els.routeWeatherButton?.disabled);
     if(els.cockpitReverse)els.cockpitReverse.disabled=route.points.length<2;
     if(els.cockpitBackPoint)els.cockpitBackPoint.disabled=!route.points.length;
@@ -4517,21 +4520,21 @@
     if(route.adding)route.reviewing=false;
     else if(!preserveReview)route.reviewing=false;
     document.body.classList.toggle('route-building',route.adding);
-    els.routeAddButton.textContent=route.adding?'Finish & review':'Start building';
+    els.routeAddButton.textContent=route.adding?'Finish trip':'Start building';
     els.routeModeButton.textContent='Build route';
     els.routeAddButton.setAttribute('aria-pressed',String(route.adding));
     els.routeModeButton.setAttribute('aria-pressed',String(route.adding));
     els.exploreModeButton?.setAttribute('aria-pressed',String(!route.adding));
     if(els.routeMapGuide) {
       els.routeMapGuide.innerHTML=route.adding
-        ? '<strong>Build route:</strong> add water points, campsites and brown P# portages. Watercraft lines appear only after a zero-land-crossing water path or designated portage resolves. Use <strong>Back one point</strong> whenever you want to change direction.'
+        ? '<strong>Build Day '+activeRouteDayNumber()+':</strong> add water points, campsites and brown P# portages. Verified safe legs stay visible with mileage as you go. At the overnight campground choose <strong>Finish day</strong>, then keep building the next day.'
         : route.reviewing
           ? '<strong>Review route:</strong> inspect the route, distance and stops. Edit again or save, share and export when ready.'
           : '<strong>Explore:</strong> click features for details. Switch to Build route when you want map clicks to edit the trip.';
     }
     if(!preserveReview)status(route.adding
       ? route.points.length
-        ? 'Build route is on. Keep adding water points, campsites or brown P# portages. Back one point removes your most recent selection.'
+        ? 'Building Day '+activeRouteDayNumber()+'. Keep adding water points, campsites or brown P# portages; verified mileage stays visible. Back one point removes your most recent selection.'
         : 'Build route is on. Click the map or a campsite for your route start.'
       : 'Explore mode. Map clicks inspect features without changing the trip.');
     renderRouteBuildFlow();
@@ -5040,6 +5043,7 @@
   });
   els.routeAddButton.addEventListener('click',()=>route.adding?finishRouteBuild():setRouteAdding(true));
   els.routeModeButton.addEventListener('click',()=>setRouteAdding(true));
+  els.routeFinishDay?.addEventListener('click',finishCurrentDay);
   els.routeFinishBuild?.addEventListener('click',finishRouteBuild);
   els.routeReviewEdit?.addEventListener('click',resumeRouteBuild);
   els.routeReviewSave?.addEventListener('click',saveTripToDevice);
@@ -5053,7 +5057,9 @@
   els.routeClear.addEventListener('click',clearRoute);
   els.routeWeatherButton.addEventListener('click',analyzeRouteWeather);
   els.cockpitExit?.addEventListener('click',()=>setMapFocus(false));
-  els.cockpitBuild?.addEventListener('click',()=>route.adding?finishRouteBuild():setRouteAdding(true));
+  els.cockpitBuild?.addEventListener('click',()=>route.reviewing?resumeRouteBuild():setRouteAdding(true));
+  els.cockpitFinishDay?.addEventListener('click',finishCurrentDay);
+  els.cockpitFinishTrip?.addEventListener('click',finishRouteBuild);
   els.cockpitUndo?.addEventListener('click',undoRouteEdit);
   els.cockpitBackPoint?.addEventListener('click',backOneRoutePoint);
   els.cockpitRedo?.addEventListener('click',redoRouteEdit);
