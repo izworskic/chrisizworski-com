@@ -80,7 +80,7 @@ check("Aurora sources expose stale semantics", /staleAfterMinutes/.test(apis.aur
 check("Aurora page survives stale shared timezone helper", /typeof N\.fmtInZone===["']function["']/.test(pages.aurora), 4);
 check("Aurora exposes NOAA auroral oval visual", /national-oval-img/.test(pages.aurora) && /aurora-forecast-northern-hemisphere\.jpg/.test(pages.aurora), 4);
 check("Auroral oval does not become fake sighting probability", /not a sighting probability/i.test(pages.aurora) && /modeled intensity/i.test(pages.aurora), 4);
-check("National entry pages cache-bust shared runtime assets", Object.values(pages).every((body) => /national-tools\\.js\\?v=20260831-river-hotfix1/.test(body)), 3);
+check("National entry pages cache-bust shared runtime assets", Object.values(pages).every((body) => /national-tools\.js\?v=20260831-river-hotfix1/.test(body)), 3);
 
 check("Rivers include same-date historical percentiles", /dailyStatistics/.test(apis.rivers) && /P10,P25,P50,P75,P90/.test(apis.rivers) && /historical_comparison/.test(apis.rivers), 5);
 check("Rivers match NWPS by exact USGS ID", /byUsgs/.test(apis.rivers) && /usgsId/.test(apis.rivers) && /stageflow\/forecast/.test(apis.rivers), 5);
