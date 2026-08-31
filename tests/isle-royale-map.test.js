@@ -496,7 +496,7 @@ test('smart route planner snaps hiking to mapped trails and keeps water routes e
   assert.match(html, /<h3>Plan a route<\/h3>/);
   assert.match(html, /id="route-smart-status"/);
   assert.match(html, /id="route-reverse"/);
-  assert.match(html, /Build on the map/);
+  assert.match(html, /Build point to point/);
   assert.match(html, /Canoe mode separates paddle legs from portages/i);
   assert.match(js, /const trailGraph = \{/);
   assert.match(js, /function registerTrailGeometry/);
