@@ -3073,8 +3073,8 @@
     let router=null;
     try { router=await ensureWaterRouter(); } catch (_) {}
     if(token!==route.waterToken||route.mode!=='canoe')return;
+    const legs=[];
     try {
-      const legs=[];
       for(let i=1;i<route.points.length;i++) {
         const a=route.points[i-1],b=route.points[i];
         const override=b.legType||'auto';
@@ -3104,22 +3104,29 @@
         } else {
           throw new Error('Leg '+i+' cannot be verified as water-only. Watercraft routes never cross land except on a designated brown P# portage.');
         }
-        leg.index=i; leg.override=override; legs.push(leg);
+        leg.index=i;
+        leg.override=override;
+        legs.push(leg);
+        if(token!==route.waterToken)return;
+        route.mixedLegs=[...legs];
+        route.resolvedPoints=combineCanoeLegs(legs);
+        route.waterAccessMiles=legs.filter(item=>item.type==='paddle').reduce((sum,item)=>sum+(Number(item.access_miles)||0),0);
+        route.smartState=i===route.points.length-1?'canoe-aware':'canoe-partial';
+        route.mixedReason='';
+        renderRoute();
+        await new Promise(resolve=>setTimeout(resolve,0));
       }
-      if(token!==route.waterToken)return;
-      route.mixedLegs=legs;
-      route.resolvedPoints=combineCanoeLegs(legs);
       route.waterStats=null;
-      route.waterAccessMiles=legs.filter(leg=>leg.type==='paddle').reduce((sum,leg)=>sum+(Number(leg.access_miles)||0),0);
       route.smartState='canoe-aware';
       route.mixedReason='';
       renderRoute();
       emitEvent('isle_royale_canoe_route',{leg_count:legs.length,paddle_legs:legs.filter(leg=>leg.type==='paddle').length,portage_legs:legs.filter(leg=>leg.type==='portage').length});
     } catch(error) {
       if(token!==route.waterToken)return;
-      route.mixedLegs=[];
-      route.resolvedPoints=[];
-      route.smartState='canoe-fallback';
+      route.mixedLegs=[...legs];
+      route.resolvedPoints=combineCanoeLegs(legs);
+      route.waterAccessMiles=legs.filter(item=>item.type==='paddle').reduce((sum,item)=>sum+(Number(item.access_miles)||0),0);
+      route.smartState=legs.length?'canoe-partial':'canoe-fallback';
       route.mixedReason=cleanText(error?.message||'mixed canoe route unavailable');
       renderRoute();
     }
@@ -3211,25 +3218,46 @@
   }
 
   async function resolveWaterRouteAsync() {
-    if(route.mode==='hike'||route.points.length<2)return;
+    if(route.mode==='hike'||route.mode==='canoe'||route.points.length<2)return;
     const token=++route.waterToken;
     route.smartState='water-loading';
     route.waterReason='';
     route.waterStats=null;
     route.waterAccessMiles=0;
+    route.waterLegs=[];
+    route.resolvedPoints=[];
     renderRoute();
+    const legs=[];
     try {
       const [router,zones]=await Promise.all([ensureWaterRouter(),ensureRouteQuietZones()]);
-      if(token!==route.waterToken||route.mode==='hike'||route.points.length<2)return;
-      await new Promise(resolve=>setTimeout(resolve,0));
-      const result=router.route(route.points,route.mode);
-      if(token!==route.waterToken)return;
-      const crossings=Number(result.land_crossings ?? router.crossingCount?.(result.points) ?? 0);
-      if(crossings!==0)throw new Error('Water route failed zero-land-crossing validation');
-      route.resolvedPoints=result.points;
-      route.waterAccessMiles=Number(result.access_miles)||0;
+      if(token!==route.waterToken||route.mode==='hike'||route.mode==='canoe'||route.points.length<2)return;
+      for(let i=1;i<route.points.length;i++) {
+        const a=route.points[i-1],b=route.points[i];
+        const result=router.route([a,b],route.mode);
+        const crossings=Number(result.land_crossings ?? router.crossingCount?.(result.points) ?? 0);
+        if(crossings!==0)throw new Error('Water route failed zero-land-crossing validation on leg '+i);
+        if(!Array.isArray(result.points)||result.points.length<2)throw new Error('Water route returned no usable geometry on leg '+i);
+        const cumulative=cumulativeFor(result.points);
+        const leg={
+          index:i,
+          type:'water',
+          points:result.points,
+          miles:cumulative[cumulative.length-1]||0,
+          access_miles:Number(result.access_miles)||0,
+          verified:true
+        };
+        legs.push(leg);
+        if(token!==route.waterToken)return;
+        route.waterLegs=[...legs];
+        route.resolvedPoints=combineCanoeLegs(legs);
+        route.waterAccessMiles=legs.reduce((sum,item)=>sum+(Number(item.access_miles)||0),0);
+        route.smartState=i===route.points.length-1?'water-aware':'water-partial';
+        route.waterReason='';
+        renderRoute();
+        await new Promise(resolve=>setTimeout(resolve,0));
+      }
       const stats=router.analyze(route.resolvedPoints);
-      stats.land_crossings=Number(stats.land_crossings ?? crossings);
+      stats.land_crossings=Number(stats.land_crossings ?? router.crossingCount?.(route.resolvedPoints) ?? 0);
       if(stats.land_crossings!==0)throw new Error('Water route analysis found a mapped shoreline crossing');
       stats.quiet_zones=window.IsleRoyaleWaterIntel.zonesAlongPath(route.resolvedPoints,zones);
       stats.refuges=nearbyRouteRefuges(route.resolvedPoints);
@@ -3237,16 +3265,19 @@
       route.smartState='water-aware';
       route.waterReason='';
       renderRoute();
-      emitEvent('isle_royale_water_route',{mode:route.mode,quiet_zone_count:stats.quiet_zones.length,refuge_count:stats.refuges.length});
+      emitEvent('isle_royale_water_route',{mode:route.mode,quiet_zone_count:stats.quiet_zones.length,refuge_count:stats.refuges.length,leg_count:legs.length});
     } catch(error) {
       if(token!==route.waterToken)return;
-      route.resolvedPoints=[];
+      route.waterLegs=[...legs];
+      route.resolvedPoints=combineCanoeLegs(legs);
+      route.waterAccessMiles=legs.reduce((sum,item)=>sum+(Number(item.access_miles)||0),0);
       route.waterStats=null;
-      route.smartState='water-fallback';
+      route.smartState=legs.length?'water-partial':'water-fallback';
       route.waterReason=cleanText(error?.message||'shoreline intelligence unavailable');
       renderRoute();
     }
   }
+
   function resolveRoute() {
     route.trailNames=[];
     route.accessMiles=0;
