@@ -113,8 +113,7 @@ test('rich map cards recenter into the actually readable map viewport', () => {
   assert.match(js, /map\.panBy\(\[-shiftX,-shiftY\]/);
   assert.match(js, /content\.style\.maxHeight=available\+'px'/);
   assert.match(js, /visibleMapOverlay\('\.planning-cockpit'\)/);
-  assert.match(js, /visibleMapOverlay\('\.map-toolbar'\)/);
-  assert.match(js, /visibleMapOverlay\('\.route-map-guide'\)/);
+  assert.match(js, /\['\.map-toolbar','\.route-map-guide'\]/);
   assert.match(js, /visibleMapOverlay\('\.map-status'\)/);
   assert.match(js, /autoPan:false,className:'isle-detail-popup'/);
   assert.match(html, /body\.map-focus\.detail-popup-open \.planning-cockpit\{display:none\}/);
