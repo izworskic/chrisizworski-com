@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-08-30",
+  "updated": "2026-08-31",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -1538,6 +1538,180 @@
       "searchEvidence": {
         "status": "new"
       }
+    },
+    {
+      "id": "national-aurora",
+      "name": "Aurora Tonight — U.S.",
+      "canonical": "https://chrisizworski.com/national-tools/aurora/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "nature-night-sky",
+      "primaryIntent": "northern lights forecast tonight by U.S. location",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "united-states"
+      ],
+      "personas": [
+        "sky-watcher",
+        "traveler"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new"
+      }
+    },
+    {
+      "id": "national-rivers",
+      "name": "U.S. River Conditions",
+      "canonical": "https://chrisizworski.com/national-tools/rivers/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "rivers-fishing",
+      "primaryIntent": "U.S. river levels flow and nearby gauges",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "united-states"
+      ],
+      "personas": [
+        "angler",
+        "paddler",
+        "river-watcher"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new"
+      }
+    },
+    {
+      "id": "national-frost",
+      "name": "U.S. Frost Dates & Freeze Risk",
+      "canonical": "https://chrisizworski.com/national-tools/frost/",
+      "aliases": [],
+      "kind": "decision-calculator",
+      "cluster": "gardening",
+      "primaryIntent": "first and last frost dates by U.S. location",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10,
+        11
+      ],
+      "geographies": [
+        "united-states"
+      ],
+      "personas": [
+        "gardener",
+        "grower"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new"
+      }
+    },
+    {
+      "id": "national-planting",
+      "name": "U.S. Planting Calendar",
+      "canonical": "https://chrisizworski.com/national-tools/planting/",
+      "aliases": [],
+      "kind": "decision-calculator",
+      "cluster": "gardening",
+      "primaryIntent": "vegetable planting calendar by U.S. location",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "geographies": [
+        "united-states"
+      ],
+      "personas": [
+        "gardener",
+        "grower"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new"
+      }
+    },
+    {
+      "id": "national-fall-color",
+      "name": "U.S. Fall Color Timing",
+      "canonical": "https://chrisizworski.com/national-tools/fall-color/",
+      "aliases": [],
+      "kind": "seasonal-data-beta",
+      "cluster": "fall-travel",
+      "primaryIntent": "historical fall foliage timing by U.S. location",
+      "seasons": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "geographies": [
+        "contiguous-united-states"
+      ],
+      "personas": [
+        "fall-traveler",
+        "photographer"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "active",
+        "beta": true
+      },
+      "searchEvidence": {
+        "status": "new"
+      }
     }
   ],
   "relationships": [
@@ -2052,6 +2226,70 @@
       "strength": "strong",
       "surface": "lake-superior",
       "reason": "The Circle Tour guide can hand off to a dedicated Isle Royale map when the island is part of the trip."
+    },
+    {
+      "from": "national-aurora",
+      "to": "aurora",
+      "type": "geographic-handoff",
+      "surface": "michigan-handoff",
+      "reason": "Michigan visitors have a deeper established Northern Lights Michigan tool.",
+      "strength": "strong"
+    },
+    {
+      "from": "national-rivers",
+      "to": "ausable-field-map",
+      "type": "regional-depth",
+      "surface": "michigan-handoff",
+      "reason": "The Au Sable field map adds access and route-planning depth beyond generic gauge conditions.",
+      "strength": "optional"
+    },
+    {
+      "from": "national-rivers",
+      "to": "manistee-field-map",
+      "type": "regional-depth",
+      "surface": "michigan-handoff",
+      "reason": "The Manistee field map adds river-specific access and trip-planning depth.",
+      "strength": "optional"
+    },
+    {
+      "from": "national-frost",
+      "to": "frost-dates",
+      "type": "geographic-handoff",
+      "surface": "michigan-handoff",
+      "reason": "Michigan frost intent should continue to favor the established Michigan station product.",
+      "strength": "strong"
+    },
+    {
+      "from": "national-frost",
+      "to": "national-planting",
+      "type": "decision-next-step",
+      "surface": "tool-navigation",
+      "reason": "A frost-date lookup naturally continues into crop planting timing.",
+      "strength": "essential"
+    },
+    {
+      "from": "national-planting",
+      "to": "planting-calendar",
+      "type": "geographic-handoff",
+      "surface": "michigan-handoff",
+      "reason": "Michigan gardeners get the deeper established Michigan planting model.",
+      "strength": "strong"
+    },
+    {
+      "from": "national-fall-color",
+      "to": "fall-color",
+      "type": "geographic-handoff",
+      "surface": "michigan-handoff",
+      "reason": "Michigan current-color intent should continue to use the established Michigan Fall Color tool.",
+      "strength": "strong"
+    },
+    {
+      "from": "national-aurora",
+      "to": "national-fall-color",
+      "type": "seasonal-companion",
+      "surface": "tool-navigation",
+      "reason": "Autumn travelers may combine dark-sky aurora planning with fall timing.",
+      "strength": "optional"
     }
   ],
   "cannibalizationGroups": [
@@ -2110,6 +2348,47 @@
         "seed-starting"
       ],
       "rule": "Calendar owns full-season planning; supports own distinct frost, tomato, and technique questions."
+    },
+    {
+      "intent": "U.S. northern lights forecast",
+      "owner": "national-aurora",
+      "supports": [
+        "aurora"
+      ],
+      "rule": "National Aurora owns U.S. location intent; Northern Lights Michigan remains the deeper canonical for Michigan-specific aurora intent."
+    },
+    {
+      "intent": "U.S. frost dates",
+      "owner": "national-frost",
+      "supports": [
+        "frost-dates"
+      ],
+      "rule": "National Frost owns non-Michigan U.S. location intent; Michigan Frost Dates remains the Michigan-specific canonical."
+    },
+    {
+      "intent": "U.S. vegetable planting timing",
+      "owner": "national-planting",
+      "supports": [
+        "planting-calendar"
+      ],
+      "rule": "National Planting owns broad U.S. location intent; the established Michigan calendar remains canonical for Michigan-specific planting intent."
+    },
+    {
+      "intent": "U.S. fall foliage timing",
+      "owner": "national-fall-color",
+      "supports": [
+        "fall-color"
+      ],
+      "rule": "The national beta owns historical U.S. timing context; Michigan Fall Color retains current Michigan map/peak intent."
+    },
+    {
+      "intent": "U.S. river gauge conditions",
+      "owner": "national-rivers",
+      "supports": [
+        "ausable-field-map",
+        "manistee-field-map"
+      ],
+      "rule": "National Rivers owns generic nearby gauge conditions; Michigan field maps own river-specific access, route and planning intent."
     }
   ],
   "expansionOpportunities": [
