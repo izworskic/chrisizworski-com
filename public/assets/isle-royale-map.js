@@ -2000,7 +2000,7 @@
   }
 
   function renderRouteBuildFlow() {
-    if(els.routeDerivedSpeed)els.routeDerivedSpeed.textContent=paddleSpeedFromStrokes().toFixed(1)+' mph modeled';
+    if(els.routeDerivedSpeed)els.routeDerivedSpeed.textContent=paddlePaceSpeed().toFixed(1)+' mph modeled';
     const bar=els.routeBuildBar;
     if(!bar)return;
     const active=route.adding||route.reviewing;
@@ -2180,8 +2180,8 @@
   function tripSegmentMetrics() {
     if(!routeIsResolved()||route.points.length<2)return [];
     if(route.mode==='canoe') {
-      const paddleSpeed=paddleSpeedFromStrokes();
-      const basePortageSpeed=Math.max(.5,Number(route.portageSpeed)||2);
+      const paddleSpeed=paddlePaceSpeed();
+      const basePortageSpeed=portagePaceSpeed();
       const transitionMinutes=Math.max(0,Number(route.portageTransitionMinutes)||0);
       return (route.mixedLegs||[]).map((leg,zeroIndex)=>{
         const index=zeroIndex+1;
@@ -2207,21 +2207,21 @@
           index,type:'paddle',from,to,miles,walkedMiles:0,hours,
           walkingHours:0,transitionHours:0,effectivePortageSpeed:null,
           terrainFactor:1,officialPortage:null,verified:Boolean(leg.verified),
-          strokes:strokeCountForMiles(miles),paddleSpeed
+          strokes:0,paddleSpeed
         };
       });
     }
 
     const distances=routeControlDistances();
     const human=route.mode==='paddle';
-    const speed=human?paddleSpeedFromStrokes():Math.max(.5,Number(route.speed)||3);
+    const speed=human?paddlePaceSpeed():Math.max(.5,Number(route.speed)||3);
     return route.points.slice(1).map((point,zeroIndex)=>{
       const index=zeroIndex+1;
       const miles=Number(distances[index]?.leg_miles)||0;
       return {
         index,type:human?'paddle':route.mode,from:route.points[index-1],to:point,miles,
         walkedMiles:0,hours:miles/speed,walkingHours:0,transitionHours:0,
-        strokes:human?strokeCountForMiles(miles):0,paddleSpeed:human?speed:null,
+        strokes:0,paddleSpeed:human?speed:null,
         verified:true
       };
     });
@@ -2236,12 +2236,11 @@
     const walkingHours=segments.reduce((sum,x)=>sum+x.walkingHours,0);
     const transitionHours=segments.reduce((sum,x)=>sum+x.transitionHours,0);
     const totalHours=segments.reduce((sum,x)=>sum+x.hours,0);
-    const strokes=segments.reduce((sum,x)=>sum+x.strokes,0);
-    const portages=segments.filter(x=>x.type==='portage').length;
+        const portages=segments.filter(x=>x.type==='portage').length;
     const longestPortage=segments.filter(x=>x.type==='portage').sort((a,b)=>b.miles-a.miles)[0]||null;
     return {
-      segments,paddleMiles,portageMiles,walkedMiles,paddleHours,walkingHours,transitionHours,totalHours,strokes,portages,longestPortage,
-      paddleSpeed:(route.mode==='paddle'||route.mode==='canoe')?paddleSpeedFromStrokes():null
+      segments,paddleMiles,portageMiles,walkedMiles,paddleHours,walkingHours,transitionHours,totalHours,portages,longestPortage,
+      paddleSpeed:(route.mode==='paddle'||route.mode==='canoe')?paddlePaceSpeed():null
     };
   }
 
@@ -2263,13 +2262,13 @@
     const target=Math.max(2,Number(route.hours)||6);
     const hasManual=route.points.some(point=>point.manualDayEnd);
     const days=[];
-    let current={day:1,segments:[],hours:0,miles:0,paddleMiles:0,portageMiles:0,walkedMiles:0,strokes:0,end:null,explicit:false,provisional:false};
+    let current={day:1,segments:[],hours:0,miles:0,paddleMiles:0,portageMiles:0,walkedMiles:0,end:null,explicit:false,provisional:false};
     const closeDay=(endPoint,{explicit=false,provisional=false}={})=>{
       current.end=endPoint||current.segments[current.segments.length-1]?.to||null;
       current.explicit=explicit;
       current.provisional=provisional;
       days.push(current);
-      current={day:days.length+1,segments:[],hours:0,miles:0,paddleMiles:0,portageMiles:0,walkedMiles:0,strokes:0,end:null,explicit:false,provisional:false};
+      current={day:days.length+1,segments:[],hours:0,miles:0,paddleMiles:0,portageMiles:0,walkedMiles:0,end:null,explicit:false,provisional:false};
     };
     for(let i=0;i<segments.length;i++) {
       const seg=segments[i];
@@ -2279,7 +2278,6 @@
       current.paddleMiles+=seg.type==='paddle'?seg.miles:0;
       current.portageMiles+=seg.type==='portage'?seg.miles:0;
       current.walkedMiles+=seg.walkedMiles||0;
-      current.strokes+=seg.strokes||0;
       const endpoint=seg.to||{};
       const isLast=i===segments.length-1;
       const manual=Boolean(endpoint.manualDayEnd);
@@ -2306,12 +2304,10 @@
     const start=cleanText(route.points[0]?.label||'the route start');
     const end=cleanText(route.points[route.points.length-1]?.label||'the route end');
     if(route.mode==='canoe') {
-      const stroke=Math.round(route.strokeRate||40);
-      const feet=Number(route.feetPerStroke||6.6).toFixed(1);
-      return start+' to '+end+' is a '+effort.paddleMiles.toFixed(1)+' mi paddle + '+effort.portageMiles.toFixed(1)+' mi portage route. At '+stroke+' strokes/min and '+feet+' ft of effective boat travel per stroke, modeled paddling speed is '+effort.paddleSpeed.toFixed(1)+' mph. '+effort.portages+' portage'+(effort.portages===1?'':'s')+' with '+carryLabel()+' turn '+effort.portageMiles.toFixed(1)+' trail mi into '+effort.walkedMiles.toFixed(1)+' walked mi. Estimated active travel time is '+formatDuration(effort.totalHours)+' before meal breaks, fishing, weather holds and camp chores.';
+      return start+' to '+end+' is a '+effort.paddleMiles.toFixed(1)+' mi paddle + '+effort.portageMiles.toFixed(1)+' mi portage route. '+paddlePaceLabel()+' paddling and '+portagePaceLabel()+' portaging are used as the planning pace. '+effort.portages+' portage'+(effort.portages===1?'':'s')+' with '+carryLabel()+' turn '+effort.portageMiles.toFixed(1)+' trail mi into '+effort.walkedMiles.toFixed(1)+' walked mi. Estimated active travel time is '+formatDuration(effort.totalHours)+' before meal breaks, fishing, weather holds and camp chores.';
     }
     if(route.mode==='paddle') {
-      return start+' to '+end+' is '+effort.paddleMiles.toFixed(1)+' routed mi. At '+Math.round(route.strokeRate||40)+' strokes/min and '+Number(route.feetPerStroke||6.6).toFixed(1)+' ft of effective boat travel per stroke, modeled cruising speed is '+effort.paddleSpeed.toFixed(1)+' mph with about '+Math.round(effort.strokes).toLocaleString()+' stroke cycles and '+formatDuration(effort.totalHours)+' of active paddling.';
+      return start+' to '+end+' is '+effort.paddleMiles.toFixed(1)+' routed mi at the '+paddlePaceLabel().toLowerCase()+' planning pace, or about '+formatDuration(effort.totalHours)+' of active paddling.';
     }
     return start+' to '+end+' is '+routeTotalMiles().toFixed(1)+' routed mi with about '+formatDuration(effort.totalHours)+' of active travel at the selected planning pace.';
   }
@@ -2364,8 +2360,7 @@
     if(effort.walkedMiles>0)values.push([effort.walkedMiles.toFixed(1)+' mi','walked with carry pattern']);
     values.push([formatDuration(effort.totalHours),'active travel']);
     if(effort.paddleSpeed)values.push([effort.paddleSpeed.toFixed(1)+' mph','modeled paddle speed']);
-    if(effort.strokes>0)values.push([Math.round(effort.strokes).toLocaleString(),'estimated stroke cycles']);
-    if(effort.portages)values.push([String(effort.portages),'portages']);
+        if(effort.portages)values.push([String(effort.portages),'portages']);
     values.push([String(days.length),'planned travel day'+(days.length===1?'':'s')]);
     for(const pair of values) {
       const box=document.createElement('div');box.className='trip-metric';
@@ -2392,7 +2387,7 @@
           span.textContent=seg.miles.toFixed(1)+' mi trail · '+seg.walkedMiles.toFixed(1)+' mi walked · '+carryLabel()+' · '+formatDuration(seg.walkingHours)+' walking + '+Math.round(seg.transitionHours*60)+' min load/unload'+(official?.terrain?(' · '+official.terrain):'');
         } else {
           b.textContent=from+' → '+to;
-          span.textContent=seg.miles.toFixed(1)+' mi '+(seg.type==='paddle'?'paddle':'travel')+' · '+formatDuration(seg.hours)+(seg.strokes?' · ~'+Math.round(seg.strokes).toLocaleString()+' strokes':'');
+          span.textContent=seg.miles.toFixed(1)+' mi '+(seg.type==='paddle'?'paddle':'travel')+' · '+formatDuration(seg.hours);
         }
         row.append(b,document.createElement('br'),span);card.appendChild(row);
       }
@@ -4034,7 +4029,7 @@
     if(els.cockpitMode)els.cockpitMode.value=route.mode;
     if(els.cockpitSpeed) {
       const human=route.mode==='paddle'||route.mode==='canoe';
-      els.cockpitSpeed.value=human?paddleSpeedFromStrokes().toFixed(1):els.routeSpeed.value;
+      els.cockpitSpeed.value=human?paddlePaceSpeed().toFixed(1):els.routeSpeed.value;
       els.cockpitSpeed.disabled=human;
       els.cockpitSpeed.title=human?'Modeled from paddle cadence and effective travel per stroke':'Planning speed';
     }
@@ -4317,7 +4312,7 @@
           const text=seg.miles.toFixed(1)+' mi trail · '+seg.walkedMiles.toFixed(1)+' mi walked · '+carryLabel()+' · '+formatDuration(seg.walkingHours)+' walking + '+Math.round(seg.transitionHours*60)+' min load/unload'+(official?.terrain?(' · '+official.terrain):'');
           return '<li><strong>'+xmlEscape(title)+'</strong><br>'+xmlEscape(text)+'</li>';
         }
-        return '<li><strong>'+xmlEscape(from+' → '+to)+'</strong><br>'+xmlEscape(seg.miles.toFixed(1)+' mi '+(seg.type==='paddle'?'paddle':'travel')+' · '+formatDuration(seg.hours)+(seg.strokes?' · ~'+Math.round(seg.strokes).toLocaleString()+' strokes':''))+'</li>';
+        return '<li><strong>'+xmlEscape(from+' → '+to)+'</strong><br>'+xmlEscape(seg.miles.toFixed(1)+' mi '+(seg.type==='paddle'?'paddle':'travel')+' · '+formatDuration(seg.hours))+'</li>';
       }).join('');
       const end=cleanText(day.end?.label||'planned end');
       const facts=day.end?.kind==='campground'?campgroundTripFacts(day.end):{text:'',alert:''};
