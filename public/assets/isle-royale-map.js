@@ -103,8 +103,20 @@
   }).addTo(map);
 
   let activeReadablePopup=null;
-  let popupReadabilityTimer=null;
-  let popupUserPositioned=false;
+  let popupPromotionTimer=null;
+  let inspectorClosing=false;
+
+  const floatingInspector = {
+    shell:document.getElementById('map-inspector'),
+    drag:document.getElementById('map-inspector-drag'),
+    body:document.getElementById('map-inspector-body'),
+    centerCard:document.getElementById('map-inspector-center-card'),
+    centerPoint:document.getElementById('map-inspector-center-point'),
+    close:document.getElementById('map-inspector-close'),
+    popup:null,
+    anchor:null,
+    userPositioned:false
+  };
 
   function popupInteractionElements(popup) {
     const popupEl=popup?.getElement?.();
@@ -113,125 +125,160 @@
     return {popupEl,detail};
   }
 
-  function centerPopupInReadableArea(popup,{animate=true}={}) {
-    const parts=popupInteractionElements(popup);
-    if(!parts)return false;
-    const safe=popupSafeBounds(parts.popupEl);
-    const rect=parts.popupEl.getBoundingClientRect();
-    const targetX=(safe.left+safe.right)/2;
-    const targetY=(safe.top+safe.bottom)/2;
-    const currentX=(rect.left+rect.right)/2;
-    const currentY=(rect.top+rect.bottom)/2;
-    const dx=targetX-currentX;
-    const dy=targetY-currentY;
-    if(Math.abs(dx)>1||Math.abs(dy)>1) {
-      map.panBy([-dx,-dy],animate?{animate:true,duration:.2,noMoveStart:true}:{animate:false,noMoveStart:true});
-    }
+  function inspectorMapRect() {
+    return map.getContainer().getBoundingClientRect();
+  }
+
+  function inspectorPosition(left,top) {
+    const shell=floatingInspector.shell;
+    if(!shell||shell.hidden)return;
+    const mapRect=inspectorMapRect();
+    const gap=8;
+    const width=shell.offsetWidth||Math.min(390,mapRect.width-16);
+    const height=shell.offsetHeight||Math.min(520,mapRect.height-16);
+    const maxLeft=Math.max(gap,mapRect.width-width-gap);
+    const maxTop=Math.max(gap,mapRect.height-height-gap);
+    shell.style.left=Math.max(gap,Math.min(maxLeft,left))+'px';
+    shell.style.top=Math.max(gap,Math.min(maxTop,top))+'px';
+    shell.style.transform='none';
+  }
+
+  function centerFloatingInspector() {
+    const shell=floatingInspector.shell;
+    if(!shell||shell.hidden)return false;
+    const safe=popupSafeBounds(shell);
+    const mapRect=inspectorMapRect();
+    const width=shell.offsetWidth;
+    const height=shell.offsetHeight;
+    const left=(safe.left-mapRect.left)+(safe.right-safe.left-width)/2;
+    const top=(safe.top-mapRect.top)+(safe.bottom-safe.top-height)/2;
+    inspectorPosition(left,top);
+    floatingInspector.userPositioned=true;
     return true;
   }
 
-  function ensurePopupDragHandle(popup) {
-    const parts=popupInteractionElements(popup);
-    if(!parts)return null;
-    const {detail}=parts;
-    let handle=detail.querySelector('.popup-drag-handle');
-    if(handle)return handle;
-    handle=document.createElement('div');
-    handle.className='popup-drag-handle';
-    handle.setAttribute('aria-label','Move or center this map card');
-
-    const dragZone=document.createElement('div');
-    dragZone.className='popup-drag-zone';
-    dragZone.setAttribute('role','button');
-    dragZone.setAttribute('tabindex','0');
-    dragZone.setAttribute('aria-label','Drag this card to reposition it on the map');
-
-    const grip=document.createElement('span');
-    grip.className='popup-drag-grip';
-    grip.setAttribute('aria-hidden','true');
-    const cue=document.createElement('span');
-    cue.className='popup-drag-cue';
-    cue.textContent='Drag card';
-    dragZone.append(grip,cue);
-
-    const center=document.createElement('button');
-    center.type='button';
-    center.className='popup-center-button';
-    center.textContent='Center card';
-    center.setAttribute('aria-label','Center this card in the readable map area');
-    center.addEventListener('click',event=>{
-      event.preventDefault();
-      event.stopPropagation();
-      popupUserPositioned=true;
-      centerPopupInReadableArea(popup);
-      emitEvent('isle_royale_popup_center',{mode:route?.mode||'unknown'});
-    });
-
-    handle.append(dragZone,center);
-    detail.prepend(handle);
-    return handle;
+  function centerInspectorPoint() {
+    const anchor=floatingInspector.anchor;
+    if(!anchor||!Number.isFinite(Number(anchor.lat))||!Number.isFinite(Number(anchor.lng)))return false;
+    map.panTo(anchor,{animate:true,duration:.25});
+    emitEvent('isle_royale_inspector_center_point',{mode:route?.mode||'unknown'});
+    return true;
   }
 
-  function wirePopupDrag(popup) {
-    const handle=ensurePopupDragHandle(popup);
-    const dragZone=handle?.querySelector?.('.popup-drag-zone');
-    if(!dragZone||dragZone.dataset.dragReady==='true')return false;
-    dragZone.dataset.dragReady='true';
-    L.DomEvent.disableClickPropagation(handle);
-    L.DomEvent.disableScrollPropagation(handle);
+  function closeFloatingInspector({closePopup=true}={}) {
+    const popup=floatingInspector.popup;
+    floatingInspector.popup=null;
+    floatingInspector.anchor=null;
+    floatingInspector.userPositioned=false;
+    window.clearTimeout(popupPromotionTimer);
+    if(floatingInspector.body)floatingInspector.body.replaceChildren();
+    if(floatingInspector.shell)floatingInspector.shell.hidden=true;
+    document.body.classList.remove('detail-popup-open');
+    if(closePopup&&popup&&!inspectorClosing) {
+      inspectorClosing=true;
+      try{map.closePopup(popup);}catch(_){}
+      inspectorClosing=false;
+    }
+  }
 
+  function sizeFloatingInspector() {
+    const shell=floatingInspector.shell;
+    const body=floatingInspector.body;
+    if(!shell||!body||shell.hidden)return;
+    const safe=popupSafeBounds(shell);
+    const available=Math.max(180,Math.min(620,(safe.bottom-safe.top)-18));
+    shell.style.maxHeight=available+'px';
+    body.style.maxHeight=Math.max(130,available-48)+'px';
+  }
+
+  function promotePopupToFloatingInspector(popup) {
+    if(!popup||popup!==activeReadablePopup)return false;
+    const parts=popupInteractionElements(popup);
+    if(!parts)return false;
+    const {popupEl,detail}=parts;
+    detail.querySelector('.popup-drag-handle')?.remove();
+    popupEl.classList.add('isle-popup-promoted');
+    if(floatingInspector.body)floatingInspector.body.replaceChildren(detail);
+    floatingInspector.popup=popup;
+    const anchor=popup.getLatLng?.()||popup._latlng||null;
+    floatingInspector.anchor=anchor&&Number.isFinite(Number(anchor.lat))&&Number.isFinite(Number(anchor.lng))
+      ? {lat:Number(anchor.lat),lng:Number(anchor.lng)}
+      : null;
+    floatingInspector.userPositioned=false;
+    floatingInspector.shell.hidden=false;
+    document.body.classList.add('detail-popup-open');
+    sizeFloatingInspector();
+    requestAnimationFrame(()=>{
+      sizeFloatingInspector();
+      centerFloatingInspector();
+    });
+    emitEvent('isle_royale_floating_inspector_open',{mode:route?.mode||'unknown'});
+    return true;
+  }
+
+  function scheduleFloatingInspectorPromotion(popup) {
+    let attempts=0;
+    const promote=()=>{
+      if(!popup||popup!==activeReadablePopup)return;
+      attempts++;
+      if(promotePopupToFloatingInspector(popup))return;
+      if(attempts<10)popupPromotionTimer=window.setTimeout(promote,attempts<3?0:40);
+    };
+    requestAnimationFrame(()=>requestAnimationFrame(promote));
+    popupPromotionTimer=window.setTimeout(promote,80);
+    window.setTimeout(promote,220);
+  }
+
+  function wireFloatingInspectorDrag() {
+    const shell=floatingInspector.shell;
+    const handle=floatingInspector.drag;
+    if(!shell||!handle||handle.dataset.dragReady==='true')return;
+    handle.dataset.dragReady='true';
+    L.DomEvent.disableClickPropagation(shell);
+    L.DomEvent.disableScrollPropagation(shell);
     let active=false;
     let pointerId=null;
-    let lastX=0,lastY=0;
-    let restoreMapDragging=false;
+    let startX=0,startY=0,startLeft=0,startTop=0;
 
     const move=event=>{
       if(!active||event.pointerId!==pointerId)return;
-      const dx=event.clientX-lastX;
-      const dy=event.clientY-lastY;
-      lastX=event.clientX;
-      lastY=event.clientY;
-      if(Math.abs(dx)+Math.abs(dy)>.5) {
-        map.panBy([-dx,-dy],{animate:false,noMoveStart:true});
-      }
+      inspectorPosition(startLeft+(event.clientX-startX),startTop+(event.clientY-startY));
       event.preventDefault();
       event.stopPropagation();
     };
-
     const end=event=>{
       if(!active)return;
       if(event&&event.pointerId!=null&&event.pointerId!==pointerId)return;
       active=false;
       pointerId=null;
-      dragZone.classList.remove('dragging');
+      handle.classList.remove('dragging');
       window.removeEventListener('pointermove',move,true);
       window.removeEventListener('pointerup',end,true);
       window.removeEventListener('pointercancel',end,true);
-      if(restoreMapDragging&&map.dragging&&!map.dragging.enabled())map.dragging.enable();
-      restoreMapDragging=false;
       if(event){event.preventDefault();event.stopPropagation();}
-      emitEvent('isle_royale_popup_drag',{mode:route?.mode||'unknown'});
+      emitEvent('isle_royale_inspector_drag',{mode:route?.mode||'unknown'});
     };
-
-    dragZone.addEventListener('pointerdown',event=>{
+    handle.addEventListener('pointerdown',event=>{
       if(event.button!=null&&event.button!==0)return;
-      window.clearTimeout(popupReadabilityTimer);
-      popupUserPositioned=true;
+      const rect=shell.getBoundingClientRect();
+      const mapRect=inspectorMapRect();
       active=true;
       pointerId=event.pointerId;
-      lastX=event.clientX;
-      lastY=event.clientY;
-      restoreMapDragging=Boolean(map.dragging?.enabled?.());
-      if(restoreMapDragging)map.dragging.disable();
-      dragZone.classList.add('dragging');
+      startX=event.clientX;
+      startY=event.clientY;
+      startLeft=rect.left-mapRect.left;
+      startTop=rect.top-mapRect.top;
+      floatingInspector.userPositioned=true;
+      handle.classList.add('dragging');
       window.addEventListener('pointermove',move,{capture:true,passive:false});
       window.addEventListener('pointerup',end,{capture:true,passive:false});
       window.addEventListener('pointercancel',end,{capture:true,passive:false});
       event.preventDefault();
       event.stopPropagation();
     });
-
-    dragZone.addEventListener('keydown',event=>{
+    handle.addEventListener('keydown',event=>{
+      const rect=shell.getBoundingClientRect();
+      const mapRect=inspectorMapRect();
       const step=event.shiftKey?80:30;
       let dx=0,dy=0;
       if(event.key==='ArrowLeft')dx=-step;
@@ -240,33 +287,32 @@
       else if(event.key==='ArrowDown')dy=step;
       else if(event.key==='Enter'||event.key===' ') {
         event.preventDefault();
-        popupUserPositioned=true;
-        centerPopupInReadableArea(popup);
+        centerFloatingInspector();
         return;
       } else return;
       event.preventDefault();
-      popupUserPositioned=true;
-      map.panBy([-dx,-dy],{animate:false,noMoveStart:true});
+      floatingInspector.userPositioned=true;
+      inspectorPosition(rect.left-mapRect.left+dx,rect.top-mapRect.top+dy);
     });
-    return true;
+    floatingInspector.centerCard?.addEventListener('click',event=>{
+      event.preventDefault();
+      event.stopPropagation();
+      centerFloatingInspector();
+      emitEvent('isle_royale_inspector_center_card',{mode:route?.mode||'unknown'});
+    });
+    floatingInspector.centerPoint?.addEventListener('click',event=>{
+      event.preventDefault();
+      event.stopPropagation();
+      centerInspectorPoint();
+    });
+    floatingInspector.close?.addEventListener('click',event=>{
+      event.preventDefault();
+      event.stopPropagation();
+      closeFloatingInspector();
+    });
   }
 
-  function schedulePopupInteractionSetup(popup) {
-    let attempts=0;
-    const attach=()=>{
-      if(!popup||popup!==activeReadablePopup)return;
-      attempts++;
-      const wired=wirePopupDrag(popup);
-      if(wired||popupInteractionElements(popup)) {
-        schedulePopupReadability(popup,{force:attempts===1});
-        return;
-      }
-      if(attempts<8)window.setTimeout(attach,attempts<3?0:35);
-    };
-    requestAnimationFrame(()=>requestAnimationFrame(attach));
-    window.setTimeout(attach,80);
-    window.setTimeout(attach,220);
-  }
+  wireFloatingInspectorDrag();
 
   function visibleMapOverlay(selector) {
     const el=document.querySelector(selector);
@@ -311,51 +357,29 @@
     return {left,right,top,bottom,mapRect};
   }
 
-  function movePopupFullyIntoView(popup) {
-    const popupEl=popup?.getElement?.();
-    if(!popupEl||!popupEl.classList.contains('isle-detail-popup')||!document.body.contains(popupEl))return;
-    const content=popupEl.querySelector('.leaflet-popup-content');
-    let safe=popupSafeBounds(popupEl);
-    if(content) {
-      const available=Math.max(150,Math.min(520,(safe.bottom-safe.top)-58));
-      content.style.maxHeight=available+'px';
-    }
-    const rect=popupEl.getBoundingClientRect();
-    safe=popupSafeBounds(popupEl);
-    let shiftX=0,shiftY=0;
-    if(rect.left<safe.left)shiftX=safe.left-rect.left;
-    else if(rect.right>safe.right)shiftX=safe.right-rect.right;
-    if(rect.top<safe.top)shiftY=safe.top-rect.top;
-    else if(rect.bottom>safe.bottom)shiftY=safe.bottom-rect.bottom;
-    if(Math.abs(shiftX)>1||Math.abs(shiftY)>1) {
-      map.panBy([-shiftX,-shiftY],{animate:true,duration:.2,noMoveStart:true});
-    }
-  }
-
-  function schedulePopupReadability(popup,{force=false}={}) {
-    if(!popup||(!force&&popupUserPositioned))return;
-    window.clearTimeout(popupReadabilityTimer);
-    requestAnimationFrame(()=>requestAnimationFrame(()=>movePopupFullyIntoView(popup)));
-    popupReadabilityTimer=window.setTimeout(()=>movePopupFullyIntoView(popup),260);
-  }
-
   map.on('popupopen',event=>{
     const popup=event.popup;
     const el=popup?.getElement?.();
     if(!el?.classList.contains('isle-detail-popup'))return;
     activeReadablePopup=popup;
-    popupUserPositioned=false;
     document.body.classList.add('detail-popup-open');
-    schedulePopupInteractionSetup(popup);
-    schedulePopupReadability(popup);
-    emitEvent('isle_royale_popup_readable',{mode:route?.mode||'unknown'});
+    scheduleFloatingInspectorPromotion(popup);
   });
   map.on('popupclose',event=>{
     if(activeReadablePopup===event.popup)activeReadablePopup=null;
-    popupUserPositioned=false;
-    document.body.classList.remove('detail-popup-open');
+    if(floatingInspector.popup===event.popup&&!inspectorClosing)closeFloatingInspector({closePopup:false});
   });
-  window.addEventListener('resize',()=>{if(activeReadablePopup)schedulePopupReadability(activeReadablePopup,{force:true});},{passive:true});
+  window.addEventListener('resize',()=>{
+    if(floatingInspector.shell&&!floatingInspector.shell.hidden) {
+      sizeFloatingInspector();
+      if(!floatingInspector.userPositioned)centerFloatingInspector();
+      else {
+        const rect=floatingInspector.shell.getBoundingClientRect();
+        const mapRect=inspectorMapRect();
+        inspectorPosition(rect.left-mapRect.left,rect.top-mapRect.top);
+      }
+    }
+  },{passive:true});
 
   map.createPane('reliefPane');
   map.getPane('reliefPane').style.zIndex = '250';
