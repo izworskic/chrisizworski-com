@@ -33,6 +33,8 @@ const apis = {
   fall: await read("api/national-fall-color.js"),
 };
 
+const frostStationNormals = (apis.frost.match(/async function stationNormals[\s\S]*?\n}\nasync function normals/) || [""])[0];
+
 let rawScore = 0;
 let maxPoints = 0;
 const failures = [];
@@ -103,10 +105,16 @@ check("River UI rejects non-JSON server responses cleanly", /readJsonResponse/.t
 check("Shared national client parses API responses defensively", /async function readJsonResponse/.test(client) && /content-type/.test(client) && /HTTP /.test(client), 4);
 check("National dashboard isolates non-JSON upstream failures", /readJsonResponse/.test(dashboard) && /Outdoor data source unavailable/.test(dashboard), 3);
 
-check("Frost includes spring and fall probabilities", /fall_10/.test(apis.frost) && /fall_50/.test(apis.frost) && /median first 32°F freeze/.test(pages.frost), 5);
+check("Frost includes spring and fall probabilities", /fall_10/.test(apis.frost) && /fall_50/.test(apis.frost) && /median first fall 32°F freeze/.test(pages.frost), 5);
+check("Frost discovers NCEI stations before requesting normals", /access\/services\/search\/v1\/data/.test(apis.frost) && /parseSearchStationIds/.test(apis.frost) && /searchParams\.set\("stations"/.test(apis.frost), 6);
+check("Frost Data Service no longer relies on bbox-only normals requests", /searchParams\.set\("stations"/.test(frostStationNormals) && !/searchParams\.set\("bbox"/.test(frostStationNormals), 5);
+check("Frost visibly leads with both median freeze dates", /id="spring50"/.test(pages.frost) && /median last spring 32°F freeze/.test(pages.frost) && /id="fall50"/.test(pages.frost) && /median first fall 32°F freeze/.test(pages.frost), 5);
+check("Frost exposes median growing-season length", /growing_season_days_50/.test(apis.frost) && /id="season50"/.test(pages.frost) && /median 32°F growing season/.test(pages.frost), 4);
 check("Frost includes hard-freeze forecast", /hard_freeze_hours/.test(apis.frost) && /hours at or below 28°F/.test(pages.frost), 4);
 check("Frost carries station-distance confidence", /station_fit/.test(apis.frost) && /confidence/.test(apis.frost) && /station confidence/.test(pages.frost), 4);
-check("Hardiness is not a frost date", /do not determine your spring planting date/.test(apis.frost), 4);
+check("Frost exposes official 2023 USDA ZIP hardiness context", /PHZM_2023_Zip_Code_Table/.test(apis.frost) && /hardiness_zone/.test(apis.frost) && /id="hardiness-zone"/.test(pages.frost) && /2023 USDA/.test(pages.frost), 5);
+check("Hardiness remains separate from frost-date semantics", /does not determine the last spring freeze, first fall freeze, or a safe planting date/.test(apis.frost) && /A zone does not tell you your last spring freeze or first fall freeze/.test(pages.frost), 5);
+check("Frost UI uses defensive shared response parsing", /readJsonResponse/.test(pages.frost) && /Frost data unavailable/.test(pages.frost), 3);
 
 check("Planting uses external crop rule dataset", /national-planting-crops\.json/.test(pages.planting) && !/const crops=\[\[/.test(pages.planting), 5);
 check("Crop dataset has meaningful depth", Array.isArray(cropData.crops) && cropData.crops.length >= 18, 4, String(cropData.crops?.length || 0));
