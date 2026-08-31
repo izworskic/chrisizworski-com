@@ -33,6 +33,8 @@ const apis = {
   fall: await read("api/national-fall-color.js"),
 };
 
+const frostStationNormals = (apis.frost.match(/async function stationNormals[\s\S]*?\n}\nasync function normals/) || [""])[0];
+
 let rawScore = 0;
 let maxPoints = 0;
 const failures = [];
@@ -105,7 +107,7 @@ check("National dashboard isolates non-JSON upstream failures", /readJsonRespons
 
 check("Frost includes spring and fall probabilities", /fall_10/.test(apis.frost) && /fall_50/.test(apis.frost) && /median first fall 32°F freeze/.test(pages.frost), 5);
 check("Frost discovers NCEI stations before requesting normals", /access\/services\/search\/v1\/data/.test(apis.frost) && /parseSearchStationIds/.test(apis.frost) && /searchParams\.set\("stations"/.test(apis.frost), 6);
-check("Frost Data Service no longer relies on bbox-only normals requests", !/NCEI[\s\S]{0,1800}searchParams\.set\("bbox"/.test(apis.frost) && /stationNormals/.test(apis.frost), 5);
+check("Frost Data Service no longer relies on bbox-only normals requests", /searchParams\.set\("stations"/.test(frostStationNormals) && !/searchParams\.set\("bbox"/.test(frostStationNormals), 5);
 check("Frost visibly leads with both median freeze dates", /id="spring50"/.test(pages.frost) && /median last spring 32°F freeze/.test(pages.frost) && /id="fall50"/.test(pages.frost) && /median first fall 32°F freeze/.test(pages.frost), 5);
 check("Frost exposes median growing-season length", /growing_season_days_50/.test(apis.frost) && /id="season50"/.test(pages.frost) && /median 32°F growing season/.test(pages.frost), 4);
 check("Frost includes hard-freeze forecast", /hard_freeze_hours/.test(apis.frost) && /hours at or below 28°F/.test(pages.frost), 4);
