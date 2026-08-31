@@ -532,12 +532,12 @@
     if (record.sourceUrl) add(record.sourceUrl, /nps\.gov\/isro/i.test(record.sourceUrl) ? 'Open official source page' : 'Open map-data source', 'feature-source');
 
     const osmId = String(record.properties?.osm_id || '');
-    if (/^(node|way|relation)\/\d+$/.test(osmId)) add(`https://www.openstreetmap.org/${osmId}`, 'Open this OpenStreetMap feature', 'osm-feature');
+    if (/^(node|way|relation)\/\d+$/.test(osmId)) add(`https://www.openstreetmap.org/${osmId}`, 'Open supplemental-data source record', 'osm-feature');
 
     if (record.latlng && Number.isFinite(record.latlng.lat) && Number.isFinite(record.latlng.lng)) {
       const lat = record.latlng.lat.toFixed(6);
       const lng = record.latlng.lng.toFixed(6);
-      add(`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng}`, 'Open this coordinate in OpenStreetMap', 'coordinate');
+      add(`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng}`, 'Open this coordinate on the source map', 'coordinate');
     }
 
     add(CONFIG.currentConditionsUrl, 'Verify current NPS conditions', 'nps-current-conditions');
@@ -743,7 +743,9 @@
 
     const meta = document.createElement('div');
     meta.className = 'popup-meta';
-    meta.textContent = layerLabels[record.category] || record.category;
+    meta.textContent = record.supplemental
+      ? (record.displayType||layerLabels[record.category]||'Supplemental visitor feature')
+      : (layerLabels[record.category] || record.category);
     wrap.appendChild(meta);
 
     if (record.liveAlert) {
@@ -842,7 +844,9 @@
 
     const source = document.createElement('div');
     source.className = 'popup-source';
-    source.textContent = `Map source: ${record.sourceLabel}. Geometry status: ${record.sourceKind}.`;
+    source.textContent = record.supplemental
+      ? `Supplemental data source: ${record.sourceLabel}. This is community-mapped context, not an NPS operational source.`
+      : `Map source: ${record.sourceLabel}. Geometry status: ${record.sourceKind}.`;
     if (record.boater) source.textContent += ' Campground facts: NPS Boat-In Campgrounds dataset, page updated June 23, 2026.';
     if (record.liveAlert) source.textContent += ' Closure signal: current NPS conditions feed fetched through this site.';
     wrap.appendChild(source);
@@ -918,6 +922,8 @@
           layer,
           sourceLabel,
           sourceKind,
+          supplemental:Boolean(context.supplemental),
+          displayType:cleanText(context.displayType||''),
           description,
           sourceUrl:context.sourceUrl || '',
           deepMeta:context.deepMeta || null,
@@ -1104,6 +1110,23 @@
     renderFeatureList();
   }
 
+  function supplementalFeatureType(props={}) {
+    const tourism=cleanText(props.tourism||'').toLowerCase();
+    const amenity=cleanText(props.amenity||'').toLowerCase();
+    const manMade=cleanText(props.man_made||'').toLowerCase();
+    const information=cleanText(props.information||'').toLowerCase();
+    if(tourism==='camp_site')return 'Campsite';
+    if(tourism==='viewpoint')return 'Viewpoint';
+    if(tourism==='information'||information)return 'Visitor information';
+    if(tourism==='museum')return 'Museum / historic place';
+    if(amenity==='shelter')return 'Shelter';
+    if(amenity==='toilets')return 'Restrooms';
+    if(amenity==='drinking_water')return 'Drinking water';
+    if(manMade==='lighthouse')return 'Lighthouse';
+    if(manMade==='pier')return 'Pier / dock';
+    return 'Mapped visitor feature';
+  }
+
   function osmFeatureToGeoJSON(el) {
     const tags = el.tags || {};
     const lat = el.lat ?? (el.center && el.center.lat);
@@ -1117,12 +1140,12 @@
     const btn = document.getElementById('load-osm');
     if (osmContextVisible) {
       if (!map.hasLayer(osmContextGroup)) osmContextGroup.addTo(map);
-      btn.textContent = 'Hide OSM context';
+      btn.textContent = 'Hide supplemental data';
       btn.setAttribute('aria-pressed','true');
       sourceStatus.osm = osmContextLoaded ? 'visible' : sourceStatus.osm;
     } else {
       if (map.hasLayer(osmContextGroup)) map.removeLayer(osmContextGroup);
-      btn.textContent = 'Show OSM context';
+      btn.textContent = 'Show supplemental data';
       btn.setAttribute('aria-pressed','false');
       sourceStatus.osm = osmContextLoaded ? 'hidden' : sourceStatus.osm;
     }
@@ -1133,14 +1156,14 @@
     const btn = document.getElementById('load-osm');
     if (osmContextLoaded) {
       setOsmContextVisible(!osmContextVisible);
-      status(osmContextVisible ? 'OpenStreetMap visitor context shown.' : 'OpenStreetMap visitor context hidden.');
+      status(osmContextVisible ? 'Supplemental visitor data shown.' : 'Supplemental visitor data hidden.');
       emitEvent('isle_royale_osm_context', {result:osmContextVisible ? 'shown' : 'hidden'});
       return;
     }
 
     btn.disabled = true;
-    btn.textContent = 'Loading OSM context…';
-    status('Adding supplementary OpenStreetMap visitor context…');
+    btn.textContent = 'Loading supplemental data…';
+    status('Adding supplemental visitor features…');
     const q = `[out:json][timeout:25];(nwr["tourism"~"camp_site|viewpoint|information|museum"](47.79,-89.36,48.33,-88.18);nwr["amenity"~"shelter|toilets|drinking_water"](47.79,-89.36,48.33,-88.18);nwr["man_made"="lighthouse"](47.79,-89.36,48.33,-88.18);nwr["man_made"="pier"](47.79,-89.36,48.33,-88.18););out center tags;`;
     try {
       const url = `${CONFIG.overpass}?data=${encodeURIComponent(q)}`;
@@ -1153,21 +1176,23 @@
         if (osmId && osmSeen.has(osmId)) continue;
         if (osmId) osmSeen.add(osmId);
         added += addGeoJSONFeature(f, {
-          layerTitle:'OpenStreetMap visitor context',
+          layerTitle:'Supplemental visitor data',
           sourceLabel:'OpenStreetMap contributors',
           sourceKind:'supplementary public OSM point',
+          supplemental:true,
+          displayType:supplementalFeatureType(f.properties),
           targetGroup:osmContextGroup
         });
       }
       osmContextLoaded = true;
       setOsmContextVisible(true);
-      status(`Added ${added} supplementary OpenStreetMap visitor points. Use the same button to hide or show them.`);
+      status(`Added ${added} supplemental visitor features. Use the same button to hide or show them.`);
       emitEvent('isle_royale_osm_context', {result:'success'});
     } catch (_) {
       sourceStatus.osm = 'unavailable';
-      status('OpenStreetMap supplementary context could not be loaded. Core map and source catalog are unaffected.');
+      status('Supplemental visitor data could not be loaded. Core map and source catalog are unaffected.');
       emitEvent('isle_royale_osm_context', {result:'failure'});
-      btn.textContent = 'Retry OSM context';
+      btn.textContent = 'Retry supplemental data';
       btn.setAttribute('aria-pressed','false');
     } finally {
       btn.disabled = false;
@@ -3801,9 +3826,9 @@
     const matches = [];
     for (let i=0;i<featureIndex.length;i++) {
       const r = featureIndex[i];
-      const hay = `${r.name} ${r.category} ${r.sourceLabel} ${r.description}`.toLowerCase();
+      const hay = `${r.name} ${r.category} ${r.displayType||''} ${r.sourceLabel} ${r.description}`.toLowerCase();
       if (!isCategoryVisible(r.category)) continue;
-      if (r.sourceKind === 'supplementary public OSM point' && !osmContextVisible) continue;
+      if (r.supplemental && !osmContextVisible) continue;
       if (term && !hay.includes(term)) continue;
       matches.push({r,i});
     }
@@ -3819,7 +3844,9 @@
         ? `Current NPS closure signal · ${layerLabels[r.category] || r.category}`
         : r.boater
           ? `${layerLabels[r.category] || r.category} · NPS campground details available`
-          : `${layerLabels[r.category] || r.category} · ${r.sourceKind}`;
+          : r.supplemental
+            ? `${r.displayType||layerLabels[r.category]||'Mapped visitor feature'} · Supplemental data`
+            : `${layerLabels[r.category] || r.category} · ${r.sourceKind}`;
       b.addEventListener('click', () => flyToFeature(i));
       els.list.appendChild(b);
     }
