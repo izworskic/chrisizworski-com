@@ -12,6 +12,7 @@ const routeWeatherApi = fs.readFileSync(path.join(root, 'api/isle-royale-route-w
 const catalog = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/catalog.json'), 'utf8'));
 const deepManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/deep-layer-manifest.json'), 'utf8'));
 const contextManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/context-layer-manifest.json'), 'utf8'));
+const officialPortages = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/official-portages-2026.json'), 'utf8'));
 const contextBuilder = fs.readFileSync(path.join(root, 'scripts/build-isle-royale-context-layers.py'), 'utf8');
 const waterIntelJs = fs.readFileSync(path.join(root, 'public/assets/isle-royale-water-intelligence.js'), 'utf8');
 const waterIntelApi = fs.readFileSync(path.join(root, 'api/isle-royale-water-intelligence.js'), 'utf8');
@@ -459,6 +460,40 @@ test('water routes hide unverified straight sketches and label only zero-crossin
   assert.match(waterIntelJs, /if\(crossingCount\(safe\)>0\)throw new Error\('Generated route intersects mapped shoreline'\)/);
   assert.match(waterIntelJs, /if\(landCrossings>0\)throw new Error\('Water route failed final coastline validation'\)/);
   assert.match(waterIntelJs, /return \{points:out,access_miles:access,land_crossings:landCrossings\}/);
+});
+
+test('2026 NPS portage dataset is complete, source-backed, and keeps anchors non-navigational', () => {
+  assert.equal(officialPortages.schema_version, 1);
+  assert.equal(officialPortages.source_vintage, 2026);
+  assert.equal(officialPortages.source_page, 6);
+  assert.match(officialPortages.authority, /National Park Service/);
+  assert.match(officialPortages.source_url, /2026-Greenstone\.pdf/);
+  assert.match(officialPortages.disclaimer, /not landing coordinates/i);
+  assert.equal(officialPortages.portages.length, 16);
+  assert.deepEqual(officialPortages.portages.map(p => p.number), Array.from({length:16},(_,i)=>i+1));
+  assert.equal(new Set(officialPortages.portages.map(p => p.id)).size, 16);
+  const total=officialPortages.portages.reduce((sum,p)=>sum+p.distance_miles,0);
+  assert.ok(Math.abs(total-9.5)<1e-9, total);
+  assert.equal(Math.max(...officialPortages.portages.map(p=>p.distance_miles)), 2);
+  assert.equal(Math.max(...officialPortages.portages.map(p=>p.elevation_change_ft)), 175);
+  assert.ok(officialPortages.portages.every(p => p.official_label && p.terrain && Array.isArray(p.terrain_tags)));
+  assert.equal(officialPortages.portages.find(p=>p.number===12).endpoint_basis, 'map-inferred-exterior-endpoint');
+  assert.ok(Object.values(officialPortages.endpoint_anchors).every(a => /not-landing/.test(a.role)));
+});
+
+test('canoe runtime promotes strong mapped matches to official NPS portages without using anchors as geometry', () => {
+  assert.match(html, /Official portage dataset/);
+  assert.match(js, /officialPortages: '\/isle-royale-map\/data\/official-portages-2026\.json'/);
+  assert.match(js, /function loadOfficialPortages/);
+  assert.match(js, /function matchOfficialPortage/);
+  assert.match(js, /NPS 2026 portage completeness validation failed/);
+  assert.match(js, /distanceBasis:official\?'nps-published':'mapped-trail'/);
+  assert.match(js, /mapped_miles:mappedMiles/);
+  assert.match(js, /officialPortage:official/);
+  assert.match(js, /NPS Portage #/);
+  assert.match(js, /elevation change/);
+  assert.match(js, /endpoint search anchors are not landing coordinates/i);
+  assert.doesNotMatch(js, /L\.polyline\([^\n]*endpoint_anchors/);
 });
 
 test('canoe planner separates paddle and portage legs and keeps a truthful trip total', () => {
