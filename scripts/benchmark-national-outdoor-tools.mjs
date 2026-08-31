@@ -86,7 +86,10 @@ check("Rivers include same-date historical percentiles", /dailyStatistics/.test(
 check("Rivers discover nearby gauges directly from USGS IV bbox", /nearbyObservations/.test(apis.rivers) && /bBox/.test(apis.rivers) && /period", "P1D"/.test(apis.rivers) && /sitesFromPayload/.test(apis.rivers), 5);
 check("River bbox search respects USGS 25 square-degree cap", /SEARCH_SPANS/.test(apis.rivers) && /2\.4/.test(apis.rivers) && /box\.product > 25\.000001/.test(apis.rivers), 4);
 check("River core no longer depends on USGS Site Service", !/nwis\/site/.test(apis.rivers) && !/findSites/.test(apis.rivers), 4);
-check("River 404 can degrade to no-gauge instead of 502", /allow404/.test(apis.rivers) && /successfulWindows > 0/.test(apis.rivers), 4);
+check("River 404 can degrade to no-gauge instead of 502", /allow404/.test(apis.rivers) && /success\.length/.test(apis.rivers), 4);
+check("River bbox windows execute in parallel", /SEARCH_SPANS\.map\(async/.test(apis.rivers) && /Promise\.all\(attempts\)/.test(apis.rivers), 5);
+check("River core response is bounded below 5 seconds per USGS window", /fetchJson\(u, 4800/.test(apis.rivers), 4);
+check("River optional enrichment has a hard sub-3-second budget", /withBudget/.test(apis.rivers) && /2800/.test(apis.rivers), 5);
 check("Rivers match NWPS by exact USGS ID", /byUsgs/.test(apis.rivers) && /usgsId/.test(apis.rivers) && /stageflow\/forecast/.test(apis.rivers), 5);
 check("River UI exposes history and official forecast", /(?:same-date historical percentiles|daily percentiles for this calendar date)/i.test(pages.rivers) && /NOAA NWPS/.test(pages.rivers), 4);
 check("River safety veto remains intact", /cannot determine whether paddling.*safe/i.test(apis.rivers) && /does not mean runnable, fishable, wadable, or safe/i.test(pages.rivers), 5);
