@@ -1,29 +1,69 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>U.S. Outdoor Tools | Chris Izworski</title><meta name="description" content="Live U.S. outdoor tools for aurora, river conditions, frost, planting and fall foliage using NOAA, NWS, USGS and phenology data."><link rel="canonical" href="https://chrisizworski.com/national-tools/">
+<title>U.S. Outdoor Tools | Chris Izworski</title>
+<meta name="description" content="Live U.S. outdoor tools for aurora, river conditions, frost, planting and fall foliage using NOAA, NWS, USGS and phenology data.">
+<link rel="canonical" href="https://chrisizworski.com/national-tools/">
 <meta name="robots" content="index,follow,max-image-preview:large"><link rel="stylesheet" href="/assets/national-tools.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"CollectionPage","@id":"https://chrisizworski.com/national-tools/#page","url":"https://chrisizworski.com/national-tools/","name":"U.S. Outdoor Tools","description":"Live U.S. outdoor tools for aurora, river conditions, frost, planting and fall foliage using NOAA, NWS, USGS and phenology data.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script></head>
 <body><header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
-<main><section class="hero"><div class="wrap"><div class="eyebrow">Outdoor conditions · United States</div><h1>U.S. Outdoor Tools</h1><p class="lede">Enter a city or ZIP. Get a usable answer from public scientific data without having to decode five government screens first.</p></div></section>
-<section class="section"><div class="wrap">
-<form id="hub-location" class="locator"><label class="sr-only" for="hub-q">City or ZIP</label><input id="hub-q" autocomplete="postal-code" placeholder="Enter a U.S. city or ZIP" required><button class="btn">Use this location</button></form><div class="status" aria-live="polite">Choose a place once, then move between tools.</div>
-<div id="local-desk" class="result" hidden><div class="result-head"><span class="pill">Your outdoor desk</span><span class="pill">location saved on this device</span></div><div class="answer" id="local-name"></div><p>Open a tool below with this location already filled in. Each tool keeps observations, forecasts, climatology and derived guidance visibly separate.</p></div>
+<main>
+<section class="hero"><div class="wrap"><div class="eyebrow">Outdoor conditions · United States</div><h1>U.S. Outdoor Tools</h1><p class="lede">One place. Five outdoor signals. See what matters first, then open the underlying NOAA, NWS, USGS and phenology decision tool.</p></div></section>
+
+<section class="section desk-entry"><div class="wrap">
+<form id="hub-location" class="locator"><label class="sr-only" for="hub-q">City or ZIP</label><input id="hub-q" autocomplete="postal-code" placeholder="Enter a U.S. city or ZIP" required><button class="btn">Build my outdoor desk</button></form>
+<div class="status" aria-live="polite">Choose a place to load the five decision signals independently.</div>
+<div class="saved-row"><strong>Saved places</strong><div id="saved-places" class="place-chips"></div></div>
+
+<section id="outdoor-desk" class="outdoor-desk" hidden aria-live="polite">
+  <div class="desk-heading"><div><span class="tool-kicker">Your outdoor desk</span><h2 data-desk-title>Today near your location</h2><p data-desk-health class="small"></p></div><button id="save-place" type="button" class="secondary-btn">Save this place</button></div>
+  <div class="desk-note"><strong>Read this top-to-bottom.</strong> Higher cards are the signals most likely to change a decision right now. A failed source stays isolated to its own card.</div>
+  <div class="decision-grid" data-desk-grid></div>
+  <details class="method-details"><summary>Why are these cards in this order?</summary><p>The desk orders live hazards and time-sensitive opportunities ahead of routine context. Official flood/freeze signals outrank seasonal or low-urgency conditions. This is a display priority, not a universal safety score.</p></details>
+</section>
 </div></section>
-<section class="section"><div class="wrap"><h2>Start with the decision</h2><div class="grid">
+
+<section class="section"><div class="wrap"><div class="section-head"><div><span class="eyebrow">Go deeper</span><h2>Open the full decision tools</h2></div><p class="small">These links remain crawlable and useful even when a live feed is unavailable.</p></div><div class="grid">
 <a class="card tool-card" data-tool="/national-tools/aurora/" href="/national-tools/aurora/"><div class="tool-kicker">Tonight</div><h3>Aurora Tonight</h3><p>NOAA aurora signal + darkness + NWS clouds + moon context, with the best dark-weather window and confidence shown separately.</p></a>
 <a class="card tool-card" data-tool="/national-tools/rivers/" href="/national-tools/rivers/"><div class="tool-kicker">Water</div><h3>River Conditions</h3><p>Nearby USGS gauges with current flow, six-hour trend, same-date historical percentiles, and official NOAA flood forecasts when a gauge match exists.</p></a>
-<a class="card tool-card" data-tool="/national-tools/frost/" href="/national-tools/frost/"><div class="tool-kicker">Garden</div><h3>Frost & Planting</h3><p>Spring and fall NOAA freeze probabilities, live NWS freeze risk, station confidence, and a sourced 20-crop planting decision engine.</p></a>
-<a class="card tool-card" data-tool="/national-tools/fall-color/" href="/national-tools/fall-color/"><div class="tool-kicker">This season · beta</div><h3>Fall Color Tracker</h3><p>USA-NPN historical autumn timing band plus separate current NWS weather context. No invented live “percent peak” score.</p></a>
+<a class="card tool-card" data-tool="/national-tools/frost/" href="/national-tools/frost/"><div class="tool-kicker">Freeze risk</div><h3>Frost Dates & Freeze Risk</h3><p>Spring and fall NOAA freeze probabilities, live NWS freeze risk, hard-freeze detection, and station-distance confidence.</p></a>
+<a class="card tool-card" data-tool="/national-tools/planting/" href="/national-tools/planting/"><div class="tool-kicker">Garden</div><h3>Planting Calendar</h3><p>A sourced 20-crop decision engine tied to NOAA freeze climatology and the live NWS cold forecast.</p></a>
+<a class="card tool-card" data-tool="/national-tools/fall-color/" href="/national-tools/fall-color/"><div class="tool-kicker">This season · beta</div><h3>Fall Color Timing</h3><p>USA-NPN historical autumn timing band plus separate current NWS weather context. No invented live “percent peak” score.</p></a>
 </div></div></section>
-<section class="section"><div class="wrap grid"><div class="source-box"><h2>Why these tools</h2><p>Each one combines authoritative public data into a decision a normal person can use. Raw data remain visible, but they are not the first thing you have to interpret.</p></div><div class="source-box"><h2>Michigan stays deeper</h2><p>The existing <a href="/tools/">Michigan & Great Lakes tools</a> remain intact. When Michigan already has a richer canonical tool, the national version points you there instead of cloning it.</p></div></div></section>
+
+<section class="section"><div class="wrap grid">
+<div class="source-box"><h2>One location, separate source truth</h2><p>The desk does not blend observations, forecasts, climatology and derived estimates into a mystery score. Each card keeps its own source class, freshness and uncertainty, then links to the full explanation.</p></div>
+<div class="source-box"><h2>Michigan stays deeper</h2><p>The existing <a href="/tools/">Michigan & Great Lakes tools</a> remain intact. When Michigan already has a richer canonical product, the national tool points there rather than cloning it.</p></div>
+</div></section>
+
+<script src="/assets/national-tools.js"></script>
+<script src="/assets/national-dashboard.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded",function(){
- const N=window.NationalTools, form=document.getElementById("hub-location");
- N.bind(form,async function(loc){
-  document.getElementById("local-name").textContent=N.label(loc);document.getElementById("local-desk").hidden=false;
-  document.querySelectorAll("[data-tool]").forEach(a=>a.href=a.dataset.tool+"?q="+encodeURIComponent(loc.query||N.label(loc)));
- });
+  const N=window.NationalTools,D=window.NationalDashboard;
+  const form=document.getElementById("hub-location"),input=document.getElementById("hub-q");
+  const desk=document.getElementById("outdoor-desk"),status=form.parentElement.querySelector(".status");
+  const savedRoot=document.getElementById("saved-places"),saveButton=document.getElementById("save-place");
+
+  async function showLocation(loc){
+    N.remember(loc);input.value=loc.query||N.label(loc);
+    document.querySelectorAll("[data-tool]").forEach(function(a){a.href=N.withQuery(a.dataset.tool,loc)});
+    await D.load(loc,{root:desk,status:status,saveButton:saveButton,savedRoot:savedRoot,onPick:showLocation});
+  }
+  D.renderSaved(savedRoot,showLocation);
+  N.bind(form,showLocation);
+
+  const q=new URLSearchParams(location.search).get("q");
+  if(q){input.value=q;form.requestSubmit()}
+  else{
+    const previous=N.saved();
+    if(previous){
+      const use=document.createElement("button");use.type="button";use.className="place-chip current-place";use.textContent="Use "+N.label(previous);
+      use.addEventListener("click",function(){showLocation(previous)});
+      savedRoot.prepend(use);
+    }
+  }
 });
-</script></main>
+</script>
+</main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Built around public scientific and government data, with sources shown where the answer is derived.</div></footer>
-<script src="/assets/national-tools.js"></script></body></html>
+</body></html>
