@@ -95,6 +95,7 @@ function stitchRings(lines) {
 function normalizeWaterData(data) {
   const coastlines = [];
   const waterPolygons = [];
+  const waterBoundaries = [];
   const waterCenterlines = [];
   for (const element of data?.elements || []) {
     const tags = element?.tags || {};
@@ -108,7 +109,11 @@ function normalizeWaterData(data) {
       }
       if (tags.natural === 'water' || ['riverbank','canal'].includes(tags.waterway)) {
         const ring = closedRing(points);
-        if (ring) waterPolygons.push(simplifyLine(ring, 0.00012));
+        if (ring) {
+          const simplifiedRing=simplifyLine(ring, 0.00012);
+          waterPolygons.push(simplifiedRing);
+          waterBoundaries.push(simplifiedRing);
+        }
       }
       if (['river','stream','canal'].includes(tags.waterway)) {
         const simplified = simplifyLine(points, 0.00008);
@@ -119,14 +124,16 @@ function normalizeWaterData(data) {
     if (element?.type === 'relation' && (tags.natural === 'water' || tags.waterway === 'riverbank')) {
       const outerLines = [];
       for (const member of element.members || []) {
-        if (member?.type !== 'way' || member.role === 'inner' || !Array.isArray(member.geometry)) continue;
+        if (member?.type !== 'way' || !Array.isArray(member.geometry)) continue;
         const points = geometryPoints(member.geometry);
-        if (points.length >= 2) outerLines.push(points);
+        if (points.length < 2) continue;
+        waterBoundaries.push(simplifyLine(points,0.00008));
+        if (member.role !== 'inner') outerLines.push(points);
       }
       for (const ring of stitchRings(outerLines)) waterPolygons.push(simplifyLine(ring, 0.00012));
     }
   }
-  return {coastlines, waterPolygons, waterCenterlines};
+  return {coastlines, waterPolygons, waterBoundaries, waterCenterlines};
 }
 
 async function fetchOverpass(endpoint) {
@@ -182,6 +189,7 @@ module.exports = async function handler(req, res) {
         water_centerline_point_count:centerlinePointCount,
         lines:result.coastlines,
         water_polygons:result.waterPolygons,
+        water_boundaries:result.waterBoundaries,
         water_centerlines:result.waterCenterlines,
         caveat:'Planning water geometry only. This is not a navigation chart and does not establish water depth, hazards, access rights, or a safe route.'
       });
