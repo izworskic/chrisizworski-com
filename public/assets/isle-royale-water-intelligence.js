@@ -168,12 +168,13 @@
       function nearest(p,allowShoreAccess=true){
         let best=null,bd=Infinity;
         const shorelineDistance=coastDistance(p);
-        const nearShore=Number.isFinite(shorelineDistance)&&shorelineDistance<=0.35;
+        const nearShore=Number.isFinite(shorelineDistance)&&shorelineDistance<=0.60;
+        const shoreSnapLimit=mode==='paddle'?1.0:1.25;
         for(const nk of waterKeys){
           const n=nodes.get(nk),d=miles(p,n);
           if(d>=bd||d>1.5)continue;
           const blocked=crosses(p,n);
-          if(blocked&&!(allowShoreAccess&&nearShore&&d<=0.55))continue;
+          if(blocked&&!(allowShoreAccess&&nearShore&&d<=shoreSnapLimit))continue;
           best=n;bd=d;
         }
         if(!best)throw new Error('Selected point is not connected to mapped water within the routing grid');
