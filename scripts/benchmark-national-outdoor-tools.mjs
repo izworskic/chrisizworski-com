@@ -82,7 +82,11 @@ check("Aurora exposes NOAA auroral oval visual", /national-oval-img/.test(pages.
 check("Auroral oval does not become fake sighting probability", /not a sighting probability/i.test(pages.aurora) && /modeled intensity/i.test(pages.aurora), 4);
 check("National entry pages cache-bust shared runtime assets", Object.values(pages).every((body) => /national-tools\.js\?v=20260831-river-hotfix1/.test(body)), 3);
 
-check("Rivers include same-date historical percentiles", /dailyStatistics/.test(apis.rivers) && /P10,P25,P50,P75,P90/.test(apis.rivers) && /historical_comparison/.test(apis.rivers), 5);
+check("Rivers include same-date historical percentiles", /dailyStatistics/.test(apis.rivers) && /p10,p25,p50,p75,p90/i.test(apis.rivers) && /historical_comparison/.test(apis.rivers), 5);
+check("Rivers discover nearby gauges directly from USGS IV bbox", /nearbyObservations/.test(apis.rivers) && /bBox/.test(apis.rivers) && /period", "P1D"/.test(apis.rivers) && /sitesFromPayload/.test(apis.rivers), 5);
+check("River bbox search respects USGS 25 square-degree cap", /SEARCH_SPANS/.test(apis.rivers) && /2\.4/.test(apis.rivers) && /box\.product > 25\.000001/.test(apis.rivers), 4);
+check("River core no longer depends on USGS Site Service", !/nwis\/site/.test(apis.rivers) && !/findSites/.test(apis.rivers), 4);
+check("River 404 can degrade to no-gauge instead of 502", /allow404/.test(apis.rivers) && /successfulWindows > 0/.test(apis.rivers), 4);
 check("Rivers match NWPS by exact USGS ID", /byUsgs/.test(apis.rivers) && /usgsId/.test(apis.rivers) && /stageflow\/forecast/.test(apis.rivers), 5);
 check("River UI exposes history and official forecast", /(?:same-date historical percentiles|daily percentiles for this calendar date)/i.test(pages.rivers) && /NOAA NWPS/.test(pages.rivers), 4);
 check("River safety veto remains intact", /cannot determine whether paddling.*safe/i.test(apis.rivers) && /does not mean runnable, fishable, wadable, or safe/i.test(pages.rivers), 5);
