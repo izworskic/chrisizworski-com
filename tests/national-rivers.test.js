@@ -4,14 +4,27 @@ const rivers=require('../api/national-rivers.js')._test;
 const context=require('../api/national-river-context.js')._test;
 const index=require('../public/data/national-usgs-streamflow-sites.json');
 
-function series({id='04157000',name='SAGINAW RIVER AT SAGINAW, MI',lat=43.43,lon=-83.94,code='00060',values=[['1000','2026-08-31T12:00:00.000-04:00']] }={}){
+function series({
+  id='04157000',
+  name='SAGINAW RIVER AT SAGINAW, MI',
+  lat=43.43,
+  lon=-83.94,
+  code='00060',
+  unit='ft3/s',
+  description='Discharge, cubic feet per second',
+  values=[['1000','2026-08-31T12:00:00.000-04:00']]
+}={}){
   return {
     sourceInfo:{
       siteName:name,
       siteCode:[{value:id}],
       geoLocation:{geogLocation:{latitude:lat,longitude:lon}}
     },
-    variable:{variableCode:[{value:code}]},
+    variable:{
+      variableCode:[{value:code}],
+      variableDescription:description,
+      unit:{unitCode:unit}
+    },
     values:[{value:values.map(([value,dateTime])=>({value,dateTime,qualifiers:['P']}))}]
   };
 }
@@ -35,7 +48,7 @@ test('local USGS streamflow index is national, source-backed and internally cons
   }
 });
 
-test('West Branch Michigan nearest-gauge lookup is local and returns real nearby USGS stations',()=>{
+test('West Branch Michigan nearest-gauge lookup remains local and source-backed',()=>{
   const nearby=rivers.nearestSites(44.276408,-84.238613,10);
   assert.equal(nearby.length,10);
   assert.equal(nearby[0].id,'04152049');
@@ -46,27 +59,112 @@ test('West Branch Michigan nearest-gauge lookup is local and returns real nearby
   for(let i=1;i<nearby.length;i++)assert.ok(nearby[i].distance_miles>=nearby[i-1].distance_miles);
 });
 
-test('normalizer keeps exact-site flow, stage and temperature on one gauge',()=>{
+test('expanded USGS parameter contract includes observations but not inferred activity scores',()=>{
+  assert.deepEqual(rivers.PARAMETERS,{
+    discharge:'00060',
+    gageHeight:'00065',
+    waterTemperature:'00010',
+    turbidity:'63680',
+    dissolvedOxygen:'00300',
+    specificConductance:'00095',
+    ph:'00400'
+  });
+});
+
+test('normalizer calculates 6h/24h flow movement and preserves exact-site stage',()=>{
   const sites=[{id:'04157000',name:'SAGINAW RIVER AT SAGINAW, MI',latitude:43.43,longitude:-83.94,distance_miles:2.5}];
   const payload={value:{timeSeries:[
-    series({values:[['900','2026-08-31T06:00:00.000-04:00'],['1000','2026-08-31T12:00:00.000-04:00']]}),
-    series({code:'00065',values:[['14.5','2026-08-31T12:00:00.000-04:00']]}),
-    series({code:'00010',values:[['20','2026-08-31T12:00:00.000-04:00']]})
+    series({values:[
+      ['800','2026-08-30T12:00:00.000-04:00'],
+      ['900','2026-08-31T06:00:00.000-04:00'],
+      ['1000','2026-08-31T12:00:00.000-04:00']
+    ]}),
+    series({code:'00065',unit:'ft',description:'Gage height',values:[
+      ['14.0','2026-08-30T12:00:00.000-04:00'],
+      ['14.5','2026-08-31T12:00:00.000-04:00']
+    ]})
   ]}};
   const [g]=rivers.normalize(payload,sites);
-  assert.equal(g.id,'04157000');
   assert.equal(g.discharge_cfs,1000);
+  assert.equal(g.flow_24h_ago,800);
+  assert.equal(g.trend_percent_24h,25);
+  assert.equal(g.trend_percent_6h,11);
   assert.equal(g.gage_height_ft,14.5);
+  assert.equal(g.gage_height_change_24h_ft,0.5);
+});
+
+test('normalizer exposes temperature and water-quality sensors only when USGS returns them',()=>{
+  const sites=[{id:'04157000',name:'SAGINAW RIVER',latitude:43.43,longitude:-83.94,distance_miles:2.5}];
+  const payload={value:{timeSeries:[
+    series({values:[['900','2026-08-30T12:00:00.000-04:00'],['1000','2026-08-31T12:00:00.000-04:00']]}),
+    series({code:'00010',unit:'deg C',description:'Temperature, water',values:[
+      ['18','2026-08-30T12:00:00.000-04:00'],
+      ['20','2026-08-31T12:00:00.000-04:00']
+    ]}),
+    series({code:'63680',unit:'FNU',description:'Turbidity',values:[
+      ['4','2026-08-30T12:00:00.000-04:00'],
+      ['6','2026-08-31T12:00:00.000-04:00']
+    ]}),
+    series({code:'00300',unit:'mg/L',description:'Dissolved oxygen',values:[['8.4','2026-08-31T12:00:00.000-04:00']]}),
+    series({code:'00095',unit:'uS/cm',description:'Specific conductance',values:[['412','2026-08-31T12:00:00.000-04:00']]}),
+    series({code:'00400',unit:'std',description:'pH',values:[['7.6','2026-08-31T12:00:00.000-04:00']]})
+  ]}};
+  const [g]=rivers.normalize(payload,sites);
   assert.equal(g.water_temp_f,68);
-  assert.equal(g.provisional,true);
-  assert.equal(g.historical_daily_flow,null);
-  assert.equal(g.nwps,null);
+  assert.equal(g.sensors.water_temperature.min_24h,64.4);
+  assert.equal(g.sensors.water_temperature.max_24h,68);
+  assert.equal(g.sensors.water_temperature.change_24h,3.6);
+  assert.equal(g.sensors.turbidity.value,6);
+  assert.equal(g.sensors.turbidity.unit,'FNU');
+  assert.equal(g.sensors.turbidity.change_percent_24h,50);
+  assert.equal(g.sensors.dissolved_oxygen.value,8.4);
+  assert.equal(g.sensors.specific_conductance.value,412);
+  assert.equal(g.sensors.ph.value,7.6);
+  assert.deepEqual(g.sensor_availability,[
+    'water_temperature','turbidity','dissolved_oxygen','specific_conductance','ph'
+  ]);
+});
+
+test('normalizer never fabricates missing water-quality sensors',()=>{
+  const sites=[{id:'04157000',name:'SAGINAW RIVER',latitude:43.43,longitude:-83.94,distance_miles:2.5}];
+  const payload={value:{timeSeries:[series({values:[['900','2026-08-30T12:00:00.000-04:00'],['1000','2026-08-31T12:00:00.000-04:00']]})]}};
+  const [g]=rivers.normalize(payload,sites);
+  assert.equal(g.sensors.water_temperature,null);
+  assert.equal(g.sensors.turbidity,null);
+  assert.equal(g.sensors.dissolved_oxygen,null);
+  assert.equal(g.sensors.specific_conductance,null);
+  assert.equal(g.sensors.ph,null);
+  assert.deepEqual(g.sensor_availability,[]);
 });
 
 test('normalizer excludes indexed sites that do not return a live discharge reading',()=>{
   const sites=[{id:'04157000',name:'SAGINAW RIVER',latitude:43.43,longitude:-83.94,distance_miles:2.5}];
-  const payload={value:{timeSeries:[series({code:'00010'})]}};
+  const payload={value:{timeSeries:[series({code:'00010',unit:'deg C'})]}};
   assert.deepEqual(rivers.normalize(payload,sites),[]);
+});
+
+test('NOAA forecast trend remains separate from observed USGS trend',()=>{
+  const trend=context.normalizeForecastTrend([
+    {validTime:'2026-08-31T12:00:00Z',primary:5.0,secondary:1000},
+    {validTime:'2026-09-01T12:00:00Z',primary:5.8,secondary:1400}
+  ]);
+  assert.equal(trend.direction,'rising');
+  assert.equal(trend.stage_change_ft,0.8);
+  assert.equal(trend.flow_change,400);
+});
+
+test('NWS weather window summarizes precipitation and wind without claiming river response',()=>{
+  const now=Date.now();
+  const at=(hours)=>new Date(now+hours*3600000).toISOString();
+  const result=context.weatherWindow([
+    {startTime:at(1),temperature:70,windSpeed:'5 to 10 mph',shortForecast:'Mostly Cloudy',probabilityOfPrecipitation:{value:20}},
+    {startTime:at(5),temperature:66,windSpeed:'12 mph',shortForecast:'Rain Showers',probabilityOfPrecipitation:{value:70}},
+    {startTime:at(20),temperature:62,windSpeed:'8 mph',shortForecast:'Rain Showers',probabilityOfPrecipitation:{value:55}}
+  ],24);
+  assert.equal(result.max_precip_probability,70);
+  assert.equal(result.max_wind_mph,12);
+  assert.equal(result.min_air_temp_f,62);
+  assert.ok(Date.parse(result.first_50pct_precip_at));
 });
 
 test('river context accepts only bounded numeric USGS site IDs',()=>{
