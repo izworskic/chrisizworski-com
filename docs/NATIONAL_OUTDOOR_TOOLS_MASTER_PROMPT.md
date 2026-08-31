@@ -341,3 +341,18 @@ Do not optimize for:
 Read this document together with `AGENTS.md`, `docs/SEARCH_STRATEGY.md`, `docs/SEARCH_AUTHORITY_PORTFOLIO.md`, the current experiment ledger, tool-network registry, and search-authority portfolio before changing a national-tool search surface.
 
 When uncertain, choose the implementation with the lower loss even if it launches with fewer features.
+
+
+## Phase 3 platform interpretation
+
+The first five tools now share a common user journey. Future work must preserve these rules:
+
+1. The national hub is a decision surface, not a card directory. One chosen place should load the available tool contracts independently and show the most decision-relevant signals first.
+2. Display priority is not a safety score. Flood/freeze/time-sensitive signals may sort ahead of routine context, but the system must never imply a universal safe/unsafe outdoor judgment.
+3. One upstream failure must not blank the whole platform. Degraded state belongs to the affected card/tool.
+4. Location is user state, not an SEO excuse. Carry city/ZIP context across tools with query/local-device state while keeping canonical tool URLs unchanged.
+5. Saved places are not alerts. Do not use alert/notify language until a real future-delivery channel exists.
+6. Render decision times in the searched place's timezone whenever that context is available.
+7. Maps are supporting spatial context. Core decisions and source truth must remain usable if the basemap fails.
+8. No national location page becomes indexable until it passes `benchmarks/national-location-admission.json`, including the hard vetoes and minimum score.
+9. Do not add a new national product family merely to increase breadth while these five still have material decision, reliability, or network gaps.
