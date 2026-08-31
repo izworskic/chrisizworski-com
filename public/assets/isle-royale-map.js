@@ -2079,7 +2079,10 @@
   function routeControlDistances() {
     const path=routePathPoints();
     if(!route.points.length)return [];
-    if(path.length<2)return draftRouteDistances();
+    if(path.length<2) {
+      if(route.mode==='hike')return draftRouteDistances();
+      return route.points.map(()=>({leg_miles:0,total_miles:0,resolved:false,pending:true}));
+    }
     const cumulative=cumulativeFor(path),total=cumulative[cumulative.length-1]||0;
     const projected=[];
     let segment=0,lastAlong=0;
@@ -2638,7 +2641,7 @@
       const add=document.createElement('button');
       add.type='button';
       add.className='popup-action popup-route-action';
-      add.textContent='Add this portage to trip';
+      add.textContent='Route through this portage';
       add.addEventListener('click',event=>{
         event.preventDefault();
         event.stopPropagation();
@@ -3699,11 +3702,11 @@
       textWrap.querySelector('.route-distance').textContent=index===0
         ? '0.0 mi start'
         : canoePending
-          ? '+'+d.leg_miles.toFixed(1)+' mi draft · '+d.total_miles.toFixed(1)+' mi draft total · resolving canoe leg'
+          ? 'water-only / official-portage leg pending'
           : route.mode==='canoe'&&canoeLeg
             ? '+'+canoeLeg.miles.toFixed(1)+' mi '+(canoeLeg.type==='portage'?'portage':'paddle')+(canoeLeg.officialPortage?' · NPS #'+canoeLeg.officialPortage.number:'')+' · '+d.total_miles.toFixed(1)+' mi trip'
             : waterPending
-              ? '+'+d.leg_miles.toFixed(1)+' mi draft · '+d.total_miles.toFixed(1)+' mi draft total · '+(route.smartState==='water-fallback'?'routing unavailable':'verifying water route')
+              ? (route.smartState==='water-fallback'?'water-only route blocked':'verifying water-only route')
               : '+'+d.leg_miles.toFixed(1)+(route.mode==='hike'?' mi leg':' mi water')+' · '+d.total_miles.toFixed(1)+' mi total';
       textWrap.addEventListener('click',()=>{
         map.flyTo([point.lat,point.lng],Math.max(map.getZoom(),13));
@@ -3831,7 +3834,7 @@
       const title=document.createElement('div');title.className='popup-title';title.textContent=point.label||('Waypoint '+(index+1));popup.appendChild(title);
       const d=controlDistances[index]||{leg_miles:0,total_miles:0,resolved:false};
       const pendingWater=route.mode!=='hike'&&route.points.length>=2&&!d.resolved;
-      const meta=document.createElement('div');meta.className='popup-meta';meta.textContent=routePointRole(point,index,route.points.length)+(index?(pendingWater?(' · +'+d.leg_miles.toFixed(1)+' mi draft · '+d.total_miles.toFixed(1)+' mi draft total'):(' · +'+d.leg_miles.toFixed(1)+(route.mode==='hike'?' mi':' mi water')+' · '+d.total_miles.toFixed(1)+' mi total')):' · route start');popup.appendChild(meta);
+      const meta=document.createElement('div');meta.className='popup-meta';meta.textContent=routePointRole(point,index,route.points.length)+(index?(pendingWater?' · route distance pending water-only verification':(' · +'+d.leg_miles.toFixed(1)+(route.mode==='hike'?' mi':' mi water')+' · '+d.total_miles.toFixed(1)+' mi total')):' · route start');popup.appendChild(meta);
       const actions=document.createElement('div');actions.className='popup-actions';
       if(point.kind==='campground'&&index>0){
         const day=document.createElement('button');day.type='button';day.className='popup-action';day.textContent=point.manualDayEnd?'Clear day end':'End day here';day.addEventListener('click',()=>{setCampDayEnd(point,!point.manualDayEnd);map.closePopup();});actions.appendChild(day);
