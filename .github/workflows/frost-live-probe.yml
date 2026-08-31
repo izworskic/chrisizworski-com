@@ -100,6 +100,19 @@ jobs:
             }
           }
 
+
+          {
+            const clean=['USC00204967','USC00207820','USC00208800','USW00014828'];
+            const d=new URL('https://www.ncei.noaa.gov/access/services/data/v1');
+            d.searchParams.set('dataset','normals-annualseasonal-1991-2020');
+            d.searchParams.set('stations',clean.join(','));
+            d.searchParams.set('format','json');
+            d.searchParams.set('includeStationName','1');
+            d.searchParams.set('includeStationLocation','1');
+            d.searchParams.set('dataTypes',types.join(','));
+            await probe('NCEI CLEAN EXPLICIT STATIONS',d.toString());
+          }
+
           const z=new URL('https://services1.arcgis.com/SyUSN23vOoYdfLC8/arcgis/rest/services/PHZM_2023_Zip_Code_Table/FeatureServer/296/query');
           z.searchParams.set('where',"ZIP_CODE='48661'");
           z.searchParams.set('outFields','ZIP_CODE,ZONE_CODE,MAJORITY,Class,Class_Code');
