@@ -554,14 +554,14 @@
     };
   }
 
-  function addFeatureToRoute(record) {
+  function addFeatureToRoute(record,options={}) {
     if(!record?.latlng||!Number.isFinite(record.latlng.lat)||!Number.isFinite(record.latlng.lng))return false;
     if(record.category==='campground'&&record.liveAlert) {
       status(record.name+' is currently flagged closed by NPS and was not added as a campsite. Open its details for the current closure.');
       selectRecord(record);
       return false;
     }
-    addRoutePoint(record.latlng,record.name,routePointMetaForRecord(record));
+    addRoutePoint(record.latlng,record.name,{...routePointMetaForRecord(record),historyAction:cleanText(options.historyAction||'')});
     map.closePopup();
     const type=record.category==='campground'
       ? (record.boater?'NPS Boat-In campsite':'campground')
@@ -588,8 +588,12 @@
     let point=recordOrPoint?.latlng ? routePointForRecord(recordOrPoint) : recordOrPoint;
     let addedForDayEnd=false;
     if(!point&&recordOrPoint?.latlng) {
+      if(active&&!route.points.length) {
+        status('Choose a route start first, then use End day here on a later campsite.');
+        return false;
+      }
       const beforeCount=route.points.length;
-      addFeatureToRoute(recordOrPoint);
+      addFeatureToRoute(recordOrPoint,{historyAction:(active?'set ':'clear ')+(recordOrPoint.name||'campground')+' day end'});
       point=routePointForRecord(recordOrPoint);
       addedForDayEnd=Boolean(point&&route.points.length>beforeCount);
     }
@@ -2674,9 +2678,11 @@
       sourceBackedBoatIn:Boolean(meta.sourceBackedBoatIn),
       sourceLabel:cleanText(meta.sourceLabel||''),
       liveAlert:Boolean(meta.liveAlert),
+      historyAction:cleanText(meta.historyAction||''),
       manualDayEnd:Boolean(meta.manualDayEnd)
     };
-    rememberRouteEdit(point.kind==='campground'?'add '+point.label:'add route point');
+    rememberRouteEdit(point.historyAction||(point.kind==='campground'?'add '+point.label:'add route point'));
+    delete point.historyAction;
     route.points.push(point);
     reroute('Route changed. Re-run the weather analysis for the updated path.');
     emitEvent('isle_royale_route_point',{point_count:route.points.length,mode:route.mode,point_kind:cleanText(meta.kind||'map-point')});
