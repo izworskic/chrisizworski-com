@@ -254,7 +254,9 @@ const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js
   && /Water route failed zero-land-crossing validation/.test(js)
   && /stats\.land_crossings!==0/.test(js)
   && /route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/.test(js)
-  && /No route line or mileage is shown until a zero-land-crossing path is validated/.test(js)
+  && /Draft route · straight between selected points while mapped routing verifies/.test(js)
+  && /route-distance-draft/.test(js)
+  && /function routeIsResolved/.test(js)
   && /route-distance-badge/.test(js)
   && /Water · .*mi/.test(js)
   && /weatherSamples/.test(waterJs)
@@ -449,7 +451,7 @@ if (!/button\.textContent=undoLabel/.test(js) || !/last\?\.fingerprint===fingerp
 if (!tripPersistenceRuntime) hardFailures.push('trip persistence/handoff is missing local-only save, share-fragment restore, or resolved-route GPX export safeguards');
 if (!routeEditingRuntime) hardFailures.push('route planning is missing leg/cumulative distances or obvious stop deletion from the map/list');
 if (!/id="route-finish-build"/.test(html) || !/function finishRouteBuild/.test(js) || !/route\.reviewing=true/.test(js)) hardFailures.push('route builder is missing explicit Finish & review transition before save/share/export');
-if (!/function crossingCount/.test(waterJs) || !/Water route failed final coastline validation/.test(waterJs) || !/route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/.test(js)) hardFailures.push('water routing can still display an unverified line or accept a mapped shoreline crossing');
+if (!/function crossingCount/.test(waterJs) || !/Water route failed final coastline validation/.test(waterJs) || !/route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/.test(js)) hardFailures.push('water routing can still promote an unverified construction sketch as a verified route or accept a mapped shoreline crossing');
 if (!/route-distance-badge/.test(js) || !/Water · .*mi/.test(js) || !/mi draft span/.test(js)) hardFailures.push('route distance is not visible during draft building and on the resolved route');
 if (/data-layer="vegetation-(?:overview|baseline|change)"|data-layer="horne-fire"/.test(html)) hardFailures.push('retired vegetation/ecology layers leaked back into the planning controls');
 if (!['geology','vegetation-detailed','vegetation-simple','vegetation-change-1996-2017','horne-fire-2021'].every(id => catalog.items.some(x => x.id === id && x.state === 'research-only'))) hardFailures.push('retired research layers are not clearly marked research-only in the source catalog');
