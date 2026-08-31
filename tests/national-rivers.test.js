@@ -1,5 +1,6 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
+const fs=require('node:fs');
 const rivers=require('../api/national-rivers.js')._test;
 const context=require('../api/national-river-context.js')._test;
 const index=require('../public/data/national-usgs-streamflow-sites.json');
@@ -171,4 +172,15 @@ test('river context accepts only bounded numeric USGS site IDs',()=>{
   assert.deepEqual(context.validSiteIds('04135700,04142000,bad,04135700'),['04135700','04142000']);
   assert.equal(context.validSiteIds('1,2,3').length,0);
   assert.equal(context.validSiteIds('04135700,04142000,04152500,04153300,04153500,04154000,04155000').length,6);
+});
+
+
+test('River Intelligence inline client parses as JavaScript',()=>{
+  const page=fs.readFileSync(require.resolve('../public/national-tools/rivers/index.html'),'utf8');
+  const match=page.match(/<script>\s*(document\.addEventListener[\s\S]*?)<\/script>/);
+  assert.ok(match,'river inline client script not found');
+  assert.doesNotThrow(()=>new Function(match[1]));
+  for(const phrase of ['What changed?','What’s next?','No combined safety score','Paddling context','Fishing context','Swimming context','Ecology context','River trip planning']){
+    assert.ok(page.includes(phrase),phrase);
+  }
 });
