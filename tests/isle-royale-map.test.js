@@ -26,7 +26,7 @@ function rendered(s) { return s.replace(/&amp;/g, '&').replace(/&#39;/g, "'").re
 test('canonical and Chris Izworski entity are present', () => {
   assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/isle-royale-map\/">/);
   assert.match(html, /https:\/\/chrisizworski\.com\/#person/);
-  assert.match(html, /"dateModified":"2026-08-30"/);
+  assert.match(html, /"dateModified":"2026-08-31"/);
 });
 
 test('SERP strings fit repository limits', () => {
