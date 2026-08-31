@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded",function(){
   document.getElementById("forecast-low").textContent=w?.min_7d_f==null?"Unavailable":Math.round(w.min_7d_f)+"°F";
   document.getElementById("freeze-hours").textContent=w?.freeze_hours?.length??"—";
   document.getElementById("hard-freeze-hours").textContent=w?.hard_freeze_hours?.length??"—";
-  document.getElementById("forecast-time").textContent=w?.min_7d_at?"Lowest returned hour: "+N.fmtDate(w.min_7d_at):"NWS hourly minimum time unavailable.";
+  document.getElementById("forecast-time").textContent=w?.min_7d_at?"Lowest returned hour: "+N.fmtInZone(w.min_7d_at,x.location?.timeZone||loc.timeZone,{dateStyle:"medium",timeStyle:"short"}):"NWS hourly minimum time unavailable.";
   const pill=document.getElementById("live-pill");pill.textContent=v.label||"Live forecast unavailable";pill.className="pill "+((v.level==="freeze"||v.level==="hard-freeze")?"danger":"");
   document.getElementById("station").textContent=c?"NOAA normals station: "+c.name+(c.distance_miles==null?"":" · "+c.distance_miles.toFixed(1)+" mi away")+" · station confidence "+c.confidence:"NOAA station climatology unavailable for this lookup.";
   document.getElementById("explain").textContent=c?.distance_miles>40?x.interpretation.station_distance:"Historical dates and the live seven-day forecast are intentionally separate. A forecast freeze overrides a comfortable-looking calendar date for the immediate decision.";
