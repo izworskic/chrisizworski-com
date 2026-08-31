@@ -1,0 +1,67 @@
+name: Frost live probe
+on:
+  push:
+    branches:
+      - fix/national-frost-dates-zone
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Probe West Branch frost sources
+        shell: bash
+        run: |
+          node <<'NODE'
+          async function probe(label,url){
+            const started=Date.now();
+            try{
+              const r=await fetch(url,{headers:{'user-agent':'ChrisIzworskiFrostProbe/1.0','accept':'application/json,text/plain,*/*'}});
+              const body=await r.text();
+              console.log('\n### '+label);
+              console.log('STATUS',r.status);
+              console.log('CTYPE',r.headers.get('content-type'));
+              console.log('ELAPSED_MS',Date.now()-started);
+              console.log('URL',url);
+              console.log('BODY',body.slice(0,12000));
+              return {r,body};
+            }catch(e){
+              console.log('\n### '+label+' ERROR');
+              console.log('ELAPSED_MS',Date.now()-started);
+              console.log(String(e?.stack||e));
+              return null;
+            }
+          }
+          const lat=44.276408,lon=-84.238613;
+          await probe('PRODUCTION FROST',`https://chrisizworski.com/api/national-frost?lat=${lat}&lon=${lon}&probe=${Date.now()}`);
+          const types=[
+            'ANN-TMIN-PRBLST-T32FP10','ANN-TMIN-PRBLST-T32FP20','ANN-TMIN-PRBLST-T32FP50',
+            'ANN-TMIN-PRBFST-T32FP10','ANN-TMIN-PRBFST-T32FP20','ANN-TMIN-PRBFST-T32FP50',
+            'ANN-TMIN-PRBGSL-T32FP50'
+          ];
+          for(const span of [0.35,0.8,1.8]){
+            const u=new URL('https://www.ncei.noaa.gov/access/services/data/v1');
+            u.searchParams.set('dataset','normals-annualseasonal-1991-2020');
+            u.searchParams.set('bbox',`${Math.min(90,lat+span)},${Math.max(-180,lon-span)},${Math.max(-90,lat-span)},${Math.min(180,lon+span)}`);
+            u.searchParams.set('format','json');
+            u.searchParams.set('includeStationName','1');
+            u.searchParams.set('includeStationLocation','1');
+            u.searchParams.set('dataTypes',types.join(','));
+            await probe('NCEI CURRENT span '+span,u.toString());
+            u.searchParams.set('startDate','0001-01-01');
+            u.searchParams.set('endDate','9996-12-31');
+            await probe('NCEI DATED span '+span,u.toString());
+          }
+          const z=new URL('https://services1.arcgis.com/SyUSN23vOoYdfLC8/arcgis/rest/services/PHZM_2023_Zip_Code_Table/FeatureServer/296/query');
+          z.searchParams.set('where',"ZIP_CODE='48661'");
+          z.searchParams.set('outFields','ZIP_CODE,ZONE_CODE,MAJORITY,Class,Class_Code');
+          z.searchParams.set('returnGeometry','false');
+          z.searchParams.set('f','json');
+          await probe('USDA ZONE 48661',z.toString());
+          const rev=new URL('https://nominatim.openstreetmap.org/reverse');
+          rev.searchParams.set('lat',String(lat));
+          rev.searchParams.set('lon',String(lon));
+          rev.searchParams.set('format','jsonv2');
+          rev.searchParams.set('addressdetails','1');
+          rev.searchParams.set('zoom','18');
+          await probe('NOMINATIM REVERSE POSTCODE',rev.toString());
+          NODE
