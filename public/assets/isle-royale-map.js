@@ -1439,6 +1439,7 @@
   }
 
   function routePathPoints() {
+    if(route.mode!=='hike'&&route.points.length>=2&&route.smartState!=='water-aware')return [];
     return route.resolvedPoints.length ? route.resolvedPoints : route.points;
   }
 
@@ -1699,9 +1700,13 @@
       await new Promise(resolve=>setTimeout(resolve,0));
       const result=router.route(route.points,route.mode);
       if(token!==route.waterToken)return;
+      const crossings=Number(result.land_crossings ?? router.crossingCount?.(result.points) ?? 0);
+      if(crossings!==0)throw new Error('Water route failed zero-land-crossing validation');
       route.resolvedPoints=result.points;
       route.waterAccessMiles=Number(result.access_miles)||0;
       const stats=router.analyze(route.resolvedPoints);
+      stats.land_crossings=Number(stats.land_crossings ?? crossings);
+      if(stats.land_crossings!==0)throw new Error('Water route analysis found a mapped shoreline crossing');
       stats.quiet_zones=window.IsleRoyaleWaterIntel.zonesAlongPath(route.resolvedPoints,zones);
       stats.refuges=nearbyRouteRefuges(route.resolvedPoints);
       route.waterStats=stats;
@@ -1711,7 +1716,7 @@
       emitEvent('isle_royale_water_route',{mode:route.mode,quiet_zone_count:stats.quiet_zones.length,refuge_count:stats.refuges.length});
     } catch(error) {
       if(token!==route.waterToken)return;
-      route.resolvedPoints=[...route.points];
+      route.resolvedPoints=[];
       route.waterStats=null;
       route.smartState='water-fallback';
       route.waterReason=cleanText(error?.message||'shoreline intelligence unavailable');
@@ -1745,7 +1750,7 @@
         route.smartReason=smart?.reason||'Smart trail routing unavailable.';
       }
     } else {
-      route.resolvedPoints=[...route.points];
+      route.resolvedPoints=[];
       route.waterStats=null;
       route.waterReason='';
       route.smartState='water-pending';
@@ -1805,16 +1810,16 @@
       return;
     }
     if(route.smartState==='water-loading'||route.smartState==='water-pending') {
-      els.routeSmartStatus.innerHTML='<strong>Building water route:</strong> checking mapped coastline and route shape. The straight line is temporary.';
+      els.routeSmartStatus.innerHTML='<strong>Building water route:</strong> checking mapped coastline. No route line or mileage is shown until a zero-land-crossing path is validated.';
       return;
     }
     if(route.smartState==='water-aware') {
       const access=route.waterAccessMiles>0.05?` · ${route.waterAccessMiles.toFixed(1)} mi endpoint access to the routing grid`:'';
-      els.routeSmartStatus.innerHTML=`<strong>Water-aware planning route:</strong> avoids mapped coastline crossings and uses a ${route.mode==='paddle'?'shoreline-biased':'more direct'} path${access}. Drag endpoints or tap the line to compare another scenario.`;
+      els.routeSmartStatus.innerHTML=`<strong>Water-aware planning route:</strong> 0 mapped shoreline crossings · ${route.mode==='paddle'?'shoreline-biased':'more direct'} water path${access}. Drag endpoints or tap the line to compare another scenario.`;
       return;
     }
     if(route.smartState==='water-fallback') {
-      els.routeSmartStatus.textContent=`Water intelligence unavailable (${route.waterReason||'unknown source issue'}). Showing an editable straight planning sketch; do not treat it as a navigable route.`;
+      els.routeSmartStatus.textContent=`Water route unavailable (${route.waterReason||'unknown source issue'}). No route line or mileage is shown because a land-safe path could not be verified.`;
       return;
     }
     els.routeSmartStatus.innerHTML='<strong>Editable water route:</strong> drag S / D / numbered handles to reshape it. Tap the route line to add another shaping point.';
