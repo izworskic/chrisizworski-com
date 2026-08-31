@@ -63,7 +63,7 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /Open this coordinate on the source map/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
 
-const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-simple-pace-1/.test(html)
+const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-hard-water-routing-1/.test(html)
   && !/isle-royale-map\.js\?v=20260830-19/.test(html)
   && /"source": "\/assets\/isle-royale-map\.js"/.test(vercel)
   && /"key": "Cache-Control"[\s\S]{0,120}"value": "no-store, max-age=0"/.test(vercel)
@@ -151,21 +151,23 @@ const routePlanningRuntime = /id="route-planner"/.test(html)
 const routeEditingRuntime = /function routeControlDistances/.test(js)
   && /function projectControlPointAlongPath/.test(js)
   && /function removeRoutePoint/.test(js)
-  && /function draftRouteDistances/.test(js)
-  && /function draftRouteTotalMiles/.test(js)
   && /function routeDisplayPoints/.test(js)
   && /function routeIsResolved/.test(js)
-  && /const displayPath=routeDisplayPoints\(\)/.test(js)
-  && /const draftDisplay=!routeIsResolved\(\)&&displayPath\.length>=2/.test(js)
-  && /route\.line=L\.polyline\(displayPath\.map/.test(js)
-  && /Draft route · straight between selected points while mapped routing verifies/.test(js)
-  && /route-distance-draft/.test(js)
-  && /if\(path\.length<2\)return draftRouteDistances\(\)/.test(js)
-  && /mi draft total/.test(js)
+  && /if\(route\.mode==='hike'\)return route\.points/.test(js)
+  && /return route\.points\.length<2\?route\.points:\[\]/.test(js)
+  && /const draftDisplay=route\.mode==='hike'&&!routeIsResolved\(\)&&displayPath\.length>=2/.test(js)
+  && /function backOneRoutePoint/.test(js)
+  && /route\.points\.pop\(\)/.test(js)
+  && /id="route-back-point"/.test(html)
+  && /id="cockpit-back-point"/.test(html)
+  && /Back one point/.test(html)
+  && /routeFinishBuild\.disabled=pointCount<2\|\|/.test(js)
+  && /Finish is blocked until every paddle leg resolves on water/.test(js)
+  && /No straight line is drawn across land/i.test(js)
+  && !/Draft route · straight between selected points while mapped routing verifies/.test(js)
   && /Remove from route/.test(js)
   && /marker\.bindPopup/.test(js)
-  && /\.route-distance/.test(html)
-  && /\.route-distance-badge\.route-distance-draft\{/.test(html);
+  && /\.route-distance/.test(html);
 
 const smartRoutingRuntime = /const trailGraph = \{/.test(js)
   && /function registerTrailGeometry/.test(js)
@@ -183,16 +185,19 @@ const canoePortageRuntime = /<option value="canoe">Canoe \+ portage<\/option>/.t
   && /id="route-portage-pace"/.test(html)
   && /function resolveCanoeRouteAsync/.test(js)
   && /function canoeTrailLegCandidate/.test(js)
+  && /if\(!official\)return null/.test(js)
   && /function canoeWaterLegCandidate/.test(js)
+  && /crossings!==0/.test(js)
   && /function canoeTotals/.test(js)
   && /function cycleCanoeLegType/.test(js)
-  && /canoe-aware/.test(js)
-  && /Portage · /.test(js)
-  && /Paddle · /.test(js)
-  && /drawn water leg/.test(js)
+  && /Watercraft routes never cross land except on a designated brown P# portage/.test(js)
+  && /attempts an overland crossing that is not a designated NPS portage/.test(js)
+  && /Land crossings are limited to designated NPS portages/.test(js)
+  && /Route through this portage/.test(js)
+  && /route\.mixedLegs\.every\(leg=>leg\?\.verified/.test(js)
+  && !/function canoeManualLeg/.test(js)
+  && !/drawn water leg/.test(js)
   && /actual walking distance/.test(js)
-  && /route\.mode==='hike'\|\|route\.mode==='canoe'\|\|route\.smartState!=='water-aware'/.test(js)
-  && /\['paddle','canoe','hike','powerboat'\]/.test(js)
   && /legType:\['water','portage'\]\.includes/.test(js);
 
 const officialPortageDatasetRuntime = officialPortages?.schema_version === 1
@@ -209,7 +214,7 @@ const officialPortageDatasetRuntime = officialPortages?.schema_version === 1
   && /officialPortages: '\/isle-royale-map\/data\/official-portages-2026\.json'/.test(js)
   && /function loadOfficialPortages/.test(js)
   && /function matchOfficialPortage/.test(js)
-  && /distanceBasis:official\?'nps-published':'mapped-trail'/.test(js)
+  && /distanceBasis:'nps-published'/.test(js)
   && /mapped_miles:mappedMiles/.test(js)
   && /officialPortage:official/.test(js)
   && /NPS Portage #/.test(js)
@@ -225,6 +230,7 @@ const selectableOfficialPortageRuntime = /data-layer="official-portage" checked/
   && /function renderOfficialPortageLayer/.test(js)
   && /function officialPortagePopup/.test(js)
   && /function addOfficialPortageToTrip/.test(js)
+  && /Route through this portage/.test(js)
   && /weight:20,opacity:\.001,interactive:true/.test(js)
   && /className:'official-portage-badge unresolved'/.test(js)
   && /mapped trail corridor could not be resolved/i.test(js)
@@ -254,8 +260,10 @@ const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js
   && /Water route failed zero-land-crossing validation/.test(js)
   && /stats\.land_crossings!==0/.test(js)
   && /route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/.test(js)
-  && /Draft route · straight between selected points while mapped routing verifies/.test(js)
-  && /route-distance-draft/.test(js)
+  && /return route\.points\.length<2\?route\.points:\[\]/.test(js)
+  && /route\.smartState==='water-aware'&&Number\(route\.waterStats\?\.land_crossings\|\|0\)===0/.test(js)
+  && /No overland fallback is drawn/.test(js)
+  && !/Draft route · straight between selected points while mapped routing verifies/.test(js)
   && /function routeIsResolved/.test(js)
   && /route-distance-badge/.test(js)
   && /Water · .*mi/.test(js)
@@ -264,6 +272,7 @@ const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js
   && /dayEnds/.test(waterJs)
   && /natural"="coastline/.test(waterApi)
   && /planning shoreline geometry only/i.test(waterApi);
+
 const itineraryRuntime = /id="route-itinerary"/.test(html)
   && /function sourceBackedWaterCamps/.test(js)
   && /record\.boater\|\|record\.liveAlert/.test(js)
@@ -299,6 +308,8 @@ const mapFirstRoutingRuntime = /id="explore-mode"[^>]*aria-pressed="true"/.test(
   && /id="route-map-guide"/.test(html)
   && /id="route-stop-list"/.test(html)
   && /id="route-build-bar"/.test(html)
+  && /id="route-back-point"/.test(html)
+  && /id="cockpit-back-point"/.test(html)
   && /id="route-finish-build"/.test(html)
   && /id="route-review-actions"/.test(html)
   && /Finish &amp; review/.test(html)
@@ -308,6 +319,8 @@ const mapFirstRoutingRuntime = /id="explore-mode"[^>]*aria-pressed="true"/.test(
   && /function renderRouteBuildFlow/.test(js)
   && /function finishRouteBuild/.test(js)
   && /function resumeRouteBuild/.test(js)
+  && /function backOneRoutePoint/.test(js)
+  && /isle_royale_route_back_point/.test(js)
   && /route\.reviewing=true/.test(js)
   && /setRouteAdding\(false,\{preserveReview:true\}\)/.test(js)
   && /route\.adding\?finishRouteBuild\(\):setRouteAdding\(true\)/.test(js)
@@ -499,7 +512,7 @@ if (!routeEditingRuntime) hardFailures.push('route planning is missing leg/cumul
 if (!tripIntelligenceRuntime) hardFailures.push('trip intelligence is missing simple researched pace presets, carry math, day planning, named saves, autosave recovery, or portable trip-plan export');
 if (!/id="route-finish-build"/.test(html) || !/function finishRouteBuild/.test(js) || !/route\.reviewing=true/.test(js)) hardFailures.push('route builder is missing explicit Finish & review transition before save/share/export');
 if (!/function crossingCount/.test(waterJs) || !/Water route failed final coastline validation/.test(waterJs) || !/route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/.test(js)) hardFailures.push('water routing can still promote an unverified construction sketch as a verified route or accept a mapped shoreline crossing');
-if (!/route-distance-badge/.test(js) || !/Water · .*mi/.test(js) || !/mi draft span/.test(js)) hardFailures.push('route distance is not visible during draft building and on the resolved route');
+if (!/route-distance-badge/.test(js) || !/Water · .*mi/.test(js) || !/verifying water-only route|water-only \/ official-portage leg pending/.test(js)) hardFailures.push('route distance is missing from resolved geometry or unresolved water legs do not clearly remain pending');
 if (/data-layer="vegetation-(?:overview|baseline|change)"|data-layer="horne-fire"/.test(html)) hardFailures.push('retired vegetation/ecology layers leaked back into the planning controls');
 if (!['geology','vegetation-detailed','vegetation-simple','vegetation-change-1996-2017','horne-fire-2021'].every(id => catalog.items.some(x => x.id === id && x.state === 'research-only'))) hardFailures.push('retired research layers are not clearly marked research-only in the source catalog');
 if (!reliefRuntime) hardFailures.push('keyless USGS relief runtime missing');
