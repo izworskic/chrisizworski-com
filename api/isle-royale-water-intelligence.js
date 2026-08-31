@@ -133,7 +133,8 @@ function normalizeWaterData(data) {
       for (const ring of stitchRings(outerLines)) waterPolygons.push(simplifyLine(ring, 0.00012));
     }
   }
-  return {coastlines, waterPolygons, waterBoundaries, waterCenterlines};
+  const landPolygons = stitchRings(coastlines.map(line=>[...line]));
+  return {coastlines, landPolygons, waterPolygons, waterBoundaries, waterCenterlines};
 }
 
 async function fetchOverpass(endpoint) {
@@ -183,11 +184,13 @@ module.exports = async function handler(req, res) {
         bbox:BBOX,
         line_count:result.coastlines.length,
         point_count:coastlinePointCount,
+        land_polygon_count:result.landPolygons.length,
         inland_water_count:result.waterPolygons.length,
         inland_water_point_count:inlandPointCount,
         water_centerline_count:result.waterCenterlines.length,
         water_centerline_point_count:centerlinePointCount,
         lines:result.coastlines,
+        land_polygons:result.landPolygons,
         water_polygons:result.waterPolygons,
         water_boundaries:result.waterBoundaries,
         water_centerlines:result.waterCenterlines,
