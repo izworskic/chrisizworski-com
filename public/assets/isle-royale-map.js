@@ -143,7 +143,7 @@
     shell.style.transform='none';
   }
 
-  function centerFloatingInspector() {
+  function centerFloatingInspector({user=true}={}) {
     const shell=floatingInspector.shell;
     if(!shell||shell.hidden)return false;
     const safe=popupSafeBounds(shell);
@@ -153,7 +153,7 @@
     const left=(safe.left-mapRect.left)+(safe.right-safe.left-width)/2;
     const top=(safe.top-mapRect.top)+(safe.bottom-safe.top-height)/2;
     inspectorPosition(left,top);
-    floatingInspector.userPositioned=true;
+    if(user)floatingInspector.userPositioned=true;
     return true;
   }
 
@@ -210,7 +210,7 @@
     sizeFloatingInspector();
     requestAnimationFrame(()=>{
       sizeFloatingInspector();
-      centerFloatingInspector();
+      centerFloatingInspector({user:false});
     });
     emitEvent('isle_royale_floating_inspector_open',{mode:route?.mode||'unknown'});
     return true;
