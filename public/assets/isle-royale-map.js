@@ -4001,18 +4001,24 @@
     updateHistoryControls();
   }
   const TRIP_STORAGE_KEY='isle-royale-trip-v1';
+  const TRIP_LIBRARY_KEY='isle-royale-trip-library-v1';
+  const TRIP_AUTOSAVE_KEY='isle-royale-trip-autosave-v1';
 
   function tripState() {
     const center=map.getCenter();
     return {
       version:1,
       saved_at:new Date().toISOString(),
+      tripName:cleanText(route.tripName||els.routeTripName?.value||'').slice(0,80),
       mode:route.mode,
       speed:Number(route.speed)||3,
       hours:Number(route.hours)||6,
       departure:route.departure||'',
       portageTrips:Number(route.portageTrips)||1,
       portageSpeed:Number(route.portageSpeed)||2,
+      portageTransitionMinutes:Number(route.portageTransitionMinutes)||10,
+      strokeRate:Number(route.strokeRate)||40,
+      feetPerStroke:Number(route.feetPerStroke)||6.6,
       activeScenario:route.activeScenario||'balanced',
       points:cloneRoutePoints().slice(0,40).map(point=>({
         lat:Number(point.lat),lng:Number(point.lng),label:cleanText(point.label||'').slice(0,100),
@@ -4045,9 +4051,13 @@
     const hours=Math.max(2,Math.min(12,Number(raw.hours)||6));
     const mapState=raw.map&&Number.isFinite(Number(raw.map.lat))&&Number.isFinite(Number(raw.map.lng))
       ? {lat:Number(raw.map.lat),lng:Number(raw.map.lng),zoom:Math.max(6,Math.min(18,Number(raw.map.zoom)||10))}:null;
-    const portageTrips=Math.max(1,Math.min(2,Number(raw.portageTrips)||1));
+    const portageTrips=Math.max(1,Math.min(3,Number(raw.portageTrips)||1));
     const portageSpeed=Math.max(.5,Math.min(5,Number(raw.portageSpeed)||2));
-    return {version:1,mode,speed,hours,portageTrips,portageSpeed,departure:cleanText(raw.departure||'').slice(0,40),activeScenario:cleanText(raw.activeScenario||'balanced').slice(0,40),points,map:mapState};
+    const portageTransitionMinutes=Math.max(0,Math.min(60,Number(raw.portageTransitionMinutes)||10));
+    const strokeRate=Math.max(20,Math.min(80,Number(raw.strokeRate)||40));
+    const feetPerStroke=Math.max(3,Math.min(12,Number(raw.feetPerStroke)||6.6));
+    const tripName=cleanText(raw.tripName||'').slice(0,80);
+    return {version:1,mode,speed,hours,portageTrips,portageSpeed,portageTransitionMinutes,strokeRate,feetPerStroke,tripName,departure:cleanText(raw.departure||'').slice(0,40),activeScenario:cleanText(raw.activeScenario||'balanced').slice(0,40),points,map:mapState};
   }
 
   function applyTripState(raw,{remember=true,message='Trip restored.'}={}) {
@@ -4061,12 +4071,24 @@
     route.hours=state.hours;
     route.portageTrips=state.portageTrips||1;
     route.portageSpeed=state.portageSpeed||2;
+    route.portageTransitionMinutes=state.portageTransitionMinutes||10;
+    route.strokeRate=state.strokeRate||40;
+    route.feetPerStroke=state.feetPerStroke||6.6;
+    route.tripName=state.tripName||'';
     route.departure=state.departure||'';
     route.activeScenario=state.activeScenario||'balanced';
     els.routeModeSelect.value=state.mode;
     els.routeSpeed.value=String(route.speed);
     if(els.routeDayHours)els.routeDayHours.value=String(route.hours);
     if(els.routeDeparture)els.routeDeparture.value=route.departure;
+    if(els.routePortageTrips)els.routePortageTrips.value=String(route.portageTrips);
+    if(els.routePortageSpeed)els.routePortageSpeed.value=String(route.portageSpeed);
+    if(els.routePortageTransition)els.routePortageTransition.value=String(route.portageTransitionMinutes);
+    if(els.routeStrokeRate)els.routeStrokeRate.value=String(route.strokeRate);
+    if(els.routeFeetPerStroke)els.routeFeetPerStroke.value=String(route.feetPerStroke);
+    if(els.routeTripName)els.routeTripName.value=route.tripName;
+    document.body.classList.toggle('canoe-mode',route.mode==='canoe');
+    document.body.classList.toggle('human-paddle-mode',route.mode==='canoe'||route.mode==='paddle');
     route.resolvedPoints=[];route.trailNames=[];route.waterStats=null;route.waterReason='';route.scenarios=[];route.scenarioWeather={};route.itinerary=null;route.itineraryWeather=null;
     reroute(message+' Re-run weather for the restored schedule.');
     if(state.map)window.setTimeout(()=>map.setView([state.map.lat,state.map.lng],state.map.zoom,{animate:false}),260);
@@ -4074,26 +4096,102 @@
     return true;
   }
 
+  function readTripLibrary() {
+    try{
+      const rows=JSON.parse(localStorage.getItem(TRIP_LIBRARY_KEY)||'[]');
+      return Array.isArray(rows)?rows.filter(row=>row&&row.id&&row.state).slice(0,20):[];
+    }catch(_){return [];}
+  }
+
+  function writeTripLibrary(rows) {
+    localStorage.setItem(TRIP_LIBRARY_KEY,JSON.stringify((rows||[]).slice(0,20)));
+  }
+
+  function autosaveTripDraft() {
+    if(!route.points.length)return;
+    try{localStorage.setItem(TRIP_AUTOSAVE_KEY,JSON.stringify(tripState()));}catch(_){}
+  }
+
+  function savedTripSummary(state) {
+    const normalized=normalizeTripState(state);
+    if(!normalized)return '';
+    const start=normalized.points[0]?.label||'Start';
+    const end=normalized.points[normalized.points.length-1]?.label||'End';
+    return start+' → '+end+' · '+normalized.points.length+' points · '+normalized.mode;
+  }
+
+  function renderSavedTrips() {
+    const root=els.routeSavedList;
+    if(!root)return;
+    root.replaceChildren();
+    const rows=readTripLibrary().sort((a,b)=>String(b.saved_at||'').localeCompare(String(a.saved_at||'')));
+    let autosave=null;
+    try{autosave=JSON.parse(localStorage.getItem(TRIP_AUTOSAVE_KEY)||'null');}catch(_){}
+    if(autosave?.points?.length) {
+      const row=document.createElement('div');row.className='saved-trip-row';
+      const copy=document.createElement('div');copy.className='saved-trip-copy';
+      const b=document.createElement('b');b.textContent='Working route · autosaved';
+      const span=document.createElement('span');span.textContent=savedTripSummary(autosave);
+      copy.append(b,span);
+      const actions=document.createElement('div');actions.className='saved-trip-actions';
+      const load=document.createElement('button');load.type='button';load.textContent='Recover';load.addEventListener('click',()=>applyTripState(autosave,{remember:true,message:'Autosaved working route recovered.'}));
+      actions.appendChild(load);row.append(copy,actions);root.appendChild(row);
+    }
+    for(const saved of rows) {
+      const row=document.createElement('div');row.className='saved-trip-row';
+      const copy=document.createElement('div');copy.className='saved-trip-copy';
+      const b=document.createElement('b');b.textContent=saved.name||'Saved Isle Royale trip';
+      const span=document.createElement('span');span.textContent=savedTripSummary(saved.state)+(saved.saved_at?' · '+new Date(saved.saved_at).toLocaleString():'');
+      copy.append(b,span);
+      const actions=document.createElement('div');actions.className='saved-trip-actions';
+      const load=document.createElement('button');load.type='button';load.textContent='Load';load.addEventListener('click',()=>{applyTripState(saved.state,{remember:true,message:'Saved trip loaded: '+saved.name+'.'});});
+      const del=document.createElement('button');del.type='button';del.textContent='Delete';del.addEventListener('click',()=>{writeTripLibrary(readTripLibrary().filter(item=>item.id!==saved.id));renderSavedTrips();syncCockpitControls();status('Saved trip deleted from this device.');});
+      actions.append(load,del);row.append(copy,actions);root.appendChild(row);
+    }
+    if(!rows.length&&!autosave?.points?.length) {
+      const empty=document.createElement('div');empty.className='trip-caveat';empty.textContent='No saved trips yet. Build a route, give it a name, then choose Save trip.';
+      root.appendChild(empty);
+    }
+  }
+
   function hasSavedTrip() {
-    try{return Boolean(localStorage.getItem(TRIP_STORAGE_KEY));}catch(_){return false;}
+    try{return readTripLibrary().length>0||Boolean(localStorage.getItem(TRIP_STORAGE_KEY))||Boolean(localStorage.getItem(TRIP_AUTOSAVE_KEY));}catch(_){return false;}
   }
 
   function saveTripToDevice() {
     if(!route.points.length){status('Add at least one route point before saving.');return;}
     try{
-      localStorage.setItem(TRIP_STORAGE_KEY,JSON.stringify(tripState()));
-      status('Trip saved on this device. It is not uploaded to the server.');
-      emitEvent('isle_royale_trip_save',{point_count:route.points.length,mode:route.mode});
+      const state=tripState();
+      const name=cleanText(els.routeTripName?.value||route.tripName||tripNameFallback()).slice(0,80)||tripNameFallback();
+      route.tripName=name;
+      state.tripName=name;
+      if(els.routeTripName)els.routeTripName.value=name;
+      const rows=readTripLibrary();
+      const existing=rows.find(row=>String(row.name||'').toLowerCase()===name.toLowerCase());
+      const id=existing?.id||('trip-'+Date.now().toString(36));
+      const saved_at=new Date().toISOString();
+      const record={id,name,saved_at,state:{...state,saved_at}};
+      const next=[record,...rows.filter(row=>row.id!==id)].slice(0,20);
+      writeTripLibrary(next);
+      localStorage.setItem(TRIP_STORAGE_KEY,JSON.stringify(record.state));
+      localStorage.setItem(TRIP_AUTOSAVE_KEY,JSON.stringify(record.state));
+      renderSavedTrips();
+      status('Saved “'+name+'” on this device. It now appears in Saved trips.');
+      emitEvent('isle_royale_trip_save',{point_count:route.points.length,mode:route.mode,library_count:next.length});
       syncCockpitControls();
     }catch(_){status('This browser could not save the trip locally.');}
   }
 
   function restoreSavedTrip() {
     try{
-      const raw=localStorage.getItem(TRIP_STORAGE_KEY);
-      if(!raw){status('No saved Isle Royale trip was found on this device.');return;}
-      const state=JSON.parse(raw);
-      if(!applyTripState(state,{remember:true,message:'Saved trip restored.'}))throw new Error('invalid trip');
+      const rows=readTripLibrary().sort((a,b)=>String(b.saved_at||'').localeCompare(String(a.saved_at||'')));
+      let state=rows[0]?.state||null;
+      if(!state) {
+        const raw=localStorage.getItem(TRIP_STORAGE_KEY)||localStorage.getItem(TRIP_AUTOSAVE_KEY);
+        if(raw)state=JSON.parse(raw);
+      }
+      if(!state){status('No saved Isle Royale trip was found on this device.');return;}
+      if(!applyTripState(state,{remember:true,message:'Latest saved trip restored.'}))throw new Error('invalid trip');
       emitEvent('isle_royale_trip_restore',{point_count:route.points.length,mode:route.mode});
     }catch(_){status('The saved trip could not be restored.');}
   }
