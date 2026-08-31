@@ -178,20 +178,40 @@ test('campground cards combine official NPS capacity with only explicit mapped s
   assert.doesNotMatch(js, /for\s*\([^)]*shelters[^)]*\).*Shelter #/i);
 });
 
-test('open map cards can be dragged to reposition the anchored popup and map', () => {
+test('open map cards can be dragged or centered after Leaflet finishes rendering them', () => {
+  assert.match(js, /function popupInteractionElements/);
+  assert.match(js, /function centerPopupInReadableArea/);
   assert.match(js, /function ensurePopupDragHandle/);
   assert.match(js, /function wirePopupDrag/);
-  assert.match(js, /Drag card to reposition map/);
-  assert.match(js, /handle\.addEventListener\('pointerdown'/);
-  assert.match(js, /handle\.addEventListener\('pointermove'/);
+  assert.match(js, /function schedulePopupInteractionSetup/);
+  assert.match(js, /Drag card to reposition it on the map/);
+  assert.match(js, /Center card/);
+  assert.match(js, /window\.addEventListener\('pointermove',move/);
+  assert.match(js, /window\.addEventListener\('pointerup',end/);
+  assert.match(js, /map\.dragging\.disable\(\)/);
   assert.match(js, /map\.panBy\(\[-dx,-dy\]/);
   assert.match(js, /popupUserPositioned=true/);
   assert.match(js, /if\(!popup\|\|\(!force&&popupUserPositioned\)\)return/);
-  assert.match(js, /wirePopupDrag\(popup\)/);
+  assert.match(js, /requestAnimationFrame\(\(\)=>requestAnimationFrame\(attach\)\)/);
+  assert.match(js, /window\.setTimeout\(attach,80\)/);
+  assert.match(js, /window\.setTimeout\(attach,220\)/);
+  assert.match(js, /schedulePopupInteractionSetup\(popup\)/);
   assert.match(html, /\.popup-drag-handle\{/);
+  assert.match(html, /\.popup-drag-zone\{/);
+  assert.match(html, /\.popup-center-button\{/);
   assert.match(html, /cursor:grab/);
   assert.match(html, /touch-action:none/);
-  assert.match(html, /\.popup-drag-handle\.dragging\{cursor:grabbing/);
+  assert.match(html, /\.popup-drag-zone\.dragging\{cursor:grabbing/);
+});
+
+test('official portage cards participate in the late-render drag and center interaction', () => {
+  assert.match(js, /function officialPortagePopup/);
+  assert.match(js, /wrap\.className='popup-detail official-portage-popup'/);
+  assert.match(js, /line\.bindPopup\(\(\)=>officialPortagePopup\(portage,visual\)/);
+  assert.match(js, /badge\.bindPopup\(\(\)=>officialPortagePopup\(portage,visual\)/);
+  assert.match(js, /marker\.bindPopup\(\(\)=>officialPortagePopup\(portage,visual\)/);
+  assert.match(js, /className:'isle-detail-popup'/);
+  assert.match(js, /map\.on\('popupopen'[\s\S]{0,700}schedulePopupInteractionSetup\(popup\)/);
 });
 
 test('route builder turns geometry into a time-aware planning outcome', () => {
