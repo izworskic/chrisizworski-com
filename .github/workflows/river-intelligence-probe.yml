@@ -1,0 +1,39 @@
+name: River intelligence live probe
+on:
+  push:
+    branches:
+      - build/national-river-intelligence
+    paths:
+      - .github/workflows/river-intelligence-probe.yml
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Probe expanded exact-site USGS request
+        shell: bash
+        run: |
+          node <<'NODE'
+          async function probe(label,url){
+            const started=Date.now();
+            try{
+              const r=await fetch(url,{headers:{'user-agent':'ChrisIzworskiRiverIntelligenceProbe/1.0','accept':'application/json'}});
+              const text=await r.text();
+              console.log('\n### '+label);
+              console.log('STATUS',r.status);
+              console.log('ELAPSED_MS',Date.now()-started);
+              console.log('CTYPE',r.headers.get('content-type'));
+              console.log('BODY_BYTES',text.length);
+              console.log('BODY_HEAD',text.slice(0,1000));
+              if(!r.ok)process.exitCode=1;
+            }catch(e){console.log('\n### '+label+' ERROR',Date.now()-started,String(e));process.exitCode=1}
+          }
+          const usgs=new URL('https://waterservices.usgs.gov/nwis/iv/');
+          usgs.searchParams.set('format','json');
+          usgs.searchParams.set('sites','04152049,04142000,04135700,04152500,04153300,04153500,04154000,04155000,04157000,04157500');
+          usgs.searchParams.set('parameterCd','00060,00065,00010,63680,00300,00095,00400');
+          usgs.searchParams.set('period','P1D');
+          usgs.searchParams.set('siteStatus','all');
+          await probe('EXPANDED USGS EXACT-SITE',usgs.toString());
+          await probe('NWS POINT','https://api.weather.gov/points/44.2764,-84.2386');
+          NODE
