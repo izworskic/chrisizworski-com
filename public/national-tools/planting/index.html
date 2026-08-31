@@ -1,26 +1,101 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>U.S. Planting Calendar | Chris Izworski</title><meta name="description" content="Build a vegetable planting calendar by U.S. city or ZIP from NOAA freeze probabilities, current NWS cold risk and crop timing rules."><link rel="canonical" href="https://chrisizworski.com/national-tools/planting/"><meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="stylesheet" href="/assets/national-tools.css"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/planting/#page","url":"https://chrisizworski.com/national-tools/planting/","name":"Vegetable Planting Calendar by Location","description":"Build a vegetable planting calendar by U.S. city or ZIP from NOAA freeze probabilities, current NWS cold risk and crop timing rules.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script></head><body>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>U.S. Planting Calendar | Chris Izworski</title>
+<meta name="description" content="Build a vegetable planting calendar by U.S. city or ZIP from NOAA freeze probabilities, current NWS cold risk and Extension crop timing rules.">
+<link rel="canonical" href="https://chrisizworski.com/national-tools/planting/"><meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="stylesheet" href="/assets/national-tools.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/planting/#page","url":"https://chrisizworski.com/national-tools/planting/","name":"Vegetable Planting Calendar by Location","description":"Build a vegetable planting calendar by U.S. city or ZIP from NOAA freeze probabilities, current NWS cold risk and Extension crop timing rules.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
+</head><body>
 <header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
-<main><section class="hero"><div class="wrap"><div class="eyebrow">When to Plant · Frost-aware garden calendar</div><h1>Vegetable Planting Calendar by Location</h1><p class="lede">Start with local freeze probability, then translate it into seed-starting, transplant and direct-sow windows for common garden crops.</p></div></section>
-<section class="section"><div class="wrap"><div class="tool-nav"><a href="/national-tools/">All U.S. tools</a><a href="/national-tools/frost/">Frost dates</a><a href="/national-tools/rivers/">Rivers</a></div>
-<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn">Build calendar</button></form><div class="status" aria-live="polite"></div>
-<div id="result" class="result" hidden><span class="pill">Frost-relative planting windows</span><div id="answer" class="answer"></div><p id="base"></p><div class="table-wrap"><table class="crop-table"><thead><tr><th>Crop</th><th>Start indoors</th><th>Transplant</th><th>Direct sow</th></tr></thead><tbody id="crops"></tbody></table></div><p class="small">These are general frost-relative biological windows, not a replacement for crop-specific soil, cultivar, heat, rainfall or local Extension guidance.</p></div>
-<div id="mi" class="handoff" hidden><strong>Michigan gardener?</strong> Use the established <a href="/zone-6a-planting-calendar/">Michigan Planting Calendar</a> for the deeper Michigan crop and station model.</div></div></section>
-<section class="section"><div class="wrap grid"><div class="source-box"><h2>How the calendar works</h2><p>The location engine starts with NOAA’s cautious 10% last-32°F-freeze date when available, then applies crop-specific frost-relative windows. The current NWS forecast remains a separate live check.</p></div>
-<div class="source-box"><h2>Why this is not just a USDA zone calculator</h2><p>Hardiness zones describe perennial winter survival. Vegetable timing depends on freeze risk, crop cold tolerance, soil warmth and crop development. The crop rules are intentionally stored separately from climatology.</p><p>Reference context: NOAA/NCEI, NWS and Cooperative Extension planting guidance.</p></div></div></section>
+<main>
+<section class="hero"><div class="wrap"><div class="eyebrow">When to Plant · NOAA + Cooperative Extension</div><h1>Vegetable Planting Calendar by Location</h1><p class="lede">Start with local freeze probability, then translate it into what to start indoors, set outside, or direct sow now.</p></div></section>
+
+<section class="section"><div class="wrap">
+<div class="tool-nav"><a href="/national-tools/">All U.S. tools</a><a href="/national-tools/frost/">Frost dates</a><a href="/national-tools/rivers/">Rivers</a></div>
+<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn">Build my calendar</button></form><div class="status" aria-live="polite"></div>
+
+<div id="result" class="result" hidden>
+  <div class="result-head"><span class="pill">NOAA frost anchor + Extension crop rules</span><span id="freeze-pill" class="pill"></span></div>
+  <div id="answer" class="answer"></div>
+  <p id="base"></p>
+  <div id="now-panel" class="decision-panel"><h2>What can I do now?</h2><div id="now-actions" class="action-grid"></div></div>
+  <div class="filter-row"><label for="season-filter"><strong>Show crops</strong></label><select id="season-filter"><option value="all">All crops</option><option value="cool">Cool-season</option><option value="warm">Warm-season</option></select></div>
+  <div class="table-wrap"><table class="crop-table"><thead><tr><th>Crop</th><th>Start indoors</th><th>Set out</th><th>Direct sow</th><th>Right now</th></tr></thead><tbody id="crops"></tbody></table></div>
+  <p class="small">These are general frost-relative planning windows. Seed packet, cultivar, soil temperature, heat, rainfall and local Extension guidance can move the right date.</p>
+</div>
+
+<div id="mi" class="handoff" hidden><strong>Michigan gardener?</strong> Use the established <a href="/zone-6a-planting-calendar/">Michigan Planting Calendar</a> for the deeper Michigan crop and station model.</div>
+</div></section>
+
+<section class="section"><div class="wrap grid">
+<div class="source-box"><h2>How the calendar works</h2><p>The local climate anchor is NOAA’s cautious 10% last-32°F-freeze date when available. Crop biology is stored separately. Warm crops are held back when the current NWS forecast still contains freezing temperatures.</p><p>The date is a planning anchor, not a guarantee. Local cold pockets, elevation and soil temperature still matter.</p></div>
+<div class="source-box"><h2>Crop timing is sourced separately</h2><p>Indoor growing duration and frost-relative set-out timing are based on Cooperative Extension schedules, including <a href="https://extension.umd.edu/resource/starting-vegetable-seeds-indoors">University of Maryland Extension</a>, <a href="https://extension.oregonstate.edu/catalog/pub/when-start-seeds-indoors-central-oregon">Oregon State University Extension</a>, <a href="https://extension.umaine.edu/gardening/manual/propagation/plant-from-spring-to-fall/">University of Maine Extension</a>, and <a href="https://njaes.rutgers.edu/pubs/download.php?strPubID=FS787">Rutgers Cooperative Extension</a>.</p></div>
+</div></section>
+
 <script>
-document.addEventListener("DOMContentLoaded",function(){const N=window.NationalTools,form=document.getElementById("loc");
- const crops=[["Tomatoes",[-56,-42],[7,21],null],["Peppers",[-70,-56],[14,28],null],["Eggplant",[-63,-49],[14,28],null],["Broccoli",[-49,-35],[-21,-7],null],["Cabbage",[-49,-35],[-28,-14],null],["Lettuce",[-35,-21],[-21,-7],[-28,7]],["Spinach",null,null,[-42,-21]],["Peas",null,null,[-42,-28]],["Green beans",null,null,[7,21]],["Sweet corn",null,null,[7,21]],["Cucumbers",[-21,-14],[14,21],[7,21]],["Basil",[-42,-28],[7,14],[14,21]]];
- function date(mmdd){if(!mmdd)return null;const [m,d]=mmdd.split("-").map(Number);return new Date(2026,m-1,d)}
- function win(base,o){if(!base||!o)return "—";const a=new Date(base),b=new Date(base);a.setDate(a.getDate()+o[0]);b.setDate(b.getDate()+o[1]);const f=x=>x.toLocaleDateString([],{month:"short",day:"numeric"});return f(a)+"–"+f(b)}
- async function run(loc){const r=await fetch("/api/national-frost?lat="+loc.latitude+"&lon="+loc.longitude),x=await r.json();if(!r.ok)throw new Error(x.error||"Planting data unavailable");const c=x.climate_normals;if(!c?.dates?.spring_10?.mmdd&&!c?.dates?.spring_50?.mmdd)throw new Error("A usable NOAA freeze-probability station was not found near this location.");
-  const mmdd=c.dates.spring_10?.mmdd||c.dates.spring_50.mmdd,b=date(mmdd),label=c.dates.spring_10?.mmdd?"10% late-freeze date":"median last-freeze date";
-  document.getElementById("result").hidden=false;document.getElementById("answer").textContent="Planting calendar near "+N.label(loc);document.getElementById("base").textContent="Calendar anchor: "+b.toLocaleDateString([],{month:"long",day:"numeric"})+" ("+label+") · NOAA station "+c.name+".";
-  document.getElementById("crops").innerHTML=crops.map(r=>"<tr><td><strong>"+r[0]+"</strong></td><td>"+win(b,r[1])+"</td><td>"+win(b,r[2])+"</td><td>"+win(b,r[3])+"</td></tr>").join("");
-  document.getElementById("mi").hidden=loc.stateCode!=="MI";
+document.addEventListener("DOMContentLoaded",function(){
+ const N=window.NationalTools,form=document.getElementById("loc"),filter=document.getElementById("season-filter");
+ let model=null,baseDate=null,cropData=null,locationData=null;
+
+ function anchorDate(mmdd){
+   if(!mmdd)return null;const [m,d]=mmdd.split("-").map(Number);return new Date(new Date().getFullYear(),m-1,d,12,0,0);
  }
- N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
-});</script></main>
+ function addDays(date,days){if(!date||days==null)return null;const d=new Date(date);d.setDate(d.getDate()+Number(days));return d}
+ function fmt(date){return date?date.toLocaleDateString([],{month:"short",day:"numeric"}):"—"}
+ function dayDiff(a,b){return Math.round((a-b)/86400000)}
+ function cropDates(crop){
+   const setout=crop.setout_offset_days==null?null:addDays(baseDate,crop.setout_offset_days);
+   const indoor=setout&&crop.indoor_weeks!=null?addDays(setout,-7*crop.indoor_weeks):null;
+   const direct=crop.direct_sow_offset_days==null?null:addDays(baseDate,crop.direct_sow_offset_days);
+   return{indoor,setout,direct};
+ }
+ function statusFor(crop,dates){
+   const today=new Date();today.setHours(12,0,0,0);
+   const freeze=model?.freeze_verdict?.level;
+   if(crop.season==="warm"&&(freeze==="freeze"||freeze==="hard-freeze"))return{label:"Hold outdoors",detail:"Freeze is still in the NWS 7-day forecast.",className:"danger"};
+   const actions=[
+     dates.indoor&&{date:dates.indoor,label:"Start indoors"},
+     dates.direct&&{date:dates.direct,label:"Direct sow"},
+     dates.setout&&{date:dates.setout,label:"Set out"}
+   ].filter(Boolean).sort((a,b)=>a.date-b.date);
+   if(!actions.length)return{label:"Use crop guidance",detail:crop.note,className:""};
+   for(const action of actions){const diff=dayDiff(today,action.date);if(Math.abs(diff)<=7)return{label:action.label+" now",detail:crop.note,className:"good"}}
+   const future=actions.find(a=>a.date>today);
+   if(future)return{label:"Next: "+future.label,detail:fmt(future.date),className:""};
+   const latest=actions.at(-1);const past=dayDiff(today,latest.date);
+   if(past<=35)return{label:"Primary window is open",detail:crop.note,className:"good"};
+   return{label:"Primary spring window passed",detail:"Succession or fall timing may still apply.",className:""};
+ }
+ function render(){
+   if(!cropData||!baseDate||!model)return;
+   const season=filter.value;
+   const crops=cropData.crops.filter(c=>season==="all"||c.season===season);
+   const rows=crops.map(c=>{const dates=cropDates(c),s=statusFor(c,dates);return{c,dates,s}});
+   document.getElementById("crops").innerHTML=rows.map(({c,dates,s})=>"<tr><td><strong>"+N.esc(c.name)+"</strong><br><span class=\"small\">"+N.esc(c.frost_tolerance)+"</span></td><td>"+fmt(dates.indoor)+"</td><td>"+fmt(dates.setout)+"</td><td>"+fmt(dates.direct)+"</td><td><strong>"+N.esc(s.label)+"</strong><br><span class=\"small\">"+N.esc(s.detail)+"</span></td></tr>").join("");
+   const actionable=rows.filter(({s})=>/ now$|window is open|Hold outdoors/.test(s.label)).slice(0,6);
+   document.getElementById("now-actions").innerHTML=actionable.length?actionable.map(({c,s})=>"<div class=\"mini-card\"><span class=\"tool-kicker\">"+N.esc(c.season)+" season</span><strong>"+N.esc(c.name)+"</strong><span>"+N.esc(s.label)+"</span><small>"+N.esc(s.detail)+"</small></div>").join(""):"<p class=\"small\">No crop in this rule set lands within a primary action window today. Use the full table for what is coming next.</p>";
+ }
+ async function run(loc){
+   const [fr,crops]=await Promise.all([
+     fetch("/api/national-frost?lat="+loc.latitude+"&lon="+loc.longitude),
+     fetch("/data/national-planting-crops.json")
+   ]);
+   const x=await fr.json();if(!fr.ok)throw new Error(x.error||"Planting data unavailable");
+   cropData=await crops.json();model=x;locationData=loc;
+   const c=x.climate_normals;if(!c?.dates?.spring_10?.mmdd&&!c?.dates?.spring_50?.mmdd)throw new Error("A usable NOAA freeze-probability station was not found near this location.");
+   const mmdd=c.dates.spring_10?.mmdd||c.dates.spring_50.mmdd;baseDate=anchorDate(mmdd);
+   const label=c.dates.spring_10?.mmdd?"10% late-freeze date":"median last-freeze date";
+   document.getElementById("result").hidden=false;
+   document.getElementById("answer").textContent="Planting calendar near "+N.label(loc);
+   document.getElementById("base").textContent="Planning anchor: "+baseDate.toLocaleDateString([],{month:"long",day:"numeric"})+" ("+label+") · NOAA station "+c.name+" · "+(c.distance_miles==null?"distance unknown":c.distance_miles.toFixed(1)+" mi away")+" · station fit "+c.confidence+".";
+   const pill=document.getElementById("freeze-pill");pill.textContent=x.freeze_verdict?.label||"Live cold forecast unavailable";pill.className="pill "+((x.freeze_verdict?.level==="freeze"||x.freeze_verdict?.level==="hard-freeze")?"danger":"");
+   document.getElementById("mi").hidden=loc.stateCode!=="MI";render();
+ }
+ filter.addEventListener("change",render);
+ N.bind(form,run);
+ const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
+});
+</script>
+</main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Public data turned into clearer outdoor decisions, with source and uncertainty shown.</div></footer>
 <script src="/assets/national-tools.js"></script></body></html>
