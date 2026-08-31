@@ -1,6 +1,6 @@
 {
-  "version": "2.2.0",
-  "updated": "2026-08-30",
+  "version": "2.3.0",
+  "updated": "2026-08-31",
   "route": "/isle-royale-map/",
   "objective": "Build the most useful source-transparent Isle Royale planning map in the Chris Izworski tool network without pretending static cartography is authoritative GIS.",
   "valueFunction": {
@@ -64,7 +64,7 @@
     {
       "id": "planning-flow",
       "weight": 15,
-      "target": "The primary surface is a trip planner, not a GIS showcase: route planner before feature browsing; every route stop shows leg and cumulative distance; deletion is obvious from both stop list and route-marker popup; primary map controls expose only decision-useful layers (trails, camps, visitor/dock places, water/transport, maritime history, quiet/no-wake, relief). Original research-only science families remain provenance-cataloged but absent from planning controls. Undo/Redo must be action-aware: capture committed route state before each edit, restore geometry + mode + speed + hours/day + departure + Build/Explore state, label the next undo/redo action, dedupe no-op snapshots, and make compound campsite/day-end actions one history step. For paddle/motorboat mode, mileage is only valid after a zero-mapped-shoreline-crossing route resolves; each selected leg must be labeled on-map with its resolved water miles, and no straight fallback line may be drawn when water routing fails."
+      "target": "The primary surface is a canoe trip builder, not a GIS showcase: route planner before feature browsing; water points, qualified campgrounds, and designated NPS portages are selectable trip objects. A mapped portage is one logical route step with water-side entry/exit landings and NPS-published carry distance. Every resolved leg shows leg+cumulative distance and active travel time during construction; verified prefixes remain visible while the newest leg resolves. Camps can close days during construction and the next day continues from the same camp. Deletion/Undo/Redo are obvious and atomic for compound portage/day-end actions. Paddle/motorboat mileage is valid only after zero-shoreline-crossing routing resolves; no straight overland fallback is ever drawn."
     },
     {
       "id": "provenance",
@@ -122,7 +122,10 @@
     "Do not call trip handoff complete if saving uploads route state, sharing puts route data in the server-visible query string, restored trips trust stale closure/Boat-In flags, or GPX can export a temporary straight fallback before trail/water routing resolves.",
     "Do not call the planning surface usable if vegetation/change/fire controls reappear, if route stops lack leg+cumulative miles, if stop deletion depends on a tiny or hidden control, or if route planning is visually subordinate to feature browsing/prose.",
     "Do not call Undo usable if speed/day/departure changes snapshot post-change DOM values, one click creates multiple history steps, no-op edits consume Undo, or the buttons cannot tell the user what action will be undone/redone.",
-    "Do not call water routing complete if route simplification can shortcut across coastline, selected on-land endpoints are drawn into the water route, failed water routing falls back to a straight line, or mileage is shown before a zero-crossing route resolves."
+    "Do not call water routing complete if route simplification can shortcut across coastline, selected on-land endpoints are drawn into the water route, failed water routing falls back to a straight line, or mileage is shown before a zero-crossing route resolves.",
+    "Do not call canoe trip creation complete if a designated mapped portage cannot be selected directly as one logical route step with entry landing, carry, and exit landing.",
+    "Do not call canoe trip creation time-aware if the builder shows miles but withholds active paddle/portage travel time until after the trip is finished.",
+    "Do not expose internal portage landing coordinates as two independent user trip stops; the canoeist-facing stop list must present the carry as one atomic P# step."
   ],
   "initialBuildFit": {
     "distinctSearchIntent": 24,
@@ -134,5 +137,71 @@
     "total": 97,
     "threshold": 85,
     "decision": "PRIORITY BUILD"
+  },
+  "tripCreationValueFunction": {
+    "formula": "TC = .25C + .20P + .15F + .15D + .10E + .07R + .05T + .03H",
+    "objective": "Maximize the canoeist's ability to construct a realistic, editable, day-by-day Isle Royale trip directly on the map.",
+    "dimensions": {
+      "C": {
+        "name": "travelContinuity",
+        "weight": 25,
+        "question": "Does every trip step connect in the mode the canoeist will actually use: paddle on water, carry on a designated portage, then resume on water?"
+      },
+      "P": {
+        "name": "portageIntegration",
+        "weight": 20,
+        "question": "Can a designated portage be selected as one first-class trip step with entry landing, official carry distance, exit landing, carry workload and time?"
+      },
+      "F": {
+        "name": "immediateFeedback",
+        "weight": 15,
+        "question": "After every trip choice, are the verified line, leg distance, cumulative distance and active travel time visible without submitting the whole route?"
+      },
+      "D": {
+        "name": "dayByDayPlanning",
+        "weight": 15,
+        "question": "Can the canoeist build Day 1, end at a qualified camp, continue Day 2 from that camp, and see day-specific distance/time while building?"
+      },
+      "E": {
+        "name": "editabilityRecovery",
+        "weight": 10,
+        "question": "Can points, portages and day ends be removed, reversed, undone, redone and reshaped without rebuilding the trip from scratch?"
+      },
+      "R": {
+        "name": "effortRealism",
+        "weight": 7,
+        "question": "Do travel estimates separate paddling, portage walking, single/double/triple carry workload, terrain effects and load/unload time?"
+      },
+      "T": {
+        "name": "truthSafety",
+        "weight": 5,
+        "question": "Are water-only routing, official portage identity, current camp truth and uncertainty preserved instead of inventing shortcuts or landings?"
+      },
+      "H": {
+        "name": "handoffReuse",
+        "weight": 3,
+        "question": "Can the finished trip be saved, restored, shared and exported without losing day ends or portage identity?"
+      }
+    },
+    "releaseTarget": 92,
+    "stretchTarget": 97,
+    "principles": [
+      "The route is the product: trip construction happens continuously on the map.",
+      "Plan by realistic active travel time as well as distance.",
+      "Portages are transitions between water networks, not decorative trail overlays.",
+      "Day boundaries are chosen during route construction, not imposed after the whole route is submitted.",
+      "Every edit preserves valid work and gives immediate feedback.",
+      "Detailed trip information follows the route the user actually built."
+    ],
+    "hardGates": [
+      "A mapped designated portage must be selectable directly during Build mode as one logical trip step.",
+      "A canoe portage trip step must include a water-side entry landing, official portage corridor/distance, and water-side exit landing; never require the user to invent land-crossing pins.",
+      "Adding a new choice must preserve all previously verified route geometry, mileage and travel time while only the newest leg resolves.",
+      "A portage must remove and undo atomically rather than leaving a stranded entry or exit point.",
+      "A qualified campground must be able to close the current day while route building remains active for the next day.",
+      "Live day and trip feedback must include active travel time, not distance alone.",
+      "Saved/restored routes must retain portage group identity, direction and day-end state.",
+      "Focus Map must remain a complete trip-building surface."
+    ]
   }
 }

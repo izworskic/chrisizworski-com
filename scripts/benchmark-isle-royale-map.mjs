@@ -63,7 +63,7 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /Open this coordinate on the source map/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
 
-const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-focus-live-days-1/.test(html)
+const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-canoe-trip-graph-1/.test(html)
   && !/isle-royale-map\.js\?v=20260830-19/.test(html)
   && /"source": "\/assets\/isle-royale-map\.js"/.test(vercel)
   && /"key": "Cache-Control"[\s\S]{0,120}"value": "no-store, max-age=0"/.test(vercel)
@@ -247,6 +247,29 @@ const selectableOfficialPortageRuntime = /data-layer="official-portage" checked/
   && /isle_royale_portage_open/.test(js)
   && /isle_royale_portage_add/.test(js);
 
+const tripCreationRuntime = spec.tripCreationValueFunction?.releaseTarget === 92
+  && spec.tripCreationValueFunction?.stretchTarget === 97
+  && spec.tripCreationValueFunction?.formula === 'TC = .25C + .20P + .15F + .15D + .10E + .07R + .05T + .03H'
+  && Object.values(spec.tripCreationValueFunction?.dimensions||{}).reduce((sum,item)=>sum+(Number(item.weight)||0),0) === 100
+  && /function officialPortageLandingPair/.test(js)
+  && /function selectedOfficialPortageLeg/.test(js)
+  && /async function addOfficialPortageToTrip/.test(js)
+  && /function removePortageGroup/.test(js)
+  && /portageGroupId:groupId/.test(js)
+  && /portageRole:role/.test(js)
+  && /kind:'official-portage-landing'/.test(js)
+  && /if\(route\.adding\) \{[\s\S]{0,220}addOfficialPortageToTrip\(portage\.id\)/.test(js)
+  && /draggable:point\.kind!=='official-portage-landing'/.test(js)
+  && /Designated NPS portage · one canoe trip step/.test(js)
+  && /function logicalRoutePointCount/.test(js)
+  && /function verifiedTripActiveHours/.test(js)
+  && /function currentDayVerifiedHours/.test(js)
+  && /active travel/.test(js)
+  && /portageGroupId:cleanText\(point\.portageGroupId/.test(js)
+  && /water → portage → water → camp/.test(html)
+  && /function landingNear/.test(waterJs)
+  && /return \{route,landingNear,analyze/.test(waterJs);
+
 const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js)
   && /function resolveWaterRouteAsync/.test(js)
   && /water-aware/.test(js)
@@ -274,6 +297,8 @@ const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js
   && /No overland fallback is drawn/.test(js)
   && !/Draft route · straight between selected points while mapped routing verifies/.test(js)
   && /function routeIsResolved/.test(js)
+  && /function landingNear/.test(waterJs)
+  && /return \{route,landingNear,analyze/.test(waterJs)
   && /route-distance-badge/.test(js)
   && /Water · .*mi/.test(js)
   && /weatherSamples/.test(waterJs)
@@ -386,6 +411,9 @@ const tripIntelligenceRuntime = /id="route-paddle-pace"/.test(html)
   && /2\*trips-1/.test(js)
   && /function portageTerrainFactor/.test(js)
   && /function tripSegmentMetrics/.test(js)
+  && /function canoeLegActiveHours/.test(js)
+  && /function verifiedTripActiveHours/.test(js)
+  && /function currentDayVerifiedHours/.test(js)
   && /walkingHours\+transitionHours/.test(js)
   && /function tripEffortSummary/.test(js)
   && /function tripDays/.test(js)
@@ -414,6 +442,9 @@ const tripPersistenceRuntime = /id="route-save"/.test(html)
   && /window\.location\.hash\.startsWith\('#trip='\)/.test(js)
   && /sourceBackedBoatIn:false,liveAlert:false/.test(js)
   && /function exportRouteGpx/.test(js)
+  && /portageGroupId:cleanText\(point\.portageGroupId/.test(js)
+  && /portageRole:\['entry','exit'\]\.includes/.test(js)
+  && /logicalRoutePointCount\(normalized\.points\)/.test(js)
   && /application\/gpx\+xml/.test(js)
   && /temporary fallback sketches are not exported/.test(js);
 
@@ -466,7 +497,7 @@ const referenceShelfComplete = /Official maps from the original research/.test(h
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && popupReadabilityRuntime && popupDragRuntime && campgroundDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && tripIntelligenceRuntime && routeEditingRuntime, 'map-first route planning with paddle/portage leg accounting, leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && popupReadabilityRuntime && popupDragRuntime && campgroundDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && tripIntelligenceRuntime && routeEditingRuntime && tripCreationRuntime, 'canoe-first trip construction with water/portage continuity, atomic P# trip steps, live distance/time, day ends, editing, persistence and water intelligence');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -524,6 +555,7 @@ if (!/speed:Number\(route\.speed\)\|\|3/.test(js) || !/hours:Number\(route\.hour
 if (!/button\.textContent=undoLabel/.test(js) || !/last\?\.fingerprint===fingerprint/.test(js)) hardFailures.push('Undo is missing action labels or no-op history deduplication');
 if (!tripPersistenceRuntime) hardFailures.push('trip persistence/handoff is missing local-only save, share-fragment restore, or resolved-route GPX export safeguards');
 if (!routeEditingRuntime) hardFailures.push('route planning is missing leg/cumulative distances or obvious stop deletion from the map/list');
+if (!tripCreationRuntime) hardFailures.push('canoe trip creation is missing first-class portage transitions, live travel-time feedback, logical trip-step persistence, or water-side landing resolution');
 if (!tripIntelligenceRuntime) hardFailures.push('trip intelligence is missing simple researched pace presets, carry math, day planning, named saves, autosave recovery, or portable trip-plan export');
 if (!/id="route-finish-day"/.test(html) || !/function finishCurrentDay/.test(js) || !/id="route-finish-build"/.test(html) || !/function finishRouteBuild/.test(js) || !/route\.reviewing=true/.test(js)) hardFailures.push('route builder is missing day-by-day completion or final trip review controls');
 if (!/function crossingCount/.test(waterJs) || !/Water route failed final coastline validation/.test(waterJs) || !/route\.smartState=legs\.length\?'water-partial':'water-fallback'/.test(js)) hardFailures.push('water routing can still promote an unsafe route or discard the verified prefix when a later leg fails');
@@ -534,6 +566,7 @@ if (!reliefRuntime) hardFailures.push('keyless USGS relief runtime missing');
 if (!referenceShelfComplete) hardFailures.push('official/reference map shelf incomplete');
 
 console.log(`Isle Royale map benchmark: ${score}/100 (release target ${spec.valueFunction.releaseTarget})`);
+console.log(`Canoe trip creation north star: ${tripCreationRuntime ? 'PASS' : 'FAIL'} (target ${spec.tripCreationValueFunction?.releaseTarget||'n/a'})`);
 for (const c of checks) console.log(`${c.ok ? 'PASS' : 'FAIL'} ${String(c.weight).padStart(2)} ${c.id} — ${c.evidence}`);
 if (hardFailures.length) console.error('HARD GATES:', hardFailures.join('; '));
 
