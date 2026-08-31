@@ -762,7 +762,8 @@ test('smart route planner snaps hiking to mapped trails and keeps water routes e
   assert.match(html, /id="route-smart-status"/);
   assert.match(html, /id="route-reverse"/);
   assert.match(html, /Build point to point/);
-  assert.match(html, /click a brown P# portage/i);
+  assert.match(html, /brown P# portage/i);
+  assert.match(html, /Route through this portage/);
   assert.match(js, /const trailGraph = \{/);
   assert.match(js, /function registerTrailGeometry/);
   assert.match(js, /function shortestTrailPath/);
