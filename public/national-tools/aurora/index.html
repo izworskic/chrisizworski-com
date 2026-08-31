@@ -18,6 +18,14 @@
   <div class="result-head"><span id="level" class="pill"></span><span id="confidence" class="pill"></span></div>
   <div id="answer" class="answer"></div><p id="detail"></p>
   <div id="reasons" class="action-grid"></div>
+  <div class="aurora-oval-panel">
+    <div class="aurora-oval-copy"><span class="tool-kicker">NOAA 30–90 minute nowcast</span><h2>Where the auroral oval is now</h2><p>The same NOAA auroral-oval view used on the Michigan tool, plus the modeled OVATION signal at your searched location.</p>
+      <div class="oval-local-signal"><strong id="oval-local-value">—</strong><span>local OVATION grid signal · 0–100 modeled intensity, not a sighting probability</span></div>
+      <p class="small">Brighter areas on NOAA’s map indicate a stronger modeled aurora signal. Clouds, darkness, light pollution and horizon still determine whether you can actually see it.</p>
+      <a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener">Open the official NOAA aurora forecast ↗</a>
+    </div>
+    <div class="aurora-oval-image"><img id="national-oval-img" alt="NOAA northern hemisphere auroral oval forecast" loading="lazy"></div>
+  </div>
   <div class="decision-panel">
     <h2>Best weather window after dark</h2>
     <div class="metrics">
@@ -42,7 +50,9 @@
 <script>
 document.addEventListener("DOMContentLoaded",function(){
  const N=window.NationalTools,form=document.getElementById("loc");
- function timeRange(w,tz){if(!w)return "Unavailable";return N.fmtInZone(w.start_time,tz,{hour:"numeric"})+"–"+N.fmtInZone(w.end_time,tz,{hour:"numeric"})}
+ function fmtZone(value,tz,options){if(typeof N.fmtInZone==="function")return N.fmtInZone(value,tz,options);if(!value)return "Unknown";const d=new Date(value);if(Number.isNaN(d.getTime()))return String(value);try{return d.toLocaleString([],{...(options||{}),timeZone:tz||undefined})}catch(_){return d.toLocaleString([],options||{})}}
+ function timeRange(w,tz){if(!w)return "Unavailable";return fmtZone(w.start_time,tz,{hour:"numeric"})+"–"+fmtZone(w.end_time,tz,{hour:"numeric"})}
+ function refreshOval(){const img=document.getElementById("national-oval-img");if(img)img.src="https://services.swpc.noaa.gov/images/aurora-forecast-northern-hemisphere.jpg?t="+Math.floor(Date.now()/300000)}
  async function run(loc){
   const r=await fetch("/api/national-aurora?lat="+loc.latitude+"&lon="+loc.longitude),d=await r.json();if(!r.ok)throw new Error(d.error||"Aurora data unavailable");
   document.getElementById("result").hidden=false;
@@ -55,16 +65,20 @@ document.addEventListener("DOMContentLoaded",function(){
   document.getElementById("window").textContent=timeRange(w,d.location?.timeZone||loc.timeZone);
   document.getElementById("cloud").textContent=w?.average_cloud_percent==null?"Unknown":Math.round(w.average_cloud_percent)+"%";
   document.getElementById("moon").textContent=d.moon?.illumination_percent==null?"Unknown":Math.round(d.moon.illumination_percent)+"%";
-  document.getElementById("ovation").textContent=d.local_signal?.ovation_value==null?"Unavailable":Math.round(d.local_signal.ovation_value);
+  const localOvation=d.local_signal?.ovation_value;
+  document.getElementById("ovation").textContent=localOvation==null?"Unavailable":Math.round(localOvation);
+  document.getElementById("oval-local-value").textContent=localOvation==null?"Unavailable":Math.round(localOvation)+"/100";
+  refreshOval();
   document.getElementById("kp").textContent=d.geomagnetic?.peak_24h_kp==null?"Unknown":d.geomagnetic.peak_24h_kp;
-  document.getElementById("signal-time").textContent=d.local_signal?.ovation_forecast_at?N.fmtInZone(d.local_signal.ovation_forecast_at,d.location?.timeZone||loc.timeZone,{hour:"numeric",minute:"2-digit"}):"Unknown";
+  document.getElementById("signal-time").textContent=d.local_signal?.ovation_forecast_at?fmtZone(d.local_signal.ovation_forecast_at,d.location?.timeZone||loc.timeZone,{hour:"numeric",minute:"2-digit"}):"Unknown";
   const stale=(d.sources||[]).filter(s=>s.stale===true).map(s=>s.source_name);
   document.getElementById("updated").textContent="Retrieved "+N.fmtDate(d.retrieved_at)+(d.degraded?" · one or more upstream feeds are degraded":"")+(stale.length?" · stale: "+stale.join(", "):"");
   document.getElementById("mi").hidden=loc.stateCode!=="MI";
  }
+ refreshOval();setInterval(refreshOval,5*60*1000);
  N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
 });
 </script>
 </main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Built around public scientific and government data, with sources shown where the answer is derived.</div></footer>
-<script src="/assets/national-tools.js"></script></body></html>
+<script src="/assets/national-tools.js?v=20260831-aurora-hotfix1"></script></body></html>
