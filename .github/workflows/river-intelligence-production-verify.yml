@@ -1,0 +1,56 @@
+name: River Intelligence production verify
+on:
+  push:
+    branches:
+      - debug/river-intelligence-production-verify
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Verify live River Intelligence production
+        shell: bash
+        run: |
+          node <<'NODE'
+          async function get(url){
+            const started=Date.now();
+            const r=await fetch(url,{headers:{'user-agent':'ChrisIzworskiRiverIntelligenceProductionVerify/1.0','accept':'application/json,text/html'}});
+            const text=await r.text();
+            console.log('FETCH',url);
+            console.log('STATUS',r.status,'ELAPSED_MS',Date.now()-started,'CTYPE',r.headers.get('content-type'),'BYTES',text.length);
+            if(!r.ok)throw new Error('HTTP '+r.status+' '+text.slice(0,500));
+            return {r,text};
+          }
+          const lat=44.276408,lon=-84.238613,stamp=Date.now();
+          const core=await get(`https://chrisizworski.com/api/national-rivers?lat=${lat}&lon=${lon}&verify=${stamp}`);
+          const d=JSON.parse(core.text);
+          if(!Array.isArray(d.gauges)||!d.gauges.length)throw new Error('No gauges');
+          const g=d.gauges[0];
+          for(const field of ['trend_percent_24h','gage_height_change_24h_ft','sensors','sensor_availability']){
+            if(!(field in g))throw new Error('Missing core field '+field);
+          }
+          for(const key of ['water_temperature','turbidity','dissolved_oxygen','specific_conductance','ph']){
+            if(!(key in g.sensors))throw new Error('Missing sensor contract '+key);
+          }
+          if(!/No gauge reading or derived lens can determine/.test(d.disclaimer||''))throw new Error('Safety disclaimer missing');
+          console.log('CORE_SUMMARY',JSON.stringify({
+            gauge:g.name,id:g.id,flow_cfs:g.discharge_cfs,trend_6h:g.trend_percent_6h,trend_24h:g.trend_percent_24h,
+            stage:g.gage_height_ft,stage_change_24h:g.gage_height_change_24h_ft,
+            sensors:g.sensor_availability,age_minutes:g.age_minutes
+          }));
+          const ids=d.gauges.slice(0,6).map(x=>x.id).join(',');
+          const ctx=await get(`https://chrisizworski.com/api/national-river-context?lat=${lat}&lon=${lon}&sites=${encodeURIComponent(ids)}&verify=${stamp}`);
+          const c=JSON.parse(ctx.text);
+          if(!('weather' in c))throw new Error('Context weather contract missing');
+          console.log('CONTEXT_SUMMARY',JSON.stringify({
+            degraded:c.degraded,
+            weather_24h:c.weather?.next_24h||null,
+            historical_sites:Object.keys(c.historical||{}).length,
+            nwps_matches:Object.values(c.context||{}).filter(x=>x&&x.nwps).length
+          }));
+          const page=await get(`https://chrisizworski.com/national-tools/rivers/?verify=${stamp}`);
+          for(const phrase of ['What changed?','What’s next?','No combined safety score','Paddling context','Fishing context','Swimming context','Ecology context','River trip planning']){
+            if(!page.text.includes(phrase))throw new Error('Production page missing '+phrase);
+          }
+          console.log('PAGE_SURFACE_OK true');
+          NODE
