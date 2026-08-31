@@ -104,6 +104,67 @@
 
   let activeReadablePopup=null;
   let popupReadabilityTimer=null;
+  let popupUserPositioned=false;
+
+  function ensurePopupDragHandle(popup) {
+    const popupEl=popup?.getElement?.();
+    const detail=popupEl?.querySelector?.('.popup-detail');
+    if(!detail)return null;
+    let handle=detail.querySelector('.popup-drag-handle');
+    if(handle)return handle;
+    handle=document.createElement('div');
+    handle.className='popup-drag-handle';
+    handle.setAttribute('role','button');
+    handle.setAttribute('tabindex','0');
+    handle.setAttribute('aria-label','Drag this card to reposition it on the map');
+    const grip=document.createElement('span');
+    grip.className='popup-drag-grip';
+    grip.setAttribute('aria-hidden','true');
+    const cue=document.createElement('span');
+    cue.className='popup-drag-cue';
+    cue.textContent='Drag card to reposition map';
+    handle.append(grip,cue);
+    detail.prepend(handle);
+    return handle;
+  }
+
+  function wirePopupDrag(popup) {
+    const handle=ensurePopupDragHandle(popup);
+    if(!handle||handle.dataset.dragReady==='true')return;
+    handle.dataset.dragReady='true';
+    let pointerId=null;
+    let lastX=0,lastY=0;
+    const end=event=>{
+      if(pointerId==null)return;
+      try{handle.releasePointerCapture?.(pointerId);}catch(_){}
+      pointerId=null;
+      handle.classList.remove('dragging');
+      if(event){event.preventDefault();event.stopPropagation();}
+      emitEvent('isle_royale_popup_drag',{mode:route?.mode||'unknown'});
+    };
+    handle.addEventListener('pointerdown',event=>{
+      if(event.button!=null&&event.button!==0)return;
+      window.clearTimeout(popupReadabilityTimer);
+      popupUserPositioned=true;
+      pointerId=event.pointerId;
+      lastX=event.clientX;lastY=event.clientY;
+      try{handle.setPointerCapture?.(pointerId);}catch(_){}
+      handle.classList.add('dragging');
+      event.preventDefault();
+      event.stopPropagation();
+    });
+    handle.addEventListener('pointermove',event=>{
+      if(pointerId==null||event.pointerId!==pointerId)return;
+      const dx=event.clientX-lastX,dy=event.clientY-lastY;
+      lastX=event.clientX;lastY=event.clientY;
+      if(Math.abs(dx)+Math.abs(dy)>.5)map.panBy([-dx,-dy],{animate:false,noMoveStart:true});
+      event.preventDefault();
+      event.stopPropagation();
+    });
+    handle.addEventListener('pointerup',end);
+    handle.addEventListener('pointercancel',end);
+    handle.addEventListener('lostpointercapture',()=>{pointerId=null;handle.classList.remove('dragging');});
+  }
 
   function visibleMapOverlay(selector) {
     const el=document.querySelector(selector);
@@ -169,8 +230,8 @@
     }
   }
 
-  function schedulePopupReadability(popup) {
-    if(!popup)return;
+  function schedulePopupReadability(popup,{force=false}={}) {
+    if(!popup||(!force&&popupUserPositioned))return;
     window.clearTimeout(popupReadabilityTimer);
     requestAnimationFrame(()=>requestAnimationFrame(()=>movePopupFullyIntoView(popup)));
     popupReadabilityTimer=window.setTimeout(()=>movePopupFullyIntoView(popup),260);
@@ -181,15 +242,18 @@
     const el=popup?.getElement?.();
     if(!el?.classList.contains('isle-detail-popup'))return;
     activeReadablePopup=popup;
+    popupUserPositioned=false;
     document.body.classList.add('detail-popup-open');
+    wirePopupDrag(popup);
     schedulePopupReadability(popup);
     emitEvent('isle_royale_popup_readable',{mode:route?.mode||'unknown'});
   });
   map.on('popupclose',event=>{
     if(activeReadablePopup===event.popup)activeReadablePopup=null;
+    popupUserPositioned=false;
     document.body.classList.remove('detail-popup-open');
   });
-  window.addEventListener('resize',()=>{if(activeReadablePopup)schedulePopupReadability(activeReadablePopup);},{passive:true});
+  window.addEventListener('resize',()=>{if(activeReadablePopup)schedulePopupReadability(activeReadablePopup,{force:true});},{passive:true});
 
   map.createPane('reliefPane');
   map.getPane('reliefPane').style.zIndex = '250';
@@ -313,9 +377,16 @@
     error:'',
     visuals:new Map()
   };
+  const campSiteIdentifiers = {
+    state:'idle',
+    promise:null,
+    items:[],
+    error:''
+  };
   const sourceStatus = {arcgis:'starting', osm:'not loaded', fallback:false};
   const operational = {
     boaterByName: new Map(),
+    campgroundByName: new Map(),
     alerts: [],
     shipwrecks: [],
     shipwrecksAdded: false,
@@ -603,6 +674,13 @@
     return null;
   }
 
+  function findCampgroundProfile(name) {
+    for (const alias of placeAliases(name)) {
+      if (operational.campgroundByName.has(alias)) return operational.campgroundByName.get(alias);
+    }
+    return null;
+  }
+
   function findOperationalAlert(name) {
     const aliases = placeAliases(name);
     for (const alert of operational.alerts) {
@@ -617,6 +695,7 @@
   function enrichRecord(record) {
     if (!record) return;
     record.boater = record.category === 'campground' ? findBoaterRecord(record.name) : null;
+    record.campgroundProfile = record.category === 'campground' ? findCampgroundProfile(record.name) : null;
     record.liveAlert = findOperationalAlert(record.name);
     if(record.boater&&record.layer) {
       try {
@@ -630,6 +709,77 @@
         record.layer.setStyle({color:'#8c3e23', weight:4, fillColor:'#b25b35', fillOpacity:.9});
       } catch (_) {}
     }
+  }
+
+
+  function campgroundSiteIdentifierLabel(props={}) {
+    const raw=cleanText(props.name||props.ref||props.local_ref||'');
+    if(!raw)return '';
+    const match=raw.match(/(?:#\s*|\b)(\d{1,2}[A-Za-z]?)\b/);
+    if(!match)return '';
+    const id=match[1].toUpperCase();
+    const hay=(raw+' '+cleanText(props.site_type||'')+' '+cleanText(props.group_only||'')).toLowerCase();
+    const amenity=cleanText(props.amenity||'').toLowerCase();
+    const type=/group/.test(hay)?'Group Site':/tent/.test(hay)?'Tent Site':(amenity==='shelter'||/shelter/.test(hay))?'Shelter':'Site';
+    return type+' #'+id;
+  }
+
+  function campgroundSiteIdentifierNumber(label='') {
+    const match=String(label).match(/#(\d+)([A-Z]?)/i);
+    return match ? Number(match[1])*10+(match[2]?match[2].toUpperCase().charCodeAt(0)-64:0)/10 : 9999;
+  }
+
+  function campSiteIdentifiersFor(record) {
+    if(record?.category!=='campground'||record.supplemental||!record.latlng||campSiteIdentifiers.state!=='ready')return [];
+    const camps=featureIndex.filter(item=>item.category==='campground'&&!item.supplemental&&item.latlng);
+    return campSiteIdentifiers.items.filter(item=>{
+      const distance=distanceMiles(record.latlng,item);
+      if(distance>.65)return false;
+      let nearest=Infinity;
+      for(const camp of camps)nearest=Math.min(nearest,distanceMiles(camp.latlng,item));
+      return distance<=nearest+.06;
+    }).sort((a,b)=>{
+      const typeOrder={'Shelter':0,'Group Site':1,'Tent Site':2,'Site':3};
+      const ta=String(a.label).replace(/\s+#.*$/,'');
+      const tb=String(b.label).replace(/\s+#.*$/,'');
+      return (typeOrder[ta]??9)-(typeOrder[tb]??9)||campgroundSiteIdentifierNumber(a.label)-campgroundSiteIdentifierNumber(b.label)||a.label.localeCompare(b.label);
+    }).slice(0,40);
+  }
+
+  function appendCampSiteIdentifiers(wrap,record) {
+    const identifiers=campSiteIdentifiersFor(record);
+    if(!identifiers.length)return;
+    const section=document.createElement('div');
+    section.className='popup-site-identifiers';
+    const heading=document.createElement('div');
+    heading.className='popup-related-title';
+    heading.textContent='Numbered sites & shelters';
+    const note=document.createElement('p');
+    note.className='popup-site-note';
+    note.textContent='Supplemental mapped identifiers near this NPS campground. This may not be a complete site inventory; verify posted numbers on arrival.';
+    const chips=document.createElement('div');
+    chips.className='popup-site-chips';
+    for(const item of identifiers) {
+      const chip=document.createElement('button');
+      chip.type='button';
+      chip.className='popup-site-chip';
+      chip.textContent=item.label;
+      chip.title='Center this mapped '+item.label.toLowerCase();
+      chip.addEventListener('click',event=>{
+        event.preventDefault();
+        event.stopPropagation();
+        map.closePopup();
+        map.flyTo([item.lat,item.lng],Math.max(map.getZoom(),16));
+        status(item.label+' centered. Identifier is supplemental mapped data; verify campground signage.');
+        emitEvent('isle_royale_campsite_identifier_open',{site_type:item.type||'site'});
+      });
+      chips.appendChild(chip);
+    }
+    const source=document.createElement('div');
+    source.className='popup-source';
+    source.textContent='Site/shelter identifiers: OpenStreetMap contributors (supplemental). Campground totals and operating facts above remain NPS-sourced.';
+    section.append(heading,note,chips,source);
+    wrap.appendChild(section);
   }
 
   function addPopupFact(container, label, value) {
@@ -773,16 +923,22 @@
     }
     for (const fact of collectFeatureFacts(record)) addPopupFact(facts, fact.label, fact.value);
 
-    if (record.boater) {
-      addPopupFact(facts, 'Dock depth', record.boater.dock_depth);
-      addPopupFact(facts, 'Shelters', record.boater.shelters);
-      addPopupFact(facts, 'Tent sites', record.boater.tent_sites);
-      addPopupFact(facts, 'Food lockers', record.boater.food_storage_lockers);
-      addPopupFact(facts, 'Stay limit', record.boater.consecutive_night_limit);
-      addPopupFact(facts, 'Generator use', record.boater.onboard_generator_use);
-      addPopupFact(facts, 'Fire ring / grill', record.boater.fire_ring_grill);
+    if (record.category==='campground') {
+      const profile=record.campgroundProfile||{};
+      const boater=record.boater||{};
+      addPopupFact(facts, 'Total sites', profile.total_sites);
+      addPopupFact(facts, 'Shelters', profile.shelters ?? boater.shelters);
+      addPopupFact(facts, 'Tent sites', profile.tent_sites ?? boater.tent_sites);
+      addPopupFact(facts, 'Group sites', profile.group_sites);
+      addPopupFact(facts, 'Stay limit', profile.stay_limit || boater.consecutive_night_limit);
+      addPopupFact(facts, 'Access', profile.access);
+      addPopupFact(facts, 'Dock depth', profile.dock_depth || boater.dock_depth);
+      addPopupFact(facts, 'Food lockers', boater.food_storage_lockers);
+      addPopupFact(facts, 'Generator use', boater.onboard_generator_use);
+      addPopupFact(facts, 'Fire ring / grill', boater.fire_ring_grill);
     }
     if (facts.childElementCount) wrap.appendChild(facts);
+    appendCampSiteIdentifiers(wrap,record);
 
     if (record.latlng && Number.isFinite(record.latlng.lat) && Number.isFinite(record.latlng.lng)) {
       const routeAction = document.createElement('button');
@@ -847,7 +1003,8 @@
     source.textContent = record.supplemental
       ? `Supplemental data source: ${record.sourceLabel}. This is community-mapped context, not an NPS operational source.`
       : `Map source: ${record.sourceLabel}. Geometry status: ${record.sourceKind}.`;
-    if (record.boater) source.textContent += ' Campground facts: NPS Boat-In Campgrounds dataset, page updated June 23, 2026.';
+    if (record.campgroundProfile) source.textContent += ' Campground capacity/access facts: NPS campground profile pages.';
+    else if (record.boater) source.textContent += ' Campground facts: NPS Boat-In Campgrounds dataset, page updated June 23, 2026.';
     if (record.liveAlert) source.textContent += ' Closure signal: current NPS conditions feed fetched through this site.';
     wrap.appendChild(source);
     return wrap;
@@ -1110,11 +1267,55 @@
     renderFeatureList();
   }
 
+
+  async function loadCampSiteIdentifiers() {
+    if(campSiteIdentifiers.state==='ready')return campSiteIdentifiers;
+    if(campSiteIdentifiers.promise)return campSiteIdentifiers.promise;
+    campSiteIdentifiers.state='loading';
+    campSiteIdentifiers.promise=(async()=>{
+      const q='[out:json][timeout:25];(nwr["amenity"="shelter"](47.79,-89.36,48.33,-88.18);nwr["tourism"~"camp_site|camp_pitch"](47.79,-89.36,48.33,-88.18););out center tags;';
+      try {
+        const data=await fetchJSON(CONFIG.overpass+'?data='+encodeURIComponent(q),26000);
+        const items=[];
+        const seen=new Set();
+        for(const el of data.elements||[]) {
+          const tags=el.tags||{};
+          const label=campgroundSiteIdentifierLabel(tags);
+          if(!label)continue;
+          const lat=Number(el.lat??el.center?.lat),lng=Number(el.lon??el.center?.lon);
+          if(!Number.isFinite(lat)||!Number.isFinite(lng))continue;
+          const key=(el.type||'node')+'/'+el.id;
+          if(seen.has(key))continue;
+          seen.add(key);
+          items.push({
+            id:key,label,lat,lng,
+            type:label.replace(/\s+#.*$/,''),
+            source:'OpenStreetMap contributors'
+          });
+        }
+        campSiteIdentifiers.items=items;
+        campSiteIdentifiers.state='ready';
+        campSiteIdentifiers.error='';
+        emitEvent('isle_royale_campsite_identifiers',{mapped_identifiers:items.length});
+        return campSiteIdentifiers;
+      } catch(error) {
+        campSiteIdentifiers.items=[];
+        campSiteIdentifiers.state='error';
+        campSiteIdentifiers.error=cleanText(error?.message||'site identifiers unavailable');
+        return campSiteIdentifiers;
+      } finally {
+        campSiteIdentifiers.promise=null;
+      }
+    })();
+    return campSiteIdentifiers.promise;
+  }
+
   function supplementalFeatureType(props={}) {
     const tourism=cleanText(props.tourism||'').toLowerCase();
     const amenity=cleanText(props.amenity||'').toLowerCase();
     const manMade=cleanText(props.man_made||'').toLowerCase();
     const information=cleanText(props.information||'').toLowerCase();
+    if(tourism==='camp_pitch')return 'Numbered campsite / pitch';
     if(tourism==='camp_site')return 'Campsite';
     if(tourism==='viewpoint')return 'Viewpoint';
     if(tourism==='information'||information)return 'Visitor information';
@@ -1132,7 +1333,8 @@
     const lat = el.lat ?? (el.center && el.center.lat);
     const lon = el.lon ?? (el.center && el.center.lon);
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
-    return {type:'Feature',geometry:{type:'Point',coordinates:[lon,lat]},properties:{...tags, osm_id:`${el.type}/${el.id}`}};
+    const siteLabel=campgroundSiteIdentifierLabel(tags);
+    return {type:'Feature',geometry:{type:'Point',coordinates:[lon,lat]},properties:{...tags,...(siteLabel?{name:siteLabel}:{}), osm_id:`${el.type}/${el.id}`}};
   }
 
   function setOsmContextVisible(visible) {
@@ -1164,7 +1366,7 @@
     btn.disabled = true;
     btn.textContent = 'Loading supplemental data…';
     status('Adding supplemental visitor features…');
-    const q = `[out:json][timeout:25];(nwr["tourism"~"camp_site|viewpoint|information|museum"](47.79,-89.36,48.33,-88.18);nwr["amenity"~"shelter|toilets|drinking_water"](47.79,-89.36,48.33,-88.18);nwr["man_made"="lighthouse"](47.79,-89.36,48.33,-88.18);nwr["man_made"="pier"](47.79,-89.36,48.33,-88.18););out center tags;`;
+    const q = `[out:json][timeout:25];(nwr["tourism"~"camp_site|camp_pitch|viewpoint|information|museum"](47.79,-89.36,48.33,-88.18);nwr["amenity"~"shelter|toilets|drinking_water"](47.79,-89.36,48.33,-88.18);nwr["man_made"="lighthouse"](47.79,-89.36,48.33,-88.18);nwr["man_made"="pier"](47.79,-89.36,48.33,-88.18););out center tags;`;
     try {
       const url = `${CONFIG.overpass}?data=${encodeURIComponent(q)}`;
       const data = await fetchJSON(url, 26000);
@@ -1205,6 +1407,7 @@
 
     const conditionsAvailable = Boolean(operational.sources.current_conditions?.available);
     const boaterAvailable = Boolean(operational.sources.boater_campgrounds?.available);
+    const campgroundProfilesAvailable = Boolean(operational.sources.campground_profiles?.available);
     const shipwreckAvailable = Boolean(operational.sources.shipwreck_buoys?.available);
     const alertCount = operational.alerts.length;
 
@@ -1250,6 +1453,7 @@
     data.textContent = boaterAvailable
       ? `${boaterCount} NPS boat-in campground records available for popup enrichment${fetched ? ` · checked ${fetched}` : ''}. Page data updated June 23, 2026.`
       : `Boat-in campground enrichment unavailable${fetched ? ` · checked ${fetched}` : ''}.`;
+    if (campgroundProfilesAvailable) data.textContent += ` ${operational.campgroundByName.size} normalized NPS campground-name aliases loaded for campground capacity cards.`;
     if (shipwreckAvailable) data.textContent += ` ${wreckCount} NPS shipwreck/dive buoy record${wreckCount === 1 ? '' : 's'} available for the maritime layer.`;
     els.liveStatus.appendChild(data);
 
@@ -1338,6 +1542,10 @@
       for (const campground of data.boater_campgrounds || []) {
         for (const alias of placeAliases(campground.name)) operational.boaterByName.set(alias, campground);
       }
+      operational.campgroundByName.clear();
+      for (const campground of data.campground_profiles || []) {
+        for (const alias of placeAliases(campground.name)) operational.campgroundByName.set(alias, campground);
+      }
       operational.alerts = Array.isArray(data.current_alerts) ? data.current_alerts : [];
       operational.shipwrecks = Array.isArray(data.shipwrecks) ? data.shipwrecks : [];
       operational.fetchedAt = data.fetched_at || null;
@@ -1350,6 +1558,7 @@
     } catch (_) {
       operational.loaded = true;
       operational.sources = {};
+      operational.campgroundByName.clear();
       operational.alerts = [];
       operational.shipwrecks = [];
       renderOperationalStatus();
@@ -4065,6 +4274,7 @@
   renderFeatureList();
   loadCatalog();
   loadOfficialPortages().catch(()=>{});
+  loadCampSiteIdentifiers().catch(()=>{});
   loadOperationalData();
   renderDeepStatus();
   loadDeepManifest().catch(() => {});

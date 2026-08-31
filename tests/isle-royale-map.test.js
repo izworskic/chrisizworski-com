@@ -8,6 +8,7 @@ const root = path.resolve(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'public/isle-royale-map/index.html'), 'utf8');
 const js = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 'utf8');
 const api = fs.readFileSync(path.join(root, 'api/isle-royale.js'), 'utf8');
+const isleApiModule = require(path.join(root, 'api/isle-royale.js'));
 const routeWeatherApi = fs.readFileSync(path.join(root, 'api/isle-royale-route-weather.js'), 'utf8');
 const catalog = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/catalog.json'), 'utf8'));
 const deepManifest = JSON.parse(fs.readFileSync(path.join(root, 'public/isle-royale-map/data/deep-layer-manifest.json'), 'utf8'));
@@ -141,6 +142,56 @@ test('supplemental data is reversible and labels the feature before the data sou
   assert.doesNotMatch(js, /textContent = 'Hide OSM context'|textContent = 'Show OSM context'|Loading OSM context/);
   assert.match(js, /targetGroup:osmContextGroup/);
   assert.match(js, /btn\.disabled = false/);
+});
+
+test('campground cards combine official NPS capacity with only explicit mapped site identifiers', () => {
+  assert.match(api, /trail-accessible-campgrounds\.htm/);
+  assert.match(api, /lake-superior-accessible-campgrounds\.htm/);
+  assert.match(api, /inland-lake-paddling-campgrounds\.htm/);
+  assert.match(api, /function normalizeCampgroundProfiles/);
+  assert.match(api, /campground_profiles:/);
+  const sample = [
+    '<h3>Moskey Basin Campground</h3>',
+    '<p>Stay Limit: 3 nights<br>Shelters: 6<br>Access: Foot/canoe/kayak/private boat</p>',
+    '<p>TOTAL SITES: 10<br>Tent Only: 2<br>Group: 2<br>Other: 6</p>'
+  ].join('');
+  const profiles=isleApiModule._test.normalizeCampgroundProfiles(sample,'https://www.nps.gov/example');
+  assert.equal(profiles.length,1);
+  assert.equal(profiles[0].name,'Moskey Basin Campground');
+  assert.equal(profiles[0].total_sites,10);
+  assert.equal(profiles[0].shelters,6);
+  assert.equal(profiles[0].tent_sites,2);
+  assert.equal(profiles[0].group_sites,2);
+  assert.match(js, /campgroundByName: new Map\(\)/);
+  assert.match(js, /function findCampgroundProfile/);
+  assert.match(js, /function loadCampSiteIdentifiers/);
+  assert.match(js, /function campgroundSiteIdentifierLabel/);
+  assert.match(js, /tourism"~"camp_site\|camp_pitch"/);
+  assert.match(js, /Numbered campsite \/ pitch/);
+  assert.match(js, /function campSiteIdentifiersFor/);
+  assert.match(js, /Numbered sites & shelters/);
+  assert.match(js, /This may not be a complete site inventory/);
+  assert.match(js, /Site\/shelter identifiers: OpenStreetMap contributors \(supplemental\)/);
+  assert.match(js, /addPopupFact\(facts, 'Total sites'/);
+  assert.match(js, /addPopupFact\(facts, 'Group sites'/);
+  assert.match(js, /loadCampSiteIdentifiers\(\)\.catch/);
+  assert.doesNotMatch(js, /for\s*\([^)]*shelters[^)]*\).*Shelter #/i);
+});
+
+test('open map cards can be dragged to reposition the anchored popup and map', () => {
+  assert.match(js, /function ensurePopupDragHandle/);
+  assert.match(js, /function wirePopupDrag/);
+  assert.match(js, /Drag card to reposition map/);
+  assert.match(js, /handle\.addEventListener\('pointerdown'/);
+  assert.match(js, /handle\.addEventListener\('pointermove'/);
+  assert.match(js, /map\.panBy\(\[-dx,-dy\]/);
+  assert.match(js, /popupUserPositioned=true/);
+  assert.match(js, /if\(!popup\|\|\(!force&&popupUserPositioned\)\)return/);
+  assert.match(js, /wirePopupDrag\(popup\)/);
+  assert.match(html, /\.popup-drag-handle\{/);
+  assert.match(html, /cursor:grab/);
+  assert.match(html, /touch-action:none/);
+  assert.match(html, /\.popup-drag-handle\.dragging\{cursor:grabbing/);
 });
 
 test('route builder turns geometry into a time-aware planning outcome', () => {
