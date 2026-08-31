@@ -2099,7 +2099,40 @@
 
   function portageWalkMultiplier() {
     const trips=Math.max(1,Number(route.portageTrips)||1);
+    if(Math.abs(trips-1.5)<.01)return 2;
     return Math.max(1,2*trips-1);
+  }
+
+  function carryLabel() {
+    const trips=Number(route.portageTrips)||1;
+    if(Math.abs(trips-1.5)<.01)return '1½ carry';
+    if(trips>=3)return 'triple carry';
+    if(trips>=2)return 'double carry';
+    return 'single carry';
+  }
+
+  function paddleSpeedFromStrokes() {
+    const cadence=Math.max(20,Math.min(80,Number(route.strokeRate)||40));
+    const feet=Math.max(3,Math.min(12,Number(route.feetPerStroke)||6.6));
+    return Math.max(.5,Math.min(6.5,cadence*feet*60/5280));
+  }
+
+  function strokeCountForMiles(miles) {
+    const feet=Math.max(3,Math.min(12,Number(route.feetPerStroke)||6.6));
+    return Math.max(0,Number(miles)||0)*5280/feet;
+  }
+
+  function portageTerrainFactor(leg) {
+    const terrain=cleanText(leg?.officialPortage?.terrain||'').toLowerCase();
+    let factor=1;
+    if(/extremely steep/.test(terrain))factor=.65;
+    else if(/steep/.test(terrain))factor=.76;
+    else if(/hilly/.test(terrain))factor=.86;
+    else if(/rolling/.test(terrain))factor=.94;
+    else if(/short and sweet/.test(terrain))factor=1.03;
+    if(/wet/.test(terrain))factor*=.90;
+    if(/rocky/.test(terrain))factor*=.90;
+    return Math.max(.55,Math.min(1.05,factor));
   }
 
   function canoeTotals() {
@@ -2107,17 +2140,81 @@
     const paddle=legs.filter(leg=>leg.type==='paddle').reduce((sum,leg)=>sum+(Number(leg.miles)||0),0);
     const portage=legs.filter(leg=>leg.type==='portage').reduce((sum,leg)=>sum+(Number(leg.miles)||0),0);
     const portages=legs.filter(leg=>leg.type==='portage').length;
-    const walked=portage*portageWalkMultiplier();
+    const walked=legs.filter(leg=>leg.type==='portage').reduce((sum,leg)=>sum+(Number(leg.miles)||0)*portageWalkMultiplier(),0);
     return {paddle,portage,walked,total:paddle+portage,portages};
   }
 
-  function routeHours() {
-    const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+  function tripSegmentMetrics() {
+    if(!routeIsResolved()||route.points.length<2)return [];
     if(route.mode==='canoe') {
-      const totals=canoeTotals();
-      const portageSpeed=Math.max(.5,Number(route.portageSpeed)||2);
-      return totals.paddle/speed+totals.walked/portageSpeed;
+      const paddleSpeed=paddleSpeedFromStrokes();
+      const basePortageSpeed=Math.max(.5,Number(route.portageSpeed)||2);
+      const transitionMinutes=Math.max(0,Number(route.portageTransitionMinutes)||0);
+      return (route.mixedLegs||[]).map((leg,zeroIndex)=>{
+        const index=zeroIndex+1;
+        const from=route.points[index-1]||{};
+        const to=route.points[index]||{};
+        const miles=Number(leg.miles)||0;
+        if(leg.type==='portage') {
+          const factor=portageTerrainFactor(leg);
+          const effectivePortageSpeed=Math.max(.35,basePortageSpeed*factor);
+          const walkedMiles=miles*portageWalkMultiplier();
+          const walkingHours=walkedMiles/effectivePortageSpeed;
+          const transitionHours=transitionMinutes/60;
+          return {
+            index,type:'portage',from,to,miles,walkedMiles,
+            hours:walkingHours+transitionHours,walkingHours,transitionHours,
+            effectivePortageSpeed,terrainFactor:factor,
+            officialPortage:leg.officialPortage||null,verified:Boolean(leg.verified),
+            strokes:0
+          };
+        }
+        const hours=miles/Math.max(.5,paddleSpeed);
+        return {
+          index,type:'paddle',from,to,miles,walkedMiles:0,hours,
+          walkingHours:0,transitionHours:0,effectivePortageSpeed:null,
+          terrainFactor:1,officialPortage:null,verified:Boolean(leg.verified),
+          strokes:strokeCountForMiles(miles),paddleSpeed
+        };
+      });
     }
+
+    const distances=routeControlDistances();
+    const human=route.mode==='paddle';
+    const speed=human?paddleSpeedFromStrokes():Math.max(.5,Number(route.speed)||3);
+    return route.points.slice(1).map((point,zeroIndex)=>{
+      const index=zeroIndex+1;
+      const miles=Number(distances[index]?.leg_miles)||0;
+      return {
+        index,type:human?'paddle':route.mode,from:route.points[index-1],to:point,miles,
+        walkedMiles:0,hours:miles/speed,walkingHours:0,transitionHours:0,
+        strokes:human?strokeCountForMiles(miles):0,paddleSpeed:human?speed:null,
+        verified:true
+      };
+    });
+  }
+
+  function tripEffortSummary() {
+    const segments=tripSegmentMetrics();
+    const paddleMiles=segments.filter(x=>x.type==='paddle').reduce((sum,x)=>sum+x.miles,0);
+    const portageMiles=segments.filter(x=>x.type==='portage').reduce((sum,x)=>sum+x.miles,0);
+    const walkedMiles=segments.filter(x=>x.type==='portage').reduce((sum,x)=>sum+x.walkedMiles,0);
+    const paddleHours=segments.filter(x=>x.type==='paddle').reduce((sum,x)=>sum+x.hours,0);
+    const walkingHours=segments.reduce((sum,x)=>sum+x.walkingHours,0);
+    const transitionHours=segments.reduce((sum,x)=>sum+x.transitionHours,0);
+    const totalHours=segments.reduce((sum,x)=>sum+x.hours,0);
+    const strokes=segments.reduce((sum,x)=>sum+x.strokes,0);
+    const portages=segments.filter(x=>x.type==='portage').length;
+    const longestPortage=segments.filter(x=>x.type==='portage').sort((a,b)=>b.miles-a.miles)[0]||null;
+    return {
+      segments,paddleMiles,portageMiles,walkedMiles,paddleHours,walkingHours,transitionHours,totalHours,strokes,portages,longestPortage,
+      paddleSpeed:(route.mode==='paddle'||route.mode==='canoe')?paddleSpeedFromStrokes():null
+    };
+  }
+
+  function routeHours() {
+    if(routeIsResolved())return tripEffortSummary().totalHours;
+    const speed=Math.max(.5,Number(route.speed)||3);
     return routeTotalMiles()/speed;
   }
 
