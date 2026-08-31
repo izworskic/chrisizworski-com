@@ -76,6 +76,8 @@
     routeShare: document.getElementById('route-share'),
     routeExportGpx: document.getElementById('route-export-gpx'),
     routeModeSelect: document.getElementById('route-mode-select'),
+    routePortageTrips: document.getElementById('route-portage-trips'),
+    routePortageSpeed: document.getElementById('route-portage-speed'),
     routeSpeed: document.getElementById('route-speed'),
     routeDayHours: document.getElementById('route-day-hours'),
     routeDeparture: document.getElementById('route-departure'),
@@ -175,6 +177,10 @@
     waterStats:null,
     waterReason:'',
     waterAccessMiles:0,
+    mixedLegs:[],
+    mixedReason:'',
+    portageTrips:1,
+    portageSpeed:2,
     itinerary:null,
     itineraryWeather:null,
     scenarios:[],
@@ -1439,7 +1445,8 @@
   }
 
   function routePathPoints() {
-    if(route.mode!=='hike'&&route.points.length>=2&&route.smartState!=='water-aware')return [];
+    if(route.mode==='canoe'&&route.points.length>=2&&route.smartState!=='canoe-aware')return [];
+    if(route.mode!=='hike'&&route.mode!=='canoe'&&route.points.length>=2&&route.smartState!=='water-aware')return [];
     return route.resolvedPoints.length ? route.resolvedPoints : route.points;
   }
 
@@ -1504,13 +1511,33 @@
     const point=route.points[index];
     rememberRouteEdit('remove '+(point.label||'route point'));
     route.points.splice(index,1);
+    if(route.mode==='canoe'&&index>0&&index<route.points.length)route.points[index].legType='auto';
     map.closePopup();
     reroute('Route stop removed. Re-run weather after the route resolves.');
     status((point.label||'Route point')+' removed from trip.');
   }
 
+  function portageWalkMultiplier() {
+    const trips=Math.max(1,Number(route.portageTrips)||1);
+    return Math.max(1,2*trips-1);
+  }
+
+  function canoeTotals() {
+    const legs=route.mixedLegs||[];
+    const paddle=legs.filter(leg=>leg.type==='paddle').reduce((sum,leg)=>sum+(Number(leg.miles)||0),0);
+    const portage=legs.filter(leg=>leg.type==='portage').reduce((sum,leg)=>sum+(Number(leg.miles)||0),0);
+    const portages=legs.filter(leg=>leg.type==='portage').length;
+    const walked=portage*portageWalkMultiplier();
+    return {paddle,portage,walked,total:paddle+portage,portages};
+  }
+
   function routeHours() {
     const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
+    if(route.mode==='canoe') {
+      const totals=canoeTotals();
+      const portageSpeed=Math.max(.5,Number(route.portageSpeed)||2);
+      return totals.paddle/speed+totals.walked/portageSpeed;
+    }
     return routeTotalMiles()/speed;
   }
 
@@ -1599,6 +1626,117 @@
     keys.reverse();
     names.reverse();
     return {keys,names,distance:distances.get(endKey)};
+  }
+
+
+  function canoeTrailLegCandidate(a,b) {
+    const snapA=nearestTrailNode(a),snapB=nearestTrailNode(b);
+    if(!snapA||!snapB||snapA.distance>.45||snapB.distance>.45)return null;
+    const trail=shortestTrailPath(snapA.key,snapB.key);
+    if(!trail||!Number.isFinite(trail.distance)||trail.distance>2.25)return null;
+    const points=[];
+    const append=point=>{
+      if(!point)return;
+      const last=points[points.length-1];
+      if(!last||distanceMiles(last,point)>.01)points.push({lat:Number(point.lat),lng:Number(point.lng)});
+    };
+    append(a);
+    for(const key of trail.keys||[])append(trailGraph.nodes.get(key));
+    append(b);
+    const names=[...new Set((trail.names||[]).map(cleanText).filter(Boolean))];
+    const miles=(Number(trail.distance)||0)+(Number(snapA.distance)||0)+(Number(snapB.distance)||0);
+    return {type:'portage',points,miles,names,verified:true,officialHint:names.some(name=>/portage/i.test(name)),source:'mapped trail'};
+  }
+
+  function canoeWaterLegCandidate(router,a,b) {
+    if(!router)return null;
+    try {
+      const result=router.route([a,b],'paddle');
+      const access=Number(result.access_miles)||0;
+      if(access>.35)return null;
+      const crossings=Number(result.land_crossings ?? router.crossingCount?.(result.points) ?? 0);
+      if(crossings!==0||!Array.isArray(result.points)||result.points.length<2)return null;
+      const cumulative=cumulativeFor(result.points);
+      return {type:'paddle',points:result.points,miles:cumulative[cumulative.length-1]||0,verified:true,source:'coastline-safe water',access_miles:access};
+    } catch (_) { return null; }
+  }
+
+  function canoeManualLeg(a,b,type='paddle') {
+    return {
+      type,
+      points:[{lat:Number(a.lat),lng:Number(a.lng)},{lat:Number(b.lat),lng:Number(b.lng)}],
+      miles:distanceMiles(a,b),
+      verified:false,
+      source:type==='portage'?'manual portage sketch':'drawn water leg'
+    };
+  }
+
+  function combineCanoeLegs(legs) {
+    const out=[];
+    for(const leg of legs||[])for(const point of leg.points||[]) {
+      const last=out[out.length-1];
+      if(!last||distanceMiles(last,point)>.01)out.push({lat:Number(point.lat),lng:Number(point.lng)});
+    }
+    return out;
+  }
+
+  function setCanoeLegType(index,type) {
+    if(route.mode!=='canoe'||index<=0||index>=route.points.length)return;
+    const next=['water','portage'].includes(type)?type:'auto';
+    const current=route.points[index].legType||'auto';
+    if(current===next)return;
+    rememberRouteEdit('set leg '+index+' '+next);
+    route.points[index].legType=next;
+    reroute('Canoe leg type changed. Distances are being recalculated.');
+  }
+
+  function cycleCanoeLegType(index) {
+    const current=route.points[index]?.legType||'auto';
+    setCanoeLegType(index,current==='auto'?'water':current==='water'?'portage':'auto');
+  }
+
+  async function resolveCanoeRouteAsync() {
+    if(route.mode!=='canoe'||route.points.length<2)return;
+    const token=++route.waterToken;
+    route.smartState='canoe-loading';
+    route.mixedReason='';
+    route.mixedLegs=[];
+    route.resolvedPoints=[];
+    renderRoute();
+    let router=null;
+    try { router=await ensureWaterRouter(); } catch (_) {}
+    if(token!==route.waterToken||route.mode!=='canoe')return;
+    try {
+      const legs=[];
+      for(let i=1;i<route.points.length;i++) {
+        const a=route.points[i-1],b=route.points[i];
+        const override=b.legType||'auto';
+        const trail=canoeTrailLegCandidate(a,b);
+        const water=canoeWaterLegCandidate(router,a,b);
+        let leg;
+        if(override==='portage')leg=trail||canoeManualLeg(a,b,'portage');
+        else if(override==='water')leg=water||canoeManualLeg(a,b,'paddle');
+        else if(trail&&(trail.officialHint||!water))leg=trail;
+        else leg=water||canoeManualLeg(a,b,'paddle');
+        leg.index=i; leg.override=override; legs.push(leg);
+      }
+      if(token!==route.waterToken)return;
+      route.mixedLegs=legs;
+      route.resolvedPoints=combineCanoeLegs(legs);
+      route.waterStats=null;
+      route.waterAccessMiles=legs.filter(leg=>leg.type==='paddle').reduce((sum,leg)=>sum+(Number(leg.access_miles)||0),0);
+      route.smartState='canoe-aware';
+      route.mixedReason='';
+      renderRoute();
+      emitEvent('isle_royale_canoe_route',{leg_count:legs.length,paddle_legs:legs.filter(leg=>leg.type==='paddle').length,portage_legs:legs.filter(leg=>leg.type==='portage').length});
+    } catch(error) {
+      if(token!==route.waterToken)return;
+      route.mixedLegs=[];
+      route.resolvedPoints=[];
+      route.smartState='canoe-fallback';
+      route.mixedReason=cleanText(error?.message||'mixed canoe route unavailable');
+      renderRoute();
+    }
   }
 
   function resolveHikingRoute() {
@@ -1734,8 +1872,17 @@
       route.smartState=route.points.length?'need-destination':'idle';
       return;
     }
-    if(route.mode==='hike') {
+    if(route.mode==='canoe') {
+      route.mixedLegs=[];
+      route.mixedReason='';
+      route.resolvedPoints=[];
+      route.waterStats=null;
+      route.waterReason='';
+      route.smartState='canoe-pending';
+    } else if(route.mode==='hike') {
       route.waterToken++;
+      route.mixedLegs=[];
+      route.mixedReason='';
       route.waterStats=null;
       route.waterReason='';
       const smart=resolveHikingRoute();
@@ -1799,6 +1946,21 @@
         : `Start: ${route.points[0].label||'selected point'}. Switch to Build route to keep adding trip points.`;
       return;
     }
+    if(route.mode==='canoe') {
+      if(route.smartState==='canoe-loading'||route.smartState==='canoe-pending') {
+        els.routeSmartStatus.innerHTML='<strong>Building canoe trip:</strong> checking each point-to-point leg for a mapped portage or water leg.';
+        return;
+      }
+      if(route.smartState==='canoe-aware') {
+        const totals=canoeTotals();
+        const inferred=route.mixedLegs.filter(leg=>leg.override==='auto').length;
+        const mapped=route.mixedLegs.filter(leg=>leg.type==='portage'&&leg.verified).length;
+        els.routeSmartStatus.innerHTML='<strong>Canoe + portage route:</strong> '+route.mixedLegs.length+' legs · '+totals.paddle.toFixed(1)+' mi paddling · '+totals.portage.toFixed(1)+' mi portage trail. '+mapped+' mapped portage leg'+(mapped===1?'':'s')+'; '+inferred+' auto-classified leg'+(inferred===1?'':'s')+'. Use each leg button below to override Paddle / Portage.';
+        return;
+      }
+      els.routeSmartStatus.textContent='Canoe route could not be resolved'+(route.mixedReason?' ('+route.mixedReason+')':'')+'. Adjust a point or set the leg type manually.';
+      return;
+    }
     if(route.mode==='hike'&&route.smartState==='trail-snapped') {
       const names=route.trailNames.slice(0,4).join(' → ');
       const access=route.accessMiles>0.05?` · about ${route.accessMiles.toFixed(1)} mi total access from your selected points to mapped trail`:'';
@@ -1845,7 +2007,8 @@
     resolveRoute();
     clearRouteWeather(message);
     renderRoute();
-    if(route.mode!=='hike'&&route.points.length>=2)resolveWaterRouteAsync();
+    if(route.mode==='canoe'&&route.points.length>=2)resolveCanoeRouteAsync();
+    else if(route.mode!=='hike'&&route.points.length>=2)resolveWaterRouteAsync();
   }
 
   function routeDayMarkers(path) {
@@ -1905,7 +2068,7 @@
   function buildRouteItinerary(path){
     route.itinerary=null;
     route.scenarios=[];
-    if(route.mode==='hike'||route.smartState!=='water-aware'||!window.IsleRoyaleWaterIntel?.buildScenarioSet||path.length<2)return null;
+    if(route.mode==='hike'||route.mode==='canoe'||route.smartState!=='water-aware'||!window.IsleRoyaleWaterIntel?.buildScenarioSet||path.length<2)return null;
     const speed=Math.max(.5,Number(els.routeSpeed.value)||3);
     const baseHours=Math.max(2,Number(els.routeDayHours?.value)||6);
     const camps=sourceBackedWaterCamps();
@@ -2712,7 +2875,8 @@
       sourceLabel:cleanText(meta.sourceLabel||''),
       liveAlert:Boolean(meta.liveAlert),
       historyAction:cleanText(meta.historyAction||''),
-      manualDayEnd:Boolean(meta.manualDayEnd)
+      manualDayEnd:Boolean(meta.manualDayEnd),
+      legType:['water','portage'].includes(meta.legType)?meta.legType:'auto'
     };
     rememberRouteEdit(point.historyAction||(point.kind==='campground'?'add '+point.label:'add route point'));
     delete point.historyAction;
@@ -2725,7 +2889,12 @@
   function reverseRoute() {
     if(route.points.length<2)return;
     rememberRouteEdit('reverse route');
+    const canoeTypes=route.mode==='canoe'?route.points.slice(1).map(point=>point.legType||'auto').reverse():null;
     route.points.reverse();
+    if(canoeTypes) {
+      route.points[0].legType='auto';
+      for(let i=1;i<route.points.length;i++)route.points[i].legType=canoeTypes[i-1]||'auto';
+    }
     reroute();
     status('Route direction reversed.');
   }
@@ -2782,6 +2951,18 @@
   function routeForecastSamples(max=5) {
     const points=routePathPoints();
     let samples=[];
+    if(route.mode==='canoe'&&route.smartState==='canoe-aware') {
+      let along=0;
+      for(let i=0;i<route.mixedLegs.length&&samples.length<max;i++) {
+        const leg=route.mixedLegs[i];
+        if(leg.type==='paddle'&&leg.points?.length>=2) {
+          const middle=leg.points[Math.floor((leg.points.length-1)/2)];
+          samples.push({lat:middle.lat,lng:middle.lng,label:'Paddle leg '+(i+1),distance_miles:along+(Number(leg.miles)||0)/2,bearing_deg:bearingDegrees(leg.points[0],leg.points[leg.points.length-1])});
+        }
+        along+=Number(leg.miles)||0;
+      }
+      return samples;
+    }
     if(window.IsleRoyaleWaterIntel?.weatherSamples) {
       samples=window.IsleRoyaleWaterIntel.weatherSamples(points,max);
     } else {
@@ -2803,6 +2984,7 @@
   }
 
   function routeScheduledForecastSamples(departure,speed,max=8){
+    if(route.mode==='canoe')return routeForecastSamples(max);
     const path=routePathPoints();
     if(route.itinerary?.legs?.length&&window.IsleRoyaleWaterIntel?.slicePath){
       const samples=[];
