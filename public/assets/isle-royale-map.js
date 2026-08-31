@@ -4087,11 +4087,10 @@
       speed:Number(route.speed)||3,
       hours:Number(route.hours)||6,
       departure:route.departure||'',
-      portageTrips:Number(route.portageTrips)||1,
-      portageSpeed:Number(route.portageSpeed)||2,
-      portageTransitionMinutes:Number(route.portageTransitionMinutes)||10,
-      strokeRate:Number(route.strokeRate)||40,
-      feetPerStroke:Number(route.feetPerStroke)||6.6,
+      portageTrips:normalizeCarryTrips(route.portageTrips),
+      paddlePace:paceKey(route.paddlePace),
+      portagePace:paceKey(route.portagePace),
+      portageTransitionMinutes:10,
       activeScenario:route.activeScenario||'balanced',
       points:cloneRoutePoints().slice(0,40).map(point=>({
         lat:Number(point.lat),lng:Number(point.lng),label:cleanText(point.label||'').slice(0,100),
@@ -4124,13 +4123,12 @@
     const hours=Math.max(2,Math.min(12,Number(raw.hours)||6));
     const mapState=raw.map&&Number.isFinite(Number(raw.map.lat))&&Number.isFinite(Number(raw.map.lng))
       ? {lat:Number(raw.map.lat),lng:Number(raw.map.lng),zoom:Math.max(6,Math.min(18,Number(raw.map.zoom)||10))}:null;
-    const portageTrips=Math.max(1,Math.min(3,Number(raw.portageTrips)||1));
-    const portageSpeed=Math.max(.5,Math.min(5,Number(raw.portageSpeed)||2));
-    const portageTransitionMinutes=Math.max(0,Math.min(60,Number(raw.portageTransitionMinutes)||10));
-    const strokeRate=Math.max(20,Math.min(80,Number(raw.strokeRate)||40));
-    const feetPerStroke=Math.max(3,Math.min(12,Number(raw.feetPerStroke)||6.6));
+    const portageTrips=normalizeCarryTrips(raw.portageTrips);
+    const paddlePace=legacyPaddlePace(raw);
+    const portagePace=legacyPortagePace(raw);
+    const portageTransitionMinutes=10;
     const tripName=cleanText(raw.tripName||'').slice(0,80);
-    return {version:1,mode,speed,hours,portageTrips,portageSpeed,portageTransitionMinutes,strokeRate,feetPerStroke,tripName,departure:cleanText(raw.departure||'').slice(0,40),activeScenario:cleanText(raw.activeScenario||'balanced').slice(0,40),points,map:mapState};
+    return {version:1,mode,speed,hours,portageTrips,paddlePace,portagePace,portageTransitionMinutes,tripName,departure:cleanText(raw.departure||'').slice(0,40),activeScenario:cleanText(raw.activeScenario||'balanced').slice(0,40),points,map:mapState};
   }
 
   function applyTripState(raw,{remember=true,message='Trip restored.'}={}) {
@@ -4142,11 +4140,10 @@
     route.mode=state.mode;
     route.speed=state.speed;
     route.hours=state.hours;
-    route.portageTrips=state.portageTrips||1;
-    route.portageSpeed=state.portageSpeed||2;
-    route.portageTransitionMinutes=state.portageTransitionMinutes||10;
-    route.strokeRate=state.strokeRate||40;
-    route.feetPerStroke=state.feetPerStroke||6.6;
+    route.portageTrips=state.portageTrips||2;
+    route.paddlePace=paceKey(state.paddlePace);
+    route.portagePace=paceKey(state.portagePace);
+    route.portageTransitionMinutes=10;
     route.tripName=state.tripName||'';
     route.departure=state.departure||'';
     route.activeScenario=state.activeScenario||'balanced';
@@ -4155,10 +4152,8 @@
     if(els.routeDayHours)els.routeDayHours.value=String(route.hours);
     if(els.routeDeparture)els.routeDeparture.value=route.departure;
     if(els.routePortageTrips)els.routePortageTrips.value=String(route.portageTrips);
-    if(els.routePortageSpeed)els.routePortageSpeed.value=String(route.portageSpeed);
-    if(els.routePortageTransition)els.routePortageTransition.value=String(route.portageTransitionMinutes);
-    if(els.routeStrokeRate)els.routeStrokeRate.value=String(route.strokeRate);
-    if(els.routeFeetPerStroke)els.routeFeetPerStroke.value=String(route.feetPerStroke);
+    if(els.routePaddlePace)els.routePaddlePace.value=route.paddlePace;
+    if(els.routePortagePace)els.routePortagePace.value=route.portagePace;
     if(els.routeTripName)els.routeTripName.value=route.tripName;
     document.body.classList.toggle('canoe-mode',route.mode==='canoe');
     document.body.classList.toggle('human-paddle-mode',route.mode==='canoe'||route.mode==='paddle');
