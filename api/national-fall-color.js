@@ -112,7 +112,7 @@ async function weatherContext(lat, lon) {
   const hourly = await json(url);
   const periods = (hourly?.properties?.periods || []).slice(0, 168).map((p) => ({
     time: p.startTime,
-    temp_f: p.temperatureUnit === "C" ? finite(p.temperature) * 9 / 5 + 32 : finite(p.temperature),
+    temp_f: (() => { const value = finite(p.temperature); return value == null ? null : p.temperatureUnit === "C" ? value * 9 / 5 + 32 : value; })(),
     short_forecast: p.shortForecast || null,
   })).filter((p) => p.temp_f != null && Date.parse(p.time || ""));
   const low = periods.reduce((best, p) => !best || p.temp_f < best.temp_f ? p : best, null);
