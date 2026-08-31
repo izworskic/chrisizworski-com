@@ -105,24 +105,26 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
 });
 
 
-test('rich map cards recenter into the actually readable map viewport', () => {
+test('rich map cards promote into a readable floating inspector', () => {
+  for (const id of ['map-inspector','map-inspector-drag','map-inspector-body','map-inspector-center-point','map-inspector-center-card','map-inspector-close']) {
+    assert.ok(html.includes(`id="${id}"`), id);
+  }
   assert.match(js, /function popupSafeBounds/);
-  assert.match(js, /function movePopupFullyIntoView/);
-  assert.match(js, /function schedulePopupReadability/);
-  assert.match(js, /map\.on\('popupopen'/);
-  assert.match(js, /document\.body\.classList\.add\('detail-popup-open'\)/);
-  assert.match(js, /map\.panBy\(\[-shiftX,-shiftY\]/);
-  assert.match(js, /content\.style\.maxHeight=available\+'px'/);
+  assert.match(js, /function promotePopupToFloatingInspector/);
+  assert.match(js, /function scheduleFloatingInspectorPromotion/);
+  assert.match(js, /function sizeFloatingInspector/);
+  assert.match(js, /function centerFloatingInspector/);
+  assert.match(js, /floatingInspector\.body\.replaceChildren\(detail\)/);
+  assert.match(js, /popupEl\.classList\.add\('isle-popup-promoted'\)/);
+  assert.match(js, /map\.on\('popupopen'[\s\S]{0,500}scheduleFloatingInspectorPromotion\(popup\)/);
   assert.match(js, /visibleMapOverlay\('\.planning-cockpit'\)/);
   assert.match(js, /\['\.map-toolbar','\.route-map-guide'\]/);
   assert.match(js, /visibleMapOverlay\('\.map-status'\)/);
-  assert.match(js, /autoPan:false,className:'isle-detail-popup'/);
+  assert.match(html, /\.map-inspector\{/);
+  assert.match(html, /\.map-inspector-body\{[^}]*overflow:auto/);
+  assert.match(html, /\.isle-popup-promoted\{visibility:hidden!important/);
   assert.match(html, /body\.map-focus\.detail-popup-open \.planning-cockpit\{display:none\}/);
-  assert.match(html, /touch-action:pan-y/);
-  assert.match(html, /scrollbar-gutter:stable/);
 });
-
-
 
 test('supplemental data is reversible and labels the feature before the data source', () => {
   assert.match(html, /id="load-osm"[^>]*aria-pressed="false"[^>]*>Show supplemental data/);
@@ -178,40 +180,38 @@ test('campground cards combine official NPS capacity with only explicit mapped s
   assert.doesNotMatch(js, /for\s*\([^)]*shelters[^)]*\).*Shelter #/i);
 });
 
-test('open map cards can be dragged or centered after Leaflet finishes rendering them', () => {
-  assert.match(js, /function popupInteractionElements/);
-  assert.match(js, /function centerPopupInReadableArea/);
-  assert.match(js, /function ensurePopupDragHandle/);
-  assert.match(js, /function wirePopupDrag/);
-  assert.match(js, /function schedulePopupInteractionSetup/);
-  assert.match(js, /Drag this card to reposition it on the map/);
-  assert.match(js, /Center card/);
+test('floating inspector drag moves the card itself instead of panning the map', () => {
+  assert.match(js, /function inspectorPosition/);
+  assert.match(js, /function wireFloatingInspectorDrag/);
+  assert.match(html, /Drag this card anywhere on the map/);
+  assert.match(js, /function centerInspectorPoint/);
+  assert.match(html, /Center card/);
+  assert.match(html, /Center point/);
   assert.match(js, /window\.addEventListener\('pointermove',move/);
   assert.match(js, /window\.addEventListener\('pointerup',end/);
-  assert.match(js, /map\.dragging\.disable\(\)/);
-  assert.match(js, /map\.panBy\(\[-dx,-dy\]/);
-  assert.match(js, /popupUserPositioned=true/);
-  assert.match(js, /if\(!popup\|\|\(!force&&popupUserPositioned\)\)return/);
-  assert.match(js, /requestAnimationFrame\(\(\)=>requestAnimationFrame\(attach\)\)/);
-  assert.match(js, /window\.setTimeout\(attach,80\)/);
-  assert.match(js, /window\.setTimeout\(attach,220\)/);
-  assert.match(js, /schedulePopupInteractionSetup\(popup\)/);
-  assert.match(html, /\.popup-drag-handle\{/);
-  assert.match(html, /\.popup-drag-zone\{/);
-  assert.match(html, /\.popup-center-button\{/);
+  assert.match(js, /shell\.style\.left=.*\+'px'/);
+  assert.match(js, /shell\.style\.top=.*\+'px'/);
+  const dragStart=js.indexOf('function wireFloatingInspectorDrag');
+  const dragEnd=js.indexOf('wireFloatingInspectorDrag();',dragStart);
+  assert.ok(dragStart>=0&&dragEnd>dragStart);
+  const dragBlock=js.slice(dragStart,dragEnd);
+  assert.match(dragBlock, /inspectorPosition\(/);
+  assert.doesNotMatch(dragBlock, /map\.panBy\(/);
+  assert.match(html, /\.map-inspector-drag\{/);
   assert.match(html, /cursor:grab/);
   assert.match(html, /touch-action:none/);
-  assert.match(html, /\.popup-drag-zone\.dragging\{cursor:grabbing/);
+  assert.match(html, /\.map-inspector-drag\.dragging\{cursor:grabbing/);
 });
 
-test('official portage cards participate in the late-render drag and center interaction', () => {
+test('official portage cards promote into the same floating inspector', () => {
   assert.match(js, /function officialPortagePopup/);
   assert.match(js, /wrap\.className='popup-detail official-portage-popup'/);
   assert.match(js, /line\.bindPopup\(\(\)=>officialPortagePopup\(portage,visual\)/);
   assert.match(js, /badge\.bindPopup\(\(\)=>officialPortagePopup\(portage,visual\)/);
   assert.match(js, /marker\.bindPopup\(\(\)=>officialPortagePopup\(portage,visual\)/);
   assert.match(js, /className:'isle-detail-popup'/);
-  assert.match(js, /map\.on\('popupopen'[\s\S]{0,700}schedulePopupInteractionSetup\(popup\)/);
+  assert.match(js, /map\.on\('popupopen'[\s\S]{0,500}scheduleFloatingInspectorPromotion\(popup\)/);
+  assert.match(js, /floatingInspector\.body\.replaceChildren\(detail\)/);
 });
 
 test('route builder turns geometry into a time-aware planning outcome', () => {
