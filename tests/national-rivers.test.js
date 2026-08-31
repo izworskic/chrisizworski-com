@@ -56,3 +56,10 @@ test('direct IV discovery does not invent a site without discharge',()=>{
   const payload={value:{timeSeries:[series({code:'00010'})]}};
   assert.deepEqual(rivers.sitesFromPayload(payload),[]);
 });
+
+
+test('optional enrichment budget resolves fallback instead of holding the function open',async()=>{
+  const fallback=new Map([['fallback',true]]);
+  const result=await rivers.withBudget(new Promise(()=>{}),5,fallback);
+  assert.equal(result,fallback);
+});
