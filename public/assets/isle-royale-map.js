@@ -2486,9 +2486,9 @@
       version:1,
       saved_at:new Date().toISOString(),
       mode:route.mode,
-      speed:Number(els.routeSpeed.value)||3,
-      hours:Number(els.routeDayHours?.value)||6,
-      departure:els.routeDeparture.value||'',
+      speed:Number(route.speed)||3,
+      hours:Number(route.hours)||6,
+      departure:route.departure||'',
       activeScenario:route.activeScenario||'balanced',
       points:cloneRoutePoints().slice(0,40).map(point=>({
         lat:Number(point.lat),lng:Number(point.lng),label:cleanText(point.label||'').slice(0,100),
