@@ -6,7 +6,16 @@ const {
 const siteIndex = require("../public/data/national-usgs-streamflow-sites.json");
 
 const IV = "https://waterservices.usgs.gov/nwis/iv/";
-const UA = "ChrisIzworskiNationalRiverConditions/4.0 (+https://chrisizworski.com/national-tools/rivers/)";
+const UA = "ChrisIzworskiNationalRiverConditions/5.0 (+https://chrisizworski.com/national-tools/rivers/)";
+const PARAMETERS = Object.freeze({
+  discharge: "00060",
+  gageHeight: "00065",
+  waterTemperature: "00010",
+  turbidity: "63680",
+  dissolvedOxygen: "00300",
+  specificConductance: "00095",
+  ph: "00400",
+});
 
 function haversine(a, b, c, d) {
   const r = 3958.7613;
@@ -48,6 +57,12 @@ async function fetchJson(url, timeoutMs = 2500) {
 function code(series) {
   return series.variable?.variableCode?.[0]?.value || null;
 }
+function unit(series) {
+  return series.variable?.unit?.unitCode || series.variable?.unit?.unitAbbreviation || null;
+}
+function description(series) {
+  return series.variable?.variableDescription || null;
+}
 function siteId(series) {
   return series.sourceInfo?.siteCode?.[0]?.value || null;
 }
@@ -62,11 +77,53 @@ function atAgo(points, hours) {
   return points.reduce((best, point) =>
     !best || Math.abs(Date.parse(point.time) - target) < Math.abs(Date.parse(best.time) - target) ? point : best, null);
 }
-function sampleSeries(points, maxPoints = 32) {
-  if (points.length <= maxPoints) return points.map((point) => ({ time: point.time, value: point.value }));
-  const step = Math.ceil(points.length / maxPoints);
-  return points.filter((_, index) => index % step === 0 || index === points.length - 1)
-    .map((point) => ({ time: point.time, value: point.value }));
+function sampleSeries(points, maxPoints = 32, transform = (value) => value) {
+  const normalized = points.map((point) => ({ time: point.time, value: transform(point.value) }))
+    .filter((point) => Number.isFinite(point.value));
+  if (normalized.length <= maxPoints) return normalized;
+  const step = Math.ceil(normalized.length / maxPoints);
+  return normalized.filter((_, index) => index % step === 0 || index === normalized.length - 1);
+}
+function changePercent(current, prior) {
+  const a = finite(current), b = finite(prior);
+  if (a == null || b == null || b === 0) return null;
+  return Math.round(((a - b) / Math.abs(b)) * 100);
+}
+function changeAbsolute(current, prior, decimals = 2) {
+  const a = finite(current), b = finite(prior);
+  if (a == null || b == null) return null;
+  const factor = 10 ** decimals;
+  return Math.round((a - b) * factor) / factor;
+}
+function toFahrenheit(value, unitCode) {
+  const n = finite(value);
+  if (n == null) return null;
+  const u = String(unitCode || "").toLowerCase();
+  if (u.includes("deg f") || u === "f" || u.includes("fahrenheit")) return Math.round(n * 10) / 10;
+  return Math.round((n * 9 / 5 + 32) * 10) / 10;
+}
+function sensorSummary(series, options = {}) {
+  const points = validPoints(series);
+  if (!points.length) return null;
+  const transform = options.transform || ((value) => value);
+  const converted = points.map((point) => ({ ...point, converted: transform(point.value) }))
+    .filter((point) => Number.isFinite(point.converted));
+  if (!converted.length) return null;
+  const last = converted.at(-1);
+  const prior = atAgo(converted.map((point) => ({ value: point.converted, time: point.time })), 24);
+  const values = converted.map((point) => point.converted);
+  const summary = {
+    value: last.converted,
+    unit: options.unit || unit(series),
+    measured_at: last.time,
+    description: description(series),
+    min_24h: Math.min(...values),
+    max_24h: Math.max(...values),
+    change_24h: changeAbsolute(last.converted, prior?.value, options.decimals ?? 2),
+    series_24h: sampleSeries(points, 32, transform),
+  };
+  if (options.percentChange) summary.change_percent_24h = changePercent(last.converted, prior?.value);
+  return summary;
 }
 function trendLabel(percent) {
   const value = finite(percent);
@@ -82,10 +139,22 @@ function normalize(payload, sites) {
     water_temp_f: null,
     measured_at: null,
     flow_6h_ago: null,
+    flow_24h_ago: null,
     trend_percent_6h: null,
+    trend_percent_24h: null,
+    gage_height_change_24h_ft: null,
     flow_series_24h: [],
+    stage_series_24h: [],
+    sensors: {
+      water_temperature: null,
+      turbidity: null,
+      dissolved_oxygen: null,
+      specific_conductance: null,
+      ph: null,
+    },
     qualifiers: [],
   }]));
+
   for (const series of payload?.value?.timeSeries || []) {
     const id = siteId(series);
     if (!by.has(id)) continue;
@@ -94,27 +163,58 @@ function normalize(payload, sites) {
     const last = points.at(-1);
     const gauge = by.get(id);
     if (!gauge.measured_at || Date.parse(last.time) > Date.parse(gauge.measured_at)) gauge.measured_at = last.time;
-    if (code(series) === "00060") {
+    const parameter = code(series);
+
+    if (parameter === PARAMETERS.discharge) {
       gauge.discharge_cfs = last.value;
-      const old = atAgo(points, 6);
-      gauge.flow_6h_ago = old?.value ?? null;
-      if (old && old.value > 0) gauge.trend_percent_6h = Math.round(((last.value - old.value) / old.value) * 100);
+      const old6 = atAgo(points, 6);
+      const old24 = atAgo(points, 24);
+      gauge.flow_6h_ago = old6?.value ?? null;
+      gauge.flow_24h_ago = old24?.value ?? null;
+      gauge.trend_percent_6h = changePercent(last.value, old6?.value);
+      gauge.trend_percent_24h = changePercent(last.value, old24?.value);
       gauge.flow_series_24h = sampleSeries(points);
     }
-    if (code(series) === "00065") gauge.gage_height_ft = last.value;
-    if (code(series) === "00010") gauge.water_temp_f = Math.round((last.value * 9 / 5 + 32) * 10) / 10;
+    if (parameter === PARAMETERS.gageHeight) {
+      gauge.gage_height_ft = last.value;
+      const old24 = atAgo(points, 24);
+      gauge.gage_height_change_24h_ft = changeAbsolute(last.value, old24?.value, 2);
+      gauge.stage_series_24h = sampleSeries(points);
+    }
+    if (parameter === PARAMETERS.waterTemperature) {
+      const summary = sensorSummary(series, { transform: (value) => toFahrenheit(value, unit(series)), unit: "°F", decimals: 1 });
+      gauge.sensors.water_temperature = summary;
+      gauge.water_temp_f = summary?.value ?? null;
+    }
+    if (parameter === PARAMETERS.turbidity) {
+      gauge.sensors.turbidity = sensorSummary(series, { percentChange: true, decimals: 2 });
+    }
+    if (parameter === PARAMETERS.dissolvedOxygen) {
+      gauge.sensors.dissolved_oxygen = sensorSummary(series, { decimals: 2 });
+    }
+    if (parameter === PARAMETERS.specificConductance) {
+      gauge.sensors.specific_conductance = sensorSummary(series, { decimals: 1 });
+    }
+    if (parameter === PARAMETERS.ph) {
+      gauge.sensors.ph = sensorSummary(series, { decimals: 2 });
+    }
     gauge.qualifiers = [...new Set([...gauge.qualifiers, ...last.qualifiers])];
   }
+
   return [...by.values()]
     .filter((gauge) => gauge.discharge_cfs != null)
     .map((gauge) => {
       const age = freshness(gauge.measured_at, 180);
+      const availableSensors = Object.entries(gauge.sensors)
+        .filter(([, value]) => value)
+        .map(([key]) => key);
       return {
         ...gauge,
         ...age,
         fresh: age.status === "current",
         provisional: true,
         trend_label: trendLabel(gauge.trend_percent_6h),
+        sensor_availability: availableSensors,
         historical_daily_flow: null,
         historical_comparison: {
           label: "Historical comparison loading",
@@ -130,7 +230,7 @@ async function observations(sites) {
   const url = new URL(IV);
   url.searchParams.set("format", "json");
   url.searchParams.set("sites", sites.map((site) => site.id).join(","));
-  url.searchParams.set("parameterCd", "00060,00065,00010");
+  url.searchParams.set("parameterCd", Object.values(PARAMETERS).join(","));
   url.searchParams.set("period", "P1D");
   url.searchParams.set("siteStatus", "all");
   return normalize(await fetchJson(url, 2500), sites);
@@ -174,10 +274,10 @@ module.exports = async function handler(req, res) {
           updatedAt: newestObserved,
           staleAfterMinutes: 180,
           available: Boolean(gauges.length),
-          status: "provisional observations",
+          status: "provisional flow, stage and available water-quality observations",
         }),
       ],
-      disclaimer: "Nearest-gauge discovery uses a periodically refreshed index of active USGS streamflow sites; displayed readings are fetched live from USGS by exact site ID and remain provisional. Historical percentiles and NOAA forecast/flood context load separately. Flow or stage alone cannot determine whether paddling, swimming, wading, fishing, or boating is safe.",
+      disclaimer: "Nearest-gauge discovery uses a periodically refreshed index of active USGS streamflow sites; displayed readings are fetched live from USGS by exact site ID and remain provisional. Water temperature, turbidity, dissolved oxygen, conductivity and pH appear only where the selected gauge actually reports those parameters. Historical percentiles, weather and NOAA river forecast context load separately. No gauge reading or derived lens can determine whether paddling, swimming, wading, fishing, or boating is safe.",
     });
   } catch (error) {
     res.setHeader("Cache-Control", "no-store");
@@ -190,10 +290,15 @@ module.exports = async function handler(req, res) {
 };
 
 module.exports._test = {
+  PARAMETERS,
   atAgo,
+  changeAbsolute,
+  changePercent,
   haversine,
   nearestSites,
   normalize,
   sampleSeries,
+  sensorSummary,
+  toFahrenheit,
   trendLabel,
 };
