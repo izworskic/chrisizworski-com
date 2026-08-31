@@ -464,7 +464,7 @@ test('route stops expose leg and cumulative distances and can be deleted from li
   assert.match(js, /function routeControlDistances/);
   assert.match(js, /function projectControlPointAlongPath/);
   assert.match(js, /function removeRoutePoint/);
-  assert.match(js, /mi leg · .*mi total/);
+  assert.match(js, /mi (?:leg|water).*mi total/);
   assert.match(html, /\.route-distance/);
   assert.match(js, /Remove from route/);
   assert.match(js, /marker\.bindPopup/);
