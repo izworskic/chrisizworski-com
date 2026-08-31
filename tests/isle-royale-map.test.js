@@ -107,7 +107,7 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
 
 
 test('Isle Royale interaction script is cache-busted and not stored during active development', () => {
-  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-map-above-criteria-1/);
+  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-multipoint-water-1/);
   assert.doesNotMatch(html, /isle-royale-map\.js\?v=20260830-19/);
   const vercel = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
   const rule = (vercel.headers || []).find(item => item.source === '/assets/isle-royale-map.js');
@@ -232,7 +232,7 @@ test('route criteria stay below the map without duplicating route construction',
     assert.ok(html.includes(`id="${id}"`), id);
   }
   assert.match(html, /<h2>Build above\. Tune the trip below\.<\/h2>/);
-  assert.match(html, /Map clicks define the trip\. These settings only change pace, carry effort, and day estimates/);
+  assert.match(html, /Water clicks are ordered checkpoints\. Distance and time accumulate through every checkpoint/);
   assert.match(html, /The route bar on the map is the only build control/);
   assert.match(html, /\.route-compat-controls\{display:none!important\}/);
   assert.doesNotMatch(html, /<span class="route-badge">ROUTE INTELLIGENCE<\/span>/);
@@ -279,26 +279,28 @@ test('quiet/no-wake ETL is IRMA-first and fails closed on a stale regulatory set
   assert.match(contextBuilder, /refusing to promote older\/mismatched geometry/);
 });
 
-test('water intelligence is a real coastline-aware planning layer, not a draggable-line benchmark shortcut', () => {
+test('water intelligence supports fine multi-point coast, inland-water, and waterway routing', () => {
   assert.match(html, /id="route-day-hours"/);
-  assert.match(html, /id="route-intelligence"/);
-  assert.match(html, /isle-royale-water-intelligence\.js/);
-  assert.match(js, /function resolveWaterRouteAsync/);
-  assert.match(js, /Open-water exposure model/);
-  assert.match(js, /NPS boating-zone check/);
-  assert.match(js, /Nearby mapped refuge \/ stopping options/);
-  assert.match(waterIntelJs, /function routeSegment/);
-  assert.match(waterIntelJs, /crosses\(n,nn\)/);
-  assert.match(waterIntelJs, /waterKeys/);
-  assert.match(waterIntelJs, /outside-water routing component/);
-  assert.match(waterIntelJs, /nearShore/);
-  assert.match(waterIntelJs, /weatherSamples/);
-  assert.match(waterIntelJs, /zonesAlongPath/);
-  assert.match(waterIntelJs, /dayEnds/);
-  assert.match(waterIntelApi, /natural"="coastline/);
+  assert.match(html, /isle-royale-water-intelligence\.js\?v=20260831-multipoint-water-1/);
+  assert.match(js, /async function resolveWaterRouteAsync\(seedLegs=\[\]\)/);
+  assert.match(js, /async function resolveCanoeRouteAsync\(seedLegs=\[\]\)/);
+  assert.match(js, /preserveVerifiedPrefix/);
+  assert.match(js, /kind:watercraft\?'water-checkpoint':'map-point'/);
+  assert.match(js, /Water checkpoint/);
+  assert.match(waterIntelJs, /function gridSpec/);
+  assert.match(waterIntelJs, /direct<=2\)\{step=\.0007/);
+  assert.match(waterIntelJs, /function centerlineRoute/);
+  assert.match(waterIntelJs, /function isMappedWater/);
+  assert.match(waterIntelJs, /waterPolygons/);
+  assert.match(waterIntelJs, /landPolygons/);
+  assert.match(waterIntelJs, /No mapped-water route found between these checkpoints/);
+  assert.match(waterIntelApi, /natural"="water"/);
+  assert.match(waterIntelApi, /waterway"~"river\|stream\|canal\|riverbank"/);
+  assert.match(waterIntelApi, /land_polygons/);
+  assert.match(waterIntelApi, /water_polygons/);
+  assert.match(waterIntelApi, /water_centerlines/);
   assert.match(waterIntelApi, /not a navigation chart/i);
   assert.match(isleBenchmark, /waterIntelligenceRuntime/);
-  assert.match(isleBenchmark, /water intelligence runtime missing or reduced to a draggable straight-line sketch/);
 });
 
 test('marine forecast sampling grows with route distance rather than control-point count', () => {
@@ -310,7 +312,7 @@ test('map-first route builder accepts every mappable feature and keeps criteria 
   assert.match(html, /id="explore-mode"[^>]*aria-pressed="true"[^>]*>Explore/);
   assert.match(html, /id="route-mode"[^>]*>Build route/);
   assert.match(html, /id="route-map-guide"/);
-  assert.match(html, /Build from the map/);
+  assert.match(html, /Trace the trip with checkpoints/);
   assert.match(html, /<h2>Build above\. Tune the trip below\.<\/h2>/);
   assert.match(html, /The route bar on the map is the only build control/);
   assert.match(js, /function featureRoutePoint/);
@@ -825,4 +827,19 @@ test('line and area features use the clicked map coordinate as a trip location',
   assert.match(js, /clickedLatLng&&Number\.isFinite\(clickedLatLng\.lat\)/);
   assert.match(js, /return recordRoutePoint\(record\)/);
   assert.match(js, /if\(route\.adding\) \{[\s\S]{0,220}addFeatureToRoute\(record,\{latlng:event\.latlng\|\|recordRoutePoint\(record\)\}\)/);
+});
+
+
+test('multi-point checkpoint routing keeps earlier verified legs while extending the tail', () => {
+  assert.match(html, /Click as many points along the water as you need/);
+  assert.match(html, /Distance and time accumulate through every checkpoint/);
+  assert.match(html, /You do not need to stop at two points/);
+  assert.match(js, /const waterSeed=preserve\?\[\.\.\.\(route\.waterLegs\|\|\[\]\)\]:\[\]/);
+  assert.match(js, /const mixedSeed=preserve\?\[\.\.\.\(route\.mixedLegs\|\|\[\]\)\]:\[\]/);
+  assert.match(js, /for\(let i=legs\.length\+1;i<route\.points\.length;i\+\+\)/);
+  assert.match(js, /reroute\('Checkpoint added\.[^']+',\{preserveVerifiedPrefix:true\}\)/);
+  assert.match(js, /point\.kind==='water-checkpoint'/);
+  assert.match(js, /isCheckpoint\?'is-checkpoint'/);
+  assert.match(js, /route\.adding\?'Water checkpoint':'Water checkpoint'/);
+  assert.doesNotMatch(js, /point\.kind==='water-checkpoint'[\s\S]{0,100}return 'Destination'/);
 });
