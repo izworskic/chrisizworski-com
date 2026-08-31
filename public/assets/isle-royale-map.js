@@ -2000,7 +2000,6 @@
   }
 
   function renderRouteBuildFlow() {
-    if(els.routeDerivedSpeed)els.routeDerivedSpeed.textContent=paddlePaceSpeed().toFixed(1)+' mph modeled';
     const bar=els.routeBuildBar;
     if(!bar)return;
     const active=route.adding||route.reviewing;
@@ -3566,7 +3565,7 @@
     travel.innerHTML='<strong></strong><span></span>';
     travel.querySelector('strong').textContent='Travel Assistant';
     travel.querySelector('span').textContent=route.mode==='canoe'
-      ? dayHours+'h moving day · paddle '+speed.toFixed(1)+' mph · portage '+Number(route.portageSpeed||2).toFixed(1)+' mph · '+(Number(route.portageTrips)===2?'double carry':Number(route.portageTrips)===1.5?'1½ carry':'single carry')+' · about '+days+' travel day'+(days===1?'':'s')+' before loading, unloading, breaks or camp chores.'
+      ? dayHours+'h moving day · '+paddlePaceLabel()+' paddling · '+portagePaceLabel()+' portaging · '+carryLabel()+' · about '+days+' travel day'+(days===1?'':'s')+' before breaks or camp chores.'
       : dayHours+'h travel day at '+speed.toFixed(1)+' mph ≈ '+daily.toFixed(1)+' mi/day · about '+days+' travel day'+(days===1?'':'s')+' for this route, before breaks or camp chores.';
     els.routeIntelligence.appendChild(travel);
 
@@ -4046,7 +4045,7 @@
       const human=route.mode==='paddle'||route.mode==='canoe';
       els.cockpitSpeed.value=human?paddlePaceSpeed().toFixed(1):els.routeSpeed.value;
       els.cockpitSpeed.disabled=human;
-      els.cockpitSpeed.title=human?'Modeled from paddle cadence and effective travel per stroke':'Planning speed';
+      els.cockpitSpeed.title=human?'Paddling pace preset: '+paddlePaceLabel():'Planning speed';
     }
     if(els.cockpitHours)els.cockpitHours.value=els.routeDayHours?.value||'6';
     if(els.cockpitBuild) {
@@ -4836,48 +4835,30 @@
     reroute('Travel mode changed. Re-run route weather after confirming speed and departure.');
   });
   els.routePortageTrips?.addEventListener('change',()=>{
-    const next=Math.max(1,Math.min(3,Number(els.routePortageTrips.value)||1));
-    if(Math.abs(next-route.portageTrips)<.001)return;
+    const next=normalizeCarryTrips(els.routePortageTrips.value);
+    if(next===route.portageTrips)return;
     rememberRouteEdit('change portage carry');
     route.portageTrips=next;
+    els.routePortageTrips.value=String(next);
     renderRoute();
   });
-  els.routePortageTransition?.addEventListener('change',()=>{
-    const next=Math.max(0,Math.min(60,Number(els.routePortageTransition.value)||0));
-    if(Math.abs(next-route.portageTransitionMinutes)<.001){els.routePortageTransition.value=String(route.portageTransitionMinutes);return;}
-    rememberRouteEdit('change portage load unload');
-    route.portageTransitionMinutes=next;
-    els.routePortageTransition.value=String(route.portageTransitionMinutes);
+  els.routePaddlePace?.addEventListener('change',()=>{
+    const next=paceKey(els.routePaddlePace.value);
+    if(next===route.paddlePace)return;
+    rememberRouteEdit('change paddling pace');
+    route.paddlePace=next;
+    clearRouteWeather('Paddling pace changed. Re-run route weather for updated travel timing.');
     renderRoute();
   });
-  els.routeStrokeRate?.addEventListener('change',()=>{
-    const next=Math.max(20,Math.min(80,Number(els.routeStrokeRate.value)||40));
-    if(Math.abs(next-route.strokeRate)<.001){els.routeStrokeRate.value=String(route.strokeRate);return;}
-    rememberRouteEdit('change paddle cadence');
-    route.strokeRate=next;
-    els.routeStrokeRate.value=String(route.strokeRate);
-    clearRouteWeather('Paddle cadence changed. Re-run route weather for updated travel timing.');
-    renderRoute();
-  });
-  els.routeFeetPerStroke?.addEventListener('change',()=>{
-    const next=Math.max(3,Math.min(12,Number(els.routeFeetPerStroke.value)||6.6));
-    if(Math.abs(next-route.feetPerStroke)<.001){els.routeFeetPerStroke.value=String(route.feetPerStroke);return;}
-    rememberRouteEdit('change paddle efficiency');
-    route.feetPerStroke=next;
-    els.routeFeetPerStroke.value=String(route.feetPerStroke);
-    clearRouteWeather('Paddle efficiency changed. Re-run route weather for updated travel timing.');
+  els.routePortagePace?.addEventListener('change',()=>{
+    const next=paceKey(els.routePortagePace.value);
+    if(next===route.portagePace)return;
+    rememberRouteEdit('change portage pace');
+    route.portagePace=next;
     renderRoute();
   });
   els.routeTripName?.addEventListener('change',()=>{
     route.tripName=cleanText(els.routeTripName.value||'').slice(0,80);
-  });
-  els.routePortageSpeed?.addEventListener('change',()=>{
-    const next=Math.max(.5,Math.min(5,Number(els.routePortageSpeed.value)||2));
-    if(Math.abs(next-route.portageSpeed)<.001){els.routePortageSpeed.value=String(route.portageSpeed);return;}
-    rememberRouteEdit('change portage pace');
-    route.portageSpeed=next;
-    els.routePortageSpeed.value=String(route.portageSpeed);
-    renderRoute();
   });
   els.routeSpeed.addEventListener('change',()=>{
     const next=Math.max(.5,Number(els.routeSpeed.value)||3);
