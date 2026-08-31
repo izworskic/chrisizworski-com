@@ -63,7 +63,7 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /Open this coordinate on the source map/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
 
-const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-route-builder-1/.test(html)
+const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-trip-intelligence-1/.test(html)
   && !/isle-royale-map\.js\?v=20260830-19/.test(html)
   && /"source": "\/assets\/isle-royale-map\.js"/.test(vercel)
   && /"key": "Cache-Control"[\s\S]{0,120}"value": "no-store, max-age=0"/.test(vercel)
@@ -327,6 +327,37 @@ const manualDayEndRuntime = /function setCampDayEnd/.test(js)
   && /manual_day_end:Boolean\(chosen\?\.manual_day_end\)/.test(waterJs)
   && /under_target:Boolean\(chosen\?\.manual_day_end/.test(waterJs);
 
+const tripIntelligenceRuntime = /id="route-stroke-rate"/.test(html)
+  && /id="route-feet-per-stroke"/.test(html)
+  && /id="route-portage-transition"/.test(html)
+  && /id="route-trip-brief"/.test(html)
+  && /id="route-export-plan"/.test(html)
+  && /<option value="3">Triple<\/option>/.test(html)
+  && /function paddleSpeedFromStrokes/.test(js)
+  && /cadence\*feet\*60\/5280/.test(js)
+  && /function planningTravelSpeed/.test(js)
+  && /function strokeCountForMiles/.test(js)
+  && /function portageWalkMultiplier/.test(js)
+  && /Math\.abs\(trips-1\.5\)<\.01\)return 2/.test(js)
+  && /2\*trips-1/.test(js)
+  && /function portageTerrainFactor/.test(js)
+  && /extremely steep/.test(js)
+  && /function tripSegmentMetrics/.test(js)
+  && /walkingHours\+transitionHours/.test(js)
+  && /function tripEffortSummary/.test(js)
+  && /function tripDays/.test(js)
+  && /function tripDescription/.test(js)
+  && /function renderTripBrief/.test(js)
+  && /estimated stroke cycles/.test(js)
+  && /Portage terrain adjustments are planning heuristics/.test(js)
+  && /TRIP_LIBRARY_KEY='isle-royale-trip-library-v1'/.test(js)
+  && /TRIP_AUTOSAVE_KEY='isle-royale-trip-autosave-v1'/.test(js)
+  && /function renderSavedTrips/.test(js)
+  && /Working route · autosaved/.test(js)
+  && /function tripPlanHtml/.test(js)
+  && /function downloadTripPlan/.test(js)
+  && /format:'html-plan'/.test(js);
+
 const tripPersistenceRuntime = /id="route-save"/.test(html)
   && /id="route-restore"/.test(html)
   && /id="route-share"/.test(html)
@@ -392,7 +423,7 @@ const referenceShelfComplete = /Official maps from the original research/.test(h
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && popupReadabilityRuntime && popupDragRuntime && campgroundDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && routeEditingRuntime, 'map-first route planning with paddle/portage leg accounting, leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && popupReadabilityRuntime && popupDragRuntime && campgroundDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && tripIntelligenceRuntime && routeEditingRuntime, 'map-first route planning with paddle/portage leg accounting, leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -450,6 +481,7 @@ if (!/speed:Number\(route\.speed\)\|\|3/.test(js) || !/hours:Number\(route\.hour
 if (!/button\.textContent=undoLabel/.test(js) || !/last\?\.fingerprint===fingerprint/.test(js)) hardFailures.push('Undo is missing action labels or no-op history deduplication');
 if (!tripPersistenceRuntime) hardFailures.push('trip persistence/handoff is missing local-only save, share-fragment restore, or resolved-route GPX export safeguards');
 if (!routeEditingRuntime) hardFailures.push('route planning is missing leg/cumulative distances or obvious stop deletion from the map/list');
+if (!tripIntelligenceRuntime) hardFailures.push('trip intelligence is missing stroke-based paddle timing, carry math, day planning, named saves, autosave recovery, or portable trip-plan export');
 if (!/id="route-finish-build"/.test(html) || !/function finishRouteBuild/.test(js) || !/route\.reviewing=true/.test(js)) hardFailures.push('route builder is missing explicit Finish & review transition before save/share/export');
 if (!/function crossingCount/.test(waterJs) || !/Water route failed final coastline validation/.test(waterJs) || !/route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/.test(js)) hardFailures.push('water routing can still promote an unverified construction sketch as a verified route or accept a mapped shoreline crossing');
 if (!/route-distance-badge/.test(js) || !/Water · .*mi/.test(js) || !/mi draft span/.test(js)) hardFailures.push('route distance is not visible during draft building and on the resolved route');
