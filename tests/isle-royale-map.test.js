@@ -239,18 +239,45 @@ test('focus map becomes a real planning cockpit with shared controls and reversi
   assert.match(html, /id="cockpit-redo"/);
   assert.match(html, /id="route-redo"/);
   assert.match(js, /function captureRouteSnapshot/);
-  assert.match(js, /function rememberRouteEdit/);
+  assert.match(js, /function snapshotFingerprint/);
+  assert.match(js, /function rememberRouteEdit\(action='route edit'\)/);
   assert.match(js, /function undoRouteEdit/);
   assert.match(js, /function redoRouteEdit/);
   assert.match(js, /function restoreRouteSnapshot/);
+  assert.match(js, /departure:route\.departure/);
+  assert.match(js, /adding:Boolean\(route\.adding\)/);
+  assert.match(js, /button\.textContent=undoLabel/);
+  assert.match(js, /button\.textContent=redoLabel/);
+  assert.match(js, /rememberRouteEdit\('add shaping point'\)/);
+  assert.match(js, /rememberRouteEdit\('move '/);
+  assert.match(js, /rememberRouteEdit\('reverse route'\)/);
+  assert.match(js, /rememberRouteEdit\('change speed'\)/);
+  assert.match(js, /rememberRouteEdit\('change day length'\)/);
+  assert.match(js, /rememberRouteEdit\('change departure'\)/);
+  assert.match(js, /historyAction:\(active\?'set ':'clear '\)/);
+  assert.match(js, /route\.speed=next/);
+  assert.match(js, /route\.hours=next/);
+  assert.match(js, /route\.departure=next/);
   assert.match(js, /renderRouteStopsInto\(els\.cockpitStops\)/);
   assert.match(js, /els\.cockpitMode\?\.addEventListener\('change'/);
   assert.match(js, /els\.cockpitWeather\?\.addEventListener\('click',analyzeRouteWeather\)/);
-  assert.match(js, /rememberRouteEdit\(\);[\s\S]{0,120}route\.points\.splice/);
-  assert.match(js, /rememberRouteEdit\(\);[\s\S]{0,120}route\.points\[index\]=/);
-  assert.match(js, /rememberRouteEdit\(\);[\s\S]{0,120}route\.points\.reverse/);
   assert.match(js, /scenarioGenerated:true/);
   assert.match(js, /sourceBackedBoatIn:true/);
+});
+
+test('undo is one-action-per-step and restores planning settings instead of DOM-after-change values', () => {
+  assert.match(js, /speed:Number\(route\.speed\)\|\|3/);
+  assert.match(js, /hours:Number\(route\.hours\)\|\|6/);
+  assert.match(js, /departure:route\.departure\|\|els\.routeDeparture/);
+  assert.match(js, /if\(next===route\.departure\)return/);
+  assert.match(js, /if\(Math\.abs\(next-route\.speed\)<\.001\)/);
+  assert.match(js, /if\(Math\.abs\(next-route\.hours\)<\.001\)/);
+  assert.match(js, /last\?\.fingerprint===fingerprint/);
+  assert.match(js, /route\.future=\[\]/);
+  assert.match(js, /Choose a route start first, then use End day here/);
+  assert.match(js, /if\(!addedForDayEnd\)rememberRouteEdit/);
+  assert.match(js, /emitEvent\('isle_royale_route_undo'/);
+  assert.match(js, /emitEvent\('isle_royale_route_redo'/);
 });
 
 test('planning map expands for route building and supports a full-viewport focus mode', () => {
