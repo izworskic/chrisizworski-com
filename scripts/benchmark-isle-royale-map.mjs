@@ -406,7 +406,8 @@ if (!catalogCrawlable) hardFailures.push('crawlable source catalog/raw manifest 
 if (!measurementComplete) hardFailures.push('planned privacy-safe Isle Royale measurement events missing');
 if (!currentShipwreckRuntime) hardFailures.push('current NPS shipwreck buoy runtime missing');
 if (!pointDetailRuntime) hardFailures.push('point hit-target/detail popup runtime missing');
-if (!interactionAssetFresh) hardFailures.push('live Isle Royale interaction asset is stale-cacheable or using an old version token');\nif (!popupReadabilityRuntime) hardFailures.push('rich detail cards are not promoted into the unobstructed floating map inspector');
+if (!interactionAssetFresh) hardFailures.push('live Isle Royale interaction asset is stale-cacheable or using an old version token');
+if (!popupReadabilityRuntime) hardFailures.push('rich detail cards are not promoted into the unobstructed floating map inspector');
 if (!popupDragRuntime) hardFailures.push('floating inspector cannot move the card itself independently of the map for points and official portages');
 if (!campgroundDetailRuntime) hardFailures.push('campground cards are missing official NPS capacity profiles or truthful supplemental numbered site/shelter identifiers');
 if (!osmToggleRuntime) hardFailures.push('supplemental-data layer is not reversible or leaks source plumbing into user-facing labels');
