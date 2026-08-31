@@ -95,7 +95,8 @@ const smartRoutingRuntime = /const trailGraph = \{/.test(js)
   && /draggable:true/.test(js)
   && /nearestControlSegmentIndex/.test(js)
   && /function reverseRoute/.test(js)
-  && /route\.resolvedPoints\.length \? route\.resolvedPoints : route\.points/.test(js);
+  && /route\.resolvedPoints\.length \? route\.resolvedPoints : route\.points/.test(js)
+  && /if\(route\.mode!=='hike'&&route\.points\.length>=2&&route\.smartState!=='water-aware'\)return \[\]/.test(js);
 const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js)
   && /function resolveWaterRouteAsync/.test(js)
   && /water-aware/.test(js)
@@ -109,6 +110,17 @@ const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js
   && /crosses\(n,nn\)/.test(waterJs)
   && /waterKeys/.test(waterJs)
   && /outside-water routing component/.test(waterJs)
+  && /function crossingCount/.test(waterJs)
+  && /shortcutSafe=!crosses/.test(waterJs)
+  && /Generated route intersects mapped shoreline/.test(waterJs)
+  && /Water route failed final coastline validation/.test(waterJs)
+  && /land_crossings:landCrossings/.test(waterJs)
+  && /Water route failed zero-land-crossing validation/.test(js)
+  && /stats\.land_crossings!==0/.test(js)
+  && /route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/.test(js)
+  && /No route line or mileage is shown until a zero-land-crossing path is validated/.test(js)
+  && /route-distance-badge/.test(js)
+  && /Water · .*mi/.test(js)
   && /weatherSamples/.test(waterJs)
   && /zonesAlongPath/.test(waterJs)
   && /dayEnds/.test(waterJs)
@@ -283,6 +295,8 @@ if (!/speed:Number\(route\.speed\)\|\|3/.test(js) || !/hours:Number\(route\.hour
 if (!/button\.textContent=undoLabel/.test(js) || !/last\?\.fingerprint===fingerprint/.test(js)) hardFailures.push('Undo is missing action labels or no-op history deduplication');
 if (!tripPersistenceRuntime) hardFailures.push('trip persistence/handoff is missing local-only save, share-fragment restore, or resolved-route GPX export safeguards');
 if (!routeEditingRuntime) hardFailures.push('route planning is missing leg/cumulative distances or obvious stop deletion from the map/list');
+if (!/function crossingCount/.test(waterJs) || !/Water route failed final coastline validation/.test(waterJs) || !/route\.resolvedPoints=\[\];[\s\S]{0,100}route\.smartState='water-fallback'/.test(js)) hardFailures.push('water routing can still display an unverified line or accept a mapped shoreline crossing');
+if (!/route-distance-badge/.test(js) || !/Water · .*mi/.test(js) || !/Calculating water distance/.test(js)) hardFailures.push('water distance is not clearly identified on the resolved route');
 if (/data-layer="vegetation-(?:overview|baseline|change)"|data-layer="horne-fire"/.test(html)) hardFailures.push('retired vegetation/ecology layers leaked back into the planning controls');
 if (!['geology','vegetation-detailed','vegetation-simple','vegetation-change-1996-2017','horne-fire-2021'].every(id => catalog.items.some(x => x.id === id && x.state === 'research-only'))) hardFailures.push('retired research layers are not clearly marked research-only in the source catalog');
 if (!reliefRuntime) hardFailures.push('keyless USGS relief runtime missing');
