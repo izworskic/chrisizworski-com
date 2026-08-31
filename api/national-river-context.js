@@ -2,13 +2,13 @@ const {
   finite,
   forecastCrest,
   nwpsCategory,
-  percentileBand,
   sourceMeta,
 } = require("../lib/national-outdoor");
 
 const STAT = "https://waterservices.usgs.gov/nwis/stat/";
 const NWPS = "https://api.water.noaa.gov/nwps/v1";
-const UA = "ChrisIzworskiNationalRiverContext/1.0 (+https://chrisizworski.com/national-tools/rivers/)";
+const NWS = "https://api.weather.gov";
+const UA = "ChrisIzworskiNationalRiverContext/2.0 (+https://chrisizworski.com/national-tools/rivers/)";
 
 async function fetchText(url, timeoutMs = 3000) {
   const response = await fetch(url, {
@@ -79,6 +79,23 @@ async function nwpsGaugeIndex(lat, lon) {
   const data = await fetchJson(`${NWPS}/gauges?${params}`, 1800);
   return Array.isArray(data?.gauges) ? data.gauges : [];
 }
+function normalizeForecastTrend(points = []) {
+  const valid = points
+    .map((point) => ({
+      time: point?.validTime || point?.valid_time || null,
+      stage: finite(point?.primary ?? point?.stage),
+      flow: finite(point?.secondary ?? point?.flow),
+    }))
+    .filter((point) => Date.parse(point.time || "") && (point.stage != null || point.flow != null));
+  if (valid.length < 2) return { direction: "unknown", stage_change_ft: null, flow_change: null, first: valid[0] || null, last: valid.at(-1) || null };
+  const first = valid[0], last = valid.at(-1);
+  const stageChange = first.stage != null && last.stage != null ? Math.round((last.stage - first.stage) * 100) / 100 : null;
+  const flowChange = first.flow != null && last.flow != null ? Math.round(last.flow - first.flow) : null;
+  const basis = stageChange ?? (flowChange == null ? null : flowChange);
+  const threshold = stageChange != null ? 0.1 : 1;
+  const direction = basis == null ? "unknown" : Math.abs(basis) < threshold ? "roughly steady" : basis > 0 ? "rising" : "falling";
+  return { direction, stage_change_ft: stageChange, flow_change: flowChange, first, last };
+}
 function normalizeNwps(metadata, forecast) {
   const observed = metadata?.status?.observed || {};
   const categories = metadata?.flood?.categories || {};
@@ -96,6 +113,7 @@ function normalizeNwps(metadata, forecast) {
     forecast_available: Boolean(forecastPoints.length),
     forecast_crest: crest,
     forecast_crest_category: crest ? nwpsCategory(crest.stage, categories) : null,
+    forecast_trend: normalizeForecastTrend(forecastPoints),
     impacts: Array.isArray(metadata?.flood?.impacts) ? metadata.flood.impacts.slice(0, 12) : [],
   };
 }
@@ -121,6 +139,45 @@ async function nwpsContext(lat, lon, ids) {
     return new Map();
   }
 }
+function parseWindMph(value) {
+  const nums = String(value || "").match(/\d+(?:\.\d+)?/g);
+  if (!nums?.length) return null;
+  return Math.max(...nums.map(Number).filter(Number.isFinite));
+}
+function weatherWindow(periods, hours) {
+  const now = Date.now(), end = now + hours * 3600000;
+  const list = (periods || []).filter((period) => {
+    const time = Date.parse(period.startTime || "");
+    return time >= now - 3600000 && time <= end;
+  });
+  const pops = list.map((period) => finite(period?.probabilityOfPrecipitation?.value, 0, 100)).filter((value) => value != null);
+  const temps = list.map((period) => finite(period.temperature)).filter((value) => value != null);
+  const winds = list.map((period) => parseWindMph(period.windSpeed)).filter((value) => value != null);
+  const likely = list.find((period) => finite(period?.probabilityOfPrecipitation?.value, 0, 100) >= 50);
+  const phrases = [...new Set(list.map((period) => period.shortForecast).filter(Boolean))].slice(0, 4);
+  return {
+    hours,
+    max_precip_probability: pops.length ? Math.max(...pops) : null,
+    first_50pct_precip_at: likely?.startTime || null,
+    min_air_temp_f: temps.length ? Math.min(...temps) : null,
+    max_air_temp_f: temps.length ? Math.max(...temps) : null,
+    max_wind_mph: winds.length ? Math.max(...winds) : null,
+    forecast_phrases: phrases,
+  };
+}
+async function weatherContext(lat, lon) {
+  const point = await fetchJson(`${NWS}/points/${lat.toFixed(4)},${lon.toFixed(4)}`, 1500);
+  const hourlyUrl = point?.properties?.forecastHourly;
+  if (!hourlyUrl) return null;
+  const hourly = await fetchJson(hourlyUrl, 1800);
+  const periods = Array.isArray(hourly?.properties?.periods) ? hourly.properties.periods : [];
+  return {
+    updated_at: hourly?.properties?.updateTime || null,
+    time_zone: point?.properties?.timeZone || null,
+    next_24h: weatherWindow(periods, 24),
+    next_48h: weatherWindow(periods, 48),
+  };
+}
 function validSiteIds(value) {
   return [...new Set(String(value || "").split(",").map((id) => id.trim()).filter((id) => /^\d{5,15}$/.test(id)))].slice(0, 6);
 }
@@ -142,12 +199,14 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: "Valid latitude, longitude and USGS site IDs are required" });
   }
 
-  const [statsResult, nwpsResult] = await Promise.allSettled([
+  const [statsResult, nwpsResult, weatherResult] = await Promise.allSettled([
     dailyStatistics(ids),
     nwpsContext(lat, lon, ids),
+    weatherContext(lat, lon),
   ]);
   const stats = statsResult.status === "fulfilled" ? statsResult.value : new Map();
   const nwps = nwpsResult.status === "fulfilled" ? nwpsResult.value : new Map();
+  const weather = weatherResult.status === "fulfilled" ? weatherResult.value : null;
 
   const context = {};
   for (const id of ids) {
@@ -165,8 +224,9 @@ module.exports = async function handler(req, res) {
 
   return res.status(200).json({
     retrieved_at: new Date().toISOString(),
-    degraded: statsResult.status !== "fulfilled" || nwpsResult.status !== "fulfilled",
+    degraded: statsResult.status !== "fulfilled" || nwpsResult.status !== "fulfilled" || weatherResult.status !== "fulfilled",
     context,
+    weather,
     historical: Object.fromEntries([...stats.entries()]),
     sources: [
       sourceMeta({
@@ -181,14 +241,24 @@ module.exports = async function handler(req, res) {
         url: "https://water.noaa.gov/",
         updatedAt: null,
         available: [...nwps.values()].some(Boolean),
-        status: "official forecast/flood context where matched",
+        status: "official river forecast/flood context where matched",
+      }),
+      sourceMeta({
+        name: "National Weather Service hourly forecast",
+        url: "https://www.weather.gov/documentation/services-web-API",
+        updatedAt: weather?.updated_at || null,
+        available: Boolean(weather),
+        status: "weather context near searched location",
       }),
     ],
   });
 };
 
 module.exports._test = {
+  normalizeForecastTrend,
   normalizeNwps,
   parseStatsRdb,
+  parseWindMph,
   validSiteIds,
+  weatherWindow,
 };

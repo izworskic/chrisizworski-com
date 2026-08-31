@@ -44,18 +44,13 @@
     if(!result.ok)return {id:"rivers",priority:4,kicker:"Water",title:"River data unavailable",detail:result.error,level:"",href:N().withQuery("/national-tools/rivers/",loc),facts:[]};
     const d=result.data,g=d.gauges&&d.gauges[0];
     if(!g)return {id:"rivers",priority:10,kicker:"Water",title:"No active streamflow gauge found nearby",detail:"Try the river tool with another nearby town or river access.",level:"",href:N().withQuery("/national-tools/rivers/",loc),facts:[]};
-    const category=g.nwps&&g.nwps.observed_category||"";
-    const hist=g.historical_comparison&&g.historical_comparison.code||"unknown";
-    let priority=30,level="";
-    if(/Major|Moderate|Minor Flood/i.test(category)){priority=100;level="danger"}
-    else if(/Action/i.test(category)){priority=88;level="warn"}
-    else if(hist==="very-high"){priority=78;level="warn"}
-    else if(hist==="high"){priority=60;level="warn"}
-    else if(hist==="very-low"){priority=55;level="warn"}
+    const priority=30,level="";
     const flow=g.discharge_cfs==null?"flow unavailable":Math.round(g.discharge_cfs).toLocaleString()+" cfs";
-    const facts=[flow+" · "+(g.trend_label||"trend unavailable"),g.historical_comparison&&g.historical_comparison.label||"Historical comparison unavailable"];
-    if(g.nwps&&g.nwps.forecast_crest)facts.push("NOAA crest "+Number(g.nwps.forecast_crest.stage).toFixed(1)+" ft · "+(g.nwps.forecast_crest_category||"forecast"));
-    return {id:"rivers",priority:priority,kicker:"Nearest river",title:g.name,detail:(g.historical_comparison&&g.historical_comparison.label||"Current conditions")+" · "+(g.trend_label||"trend unavailable"),level:level,href:N().withQuery("/national-tools/rivers/",loc),facts:facts,source:"USGS reading "+(g.age_minutes==null?"age unknown":g.age_minutes+" min old")+(g.nwps?" · NOAA forecast match":"")};
+    const facts=[flow+" · "+(g.trend_label||"trend unavailable")];
+    if(g.trend_percent_24h!=null)facts.push("Flow change "+(g.trend_percent_24h>0?"+":"")+g.trend_percent_24h+"% in 24h");
+    const water=g.sensors&&g.sensors.water_temperature;if(water&&water.value!=null)facts.push("Water "+Number(water.value).toFixed(1)+"°F");
+    const turbidity=g.sensors&&g.sensors.turbidity;if(turbidity&&turbidity.value!=null)facts.push("Turbidity "+Number(turbidity.value).toFixed(1)+(turbidity.unit?" "+turbidity.unit:""));
+    return {id:"rivers",priority:priority,kicker:"River intelligence",title:g.name,detail:"Current USGS observations · "+(g.trend_label||"trend unavailable"),level:level,href:N().withQuery("/national-tools/rivers/",loc),facts:facts.slice(0,5),source:"USGS reading "+(g.age_minutes==null?"age unknown":g.age_minutes+" min old")+" · open tool for historical and NOAA/NWS context"};
   }
   function frostCard(result,loc){
     if(!result.ok)return {id:"frost",priority:5,kicker:"Freeze risk",title:"Frost data unavailable",detail:result.error,level:"",href:N().withQuery("/national-tools/frost/",loc),facts:[]};

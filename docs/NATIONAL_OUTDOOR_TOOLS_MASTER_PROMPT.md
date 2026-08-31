@@ -159,11 +159,23 @@ Must answer:
 - What river/gauge is near me?
 - What is the current flow/level?
 - Is it rising or falling?
+- What changed over the last 6–24 hours?
 - How fresh is the reading?
 - How unusual is it for this time of year when historical statistics are available?
+- Which additional continuous USGS signals are actually monitored here, such as water temperature, turbidity, dissolved oxygen, conductivity, or pH?
 - Is there an official flood category/forecast where supported?
+- What weather may matter next, while clearly separating weather from an inferred river response?
 
-Never infer recreational safety from gauge values.
+River Intelligence interpretation rules:
+- Lead with observable change before raw sensor inventory.
+- Show "what changed" and "what's next" as separate observation/forecast concepts.
+- Activity lenses may reorder or explain the same facts for paddling, fishing, swimming, ecology, or trip planning, but may not manufacture activity scores or universal recommendations.
+- Missing sensors remain unavailable; never substitute modeled or nearby values without an explicit source/method label.
+- A weather forecast is context, not proof that a river will rise or fall.
+- Species-specific fishing inference requires species/regulation/ecology inputs; do not turn generic river data into a trout or bite score.
+- Swimming interpretation must explicitly disclose when bacteria/toxin/advisory data are absent.
+
+Never infer recreational safety from gauge values or from an activity lens.
 
 ### 3. Aurora Tonight
 
