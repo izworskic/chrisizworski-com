@@ -67,10 +67,27 @@
       if(href.startsWith("/national-tools/"))anchor.setAttribute("href",withQuery(href,loc));
     });
   }
+  async function readJsonResponse(response,fallback){
+    const text=await response.text();
+    const type=(response.headers.get("content-type")||"").toLowerCase();
+    let data=null;
+    if(text){
+      if(type.includes("application/json")||type.includes("+json")){
+        try{data=JSON.parse(text)}catch(_){}
+      }else{
+        try{data=JSON.parse(text)}catch(_){}
+      }
+    }
+    if(!data){
+      const status=response.status?("HTTP "+response.status):"";
+      throw new Error((fallback||"Data source unavailable")+(status?" · "+status:""));
+    }
+    if(!response.ok)throw new Error(data.error||data.detail||fallback||"Request failed");
+    return data;
+  }
   async function geocode(q){
     const r=await fetch("/api/national-geocode?q="+encodeURIComponent(q));
-    const data=await r.json();
-    if(!r.ok)throw new Error(data.error||"Location lookup failed");
+    const data=await readJsonResponse(r,"Location lookup unavailable");
     remember(data);
     return data;
   }
@@ -87,6 +104,6 @@
     });
   }
   window.NationalTools={
-    $,fmtDate,fmtInZone,esc,geocode,label,bind,saved,savedPlaces,savePlace,removePlace,locationKey,remember,withQuery,propagate
+    $,fmtDate,fmtInZone,esc,readJsonResponse,geocode,label,bind,saved,savedPlaces,savePlace,removePlace,locationKey,remember,withQuery,propagate
   };
 })();
