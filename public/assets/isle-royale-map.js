@@ -2019,24 +2019,34 @@
     if(!active)return;
     const pointCount=route.points.length;
     const resolved=routeIsResolved();
-    const routedMiles=resolved?routeTotalMiles():0;
-    if(els.routeBuildPhase)els.routeBuildPhase.textContent=route.reviewing?'Route review':'Building route';
+    const verifiedMiles=verifiedRouteMiles();
+    const activeDay=activeRouteDayNumber();
+    const dayMiles=currentDayVerifiedMiles();
+    const last=route.points[pointCount-1]||null;
+    if(els.routeBuildPhase)els.routeBuildPhase.textContent=route.reviewing?'Trip review':'Building Day '+activeDay;
     if(els.routeBuildMetrics) {
-      if(pointCount===0)els.routeBuildMetrics.textContent='Tap the map or a campground to set the start.';
-      else if(pointCount===1)els.routeBuildMetrics.textContent='Start set. Add the next point to draw the first leg.';
-      else if(resolved) {
-        const qualifier=route.mode==='canoe'?'routed trip':route.mode==='hike'?'mapped route':'verified route';
-        els.routeBuildMetrics.textContent=pointCount+' points · '+routedMiles.toFixed(1)+' mi '+qualifier;
+      if(pointCount===0)els.routeBuildMetrics.textContent='Day 1 · tap the map or a campground to set the start.';
+      else if(pointCount===1)els.routeBuildMetrics.textContent='Day 1 start set. Add the next point to draw and measure the first safe leg.';
+      else if(last?.manualDayEnd) {
+        const day=manualDayNumber(last)||Math.max(1,activeDay-1);
+        els.routeBuildMetrics.textContent='Day '+day+' complete at '+(last.label||'camp')+' · '+verifiedMiles.toFixed(1)+' mi trip so far · add the next point for Day '+activeDay+'.';
+      } else if(resolved) {
+        els.routeBuildMetrics.textContent='Day '+activeDay+' · '+dayMiles.toFixed(1)+' mi this day · '+verifiedMiles.toFixed(1)+' mi trip · all current legs verified.';
       } else {
         const state=route.smartState==='water-fallback'||route.smartState==='canoe-fallback'
-          ? 'blocked — adjust water points or choose an official P# portage'
-          : route.mode==='hike'?'verifying mapped trail…':'verifying water-only route…';
-        els.routeBuildMetrics.textContent=pointCount+' points · '+state;
+          ? 'newest leg blocked'
+          : route.mode==='hike'?'verifying mapped trail…':'newest leg verifying…';
+        els.routeBuildMetrics.textContent='Day '+activeDay+' · '+dayMiles.toFixed(1)+' mi verified this day · '+verifiedMiles.toFixed(1)+' mi verified trip · '+state;
       }
     }
     if(els.routeBackPoint) {
       els.routeBackPoint.hidden=route.reviewing;
       els.routeBackPoint.disabled=pointCount<1;
+    }
+    if(els.routeFinishDay) {
+      els.routeFinishDay.hidden=route.reviewing;
+      els.routeFinishDay.disabled=!canFinishCurrentDay();
+      els.routeFinishDay.title=canFinishCurrentDay()?'Close this day at the selected campground and keep building the next day.':'Finish day becomes available when the current route is verified and the last point is an eligible campground.';
     }
     if(els.routeFinishBuild) {
       els.routeFinishBuild.hidden=route.reviewing;
@@ -2051,6 +2061,26 @@
     if(els.cockpitShare)els.cockpitShare.disabled=building||pointCount<2;
     if(els.cockpitGpx)els.cockpitGpx.disabled=building||!routeIsResolved();
     if(els.routeReviewGpx)els.routeReviewGpx.disabled=!routeIsResolved();
+  }
+
+  function finishCurrentDay() {
+    if(!route.adding)return;
+    if(!routeIsResolved()) {
+      status('Finish day is waiting for the current water/portage route to verify. The mileage already verified stays on the map.');
+      return;
+    }
+    const last=route.points[route.points.length-1];
+    if(!last||last.kind!=='campground') {
+      status('Choose the campground where you will sleep, then use Finish day. The next day will continue from that same camp.');
+      return;
+    }
+    const day=completedRouteDays()+1;
+    const miles=currentDayVerifiedMiles();
+    if(!setCampDayEnd(last,true))return;
+    route.reviewing=false;
+    setRouteAdding(true);
+    status('Day '+day+' complete at '+(last.label||'campground')+' · '+miles.toFixed(1)+' mi. Continue building Day '+(day+1)+' from this camp.');
+    emitEvent('isle_royale_finish_day',{day,distance_miles:Number(miles.toFixed(2)),mode:route.mode});
   }
 
   function finishRouteBuild() {
@@ -2069,8 +2099,8 @@
     renderRoute();
     renderSavedTrips();
     status(routeIsResolved()
-      ? 'Route build finished. Review the route distance and stops, then save, share or export GPX.'
-      : 'Route build finished. Review your points while the mapped route finishes resolving; GPX unlocks when route geometry is ready.');
+      ? 'Trip finished. Review the day-by-day route, distances and stops, then save, share or export GPX.'
+      : 'Trip review opened while the mapped route finishes resolving; GPX unlocks when route geometry is ready.');
     emitEvent('isle_royale_route_review',{point_count:route.points.length,mode:route.mode,resolved:routeIsResolved()});
   }
 
@@ -4475,9 +4505,10 @@
     }
     syncCockpitControls();
     resizePlanningMap();
+    renderRouteBuildFlow();
     status(focused
-      ? 'Map focus is on. The map now fills the viewport for route planning; use Exit map focus or Escape to return.'
-      : 'Map focus closed. Your route and map position are preserved.');
+      ? 'Map focus is on. Route controls and live verified mileage remain on the map while you build day by day.'
+      : 'Map focus closed. Your route, day boundaries and map position are preserved.');
     emitEvent('isle_royale_map_focus',{active:focused,mode:route.mode,building:route.adding});
   }
 
