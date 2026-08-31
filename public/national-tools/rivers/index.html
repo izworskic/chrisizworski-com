@@ -1,25 +1,78 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>U.S. River Levels & Flow | Chris Izworski</title><meta name="description" content="Find nearby USGS river gauges and see current flow, level, water temperature, reading age and six-hour trend across the United States."><link rel="canonical" href="https://chrisizworski.com/national-tools/rivers/">
-<meta name="robots" content="index,follow,max-image-preview:large"><link rel="stylesheet" href="/assets/national-tools.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/rivers/#page","url":"https://chrisizworski.com/national-tools/rivers/","name":"U.S. River Levels, Flow & Conditions","description":"Find nearby USGS river gauges and see current flow, level, water temperature, reading age and six-hour trend across the United States.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script></head>
-<body><header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
-<main><section class="hero"><div class="wrap"><div class="eyebrow">River Conditions · USGS</div><h1>U.S. River Levels, Flow & Conditions</h1><p class="lede">Find the gauges nearest a city or ZIP and see what the water is doing now, how fresh the reading is, and whether flow is rising or falling.</p></div></section>
+<title>U.S. River Levels & Flow | Chris Izworski</title>
+<meta name="description" content="Find nearby USGS river gauges with current flow, trend, historical daily range and official NOAA flood forecasts where matched.">
+<link rel="canonical" href="https://chrisizworski.com/national-tools/rivers/"><meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="stylesheet" href="/assets/national-tools.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/rivers/#page","url":"https://chrisizworski.com/national-tools/rivers/","name":"U.S. River Levels, Flow & Conditions","description":"Find nearby USGS river gauges with current flow, trend, historical daily range and official NOAA flood forecasts where matched.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
+</head><body>
+<header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
+<main>
+<section class="hero"><div class="wrap"><div class="eyebrow">River Conditions · USGS + NOAA NWPS</div><h1>U.S. River Levels, Flow & Forecasts</h1><p class="lede">See what the nearest river is doing now, whether it is unusual for this date, and whether NOAA has an official flood forecast for the same gauge.</p></div></section>
+
 <section class="section"><div class="wrap">
 <div class="tool-nav"><a href="/national-tools/">All U.S. tools</a><a href="/national-tools/aurora/">Aurora</a><a href="/national-tools/frost/">Frost</a></div>
-<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn">Find river gauges</button></form><div class="status" aria-live="polite"></div>
-<div id="result" class="result" hidden><span class="pill">USGS provisional data</span><div id="answer" class="answer"></div><div id="gauges"></div><p class="small" id="updated"></p></div>
+<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn">Check nearby rivers</button></form><div class="status" aria-live="polite"></div>
+
+<div id="result" class="result" hidden>
+  <div class="result-head"><span class="pill">USGS observations</span><span id="forecast-pill" class="pill">NOAA forecast where available</span></div>
+  <div id="answer" class="answer"></div>
+  <div id="primary-gauge"></div>
+  <details class="more-gauges"><summary>Other nearby USGS gauges</summary><div id="gauges"></div></details>
+  <p class="small" id="updated"></p>
+</div>
 </div></section>
-<section class="section"><div class="wrap grid"><div class="source-box"><h2>What you get</h2><p>Active stream gauges nearest your chosen place, current discharge, gauge height, water temperature where measured, data age and a six-hour flow trend when enough observations exist.</p></div><div class="source-box"><h2>Important limitation</h2><p><strong>A gauge cannot tell you that a river is safe.</strong> Local hydraulics, obstructions, weather, skill, access and craft matter. USGS real-time values are provisional and subject to revision.</p><p>Source: <a href="https://waterdata.usgs.gov/">USGS Water Data for the Nation</a>.</p></div></div></section>
+
+<section class="section"><div class="wrap grid">
+<div class="source-box"><h2>“High” and “low” are historical, not recreational</h2><p>For the closest gauges, current discharge is compared with approved USGS daily percentiles for this calendar date. “High for this date” means hydrologically unusual compared with the gauge record. It does not mean runnable, fishable, wadable, or safe.</p></div>
+<div class="source-box"><h2>NOAA forecast appears only on a real match</h2><p>The tool matches a USGS site number to NOAA’s National Water Prediction Service. If the IDs match, official flood categories, impacts and a forecast crest can appear. If they do not, the card stays honestly observation-only.</p><p><a href="https://waterdata.usgs.gov/">USGS Water Data</a> · <a href="https://water.noaa.gov/">NOAA National Water Prediction Service</a></p></div>
+</div></section>
+
 <script>
-document.addEventListener("DOMContentLoaded",function(){const N=window.NationalTools,form=document.getElementById("loc");
- function trend(g){if(g.trend_percent_6h==null)return "trend unavailable";if(Math.abs(g.trend_percent_6h)<3)return "roughly steady";return(g.trend_percent_6h>0?"↑ rising ":"↓ falling ")+Math.abs(g.trend_percent_6h)+"% / 6h";}
- async function run(loc){const r=await fetch("/api/national-rivers?lat="+loc.latitude+"&lon="+loc.longitude),d=await r.json();if(!r.ok)throw new Error(d.error||"River data unavailable");
-  document.getElementById("result").hidden=false;document.getElementById("answer").textContent=d.gauges.length?"Nearest live river gauges to "+N.label(loc):"No active USGS streamflow gauges found nearby";
-  document.getElementById("gauges").innerHTML=d.gauges.map(g=>'<div class="card" style="margin:10px 0"><h3>'+N.esc(g.name)+'</h3><div class="metrics"><div class="metric"><b>'+(g.discharge_cfs==null?"—":Math.round(g.discharge_cfs).toLocaleString()+" cfs")+'</b><span>flow · '+trend(g)+'</span></div><div class="metric"><b>'+(g.gage_height_ft==null?"—":g.gage_height_ft.toFixed(2)+" ft")+'</b><span>gauge height</span></div><div class="metric"><b>'+(g.water_temp_f==null?"—":g.water_temp_f.toFixed(1)+"°F")+'</b><span>water temperature</span></div></div><p class="small">'+g.distance_miles.toFixed(1)+' mi from search point · reading '+(g.age_minutes==null?"age unknown":g.age_minutes+" min old")+'</p></div>').join("");
+document.addEventListener("DOMContentLoaded",function(){
+ const N=window.NationalTools,form=document.getElementById("loc");
+ function flow(v){return v==null?"Unavailable":Math.round(v).toLocaleString()+" cfs"}
+ function stage(v){return v==null?"Unavailable":Number(v).toFixed(2)+" ft"}
+ function temp(v){return v==null?"Unavailable":Number(v).toFixed(1)+"°F"}
+ function trend(g){if(g.trend_percent_6h==null)return "Trend unavailable";if(Math.abs(g.trend_percent_6h)<3)return "Roughly steady";return(g.trend_percent_6h>0?"Rising ":"Falling ")+Math.abs(g.trend_percent_6h)+"% in 6h"}
+ function spark(series){
+   const pts=(series||[]).filter(p=>Number.isFinite(Number(p.value))&&Date.parse(p.time||""));if(pts.length<2)return "";
+   const values=pts.map(p=>Number(p.value)),min=Math.min(...values),max=Math.max(...values),range=Math.max(1,max-min),w=420,h=90,pad=5;
+   const coords=values.map((v,i)=>[(i/(values.length-1))*(w-pad*2)+pad,h-pad-((v-min)/range)*(h-pad*2)]);
+   const path=coords.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+   return '<svg class="spark" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="Recent 24 hour flow trend"><path d="'+path+'" fill="none" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"></path></svg>';
+ }
+ function historical(g){
+   const h=g.historical_daily_flow;if(!h)return '<p class="small">Approved same-date USGS historical percentiles are unavailable for this gauge.</p>';
+   return '<div class="range-line"><strong>'+N.esc(g.historical_comparison?.label||"Historical comparison")+'</strong><span>10th '+flow(h.p10)+' · median '+flow(h.p50)+' · 90th '+flow(h.p90)+'</span></div>';
+ }
+ function nwps(g){
+   const n=g.nwps;if(!n)return '<div class="forecast-box muted-box"><strong>NOAA forecast match unavailable</strong><span>This card remains USGS observation-only.</span></div>';
+   let message=n.observed_category||"NOAA gauge matched";
+   if(n.forecast_crest){
+     message=(n.forecast_crest_category||"Forecast")+" · crest "+stage(n.forecast_crest.stage)+" "+N.fmtDate(n.forecast_crest.valid_time);
+   }else if(!n.forecast_available){message+=" · official forecast series not available";}
+   return '<div class="forecast-box"><strong>'+N.esc(message)+'</strong><span>NOAA NWPS '+N.esc(n.lid||"")+'</span>'+(n.official_url?'<a href="'+N.esc(n.official_url)+'">Open official NOAA hydrograph ↗</a>':"")+'</div>';
+ }
+ function gaugeCard(g,primary){
+   return '<article class="river-card '+(primary?"primary":"")+'"><div class="river-title"><div><span class="tool-kicker">'+g.distance_miles.toFixed(1)+' mi from search point</span><h3>'+N.esc(g.name)+'</h3></div><span class="pill '+(g.stale?"danger":"")+'">'+(g.age_minutes==null?"age unknown":g.age_minutes+" min old")+'</span></div>'+
+   '<div class="metrics"><div class="metric"><b>'+flow(g.discharge_cfs)+'</b><span>'+N.esc(trend(g))+'</span></div><div class="metric"><b>'+stage(g.gage_height_ft)+'</b><span>gauge height</span></div><div class="metric"><b>'+temp(g.water_temp_f)+'</b><span>water temperature</span></div></div>'+
+   spark(g.flow_series_24h)+historical(g)+nwps(g)+'</article>';
+ }
+ async function run(loc){
+  const r=await fetch("/api/national-rivers?lat="+loc.latitude+"&lon="+loc.longitude),d=await r.json();if(!r.ok)throw new Error(d.error||"River data unavailable");
+  document.getElementById("result").hidden=false;
+  if(!d.gauges.length){document.getElementById("answer").textContent="No active USGS streamflow gauge found nearby";document.getElementById("primary-gauge").innerHTML="";document.getElementById("gauges").innerHTML="";return}
+  const first=d.gauges[0];
+  document.getElementById("answer").textContent=(first.historical_comparison?.label||"Current river conditions")+" · "+first.trend_label+" near "+N.label(loc);
+  document.getElementById("primary-gauge").innerHTML=gaugeCard(first,true);
+  document.getElementById("gauges").innerHTML=d.gauges.slice(1).map(g=>gaugeCard(g,false)).join("");
+  document.getElementById("forecast-pill").textContent=d.gauges.some(g=>g.nwps)?"NOAA NWPS match available":"USGS observation only";
   document.getElementById("updated").textContent=d.disclaimer+" Retrieved "+N.fmtDate(d.retrieved_at)+".";
  }
  N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
-});</script></main>
+});
+</script>
+</main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Built around public scientific and government data, with sources shown where the answer is derived.</div></footer>
 <script src="/assets/national-tools.js"></script></body></html>

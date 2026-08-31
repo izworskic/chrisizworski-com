@@ -1,29 +1,70 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Northern Lights Forecast Tonight | Chris Izworski</title><meta name="description" content="Check northern lights viewing potential tonight using NOAA aurora signals, Kp, darkness and local NWS cloud cover for your U.S. location."><link rel="canonical" href="https://chrisizworski.com/national-tools/aurora/">
-<meta name="robots" content="index,follow,max-image-preview:large"><link rel="stylesheet" href="/assets/national-tools.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/aurora/#page","url":"https://chrisizworski.com/national-tools/aurora/","name":"Can I See the Northern Lights Tonight?","description":"Check northern lights viewing potential tonight using NOAA aurora signals, Kp, darkness and local NWS cloud cover for your U.S. location.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script></head>
-<body><header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
-<main><section class="hero"><div class="wrap"><div class="eyebrow">Aurora Tonight · NOAA + NWS</div><h1>Can I See the Northern Lights Tonight?</h1><p class="lede">A local answer built from the aurora signal, clouds and darkness—not a Kp number pretending to be a visibility forecast.</p></div></section>
+<title>Northern Lights Forecast Tonight | Chris Izworski</title>
+<meta name="description" content="Check northern lights viewing potential tonight using NOAA aurora signals, Kp, darkness, moon and local NWS cloud cover for your U.S. location.">
+<link rel="canonical" href="https://chrisizworski.com/national-tools/aurora/"><meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="stylesheet" href="/assets/national-tools.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/aurora/#page","url":"https://chrisizworski.com/national-tools/aurora/","name":"Can I See the Northern Lights Tonight?","description":"Check northern lights viewing potential tonight using NOAA aurora signals, Kp, darkness, moon and local NWS cloud cover for your U.S. location.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
+</head><body>
+<header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
+<main>
+<section class="hero"><div class="wrap"><div class="eyebrow">Aurora Tonight · NOAA + NWS + USNO</div><h1>Can I See the Northern Lights Tonight?</h1><p class="lede">A local answer built from the aurora signal, darkness, clouds and moonlight—not a Kp number pretending to be a visibility forecast.</p></div></section>
+
 <section class="section"><div class="wrap">
 <div class="tool-nav"><a href="/national-tools/">All U.S. tools</a><a href="/national-tools/rivers/">Rivers</a><a href="/national-tools/frost/">Frost</a><a href="/national-tools/fall-color/">Fall color</a></div>
 <form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn">Check tonight</button></form><div class="status" aria-live="polite"></div>
-<div id="result" class="result" hidden><span id="level" class="pill"></span><div id="answer" class="answer"></div><p id="detail"></p>
-<div class="metrics"><div class="metric"><b id="ovation">—</b><span>NOAA local OVATION signal</span></div><div class="metric"><b id="cloud">—</b><span>Best dark-window cloud cover</span></div><div class="metric"><b id="kp">—</b><span>Peak Kp in 24 hours</span></div></div><p class="small" id="updated"></p></div>
+
+<div id="result" class="result" hidden>
+  <div class="result-head"><span id="level" class="pill"></span><span id="confidence" class="pill"></span></div>
+  <div id="answer" class="answer"></div><p id="detail"></p>
+  <div id="reasons" class="action-grid"></div>
+  <div class="decision-panel">
+    <h2>Best weather window after dark</h2>
+    <div class="metrics">
+      <div class="metric"><b id="window">—</b><span>best three-hour dark window</span></div>
+      <div class="metric"><b id="cloud">—</b><span>average NWS cloud cover in that window</span></div>
+      <div class="metric"><b id="moon">—</b><span>moon illumination</span></div>
+    </div>
+    <p class="small">This ranks cloud cover only among dark hours. It does not assume the current aurora signal will last until the weather window.</p>
+  </div>
+  <div class="metrics"><div class="metric"><b id="ovation">—</b><span>NOAA local OVATION signal</span></div><div class="metric"><b id="kp">—</b><span>peak Kp in 24 hours</span></div><div class="metric"><b id="signal-time">—</b><span>OVATION forecast time</span></div></div>
+  <p class="small" id="updated"></p>
+</div>
+
 <div id="mi" class="handoff" hidden><strong>Michigan has a deeper version.</strong> Use <a href="/northern-lights-michigan/">Northern Lights Michigan</a> for the Michigan-specific viewing network and local context.</div>
 </div></section>
-<section class="section"><div class="wrap grid"><div class="source-box"><h2>What this score means</h2><p>This tool combines NOAA’s 30–90 minute OVATION aurora signal with the broader Kp outlook and National Weather Service cloud/darkness context. OVATION is not a percent chance of a sighting; Kp is not a local forecast.</p></div><div class="source-box"><h2>Sources</h2><p><strong>NOAA Space Weather Prediction Center</strong> for OVATION and Kp. <strong>National Weather Service</strong> for local cloud forecasts. Every lookup carries current source timestamps when available.</p></div></div></section>
+
+<section class="section"><div class="wrap grid">
+<div class="source-box"><h2>What the answer is actually combining</h2><p><strong>OVATION:</strong> NOAA’s 30–90 minute modeled aurora signal near your location. <strong>Kp:</strong> broad geomagnetic context. <strong>NWS:</strong> local darkness and cloud cover. <strong>USNO:</strong> moon phase and illumination when available.</p></div>
+<div class="source-box"><h2>What can still ruin a good-looking result</h2><p>Light pollution, a blocked northern horizon, haze, moon glare and a fast-changing aurora can all matter. OVATION is not a percent chance of seeing aurora and Kp is not a local visibility forecast.</p><p><a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast">NOAA OVATION</a> · <a href="https://www.weather.gov/documentation/services-web-API">NWS API</a></p></div>
+</div></section>
+
 <script>
-document.addEventListener("DOMContentLoaded",function(){const N=window.NationalTools,form=document.getElementById("loc");
- async function run(loc){const r=await fetch("/api/national-aurora?lat="+loc.latitude+"&lon="+loc.longitude),d=await r.json();if(!r.ok)throw new Error(d.error||"Aurora data unavailable");
-  document.getElementById("result").hidden=false;document.getElementById("level").textContent=d.verdict.level;document.getElementById("answer").textContent=d.verdict.label+" near "+N.label(loc);document.getElementById("detail").textContent=d.verdict.detail;
-  document.getElementById("ovation").textContent=d.local_signal.ovation_value==null?"Unavailable":Math.round(d.local_signal.ovation_value);
-  const c=d.local_signal.best_dark_window?.cloud_percent;document.getElementById("cloud").textContent=c==null?"Unknown":Math.round(c)+"%";
-  document.getElementById("kp").textContent=d.geomagnetic.peak_24h_kp==null?"Unknown":d.geomagnetic.peak_24h_kp;
-  document.getElementById("updated").textContent="Retrieved "+N.fmtDate(d.retrieved_at)+(d.degraded?" · One or more upstream feeds are degraded":"");
+document.addEventListener("DOMContentLoaded",function(){
+ const N=window.NationalTools,form=document.getElementById("loc");
+ function timeRange(w){if(!w)return "Unavailable";return new Date(w.start_time).toLocaleTimeString([],{hour:"numeric"})+"–"+new Date(w.end_time).toLocaleTimeString([],{hour:"numeric"})}
+ async function run(loc){
+  const r=await fetch("/api/national-aurora?lat="+loc.latitude+"&lon="+loc.longitude),d=await r.json();if(!r.ok)throw new Error(d.error||"Aurora data unavailable");
+  document.getElementById("result").hidden=false;
+  document.getElementById("level").textContent=d.verdict.level;
+  document.getElementById("confidence").textContent="confidence "+d.verdict.confidence;
+  document.getElementById("answer").textContent=d.verdict.label+" near "+N.label(loc);
+  document.getElementById("detail").textContent=d.verdict.detail;
+  document.getElementById("reasons").innerHTML=(d.reasons||[]).map(r=>'<div class="mini-card"><span class="tool-kicker">'+N.esc(r.label)+'</span><strong>'+N.esc(r.value)+'</strong><small>'+N.esc(r.detail)+'</small></div>').join("");
+  const w=d.local_signal?.best_dark_window;
+  document.getElementById("window").textContent=timeRange(w);
+  document.getElementById("cloud").textContent=w?.average_cloud_percent==null?"Unknown":Math.round(w.average_cloud_percent)+"%";
+  document.getElementById("moon").textContent=d.moon?.illumination_percent==null?"Unknown":Math.round(d.moon.illumination_percent)+"%";
+  document.getElementById("ovation").textContent=d.local_signal?.ovation_value==null?"Unavailable":Math.round(d.local_signal.ovation_value);
+  document.getElementById("kp").textContent=d.geomagnetic?.peak_24h_kp==null?"Unknown":d.geomagnetic.peak_24h_kp;
+  document.getElementById("signal-time").textContent=d.local_signal?.ovation_forecast_at?new Date(d.local_signal.ovation_forecast_at).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}):"Unknown";
+  const stale=(d.sources||[]).filter(s=>s.stale===true).map(s=>s.source_name);
+  document.getElementById("updated").textContent="Retrieved "+N.fmtDate(d.retrieved_at)+(d.degraded?" · one or more upstream feeds are degraded":"")+(stale.length?" · stale: "+stale.join(", "):"");
   document.getElementById("mi").hidden=loc.stateCode!=="MI";
  }
  N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
-});</script></main>
+});
+</script>
+</main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Built around public scientific and government data, with sources shown where the answer is derived.</div></footer>
 <script src="/assets/national-tools.js"></script></body></html>

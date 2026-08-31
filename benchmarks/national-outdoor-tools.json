@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "updated": "2026-08-31",
   "objective": "Ship a separate U.S. outdoor decision network without weakening Michigan canonicals, source truth, or search quality.",
   "lossFunction": {
@@ -59,7 +59,8 @@
     "hub": true,
     "phase1EntryPages": true,
     "generatedLocationPages": false,
-    "zipCropDatePages": false
+    "zipCropDatePages": false,
+    "phase2AddsIndexableRoutes": false
   },
   "protectedMichiganRoutes": [
     "/tools/",
@@ -67,5 +68,28 @@
     "/fall-color/",
     "/michigan-frost-dates/",
     "/zone-6a-planting-calendar/"
-  ]
+  ],
+  "phase2": {
+    "principle": "Deepen decision usefulness and source transparency before expanding URL count.",
+    "capabilities": [
+      "shared-source-freshness-contract",
+      "location-timezone-context",
+      "aurora-best-dark-weather-window-and-moon-context",
+      "river-same-date-usgs-percentiles",
+      "river-exact-usgs-to-nwps-official-forecast-match",
+      "frost-spring-and-fall-probabilities",
+      "frost-hard-freeze-and-station-confidence",
+      "extension-sourced-20-crop-planting-rules",
+      "fall-color-historical-timing-band-plus-separate-current-weather"
+    ],
+    "smokeAirQuality": {
+      "status": "source-key-gated",
+      "reason": "AirNow developer access and NASA FIRMS MAP_KEY are required for the intended authoritative implementation. Do not ship a weaker fake-live substitute.",
+      "requiredConfiguration": [
+        "AIRNOW_API_KEY",
+        "FIRMS_MAP_KEY"
+      ],
+      "indexableRouteCreated": false
+    }
+  }
 }

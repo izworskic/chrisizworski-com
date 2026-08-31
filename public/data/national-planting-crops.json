@@ -1,0 +1,229 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-31",
+  "methodology": "Crop timing rules are general frost-relative planning guidance synthesized from Cooperative Extension schedules. The local anchor comes from NOAA freeze climatology; the current NWS forecast remains a separate immediate-risk check. Seed packet, cultivar, soil temperature, heat, moisture and local Extension guidance can change the right date.",
+  "sources": [
+    {
+      "name": "University of Maryland Extension — Starting Vegetable Seeds Indoors",
+      "url": "https://extension.umd.edu/resource/starting-vegetable-seeds-indoors",
+      "role": "indoor seedling duration and crop grouping"
+    },
+    {
+      "name": "Oregon State University Extension — When to start seeds indoors",
+      "url": "https://extension.oregonstate.edu/catalog/pub/when-start-seeds-indoors-central-oregon",
+      "role": "frost-relative set-out timing and indoor duration"
+    },
+    {
+      "name": "University of Maine Cooperative Extension — Plant from Spring to Fall",
+      "url": "https://extension.umaine.edu/gardening/manual/propagation/plant-from-spring-to-fall/",
+      "role": "direct-sow and cool/warm-season timing context"
+    },
+    {
+      "name": "Rutgers Cooperative Extension — Starting Vegetable Seeds Indoors",
+      "url": "https://njaes.rutgers.edu/pubs/download.php?strPubID=FS787",
+      "role": "transplant suitability and warm/cool season classification"
+    }
+  ],
+  "crops": [
+    {
+      "id": "tomato",
+      "name": "Tomato",
+      "season": "warm",
+      "indoor_weeks": 6,
+      "setout_offset_days": 7,
+      "direct_sow_offset_days": null,
+      "frost_tolerance": "tender",
+      "note": "Wait until freeze risk has passed and nights are reliably mild; protect from cold setbacks."
+    },
+    {
+      "id": "pepper",
+      "name": "Pepper",
+      "season": "warm",
+      "indoor_weeks": 9,
+      "setout_offset_days": 14,
+      "direct_sow_offset_days": null,
+      "frost_tolerance": "very tender",
+      "note": "Peppers are slow indoors and dislike cold soil and cold nights."
+    },
+    {
+      "id": "eggplant",
+      "name": "Eggplant",
+      "season": "warm",
+      "indoor_weeks": 9,
+      "setout_offset_days": 14,
+      "direct_sow_offset_days": null,
+      "frost_tolerance": "very tender",
+      "note": "Treat like peppers: warm soil, warm nights, no frost exposure."
+    },
+    {
+      "id": "broccoli",
+      "name": "Broccoli",
+      "season": "cool",
+      "indoor_weeks": 6,
+      "setout_offset_days": -28,
+      "direct_sow_offset_days": -28,
+      "frost_tolerance": "light frost tolerant",
+      "note": "Cool-season crop that can go out well before the warm-season garden."
+    },
+    {
+      "id": "cabbage",
+      "name": "Cabbage",
+      "season": "cool",
+      "indoor_weeks": 6,
+      "setout_offset_days": -35,
+      "direct_sow_offset_days": -28,
+      "frost_tolerance": "light frost tolerant",
+      "note": "Hardened transplants tolerate cool spring conditions."
+    },
+    {
+      "id": "cauliflower",
+      "name": "Cauliflower",
+      "season": "cool",
+      "indoor_weeks": 6,
+      "setout_offset_days": -14,
+      "direct_sow_offset_days": -21,
+      "frost_tolerance": "light frost tolerant",
+      "note": "Best growth comes from steady cool conditions without severe cold stress."
+    },
+    {
+      "id": "kale",
+      "name": "Kale",
+      "season": "cool",
+      "indoor_weeks": 6,
+      "setout_offset_days": -35,
+      "direct_sow_offset_days": -35,
+      "frost_tolerance": "frost tolerant",
+      "note": "One of the more cold-tolerant garden crops."
+    },
+    {
+      "id": "lettuce",
+      "name": "Lettuce",
+      "season": "cool",
+      "indoor_weeks": 5,
+      "setout_offset_days": -14,
+      "direct_sow_offset_days": -28,
+      "frost_tolerance": "light frost tolerant",
+      "note": "Direct sow early; heat matters more as spring advances."
+    },
+    {
+      "id": "spinach",
+      "name": "Spinach",
+      "season": "cool",
+      "indoor_weeks": null,
+      "setout_offset_days": null,
+      "direct_sow_offset_days": -42,
+      "frost_tolerance": "frost tolerant",
+      "note": "Direct sow very early as soon as soil is workable."
+    },
+    {
+      "id": "pea",
+      "name": "Peas",
+      "season": "cool",
+      "indoor_weeks": null,
+      "setout_offset_days": null,
+      "direct_sow_offset_days": -28,
+      "frost_tolerance": "light frost tolerant",
+      "note": "Direct sow into cool soil; mature before summer heat."
+    },
+    {
+      "id": "onion",
+      "name": "Onions",
+      "season": "cool",
+      "indoor_weeks": 10,
+      "setout_offset_days": -42,
+      "direct_sow_offset_days": -42,
+      "frost_tolerance": "light frost tolerant",
+      "note": "Long indoor lead time when grown from seed."
+    },
+    {
+      "id": "bean",
+      "name": "Snap Beans",
+      "season": "warm",
+      "indoor_weeks": null,
+      "setout_offset_days": null,
+      "direct_sow_offset_days": 7,
+      "frost_tolerance": "tender",
+      "note": "Direct sow after frost risk drops and soil warms."
+    },
+    {
+      "id": "corn",
+      "name": "Sweet Corn",
+      "season": "warm",
+      "indoor_weeks": null,
+      "setout_offset_days": null,
+      "direct_sow_offset_days": 7,
+      "frost_tolerance": "tender",
+      "note": "Plant after the soil has warmed; cold wet soil delays emergence."
+    },
+    {
+      "id": "cucumber",
+      "name": "Cucumber",
+      "season": "warm",
+      "indoor_weeks": 3,
+      "setout_offset_days": 7,
+      "direct_sow_offset_days": 7,
+      "frost_tolerance": "tender",
+      "note": "Short indoor lead; avoid overgrown root-bound transplants."
+    },
+    {
+      "id": "squash",
+      "name": "Squash",
+      "season": "warm",
+      "indoor_weeks": 3,
+      "setout_offset_days": 14,
+      "direct_sow_offset_days": 7,
+      "frost_tolerance": "tender",
+      "note": "Warm soil is important; direct sowing often works well."
+    },
+    {
+      "id": "melon",
+      "name": "Melons",
+      "season": "warm",
+      "indoor_weeks": 3,
+      "setout_offset_days": 14,
+      "direct_sow_offset_days": 14,
+      "frost_tolerance": "very tender",
+      "note": "Needs genuinely warm soil and nights; do not rush."
+    },
+    {
+      "id": "carrot",
+      "name": "Carrots",
+      "season": "cool",
+      "indoor_weeks": null,
+      "setout_offset_days": null,
+      "direct_sow_offset_days": -28,
+      "frost_tolerance": "light frost tolerant",
+      "note": "Direct sow; transplanting disturbs the root."
+    },
+    {
+      "id": "beet",
+      "name": "Beets",
+      "season": "cool",
+      "indoor_weeks": null,
+      "setout_offset_days": null,
+      "direct_sow_offset_days": -21,
+      "frost_tolerance": "light frost tolerant",
+      "note": "Direct sow in cool spring soil."
+    },
+    {
+      "id": "radish",
+      "name": "Radishes",
+      "season": "cool",
+      "indoor_weeks": null,
+      "setout_offset_days": null,
+      "direct_sow_offset_days": -35,
+      "frost_tolerance": "frost tolerant",
+      "note": "Fast cool-season crop; succession sow before hot weather."
+    },
+    {
+      "id": "basil",
+      "name": "Basil",
+      "season": "warm",
+      "indoor_weeks": 6,
+      "setout_offset_days": 14,
+      "direct_sow_offset_days": 14,
+      "frost_tolerance": "very tender",
+      "note": "Cold-sensitive herb; wait for warm nights."
+    }
+  ]
+}
