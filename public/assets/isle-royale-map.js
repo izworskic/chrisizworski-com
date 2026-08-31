@@ -2322,7 +2322,7 @@
       return;
     }
     root.hidden=false;
-    if(els.routeExportPlan)els.routeExportPlan.disabled=false;
+    if(els.routeExportPlan)els.routeExportPlan.disabled=route.adding;
     const effort=tripEffortSummary();
     const days=tripDays();
 
@@ -4444,8 +4444,10 @@
     route.reviewing=false;
     setRouteAdding(false);
     clearRouteWeather();
+    try{localStorage.removeItem(TRIP_AUTOSAVE_KEY);}catch(_){}
+    renderSavedTrips();
     renderRoute();
-    status('Route cleared.');
+    status('Working route cleared. Named saved trips were kept.');
   }
 
   function interpolateRoutePoint(targetDistance,cumulative) {
