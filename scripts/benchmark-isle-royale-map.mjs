@@ -180,7 +180,7 @@ const smartRoutingRuntime = /const trailGraph = \{/.test(js)
   && /if\(route\.mode!=='hike'&&route\.mode!=='canoe'&&route\.points\.length>=2&&route\.smartState!=='water-aware'\)return \[\]/.test(js);
 const canoePortageRuntime = /<option value="canoe">Canoe \+ portage<\/option>/.test(html)
   && /id="route-portage-trips"/.test(html)
-  && /id="route-portage-speed"/.test(html)
+  && /id="route-portage-pace"/.test(html)
   && /function resolveCanoeRouteAsync/.test(js)
   && /function canoeTrailLegCandidate/.test(js)
   && /function canoeWaterLegCandidate/.test(js)
