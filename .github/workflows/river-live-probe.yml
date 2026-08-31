@@ -41,15 +41,30 @@ jobs:
           }catch{}
           console.log('\nRESOLVED',JSON.stringify({lat,lon}));
           await probe('PRODUCTION RIVERS',`https://chrisizworski.com/api/national-rivers?lat=${lat}&lon=${lon}&probe=${Date.now()}`);
+          const round7=n=>Math.round(n*1e7)/1e7;
           for(const span of [0.6,1.5,2.4]){
-            const west=Math.max(-180,lon-span),east=Math.min(180,lon+span),south=Math.max(-90,lat-span),north=Math.min(90,lat+span);
+            const west=round7(Math.max(-180,lon-span)),east=round7(Math.min(180,lon+span)),south=round7(Math.max(-90,lat-span)),north=round7(Math.min(90,lat+span));
             const u=new URL('https://waterservices.usgs.gov/nwis/iv/');
             u.searchParams.set('format','json');
             u.searchParams.set('bBox',`${west},${south},${east},${north}`);
             u.searchParams.set('siteType','ST');
             u.searchParams.set('siteStatus','active');
-            u.searchParams.set('parameterCd','00060,00065,00010');
-            u.searchParams.set('period','P1D');
-            await probe('USGS IV span '+span,u.toString());
+            u.searchParams.set('parameterCd','00060');
+            u.searchParams.set('period','PT2H');
+            const result=await probe('USGS DISCOVERY span '+span,u.toString());
+            try{
+              const data=JSON.parse(result.text);
+              const ids=[...new Set((data.value?.timeSeries||[]).map(s=>s.sourceInfo?.siteCode?.[0]?.value).filter(Boolean))];
+              console.log('DISCOVERED_IDS',ids.slice(0,20).join(','));
+              if(ids.length){
+                const detail=new URL('https://waterservices.usgs.gov/nwis/iv/');
+                detail.searchParams.set('format','json');
+                detail.searchParams.set('sites',ids.slice(0,10).join(','));
+                detail.searchParams.set('parameterCd','00060,00065,00010');
+                detail.searchParams.set('period','P1D');
+                detail.searchParams.set('siteStatus','all');
+                await probe('USGS DETAIL span '+span,detail.toString());
+              }
+            }catch{}
           }
           NODE
