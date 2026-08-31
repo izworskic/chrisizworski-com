@@ -129,6 +129,15 @@
       }
       return Number.isFinite(best)?best:null;
     }
+    function boundaryDistance(p){
+      let best=Infinity;
+      for(let ring=1;ring<=4;ring++){
+        const d=ring*BUCKET;
+        for(const seg of nearbyFrom(barrierBuckets,{lat:p.lat-d,lng:p.lng-d},{lat:p.lat+d,lng:p.lng+d},0))best=Math.min(best,pointSegmentMiles(p,seg.a,seg.b));
+        if(best<Infinity)break;
+      }
+      return Number.isFinite(best)?best:null;
+    }
     function inAnyRing(p,rings){
       return (rings||[]).some(ring=>Array.isArray(ring)&&ring.length>=4&&pointInRing(p,ring));
     }
@@ -255,13 +264,15 @@
 
       function nearest(p,allowShoreAccess=true){
         let best=null,bd=Infinity;
-        const shoreSnapLimit=mode==='paddle'?.45:.7;
+        const boundary=boundaryDistance(p);
+        const nearBoundary=Number.isFinite(boundary)&&boundary<=.65;
+        const shoreSnapLimit=mode==='paddle'?(nearBoundary?.95:.45):(nearBoundary?1.1:.7);
         for(const nk of waterKeys){
           const n=nodes.get(nk),d=miles(p,n);
           if(d>=bd||d>shoreSnapLimit)continue;
           const blocked=crosses(p,n);
           if(blocked&&!allowShoreAccess)continue;
-          if(blocked&&allowShoreAccess&&d>.12)continue;
+          if(blocked&&allowShoreAccess&&!nearBoundary)continue;
           best=n;bd=d;
         }
         if(!best)throw new Error('Checkpoint is not close enough to mapped water. Move it onto the water and try again.');
@@ -349,7 +360,7 @@
       return {max_offshore_miles:maxOff,exposed_miles:exposed,longest_exposed_miles:longest,land_crossings:crossingCount(path)};
     }
     return {
-      route,landingNear,analyze,coastDistance,crosses,crossingCount,isMappedWater,
+      route,landingNear,analyze,coastDistance,boundaryDistance,crosses,crossingCount,isMappedWater,
       segment_count:barrierSegments.length,
       inland_water_count:waterPolygons.length,
       waterway_node_count:centerNodes.size
