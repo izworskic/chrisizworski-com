@@ -20,49 +20,57 @@
       "label": "Malone Bay",
       "lat": 47.98044,
       "lng": -88.8123,
-      "role": "waterbody-centroid-not-landing"
+      "role": "waterbody-centroid-not-landing",
+      "match_radius_miles": 1
     },
     "siskiwit-lake": {
       "label": "Siskiwit Lake",
       "lat": 48.00125,
       "lng": -88.79723,
-      "role": "waterbody-centroid-not-landing"
+      "role": "waterbody-centroid-not-landing",
+      "match_radius_miles": 3
     },
     "intermediate-lake": {
       "label": "Intermediate Lake",
       "lat": 48.030726,
       "lng": -88.727174,
-      "role": "waterbody-centroid-not-landing"
+      "role": "waterbody-centroid-not-landing",
+      "match_radius_miles": 0.8
     },
     "lake-richie": {
       "label": "Lake Richie",
       "lat": 48.043807,
       "lng": -88.69536,
-      "role": "waterbody-centroid-not-landing"
+      "role": "waterbody-centroid-not-landing",
+      "match_radius_miles": 1
     },
     "wood-lake": {
       "label": "Wood Lake",
       "lat": 48.003494,
       "lng": -88.744244,
-      "role": "waterbody-centroid-not-landing"
+      "role": "waterbody-centroid-not-landing",
+      "match_radius_miles": 0.8
     },
     "lake-whittlesey": {
       "label": "Lake Whittlesey",
       "lat": 48.00644,
       "lng": -88.70721,
-      "role": "waterbody-centroid-not-landing"
+      "role": "waterbody-centroid-not-landing",
+      "match_radius_miles": 0.8
     },
     "chippewa-harbor": {
       "label": "Chippewa Harbor",
       "lat": 48.02891,
       "lng": -88.65041,
-      "role": "waterbody-place-centroid-not-landing"
+      "role": "waterbody-place-centroid-not-landing",
+      "match_radius_miles": 1.2
     },
     "moskey-basin": {
       "label": "Moskey Basin",
       "lat": 48.069,
       "lng": -88.6296,
-      "role": "waterbody-centroid-not-landing"
+      "role": "waterbody-centroid-not-landing",
+      "match_radius_miles": 1.2
     },
     "lake-lesage": {
       "label": "Lake LeSage",
@@ -72,19 +80,22 @@
       "aliases": [
         "LeSage Lake",
         "Lake Lesage"
-      ]
+      ],
+      "match_radius_miles": 0.8
     },
     "lake-livermore": {
       "label": "Lake Livermore",
       "lat": 48.064733,
       "lng": -88.7084,
-      "role": "waterbody-centroid-not-landing"
+      "role": "waterbody-centroid-not-landing",
+      "match_radius_miles": 0.7
     },
     "chickenbone-lake": {
       "label": "Chickenbone Lake",
       "lat": 48.06734,
       "lng": -88.71318,
-      "role": "waterbody-centroid-not-landing"
+      "role": "waterbody-centroid-not-landing",
+      "match_radius_miles": 1
     },
     "mccargoe-cove": {
       "label": "McCargoe Cove",
@@ -93,7 +104,8 @@
       "role": "waterbody-centroid-not-landing",
       "aliases": [
         "McCargo Cove"
-      ]
+      ],
+      "match_radius_miles": 1.2
     },
     "pickerel-cove": {
       "label": "Pickerel Cove",
@@ -102,19 +114,22 @@
       "role": "waterbody-centroid-not-landing",
       "aliases": [
         "Dory Bay"
-      ]
+      ],
+      "match_radius_miles": 0.9
     },
     "lane-cove": {
       "label": "Lane Cove",
       "lat": 48.14571,
       "lng": -88.55924,
-      "role": "waterbody-centroid-not-landing"
+      "role": "waterbody-centroid-not-landing",
+      "match_radius_miles": 1
     },
     "stockly-bay": {
       "label": "Stockly Bay",
       "lat": 48.15154,
       "lng": -88.53924,
-      "role": "waterbody-centroid-not-landing"
+      "role": "waterbody-centroid-not-landing",
+      "match_radius_miles": 1
     },
     "five-finger-bay": {
       "label": "Five Finger Bay",
@@ -123,25 +138,29 @@
       "role": "waterbody-centroid-not-landing",
       "aliases": [
         "Five Fingers Bay"
-      ]
+      ],
+      "match_radius_miles": 1.2
     },
     "duncan-bay": {
       "label": "Duncan Bay",
       "lat": 48.1506,
       "lng": -88.5225,
-      "role": "place-centroid-not-landing"
+      "role": "place-centroid-not-landing",
+      "match_radius_miles": 1.2
     },
     "tobin-harbor": {
       "label": "Tobin Harbor",
       "lat": 48.14432,
       "lng": -88.49785,
-      "role": "waterbody-centroid-not-landing"
+      "role": "waterbody-centroid-not-landing",
+      "match_radius_miles": 1.2
     },
     "rock-harbor": {
       "label": "Rock Harbor",
       "lat": 48.13639,
       "lng": -88.49586,
-      "role": "waterbody-centroid-not-landing"
+      "role": "waterbody-centroid-not-landing",
+      "match_radius_miles": 1.5
     }
   },
   "portages": [
@@ -432,5 +451,6 @@
       "route_family": "northeast-harbors",
       "endpoint_basis": "official-label"
     }
-  ]
+  ],
+  "anchor_note": "Endpoint search anchors are deliberately generous waterbody/place centroids so a user click near a landing can be associated with a named corridor. Matching also requires the mapped trail length to agree with the NPS published distance; anchors never define route geometry."
 }
