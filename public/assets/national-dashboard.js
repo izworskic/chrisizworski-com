@@ -12,7 +12,10 @@
     }
   }
   function formatClock(value,timeZone){
-    return N().fmtInZone(value,timeZone,{hour:"numeric",minute:"2-digit"});
+    if(typeof N().fmtInZone==="function")return N().fmtInZone(value,timeZone,{hour:"numeric",minute:"2-digit"});
+    if(!value)return "Unknown";
+    const d=new Date(value);if(Number.isNaN(d.getTime()))return String(value);
+    try{return d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit",timeZone:timeZone||undefined})}catch(_){return d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}
   }
   function statusClass(level){
     if(["hard-freeze","freeze","cloudy","danger","major","moderate","minor"].includes(level))return "danger";
