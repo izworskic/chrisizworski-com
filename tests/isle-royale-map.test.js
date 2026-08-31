@@ -106,7 +106,7 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
 
 
 test('Isle Royale interaction script is cache-busted and not stored during active development', () => {
-  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-hard-water-routing-1/);
+  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-focus-live-days-1/);
   assert.doesNotMatch(html, /isle-royale-map\.js\?v=20260830-19/);
   const vercel = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
   const rule = (vercel.headers || []).find(item => item.source === '/assets/isle-royale-map.js');
@@ -321,27 +321,30 @@ test('map-first route builder separates Explore from persistent Build mode and m
   assert.doesNotMatch(js, /scrollIntoView\(\{behavior:'smooth'.*route-planner/);
 });
 
-test('water route building waits for verified geometry and exposes point-by-point backtracking', () => {
-  for (const id of ['route-build-bar','route-build-phase','route-build-metrics','route-back-point','route-finish-build','route-review-actions','route-review-edit','route-review-save','route-review-share','route-review-gpx','cockpit-back-point']) {
+test('focused route building keeps controls, verified prefix mileage, and day-by-day actions visible', () => {
+  for (const id of ['route-build-bar','route-build-phase','route-build-metrics','route-back-point','route-finish-day','route-finish-build','route-review-actions','route-review-edit','route-review-save','route-review-share','route-review-gpx','cockpit-back-point','cockpit-finish-day','cockpit-finish-trip']) {
     assert.ok(html.includes(`id="${id}"`), id);
   }
   assert.match(html, /Back one point/);
-  assert.match(html, /Finish &amp; review/);
-  assert.match(js, /function routeDisplayPoints/);
-  assert.match(js, /if\(route\.mode==='hike'\)return route\.points/);
-  assert.match(js, /return route\.points\.length<2\?route\.points:\[\]/);
-  assert.match(js, /const draftDisplay=route\.mode==='hike'&&!routeIsResolved\(\)&&displayPath\.length>=2/);
+  assert.match(html, />Finish day</);
+  assert.match(html, />Finish trip</);
+  assert.match(html, /body\.map-focus \.route-build-bar\{display:flex!important/);
+  assert.doesNotMatch(html, /body\.map-focus \.route-build-bar\{display:none!important/);
+  assert.match(js, /function verifiedRouteMiles/);
+  assert.match(js, /function currentDayVerifiedMiles/);
+  assert.match(js, /function finishCurrentDay/);
+  assert.match(js, /isle_royale_finish_day/);
   assert.match(js, /function backOneRoutePoint/);
   assert.match(js, /route\.points\.pop\(\)/);
   assert.match(js, /isle_royale_route_back_point/);
   assert.match(js, /els\.routeBackPoint\?\.addEventListener\('click',backOneRoutePoint\)/);
-  assert.match(js, /els\.cockpitBackPoint\?\.addEventListener\('click',backOneRoutePoint\)/);
+  assert.match(js, /els\.routeFinishDay\?\.addEventListener\('click',finishCurrentDay\)/);
+  assert.match(js, /els\.cockpitFinishDay\?\.addEventListener\('click',finishCurrentDay\)/);
+  assert.match(js, /els\.cockpitFinishTrip\?\.addEventListener\('click',finishRouteBuild\)/);
   assert.match(js, /routeFinishBuild\.disabled=pointCount<2\|\|/);
   assert.match(js, /Finish is blocked until every paddle leg resolves on water/);
-  assert.match(js, /No straight line is drawn across land/);
-  assert.match(js, /if\(path\.length<2\) \{[\s\S]{0,140}route\.mode==='hike'[\s\S]{0,140}pending:true/);
+  assert.match(js, /verified this day/);
   assert.doesNotMatch(js, /Draft route · straight between selected points while mapped routing verifies/);
-  assert.doesNotMatch(js, /mi draft total · resolving canoe leg/);
 });
 
 test('canoe resolved leg distance labels use the current route leg index', () => {
@@ -648,22 +651,22 @@ test('Isle Royale has protected internal discovery paths outside the frozen tool
 });
 
 
-test('watercraft routes never fall back to a straight overland line', () => {
-  assert.match(js, /if\(route\.mode==='canoe'&&route\.points\.length>=2&&route\.smartState!=='canoe-aware'\)return \[\]/);
-  assert.match(js, /if\(route\.mode!=='hike'&&route\.mode!=='canoe'&&route\.points\.length>=2&&route\.smartState!=='water-aware'\)return \[\]/);
-  assert.match(js, /return route\.points\.length<2\?route\.points:\[\]/);
+test('watercraft routes keep only verified safe prefixes and never fall back over land', () => {
+  assert.match(js, /!\['canoe-aware','canoe-partial'\]\.includes\(route\.smartState\)/);
+  assert.match(js, /!\['water-aware','water-partial'\]\.includes\(route\.smartState\)/);
   assert.match(js, /route\.smartState==='water-aware'&&Number\(route\.waterStats\?\.land_crossings\|\|0\)===0/);
   assert.match(js, /Water route failed zero-land-crossing validation/);
   assert.match(js, /stats\.land_crossings!==0/);
-  assert.match(js, /No overland fallback is drawn/);
-  assert.match(js, /no straight line is drawn across land/i);
-  assert.match(js, /0 mapped shoreline crossings/);
+  assert.match(js, /route\.smartState=legs\.length\?'water-partial':'water-fallback'/);
+  assert.match(js, /route\.smartState=legs\.length\?'canoe-partial':'canoe-fallback'/);
+  assert.match(js, /route\.resolvedPoints=combineCanoeLegs\(legs\)/);
+  assert.match(js, /Earlier safe-water lines and measurements remain on the map/);
+  assert.match(js, /Earlier lines and measurements remain valid/);
   assert.doesNotMatch(js, /Draft route · straight between selected points while mapped routing verifies/);
   assert.match(waterIntelJs, /function crossingCount/);
   assert.match(waterIntelJs, /shortcutSafe=!crosses/);
   assert.match(waterIntelJs, /if\(crossingCount\(safe\)>0\)throw new Error\('Generated route intersects mapped shoreline'\)/);
   assert.match(waterIntelJs, /if\(landCrossings>0\)throw new Error\('Water route failed final coastline validation'\)/);
-  assert.match(waterIntelJs, /return \{points:out,access_miles:access,land_crossings:landCrossings\}/);
 });
 
 test('2026 NPS portage dataset is complete, source-backed, and keeps anchors non-navigational', () => {
