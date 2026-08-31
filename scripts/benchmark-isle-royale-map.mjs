@@ -136,6 +136,24 @@ const officialPortageDatasetRuntime = officialPortages?.schema_version === 1
   && /NPS Portage #/.test(js)
   && /Official portage dataset/.test(html);
 
+const selectableOfficialPortageRuntime = /data-layer="official-portage" checked/.test(html)
+  && /Official portages/.test(html)
+  && /16 NPS 2026 carries/.test(html)
+  && /official-portage-badge/.test(html)
+  && /map\.createPane\('portagePane'\)/.test(js)
+  && /'official-portage': L\.layerGroup\(\)\.addTo\(map\)/.test(js)
+  && /function officialPortageMappedGeometry/.test(js)
+  && /function renderOfficialPortageLayer/.test(js)
+  && /function officialPortagePopup/.test(js)
+  && /function addOfficialPortageToTrip/.test(js)
+  && /weight:20,opacity:\.001,interactive:true/.test(js)
+  && /className:'official-portage-badge unresolved'/.test(js)
+  && /mapped trail corridor could not be resolved/i.test(js)
+  && /officialPortageId/.test(js)
+  && /selected mapped portage corridor/.test(js)
+  && /isle_royale_portage_open/.test(js)
+  && /isle_royale_portage_add/.test(js);
+
 const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js)
   && /function resolveWaterRouteAsync/.test(js)
   && /water-aware/.test(js)
@@ -283,7 +301,7 @@ const referenceShelfComplete = /Official maps from the original research/.test(h
 
 add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
-add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && routeEditingRuntime, 'map-first route planning with paddle/portage leg accounting, leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
+add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && routeEditingRuntime, 'map-first route planning with paddle/portage leg accounting, leg/cumulative distances, obvious deletion, cockpit/undo-redo, source-backed camps/day ends, persistence and water intelligence');
 add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
@@ -325,6 +343,7 @@ if (!routePlanningRuntime) hardFailures.push('route-aware marine planning runtim
 if (!smartRoutingRuntime) hardFailures.push('smart trail routing runtime missing');
 if (!canoePortageRuntime) hardFailures.push('canoe route planning is missing mixed paddle/portage leg detection, distance accounting, carry settings, or manual leg override');
 if (!officialPortageDatasetRuntime) hardFailures.push('official 2026 NPS portage dataset is incomplete, unvalidated, or disconnected from canoe route matching');
+if (!selectableOfficialPortageRuntime) hardFailures.push('official portages are not visually selectable map objects with wide tap targets and add-to-trip behavior');
 if (!waterIntelligenceRuntime) hardFailures.push('water intelligence runtime missing or reduced to a draggable straight-line sketch');
 if (!itineraryRuntime) hardFailures.push('multi-day water itinerary is not source-backed by open NPS Boat-In campgrounds with per-day context');
 if (!scenarioRuntime) hardFailures.push('scenario planning is missing side-by-side trip structures or overnight-aware forecast comparison');
