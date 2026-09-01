@@ -3,6 +3,41 @@
   const LEGACY_STORE="ci-national-location-v1";
   const PLACES_STORE="ci-national-places-v1";
 
+  const ANALYTICS_BLOCKED_KEYS=new Set(["query","q","latitude","longitude","displayName","place","state","postalCode","location"]);
+
+  function currentSurface(){
+    const path=(window.location.pathname||"/").replace(/\/+$/,"")||"/";
+    if(path==="/national-tools")return "hub";
+    const match=path.match(/^\/national-tools\/([^/]+)/);
+    return match?match[1]:"national-tools";
+  }
+  function ensureAnalytics(){
+    window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};
+    if(document.querySelector('script[data-national-analytics="1"]'))return;
+    const script=document.createElement("script");
+    script.defer=true;
+    script.src="/_vercel/insights/script.js";
+    script.dataset.nationalAnalytics="1";
+    document.head.appendChild(script);
+  }
+  function eventData(data){
+    const safe={surface:currentSurface()};
+    Object.entries(data||{}).forEach(function(entry){
+      const key=entry[0],value=entry[1];
+      if(ANALYTICS_BLOCKED_KEYS.has(key)||value==null)return;
+      if(typeof value==="number"||typeof value==="boolean")safe[key]=value;
+      else safe[key]=String(value).slice(0,48);
+    });
+    return safe;
+  }
+  function track(name,data){
+    ensureAnalytics();
+    window.va("event",{name:name,data:eventData(data)});
+  }
+  function inputType(value){
+    return /^\d{5}(?:-\d{4})?$/.test(String(value||"").trim())?"zip":"place";
+  }
+
   function $(sel,root){return (root||document).querySelector(sel)}
   function fmtDate(value){
     if(!value)return "Unknown";
@@ -47,6 +82,7 @@
     const next=[loc,...savedPlaces().filter(item=>locationKey(item)!==key)].slice(0,6);
     write(PLACES_STORE,next);
     remember(loc);
+    track("National Saved Place",{saved_count:next.length});
     return next;
   }
   function removePlace(locOrKey){
@@ -98,12 +134,35 @@
     form.addEventListener("submit",async e=>{
       e.preventDefault();const q=input.value.trim();if(!q)return;
       button.disabled=true;if(status)status.textContent="Finding "+q+"…";
-      try{const loc=await geocode(q);if(status)status.textContent=label(loc);propagate(loc);await onLocation(loc)}
-      catch(err){if(status)status.innerHTML='<span class="error">'+esc(err.message)+"</span>"}
+      try{const loc=await geocode(q);track("National Location Resolved",{input_type:inputType(q)});if(status)status.textContent=label(loc);propagate(loc);await onLocation(loc)}
+      catch(err){track("National Location Error",{input_type:inputType(q)});if(status)status.innerHTML='<span class="error">'+esc(err.message)+"</span>"}
       finally{button.disabled=false}
     });
   }
+  document.addEventListener("click",function(event){
+    const origin=event.target;
+    if(!origin||typeof origin.closest!=="function")return;
+    const anchor=origin.closest('a[href^="/national-tools/"]');
+    if(!anchor)return;
+    let target="national-tools";
+    try{
+      const path=new URL(anchor.href,window.location.href).pathname.replace(/\/+$/,"");
+      if(path==="/national-tools")target="hub";
+      else{
+        const match=path.match(/^\/national-tools\/([^/]+)/);
+        if(match)target=match[1];
+      }
+    }catch(_){}
+    if(target===currentSurface())return;
+    let placement="in-tool";
+    if(anchor.closest(".desk-card"))placement="decision-card";
+    else if(anchor.closest(".tool-card"))placement="tool-grid";
+    else if(anchor.closest(".nav"))placement="nav";
+    track("National Tool Open",{target:target,placement:placement});
+  });
+  ensureAnalytics();
+
   window.NationalTools={
-    $,fmtDate,fmtInZone,esc,readJsonResponse,geocode,label,bind,saved,savedPlaces,savePlace,removePlace,locationKey,remember,withQuery,propagate
+    $,fmtDate,fmtInZone,esc,readJsonResponse,geocode,label,bind,saved,savedPlaces,savePlace,removePlace,locationKey,remember,withQuery,propagate,track
   };
 })();
