@@ -145,6 +145,7 @@
     const aurora=results[0],rivers=results[1],frost=results[2],fall=results[3],crops=results[4];
     const cards=[auroraCard(aurora,loc),riverCard(rivers,loc),frostCard(frost,loc),plantingCard(frost,crops,loc),fallCard(fall,loc)].sort(function(a,b){return b.priority-a.priority});
     const ok=results.filter(function(x){return x.ok}).length;
+    if(typeof N().track==="function")N().track("National Desk Loaded",{inputs_available:ok,inputs_total:5});
     if(root){
       root.classList.remove("loading");
       const title=root.querySelector("[data-desk-title]"),grid=root.querySelector("[data-desk-grid]"),health=root.querySelector("[data-desk-health]");
