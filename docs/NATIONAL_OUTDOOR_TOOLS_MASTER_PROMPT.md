@@ -217,6 +217,8 @@ If the model is not calibrated well enough:
 
 A truthful “estimate, medium confidence” is preferable to a precise unsupported claim.
 
+Current USA-NPN Nature's Notebook observations may be added as a separate ground-evidence layer when available. The Colored leaves phenophase is an individual-plant observation and may include drought/stress color. It must never be converted into a landscape percent-peak value or used to silently shift the historical satellite timing model. Optional observations must load after the core timing answer and fail independently.
+
 ## Search and URL architecture
 
 Visible section name:
