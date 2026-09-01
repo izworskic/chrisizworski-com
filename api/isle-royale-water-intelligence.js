@@ -1,144 +1,31 @@
+const {
+  BBOX,
+  number,
+  sqSegDistance,
+  simplifyLine,
+  geometryPoints,
+  closeEnough,
+  closedRing,
+  stitchRings,
+  normalizeWaterData,
+  toPayload
+} = require('../lib/isle-royale/water-geometry.js');
+
 const OVERPASS_ENDPOINTS = [
   'https://overpass-api.de/api/interpreter',
   'https://overpass.kumi.systems/api/interpreter'
 ];
 const USER_AGENT = 'ChrisIzworskiIsleRoyaleWaterIntelligence/2.0 (https://chrisizworski.com/isle-royale-map/)';
-const BBOX = Object.freeze({south:47.74, west:-89.46, north:48.38, east:-88.08});
+// The function budget for this route is 30s in vercel.json. The request has to give up inside that
+// or the caller sees a platform timeout instead of an answer it can act on.
+const OVERPASS_TIMEOUT_SECONDS = 11;
+const FETCH_TIMEOUT_MS = 12500;
 
-function number(value) {
-  const n = Number(value);
-  return Number.isFinite(n) ? n : null;
-}
-
-function sqSegDistance(point, a, b) {
-  let x = a[0], y = a[1];
-  let dx = b[0] - x, dy = b[1] - y;
-  if (dx || dy) {
-    const t = ((point[0] - x) * dx + (point[1] - y) * dy) / (dx * dx + dy * dy);
-    if (t > 1) { x = b[0]; y = b[1]; }
-    else if (t > 0) { x += dx * t; y += dy * t; }
-  }
-  dx = point[0] - x; dy = point[1] - y;
-  return dx * dx + dy * dy;
-}
-
-function simplifyLine(points, tolerance = 0.0002) {
-  if (!Array.isArray(points) || points.length <= 2) return points || [];
-  const sqTolerance = tolerance * tolerance;
-  const keep = new Uint8Array(points.length);
-  keep[0] = 1; keep[points.length - 1] = 1;
-  const stack = [[0, points.length - 1]];
-  while (stack.length) {
-    const [first, last] = stack.pop();
-    let maxSq = sqTolerance, index = -1;
-    for (let i = first + 1; i < last; i++) {
-      const sq = sqSegDistance(points[i], points[first], points[last]);
-      if (sq > maxSq) { index = i; maxSq = sq; }
-    }
-    if (index > 0) {
-      keep[index] = 1;
-      if (index - first > 1) stack.push([first, index]);
-      if (last - index > 1) stack.push([index, last]);
-    }
-  }
-  return points.filter((_, i) => keep[i]);
-}
-
-function geometryPoints(geometry) {
-  return (geometry || [])
-    .map(p => [number(p.lon), number(p.lat)])
-    .filter(p => p[0] !== null && p[1] !== null);
-}
-
-function closeEnough(a,b,tolerance=0.00003) {
-  return Boolean(a&&b&&Math.abs(a[0]-b[0])<=tolerance&&Math.abs(a[1]-b[1])<=tolerance);
-}
-
-function closedRing(points) {
-  if (!Array.isArray(points) || points.length < 4) return null;
-  const ring = [...points];
-  if (!closeEnough(ring[0], ring[ring.length - 1])) return null;
-  ring[ring.length - 1] = [...ring[0]];
-  return ring;
-}
-
-function stitchRings(lines) {
-  const pending = (lines || []).filter(line => Array.isArray(line) && line.length >= 2).map(line => [...line]);
-  const rings = [];
-  while (pending.length) {
-    let ring = pending.shift();
-    let changed = true;
-    while (changed && !closeEnough(ring[0], ring[ring.length - 1])) {
-      changed = false;
-      for (let i = 0; i < pending.length; i++) {
-        const line = pending[i];
-        if (closeEnough(ring[ring.length - 1], line[0])) {
-          ring = ring.concat(line.slice(1)); pending.splice(i,1); changed = true; break;
-        }
-        if (closeEnough(ring[ring.length - 1], line[line.length - 1])) {
-          ring = ring.concat([...line].reverse().slice(1)); pending.splice(i,1); changed = true; break;
-        }
-        if (closeEnough(ring[0], line[line.length - 1])) {
-          ring = line.slice(0,-1).concat(ring); pending.splice(i,1); changed = true; break;
-        }
-        if (closeEnough(ring[0], line[0])) {
-          ring = [...line].reverse().slice(0,-1).concat(ring); pending.splice(i,1); changed = true; break;
-        }
-      }
-    }
-    const closed = closedRing(ring);
-    if (closed) rings.push(closed);
-  }
-  return rings;
-}
-
-function normalizeWaterData(data) {
-  const coastlines = [];
-  const waterPolygons = [];
-  const waterBoundaries = [];
-  const waterCenterlines = [];
-  for (const element of data?.elements || []) {
-    const tags = element?.tags || {};
-    if (element?.type === 'way' && Array.isArray(element.geometry)) {
-      const points = geometryPoints(element.geometry);
-      if (points.length < 2) continue;
-      if (tags.natural === 'coastline') {
-        const simplified = simplifyLine(points, 0.0002);
-        if (simplified.length >= 2) coastlines.push(simplified);
-        continue;
-      }
-      if (tags.natural === 'water' || ['riverbank','canal'].includes(tags.waterway)) {
-        const ring = closedRing(points);
-        if (ring) {
-          const simplifiedRing=simplifyLine(ring, 0.00012);
-          waterPolygons.push(simplifiedRing);
-          waterBoundaries.push(simplifiedRing);
-        }
-      }
-      if (['river','stream','canal'].includes(tags.waterway)) {
-        const simplified = simplifyLine(points, 0.00008);
-        if (simplified.length >= 2) waterCenterlines.push(simplified);
-      }
-      continue;
-    }
-    if (element?.type === 'relation' && (tags.natural === 'water' || tags.waterway === 'riverbank')) {
-      const outerLines = [];
-      for (const member of element.members || []) {
-        if (member?.type !== 'way' || !Array.isArray(member.geometry)) continue;
-        const points = geometryPoints(member.geometry);
-        if (points.length < 2) continue;
-        waterBoundaries.push(simplifyLine(points,0.00008));
-        if (member.role !== 'inner') outerLines.push(points);
-      }
-      for (const ring of stitchRings(outerLines)) waterPolygons.push(simplifyLine(ring, 0.00012));
-    }
-  }
-  const landPolygons = stitchRings(coastlines.map(line=>[...line]));
-  return {coastlines, landPolygons, waterPolygons, waterBoundaries, waterCenterlines};
-}
-
-async function fetchOverpass(endpoint) {
-  const query = `[out:json][timeout:40];
+// This endpoint REFRESHES the geometry. The planner does not depend on it: it loads the committed
+// dataset at /isle-royale-map/data/water-geometry-2026.json first and only falls back to here.
+// Overpass asks not to be used as a request-time dependency and this respects that.
+function overpassQuery() {
+  return `[out:json][timeout:${OVERPASS_TIMEOUT_SECONDS}];
 (
   way["natural"="coastline"](${BBOX.south},${BBOX.west},${BBOX.north},${BBOX.east});
   way["natural"="water"](${BBOX.south},${BBOX.west},${BBOX.north},${BBOX.east});
@@ -147,15 +34,26 @@ async function fetchOverpass(endpoint) {
   relation["waterway"="riverbank"](${BBOX.south},${BBOX.west},${BBOX.north},${BBOX.east});
 );
 out geom;`;
-  const url = endpoint + '?data=' + encodeURIComponent(query);
+}
+
+async function fetchOverpass(endpoint) {
+  const url = endpoint + '?data=' + encodeURIComponent(overpassQuery());
   const response = await fetch(url, {
     headers: {accept:'application/json', 'user-agent':USER_AGENT},
-    signal: AbortSignal.timeout(47000)
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS)
   });
   if (!response.ok) throw new Error(`Overpass returned ${response.status}`);
   const data = await response.json();
+  // Overpass answers HTTP 200 with a `remark` when the query timed out or the dispatcher is
+  // overloaded, and the elements are then empty or partial. Reading that as real geometry is how a
+  // dead upstream turns into a wrong map, so it is treated as the failure it is.
+  if (data?.remark) throw new Error(`Overpass reported: ${String(data.remark).slice(0, 160)}`);
   const normalized = normalizeWaterData(data);
-  if (!normalized.coastlines.length) throw new Error('Overpass returned no coastline geometry');
+  // Lake Superior is NOT tagged natural=coastline in OpenStreetMap; Isle Royale is an inner ring of
+  // the lake's water multipolygon. So shoreline presence is judged on land rings, not on coastline
+  // ways, which never exist inside this bbox.
+  if (!normalized.landPolygons.length) throw new Error('Water geometry has no island shoreline rings');
+  if (!normalized.waterPolygons.length) throw new Error('Water geometry has no mapped water bodies');
   return {...normalized, endpoint};
 }
 
@@ -173,27 +71,13 @@ module.exports = async function handler(req, res) {
   for (const endpoint of OVERPASS_ENDPOINTS) {
     try {
       const result = await fetchOverpass(endpoint);
-      const coastlinePointCount = result.coastlines.reduce((sum, line) => sum + line.length, 0);
-      const inlandPointCount = result.waterPolygons.reduce((sum, ring) => sum + ring.length, 0);
-      const centerlinePointCount = result.waterCenterlines.reduce((sum, line) => sum + line.length, 0);
       res.setHeader('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800');
       return res.status(200).json({
         source:'OpenStreetMap coastline + inland water geometry via Overpass',
         source_url:'https://www.openstreetmap.org/copyright',
         fetched_at:new Date().toISOString(),
         bbox:BBOX,
-        line_count:result.coastlines.length,
-        point_count:coastlinePointCount,
-        land_polygon_count:result.landPolygons.length,
-        inland_water_count:result.waterPolygons.length,
-        inland_water_point_count:inlandPointCount,
-        water_centerline_count:result.waterCenterlines.length,
-        water_centerline_point_count:centerlinePointCount,
-        lines:result.coastlines,
-        land_polygons:result.landPolygons,
-        water_polygons:result.waterPolygons,
-        water_boundaries:result.waterBoundaries,
-        water_centerlines:result.waterCenterlines,
+        ...toPayload(result),
         caveat:'Planning water geometry only. This is not a navigation chart and does not establish water depth, hazards, access rights, or a safe route.'
       });
     } catch (error) {
@@ -203,9 +87,11 @@ module.exports = async function handler(req, res) {
 
   res.setHeader('Cache-Control', 'no-store');
   return res.status(502).json({
-    error:'Isle Royale water geometry unavailable',
-    detail:errors.join(' | ')
+    error:'Isle Royale water geometry refresh unavailable',
+    detail:errors.join(' | '),
+    committed_dataset:'/isle-royale-map/data/water-geometry-2026.json',
+    note:'The planner routes from the committed dataset; this endpoint only refreshes it.'
   });
 };
 
-module.exports._test = {number, sqSegDistance, simplifyLine, geometryPoints, closeEnough, closedRing, stitchRings, normalizeWaterData, BBOX};
+module.exports._test = {number, sqSegDistance, simplifyLine, geometryPoints, closeEnough, closedRing, stitchRings, normalizeWaterData, BBOX, overpassQuery};

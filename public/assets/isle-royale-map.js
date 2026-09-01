@@ -11,6 +11,7 @@
     operationsEndpoint: '/api/isle-royale',
     routeWeatherEndpoint: '/api/isle-royale-route-weather',
     waterIntelEndpoint: '/api/isle-royale-water-intelligence',
+    waterGeometryDataset: '/isle-royale-map/data/water-geometry-2026.json',
     officialPortages: '/isle-royale-map/data/official-portages-2026.json',
     currentConditionsUrl: 'https://www.nps.gov/isro/planyourvisit/current-conditions-at-isle-royale.htm',
     boatInUrl: 'https://www.nps.gov/isro/planyourvisit/boat-in-campgrounds.htm',
@@ -3441,14 +3442,34 @@
     return {ok:true,points:resolved,trailNames,accessMiles};
   }
 
+  function usableWaterGeometry(data) {
+    // Isle Royale is an inner ring of the Lake Superior water multipolygon, so the shoreline this
+    // planner routes against arrives as land rings. Judging the payload on coastline ways instead
+    // rejected every valid response, because OpenStreetMap tags no coastline inside this bbox.
+    const landRings=Array.isArray(data?.land_polygons)?data.land_polygons.length:0;
+    const shoreLines=Array.isArray(data?.lines)?data.lines.length:0;
+    return landRings>0||shoreLines>0;
+  }
+
+  async function loadWaterGeometry() {
+    // The committed dataset is the planner's routing source. The refresh endpoint is a fallback
+    // only, so a slow or unavailable upstream can no longer stop a trip being built.
+    try {
+      const committed=await fetchJSON(CONFIG.waterGeometryDataset,20000);
+      if(usableWaterGeometry(committed))return committed;
+    } catch (_) {}
+    const refreshed=await fetchJSON(CONFIG.waterIntelEndpoint,25000);
+    if(!usableWaterGeometry(refreshed))throw new Error('water geometry source returned no shoreline');
+    return refreshed;
+  }
+
   async function ensureWaterRouter() {
     if(waterIntel.router)return waterIntel.router;
     if(waterIntel.promise)return waterIntel.promise;
     if(!window.IsleRoyaleWaterIntel?.create)throw new Error('water-routing engine is unavailable');
     waterIntel.state='loading';
-    waterIntel.promise=fetchJSON(CONFIG.waterIntelEndpoint,48000)
+    waterIntel.promise=loadWaterGeometry()
       .then(data=>{
-        if(!Array.isArray(data?.lines)||!data.lines.length)throw new Error('shoreline source returned no coastline geometry');
         waterIntel.router=window.IsleRoyaleWaterIntel.create(data);
         if(!waterIntel.router?.segment_count)throw new Error('water-boundary index is empty');
         waterIntel.source=data;

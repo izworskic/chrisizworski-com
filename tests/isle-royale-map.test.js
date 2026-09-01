@@ -18,6 +18,7 @@ const benchmarkSpec = JSON.parse(fs.readFileSync(path.join(root, 'benchmarks/isl
 const contextBuilder = fs.readFileSync(path.join(root, 'scripts/build-isle-royale-context-layers.py'), 'utf8');
 const waterIntelJs = fs.readFileSync(path.join(root, 'public/assets/isle-royale-water-intelligence.js'), 'utf8');
 const waterIntelApi = fs.readFileSync(path.join(root, 'api/isle-royale-water-intelligence.js'), 'utf8');
+const waterGeometryLib = fs.readFileSync(path.join(root, 'lib/isle-royale/water-geometry.js'), 'utf8');
 const isleBenchmark = fs.readFileSync(path.join(root, 'scripts/benchmark-isle-royale-map.mjs'), 'utf8');
 const circleTour = fs.readFileSync(path.join(root, 'public/lake-superior-circle-tour/index.html'), 'utf8');
 const upNorth = fs.readFileSync(path.join(root, 'public/up-north-michigan/index.html'), 'utf8');
@@ -107,7 +108,7 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
 
 
 test('Isle Royale interaction script is cache-busted and not stored during active development', () => {
-  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260831-multipoint-water-1/);
+  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260901-committed-water-geometry-1/);
   assert.doesNotMatch(html, /isle-royale-map\.js\?v=20260830-19/);
   const vercel = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
   const rule = (vercel.headers || []).find(item => item.source === '/assets/isle-royale-map.js');
@@ -281,7 +282,7 @@ test('quiet/no-wake ETL is IRMA-first and fails closed on a stale regulatory set
 
 test('water intelligence supports fine multi-point coast, inland-water, and waterway routing', () => {
   assert.match(html, /id="route-day-hours"/);
-  assert.match(html, /isle-royale-water-intelligence\.js\?v=20260831-multipoint-water-1/);
+  assert.match(html, /isle-royale-water-intelligence\.js\?v=20260901-committed-water-geometry-1/);
   assert.match(js, /async function resolveWaterRouteAsync\(seedLegs=\[\]\)/);
   assert.match(js, /async function resolveCanoeRouteAsync\(seedLegs=\[\]\)/);
   assert.match(js, /preserveVerifiedPrefix/);
@@ -296,9 +297,12 @@ test('water intelligence supports fine multi-point coast, inland-water, and wate
   assert.match(waterIntelJs, /No mapped-water route found between these checkpoints/);
   assert.match(waterIntelApi, /natural"="water"/);
   assert.match(waterIntelApi, /waterway"~"river\|stream\|canal\|riverbank"/);
-  assert.match(waterIntelApi, /land_polygons/);
-  assert.match(waterIntelApi, /water_polygons/);
-  assert.match(waterIntelApi, /water_centerlines/);
+  // The geometry payload is assembled in lib/isle-royale/water-geometry.js so the committed dataset
+  // and any live refresh are normalised by one implementation.
+  assert.match(waterGeometryLib, /land_polygons/);
+  assert.match(waterGeometryLib, /water_polygons/);
+  assert.match(waterGeometryLib, /water_centerlines/);
+  assert.match(waterIntelApi, /toPayload/);
   assert.match(waterIntelApi, /not a navigation chart/i);
   assert.match(isleBenchmark, /waterIntelligenceRuntime/);
 });
