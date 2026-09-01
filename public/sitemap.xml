@@ -752,4 +752,40 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <url>\n    <loc>https://chrisizworski.com/national-tools/</loc>\n    <lastmod>2026-08-31</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.85</priority>\n  </url>\n  <url>\n    <loc>https://chrisizworski.com/national-tools/aurora/</loc>\n    <lastmod>2026-08-31</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.85</priority>\n  </url>\n  <url>\n    <loc>https://chrisizworski.com/national-tools/rivers/</loc>\n    <lastmod>2026-08-31</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.85</priority>\n  </url>\n  <url>\n    <loc>https://chrisizworski.com/national-tools/frost/</loc>\n    <lastmod>2026-08-31</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n  <url>\n    <loc>https://chrisizworski.com/national-tools/planting/</loc>\n    <lastmod>2026-08-31</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n  <url>\n    <loc>https://chrisizworski.com/national-tools/fall-color/</loc>\n    <lastmod>2026-08-31</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n</urlset>
+  <url>
+    <loc>https://chrisizworski.com/national-tools/</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/national-tools/aurora/</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/national-tools/rivers/</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/national-tools/frost/</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/national-tools/planting/</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/national-tools/fall-color/</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
