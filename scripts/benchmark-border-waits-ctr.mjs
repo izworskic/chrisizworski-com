@@ -21,6 +21,24 @@ const h1 = capture(/<h1[^>]*>([^<]+)<\/h1>/i, 'H1');
 const canonical = capture(/<link\s+rel="canonical"\s+href="([^"]+)"/i, 'canonical');
 const firstAnswer = capture(/<p class="lede">([\s\S]*?)<\/p>/i, 'first answer').replace(/<[^>]+>/g, '');
 
+// A literal dateModified here is duplicated state: it fails the day the page legitimately changes
+// and gets stamped, which has already cost this repo several repairs. The snippet freeze that
+// actually protects a measurement window is the title/description/canonical/H1 pin above; a moving
+// dateModified does not contaminate a CTR window. So assert the property worth holding instead:
+// the page stamp agrees with the lastmod its own route publishes, which is the pair that went
+// silently out of sync on /connect/ and on the national tools.
+function freshnessMismatch(html, route) {
+  const sitemap = fs.readFileSync(path.join(root, 'public', 'sitemap.xml'), 'utf8');
+  const stamped = (html.match(/"dateModified":\s*"(\d{4}-\d{2}-\d{2})"/) || [])[1] || '';
+  const published = (new RegExp(
+    `<loc>https://chrisizworski\\.com${route.replace(/\//g, '\\/')}</loc>[\\s\\S]{0,200}?<lastmod>(\\d{4}-\\d{2}-\\d{2})`
+  ).exec(sitemap) || [])[1] || '';
+  if (!stamped) return 'page carries no dateModified stamp';
+  if (!published) return `no sitemap lastmod published for ${route}`;
+  if (stamped !== published) return `dateModified ${stamped} does not match sitemap lastmod ${published}`;
+  return null;
+}
+
 const failures = [];
 if (title !== config.treatment.title) failures.push(`title drift: ${title}`);
 if (meta !== config.treatment.metaDescription) failures.push('meta description drift');
@@ -31,7 +49,7 @@ for (const phrase of config.treatment.firstAnswerMustContain) {
 }
 if (!html.includes('Both directions stay separate')) failures.push('direction truth boundary missing');
 if (!html.includes('CBSA reports entering Canada; CBP reports entering the United States.')) failures.push('agency-direction explanation missing');
-if (!html.includes('"dateModified": "2026-08-22"')) failures.push('dateModified is not aligned');
+{ const drift = freshnessMismatch(html, '/michigan-border-wait-times/'); if (drift) failures.push(drift); }
 if (!html.includes('"name": "Michigan Border Wait Times Today"')) failures.push('WebApplication name does not match treatment');
 for (const route of ['/gordie-howe-bridge-wait-time/','/ambassador-bridge-wait-time/','/detroit-windsor-tunnel-wait-time/','/blue-water-bridge-wait-time/','/sault-ste-marie-border-wait-time/']) {
   if (!html.includes(`https://chrisizworski.com${route}`)) failures.push(`crossing-specific owner missing from schema: ${route}`);
