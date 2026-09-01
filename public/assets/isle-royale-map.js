@@ -1388,7 +1388,7 @@
         if (added > 0) {
           sourceStatus.arcgis = `loaded ${added} public visitor features`;
           els.sourceStatus.textContent = `Preferred NPS/ArcGIS visitor geometry loaded (${added} features). Verified NPS boating zones and federal science layers are available as independent opt-in overlays.`;
-          status(`Loaded ${added} public visitor features. Search or filter the map; deep layers remain source-cataloged below.`);
+          status(`Loaded ${added} public visitor features. Search or filter the map; source and methodology details are available from the compact source disclosure below the planner.`);
           visitorGeometrySettled = true;
           addPendingShipwrecks();
           renderOfficialPortageLayer();
@@ -1420,7 +1420,7 @@
     added = loadFallbackAnchors();
     sourceStatus.arcgis = 'remote visitor geometry unavailable';
     els.sourceStatus.textContent = 'The public visitor web map could not be read in this browser, so only clearly labeled approximate reference anchors are shown. Official NPS map links remain available.';
-    status(`Remote visitor geometry unavailable. Showing ${added} approximate reference anchors and the full source catalog instead.`);
+    status(`Remote visitor geometry unavailable. Showing ${added} approximate reference anchors; open Sources & methodology for the full source catalog.`);
     visitorGeometrySettled = true;
     addPendingShipwrecks();
     renderOfficialPortageLayer();
@@ -5562,6 +5562,7 @@
   });
 
   async function loadCatalog() {
+    if(!els.catalog)return;
     try {
       const res = await fetch('/isle-royale-map/catalog.json');
       if (!res.ok) throw new Error(String(res.status));
@@ -5577,7 +5578,7 @@
         els.catalog.appendChild(tr);
       }
     } catch (_) {
-      els.catalog.innerHTML = '<tr><td>Source catalog could not be loaded.</td><td></td><td><a href="/isle-royale-map/catalog.json">Open raw catalog</a></td><td>The interactive map remains available.</td></tr>';
+      if(els.catalog)els.catalog.innerHTML = '<tr><td>Source catalog could not be loaded.</td><td></td><td><a href="/isle-royale-map/catalog.json">Open raw catalog</a></td><td>The interactive map remains available.</td></tr>';
     }
   }
 
