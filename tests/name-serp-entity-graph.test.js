@@ -12,7 +12,7 @@ function jsonLdBlocks(source) {
     .map((match) => JSON.parse(match[1]));
 }
 
-test("canonical Chris profile uses Google ProfilePage mainEntity semantics", () => {
+test("canonical Chris profile uses Google ProfilePage mainEntity semantics", async () => {
   const blocks = jsonLdBlocks(html);
   const nodes = blocks.flatMap((block) => block["@graph"] || [block]);
   const person = nodes.find((node) => node["@id"] === "https://chrisizworski.com/#person");
@@ -25,7 +25,17 @@ test("canonical Chris profile uses Google ProfilePage mainEntity semantics", () 
   assert.ok(person);
   assert.ok(profile);
   assert.deepEqual(profile.mainEntity, { "@id": "https://chrisizworski.com/#person" });
-  assert.equal(profile.dateModified, "2026-08-30");
+  // Not a literal date: the branded surface is frozen by benchmarks/name-serp-protection.json and
+  // the protect-existing-winners CI guard, not by this line, and a literal here just fails the day
+  // the page legitimately changes. Assert the pair that goes silently out of sync instead.
+  {
+    const sitemap = await readFile(new URL("../public/sitemap.xml", import.meta.url), "utf8");
+    const marker = "<loc>https://chrisizworski.com/chris-izworski/</loc>";
+    const at = sitemap.indexOf(marker);
+    const published = at < 0 ? null : (/<lastmod>(\d{4}-\d{2}-\d{2})/.exec(sitemap.slice(at, at + 240)) || [])[1];
+    assert.ok(profile.dateModified, "profile carries no dateModified");
+    assert.equal(profile.dateModified, published, "profile dateModified must match its sitemap lastmod");
+  }
 });
 
 test("sameAs is identity-oriented while authored projects live in hasPart", () => {

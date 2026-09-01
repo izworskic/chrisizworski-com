@@ -27,7 +27,20 @@ test('Estivant Pines owns one distinct indexable canonical with bounded SERP str
 test('the page defines the canonical Chris Izworski entity and the tool honestly', () => {
   assert.match(html, /"@id":"https:\/\/chrisizworski\.com\/#person"/);
   assert.match(html, /"@type":"SoftwareApplication"/);
-  assert.match(html, /"dateModified":"2026-08-25"/);
+  // Not a literal date: that fails the day the page legitimately changes and gets stamped.
+  // Assert the pair that actually goes silently out of sync — the page stamp and the lastmod
+  // its own route publishes in the sitemap.
+  {
+    const sitemap = fs.readFileSync(path.join(root, 'public/sitemap.xml'), 'utf8');
+    const stamped = (html.match(/"dateModified":\s*"(\d{4}-\d{2}-\d{2})"/) || [])[1];
+    const marker = '<loc>https://chrisizworski.com/estivant-pines/</loc>';
+    const at = sitemap.indexOf(marker);
+    const published = at < 0
+      ? null
+      : (/<lastmod>(\d{4}-\d{2}-\d{2})/.exec(sitemap.slice(at, at + 240)) || [])[1];
+    assert.ok(stamped, 'page carries no dateModified stamp');
+    assert.equal(stamped, published, 'page dateModified must match its sitemap lastmod');
+  }
   assert.match(html, /does <em>not<\/em> claim to know actual mud, blowdowns, parking availability or closures/);
   assert.match(html, /There is no official live trail-condition sensor at Estivant Pines/);
   assert.doesNotMatch(html, /safe to hike|trail is safe|official live trail conditions/i);

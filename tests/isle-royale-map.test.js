@@ -30,7 +30,20 @@ function rendered(s) { return s.replace(/&amp;/g, '&').replace(/&#39;/g, "'").re
 test('canonical and Chris Izworski entity are present', () => {
   assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/isle-royale-map\/">/);
   assert.match(html, /https:\/\/chrisizworski\.com\/#person/);
-  assert.match(html, /"dateModified":"2026-08-31"/);
+  // Not a literal date: that fails the day the page legitimately changes and gets stamped.
+  // Assert the pair that actually goes silently out of sync — the page stamp and the lastmod
+  // its own route publishes in the sitemap.
+  {
+    const sitemap = fs.readFileSync(path.join(root, 'public/sitemap.xml'), 'utf8');
+    const stamped = (html.match(/"dateModified":\s*"(\d{4}-\d{2}-\d{2})"/) || [])[1];
+    const marker = '<loc>https://chrisizworski.com/isle-royale-map/</loc>';
+    const at = sitemap.indexOf(marker);
+    const published = at < 0
+      ? null
+      : (/<lastmod>(\d{4}-\d{2}-\d{2})/.exec(sitemap.slice(at, at + 240)) || [])[1];
+    assert.ok(stamped, 'page carries no dateModified stamp');
+    assert.equal(stamped, published, 'page dateModified must match its sitemap lastmod');
+  }
 });
 
 test('SERP strings fit repository limits', () => {
