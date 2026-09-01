@@ -87,8 +87,11 @@ test("Tools hub makes ten live tools prominent and indexes the expanded library"
   const jsonLd = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
   const itemList = jsonLd["@graph"].find((entry) => entry["@type"] === "ItemList");
   const collection = jsonLd["@graph"].find((entry) => entry["@type"] === "CollectionPage");
-  assert.equal(itemList.numberOfItems, 36);
-  assert.equal(itemList.itemListElement.length, 36);
+  // 38 since 2026-09-01: the beach report and boat launch finder had visible cards on this page
+  // and no structured entry, so anything reading the directory could not see them. Raise this
+  // deliberately when a tool is added; it exists to stop one disappearing by accident.
+  assert.equal(itemList.numberOfItems, 38);
+  assert.equal(itemList.itemListElement.length, 38);
   // Derived from git, so pin the shape not the day.
   assert.match(collection.dateModified, /^\d{4}-\d{2}-\d{2}$/);
   assert.ok(Date.parse(collection.dateModified) <= Date.now(), "dateModified must not be in the future");
