@@ -309,8 +309,8 @@ test('marine forecast sampling grows with route distance rather than control-poi
 });
 
 test('map-first route builder accepts every mappable feature and keeps criteria below the map', () => {
-  assert.match(html, /id="explore-mode"[^>]*aria-pressed="true"[^>]*>Explore/);
-  assert.match(html, /id="route-mode"[^>]*>Build route/);
+  assert.match(html, /id="explore-mode"[^>]*aria-pressed="false"[^>]*>Inspect map/);
+  assert.match(html, /id="route-mode"[^>]*aria-pressed="true"[^>]*>Plan route/);
   assert.match(html, /id="route-map-guide"/);
   assert.match(html, /Trace the trip with checkpoints/);
   assert.match(html, /<h2>Build above\. Tune the trip below\.<\/h2>/);
