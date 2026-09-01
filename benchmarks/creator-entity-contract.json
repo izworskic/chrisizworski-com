@@ -1,0 +1,232 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-08-30",
+  "objective": "Keep every serious Chris Izworski tool attached to one canonical Person entity without turning tool interfaces into personal-brand surfaces.",
+  "canonicalPersonId": "https://chrisizworski.com/#person",
+  "canonicalProfileUrl": "https://chrisizworski.com/chris-izworski/",
+  "rules": {
+    "onePerson": "Every Chris Izworski creator/author node uses the canonical Person @id. Tool-local Person IDs are forbidden.",
+    "profileResolution": "Creator/author URLs and rel=author links resolve to the canonical profile URL when the property supports them.",
+    "productFirst": "Visible creator attribution stays compact and contextual. No name stuffing in tool titles, H1s, controls, or primary-answer surfaces.",
+    "independentUtility": "A property must earn search visibility through its own useful intent; creator linkage reinforces identity but does not replace product value.",
+    "launchGate": "Every new separate-host first-party tool must be added to this contract as verified or pending-audit before it is treated as portfolio-complete."
+  },
+  "properties": [
+    {
+      "id": "trout-report",
+      "host": "michigantroutreport.com",
+      "toolIds": [
+        "trout-report",
+        "trout-map",
+        "salmon-run"
+      ],
+      "repo": "izworskic/michigan-trout-report",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merged creator entity PR #9"
+    },
+    {
+      "id": "trout-daily",
+      "host": "daily.michigantroutreport.com",
+      "toolIds": [
+        "trout-daily"
+      ],
+      "repo": "izworskic/michigan-trout-daily",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merged creator profile PR #13"
+    },
+    {
+      "id": "birding",
+      "host": "michiganbirdingreport.com",
+      "toolIds": [
+        "birding"
+      ],
+      "repo": "izworskic/michigan-birding-report",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merged creator entity PR #11"
+    },
+    {
+      "id": "birding-daily",
+      "host": "daily.michiganbirdingreport.com",
+      "toolIds": [
+        "birding-daily"
+      ],
+      "repo": "izworskic/michigan-birding-daily",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merged creator profile PR #2"
+    },
+    {
+      "id": "great-lakes-levels",
+      "host": "greatlakeslevels.org",
+      "toolIds": [
+        "great-lakes-levels"
+      ],
+      "repo": "izworskic/great-lakes-levels",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merged creator entity PR #5"
+    },
+    {
+      "id": "saginaw-bay",
+      "host": "saginawbay.chrisizworski.com",
+      "toolIds": [
+        "saginaw-bay"
+      ],
+      "repo": "izworskic/saginaw-bay-report",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merge bdf1d21ed9125cfd4fe4499f46d7997a43a75a69"
+    },
+    {
+      "id": "whitetail",
+      "host": "whitetail.chrisizworski.com",
+      "toolIds": [
+        "whitetail"
+      ],
+      "repo": "izworskic/michigan-whitetail-report",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merge 1e009071a9cc05c1d00f34ccc3453d8ca567b7f7"
+    },
+    {
+      "id": "phenology",
+      "host": "phenology.chrisizworski.com",
+      "toolIds": [
+        "phenology"
+      ],
+      "repo": "izworskic/phenology-michigan",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merge cdc8bc9f52e785132e55467dd635fe59aa7d09f5"
+    },
+    {
+      "id": "outdoors-now",
+      "host": "michiganoutdoorsnow.chrisizworski.com",
+      "toolIds": [
+        "outdoors-now"
+      ],
+      "repo": "izworskic/michigan-outdoors-now",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "existing canonical creator and author profile contract"
+    },
+    {
+      "id": "outdoor-weekend",
+      "host": "weekend.chrisizworski.com",
+      "toolIds": [
+        "outdoor-weekend"
+      ],
+      "repo": "izworskic/michigan-outdoor-weekend",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merge 27b909b5eff70bd0d65ab717e4bbad5462d970ac"
+    },
+    {
+      "id": "tc-wine",
+      "host": "tcwine.chrisizworski.com",
+      "toolIds": [
+        "tc-wine"
+      ],
+      "repo": "izworskic/tcwine",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merge 9f162a8cda1d415d9e6bd08e81e359a57baf464e"
+    },
+    {
+      "id": "xc-live",
+      "host": "xcski.chrisizworski.com",
+      "toolIds": [
+        "xc-live"
+      ],
+      "repo": "izworskic/xcski",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merge 1de5a4abf2234f80e5497b58fa7f7b095ac97941"
+    },
+    {
+      "id": "morel-report",
+      "host": "morel.chrisizworski.com",
+      "toolIds": [
+        "morel-report"
+      ],
+      "repo": "izworskic/michigan-morel-report",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merge ba777cc238e9efee73b89abb802bc445b08e07c4"
+    },
+    {
+      "id": "perfect-lawn",
+      "host": "lawn.chrisizworski.com",
+      "toolIds": [
+        "perfect-lawn"
+      ],
+      "repo": "izworskic/lawn-advisor",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merge 43753c3f0aecbae132e79bb0a89e56b67453a8e7"
+    },
+    {
+      "id": "great-lakes-gazette",
+      "host": "gazette.chrisizworski.com",
+      "toolIds": [
+        "gazette"
+      ],
+      "repo": "izworskic/great-lakes-gazette",
+      "status": "verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "merge 542ef623dbece494b3b944fb9f4c89dd01d04caa"
+    },
+    {
+      "id": "michigan-ice-source",
+      "host": "chrisizworski.com",
+      "toolIds": [
+        "michigan-ice"
+      ],
+      "repo": "izworskic/michigan-ice-report",
+      "status": "source-verified",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "evidence": "source generator merge df5407401fe42692936b2932957c01d8b7f7348d"
+    },
+    {
+      "id": "ausable-field-map",
+      "host": "ausable.chrisizworski.com",
+      "toolIds": [
+        "ausable-field-map"
+      ],
+      "status": "pending-audit",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "reason": "Current production property is registered, but no matching active GitHub repository was discoverable in the portfolio audit."
+    },
+    {
+      "id": "pictured-rocks",
+      "host": "picturedrocks.chrisizworski.com",
+      "toolIds": [
+        "pictured-rocks"
+      ],
+      "status": "pending-audit",
+      "personId": "https://chrisizworski.com/#person",
+      "profileUrl": "https://chrisizworski.com/chris-izworski/",
+      "reason": "Current production property is registered, but no matching active GitHub repository was discoverable in the portfolio audit."
+    }
+  ]
+}
