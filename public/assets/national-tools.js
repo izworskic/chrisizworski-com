@@ -3,7 +3,7 @@
   const LEGACY_STORE="ci-national-location-v1";
   const PLACES_STORE="ci-national-places-v1";
 
-  const ANALYTICS_BLOCKED_KEYS=new Set(["query","q","latitude","longitude","displayName","place","state","postalCode","location"]);
+  const ANALYTICS_BLOCKED_KEYS=new Set(["query","q","latitude","longitude","displayName","place","state","postalCode","postcode","location"]);
 
   function currentSurface(){
     const path=(window.location.pathname||"/").replace(/\/+$/,"")||"/";
@@ -127,9 +127,38 @@
     remember(data);
     return data;
   }
+  async function reverseGeocode(latitude,longitude){
+    const roundedLatitude=Number(Number(latitude).toFixed(3));
+    const roundedLongitude=Number(Number(longitude).toFixed(3));
+    const r=await fetch("/api/national-geocode",{
+      method:"POST",
+      headers:{"content-type":"application/json"},
+      body:JSON.stringify({latitude:roundedLatitude,longitude:roundedLongitude})
+    });
+    const data=await readJsonResponse(r,"Current location lookup unavailable");
+    remember(data);
+    return data;
+  }
+  function geolocationMessage(error){
+    if(error&&error.code===1)return "Location permission was not granted";
+    if(error&&error.code===2)return "Your location could not be determined";
+    if(error&&error.code===3)return "Location lookup timed out";
+    return "Your browser could not provide a location";
+  }
+  async function deviceLocation(){
+    if(!navigator.geolocation)throw new Error("This browser does not support device location");
+    const position=await new Promise(function(resolve,reject){
+      navigator.geolocation.getCurrentPosition(resolve,reject,{
+        enableHighAccuracy:false,
+        timeout:10000,
+        maximumAge:300000
+      });
+    }).catch(function(error){throw new Error(geolocationMessage(error))});
+    return reverseGeocode(position.coords.latitude,position.coords.longitude);
+  }
   function bind(form,onLocation){
     if(!form)return;
-    const input=$("input",form),button=$("button",form),status=form.parentElement.querySelector(".status");
+    const input=$("input",form),button=$(".btn",form),geoButton=$("[data-use-location]",form),status=form.parentElement.querySelector(".status");
     const old=saved();if(old&&input&&!input.value)input.placeholder="Try "+label(old);
     form.addEventListener("submit",async e=>{
       e.preventDefault();const q=input.value.trim();if(!q)return;
@@ -138,6 +167,23 @@
       catch(err){track("National Location Error",{input_type:inputType(q)});if(status)status.innerHTML='<span class="error">'+esc(err.message)+"</span>"}
       finally{button.disabled=false}
     });
+    if(geoButton){
+      if(!navigator.geolocation)geoButton.hidden=true;
+      else geoButton.addEventListener("click",async function(){
+        geoButton.disabled=true;if(status)status.textContent="Using your device location…";
+        try{
+          const loc=await deviceLocation();
+          track("National Device Location Resolved",{precision:"rounded-0.001deg"});
+          if(input)input.value=loc.query||label(loc);
+          if(status)status.textContent=label(loc);
+          propagate(loc);
+          await onLocation(loc);
+        }catch(err){
+          track("National Device Location Error",{reason:String(err&&err.message||"unavailable").slice(0,48)});
+          if(status)status.innerHTML='<span class="error">'+esc(err.message)+"</span>";
+        }finally{geoButton.disabled=false}
+      });
+    }
   }
   document.addEventListener("click",function(event){
     const origin=event.target;
@@ -163,6 +209,6 @@
   ensureAnalytics();
 
   window.NationalTools={
-    $,fmtDate,fmtInZone,esc,readJsonResponse,geocode,label,bind,saved,savedPlaces,savePlace,removePlace,locationKey,remember,withQuery,propagate,track
+    $,fmtDate,fmtInZone,esc,readJsonResponse,geocode,reverseGeocode,deviceLocation,label,bind,saved,savedPlaces,savePlace,removePlace,locationKey,remember,withQuery,propagate,track
   };
 })();
