@@ -1,5 +1,6 @@
 const test=require("node:test");
 const assert=require("node:assert/strict");
+const fs=require("node:fs");
 const geo=require("../api/national-geocode.js")._test;
 
 test("device coordinates are rounded to about 0.001 degrees",()=>{
@@ -42,4 +43,17 @@ test("U.S. candidate detection works for reverse-geocoder rows",()=>{
   assert.equal(geo.isUsCandidate({address:{country_code:"us"}}),true);
   assert.equal(geo.isUsCandidate({address:{"ISO3166-2-lvl4":"US-MI"}}),true);
   assert.equal(geo.isUsCandidate({address:{country_code:"ca"}}),false);
+});
+
+
+test("shared national place toolbar keeps shared links query-based and analytics-safe",()=>{
+  const client=fs.readFileSync(require.resolve("../public/assets/national-tools.js"),"utf8");
+  assert.match(client,/function renderPlaceToolbar/);
+  assert.match(client,/function currentShareUrl/);
+  assert.match(client,/withQuery\(path,loc\)/);
+  assert.match(client,/navigator\.share/);
+  assert.match(client,/clipboard\.writeText/);
+  assert.match(client,/National Place Shared/);
+  assert.match(client,/National Place Switched/);
+  assert.doesNotMatch(client,/National Place Shared[^\n]{0,160}(?:query|latitude|longitude|place)/);
 });
