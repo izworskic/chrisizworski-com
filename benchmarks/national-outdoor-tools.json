@@ -1,5 +1,5 @@
 {
-  "version": "1.4.0",
+  "version": "1.5.0",
   "updated": "2026-08-31",
   "objective": "Ship a separate U.S. outdoor decision network without weakening Michigan canonicals, source truth, or search quality.",
   "lossFunction": {
@@ -105,7 +105,8 @@
       "keyless-fail-soft-river-spatial-context",
       "location-page-admission-gate",
       "privacy-safe-national-tool-measurement",
-      "optional-device-location-with-rounded-coordinate-privacy"
+      "optional-device-location-with-rounded-coordinate-privacy",
+      "cross-tool-place-toolbar-save-switch-share"
     ],
     "alerts": {
       "status": "deferred-until-real-delivery-channel",
@@ -122,6 +123,16 @@
       "status": "manual-first-with-optional-device-location",
       "rule": "Manual city/ZIP remains the default. Device location runs only after an explicit user tap, is rounded to 0.001 degrees before the server request, uses POST rather than a coordinate URL, and never enters analytics.",
       "continuity": "After reverse geocoding, cross-tool links carry the resolved place query rather than latitude/longitude."
+    },
+    "placeToolbar": {
+      "status": "live",
+      "capabilities": [
+        "save-place",
+        "switch-saved-place",
+        "share-place-link"
+      ],
+      "shareRule": "Shared national-tool links may carry the resolved city/state query but never latitude/longitude. Canonical URLs remain the base tool routes.",
+      "analyticsRule": "Save, switch, and share events may record action/method only; place names, ZIPs, and coordinates remain excluded."
     }
   }
 }
