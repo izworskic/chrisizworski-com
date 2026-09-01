@@ -1,0 +1,154 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+
+// These tests exist because the Isle Royale planner shipped with every gate green while no water
+// route could resolve at all. The endpoint it depended on asked Overpass for natural=coastline ways
+// inside the Isle Royale bbox and refused any payload without them, and OpenStreetMap has none
+// there: Lake Superior is a water multipolygon and Isle Royale is one of its inner rings. So the
+// refresh endpoint failed on every call, ensureWaterRouter always rejected, and every canoe leg
+// fell through to the checkpoint guide with no mileage.
+//
+// The gates could not catch it because they read source strings. These assertions run the real
+// router over the real committed geometry and check the answers, so a regression that breaks
+// routing fails here rather than in production.
+
+const root = path.join(__dirname, '..');
+const geometryPath = path.join(root, 'public/isle-royale-map/data/water-geometry-2026.json');
+const geometry = JSON.parse(fs.readFileSync(geometryPath, 'utf8'));
+const anchors = JSON.parse(
+  fs.readFileSync(path.join(root, 'public/isle-royale-map/data/official-portages-2026.json'), 'utf8')
+).endpoint_anchors;
+
+function loadIntel() {
+  const saved = global.window;
+  global.window = {};
+  const modulePath = require.resolve('../public/assets/isle-royale-water-intelligence.js');
+  delete require.cache[modulePath];
+  require(modulePath);
+  const api = global.window.IsleRoyaleWaterIntel;
+  global.window = saved;
+  return api;
+}
+
+function anchor(id) {
+  const record = anchors[id];
+  assert.ok(record, `missing NPS anchor ${id}`);
+  return {lat: record.lat, lng: record.lng};
+}
+
+test('committed water geometry carries the island shoreline the planner routes against', () => {
+  assert.ok(geometry.land_polygon_count > 100, 'expected the island and islet rings');
+  assert.ok(geometry.inland_water_count > 100, 'expected mapped inland water bodies');
+  assert.equal(geometry.land_polygons.length, geometry.land_polygon_count);
+  assert.match(geometry.source, /OpenStreetMap/);
+  assert.match(geometry.license, /ODbL/);
+  assert.match(geometry.caveat, /not a navigation chart/);
+
+  // The largest land ring must actually be Isle Royale, roughly 45 miles of island from Washington
+  // Harbor to Blake Point. A ring that collapses to a fragment would still satisfy a count check.
+  let widest = null;
+  for (const ring of geometry.land_polygons) {
+    const lons = ring.map(point => point[0]);
+    const lats = ring.map(point => point[1]);
+    const box = {
+      west: Math.min(...lons), east: Math.max(...lons),
+      south: Math.min(...lats), north: Math.max(...lats)
+    };
+    const span = (box.east - box.west) + (box.north - box.south);
+    if (!widest || span > widest.span) widest = {box, span, points: ring.length};
+  }
+  assert.ok(widest.points > 800, 'the main island ring lost too much detail');
+  assert.ok(widest.box.west < -89.15 && widest.box.east > -88.45, 'main island ring is not island-length');
+  assert.ok(widest.box.south < 47.87 && widest.box.north > 48.15, 'main island ring is not island-height');
+});
+
+test('water multipolygon inner rings are read as land, not discarded', () => {
+  const {normalizeWaterData} = require('../lib/isle-royale/water-geometry.js');
+  const square = (cx, cy, size) => ([
+    {lat: cy - size, lon: cx - size},
+    {lat: cy - size, lon: cx + size},
+    {lat: cy + size, lon: cx + size},
+    {lat: cy + size, lon: cx - size},
+    {lat: cy - size, lon: cx - size}
+  ]);
+  const normalized = normalizeWaterData({
+    elements: [{
+      type: 'relation',
+      tags: {natural: 'water', name: 'Test lake'},
+      members: [
+        {type: 'way', role: 'outer', geometry: square(-88.8, 48.0, 0.05)},
+        {type: 'way', role: 'inner', geometry: square(-88.8, 48.0, 0.01)}
+      ]
+    }]
+  });
+  assert.equal(normalized.waterPolygons.length, 1, 'outer ring should be water');
+  assert.equal(normalized.landPolygons.length, 1, 'inner ring should be land');
+  assert.ok(normalized.coastlines.length >= 1, 'the island ring is also the shoreline barrier');
+});
+
+test('paddle legs between NPS waterbody anchors resolve on water without crossing land', () => {
+  const api = loadIntel();
+  const router = api.create(geometry);
+  assert.ok(router.segment_count > 1000, 'water boundary index is too thin to route against');
+
+  const legs = [
+    {name: 'Lane Cove to Five Finger Bay', ids: ['lane-cove', 'five-finger-bay'], min: 1.5, max: 8},
+    {name: 'Chippewa Harbor to Malone Bay', ids: ['chippewa-harbor', 'malone-bay'], min: 6, max: 18}
+  ];
+  for (const leg of legs) {
+    const result = router.route(leg.ids.map(anchor), 'paddle');
+    assert.ok(result.points.length > 2, `${leg.name} returned no route geometry`);
+    assert.equal(result.land_crossings, 0, `${leg.name} crossed land`);
+    let miles = 0;
+    for (let i = 1; i < result.points.length; i++) miles += api.miles(result.points[i - 1], result.points[i]);
+    assert.ok(miles >= leg.min && miles <= leg.max, `${leg.name} produced an implausible ${miles.toFixed(1)} miles`);
+    for (const point of result.points) {
+      assert.notEqual(router.isMappedWater(point), false, `${leg.name} routed through mapped land`);
+    }
+  }
+});
+
+test('a coastal leg is not refused just because the straight line is short', () => {
+  // Rock Harbor and Tobin Harbor sit a fifth of a mile apart across Scoville Point, and the paddle
+  // around it is several miles. Sizing the search box from the straight line alone reported this
+  // and other ordinary coastal legs as unroutable.
+  const router = loadIntel().create(geometry);
+  const result = router.route([anchor('rock-harbor'), anchor('tobin-harbor')], 'paddle');
+  assert.equal(result.land_crossings, 0);
+  assert.ok(result.points.length > 2);
+});
+
+test('portage-only waterbody pairs are refused rather than routed over land', () => {
+  // Siskiwit Lake to Intermediate Lake is an official 0.4 mile NPS portage. There is no water
+  // connection, and inventing one is the failure mode that matters most on a canoe trip.
+  const router = loadIntel().create(geometry);
+  assert.throws(
+    () => router.route([anchor('siskiwit-lake'), anchor('intermediate-lake')], 'paddle'),
+    /No mapped-water route found/
+  );
+});
+
+test('the refresh endpoint rejects an Overpass timeout remark instead of mapping it', () => {
+  const api = require('../api/isle-royale-water-intelligence.js');
+  const source = fs.readFileSync(path.join(root, 'api/isle-royale-water-intelligence.js'), 'utf8');
+  assert.match(source, /data\?\.remark/, 'Overpass answers 200 with a remark when it times out');
+  assert.match(source, /normalized\.landPolygons\.length/, 'shoreline presence must be judged on land rings');
+  assert.doesNotMatch(source, /normalized\.coastlines\.length\)\s*throw/, 'coastline ways never exist in this bbox');
+  // The request has to give up inside the function budget declared in vercel.json.
+  const budget = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'))
+    .functions['api/isle-royale-water-intelligence.js'].maxDuration;
+  const abortMs = Number(/const FETCH_TIMEOUT_MS = (\d+)/.exec(source)[1]);
+  assert.ok(abortMs < budget * 1000, 'the upstream timeout must fit inside the function budget');
+  assert.ok(typeof api === 'function');
+});
+
+test('the planner routes from the committed dataset and only falls back to the endpoint', () => {
+  const client = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 'utf8');
+  assert.match(client, /waterGeometryDataset:\s*'\/isle-royale-map\/data\/water-geometry-2026\.json'/);
+  assert.match(client, /const committed=await fetchJSON\(CONFIG\.waterGeometryDataset/);
+  assert.match(client, /const refreshed=await fetchJSON\(CONFIG\.waterIntelEndpoint/);
+  // The old gate rejected any payload without coastline ways, which is every valid payload here.
+  assert.doesNotMatch(client, /shoreline source returned no coastline geometry/);
+});

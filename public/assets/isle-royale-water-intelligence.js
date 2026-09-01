@@ -120,7 +120,17 @@
     function crosses(a,b){
       return nearbyFrom(barrierBuckets,a,b,.003).some(seg=>intersects(a,b,seg.a,seg.b));
     }
+    // A* asks for shore distance on every edge it expands, and a widened search expands tens of
+    // thousands. The answer only depends on the point, so it is memoised.
+    const coastDistanceCache=new Map();
     function coastDistance(p){
+      const cacheKey=(+p.lat).toFixed(5)+':'+(+p.lng).toFixed(5);
+      if(coastDistanceCache.has(cacheKey))return coastDistanceCache.get(cacheKey);
+      const value=computeCoastDistance(p);
+      if(coastDistanceCache.size<400000)coastDistanceCache.set(cacheKey,value);
+      return value;
+    }
+    function computeCoastDistance(p){
       let best=Infinity;
       for(let ring=1;ring<=4;ring++){
         const d=ring*BUCKET;
@@ -138,12 +148,40 @@
       }
       return Number.isFinite(best)?best:null;
     }
+    // Every grid node in a route search asks whether it sits in water, and Isle Royale carries
+    // hundreds of island and lake rings. Testing each point against every ring is what made a
+    // widened coastal search take seconds, so each ring is indexed by its bounding box once and
+    // only the rings that could contain the point are walked.
+    function indexRings(rings){
+      const out=[];
+      for(const ring of rings||[]){
+        if(!Array.isArray(ring)||ring.length<4)continue;
+        let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+        for(const point of ring){
+          const x=+point[0],y=+point[1];
+          if(!Number.isFinite(x)||!Number.isFinite(y))continue;
+          if(x<minX)minX=x;if(x>maxX)maxX=x;if(y<minY)minY=y;if(y>maxY)maxY=y;
+        }
+        if(minX>maxX||minY>maxY)continue;
+        out.push({ring,minX,minY,maxX,maxY});
+      }
+      return out;
+    }
+    const waterRingIndex=indexRings(waterPolygons),landRingIndex=indexRings(landPolygons);
+    function inIndexedRings(p,index){
+      const x=+p.lng,y=+p.lat;
+      for(const entry of index){
+        if(x<entry.minX||x>entry.maxX||y<entry.minY||y>entry.maxY)continue;
+        if(pointInRing(p,entry.ring))return true;
+      }
+      return false;
+    }
     function inAnyRing(p,rings){
       return (rings||[]).some(ring=>Array.isArray(ring)&&ring.length>=4&&pointInRing(p,ring));
     }
     function isMappedWater(p){
-      if(inAnyRing(p,waterPolygons))return true;
-      if(landPolygons.length)return !inAnyRing(p,landPolygons);
+      if(inIndexedRings(p,waterRingIndex))return true;
+      if(landRingIndex.length)return !inIndexedRings(p,landRingIndex);
       return null;
     }
     function crossingCount(points){
@@ -214,6 +252,7 @@
       if(pathMiles>direct*5+2||crossingCount(points)>0)return null;
       return {points:compact(points),access_miles:a.distance+b.distance,start_access_miles:a.distance,end_access_miles:b.distance,land_crossings:0,method:'mapped-waterway'};
     }
+    const SEARCH_ATTEMPTS=[{marginScale:1,nodeCap:24000},{marginScale:2.6,nodeCap:42000},{marginScale:5.5,nodeCap:60000}];
     function gridSpec(direct,mode){
       let step,margin;
       if(direct<=2){step=.0007;margin=.012;}
@@ -228,12 +267,29 @@
       if(!barrierSegments.length)throw new Error('No mapped water boundaries loaded');
       const riverPath=centerlineRoute(forcedStart||start,end,mode);
       if(riverPath)return riverPath;
-      const direct=miles(forcedStart||start,end),spec=gridSpec(direct,mode),mid=((forcedStart||start).lat+end.lat)/2;
-      let south=Math.max(BOUNDS.south,Math.min((forcedStart||start).lat,end.lat)-spec.margin),north=Math.min(BOUNDS.north,Math.max((forcedStart||start).lat,end.lat)+spec.margin);
-      let west=Math.max(BOUNDS.west,Math.min((forcedStart||start).lng,end.lng)-spec.margin),east=Math.min(BOUNDS.east,Math.max((forcedStart||start).lng,end.lng)+spec.margin);
-      let latStep=spec.step,lngStep=latStep/Math.max(.55,Math.cos(rad(mid)));
+      const direct=miles(forcedStart||start,end),spec=gridSpec(direct,mode);
+      // A paddle leg around a headland is routinely several times its straight line: Moskey Basin
+      // to Chippewa Harbor is three miles apart and about ten miles of coast. Sizing the search box
+      // from the straight line alone therefore reports open, obvious coastal legs as unroutable, so
+      // the box is widened and retried before a leg is refused.
+      let firstFailure=null;
+      for(const attempt of SEARCH_ATTEMPTS){
+        try{
+          const found=gridRoute(start,end,mode,forcedStart,spec.step,spec.margin*attempt.marginScale,attempt.nodeCap);
+          if(found)return found;
+        }catch(error){
+          if(!firstFailure)firstFailure=error;
+        }
+      }
+      throw firstFailure||new Error('No mapped-water route found between these checkpoints. Add another checkpoint along the water you want to follow.');
+    }
+    function gridRoute(start,end,mode,forcedStart,baseStep,margin,nodeCap){
+      const mid=((forcedStart||start).lat+end.lat)/2;
+      let south=Math.max(BOUNDS.south,Math.min((forcedStart||start).lat,end.lat)-margin),north=Math.min(BOUNDS.north,Math.max((forcedStart||start).lat,end.lat)+margin);
+      let west=Math.max(BOUNDS.west,Math.min((forcedStart||start).lng,end.lng)-margin),east=Math.min(BOUNDS.east,Math.max((forcedStart||start).lng,end.lng)+margin);
+      let latStep=baseStep,lngStep=latStep/Math.max(.55,Math.cos(rad(mid)));
       let rows=Math.ceil((north-south)/latStep)+1,cols=Math.ceil((east-west)/lngStep)+1,estimate=rows*cols;
-      if(estimate>24000){const scale=Math.sqrt(estimate/24000);latStep*=scale;lngStep*=scale;rows=Math.ceil((north-south)/latStep)+1;cols=Math.ceil((east-west)/lngStep)+1;}
+      if(estimate>nodeCap){const scale=Math.sqrt(estimate/nodeCap);latStep*=scale;lngStep*=scale;rows=Math.ceil((north-south)/latStep)+1;cols=Math.ceil((east-west)/lngStep)+1;}
       const nodes=new Map();
       function nkey(r,c){return r+':'+c;}
       for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)nodes.set(nkey(r,c),{r,c,lat:south+r*latStep,lng:west+c*lngStep});
@@ -267,7 +323,14 @@
         const boundary=boundaryDistance(p);
         const nearBoundary=Number.isFinite(boundary)&&boundary<=.65;
         const shoreSnapLimit=mode==='paddle'?(nearBoundary?.95:.45):(nearBoundary?1.1:.7);
-        for(const nk of waterKeys){
+        // Only the grid cells inside the snap radius can win, so walk those instead of every water
+        // node in the box: a widened coastal search holds tens of thousands of them.
+        const centerRow=Math.round((p.lat-south)/latStep),centerCol=Math.round((p.lng-west)/lngStep);
+        const rowSpan=Math.ceil(shoreSnapLimit/Math.max(.01,latStep*69))+2;
+        const colSpan=Math.ceil(shoreSnapLimit/Math.max(.01,lngStep*69*Math.max(.55,Math.cos(rad(p.lat)))))+2;
+        for(let r=centerRow-rowSpan;r<=centerRow+rowSpan;r++)for(let c=centerCol-colSpan;c<=centerCol+colSpan;c++){
+          const nk=nkey(r,c);
+          if(!waterKeys.has(nk))continue;
           const n=nodes.get(nk),d=miles(p,n);
           if(d>=bd||d>shoreSnapLimit)continue;
           const blocked=crosses(p,n);
@@ -302,7 +365,7 @@
           }
         }
       }
-      if(!dist.has(bk))throw new Error('No mapped-water route found between these checkpoints. Add another checkpoint along the water you want to follow.');
+      if(!dist.has(bk))return null;
       const raw=[];let cursor=bk;
       while(cursor){const n=nodes.get(cursor);if(n)raw.push({lat:n.lat,lng:n.lng});if(cursor===ak)break;cursor=prev.get(cursor);}
       raw.reverse();

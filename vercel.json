@@ -29,6 +29,9 @@
     "api/national-rivers.js": {
       "maxDuration": 30
     },
+    "api/isle-royale-water-intelligence.js": {
+      "maxDuration": 30
+    },
     "api/**/*.js": {
       "maxDuration": 10
     }

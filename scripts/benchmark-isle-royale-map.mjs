@@ -11,6 +11,8 @@ const api = read('api/isle-royale.js');
 const routeWeatherApi = read('api/isle-royale-route-weather.js');
 const waterApi = read('api/isle-royale-water-intelligence.js');
 const waterJs = read('public/assets/isle-royale-water-intelligence.js');
+const waterGeometryLib = read('lib/isle-royale/water-geometry.js');
+const committedWaterGeometry = JSON.parse(read('public/isle-royale-map/data/water-geometry-2026.json'));
 const catalog = JSON.parse(read('public/isle-royale-map/catalog.json'));
 const spec = JSON.parse(read('benchmarks/isle-royale-map.json'));
 const deepManifest = JSON.parse(read('public/isle-royale-map/data/deep-layer-manifest.json'));
@@ -63,7 +65,7 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /Open this coordinate on the source map/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
 
-const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260831-multipoint-water-1/.test(html)
+const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260901-committed-water-geometry-1/.test(html)
   && !/isle-royale-map\.js\?v=20260830-19/.test(html)
   && /"source": "\/assets\/isle-royale-map\.js"/.test(vercel)
   && /"key": "Cache-Control"[\s\S]{0,120}"value": "no-store, max-age=0"/.test(vercel)
@@ -329,10 +331,17 @@ const waterIntelligenceRuntime = /\/api\/isle-royale-water-intelligence/.test(js
   && /natural"="coastline/.test(waterApi)
   && /natural"="water"/.test(waterApi)
   && /waterway"~"river\|stream\|canal\|riverbank"/.test(waterApi)
-  && /land_polygons/.test(waterApi)
-  && /water_polygons/.test(waterApi)
-  && /water_centerlines/.test(waterApi)
-  && /planning water geometry only/i.test(waterApi);
+  && /land_polygons/.test(waterGeometryLib)
+  && /water_polygons/.test(waterGeometryLib)
+  && /water_centerlines/.test(waterGeometryLib)
+  && /planning water geometry only/i.test(waterApi)
+  // The planner must route from committed geometry. Depending on a live third-party call at route
+  // time is what left this tool unable to build any water route at all.
+  && committedWaterGeometry.land_polygon_count > 100
+  && committedWaterGeometry.inland_water_count > 100
+  && /waterGeometryDataset: '\/isle-royale-map\/data\/water-geometry-2026\.json'/.test(js)
+  && /const committed=await fetchJSON\(CONFIG\.waterGeometryDataset/.test(js)
+  && /data\?\.remark/.test(waterApi);
 
 const itineraryRuntime = /id="route-itinerary"/.test(html)
   && /function sourceBackedWaterCamps/.test(js)
