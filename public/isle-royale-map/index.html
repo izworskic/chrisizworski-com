@@ -73,7 +73,7 @@ body.map-focus .route-build-bar{left:12px!important;right:12px!important;width:a
     <div>
       <div class="crumb"><a href="/">Chris Izworski</a> / Michigan field tools / Isle Royale</div>
       <h1>Isle Royale Trip Planner</h1>
-      <p>Click the map. Add camps. See leg distances. Set day ends. Check wind, waves and NPS restrictions.</p>
+      <p>Start clicking the water to build a canoe route. Add camps and P# portages as you go; distance and travel time update underneath the route.</p>
     </div>
     <div class="mast-note"><strong>Planning only.</strong><br>Verify current NPS maps, alerts and marine guidance.</div>
   </div>
@@ -98,8 +98,8 @@ body.map-focus .route-build-bar{left:12px!important;right:12px!important;width:a
     </aside>
     <div class="map-toolbar">
       <div class="mode-toggle" role="group" aria-label="Map interaction mode">
-        <button id="explore-mode" type="button" aria-pressed="true">Explore</button>
-        <button id="route-mode" type="button" aria-pressed="false">Build route</button>
+        <button id="explore-mode" type="button" aria-pressed="false">Inspect map</button>
+        <button id="route-mode" type="button" aria-pressed="true">Plan route</button>
       </div>
       <button id="fit-island" type="button">Fit island</button>
       <button id="focus-map" type="button" aria-pressed="false">Focus map</button>
@@ -126,7 +126,7 @@ body.map-focus .route-build-bar{left:12px!important;right:12px!important;width:a
     </div>
     <section id="planning-cockpit" class="planning-cockpit" aria-hidden="true">
       <button id="cockpit-exit" type="button">Exit focus</button>
-      <select id="cockpit-route-mode"><option value="paddle">Paddle</option><option value="canoe">Canoe + portage</option><option value="hike">Hike</option><option value="powerboat">Motorboat</option></select>
+      <select id="cockpit-route-mode"><option value="paddle">Paddle</option><option value="canoe" selected>Canoe + portage</option><option value="hike">Hike</option><option value="powerboat">Motorboat</option></select>
       <input id="cockpit-route-speed" type="number" value="3">
       <input id="cockpit-route-hours" type="number" value="6">
       <button id="cockpit-build" type="button">Build route</button>
@@ -162,7 +162,7 @@ body.map-focus .route-build-bar{left:12px!important;right:12px!important;width:a
           <label>Travel mode
             <select id="route-mode-select">
               <option value="paddle">Paddle / small craft</option>
-              <option value="canoe">Canoe + portage</option>
+              <option value="canoe" selected>Canoe + portage</option>
               <option value="hike">Hike / backpack</option>
               <option value="powerboat">Motorboat</option>
             </select>
@@ -198,7 +198,7 @@ body.map-focus .route-build-bar{left:12px!important;right:12px!important;width:a
             <input id="route-departure" type="datetime-local">
           </label>
         </div>
-        <p class="criteria-note">Keep clicking along shorelines, channels, rivers, and inland lakes to force the route where you intend to paddle. You do not need to stop at two points. The route bar on the map is the only build control.</p>
+        <p class="criteria-note">Route planning is on when the page opens. Keep clicking along shorelines, channels, rivers, and inland lakes to shape the trip. Click a brown P# to portage and a campground to add a stop. The faint dashed checkpoint guide is only temporary while the safe water/portage route verifies.</p>
 
         <div class="route-compat-controls" aria-hidden="true">
           <div id="route-smart-status" class="route-smart-status" aria-live="polite"></div>
