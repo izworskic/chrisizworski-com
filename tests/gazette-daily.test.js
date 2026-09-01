@@ -73,7 +73,11 @@ test("Gazette benchmark records unknown search metrics honestly and the released
   assert.equal(benchmark.targets.first28Days.dailyEditionAvailability, 1);
   assert.equal(benchmark.targets.first28Days.editionsWithAtLeastFiveHealthyAisPorts, 0.95);
   assert.ok(experiment);
-  assert.equal(experiment.status, "running");
+  // Read and closed 2026-09-01 from the Search Console 28-day export. What matters now is that
+  // the entry carries a recorded result, not that it is still frozen open.
+  assert.equal(experiment.status, "evaluated");
+  assert.ok(experiment.result?.measured, "read must record the measured page row");
+  assert.ok(experiment.decisionDate, "read must record a decision date");
   assert.equal(experiment.releaseDate, "2026-08-03");
   assert.deepEqual(experiment.evaluationWindow, { start: "2026-08-04", end: "2026-08-31" });
   assert.equal(experiment.target.widgetEditionOpenRate, 0.02);

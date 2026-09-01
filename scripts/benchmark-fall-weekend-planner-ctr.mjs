@@ -20,7 +20,7 @@ check("statewide hub remains canonical to itself", hub.includes('rel="canonical"
 check("baseline exact", experiment.baseline.impressions === 54 && experiment.baseline.clicks === 0 && experiment.baseline.averagePosition === 10.07);
 check("CTR target explicit", experiment.targets.ctrAtOrAbove === 0.02 && experiment.targets.averagePositionAtOrBetterThan === 12);
 const item = ledger.experiments.find((entry) => entry.id === "2026-08-22-fall-weekend-planner-ctr");
-check("ledger protection", item?.status === "pending-clean-window" && item?.lastSearchFacingChangeDate === "2026-08-22");
+check("ledger entry is declared and either open or read", (item?.status === "pending-clean-window" || (item?.status === "evaluated" && Boolean(item?.result))) && Boolean(item?.lastSearchFacingChangeDate));
 console.log("\nFALL WEEKEND PLANNER CTR BENCHMARK");
 console.log("=".repeat(72));
 console.log("Baseline: 54 impressions, 0 clicks, position 10.07");

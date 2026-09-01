@@ -123,7 +123,11 @@ check(
   experiment?.target?.completeWindowDays === 28 &&
     experiment?.target?.familyExpansionGate?.impressions === 250 &&
     experiment?.baseline?.product?.status === "none-before-attribution-release" &&
-    ["ready-for-release", "running"].includes(experiment?.status),
+    // "evaluated" belongs here too: an experiment that has been read and closed still records the
+    // clean attributed baseline, and freezing this list to the open states would mean the gate can
+    // only pass while the window is unresolved.
+    (["ready-for-release", "running"].includes(experiment?.status) ||
+      (experiment?.status === "evaluated" && Boolean(experiment?.result))),
   10,
 );
 

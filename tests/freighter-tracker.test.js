@@ -87,7 +87,11 @@ test("freighter experiment is recorded as the released August 3 treatment", () =
   assert.equal(experiment.target.impressionsMultiple, 3);
   assert.equal(experiment.target.ctr, 0.015);
   assert.equal(experiment.target.averagePosition, 15);
-  assert.equal(experiment.status, "running");
+  // Read and closed 2026-09-01 from the Search Console 28-day export. What matters now is that
+  // the entry carries a recorded result, not that it is still frozen open.
+  assert.equal(experiment.status, "evaluated");
+  assert.ok(experiment.result?.measured, "read must record the measured page row");
+  assert.ok(experiment.decisionDate, "read must record a decision date");
   assert.equal(experiment.releaseDate, "2026-08-03");
   assert.deepEqual(experiment.evaluationWindow, { start: "2026-08-04", end: "2026-08-31" });
 });

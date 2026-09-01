@@ -8,11 +8,15 @@ from gen_chrome import (head, header, FOOTER, SAFETY_BANNER, breadcrumb,
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = pathlib.Path(os.environ.get("ICE_OUT", str(ROOT / "public" / "michigan-ice")))
 (OUT / "regions").mkdir(parents=True, exist_ok=True)
-ICE_ROOT_DATE_MODIFIED = "2026-08-18"
+# Moved forward 2026-09-01: PR #234 rewrote the Person node on all ten generated pages and this
+# repair rewrote it again, so the pages really did change today. Only ever move this FORWARD, and
+# only with a real content change behind it — the stamper corrects a stale date but never walks an
+# overstated one back.
+ICE_ROOT_DATE_MODIFIED = "2026-09-01"
 # Sub-pages (ice safety, freezing degree days, ice cover history) gained their
 # dateModified on 2026-08-25. Keep this separate from the root/region date: the stamper
 # only corrects stamps FORWARD, so an overstated date would never be walked back.
-ICE_SUBPAGE_DATE_MODIFIED = "2026-08-25"
+ICE_SUBPAGE_DATE_MODIFIED = "2026-09-01"
 
 REGIONS = [
     dict(

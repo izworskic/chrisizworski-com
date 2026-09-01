@@ -19,7 +19,9 @@ check("destination canonical frozen", targetPage.includes('rel="canonical" href=
 check("baseline exact", benchmark.baseline.impressions === 78 && benchmark.baseline.clicks === 1 && benchmark.baseline.averagePosition === 11.88);
 check("top ten target", benchmark.targets.averagePositionAtOrBetterThan === 10 && benchmark.targets.stretchAveragePositionAtOrBetterThan === 8);
 const item = ledger.experiments.find((entry) => entry.id === "2026-08-22-upper-peninsula-fall-rank");
-check("ledger protection", item?.status === "pending-clean-window" && item?.paths?.includes("/fall-color/upper-peninsula-fall-color/"));
+// An experiment that has been read and closed still counts as declared. Requiring the frozen
+// state here would mean the gate can only pass while the window is unresolved.
+check("ledger entry is declared and either open or read", (item?.status === "pending-clean-window" || (item?.status === "evaluated" && Boolean(item?.result))) && item?.paths?.includes("/fall-color/upper-peninsula-fall-color/"));
 console.log("\nUPPER PENINSULA FALL RANK BENCHMARK");
 console.log("=".repeat(72));
 console.log("Baseline: 78 impressions, 1 click, position 11.88");

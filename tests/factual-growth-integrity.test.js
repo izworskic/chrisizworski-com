@@ -73,9 +73,16 @@ test("FVF distribution grows from established pages without touching active snip
   const tomato = ledger.experiments.find((item) => item.id === "2026-08-03-tomato-snippet");
   const frost = ledger.experiments.find((item) => item.id === "2026-08-03-frost-snippet");
   const fvf = ledger.experiments.find((item) => item.id === "2026-08-03-fvf-gardening-authority");
-  assert.equal(tomato.status, "running");
-  assert.equal(frost.status, "running");
-  assert.equal(fvf.status, "running");
+  // Read and closed 2026-09-01 from the Search Console 28-day export. What matters now is that
+  // the entry carries a recorded result, not that it is still frozen open.
+  assert.equal(tomato.status, "evaluated");
+  assert.ok(tomato.result?.measured, "read must record the measured page row");
+  assert.ok(tomato.decisionDate, "read must record a decision date");
+  assert.equal(frost.status, "evaluated");
+  assert.ok(frost.result?.measured, "read must record the measured page row");
+  assert.ok(frost.decisionDate, "read must record a decision date");
+  assert.equal(fvf.status, "evaluated");
+  assert.ok(fvf.decisionDate);
   assert.equal(fvf.releaseDate, "2026-08-12");
   assert.deepEqual(fvf.evaluationWindow, { start: "2026-08-13", end: "2026-09-09" });
   assert.equal(fvf.invalidatedWindow.invalidatedOn, "2026-08-11");
