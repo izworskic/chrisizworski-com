@@ -133,7 +133,7 @@
     "Do not label the newest ordinary water checkpoint as the final destination while Build mode is active.",
     "Do not treat intermediate water clicks as an error-recovery feature only; they are a primary route-building interaction.",
     "Do not call two-point canoe routing complete unless a failed water-only leg can be expanded through a verified chain of designated NPS portages with mapped-water access to every entry/exit landing.",
-    "Do not permit a Chickenbone Lake to McCargoe Cove water shortcut through the closed outlet; vessel routing must use designated NPS Portage #11."
+    "Do not permit a Chickenbone Lake to McCargoe Cove water shortcut through the closed outlet; vessel routing must use designated NPS P11."
   ],
   "initialBuildFit": {
     "distinctSearchIntent": 24,
@@ -225,7 +225,7 @@
       "Saved/restored routes must retain portage group identity, direction and day-end state.",
       "Focus Map must remain a complete trip-building surface.",
       "Do not call two-point canoe routing complete unless a failed water-only leg can be expanded through a verified chain of designated NPS portages with mapped-water access to every entry/exit landing.",
-      "Do not permit a Chickenbone Lake to McCargoe Cove water shortcut through the closed outlet; vessel routing must use designated NPS Portage #11."
+      "Do not permit a Chickenbone Lake to McCargoe Cove water shortcut through the closed outlet; vessel routing must use designated NPS P11."
     ]
   },
   "multimodalRouteBuilderValueFunction": {
