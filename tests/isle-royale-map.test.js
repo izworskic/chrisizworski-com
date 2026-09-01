@@ -309,8 +309,8 @@ test('marine forecast sampling grows with route distance rather than control-poi
 });
 
 test('map-first route builder accepts every mappable feature and keeps criteria below the map', () => {
-  assert.match(html, /id="explore-mode"[^>]*aria-pressed="true"[^>]*>Explore/);
-  assert.match(html, /id="route-mode"[^>]*>Build route/);
+  assert.match(html, /id="explore-mode"[^>]*aria-pressed="false"[^>]*>Inspect map/);
+  assert.match(html, /id="route-mode"[^>]*aria-pressed="true"[^>]*>Plan route/);
   assert.match(html, /id="route-map-guide"/);
   assert.match(html, /Trace the trip with checkpoints/);
   assert.match(html, /<h2>Build above\. Tune the trip below\.<\/h2>/);
@@ -717,7 +717,7 @@ test('official NPS portages are first-class atomic canoe trip steps', () => {
 });
 
 test('canoe planner connects water to atomic official portages and back to water', () => {
-  assert.match(html, /<option value="canoe">Canoe \+ portage<\/option>/);
+  assert.match(html, /<option value="canoe"(?: selected)?>Canoe \+ portage<\/option>/);
   assert.match(js, /function resolveCanoeRouteAsync/);
   assert.match(js, /function canoeWaterLegCandidate/);
   assert.match(js, /function selectedOfficialPortageLeg/);
@@ -844,6 +844,21 @@ test('multi-point checkpoint routing keeps earlier verified legs while extending
   assert.doesNotMatch(js, /point\.kind==='water-checkpoint'[\s\S]{0,100}return 'Destination'/);
 });
 
+
+test('route planner opens ready to build a canoe trip', () => {
+  assert.match(js, /adding:true,[\s\S]{0,120}mode:'canoe'/);
+  assert.match(html, /id="route-mode"[^>]*aria-pressed="true"[^>]*>Plan route<\/button>/);
+  assert.match(html, /id="explore-mode"[^>]*aria-pressed="false"[^>]*>Inspect map<\/button>/);
+  assert.match(html, /<option value="canoe" selected>Canoe \+ portage<\/option>/);
+  assert.match(js, /if\(!sharedTripLoaded\) \{[\s\S]{0,120}setRouteAdding\(true\)/);
+});
+
+test('unresolved water legs keep a visible checkpoint guide without inventing mileage', () => {
+  assert.match(js, /function routeDisplayPoints\(\) \{[\s\S]{0,180}return route\.points;/);
+  assert.match(js, /const draftDisplay=!routeIsResolved\(\)&&displayPath\.length>=2/);
+  assert.match(js, /Checkpoint guide only · safe water\/portage route is still verifying/);
+  assert.doesNotMatch(js, /route-distance-draft">Draft/);
+});
 
 test('canoe routing can auto-expand two points through the designated NPS portage graph', () => {
   assert.match(waterIntelJs, /function candidatePortageAnchors/);

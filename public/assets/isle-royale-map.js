@@ -465,14 +465,14 @@
   let visitorGeometrySettled = false;
   const osmSeen = new Set();
   const route = {
-    adding:false,
+    adding:true,
     reviewing:false,
     points:[],
     resolvedPoints:[],
     line:null,
     markers:[],
     weather:null,
-    mode:'paddle',
+    mode:'canoe',
     speed:3,
     hours:6,
     departure:'',
@@ -2016,8 +2016,7 @@
   function routeDisplayPoints() {
     const resolved=routePathPoints();
     if(resolved.length>=2)return resolved;
-    if(route.mode==='hike')return route.points;
-    return route.points.length<2?route.points:[];
+    return route.points;
   }
 
   function renderRouteBuildFlow() {
@@ -4217,31 +4216,25 @@
     route.line=null;
     const path=routePathPoints();
     const displayPath=routeDisplayPoints();
-    const draftDisplay=route.mode==='hike'&&!routeIsResolved()&&displayPath.length>=2;
+    const draftDisplay=!routeIsResolved()&&displayPath.length>=2;
     buildRouteItinerary(path);
 
     if(displayPath.length>=2) {
       route.line=L.polyline(displayPath.map(p=>[p.lat,p.lng]),{
         pane:'routePane',
-        color:draftDisplay?'#a46a2c':route.mode==='hike'&&route.smartState==='trail-snapped'?'#8b4f2d':'#173d36',
-        weight:draftDisplay?4:(route.mode==='hike'?5:4),
-        opacity:draftDisplay ? .86 : .94,
-        dashArray:draftDisplay?'8 7':((route.mode==='hike'&&route.smartState==='trail-snapped')||route.smartState==='water-aware'?null:'9 6'),
+        color:draftDisplay?'#6d7772':route.mode==='hike'&&route.smartState==='trail-snapped'?'#8b4f2d':'#173d36',
+        weight:draftDisplay?3:(route.mode==='hike'?5:4),
+        opacity:draftDisplay ? .78 : .94,
+        dashArray:draftDisplay?'6 7':((route.mode==='hike'&&route.smartState==='trail-snapped')||route.smartState==='water-aware'?null:'9 6'),
         interactive:route.mode!=='hike'
       }).addTo(routeLayerGroup);
       if(draftDisplay) {
-        route.line.bindTooltip('Trail draft · straight between selected points while mapped trail routing verifies',{sticky:true});
-        for(let i=1;i<route.points.length;i++) {
-          const a=route.points[i-1],b=route.points[i];
-          const leg=distanceMiles(a,b);
-          const mid={lat:(a.lat+b.lat)/2,lng:(a.lng+b.lng)/2};
-          L.marker([mid.lat,mid.lng],{
-            pane:'routePane',
-            interactive:false,
-            keyboard:false,
-            icon:L.divIcon({className:'',html:'<span class="route-distance-badge route-distance-draft">Draft '+leg.toFixed(1)+' mi</span>',iconSize:[96,24],iconAnchor:[48,12]})
-          }).addTo(routeLayerGroup);
-        }
+        route.line.bindTooltip(
+          route.mode==='hike'
+            ? 'Checkpoint guide only · mapped trail route is still verifying'
+            : 'Checkpoint guide only · safe water/portage route is still verifying',
+          {sticky:true}
+        );
       }
       if(route.mode!=='hike') {
         route.line.on('click',event=>{
@@ -5571,10 +5564,16 @@
   document.body.classList.toggle('canoe-mode',route.mode==='canoe');
   document.body.classList.toggle('human-paddle-mode',route.mode==='canoe'||route.mode==='paddle');
   renderSavedTrips();
-  els.exploreModeButton?.setAttribute('aria-pressed','true');
-  els.routeModeButton?.setAttribute('aria-pressed','false');
   const sharedTripLoaded=loadSharedTripFromHash();
-  if(!sharedTripLoaded)renderRoute();
+  if(!sharedTripLoaded) {
+    setRouteAdding(true);
+    renderRoute();
+  } else {
+    document.body.classList.toggle('route-building',route.adding);
+    els.exploreModeButton?.setAttribute('aria-pressed',String(!route.adding));
+    els.routeModeButton?.setAttribute('aria-pressed',String(route.adding));
+    renderRouteBuildFlow();
+  }
   updateHistoryControls();
   syncCockpitControls();
   renderFeatureList();
