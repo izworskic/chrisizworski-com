@@ -75,6 +75,11 @@ for (const [name, body] of Object.entries(pages)) {
 
 check("Shared data helpers expose freshness contract", /sourceMeta/.test(shared) && /stale_after_minutes/.test(shared) && /source_status/.test(shared), 5);
 check("Location object includes timezone context", /timeZone/.test(apis.geocode) && /api\.weather\.gov\/points/.test(apis.geocode), 3);
+check("Device location is opt-in and rounded before server lookup", /navigator\.geolocation/.test(client) && /toFixed\(3\)/.test(client) && /method:"POST"/.test(client) && /reverseGeocode/.test(apis.geocode) && /roundCoord/.test(apis.geocode), 5);
+check("Device coordinates stay out of national page URLs", /body:JSON\.stringify\(\{latitude:roundedLatitude,longitude:roundedLongitude\}\)/.test(client) && !/national-geocode\?lat=/.test(client), 4);
+check("All national entry forms expose optional Use my location", Object.values(pages).every((body) => /data-use-location/.test(body) && /location-privacy/.test(body)), 4);
+check("Device lookup is not cached and analytics block postal coordinate fields", /method === "POST"[\s\S]*Cache-Control", "no-store"/.test(apis.geocode) && ["latitude","longitude","postalCode","postcode","location"].every((key) => client.includes('"'+key+'"')), 4);
+
 check("National client persists saved places locally", /PLACES_STORE/.test(client) && /savedPlaces/.test(client) && /savePlace/.test(client), 4);
 check("Location continuity crosses national tools without new canonicals", /function propagate/.test(client) && /withQuery/.test(client) && /a\[href\^="\/national-tools\/"\]/.test(client), 4);
 check("Decision times can render in searched timezone", /fmtInZone/.test(client) && /timeZone/.test(client), 3);
@@ -158,6 +163,8 @@ const admissionWeight = Object.values(admission.weights || {}).reduce((sum, valu
 check("Location admission weights total 100", admissionWeight === 100 && admission.minimumScore === 80, 4, String(admissionWeight));
 check("Location admission has hard vetoes and critical minimums", Array.isArray(admission.hardVetoes) && admission.hardVetoes.length >= 5 && admission.criticalMinimums?.cannibalizationSafety === 10, 4);
 check("Saved places are explicitly not fake alerts", contract.phase3?.alerts?.status === "deferred-until-real-delivery-channel", 4);
+check("Phase 3 device location remains manual-first and privacy bounded", contract.phase3?.location?.status === "manual-first-with-optional-device-location" && /rounded to 0\.001 degrees/.test(contract.phase3?.location?.rule || "") && /resolved place query/.test(contract.phase3?.location?.continuity || ""), 4);
+
 check("Phase 3 measurement is instrumented without raw location payloads", contract.phase3?.measurement?.status === "instrumented-on-existing-vercel-analytics" && /Never send raw city\/ZIP/.test(contract.phase3?.measurement?.privacy || ""), 4);
 const masterPrompt = await read("docs/NATIONAL_OUTDOOR_TOOLS_MASTER_PROMPT.md");
 check("Master prompt remains the build doctrine", masterPrompt.includes("## Loss function") && masterPrompt.includes("## Phase 3 platform interpretation") && masterPrompt.includes("Core decision data must not wait on optional enrichment") && masterPrompt.includes("Slow discovery may be precomputed"), 4);
