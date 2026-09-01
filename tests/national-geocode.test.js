@@ -1,5 +1,6 @@
 const test=require("node:test");
 const assert=require("node:assert/strict");
+const fs=require("node:fs");
 const geo=require("../api/national-geocode.js")._test;
 
 test("device coordinates are rounded to about 0.001 degrees",()=>{
@@ -42,4 +43,35 @@ test("U.S. candidate detection works for reverse-geocoder rows",()=>{
   assert.equal(geo.isUsCandidate({address:{country_code:"us"}}),true);
   assert.equal(geo.isUsCandidate({address:{"ISO3166-2-lvl4":"US-MI"}}),true);
   assert.equal(geo.isUsCandidate({address:{country_code:"ca"}}),false);
+});
+
+
+test("shared national place toolbar keeps shared links query-based and analytics-safe",()=>{
+  const client=fs.readFileSync(require.resolve("../public/assets/national-tools.js"),"utf8");
+  assert.match(client,/function renderPlaceToolbar/);
+  assert.match(client,/function currentShareUrl/);
+  assert.match(client,/withQuery\(path,loc\)/);
+  assert.match(client,/navigator\.share/);
+  assert.match(client,/clipboard\.writeText/);
+  assert.match(client,/National Place Shared/);
+  assert.match(client,/National Place Switched/);
+  assert.doesNotMatch(client,/National Place Shared[^\n]{0,160}(?:query|latitude|longitude|place)/);
+});
+
+
+test("saved-place comparison stays signal-by-signal without an overall score",()=>{
+  const dashboard=fs.readFileSync(require.resolve("../public/assets/national-dashboard.js"),"utf8");
+  const hub=fs.readFileSync(require.resolve("../public/national-tools/index.html"),"utf8");
+  assert.match(dashboard,/async function compare/);
+  assert.match(dashboard,/load\(left,\{measure:false\}\)/);
+  assert.match(dashboard,/load\(right,\{measure:false\}\)/);
+  assert.match(dashboard,/National Places Compared",\{signals:5\}/);
+  assert.doesNotMatch(dashboard,/National Places Compared[^\n]{0,180}(?:query|latitude|longitude|place)/);
+  assert.match(hub,/Compare two places across the same five signals/);
+  assert.match(hub,/No overall winner or safety score/);
+  assert.match(hub,/D\.compare\(left,right\)/);
+  for(const label of ["Aurora","River","Frost","Planting","Fall timing"])assert.ok(hub.includes(label),label);
+  const inline=hub.match(/<script>\s*(document\.addEventListener[\s\S]*?)<\/script>/);
+  assert.ok(inline,"national hub inline script not found");
+  assert.doesNotThrow(()=>new Function(inline[1]));
 });

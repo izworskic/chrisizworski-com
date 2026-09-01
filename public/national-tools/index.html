@@ -3,7 +3,7 @@
 <title>U.S. Outdoor Tools | Chris Izworski</title>
 <meta name="description" content="Live U.S. outdoor tools for aurora, river conditions, frost, planting and fall foliage using NOAA, NWS, USGS and phenology data.">
 <link rel="canonical" href="https://chrisizworski.com/national-tools/">
-<meta name="robots" content="index,follow,max-image-preview:large"><link rel="stylesheet" href="/assets/national-tools.css?v=20260901-location1">
+<meta name="robots" content="index,follow,max-image-preview:large"><link rel="stylesheet" href="/assets/national-tools.css?v=20260901-compare1">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"CollectionPage","@id":"https://chrisizworski.com/national-tools/#page","url":"https://chrisizworski.com/national-tools/","name":"U.S. Outdoor Tools","description":"Live U.S. outdoor tools for aurora, river conditions, frost, planting and fall foliage using NOAA, NWS, USGS and phenology data.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script></head>
 <body><header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
 <main>
@@ -20,6 +20,17 @@
   <div class="decision-grid" data-desk-grid></div>
   <details class="method-details"><summary>Why are these cards in this order?</summary><p>The desk orders live hazards and time-sensitive opportunities ahead of routine context. Official flood/freeze signals outrank seasonal or low-urgency conditions. This is a display priority, not a universal safety score.</p></details>
 </section>
+
+<section id="place-compare" class="place-compare" hidden aria-live="polite">
+  <div class="compare-title"><div><span class="tool-kicker">Saved-place comparison</span><h2>Compare two places across the same five signals</h2></div><p>No overall winner or safety score. Each source-backed signal stays separate so you can decide what matters for the trip.</p></div>
+  <form id="compare-form" class="compare-controls">
+    <label>First place<select id="compare-a" aria-label="First saved place"></select></label>
+    <label>Second place<select id="compare-b" aria-label="Second saved place"></select></label>
+    <button class="btn" type="submit">Compare places</button>
+  </form>
+  <div id="compare-status" class="status" aria-live="polite"></div>
+  <div class="compare-matrix" data-compare-grid></div>
+</section>
 </div></section>
 
 <section class="section"><div class="wrap"><div class="section-head"><div><span class="eyebrow">Go deeper</span><h2>Open the full decision tools</h2></div><p class="small">These links remain crawlable and useful even when a live feed is unavailable.</p></div><div class="grid">
@@ -35,8 +46,8 @@
 <div class="source-box"><h2>Michigan stays deeper</h2><p>The existing <a href="/tools/">Michigan & Great Lakes tools</a> remain intact. When Michigan already has a richer canonical product, the national tool points there rather than cloning it.</p></div>
 </div></section>
 
-<script src="/assets/national-tools.js?v=20260901-location1"></script>
-<script src="/assets/national-dashboard.js?v=20260831-measurement1"></script>
+<script src="/assets/national-tools.js?v=20260901-placebar1"></script>
+<script src="/assets/national-dashboard.js?v=20260901-compare1"></script>
 <script>
 document.addEventListener("DOMContentLoaded",function(){
   const N=window.NationalTools,D=window.NationalDashboard;
@@ -51,6 +62,65 @@ document.addEventListener("DOMContentLoaded",function(){
   }
   D.renderSaved(savedRoot,showLocation);
   N.bind(form,showLocation);
+
+  const compareSection=document.getElementById("place-compare");
+  const compareForm=document.getElementById("compare-form");
+  const compareA=document.getElementById("compare-a"),compareB=document.getElementById("compare-b");
+  const compareStatus=document.getElementById("compare-status"),compareGrid=compareSection.querySelector("[data-compare-grid]");
+
+  function compareOption(place){
+    return '<option value="'+N.esc(N.locationKey(place))+'">'+N.esc(N.label(place))+'</option>';
+  }
+  function comparePlaces(){
+    const places=N.savedPlaces();
+    if(places.length<2){compareSection.hidden=true;compareGrid.innerHTML="";return places}
+    const oldA=compareA.value,oldB=compareB.value;
+    compareA.innerHTML=places.map(compareOption).join("");
+    compareB.innerHTML=places.map(compareOption).join("");
+    if(places.some(function(p){return N.locationKey(p)===oldA}))compareA.value=oldA;
+    if(places.some(function(p){return N.locationKey(p)===oldB}))compareB.value=oldB;
+    if(!compareA.value)compareA.value=N.locationKey(places[0]);
+    if(!compareB.value||compareB.value===compareA.value){
+      const alternate=places.find(function(p){return N.locationKey(p)!==compareA.value});
+      if(alternate)compareB.value=N.locationKey(alternate);
+    }
+    compareSection.hidden=false;
+    return places;
+  }
+  function compareCell(card,place){
+    if(!card)return '<div class="compare-cell"><span class="compare-mobile-label">'+N.esc(N.label(place))+'</span><strong>Signal unavailable</strong><p>No comparable result returned.</p></div>';
+    return '<div class="compare-cell"><span class="compare-mobile-label">'+N.esc(N.label(place))+'</span><strong>'+N.esc(card.title)+'</strong><p>'+N.esc(card.detail||"")+'</p>'+
+      (card.facts&&card.facts.length?'<ul>'+card.facts.slice(0,2).map(function(f){return '<li>'+N.esc(f)+'</li>'}).join("")+'</ul>':"")+
+      (card.source?'<small>'+N.esc(card.source)+'</small>':"")+
+      '<a href="'+N.esc(card.href)+'">Open full tool →</a></div>';
+  }
+  function renderComparison(result){
+    const order=[["aurora","Aurora"],["rivers","River"],["frost","Frost"],["planting","Planting"],["fall","Fall timing"]];
+    const leftMap=Object.fromEntries(result.left.cards.map(function(card){return [card.id,card]}));
+    const rightMap=Object.fromEntries(result.right.cards.map(function(card){return [card.id,card]}));
+    compareGrid.innerHTML='<div class="compare-head"><span>Signal</span><strong>'+N.esc(N.label(result.left.location))+'</strong><strong>'+N.esc(N.label(result.right.location))+'</strong></div>'+
+      order.map(function(row){return '<div class="compare-row"><div class="compare-signal"><span class="tool-kicker">'+N.esc(row[1])+'</span></div>'+compareCell(leftMap[row[0]],result.left.location)+compareCell(rightMap[row[0]],result.right.location)+'</div>'}).join("");
+  }
+  compareForm.addEventListener("submit",async function(event){
+    event.preventDefault();
+    const places=comparePlaces();
+    const left=places.find(function(p){return N.locationKey(p)===compareA.value});
+    const right=places.find(function(p){return N.locationKey(p)===compareB.value});
+    if(!left||!right||N.locationKey(left)===N.locationKey(right)){
+      compareStatus.innerHTML='<span class="error">Choose two different saved places.</span>';return;
+    }
+    const button=compareForm.querySelector(".btn");button.disabled=true;compareStatus.textContent="Comparing the five signals…";
+    try{
+      const result=await D.compare(left,right);
+      renderComparison(result);
+      compareStatus.textContent="Comparison loaded · signals remain independent";
+    }catch(err){
+      compareStatus.innerHTML='<span class="error">'+N.esc(err.message||"Comparison unavailable")+'</span>';
+    }finally{button.disabled=false}
+  });
+  const savedObserver=new MutationObserver(comparePlaces);
+  savedObserver.observe(savedRoot,{childList:true,subtree:true});
+  comparePlaces();
 
   const q=new URLSearchParams(location.search).get("q");
   if(q){input.value=q;form.requestSubmit()}

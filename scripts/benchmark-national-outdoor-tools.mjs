@@ -81,6 +81,10 @@ check("All national entry forms expose optional Use my location", Object.values(
 check("Device lookup is not cached and analytics block postal coordinate fields", /method === "POST"[\s\S]*Cache-Control", "no-store"/.test(apis.geocode) && ["latitude","longitude","postalCode","postcode","location"].every((key) => client.includes('"'+key+'"')), 4);
 
 check("National client persists saved places locally", /PLACES_STORE/.test(client) && /savedPlaces/.test(client) && /savePlace/.test(client), 4);
+check("Resolved place toolbar supports save switch and share", /function renderPlaceToolbar/.test(client) && /data-place-save/.test(client) && /data-place-switch/.test(client) && /data-place-share/.test(client), 5);
+check("Shared national links carry place query not coordinates", /function currentShareUrl/.test(client) && /withQuery\(path,loc\)/.test(client) && /navigator\.share/.test(client) && /clipboard\.writeText/.test(client) && !/currentShareUrl[\s\S]{0,500}latitude/.test(client), 5);
+check("Place toolbar actions stay privacy-safe in analytics", /National Place Shared/.test(client) && /National Place Switched/.test(client) && /method:"native"/.test(client) && /method:"clipboard"/.test(client) && !/National Place Shared[^\n]{0,160}(?:query|latitude|longitude|place)/.test(client), 4);
+
 check("Location continuity crosses national tools without new canonicals", /function propagate/.test(client) && /withQuery/.test(client) && /a\[href\^="\/national-tools\/"\]/.test(client), 4);
 check("Decision times can render in searched timezone", /fmtInZone/.test(client) && /timeZone/.test(client), 3);
 
@@ -146,6 +150,11 @@ check("Fall beta rejects fake current color", /not an observed 2026 leaf-color r
 check("Fall exposes variability confidence", /median_absolute_deviation_days/.test(apis.fall) && /confidence/.test(apis.fall), 3);
 
 check("Hub is a live multi-signal decision surface", /national-dashboard\.js/.test(pages.hub) && /Your outdoor desk/.test(pages.hub) && /data-desk-grid/.test(pages.hub), 5);
+check("Hub compares two saved places across the same five signals", /id="place-compare"/.test(pages.hub) && /id="compare-a"/.test(pages.hub) && /id="compare-b"/.test(pages.hub) && /No overall winner or safety score/.test(pages.hub) && /D\.compare/.test(pages.hub), 5);
+check("Comparison engine reuses independent tool contracts without duplicate desk analytics", /async function compare/.test(dashboard) && /load\(left,\{measure:false\}\)/.test(dashboard) && /load\(right,\{measure:false\}\)/.test(dashboard) && /National Places Compared/.test(dashboard), 5);
+check("Comparison analytics exclude selected place identity", /National Places Compared",\{signals:5\}/.test(dashboard) && !/National Places Compared[^\n]{0,180}(?:query|latitude|longitude|place)/.test(dashboard), 4);
+check("Comparison remains signal-by-signal and responsive", /\["aurora","Aurora"\]/.test(pages.hub) && /\["rivers","River"\]/.test(pages.hub) && /\["frost","Frost"\]/.test(pages.hub) && /\["planting","Planting"\]/.test(pages.hub) && /\["fall","Fall timing"\]/.test(pages.hub) && /compare-matrix/.test(nationalCss), 4);
+
 check("Dashboard loads all five platform inputs independently", ["/api/national-aurora","/api/national-rivers","/api/national-frost","/api/national-fall-color","/data/national-planting-crops.json"].every((needle) => dashboard.includes(needle)) && /getJson/.test(dashboard), 5);
 check("Dashboard orders by decision urgency, not a safety score", /sort\(function\(a,b\)\{return b\.priority-a\.priority\}/.test(dashboard) && /not a universal safety score/i.test(pages.hub), 4);
 check("Dashboard shows independent source degradation", /if\(!result\.ok\)/.test(dashboard) && /platform inputs available/.test(dashboard), 4);
@@ -164,6 +173,10 @@ check("Location admission weights total 100", admissionWeight === 100 && admissi
 check("Location admission has hard vetoes and critical minimums", Array.isArray(admission.hardVetoes) && admission.hardVetoes.length >= 5 && admission.criticalMinimums?.cannibalizationSafety === 10, 4);
 check("Saved places are explicitly not fake alerts", contract.phase3?.alerts?.status === "deferred-until-real-delivery-channel", 4);
 check("Phase 3 device location remains manual-first and privacy bounded", contract.phase3?.location?.status === "manual-first-with-optional-device-location" && /rounded to 0\.001 degrees/.test(contract.phase3?.location?.rule || "") && /resolved place query/.test(contract.phase3?.location?.continuity || ""), 4);
+check("Phase 3 place toolbar preserves canonical and privacy rules", contract.phase3?.placeToolbar?.status === "live" && /never latitude\/longitude/.test(contract.phase3?.placeToolbar?.shareRule || "") && /place names, ZIPs, and coordinates remain excluded/.test(contract.phase3?.placeToolbar?.analyticsRule || ""), 4);
+check("Phase 3 comparison forbids winner and safety scoring", contract.phase3?.comparison?.status === "live" && /without producing an overall winner, universal score, or safety determination/.test(contract.phase3?.comparison?.rule || "") && /signal count only/.test(contract.phase3?.comparison?.measurement || "") && /creates no new indexable URL/.test(contract.phase3?.comparison?.indexability || ""), 4);
+
+
 
 check("Phase 3 measurement is instrumented without raw location payloads", contract.phase3?.measurement?.status === "instrumented-on-existing-vercel-analytics" && /Never send raw city\/ZIP/.test(contract.phase3?.measurement?.privacy || ""), 4);
 const masterPrompt = await read("docs/NATIONAL_OUTDOOR_TOOLS_MASTER_PROMPT.md");

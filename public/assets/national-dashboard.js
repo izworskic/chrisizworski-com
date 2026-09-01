@@ -132,6 +132,7 @@
   async function load(loc,options){
     options=options||{};
     const root=options.root,status=options.status,saveButton=options.saveButton,savedRoot=options.savedRoot,onPick=options.onPick;
+    const measure=options.measure!==false;
     if(status)status.textContent="Loading outdoor signals for "+N().label(loc)+"…";
     if(root){root.hidden=false;root.classList.add("loading")}
     const lat=encodeURIComponent(loc.latitude),lon=encodeURIComponent(loc.longitude);
@@ -145,7 +146,7 @@
     const aurora=results[0],rivers=results[1],frost=results[2],fall=results[3],crops=results[4];
     const cards=[auroraCard(aurora,loc),riverCard(rivers,loc),frostCard(frost,loc),plantingCard(frost,crops,loc),fallCard(fall,loc)].sort(function(a,b){return b.priority-a.priority});
     const ok=results.filter(function(x){return x.ok}).length;
-    if(typeof N().track==="function")N().track("National Desk Loaded",{inputs_available:ok,inputs_total:5});
+    if(measure&&typeof N().track==="function")N().track("National Desk Loaded",{inputs_available:ok,inputs_total:5});
     if(root){
       root.classList.remove("loading");
       const title=root.querySelector("[data-desk-title]"),grid=root.querySelector("[data-desk-grid]"),health=root.querySelector("[data-desk-health]");
@@ -161,5 +162,16 @@
     }
     return {cards:cards,results:{aurora:aurora,rivers:rivers,frost:frost,fall:fall,crops:crops}};
   }
-  window.NationalDashboard={load:load,renderSaved:renderSaved};
+  async function compare(left,right){
+    const pair=await Promise.all([
+      load(left,{measure:false}),
+      load(right,{measure:false})
+    ]);
+    if(typeof N().track==="function")N().track("National Places Compared",{signals:5});
+    return {
+      left:{location:left,cards:pair[0].cards,results:pair[0].results},
+      right:{location:right,cards:pair[1].cards,results:pair[1].results}
+    };
+  }
+  window.NationalDashboard={load:load,renderSaved:renderSaved,compare:compare};
 })();
