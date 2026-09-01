@@ -3384,7 +3384,7 @@
           }
           throw new Error(closedVesselWaterConnection(a,b)
             ? 'NPS closes the Chickenbone Lake outlet toward McCargoe Cove to vessels. Use the designated P11 portage.'
-            : 'Leg '+i+' cannot be verified as water-only or connected through the designated NPS portage network. Add a water checkpoint or select a brown P# portage.');
+            : 'Leg '+i+' cannot be verified as water-only or connected through the designated NPS portage network. Watercraft routes never cross land except on a designated brown P# portage. Add a water checkpoint or select a brown P# portage.');
         }
         leg.index=i;
         leg.override=override;
