@@ -4,15 +4,16 @@
 <meta name="description" content="Read nearby rivers with live USGS flow, change, temperature and water sensors plus historical and NOAA forecast context where available.">
 <link rel="canonical" href="https://chrisizworski.com/national-tools/rivers/"><meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="stylesheet" href="/assets/national-tools.css?v=20260901-placebar1">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/rivers/#page","url":"https://chrisizworski.com/national-tools/rivers/","name":"U.S. River Conditions, Levels & Flow","description":"Read nearby rivers with live USGS flow, recent change, available water sensors, historical comparison and official NOAA forecast context.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/rivers/#page","url":"https://chrisizworski.com/national-tools/rivers/","name":"U.S. River Conditions, Levels & Flow","description":"Read nearby rivers with live USGS flow, recent change, available water sensors, historical comparison and official NOAA forecast context.","dateModified":"2026-09-01","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
 </head><body>
 <header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
 <main>
-<section class="hero"><div class="wrap"><div class="eyebrow">River Intelligence · USGS + NOAA + NWS</div><h1>U.S. River Conditions, Levels & Flow</h1><p class="lede">See what a nearby river is doing, what changed, what may affect it next, and which observations matter for your trip or activity.</p></div></section>
+<section class="hero"><div class="wrap"><div class="eyebrow">River Intelligence · USGS + NOAA + NWS</div><h1>U.S. River Conditions, Levels & Flow</h1><p class="lede">See what a nearby river is doing today, what changed, what may affect it next, and which observations matter for your trip or activity.</p></div></section>
 
 <section class="section"><div class="wrap">
 <div class="tool-nav"><a href="/national-tools/">All U.S. tools</a><a href="/national-tools/aurora/">Aurora</a><a href="/national-tools/frost/">Frost</a></div>
-<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn" type="submit">Read nearby rivers</button><button type="button" class="secondary-btn geo-btn" data-use-location>Use my location</button></form><p class="location-privacy">Optional. Your browser shares a location rounded to about 0.001° only after you tap. It is used to load nearby conditions and is not included in analytics.</p><div class="status" aria-live="polite"></div>
+<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn" type="submit">Read nearby rivers</button><button type="button" class="secondary-btn geo-btn" data-use-location>Use my location</button></form><p class="near-me-note">Works anywhere in the United States: tap <strong>Use my location</strong> for conditions near me, or type any U.S. city or ZIP code.</p>
+<p class="location-privacy">Optional. Your browser shares a location rounded to about 0.001° only after you tap. It is used to load nearby conditions and is not included in analytics.</p><div class="status" aria-live="polite"></div>
 
 <div id="result" class="result" hidden>
   <div class="result-head"><span class="pill">Live USGS observations</span><span id="forecast-pill" class="pill">Loading river context</span></div>
@@ -256,6 +257,17 @@ document.addEventListener("DOMContentLoaded",function(){
  N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
 });
 </script>
+<section class="section"><div class="wrap">
+<h2>River condition questions this tool answers</h2>
+<div class="grid">
+<div class="source-box"><h3>What are the river levels near me today?</h3><p>Tap <strong>Use my location</strong> or enter a city or ZIP code, and the nearest USGS gauges load with their current reading, how far away they are, and how old the observation is. Most gauges report every 15 to 60 minutes, so "today" here usually means within the last hour.</p></div>
+<div class="source-box"><h3>What is the difference between cfs and gage height?</h3><p>Discharge in cubic feet per second is the volume of water moving past the gauge. Gage height in feet is how high the water sits against that gauge's own datum, which is local to the station. Two rivers at "four feet" are not comparable, while their flows are.</p></div>
+<div class="source-box"><h3>Is the river safe to paddle, fish, or swim?</h3><p>This tool cannot tell you that, and it deliberately does not try. A gauge reports what the water is doing at one point. It does not know about strainers, a low-head dam, water quality, your skill, your boat, or a hazard that moved in last week. Use the readings as inputs and get the safety call from local knowledge and current advisories.</p></div>
+<div class="source-box"><h3>Is this flow high or low for the date?</h3><p>Where the station supports it, the tool loads same-date USGS historical percentiles, which compare today's reading against the record for this calendar day rather than against the whole year. That is the honest way to say "high for early September" instead of just "high".</p></div>
+<div class="source-box"><h3>What is going to happen next?</h3><p>Where NOAA's National Water Prediction Service publishes an official forecast for the exact gauge, it is shown separately from the observations. Nothing is invented for gauges that have no forecast.</p></div>
+<div class="source-box"><h3>Why do some gauges show more than flow?</h3><p>USGS stations are instrumented differently. Some report only discharge; others add stage, water temperature, turbidity, dissolved oxygen, conductivity or pH. The page shows the sensors that station actually carries rather than blank fields for the ones it does not.</p></div>
+</div>
+</div></section>
 </main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Built around public scientific and government data, with sources shown where the answer is derived.</div></footer>
 <script src="/assets/national-tools.js?v=20260901-placebar1"></script></body></html>

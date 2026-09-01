@@ -4,7 +4,7 @@
 <meta name="description" content="Check northern lights viewing potential tonight using NOAA aurora signals, Kp, darkness, moon and local NWS cloud cover for your U.S. location.">
 <link rel="canonical" href="https://chrisizworski.com/national-tools/aurora/"><meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="stylesheet" href="/assets/national-tools.css?v=20260901-placebar1">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/aurora/#page","url":"https://chrisizworski.com/national-tools/aurora/","name":"Can I See the Northern Lights Tonight?","description":"Check northern lights viewing potential tonight using NOAA aurora signals, Kp, darkness, moon and local NWS cloud cover for your U.S. location.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/aurora/#page","url":"https://chrisizworski.com/national-tools/aurora/","name":"Can I See the Northern Lights Tonight?","description":"Check northern lights viewing potential tonight using NOAA aurora signals, Kp, darkness, moon and local NWS cloud cover for your U.S. location.","dateModified":"2026-09-01","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
 </head><body>
 <header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
 <main>
@@ -12,7 +12,8 @@
 
 <section class="section"><div class="wrap">
 <div class="tool-nav"><a href="/national-tools/">All U.S. tools</a><a href="/national-tools/rivers/">Rivers</a><a href="/national-tools/frost/">Frost</a><a href="/national-tools/fall-color/">Fall color</a></div>
-<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn" type="submit">Check tonight</button><button type="button" class="secondary-btn geo-btn" data-use-location>Use my location</button></form><p class="location-privacy">Optional. Your browser shares a location rounded to about 0.001° only after you tap. It is used to load nearby conditions and is not included in analytics.</p><div class="status" aria-live="polite"></div>
+<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn" type="submit">Check tonight</button><button type="button" class="secondary-btn geo-btn" data-use-location>Use my location</button></form><p class="near-me-note">Works anywhere in the United States: tap <strong>Use my location</strong> for conditions near me, or type any U.S. city or ZIP code.</p>
+<p class="location-privacy">Optional. Your browser shares a location rounded to about 0.001° only after you tap. It is used to load nearby conditions and is not included in analytics.</p><div class="status" aria-live="polite"></div>
 
 <div id="result" class="result" hidden>
   <div class="result-head"><span id="level" class="pill"></span><span id="confidence" class="pill"></span></div>
@@ -79,6 +80,17 @@ document.addEventListener("DOMContentLoaded",function(){
  N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
 });
 </script>
+<section class="section"><div class="wrap">
+<h2>Northern lights questions this tool answers</h2>
+<div class="grid">
+<div class="source-box"><h3>How do I check the northern lights near me?</h3><p>Tap <strong>Use my location</strong>, or type a U.S. city or ZIP code. The answer is built for that spot: the modeled aurora signal overhead, when it is actually dark there, how much cloud the local NWS forecast expects during those dark hours, and how much moonlight is competing with it.</p></div>
+<div class="source-box"><h3>Can I see the aurora tonight if it is cloudy?</h3><p>Generally no. Aurora happens far above the clouds, so an overcast deck hides it completely regardless of how strong the storm is. That is why the answer here ranks cloud cover only among dark hours rather than reporting a headline number that ignores the sky you are standing under.</p></div>
+<div class="source-box"><h3>How far ahead does this look?</h3><p>The NOAA OVATION signal is a 30 to 90 minute nowcast, and the dark-weather window covers roughly the next 30 hours, which means tonight and, depending on when you look, tomorrow night. This tool does not forecast aurora a week out, and anything that claims to is selling a Kp outlook as a local visibility forecast.</p></div>
+<div class="source-box"><h3>Is a high Kp enough to go out?</h3><p>No. Kp is a broad planetary index of geomagnetic activity, not a statement about your sky. A Kp 5 under solid cloud with a full moon is a worse night than a quieter reading under clear dark skies with the oval sitting overhead. Kp is shown here as context, never as a chance of seeing anything.</p></div>
+<div class="source-box"><h3>Why does the moon matter?</h3><p>A bright moon washes out faint aurora the same way it washes out the Milky Way. Illumination near full will not stop a strong display, but it will flatten the soft green glow that makes up most sightings at mid-latitudes.</p></div>
+<div class="source-box"><h3>What about light pollution and the horizon?</h3><p>At mid-latitudes the aurora usually sits low in the north, so a town glow or a treeline in that direction can end the night before the sky does. A dark site with an open northern horizon is worth more than a slightly better cloud forecast.</p></div>
+</div>
+</div></section>
 </main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Built around public scientific and government data, with sources shown where the answer is derived.</div></footer>
 <script src="/assets/national-tools.js?v=20260901-placebar1"></script></body></html>

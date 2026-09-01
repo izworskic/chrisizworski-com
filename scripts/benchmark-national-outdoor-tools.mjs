@@ -63,13 +63,34 @@ const routes = [
 check("Only deliberate Phase 1 entry routes are required", routes.every((r) => sitemap.includes(`<loc>https://chrisizworski.com${r}</loc>`)), 5);
 check("No generated national location tree shipped", !/national-tools\/(?:aurora|rivers|frost|planting|fall-color)\/(?:[a-z]{2}|city|zip)\//i.test(sitemap), 5);
 
+function nationalRouteFor(name) {
+  return name === "hub" ? "/national-tools/" : `/national-tools/${name === "fall" ? "fall-color" : name}/`;
+}
+function sitemapLastmod(route) {
+  const block = new RegExp(
+    `<loc>https://chrisizworski\\.com${route.replace(/\//g, "\\/")}</loc>[\\s\\S]{0,200}?<lastmod>(\\d{4}-\\d{2}-\\d{2})`
+  ).exec(sitemap);
+  return block ? block[1] : "";
+}
+
 for (const [name, body] of Object.entries(pages)) {
   const title = (body.match(/<title>([^<]+)<\/title>/) || [])[1] || "";
   const desc = (body.match(/<meta name="description" content="([^"]+)"/) || [])[1] || "";
   check(`${name} title length`, title.length > 0 && title.length <= 60, 1, `${title.length}: ${title}`);
   check(`${name} description length`, desc.length > 0 && desc.length <= 158, 1, String(desc.length));
   check(`${name} canonical Person`, body.includes('"@id":"https://chrisizworski.com/#person"'), 1);
-  check(`${name} freshness stamp`, body.includes('"dateModified":"2026-08-31"'), 1);
+  // A literal date here fails the day the page legitimately changes, which has already cost this
+  // repo three separate repairs. Assert the property instead: the page carries a dateModified and
+  // it agrees with the lastmod this route publishes in the sitemap.
+  const stamped = (body.match(/"dateModified":"(\d{4}-\d{2}-\d{2})"/) || [])[1] || "";
+  const route = nationalRouteFor(name);
+  const sitemapStamp = sitemapLastmod(route);
+  check(
+    `${name} freshness stamp matches sitemap`,
+    Boolean(stamped) && stamped === sitemapStamp,
+    1,
+    `page ${stamped || "none"} vs sitemap ${sitemapStamp || "none"}`
+  );
   check(`${name} visible authorship`, body.includes('class="brand" href="/">Chris Izworski</a>'), 1);
 }
 

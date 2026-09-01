@@ -4,7 +4,7 @@
 <meta name="description" content="Build a vegetable planting calendar by U.S. city or ZIP from NOAA freeze probabilities, current NWS cold risk and Extension crop timing rules.">
 <link rel="canonical" href="https://chrisizworski.com/national-tools/planting/"><meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="stylesheet" href="/assets/national-tools.css?v=20260901-placebar1">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/planting/#page","url":"https://chrisizworski.com/national-tools/planting/","name":"Vegetable Planting Calendar by Location","description":"Build a vegetable planting calendar by U.S. city or ZIP from NOAA freeze probabilities, current NWS cold risk and Extension crop timing rules.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/planting/#page","url":"https://chrisizworski.com/national-tools/planting/","name":"Vegetable Planting Calendar by Location","description":"Build a vegetable planting calendar by U.S. city or ZIP from NOAA freeze probabilities, current NWS cold risk and Extension crop timing rules.","dateModified":"2026-09-01","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
 </head><body>
 <header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
 <main>
@@ -12,7 +12,8 @@
 
 <section class="section"><div class="wrap">
 <div class="tool-nav"><a href="/national-tools/">All U.S. tools</a><a href="/national-tools/frost/">Frost dates</a><a href="/national-tools/rivers/">Rivers</a></div>
-<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn" type="submit">Build my calendar</button><button type="button" class="secondary-btn geo-btn" data-use-location>Use my location</button></form><p class="location-privacy">Optional. Your browser shares a location rounded to about 0.001° only after you tap. It is used to load nearby conditions and is not included in analytics.</p><div class="status" aria-live="polite"></div>
+<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn" type="submit">Build my calendar</button><button type="button" class="secondary-btn geo-btn" data-use-location>Use my location</button></form><p class="near-me-note">Works anywhere in the United States: tap <strong>Use my location</strong> for conditions near me, or type any U.S. city or ZIP code.</p>
+<p class="location-privacy">Optional. Your browser shares a location rounded to about 0.001° only after you tap. It is used to load nearby conditions and is not included in analytics.</p><div class="status" aria-live="polite"></div>
 
 <div id="result" class="result" hidden>
   <div class="result-head"><span class="pill">NOAA frost anchor + Extension crop rules</span><span id="freeze-pill" class="pill"></span></div>
@@ -96,6 +97,17 @@ document.addEventListener("DOMContentLoaded",function(){
  const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
 });
 </script>
+<section class="section"><div class="wrap">
+<h2>Planting calendar questions this tool answers</h2>
+<div class="grid">
+<div class="source-box"><h3>What can I plant now near me, or by ZIP code?</h3><p>Type a city or ZIP code, or tap <strong>Use my location</strong>, and the calendar rebuilds around your local freeze probability instead of a national average date. The "what can I do now" panel lists what is due to start indoors, harden off, or go straight in the ground within the next week.</p></div>
+<div class="source-box"><h3>Why build the calendar from the 10 percent freeze date?</h3><p>Because losing a flat of tomatoes to one late frost costs more than waiting a week. The 10 percent last-freeze date is the cautious anchor: historically only one year in ten had a 32°F freeze after it. Cold-tolerant crops are scheduled against it far more loosely than warm crops.</p></div>
+<div class="source-box"><h3>What is the difference between starting indoors and direct sowing?</h3><p>Indoor start dates count backwards from your set-out date by the weeks a seedling needs under lights. Direct sow dates are tied to when the soil and the air outside can carry the seed. The same crop can appear twice for that reason, and the two dates are not interchangeable.</p></div>
+<div class="source-box"><h3>Does soil temperature matter more than the calendar?</h3><p>Often, yes. Warm-season seed sitting in cold wet soil rots rather than waits. Treat these windows as planning anchors and let a soil thermometer make the final call on the day.</p></div>
+<div class="source-box"><h3>Does this replace my local Extension office?</h3><p>No. Crop timing here is built from Cooperative Extension schedules, and your state Extension service, your seed packet, and your own notes from last season all beat a national rule when they disagree with it.</p></div>
+<div class="source-box"><h3>What about a fall garden?</h3><p>Work backwards from the first fall freeze date rather than the spring one, and add time for the slower growth that comes with shortening days. The frost tool on this site reports both ends of the season for the same location.</p></div>
+</div>
+</div></section>
 </main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Public data turned into clearer outdoor decisions, with source and uncertainty shown.</div></footer>
 <script src="/assets/national-tools.js?v=20260901-placebar1"></script></body></html>

@@ -4,7 +4,7 @@
 <meta name="description" content="Check historical fall foliage timing by U.S. location using USA-NPN satellite greendown data plus separate current NWS weather context.">
 <link rel="canonical" href="https://chrisizworski.com/national-tools/fall-color/"><meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="stylesheet" href="/assets/national-tools.css?v=20260901-placebar1">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/fall-color/#page","url":"https://chrisizworski.com/national-tools/fall-color/","name":"Fall Color Timing by Location","description":"Check historical fall foliage timing by U.S. location using USA-NPN satellite greendown data plus separate current NWS weather context.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/fall-color/#page","url":"https://chrisizworski.com/national-tools/fall-color/","name":"Fall Color Timing by Location","description":"Check historical fall foliage timing by U.S. location using USA-NPN satellite greendown data plus separate current NWS weather context.","dateModified":"2026-09-01","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
 </head><body>
 <header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
 <main>
@@ -13,7 +13,8 @@
 <section class="section"><div class="wrap">
 <div class="tool-nav"><a href="/national-tools/">All U.S. tools</a><a href="/national-tools/aurora/">Aurora</a><a href="/national-tools/rivers/">Rivers</a></div>
 <p><span class="beta">2026 calibration beta</span></p>
-<form id="loc" class="locator"><input aria-label="Contiguous U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn" type="submit">Check fall timing</button><button type="button" class="secondary-btn geo-btn" data-use-location>Use my location</button></form><p class="location-privacy">Optional. Your browser shares a location rounded to about 0.001° only after you tap. It is used to load nearby conditions and is not included in analytics.</p><div class="status" aria-live="polite"></div>
+<form id="loc" class="locator"><input aria-label="Contiguous U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn" type="submit">Check fall timing</button><button type="button" class="secondary-btn geo-btn" data-use-location>Use my location</button></form><p class="near-me-note">Works anywhere in the United States: tap <strong>Use my location</strong> for conditions near me, or type any U.S. city or ZIP code.</p>
+<p class="location-privacy">Optional. Your browser shares a location rounded to about 0.001° only after you tap. It is used to load nearby conditions and is not included in analytics.</p><div class="status" aria-live="polite"></div>
 
 <div id="result" class="result" hidden>
   <div class="result-head"><span class="pill">USA-NPN historical satellite timing</span><span id="confidence" class="pill"></span></div>
@@ -67,6 +68,17 @@ document.addEventListener("DOMContentLoaded",function(){
  N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
 });
 </script>
+<section class="section"><div class="wrap">
+<h2>Fall color questions this tool answers</h2>
+<div class="grid">
+<div class="source-box"><h3>When is peak fall color near me?</h3><p>Enter a city or ZIP code, or tap <strong>Use my location</strong>, and the tool reports the window when that landscape has historically entered its main autumn transition, together with how much that timing has varied. It is a timing layer for planning a trip weeks out, not a claim about the trees this week.</p></div>
+<div class="source-box"><h3>Does this show today's color?</h3><p>No. There is no live leaf camera or current-season color survey behind it. The satellite record ends in 2017 and describes typical timing. For what the woods look like today, check USDA Forest Service fall color reports and local observations.</p></div>
+<div class="source-box"><h3>Why a window instead of a peak percentage?</h3><p>Because a single "62 percent color" number is precision the underlying data cannot support. The median absolute deviation shown alongside the window is the honest version of the same information: it tells you how far this landscape has historically swung from its own median.</p></div>
+<div class="source-box"><h3>How much can weather move it?</h3><p>A warm, wet autumn can delay the transition and mute it; drought or an early hard freeze can pull it forward or cut it short. Current weather is shown separately on this page for exactly that reason, and it is never used to silently shift the historical date.</p></div>
+<div class="source-box"><h3>Does it cover Alaska, Hawaii, or Puerto Rico?</h3><p>Not yet. The USA-NPN greendown layer this beta uses covers the contiguous United States, so a location outside it returns a clear coverage message rather than an invented answer.</p></div>
+<div class="source-box"><h3>Why does elevation change the answer nearby?</h3><p>Higher ground turns first, which is why a ridge can be past peak while a valley twenty minutes away has barely started. Check a couple of points across the elevation range you plan to drive rather than one town center.</p></div>
+</div>
+</div></section>
 </main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Public data turned into clearer outdoor decisions, with source and uncertainty shown.</div></footer>
 <script src="/assets/national-tools.js?v=20260901-placebar1"></script></body></html>
