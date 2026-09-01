@@ -368,6 +368,8 @@ The first five tools now share a common user journey. Future work must preserve 
 7. Maps are supporting spatial context. Core decisions and source truth must remain usable if the basemap fails.
 8. No national location page becomes indexable until it passes `benchmarks/national-location-admission.json`, including the hard vetoes and minimum score.
 9. Do not add a new national product family merely to increase breadth while these five still have material decision, reliability, or network gaps.
+10. Device location is optional convenience, never a prerequisite. It must be explicit, privacy-bounded, and search-neutral.
+11. Resolved place state should remain useful across the platform. Save/switch/share controls may reuse place state, but shared links must carry a resolved place query rather than coordinates and must keep the base tool canonical.
 
 
 ### Core-before-enrichment rule
