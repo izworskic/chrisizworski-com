@@ -374,3 +374,18 @@ The first five tools now share a common user journey. Future work must preserve 
 Core decision data must not wait on optional enrichment. If a tool has a fast authoritative observation and slower secondary context, render the observation first and load enrichment independently. Secondary-source latency or failure must never blank the primary decision surface.
 
 Slow discovery may be precomputed, but condition values must remain live. If an authoritative discovery endpoint cannot reliably meet the interaction latency budget, maintain a source-backed local index for identifiers and coordinates, refresh it deliberately, and still fetch current observations live from the authoritative source by exact identifier.
+
+
+### Measurement before expansion
+
+Use the site's existing Vercel Analytics channel to measure whether the national platform is actually helping people before expanding canonical URL families.
+
+Measure:
+- successful vs failed location resolution;
+- transitions between national tools;
+- saved-place use;
+- outdoor-desk input health.
+
+Privacy is a hard boundary. Analytics event properties must not contain raw city or ZIP text, display names, latitude/longitude, postal codes, or saved-place names. Location is product state, not an analytics identity.
+
+Measurement can supply evidence to `benchmarks/national-location-admission.json`; it does not itself make a city, ZIP, river, or crop page eligible for indexing.
