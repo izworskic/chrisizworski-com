@@ -15,6 +15,7 @@ const nationalCss = await read("public/assets/national-tools.css");
 const admission = JSON.parse(await read("benchmarks/national-location-admission.json"));
 const vercel = JSON.parse(await read("vercel.json"));
 const sitemap = await read("public/sitemap.xml");
+const homepage = await read("public/index.html");
 const registry = JSON.parse(await read("benchmarks/tool-network-registry.json"));
 const pages = {
   hub: await read("public/national-tools/index.html"),
@@ -77,6 +78,10 @@ check("Location object includes timezone context", /timeZone/.test(apis.geocode)
 check("National client persists saved places locally", /PLACES_STORE/.test(client) && /savedPlaces/.test(client) && /savePlace/.test(client), 4);
 check("Location continuity crosses national tools without new canonicals", /function propagate/.test(client) && /withQuery/.test(client) && /a\[href\^="\/national-tools\/"\]/.test(client), 4);
 check("Decision times can render in searched timezone", /fmtInZone/.test(client) && /timeZone/.test(client), 3);
+
+check("National product measurement uses existing Vercel analytics", /_vercel\/insights\/script\.js/.test(client) && /National Location Resolved/.test(client) && /National Tool Open/.test(client) && /National Saved Place/.test(client) && /National Desk Loaded/.test(dashboard), 4);
+check("National analytics block raw location properties", /ANALYTICS_BLOCKED_KEYS/.test(client) && ["query","q","latitude","longitude","displayName","place","state","postalCode","location"].every((key) => client.includes('"'+key+'"')), 5);
+check("Homepage exposes a small national-tools access link", /href="\/national-tools\/"[^>]*data-track-tool="national-tools"[^>]*data-placement="home-nav"/.test(homepage), 3);
 
 check("Aurora has best dark weather window", /bestCloudWindow/.test(apis.aurora) && /best_dark_window/.test(apis.aurora) && /Best weather window after dark/.test(pages.aurora), 5);
 check("Aurora separates Kp from visibility", /Kp is not a local visibility forecast|Kp is not a local visibility probability|Kp is not a local forecast/.test(pages.aurora + apis.aurora), 4);
@@ -153,6 +158,7 @@ const admissionWeight = Object.values(admission.weights || {}).reduce((sum, valu
 check("Location admission weights total 100", admissionWeight === 100 && admission.minimumScore === 80, 4, String(admissionWeight));
 check("Location admission has hard vetoes and critical minimums", Array.isArray(admission.hardVetoes) && admission.hardVetoes.length >= 5 && admission.criticalMinimums?.cannibalizationSafety === 10, 4);
 check("Saved places are explicitly not fake alerts", contract.phase3?.alerts?.status === "deferred-until-real-delivery-channel", 4);
+check("Phase 3 measurement is instrumented without raw location payloads", contract.phase3?.measurement?.status === "instrumented-on-existing-vercel-analytics" && /Never send raw city\/ZIP/.test(contract.phase3?.measurement?.privacy || ""), 4);
 const masterPrompt = await read("docs/NATIONAL_OUTDOOR_TOOLS_MASTER_PROMPT.md");
 check("Master prompt remains the build doctrine", masterPrompt.includes("## Loss function") && masterPrompt.includes("## Phase 3 platform interpretation") && masterPrompt.includes("Core decision data must not wait on optional enrichment") && masterPrompt.includes("Slow discovery may be precomputed"), 4);
 
