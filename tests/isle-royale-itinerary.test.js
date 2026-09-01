@@ -257,3 +257,31 @@ test('mapped waterway centerline can guide short checkpoint legs', () => {
   assert.equal(result.land_crossings,0);
   assert.ok(result.points.length>=3);
 });
+
+
+test('official portage graph returns an ordered multi-portage chain instead of a land shortcut', () => {
+  const api = loadIntel();
+  const portages = [
+    {id:'a-b',from_anchor_id:'a',to_anchor_id:'b',distance_miles:.4},
+    {id:'b-c',from_anchor_id:'b',to_anchor_id:'c',distance_miles:.6},
+    {id:'a-c-long',from_anchor_id:'a',to_anchor_id:'c',distance_miles:3}
+  ];
+  const chains = api.findPortageChains(portages,['a'],['c'],{maxResults:4});
+  assert.ok(chains.length >= 2);
+  assert.deepEqual(chains[0].steps.map(step=>step.portage_id),['a-b','b-c']);
+  assert.equal(chains[0].start_anchor_id,'a');
+  assert.equal(chains[0].end_anchor_id,'c');
+  assert.ok(Math.abs(chains[0].cost-1) < 1e-9);
+});
+
+test('portage anchor matching uses waterbody radii and bounded fallback', () => {
+  const api = loadIntel();
+  const anchors = {
+    near:{lat:48,lng:-88.7,match_radius_miles:1},
+    far:{lat:48.2,lng:-88.2,match_radius_miles:1}
+  };
+  const matches = api.candidatePortageAnchors({lat:48,lng:-88.705},anchors,{radiusScale:1.5,fallbackMiles:3});
+  assert.equal(matches[0].id,'near');
+  assert.equal(matches[0].within_published_radius,true);
+  assert.ok(!matches.some(item=>item.id==='far'));
+});
