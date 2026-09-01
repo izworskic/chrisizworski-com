@@ -3,7 +3,7 @@
 <title>U.S. Frost Dates & Freeze Risk | Chris Izworski</title>
 <meta name="description" content="Find first and last frost dates by U.S. location using NOAA climate normals, plus the current NWS seven-day freeze forecast.">
 <link rel="canonical" href="https://chrisizworski.com/national-tools/frost/"><meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="stylesheet" href="/assets/national-tools.css?v=20260831-frost-fix1">
+<link rel="stylesheet" href="/assets/national-tools.css?v=20260901-location1">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/frost/#page","url":"https://chrisizworski.com/national-tools/frost/","name":"First & Last Frost Dates by Location","description":"Find first and last frost dates by U.S. location using NOAA climate normals, plus the current NWS seven-day freeze forecast.","dateModified":"2026-08-31","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
 </head><body>
 <header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
@@ -11,7 +11,7 @@
 <section class="hero"><div class="wrap"><div class="eyebrow">Frost Date Calculator · NOAA + NWS</div><h1>First & Last Frost Dates by Location</h1><p class="lede">Separate the historical freeze odds from the weather that is actually forecast for the next seven days.</p></div></section>
 <section class="section"><div class="wrap">
 <div class="tool-nav"><a href="/national-tools/">All U.S. tools</a><a href="/national-tools/planting/">Planting calendar</a><a href="/national-tools/rivers/">Rivers</a></div>
-<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn">Check freeze risk</button></form><div class="status" aria-live="polite"></div>
+<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn" type="submit">Check freeze risk</button><button type="button" class="secondary-btn geo-btn" data-use-location>Use my location</button></form><p class="location-privacy">Optional. Your browser shares a location rounded to about 0.001° only after you tap. It is used to load nearby conditions and is not included in analytics.</p><div class="status" aria-live="polite"></div>
 
 <div id="result" class="result" hidden>
   <div class="result-head"><span class="pill">NOAA 1991–2020 climatology</span><span id="live-pill" class="pill"></span></div>
@@ -86,4 +86,4 @@ document.addEventListener("DOMContentLoaded",function(){
 </script>
 </main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Public data turned into clearer outdoor decisions, with source and uncertainty shown.</div></footer>
-<script src="/assets/national-tools.js?v=20260831-measurement1"></script></body></html>
+<script src="/assets/national-tools.js?v=20260901-location1"></script></body></html>
