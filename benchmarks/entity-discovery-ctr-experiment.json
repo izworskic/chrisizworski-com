@@ -100,5 +100,16 @@
     "structuredData",
     "canonical",
     "indexability"
+  ],
+  "midWindowContentChanges": [
+    {
+      "date": "2026-09-01",
+      "paths": [
+        "/tools/"
+      ],
+      "change": "ItemList JSON-LD only: each hub tool entry now REFERENCES the tool's own @id (<url>#app) instead of restating it as an anonymous node, and carries creator/author pointing at the canonical Person.",
+      "frozenFieldsTouched": "none",
+      "rationale": "The frozen treatment on this page is title, metaDescription, canonical and H1, and none of them changed. The directory previously described each tool a second time with no identity link to the tool's own page, so a crawler could not tell the two were the same thing. Recorded here so the CTR window is not later read as a clean single-variable period."
+    }
   ]
 }
