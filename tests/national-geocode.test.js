@@ -1,0 +1,45 @@
+const test=require("node:test");
+const assert=require("node:assert/strict");
+const geo=require("../api/national-geocode.js")._test;
+
+test("device coordinates are rounded to about 0.001 degrees",()=>{
+  assert.equal(geo.roundCoord(43.5941234),43.594);
+  assert.equal(geo.roundCoord(-83.8898765),-83.89);
+  assert.deepEqual(geo.validCoordinates(43.5941234,-83.8898765),{
+    latitude:43.594,
+    longitude:-83.89
+  });
+});
+
+test("invalid coordinates are rejected before reverse geocoding",()=>{
+  assert.equal(geo.validCoordinates(91,-83),null);
+  assert.equal(geo.validCoordinates(43,-181),null);
+  assert.equal(geo.validCoordinates("nope",-83),null);
+});
+
+test("reverse-geocoded location continuity uses a place label rather than coordinates",()=>{
+  const address={
+    city:"Bay City",
+    state:"Michigan",
+    "ISO3166-2-lvl4":"US-MI",
+    postcode:"48708",
+    country_code:"us"
+  };
+  assert.equal(geo.queryLabel(address),"Bay City, MI");
+  const payload=geo.locationPayload({
+    display_name:"Bay City, Bay County, Michigan, United States",
+    type:"city",
+    address
+  },geo.queryLabel(address),{latitude:43.594,longitude:-83.89},{timeZone:"America/Detroit"},"device");
+  assert.equal(payload.query,"Bay City, MI");
+  assert.equal(payload.latitude,43.594);
+  assert.equal(payload.longitude,-83.89);
+  assert.equal(payload.sourceMode,"device");
+  assert.match(payload.coordinate_precision,/0\.001/);
+});
+
+test("U.S. candidate detection works for reverse-geocoder rows",()=>{
+  assert.equal(geo.isUsCandidate({address:{country_code:"us"}}),true);
+  assert.equal(geo.isUsCandidate({address:{"ISO3166-2-lvl4":"US-MI"}}),true);
+  assert.equal(geo.isUsCandidate({address:{country_code:"ca"}}),false);
+});

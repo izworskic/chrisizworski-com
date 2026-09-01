@@ -93,7 +93,7 @@ A city/ZIP lookup should resolve to:
 - elevation when available;
 - attribution.
 
-Do not require precise browser location. Manual city/ZIP is the default; geolocation may be optional later.
+Do not require precise browser location. Manual city/ZIP is the default. Optional device location may be offered only after an explicit tap; round coordinates before the server request, keep coordinates out of page URLs and analytics, and convert the result back to a place label for cross-tool continuity.
 
 ### Data contract
 
