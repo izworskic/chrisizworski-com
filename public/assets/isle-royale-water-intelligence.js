@@ -367,6 +367,98 @@
     };
   }
 
+
+  function candidatePortageAnchors(point,anchors,options={}){
+    if(!point||!anchors||typeof anchors!=='object')return [];
+    const radiusScale=Math.max(1,Number(options.radiusScale)||1.7);
+    const fallbackMiles=Math.max(.5,Number(options.fallbackMiles)||4);
+    const rows=[];
+    for(const [id,anchor] of Object.entries(anchors)){
+      if(!anchor||!Number.isFinite(Number(anchor.lat))||!Number.isFinite(Number(anchor.lng)))continue;
+      const distance=miles(point,{lat:Number(anchor.lat),lng:Number(anchor.lng)});
+      const publishedRadius=Math.max(.25,Number(anchor.match_radius_miles)||.75);
+      if(distance<=publishedRadius*radiusScale){
+        rows.push({id,distance_miles:distance,match_radius_miles:publishedRadius,within_published_radius:distance<=publishedRadius});
+      }
+    }
+    rows.sort((a,b)=>Number(b.within_published_radius)-Number(a.within_published_radius)||a.distance_miles-b.distance_miles);
+    if(rows.length)return rows.slice(0,5);
+    let nearest=null;
+    for(const [id,anchor] of Object.entries(anchors)){
+      if(!anchor||!Number.isFinite(Number(anchor.lat))||!Number.isFinite(Number(anchor.lng)))continue;
+      const distance=miles(point,{lat:Number(anchor.lat),lng:Number(anchor.lng)});
+      if(distance<=fallbackMiles&&(!nearest||distance<nearest.distance_miles)){
+        nearest={id,distance_miles:distance,match_radius_miles:Number(anchor.match_radius_miles)||null,within_published_radius:false,fallback:true};
+      }
+    }
+    return nearest?[nearest]:[];
+  }
+
+  function findPortageChains(portages,startAnchorIds,endAnchorIds,options={}){
+    const starts=new Set((startAnchorIds||[]).filter(Boolean));
+    const ends=new Set((endAnchorIds||[]).filter(Boolean));
+    if(!starts.size||!ends.size)return [];
+    const maxEdges=Math.max(1,Math.min(12,Number(options.maxEdges)||8));
+    const maxResults=Math.max(1,Math.min(20,Number(options.maxResults)||10));
+    const edgeCost=typeof options.edgeCost==='function'
+      ? options.edgeCost
+      : portage=>Math.max(.01,Number(portage?.distance_miles)||.01);
+    const adjacency=new Map();
+    const add=(anchor,step)=>{
+      if(!adjacency.has(anchor))adjacency.set(anchor,[]);
+      adjacency.get(anchor).push(step);
+    };
+    for(const portage of portages||[]){
+      const from=portage?.from_anchor_id,to=portage?.to_anchor_id;
+      if(!from||!to||from===to||portage?.status==='closed')continue;
+      const cost=Math.max(.0001,Number(edgeCost(portage))||.0001);
+      add(from,{portage,from_anchor_id:from,to_anchor_id:to,cost});
+      add(to,{portage,from_anchor_id:to,to_anchor_id:from,cost});
+    }
+    const queue=[];
+    const push=state=>{
+      queue.push(state);
+      queue.sort((a,b)=>a.cost-b.cost||a.steps.length-b.steps.length);
+    };
+    for(const start of starts)push({anchor:start,cost:0,steps:[],visited:new Set([start])});
+    const results=[];
+    const fingerprints=new Set();
+    while(queue.length&&results.length<maxResults){
+      const state=queue.shift();
+      if(state.steps.length&&ends.has(state.anchor)){
+        const fingerprint=state.steps.map(step=>step.portage.id+':'+step.from_anchor_id+'>'+step.to_anchor_id).join('|');
+        if(!fingerprints.has(fingerprint)){
+          fingerprints.add(fingerprint);
+          results.push({
+            cost:state.cost,
+            start_anchor_id:state.steps[0].from_anchor_id,
+            end_anchor_id:state.anchor,
+            steps:state.steps.map(step=>({
+              portage:step.portage,
+              portage_id:step.portage.id,
+              from_anchor_id:step.from_anchor_id,
+              to_anchor_id:step.to_anchor_id,
+              cost:step.cost
+            }))
+          });
+        }
+        continue;
+      }
+      if(state.steps.length>=maxEdges)continue;
+      for(const step of adjacency.get(state.anchor)||[]){
+        if(state.visited.has(step.to_anchor_id))continue;
+        const visited=new Set(state.visited);visited.add(step.to_anchor_id);
+        push({
+          anchor:step.to_anchor_id,
+          cost:state.cost+step.cost,
+          steps:[...state.steps,step],
+          visited
+        });
+      }
+    }
+    return results;
+  }
+
   function weatherSamples(points,maxSamples){
     const cum=cumulative(points),total=cum[cum.length-1]||0;
     const max=Math.max(2,maxSamples||5);
@@ -520,5 +612,5 @@
     return out;
   }
 
-  window.IsleRoyaleWaterIntel={create,weatherSamples,zonesAlongPath,pathDistance,projectPointToPath,slicePath,buildItinerary,scenarioProfiles,buildScenarioSet,dayEnds,miles};
+  window.IsleRoyaleWaterIntel={create,candidatePortageAnchors,findPortageChains,weatherSamples,zonesAlongPath,pathDistance,projectPointToPath,slicePath,buildItinerary,scenarioProfiles,buildScenarioSet,dayEnds,miles};
 })();

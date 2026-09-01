@@ -1,5 +1,5 @@
 {
-  "version": "2.6.0",
+  "version": "2.7.0",
   "updated": "2026-08-31",
   "route": "/isle-royale-map/",
   "objective": "Build the most useful source-transparent Isle Royale planning map in the Chris Izworski tool network without pretending static cartography is authoritative GIS.",
@@ -64,7 +64,7 @@
     {
       "id": "planning-flow",
       "weight": 15,
-      "target": "One full-width map is the trip-building surface. Watercraft routes are built from any number of ordered checkpoints: each click constrains the next mapped-water leg and live cumulative distance/time. Previously verified checkpoint legs remain fixed when a new checkpoint is appended. The water engine supports Lake Superior coastline, inland-water polygons, and mapped waterway centerlines. Camps and mapped places can be checkpoints; P# portages remain atomic selectable transitions. Criteria sit below the map."
+      "target": "One full-width map is the trip-building surface. Watercraft routes accept any number of ordered checkpoints, continuously preserve verified distance/time, and may automatically expand a failed canoe water leg through a verified chain of designated NPS portages before resuming mapped-water routing. Explicit P# selection remains an atomic constraint. Criteria sit below the map."
     },
     {
       "id": "provenance",
@@ -131,7 +131,9 @@
     "Do not call the interface map-first if the map shares the primary horizontal space with a persistent planner/criteria sidebar.",
     "Do not keep a second visible Focus Map cockpit after the route bar can perform the same trip-building actions.",
     "Do not label the newest ordinary water checkpoint as the final destination while Build mode is active.",
-    "Do not treat intermediate water clicks as an error-recovery feature only; they are a primary route-building interaction."
+    "Do not treat intermediate water clicks as an error-recovery feature only; they are a primary route-building interaction.",
+    "Do not call two-point canoe routing complete unless a failed water-only leg can be expanded through a verified chain of designated NPS portages with mapped-water access to every entry/exit landing.",
+    "Do not permit a Chickenbone Lake to McCargoe Cove water shortcut through the closed outlet; vessel routing must use designated NPS P11."
   ],
   "initialBuildFit": {
     "distinctSearchIntent": 24,
@@ -221,7 +223,64 @@
       "A qualified campground must be able to close the current day while route building remains active for the next day.",
       "Live day and trip feedback must include active travel time, not distance alone.",
       "Saved/restored routes must retain portage group identity, direction and day-end state.",
-      "Focus Map must remain a complete trip-building surface."
+      "Focus Map must remain a complete trip-building surface.",
+      "Do not call two-point canoe routing complete unless a failed water-only leg can be expanded through a verified chain of designated NPS portages with mapped-water access to every entry/exit landing.",
+      "Do not permit a Chickenbone Lake to McCargoe Cove water shortcut through the closed outlet; vessel routing must use designated NPS P11."
+    ]
+  },
+  "multimodalRouteBuilderValueFunction": {
+    "formula": "RB = .28C + .16U + .15P + .12T + .12X + .09D + .08R",
+    "objective": "Maximize the probability that two or more map selections become a canoe-plausible, editable, source-transparent paddle-and-portage route rather than a geometric sketch.",
+    "dimensions": {
+      "C": {
+        "name": "routeCorrectness",
+        "weight": 28,
+        "question": "Does every paddle segment stay on mapped water and every land transition use a designated portage?"
+      },
+      "U": {
+        "name": "paddlerControl",
+        "weight": 16,
+        "question": "Can the paddler add, insert, delete, reorder, reverse and reshape ordered route intent without losing valid work?"
+      },
+      "P": {
+        "name": "portageIntelligence",
+        "weight": 15,
+        "question": "Are portages first-class complete transitions with mapped-water landings and official distance/identity?"
+      },
+      "T": {
+        "name": "travelTimeRealism",
+        "weight": 12,
+        "question": "Are paddle time, physical portage distance, carry walking multiplier, terrain and transition time modeled separately?"
+      },
+      "X": {
+        "name": "uxClarity",
+        "weight": 12,
+        "question": "Can a paddler build primarily from the map and understand verified, pending and failed route state?"
+      },
+      "D": {
+        "name": "dataIntegrity",
+        "weight": 9,
+        "question": "Are NPS connectivity/restrictions preserved and uncertain geometry never promoted as authoritative?"
+      },
+      "R": {
+        "name": "reliability",
+        "weight": 8,
+        "question": "Do route edits, save/restore and export preserve only verified geometry and fail without fake lines?"
+      }
+    },
+    "releaseTarget": 90,
+    "stretchTarget": 96,
+    "scenarios": [
+      "same-waterbody two-point route stays on water",
+      "peninsula/island route does not cut land",
+      "multi-point checkpoints are honored in order",
+      "two points on different interior waterbodies auto-expand through designated NPS portage chain",
+      "explicit P# selection remains atomic and directional",
+      "Chickenbone Lake to McCargoe Cove uses P11, never the closed outlet",
+      "water → portage → water → campground resolves continuously",
+      "delete/undo/reverse preserves route semantics",
+      "double carry reports 3x walking distance but unchanged physical portage distance",
+      "failed route preserves selected points and blocks GPX"
     ]
   }
 }
