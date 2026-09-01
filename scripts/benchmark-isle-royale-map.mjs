@@ -5,6 +5,7 @@ import crypto from 'node:crypto';
 const root = process.cwd();
 const read = p => fs.readFileSync(path.join(root, p), 'utf8');
 const html = read('public/isle-royale-map/index.html');
+const sourceHtml = read('public/isle-royale-map/sources/index.html');
 const js = read('public/assets/isle-royale-map.js');
 const vercel = read('vercel.json');
 const api = read('api/isle-royale.js');
@@ -49,7 +50,11 @@ const requiredNpMapsIds = [
 ];
 const catalogIds = new Set(catalog.items.map(x => x.id));
 const npmapsComplete = requiredNpMapsIds.every(id => catalogIds.has(id));
-const catalogCrawlable = /href=["']\/isle-royale-map\/catalog\.json/.test(html) && (html.match(/<tbody id="catalog-body">[\s\S]*?<tr>/g) || []).length >= 1;
+const catalogCrawlable = /href=["']\/isle-royale-map\/sources\//.test(html)
+  && /href=["']\/isle-royale-map\/catalog\.json/.test(sourceHtml)
+  && (sourceHtml.match(/<tbody id="catalog-body">[\s\S]*?<tr>/g) || []).length >= 1
+  && !/Machine-readable source desk/.test(html)
+  && /Machine-readable source desk/.test(sourceHtml);
 const measurementComplete = [
   'isle_royale_layer_toggle','isle_royale_search','isle_royale_feature_open','isle_royale_source_open','isle_royale_osm_context'
 ].every(eventName => js.includes(eventName));
@@ -570,10 +575,10 @@ const rbSignals = {
 };
 const rbScore = Object.entries(rbSpec?.dimensions||{}).reduce((sum,[key,item])=>sum+(rbSignals[key]?Number(item.weight)||0:0),0);
 
-add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; crawlable catalog + in-tool reference shelf`);
+add('source-catalog', 12, catalog.items.length >= 19 && npmapsComplete && catalogCrawlable && referenceShelfComplete, `${catalog.items.length} catalog entries; 16/16 NPMaps families; dedicated crawlable source desk + compact planner disclosure`);
 add('visitor-geometry', 13, /75e3ceba038a45f7b4d5a9d7c6a46ccf/.test(js) && /loadArcGISService/.test(js) && currentShipwreckRuntime, 'public ArcGIS web-map + service ingestion + current NPS shipwreck buoy runtime');
 add('planning-flow', 15, ['feature-search','layer-filters','feature-list','park-live-status','route-planner'].every(x => html.includes(`id="${x}"`)) && /flyToFeature/.test(js) && /\/api\/isle-royale/.test(js) && measurementComplete && reliefRuntime && pointDetailRuntime && popupReadabilityRuntime && popupDragRuntime && campgroundDetailRuntime && osmToggleRuntime && routePlanningRuntime && smartRoutingRuntime && canoePortageRuntime && officialPortageDatasetRuntime && selectableOfficialPortageRuntime && waterIntelligenceRuntime && itineraryRuntime && scenarioRuntime && mapFirstRoutingRuntime && manualDayEndRuntime && largePlanningCanvasRuntime && focusCockpitRuntime && tripPersistenceRuntime && tripIntelligenceRuntime && routeEditingRuntime && tripCreationRuntime && multimodalPortageRuntime && mapOnlyCriteriaRuntime && multiPointCheckpointRuntime, 'single-surface multi-point water trip construction with cumulative checkpoint routing, automatic official-portage graph expansion, atomic P# constraints, inland-water geometry, and a compact criteria strip');
-add('provenance', 10, /sourceStatus/.test(js) && /source-catalog/.test(html) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'map + live operational sources/status displayed and cataloged');
+add('provenance', 10, /sourceStatus/.test(js) && /id="source-catalog"/.test(html) && /\/isle-royale-map\/sources\//.test(html) && /id="source-catalog"/.test(sourceHtml) && /National Park Service — Boat-In Campgrounds/.test(api) && catalog.items.every(x => x.publisher && x.source && x.state), 'compact planner disclosure + dedicated source desk preserve provenance without occupying planning space');
 add('safety', 10, !/nps\.gov\/maps\/pmtiles|Park Tiles/i.test(html + js) && /not a navigation chart/i.test(html) && /approximate reference/i.test(js), 'no restricted NPS basemap; navigation and fallback caveats');
 add('fail-soft', 10, /loadFallbackAnchors/.test(js) && /catch/.test(js) && /Promise\.allSettled/.test(api) && /degraded:/.test(api) && /tile\.openstreetmap\.org/.test(js), 'geometry fallbacks + independent NPS feed degradation + keyless basemap');
 add('accessibility', 8, /aria-live/.test(html) && /feature-list/.test(html) && /focus-visible/.test(html), 'status region + list alternative + focus states');
