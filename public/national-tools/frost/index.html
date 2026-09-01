@@ -11,7 +11,8 @@
 <section class="hero"><div class="wrap"><div class="eyebrow">Frost Date Calculator · NOAA + NWS</div><h1>First & Last Frost Dates by Location</h1><p class="lede">Separate the historical freeze odds from the weather that is actually forecast for the next seven days.</p></div></section>
 <section class="section"><div class="wrap">
 <div class="tool-nav"><a href="/national-tools/">All U.S. tools</a><a href="/national-tools/planting/">Planting calendar</a><a href="/national-tools/rivers/">Rivers</a></div>
-<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn" type="submit">Check freeze risk</button><button type="button" class="secondary-btn geo-btn" data-use-location>Use my location</button></form><p class="location-privacy">Optional. Your browser shares a location rounded to about 0.001° only after you tap. It is used to load nearby conditions and is not included in analytics.</p><div class="status" aria-live="polite"></div>
+<form id="loc" class="locator"><input aria-label="U.S. city or ZIP" placeholder="City or ZIP" required><button class="btn" type="submit">Check freeze risk</button><button type="button" class="secondary-btn geo-btn" data-use-location>Use my location</button></form><p class="near-me-note">Works anywhere in the United States: tap <strong>Use my location</strong> for conditions near me, or type any U.S. city or ZIP code.</p>
+<p class="location-privacy">Optional. Your browser shares a location rounded to about 0.001° only after you tap. It is used to load nearby conditions and is not included in analytics.</p><div class="status" aria-live="polite"></div>
 
 <div id="result" class="result" hidden>
   <div class="result-head"><span class="pill">NOAA 1991–2020 climatology</span><span id="live-pill" class="pill"></span></div>
@@ -84,6 +85,17 @@ document.addEventListener("DOMContentLoaded",function(){
  N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
 });
 </script>
+<section class="section"><div class="wrap">
+<h2>Frost date questions this tool answers</h2>
+<div class="grid">
+<div class="source-box"><h3>When is the first frost near me, or for my ZIP code?</h3><p>Type a city or ZIP code, or tap <strong>Use my location</strong>. The dates come from the nearest usable NOAA climate normals station, so the answer is station climatology for your area rather than a state-wide average.</p></div>
+<div class="source-box"><h3>What does a 10 percent or 50 percent freeze date actually mean?</h3><p>It is a historical frequency, not a schedule. The 50 percent last-spring-freeze date is the day by which half the years on record had seen their final 32°F freeze. The 10 percent date is the cautious end: only one year in ten had a freeze after it. Neither one promises anything about this year.</p></div>
+<div class="source-box"><h3>Is my hardiness zone the same as my frost date?</h3><p>No, and treating them as the same is the most common mistake here. A USDA zone describes the average annual coldest winter temperature, which is a survival question for perennials. It does not tell you your last spring freeze, your first fall freeze, or when it is safe to set out tomatoes.</p></div>
+<div class="source-box"><h3>Will it frost this week?</h3><p>The climatology answers a typical year. The seven-day NWS forecast on this page answers this week, including hours at or below 28°F for a hard freeze. For an immediate decision about covering plants, the live forecast should outrank the calendar every time.</p></div>
+<div class="source-box"><h3>Why does the reporting station distance matter?</h3><p>Freeze behavior is local. Elevation, a lakeshore, a valley bottom that pools cold air, or a city heat island can move a frost date by a week or more against a station a few miles away. The page shows how far the station is and how confident that fit is, so you can discount it when it is far.</p></div>
+<div class="source-box"><h3>Do frost dates change from year to year?</h3><p>The normals themselves update on NOAA's 30-year cycle, so they move slowly. Any single season can land well outside the window in either direction, which is exactly what the 10 and 90 percent dates are there to show.</p></div>
+</div>
+</div></section>
 </main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Public data turned into clearer outdoor decisions, with source and uncertainty shown.</div></footer>
 <script src="/assets/national-tools.js?v=20260901-placebar1"></script></body></html>
