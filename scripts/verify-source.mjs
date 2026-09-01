@@ -425,7 +425,7 @@ if (!toolsHtml.includes("Built by Chris Izworski")) failures.push("The new Tools
 const toolsJsonLdMatch = toolsHtml.match(/<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/i);
 const toolsJsonLd = toolsJsonLdMatch ? JSON.parse(toolsJsonLdMatch[1]) : null;
 const toolsItemList = toolsJsonLd?.["@graph"]?.find((entry) => entry["@type"] === "ItemList");
-if (toolsItemList?.numberOfItems !== 36 || toolsItemList?.itemListElement?.length !== 36) {
+if (toolsItemList?.numberOfItems !== 38 || toolsItemList?.itemListElement?.length !== 38) {
   failures.push("Tools ItemList does not contain exactly 36 entries");
 }
 if (!toolsHtml.includes("Michigan &amp; Great Lakes Live Tools") || !toolsHtml.includes("Start with the live tools")) {
