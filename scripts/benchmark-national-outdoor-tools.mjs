@@ -81,6 +81,10 @@ check("All national entry forms expose optional Use my location", Object.values(
 check("Device lookup is not cached and analytics block postal coordinate fields", /method === "POST"[\s\S]*Cache-Control", "no-store"/.test(apis.geocode) && ["latitude","longitude","postalCode","postcode","location"].every((key) => client.includes('"'+key+'"')), 4);
 
 check("National client persists saved places locally", /PLACES_STORE/.test(client) && /savedPlaces/.test(client) && /savePlace/.test(client), 4);
+check("Resolved place toolbar supports save switch and share", /function renderPlaceToolbar/.test(client) && /data-place-save/.test(client) && /data-place-switch/.test(client) && /data-place-share/.test(client), 5);
+check("Shared national links carry place query not coordinates", /function currentShareUrl/.test(client) && /withQuery\(path,loc\)/.test(client) && /navigator\.share/.test(client) && /clipboard\.writeText/.test(client) && !/currentShareUrl[\s\S]{0,500}latitude/.test(client), 5);
+check("Place toolbar actions stay privacy-safe in analytics", /National Place Shared/.test(client) && /National Place Switched/.test(client) && /method:"native"/.test(client) && /method:"clipboard"/.test(client) && !/National Place Shared[^\n]{0,160}(?:query|latitude|longitude|place)/.test(client), 4);
+
 check("Location continuity crosses national tools without new canonicals", /function propagate/.test(client) && /withQuery/.test(client) && /a\[href\^="\/national-tools\/"\]/.test(client), 4);
 check("Decision times can render in searched timezone", /fmtInZone/.test(client) && /timeZone/.test(client), 3);
 
@@ -164,6 +168,8 @@ check("Location admission weights total 100", admissionWeight === 100 && admissi
 check("Location admission has hard vetoes and critical minimums", Array.isArray(admission.hardVetoes) && admission.hardVetoes.length >= 5 && admission.criticalMinimums?.cannibalizationSafety === 10, 4);
 check("Saved places are explicitly not fake alerts", contract.phase3?.alerts?.status === "deferred-until-real-delivery-channel", 4);
 check("Phase 3 device location remains manual-first and privacy bounded", contract.phase3?.location?.status === "manual-first-with-optional-device-location" && /rounded to 0\.001 degrees/.test(contract.phase3?.location?.rule || "") && /resolved place query/.test(contract.phase3?.location?.continuity || ""), 4);
+check("Phase 3 place toolbar preserves canonical and privacy rules", contract.phase3?.placeToolbar?.status === "live" && /never latitude\/longitude/.test(contract.phase3?.placeToolbar?.shareRule || "") && /place names, ZIPs, and coordinates remain excluded/.test(contract.phase3?.placeToolbar?.analyticsRule || ""), 4);
+
 
 check("Phase 3 measurement is instrumented without raw location payloads", contract.phase3?.measurement?.status === "instrumented-on-existing-vercel-analytics" && /Never send raw city\/ZIP/.test(contract.phase3?.measurement?.privacy || ""), 4);
 const masterPrompt = await read("docs/NATIONAL_OUTDOOR_TOOLS_MASTER_PROMPT.md");
