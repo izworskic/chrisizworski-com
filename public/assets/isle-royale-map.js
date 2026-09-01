@@ -3671,7 +3671,8 @@
         const inferred=route.mixedLegs.filter(leg=>leg.override==='auto').length;
         const mapped=route.mixedLegs.filter(leg=>leg.type==='portage'&&leg.verified).length;
         const official=route.mixedLegs.filter(leg=>leg.officialPortage).length;
-        els.routeSmartStatus.innerHTML='<strong>Canoe + portage route:</strong> '+route.mixedLegs.length+' legs · '+totals.paddle.toFixed(1)+' mi paddling · '+totals.portage.toFixed(1)+' mi official portage trail. '+official+' designated NPS portage'+(official===1?'':'s')+' · '+mapped+' mapped carry'+(mapped===1?'':'ies')+' · '+inferred+' automatically resolved leg'+(inferred===1?'':'s')+'. Land crossings are allowed only on the brown P# portages.';
+        const autoPortages=route.mixedLegs.filter(leg=>leg.type==='portage'&&leg.autoSelected).length;
+        els.routeSmartStatus.innerHTML='<strong>Canoe + portage route:</strong> '+route.mixedLegs.length+' legs · '+totals.paddle.toFixed(1)+' mi paddling · '+totals.portage.toFixed(1)+' mi official portage trail. '+official+' designated NPS portage'+(official===1?'':'s')+' · '+mapped+' mapped carry'+(mapped===1?'':'ies')+(autoPortages?' · '+autoPortages+' auto-selected from the NPS portage network':'')+' · '+inferred+' automatically resolved leg'+(inferred===1?'':'s')+'. Land crossings are allowed only on the brown P# portages.';
         return;
       }
       els.routeSmartStatus.textContent='Canoe route blocked'+(route.mixedReason?' ('+route.mixedReason+')':'')+'. Add another checkpoint along the water you intend to follow, move the last checkpoint, or select a brown P# portage. Straight overland fallback is disabled.';
