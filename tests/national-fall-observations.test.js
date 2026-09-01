@@ -1,5 +1,6 @@
 const test=require("node:test");
 const assert=require("node:assert/strict");
+const fs=require("node:fs");
 const obs=require("../api/national-fall-observations.js")._test;
 
 test("fall observation bounds cover the requested radius",()=>{
@@ -48,4 +49,18 @@ test("fall observation status never becomes a landscape peak percentage",()=>{
   assert.equal(summary.yes_records,3);
   assert.ok(!Object.hasOwn(summary,"peak_percent"));
   assert.ok(!Object.hasOwn(summary,"landscape_percent"));
+});
+
+
+test("fall tool loads observation enrichment without blocking the core answer",()=>{
+  const html=fs.readFileSync(require.resolve("../public/national-tools/fall-color/index.html"),"utf8");
+  assert.match(html,/Nearby current leaf observations/);
+  assert.match(html,/async function loadObservations/);
+  assert.match(html,/void loadObservations\(loc\)/);
+  assert.match(html,/optional source failed independently/);
+  assert.match(html,/individual monitored plants/i);
+  assert.match(html,/never become a landscape/i);
+  const inline=html.match(/<script>\s*(document\.addEventListener[\s\S]*?)<\/script>/);
+  assert.ok(inline,"fall-color inline script not found");
+  assert.doesNotThrow(()=>new Function(inline[1]));
 });
