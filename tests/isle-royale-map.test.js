@@ -6,6 +6,7 @@ const crypto = require('node:crypto');
 
 const root = path.resolve(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'public/isle-royale-map/index.html'), 'utf8');
+const sourceHtml = fs.readFileSync(path.join(root, 'public/isle-royale-map/sources/index.html'), 'utf8');
 const js = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 'utf8');
 const api = fs.readFileSync(path.join(root, 'api/isle-royale.js'), 'utf8');
 const isleApiModule = require(path.join(root, 'api/isle-royale.js'));
@@ -81,6 +82,21 @@ test('catalog preserves original research families while retiring non-planning s
   assert.ok(catalog.items.some(x => x.id === 'shipwrecks' && x.state === 'live-api'));
   assert.doesNotMatch(html, /data-layer="vegetation-(?:overview|baseline|change)"/);
   assert.doesNotMatch(html, /data-layer="horne-fire"/);
+});
+
+test('source strategy and machine-readable source desk stay off the route-planning surface', () => {
+  assert.match(html, /<details class="source-disclosure" id="source-catalog">/);
+  assert.match(html, /href="\/isle-royale-map\/sources\/"/);
+  assert.match(html, /Sources &amp; methodology/);
+  assert.doesNotMatch(html, /Machine-readable source desk/);
+  assert.doesNotMatch(html, /NPMaps = completeness checklist/);
+  assert.doesNotMatch(html, /<tbody id="catalog-body">/);
+  assert.match(sourceHtml, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/isle-royale-map\/sources\/">/);
+  assert.match(sourceHtml, /Source strategy/);
+  assert.match(sourceHtml, /NPMaps = completeness checklist/);
+  assert.match(sourceHtml, /Machine-readable source desk/);
+  assert.match(sourceHtml, /<tbody id="catalog-body">[\s\S]*?<tr>/);
+  assert.match(sourceHtml, /href="\/isle-royale-map\/catalog\.json"/);
 });
 
 test('planning, provenance, accessibility and safety hooks exist', () => {
