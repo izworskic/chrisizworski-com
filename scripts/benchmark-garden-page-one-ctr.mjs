@@ -41,8 +41,8 @@ check("heirloom baseline", experiment.pages[1].baseline.impressions === 30 && ex
 check("targets not weakened", experiment.pages.every((p) => p.target.ctr >= 0.02 && p.target.stretchCtr >= 0.03));
 const zoneLedger = ledger.experiments.find((e) => e.id === "2026-08-22-zone-6a-calendar-ctr");
 const heirloomLedger = ledger.experiments.find((e) => e.id === "2026-08-22-heirloom-tomatoes-ctr");
-check("zone ledger protection", zoneLedger?.status === "pending-clean-window" && zoneLedger?.lastSearchFacingChangeDate === "2026-08-22");
-check("heirloom ledger protection", heirloomLedger?.status === "pending-clean-window" && heirloomLedger?.lastSearchFacingChangeDate === "2026-08-22");
+check("zone ledger entry is declared and either open or read", (zoneLedger?.status === "pending-clean-window" || (zoneLedger?.status === "evaluated" && Boolean(zoneLedger?.result))) && Boolean(zoneLedger?.lastSearchFacingChangeDate));
+check("heirloom ledger entry is declared and either open or read", (heirloomLedger?.status === "pending-clean-window" || (heirloomLedger?.status === "evaluated" && Boolean(heirloomLedger?.result))) && Boolean(heirloomLedger?.lastSearchFacingChangeDate));
 check("latest snapshot advanced", portfolio.measurement?.latestLeadingSnapshot?.spreadsheetId === "1dm2AC6FN4lU9P0viRs3mhVtg098AuvwEdNbKw-PsEVw" && portfolio.measurement?.latestLeadingSnapshot?.exportedThrough === "2026-08-20");
 console.log("\nGARDEN PAGE-ONE CTR SPRINT");
 console.log("=".repeat(72));

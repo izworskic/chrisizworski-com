@@ -212,6 +212,29 @@ So the rule is not "never touch an experiment". It is:
 | `running`, page not in a `freeze` list | fix non-treatment defects, record under `midWindowContentChanges` |
 | `running`, field is in the `freeze` list | wait for the window, and make the wait expire on its own |
 
+**Before opening an experiment at all, check the power floor.** A page qualifies
+for a CTR freeze only if its 28-day baseline clears BOTH 4,000 impressions and
+80 clicks (`measurementProtocol.minimumBaselineImpressions` and
+`minimumBaselineClicks`). Below that, a 28-day window cannot resolve even a 50%
+relative CTR change, so freezing the page costs shipping speed and buys nothing.
+Measured across all 21 experiments on 2026-09-01: only `/northern-lights-michigan/`
+and `/soo-locks/` cleared it, while the rest needed between 2,229 and 77,988
+impressions per arm against baselines of 30 to 5,479. For pages under the floor,
+measure average position and impressions — far more data, and they move first —
+or ship and watch rank.
+
+**A window may be closed early when the remaining days cannot change the
+decision.** Aurora was read at 18 of 28 days because the detectable difference
+only moved from 0.44pp to 0.39pp over the remaining ten. Record `readType:
+partial-window` with the elapsed days and the detectable difference at read time.
+This is not licence to peek and stop when the number looks good: decide the read
+date before you look at the data.
+
+**Window length does not protect a seasonal or event-driven page.** Aurora
+impressions are driven by geomagnetic storms and news cycles, fall pages by the
+season itself. Check the daily impression curve for spikes before trusting any
+aggregate, partial or complete. Waiting longer does not average that away.
+
 That last row is the one worth getting right. `/tools/` has a 160-character
 description against a 158 limit, and its window runs to 2026-09-21 with
 `metaDescription` frozen. Two characters are not worth a 28-day measurement, so

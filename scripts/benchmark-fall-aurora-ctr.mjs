@@ -19,7 +19,7 @@ check("live aurora handoff", page.includes('href="/northern-lights-michigan/"'))
 check("baseline exact", experiment.baseline.impressions === 90 && experiment.baseline.clicks === 0 && experiment.baseline.averagePosition === 8.28);
 check("CTR target explicit", experiment.targets.ctrAtOrAbove === 0.02 && experiment.targets.averagePositionAtOrBetterThan === 10);
 const ledgerExperiment = ledger.experiments.find((item) => item.id === "2026-08-22-fall-aurora-overlap-ctr");
-check("ledger protection exists", ledgerExperiment?.status === "pending-clean-window" && ledgerExperiment?.paths?.includes("/fall-color-northern-lights-michigan/"));
+check("ledger entry is declared and either open or read", (ledgerExperiment?.status === "pending-clean-window" || (ledgerExperiment?.status === "evaluated" && Boolean(ledgerExperiment?.result))) && ledgerExperiment?.paths?.includes("/fall-color-northern-lights-michigan/"));
 console.log("\nFALL + AURORA CTR BENCHMARK");
 console.log("=".repeat(72));
 console.log("Baseline: 90 impressions, 0 clicks, position 8.28");

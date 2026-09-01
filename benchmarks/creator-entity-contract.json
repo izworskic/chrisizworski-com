@@ -6,7 +6,7 @@
   "canonicalProfileUrl": "https://chrisizworski.com/chris-izworski/",
   "rules": {
     "onePerson": "Every Chris Izworski creator/author node uses the canonical Person @id. Tool-local Person IDs are forbidden.",
-    "profileResolution": "Creator/author URLs and rel=author links resolve to the canonical profile URL when the property supports them.",
+    "profileResolution": "Creator/author LINKS resolve to the canonical profile URL: rel=author, visible byline links, and author URLs on properties that support them. This does NOT override the Person node's own url property. Every node sharing the canonical Person @id must carry the same url (https://chrisizworski.com/), because benchmark:entity fails on a single @id holding two values; the profile page is expressed as a ProfilePage node with mainEntity pointing at the Person, which is the correct schema shape. Applying this rule to Person.url on 2026-09-01 put 10 Michigan Ice pages in conflict with 160 others and turned the entity gate red on main.",
     "productFirst": "Visible creator attribution stays compact and contextual. No name stuffing in tool titles, H1s, controls, or primary-answer surfaces.",
     "independentUtility": "A property must earn search visibility through its own useful intent; creator linkage reinforces identity but does not replace product value.",
     "launchGate": "Every new separate-host first-party tool must be added to this contract as verified or pending-audit before it is treated as portfolio-complete."

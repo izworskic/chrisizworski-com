@@ -136,10 +136,16 @@ test("seasonal experiments use page-specific windows instead of a site-wide paus
   const tunnel = ledger.experiments.find(
     (experiment) => experiment.id === "2026-08-15-tunnel-of-trees-peak-date-serp",
   );
-  assert.equal(aurora?.status, "running");
+  // Read and closed 2026-09-01 from the Search Console 28-day export. What matters now is that
+  // the entry carries a recorded result, not that it is still frozen open.
+  assert.equal(aurora.status, "evaluated");
+  assert.ok(aurora.result?.measured, "read must record the measured page row");
+  assert.ok(aurora.decisionDate, "read must record a decision date");
   assert.equal(aurora?.releaseDate, "2026-08-14");
   assert.deepEqual(aurora?.evaluationWindow, { start: "2026-08-15", end: "2026-09-11" });
-  assert.equal(tunnel?.status, "running");
+  assert.equal(tunnel.status, "evaluated");
+  assert.ok(tunnel.result?.measured, "read must record the measured page row");
+  assert.ok(tunnel.decisionDate, "read must record a decision date");
   assert.equal(tunnel?.releaseDate, "2026-08-15");
   assert.deepEqual(tunnel?.evaluationWindow, { start: "2026-08-16", end: "2026-09-12" });
   assert.equal(tunnel?.lastSearchFacingChangeDate, "2026-08-15");

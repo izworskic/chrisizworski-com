@@ -28,7 +28,10 @@ test("the FVF experiment runs on the clean post-PR-50 window", () => {
   const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
   const fvf = ledger.experiments.find((item) => item.id === "2026-08-03-fvf-gardening-authority");
 
-  assert.equal(fvf.status, "running");
+  // Read and closed 2026-09-01 from the Search Console 28-day export. What matters now is that
+  // the entry carries a recorded result, not that it is still frozen open.
+  assert.equal(fvf.status, "evaluated");
+  assert.ok(fvf.decisionDate);
   assert.equal(fvf.releaseDate, "2026-08-12");
   assert.deepEqual(fvf.evaluationWindow, { start: "2026-08-13", end: "2026-09-09" });
   assert.equal(fvf.lastSearchFacingChangeDate, "2026-08-11");
@@ -103,7 +106,9 @@ test("Great Lakes Buoys matches live-buoy intent without regressing the tool", (
     averagePosition: 14.54,
   });
   assert.deepEqual(experiment.target, { ctr: 0.025, averagePosition: 12 });
-  assert.equal(experiment.status, "running");
+  assert.equal(experiment.status, "evaluated");
+  assert.ok(experiment.result?.measured, "read must record the measured page row");
+  assert.ok(experiment.decisionDate, "read must record a decision date");
   assert.equal(experiment.releaseDate, "2026-08-12");
   assert.deepEqual(experiment.evaluationWindow, { start: "2026-08-13", end: "2026-09-09" });
 });
