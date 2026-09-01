@@ -12,9 +12,17 @@ function title(html) {
 
 test("Mackinac toll page leads with the page-one price answer", () => {
   const html = read("public/mackinac-bridge-tolls/index.html");
+  const tollExperiment = JSON.parse(read("benchmarks/transport-365-growth.json")).experiments[0];
   assert.equal(title(html), "Mackinac Bridge Toll Cost 2026: $4 Car Fare &amp; Calculator");
   assert.ok(title(html).replaceAll("&amp;", "&").length <= 60);
-  assert.match(html, /<meta name="description" content="Mackinac Bridge toll 2026: \$4 one way for a standard car, \$8 round trip\./);
+  // Revised pre-release 2026-09-01. The old description answered the query outright, so a searcher
+  // asking what the toll costs had no reason to open the page: 1,190 impressions, 0.17% CTR, from
+  // position 8.0. Assert the property that matters instead of the sentence — the description must
+  // match the declared treatment, and must NOT hand over the flat fare that is the whole query.
+  const tollDescription = /<meta name="description" content="([^"]+)"/.exec(html)?.[1] ?? "";
+  assert.equal(tollDescription, tollExperiment.treatment.metaDescription);
+  assert.doesNotMatch(tollDescription, /\$4 one way|\$8 round trip/);
+  assert.match(tollDescription, /axle/i, "the description must promise the multi-axle answer a snippet cannot give");
   assert.match(html, /<h1>Mackinac Bridge Toll Cost: 2026 Fares &amp; Calculator<\/h1>/);
   assert.match(html, /The Mackinac Bridge toll is \$4 one way, or \$8 round trip, for a standard two-axle passenger car in 2026\./i);
   assert.match(html, /Passenger vehicles are \$2 per axle/i);
