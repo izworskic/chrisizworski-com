@@ -57,3 +57,21 @@ test("shared national place toolbar keeps shared links query-based and analytics
   assert.match(client,/National Place Switched/);
   assert.doesNotMatch(client,/National Place Shared[^\n]{0,160}(?:query|latitude|longitude|place)/);
 });
+
+
+test("saved-place comparison stays signal-by-signal without an overall score",()=>{
+  const dashboard=fs.readFileSync(require.resolve("../public/assets/national-dashboard.js"),"utf8");
+  const hub=fs.readFileSync(require.resolve("../public/national-tools/index.html"),"utf8");
+  assert.match(dashboard,/async function compare/);
+  assert.match(dashboard,/load\(left,\{measure:false\}\)/);
+  assert.match(dashboard,/load\(right,\{measure:false\}\)/);
+  assert.match(dashboard,/National Places Compared",\{signals:5\}/);
+  assert.doesNotMatch(dashboard,/National Places Compared[^\n]{0,180}(?:query|latitude|longitude|place)/);
+  assert.match(hub,/Compare two places across the same five signals/);
+  assert.match(hub,/No overall winner or safety score/);
+  assert.match(hub,/D\.compare\(left,right\)/);
+  for(const label of ["Aurora","River","Frost","Planting","Fall timing"])assert.ok(hub.includes(label),label);
+  const inline=hub.match(/<script>\s*(document\.addEventListener[\s\S]*?)<\/script>/);
+  assert.ok(inline,"national hub inline script not found");
+  assert.doesNotThrow(()=>new Function(inline[1]));
+});
