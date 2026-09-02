@@ -1,5 +1,5 @@
 {
-  "version": "2.1.0",
+  "version": "2.1.1",
   "updated": "2026-09-02",
   "objective": "Build a national outdoor decision-intelligence network that turns authoritative public data into explainable, place-specific decisions without weakening Michigan canonicals, source truth, or search quality.",
   "lossFunction": {
@@ -295,7 +295,7 @@
       "gate": "AIRNOW_API_KEY and FIRMS_MAP_KEY plus supported-interface verification remain required."
     },
     "phase3": {
-      "status": "implemented-pending-verification",
+      "status": "complete-production-verified-with-location-admission-hardening",
       "scope": "Coastal Water Window",
       "route": "/national-tools/coastal/",
       "api": "/api/national-coastal"
@@ -306,7 +306,7 @@
     }
   },
   "coastalProduct": {
-    "status": "implemented-pending-verification",
+    "status": "live-production-verified-location-admission-hardening",
     "route": "/national-tools/coastal/",
     "api": "/api/national-coastal",
     "canonicalIntent": "U.S. beach and coastal conditions today by location",
@@ -327,8 +327,17 @@
       "Missing source data remains unavailable rather than neutral or favorable.",
       "NDBC station distance is visible because an offshore station is not exact beach truth.",
       "CO-OPS tide predictions remain predictions and never masquerade as observed water level.",
-      "Michigan users are handed to the deeper Michigan Beach Report instead of cloning that canonical."
+      "Michigan users are handed to the deeper Michigan Beach Report instead of cloning that canonical.",
+      "Source proximity alone does not qualify a location as coastal; location admission must pass before NDBC or CO-OPS context is shown.",
+      "Portland, Oregon and other inland locations must return not-applicable even if distant coastal or tidal sources fall within the broader discovery radius."
     ],
-    "dashboardBehavior": "Optional sixth card only when coastal source coverage exists; inland places retain the five core cards."
+    "dashboardBehavior": "Optional sixth card only after coastal location admission passes and real coastal source coverage exists; inland places retain the five core cards.",
+    "locationAdmission": {
+      "status": "required-before-source-synthesis",
+      "basis": "Nearest applicable NOAA/NWS Marine Beach Forecast Summary area",
+      "maximumMiles": 25,
+      "rule": "A location must be within 25 miles of an applicable NWS beach-forecast area before buoy or tide context can be shown. Source proximity alone does not qualify a location as coastal.",
+      "failClosed": "If NWS beach applicability cannot be verified, the tool returns coverage-unverified and suppresses buoy/tide context rather than guessing."
+    }
   }
 }
