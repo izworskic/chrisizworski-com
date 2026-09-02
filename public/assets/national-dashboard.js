@@ -71,6 +71,22 @@
     const src=sourceFootnote(d);
     return {id:"coastal",priority:priority,kicker:"Coast & beaches",title:decision.headline||"Coastal conditions",detail:decision.detail||"Official beach risk with separate observation and tide context.",level:level,href:N().withQuery("/national-tools/coastal/",loc),facts:facts.slice(0,5),source:src.available+"/"+(src.total||3)+" coastal source families available"+(src.stale?" · "+src.stale+" stale":"")};
   }
+  function snowCard(result,loc){
+    if(!result.ok)return null;
+    const d=result.data||{};
+    if(!d.snow_relevant)return null;
+    const v=d.decision||{},f=d.forecast_48h||{},n=d.nohrsc||{},s=d.snotel||{};
+    const priority=v.level==="melt-pressure-high"?78:v.level==="melt-pressure-moderate"?62:v.level==="freeze-thaw"?56:v.level==="snow-possible"?52:v.level==="accumulation-supportive"?50:d.pack_available?34:22;
+    const level=v.level==="melt-pressure-high"?"warn":"";
+    const facts=[];
+    if(n.depth)facts.push("NOHRSC depth "+n.depth.value+" "+(n.depth.unit||"in")+" · "+n.depth.distance_miles+" mi away");
+    if(n.swe)facts.push("NOHRSC SWE "+n.swe.value+" "+(n.swe.unit||"in")+" · "+n.swe.distance_miles+" mi away");
+    if(s.station&&s.snow_depth)facts.push("SNOTEL depth "+s.snow_depth.value+" "+s.snow_depth.unit+" · "+s.station.distance_miles+" mi away");
+    if(f.max_temperature_f!=null)facts.push("48h high "+f.max_temperature_f+"°F · "+(f.above_freezing_hours||0)+" hr above freezing");
+    if(f.snow_signal_hours)facts.push(f.snow_signal_hours+" forecast snow-signal hours");
+    const src=sourceFootnote(d);
+    return {id:"snow",priority:priority,kicker:"Snowpack & melt",title:v.headline||"Snowpack context",detail:v.detail||"Measured pack with separate 48-hour weather context.",level:level,href:N().withQuery("/national-tools/snow/",loc),facts:facts.slice(0,5),source:src.available+"/"+(src.total||3)+" snow source families available"+(src.stale?" · "+src.stale+" stale":"")};
+  }
   function frostCard(result,loc){
     if(!result.ok)return {id:"frost",priority:5,kicker:"Freeze risk",title:"Frost data unavailable",detail:result.error,level:"",href:N().withQuery("/national-tools/frost/",loc),facts:[]};
     const d=result.data,v=d.freeze_verdict||{},c=d.climate_normals,w=d.current_forecast;
@@ -161,18 +177,19 @@
       getJson("/api/national-frost?lat="+lat+"&lon="+lon),
       getJson("/api/national-fall-color?lat="+lat+"&lon="+lon),
       getJson("/data/national-planting-crops.json"),
-      getJson("/api/national-coastal?lat="+lat+"&lon="+lon)
+      getJson("/api/national-coastal?lat="+lat+"&lon="+lon),
+      getJson("/api/national-snow?lat="+lat+"&lon="+lon+(loc.stateCode?"&state="+encodeURIComponent(loc.stateCode):""))
     ]);
-    const aurora=results[0],rivers=results[1],frost=results[2],fall=results[3],crops=results[4],coastal=results[5];
-    const cards=[auroraCard(aurora,loc),riverCard(rivers,loc),coastalCard(coastal,loc),frostCard(frost,loc),plantingCard(frost,crops,loc),fallCard(fall,loc)].filter(Boolean).sort(function(a,b){return b.priority-a.priority});
+    const aurora=results[0],rivers=results[1],frost=results[2],fall=results[3],crops=results[4],coastal=results[5],snow=results[6];
+    const cards=[auroraCard(aurora,loc),riverCard(rivers,loc),coastalCard(coastal,loc),snowCard(snow,loc),frostCard(frost,loc),plantingCard(frost,crops,loc),fallCard(fall,loc)].filter(Boolean).sort(function(a,b){return b.priority-a.priority});
     const ok=results.filter(function(x){return x.ok}).length;
-    if(measure&&typeof N().track==="function")N().track("National Desk Loaded",{inputs_available:ok,inputs_total:6,coastal_visible:cards.some(function(card){return card.id==="coastal"})});
+    if(measure&&typeof N().track==="function")N().track("National Desk Loaded",{inputs_available:ok,inputs_total:7,coastal_visible:cards.some(function(card){return card.id==="coastal"}),snow_visible:cards.some(function(card){return card.id==="snow"})});
     if(root){
       root.classList.remove("loading");
       const title=root.querySelector("[data-desk-title]"),grid=root.querySelector("[data-desk-grid]"),health=root.querySelector("[data-desk-health]");
       if(title)title.textContent="Today near "+N().label(loc);
       if(grid)grid.innerHTML=cards.map(cardHtml).join("");
-      if(health)health.textContent=ok+"/6 platform inputs responded · five core cards plus coastal when coverage exists · ordered by decision urgency, not marketing priority";
+      if(health)health.textContent=ok+"/7 platform inputs responded · five core cards plus coastal and snow when relevant coverage exists · ordered by decision urgency, not marketing priority";
     }
     if(status)status.textContent=N().label(loc);
     if(saveButton){
@@ -180,7 +197,7 @@
       saveButton.textContent=already?"Saved place":"Save this place";saveButton.disabled=already;
       saveButton.onclick=function(){N().savePlace(loc);saveButton.textContent="Saved place";saveButton.disabled=true;renderSaved(savedRoot,onPick||function(){})};
     }
-    return {cards:cards,results:{aurora:aurora,rivers:rivers,coastal:coastal,frost:frost,fall:fall,crops:crops}};
+    return {cards:cards,results:{aurora:aurora,rivers:rivers,coastal:coastal,snow:snow,frost:frost,fall:fall,crops:crops}};
   }
   async function compare(left,right){
     const pair=await Promise.all([
