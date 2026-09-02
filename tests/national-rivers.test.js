@@ -195,3 +195,22 @@ test('trend windows anchor to latest observation time rather than server wall cl
   assert.equal(rivers.atAgo(points,6,'2026-08-31T12:00:00.000-04:00').value,900);
   assert.equal(rivers.atAgo(points,24,'2026-08-31T12:00:00.000-04:00').value,800);
 });
+
+
+test('river core observations can retain flow while optional sensor enrichment is merged separately',()=>{
+  const core=[{
+    id:'04157000',discharge_cfs:1000,gage_height_ft:14.5,water_temp_f:null,
+    sensors:{water_temperature:null,turbidity:null,dissolved_oxygen:null,specific_conductance:null,ph:null},
+    sensor_availability:[]
+  }];
+  const enrichment=[{
+    id:'04157000',water_temp_f:68,
+    sensors:{water_temperature:{value:68},turbidity:{value:6},dissolved_oxygen:null,specific_conductance:null,ph:null},
+    sensor_availability:['water_temperature','turbidity']
+  }];
+  const [merged]=rivers.mergeEnrichment(core,enrichment);
+  assert.equal(merged.discharge_cfs,1000);
+  assert.equal(merged.gage_height_ft,14.5);
+  assert.equal(merged.water_temp_f,68);
+  assert.deepEqual(merged.sensor_availability,['water_temperature','turbidity']);
+});
