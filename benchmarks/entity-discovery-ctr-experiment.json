@@ -110,6 +110,15 @@
       "change": "ItemList JSON-LD only: each hub tool entry now REFERENCES the tool's own @id (<url>#app) instead of restating it as an anonymous node, and carries creator/author pointing at the canonical Person.",
       "frozenFieldsTouched": "none",
       "rationale": "The frozen treatment on this page is title, metaDescription, canonical and H1, and none of them changed. The directory previously described each tool a second time with no identity link to the tool's own page, so a crawler could not tell the two were the same thing. Recorded here so the CTR window is not later read as a clean single-variable period."
+    },
+    {
+      "date": "2026-09-01",
+      "paths": [
+        "/tools/"
+      ],
+      "change": "VISIBLE change: one new tool card and one decision-network entry for the Isle Royale canoe trip planner, plus its ItemList entry (numberOfItems 38 -> 39).",
+      "frozenFieldsTouched": "none — title, metaDescription, canonical and H1 unchanged",
+      "rationale": "Shipped at Chris's explicit direction to make the planner a tool for anyone, overriding the wait-for-window-close plan. This IS a visible search-facing change inside the window, so the window can no longer be read as clean; treat the entity-discovery read as confounded from this date."
     }
   ]
 }
