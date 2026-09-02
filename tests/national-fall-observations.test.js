@@ -24,6 +24,25 @@ test("fall observations exclude status conflicts and points outside 75 miles",()
   assert.equal(summary.latest_yes.intensity,"25-49%");
 });
 
+test("fall observations discard missing status instead of turning it into a no record",()=>{
+  const origin={latitude:43.6,longitude:-83.9};
+  const summary=obs.summarize([
+    {observation_date:"2026-08-31",latitude:43.6,longitude:-83.9,phenophase_status:null,site_id:1},
+    {observation_date:"2026-08-31",latitude:43.61,longitude:-83.91,phenophase_status:"",site_id:2}
+  ],origin);
+  assert.equal(summary.records,0);
+  assert.equal(summary.no_records,0);
+});
+
+test("fall observation lookback follows the searched location calendar date",()=>{
+  const now=new Date("2026-09-01T00:30:00Z");
+  assert.deepEqual(obs.dateWindow(now,"America/New_York"),{start:"2026-08-11",end:"2026-08-31"});
+  assert.deepEqual(obs.dateWindow(now,"America/Denver"),{start:"2026-08-11",end:"2026-08-31"});
+  assert.deepEqual(obs.dateWindow(now,"Pacific/Honolulu"),{start:"2026-08-11",end:"2026-08-31"});
+  assert.equal(obs.validTimeZone("America/New_York"),"America/New_York");
+  assert.equal(obs.validTimeZone("not/a-zone"),null);
+});
+
 test("fall observations report no-color evidence separately from no data",()=>{
   const origin={latitude:43.6,longitude:-83.9};
   const noSummary=obs.summarize([
@@ -57,10 +76,18 @@ test("fall tool loads observation enrichment without blocking the core answer",(
   assert.match(html,/Nearby current leaf observations/);
   assert.match(html,/async function loadObservations/);
   assert.match(html,/void loadObservations\(loc\)/);
+  assert.match(html,/AbortController/);
+  assert.match(html,/encodeURIComponent\(loc\.timeZone\|\|""\)/);
   assert.match(html,/optional source failed independently/);
   assert.match(html,/individual monitored plants/i);
   assert.match(html,/never become a landscape/i);
   const inline=html.match(/<script>\s*(document\.addEventListener[\s\S]*?)<\/script>/);
   assert.ok(inline,"fall-color inline script not found");
   assert.doesNotThrow(()=>new Function(inline[1]));
+});
+
+
+test("fall-color route is declared as an intentional production change",()=>{
+  const verify=fs.readFileSync(require.resolve("../scripts/verify-source.mjs"),"utf8");
+  assert.match(verify,/"\/national-tools\/fall-color\/"/);
 });
