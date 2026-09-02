@@ -302,7 +302,7 @@
       "api": "/api/national-coastal"
     },
     "phase4": {
-      "status": "implemented-pending-verification",
+      "status": "complete-production-verified",
       "scope": "Snowpack + Melt",
       "route": "/national-tools/snow/",
       "api": "/api/national-snow"
@@ -351,7 +351,7 @@
     "rule": "A transient failure from one geocoding dependency must not strand ordinary U.S. city/state or ZIP tool entry."
   },
   "snowProduct": {
-    "status": "implemented-pending-verification",
+    "status": "live-production-verified",
     "route": "/national-tools/snow/",
     "api": "/api/national-snow",
     "canonicalIntent": "U.S. snowpack, snow depth, SWE and snowmelt conditions by location",
@@ -383,6 +383,15 @@
       "No Snow candidate authorizes generated city, ZIP or resort location pages."
     ],
     "dashboardBehavior": "Optional Snow card only when current measured pack is present or the local NWS forecast contains a snow signal. Otherwise the five core cards remain, with Coastal separately optional where applicable.",
-    "cannibalizationBoundary": "National Snow owns measured snowpack plus weather-driven melt/refreeze context. Michigan XC tools retain trail/grooming/ski-planning intent; Rivers retains flow and official flood/river forecast intent."
+    "cannibalizationBoundary": "National Snow owns measured snowpack plus weather-driven melt/refreeze context. Michigan XC tools retain trail/grooming/ski-planning intent; Rivers retains flow and official flood/river forecast intent.",
+    "productionSmoke": {
+      "status": "required-and-passing-before-release-metadata-merge",
+      "controls": [
+        "Mount Hood, Oregon",
+        "Burlington, Vermont",
+        "Atlanta, Georgia"
+      ],
+      "invariant": "A local pack-phase conclusion requires measured pack within 60 miles; otherwise melt pressure remains not-evaluated."
+    }
   }
 }

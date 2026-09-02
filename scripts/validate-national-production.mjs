@@ -92,7 +92,32 @@ await check("coastal production has real coastal coverage",async()=>{
   if(coastalCovered<1)throw new Error("neither coastal control returned any live coastal source coverage");
 });
 
-for(const route of ["/national-tools/","/national-tools/aurora/","/national-tools/rivers/","/national-tools/coastal/","/national-tools/frost/","/national-tools/planting/","/national-tools/fall-color/","/national-tools/garden/","/national-tools/fall/","/national-tools/water/","/national-tools/night-sky/"]){
+const snowControls=[
+  {name:"Mount Hood Oregon snow",lat:45.33,lon:-121.71,state:"OR"},
+  {name:"Burlington Vermont snow",lat:44.4759,lon:-73.2121,state:"VT"},
+  {name:"Atlanta Georgia snow",lat:33.7490,lon:-84.3880,state:"GA"}
+];
+let snowControlsWithLiveSource=0;
+const localSnowLevels=new Set(["melt-pressure-high","melt-pressure-moderate","freeze-thaw","accumulation-supportive","cold-hold","pack-holding"]);
+for(const p of snowControls){
+  await check(p.name+" contract",async()=>{
+    const x=await get("/api/national-snow?lat="+p.lat+"&lon="+p.lon+"&state="+encodeURIComponent(p.state),{timeout:20000});
+    if(!x.decision||!Array.isArray(x.sources)||x.sources.length!==3)throw new Error("missing Snow decision/source contract");
+    if(x.context_radius_miles!==120||x.decision_radius_miles!==60)throw new Error("Snow geography radii drifted");
+    if(x.sources.some(source=>source&&source.available===false&&source.stale===true))throw new Error("unavailable Snow source marked stale");
+    if(x.sources.some(source=>source&&source.available!==false))snowControlsWithLiveSource+=1;
+    if(localSnowLevels.has(x.decision.level)){
+      const basis=x.decision.pack_basis;
+      if(!basis||!Number.isFinite(Number(basis.distance_miles))||Number(basis.distance_miles)>60||!(Number(basis.value)>0))throw new Error("local Snow conclusion lacks measured pack inside 60 miles");
+    }
+    if(!localSnowLevels.has(x.decision.level)&&x.decision.melt_pressure&&x.decision.melt_pressure!=="not-evaluated")throw new Error("non-local Snow state unexpectedly carries evaluated melt pressure");
+  });
+}
+await check("snow production has live source coverage",async()=>{
+  if(snowControlsWithLiveSource<1)throw new Error("all Snow controls lost every source family");
+});
+
+for(const route of ["/national-tools/","/national-tools/aurora/","/national-tools/rivers/","/national-tools/coastal/","/national-tools/snow/","/national-tools/frost/","/national-tools/planting/","/national-tools/fall-color/","/national-tools/garden/","/national-tools/fall/","/national-tools/water/","/national-tools/night-sky/"]){
   await check(route+" page",async()=>{
     const body=await get(route,{json:false});
     if(!/<title>[^<]+<\/title>/i.test(body)||!body.includes("Chris Izworski"))throw new Error("page shell incomplete");
