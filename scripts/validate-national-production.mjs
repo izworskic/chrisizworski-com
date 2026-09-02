@@ -20,6 +20,16 @@ async function check(label,fn){
   try{await fn();results.push({label,ok:true});console.log("PASS",label)}
   catch(error){results.push({label,ok:false,error:String(error.message||error)});console.error("FAIL",label,error.message||error)}
 }
+await check("Portland Oregon geocode resilience",async()=>{
+  const forms=["Portland, OR","Portland Oregon","97201"];
+  for(const q of forms){
+    const x=await get("/api/national-geocode?q="+encodeURIComponent(q),{timeout:20000});
+    if(!Number.isFinite(Number(x.latitude))||!Number.isFinite(Number(x.longitude)))throw new Error(q+" missing coordinates");
+    if(x.stateCode!=="OR")throw new Error(q+" lost Oregon state identity");
+    if(!x.geocodeSource)throw new Error(q+" missing geocode source");
+  }
+});
+
 for(const p of places){
   await check(p.name+" geocode",async()=>{
     const x=await get("/api/national-geocode?q="+encodeURIComponent(p.q));
@@ -62,6 +72,7 @@ for(const p of places){
 const coastalControls=[
   {name:"Grand Haven coastal",lat:43.063,lon:-86.228,expectCoastal:true},
   {name:"Folly Beach coastal",lat:32.655,lon:-79.940,expectCoastal:true},
+  {name:"Portland Oregon inland control",lat:45.537,lon:-122.650,expectCoastal:false},
   {name:"Denver inland control",lat:39.7392,lon:-104.9903,expectCoastal:false}
 ];
 let coastalCovered=0;
@@ -71,7 +82,9 @@ for(const p of coastalControls){
     if(typeof x.coastal_available!=="boolean"||!x.decision||!Array.isArray(x.sources)||x.sources.length!==3)throw new Error("missing coastal decision/source contract");
     if(p.expectCoastal&&x.coastal_available)coastalCovered+=1;
     if(!p.expectCoastal&&x.coastal_available)throw new Error("inland control unexpectedly received coastal coverage");
-    if(!p.expectCoastal&&x.decision.level!=="inland-or-uncovered")throw new Error("inland control did not fail closed");
+    if(!p.expectCoastal&&x.applicability?.status!=="not-applicable")throw new Error("inland control did not fail coastal location admission");
+    if(!p.expectCoastal&&x.decision.level!=="not-applicable")throw new Error("inland control did not return explicit not-applicable decision");
+    if(!p.expectCoastal&&(x.nearby_observation||x.tide_context||x.official_beach_forecast?.day1||x.official_beach_forecast?.day2))throw new Error("inland control leaked distant coastal source data");
     if(x.sources.some(source=>source&&source.available===false&&source.stale===true))throw new Error("unavailable source marked stale instead of unavailable");
   });
 }
