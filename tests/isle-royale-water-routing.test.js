@@ -152,3 +152,57 @@ test('the planner routes from the committed dataset and only falls back to the e
   // The old gate rejected any payload without coastline ways, which is every valid payload here.
   assert.doesNotMatch(client, /shoreline source returned no coastline geometry/);
 });
+
+test('portage chains may paddle between anchors that share a water body', () => {
+  const intel = loadIntel();
+  const router = intel.create(geometry);
+  const dataset = JSON.parse(
+    fs.readFileSync(path.join(root, 'public/isle-royale-map/data/official-portages-2026.json'), 'utf8'),
+  );
+  const usable = dataset.portages.filter((portage) => portage.from_anchor_id && portage.to_anchor_id);
+
+  const waterBodyOf = new Map();
+  for (const [id, anchor] of Object.entries(dataset.endpoint_anchors)) {
+    waterBodyOf.set(id, router.waterBodyId({ lat: Number(anchor.lat), lng: Number(anchor.lng) }));
+  }
+
+  // Every inland lake anchor is its own body; everything else afloat is one Lake Superior.
+  assert.equal(waterBodyOf.get('rock-harbor'), waterBodyOf.get('moskey-basin'));
+  assert.equal(waterBodyOf.get('rock-harbor'), waterBodyOf.get('chippewa-harbor'));
+  assert.notEqual(waterBodyOf.get('lake-richie'), waterBodyOf.get('rock-harbor'));
+  assert.notEqual(waterBodyOf.get('lake-richie'), waterBodyOf.get('siskiwit-lake'));
+
+  const options = { maxEdges: 8, maxResults: 6, edgeCost: (p) => Number(p.distance_miles) || 0.25 };
+
+  // The regression this guards: the graph used to hold portage edges only, so a trip whose first
+  // move is a paddle found nothing at all.
+  assert.equal(
+    intel.findPortageChains(usable, ['rock-harbor'], ['lake-richie'], options).length,
+    0,
+    'without water links this pair is unreachable, which is the old behaviour',
+  );
+
+  const linked = intel.findPortageChains(usable, ['rock-harbor'], ['lake-richie'], { ...options, waterBodyOf });
+  assert.ok(linked.length, 'Rock Harbor to Lake Richie must resolve once anchors can be paddled between');
+  const cheapest = linked[0].steps.map((step) => step.portage.number);
+  assert.deepEqual(cheapest, [6], 'the cheapest route is the single Chippewa Harbor carry');
+  assert.ok(
+    linked.some((chain) => chain.steps.length === 1 && chain.steps[0].portage.number === 7),
+    'the Moskey Basin carry must be offered as the alternative it is',
+  );
+
+  // A chain that only adds carries to one already found is not an alternative worth showing.
+  for (const chain of linked) {
+    const ids = new Set(chain.steps.map((step) => step.portage.id));
+    const supersets = linked.filter(
+      (other) => other !== chain && other.steps.every((step) => ids.has(step.portage.id)) && other.steps.length < ids.size,
+    );
+    assert.equal(supersets.length, 0, 'no chain may be a strict superset of another returned chain');
+  }
+
+  // A lake no portage serves stays unreachable rather than being invented.
+  assert.equal(
+    intel.findPortageChains(usable, ['washington-harbor'], ['lake-desor'], { ...options, waterBodyOf }).length,
+    0,
+  );
+});
