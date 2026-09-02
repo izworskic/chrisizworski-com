@@ -4,11 +4,10 @@ import path from 'node:path';
 
 const root=path.resolve(import.meta.dirname,'..');
 const registry=JSON.parse(await readFile(path.join(root,'benchmarks/tool-network-registry.json'),'utf8'));
-let actions={relationships:[],experiments:[]};
+let actions={relationships:[]};
 try{actions=JSON.parse(await readFile(path.join(root,'benchmarks/tool-network-actions.json'),'utf8'));}catch{}
 const tools=registry.tools||[];
 const rels=[...(registry.relationships||[]),...(actions.relationships||[])];
-const experiments=actions.experiments||[];
 const byId=new Map(tools.map(t=>[t.id,t]));
 const inbound=new Map(tools.map(t=>[t.id,[]]));
 const outbound=new Map(tools.map(t=>[t.id,[]]));
@@ -23,9 +22,7 @@ const degree=tools.map(t=>({
 })).sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name));
 const degreeById=new Map(degree.map(d=>[d.id,d]));
 const isolated=degree.filter(d=>d.total===0&&byId.get(d.id)?.networkRole!=='leaf');
-const protectedTools=tools.filter(t=>t.searchTreatment?.status==='protected');
 const candidates=[...(registry.expansionOpportunities||[])].sort((a,b)=>b.bestFitScore-a.bestFitScore);
-const experimentByCandidate=new Map(experiments.filter(e=>e.candidateId).map(e=>[e.candidateId,e]));
 
 const focusArg=process.argv.find(arg=>arg.startsWith('--focus='));
 const focusId=focusArg?focusArg.slice('--focus='.length):null;
@@ -39,14 +36,11 @@ function focusRecommendation(tool){
   const d=degreeById.get(tool.id)||{in:0,out:0,total:0};
   const evidence=tool.searchEvidence?.status||'unknown';
   const active=seasonActive(tool);
-  if(tool.searchTreatment?.status==='protected'){
-    return {label:'PROTECT + AMPLIFY',reason:'Search treatment is protected; leave acquisition surfaces unchanged and improve only contextual handoffs and downstream measurement.',d,evidence,active};
-  }
   if((evidence==='unknown'||evidence==='new'||evidence==='preseason')&&active){
-    return {label:'AMPLIFY + MEASURE',reason:'The tool is in season but lacks enough search evidence. Strengthen useful inbound/outbound handoffs and collect acquisition plus cross-tool behavior before repositioning its search intent.',d,evidence,active};
+    return {label:'AMPLIFY + OBSERVE',reason:'The tool is in season but lacks enough search evidence. Strengthen useful handoffs and observe acquisition plus cross-tool behavior before repositioning its search intent.',d,evidence,active};
   }
   if((evidence==='unknown'||evidence==='new'||evidence==='preseason')&&!active){
-    return {label:'PREPARE + MEASURE',reason:'The tool is outside its active season and lacks evidence. Prepare network handoffs and measurement without forcing a search-facing rewrite.',d,evidence,active};
+    return {label:'PREPARE + OBSERVE',reason:'The tool is outside its active season and lacks evidence. Prepare useful network handoffs without forcing a search-facing rewrite.',d,evidence,active};
   }
   if(d.total<4){
     return {label:'NETWORK AMPLIFY',reason:'Search evidence exists, but the node is thinly connected. Improve useful handoffs before creating adjacent standalone pages.',d,evidence,active};
@@ -61,12 +55,11 @@ function isolatedPriority(d){
 const isolatedRanked=[...isolated].sort((a,b)=>isolatedPriority(b)-isolatedPriority(a)||a.name.localeCompare(b.name));
 
 function candidateDecision(c){
-  const experiment=experimentByCandidate.get(c.id);
-  if(experiment?.status==='running-contextual-test')return 'TEST RUNNING';
+  if(c.status==='shelved')return 'SHELVED';
   const note=String(c.note||'');
-  const evidenceGated=/only build if|if .*shows|if query data|first test|avoid creating|otherwise strengthen/i.test(note);
+  const evidenceGated=/only build if|if .*shows|if query data|first validate|avoid creating|otherwise strengthen|unless future/i.test(note);
   if(c.bestFitScore>=(registry.bestFitScoring?.priorityThreshold||85)){
-    return evidenceGated?'TEST FIRST':'BUILD READY';
+    return evidenceGated?'VALIDATE FIRST':'BUILD READY';
   }
   if(c.bestFitScore>=(registry.bestFitScoring?.buildThreshold||70))return 'IMPROVE EVIDENCE';
   return 'DO NOT BUILD';
@@ -76,6 +69,7 @@ console.log('\nTOOL NETWORK REGISTRY REPORT');
 console.log('='.repeat(72));
 console.log(`Nodes ${tools.length} · relationships ${rels.length} · cannibalization groups ${(registry.cannibalizationGroups||[]).length}`);
 console.log(`Decision month: ${currentMonth}`);
+console.log('Operating mode: ship and observe · no search experiment or freeze is active');
 
 if(focusId){
   const tool=byId.get(focusId);
@@ -90,11 +84,6 @@ if(focusId){
   }
 }
 
-console.log('\nActive network experiments');
-if(experiments.length){
-  for(const e of experiments)console.log(`  ${e.status.toUpperCase()}  ${e.name} [${e.id}] · candidate ${e.candidateScore||'n/a'}/100 · surfaces ${(e.surfaces||[]).join(', ')}`);
-}else console.log('  None.');
-
 console.log('\nNetwork repair priority');
 if(isolatedRanked.length){
   for(const d of isolatedRanked){
@@ -108,18 +97,14 @@ if(isolatedRanked.length){
 
 console.log('\nCandidate after network repair');
 if(candidates.length){
-  const c=candidates[0];
+  const c=candidates.find(item=>item.status!=='shelved')||candidates[0];
   console.log(`  ${candidateDecision(c)}  ${c.bestFitScore}/100  ${c.name} [${c.id}]`);
   console.log(`  Connects to: ${(c.connectsTo||[]).join(', ')}`);
-  const experiment=experimentByCandidate.get(c.id);
-  if(experiment?.promotionGate?.decision)console.log(`  Promotion gate: ${experiment.promotionGate.decision}`);
-  else if(c.note)console.log(`  Gate: ${c.note}`);
+  if(c.note)console.log(`  Gate: ${c.note}`);
 }
 
 console.log('\nMost connected nodes');
 for(const d of degree.slice(0,12))console.log(`  ${String(d.total).padStart(2)}  ${d.name}  (${d.in} in / ${d.out} out)`);
-console.log('\nProtected search experiments');
-for(const t of protectedTools)console.log(`  - ${t.name} [${t.id}]`);
 console.log('\nExpansion candidates');
 for(const c of candidates)console.log(`  ${String(c.bestFitScore).padStart(3)}/100  ${candidateDecision(c).padEnd(16)} ${c.name} → ${(c.connectsTo||[]).join(', ')}`);
 if(isolated.length){console.log('\nIsolated non-leaf nodes');isolated.forEach(d=>console.log(`  - ${d.name} [${d.id}]`));}
