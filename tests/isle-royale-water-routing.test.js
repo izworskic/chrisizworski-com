@@ -206,3 +206,61 @@ test('portage chains may paddle between anchors that share a water body', () => 
     0,
   );
 });
+
+test('a multi-day interior canoe trip resolves through the marked NPS portages', () => {
+  // Rock Harbor to McCargoe Cove through the interior lakes is the classic Isle Royale canoe
+  // trip. Every lake-to-lake move must be solved through a marked portage, every paddle leg must
+  // stay on water, and the search must take the carry beside you rather than paddle miles to a
+  // marginally shorter one.
+  const intel = loadIntel();
+  const router = intel.create(geometry);
+  const dataset = JSON.parse(
+    fs.readFileSync(path.join(root, 'public/isle-royale-map/data/official-portages-2026.json'), 'utf8'),
+  );
+  const usable = dataset.portages.filter((portage) => portage.from_anchor_id && portage.to_anchor_id);
+  const waterBodyOf = new Map(Object.keys(anchors).map((id) => [id, router.waterBodyId(anchor(id))]));
+  const paddleCost = (a, b) => intel.miles(anchor(a), anchor(b));
+  const lengthOf = (points) => points.reduce((sum, point, i) => (i ? sum + intel.miles(points[i - 1], point) : 0), 0);
+  const options = { maxEdges: 8, maxResults: 6, edgeCost: (p) => Number(p.distance_miles) || 0.25, waterBodyOf, paddleCost };
+
+  const stops = ['rock-harbor', 'moskey-basin', 'lake-richie', 'lake-lesage', 'lake-livermore', 'chickenbone-lake', 'mccargoe-cove'];
+  const expectedCarries = { 'moskey-basin>lake-richie': 7, 'lake-richie>lake-lesage': 8, 'lake-lesage>lake-livermore': 9, 'lake-livermore>chickenbone-lake': 10, 'chickenbone-lake>mccargoe-cove': 11 };
+
+  let paddleMiles = 0, portageMiles = 0, carries = 0;
+  for (let i = 1; i < stops.length; i++) {
+    const [from, to] = [stops[i - 1], stops[i]];
+    if (waterBodyOf.get(from) === waterBodyOf.get(to)) {
+      const leg = router.route([anchor(from), anchor(to)], 'paddle');
+      assert.equal(leg.land_crossings, 0, `${from} to ${to} must stay on water`);
+      paddleMiles += lengthOf(leg.points);
+      continue;
+    }
+    const chains = intel.findPortageChains(usable, [from], [to], options);
+    assert.ok(chains.length, `${from} to ${to} must resolve through a marked portage`);
+    const cheapest = chains[0];
+    assert.equal(cheapest.steps.length, 1, `${from} to ${to} is one carry, not a detour`);
+    assert.equal(cheapest.steps[0].portage.number, expectedCarries[`${from}>${to}`], `${from} to ${to} takes the carry beside it`);
+
+    // Reference carry: the official landings, snapped to water, with no land crossed to reach them.
+    const portage = cheapest.steps[0].portage;
+    const forward = cheapest.steps[0].from_anchor_id === portage.from_anchor_id;
+    const entryId = forward ? portage.from_anchor_id : portage.to_anchor_id;
+    const exitId = forward ? portage.to_anchor_id : portage.from_anchor_id;
+    const entry = router.landingNear(anchor(entryId), anchor(entryId), 'paddle');
+    const exit = router.landingNear(anchor(exitId), anchor(exitId), 'paddle');
+    assert.equal(entry.land_crossings || 0, 0);
+    assert.equal(exit.land_crossings || 0, 0);
+    assert.ok(entry.access_miles <= 0.75 && exit.access_miles <= 0.75, 'landings must sit on the water they serve');
+
+    const toEntry = router.route([anchor(from), entry], 'paddle');
+    const fromExit = router.route([exit, anchor(to)], 'paddle');
+    assert.equal(toEntry.land_crossings + fromExit.land_crossings, 0, `paddle legs around P${portage.number} must stay on water`);
+    paddleMiles += lengthOf(toEntry.points) + lengthOf(fromExit.points);
+    portageMiles += Number(portage.distance_miles);
+    carries++;
+  }
+
+  assert.equal(carries, 5, 'five carries: P7, P8, P9, P10, P11');
+  assert.ok(paddleMiles > 6 && paddleMiles < 14, `paddle mileage ${paddleMiles.toFixed(1)} should be the interior route, not a coastal detour`);
+  assert.ok(portageMiles > 3 && portageMiles < 6, `portage mileage ${portageMiles.toFixed(1)} should match the NPS carries`);
+});

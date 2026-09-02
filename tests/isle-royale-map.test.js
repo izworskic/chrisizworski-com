@@ -137,7 +137,9 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
 
 
 test('Isle Royale interaction script is cache-busted and not stored during active development', () => {
-  assert.match(html, /\/assets\/isle-royale-map\.js\?v=20260901-committed-water-geometry-1/);
+  // Not a literal token: that fails every time the asset legitimately changes. Assert that the
+  // script is versioned at all and that the version is not one we know to be stale.
+  assert.match(html, /\/assets\/isle-royale-map\.js\?v=2026\d{4}-[a-z0-9-]+/);
   assert.doesNotMatch(html, /isle-royale-map\.js\?v=20260830-19/);
   const vercel = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
   const rule = (vercel.headers || []).find(item => item.source === '/assets/isle-royale-map.js');
@@ -311,7 +313,12 @@ test('quiet/no-wake ETL is IRMA-first and fails closed on a stale regulatory set
 
 test('water intelligence supports fine multi-point coast, inland-water, and waterway routing', () => {
   assert.match(html, /id="route-day-hours"/);
-  assert.match(html, /isle-royale-water-intelligence\.js\?v=20260901-committed-water-geometry-1/);
+  assert.match(html, /isle-royale-water-intelligence\.js\?v=2026\d{4}-[a-z0-9-]+/);
+  // and both scripts must carry the SAME version, or a browser can load a new map script against a
+  // cached old engine
+  const mapVersion = html.match(/isle-royale-map\.js\?v=([a-z0-9-]+)/)?.[1];
+  const engineVersion = html.match(/isle-royale-water-intelligence\.js\?v=([a-z0-9-]+)/)?.[1];
+  assert.equal(mapVersion, engineVersion, 'map script and water engine must be cache-busted together');
   assert.match(js, /async function resolveWaterRouteAsync\(seedLegs=\[\]\)/);
   assert.match(js, /async function resolveCanoeRouteAsync\(seedLegs=\[\]\)/);
   assert.match(js, /preserveVerifiedPrefix/);
