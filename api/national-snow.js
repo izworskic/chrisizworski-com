@@ -155,7 +155,7 @@ function awdbStationUrl(stateCode) {
 }
 function awdbDataUrl(stationTriplet) {
   const q = new URLSearchParams({
-    stationTriplets,
+    stationTriplets: stationTriplet,
     elements: "WTEQ,SNWD",
     duration: "DAILY",
     beginDate: "-7",
