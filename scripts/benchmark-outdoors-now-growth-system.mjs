@@ -40,7 +40,7 @@ const authorityEntry = authority.focusPortfolio.find((item) => item.id === "outd
 const registryItems = registry.tools || registry.nodes || registry.entries || [];
 const registryEntry = registryItems.find((item) => item.id === "outdoors-now");
 const repair = actions.repairs.find((item) => item.id === "outdoors-now-growth-operating-system");
-const experiment = experiments.experiments.find((item) => item.id === "2026-08-28-outdoors-now-growth-system");
+const experimentLedgerRetired = experiments.status === "retired" && experiments.operatingMode === "ship-and-observe" && experiments.activeExperiments?.length === 0;
 const ownedRoot = owned.roots.find((item) => item.host === "michiganoutdoorsnow.chrisizworski.com");
 const brandedSupport = branded.supportingControlledProperties.find(
   (item) => item.origin === "michiganoutdoorsnow.chrisizworski.com",
@@ -119,15 +119,12 @@ check(
 );
 
 check(
-  "Experiment ledger records the clean attributed baseline",
-  experiment?.target?.completeWindowDays === 28 &&
-    experiment?.target?.familyExpansionGate?.impressions === 250 &&
-    experiment?.baseline?.product?.status === "none-before-attribution-release" &&
-    // "evaluated" belongs here too: an experiment that has been read and closed still records the
-    // clean attributed baseline, and freezing this list to the open states would mean the gate can
-    // only pass while the window is unresolved.
-    (["ready-for-release", "running"].includes(experiment?.status) ||
-      (experiment?.status === "evaluated" && Boolean(experiment?.result))),
+  "Ship-and-observe ledger closes the experiment while preserving attributed expansion rules",
+  experimentLedgerRetired &&
+    contract.decisionRules.expandFamilyRequires.impressions === 250 &&
+    contract.decisionRules.expandFamilyRequires.clicks === 5 &&
+    contract.decisionRules.expandFamilyRequires.plannerCompletions === 10 &&
+    contract.decisionRules.expandFamilyRequires.directionsOpens === 3,
   10,
 );
 
@@ -161,7 +158,7 @@ console.log("=".repeat(72));
 console.log(`Score: ${score}/100`);
 console.log(`Launch: ${contract.tool.locationIntentPages} pages · ${contract.tool.families.length} families · ${contract.tool.originsCovered} origins`);
 console.log(`Portfolio action: ${authorityEntry?.action || "missing"}`);
-console.log(`Experiment status: ${experiment?.status || "missing"}`);
+console.log(`Experiment ledger: ${experiments.status} · ${experiments.activeExperiments?.length || 0} active`);
 if (failures.length) {
   console.log("Failures:");
   for (const failure of failures) console.log(` - ${failure}`);
