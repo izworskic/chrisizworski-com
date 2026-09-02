@@ -25,6 +25,7 @@ const pages = {
   rivers: await read("public/national-tools/rivers/index.html"),
   coastal: await read("public/national-tools/coastal/index.html"),
   snow: await read("public/national-tools/snow/index.html"),
+  whiteChristmas: await read("public/national-tools/white-christmas/index.html"),
   frost: await read("public/national-tools/frost/index.html"),
   planting: await read("public/national-tools/planting/index.html"),
   fall: await read("public/national-tools/fall-color/index.html"),
@@ -36,10 +37,14 @@ const apis = {
   riverContext: await read("api/national-river-context.js"),
   coastal: await read("api/national-coastal.js"),
   snow: await read("api/national-snow.js"),
+  whiteChristmas: await read("api/national-white-christmas.js"),
   frost: await read("api/national-frost.js"),
   fall: await read("api/national-fall-color.js"),
   fallObservations: await read("api/national-fall-observations.js"),
 };
+
+const whiteChristmasMap = await read("public/white-christmas-probability-map/index.html");
+const whiteChristmasMichigan = await read("public/white-christmas-michigan/index.html");
 
 const frostStationNormals = (apis.frost.match(/async function stationNormals[\s\S]*?\n}\nasync function normals/) || [""])[0];
 
@@ -73,6 +78,7 @@ check("Candidate matrix forbids location-page expansion by score alone", /No can
 check("Phase 2 adds no indexable route family", contract.indexPolicy?.phase2AddsIndexableRoutes === false, 4);
 check("Phase 3 admits one distinct coastal canonical", contract.indexPolicy?.phase3AddsIndexableRoutes === true && contract.coastalProduct?.route === "/national-tools/coastal/" && contract.coastalProduct?.api === "/api/national-coastal", 4);
 check("Phase 4 admits one distinct Snowpack canonical", contract.indexPolicy?.phase4AddsIndexableRoutes === true && contract.snowProduct?.route === "/national-tools/snow/" && contract.snowProduct?.api === "/api/national-snow", 5);
+check("Phase 5 admits one live White Christmas canonical plus two bounded support intents", contract.indexPolicy?.phase5AddsIndexableRoutes === true && contract.whiteChristmasProduct?.route === "/national-tools/white-christmas/" && contract.whiteChristmasProduct?.api === "/api/national-white-christmas" && JSON.stringify(contract.whiteChristmasProduct?.longTail?.admittedNow || []) === JSON.stringify(["/white-christmas-probability-map/","/white-christmas-michigan/"]), 7);
 check("Phase 0 source lifecycle contract is current", lifecycle.updated === "2026-09-02" && contract.phase0?.sourceLifecycleContract === "benchmarks/national-source-lifecycle.json", 4);
 check("USGS production runtime is off retiring WaterServices", !/waterservices\.usgs\.gov/.test(apis.rivers + apis.riverContext + riverIndexGenerator) && lifecycle.sources?.usgsContinuous?.status === "migrated" && lifecycle.sources?.usgsStatistics?.status === "migrated-beta", 8);
 check("Smoke remains credential-gated on supported source families", lifecycle.sources?.airNow?.status === "source-key-gated" && lifecycle.sources?.nasaFirms?.status === "source-key-gated" && contract.phase2?.smokeAirQuality?.indexableRouteCreated === false, 5);
@@ -81,6 +87,8 @@ check("Coastal source lifecycle is production-audited and keyless", ["nwsMarineB
 check("Coastal lifecycle preserves source semantics", /may not downgrade or override/.test(lifecycle.sources?.nwsMarineBeachForecast?.dominanceRule || "") && /not proof of exact conditions/.test(lifecycle.sources?.ndbcRealtime?.semantics || "") && /not observed water level/.test(lifecycle.sources?.noaaCoopsTides?.semantics || ""), 4);
 check("Snow source lifecycle is production-audited and keyless", ["nohrscSnowReports","nrcsAwdbSnow","nwsHourlyForecast"].every((id) => lifecycle.sources?.[id]?.status === "production-supported" && lifecycle.sources?.[id]?.authentication === "none"), 6);
 check("Snow lifecycle preserves provisional, regional and derived semantics", /unofficial and provisional/.test(lifecycle.sources?.nohrscSnowReports?.semantics || "") && /not evidence of no snow/.test(lifecycle.sources?.nrcsAwdbSnow?.semantics || "") && /never be presented as an NWS, NOAA or NRCS snowmelt forecast/.test(lifecycle.sources?.nwsHourlyForecast?.derivedRule || ""), 6);
+check("White Christmas historical and CPC sources are keyless and production-audited", lifecycle.sources?.acisChristmasHistory?.status === "production-supported" && lifecycle.sources?.acisChristmasHistory?.authentication === "none" && lifecycle.sources?.cpcChristmasOutlooks?.status === "production-supported" && lifecycle.sources?.cpcChristmasOutlooks?.authentication === "none", 7);
+check("White Christmas lifecycle preserves station-history and broad-outlook semantics", /at least 25 valid/.test(lifecycle.sources?.acisChristmasHistory?.semantics || "") && /not Christmas Day probabilities/.test(lifecycle.sources?.cpcChristmasOutlooks?.semantics || "") && /never represented as the current-year forecast/.test(lifecycle.sources?.nceiWhiteChristmasMap?.semantics || ""), 6);
 
 const routes = [
   "/national-tools/",
@@ -88,15 +96,20 @@ const routes = [
   "/national-tools/rivers/",
   "/national-tools/coastal/",
   "/national-tools/snow/",
+  "/national-tools/white-christmas/",
+  "/white-christmas-probability-map/",
+  "/white-christmas-michigan/",
   "/national-tools/frost/",
   "/national-tools/planting/",
   "/national-tools/fall-color/",
 ];
 check("Deliberate national canonical routes are present", routes.every((r) => sitemap.includes(`<loc>https://chrisizworski.com${r}</loc>`)), 5);
-check("No generated national location tree shipped", !/national-tools\/(?:aurora|rivers|coastal|snow|frost|planting|fall-color)\/(?:[a-z]{2}|city|zip)\//i.test(sitemap), 5);
+check("No generated national location tree shipped", !/national-tools\/(?:aurora|rivers|coastal|snow|white-christmas|frost|planting|fall-color)\/(?:[a-z]{2}|city|zip)\//i.test(sitemap) && !/white-christmas\/(?:[a-z]{2}|city|zip|county)\//i.test(sitemap), 5);
 
 function nationalRouteFor(name) {
-  return name === "hub" ? "/national-tools/" : `/national-tools/${name === "fall" ? "fall-color" : name}/`;
+  if (name === "hub") return "/national-tools/";
+  if (name === "whiteChristmas") return "/national-tools/white-christmas/";
+  return `/national-tools/${name === "fall" ? "fall-color" : name}/`;
 }
 function sitemapLastmod(route) {
   const block = new RegExp(
@@ -213,6 +226,19 @@ check("Snow analytics excludes raw location", /National Snow Result/.test(pages.
 check("Snow is optional in Decision Desk and seasonal", /function snowCard/.test(dashboard) && /if\(!d\.snow_relevant\)return null/.test(dashboard) && /api\/national-snow/.test(dashboard) && /snow_visible/.test(dashboard) && /inputs_total:7/.test(dashboard), 6);
 check("Snow canonical is registered without XC or river cannibalization", registry.tools?.some((tool) => tool.id === "national-snow" && tool.canonical === "https://chrisizworski.com/national-tools/snow/") && registry.cannibalizationGroups?.some((group) => group.owner === "national-snow" && group.supports?.includes("xc-planning") && group.supports?.includes("national-rivers")), 6);
 check("Snow and Rivers stay distinct in the water hub", /\/national-tools\/snow\//.test(await read("public/national-tools/water/index.html")) && /do not prove when or how much a river will rise/.test(await read("public/national-tools/water/index.html")), 4);
+
+check("White Christmas uses ACIS history, CPC outlooks and existing Snowpack source helpers", /data\.rcc-acis\.org/.test(apis.whiteChristmas) && /cpc_mthly_temp_outlk/.test(apis.whiteChristmas) && /require\("\.\/national-snow"\)/.test(apis.whiteChristmas) && /api\.weather\.gov/.test(apis.whiteChristmas), 8);
+check("White Christmas baseline requires 25 valid 1991-2020 observations", /baseline\.length<25/.test(apis.whiteChristmas) && /year>=1991&&r\.year<=2020/.test(apis.whiteChristmas) && /value>=1/.test(apis.whiteChristmas), 7);
+check("White Christmas avoids false precision", /function round5/.test(apis.whiteChristmas) && /probability:round5\(value\)/.test(apis.whiteChristmas) && /Rounded to the nearest 5 percentage points/.test(pages.whiteChristmas), 6);
+check("White Christmas long-range outlook can only nudge the prior", /return 7\*strength/.test(apis.whiteChristmas) && /return 4\*strength/.test(apis.whiteChristmas) && /CPC monthly or seasonal outlooks describe broad/.test(apis.whiteChristmas), 6);
+check("White Christmas reuses the Snowpack 60-mile truth boundary", /d<=45&&pack&&pack\.distance_miles<=60/.test(apis.whiteChristmas) && /only pack inside 60 miles can influence/.test(pages.whiteChristmas) && /Snowpack outside 60 miles cannot alter/.test(JSON.stringify(contract.whiteChristmasProduct?.hardRules || [])), 7);
+check("White Christmas short-range forecast only dominates near the event", /d<=8&&forecast&&forecast\.available/.test(apis.whiteChristmas) && /short-range NWS weather can dominate only/.test(JSON.stringify(contract.whiteChristmasProduct?.hardRules || [])), 6);
+check("White Christmas is visibly site-derived rather than an official NOAA probability", /not an official NOAA Christmas forecast/i.test(pages.whiteChristmas) && /ChrisIzworski\.com blended estimate/.test(apis.whiteChristmas) && /site-derived synthesis/.test(JSON.stringify(contract.whiteChristmasProduct?.hardRules || [])), 7);
+check("White Christmas analytics excludes raw place identity", /White Christmas Result/.test(pages.whiteChristmas) && /probability_band/.test(pages.whiteChristmas) && !/White Christmas Result[^\n]{0,320}(?:latitude|longitude|query|place|postal)/.test(pages.whiteChristmas), 5);
+check("White Christmas support pages own distinct map and Michigan intents", /climatology, not this year's answer/i.test(whiteChristmasMap) && /White Christmas Michigan/.test(whiteChristmasMichigan) && /34\.7% historical probability/.test(whiteChristmasMichigan) && registry.tools?.some(t=>t.id==="white-christmas-map") && registry.tools?.some(t=>t.id==="white-christmas-michigan"), 6);
+check("White Christmas network ownership blocks doorway expansion", registry.cannibalizationGroups?.some(group=>group.owner==="national-white-christmas" && group.supports?.includes("white-christmas-map") && group.supports?.includes("white-christmas-michigan") && /Do not create city\/state variants/.test(group.rule || "")) && /Mass city, ZIP, county or state doorway generation/.test(contract.whiteChristmasProduct?.longTail?.blockedPattern || ""), 7);
+check("White Christmas canonical is linked from Snowpack and the national hub", /\/national-tools\/white-christmas\//.test(pages.snow) && /Will I Have a White Christmas\?/.test(pages.hub), 4);
+
 
 
 check("Frost includes spring and fall probabilities", /fall_10/.test(apis.frost) && /fall_50/.test(apis.frost) && /median first fall 32°F freeze/.test(pages.frost), 5);
