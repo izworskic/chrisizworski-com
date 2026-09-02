@@ -228,8 +228,8 @@ check("Fall observation enrichment stays optional and non-peak", contract.phase2
 
 check("Phase 3 measurement is instrumented without raw location payloads", contract.phase3?.measurement?.status === "instrumented-on-existing-vercel-analytics" && /Never send raw city\/ZIP/.test(contract.phase3?.measurement?.privacy || ""), 4);
 const masterPrompt = await read("docs/NATIONAL_OUTDOOR_TOOLS_MASTER_PROMPT.md");
-check("Master prompt remains the build doctrine", masterPrompt.includes("## Loss function") && masterPrompt.includes("## Phase 3 platform interpretation") && masterPrompt.includes("Core decision data must not wait on optional enrichment") && masterPrompt.includes("Slow discovery may be precomputed"), 4);
-check("River product contract forbids nearest-gauge auto-promotion", /Discovery is river-first/.test(masterPrompt) && /Never assume the nearest gauge is the river the user meant/.test(masterPrompt) && /explicit river\/monitoring-point selection/.test(masterPrompt), 4);
+check("Master prompt remains the build doctrine", masterPrompt.includes("## 10. Product Value Function") && masterPrompt.includes("## 11. Loss Function") && masterPrompt.includes("## 14. National Outdoor Decision Desk") && masterPrompt.includes("### Core-before-enrichment rule") && masterPrompt.includes("Core authoritative decision data must not wait on optional enrichment") && masterPrompt.includes("Slow discovery may be precomputed"), 4);
+check("River product contract forbids nearest-gauge auto-promotion", /Preserve river-first discovery/.test(masterPrompt) && /explicit river\/gauge selection/.test(masterPrompt) && /exact monitoring-point retrieval/.test(masterPrompt), 4);
 
 const score = Math.round((rawScore / maxPoints) * 100);
 const summary = { score, rawScore, maxPoints, failures, hardVetoes: contract.hardVetoes };
