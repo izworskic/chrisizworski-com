@@ -1,399 +1,581 @@
-# National Outdoor Tools — Master Build Prompt and Loss Function
+# ChrisIzworski.com — National Outdoor Decision Intelligence Network
 
-Updated: August 31, 2026 (America/Detroit)
+Updated: September 2, 2026 (America/Detroit)
 
-## Mission
+This document supersedes the August 31 national-tools build prompt. Read it with `AGENTS.md`, `docs/SEARCH_STRATEGY.md`, `docs/SEARCH_AUTHORITY_PORTFOLIO.md`, the current experiment ledger, tool-network registry, source-lifecycle benchmark and location-admission benchmark before changing a national search surface.
 
-Build a separate national outdoor decision-tool network at `/national-tools/` on ChrisIzworski.com without weakening, cloning, renaming, restructuring, or cannibalizing the existing Michigan & Great Lakes tools.
+## 1. Mission
 
-The product is not “a collection of widgets.” It is a shared national decision engine:
+Build National Outdoor Decision Intelligence on ChrisIzworski.com into a national network of high-utility, data-driven outdoor tools capable of generating many tens of thousands of qualified organic search impressions per day, substantial recurring direct usage, increasing pageviews per visitor, defensible search authority and meaningful advertising revenue.
 
-**Where are you? → What is happening there? → What decision are you trying to make?**
+This is not a mandate to build the largest number of tools. It is a mandate to create the most useful network of **outdoor decisions derived from authoritative data**.
 
-Phase 1 consists of four product families:
-1. Frost & Planting Planner
-2. River Conditions
-3. Aurora Tonight / Northern Lights Forecast
-4. Fall Color Tracker / Fall Foliage Map
+> Public data tells people what is happening. We tell them what it means for the outdoor decision they are trying to make.
 
-The Michigan ecosystem remains the deeper local authority. National pages should route Michigan-specific intent toward the established Michigan tools when those are already the better canonical answer.
+Every major product should attempt to answer:
 
-## Build doctrine
+**Where are you? → What changed? → What is happening now? → What happens next? → What does that mean for what you want to do?**
 
-Act simultaneously as a product architect, data engineer, reliability engineer, search strategist, accessibility engineer, and skeptical end user.
+Do not stop at raw weather, gauges, maps, satellite pixels or agency feeds. Combine independent signals only when the combination produces materially new, explainable insight.
 
-Do not optimize for page count. Optimize for useful decisions, source truth, repeat use, qualified search impressions, CTR, and durable authority.
+## 2. Operating mode
 
-Every product answer must distinguish:
-- official observation;
-- official forecast;
-- historical climatology;
-- derived estimate;
-- recommendation.
+Work end-to-end. Inspect current production and current `main` first. Research the opportunity and source lifecycle. Score candidates internally. Select the highest-value work without a hard veto. Design, implement, test, integrate, search-optimize, benchmark and verify it.
 
-Never collapse those categories into one number that appears more certain than its inputs.
+Follow repository-specific release rules in `AGENTS.md`. In this repository, agents prepare verified PRs but do not merge `main`; Chris makes the merge decision.
 
-## Hard vetoes
+Never overwrite or discard unrelated work from another agent.
 
-Any one of these is a release blocker:
+## 3. North-star outcome
 
-1. A national page duplicates or competes with an established Michigan canonical without materially different intent.
-2. A live value is shown without source time/freshness, or stale data are silently presented as current.
-3. A derived estimate is represented as an official NOAA, NWS, USGS, USDA, EPA, NASA, USFS, or other agency forecast.
-4. A river score or badge claims that paddling, swimming, wading, fishing, or boating is “safe.”
-5. Kp alone is represented as a local aurora-visibility probability.
-6. USDA Plant Hardiness Zone is represented as a local spring planting date or last-frost date.
-7. Fall foliage is expressed with fake precision unsupported by observations/model confidence.
-8. Thin city/ZIP/date/crop pages are mass-created merely to increase index count.
-9. An external feed is called on every page view when it can be centrally cached or precomputed.
-10. A page omits canonical authorship/entity linkage to `https://chrisizworski.com/#person`, a truthful source/method section, or crawlable core explanatory content.
-11. Titles/meta descriptions violate the repository guardrails.
-12. Existing active search experiments are changed to accommodate the national build.
-13. Missing upstream data are converted into a neutral/default score instead of “unknown/unavailable.”
-14. A source/license/attribution requirement is ignored.
-15. A failure mode creates confident-looking but unsupported output.
+The target is a compounding search and usage flywheel supporting:
+- tens of thousands of daily Google impressions;
+- thousands of daily organic visits;
+- recurring/direct visits driven by changing conditions;
+- multiple useful pageviews during planning sessions;
+- seasonal reactivation;
+- earned links/citations;
+- high-value contextual advertising inventory;
+- future sponsorship and affiliate opportunities where appropriate.
 
-## Loss function
+Order of operations:
 
-Minimize the following weighted loss. Lower is better; a hard veto above overrides the numeric score.
+**utility → search visibility → repeat usage → page depth → monetization**
 
-| Loss component | Weight | Zero-loss condition |
-| --- | ---: | --- |
-| Factual & data integrity | 25 | Every output is traceable to the right source class and uncertainty is explicit |
-| Michigan cannibalization & experiment protection | 20 | Existing Michigan canonicals and frozen treatments remain intact |
-| Decision usefulness | 15 | The first screen answers a real user decision, not just displays raw data |
-| Freshness & failure transparency | 10 | Source timestamps, stale states, degraded states, and unknowns are visible |
-| Source / licensing integrity | 10 | Official sources are preferred, attributed, and used within terms |
-| Search distinct-value quality | 10 | Every indexable URL has unique utility and satisfies a distinct intent |
-| Performance & accessibility | 5 | Mobile-first, keyboard usable, resilient, and fast |
-| Shared-platform maintainability | 5 | Location/data/scoring logic is reused instead of copied |
+Never sacrifice source truth, user trust, page speed or first-screen utility merely to create ad inventory.
 
-### Scoring interpretation
+## 4. Protected national assets
 
-- **0–10 loss:** release-quality
-- **11–20 loss:** acceptable beta only if no hard vetoes and limitations are explicit
-- **21–35 loss:** do not index; continue building
-- **>35 loss:** redesign
-
-When feature breadth conflicts with truth, ship less. A smaller truthful tool has lower loss than a larger misleading one.
-
-## Shared national platform
-
-Create common primitives instead of four isolated applications.
-
-### Location object
-
-A city/ZIP lookup should resolve to:
-- display name;
-- latitude/longitude;
-- city/place;
-- state/state code;
-- postal code when available;
-- timezone when available;
-- elevation when available;
-- attribution.
-
-Do not require precise browser location. Manual city/ZIP is the default. Optional device location may be offered only after an explicit tap; round coordinates before the server request, keep coordinates out of page URLs and analytics, and convert the result back to a place label for cross-tool continuity.
-
-### Data contract
-
-Every live/derived response should expose, where applicable:
-- `source_name`
-- `source_url`
-- `source_updated_at`
-- `retrieved_at`
-- `age_minutes`
-- `stale_after`
-- `source_status`
-- `confidence`
-- `method`
-- `degraded`
-
-### Caching
-
-- Historical climatology: precompute and store.
-- Government live feeds: cache centrally.
-- Location geocoding: cache aggressively.
-- Never have thousands of browser clients independently hammer a government endpoint.
-- Preserve last-known-good data only when clearly marked stale.
-
-## Product contracts
-
-### 1. Frost & Planting Planner
-
-Primary sources:
-- NOAA/NCEI 1991–2020 U.S. Climate Normals and freeze-probability products
-- NWS forecast/API for current cold risk
-- USDA Plant Hardiness Zone as perennial-survival context only
-- Curated Cooperative Extension crop biology/timing rules
-
-Must answer:
-- What is my historical spring freeze risk?
-- What is my historical first-fall-freeze risk?
-- Is a freeze currently forecast?
-- When should I start/transplant/direct-sow this crop?
-- Why can the recommendation differ from an “average last frost date”?
-
-Separate climatology from the current forecast in both data and UI.
-
-Use probability language such as:
-“Historically, only 10% of years recorded a 32°F freeze this late or later.”
-
-Do not say:
-“Frost is over after this date.”
-
-The integrated application may power two search-intent entry points:
-- `/national-tools/frost/`
-- `/national-tools/planting/`
-
-Do not create indexable ZIP × crop × date combinations.
-
-### 2. River Conditions
-
-Primary sources:
-- USGS Water Data APIs / Water Services for current and historical observations
-- NOAA National Water Prediction Service for official forecasts/flood context where available
-- National Water Model only when explicitly labeled model guidance
-
-Must answer:
-- What monitored rivers/streams are near me?
-- Which USGS monitoring point do I want when a river has more than one nearby gauge?
-- What is the current flow/level?
-- Is it rising or falling?
-- What changed over the last 6–24 hours?
-- How fresh is the reading?
-- How unusual is it for this time of year when historical statistics are available?
-- Which additional continuous USGS signals are actually monitored here, such as water temperature, turbidity, dissolved oxygen, conductivity, or pH?
-- Is there an official flood category/forecast where supported?
-- What weather may matter next, while clearly separating weather from an inferred river response?
-
-River Intelligence interpretation rules:
-- Discovery is river-first: location search returns the nearby monitored-waterway chooser before any detailed live river panel opens.
-- Never assume the nearest gauge is the river the user meant. Live detail loads only after an explicit river/monitoring-point selection.
-- Lead with observable change before raw sensor inventory.
-- Show "what changed" and "what's next" as separate observation/forecast concepts.
-- Activity lenses may reorder or explain the same facts for paddling, fishing, swimming, ecology, or trip planning, but may not manufacture activity scores or universal recommendations.
-- Missing sensors remain unavailable; never substitute modeled or nearby values without an explicit source/method label.
-- A weather forecast is context, not proof that a river will rise or fall.
-- Species-specific fishing inference requires species/regulation/ecology inputs; do not turn generic river data into a trout or bite score.
-- Swimming interpretation must explicitly disclose when bacteria/toxin/advisory data are absent.
-
-Never infer recreational safety from gauge values or from an activity lens.
-
-### 3. Aurora Tonight
-
-Primary sources:
-- NOAA SWPC OVATION 30–90 minute nowcast
-- NOAA SWPC Kp/current space-weather products
-- NWS local cloud forecast
-- darkness/sun timing
-- moon context when useful
-
-Must answer the human question:
-“Can I see the northern lights from here tonight?”
-
-The answer must decompose:
-- aurora signal;
-- cloud obstruction;
-- darkness;
-- best window;
-- confidence.
-
-Kp is context, not the answer.
-
-### 4. Fall Color Tracker
-
-Primary sources:
-- USDA Forest Service observations/reports where available
-- defensible satellite/remote-sensing inputs when implemented
-- weather/elevation/historical timing only as documented model features
-
-This tool has a higher uncertainty floor than the other three.
-
-Do not manufacture a nationwide “percent peak” API.
-
-If the model is not calibrated well enough:
-- label the surface beta;
-- show source age and confidence;
-- prefer broad stages/ranges over false percentages;
-- withhold or noindex location families that do not pass the distinct-value/truth gate.
-
-A truthful “estimate, medium confidence” is preferable to a precise unsupported claim.
-
-Current USA-NPN Nature's Notebook observations may be added as a separate ground-evidence layer when available. The Colored leaves phenophase is an individual-plant observation and may include drought/stress color. It must never be converted into a landscape percent-peak value or used to silently shift the historical satellite timing model. Optional observations must load after the core timing answer and fail independently.
-
-## Search and URL architecture
-
-Visible section name:
-**U.S. Outdoor Tools**
-
-Hub:
-`https://chrisizworski.com/national-tools/`
-
-Phase 1:
-- `/national-tools/frost/`
-- `/national-tools/planting/`
-- `/national-tools/rivers/`
+Inventory national canonicals before creating anything. Current major product families:
 - `/national-tools/aurora/`
+- `/national-tools/rivers/`
+- `/national-tools/frost/`
+- `/national-tools/planting/`
 - `/national-tools/fall-color/`
 
-Use query language in titles/H1s:
-- First & Last Frost Dates / Freeze Risk
-- Planting Calendar / When to Plant
-- River Level, Flow & Forecast
-- Northern Lights Forecast Tonight
-- Fall Foliage Map / Peak Color
+Existing intent networks include Garden, Fall-trip planning, River-trip planning and Night-sky planning. Existing platform capabilities include national location handling, source freshness contracts, saved places, cross-tool place continuity, sharing, multi-place comparison, analytics, the national benchmark and the location-page admission benchmark.
 
-The permanent URL must not include the year.
+Every proposed surface must first be classified:
+1. enhancement to an existing canonical;
+2. new decision-intent entry point into an existing engine;
+3. new product family;
+4. supporting evergreen/search content;
+5. potential long-tail location surface.
 
-Do not create an indexable location page until it passes all of:
-1. distinct decision;
-2. search/evidence basis;
-3. materially unique local data;
-4. cannibalization safety;
-5. two-way network fit;
-6. valid canonical/discovery;
-7. stated measurement target.
+Prefer enhancement and cross-source intelligence over duplicate canonicals.
 
-Michigan handling:
-- frost → established Michigan frost pages
-- planting → established Michigan planting pages
-- aurora → established Northern Lights Michigan tool
-- fall color → established Michigan Fall Color tool
-- river/fishing intent → established Michigan river/fishing properties where they are the better match
+## 5. Immediate infrastructure audit
 
-Do not automatically delete national functionality for Michigan users; provide the deeper local handoff clearly.
+### Rivers
 
-## First-screen UX
+Do not deepen dependency on retiring USGS WaterServices. Production runtime and future discovery-index generation must use the modern USGS Water Data APIs. Preserve river-first discovery, explicit river/gauge selection, exact monitoring-point retrieval, historical context, sensor availability, NWPS context, source timestamps and transparent missing-data behavior.
 
-The first interaction should be consistent:
+The source lifecycle contract is `benchmarks/national-source-lifecycle.json`.
 
-**Enter city or ZIP**
+### Air quality and fire
 
-Then return a concise decision card before secondary data.
+Audit AirNow interface lifecycle before implementation; avoid service families scheduled for retirement. NASA FIRMS remains credential/configuration aware. Missing `AIRNOW_API_KEY`, `FIRMS_MAP_KEY` or another required secret must produce an explicit configuration/degraded state, never fabricated data.
 
-Avoid:
-- giant hero areas;
-- tool-card walls before the user gets an answer;
-- jargon-led labels;
-- requiring an account;
-- asking for precise location permission before manual entry;
-- hiding the useful result below explanatory prose.
+## 6. Product doctrine
 
-Every result card should provide:
-1. plain-English answer;
-2. the 2–4 strongest reasons;
-3. updated/source context;
-4. “why this answer?” disclosure;
-5. next useful action.
+A product earns its place when multiple pieces of information become significantly more useful when interpreted together.
 
-## SEO / AI-search rules
+Weak:
+`Temperature 72°F · Wind 9 mph · AQI 48`
 
-Every indexable page must:
-- render a useful crawlable answer/context without JavaScript;
-- have one canonical URL;
-- have one clear H1;
-- define the Chris Izworski Person node with `@id=https://chrisizworski.com/#person`;
-- use a query-aligned title <=60 rendered characters;
-- use a useful meta description <=158 rendered characters;
-- include source/methodology text;
-- use truthful structured data;
-- be reachable through crawlable internal links;
-- carry truthful `dateModified` and sitemap `lastmod`.
+Strong:
+`The next four hours are the best outdoor window today: temperatures remain comfortable, winds stay below the afternoon increase and current air quality is good. Smoke detections are west of the area; the wind forecast changes later today.`
 
-Do not use generated explanatory filler to make pages “look unique.”
+The second answer is the product. The feeds are evidence.
 
-## Phase order
+## 7. Shared National Outdoor Intelligence Engine
 
-Because the current date is August 31, 2026:
+Do not build technical islands.
 
-1. Shared national location/data shell
-2. Aurora Tonight — operational live data and immediate event demand
-3. Fall Color — transparent 2026 beta/calibration surface
-4. River Conditions — evergreen USGS/NWPS foundation
-5. Frost & Planting — build the climatology/crop model thoroughly for late-winter/spring demand
-6. Smoke & Air Quality — next product after Phase 1, using EPA AirNow + NASA FIRMS + NIFC
+### Common location object
 
-Phase order does not alter long-term priority:
-Frost/Planting and Rivers are the strongest durable SEO/data assets; Aurora is the fastest acquisition/alert asset; Fall Color is the travel/seasonal asset.
+Where available, resolve a place into:
+- display place;
+- latitude/longitude;
+- state;
+- timezone;
+- elevation;
+- watershed;
+- coastal proximity;
+- forecast zones;
+- monitoring stations;
+- public-land context;
+- data coverage indicators.
 
-## Release gate
+Precise device location is optional. Coordinates never become analytics identity.
 
-Before a PR:
-1. Run `npm run verify:all`.
-2. Run the national-tools-specific benchmark.
-3. Confirm existing protected Michigan pages were not modified.
-4. Confirm each external-data endpoint fails explicitly when upstream data fail.
-5. Confirm no indexable location-page explosion occurred.
-6. Confirm all new sitemap pages have matching `dateModified`.
-7. Confirm titles/descriptions pass repo limits.
-8. Confirm API endpoints carry `X-Robots-Tag: noindex, nofollow`.
-9. Confirm source attribution and disclaimers.
-10. Record what is indexable now vs intentionally beta/noindex.
+### Common signal contract
 
-## Success function
+Every source-derived signal should support:
+- source and source class;
+- observation/issue time;
+- retrieval time;
+- data age and freshness threshold;
+- current/stale/unavailable state;
+- geographic relationship to the requested place;
+- confidence;
+- observed/forecast/historical/modeled/derived classification;
+- derivation methodology;
+- degraded state.
 
-The build succeeds when it produces fewer user decisions requiring interpretation of scattered government pages, while increasing qualified national discovery without weakening Michigan authority.
+### Common temporal model
 
-Optimize for:
-- useful answer rate;
-- repeat/direct use;
-- qualified organic impressions;
-- CTR at comparable rank;
-- alert conversion later;
-- source uptime and freshness;
-- backlinks/embeds later;
-- revenue only after trust/usefulness.
+Support:
+- now;
+- previous 1–6 hours;
+- previous 24 hours;
+- next 3 hours;
+- today;
+- tonight;
+- tomorrow;
+- next several days;
+- historical normal for the date.
 
-Do not optimize for:
-- raw URL count;
-- vanity “live” labels;
-- exact-looking scores;
-- keyword repetition;
-- unsupported certainty;
-- replacing Michigan tools that already work.
+### Independent degradation
 
-## Final instruction to future agents
+One failed source must never blank unrelated truthful signals.
 
-Read this document together with `AGENTS.md`, `docs/SEARCH_STRATEGY.md`, `docs/SEARCH_AUTHORITY_PORTFOLIO.md`, the current experiment ledger, tool-network registry, and search-authority portfolio before changing a national-tool search surface.
+## 8. No universal outdoor score
 
-When uncertain, choose the implementation with the lower loss even if it launches with fewer features.
+Never create a fake universal recreation score such as “Outdoor Score 83/100.”
 
+Produce individual decision statements such as:
+- Clear-air window
+- Rain arriving
+- River rising rapidly
+- Strong afternoon wind
+- Snowpack melting
+- Trail surface likely wet
+- High tide approaching
+- Smoke moving toward the area only when supported by the actual evidence
+- Darkest clear-sky window
+- Hard-freeze risk tonight
 
-## Phase 3 platform interpretation
+Priority may order urgent signals; priority is not a safety determination.
 
-The first five tools now share a common user journey. Future work must preserve these rules:
+## 9. Candidate discovery
 
-1. The national hub is a decision surface, not a card directory. One chosen place should load the available tool contracts independently and show the most decision-relevant signals first.
-2. Display priority is not a safety score. Flood/freeze/time-sensitive signals may sort ahead of routine context, but the system must never imply a universal safe/unsafe outdoor judgment.
-3. One upstream failure must not blank the whole platform. Degraded state belongs to the affected card/tool.
-4. Location is user state, not an SEO excuse. Carry city/ZIP context across tools with query/local-device state while keeping canonical tool URLs unchanged.
-5. Saved places are not alerts. Do not use alert/notify language until a real future-delivery channel exists.
-6. Render decision times in the searched place's timezone whenever that context is available.
-7. Maps are supporting spatial context. Core decisions and source truth must remain usable if the basemap fails.
-8. No national location page becomes indexable until it passes `benchmarks/national-location-admission.json`, including the hard vetoes and minimum score.
-9. Do not add a new national product family merely to increase breadth while these five still have material decision, reliability, or network gaps.
-10. Device location is optional convenience, never a prerequisite. It must be explicit, privacy-bounded, and search-neutral.
-11. Resolved place state should remain useful across the platform. Save/switch/share controls may reuse place state, but shared links must carry a resolved place query rather than coordinates and must keep the base tool canonical.
-12. Saved-place comparison may juxtapose the same source-backed signals, but must never collapse them into an overall winner, universal score, or safety judgment. Comparison remains local UI state rather than a new indexable URL family.
+Before each major expansion wave identify at least 20 plausible data-combination products and research:
+- actual search intent;
+- competing tools;
+- source availability and longevity;
+- update frequency;
+- national coverage;
+- licensing;
+- caching constraints;
+- latency;
+- cost;
+- reliability;
+- whether two or more feeds produce a genuinely new decision.
 
+Store useful scoring artifacts in the repository. Never expose internal scores on consumer pages.
+
+## 10. Product Value Function
+
+Use `benchmarks/national-outdoor-tools.json.productValueFunction`.
+
+| Component | Weight |
+| --- | ---: |
+| Real user decision usefulness | 20 |
+| Organic search opportunity | 15 |
+| Novelty of multi-source synthesis | 15 |
+| Frequency/freshness of changing data | 10 |
+| Repeat-use potential | 10 |
+| National geographic reach | 8 |
+| Defensibility versus ordinary content sites | 7 |
+| Existing-network synergy | 5 |
+| Long-tail expansion potential | 5 |
+| Monetization/page-depth fit | 3 |
+| Data sustainability/cost | 2 |
+| **Total** | **100** |
+
+Normally do not build a new product family below 82/100. Normally prioritize 88+. A hard veto always overrides the score.
+
+## 11. Loss Function
+
+Use `benchmarks/national-outdoor-tools.json.lossFunction`.
+
+| Loss | Weight |
+| --- | ---: |
+| Data/factual integrity risk | 20 |
+| Canonical/search cannibalization | 15 |
+| Thin/programmatic-page risk | 15 |
+| False certainty/misleading synthesis | 10 |
+| Stale/failure-state weakness | 10 |
+| Dependency/API sustainability risk | 10 |
+| UX/performance complexity | 8 |
+| Search-intent mismatch | 7 |
+| Maintenance burden | 5 |
+| **Total** | **100** |
+
+Interpretation:
+- 0–10: excellent
+- 11–15: acceptable production
+- 16–25: redesign before major search expansion
+- >25: do not ship/index
+
+## 12. Hard vetoes
+
+Never ship:
+- fabricated live data;
+- silently stale live data;
+- a derived result masquerading as an agency forecast;
+- a universal recreation safety score;
+- mass-generated location doorway pages;
+- duplicate national canonicals;
+- Michigan canonical clones;
+- unsupported wildfire movement claims;
+- unsupported flood predictions;
+- unsupported trail-condition certainty;
+- unsupported fish-bite scores;
+- unsupported landscape foliage percentages;
+- Kp represented as local aurora probability;
+- plant-hardiness zones represented as frost dates;
+- missing data turned into a neutral value;
+- credentials embedded client-side;
+- private/precise location data in analytics;
+- arbitrary AI recommendations unsupported by supplied signals.
+
+## 13. High-potential intelligence families
+
+Research broadly and challenge the order.
+
+### Smoke & Clear-Air Window
+Potential inputs: supported AirNow observations/forecast, NASA FIRMS, NWS wind/hourly weather, alerts and only defensible smoke-model guidance. Do not claim a fire caused local smoke unless evidence supports that relationship. Candidate canonical: `/national-tools/smoke/`.
+
+### Coastal Water Window
+Potential inputs: NOAA NDBC observations, wave height/period/direction, wind, water temperature, NOAA CO-OPS tides/currents, NWS marine forecasts/advisories and sunrise/sunset. Activity lenses may include paddling, shore fishing, boating, beach walking and general coastal planning. Never label water recreation universally safe.
+
+### Trail Surface / Mud / Freeze-Thaw
+Use recent/forecast precipitation, temperature history, freeze/thaw cycles, snow, defensible soil-moisture products, elevation/terrain and official closure data where accessible. Always label the result as a derived estimate and show the evidence.
+
+### Snowpack & Melt
+Use NOAA National Snow Analysis, NRCS SNOTEL where available, temperature, precipitation type, SWE, elevation and nearby river response where relevant. Explain current pack, direction, melt and possible trail/runoff implications without unsupported certainty.
+
+### Wildfire Trip Impact
+Separate detected fire activity, smoke, air quality, official closures, official warnings and fire-weather conditions. Never invent evacuation guidance.
+
+### Outdoor Weather Window
+This is primarily an intelligence capability powering activity-specific decisions, not a generic weather app.
+
+### Rivers + aquatic stress
+Extend Rivers where actual sensors support water temperature, historical context, discharge, dissolved oxygen and trend. Do not infer species-specific fish behavior without ecological inputs.
+
+### Garden water stress
+Prefer extension of Garden/Frost/Planting. Combine recent rain, forecast rain, drought, soil moisture, temperature and defensible evapotranspiration context. Do not invent inch-perfect watering prescriptions.
+
+### Night-sky intelligence
+Extend Night Sky/Aurora with darkness, cloud, moon, smoke, precipitation and event context. Do not create a duplicate night-sky canonical merely to add another URL.
+
+## 14. National Outdoor Decision Desk
+
+The hub `/national-tools/` is the National Outdoor Decision Desk, not a directory.
+
+One place should yield:
+- **NOW** — what matters now;
+- **CHANGED** — what changed recently;
+- **NEXT** — what is likely to change next;
+- **OPPORTUNITIES** — useful windows worth knowing about.
+
+Each statement remains linked to its evidence. No overall winner or universal outdoor score.
+
+## 15. Standalone canonical rule
+
+Create a standalone canonical only when all are true:
+1. clearly distinct search intent;
+2. substantial independent search demand;
+3. enough depth to satisfy the query by itself;
+4. meaningful recurring/update behavior;
+5. no existing canonical should own the intent.
+
+Otherwise enhance an existing product or intent surface.
+
+## 16. Long-tail search architecture
+
+Use four layers:
+1. major canonical tools;
+2. substantial decision-intent surfaces;
+3. admitted geographic pages;
+4. deep authority/support pages.
+
+A geographic page becomes indexable only after passing `benchmarks/national-location-admission.json`. Never generate thousands of city pages merely because the cities exist.
+
+## 17. Search Opportunity Engine
+
+Use Search Console evidence when available. Identify:
+- rising queries;
+- high impressions / poor CTR;
+- rankings roughly positions 4–20;
+- query clusters already touching a tool;
+- unexpected location demand;
+- near-me/question variants;
+- seasonal demand beginning to rise;
+- pages with impressions but weak engagement.
+
+Choose the proper response: title/snippet improvement, better first answer, additional data, section depth, intent surface, admitted location surface or internal links. Do not reflexively create a URL.
+
+## 18. Search Opportunity Matrix
+
+Use `benchmarks/national-outdoor-tools.json.searchOpportunityMatrix`.
+
+| Criterion | Weight |
+| --- | ---: |
+| Search evidence | 25 |
+| Distinct intent | 15 |
+| Unique localized/data answer | 15 |
+| Tool conversion opportunity | 10 |
+| Repeat usage | 10 |
+| Internal-network relevance | 10 |
+| Competition vulnerability | 5 |
+| Backlink/share potential | 5 |
+| Monetization fit | 5 |
+
+Minimum 80/100 plus all hard gates.
+
+## 19. UX
+
+The useful answer wins the page.
+
+Ideal flow:
+1. Enter city or ZIP
+2. Headline answer
+3. Why — strongest 2–4 signals
+4. Changed
+5. Next
+6. Explore — map, graph, source details, alternate places
+7. Related decision — a contextual route to the next useful tool
+
+Avoid large banners and explanatory copy before the answer.
+
+## 20. Maps
+
+Maps answer spatial questions; they are not decoration. Core decisions must remain readable without the map.
+
+## 21. Freshness
+
+Freshness is a product feature. Distinguish real-time, near-real-time, hourly, daily, weekly, climatological and static-reference inputs. Never label mixed-age sources as one generic “LIVE” state.
+
+## 22. Technical architecture
+
+Prefer:
+
+**source → server ingestion/cache → normalized contract → deterministic intelligence rules → client**
+
+Not:
+
+**browser → many federal APIs**
+
+Use central caching, local indexes for slow discovery, exact live retrieval for selected assets, request deduplication, timeouts, stale-while-revalidate where appropriate, clearly labeled last-known-good data, circuit breakers, source-health logging, deterministic derivations and threshold tests. Secrets stay server-side.
+
+## 23. Derived intelligence
+
+Every derived statement must define:
+- exact inputs;
+- time window;
+- auditable rule/model;
+- confidence from input completeness/relevance;
+- inspectable explanation.
+
+Do not ask an LLM to invent numerical environmental conclusions from unstructured readings. LLMs may explain deterministic/source-backed calculations; they do not replace them.
+
+## 24. Production benchmark
+
+Use `benchmarks/national-outdoor-tools.json.productionBenchmark`.
+
+Targets:
+- factual/source integrity: 100%, hard gate;
+- freshness transparency: >=95;
+- decision usefulness: >=90;
+- distinct search intent: >=90;
+- first-screen usefulness: >=90;
+- failure/degradation behavior: >=95;
+- mobile usability: >=90;
+- accessibility: >=90;
+- performance: >=90;
+- internal-network integration: >=90;
+- analytics coverage: >=90;
+- canonical/cannibalization integrity: 100%, hard gate.
+
+Overall target: **>=92/100 with no hard veto**.
+
+## 25. Scenario testing
+
+Do not test only Michigan. At minimum exercise:
+- Seattle/Cascades;
+- Denver/Colorado mountains;
+- Atlanta/Appalachians;
+- Burlington/New England;
+- Phoenix/Flagstaff;
+- New Orleans/Gulf;
+- California coast;
+- Michigan coexistence with deeper local canonicals.
+
+## 26. SEO requirements
+
+Every indexable product needs:
+- query-aligned H1;
+- unique title and meta description;
+- canonical URL;
+- useful HTML before JS;
+- Chris Izworski Person/entity linkage;
+- truthful schema;
+- source/methodology content;
+- contextual internal links;
+- breadcrumbs where useful;
+- truthful `dateModified`;
+- sitemap inclusion;
+- strong OG/social metadata;
+- no indexation of APIs/transient location state.
+
+No keyword stuffing.
+
+## 27. Search CTR optimization
+
+For pages with impressions, compare query language with title, H1, description, visible first answer and SERP intent. Improve poor-CTR surfaces from evidence, not guesswork.
+
+## 28. Internal-link flywheel
+
+Contextual decisions should strengthen neighboring tools: Aurora → Night Sky; Snowpack → Rivers/Trails; Smoke → outdoor timing/Night Sky; Frost → Planting; Rivers → precipitation/snowmelt; Fall → trip-weather context. Avoid generic card walls when a meaningful next decision exists.
+
+## 29. Promotion
+
+Promotion is part of the build.
+
+Execute on-site promotion, sitemap/canonical/structured-data checks, Search Console inspection when available and linkable assets without external authorization.
+
+Research earned-promotion targets and prepare outreach drafts, but **never send external outreach email without Chris's explicit approval**.
+
+## 30. Seasonal calendar
+
+Build before demand peaks:
+- Winter: snow depth, snowpack, trail snow, aurora, freeze, supported river-ice context.
+- Spring: frost, planting, snowmelt, rivers, trail mud, high water.
+- Summer: smoke, wildfire, heat, coastal conditions, rivers, outdoor windows.
+- Fall: foliage, frost, smoke/fire where relevant, outdoor travel, aurora.
+
+## 31. Advertising architecture
+
+Advertising follows utility. Never place ads before the primary answer, between a warning and explanation, inside critical controls, where it resembles official data or where it harms mobile usability. Prefer inventory after the initial answer and between deeper modules/support content.
+
+Optimize qualified sessions, repeat frequency, pages/session, seasonality, viewability and performance — not ads per page.
+
+## 32. Analytics
+
+Measure:
+- location-resolution success;
+- first useful answer rendered;
+- source degradation;
+- selected river/station or activity lens;
+- transitions between tools;
+- repeat usage;
+- saved places;
+- shares;
+- long-tail → tool conversion;
+- result depth;
+- privacy-safe return behavior.
+
+Never send raw coordinates, ZIPs, saved place names or precise device position.
+
+## 33. Growth measurement
+
+Track per product:
+- Google impressions/day;
+- clicks/day;
+- CTR;
+- median rank;
+- indexed pages;
+- organic landings;
+- engagement;
+- transitions;
+- repeat use;
+- source reliability;
+- page performance.
+
+Network funnel:
+
+**Impressions → clicks → useful answers → second decisions → repeat visits → monetizable pageviews**
+
+Find the bottleneck. Do not celebrate impressions with collapsing CTR or traffic without tool use.
+
+## 34. Build sequence
+
+Unless research materially changes it:
+- Phase 0: audit/harden existing five national products and source lifecycles, especially USGS.
+- Phase 1: evolve `/national-tools/` into the Decision Desk by reusing existing products.
+- Phase 2: Smoke & Clear-Air if supported interfaces and credentials pass.
+- Phase 3: Coastal Water Window.
+- Phase 4: Snowpack + Melt; decide whether trail surface is a canonical or activity lens.
+- Phase 5: Wildfire Trip Impact if incident/closure integration passes source audit.
+- Phase 6: deepen existing products with cross-source intelligence.
+
+Rerun the candidate matrix at every phase. Search evidence and source reliability may change the order.
+
+## 35. End-to-end execution loop
+
+For every expansion:
+1. Inspect current main, routes, APIs, experiments and benchmarks.
+2. Research intent, competition, datasets, source viability and freshness.
+3. Score Product Value + Loss + Search Opportunity internally.
+4. Select the highest-value candidate without vetoes.
+5. Design decision statement, data contract, failure state, canonical ownership and long-tail architecture.
+6. Build backend, caching, deterministic synthesis and responsive UI.
+7. Integrate shared place state, Decision Desk, cross-tool links and analytics.
+8. Search-optimize metadata, crawlable content, schema, sitemap and OG.
+9. Test unit, integration, failure, freshness, multi-region, accessibility and mobile.
+10. Benchmark internally.
+11. Run all repository verification.
+12. Prepare a PR. Follow `AGENTS.md` for merge authority.
+13. After merge, verify production deployment.
+14. Production-smoke real public URLs/live behavior.
+15. Execute internal promotion and prepare external opportunities.
+16. Record baselines.
+17. Improve from actual impressions, CTR and usage.
+
+Then repeat.
+
+## 36. Required state after each execution
+
+Leave behind where applicable:
+- production-ready code;
+- normalized source adapters;
+- source/freshness documentation;
+- automated tests;
+- machine-readable benchmarks;
+- current master doctrine;
+- search metadata/schema/sitemap;
+- analytics;
+- internal links;
+- Decision Desk integration;
+- promotion assets;
+- baseline metrics;
+- production verification;
+- public URLs after merge.
+
+State clearly what shipped, what deliberately did not ship, what data are live/derived/forecast, what degraded, source/API risk and the next highest-value move.
+
+## 37. Final product principle
+
+Do not beat NOAA at weather, USGS at gauges, NASA at satellite fire detection or EPA at AQI.
+
+Build the layer those systems generally do not provide:
+
+**What do these signals mean together, for this place, at this moment, for the outdoor decision I am trying to make?**
+
+That is the product moat. Search compounds through changing local decisions; retention compounds because conditions change every day.
+
+The recurring user questions are:
+
+**Should I go? When should I go? Where should I go? What changed? What should I pay attention to next?**
 
 ### Core-before-enrichment rule
-Core decision data must not wait on optional enrichment. If a tool has a fast authoritative observation and slower secondary context, render the observation first and load enrichment independently. Secondary-source latency or failure must never blank the primary decision surface.
 
-Slow discovery may be precomputed, but condition values must remain live. If an authoritative discovery endpoint cannot reliably meet the interaction latency budget, maintain a source-backed local index for identifiers and coordinates, refresh it deliberately, and still fetch current observations live from the authoritative source by exact identifier.
-
+Core authoritative decision data must not wait on optional enrichment. Slow discovery may be precomputed, but selected condition values remain exact and current. Optional enrichment fails independently.
 
 ### Measurement before expansion
 
-Use the site's existing Vercel Analytics channel to measure whether the national platform is actually helping people before expanding canonical URL families.
-
-Measure:
-- successful vs failed location resolution;
-- transitions between national tools;
-- saved-place use;
-- outdoor-desk input health.
-
-Privacy is a hard boundary. Analytics event properties must not contain raw city or ZIP text, display names, latitude/longitude, postal codes, or saved-place names. Location is product state, not an analytics identity.
-
-Measurement can supply evidence to `benchmarks/national-location-admission.json`; it does not itself make a city, ZIP, river, or crop page eligible for indexing.
+Use existing Vercel Analytics to measure location resolution, tool transitions, saved-place use and Decision Desk source health. Location state is product state, not analytics identity. Measurement informs but does not itself grant indexability.

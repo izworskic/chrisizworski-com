@@ -72,6 +72,68 @@ test('expanded USGS parameter contract includes observations but not inferred ac
   });
 });
 
+test('modern USGS continuous GeoJSON normalizes exact-site flow, stage and sensor readings',()=>{
+  const sites=[{id:'04157000',name:'SAGINAW RIVER AT SAGINAW, MI',latitude:43.43,longitude:-83.94,distance_miles:2.5}];
+  const feature=(parameter_code,value,time,unit_of_measure='ft^3/s',extra={})=>({
+    type:'Feature',
+    properties:{
+      monitoring_location_id:'USGS-04157000',
+      time_series_id:'ts-'+parameter_code,
+      parameter_code,
+      value:String(value),
+      time,
+      unit_of_measure,
+      approval_status:'Provisional',
+      qualifier:null,
+      ...extra
+    }
+  });
+  const payload={type:'FeatureCollection',features:[
+    feature('00060',800,'2026-08-30T16:00:00Z'),
+    feature('00060',900,'2026-08-31T10:00:00Z'),
+    feature('00060',1000,'2026-08-31T16:00:00Z'),
+    feature('00065',14,'2026-08-30T16:00:00Z','ft'),
+    feature('00065',14.5,'2026-08-31T16:00:00Z','ft'),
+    feature('00010',20,'2026-08-31T16:00:00Z','degC')
+  ]};
+  const [g]=rivers.normalize(payload,sites);
+  assert.equal(g.discharge_cfs,1000);
+  assert.equal(g.trend_percent_6h,11);
+  assert.equal(g.trend_percent_24h,25);
+  assert.equal(g.gage_height_ft,14.5);
+  assert.equal(g.gage_height_change_24h_ft,0.5);
+  assert.equal(g.water_temp_f,68);
+  assert.ok(g.qualifiers.includes('P'));
+});
+
+test('modern USGS statistics response maps same-day percentile arrays without inventing missing values',()=>{
+  const payload={data:[{
+    monitoring_location_id:'USGS-04157000',
+    time_of_year:'09-02',
+    time_of_year_type:'day_of_year',
+    percentiles:['5','10','25','50','75','90','95'],
+    values:['700','800','900','1000','1200','1400','1600'],
+    sample_count:42
+  }]};
+  const stats=context.parseStatistics(payload,new Date('2026-09-02T12:00:00Z')).get('04157000');
+  assert.deepEqual(
+    {p10:stats.p10,p25:stats.p25,p50:stats.p50,p75:stats.p75,p90:stats.p90,count:stats.count},
+    {p10:800,p25:900,p50:1000,p75:1200,p90:1400,count:42}
+  );
+});
+
+test('river runtime and index generator no longer call retiring USGS WaterServices',()=>{
+  const runtime=fs.readFileSync(require.resolve('../api/national-rivers.js'),'utf8');
+  const enrichment=fs.readFileSync(require.resolve('../api/national-river-context.js'),'utf8');
+  const generator=fs.readFileSync(require.resolve('../scripts/generate-national-usgs-streamflow-index.mjs'),'utf8');
+  assert.doesNotMatch(runtime,/waterservices\.usgs\.gov/);
+  assert.doesNotMatch(enrichment,/waterservices\.usgs\.gov/);
+  assert.doesNotMatch(generator,/waterservices\.usgs\.gov/);
+  assert.match(runtime,/api\.waterdata\.usgs\.gov\/ogcapi\/v0\/collections\/continuous\/items/);
+  assert.match(enrichment,/api\.waterdata\.usgs\.gov\/statistics\/v0\/observationNormals/);
+  assert.match(generator,/latest-continuous\/items/);
+});
+
 test('normalizer calculates 6h/24h flow movement and preserves exact-site stage',()=>{
   const sites=[{id:'04157000',name:'SAGINAW RIVER AT SAGINAW, MI',latitude:43.43,longitude:-83.94,distance_miles:2.5}];
   const payload={value:{timeSeries:[

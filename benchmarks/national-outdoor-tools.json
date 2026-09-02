@@ -1,27 +1,38 @@
 {
-  "version": "1.7.0",
-  "updated": "2026-08-31",
-  "objective": "Ship a separate U.S. outdoor decision network without weakening Michigan canonicals, source truth, or search quality.",
+  "version": "2.0.0",
+  "updated": "2026-09-02",
+  "objective": "Build a national outdoor decision-intelligence network that turns authoritative public data into explainable, place-specific decisions without weakening Michigan canonicals, source truth, or search quality.",
   "lossFunction": {
-    "factualDataIntegrity": 25,
-    "michiganCannibalizationExperimentProtection": 20,
-    "decisionUsefulness": 15,
-    "freshnessFailureTransparency": 10,
-    "sourceLicensingIntegrity": 10,
-    "searchDistinctValue": 10,
-    "performanceAccessibility": 5,
-    "sharedPlatformMaintainability": 5,
+    "dataFactualIntegrityRisk": 20,
+    "canonicalSearchCannibalization": 15,
+    "thinProgrammaticPageRisk": 15,
+    "falseCertaintyMisleadingSynthesis": 10,
+    "staleFailureStateWeakness": 10,
+    "dependencyApiSustainabilityRisk": 10,
+    "uxPerformanceComplexity": 8,
+    "searchIntentMismatch": 7,
+    "maintenanceBurden": 5,
     "total": 100
   },
   "hardVetoes": [
-    "no-fake-live-values",
-    "no-river-safety-score",
-    "no-kp-as-local-probability",
-    "no-hardiness-as-frost-date",
-    "no-fake-foliage-precision",
-    "no-doorway-location-pages",
+    "no-fabricated-live-data",
+    "no-silently-stale-live-data",
+    "no-derived-result-masquerading-as-agency-forecast",
+    "no-universal-recreation-safety-score",
+    "no-mass-generated-location-doorways",
+    "no-duplicate-national-canonicals",
     "no-michigan-canonical-clones",
-    "no-silent-stale-defaults"
+    "no-unsupported-wildfire-movement-claims",
+    "no-unsupported-flood-predictions",
+    "no-unsupported-trail-condition-certainty",
+    "no-unsupported-fish-bite-scores",
+    "no-unsupported-landscape-foliage-percentages",
+    "no-kp-as-local-aurora-probability",
+    "no-hardiness-zone-as-frost-date",
+    "no-missing-data-as-neutral-value",
+    "no-client-side-secrets",
+    "no-precise-location-in-analytics",
+    "no-ai-invented-environmental-conclusions"
   ],
   "phase1": [
     {
@@ -148,6 +159,125 @@
       "rule": "Compare the same five source-backed signals side by side without producing an overall winner, universal score, or safety determination.",
       "measurement": "A comparison event may record signal count only; selected place identities remain excluded from analytics.",
       "indexability": "Comparison is local UI state on the canonical hub and creates no new indexable URL."
+    }
+  },
+  "phase0": {
+    "status": "merge-ready-pending-main",
+    "sourceLifecycleContract": "benchmarks/national-source-lifecycle.json",
+    "usgs": {
+      "continuousRuntime": "migrated-to-water-data-ogc-continuous",
+      "statisticsRuntime": "migrated-to-water-data-statistics-observationNormals-beta",
+      "discoveryGenerator": "migrated-to-water-data-latest-continuous",
+      "checkedInDiscoveryIndex": "legacy-provenance-static-snapshot-until-regenerated",
+      "rule": "No production runtime request or future index generation may depend on waterservices.usgs.gov."
+    },
+    "smokePrerequisites": {
+      "airNow": "supported-interface-audited-source-key-gated",
+      "firms": "map-key-gated-no-new-snpp-dependency",
+      "routeStatus": "not-created"
+    },
+    "verification": {
+      "fullRepositoryGate": "required-and-passing-before-merge",
+      "nationalToolsBenchmarkTarget": 100,
+      "nationalHubsBenchmarkTarget": 100,
+      "nameSerpProtection": "required-and-passing-before-merge",
+      "vercelPreview": "required-and-passing-before-merge",
+      "productionSmoke": "run-after-merge-against-public-origin"
+    }
+  },
+  "productValueFunction": {
+    "realUserDecisionUsefulness": 20,
+    "organicSearchOpportunity": 15,
+    "noveltyOfMultiSourceSynthesis": 15,
+    "changingDataFrequency": 10,
+    "repeatUsePotential": 10,
+    "nationalGeographicReach": 8,
+    "defensibilityVsOrdinaryContent": 7,
+    "existingNetworkSynergy": 5,
+    "longTailExpansionPotential": 5,
+    "monetizationPageDepthFit": 3,
+    "dataSustainabilityCost": 2,
+    "total": 100,
+    "normalNewFamilyMinimum": 82,
+    "priorityThreshold": 88
+  },
+  "productionBenchmark": {
+    "overallTarget": 92,
+    "hardGates": [
+      "factual-source-integrity",
+      "canonical-cannibalization-integrity"
+    ],
+    "dimensions": {
+      "factualSourceIntegrity": {
+        "target": 100,
+        "hardGate": true
+      },
+      "freshnessTransparency": {
+        "target": 95
+      },
+      "decisionUsefulness": {
+        "target": 90
+      },
+      "distinctSearchIntent": {
+        "target": 90
+      },
+      "firstScreenUsefulness": {
+        "target": 90
+      },
+      "failureDegradationBehavior": {
+        "target": 95
+      },
+      "mobileUsability": {
+        "target": 90
+      },
+      "accessibility": {
+        "target": 90
+      },
+      "performance": {
+        "target": 90
+      },
+      "internalNetworkIntegration": {
+        "target": 90
+      },
+      "analyticsCoverage": {
+        "target": 90
+      },
+      "canonicalCannibalizationIntegrity": {
+        "target": 100,
+        "hardGate": true
+      }
+    }
+  },
+  "searchOpportunityMatrix": {
+    "minimumScore": 80,
+    "weights": {
+      "searchEvidence": 25,
+      "distinctIntent": 15,
+      "uniqueLocalizedDataAnswer": 15,
+      "toolConversionOpportunity": 10,
+      "repeatUsage": 10,
+      "internalNetworkRelevance": 10,
+      "competitionVulnerability": 5,
+      "backlinkSharePotential": 5,
+      "monetizationFit": 5
+    },
+    "rule": "A score of 80 is necessary but not sufficient; canonical, source, truth and thin-page hard gates still apply."
+  },
+  "lossThresholds": {
+    "excellent": {
+      "min": 0,
+      "max": 10
+    },
+    "acceptableProduction": {
+      "min": 11,
+      "max": 15
+    },
+    "redesignBeforeMajorSearchExpansion": {
+      "min": 16,
+      "max": 25
+    },
+    "doNotShip": {
+      "greaterThan": 25
     }
   }
 }

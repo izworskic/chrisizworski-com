@@ -2,8 +2,8 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const SITE = "https://waterservices.usgs.gov/nwis/site/";
-const UA = "ChrisIzworskiNationalRiverIndex/1.0 (+https://chrisizworski.com/national-tools/rivers/)";
+const LATEST = "https://api.waterdata.usgs.gov/ogcapi/v0/collections/latest-continuous/items";
+const UA = "ChrisIzworskiNationalRiverIndex/2.0 (+https://chrisizworski.com/national-tools/rivers/)";
 const STATE_FIPS = [
   "01","02","04","05","06","08","09","10","11","12","13","15","16","17","18","19",
   "20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35",
@@ -13,64 +13,76 @@ const STATE_FIPS = [
 const CONCURRENCY = 4;
 const MAX_ATTEMPTS = 4;
 const TIMEOUT_MS = 30000;
+const RECENT_DAYS = 14;
 const OUTPUT = path.resolve("public/data/national-usgs-streamflow-sites.json");
 
 function finite(value, min = -Infinity, max = Infinity) {
   const n = Number(value);
   return Number.isFinite(n) && n >= min && n <= max ? n : null;
 }
-function parseRdb(body, stateFips) {
-  const lines = String(body || "").split(/\r?\n/).filter(Boolean);
-  const hi = lines.findIndex((line) => !line.startsWith("#") && line.includes("site_no") && line.includes("station_nm"));
-  if (hi < 0) return [];
-  const headers = lines[hi].split("\t");
-  const index = (name) => headers.indexOf(name);
-  const idI = index("site_no");
-  const nameI = index("station_nm");
-  const latI = index("dec_lat_va");
-  const lonI = index("dec_long_va");
-  if ([idI, nameI, latI, lonI].some((i) => i < 0)) return [];
-  return lines.slice(hi + 2)
-    .filter((line) => line && !line.startsWith("#"))
-    .map((line) => line.split("\t"))
-    .map((parts) => ({
-      id: parts[idI],
-      name: parts[nameI],
-      latitude: finite(parts[latI], -90, 90),
-      longitude: finite(parts[lonI], -180, 180),
-      state_fips: stateFips,
-    }))
-    .filter((site) => site.id && site.name && site.latitude != null && site.longitude != null);
+function normalizeSite(feature, stateFips, now = Date.now()) {
+  const row = feature?.properties || {};
+  const coordinates = feature?.geometry?.coordinates || [];
+  const id = String(row.monitoring_location_number || row.monitoring_location_id || "")
+    .replace(/^USGS-/, "");
+  const observedAt = Date.parse(row.time || "");
+  const cutoff = now - RECENT_DAYS * 86400000;
+  const site = {
+    id,
+    name: String(row.monitoring_location_name || "").trim(),
+    latitude: finite(coordinates[1], -90, 90),
+    longitude: finite(coordinates[0], -180, 180),
+    state_fips: stateFips,
+  };
+  if (!/^\d{5,15}$/.test(site.id) || !site.name || site.latitude == null || site.longitude == null) return null;
+  if (!Number.isFinite(observedAt) || observedAt < cutoff) return null;
+  return site;
+}
+function nextHref(payload) {
+  return (payload?.links || []).find((link) => link?.rel === "next" && /^https:\/\/api\.waterdata\.usgs\.gov\//.test(link?.href || ""))?.href || null;
 }
 async function sleep(ms) {
   await new Promise((resolve) => setTimeout(resolve, ms));
 }
-async function fetchState(stateFips) {
-  const url = new URL(SITE);
-  url.searchParams.set("format", "rdb");
-  url.searchParams.set("stateCd", stateFips);
-  url.searchParams.set("siteType", "ST");
-  url.searchParams.set("siteStatus", "active");
-  url.searchParams.set("hasDataTypeCd", "iv");
-  url.searchParams.set("parameterCd", "00060");
-
+async function fetchJson(url) {
   let lastError = null;
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     try {
+      const headers = { accept: "application/json", "user-agent": UA };
+      if (process.env.USGS_API_KEY) headers["X-Api-Key"] = process.env.USGS_API_KEY;
       const response = await fetch(url, {
-        headers: { accept: "text/plain", "user-agent": UA },
+        headers,
         signal: AbortSignal.timeout(TIMEOUT_MS),
       });
-      if (response.status === 404) return [];
-      if (!response.ok) throw new Error(`USGS site service returned ${response.status}`);
-      const body = await response.text();
-      return parseRdb(body, stateFips);
+      if (response.status === 404) return null;
+      if (!response.ok) throw new Error(`USGS Water Data API returned ${response.status}`);
+      return response.json();
     } catch (error) {
       lastError = error;
       if (attempt < MAX_ATTEMPTS) await sleep(750 * attempt);
     }
   }
-  throw new Error(`${stateFips}: ${String(lastError?.message || lastError)}`);
+  throw lastError;
+}
+async function fetchState(stateFips) {
+  const first = new URL(LATEST);
+  first.searchParams.set("f", "json");
+  first.searchParams.set("state_code", stateFips);
+  first.searchParams.set("site_type_code", "ST");
+  first.searchParams.set("parameter_code", "00060");
+  first.searchParams.set("limit", "10000");
+  first.searchParams.set("properties", "monitoring_location_id,monitoring_location_number,monitoring_location_name,time,state_code,site_type_code,parameter_code");
+
+  const features = [];
+  let url = first.toString();
+  for (let page = 0; url && page < 20; page++) {
+    const payload = await fetchJson(url);
+    if (!payload) return [];
+    features.push(...(payload.features || []));
+    url = nextHref(payload);
+  }
+  if (url) throw new Error(`${stateFips}: latest-continuous pagination exceeded safety cap`);
+  return features.map((feature) => normalizeSite(feature, stateFips)).filter(Boolean);
 }
 
 const results = new Array(STATE_FIPS.length);
@@ -82,7 +94,7 @@ async function worker() {
     const state = STATE_FIPS[index];
     const sites = await fetchState(state);
     results[index] = { state, sites };
-    process.stdout.write(`${state}: ${sites.length} sites\n`);
+    process.stdout.write(`${state}: ${sites.length} recently reporting streamflow sites\n`);
   }
 }
 await Promise.all(Array.from({ length: CONCURRENCY }, () => worker()));
@@ -95,19 +107,18 @@ for (const result of results) {
 }
 const sites = [...byId.values()].sort((a, b) => a.id.localeCompare(b.id));
 if (sites.length < 5000) {
-  throw new Error(`Generated only ${sites.length} active streamflow sites; refusing to publish an incomplete national index.`);
+  throw new Error(`Generated only ${sites.length} recently reporting streamflow sites; refusing to publish an incomplete national index.`);
 }
 
 const payload = {
-  version: 1,
+  version: 2,
   generated_at: new Date().toISOString(),
-  source_name: "USGS Site Service",
-  source_url: SITE,
+  source_name: "USGS Water Data APIs — latest continuous",
+  source_url: LATEST,
   criteria: {
-    siteType: "ST",
-    siteStatus: "active",
-    hasDataTypeCd: "iv",
-    parameterCd: "00060",
+    site_type_code: "ST",
+    parameter_code: "00060",
+    latest_observation_within_days: RECENT_DAYS,
   },
   states_requested: STATE_FIPS,
   site_count: sites.length,

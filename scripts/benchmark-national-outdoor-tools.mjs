@@ -5,6 +5,8 @@ import path from "node:path";
 const root = path.resolve(import.meta.dirname, "..");
 const read = (rel) => readFile(path.join(root, rel), "utf8");
 const contract = JSON.parse(await read("benchmarks/national-outdoor-tools.json"));
+const lifecycle = JSON.parse(await read("benchmarks/national-source-lifecycle.json"));
+const candidates = JSON.parse(await read("benchmarks/national-intelligence-candidates-2026-09-02.json"));
 const cropData = JSON.parse(await read("public/data/national-planting-crops.json"));
 const riverIndex = JSON.parse(await read("public/data/national-usgs-streamflow-sites.json"));
 const riverIndexGenerator = await read("scripts/generate-national-usgs-streamflow-index.mjs");
@@ -50,8 +52,24 @@ const lossTotal = Object.entries(contract.lossFunction)
   .filter(([key]) => key !== "total")
   .reduce((sum, [, value]) => sum + value, 0);
 check("Loss function totals 100", lossTotal === 100 && contract.lossFunction.total === 100, 5, String(lossTotal));
+const valueTotal = Object.entries(contract.productValueFunction || {})
+  .filter(([key]) => !["total","normalNewFamilyMinimum","priorityThreshold"].includes(key))
+  .reduce((sum, [, value]) => sum + (Number.isFinite(value) ? value : 0), 0);
+const searchOpportunityTotal = Object.values(contract.searchOpportunityMatrix?.weights || {})
+  .reduce((sum, value) => sum + value, 0);
+check("Product value function totals 100", valueTotal === 100 && contract.productValueFunction?.total === 100, 5, String(valueTotal));
+check("Search opportunity matrix totals 100", searchOpportunityTotal === 100 && contract.searchOpportunityMatrix?.minimumScore === 80, 4, String(searchOpportunityTotal));
+check("Production benchmark preserves 92 target and both hard gates", contract.productionBenchmark?.overallTarget === 92 && contract.productionBenchmark?.dimensions?.factualSourceIntegrity?.hardGate === true && contract.productionBenchmark?.dimensions?.canonicalCannibalizationIntegrity?.hardGate === true, 4);
+check("Candidate discovery wave contains at least 20 researched combinations", Array.isArray(candidates.candidates) && candidates.candidates.length >= 20, 5, String(candidates.candidates?.length || 0));
+check("Smoke remains blocked until credentials and supported interfaces pass", candidates.decision?.blockedHighestValue === "smoke-clear-air" && candidates.candidates.some((candidate) => candidate.id === "smoke-clear-air" && /^blocked-/.test(candidate.gate)), 4);
+check("Coastal is the next eligible standalone after the source audit", candidates.decision?.nextEligibleStandalone === "coastal-water-window" && candidates.candidates.some((candidate) => candidate.id === "coastal-water-window" && candidate.gate === "eligible"), 4);
+check("Candidate matrix forbids location-page expansion by score alone", /No candidate authorizes location-page generation/.test(candidates.decision?.longTailRule || ""), 3);
 check("Phase 2 adds no indexable route family", contract.indexPolicy?.phase2AddsIndexableRoutes === false, 4);
 check("Phase 3 adds no indexable route family", contract.indexPolicy?.phase3AddsIndexableRoutes === false, 4);
+check("Phase 0 source lifecycle contract is current", lifecycle.updated === "2026-09-02" && contract.phase0?.sourceLifecycleContract === "benchmarks/national-source-lifecycle.json", 4);
+check("USGS production runtime is off retiring WaterServices", !/waterservices\.usgs\.gov/.test(apis.rivers + apis.riverContext + riverIndexGenerator) && lifecycle.sources?.usgsContinuous?.status === "migrated" && lifecycle.sources?.usgsStatistics?.status === "migrated-beta", 8);
+check("Smoke remains credential-gated on supported source families", lifecycle.sources?.airNow?.status === "source-key-gated" && lifecycle.sources?.nasaFirms?.status === "source-key-gated" && contract.phase2?.smokeAirQuality?.indexableRouteCreated === false, 5);
+check("FIRMS lifecycle avoids new Suomi-NPP dependency", /NOAA20/.test(JSON.stringify(lifecycle.sources?.nasaFirms)) && /NOAA21/.test(JSON.stringify(lifecycle.sources?.nasaFirms)) && /November 1, 2026/.test(lifecycle.sources?.nasaFirms?.lifecycle || ""), 3);
 
 const routes = [
   "/national-tools/",
@@ -123,19 +141,19 @@ check("Aurora exposes NOAA auroral oval visual", /national-oval-img/.test(pages.
 check("Auroral oval does not become fake sighting probability", /not a sighting probability/i.test(pages.aurora) && /modeled intensity/i.test(pages.aurora), 4);
 check("National entry pages cache-bust shared runtime assets", Object.values(pages).every((body) => /national-tools\.js\?v=[^"']+/.test(body)), 3);
 
-check("Rivers preserve same-date historical percentiles in optional context", /dailyStatistics/.test(apis.riverContext) && /p10,p25,p50,p75,p90/i.test(apis.riverContext) && /historical_daily_flow/.test(pages.rivers), 5);
+check("Rivers preserve same-date historical percentiles in optional context", /dailyStatistics/.test(apis.riverContext) && /p10:/.test(apis.riverContext) && /p25:/.test(apis.riverContext) && /p50:/.test(apis.riverContext) && /p75:/.test(apis.riverContext) && /p90:/.test(apis.riverContext) && /historical_daily_flow/.test(pages.rivers), 5);
 check("River discovery index has national depth", riverIndex.site_count >= 9000 && Array.isArray(riverIndex.sites) && riverIndex.sites.length === riverIndex.site_count, 5, String(riverIndex.site_count));
-check("River discovery index is source-backed active USGS streamflow inventory", riverIndex.source_name === "USGS Site Service" && /waterservices\.usgs\.gov\/nwis\/site/.test(riverIndex.source_url || "") && riverIndex.criteria?.siteType === "ST" && riverIndex.criteria?.siteStatus === "active" && riverIndex.criteria?.hasDataTypeCd === "iv" && riverIndex.criteria?.parameterCd === "00060", 5);
-check("River index generator preserves USGS source criteria", /nwis\/site/.test(riverIndexGenerator) && /siteStatus.*active/s.test(riverIndexGenerator) && /parameterCd.*00060/s.test(riverIndexGenerator) && /siteType.*ST/s.test(riverIndexGenerator), 4);
+check("Checked-in river discovery index retains explicit source provenance until regenerated", Boolean(riverIndex.source_name) && /^https:\/\//.test(riverIndex.source_url || "") && Array.isArray(riverIndex.sites), 3);
+check("River index generator uses modern USGS latest-continuous discovery", /api\.waterdata\.usgs\.gov\/ogcapi\/v0\/collections\/latest-continuous\/items/.test(riverIndexGenerator) && /state_code/.test(riverIndexGenerator) && /site_type_code/.test(riverIndexGenerator) && /parameter_code/.test(riverIndexGenerator) && /RECENT_DAYS = 14/.test(riverIndexGenerator), 6);
 check("River discovery uses local national index before live detail", /national-usgs-streamflow-sites\.json/.test(apis.rivers) && /function discoveryRivers/.test(apis.rivers) && /mode === "discovery"/.test(apis.rivers) && /distance_miles/.test(apis.rivers), 5);
-check("River core has no live gauge-discovery network call", !/const\s+SITE\s*=/.test(apis.rivers) && !/new URL\([^)]*nwis\/site/.test(apis.rivers) && !/bBox/.test(apis.rivers) && !/siteSearch/.test(apis.rivers), 6);
-check("River live request remains exact-site USGS IV", /nwis\/iv/.test(apis.rivers) && /searchParams\.set\("sites"/.test(apis.rivers) && /searchParams\.set\("period", "P1D"\)/.test(apis.rivers), 5);
-check("River exact-site observation request has bounded timeout", /observations\(coreSites, coreParameters, 1400\)/.test(apis.rivers) && /observations\(sensorSites, Object\.values\(PARAMETERS\), 1200\)/.test(apis.rivers) && /AbortSignal\.timeout\(timeoutMs\)/.test(apis.rivers), 4);
+check("River core has no live gauge-discovery network call", !/latest-continuous/.test(apis.rivers) && !/monitoring-locations\/items/.test(apis.rivers) && !/bBox/.test(apis.rivers) && !/siteSearch/.test(apis.rivers), 6);
+check("River live request uses modern exact-site USGS continuous API", /api\.waterdata\.usgs\.gov\/ogcapi\/v0\/collections\/continuous\/items/.test(apis.rivers) && /monitoring_location_id/.test(apis.rivers) && /application\/query-cql-json/.test(apis.rivers) && /between/.test(apis.rivers), 6);
+check("River exact-site observation request has bounded timeout", /observations\(coreSites, coreParameters, 2600\)/.test(apis.rivers) && /observations\(sensorSites, Object\.values\(PARAMETERS\), 2200\)/.test(apis.rivers) && /AbortSignal\.timeout\(timeoutMs\)/.test(apis.rivers), 4);
 check("River core adds real multi-signal USGS parameters", ["00010","63680","00300","00095","00400"].every((code) => apis.rivers.includes(code)) && /sensor_availability/.test(apis.rivers), 6);
 check("River sensor values are conditional rather than fabricated defaults", /water_temperature:\s*null/.test(apis.rivers) && /turbidity:\s*null/.test(apis.rivers) && /dissolved_oxygen:\s*null/.test(apis.rivers) && /specific_conductance:\s*null/.test(apis.rivers) && /ph:\s*null/.test(apis.rivers), 5);
 check("River core computes observed 6h and 24h change", /trend_percent_6h/.test(apis.rivers) && /trend_percent_24h/.test(apis.rivers) && /gage_height_change_24h_ft/.test(apis.rivers), 5);
 check("River core excludes historical NOAA and weather network calls", !/nwis\/stat/.test(apis.rivers) && !/api\.water\.noaa\.gov/.test(apis.rivers) && !/api\.weather\.gov/.test(apis.rivers) && /context_pending/.test(apis.rivers), 5);
-check("River optional context carries USGS history NOAA NWPS and NWS weather", /nwis\/stat/.test(apis.riverContext) && /api\.water\.noaa\.gov/.test(apis.riverContext) && /api\.weather\.gov/.test(apis.riverContext) && /stageflow\/forecast/.test(apis.riverContext) && /weatherContext/.test(apis.riverContext), 6);
+check("River optional context carries modern USGS history, NOAA NWPS and NWS weather", /statistics\/v0\/observationNormals/.test(apis.riverContext) && /api\.water\.noaa\.gov/.test(apis.riverContext) && /api\.weather\.gov/.test(apis.riverContext) && /stageflow\/forecast/.test(apis.riverContext) && /weatherContext/.test(apis.riverContext), 6);
 check("River official forecast trajectory stays distinct from observations", /normalizeForecastTrend/.test(apis.riverContext) && /forecast_trend/.test(apis.riverContext) && /Official forecast trend/.test(pages.rivers), 4);
 check("River UI is discovery-first and supports repeated river switching", /mode=discovery/.test(pages.rivers) && /function renderDiscovery/.test(pages.rivers) && /function openSelectedSite/.test(pages.rivers) && /data-site-id/.test(pages.rivers) && /site="\+encodeURIComponent\(siteId\)/.test(pages.rivers) && /← River list/.test(pages.rivers) && /← Choose another river/.test(pages.rivers) && /function returnToRiverList/.test(pages.rivers), 5);
 check("River UI leads with what changed and what is next", /What changed\?/.test(pages.rivers) && /What’s next\?/.test(pages.rivers) && /Observed movement/.test(pages.rivers), 5);
@@ -210,8 +228,8 @@ check("Fall observation enrichment stays optional and non-peak", contract.phase2
 
 check("Phase 3 measurement is instrumented without raw location payloads", contract.phase3?.measurement?.status === "instrumented-on-existing-vercel-analytics" && /Never send raw city\/ZIP/.test(contract.phase3?.measurement?.privacy || ""), 4);
 const masterPrompt = await read("docs/NATIONAL_OUTDOOR_TOOLS_MASTER_PROMPT.md");
-check("Master prompt remains the build doctrine", masterPrompt.includes("## Loss function") && masterPrompt.includes("## Phase 3 platform interpretation") && masterPrompt.includes("Core decision data must not wait on optional enrichment") && masterPrompt.includes("Slow discovery may be precomputed"), 4);
-check("River product contract forbids nearest-gauge auto-promotion", /Discovery is river-first/.test(masterPrompt) && /Never assume the nearest gauge is the river the user meant/.test(masterPrompt) && /explicit river\/monitoring-point selection/.test(masterPrompt), 4);
+check("Master prompt remains the build doctrine", masterPrompt.includes("## 10. Product Value Function") && masterPrompt.includes("## 11. Loss Function") && masterPrompt.includes("## 14. National Outdoor Decision Desk") && masterPrompt.includes("### Core-before-enrichment rule") && masterPrompt.includes("Core authoritative decision data must not wait on optional enrichment") && masterPrompt.includes("Slow discovery may be precomputed"), 4);
+check("River product contract forbids nearest-gauge auto-promotion", /Preserve river-first discovery/.test(masterPrompt) && /explicit river\/gauge selection/.test(masterPrompt) && /exact monitoring-point retrieval/.test(masterPrompt), 4);
 
 const score = Math.round((rawScore / maxPoints) * 100);
 const summary = { score, rawScore, maxPoints, failures, hardVetoes: contract.hardVetoes };
