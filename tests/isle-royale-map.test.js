@@ -935,3 +935,36 @@ test('multimodal route-builder value function is a 90-point release gate', () =>
   assert.ok(rb.scenarios.some(item=>/different interior waterbodies/i.test(item)));
   assert.ok(rb.scenarios.some(item=>/Chickenbone Lake.*McCargoe Cove.*P11/i.test(item)));
 });
+
+test('the planner is hidden behind one flag while its runtime is kept', () => {
+  const js = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 'utf8');
+
+  assert.match(js, /const PLANNER_ENABLED = false;/);
+  assert.match(js, /if \(!PLANNER_ENABLED\) document\.body\.classList\.add\('planner-off'\)/);
+  // Nothing may enter build mode while it is off, or a map click collects checkpoints against a UI
+  // the visitor cannot see.
+  assert.match(js, /route\.adding=PLANNER_ENABLED\?Boolean\(active\):false;/);
+  for (const surface of ['mode-toggle planner-only', 'route-map-guide planner-only', 'route-build-bar planner-only', 'planning-cockpit planner-only']) {
+    assert.ok(html.includes(surface), `planner surface not flagged: ${surface}`);
+  }
+  assert.match(html, /body\.planner-off \.planner-only\{display:none!important\}/);
+
+  // Kept, not deleted: turning it back on must be the flag, not a rebuild.
+  assert.match(js, /async function resolveCanoeRouteAsync/);
+  assert.match(js, /function autoPortageRouteCandidate/);
+  assert.match(js, /routeAsync/);
+});
+
+test('the map offers satellite imagery and a way past itself', () => {
+  const js = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 'utf8');
+
+  assert.match(html, /id="basemap-imagery"/);
+  assert.match(js, /World_Imagery\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/);
+  assert.match(js, /Imagery &copy; Esri/, 'imagery must carry its attribution');
+  assert.match(js, /localStorage\.setItem\('isle-royale-basemap'/, 'the choice should survive a reload');
+
+  // The map was eating the swipe, so reaching the guide below it cannot depend on one.
+  assert.match(html, /id="map-peek"/);
+  assert.match(js, /document\.getElementById\('map-peek'\)\?\.addEventListener/);
+  assert.match(html, /body\.planner-off \.map-wrap\{height:clamp\(360px,56dvh,540px\)/, 'the map must not fill a phone screen');
+});
