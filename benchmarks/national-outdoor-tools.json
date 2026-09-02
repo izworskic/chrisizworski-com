@@ -1,5 +1,5 @@
 {
-  "version": "2.1.2",
+  "version": "2.2.0",
   "updated": "2026-09-02",
   "objective": "Build a national outdoor decision-intelligence network that turns authoritative public data into explainable, place-specific decisions without weakening Michigan canonicals, source truth, or search quality.",
   "lossFunction": {
@@ -72,7 +72,8 @@
     "generatedLocationPages": false,
     "zipCropDatePages": false,
     "phase2AddsIndexableRoutes": false,
-    "phase3AddsIndexableRoutes": true
+    "phase3AddsIndexableRoutes": true,
+    "phase4AddsIndexableRoutes": true
   },
   "protectedMichiganRoutes": [
     "/tools/",
@@ -301,8 +302,10 @@
       "api": "/api/national-coastal"
     },
     "phase4": {
-      "status": "next-eligible",
-      "scope": "Snowpack + Melt"
+      "status": "implemented-pending-verification",
+      "scope": "Snowpack + Melt",
+      "route": "/national-tools/snow/",
+      "api": "/api/national-snow"
     }
   },
   "coastalProduct": {
@@ -346,5 +349,40 @@
     "fallback": "OpenStreetMap Nominatim for flexible queries and reverse geocoding",
     "edgeRetry": "one client retry for HTTP 502/503/504",
     "rule": "A transient failure from one geocoding dependency must not strand ordinary U.S. city/state or ZIP tool entry."
+  },
+  "snowProduct": {
+    "status": "implemented-pending-verification",
+    "route": "/national-tools/snow/",
+    "api": "/api/national-snow",
+    "canonicalIntent": "U.S. snowpack, snow depth, SWE and snowmelt conditions by location",
+    "sourceFamilies": [
+      "NOAA/NOHRSC provisional snow depth and SWE station observations",
+      "USDA NRCS AWDB / SNOTEL",
+      "NOAA/NWS hourly forecast"
+    ],
+    "sourceLifecycleContract": "benchmarks/national-source-lifecycle.json",
+    "geography": {
+      "nohrscContextRadiusMiles": 120,
+      "localDecisionRadiusMiles": 60,
+      "snotelContextRadiusMiles": 150,
+      "rule": "Source proximity is not local pack truth. Stations outside 60 miles may be shown only as regional context and cannot drive a local pack-phase conclusion."
+    },
+    "decisionOrder": [
+      "nearby measured snowpack",
+      "recent measured pack change",
+      "local 48-hour NWS temperature and precipitation wording",
+      "transparent derived melt/refreeze/retention interpretation"
+    ],
+    "hardRules": [
+      "NOHRSC station observations remain labeled unofficial and provisional.",
+      "No nearby SNOTEL station is never interpreted as no snow.",
+      "Missing measured snowpack remains unavailable rather than zero or favorable.",
+      "Melt pressure is a transparent site-derived interpretation and never masquerades as a NOAA, NWS or NRCS snowmelt forecast.",
+      "Snow does not infer avalanche danger, groomed-trail condition, road access, ice safety or a universal recreation safety score.",
+      "Snowmelt context does not predict river response; Rivers retains measured flow and official forecast intent.",
+      "No Snow candidate authorizes generated city, ZIP or resort location pages."
+    ],
+    "dashboardBehavior": "Optional Snow card only when current measured pack is present or the local NWS forecast contains a snow signal. Otherwise the five core cards remain, with Coastal separately optional where applicable.",
+    "cannibalizationBoundary": "National Snow owns measured snowpack plus weather-driven melt/refreeze context. Michigan XC tools retain trail/grooming/ski-planning intent; Rivers retains flow and official flood/river forecast intent."
   }
 }
