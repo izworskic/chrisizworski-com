@@ -101,20 +101,22 @@ check(
 );
 
 check(
-  "Tool registry carries the attributed measurement contract",
-  registryEntry?.searchTreatment?.status === "active-measurement-window" &&
-    registryEntry?.searchTreatment?.launchPages === 54 &&
-    registryEntry?.searchTreatment?.measurementContract ===
-      "https://michiganoutdoorsnow.chrisizworski.com/growth-manifest.json" &&
-    registryEntry?.measurement?.decisionWindowDays === 28,
+  "Tool registry carries the attributed measurement contract in ordinary observation mode",
+  registryEntry?.searchTreatment?.status === "active" &&
+    registryEntry?.measurement?.decisionWindowDays === 28 &&
+    registryEntry?.measurement?.search === "Google Search Console page × query" &&
+    registryEntry?.measurement?.product === "Vercel fixed-label events" &&
+    /Hold the 54-page cluster stable/.test(registryEntry?.searchEvidence?.nextMeasurement || ""),
   10,
 );
 
 check(
-  "Network action registers the growth loop without pretending it is measured yet",
+  "Network action records the released growth loop in ordinary observation mode",
   repair?.implementationRepo === "izworskic/michigan-outdoors-now" &&
     repair?.implementationPr === 40 &&
-    ["ready-for-release", "released-measuring"].includes(repair?.status),
+    repair?.status === "released" &&
+    repair?.releaseDate === "2026-08-28" &&
+    /no experiment freeze or fixed evaluation window is active/.test(repair?.next || ""),
   10,
 );
 
