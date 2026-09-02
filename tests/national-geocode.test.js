@@ -63,6 +63,8 @@ test("manual geocode parser recognizes city-state and ZIP inputs",()=>{
     state:{code:"OR",fips:"41",name:"Oregon"}
   });
   assert.deepEqual(geo.parseManualQuery("97201"),{kind:"zip",zip:"97201"});
+  assert.deepEqual(geo.stateInfo("Michigan"),{code:"MI",fips:"26",name:"Michigan"});
+  assert.deepEqual(geo.stateInfo("PR"),{code:"PR",fips:"72",name:"Puerto Rico"});
   assert.equal(geo.parseManualQuery("Portland").kind,"flexible");
 });
 
