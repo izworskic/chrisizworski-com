@@ -46,7 +46,7 @@ for(const p of places){
     if(!x.sources||!x.colored_leaves)throw new Error("missing observation contract");
   });
 }
-for(const route of ["/national-tools/","/national-tools/aurora/","/national-tools/rivers/","/national-tools/frost/","/national-tools/planting/","/national-tools/fall-color/"]){
+for(const route of ["/national-tools/","/national-tools/aurora/","/national-tools/rivers/","/national-tools/frost/","/national-tools/planting/","/national-tools/fall-color/","/national-tools/garden/","/national-tools/fall/","/national-tools/water/","/national-tools/night-sky/"]){
   await check(route+" page",async()=>{
     const body=await get(route,{json:false});
     if(!/<title>[^<]+<\/title>/i.test(body)||!body.includes("Chris Izworski"))throw new Error("page shell incomplete");
