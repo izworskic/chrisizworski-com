@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "updated": "2026-09-02",
   "purpose": "Machine-readable lifecycle and migration audit for national outdoor data dependencies.",
   "sources": {
@@ -120,6 +120,46 @@
       "authentication": "none",
       "rateRule": "Public service use remains at or below one request per second; a single 429/5xx retry waits at least 1.1 seconds.",
       "failureMode": "Nominatim failure must not break ordinary Census-resolvable city/state or ZIP lookups."
+    },
+    "nohrscSnowReports": {
+      "source": "NOAA/National Operational Hydrologic Remote Sensing Center National Snow Analyses",
+      "class": "provisional snow-depth and snow-water-equivalent station observations",
+      "runtimePattern": "https://www.nohrsc.noaa.gov/nsa/discussions_text/National/{snowdepth|swe}/YYYYMM/{variable}_YYYYMMDD06_e.txt",
+      "status": "production-supported",
+      "authentication": "none",
+      "cadence": "Daily 06Z station reports; runtime may fall back up to two prior report days when the newest file is not yet available.",
+      "semantics": "Rows include station identity, latitude, longitude, observation time, amount and units. NOAA labels these station observations unofficial and provisional.",
+      "geographyRule": "Nearest observations may be shown within 120 miles as regional context, but only measured pack within 60 miles can support a local pack-phase/melt interpretation.",
+      "freshnessRule": "Treat the chosen observation as stale after 24 hours.",
+      "failureMode": "NOHRSC failure degrades independently from SNOTEL and NWS; missing observations never become zero snow."
+    },
+    "nrcsAwdbSnow": {
+      "source": "USDA Natural Resources Conservation Service Air and Water Database / SNOTEL",
+      "class": "snow-monitoring station observations",
+      "stationEndpoint": "https://wcc.sc.egov.usda.gov/awdbRestApi/services/v1/stations",
+      "dataEndpoint": "https://wcc.sc.egov.usda.gov/awdbRestApi/services/v1/data",
+      "status": "production-supported",
+      "authentication": "none",
+      "elements": [
+        "SNWD",
+        "WTEQ"
+      ],
+      "semantics": "SNWD is snow depth and WTEQ is snow water equivalent. SNOTEL is a regional monitoring network; no nearby SNOTEL station is not evidence of no snow.",
+      "geographyRule": "Select the nearest active SNOTEL station within 150 miles and always expose station distance. A station beyond the 60-mile Snow decision radius is context only.",
+      "freshnessRule": "Treat daily SNOTEL values as stale after 48 hours.",
+      "failureMode": "SNOTEL failure does not blank NOHRSC or NWS context and never creates a favorable pack state."
+    },
+    "nwsHourlyForecast": {
+      "source": "NOAA/National Weather Service API",
+      "class": "official hourly weather forecast",
+      "pointsEndpoint": "https://api.weather.gov/points/{latitude},{longitude}",
+      "forecastEndpoint": "forecastHourly link returned by the NWS points service",
+      "status": "production-supported",
+      "authentication": "none",
+      "semantics": "Hourly temperature and NWS precipitation/weather wording provide the atmospheric input for the next 48 hours. The Snow product counts freeze/thaw, rain-signal and snow-signal hours without inventing precipitation totals.",
+      "derivedRule": "Melt pressure, refreeze and retention language are site-derived interpretations and must never be presented as an NWS, NOAA or NRCS snowmelt forecast.",
+      "freshnessRule": "Treat the hourly forecast as stale after six hours.",
+      "failureMode": "Forecast failure leaves measured pack visible and prevents unsupported melt conclusions."
     }
   },
   "gates": [
@@ -127,6 +167,8 @@
     "Missing source credentials must render explicit configuration/degraded state rather than fabricated data.",
     "Source freshness and observation/forecast/derived semantics must remain visible.",
     "One failed source must not blank independent source-backed signals.",
-    "National location resolution must not depend on a single upstream geocoder for ordinary U.S. city/state or ZIP queries."
+    "National location resolution must not depend on a single upstream geocoder for ordinary U.S. city/state or ZIP queries.",
+    "Measured snowpack farther than the Snow decision radius may be shown only as regional context, never as local pack truth.",
+    "Derived snowmelt pressure must remain labeled as site interpretation rather than an agency forecast."
   ]
 }

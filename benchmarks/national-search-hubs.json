@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "updated": "2026-09-02",
   "objective": "Grow qualified national search demand with a small set of distinct intent hubs instead of thin city/ZIP pages.",
   "minimumScore": 90,
@@ -37,10 +37,13 @@
     },
     {
       "route": "/national-tools/water/",
-      "intent": "choose the correct river or coastal water decision tool, then interpret each source class without blending safety claims",
+      "intent": "choose the correct river or coastal water decision tool, with Snowpack as separate upstream context that never substitutes for measured flow or official river forecasts",
       "primaryTools": [
         "/national-tools/rivers/",
         "/national-tools/coastal/"
+      ],
+      "supportingTools": [
+        "/national-tools/snow/"
       ]
     },
     {

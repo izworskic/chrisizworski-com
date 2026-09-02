@@ -24,6 +24,7 @@ const pages = {
   aurora: await read("public/national-tools/aurora/index.html"),
   rivers: await read("public/national-tools/rivers/index.html"),
   coastal: await read("public/national-tools/coastal/index.html"),
+  snow: await read("public/national-tools/snow/index.html"),
   frost: await read("public/national-tools/frost/index.html"),
   planting: await read("public/national-tools/planting/index.html"),
   fall: await read("public/national-tools/fall-color/index.html"),
@@ -34,6 +35,7 @@ const apis = {
   rivers: await read("api/national-rivers.js"),
   riverContext: await read("api/national-river-context.js"),
   coastal: await read("api/national-coastal.js"),
+  snow: await read("api/national-snow.js"),
   frost: await read("api/national-frost.js"),
   fall: await read("api/national-fall-color.js"),
   fallObservations: await read("api/national-fall-observations.js"),
@@ -64,29 +66,34 @@ check("Search opportunity matrix totals 100", searchOpportunityTotal === 100 && 
 check("Production benchmark preserves 92 target and both hard gates", contract.productionBenchmark?.overallTarget === 92 && contract.productionBenchmark?.dimensions?.factualSourceIntegrity?.hardGate === true && contract.productionBenchmark?.dimensions?.canonicalCannibalizationIntegrity?.hardGate === true, 4);
 check("Candidate discovery wave contains at least 20 researched combinations", Array.isArray(candidates.candidates) && candidates.candidates.length >= 20, 5, String(candidates.candidates?.length || 0));
 check("Smoke remains blocked until credentials and supported interfaces pass", candidates.decision?.blockedHighestValue === "smoke-clear-air" && candidates.candidates.some((candidate) => candidate.id === "smoke-clear-air" && /^blocked-/.test(candidate.gate)), 4);
-check("Coastal is the admitted Phase 3 standalone after the source audit", candidates.decision?.completedStandalone?.includes("coastal-water-window") && candidates.candidates.some((candidate) => candidate.id === "coastal-water-window" && /^implemented-/.test(candidate.gate)), 4);
-check("Snowpack advances to the next eligible standalone", candidates.decision?.nextEligibleStandalone === "snowpack-melt" && candidates.candidates.some((candidate) => candidate.id === "snowpack-melt" && candidate.gate === "eligible"), 4);
+check("Coastal remains a completed national standalone", candidates.decision?.completedStandalone?.includes("coastal-water-window") && candidates.candidates.some((candidate) => candidate.id === "coastal-water-window" && /production-verified|implemented-/.test(candidate.gate)), 4);
+check("Snowpack is the implemented Phase 4 standalone", candidates.decision?.completedStandalone?.includes("snowpack-melt") && candidates.candidates.some((candidate) => candidate.id === "snowpack-melt" && /^implemented-/.test(candidate.gate)), 5);
+check("No unblocked new family is falsely promoted after Snowpack", candidates.decision?.nextEligibleStandalone === null && /No additional new-product family/.test(candidates.decision?.nextStandaloneNote || ""), 3);
 check("Candidate matrix forbids location-page expansion by score alone", /No candidate authorizes location-page generation/.test(candidates.decision?.longTailRule || ""), 3);
 check("Phase 2 adds no indexable route family", contract.indexPolicy?.phase2AddsIndexableRoutes === false, 4);
 check("Phase 3 admits one distinct coastal canonical", contract.indexPolicy?.phase3AddsIndexableRoutes === true && contract.coastalProduct?.route === "/national-tools/coastal/" && contract.coastalProduct?.api === "/api/national-coastal", 4);
+check("Phase 4 admits one distinct Snowpack canonical", contract.indexPolicy?.phase4AddsIndexableRoutes === true && contract.snowProduct?.route === "/national-tools/snow/" && contract.snowProduct?.api === "/api/national-snow", 5);
 check("Phase 0 source lifecycle contract is current", lifecycle.updated === "2026-09-02" && contract.phase0?.sourceLifecycleContract === "benchmarks/national-source-lifecycle.json", 4);
 check("USGS production runtime is off retiring WaterServices", !/waterservices\.usgs\.gov/.test(apis.rivers + apis.riverContext + riverIndexGenerator) && lifecycle.sources?.usgsContinuous?.status === "migrated" && lifecycle.sources?.usgsStatistics?.status === "migrated-beta", 8);
 check("Smoke remains credential-gated on supported source families", lifecycle.sources?.airNow?.status === "source-key-gated" && lifecycle.sources?.nasaFirms?.status === "source-key-gated" && contract.phase2?.smokeAirQuality?.indexableRouteCreated === false, 5);
 check("FIRMS lifecycle avoids new Suomi-NPP dependency", /NOAA20/.test(JSON.stringify(lifecycle.sources?.nasaFirms)) && /NOAA21/.test(JSON.stringify(lifecycle.sources?.nasaFirms)) && /November 1, 2026/.test(lifecycle.sources?.nasaFirms?.lifecycle || ""), 3);
 check("Coastal source lifecycle is production-audited and keyless", ["nwsMarineBeachForecast","ndbcRealtime","noaaCoopsTides"].every((id) => lifecycle.sources?.[id]?.status === "production-supported" && lifecycle.sources?.[id]?.authentication === "none"), 5);
 check("Coastal lifecycle preserves source semantics", /may not downgrade or override/.test(lifecycle.sources?.nwsMarineBeachForecast?.dominanceRule || "") && /not proof of exact conditions/.test(lifecycle.sources?.ndbcRealtime?.semantics || "") && /not observed water level/.test(lifecycle.sources?.noaaCoopsTides?.semantics || ""), 4);
+check("Snow source lifecycle is production-audited and keyless", ["nohrscSnowReports","nrcsAwdbSnow","nwsHourlyForecast"].every((id) => lifecycle.sources?.[id]?.status === "production-supported" && lifecycle.sources?.[id]?.authentication === "none"), 6);
+check("Snow lifecycle preserves provisional, regional and derived semantics", /unofficial and provisional/.test(lifecycle.sources?.nohrscSnowReports?.semantics || "") && /not evidence of no snow/.test(lifecycle.sources?.nrcsAwdbSnow?.semantics || "") && /never be presented as an NWS, NOAA or NRCS snowmelt forecast/.test(lifecycle.sources?.nwsHourlyForecast?.derivedRule || ""), 6);
 
 const routes = [
   "/national-tools/",
   "/national-tools/aurora/",
   "/national-tools/rivers/",
   "/national-tools/coastal/",
+  "/national-tools/snow/",
   "/national-tools/frost/",
   "/national-tools/planting/",
   "/national-tools/fall-color/",
 ];
 check("Deliberate national canonical routes are present", routes.every((r) => sitemap.includes(`<loc>https://chrisizworski.com${r}</loc>`)), 5);
-check("No generated national location tree shipped", !/national-tools\/(?:aurora|rivers|coastal|frost|planting|fall-color)\/(?:[a-z]{2}|city|zip)\//i.test(sitemap), 5);
+check("No generated national location tree shipped", !/national-tools\/(?:aurora|rivers|coastal|snow|frost|planting|fall-color)\/(?:[a-z]{2}|city|zip)\//i.test(sitemap), 5);
 
 function nationalRouteFor(name) {
   return name === "hub" ? "/national-tools/" : `/national-tools/${name === "fall" ? "fall-color" : name}/`;
@@ -187,7 +194,7 @@ check("Coastal tide context remains prediction with named datum", /product:"pred
 check("Coastal page preserves local safety authority", /official beach-risk forecast/i.test(pages.coastal) && /does not declare swimming or boating safe/.test(pages.coastal) && /Beach flags, closures, lifeguards/i.test(pages.coastal), 5);
 check("Coastal page keeps Michigan canonical deeper", /\/great-lakes-beaches\//.test(pages.coastal) && /Michigan has a deeper beach network/.test(pages.coastal), 4);
 check("Coastal analytics excludes raw location", /National Coastal Result/.test(pages.coastal) && /coverage:Boolean/.test(pages.coastal) && /sources_available/.test(pages.coastal) && !/National Coastal Result[^\n]{0,220}(?:latitude|longitude|query|place)/.test(pages.coastal), 4);
-check("Coastal is optional in Decision Desk and absent inland", /function coastalCard/.test(dashboard) && /if\(!d\.coastal_available\)return null/.test(dashboard) && /api\/national-coastal/.test(dashboard) && /inputs_total:6/.test(dashboard), 6);
+check("Coastal is optional in Decision Desk and absent inland", /function coastalCard/.test(dashboard) && /if\(!d\.coastal_available\)return null/.test(dashboard) && /api\/national-coastal/.test(dashboard) && /inputs_total:7/.test(dashboard), 6);
 
 check("Coastal location admission precedes source synthesis", /const ADMISSION_MILES = 25/.test(apis.coastal) && /function coastalAdmission/.test(apis.coastal) && /suppressed-by-location-admission/.test(apis.coastal) && /Source proximity alone does not qualify/.test(JSON.stringify(contract.coastalProduct?.hardRules || [])), 7);
 check("Coastal location admission fails closed when NWS applicability is unavailable", /coverage-unverified/.test(apis.coastal) && /will not substitute distant buoy or tide data/.test(apis.coastal) && /failClosed/.test(JSON.stringify(contract.coastalProduct?.locationAdmission || {})), 5);
@@ -196,6 +203,17 @@ check("Coastal page explains non-applicable locations instead of showing distant
 check("Coastal card can outrank routine context without becoming a universal score", /code==="high"\?97/.test(dashboard) && /code==="moderate"\?83/.test(dashboard) && /Official NWS High or Moderate beach risk/.test(JSON.stringify(contract.coastalProduct?.hardRules || [])), 4);
 check("Coastal fits the existing bounded API runtime", Number(vercel.functions?.["api/**/*.js"]?.maxDuration) >= 10 && /beach\(0,lat,lon,"day1"\)/.test(apis.coastal) && /3500/.test(apis.coastal) && /3000/.test(apis.coastal), 3);
 check("Coastal canonical is registered without Michigan cannibalization", registry.tools?.some((tool) => tool.id === "national-coastal" && tool.canonical === "https://chrisizworski.com/national-tools/coastal/") && registry.cannibalizationGroups?.some((group) => group.owner === "national-coastal" && group.supports?.includes("beach-report") && group.supports?.includes("great-lakes-buoys")), 5);
+
+check("Snow API keeps NOAA, NRCS and NWS independent", /Promise\.allSettled/.test(apis.snow) && /nohrsc\.noaa\.gov/.test(apis.snow) && /awdbRestApi/.test(apis.snow) && /api\.weather\.gov/.test(apis.snow), 7);
+check("Snow local decision radius is tighter than source context", /CONTEXT_RADIUS_MILES = 120/.test(apis.snow) && /DECISION_RADIUS_MILES = 60/.test(apis.snow) && /SNOTEL_RADIUS_MILES = 150/.test(apis.snow) && /distance_miles <= DECISION_RADIUS_MILES/.test(apis.snow), 7);
+check("Snow never turns missing or distant pack into local melt truth", /pack-unverified/.test(apis.snow) && /regional context only/.test(pages.snow) && /Missing snowpack data stays unavailable/.test(apis.snow), 6);
+check("Snow melt pressure stays explicitly derived", /not an agency snowmelt forecast/.test(apis.snow) && /not a NOAA\/NRCS snowmelt forecast/.test(pages.snow) && /site-derived interpretation/.test(JSON.stringify(contract.snowProduct?.hardRules || [])), 7);
+check("Snow excludes unsupported trail and safety claims", /avalanche/.test(pages.snow) && /groomed-trail/.test(apis.snow) && /road access/.test(apis.snow) && /universal go\/no-go/.test(pages.snow), 5);
+check("Snow analytics excludes raw location", /National Snow Result/.test(pages.snow) && /sources_available/.test(pages.snow) && !/National Snow Result[^\n]{0,280}(?:latitude|longitude|query|place)/.test(pages.snow), 4);
+check("Snow is optional in Decision Desk and seasonal", /function snowCard/.test(dashboard) && /if\(!d\.snow_relevant\)return null/.test(dashboard) && /api\/national-snow/.test(dashboard) && /snow_visible/.test(dashboard) && /inputs_total:7/.test(dashboard), 6);
+check("Snow canonical is registered without XC or river cannibalization", registry.tools?.some((tool) => tool.id === "national-snow" && tool.canonical === "https://chrisizworski.com/national-tools/snow/") && registry.cannibalizationGroups?.some((group) => group.owner === "national-snow" && group.supports?.includes("xc-planning") && group.supports?.includes("national-rivers")), 6);
+check("Snow and Rivers stay distinct in the water hub", /\/national-tools\/snow\//.test(await read("public/national-tools/water/index.html")) && /do not prove when or how much a river will rise/.test(await read("public/national-tools/water/index.html")), 4);
+
 
 check("Frost includes spring and fall probabilities", /fall_10/.test(apis.frost) && /fall_50/.test(apis.frost) && /median first fall 32°F freeze/.test(pages.frost), 5);
 check("Frost discovers NCEI stations before requesting normals", /access\/services\/search\/v1\/data/.test(apis.frost) && /parseSearchStationIds/.test(apis.frost) && /searchParams\.set\("stations"/.test(apis.frost), 6);
@@ -225,14 +243,14 @@ check("Fall page keeps individual-plant observations separate from landscape tim
 
 
 check("Hub is a live multi-signal decision surface", /national-dashboard\.js/.test(pages.hub) && /Your outdoor desk/.test(pages.hub) && /data-desk-grid/.test(pages.hub), 5);
-check("Hub compares two saved places across the same five signals", /id="place-compare"/.test(pages.hub) && /id="compare-a"/.test(pages.hub) && /id="compare-b"/.test(pages.hub) && /No overall winner or safety score/.test(pages.hub) && /D\.compare/.test(pages.hub), 5);
+check("Hub compares two saved places across the same core signals", /id="place-compare"/.test(pages.hub) && /id="compare-a"/.test(pages.hub) && /id="compare-b"/.test(pages.hub) && /No overall winner or safety score/.test(pages.hub) && /D\.compare/.test(pages.hub), 5);
 check("Comparison engine reuses independent tool contracts without duplicate desk analytics", /async function compare/.test(dashboard) && /load\(left,\{measure:false\}\)/.test(dashboard) && /load\(right,\{measure:false\}\)/.test(dashboard) && /National Places Compared/.test(dashboard), 5);
 check("Comparison analytics exclude selected place identity", /National Places Compared",\{signals:Math\.max\(pair\[0\]\.cards\.length,pair\[1\]\.cards\.length\)\}/.test(dashboard) && !/National Places Compared[^\n]{0,220}(?:query|latitude|longitude|place)/.test(dashboard), 4);
-check("Comparison remains signal-by-signal and responsive", /\["aurora","Aurora"\]/.test(pages.hub) && /\["rivers","River"\]/.test(pages.hub) && /\["frost","Frost"\]/.test(pages.hub) && /\["planting","Planting"\]/.test(pages.hub) && /\["fall","Fall timing"\]/.test(pages.hub) && /compare-matrix/.test(nationalCss), 4);
+check("Comparison remains signal-by-signal and responsive", /\["aurora","Aurora"\]/.test(pages.hub) && /\["rivers","River"\]/.test(pages.hub) && /\["snow","Snowpack"\]/.test(pages.hub) && /\["frost","Frost"\]/.test(pages.hub) && /\["planting","Planting"\]/.test(pages.hub) && /\["fall","Fall timing"\]/.test(pages.hub) && /compare-matrix/.test(nationalCss), 5);
 
 check("Dashboard loads all five platform inputs independently", ["/api/national-aurora","/api/national-rivers","/api/national-frost","/api/national-fall-color","/data/national-planting-crops.json"].every((needle) => dashboard.includes(needle)) && /getJson/.test(dashboard), 5);
 check("Dashboard orders by decision urgency, not a safety score", /sort\(function\(a,b\)\{return b\.priority-a\.priority\}/.test(dashboard) && /not a universal safety score/i.test(pages.hub), 4);
-check("Dashboard shows independent source degradation", /if\(!result\.ok\)/.test(dashboard) && /platform inputs responded/.test(dashboard) && /coastal when coverage exists/.test(dashboard), 4);
+check("Dashboard shows independent source degradation", /if\(!result\.ok\)/.test(dashboard) && /platform inputs responded/.test(dashboard) && /coastal and snow when relevant coverage exists/.test(dashboard), 4);
 check("Hub exposes saved places without calling them alerts", /Saved places/.test(pages.hub) && /Save this place/.test(pages.hub) && !/alert me|notify me/i.test(pages.hub), 4);
 check("River spatial context is keyless and selected-site only", /openstreetmap\.org\/export\/embed/.test(pages.rivers) && /orientation context only/.test(pages.rivers) && /Selected monitoring point/.test(pages.rivers), 4);
 check("Phase 3 responsive decision UI exists", /decision-grid/.test(nationalCss) && /river-map-shell/.test(nationalCss), 2);
@@ -241,7 +259,7 @@ check("All APIs are noindex", Object.values(apis).every((x) => /X-Robots-Tag",\s
 check("Michigan handoffs remain", pages.aurora.includes("/northern-lights-michigan/") && pages.frost.includes("/michigan-frost-dates/") && pages.planting.includes("/zone-6a-planting-calendar/") && pages.fall.includes("/fall-color/"), 5);
 
 const ids = new Set(registry.tools.map((tool) => tool.id));
-check("National tools remain registered", ["national-aurora","national-rivers","national-frost","national-planting","national-fall-color"].every((id) => ids.has(id)), 4);
+check("National tools remain registered", ["national-aurora","national-rivers","national-coastal","national-snow","national-frost","national-planting","national-fall-color"].every((id) => ids.has(id)), 5);
 check("Smoke/AQ remains source-key gated", contract.phase2?.smokeAirQuality?.status === "source-key-gated" && contract.phase2?.smokeAirQuality?.indexableRouteCreated === false, 4);
 const admissionWeight = Object.values(admission.weights || {}).reduce((sum, value) => sum + value, 0);
 check("Location admission weights total 100", admissionWeight === 100 && admission.minimumScore === 80, 4, String(admissionWeight));

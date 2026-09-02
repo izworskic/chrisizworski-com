@@ -123,7 +123,7 @@
         "loss": 9,
         "searchOpportunity": 92
       },
-      "gate": "implemented-pending-verification",
+      "gate": "production-verified",
       "disposition": "Phase 3 implementation complete on the coastal canonical; verify preview/live source behavior and full repository gate before merge.",
       "implementation": {
         "route": "/national-tools/coastal/",
@@ -159,8 +159,29 @@
         "loss": 10,
         "searchOpportunity": 90
       },
-      "gate": "eligible",
-      "disposition": "second shippable family; strong winter/spring seasonal runway"
+      "gate": "implemented-pending-verification",
+      "disposition": "Snow canonical, API, Decision Desk signal, source lifecycle and tests implemented; merge only after live-source and repository verification.",
+      "implementation": {
+        "route": "/national-tools/snow/",
+        "api": "/api/national-snow",
+        "sourceFamilies": [
+          "NOAA/NOHRSC provisional snow depth and SWE station reports",
+          "USDA NRCS AWDB/SNOTEL",
+          "NOAA/NWS hourly forecast"
+        ],
+        "contextRadiusMiles": 120,
+        "decisionRadiusMiles": 60,
+        "snotelRadiusMiles": 150,
+        "decisionRule": "Measured pack farther than 60 miles is regional context only. Melt pressure is derived from nearby measured pack plus local NWS weather and never presented as an agency snowmelt forecast.",
+        "prohibitedClaims": [
+          "avalanche danger",
+          "groomed trail condition",
+          "road access",
+          "ice safety",
+          "river runoff prediction",
+          "universal recreation safety score"
+        ]
+      }
     },
     {
       "id": "wildfire-trip-impact",
@@ -698,8 +719,8 @@
   ],
   "decision": {
     "blockedHighestValue": "smoke-clear-air",
-    "nextEligibleStandalone": "snowpack-melt",
-    "nextEligibleSeasonal": "snowpack-melt",
+    "nextEligibleStandalone": null,
+    "nextEligibleSeasonal": null,
     "nextExistingCanonicalEnhancements": [
       "outdoor-weather-window-engine",
       "night-sky-dark-clear-window",
@@ -709,7 +730,9 @@
     "canonicalRule": "Rip-current, tide/current, freshwater-beach and coastal-visibility intents are lenses inside Coastal initially; do not fragment them into competing canonicals.",
     "longTailRule": "No candidate authorizes location-page generation. Location surfaces still require the national location-admission benchmark plus actual measured demand.",
     "completedStandalone": [
-      "coastal-water-window"
-    ]
+      "coastal-water-window",
+      "snowpack-melt"
+    ],
+    "nextStandaloneNote": "No additional new-product family currently clears both source and loss gates. Smoke/Clear-Air remains the highest-value blocked family; prioritize eligible shared capabilities and existing-canonical enhancements after Snow."
   }
 }
