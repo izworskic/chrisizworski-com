@@ -36,12 +36,13 @@
   </div>
 
   <div id="river-detail" class="river-detail" hidden>
-    <div class="river-detail-nav"><button id="back-to-rivers" type="button" class="secondary-btn">← Back to nearby rivers</button><span id="selected-river-label" class="small"></span></div>
+    <div class="river-detail-nav river-detail-nav-sticky"><button id="back-to-rivers" type="button" class="secondary-btn river-back-btn">← River list</button><span id="selected-river-label" class="small"></span></div>
     <div class="result-head"><span class="pill">Live USGS observations</span><span id="forecast-pill" class="pill">Loading river context</span></div>
     <div id="selected-answer" class="answer"></div>
     <div id="primary-gauge"></div>
     <div id="river-map" class="river-map-shell" hidden><div class="river-map-head"><div><span class="tool-kicker">Selected monitoring point</span><strong id="map-gauge-name">USGS gauge</strong></div><div class="map-actions"><a id="map-open" class="map-btn" href="#" target="_blank" rel="noopener">Open in OpenStreetMap ↗</a></div></div><iframe id="river-map-frame" title="Map of selected river gauge" loading="lazy"></iframe><div class="map-attribution">Basemap © OpenStreetMap contributors. River observations come from USGS; the map is orientation context only.</div></div>
     <p class="small" id="updated"></p>
+    <div class="river-switch-footer"><button id="choose-another-river" type="button" class="secondary-btn river-back-btn">← Choose another river</button></div>
   </div>
 </div>
 </div></section>
@@ -377,7 +378,17 @@ document.addEventListener("DOMContentLoaded",function(){
  }
  document.getElementById("river-radius").addEventListener("change",function(event){currentRadius=Number(event.target.value)||50;renderDiscovery()});
  document.getElementById("river-filter").addEventListener("input",function(event){currentFilter=event.target.value||"";renderDiscovery()});
- document.getElementById("back-to-rivers").addEventListener("click",function(){detailRequestId++;renderDiscovery();document.getElementById("result").scrollIntoView({behavior:"smooth",block:"start"})});
+ function returnToRiverList(){
+   detailRequestId++;
+   renderDiscovery();
+   requestAnimationFrame(function(){
+     document.getElementById("result").scrollIntoView({behavior:"smooth",block:"start"});
+     const filter=document.getElementById("river-filter");
+     if(filter&&currentFilter)filter.focus({preventScroll:true});
+   });
+ }
+ document.getElementById("back-to-rivers").addEventListener("click",returnToRiverList);
+ document.getElementById("choose-another-river").addEventListener("click",returnToRiverList);
  N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
 });
 </script>
