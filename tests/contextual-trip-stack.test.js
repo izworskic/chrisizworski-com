@@ -14,9 +14,8 @@ test('contextual trip stack covers eight Michigan region families',()=>{
 test('trip stack analytics are symbolic and privacy limited',()=>{
   const js=read('public/assets/contextual-trip-stack.js');
   assert.ok(js.includes("emit('Contextual Tool Handoff'"));
-  assert.ok(js.includes("emit('Network Experiment Exposure'"));
-  assert.ok(js.includes("emit('Network Experiment Handoff'"));
   assert.ok(js.includes("emit('Network Amplification Exposure'"));
+  assert.doesNotMatch(js,/Network Experiment|fall-river-window-v1|data-network-experiment/i);
   assert.doesNotMatch(js,/geolocation|latitude|longitude|localStorage|sessionStorage|document\.cookie|fingerprint/i);
   assert.ok(js.includes("const destination=a.dataset.tripStackLink||'unknown'"));
 });
@@ -40,22 +39,13 @@ test('Circle Tour route asset loads the shared network layer and repairs border-
   assert.ok(stack.includes("path==='/lake-superior-circle-tour'"));
 });
 
-test('fall river candidate runs as an in-page experiment instead of a new canonical',()=>{
+test('fall river standalone candidate stays shelved and no experiment runtime remains',()=>{
   const js=read('public/assets/contextual-trip-stack.js');
-  const actions=JSON.parse(read('benchmarks/tool-network-actions.json'));
-  const exp=actions.experiments.find(e=>e.id==='fall-river-window-v1');
-  assert.ok(exp);
-  assert.equal(exp.candidateId,'fall-river-window');
-  assert.equal(exp.status,'running-contextual-test');
-  assert.equal(exp.candidateScore,93);
-  assert.deepEqual(exp.surfaces,['fall-color','fall-weekend','manistee']);
-  assert.match(exp.promotionGate.decision,/standalone canonical only when searchEvidence is true and networkEvidence is true/i);
-  assert.ok(js.includes("const EXPERIMENT_ID='fall-river-window-v1'"));
-  assert.ok(js.includes('Find a fall river paddle window'));
-  assert.ok(js.includes("if(path==='/fall-color')mountFallRiverExperiment('fall-color')"));
-  assert.ok(js.includes("if(path==='/fall-color/this-weekend')mountFallRiverExperiment('fall-weekend')"));
-  assert.ok(js.includes("mountFallRiverExperiment('manistee')"));
+  const registry=JSON.parse(read('benchmarks/tool-network-registry.json'));
+  const candidate=registry.expansionOpportunities.find(e=>e.id==='fall-river-window');
+  assert.equal(candidate?.status,'shelved');
   assert.equal(require('node:fs').existsSync(path.join(root,'public','fall-river-window','index.html')),false);
+  assert.doesNotMatch(js,/fall-river-window-v1|mountFallRiverExperiment|Network Experiment/);
 });
 
 test('fall weekend page keeps crawlable cross-tool fallback links',()=>{
