@@ -47,6 +47,8 @@ const HUB_TOOLS = [
   { file: "public/fall-color/michigan-leaf-peeping-planner/index.html", url: "https://chrisizworski.com/fall-color/michigan-leaf-peeping-planner/" },
   { file: "public/national-tools/aurora/index.html", url: "https://chrisizworski.com/national-tools/aurora/" },
   { file: "public/national-tools/rivers/index.html", url: "https://chrisizworski.com/national-tools/rivers/" },
+  { file: "public/national-tools/coastal/index.html", url: "https://chrisizworski.com/national-tools/coastal/" },
+  { file: "public/national-tools/snow/index.html", url: "https://chrisizworski.com/national-tools/snow/" },
   { file: "public/national-tools/frost/index.html", url: "https://chrisizworski.com/national-tools/frost/" },
   { file: "public/national-tools/planting/index.html", url: "https://chrisizworski.com/national-tools/planting/" },
   { file: "public/national-tools/fall-color/index.html", url: "https://chrisizworski.com/national-tools/fall-color/" },

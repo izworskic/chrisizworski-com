@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "updated": "2026-09-02",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
@@ -1731,6 +1731,42 @@
       "searchEvidence": {
         "status": "documented-source-and-search-opportunity"
       }
+    },
+    {
+      "id": "national-snow",
+      "name": "U.S. Snowpack & Snowmelt Conditions",
+      "canonical": "https://chrisizworski.com/national-tools/snow/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "winter-snow",
+      "primaryIntent": "U.S. snow depth SWE snowpack and snowmelt outlook by location",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "united-states"
+      ],
+      "personas": [
+        "snowshoer",
+        "xc-skier",
+        "winter-traveler",
+        "water-watcher"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "documented-source-and-search-opportunity"
+      }
     }
   ],
   "relationships": [
@@ -2333,6 +2369,30 @@
       "strength": "optional",
       "surface": "national-water",
       "reason": "Water-planning visitors may need the distinct coastal decision system when their trip moves from rivers to beaches or shoreline."
+    },
+    {
+      "from": "national-snow",
+      "to": "national-rivers",
+      "type": "snowmelt-water-sibling",
+      "strength": "strong",
+      "surface": "national-water",
+      "reason": "Snowpack and melt pressure can explain an upstream water input, while Rivers retains measured flow and official flood/river forecast intent without inferring runoff response."
+    },
+    {
+      "from": "national-snow",
+      "to": "xc-planning",
+      "type": "geographic-activity-handoff",
+      "strength": "strong",
+      "surface": "snow-tool",
+      "reason": "Michigan XC planning retains trail selection, grooming and statewide ski-planning intent; the national Snowpack tool owns measured pack and weather-driven melt context."
+    },
+    {
+      "from": "national-snow",
+      "to": "xc-live",
+      "type": "evidence-depth",
+      "strength": "optional",
+      "surface": "snow-tool",
+      "reason": "Northern Michigan skiers can move from broad measured snowpack context to the existing XC live conditions surface for local trail-oriented detail."
     }
   ],
   "cannibalizationGroups": [
@@ -2441,6 +2501,16 @@
         "great-lakes-buoys"
       ],
       "rule": "National Coastal owns broad U.S. location-based beach/coastal conditions. Michigan Beach Report retains the deeper Michigan beach canonical, and Great Lakes Buoys retains station-observation intent."
+    },
+    {
+      "intent": "National snowpack, snow depth, SWE and snowmelt conditions",
+      "owner": "national-snow",
+      "supports": [
+        "xc-planning",
+        "xc-live",
+        "national-rivers"
+      ],
+      "rule": "National Snow owns measured pack plus transparent weather-driven melt/refreeze context. Michigan XC keeps trail, grooming and ski-planning intent; Rivers keeps measured flow and official river forecasts. Do not create national groomed-trail, avalanche, road-access or runoff-response claims from Snow."
     }
   ],
   "expansionOpportunities": [
