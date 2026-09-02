@@ -48,9 +48,8 @@ const ROUTE_REGION={
 };
 const MANISTEE={title:'More for this river trip',keys:['trout','salmon','ausable','weekend']};
 const CIRCLE={title:'Before the next Circle Tour leg',keys:['border','soo','pictured','aurora']};
-const EXPERIMENT_ID='fall-river-window-v1';
-function style(){if(document.getElementById('contextual-trip-stack-style'))return;const s=document.createElement('style');s.id='contextual-trip-stack-style';s.textContent=`.contextual-trip-stack{max-width:980px;margin:24px auto;padding:18px;border:1px solid #d8cdb9;border-radius:14px;background:#fffaf1}.contextual-trip-stack h2{font-size:1.1rem;margin:0 0 4px}.contextual-trip-stack>p{margin:0 0 12px;font-size:.9rem;opacity:.75}.contextual-trip-stack__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:9px}.contextual-trip-stack a{display:block;border:1px solid #ddd2c0;border-radius:11px;padding:12px;text-decoration:none;background:#fff;color:inherit}.contextual-trip-stack a strong{display:block;margin-bottom:3px}.contextual-trip-stack a span{display:block;font-size:.8rem;line-height:1.35;opacity:.72}.contextual-trip-stack a:hover,.contextual-trip-stack a:focus{border-color:#8f6a42}.contextual-trip-stack a:focus-visible{outline:2px solid #2764a8;outline-offset:2px}.contextual-trip-stack--experiment{border-style:dashed}.contextual-trip-stack__eyebrow{font:700 .7rem/1.2 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;opacity:.62;margin-bottom:5px}`;document.head.appendChild(s)}
-function cards(keys,surface,experiment=''){return keys.map(key=>{const d=DEST[key];return `<a href="${d.href}" data-trip-stack-link="${key}" data-trip-stack-surface="${surface}"${experiment?` data-network-experiment="${experiment}"`:''}><strong>${d.label}</strong><span>${d.detail}</span></a>`}).join('')}
+function style(){if(document.getElementById('contextual-trip-stack-style'))return;const s=document.createElement('style');s.id='contextual-trip-stack-style';s.textContent=`.contextual-trip-stack{max-width:980px;margin:24px auto;padding:18px;border:1px solid #d8cdb9;border-radius:14px;background:#fffaf1}.contextual-trip-stack h2{font-size:1.1rem;margin:0 0 4px}.contextual-trip-stack>p{margin:0 0 12px;font-size:.9rem;opacity:.75}.contextual-trip-stack__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:9px}.contextual-trip-stack a{display:block;border:1px solid #ddd2c0;border-radius:11px;padding:12px;text-decoration:none;background:#fff;color:inherit}.contextual-trip-stack a strong{display:block;margin-bottom:3px}.contextual-trip-stack a span{display:block;font-size:.8rem;line-height:1.35;opacity:.72}.contextual-trip-stack a:hover,.contextual-trip-stack a:focus{border-color:#8f6a42}.contextual-trip-stack a:focus-visible{outline:2px solid #2764a8;outline-offset:2px}`;document.head.appendChild(s)}
+function cards(keys,surface){return keys.map(key=>{const d=DEST[key];return `<a href="${d.href}" data-trip-stack-link="${key}" data-trip-stack-surface="${surface}"><strong>${d.label}</strong><span>${d.detail}</span></a>`}).join('')}
 function html(cfg,surface){return `<h2>${cfg.title}</h2><p>One trip, a few useful checks.</p><div class="contextual-trip-stack__grid">${cards(cfg.keys,surface)}</div>`}
 function insertHost(host){
   if(path==='/manistee-river-map'){const footer=document.querySelector('.footer');if(footer?.parentNode)footer.parentNode.insertBefore(host,footer);else document.querySelector('main')?.appendChild(host);return}
@@ -59,31 +58,16 @@ function insertHost(host){
 }
 function mount(cfg,surface){style();let host=document.querySelector(`[data-contextual-trip-stack="${surface}"]`);if(host){host.classList.add('contextual-trip-stack');host.innerHTML=html(cfg,surface);return host}host=document.createElement('section');host.className='contextual-trip-stack';host.dataset.contextualTripStack=surface;host.setAttribute('aria-label',cfg.title);host.innerHTML=html(cfg,surface);insertHost(host);return host}
 function emit(name,data){try{window.va('event',{name,data})}catch{}}
-function mountFallRiverExperiment(surface){
-  if(document.querySelector(`[data-network-experiment-host="${EXPERIMENT_ID}"]`))return;
-  style();
-  const host=document.createElement('section');
-  host.className='contextual-trip-stack contextual-trip-stack--experiment';
-  host.dataset.networkExperimentHost=EXPERIMENT_ID;
-  host.setAttribute('aria-label','Fall river paddle window');
-  const keys=path==='/manistee-river-map'?['fall','ausable','buoys']:['ausable','manistee','buoys'];
-  host.innerHTML=`<div class="contextual-trip-stack__eyebrow">Fall + river</div><h2>Find a fall river paddle window</h2><p>Pair color timing with river and lake conditions before you pick the day.</p><div class="contextual-trip-stack__grid">${cards(keys,surface,EXPERIMENT_ID)}</div>`;
-  insertHost(host);
-  emit('Network Experiment Exposure',{experiment:EXPERIMENT_ID,source:path,surface});
-}
 function fallRegion(){return document.documentElement.dataset.fallBestRegion||ROUTE_REGION[path]||'generic'}
 function renderFall(){mount(REGION[fallRegion()]||REGION.generic,path==='/fall-color/this-weekend'?'fall-weekend':'fall-route')}
 if(path==='/manistee-river-map'){
   mount(MANISTEE,'manistee');
-  mountFallRiverExperiment('manistee');
 }else if(path==='/lake-superior-circle-tour'){
   mount(CIRCLE,'circle-tour');
   emit('Network Amplification Exposure',{source:'circle-tour',surface:'circle-tour',destinations:CIRCLE.keys.join(',')});
 }else if(path==='/fall-color'||path.startsWith('/fall-color/')){
   renderFall();
-  if(path==='/fall-color')mountFallRiverExperiment('fall-color');
-  if(path==='/fall-color/this-weekend')mountFallRiverExperiment('fall-weekend');
 }
 window.addEventListener('fall-weekend-ranked',e=>{const id=e.detail?.bestId;if(!REGION[id])return;document.documentElement.dataset.fallBestRegion=id;mount(REGION[id],'fall-weekend')});
-document.addEventListener('click',e=>{const a=e.target.closest('[data-trip-stack-link]');if(!a)return;const destination=a.dataset.tripStackLink||'unknown';const surface=a.dataset.tripStackSurface||'unknown';const experiment=a.dataset.networkExperiment||'';emit('Contextual Tool Handoff',{source:path,destination,surface,experiment:experiment||'none'});if(experiment)emit('Network Experiment Handoff',{experiment,source:path,destination,surface})});
+document.addEventListener('click',e=>{const a=e.target.closest('[data-trip-stack-link]');if(!a)return;const destination=a.dataset.tripStackLink||'unknown';const surface=a.dataset.tripStackSurface||'unknown';emit('Contextual Tool Handoff',{source:path,destination,surface})});
 })();
