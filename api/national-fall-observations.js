@@ -6,8 +6,31 @@ const LOOKBACK_DAYS = 21;
 const RADIUS_MILES = 75;
 const UA = "ChrisIzworskiNationalFallObservations/1.0 (+https://chrisizworski.com/national-tools/fall-color/)";
 
-function isoDate(date) {
-  return new Date(date).toISOString().slice(0, 10);
+function validTimeZone(value) {
+  const timeZone = String(value || "").trim();
+  if (!timeZone || timeZone.length > 64) return null;
+  try {
+    new Intl.DateTimeFormat("en-US", { timeZone }).format(new Date());
+    return timeZone;
+  } catch {
+    return null;
+  }
+}
+function localIsoDate(date, timeZone) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date(date));
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+function dateWindow(now, timeZone) {
+  const end = localIsoDate(now, timeZone);
+  const [year, month, day] = end.split("-").map(Number);
+  const start = new Date(Date.UTC(year, month - 1, day - (LOOKBACK_DAYS - 1), 12));
+  return { start: start.toISOString().slice(0, 10), end };
 }
 function boundsFor(lat, lon, radiusMiles = RADIUS_MILES) {
   const latitude = finite(lat, -90, 90);
@@ -55,7 +78,9 @@ function conflictFlag(row) {
 function record(row, origin) {
   const latitude = finite(field(row, "latitude", "Latitude"), -90, 90);
   const longitude = finite(field(row, "longitude", "Longitude"), -180, 180);
-  const status = finite(field(row, "phenophase_status", "Phenophase_Status"), -1, 1);
+  const rawStatus = field(row, "phenophase_status", "Phenophase_Status");
+  if (rawStatus == null || String(rawStatus).trim() === "") return null;
+  const status = finite(rawStatus, -1, 1);
   const date = String(field(row, "observation_date", "Observation_Date") || "").slice(0, 10);
   if (latitude == null || longitude == null || status == null || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
   const distance = haversineMiles(origin.latitude, origin.longitude, latitude, longitude);
@@ -120,10 +145,11 @@ function summarize(rows, origin) {
     coverage: yesSites.size >= 2 && yes.length >= 3 ? "some current local coverage" : parsed.length ? "sparse current local coverage" : "no recent local coverage",
   };
 }
-async function fetchRows(lat, lon, now = new Date()) {
+async function fetchRows(lat, lon, timeZone, now = new Date()) {
   const bounds = boundsFor(lat, lon);
-  const end = isoDate(now);
-  const start = isoDate(new Date(now.getTime() - (LOOKBACK_DAYS - 1) * 86400000));
+  const zone = validTimeZone(timeZone);
+  if (!zone) throw new Error("A valid searched-location timezone is required");
+  const { start, end } = dateWindow(now, zone);
   const body = new URLSearchParams({
     request_src: "Chris Izworski National Fall Color",
     climate_data: "0",
@@ -150,7 +176,8 @@ async function fetchRows(lat, lon, now = new Date()) {
   });
   if (!response.ok) throw new Error(`services.usanpn.org returned ${response.status}`);
   const data = await response.json();
-  return Array.isArray(data) ? data : [];
+  if (!Array.isArray(data)) throw new Error("services.usanpn.org returned an unexpected response shape");
+  return data;
 }
 
 module.exports = async function handler(req, res) {
@@ -163,15 +190,17 @@ module.exports = async function handler(req, res) {
   }
   const lat = finite(req.query?.lat, 24, 50);
   const lon = finite(req.query?.lon, -125, -66);
+  const timeZone = validTimeZone(req.query?.tz);
   if (lat == null || lon == null) return res.status(400).json({ error: "This observation context currently covers the contiguous United States" });
+  if (!timeZone) return res.status(400).json({ error: "A valid searched-location timezone is required" });
 
   try {
-    const rows = await fetchRows(lat, lon);
+    const rows = await fetchRows(lat, lon, timeZone);
     const summary = summarize(rows, { latitude: lat, longitude: lon });
     return res.status(200).json({
       retrieved_at: new Date().toISOString(),
       mode: "current-ground-observations",
-      location: { latitude: lat, longitude: lon },
+      location: { latitude: lat, longitude: lon, timeZone },
       colored_leaves: summary,
       method: {
         phenophase_id: PHENOPHASE_ID,
@@ -201,4 +230,4 @@ module.exports = async function handler(req, res) {
   }
 };
 
-module.exports._test = { boundsFor, conflictFlag, field, haversineMiles, record, summarize };
+module.exports._test = { boundsFor, conflictFlag, dateWindow, field, haversineMiles, localIsoDate, record, summarize, validTimeZone };
