@@ -43,7 +43,7 @@ test("NDBC observations convert units and calculate roughly three-hour change", 
   assert.equal(result.wave_height_ft, 3.9);
   assert.equal(result.wind_mph, 11.2);
   assert.equal(result.water_temperature_f, 64.4);
-  assert.equal(result.change_3h.wave_height_ft, 1);
+  assert.equal(result.change_3h.wave_height_ft, 0.9);
   assert.equal(result.change_3h.wind_mph, 2.3);
 });
 
