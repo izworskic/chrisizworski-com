@@ -464,8 +464,10 @@ const mapFirstRoutingRuntime = /id="explore-mode"[^>]*aria-pressed="false"[^>]*>
   && /nextPinned=candidates\.find/.test(waterJs)
   && /pinned:Boolean\(chosen\?\.pinned\)/.test(waterJs);
 
-const mapOnlyCriteriaRuntime = /<h2>Build above\. Tune the trip below\.<\/h2>/.test(html)
-  && /Water clicks are ordered checkpoints\. Distance and time accumulate through every checkpoint/.test(html)
+// The planner is hidden, so this pins the shape the old copy pin protected rather than sentences
+// that no longer appear on the page.
+const mapOnlyCriteriaRuntime = /<div class="criteria-header">[\s\S]{0,400}<h2>[^<]+<\/h2>/.test(html)
+  && /class="panel-block route-planner criteria-panel planner-only"/.test(html)
   && /The route bar on the map is the only build control/.test(html)
   && /class="route-fields criteria-fields"/.test(html)
   && /\.route-compat-controls\{display:none!important\}/.test(html)

@@ -130,7 +130,10 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
   assert.match(js, /NPS ferry, seaplane & transportation/);
   assert.match(js, /NPS lighthouses & places to go/);
   assert.match(js, /Open map-data source/);
-  assert.match(html, /Build above\. Tune the trip below\./);
+  // The planner is hidden, so this panel no longer sells trip building. What must still hold is
+  // the SHAPE the pin protected: map on top, one criteria panel beneath, and no second
+  // route-construction UI down there.
+  assert.match(html, /<div class="criteria-header">/);
   assert.match(html, /\.popup-action\{[^}]*min-height:42px/);
   assert.match(html, /\.isle-detail-popup \.leaflet-popup-content/);
 });
@@ -263,8 +266,11 @@ test('route criteria stay below the map without duplicating route construction',
   for (const id of ['route-planner','route-mode-select','route-speed','route-departure','route-summary','route-weather-button','route-weather']) {
     assert.ok(html.includes(`id="${id}"`), id);
   }
-  assert.match(html, /<h2>Build above\. Tune the trip below\.<\/h2>/);
-  assert.match(html, /Water clicks are ordered checkpoints\. Distance and time accumulate through every checkpoint/);
+  // The planner is hidden, so this panel no longer sells trip building. What must still hold is
+  // the SHAPE the pin protected: map on top, one criteria panel beneath, and no second
+  // route-construction UI down there.
+  assert.match(html, /<div class="criteria-header">[\s\S]{0,400}<h2>[^<]+<\/h2>/);
+  assert.match(html, /class="panel-block route-planner criteria-panel planner-only"/);
   assert.match(html, /The route bar on the map is the only build control/);
   assert.match(html, /\.route-compat-controls\{display:none!important\}/);
   assert.doesNotMatch(html, /<span class="route-badge">ROUTE INTELLIGENCE<\/span>/);
@@ -353,7 +359,10 @@ test('map-first route builder accepts every mappable feature and keeps criteria 
   assert.match(html, /id="route-mode"[^>]*aria-pressed="true"[^>]*>Plan route/);
   assert.match(html, /id="route-map-guide"/);
   assert.match(html, /Trace the trip with checkpoints/);
-  assert.match(html, /<h2>Build above\. Tune the trip below\.<\/h2>/);
+  // The planner is hidden, so this panel no longer sells trip building. What must still hold is
+  // the SHAPE the pin protected: map on top, one criteria panel beneath, and no second
+  // route-construction UI down there.
+  assert.match(html, /<div class="criteria-header">[\s\S]{0,400}<h2>[^<]+<\/h2>/);
   assert.match(html, /The route bar on the map is the only build control/);
   assert.match(js, /function featureRoutePoint/);
   assert.match(js, /function addFeatureToRoute/);
@@ -853,7 +862,10 @@ test('canoe trip builder reports active travel time while constructing days', ()
 
 
 test('map sits above a compact criteria strip and owns route construction', () => {
-  assert.match(html, /<h2>Build above\. Tune the trip below\.<\/h2>/);
+  // The planner is hidden, so this panel no longer sells trip building. What must still hold is
+  // the SHAPE the pin protected: map on top, one criteria panel beneath, and no second
+  // route-construction UI down there.
+  assert.match(html, /<div class="criteria-header">[\s\S]{0,400}<h2>[^<]+<\/h2>/);
   assert.match(html, /class="route-fields criteria-fields"/);
   for (const id of ['route-mode-select','route-paddle-pace','route-portage-pace','route-portage-trips','route-day-hours','route-departure']) {
     assert.ok(html.includes(`id="${id}"`), id);
@@ -877,7 +889,7 @@ test('line and area features use the clicked map coordinate as a trip location',
 
 test('multi-point checkpoint routing keeps earlier verified legs while extending the tail', () => {
   assert.match(html, /Click as many points along the water as you need/);
-  assert.match(html, /Distance and time accumulate through every checkpoint/);
+  assert.match(html, /class="panel-block route-planner criteria-panel planner-only"/);
   assert.match(html, /You do not need to stop at two points/);
   assert.match(js, /const waterSeed=preserve\?\[\.\.\.\(route\.waterLegs\|\|\[\]\)\]:\[\]/);
   assert.match(js, /const mixedSeed=preserve\?\[\.\.\.\(route\.mixedLegs\|\|\[\]\)\]:\[\]/);
@@ -967,4 +979,31 @@ test('the map offers satellite imagery and a way past itself', () => {
   assert.match(html, /id="map-peek"/);
   assert.match(js, /document\.getElementById\('map-peek'\)\?\.addEventListener/);
   assert.match(html, /body\.planner-off \.map-wrap\{height:clamp\(360px,56dvh,540px\)/, 'the map must not fill a phone screen');
+});
+
+test('the guide no longer sells a planner it is not showing', () => {
+  const visible = html.slice(0, html.indexOf('id="route-planner"'));
+  assert.doesNotMatch(visible, /Start clicking the water to build a canoe route/);
+  assert.doesNotMatch(visible, /Build above\. Tune the trip below\./);
+  assert.doesNotMatch(visible, /Distance and time accumulate through every checkpoint/);
+  assert.doesNotMatch(visible, /use Canoe \+ portage mode/);
+  // Focus map existed to clear space for planning.
+  assert.match(html, /id="focus-map" class="planner-only"/);
+});
+
+test('the map offers three base maps and NOAA charts', () => {
+  const js = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 'utf8');
+  for (const id of ['basemap-standard', 'basemap-imagery', 'basemap-topo', 'overlay-nautical']) {
+    assert.match(html, new RegExp(`id="${id}"`), `missing control ${id}`);
+  }
+  assert.match(js, /World_Imagery\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/);
+  assert.match(js, /USGSTopo\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/);
+  // NOAA's raster chart tile service is retired and answers 503; this is the live one.
+  assert.match(js, /MCS\/ENCOnline\/MapServer\/exts\/MaritimeChartService\/WMSServer/);
+  assert.doesNotMatch(js, /tileservice\.charts\.noaa\.gov/);
+  for (const credit of [/Imagery &copy; Esri/, /Topo &copy; USGS The National Map/, /Nautical charts &copy; NOAA Office of Coast Survey/]) {
+    assert.match(js, credit, 'every third-party layer must carry its attribution');
+  }
+  assert.match(js, /localStorage\.setItem\('isle-royale-basemap'/);
+  assert.match(js, /localStorage\.setItem\('isle-royale-nautical'/);
 });
