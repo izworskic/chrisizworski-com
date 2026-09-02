@@ -6,9 +6,9 @@
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
     "relationshipTruth": "Every relationship is directed, intentional, and points to an existing registry node.",
     "searchOwnership": "One canonical owner per primary search intent; supporting pages may reinforce but not compete with that owner.",
-    "experimentProtection": "Protected search treatments are not changed until their measurement window closes or a stop-loss fires.",
     "measurement": "Cross-tool behavior uses symbolic source/destination/surface identifiers, never precise location or personal identifiers.",
-    "newBuildRule": "Score new tool ideas before implementation. Prefer ideas that fill a missing visitor decision and connect to at least two existing nodes."
+    "newBuildRule": "Score new tool ideas before implementation. Prefer ideas that fill a missing visitor decision and connect to at least two existing nodes.",
+    "searchChangePolicy": "No search experiment or freeze is active. Search-facing changes follow current evidence, canonical ownership, factual integrity, and cannibalization safety."
   },
   "bestFitScoring": {
     "distinctSearchIntent": 25,
@@ -307,8 +307,7 @@
       ],
       "networkRole": "destination",
       "searchTreatment": {
-        "status": "protected",
-        "experiment": "active"
+        "status": "active"
       },
       "searchEvidence": {
         "status": "growing"
@@ -346,8 +345,7 @@
       ],
       "networkRole": "bridge",
       "searchTreatment": {
-        "status": "protected",
-        "experiment": "active"
+        "status": "active"
       },
       "searchEvidence": {
         "status": "measured",
@@ -420,8 +418,7 @@
       ],
       "networkRole": "destination",
       "searchTreatment": {
-        "status": "protected",
-        "experiment": "active"
+        "status": "active"
       },
       "searchEvidence": {
         "status": "measured",
@@ -486,8 +483,7 @@
       ],
       "networkRole": "destination",
       "searchTreatment": {
-        "status": "protected",
-        "experiment": "active"
+        "status": "active"
       },
       "searchEvidence": {
         "status": "measured",
@@ -565,8 +561,7 @@
       ],
       "networkRole": "destination",
       "searchTreatment": {
-        "status": "protected",
-        "experiment": "active"
+        "status": "active"
       },
       "searchEvidence": {
         "status": "growing"
@@ -637,8 +632,7 @@
       ],
       "networkRole": "destination",
       "searchTreatment": {
-        "status": "protected",
-        "experiment": "active"
+        "status": "active"
       },
       "searchEvidence": {
         "status": "new"
@@ -776,8 +770,7 @@
       ],
       "networkRole": "support",
       "searchTreatment": {
-        "status": "protected",
-        "experiment": "active"
+        "status": "active"
       },
       "searchEvidence": {
         "status": "known-demand"
@@ -849,15 +842,7 @@
       ],
       "networkRole": "hub",
       "searchTreatment": {
-        "status": "active-measurement-window",
-        "launchPages": 54,
-        "launchDate": "2026-08-28",
-        "measurementContract": "https://michiganoutdoorsnow.chrisizworski.com/growth-manifest.json",
-        "releaseCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150",
-        "evaluationWindow": {
-          "start": "2026-08-29",
-          "end": "2026-09-25"
-        }
+        "status": "active"
       },
       "searchEvidence": {
         "status": "measured-query",
@@ -941,10 +926,7 @@
       ],
       "networkRole": "destination",
       "searchTreatment": {
-        "status": "active",
-        "experiment": "map-first-search-authority",
-        "windowStart": "2026-08-29",
-        "minimumWindowDays": 28
+        "status": "active"
       },
       "searchEvidence": {
         "status": "emerging-demand",
@@ -1126,8 +1108,7 @@
       ],
       "networkRole": "destination",
       "searchTreatment": {
-        "status": "protected",
-        "experiment": "active"
+        "status": "active"
       },
       "searchEvidence": {
         "status": "measured",
@@ -1346,8 +1327,7 @@
       ],
       "networkRole": "evidence-hub",
       "searchTreatment": {
-        "status": "protected",
-        "experiment": "active"
+        "status": "active"
       },
       "searchEvidence": {
         "status": "measured",
@@ -1438,8 +1418,7 @@
       ],
       "networkRole": "support",
       "searchTreatment": {
-        "status": "protected",
-        "experiment": "active"
+        "status": "active"
       },
       "searchEvidence": {
         "status": "measured",
@@ -2512,7 +2491,7 @@
     {
       "id": "fall-river-window",
       "name": "Best Fall River Paddle Window",
-      "status": "candidate",
+      "status": "shelved",
       "connectsTo": [
         "fall-color",
         "ausable-field-map",
@@ -2528,7 +2507,7 @@
         "cannibalizationSafety": 10
       },
       "bestFitScore": 93,
-      "note": "Strong seasonal composition candidate if query data shows river + color planning demand."
+      "note": "Shelved after the contextual learning pass. Do not create a standalone canonical unless future independent demand clearly warrants reopening the idea."
     },
     {
       "id": "spring-natural-year",
@@ -2550,7 +2529,7 @@
         "cannibalizationSafety": 9
       },
       "bestFitScore": 88,
-      "note": "Good spring network opportunity; first test via contextual handoffs before a new canonical URL."
+      "note": "Good spring network opportunity; first validate via contextual handoffs before a new canonical URL."
     }
   ]
 }

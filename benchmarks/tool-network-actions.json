@@ -1,7 +1,7 @@
 {
-  "version": "1.5.0",
-  "updated": "2026-08-28",
-  "purpose": "Operational overlay for Tool Network Registry decisions that are actively being executed and measured. This file adds current relationships, repairs, experiments, and launch gates without rewriting historical search evidence.",
+  "version": "2.0.0",
+  "updated": "2026-09-02",
+  "purpose": "Operational overlay for durable Tool Network Registry relationships, released repairs, and launch gates. No growth or search experiment is active.",
   "relationships": [
     {
       "from": "circle-tour",
@@ -80,7 +80,7 @@
     {
       "id": "perfect-lawn-network-repair",
       "tool": "perfect-lawn",
-      "status": "released-measuring",
+      "status": "released",
       "released": "2026-08-20",
       "implementationRepo": "izworskic/lawn-advisor",
       "implementationPr": 4,
@@ -93,7 +93,7 @@
     {
       "id": "whitetail-preseason-network-repair",
       "tool": "whitetail",
-      "status": "released-measuring",
+      "status": "released",
       "released": "2026-08-20",
       "implementationRepo": "izworskic/michigan-whitetail-report",
       "implementationPr": 1,
@@ -106,7 +106,7 @@
     {
       "id": "outdoors-now-growth-operating-system",
       "tool": "outdoors-now",
-      "status": "released-measuring",
+      "status": "released",
       "proposed": "2026-08-28",
       "implementationRepo": "izworskic/michigan-outdoors-now",
       "implementationPr": 40,
@@ -122,7 +122,7 @@
       "note": "Joins acquisition and downstream decision behavior so Outdoors Now cannot justify more search pages from impressions alone.",
       "releaseDate": "2026-08-28",
       "mergeCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150",
-      "next": "Verify weekly Search Console + Vercel collection configuration, then hold the 54-page cluster stable through the complete attributed window."
+      "next": "Continue ordinary Search Console and product observation; no experiment freeze or fixed evaluation window is active."
     }
   ],
   "launches": [
@@ -186,34 +186,6 @@
           "canonical-route-checks-pass"
         ],
         "afterPromotion": "Add the planner as an active Tool Network Registry node and only then add crawlable inbound links/cards from central owned properties."
-      }
-    }
-  ],
-  "experiments": [
-    {
-      "id": "fall-river-window-v1",
-      "candidateId": "fall-river-window",
-      "name": "Best Fall River Paddle Window",
-      "status": "running-contextual-test",
-      "candidateScore": 93,
-      "started": "2026-08-20",
-      "surfaces": [
-        "fall-color",
-        "fall-weekend",
-        "manistee"
-      ],
-      "connectsTo": [
-        "fall-color",
-        "ausable-field-map",
-        "manistee-field-map",
-        "great-lakes-buoys"
-      ],
-      "hypothesis": "People planning Michigan fall color trips will use a combined fall-color plus river-paddling decision handoff often enough to justify a distinct tool.",
-      "promotionGate": {
-        "searchEvidence": "A fresh 28-day Search Console export shows distinct query demand combining fall/color intent with river, paddle, canoe, kayak, float, Au Sable, or Manistee intent.",
-        "networkEvidence": "Contextual test has at least 100 symbolic exposures and at least a 5% handoff rate, or equivalent strong evidence across two test surfaces.",
-        "safety": "Do not create a standalone canonical if the observed demand is adequately served by the existing Fall Color, Au Sable, Manistee, or Outdoor Weekend owners.",
-        "decision": "Build a standalone canonical only when searchEvidence is true and networkEvidence is true and safety remains true."
       }
     }
   ]

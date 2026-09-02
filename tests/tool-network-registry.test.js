@@ -18,9 +18,12 @@ test('tool network registry has stable unique nodes and complete relationships',
   }
 });
 
-test('known active search experiments are registry-protected',()=>{
-  for(const id of ['aurora','soo-locks','ship-tracker','frost-dates','tomato-planting']){
-    assert.equal(tools.get(id)?.searchTreatment?.status,'protected',id);
+test('no search experiment or freeze remains active',()=>{
+  assert.match(registry.rules.searchChangePolicy,/No search experiment or freeze is active/);
+  for(const tool of registry.tools){
+    assert.notEqual(tool.searchTreatment?.status,'protected',tool.id);
+    assert.notEqual(tool.searchTreatment?.status,'active-measurement-window',tool.id);
+    assert.equal(Object.prototype.hasOwnProperty.call(tool.searchTreatment||{},'experiment'),false,tool.id);
   }
 });
 
@@ -43,4 +46,5 @@ test('new tool candidates use the 100 point best-fit model and connect to the li
     assert.ok(candidate.connectsTo.length>=2,candidate.id);
     for(const id of candidate.connectsTo)assert.ok(tools.has(id),`${candidate.id}: ${id}`);
   }
+  assert.equal(registry.expansionOpportunities.find(c=>c.id==='fall-river-window')?.status,'shelved');
 });

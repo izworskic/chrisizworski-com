@@ -18,7 +18,6 @@ function htmlFiles(dir) {
 
 test("Michigan summer darkness copy matches the page's astronomical threshold", () => {
   const aurora = read("public/northern-lights-michigan/index.html");
-
   assert.ok(aurora.includes("the fully dark window is much shorter than it is in fall and winter"));
   assert.ok(aurora.includes("the sun is 18 degrees below the horizon"));
   assert.ok(aurora.includes("could not be calculated for the next 24 hours"));
@@ -29,7 +28,6 @@ test("Michigan summer darkness copy matches the page's astronomical threshold", 
 
 test("Soo Locks copy distinguishes gravity-fed level change from complete vessel passage", () => {
   const soo = read("public/soo-locks/index.html");
-
   assert.ok(soo.includes("A lockage raises or lowers the chamber by gravity alone, with no pumps"));
   assert.ok(soo.includes("The complete vessel passage takes longer"));
   assert.ok(soo.includes("timing varies with vessel size, traffic, weather, and ice"));
@@ -40,7 +38,6 @@ test("Michigan Ice separates ten-year accumulated cold from lake-wide ice climat
   const api = read("api/ice.js");
   const generator = read("scripts/ice/gen_site.py");
   const index = read("public/michigan-ice/index.html");
-
   assert.match(api, /slug: 'saginaw-bay', acis: 'KMBS', lake: 'huron'/);
   assert.match(api, /slug: 'grand-traverse-bay', acis: 'KTVC', lake: 'michigan'/);
   assert.ok(index.includes("ten year station normal"));
@@ -51,7 +48,7 @@ test("Michigan Ice separates ten-year accumulated cold from lake-wide ice climat
   assert.ok(!generator.includes("accumulated cold figure and the 54 year comparison"));
 });
 
-test("FVF distribution grows from established pages without touching active snippets", () => {
+test("FVF distribution grows from established pages", () => {
   const sources = [
     ["public/index.html", "home-fvf-authority"],
     ["public/about/index.html", "about-fvf-authority"],
@@ -63,37 +60,11 @@ test("FVF distribution grows from established pages without touching active snip
     assert.ok(html.includes(`data-growth-cta="${action}"`));
     assert.ok(html.includes('/assets/growth-cta.js'));
   }
-
   const inbound = htmlFiles(path.join(root, "public")).filter((file) =>
     readFileSync(file, "utf8").includes('href="/chris-izworski-freighter-view-farms/"'),
   );
   assert.ok(inbound.length >= 9, `expected at least 9 inbound FVF pages, found ${inbound.length}`);
-
   const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
-  const tomato = ledger.experiments.find((item) => item.id === "2026-08-03-tomato-snippet");
-  const frost = ledger.experiments.find((item) => item.id === "2026-08-03-frost-snippet");
-  const fvf = ledger.experiments.find((item) => item.id === "2026-08-03-fvf-gardening-authority");
-  // Read and closed 2026-09-01 from the Search Console 28-day export. What matters now is that
-  // the entry carries a recorded result, not that it is still frozen open.
-  assert.equal(tomato.status, "evaluated");
-  assert.ok(tomato.result?.measured, "read must record the measured page row");
-  assert.ok(tomato.decisionDate, "read must record a decision date");
-  assert.equal(frost.status, "evaluated");
-  assert.ok(frost.result?.measured, "read must record the measured page row");
-  assert.ok(frost.decisionDate, "read must record a decision date");
-  assert.equal(fvf.status, "evaluated");
-  assert.ok(fvf.decisionDate);
-  assert.equal(fvf.releaseDate, "2026-08-12");
-  assert.deepEqual(fvf.evaluationWindow, { start: "2026-08-13", end: "2026-09-09" });
-  assert.equal(fvf.invalidatedWindow.invalidatedOn, "2026-08-11");
-  assert.match(fvf.invalidatedWindow.reason, /confounding/);
-  assert.equal(fvf.distributionExpansion.status, "released");
-  assert.equal(fvf.distributionExpansion.releaseDate, "2026-08-11");
-  assert.deepEqual(fvf.distributionExpansion.evaluationWindow, {
-    start: "2026-08-13",
-    end: "2026-09-09",
-  });
-  assert.deepEqual(fvf.distributionExpansion.sourcePaths, ["/", "/about/", "/guides/"]);
-  assert.match(ledger.measurementProtocol.parallelExecutionPolicy, /page-specific, not site-wide/);
-  assert.match(ledger.measurementProtocol.parallelExecutionPolicy, /Stop or roll back an affected experiment/);
+  assert.equal(ledger.status, "retired");
+  assert.deepEqual(ledger.activeExperiments, []);
 });
