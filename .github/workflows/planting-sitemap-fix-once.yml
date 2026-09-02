@@ -1,0 +1,37 @@
+name: Planting sitemap one-time fix
+
+on:
+  push:
+    branches:
+      - agent/national-garden-expert-logic-20260902
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/national-garden-expert-logic-20260902
+      - name: Align planting sitemap freshness and remove one-time workflow
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('public/sitemap.xml')
+          s = p.read_text()
+          old = '''    <loc>https://chrisizworski.com/national-tools/planting/</loc>\n    <lastmod>2026-09-01</lastmod>'''
+          new = '''    <loc>https://chrisizworski.com/national-tools/planting/</loc>\n    <lastmod>2026-09-02</lastmod>'''
+          if old not in s:
+              raise SystemExit('Expected planting sitemap entry not found')
+          p.write_text(s.replace(old, new, 1))
+          PY
+          git rm .github/workflows/planting-sitemap-fix-once.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add public/sitemap.xml
+          git commit -m "Align planting sitemap freshness"
+          git push origin HEAD:agent/national-garden-expert-logic-20260902
