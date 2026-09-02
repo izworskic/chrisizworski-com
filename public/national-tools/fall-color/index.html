@@ -24,6 +24,18 @@
     <div class="metric"><b id="typical">—</b><span>historical mid-greendown midpoint</span></div>
     <div class="metric"><b id="spread">—</b><span>historical variability (MAD)</span></div>
   </div>
+  <div id="observations" class="decision-panel" hidden>
+    <h2>Nearby current leaf observations</h2>
+    <p id="obs-answer" class="answer-small">Checking recent USA-NPN Nature's Notebook records…</p>
+    <p id="obs-detail" class="small"></p>
+    <div class="metrics">
+      <div class="metric"><b id="obs-yes">—</b><span>recent colored-leaf yes records</span></div>
+      <div class="metric"><b id="obs-sites">—</b><span>monitored sites reporting</span></div>
+      <div class="metric"><b id="obs-latest">—</b><span>most recent observation</span></div>
+    </div>
+    <p id="obs-latest-yes" class="small"></p>
+    <div class="truth-box"><strong>Observation boundary:</strong> <span id="obs-warning">Individual monitored plants are not a landscape-wide peak-color measurement.</span></div>
+  </div>
   <div class="decision-panel">
     <h2>Current weather context</h2>
     <p class="small">These NWS temperatures do not alter the historical satellite timing score. They are shown separately because current weather can affect what you actually find on the ground.</p>
@@ -41,14 +53,49 @@
 
 <section class="section"><div class="wrap grid">
 <div class="source-box"><h2>Why a window is better than a fake peak percentage</h2><p>USA-NPN’s Mid Green-down Median comes from MODIS satellite greenness from 2001–2017. Its median absolute deviation shows how much that timing varied historically. Together they create a defensible timing band rather than an invented “82% peak” number.</p></div>
-<div class="source-box"><h2>Use current observations for the final trip call</h2><p>This tool is not a live leaf camera or a current-season color survey. Check <a href="https://www.fs.usda.gov/visit/fall-colors">USDA Forest Service fall color reports</a> and local observations where available, especially once you are inside or beyond the historical timing window.</p></div>
+<div class="source-box"><h2>Current observations stay separate from the model</h2><p>When available, this tool also checks recent USA-NPN Nature's Notebook <strong>Colored leaves</strong> records near the searched place. Those are observations of individual monitored plants and can include drought or stress color, so they never become a landscape “percent peak” or mathematically alter the historical timing band. Also check <a href="https://www.fs.usda.gov/visit/fall-colors">USDA Forest Service fall color reports</a> and local reports before traveling.</p></div>
 </div></section>
 
 <script>
 document.addEventListener("DOMContentLoaded",function(){
  const N=window.NationalTools,form=document.getElementById("loc");
  function md(value){return value?new Date(value+"T12:00:00Z").toLocaleDateString([],{month:"short",day:"numeric"}):"Unavailable"}
+ let observationController=null;
+ async function loadObservations(loc){
+  if(observationController)observationController.abort();
+  const controller=new AbortController();
+  observationController=controller;
+  const panel=document.getElementById("observations");
+  panel.hidden=false;
+  document.getElementById("obs-answer").textContent="Checking recent USA-NPN Nature's Notebook records…";
+  document.getElementById("obs-detail").textContent="";
+  document.getElementById("obs-yes").textContent="—";
+  document.getElementById("obs-sites").textContent="—";
+  document.getElementById("obs-latest").textContent="—";
+  document.getElementById("obs-latest-yes").textContent="";
+  try{
+    const r=await fetch("/api/national-fall-observations?lat="+loc.latitude+"&lon="+loc.longitude+"&tz="+encodeURIComponent(loc.timeZone||""),{signal:controller.signal});
+    const x=typeof N.readJsonResponse==="function"?await N.readJsonResponse(r,"Current leaf observations unavailable"):await r.json();
+    if(controller!==observationController)return;
+    const o=x.colored_leaves||{};
+    document.getElementById("obs-answer").textContent=o.label||"Current observation context unavailable";
+    document.getElementById("obs-detail").textContent=o.detail||"";
+    document.getElementById("obs-yes").textContent=o.yes_records==null?"—":o.yes_records;
+    document.getElementById("obs-sites").textContent=o.sites_reporting==null?"—":o.sites_reporting;
+    document.getElementById("obs-latest").textContent=o.latest_observation_date?md(o.latest_observation_date):"None in window";
+    const latest=o.latest_yes;
+    document.getElementById("obs-latest-yes").textContent=latest?("Most recent yes: "+md(latest.date)+(latest.common_name?" · "+latest.common_name:"")+(latest.intensity?" · reported canopy color "+latest.intensity:"")+(latest.distance_miles==null?"":" · "+latest.distance_miles+" mi away")):"No recent yes record in this query.";
+    document.getElementById("obs-warning").textContent=x.disclaimer||"Individual monitored plants are not a landscape-wide peak-color measurement.";
+  }catch(err){
+    if(err&&err.name==="AbortError")return;
+    if(controller!==observationController)return;
+    document.getElementById("obs-answer").textContent="Current ground observations unavailable";
+    document.getElementById("obs-detail").textContent="The historical timing and NWS weather answer above remain usable. This optional source failed independently.";
+    document.getElementById("obs-warning").textContent="No current observation claim is being substituted for the unavailable source.";
+  }
+ }
  async function run(loc){
+  if(observationController){observationController.abort();observationController=null;}
   const r=await fetch("/api/national-fall-color?lat="+loc.latitude+"&lon="+loc.longitude),x=await r.json();if(!r.ok)throw new Error(x.error||"Fall timing data unavailable");
   document.getElementById("result").hidden=false;
   document.getElementById("answer").textContent=x.timing_context.stage+" near "+N.label(loc);
@@ -64,6 +111,7 @@ document.addEventListener("DOMContentLoaded",function(){
   document.getElementById("freeze").textContent=weather?.freeze_hours==null?"Unavailable":weather.freeze_hours;
   document.getElementById("warning").textContent=x.disclaimer;
   document.getElementById("mi").hidden=loc.stateCode!=="MI";
+  void loadObservations(loc);
  }
  N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
 });
@@ -81,4 +129,4 @@ document.addEventListener("DOMContentLoaded",function(){
 </div></section>
 </main>
 <footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Public data turned into clearer outdoor decisions, with source and uncertainty shown.</div></footer>
-<script src="/assets/national-tools.js?v=20260901-placebar1"></script></body></html>
+<script src="/assets/national-tools.js?v=20260901-fallobs1"></script></body></html>

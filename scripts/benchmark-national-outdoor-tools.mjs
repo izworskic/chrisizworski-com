@@ -32,6 +32,7 @@ const apis = {
   riverContext: await read("api/national-river-context.js"),
   frost: await read("api/national-frost.js"),
   fall: await read("api/national-fall-color.js"),
+  fallObservations: await read("api/national-fall-observations.js"),
 };
 
 const frostStationNormals = (apis.frost.match(/async function stationNormals[\s\S]*?\n}\nasync function normals/) || [""])[0];
@@ -169,6 +170,12 @@ check("Fall beta uses a historical timing band", /historicalWindow/.test(apis.fa
 check("Fall weather is explicitly separate", /do not mathematically shift the historical satellite date/.test(apis.fall) && /do not alter the historical satellite timing score/.test(pages.fall), 5);
 check("Fall beta rejects fake current color", /not an observed 2026 leaf-color reading/.test(apis.fall) && /fake peak percentage|fake peak|invented/i.test(pages.fall), 5);
 check("Fall exposes variability confidence", /median_absolute_deviation_days/.test(apis.fall) && /confidence/.test(apis.fall), 3);
+check("Fall current observations use official USA-NPN status data", /services\.usanpn\.org\/npn_portal\/observations\/getObservations\.json/.test(apis.fallObservations) && /PHENOPHASE_ID = 498/.test(apis.fallObservations) && /method: "POST"/.test(apis.fallObservations), 5);
+check("Fall current observations are geographically and temporally bounded", /LOOKBACK_DAYS = 21/.test(apis.fallObservations) && /RADIUS_MILES = 75/.test(apis.fallObservations) && /haversineMiles/.test(apis.fallObservations) && /bottom_left_x1/.test(apis.fallObservations), 4);
+check("Fall observation conflicts are excluded without creating peak precision", /conflictFlag/.test(apis.fallObservations) && /filter\(\(row\) => !row\.conflict\)/.test(apis.fallObservations) && !/peak_percent|landscape_percent/.test(apis.fallObservations), 5);
+check("Fall page loads current observations after the core answer", /async function loadObservations/.test(pages.fall) && /void loadObservations\(loc\)/.test(pages.fall) && /api\/national-fall-observations/.test(pages.fall) && /optional source failed independently/.test(pages.fall), 5);
+check("Fall page keeps individual-plant observations separate from landscape timing", /individual monitored plants/i.test(pages.fall) && /never become a landscape/i.test(pages.fall) && /do not alter|never.*alter/i.test(pages.fall), 4);
+
 
 check("Hub is a live multi-signal decision surface", /national-dashboard\.js/.test(pages.hub) && /Your outdoor desk/.test(pages.hub) && /data-desk-grid/.test(pages.hub), 5);
 check("Hub compares two saved places across the same five signals", /id="place-compare"/.test(pages.hub) && /id="compare-a"/.test(pages.hub) && /id="compare-b"/.test(pages.hub) && /No overall winner or safety score/.test(pages.hub) && /D\.compare/.test(pages.hub), 5);
@@ -196,6 +203,8 @@ check("Saved places are explicitly not fake alerts", contract.phase3?.alerts?.st
 check("Phase 3 device location remains manual-first and privacy bounded", contract.phase3?.location?.status === "manual-first-with-optional-device-location" && /rounded to 0\.001 degrees/.test(contract.phase3?.location?.rule || "") && /resolved place query/.test(contract.phase3?.location?.continuity || ""), 4);
 check("Phase 3 place toolbar preserves canonical and privacy rules", contract.phase3?.placeToolbar?.status === "live" && /never latitude\/longitude/.test(contract.phase3?.placeToolbar?.shareRule || "") && /place names, ZIPs, and coordinates remain excluded/.test(contract.phase3?.placeToolbar?.analyticsRule || ""), 4);
 check("Phase 3 comparison forbids winner and safety scoring", contract.phase3?.comparison?.status === "live" && /without producing an overall winner, universal score, or safety determination/.test(contract.phase3?.comparison?.rule || "") && /signal count only/.test(contract.phase3?.comparison?.measurement || "") && /creates no new indexable URL/.test(contract.phase3?.comparison?.indexability || ""), 4);
+check("Fall observation enrichment stays optional and non-peak", contract.phase2?.fallCurrentObservations?.status === "optional-enrichment" && /never become a landscape percent-peak/.test(contract.phase2?.fallCurrentObservations?.rule || "") && /without waiting/.test(contract.phase2?.fallCurrentObservations?.failureMode || "") && /conflicting status records excluded/.test(contract.phase2?.fallCurrentObservations?.coverage || ""), 4);
+
 
 
 

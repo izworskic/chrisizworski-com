@@ -1,5 +1,5 @@
 {
-  "version": "1.6.0",
+  "version": "1.7.0",
   "updated": "2026-08-31",
   "objective": "Ship a separate U.S. outdoor decision network without weakening Michigan canonicals, source truth, or search quality.",
   "lossFunction": {
@@ -81,7 +81,8 @@
       "frost-spring-and-fall-probabilities",
       "frost-hard-freeze-and-station-confidence",
       "extension-sourced-20-crop-planting-rules",
-      "fall-color-historical-timing-band-plus-separate-current-weather"
+      "fall-color-historical-timing-band-plus-separate-current-weather",
+      "fall-color-current-usanpn-individual-plant-observation-context"
     ],
     "smokeAirQuality": {
       "status": "source-key-gated",
@@ -91,6 +92,13 @@
         "FIRMS_MAP_KEY"
       ],
       "indexableRouteCreated": false
+    },
+    "fallCurrentObservations": {
+      "status": "optional-enrichment",
+      "source": "USA-NPN Nature's Notebook Status & Intensity data, Colored leaves phenophase 498",
+      "rule": "Recent nearby individual-plant observations may be shown as current ground evidence, but they never become a landscape percent-peak estimate and never mathematically alter the historical timing model.",
+      "failureMode": "The core historical timing and NWS weather answer renders without waiting for this optional source; failure remains isolated to the observation panel.",
+      "coverage": "75-mile radius, 21-day lookback, conflicting status records excluded"
     }
   },
   "phase3": {
