@@ -24,7 +24,8 @@ test("historical White Christmas summary uses the one-inch threshold and require
   assert.equal(s.probability,50);
   assert.equal(s.definition,"At least 1 inch of snow depth on December 25");
   assert.equal(s.recent_valid_years,10);
-  assert.equal(s.recent_white_years,7);
+  assert.equal(s.recent_white_years,8);
+  assert.equal(s.recent_probability,80);
   assert.equal(T.historicalSummary(rows.slice(0,24)),null);
 });
 
