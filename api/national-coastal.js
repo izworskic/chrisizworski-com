@@ -63,7 +63,7 @@ function normalizeBeach(f, lat, lon, day) {
   return { day:day, site_id:clean(a.siteid || a.id), site_name:clean(a.beachname || a.sitename || a.siteid || a.id) || "NWS beach forecast area", distance_miles:Number.isFinite(d) ? Math.round(d * 10) / 10 : null, period:clean(a.period), rip_swim_risk:clean(a.rip), rip_swim_risk_code:risk(a.rip), surf:clean(a.surf), water_temperature:clean(a.wtemp), winds:clean(a.winds), weather:clean(a.weather), thunderstorm:clean(a.tstorm), waterspout:clean(a.wspout), uv:clean(a.uv), product_url:clean(a.srfprod), issued_at:isoEpoch(a.idp_filedate), ingested_at:isoEpoch(a.idp_ingestdate) };
 }
 async function beach(layer, lat, lon, day) {
-  const p = await json(beachUrl(layer, lat, lon), 5500);
+  const p = await json(beachUrl(layer, lat, lon), 3500);
   if (p && p.error) throw new Error("NWS beach service: " + (p.error.message || "query failed"));
   const rows = (p && p.features || []).map(function(f){ return { f:f, d:featureMiles(f, lat, lon) }; }).filter(function(x){ return Number.isFinite(x.d) && x.d <= RADIUS; }).sort(function(a,b){ return a.d - b.d; });
   return normalizeBeach(rows[0] && rows[0].f, lat, lon, day);
@@ -106,9 +106,9 @@ function obs(station, rows) {
   return { station:{ id:station.id, name:station.name, owner:station.owner, distance_miles:Math.round(station.distance_miles*10)/10, latitude:station.latitude, longitude:station.longitude }, observed_at:now.observed_at, wave_height_ft:wave, dominant_period_sec:now.dominant_period_sec, mean_wave_direction_deg:now.mean_wave_direction_deg, wind_mph:wind, gust_mph:mph(now.gust_mps), wind_direction_deg:now.wind_direction_deg, air_temperature_f:ctf(now.air_temp_c), water_temperature_f:water, change_3h:prior ? { wave_height_ft:change(wave,mtf(prior.wave_m)), wind_mph:change(wind,mph(prior.wind_mps)), water_temperature_f:change(water,ctf(prior.water_temp_c)), compared_at:prior.observed_at } : null };
 }
 async function ndbc(lat, lon) {
-  const list = ndbcStations(await text(NDBC_ACTIVE, 5000)).filter(function(s){ return s.met || s.waterquality; }), station = nearest(list, lat, lon, RADIUS);
+  const list = ndbcStations(await text(NDBC_ACTIVE, 3000)).filter(function(s){ return s.met || s.waterquality; }), station = nearest(list, lat, lon, RADIUS);
   if (!station) return null;
-  return obs(station, ndbcRows(await text(NDBC_DATA + "/" + encodeURIComponent(station.id) + ".txt", 4500)));
+  return obs(station, ndbcRows(await text(NDBC_DATA + "/" + encodeURIComponent(station.id) + ".txt", 3000)));
 }
 function coopsStations(p) { const rows = p && (p.stationList || p.stations) || []; return (Array.isArray(rows) ? rows : []).map(function(r){ return { id:clean(r.id), name:clean(r.name)||clean(r.id), state:clean(r.state), latitude:finite(r.lat,-90,90), longitude:finite(r.lng,-180,180) }; }).filter(function(r){ return r.id && r.latitude != null && r.longitude != null; }); }
 function pad(v){ return String(v).padStart(2,"0"); }
@@ -116,9 +116,9 @@ function begin(now){ now = now || new Date(); return String(now.getUTCFullYear()
 function tideTime(v){ const t = Date.parse(String(v||"").trim().replace(" ","T")+"Z"); return Number.isFinite(t) ? new Date(t).toISOString() : null; }
 function tideUrl(id, now) { const q = new URLSearchParams({ product:"predictions", application:"ChrisIzworskiNationalCoastal", begin_date:begin(now), range:"36", datum:"MLLW", station:id, time_zone:"gmt", units:"english", interval:"hilo", format:"json" }); return COOPS_DATA + "?" + q.toString(); }
 async function tides(lat, lon) {
-  const station = nearest(coopsStations(await json(COOPS_META,5000)), lat, lon, RADIUS);
+  const station = nearest(coopsStations(await json(COOPS_META,3000)), lat, lon, RADIUS);
   if (!station) return null;
-  const p = await json(tideUrl(station.id),5000), predictions = p && p.error ? [] : (p && p.predictions || []).map(function(r){ return { time:tideTime(r.t), height_ft:finite(r.v), type:r.type==="H"?"high":r.type==="L"?"low":clean(r.type) }; }).filter(function(r){ return r.time && r.height_ft != null; }).slice(0,8);
+  const p = await json(tideUrl(station.id),3500), predictions = p && p.error ? [] : (p && p.predictions || []).map(function(r){ return { time:tideTime(r.t), height_ft:finite(r.v), type:r.type==="H"?"high":r.type==="L"?"low":clean(r.type) }; }).filter(function(r){ return r.time && r.height_ft != null; }).slice(0,8);
   return { station:{ id:station.id, name:station.name, state:station.state, distance_miles:Math.round(station.distance_miles*10)/10 }, datum:"MLLW", predictions:predictions, unavailable_reason:predictions.length ? null : clean(p && p.error && p.error.message) || "No tide predictions returned for this station" };
 }
 function changed(o){ const c=o && o.change_3h; if(!c) return "Three-hour buoy change is unavailable."; const p=[]; if(c.wave_height_ft!=null&&Math.abs(c.wave_height_ft)>=0.2)p.push("wave height "+(c.wave_height_ft>0?"rose ":"fell ")+Math.abs(c.wave_height_ft).toFixed(1)+" ft"); if(c.wind_mph!=null&&Math.abs(c.wind_mph)>=2)p.push("wind "+(c.wind_mph>0?"increased ":"decreased ")+Math.abs(c.wind_mph).toFixed(1)+" mph"); return p.length ? "At the nearby buoy, "+p.join(" and ")+" over roughly three hours." : "Nearby buoy wave and wind observations changed little over roughly three hours."; }
