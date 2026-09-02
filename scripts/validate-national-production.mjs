@@ -67,7 +67,7 @@ const coastalControls=[
 ];
 let coastalCovered=0;
 for(const p of coastalControls){
-  await check(p.name+" coastal contract",async()=>{
+  await check(p.name+" contract",async()=>{
     const x=await get("/api/national-coastal?lat="+p.lat+"&lon="+p.lon,{timeout:20000});
     if(typeof x.coastal_available!=="boolean"||!x.decision||!Array.isArray(x.sources)||x.sources.length!==3)throw new Error("missing coastal decision/source contract");
     if(p.expectCoastal&&x.coastal_available)coastalCovered+=1;
