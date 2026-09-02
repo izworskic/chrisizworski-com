@@ -29,9 +29,21 @@ for(const p of places){
     const x=await get("/api/national-aurora?lat="+p.lat+"&lon="+p.lon);
     if(!x.sources||!x.retrieved_at)throw new Error("missing source contract");
   });
-  await check(p.name+" rivers",async()=>{
+  await check(p.name+" rivers summary",async()=>{
     const x=await get("/api/national-rivers?lat="+p.lat+"&lon="+p.lon,{timeout:20000});
     if(!Array.isArray(x.gauges)||!x.sources)throw new Error("missing gauges/source contract");
+  });
+  let selectedRiverSite=null;
+  await check(p.name+" river discovery",async()=>{
+    const x=await get("/api/national-rivers?mode=discovery&radius=50&limit=200&lat="+p.lat+"&lon="+p.lon,{timeout:15000});
+    if(x.mode!=="river-discovery"||!Array.isArray(x.rivers)||!x.sources)throw new Error("missing river discovery contract");
+    const first=x.rivers.flatMap(r=>Array.isArray(r.gauges)?r.gauges:[])[0];
+    selectedRiverSite=first?.id||null;
+  });
+  await check(p.name+" selected river detail",async()=>{
+    if(!selectedRiverSite)throw new Error("no monitored river available for selected-detail smoke");
+    const x=await get("/api/national-rivers?lat="+p.lat+"&lon="+p.lon+"&site="+encodeURIComponent(selectedRiverSite),{timeout:20000});
+    if(x.mode!=="selected-river-detail"||x.selected_site?.id!==selectedRiverSite||!Array.isArray(x.gauges))throw new Error("selected river did not remain exact-site");
   });
   await check(p.name+" frost",async()=>{
     const x=await get("/api/national-frost?lat="+p.lat+"&lon="+p.lon,{timeout:20000});
