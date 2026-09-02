@@ -62,34 +62,18 @@ check(
   current.dailyImpressions !== benchmark.measurement.unverifiedClaimedMaxDailyImpressions,
 );
 check(
-  "Every priority page has one experiment",
-  benchmark.priorityPages.every((page) =>
-    ledger.experiments.some((experiment) => experiment.path === page.path),
-  ),
+  "Growth experiment ledger is retired into ship-and-observe mode",
+  ledger.status === "retired" &&
+    ledger.operatingMode === "ship-and-observe" &&
+    Array.isArray(ledger.activeExperiments) &&
+    ledger.activeExperiments.length === 0,
 );
 check(
-  "Experiment protocol requires a clean 28-day window",
-  ledger.measurementProtocol?.windowDays === 28 &&
-    ledger.measurementProtocol?.startOffsetDays === 1,
+  "Retired ledger carries durable learnings instead of synthetic experiment windows",
+  Array.isArray(ledger.durableLearnings) &&
+    ledger.durableLearnings.length >= 3 &&
+    !Array.isArray(ledger.experiments),
 );
-for (const experiment of ledger.experiments) {
-  if (experiment.status === "running") {
-    check(
-      `${experiment.id} has a valid running window`,
-      Boolean(experiment.releaseDate && experiment.evaluationWindow) &&
-        daysBetween(experiment.releaseDate, experiment.evaluationWindow.start) === 1 &&
-        daysBetween(experiment.evaluationWindow.start, experiment.evaluationWindow.end) + 1 === 28,
-    );
-  }
-  if (experiment.status === "pending-clean-window") {
-    check(
-      `${experiment.id} does not claim an unreleased measurement window`,
-      experiment.releaseDate === null &&
-        experiment.evaluationWindow === null &&
-        Boolean(experiment.lastSearchFacingChangeDate),
-    );
-  }
-}
 check(
   "Monetization sequence is ad-first",
   benchmark.revenueModel.sequence.join("|") === "search growth|Google AdSense|post-proof sponsorships",
@@ -149,7 +133,7 @@ const pageChecks = [
   {
     file: "public/mackinac-bridge-live/index.html",
     path: "/mackinac-bridge-live/",
-    title: "Mackinac Bridge Conditions Today: Live Status &amp; Cameras",
+    title: "Is the Mackinac Bridge Open Today? Live Status &amp; Cameras",
     marker: 'id="mackinac-conditions-answer"',
   },
 ];
@@ -218,9 +202,6 @@ check(
     (birding.match(/href="https:\/\/birding\.chrisizworski\.com\/"/g) || []).length >= 2,
 );
 
-const gazetteExperiment = ledger.experiments.find(
-  (experiment) => experiment.id === "2026-08-03-great-lakes-gazette-daily",
-);
 const gazetteLanding = await read("public/great-lakes-gazette/index.html");
 const gazetteDistribution = await Promise.all(
   gazetteBenchmark.scope.distributionPages.map(async (route) => {
@@ -245,9 +226,9 @@ check(
     gazetteDistribution.every((html) => html.includes("data-gazette-latest")),
 );
 check(
-  "Gazette experiment gates reliability and engagement",
-  gazetteExperiment?.target?.dailyAvailability === 1 &&
-    gazetteExperiment?.target?.widgetEditionOpenRate === 0.02,
+  "Gazette publication benchmark retains reliability and engagement targets",
+  gazetteBenchmark.targets.first28Days.dailyEditionAvailability === 1 &&
+    gazetteBenchmark.targets.first28Days.editionsWithAtLeastFiveHealthyAisPorts === 0.95,
 );
 
 const report = {
@@ -261,7 +242,7 @@ const report = {
   },
   northStar: hundredX,
   pages,
-  experimentsReady: ledger.experiments.length,
+  activeExperiments: ledger.activeExperiments.length,
   failures,
 };
 
