@@ -1,8 +1,8 @@
 const { finite, sourceMeta } = require("../lib/national-outdoor");
 const snow = require("./national-snow")._test;
 
-const ACIS_META = "https://data.rcc-acis.org/StnMeta";
-const ACIS_DATA = "https://data.rcc-acis.org/StnData";
+const ACIS_MULTI = "https://data.rcc-acis.org/MultiStnData";
+const HISTORY_RADIUS_MILES = 75;
 const CPC_SEASON_TEMP = "https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/cpc_sea_temp_outlk/MapServer";
 const CPC_SEASON_PRECIP = "https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/cpc_sea_precip_outlk/MapServer";
 const CPC_MONTH_TEMP = "https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/cpc_mthly_temp_outlk/MapServer";
@@ -60,11 +60,13 @@ function stationRows(payload){
     };
   }).filter(row=>row.sid&&row.latitude!=null&&row.longitude!=null);
 }
-function annualSnowRows(payload){
+function annualSnowRows(payload,startYear=1991){
   const data=Array.isArray(payload&&payload.data)?payload.data:[];
-  return data.map(row=>{
-    const year=Number(String(row&&row[0]||"").slice(0,4));
-    const raw=Array.isArray(row)?row[1]:null;
+  return data.map((row,index)=>{
+    const first=Array.isArray(row)?row[0]:null;
+    const dated=/^\d{4}-/.test(String(first||""));
+    const year=dated?Number(String(first).slice(0,4)):startYear+index;
+    const raw=dated?(Array.isArray(row)?row[1]:null):first;
     let value=null;
     if(raw==="T")value=0;
     else if(raw!==null&&raw!=="M"&&raw!==""&&Number.isFinite(Number(raw)))value=Number(raw);
@@ -89,28 +91,35 @@ function historicalSummary(rows){
   };
 }
 async function historicalClimatology(lat,lon){
-  const meta=await postAcis(ACIS_META,{
-    bbox:bbox(lat,lon,180).join(","),
+  const payload=await postAcis(ACIS_MULTI,{
+    bbox:bbox(lat,lon,HISTORY_RADIUS_MILES).join(","),
     sdate:"1991-12-25",
     edate:"2025-12-25",
-    elems:"snwd",
-    meta:["name","state","sids","ll","elev","uid","valid_daterange"]
-  },5500);
-  const candidates=stationRows(meta).map(row=>({...row,distance_miles:miles(lat,lon,row.latitude,row.longitude)})).sort((a,b)=>a.distance_miles-b.distance_miles).slice(0,6);
-  for(const station of candidates){
-    try{
-      const payload=await postAcis(ACIS_DATA,{
-        sid:station.sid,
-        sdate:"1991-12-25",
-        edate:"2025-12-25",
-        meta:["name","state","ll","elev"],
-        elems:[{name:"snwd",interval:[1,0,0],duration:1}]
-      },5000);
-      const history=historicalSummary(annualSnowRows(payload));
-      if(history)return {station:{...station,distance_miles:Math.round(station.distance_miles*10)/10},history};
-    }catch{}
-  }
-  return null;
+    meta:["name","state","sids","ll","elev","uid"],
+    elems:[{name:"snwd",interval:[1,0,0],duration:1}]
+  },6500);
+  const stations=(Array.isArray(payload&&payload.data)?payload.data:[]).map(record=>{
+    const meta=record&&record.meta||{};
+    const ll=Array.isArray(meta.ll)?meta.ll:[null,null];
+    const latitude=finite(ll[1],-90,90),longitude=finite(ll[0],-180,180);
+    if(latitude==null||longitude==null)return null;
+    const history=historicalSummary(annualSnowRows({data:record.data},1991));
+    if(!history)return null;
+    const distance=miles(lat,lon,latitude,longitude);
+    if(!Number.isFinite(distance)||distance>HISTORY_RADIUS_MILES)return null;
+    return {
+      station:{
+        name:meta.name||"Climate station",
+        state:meta.state||null,
+        latitude,longitude,
+        elevation_ft:finite(meta.elev),
+        sid:sidFor(meta),
+        distance_miles:Math.round(distance*10)/10
+      },
+      history
+    };
+  }).filter(Boolean).sort((a,b)=>a.station.distance_miles-b.station.distance_miles);
+  return stations[0]||null;
 }
 function identifyUrl(base,lat,lon,layers="all"){
   const extent=[lon-.15,lat-.15,lon+.15,lat+.15].join(",");
@@ -327,7 +336,7 @@ module.exports=async function handler(req,res){
     sources,
     limitations:[
       "The displayed percentage is a ChrisIzworski.com blended estimate, not an official NOAA probability forecast for this year's Christmas.",
-      "The historical anchor is calculated from the nearest ACIS station with at least 25 valid December 25 snow-depth observations during 1991-2020; station distance is shown.",
+      "The historical anchor is calculated from the nearest ACIS station within 75 miles with at least 25 valid December 25 snow-depth observations during 1991-2020; station distance is shown.",
       "NOAA's historical White Christmas definition is at least 1 inch of snow depth on December 25.",
       "CPC monthly or seasonal outlooks describe broad temperature and precipitation categories, not Christmas Day weather, so their influence is deliberately capped.",
       "Current NOHRSC/SNOTEL snowpack begins influencing the estimate only inside 45 days and only within the Snowpack tool's 60-mile local decision boundary.",
@@ -347,6 +356,7 @@ module.exports._test={
   decemberPriority,
   historicalClimatology,
   historicalSummary,
+  HISTORY_RADIUS_MILES,
   identifyUrl,
   normalizeOutlookResult,
   nwsChristmasForecast,
