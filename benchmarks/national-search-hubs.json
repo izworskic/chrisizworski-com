@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "updated": "2026-09-01",
+  "version": "1.1.0",
+  "updated": "2026-09-02",
   "objective": "Grow qualified national search demand with a small set of distinct intent hubs instead of thin city/ZIP pages.",
   "minimumScore": 90,
   "weights": {
@@ -19,9 +19,36 @@
     "no-live-data-claims-without-the-underlying-tool"
   ],
   "hubs": [
-    {"route":"/national-tools/garden/","intent":"combine frost risk with crop timing","primaryTools":["/national-tools/frost/","/national-tools/planting/"]},
-    {"route":"/national-tools/fall/","intent":"plan a fall trip using foliage timing plus separate freeze context","primaryTools":["/national-tools/fall-color/","/national-tools/frost/"]},
-    {"route":"/national-tools/water/","intent":"learn how to interpret river flow, trend, historical context and official forecast","primaryTools":["/national-tools/rivers/"]},
-    {"route":"/national-tools/night-sky/","intent":"plan aurora viewing using separate signal, cloud, darkness and moon context","primaryTools":["/national-tools/aurora/"]}
+    {
+      "route": "/national-tools/garden/",
+      "intent": "combine frost risk with crop timing",
+      "primaryTools": [
+        "/national-tools/frost/",
+        "/national-tools/planting/"
+      ]
+    },
+    {
+      "route": "/national-tools/fall/",
+      "intent": "plan a fall trip using foliage timing plus separate freeze context",
+      "primaryTools": [
+        "/national-tools/fall-color/",
+        "/national-tools/frost/"
+      ]
+    },
+    {
+      "route": "/national-tools/water/",
+      "intent": "choose the correct river or coastal water decision tool, then interpret each source class without blending safety claims",
+      "primaryTools": [
+        "/national-tools/rivers/",
+        "/national-tools/coastal/"
+      ]
+    },
+    {
+      "route": "/national-tools/night-sky/",
+      "intent": "plan aurora viewing using separate signal, cloud, darkness and moon context",
+      "primaryTools": [
+        "/national-tools/aurora/"
+      ]
+    }
   ]
 }
