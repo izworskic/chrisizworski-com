@@ -1,4 +1,3 @@
-// Release gate rerun after sitemap freshness alignment.
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -50,7 +49,7 @@ test('onion latitude guidance changes by photoperiod',()=>{
 });
 
 test('page exposes whole-year decisions without new doorway canonicals',()=>{
-  assert.match(page,/Planting Calendar by Location: Spring, Fall & Succession/);
+  assert.match(page,/<title>Planting Calendar by Location \| Chris Izworski<\/title>/);
   assert.match(page,/What should I do now\?/);
   assert.match(page,/Next succession/);
   assert.match(page,/Fall garden/);
