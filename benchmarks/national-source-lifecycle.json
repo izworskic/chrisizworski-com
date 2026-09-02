@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.4.0",
   "updated": "2026-09-02",
   "purpose": "Machine-readable lifecycle and migration audit for national outdoor data dependencies.",
   "sources": {
@@ -160,6 +160,42 @@
       "derivedRule": "Melt pressure, refreeze and retention language are site-derived interpretations and must never be presented as an NWS, NOAA or NRCS snowmelt forecast.",
       "freshnessRule": "Treat the hourly forecast as stale after six hours.",
       "failureMode": "Forecast failure leaves measured pack visible and prevents unsupported melt conclusions."
+    },
+    "acisChristmasHistory": {
+      "source": "Regional Climate Centers Applied Climate Information System (ACIS), joint RCC/NCEI/NWS climate-data system",
+      "class": "historical station snow-depth observations",
+      "status": "production-supported",
+      "authentication": "none",
+      "endpoints": [
+        "https://data.rcc-acis.org/StnMeta",
+        "https://data.rcc-acis.org/StnData"
+      ],
+      "semantics": "Calculate the 1991-2020 frequency of at least 1 inch of snow depth on December 25 from the nearest station with at least 25 valid Christmas observations. This is a site calculation from climate observations, not the NCEI interpolated map value.",
+      "geographyRule": "Station distance is always exposed; the calculation uses station history rather than claiming exact neighborhood climatology.",
+      "failureMode": "If no qualifying station can be established, the White Christmas percentage is unavailable rather than inferred from latitude or reputation."
+    },
+    "cpcChristmasOutlooks": {
+      "source": "NOAA/NWS Climate Prediction Center monthly and seasonal temperature/precipitation outlook map services",
+      "class": "broad-period climate outlook",
+      "status": "production-supported",
+      "authentication": "none",
+      "endpoints": [
+        "https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/cpc_mthly_temp_outlk/MapServer",
+        "https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/cpc_mthly_precip_outlk/MapServer",
+        "https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/cpc_sea_temp_outlk/MapServer",
+        "https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/cpc_sea_precip_outlk/MapServer"
+      ],
+      "semantics": "CPC probabilities describe above/below/near-normal categories for a month or overlapping three-month season. They are not Christmas Day probabilities.",
+      "derivedRule": "CPC influence on the White Christmas estimate is deliberately capped and cannot replace the historical prior or short-range forecast.",
+      "failureMode": "Missing CPC data leaves the historical baseline intact."
+    },
+    "nceiWhiteChristmasMap": {
+      "source": "NOAA Climate.gov / NCEI 1991-2020 White Christmas probability map",
+      "class": "historical climatology communication layer",
+      "status": "production-supported-reference",
+      "authentication": "none",
+      "endpoint": "https://www.arcgis.com/home/item.html?id=f0ad5d4bb3fa4176ad2134cafbbf8cfd",
+      "semantics": "Historical probability of at least 1 inch of snow on the ground on December 25. The map is climatology and is never represented as the current-year forecast."
     }
   },
   "gates": [
@@ -169,6 +205,9 @@
     "One failed source must not blank independent source-backed signals.",
     "National location resolution must not depend on a single upstream geocoder for ordinary U.S. city/state or ZIP queries.",
     "Measured snowpack farther than the Snow decision radius may be shown only as regional context, never as local pack truth.",
-    "Derived snowmelt pressure must remain labeled as site interpretation rather than an agency forecast."
+    "Derived snowmelt pressure must remain labeled as site interpretation rather than an agency forecast.",
+    "White Christmas historical probability must require at least 25 valid 1991-2020 Christmas snow-depth observations.",
+    "CPC broad-period outlook probabilities must never be relabeled as Christmas Day forecast probabilities.",
+    "White Christmas percentage output must remain visibly site-derived and rounded to five points."
   ]
 }
