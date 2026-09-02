@@ -1,5 +1,5 @@
 {
-  "version": "2.2.0",
+  "version": "2.3.0",
   "updated": "2026-09-02",
   "objective": "Build a national outdoor decision-intelligence network that turns authoritative public data into explainable, place-specific decisions without weakening Michigan canonicals, source truth, or search quality.",
   "lossFunction": {
@@ -73,7 +73,8 @@
     "zipCropDatePages": false,
     "phase2AddsIndexableRoutes": false,
     "phase3AddsIndexableRoutes": true,
-    "phase4AddsIndexableRoutes": true
+    "phase4AddsIndexableRoutes": true,
+    "phase5AddsIndexableRoutes": true
   },
   "protectedMichiganRoutes": [
     "/tools/",
@@ -306,6 +307,16 @@
       "scope": "Snowpack + Melt",
       "route": "/national-tools/snow/",
       "api": "/api/national-snow"
+    },
+    "phase5": {
+      "status": "implemented-pending-verification",
+      "scope": "White Christmas seasonal intelligence",
+      "route": "/national-tools/white-christmas/",
+      "api": "/api/national-white-christmas",
+      "supportingRoutes": [
+        "/white-christmas-probability-map/",
+        "/white-christmas-michigan/"
+      ]
     }
   },
   "coastalProduct": {
@@ -392,6 +403,44 @@
         "Atlanta, Georgia"
       ],
       "invariant": "A local pack-phase conclusion requires measured pack within 60 miles; otherwise melt pressure remains not-evaluated."
+    }
+  },
+  "whiteChristmasProduct": {
+    "status": "implemented-pending-verification",
+    "route": "/national-tools/white-christmas/",
+    "api": "/api/national-white-christmas",
+    "canonicalIntent": "Will I have a White Christmas? Current-year probability by U.S. location",
+    "definition": "At least 1 inch of snow on the ground on December 25.",
+    "sourceFamilies": [
+      "RCC-ACIS/NCEI-NWS historical snow depth",
+      "NOAA/NWS CPC monthly and seasonal outlooks",
+      "NOAA/NOHRSC and USDA NRCS snowpack",
+      "NOAA/NWS short-range forecast"
+    ],
+    "model": {
+      "output": "Rounded 5-point probability estimate with visible confidence and factor contributions",
+      "earlySeason": "1991-2020 station history dominates; CPC can only nudge the prior",
+      "snowpackWindow": "Current measured snowpack begins influencing inside 45 days and only within 60 miles",
+      "shortRangeWindow": "NWS Christmas-period forecast becomes a major factor only inside 8 days",
+      "precisionRule": "Never display a one-point probability; round to five points to avoid false precision."
+    },
+    "hardRules": [
+      "The percentage is site-derived synthesis and must never be labeled an official NOAA/NWS White Christmas forecast.",
+      "Historical baseline requires at least 25 valid December 25 snow-depth observations in 1991-2020.",
+      "White Christmas uses the NOAA one-inch snow-depth definition, not snowfall during Christmas Day.",
+      "CPC seasonal/monthly categories may only nudge the historical prior because they are broad-period outlooks.",
+      "Snowpack outside 60 miles cannot alter the local White Christmas estimate.",
+      "Short-range NWS weather can dominate only after December 25 enters normal forecast range.",
+      "No guarantee or certainty language at any probability.",
+      "No raw place, ZIP or coordinates in analytics."
+    ],
+    "longTail": {
+      "admittedNow": [
+        "/white-christmas-probability-map/",
+        "/white-christmas-michigan/"
+      ],
+      "blockedPattern": "Mass city, ZIP, county or state doorway generation",
+      "futureAdmission": "Require distinct query intent, primary-source depth, internal network fit and measurable search opportunity before any new supporting URL."
     }
   }
 }
