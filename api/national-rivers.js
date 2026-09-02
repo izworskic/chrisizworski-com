@@ -25,7 +25,7 @@ function haversine(a, b, c, d) {
   const q = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a)) * Math.cos(toRad(c)) * Math.sin(dLon / 2) ** 2;
   return 2 * r * Math.asin(Math.sqrt(q));
 }
-function nearestSites(lat, lon, limit = 10) {
+function indexedSitesByDistance(lat, lon) {
   const sites = Array.isArray(siteIndex?.sites) ? siteIndex.sites : [];
   return sites
     .map((site) => ({
@@ -36,8 +36,59 @@ function nearestSites(lat, lon, limit = 10) {
       distance_miles: haversine(lat, lon, Number(site.latitude), Number(site.longitude)),
     }))
     .filter((site) => site.id && site.latitude != null && site.longitude != null && Number.isFinite(site.distance_miles))
-    .sort((a, b) => a.distance_miles - b.distance_miles)
-    .slice(0, Math.max(1, Math.min(20, Number(limit) || 10)));
+    .sort((a, b) => a.distance_miles - b.distance_miles);
+}
+function nearestSites(lat, lon, limit = 10) {
+  return indexedSitesByDistance(lat, lon)
+    .slice(0, Math.max(1, Math.min(300, Number(limit) || 10)));
+}
+function riverName(siteName) {
+  const clean = String(siteName || "").replace(/\s+/g, " ").trim();
+  if (!clean) return "Unnamed monitored waterway";
+  const base = clean.split(/\s+(?:AT|NEAR|NR|BELOW|ABOVE|BLW|ABV|UPSTREAM|DOWNSTREAM)\s+/i)[0] || clean;
+  return base.toLowerCase().replace(/\b([a-z])/g, (match) => match.toUpperCase());
+}
+function discoveryRivers(lat, lon, radiusMiles = 50, limit = 200) {
+  const radius = finite(radiusMiles, 10, 100) ?? 50;
+  const all = indexedSitesByDistance(lat, lon).filter((site) => site.distance_miles <= radius);
+  const sites = all.slice(0, Math.max(1, Math.min(300, Number(limit) || 200)));
+  const groups = new Map();
+  for (const site of sites) {
+    const label = riverName(site.name);
+    const key = label.toLowerCase();
+    if (!groups.has(key)) groups.set(key, { key, name: label, gauges: [], closest_distance_miles: site.distance_miles });
+    const group = groups.get(key);
+    group.gauges.push(site);
+    group.closest_distance_miles = Math.min(group.closest_distance_miles, site.distance_miles);
+  }
+  return {
+    radius_miles: radius,
+    total_sites_in_radius: all.length,
+    returned_sites: sites.length,
+    truncated: all.length > sites.length,
+    rivers: [...groups.values()]
+      .map((group) => ({
+        ...group,
+        gauge_count: group.gauges.length,
+        gauges: group.gauges.sort((a, b) => a.distance_miles - b.distance_miles),
+      }))
+      .sort((a, b) => a.closest_distance_miles - b.closest_distance_miles),
+  };
+}
+function indexedSite(siteId, lat, lon) {
+  const id = String(siteId || "").trim();
+  if (!/^\d{5,15}$/.test(id)) return null;
+  const raw = (Array.isArray(siteIndex?.sites) ? siteIndex.sites : []).find((site) => String(site.id) === id);
+  if (!raw) return null;
+  const latitude = finite(raw.latitude, -90, 90), longitude = finite(raw.longitude, -180, 180);
+  if (latitude == null || longitude == null) return null;
+  return {
+    id: raw.id,
+    name: raw.name,
+    latitude,
+    longitude,
+    distance_miles: haversine(lat, lon, latitude, longitude),
+  };
 }
 async function fetchJson(url, timeoutMs = 2500) {
   const response = await fetch(url, {
@@ -298,8 +349,37 @@ module.exports = async function handler(req, res) {
   const lon = finite(req.query?.lon, -180, 180);
   if (lat == null || lon == null) return res.status(400).json({ error: "Valid latitude and longitude are required" });
 
+  const mode = String(req.query?.mode || "").toLowerCase();
+  if (mode === "discovery") {
+    const discovery = discoveryRivers(lat, lon, req.query?.radius, req.query?.limit);
+    return res.status(200).json({
+      retrieved_at: new Date().toISOString(),
+      mode: "river-discovery",
+      location: { latitude: lat, longitude: lon },
+      ...discovery,
+      discovery_index: {
+        generated_at: siteIndex.generated_at || null,
+        site_count: finite(siteIndex.site_count),
+        source_name: siteIndex.source_name || "USGS Site Service",
+        source_url: siteIndex.source_url || "https://waterservices.usgs.gov/nwis/site/",
+      },
+      sources: [
+        sourceMeta({
+          name: "USGS Site Service — active instantaneous streamflow stations",
+          url: siteIndex.source_url || "https://waterservices.usgs.gov/nwis/site/",
+          updatedAt: siteIndex.generated_at || null,
+          available: discovery.returned_sites > 0,
+          status: "nearby monitored-river discovery",
+        }),
+      ],
+      disclaimer: "This is a discovery list of nearby rivers and streams with active USGS instantaneous streamflow monitoring, not a list of every mapped waterway. Choose a river and monitoring point before live readings are requested.",
+    });
+  }
+
   try {
-    const sites = nearestSites(lat, lon, 6);
+    const requestedSite = indexedSite(req.query?.site, lat, lon);
+    if (req.query?.site && !requestedSite) return res.status(404).json({ error: "Requested USGS monitoring site was not found in the active streamflow index" });
+    const sites = requestedSite ? [requestedSite] : nearestSites(lat, lon, 6);
     const live = await loadObservations(sites);
     const gauges = live.gauges;
     if (live.degraded) res.setHeader("Cache-Control", gauges.length ? "public, s-maxage=60, stale-while-revalidate=180" : "no-store");
@@ -310,6 +390,8 @@ module.exports = async function handler(req, res) {
       degraded: live.degraded,
       degraded_reason: live.detail,
       context_pending: Boolean(gauges.length),
+      mode: requestedSite ? "selected-river-detail" : "nearest-live-summary",
+      selected_site: requestedSite ? { id: requestedSite.id, river_name: riverName(requestedSite.name) } : null,
       discovery: "Local USGS active-streamflow site index + exact-site instantaneous values",
       discovery_index: {
         generated_at: siteIndex.generated_at || null,
@@ -348,11 +430,15 @@ module.exports._test = {
   atAgo,
   changeAbsolute,
   changePercent,
+  discoveryRivers,
   haversine,
+  indexedSite,
+  indexedSitesByDistance,
   loadObservations,
   mergeEnrichment,
   nearestSites,
   normalize,
+  riverName,
   sampleSeries,
   sensorSummary,
   toFahrenheit,
