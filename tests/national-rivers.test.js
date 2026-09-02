@@ -246,7 +246,18 @@ test('river page is discovery-first and never auto-opens the first returned gaug
   assert.match(page,/mode=discovery/);
   assert.match(page,/data-site-id/);
   assert.match(page,/openSelectedSite/);
-  assert.match(page,/Back to nearby rivers/);
+  assert.match(page,/← River list/);
   assert.doesNotMatch(page,/const first=d\.gauges\[0\][\s\S]{0,400}document\.getElementById\("answer"\)/);
   assert.match(page,/Live readings do not load until you make that choice/);
+});
+
+
+test("river detail keeps obvious back-and-forth controls while preserving chooser state",()=>{
+  const page=fs.readFileSync(require.resolve("../public/national-tools/rivers/index.html"),"utf8");
+  assert.match(page,/id="back-to-rivers"[^>]*>← River list</);
+  assert.match(page,/id="choose-another-river"[^>]*>← Choose another river</);
+  assert.match(page,/function returnToRiverList\(\)/);
+  assert.match(page,/addEventListener\("click",returnToRiverList\)/);
+  assert.match(page,/currentRadius/);
+  assert.match(page,/currentFilter/);
 });
