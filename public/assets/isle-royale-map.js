@@ -2770,6 +2770,30 @@
     };
   }
 
+  // The official portage drawn between its two NPS landings when the visitor web map has no trail
+  // line for it. Before this, a portage with no matched corridor was a '?' badge that could not be
+  // added to a trip at all — which made the whole planner depend on a live ArcGIS fetch for the one
+  // thing it exists to do. The carry is real whether or not that map draws it; NPS publishes its
+  // distance and terrain, and the landings are in the committed dataset.
+  function officialPortageReferenceGeometry(portage) {
+    if(!portage?.from_anchor_id||!portage?.to_anchor_id)return null;
+    const from=officialPortages.anchors?.[portage.from_anchor_id];
+    const to=officialPortages.anchors?.[portage.to_anchor_id];
+    if(!from||!to)return null;
+    const points=[{lat:Number(from.lat),lng:Number(from.lng)},{lat:Number(to.lat),lng:Number(to.lng)}];
+    if(points.some(point=>!Number.isFinite(point.lat)||!Number.isFinite(point.lng)))return null;
+    return {
+      points,
+      reference:true,
+      mapped_miles:null,
+      official_miles:Number(portage.distance_miles)||0,
+      distance_delta_miles:null,
+      trail_names:[],
+      from_snap_miles:0,
+      to_snap_miles:0
+    };
+  }
+
   function officialPortageLandingPair(portage,visual,router) {
     if(!portage||!visual?.geometryResolved||!router?.landingNear)return null;
     if(visual.landingPair?.from&&visual.landingPair?.to)return visual.landingPair;
@@ -2859,12 +2883,15 @@
     addPopupFact(facts,'NPS distance',Number(portage.distance_miles).toFixed(1)+' mi');
     addPopupFact(facts,'Elevation change',Number(portage.elevation_change_ft)+' ft');
     addPopupFact(facts,'Terrain',portage.terrain);
-    if(visual?.geometryResolved)addPopupFact(facts,'Mapped trail geometry',Number(visual.mapped_miles).toFixed(2)+' mi');
+    if(visual?.geometryResolved&&!visual.reference)addPopupFact(facts,'Mapped trail geometry',Number(visual.mapped_miles).toFixed(2)+' mi');
+    if(visual?.reference)addPopupFact(facts,'Trail line','Not in the loaded visitor map; drawn between the official landings');
     wrap.appendChild(facts);
 
     const note=document.createElement('p');
     note.className='popup-description';
-    note.textContent=visual?.geometryResolved
+    note.textContent=visual?.reference
+      ? 'This is an official NPS portage. The visitor map loaded here has no trail line for it, so the corridor is drawn straight between the two official landings. Trip accounting uses the NPS-published distance, not the straight line.'
+      : visual?.geometryResolved
       ? 'Selectable corridor follows the currently loaded public trail geometry associated with this official NPS portage. Trip accounting uses the NPS-published distance.'
       : 'Official NPS portage facts are available, but a mapped trail corridor could not be resolved from the currently loaded visitor trail network. The map badge is only an approximate waterbody reference, not a landing.';
     wrap.appendChild(note);
@@ -2984,13 +3011,18 @@
     for(let i=featureIndex.length-1;i>=0;i--)if(featureIndex[i].category==='official-portage')featureIndex.splice(i,1);
 
     for(const portage of officialPortages.portages) {
-      const geometry=officialPortageMappedGeometry(portage);
+      const geometry=officialPortageMappedGeometry(portage)||officialPortageReferenceGeometry(portage);
       let primaryLayer=null;
       let visual=null;
       if(geometry) {
         const latlngs=geometry.points.map(point=>[point.lat,point.lng]);
         const hit=L.polyline(latlngs,{pane:'portagePane',color:'#9b512b',weight:20,opacity:.001,interactive:true});
-        const line=L.polyline(latlngs,{pane:'portagePane',color:'#9b512b',weight:5,opacity:.94,dashArray:'8 5',interactive:true});
+        // A matched trail corridor draws as a firm dashed line. A reference carry — the official
+        // NPS portage between its two landings when the visitor map has no trail line for it — draws
+        // lighter and dotted so the difference is visible on the map, not just in the popup.
+        const line=L.polyline(latlngs,geometry.reference
+          ? {pane:'portagePane',color:'#9b512b',weight:4,opacity:.8,dashArray:'2 7',interactive:true}
+          : {pane:'portagePane',color:'#9b512b',weight:5,opacity:.94,dashArray:'8 5',interactive:true});
         const mid=pointAlongPolyline(geometry.points,.5);
         const badge=L.marker([mid.lat,mid.lng],{
           pane:'portagePane',
@@ -2999,7 +3031,7 @@
           title:'NPS Portage #'+portage.number+' — '+portage.official_label,
           icon:L.divIcon({className:'official-portage-badge',html:'<span>P'+portage.number+'</span>',iconSize:[30,24],iconAnchor:[15,12]})
         });
-        visual={geometryResolved:true,points:geometry.points,mapped_miles:geometry.mapped_miles,line,badge};
+        visual={geometryResolved:true,reference:Boolean(geometry.reference),points:geometry.points,mapped_miles:geometry.mapped_miles,line,badge};
         line.bindPopup(()=>officialPortagePopup(portage,visual),{maxWidth:390,minWidth:280,autoPan:false,className:'isle-detail-popup'});
         badge.bindPopup(()=>officialPortagePopup(portage,visual),{maxWidth:390,minWidth:280,autoPan:false,className:'isle-detail-popup'});
         const open=event=>{
@@ -3017,7 +3049,7 @@
         hit.on('click',open);
         badge.on('click',open);
         line.on('popupclose',()=>line.setStyle({weight:5}));
-        line.bindTooltip('P'+portage.number+' · '+portage.official_label+' · '+Number(portage.distance_miles).toFixed(1)+' mi',{sticky:true});
+        line.bindTooltip('P'+portage.number+' · '+portage.official_label+' · '+Number(portage.distance_miles).toFixed(1)+' mi'+(geometry.reference?' · official landings, trail line not mapped':''),{sticky:true});
         badge.bindTooltip(portage.official_label+' · '+Number(portage.distance_miles).toFixed(1)+' mi',{direction:'top'});
         group.addLayer(hit);group.addLayer(line);group.addLayer(badge);
         primaryLayer=line;
@@ -3050,7 +3082,7 @@
           category:'official-portage',
           layer:primaryLayer,
           sourceLabel:'National Park Service — 2026 Greenstone',
-          sourceKind:visual?.geometryResolved?'official facts + matched public trail corridor':'official facts + unresolved reference badge',
+          sourceKind:visual?.reference?'official facts + reference carry between official landings':visual?.geometryResolved?'official facts + matched public trail corridor':'official facts + unresolved reference badge',
           description:Number(portage.distance_miles).toFixed(1)+' mi · '+portage.elevation_change_ft+' ft · '+portage.terrain,
           sourceUrl:officialPortages.source?.url||'',
           properties:{...portage},
@@ -3280,7 +3312,14 @@
       // Without this the graph is portage edges only, so a trip whose first move is a paddle finds
       // nothing: Rock Harbor to Lake Richie failed outright, because every portage serving Richie
       // leaves from Chippewa Harbor or Moskey Basin and nothing said you can paddle there first.
-      waterBodyOf:anchorWaterBodies(router)
+      waterBodyOf:anchorWaterBodies(router),
+      // Weigh a paddle between two anchors by the miles between them, so the search does not paddle
+      // four miles to reach a marginally shorter carry.
+      paddleCost:(fromId,toId)=>{
+        const from=officialPortages.anchors?.[fromId],to=officialPortages.anchors?.[toId];
+        if(!from||!to)return .05;
+        return Math.max(.05,distanceMiles({lat:Number(from.lat),lng:Number(from.lng)},{lat:Number(to.lat),lng:Number(to.lng)}));
+      }
     });
     for(const chain of chains) {
       let current={lat:Number(a.lat),lng:Number(a.lng)};

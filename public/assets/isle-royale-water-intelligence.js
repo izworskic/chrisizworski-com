@@ -503,8 +503,14 @@
       if(!byBody.has(body))byBody.set(body,[]);
       byBody.get(body).push(anchorId);
     }
-    // A small non-zero cost so an equal-length route that avoids an extra open-water crossing wins.
-    const paddleCost=Math.max(0,Number(options.paddleCost)>=0?Number(options.paddleCost):.05);
+    // Paddling is not free. With a flat token cost the search from Moskey Basin reached Lake Richie
+    // by paddling four miles to Chippewa Harbor for the shorter carry there, instead of taking the
+    // Moskey Basin carry it was sitting beside. Pass a function of the two anchor ids (miles between
+    // them is the obvious one) and the search weighs the water honestly; a number is kept as a flat
+    // fallback so old callers behave as before.
+    const paddleCost=typeof options.paddleCost==='function'
+      ? (from,to)=>Math.max(0,Number(options.paddleCost(from,to))||0)
+      : ()=>Math.max(0,Number(options.paddleCost)>=0?Number(options.paddleCost):.05);
     const paddleNeighbours=anchorId=>{
       const body=waterBodyOf.get(anchorId);
       if(!body)return [];
@@ -560,7 +566,7 @@
           if(state.visited.has(paddle))continue;
           if(!adjacency.has(paddle)&&!ends.has(paddle))continue;
           const visited=new Set(state.visited);visited.add(paddle);
-          push({anchor:paddle,cost:state.cost+paddleCost,steps:state.steps,visited,viaPaddle:true});
+          push({anchor:paddle,cost:state.cost+paddleCost(state.anchor,paddle),steps:state.steps,visited,viaPaddle:true});
         }
       }
       for(const step of adjacency.get(state.anchor)||[]){
