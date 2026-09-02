@@ -54,7 +54,7 @@
 <script>
 document.addEventListener("DOMContentLoaded",function(){
  const N=window.NationalTools,form=document.getElementById("loc");
- let activeLens="general";
+ let activeLens="general",currentLocation=null,currentDiscovery=null,currentRadius=50,currentFilter="";
  function flow(v){return v==null?"Unavailable":Math.round(v).toLocaleString()+" cfs"}
  function stage(v){return v==null?"Unavailable":Number(v).toFixed(2)+" ft"}
  function temp(v){return v==null?"Unavailable":Number(v).toFixed(1)+"°F"}
@@ -207,13 +207,12 @@ document.addEventListener("DOMContentLoaded",function(){
    '<div class="intel-grid"><section class="intel-panel"><div class="section-mini-head"><strong>What changed?</strong><span>Observed movement</span></div>'+whatChanged(g)+'</section><section class="intel-panel"><div class="section-mini-head"><strong>What’s next?</strong><span>Official forecast + weather context</span></div>'+whatNext(g,d,loading)+'</section></div>'+
    qualityPanel(g)+lensPanel(g,d);
  }
- function gaugeCard(g,primary,loading,d){
+ function gaugeCard(g,loading,d){
    const wt=sensor(g,"water_temperature");
-   return '<article class="river-card '+(primary?"primary":"")+'"><div class="river-title"><div><span class="tool-kicker">'+g.distance_miles.toFixed(1)+' mi from search point</span><h3>'+N.esc(g.name)+'</h3></div><span class="pill '+(g.stale?"danger":"")+'">'+(g.age_minutes==null?"age unknown":g.age_minutes+" min old")+'</span></div>'+
-   '<div class="metrics"><div class="metric"><b>'+flow(g.discharge_cfs)+'</b><span>'+N.esc(trend(g))+'</span></div><div class="metric"><b>'+stage(g.gage_height_ft)+'</b><span>gauge height</span></div><div class="metric"><b>'+temp(wt?.value??g.water_temp_f)+'</b><span>water temperature'+(wt?" · monitored":" · unavailable")+'</span></div></div>'+
-   spark(g.flow_series_24h,"Recent 24 hour flow trend")+(primary?primaryIntelligence(g,d,loading):historical(g,loading)+nwps(g,loading))+
-   (primary?historical(g,loading)+nwps(g,loading):"")+
-   '<div class="map-actions"><button type="button" class="map-btn" data-map-id="'+N.esc(g.id)+'">Show this gauge on map</button></div></article>';
+   return '<article class="river-card primary"><div class="river-title"><div><span class="tool-kicker">'+g.distance_miles.toFixed(1)+' mi from search point</span><h3>'+N.esc(g.name)+'</h3></div><span class="pill '+(g.stale?"danger":"")+'">'+(g.age_minutes==null?"age unknown":g.age_minutes+" min old")+'</span></div>'+
+   '<div class="metrics"><div class="metric"><b>'+flow(g.discharge_cfs)+'</b><span>'+N.esc(trend(g))+'</span></div><div class="metric"><b>'+stage(g.gage_height_ft)+'</b><span>gage height</span></div><div class="metric"><b>'+temp(wt?.value??g.water_temp_f)+'</b><span>water temperature'+(wt?" · monitored":" · unavailable")+'</span></div></div>'+
+   spark(g.flow_series_24h,"Recent 24 hour flow trend")+primaryIntelligence(g,d,loading)+historical(g,loading)+nwps(g,loading)+
+   '<div class="map-actions"><button type="button" class="map-btn" data-map-id="'+N.esc(g.id)+'">Show selected monitoring point on map</button></div></article>';
  }
  function setMap(g){
    if(!g||!Number.isFinite(Number(g.latitude))||!Number.isFinite(Number(g.longitude)))return;
@@ -225,63 +224,155 @@ document.addEventListener("DOMContentLoaded",function(){
    document.getElementById("map-open").href="https://www.openstreetmap.org/?mlat="+encodeURIComponent(lat)+"&mlon="+encodeURIComponent(lon)+"#map=13/"+encodeURIComponent(lat)+"/"+encodeURIComponent(lon);
    shell.hidden=false;
  }
- function bindMapButtons(gauges){
-   document.querySelectorAll("[data-map-id]").forEach(function(button){button.addEventListener("click",function(){
-     const match=gauges.find(function(g){return String(g.id)===button.dataset.mapId});
-     if(match){setMap(match);document.getElementById("river-map").scrollIntoView({behavior:"smooth",block:"nearest"})}
-   })});
+ function bindMapButton(g){
+   const button=document.querySelector("[data-map-id]");
+   if(!button)return;
+   button.addEventListener("click",function(){setMap(g);document.getElementById("river-map").scrollIntoView({behavior:"smooth",block:"nearest"})});
  }
- function render(d,loc,loading){
-  document.getElementById("result").hidden=false;
-  if(!d.gauges.length){document.getElementById("answer").textContent="No active USGS streamflow gauge found nearby";document.getElementById("primary-gauge").innerHTML="";document.getElementById("gauges").innerHTML="";document.getElementById("forecast-pill").textContent="USGS observation only";return}
-  const first=d.gauges[0],comparison=first.historical_daily_flow?(first.historical_comparison||historyComparison(first)):null,wt=sensor(first,"water_temperature");
-  const pieces=[comparison?.label||"Current river conditions",first.trend_label];if(wt)pieces.push(temp(wt.value));
-  document.getElementById("answer").textContent=pieces.filter(Boolean).join(" · ")+" near "+N.label(loc);
-  document.getElementById("primary-gauge").innerHTML=gaugeCard(first,true,loading,d);
-  document.getElementById("gauges").innerHTML=d.gauges.slice(1).map(g=>gaugeCard(g,false,loading,d)).join("");
-  setMap(first);bindMapButtons(d.gauges);bindLens(first,d);
-  const contextBits=[];
-  if(d.gauges.some(g=>g.nwps))contextBits.push("NOAA river forecast");
-  if(d.weather)contextBits.push("NWS weather");
-  document.getElementById("forecast-pill").textContent=loading?"Loading history + forecast context":(contextBits.length?contextBits.join(" + ")+" loaded":"USGS observation · optional forecast context unavailable");
-  document.getElementById("updated").textContent=d.disclaimer+" Retrieved "+N.fmtDate(d.retrieved_at)+".";
+ function prettyStation(name){
+   return String(name||"USGS monitoring point").toLowerCase().replace(/\b([a-z])/g,function(m){return m.toUpperCase()});
+ }
+ function visibleRiverGroups(){
+   const rivers=Array.isArray(currentDiscovery?.rivers)?currentDiscovery.rivers:[];
+   const term=currentFilter.trim().toLowerCase();
+   return rivers.map(function(group){
+     const gauges=(group.gauges||[]).filter(function(g){return Number(g.distance_miles)<=currentRadius});
+     if(!gauges.length)return null;
+     const name=group.name||"Monitored waterway";
+     if(term&&!name.toLowerCase().includes(term)&&!gauges.some(function(g){return String(g.name||"").toLowerCase().includes(term)}))return null;
+     return {...group,gauges:gauges,gauge_count:gauges.length,closest_distance_miles:gauges[0].distance_miles};
+   }).filter(Boolean);
+ }
+ function monitoringPointButton(g){
+   return '<button type="button" class="monitoring-point" data-site-id="'+N.esc(g.id)+'"><span>'+N.esc(prettyStation(g.name))+'</span><small>'+Number(g.distance_miles).toFixed(1)+' mi away · USGS '+N.esc(g.id)+'</small></button>';
+ }
+ function riverChoiceCard(group){
+   const gauges=group.gauges||[];
+   const one=gauges.length===1;
+   return '<article class="river-choice-card"><div class="river-choice-head"><div><span class="tool-kicker">'+Number(group.closest_distance_miles).toFixed(1)+' mi to closest monitor</span><h3>'+N.esc(group.name)+'</h3></div><span class="pill">'+gauges.length+' monitoring point'+(gauges.length===1?"":"s")+'</span></div>'+
+     (one
+       ? '<p class="small">'+N.esc(prettyStation(gauges[0].name))+'</p>'+monitoringPointButton(gauges[0])
+       : '<details class="river-monitor-list"><summary>Choose monitoring point</summary><div class="monitoring-points">'+gauges.map(monitoringPointButton).join("")+'</div></details>')+
+     '</article>';
+ }
+ function bindDiscoveryButtons(){
+   document.querySelectorAll("[data-site-id]").forEach(function(button){
+     button.addEventListener("click",function(){openSelectedSite(button.dataset.siteId)});
+   });
+ }
+ function renderDiscovery(){
+   const list=document.getElementById("river-discovery"),groups=visibleRiverGroups();
+   const gauges=groups.reduce(function(sum,g){return sum+g.gauges.length},0);
+   document.getElementById("result").hidden=false;
+   document.getElementById("river-list-panel").hidden=false;
+   document.getElementById("river-detail").hidden=true;
+   document.getElementById("answer").textContent="Choose a monitored river near "+N.label(currentLocation);
+   document.getElementById("discovery-count").textContent=groups.length+" river"+(groups.length===1?"":"s")+" · "+gauges+" monitor"+(gauges===1?"":"s");
+   const truncated=currentDiscovery?.truncated?" The source list was capped because this area has an unusually dense monitoring network.":"";
+   document.getElementById("discovery-note").textContent="Showing rivers and streams with active USGS instantaneous streamflow monitoring within "+currentRadius+" miles. Not every mapped river has a USGS gauge."+truncated;
+   if(!groups.length){
+     list.innerHTML='<div class="river-empty"><strong>No monitored rivers in this distance range.</strong><span>Increase the distance or try a nearby place.</span></div>';
+     return;
+   }
+   list.innerHTML=groups.map(riverChoiceCard).join("");
+   bindDiscoveryButtons();
+ }
+ function selectedSiteMeta(siteId){
+   for(const group of currentDiscovery?.rivers||[]){
+     const gauge=(group.gauges||[]).find(function(g){return String(g.id)===String(siteId)});
+     if(gauge)return {group:group,gauge:gauge};
+   }
+   return null;
+ }
+ function renderDetail(d,loc,loading){
+   document.getElementById("result").hidden=false;
+   document.getElementById("river-list-panel").hidden=true;
+   document.getElementById("river-detail").hidden=false;
+   const first=d.gauges?.[0];
+   if(!first){
+     document.getElementById("selected-answer").textContent="Live USGS reading unavailable for this monitoring point";
+     document.getElementById("primary-gauge").innerHTML='<div class="truth-box">No replacement value was generated. Return to the nearby river list and try another monitoring point.</div>';
+     document.getElementById("forecast-pill").textContent="Live observation unavailable";
+     document.getElementById("updated").textContent=d.degraded_reason||d.disclaimer||"USGS live data unavailable.";
+     document.getElementById("river-map").hidden=true;
+     return;
+   }
+   const comparison=first.historical_daily_flow?(first.historical_comparison||historyComparison(first)):null,wt=sensor(first,"water_temperature");
+   const pieces=[d.selected_site?.river_name||prettyStation(first.name),comparison?.label||"Current conditions",first.trend_label];if(wt)pieces.push(temp(wt.value));
+   document.getElementById("selected-answer").textContent=pieces.filter(Boolean).join(" · ");
+   document.getElementById("selected-river-label").textContent=prettyStation(first.name);
+   document.getElementById("primary-gauge").innerHTML=gaugeCard(first,loading,d);
+   setMap(first);bindMapButton(first);bindLens(first,d);
+   const contextBits=[];
+   if(first.nwps)contextBits.push("NOAA river forecast");
+   if(d.weather)contextBits.push("NWS weather");
+   document.getElementById("forecast-pill").textContent=loading?"Loading history + forecast context":(contextBits.length?contextBits.join(" + ")+" loaded":"USGS observation · optional forecast context unavailable");
+   document.getElementById("updated").textContent=d.disclaimer+" Retrieved "+N.fmtDate(d.retrieved_at)+".";
  }
  async function loadContext(d,loc){
-  const ids=d.gauges.slice(0,6).map(g=>g.id).join(",");
-  if(!ids)return;
-  const url="/api/national-river-context?lat="+encodeURIComponent(loc.latitude)+"&lon="+encodeURIComponent(loc.longitude)+"&sites="+encodeURIComponent(ids);
-  try{
-    const response=await fetch(url);
-    const context=typeof N.readJsonResponse==="function"?await N.readJsonResponse(response,"River history and forecast context unavailable"):await response.json();
-    d.weather=context.weather||null;
-    d.gauges=d.gauges.map(function(g){
-      const extra=context.context?.[g.id]||{};
-      const merged={...g,...extra};
-      if(merged.historical_daily_flow)merged.historical_comparison=historyComparison(merged);
-      return merged;
-    });
-    render(d,loc,false);
-  }catch(_error){
-    render(d,loc,false);
-  }
+   const id=d.gauges?.[0]?.id;
+   if(!id)return;
+   const url="/api/national-river-context?lat="+encodeURIComponent(loc.latitude)+"&lon="+encodeURIComponent(loc.longitude)+"&sites="+encodeURIComponent(id);
+   try{
+     const response=await fetch(url);
+     const context=typeof N.readJsonResponse==="function"?await N.readJsonResponse(response,"River history and forecast context unavailable"):await response.json();
+     d.weather=context.weather||null;
+     d.gauges=d.gauges.map(function(g){
+       const extra=context.context?.[g.id]||{};
+       const merged={...g,...extra};
+       if(merged.historical_daily_flow)merged.historical_comparison=historyComparison(merged);
+       return merged;
+     });
+     renderDetail(d,loc,false);
+   }catch(_error){
+     renderDetail(d,loc,false);
+   }
+ }
+ async function openSelectedSite(siteId){
+   const meta=selectedSiteMeta(siteId);
+   if(!meta||!currentLocation)return;
+   activeLens="general";
+   document.getElementById("river-list-panel").hidden=true;
+   document.getElementById("river-detail").hidden=false;
+   document.getElementById("selected-river-label").textContent=meta.group.name+" · "+prettyStation(meta.gauge.name);
+   document.getElementById("selected-answer").textContent="Loading "+meta.group.name+"…";
+   document.getElementById("primary-gauge").innerHTML='<div class="river-loading">Loading live USGS observations for the monitoring point you selected…</div>';
+   document.getElementById("forecast-pill").textContent="Loading live observation";
+   document.getElementById("river-map").hidden=true;
+   document.getElementById("river-detail").scrollIntoView({behavior:"smooth",block:"start"});
+   const r=await fetch("/api/national-rivers?lat="+encodeURIComponent(currentLocation.latitude)+"&lon="+encodeURIComponent(currentLocation.longitude)+"&site="+encodeURIComponent(siteId));
+   const d=typeof N.readJsonResponse==="function"
+     ? await N.readJsonResponse(r,"Selected river conditions unavailable")
+     : await r.json();
+   if(!r.ok)throw new Error(d.error||"Selected river data unavailable");
+   d.weather=null;
+   renderDetail(d,currentLocation,Boolean(d.context_pending));
+   if(d.context_pending)void loadContext(d,currentLocation);
  }
  async function run(loc){
-  const r=await fetch("/api/national-rivers?lat="+encodeURIComponent(loc.latitude)+"&lon="+encodeURIComponent(loc.longitude));
-  const d=typeof N.readJsonResponse==="function"
-    ? await N.readJsonResponse(r,"River conditions unavailable")
-    : await r.json();
-  if(!r.ok)throw new Error(d.error||"River data unavailable");
-  d.weather=null;
-  render(d,loc,Boolean(d.context_pending));
-  if(d.context_pending)loadContext(d,loc);
+   currentLocation=loc;
+   currentRadius=50;
+   currentFilter="";
+   document.getElementById("river-radius").value="50";
+   document.getElementById("river-filter").value="";
+   const r=await fetch("/api/national-rivers?mode=discovery&radius=100&limit=250&lat="+encodeURIComponent(loc.latitude)+"&lon="+encodeURIComponent(loc.longitude));
+   const d=typeof N.readJsonResponse==="function"
+     ? await N.readJsonResponse(r,"River discovery unavailable")
+     : await r.json();
+   if(!r.ok)throw new Error(d.error||"River discovery unavailable");
+   currentDiscovery=d;
+   renderDiscovery();
  }
+ document.getElementById("river-radius").addEventListener("change",function(event){currentRadius=Number(event.target.value)||50;renderDiscovery()});
+ document.getElementById("river-filter").addEventListener("input",function(event){currentFilter=event.target.value||"";renderDiscovery()});
+ document.getElementById("back-to-rivers").addEventListener("click",function(){renderDiscovery();document.getElementById("result").scrollIntoView({behavior:"smooth",block:"start"})});
  N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
 });
 </script>
 <section class="section"><div class="wrap">
 <h2>River condition questions this tool answers</h2>
 <div class="grid">
-<div class="source-box"><h3>What are the river levels near me today?</h3><p>Tap <strong>Use my location</strong> or enter a city or ZIP code, and the nearest USGS gauges load with their current reading, how far away they are, and how old the observation is. Most gauges report every 15 to 60 minutes, so "today" here usually means within the last hour.</p></div>
+<div class="source-box"><h3>What rivers are monitored near me?</h3><p>Tap <strong>Use my location</strong> or enter a city or ZIP code. The tool first lists nearby rivers and streams that have active USGS instantaneous streamflow monitoring. Choose the river you care about, then choose a monitoring point when that river has more than one nearby gauge. Live readings do not load until you make that choice.</p></div>
 <div class="source-box"><h3>What is the difference between cfs and gage height?</h3><p>Discharge in cubic feet per second is the volume of water moving past the gauge. Gage height in feet is how high the water sits against that gauge's own datum, which is local to the station. Two rivers at "four feet" are not comparable, while their flows are.</p></div>
 <div class="source-box"><h3>Is the river safe to paddle, fish, or swim?</h3><p>This tool cannot tell you that, and it deliberately does not try. A gauge reports what the water is doing at one point. It does not know about strainers, a low-head dam, water quality, your skill, your boat, or a hazard that moved in last week. Use the readings as inputs and get the safety call from local knowledge and current advisories.</p></div>
 <div class="source-box"><h3>Is this flow high or low for the date?</h3><p>Where the station supports it, the tool loads same-date USGS historical percentiles, which compare today's reading against the record for this calendar day rather than against the whole year. That is the honest way to say "high for early September" instead of just "high".</p></div>
