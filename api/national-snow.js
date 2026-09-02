@@ -198,7 +198,7 @@ function awdbElement(payload, code) {
 }
 async function snotelContext(lat, lon, stateCode) {
   const stationListUrl = awdbStationUrl(stateCode);
-  const stations = await fetchJson(stationListUrl, 3500);
+  const stations = await fetchJson(stationListUrl, 5000);
   const station = nearestSnotel(stations, lat, lon);
   if (!station) return { station: null, snow_depth: null, swe: null, station_list_url: stationListUrl, data_url: null };
   const dataUrl = awdbDataUrl(station.station_triplet);
