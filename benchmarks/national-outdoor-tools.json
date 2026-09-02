@@ -12,11 +12,7 @@
     "uxPerformanceComplexity": 8,
     "searchIntentMismatch": 7,
     "maintenanceBurden": 5,
-    "total": 100,
-    "excellentMaximum": 10,
-    "acceptableProductionMaximum": 15,
-    "redesignThreshold": 16,
-    "doNotShipAbove": 25
+    "total": 100
   },
   "hardVetoes": [
     "no-fabricated-live-data",
@@ -258,5 +254,22 @@
       "monetizationFit": 5
     },
     "rule": "A score of 80 is necessary but not sufficient; canonical, source, truth and thin-page hard gates still apply."
+  },
+  "lossThresholds": {
+    "excellent": {
+      "min": 0,
+      "max": 10
+    },
+    "acceptableProduction": {
+      "min": 11,
+      "max": 15
+    },
+    "redesignBeforeMajorSearchExpansion": {
+      "min": 16,
+      "max": 25
+    },
+    "doNotShip": {
+      "greaterThan": 25
+    }
   }
 }
