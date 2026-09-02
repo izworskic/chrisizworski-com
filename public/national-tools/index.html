@@ -103,9 +103,10 @@ document.addEventListener("DOMContentLoaded",function(){
       '<a href="'+N.esc(card.href)+'">Open full tool →</a></div>';
   }
   function renderComparison(result){
-    const order=[["aurora","Aurora"],["rivers","River"],["frost","Frost"],["planting","Planting"],["fall","Fall timing"]];\n    if(leftMap.coastal||rightMap.coastal)order.splice(2,0,["coastal","Coastal"]);
     const leftMap=Object.fromEntries(result.left.cards.map(function(card){return [card.id,card]}));
     const rightMap=Object.fromEntries(result.right.cards.map(function(card){return [card.id,card]}));
+    const order=[["aurora","Aurora"],["rivers","River"],["frost","Frost"],["planting","Planting"],["fall","Fall timing"]];
+    if(leftMap.coastal||rightMap.coastal)order.splice(2,0,["coastal","Coastal"]);
     compareGrid.innerHTML='<div class="compare-head"><span>Signal</span><strong>'+N.esc(N.label(result.left.location))+'</strong><strong>'+N.esc(N.label(result.right.location))+'</strong></div>'+
       order.map(function(row){return '<div class="compare-row"><div class="compare-signal"><span class="tool-kicker">'+N.esc(row[1])+'</span></div>'+compareCell(leftMap[row[0]],result.left.location)+compareCell(rightMap[row[0]],result.right.location)+'</div>'}).join("");
   }
@@ -117,7 +118,7 @@ document.addEventListener("DOMContentLoaded",function(){
     if(!left||!right||N.locationKey(left)===N.locationKey(right)){
       compareStatus.innerHTML='<span class="error">Choose two different saved places.</span>';return;
     }
-    const button=compareForm.querySelector(".btn");button.disabled=true;compareStatus.textContent="Comparing the five signals…";
+    const button=compareForm.querySelector(".btn");button.disabled=true;compareStatus.textContent="Comparing the core signals…";
     try{
       const result=await D.compare(left,right);
       renderComparison(result);
