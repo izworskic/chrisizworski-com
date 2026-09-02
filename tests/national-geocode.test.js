@@ -65,12 +65,12 @@ test("saved-place comparison stays signal-by-signal without an overall score",()
   assert.match(dashboard,/async function compare/);
   assert.match(dashboard,/load\(left,\{measure:false\}\)/);
   assert.match(dashboard,/load\(right,\{measure:false\}\)/);
-  assert.match(dashboard,/National Places Compared",\{signals:5\}/);
+  assert.match(dashboard,/National Places Compared",\{signals:Math\.max\(pair\[0\]\.cards\.length,pair\[1\]\.cards\.length\)\}/);
   assert.doesNotMatch(dashboard,/National Places Compared[^\n]{0,180}(?:query|latitude|longitude|place)/);
-  assert.match(hub,/Compare two places across the same five signals/);
+  assert.match(hub,/Compare two places across the same core signals/);
   assert.match(hub,/No overall winner or safety score/);
   assert.match(hub,/D\.compare\(left,right\)/);
-  for(const label of ["Aurora","River","Frost","Planting","Fall timing"])assert.ok(hub.includes(label),label);
+  for(const label of ["Aurora","River","Coastal","Frost","Planting","Fall timing"])assert.ok(hub.includes(label),label);\n  assert.match(dashboard,/if\(!d\.coastal_available\)return null/);
   const inline=hub.match(/<script>\s*(document\.addEventListener[\s\S]*?)<\/script>/);
   assert.ok(inline,"national hub inline script not found");
   assert.doesNotThrow(()=>new Function(inline[1]));
