@@ -75,9 +75,14 @@ check('Non-leaf nodes are not isolated',stranded.length===0,3,stranded.map(t=>t.
 const groups=registry.cannibalizationGroups||[];
 const badGroups=groups.filter(g=>!idSet.has(g.owner)||(g.supports||[]).some(x=>!idSet.has(x))||(g.supports||[]).includes(g.owner)||!g.rule);
 check('Cannibalization groups resolve cleanly',badGroups.length===0,6,badGroups.map(g=>g.intent).join(', '),true);
-const protectedIds=['aurora','soo-locks','ship-tracker','frost-dates','tomato-planting'];
-const missingProtected=protectedIds.filter(id=>registry.tools.find(t=>t.id===id)?.searchTreatment?.status!=='protected');
-check('Known active experiments remain protected',missingProtected.length===0,5,missingProtected.join(', '),true);
+// The owner ended every Search Console experiment on 2026-09-02, so 'protected' is no longer a
+// state these five should be pinned to; requiring it would re-freeze pages nobody is measuring.
+// What must still hold is that the flagships are DECLARED — each carries a searchTreatment with a
+// known status — so a future freeze has something to set rather than a missing field to invent.
+const flagshipIds=['aurora','soo-locks','ship-tracker','frost-dates','tomato-planting'];
+const knownStatuses=new Set(['protected','active','retired','released']);
+const undeclared=flagshipIds.filter(id=>!knownStatuses.has(registry.tools.find(t=>t.id===id)?.searchTreatment?.status));
+check('Flagship surfaces declare a search treatment',undeclared.length===0,5,undeclared.join(', '),true);
 check('Search evidence allows unknowns without fabrication',tools.some(t=>t.searchEvidence.status==='unknown')&&tools.some(t=>t.searchEvidence.status==='measured'),4,'registry must retain both measured and unknown states');
 
 // Best-fit candidate model — 15

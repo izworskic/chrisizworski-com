@@ -9,13 +9,21 @@ const css = readFileSync(path.join(root, "public/assets/mackinac-bridge-live.css
 const js = readFileSync(path.join(root, "public/assets/mackinac-bridge-live.js"), "utf8");
 
 test("Mackinac Bridge Live has indexable metadata and valid structured data", () => {
-  assert.match(html, /<title>Mackinac Bridge Conditions Today: Live Status &amp; Cameras<\/title>/);
+  // Title changed in dc9db7e to lead with the decision the searcher is making, which is the
+  // durable learning this page produced: it ranks near page one and loses the click. The h1 still
+  // reads 'Mackinac Bridge Conditions Today', so the on-page answer is unchanged.
+  assert.match(html, /<title>Is the Mackinac Bridge Open Today\? Live Status &amp; Cameras<\/title>/);
   assert.ok(
     html.includes(
       '<link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-live/">',
     ),
   );
-  assert.match(html, /name="description" content="[^"]*official status/i);
+  // The description was rewritten in dc9db7e to lead with the open-now decision rather than the
+  // word "official". What must still hold is that it promises the authority and the cameras,
+  // which is what a searcher asking whether the bridge is open needs to see in the snippet.
+  const mackinacDescription = /name="description" content="([^"]+)"/.exec(html)?.[1] ?? "";
+  assert.match(mackinacDescription, /\bopen\b/i);
+  assert.match(mackinacDescription, /camera/i);
   assert.ok(html.includes('"@type": "WebApplication"'));
   assert.ok(html.includes('"@type": "Offer"'));
   assert.doesNotMatch(html, /"@type": "FAQPage"/);

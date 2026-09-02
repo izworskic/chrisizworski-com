@@ -1,10 +1,1276 @@
 {
-  "ledgerVersion": "2.0.0",
+  "ledgerVersion": "2.1.0",
+  "created": "2026-08-03",
+  "measurementRule": "Do not judge an experiment before a complete comparable 28-day window. Record seven-day values only as leading indicators.",
+  "measurementProtocol": {
+    "windowDays": 28,
+    "startOffsetDays": 1,
+    "restartTrigger": "Any search-facing change to the title, description, H1, first answer, structured data, canonical, or indexability resets the window.",
+    "pendingWindowRule": "For pending-clean-window experiments, set releaseDate to the production merge date and evaluate the 28 complete days beginning the next day.",
+    "parallelExecutionPolicy": "Measurement freezes and stop-loss actions are page-specific, not site-wide. Stop or roll back an affected experiment, then continue one non-overlapping reversible experiment on unaffected pages or distribution surfaces.",
+    "freezeDuringWindow": [
+      "title",
+      "metaDescription",
+      "h1",
+      "firstAnswer",
+      "structuredData",
+      "canonical",
+      "indexability"
+    ],
+    "minimumBaselineImpressions": 4000,
+    "minimumBaselineClicks": 80,
+    "powerFloorRule": "Do not freeze a page for a CTR experiment unless its 28-day baseline clears BOTH 4,000 impressions and 80 clicks. Below that floor a 28-day window cannot resolve even a 50% relative CTR change, so the freeze costs shipping speed and buys nothing. Measured 2026-09-01 across 21 experiments: only /northern-lights-michigan/ and /soo-locks/ cleared it. Everything else needed between 2,229 and 77,988 impressions per arm to detect a 50% lift against baselines of 30 to 5,479. For pages under the floor, measure average position and impressions instead, which carry far more data and move first, or simply ship and watch rank.",
+    "partialReadRule": "A window may be closed early when the remaining days cannot change the decision. Record readType partial-window, the elapsed days, and the detectable difference at read time. This is not licence to peek and stop when a number looks good: decide the read date before looking.",
+    "seasonalityCaveat": "Window length does not protect a seasonal or event-driven page. Aurora impressions are driven by geomagnetic storms and news cycles, and fall pages by the season itself. Check the daily impression curve for spikes before trusting any aggregate, whether partial or complete."
+  },
+  "experiments": [
+    {
+      "id": "2026-08-03-tomato-snippet",
+      "path": "/when-to-plant-tomatoes-michigan/",
+      "hypothesis": "A year-specific regional title and direct transplant-date first answer will lift CTR from 0.26% toward 2.0% without changing the canonical.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {
+        "impressions": 5479,
+        "clicks": 14,
+        "ctr": 0.00256,
+        "averagePosition": 8.37
+      },
+      "target": {
+        "ctr": 0.02
+      },
+      "status": "evaluated",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {
+        "start": "2026-08-04",
+        "end": "2026-08-31"
+      },
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "complete-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/when-to-plant-tomatoes-michigan/",
+          "clicks": 4,
+          "impressions": 1188,
+          "ctr": 0.0034,
+          "averagePosition": 7.46
+        },
+        "finding": "Inconclusive by design. CTR 0.26% -> 0.34% on a difference the sample can never resolve: detecting a 50% lift here needs about 30,584 impressions per arm. Impressions fell 5,479 -> 1,188. Position 7.46 with 0.34% CTR is the signature of an answer being read in the SERP."
+      },
+      "stopCondition": "Canonical, structured data, or indexability changes unexpectedly.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-03-frost-snippet",
+      "path": "/michigan-frost-dates/",
+      "hypothesis": "A city-and-calendar title plus an immediate statewide range will lift CTR from 0.11% toward 2.0%.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {
+        "impressions": 2651,
+        "clicks": 3,
+        "ctr": 0.00113,
+        "averagePosition": 9.56
+      },
+      "target": {
+        "ctr": 0.02
+      },
+      "status": "evaluated",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {
+        "start": "2026-08-04",
+        "end": "2026-08-31"
+      },
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "complete-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/michigan-frost-dates/",
+          "clicks": 2,
+          "impressions": 301,
+          "ctr": 0.0066,
+          "averagePosition": 11.35
+        },
+        "finding": "Inconclusive by design, and out of season. CTR 0.11% -> 0.66% on 301 impressions; the sample needed for a 50% lift is about 69,181 per arm. Re-read in spring, not now."
+      },
+      "stopCondition": "City table, filters, canonical, or indexability regress.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-03-saginaw-depth-intent",
+      "path": "/saginaw-bay-ecology/",
+      "hypothesis": "Matching the depth query in the title, H1, FAQ, and first answer will lift CTR from 0.54% toward 1.5%.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {
+        "impressions": 1671,
+        "clicks": 9,
+        "ctr": 0.00539,
+        "averagePosition": 11.13
+      },
+      "target": {
+        "ctr": 0.015
+      },
+      "status": "evaluated",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-11",
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "Factual source links, canonical, or existing ecology query coverage regress.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-03-aurora-resilient-answer",
+      "path": "/northern-lights-michigan/",
+      "hypothesis": "A tonight-led title, crawlable regional Michigan outlooks, and a fail-soft decision engine that combines NOAA space weather with NWS clouds, USNO moonlight, and a selected-region best window will lift CTR from 1.85% toward 2.5% and improve qualified return use without mass-producing thin location pages.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {
+        "impressions": 18461,
+        "clicks": 341,
+        "ctr": 0.01847,
+        "averagePosition": 10.36
+      },
+      "supportingEvidence": [
+        {
+          "query": "northern lights michigan tonight",
+          "impressions": 448,
+          "clicks": 6,
+          "ctr": 0.0134,
+          "averagePosition": 9.72
+        },
+        {
+          "query": "northern lights upper peninsula tonight",
+          "impressions": 187,
+          "clicks": 5,
+          "ctr": 0.0267,
+          "averagePosition": 7.36
+        },
+        {
+          "query": "northern lights tonight near me",
+          "impressions": 194,
+          "clicks": 2,
+          "ctr": 0.0103,
+          "averagePosition": 7.91
+        }
+      ],
+      "engagementMetrics": [
+        "Aurora Region Selected",
+        "Aurora Location Used",
+        "Aurora Manual Refresh",
+        "Aurora Field Report"
+      ],
+      "target": {
+        "ctr": 0.025
+      },
+      "status": "evaluated",
+      "releaseDate": "2026-08-14",
+      "evaluationWindow": {
+        "start": "2026-08-15",
+        "end": "2026-09-11"
+      },
+      "lastSearchFacingChangeDate": "2026-08-14",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/northern-lights-michigan/",
+          "clicks": 110,
+          "impressions": 10328,
+          "ctr": 0.0107,
+          "averagePosition": 8.88
+        },
+        "finding": "MISSED, and the sample is large enough to say so. CTR 1.85% -> 1.07% against a 2.5% target, a 0.78pp fall well outside the 0.44pp detectable difference at this volume. Average position IMPROVED 10.36 -> 8.88 while impressions fell 18,461 -> 10,328, so the most likely reading is a query-mix shift toward zero-click aurora questions rather than a snippet that stopped working: the export shows 'northern lights michigan' at 81 impressions, 'northern lights michigan tonight' at 39 and 'are there northern lights in michigan tonight' at 36, all with zero clicks. Either way the treatment did not deliver the hypothesised lift, and 1.07% at position 8.9 is far under what that position normally returns. This page is the single largest recoverable opportunity on the estate."
+      },
+      "stopCondition": "NOAA, NWS, or USNO parsing regresses; the map or manual fallback fails; exact coordinates enter analytics or storage; or the interface presents a forecast combination as a visibility probability.",
+      "midWindowContentChanges": [
+        {
+          "date": "2026-08-18",
+          "pr": 63,
+          "change": "Added a self-contained answer for \"will the northern lights be visible in Michigan this weekend\", closing a timeframe-phrasing gap where the word weekend appeared zero times against five autocomplete variants.",
+          "searchFacingSurfaceChanged": false,
+          "note": "Title, description, canonical, h1 and the static answer block were all unchanged and remain pinned by tests/seasonal-search-protection.test.js. dateModified moved 2026-08-14 to 2026-08-18 because the freshness gate derives it from the last content commit. Read the CTR result with this addition in mind rather than as a clean single-variable window."
+        }
+      ],
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-03-soo-schedule-intent",
+      "path": "/soo-locks/",
+      "hypothesis": "A schedule-today title plus an honest three-step source flow—BoatNerd named vessels, the official USACE hotline, and the live AIS map—will better satisfy today and tomorrow schedule intent and lift CTR from 1.26% toward 2.5%.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {
+        "impressions": 11919,
+        "clicks": 150,
+        "ctr": 0.01259,
+        "averagePosition": 9.41
+      },
+      "supportingEvidence": [
+        {
+          "query": "soo locks schedule",
+          "impressions": 1153,
+          "clicks": 22,
+          "ctr": 0.0191,
+          "averagePosition": 8.09
+        },
+        {
+          "query": "soo locks schedule today",
+          "impressions": 877,
+          "clicks": 13,
+          "ctr": 0.0148,
+          "averagePosition": 9.01
+        },
+        {
+          "query": "soo locks ship schedule",
+          "impressions": 514,
+          "clicks": 5,
+          "ctr": 0.0097,
+          "averagePosition": 8.97
+        },
+        {
+          "query": "soo locks schedule tomorrow",
+          "impressions": 144,
+          "clicks": 5,
+          "ctr": 0.0347,
+          "averagePosition": 8.87
+        }
+      ],
+      "target": {
+        "ctr": 0.025
+      },
+      "status": "evaluated",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-13",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/soo-locks/",
+          "clicks": 347,
+          "impressions": 9136,
+          "ctr": 0.038,
+          "averagePosition": 6.96
+        },
+        "finding": "The estate's best performing surface by a wide margin: 347 clicks, 3.80% CTR at position 6.96, which is 40% of all site clicks in the period. Baseline was 1.26%. This was never released as an experiment, so the gain is not attributable to a treatment; record it as the performance reference other tools should be measured against."
+      },
+      "stopCondition": "Named-vessel data is republished without permission or the live map regresses.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-03-mackinac-conditions-page-one",
+      "path": "/mackinac-bridge-live/",
+      "hypothesis": "A conditions-today title, an immediate open-today answer, and contextual links from Soo Locks and Aurora will move the new page from average position 15.46 toward page one and lift CTR from 0.89% toward 2.0%.",
+      "primaryMetric": "Search Console page impressions, CTR, and average position",
+      "baseline": {
+        "impressions": 224,
+        "clicks": 2,
+        "ctr": 0.00893,
+        "averagePosition": 15.46
+      },
+      "supportingEvidence": [
+        {
+          "query": "mackinac bridge conditions today live",
+          "impressions": 21,
+          "averagePosition": 10.62
+        },
+        {
+          "query": "mackinac bridge conditions",
+          "impressions": 9,
+          "averagePosition": 10.33
+        },
+        {
+          "query": "mackinac bridge current conditions",
+          "impressions": 8,
+          "averagePosition": 11.75
+        },
+        {
+          "query": "mackinac bridge traffic today",
+          "impressions": 6,
+          "averagePosition": 10.17
+        }
+      ],
+      "target": {
+        "ctr": 0.02,
+        "averagePosition": 10
+      },
+      "status": "evaluated",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-11",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/mackinac-bridge-live/",
+          "clicks": 10,
+          "impressions": 2656,
+          "ctr": 0.0038,
+          "averagePosition": 10.2
+        },
+        "finding": "Impressions grew 224 -> 2,656 while CTR fell 0.89% -> 0.38% at position 10.2. The page now earns substantial demand and converts almost none of it. Combined with /mackinac-bridge-tolls/ at 0.17% on 1,190 impressions, this is the second largest recoverable opportunity on the estate."
+      },
+      "stopCondition": "The official Bridge Authority source, fail-safe open/closed logic, cameras, canonical, or live crossing flow regresses.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-03-fvf-gardening-authority",
+      "path": "/chris-izworski-freighter-view-farms/",
+      "hypothesis": "A clearer Zone 6a title, first-party experience framing, and contextual links into the gardening hub, tomato guide, and frost tool will grow qualified impressions and send measurable readers deeper into the gardening cluster.",
+      "primaryMetric": "Search Console impressions and aggregate internal CTA clicks",
+      "baseline": {
+        "impressions": 10,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 9.9
+      },
+      "target": {
+        "impressions": 100,
+        "internalCtaClicks": 10
+      },
+      "status": "evaluated",
+      "releaseDate": "2026-08-12",
+      "evaluationWindow": {
+        "start": "2026-08-13",
+        "end": "2026-09-09"
+      },
+      "lastSearchFacingChangeDate": "2026-08-11",
+      "invalidatedWindow": {
+        "releaseDate": "2026-08-03",
+        "evaluationWindow": {
+          "start": "2026-08-04",
+          "end": "2026-08-31"
+        },
+        "invalidatedOn": "2026-08-11",
+        "reason": "The inbound-link distribution expansion shipped during the original window, changing qualified traffic to the same destination and confounding its impressions and CTA metrics. Restart the combined treatment after the analytics repair reaches production."
+      },
+      "distributionExpansion": {
+        "status": "released",
+        "proposedDate": "2026-08-11",
+        "releaseDate": "2026-08-11",
+        "evaluationWindow": {
+          "start": "2026-08-13",
+          "end": "2026-09-09"
+        },
+        "sourcePaths": [
+          "/",
+          "/about/",
+          "/guides/"
+        ],
+        "change": "Add measurable contextual links from established discovery pages into the FVF authority page without changing the destination title, H1, first answer, schema, canonical, or indexability.",
+        "baselineInboundInternalPages": 6,
+        "targetInboundInternalPages": 9,
+        "measurement": "Growth CTA events on the three source links plus FVF authority-page impressions and downstream gardening CTA clicks.",
+        "attributionNote": "This expanded distribution without altering the active tomato and frost snippets. The PR 50 analytics-loader repair reached production on August 12, so the clean combined FVF window begins August 13."
+      },
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": null,
+        "finding": "NOT READABLE from this export: freighterviewfarms.com is a separate Search Console property and is not in this file. Baseline was 10 impressions and 0 clicks, which was never measurable regardless. Closed unmeasured."
+      },
+      "stopCondition": "First-party claims, canonicals, or links to the independent Freighter View Farms blog become inaccurate.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-03-great-lakes-birding-cluster",
+      "path": "/great-lakes-birding/",
+      "hypothesis": "A migration-and-hotspot title, direct first answer, and prominent bridge to the live birding tool will lift guide CTR and expand impressions without weakening the birding subdomain's existing 4.5% CTR.",
+      "primaryMetric": "Search Console page impressions, CTR, and aggregate clicks to the live birding tool",
+      "baseline": {
+        "impressions": 74,
+        "clicks": 1,
+        "ctr": 0.0135,
+        "averagePosition": 11.01
+      },
+      "supportingBaseline": {
+        "url": "https://birding.chrisizworski.com/",
+        "impressions": 111,
+        "clicks": 5,
+        "ctr": 0.045,
+        "averagePosition": 7.32
+      },
+      "target": {
+        "impressions": 250,
+        "ctr": 0.025,
+        "liveToolClicks": 15
+      },
+      "status": "evaluated",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {
+        "start": "2026-08-04",
+        "end": "2026-08-31"
+      },
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "complete-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/great-lakes-birding/",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0.0,
+          "averagePosition": 7.33
+        },
+        "finding": "Collapsed to 3 impressions and 0 clicks. Nothing to measure; the cluster has no demand at present, which is itself the finding."
+      },
+      "stopCondition": "The guide loses indexability, the live-tool destination changes, or birding-subdomain CTR falls below 2.5% in a comparable 28-day window.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-12-great-lakes-buoys-live-intent",
+      "path": "/great-lakes-buoys/",
+      "hypothesis": "Leading the title and H1 with Great Lakes buoys, then giving an immediate NOAA/NDBC conditions answer, will lift page CTR from 1.96% toward 2.5% and average position from 14.54 toward 12 without changing the canonical, live feed, map, or filters.",
+      "primaryMetric": "Search Console page CTR and average position",
+      "baseline": {
+        "impressions": 1276,
+        "clicks": 25,
+        "ctr": 0.0196,
+        "averagePosition": 14.54
+      },
+      "supportingEvidence": [
+        {
+          "query": "great lakes buoys",
+          "impressions": 104,
+          "clicks": 1,
+          "ctr": 0.0096,
+          "averagePosition": 11.49
+        }
+      ],
+      "target": {
+        "ctr": 0.025,
+        "averagePosition": 12
+      },
+      "status": "evaluated",
+      "releaseDate": "2026-08-12",
+      "evaluationWindow": {
+        "start": "2026-08-13",
+        "end": "2026-09-09"
+      },
+      "lastSearchFacingChangeDate": "2026-08-12",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/great-lakes-buoys/",
+          "clicks": 22,
+          "impressions": 735,
+          "ctr": 0.0299,
+          "averagePosition": 11.98
+        },
+        "finding": "Directionally positive, NOT conclusive. CTR 1.96% -> 2.99%, a 1.03pp move against a 1.54pp detectable difference. Read at 20 of 28 days. Treat as encouraging, not proven."
+      },
+      "stopCondition": "The NOAA/NDBC attribution, canonical, live feed, map, station list, activity filters, accessibility, or performance regresses.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-03-great-lakes-ship-tracker",
+      "path": "/great-lakes-freighter-tracking/",
+      "hypothesis": "Replacing the passive guide with a live lake-wide AIS tool, corridor-specific views, nearby NOAA context, and a title matching ship-tracker intent will move the page toward the top 15 and lift CTR from 0.10% toward 1.5%.",
+      "primaryMetric": "Search Console page impressions, CTR, and average position",
+      "baseline": {
+        "impressions": 996,
+        "clicks": 1,
+        "ctr": 0.001,
+        "averagePosition": 23.87
+      },
+      "supportingEvidence": [
+        {
+          "query": "great lake freighter tracker",
+          "impressions": 3,
+          "averagePosition": 18
+        },
+        {
+          "query": "great lakes ships tracker",
+          "impressions": 3,
+          "averagePosition": 22.33
+        },
+        {
+          "query": "great lake ship tracker",
+          "impressions": 3,
+          "averagePosition": 28
+        },
+        {
+          "query": "track freighters great lakes",
+          "impressions": 2,
+          "averagePosition": 17.5
+        },
+        {
+          "query": "vessel tracker great lakes",
+          "impressions": 2,
+          "averagePosition": 21.5
+        }
+      ],
+      "target": {
+        "impressionsMultiple": 3,
+        "ctr": 0.015,
+        "averagePosition": 15,
+        "measurementHorizonDays": 90
+      },
+      "status": "evaluated",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {
+        "start": "2026-08-04",
+        "end": "2026-08-31"
+      },
+      "lastSearchFacingChangeDate": "2026-08-03",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "complete-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/great-lakes-freighter-tracking/",
+          "clicks": 30,
+          "impressions": 2533,
+          "ctr": 0.0118,
+          "averagePosition": 10.13
+        },
+        "finding": "Directionally strong and worth keeping. CTR 0.10% -> 1.18% with impressions up 996 -> 2,533. The absolute sample still cannot certify the lift, but 30 clicks where there was 1 is a real change in kind, not a ratio artefact."
+      },
+      "stopCondition": "The supported AIS embed, corridor switching, nearby NOAA context, canonical, or non-JavaScript source links regress.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-03-great-lakes-gazette-daily",
+      "path": "/great-lakes-gazette/",
+      "hypothesis": "A shipping-news-today title, direct link to the dated newspaper, visible archive and RSS, and current-headline distribution across relevant high-demand pages will establish qualified search demand and repeat edition opens while publication health prevents stale or silently broken issues.",
+      "primaryMetric": "Daily publication availability, widget edition-open rate, and Search Console landing-page CTR after a complete baseline window",
+      "baseline": {
+        "impressions": null,
+        "clicks": null,
+        "ctr": null,
+        "averagePosition": null,
+        "status": "not-isolated-in-visible-export"
+      },
+      "reliabilityBaseline": {
+        "archiveIssues": 92,
+        "currentStreakDays": 10,
+        "latestGeneratedAfter7amEastern": true,
+        "latestHealthyAisPorts": 0
+      },
+      "target": {
+        "dailyAvailability": 1,
+        "publishedBy730amEastern": 0.96,
+        "healthyAisPortRate": 0.95,
+        "widgetEditionOpenRate": 0.02,
+        "ctrAfter250Impressions": 0.02
+      },
+      "status": "evaluated",
+      "releaseDate": "2026-08-03",
+      "evaluationWindow": {
+        "start": "2026-08-04",
+        "end": "2026-08-31"
+      },
+      "lastSearchFacingChangeDate": "2026-08-03",
+      "publicationQualityRepairs": [
+        {
+          "date": "2026-08-09",
+          "repository": "izworskic/great-lakes-gazette",
+          "change": "Shipping-section relevance and stale/background-waterway filtering were repaired without changing this landing page's title, description, H1, first answer, canonical, or indexability.",
+          "measurementNote": "Treat publication reliability and engagement after August 9 as the corrected newspaper pipeline. The landing-page search treatment itself remains the August 3 release."
+        }
+      ],
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "complete-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "gazette.chrisizworski.com",
+          "clicks": 8,
+          "impressions": 189,
+          "ctr": 0.0423,
+          "averagePosition": null
+        },
+        "finding": "Roughly 189 impressions and 8 clicks across issue pages. Individual issues rank well (position 1.2 to 8) but carry almost no demand. Archive depth, not snippet quality, is the question."
+      },
+      "stopCondition": "A duplicate issue, wrong-date headline link, stale movement framed as current, source-health false positive, indexability change, or material live-tool performance regression occurs.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-15-tunnel-of-trees-peak-date-serp",
+      "path": "/fall-color/tunnel-of-trees-fall-color/",
+      "hypothesis": "Leading the description with the existing October 5-13 peak window will lift CTR from 0.79% toward the 2.5% site gate while the page holds its current page-one average position.",
+      "primaryMetric": "Search Console page CTR and average position",
+      "baseline": {
+        "impressions": 127,
+        "clicks": 1,
+        "ctr": 0.0079,
+        "averagePosition": 8.29
+      },
+      "baselineSource": "Google Search Console six-month export ending 2026-08-13",
+      "treatment": {
+        "metaDescription": "Tunnel of Trees fall color typically peaks October 5–13. See the 2026 outlook, live regional conditions, and M-119 stops from Harbor Springs north.",
+        "preserved": [
+          "title",
+          "h1",
+          "firstAnswer",
+          "canonical",
+          "liveConditions",
+          "guideContent"
+        ]
+      },
+      "target": {
+        "ctr": 0.025,
+        "averagePosition": 10
+      },
+      "status": "evaluated",
+      "proposedDate": "2026-08-15",
+      "releaseDate": "2026-08-15",
+      "evaluationWindow": {
+        "start": "2026-08-16",
+        "end": "2026-09-12"
+      },
+      "lastSearchFacingChangeDate": "2026-08-15",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/fall-color/tunnel-of-trees-fall-color/",
+          "clicks": 14,
+          "impressions": 611,
+          "ctr": 0.0229,
+          "averagePosition": 7.52
+        },
+        "finding": "Directionally positive, small sample, and confounded by season. CTR 0.79% -> 2.29% at 17 of 28 days, with fall demand ramping through the window. Seasonality will dominate any further waiting, so more days would not have made this cleaner."
+      },
+      "stopCondition": "CTR falls below 0.50% after at least 250 impressions, average position moves below page one in a comparable window, or the title, H1, first answer, canonical, live conditions, or guide content regresses.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-15-seasonal-field-desk-ux",
+      "paths": [
+        "/fall-color/",
+        "/michigan-ice/"
+      ],
+      "externalPathPrepared": "https://xcski.chrisizworski.com/",
+      "hypothesis": "A mobile-first persona decision surface, a useful-result-first Ice hierarchy, and explicit handoffs among Fall, XC skiing, and Ice will increase qualified tool use and cross-season discovery without changing the active Fall search snippets or weakening factual boundaries.",
+      "primaryMetric": "Seasonal Decision events divided by Seasonal Module View events",
+      "supportingMetrics": [
+        "Seasonal Tool Open rate",
+        "Search Console page impressions",
+        "Search Console page CTR",
+        "p75 Core Web Vitals"
+      ],
+      "baseline": {
+        "fallHub": {
+          "impressions": 575,
+          "clicks": 14,
+          "ctr": 0.0243,
+          "averagePosition": 11.17
+        },
+        "iceHub": {
+          "impressions": 20,
+          "clicks": 0,
+          "ctr": 0,
+          "averagePosition": 57.5
+        },
+        "decisionRate": null,
+        "crossSeasonToolOpenRate": null,
+        "note": "Search values are a directional August 15 export snapshot. Interaction baselines do not exist before instrumentation."
+      },
+      "target": {
+        "decisionRate": 0.12,
+        "crossSeasonToolOpenRate": 0.03,
+        "fallHubCtrAfter500Impressions": 0.03,
+        "qualifiedImpressionsMultiple": 1.2
+      },
+      "treatment": {
+        "fall": "Three outing-intent paths, accessible tab state, and seasonal tool handoff.",
+        "ice": "Safety-first trip screen, current read before long explanation, six direct water choices, and seasonal tool handoff.",
+        "xcSkiing": "A non-overwriting adapter prepared and tested against the current live HTML; production source access remains required.",
+        "shared": "One dependency-free CSS and analytics layer with fixed-label, privacy-safe events."
+      },
+      "preserved": [
+        "Fall title",
+        "Fall meta description",
+        "Fall H1",
+        "Fall first answer",
+        "Fall canonical",
+        "Fall structured data",
+        "Ice safety language",
+        "Ice data limitations",
+        "Ice source attributions",
+        "Ice canonical",
+        "Ice structured data",
+        "Tunnel of Trees experiment",
+        "Aurora experiment"
+      ],
+      "status": "evaluated",
+      "proposedDate": "2026-08-15",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "decisionDate": null,
+      "result": null,
+      "stopCondition": "A frozen search surface changes; exact location enters analytics or storage; Ice implies safety; XC equates modeled snow with grooming; fewer than 5 decisions occur after 500 module views; Fall CTR falls at least 20% after 500 comparable impressions with stable position; or a p75 Core Web Vital remains outside the green range for seven days.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-22-beach-conditions-ctr",
+      "path": "/great-lakes-beaches/",
+      "hypothesis": "Leading with Michigan beach conditions today while preserving official-source and flag-status truth boundaries will lift CTR on an existing page-one surface.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 273,
+        "clicks": 2,
+        "ctr": 0.0073,
+        "averagePosition": 9.12
+      },
+      "target": {
+        "ctr": 0.015,
+        "stretchCtr": 0.025,
+        "averagePositionMax": 12.5
+      },
+      "status": "evaluated",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-25",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/great-lakes-beaches/",
+          "clicks": 15,
+          "impressions": 1131,
+          "ctr": 0.0133,
+          "averagePosition": 9.56
+        },
+        "finding": "CTR 0.73% -> 1.33% on 1,131 impressions. Below the resolving power of the sample, but the impression growth is real and the season is closing. Re-read next summer."
+      },
+      "stopCondition": "Average position falls below 12.5, canonical/indexability changes, or the page weakens its explicit boundary between NWS swim risk and physical posted flag status.",
+      "preWindowContentChanges": [
+        {
+          "date": "2026-08-25",
+          "path": "/great-lakes-beaches/new-buffalo-beach/",
+          "change": "meta description trimmed to <=158 chars",
+          "why": "2026-08-25: meta description trimmed to the 158-char limit BEFORE this experiment's clock started (status was pending-clean-window with releaseDate null), so the window opens on the corrected string and the result stays single-variable. This is not a mid-window change."
+        }
+      ],
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-22-border-waits-ctr",
+      "path": "/michigan-border-wait-times/",
+      "hypothesis": "Today/Detroit/all-five-crossings framing will lift statewide border-wait CTR while five crossing-specific pages retain their own canonical intent.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 284,
+        "clicks": 2,
+        "ctr": 0.007,
+        "averagePosition": 11.98
+      },
+      "target": {
+        "ctr": 0.015,
+        "stretchCtr": 0.025,
+        "averagePositionMax": 15
+      },
+      "status": "evaluated",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/michigan-border-wait-times/",
+          "clicks": 6,
+          "impressions": 548,
+          "ctr": 0.0109,
+          "averagePosition": 11.92
+        },
+        "finding": "CTR 0.70% -> 1.09% on 548 impressions. Not resolvable. Note the crossing-specific pages outperform the hub: /gordie-howe-bridge-wait-time/ returns 26 clicks at 2.58%."
+      },
+      "stopCondition": "Average position falls below 15, directional source truth regresses, or the statewide page begins cannibalizing a crossing-specific canonical owner.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-22-boat-launch-authority",
+      "path": "/michigan-boat-launches/",
+      "hypothesis": "Crawlable destination guidance beneath the map will expand qualified discovery without changing the winning map-first product or its snippet.",
+      "primaryMetric": "Search Console average daily page impressions",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 77,
+        "averageDailyImpressions": 11,
+        "clicks": 0,
+        "averagePosition": 13.17
+      },
+      "target": {
+        "averageDailyImpressions": 15,
+        "averagePositionMax": 18
+      },
+      "status": "evaluated",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/michigan-boat-launches/",
+          "clicks": 0,
+          "impressions": 255,
+          "ctr": 0.0,
+          "averagePosition": 13.34
+        },
+        "finding": "255 impressions, zero clicks, position 13.34. No CTR to move at this volume. Ranking, not snippet, is the constraint."
+      },
+      "stopCondition": "Average position falls below 18, finder behavior/source truth regresses, or new doorway destination canonicals are introduced.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-22-au-sable-map-access-authority",
+      "path": "/au-sable-river/",
+      "hypothesis": "A crawlable map/public-access answer inside the existing Au Sable owner will expand map, access, fishing and paddling discovery without touching the strong snippet.",
+      "primaryMetric": "Search Console average daily page impressions",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 475,
+        "averageDailyImpressions": 67.86,
+        "clicks": 16,
+        "ctr": 0.0337,
+        "averagePosition": 9.16
+      },
+      "target": {
+        "averageDailyImpressions": 80,
+        "ctrFloor": 0.025,
+        "averagePositionMax": 12.5
+      },
+      "status": "evaluated",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/au-sable-river/",
+          "clicks": 1,
+          "impressions": 17,
+          "ctr": 0.0588,
+          "averagePosition": 7.06
+        },
+        "finding": "FINDING THAT MATTERS MORE THAN THE EXPERIMENT: the hub page fell to 17 impressions while ausable.chrisizworski.com took 1,798 impressions and 55 clicks at 3.06%. The subdomain is winning the query set the hub page was built for. Treat as a canonical/cannibalisation question, not a CTR question."
+      },
+      "stopCondition": "Average position falls below 12.5, CTR falls below 2.5% in a comparable window, canonical/snippet changes, or access claims lose source support.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-22-manistee-paddling-page-one",
+      "paths": [
+        "/michigan-paddling/manistee-river/"
+      ],
+      "hypothesis": "A query-led snippet, direct trip-planning answer and explicit field-map handoff will move the existing Manistee River guide from the page-one threshold into the top 10 and turn current impressions into qualified clicks.",
+      "primaryMetric": "Search Console average position and CTR for /michigan-paddling/manistee-river/",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 72,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 11.4
+      },
+      "target": {
+        "averagePositionAtOrBetterThan": 10,
+        "ctrAtOrAbove": 0.015,
+        "stretchAveragePositionAtOrBetterThan": 8
+      },
+      "status": "evaluated",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-25",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/michigan-paddling/manistee-river/",
+          "clicks": 9,
+          "impressions": 436,
+          "ctr": 0.0206,
+          "averagePosition": 10.63
+        },
+        "finding": "9 clicks on 436 impressions, 2.06% at position 10.63. Healthy for its position; the constraint is ranking."
+      },
+      "stopCondition": "Average position worsens beyond 15 after a meaningful impression sample, CTR remains effectively zero after the clean window, or the field map begins competing as a duplicate search owner.",
+      "preWindowContentChanges": [
+        {
+          "date": "2026-08-25",
+          "path": "/michigan-paddling/manistee-river/",
+          "change": "meta description trimmed to <=158 chars",
+          "why": "2026-08-25: meta description trimmed to the 158-char limit BEFORE this experiment's clock started (status was pending-clean-window with releaseDate null), so the window opens on the corrected string and the result stays single-variable. This is not a mid-window change."
+        }
+      ],
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-22-fall-aurora-overlap-ctr",
+      "paths": [
+        "/fall-color-northern-lights-michigan/"
+      ],
+      "hypothesis": "A clearer overlap-window snippet plus immediate handoffs to the live fall-color and aurora tools will convert an existing position-8 result that currently earns impressions but no clicks.",
+      "primaryMetric": "Search Console page CTR while holding page-one average position",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 90,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 8.28
+      },
+      "target": {
+        "ctr": 0.02,
+        "stretchCtr": 0.03,
+        "averagePositionMax": 10
+      },
+      "status": "evaluated",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-25",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/fall-color-northern-lights-michigan/",
+          "clicks": 4,
+          "impressions": 400,
+          "ctr": 0.01,
+          "averagePosition": 10.22
+        },
+        "finding": "400 impressions, 4 clicks, 1.00% at position 10.22, up from zero clicks. Season opening; re-read in October when the overlap query set is live."
+      },
+      "stopCondition": "Average position worsens beyond 12.5 after a meaningful sample, CTR remains effectively zero after the clean window, canonical changes, or the treatment weakens the protected Fall Color or Northern Lights owners.",
+      "preWindowContentChanges": [
+        {
+          "date": "2026-08-25",
+          "path": "/fall-color/",
+          "change": "added a contextual inbound link from the fall hub peak-timing section",
+          "why": "The fall hub was the one obvious entry point NOT linking to this page, which sits at position 8.28 with 90 impressions and zero clicks. Added before the clock started, so the window opens with the link in place and the CTR result stays single-variable. The destination page itself was not touched, and no inbound link was added to /northern-lights-michigan/, which is frozen until 2026-09-11."
+        }
+      ],
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-22-upper-peninsula-fall-rank",
+      "paths": [
+        "/fall-color/upper-peninsula-fall-color/"
+      ],
+      "sourcePaths": [
+        "/up-north-michigan/",
+        "/lake-superior-circle-tour/"
+      ],
+      "hypothesis": "Two contextual links from relevant northern-Michigan and Lake Superior planning surfaces will move the existing regional fall-color owner from average position 11.88 into the top 10 without changing its already-strong snippet.",
+      "primaryMetric": "Search Console average position for /fall-color/upper-peninsula-fall-color/",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 78,
+        "clicks": 1,
+        "ctr": 0.0128,
+        "averagePosition": 11.88
+      },
+      "target": {
+        "averagePositionAtOrBetterThan": 10,
+        "stretchAveragePositionAtOrBetterThan": 8,
+        "ctrFloor": 0.01
+      },
+      "status": "evaluated",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-25",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/fall-color/upper-peninsula-fall-color/",
+          "clicks": 7,
+          "impressions": 320,
+          "ctr": 0.0219,
+          "averagePosition": 11.05
+        },
+        "finding": "320 impressions, 7 clicks, 2.19%. Season opening. Re-read in October."
+      },
+      "stopCondition": "Average position worsens beyond 15 after a meaningful sample, CTR falls below 1%, the destination snippet changes, or the statewide Fall Color owner is altered during its protected window.",
+      "preWindowContentChanges": [
+        {
+          "date": "2026-08-25",
+          "path": "/up-north-michigan/ (source path only; destination snippet untouched)",
+          "change": "meta description trimmed to <=158 chars",
+          "why": "2026-08-25: meta description trimmed to the 158-char limit BEFORE this experiment's clock started (status was pending-clean-window with releaseDate null), so the window opens on the corrected string and the result stays single-variable. This is not a mid-window change."
+        }
+      ],
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-22-fall-weekend-planner-ctr",
+      "paths": [
+        "/fall-color/michigan-leaf-peeping-planner/"
+      ],
+      "hypothesis": "Plain-language weekend-planning search copy will lift an existing position-10 planner from zero clicks while preserving the live Fall Color hub as the statewide current-conditions owner.",
+      "primaryMetric": "Search Console page CTR while holding page-one/near-page-one average position",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 54,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 10.07
+      },
+      "target": {
+        "ctr": 0.02,
+        "stretchCtr": 0.03,
+        "averagePositionMax": 12
+      },
+      "status": "evaluated",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/fall-color/michigan-leaf-peeping-planner/",
+          "clicks": 0,
+          "impressions": 237,
+          "ctr": 0.0,
+          "averagePosition": 10.65
+        },
+        "finding": "237 impressions and ZERO clicks at position 10.65. The clearest snippet failure in the set: the page is being served and refused. Worth a title and description rewrite before fall peak."
+      },
+      "stopCondition": "Average position worsens beyond 15 after a meaningful sample, CTR remains effectively zero after the clean window, planner behavior regresses, or the page begins competing with the statewide live Fall Color current-conditions owner.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-22-zone-6a-calendar-ctr",
+      "paths": [
+        "/zone-6a-planting-calendar/"
+      ],
+      "hypothesis": "A Zone 6a + by-city search promise and immediate multi-crop answer will convert an existing position-8 planting-calendar result into clicks without changing the active tomato or frost owners.",
+      "primaryMetric": "Search Console page CTR while holding page-one average position",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 34,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 8.26
+      },
+      "target": {
+        "ctr": 0.02,
+        "stretchCtr": 0.03,
+        "averagePositionMax": 10.5
+      },
+      "status": "evaluated",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/zone-6a-planting-calendar/",
+          "clicks": 0,
+          "impressions": 168,
+          "ctr": 0.0,
+          "averagePosition": 11.1
+        },
+        "finding": "168 impressions, zero clicks, position 11.10. Out of season and unmeasurable. Re-read in spring."
+      },
+      "stopCondition": "CTR remains effectively zero after the clean window, average position worsens beyond 13 after a meaningful sample, or the page begins competing with the protected tomato or frost owners.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-22-heirloom-tomatoes-ctr",
+      "paths": [
+        "/heirloom-tomatoes-michigan/"
+      ],
+      "hypothesis": "Leading with best-variety intent and a first-party Zone 6a answer will convert an existing position-10 heirloom result into clicks without changing the active tomato-planting experiment.",
+      "primaryMetric": "Search Console page CTR while holding near-page-one average position",
+      "baseline": {
+        "windowDays": 7,
+        "impressions": 30,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 10.37
+      },
+      "target": {
+        "ctr": 0.02,
+        "stretchCtr": 0.03,
+        "averagePositionMax": 12
+      },
+      "status": "evaluated",
+      "releaseDate": null,
+      "evaluationWindow": null,
+      "lastSearchFacingChangeDate": "2026-08-22",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "/heirloom-tomatoes-michigan/",
+          "clicks": 3,
+          "impressions": 163,
+          "ctr": 0.0184,
+          "averagePosition": 10.2
+        },
+        "finding": "163 impressions, 3 clicks, 1.84%, up from zero. Out of season. Re-read in spring."
+      },
+      "stopCondition": "CTR remains effectively zero after the clean window, average position worsens beyond 15 after a meaningful sample, factual variety claims regress, or the page begins competing with the protected tomato-timing owner.",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    },
+    {
+      "id": "2026-08-28-outdoors-now-growth-system",
+      "surface": "https://michiganoutdoorsnow.chrisizworski.com/",
+      "externalRepository": "izworskic/michigan-outdoors-now",
+      "hypothesis": "A bounded set of high-value location-intent pages, attributed through the real planner/decision funnel and governed by canonical ownership, will grow qualified Michigan outdoor impressions and clicks without creating doorway pages or rewarding traffic that does not become useful planning.",
+      "primaryMetric": "Search Console page × query impressions, CTR, and average position joined with attributed planner completion and directions behavior",
+      "baseline": {
+        "search": {
+          "query": "michigan day trips for families",
+          "impressions": 9,
+          "clicks": 0,
+          "ctr": 0,
+          "averagePosition": 31.33,
+          "window": "7-day leading snapshot through 2026-08-20"
+        },
+        "product": {
+          "status": "none-before-attribution-release"
+        }
+      },
+      "treatment": {
+        "locationIntentPages": 54,
+        "families": [
+          "family-day-trips",
+          "hiking",
+          "paddling",
+          "dog-friendly",
+          "lower-barrier"
+        ],
+        "attribution": "surface + origin slug + intent slug + page key",
+        "semanticFunnel": "search → result → keep/compare → trust → departure → directions",
+        "searchCollection": "weekly Search Console page × query workflow",
+        "previewCreative": "query-specific location-intent OpenGraph image"
+      },
+      "protectedAdjacentOwners": {
+        "beaches": "/great-lakes-beaches/",
+        "freighters": "/great-lakes-freighter-tracking/",
+        "birding": "https://michiganbirdingreport.com/"
+      },
+      "target": {
+        "familyExpansionGate": {
+          "impressions": 250,
+          "clicks": 5,
+          "plannerCompletions": 10,
+          "directionsOpens": 3
+        },
+        "completeWindowDays": 28
+      },
+      "status": "evaluated",
+      "proposedDate": "2026-08-28",
+      "releaseDate": "2026-08-28",
+      "evaluationWindow": {
+        "start": "2026-08-29",
+        "end": "2026-09-25"
+      },
+      "lastSearchFacingChangeDate": "2026-08-28",
+      "decisionDate": "2026-09-01",
+      "result": {
+        "readDate": "2026-09-01",
+        "readType": "partial-window",
+        "source": "Search Console export chrisizworski.com-Performance-on-Search-2026-09-01, last 28 days (2026-08-02 to 2026-08-29), web search",
+        "measured": {
+          "path": "michiganoutdoorsnow.chrisizworski.com",
+          "clicks": 1,
+          "impressions": 341,
+          "ctr": 0.0029,
+          "averagePosition": null
+        },
+        "finding": "341 impressions and 1 click across the whole property, most pages beyond position 20. Ranking is the constraint; CTR measurement is not meaningful here yet."
+      },
+      "stopCondition": "A family is expanded from impressions alone; location pages become near-duplicate doorway variants; protected beach/freighter/birding owners are cannibalized; exact location or free-text semantic queries enter analytics; or canonical/entity integrity regresses.",
+      "implementationMergeCommit": "df094eabff96afbfa5691b7f85e2a1a0b926e150",
+      "unblocked": true,
+      "unblockReason": "Read 2026-09-01 and closed. Waiting longer could not change the decision: at this page's volume the detectable difference barely moves with the remaining days, and for most of these surfaces no 28-day window at current traffic can resolve a CTR change at all.",
+      "retiredOn": "2026-09-02"
+    }
+  ],
   "updated": "2026-09-02",
   "status": "retired",
   "operatingMode": "ship-and-observe",
   "activeExperiments": [],
-  "note": "All Search Console growth experiments were ended early by the owner on 2026-09-02. No title, description, H1, canonical, structured-data, or indexability experiment freeze is active.",
+  "note": "All Search Console growth experiments were ended early by the owner on 2026-09-02. No title, description, H1, canonical, structured-data, or indexability experiment freeze is active. The per-experiment records below are RETAINED, not active: they hold the measured readings taken on 2026-09-01 and the power floor derived from them. Version 2.0.0 dropped them; they are restored here because the findings are the reason to keep a ledger at all, and six tests assert against them.",
   "durableLearnings": [
     "Aurora rankings improved while CTR fell; prioritize query-to-SERP promise matching over another tool rebuild.",
     "Mackinac Bridge ranks near page one but underperforms on CTR; lead the snippet with the open-today decision.",

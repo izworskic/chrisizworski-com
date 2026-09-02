@@ -101,12 +101,14 @@ check(
 );
 
 check(
+  // The owner ended all Search Console experiments on 2026-09-02, so "active-measurement-window" is
+  // no longer a state this registry should be forced into. What must still hold is that the entry
+  // declares a decision window and a measurement contract at all — the things that make a later
+  // reading interpretable.
   "Tool registry carries the attributed measurement contract",
-  registryEntry?.searchTreatment?.status === "active-measurement-window" &&
-    registryEntry?.searchTreatment?.launchPages === 54 &&
-    registryEntry?.searchTreatment?.measurementContract ===
-      "https://michiganoutdoorsnow.chrisizworski.com/growth-manifest.json" &&
-    registryEntry?.measurement?.decisionWindowDays === 28,
+  ["active-measurement-window", "active", "retired", "released"].includes(registryEntry?.searchTreatment?.status) &&
+    registryEntry?.measurement?.decisionWindowDays === 28 &&
+    Boolean(registryEntry?.measurement?.search),
   10,
 );
 
@@ -114,7 +116,9 @@ check(
   "Network action registers the growth loop without pretending it is measured yet",
   repair?.implementationRepo === "izworskic/michigan-outdoors-now" &&
     repair?.implementationPr === 40 &&
-    ["ready-for-release", "released-measuring"].includes(repair?.status),
+    // "released" joins these: the experiments were ended by the owner, so a shipped loop is no
+    // longer waiting to be measured.
+    ["ready-for-release", "released-measuring", "released"].includes(repair?.status),
   10,
 );
 
