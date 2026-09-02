@@ -124,10 +124,14 @@ test('portage-only waterbody pairs are refused rather than routed over land', ()
   // Siskiwit Lake to Intermediate Lake is an official 0.4 mile NPS portage. There is no water
   // connection, and inventing one is the failure mode that matters most on a canoe trip.
   const router = loadIntel().create(geometry);
+  // Refused at once, with the reason, rather than after flooding the lake: Siskiwit and
+  // Intermediate are different water bodies, and saying so is the honest answer.
+  const started = Date.now();
   assert.throws(
     () => router.route([anchor('siskiwit-lake'), anchor('intermediate-lake')], 'paddle'),
-    /No mapped-water route found/
+    /different water.*carry over a portage/
   );
+  assert.ok(Date.now() - started < 250, 'a cross-water refusal must be immediate, not a search');
 });
 
 test('the refresh endpoint rejects an Overpass timeout remark instead of mapping it', () => {
@@ -263,4 +267,31 @@ test('a multi-day interior canoe trip resolves through the marked NPS portages',
   assert.equal(carries, 5, 'five carries: P7, P8, P9, P10, P11');
   assert.ok(paddleMiles > 6 && paddleMiles < 14, `paddle mileage ${paddleMiles.toFixed(1)} should be the interior route, not a coastal detour`);
   assert.ok(portageMiles > 3 && portageMiles < 6, `portage mileage ${portageMiles.toFixed(1)} should match the NPS carries`);
+});
+
+test('the yielding search keeps the event loop alive and refuses cross-water legs at once', async () => {
+  const intel = loadIntel();
+  const router = intel.create(geometry);
+
+  // A search that must fail between different water bodies is refused before any expansion.
+  const t0 = Date.now();
+  await assert.rejects(
+    () => router.routeAsync([anchor('rock-harbor'), anchor('lake-richie')], 'paddle'),
+    /different water/,
+  );
+  assert.ok(Date.now() - t0 < 250, 'cross-water refusal must not search');
+
+  // A real leg resolves through the async form, and the event loop keeps turning while it does.
+  let ticks = 0;
+  const timer = setInterval(() => { ticks += 1; }, 16);
+  try {
+    // Rock Harbor to Tobin Harbor is a fifth of a mile apart and several miles round Scoville Point:
+    // long enough that the search must yield more than once before it resolves.
+    const leg = await router.routeAsync([anchor('rock-harbor'), anchor('tobin-harbor')], 'paddle');
+    assert.equal(leg.land_crossings, 0);
+    assert.ok(leg.points.length > 2);
+  } finally {
+    clearInterval(timer);
+  }
+  assert.ok(ticks >= 3, `expected the event loop to turn during the search, saw ${ticks} ticks`);
 });
