@@ -70,8 +70,16 @@ const pointDetailRuntime = /L\.canvas\(\{padding:\.5, tolerance:coarsePointer \?
   && /Open this coordinate on the source map/.test(js)
   && /\.popup-action\{[^}]*min-height:42px/.test(html);
 
-const interactionAssetFresh = /\/assets\/isle-royale-map\.js\?v=20260901-committed-water-geometry-1/.test(html)
-  && !/isle-royale-map\.js\?v=20260830-19/.test(html)
+// The version token is a property, not a literal: a literal pin fails every time the asset is
+// legitimately changed and has to be hand-edited here, which is how a stale token slips through.
+// What must hold: the script is versioned, the token is dated, it is not a known-stale one, and the
+// map script and the water engine carry the SAME token so a browser never loads a new planner
+// against a cached old engine.
+const mapAssetVersion = (html.match(/\/assets\/isle-royale-map\.js\?v=([a-z0-9-]+)/) || [])[1] || '';
+const engineAssetVersion = (html.match(/\/assets\/isle-royale-water-intelligence\.js\?v=([a-z0-9-]+)/) || [])[1] || '';
+const interactionAssetFresh = /^2026\d{4}-[a-z0-9-]+$/.test(mapAssetVersion)
+  && mapAssetVersion === engineAssetVersion
+  && !/^20260830-19/.test(mapAssetVersion)
   && /"source": "\/assets\/isle-royale-map\.js"/.test(vercel)
   && /"key": "Cache-Control"[\s\S]{0,120}"value": "no-store, max-age=0"/.test(vercel)
   && /"key": "CDN-Cache-Control"[\s\S]{0,120}"value": "no-store"/.test(vercel)
