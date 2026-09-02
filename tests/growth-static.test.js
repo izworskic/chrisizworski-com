@@ -20,7 +20,9 @@ test("100x benchmark reconciles to the supplied Search Console baseline", () => 
   assert.notEqual(current.dailyImpressions, benchmark.measurement.unverifiedClaimedMaxDailyImpressions);
   assert.equal(benchmark.benchmarkVersion, "1.2.0");
   assert.ok(benchmark.priorityPages.some((page) => page.path === "/mackinac-bridge-live/"));
-  assert.ok(ledger.experiments.some((experiment) => experiment.path === "/mackinac-bridge-live/"));
+  assert.equal(ledger.status, "retired");
+  assert.equal(ledger.operatingMode, "ship-and-observe");
+  assert.deepEqual(ledger.activeExperiments, []);
 });
 
 test("priority search pages preserve canonicals, direct answers, and internal depth", () => {
@@ -30,7 +32,7 @@ test("priority search pages preserve canonicals, direct answers, and internal de
     ["saginaw-bay-ecology", "How Deep Is Saginaw Bay? Depth, Ecology &amp; Fishing", "saginaw-depth-answer"],
     ["northern-lights-michigan", "Northern Lights Michigan Tonight: Aurora | Chris Izworski", "aurora-static-answer"],
     ["soo-locks", "Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski", "soo-schedule-answer"],
-    ["mackinac-bridge-live", "Mackinac Bridge Conditions Today: Live Status &amp; Cameras", "mackinac-conditions-answer"],
+    ["mackinac-bridge-live", "Is the Mackinac Bridge Open Today? Live Status &amp; Cameras", "mackinac-conditions-answer"],
   ];
 
   for (const [route, title, answerId] of checks) {
