@@ -32,6 +32,9 @@ const intentionalChanges = new Set([
   // Sep 1 2026: add distinct national intent hubs and discovery links from the canonical national tools hub.
   // Re-crawl after production release, then remove this declaration.
   "/national-tools/",
+  // Sep 2 2026: connect the water intent hub to the new, distinct national coastal decision tool.
+  // Re-crawl after production release, then remove this declaration.
+  "/national-tools/water/",
   // Aug 28 2026: Michigan Outdoors Now joined the canonical Chris entity/project network.
   // These are additive identity/project links plus freshness stamps; re-crawl after production release, then remove.
   "/chris-izworski/",
