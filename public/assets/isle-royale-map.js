@@ -527,7 +527,10 @@
     anchors:{},
     source:null,
     error:'',
-    visuals:new Map()
+    visuals:new Map(),
+    // anchor id -> the navigable body it sits on, resolved once the water router loads. Two anchors
+    // sharing a body can be paddled between; different bodies need a carry.
+    waterBodies:new Map()
   };
   const campSiteIdentifiers = {
     state:'idle',
@@ -3211,6 +3214,19 @@
     return miles*portageWalkMultiplier()/speed+(Math.max(0,Number(route.portageTransitionMinutes)||10)/60);
   }
 
+  function anchorWaterBodies(router) {
+    if(typeof router?.waterBodyId!=='function')return officialPortages.waterBodies;
+    const anchors=officialPortages.anchors||{};
+    // Resolve once per anchor and keep it: the geometry does not change while the page is open.
+    for(const [id,anchor] of Object.entries(anchors)) {
+      if(officialPortages.waterBodies.has(id))continue;
+      const lat=Number(anchor?.lat),lng=Number(anchor?.lng);
+      if(!Number.isFinite(lat)||!Number.isFinite(lng))continue;
+      officialPortages.waterBodies.set(id,router.waterBodyId({lat,lng})||null);
+    }
+    return officialPortages.waterBodies;
+  }
+
   function autoPortageAnchorIds(point) {
     const helper=window.IsleRoyaleWaterIntel?.candidatePortageAnchors;
     if(typeof helper!=='function')return [];
@@ -3260,7 +3276,11 @@
     const chains=window.IsleRoyaleWaterIntel.findPortageChains(usable,startAnchors,endAnchors,{
       maxEdges:8,
       maxResults:12,
-      edgeCost:autoPortageEdgeCost
+      edgeCost:autoPortageEdgeCost,
+      // Without this the graph is portage edges only, so a trip whose first move is a paddle finds
+      // nothing: Rock Harbor to Lake Richie failed outright, because every portage serving Richie
+      // leaves from Chippewa Harbor or Moskey Basin and nothing said you can paddle there first.
+      waterBodyOf:anchorWaterBodies(router)
     });
     for(const chain of chains) {
       let current={lat:Number(a.lat),lng:Number(a.lng)};

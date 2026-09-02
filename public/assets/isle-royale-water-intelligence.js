@@ -422,8 +422,22 @@
       }
       return {max_offshore_miles:maxOff,exposed_miles:exposed,longest_exposed_miles:longest,land_crossings:crossingCount(path)};
     }
+    // Which navigable body a point sits on. Two points sharing an id can be paddled between without
+    // carrying a boat; two points with different ids cannot, whatever the straight-line distance.
+    // Every inland lake is its own mapped polygon, and everything else afloat is Lake Superior,
+    // which is one connected body all the way round the island.
+    function waterBodyId(p){
+      for(let i=0;i<waterRingIndex.length;i++){
+        const entry=waterRingIndex[i];
+        const x=+p.lng,y=+p.lat;
+        if(x<entry.minX||x>entry.maxX||y<entry.minY||y>entry.maxY)continue;
+        if(pointInRing(p,entry.ring))return 'lake:'+i;
+      }
+      if(isMappedWater(p)===true)return 'superior';
+      return null;
+    }
     return {
-      route,landingNear,analyze,coastDistance,boundaryDistance,crosses,crossingCount,isMappedWater,
+      route,landingNear,analyze,coastDistance,boundaryDistance,crosses,crossingCount,isMappedWater,waterBodyId,
       segment_count:barrierSegments.length,
       inland_water_count:waterPolygons.length,
       waterway_node_count:centerNodes.size
@@ -478,19 +492,44 @@
       add(from,{portage,from_anchor_id:from,to_anchor_id:to,cost});
       add(to,{portage,from_anchor_id:to,to_anchor_id:from,cost});
     }
+    // Anchors reachable from one another by water, keyed by water body. Supplied by the caller
+    // because only it has a loaded router; without it the solver behaves exactly as before.
+    const waterBodyOf=options.waterBodyOf instanceof Map
+      ? options.waterBodyOf
+      : new Map(Object.entries(options.waterBodyOf||{}));
+    const byBody=new Map();
+    for(const [anchorId,body] of waterBodyOf){
+      if(!body)continue;
+      if(!byBody.has(body))byBody.set(body,[]);
+      byBody.get(body).push(anchorId);
+    }
+    // A small non-zero cost so an equal-length route that avoids an extra open-water crossing wins.
+    const paddleCost=Math.max(0,Number(options.paddleCost)>=0?Number(options.paddleCost):.05);
+    const paddleNeighbours=anchorId=>{
+      const body=waterBodyOf.get(anchorId);
+      if(!body)return [];
+      return (byBody.get(body)||[]).filter(other=>other!==anchorId);
+    };
     const queue=[];
     const push=state=>{
       queue.push(state);
       queue.sort((a,b)=>a.cost-b.cost||a.steps.length-b.steps.length);
     };
-    for(const start of starts)push({anchor:start,cost:0,steps:[],visited:new Set([start])});
+    for(const start of starts)push({anchor:start,cost:0,steps:[],visited:new Set([start]),viaPaddle:false});
     const results=[];
     const fingerprints=new Set();
     while(queue.length&&results.length<maxResults){
       const state=queue.shift();
       if(state.steps.length&&ends.has(state.anchor)){
         const fingerprint=state.steps.map(step=>step.portage.id+':'+step.from_anchor_id+'>'+step.to_anchor_id).join('|');
-        if(!fingerprints.has(fingerprint)){
+        // Drop a chain that just adds carries to one already found. Once anchors can be paddled
+        // between, the search happily returns "portage #13, then portage #6" alongside plain
+        // "portage #6", because #13 links two points on the same water and costs almost nothing in
+        // this model. It is a real portage people use, but offering it as an ALTERNATIVE to a route
+        // that already works means offering a strictly longer carry for no reason.
+        const carried=new Set(state.steps.map(step=>step.portage.id));
+        const redundant=results.some(result=>result.steps.every(step=>carried.has(step.portage.id))&&result.steps.length<carried.size);
+        if(!fingerprints.has(fingerprint)&&!redundant){
           fingerprints.add(fingerprint);
           results.push({
             cost:state.cost,
@@ -508,6 +547,22 @@
         continue;
       }
       if(state.steps.length>=maxEdges)continue;
+      // Paddle between anchors that share a water body. Before this, the graph contained portage
+      // edges ONLY, so a trip like Rock Harbor to Lake Richie found nothing: the portage that
+      // serves Richie leaves from Moskey Basin, and nothing told the search you can simply paddle
+      // Rock Harbor to Moskey Basin. Crossing water adds no step, because the caller already routes
+      // the paddle to each landing; it only has to be allowed.
+      // One paddle hop at a time: crossing A to B to C on the same body is the same crossing as A
+      // to C, and allowing consecutive hops makes the search space blow up on Lake Superior, where
+      // ten anchors are mutually reachable.
+      if(!state.viaPaddle){
+        for(const paddle of paddleNeighbours(state.anchor)){
+          if(state.visited.has(paddle))continue;
+          if(!adjacency.has(paddle)&&!ends.has(paddle))continue;
+          const visited=new Set(state.visited);visited.add(paddle);
+          push({anchor:paddle,cost:state.cost+paddleCost,steps:state.steps,visited,viaPaddle:true});
+        }
+      }
       for(const step of adjacency.get(state.anchor)||[]){
         if(state.visited.has(step.to_anchor_id))continue;
         const visited=new Set(state.visited);visited.add(step.to_anchor_id);
@@ -515,7 +570,8 @@
           anchor:step.to_anchor_id,
           cost:state.cost+step.cost,
           steps:[...state.steps,step],
-          visited
+          visited,
+          viaPaddle:false
         });
       }
     }
