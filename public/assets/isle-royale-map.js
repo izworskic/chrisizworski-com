@@ -3254,7 +3254,18 @@
       if(officialPortages.waterBodies.has(id))continue;
       const lat=Number(anchor?.lat),lng=Number(anchor?.lng);
       if(!Number.isFinite(lat)||!Number.isFinite(lng))continue;
-      officialPortages.waterBodies.set(id,router.waterBodyId({lat,lng})||null);
+      const point={lat,lng};
+      let body=router.waterBodyId(point)||null;
+      // Some anchors are place centroids rather than landings — Duncan Bay sits about 40 m inland of
+      // its own water — so the point itself reads as land and the anchor drops out of every paddle
+      // group. Classify by the landing the router would actually use for it instead.
+      if(!body&&typeof router.landingNear==='function') {
+        try {
+          const landing=router.landingNear(point,point,'paddle');
+          if(landing&&!Number(landing.land_crossings)&&Number(landing.access_miles)<=.75)body=router.waterBodyId(landing)||null;
+        } catch (_) {}
+      }
+      officialPortages.waterBodies.set(id,body);
     }
     return officialPortages.waterBodies;
   }

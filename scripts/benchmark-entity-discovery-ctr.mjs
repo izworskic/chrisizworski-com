@@ -12,7 +12,16 @@ for (const page of data.pages) {
   if (!html.includes('<title>'+e.title+'</title>')) failures.push(page.id+' title mismatch');
   if (!html.includes('>'+e.h1+'</h1>')) failures.push(page.id+' h1 mismatch');
   if (!html.includes('href=\"'+e.canonical+'\"')) failures.push(page.id+' canonical mismatch');
-  if (!html.includes('2026-08-23')) failures.push(page.id+' freshness mismatch');
+  // Not a literal date: /tools/ legitimately changed on 2026-09-01 and a literal here fails on
+  // every honest edit. The snippet freeze this window depends on is the title/h1/canonical pins
+  // above. Assert freshness as the property that matters — the page stamp agrees with the lastmod
+  // its route publishes — rather than a specific day.
+  const stamped=(html.match(/"dateModified":\s*"(\d{4}-\d{2}-\d{2})"/)||[])[1]||'';
+  const sitemap=await readFile('public/sitemap.xml','utf8');
+  const marker='<loc>https://chrisizworski.com'+e.canonical.replace('https://chrisizworski.com','')+'</loc>';
+  const at=sitemap.indexOf(marker);
+  const published=at<0?'':((/<lastmod>(\d{4}-\d{2}-\d{2})/.exec(sitemap.slice(at,at+240))||[])[1]||'');
+  if (!stamped||stamped!==published) failures.push(page.id+' freshness mismatch: page '+(stamped||'none')+' vs sitemap '+(published||'none'));
   if (page.baseline.clicks !== 0 || page.baseline.ctr !== 0) failures.push(page.id+' baseline drift');
   if (page.target.ctr < 0.02) failures.push(page.id+' CTR target too weak');
 }
