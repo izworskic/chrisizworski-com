@@ -146,7 +146,7 @@ check("River historical and official forecast context remain visible", /same-dat
 check("River safety veto remains intact", /No gauge reading or derived lens can determine whether paddling, swimming, wading, fishing, or boating is safe/.test(apis.rivers) && /River intelligence is not a safety score/.test(pages.rivers), 6);
 check("National dashboard carries richer river intelligence", /kicker:"River intelligence"/.test(dashboard) && /Water "/.test(dashboard) && /Turbidity /.test(dashboard), 4);
 check("River function has extended runtime budget", Number(vercel.functions?.["api/national-rivers.js"]?.maxDuration) >= 25, 4);
-check("River UI rejects non-JSON server responses cleanly", /readJsonResponse/.test(pages.rivers) && /River conditions unavailable/.test(pages.rivers), 4);
+check("River UI rejects non-JSON discovery and selected-detail responses cleanly", /readJsonResponse/.test(pages.rivers) && /River discovery unavailable/.test(pages.rivers) && /Selected river conditions unavailable/.test(pages.rivers), 4);
 check("Shared national client parses API responses defensively", /async function readJsonResponse/.test(client) && /content-type/.test(client) && /HTTP /.test(client), 4);
 check("National dashboard isolates non-JSON upstream failures", /readJsonResponse/.test(dashboard) && /Outdoor data source unavailable/.test(dashboard), 3);
 
