@@ -6,6 +6,7 @@ const root = path.resolve(import.meta.dirname, "..");
 const read = (rel) => readFile(path.join(root, rel), "utf8");
 const contract = JSON.parse(await read("benchmarks/national-outdoor-tools.json"));
 const lifecycle = JSON.parse(await read("benchmarks/national-source-lifecycle.json"));
+const candidates = JSON.parse(await read("benchmarks/national-intelligence-candidates-2026-09-02.json"));
 const cropData = JSON.parse(await read("public/data/national-planting-crops.json"));
 const riverIndex = JSON.parse(await read("public/data/national-usgs-streamflow-sites.json"));
 const riverIndexGenerator = await read("scripts/generate-national-usgs-streamflow-index.mjs");
@@ -51,6 +52,18 @@ const lossTotal = Object.entries(contract.lossFunction)
   .filter(([key]) => key !== "total")
   .reduce((sum, [, value]) => sum + value, 0);
 check("Loss function totals 100", lossTotal === 100 && contract.lossFunction.total === 100, 5, String(lossTotal));
+const valueTotal = Object.entries(contract.productValueFunction || {})
+  .filter(([key]) => !["total","normalNewFamilyMinimum","priorityThreshold"].includes(key))
+  .reduce((sum, [, value]) => sum + (Number.isFinite(value) ? value : 0), 0);
+const searchOpportunityTotal = Object.values(contract.searchOpportunityMatrix?.weights || {})
+  .reduce((sum, value) => sum + value, 0);
+check("Product value function totals 100", valueTotal === 100 && contract.productValueFunction?.total === 100, 5, String(valueTotal));
+check("Search opportunity matrix totals 100", searchOpportunityTotal === 100 && contract.searchOpportunityMatrix?.minimumScore === 80, 4, String(searchOpportunityTotal));
+check("Production benchmark preserves 92 target and both hard gates", contract.productionBenchmark?.overallTarget === 92 && contract.productionBenchmark?.dimensions?.factualSourceIntegrity?.hardGate === true && contract.productionBenchmark?.dimensions?.canonicalCannibalizationIntegrity?.hardGate === true, 4);
+check("Candidate discovery wave contains at least 20 researched combinations", Array.isArray(candidates.candidates) && candidates.candidates.length >= 20, 5, String(candidates.candidates?.length || 0));
+check("Smoke remains blocked until credentials and supported interfaces pass", candidates.decision?.blockedHighestValue === "smoke-clear-air" && candidates.candidates.some((candidate) => candidate.id === "smoke-clear-air" && /^blocked-/.test(candidate.gate)), 4);
+check("Coastal is the next eligible standalone after the source audit", candidates.decision?.nextEligibleStandalone === "coastal-water-window" && candidates.candidates.some((candidate) => candidate.id === "coastal-water-window" && candidate.gate === "eligible"), 4);
+check("Candidate matrix forbids location-page expansion by score alone", /No candidate authorizes location-page generation/.test(candidates.decision?.longTailRule || ""), 3);
 check("Phase 2 adds no indexable route family", contract.indexPolicy?.phase2AddsIndexableRoutes === false, 4);
 check("Phase 3 adds no indexable route family", contract.indexPolicy?.phase3AddsIndexableRoutes === false, 4);
 check("Phase 0 source lifecycle contract is current", lifecycle.updated === "2026-09-02" && contract.phase0?.sourceLifecycleContract === "benchmarks/national-source-lifecycle.json", 4);
