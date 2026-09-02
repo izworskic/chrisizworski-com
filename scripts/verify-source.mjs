@@ -35,6 +35,9 @@ const intentionalChanges = new Set([
   // Sep 2 2026: connect the water intent hub to the new, distinct national coastal decision tool.
   // Re-crawl after production release, then remove this declaration.
   "/national-tools/water/",
+  // Sep 2 2026: the Decision Desk adds Coastal only when real coastal coverage exists.
+  // Re-crawl after production release, then remove this declaration.
+  "/assets/national-dashboard.js",
   // Aug 28 2026: Michigan Outdoors Now joined the canonical Chris entity/project network.
   // These are additive identity/project links plus freshness stamps; re-crawl after production release, then remove.
   "/chris-izworski/",
