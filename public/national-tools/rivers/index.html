@@ -309,13 +309,14 @@ document.addEventListener("DOMContentLoaded",function(){
    document.getElementById("forecast-pill").textContent=loading?"Loading history + forecast context":(contextBits.length?contextBits.join(" + ")+" loaded":"USGS observation · optional forecast context unavailable");
    document.getElementById("updated").textContent=d.disclaimer+" Retrieved "+N.fmtDate(d.retrieved_at)+".";
  }
- async function loadContext(d,loc){
+ async function loadContext(d,loc,requestId){
    const id=d.gauges?.[0]?.id;
    if(!id)return;
    const url="/api/national-river-context?lat="+encodeURIComponent(loc.latitude)+"&lon="+encodeURIComponent(loc.longitude)+"&sites="+encodeURIComponent(id);
    try{
      const response=await fetch(url);
      const context=typeof N.readJsonResponse==="function"?await N.readJsonResponse(response,"River history and forecast context unavailable"):await response.json();
+     if(requestId!==detailRequestId||loc!==currentLocation)return;
      d.weather=context.weather||null;
      d.gauges=d.gauges.map(function(g){
        const extra=context.context?.[g.id]||{};
@@ -325,6 +326,7 @@ document.addEventListener("DOMContentLoaded",function(){
      });
      renderDetail(d,loc,false);
    }catch(_error){
+     if(requestId!==detailRequestId||loc!==currentLocation)return;
      renderDetail(d,loc,false);
    }
  }
@@ -350,7 +352,7 @@ document.addEventListener("DOMContentLoaded",function(){
      if(!r.ok)throw new Error(d.error||"Selected river data unavailable");
      d.weather=null;
      renderDetail(d,loc,Boolean(d.context_pending));
-     if(d.context_pending)void loadContext(d,loc);
+     if(d.context_pending)void loadContext(d,loc,requestId);
    }catch(error){
      if(requestId!==detailRequestId||loc!==currentLocation)return;
      document.getElementById("selected-answer").textContent=meta.group.name+" live reading unavailable";
