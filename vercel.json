@@ -34,9 +34,6 @@
     },
     "api/**/*.js": {
       "maxDuration": 10
-    },
-    "api/national-coastal.js": {
-      "maxDuration": 25
     }
   },
   "redirects": [
