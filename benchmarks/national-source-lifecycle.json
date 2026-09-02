@@ -167,11 +167,10 @@
       "status": "production-supported",
       "authentication": "none",
       "endpoints": [
-        "https://data.rcc-acis.org/StnMeta",
-        "https://data.rcc-acis.org/StnData"
+        "https://data.rcc-acis.org/MultiStnData"
       ],
-      "semantics": "Calculate the 1991-2020 frequency of at least 1 inch of snow depth on December 25 from the nearest station with at least 25 valid Christmas observations. This is a site calculation from climate observations, not the NCEI interpolated map value.",
-      "geographyRule": "Station distance is always exposed; the calculation uses station history rather than claiming exact neighborhood climatology.",
+      "semantics": "Calculate the 1991-2020 frequency of at least 1 inch of snow depth on December 25 from one bounded MultiStnData request, choosing the nearest station within 75 miles with at least 25 valid Christmas observations. This is a site calculation from climate observations, not the NCEI interpolated map value.",
+      "geographyRule": "A qualifying history station must be within 75 miles and its distance is always exposed. If none qualifies, history remains unavailable rather than borrowing a farther climate.",
       "failureMode": "If no qualifying station can be established, the White Christmas percentage is unavailable rather than inferred from latitude or reputation."
     },
     "cpcChristmasOutlooks": {
