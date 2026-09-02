@@ -162,7 +162,7 @@
     }
   },
   "phase0": {
-    "status": "in-progress-source-hardening",
+    "status": "merge-ready-pending-main",
     "sourceLifecycleContract": "benchmarks/national-source-lifecycle.json",
     "usgs": {
       "continuousRuntime": "migrated-to-water-data-ogc-continuous",
@@ -175,6 +175,14 @@
       "airNow": "supported-interface-audited-source-key-gated",
       "firms": "map-key-gated-no-new-snpp-dependency",
       "routeStatus": "not-created"
+    },
+    "verification": {
+      "fullRepositoryGate": "required-and-passing-before-merge",
+      "nationalToolsBenchmarkTarget": 100,
+      "nationalHubsBenchmarkTarget": 100,
+      "nameSerpProtection": "required-and-passing-before-merge",
+      "vercelPreview": "required-and-passing-before-merge",
+      "productionSmoke": "run-after-merge-against-public-origin"
     }
   },
   "productValueFunction": {
