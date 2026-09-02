@@ -1,0 +1,37 @@
+:root{--wc-ink:#17352f;--wc-evergreen:#24483e;--wc-deep:#15372f;--wc-cream:#fbf7ec;--wc-paper:#fffdf7;--wc-gold:#b78a42;--wc-red:#8f3d38;--wc-line:rgba(36,72,62,.18)}
+.white-christmas-page{background:linear-gradient(180deg,#eef4ef 0,#fbf7ec 26rem,#fff 100%);color:#24352f}
+.white-christmas-page .hero{position:relative;overflow:hidden;background:linear-gradient(145deg,#173c33,#285347 64%,#315c50);color:#fff;padding:4.5rem 0 4rem}
+.white-christmas-page .hero:before,.white-christmas-page .hero:after{content:"";position:absolute;inset:0;pointer-events:none}
+.white-christmas-page .hero:before{opacity:.34;background-image:radial-gradient(circle at 12% 25%,#fff 0 1.5px,transparent 1.7px),radial-gradient(circle at 41% 16%,#fff 0 1px,transparent 1.2px),radial-gradient(circle at 67% 32%,#fff 0 1.3px,transparent 1.5px),radial-gradient(circle at 84% 18%,#fff 0 1px,transparent 1.2px);background-size:86px 86px,112px 112px,138px 138px,164px 164px}
+.white-christmas-page .hero:after{background:linear-gradient(180deg,transparent 70%,rgba(251,247,236,.12))}
+.white-christmas-page .hero .wrap{position:relative;z-index:1}
+.white-christmas-page .eyebrow{color:#f1dfb7;letter-spacing:.11em;text-transform:uppercase;font-size:.78rem;font-weight:800}
+.white-christmas-page h1{max-width:14ch;font-family:Georgia,"Times New Roman",serif;font-weight:500;letter-spacing:-.025em;font-size:clamp(2.6rem,7vw,5rem);line-height:.98;margin:.65rem 0 1rem}
+.white-christmas-page .lede{max-width:760px;color:rgba(255,255,255,.88);font-size:1.08rem}
+.wc-locator{margin-top:-2rem;position:relative;z-index:4;background:var(--wc-paper);border:1px solid var(--wc-line);box-shadow:0 18px 42px rgba(23,53,47,.12);border-radius:20px;padding:1rem}
+.wc-locator form{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:.65rem}
+.wc-result{margin-top:1.25rem;background:var(--wc-paper);border:1px solid var(--wc-line);border-radius:24px;padding:clamp(1.1rem,3vw,2rem);box-shadow:0 18px 46px rgba(23,53,47,.08)}
+.wc-score{display:grid;grid-template-columns:150px 1fr;gap:1.5rem;align-items:center}
+.wc-orb{width:140px;height:140px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 42%,#fff 0 38%,#edf4f1 39% 55%,#d8e6e1 56% 100%);border:1px solid var(--wc-line);box-shadow:inset 0 0 0 8px rgba(255,255,255,.45)}
+.wc-orb strong{font-family:Georgia,"Times New Roman",serif;font-size:2.6rem;color:var(--wc-deep);font-weight:500}
+.wc-orb span{display:block;text-align:center;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#667b73}
+.wc-headline{font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.7rem,4vw,2.5rem);font-weight:500;color:var(--wc-ink);line-height:1.08;margin:.2rem 0 .55rem}
+.wc-pill{display:inline-flex;gap:.35rem;align-items:center;border:1px solid var(--wc-line);background:#f4f7f4;border-radius:999px;padding:.35rem .65rem;font-size:.78rem;color:#52675f}
+.wc-factors,.wc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}
+.wc-card{background:#fff;border:1px solid var(--wc-line);border-radius:18px;padding:1rem}
+.wc-card h3{margin:.15rem 0 .5rem;color:var(--wc-ink)}
+.wc-card small,.wc-muted{color:#697b74}
+.wc-factor{display:flex;justify-content:space-between;gap:1rem;padding:.7rem 0;border-top:1px solid var(--wc-line)}
+.wc-factor:first-child{border-top:0}
+.wc-effect{font-variant-numeric:tabular-nums;font-weight:800;color:var(--wc-evergreen)}
+.wc-effect.negative{color:var(--wc-red)}
+.wc-media{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1.2rem}
+.wc-frame{background:#fff;border:1px solid var(--wc-line);border-radius:18px;overflow:hidden}
+.wc-frame iframe{display:block;width:100%;height:420px;border:0;background:#eef1ef}
+.wc-frame .wc-frame-copy{padding:1rem}
+.wc-christmas-note{border-left:4px solid var(--wc-gold);background:#fff9ea;padding:1rem 1.1rem;border-radius:0 14px 14px 0;margin:1rem 0}
+.wc-support{background:var(--wc-cream)}
+.wc-support .card{background:var(--wc-paper)}
+.wc-definition{font-family:Georgia,"Times New Roman",serif;font-size:1.2rem;color:var(--wc-ink)}
+@media(max-width:760px){.wc-locator form{grid-template-columns:1fr}.wc-score{grid-template-columns:1fr}.wc-orb{width:120px;height:120px}.wc-grid,.wc-factors,.wc-media{grid-template-columns:1fr}.wc-frame iframe{height:330px}}
+@media(prefers-reduced-motion:reduce){.white-christmas-page *{scroll-behavior:auto!important}}
