@@ -33,9 +33,9 @@ test('no non-leaf registry node remains isolated after this repair',()=>{
   assert.deepEqual(isolated,[]);
 });
 
-test('Fall River remains a measured experiment rather than a premature canonical',()=>{
-  const exp=(actions.experiments||[]).find(item=>item.id==='fall-river-window-v1');
-  assert.ok(exp);
-  assert.equal(exp.status,'running-contextual-test');
-  assert.match(exp.promotionGate.decision,/only when searchEvidence is true and networkEvidence is true and safety remains true/i);
+test('Fall River standalone candidate is shelved and no retired experiment remains',()=>{
+  const candidate=(registry.expansionOpportunities||[]).find(item=>item.id==='fall-river-window');
+  assert.equal(candidate?.status,'shelved');
+  assert.equal(Object.prototype.hasOwnProperty.call(actions,'experiments'),false);
+  assert.doesNotMatch(stack,/fall-river-window-v1|Network Experiment/);
 });
