@@ -59,7 +59,11 @@
 document.addEventListener("DOMContentLoaded",function(){
  const N=window.NationalTools,form=document.getElementById("loc");
  function md(value){return value?new Date(value+"T12:00:00Z").toLocaleDateString([],{month:"short",day:"numeric"}):"Unavailable"}
+ let observationController=null;
  async function loadObservations(loc){
+  if(observationController)observationController.abort();
+  const controller=new AbortController();
+  observationController=controller;
   const panel=document.getElementById("observations");
   panel.hidden=false;
   document.getElementById("obs-answer").textContent="Checking recent USA-NPN Nature's Notebook records…";
@@ -69,8 +73,9 @@ document.addEventListener("DOMContentLoaded",function(){
   document.getElementById("obs-latest").textContent="—";
   document.getElementById("obs-latest-yes").textContent="";
   try{
-    const r=await fetch("/api/national-fall-observations?lat="+loc.latitude+"&lon="+loc.longitude);
+    const r=await fetch("/api/national-fall-observations?lat="+loc.latitude+"&lon="+loc.longitude+"&tz="+encodeURIComponent(loc.timeZone||""),{signal:controller.signal});
     const x=typeof N.readJsonResponse==="function"?await N.readJsonResponse(r,"Current leaf observations unavailable"):await r.json();
+    if(controller!==observationController)return;
     const o=x.colored_leaves||{};
     document.getElementById("obs-answer").textContent=o.label||"Current observation context unavailable";
     document.getElementById("obs-detail").textContent=o.detail||"";
@@ -81,12 +86,15 @@ document.addEventListener("DOMContentLoaded",function(){
     document.getElementById("obs-latest-yes").textContent=latest?("Most recent yes: "+md(latest.date)+(latest.common_name?" · "+latest.common_name:"")+(latest.intensity?" · reported canopy color "+latest.intensity:"")+(latest.distance_miles==null?"":" · "+latest.distance_miles+" mi away")):"No recent yes record in this query.";
     document.getElementById("obs-warning").textContent=x.disclaimer||"Individual monitored plants are not a landscape-wide peak-color measurement.";
   }catch(err){
+    if(err&&err.name==="AbortError")return;
+    if(controller!==observationController)return;
     document.getElementById("obs-answer").textContent="Current ground observations unavailable";
     document.getElementById("obs-detail").textContent="The historical timing and NWS weather answer above remain usable. This optional source failed independently.";
     document.getElementById("obs-warning").textContent="No current observation claim is being substituted for the unavailable source.";
   }
  }
  async function run(loc){
+  if(observationController){observationController.abort();observationController=null;}
   const r=await fetch("/api/national-fall-color?lat="+loc.latitude+"&lon="+loc.longitude),x=await r.json();if(!r.ok)throw new Error(x.error||"Fall timing data unavailable");
   document.getElementById("result").hidden=false;
   document.getElementById("answer").textContent=x.timing_context.stage+" near "+N.label(loc);
