@@ -49,6 +49,7 @@ const HUB_TOOLS = [
   { file: "public/national-tools/rivers/index.html", url: "https://chrisizworski.com/national-tools/rivers/" },
   { file: "public/national-tools/coastal/index.html", url: "https://chrisizworski.com/national-tools/coastal/" },
   { file: "public/national-tools/snow/index.html", url: "https://chrisizworski.com/national-tools/snow/" },
+  { file: "public/national-tools/white-christmas/index.html", url: "https://chrisizworski.com/national-tools/white-christmas/" },
   { file: "public/national-tools/frost/index.html", url: "https://chrisizworski.com/national-tools/frost/" },
   { file: "public/national-tools/planting/index.html", url: "https://chrisizworski.com/national-tools/planting/" },
   { file: "public/national-tools/fall-color/index.html", url: "https://chrisizworski.com/national-tools/fall-color/" },
