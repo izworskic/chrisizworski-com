@@ -1174,7 +1174,10 @@
     if (facts.childElementCount) wrap.appendChild(facts);
     appendCampSiteIdentifiers(wrap,record);
 
-    const popupRoutePoint=recordRoutePoint(record);
+    // Every feature card carried planner actions — "Start route here", "Route to here", "Start trip
+    // at this campsite", "End next day here". Hiding the planner panels left those buttons on every
+    // popup, offering a visitor a trip builder that is not there. They go with the planner.
+    const popupRoutePoint=PLANNER_ENABLED?recordRoutePoint(record):null;
     if (popupRoutePoint) {
       const routeAction = document.createElement('button');
       routeAction.type = 'button';
@@ -2974,7 +2977,8 @@
       : 'Official NPS portage facts are available, but a mapped trail corridor could not be resolved from the currently loaded visitor trail network. The map badge is only an approximate waterbody reference, not a landing.';
     wrap.appendChild(note);
 
-    if(visual?.geometryResolved) {
+    // Same as the feature cards: no "Route through this portage" while the planner is hidden.
+    if(PLANNER_ENABLED && visual?.geometryResolved) {
       const add=document.createElement('button');
       add.type='button';
       add.className='popup-action popup-route-action';

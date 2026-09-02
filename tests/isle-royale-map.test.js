@@ -1027,3 +1027,21 @@ test('the map offers three base maps, NOAA charts, and a way past itself', () =>
   assert.match(html, /id="map-peek"/);
   assert.match(js, /document\.getElementById\('map-peek'\)\?\.addEventListener/);
 });
+
+test('no feature card offers a planner action while the planner is hidden', () => {
+  const js = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 'utf8');
+
+  // The miss this guards: hiding the planner PANELS left "Start route here", "Route to here",
+  // "Start trip at this campsite", "End next day here" and "Route through this portage" on every
+  // feature popup, offering a trip builder that is not there.
+  assert.match(js, /const popupRoutePoint=PLANNER_ENABLED\?recordRoutePoint\(record\):null;/);
+  assert.match(js, /if\(PLANNER_ENABLED && visual\?\.geometryResolved\)/);
+
+  // A feature click must select, never add to a route: route.adding cannot be true with the flag
+  // off, and that is asserted separately, but keep the CSS backstop too.
+  assert.match(html, /body\.planner-off \.popup-route-action\{display:none!important\}/);
+
+  // The strings stay in source because the runtime is kept; they must simply be unreachable.
+  assert.match(js, /Start route here/);
+  assert.match(js, /Route through this portage/);
+});
