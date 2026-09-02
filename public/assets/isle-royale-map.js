@@ -126,31 +126,68 @@
   const PLANNER_ENABLED = false;
   if (!PLANNER_ENABLED) document.body.classList.add('planner-off');
 
-  const baseLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-  }).addTo(map);
+  // Base maps. All three are public services needing no key: OSM, Esri World Imagery (the same
+  // ArcGIS host the NPS layers here come from) and the USGS National Map topo.
+  const baseLayers = {
+    standard: L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    }),
+    imagery: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 19, maxNativeZoom: 18,
+      attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics, and the GIS User Community'
+    }),
+    topo: L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 19, maxNativeZoom: 16,
+      attribution: 'Topo &copy; USGS The National Map'
+    })
+  };
+  let activeBase = 'standard';
+  baseLayers.standard.addTo(map);
 
-  // Esri World Imagery, the same public ArcGIS service the NPS layers on this page come from.
-  const imageryLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    maxZoom: 19,
-    maxNativeZoom: 18,
-    attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics, and the GIS User Community'
+  // NOAA official electronic navigational charts over the base map: Lake Superior depths, buoys,
+  // hazards and chart symbols. NOAA's old raster chart tile service is retired and answers 503, so
+  // this is the Maritime Chart Service WMS, which is the live one.
+  map.createPane('nauticalPane');
+  map.getPane('nauticalPane').style.zIndex = '245';
+  const nauticalLayer = L.tileLayer.wms('https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/ENCOnline/MapServer/exts/MaritimeChartService/WMSServer', {
+    layers: '0,1,2,3,4,5,6,7',
+    format: 'image/png',
+    transparent: true,
+    opacity: .85,
+    version: '1.3.0',
+    pane: 'nauticalPane',
+    attribution: 'Nautical charts &copy; NOAA Office of Coast Survey'
   });
-  let imageryOn = false;
-  function setImagery(on) {
-    imageryOn = Boolean(on);
-    if (imageryOn) { map.addLayer(imageryLayer); map.removeLayer(baseLayer); }
-    else { map.addLayer(baseLayer); map.removeLayer(imageryLayer); }
-    const button = document.getElementById('basemap-imagery');
-    if (button) {
-      button.setAttribute('aria-pressed', imageryOn ? 'true' : 'false');
-      button.textContent = imageryOn ? 'Standard map' : 'Satellite imagery';
+  let nauticalOn = false;
+
+  function setBase(name) {
+    if (!baseLayers[name] || name === activeBase) return;
+    map.removeLayer(baseLayers[activeBase]);
+    baseLayers[name].addTo(map);
+    activeBase = name;
+    for (const key of Object.keys(baseLayers)) {
+      const button = document.getElementById('basemap-' + key);
+      if (button) button.setAttribute('aria-pressed', key === name ? 'true' : 'false');
     }
-    try { localStorage.setItem('isle-royale-basemap', imageryOn ? 'imagery' : 'standard'); } catch (_) {}
+    try { localStorage.setItem('isle-royale-basemap', name); } catch (_) {}
   }
-  document.getElementById('basemap-imagery')?.addEventListener('click', () => setImagery(!imageryOn));
-  try { if (localStorage.getItem('isle-royale-basemap') === 'imagery') setImagery(true); } catch (_) {}
+  function setNautical(on) {
+    nauticalOn = Boolean(on);
+    if (nauticalOn) nauticalLayer.addTo(map); else map.removeLayer(nauticalLayer);
+    const button = document.getElementById('overlay-nautical');
+    if (button) button.setAttribute('aria-pressed', nauticalOn ? 'true' : 'false');
+    try { localStorage.setItem('isle-royale-nautical', nauticalOn ? 'on' : 'off'); } catch (_) {}
+  }
+  for (const key of Object.keys(baseLayers)) {
+    document.getElementById('basemap-' + key)?.addEventListener('click', () => setBase(key));
+  }
+  document.getElementById('overlay-nautical')?.addEventListener('click', () => setNautical(!nauticalOn));
+  try {
+    const saved = localStorage.getItem('isle-royale-basemap');
+    if (saved && baseLayers[saved]) setBase(saved);
+    if (localStorage.getItem('isle-royale-nautical') === 'on') setNautical(true);
+  } catch (_) {}
 
   // Getting past the map cannot depend on a swipe the map is eating.
   document.getElementById('map-peek')?.addEventListener('click', () => {

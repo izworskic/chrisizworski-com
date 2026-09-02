@@ -130,7 +130,10 @@ test('map points have large pointer tolerance and data-rich detail popups', () =
   assert.match(js, /NPS ferry, seaplane & transportation/);
   assert.match(js, /NPS lighthouses & places to go/);
   assert.match(js, /Open map-data source/);
-  assert.match(html, /Build above\. Tune the trip below\./);
+  // The planner is hidden (PLANNER_ENABLED=false), so this panel no longer sells trip building.
+  // What must still hold is the SHAPE the pin was protecting: the map on top, one criteria panel
+  // beneath it, and no second route-construction UI down there.
+  assert.match(html, /<div class="criteria-header">/);
   assert.match(html, /\.popup-action\{[^}]*min-height:42px/);
   assert.match(html, /\.isle-detail-popup \.leaflet-popup-content/);
 });
@@ -263,8 +266,11 @@ test('route criteria stay below the map without duplicating route construction',
   for (const id of ['route-planner','route-mode-select','route-speed','route-departure','route-summary','route-weather-button','route-weather']) {
     assert.ok(html.includes(`id="${id}"`), id);
   }
-  assert.match(html, /<h2>Build above\. Tune the trip below\.<\/h2>/);
-  assert.match(html, /Water clicks are ordered checkpoints\. Distance and time accumulate through every checkpoint/);
+  // The planner is hidden (PLANNER_ENABLED=false), so this panel no longer sells trip building.
+  // What must still hold is the SHAPE the pin was protecting: the map on top, one criteria panel
+  // beneath it, and no second route-construction UI down there.
+  assert.match(html, /<div class="criteria-header">[\s\S]{0,400}<h2>[^<]+<\/h2>/);
+  assert.match(html, /class="panel-block route-planner criteria-panel planner-only"/);
   assert.match(html, /The route bar on the map is the only build control/);
   assert.match(html, /\.route-compat-controls\{display:none!important\}/);
   assert.doesNotMatch(html, /<span class="route-badge">ROUTE INTELLIGENCE<\/span>/);
@@ -353,7 +359,10 @@ test('map-first route builder accepts every mappable feature and keeps criteria 
   assert.match(html, /id="route-mode"[^>]*aria-pressed="true"[^>]*>Plan route/);
   assert.match(html, /id="route-map-guide"/);
   assert.match(html, /Trace the trip with checkpoints/);
-  assert.match(html, /<h2>Build above\. Tune the trip below\.<\/h2>/);
+  // The planner is hidden (PLANNER_ENABLED=false), so this panel no longer sells trip building.
+  // What must still hold is the SHAPE the pin was protecting: the map on top, one criteria panel
+  // beneath it, and no second route-construction UI down there.
+  assert.match(html, /<div class="criteria-header">[\s\S]{0,400}<h2>[^<]+<\/h2>/);
   assert.match(html, /The route bar on the map is the only build control/);
   assert.match(js, /function featureRoutePoint/);
   assert.match(js, /function addFeatureToRoute/);
@@ -853,7 +862,10 @@ test('canoe trip builder reports active travel time while constructing days', ()
 
 
 test('map sits above a compact criteria strip and owns route construction', () => {
-  assert.match(html, /<h2>Build above\. Tune the trip below\.<\/h2>/);
+  // The planner is hidden (PLANNER_ENABLED=false), so this panel no longer sells trip building.
+  // What must still hold is the SHAPE the pin was protecting: the map on top, one criteria panel
+  // beneath it, and no second route-construction UI down there.
+  assert.match(html, /<div class="criteria-header">[\s\S]{0,400}<h2>[^<]+<\/h2>/);
   assert.match(html, /class="route-fields criteria-fields"/);
   for (const id of ['route-mode-select','route-paddle-pace','route-portage-pace','route-portage-trips','route-day-hours','route-departure']) {
     assert.ok(html.includes(`id="${id}"`), id);
@@ -877,7 +889,8 @@ test('line and area features use the clicked map coordinate as a trip location',
 
 test('multi-point checkpoint routing keeps earlier verified legs while extending the tail', () => {
   assert.match(html, /Click as many points along the water as you need/);
-  assert.match(html, /Distance and time accumulate through every checkpoint/);
+  // Planner copy: hidden with the planner, and now living inside the hidden block.
+  assert.match(html, /class="panel-block route-planner criteria-panel planner-only"/);
   assert.match(html, /You do not need to stop at two points/);
   assert.match(js, /const waterSeed=preserve\?\[\.\.\.\(route\.waterLegs\|\|\[\]\)\]:\[\]/);
   assert.match(js, /const mixedSeed=preserve\?\[\.\.\.\(route\.mixedLegs\|\|\[\]\)\]:\[\]/);
@@ -967,4 +980,50 @@ test('the map offers satellite imagery and a way past itself', () => {
   assert.match(html, /id="map-peek"/);
   assert.match(js, /document\.getElementById\('map-peek'\)\?\.addEventListener/);
   assert.match(html, /body\.planner-off \.map-wrap\{height:clamp\(360px,56dvh,540px\)/, 'the map must not fill a phone screen');
+});
+
+test('the planner is hidden behind one flag while its runtime is kept', () => {
+  const js = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 'utf8');
+
+  assert.match(js, /const PLANNER_ENABLED = false;/);
+  assert.match(js, /if \(!PLANNER_ENABLED\) document\.body\.classList\.add\('planner-off'\)/);
+  // Nothing may enter build mode while it is off, or a map click collects checkpoints against a UI
+  // the visitor cannot see.
+  assert.match(js, /route\.adding=PLANNER_ENABLED\?Boolean\(active\):false;/);
+  for (const surface of ['mode-toggle planner-only', 'route-map-guide planner-only', 'route-build-bar planner-only', 'planning-cockpit planner-only', 'id="focus-map" class="planner-only"']) {
+    assert.ok(html.includes(surface), `planner surface not flagged: ${surface}`);
+  }
+  assert.match(html, /body\.planner-off \.planner-only\{display:none!important\}/);
+
+  // Copy that sells trip building lives INSIDE the hidden block, not in the visible guide.
+  const visible = html.slice(0, html.indexOf('id="route-planner"'));
+  assert.doesNotMatch(visible, /Distance and time accumulate through every checkpoint/);
+  assert.doesNotMatch(visible, /Start clicking the water to build a canoe route/);
+  assert.doesNotMatch(visible, /use Canoe \+ portage mode/);
+
+  // Kept, not deleted: turning it back on must be the flag, not a rebuild.
+  assert.match(js, /async function resolveCanoeRouteAsync/);
+  assert.match(js, /function autoPortageRouteCandidate/);
+  assert.match(js, /routeAsync/);
+});
+
+test('the map offers three base maps, NOAA charts, and a way past itself', () => {
+  const js = fs.readFileSync(path.join(root, 'public/assets/isle-royale-map.js'), 'utf8');
+
+  for (const id of ['basemap-standard', 'basemap-imagery', 'basemap-topo', 'overlay-nautical']) {
+    assert.match(html, new RegExp(`id="${id}"`), `missing control ${id}`);
+  }
+  assert.match(js, /World_Imagery\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/);
+  assert.match(js, /USGSTopo\/MapServer\/tile\/\{z\}\/\{y\}\/\{x\}/);
+  // NOAA's raster chart tile service is retired and answers 503; this is the live Maritime Chart
+  // Service, verified serving real tiles before it was wired in.
+  assert.match(js, /MCS\/ENCOnline\/MapServer\/exts\/MaritimeChartService\/WMSServer/);
+  assert.match(js, /Imagery &copy; Esri/);
+  assert.match(js, /Topo &copy; USGS The National Map/);
+  assert.match(js, /Nautical charts &copy; NOAA Office of Coast Survey/);
+  assert.match(js, /localStorage\.setItem\('isle-royale-basemap'/);
+
+  // The map was eating the swipe, so reaching the guide below it cannot depend on one.
+  assert.match(html, /id="map-peek"/);
+  assert.match(js, /document\.getElementById\('map-peek'\)\?\.addEventListener/);
 });
