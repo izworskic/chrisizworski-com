@@ -118,10 +118,44 @@
   const map = L.map('isle-map', {renderer:vectorRenderer, zoomControl:false, minZoom:6, maxZoom:18});
   L.control.zoom({position:'topright'}).addTo(map);
   map.fitBounds(CONFIG.islandBounds, {padding:[10,10]});
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  // Route planning is built, tested and kept, but NOT shipped to visitors. The async search in #253
+  // stopped the tab locking, but a leg with no answer inside its box still spends about six seconds
+  // before it fails, and the planner was not usable enough to ship. This page earns its keep as an
+  // interactive guide meanwhile. Set this to true to restore the planner: the whole runtime is
+  // still here, so it is one flag, not a rebuild.
+  const PLANNER_ENABLED = false;
+  if (!PLANNER_ENABLED) document.body.classList.add('planner-off');
+
+  const baseLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
   }).addTo(map);
+
+  // Esri World Imagery, the same public ArcGIS service the NPS layers on this page come from.
+  const imageryLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19,
+    maxNativeZoom: 18,
+    attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics, and the GIS User Community'
+  });
+  let imageryOn = false;
+  function setImagery(on) {
+    imageryOn = Boolean(on);
+    if (imageryOn) { map.addLayer(imageryLayer); map.removeLayer(baseLayer); }
+    else { map.addLayer(baseLayer); map.removeLayer(imageryLayer); }
+    const button = document.getElementById('basemap-imagery');
+    if (button) {
+      button.setAttribute('aria-pressed', imageryOn ? 'true' : 'false');
+      button.textContent = imageryOn ? 'Standard map' : 'Satellite imagery';
+    }
+    try { localStorage.setItem('isle-royale-basemap', imageryOn ? 'imagery' : 'standard'); } catch (_) {}
+  }
+  document.getElementById('basemap-imagery')?.addEventListener('click', () => setImagery(!imageryOn));
+  try { if (localStorage.getItem('isle-royale-basemap') === 'imagery') setImagery(true); } catch (_) {}
+
+  // Getting past the map cannot depend on a swipe the map is eating.
+  document.getElementById('map-peek')?.addEventListener('click', () => {
+    document.querySelector('.panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 
   let activeReadablePopup=null;
   let popupPromotionTimer=null;
@@ -5007,7 +5041,9 @@
   }
 
   function setRouteAdding(active,{preserveReview=false}={}) {
-    route.adding=Boolean(active);
+    // With the planner hidden nothing may enter build mode: a map click would collect checkpoints
+    // against a UI the visitor cannot see.
+    route.adding=PLANNER_ENABLED?Boolean(active):false;
     if(route.adding)route.reviewing=false;
     else if(!preserveReview)route.reviewing=false;
     document.body.classList.toggle('route-building',route.adding);
