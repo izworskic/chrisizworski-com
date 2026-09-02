@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "updated": "2026-09-02",
   "objective": "Build a national outdoor decision-intelligence network that turns authoritative public data into explainable, place-specific decisions without weakening Michigan canonicals, source truth, or search quality.",
   "lossFunction": {
@@ -72,7 +72,7 @@
     "generatedLocationPages": false,
     "zipCropDatePages": false,
     "phase2AddsIndexableRoutes": false,
-    "phase3AddsIndexableRoutes": false
+    "phase3AddsIndexableRoutes": true
   },
   "protectedMichiganRoutes": [
     "/tools/",
@@ -156,13 +156,13 @@
     },
     "comparison": {
       "status": "live",
-      "rule": "Compare the same five source-backed signals side by side without producing an overall winner, universal score, or safety determination.",
+      "rule": "Compare the five core source-backed signals plus coastal context where real source coverage exists, without producing an overall winner, universal score, or safety determination.",
       "measurement": "A comparison event may record signal count only; selected place identities remain excluded from analytics.",
       "indexability": "Comparison is local UI state on the canonical hub and creates no new indexable URL."
     }
   },
   "phase0": {
-    "status": "merge-ready-pending-main",
+    "status": "complete-production-verified",
     "sourceLifecycleContract": "benchmarks/national-source-lifecycle.json",
     "usgs": {
       "continuousRuntime": "migrated-to-water-data-ogc-continuous",
@@ -182,7 +182,7 @@
       "nationalHubsBenchmarkTarget": 100,
       "nameSerpProtection": "required-and-passing-before-merge",
       "vercelPreview": "required-and-passing-before-merge",
-      "productionSmoke": "run-after-merge-against-public-origin"
+      "productionSmoke": "43/43 public-origin checks passed after merge on 2026-09-02"
     }
   },
   "productValueFunction": {
@@ -279,5 +279,56 @@
     "doNotShip": {
       "greaterThan": 25
     }
+  },
+  "executionPhases": {
+    "phase0": {
+      "status": "complete-production-verified",
+      "scope": "Existing five national products and source lifecycle hardening, including USGS migration."
+    },
+    "phase1": {
+      "status": "complete-existing-capability",
+      "scope": "Decision Desk, saved places, cross-tool continuity, comparison, privacy-safe analytics and independent degradation."
+    },
+    "phase2": {
+      "status": "blocked-configuration",
+      "scope": "Smoke & Clear-Air",
+      "gate": "AIRNOW_API_KEY and FIRMS_MAP_KEY plus supported-interface verification remain required."
+    },
+    "phase3": {
+      "status": "implemented-pending-verification",
+      "scope": "Coastal Water Window",
+      "route": "/national-tools/coastal/",
+      "api": "/api/national-coastal"
+    },
+    "phase4": {
+      "status": "next-eligible",
+      "scope": "Snowpack + Melt"
+    }
+  },
+  "coastalProduct": {
+    "status": "implemented-pending-verification",
+    "route": "/national-tools/coastal/",
+    "api": "/api/national-coastal",
+    "canonicalIntent": "U.S. beach and coastal conditions today by location",
+    "sourceFamilies": [
+      "NOAA/NWS Marine Beach Forecast Summary",
+      "NOAA/NDBC observations",
+      "NOAA CO-OPS tide predictions"
+    ],
+    "sourceLifecycleContract": "benchmarks/national-source-lifecycle.json",
+    "decisionOrder": [
+      "official NWS beach risk",
+      "nearby observed wave/wind/water context",
+      "tidal timing where valid"
+    ],
+    "hardRules": [
+      "Official High or Moderate beach risk is never downgraded by buoy or tide context.",
+      "No universal beach, swimming or boating safety score.",
+      "Missing source data remains unavailable rather than neutral or favorable.",
+      "NDBC station distance is visible because an offshore station is not exact beach truth.",
+      "CO-OPS tide predictions remain predictions and never masquerade as observed water level.",
+      "Michigan users are handed to the deeper Michigan Beach Report instead of cloning that canonical."
+    ],
+    "dashboardBehavior": "Optional sixth card only when coastal source coverage exists; inland places retain the five core cards."
   }
 }
