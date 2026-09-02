@@ -1,5 +1,5 @@
 {
-  "version": "2.1.1",
+  "version": "2.1.2",
   "updated": "2026-09-02",
   "objective": "Build a national outdoor decision-intelligence network that turns authoritative public data into explainable, place-specific decisions without weakening Michigan canonicals, source truth, or search quality.",
   "lossFunction": {
@@ -339,5 +339,12 @@
       "rule": "A location must be within 25 miles of an applicable NWS beach-forecast area before buoy or tide context can be shown. Source proximity alone does not qualify a location as coastal.",
       "failClosed": "If NWS beach applicability cannot be verified, the tool returns coverage-unverified and suppresses buoy/tide context rather than guessing."
     }
+  },
+  "locationResolution": {
+    "status": "hardened-multi-provider",
+    "primary": "U.S. Census Bureau TIGERweb for city/state and ZIP",
+    "fallback": "OpenStreetMap Nominatim for flexible queries and reverse geocoding",
+    "edgeRetry": "one client retry for HTTP 502/503/504",
+    "rule": "A transient failure from one geocoding dependency must not strand ordinary U.S. city/state or ZIP tool entry."
   }
 }
