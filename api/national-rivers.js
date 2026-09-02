@@ -5,8 +5,8 @@ const {
 } = require("../lib/national-outdoor");
 const siteIndex = require("../public/data/national-usgs-streamflow-sites.json");
 
-const IV = "https://waterservices.usgs.gov/nwis/iv/";
-const UA = "ChrisIzworskiNationalRiverConditions/5.0 (+https://chrisizworski.com/national-tools/rivers/)";
+const CONTINUOUS = "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items";
+const UA = "ChrisIzworskiNationalRiverConditions/6.0 (+https://chrisizworski.com/national-tools/rivers/)";
 const PARAMETERS = Object.freeze({
   discharge: "00060",
   gageHeight: "00065",
@@ -90,9 +90,15 @@ function indexedSite(siteId, lat, lon) {
     distance_miles: haversine(lat, lon, latitude, longitude),
   };
 }
-async function fetchJson(url, timeoutMs = 2500) {
+async function fetchJson(url, timeoutMs = 2500, options = {}) {
+  const headers = { accept: "application/json", "user-agent": UA, ...(options.headers || {}) };
+  if (process.env.USGS_API_KEY && new URL(url).hostname === "api.waterdata.usgs.gov") {
+    headers["X-Api-Key"] = process.env.USGS_API_KEY;
+  }
   const response = await fetch(url, {
-    headers: { accept: "application/json", "user-agent": UA },
+    method: options.method || "GET",
+    headers,
+    body: options.body,
     signal: AbortSignal.timeout(timeoutMs),
   });
   if (!response.ok) throw new Error(`${new URL(url).hostname} returned ${response.status}`);
@@ -104,6 +110,55 @@ async function fetchJson(url, timeoutMs = 2500) {
   } catch {
     throw new Error(`${new URL(url).hostname} returned invalid JSON`);
   }
+}
+const PARAMETER_DESCRIPTIONS = Object.freeze({
+  "00060": "Discharge",
+  "00065": "Gage height",
+  "00010": "Temperature, water",
+  "63680": "Turbidity",
+  "00300": "Dissolved oxygen",
+  "00095": "Specific conductance",
+  "00400": "pH",
+});
+function normalizeQualifiers(value, approvalStatus = null) {
+  const qualifiers = Array.isArray(value) ? value : value ? [value] : [];
+  if (approvalStatus === "Provisional") qualifiers.push("P");
+  if (approvalStatus === "Approved") qualifiers.push("A");
+  return [...new Set(qualifiers.map(String).filter(Boolean))];
+}
+function modernTimeSeries(payload) {
+  if (Array.isArray(payload?.value?.timeSeries)) return payload.value.timeSeries;
+  const grouped = new Map();
+  for (const feature of payload?.features || []) {
+    const row = feature?.properties || {};
+    const id = String(row.monitoring_location_id || "").replace(/^USGS-/, "");
+    const parameter = String(row.parameter_code || "");
+    const time = row.time;
+    const value = finite(row.value);
+    if (!/^\d{5,15}$/.test(id) || !/^\d{5}$/.test(parameter) || value == null || !Date.parse(time || "")) continue;
+    const seriesId = row.time_series_id || row.timeseries_id || "";
+    const key = `${id}|${parameter}|${seriesId}`;
+    if (!grouped.has(key)) {
+      grouped.set(key, {
+        sourceInfo: { siteCode: [{ value: id }] },
+        variable: {
+          variableCode: [{ value: parameter }],
+          variableDescription: PARAMETER_DESCRIPTIONS[parameter] || null,
+          unit: { unitCode: row.unit_of_measure || null },
+        },
+        values: [{ value: [] }],
+      });
+    }
+    grouped.get(key).values[0].value.push({
+      value: String(row.value),
+      dateTime: time,
+      qualifiers: normalizeQualifiers(row.qualifier, row.approval_status),
+    });
+  }
+  return [...grouped.values()].map((series) => {
+    series.values[0].value.sort((a, b) => Date.parse(a.dateTime) - Date.parse(b.dateTime));
+    return series;
+  });
 }
 function code(series) {
   return series.variable?.variableCode?.[0]?.value || null;
@@ -208,7 +263,7 @@ function normalize(payload, sites) {
     qualifiers: [],
   }]));
 
-  for (const series of payload?.value?.timeSeries || []) {
+  for (const series of modernTimeSeries(payload)) {
     const id = siteId(series);
     if (!by.has(id)) continue;
     const points = validPoints(series);
@@ -278,15 +333,28 @@ function normalize(payload, sites) {
       };
     });
 }
-async function observations(sites, parameterCodes = Object.values(PARAMETERS), timeoutMs = 1600) {
+async function observations(sites, parameterCodes = Object.values(PARAMETERS), timeoutMs = 2600) {
   if (!sites.length) return [];
-  const url = new URL(IV);
-  url.searchParams.set("format", "json");
-  url.searchParams.set("sites", sites.map((site) => site.id).join(","));
-  url.searchParams.set("parameterCd", parameterCodes.join(","));
-  url.searchParams.set("period", "P1D");
-  url.searchParams.set("siteStatus", "all");
-  return normalize(await fetchJson(url, timeoutMs), sites);
+  const end = new Date();
+  const start = new Date(end.getTime() - 25 * 3600000);
+  const url = new URL(CONTINUOUS);
+  url.searchParams.set("f", "json");
+  url.searchParams.set("limit", "10000");
+  url.searchParams.set("properties", "time_series_id,monitoring_location_id,parameter_code,time,value,unit_of_measure,approval_status,qualifier");
+  const query = {
+    op: "and",
+    args: [
+      { op: "in", args: [{ property: "monitoring_location_id" }, sites.map((site) => `USGS-${site.id}`)] },
+      { op: "in", args: [{ property: "parameter_code" }, parameterCodes] },
+      { op: "between", args: [{ property: "time" }, [start.toISOString(), end.toISOString()]] },
+    ],
+  };
+  const payload = await fetchJson(url, timeoutMs, {
+    method: "POST",
+    headers: { "content-type": "application/query-cql-json" },
+    body: JSON.stringify(query),
+  });
+  return normalize(payload, sites);
 }
 function mergeEnrichment(core, enrichment) {
   const byId = new Map((enrichment || []).map((gauge) => [gauge.id, gauge]));
@@ -306,8 +374,8 @@ async function loadObservations(sites) {
   const sensorSites = sites.slice(0, 3);
   const coreParameters = [PARAMETERS.discharge, PARAMETERS.gageHeight];
   const [core, enrichment] = await Promise.allSettled([
-    observations(coreSites, coreParameters, 1400),
-    observations(sensorSites, Object.values(PARAMETERS), 1200),
+    observations(coreSites, coreParameters, 2600),
+    observations(sensorSites, Object.values(PARAMETERS), 2200),
   ]);
 
   if (core.status === "fulfilled") {
@@ -360,13 +428,13 @@ module.exports = async function handler(req, res) {
       discovery_index: {
         generated_at: siteIndex.generated_at || null,
         site_count: finite(siteIndex.site_count),
-        source_name: siteIndex.source_name || "USGS Site Service",
-        source_url: siteIndex.source_url || "https://waterservices.usgs.gov/nwis/site/",
+        source_name: siteIndex.source_name || "USGS monitoring-location inventory",
+        source_url: siteIndex.source_url || "https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations",
       },
       sources: [
         sourceMeta({
-          name: "USGS Site Service — active instantaneous streamflow stations",
-          url: siteIndex.source_url || "https://waterservices.usgs.gov/nwis/site/",
+          name: "USGS monitoring-location inventory — active instantaneous streamflow stations",
+          url: siteIndex.source_url || "https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations",
           updatedAt: siteIndex.generated_at || null,
           available: discovery.returned_sites > 0,
           status: "nearby monitored-river discovery",
@@ -436,6 +504,7 @@ module.exports._test = {
   indexedSitesByDistance,
   loadObservations,
   mergeEnrichment,
+  modernTimeSeries,
   nearestSites,
   normalize,
   riverName,
