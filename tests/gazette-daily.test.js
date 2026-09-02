@@ -62,24 +62,15 @@ test("current Gazette headline is distributed across six relevant owned pages", 
   assert.ok(birding.includes('data-growth-cta="birding-great-lakes-gazette"'));
 });
 
-test("Gazette benchmark records unknown search metrics honestly and the released experiment window", () => {
+test("Gazette benchmark records unknown search metrics honestly after experiment retirement", () => {
   const benchmark = JSON.parse(read("benchmarks/gazette-daily-growth.json"));
   const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
-  const experiment = ledger.experiments.find((item) => item.id === "2026-08-03-great-lakes-gazette-daily");
-
   assert.equal(benchmark.baseline.searchConsole.landingPageImpressions, null);
   assert.equal(benchmark.baseline.searchConsole.status, "not-isolated-in-visible-export");
   assert.equal(benchmark.baseline.publication.aisHealthyPortsLatestEdition, 0);
   assert.equal(benchmark.targets.first28Days.dailyEditionAvailability, 1);
   assert.equal(benchmark.targets.first28Days.editionsWithAtLeastFiveHealthyAisPorts, 0.95);
-  assert.ok(experiment);
-  // Read and closed 2026-09-01 from the Search Console 28-day export. What matters now is that
-  // the entry carries a recorded result, not that it is still frozen open.
-  assert.equal(experiment.status, "evaluated");
-  assert.ok(experiment.result?.measured, "read must record the measured page row");
-  assert.ok(experiment.decisionDate, "read must record a decision date");
-  assert.equal(experiment.releaseDate, "2026-08-03");
-  assert.deepEqual(experiment.evaluationWindow, { start: "2026-08-04", end: "2026-08-31" });
-  assert.equal(experiment.target.widgetEditionOpenRate, 0.02);
-  assert.ok(experiment.publicationQualityRepairs.some((item) => item.date === "2026-08-09"));
+  assert.equal(ledger.status, "retired");
+  assert.equal(ledger.operatingMode, "ship-and-observe");
+  assert.deepEqual(ledger.activeExperiments, []);
 });
