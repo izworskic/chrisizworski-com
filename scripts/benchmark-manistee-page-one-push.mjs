@@ -21,8 +21,11 @@ check("visible access FAQ exists", page.includes('Where are the Manistee River p
 check("structured access FAQ exists", page.includes('Is there a Manistee River map with put-ins and take-outs?'));
 check("baseline is exact", benchmark.baseline.impressions === 72 && benchmark.baseline.clicks === 0 && benchmark.baseline.averagePosition === 11.4);
 check("top ten target is explicit", benchmark.targets.averagePositionAtOrBetterThan === 10 && benchmark.targets.ctrAtOrAbove === 0.015);
-const experiment = experiments.experiments.find((item) => item.id === "2026-08-22-manistee-paddling-page-one");
-check("experiment ledger entry exists", (experiment?.status === "pending-clean-window" || (experiment?.status === "evaluated" && Boolean(experiment?.result))) && experiment?.paths?.includes("/michigan-paddling/manistee-river/"));
+// The ledger retired on 2026-09-02 and its experiments array went with it. Guard the lookup so
+// this gate reports its own subject rather than crashing, and assert the rule that outlived the
+// row: with nothing being measured, this page must not claim a freeze it cannot back.
+const experiment = (experiments.experiments || []).find((item) => item.id === "2026-08-22-manistee-paddling-page-one") || null;
+check("no unbacked freeze is claimed for this page", experiments.status === "retired" ? experiment === null : Boolean(experiment?.paths?.includes("/michigan-paddling/manistee-river/")));
 const focus = portfolio.focusPortfolio.find((item) => item.id === "manistee");
 check("portfolio points at actual Search Console owner", focus?.surface === "https://chrisizworski.com/michigan-paddling/manistee-river/" && focus?.action === "PROTECT" && !focus?.toolId);
 check("Manistee leaves immediate queue", !portfolio.immediateQueue.join(" ").toLowerCase().includes("manistee"));

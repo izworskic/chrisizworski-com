@@ -19,8 +19,11 @@ check("product identity remains in app schema", page.includes('"name": "Michigan
 check("statewide hub remains canonical to itself", hub.includes('rel="canonical" href="https://chrisizworski.com/fall-color/'));
 check("baseline exact", experiment.baseline.impressions === 54 && experiment.baseline.clicks === 0 && experiment.baseline.averagePosition === 10.07);
 check("CTR target explicit", experiment.targets.ctrAtOrAbove === 0.02 && experiment.targets.averagePositionAtOrBetterThan === 12);
-const item = ledger.experiments.find((entry) => entry.id === "2026-08-22-fall-weekend-planner-ctr");
-check("ledger entry is declared and either open or read", (item?.status === "pending-clean-window" || (item?.status === "evaluated" && Boolean(item?.result))) && Boolean(item?.lastSearchFacingChangeDate));
+// The ledger retired on 2026-09-02 and its experiments array went with it. Guard the lookup so
+// this gate reports its own subject rather than crashing, and assert the rule that outlived the
+// row: with nothing being measured, this page must not claim a freeze it cannot back.
+const item = (ledger.experiments || []).find((entry) => entry.id === "2026-08-22-fall-weekend-planner-ctr") || null;
+check("no unbacked freeze is claimed for this page", ledger.status === "retired" ? item === null : Boolean(item?.lastSearchFacingChangeDate));
 console.log("\nFALL WEEKEND PLANNER CTR BENCHMARK");
 console.log("=".repeat(72));
 console.log("Baseline: 54 impressions, 0 clicks, position 10.07");
