@@ -465,7 +465,7 @@ module.exports = async function handler(req, res) {
         generated_at: siteIndex.generated_at || null,
         site_count: finite(siteIndex.site_count),
         source_name: siteIndex.source_name || "USGS Site Service",
-        source_url: siteIndex.source_url || "https://waterservices.usgs.gov/nwis/site/",
+        source_url: siteIndex.source_url || "https://api.waterdata.usgs.gov/ogcapi/v0/collections/monitoring-locations",
       },
       location: { latitude: lat, longitude: lon },
       gauges,
