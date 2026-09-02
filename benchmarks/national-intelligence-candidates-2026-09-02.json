@@ -159,8 +159,8 @@
         "loss": 10,
         "searchOpportunity": 90
       },
-      "gate": "implemented-pending-verification",
-      "disposition": "Snow canonical, API, Decision Desk signal, source lifecycle and tests implemented; merge only after live-source and repository verification.",
+      "gate": "implemented-production-verified",
+      "disposition": "Production verified: canonical, API, Decision Desk integration, source lifecycle, live-source probes, full repository gate and public-origin Snow smoke all pass.",
       "implementation": {
         "route": "/national-tools/snow/",
         "api": "/api/national-snow",
@@ -180,7 +180,12 @@
           "ice safety",
           "river runoff prediction",
           "universal recreation safety score"
-        ]
+        ],
+        "productionVerification": {
+          "status": "verified",
+          "expectedPublicSmoke": "Mount Hood OR, Burlington VT and Atlanta GA contract checks plus public Snow page shell",
+          "invariant": "Any local melt/hold/refreeze/accumulation conclusion must be backed by measured pack within 60 miles."
+        }
       }
     },
     {
@@ -733,6 +738,6 @@
       "coastal-water-window",
       "snowpack-melt"
     ],
-    "nextStandaloneNote": "No additional new-product family currently clears both source and loss gates. Smoke/Clear-Air remains the highest-value blocked family; prioritize eligible shared capabilities and existing-canonical enhancements after Snow."
+    "nextStandaloneNote": "Snowpack + Melt is production-verified. No additional new-product family currently clears both source and loss gates; Smoke/Clear-Air remains the highest-value blocked family."
   }
 }
