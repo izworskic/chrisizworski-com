@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "updated": "2026-09-02",
   "purpose": "Machine-readable lifecycle and migration audit for national outdoor data dependencies.",
   "sources": {
@@ -98,12 +98,35 @@
       "semantics": "Predicted high/low tide timing is not observed water level and is not a swim- or boating-safety determination.",
       "greatLakesRule": "Do not invent tide context for Great Lakes locations when no valid CO-OPS tide-prediction station is returned.",
       "failureMode": "Tides degrade independently; missing predictions remain unavailable."
+    },
+    "censusTigerwebGeocode": {
+      "source": "U.S. Census Bureau TIGERweb",
+      "class": "U.S. place and ZIP location resolution",
+      "status": "production-primary-for-city-state-and-zip",
+      "authentication": "none",
+      "endpoints": [
+        "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer",
+        "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/1",
+        "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/0"
+      ],
+      "rule": "Resolve ordinary U.S. city/state and 5-digit ZIP queries from Census TIGERweb before using flexible third-party geocoding.",
+      "currentVintage": "TIGERweb current place/state layers are January 1, 2025 vintage; current TIGERweb release reflects 2026 BAS boundary work.",
+      "failureMode": "If Census cannot resolve or is unavailable, fall back to Nominatim; do not fail the location flow from one provider alone."
+    },
+    "osmNominatimGeocode": {
+      "source": "OpenStreetMap Nominatim public API",
+      "class": "flexible geocoding fallback and reverse geocoding",
+      "status": "fallback",
+      "authentication": "none",
+      "rateRule": "Public service use remains at or below one request per second; a single 429/5xx retry waits at least 1.1 seconds.",
+      "failureMode": "Nominatim failure must not break ordinary Census-resolvable city/state or ZIP lookups."
     }
   },
   "gates": [
     "No retiring endpoint may be introduced by a new national product.",
     "Missing source credentials must render explicit configuration/degraded state rather than fabricated data.",
     "Source freshness and observation/forecast/derived semantics must remain visible.",
-    "One failed source must not blank independent source-backed signals."
+    "One failed source must not blank independent source-backed signals.",
+    "National location resolution must not depend on a single upstream geocoder for ordinary U.S. city/state or ZIP queries."
   ]
 }

@@ -121,6 +121,10 @@ for (const [name, body] of Object.entries(pages)) {
 
 check("Shared data helpers expose freshness contract", /sourceMeta/.test(shared) && /stale_after_minutes/.test(shared) && /source_status/.test(shared), 5);
 check("Location object includes timezone context", /timeZone/.test(apis.geocode) && /api\.weather\.gov\/points/.test(apis.geocode), 3);
+
+check("National geocoding is Census-first for city/state and ZIP", /TIGER_PLACES/.test(apis.geocode) && /TIGER_ZCTA/.test(apis.geocode) && /censusPlaceGeocode/.test(apis.geocode) && /parseManualQuery/.test(apis.geocode), 6);
+check("National geocoding retains a rate-compliant fallback", /NOMINATIM_SEARCH/.test(apis.geocode) && /nominatimJson/.test(apis.geocode) && /wait\(1100\)/.test(apis.geocode), 4);
+check("Location UI retries transient edge failures once", /function fetchLocation/.test(client) && /\[502,503,504\]\.includes\(response\.status\)/.test(client) && /delay\(750\)/.test(client), 4);
 check("Device location is opt-in and rounded before server lookup", /navigator\.geolocation/.test(client) && /toFixed\(3\)/.test(client) && /method:"POST"/.test(client) && /reverseGeocode/.test(apis.geocode) && /roundCoord/.test(apis.geocode), 5);
 check("Device coordinates stay out of national page URLs", /body:JSON\.stringify\(\{latitude:roundedLatitude,longitude:roundedLongitude\}\)/.test(client) && !/national-geocode\?lat=/.test(client), 4);
 check("All national entry forms expose optional Use my location", Object.values(pages).every((body) => /data-use-location/.test(body) && /location-privacy/.test(body)), 4);

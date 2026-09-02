@@ -205,8 +205,17 @@
     if(!response.ok)throw new Error(data.error||data.detail||fallback||"Request failed");
     return data;
   }
+  function delay(ms){return new Promise(function(resolve){setTimeout(resolve,ms)})}
+  async function fetchLocation(url,options){
+    let response=await fetch(url,options);
+    if([502,503,504].includes(response.status)){
+      await delay(750);
+      response=await fetch(url,options);
+    }
+    return response;
+  }
   async function geocode(q){
-    const r=await fetch("/api/national-geocode?q="+encodeURIComponent(q));
+    const r=await fetchLocation("/api/national-geocode?q="+encodeURIComponent(q));
     const data=await readJsonResponse(r,"Location lookup unavailable");
     remember(data);
     return data;
@@ -214,7 +223,7 @@
   async function reverseGeocode(latitude,longitude){
     const roundedLatitude=Number(Number(latitude).toFixed(3));
     const roundedLongitude=Number(Number(longitude).toFixed(3));
-    const r=await fetch("/api/national-geocode",{
+    const r=await fetchLocation("/api/national-geocode",{
       method:"POST",
       headers:{"content-type":"application/json"},
       body:JSON.stringify({latitude:roundedLatitude,longitude:roundedLongitude})
