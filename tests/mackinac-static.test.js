@@ -15,7 +15,7 @@ test("Mackinac Bridge Live has indexable metadata and valid structured data", ()
       '<link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-live/">',
     ),
   );
-  assert.match(html, /name="description" content="[^"]*official status/i);
+  assert.match(html, /name="description" content="[^"]*open now/i);
   assert.ok(html.includes('"@type": "WebApplication"'));
   assert.ok(html.includes('"@type": "Offer"'));
   assert.doesNotMatch(html, /"@type": "FAQPage"/);
