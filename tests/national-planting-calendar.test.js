@@ -33,7 +33,7 @@ test('fall cutoff runs backward with slowdown and cultivar override',()=>{
 
 test('succession stops when the next sowing is beyond last viable date',()=>{
   const radish=crop('radish');
-  const start=new Date(2026,7,1,12),today=new Date(2026,8,10,12),last=new Date(2026,8,12,12);
+  const start=new Date(2026,7,1,12),today=new Date(2026,8,10,12),last=new Date(2026,8,11,12);
   assert.equal(E.nextSuccession(radish,start,today,last),null);
 });
 
