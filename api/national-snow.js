@@ -450,8 +450,11 @@ module.exports._test = {
   miles,
   nearest,
   nearestSnotel,
+  nohrscContext,
   nohrscRows,
   nohrscUrl,
+  nwsForecast,
   observationSummary,
   reportAnchor,
+  snotelContext,
 };
