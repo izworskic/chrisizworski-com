@@ -123,6 +123,15 @@ test("TIGERweb query builder remains server-side and keyless",()=>{
 });
 
 
+test("national client retries transient edge geocode failures once",()=>{
+  const client=fs.readFileSync(require.resolve("../public/assets/national-tools.js"),"utf8");
+  assert.match(client,/function fetchLocation/);
+  assert.match(client,/\[502,503,504\]\.includes\(response\.status\)/);
+  assert.match(client,/await delay\(750\)/);
+  assert.match(client,/fetchLocation\("\/api\/national-geocode\?q="/);
+});
+
+
 test("shared national place toolbar keeps shared links query-based and analytics-safe",()=>{
   const client=fs.readFileSync(require.resolve("../public/assets/national-tools.js"),"utf8");
   assert.match(client,/function renderPlaceToolbar/);
