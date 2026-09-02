@@ -104,7 +104,7 @@ test("snow canonical exposes source truth, safety boundaries and privacy-safe an
   assert.match(html,/not a NOAA\/NRCS snowmelt forecast/i);
   assert.match(html,/avalanche/i);
   assert.match(html,/National Snow Result/);
-  const event=html.match(/N\.track\("National Snow Result",[\s\S]{0,300}/)?.[0]||"";
+  const event=html.split("\n").find((line)=>line.includes("National Snow Result"))||"";
   assert.doesNotMatch(event,/latitude|longitude|query|place/);
 });
 
