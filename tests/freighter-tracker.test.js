@@ -78,20 +78,10 @@ test("ship tracker structured data and internal discovery surfaces are aligned",
   assert.ok(llms.includes("## Great Lakes Ship Tracking"));
 });
 
-test("freighter experiment is recorded as the released August 3 treatment", () => {
+test("ship tracker remains active after growth experiment retirement", () => {
   const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
-  const experiment = ledger.experiments.find((item) => item.id === "2026-08-03-great-lakes-ship-tracker");
-
-  assert.ok(experiment);
-  assert.deepEqual(experiment.baseline, { impressions: 996, clicks: 1, ctr: 0.001, averagePosition: 23.87 });
-  assert.equal(experiment.target.impressionsMultiple, 3);
-  assert.equal(experiment.target.ctr, 0.015);
-  assert.equal(experiment.target.averagePosition, 15);
-  // Read and closed 2026-09-01 from the Search Console 28-day export. What matters now is that
-  // the entry carries a recorded result, not that it is still frozen open.
-  assert.equal(experiment.status, "evaluated");
-  assert.ok(experiment.result?.measured, "read must record the measured page row");
-  assert.ok(experiment.decisionDate, "read must record a decision date");
-  assert.equal(experiment.releaseDate, "2026-08-03");
-  assert.deepEqual(experiment.evaluationWindow, { start: "2026-08-04", end: "2026-08-31" });
+  assert.equal(ledger.status, "retired");
+  assert.equal(ledger.operatingMode, "ship-and-observe");
+  assert.deepEqual(ledger.activeExperiments, []);
+  assert.match(ledger.note, /No title, description, H1, canonical, structured-data, or indexability experiment freeze is active/);
 });
