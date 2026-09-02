@@ -70,7 +70,8 @@
       "semantics": "Official rip-current/swim-risk, surf, winds, weather and water-temperature fields remain forecast guidance tied to the named forecast area.",
       "dominanceRule": "When a High or Moderate official beach-risk category exists, observation or tide context may not downgrade or override it.",
       "freshnessRule": "Treat the issued beach forecast as stale after 24 hours unless a newer Day 1/Day 2 product is retrieved.",
-      "failureMode": "NDBC observations and CO-OPS predictions may still render separately; missing NWS coverage must never be converted into Low risk."
+      "failureMode": "NDBC observations and CO-OPS predictions may still render separately; missing NWS coverage must never be converted into Low risk.",
+      "admissionRule": "Use NWS beach-forecast geography as the location-admission gate. The searched point must be within 25 miles of the nearest applicable beach-forecast area before NDBC or CO-OPS context can be exposed. Distant source proximity is not coastal eligibility."
     },
     "ndbcRealtime": {
       "source": "NOAA National Data Buoy Center",
