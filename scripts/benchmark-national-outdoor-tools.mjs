@@ -127,7 +127,7 @@ check("Rivers preserve same-date historical percentiles in optional context", /d
 check("River discovery index has national depth", riverIndex.site_count >= 9000 && Array.isArray(riverIndex.sites) && riverIndex.sites.length === riverIndex.site_count, 5, String(riverIndex.site_count));
 check("River discovery index is source-backed active USGS streamflow inventory", riverIndex.source_name === "USGS Site Service" && /waterservices\.usgs\.gov\/nwis\/site/.test(riverIndex.source_url || "") && riverIndex.criteria?.siteType === "ST" && riverIndex.criteria?.siteStatus === "active" && riverIndex.criteria?.hasDataTypeCd === "iv" && riverIndex.criteria?.parameterCd === "00060", 5);
 check("River index generator preserves USGS source criteria", /nwis\/site/.test(riverIndexGenerator) && /siteStatus.*active/s.test(riverIndexGenerator) && /parameterCd.*00060/s.test(riverIndexGenerator) && /siteType.*ST/s.test(riverIndexGenerator), 4);
-check("River core uses local index for nearest-gauge discovery", /national-usgs-streamflow-sites\.json/.test(apis.rivers) && /function nearestSites/.test(apis.rivers) && /distance_miles/.test(apis.rivers), 5);
+check("River discovery uses local national index before live detail", /national-usgs-streamflow-sites\.json/.test(apis.rivers) && /function discoveryRivers/.test(apis.rivers) && /mode === "discovery"/.test(apis.rivers) && /distance_miles/.test(apis.rivers), 5);
 check("River core has no live gauge-discovery network call", !/const\s+SITE\s*=/.test(apis.rivers) && !/new URL\([^)]*nwis\/site/.test(apis.rivers) && !/bBox/.test(apis.rivers) && !/siteSearch/.test(apis.rivers), 6);
 check("River live request remains exact-site USGS IV", /nwis\/iv/.test(apis.rivers) && /searchParams\.set\("sites"/.test(apis.rivers) && /searchParams\.set\("period", "P1D"\)/.test(apis.rivers), 5);
 check("River exact-site observation request has bounded timeout", /observations\(coreSites, coreParameters, 1400\)/.test(apis.rivers) && /observations\(sensorSites, Object\.values\(PARAMETERS\), 1200\)/.test(apis.rivers) && /AbortSignal\.timeout\(timeoutMs\)/.test(apis.rivers), 4);
@@ -137,7 +137,7 @@ check("River core computes observed 6h and 24h change", /trend_percent_6h/.test(
 check("River core excludes historical NOAA and weather network calls", !/nwis\/stat/.test(apis.rivers) && !/api\.water\.noaa\.gov/.test(apis.rivers) && !/api\.weather\.gov/.test(apis.rivers) && /context_pending/.test(apis.rivers), 5);
 check("River optional context carries USGS history NOAA NWPS and NWS weather", /nwis\/stat/.test(apis.riverContext) && /api\.water\.noaa\.gov/.test(apis.riverContext) && /api\.weather\.gov/.test(apis.riverContext) && /stageflow\/forecast/.test(apis.riverContext) && /weatherContext/.test(apis.riverContext), 6);
 check("River official forecast trajectory stays distinct from observations", /normalizeForecastTrend/.test(apis.riverContext) && /forecast_trend/.test(apis.riverContext) && /Official forecast trend/.test(pages.rivers), 4);
-check("River UI renders core before loading optional context", /render\(d,loc,Boolean\(d\.context_pending\)\)/.test(pages.rivers) && /if\(d\.context_pending\)loadContext\(d,loc\)/.test(pages.rivers), 5);
+check("River UI is discovery-first and loads detail only after explicit monitoring-point choice", /mode=discovery/.test(pages.rivers) && /function renderDiscovery/.test(pages.rivers) && /function openSelectedSite/.test(pages.rivers) && /data-site-id/.test(pages.rivers) && /site="\+encodeURIComponent\(siteId\)/.test(pages.rivers) && /Back to nearby rivers/.test(pages.rivers), 5);
 check("River UI leads with what changed and what is next", /What changed\?/.test(pages.rivers) && /What’s next\?/.test(pages.rivers) && /Observed movement/.test(pages.rivers), 5);
 check("River UI exposes conditional water-quality sensor panel", /Available water sensors/.test(pages.rivers) && /Dissolved oxygen/.test(pages.rivers) && /Conductivity/.test(pages.rivers) && /Turbidity/.test(pages.rivers), 5);
 check("River activity lenses reuse facts without a combined score", [["general","General"],["paddle","Paddle"],["fish","Fish"],["swim","Swim"],["ecology","Ecology"],["trip","Trip"]].every(([id,label]) => pages.rivers.includes('["'+id+'","'+label+'"]')) && /No combined safety score/.test(pages.rivers), 6);
@@ -146,7 +146,7 @@ check("River historical and official forecast context remain visible", /same-dat
 check("River safety veto remains intact", /No gauge reading or derived lens can determine whether paddling, swimming, wading, fishing, or boating is safe/.test(apis.rivers) && /River intelligence is not a safety score/.test(pages.rivers), 6);
 check("National dashboard carries richer river intelligence", /kicker:"River intelligence"/.test(dashboard) && /Water "/.test(dashboard) && /Turbidity /.test(dashboard), 4);
 check("River function has extended runtime budget", Number(vercel.functions?.["api/national-rivers.js"]?.maxDuration) >= 25, 4);
-check("River UI rejects non-JSON server responses cleanly", /readJsonResponse/.test(pages.rivers) && /River conditions unavailable/.test(pages.rivers), 4);
+check("River UI rejects non-JSON discovery and selected-detail responses cleanly", /readJsonResponse/.test(pages.rivers) && /River discovery unavailable/.test(pages.rivers) && /Selected river conditions unavailable/.test(pages.rivers), 4);
 check("Shared national client parses API responses defensively", /async function readJsonResponse/.test(client) && /content-type/.test(client) && /HTTP /.test(client), 4);
 check("National dashboard isolates non-JSON upstream failures", /readJsonResponse/.test(dashboard) && /Outdoor data source unavailable/.test(dashboard), 3);
 
@@ -187,7 +187,7 @@ check("Dashboard loads all five platform inputs independently", ["/api/national-
 check("Dashboard orders by decision urgency, not a safety score", /sort\(function\(a,b\)\{return b\.priority-a\.priority\}/.test(dashboard) && /not a universal safety score/i.test(pages.hub), 4);
 check("Dashboard shows independent source degradation", /if\(!result\.ok\)/.test(dashboard) && /platform inputs available/.test(dashboard), 4);
 check("Hub exposes saved places without calling them alerts", /Saved places/.test(pages.hub) && /Save this place/.test(pages.hub) && !/alert me|notify me/i.test(pages.hub), 4);
-check("River spatial context is keyless and fail-soft", /openstreetmap\.org\/export\/embed/.test(pages.rivers) && /orientation context only/.test(pages.rivers) && /primary-gauge/.test(pages.rivers), 4);
+check("River spatial context is keyless and selected-site only", /openstreetmap\.org\/export\/embed/.test(pages.rivers) && /orientation context only/.test(pages.rivers) && /Selected monitoring point/.test(pages.rivers), 4);
 check("Phase 3 responsive decision UI exists", /decision-grid/.test(nationalCss) && /river-map-shell/.test(nationalCss), 2);
 
 check("All APIs are noindex", Object.values(apis).every((x) => /X-Robots-Tag",\s*"noindex, nofollow"/.test(x)), 5);
@@ -211,6 +211,7 @@ check("Fall observation enrichment stays optional and non-peak", contract.phase2
 check("Phase 3 measurement is instrumented without raw location payloads", contract.phase3?.measurement?.status === "instrumented-on-existing-vercel-analytics" && /Never send raw city\/ZIP/.test(contract.phase3?.measurement?.privacy || ""), 4);
 const masterPrompt = await read("docs/NATIONAL_OUTDOOR_TOOLS_MASTER_PROMPT.md");
 check("Master prompt remains the build doctrine", masterPrompt.includes("## Loss function") && masterPrompt.includes("## Phase 3 platform interpretation") && masterPrompt.includes("Core decision data must not wait on optional enrichment") && masterPrompt.includes("Slow discovery may be precomputed"), 4);
+check("River product contract forbids nearest-gauge auto-promotion", /Discovery is river-first/.test(masterPrompt) && /Never assume the nearest gauge is the river the user meant/.test(masterPrompt) && /explicit river\/monitoring-point selection/.test(masterPrompt), 4);
 
 const score = Math.round((rawScore / maxPoints) * 100);
 const summary = { score, rawScore, maxPoints, failures, hardVetoes: contract.hardVetoes };

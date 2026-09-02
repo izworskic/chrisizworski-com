@@ -156,7 +156,8 @@ Primary sources:
 - National Water Model only when explicitly labeled model guidance
 
 Must answer:
-- What river/gauge is near me?
+- What monitored rivers/streams are near me?
+- Which USGS monitoring point do I want when a river has more than one nearby gauge?
 - What is the current flow/level?
 - Is it rising or falling?
 - What changed over the last 6–24 hours?
@@ -167,6 +168,8 @@ Must answer:
 - What weather may matter next, while clearly separating weather from an inferred river response?
 
 River Intelligence interpretation rules:
+- Discovery is river-first: location search returns the nearby monitored-waterway chooser before any detailed live river panel opens.
+- Never assume the nearest gauge is the river the user meant. Live detail loads only after an explicit river/monitoring-point selection.
 - Lead with observable change before raw sensor inventory.
 - Show "what changed" and "what's next" as separate observation/forecast concepts.
 - Activity lenses may reorder or explain the same facts for paddling, fishing, swimming, ecology, or trip planning, but may not manufacture activity scores or universal recommendations.

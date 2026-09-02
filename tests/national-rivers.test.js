@@ -214,3 +214,39 @@ test('river core observations can retain flow while optional sensor enrichment i
   assert.equal(merged.water_temp_f,68);
   assert.deepEqual(merged.sensor_availability,['water_temperature','turbidity']);
 });
+
+
+test('river discovery groups nearby USGS monitoring sites by waterway before live detail',()=>{
+  assert.equal(rivers.riverName('RIFLE RIVER NEAR STERLING, MI'),'Rifle River');
+  assert.equal(rivers.riverName('SOUTH PLATTE RIVER AT DENVER, CO'),'South Platte River');
+  const discovery=rivers.discoveryRivers(44.276408,-84.238613,50,200);
+  assert.equal(discovery.radius_miles,50);
+  assert.ok(discovery.rivers.length>0);
+  assert.ok(discovery.total_sites_in_radius>=discovery.returned_sites);
+  assert.ok(discovery.rivers.some(r=>/Rifle River/i.test(r.name)));
+  for(const river of discovery.rivers){
+    assert.ok(river.gauges.length>=1);
+    assert.equal(river.gauge_count,river.gauges.length);
+    for(const gauge of river.gauges)assert.ok(gauge.distance_miles<=50);
+  }
+});
+
+test('selected river lookup resolves an exact indexed USGS site instead of guessing another gauge',()=>{
+  const selected=rivers.indexedSite('04142000',44.276408,-84.238613);
+  assert.equal(selected.id,'04142000');
+  assert.match(selected.name,/RIFLE RIVER NEAR STERLING/i);
+  assert.ok(Number.isFinite(selected.distance_miles));
+  assert.equal(rivers.indexedSite('999999999999999',44.276408,-84.238613),null);
+});
+
+test('river page is discovery-first and never auto-opens the first returned gauge',()=>{
+  const page=fs.readFileSync(require.resolve('../public/national-tools/rivers/index.html'),'utf8');
+  assert.match(page,/Nearby monitored rivers/);
+  assert.match(page,/Choose a monitored river near/);
+  assert.match(page,/mode=discovery/);
+  assert.match(page,/data-site-id/);
+  assert.match(page,/openSelectedSite/);
+  assert.match(page,/Back to nearby rivers/);
+  assert.doesNotMatch(page,/const first=d\.gauges\[0\][\s\S]{0,400}document\.getElementById\("answer"\)/);
+  assert.match(page,/Live readings do not load until you make that choice/);
+});
