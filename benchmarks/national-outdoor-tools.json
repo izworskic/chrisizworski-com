@@ -1,6 +1,6 @@
 {
-  "version": "1.7.0",
-  "updated": "2026-08-31",
+  "version": "1.8.0",
+  "updated": "2026-09-02",
   "objective": "Ship a separate U.S. outdoor decision network without weakening Michigan canonicals, source truth, or search quality.",
   "lossFunction": {
     "factualDataIntegrity": 25,
@@ -148,6 +148,22 @@
       "rule": "Compare the same five source-backed signals side by side without producing an overall winner, universal score, or safety determination.",
       "measurement": "A comparison event may record signal count only; selected place identities remain excluded from analytics.",
       "indexability": "Comparison is local UI state on the canonical hub and creates no new indexable URL."
+    }
+  },
+  "phase0": {
+    "status": "in-progress-source-hardening",
+    "sourceLifecycleContract": "benchmarks/national-source-lifecycle.json",
+    "usgs": {
+      "continuousRuntime": "migrated-to-water-data-ogc-continuous",
+      "statisticsRuntime": "migrated-to-water-data-statistics-observationNormals-beta",
+      "discoveryGenerator": "migrated-to-water-data-latest-continuous",
+      "checkedInDiscoveryIndex": "legacy-provenance-static-snapshot-until-regenerated",
+      "rule": "No production runtime request or future index generation may depend on waterservices.usgs.gov."
+    },
+    "smokePrerequisites": {
+      "airNow": "supported-interface-audited-source-key-gated",
+      "firms": "map-key-gated-no-new-snpp-dependency",
+      "routeStatus": "not-created"
     }
   }
 }
