@@ -720,6 +720,34 @@
       },
       "gate": "hard-source-veto",
       "disposition": "do not build in current architecture"
+    },
+    {
+      "id": "white-christmas-intelligence",
+      "classification": "seasonal-synthesis-family",
+      "canonical": "/national-tools/white-christmas/",
+      "userQuestions": [
+        "Will I have a White Christmas?",
+        "What are the odds of snow on the ground Christmas morning?",
+        "How are this year's odds changing as Christmas approaches?"
+      ],
+      "signals": [
+        "1991-2020 ACIS Christmas snow-depth history",
+        "CPC December-relevant monthly/seasonal outlooks",
+        "NOHRSC/SNOTEL current pack inside 45 days",
+        "NWS Christmas-period forecast inside 8 days"
+      ],
+      "competition": "Most pages are static climatology maps or generic forecast articles; the product differentiates by progressively replacing the climatological prior with current-year evidence.",
+      "scores": {
+        "value": 93,
+        "loss": 11,
+        "searchOpportunity": 95
+      },
+      "gate": "implemented-pending-verification",
+      "disposition": "Build as a seasonal synthesis product off the production Snowpack platform; admit only map and Michigan supporting pages initially.",
+      "supportingRoutes": [
+        "/white-christmas-probability-map/",
+        "/white-christmas-michigan/"
+      ]
     }
   ],
   "decision": {
@@ -733,11 +761,15 @@
       "river-rain-runoff-context"
     ],
     "canonicalRule": "Rip-current, tide/current, freshwater-beach and coastal-visibility intents are lenses inside Coastal initially; do not fragment them into competing canonicals.",
-    "longTailRule": "No candidate authorizes location-page generation. Location surfaces still require the national location-admission benchmark plus actual measured demand.",
+    "longTailRule": "No candidate authorizes location-page generation by score alone. White Christmas initially admits only the historical map and Michigan deep-dive; additional pages require distinct intent, primary-source depth and search evidence.",
     "completedStandalone": [
       "coastal-water-window",
       "snowpack-melt"
     ],
-    "nextStandaloneNote": "Snowpack + Melt is production-verified. No additional new-product family currently clears both source and loss gates; Smoke/Clear-Air remains the highest-value blocked family."
-  }
+    "nextStandaloneNote": "Snowpack + Melt is production-verified. No additional new-product family currently clears both source and loss gates; Smoke/Clear-Air remains the highest-value blocked family.",
+    "seasonalSpecials": [
+      "white-christmas-intelligence"
+    ]
+  },
+  "updated": "2026-09-02"
 }
