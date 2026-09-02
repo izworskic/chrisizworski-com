@@ -75,9 +75,9 @@ check('Non-leaf nodes are not isolated',stranded.length===0,3,stranded.map(t=>t.
 const groups=registry.cannibalizationGroups||[];
 const badGroups=groups.filter(g=>!idSet.has(g.owner)||(g.supports||[]).some(x=>!idSet.has(x))||(g.supports||[]).includes(g.owner)||!g.rule);
 check('Cannibalization groups resolve cleanly',badGroups.length===0,6,badGroups.map(g=>g.intent).join(', '),true);
-const protectedIds=['aurora','soo-locks','ship-tracker','frost-dates','tomato-planting'];
-const missingProtected=protectedIds.filter(id=>registry.tools.find(t=>t.id===id)?.searchTreatment?.status!=='protected');
-check('Known active experiments remain protected',missingProtected.length===0,5,missingProtected.join(', '),true);
+const formerExperimentIds=['aurora','soo-locks','ship-tracker','frost-dates','tomato-planting'];
+const inactiveFormerExperiments=formerExperimentIds.filter(id=>registry.tools.find(t=>t.id===id)?.searchTreatment?.status!=='active');
+check('Former experiment surfaces remain active after experiment retirement',inactiveFormerExperiments.length===0&&(actions.experiments||[]).length===0,5,inactiveFormerExperiments.join(', '),true);
 check('Search evidence allows unknowns without fabrication',tools.some(t=>t.searchEvidence.status==='unknown')&&tools.some(t=>t.searchEvidence.status==='measured'),4,'registry must retain both measured and unknown states');
 
 // Best-fit candidate model — 15
