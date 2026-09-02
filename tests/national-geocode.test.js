@@ -70,7 +70,8 @@ test("saved-place comparison stays signal-by-signal without an overall score",()
   assert.match(hub,/Compare two places across the same core signals/);
   assert.match(hub,/No overall winner or safety score/);
   assert.match(hub,/D\.compare\(left,right\)/);
-  for(const label of ["Aurora","River","Coastal","Frost","Planting","Fall timing"])assert.ok(hub.includes(label),label);\n  assert.match(dashboard,/if\(!d\.coastal_available\)return null/);
+  for(const label of ["Aurora","River","Coastal","Frost","Planting","Fall timing"])assert.ok(hub.includes(label),label);
+  assert.match(dashboard,/if\(!d\.coastal_available\)return null/);
   const inline=hub.match(/<script>\s*(document\.addEventListener[\s\S]*?)<\/script>/);
   assert.ok(inline,"national hub inline script not found");
   assert.doesNotThrow(()=>new Function(inline[1]));
