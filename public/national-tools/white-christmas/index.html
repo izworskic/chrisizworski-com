@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Will I Have a White Christmas? | Chris Izworski</title>
+<meta name="description" content="Check your White Christmas odds using 1991-2020 snow-depth history, NOAA climate outlooks, current snowpack and the NWS forecast as Christmas nears.">
+<link rel="canonical" href="https://chrisizworski.com/national-tools/white-christmas/"><meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website"><meta property="og:title" content="Will I Have a White Christmas?"><meta property="og:description" content="A place-specific White Christmas estimate that gets smarter as December 25 approaches."><meta property="og:url" content="https://chrisizworski.com/national-tools/white-christmas/">
+<link rel="stylesheet" href="/assets/national-tools.css?v=20260902-placebar1"><link rel="stylesheet" href="/assets/white-christmas.css?v=20260902-1">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"SoftwareApplication","@id":"https://chrisizworski.com/national-tools/white-christmas/#page","url":"https://chrisizworski.com/national-tools/white-christmas/","name":"Will I Have a White Christmas?","description":"A U.S. White Christmas probability tool blending station history, CPC outlooks, current snowpack and short-range NWS forecasts.","dateModified":"2026-09-02","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script></head>
+<body class="white-christmas-page"><header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
+<main>
+<section class="hero"><div class="wrap"><div class="eyebrow">Christmas snow intelligence · United States</div><h1>Will I have a White Christmas?</h1><p class="lede">Start with 30 years of Christmas snow-depth history. Then let NOAA's long-range outlook, current snowpack and the actual Christmas forecast take over as December 25 gets closer.</p></div></section>
+<section class="section"><div class="wrap">
+<div class="wc-locator"><form id="loc"><input aria-label="U.S. city or ZIP" placeholder="City, state or ZIP" required><button class="btn" type="submit">Check my odds</button><button type="button" class="secondary-btn geo-btn" data-use-location>Use my location</button></form><p class="near-me-note">The percentage is a transparent site estimate, not an official NOAA Christmas forecast. It is rounded to 5-point increments to avoid fake precision.</p><p class="location-privacy">Optional device location is rounded before lookup and is not included in analytics.</p><div class="status" aria-live="polite"></div></div>
+<div id="result" class="wc-result" hidden>
+  <div class="wc-score"><div class="wc-orb"><div><strong id="probability">—</strong><span>estimated chance</span></div></div><div><span id="confidence" class="wc-pill">—</span><h2 id="answer" class="wc-headline">—</h2><p id="detail">—</p><p id="target" class="wc-muted"></p></div></div>
+  <div class="wc-christmas-note"><strong>What counts as a White Christmas?</strong> <span id="definition">At least 1 inch of snow on the ground on December 25.</span></div>
+  <div class="wc-grid">
+    <div class="wc-card"><span class="tool-kicker">The historical anchor</span><h3 id="history-title">Christmas snow-depth history</h3><p id="history-copy">—</p><small id="history-station">—</small></div>
+    <div class="wc-card"><span class="tool-kicker">The long-range nudge</span><h3>NOAA Climate Prediction Center</h3><p id="cpc-copy">—</p><small>Broad climate outlooks never become a Christmas Day forecast.</small></div>
+    <div class="wc-card"><span class="tool-kicker">What is on the ground</span><h3>Current snowpack</h3><p id="pack-copy">—</p><small id="pack-station">Snowpack begins influencing the estimate inside 45 days.</small></div>
+    <div class="wc-card"><span class="tool-kicker">As Christmas nears</span><h3>NWS forecast</h3><p id="forecast-copy">The short-range forecast becomes a major factor only once December 25 enters the normal NWS forecast window.</p><small id="forecast-meta"></small></div>
+  </div>
+  <div class="wc-card" style="margin-top:1rem"><span class="tool-kicker">Why the percentage moved</span><h3>Estimate ingredients</h3><div id="factors"></div></div>
+  <div class="wc-media">
+    <div class="wc-frame"><div class="wc-frame-copy"><span class="tool-kicker">Historical map</span><h3>NOAA 1991-2020 White Christmas probability</h3><p class="wc-muted">The map shows the historical chance of at least 1 inch of snow on December 25. It is climatology, not this year's forecast.</p></div><iframe title="NOAA historical White Christmas probability map" loading="lazy" referrerpolicy="no-referrer" src="https://www.arcgis.com/apps/mapviewer/index.html?layers=f0ad5d4bb3fa4176ad2134cafbbf8cfd"></iframe></div>
+    <div class="wc-frame"><div class="wc-frame-copy"><span class="tool-kicker">Current snow cover</span><h3>NOAA National Snow Analyses</h3><p class="wc-muted">As winter develops, use NOAA's national snow analysis to see the broader pack around your location.</p><p><a class="secondary-btn" id="snow-map-link" href="https://www.nohrsc.noaa.gov/nsa/?region=National&amp;units=e&amp;var=snowdepth" target="_blank" rel="noopener">Open current NOAA snow map</a></p></div></div>
+  </div>
+  <div class="truth-box" style="margin-top:1rem"><strong>Interpretation boundary:</strong> This tool combines historical station frequency, broad CPC outlook categories, nearby measured snowpack and short-range NWS forecast context. The final percentage is ChrisIzworski.com synthesis, not an official NOAA/NWS probability product.</div>
+  <p id="updated" class="small"></p>
+</div>
+</div></section>
+<section class="section wc-support"><div class="wrap"><div class="section-head"><div><span class="tool-kicker">Explore the question</span><h2>White Christmas maps, history and Michigan depth</h2></div></div><div class="grid">
+<a class="card tool-card" href="/white-christmas-probability-map/"><div class="tool-kicker">Historic odds</div><h3>White Christmas Probability Map</h3><p>Understand NOAA's 1991-2020 map, what the 1-inch threshold means and why mountains and lake-effect belts stand out.</p></a>
+<a class="card tool-card" href="/white-christmas-michigan/"><div class="tool-kicker">Michigan deep dive</div><h3>White Christmas in Michigan</h3><p>Detroit, Flint, Saginaw, the U.P. and the huge north-south difference in Michigan Christmas snow climatology.</p></a>
+<a class="card tool-card" href="/national-tools/snow/"><div class="tool-kicker">Snowpack now</div><h3>Snowpack &amp; Snowmelt Conditions</h3><p>See the measured pack and melt/refreeze intelligence underneath the Christmas estimate.</p></a>
+</div></div></section>
+<section class="section"><div class="wrap"><h2>How the estimate changes through the season</h2><div class="grid">
+<div class="source-box"><h3>September and October</h3><p>History does most of the work. CPC seasonal temperature and precipitation outlooks can move the prior only a few points because they describe a broad three-month pattern, not Christmas Day.</p></div>
+<div class="source-box"><h3>November to mid-December</h3><p>The December monthly outlook becomes more useful. Once current snowpack is seasonally meaningful, a nearby measured pack can begin moving the estimate.</p></div>
+<div class="source-box"><h3>The final week</h3><p>The NWS forecast becomes the strongest weather input. Existing snowpack, forecast snow, rain and temperatures around freezing matter far more than a long-range outlook.</p></div>
+<div class="source-box"><h3>Christmas Eve</h3><p>The estimate is much more confident, but it still is not a guarantee. Station distance, localized snowfall, elevation and melting can still make the exact yard different from the nearest observation.</p></div>
+</div></div></section>
+</main>
+<footer class="footer"><div class="wrap">© 2026 <a href="/">Chris Izworski</a> · Historical snow depth, CPC outlooks and current snow sources stay separately labeled.</div></footer>
+<script src="/assets/national-tools.js?v=20260902-placebar1"></script>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+  const N=window.NationalTools,form=document.getElementById("loc");
+  function sign(v){return v>0?"+"+v:v}
+  function outlookText(o){
+    if(!o)return "No December-relevant CPC signal is available at this location right now.";
+    const t=o.temperature,p=o.precipitation,bits=[];
+    if(t)bits.push((t.valid_period||"December period")+": "+t.probability+"% "+String(t.category).toLowerCase()+"-normal temperature category");
+    if(p)bits.push((p.valid_period||"December period")+": "+p.probability+"% "+String(p.category).toLowerCase()+"-normal precipitation category");
+    return bits.join(" · ")||"Equal-chance or unavailable CPC context.";
+  }
+  function packText(s){
+    const p=s&&s.basis;if(!s||!s.weighted)return "Too early in the season for current snowpack to influence the Christmas estimate.";
+    if(!p)return "No measured snowpack close enough to the searched location is being used.";
+    return p.value+" "+(p.unit||"in")+" "+(p.kind==="swe"?"snow-water equivalent":"snow depth")+" at "+p.station+" ("+p.distance_miles+" mi away).";
+  }
+  function forecastText(f){
+    if(!f)return "Christmas is still outside the short-range NWS forecast window.";
+    if(!f.available)return "Christmas is close enough to check, but a Christmas-period forecast was not returned yet.";
+    return [f.text,f.max_temperature_f!=null?"High signal "+f.max_temperature_f+"°F":null,f.min_temperature_f!=null?"Low signal "+f.min_temperature_f+"°F":null].filter(Boolean).join(" · ");
+  }
+  async function run(loc){
+    const p=new URLSearchParams({lat:loc.latitude,lon:loc.longitude});if(loc.stateCode)p.set("state",loc.stateCode);
+    const r=await fetch("/api/national-white-christmas?"+p.toString());
+    const d=await N.readJsonResponse(r,"White Christmas estimate unavailable");
+    document.getElementById("result").hidden=false;
+    document.getElementById("probability").textContent=d.estimate.probability==null?"—":d.estimate.probability+"%";
+    document.getElementById("confidence").textContent=(d.estimate.confidence||"unknown")+" confidence · "+String(d.estimate.stage||"").replace(/-/g," ");
+    document.getElementById("answer").textContent=d.verdict.headline+" — "+N.label(loc);
+    document.getElementById("detail").textContent=d.estimate.probability==null?"A usable 1991-2020 snow-depth history could not be established nearby.":("The estimate begins with local Christmas history and is currently "+d.estimate.days_until+" days from December 25.");
+    document.getElementById("target").textContent="Target: "+d.target_date+" · Rounded to the nearest 5 percentage points.";
+    document.getElementById("definition").textContent=d.definition;
+    const c=d.climatology;
+    document.getElementById("history-copy").textContent=c?(c.history.probability+"% of "+c.history.valid_years+" valid 1991-2020 Christmas observations had at least 1 inch of snow on the ground."+(c.history.recent_probability!=null?" Recent 2016-2025 rate: "+c.history.recent_probability+"%.":"")):"Historical station baseline unavailable.";
+    document.getElementById("history-station").textContent=c?(c.station.name+" · "+c.station.distance_miles+" mi away"+(c.station.elevation_ft?" · "+c.station.elevation_ft+" ft":"")):"";
+    document.getElementById("cpc-copy").textContent=outlookText(d.cpc);
+    document.getElementById("pack-copy").textContent=packText(d.current_snowpack);
+    const basis=d.current_snowpack&&d.current_snowpack.basis;
+    document.getElementById("pack-station").textContent=basis?"Measured station context; only pack inside 60 miles can influence the estimate.":"Snowpack begins influencing the estimate inside 45 days.";
+    document.getElementById("forecast-copy").textContent=forecastText(d.christmas_forecast);
+    document.getElementById("forecast-meta").textContent=d.christmas_forecast&&d.christmas_forecast.updated_at?"Updated "+N.fmtDate(d.christmas_forecast.updated_at):"";
+    document.getElementById("factors").innerHTML=(d.estimate.factors||[]).map(function(f){const n=Number(f.effect_points||0);return '<div class="wc-factor"><span>'+N.esc(f.label)+'</span><span class="wc-effect '+(n<0?"negative":"")+'">'+(f.id==="history"?"baseline":N.esc(sign(n)+" pts"))+'</span></div>'}).join("")||'<p class="wc-muted">No factor breakdown available.</p>';
+    document.getElementById("updated").textContent="Retrieved "+N.fmtDate(d.retrieved_at)+(d.degraded?" · one or more source families degraded":"");
+    if(d.imagery&&d.imagery.current_snow_analysis)document.getElementById("snow-map-link").href=d.imagery.current_snow_analysis;
+    if(typeof N.track==="function")N.track("White Christmas Result",{stage:d.estimate.stage||"unknown",confidence:d.estimate.confidence||"unknown",probability_band:d.estimate.probability==null?"unavailable":Math.floor(d.estimate.probability/10)*10,sources_available:(d.sources||[]).filter(function(s){return s.available!==false}).length});
+  }
+  N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
+});
+</script>
+</body></html>
