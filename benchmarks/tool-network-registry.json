@@ -1762,10 +1762,10 @@
       ],
       "networkRole": "bridge",
       "searchTreatment": {
-        "status": "launch"
+        "status": "active"
       },
       "searchEvidence": {
-        "status": "documented-source-and-search-opportunity"
+        "status": "documented-source-live-production-verified"
       }
     }
   ],
