@@ -33,6 +33,10 @@ async function fetchJson(url,options={},timeout=5000){
 async function postJson(url,body,timeout=5500){
   return fetchJson(url,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(body)},timeout);
 }
+async function postAcis(url,body,timeout=5500){
+  const params=new URLSearchParams({params:JSON.stringify(body)});
+  return fetchJson(url,{method:"POST",headers:{"content-type":"application/x-www-form-urlencoded"},body:params.toString()},timeout);
+}
 function bbox(lat,lon,milesRadius=140){
   const dy=milesRadius/69, dx=milesRadius/(69*Math.max(.25,Math.cos(rad(lat))));
   return [lon-dx,lat-dy,lon+dx,lat+dy].map(v=>Math.round(v*10000)/10000);
@@ -85,8 +89,8 @@ function historicalSummary(rows){
   };
 }
 async function historicalClimatology(lat,lon){
-  const meta=await postJson(ACIS_META,{
-    bbox:bbox(lat,lon,180),
+  const meta=await postAcis(ACIS_META,{
+    bbox:bbox(lat,lon,180).join(","),
     sdate:"1991-12-25",
     edate:"2025-12-25",
     elems:"snwd",
@@ -95,7 +99,7 @@ async function historicalClimatology(lat,lon){
   const candidates=stationRows(meta).map(row=>({...row,distance_miles:miles(lat,lon,row.latitude,row.longitude)})).sort((a,b)=>a.distance_miles-b.distance_miles).slice(0,6);
   for(const station of candidates){
     try{
-      const payload=await postJson(ACIS_DATA,{
+      const payload=await postAcis(ACIS_DATA,{
         sid:station.sid,
         sdate:"1991-12-25",
         edate:"2025-12-25",
@@ -133,15 +137,15 @@ function normalizeOutlookResult(result){
   return {category:cat,probability:prob,valid_period:valid,forecast_date:fcst||null,layer_id:result.layerId};
 }
 function containsDecember(valid){
-  const s=String(valid||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
-  return s.includes("DEC")||s==="OND"||s==="NDJ"||s==="DJF"||s.includes("12");
+  const s=String(valid||"").toUpperCase().trim();
+  return /\bDEC\b/.test(s)||/^(OND|NDJ|DJF)\b/.test(s)||/\b12\b/.test(s);
 }
 function decemberPriority(valid){
-  const s=String(valid||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
-  if(s.includes("DEC")||s==="DEC")return 0;
-  if(s==="NDJ")return 1;
-  if(s==="OND")return 2;
-  if(s==="DJF")return 3;
+  const s=String(valid||"").toUpperCase().trim();
+  if(/\bDEC\b/.test(s))return 0;
+  if(/^NDJ\b/.test(s))return 1;
+  if(/^OND\b/.test(s))return 2;
+  if(/^DJF\b/.test(s))return 3;
   return 9;
 }
 function chooseDecemberOutlook(payload){
