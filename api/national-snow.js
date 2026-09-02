@@ -310,7 +310,6 @@ function decision(nohrsc, snotel, forecast) {
       what_changed: changeLanguage(nohrsc, snotel),
       what_next: (f.snow_signal_hours || 0) + " of the next " + (f.hours || 48) + " forecast hours contain a snow signal.",
     };
-    }
     return {
       level: "pack-unverified",
       headline: "No nearby measured snowpack is close enough for a local melt conclusion",
