@@ -263,11 +263,65 @@
       if(mode==='powerboat')step*=1.35;
       return {step,margin};
     }
+    // A search that cannot succeed must fail at once, not after flooding the whole lake. Refusing a
+    // leg between different water bodies took four to eight seconds of synchronous work — that was
+    // the freeze when a portage was added: the planner probed the paddle leg to the far landing,
+    // the A* explored every reachable cell of Lake Superior before giving up, and the browser could
+    // not even repaint. If both ends sit on mapped water and the bodies differ, no paddle exists.
+    function differentWaterBodies(a,b){
+      const ba=waterBodyId(a),bb=waterBodyId(b);
+      return Boolean(ba&&bb&&ba!==bb);
+    }
+    // Total wall-clock budget across the widening attempts. A leg that has not resolved inside it
+    // is refused with the add-a-checkpoint message rather than freezing the page. Callers that
+    // genuinely want the exhaustive search can raise it.
+    const SEARCH_BUDGET_MS=9000;
+    // The async search hands the browser a frame every few hundred expansions, so a long search no
+    // longer costs the page anything but time. It can afford to be patient: a twenty-mile coastal
+    // leg legitimately needs more than nine seconds of expansions.
+    const ASYNC_SEARCH_BUDGET_MS=25000;
+    function gridRoute(...args){
+      const it=gridRouteCore(...args);
+      for(;;){const step=it.next();if(step.done)return step.value;}
+    }
+    async function gridRouteAsync(...args){
+      const it=gridRouteCore(...args);
+      for(;;){
+        const step=it.next();
+        if(step.done)return step.value;
+        await new Promise(resolve=>setTimeout(resolve,0));
+      }
+    }
+    const DIFFERENT_WATER='These checkpoints sit on different water. A paddle route cannot connect them; carry over a portage between them.';
+    const NO_ROUTE='No mapped-water route found between these checkpoints. Add another checkpoint along the water you want to follow.';
+    async function routeSegmentAsync(start,end,mode,forcedStart=null){
+      if(!barrierSegments.length)throw new Error('No mapped water boundaries loaded');
+      const from=forcedStart||start;
+      if(differentWaterBodies(from,end))throw new Error(DIFFERENT_WATER);
+      const riverPath=centerlineRoute(from,end,mode);
+      if(riverPath)return riverPath;
+      const startedAt=Date.now();
+      const direct=miles(from,end),spec=gridSpec(direct,mode);
+      let firstFailure=null;
+      for(const attempt of SEARCH_ATTEMPTS){
+        try{
+          const found=await gridRouteAsync(start,end,mode,forcedStart,spec.step,spec.margin*attempt.marginScale,attempt.nodeCap,startedAt+ASYNC_SEARCH_BUDGET_MS);
+          if(found)return found;
+        }catch(error){
+          if(!firstFailure)firstFailure=error;
+        }
+        if(Date.now()-startedAt>ASYNC_SEARCH_BUDGET_MS)break;
+      }
+      throw firstFailure||new Error(NO_ROUTE);
+    }
     function routeSegment(start,end,mode,forcedStart=null){
       if(!barrierSegments.length)throw new Error('No mapped water boundaries loaded');
-      const riverPath=centerlineRoute(forcedStart||start,end,mode);
+      const from=forcedStart||start;
+      if(differentWaterBodies(from,end))throw new Error(DIFFERENT_WATER);
+      const riverPath=centerlineRoute(from,end,mode);
       if(riverPath)return riverPath;
-      const direct=miles(forcedStart||start,end),spec=gridSpec(direct,mode);
+      const startedAt=Date.now();
+      const direct=miles(from,end),spec=gridSpec(direct,mode);
       // A paddle leg around a headland is routinely several times its straight line: Moskey Basin
       // to Chippewa Harbor is three miles apart and about ten miles of coast. Sizing the search box
       // from the straight line alone therefore reports open, obvious coastal legs as unroutable, so
@@ -275,15 +329,21 @@
       let firstFailure=null;
       for(const attempt of SEARCH_ATTEMPTS){
         try{
-          const found=gridRoute(start,end,mode,forcedStart,spec.step,spec.margin*attempt.marginScale,attempt.nodeCap);
+          const found=gridRoute(start,end,mode,forcedStart,spec.step,spec.margin*attempt.marginScale,attempt.nodeCap,startedAt+SEARCH_BUDGET_MS);
           if(found)return found;
         }catch(error){
           if(!firstFailure)firstFailure=error;
         }
+        if(Date.now()-startedAt>SEARCH_BUDGET_MS)break;
       }
-      throw firstFailure||new Error('No mapped-water route found between these checkpoints. Add another checkpoint along the water you want to follow.');
+      throw firstFailure||new Error(NO_ROUTE);
     }
-    function gridRoute(start,end,mode,forcedStart,baseStep,margin,nodeCap){
+    // The search core is a generator so it can run two ways: drained synchronously by route(), or
+    // driven by routeAsync(), which hands the browser a frame every YIELD_EVERY expansions. The
+    // planner runs the async form, so a long search no longer freezes the page — the map keeps
+    // panning and the status line keeps updating while a leg is still being solved.
+    const YIELD_EVERY=1500;
+    function* gridRouteCore(start,end,mode,forcedStart,baseStep,margin,nodeCap,deadline=Infinity){
       const mid=((forcedStart||start).lat+end.lat)/2;
       let south=Math.max(BOUNDS.south,Math.min((forcedStart||start).lat,end.lat)-margin),north=Math.min(BOUNDS.north,Math.max((forcedStart||start).lat,end.lat)+margin);
       let west=Math.max(BOUNDS.west,Math.min((forcedStart||start).lng,end.lng)-margin),east=Math.min(BOUNDS.east,Math.max((forcedStart||start).lng,end.lng)+margin);
@@ -347,6 +407,10 @@
       const dirs=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
       let loops=0;
       while(heap.length&&loops<90000){
+        // The budget has to bite inside the search, not just between widening attempts: a single
+        // attempt that floods a harbour system can run six seconds on its own.
+        if((loops&255)===0&&Date.now()>deadline)break;
+        if(loops>0&&loops%YIELD_EVERY===0)yield;
         const cur=heapPop(heap);if(!cur)break;
         const known=dist.get(cur.key);if(known==null||Math.abs(known-cur.travel)>1e-7)continue;
         if(cur.key===bk)break;loops++;
@@ -400,6 +464,34 @@
       if(landCrossings>0)throw new Error('Multi-point water route failed final land-crossing validation');
       return {points:out,access_miles:access,land_crossings:landCrossings};
     }
+    async function routeAsync(controlPoints,mode){
+      if(!Array.isArray(controlPoints)||controlPoints.length<2)throw new Error('Two route checkpoints are required');
+      const out=[];let access=0,previousWaterEnd=null;
+      for(let i=1;i<controlPoints.length;i++){
+        const part=await routeSegmentAsync(controlPoints[i-1],controlPoints[i],mode,previousWaterEnd);
+        access+=part.access_miles;
+        for(const p of part.points){
+          const last=out[out.length-1];
+          if(!last||miles(last,p)>.005)out.push(p);
+        }
+        previousWaterEnd=part.points[part.points.length-1]||previousWaterEnd;
+      }
+      const landCrossings=crossingCount(out);
+      if(landCrossings>0)throw new Error('Multi-point water route failed final land-crossing validation');
+      return {points:out,access_miles:access,land_crossings:landCrossings};
+    }
+    async function landingNearAsync(shorePoint,waterReference,mode='paddle'){
+      if(!shorePoint||!waterReference)throw new Error('Portage landing needs both a shore point and waterbody reference');
+      const part=await routeSegmentAsync(waterReference,shorePoint,mode);
+      const landing=part.points?.[part.points.length-1];
+      if(!landing)throw new Error('Could not resolve a mapped-water landing beside the portage');
+      return {
+        lat:Number(landing.lat),lng:Number(landing.lng),
+        access_miles:Number(part.end_access_miles)||0,
+        reference_miles:miles(waterReference,landing),
+        land_crossings:crossingCount(part.points)
+      };
+    }
     function landingNear(shorePoint,waterReference,mode='paddle'){
       if(!shorePoint||!waterReference)throw new Error('Portage landing needs both a shore point and waterbody reference');
       const part=routeSegment(waterReference,shorePoint,mode);
@@ -437,7 +529,7 @@
       return null;
     }
     return {
-      route,landingNear,analyze,coastDistance,boundaryDistance,crosses,crossingCount,isMappedWater,waterBodyId,
+      route,routeAsync,landingNear,landingNearAsync,analyze,coastDistance,boundaryDistance,crosses,crossingCount,isMappedWater,waterBodyId,
       segment_count:barrierSegments.length,
       inland_water_count:waterPolygons.length,
       waterway_node_count:centerNodes.size

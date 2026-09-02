@@ -735,9 +735,14 @@ test('official NPS portages are first-class atomic canoe trip steps', () => {
   assert.match(html, /Click a brown <strong>P#<\/strong> when you want that portage/);
   assert.match(js, /function officialPortageMappedGeometry/);
   assert.match(js, /function officialPortageLandingPair/);
-  assert.match(js, /router\.landingNear/);
+  // The planner now runs the engine's yielding search so a long or failing leg cannot freeze the
+  // page; the synchronous forms stay exported for tests and the refresh endpoint.
+  assert.match(js, /router\.landingNearAsync/);
+  assert.match(js, /router\.routeAsync/);
   assert.match(waterIntelJs, /function landingNear/);
-  assert.match(waterIntelJs, /route,landingNear,analyze,coastDistance,boundaryDistance/);
+  assert.match(waterIntelJs, /async function landingNearAsync/);
+  assert.match(waterIntelJs, /async function routeAsync/);
+  assert.match(waterIntelJs, /route,routeAsync,landingNear,landingNearAsync,analyze,coastDistance,boundaryDistance/);
   assert.match(js, /function selectedOfficialPortageLeg/);
   assert.match(js, /officialMatchMethod:'selected-portage-trip-node'/);
   assert.match(js, /async function addOfficialPortageToTrip/);

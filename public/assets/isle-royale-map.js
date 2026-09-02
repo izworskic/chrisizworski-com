@@ -2794,7 +2794,13 @@
     };
   }
 
-  function officialPortageLandingPair(portage,visual,router) {
+  async function officialPortageLandingPair(portage,visual,router) {
+    if(visual&&visual.landingPair!==undefined)return visual.landingPair;
+    const pair=await officialPortageLandingPairUncached(portage,visual,router);
+    if(visual)visual.landingPair=pair;
+    return pair;
+  }
+  async function officialPortageLandingPairUncached(portage,visual,router) {
     if(!portage||!visual?.geometryResolved||!router?.landingNear)return null;
     if(visual.landingPair?.from&&visual.landingPair?.to)return visual.landingPair;
     const fromRef=officialPortages.anchors?.[portage.from_anchor_id];
@@ -2803,8 +2809,9 @@
     const toTrail=visual.points?.[visual.points.length-1];
     if(!fromRef||!toRef||!fromTrail||!toTrail)return null;
     try {
-      const from=router.landingNear(fromTrail,fromRef,'paddle');
-      const to=router.landingNear(toTrail,toRef,'paddle');
+      const near=typeof router.landingNearAsync==='function'?router.landingNearAsync.bind(router):async (...args)=>router.landingNear(...args);
+      const from=await near(fromTrail,fromRef,'paddle');
+      const to=await near(toTrail,toRef,'paddle');
       if(Number(from.land_crossings)||Number(to.land_crossings))return null;
       if(Number(from.access_miles)>.75||Number(to.access_miles)>.75)return null;
       visual.landingPair={from,to};
@@ -2957,7 +2964,7 @@
     }
     let router=null;
     try { router=await ensureWaterRouter(); } catch (_) {}
-    const landings=officialPortageLandingPair(portage,visual,router);
+    const landings=await officialPortageLandingPair(portage,visual,router);
     if(!landings) {
       status('Portage #'+portage.number+' cannot yet be connected to defensible mapped-water landings. It was not added rather than inventing a landing.');
       return false;
@@ -3224,12 +3231,16 @@
     return chickenboneToMccargoe||mccargoeToChickenbone;
   }
 
-  function canoeWaterLegCandidate(router,a,b) {
+  // Every water search here runs the engine's yielding form. The synchronous search froze the
+  // page: a failing probe explored the whole lake before giving up, and the planner probed one on
+  // every portage added. Now the browser gets a frame every few hundred expansions, and a leg
+  // between different water bodies is refused by the engine in under a millisecond.
+  async function canoeWaterLegCandidate(router,a,b) {
     if(!router||closedVesselWaterConnection(a,b))return null;
     try {
       const direct=distanceMiles(a,b);
       if(direct<=.08&&!router.crosses(a,b))return {type:'paddle',points:[{lat:a.lat,lng:a.lng},{lat:b.lat,lng:b.lng}],miles:direct,verified:true,source:'coastline-safe short water link',access_miles:0};
-      const result=router.route([a,b],'paddle');
+      const result=typeof router.routeAsync==='function'?await router.routeAsync([a,b],'paddle'):router.route([a,b],'paddle');
       const access=Number(result.access_miles)||0;
       if(access>.35)return null;
       const crossings=Number(result.land_crossings ?? router.crossingCount?.(result.points) ?? 0);
@@ -3297,7 +3308,7 @@
     };
   }
 
-  function autoPortageRouteCandidate(router,a,b) {
+  async function autoPortageRouteCandidate(router,a,b) {
     if(!router||officialPortages.state!=='ready'||typeof window.IsleRoyaleWaterIntel?.findPortageChains!=='function')return null;
     const startAnchors=autoPortageAnchorIds(a);
     const endAnchors=autoPortageAnchorIds(b);
@@ -3309,7 +3320,7 @@
       if(!portage.from_anchor_id||!portage.to_anchor_id)continue;
       const visual=officialPortages.visuals.get(portage.id);
       if(!visual?.geometryResolved)continue;
-      const pair=officialPortageLandingPair(portage,visual,router);
+      const pair=await officialPortageLandingPair(portage,visual,router);
       if(!pair)continue;
       usable.push(portage);
       landingPairs.set(portage.id,pair);
@@ -3318,7 +3329,9 @@
 
     const chains=window.IsleRoyaleWaterIntel.findPortageChains(usable,startAnchors,endAnchors,{
       maxEdges:8,
-      maxResults:12,
+      // Four candidates, not twelve: each candidate can cost several water searches, and the
+      // cheapest few are the only ones a paddler would take anyway.
+      maxResults:4,
       edgeCost:autoPortageEdgeCost,
       // Without this the graph is portage edges only, so a trip whose first move is a paddle finds
       // nothing: Rock Harbor to Lake Richie failed outright, because every portage serving Richie
@@ -3345,7 +3358,7 @@
         const forward=step.from_anchor_id===portage.from_anchor_id;
         const entry=forward?pair.from:pair.to;
         const exit=forward?pair.to:pair.from;
-        const water=canoeWaterLegCandidate(router,current,entry);
+        const water=await canoeWaterLegCandidate(router,current,entry);
         if(!water){valid=false;break;}
         paddleMiles+=Number(water.miles)||0;
         portageMiles+=Number(portage.distance_miles)||0;
@@ -3357,7 +3370,7 @@
         current={lat:Number(exit.lat),lng:Number(exit.lng)};
       }
       if(!valid||!derived.length)continue;
-      const tail=canoeWaterLegCandidate(router,current,b);
+      const tail=await canoeWaterLegCandidate(router,current,b);
       if(!tail)continue;
       paddleMiles+=Number(tail.miles)||0;
       return {
@@ -3428,7 +3441,10 @@
           ? selectedOfficialPortageLeg(a,b,b.officialPortageId)
           : null;
         const trail=selectedLeg||canoeTrailLegCandidate(a,b);
-        const water=selectedLeg?null:canoeWaterLegCandidate(router,a,b);
+        const water=selectedLeg?null:await canoeWaterLegCandidate(router,a,b);
+        // The search yields to the browser now, so the user may have moved a point while this leg
+        // was solving. A stale token means a newer resolve owns the route; stop quietly.
+        if(token!==route.waterToken||route.mode!=='canoe')return;
         let leg=null;
         if(override==='portage') {
           if(!trail?.officialPortage)throw new Error('Leg '+i+' attempts an overland crossing that is not a designated NPS portage. Select a brown P# portage on the map.');
@@ -3441,7 +3457,8 @@
         } else if(water) {
           leg=water;
         } else {
-          const autoPortage=override==='auto'?autoPortageRouteCandidate(router,a,b):null;
+          const autoPortage=override==='auto'?await autoPortageRouteCandidate(router,a,b):null;
+          if(token!==route.waterToken||route.mode!=='canoe')return;
           if(autoPortage?.points?.length) {
             route.points.splice(i,0,...autoPortage.points);
             route.mixedReason='Auto-routed through '+autoPortage.portage_count+' designated NPS portage'+(autoPortage.portage_count===1?'':'s')+'.';
@@ -3605,7 +3622,8 @@
       if(token!==route.waterToken||route.mode==='hike'||route.mode==='canoe'||route.points.length<2)return;
       for(let i=legs.length+1;i<route.points.length;i++) {
         const a=route.points[i-1],b=route.points[i];
-        const result=router.route([a,b],route.mode);
+        const result=typeof router.routeAsync==='function'?await router.routeAsync([a,b],route.mode):router.route([a,b],route.mode);
+        if(token!==route.waterToken)return;
         const crossings=Number(result.land_crossings ?? router.crossingCount?.(result.points) ?? 0);
         if(crossings!==0)throw new Error('Water route failed zero-land-crossing validation on leg '+i);
         if(!Array.isArray(result.points)||result.points.length<2)throw new Error('Water route returned no usable geometry on leg '+i);
