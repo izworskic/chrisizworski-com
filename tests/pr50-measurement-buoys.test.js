@@ -24,28 +24,11 @@ test("FVF source-page CTA tracking loads Vercel Analytics before the tracker", (
   }
 });
 
-test("the FVF experiment runs on the clean post-PR-50 window", () => {
+test("the FVF distribution remains shipped after experiment retirement", () => {
   const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
-  const fvf = ledger.experiments.find((item) => item.id === "2026-08-03-fvf-gardening-authority");
-
-  // Read and closed 2026-09-01 from the Search Console 28-day export. What matters now is that
-  // the entry carries a recorded result, not that it is still frozen open.
-  assert.equal(fvf.status, "evaluated");
-  assert.ok(fvf.decisionDate);
-  assert.equal(fvf.releaseDate, "2026-08-12");
-  assert.deepEqual(fvf.evaluationWindow, { start: "2026-08-13", end: "2026-09-09" });
-  assert.equal(fvf.lastSearchFacingChangeDate, "2026-08-11");
-  assert.deepEqual(fvf.invalidatedWindow.evaluationWindow, {
-    start: "2026-08-04",
-    end: "2026-08-31",
-  });
-  assert.match(fvf.invalidatedWindow.reason, /confounding/);
-  assert.equal(fvf.distributionExpansion.status, "released");
-  assert.equal(fvf.distributionExpansion.releaseDate, "2026-08-11");
-  assert.deepEqual(fvf.distributionExpansion.evaluationWindow, {
-    start: "2026-08-13",
-    end: "2026-09-09",
-  });
+  assert.equal(ledger.status, "retired");
+  assert.equal(ledger.operatingMode, "ship-and-observe");
+  assert.deepEqual(ledger.activeExperiments, []);
 });
 
 test("the Michigan Ice root freshness signal is generated and matches the sitemap", () => {
@@ -82,10 +65,6 @@ test("Great Lakes Buoys matches live-buoy intent without regressing the tool", (
   const titleMarkup = (html.match(/<title>(.*?)<\/title>/s) || [])[1] || "";
   const title = titleMarkup.replaceAll("&amp;", "&");
   const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
-  const experiment = ledger.experiments.find(
-    (item) => item.id === "2026-08-12-great-lakes-buoys-live-intent",
-  );
-
   assert.equal(title, "Great Lakes Buoys Live: Waves & Water Temp | Chris Izworski");
   assert.ok(title.length <= 60, `buoy title is ${title.length} characters`);
   assert.ok(html.includes("<h1 class=\"page-title\">Great Lakes Buoys Live: Waves, Wind &amp; Water Temperature</h1>"));
@@ -98,19 +77,9 @@ test("Great Lakes Buoys matches live-buoy intent without regressing the tool", (
   assert.ok(html.includes("fetch('/api/buoys')"));
   assert.ok(html.includes('id="activityPills"'));
   assert.ok(html.includes('id="stationList"'));
-
-  assert.deepEqual(experiment.baseline, {
-    impressions: 1276,
-    clicks: 25,
-    ctr: 0.0196,
-    averagePosition: 14.54,
-  });
-  assert.deepEqual(experiment.target, { ctr: 0.025, averagePosition: 12 });
-  assert.equal(experiment.status, "evaluated");
-  assert.ok(experiment.result?.measured, "read must record the measured page row");
-  assert.ok(experiment.decisionDate, "read must record a decision date");
-  assert.equal(experiment.releaseDate, "2026-08-12");
-  assert.deepEqual(experiment.evaluationWindow, { start: "2026-08-13", end: "2026-09-09" });
+  assert.equal(ledger.status, "retired");
+  assert.equal(ledger.operatingMode, "ship-and-observe");
+  assert.deepEqual(ledger.activeExperiments, []);
 });
 
 test("PR 50 page freshness stamps match sitemap.xml", () => {

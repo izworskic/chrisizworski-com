@@ -19,8 +19,7 @@ check("product identity remains in app schema", page.includes('"name": "Michigan
 check("statewide hub remains canonical to itself", hub.includes('rel="canonical" href="https://chrisizworski.com/fall-color/'));
 check("baseline exact", experiment.baseline.impressions === 54 && experiment.baseline.clicks === 0 && experiment.baseline.averagePosition === 10.07);
 check("CTR target explicit", experiment.targets.ctrAtOrAbove === 0.02 && experiment.targets.averagePositionAtOrBetterThan === 12);
-const item = ledger.experiments.find((entry) => entry.id === "2026-08-22-fall-weekend-planner-ctr");
-check("ledger entry is declared and either open or read", (item?.status === "pending-clean-window" || (item?.status === "evaluated" && Boolean(item?.result))) && Boolean(item?.lastSearchFacingChangeDate));
+check("growth ledger is retired into ship-and-observe mode", ledger.status === "retired" && ledger.operatingMode === "ship-and-observe" && ledger.activeExperiments?.length === 0);
 console.log("\nFALL WEEKEND PLANNER CTR BENCHMARK");
 console.log("=".repeat(72));
 console.log("Baseline: 54 impressions, 0 clicks, position 10.07");

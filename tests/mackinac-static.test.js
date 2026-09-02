@@ -9,13 +9,13 @@ const css = readFileSync(path.join(root, "public/assets/mackinac-bridge-live.css
 const js = readFileSync(path.join(root, "public/assets/mackinac-bridge-live.js"), "utf8");
 
 test("Mackinac Bridge Live has indexable metadata and valid structured data", () => {
-  assert.match(html, /<title>Mackinac Bridge Conditions Today: Live Status &amp; Cameras<\/title>/);
+  assert.match(html, /<title>Is the Mackinac Bridge Open Today\? Live Status &amp; Cameras<\/title>/);
   assert.ok(
     html.includes(
       '<link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-live/">',
     ),
   );
-  assert.match(html, /name="description" content="[^"]*official status/i);
+  assert.match(html, /name="description" content="[^"]*open now/i);
   assert.ok(html.includes('"@type": "WebApplication"'));
   assert.ok(html.includes('"@type": "Offer"'));
   assert.doesNotMatch(html, /"@type": "FAQPage"/);

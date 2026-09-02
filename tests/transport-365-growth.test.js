@@ -61,7 +61,7 @@ test("365 transport experiment records observed baselines and a page-specific fr
 
 test("Mackinac flagship search surface stays frozen while the companion pages run", () => {
   const html = read("public/mackinac-bridge-live/index.html");
-  assert.match(html, /<title>Mackinac Bridge Conditions Today: Live Status &amp; Cameras<\/title>/);
+  assert.match(html, /<title>Is the Mackinac Bridge Open Today\? Live Status &amp; Cameras<\/title>/);
   assert.match(html, /<h1>Mackinac Bridge Conditions Today<\/h1>/);
   assert.ok(html.includes('id="mackinac-conditions-answer"'));
   assert.match(html, /Is the Mackinac Bridge open today\?/i);

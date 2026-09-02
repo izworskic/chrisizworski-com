@@ -21,8 +21,7 @@ check("visible access FAQ exists", page.includes('Where are the Manistee River p
 check("structured access FAQ exists", page.includes('Is there a Manistee River map with put-ins and take-outs?'));
 check("baseline is exact", benchmark.baseline.impressions === 72 && benchmark.baseline.clicks === 0 && benchmark.baseline.averagePosition === 11.4);
 check("top ten target is explicit", benchmark.targets.averagePositionAtOrBetterThan === 10 && benchmark.targets.ctrAtOrAbove === 0.015);
-const experiment = experiments.experiments.find((item) => item.id === "2026-08-22-manistee-paddling-page-one");
-check("experiment ledger entry exists", (experiment?.status === "pending-clean-window" || (experiment?.status === "evaluated" && Boolean(experiment?.result))) && experiment?.paths?.includes("/michigan-paddling/manistee-river/"));
+check("growth ledger is retired into ship-and-observe mode", experiments.status === "retired" && experiments.operatingMode === "ship-and-observe" && experiments.activeExperiments?.length === 0);
 const focus = portfolio.focusPortfolio.find((item) => item.id === "manistee");
 check("portfolio points at actual Search Console owner", focus?.surface === "https://chrisizworski.com/michigan-paddling/manistee-river/" && focus?.action === "PROTECT" && !focus?.toolId);
 check("Manistee leaves immediate queue", !portfolio.immediateQueue.join(" ").toLowerCase().includes("manistee"));

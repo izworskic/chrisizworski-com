@@ -39,10 +39,7 @@ check("frost protected H1", frost.includes('<h1>Michigan Last Frost Dates by Cit
 check("zone baseline", experiment.pages[0].baseline.impressions === 34 && experiment.pages[0].baseline.clicks === 0 && experiment.pages[0].baseline.averagePosition === 8.26);
 check("heirloom baseline", experiment.pages[1].baseline.impressions === 30 && experiment.pages[1].baseline.clicks === 0 && experiment.pages[1].baseline.averagePosition === 10.37);
 check("targets not weakened", experiment.pages.every((p) => p.target.ctr >= 0.02 && p.target.stretchCtr >= 0.03));
-const zoneLedger = ledger.experiments.find((e) => e.id === "2026-08-22-zone-6a-calendar-ctr");
-const heirloomLedger = ledger.experiments.find((e) => e.id === "2026-08-22-heirloom-tomatoes-ctr");
-check("zone ledger entry is declared and either open or read", (zoneLedger?.status === "pending-clean-window" || (zoneLedger?.status === "evaluated" && Boolean(zoneLedger?.result))) && Boolean(zoneLedger?.lastSearchFacingChangeDate));
-check("heirloom ledger entry is declared and either open or read", (heirloomLedger?.status === "pending-clean-window" || (heirloomLedger?.status === "evaluated" && Boolean(heirloomLedger?.result))) && Boolean(heirloomLedger?.lastSearchFacingChangeDate));
+check("growth ledger is retired into ship-and-observe mode", ledger.status === "retired" && ledger.operatingMode === "ship-and-observe" && ledger.activeExperiments?.length === 0);
 check("latest snapshot advanced", portfolio.measurement?.latestLeadingSnapshot?.spreadsheetId === "1dm2AC6FN4lU9P0viRs3mhVtg098AuvwEdNbKw-PsEVw" && portfolio.measurement?.latestLeadingSnapshot?.exportedThrough === "2026-08-20");
 console.log("\nGARDEN PAGE-ONE CTR SPRINT");
 console.log("=".repeat(72));

@@ -36,26 +36,21 @@ check(
 );
 
 check(
-  "Measurement cadence agrees with the experiment ledger",
+  "Measurement cadence agrees with ship-and-observe governance",
   governance.measurement.primaryWindowDays === 28 &&
-    experiments.measurementProtocol?.windowDays === governance.measurement.primaryWindowDays &&
     governance.measurement.leadingIndicatorWindowDays === 7 &&
-    governance.measurement.doNotDeclareWinnerEarly === true,
+    governance.measurement.doNotDeclareWinnerEarly === true &&
+    experiments.status === "retired" &&
+    experiments.operatingMode === "ship-and-observe" &&
+    Array.isArray(experiments.activeExperiments),
   10,
 );
 
-const requiredFreezeSurfaces = [
-  "title",
-  "metaDescription",
-  "h1",
-  "firstAnswer",
-  "structuredData",
-  "canonical",
-  "indexability",
-];
 check(
-  "Protected experiments freeze every search-facing surface",
-  requiredFreezeSurfaces.every((surface) => experiments.measurementProtocol?.freezeDuringWindow?.includes(surface)) &&
+  "Experiment retirement removes stale search-facing freezes",
+  experiments.status === "retired" &&
+    experiments.activeExperiments.length === 0 &&
+    /No title, description, H1, canonical, structured-data, or indexability experiment freeze is active/.test(experiments.note || "") &&
     governance.serpRules.protectRunningExperiments === true,
   10,
 );
