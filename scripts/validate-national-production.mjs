@@ -58,7 +58,28 @@ for(const p of places){
     if(!x.sources||!x.colored_leaves)throw new Error("missing observation contract");
   });
 }
-for(const route of ["/national-tools/","/national-tools/aurora/","/national-tools/rivers/","/national-tools/frost/","/national-tools/planting/","/national-tools/fall-color/","/national-tools/garden/","/national-tools/fall/","/national-tools/water/","/national-tools/night-sky/"]){
+
+const coastalControls=[
+  {name:"Grand Haven coastal",lat:43.063,lon:-86.228,expectCoastal:true},
+  {name:"Folly Beach coastal",lat:32.655,lon:-79.940,expectCoastal:true},
+  {name:"Denver inland control",lat:39.7392,lon:-104.9903,expectCoastal:false}
+];
+let coastalCovered=0;
+for(const p of coastalControls){
+  await check(p.name+" coastal contract",async()=>{
+    const x=await get("/api/national-coastal?lat="+p.lat+"&lon="+p.lon,{timeout:20000});
+    if(typeof x.coastal_available!=="boolean"||!x.decision||!Array.isArray(x.sources)||x.sources.length!==3)throw new Error("missing coastal decision/source contract");
+    if(p.expectCoastal&&x.coastal_available)coastalCovered+=1;
+    if(!p.expectCoastal&&x.coastal_available)throw new Error("inland control unexpectedly received coastal coverage");
+    if(!p.expectCoastal&&x.decision.level!=="inland-or-uncovered")throw new Error("inland control did not fail closed");
+    if(x.sources.some(source=>source&&source.available===false&&source.stale===true))throw new Error("unavailable source marked stale instead of unavailable");
+  });
+}
+await check("coastal production has real coastal coverage",async()=>{
+  if(coastalCovered<1)throw new Error("neither coastal control returned any live coastal source coverage");
+});
+
+for(const route of ["/national-tools/","/national-tools/aurora/","/national-tools/rivers/","/national-tools/coastal/","/national-tools/frost/","/national-tools/planting/","/national-tools/fall-color/","/national-tools/garden/","/national-tools/fall/","/national-tools/water/","/national-tools/night-sky/"]){
   await check(route+" page",async()=>{
     const body=await get(route,{json:false});
     if(!/<title>[^<]+<\/title>/i.test(body)||!body.includes("Chris Izworski"))throw new Error("page shell incomplete");
