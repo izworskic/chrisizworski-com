@@ -5,67 +5,99 @@ const {
   sourceMeta,
 } = require("../lib/national-outdoor");
 
-const STAT = "https://waterservices.usgs.gov/nwis/stat/";
+const STAT = "https://api.waterdata.usgs.gov/statistics/v0/observationNormals";
 const NWPS = "https://api.water.noaa.gov/nwps/v1";
 const NWS = "https://api.weather.gov";
-const UA = "ChrisIzworskiNationalRiverContext/2.0 (+https://chrisizworski.com/national-tools/rivers/)";
+const UA = "ChrisIzworskiNationalRiverContext/3.0 (+https://chrisizworski.com/national-tools/rivers/)";
 
-async function fetchText(url, timeoutMs = 3000) {
-  const response = await fetch(url, {
-    headers: { accept: "text/plain", "user-agent": UA },
-    signal: AbortSignal.timeout(timeoutMs),
-  });
-  if (!response.ok) throw new Error(`${new URL(url).hostname} returned ${response.status}`);
-  return response.text();
-}
 async function fetchJson(url, timeoutMs = 1800, options = {}) {
+  const headers = { accept: "application/json", "user-agent": UA };
+  if (process.env.USGS_API_KEY && new URL(url).hostname === "api.waterdata.usgs.gov") {
+    headers["X-Api-Key"] = process.env.USGS_API_KEY;
+  }
   const response = await fetch(url, {
-    headers: { accept: "application/json", "user-agent": UA },
+    headers,
     signal: AbortSignal.timeout(timeoutMs),
   });
   if (response.status === 404 && options.allow404) return null;
   if (!response.ok) throw new Error(`${new URL(url).hostname} returned ${response.status}`);
   return response.json();
 }
-function parseStatsRdb(body, now = new Date()) {
-  const lines = String(body || "").split(/\r?\n/).filter(Boolean);
-  const hi = lines.findIndex((line) => !line.startsWith("#") && line.includes("site_no") && line.includes("month_nu") && line.includes("day_nu"));
-  if (hi < 0) return new Map();
-  const headers = lines[hi].split("\t");
-  const index = (name) => headers.indexOf(name);
+function arrayValue(value) {
+  if (Array.isArray(value)) return value;
+  if (typeof value !== "string") return [];
+  const trimmed = value.trim();
+  if (!trimmed) return [];
+  try {
+    const parsed = JSON.parse(trimmed);
+    if (Array.isArray(parsed)) return parsed;
+  } catch {}
+  return trimmed.replace(/^\[|\]$/g, "").split(",").map((item) => item.trim().replace(/^["']|["']$/g, ""));
+}
+function statisticsRows(payload, depth = 0) {
+  if (depth > 4 || payload == null) return [];
+  if (Array.isArray(payload)) return payload.flatMap((item) => statisticsRows(item, depth + 1));
+  if (typeof payload !== "object") return [];
+  const row = payload.properties && typeof payload.properties === "object" ? payload.properties : payload;
+  if (row.monitoring_location_id || row.monitoringLocationId) return [row];
+  return Object.values(payload).flatMap((value) => statisticsRows(value, depth + 1));
+}
+function parseStatistics(payload, now = new Date()) {
   const month = now.getUTCMonth() + 1;
   const day = now.getUTCDate();
+  const dayKey = `${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
   const out = new Map();
-  for (const line of lines.slice(hi + 2)) {
-    if (!line || line.startsWith("#")) continue;
-    const parts = line.split("\t");
-    if (Number(parts[index("month_nu")]) !== month || Number(parts[index("day_nu")]) !== day) continue;
-    const id = parts[index("site_no")];
-    if (!id) continue;
-    out.set(id, {
-      p10: finite(parts[index("p10_va")]),
-      p25: finite(parts[index("p25_va")]),
-      p50: finite(parts[index("p50_va")]),
-      p75: finite(parts[index("p75_va")]),
-      p90: finite(parts[index("p90_va")]),
-      begin_year: finite(parts[index("begin_yr")]),
-      end_year: finite(parts[index("end_yr")]),
-      count: finite(parts[index("count_nu")]),
+  for (const row of statisticsRows(payload)) {
+    const type = String(row.time_of_year_type || row.normal_type || "").toLowerCase();
+    if (type && type !== "day_of_year" && type !== "doy") continue;
+    if (row.time_of_year && String(row.time_of_year) !== dayKey) continue;
+    const id = String(row.monitoring_location_id || row.monitoringLocationId || "").replace(/^USGS-/, "");
+    if (!/^\d{5,15}$/.test(id)) continue;
+    const percentiles = arrayValue(row.percentiles);
+    const values = arrayValue(row.values);
+    if (!percentiles.length || percentiles.length !== values.length) continue;
+    const byPercentile = new Map(percentiles.map((percentile, index) => [Number(percentile), finite(values[index])]));
+    const stats = {
+      p10: byPercentile.get(10) ?? null,
+      p25: byPercentile.get(25) ?? null,
+      p50: byPercentile.get(50) ?? null,
+      p75: byPercentile.get(75) ?? null,
+      p90: byPercentile.get(90) ?? null,
+      begin_year: null,
+      end_year: null,
+      count: finite(row.sample_count),
       month,
       day,
-    });
+    };
+    if ([stats.p10, stats.p25, stats.p50, stats.p75, stats.p90].every((value) => value != null)) out.set(id, stats);
   }
   return out;
 }
-async function dailyStatistics(ids) {
-  if (!ids.length) return new Map();
+async function dailyStatisticsForSite(id, now = new Date()) {
+  const month = String(now.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(now.getUTCDate()).padStart(2, "0");
   const url = new URL(STAT);
-  url.searchParams.set("format", "rdb");
-  url.searchParams.set("sites", ids.join(","));
-  url.searchParams.set("parameterCd", "00060");
-  url.searchParams.set("statReportType", "daily");
-  url.searchParams.set("statTypeCd", "p10,p25,p50,p75,p90");
-  return parseStatsRdb(await fetchText(url, 3000));
+  url.searchParams.set("monitoring_location_id", `USGS-${id}`);
+  url.searchParams.set("parameter_code", "00060");
+  url.searchParams.set("computation_type", "percentile");
+  url.searchParams.set("normal_type", "DOY");
+  url.searchParams.set("start_date", `${month}-${day}`);
+  url.searchParams.set("end_date", `${month}-${day}`);
+  url.searchParams.set("page_size", "100");
+  return parseStatistics(await fetchJson(url, 2600), now);
+}
+async function dailyStatistics(ids, now = new Date()) {
+  if (!ids.length) return new Map();
+  const results = await Promise.allSettled(ids.map((id) => dailyStatisticsForSite(id, now)));
+  const out = new Map();
+  for (const result of results) {
+    if (result.status !== "fulfilled") continue;
+    for (const [id, stats] of result.value) out.set(id, stats);
+  }
+  if (!out.size && results.some((result) => result.status === "rejected")) {
+    throw new Error("USGS statistics API unavailable for requested monitoring locations");
+  }
+  return out;
 }
 async function nwpsGaugeIndex(lat, lon) {
   const span = 2.4;
@@ -231,7 +263,7 @@ module.exports = async function handler(req, res) {
     sources: [
       sourceMeta({
         name: "USGS approved daily statistics",
-        url: "https://waterservices.usgs.gov/docs/statistics/",
+        url: "https://api.waterdata.usgs.gov/statistics/v0/docs",
         updatedAt: null,
         available: stats.size > 0,
         status: "historical climatology",
@@ -257,7 +289,8 @@ module.exports = async function handler(req, res) {
 module.exports._test = {
   normalizeForecastTrend,
   normalizeNwps,
-  parseStatsRdb,
+  parseStatistics,
+  statisticsRows,
   parseWindMph,
   validSiteIds,
   weatherWindow,
