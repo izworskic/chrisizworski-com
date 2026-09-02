@@ -322,7 +322,7 @@
       "tidal timing where valid"
     ],
     "hardRules": [
-      "Official High or Moderate beach risk is never downgraded by buoy or tide context.",
+      "Official NWS High or Moderate beach risk is never downgraded by buoy or tide context.",
       "No universal beach, swimming or boating safety score.",
       "Missing source data remains unavailable rather than neutral or favorable.",
       "NDBC station distance is visible because an offshore station is not exact beach truth.",
