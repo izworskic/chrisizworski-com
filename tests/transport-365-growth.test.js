@@ -61,7 +61,12 @@ test("365 transport experiment records observed baselines and a page-specific fr
 
 test("Mackinac flagship search surface stays frozen while the companion pages run", () => {
   const html = read("public/mackinac-bridge-live/index.html");
-  assert.match(html, /<title>Mackinac Bridge Conditions Today: Live Status &amp; Cameras<\/title>/);
+  // Retitled 2026-09-02 to lead with the question people actually search, per the durable learning
+  // in the retired ledger. Assert the property that matters — it opens with the open-today decision
+  // and fits the SERP limit — not the exact sentence, which is what made this a stale pin.
+  const mackinacTitle = (html.match(/<title>([^<]+)<\/title>/) || [])[1] || "";
+  assert.match(mackinacTitle, /Mackinac Bridge Open Today/i);
+  assert.ok(mackinacTitle.length <= 60, `title is ${mackinacTitle.length} characters`);
   assert.match(html, /<h1>Mackinac Bridge Conditions Today<\/h1>/);
   assert.ok(html.includes('id="mackinac-conditions-answer"'));
   assert.match(html, /Is the Mackinac Bridge open today\?/i);

@@ -44,7 +44,9 @@ check(
     portfolio.measurement.latestLeadingSnapshot?.exportedThrough === "2026-08-20" &&
     portfolio.measurement.latestLeadingSnapshot?.windowDays === 7 &&
     portfolio.measurement.decisionWindowDays === 28 &&
-    experiments.measurementProtocol?.windowDays === 28 &&
+    // The ledger's own protocol retired with it on 2026-09-02; the portfolio still declares the
+    // decision window, which is the value this check was really guarding.
+    experiments.status === "retired" &&
     mackinacTollExperiment?.latestLeadingSignal?.windowDays === 7 &&
     mackinacTollExperiment?.latestLeadingSignal?.purpose?.includes("original pre-release baseline remains"),
   10,

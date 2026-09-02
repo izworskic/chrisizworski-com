@@ -40,7 +40,8 @@ const authorityEntry = authority.focusPortfolio.find((item) => item.id === "outd
 const registryItems = registry.tools || registry.nodes || registry.entries || [];
 const registryEntry = registryItems.find((item) => item.id === "outdoors-now");
 const repair = actions.repairs.find((item) => item.id === "outdoors-now-growth-operating-system");
-const experiment = experiments.experiments.find((item) => item.id === "2026-08-28-outdoors-now-growth-system");
+// The ledger retired on 2026-09-02; this property's row went with it.
+const experiment = (experiments.experiments || []).find((item) => item.id === "2026-08-28-outdoors-now-growth-system") || null;
 const ownedRoot = owned.roots.find((item) => item.host === "michiganoutdoorsnow.chrisizworski.com");
 const brandedSupport = branded.supportingControlledProperties.find(
   (item) => item.origin === "michiganoutdoorsnow.chrisizworski.com",
@@ -101,33 +102,31 @@ check(
 );
 
 check(
-  "Tool registry carries the attributed measurement contract",
-  registryEntry?.searchTreatment?.status === "active-measurement-window" &&
-    registryEntry?.searchTreatment?.launchPages === 54 &&
-    registryEntry?.searchTreatment?.measurementContract ===
-      "https://michiganoutdoorsnow.chrisizworski.com/growth-manifest.json" &&
-    registryEntry?.measurement?.decisionWindowDays === 28,
+  // The measurement-window fields were cleared on 2026-09-02 with the rest of the experiment
+  // system; the registry now simply records the tool as active. What must still hold is that the
+  // tool is registered and not claiming a window it no longer has.
+  "Tool registry records the tool without claiming a measurement window",
+  registryEntry?.searchTreatment?.status === "active" &&
+    registryEntry?.searchTreatment?.measurementContract === undefined,
   10,
 );
 
 check(
-  "Network action registers the growth loop without pretending it is measured yet",
+  "Network action registers the growth loop and records that it shipped",
   repair?.implementationRepo === "izworskic/michigan-outdoors-now" &&
     repair?.implementationPr === 40 &&
-    ["ready-for-release", "released-measuring"].includes(repair?.status),
+    ["ready-for-release", "released-measuring", "released"].includes(repair?.status),
   10,
 );
 
+// With the ledger retired there is no row to record a baseline on. What must still hold is the
+// honesty rule this check existed for: the product does not claim attributed search performance it
+// has never measured.
 check(
-  "Experiment ledger records the clean attributed baseline",
-  experiment?.target?.completeWindowDays === 28 &&
-    experiment?.target?.familyExpansionGate?.impressions === 250 &&
-    experiment?.baseline?.product?.status === "none-before-attribution-release" &&
-    // "evaluated" belongs here too: an experiment that has been read and closed still records the
-    // clean attributed baseline, and freezing this list to the open states would mean the gate can
-    // only pass while the window is unresolved.
-    (["ready-for-release", "running"].includes(experiment?.status) ||
-      (experiment?.status === "evaluated" && Boolean(experiment?.result))),
+  "No attributed performance is claimed before it is measured",
+  experiments.status === "retired" &&
+    (experiment === null ||
+      experiment?.baseline?.product?.status === "none-before-attribution-release"),
   10,
 );
 

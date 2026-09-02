@@ -9,13 +9,23 @@ const css = readFileSync(path.join(root, "public/assets/mackinac-bridge-live.css
 const js = readFileSync(path.join(root, "public/assets/mackinac-bridge-live.js"), "utf8");
 
 test("Mackinac Bridge Live has indexable metadata and valid structured data", () => {
-  assert.match(html, /<title>Mackinac Bridge Conditions Today: Live Status &amp; Cameras<\/title>/);
+  // Retitled 2026-09-02 to lead with the question people actually search, per the durable learning
+  // in the retired ledger. Assert the property that matters — it opens with the open-today decision
+  // and fits the SERP limit — not the exact sentence, which is what made this a stale pin.
+  const mackinacTitle = (html.match(/<title>([^<]+)<\/title>/) || [])[1] || "";
+  assert.match(mackinacTitle, /Mackinac Bridge Open Today/i);
+  assert.ok(mackinacTitle.length <= 60, `title is ${mackinacTitle.length} characters`);
   assert.ok(
     html.includes(
       '<link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-live/">',
     ),
   );
-  assert.match(html, /name="description" content="[^"]*official status/i);
+  // Rewritten 2026-09-02 with the title. What the description must still do is answer the
+  // open-now question and name what the page shows, rather than repeat a specific phrase.
+  const mackinacDescription = (html.match(/name="description" content="([^"]+)"/) || [])[1] || "";
+  assert.match(mackinacDescription, /open/i);
+  assert.match(mackinacDescription, /camera/i);
+  assert.ok(mackinacDescription.length <= 158, `description is ${mackinacDescription.length} characters`);
   assert.ok(html.includes('"@type": "WebApplication"'));
   assert.ok(html.includes('"@type": "Offer"'));
   assert.doesNotMatch(html, /"@type": "FAQPage"/);

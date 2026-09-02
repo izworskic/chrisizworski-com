@@ -26,26 +26,14 @@ test("FVF source-page CTA tracking loads Vercel Analytics before the tracker", (
 
 test("the FVF experiment runs on the clean post-PR-50 window", () => {
   const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
-  const fvf = ledger.experiments.find((item) => item.id === "2026-08-03-fvf-gardening-authority");
-
-  // Read and closed 2026-09-01 from the Search Console 28-day export. What matters now is that
-  // the entry carries a recorded result, not that it is still frozen open.
-  assert.equal(fvf.status, "evaluated");
-  assert.ok(fvf.decisionDate);
-  assert.equal(fvf.releaseDate, "2026-08-12");
-  assert.deepEqual(fvf.evaluationWindow, { start: "2026-08-13", end: "2026-09-09" });
-  assert.equal(fvf.lastSearchFacingChangeDate, "2026-08-11");
-  assert.deepEqual(fvf.invalidatedWindow.evaluationWindow, {
-    start: "2026-08-04",
-    end: "2026-08-31",
-  });
-  assert.match(fvf.invalidatedWindow.reason, /confounding/);
-  assert.equal(fvf.distributionExpansion.status, "released");
-  assert.equal(fvf.distributionExpansion.releaseDate, "2026-08-11");
-  assert.deepEqual(fvf.distributionExpansion.evaluationWindow, {
-    start: "2026-08-13",
-    end: "2026-09-09",
-  });
+  // The growth-experiment ledger was retired on 2026-09-02: the owner ended every Search Console
+  // experiment early, so there is no experiments array and no active freeze to assert. What must
+  // still hold is that the ledger says so plainly and keeps what was learned, rather than going
+  // quiet and leaving a reader to assume a window is still running.
+  assert.equal(ledger.status, "retired");
+  assert.deepEqual(ledger.activeExperiments, []);
+  assert.ok(Array.isArray(ledger.durableLearnings) && ledger.durableLearnings.length >= 4);
+  assert.equal(ledger.experiments, undefined, "a retired ledger must not carry a stale experiments array");
 });
 
 test("the Michigan Ice root freshness signal is generated and matches the sitemap", () => {
@@ -82,9 +70,7 @@ test("Great Lakes Buoys matches live-buoy intent without regressing the tool", (
   const titleMarkup = (html.match(/<title>(.*?)<\/title>/s) || [])[1] || "";
   const title = titleMarkup.replaceAll("&amp;", "&");
   const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
-  const experiment = ledger.experiments.find(
-    (item) => item.id === "2026-08-12-great-lakes-buoys-live-intent",
-  );
+
 
   assert.equal(title, "Great Lakes Buoys Live: Waves & Water Temp | Chris Izworski");
   assert.ok(title.length <= 60, `buoy title is ${title.length} characters`);
@@ -99,18 +85,8 @@ test("Great Lakes Buoys matches live-buoy intent without regressing the tool", (
   assert.ok(html.includes('id="activityPills"'));
   assert.ok(html.includes('id="stationList"'));
 
-  assert.deepEqual(experiment.baseline, {
-    impressions: 1276,
-    clicks: 25,
-    ctr: 0.0196,
-    averagePosition: 14.54,
-  });
-  assert.deepEqual(experiment.target, { ctr: 0.025, averagePosition: 12 });
-  assert.equal(experiment.status, "evaluated");
-  assert.ok(experiment.result?.measured, "read must record the measured page row");
-  assert.ok(experiment.decisionDate, "read must record a decision date");
-  assert.equal(experiment.releaseDate, "2026-08-12");
-  assert.deepEqual(experiment.evaluationWindow, { start: "2026-08-13", end: "2026-09-09" });
+  // Ledger row gone with the retired experiment system; the page assertions above are the part
+  // that still protects this tool.
 });
 
 test("PR 50 page freshness stamps match sitemap.xml", () => {

@@ -10,6 +10,7 @@ try{actions=JSON.parse(await read('benchmarks/tool-network-actions.json'));}catc
 const toolsHtml=await read('public/tools/index.html');
 const docs=await read('docs/TOOL_NETWORK_REGISTRY.md');
 const pkg=JSON.parse(await read('package.json'));
+const experiments=JSON.parse(await read('benchmarks/growth-experiments.json'));
 
 const failures=[];
 const fatal=[];
@@ -75,9 +76,13 @@ check('Non-leaf nodes are not isolated',stranded.length===0,3,stranded.map(t=>t.
 const groups=registry.cannibalizationGroups||[];
 const badGroups=groups.filter(g=>!idSet.has(g.owner)||(g.supports||[]).some(x=>!idSet.has(x))||(g.supports||[]).includes(g.owner)||!g.rule);
 check('Cannibalization groups resolve cleanly',badGroups.length===0,6,badGroups.map(g=>g.intent).join(', '),true);
-const protectedIds=['aurora','soo-locks','ship-tracker','frost-dates','tomato-planting'];
-const missingProtected=protectedIds.filter(id=>registry.tools.find(t=>t.id===id)?.searchTreatment?.status!=='protected');
-check('Known active experiments remain protected',missingProtected.length===0,5,missingProtected.join(', '),true);
+// Every Search Console experiment was ended by the owner on 2026-09-02, so no tool sits under a
+// protected window any more. The rule that replaces it is the inverse: a tool may not CLAIM
+// protection the retired ledger cannot back, because a stale 'protected' flag is exactly what
+// stops a page being fixed when nothing is actually being measured.
+const flaggedProtected=registry.tools.filter(t=>t.searchTreatment?.status==='protected').map(t=>t.id);
+const ledgerRetired=String(experiments?.status||'')==='retired';
+check('No tool claims a protected window the ledger cannot back',!ledgerRetired||flaggedProtected.length===0,5,flaggedProtected.join(', '),true);
 check('Search evidence allows unknowns without fabrication',tools.some(t=>t.searchEvidence.status==='unknown')&&tools.some(t=>t.searchEvidence.status==='measured'),4,'registry must retain both measured and unknown states');
 
 // Best-fit candidate model — 15

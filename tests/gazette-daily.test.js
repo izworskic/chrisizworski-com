@@ -65,21 +65,17 @@ test("current Gazette headline is distributed across six relevant owned pages", 
 test("Gazette benchmark records unknown search metrics honestly and the released experiment window", () => {
   const benchmark = JSON.parse(read("benchmarks/gazette-daily-growth.json"));
   const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
-  const experiment = ledger.experiments.find((item) => item.id === "2026-08-03-great-lakes-gazette-daily");
-
   assert.equal(benchmark.baseline.searchConsole.landingPageImpressions, null);
   assert.equal(benchmark.baseline.searchConsole.status, "not-isolated-in-visible-export");
   assert.equal(benchmark.baseline.publication.aisHealthyPortsLatestEdition, 0);
   assert.equal(benchmark.targets.first28Days.dailyEditionAvailability, 1);
   assert.equal(benchmark.targets.first28Days.editionsWithAtLeastFiveHealthyAisPorts, 0.95);
-  assert.ok(experiment);
-  // Read and closed 2026-09-01 from the Search Console 28-day export. What matters now is that
-  // the entry carries a recorded result, not that it is still frozen open.
-  assert.equal(experiment.status, "evaluated");
-  assert.ok(experiment.result?.measured, "read must record the measured page row");
-  assert.ok(experiment.decisionDate, "read must record a decision date");
-  assert.equal(experiment.releaseDate, "2026-08-03");
-  assert.deepEqual(experiment.evaluationWindow, { start: "2026-08-04", end: "2026-08-31" });
-  assert.equal(experiment.target.widgetEditionOpenRate, 0.02);
-  assert.ok(experiment.publicationQualityRepairs.some((item) => item.date === "2026-08-09"));
+  // The growth-experiment ledger was retired on 2026-09-02: the owner ended every Search Console
+  // experiment early, so there is no experiments array and no active freeze to assert. What must
+  // still hold is that the ledger says so plainly and keeps what was learned, rather than going
+  // quiet and leaving a reader to assume a window is still running.
+  assert.equal(ledger.status, "retired");
+  assert.deepEqual(ledger.activeExperiments, []);
+  assert.ok(Array.isArray(ledger.durableLearnings) && ledger.durableLearnings.length >= 4);
+  assert.equal(ledger.experiments, undefined, "a retired ledger must not carry a stale experiments array");
 });

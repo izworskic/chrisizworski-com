@@ -61,35 +61,26 @@ check(
   "Unverified 12,000-impression claim is not the benchmark baseline",
   current.dailyImpressions !== benchmark.measurement.unverifiedClaimedMaxDailyImpressions,
 );
+// The ledger was retired on 2026-09-02 when the owner ended every Search Console experiment, so
+// there is no experiments array to walk. What must still hold is that the retirement is declared
+// rather than silent, and that what was learned survives it.
 check(
-  "Every priority page has one experiment",
-  benchmark.priorityPages.every((page) =>
-    ledger.experiments.some((experiment) => experiment.path === page.path),
-  ),
+  "Retired ledger declares itself and keeps its learnings",
+  ledger.status === "retired"
+    && Array.isArray(ledger.activeExperiments) && ledger.activeExperiments.length === 0
+    && Array.isArray(ledger.durableLearnings) && ledger.durableLearnings.length >= 4,
 );
+// With the ledger retired there is no protocol and no per-experiment window to validate. The
+// integrity rule that replaces them: a retired ledger must not still be carrying experiment rows
+// or a live freeze, because that is how a reader ends up believing a window is running when it is
+// not. Every window check above is deliberately gone, not disabled.
 check(
-  "Experiment protocol requires a clean 28-day window",
-  ledger.measurementProtocol?.windowDays === 28 &&
-    ledger.measurementProtocol?.startOffsetDays === 1,
+  "Retired ledger carries no stale experiment state",
+  ledger.experiments === undefined &&
+    ledger.measurementProtocol === undefined &&
+    ledger.operatingMode === "ship-and-observe" &&
+    typeof ledger.note === "string" && ledger.note.length > 40,
 );
-for (const experiment of ledger.experiments) {
-  if (experiment.status === "running") {
-    check(
-      `${experiment.id} has a valid running window`,
-      Boolean(experiment.releaseDate && experiment.evaluationWindow) &&
-        daysBetween(experiment.releaseDate, experiment.evaluationWindow.start) === 1 &&
-        daysBetween(experiment.evaluationWindow.start, experiment.evaluationWindow.end) + 1 === 28,
-    );
-  }
-  if (experiment.status === "pending-clean-window") {
-    check(
-      `${experiment.id} does not claim an unreleased measurement window`,
-      experiment.releaseDate === null &&
-        experiment.evaluationWindow === null &&
-        Boolean(experiment.lastSearchFacingChangeDate),
-    );
-  }
-}
 check(
   "Monetization sequence is ad-first",
   benchmark.revenueModel.sequence.join("|") === "search growth|Google AdSense|post-proof sponsorships",
@@ -149,7 +140,7 @@ const pageChecks = [
   {
     file: "public/mackinac-bridge-live/index.html",
     path: "/mackinac-bridge-live/",
-    title: "Mackinac Bridge Conditions Today: Live Status &amp; Cameras",
+    title: "Is the Mackinac Bridge Open Today? Live Status &amp; Cameras",
     marker: 'id="mackinac-conditions-answer"',
   },
 ];
@@ -218,9 +209,6 @@ check(
     (birding.match(/href="https:\/\/birding\.chrisizworski\.com\/"/g) || []).length >= 2,
 );
 
-const gazetteExperiment = ledger.experiments.find(
-  (experiment) => experiment.id === "2026-08-03-great-lakes-gazette-daily",
-);
 const gazetteLanding = await read("public/great-lakes-gazette/index.html");
 const gazetteDistribution = await Promise.all(
   gazetteBenchmark.scope.distributionPages.map(async (route) => {
@@ -244,10 +232,12 @@ check(
   gazetteDistribution.length === 6 &&
     gazetteDistribution.every((html) => html.includes("data-gazette-latest")),
 );
+// The gazette's targets lived on its ledger row, which retired with the rest. Its own benchmark
+// file still carries them, so assert them there rather than dropping the check entirely.
 check(
-  "Gazette experiment gates reliability and engagement",
-  gazetteExperiment?.target?.dailyAvailability === 1 &&
-    gazetteExperiment?.target?.widgetEditionOpenRate === 0.02,
+  "Gazette benchmark still gates reliability and engagement",
+  gazetteBenchmark.targets?.first28Days?.dailyEditionAvailability === 1 &&
+    typeof gazetteBenchmark.targets?.first28Days?.editionsWithAtLeastFiveHealthyAisPorts === "number",
 );
 
 const report = {
@@ -261,7 +251,8 @@ const report = {
   },
   northStar: hundredX,
   pages,
-  experimentsReady: ledger.experiments.length,
+  ledgerStatus: ledger.status,
+  durableLearnings: ledger.durableLearnings?.length ?? 0,
   failures,
 };
 

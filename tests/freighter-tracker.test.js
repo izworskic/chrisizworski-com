@@ -80,18 +80,13 @@ test("ship tracker structured data and internal discovery surfaces are aligned",
 
 test("freighter experiment is recorded as the released August 3 treatment", () => {
   const ledger = JSON.parse(read("benchmarks/growth-experiments.json"));
-  const experiment = ledger.experiments.find((item) => item.id === "2026-08-03-great-lakes-ship-tracker");
-
-  assert.ok(experiment);
-  assert.deepEqual(experiment.baseline, { impressions: 996, clicks: 1, ctr: 0.001, averagePosition: 23.87 });
-  assert.equal(experiment.target.impressionsMultiple, 3);
-  assert.equal(experiment.target.ctr, 0.015);
-  assert.equal(experiment.target.averagePosition, 15);
-  // Read and closed 2026-09-01 from the Search Console 28-day export. What matters now is that
-  // the entry carries a recorded result, not that it is still frozen open.
-  assert.equal(experiment.status, "evaluated");
-  assert.ok(experiment.result?.measured, "read must record the measured page row");
-  assert.ok(experiment.decisionDate, "read must record a decision date");
-  assert.equal(experiment.releaseDate, "2026-08-03");
-  assert.deepEqual(experiment.evaluationWindow, { start: "2026-08-04", end: "2026-08-31" });
+  // The growth-experiment ledger was retired on 2026-09-02: the owner ended every Search Console
+  // experiment early, so there is no experiments array and no active freeze to assert. What must
+  // still hold is that the ledger says so plainly and keeps what was learned, rather than going
+  // quiet and leaving a reader to assume a window is still running.
+  assert.equal(ledger.status, "retired");
+  assert.deepEqual(ledger.activeExperiments, []);
+  assert.ok(Array.isArray(ledger.durableLearnings) && ledger.durableLearnings.length >= 4);
+  assert.equal(ledger.experiments, undefined, "a retired ledger must not carry a stale experiments array");
+  assert.ok(ledger.durableLearnings.some((line) => /Soo Locks/i.test(line)));
 });

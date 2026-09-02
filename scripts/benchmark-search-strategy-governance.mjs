@@ -35,12 +35,16 @@ check(
   `pillar total ${pillarTotal}`,
 );
 
+// The experiment ledger was retired on 2026-09-02 when the owner ended every Search Console
+// experiment, so there is no measurementProtocol left to agree with. Governance still declares its
+// own cadence, and the ledger must say plainly that it is retired rather than going quiet.
 check(
-  "Measurement cadence agrees with the experiment ledger",
+  "Measurement cadence is declared, and the retired ledger says so",
   governance.measurement.primaryWindowDays === 28 &&
-    experiments.measurementProtocol?.windowDays === governance.measurement.primaryWindowDays &&
     governance.measurement.leadingIndicatorWindowDays === 7 &&
-    governance.measurement.doNotDeclareWinnerEarly === true,
+    governance.measurement.doNotDeclareWinnerEarly === true &&
+    experiments.status === "retired" &&
+    experiments.measurementProtocol === undefined,
   10,
 );
 
@@ -53,10 +57,14 @@ const requiredFreezeSurfaces = [
   "canonical",
   "indexability",
 ];
+// With no running experiments there is no freeze to enforce. The rule that still matters is that
+// governance keeps the protection RULE on the books for the next experiment, and that the ledger is
+// not claiming active experiments while saying it is retired.
 check(
-  "Protected experiments freeze every search-facing surface",
-  requiredFreezeSurfaces.every((surface) => experiments.measurementProtocol?.freezeDuringWindow?.includes(surface)) &&
-    governance.serpRules.protectRunningExperiments === true,
+  "Protection rule survives the retirement, with nothing left frozen",
+  requiredFreezeSurfaces.length === 7 &&
+    governance.serpRules.protectRunningExperiments === true &&
+    Array.isArray(experiments.activeExperiments) && experiments.activeExperiments.length === 0,
   10,
 );
 
