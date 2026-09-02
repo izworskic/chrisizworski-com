@@ -6,6 +6,8 @@ on:
       - 'agent/national-*'
     paths:
       - 'scripts/validate-national-production.mjs'
+      - 'api/national-*.js'
+      - 'public/national-tools/**'
       - '.github/workflows/national-tools-production-smoke.yml'
   workflow_dispatch:
   schedule:
