@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "updated": "2026-09-02",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
@@ -1767,6 +1767,97 @@
       "searchEvidence": {
         "status": "documented-source-live-production-verified"
       }
+    },
+    {
+      "id": "national-white-christmas",
+      "name": "Will I Have a White Christmas?",
+      "canonical": "https://chrisizworski.com/national-tools/white-christmas/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "winter-snow",
+      "primaryIntent": "White Christmas probability and current-year outlook by U.S. location",
+      "seasons": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "united-states"
+      ],
+      "personas": [
+        "holiday-planner",
+        "winter-traveler",
+        "snow-lover",
+        "family-planner"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "documented-source-and-search-opportunity"
+      }
+    },
+    {
+      "id": "white-christmas-map",
+      "name": "White Christmas Probability Map",
+      "canonical": "https://chrisizworski.com/white-christmas-probability-map/",
+      "aliases": [],
+      "kind": "supporting-content",
+      "cluster": "winter-snow",
+      "primaryIntent": "historical White Christmas probability map 1991-2020",
+      "seasons": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "united-states"
+      ],
+      "personas": [
+        "holiday-planner",
+        "climate-researcher",
+        "winter-traveler"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "documented-primary-source"
+      }
+    },
+    {
+      "id": "white-christmas-michigan",
+      "name": "White Christmas Michigan",
+      "canonical": "https://chrisizworski.com/white-christmas-michigan/",
+      "aliases": [],
+      "kind": "supporting-content",
+      "cluster": "winter-snow",
+      "primaryIntent": "Michigan White Christmas odds history and forecast context",
+      "seasons": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "michigan"
+      ],
+      "personas": [
+        "michigan-resident",
+        "holiday-planner",
+        "winter-traveler"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "documented-primary-source"
+      }
     }
   ],
   "relationships": [
@@ -2393,6 +2484,54 @@
       "strength": "optional",
       "surface": "snow-tool",
       "reason": "Northern Michigan skiers can move from broad measured snowpack context to the existing XC live conditions surface for local trail-oriented detail."
+    },
+    {
+      "from": "national-white-christmas",
+      "to": "national-snow",
+      "type": "evidence-depth",
+      "strength": "strong",
+      "surface": "white-christmas-tool",
+      "reason": "Current measured snowpack becomes a seasonally weighted ingredient inside 45 days of Christmas."
+    },
+    {
+      "from": "national-snow",
+      "to": "national-white-christmas",
+      "type": "seasonal-decision-next",
+      "strength": "strong",
+      "surface": "snow-tool",
+      "reason": "Users checking December snowpack can continue into the distinct Christmas snow probability decision."
+    },
+    {
+      "from": "national-white-christmas",
+      "to": "white-christmas-map",
+      "type": "climatology-depth",
+      "strength": "strong",
+      "surface": "white-christmas-tool",
+      "reason": "The map page owns the historic spatial-probability explanation while the live tool owns this-year synthesis."
+    },
+    {
+      "from": "national-white-christmas",
+      "to": "white-christmas-michigan",
+      "type": "geography-depth",
+      "strength": "strong",
+      "surface": "white-christmas-tool",
+      "reason": "Michigan users can move into a state-specific climatology deep dive without duplicating the national live-tool intent."
+    },
+    {
+      "from": "white-christmas-map",
+      "to": "national-white-christmas",
+      "type": "current-year-handoff",
+      "strength": "strong",
+      "surface": "white-christmas-map",
+      "reason": "Historical map users can continue into a place-specific current-year estimate."
+    },
+    {
+      "from": "white-christmas-michigan",
+      "to": "national-white-christmas",
+      "type": "current-year-handoff",
+      "strength": "strong",
+      "surface": "white-christmas-michigan",
+      "reason": "Michigan climatology users can check their actual city or ZIP in the live estimator."
     }
   ],
   "cannibalizationGroups": [
@@ -2511,6 +2650,16 @@
         "national-rivers"
       ],
       "rule": "National Snow owns measured pack plus transparent weather-driven melt/refreeze context. Michigan XC keeps trail, grooming and ski-planning intent; Rivers keeps measured flow and official river forecasts. Do not create national groomed-trail, avalanche, road-access or runoff-response claims from Snow."
+    },
+    {
+      "intent": "White Christmas forecast, odds, climatology and map",
+      "owner": "national-white-christmas",
+      "supports": [
+        "white-christmas-map",
+        "white-christmas-michigan",
+        "national-snow"
+      ],
+      "rule": "The live national tool owns current-year place-specific White Christmas probability/forecast intent. The map page owns historical national-map intent. Michigan owns state-specific climatology depth. Snowpack remains the measured snowpack canonical. Do not create city/state variants without distinct data depth and search evidence."
     }
   ],
   "expansionOpportunities": [
