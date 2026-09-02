@@ -26,6 +26,11 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Sep 2 2026: citation-readiness answers rewritten to be self-contained on three tools.
+  // Re-crawl after production release, then remove this declaration.
+  "/great-lakes-beaches/",
+  "/great-lakes-buoys/",
+  "/great-lakes-freighter-tracking/",
   // Sep 1 2026: current USA-NPN ground-observation enrichment on the canonical national fall-color tool.
   // Re-crawl after production release, then remove this declaration.
   "/national-tools/fall-color/",
