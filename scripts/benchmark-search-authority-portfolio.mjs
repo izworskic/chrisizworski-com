@@ -39,12 +39,14 @@ check(
 );
 
 check(
-  "Fresh leading Search Console signal is explicit and does not replace experiment windows",
+  "Fresh leading Search Console signal is explicit in ship-and-observe mode",
   portfolio.measurement.latestLeadingSnapshot?.spreadsheetId === "1dm2AC6FN4lU9P0viRs3mhVtg098AuvwEdNbKw-PsEVw" &&
     portfolio.measurement.latestLeadingSnapshot?.exportedThrough === "2026-08-20" &&
     portfolio.measurement.latestLeadingSnapshot?.windowDays === 7 &&
     portfolio.measurement.decisionWindowDays === 28 &&
-    experiments.measurementProtocol?.windowDays === 28 &&
+    experiments.status === "retired" &&
+    experiments.operatingMode === "ship-and-observe" &&
+    experiments.activeExperiments?.length === 0 &&
     mackinacTollExperiment?.latestLeadingSignal?.windowDays === 7 &&
     mackinacTollExperiment?.latestLeadingSignal?.purpose?.includes("original pre-release baseline remains"),
   10,
