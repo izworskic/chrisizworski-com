@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-09-01",
+  "objective": "Grow qualified national search demand with a small set of distinct intent hubs instead of thin city/ZIP pages.",
+  "minimumScore": 90,
+  "weights": {
+    "distinctIntent": 25,
+    "decisionUsefulness": 20,
+    "canonicalSafety": 20,
+    "sourceTruth": 15,
+    "internalNetworkFit": 10,
+    "crawlableValue": 10
+  },
+  "hardVetoes": [
+    "no-location-doorway-pages",
+    "no-cloned-tool-primary-intent",
+    "no-michigan-canonical-cannibalization",
+    "no-unsupported-safety-or-probability-claims",
+    "no-live-data-claims-without-the-underlying-tool"
+  ],
+  "hubs": [
+    {"route":"/national-tools/garden/","intent":"combine frost risk with crop timing","primaryTools":["/national-tools/frost/","/national-tools/planting/"]},
+    {"route":"/national-tools/fall/","intent":"plan a fall trip using foliage timing plus separate freeze context","primaryTools":["/national-tools/fall-color/","/national-tools/frost/"]},
+    {"route":"/national-tools/water/","intent":"learn how to interpret river flow, trend, historical context and official forecast","primaryTools":["/national-tools/rivers/"]},
+    {"route":"/national-tools/night-sky/","intent":"plan aurora viewing using separate signal, cloud, darkness and moon context","primaryTools":["/national-tools/aurora/"]}
+  ]
+}

@@ -29,6 +29,9 @@ const intentionalChanges = new Set([
   // Sep 1 2026: current USA-NPN ground-observation enrichment on the canonical national fall-color tool.
   // Re-crawl after production release, then remove this declaration.
   "/national-tools/fall-color/",
+  // Sep 1 2026: add distinct national intent hubs and discovery links from the canonical national tools hub.
+  // Re-crawl after production release, then remove this declaration.
+  "/national-tools/",
   // Aug 28 2026: Michigan Outdoors Now joined the canonical Chris entity/project network.
   // These are additive identity/project links plus freshness stamps; re-crawl after production release, then remove.
   "/chris-izworski/",

@@ -1,0 +1,28 @@
+name: National tools production smoke
+
+on:
+  push:
+    branches:
+      - 'agent/national-*'
+    paths:
+      - 'scripts/validate-national-production.mjs'
+      - 'api/national-*.js'
+      - 'public/national-tools/**'
+      - '.github/workflows/national-tools-production-smoke.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '17 11 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate national production across U.S. regions
+        run: node scripts/validate-national-production.mjs

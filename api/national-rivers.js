@@ -227,15 +227,62 @@ function normalize(payload, sites) {
       };
     });
 }
-async function observations(sites) {
+async function observations(sites, parameterCodes = Object.values(PARAMETERS), timeoutMs = 1600) {
   if (!sites.length) return [];
   const url = new URL(IV);
   url.searchParams.set("format", "json");
   url.searchParams.set("sites", sites.map((site) => site.id).join(","));
-  url.searchParams.set("parameterCd", Object.values(PARAMETERS).join(","));
+  url.searchParams.set("parameterCd", parameterCodes.join(","));
   url.searchParams.set("period", "P1D");
   url.searchParams.set("siteStatus", "all");
-  return normalize(await fetchJson(url, 2500), sites);
+  return normalize(await fetchJson(url, timeoutMs), sites);
+}
+function mergeEnrichment(core, enrichment) {
+  const byId = new Map((enrichment || []).map((gauge) => [gauge.id, gauge]));
+  return (core || []).map((gauge) => {
+    const extra = byId.get(gauge.id);
+    if (!extra) return gauge;
+    return {
+      ...gauge,
+      water_temp_f: extra.water_temp_f,
+      sensors: extra.sensors,
+      sensor_availability: extra.sensor_availability,
+    };
+  });
+}
+async function loadObservations(sites) {
+  const coreSites = sites.slice(0, 6);
+  const sensorSites = sites.slice(0, 3);
+  const coreParameters = [PARAMETERS.discharge, PARAMETERS.gageHeight];
+  const [core, enrichment] = await Promise.allSettled([
+    observations(coreSites, coreParameters, 1400),
+    observations(sensorSites, Object.values(PARAMETERS), 1200),
+  ]);
+
+  if (core.status === "fulfilled") {
+    const gauges = enrichment.status === "fulfilled"
+      ? mergeEnrichment(core.value, enrichment.value)
+      : core.value;
+    return {
+      gauges,
+      degraded: enrichment.status !== "fulfilled",
+      detail: enrichment.status === "rejected"
+        ? "Core USGS flow/stage observations loaded; optional sensor enrichment is temporarily unavailable."
+        : null,
+    };
+  }
+  if (enrichment.status === "fulfilled") {
+    return {
+      gauges: enrichment.value,
+      degraded: true,
+      detail: "The broader USGS core request failed; a reduced nearest-gauge response is being shown.",
+    };
+  }
+  return {
+    gauges: [],
+    degraded: true,
+    detail: "Live USGS observations are temporarily unavailable. No substitute flow or stage values were generated.",
+  };
 }
 
 module.exports = async function handler(req, res) {
@@ -252,13 +299,16 @@ module.exports = async function handler(req, res) {
   if (lat == null || lon == null) return res.status(400).json({ error: "Valid latitude and longitude are required" });
 
   try {
-    const sites = nearestSites(lat, lon, 10);
-    const gauges = await observations(sites);
+    const sites = nearestSites(lat, lon, 6);
+    const live = await loadObservations(sites);
+    const gauges = live.gauges;
+    if (live.degraded) res.setHeader("Cache-Control", gauges.length ? "public, s-maxage=60, stale-while-revalidate=180" : "no-store");
     const now = new Date().toISOString();
     const newestObserved = gauges.map((gauge) => gauge.measured_at).filter(Boolean).sort().at(-1) || null;
     return res.status(200).json({
       retrieved_at: now,
-      degraded: false,
+      degraded: live.degraded,
+      degraded_reason: live.detail,
       context_pending: Boolean(gauges.length),
       discovery: "Local USGS active-streamflow site index + exact-site instantaneous values",
       discovery_index: {
@@ -276,7 +326,9 @@ module.exports = async function handler(req, res) {
           updatedAt: newestObserved,
           staleAfterMinutes: 180,
           available: Boolean(gauges.length),
-          status: "provisional flow, stage and available water-quality observations",
+          status: live.degraded
+            ? (gauges.length ? "core observations available; optional USGS enrichment degraded" : "USGS live observations unavailable")
+            : "provisional flow, stage and available water-quality observations",
         }),
       ],
       disclaimer: "Nearest-gauge discovery uses a periodically refreshed index of active USGS streamflow sites; displayed readings are fetched live from USGS by exact site ID and remain provisional. Water temperature, turbidity, dissolved oxygen, conductivity and pH appear only where the selected gauge actually reports those parameters. Historical percentiles, weather and NOAA river forecast context load separately. No gauge reading or derived lens can determine whether paddling, swimming, wading, fishing, or boating is safe.",
@@ -297,6 +349,8 @@ module.exports._test = {
   changeAbsolute,
   changePercent,
   haversine,
+  loadObservations,
+  mergeEnrichment,
   nearestSites,
   normalize,
   sampleSeries,
