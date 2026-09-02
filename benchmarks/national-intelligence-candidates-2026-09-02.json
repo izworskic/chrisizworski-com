@@ -113,10 +113,9 @@
         "What tide/current phase am I entering?"
       ],
       "signals": [
-        "NDBC waves/wind/water temperature",
-        "CO-OPS tide/current observations and predictions",
-        "NWS marine forecast/advisories",
-        "sunrise/sunset"
+        "NWS Day 1 / Day 2 official beach rip/swim-risk, surf, wind, weather and water-temperature guidance",
+        "NDBC nearby wave/wind/water-temperature observations and roughly three-hour change",
+        "NOAA CO-OPS high/low tide predictions where a valid tidal station exists"
       ],
       "competition": "Most competitors are single-source surf, tide or buoy dashboards; synthesis around a planning window is distinct.",
       "scores": {
@@ -124,8 +123,19 @@
         "loss": 9,
         "searchOpportunity": 92
       },
-      "gate": "eligible",
-      "disposition": "next shippable standalone family if Phase 0 merges"
+      "gate": "implemented-pending-verification",
+      "disposition": "Phase 3 implementation complete on the coastal canonical; verify preview/live source behavior and full repository gate before merge.",
+      "implementation": {
+        "route": "/national-tools/coastal/",
+        "api": "/api/national-coastal",
+        "sourceFamilies": [
+          "NWS Marine Beach Forecast Summary Day 1/Day 2",
+          "NDBC active-station observations",
+          "NOAA CO-OPS high/low tide predictions"
+        ],
+        "networkRole": "optional coastal signal in the Decision Desk; distinct Michigan handoff retained",
+        "truthBoundary": "Official NWS beach risk cannot be downgraded by buoy or tide context; missing data never becomes Low/favorable."
+      }
     },
     {
       "id": "snowpack-melt",
@@ -688,7 +698,7 @@
   ],
   "decision": {
     "blockedHighestValue": "smoke-clear-air",
-    "nextEligibleStandalone": "coastal-water-window",
+    "nextEligibleStandalone": "snowpack-melt",
     "nextEligibleSeasonal": "snowpack-melt",
     "nextExistingCanonicalEnhancements": [
       "outdoor-weather-window-engine",
@@ -697,6 +707,9 @@
       "river-rain-runoff-context"
     ],
     "canonicalRule": "Rip-current, tide/current, freshwater-beach and coastal-visibility intents are lenses inside Coastal initially; do not fragment them into competing canonicals.",
-    "longTailRule": "No candidate authorizes location-page generation. Location surfaces still require the national location-admission benchmark plus actual measured demand."
+    "longTailRule": "No candidate authorizes location-page generation. Location surfaces still require the national location-admission benchmark plus actual measured demand.",
+    "completedStandalone": [
+      "coastal-water-window"
+    ]
   }
 }

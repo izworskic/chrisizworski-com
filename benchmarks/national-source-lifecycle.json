@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "updated": "2026-09-02",
   "purpose": "Machine-readable lifecycle and migration audit for national outdoor data dependencies.",
   "sources": {
@@ -59,6 +59,44 @@
       ],
       "lifecycle": "Suomi-NPP product delivery is scheduled to cease November 1, 2026; do not make a new smoke product dependent on VIIRS_SNPP_NRT.",
       "semantics": "A hotspot is a satellite fire/thermal detection, not proof that a specific fire caused smoke at a user location."
+    },
+    "nwsMarineBeachForecast": {
+      "source": "NOAA/National Weather Service Marine Beach Forecast Summary",
+      "class": "official Day 1 / Day 2 beach forecast guidance",
+      "runtimeEndpoint": "https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/marine_beachforecast_summary/MapServer",
+      "status": "production-supported",
+      "authentication": "none",
+      "coverage": "U.S. marine beaches including Great Lakes forecast areas where local NWS offices publish the product",
+      "semantics": "Official rip-current/swim-risk, surf, winds, weather and water-temperature fields remain forecast guidance tied to the named forecast area.",
+      "dominanceRule": "When a High or Moderate official beach-risk category exists, observation or tide context may not downgrade or override it.",
+      "freshnessRule": "Treat the issued beach forecast as stale after 24 hours unless a newer Day 1/Day 2 product is retrieved.",
+      "failureMode": "NDBC observations and CO-OPS predictions may still render separately; missing NWS coverage must never be converted into Low risk."
+    },
+    "ndbcRealtime": {
+      "source": "NOAA National Data Buoy Center",
+      "class": "near-real-time buoy and coastal station observations",
+      "runtimeEndpoints": [
+        "https://www.ndbc.noaa.gov/activestations.xml",
+        "https://www.ndbc.noaa.gov/data/realtime2/"
+      ],
+      "status": "production-supported",
+      "authentication": "none",
+      "stationRule": "Choose the nearest active reporting met/water-quality station within the bounded coastal search radius and display its distance.",
+      "freshnessRule": "Treat selected observations as stale after 90 minutes.",
+      "semantics": "Wave, wind and water-temperature values are observations at the named station, not proof of exact conditions at a searched beach.",
+      "failureMode": "A failed or missing NDBC station never creates neutral/favorable coastal conditions and never blanks an available NWS beach forecast."
+    },
+    "noaaCoopsTides": {
+      "source": "NOAA Center for Operational Oceanographic Products and Services",
+      "class": "astronomical tide predictions",
+      "metadataEndpoint": "https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations.json?type=tidepredictions",
+      "runtimeEndpoint": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter",
+      "status": "production-supported",
+      "authentication": "none",
+      "queryContract": "36-hour high/low predictions, English units, GMT, MLLW datum at the selected tide-prediction station",
+      "semantics": "Predicted high/low tide timing is not observed water level and is not a swim- or boating-safety determination.",
+      "greatLakesRule": "Do not invent tide context for Great Lakes locations when no valid CO-OPS tide-prediction station is returned.",
+      "failureMode": "Tides degrade independently; missing predictions remain unavailable."
     }
   },
   "gates": [

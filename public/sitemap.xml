@@ -754,7 +754,7 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/national-tools/</loc>
-    <lastmod>2026-09-01</lastmod>
+    <lastmod>2026-09-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
@@ -767,6 +767,12 @@
   <url>
     <loc>https://chrisizworski.com/national-tools/rivers/</loc>
     <lastmod>2026-09-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://chrisizworski.com/national-tools/coastal/</loc>
+    <lastmod>2026-09-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
@@ -803,7 +809,7 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/national-tools/water/</loc>
-    <lastmod>2026-09-01</lastmod>
+    <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>

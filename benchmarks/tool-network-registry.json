@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-08-31",
+  "updated": "2026-09-02",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -1712,6 +1712,46 @@
       "searchEvidence": {
         "status": "new"
       }
+    },
+    {
+      "id": "national-coastal",
+      "name": "U.S. Beach & Coastal Conditions",
+      "canonical": "https://chrisizworski.com/national-tools/coastal/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "coastal-recreation",
+      "primaryIntent": "U.S. beach and coastal conditions today by location",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "united-states-coasts",
+        "great-lakes"
+      ],
+      "personas": [
+        "beachgoer",
+        "swimmer",
+        "surfer",
+        "coastal-traveler"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "documented-source-and-search-opportunity"
+      }
     }
   ],
   "relationships": [
@@ -2290,6 +2330,30 @@
       "surface": "tool-navigation",
       "reason": "Autumn travelers may combine dark-sky aurora planning with fall timing.",
       "strength": "optional"
+    },
+    {
+      "from": "national-coastal",
+      "to": "beach-report",
+      "type": "geography-handoff",
+      "strength": "strong",
+      "surface": "coastal-tool",
+      "reason": "Michigan beach users should move to the deeper Michigan Great Lakes beach canonical rather than receive a national clone."
+    },
+    {
+      "from": "national-coastal",
+      "to": "great-lakes-buoys",
+      "type": "evidence-depth",
+      "strength": "strong",
+      "surface": "coastal-tool",
+      "reason": "Great Lakes users can inspect the dedicated station dashboard after the national coastal synthesis."
+    },
+    {
+      "from": "national-rivers",
+      "to": "national-coastal",
+      "type": "water-sibling",
+      "strength": "optional",
+      "surface": "national-water",
+      "reason": "Water-planning visitors may need the distinct coastal decision system when their trip moves from rivers to beaches or shoreline."
     }
   ],
   "cannibalizationGroups": [
@@ -2389,6 +2453,15 @@
         "manistee-field-map"
       ],
       "rule": "National Rivers owns generic nearby gauge conditions; Michigan field maps own river-specific access, route and planning intent."
+    },
+    {
+      "intent": "U.S. beach and coastal conditions",
+      "owner": "national-coastal",
+      "supports": [
+        "beach-report",
+        "great-lakes-buoys"
+      ],
+      "rule": "National Coastal owns broad U.S. location-based beach/coastal conditions. Michigan Beach Report retains the deeper Michigan beach canonical, and Great Lakes Buoys retains station-observation intent."
     }
   ],
   "expansionOpportunities": [

@@ -1,18 +1,18 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>U.S. Outdoor Tools | Chris Izworski</title>
-<meta name="description" content="Live U.S. outdoor tools for aurora, river conditions, frost, planting and fall foliage using NOAA, NWS, USGS and phenology data.">
+<meta name="description" content="Live U.S. outdoor tools for aurora, rivers, coastal water, frost, planting and fall foliage using NOAA, NWS, USGS and phenology data.">
 <link rel="canonical" href="https://chrisizworski.com/national-tools/">
 <meta name="robots" content="index,follow,max-image-preview:large"><link rel="stylesheet" href="/assets/national-tools.css?v=20260901-compare1">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"CollectionPage","@id":"https://chrisizworski.com/national-tools/#page","url":"https://chrisizworski.com/national-tools/","name":"U.S. Outdoor Tools","description":"Live U.S. outdoor tools for aurora, river conditions, frost, planting and fall foliage using NOAA, NWS, USGS and phenology data.","dateModified":"2026-09-01","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script></head>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","author":{"@id":"https://chrisizworski.com/#person"}},{"@type":"CollectionPage","@id":"https://chrisizworski.com/national-tools/#page","url":"https://chrisizworski.com/national-tools/","name":"U.S. Outdoor Tools","description":"Live U.S. outdoor tools for aurora, rivers, coastal water, frost, planting and fall foliage using NOAA, NWS, USGS and phenology data.","dateModified":"2026-09-02","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script></head>
 <body><header class="site-head"><div class="wrap head-in"><a class="brand" href="/">Chris Izworski</a><nav class="nav" aria-label="Primary"><a href="/national-tools/">U.S. Outdoor Tools</a><a href="/tools/">Michigan Tools</a></nav></div></header>
 <main>
-<section class="hero"><div class="wrap"><div class="eyebrow">Outdoor conditions · United States</div><h1>U.S. Outdoor Tools</h1><p class="lede">One place. Five outdoor signals. See what matters first, then open the underlying NOAA, NWS, USGS and phenology decision tool.</p></div></section>
+<section class="hero"><div class="wrap"><div class="eyebrow">Outdoor conditions · United States</div><h1>U.S. Outdoor Tools</h1><p class="lede">One place. Five core outdoor signals, plus coastal context where it applies. See what matters first, then open the underlying source-backed decision tool.</p></div></section>
 
 <section class="section desk-entry"><div class="wrap">
 <form id="hub-location" class="locator"><label class="sr-only" for="hub-q">City or ZIP</label><input id="hub-q" autocomplete="postal-code" placeholder="Enter a U.S. city or ZIP" required><button class="btn" type="submit">Build my outdoor desk</button><button type="button" class="secondary-btn geo-btn" data-use-location>Use my location</button></form><p class="near-me-note">Works anywhere in the United States: tap <strong>Use my location</strong> for conditions near me, or type any U.S. city or ZIP code.</p>
 <p class="location-privacy">Optional. Your browser shares a location rounded to about 0.001° only after you tap. It is used to load nearby conditions and is not included in analytics.</p>
-<div class="status" aria-live="polite">Choose a place to load the five decision signals independently.</div>
+<div class="status" aria-live="polite">Choose a place to load the five core decision signals independently, with coastal context added where source coverage exists.</div>
 <div class="saved-row"><strong>Saved places</strong><div id="saved-places" class="place-chips"></div></div>
 
 <section id="outdoor-desk" class="outdoor-desk" hidden aria-live="polite">
@@ -23,7 +23,7 @@
 </section>
 
 <section id="place-compare" class="place-compare" hidden aria-live="polite">
-  <div class="compare-title"><div><span class="tool-kicker">Saved-place comparison</span><h2>Compare two places across the same five signals</h2></div><p>No overall winner or safety score. Each source-backed signal stays separate so you can decide what matters for the trip.</p></div>
+  <div class="compare-title"><div><span class="tool-kicker">Saved-place comparison</span><h2>Compare two places across the same core signals</h2></div><p>No overall winner or safety score. Coastal context appears only where coverage exists, and every source-backed signal stays separate.</p></div>
   <form id="compare-form" class="compare-controls">
     <label>First place<select id="compare-a" aria-label="First saved place"></select></label>
     <label>Second place<select id="compare-b" aria-label="Second saved place"></select></label>
@@ -36,7 +36,7 @@
 
 <section class="section"><div class="wrap"><div class="section-head"><div><span class="eyebrow">Go deeper</span><h2>Open the full decision tools</h2></div><p class="small">These links remain crawlable and useful even when a live feed is unavailable.</p></div><div class="grid">
 <a class="card tool-card" data-tool="/national-tools/aurora/" href="/national-tools/aurora/"><div class="tool-kicker">Tonight</div><h3>Aurora Tonight</h3><p>NOAA aurora signal + darkness + NWS clouds + moon context, with the best dark-weather window and confidence shown separately.</p></a>
-<a class="card tool-card" data-tool="/national-tools/rivers/" href="/national-tools/rivers/"><div class="tool-kicker">Water</div><h3>River Conditions</h3><p>Nearby USGS gauges with current flow, six-hour trend, same-date historical percentiles, and official NOAA flood forecasts when a gauge match exists.</p></a>
+<a class="card tool-card" data-tool="/national-tools/rivers/" href="/national-tools/rivers/"><div class="tool-kicker">Rivers</div><h3>River Conditions</h3><p>Nearby USGS gauges with current flow, six-hour trend, same-date historical percentiles, and official NOAA flood forecasts when a gauge match exists.</p></a>\n<a class="card tool-card" data-tool="/national-tools/coastal/" href="/national-tools/coastal/"><div class="tool-kicker">Coast &amp; beaches</div><h3>Beach &amp; Coastal Conditions</h3><p>Official NWS rip/swim risk first, then nearby NDBC waves, wind and water temperature plus NOAA tide predictions where they apply.</p></a>
 <a class="card tool-card" data-tool="/national-tools/frost/" href="/national-tools/frost/"><div class="tool-kicker">Freeze risk</div><h3>Frost Dates & Freeze Risk</h3><p>Spring and fall NOAA freeze probabilities, live NWS freeze risk, hard-freeze detection, and station-distance confidence.</p></a>
 <a class="card tool-card" data-tool="/national-tools/planting/" href="/national-tools/planting/"><div class="tool-kicker">Garden</div><h3>Planting Calendar</h3><p>A sourced 20-crop decision engine tied to NOAA freeze climatology and the live NWS cold forecast.</p></a>
 <a class="card tool-card" data-tool="/national-tools/fall-color/" href="/national-tools/fall-color/"><div class="tool-kicker">This season · beta</div><h3>Fall Color Timing</h3><p>USA-NPN historical autumn timing band plus separate current NWS weather context. No invented live “percent peak” score.</p></a>
@@ -103,9 +103,10 @@ document.addEventListener("DOMContentLoaded",function(){
       '<a href="'+N.esc(card.href)+'">Open full tool →</a></div>';
   }
   function renderComparison(result){
-    const order=[["aurora","Aurora"],["rivers","River"],["frost","Frost"],["planting","Planting"],["fall","Fall timing"]];
     const leftMap=Object.fromEntries(result.left.cards.map(function(card){return [card.id,card]}));
     const rightMap=Object.fromEntries(result.right.cards.map(function(card){return [card.id,card]}));
+    const order=[["aurora","Aurora"],["rivers","River"],["frost","Frost"],["planting","Planting"],["fall","Fall timing"]];
+    if(leftMap.coastal||rightMap.coastal)order.splice(2,0,["coastal","Coastal"]);
     compareGrid.innerHTML='<div class="compare-head"><span>Signal</span><strong>'+N.esc(N.label(result.left.location))+'</strong><strong>'+N.esc(N.label(result.right.location))+'</strong></div>'+
       order.map(function(row){return '<div class="compare-row"><div class="compare-signal"><span class="tool-kicker">'+N.esc(row[1])+'</span></div>'+compareCell(leftMap[row[0]],result.left.location)+compareCell(rightMap[row[0]],result.right.location)+'</div>'}).join("");
   }
@@ -117,7 +118,7 @@ document.addEventListener("DOMContentLoaded",function(){
     if(!left||!right||N.locationKey(left)===N.locationKey(right)){
       compareStatus.innerHTML='<span class="error">Choose two different saved places.</span>';return;
     }
-    const button=compareForm.querySelector(".btn");button.disabled=true;compareStatus.textContent="Comparing the five signals…";
+    const button=compareForm.querySelector(".btn");button.disabled=true;compareStatus.textContent="Comparing the core signals…";
     try{
       const result=await D.compare(left,right);
       renderComparison(result);
