@@ -1,0 +1,24 @@
+name: Remove superseded split branches
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/remove-superseded-split-branches.yml
+
+permissions:
+  contents: write
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Delete superseded branch refs
+        shell: bash
+        run: |
+          set -euo pipefail
+          for branch in             fix/isle-royale-guide-layers             agent/national-garden-expert-logic-20260902             agent/white-christmas-confidence-resilience-20260902
+          do
+            git push origin --delete "$branch"
+          done
