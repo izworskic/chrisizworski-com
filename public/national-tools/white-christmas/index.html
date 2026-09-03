@@ -64,20 +64,32 @@ document.addEventListener("DOMContentLoaded",function(){
     if(!f.available)return "Christmas is close enough to check, but a Christmas-period forecast was not returned yet.";
     return [f.text,f.max_temperature_f!=null?"High signal "+f.max_temperature_f+"°F":null,f.min_temperature_f!=null?"Low signal "+f.min_temperature_f+"°F":null].filter(Boolean).join(" · ");
   }
+  function historyStationText(c){
+    if(!c)return "";
+    if(c.station)return c.station.name+" · "+c.station.distance_miles+" mi away"+(c.station.elevation_ft?" · "+c.station.elevation_ft+" ft":"");
+    if(Array.isArray(c.stations)&&c.stations.length)return "Regional blend: "+c.stations.map(function(s){return s.name+" ("+s.distance_miles+" mi)"}).join(" · ");
+    return "Regional historical baseline";
+  }
+  function historyCopy(c){
+    if(!c)return "Historical station baseline unavailable after local and regional searches.";
+    const recent=c.history.recent_probability!=null?" Recent 2016-2025 rate: "+c.history.recent_probability+"%.":"";
+    if(c.baseline_type==="regional_blend")return c.history.probability+"% blended historical estimate from "+c.stations.length+" nearby stations. The stations span about "+c.history.valid_years+" valid normal-period years on average."+recent;
+    return c.history.probability+"% of "+c.history.valid_years+" valid 1991-2020 Christmas observations had at least 1 inch of snow on the ground."+recent;
+  }
   async function run(loc){
     const p=new URLSearchParams({lat:loc.latitude,lon:loc.longitude});if(loc.stateCode)p.set("state",loc.stateCode);
     const r=await fetch("/api/national-white-christmas?"+p.toString());
     const d=await N.readJsonResponse(r,"White Christmas estimate unavailable");
     document.getElementById("result").hidden=false;
     document.getElementById("probability").textContent=d.estimate.probability==null?"—":d.estimate.probability+"%";
-    document.getElementById("confidence").textContent=(d.estimate.confidence||"unknown")+" confidence · "+String(d.estimate.stage||"").replace(/-/g," ");
+    document.getElementById("confidence").textContent=String(d.estimate.confidence||"unknown").replace(/-/g," ")+" confidence · "+String(d.estimate.stage||"").replace(/-/g," ");
     document.getElementById("answer").textContent=d.verdict.headline+" — "+N.label(loc);
-    document.getElementById("detail").textContent=d.estimate.probability==null?"A usable 1991-2020 snow-depth history could not be established nearby.":("The estimate begins with local Christmas history and is currently "+d.estimate.days_until+" days from December 25.");
+    document.getElementById("detail").textContent=d.estimate.probability==null?((d.confidence_basis&&d.confidence_basis.reason_message)||"A reliable historical snow-depth baseline could not be established."):((d.confidence_basis&&d.confidence_basis.reason_message?d.confidence_basis.reason_message+" ":"")+"The estimate is currently "+d.estimate.days_until+" days from December 25.");
     document.getElementById("target").textContent="Target: "+d.target_date+" · Rounded to the nearest 5 percentage points.";
     document.getElementById("definition").textContent=d.definition;
     const c=d.climatology;
-    document.getElementById("history-copy").textContent=c?(c.history.probability+"% of "+c.history.valid_years+" valid 1991-2020 Christmas observations had at least 1 inch of snow on the ground."+(c.history.recent_probability!=null?" Recent 2016-2025 rate: "+c.history.recent_probability+"%.":"")):"Historical station baseline unavailable.";
-    document.getElementById("history-station").textContent=c?(c.station.name+" · "+c.station.distance_miles+" mi away"+(c.station.elevation_ft?" · "+c.station.elevation_ft+" ft":"")):"";
+    document.getElementById("history-copy").textContent=historyCopy(c);
+    document.getElementById("history-station").textContent=historyStationText(c);
     document.getElementById("cpc-copy").textContent=outlookText(d.cpc);
     document.getElementById("pack-copy").textContent=packText(d.current_snowpack);
     const basis=d.current_snowpack&&d.current_snowpack.basis;
@@ -87,7 +99,7 @@ document.addEventListener("DOMContentLoaded",function(){
     document.getElementById("factors").innerHTML=(d.estimate.factors||[]).map(function(f){const n=Number(f.effect_points||0);return '<div class="wc-factor"><span>'+N.esc(f.label)+'</span><span class="wc-effect '+(n<0?"negative":"")+'">'+(f.id==="history"?"baseline":N.esc(sign(n)+" pts"))+'</span></div>'}).join("")||'<p class="wc-muted">No factor breakdown available.</p>';
     document.getElementById("updated").textContent="Retrieved "+N.fmtDate(d.retrieved_at)+(d.degraded?" · one or more source families degraded":"");
     if(d.imagery&&d.imagery.current_snow_analysis)document.getElementById("snow-map-link").href=d.imagery.current_snow_analysis;
-    if(typeof N.track==="function")N.track("White Christmas Result",{stage:d.estimate.stage||"unknown",confidence:d.estimate.confidence||"unknown",probability_band:d.estimate.probability==null?"unavailable":Math.floor(d.estimate.probability/10)*10,sources_available:(d.sources||[]).filter(function(s){return s.available!==false}).length});
+    if(typeof N.track==="function")N.track("White Christmas Result",{stage:d.estimate.stage||"unknown",confidence:d.estimate.confidence||"unknown",probability_band:d.estimate.probability==null?"unavailable":Math.floor(d.estimate.probability/10)*10,history_basis:c&&c.baseline_type||"unavailable",history_reason:d.confidence_basis&&d.confidence_basis.reason_code||"unknown",sources_available:(d.sources||[]).filter(function(s){return s.available!==false}).length});
   }
   N.bind(form,run);const q=new URLSearchParams(location.search).get("q");if(q){form.querySelector("input").value=q;form.requestSubmit();}
 });
