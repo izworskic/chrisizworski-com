@@ -1,0 +1,10 @@
+PASS geocode HTTP_200 https://national-outdoor-core.vercel.app/api/national-geocode?q=Bay%20City%2C%20MI
+PASS aurora HTTP_200 https://national-aurora.vercel.app/api/national-aurora?lat=43.594&lon=-83.89
+PASS rivers HTTP_200 https://national-rivers.vercel.app/api/national-rivers?mode=discovery&radius=100&limit=25&lat=43.594&lon=-83.89
+PASS frost HTTP_200 https://national-frost.vercel.app/api/national-frost?lat=43.594&lon=-83.89&zip=48706
+PASS fall HTTP_200 https://national-fall-color.vercel.app/api/national-fall-color?lat=43.594&lon=-83.89
+PASS coastal HTTP_200 https://national-coastal-water.vercel.app/api/national-coastal?lat=43.594&lon=-83.89
+PASS snow HTTP_200 https://national-snowpack-melt.vercel.app/api/national-snow?lat=43.594&lon=-83.89&state=MI
+PASS christmas HTTP_200 https://national-white-christmas.vercel.app/api/national-white-christmas?lat=43.594&lon=-83.89&state=MI
+FAIL isle CONTENT https://isle-royale-outdoors.vercel.app/api/isle-royale
+BODY isle {"fetched_at":"2026-09-03T11:48:37.858Z","degraded":true,"boater_campgrounds":[{"name":"Beaver Island Campground","consecutive_night_limit":"3","shelters":"3","tent_sites":"0","food_storage_lockers":"2","fire_ring_grill":"None","dock_depth":"2'-5'","onboard_generator_use":"Yes","raw":{"Overnight Docks":"Beaver Island Campground","Consecutive Night Stay Limit":"3","Shelters":"3","Tent Sites":"0","Food Storage Lockers":"2","Fire Ring/Grill":"None","Depth at Dock":"2'-5'","Onboard Generator Use AllFAILURES 1
