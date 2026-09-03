@@ -46,7 +46,7 @@ jobs:
           check coastal "https://national-coastal-water.vercel.app/api/national-coastal?lat=43.594&lon=-83.89" '"decision"|"applicability"' || failures=$((failures+1))
           check snow "https://national-snowpack-melt.vercel.app/api/national-snow?lat=43.594&lon=-83.89&state=MI" '"decision"' || failures=$((failures+1))
           check christmas "https://national-white-christmas.vercel.app/api/national-white-christmas?lat=43.594&lon=-83.89&state=MI" '"estimate"' || failures=$((failures+1))
-          check isle "https://isle-royale-outdoors.vercel.app/api/isle-royale" '"items"|"features"|"catalog"' || failures=$((failures+1))
+          check isle "https://isle-royale-outdoors.vercel.app/api/isle-royale" '"boater_campgrounds"|"fetched_at"' || failures=$((failures+1))
           echo "FAILURES $failures" | tee -a "$OUT"
           test "$failures" = "0"
 
