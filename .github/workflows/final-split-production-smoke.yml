@@ -1,0 +1,56 @@
+name: Final split production smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/final-split-production-smoke.yml
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: hub, url: "https://chrisizworski.com/national-tools/", pattern: "National Outdoor|national tools|National" }
+          - { name: aurora, url: "https://chrisizworski.com/national-tools/aurora/", pattern: "Aurora|aurora" }
+          - { name: rivers, url: "https://chrisizworski.com/national-tools/rivers/", pattern: "River|river" }
+          - { name: frost, url: "https://chrisizworski.com/national-tools/frost/", pattern: "Frost|frost" }
+          - { name: planting, url: "https://chrisizworski.com/national-tools/planting/", pattern: "Plant|plant" }
+          - { name: fall, url: "https://chrisizworski.com/national-tools/fall-color/", pattern: "Fall|color" }
+          - { name: coastal, url: "https://chrisizworski.com/national-tools/coastal/", pattern: "Coastal|coastal" }
+          - { name: snow, url: "https://chrisizworski.com/national-tools/snow/", pattern: "Snow|snow" }
+          - { name: christmas, url: "https://chrisizworski.com/national-tools/white-christmas/", pattern: "Christmas|christmas" }
+          - { name: christmas-map, url: "https://chrisizworski.com/white-christmas-probability-map/", pattern: "White Christmas Probability Map|Christmas" }
+          - { name: christmas-mi, url: "https://chrisizworski.com/white-christmas-michigan/", pattern: "White Christmas|Michigan" }
+          - { name: isle, url: "https://chrisizworski.com/isle-royale-map/", pattern: "Isle Royale" }
+          - { name: national-css, url: "https://chrisizworski.com/assets/national-tools.css", pattern: "national|tool|--" }
+          - { name: christmas-css, url: "https://chrisizworski.com/assets/white-christmas.css", pattern: "christmas|snow|--" }
+          - { name: geocode-api, url: "https://chrisizworski.com/api/national-geocode?q=Bay%20City%2C%20MI", pattern: "\"latitude\"|\"query\"" }
+          - { name: aurora-api, url: "https://chrisizworski.com/api/national-aurora?lat=43.594&lon=-83.89", pattern: "\"verdict\"" }
+          - { name: rivers-api, url: "https://chrisizworski.com/api/national-rivers?mode=discovery&radius=100&limit=25&lat=43.594&lon=-83.89", pattern: "\"gauges\"|\"rivers\"|\"mode\"" }
+          - { name: frost-api, url: "https://chrisizworski.com/api/national-frost?lat=43.594&lon=-83.89&zip=48706", pattern: "\"climate_normal\"|\"zone\"" }
+          - { name: fall-api, url: "https://chrisizworski.com/api/national-fall-color?lat=43.594&lon=-83.89", pattern: "\"timing_context\"" }
+          - { name: coastal-api, url: "https://chrisizworski.com/api/national-coastal?lat=43.594&lon=-83.89", pattern: "\"decision\"|\"applicability\"" }
+          - { name: snow-api, url: "https://chrisizworski.com/api/national-snow?lat=43.594&lon=-83.89&state=MI", pattern: "\"decision\"" }
+          - { name: christmas-api, url: "https://chrisizworski.com/api/national-white-christmas?lat=43.594&lon=-83.89&state=MI", pattern: "\"estimate\"" }
+          - { name: isle-api, url: "https://chrisizworski.com/api/isle-royale", pattern: "\"boater_campgrounds\"|\"fetched_at\"" }
+
+    steps:
+      - name: Check canonical route
+        shell: bash
+        env:
+          URL: ${{ matrix.url }}
+          PATTERN: ${{ matrix.pattern }}
+        run: |
+          set -euo pipefail
+          body="$(mktemp)"
+          code="$(curl -L -sS --retry 2 --retry-all-errors --retry-delay 2 --max-time 45 -o "$body" -w '%{http_code}' "$URL")"
+          echo "HTTP $code $URL"
+          test "$code" = "200"
+          grep -Eqi "$PATTERN" "$body"
