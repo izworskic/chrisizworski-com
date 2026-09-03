@@ -447,6 +447,22 @@
       "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/:slug/index.html"
     },
     {
+      "source": "/national-tools/white-christmas/cities/:slug/",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/:slug/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/cities/:slug",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/:slug/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/cities/",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/cities",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/index.html"
+    },
+    {
       "source": "/national-tools/white-christmas/:path*",
       "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/:path*"
     },
