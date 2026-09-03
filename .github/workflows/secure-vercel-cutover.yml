@@ -1,0 +1,107 @@
+name: Secure Vercel project cutover prep
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/secure-vercel-cutover.yml
+
+permissions:
+  contents: write
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Publish ephemeral encryption key
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p migration
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out "$RUNNER_TEMP/vercel-cutover-private.pem" >/dev/null 2>&1
+          openssl pkey -in "$RUNNER_TEMP/vercel-cutover-private.pem" -pubout -out migration/vercel-token-public.pem >/dev/null 2>&1
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add migration/vercel-token-public.pem
+          git commit -m "Publish ephemeral Vercel cutover encryption key" || true
+          git push origin HEAD:main
+
+      - name: Wait for encrypted Vercel token
+        shell: bash
+        run: |
+          set -euo pipefail
+          found=0
+          for i in $(seq 1 180); do
+            git fetch origin main --quiet
+            if git show origin/main:migration/vercel-token.enc > "$RUNNER_TEMP/token.enc.b64" 2>/dev/null; then
+              found=1
+              break
+            fi
+            sleep 5
+          done
+          if [ "$found" != "1" ]; then
+            echo "Encrypted Vercel token was not supplied before timeout."
+            exit 1
+          fi
+          base64 -d "$RUNNER_TEMP/token.enc.b64" > "$RUNNER_TEMP/token.enc"
+          openssl pkeyutl -decrypt             -inkey "$RUNNER_TEMP/vercel-cutover-private.pem"             -in "$RUNNER_TEMP/token.enc"             -pkeyopt rsa_padding_mode:oaep             -pkeyopt rsa_oaep_md:sha256             -out "$RUNNER_TEMP/vercel-token.txt"
+          chmod 600 "$RUNNER_TEMP/vercel-token.txt"
+
+      - name: Create linked Vercel projects and production deployments
+        shell: bash
+        run: |
+          set -euo pipefail
+          TOKEN="$(cat "$RUNNER_TEMP/vercel-token.txt")"
+          echo "::add-mask::$TOKEN"
+          TEAM_ID="team_SibGYOKdlEddaSrq3xHqX8z0"
+          OWNER="izworskic"
+          OUT="$RUNNER_TEMP/vercel-cutover-result.txt"
+          : > "$OUT"
+
+          api() {
+            curl -sS --fail-with-body               -H "Authorization: Bearer $TOKEN"               -H "Content-Type: application/json"               "$@"
+          }
+
+          for name in             national-outdoor-core             national-outdoor-tools-hub             national-aurora             national-rivers             national-frost             national-planting             national-fall-color             national-coastal-water             national-snowpack-melt             national-white-christmas             isle-royale-outdoors
+          do
+            echo "PROJECT $name"
+            if project="$(api "https://api.vercel.com/v9/projects/$name?teamId=$TEAM_ID" 2>/dev/null)"; then
+              echo "EXISTS $name" | tee -a "$OUT"
+            else
+              payload="$(jq -nc --arg name "$name" --arg repo "$OWNER/$name"                 '{name:$name,framework:null,gitRepository:{repo:$repo,type:"github"}}')"
+              project="$(api -X POST "https://api.vercel.com/v11/projects?teamId=$TEAM_ID" -d "$payload")"
+              echo "CREATED $name $(jq -r '.id' <<<"$project")" | tee -a "$OUT"
+            fi
+
+            dep_payload="$(jq -nc --arg name "$name" --arg repo "$name" --arg org "$OWNER"               '{name:$name,project:$name,target:"production",gitSource:{type:"github",repo:$repo,ref:"main",org:$org}}')"
+            deployment="$(api -X POST "https://api.vercel.com/v13/deployments?teamId=$TEAM_ID" -d "$dep_payload")"
+            dep_id="$(jq -r '.id // empty' <<<"$deployment")"
+            dep_url="$(jq -r '.url // empty' <<<"$deployment")"
+            echo "DEPLOYMENT $name $dep_id $dep_url" | tee -a "$OUT"
+          done
+
+      - name: Record sanitized result and remove token handoff
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --quiet
+          git reset --hard origin/main
+          mkdir -p migration
+          if [ -f "$RUNNER_TEMP/vercel-cutover-result.txt" ]; then
+            cp "$RUNNER_TEMP/vercel-cutover-result.txt" migration/vercel-cutover-result.txt
+          else
+            echo "Provisioning did not reach result stage." > migration/vercel-cutover-result.txt
+          fi
+          rm -f migration/vercel-token-public.pem migration/vercel-token.enc
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A migration
+          git commit -m "Record Vercel cutover provisioning result" || true
+          git push origin HEAD:main
