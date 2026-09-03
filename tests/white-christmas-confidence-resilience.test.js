@@ -49,6 +49,16 @@ test('strong single station beats a merely closer moderate record', () => {
   assert.equal(chosen.station.name, 'Stronger complete');
 });
 
+test('staged search accumulates candidates before accepting a moderate fallback', () => {
+  const source = fs.readFileSync(path.join(__dirname, '../api/national-white-christmas.js'), 'utf8');
+  assert.match(source, /const allCandidates=new Map\(\)/);
+  assert.match(source, /valid_years>=HISTORY_SINGLE_STRONG_YEARS/);
+  assert.match(source, /const single=chooseSingleStation\(combined\);/);
+  const strongReturn = source.indexOf('if(strong){');
+  const finalModerate = source.indexOf('const single=chooseSingleStation(combined);');
+  assert.ok(strongReturn >= 0 && finalModerate > strongReturn);
+});
+
 test('regional blend creates a finite transparent baseline from sparse usable stations', () => {
   const candidates = [
     history(18, 70, 24, 'A'),
