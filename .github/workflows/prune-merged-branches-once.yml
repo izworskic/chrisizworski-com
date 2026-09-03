@@ -22,14 +22,14 @@ jobs:
       - name: Fetch all branch refs
         run: git fetch origin '+refs/heads/*:refs/remotes/origin/*' --prune
 
-      - name: Prune exact heads of merged pull requests
+      - name: Prune unchanged heads of closed pull requests
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -uo pipefail
 
-          python - <<'PY' > "$RUNNER_TEMP/merged-heads.tsv"
+          python - <<'PY' > "$RUNNER_TEMP/closed-heads.tsv"
           import json
           import os
           import urllib.request
@@ -37,7 +37,6 @@ jobs:
           api = os.environ["GITHUB_API_URL"]
           repo = os.environ["GITHUB_REPOSITORY"]
           token = os.environ["GH_TOKEN"]
-
           headers = {
               "Authorization": f"Bearer {token}",
               "Accept": "application/vnd.github+json",
@@ -52,10 +51,7 @@ jobs:
                   pulls = json.load(response)
               if not pulls:
                   break
-
               for pr in pulls:
-                  if not pr.get("merged_at"):
-                      continue
                   head = pr.get("head") or {}
                   head_repo = head.get("repo") or {}
                   if head_repo.get("full_name") != repo:
@@ -64,7 +60,6 @@ jobs:
                   sha = head.get("sha")
                   if ref and sha:
                       print(f"{ref}\t{sha}")
-
               if len(pulls) < 100:
                   break
               page += 1
@@ -78,9 +73,8 @@ jobs:
           api = os.environ["GITHUB_API_URL"]
           repo = os.environ["GITHUB_REPOSITORY"]
           token = os.environ["GH_TOKEN"]
-          url = f"{api}/repos/{repo}/pulls?state=open&per_page=100"
           req = urllib.request.Request(
-              url,
+              f"{api}/repos/{repo}/pulls?state=open&per_page=100",
               headers={
                   "Authorization": f"Bearer {token}",
                   "Accept": "application/vnd.github+json",
@@ -101,12 +95,11 @@ jobs:
           kept_open=0
           failed=0
 
-          while IFS=$'\t' read -r branch merged_sha; do
+          while IFS=$'\t' read -r branch closed_sha; do
             [ -n "$branch" ] || continue
             [ "$branch" = "main" ] && continue
 
             if grep -Fxq "$branch" "$RUNNER_TEMP/open-heads.txt"; then
-              echo "KEEP open PR: $branch"
               kept_open=$((kept_open + 1))
               continue
             fi
@@ -117,19 +110,18 @@ jobs:
             fi
 
             current_sha="$(git rev-parse "$remote_ref")"
-            if [ "$current_sha" != "$merged_sha" ]; then
-              echo "KEEP changed since merge: $branch"
+            if [ "$current_sha" != "$closed_sha" ]; then
               kept_changed=$((kept_changed + 1))
               continue
             fi
 
-            echo "DELETE exact merged PR head: $branch"
+            echo "DELETE unchanged closed PR head: $branch"
             if git push origin --delete "$branch"; then
               deleted=$((deleted + 1))
             else
               echo "FAILED delete: $branch"
               failed=$((failed + 1))
             fi
-          done < <(sort -u "$RUNNER_TEMP/merged-heads.tsv")
+          done < <(sort -u "$RUNNER_TEMP/closed-heads.tsv")
 
           echo "SUMMARY deleted=$deleted kept_changed=$kept_changed kept_open=$kept_open failed=$failed"
