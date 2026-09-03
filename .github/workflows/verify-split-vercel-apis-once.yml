@@ -1,0 +1,64 @@
+name: Verify split Vercel APIs once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/verify-split-vercel-apis-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Smoke public API aliases
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/split-vercel-apis.txt"
+          : > "$OUT"
+          check() {
+            local name="$1" url="$2" pattern="$3"
+            local body code
+            body="$RUNNER_TEMP/api-$name"
+            code="$(curl -L -sS -o "$body" -w '%{http_code}' --max-time 45 "$url")"
+            if [ "$code" != "200" ]; then
+              echo "FAIL $name HTTP_$code $url" | tee -a "$OUT"
+              head -c 500 "$body" | tr '\n' ' ' | sed "s/^/BODY $name /" | tee -a "$OUT" || true
+              return 1
+            fi
+            if ! grep -Eqi "$pattern" "$body"; then
+              echo "FAIL $name CONTENT $url" | tee -a "$OUT"
+              head -c 500 "$body" | tr '\n' ' ' | sed "s/^/BODY $name /" | tee -a "$OUT" || true
+              return 1
+            fi
+            echo "PASS $name HTTP_200 $url" | tee -a "$OUT"
+          }
+          failures=0
+          check geocode "https://national-outdoor-core.vercel.app/api/national-geocode?q=Bay%20City%2C%20MI" '"latitude"|"query"' || failures=$((failures+1))
+          check aurora "https://national-aurora.vercel.app/api/national-aurora?lat=43.594&lon=-83.89" '"verdict"' || failures=$((failures+1))
+          check rivers "https://national-rivers.vercel.app/api/national-rivers?mode=discovery&radius=100&limit=25&lat=43.594&lon=-83.89" '"gauges"|"sites"|"discovery"' || failures=$((failures+1))
+          check frost "https://national-frost.vercel.app/api/national-frost?lat=43.594&lon=-83.89&zip=48706" '"climate_normal"|"zone"' || failures=$((failures+1))
+          check fall "https://national-fall-color.vercel.app/api/national-fall-color?lat=43.594&lon=-83.89" '"timing_context"' || failures=$((failures+1))
+          check coastal "https://national-coastal-water.vercel.app/api/national-coastal?lat=43.594&lon=-83.89" '"decision"|"applicability"' || failures=$((failures+1))
+          check snow "https://national-snowpack-melt.vercel.app/api/national-snow?lat=43.594&lon=-83.89&state=MI" '"decision"' || failures=$((failures+1))
+          check christmas "https://national-white-christmas.vercel.app/api/national-white-christmas?lat=43.594&lon=-83.89&state=MI" '"estimate"' || failures=$((failures+1))
+          check isle "https://isle-royale-outdoors.vercel.app/api/isle-royale" '"items"|"features"|"catalog"' || failures=$((failures+1))
+          echo "FAILURES $failures" | tee -a "$OUT"
+          test "$failures" = "0"
+
+      - name: Record API smoke result
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p migration
+          cp "$RUNNER_TEMP/split-vercel-apis.txt" migration/split-vercel-apis.txt 2>/dev/null || echo "Smoke did not produce output." > migration/split-vercel-apis.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add migration/split-vercel-apis.txt
+          git commit -m "Record split Vercel API smoke result" || true
+          git push origin HEAD:main
