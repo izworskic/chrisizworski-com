@@ -5,6 +5,32 @@ on merge to `main`. There is no staging step between a merge and real traffic.
 
 Read this file before making any change.
 
+## 0. Extracted tool repositories are authoritative
+
+This repository still contains deployment mirrors for some national tools and Isle Royale so
+existing production URLs remain intact during routing cutover. **Do not develop those products
+here.** Their authoritative implementation sources are:
+
+- `izworskic/national-outdoor-core` — shared national geocode/location and freshness/source contracts
+- `izworskic/national-outdoor-tools-hub` — national tools landing and navigation/search hubs
+- `izworskic/national-aurora`
+- `izworskic/national-rivers`
+- `izworskic/national-frost`
+- `izworskic/national-planting`
+- `izworskic/national-fall-color`
+- `izworskic/national-coastal-water`
+- `izworskic/national-snowpack-melt`
+- `izworskic/national-white-christmas`
+- `izworskic/isle-royale-outdoors`
+
+If work is requested on one of those products, make the implementation change in its owning
+repository first. Changes in this repo are limited to site-shell integration, routing, canonical
+URL preservation, deployment composition, or an explicit mirror sync. Never introduce new
+tool-specific business logic into the mirror.
+
+The current public paths remain canonical during the migration. Repo extraction is an
+implementation boundary, not permission to change URLs.
+
 ## 1. Run the full gate before you open a PR
 
 ```
