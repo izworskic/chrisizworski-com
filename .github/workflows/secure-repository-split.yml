@@ -1,0 +1,86 @@
+name: Secure repository split
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/secure-repository-split.yml
+
+permissions:
+  contents: write
+
+jobs:
+  split:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Publish ephemeral encryption key
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p migration
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out "$RUNNER_TEMP/repo-split-private.pem" >/dev/null 2>&1
+          openssl pkey -in "$RUNNER_TEMP/repo-split-private.pem" -pubout -out migration/token-public.pem >/dev/null 2>&1
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add migration/token-public.pem
+          git commit -m "Publish ephemeral repo-split encryption key" || true
+          git push origin HEAD:main
+
+      - name: Wait for encrypted migration token
+        shell: bash
+        run: |
+          set -euo pipefail
+          found=0
+          for i in $(seq 1 180); do
+            git fetch origin main --quiet
+            if git show origin/main:migration/token.enc > "$RUNNER_TEMP/token.enc.b64" 2>/dev/null; then
+              found=1
+              break
+            fi
+            sleep 5
+          done
+          if [ "$found" != "1" ]; then
+            echo "Encrypted token was not supplied before timeout."
+            exit 1
+          fi
+          base64 -d "$RUNNER_TEMP/token.enc.b64" > "$RUNNER_TEMP/token.enc"
+          openssl pkeyutl -decrypt -inkey "$RUNNER_TEMP/repo-split-private.pem" -in "$RUNNER_TEMP/token.enc" -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 -out "$RUNNER_TEMP/token.txt"
+          chmod 600 "$RUNNER_TEMP/token.txt"
+
+      - name: Create and populate split repositories
+        shell: bash
+        run: |
+          set -euo pipefail
+          export GH_TOKEN="$(cat "$RUNNER_TEMP/token.txt")"
+          echo "::add-mask::$GH_TOKEN"
+          login="$(gh api user --jq .login)"
+          test "$login" = "izworskic"
+          cat scripts/repo-split/migration.b64.* | base64 -d > "$RUNNER_TEMP/migrate-repository-split.sh"
+          chmod 700 "$RUNNER_TEMP/migrate-repository-split.sh"
+          bash "$RUNNER_TEMP/migrate-repository-split.sh" | tee "$RUNNER_TEMP/repo-split-result.txt"
+
+      - name: Record result and remove encrypted handoff
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --quiet
+          git reset --hard origin/main
+          mkdir -p migration
+          if [ -f "$RUNNER_TEMP/repo-split-result.txt" ]; then
+            grep -E '^(PUSHED|TEST|VALIDATION_FAILURE_COUNT|REPO_SPLIT_COMPLETE)' "$RUNNER_TEMP/repo-split-result.txt" > migration/repo-split-result.txt || true
+          else
+            echo "Migration did not reach the result stage." > migration/repo-split-result.txt
+          fi
+          rm -f migration/token-public.pem migration/token.enc
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A migration
+          git commit -m "Record repository split result and remove token handoff" || true
+          git push origin HEAD:main
