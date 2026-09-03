@@ -21,9 +21,9 @@ await check('garden hub route',async()=>{
   if(!/garden/i.test(text)||!/<title>/i.test(text))throw new Error('garden page shell missing');
 });
 
-await check('planting page is v3.4 shell',async()=>{
+await check('planting page is v3.4 shell on v35 runtime',async()=>{
   const {text}=await request('/national-tools/planting/');
-  for(const marker of ['data-planting-ui="v3.4"','id="packet-crop"','id="horizon-grid"','national-planting-page-v3.js?v=20260903-v34']){
+  for(const marker of ['data-planting-ui="v3.4"','id="packet-crop"','id="horizon-grid"','national-planting-page-v3.js?v=20260903-v35']){
     if(!text.includes(marker))throw new Error('missing marker '+marker);
   }
 });
