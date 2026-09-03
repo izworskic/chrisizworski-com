@@ -50,7 +50,16 @@ jobs:
         run: |
           set -euo pipefail
           body="$(mktemp)"
-          code="$(curl -L -sS --retry 2 --retry-all-errors --retry-delay 2 --max-time 45 -o "$body" -w '%{http_code}' "$URL")"
-          echo "HTTP $code $URL"
-          test "$code" = "200"
-          grep -Eqi "$PATTERN" "$body"
+          code=""
+          for attempt in $(seq 1 12); do
+            code="$(curl -L -sS --max-time 45 -o "$body" -w '%{http_code}' "$URL" || true)"
+            if [ "$code" = "200" ] && grep -Eqi "$PATTERN" "$body"; then
+              echo "PASS HTTP_200 $URL attempt=$attempt"
+              exit 0
+            fi
+            echo "WAIT HTTP_${code:-none} $URL attempt=$attempt"
+            sleep 5
+          done
+          echo "FAIL HTTP_${code:-none} $URL"
+          head -c 500 "$body" || true
+          exit 1
