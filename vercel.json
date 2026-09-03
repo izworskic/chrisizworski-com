@@ -259,6 +259,18 @@
       "destination": "https://national-planting.vercel.app/assets/national-planting-engine.js"
     },
     {
+      "source": "/assets/national-planting-page-v3.js",
+      "destination": "https://national-planting.vercel.app/assets/national-planting-page-v3.js"
+    },
+    {
+      "source": "/assets/national-planting-season-years.js",
+      "destination": "https://national-planting.vercel.app/assets/national-planting-season-years.js"
+    },
+    {
+      "source": "/assets/national-planting-v3.css",
+      "destination": "https://national-planting.vercel.app/assets/national-planting-v3.css"
+    },
+    {
       "source": "/assets/white-christmas.css",
       "destination": "https://national-white-christmas.vercel.app/assets/white-christmas.css"
     },
@@ -299,12 +311,48 @@
       "destination": "https://national-planting.vercel.app/data/national-planting-crops.json"
     },
     {
+      "source": "/data/national-planting-v3.json",
+      "destination": "https://national-planting.vercel.app/data/national-planting-v3.json"
+    },
+    {
       "source": "/national-tools",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/"
     },
     {
       "source": "/national-tools/",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/"
+    },
+    {
+      "source": "/national-tools/garden",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/garden/"
+    },
+    {
+      "source": "/national-tools/garden/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/garden/"
+    },
+    {
+      "source": "/national-tools/fall",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/fall/"
+    },
+    {
+      "source": "/national-tools/fall/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/fall/"
+    },
+    {
+      "source": "/national-tools/water",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/water/"
+    },
+    {
+      "source": "/national-tools/water/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/water/"
+    },
+    {
+      "source": "/national-tools/night-sky",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/night-sky/"
+    },
+    {
+      "source": "/national-tools/night-sky/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/night-sky/"
     },
     {
       "source": "/national-tools/aurora",
