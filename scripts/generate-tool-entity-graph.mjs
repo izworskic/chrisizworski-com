@@ -40,19 +40,19 @@ const HUB_TOOLS = [
   { file: "public/mackinac-bridge-tolls/index.html", url: "https://chrisizworski.com/mackinac-bridge-tolls/" },
   { file: "public/michigan-border-wait-times/index.html", url: "https://chrisizworski.com/michigan-border-wait-times/" },
   { file: "public/michigan-boat-launches/index.html", url: "https://chrisizworski.com/michigan-boat-launches/" },
-  { file: "public/isle-royale-map/index.html", url: "https://chrisizworski.com/isle-royale-map/" },
+  { external: true, id: "https://chrisizworski.com/isle-royale-map/#app", url: "https://chrisizworski.com/isle-royale-map/" },
   { file: "public/heirloom-variety-matchmaker/index.html", url: "https://chrisizworski.com/heirloom-variety-matchmaker/" },
   { file: "public/zone-6a-planting-calendar/index.html", url: "https://chrisizworski.com/zone-6a-planting-calendar/" },
   { file: "public/estivant-pines/index.html", url: "https://chrisizworski.com/estivant-pines/" },
   { file: "public/fall-color/michigan-leaf-peeping-planner/index.html", url: "https://chrisizworski.com/fall-color/michigan-leaf-peeping-planner/" },
-  { file: "public/national-tools/aurora/index.html", url: "https://chrisizworski.com/national-tools/aurora/" },
-  { file: "public/national-tools/rivers/index.html", url: "https://chrisizworski.com/national-tools/rivers/" },
-  { file: "public/national-tools/coastal/index.html", url: "https://chrisizworski.com/national-tools/coastal/" },
-  { file: "public/national-tools/snow/index.html", url: "https://chrisizworski.com/national-tools/snow/" },
-  { file: "public/national-tools/white-christmas/index.html", url: "https://chrisizworski.com/national-tools/white-christmas/" },
-  { file: "public/national-tools/frost/index.html", url: "https://chrisizworski.com/national-tools/frost/" },
-  { file: "public/national-tools/planting/index.html", url: "https://chrisizworski.com/national-tools/planting/" },
-  { file: "public/national-tools/fall-color/index.html", url: "https://chrisizworski.com/national-tools/fall-color/" },
+  { external: true, id: "https://chrisizworski.com/national-tools/aurora/#page", url: "https://chrisizworski.com/national-tools/aurora/" },
+  { external: true, id: "https://chrisizworski.com/national-tools/rivers/#page", url: "https://chrisizworski.com/national-tools/rivers/" },
+  { external: true, id: "https://chrisizworski.com/national-tools/coastal/#page", url: "https://chrisizworski.com/national-tools/coastal/" },
+  { external: true, id: "https://chrisizworski.com/national-tools/snow/#page", url: "https://chrisizworski.com/national-tools/snow/" },
+  { external: true, id: "https://chrisizworski.com/national-tools/white-christmas/#page", url: "https://chrisizworski.com/national-tools/white-christmas/" },
+  { external: true, id: "https://chrisizworski.com/national-tools/frost/#page", url: "https://chrisizworski.com/national-tools/frost/" },
+  { external: true, id: "https://chrisizworski.com/national-tools/planting/#page", url: "https://chrisizworski.com/national-tools/planting/" },
+  { external: true, id: "https://chrisizworski.com/national-tools/fall-color/#page", url: "https://chrisizworski.com/national-tools/fall-color/" },
 ];
 
 const APP_TYPES = new Set(["WebApplication", "SoftwareApplication"]);
@@ -90,6 +90,7 @@ function existingEntityId(html, url) {
 }
 
 async function ensureEntity(tool) {
+  if (tool.external) return tool;
   const file = path.join(root, tool.file);
   const html = await readFile(file, "utf8");
   const found = existingEntityId(html, tool.url);
