@@ -384,7 +384,16 @@ function publicPathFor(record) {
 // (Web Analytics and Speed Insights), and feeds served by a rewrite rather than a static file.
 // These appeared the first time the audit was re-crawled after the freshness fix; they are not
 // drift, they are routes that were always dynamic.
-const NO_SOURCE_FILE = [/^\/api\//, /^\/_vercel\//, /^\/fall-color\/rss\.xml$/];
+const NO_SOURCE_FILE = [
+  /^\/api\//,
+  /^\/_vercel\//,
+  /^\/fall-color\/rss\.xml$/,
+  /^\/national-tools(?:\/|$)/,
+  /^\/white-christmas-(?:probability-map|michigan)\/$/,
+  /^\/isle-royale-map(?:\/|$)/,
+  /^\/assets\/(?:national-tools\.(?:css|js)|national-dashboard\.js|national-hubs\.js|national-planting-engine\.js|white-christmas\.css|isle-royale-(?:map|water-intelligence)\.js)$/,
+  /^\/data\/(?:national-usgs-streamflow-sites|national-planting-crops)\.json$/,
+];
 const canonicalRecords = audit.records.filter(
   (record) => record.status === 200 && !record.search && record.snapshotPath
     && !NO_SOURCE_FILE.some((re) => re.test(record.pathname)),
