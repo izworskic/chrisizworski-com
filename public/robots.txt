@@ -8,3 +8,4 @@ Sitemap: https://chrisizworski.com/sitemap-reputation.xml
 Sitemap: https://chrisizworski.com/sitemap-winter.xml
 Sitemap: https://chrisizworski.com/sitemap-manistee.xml
 Sitemap: https://chrisizworski.com/image-sitemap.xml
+Sitemap: https://chrisizworski.com/sitemap-white-christmas.xml

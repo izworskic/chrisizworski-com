@@ -1,0 +1,59 @@
+name: IndexNow White Christmas
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - public/sitemap-white-christmas.xml
+      - public/b7f82e4d6c3a49a1bd6f7e2085c94e13.txt
+      - .github/workflows/indexnow-white-christmas.yml
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for production key file
+        shell: bash
+        run: |
+          set -euo pipefail
+          KEY="b7f82e4d6c3a49a1bd6f7e2085c94e13"
+          KEY_URL="https://chrisizworski.com/b7f82e4d6c3a49a1bd6f7e2085c94e13.txt"
+          for attempt in {1..30}; do
+            BODY="$(curl -fsSL "$KEY_URL" || true)"
+            if [ "$BODY" = "$KEY" ]; then
+              echo "IndexNow key is live on production."
+              exit 0
+            fi
+            echo "Waiting for production deploy ($attempt/30)..."
+            sleep 10
+          done
+          echo "IndexNow key did not become available on production in time."
+          exit 1
+      - name: Submit White Christmas URLs to IndexNow
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE' > /tmp/indexnow.json
+          const fs=require("fs");
+          const xml=fs.readFileSync("public/sitemap-white-christmas.xml","utf8");
+          const urlList=[...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
+          const payload={
+            host:"chrisizworski.com",
+            key:"b7f82e4d6c3a49a1bd6f7e2085c94e13",
+            keyLocation:"https://chrisizworski.com/b7f82e4d6c3a49a1bd6f7e2085c94e13.txt",
+            urlList
+          };
+          process.stdout.write(JSON.stringify(payload));
+          NODE
+          CODE="$(curl -sS -o /tmp/indexnow-response.txt -w "%{http_code}" -X POST "https://api.indexnow.org/indexnow" -H "Content-Type: application/json; charset=utf-8" --data-binary @/tmp/indexnow.json)"
+          cat /tmp/indexnow-response.txt || true
+          echo
+          echo "IndexNow HTTP status: $CODE"
+          case "$CODE" in
+            200|202) exit 0 ;;
+            *) exit 1 ;;
+          esac
