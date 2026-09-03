@@ -46,6 +46,7 @@ jobs:
           check coastal "https://national-coastal-water.vercel.app/national-tools/coastal/" "Coastal|coastal" || failures=$((failures+1))
           check snow "https://national-snowpack-melt.vercel.app/national-tools/snow/" "Snow|snow" || failures=$((failures+1))
           check christmas "https://national-white-christmas.vercel.app/national-tools/white-christmas/" "Christmas|christmas" || failures=$((failures+1))
+          check christmascss "https://national-white-christmas.vercel.app/assets/white-christmas.css" "christmas|snow|--" || failures=$((failures+1))
           check isle "https://isle-royale-outdoors.vercel.app/isle-royale-map/" "Isle Royale" || failures=$((failures+1))
           echo "FAILURES $failures" | tee -a "$OUT"
           test "$failures" = "0"
