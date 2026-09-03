@@ -313,3 +313,18 @@ wrong answer more often than it looks.
 ## 7. Open a PR, do not push to main
 
 Merges are Chris's call. Put the gate results in the PR body.
+
+## White Christmas published-route release contract
+
+The extracted White Christmas repo owns its content; this repo owns canonical shell routing and sitemap publication. **Never add a new White Christmas URL to a sitemap on the same unverified step that invents the route.**
+
+For every new White Christmas hub, region, city, state, history, watch, or travel URL:
+
+1. Build it in `izworskic/national-white-christmas` first.
+2. Require a real backing file, matching canonical, owner `vercel.json` route family, owner route-manifest entry, and green owner CI.
+3. Merge the owner PR and wait for the owner Vercel production deployment to report success.
+4. Only then add the canonical route family and sitemap URL(s) here.
+5. Nested White Christmas families must have explicit site-shell rewrites to the owner `index.html` files **before** `/national-tools/white-christmas/:path*`. The wildcard is fallback only and never satisfies the publish gate.
+6. `npm run benchmark:extracted-routing` and the full `npm run verify:all` gate must pass before merge.
+
+If the owner production deployment is not green, the sitemap change waits.

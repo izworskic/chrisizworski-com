@@ -49,6 +49,16 @@ const expected = new Map(Object.entries({
   "/national-tools/snow/": "https://national-snowpack-melt.vercel.app/national-tools/snow/",
   "/national-tools/white-christmas": "https://national-white-christmas.vercel.app/national-tools/white-christmas/",
   "/national-tools/white-christmas/": "https://national-white-christmas.vercel.app/national-tools/white-christmas/",
+  "/national-tools/white-christmas/forecast": "https://national-white-christmas.vercel.app/national-tools/white-christmas/forecast/index.html",
+  "/national-tools/white-christmas/forecast/": "https://national-white-christmas.vercel.app/national-tools/white-christmas/forecast/index.html",
+  "/national-tools/white-christmas/regions": "https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/index.html",
+  "/national-tools/white-christmas/regions/": "https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/index.html",
+  "/national-tools/white-christmas/regions/:slug": "https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/:slug/index.html",
+  "/national-tools/white-christmas/regions/:slug/": "https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/:slug/index.html",
+  "/national-tools/white-christmas/cities": "https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/index.html",
+  "/national-tools/white-christmas/cities/": "https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/index.html",
+  "/national-tools/white-christmas/cities/:slug": "https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/:slug/index.html",
+  "/national-tools/white-christmas/cities/:slug/": "https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/:slug/index.html",
   "/white-christmas-probability-map": "https://national-white-christmas.vercel.app/white-christmas-probability-map/",
   "/white-christmas-probability-map/": "https://national-white-christmas.vercel.app/white-christmas-probability-map/",
   "/white-christmas-michigan": "https://national-white-christmas.vercel.app/white-christmas-michigan/",
@@ -82,6 +92,24 @@ const hubIndex = rewrites.findIndex(item => item.source === "/national-tools/:pa
 for (const source of [...expected.keys()].filter(x => x.startsWith("/national-tools/") && x !== "/national-tools/:path*")) {
   const i = rewrites.findIndex(item => item.source === source);
   if (i < 0 || hubIndex < 0 || i >= hubIndex) failures.push(`specific national route must precede hub catch-all: ${source}`);
+}
+
+
+const wcWildcardIndex = rewrites.findIndex(item => item.source === "/national-tools/white-christmas/:path*");
+for (const source of [
+  "/national-tools/white-christmas/forecast",
+  "/national-tools/white-christmas/forecast/",
+  "/national-tools/white-christmas/regions",
+  "/national-tools/white-christmas/regions/",
+  "/national-tools/white-christmas/regions/:slug",
+  "/national-tools/white-christmas/regions/:slug/",
+  "/national-tools/white-christmas/cities",
+  "/national-tools/white-christmas/cities/",
+  "/national-tools/white-christmas/cities/:slug",
+  "/national-tools/white-christmas/cities/:slug/"
+]) {
+  const i = rewrites.findIndex(item => item.source === source);
+  if (i < 0 || wcWildcardIndex < 0 || i >= wcWildcardIndex) failures.push(`explicit White Christmas route must precede White Christmas wildcard: ${source}`);
 }
 
 const forbidden = [
@@ -170,6 +198,23 @@ for (const route of [
   "/isle-royale-map/"
 ]) {
   if (!sitemap.includes(`<loc>https://chrisizworski.com${route}</loc>`)) failures.push(`sitemap lost canonical route: ${route}`);
+}
+
+
+for (const route of [
+  "/national-tools/white-christmas/forecast/",
+  "/national-tools/white-christmas/regions/",
+  "/national-tools/white-christmas/cities/"
+]) {
+  if (!sitemap.includes(`<loc>https://chrisizworski.com${route}</loc>`)) failures.push(`sitemap lost White Christmas funnel route: ${route}`);
+}
+
+const sitemapUrls = [...sitemap.matchAll(/<loc>https:\/\/chrisizworski\.com([^<]+)<\/loc>/g)].map(m => m[1]);
+for (const route of sitemapUrls.filter(x => x.startsWith("/national-tools/white-christmas/cities/") && x !== "/national-tools/white-christmas/cities/")) {
+  if (!bySource.has("/national-tools/white-christmas/cities/:slug/")) failures.push(`city sitemap route published without explicit shell family: ${route}`);
+}
+for (const route of sitemapUrls.filter(x => x.startsWith("/national-tools/white-christmas/regions/") && x !== "/national-tools/white-christmas/regions/")) {
+  if (!bySource.has("/national-tools/white-christmas/regions/:slug/")) failures.push(`region sitemap route published without explicit shell family: ${route}`);
 }
 
 for (const localFunction of ["api/national-rivers.js", "api/isle-royale-water-intelligence.js"]) {
