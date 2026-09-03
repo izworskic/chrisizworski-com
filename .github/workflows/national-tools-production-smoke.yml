@@ -3,9 +3,11 @@ name: National tools production smoke
 on:
   push:
     branches:
+      - 'main'
       - 'agent/national-*'
     paths:
-      - 'scripts/validate-national-production.mjs'
+      - 'vercel.json'
+      - 'scripts/smoke-national-composition.mjs'
       - 'api/national-*.js'
       - 'public/national-tools/**'
       - '.github/workflows/national-tools-production-smoke.yml'
@@ -24,5 +26,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Validate national production across U.S. regions
-        run: node scripts/validate-national-production.mjs
+      - name: Validate live national routing and planting composition
+        run: node scripts/smoke-national-composition.mjs
