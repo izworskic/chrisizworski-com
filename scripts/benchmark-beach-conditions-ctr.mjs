@@ -47,7 +47,7 @@ if (canonical !== config.surface) failures.push(`canonical drift: ${canonical}`)
 for (const phrase of config.treatment.firstAnswerMustContain) {
   if (!firstAnswer.includes(phrase)) failures.push(`first answer missing: ${phrase}`);
 }
-if (!html.includes('The NWS risk is a forecast—not the posted beach flag')) failures.push('posted-flag truth boundary missing');
+if (!html.includes('The NWS risk is a forecast, not the posted beach flag')) failures.push('posted-flag truth boundary missing');
 if (!html.includes('leaves posted flag status unknown')) failures.push('FAQ must keep physical posted flag status unknown');
 { const drift = freshnessMismatch(html, '/great-lakes-beaches/'); if (drift) failures.push(drift); }
 if (!html.includes('"name": "Michigan Beach Conditions Today"')) failures.push('structured data name does not match conditions intent');
