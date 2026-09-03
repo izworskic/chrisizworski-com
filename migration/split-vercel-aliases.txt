@@ -8,5 +8,6 @@ PASS fall HTTP_200 https://national-fall-color.vercel.app/national-tools/fall-co
 PASS coastal HTTP_200 https://national-coastal-water.vercel.app/national-tools/coastal/
 PASS snow HTTP_200 https://national-snowpack-melt.vercel.app/national-tools/snow/
 PASS christmas HTTP_200 https://national-white-christmas.vercel.app/national-tools/white-christmas/
+PASS christmascss HTTP_200 https://national-white-christmas.vercel.app/assets/white-christmas.css
 PASS isle HTTP_200 https://isle-royale-outdoors.vercel.app/isle-royale-map/
 FAILURES 0
