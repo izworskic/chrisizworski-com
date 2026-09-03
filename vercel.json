@@ -263,6 +263,26 @@
       "destination": "https://national-white-christmas.vercel.app/assets/white-christmas.css"
     },
     {
+      "source": "/assets/white-christmas-hero-final.webp",
+      "destination": "https://national-white-christmas.vercel.app/assets/white-christmas-hero-final.webp"
+    },
+    {
+      "source": "/assets/evergreen-corner.svg",
+      "destination": "https://national-white-christmas.vercel.app/assets/evergreen-corner.svg"
+    },
+    {
+      "source": "/assets/holly-divider.svg",
+      "destination": "https://national-white-christmas.vercel.app/assets/holly-divider.svg"
+    },
+    {
+      "source": "/assets/white-christmas-village.svg",
+      "destination": "https://national-white-christmas.vercel.app/assets/white-christmas-village.svg"
+    },
+    {
+      "source": "/assets/wc-icon-:path*",
+      "destination": "https://national-white-christmas.vercel.app/assets/wc-icon-:path*"
+    },
+    {
       "source": "/assets/isle-royale-map.js",
       "destination": "https://isle-royale-outdoors.vercel.app/assets/isle-royale-map.js"
     },
