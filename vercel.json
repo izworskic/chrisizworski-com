@@ -423,6 +423,30 @@
       "destination": "https://national-snowpack-melt.vercel.app/national-tools/snow/:path*"
     },
     {
+      "source": "/national-tools/white-christmas/forecast",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/forecast/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/forecast/",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/forecast/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/regions",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/regions/",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/regions/:slug",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/:slug/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/regions/:slug/",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/:slug/index.html"
+    },
+    {
       "source": "/national-tools/white-christmas/:path*",
       "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/:path*"
     },
