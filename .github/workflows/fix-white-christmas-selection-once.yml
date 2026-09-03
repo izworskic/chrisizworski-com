@@ -1,0 +1,91 @@
+name: Fix White Christmas selection once
+on:
+  push:
+    branches:
+      - agent/white-christmas-confidence-resilience-20260902
+permissions:
+  contents: write
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/white-christmas-confidence-resilience-20260902
+      - name: Patch staged selection and stale test
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('api/national-white-christmas.js')
+          s = p.read_text()
+          old = '''async function historicalClimatology(lat,lon){
+            let lastError=null;
+            for(const radius of HISTORY_SEARCH_RADII_MILES){
+              try{
+                const payload=await postAcis(ACIS_MULTI,{bbox:bbox(lat,lon,radius).join(","),sdate:"1991-12-25",edate:"2025-12-25",meta:["name","state","sids","ll","elev","uid"],elems:[{name:"snwd",interval:[1,0,0],duration:1}]},7500);
+                const candidates=(Array.isArray(payload&&payload.data)?payload.data:[]).map(record=>candidateFromRecord(record,lat,lon,radius)).filter(Boolean);
+                const single=chooseSingleStation(candidates);
+                if(single){const result={...single,baseline_type:"single_station",search_radius_miles:radius,candidate_count:candidates.length,cache_status:"fresh"};result.confidence=historicalConfidence(result);putCachedHistory(lat,lon,result);return result;}
+                const blend=weightedBlend(candidates);
+                if(blend){const result={...blend,search_radius_miles:radius,candidate_count:candidates.length,cache_status:"fresh"};result.confidence=historicalConfidence(result);putCachedHistory(lat,lon,result);return result;}
+              }catch(err){lastError=err;}
+            }
+            const cached=getCachedHistory(lat,lon);
+            if(cached){cached.confidence={...historicalConfidence(cached),reason:"last_known_good_after_source_failure"};return cached;}
+            if(lastError)throw lastError;
+            return null;
+          }'''
+          new = '''async function historicalClimatology(lat,lon){
+            let lastError=null;
+            const allCandidates=new Map();
+            let searchedRadius=0;
+            for(const radius of HISTORY_SEARCH_RADII_MILES){
+              searchedRadius=radius;
+              try{
+                const payload=await postAcis(ACIS_MULTI,{bbox:bbox(lat,lon,radius).join(","),sdate:"1991-12-25",edate:"2025-12-25",meta:["name","state","sids","ll","elev","uid"],elems:[{name:"snwd",interval:[1,0,0],duration:1}]},7500);
+                const candidates=(Array.isArray(payload&&payload.data)?payload.data:[]).map(record=>candidateFromRecord(record,lat,lon,radius)).filter(Boolean);
+                for(const candidate of candidates){
+                  const key=candidate.station.sid||`${candidate.station.name}|${candidate.station.latitude}|${candidate.station.longitude}`;
+                  const prior=allCandidates.get(key);
+                  if(!prior||candidate.quality_score>prior.quality_score)allCandidates.set(key,candidate);
+                }
+                const combined=[...allCandidates.values()];
+                const strong=combined.filter(c=>c.history.valid_years>=HISTORY_SINGLE_STRONG_YEARS).sort((a,b)=>b.quality_score-a.quality_score||a.station.distance_miles-b.station.distance_miles)[0]||null;
+                if(strong){
+                  const result={...strong,baseline_type:"single_station",search_radius_miles:radius,candidate_count:combined.length,cache_status:"fresh"};
+                  result.confidence=historicalConfidence(result);putCachedHistory(lat,lon,result);return result;
+                }
+              }catch(err){lastError=err;}
+            }
+            const combined=[...allCandidates.values()];
+            const single=chooseSingleStation(combined);
+            if(single){const result={...single,baseline_type:"single_station",search_radius_miles:searchedRadius,candidate_count:combined.length,cache_status:"fresh"};result.confidence=historicalConfidence(result);putCachedHistory(lat,lon,result);return result;}
+            const blend=weightedBlend(combined);
+            if(blend){const result={...blend,search_radius_miles:searchedRadius,candidate_count:combined.length,cache_status:"fresh"};result.confidence=historicalConfidence(result);putCachedHistory(lat,lon,result);return result;}
+            const cached=getCachedHistory(lat,lon);
+            if(cached){cached.confidence={...historicalConfidence(cached),reason:"last_known_good_after_source_failure"};return cached;}
+            if(lastError)throw lastError;
+            return null;
+          }'''
+          if old not in s:
+              raise SystemExit('historicalClimatology target not found')
+          p.write_text(s.replace(old,new))
+
+          t = Path('tests/national-white-christmas.test.js')
+          q = t.read_text()
+          q = q.replace('test("historical White Christmas summary uses the one-inch threshold and requires 25 valid years",()=>{\n  assert.equal(T.HISTORY_RADIUS_MILES,75);', 'test("historical White Christmas summary uses the one-inch threshold and resilience minimum",()=>{\n  assert.equal(T.HISTORY_RADIUS_MILES,175);')
+          q = q.replace('assert.equal(T.historicalSummary(rows.slice(0,24)),null);', 'assert.equal(T.historicalSummary(rows.slice(0,14)),null);')
+          t.write_text(q)
+
+          w = Path('.github/workflows/fix-white-christmas-selection-once.yml')
+          w.unlink()
+          PY
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add api/national-white-christmas.js tests/national-white-christmas.test.js .github/workflows/fix-white-christmas-selection-once.yml
+          git commit -m "Fix White Christmas staged station selection"
+          git push origin HEAD:agent/white-christmas-confidence-resilience-20260902
