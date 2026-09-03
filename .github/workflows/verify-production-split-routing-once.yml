@@ -1,0 +1,77 @@
+name: Verify production split routing once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/verify-production-split-routing-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Smoke canonical production routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/production-split-routing.txt"
+          : > "$OUT"
+          check() {
+            local name="$1" url="$2" pattern="$3"
+            local body code
+            body="$RUNNER_TEMP/prod-$name"
+            for i in $(seq 1 30); do
+              code="$(curl -L -sS -o "$body" -w '%{http_code}' --max-time 45 "$url" || true)"
+              if [ "$code" = "200" ] && grep -Eqi "$pattern" "$body"; then
+                echo "PASS $name HTTP_200 $url" | tee -a "$OUT"
+                return 0
+              fi
+              sleep 4
+            done
+            echo "FAIL $name HTTP_$code $url" | tee -a "$OUT"
+            head -c 500 "$body" | tr '\n' ' ' | sed "s/^/BODY $name /" | tee -a "$OUT" || true
+            return 1
+          }
+          failures=0
+          check hub "https://chrisizworski.com/national-tools/" "National Outdoor|national tools|National" || failures=$((failures+1))
+          check aurora "https://chrisizworski.com/national-tools/aurora/" "Aurora|aurora" || failures=$((failures+1))
+          check rivers "https://chrisizworski.com/national-tools/rivers/" "River|river" || failures=$((failures+1))
+          check frost "https://chrisizworski.com/national-tools/frost/" "Frost|frost" || failures=$((failures+1))
+          check planting "https://chrisizworski.com/national-tools/planting/" "Plant|plant" || failures=$((failures+1))
+          check fall "https://chrisizworski.com/national-tools/fall-color/" "Fall|color" || failures=$((failures+1))
+          check coastal "https://chrisizworski.com/national-tools/coastal/" "Coastal|coastal" || failures=$((failures+1))
+          check snow "https://chrisizworski.com/national-tools/snow/" "Snow|snow" || failures=$((failures+1))
+          check christmas "https://chrisizworski.com/national-tools/white-christmas/" "Christmas|christmas" || failures=$((failures+1))
+          check christmasmap "https://chrisizworski.com/white-christmas-probability-map/" "White Christmas Probability Map" || failures=$((failures+1))
+          check christmasmi "https://chrisizworski.com/white-christmas-michigan/" "White Christmas Michigan" || failures=$((failures+1))
+          check isle "https://chrisizworski.com/isle-royale-map/" "Isle Royale" || failures=$((failures+1))
+          check corecss "https://chrisizworski.com/assets/national-tools.css" "national|tool|--" || failures=$((failures+1))
+          check christmascss "https://chrisizworski.com/assets/white-christmas.css" "christmas|snow|--" || failures=$((failures+1))
+          check geocode "https://chrisizworski.com/api/national-geocode?q=Bay%20City%2C%20MI" '"latitude"|"query"' || failures=$((failures+1))
+          check auroraapi "https://chrisizworski.com/api/national-aurora?lat=43.594&lon=-83.89" '"verdict"' || failures=$((failures+1))
+          check riversapi "https://chrisizworski.com/api/national-rivers?mode=discovery&radius=100&limit=25&lat=43.594&lon=-83.89" '"gauges"|"sites"|"discovery"' || failures=$((failures+1))
+          check frostapi "https://chrisizworski.com/api/national-frost?lat=43.594&lon=-83.89&zip=48706" '"climate_normal"|"zone"' || failures=$((failures+1))
+          check fallapi "https://chrisizworski.com/api/national-fall-color?lat=43.594&lon=-83.89" '"timing_context"' || failures=$((failures+1))
+          check coastalapi "https://chrisizworski.com/api/national-coastal?lat=43.594&lon=-83.89" '"decision"|"applicability"' || failures=$((failures+1))
+          check snowapi "https://chrisizworski.com/api/national-snow?lat=43.594&lon=-83.89&state=MI" '"decision"' || failures=$((failures+1))
+          check christmasapi "https://chrisizworski.com/api/national-white-christmas?lat=43.594&lon=-83.89&state=MI" '"estimate"' || failures=$((failures+1))
+          check isleapi "https://chrisizworski.com/api/isle-royale" '"boater_campgrounds"|"fetched_at"' || failures=$((failures+1))
+          echo "FAILURES $failures" | tee -a "$OUT"
+          test "$failures" = "0"
+
+      - name: Record production smoke result
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p migration
+          cp "$RUNNER_TEMP/production-split-routing.txt" migration/production-split-routing.txt 2>/dev/null || echo "Smoke did not produce output." > migration/production-split-routing.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add migration/production-split-routing.txt
+          git commit -m "Record production split-routing smoke result" || true
+          git push origin HEAD:main
