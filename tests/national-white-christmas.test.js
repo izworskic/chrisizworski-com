@@ -14,8 +14,8 @@ test("ACIS annual snow rows keep missing data missing and trace as zero",()=>{
   ]);
 });
 
-test("historical White Christmas summary uses the one-inch threshold and requires 25 valid years",()=>{
-  assert.equal(T.HISTORY_RADIUS_MILES,75);
+test("historical White Christmas summary uses the one-inch threshold and resilience minimum",()=>{
+  assert.equal(T.HISTORY_RADIUS_MILES,175);
   const rows=[];
   for(let y=1991;y<=2020;y++)rows.push({year:y,value:y%2===0?1:0});
   for(let y=2021;y<=2025;y++)rows.push({year:y,value:2});
@@ -27,7 +27,7 @@ test("historical White Christmas summary uses the one-inch threshold and require
   assert.equal(s.recent_valid_years,10);
   assert.equal(s.recent_white_years,8);
   assert.equal(s.recent_probability,80);
-  assert.equal(T.historicalSummary(rows.slice(0,24)),null);
+  assert.equal(T.historicalSummary(rows.slice(0,14)),null);
 });
 
 test("December outlook selection prefers monthly December then NDJ over broader seasonal bands",()=>{

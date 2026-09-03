@@ -144,16 +144,31 @@ function getCachedHistory(lat,lon){
 function putCachedHistory(lat,lon,value){if(value&&value.history)historyCache.set(historyCacheKey(lat,lon),{saved_at:Date.now(),value});}
 async function historicalClimatology(lat,lon){
   let lastError=null;
+  const allCandidates=new Map();
+  let searchedRadius=0;
   for(const radius of HISTORY_SEARCH_RADII_MILES){
+    searchedRadius=radius;
     try{
       const payload=await postAcis(ACIS_MULTI,{bbox:bbox(lat,lon,radius).join(","),sdate:"1991-12-25",edate:"2025-12-25",meta:["name","state","sids","ll","elev","uid"],elems:[{name:"snwd",interval:[1,0,0],duration:1}]},7500);
       const candidates=(Array.isArray(payload&&payload.data)?payload.data:[]).map(record=>candidateFromRecord(record,lat,lon,radius)).filter(Boolean);
-      const single=chooseSingleStation(candidates);
-      if(single){const result={...single,baseline_type:"single_station",search_radius_miles:radius,candidate_count:candidates.length,cache_status:"fresh"};result.confidence=historicalConfidence(result);putCachedHistory(lat,lon,result);return result;}
-      const blend=weightedBlend(candidates);
-      if(blend){const result={...blend,search_radius_miles:radius,candidate_count:candidates.length,cache_status:"fresh"};result.confidence=historicalConfidence(result);putCachedHistory(lat,lon,result);return result;}
+      for(const candidate of candidates){
+        const key=candidate.station.sid||`${candidate.station.name}|${candidate.station.latitude}|${candidate.station.longitude}`;
+        const prior=allCandidates.get(key);
+        if(!prior||candidate.quality_score>prior.quality_score)allCandidates.set(key,candidate);
+      }
+      const combined=[...allCandidates.values()];
+      const strong=combined.filter(c=>c.history.valid_years>=HISTORY_SINGLE_STRONG_YEARS).sort((a,b)=>b.quality_score-a.quality_score||a.station.distance_miles-b.station.distance_miles)[0]||null;
+      if(strong){
+        const result={...strong,baseline_type:"single_station",search_radius_miles:radius,candidate_count:combined.length,cache_status:"fresh"};
+        result.confidence=historicalConfidence(result);putCachedHistory(lat,lon,result);return result;
+      }
     }catch(err){lastError=err;}
   }
+  const combined=[...allCandidates.values()];
+  const single=chooseSingleStation(combined);
+  if(single){const result={...single,baseline_type:"single_station",search_radius_miles:searchedRadius,candidate_count:combined.length,cache_status:"fresh"};result.confidence=historicalConfidence(result);putCachedHistory(lat,lon,result);return result;}
+  const blend=weightedBlend(combined);
+  if(blend){const result={...blend,search_radius_miles:searchedRadius,candidate_count:combined.length,cache_status:"fresh"};result.confidence=historicalConfidence(result);putCachedHistory(lat,lon,result);return result;}
   const cached=getCachedHistory(lat,lon);
   if(cached){cached.confidence={...historicalConfidence(cached),reason:"last_known_good_after_source_failure"};return cached;}
   if(lastError)throw lastError;
