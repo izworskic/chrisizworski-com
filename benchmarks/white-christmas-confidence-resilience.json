@@ -1,0 +1,48 @@
+{
+  "name": "white-christmas-confidence-resilience",
+  "version": "1.0.0",
+  "updated": "2026-09-02",
+  "objective": "Minimize avoidable unavailability while preserving honest uncertainty and spatial representativeness.",
+  "pass_score": 90,
+  "critical_floor": 85,
+  "loss_function": {
+    "avoidable_unavailability": 35,
+    "false_precision": 25,
+    "spatial_mismatch": 15,
+    "data_depth_weakness": 10,
+    "source_reliability_fragility": 8,
+    "explanation_failure": 7
+  },
+  "value_functions": [
+    {"id":"availability-with-integrity","weight":25,"critical":true},
+    {"id":"historical-representativeness","weight":18,"critical":true},
+    {"id":"confidence-calibration","weight":15,"critical":true},
+    {"id":"source-failure-resilience","weight":12,"critical":true},
+    {"id":"regional-fallback-quality","weight":10,"critical":true},
+    {"id":"user-explanation","weight":8},
+    {"id":"testability-observability","weight":7},
+    {"id":"maintainability","weight":5}
+  ],
+  "hard_vetoes": [
+    "West Branch, Michigan returns unavailable under normal source availability while multiple usable regional Christmas snow-depth records exist.",
+    "Regional blending is presented as an exact local observation.",
+    "A single upstream failure destroys an otherwise usable historical estimate.",
+    "The UI assumes a regional blend always has one station and crashes.",
+    "Confidence rises without regard to historical evidence quality."
+  ],
+  "scenarios": [
+    "West Branch MI station-gap fallback",
+    "Bay City MI nearby-station case",
+    "Marquette MI strong snowy climatology",
+    "Detroit MI strong nearby station",
+    "Minneapolis MN cold continental",
+    "Denver CO elevation-sensitive",
+    "Seattle WA marginal snow climatology",
+    "Phoenix AZ low-climatology",
+    "Miami FL low/no-snow climatology",
+    "ACIS temporary failure with cached last-known-good baseline",
+    "CPC outage with historical estimate intact",
+    "snowpack outage outside and inside 45 days",
+    "NWS outage inside short-range window"
+  ]
+}
