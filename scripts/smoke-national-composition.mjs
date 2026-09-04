@@ -2,9 +2,12 @@
 const origin=process.env.NATIONAL_SMOKE_ORIGIN||'https://chrisizworski.com';
 const checks=[];
 
-async function request(path,{json=false,timeout=20000}={}){
-  const url=origin+path+(path.includes('?')?'&':'?')+'_smoke='+Date.now();
-  const response=await fetch(url,{headers:{accept:json?'application/json':'text/plain, text/html, application/javascript, text/css, */*','cache-control':'no-cache'},signal:AbortSignal.timeout(timeout)});
+async function request(path,{json=false,timeout=20000,cacheBust=true,noCacheHeader=true}={}){
+  const suffix=cacheBust?(path.includes('?')?'&':'?')+'_smoke='+Date.now():'';
+  const headers={accept:json?'application/json':'text/plain, text/html, application/javascript, text/css, */*'};
+  if(noCacheHeader)headers['cache-control']='no-cache';
+  const url=origin+path+suffix;
+  const response=await fetch(url,{headers,signal:AbortSignal.timeout(timeout)});
   const text=await response.text();
   if(!response.ok)throw new Error(path+' HTTP '+response.status+' '+text.slice(0,160));
   if(!json)return {text,response};
@@ -21,10 +24,13 @@ await check('garden hub route',async()=>{
   if(!/garden/i.test(text)||!/<title>/i.test(text))throw new Error('garden page shell missing');
 });
 
-await check('planting page is v3.4 shell on v35 runtime',async()=>{
-  const {text}=await request('/national-tools/planting/');
+await check('planting canonical page is v3.4 shell on v35 runtime',async()=>{
+  // Deliberately use the exact public URL with no cache-busting query and no
+  // no-cache request header. This catches a stale canonical CDN object that a
+  // query-string smoke would silently bypass.
+  const {text}=await request('/national-tools/planting/',{cacheBust:false,noCacheHeader:false});
   for(const marker of ['data-planting-ui="v3.4"','id="packet-crop"','id="horizon-grid"','national-planting-page-v3.js?v=20260903-v35']){
-    if(!text.includes(marker))throw new Error('missing marker '+marker);
+    if(!text.includes(marker))throw new Error('canonical page missing marker '+marker);
   }
 });
 
