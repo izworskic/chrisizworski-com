@@ -21,5 +21,6 @@ test('site build keeps GA4 automatic for current and future HTML pages', async (
   assert.match(injector, /\.endsWith\('\.html'\)/);
   assert.match(standard, new RegExp(ID.replace(/-/g, '\\-')));
   assert.match(standard, /Standalone tools extracted into their own repositories/i);
-  assert.match(standard, /Freighter View Farms is an explicit exception/i);
+  assert.match(standard, /Freighter View Farms is part of the same measurement network/i);
+  assert.doesNotMatch(standard, /Freighter View Farms is an explicit exception/i);
 });
