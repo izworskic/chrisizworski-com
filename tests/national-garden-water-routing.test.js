@@ -4,7 +4,7 @@ import fs from 'node:fs';
 
 const vercel = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
 const registry = JSON.parse(fs.readFileSync('benchmarks/tool-network-registry.json', 'utf8'));
-const child = 'https://national-garden-water.vercel.app';
+const child = 'https://national-garden-water-izworski-gmailcoms-projects.vercel.app';
 
 function route(source) {
   return vercel.rewrites.find((item) => item.source === source);

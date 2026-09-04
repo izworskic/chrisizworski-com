@@ -208,7 +208,7 @@
     },
     {
       "source": "/api/national-garden-water",
-      "destination": "https://national-garden-water.vercel.app/api/national-garden-water"
+      "destination": "https://national-garden-water-izworski-gmailcoms-projects.vercel.app/api/national-garden-water"
     },
     {
       "source": "/api/national-fall-color",
@@ -276,15 +276,15 @@
     },
     {
       "source": "/assets/national-garden-water.css",
-      "destination": "https://national-garden-water.vercel.app/assets/national-garden-water.css"
+      "destination": "https://national-garden-water-izworski-gmailcoms-projects.vercel.app/assets/national-garden-water.css"
     },
     {
       "source": "/assets/national-garden-water-engine.js",
-      "destination": "https://national-garden-water.vercel.app/assets/national-garden-water-engine.js"
+      "destination": "https://national-garden-water-izworski-gmailcoms-projects.vercel.app/assets/national-garden-water-engine.js"
     },
     {
       "source": "/assets/national-garden-water-page.js",
-      "destination": "https://national-garden-water.vercel.app/assets/national-garden-water-page.js"
+      "destination": "https://national-garden-water-izworski-gmailcoms-projects.vercel.app/assets/national-garden-water-page.js"
     },
     {
       "source": "/assets/white-christmas.css",
@@ -332,7 +332,7 @@
     },
     {
       "source": "/data/national-garden-water-crops.json",
-      "destination": "https://national-garden-water.vercel.app/data/national-garden-water-crops.json"
+      "destination": "https://national-garden-water-izworski-gmailcoms-projects.vercel.app/data/national-garden-water-crops.json"
     },
     {
       "source": "/national-tools",
@@ -408,11 +408,11 @@
     },
     {
       "source": "/national-tools/garden-water",
-      "destination": "https://national-garden-water.vercel.app/national-tools/garden-water/"
+      "destination": "https://national-garden-water-izworski-gmailcoms-projects.vercel.app/national-tools/garden-water/"
     },
     {
       "source": "/national-tools/garden-water/",
-      "destination": "https://national-garden-water.vercel.app/national-tools/garden-water/"
+      "destination": "https://national-garden-water-izworski-gmailcoms-projects.vercel.app/national-tools/garden-water/"
     },
     {
       "source": "/national-tools/fall-color",
