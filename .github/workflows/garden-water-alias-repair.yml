@@ -1,0 +1,60 @@
+name: Repair Garden Water production alias
+on:
+  push:
+    branches:
+      - agent/garden-water-production-alias
+    paths:
+      - .github/workflows/garden-water-alias-repair.yml
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/garden-water-production-alias
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Replace stale Garden Water production host
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          old='https://national-garden-water.vercel.app'
+          new='https://national-garden-water-izworski-gmailcoms-projects.vercel.app'
+          allowed={'.json','.js','.mjs','.md','.yml','.yaml','.html','.txt','.xml'}
+          changed=[]
+          for p in Path('.').rglob('*'):
+              if not p.is_file() or '.git' in p.parts:
+                  continue
+              if p.suffix.lower() not in allowed and p.name not in {'vercel.json','AGENTS.md'}:
+                  continue
+              try:
+                  text=p.read_text()
+              except UnicodeDecodeError:
+                  continue
+              if old not in text:
+                  continue
+              p.write_text(text.replace(old,new))
+              changed.append(str(p))
+          if not changed:
+              raise SystemExit('No stale Garden Water host references found')
+          print('Updated host in:')
+          print('\n'.join(changed))
+          PY
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Verify full repository
+        run: npm run verify:all
+      - name: Commit only durable routing repair
+        shell: bash
+        run: |
+          rm .github/workflows/garden-water-alias-repair.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Route Garden Water to restored production alias'
+          git push origin HEAD:agent/garden-water-production-alias
