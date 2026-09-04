@@ -4,6 +4,7 @@
   "private": true,
   "description": "Source-controlled deployment for chrisizworski.com",
   "scripts": {
+    "vercel-build": "node scripts/inject-ga4.mjs",
     "audit:live": "node scripts/crawl-live.mjs",
     "audit:boat-launch-source": "node scripts/audit-boat-launch-source.mjs",
     "benchmark:border": "node scripts/benchmark-border-crossing.mjs --check",
