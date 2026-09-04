@@ -1,6 +1,6 @@
 {
-  "version": "1.2.0",
-  "updated": "2026-09-02",
+  "version": "1.3.0",
+  "updated": "2026-09-03",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -1663,6 +1663,39 @@
       }
     },
     {
+      "id": "national-garden-water",
+      "name": "U.S. Garden Water Decision Tool",
+      "canonical": "https://chrisizworski.com/national-tools/garden-water/",
+      "aliases": [],
+      "kind": "decision-calculator",
+      "cluster": "gardening",
+      "primaryIntent": "garden watering decision by U.S. location",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "geographies": [
+        "united-states"
+      ],
+      "personas": [
+        "gardener"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new-utility"
+      }
+    },
+    {
       "id": "national-fall-color",
       "name": "U.S. Fall Color Timing",
       "canonical": "https://chrisizworski.com/national-tools/fall-color/",
@@ -2532,6 +2565,30 @@
       "strength": "strong",
       "surface": "white-christmas-michigan",
       "reason": "Michigan climatology users can check their actual city or ZIP in the live estimator."
+    },
+    {
+      "from": "national-planting",
+      "to": "national-garden-water",
+      "type": "decision-next-step",
+      "surface": "garden",
+      "reason": "After planting, gardeners need an ongoing decision about whether current crops need water.",
+      "strength": "strong"
+    },
+    {
+      "from": "national-garden-water",
+      "to": "national-planting",
+      "type": "season-planning",
+      "surface": "garden",
+      "reason": "A watering decision can hand gardeners back to crop timing and succession planning.",
+      "strength": "strong"
+    },
+    {
+      "from": "national-garden-water",
+      "to": "planting-calendar",
+      "type": "geographic-handoff",
+      "surface": "michigan-handoff",
+      "reason": "Michigan gardeners can continue into the established Michigan planting calendar.",
+      "strength": "optional"
     }
   ],
   "cannibalizationGroups": [
@@ -2660,6 +2717,14 @@
         "national-snow"
       ],
       "rule": "The live national tool owns current-year place-specific White Christmas probability/forecast intent. The map page owns historical national-map intent. Michigan owns state-specific climatology depth. Snowpack remains the measured snowpack canonical. Do not create city/state variants without distinct data depth and search evidence."
+    },
+    {
+      "intent": "U.S. garden watering decision",
+      "owner": "national-garden-water",
+      "supports": [
+        "national-planting"
+      ],
+      "rule": "Garden Water owns whether/how-much-to-water intent; National Planting remains the owner of crop timing and succession intent."
     }
   ],
   "expansionOpportunities": [
