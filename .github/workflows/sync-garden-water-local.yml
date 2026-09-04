@@ -1,0 +1,41 @@
+name: Sync Garden Water deployment mirror
+on:
+  push:
+    branches:
+      - 'agent/garden-water-local-deploy'
+    paths:
+      - 'scripts/sync-national-garden-water-deployment.mjs'
+      - '.github/workflows/sync-garden-water-local.yml'
+permissions:
+  contents: write
+jobs:
+  sync:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/garden-water-local-deploy
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Mirror Garden Water into main-site deployment
+        run: node scripts/sync-national-garden-water-deployment.mjs
+      - name: Install test dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Verify repository
+        run: npm run verify:all
+      - name: Commit deployment mirror
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add vercel.json api/national-garden-water.js public/assets/national-garden-water-engine.js public/assets/national-garden-water-page.js public/assets/national-garden-water.css public/data/national-garden-water-crops.json public/national-tools/garden-water tests/national-garden-water-routing.test.js
+          if git diff --cached --quiet; then
+            echo 'No Garden Water deployment changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Serve Garden Water from main-site deployment'
+          git push origin HEAD:agent/garden-water-local-deploy
