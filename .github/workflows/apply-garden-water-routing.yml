@@ -1,0 +1,120 @@
+name: Apply Garden Water routing integration
+on:
+  push:
+    branches:
+      - agent/national-garden-water-routing
+    paths:
+      - '.github/workflows/apply-garden-water-routing.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/national-garden-water-routing
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Add canonical composition and registry ownership
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+          const child = 'https://national-garden-water.vercel.app';
+
+          const vercelPath = 'vercel.json';
+          const vercel = JSON.parse(fs.readFileSync(vercelPath, 'utf8'));
+          const rewrites = vercel.rewrites || (vercel.rewrites = []);
+          const has = (source) => rewrites.some((item) => item.source === source);
+          function addAfter(anchor, routes) {
+            const missing = routes.filter((route) => !has(route.source));
+            if (!missing.length) return;
+            const index = rewrites.findIndex((item) => item.source === anchor);
+            rewrites.splice(index >= 0 ? index + 1 : rewrites.length, 0, ...missing);
+          }
+          addAfter('/api/national-frost', [
+            {source:'/api/national-garden-water', destination:`${child}/api/national-garden-water`},
+          ]);
+          addAfter('/assets/national-planting-v3.css', [
+            {source:'/assets/national-garden-water.css', destination:`${child}/assets/national-garden-water.css`},
+            {source:'/assets/national-garden-water-engine.js', destination:`${child}/assets/national-garden-water-engine.js`},
+            {source:'/assets/national-garden-water-page.js', destination:`${child}/assets/national-garden-water-page.js`},
+          ]);
+          addAfter('/data/national-planting-v3.json', [
+            {source:'/data/national-garden-water-crops.json', destination:`${child}/data/national-garden-water-crops.json`},
+          ]);
+          addAfter('/national-tools/planting/', [
+            {source:'/national-tools/garden-water', destination:`${child}/national-tools/garden-water/`},
+            {source:'/national-tools/garden-water/', destination:`${child}/national-tools/garden-water/`},
+          ]);
+          fs.writeFileSync(vercelPath, JSON.stringify(vercel, null, 2) + '\n');
+
+          const registryPath = 'benchmarks/tool-network-registry.json';
+          const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+          registry.version = '1.3.0';
+          registry.updated = '2026-09-03';
+          registry.tools ||= [];
+          if (!registry.tools.some((tool) => tool.id === 'national-garden-water')) {
+            const plantingIndex = registry.tools.findIndex((tool) => tool.id === 'national-planting');
+            const node = {
+              id: 'national-garden-water',
+              name: 'U.S. Garden Water Decision Tool',
+              canonical: 'https://chrisizworski.com/national-tools/garden-water/',
+              aliases: [],
+              kind: 'decision-calculator',
+              cluster: 'gardening',
+              primaryIntent: 'garden watering decision by U.S. location',
+              seasons: [3,4,5,6,7,8,9,10,11],
+              geographies: ['united-states'],
+              personas: ['gardener'],
+              networkRole: 'destination',
+              searchTreatment: {status:'active'},
+              searchEvidence: {status:'new-utility'}
+            };
+            registry.tools.splice(plantingIndex >= 0 ? plantingIndex + 1 : registry.tools.length, 0, node);
+          }
+
+          const arrays = [];
+          function collect(value, path = []) {
+            if (Array.isArray(value)) {
+              arrays.push({value, path});
+              value.forEach((item, index) => collect(item, path.concat(index)));
+            } else if (value && typeof value === 'object') {
+              Object.entries(value).forEach(([key, item]) => collect(item, path.concat(key)));
+            }
+          }
+          collect(registry);
+          const relationshipArray = arrays.find(({value}) => value.some((item) => item && typeof item === 'object' && 'from' in item && 'to' in item))?.value;
+          if (!relationshipArray) throw new Error('Tool relationship array not found');
+          const relations = [
+            {from:'national-planting',to:'national-garden-water',type:'decision-next-step',surface:'garden',reason:'After planting, gardeners need an ongoing decision about whether current crops need water.',strength:'strong'},
+            {from:'national-garden-water',to:'national-planting',type:'season-planning',surface:'garden',reason:'A watering decision can hand gardeners back to crop timing and succession planning.',strength:'strong'},
+            {from:'national-garden-water',to:'planting-calendar',type:'geographic-handoff',surface:'michigan-handoff',reason:'Michigan gardeners can continue into the established Michigan planting calendar.',strength:'optional'}
+          ];
+          for (const rel of relations) {
+            if (!relationshipArray.some((item) => item?.from === rel.from && item?.to === rel.to && item?.type === rel.type)) relationshipArray.push(rel);
+          }
+
+          const ownershipArray = arrays.find(({value}) => value.some((item) => item && typeof item === 'object' && 'intent' in item && 'owner' in item))?.value;
+          if (!ownershipArray) throw new Error('Intent ownership array not found');
+          if (!ownershipArray.some((item) => item?.owner === 'national-garden-water')) {
+            ownershipArray.push({
+              intent: 'U.S. garden watering decision',
+              owner: 'national-garden-water',
+              supports: ['national-planting'],
+              rule: 'Garden Water owns whether/how-much-to-water intent; National Planting remains the owner of crop timing and succession intent.'
+            });
+          }
+          fs.writeFileSync(registryPath, JSON.stringify(registry, null, 2) + '\n');
+
+          fs.rmSync('.github/workflows/apply-garden-water-routing.yml');
+          NODE
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add vercel.json benchmarks/tool-network-registry.json tests/national-garden-water-routing.test.js .github/workflows/apply-garden-water-routing.yml
+          git commit -m 'Route National Garden Water tool'
+          git push origin HEAD:agent/national-garden-water-routing
