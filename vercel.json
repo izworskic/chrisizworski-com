@@ -207,6 +207,10 @@
       "destination": "https://national-frost.vercel.app/api/national-frost"
     },
     {
+      "source": "/api/national-garden-water",
+      "destination": "https://national-garden-water.vercel.app/api/national-garden-water"
+    },
+    {
       "source": "/api/national-fall-color",
       "destination": "https://national-fall-color.vercel.app/api/national-fall-color"
     },
@@ -271,6 +275,18 @@
       "destination": "https://national-planting.vercel.app/assets/national-planting-v3.css"
     },
     {
+      "source": "/assets/national-garden-water.css",
+      "destination": "https://national-garden-water.vercel.app/assets/national-garden-water.css"
+    },
+    {
+      "source": "/assets/national-garden-water-engine.js",
+      "destination": "https://national-garden-water.vercel.app/assets/national-garden-water-engine.js"
+    },
+    {
+      "source": "/assets/national-garden-water-page.js",
+      "destination": "https://national-garden-water.vercel.app/assets/national-garden-water-page.js"
+    },
+    {
       "source": "/assets/white-christmas.css",
       "destination": "https://national-white-christmas.vercel.app/assets/white-christmas.css"
     },
@@ -313,6 +329,10 @@
     {
       "source": "/data/national-planting-v3.json",
       "destination": "https://national-planting.vercel.app/data/national-planting-v3.json"
+    },
+    {
+      "source": "/data/national-garden-water-crops.json",
+      "destination": "https://national-garden-water.vercel.app/data/national-garden-water-crops.json"
     },
     {
       "source": "/national-tools",
@@ -385,6 +405,14 @@
     {
       "source": "/national-tools/planting/",
       "destination": "https://national-planting.vercel.app/national-tools/planting/"
+    },
+    {
+      "source": "/national-tools/garden-water",
+      "destination": "https://national-garden-water.vercel.app/national-tools/garden-water/"
+    },
+    {
+      "source": "/national-tools/garden-water/",
+      "destination": "https://national-garden-water.vercel.app/national-tools/garden-water/"
     },
     {
       "source": "/national-tools/fall-color",
