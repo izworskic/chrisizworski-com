@@ -367,6 +367,18 @@
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/water/"
     },
     {
+      "source": "/national-tools/waterfalls",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/waterfalls/"
+    },
+    {
+      "source": "/national-tools/waterfalls/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/waterfalls/"
+    },
+    {
+      "source": "/national-tools/waterfalls/:path*",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/waterfalls/:path*"
+    },
+    {
       "source": "/national-tools/night-sky",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/night-sky/"
     },
