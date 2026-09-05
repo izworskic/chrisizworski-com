@@ -1,1 +1,586 @@
-{"$schema":"https://openapi.vercel.sh/vercel.json","version":2,"functions":{"api/border-crossings.js":{"maxDuration":20},"api/border-media.js":{"maxDuration":20},"api/border-trends.js":{"maxDuration":20},"api/mackinac-media.js":{"maxDuration":20},"api/beaches.js":{"maxDuration":25},"api/fall-color.js":{"maxDuration":60},"api/aurora.js":{"maxDuration":20},"api/field-camera.js":{"maxDuration":20},"api/**/*.js":{"maxDuration":10}},"redirects":[{"source":"/chris-izworski-bay-city-michigan","destination":"/chris-izworski-bay-city/","permanent":true},{"source":"/chris-izworski-bay-city-michigan/","destination":"/chris-izworski-bay-city/","permanent":true},{"source":"/chris-izworski-speaking","destination":"/speaking/","permanent":true},{"source":"/chris-izworski-speaking/","destination":"/speaking/","permanent":true},{"source":"/news-coverage","destination":"/chris-izworski-news-coverage/","permanent":true},{"source":"/news-coverage/","destination":"/chris-izworski-news-coverage/","permanent":true},{"source":"/prepared","destination":"/chris-izworski-prepared/","permanent":true},{"source":"/prepared/","destination":"/chris-izworski-prepared/","permanent":true},{"source":"/save-our-shoreline","destination":"/chris-izworski-save-our-shoreline/","permanent":true},{"source":"/save-our-shoreline/","destination":"/chris-izworski-save-our-shoreline/","permanent":true},{"source":"/fall-color/western-upper-peninsula-fall-color","destination":"/fall-color/porcupine-mountains-fall-color","permanent":true},{"source":"/fall-color/eastern-upper-peninsula-fall-color","destination":"/fall-color/tahquamenon-falls-fall-color","permanent":true},{"source":"/fall-color/sleeping-bear-fall-color","destination":"/fall-color/sleeping-bear-dunes-fall-color","permanent":true},{"source":"/fall-color/southwest-michigan-fall-color","destination":"/fall-color/saugatuck-southwest-michigan-fall-color","permanent":true},{"source":"/fall-color/southeast-michigan-fall-color","destination":"/fall-color/ann-arbor-irish-hills-fall-color","permanent":true}],"headers":[{"source":"/assets/isle-royale-map.js","headers":[{"key":"Cache-Control","value":"no-store, max-age=0"},{"key":"CDN-Cache-Control","value":"no-store"},{"key":"Vercel-CDN-Cache-Control","value":"no-store"}]},{"source":"/(.*)","headers":[{"key":"X-Content-Type-Options","value":"nosniff"},{"key":"Strict-Transport-Security","value":"max-age=31536000; includeSubDomains"}]},{"source":"/(.*)","has":[{"type":"host","value":"(?<preview>.*)\\.vercel\\.app"}],"headers":[{"key":"X-Robots-Tag","value":"noindex, nofollow, noarchive"}]},{"source":"/api/(.*)","headers":[{"key":"X-Robots-Tag","value":"noindex, nofollow"}]}],"crons":[{"path":"/api/fall-color?view=cron","schedule":"0 11 * * *"}],"rewrites":[{"source":"/api/fall-color-conditions","destination":"/api/fall-color?view=conditions"},{"source":"/api/fall-color-report","destination":"/api/fall-color?view=report"},{"source":"/fall-color/rss.xml","destination":"/api/fall-color?view=rss"},{"source":"/fall-color/sitemap.xml","destination":"/api/fall-color?view=sitemap"},{"source":"/api/national-geocode","destination":"https://national-outdoor-core.vercel.app/api/national-geocode"},{"source":"/api/national-aurora","destination":"https://national-aurora.vercel.app/api/national-aurora"},{"source":"/api/national-rivers","destination":"https://national-rivers.vercel.app/api/national-rivers"},{"source":"/api/national-river-context","destination":"https://national-rivers.vercel.app/api/national-river-context"},{"source":"/api/national-frost","destination":"https://national-frost.vercel.app/api/national-frost"},{"source":"/api/national-garden-water","destination":"https://national-garden-water.vercel.app/api/national-garden-water"},{"source":"/api/national-fall-color","destination":"https://national-fall-color.vercel.app/api/national-fall-color"},{"source":"/api/national-fall-observations","destination":"https://national-fall-color.vercel.app/api/national-fall-observations"},{"source":"/api/national-coastal","destination":"https://national-coastal-water.vercel.app/api/national-coastal"},{"source":"/api/national-snow","destination":"https://national-snowpack-melt.vercel.app/api/national-snow"},{"source":"/api/national-white-christmas","destination":"https://national-white-christmas.vercel.app/api/national-white-christmas"},{"source":"/api/isle-royale","destination":"https://isle-royale-outdoors.vercel.app/api/isle-royale"},{"source":"/api/isle-royale-route-weather","destination":"https://isle-royale-outdoors.vercel.app/api/isle-royale-route-weather"},{"source":"/api/isle-royale-water-intelligence","destination":"https://isle-royale-outdoors.vercel.app/api/isle-royale-water-intelligence"},{"source":"/assets/national-tools.css","destination":"https://national-outdoor-core.vercel.app/assets/national-tools.css"},{"source":"/assets/national-tools.js","destination":"https://national-outdoor-core.vercel.app/assets/national-tools.js"},{"source":"/assets/national-dashboard.js","destination":"https://national-outdoor-tools-hub.vercel.app/assets/national-dashboard.js"},{"source":"/assets/national-hubs.js","destination":"https://national-outdoor-tools-hub.vercel.app/assets/national-hubs.js"},{"source":"/assets/national-planting-engine.js","destination":"https://national-planting.vercel.app/assets/national-planting-engine.js"},{"source":"/assets/national-planting-page-v3.js","destination":"https://national-planting.vercel.app/assets/national-planting-page-v3.js"},{"source":"/assets/national-planting-season-years.js","destination":"https://national-planting.vercel.app/assets/national-planting-season-years.js"},{"source":"/assets/national-planting-v3.css","destination":"https://national-planting.vercel.app/assets/national-planting-v3.css"},{"source":"/assets/national-garden-water.css","destination":"https://national-garden-water.vercel.app/assets/national-garden-water.css"},{"source":"/assets/national-garden-water-engine.js","destination":"https://national-garden-water.vercel.app/assets/national-garden-water-engine.js"},{"source":"/assets/national-garden-water-page.js","destination":"https://national-garden-water.vercel.app/assets/national-garden-water-page.js"},{"source":"/assets/white-christmas.css","destination":"https://national-white-christmas.vercel.app/assets/white-christmas.css"},{"source":"/assets/white-christmas-hero-final.webp","destination":"https://national-white-christmas.vercel.app/assets/white-christmas-hero-final.webp"},{"source":"/assets/evergreen-corner.svg","destination":"https://national-white-christmas.vercel.app/assets/evergreen-corner.svg"},{"source":"/assets/holly-divider.svg","destination":"https://national-white-christmas.vercel.app/assets/holly-divider.svg"},{"source":"/assets/white-christmas-village.svg","destination":"https://national-white-christmas.vercel.app/assets/white-christmas-village.svg"},{"source":"/assets/wc-icon-:path*","destination":"https://national-white-christmas.vercel.app/assets/wc-icon-:path*"},{"source":"/assets/isle-royale-map.js","destination":"https://isle-royale-outdoors.vercel.app/assets/isle-royale-map.js"},{"source":"/assets/isle-royale-water-intelligence.js","destination":"https://isle-royale-outdoors.vercel.app/assets/isle-royale-water-intelligence.js"},{"source":"/data/national-usgs-streamflow-sites.json","destination":"https://national-rivers.vercel.app/data/national-usgs-streamflow-sites.json"},{"source":"/data/national-planting-crops.json","destination":"https://national-planting.vercel.app/data/national-planting-crops.json"},{"source":"/data/national-planting-v3.json","destination":"https://national-planting.vercel.app/data/national-planting-v3.json"},{"source":"/data/national-garden-water-crops.json","destination":"https://national-garden-water.vercel.app/data/national-garden-water-crops.json"},{"source":"/national-tools","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/"},{"source":"/national-tools/","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/"},{"source":"/national-tools/garden","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/garden/"},{"source":"/national-tools/garden/","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/garden/"},{"source":"/national-tools/fall","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/fall/"},{"source":"/national-tools/fall/","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/fall/"},{"source":"/national-tools/water","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/water/"},{"source":"/national-tools/water/","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/water/"},{"source":"/national-tools/waterfalls","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/waterfalls/"},{"source":"/national-tools/waterfalls/","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/waterfalls/"},{"source":"/national-tools/waterfalls/:path*","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/waterfalls/:path*"},{"source":"/national-tools/night-sky","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/night-sky/"},{"source":"/national-tools/night-sky/","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/night-sky/"},{"source":"/national-tools/aurora","destination":"https://national-aurora.vercel.app/national-tools/aurora/"},{"source":"/national-tools/aurora/","destination":"https://national-aurora.vercel.app/national-tools/aurora/"},{"source":"/national-tools/rivers","destination":"https://national-rivers.vercel.app/national-tools/rivers/"},{"source":"/national-tools/rivers/","destination":"https://national-rivers.vercel.app/national-tools/rivers/"},{"source":"/national-tools/frost","destination":"https://national-frost.vercel.app/national-tools/frost/"},{"source":"/national-tools/frost/","destination":"https://national-frost.vercel.app/national-tools/frost/"},{"source":"/national-tools/planting","destination":"https://national-planting.vercel.app/national-tools/planting/"},{"source":"/national-tools/planting/","destination":"https://national-planting.vercel.app/national-tools/planting/"},{"source":"/national-tools/garden-water","destination":"https://national-garden-water.vercel.app/national-tools/garden-water/"},{"source":"/national-tools/garden-water/","destination":"https://national-garden-water.vercel.app/national-tools/garden-water/"},{"source":"/national-tools/smoke","destination":"https://national-outdoor-core.vercel.app/national-tools/smoke/index.html"},{"source":"/national-tools/smoke/","destination":"https://national-outdoor-core.vercel.app/national-tools/smoke/index.html"},{"source":"/national-tools/fall-color","destination":"https://national-fall-color.vercel.app/national-tools/fall-color/"},{"source":"/national-tools/fall-color/","destination":"https://national-fall-color.vercel.app/national-tools/fall-color/"},{"source":"/national-tools/coastal","destination":"https://national-coastal-water.vercel.app/national-tools/coastal/"},{"source":"/national-tools/coastal/","destination":"https://national-coastal-water.vercel.app/national-tools/coastal/"},{"source":"/national-tools/snow","destination":"https://national-snowpack-melt.vercel.app/national-tools/snow/"},{"source":"/national-tools/snow/","destination":"https://national-snowpack-melt.vercel.app/national-tools/snow/"},{"source":"/national-tools/white-christmas","destination":"https://national-white-christmas.vercel.app/national-tools/white-christmas/"},{"source":"/national-tools/white-christmas/","destination":"https://national-white-christmas.vercel.app/national-tools/white-christmas/"},{"source":"/white-christmas-probability-map","destination":"https://national-white-christmas.vercel.app/white-christmas-probability-map/"},{"source":"/white-christmas-probability-map/","destination":"https://national-white-christmas.vercel.app/white-christmas-probability-map/"},{"source":"/white-christmas-michigan","destination":"https://national-white-christmas.vercel.app/white-christmas-michigan/"},{"source":"/white-christmas-michigan/","destination":"https://national-white-christmas.vercel.app/white-christmas-michigan/"},{"source":"/isle-royale-map","destination":"https://isle-royale-outdoors.vercel.app/isle-royale-map/"},{"source":"/isle-royale-map/","destination":"https://isle-royale-outdoors.vercel.app/isle-royale-map/"},{"source":"/national-tools/aurora/:path*","destination":"https://national-aurora.vercel.app/national-tools/aurora/:path*"},{"source":"/national-tools/rivers/:path*","destination":"https://national-rivers.vercel.app/national-tools/rivers/:path*"},{"source":"/national-tools/frost/:path*","destination":"https://national-frost.vercel.app/national-tools/frost/:path*"},{"source":"/national-tools/planting/:path*","destination":"https://national-planting.vercel.app/national-tools/planting/:path*"},{"source":"/national-tools/smoke/:path*","destination":"https://national-outdoor-core.vercel.app/national-tools/smoke/:path*"},{"source":"/national-tools/fall-color/:path*","destination":"https://national-fall-color.vercel.app/national-tools/fall-color/:path*"},{"source":"/national-tools/coastal/:path*","destination":"https://national-coastal-water.vercel.app/national-tools/coastal/:path*"},{"source":"/national-tools/snow/:path*","destination":"https://national-snowpack-melt.vercel.app/national-tools/snow/:path*"},{"source":"/national-tools/white-christmas/forecast","destination":"https://national-white-christmas.vercel.app/national-tools/white-christmas/forecast/index.html"},{"source":"/national-tools/white-christmas/forecast/","destination":"https://national-white-christmas.vercel.app/national-tools/white-christmas/forecast/index.html"},{"source":"/national-tools/white-christmas/regions","destination":"https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/index.html"},{"source":"/national-tools/white-christmas/regions/","destination":"https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/index.html"},{"source":"/national-tools/white-christmas/regions/:slug","destination":"https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/:slug/index.html"},{"source":"/national-tools/white-christmas/regions/:slug/","destination":"https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/:slug/index.html"},{"source":"/national-tools/white-christmas/cities/:slug/","destination":"https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/:slug/index.html"},{"source":"/national-tools/white-christmas/cities/:slug","destination":"https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/:slug/index.html"},{"source":"/national-tools/white-christmas/cities/","destination":"https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/index.html"},{"source":"/national-tools/white-christmas/cities","destination":"https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/index.html"},{"source":"/national-tools/white-christmas/:path*","destination":"https://national-white-christmas.vercel.app/national-tools/white-christmas/:path*"},{"source":"/white-christmas-probability-map/:path*","destination":"https://national-white-christmas.vercel.app/white-christmas-probability-map/:path*"},{"source":"/white-christmas-michigan/:path*","destination":"https://national-white-christmas.vercel.app/white-christmas-michigan/:path*"},{"source":"/isle-royale-map/:path*","destination":"https://isle-royale-outdoors.vercel.app/isle-royale-map/:path*"},{"source":"/national-tools/:path*","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"}]}
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "functions": {
+    "api/border-crossings.js": {
+      "maxDuration": 20
+    },
+    "api/border-media.js": {
+      "maxDuration": 20
+    },
+    "api/border-trends.js": {
+      "maxDuration": 20
+    },
+    "api/mackinac-media.js": {
+      "maxDuration": 20
+    },
+    "api/beaches.js": {
+      "maxDuration": 25
+    },
+    "api/fall-color.js": {
+      "maxDuration": 60
+    },
+    "api/aurora.js": {
+      "maxDuration": 20
+    },
+    "api/field-camera.js": {
+      "maxDuration": 20
+    },
+    "api/**/*.js": {
+      "maxDuration": 10
+    }
+  },
+  "redirects": [
+    {
+      "source": "/chris-izworski-bay-city-michigan",
+      "destination": "/chris-izworski-bay-city/",
+      "permanent": true
+    },
+    {
+      "source": "/chris-izworski-bay-city-michigan/",
+      "destination": "/chris-izworski-bay-city/",
+      "permanent": true
+    },
+    {
+      "source": "/chris-izworski-speaking",
+      "destination": "/speaking/",
+      "permanent": true
+    },
+    {
+      "source": "/chris-izworski-speaking/",
+      "destination": "/speaking/",
+      "permanent": true
+    },
+    {
+      "source": "/news-coverage",
+      "destination": "/chris-izworski-news-coverage/",
+      "permanent": true
+    },
+    {
+      "source": "/news-coverage/",
+      "destination": "/chris-izworski-news-coverage/",
+      "permanent": true
+    },
+    {
+      "source": "/prepared",
+      "destination": "/chris-izworski-prepared/",
+      "permanent": true
+    },
+    {
+      "source": "/prepared/",
+      "destination": "/chris-izworski-prepared/",
+      "permanent": true
+    },
+    {
+      "source": "/save-our-shoreline",
+      "destination": "/chris-izworski-save-our-shoreline/",
+      "permanent": true
+    },
+    {
+      "source": "/save-our-shoreline/",
+      "destination": "/chris-izworski-save-our-shoreline/",
+      "permanent": true
+    },
+    {
+      "source": "/fall-color/western-upper-peninsula-fall-color",
+      "destination": "/fall-color/porcupine-mountains-fall-color",
+      "permanent": true
+    },
+    {
+      "source": "/fall-color/eastern-upper-peninsula-fall-color",
+      "destination": "/fall-color/tahquamenon-falls-fall-color",
+      "permanent": true
+    },
+    {
+      "source": "/fall-color/sleeping-bear-fall-color",
+      "destination": "/fall-color/sleeping-bear-dunes-fall-color",
+      "permanent": true
+    },
+    {
+      "source": "/fall-color/southwest-michigan-fall-color",
+      "destination": "/fall-color/saugatuck-southwest-michigan-fall-color",
+      "permanent": true
+    },
+    {
+      "source": "/fall-color/southeast-michigan-fall-color",
+      "destination": "/fall-color/ann-arbor-irish-hills-fall-color",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/assets/isle-royale-map.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Vercel-CDN-Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "(?<preview>.*)\\.vercel\\.app"
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/fall-color?view=cron",
+      "schedule": "0 11 * * *"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/fall-color-conditions",
+      "destination": "/api/fall-color?view=conditions"
+    },
+    {
+      "source": "/api/fall-color-report",
+      "destination": "/api/fall-color?view=report"
+    },
+    {
+      "source": "/fall-color/rss.xml",
+      "destination": "/api/fall-color?view=rss"
+    },
+    {
+      "source": "/fall-color/sitemap.xml",
+      "destination": "/api/fall-color?view=sitemap"
+    },
+    {
+      "source": "/api/national-geocode",
+      "destination": "https://national-outdoor-core.vercel.app/api/national-geocode"
+    },
+    {
+      "source": "/api/national-aurora",
+      "destination": "https://national-aurora.vercel.app/api/national-aurora"
+    },
+    {
+      "source": "/api/national-rivers",
+      "destination": "https://national-rivers.vercel.app/api/national-rivers"
+    },
+    {
+      "source": "/api/national-river-context",
+      "destination": "https://national-rivers.vercel.app/api/national-river-context"
+    },
+    {
+      "source": "/api/national-frost",
+      "destination": "https://national-frost.vercel.app/api/national-frost"
+    },
+    {
+      "source": "/api/national-garden-water",
+      "destination": "https://national-garden-water.vercel.app/api/national-garden-water"
+    },
+    {
+      "source": "/api/national-fall-color",
+      "destination": "https://national-fall-color.vercel.app/api/national-fall-color"
+    },
+    {
+      "source": "/api/national-fall-observations",
+      "destination": "https://national-fall-color.vercel.app/api/national-fall-observations"
+    },
+    {
+      "source": "/api/national-coastal",
+      "destination": "https://national-coastal-water.vercel.app/api/national-coastal"
+    },
+    {
+      "source": "/api/national-snow",
+      "destination": "https://national-snowpack-melt.vercel.app/api/national-snow"
+    },
+    {
+      "source": "/api/national-white-christmas",
+      "destination": "https://national-white-christmas.vercel.app/api/national-white-christmas"
+    },
+    {
+      "source": "/api/isle-royale",
+      "destination": "https://isle-royale-outdoors.vercel.app/api/isle-royale"
+    },
+    {
+      "source": "/api/isle-royale-route-weather",
+      "destination": "https://isle-royale-outdoors.vercel.app/api/isle-royale-route-weather"
+    },
+    {
+      "source": "/api/isle-royale-water-intelligence",
+      "destination": "https://isle-royale-outdoors.vercel.app/api/isle-royale-water-intelligence"
+    },
+    {
+      "source": "/assets/national-tools.css",
+      "destination": "https://national-outdoor-core.vercel.app/assets/national-tools.css"
+    },
+    {
+      "source": "/assets/national-tools.js",
+      "destination": "https://national-outdoor-core.vercel.app/assets/national-tools.js"
+    },
+    {
+      "source": "/assets/national-dashboard.js",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/assets/national-dashboard.js"
+    },
+    {
+      "source": "/assets/national-hubs.js",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/assets/national-hubs.js"
+    },
+    {
+      "source": "/assets/national-planting-engine.js",
+      "destination": "https://national-planting.vercel.app/assets/national-planting-engine.js"
+    },
+    {
+      "source": "/assets/national-planting-page-v3.js",
+      "destination": "https://national-planting.vercel.app/assets/national-planting-page-v3.js"
+    },
+    {
+      "source": "/assets/national-planting-season-years.js",
+      "destination": "https://national-planting.vercel.app/assets/national-planting-season-years.js"
+    },
+    {
+      "source": "/assets/national-planting-v3.css",
+      "destination": "https://national-planting.vercel.app/assets/national-planting-v3.css"
+    },
+    {
+      "source": "/assets/national-garden-water.css",
+      "destination": "https://national-garden-water.vercel.app/assets/national-garden-water.css"
+    },
+    {
+      "source": "/assets/national-garden-water-engine.js",
+      "destination": "https://national-garden-water.vercel.app/assets/national-garden-water-engine.js"
+    },
+    {
+      "source": "/assets/national-garden-water-page.js",
+      "destination": "https://national-garden-water.vercel.app/assets/national-garden-water-page.js"
+    },
+    {
+      "source": "/assets/white-christmas.css",
+      "destination": "https://national-white-christmas.vercel.app/assets/white-christmas.css"
+    },
+    {
+      "source": "/assets/white-christmas-hero-final.webp",
+      "destination": "https://national-white-christmas.vercel.app/assets/white-christmas-hero-final.webp"
+    },
+    {
+      "source": "/assets/evergreen-corner.svg",
+      "destination": "https://national-white-christmas.vercel.app/assets/evergreen-corner.svg"
+    },
+    {
+      "source": "/assets/holly-divider.svg",
+      "destination": "https://national-white-christmas.vercel.app/assets/holly-divider.svg"
+    },
+    {
+      "source": "/assets/white-christmas-village.svg",
+      "destination": "https://national-white-christmas.vercel.app/assets/white-christmas-village.svg"
+    },
+    {
+      "source": "/assets/wc-icon-:path*",
+      "destination": "https://national-white-christmas.vercel.app/assets/wc-icon-:path*"
+    },
+    {
+      "source": "/assets/isle-royale-map.js",
+      "destination": "https://isle-royale-outdoors.vercel.app/assets/isle-royale-map.js"
+    },
+    {
+      "source": "/assets/isle-royale-water-intelligence.js",
+      "destination": "https://isle-royale-outdoors.vercel.app/assets/isle-royale-water-intelligence.js"
+    },
+    {
+      "source": "/data/national-usgs-streamflow-sites.json",
+      "destination": "https://national-rivers.vercel.app/data/national-usgs-streamflow-sites.json"
+    },
+    {
+      "source": "/data/national-planting-crops.json",
+      "destination": "https://national-planting.vercel.app/data/national-planting-crops.json"
+    },
+    {
+      "source": "/data/national-planting-v3.json",
+      "destination": "https://national-planting.vercel.app/data/national-planting-v3.json"
+    },
+    {
+      "source": "/data/national-garden-water-crops.json",
+      "destination": "https://national-garden-water.vercel.app/data/national-garden-water-crops.json"
+    },
+    {
+      "source": "/national-tools",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/"
+    },
+    {
+      "source": "/national-tools/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/"
+    },
+    {
+      "source": "/national-tools/garden",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/garden/"
+    },
+    {
+      "source": "/national-tools/garden/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/garden/"
+    },
+    {
+      "source": "/national-tools/fall",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/fall/"
+    },
+    {
+      "source": "/national-tools/fall/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/fall/"
+    },
+    {
+      "source": "/national-tools/water",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/water/"
+    },
+    {
+      "source": "/national-tools/water/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/water/"
+    },
+    {
+      "source": "/national-tools/waterfalls",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/waterfalls/"
+    },
+    {
+      "source": "/national-tools/waterfalls/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/waterfalls/"
+    },
+    {
+      "source": "/national-tools/waterfalls/:path*",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/waterfalls/:path*"
+    },
+    {
+      "source": "/national-tools/night-sky",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/night-sky/"
+    },
+    {
+      "source": "/national-tools/night-sky/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/night-sky/"
+    },
+    {
+      "source": "/national-tools/aurora",
+      "destination": "https://national-aurora.vercel.app/national-tools/aurora/"
+    },
+    {
+      "source": "/national-tools/aurora/",
+      "destination": "https://national-aurora.vercel.app/national-tools/aurora/"
+    },
+    {
+      "source": "/national-tools/rivers",
+      "destination": "https://national-rivers.vercel.app/national-tools/rivers/"
+    },
+    {
+      "source": "/national-tools/rivers/",
+      "destination": "https://national-rivers.vercel.app/national-tools/rivers/"
+    },
+    {
+      "source": "/national-tools/frost",
+      "destination": "https://national-frost.vercel.app/national-tools/frost/"
+    },
+    {
+      "source": "/national-tools/frost/",
+      "destination": "https://national-frost.vercel.app/national-tools/frost/"
+    },
+    {
+      "source": "/national-tools/planting",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/"
+    },
+    {
+      "source": "/national-tools/planting/",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/"
+    },
+    {
+      "source": "/national-tools/garden-water",
+      "destination": "https://national-garden-water.vercel.app/national-tools/garden-water/"
+    },
+    {
+      "source": "/national-tools/garden-water/",
+      "destination": "https://national-garden-water.vercel.app/national-tools/garden-water/"
+    },
+    {
+      "source": "/national-tools/smoke",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/smoke/index.html"
+    },
+    {
+      "source": "/national-tools/smoke/",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/smoke/index.html"
+    },
+    {
+      "source": "/national-tools/fall-color",
+      "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/"
+    },
+    {
+      "source": "/national-tools/fall-color/",
+      "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/"
+    },
+    {
+      "source": "/national-tools/coastal",
+      "destination": "https://national-coastal-water.vercel.app/national-tools/coastal/"
+    },
+    {
+      "source": "/national-tools/coastal/",
+      "destination": "https://national-coastal-water.vercel.app/national-tools/coastal/"
+    },
+    {
+      "source": "/national-tools/snow",
+      "destination": "https://national-snowpack-melt.vercel.app/national-tools/snow/"
+    },
+    {
+      "source": "/national-tools/snow/",
+      "destination": "https://national-snowpack-melt.vercel.app/national-tools/snow/"
+    },
+    {
+      "source": "/national-tools/white-christmas",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/"
+    },
+    {
+      "source": "/national-tools/white-christmas/",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/"
+    },
+    {
+      "source": "/white-christmas-probability-map",
+      "destination": "https://national-white-christmas.vercel.app/white-christmas-probability-map/"
+    },
+    {
+      "source": "/white-christmas-probability-map/",
+      "destination": "https://national-white-christmas.vercel.app/white-christmas-probability-map/"
+    },
+    {
+      "source": "/white-christmas-michigan",
+      "destination": "https://national-white-christmas.vercel.app/white-christmas-michigan/"
+    },
+    {
+      "source": "/white-christmas-michigan/",
+      "destination": "https://national-white-christmas.vercel.app/white-christmas-michigan/"
+    },
+    {
+      "source": "/isle-royale-map",
+      "destination": "https://isle-royale-outdoors.vercel.app/isle-royale-map/"
+    },
+    {
+      "source": "/isle-royale-map/",
+      "destination": "https://isle-royale-outdoors.vercel.app/isle-royale-map/"
+    },
+    {
+      "source": "/national-tools/aurora/:path*",
+      "destination": "https://national-aurora.vercel.app/national-tools/aurora/:path*"
+    },
+    {
+      "source": "/national-tools/rivers/:path*",
+      "destination": "https://national-rivers.vercel.app/national-tools/rivers/:path*"
+    },
+    {
+      "source": "/national-tools/frost/:path*",
+      "destination": "https://national-frost.vercel.app/national-tools/frost/:path*"
+    },
+    {
+      "source": "/national-tools/planting/:path*",
+      "destination": "https://national-planting.vercel.app/national-tools/planting/:path*"
+    },
+    {
+      "source": "/national-tools/smoke/:path*",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/smoke/:path*"
+    },
+    {
+      "source": "/national-tools/fall-color/:path*",
+      "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/:path*"
+    },
+    {
+      "source": "/national-tools/coastal/:path*",
+      "destination": "https://national-coastal-water.vercel.app/national-tools/coastal/:path*"
+    },
+    {
+      "source": "/national-tools/snow/:path*",
+      "destination": "https://national-snowpack-melt.vercel.app/national-tools/snow/:path*"
+    },
+    {
+      "source": "/national-tools/white-christmas/forecast",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/forecast/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/forecast/",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/forecast/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/regions",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/regions/",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/regions/:slug",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/:slug/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/regions/:slug/",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/regions/:slug/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/cities/:slug/",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/:slug/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/cities/:slug",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/:slug/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/cities/",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/cities",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/cities/index.html"
+    },
+    {
+      "source": "/national-tools/white-christmas/:path*",
+      "destination": "https://national-white-christmas.vercel.app/national-tools/white-christmas/:path*"
+    },
+    {
+      "source": "/white-christmas-probability-map/:path*",
+      "destination": "https://national-white-christmas.vercel.app/white-christmas-probability-map/:path*"
+    },
+    {
+      "source": "/white-christmas-michigan/:path*",
+      "destination": "https://national-white-christmas.vercel.app/white-christmas-michigan/:path*"
+    },
+    {
+      "source": "/isle-royale-map/:path*",
+      "destination": "https://isle-royale-outdoors.vercel.app/isle-royale-map/:path*"
+    },
+    {
+      "source": "/national-tools/:path*",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"
+    }
+  ]
+}
