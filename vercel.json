@@ -415,6 +415,14 @@
       "destination": "https://national-garden-water.vercel.app/national-tools/garden-water/"
     },
     {
+      "source": "/national-tools/smoke",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/smoke/index.html"
+    },
+    {
+      "source": "/national-tools/smoke/",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/smoke/index.html"
+    },
+    {
       "source": "/national-tools/fall-color",
       "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/"
     },
@@ -485,6 +493,10 @@
     {
       "source": "/national-tools/planting/:path*",
       "destination": "https://national-planting.vercel.app/national-tools/planting/:path*"
+    },
+    {
+      "source": "/national-tools/smoke/:path*",
+      "destination": "https://national-outdoor-core.vercel.app/national-tools/smoke/:path*"
     },
     {
       "source": "/national-tools/fall-color/:path*",
