@@ -118,7 +118,7 @@
   function renderMap(baseList){
     loadLeaflet(()=>{
       if(!window.L)return;
-      if(!map){map=L.map('we-map',{scrollWheelZoom:false}).setView([45.3,-84.8],5);L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap, &copy; CARTO',subdomains:'abcd'}).addTo(map);}
+      if(!map){map=L.map('we-map',{scrollWheelZoom:false}).setView([45.3,-84.8],5);L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{attribution:'&copy; OpenStreetMap, &copy; CARTO',subdomains:'abcd'}).addTo(map);}
       if(layer)layer.remove();layer=L.layerGroup().addTo(map);markerByAnchor.clear();groupByAnchor.clear();
       const groups=groupRecords(baseList);groups.forEach((g,label)=>groupByAnchor.set(label,g));const bounds=[];
       groups.forEach(g=>{

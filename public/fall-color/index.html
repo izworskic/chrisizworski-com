@@ -972,9 +972,9 @@ let map,regionLayer,canoeLayer,washLayer;
 function buildMap(){
   map=L.map("map",{zoomControl:true,attributionControl:false,maxZoom:15}).setView([44.9,-85.4],6);
   // Labeled dark basemap: cities, roads, highways, and water labels, kept on-brand dark.
-  const dark=L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{maxZoom:15,subdomains:"abcd"});
+  const dark=L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88",{maxZoom:15,subdomains:"abcd"});
   // Full street map with maximum road and place detail, for when you want it.
-  const streets=L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{maxZoom:15,subdomains:"abcd"}).addTo(map);
+  const streets=L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88",{maxZoom:15,subdomains:"abcd"}).addTo(map);
   const gibsDate=new Date(Date.now()-2*86400000).toISOString().slice(0,10);
   const sat=L.tileLayer(
     "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/"+gibsDate+"/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg",
