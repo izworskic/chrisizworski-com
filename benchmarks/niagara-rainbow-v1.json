@@ -1,0 +1,34 @@
+{
+  "name": "Niagara Falls Rainbow Predictor v1",
+  "version": "1.0.0",
+  "releaseTarget": 92,
+  "valueFunction": "V = D(20) + P(25) + U(15) + A(10) + Q(10) + R(10) + S(10)",
+  "lossFunction": "L = 100 - V + 100 * hardVetoCount. Release only when hardVetoCount = 0 and V >= 92.",
+  "dimensions": {
+    "decisionClarity": { "weight": 20, "goal": "Answer whether to go, when to go, and where to stand without requiring weather interpretation." },
+    "dataPhysicsIntegrity": { "weight": 25, "goal": "Use live NWS grid data plus solar, antisolar, rainbow-angle, viewpoint and wind-driven mist geometry. Do not imply empirical probability calibration." },
+    "usefulness": { "weight": 15, "goal": "Provide today's strongest window, ranked viewpoints, an hourly curve and a multi-day alternative." },
+    "mobileAccessibility": { "weight": 10, "goal": "Remain usable at 390px, keyboard accessible, semantic and reduced-motion aware." },
+    "visualQuality": { "weight": 10, "goal": "Use a credible Niagara hero photograph and an editorial, non-dashboard visual hierarchy." },
+    "resilienceFreshness": { "weight": 10, "goal": "Expose source freshness, cache responsibly, time out stalled requests and never replace failed live data with synthetic weather." },
+    "seoSchemaAnalytics": { "weight": 10, "goal": "Own one distinct canonical intent with query-first metadata, entity/schema integrity, social image and inherited GA4." }
+  },
+  "hardVetoes": [
+    "fake live weather or a hard-coded live opportunity score",
+    "no best-time answer",
+    "no best-viewpoint answer",
+    "missing GA4 G-Y5D2V2W7HN from the production build contract",
+    "no explicit degraded-data state",
+    "broken 390px/mobile treatment",
+    "displaying an unsupported precise probability instead of a rounded opportunity score"
+  ],
+  "calibrationRule": "Until the model has an empirical observation dataset, data/physics integrity is capped at 22/25. The UI must call the result an experimental opportunity score, not a calibrated probability.",
+  "benchmarkScenarios": [
+    "clear sky with usable geometry",
+    "heavy overcast suppresses otherwise favorable geometry",
+    "NWS upstream failure returns no synthetic fallback",
+    "five-day response and ranked viewpoints",
+    "source HTML ships no fake score",
+    "mobile/accessibility and metadata contracts"
+  ]
+}
