@@ -140,14 +140,16 @@ test('browser UI exposes retry/freshness and renders today, viewpoints and five-
   assert.match(API, /import\('\.\.\/lib\/niagara-rainbow-engine\.mjs'\)/);
 });
 
-test('nighttime is a hard zero and sunrise/sunset boundaries are calculated client-side', () => {
+test('nighttime hides the current score while sunrise and sunset boundaries remain enforced', () => {
   assert.match(UI, /SUNRISE_SUNSET_ALTITUDE\s*=\s*-0\.833/);
   assert.match(UI, /findNextHorizonCrossing/);
   assert.match(UI, /renderNightState/);
-  assert.match(UI, /todayScore\.textContent\s*=\s*'0'/);
-  assert.match(UI, /sun is below the horizon/i);
-  assert.match(PAGE, /hard-stops between sunset and sunrise/i);
-  assert.match(PAGE, /Rare moonbows are a different optical phenomenon/i);
+  assert.match(UI, /scoreRow\.hidden\s*=\s*true/);
+  assert.match(UI, /whyCard\.hidden\s*=\s*true/);
+  assert.match(UI, /Next rainbow opportunity/);
+  assert.doesNotMatch(UI, /todayScore\.textContent\s*=\s*'0'/);
+  assert.doesNotMatch(UI, /sun is below the horizon/i);
+  assert.doesNotMatch(PAGE, /hard-stops between sunset and sunrise/i);
 });
 
 test('two lazy third-party Niagara camera views are present', () => {
