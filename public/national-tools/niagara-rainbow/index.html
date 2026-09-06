@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Niagara Falls Rainbow Forecast | Chris Izworski</title>
+<meta name="description" content="See the best time and viewpoint for a Niagara Falls rainbow today using live NWS weather, sun angle and mist geometry.">
+<link rel="canonical" href="https://chrisizworski.com/national-tools/niagara-rainbow/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#0b3142">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Niagara Falls Rainbow Forecast">
+<meta property="og:description" content="A live experimental forecast for when and where a Niagara Falls rainbow is most likely to appear.">
+<meta property="og:url" content="https://chrisizworski.com/national-tools/niagara-rainbow/">
+<meta property="og:image" content="https://commons.wikimedia.org/wiki/Special:Redirect/file/HorseshoeFallsRainbowA.jpg?width=1800">
+<meta property="og:image:alt" content="Rainbow above Horseshoe Falls at Niagara Falls">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Niagara Falls Rainbow Forecast">
+<meta name="twitter:description" content="Best time + best viewpoint from live weather, sun angle and mist geometry.">
+<meta name="twitter:image" content="https://commons.wikimedia.org/wiki/Special:Redirect/file/HorseshoeFallsRainbowA.jpg?width=1800">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="/assets/niagara-rainbow.css">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},
+    {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
+    {"@type":"WebApplication","@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#app","name":"Niagara Falls Rainbow Forecast","applicationCategory":"WeatherApplication","operatingSystem":"Any","url":"https://chrisizworski.com/national-tools/niagara-rainbow/","description":"Experimental decision engine that estimates the best time and viewpoint to see a Niagara Falls rainbow using NWS weather, solar position and mist geometry.","author":{"@id":"https://chrisizworski.com/#person"}},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#page","url":"https://chrisizworski.com/national-tools/niagara-rainbow/","name":"Niagara Falls Rainbow Forecast","isPartOf":{"@id":"https://chrisizworski.com/#website"},"mainEntity":{"@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#app"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-09-05","inLanguage":"en-US"},
+    {"@type":"FAQPage","@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#faq","mainEntity":[
+      {"@type":"Question","name":"What is the best time to see a rainbow at Niagara Falls?","acceptedAnswer":{"@type":"Answer","text":"The best time changes with the sun angle, cloud cover, wind and your viewpoint. This live tool evaluates the geometry every 10 minutes and identifies the strongest current window."}},
+      {"@type":"Question","name":"Does it have to be raining to see a rainbow at Niagara Falls?","acceptedAnswer":{"@type":"Answer","text":"No. Niagara Falls continuously produces mist, so direct sunlight reaching that mist at the right angle can create a rainbow even without rain."}},
+      {"@type":"Question","name":"Which viewpoint is best for a Niagara Falls rainbow?","acceptedAnswer":{"@type":"Answer","text":"It depends on the time of day, sun position and wind-driven mist. The tool ranks Terrapin Point, Prospect Point, Luna Island, Table Rock and Queen Victoria Park for the current forecast."}},
+      {"@type":"Question","name":"Is a Niagara Falls rainbow guaranteed?","acceptedAnswer":{"@type":"Answer","text":"No. This is an experimental opportunity model, not a guarantee. Small cloud changes can block the direct sunlight needed for a rainbow."}}
+    ]}
+  ]
+}
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+<script defer src="/assets/niagara-rainbow.js"></script>
+</head>
+<body data-analytics-page="niagara-rainbow-predictor">
+<a class="skip-link" href="#forecast">Skip to rainbow forecast</a>
+<header class="site-header">
+  <a class="site-name" href="/">Chris Izworski</a>
+  <nav class="site-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/tools/">Tools</a><a href="/national-tools/" aria-current="page">National tools</a><a href="/guides/">Guides</a></nav>
+</header>
+<main>
+  <section class="hero" aria-labelledby="pageTitle">
+    <img class="hero-image" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/HorseshoeFallsRainbowA.jpg?width=1800" width="1800" height="1200" alt="Rainbow arching through mist at Horseshoe Falls, Niagara Falls" fetchpriority="high">
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-content">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/national-tools/">National tools</a><span>/</span><span>Niagara rainbow</span></nav>
+      <p class="eyebrow">Live Niagara Falls decision tool</p>
+      <h1 id="pageTitle">Will there be a rainbow at Niagara Falls today?</h1>
+      <p class="hero-lede">Find the best time and the best place to stand. The model combines the sun’s position with live NWS clouds, wind and the falls’ mist geometry.</p>
+      <a class="hero-button" href="#forecast">See today’s forecast <span aria-hidden="true">↓</span></a>
+    </div>
+    <p class="photo-credit">Hero: Rlevse / Wikimedia Commons · CC BY-SA 3.0</p>
+  </section>
+
+  <section class="forecast-shell" id="forecast" aria-labelledby="forecastTitle">
+    <div class="live-strip"><span class="live-dot is-loading" id="liveDot" aria-hidden="true"></span><strong id="freshness">Loading live NWS forecast…</strong><button type="button" class="text-button" id="refreshButton">Refresh</button></div>
+    <div class="decision-grid">
+      <article class="decision-card" aria-live="polite">
+        <p class="eyebrow">Today’s rainbow opportunity</p>
+        <div class="score-row"><strong class="score" id="todayScore">—</strong><span class="score-unit">/100</span></div>
+        <h2 id="forecastTitle">Checking the sun, mist and clouds…</h2>
+        <p class="decision-copy" id="recommendation">Connecting to the National Weather Service.</p>
+        <div class="decision-facts">
+          <div><span>Best window</span><strong id="bestWindow">—</strong></div>
+          <div><span>Best viewpoint</span><strong id="bestViewpoint">—</strong></div>
+          <div><span>Confidence</span><strong id="confidence">—</strong></div>
+        </div>
+        <p class="model-note">Experimental model estimate — not a guarantee.</p>
+      </article>
+      <aside class="why-card" aria-labelledby="whyTitle">
+        <p class="eyebrow">Why this score</p>
+        <h2 id="whyTitle">Four things have to line up</h2>
+        <div class="meter-list" id="componentMeters">
+          <div class="meter-row"><div><span>Optical geometry</span><strong>—</strong></div><div class="meter"><i style="width:0%"></i></div></div>
+          <div class="meter-row"><div><span>Direct sunlight</span><strong>—</strong></div><div class="meter"><i style="width:0%"></i></div></div>
+          <div class="meter-row"><div><span>Mist + wind</span><strong>—</strong></div><div class="meter"><i style="width:0%"></i></div></div>
+          <div class="meter-row"><div><span>Visibility</span><strong>—</strong></div><div class="meter"><i style="width:0%"></i></div></div>
+        </div>
+        <p class="why-explain" id="whyExplain">The strongest rainbows form when direct sunlight reaches the mist about 42° from the antisolar point.</p>
+      </aside>
+    </div>
+
+    <div class="error-card" id="errorCard" hidden role="alert">
+      <strong>We couldn’t refresh the live rainbow forecast.</strong>
+      <p id="errorText">No synthetic forecast is being shown. Try refreshing the live NWS data.</p>
+      <button type="button" class="button" id="retryButton">Try again</button>
+    </div>
+  </section>
+
+  <section class="content-shell" aria-labelledby="timelineTitle">
+    <div class="section-heading"><div><p class="eyebrow">Today, hour by hour</p><h2 id="timelineTitle">When the geometry is best</h2></div><p>Each bar shows the strongest modeled viewpoint at that time.</p></div>
+    <div class="timeline" id="timeline" aria-live="polite"><p class="loading-copy">Building today’s 10-minute model…</p></div>
+  </section>
+
+  <section class="content-shell" aria-labelledby="viewpointsTitle">
+    <div class="section-heading"><div><p class="eyebrow">Where to stand</p><h2 id="viewpointsTitle">Best Niagara Falls rainbow viewpoints today</h2></div><p>The ranking changes as the sun moves and wind shifts the mist plume.</p></div>
+    <div class="viewpoint-grid" id="viewpointGrid"><p class="loading-copy">Ranking viewpoints…</p></div>
+  </section>
+
+  <section class="content-shell" aria-labelledby="outlookTitle">
+    <div class="section-heading"><div><p class="eyebrow">Plan ahead</p><h2 id="outlookTitle">5-day rainbow outlook</h2></div><p>If today is poor, the tool looks for the next stronger day.</p></div>
+    <div class="outlook-grid" id="outlookGrid"><p class="loading-copy">Building the outlook…</p></div>
+  </section>
+
+  <section class="content-shell split-copy">
+    <article>
+      <p class="eyebrow">What makes this different</p>
+      <h2>A weather forecast cannot tell you where a rainbow will be</h2>
+      <p>Niagara already supplies the water droplets. The missing pieces are direct sunlight and geometry. A primary rainbow appears about 42 degrees from the antisolar point — the point directly opposite the sun. This tool calculates the sun position every 10 minutes, estimates where the falls’ mist is being pushed by the wind, then evaluates that mist from five public viewpoints.</p>
+      <p>Cloud cover is still decisive. Perfect geometry does not help if a cloud blocks the sun, which is why the result is an opportunity score rather than a promise.</p>
+      <details><summary>Model details and limitations</summary><p>The model uses NWS forecast-grid cloud cover, wind speed, wind direction, precipitation probability and visibility when available. It approximates each falls’ mist source and plume displacement. Local spray is turbulent and clouds can change faster than a forecast grid, so real-world conditions can beat or miss the model.</p></details>
+    </article>
+    <aside class="source-card">
+      <p class="eyebrow">Live source</p>
+      <h2>National Weather Service</h2>
+      <p id="sourceDetail">Forecast-grid data will appear here after the first refresh.</p>
+      <p><a href="https://www.weather.gov/documentation/services-web-api" target="_blank" rel="noopener">NWS API documentation →</a></p>
+    </aside>
+  </section>
+
+  <section class="content-shell faq" aria-labelledby="faqTitle">
+    <p class="eyebrow">Quick answers</p>
+    <h2 id="faqTitle">Niagara Falls rainbow FAQ</h2>
+    <details open><summary>What is the best time to see a rainbow at Niagara Falls?</summary><p>There is no fixed hour. The best time depends on the season, clouds, wind and where you stand. The live forecast above identifies the strongest current window instead of using a generic “morning” or “afternoon” rule.</p></details>
+    <details><summary>Does it need to be raining?</summary><p>No. Niagara Falls continuously creates a large mist plume. Sunlight hitting those airborne droplets at the correct angle can produce a rainbow on a dry day.</p></details>
+    <details><summary>Which side of Niagara Falls is best?</summary><p>Both sides can work. The model scores U.S. viewpoints such as Terrapin Point, Prospect Point and Luna Island alongside Canadian viewpoints such as Table Rock and Queen Victoria Park.</p></details>
+    <details><summary>Why did the rainbow disappear even though the score was high?</summary><p>A small cloud passing in front of the sun can shut the effect off almost instantly. Wind also moves the mist. Use the score as a decision aid, then watch for direct sun breaking through.</p></details>
+  </section>
+</main>
+<footer class="site-footer"><div><strong>Chris Izworski</strong><p>Useful live tools built from public data, physics and clear decision rules.</p></div><nav><a href="/national-tools/">National tools</a><a href="/tools/">Michigan tools</a><a href="/">Home</a></nav><p>© 2026 Chris Izworski</p></footer>
+</body>
+</html>
