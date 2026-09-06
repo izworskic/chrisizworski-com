@@ -140,6 +140,26 @@ test('browser UI exposes retry/freshness and renders today, viewpoints and five-
   assert.match(API, /import\('\.\.\/lib\/niagara-rainbow-engine\.mjs'\)/);
 });
 
+test('nighttime is a hard zero and sunrise/sunset boundaries are calculated client-side', () => {
+  assert.match(UI, /SUNRISE_SUNSET_ALTITUDE\s*=\s*-0\.833/);
+  assert.match(UI, /findNextHorizonCrossing/);
+  assert.match(UI, /renderNightState/);
+  assert.match(UI, /todayScore\.textContent\s*=\s*'0'/);
+  assert.match(UI, /sun is below the horizon/i);
+  assert.match(PAGE, /hard-stops between sunset and sunrise/i);
+  assert.match(PAGE, /Rare moonbows are a different optical phenomenon/i);
+});
+
+test('two lazy third-party Niagara camera views are present', () => {
+  const iframes = PAGE.match(/<iframe\b/g) || [];
+  assert.ok(iframes.length >= 2, `expected at least two camera iframes, got ${iframes.length}`);
+  assert.match(PAGE, /youtube-nocookie\.com\/embed\/qx7gry390YA/);
+  assert.match(PAGE, /youtube-nocookie\.com\/embed\/cf4YkyGk6Tk/);
+  assert.match(PAGE, /loading="lazy"/);
+  assert.match(PAGE, /Fallsview Casino \/ EarthCam/);
+  assert.match(CSS, /\.camera-grid/);
+});
+
 test('mobile and accessibility release guards are in the source', () => {
   assert.match(PAGE, /class="skip-link"/);
   assert.match(PAGE, /aria-live="polite"/);
