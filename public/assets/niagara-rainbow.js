@@ -2,18 +2,88 @@
   const $ = (id) => document.getElementById(id);
   const els = {
     liveDot: $('liveDot'), freshness: $('freshness'), refreshButton: $('refreshButton'), todayScore: $('todayScore'),
-    forecastTitle: $('forecastTitle'), recommendation: $('recommendation'), bestWindow: $('bestWindow'), bestViewpoint: $('bestViewpoint'),
+    opportunityEyebrow: $('opportunityEyebrow'), forecastTitle: $('forecastTitle'), recommendation: $('recommendation'), bestWindow: $('bestWindow'), bestViewpoint: $('bestViewpoint'),
     confidence: $('confidence'), componentMeters: $('componentMeters'), whyExplain: $('whyExplain'), errorCard: $('errorCard'),
     errorText: $('errorText'), retryButton: $('retryButton'), timeline: $('timeline'), viewpointGrid: $('viewpointGrid'),
     outlookGrid: $('outlookGrid'), sourceDetail: $('sourceDetail')
   };
   const TZ = 'America/New_York';
+  const LAT = 43.0810;
+  const LON = -79.0740;
+  const SUNRISE_SUNSET_ALTITUDE = -0.833;
   let controller;
 
   const timeFmt = new Intl.DateTimeFormat('en-US', { timeZone: TZ, hour: 'numeric', minute: '2-digit' });
   const shortTimeFmt = new Intl.DateTimeFormat('en-US', { timeZone: TZ, hour: 'numeric' });
   const dayFmt = new Intl.DateTimeFormat('en-US', { timeZone: TZ, weekday: 'short', month: 'short', day: 'numeric' });
   const fullDateFmt = new Intl.DateTimeFormat('en-US', { timeZone: TZ, weekday: 'long', month: 'long', day: 'numeric' });
+
+  const clamp = (v, min = 0, max = 1) => Math.max(min, Math.min(max, v));
+  const rad = (d) => d * Math.PI / 180;
+  const deg = (r) => r * 180 / Math.PI;
+
+  function localDateKey(date) {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit'
+    }).formatToParts(date);
+    const out = Object.fromEntries(parts.map((p) => [p.type, p.value]));
+    return `${out.year}-${out.month}-${out.day}`;
+  }
+
+  function solarPosition(date) {
+    const jd = date.getTime() / 86400000 + 2440587.5;
+    const t = (jd - 2451545.0) / 36525;
+    const geomMeanLong = ((280.46646 + t * (36000.76983 + t * 0.0003032)) % 360 + 360) % 360;
+    const geomMeanAnom = 357.52911 + t * (35999.05029 - 0.0001537 * t);
+    const ecc = 0.016708634 - t * (0.000042037 + 0.0000001267 * t);
+    const sunEq = Math.sin(rad(geomMeanAnom)) * (1.914602 - t * (0.004817 + 0.000014 * t))
+      + Math.sin(rad(2 * geomMeanAnom)) * (0.019993 - 0.000101 * t)
+      + Math.sin(rad(3 * geomMeanAnom)) * 0.000289;
+    const trueLong = geomMeanLong + sunEq;
+    const omega = 125.04 - 1934.136 * t;
+    const appLong = trueLong - 0.00569 - 0.00478 * Math.sin(rad(omega));
+    const meanObliq = 23 + (26 + (21.448 - t * (46.815 + t * (0.00059 - t * 0.001813))) / 60) / 60;
+    const obliq = meanObliq + 0.00256 * Math.cos(rad(omega));
+    const decl = deg(Math.asin(Math.sin(rad(obliq)) * Math.sin(rad(appLong))));
+    const y = Math.tan(rad(obliq / 2)) ** 2;
+    const eqTime = 4 * deg(y * Math.sin(2 * rad(geomMeanLong)) - 2 * ecc * Math.sin(rad(geomMeanAnom))
+      + 4 * ecc * y * Math.sin(rad(geomMeanAnom)) * Math.cos(2 * rad(geomMeanLong))
+      - 0.5 * y * y * Math.sin(4 * rad(geomMeanLong))
+      - 1.25 * ecc * ecc * Math.sin(2 * rad(geomMeanAnom)));
+    const utcMinutes = date.getUTCHours() * 60 + date.getUTCMinutes() + date.getUTCSeconds() / 60;
+    let trueSolar = (utcMinutes + eqTime + 4 * LON) % 1440;
+    if (trueSolar < 0) trueSolar += 1440;
+    let hourAngle = trueSolar / 4 - 180;
+    if (hourAngle < -180) hourAngle += 360;
+    const cosZenith = clamp(
+      Math.sin(rad(LAT)) * Math.sin(rad(decl)) + Math.cos(rad(LAT)) * Math.cos(rad(decl)) * Math.cos(rad(hourAngle)),
+      -1, 1
+    );
+    return { elevation: 90 - deg(Math.acos(cosZenith)) };
+  }
+
+  function findNextHorizonCrossing(start, rising) {
+    let previous = solarPosition(start).elevation;
+    for (let i = 1; i <= 432; i += 1) {
+      const at = new Date(start.getTime() + i * 5 * 60000);
+      const current = solarPosition(at).elevation;
+      if (rising && previous <= SUNRISE_SUNSET_ALTITUDE && current > SUNRISE_SUNSET_ALTITUDE) return at;
+      if (!rising && previous > SUNRISE_SUNSET_ALTITUDE && current <= SUNRISE_SUNSET_ALTITUDE) return at;
+      previous = current;
+    }
+    return null;
+  }
+
+  function daylightState(now = new Date()) {
+    const elevation = solarPosition(now).elevation;
+    const isDaylight = elevation > SUNRISE_SUNSET_ALTITUDE;
+    return {
+      isDaylight,
+      elevation,
+      nextSunrise: isDaylight ? null : findNextHorizonCrossing(now, true),
+      nextSunset: isDaylight ? findNextHorizonCrossing(now, false) : null
+    };
+  }
 
   function scoreClass(score) {
     return score >= 75 ? 'score-high' : score >= 50 ? 'score-mid' : 'score-low';
@@ -59,13 +129,39 @@
     }).join('');
   }
 
-  function renderToday(day) {
+  function renderNightState(days, state) {
+    const nextRise = state.nextSunrise;
+    const nextDayKey = nextRise ? localDateKey(nextRise) : null;
+    const nextDay = days?.find((d) => d.date === nextDayKey) || days?.[1] || days?.[0];
+    const nextBest = nextDay?.windows?.[0] || null;
+    if (els.opportunityEyebrow) els.opportunityEyebrow.textContent = 'Rainbow opportunity right now';
+    els.todayScore.textContent = '0';
+    els.todayScore.className = 'score score-low';
+    els.forecastTitle.textContent = 'No rainbow now — the sun is below the horizon';
+    const riseText = nextRise ? timeFmt.format(nextRise) : 'the next sunrise';
+    const nextPeak = nextDay?.peakAt ? ` The next modeled daylight peak is ${nextDay.peak}/100 near ${formatPeak(nextDay.peakAt)}${nextDay.bestViewpoint ? ` from ${nextDay.bestViewpoint}` : ''}.` : '';
+    els.recommendation.textContent = `Ordinary Niagara mist rainbows require direct sunlight. The next possible daylight begins around ${riseText}.${nextPeak}`;
+    els.bestWindow.textContent = nextBest ? `${nextDayKey === localDateKey(new Date()) ? 'After sunrise' : 'Next daylight'}: ${formatWindow(nextBest)}` : `Sunrise about ${riseText}`;
+    els.bestViewpoint.textContent = nextDay?.bestViewpoint ? `${nextDay.bestViewpoint}${nextDay.bestFall ? ` · ${nextDay.bestFall}` : ''}` : 'Recheck after sunrise';
+    els.confidence.textContent = 'Hard daylight cutoff';
+    renderComponents({ geometry: 0, sunlight: 0, mist: 0, visibility: 0 });
+    els.whyExplain.textContent = `Sun elevation is ${state.elevation.toFixed(1)}°. This tool hard-stops sunlit rainbow scoring between sunset and sunrise.`;
+  }
+
+  function renderToday(day, days) {
+    const state = daylightState();
+    if (!state.isDaylight) {
+      renderNightState(days, state);
+      return;
+    }
+    if (els.opportunityEyebrow) els.opportunityEyebrow.textContent = 'Today’s best daylight opportunity';
     const best = day?.windows?.[0] || null;
     const score = day?.peak ?? 0;
     els.todayScore.textContent = String(score);
     els.todayScore.className = `score ${scoreClass(score)}`;
     els.forecastTitle.textContent = opportunityLabel(score);
-    els.recommendation.textContent = day?.recommendation || 'The model could not form a recommendation for today.';
+    const sunsetText = state.nextSunset ? ` Sunset is about ${timeFmt.format(state.nextSunset)}; the model does not score ordinary rainbows after that.` : '';
+    els.recommendation.textContent = `${day?.recommendation || 'The model could not form a recommendation for today.'}${sunsetText}`;
     els.bestWindow.textContent = best ? formatWindow(best) : (day?.peakAt ? `Peak near ${formatPeak(day.peakAt)}` : 'No daylight window');
     els.bestViewpoint.textContent = day?.bestViewpoint ? `${day.bestViewpoint}${day.bestFall ? ` · ${day.bestFall}` : ''}` : '—';
     els.confidence.textContent = day?.confidence || '—';
@@ -74,7 +170,7 @@
       const w = day.weatherAtPeak;
       const sky = Number.isFinite(w.skyCover) ? `${Math.round(w.skyCover)}% cloud cover` : 'cloud coverage unavailable';
       const wind = Number.isFinite(w.windSpeedKmh) ? `${Math.round(w.windSpeedKmh)} km/h wind` : 'wind speed unavailable';
-      els.whyExplain.textContent = `At the modeled peak: ${sky}, ${wind}. Geometry is evaluated against the ~42° primary-rainbow cone.`;
+      els.whyExplain.textContent = `At the modeled peak: ${sky}, ${wind}. Geometry is evaluated against the ~42° primary-rainbow cone, during daylight only.`;
     }
   }
 
@@ -121,7 +217,7 @@
         <div class="mini-score ${scoreClass(day.peak)}">${day.peak}<small>/100</small></div>
         <h3>${opportunityLabel(day.peak)}</h3>
         <p>${best ? `${formatWindow(best)} · ${best.viewpoint}` : `Peak ${formatPeak(day.peakAt)} · ${day.bestViewpoint || 'viewpoint uncertain'}`}</p>
-        <p>Confidence: ${day.confidence || '—'}</p>
+        <p>Daylight forecast · Confidence: ${day.confidence || '—'}</p>
       </article>`;
     }).join('');
   }
@@ -131,7 +227,7 @@
     const label = fetched && !Number.isNaN(fetched.getTime()) ? `${fullDateFmt.format(fetched)} at ${timeFmt.format(fetched)}` : 'just now';
     els.liveDot.className = 'live-dot is-live';
     els.freshness.textContent = `Live NWS grid fetched ${label}`;
-    els.sourceDetail.textContent = `Weather: ${data?.source?.name || 'National Weather Service'}. Model version ${data?.model?.version || '1.0.0'} evaluates the sun and mist geometry every ${data?.model?.intervalMinutes || 10} minutes. Last live fetch: ${label}.`;
+    els.sourceDetail.textContent = `Weather: ${data?.source?.name || 'National Weather Service'}. Model version ${data?.model?.version || '1.0.0'} evaluates the sun and mist geometry every ${data?.model?.intervalMinutes || 10} minutes during daylight only. Last live fetch: ${label}.`;
   }
 
   function showError(error) {
@@ -157,7 +253,7 @@
       const response = await fetch('/api/niagara-rainbow', { cache: 'no-store', signal: controller.signal, headers: { Accept: 'application/json' } });
       const data = await response.json().catch(() => ({}));
       if (!response.ok || !data.ok) throw new Error(data.error || `Live source returned HTTP ${response.status}`);
-      renderToday(data.days?.[0]);
+      renderToday(data.days?.[0], data.days);
       renderTimeline(data.days?.[0]);
       renderViewpoints(data.viewpoints);
       renderOutlook(data.days);
