@@ -367,6 +367,18 @@
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/water/"
     },
     {
+      "source": "/national-tools/waterfalls/niagara-falls-live",
+      "destination": "https://jubilant-lost-bloatware.replit.app/"
+    },
+    {
+      "source": "/national-tools/waterfalls/niagara-falls-live/",
+      "destination": "https://jubilant-lost-bloatware.replit.app/"
+    },
+    {
+      "source": "/national-tools/waterfalls/niagara-falls-live/:path*",
+      "destination": "https://jubilant-lost-bloatware.replit.app/:path*"
+    },
+    {
       "source": "/national-tools/waterfalls",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/waterfalls/"
     },
