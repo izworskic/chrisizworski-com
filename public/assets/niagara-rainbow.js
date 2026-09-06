@@ -134,18 +134,22 @@
     const nextDayKey = nextRise ? localDateKey(nextRise) : null;
     const nextDay = days?.find((d) => d.date === nextDayKey) || days?.[1] || days?.[0];
     const nextBest = nextDay?.windows?.[0] || null;
-    if (els.opportunityEyebrow) els.opportunityEyebrow.textContent = 'Rainbow opportunity right now';
-    els.todayScore.textContent = '0';
-    els.todayScore.className = 'score score-low';
-    els.forecastTitle.textContent = 'No rainbow now — the sun is below the horizon';
-    const riseText = nextRise ? timeFmt.format(nextRise) : 'the next sunrise';
-    const nextPeak = nextDay?.peakAt ? ` The next modeled daylight peak is ${nextDay.peak}/100 near ${formatPeak(nextDay.peakAt)}${nextDay.bestViewpoint ? ` from ${nextDay.bestViewpoint}` : ''}.` : '';
-    els.recommendation.textContent = `Ordinary Niagara mist rainbows require direct sunlight. The next possible daylight begins around ${riseText}.${nextPeak}`;
-    els.bestWindow.textContent = nextBest ? `${nextDayKey === localDateKey(new Date()) ? 'After sunrise' : 'Next daylight'}: ${formatWindow(nextBest)}` : `Sunrise about ${riseText}`;
-    els.bestViewpoint.textContent = nextDay?.bestViewpoint ? `${nextDay.bestViewpoint}${nextDay.bestFall ? ` · ${nextDay.bestFall}` : ''}` : 'Recheck after sunrise';
-    els.confidence.textContent = 'Hard daylight cutoff';
-    renderComponents({ geometry: 0, sunlight: 0, mist: 0, visibility: 0 });
-    els.whyExplain.textContent = `Sun elevation is ${state.elevation.toFixed(1)}°. This tool hard-stops sunlit rainbow scoring between sunset and sunrise.`;
+    const scoreRow = els.todayScore?.closest('.score-row');
+    const whyCard = els.componentMeters?.closest('.why-card');
+    if (scoreRow) scoreRow.hidden = true;
+    if (whyCard) whyCard.hidden = true;
+    if (els.opportunityEyebrow) els.opportunityEyebrow.textContent = 'Next rainbow opportunity';
+    els.forecastTitle.textContent = 'Next forecast window';
+    const riseText = nextRise ? timeFmt.format(nextRise) : null;
+    if (nextBest) {
+      els.recommendation.textContent = `The next modeled window is ${formatWindow(nextBest)}${nextDay?.bestViewpoint ? ` from ${nextDay.bestViewpoint}` : ''}.`;
+      els.bestWindow.textContent = formatWindow(nextBest);
+    } else {
+      els.recommendation.textContent = riseText ? `The next forecast window will be evaluated after about ${riseText}.` : 'The next forecast window will appear here when available.';
+      els.bestWindow.textContent = riseText ? `Around ${riseText}` : '—';
+    }
+    els.bestViewpoint.textContent = nextDay?.bestViewpoint ? `${nextDay.bestViewpoint}${nextDay.bestFall ? ` · ${nextDay.bestFall}` : ''}` : '—';
+    els.confidence.textContent = nextDay?.confidence || '—';
   }
 
   function renderToday(day, days) {
@@ -154,15 +158,18 @@
       renderNightState(days, state);
       return;
     }
-    if (els.opportunityEyebrow) els.opportunityEyebrow.textContent = 'Today’s best daylight opportunity';
+    const scoreRow = els.todayScore?.closest('.score-row');
+    const whyCard = els.componentMeters?.closest('.why-card');
+    if (scoreRow) scoreRow.hidden = false;
+    if (whyCard) whyCard.hidden = false;
+    if (els.opportunityEyebrow) els.opportunityEyebrow.textContent = 'Today’s rainbow opportunity';
     const best = day?.windows?.[0] || null;
     const score = day?.peak ?? 0;
     els.todayScore.textContent = String(score);
     els.todayScore.className = `score ${scoreClass(score)}`;
     els.forecastTitle.textContent = opportunityLabel(score);
-    const sunsetText = state.nextSunset ? ` Sunset is about ${timeFmt.format(state.nextSunset)}; the model does not score ordinary rainbows after that.` : '';
-    els.recommendation.textContent = `${day?.recommendation || 'The model could not form a recommendation for today.'}${sunsetText}`;
-    els.bestWindow.textContent = best ? formatWindow(best) : (day?.peakAt ? `Peak near ${formatPeak(day.peakAt)}` : 'No daylight window');
+    els.recommendation.textContent = day?.recommendation || 'The model could not form a recommendation for today.';
+    els.bestWindow.textContent = best ? formatWindow(best) : (day?.peakAt ? `Peak near ${formatPeak(day.peakAt)}` : 'No window available');
     els.bestViewpoint.textContent = day?.bestViewpoint ? `${day.bestViewpoint}${day.bestFall ? ` · ${day.bestFall}` : ''}` : '—';
     els.confidence.textContent = day?.confidence || '—';
     renderComponents(day?.components);
@@ -170,14 +177,14 @@
       const w = day.weatherAtPeak;
       const sky = Number.isFinite(w.skyCover) ? `${Math.round(w.skyCover)}% cloud cover` : 'cloud coverage unavailable';
       const wind = Number.isFinite(w.windSpeedKmh) ? `${Math.round(w.windSpeedKmh)} km/h wind` : 'wind speed unavailable';
-      els.whyExplain.textContent = `At the modeled peak: ${sky}, ${wind}. Geometry is evaluated against the ~42° primary-rainbow cone, during daylight only.`;
+      els.whyExplain.textContent = `At the modeled peak: ${sky}, ${wind}. Geometry is evaluated against the ~42° primary-rainbow cone.`;
     }
   }
 
   function renderTimeline(day) {
     const rows = day?.hourly || [];
     if (!rows.length) {
-      els.timeline.innerHTML = '<p class="loading-copy">No daylight timeline is available from the current model.</p>';
+      els.timeline.innerHTML = '<p class="loading-copy">No timeline is available from the current model.</p>';
       return;
     }
     els.timeline.innerHTML = rows.map((row) => {
@@ -217,7 +224,7 @@
         <div class="mini-score ${scoreClass(day.peak)}">${day.peak}<small>/100</small></div>
         <h3>${opportunityLabel(day.peak)}</h3>
         <p>${best ? `${formatWindow(best)} · ${best.viewpoint}` : `Peak ${formatPeak(day.peakAt)} · ${day.bestViewpoint || 'viewpoint uncertain'}`}</p>
-        <p>Daylight forecast · Confidence: ${day.confidence || '—'}</p>
+        <p>Confidence: ${day.confidence || '—'}</p>
       </article>`;
     }).join('');
   }
@@ -227,7 +234,7 @@
     const label = fetched && !Number.isNaN(fetched.getTime()) ? `${fullDateFmt.format(fetched)} at ${timeFmt.format(fetched)}` : 'just now';
     els.liveDot.className = 'live-dot is-live';
     els.freshness.textContent = `Live NWS grid fetched ${label}`;
-    els.sourceDetail.textContent = `Weather: ${data?.source?.name || 'National Weather Service'}. Model version ${data?.model?.version || '1.0.0'} evaluates the sun and mist geometry every ${data?.model?.intervalMinutes || 10} minutes during daylight only. Last live fetch: ${label}.`;
+    els.sourceDetail.textContent = `Weather: ${data?.source?.name || 'National Weather Service'}. Model version ${data?.model?.version || '1.0.0'} evaluates the sun and mist geometry every ${data?.model?.intervalMinutes || 10} minutes. Last live fetch: ${label}.`;
   }
 
   function showError(error) {

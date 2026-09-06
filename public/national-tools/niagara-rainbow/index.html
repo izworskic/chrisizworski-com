@@ -29,10 +29,9 @@
     {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},
     {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
     {"@type":"WebApplication","@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#app","name":"Niagara Falls Rainbow Forecast","applicationCategory":"WeatherApplication","operatingSystem":"Any","url":"https://chrisizworski.com/national-tools/niagara-rainbow/","description":"Experimental daylight decision engine that estimates the best time and viewpoint to see a Niagara Falls rainbow using NWS weather, solar position and mist geometry.","author":{"@id":"https://chrisizworski.com/#person"}},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#page","url":"https://chrisizworski.com/national-tools/niagara-rainbow/","name":"Niagara Falls Rainbow Forecast","isPartOf":{"@id":"https://chrisizworski.com/#website"},"mainEntity":{"@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#app"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-09-05","inLanguage":"en-US"},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#page","url":"https://chrisizworski.com/national-tools/niagara-rainbow/","name":"Niagara Falls Rainbow Forecast","isPartOf":{"@id":"https://chrisizworski.com/#website"},"mainEntity":{"@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#app"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-09-06","inLanguage":"en-US"},
     {"@type":"FAQPage","@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#faq","mainEntity":[
       {"@type":"Question","name":"What is the best time to see a rainbow at Niagara Falls?","acceptedAnswer":{"@type":"Answer","text":"The best time changes with the sun angle, cloud cover, wind and your viewpoint. This live tool evaluates daylight geometry every 10 minutes and identifies the strongest window."}},
-      {"@type":"Question","name":"Can I see a Niagara Falls rainbow after sunset or before sunrise?","acceptedAnswer":{"@type":"Answer","text":"This tool forecasts ordinary sunlit mist rainbows, which require direct sunlight. It therefore hard-stops rainbow scoring between sunset and sunrise."}},
       {"@type":"Question","name":"Does it have to be raining to see a rainbow at Niagara Falls?","acceptedAnswer":{"@type":"Answer","text":"No. Niagara Falls continuously produces mist, so direct sunlight reaching that mist at the right angle can create a rainbow even without rain."}},
       {"@type":"Question","name":"Which viewpoint is best for a Niagara Falls rainbow?","acceptedAnswer":{"@type":"Answer","text":"It depends on the time of day, sun position and wind-driven mist. The tool ranks Terrapin Point, Prospect Point, Luna Island, Table Rock and Queen Victoria Park for the current forecast."}},
       {"@type":"Question","name":"Is a Niagara Falls rainbow guaranteed?","acceptedAnswer":{"@type":"Answer","text":"No. This is an experimental opportunity model, not a guarantee. Small cloud changes can block the direct sunlight needed for a rainbow."}}
@@ -59,7 +58,7 @@
       <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/national-tools/">National tools</a><span>/</span><span>Niagara rainbow</span></nav>
       <p class="eyebrow">Live Niagara Falls decision tool</p>
       <h1 id="pageTitle">Will there be a rainbow at Niagara Falls today?</h1>
-      <p class="hero-lede">Find the best daylight time and the best place to stand. The model combines the sun’s position with live NWS clouds, wind and the falls’ mist geometry.</p>
+      <p class="hero-lede">Find the best time and the best place to stand. The model combines the sun’s position with live NWS clouds, wind and the falls’ mist geometry.</p>
       <a class="hero-button" href="#forecast">See today’s forecast <span aria-hidden="true">↓</span></a>
     </div>
     <p class="photo-credit">Hero: Rlevse / Wikimedia Commons · CC BY-SA 3.0</p>
@@ -69,7 +68,7 @@
     <div class="live-strip"><span class="live-dot is-loading" id="liveDot" aria-hidden="true"></span><strong id="freshness">Loading live NWS forecast…</strong><button type="button" class="text-button" id="refreshButton">Refresh</button></div>
     <div class="decision-grid">
       <article class="decision-card" aria-live="polite">
-        <p class="eyebrow" id="opportunityEyebrow">Today’s best daylight opportunity</p>
+        <p class="eyebrow" id="opportunityEyebrow">Today’s rainbow opportunity</p>
         <div class="score-row"><strong class="score" id="todayScore">—</strong><span class="score-unit">/100</span></div>
         <h2 id="forecastTitle">Checking the sun, mist and clouds…</h2>
         <p class="decision-copy" id="recommendation">Connecting to the National Weather Service.</p>
@@ -78,7 +77,7 @@
           <div><span>Best viewpoint</span><strong id="bestViewpoint">—</strong></div>
           <div><span>Confidence</span><strong id="confidence">—</strong></div>
         </div>
-        <p class="model-note">Sunlit rainbows only. Scoring hard-stops between sunset and sunrise. Experimental model estimate — not a guarantee.</p>
+        <p class="model-note">Experimental model estimate — not a guarantee.</p>
       </article>
       <aside class="why-card" aria-labelledby="whyTitle">
         <p class="eyebrow">Why this score</p>
@@ -101,8 +100,8 @@
   </section>
 
   <section class="content-shell" aria-labelledby="timelineTitle">
-    <div class="section-heading"><div><p class="eyebrow">Daylight only · today</p><h2 id="timelineTitle">When the geometry is best</h2></div><p>Each bar shows the strongest modeled viewpoint at that daylight time. Nighttime is excluded entirely.</p></div>
-    <div class="timeline" id="timeline" aria-live="polite"><p class="loading-copy">Building today’s 10-minute daylight model…</p></div>
+    <div class="section-heading"><div><p class="eyebrow">Today, hour by hour</p><h2 id="timelineTitle">When the geometry is best</h2></div><p>Each bar shows the strongest modeled viewpoint at that time.</p></div>
+    <div class="timeline" id="timeline" aria-live="polite"><p class="loading-copy">Building today’s 10-minute model…</p></div>
   </section>
 
   <section class="content-shell camera-section" aria-labelledby="cameraTitle">
@@ -130,7 +129,7 @@
   </section>
 
   <section class="content-shell" aria-labelledby="outlookTitle">
-    <div class="section-heading"><div><p class="eyebrow">Plan ahead</p><h2 id="outlookTitle">5-day daylight rainbow outlook</h2></div><p>If today is poor or daylight is over, the tool looks for the next stronger daylight period.</p></div>
+    <div class="section-heading"><div><p class="eyebrow">Plan ahead</p><h2 id="outlookTitle">5-day rainbow outlook</h2></div><p>If today is poor, the tool looks for the next stronger period.</p></div>
     <div class="outlook-grid" id="outlookGrid"><p class="loading-copy">Building the outlook…</p></div>
   </section>
 
@@ -139,7 +138,7 @@
       <p class="eyebrow">What makes this different</p>
       <h2>A weather forecast cannot tell you where a rainbow will be</h2>
       <p>Niagara already supplies the water droplets. The missing pieces are direct sunlight and geometry. A primary rainbow appears about 42 degrees from the antisolar point — the point directly opposite the sun. This tool calculates the sun position every 10 minutes, estimates where the falls’ mist is being pushed by the wind, then evaluates that mist from five public viewpoints.</p>
-      <p>Direct sunlight is non-negotiable. The live tool therefore returns a hard zero when the sun is below the local sunrise/sunset horizon and does not show nighttime bars in the timeline. Cloud cover is still decisive during daylight: perfect geometry does not help if a cloud blocks the sun.</p>
+      <p>Direct sunlight is non-negotiable. Cloud cover is still decisive: perfect geometry does not help if a cloud blocks the sun, which is why the result is an opportunity score rather than a promise.</p>
       <details><summary>Model details and limitations</summary><p>The model uses NWS forecast-grid cloud cover, wind speed, wind direction, precipitation probability and visibility when available. It approximates each falls’ mist source and plume displacement. Local spray is turbulent and clouds can change faster than a forecast grid, so real-world conditions can beat or miss the model.</p></details>
     </article>
     <aside class="source-card">
@@ -153,8 +152,7 @@
   <section class="content-shell faq" aria-labelledby="faqTitle">
     <p class="eyebrow">Quick answers</p>
     <h2 id="faqTitle">Niagara Falls rainbow FAQ</h2>
-    <details open><summary>What is the best time to see a rainbow at Niagara Falls?</summary><p>There is no fixed hour. The best time depends on the season, clouds, wind and where you stand. The live forecast above identifies the strongest daylight window instead of using a generic “morning” or “afternoon” rule.</p></details>
-    <details><summary>Can I see one after sunset or before sunrise?</summary><p>Not an ordinary sunlit Niagara mist rainbow. This tool hard-stops scoring between sunset and sunrise. Rare moonbows are a different optical phenomenon and are not modeled here.</p></details>
+    <details open><summary>What is the best time to see a rainbow at Niagara Falls?</summary><p>There is no fixed hour. The best time depends on the season, clouds, wind and where you stand. The live forecast above identifies the strongest window instead of using a generic “morning” or “afternoon” rule.</p></details>
     <details><summary>Does it need to be raining?</summary><p>No. Niagara Falls continuously creates a large mist plume. Sunlight hitting those airborne droplets at the correct angle can produce a rainbow on a dry day.</p></details>
     <details><summary>Which side of Niagara Falls is best?</summary><p>Both sides can work. The model scores U.S. viewpoints such as Terrapin Point, Prospect Point and Luna Island alongside Canadian viewpoints such as Table Rock and Queen Victoria Park.</p></details>
     <details><summary>Why did the rainbow disappear even though the score was high?</summary><p>A small cloud passing in front of the sun can shut the effect off almost instantly. Wind also moves the mist. Use the score as a decision aid, then use the live cameras above to see whether direct sun is actually hitting the spray.</p></details>
