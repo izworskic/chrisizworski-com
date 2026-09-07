@@ -1,5 +1,7 @@
 {
   "canonical": "https://chrisizworski.com/ontario-fishing-lake-finder/",
-  "standalone": "https://intelligent-lightgray-texts.replit.app/",
-  "repository": "izworskic/ontario-fishing-lake-finder"
+  "standalone": null,
+  "repository": "izworskic/ontario-fishing-lake-finder",
+  "hosting": "vercel",
+  "status": "awaiting-first-party-deployment"
 }
