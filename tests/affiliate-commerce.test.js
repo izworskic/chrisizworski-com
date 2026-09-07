@@ -14,7 +14,7 @@ const placements = [
     module: "aurora-field-gear",
     context: "aurora",
     expectedItems: ["camera-tripod", "red-light-headlamp", "hand-warmers", "power-bank"],
-    title: "<title>Northern Lights Michigan Tonight: Aurora | Chris Izworski</title>",
+    title: "<title>Northern Lights Michigan: Visible Tonight? | Chris Izworski</title>",
     h1: '<h1 class="page-title">Northern Lights Michigan Tonight</h1>',
     canonical: '<link rel="canonical" href="https://chrisizworski.com/northern-lights-michigan/">'
   },

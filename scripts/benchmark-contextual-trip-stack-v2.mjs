@@ -24,7 +24,7 @@ const symbolicEvent=asset.includes("emit('Contextual Tool Handoff'")&&asset.incl
 const forbiddenAnalytics=/geolocation|latitude|longitude|localStorage|sessionStorage|document\.cookie|fingerprint/i.test(asset);
 check('Handoffs use symbolic analytics only',symbolicEvent&&!forbiddenAnalytics,10);
 const protectedTitles={
-  'public/northern-lights-michigan/index.html':'Northern Lights Michigan Tonight: Aurora | Chris Izworski',
+  'public/northern-lights-michigan/index.html':'Northern Lights Michigan: Visible Tonight? | Chris Izworski',
   'public/soo-locks/index.html':'Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski',
   'public/when-to-plant-tomatoes-michigan/index.html':'When to Plant Tomatoes in Michigan: 2026 Dates by Region',
   'public/michigan-frost-dates/index.html':'Michigan Last Frost Dates by City: 2026 Planting Calendar',
