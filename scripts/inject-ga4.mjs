@@ -16,6 +16,28 @@ const GA4_TAG = `<!-- Google tag (gtag.js) -->
 </script>`;
 const ADSENSE_TAG = `<meta name="google-adsense-account" content="${ADSENSE_PUBLISHER_ID}">`;
 
+const MIGRATED_TOOLS_SECTION = `
+<section id="first-party-migrated-tools" class="decision-network" aria-labelledby="first-party-migrated-title">
+  <div class="decision-network__head">
+    <h2 id="first-party-migrated-title">More first-party live tools</h2>
+    <p>These tools run from ChrisIzworski.com and Vercel. No Replit runtime is required.</p>
+  </div>
+  <div class="decision-network__grid">
+    <div class="decision-network__lane">
+      <h3>Ontario fishing</h3>
+      <ul><li><a href="/ontario-fishing-lake-finder/">Ontario Fishing Lake Finder<span>Ontario lake registry, fish evidence, access, roads, fire and weather context</span></a></li></ul>
+    </div>
+    <div class="decision-network__lane">
+      <h3>National waterfall planning</h3>
+      <ul><li><a href="/national-tools/waterfalls/">Waterfall Window<span>Live water conditions translated into a go-or-wait trip decision</span></a></li></ul>
+    </div>
+    <div class="decision-network__lane">
+      <h3>Niagara Falls</h3>
+      <ul><li><a href="/national-tools/niagara-rainbow/">Niagara Falls Rainbow Predictor<span>Sun angle, NWS weather, mist geometry and live camera checks</span></a></li></ul>
+    </div>
+  </div>
+</section>`;
+
 let scanned = 0;
 let ga4Injected = 0;
 let ga4AlreadyTagged = 0;
@@ -58,7 +80,49 @@ async function walk(dir) {
   }
 }
 
+async function injectMigratedTools() {
+  const toolsPath = path.join(ROOT, 'tools', 'index.html');
+  let html = await readFile(toolsPath, 'utf8');
+  if (html.includes('id="first-party-migrated-tools"')) return false;
+  if (!/<\/main>/i.test(html)) throw new Error('Cannot add first-party migrated tools: /tools/ has no </main> anchor');
+  html = html.replace(/<\/main>/i, `${MIGRATED_TOOLS_SECTION}\n</main>`);
+  await writeFile(toolsPath, html);
+  return true;
+}
+
+async function collectTextFiles(dir, out = []) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      await collectTextFiles(fullPath, out);
+      continue;
+    }
+    if (entry.isFile() && /\.(?:html?|js|mjs|cjs|json|css|txt)$/i.test(entry.name)) out.push(fullPath);
+  }
+  return out;
+}
+
+async function assertNoReplitRuntime() {
+  const roots = [path.join(process.cwd(), 'api'), path.join(process.cwd(), 'lib'), ROOT];
+  const files = [path.join(process.cwd(), 'vercel.json')];
+  for (const root of roots) {
+    try { await collectTextFiles(root, files); } catch {}
+  }
+  const hits = [];
+  for (const file of files) {
+    const text = await readFile(file, 'utf8');
+    if (/https?:\/\/[^\s"']*replit\.app/i.test(text)) hits.push(path.relative(process.cwd(), file));
+  }
+  if (hits.length) {
+    throw new Error(`Replit runtime dependency detected in production surface(s): ${hits.join(', ')}`);
+  }
+  return files.length;
+}
+
+await injectMigratedTools();
 await walk(ROOT);
+const runtimeFilesChecked = await assertNoReplitRuntime();
 console.log(JSON.stringify({
   measurementId: MEASUREMENT_ID,
   adsensePublisherId: ADSENSE_PUBLISHER_ID,
@@ -67,5 +131,7 @@ console.log(JSON.stringify({
   ga4AlreadyTagged,
   adsenseInjected,
   adsenseAlreadyTagged,
+  runtimeFilesChecked,
+  replitRuntimeDependencies: 0,
   root: 'public',
 }));
