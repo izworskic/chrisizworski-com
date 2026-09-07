@@ -5,30 +5,30 @@ const path = require('node:path');
 
 const middleware = fs.readFileSync(path.join(__dirname, '..', 'middleware.ts'), 'utf8');
 const legacy = '/national-tools/waterfalls/niagara-falls-live';
-const planner = '/national-tools/niagara-falls-rainbow-planner/';
+const duplicatePlanner = '/national-tools/niagara-falls-rainbow-planner';
+const livePredictor = '/national-tools/niagara-rainbow/';
 
-test('legacy Niagara hub URLs are narrowly retired into the standalone rainbow planner', () => {
+test('legacy Niagara hub URLs permanently redirect to the live rainbow predictor', () => {
   assert.ok(middleware.includes(`'${legacy}'`), 'missing legacy root matcher');
   assert.ok(middleware.includes(`'${legacy}/'`), 'missing legacy slash matcher');
   assert.ok(middleware.includes(`'${legacy}/:path*'`), 'missing legacy wildcard matcher');
-  assert.match(middleware, /url\.pathname\s*=\s*RAINBOW_PLANNER/);
-  assert.match(middleware, /url\.search\s*=\s*''/);
+  assert.ok(middleware.includes(`const LIVE_RAINBOW_PREDICTOR = '${livePredictor}'`));
+  assert.match(middleware, /url\.pathname\s*=\s*LIVE_RAINBOW_PREDICTOR/);
   assert.match(middleware, /Response\.redirect\(url,\s*308\)/);
 });
 
-test('standalone rainbow planner canonical and all prefixed assets/API are handled on the main domain', () => {
-  assert.ok(middleware.includes("'/national-tools/niagara-falls-rainbow-planner'"));
-  assert.ok(middleware.includes("'/national-tools/niagara-falls-rainbow-planner/:path*'"));
-  assert.ok(middleware.includes(`const RAINBOW_PLANNER = '${planner}'`));
-  assert.ok(middleware.includes("const RAINBOW_ORIGIN = 'https://aqua-sharp-digits.replit.app'"));
-  assert.match(middleware, /url\.pathname\s*===\s*RAINBOW_PLANNER\.slice\(0,\s*-1\)/);
-  assert.match(middleware, /url\.pathname\.startsWith\(RAINBOW_PLANNER\)/);
-  assert.match(middleware, /return fetch\(upstream,/);
+test('duplicate standalone rainbow planner is fully retired into the live predictor', () => {
+  assert.ok(middleware.includes(`'${duplicatePlanner}'`));
+  assert.ok(middleware.includes(`'${duplicatePlanner}/:path*'`));
+  assert.ok(middleware.includes(`const DUPLICATE_RAINBOW_PLANNER = '${duplicatePlanner}'`));
+  assert.match(middleware, /url\.pathname\s*===\s*DUPLICATE_RAINBOW_PLANNER/);
+  assert.match(middleware, /url\.pathname\.startsWith\(`\$\{DUPLICATE_RAINBOW_PLANNER\}\/`\)/);
+  assert.doesNotMatch(middleware, /aqua-sharp-digits\.replit\.app/);
+  assert.doesNotMatch(middleware, /RAINBOW_ORIGIN/);
+  assert.doesNotMatch(middleware, /return fetch\(upstream/);
 });
 
-test('retired child tools do not keep dedicated hub behavior', () => {
-  for (const route of ['border', 'water-flow', 'maid', 'best-time', 'visibility', 'tonight', 'cameras', 'map', 'rainbow']) {
-    assert.ok(!middleware.includes(`'${legacy}/${route}/'`), `${route} still has a dedicated legacy matcher`);
-  }
+test('retired Niagara routes remain narrowly scoped', () => {
   assert.doesNotMatch(middleware, /matcher:\s*['"]\/:path\*/);
+  assert.doesNotMatch(middleware, /jubilant-lost-bloatware\.replit\.app/);
 });
