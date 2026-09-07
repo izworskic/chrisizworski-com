@@ -1,10 +1,97 @@
 {
-  "ledgerVersion": "2.0.0",
-  "updated": "2026-09-02",
+  "ledgerVersion": "2.1.0",
+  "updated": "2026-09-07",
   "status": "retired",
   "operatingMode": "ship-and-observe",
   "activeExperiments": [],
-  "note": "All Search Console growth experiments were ended early by the owner on 2026-09-02. No title, description, H1, canonical, structured-data, or indexability experiment freeze is active.",
+  "draftExperiments": [
+    {
+      "id": "2026-09-07-aurora-visible-tonight-ctr",
+      "path": "/northern-lights-michigan/",
+      "status": "draft-owner-review",
+      "proposedDate": "2026-09-07",
+      "releaseDate": null,
+      "hypothesis": "Replacing the vague trailing title label with a direct visible-tonight question and using the searcher's northern-lights language in the description will lift qualified page CTR from 1.07% to at least 1.60% while preserving the live decision tool, canonical owner, and Chris Izworski entity signal.",
+      "primaryMetric": "Search Console page CTR",
+      "baseline": {
+        "sourceTitle": "chrisizworski.com-Performance-on-Search-2026-09-01",
+        "spreadsheetId": "149s7J6lBPwENFwBu0bPTpc3DoEGtobGmBTr0D5EDgTE",
+        "searchType": "Web",
+        "window": {
+          "start": "2026-08-02",
+          "end": "2026-08-29",
+          "days": 28
+        },
+        "clicks": 110,
+        "impressions": 10328,
+        "ctr": 0.0107,
+        "averagePosition": 8.88
+      },
+      "supportingEvidence": [
+        {
+          "query": "northern lights michigan",
+          "clicks": 0,
+          "impressions": 81,
+          "ctr": 0,
+          "averagePosition": 11.89
+        },
+        {
+          "query": "northern lights michigan tonight",
+          "clicks": 0,
+          "impressions": 39,
+          "ctr": 0,
+          "averagePosition": 11.72
+        },
+        {
+          "query": "are there northern lights in michigan tonight",
+          "clicks": 0,
+          "impressions": 36,
+          "ctr": 0,
+          "averagePosition": 10.44
+        },
+        {
+          "query": "can you see the northern lights in michigan tonight",
+          "clicks": 0,
+          "impressions": 31,
+          "ctr": 0,
+          "averagePosition": 10.55
+        }
+      ],
+      "queryEvidenceCaveat": "The flat Search Console export has separate page and query tables, not a page-query join. These are sitewide query rows whose canonical intent owner is this page; do not report them as page-attributed clicks.",
+      "treatment": {
+        "oldTitle": "Northern Lights Michigan Tonight: Aurora | Chris Izworski",
+        "newTitle": "Northern Lights Michigan: Visible Tonight? | Chris Izworski",
+        "oldMetaDescription": "Will the aurora borealis be visible in Michigan tonight? Live NOAA Kp, solar wind, peak timing, and regional outlooks for the U.P. and northern Michigan.",
+        "newMetaDescription": "Can you see the northern lights in Michigan tonight? Check the live NOAA aurora borealis forecast, cloud cover, moonlight, timing, and regional outlooks."
+      },
+      "controls": [
+        "Keep the H1, first answer, structured-data meaning apart from the derived dateModified, canonical, live tool, data sources, accessibility, privacy behavior, and internal links unchanged.",
+        "Do not create location-variant pages or change the national Aurora canonical relationship.",
+        "Do not begin the measurement clock until an owner-approved production release."
+      ],
+      "target": {
+        "ctrAtOrAbove": 0.016,
+        "stretchCtrAtOrAbove": 0.025,
+        "averagePositionAtOrBetterThan": 10,
+        "evaluationWindowDays": 28,
+        "minimumImpressionsBeforePerformanceDecision": 4000
+      },
+      "modeledSearchClickHeadroom": {
+        "atTargetCtr": 55,
+        "atStretchCtr": 148,
+        "windowDays": 28,
+        "note": "Modeled from Search Console impressions and clicks only; these are not pageviews or revenue."
+      },
+      "stopConditions": [
+        "Revert immediately if the canonical, indexability, structured data, NOAA/NWS/USNO behavior, accessibility, or privacy posture regresses.",
+        "After at least 4,000 impressions, revert if page CTR is below 0.80% or average position is worse than 12, unless a documented query-mix or seasonality shift explains the move.",
+        "Do not call a win before 28 complete post-release days."
+      ],
+      "measurementActivation": "After an owner-approved production release, record the release date and open a 28-day window beginning the following day. No production freeze or clock exists while this proposal remains an unmerged draft.",
+      "reversal": "Restore the old title and meta description exactly; no application code or data pipeline rollback is required."
+    }
+  ],
+  "note": "All earlier Search Console growth experiments were ended by the owner on 2026-09-02. No title, description, H1, canonical, structured-data, or indexability experiment freeze is active in production. One review-only Aurora snippet proposal is recorded in draftExperiments; it has no release date or measurement clock.",
   "durableLearnings": [
     "Aurora rankings improved while CTR fell; prioritize query-to-SERP promise matching over another tool rebuild.",
     "Mackinac Bridge ranks near page one but underperforms on CTR; lead the snippet with the open-today decision.",

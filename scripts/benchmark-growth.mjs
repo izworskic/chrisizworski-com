@@ -75,6 +75,14 @@ check(
     !Array.isArray(ledger.experiments),
 );
 check(
+  "At most one review-only experiment is staged without activating a production freeze",
+  Array.isArray(ledger.draftExperiments) &&
+    ledger.draftExperiments.length === 1 &&
+    ledger.draftExperiments[0].status === "draft-owner-review" &&
+    ledger.draftExperiments[0].releaseDate === null &&
+    ledger.activeExperiments.length === 0,
+);
+check(
   "Monetization sequence is ad-first",
   benchmark.revenueModel.sequence.join("|") === "search growth|Google AdSense|post-proof sponsorships",
 );
@@ -121,7 +129,7 @@ const pageChecks = [
   {
     file: "public/northern-lights-michigan/index.html",
     path: "/northern-lights-michigan/",
-    title: "Northern Lights Michigan Tonight: Aurora | Chris Izworski",
+    title: "Northern Lights Michigan: Visible Tonight? | Chris Izworski",
     marker: 'id="aurora-static-answer"',
   },
   {
