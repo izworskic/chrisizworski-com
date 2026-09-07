@@ -4,7 +4,7 @@
   "private": true,
   "description": "Source-controlled deployment for chrisizworski.com",
   "scripts": {
-    "vercel-build": "node scripts/inject-ga4.mjs",
+    "vercel-build": "node scripts/sync-ontario-finder.mjs && node scripts/inject-ga4.mjs",
     "audit:live": "node scripts/crawl-live.mjs",
     "audit:boat-launch-source": "node scripts/audit-boat-launch-source.mjs",
     "benchmark:border": "node scripts/benchmark-border-crossing.mjs --check",
@@ -59,6 +59,9 @@
     "benchmark:tool-entities": "node scripts/generate-tool-entity-graph.mjs --check",
     "benchmark:extracted-routing": "node scripts/verify-extracted-routing.mjs",
     "benchmark:white-christmas-indexing": "node scripts/verify-white-christmas-indexing.mjs"
+  },
+  "dependencies": {
+    "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#19aefa59415c2e5c3124a5df5f51e7a75974498f"
   },
   "engines": {
     "node": "22.x"
