@@ -104,15 +104,21 @@ async function collectTextFiles(dir, out = []) {
 }
 
 async function assertNoReplitRuntime() {
-  const roots = [path.join(process.cwd(), 'api'), path.join(process.cwd(), 'lib'), ROOT];
-  const files = [path.join(process.cwd(), 'vercel.json')];
+  const roots = [path.join(process.cwd(), 'api'), path.join(process.cwd(), 'lib')];
+  const files = [
+    path.join(process.cwd(), 'vercel.json'),
+    path.join(ROOT, 'ontario-fishing-lake-finder', 'index.html'),
+    path.join(ROOT, 'national-tools', 'niagara-rainbow', 'index.html')
+  ];
   for (const root of roots) {
     try { await collectTextFiles(root, files); } catch {}
   }
   const hits = [];
   for (const file of files) {
-    const text = await readFile(file, 'utf8');
-    if (/https?:\/\/[^\s"']*replit\.app/i.test(text)) hits.push(path.relative(process.cwd(), file));
+    try {
+      const text = await readFile(file, 'utf8');
+      if (/https?:\/\/[^\s"']*replit\.app/i.test(text)) hits.push(path.relative(process.cwd(), file));
+    } catch {}
   }
   if (hits.length) {
     throw new Error(`Replit runtime dependency detected in production surface(s): ${hits.join(', ')}`);
