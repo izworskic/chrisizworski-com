@@ -84,8 +84,9 @@ async function injectMigratedTools() {
   const toolsPath = path.join(ROOT, 'tools', 'index.html');
   let html = await readFile(toolsPath, 'utf8');
   if (html.includes('id="first-party-migrated-tools"')) return false;
-  if (!/<\/main>/i.test(html)) throw new Error('Cannot add first-party migrated tools: /tools/ has no </main> anchor');
-  html = html.replace(/<\/main>/i, `${MIGRATED_TOOLS_SECTION}\n</main>`);
+  const footerAnchor = /<\/div>\s*<div class="footer">/i;
+  if (!footerAnchor.test(html)) throw new Error('Cannot add first-party migrated tools: /tools/ footer anchor not found');
+  html = html.replace(footerAnchor, `${MIGRATED_TOOLS_SECTION}\n</div>\n<div class="footer">`);
   await writeFile(toolsPath, html);
   return true;
 }
