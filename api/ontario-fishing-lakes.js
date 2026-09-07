@@ -283,7 +283,7 @@ function matchScore(lake, requestedSpecies) {
     reasons.push(`stocked in ${anyRecentStock.year}`);
   }
 
-  return { score: clamp(Math.round(score), 0, 100), reasons: reasons.slice(0, 5) };
+  return { score: clamp(Math.round(score), 0, 100), reasons: reasons.slice(0, 7) };
 }
 
 function normalizeAccess(feature, lat, lon) {
