@@ -106,7 +106,7 @@ test('frontend truth contract: one lake search, map-first UI, no catch-probabili
   assert.match(html, /Match score = filter fit/);
   assert.match(html, /not a catch forecast/i);
   assert.match(html, /did not substitute guessed lake records/i);
-  assert.match(html, /Ontario Fishing Lake Finder Search/);
+  assert.match(html, /Ontario Lake Finder Search/);
   assert.doesNotMatch(html, /navigator\.geolocation|getCurrentPosition|localStorage|sessionStorage/);
   assert.doesNotMatch(html, /chance of catching|catch probability|guaranteed catch/i);
 });
