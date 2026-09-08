@@ -1,0 +1,30 @@
+name: Ballard lake level diagnostic
+
+on:
+  push:
+    branches:
+      - agent/ballard-lake-debug
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Fetch production lake-level payload
+        run: |
+          node --input-type=module <<'EOF'
+          const url = `https://chrisizworski.com/api/ballard-locks?lake-debug=${Date.now()}`;
+          const r = await fetch(url, {headers:{'cache-control':'no-cache','user-agent':'BallardLakeDebug/1.0'}, signal:AbortSignal.timeout(30000)});
+          const text = await r.text();
+          console.log('HTTP', r.status, r.headers.get('content-type'));
+          let data;
+          try { data = JSON.parse(text); } catch { console.log(text.slice(0,2000)); process.exit(1); }
+          console.log(JSON.stringify({generatedAt:data.generatedAt,lakeLevel:data.lakeLevel}, null, 2));
+          EOF
