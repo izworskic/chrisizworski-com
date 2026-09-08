@@ -5,6 +5,9 @@ const OLD_ICE_OUT='https://lspp-ice-out.vercel.app/north-america/';
 const BRANDED_ICE_OUT='https://chrisizworski.com/national-tools/ice-out/';
 
 module.exports=async function handler(req,res){
+  // This is an internal composition endpoint. The public, indexable URL is
+  // /national-tools/; never let the API route itself become a competing URL.
+  res.setHeader('X-Robots-Tag','noindex, nofollow');
   if(req.method!=='GET'){
     res.setHeader('Allow','GET');
     return res.status(405).send('GET only');
@@ -19,7 +22,7 @@ module.exports=async function handler(req,res){
     html=html.split(OLD_ICE_OUT).join(BRANDED_ICE_OUT);
     html=html.replace('"dateModified":"2026-09-07"','"dateModified":"2026-09-08"');
     res.setHeader('Content-Type','text/html; charset=utf-8');
-    res.setHeader('Cache-Control','public, s-maxage=21600, stale-while-revalidate=604800');
+    res.setHeader('Cache-Control','public, s-maxage=300, stale-while-revalidate=1800');
     return res.status(200).send(html);
   }catch(error){
     res.setHeader('Cache-Control','no-store');

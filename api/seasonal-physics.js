@@ -3,6 +3,8 @@
 const BACKEND='https://lspp-ice-out.vercel.app/api/seasonal-physics';
 
 module.exports=async function handler(req,res){
+  // Internal API proxy only. The indexable surface is the branded Ice-Out page.
+  res.setHeader('X-Robots-Tag','noindex, nofollow');
   if(req.method!=='GET'){
     res.setHeader('Allow','GET');
     return res.status(405).json({error:'GET only'});
