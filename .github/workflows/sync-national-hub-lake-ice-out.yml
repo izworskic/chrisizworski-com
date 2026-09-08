@@ -1,0 +1,67 @@
+name: Sync national hub Lake Ice-Out release
+
+on:
+  push:
+    branches: [sync-national-hub-lake-ice-out]
+    paths: [.github/workflows/sync-national-hub-lake-ice-out.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  sync-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: sync-national-hub-lake-ice-out
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies without touching committed lockfile
+        run: npm install --ignore-scripts --package-lock=false --no-audit --no-fund
+      - name: Mirror authoritative national landing and align routing freshness
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/national-tools
+          curl -fsSL 'https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/ad2a8553456de970a4e4579c50e51a214feee765/public/national-tools/index.html' -o public/national-tools/index.html
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          v=Path('vercel.json')
+          s=v.read_text()
+          old1='    {"source":"/national-tools","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/"},\n'
+          old2='    {"source":"/national-tools/","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/"},\n'
+          if old1 not in s or old2 not in s:
+              raise SystemExit('national-tools upstream rewrite anchors changed')
+          v.write_text(s.replace(old1,'',1).replace(old2,'',1))
+
+          sm=Path('public/sitemap.xml')
+          x=sm.read_text()
+          pattern=r'(<loc>https://chrisizworski\.com/national-tools/</loc>\s*<lastmod>)\d{4}-\d{2}-\d{2}(</lastmod>)'
+          x2,n=re.subn(pattern,r'\g<1>2026-09-07\g<2>',x,count=1)
+          if n != 1:
+              raise SystemExit(f'national-tools sitemap entry match count={n}')
+          sm.write_text(x2)
+          PY
+          grep -q 'Lake Ice-Out Forecast' public/national-tools/index.html
+          grep -q 'https://lspp-ice-out.vercel.app/north-america/' public/national-tools/index.html
+          grep -q '"numberOfItems":12' public/national-tools/index.html
+          grep -A1 -F '<loc>https://chrisizworski.com/national-tools/</loc>' public/sitemap.xml | grep -q '2026-09-07'
+      - name: Run full repository gate
+        run: npm run verify:all
+      - name: Commit clean mirror integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain -- package-lock.json)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/national-tools/index.html public/sitemap.xml vercel.json
+          git rm .github/workflows/sync-national-hub-lake-ice-out.yml
+          git commit -m 'Sync national tools hub Lake Ice-Out release'
+          git push origin HEAD:sync-national-hub-lake-ice-out
