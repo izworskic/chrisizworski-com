@@ -12,7 +12,7 @@ const syncPath = path.join(root, 'scripts', 'sync-ballard-locks.mjs');
 test('Ballard Locks implementation is pinned to its authoritative repository', () => {
   assert.equal(
     pkg.dependencies['national-ballard-locks'],
-    'github:izworskic/national-ballard-locks#01330cc3b0ceeffdea464bd5b94a6fc77786cc06'
+    'github:izworskic/national-ballard-locks#8cbb7361f83cc521840edda8441333fba2781a88'
   );
 });
 
