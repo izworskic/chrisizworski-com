@@ -127,7 +127,7 @@ test("edge runtime API routes never use the Node res object, and still set noind
     const isEdge = /runtime:\s*['"]edge['"]/.test(src);
     const rel = path.relative(dir, file);
     // This handler renders the public /national-tools/ HTML page, not a data API.
-    if (rel === 'national-tools-hub.js') {
+    if (['national-tools-hub.js', 'garden-water-page.js'].includes(rel)) {
       assert.match(src, /text\/html/);
       assert.ok(!/setHeader\(['"]X-Robots-Tag['"],\s*['"]noindex/i.test(src));
       continue;

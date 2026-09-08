@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://chrisizworski.com/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -410,7 +410,7 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/tools/</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -886,4 +886,7 @@
   <url><loc>https://chrisizworski.com/national-tools/white-christmas/cities/oklahoma-city-ok/</loc><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://chrisizworski.com/national-tools/white-christmas/cities/boise-id/</loc><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://chrisizworski.com/national-tools/white-christmas/cities/reno-nv/</loc><lastmod>2026-09-03</lastmod></url>
+  <url><loc>https://chrisizworski.com/national-tools/ice-out/</loc><lastmod>2026-09-08</lastmod></url>
+  <url><loc>https://chrisizworski.com/national-tools/waterfalls/</loc></url>
+  <url><loc>https://chrisizworski.com/national-tools/niagara-rainbow/</loc><lastmod>2026-09-06</lastmod></url>
 </urlset>

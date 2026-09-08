@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
@@ -31,8 +31,8 @@ const expected = new Map(Object.entries({
   "/assets/isle-royale-water-intelligence.js": "https://isle-royale-outdoors.vercel.app/assets/isle-royale-water-intelligence.js",
   "/data/national-usgs-streamflow-sites.json": "https://national-rivers.vercel.app/data/national-usgs-streamflow-sites.json",
   "/data/national-planting-crops.json": "https://national-planting.vercel.app/data/national-planting-crops.json",
-  "/national-tools": "https://national-outdoor-tools-hub.vercel.app/national-tools/",
-  "/national-tools/": "https://national-outdoor-tools-hub.vercel.app/national-tools/",
+  "/national-tools": "/api/national-tools-hub",
+  "/national-tools/": "/api/national-tools-hub",
   "/national-tools/aurora": "https://national-aurora.vercel.app/national-tools/aurora/",
   "/national-tools/aurora/": "https://national-aurora.vercel.app/national-tools/aurora/",
   "/national-tools/rivers": "https://national-rivers.vercel.app/national-tools/rivers/",
@@ -128,7 +128,6 @@ const forbidden = [
   "api/isle-royale-water-intelligence.js",
   "lib/national-outdoor.js",
   "lib/isle-royale",
-  "public/national-tools",
   "public/isle-royale-map",
   "public/white-christmas-probability-map",
   "public/white-christmas-michigan",
@@ -158,6 +157,13 @@ const forbidden = [
   ".github/workflows/isle-royale-deep-data.yml"
 ];
 
+// These existing shell-owned pages are explicit composition exceptions, not
+// permission to copy extracted specialist implementations back into the hub.
+for (const entry of await readdir(path.join(root, 'public/national-tools'))) {
+  if (!['ice-out', 'niagara-rainbow'].includes(entry)) {
+    failures.push(`unexpected local national implementation: ${entry}`);
+  }
+}
 for (const rel of forbidden) {
   try {
     await access(path.join(root, rel));
