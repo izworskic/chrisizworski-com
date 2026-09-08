@@ -3,7 +3,15 @@ name: Remote Trout production smoke
 on:
   push:
     branches:
+      - main
       - test/remote-trout-production-smoke
+    paths:
+      - 'public/remote-trout-lake-finder/**'
+      - 'api/lakes.js'
+      - 'package.json'
+      - 'scripts/sync-ontario-finder.mjs'
+      - 'scripts/remote-trout-production-smoke.mjs'
+      - '.github/workflows/remote-trout-production-smoke.yml'
   workflow_dispatch:
 
 jobs:
