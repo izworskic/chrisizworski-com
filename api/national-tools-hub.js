@@ -18,6 +18,9 @@ module.exports=async function handler(req,res){
     let html=await upstream.text();
     html=html.split(OLD_ICE_OUT).join(BRANDED_ICE_OUT);
     html=html.replace('"dateModified":"2026-09-07"','"dateModified":"2026-09-08"');
+    if(!/<script\b[^>]*src=["'][^"']*pagead\/js\/adsbygoogle\.js\b/i.test(html)){
+      html=html.replace(/<\/head>/i,'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>\n</head>');
+    }
     res.setHeader('Content-Type','text/html; charset=utf-8');
     res.setHeader('Cache-Control','public, s-maxage=21600, stale-while-revalidate=604800');
     return res.status(200).send(html);

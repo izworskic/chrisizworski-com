@@ -15,6 +15,7 @@ const GA4_TAG = `<!-- Google tag (gtag.js) -->
   gtag('config', '${MEASUREMENT_ID}');
 </script>`;
 const ADSENSE_TAG = `<meta name="google-adsense-account" content="${ADSENSE_PUBLISHER_ID}">`;
+const ADSENSE_SCRIPT = `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}" crossorigin="anonymous"></script>`;
 
 const MIGRATED_TOOLS_SECTION = `
 <section id="first-party-migrated-tools" class="decision-network" aria-labelledby="first-party-migrated-title">
@@ -56,11 +57,12 @@ async function walk(dir) {
     scanned += 1;
     const html = await readFile(fullPath, 'utf8');
     const needsGa4 = !html.includes(MEASUREMENT_ID);
-    const needsAdsense = !html.includes(ADSENSE_PUBLISHER_ID);
+    const needsAdsense = !/<meta\b[^>]*name=["']google-adsense-account["']/i.test(html);
+    const needsAdsenseScript = !/<script\b[^>]*src=["'][^"']*pagead\/js\/adsbygoogle\.js\b/i.test(html);
 
     if (!needsGa4) ga4AlreadyTagged += 1;
     if (!needsAdsense) adsenseAlreadyTagged += 1;
-    if (!needsGa4 && !needsAdsense) continue;
+    if (!needsGa4 && !needsAdsense && !needsAdsenseScript) continue;
 
     if (!/<\/head>/i.test(html)) {
       throw new Error(`Cannot inject site tags: missing </head> in ${path.relative(ROOT, fullPath)}`);
@@ -75,6 +77,7 @@ async function walk(dir) {
       tags.push(ADSENSE_TAG);
       adsenseInjected += 1;
     }
+    if (needsAdsenseScript) tags.push(ADSENSE_SCRIPT);
 
     await writeFile(fullPath, html.replace(/<\/head>/i, `${tags.join('\n')}\n</head>`));
   }
