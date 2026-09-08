@@ -15,7 +15,7 @@ const GA4_TAG = `<!-- Google tag (gtag.js) -->
   gtag('config', '${MEASUREMENT_ID}');
 </script>`;
 const ADSENSE_ACCOUNT_TAG = `<meta name="google-adsense-account" content="${ADSENSE_PUBLISHER_ID}">`;
-const ADSENSE_AUTO_ADS_SRC = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}`;
+const ADSENSE_AUTO_ADS_SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075';
 const ADSENSE_AUTO_ADS_TAG = `<script async src="${ADSENSE_AUTO_ADS_SRC}"
      crossorigin="anonymous"></script>`;
 
