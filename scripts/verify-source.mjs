@@ -164,6 +164,7 @@ const intentionalChanges = new Set([
   "/fall-color/",
   "/fall-color/michigan-leaf-peeping-planner",
   "/fall-color/michigan-fall-color-drives",
+  "/fall-color/michigan-fall-color-drives/",
   "/fall-color/when-do-leaves-peak-in-michigan",
   // palette repair, Aug 5 2026. The planner and the drives map were built with
   // flat white cards on the section's dark autumn ground. Both now use the same
