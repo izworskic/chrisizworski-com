@@ -1,0 +1,26 @@
+name: Remote Trout production smoke
+
+on:
+  push:
+    branches:
+      - main
+      - test/remote-trout-production-smoke
+    paths:
+      - 'public/remote-trout-lake-finder/**'
+      - 'api/lakes.js'
+      - 'package.json'
+      - 'scripts/sync-ontario-finder.mjs'
+      - 'scripts/remote-trout-production-smoke.mjs'
+      - '.github/workflows/remote-trout-production-smoke.yml'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/remote-trout-production-smoke.mjs
