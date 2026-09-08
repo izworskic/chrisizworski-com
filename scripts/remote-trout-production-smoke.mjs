@@ -1,5 +1,6 @@
 const PAGE='https://chrisizworski.com/remote-trout-lake-finder/';
 const API='https://chrisizworski.com/api/lakes?mode=remote&species=Brook%20Trout&thermal=cold&limit=6';
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 
 async function fetchText(url,timeoutMs=45000){
   const started=Date.now();
@@ -8,11 +9,23 @@ async function fetchText(url,timeoutMs=45000){
   return {r,text,elapsedMs:Date.now()-started};
 }
 
-const page=await fetchText(PAGE,20000);
-if(!page.r.ok) throw new Error(`Remote Trout page HTTP ${page.r.status}`);
-if(!page.text.includes('Find trout lakes that feel farther from the road.')) throw new Error('Remote Trout page missing release marker');
-if(!page.text.includes('Trout Fit ≠ Remote Context')) throw new Error('Remote Trout page missing score-separation contract');
+async function waitForRelease(){
+  let last=null;
+  for(let attempt=1;attempt<=18;attempt++){
+    try{
+      const page=await fetchText(PAGE,15000);
+      last=page;
+      if(page.r.ok&&page.text.includes('Find trout lakes that feel farther from the road.')&&page.text.includes('Trout Fit ≠ Remote Context')) return page;
+      console.log(`Release not visible yet (attempt ${attempt}/18, HTTP ${page.r.status}); retrying.`);
+    }catch(error){
+      console.log(`Release check attempt ${attempt}/18 failed: ${error.message}`);
+    }
+    await sleep(5000);
+  }
+  throw new Error(`Remote Trout release did not become visible${last?` (last HTTP ${last.r.status})`:''}`);
+}
 
+const page=await waitForRelease();
 const api=await fetchText(API,60000);
 if(!api.r.ok) throw new Error(`Remote Trout API HTTP ${api.r.status}: ${api.text.slice(0,300)}`);
 const data=JSON.parse(api.text);
