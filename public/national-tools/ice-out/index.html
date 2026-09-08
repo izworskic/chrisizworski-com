@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Lake Ice-Out Forecast — Northern U.S. & Canada | Chris Izworski</title>
+<title>Lake Ice-Out Forecast — U.S. & Canada | Chris Izworski</title>
 <meta name="description" content="Search northern U.S. and Canadian lakes for calibrated spring ice-out timing, historical context, live thaw signals and NASA satellite imagery." />
 <link rel="canonical" href="https://chrisizworski.com/national-tools/ice-out/" />
 <meta name="robots" content="index,follow,max-image-preview:large" />
@@ -38,11 +38,11 @@
         <button class="control" id="ndsiBtn">NDSI snow/ice</button>
         <button class="control" id="fitBtn">Selected lake</button>
       </div>
-      <div class="legend" id="legend">NASA imagery is visual evidence. Automatic open-water classification is not fabricated from unsupported pixels.</div>
+      <div class="legend" id="legend">NASA imagery is visual evidence. Automatic open-water classification is not used unless it clears the model's heldout release gates.</div>
     </main>
     <aside class="side" aria-live="polite">
       <section class="section">
-        <div class="eyebrow">Continental lake search</div>
+        <div class="eyebrow">Northern U.S. + Canada lake search</div>
         <h1 class="lake-title" id="lakeName">Lake Vermilion</h1>
         <div class="sub" id="lakeMeta"></div>
         <div class="hero">
@@ -62,15 +62,25 @@
         <div class="bar"><span id="probBar" style="width:0%"></span></div>
         <div class="sub" id="modeNote"></div>
       </section>
-      <section class="section"><h3>Live thaw drivers</h3><div id="weatherDrivers"><div class="loading">Loading live forecast…</div></div></section>
-      <section class="section"><h3>Nearby lake comparison</h3><div class="near" id="nearby"></div></section>
-      <section class="section"><h3>What this model uses</h3><div class="sources">Official U.S. and Canadian lake names, HydroLAKES morphology where the match is unambiguous, historical ice-out calibration, validated seasonal temperature physics, operational weather and NASA satellite imagery.</div></section>
+      <section class="section">
+        <h3>Live thaw drivers</h3>
+        <div id="weatherDrivers"><div class="loading">Loading live forecast…</div></div>
+      </section>
+      <section class="section">
+        <h3>Nearby lake comparison</h3>
+        <div class="near" id="nearby"></div>
+      </section>
+      <section class="section">
+        <h3>What this model uses</h3>
+        <div class="sources">Official U.S. GNIS and Canadian CGNDB lake names, HydroLAKES morphology where the match is unambiguous, historical ice-out observations and regional calibration, validated seasonal freezing/thaw physics, operational weather, and NASA satellite imagery as visual evidence. Uncertain matches remain broad rather than being guessed.</div>
+      </section>
       <section class="section"><div class="warning"><strong>Not an ice-safety tool.</strong> Ice-out probability does not estimate ice thickness or whether ice can support people, vehicles or equipment.</div></section>
     </aside>
   </div>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="https://lspp-ice-out.vercel.app/north-america/lakes.js"></script>
+<script>window.__ICEOUT_API_BASE='/api/seasonal-physics';</script>
 <script src="https://lspp-ice-out.vercel.app/north-america/app.js"></script>
 </body>
 </html>
