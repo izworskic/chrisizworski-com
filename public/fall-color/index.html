@@ -76,7 +76,7 @@
         "height": 630
       },
       "datePublished": "2026-03-15",
-      "dateModified": "2026-09-05",
+      "dateModified": "2026-09-08",
       "author": {
         "@id": "https://chrisizworski.com/#person"
       },
@@ -514,12 +514,14 @@
 
   <section class="card pad" id="statewideStatus" aria-labelledby="statewideStatusHeading" style="margin:16px 0">
     <div class="row" style="align-items:baseline;margin-bottom:8px">
-      <span class="kicker">2026 statewide status</span>
-      <time class="mono tiny muted" id="statewideStatusUpdated" datetime="2026-08-21">Updated Aug 21</time>
+      <span class="kicker" id="statewideStatusLabel">Seasonal planning baseline</span>
+      <time class="mono tiny muted" id="statewideStatusUpdated" hidden></time>
     </div>
-    <h2 id="statewideStatusHeading" class="serif-h" style="font-size:20px;line-height:1.2;margin:0 0 7px">Michigan is still predominantly green as the 2026 season begins.</h2>
-    <p class="small soft" id="statewideStatusBody" style="margin:0">The first meaningful color normally develops in the western Upper Peninsula in late September. For trip planning, target Sep 28&ndash;Oct 6 in the western U.P., Oct 5&ndash;17 across northern Lower Michigan, and Oct 18&ndash;28 in southern Michigan. Live canopy and weather readings below refine those windows as the season moves.</p>
+    <h2 id="statewideStatusHeading" class="serif-h" style="font-size:20px;line-height:1.2;margin:0 0 7px">Michigan fall color usually peaks first in the U.P., then farther south.</h2>
+    <p class="small soft" id="statewideStatusBody" style="margin:0">Typical peak windows are Sep 28&ndash;Oct 6 in the western U.P., Oct 5&ndash;17 across northern Lower Michigan, and Oct 18&ndash;28 in southern Michigan. These are seasonal planning ranges, not observations of today's leaves. When recent data is available, a dated model estimate replaces this baseline.</p>
   </section>
+
+  <p class="small"><strong>Staying after sunset?</strong> <a href="/fall-color-northern-lights-michigan/">Plan fall color by day and a northern lights check after dark</a>. Check each forecast before choosing your trip.</p>
 
   <section class="seasonal-desk" data-seasonal-module="fall-day-decisions" aria-labelledby="fall-day-title">
     <div class="seasonal-desk__head">
@@ -640,7 +642,7 @@
       <h2>When does fall color peak in Michigan?</h2>
       <p>Michigan's fall color peaks from north to south over about four weeks. The Upper Peninsula turns first, usually in late September and the first week of October. Northern Lower Michigan, including the Tunnel of Trees, Sleeping Bear, and the Grayling and Au Sable country, peaks in the second and third weeks of October. Southern Michigan, including Grand Rapids, Ann Arbor, and the Irish Hills, peaks in the last week of October.</p>
       <p><a href="/fall-color/when-do-leaves-peak-in-michigan/">See the full region-by-region timeline with a live statewide snapshot</a>, kept current through the season.</p>
-      <p>The Upper Peninsula peak in late September and the northern Lower peak in October fall inside the strongest part of the aurora year, and both want the same clear, moonless night. <a href="/fall-color-northern-lights-michigan/">Check where fall color and northern lights overlap</a> if you are staying out after dark rather than driving home at dusk.</p>
+      <p>An autumn trip can include fall color by day and an aurora check after dark. Clear skies and a favorable aurora forecast determine whether the night portion is worthwhile. <a href="/fall-color-northern-lights-michigan/">Check where fall color and northern lights overlap</a> if you are staying out after dark rather than driving home at dusk.</p>
       <p><a href="/fall-color/michigan-leaf-peeping-planner/">Or plan an actual trip: tell the planner where you live and which weekend you can travel</a>, and it ranks all eight regions by how close to peak they will be on your dates and how far you have to drive.</p>
       <p><a href="/fall-color/michigan-fall-color-drives/">Or start from the road: the tour map lays out twelve named scenic drives</a>, from the Tunnel of Trees to the Keweenaw shore, each showing how close to peak it will be on the date you pick.</p>
       <table class="ptable">
@@ -697,6 +699,7 @@
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/assets/fall-color-freshness.js"></script>
 <script>
 const C={bg:"#F5EEDF",panel:"#FFFCF5",panel2:"#EFE5D2",line:"#DFD1B4",
   bone:"#2A2018",soft:"#4B3F32",muted:"#726351",
@@ -819,6 +822,7 @@ function listNames(a){return a.length<=1?(a[0]||""):a.slice(0,-1).join(", ")+" a
 
 // ---- live ----
 let LIVE=null;
+let LIVE_FRESHNESS=null;
 let LIVE_OFFSET={};   // r.id -> integer pct offset (live - predicted today)
 const now=new Date();
 const tm=now.getMonth()+1, td=now.getDate();
@@ -926,7 +930,7 @@ function fc(regionId){
 // ---- render: live strip ----
 function renderLiveStrip(){
   const el=document.getElementById("liveStripBody");
-  if(!LIVE){el.textContent="Live feed unavailable just now. Use the dated statewide status above and the regional season bands below; neither will invent a live reading.";return;}
+  if(!LIVE){el.textContent="Live feed unavailable just now. Use the seasonal planning baseline above and the regional season bands below; neither will invent a live reading.";return;}
   let canopy=[],lows=[],dt=null,froze=false;
   REGIONS.forEach(r=>{const v=LIVE[r.id];if(v){if(v.ndvi){canopy.push(v.ndvi.canopyPct);dt=v.ndvi.date;}if(v.weather){if(v.weather.lowestRecent!=null)lows.push(v.weather.lowestRecent);if(v.weather.frostRecent)froze=true;}}});
   const avg=canopy.length?Math.round(canopy.reduce((a,b)=>a+b,0)/canopy.length):null;
@@ -948,23 +952,25 @@ function renderStatewideStatus(){
   const body=document.getElementById("statewideStatusBody");
   const updated=document.getElementById("statewideStatusUpdated");
   if(!heading||!body||!updated)return;
-  if(!LIVE||!Object.keys(LIVE).length)return;
-  const ranked=REGIONS.map(r=>({r,d:todayStage(r)})).sort((a,b)=>b.d.pct-a.d.pct);
+  if(!inSeason||!LIVE_FRESHNESS)return;
+  const ranked=REGIONS.filter(r=>LIVE_FRESHNESS.regionIds.includes(r.id)).map(r=>({r,d:todayStage(r)})).sort((a,b)=>b.d.pct-a.d.pct);
   const lead=ranked[0];
   const peaks=ranked.filter(x=>x.d.phase==="peak"||x.d.pct>=85);
   if(peaks.length){
     heading.textContent=peaks.length===1
-      ? peaks[0].r.name+" is at or near peak now."
-      : "Peak color is strongest in "+listNames(peaks.slice(0,3).map(x=>x.r.name))+".";
+      ? peaks[0].r.name+" is estimated at or near peak."
+      : "The model estimates peak color in "+listNames(peaks.slice(0,3).map(x=>x.r.name))+".";
   }else if(lead.d.pct<20){
-    heading.textContent="Michigan is still mostly green. "+lead.r.name+" is leading the season.";
+    heading.textContent="The model estimates mostly green foliage. "+lead.r.name+" is leading the season.";
   }else{
-    heading.textContent=lead.r.name+" is leading Michigan's fall color at about "+lead.d.pct+"%.";
+    heading.textContent=lead.r.name+" has the highest modeled color among reporting regions at about "+lead.d.pct+"%.";
   }
-  body.textContent="The live model puts "+lead.r.name+" at about "+lead.d.pct+"% of peak, with its current peak window "+fmt(lead.d.ps)+" to "+fmt(lead.d.pe)+". The map and regional bands below show how the rest of Michigan compares.";
-  const stamp=new Date();
-  updated.textContent="Updated "+stamp.toLocaleDateString("en-US",{month:"short",day:"numeric"});
-  updated.setAttribute("datetime",stamp.toISOString().slice(0,10));
+  body.textContent="The model puts "+lead.r.name+" at about "+lead.d.pct+"% of peak, with its current peak window "+fmt(lead.d.ps)+" to "+fmt(lead.d.pe)+". Recent inputs are available for "+ranked.length+" of "+REGIONS.length+" regions; other regions retain seasonal estimates. Individual source dates appear below.";
+  document.getElementById("statewideStatusLabel").textContent="Latest model estimate";
+  const stamp=new Date(LIVE_FRESHNESS.updated);
+  updated.hidden=false;
+  updated.textContent="Feed generated "+stamp.toLocaleString("en-US",{timeZone:"America/Detroit",month:"short",day:"numeric",hour:"numeric",minute:"2-digit",timeZoneName:"short"});
+  updated.setAttribute("datetime",LIVE_FRESHNESS.updated);
 }
 
 // ---- map ----
@@ -1365,7 +1371,9 @@ function init(){
   document.getElementById("planBtn").onclick=buildPlan;
   document.getElementById("planRegion").addEventListener("change",rebuildIfShown);
   renderStatewideStatus(); buildMap(); renderAll();
-  fetch("/api/fall-color-conditions").then(r=>r.json()).then(j=>{
+  fetch("/api/fall-color-conditions").then(r=>{if(!r.ok)throw new Error("Conditions unavailable");return r.json();}).then(j=>{
+    LIVE_FRESHNESS=FallColorFreshness.assess(j,REGIONS.map(r=>r.id));
+    if(!LIVE_FRESHNESS)throw new Error("Recent conditions unavailable");
     LIVE={}; (j.regions||[]).forEach(r=>LIVE[r.id]={weather:r.weather,ndvi:r.ndvi,forecast:r.forecast});
     computeLiveOffsets();
     renderStatewideStatus(); renderLiveStrip(); renderAll(); if(nearId)renderNearMe();
