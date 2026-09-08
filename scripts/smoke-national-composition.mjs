@@ -24,6 +24,34 @@ await check('garden hub route',async()=>{
   if(!/garden/i.test(text)||!/<title>/i.test(text))throw new Error('garden page shell missing');
 });
 
+await check('national hub links branded Lake Ice-Out',async()=>{
+  // Exact public URL, no query-string bypass: this must be what ordinary users receive.
+  const {text}=await request('/national-tools/',{cacheBust:false,noCacheHeader:false});
+  if(!text.includes('Lake Ice-Out Forecast'))throw new Error('Lake Ice-Out card missing from canonical hub response');
+  if(!text.includes('href="/national-tools/ice-out/"')&&!text.includes('href="https://chrisizworski.com/national-tools/ice-out/"')){
+    throw new Error('hub does not link to branded Lake Ice-Out route');
+  }
+  if(text.includes('href="https://lspp-ice-out.vercel.app/north-america/"'))throw new Error('hub still exposes legacy Vercel ice-out href');
+});
+
+await check('branded Lake Ice-Out page is live',async()=>{
+  const {text}=await request('/national-tools/ice-out/',{cacheBust:false,noCacheHeader:false});
+  for(const marker of [
+    '<title>Lake Ice-Out Forecast — Northern U.S. & Canada | Chris Izworski</title>',
+    '<link rel="canonical" href="https://chrisizworski.com/national-tools/ice-out/"',
+    'G-Y5D2V2W7HN',
+    'ca-pub-8222782620788075',
+    'https://lspp-ice-out.vercel.app/north-america/app.js'
+  ])if(!text.includes(marker))throw new Error('branded ice-out page missing marker '+marker);
+});
+
+await check('Lake Ice-Out seasonal physics proxy works',async()=>{
+  const {data}=await request('/api/seasonal-physics?lat=47.66&lon=-84.74&date=2025-04-15',{json:true,timeout:30000});
+  if(data.active!==true)throw new Error('seasonal physics is not active for spring smoke date');
+  if(!Array.isArray(data.features)||data.features.length!==4)throw new Error('seasonal physics feature vector invalid');
+  if(Number(data.prior_years)<8)throw new Error('seasonal physics prior-year coverage too small');
+});
+
 await check('planting canonical page is v3.4 shell on v35 runtime',async()=>{
   // Deliberately use the exact public URL with no cache-busting query and no
   // no-cache request header. This catches a stale canonical CDN object that a
