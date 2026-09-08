@@ -1,0 +1,71 @@
+name: Remote Trout V2 release gate
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'package.json'
+      - 'api/lakes.js'
+      - 'scripts/sync-ontario-finder.mjs'
+      - 'scripts/remote-trout-production-smoke.mjs'
+      - 'tests/ontario-fishing-lake-finder-route.test.js'
+      - '.github/workflows/remote-trout-v2-release.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'package.json'
+      - 'api/lakes.js'
+      - 'scripts/sync-ontario-finder.mjs'
+      - 'scripts/remote-trout-production-smoke.mjs'
+      - 'tests/ontario-fishing-lake-finder-route.test.js'
+      - '.github/workflows/remote-trout-v2-release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install pinned standalone release
+        run: npm install --no-audit --no-fund --ignore-scripts
+      - name: Verify main-site route contract
+        run: node --test tests/ontario-fishing-lake-finder-route.test.js
+      - name: Verify pinned V2 index accounting
+        run: |
+          node - <<'NODE'
+          const index=require('ontario-fishing-lake-finder/data/trout-index.json');
+          const s=index.summary||{};
+          const expected={unionWaterbodyIds:6538,lakes:5651,mappable:5649,remoteScored:5649,unmapped:2,excludedNonLake:887,excludedUncertain:0};
+          for(const [key,value] of Object.entries(expected)){
+            if(s[key]!==value) throw new Error(`${key}: expected ${value}, got ${s[key]}`);
+          }
+          const expectedSpecies={'Brook Trout':3414,'Lake Trout':2368,'Rainbow Trout':459,'Brown Trout':58,'Splake':509};
+          for(const [species,value] of Object.entries(expectedSpecies)){
+            if(s.bySpecies?.[species]!==value) throw new Error(`${species}: expected ${value}, got ${s.bySpecies?.[species]}`);
+          }
+          if(s.lakes+s.excludedNonLake+s.excludedUncertain!==s.unionWaterbodyIds) throw new Error('Trout-union accounting does not reconcile');
+          if(s.mappable+s.unmapped!==s.lakes) throw new Error('Mappable/unmapped accounting does not reconcile');
+          console.log(JSON.stringify({status:'ok',summary:s}));
+          NODE
+      - name: Sync exact standalone surfaces
+        run: node scripts/sync-ontario-finder.mjs
+      - name: Verify generated Remote Trout V2 surface
+        run: |
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const html=fs.readFileSync('public/remote-trout-lake-finder/index.html','utf8');
+          for(const marker of ['Ontario trout intelligence · V2','No hidden top-candidate sampling.',"Why isn't my lake here?","const API='/api/lakes'"]){
+            if(!html.includes(marker)) throw new Error(`Missing V2 marker: ${marker}`);
+          }
+          if(/replit\.app/i.test(html)) throw new Error('Forbidden Replit dependency');
+          console.log('Remote Trout V2 mirrored surface verified.');
+          NODE
