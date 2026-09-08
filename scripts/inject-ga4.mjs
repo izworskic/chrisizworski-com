@@ -14,7 +14,11 @@ const GA4_TAG = `<!-- Google tag (gtag.js) -->
   gtag('js', new Date());
   gtag('config', '${MEASUREMENT_ID}');
 </script>`;
-const ADSENSE_TAG = `<meta name="google-adsense-account" content="${ADSENSE_PUBLISHER_ID}">`;
+const ADSENSE_ACCOUNT_TAG = `<meta name="google-adsense-account" content="${ADSENSE_PUBLISHER_ID}">`;
+// Auto Ads is injected independently from the account meta tag so either tag can be repaired without duplication.
+const ADSENSE_AUTO_ADS_SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075';
+const ADSENSE_AUTO_ADS_TAG = `<script async src="${ADSENSE_AUTO_ADS_SRC}"
+     crossorigin="anonymous"></script>`;
 
 const MIGRATED_TOOLS_SECTION = `
 <section id="first-party-migrated-tools" class="decision-network" aria-labelledby="first-party-migrated-title">
@@ -41,8 +45,10 @@ const MIGRATED_TOOLS_SECTION = `
 let scanned = 0;
 let ga4Injected = 0;
 let ga4AlreadyTagged = 0;
-let adsenseInjected = 0;
-let adsenseAlreadyTagged = 0;
+let adsenseAccountInjected = 0;
+let adsenseAccountAlreadyTagged = 0;
+let autoAdsInjected = 0;
+let autoAdsAlreadyTagged = 0;
 
 async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
@@ -56,11 +62,15 @@ async function walk(dir) {
     scanned += 1;
     const html = await readFile(fullPath, 'utf8');
     const needsGa4 = !html.includes(MEASUREMENT_ID);
-    const needsAdsense = !html.includes(ADSENSE_PUBLISHER_ID);
+    const hasAdsenseAccount = html.includes('name="google-adsense-account"') && html.includes(ADSENSE_PUBLISHER_ID);
+    const hasAutoAds = html.includes(ADSENSE_AUTO_ADS_SRC);
+    const needsAdsenseAccount = !hasAdsenseAccount;
+    const needsAutoAds = !hasAutoAds;
 
     if (!needsGa4) ga4AlreadyTagged += 1;
-    if (!needsAdsense) adsenseAlreadyTagged += 1;
-    if (!needsGa4 && !needsAdsense) continue;
+    if (!needsAdsenseAccount) adsenseAccountAlreadyTagged += 1;
+    if (!needsAutoAds) autoAdsAlreadyTagged += 1;
+    if (!needsGa4 && !needsAdsenseAccount && !needsAutoAds) continue;
 
     if (!/<\/head>/i.test(html)) {
       throw new Error(`Cannot inject site tags: missing </head> in ${path.relative(ROOT, fullPath)}`);
@@ -71,9 +81,13 @@ async function walk(dir) {
       tags.push(GA4_TAG);
       ga4Injected += 1;
     }
-    if (needsAdsense) {
-      tags.push(ADSENSE_TAG);
-      adsenseInjected += 1;
+    if (needsAdsenseAccount) {
+      tags.push(ADSENSE_ACCOUNT_TAG);
+      adsenseAccountInjected += 1;
+    }
+    if (needsAutoAds) {
+      tags.push(ADSENSE_AUTO_ADS_TAG);
+      autoAdsInjected += 1;
     }
 
     await writeFile(fullPath, html.replace(/<\/head>/i, `${tags.join('\n')}\n</head>`));
@@ -136,8 +150,10 @@ console.log(JSON.stringify({
   scanned,
   ga4Injected,
   ga4AlreadyTagged,
-  adsenseInjected,
-  adsenseAlreadyTagged,
+  adsenseAccountInjected,
+  adsenseAccountAlreadyTagged,
+  autoAdsInjected,
+  autoAdsAlreadyTagged,
   runtimeFilesChecked,
   replitRuntimeDependencies: 0,
   root: 'public',
