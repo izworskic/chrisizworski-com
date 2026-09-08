@@ -96,3 +96,5 @@ await check('planting frost API works for 48706',async()=>{
 
 console.log('\n'+JSON.stringify({origin,checked_at:new Date().toISOString(),passed:checks.filter(x=>x.ok).length,failed:checks.filter(x=>!x.ok).length,checks},null,2));
 if(checks.some(x=>!x.ok))process.exit(1);
+
+// Production smoke is also the post-merge verification contract.
