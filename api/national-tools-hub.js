@@ -5,6 +5,7 @@ const OLD_ICE_OUT='https://lspp-ice-out.vercel.app/north-america/';
 const BRANDED_ICE_OUT='https://chrisizworski.com/national-tools/ice-out/';
 
 module.exports=async function handler(req,res){
+  res.setHeader('X-Robots-Tag','noindex, nofollow');
   if(req.method!=='GET'){
     res.setHeader('Allow','GET');
     return res.status(405).send('GET only');
