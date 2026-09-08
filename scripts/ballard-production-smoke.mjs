@@ -1,5 +1,6 @@
 const PAGE = 'https://chrisizworski.com/ballard-locks/';
 const API = 'https://chrisizworski.com/api/ballard-locks';
+const LEVEL_TSID = 'LWSC.Elev-Lake.Ave.1Hour.1Hour.IRIDIUM-REV';
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function fetchText(url, timeoutMs = 30000) {
@@ -8,7 +9,7 @@ async function fetchText(url, timeoutMs = 30000) {
     redirect: 'follow',
     headers: {
       accept: 'text/html,application/json',
-      'user-agent': 'ChrisIzworskiBallardProductionSmoke/1.3',
+      'user-agent': 'ChrisIzworskiBallardProductionSmoke/1.4',
       'cache-control': 'no-cache',
     },
     signal: AbortSignal.timeout(timeoutMs),
@@ -34,6 +35,18 @@ function fishContractReady(data) {
     signatures.push(`${species.latest.daily}:${species.latest.total}`);
   }
   return new Set(signatures).size === 3;
+}
+
+function lakeLevelContractReady(data) {
+  const level = data?.lakeLevel;
+  if (!level?.ok || !Number.isFinite(level.valueFt) || level.valueFt < 18 || level.valueFt > 24) return false;
+  const observed = Date.parse(level.observedAt);
+  if (!Number.isFinite(observed)) return false;
+  const ageHours = Math.max(0, (Date.now() - observed) / 3600000);
+  if (ageHours > 72) return false;
+  if (!String(level.source || '').includes('USACE')) return false;
+  if (level.tsid !== LEVEL_TSID) return false;
+  return true;
 }
 
 async function waitForPage() {
@@ -62,16 +75,17 @@ async function waitForApiContract() {
       const api = await fetchText(`${API}?smoke=${Date.now()}`, 30000);
       const data = parseJson(api.text);
       last = { api, data };
-      if (api.response.ok && data && fishContractReady(data)) return last;
+      if (api.response.ok && data && fishContractReady(data) && lakeLevelContractReady(data)) return last;
       const fishSummary = data?.fish?.species?.map(s => `${s.species}:${s.latest?.daily}/${s.latest?.total}`).join(', ') || data?.fish?.error || 'no fish payload';
-      console.log(`Ballard API contract not ready (attempt ${attempt}/24, HTTP ${api.response.status}, fish=${fishSummary}); retrying.`);
+      const levelSummary = data?.lakeLevel?.ok ? `${data.lakeLevel.valueFt}ft @ ${data.lakeLevel.observedAt}` : data?.lakeLevel?.error || 'no lake-level payload';
+      console.log(`Ballard API contract not ready (attempt ${attempt}/24, HTTP ${api.response.status}, fish=${fishSummary}, lake=${levelSummary}); retrying.`);
     } catch (error) {
       console.log(`Ballard API readiness attempt ${attempt}/24 failed: ${error.message}`);
     }
     await sleep(5000);
   }
-  const summary = last?.data?.fish?.species ? JSON.stringify(last.data.fish.species) : last?.api?.text?.slice(0, 500);
-  throw new Error(`Ballard production API did not expose the corrected fish contract${summary ? `; last payload: ${summary}` : ''}`);
+  const summary = last?.data ? JSON.stringify({fish:last.data.fish, lakeLevel:last.data.lakeLevel}) : last?.api?.text?.slice(0, 500);
+  throw new Error(`Ballard production API did not expose the corrected fish + USACE lake-level contract${summary ? `; last payload: ${summary}` : ''}`);
 }
 
 const page = await waitForPage();
@@ -118,6 +132,7 @@ const feeds = {
 };
 const coreFeedsUp = [feeds.fish, feeds.tides, feeds.weather].filter(Boolean).length;
 if (coreFeedsUp < 2) throw new Error(`Too many Ballard core feeds unavailable: ${JSON.stringify(feeds)}`);
+if (!lakeLevelContractReady(data)) throw new Error(`USACE Lake Washington Ship Canal level contract failed: ${JSON.stringify(data?.lakeLevel)}`);
 
 const expectedSpecies = new Set(['Sockeye', 'Chinook', 'Coho']);
 const seenSpecies = new Set();
@@ -146,6 +161,13 @@ console.log(JSON.stringify({
   label: data.visit.label,
   confidence: data.visit.confidence,
   feeds,
+  lakeLevel: {
+    valueFt: data.lakeLevel.valueFt,
+    observedAt: data.lakeLevel.observedAt,
+    delta24hr: data.lakeLevel.delta24hr,
+    source: data.lakeLevel.source,
+    tsid: data.lakeLevel.tsid,
+  },
   fishSpecies: data.fish.species.map(s => ({ species: s.species, date: s.latest.date, daily: s.latest.daily, total: s.latest.total, ageDays: s.ageDays })),
   nextTide: data.tides?.ok ? data.tides.predictions?.[0] : null,
   weather: data.weather?.ok ? { temperatureF: data.weather.temperatureF, shortForecast: data.weather.shortForecast } : null,
