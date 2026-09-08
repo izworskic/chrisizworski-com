@@ -8,7 +8,7 @@ async function fetchText(url, timeoutMs = 30000) {
     redirect: 'follow',
     headers: {
       accept: 'text/html,application/json',
-      'user-agent': 'ChrisIzworskiBallardProductionSmoke/1.0',
+      'user-agent': 'ChrisIzworskiBallardProductionSmoke/1.1',
       'cache-control': 'no-cache',
     },
     signal: AbortSignal.timeout(timeoutMs),
@@ -87,11 +87,19 @@ const coreFeedsUp = [feeds.fish, feeds.tides, feeds.weather].filter(Boolean).len
 if (coreFeedsUp < 2) throw new Error(`Too many Ballard core feeds unavailable: ${JSON.stringify(feeds)}`);
 
 if (feeds.fish) {
-  if (!Array.isArray(data.fish.species) || data.fish.species.length === 0) throw new Error('WDFW feed marked ok without species rows');
+  if (!Array.isArray(data.fish.species) || data.fish.species.length !== 3) throw new Error(`WDFW feed must expose exactly three species rows: ${JSON.stringify(data.fish.species)}`);
+  const expectedSpecies = new Set(['Sockeye', 'Chinook', 'Coho']);
+  const seenSpecies = new Set();
+  const totals = [];
   for (const species of data.fish.species) {
-    if (!species?.latest?.date || !Number.isFinite(species?.latest?.daily)) throw new Error(`Invalid WDFW species row: ${JSON.stringify(species)}`);
+    if (!expectedSpecies.has(species?.species)) throw new Error(`Unexpected WDFW species row: ${JSON.stringify(species)}`);
+    if (seenSpecies.has(species.species)) throw new Error(`Duplicate WDFW species row: ${species.species}`);
+    seenSpecies.add(species.species);
+    if (!species?.latest?.date || !Number.isFinite(species?.latest?.daily) || !Number.isFinite(species?.latest?.total)) throw new Error(`Invalid WDFW species row: ${JSON.stringify(species)}`);
     if (species.ageDays != null && !Number.isFinite(species.ageDays)) throw new Error(`Invalid WDFW source age: ${JSON.stringify(species)}`);
+    totals.push(species.latest.total);
   }
+  if (new Set(totals).size < 2) throw new Error(`WDFW species tables appear cross-contaminated; running totals collapsed: ${JSON.stringify(data.fish.species)}`);
 }
 if (feeds.tides && (!Array.isArray(data.tides.predictions) || data.tides.predictions.length === 0)) throw new Error('NOAA tide feed marked ok without predictions');
 if (feeds.weather && !Number.isFinite(data.weather.temperatureF)) throw new Error(`NWS weather feed marked ok without temperature: ${JSON.stringify(data.weather)}`);
@@ -107,7 +115,7 @@ console.log(JSON.stringify({
   label: data.visit.label,
   confidence: data.visit.confidence,
   feeds,
-  fishSpecies: data.fish?.ok ? data.fish.species.map(s => ({ species: s.species, date: s.latest.date, daily: s.latest.daily, ageDays: s.ageDays })) : [],
+  fishSpecies: data.fish?.ok ? data.fish.species.map(s => ({ species: s.species, date: s.latest.date, daily: s.latest.daily, total: s.latest.total, ageDays: s.ageDays })) : [],
   nextTide: data.tides?.ok ? data.tides.predictions?.[0] : null,
   weather: data.weather?.ok ? { temperatureF: data.weather.temperatureF, shortForecast: data.weather.shortForecast } : null,
 }));
