@@ -8,7 +8,7 @@ async function fetchText(url, timeoutMs = 30000) {
     redirect: 'follow',
     headers: {
       accept: 'text/html,application/json',
-      'user-agent': 'ChrisIzworskiBallardProductionSmoke/1.2',
+      'user-agent': 'ChrisIzworskiBallardProductionSmoke/1.3',
       'cache-control': 'no-cache',
     },
     signal: AbortSignal.timeout(timeoutMs),
@@ -26,14 +26,14 @@ function fishContractReady(data) {
   if (!data?.fish?.ok || !Array.isArray(data.fish.species) || data.fish.species.length !== 3) return false;
   const expected = new Set(['Sockeye', 'Chinook', 'Coho']);
   const seen = new Set();
-  const totals = [];
+  const signatures = [];
   for (const species of data.fish.species) {
     if (!expected.has(species?.species) || seen.has(species.species)) return false;
     seen.add(species.species);
     if (!species?.latest?.date || !Number.isFinite(species?.latest?.daily) || !Number.isFinite(species?.latest?.total)) return false;
-    totals.push(species.latest.total);
+    signatures.push(`${species.latest.daily}:${species.latest.total}`);
   }
-  return new Set(totals).size >= 2;
+  return new Set(signatures).size === 3;
 }
 
 async function waitForPage() {
@@ -121,16 +121,16 @@ if (coreFeedsUp < 2) throw new Error(`Too many Ballard core feeds unavailable: $
 
 const expectedSpecies = new Set(['Sockeye', 'Chinook', 'Coho']);
 const seenSpecies = new Set();
-const totals = [];
+const signatures = [];
 for (const species of data.fish.species) {
   if (!expectedSpecies.has(species?.species)) throw new Error(`Unexpected WDFW species row: ${JSON.stringify(species)}`);
   if (seenSpecies.has(species.species)) throw new Error(`Duplicate WDFW species row: ${species.species}`);
   seenSpecies.add(species.species);
   if (!species?.latest?.date || !Number.isFinite(species?.latest?.daily) || !Number.isFinite(species?.latest?.total)) throw new Error(`Invalid WDFW species row: ${JSON.stringify(species)}`);
   if (species.ageDays != null && !Number.isFinite(species.ageDays)) throw new Error(`Invalid WDFW source age: ${JSON.stringify(species)}`);
-  totals.push(species.latest.total);
+  signatures.push(`${species.latest.daily}:${species.latest.total}`);
 }
-if (new Set(totals).size < 2) throw new Error(`WDFW species tables appear cross-contaminated; running totals collapsed: ${JSON.stringify(data.fish.species)}`);
+if (new Set(signatures).size !== 3) throw new Error(`WDFW species tables appear cross-contaminated; daily/total signatures collided: ${JSON.stringify(data.fish.species)}`);
 
 if (feeds.tides && (!Array.isArray(data.tides.predictions) || data.tides.predictions.length === 0)) throw new Error('NOAA tide feed marked ok without predictions');
 if (feeds.weather && !Number.isFinite(data.weather.temperatureF)) throw new Error(`NWS weather feed marked ok without temperature: ${JSON.stringify(data.weather)}`);
