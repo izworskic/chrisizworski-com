@@ -26,6 +26,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Sep 8: honest seasonal fallback, feed freshness and existing fall/aurora handoffs.
+  "/assets/fall-color-freshness.js",
   // Sep 2 2026: citation-readiness answers rewritten to be self-contained on three tools.
   // Re-crawl after production release, then remove this declaration.
   "/great-lakes-beaches/",
