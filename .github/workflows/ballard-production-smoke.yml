@@ -1,0 +1,28 @@
+name: Ballard Locks production smoke
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'public/ballard-locks/**'
+      - 'api/ballard-locks.js'
+      - 'package.json'
+      - 'scripts/sync-ballard-locks.mjs'
+      - 'scripts/ballard-production-smoke.mjs'
+      - '.github/workflows/ballard-production-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/ballard-production-smoke.mjs
