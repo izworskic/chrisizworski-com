@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - agent/ballard-smoke-readiness
     paths:
       - 'public/ballard-locks/**'
       - 'api/ballard-locks.js'
