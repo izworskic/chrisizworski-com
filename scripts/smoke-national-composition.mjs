@@ -36,6 +36,7 @@ await check('national hub links branded Lake Ice-Out',async()=>{
 
 await check('branded Lake Ice-Out page is live',async()=>{
   const {text}=await request('/national-tools/ice-out/',{cacheBust:false,noCacheHeader:false});
+  // Keep this marker aligned with the SERP-safe public title.
   for(const marker of [
     '<title>Lake Ice-Out Forecast — U.S. & Canada | Chris Izworski</title>',
     '<link rel="canonical" href="https://chrisizworski.com/national-tools/ice-out/"',
