@@ -37,7 +37,7 @@ await check('national hub links branded Lake Ice-Out',async()=>{
 await check('branded Lake Ice-Out page is live',async()=>{
   const {text}=await request('/national-tools/ice-out/',{cacheBust:false,noCacheHeader:false});
   for(const marker of [
-    '<title>Lake Ice-Out Forecast — Northern U.S. & Canada | Chris Izworski</title>',
+    '<title>Lake Ice-Out Forecast — U.S. & Canada | Chris Izworski</title>',
     '<link rel="canonical" href="https://chrisizworski.com/national-tools/ice-out/"',
     'G-Y5D2V2W7HN',
     'ca-pub-8222782620788075',
