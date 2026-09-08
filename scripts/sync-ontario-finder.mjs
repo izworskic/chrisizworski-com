@@ -15,7 +15,12 @@ const surfaces = [
     name: 'Remote Trout Lake Finder',
     source: path.join(packageRoot, 'public', 'remote-trout-lake-finder', 'index.html'),
     targetDir: path.join(root, 'public', 'remote-trout-lake-finder'),
-    required: ['Trout Fit ≠ Remote Context', "const API='/api/lakes'"],
+    required: [
+      'Ontario trout intelligence · V2',
+      'No hidden top-candidate sampling.',
+      "Why isn't my lake here?",
+      "const API='/api/lakes'",
+    ],
   },
 ];
 
