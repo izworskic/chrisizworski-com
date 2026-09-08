@@ -3,26 +3,38 @@ import path from 'node:path';
 
 const root = process.cwd();
 const packageRoot = path.join(root, 'node_modules', 'ontario-fishing-lake-finder');
-const sourceHtml = path.join(packageRoot, 'public', 'index.html');
-const targetDir = path.join(root, 'public', 'ontario-fishing-lake-finder');
-const targetHtml = path.join(targetDir, 'index.html');
 
-if (!fs.existsSync(sourceHtml)) {
-  throw new Error('Ontario Fishing Lake Finder package is not installed; refusing to publish a stale mirror.');
-}
+const surfaces = [
+  {
+    name: 'Ontario Fishing Lake Finder',
+    source: path.join(packageRoot, 'public', 'index.html'),
+    targetDir: path.join(root, 'public', 'ontario-fishing-lake-finder'),
+    required: ['Ontario Hydro Network', "const API='/api/lakes'"],
+  },
+  {
+    name: 'Remote Trout Lake Finder',
+    source: path.join(packageRoot, 'public', 'remote-trout-lake-finder', 'index.html'),
+    targetDir: path.join(root, 'public', 'remote-trout-lake-finder'),
+    required: ['Trout Fit ≠ Remote Context', "const API='/api/lakes'"],
+  },
+];
 
-const html = fs.readFileSync(sourceHtml, 'utf8');
+for (const surface of surfaces) {
+  if (!fs.existsSync(surface.source)) {
+    throw new Error(`${surface.name} package surface is missing; refusing to publish a stale mirror.`);
+  }
 
-if (!html.includes('Ontario Hydro Network')) {
-  throw new Error('Ontario Fishing Lake Finder release does not contain the OHN all-lakes coverage contract.');
-}
-if (/replit\.app/i.test(html)) {
-  throw new Error('Ontario Fishing Lake Finder release contains a forbidden Replit dependency.');
-}
-if (!html.includes("const API='/api/lakes'")) {
-  throw new Error('Ontario Fishing Lake Finder frontend is not wired to the first-party /api/lakes endpoint.');
-}
+  const html = fs.readFileSync(surface.source, 'utf8');
+  for (const marker of surface.required) {
+    if (!html.includes(marker)) {
+      throw new Error(`${surface.name} release is missing required contract marker: ${marker}`);
+    }
+  }
+  if (/replit\.app/i.test(html)) {
+    throw new Error(`${surface.name} release contains a forbidden Replit dependency.`);
+  }
 
-fs.mkdirSync(targetDir, { recursive: true });
-fs.writeFileSync(targetHtml, html);
-console.log('Synced Ontario Fishing Lake Finder frontend from pinned standalone release.');
+  fs.mkdirSync(surface.targetDir, { recursive: true });
+  fs.writeFileSync(path.join(surface.targetDir, 'index.html'), html);
+  console.log(`Synced ${surface.name} frontend from pinned standalone release.`);
+}
