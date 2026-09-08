@@ -61,7 +61,7 @@
     "benchmark:white-christmas-indexing": "node scripts/verify-white-christmas-indexing.mjs"
   },
   "dependencies": {
-    "national-ballard-locks": "github:izworskic/national-ballard-locks#8cbb7361f83cc521840edda8441333fba2781a88",
+    "national-ballard-locks": "github:izworskic/national-ballard-locks#2822faf4adfb4eeb7ac7c96decca37f4ca55a377",
     "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#317abdf164792692a5202078cee3d3fae36b9322"
   },
   "engines": {
