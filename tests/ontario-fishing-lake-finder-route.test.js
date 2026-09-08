@@ -9,17 +9,19 @@ const api = fs.readFileSync(path.join(root, 'api', 'lakes.js'), 'utf8');
 const sync = fs.readFileSync(path.join(root, 'scripts', 'sync-ontario-finder.mjs'), 'utf8');
 const html = fs.readFileSync(path.join(root, 'public', 'ontario-fishing-lake-finder', 'index.html'), 'utf8');
 
-test('Ontario fishing surfaces deploy from the pinned standalone release without Replit', () => {
+test('Ontario fishing surfaces deploy from the pinned standalone V2 release without Replit', () => {
   assert.equal(
     pkg.dependencies?.['ontario-fishing-lake-finder'],
-    'github:izworskic/ontario-fishing-lake-finder#7e72cbaeb35b969a06e6ed66a5e8cc5d8669a148'
+    'github:izworskic/ontario-fishing-lake-finder#2a82f27ff6bd7e8612d30862828bc6594dff565a'
   );
   assert.match(pkg.scripts?.['vercel-build'] || '', /sync-ontario-finder\.mjs/);
   assert.match(api, /ontario-fishing-lake-finder\/api\/lakes/);
   assert.match(sync, /Ontario Hydro Network/);
   assert.match(sync, /Remote Trout Lake Finder/);
   assert.match(sync, /remote-trout-lake-finder/);
-  assert.match(sync, /Trout Fit ≠ Remote Context/);
+  assert.match(sync, /Ontario trout intelligence · V2/);
+  assert.match(sync, /No hidden top-candidate sampling\./);
+  assert.match(sync, /Why isn't my lake here\?/);
   assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/ontario-fishing-lake-finder\/">/);
   assert.doesNotMatch(api + sync + html, /replit\.app/i);
 });
