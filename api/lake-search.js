@@ -3,6 +3,7 @@
 const BACKEND='https://lspp-ice-out.vercel.app/api/lake-search';
 
 module.exports=async function handler(req,res){
+  res.setHeader('X-Robots-Tag','noindex, nofollow');
   if(req.method!=='GET'){
     res.setHeader('Allow','GET');
     return res.status(405).json({error:'GET only'});
