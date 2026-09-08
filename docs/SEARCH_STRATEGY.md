@@ -1,5 +1,10 @@
 # ChrisIzworski.com Search Strategy Operating System
 
+## Current operating mode — September 8, 2026
+
+The owner retired all search experiments on September 2. `benchmarks/growth-experiments.json` is authoritative: `activeExperiments` is empty and the mode is **ship-and-observe**. Historical freeze lists and hold queues below document earlier decisions; they impose no current waiting period. Preserve winning utility, canonical ownership and factual accuracy, record changes, and observe comparable search windows without claiming causal uplift. A future freeze requires a new explicit owner-approved ledger entry.
+
+
 Updated: August 21, 2026 (America/Detroit)
 
 ## North star

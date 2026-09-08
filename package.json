@@ -61,7 +61,7 @@
     "benchmark:white-christmas-indexing": "node scripts/verify-white-christmas-indexing.mjs"
   },
   "dependencies": {
-    "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#2a82f27ff6bd7e8612d30862828bc6594dff565a"
+    "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#317abdf164792692a5202078cee3d3fae36b9322"
   },
   "engines": {
     "node": "22.x"

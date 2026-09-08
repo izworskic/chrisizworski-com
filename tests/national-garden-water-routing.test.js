@@ -25,8 +25,8 @@ test('Garden Water canonical, API, assets and data route to owning project', () 
     ['/assets/national-garden-water-engine.js', `${child}/assets/national-garden-water-engine.js`],
     ['/assets/national-garden-water-page.js', `${child}/assets/national-garden-water-page.js`],
     ['/data/national-garden-water-crops.json', `${child}/data/national-garden-water-crops.json`],
-    ['/national-tools/garden-water', `${child}/national-tools/garden-water/`],
-    ['/national-tools/garden-water/', `${child}/national-tools/garden-water/`],
+    ['/national-tools/garden-water', '/api/garden-water-page'],
+    ['/national-tools/garden-water/', '/api/garden-water-page'],
   ]);
   for (const [source, destination] of expected) {
     assert.equal(route(source)?.destination, destination, source);
