@@ -12,19 +12,44 @@ permissions:
 jobs:
   diagnose:
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 3
     steps:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Fetch production lake-level payload
+      - name: Probe official USACE lake-level sources
         run: |
           node --input-type=module <<'EOF'
-          const url = `https://chrisizworski.com/api/ballard-locks?lake-debug=${Date.now()}`;
-          const r = await fetch(url, {headers:{'cache-control':'no-cache','user-agent':'BallardLakeDebug/1.0'}, signal:AbortSignal.timeout(30000)});
-          const text = await r.text();
-          console.log('HTTP', r.status, r.headers.get('content-type'));
-          let data;
-          try { data = JSON.parse(text); } catch { console.log(text.slice(0,2000)); process.exit(1); }
-          console.log(JSON.stringify({generatedAt:data.generatedAt,lakeLevel:data.lakeLevel}, null, 2));
+          const now = new Date();
+          const begin = new Date(now.getTime() - 48 * 3600e3).toISOString();
+          const end = new Date(now.getTime() + 3600e3).toISOString();
+          const tsid = 'LWSC.Elev-Lake.Ave.1Hour.1Hour.IRIDIUM-REV';
+          const urls = [
+            `https://cwms-data.usace.army.mil/cwms-data/catalog/TIMESERIES?office=NWS&like=LWSC.%2AElev%2A`,
+            `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${encodeURIComponent(tsid)}&office=NWS&unit=ft`,
+            `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${encodeURIComponent(tsid)}&office=NWS&unit=ft&begin=${encodeURIComponent(begin)}&end=${encodeURIComponent(end)}`,
+            `https://water.usace.army.mil/cda/reporting/providers/nws/locations/lwsc`,
+            `https://water.usace.army.mil/overview/nws/locations/lwsc`,
+            `https://water.usace.army.mil/office/nws/data/lkw_lwsc_plot`,
+          ];
+          for (const url of urls) {
+            try {
+              const r = await fetch(url, {
+                headers: {
+                  'user-agent': 'BallardLakeDebug/2.0',
+                  'accept': 'application/json;version=2, application/json;q=0.9, text/html;q=0.5, */*;q=0.1'
+                },
+                redirect: 'follow',
+                signal: AbortSignal.timeout(20000)
+              });
+              const body = await r.text();
+              console.log('\nURL', url);
+              console.log('FINAL', r.url);
+              console.log('HTTP', r.status, r.headers.get('content-type'));
+              console.log(body.slice(0, 1800).replace(/\s+/g,' '));
+            } catch (e) {
+              console.log('\nURL', url);
+              console.log('ERROR', e.message);
+            }
+          }
           EOF
