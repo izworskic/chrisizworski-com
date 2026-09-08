@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 
 const file = 'public/tools/index.html';
-const TOOL_URL = 'https://tahquamenon-falls-live-94is.vercel.app/';
+const TOOL_URL = 'https://chrisizworski.com/tahquamenon-falls/';
 const TOOL_KEY = 'tahquamenon-falls-live';
 const TOOL_NAME = 'Tahquamenon Falls Live, River Conditions and Park Planner';
 const TOOL_DESC = 'Live USGS river flow, same-date historical context, NWS weather and hazards, Upper versus Lower Falls guidance, an interactive park map, trails, campgrounds, brewery stops, paddling access, photo conditions, and time-based visit planning for Tahquamenon Falls State Park.';
@@ -67,7 +67,7 @@ if (!html.includes('data-decision-network="tahquamenon-falls-live"')) {
   const laneRe = /(<div class="decision-network__lane"><h3>Go outside in Michigan<\/h3><ul>)([\s\S]*?)(<\/ul>)/;
   const match = html.match(laneRe);
   if (!match) throw new Error('Tahquamenon tools patch: outdoors decision lane not found');
-  const item = `<li><a href="${TOOL_URL}" target="_blank" rel="noopener" data-decision-network="tahquamenon-falls-live" data-lane="outdoors" data-surface="tools">Tahquamenon Falls<span>Live river, trails, map &amp; visit planner</span></a></li>`;
+  const item = `<li><a href="${TOOL_URL}" data-decision-network="tahquamenon-falls-live" data-lane="outdoors" data-surface="tools">Tahquamenon Falls<span>Live river, trails, map &amp; visit planner</span></a></li>`;
   html = html.replace(laneRe, `${match[1]}${match[2]}${item}${match[3]}`);
   changed = true;
 }
@@ -75,7 +75,7 @@ if (!html.includes('data-decision-network="tahquamenon-falls-live"')) {
 // 3) Featured tools: treat Tahquamenon like the flagship destination tool it is.
 if (!html.includes('data-featured-tool="tahquamenon-falls-live"')) {
   const sooAnchor = '    <article class="feature-card" data-featured-tool="soo-locks">';
-  const card = `    <article class="feature-card" data-featured-tool="tahquamenon-falls-live">\n      <div class="feature-kicker">Live waterfall + park intelligence</div>\n      <h3><a href="${TOOL_URL}" target="_blank" rel="noopener" data-track-tool="tahquamenon-falls-live" data-placement="tools-featured">Tahquamenon Falls Live</a></h3>\n      <p>See whether Tahquamenon is worth the drive right now, compare Upper and Lower Falls, check live river flow and trail weather, then build the visit on an interactive park map.</p>\n      <a class="tool-cta" href="${TOOL_URL}" target="_blank" rel="noopener" data-track-tool="tahquamenon-falls-live" data-placement="tools-featured">Plan Tahquamenon <span aria-hidden="true">&rarr;</span></a>\n    </article>\n`;
+  const card = `    <article class="feature-card" data-featured-tool="tahquamenon-falls-live">\n      <div class="feature-kicker">Live waterfall + park intelligence</div>\n      <h3><a href="${TOOL_URL}" data-track-tool="tahquamenon-falls-live" data-placement="tools-featured">Tahquamenon Falls Live</a></h3>\n      <p>See whether Tahquamenon is worth the drive right now, compare Upper and Lower Falls, check live river flow and trail weather, then build the visit on an interactive park map.</p>\n      <a class="tool-cta" href="${TOOL_URL}" data-track-tool="tahquamenon-falls-live" data-placement="tools-featured">Plan Tahquamenon <span aria-hidden="true">&rarr;</span></a>\n    </article>\n`;
   replaceOnce(sooAnchor, `${card}${sooAnchor}`, 'Soo Locks featured card');
 }
 
@@ -86,7 +86,7 @@ if (!html.includes('data-tool-key="tahquamenon-falls-live"')) {
   if (titleIndex < 0) throw new Error('Tahquamenon tools patch: Lake Superior Circle Tour catalog anchor not found');
   const cardIndex = html.lastIndexOf('  <div class="tool-card"', titleIndex);
   if (cardIndex < 0) throw new Error('Tahquamenon tools patch: planning catalog card boundary not found');
-  const catalog = `  <div class="tool-card" data-tool-key="tahquamenon-falls-live" data-tags="planning nature" data-months="1,2,3,4,5,6,7,8,9,10,11,12">\n    <div class="tk">Live data<span class="tk-season" hidden> / useful now</span></div>\n    <div class="tool-title"><a href="${TOOL_URL}" target="_blank" rel="noopener">Tahquamenon Falls Live, River Conditions and Park Planner</a></div>\n    <div class="tool-desc">${TOOL_DESC}</div>\n  </div>\n`;
+  const catalog = `  <div class="tool-card" data-tool-key="tahquamenon-falls-live" data-tags="planning nature" data-months="1,2,3,4,5,6,7,8,9,10,11,12">\n    <div class="tk">Live data<span class="tk-season" hidden> / useful now</span></div>\n    <div class="tool-title"><a href="${TOOL_URL}">Tahquamenon Falls Live, River Conditions and Park Planner</a></div>\n    <div class="tool-desc">${TOOL_DESC}</div>\n  </div>\n`;
   html = html.slice(0, cardIndex) + catalog + html.slice(cardIndex);
   changed = true;
 }

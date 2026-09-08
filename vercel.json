@@ -58,6 +58,7 @@
     {"source":"/api/isle-royale","destination":"https://isle-royale-outdoors.vercel.app/api/isle-royale"},
     {"source":"/api/isle-royale-route-weather","destination":"https://isle-royale-outdoors.vercel.app/api/isle-royale-route-weather"},
     {"source":"/api/isle-royale-water-intelligence","destination":"https://isle-royale-outdoors.vercel.app/api/isle-royale-water-intelligence"},
+    {"source":"/api/tahquamenon-falls","destination":"https://tahquamenon-falls-live-94is.vercel.app/api/tahquamenon-falls"},
     {"source":"/assets/national-tools.css","destination":"https://national-outdoor-core.vercel.app/assets/national-tools.css"},
     {"source":"/assets/national-tools.js","destination":"https://national-outdoor-core.vercel.app/assets/national-tools.js"},
     {"source":"/assets/national-dashboard.js","destination":"https://national-outdoor-tools-hub.vercel.app/assets/national-dashboard.js"},
@@ -76,6 +77,9 @@
     {"source":"/assets/white-christmas-village.svg","destination":"https://national-white-christmas.vercel.app/assets/white-christmas-village.svg"},
     {"source":"/assets/wc-icon-:path*","destination":"https://national-white-christmas.vercel.app/assets/wc-icon-:path*"},
     {"source":"/assets/isle-royale-map.js","destination":"https://isle-royale-outdoors.vercel.app/assets/isle-royale-map.js"},
+    {"source":"/assets/tahquamenon-falls.js","destination":"https://tahquamenon-falls-live-94is.vercel.app/assets/tahquamenon-falls.js"},
+    {"source":"/assets/tahquamenon-falls.css","destination":"https://tahquamenon-falls-live-94is.vercel.app/assets/tahquamenon-falls.css"},
+    {"source":"/assets/css/:path*","destination":"https://tahquamenon-falls-live-94is.vercel.app/assets/css/:path*"},
     {"source":"/assets/isle-royale-water-intelligence.js","destination":"https://isle-royale-outdoors.vercel.app/assets/isle-royale-water-intelligence.js"},
     {"source":"/data/national-usgs-streamflow-sites.json","destination":"https://national-rivers.vercel.app/data/national-usgs-streamflow-sites.json"},
     {"source":"/data/national-planting-crops.json","destination":"https://national-planting.vercel.app/data/national-planting-crops.json"},
@@ -122,6 +126,8 @@
     {"source":"/white-christmas-michigan/","destination":"https://national-white-christmas.vercel.app/white-christmas-michigan/"},
     {"source":"/isle-royale-map","destination":"https://isle-royale-outdoors.vercel.app/isle-royale-map/"},
     {"source":"/isle-royale-map/","destination":"https://isle-royale-outdoors.vercel.app/isle-royale-map/"},
+    {"source":"/tahquamenon-falls","destination":"https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/"},
+    {"source":"/tahquamenon-falls/","destination":"https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/"},
     {"source":"/national-tools/aurora/:path*","destination":"https://national-aurora.vercel.app/national-tools/aurora/:path*"},
     {"source":"/national-tools/rivers/:path*","destination":"https://national-rivers.vercel.app/national-tools/rivers/:path*"},
     {"source":"/national-tools/frost/:path*","destination":"https://national-frost.vercel.app/national-tools/frost/:path*"},
@@ -144,6 +150,7 @@
     {"source":"/white-christmas-probability-map/:path*","destination":"https://national-white-christmas.vercel.app/white-christmas-probability-map/:path*"},
     {"source":"/white-christmas-michigan/:path*","destination":"https://national-white-christmas.vercel.app/white-christmas-michigan/:path*"},
     {"source":"/isle-royale-map/:path*","destination":"https://isle-royale-outdoors.vercel.app/isle-royale-map/:path*"},
+    {"source":"/tahquamenon-falls/:path*","destination":"https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/:path*"},
     {"source":"/national-tools/:path*","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"}
   ]
 }
