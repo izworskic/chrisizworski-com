@@ -95,10 +95,17 @@ for (const required of [
   'Ballard Locks salmon activity',
   'NOAA Tides &amp; Currents',
   'National Weather Service',
+  'https://www.sbmc.com/dock-cams/',
+  'Live Ballard Ship Canal cameras',
   'ca-pub-8222782620788075',
   'G-Y5D2V2W7HN',
 ]) {
   if (!page.text.includes(required)) throw new Error(`Ballard production page missing required contract: ${required}`);
+}
+
+
+if (page.text.includes('UC1roj2AL1R0DxTjjX89gbEQ') || page.text.includes('youtube.com/@BallardLocksWebcam')) {
+  throw new Error('Dead Ballard Locks YouTube camera embed/link returned to production');
 }
 
 const { api, data } = await waitForApiContract();
