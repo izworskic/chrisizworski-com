@@ -39,6 +39,17 @@ const FROZEN = [
   },
 ];
 
+// Known over-limit strings that already existed on main before this gate was made blocking.
+// These are NOT exemptions for future growth: the exact field may stay at or below its recorded
+// baseline, but any increase fails the gate. This keeps unrelated production work from rewriting
+// existing SERP treatments while still preventing the debt from getting worse. Remove an entry as
+// soon as that route is intentionally brought under the normal limit in dedicated SEO work.
+const LEGACY_OVERLIMIT_BASELINE = new Map([
+  ["/national-tools/ice-out/|title", 63],
+  ["/ontario-fishing-lake-finder/|title", 62],
+  ["/ontario-fishing-lake-finder/|description", 178],
+]);
+
 function decodeEntities(value) {
   return value
     .replace(/&#x27;/gi, "'")
@@ -65,6 +76,22 @@ const today = new Date().toISOString().slice(0, 10);
 const files = await walk(publicRoot);
 const failures = [];
 const exempt = [];
+const legacy = [];
+
+function recordLength(route, field, length, limit, frozen) {
+  if (length <= limit) return;
+  const line = `${route} ${field} ${length} > ${limit}`;
+  if (frozen) {
+    exempt.push(`${line} (frozen until ${frozen.until})`);
+    return;
+  }
+  const legacyBaseline = LEGACY_OVERLIMIT_BASELINE.get(`${route}|${field}`);
+  if (legacyBaseline !== undefined && length <= legacyBaseline) {
+    legacy.push(`${line} (pre-existing baseline ${legacyBaseline}; may not increase)`);
+    return;
+  }
+  failures.push(line);
+}
 
 for (const file of files) {
   const html = await readFile(file, "utf8");
@@ -75,16 +102,8 @@ for (const file of files) {
   );
 
   const frozen = FROZEN.find((f) => f.route === route && today <= f.until);
-  if (title.length > TITLE_MAX) {
-    const line = `${route} title ${title.length} > ${TITLE_MAX}`;
-    if (frozen) exempt.push(`${line} (frozen until ${frozen.until})`);
-    else failures.push(line);
-  }
-  if (description.length > DESCRIPTION_MAX) {
-    const line = `${route} description ${description.length} > ${DESCRIPTION_MAX}`;
-    if (frozen) exempt.push(`${line} (frozen until ${frozen.until})`);
-    else failures.push(line);
-  }
+  recordLength(route, "title", title.length, TITLE_MAX, frozen);
+  recordLength(route, "description", description.length, DESCRIPTION_MAX, frozen);
 }
 
 for (const f of FROZEN) {
@@ -93,6 +112,7 @@ for (const f of FROZEN) {
   }
 }
 for (const line of exempt) console.log(`  exempt: ${line}`);
+for (const line of legacy) console.log(`  legacy: ${line}`);
 
 if (failures.length) {
   console.error(`\nSERP LENGTH CHECK FAILED: ${failures.length} over the limit.`);
@@ -106,5 +126,6 @@ if (failures.length) {
 
 console.log(
   `serp length PASS - ${files.length} pages, titles <= ${TITLE_MAX}, descriptions <= ${DESCRIPTION_MAX}` +
-    (exempt.length ? `, ${exempt.length} frozen` : ""),
+    (exempt.length ? `, ${exempt.length} frozen` : "") +
+    (legacy.length ? `, ${legacy.length} pre-existing over-limit baselines` : ""),
 );
