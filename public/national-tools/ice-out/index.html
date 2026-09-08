@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Lake Ice-Out Forecast — Northern U.S. & Canada | Chris Izworski</title>
+<meta name="description" content="Search northern U.S. and Canadian lakes for calibrated spring ice-out timing, historical context, live thaw signals and NASA satellite imagery." />
+<link rel="canonical" href="https://chrisizworski.com/national-tools/ice-out/" />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<meta property="og:title" content="Lake Ice-Out Forecast — Northern U.S. & Canada" />
+<meta property="og:description" content="When will your lake open? Search northern U.S. and Canadian lakes for calibrated ice-out timing, thaw drivers and satellite evidence." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://chrisizworski.com/national-tools/ice-out/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="google-adsense-account" content="ca-pub-8222782620788075" />
+<link rel="preconnect" href="https://gibs.earthdata.nasa.gov" />
+<link rel="preconnect" href="https://lspp-ice-out.vercel.app" crossorigin />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<link rel="stylesheet" href="https://lspp-ice-out.vercel.app/north-america/styles.css" />
+<link rel="stylesheet" href="https://lspp-ice-out.vercel.app/north-america/registry.css" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Lake Ice-Out Forecast","url":"https://chrisizworski.com/national-tools/ice-out/","applicationCategory":"WeatherApplication","operatingSystem":"Web","isAccessibleForFree":true,"author":{"@type":"Person","name":"Chris Izworski","url":"https://chrisizworski.com/"},"description":"Official-lake search, historical calibration, seasonal thaw physics and satellite monitoring for northern United States and Canada."}</script>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="brandmark">ICE</div><div><strong>Lake Ice-Out Forecast</strong><small>Northern U.S. + Canada</small></div></div>
+    <div class="searchwrap"><input id="search" autocomplete="off" placeholder="Search any official U.S. or Canadian lake…" aria-label="Search official lakes"/><div id="results" class="results"></div></div>
+    <div class="pill" id="seasonPill">Spring model</div>
+  </header>
+  <div class="layout">
+    <main class="mapcol">
+      <div id="map"></div>
+      <div class="maptools">
+        <label class="control">Imagery date <input id="imageryDate" type="date"/></label>
+        <select class="control" id="sensor"><option value="modis">MODIS Terra</option><option value="viirs">VIIRS SNPP</option><option value="aqua">MODIS Aqua</option></select>
+        <button class="control" id="ndsiBtn">NDSI snow/ice</button>
+        <button class="control" id="fitBtn">Selected lake</button>
+      </div>
+      <div class="legend" id="legend">NASA imagery is visual evidence. Automatic open-water classification is not fabricated from unsupported pixels.</div>
+    </main>
+    <aside class="side" aria-live="polite">
+      <section class="section">
+        <div class="eyebrow">Continental lake search</div>
+        <h1 class="lake-title" id="lakeName">Lake Vermilion</h1>
+        <div class="sub" id="lakeMeta"></div>
+        <div class="hero">
+          <div class="hero-top"><div><div class="prob" id="prob">--%</div><div class="prob-label" id="probLabel">chance of ice-out by target date</div></div><div class="status-chip" id="statusChip">Loading</div></div>
+          <div class="window" id="window">Most likely window: —</div>
+          <div class="reason" id="reason">Loading lake model.</div>
+          <div class="grid3">
+            <div class="metric"><span>Median</span><b id="median">—</b></div>
+            <div class="metric"><span>80% range</span><b id="range">—</b></div>
+            <div class="metric"><span>Confidence</span><b id="confidence">—</b></div>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <h3>Target date</h3>
+        <div class="row"><span>Ice-out by</span><input id="targetDate" type="date" class="control" /></div>
+        <div class="bar"><span id="probBar" style="width:0%"></span></div>
+        <div class="sub" id="modeNote"></div>
+      </section>
+      <section class="section"><h3>Live thaw drivers</h3><div id="weatherDrivers"><div class="loading">Loading live forecast…</div></div></section>
+      <section class="section"><h3>Nearby lake comparison</h3><div class="near" id="nearby"></div></section>
+      <section class="section"><h3>What this model uses</h3><div class="sources">Official U.S. and Canadian lake names, HydroLAKES morphology where the match is unambiguous, historical ice-out calibration, validated seasonal temperature physics, operational weather and NASA satellite imagery.</div></section>
+      <section class="section"><div class="warning"><strong>Not an ice-safety tool.</strong> Ice-out probability does not estimate ice thickness or whether ice can support people, vehicles or equipment.</div></section>
+    </aside>
+  </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://lspp-ice-out.vercel.app/north-america/lakes.js"></script>
+<script src="https://lspp-ice-out.vercel.app/north-america/app.js"></script>
+</body>
+</html>
