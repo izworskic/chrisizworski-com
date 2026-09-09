@@ -9,7 +9,8 @@ on:
       - 'package.json'
       - 'public/melvin-price/**'
       - 'api/melvin-price.js'
-      - 'scripts/strip-melvin-explainer.mjs'
+      - 'api/melvin-price-v2.js'
+      - 'scripts/sync-melvin-price-national-route.mjs'
       - 'scripts/melvin-price-production-smoke.mjs'
       - '.github/workflows/melvin-price-production-smoke.yml'
   workflow_dispatch:
