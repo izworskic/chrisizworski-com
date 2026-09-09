@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - 'vercel.json'
       - 'public/melvin-price/**'
       - 'api/melvin-price.js'
       - 'scripts/melvin-price-production-smoke.mjs'
