@@ -6,8 +6,10 @@ on:
       - main
     paths:
       - 'vercel.json'
+      - 'package.json'
       - 'public/melvin-price/**'
       - 'api/melvin-price.js'
+      - 'scripts/strip-melvin-explainer.mjs'
       - 'scripts/melvin-price-production-smoke.mjs'
       - '.github/workflows/melvin-price-production-smoke.yml'
   workflow_dispatch:
