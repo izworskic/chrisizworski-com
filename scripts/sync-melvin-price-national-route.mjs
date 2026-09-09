@@ -11,6 +11,7 @@ fs.mkdirSync(targetDir, { recursive: true });
 let html = fs.readFileSync(source, 'utf8');
 const explainer = /\n\s*<section class="panel" aria-labelledby="whatKnow"><h3 id="whatKnow">What we know — and what we don't<\/h3>[\s\S]*?<\/section>/;
 html = html.replace(explainer, '');
+html = html.replace('<div class="ops-grid">', '<div class="ops-grid" style="grid-template-columns:1fr">');
 fs.writeFileSync(source, html, 'utf8');
 
 // Keep SEO authority consolidated on the original canonical while exposing the same
