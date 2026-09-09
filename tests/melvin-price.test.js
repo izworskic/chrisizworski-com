@@ -5,6 +5,8 @@ const path = require('node:path');
 const api = require('../api/melvin-price.js')._test;
 
 const page = fs.readFileSync(path.join(__dirname, '..', 'public', 'melvin-price', 'index.html'), 'utf8');
+const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'));
+const sitemapScript = fs.readFileSync(path.join(__dirname, '..', 'scripts', 'add-melvin-price-to-sitemap.mjs'), 'utf8');
 
 test('Melvin Price page preserves core live-data integrity language', () => {
   assert.match(page, /Melvin Price Live/);
@@ -13,6 +15,12 @@ test('Melvin Price page preserves core live-data integrity language', () => {
   assert.match(page, /1,200 × 110 ft/);
   assert.match(page, /10:00 AM, 1:00 PM and 3:00 PM/);
   assert.doesNotMatch(page, /DEMO DATA/i);
+});
+
+test('Melvin Price canonical is added to the deployed sitemap', () => {
+  assert.match(pkg.scripts['vercel-build'], /add-melvin-price-to-sitemap\.mjs/);
+  assert.match(sitemapScript, /https:\/\/chrisizworski\.com\/melvin-price\//);
+  assert.match(sitemapScript, /<changefreq>daily<\/changefreq>/);
 });
 
 test('LPMS Mel Price record normalizes operational fields', () => {
