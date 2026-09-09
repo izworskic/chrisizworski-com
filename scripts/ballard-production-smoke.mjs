@@ -58,9 +58,7 @@ async function waitForPage() {
       const ready = last.response.ok
         && last.text.includes('<h1>Ballard Locks Live: Ships, Salmon &amp; Tides</h1>')
         && last.text.includes('<link rel="canonical" href="https://chrisizworski.com/ballard-locks/">')
-        && last.text.includes('/api/ballard-locks')
-        && last.text.includes('activePopup=null')
-        && last.text.includes('if(activePopup&&activePopup!==popup)activePopup.remove()');
+        && last.text.includes('/api/ballard-locks');
       if (ready) return last;
       console.log(`Ballard production page not ready (attempt ${attempt}/18, HTTP ${last.response.status}); retrying.`);
     } catch (error) {
@@ -82,7 +80,9 @@ async function waitForTour() {
         && last.text.includes('45 min · Full Locks')
         && last.text.includes('75 min · + Ballard')
         && last.text.includes('https://tiles.openfreemap.org/styles/liberty')
-        && last.text.includes('/api/ballard-locks');
+        && last.text.includes('/api/ballard-locks')
+        && last.text.includes('activePopup=null')
+        && last.text.includes('if(activePopup&&activePopup!==popup)activePopup.remove()');
       if (ready) return last;
       console.log('Ballard tour not ready (attempt ' + attempt + '/18, HTTP ' + last.response.status + '); retrying.');
     } catch (error) {
