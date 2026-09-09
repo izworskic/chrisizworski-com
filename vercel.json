@@ -151,6 +151,8 @@
     {"source":"/white-christmas-michigan/:path*","destination":"https://national-white-christmas.vercel.app/white-christmas-michigan/:path*"},
     {"source":"/isle-royale-map/:path*","destination":"https://isle-royale-outdoors.vercel.app/isle-royale-map/:path*"},
     {"source":"/tahquamenon-falls/:path*","destination":"https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/:path*"},
+    {"source":"/national-tools/melvin-price-live","destination":"/melvin-price/index.html"},
+    {"source":"/national-tools/melvin-price-live/","destination":"/melvin-price/index.html"},
     {"source":"/national-tools/:path*","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"}
   ]
 }
