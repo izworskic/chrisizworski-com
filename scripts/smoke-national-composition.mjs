@@ -34,6 +34,18 @@ await check('national hub links branded Lake Ice-Out',async()=>{
   if(text.includes('href="https://lspp-ice-out.vercel.app/north-america/"'))throw new Error('hub still exposes legacy Vercel ice-out href');
 });
 
+await check('national hub links Melvin Price Live',async()=>{
+  // Exact public URL: verify all user-facing Melvin discovery surfaces survive production composition.
+  const {text}=await request('/national-tools/',{cacheBust:false,noCacheHeader:false});
+  for(const marker of ['Time a Melvin Price Locks visit','Melvin Price Live','Melvin Price Live: Tows, Locks &amp; River']){
+    if(!text.includes(marker))throw new Error('Melvin Price hub marker missing: '+marker);
+  }
+  if(!text.includes('href="https://chrisizworski.com/national-tools/melvin-price-live/"')&&!text.includes('href="/national-tools/melvin-price-live/"')){
+    throw new Error('hub does not link to canonical Melvin Price Live route');
+  }
+  if(text.includes('href="https://chrisizworski.com/melvin-price/"'))throw new Error('hub still exposes legacy Melvin Price root href');
+});
+
 await check('branded Lake Ice-Out page is live',async()=>{
   const {text}=await request('/national-tools/ice-out/',{cacheBust:false,noCacheHeader:false});
   for(const marker of [
