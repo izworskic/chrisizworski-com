@@ -1,0 +1,84 @@
+name: Apply Ballard Tour Production V2
+
+on:
+  push:
+    branches:
+      - agent/ballard-interactive-tour-production
+    paths:
+      - '.github/workflows/apply-ballard-tour-production-v2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/ballard-interactive-tour-production
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Update production sources
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const pin='822ba2e1a3664edd423584049ca6edaf7812cf55';
+          const dep=`github:izworskic/national-ballard-locks#${pin}`;
+
+          const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+          pkg.dependencies['national-ballard-locks']=dep;
+          fs.writeFileSync('package.json',JSON.stringify(pkg,null,2)+'\n');
+
+          const testPath='tests/ballard-locks-extracted.test.js';
+          let test=fs.readFileSync(testPath,'utf8').replace(/github:izworskic\/national-ballard-locks#[0-9a-f]{40}/g,dep);
+          if(!test.includes("const tourPath =")) test=test.replace("const pagePath = path.join(root, 'public', 'ballard-locks', 'index.html');", "const pagePath = path.join(root, 'public', 'ballard-locks', 'index.html');\nconst tourPath = path.join(root, 'public', 'ballard-locks', 'tour', 'index.html');");
+          if(!test.includes("committed Ballard mirror includes the interactive self-guided tour")){
+            test += `\n\ntest('committed Ballard mirror includes the interactive self-guided tour', () => {\n  const page = fs.readFileSync(pagePath, 'utf8');\n  const tour = fs.readFileSync(tourPath, 'utf8');\n  assert.ok(page.includes('https://chrisizworski.com/ballard-locks/tour/'));\n  assert.ok(tour.includes('Ballard Locks Self-Guided Tour Map'));\n  assert.ok(tour.includes('20 min · Essentials'));\n  assert.ok(tour.includes('45 min · Full Locks'));\n  assert.ok(tour.includes('75 min · + Ballard'));\n  assert.ok(tour.includes('https://tiles.openfreemap.org/styles/liberty'));\n  assert.ok(tour.includes('/api/ballard-locks'));\n});\n`;
+          }
+          fs.writeFileSync(testPath,test);
+
+          const syncPath='scripts/sync-ballard-locks.mjs';
+          let sync=fs.readFileSync(syncPath,'utf8');
+          if(!sync.includes('tourCanonical')){
+            sync=sync.replace("const canonical = 'https://chrisizworski.com/ballard-locks/';", "const canonical = 'https://chrisizworski.com/ballard-locks/';\nconst tourCanonical = 'https://chrisizworski.com/ballard-locks/tour/';");
+            sync=sync.replace("if (!page.includes('/api/ballard-locks')) throw new Error('Ballard sync: live API hook missing');", "if (!page.includes('/api/ballard-locks')) throw new Error('Ballard sync: live API hook missing');\nconst tourFile = path.join(destPage, 'tour', 'index.html');\nif (!fs.existsSync(tourFile)) throw new Error('Ballard sync: interactive tour missing');\nconst tourPage = fs.readFileSync(tourFile, 'utf8');\nif (!tourPage.includes(tourCanonical)) throw new Error('Ballard sync: tour canonical missing');\nif (!tourPage.includes('/api/ballard-locks')) throw new Error('Ballard sync: tour live API hook missing');");
+            const oldLog="console.log('Synced Ballard Locks from national-ballard-locks authoritative repo and ensured sitemap discovery.');";
+            const add=`if (!sitemap.includes(\`<loc>${'${tourCanonical}'}</loc>\`)) {\n  const tourEntry = \`  <url>\\n    <loc>${'${tourCanonical}'}</loc>\\n    <lastmod>2026-09-09</lastmod>\\n    <changefreq>weekly</changefreq>\\n    <priority>0.75</priority>\\n  </url>\\n\`;\n  if (!sitemap.includes('</urlset>')) throw new Error('Ballard sync: sitemap closing tag missing for tour');\n  sitemap = sitemap.replace('</urlset>', \`${'${tourEntry}'}</urlset>\`);\n  fs.writeFileSync(sitemapPath, sitemap);\n}\n\nconsole.log('Synced Ballard Locks from national-ballard-locks authoritative repo and ensured main + tour sitemap discovery.');`;
+            if(!sync.includes(oldLog)) throw new Error('sync log anchor missing');
+            sync=sync.replace(oldLog,add);
+          }
+          fs.writeFileSync(syncPath,sync);
+
+          const smokePath='scripts/ballard-production-smoke.mjs';
+          let smoke=fs.readFileSync(smokePath,'utf8');
+          if(!smoke.includes("const TOUR = 'https://chrisizworski.com/ballard-locks/tour/';")){
+            smoke=smoke.replace("const PAGE = 'https://chrisizworski.com/ballard-locks/';", "const PAGE = 'https://chrisizworski.com/ballard-locks/';\nconst TOUR = 'https://chrisizworski.com/ballard-locks/tour/';");
+            const marker='async function waitForApiContract() {';
+            const fn=`async function waitForTour() {\n  let last;\n  for (let attempt = 1; attempt <= 18; attempt++) {\n    try {\n      last = await fetchText(TOUR + '?smoke=' + Date.now(), 15000);\n      const ready = last.response.ok\n        && last.text.includes('Ballard Locks Self-Guided Tour Map')\n        && last.text.includes('20 min · Essentials')\n        && last.text.includes('45 min · Full Locks')\n        && last.text.includes('75 min · + Ballard')\n        && last.text.includes('https://tiles.openfreemap.org/styles/liberty')\n        && last.text.includes('/api/ballard-locks');\n      if (ready) return last;\n      console.log('Ballard tour not ready (attempt ' + attempt + '/18, HTTP ' + last.response.status + '); retrying.');\n    } catch (error) {\n      console.log('Ballard tour attempt ' + attempt + '/18 failed: ' + error.message);\n    }\n    await sleep(5000);\n  }\n  throw new Error('Ballard tour did not become ready' + (last ? ' (last HTTP ' + last.response.status + ')' : ''));\n}\n\n`;
+            smoke=smoke.replace(marker,fn+marker);
+            smoke=smoke.replace('const page = await waitForPage();','const page = await waitForPage();\nconst tour = await waitForTour();');
+            smoke=smoke.replace("  'G-Y5D2V2W7HN',\n])", "  'G-Y5D2V2W7HN',\n  'https://chrisizworski.com/ballard-locks/tour/',\n  'Explore the Locks stop by stop',\n])");
+            smoke=smoke.replace('  pageStatus: page.response.status,','  pageStatus: page.response.status,\n  tourStatus: tour.response.status,\n  tourMs: tour.elapsedMs,');
+          }
+          fs.writeFileSync(smokePath,smoke);
+          NODE
+      - name: Install pinned authoritative package
+        run: npm install --ignore-scripts
+      - name: Sync Ballard package and sitemap
+        run: node scripts/sync-ballard-locks.mjs
+      - name: Focused Ballard contracts
+        run: node --test tests/ballard-locks-extracted.test.js
+      - name: Full main-site unit suite
+        run: npm test
+      - name: Commit integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json scripts/sync-ballard-locks.mjs scripts/ballard-production-smoke.mjs tests/ballard-locks-extracted.test.js public/ballard-locks public/sitemap.xml api/ballard-locks.js
+          git commit -m 'Ship Ballard Locks interactive tour to production'
+          git push
