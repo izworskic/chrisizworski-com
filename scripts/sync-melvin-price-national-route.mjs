@@ -9,6 +9,10 @@ if (!fs.existsSync(source)) throw new Error(`Melvin Price source page missing: $
 fs.mkdirSync(targetDir, { recursive: true });
 
 let html = fs.readFileSync(source, 'utf8');
+const explainer = /\n\s*<section class="panel" aria-labelledby="whatKnow"><h3 id="whatKnow">What we know — and what we don't<\/h3>[\s\S]*?<\/section>/;
+html = html.replace(explainer, '');
+fs.writeFileSync(source, html, 'utf8');
+
 // Keep SEO authority consolidated on the original canonical while exposing the same
 // product through the National Tools URL pattern used for discovery and navigation.
 html = html.replace(
@@ -16,4 +20,4 @@ html = html.replace(
   '<meta property="og:url" content="https://chrisizworski.com/national-tools/melvin-price-live/">',
 );
 fs.writeFileSync(target, html);
-console.log('Melvin Price National Tools route synced.');
+console.log('Melvin Price National Tools route synced without the source explainer panel.');
