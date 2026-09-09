@@ -29,22 +29,25 @@ html = html.replace(
   "setText('activityExtra',m.lockingNow>0?'USACE reports active lockage':data.traffic?.comparison?`${data.traffic.comparison.shortLabel} · 2024 avg ${data.traffic.comparison.averageDaily2024}/day`:'completed up + down lockages');",
 );
 
+const tourClientReplacement = [
+  "if(t){",
+  "      if(t.closedToday){",
+  "        setText('tourVal','Closed today','val');",
+  "        setText('tourExtra',t.closureReason||'Museum closed');",
+  "        setText('tourNextBig','No tours today');",
+  "        setText('tourCountdown',t.closureReason||'Museum closed');",
+  "      }else{",
+  "        setText('tourVal',t.nextTour||'Tours done','val');",
+  "        setText('tourExtra',t.nextTour?(t.opportunity?.state==='TIGHT'?'Starts soon · sign-up may be tight':`${t.minutesUntilNextTour} min · scheduled`):'Today’s scheduled tours have passed');",
+  "        setText('tourNextBig',t.nextTour||'Tours done');",
+  "        setText('tourCountdown',t.nextTour?(t.opportunity?.state==='TIGHT'?`Starts in ${t.minutesUntilNextTour} minutes · USACE recommends arriving ~15 minutes early`:`Starts in ${t.minutesUntilNextTour} minutes · arrive ~15 minutes early`):'Today’s regular tour times have passed');",
+  "      }",
+  "      setText('museumState',t.museumOpen?'OPEN':'CLOSED')",
+  "    }",
+].join('\n');
 html = html.replace(
   /if\(t\)\{setText\('tourVal'[\s\S]*?setText\('museumState',t\.museumOpen\?'OPEN':'CLOSED'\)\}/,
-  `if(t){
-      if(t.closedToday){
-        setText('tourVal','Closed today','val');
-        setText('tourExtra',t.closureReason||'Museum closed');
-        setText('tourNextBig','No tours today');
-        setText('tourCountdown',t.closureReason||'Museum closed');
-      }else{
-        setText('tourVal',t.nextTour||'Tours done','val');
-        setText('tourExtra',t.nextTour?(t.opportunity?.state==='TIGHT'?'Starts soon · sign-up may be tight':`${t.minutesUntilNextTour} min · scheduled`):'Today’s scheduled tours have passed');
-        setText('tourNextBig',t.nextTour||'Tours done');
-        setText('tourCountdown',t.nextTour?(t.opportunity?.state==='TIGHT'?`Starts in ${t.minutesUntilNextTour} minutes · USACE recommends arriving ~15 minutes early`:`Starts in ${t.minutesUntilNextTour} minutes · arrive ~15 minutes early`):'Today’s regular tour times have passed');
-      }
-      setText('museumState',t.museumOpen?'OPEN':'CLOSED')
-    }`,
+  tourClientReplacement,
 );
 
 html = html.replace(
