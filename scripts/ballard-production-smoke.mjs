@@ -82,7 +82,17 @@ async function waitForTour() {
         && last.text.includes('https://tiles.openfreemap.org/styles/liberty')
         && last.text.includes('/api/ballard-locks')
         && last.text.includes('activePopup=null')
-        && last.text.includes('if(activePopup&&activePopup!==popup)activePopup.remove()');
+        && last.text.includes('if(activePopup&&activePopup!==popup)activePopup.remove()')
+        && last.text.includes('id="map-live-dock"')
+        && last.text.includes('data-live-panel="fish"')
+        && last.text.includes('data-live-panel="ais"')
+        && last.text.includes('data-live-panel="camera"')
+        && last.text.includes('https://embed.myshiptracking.com/embed?myst')
+        && last.text.includes('https://g1.ipcamlive.com/player/player.php?alias=5ababb8154afe')
+        && last.text.includes('Sockeye')
+        && last.text.includes('Chinook')
+        && last.text.includes('Coho')
+        && !last.text.includes('What this map adds');
       if (ready) return last;
       console.log('Ballard tour not ready (attempt ' + attempt + '/18, HTTP ' + last.response.status + '); retrying.');
     } catch (error) {
