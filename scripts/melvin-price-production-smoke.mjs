@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const ORIGIN = process.env.MELVIN_PRICE_SMOKE_ORIGIN || 'https://chrisizworski.com';
-const PAGE = `${ORIGIN}/melvin-price/`;
+const PAGE = `${ORIGIN}/national-tools/melvin-price-live/`;
 const API = `${ORIGIN}/api/melvin-price`;
 
 async function fetchText(url, timeoutMs = 30000) {
@@ -10,7 +10,7 @@ async function fetchText(url, timeoutMs = 30000) {
     headers: {
       accept: 'text/html,application/json',
       'cache-control': 'no-cache',
-      'user-agent': 'ChrisIzworskiMelvinPriceProductionSmoke/1.1',
+      'user-agent': 'ChrisIzworskiMelvinPriceProductionSmoke/1.2',
     },
     signal: AbortSignal.timeout(timeoutMs),
   });
@@ -69,11 +69,5 @@ if (data.notices.count > 0) {
   }
 }
 
-const core = {
-  lpms: true,
-  stage: true,
-  flow: true,
-  weather: true,
-  notices: true,
-};
+const core = { lpms: true, stage: true, flow: true, weather: true, notices: true };
 console.log(JSON.stringify({status:'ok', apiMs:api.elapsedMs, core}, null, 2));
