@@ -10,7 +10,7 @@ async function fetchText(url, timeoutMs = 30000) {
     headers: {
       accept: 'text/html,application/json',
       'cache-control': 'no-cache',
-      'user-agent': 'ChrisIzworskiMelvinPriceProductionSmoke/1.0',
+      'user-agent': 'ChrisIzworskiMelvinPriceProductionSmoke/1.1',
     },
     signal: AbortSignal.timeout(timeoutMs),
   });
@@ -32,9 +32,7 @@ for (const marker of ['Melvin Price Live', '/api/melvin-price', 'melvinVesselMap
 const api = await fetchText(API, 30000);
 console.log(`API HTTP ${api.response.status} ${api.elapsedMs}ms content-type=${api.response.headers.get('content-type')}`);
 const data = parseJson(api.text);
-if (!api.response.ok) {
-  throw new Error(`Melvin API HTTP ${api.response.status}: ${api.text.slice(0, 1500)}`);
-}
+if (!api.response.ok) throw new Error(`Melvin API HTTP ${api.response.status}: ${api.text.slice(0, 1500)}`);
 if (!data) throw new Error(`Melvin API returned non-JSON: ${api.text.slice(0, 1500)}`);
 
 console.log(JSON.stringify({
@@ -55,13 +53,27 @@ if (!m || String(m.lockNumber) !== '26') throw new Error(`Mel Price lock 26 miss
 if (!Number.isFinite(Number(m.pendingArrivals)) || !Number.isFinite(Number(m.lockedUp24h)) || !Number.isFinite(Number(m.lockedDown24h))) {
   throw new Error(`Mel Price operational counts invalid: ${JSON.stringify(m)}`);
 }
+if (!data.river?.stage?.ok || !Number.isFinite(Number(data.river.stage.valueFt))) {
+  throw new Error(`Mel Price CWMS stage unavailable in production: ${JSON.stringify(data.river?.stage)}`);
+}
+if (!data.river?.flow?.ok || !Number.isFinite(Number(data.river.flow.valueCfs))) {
+  throw new Error(`Mel Price CWMS flow unavailable in production: ${JSON.stringify(data.river?.flow)}`);
+}
 if (!data.weather?.ok) throw new Error(`NWS unavailable in production: ${JSON.stringify(data.weather)}`);
+if (!data.notices?.ok) throw new Error(`NTNI unavailable in production: ${JSON.stringify(data.notices)}`);
+if (data.notices.count > 0) {
+  for (const item of data.notices.items || []) {
+    if (!item.title || !item.url || !/^https:\/\/ndc\.ops\.usace\.army\.mil\//.test(item.url)) {
+      throw new Error(`NTNI item lacks usable official title/link: ${JSON.stringify(item)}`);
+    }
+  }
+}
 
 const core = {
-  lpms: Boolean(data.locks?.ok),
-  stage: Boolean(data.river?.stage?.ok),
-  flow: Boolean(data.river?.flow?.ok),
-  weather: Boolean(data.weather?.ok),
-  notices: Boolean(data.notices?.ok),
+  lpms: true,
+  stage: true,
+  flow: true,
+  weather: true,
+  notices: true,
 };
 console.log(JSON.stringify({status:'ok', apiMs:api.elapsedMs, core}, null, 2));
