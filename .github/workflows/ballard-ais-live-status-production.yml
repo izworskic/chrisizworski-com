@@ -1,0 +1,39 @@
+name: Ship Ballard AIS live status
+
+on:
+  push:
+    branches:
+      - agent/ballard-ais-live-status-production
+    paths:
+      - '.github/workflows/ballard-ais-live-status-production.yml'
+      - 'scripts/patch-ballard-ais-live-status-production.py'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/ballard-ais-live-status-production
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Patch production contracts
+        run: python scripts/patch-ballard-ais-live-status-production.py
+      - name: Install authoritative Ballard package
+        run: npm install --ignore-scripts
+      - name: Sync Ballard package into site
+        run: node scripts/sync-ballard-locks.mjs
+      - name: Full repository gate
+        run: npm run verify:all
+      - name: Commit production integration
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json public/ballard-locks public/sitemap.xml api/ballard-locks.js tests/ballard-locks-extracted.test.js scripts/ballard-production-smoke.mjs
+          git commit -m 'Ship Ballard AIS auto-update status'
+          git push
