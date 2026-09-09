@@ -1,0 +1,28 @@
+name: Melvin Price production smoke
+
+on:
+  push:
+    branches:
+      - main
+      - 'agent/melvin-price-*'
+    paths:
+      - 'public/melvin-price/**'
+      - 'api/melvin-price.js'
+      - 'scripts/melvin-price-production-smoke.mjs'
+      - '.github/workflows/melvin-price-production-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify public Melvin Price live page and feeds
+        run: node scripts/melvin-price-production-smoke.mjs
