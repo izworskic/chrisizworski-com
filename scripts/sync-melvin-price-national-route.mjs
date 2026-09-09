@@ -13,9 +13,10 @@ const explainer = /\n\s*<section class="panel" aria-labelledby="whatKnow"><h3 id
 html = html.replace(explainer, '');
 html = html.replace('<div class="ops-grid">', '<div class="ops-grid" style="grid-template-columns:1fr">');
 
-// Decision v2 keeps the proven live adapters intact, then applies a freshness-safe,
-// visitor-oriented decision layer on top of the same sourced data.
-html = html.replace("fetch('/api/melvin-price'", "fetch('/api/melvin-price-v2'");
+// Decision v3 keeps the proven live adapters intact, separates the near-real-time
+// LPMS traffic report from the older manual/gage observation timestamp, and then
+// applies the same visitor-oriented decision layer to the corrected freshness model.
+html = html.replace("fetch('/api/melvin-price'", "fetch('/api/melvin-price-v3'");
 html = html.replace(
   "setText('decisionTitle',visit?.label||'DATA LIMITED');",
   "setText('decisionTitle',visit?.headline||visit?.label||'DATA LIMITED');",
@@ -27,6 +28,14 @@ html = html.replace(
 html = html.replace(
   "setText('activityExtra',m.lockingNow>0?'USACE reports active lockage':'completed up + down lockages');",
   "setText('activityExtra',m.lockingNow>0?'USACE reports active lockage':data.traffic?.comparison?`${data.traffic.comparison.shortLabel} · 2024 avg ${data.traffic.comparison.averageDaily2024}/day`:'completed up + down lockages');",
+);
+html = html.replace(
+  "setText('queueExtra',`LPMS · ${ageLabel(m.observedAt)}`);",
+  "setText('queueExtra',`LPMS traffic · ${locks.trafficFreshness||locks.freshness}`);",
+);
+html = html.replace(
+  "setText('opsSource',`Source: USACE LPMS · ${ageLabel(m.observedAt)} · nominal 15-minute report cadence`);",
+  "setText('opsSource',`Source: USACE LPMS · traffic report nominal 15-minute cadence · gage/status observation ${ageLabel(m.observedAt)}`);",
 );
 
 const tourClientReplacement = [
@@ -68,4 +77,4 @@ html = html.replace(
   '<meta property="og:url" content="https://chrisizworski.com/national-tools/melvin-price-live/">',
 );
 fs.writeFileSync(target, html);
-console.log('Melvin Price National Tools route synced with decision-v2 visitor intelligence.');
+console.log('Melvin Price National Tools route synced with decision-v3 split traffic/gage freshness.');
