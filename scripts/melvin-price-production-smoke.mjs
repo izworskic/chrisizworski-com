@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const ORIGIN = process.env.MELVIN_PRICE_SMOKE_ORIGIN || 'https://chrisizworski.com';
 const PAGE = `${ORIGIN}/national-tools/melvin-price-live/`;
-const API = `${ORIGIN}/api/melvin-price-v2`;
+const API = `${ORIGIN}/api/melvin-price-v3`;
 
 async function fetchText(url, timeoutMs = 30000) {
   const started = Date.now();
@@ -10,7 +10,7 @@ async function fetchText(url, timeoutMs = 30000) {
     headers: {
       accept: 'text/html,application/json',
       'cache-control': 'no-cache',
-      'user-agent': 'ChrisIzworskiMelvinPriceProductionSmoke/1.4',
+      'user-agent': 'ChrisIzworskiMelvinPriceProductionSmoke/1.5',
     },
     signal: AbortSignal.timeout(timeoutMs),
   });
@@ -25,7 +25,7 @@ function parseJson(text) {
 const page = await fetchText(PAGE, 20000);
 console.log(`PAGE HTTP ${page.response.status} ${page.elapsedMs}ms content-type=${page.response.headers.get('content-type')}`);
 if (!page.response.ok) throw new Error(`Melvin page HTTP ${page.response.status}: ${page.text.slice(0, 700)}`);
-for (const marker of ['Melvin Price Live', '/api/melvin-price-v2', 'melvinVesselMap', 'arrive ~15 min early']) {
+for (const marker of ['Melvin Price Live', '/api/melvin-price-v3', 'melvinVesselMap', 'arrive ~15 min early']) {
   if (!page.text.includes(marker)) throw new Error(`Melvin production page missing ${marker}`);
 }
 for (const removedCopy of ["What we know — and what we don't", 'The official status feed gives counts, direction totals, delay and gage readings.']) {
@@ -51,12 +51,18 @@ console.log(JSON.stringify({
   visit: data.visit,
 }, null, 2));
 
-if (data.productVersion !== 'decision-v2') throw new Error(`Unexpected Melvin decision version: ${data.productVersion}`);
+if (data.productVersion !== 'decision-v3') throw new Error(`Unexpected Melvin decision version: ${data.productVersion}`);
 if (!data.generatedAt || !data.tours) throw new Error('Melvin API base contract is incomplete');
 if (!data.locks?.ok) throw new Error(`LPMS unavailable in production: ${JSON.stringify(data.locks)}`);
+if (data.locks.trafficFreshness !== 'LIVE') {
+  throw new Error(`Near-real-time LPMS traffic report was not promoted to LIVE: ${JSON.stringify(data.locks)}`);
+}
+if (!data.locks.gageFreshness || !data.locks.gageObservedAt || data.locks.reportCadenceMinutes !== 15) {
+  throw new Error(`Split traffic/gage freshness contract missing: ${JSON.stringify(data.locks)}`);
+}
 const m = data.locks.melvin;
 if (!m || String(m.lockNumber) !== '26') throw new Error(`Mel Price lock 26 missing: ${JSON.stringify(data.locks)}`);
-if (!Number.isFinite(Number(m.pendingArrivals)) || !Number.isFinite(Number(m.lockedUp24h)) || !Number.isFinite(Number(m.lockedDown24h))) {
+if (!Number.isFinite(Number(m.pendingArrivals)) || !Number.isFinite(Number(m.lockingNow)) || !Number.isFinite(Number(m.lockedUp24h)) || !Number.isFinite(Number(m.lockedDown24h))) {
   throw new Error(`Mel Price operational counts invalid: ${JSON.stringify(m)}`);
 }
 const rawStamp = String(m.observedAt?.raw || '');
@@ -72,11 +78,14 @@ if (!data.traffic?.comparison || !Number.isFinite(Number(data.traffic.comparison
 if (!data.visit?.headline || !data.visit?.summary || !data.visit?.persona) {
   throw new Error(`Visitor-first decision contract missing: ${JSON.stringify(data.visit)}`);
 }
-if (data.locks.freshness === 'STALE' && data.visit.score !== null) {
-  throw new Error(`Stale LPMS must veto the visitor score: ${JSON.stringify(data.visit)}`);
+if (!Number.isFinite(Number(data.visit.score))) {
+  throw new Error(`Live LPMS traffic must produce a scored visitor outlook when supporting feeds are available: ${JSON.stringify(data.visit)}`);
 }
-if (data.locks.freshness === 'DELAYED' && (Number(data.visit.score) > 74 || data.visit.confidence === 'High')) {
-  throw new Error(`Delayed LPMS recommendation is overconfident: ${JSON.stringify(data.visit)}`);
+if (data.visit.label === 'DATA LIMITED' || data.visit.persona?.towWatching === 'UNVERIFIED') {
+  throw new Error(`Older gage timestamp incorrectly suppressed live traffic intelligence: ${JSON.stringify(data.visit)}`);
+}
+if (/unverified|latest USACE lock report is stale|live score withheld/i.test(`${data.visit.headline} ${data.visit.summary} ${(data.visit.reasons || []).join(' ')}`)) {
+  throw new Error(`Stale-gage wording leaked into live traffic decision: ${JSON.stringify(data.visit)}`);
 }
 if (!data.river?.stage?.ok || !Number.isFinite(Number(data.river.stage.valueFt))) {
   throw new Error(`Mel Price CWMS stage unavailable in production: ${JSON.stringify(data.river?.stage)}`);
@@ -94,5 +103,5 @@ if (data.notices.count > 0) {
   }
 }
 
-const core = { lpms: true, lpmsDateFormat: true, stage: true, flow: true, weather: true, notices: true, decisionV2: true };
+const core = { lpms: true, splitFreshness: true, lpmsDateFormat: true, stage: true, flow: true, weather: true, notices: true, decisionV3: true };
 console.log(JSON.stringify({status:'ok', apiMs:api.elapsedMs, core}, null, 2));
