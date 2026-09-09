@@ -1,0 +1,53 @@
+name: Final Ballard popup repin
+
+on:
+  push:
+    branches:
+      - agent/ballard-single-popup-production
+    paths:
+      - '.github/workflows/ballard-popup-final-repin.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/ballard-single-popup-production
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Repin authoritative Ballard release
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          old = 'ddfc9ad5a0e75977286922eacbb9e12fe14f1ff8'
+          new = 'cf4b8468176055068883a77fa9a253e27b612d9a'
+          p = Path('package.json')
+          data = json.loads(p.read_text())
+          data['dependencies']['national-ballard-locks'] = f'github:izworskic/national-ballard-locks#{new}'
+          p.write_text(json.dumps(data, indent=2) + '\n')
+          t = Path('tests/ballard-locks-extracted.test.js')
+          s = t.read_text()
+          if old not in s:
+              raise SystemExit('old Ballard test pin not found')
+          t.write_text(s.replace(old, new))
+          PY
+      - name: Install pinned package
+        run: npm install --ignore-scripts
+      - name: Sync Ballard package
+        run: node scripts/sync-ballard-locks.mjs
+      - name: Full repository gate
+        run: npm run verify:all
+      - name: Commit final production integration
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json public/ballard-locks public/sitemap.xml api/ballard-locks.js tests/ballard-locks-extracted.test.js scripts/ballard-production-smoke.mjs
+          git commit -m 'Repin single-popup Ballard release'
+          git push
