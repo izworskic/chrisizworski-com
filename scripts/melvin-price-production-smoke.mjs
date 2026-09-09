@@ -28,6 +28,9 @@ if (!page.response.ok) throw new Error(`Melvin page HTTP ${page.response.status}
 for (const marker of ['Melvin Price Live', '/api/melvin-price', 'melvinVesselMap']) {
   if (!page.text.includes(marker)) throw new Error(`Melvin production page missing ${marker}`);
 }
+for (const removedCopy of ["What we know — and what we don't", 'The official status feed gives counts, direction totals, delay and gage readings.']) {
+  if (page.text.includes(removedCopy)) throw new Error(`Removed Melvin explainer returned: ${removedCopy}`);
+}
 
 const api = await fetchText(API, 30000);
 console.log(`API HTTP ${api.response.status} ${api.elapsedMs}ms content-type=${api.response.headers.get('content-type')}`);
