@@ -1,36 +1,95 @@
 const LAT = 38.86917;
 const LON = -90.15361;
 const TZ = 'America/Chicago';
+
 const LOCK_STATUS_URL = 'https://ndc.ops.usace.army.mil/ords/lpms/lock_status_report_json?in_river_code=MI';
 const CORPS_LOCKS_URL = 'https://ndc.ops.usace.army.mil/ords/r/lpms/corps-locks/home';
 const NTNI_URL = 'https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVS';
+const NTNI_PAGE = 'https://ndc.ops.usace.army.mil/ords/r/ntni/notices';
 const NGRM_URL = 'https://www.mvs.usace.army.mil/Missions/Recreation/Rivers-Project-Office/NGRM/';
 const EDUCATION_URL = 'https://www.mvs.usace.army.mil/Missions/Recreation/Rivers-Project-Office/Education/';
 const FACILITY_URL = 'https://www.mvs.usace.army.mil/Missions/Navigation/Locks-and-Dams/Melvin-Price/';
 const WATER_PAGE = 'https://water.usace.army.mil/office/mvs/reports/chart?basin=Mississippi&tsid1=Mel+Price+TW-Mississippi.Stage.Inst.30Minutes.0.lrgsShef-rev&type=macro';
 const CWMS = 'https://cwms-data.usace.army.mil/cwms-data/timeseries';
 const STAGE_TSID = 'Mel Price TW-Mississippi.Stage.Inst.30Minutes.0.lrgsShef-rev';
-const UA = 'MelvinPriceLive/1.1 (+https://chrisizworski.com/melvin-price/)';
+const FLOW_TSID = 'Mel Price TW-Mississippi.Flow.Inst.30Minutes.0.RatingCOE';
+const UA = 'MelvinPriceLive/1.2 (+https://chrisizworski.com/melvin-price/)';
 
 async function get(url, type = 'json', timeout = 3500, extraHeaders = {}) {
-  const c = new AbortController();
-  const timer = setTimeout(() => c.abort(), timeout);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeout);
   try {
-    const r = await fetch(url, {
-      headers: { 'user-agent': UA, accept: type === 'json' ? 'application/json' : '*/*', ...extraHeaders },
-      signal: c.signal,
+    const response = await fetch(url, {
+      headers: {
+        'user-agent': UA,
+        accept: type === 'json' ? 'application/json' : '*/*',
+        ...extraHeaders,
+      },
+      signal: controller.signal,
     });
-    if (!r.ok) throw new Error(`${new URL(url).hostname} returned ${r.status}`);
-    return type === 'text' ? r.text() : r.json();
+    if (!response.ok) throw new Error(`${new URL(url).hostname} returned ${response.status}`);
+    return type === 'text' ? response.text() : response.json();
   } finally {
     clearTimeout(timer);
   }
 }
 
-function n(v) {
-  if (v == null || v === '') return null;
-  const x = Number(v);
-  return Number.isFinite(x) ? x : null;
+function n(value) {
+  if (value == null || value === '') return null;
+  const out = Number(value);
+  return Number.isFinite(out) ? out : null;
+}
+
+function sanitizeJsonControlChars(raw) {
+  let out = '';
+  let inString = false;
+  let escaped = false;
+  for (const ch of String(raw ?? '')) {
+    const code = ch.charCodeAt(0);
+    if (!inString) {
+      out += ch;
+      if (ch === '"') inString = true;
+      continue;
+    }
+    if (escaped) {
+      out += ch;
+      escaped = false;
+      continue;
+    }
+    if (ch === '\\') {
+      out += ch;
+      escaped = true;
+      continue;
+    }
+    if (ch === '"') {
+      out += ch;
+      inString = false;
+      continue;
+    }
+    if (code >= 0 && code <= 0x1f) {
+      if (ch === '\n') out += '\\n';
+      else if (ch === '\r') out += '\\r';
+      else if (ch === '\t') out += '\\t';
+      else out += `\\u${code.toString(16).padStart(4, '0')}`;
+      continue;
+    }
+    out += ch;
+  }
+  return out;
+}
+
+function parseLooseJson(raw) {
+  try {
+    return JSON.parse(raw);
+  } catch (firstError) {
+    const cleaned = sanitizeJsonControlChars(raw);
+    try {
+      return JSON.parse(cleaned);
+    } catch (secondError) {
+      secondError.message = `USACE JSON parse failed after control-character repair: ${secondError.message}`;
+      throw secondError;
+    }
+  }
 }
 
 function localParts(date = new Date()) {
@@ -57,16 +116,16 @@ function localTime(date = new Date()) {
 }
 
 function parseLpmsStamp(value, now = new Date()) {
-  const m = /^(\d{2})(\d{2})(\d{2}):(\d{2})(\d{2})$/.exec(String(value || '').trim());
-  if (!m) return null;
-  const yy = 2000 + Number(m[1]);
-  const mo = Number(m[2]);
-  const d = Number(m[3]);
-  const h = Number(m[4]);
-  const min = Number(m[5]);
-  const label = `${String(mo).padStart(2,'0')}/${String(d).padStart(2,'0')}/${yy} ${String(h).padStart(2,'0')}:${String(min).padStart(2,'0')} CT`;
+  const match = /^(\d{2})(\d{2})(\d{2}):(\d{2})(\d{2})$/.exec(String(value || '').trim());
+  if (!match) return null;
+  const yy = 2000 + Number(match[1]);
+  const mo = Number(match[2]);
+  const day = Number(match[3]);
+  const hour = Number(match[4]);
+  const minute = Number(match[5]);
+  const label = `${String(mo).padStart(2, '0')}/${String(day).padStart(2, '0')}/${yy} ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')} CT`;
   const nowP = localParts(now);
-  const roughMs = Date.UTC(yy, mo - 1, d, h, min) - Date.UTC(nowP.year, nowP.month - 1, nowP.day, nowP.hour, nowP.minute);
+  const roughMs = Date.UTC(yy, mo - 1, day, hour, minute) - Date.UTC(nowP.year, nowP.month - 1, nowP.day, nowP.hour, nowP.minute);
   return { raw: value, label, ageMinutes: Math.max(0, Math.round(-roughMs / 60000)) };
 }
 
@@ -83,12 +142,11 @@ function findRecords(root, predicate, out = []) {
 
 function normalizeLock(row, now) {
   if (!row) return null;
-  const stamp = parseLpmsStamp(row.readingEntryDateTime, now);
   return {
     lockNumber: String(row.lockNumber ?? ''),
     name: row.lockName || null,
     mile: n(row.lockMile),
-    observedAt: stamp,
+    observedAt: parseLpmsStamp(row.readingEntryDateTime, now),
     upperElevationFt: n(row.gageUpperElevation),
     upperChangeFt: n(row.gageUpperElevationChange),
     lowerElevationFt: n(row.gageLowerElevation),
@@ -103,7 +161,7 @@ function normalizeLock(row, now) {
     waterTemperatureF: n(row.waterTemperature),
     precipitationIn: n(row.precipitation),
     weatherCode: row.weatherCode || null,
-    notes: row.notes || '',
+    notes: String(row.notes || '').replace(/[\r\n\t]+/g, ' ').replace(/\s+/g, ' ').trim(),
   };
 }
 
@@ -119,9 +177,12 @@ function unavailableLocks(reason = 'USACE LPMS request exceeded the live-page de
 
 async function lockStatus(now = new Date()) {
   try {
-    const data = await get(LOCK_STATUS_URL, 'json', 4500);
+    // The LPMS endpoint currently emits literal CR/LF control characters inside quoted notes.
+    // Read as text and repair only control characters that occur inside JSON strings.
+    const raw = await get(LOCK_STATUS_URL, 'text', 4500, { accept: 'application/json,text/plain,*/*' });
+    const data = parseLooseJson(raw);
     const records = findRecords(data, x => x && x.lockNumber != null && x.lockName != null);
-    const byNo = new Map(records.map(r => [String(r.lockNumber), normalizeLock(r, now)]));
+    const byNo = new Map(records.map(row => [String(row.lockNumber), normalizeLock(row, now)]));
     const melvin = byNo.get('26');
     if (!melvin) throw new Error('Mel Price lock record not found in Mississippi River response');
     const age = melvin.observedAt?.ageMinutes ?? null;
@@ -136,26 +197,28 @@ async function lockStatus(now = new Date()) {
       dataUrl: LOCK_STATUS_URL,
       caveat: 'Counts and status are operational reports, not exact AIS positions. Pending arrivals do not identify an individual tow in this endpoint.',
     };
-  } catch (e) {
-    return unavailableLocks(e.message);
+  } catch (error) {
+    return unavailableLocks(error.message);
   }
 }
 
 function parseCwmsValues(data) {
   const candidates = findRecords(data, x => Array.isArray(x?.values));
-  for (const c of candidates) {
-    const rows = c.values.map(v => {
-      if (Array.isArray(v)) {
-        const t = typeof v[0] === 'number' ? new Date(v[0]).toISOString() : String(v[0] || '');
-        return { at: t, value: n(v[1]) };
+  for (const candidate of candidates) {
+    const rows = candidate.values.map(value => {
+      if (Array.isArray(value)) {
+        const at = typeof value[0] === 'number' ? new Date(value[0]).toISOString() : String(value[0] || '');
+        return { at, value: n(value[1]) };
       }
-      if (v && typeof v === 'object') return { at: v.dateTime || v['date-time'] || v.time || null, value: n(v.value) };
+      if (value && typeof value === 'object') {
+        return { at: value.dateTime || value['date-time'] || value.time || null, value: n(value.value) };
+      }
       return null;
     }).filter(x => x?.at && x.value != null && Number.isFinite(Date.parse(x.at)));
-    if (rows.length) return rows.sort((a,b) => Date.parse(a.at) - Date.parse(b.at));
+    if (rows.length) return rows.sort((a, b) => Date.parse(a.at) - Date.parse(b.at));
   }
   if (Array.isArray(data?.values)) {
-    return data.values.map(v => Array.isArray(v) ? { at: new Date(v[0]).toISOString(), value: n(v[1]) } : null).filter(Boolean);
+    return data.values.map(value => Array.isArray(value) ? { at: new Date(value[0]).toISOString(), value: n(value[1]) } : null).filter(Boolean);
   }
   return [];
 }
@@ -167,43 +230,54 @@ async function cwmsSeries(name, unit, timeout = 3500) {
   if (!rows.length) throw new Error(`No values returned for ${name}`);
   const latest = rows[rows.length - 1];
   const prior = rows.filter(x => Date.parse(x.at) <= Date.parse(latest.at) - 23 * 3600000).slice(-1)[0] || rows[0];
-  const delta24h = Math.round((latest.value - prior.value) * 100) / 100;
-  return { latest, delta24h, recent: rows.slice(-49) };
+  return {
+    latest,
+    delta24h: Math.round((latest.value - prior.value) * 100) / 100,
+    recent: rows.slice(-49),
+  };
 }
 
 function discoverTsid(html, label) {
   const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const re = new RegExp(`href=["']([^"']*tsid1=([^"'&]+)[^"']*)["'][^>]*>[^<]*${escaped}[^<]*<`, 'i');
-  const m = re.exec(html);
-  if (!m) return null;
-  try { return decodeURIComponent(m[2].replace(/\+/g, ' ')); } catch { return m[2].replace(/\+/g, ' '); }
+  const match = re.exec(html);
+  if (!match) return null;
+  try { return decodeURIComponent(match[2].replace(/\+/g, ' ')); } catch { return match[2].replace(/\+/g, ' '); }
 }
 
 async function riverStage() {
   try {
-    const s = await cwmsSeries(STAGE_TSID, 'ft', 3500);
+    const series = await cwmsSeries(STAGE_TSID, 'ft', 3500);
+    const delta = series.delta24h;
     return {
       ok: true,
-      valueFt: s.latest.value,
-      observedAt: s.latest.at,
-      delta24hFt: s.delta24h,
-      trend: s.delta24h > 0.08 ? 'rising' : s.delta24h < -0.08 ? 'falling' : 'steady',
-      recent: s.recent,
+      valueFt: series.latest.value,
+      observedAt: series.latest.at,
+      delta24hFt: delta,
+      trend: delta > 0.08 ? 'rising' : delta < -0.08 ? 'falling' : 'steady',
+      recent: series.recent,
+      tsid: STAGE_TSID,
+      label: 'Mel Price tailwater stage',
     };
-  } catch (e) {
-    return { ok: false, error: e.message };
+  } catch (error) {
+    return { ok: false, error: error.message };
   }
 }
 
 async function riverFlow() {
   try {
-    const html = await get(WATER_PAGE, 'text', 2200);
-    const flowTsid = discoverTsid(html, 'Mel Price TW - Flow');
-    if (!flowTsid) throw new Error('Flow time-series identifier not discoverable from official water page');
-    const f = await cwmsSeries(flowTsid, 'cfs', 2600);
-    return { ok: true, valueCfs: Math.round(f.latest.value), observedAt: f.latest.at, delta24hCfs: Math.round(f.delta24h), tsid: flowTsid };
-  } catch (e) {
-    return { ok: false, error: e.message };
+    // Exact current Corps-rated flow series discovered through the CWMS timeseries catalog.
+    const series = await cwmsSeries(FLOW_TSID, 'cfs', 3500);
+    return {
+      ok: true,
+      valueCfs: Math.round(series.latest.value),
+      observedAt: series.latest.at,
+      delta24hCfs: Math.round(series.delta24h),
+      tsid: FLOW_TSID,
+      label: 'Mel Price tailwater flow',
+    };
+  } catch (error) {
+    return { ok: false, error: error.message, tsid: FLOW_TSID };
   }
 }
 
@@ -224,37 +298,37 @@ async function weather() {
     const hourlyUrl = point?.properties?.forecastHourly;
     if (!hourlyUrl) throw new Error('NWS hourly forecast URL missing');
     const data = await get(hourlyUrl, 'json', 2500);
-    const p = data?.properties?.periods?.[0];
-    if (!p) throw new Error('NWS hourly period missing');
+    const period = data?.properties?.periods?.[0];
+    if (!period) throw new Error('NWS hourly period missing');
     return {
       ok: true,
-      temperatureF: p.temperature,
-      windSpeed: p.windSpeed,
-      windDirection: p.windDirection,
-      precipitationProbability: p.probabilityOfPrecipitation?.value ?? null,
-      shortForecast: p.shortForecast || 'Current NWS conditions',
-      validFrom: p.startTime,
+      temperatureF: period.temperature,
+      windSpeed: period.windSpeed,
+      windDirection: period.windDirection,
+      precipitationProbability: period.probabilityOfPrecipitation?.value ?? null,
+      shortForecast: period.shortForecast || 'Current NWS conditions',
+      validFrom: period.startTime,
       source: 'National Weather Service',
       url: `https://forecast.weather.gov/MapClick.php?lat=${LAT}&lon=${LON}`,
     };
-  } catch (e) {
-    return { ok: false, source: 'National Weather Service', error: e.message, url: `https://forecast.weather.gov/MapClick.php?lat=${LAT}&lon=${LON}` };
+  } catch (error) {
+    return { ok: false, source: 'National Weather Service', error: error.message, url: `https://forecast.weather.gov/MapClick.php?lat=${LAT}&lon=${LON}` };
   }
 }
 
 function museumAndTours(now = new Date()) {
-  const p = localParts(now);
-  const minutes = p.hour * 60 + p.minute;
+  const parts = localParts(now);
+  const minutes = parts.hour * 60 + parts.minute;
   const museumOpen = minutes >= 9 * 60 && minutes < 17 * 60;
   const tourMinutes = [10 * 60, 13 * 60, 15 * 60];
-  const next = tourMinutes.find(x => x > minutes);
-  const label = next == null ? null : new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' }).format(new Date(2020,0,1,Math.floor(next/60),next%60));
+  const next = tourMinutes.find(value => value > minutes);
+  const nextTour = next == null ? null : new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' }).format(new Date(2020, 0, 1, Math.floor(next / 60), next % 60));
   return {
     museumOpen,
     museumHours: '9:00 AM–5:00 PM daily',
     admission: 'Free',
-    scheduledTours: ['10:00 AM','1:00 PM','3:00 PM'],
-    nextTour: label,
+    scheduledTours: ['10:00 AM', '1:00 PM', '3:00 PM'],
+    nextTour,
     minutesUntilNextTour: next == null ? null : next - minutes,
     source: 'U.S. Army Corps of Engineers — National Great Rivers Museum',
     url: NGRM_URL,
@@ -267,12 +341,17 @@ function itemText(item) {
   return JSON.stringify(item || {}).toLowerCase();
 }
 
-function noticeTitle(item) {
-  return item.title || item.noticeTitle || item.notice_title || item.subject || item.description || item.nav_notice_title || `Navigation notice ${item.noticeNumber || item.notice_number || ''}`.trim();
-}
-
-function noticeUrl(item) {
-  return item.url || item.noticeUrl || item.notice_url || item.link || item.href || null;
+function normalizeNotice(item) {
+  const number = item.noticeno || item.noticeNumber || item.notice_number || null;
+  const title = item.title || item.noticeTitle || item.notice_title || item.subject || item.description || item.nav_notice_title || (number ? `Notice ${number}` : 'USACE navigation notice');
+  return {
+    title: String(title).replace(/\s+/g, ' ').trim(),
+    number,
+    issuedAt: item.issuedate || item.issueDate || item.issue_date || null,
+    beginsAt: item.begindate || item.beginDate || item.begin_date || null,
+    waterways: item.waterways || null,
+    url: item.noticelink || item.url || item.noticeUrl || item.notice_url || item.link || item.href || null,
+  };
 }
 
 async function notices() {
@@ -281,12 +360,19 @@ async function notices() {
     const items = Array.isArray(data) ? data : (data?.items || data?.notices || data?.results || []);
     if (!Array.isArray(items)) throw new Error('Unexpected NTNI response shape');
     const relevant = items.filter(item => {
-      const t = itemText(item);
-      return t.includes('mi26') || t.includes('mi 26') || t.includes('melvin price') || t.includes('mel price') || t.includes('pool_26') || t.includes('pool 26') || t.includes('200.5');
-    }).slice(0, 6).map(item => ({ title: String(noticeTitle(item)).replace(/\s+/g,' ').trim(), url: noticeUrl(item) }));
-    return { ok: true, count: relevant.length, items: relevant, source: 'USACE Notices to Navigation Interests (St. Louis District)', url: 'https://ndc.ops.usace.army.mil/ords/r/ntni/notices', dataUrl: NTNI_URL };
-  } catch (e) {
-    return { ok: false, count: 0, items: [], source: 'USACE Notices to Navigation Interests (St. Louis District)', error: e.message, url: 'https://ndc.ops.usace.army.mil/ords/r/ntni/notices' };
+      const text = itemText(item);
+      return text.includes('mi26') || text.includes('mi 26') || text.includes('melvin price') || text.includes('mel price') || text.includes('pool_26') || text.includes('pool 26') || text.includes('200.5');
+    }).slice(0, 6).map(normalizeNotice);
+    return {
+      ok: true,
+      count: relevant.length,
+      items: relevant,
+      source: 'USACE Notices to Navigation Interests (St. Louis District)',
+      url: NTNI_PAGE,
+      dataUrl: NTNI_URL,
+    };
+  } catch (error) {
+    return { ok: false, count: 0, items: [], source: 'USACE Notices to Navigation Interests (St. Louis District)', error: error.message, url: NTNI_PAGE };
   }
 }
 
@@ -294,19 +380,34 @@ function trafficSnapshot(lock) {
   if (!lock) return null;
   const up = lock.lockedUp24h ?? 0;
   const down = lock.lockedDown24h ?? 0;
-  return { pending: lock.pendingArrivals, locking: lock.lockingNow, up24h: up, down24h: down, total24h: up + down, averageDelayMinutes24h: lock.averageDelayMinutes24h };
+  return {
+    pending: lock.pendingArrivals,
+    locking: lock.lockingNow,
+    up24h: up,
+    down24h: down,
+    total24h: up + down,
+    averageDelayMinutes24h: lock.averageDelayMinutes24h,
+  };
 }
 
 function scoreVisit({ locks, wx, tours, nav }) {
   if (!locks.ok) return { score: null, label: 'DATA LIMITED', confidence: 'Low', reasons: ['Live USACE lock traffic is temporarily unavailable.'] };
-  const m = locks.melvin;
+  const melvin = locks.melvin;
   let score = 35;
   const reasons = [];
-  const active = (m.pendingArrivals || 0) + (m.lockingNow || 0);
-  const total24 = (m.lockedUp24h || 0) + (m.lockedDown24h || 0);
-  if (m.lockingNow > 0) { score += 27; reasons.push(`${m.lockingNow} vessel${m.lockingNow === 1 ? '' : 's'} reported locking now`); }
-  else if (m.pendingArrivals > 0) { score += Math.min(24, 12 + m.pendingArrivals * 4); reasons.push(`${m.pendingArrivals} pending arrival${m.pendingArrivals === 1 ? '' : 's'} reported`); }
-  else { score += Math.min(14, total24); reasons.push(`${total24} lockages reported in the last 24 hours`); }
+  const active = (melvin.pendingArrivals || 0) + (melvin.lockingNow || 0);
+  const total24 = (melvin.lockedUp24h || 0) + (melvin.lockedDown24h || 0);
+
+  if (melvin.lockingNow > 0) {
+    score += 27;
+    reasons.push(`${melvin.lockingNow} vessel${melvin.lockingNow === 1 ? '' : 's'} reported locking now`);
+  } else if (melvin.pendingArrivals > 0) {
+    score += Math.min(24, 12 + melvin.pendingArrivals * 4);
+    reasons.push(`${melvin.pendingArrivals} pending arrival${melvin.pendingArrivals === 1 ? '' : 's'} reported`);
+  } else {
+    score += Math.min(14, total24);
+    reasons.push(`${total24} lockages reported in the last 24 hours`);
+  }
 
   if (tours.museumOpen && tours.minutesUntilNextTour != null && tours.minutesUntilNextTour <= 90) {
     score += 14;
@@ -318,8 +419,13 @@ function scoreVisit({ locks, wx, tours, nav }) {
 
   if (wx.ok) {
     const rain = wx.precipitationProbability ?? 0;
-    if (rain <= 25) { score += 9; reasons.push(`${String(wx.shortForecast || 'favorable weather').toLowerCase()} for viewing`); }
-    else if (rain >= 70) { score -= 8; reasons.push('rain is likely during the current hour'); }
+    if (rain <= 25) {
+      score += 9;
+      reasons.push(`${String(wx.shortForecast || 'favorable weather').toLowerCase()} for viewing`);
+    } else if (rain >= 70) {
+      score -= 8;
+      reasons.push('rain is likely during the current hour');
+    }
   }
 
   if (nav.ok && nav.count > 0) {
@@ -351,7 +457,7 @@ async function build(now = new Date()) {
     within(lockStatus(now), 5600, () => unavailableLocks()),
     within(weather(), 5600, () => ({ ok: false, source: 'National Weather Service', error: 'NWS request exceeded the live-page deadline', url: `https://forecast.weather.gov/MapClick.php?lat=${LAT}&lon=${LON}` })),
     within(river(), 5600, () => ({ ok: false, stage: { ok: false, error: 'CWMS request exceeded the live-page deadline' }, flow: { ok: false, error: 'CWMS request exceeded the live-page deadline' }, source: 'USACE St. Louis District / CWMS Data API', url: WATER_PAGE })),
-    within(notices(), 4200, () => ({ ok: false, count: 0, items: [], source: 'USACE Notices to Navigation Interests (St. Louis District)', error: 'NTNI request exceeded the live-page deadline', url: 'https://ndc.ops.usace.army.mil/ords/r/ntni/notices' })),
+    within(notices(), 4200, () => ({ ok: false, count: 0, items: [], source: 'USACE Notices to Navigation Interests (St. Louis District)', error: 'NTNI request exceeded the live-page deadline', url: NTNI_PAGE })),
   ]);
 
   return {
@@ -392,7 +498,10 @@ async function build(now = new Date()) {
 }
 
 async function handler(req, res) {
-  if (req.method !== 'GET') { res.statusCode = 405; return res.end('Method not allowed'); }
+  if (req.method !== 'GET') {
+    res.statusCode = 405;
+    return res.end('Method not allowed');
+  }
   try {
     const body = await build();
     res.statusCode = 200;
@@ -400,12 +509,30 @@ async function handler(req, res) {
     res.setHeader('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=600');
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     res.end(JSON.stringify(body));
-  } catch (e) {
+  } catch (error) {
     res.statusCode = 500;
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    res.end(JSON.stringify({ error: 'Melvin Price live data unavailable', detail: e.message }));
+    res.end(JSON.stringify({ error: 'Melvin Price live data unavailable', detail: error.message }));
   }
 }
 
 module.exports = handler;
-module.exports._test = { n, localParts, parseLpmsStamp, findRecords, normalizeLock, parseCwmsValues, discoverTsid, museumAndTours, trafficSnapshot, scoreVisit, within, build };
+module.exports._test = {
+  n,
+  sanitizeJsonControlChars,
+  parseLooseJson,
+  localParts,
+  parseLpmsStamp,
+  findRecords,
+  normalizeLock,
+  parseCwmsValues,
+  discoverTsid,
+  normalizeNotice,
+  museumAndTours,
+  trafficSnapshot,
+  scoreVisit,
+  within,
+  build,
+  STAGE_TSID,
+  FLOW_TSID,
+};
