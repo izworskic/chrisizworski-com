@@ -91,6 +91,7 @@ async function waitForTour() {
         && last.text.includes('data-live-panel="camera"')
         && !last.text.includes('id="map-live-panel-ais"')
         && last.text.includes('https://embed.myshiptracking.com/embed?myst')
+        && last.text.includes('LIVE AIS · positions update automatically')
         && last.text.includes('style:{version:8,sources:{},layers:[]}')
         && last.text.includes('const routeViews=')
         && last.text.includes('function setAisView(key)')
