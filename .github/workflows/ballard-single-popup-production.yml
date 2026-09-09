@@ -27,10 +27,18 @@ jobs:
           from pathlib import Path
           import json
           release = 'ddfc9ad5a0e75977286922eacbb9e12fe14f1ff8'
+          previous = '87c99c77cc0ed6a265ff9ae4fdffafa632ae6b50'
+
           p = Path('package.json')
           data = json.loads(p.read_text())
           data['dependencies']['national-ballard-locks'] = f'github:izworskic/national-ballard-locks#{release}'
           p.write_text(json.dumps(data, indent=2) + '\n')
+
+          contract = Path('tests/ballard-locks-extracted.test.js')
+          c = contract.read_text()
+          if previous not in c:
+              raise SystemExit('old Ballard test pin not found')
+          contract.write_text(c.replace(previous, release))
 
           smoke = Path('scripts/ballard-production-smoke.mjs')
           s = smoke.read_text()
@@ -52,6 +60,6 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add package.json package-lock.json public/ballard-locks api/ballard-locks.js scripts/ballard-production-smoke.mjs
+          git add package.json package-lock.json public/ballard-locks api/ballard-locks.js scripts/ballard-production-smoke.mjs tests/ballard-locks-extracted.test.js
           git commit -m 'Ship single-popup Ballard tour behavior'
           git push
