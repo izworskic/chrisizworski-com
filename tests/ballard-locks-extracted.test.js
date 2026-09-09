@@ -13,7 +13,7 @@ const syncPath = path.join(root, 'scripts', 'sync-ballard-locks.mjs');
 test('Ballard Locks implementation is pinned to its authoritative repository', () => {
   assert.equal(
     pkg.dependencies['national-ballard-locks'],
-    'github:izworskic/national-ballard-locks#cf4b8468176055068883a77fa9a253e27b612d9a'
+    'github:izworskic/national-ballard-locks#24b49044a7065145c632c92a7a90f110da6df0c3'
   );
 });
 
@@ -56,4 +56,11 @@ test('committed Ballard mirror includes the interactive self-guided tour', () =>
   assert.ok(tour.includes('75 min · + Ballard'));
   assert.ok(tour.includes('https://tiles.openfreemap.org/styles/liberty'));
   assert.ok(tour.includes('/api/ballard-locks'));
+  assert.ok(tour.includes('id="map-live-dock"'));
+  assert.ok(tour.includes('data-live-panel="fish"'));
+  assert.ok(tour.includes('data-live-panel="ais"'));
+  assert.ok(tour.includes('data-live-panel="camera"'));
+  assert.ok(tour.includes('https://embed.myshiptracking.com/embed?myst'));
+  assert.ok(tour.includes('https://g1.ipcamlive.com/player/player.php?alias=5ababb8154afe'));
+  assert.ok(!tour.includes('What this map adds'));
 });
