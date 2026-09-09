@@ -13,7 +13,7 @@ const syncPath = path.join(root, 'scripts', 'sync-ballard-locks.mjs');
 test('Ballard Locks implementation is pinned to its authoritative repository', () => {
   assert.equal(
     pkg.dependencies['national-ballard-locks'],
-    'github:izworskic/national-ballard-locks#3e4eaf1a96640bda66b4ec8df79679ff8c059048'
+    'github:izworskic/national-ballard-locks#39ba975a099c28bedf965019510312c4c086174f'
   );
 });
 
@@ -62,6 +62,7 @@ test('committed Ballard mirror includes the interactive self-guided tour', () =>
   assert.ok(!tour.includes('data-live-panel="ais"'));
   assert.ok(tour.includes('data-live-panel="camera"'));
   assert.ok(tour.includes('https://embed.myshiptracking.com/embed?myst'));
+  assert.ok(tour.includes('LIVE AIS · positions update automatically'));
   assert.ok(tour.includes('id="tour-map" class="map map-overlay"'));
   assert.ok(tour.indexOf('id="tour-ais-underlay"') < tour.indexOf('id="tour-map"'));
   assert.ok(tour.includes('const routeViews='));
