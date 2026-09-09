@@ -34,6 +34,17 @@ await check('national hub links branded Lake Ice-Out',async()=>{
   if(text.includes('href="https://lspp-ice-out.vercel.app/north-america/"'))throw new Error('hub still exposes legacy Vercel ice-out href');
 });
 
+await check('national hub exposes Ballard interactive tour',async()=>{
+  // Exact canonical hub response: the tour must be visible to ordinary users and crawlers.
+  const {text}=await request('/national-tools/',{cacheBust:false,noCacheHeader:false});
+  for(const marker of [
+    'Ballard Locks Interactive Tour',
+    'https://chrisizworski.com/ballard-locks/tour/',
+    'Open interactive tour',
+    'live AIS vessel positions'
+  ])if(!text.includes(marker))throw new Error('Ballard interactive tour discovery missing marker '+marker);
+});
+
 await check('branded Lake Ice-Out page is live',async()=>{
   const {text}=await request('/national-tools/ice-out/',{cacheBust:false,noCacheHeader:false});
   for(const marker of [
