@@ -10,9 +10,9 @@ const FACILITY_URL = 'https://www.mvs.usace.army.mil/Missions/Navigation/Locks-a
 const WATER_PAGE = 'https://water.usace.army.mil/office/mvs/reports/chart?basin=Mississippi&tsid1=Mel+Price+TW-Mississippi.Stage.Inst.30Minutes.0.lrgsShef-rev&type=macro';
 const CWMS = 'https://cwms-data.usace.army.mil/cwms-data/timeseries';
 const STAGE_TSID = 'Mel Price TW-Mississippi.Stage.Inst.30Minutes.0.lrgsShef-rev';
-const UA = 'MelvinPriceLive/1.0 (+https://chrisizworski.com/melvin-price/)';
+const UA = 'MelvinPriceLive/1.1 (+https://chrisizworski.com/melvin-price/)';
 
-async function get(url, type = 'json', timeout = 7000, extraHeaders = {}) {
+async function get(url, type = 'json', timeout = 3500, extraHeaders = {}) {
   const c = new AbortController();
   const timer = setTimeout(() => c.abort(), timeout);
   try {
@@ -64,8 +64,6 @@ function parseLpmsStamp(value, now = new Date()) {
   const d = Number(m[3]);
   const h = Number(m[4]);
   const min = Number(m[5]);
-  // LPMS timestamps are operational-local. Return a human-readable local stamp and an age estimate
-  // computed in the current Central offset rather than silently claiming UTC precision.
   const label = `${String(mo).padStart(2,'0')}/${String(d).padStart(2,'0')}/${yy} ${String(h).padStart(2,'0')}:${String(min).padStart(2,'0')} CT`;
   const nowP = localParts(now);
   const roughMs = Date.UTC(yy, mo - 1, d, h, min) - Date.UTC(nowP.year, nowP.month - 1, nowP.day, nowP.hour, nowP.minute);
@@ -109,9 +107,19 @@ function normalizeLock(row, now) {
   };
 }
 
+function unavailableLocks(reason = 'USACE LPMS request exceeded the live-page deadline') {
+  return {
+    ok: false,
+    freshness: 'UNAVAILABLE',
+    source: 'USACE Lock Performance Monitoring System (LPMS)',
+    url: CORPS_LOCKS_URL,
+    error: reason,
+  };
+}
+
 async function lockStatus(now = new Date()) {
   try {
-    const data = await get(LOCK_STATUS_URL);
+    const data = await get(LOCK_STATUS_URL, 'json', 4500);
     const records = findRecords(data, x => x && x.lockNumber != null && x.lockName != null);
     const byNo = new Map(records.map(r => [String(r.lockNumber), normalizeLock(r, now)]));
     const melvin = byNo.get('26');
@@ -129,7 +137,7 @@ async function lockStatus(now = new Date()) {
       caveat: 'Counts and status are operational reports, not exact AIS positions. Pending arrivals do not identify an individual tow in this endpoint.',
     };
   } catch (e) {
-    return { ok: false, freshness: 'UNAVAILABLE', source: 'USACE Lock Performance Monitoring System (LPMS)', url: CORPS_LOCKS_URL, error: e.message };
+    return unavailableLocks(e.message);
   }
 }
 
@@ -152,9 +160,9 @@ function parseCwmsValues(data) {
   return [];
 }
 
-async function cwmsSeries(name, unit) {
+async function cwmsSeries(name, unit, timeout = 3500) {
   const qs = new URLSearchParams({ name, office: 'MVS', unit, begin: 'PT-26H' });
-  const data = await get(`${CWMS}?${qs}`, 'json', 8000, { accept: 'application/json;version=2' });
+  const data = await get(`${CWMS}?${qs}`, 'json', timeout, { accept: 'application/json;version=2' });
   const rows = parseCwmsValues(data);
   if (!rows.length) throw new Error(`No values returned for ${name}`);
   const latest = rows[rows.length - 1];
@@ -171,40 +179,51 @@ function discoverTsid(html, label) {
   try { return decodeURIComponent(m[2].replace(/\+/g, ' ')); } catch { return m[2].replace(/\+/g, ' '); }
 }
 
+async function riverStage() {
+  try {
+    const s = await cwmsSeries(STAGE_TSID, 'ft', 3500);
+    return {
+      ok: true,
+      valueFt: s.latest.value,
+      observedAt: s.latest.at,
+      delta24hFt: s.delta24h,
+      trend: s.delta24h > 0.08 ? 'rising' : s.delta24h < -0.08 ? 'falling' : 'steady',
+      recent: s.recent,
+    };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+async function riverFlow() {
+  try {
+    const html = await get(WATER_PAGE, 'text', 2200);
+    const flowTsid = discoverTsid(html, 'Mel Price TW - Flow');
+    if (!flowTsid) throw new Error('Flow time-series identifier not discoverable from official water page');
+    const f = await cwmsSeries(flowTsid, 'cfs', 2600);
+    return { ok: true, valueCfs: Math.round(f.latest.value), observedAt: f.latest.at, delta24hCfs: Math.round(f.delta24h), tsid: flowTsid };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
 async function river() {
-  const result = {
-    ok: false,
-    stage: null,
-    flow: null,
+  const [stage, flow] = await Promise.all([riverStage(), riverFlow()]);
+  return {
+    ok: Boolean(stage.ok || flow.ok),
+    stage,
+    flow,
     source: 'USACE St. Louis District / CWMS Data API',
     url: WATER_PAGE,
   };
-  try {
-    const s = await cwmsSeries(STAGE_TSID, 'ft');
-    result.stage = { ok: true, valueFt: s.latest.value, observedAt: s.latest.at, delta24hFt: s.delta24h, trend: s.delta24h > 0.08 ? 'rising' : s.delta24h < -0.08 ? 'falling' : 'steady', recent: s.recent };
-    result.ok = true;
-  } catch (e) {
-    result.stage = { ok: false, error: e.message };
-  }
-
-  try {
-    const html = await get(WATER_PAGE, 'text', 7000);
-    const flowTsid = discoverTsid(html, 'Mel Price TW - Flow');
-    if (!flowTsid) throw new Error('Flow time-series identifier not discoverable from official water page');
-    const f = await cwmsSeries(flowTsid, 'cfs');
-    result.flow = { ok: true, valueCfs: Math.round(f.latest.value), observedAt: f.latest.at, delta24hCfs: Math.round(f.delta24h), tsid: flowTsid };
-  } catch (e) {
-    result.flow = { ok: false, error: e.message };
-  }
-  return result;
 }
 
 async function weather() {
   try {
-    const point = await get(`https://api.weather.gov/points/${LAT},${LON}`);
+    const point = await get(`https://api.weather.gov/points/${LAT},${LON}`, 'json', 2500);
     const hourlyUrl = point?.properties?.forecastHourly;
     if (!hourlyUrl) throw new Error('NWS hourly forecast URL missing');
-    const data = await get(hourlyUrl);
+    const data = await get(hourlyUrl, 'json', 2500);
     const p = data?.properties?.periods?.[0];
     if (!p) throw new Error('NWS hourly period missing');
     return {
@@ -213,7 +232,7 @@ async function weather() {
       windSpeed: p.windSpeed,
       windDirection: p.windDirection,
       precipitationProbability: p.probabilityOfPrecipitation?.value ?? null,
-      shortForecast: p.shortForecast,
+      shortForecast: p.shortForecast || 'Current NWS conditions',
       validFrom: p.startTime,
       source: 'National Weather Service',
       url: `https://forecast.weather.gov/MapClick.php?lat=${LAT}&lon=${LON}`,
@@ -258,12 +277,13 @@ function noticeUrl(item) {
 
 async function notices() {
   try {
-    const data = await get(NTNI_URL);
+    const data = await get(NTNI_URL, 'json', 2800);
     const items = Array.isArray(data) ? data : (data?.items || data?.notices || data?.results || []);
+    if (!Array.isArray(items)) throw new Error('Unexpected NTNI response shape');
     const relevant = items.filter(item => {
       const t = itemText(item);
       return t.includes('mi26') || t.includes('mi 26') || t.includes('melvin price') || t.includes('mel price') || t.includes('pool_26') || t.includes('pool 26') || t.includes('200.5');
-    }).slice(0, 6).map(item => ({ title: String(noticeTitle(item)).replace(/\s+/g,' ').trim(), url: noticeUrl(item), raw: item }));
+    }).slice(0, 6).map(item => ({ title: String(noticeTitle(item)).replace(/\s+/g,' ').trim(), url: noticeUrl(item) }));
     return { ok: true, count: relevant.length, items: relevant, source: 'USACE Notices to Navigation Interests (St. Louis District)', url: 'https://ndc.ops.usace.army.mil/ords/r/ntni/notices', dataUrl: NTNI_URL };
   } catch (e) {
     return { ok: false, count: 0, items: [], source: 'USACE Notices to Navigation Interests (St. Louis District)', error: e.message, url: 'https://ndc.ops.usace.army.mil/ords/r/ntni/notices' };
@@ -298,7 +318,7 @@ function scoreVisit({ locks, wx, tours, nav }) {
 
   if (wx.ok) {
     const rain = wx.precipitationProbability ?? 0;
-    if (rain <= 25) { score += 9; reasons.push(`${wx.shortForecast.toLowerCase()} for viewing`); }
+    if (rain <= 25) { score += 9; reasons.push(`${String(wx.shortForecast || 'favorable weather').toLowerCase()} for viewing`); }
     else if (rain >= 70) { score -= 8; reasons.push('rain is likely during the current hour'); }
   }
 
@@ -314,9 +334,26 @@ function scoreVisit({ locks, wx, tours, nav }) {
   return { score, label, confidence, reasons: reasons.slice(0, 4) };
 }
 
+function within(promise, ms, fallback) {
+  let timer;
+  const deadline = new Promise(resolve => {
+    timer = setTimeout(() => resolve(typeof fallback === 'function' ? fallback() : fallback), ms);
+  });
+  return Promise.race([
+    Promise.resolve(promise).finally(() => clearTimeout(timer)),
+    deadline,
+  ]);
+}
+
 async function build(now = new Date()) {
   const tours = museumAndTours(now);
-  const [locks, wx, riverData, nav] = await Promise.all([lockStatus(now), weather(), river(), notices()]);
+  const [locks, wx, riverData, nav] = await Promise.all([
+    within(lockStatus(now), 5600, () => unavailableLocks()),
+    within(weather(), 5600, () => ({ ok: false, source: 'National Weather Service', error: 'NWS request exceeded the live-page deadline', url: `https://forecast.weather.gov/MapClick.php?lat=${LAT}&lon=${LON}` })),
+    within(river(), 5600, () => ({ ok: false, stage: { ok: false, error: 'CWMS request exceeded the live-page deadline' }, flow: { ok: false, error: 'CWMS request exceeded the live-page deadline' }, source: 'USACE St. Louis District / CWMS Data API', url: WATER_PAGE })),
+    within(notices(), 4200, () => ({ ok: false, count: 0, items: [], source: 'USACE Notices to Navigation Interests (St. Louis District)', error: 'NTNI request exceeded the live-page deadline', url: 'https://ndc.ops.usace.army.mil/ords/r/ntni/notices' })),
+  ]);
+
   return {
     generatedAt: now.toISOString(),
     localTime: localTime(now),
@@ -335,9 +372,9 @@ async function build(now = new Date()) {
     traffic: locks.ok ? {
       melvin: trafficSnapshot(locks.melvin),
       pipeline: {
-        upstreamLock25: trafficSnapshot(locks.adjacent.upstream),
+        upstreamLock25: trafficSnapshot(locks.adjacent?.upstream),
         melvinPrice: trafficSnapshot(locks.melvin),
-        downstreamLock27: trafficSnapshot(locks.adjacent.downstream),
+        downstreamLock27: trafficSnapshot(locks.adjacent?.downstream),
         caveat: 'Pipeline cards show confirmed LPMS activity at each lock, not continuous vessel positions or a guarantee that a vessel at an adjacent lock is bound for Melvin Price.',
       },
     } : null,
@@ -360,7 +397,7 @@ async function handler(req, res) {
     const body = await build();
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=900');
+    res.setHeader('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=600');
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     res.end(JSON.stringify(body));
   } catch (e) {
@@ -371,4 +408,4 @@ async function handler(req, res) {
 }
 
 module.exports = handler;
-module.exports._test = { n, localParts, parseLpmsStamp, findRecords, normalizeLock, parseCwmsValues, discoverTsid, museumAndTours, trafficSnapshot, scoreVisit, build };
+module.exports._test = { n, localParts, parseLpmsStamp, findRecords, normalizeLock, parseCwmsValues, discoverTsid, museumAndTours, trafficSnapshot, scoreVisit, within, build };
