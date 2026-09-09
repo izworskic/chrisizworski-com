@@ -1,379 +1,299 @@
 const LAT = 47.66556;
 const LON = -122.39722;
-const PACIFIC = 'America/Los_Angeles';
-const WDFW_URL = 'https://wdfw.wa.gov/fishing/reports/counts/lake-washington';
-const USACE_FISH_URL = 'https://www.nws.usace.army.mil/Missions/Civil-Works/Locks-and-Dams/Chittenden-Locks/Fish-Counts/';
-const USACE_CLOSURES_URL = 'https://www.nws.usace.army.mil/Missions/Civil-Works/Locks-and-Dams/Chittenden-Locks/Closures/';
-const USACE_LEVEL_URL = 'https://water.usace.army.mil/office/nws/data/lkw_lwsc_plot';
+const TZ = 'America/Los_Angeles';
 const NOAA_STATION = '9447130';
+const WDFW = 'https://wdfw.wa.gov/fishing/reports/counts/lake-washington';
+const USACE = 'https://www.nws.usace.army.mil/Missions/Civil-Works/Locks-and-Dams/Chittenden-Locks/';
+const CLOSURES = `${USACE}Closures/`;
+const LEVEL_PAGE = 'https://water.usace.army.mil/overview/nws/locations/lwsc';
+const LEVEL_FALLBACK = 'https://water.usace.army.mil/office/nws/data/lkw_lwsc_plot';
+const A2W_LEVEL = 'https://water.usace.army.mil/cda/reporting/providers/nws/locations/lwsc';
+const CWMS_TSID = 'LWSC.Elev-Lake.Ave.1Hour.1Hour.IRIDIUM-REV';
+const UA = 'BallardLocksLive/1.0 (+https://chrisizworski.com/ballard-locks/)';
 
-const HEADERS = {
-  'User-Agent': 'chrisizworski.com Ballard Locks visitor intelligence (https://chrisizworski.com/ballard-locks/)',
-  Accept: 'application/json,text/html;q=0.9,*/*;q=0.8',
-};
-
-function json(res, status, body) {
-  res.statusCode = status;
-  res.setHeader('Content-Type', 'application/json; charset=utf-8');
-  res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=900');
-  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
-  res.end(JSON.stringify(body));
-}
-
-async function fetchWithTimeout(url, options = {}, timeoutMs = 4500) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
+async function get(url, type = 'json', timeout = 5000, extraHeaders = {}) {
+  const c = new AbortController();
+  const timer = setTimeout(() => c.abort(), timeout);
   try {
-    const response = await fetch(url, { ...options, signal: controller.signal });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return response;
-  } finally {
-    clearTimeout(timer);
-  }
+    const r = await fetch(url, { headers: { 'user-agent': UA, accept: '*/*', ...extraHeaders }, signal: c.signal });
+    if (!r.ok) throw new Error(`${new URL(url).hostname} returned ${r.status}`);
+    return type === 'text' ? r.text() : r.json();
+  } finally { clearTimeout(timer); }
 }
 
-function pacificParts(date = new Date()) {
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: PACIFIC,
-    year: 'numeric', month: '2-digit', day: '2-digit',
-    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
-    weekday: 'short',
-  }).formatToParts(date).reduce((acc, p) => (acc[p.type] = p.value, acc), {});
-  return {
-    year: Number(parts.year), month: Number(parts.month), day: Number(parts.day),
-    hour: Number(parts.hour === '24' ? 0 : parts.hour), minute: Number(parts.minute),
-    second: Number(parts.second), weekday: parts.weekday,
-  };
-}
-
-function ymd({ year, month, day }) {
-  return `${year}${String(month).padStart(2, '0')}${String(day).padStart(2, '0')}`;
-}
-
-function pacificDisplay(date) {
-  return new Intl.DateTimeFormat('en-US', {
-    timeZone: PACIFIC,
-    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
-    timeZoneName: 'short',
-  }).format(date);
-}
-
-function decodeHtml(s) {
-  return String(s || '')
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/&amp;/gi, '&')
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;|&apos;/gi, "'")
-    .replace(/&ndash;|&#8211;/gi, '–')
-    .replace(/&mdash;|&#8212;/gi, '—')
-    .replace(/&#x2F;/gi, '/');
-}
-
-function tableText(html) {
-  return decodeHtml(html)
+function text(html) {
+  return String(html || '')
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<\/(?:tr|p|h[1-6]|div|section|article|table|li)>/gi, '\n')
+    .replace(/<\/(?:tr|p|h[1-6]|div|table|li)>/gi, '\n')
     .replace(/<\/(?:td|th)>/gi, ' | ')
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<[^>]+>/g, ' ')
-    .replace(/[ \t]+/g, ' ')
-    .replace(/ *\n */g, '\n');
+    .replace(/&nbsp;/gi, ' ').replace(/&amp;/gi, '&')
+    .replace(/&#39;|&apos;/gi, "'").replace(/&quot;/gi, '"')
+    .replace(/[ \t]+/g, ' ').replace(/ *\n */g, '\n');
 }
 
-function parseCount(value) {
-  if (!value) return null;
-  const n = Number(String(value).replace(/,/g, '').trim());
-  return Number.isFinite(n) ? n : null;
+function n(v) {
+  if (v == null || !String(v).trim()) return null;
+  const x = Number(String(v).replace(/,/g, '').trim());
+  return Number.isFinite(x) ? x : null;
 }
 
-function extractDailySpecies(text, species) {
-  const lower = text.toLowerCase();
-  const candidates = [`daily ${species.toLowerCase()} counts`, `ballard locks ${species.toLowerCase()} counts`, `${species.toLowerCase()} counts`];
-  let start = -1;
-  for (const needle of candidates) {
-    const idx = lower.indexOf(needle);
-    if (idx >= 0) { start = idx; break; }
+function pacificParts(date = new Date()) {
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
+    timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', hour12: false,
+  }).formatToParts(date).map(x => [x.type, x.value]));
+  return { year: +p.year, month: +p.month, day: +p.day, hour: +(p.hour === '24' ? 0 : p.hour), minute: +p.minute };
+}
+
+function ymd(p) { return `${p.year}${String(p.month).padStart(2,'0')}${String(p.day).padStart(2,'0')}`; }
+function local(date) { return new Intl.DateTimeFormat('en-US', { timeZone: TZ, month:'short', day:'numeric', hour:'numeric', minute:'2-digit', timeZoneName:'short' }).format(date); }
+
+function ageDays(md, nowParts) {
+  const m = /^(\d{1,2})\/(\d{1,2})/.exec(md || '');
+  if (!m) return null;
+  const a = Date.UTC(nowParts.year, nowParts.month - 1, nowParts.day, 12);
+  const b = Date.UTC(nowParts.year, +m[1] - 1, +m[2], 12);
+  return Math.max(0, Math.round((a - b) / 86400000));
+}
+
+function speciesSection(page, species) {
+  const wanted = String(species || '').toLowerCase();
+  const heading = new RegExp(`(?:^|\\n)\\s*daily\\s+${wanted}\\s+counts\\s*(?:\\n|$)`, 'i');
+  const hit = heading.exec(page);
+  if (!hit) return null;
+
+  const afterHeading = page.slice(hit.index + hit[0].length);
+  const current = /(?:^|\n)\s*2026\s+daily\s+counts\s*(?:\n|$)/i.exec(afterHeading);
+  if (!current) return null;
+
+  const tail = afterHeading.slice(current.index);
+  const boundaries = [];
+  const afterYearOffset = current[0].length;
+
+  const older = /(?:^|\n)\s*2025\s+daily\s+counts\s*(?:\n|$)/i.exec(tail.slice(afterYearOffset));
+  if (older) boundaries.push(afterYearOffset + older.index);
+
+  const nextSpecies = /(?:^|\n)\s*daily\s+(sockeye|chinook|coho)\s+counts\s*(?:\n|$)/ig;
+  nextSpecies.lastIndex = afterYearOffset;
+  let next;
+  while ((next = nextSpecies.exec(tail))) {
+    if (String(next[1]).toLowerCase() !== wanted) {
+      boundaries.push(next.index);
+      break;
+    }
   }
-  if (start < 0) return null;
-  let slice = text.slice(start, start + 30000);
-  const yearStart = slice.toLowerCase().indexOf('2026 daily counts');
-  if (yearStart >= 0) {
-    slice = slice.slice(yearStart);
-    const nextYear = slice.toLowerCase().indexOf('2025 daily counts');
-    if (nextYear > 0) slice = slice.slice(0, nextYear);
-  }
+
+  const annual = /(?:^|\n)\s*annual\s+(?:sockeye|chinook|coho)\s+counts\s*(?:\n|$)/i.exec(tail.slice(afterYearOffset));
+  if (annual) boundaries.push(afterYearOffset + annual.index);
+
+  const chart = new RegExp(`(?:^|\\n)\\s*ballard\\s+locks\\s+${wanted}\\s+counts\\s*(?:\\n|$)`, 'i').exec(tail.slice(afterYearOffset));
+  if (chart) boundaries.push(afterYearOffset + chart.index);
+
+  const validBoundaries = boundaries.filter(x => x > afterYearOffset);
+  const end = validBoundaries.length ? Math.min(...validBoundaries) : Math.min(tail.length, 30000);
+  return tail.slice(0, end);
+}
+
+function parseSpecies(page, species, nowParts) {
+  const slice = speciesSection(page, species);
+  if (!slice) return null;
   const rows = [];
-  const rowRe = /(?:^|\n)\s*(\d{1,2}\/\d{1,2}(?:-\d{1,2}\/\d{1,2})?)\s*\|\s*([\d,]+|[-–—])\s*\|\s*([\d,]+|[-–—])/gm;
+  const re = /(?:^|\n)\s*(\d{1,2}\/\d{1,2}(?:-\d{1,2}\/\d{1,2})?)\s*\|\s*([\d,]+)\s*\|\s*([\d,]+)/gm;
   let m;
-  while ((m = rowRe.exec(slice))) {
-    const daily = parseCount(m[2]);
-    const total = parseCount(m[3]);
+  while ((m = re.exec(slice))) {
+    const daily = n(m[2]);
+    const total = n(m[3]);
     if (daily !== null && total !== null) rows.push({ date: m[1], daily, total });
   }
   if (!rows.length) return null;
   const latest = rows[rows.length - 1];
   const recent = rows.slice(-7);
-  const avg7 = recent.length ? recent.reduce((s, r) => s + r.daily, 0) / recent.length : null;
-  return { species, latest, recent, avg7: avg7 == null ? null : Math.round(avg7 * 10) / 10, source: 'WDFW daily' };
+  return {
+    species, latest, ageDays: ageDays(latest.date, nowParts),
+    avg7: Math.round((recent.reduce((s,r)=>s+r.daily,0) / recent.length) * 10) / 10,
+  };
 }
 
-function extractUsaceWeekly(text) {
-  const rows = [];
-  const rowRe = /(?:^|\n)\s*(\d{1,2}\/\d{1,2}\/\d{4})\s*\|\s*([\d, ]+)\s*\|\s*([\d, ]+)\s*\|\s*([\d, ]+)\s*\|\s*([\d, ]+)\s*\|\s*([\d, ]+)\s*\|\s*([\d, ]+)/gm;
-  let m;
-  while ((m = rowRe.exec(text))) {
-    const nums = m.slice(2, 8).map(parseCount);
-    if (nums.every((n) => n !== null)) {
-      rows.push({ date: m[1], chinookWeekly: nums[0], chinookTotal: nums[1], sockeyeWeekly: nums[2], sockeyeTotal: nums[3], cohoWeekly: nums[4], cohoTotal: nums[5] });
-    }
-  }
-  if (!rows.length) return null;
-  rows.sort((a, b) => new Date(a.date) - new Date(b.date));
-  return rows[rows.length - 1];
-}
-
-function mdToDate(md, nowParts) {
-  const m = /^(\d{1,2})\/(\d{1,2})$/.exec(md || '');
-  if (!m) return null;
-  return new Date(Date.UTC(nowParts.year, Number(m[1]) - 1, Number(m[2]), 12));
-}
-
-function dataAgeDays(md, nowParts) {
-  const d = mdToDate(md, nowParts);
-  if (!d) return null;
-  const now = new Date(Date.UTC(nowParts.year, nowParts.month - 1, nowParts.day, 12));
-  return Math.max(0, Math.round((now - d) / 86400000));
-}
-
-async function getFish(nowParts) {
+async function fish(nowParts) {
   try {
-    const r = await fetchWithTimeout(WDFW_URL, { headers: HEADERS });
-    const text = tableText(await r.text());
-    const species = ['Sockeye', 'Chinook', 'Coho'].map((s) => extractDailySpecies(text, s)).filter(Boolean);
-    if (species.length) {
-      for (const s of species) s.ageDays = dataAgeDays(s.latest.date, nowParts);
-      return { ok: true, cadence: 'daily', species, source: 'Washington Department of Fish & Wildlife', url: WDFW_URL };
-    }
-    throw new Error('Daily table not found');
-  } catch (primaryError) {
-    try {
-      const r = await fetchWithTimeout(USACE_FISH_URL, { headers: HEADERS });
-      const weekly = extractUsaceWeekly(tableText(await r.text()));
-      if (!weekly) throw new Error('Weekly table not found');
-      return { ok: true, cadence: 'weekly', weekly, source: 'U.S. Army Corps of Engineers', url: USACE_FISH_URL, note: 'WDFW daily feed unavailable; showing the latest USACE weekly summary.' };
-    } catch (fallbackError) {
-      return { ok: false, source: 'WDFW / USACE', url: WDFW_URL, error: `${primaryError.message}; ${fallbackError.message}` };
-    }
+    const page = text(await get(WDFW, 'text'));
+    const species = ['Sockeye','Chinook','Coho'].map(s => parseSpecies(page, s, nowParts)).filter(Boolean);
+    if (species.length !== 3) throw new Error(`Expected 3 WDFW species tables, parsed ${species.length}`);
+    return { ok:true, cadence:'daily', species, source:'Washington Department of Fish & Wildlife', url:WDFW };
+  } catch (e) {
+    return { ok:false, source:'Washington Department of Fish & Wildlife', url:WDFW, error:e.message };
   }
 }
 
-async function getTides(now) {
-  const pp = pacificParts(now);
-  const begin = ymd(pp);
-  const endDate = new Date(now.getTime() + 3 * 86400000);
-  const end = ymd(pacificParts(endDate));
+async function tides(now) {
+  const begin = ymd(pacificParts(now));
+  const end = ymd(pacificParts(new Date(now.getTime() + 3 * 86400000)));
   const base = 'https://api.tidesandcurrents.noaa.gov/api/prod/datagetter';
-  const common = `application=chrisizworski.com&station=${NOAA_STATION}&datum=MLLW&time_zone=gmt&units=english&format=json`;
-  const predictionsUrl = `${base}?product=predictions&begin_date=${begin}&end_date=${end}&interval=hilo&${common}`;
-  const observedUrl = `${base}?product=water_level&date=latest&${common}`;
+  const common = `application=ballard-locks-live&station=${NOAA_STATION}&datum=MLLW&time_zone=gmt&units=english&format=json`;
   try {
-    const [pRes, oRes] = await Promise.all([
-      fetchWithTimeout(predictionsUrl, { headers: HEADERS }),
-      fetchWithTimeout(observedUrl, { headers: HEADERS }).catch(() => null),
+    const [pred, obs] = await Promise.all([
+      get(`${base}?product=predictions&begin_date=${begin}&end_date=${end}&interval=hilo&${common}`),
+      get(`${base}?product=water_level&date=latest&${common}`).catch(()=>null),
     ]);
-    const pJson = await pRes.json();
-    const predictions = (pJson.predictions || []).map((p) => ({
-      type: p.type === 'H' ? 'High' : 'Low',
-      valueFt: Number(p.v),
-      at: `${p.t.replace(' ', 'T')}:00Z`,
-    })).filter((p) => Number.isFinite(p.valueFt));
-    const upcoming = predictions.filter((p) => new Date(p.at).getTime() >= now.getTime() - 15 * 60000).slice(0, 4);
-    let observed = null;
-    if (oRes) {
-      const oJson = await oRes.json();
-      const row = oJson.data && oJson.data[0];
-      if (row) observed = { valueFt: Number(row.v), at: `${row.t.replace(' ', 'T')}:00Z` };
-    }
-    return { ok: true, station: NOAA_STATION, stationName: 'Seattle, Elliott Bay', predictions: upcoming, observed, source: 'NOAA Tides & Currents', url: `https://tidesandcurrents.noaa.gov/stationhome.html?id=${NOAA_STATION}` };
-  } catch (error) {
-    return { ok: false, station: NOAA_STATION, source: 'NOAA Tides & Currents', url: `https://tidesandcurrents.noaa.gov/stationhome.html?id=${NOAA_STATION}`, error: error.message };
-  }
+    const predictions = (pred.predictions || []).map(p => ({ type:p.type === 'H' ? 'High' : 'Low', valueFt:+p.v, at:`${p.t.replace(' ','T')}:00Z` }))
+      .filter(p => Number.isFinite(p.valueFt) && new Date(p.at) >= new Date(now.getTime() - 15 * 60000)).slice(0,4);
+    const row = obs?.data?.[0];
+    return { ok:true, station:NOAA_STATION, stationName:'Seattle, WA', predictions, observed:row ? {valueFt:+row.v, at:`${row.t.replace(' ','T')}:00Z`} : null, source:'NOAA Tides & Currents', url:`https://tidesandcurrents.noaa.gov/stationhome.html?id=${NOAA_STATION}` };
+  } catch(e) { return { ok:false, station:NOAA_STATION, source:'NOAA Tides & Currents', error:e.message, url:`https://tidesandcurrents.noaa.gov/stationhome.html?id=${NOAA_STATION}` }; }
 }
 
-async function getWeather() {
+async function weather() {
   try {
-    const points = await fetchWithTimeout(`https://api.weather.gov/points/${LAT},${LON}`, { headers: HEADERS });
-    const pointJson = await points.json();
-    const hourlyUrl = pointJson?.properties?.forecastHourly;
-    if (!hourlyUrl) throw new Error('NWS hourly forecast URL missing');
-    const hourly = await fetchWithTimeout(hourlyUrl, { headers: HEADERS });
-    const h = await hourly.json();
-    const p = h?.properties?.periods?.[0];
+    const point = await get(`https://api.weather.gov/points/${LAT},${LON}`);
+    const url = point?.properties?.forecastHourly;
+    if (!url) throw new Error('NWS hourly URL missing');
+    const data = await get(url);
+    const p = data?.properties?.periods?.[0];
     if (!p) throw new Error('NWS hourly period missing');
+    return { ok:true, temperatureF:p.temperature, windSpeed:p.windSpeed, windDirection:p.windDirection, precipitationProbability:p.probabilityOfPrecipitation?.value ?? null, shortForecast:p.shortForecast, validFrom:p.startTime, source:'National Weather Service', url:'https://forecast.weather.gov/MapClick.php?lat=47.66556&lon=-122.39722' };
+  } catch(e) { return { ok:false, source:'National Weather Service', error:e.message, url:'https://forecast.weather.gov/MapClick.php?lat=47.66556&lon=-122.39722' }; }
+}
+
+function parseA2wLatest(data) {
+  const locations = Array.isArray(data) ? data : [data];
+  for (const location of locations) {
+    const rows = Array.isArray(location?.timeseries) ? location.timeseries : [];
+    const row = rows.find(x => x?.tsid === CWMS_TSID) || rows.find(x => x?.label === 'Elevation' && x?.unit === 'ft');
+    if (!row) continue;
+    if (row.latest_value == null || !String(row.latest_value).trim()) continue;
+    const valueFt = Number(row.latest_value);
+    const timeMs = Date.parse(String(row.latest_time || ''));
+    if (!Number.isFinite(valueFt) || !Number.isFinite(timeMs)) continue;
     return {
-      ok: true,
-      temperatureF: p.temperature,
-      windSpeed: p.windSpeed,
-      windDirection: p.windDirection,
-      precipitationProbability: p.probabilityOfPrecipitation?.value,
-      shortForecast: p.shortForecast,
-      isDaytime: p.isDaytime,
-      validFrom: p.startTime,
-      source: 'National Weather Service',
-      url: 'https://forecast.weather.gov/MapClick.php?lat=47.66556&lon=-122.39722',
+      valueFt,
+      observedAt:new Date(timeMs).toISOString(),
+      delta24hr:Number.isFinite(Number(row.delta24hr)) ? Number(row.delta24hr) : null,
+      tsid:row.tsid || CWMS_TSID,
     };
-  } catch (error) {
-    return { ok: false, source: 'National Weather Service', url: 'https://forecast.weather.gov/MapClick.php?lat=47.66556&lon=-122.39722', error: error.message };
   }
+  return null;
 }
 
-async function getLakeLevel() {
+async function lakeLevel() {
+  const errors = [];
   try {
-    const r = await fetchWithTimeout(USACE_LEVEL_URL, { headers: HEADERS });
-    const html = await r.text();
-    const text = tableText(html);
-    const near = text.match(/LWSC[\s\S]{0,9000}?(?:Observed Elevation|Elevation)[^\d]{0,80}(2[01]\.\d{1,2})/i)
-      || text.match(/(2[01]\.\d{1,2})\s*(?:ft|feet)/i);
-    if (!near) throw new Error('Current elevation value not exposed in page HTML');
-    const valueFt = Number(near[1]);
-    if (!Number.isFinite(valueFt) || valueFt < 18 || valueFt > 24) throw new Error('Parsed elevation outside expected range');
-    return { ok: true, valueFt, targetRangeFt: [20, 22], source: 'USACE Seattle Water Management', url: USACE_LEVEL_URL, provisional: true };
-  } catch (error) {
-    return { ok: false, targetRangeFt: [20, 22], source: 'USACE Seattle Water Management', url: USACE_LEVEL_URL, error: error.message };
+    const data = await get(A2W_LEVEL, 'json', 8000, { accept:'application/json' });
+    const latest = parseA2wLatest(data);
+    if (!latest) throw new Error('Access to Water response contained no usable elevation value');
+    if (latest.valueFt < 18 || latest.valueFt > 24) throw new Error(`USACE elevation outside expected range: ${latest.valueFt}`);
+    const ageHours = Math.max(0, Math.round(((Date.now() - Date.parse(latest.observedAt)) / 3600000) * 10) / 10);
+    if (ageHours > 72) throw new Error(`USACE elevation is stale by ${ageHours} hours`);
+    return {
+      ok:true,
+      valueFt:latest.valueFt,
+      observedAt:latest.observedAt,
+      ageHours,
+      delta24hr:latest.delta24hr,
+      targetRangeFt:[20,22],
+      provisional:true,
+      source:'USACE Access to Water',
+      tsid:latest.tsid,
+      url:LEVEL_PAGE,
+      dataUrl:A2W_LEVEL,
+    };
+  } catch (e) {
+    errors.push(`Access to Water: ${e.message}`);
+  }
+
+  try {
+    const page = text(await get(LEVEL_FALLBACK, 'text'));
+    const match = page.match(/(?:LWSC|Lake Washington Ship Canal)[\s\S]{0,8000}?(2[01]\.\d{1,2})\s*(?:ft|feet)?/i) || page.match(/(2[01]\.\d{1,2})\s*(?:ft|feet)/i);
+    if (!match) throw new Error('Current elevation not safely machine-readable');
+    const valueFt = +match[1];
+    if (valueFt < 18 || valueFt > 24) throw new Error('Elevation outside expected range');
+    return { ok:true, valueFt, targetRangeFt:[20,22], provisional:true, source:'USACE Seattle Water Management', url:LEVEL_PAGE, note:'Access to Water API unavailable; using official Seattle Water Management page fallback.' };
+  } catch(e) {
+    errors.push(`legacy page: ${e.message}`);
+    return { ok:false, targetRangeFt:[20,22], source:'USACE Seattle Water Management', error:errors.join('; '), url:LEVEL_PAGE };
   }
 }
 
-const maintenance = [
-  { chamber: 'Large lock', start: '2026-11-02T00:00:00-08:00', end: '2026-11-21T00:00:00-08:00', label: '2026 annual maintenance' },
-  { chamber: 'Small lock', start: '2026-12-07T00:00:00-08:00', end: '2027-01-19T00:00:00-08:00', label: '2026-27 maintenance' },
-  { chamber: 'Small lock', start: '2027-03-01T00:00:00-08:00', end: '2027-03-31T00:00:00-07:00', label: '2027 annual maintenance' },
-  { chamber: 'Large lock', start: '2027-11-01T00:00:00-07:00', end: '2027-11-13T00:00:00-08:00', label: '2027 annual maintenance' },
-];
+const plannedClosures = [
+  ['Large lock','2026-11-02T00:00:00-08:00','2026-11-21T00:00:00-08:00','2026 annual maintenance'],
+  ['Small lock','2026-12-07T00:00:00-08:00','2027-01-19T00:00:00-08:00','2026–27 maintenance'],
+  ['Small lock','2027-03-01T00:00:00-08:00','2027-03-31T00:00:00-07:00','2027 annual maintenance'],
+  ['Large lock','2027-11-01T00:00:00-07:00','2027-11-13T00:00:00-08:00','2027 annual maintenance'],
+].map(x => ({chamber:x[0],start:x[1],end:x[2],label:x[3]}));
 
-function lockStatus(now) {
-  const active = maintenance.filter((m) => now >= new Date(m.start) && now < new Date(m.end));
-  return {
-    largeOpen: !active.some((m) => m.chamber === 'Large lock'),
-    smallOpen: !active.some((m) => m.chamber === 'Small lock'),
-    activeClosures: active,
-    source: 'USACE published maintenance schedule',
-    url: USACE_CLOSURES_URL,
-    note: 'Unplanned outages can occur; confirm with USACE before relying on chamber availability for navigation.'
-  };
+function locks(now) {
+  const active = plannedClosures.filter(x => now >= new Date(x.start) && now < new Date(x.end));
+  return { largeOpen:!active.some(x=>x.chamber==='Large lock'), smallOpen:!active.some(x=>x.chamber==='Small lock'), activeClosures:active, source:'USACE published projected closures', url:CLOSURES, caveat:'Unplanned outages can occur; this reflects published maintenance windows, not a guarantee of chamber availability.' };
 }
 
-function accessStatus(nowParts) {
-  const mins = nowParts.hour * 60 + nowParts.minute;
-  const groundsOpen = mins >= 7 * 60 && mins < 21 * 60;
-  const fishLadderOpen = mins >= 7 * 60 && mins < 20 * 60 + 45;
-  return {
-    groundsOpen,
-    fishLadderOpen,
-    groundsHours: '7:00 AM–9:00 PM',
-    fishLadderHours: '7:00 AM–8:45 PM',
-    vesselTraffic: '24/7',
-    timezone: 'Pacific Time',
-    source: 'U.S. Army Corps of Engineers',
-    url: 'https://www.nws.usace.army.mil/Missions/Civil-Works/Locks-and-Dams/Chittenden-Locks/'
-  };
+function access(p) {
+  const mins = p.hour * 60 + p.minute;
+  return { groundsOpen:mins >= 420 && mins < 1260, fishLadderOpen:mins >= 420 && mins < 1245, groundsHours:'7:00 AM–9:00 PM', fishLadderHours:'7:00 AM–8:45 PM', vesselTraffic:'24/7', source:'U.S. Army Corps of Engineers', url:USACE };
 }
 
-function salmonSignal(fish) {
-  if (!fish?.ok) return { label: 'Unknown', points: 8, detail: 'Fish-count feed unavailable', best: null };
-  if (fish.cadence === 'weekly' && fish.weekly) {
-    const w = fish.weekly;
-    const best = Math.max(w.chinookWeekly || 0, w.cohoWeekly || 0, w.sockeyeWeekly || 0);
-    const label = best >= 2000 ? 'HIGH' : best >= 500 ? 'MODERATE' : best > 0 ? 'LOW' : 'QUIET';
-    return { label, points: best >= 2000 ? 30 : best >= 500 ? 23 : best > 0 ? 15 : 6, detail: `Latest weekly count peaks at ${best.toLocaleString()} fish`, best };
-  }
-  const available = fish.species || [];
-  if (!available.length) return { label: 'Unknown', points: 8, detail: 'No current species rows', best: null };
-  const ranked = available.map((s) => ({ ...s, effective: (s.ageDays ?? 99) > 7 ? 0 : s.latest.daily }));
-  ranked.sort((a, b) => b.effective - a.effective);
-  const best = ranked[0];
-  const n = best.effective;
-  const freshnessFactor = (best.ageDays ?? 99) <= 3 ? 1 : (best.ageDays ?? 99) <= 7 ? 0.75 : 0.35;
-  const raw = n >= 500 ? 35 : n >= 200 ? 30 : n >= 75 ? 24 : n >= 20 ? 18 : n > 0 ? 12 : 6;
-  const label = n >= 200 ? 'HIGH' : n >= 50 ? 'MODERATE' : n > 0 ? 'LOW' : 'QUIET';
-  return { label, points: Math.round(raw * freshnessFactor), detail: `${best.species}: ${best.latest.daily.toLocaleString()} on ${best.latest.date}`, best };
+function windMph(s) { const m = String(s || '').match(/\d+/); return m ? +m[0] : null; }
+
+function salmonSignal(f) {
+  if (!f?.ok || !f.species?.length) return { label:'Unknown', points:8, detail:'Current fish-count feed unavailable' };
+  const ranked = f.species.map(s => ({...s, usable:(s.ageDays ?? 99) <= 7 ? s.latest.daily : 0})).sort((a,b)=>b.usable-a.usable);
+  const best = ranked[0], x = best.usable;
+  const fresh = (best.ageDays ?? 99) <= 3 ? 1 : (best.ageDays ?? 99) <= 7 ? .72 : .35;
+  const raw = x >= 500 ? 35 : x >= 200 ? 31 : x >= 75 ? 25 : x >= 20 ? 18 : x > 0 ? 12 : 6;
+  return { label:x >= 200 ? 'HIGH' : x >= 50 ? 'MODERATE' : x > 0 ? 'LOW' : 'QUIET', points:Math.round(raw*fresh), detail:`${best.species}: ${best.latest.daily.toLocaleString()} on ${best.latest.date}` };
 }
 
-function windMph(value) {
-  const m = String(value || '').match(/(\d+)/);
-  return m ? Number(m[1]) : null;
-}
-
-function computeScore({ fish, tides, weather, access, locks }) {
-  const reasons = [];
-  const salmon = salmonSignal(fish);
-  let score = salmon.points;
-  reasons.push(`${salmon.label.toLowerCase()} salmon signal`);
-
-  if (weather.ok) {
-    const pop = weather.precipitationProbability ?? 0;
-    const wind = windMph(weather.windSpeed);
-    let w = pop <= 20 ? 10 : pop <= 40 ? 7 : pop <= 70 ? 3 : 0;
-    w += wind == null ? 3 : wind <= 10 ? 6 : wind <= 18 ? 4 : wind <= 25 ? 2 : 0;
-    w += weather.temperatureF >= 48 && weather.temperatureF <= 82 ? 4 : 2;
-    score += w;
+function score({f,t,w,a,l,now}) {
+  const salmon = salmonSignal(f);
+  let total = salmon.points;
+  const reasons = [`${salmon.label.toLowerCase()} salmon signal`];
+  if (w.ok) {
+    const pop = w.precipitationProbability ?? 0, wind = windMph(w.windSpeed);
+    total += pop <= 20 ? 10 : pop <= 40 ? 7 : pop <= 70 ? 3 : 0;
+    total += wind == null ? 3 : wind <= 10 ? 6 : wind <= 18 ? 4 : wind <= 25 ? 2 : 0;
+    total += w.temperatureF >= 48 && w.temperatureF <= 82 ? 4 : 2;
     reasons.push(pop <= 20 ? 'dry weather favored' : `${pop}% precipitation chance`);
-  } else {
-    score += 8;
-    reasons.push('weather feed unavailable');
-  }
-
-  score += access.groundsOpen ? 10 : 1;
-  if (access.fishLadderOpen) score += 5;
-  reasons.push(access.groundsOpen ? 'grounds open now' : 'grounds currently closed');
-
-  if (locks.largeOpen && locks.smallOpen) score += 15;
-  else if (locks.largeOpen || locks.smallOpen) score += 8;
-  reasons.push(locks.largeOpen && locks.smallOpen ? 'both chambers scheduled open' : 'maintenance affects a chamber');
-
-  if (tides.ok && tides.predictions?.length) {
-    const next = tides.predictions[0];
-    const hours = (new Date(next.at).getTime() - Date.now()) / 3600000;
-    const tidePts = hours >= 0 && hours <= 2 ? 15 : hours <= 4 ? 11 : 7;
-    score += tidePts;
-    reasons.push(`${next.type.toLowerCase()} tide ${hours <= 2 ? 'turning soon' : 'ahead'}`);
-  } else {
-    score += 5;
-  }
-
-  score = Math.max(0, Math.min(100, score));
-  const feeds = [fish?.ok, tides?.ok, weather?.ok].filter(Boolean).length;
-  const confidence = feeds === 3 ? 'High' : feeds === 2 ? 'Moderate' : 'Low';
-  const label = score >= 85 ? 'Excellent time to visit' : score >= 75 ? 'Great time to visit' : score >= 60 ? 'Good time to visit' : score >= 45 ? 'Fair window' : 'Low-value window';
-  return { score, label, confidence, reasons: reasons.slice(0, 4), salmon };
+  } else total += 8;
+  total += a.groundsOpen ? 10 : 1;
+  if (a.fishLadderOpen) total += 5;
+  reasons.push(a.groundsOpen ? 'visitor grounds open' : 'visitor grounds closed');
+  total += l.largeOpen && l.smallOpen ? 15 : (l.largeOpen || l.smallOpen ? 8 : 0);
+  reasons.push(l.largeOpen && l.smallOpen ? 'both chambers scheduled open' : 'maintenance affects a chamber');
+  if (t.ok && t.predictions?.length) {
+    const hours = (new Date(t.predictions[0].at) - now) / 3600000;
+    total += hours >= 0 && hours <= 2 ? 15 : hours <= 4 ? 11 : 7;
+    reasons.push(`${t.predictions[0].type.toLowerCase()} tide ${hours <= 2 ? 'turning soon' : 'ahead'}`);
+  } else total += 5;
+  total = Math.max(0, Math.min(100,total));
+  const feeds = [f.ok,t.ok,w.ok].filter(Boolean).length;
+  return { score:total, label:total>=85?'Excellent time to visit':total>=75?'Great time to visit':total>=60?'Good time to visit':total>=45?'Fair window':'Low-value window', confidence:feeds===3?'High':feeds===2?'Moderate':'Low', reasons:reasons.slice(0,4), salmon };
 }
 
-module.exports = async function handler(req, res) {
-  if (req.method !== 'GET') return json(res, 405, { error: 'Method not allowed' });
-  const now = new Date();
-  const nowParts = pacificParts(now);
-  const access = accessStatus(nowParts);
-  const locks = lockStatus(now);
-  const [fish, tides, weather, lakeLevel] = await Promise.all([
-    getFish(nowParts), getTides(now), getWeather(), getLakeLevel(),
-  ]);
-  const visit = computeScore({ fish, tides, weather, access, locks });
-  json(res, 200, {
-    generatedAt: now.toISOString(),
-    localTime: pacificDisplay(now),
-    location: { name: 'Hiram M. Chittenden Locks (Ballard Locks)', city: 'Seattle', state: 'WA', lat: LAT, lon: LON },
-    visit,
-    fish,
-    tides,
-    weather,
-    lakeLevel,
-    access,
-    locks,
-    vessels: {
-      mode: 'AIS map',
-      coverage: 'AIS-equipped vessels only',
-      note: 'AIS does not represent every recreational boat or every lockage. The live map is a traffic picture, not an official transit count or guaranteed schedule.'
-    },
-    sources: [WDFW_URL, USACE_FISH_URL, USACE_CLOSURES_URL, USACE_LEVEL_URL, `https://tidesandcurrents.noaa.gov/stationhome.html?id=${NOAA_STATION}`, 'https://api.weather.gov/']
-  });
+async function build(now = new Date()) {
+  const p = pacificParts(now), a = access(p), l = locks(now);
+  const [f,t,w,level] = await Promise.all([fish(p), tides(now), weather(), lakeLevel()]);
+  return {
+    generatedAt:now.toISOString(), localTime:local(now),
+    location:{name:'Hiram M. Chittenden Locks (Ballard Locks)',city:'Seattle',state:'WA',lat:LAT,lon:LON},
+    visit:score({f,t,w,a,l,now}), fish:f, tides:t, weather:w, lakeLevel:level, access:a, locks:l,
+    vessels:{mode:'AIS map',coverage:'AIS-equipped vessels only',note:'AIS does not represent every recreational boat or every lockage. It is a traffic picture, not an official transit count or guaranteed schedule.'},
+  };
 }
+
+async function handler(req,res) {
+  if (req.method !== 'GET') { res.statusCode=405; return res.end('Method not allowed'); }
+  try {
+    const body = await build();
+    res.statusCode=200;
+    res.setHeader('Content-Type','application/json; charset=utf-8');
+    res.setHeader('Cache-Control','public, s-maxage=300, stale-while-revalidate=900');
+    res.setHeader('X-Robots-Tag','noindex, nofollow');
+    res.end(JSON.stringify(body));
+  } catch(e) {
+    res.statusCode=500; res.setHeader('Content-Type','application/json; charset=utf-8'); res.end(JSON.stringify({error:'Ballard Locks data unavailable',detail:e.message}));
+  }
+}
+
+module.exports = handler;
+module.exports._test = { text, speciesSection, parseSpecies, parseA2wLatest, pacificParts, access, locks, salmonSignal, score, build };

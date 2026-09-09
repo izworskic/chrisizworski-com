@@ -6,13 +6,14 @@ const path = require('node:path');
 const root = path.join(__dirname, '..');
 const pkg = require('../package.json');
 const pagePath = path.join(root, 'public', 'ballard-locks', 'index.html');
+const tourPath = path.join(root, 'public', 'ballard-locks', 'tour', 'index.html');
 const apiPath = path.join(root, 'api', 'ballard-locks.js');
 const syncPath = path.join(root, 'scripts', 'sync-ballard-locks.mjs');
 
 test('Ballard Locks implementation is pinned to its authoritative repository', () => {
   assert.equal(
     pkg.dependencies['national-ballard-locks'],
-    'github:izworskic/national-ballard-locks#a02157ef0d085879f3a7b1374ba25acc9c836f9a'
+    'github:izworskic/national-ballard-locks#87c99c77cc0ed6a265ff9ae4fdffafa632ae6b50'
   );
 });
 
@@ -42,4 +43,17 @@ test('main-site build sync installs the authoritative mirror and sitemap entry',
   assert.match(sync, /public\/ballard-locks/);
   assert.match(sync, /public\/sitemap\.xml/);
   assert.match(sync, /https:\/\/chrisizworski\.com\/ballard-locks\//);
+});
+
+
+test('committed Ballard mirror includes the interactive self-guided tour', () => {
+  const page = fs.readFileSync(pagePath, 'utf8');
+  const tour = fs.readFileSync(tourPath, 'utf8');
+  assert.ok(page.includes('https://chrisizworski.com/ballard-locks/tour/'));
+  assert.ok(tour.includes('Ballard Locks Self-Guided Tour Map'));
+  assert.ok(tour.includes('20 min · Essentials'));
+  assert.ok(tour.includes('45 min · Full Locks'));
+  assert.ok(tour.includes('75 min · + Ballard'));
+  assert.ok(tour.includes('https://tiles.openfreemap.org/styles/liberty'));
+  assert.ok(tour.includes('/api/ballard-locks'));
 });
