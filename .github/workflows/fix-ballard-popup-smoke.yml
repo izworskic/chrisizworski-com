@@ -1,0 +1,51 @@
+name: Fix Ballard popup smoke placement
+
+on:
+  push:
+    branches:
+      - agent/ballard-popup-smoke-fix
+    paths:
+      - '.github/workflows/fix-ballard-popup-smoke.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/ballard-popup-smoke-fix
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Move popup contract to tour readiness
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/ballard-production-smoke.mjs')
+          s = p.read_text()
+          wrong = "        && last.text.includes('/api/ballard-locks')\n        && last.text.includes('activePopup=null')\n        && last.text.includes('if(activePopup&&activePopup!==popup)activePopup.remove()');"
+          page = "        && last.text.includes('/api/ballard-locks');"
+          if wrong not in s:
+              raise SystemExit('misplaced popup page contract not found')
+          s = s.replace(wrong, page, 1)
+          tour = "        && last.text.includes('https://tiles.openfreemap.org/styles/liberty')\n        && last.text.includes('/api/ballard-locks');"
+          tour_new = "        && last.text.includes('https://tiles.openfreemap.org/styles/liberty')\n        && last.text.includes('/api/ballard-locks')\n        && last.text.includes('activePopup=null')\n        && last.text.includes('if(activePopup&&activePopup!==popup)activePopup.remove()');"
+          if tour not in s:
+              raise SystemExit('tour readiness anchor not found')
+          p.write_text(s.replace(tour, tour_new, 1))
+          PY
+      - name: Verify
+        run: |
+          node --check scripts/ballard-production-smoke.mjs
+          npm run verify:all
+      - name: Commit smoke correction
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/ballard-production-smoke.mjs
+          git commit -m 'Check Ballard popup contract on tour page'
+          git push
