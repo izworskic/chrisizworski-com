@@ -19,6 +19,36 @@ function localParts(date = new Date()) {
   };
 }
 
+function parseLpmsStamp(value, now = new Date()) {
+  const match = /^(\d{2})(\d{2})(\d{2}):(\d{2})(\d{2})$/.exec(String(value || '').trim());
+  if (!match) return null;
+  // LPMS publishes MMDDYY:HHMM. This is corroborated by same-record notes such as
+  // "09/09/2026" alongside readingEntryDateTime "090926:0600".
+  const mo = Number(match[1]);
+  const day = Number(match[2]);
+  const yy = 2000 + Number(match[3]);
+  const hour = Number(match[4]);
+  const minute = Number(match[5]);
+  if (mo < 1 || mo > 12 || day < 1 || day > 31 || hour > 23 || minute > 59) return null;
+  const label = `${String(mo).padStart(2, '0')}/${String(day).padStart(2, '0')}/${yy} ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')} CT`;
+  const nowP = localParts(now);
+  const roughMs = Date.UTC(yy, mo - 1, day, hour, minute) - Date.UTC(nowP.year, nowP.month - 1, nowP.day, nowP.hour, nowP.minute);
+  return { raw: value, label, ageMinutes: Math.max(0, Math.round(-roughMs / 60000)) };
+}
+
+function repairLockFreshness(locks, now = new Date()) {
+  if (!locks?.ok) return locks;
+  for (const lock of [locks.melvin, locks.adjacent?.upstream, locks.adjacent?.downstream]) {
+    const raw = lock?.observedAt?.raw;
+    if (!raw) continue;
+    const corrected = parseLpmsStamp(raw, now);
+    if (corrected) lock.observedAt = corrected;
+  }
+  const age = locks.melvin?.observedAt?.ageMinutes ?? null;
+  locks.freshness = age == null ? 'RECENT' : age <= 45 ? 'LIVE' : age <= 180 ? 'DELAYED' : 'STALE';
+  return locks;
+}
+
 function museumHoliday(date = new Date()) {
   const p = localParts(date);
   const fixed = new Map([
@@ -221,6 +251,7 @@ function buildVisit(body) {
 
 async function build(now = new Date()) {
   const body = await legacy.build(now);
+  body.locks = repairLockFreshness(body.locks, now);
   body.tours = enhanceTours(body.tours, now);
   const comparison = body.locks?.ok ? trafficComparison(body.locks.melvin) : null;
   if (body.traffic) body.traffic.comparison = comparison;
@@ -251,6 +282,8 @@ async function handler(req, res) {
 module.exports = handler;
 module.exports._test = {
   localParts,
+  parseLpmsStamp,
+  repairLockFreshness,
   museumHoliday,
   enhanceTours,
   trafficComparison,

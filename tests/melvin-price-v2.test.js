@@ -21,6 +21,25 @@ function baseBody(overrides = {}) {
   };
 }
 
+test('LPMS readingEntryDateTime is MMDDYY, not YYMMDD', () => {
+  const parsed = v2.parseLpmsStamp('090926:0400', new Date('2026-09-09T15:21:00Z'));
+  assert.equal(parsed.label, '09/09/2026 04:00 CT');
+  assert.equal(parsed.ageMinutes, 381);
+});
+
+test('LPMS timestamp repair restores correct freshness from raw records', () => {
+  const locks = {
+    ok: true,
+    freshness: 'STALE',
+    melvin: { observedAt: { raw: '090926:1000', label: '09/26/2009 10:00 CT', ageMinutes: 999999 } },
+    adjacent: {},
+  };
+  v2.repairLockFreshness(locks, new Date('2026-09-09T15:21:00Z'));
+  assert.equal(locks.melvin.observedAt.label, '09/09/2026 10:00 CT');
+  assert.equal(locks.melvin.observedAt.ageMinutes, 21);
+  assert.equal(locks.freshness, 'LIVE');
+});
+
 test('stale LPMS is a hard veto on the go-now score', () => {
   const body = baseBody();
   body.locks.freshness = 'STALE';
