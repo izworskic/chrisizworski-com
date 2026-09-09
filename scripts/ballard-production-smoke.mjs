@@ -1,4 +1,5 @@
 const PAGE = 'https://chrisizworski.com/ballard-locks/';
+const TOUR = 'https://chrisizworski.com/ballard-locks/tour/';
 const API = 'https://chrisizworski.com/api/ballard-locks';
 const LEVEL_TSID = 'LWSC.Elev-Lake.Ave.1Hour.1Hour.IRIDIUM-REV';
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -68,6 +69,28 @@ async function waitForPage() {
   throw new Error(`Ballard production page did not become ready${last ? ` (last HTTP ${last.response.status})` : ''}`);
 }
 
+async function waitForTour() {
+  let last;
+  for (let attempt = 1; attempt <= 18; attempt++) {
+    try {
+      last = await fetchText(TOUR + '?smoke=' + Date.now(), 15000);
+      const ready = last.response.ok
+        && last.text.includes('Ballard Locks Self-Guided Tour Map')
+        && last.text.includes('20 min · Essentials')
+        && last.text.includes('45 min · Full Locks')
+        && last.text.includes('75 min · + Ballard')
+        && last.text.includes('https://tiles.openfreemap.org/styles/liberty')
+        && last.text.includes('/api/ballard-locks');
+      if (ready) return last;
+      console.log('Ballard tour not ready (attempt ' + attempt + '/18, HTTP ' + last.response.status + '); retrying.');
+    } catch (error) {
+      console.log('Ballard tour attempt ' + attempt + '/18 failed: ' + error.message);
+    }
+    await sleep(5000);
+  }
+  throw new Error('Ballard tour did not become ready' + (last ? ' (last HTTP ' + last.response.status + ')' : ''));
+}
+
 async function waitForApiContract() {
   let last;
   for (let attempt = 1; attempt <= 24; attempt++) {
@@ -89,6 +112,7 @@ async function waitForApiContract() {
 }
 
 const page = await waitForPage();
+const tour = await waitForTour();
 for (const required of [
   'AIS map does not represent every pleasure boat',
   'not an official lockage count',
@@ -100,6 +124,8 @@ for (const required of [
   'Live video from Salmon Bay Marine Center Camera #3',
   'ca-pub-8222782620788075',
   'G-Y5D2V2W7HN',
+  'https://chrisizworski.com/ballard-locks/tour/',
+  'Explore the Locks stop by stop',
 ]) {
   if (!page.text.includes(required)) throw new Error(`Ballard production page missing required contract: ${required}`);
 }
@@ -165,6 +191,8 @@ if (feeds.weather && !Number.isFinite(data.weather.temperatureF)) throw new Erro
 console.log(JSON.stringify({
   status: 'ok',
   pageStatus: page.response.status,
+  tourStatus: tour.response.status,
+  tourMs: tour.elapsedMs,
   pageMs: page.elapsedMs,
   apiStatus: api.response.status,
   apiMs: api.elapsedMs,
