@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - 'agent/melvin-price-*'
     paths:
       - 'public/melvin-price/**'
       - 'api/melvin-price.js'
