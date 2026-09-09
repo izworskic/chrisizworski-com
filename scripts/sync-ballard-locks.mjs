@@ -4,19 +4,23 @@ import path from 'node:path';
 const sourceRoot = path.resolve('node_modules/national-ballard-locks');
 const sourcePage = path.join(sourceRoot, 'public', 'ballard-locks');
 const sourceApi = path.join(sourceRoot, 'api', 'ballard-locks.js');
+const sourceAisApi = path.join(sourceRoot, 'api', 'ballard-ais.js');
 const destPage = path.resolve('public/ballard-locks');
 const destApi = path.resolve('api/ballard-locks.js');
+const destAisApi = path.resolve('api/ballard-ais.js');
 const sitemapPath = path.resolve('public/sitemap.xml');
 const canonical = 'https://chrisizworski.com/ballard-locks/';
 const tourCanonical = 'https://chrisizworski.com/ballard-locks/tour/';
 
 if (!fs.existsSync(sourcePage)) throw new Error(`Ballard sync: missing ${sourcePage}`);
 if (!fs.existsSync(sourceApi)) throw new Error(`Ballard sync: missing ${sourceApi}`);
+if (!fs.existsSync(sourceAisApi)) throw new Error(`Ballard sync: missing ${sourceAisApi}`);
 
 fs.rmSync(destPage, { recursive: true, force: true });
 fs.mkdirSync(path.dirname(destPage), { recursive: true });
 fs.cpSync(sourcePage, destPage, { recursive: true });
 fs.copyFileSync(sourceApi, destApi);
+fs.copyFileSync(sourceAisApi, destAisApi);
 
 const page = fs.readFileSync(path.join(destPage, 'index.html'), 'utf8');
 if (!page.includes(canonical)) throw new Error('Ballard sync: canonical production URL missing');
@@ -26,6 +30,7 @@ if (!fs.existsSync(tourFile)) throw new Error('Ballard sync: interactive tour mi
 const tourPage = fs.readFileSync(tourFile, 'utf8');
 if (!tourPage.includes(tourCanonical)) throw new Error('Ballard sync: tour canonical missing');
 if (!tourPage.includes('/api/ballard-locks')) throw new Error('Ballard sync: tour live API hook missing');
+if (!tourPage.includes('/api/ballard-ais')) throw new Error('Ballard sync: tour AIS API hook missing');
 
 let sitemap = fs.readFileSync(sitemapPath, 'utf8');
 if (!sitemap.includes(`<loc>${canonical}</loc>`)) {

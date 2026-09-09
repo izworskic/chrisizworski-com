@@ -1,6 +1,7 @@
 const PAGE = 'https://chrisizworski.com/ballard-locks/';
 const TOUR = 'https://chrisizworski.com/ballard-locks/tour/';
 const API = 'https://chrisizworski.com/api/ballard-locks';
+const AIS_API = 'https://chrisizworski.com/api/ballard-ais';
 const LEVEL_TSID = 'LWSC.Elev-Lake.Ave.1Hour.1Hour.IRIDIUM-REV';
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -80,27 +81,19 @@ async function waitForTour() {
         && last.text.includes('45 min · Full Locks')
         && last.text.includes('75 min · + Ballard')
         && last.text.includes('/api/ballard-locks')
+        && last.text.includes('/api/ballard-ais')
         && last.text.includes('activePopup=null')
         && last.text.includes('if(activePopup&&activePopup!==popup)activePopup.remove()')
-        && last.text.includes('id="tour-ais-underlay"')
         && last.text.includes('id="tour-map" class="map map-overlay"')
-        && last.text.indexOf('id="tour-ais-underlay"') < last.text.indexOf('id="tour-map"')
+        && last.text.includes('https://tiles.openfreemap.org/styles/liberty')
+        && last.text.includes("map.addSource('ais-vessels'")
+        && last.text.includes("id:'ais-vessels'")
+        && last.text.includes('setInterval(loadAis,15000)')
+        && last.text.includes('interactive:true')
         && last.text.includes('id="map-live-dock"')
         && last.text.includes('data-live-panel="fish"')
         && !last.text.includes('data-live-panel="ais"')
         && last.text.includes('data-live-panel="camera"')
-        && !last.text.includes('id="map-live-panel-ais"')
-        && last.text.includes('https://embed.myshiptracking.com/embed?myst')
-        && last.text.includes('LIVE AIS · positions update automatically')
-        && last.text.includes('style:{version:8,sources:{},layers:[]}')
-        && last.text.includes('const routeViews=')
-        && last.text.includes('function setAisView(key)')
-        && last.text.includes('function syncAisToMap()')
-        && last.text.includes("map.on('moveend',syncAisToMap)")
-        && last.text.includes('interactive:true')
-        && last.text.includes('class="ais-clip"')
-        && last.text.includes('left:-42px')
-        && last.text.includes('width:calc(100% + 84px)')
         && last.text.includes("closeOnClick:false")
         && last.text.includes("map.panBy([shiftX,shiftY")
         && last.text.includes('map.jumpTo({center:v.center,zoom:v.zoom})')
@@ -108,6 +101,9 @@ async function waitForTour() {
         && last.text.includes('Sockeye')
         && last.text.includes('Chinook')
         && last.text.includes('Coho')
+        && !last.text.includes('id="tour-ais-underlay"')
+        && !last.text.includes('embed.myshiptracking.com')
+        && !last.text.includes('syncAisToMap')
         && !last.text.includes('What this map adds');
       if (ready) return last;
       console.log('Ballard tour not ready (attempt ' + attempt + '/18, HTTP ' + last.response.status + '); retrying.');
@@ -117,6 +113,36 @@ async function waitForTour() {
     await sleep(5000);
   }
   throw new Error('Ballard tour did not become ready' + (last ? ' (last HTTP ' + last.response.status + ')' : ''));
+}
+
+async function waitForAisContract() {
+  let last;
+  for (let attempt = 1; attempt <= 24; attempt++) {
+    try {
+      const aisApi = await fetchText(`${AIS_API}?smoke=${Date.now()}`, 20000);
+      const aisData = parseJson(aisApi.text);
+      last = { aisApi, aisData };
+      const features = aisData?.featureCollection?.features;
+      const generated = Date.parse(aisData?.generatedAt || '');
+      const fresh = Number.isFinite(generated) && Math.abs(Date.now() - generated) <= 10 * 60 * 1000;
+      const countMatches = Array.isArray(features) && Number.isFinite(aisData?.count) && aisData.count === features.length;
+      if (aisApi.response.ok && aisData?.ok && aisData?.source === 'Open Waters AIS' && aisData?.featureCollection?.type === 'FeatureCollection' && countMatches && fresh) {
+        const robots = String(aisApi.response.headers.get('x-robots-tag') || '').toLowerCase();
+        if (!robots.includes('noindex')) throw new Error(`Ballard AIS API missing noindex header: ${robots || '(none)'}`);
+        if (features.length) {
+          const f = features[0];
+          const c = f?.geometry?.coordinates;
+          if (f?.geometry?.type !== 'Point' || !Array.isArray(c) || !Number.isFinite(Number(c[0])) || !Number.isFinite(Number(c[1]))) throw new Error('Ballard AIS API returned invalid vessel geometry');
+        }
+        return last;
+      }
+      console.log(`Ballard AIS contract not ready (attempt ${attempt}/24, HTTP ${aisApi.response.status}, count=${aisData?.count ?? 'n/a'}); retrying.`);
+    } catch (error) {
+      console.log(`Ballard AIS readiness attempt ${attempt}/24 failed: ${error.message}`);
+    }
+    await sleep(5000);
+  }
+  throw new Error(`Ballard production AIS API did not become ready${last ? `; last payload: ${last.aisApi.text.slice(0,500)}` : ''}`);
 }
 
 async function waitForApiContract() {
@@ -141,6 +167,7 @@ async function waitForApiContract() {
 
 const page = await waitForPage();
 const tour = await waitForTour();
+const { aisApi, aisData } = await waitForAisContract();
 for (const required of [
   'AIS map does not represent every pleasure boat',
   'not an official lockage count',
@@ -224,6 +251,9 @@ console.log(JSON.stringify({
   pageMs: page.elapsedMs,
   apiStatus: api.response.status,
   apiMs: api.elapsedMs,
+  aisStatus: aisApi.response.status,
+  aisMs: aisApi.elapsedMs,
+  aisCount: aisData.count,
   generatedAt: data.generatedAt,
   score: data.visit.score,
   label: data.visit.label,
