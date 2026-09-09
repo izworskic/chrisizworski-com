@@ -10,7 +10,7 @@ async function fetchText(url, timeoutMs = 30000) {
     headers: {
       accept: 'text/html,application/json',
       'cache-control': 'no-cache',
-      'user-agent': 'ChrisIzworskiMelvinPriceProductionSmoke/1.3',
+      'user-agent': 'ChrisIzworskiMelvinPriceProductionSmoke/1.4',
     },
     signal: AbortSignal.timeout(timeoutMs),
   });
@@ -59,6 +59,13 @@ if (!m || String(m.lockNumber) !== '26') throw new Error(`Mel Price lock 26 miss
 if (!Number.isFinite(Number(m.pendingArrivals)) || !Number.isFinite(Number(m.lockedUp24h)) || !Number.isFinite(Number(m.lockedDown24h))) {
   throw new Error(`Mel Price operational counts invalid: ${JSON.stringify(m)}`);
 }
+const rawStamp = String(m.observedAt?.raw || '');
+if (/^\d{6}:\d{4}$/.test(rawStamp)) {
+  const expectedDatePrefix = `${rawStamp.slice(0, 2)}/${rawStamp.slice(2, 4)}/20${rawStamp.slice(4, 6)} `;
+  if (!String(m.observedAt?.label || '').startsWith(expectedDatePrefix)) {
+    throw new Error(`LPMS timestamp format regression: raw ${rawStamp} must map as MMDDYY to ${expectedDatePrefix.trim()}, got ${m.observedAt?.label}`);
+  }
+}
 if (!data.traffic?.comparison || !Number.isFinite(Number(data.traffic.comparison.averageDaily2024))) {
   throw new Error(`Traffic comparison missing: ${JSON.stringify(data.traffic?.comparison)}`);
 }
@@ -87,5 +94,5 @@ if (data.notices.count > 0) {
   }
 }
 
-const core = { lpms: true, stage: true, flow: true, weather: true, notices: true, decisionV2: true };
+const core = { lpms: true, lpmsDateFormat: true, stage: true, flow: true, weather: true, notices: true, decisionV2: true };
 console.log(JSON.stringify({status:'ok', apiMs:api.elapsedMs, core}, null, 2));
