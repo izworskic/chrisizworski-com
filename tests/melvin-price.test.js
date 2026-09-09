@@ -43,14 +43,46 @@ test('LPMS Mel Price record normalizes operational fields', () => {
   assert.equal(out.lowerElevationFt, 398.2);
 });
 
+test('LPMS parser repairs literal control characters inside USACE note strings', () => {
+  const malformed = '{"items":[{"lockNumber":"25","notes":"26FEB2024\r FLOW: 23600\r OUT DRAFT SIGNS"},{"lockNumber":"26","lockName":"Mel Price L/D","totalPendingArrivals":1}]}';
+  const parsed = api.parseLooseJson(malformed);
+  assert.equal(parsed.items[0].notes, '26FEB2024\r FLOW: 23600\r OUT DRAFT SIGNS');
+  assert.equal(parsed.items[1].lockNumber, '26');
+});
+
+test('LPMS sanitizer preserves legal structural whitespace outside strings', () => {
+  const raw = '{\n  "ok": true,\n  "notes": "a\tb"\n}';
+  const sanitized = api.sanitizeJsonControlChars(raw);
+  assert.match(sanitized, /^\{\n/);
+  const parsed = JSON.parse(sanitized);
+  assert.equal(parsed.notes, 'a\tb');
+});
+
 test('CWMS values parse common version-2 shape', () => {
   const values = api.parseCwmsValues({ values: [[1788861600000, 398.1, 0], [1788863400000, 398.2, 0]] });
   assert.equal(values.length, 2);
   assert.equal(values[1].value, 398.2);
 });
 
+test('Mel Price flow uses the current Corps-rated CWMS series', () => {
+  assert.equal(api.FLOW_TSID, 'Mel Price TW-Mississippi.Flow.Inst.30Minutes.0.RatingCOE');
+});
+
+test('NTNI normalization exposes current notice number and official link', () => {
+  const out = api.normalizeNotice({
+    noticeno: '212499-7',
+    issuedate: '2026-07-31T19:10:30Z',
+    begindate: '2025-11-14T21:00:00Z',
+    waterways: 'POOL_25_UPPER_MISSISSIPPI, POOL_26_UPPER_MISSISSIPPI',
+    noticelink: 'https://ndc.ops.usace.army.mil/ords/ntni/print_nav_notice?in_nav_notice_number=214814',
+  });
+  assert.equal(out.title, 'Notice 212499-7');
+  assert.equal(out.number, '212499-7');
+  assert.match(out.url, /214814/);
+  assert.match(out.waterways, /POOL_26/);
+});
+
 test('tour schedule returns the next normal walk-in tour', () => {
-  // 2026-09-09 16:30Z is 11:30 AM CDT.
   const tours = api.museumAndTours(new Date('2026-09-09T16:30:00Z'));
   assert.equal(tours.museumOpen, true);
   assert.equal(tours.nextTour, '1:00 PM');
