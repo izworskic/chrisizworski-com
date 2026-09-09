@@ -13,7 +13,7 @@ const syncPath = path.join(root, 'scripts', 'sync-ballard-locks.mjs');
 test('Ballard Locks implementation is pinned to its authoritative repository', () => {
   assert.equal(
     pkg.dependencies['national-ballard-locks'],
-    'github:izworskic/national-ballard-locks#39ba975a099c28bedf965019510312c4c086174f'
+    'github:izworskic/national-ballard-locks#be4bfe2cd3a1a35339049e7c4faa74b62c4a8e80'
   );
 });
 
@@ -67,6 +67,14 @@ test('committed Ballard mirror includes the interactive self-guided tour', () =>
   assert.ok(tour.indexOf('id="tour-ais-underlay"') < tour.indexOf('id="tour-map"'));
   assert.ok(tour.includes('const routeViews='));
   assert.ok(tour.includes('function setAisView(key)'));
+  assert.ok(tour.includes('function syncAisToMap()'));
+  assert.ok(tour.includes("map.on('moveend',syncAisToMap)"));
+  assert.ok(tour.includes('interactive:true'));
+  assert.ok(tour.includes('class="ais-clip"'));
+  assert.ok(tour.includes('left:-42px'));
+  assert.ok(tour.includes('width:calc(100% + 84px)'));
+  assert.ok(tour.includes("closeOnClick:false"));
+  assert.ok(tour.includes("map.panBy([shiftX,shiftY]"));
   assert.ok(tour.includes('map.jumpTo({center:v.center,zoom:v.zoom})'));
   assert.ok(!tour.includes('id="map-live-panel-ais"'));
   assert.ok(tour.includes('https://g1.ipcamlive.com/player/player.php?alias=5ababb8154afe'));
