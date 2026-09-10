@@ -1,0 +1,39 @@
+name: Melvin Price intent production smoke
+on:
+  push:
+    paths:
+      - 'public/melvin-price/**'
+      - 'api/melvin-price.js'
+      - 'public/sitemap-melvin-price.xml'
+      - '.github/workflows/melvin-price-intent-production-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Verify Melvin Price live intent pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE='https://chrisizworski.com'
+          probe(){
+            name="$1"; url="$2"
+            for n in $(seq 1 18); do
+              code=$(curl -L -sS --max-time 30 -o /tmp/out -w '%{http_code}' "$url" || true)
+              if [ "$code" = '200' ]; then echo "$name OK"; return 0; fi
+              echo "$name returned $code on attempt $n"; sleep 10
+            done
+            return 1
+          }
+          probe api "$BASE/api/melvin-price?smoke=$GITHUB_SHA"
+          python -c "import json; d=json.load(open('/tmp/out')); assert 'generatedAt' in d and 'locks' in d and 'river' in d and 'tours' in d"
+          for slug in lock-traffic-today river-level tours; do
+            probe "$slug" "$BASE/melvin-price/$slug/?smoke=$GITHUB_SHA"
+            grep -Fq "rel=\"canonical\" href=\"$BASE/melvin-price/$slug/\"" /tmp/out
+            grep -Fq 'FAQPage' /tmp/out
+          done
+          probe sitemap "$BASE/sitemap-melvin-price.xml?smoke=$GITHUB_SHA"
+          test "$(grep -o '<url>' /tmp/out | wc -l | tr -d ' ')" = '4'
