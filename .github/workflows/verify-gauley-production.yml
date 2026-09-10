@@ -1,0 +1,75 @@
+name: Verify Gauley Production
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'api/gauley-*.js'
+      - 'scripts/*gauley*'
+      - 'vercel.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/verify-gauley-production.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for and verify public Gauley page
+        shell: bash
+        run: |
+          set -euo pipefail
+          PAGE='https://chrisizworski.com/national-tools/gauley-release-live/'
+          ok=0
+          for attempt in $(seq 1 18); do
+            code=$(curl -L -sS --max-time 20 -o /tmp/gauley-page.html -w '%{http_code}' "$PAGE" || true)
+            if [ "$code" = '200' ] \
+              && grep -q 'Gauley Release Live' /tmp/gauley-page.html \
+              && grep -q 'https://chrisizworski.com/national-tools/gauley-release-live/' /tmp/gauley-page.html \
+              && grep -q 'G-Y5D2V2W7HN' /tmp/gauley-page.html; then
+              ok=1
+              break
+            fi
+            echo "Attempt $attempt: page HTTP $code; retrying"
+            sleep 5
+          done
+          test "$ok" = '1'
+
+      - name: Verify live Gauley API
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl -sS --max-time 30 -o /tmp/gauley-live.json -w '%{http_code}' 'https://chrisizworski.com/api/gauley-live')
+          test "$code" = '200'
+          python - <<'PY'
+          import json
+          with open('/tmp/gauley-live.json') as f: d=json.load(f)
+          assert 'release' in d and 'river' in d and 'conditions' in d and 'sources' in d
+          assert d.get('generatedAt')
+          print('live API OK:', d['release'].get('status'), d['conditions'].get('confidence'))
+          PY
+
+      - name: Verify Gauley history API
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl -sS --max-time 30 -o /tmp/gauley-history.json -w '%{http_code}' 'https://chrisizworski.com/api/gauley-history')
+          test "$code" = '200'
+          python - <<'PY'
+          import json
+          with open('/tmp/gauley-history.json') as f: d=json.load(f)
+          assert 'sample' in d and 'sampleCount' in d
+          print('history API OK:', d.get('sampleCount'))
+          PY
+
+      - name: Verify sitemap discovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL --max-time 20 'https://chrisizworski.com/sitemap.xml' -o /tmp/sitemap.xml
+          grep -q '<loc>https://chrisizworski.com/national-tools/gauley-release-live/</loc>' /tmp/sitemap.xml
+          echo 'sitemap OK'
