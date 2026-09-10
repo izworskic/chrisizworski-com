@@ -1,0 +1,42 @@
+name: Blue Spring intent production smoke
+on:
+  push:
+    paths:
+      - 'public/national-tools/blue-spring-live/**'
+      - 'api/blue-spring-live.js'
+      - 'api/blue-spring-manatee.js'
+      - 'public/sitemap-blue-spring.xml'
+      - '.github/workflows/blue-spring-intent-production-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Verify Blue Spring live intent pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE='https://chrisizworski.com'
+          probe(){
+            name="$1"; url="$2"
+            for n in $(seq 1 18); do
+              code=$(curl -L -sS --max-time 30 -o /tmp/out -w '%{http_code}' "$url" || true)
+              if [ "$code" = '200' ]; then echo "$name OK"; return 0; fi
+              echo "$name returned $code on attempt $n"; sleep 10
+            done
+            return 1
+          }
+          probe live-api "$BASE/api/blue-spring-live?smoke=$GITHUB_SHA"
+          python -c "import json; d=json.load(open('/tmp/out')); assert 'retrievedAt' in d"
+          probe manatee-api "$BASE/api/blue-spring-manatee?smoke=$GITHUB_SHA"
+          python -c "import json; d=json.load(open('/tmp/out')); assert 'freshness' in d and 'retrievedAt' in d"
+          for slug in manatee-conditions-today best-time-to-visit water-temperature; do
+            probe "$slug" "$BASE/national-tools/blue-spring-live/$slug/?smoke=$GITHUB_SHA"
+            grep -Fq "rel=\"canonical\" href=\"$BASE/national-tools/blue-spring-live/$slug/\"" /tmp/out
+            grep -Fq 'FAQPage' /tmp/out
+          done
+          probe sitemap "$BASE/sitemap-blue-spring.xml?smoke=$GITHUB_SHA"
+          test "$(grep -o '<url>' /tmp/out | wc -l | tr -d ' ')" = '4'
