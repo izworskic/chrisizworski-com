@@ -5,8 +5,6 @@ const GRAND_COULEE_PATH = '/national-tools/grand-coulee';
 const GRAND_COULEE_UPSTREAM = 'https://grand-coulee-live.vercel.app';
 const PLATTE_CRANE_PATH = '/national-tools/platte-crane-live';
 const PLATTE_CRANE_UPSTREAM = 'https://platte-crane-migration-nebraska.vercel.app';
-const GAULEY_PATH = '/national-tools/gauley-release-live';
-const GAULEY_UPSTREAM = 'https://gauley-release-live-wv-izworski-gmailcoms-projects.vercel.app';
 
 export const config = {
   matcher: [
@@ -21,9 +19,6 @@ export const config = {
     '/national-tools/platte-crane-live',
     '/national-tools/platte-crane-live/',
     '/national-tools/platte-crane-live/:path*',
-    '/national-tools/gauley-release-live',
-    '/national-tools/gauley-release-live/',
-    '/national-tools/gauley-release-live/:path*',
     '/api/status',
     '/api/history',
   ],
@@ -53,11 +48,6 @@ export default function middleware(request: Request) {
     return Response.redirect(url, 308);
   }
 
-  if (url.pathname === GAULEY_PATH) {
-    url.pathname = `${GAULEY_PATH}/`;
-    return Response.redirect(url, 308);
-  }
-
   if (url.pathname === '/api/status' || url.pathname === '/api/history') {
     const upstream = new URL(`${GRAND_COULEE_PATH}${url.pathname}${url.search}`, GRAND_COULEE_UPSTREAM);
     return fetch(new Request(upstream, request));
@@ -70,12 +60,6 @@ export default function middleware(request: Request) {
 
   if (url.pathname.startsWith(`${PLATTE_CRANE_PATH}/`)) {
     const upstream = new URL(`${url.pathname}${url.search}`, PLATTE_CRANE_UPSTREAM);
-    return fetch(new Request(upstream, request));
-  }
-
-  if (url.pathname.startsWith(`${GAULEY_PATH}/`)) {
-    const upstreamPath = url.pathname.slice(GAULEY_PATH.length) || '/';
-    const upstream = new URL(`${upstreamPath}${url.search}`, GAULEY_UPSTREAM);
     return fetch(new Request(upstream, request));
   }
 }
