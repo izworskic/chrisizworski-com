@@ -24,10 +24,8 @@ jobs:
           node-version: 22
       - name: Install pinned dependencies
         run: npm ci --ignore-scripts
-      - name: Verify Gauley routing and provenance
-        run: npm run benchmark:gauley-routing
-      - name: Build Gauley deployment mirror
-        run: node scripts/sync-gauley-release-live.mjs
+      - name: Run exact Vercel build command
+        run: npm run vercel-build
       - name: Exercise first-party Gauley page renderer
         shell: bash
         run: |
