@@ -5,7 +5,6 @@ const GRAND_COULEE_PATH = '/national-tools/grand-coulee';
 const GRAND_COULEE_UPSTREAM = 'https://grand-coulee-live.vercel.app';
 const PLATTE_CRANE_PATH = '/national-tools/platte-crane-live';
 const PLATTE_CRANE_UPSTREAM = 'https://platte-crane-migration-nebraska.vercel.app';
-const GAULEY_PATH = '/national-tools/gauley-release-live';
 
 export const config = {
   matcher: [
@@ -20,8 +19,6 @@ export const config = {
     '/national-tools/platte-crane-live',
     '/national-tools/platte-crane-live/',
     '/national-tools/platte-crane-live/:path*',
-    '/national-tools/gauley-release-live',
-    '/national-tools/gauley-release-live/',
     '/api/status',
     '/api/history',
   ],
@@ -49,16 +46,6 @@ export default function middleware(request: Request) {
   if (url.pathname === PLATTE_CRANE_PATH) {
     url.pathname = `${PLATTE_CRANE_PATH}/`;
     return Response.redirect(url, 308);
-  }
-
-  if (url.pathname === GAULEY_PATH) {
-    url.pathname = `${GAULEY_PATH}/`;
-    return Response.redirect(url, 308);
-  }
-
-  if (url.pathname === `${GAULEY_PATH}/`) {
-    url.pathname = `${GAULEY_PATH}/index.html`;
-    return fetch(new Request(url, request));
   }
 
   if (url.pathname === '/api/status' || url.pathname === '/api/history') {
