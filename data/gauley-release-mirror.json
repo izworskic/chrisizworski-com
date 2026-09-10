@@ -1,0 +1,6 @@
+{
+  "sourceRepository": "izworskic/gauley-release-live-",
+  "sourceCommit": "c124a15a0d1a260fe4dd883a3adf830e3bb26c28",
+  "canonical": "https://chrisizworski.com/national-tools/gauley-release-live/",
+  "generatedBy": "scripts/sync-gauley-release-live.mjs"
+}
