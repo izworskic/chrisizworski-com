@@ -75,10 +75,30 @@ test("ad-first execution plan stays internal and measurable", () => {
   assert.ok(plan.includes("25,000 measured monthly pageviews"));
   assert.ok(!plan.includes("ca-pub-"));
   assert.ok(!connect.includes("advertising roadmap"));
-  for (const route of ["advertise", "disclosure", "privacy"]) {
+  // Sep 10 2026: "privacy" removed from this forbidden list. It was bundled with
+  // "advertise" and "disclosure" as if all three were premature monetization
+  // announcements, but a privacy policy is not one: it is a prerequisite for the
+  // AdSense ACCOUNT REVIEW (already in progress live: the real publisher ID,
+  // verification meta tag, and ads.txt authorized-seller record are already in
+  // production, ahead of this plan's own item 8), which is a separate gate from
+  // the 10,000-pageview/2.5%-CTR gate below that governs turning ads ON. The site
+  // was also already running Google Analytics site-wide with no privacy
+  // disclosure anywhere, independent of AdSense. "advertise" and "disclosure"
+  // still correctly describe pages that WOULD announce the roadmap, so they stay
+  // forbidden. See docs/adsense-launch-plan.md for the updated distinction.
+  for (const route of ["advertise", "disclosure"]) {
     assert.ok(!existsSync(path.join(__dirname, "..", "public", route, "index.html")), route);
     assert.ok(!sitemap.includes(`https://chrisizworski.com/${route}/`), route);
   }
+  // The privacy policy must exist and must not overclaim: ads.txt/verification
+  // are live for account review, but Auto ads / visible ad units are not yet
+  // released, so the policy should not assert ads are actively serving today.
+  const privacy = read("public/privacy/index.html");
+  assert.ok(existsSync(path.join(__dirname, "..", "public", "privacy", "index.html")));
+  assert.ok(sitemap.includes("https://chrisizworski.com/privacy/"));
+  assert.ok(privacy.includes("Google Analytics"));
+  assert.ok(privacy.includes("AdSense"));
+  assert.ok(!privacy.includes("ca-pub-"));
   assert.ok(tracker.includes('name: "Growth CTA"'));
   assert.ok(!tracker.includes("localStorage"));
   assert.ok(!tracker.includes("document.cookie"));
