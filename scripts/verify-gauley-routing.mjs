@@ -8,7 +8,7 @@ const history=fs.readFileSync('api/gauley-history.js','utf8');
 const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
 const mirror=JSON.parse(fs.readFileSync('data/gauley-release-mirror.json','utf8'));
 const url='https://chrisizworski.com/national-tools/gauley-release-live/';
-const sourceCommit='c3d152416a28fb42b113bb25e45f3a34c1e04ae2';
+const sourceCommit='e66ff2ab2dd6805d73071c8a3be051cc4766e934';
 
 assert.ok(!middleware.includes('GAULEY_UPSTREAM'),'Gauley must not depend on a protected upstream Vercel proxy');
 assert.ok(!middleware.includes('gauley-release-live-wv-izworski-gmailcoms-projects.vercel.app'),'Protected Gauley upstream leaked into middleware');
