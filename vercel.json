@@ -170,8 +170,8 @@
     {"source":"/tahquamenon-falls/:path*","destination":"https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/:path*"},
     {"source":"/national-tools/melvin-price-live","destination":"/melvin-price/index.html"},
     {"source":"/national-tools/melvin-price-live/","destination":"/melvin-price/index.html"},
-    {"source":"/national-tools/gauley-release-live","destination":"/national-tools/gauley-release-live/index.html"},
-    {"source":"/national-tools/gauley-release-live/","destination":"/national-tools/gauley-release-live/index.html"},
+    {"source":"/national-tools/gauley-release-live","destination":"/api/gauley-page"},
+    {"source":"/national-tools/gauley-release-live/","destination":"/api/gauley-page"},
     {"source":"/national-tools/:path*","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"}
   ]
 }
