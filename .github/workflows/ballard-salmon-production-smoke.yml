@@ -1,0 +1,36 @@
+name: Ballard salmon production smoke
+on:
+  push:
+    paths:
+      - 'scripts/sync-ballard-locks.mjs'
+      - '.github/workflows/ballard-salmon-production-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Verify Ballard salmon page and live API
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE='https://chrisizworski.com'
+          probe(){
+            name="$1"; url="$2"
+            for n in $(seq 1 18); do
+              code=$(curl -L -sS --max-time 30 -o /tmp/out -w '%{http_code}' "$url" || true)
+              if [ "$code" = '200' ]; then echo "$name OK"; return 0; fi
+              echo "$name returned $code on attempt $n"; sleep 10
+            done
+            return 1
+          }
+          probe api "$BASE/api/ballard-locks?smoke=$GITHUB_SHA"
+          python -c "import json; d=json.load(open('/tmp/out')); assert 'fish' in d and 'access' in d and 'visit' in d"
+          probe salmon "$BASE/ballard-locks/salmon-counts/?smoke=$GITHUB_SHA"
+          grep -Fq 'https://chrisizworski.com/ballard-locks/salmon-counts/' /tmp/out
+          grep -Fq '/api/ballard-locks' /tmp/out
+          grep -Fq 'latest published' /tmp/out
+          probe sitemap "$BASE/sitemap.xml?smoke=$GITHUB_SHA"
+          grep -Fq '<loc>https://chrisizworski.com/ballard-locks/salmon-counts/</loc>' /tmp/out
