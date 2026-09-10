@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const middleware=fs.readFileSync('middleware.ts','utf8');
+const sitemap=fs.readFileSync('public/sitemap.xml','utf8');
+const url='https://chrisizworski.com/national-tools/gauley-release-live/';
+assert.match(middleware,/GAULEY_PATH\s*=\s*'\/national-tools\/gauley-release-live'/);
+assert.match(middleware,/gauley-release-live-wv-izworski-gmailcoms-projects\.vercel\.app/);
+assert.match(middleware,/url\.pathname\.slice\(GAULEY_PATH\.length\)/,'Gauley proxy must strip the public mount prefix');
+assert.match(sitemap,new RegExp(`<loc>${url.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}<\\/loc>`));
+const count=(sitemap.match(new RegExp(url.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g'))||[]).length;
+assert.equal(count,1,'Gauley sitemap URL must be unique');
+console.log('Gauley site routing: PASS');
