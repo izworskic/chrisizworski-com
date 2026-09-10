@@ -21,7 +21,7 @@ function buildPage() {
   const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
 
   const geometry = stripExports(read('lib/geometry.js'));
-  const css = read('styles.css');
+  const css = `${read('styles.css')}\n${read('persona.css')}`;
   const app = stripImports(read('app.js'))
     .replaceAll("getJSON('/api/live')", "getJSON('/api/gauley-live')")
     .replaceAll("getJSON('./api/live')", "getJSON('/api/gauley-live')")
@@ -43,6 +43,8 @@ function buildPage() {
 
   if (!html.includes(canonical)) throw new Error('Gauley page canonical injection failed');
   if (!html.includes(gaId)) throw new Error('Gauley page analytics injection failed');
+  if (!html.includes('persona-tabs')) throw new Error('Gauley persona UI missing from first-party page');
+  if (!html.includes('decision-card')) throw new Error('Gauley decision surface missing from first-party page');
   if (!html.includes("getJSON('/api/gauley-live')")) throw new Error('Gauley live API remap failed');
   if (!html.includes("getJSON('/api/gauley-history')")) throw new Error('Gauley history API remap failed');
   return html;
