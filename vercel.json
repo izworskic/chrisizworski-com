@@ -10,6 +10,8 @@
     "api/fall-color.js": {"maxDuration": 60},
     "api/aurora.js": {"maxDuration": 20},
     "api/field-camera.js": {"maxDuration": 20},
+    "api/gauley-live.js": {"maxDuration": 25},
+    "api/gauley-history.js": {"maxDuration": 25},
     "api/**/*.js": {"maxDuration": 10}
   },
   "redirects": [
@@ -168,6 +170,8 @@
     {"source":"/tahquamenon-falls/:path*","destination":"https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/:path*"},
     {"source":"/national-tools/melvin-price-live","destination":"/melvin-price/index.html"},
     {"source":"/national-tools/melvin-price-live/","destination":"/melvin-price/index.html"},
+    {"source":"/national-tools/gauley-release-live","destination":"/national-tools/gauley-release-live/index.html"},
+    {"source":"/national-tools/gauley-release-live/","destination":"/national-tools/gauley-release-live/index.html"},
     {"source":"/national-tools/:path*","destination":"https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"}
   ]
 }
