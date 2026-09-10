@@ -1,0 +1,46 @@
+name: State Aurora Production Smoke
+on:
+  push:
+    paths:
+      - '.github/workflows/state-aurora-production-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify public state pages and live APIs
+        shell: bash
+        run: |
+          set -euo pipefail
+          check() {
+            state_slug="$1"
+            api_host="$2"
+            region="$3"
+            state_name="$4"
+            page="https://chrisizworski.com/national-tools/aurora/${state_slug}/"
+            api="https://${api_host}/api/aurora?region=${region}"
+
+            echo "Checking $state_name page: $page"
+            curl -L --fail --silent --show-error --max-time 30 "$page" -o /tmp/page.html
+            grep -Fq "https://${api_host}/api/aurora?region=" /tmp/page.html
+
+            echo "Checking $state_name API: $api"
+            curl -L --fail --silent --show-error --max-time 30 "$api" -o /tmp/api.json
+            STATE_NAME="$state_name" node - <<'NODE'
+          const fs = require('fs');
+          const d = JSON.parse(fs.readFileSync('/tmp/api.json','utf8'));
+          if (d?.state?.name !== process.env.STATE_NAME || !d?.fetched_at || !d?.selected_region?.id) {
+            console.error(d);
+            process.exit(1);
+          }
+          console.log(JSON.stringify({state:d.state.name,region:d.selected_region.id,score:d.verdict?.score,fetched_at:d.fetched_at,degraded:d.degraded}));
+          NODE
+          }
+
+          check alaska alaska-aurora-live.vercel.app fairbanks Alaska
+          check minnesota minnesota-aurora-live.vercel.app voyageurs Minnesota
+          check north-dakota north-dakota-aurora-live.vercel.app peace-garden 'North Dakota'
+          check montana montana-aurora-live.vercel.app glacier Montana
+          check maine maine-aurora-live.vercel.app allagash Maine
