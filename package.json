@@ -48,7 +48,7 @@
     "benchmark:au-sable-search": "node scripts/benchmark-au-sable-map-access-expansion.mjs",
     "benchmark:manistee-page-one": "node scripts/benchmark-manistee-page-one-push.mjs",
     "benchmark:fall-aurora-ctr": "node scripts/benchmark-fall-aurora-ctr.mjs",
-    "benchmark:up-fall-rank": "node scripts/benchmark-upper-peninsula-fall-rank-distribution.mjs",
+    "benchmark:up-fall-rank": "node scripts/benchmark-upper-peninsula-fall-rank.mjs",
     "benchmark:fall-weekend-planner-ctr": "node scripts/benchmark-fall-weekend-planner-ctr.mjs",
     "benchmark:garden-page-one-ctr": "node scripts/benchmark-garden-page-one-ctr.mjs",
     "benchmark:entity-discovery-ctr": "node scripts/benchmark-entity-discovery-ctr.mjs",
