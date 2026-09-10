@@ -19,7 +19,7 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for and verify public Gauley page
+      - name: Wait for and verify public Gauley persona page
         shell: bash
         run: |
           set -euo pipefail
@@ -29,17 +29,23 @@ jobs:
             code=$(curl -L -sS --max-time 20 -o /tmp/gauley-page.html -w '%{http_code}' "$PAGE" || true)
             if [ "$code" = '200' ] \
               && grep -q 'Gauley Release Live' /tmp/gauley-page.html \
+              && grep -q 'Private paddle' /tmp/gauley-page.html \
+              && grep -q 'Raft guest' /tmp/gauley-page.html \
+              && grep -q 'data-persona="watch"' /tmp/gauley-page.html \
+              && grep -q 'data-persona="photo"' /tmp/gauley-page.html \
+              && grep -q 'Since your last check' /tmp/gauley-page.html \
+              && grep -q 'ENVIRONMENTAL CONTEXT INDEX' /tmp/gauley-page.html \
               && grep -q 'https://chrisizworski.com/national-tools/gauley-release-live/' /tmp/gauley-page.html \
               && grep -q 'G-Y5D2V2W7HN' /tmp/gauley-page.html; then
               ok=1
               break
             fi
-            echo "Attempt $attempt: page HTTP $code; retrying"
+            echo "Attempt $attempt: persona page HTTP $code; retrying"
             sleep 5
           done
           test "$ok" = '1'
 
-      - name: Verify live Gauley API
+      - name: Verify live Gauley persona API
         shell: bash
         run: |
           set -euo pipefail
@@ -50,7 +56,14 @@ jobs:
           with open('/tmp/gauley-live.json') as f: d=json.load(f)
           assert 'release' in d and 'river' in d and 'conditions' in d and 'sources' in d
           assert d.get('generatedAt')
-          print('live API OK:', d['release'].get('status'), d['conditions'].get('confidence'))
+          p=d.get('personas') or {}
+          for key in ('planning','paddler','raft','watch','photo'):
+              assert key in p, f'missing persona {key}'
+          assert p['watch']['facts'][0]['value']=='Summersville Dam tailwaters'
+          assert 'outfitter' in (p['raft']['headline']+' '+p['raft']['summary']+' '+p['raft']['caution']).lower()
+          assert 'release-start time is inferred' in p['planning']['timingNote']
+          assert 'safe to paddle' not in json.dumps(p).lower()
+          print('live persona API OK:', d['release'].get('status'), d['conditions'].get('confidence'), list(p))
           PY
 
       - name: Verify Gauley history API
