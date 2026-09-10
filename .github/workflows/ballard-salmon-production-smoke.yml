@@ -2,6 +2,8 @@ name: Ballard salmon production smoke
 on:
   push:
     paths:
+      - 'package.json'
+      - 'package-lock.json'
       - 'scripts/sync-ballard-locks.mjs'
       - '.github/workflows/ballard-salmon-production-smoke.yml'
   workflow_dispatch:
@@ -10,7 +12,7 @@ permissions:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 8
     steps:
       - name: Verify Ballard salmon page and live API
         shell: bash
@@ -19,7 +21,7 @@ jobs:
           BASE='https://chrisizworski.com'
           probe(){
             name="$1"; url="$2"
-            for n in $(seq 1 18); do
+            for n in $(seq 1 24); do
               code=$(curl -L -sS --max-time 30 -o /tmp/out -w '%{http_code}' "$url" || true)
               if [ "$code" = '200' ]; then echo "$name OK"; return 0; fi
               echo "$name returned $code on attempt $n"; sleep 10
