@@ -185,10 +185,18 @@ check(
   "AdSense execution plan stays internal and contains the measured gate",
   adsensePlan.includes("10,000 measured pageviews") && adsensePlan.includes("25,000 measured monthly pageviews"),
 );
-for (const route of ["advertise", "disclosure", "privacy"]) {
+// Sep 10 2026: "privacy" removed from this list for the same reason recorded in
+// tests/growth-static.test.js and docs/adsense-launch-plan.md -- it's a duplicate
+// of that same guardrail, just in this script. A privacy policy is a prerequisite
+// for Google's AdSense account review (already in progress live: real publisher
+// ID, verification tag, and ads.txt are already in production), not a premature
+// monetization announcement like "advertise" or "disclosure" would be.
+for (const route of ["advertise", "disclosure"]) {
   check(`/${route}/ strategy page is not published`, !(await exists(`public/${route}/index.html`)));
   check(`/${route}/ is absent from the sitemap`, !sitemap.includes(`https://chrisizworski.com/${route}/`));
 }
+check("/privacy/ strategy page is published", await exists("public/privacy/index.html"));
+check("/privacy/ is present in the sitemap", sitemap.includes("https://chrisizworski.com/privacy/"));
 check("No placeholder Google publisher ID exists", !adsensePlan.includes("ca-pub-"));
 check(
   "FVF authority page links the gardening cluster",
