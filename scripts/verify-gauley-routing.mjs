@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 const middleware=fs.readFileSync('middleware.ts','utf8');
+const vercel=JSON.parse(fs.readFileSync('vercel.json','utf8'));
 const sitemap=fs.readFileSync('public/sitemap.xml','utf8');
 const page=fs.readFileSync('public/national-tools/gauley-release-live/index.html','utf8');
 const live=fs.readFileSync('api/gauley-live.js','utf8');
@@ -9,11 +10,18 @@ const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
 const mirror=JSON.parse(fs.readFileSync('data/gauley-release-mirror.json','utf8'));
 const url='https://chrisizworski.com/national-tools/gauley-release-live/';
 const sourceCommit='e66ff2ab2dd6805d73071c8a3be051cc4766e934';
+const clean='/national-tools/gauley-release-live';
+const target='/national-tools/gauley-release-live/index.html';
 
-assert.ok(!middleware.includes('GAULEY_UPSTREAM'),'Gauley must not depend on a protected upstream Vercel proxy');
-assert.ok(!middleware.includes('gauley-release-live-wv-izworski-gmailcoms-projects.vercel.app'),'Protected Gauley upstream leaked into middleware');
-assert.ok(middleware.includes("const GAULEY_PATH = '/national-tools/gauley-release-live';"),'Gauley clean route missing from middleware');
-assert.ok(middleware.includes("url.pathname = `${GAULEY_PATH}/index.html`;"),'Gauley clean route must resolve to the first-party static mirror');
+assert.ok(!middleware.includes('GAULEY_'),'Gauley must bypass middleware and use native first-party routing');
+assert.ok(!middleware.includes('gauley-release-live'),'Gauley must not depend on middleware self-fetching');
+const rewrites=vercel.rewrites || [];
+const noSlash=rewrites.findIndex(r=>r.source===clean && r.destination===target);
+const slash=rewrites.findIndex(r=>r.source===`${clean}/` && r.destination===target);
+const catchAll=rewrites.findIndex(r=>r.source==='/national-tools/:path*');
+assert.ok(noSlash>=0 && slash>=0,'Gauley clean URL rewrites are missing');
+assert.ok(catchAll>=0 && noSlash<catchAll && slash<catchAll,'Gauley rewrites must precede the national-tools catch-all');
+assert.ok(!JSON.stringify(vercel).includes('gauley-release-live-wv-izworski-gmailcoms-projects.vercel.app'),'Protected Gauley upstream leaked into Vercel routing');
 assert.ok(page.includes(url),'Gauley public canonical missing');
 assert.ok(page.includes('G-Y5D2V2W7HN'),'Gauley GA4 contract missing');
 assert.ok(page.includes("getJSON('/api/gauley-live')"),'Gauley page is not using first-party live API');
@@ -24,4 +32,4 @@ assert.equal(pkg.dependencies['gauley-release-live'],`github:izworskic/gauley-re
 assert.equal(mirror.sourceCommit,sourceCommit,'Mirror provenance does not match pinned source');
 assert.ok(sitemap.includes(`<loc>${url}</loc>`),'Gauley sitemap URL missing');
 assert.equal(sitemap.split(url).length-1,1,'Gauley sitemap URL must be unique');
-console.log('Gauley first-party deployment mirror: PASS');
+console.log('Gauley first-party Vercel routing: PASS');
