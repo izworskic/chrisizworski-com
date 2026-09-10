@@ -11,7 +11,7 @@ const dist=path.join(pkgRoot,'dist');
 const targetDir='public/national-tools/gauley-release-live';
 const target=path.join(targetDir,'index.html');
 const canonical='https://chrisizworski.com/national-tools/gauley-release-live/';
-const expectedSource='c3d152416a28fb42b113bb25e45f3a34c1e04ae2';
+const expectedSource='e66ff2ab2dd6805d73071c8a3be051cc4766e934';
 
 execFileSync(process.execPath,[buildScript],{cwd:pkgRoot,stdio:'inherit'});
 let html=fs.readFileSync(path.join(dist,'index.html'),'utf8');
