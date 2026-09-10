@@ -1,0 +1,25 @@
+name: Verify Monarch National Tools live
+
+on:
+  push:
+    branches:
+      - verify/monarch-national-tools-live
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify cache-busted public National Tools page
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://chrisizworski.com/national-tools/?release=${GITHUB_SHA}"
+          curl -fsSL --max-time 30 "$URL" -o /tmp/national-tools.html
+          grep -F 'Monarch Migration Live' /tmp/national-tools.html
+          grep -F 'data-monarch-feature="true"' /tmp/national-tools.html
+          grep -F 'data-filter="wildlife"' /tmp/national-tools.html
+          grep -F 'Monarch Migration Live: Butterfly Migration Intelligence' /tmp/national-tools.html
+          curl -fsSL --max-time 30 'https://chrisizworski.com/national-tools/monarch-migration-live' -o /tmp/monarch.html
+          grep -F '<title>Monarch Migration Live' /tmp/monarch.html
