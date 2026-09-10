@@ -26,6 +26,13 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Sep 10 2026: added /privacy/ and /terms/ trust pages (AdSense/GA4 compliance gap: the
+  // site injects Google Analytics and Google AdSense site-wide but had no privacy or terms
+  // page anywhere in the repo). These three existing pages now link to them.
+  // Re-crawl after production release, then remove this declaration.
+  "/",
+  "/about/",
+  "/connect/",
   // Sep 8: honest seasonal fallback, feed freshness and existing fall/aurora handoffs.
   "/assets/fall-color-freshness.js",
   // Sep 2 2026: citation-readiness answers rewritten to be self-contained on three tools.

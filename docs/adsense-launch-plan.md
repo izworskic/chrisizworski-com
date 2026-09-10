@@ -2,6 +2,22 @@
 
 Status: technical and audience preparation only. No display-ad network is active in this change.
 
+**Sep 10 2026 clarification.** This plan bundles two different gates that need to stay
+separate: (1) getting the AdSense **account and site approved by Google**, and (2)
+**turning visible ads on**. Only (2) is governed by the 10,000-pageview / 2.5%-CTR
+activation gate below. (1) is not traffic-gated at all (Google does not publish a
+minimum traffic requirement, as this plan already says), and it was already in progress
+before this clarification: the real publisher ID, the AdSense verification meta tag, and
+a correctly formatted `ads.txt` authorized-seller record are already live in production,
+ahead of where item 8 below implied they should be. Google's site review for approval
+checks for exactly the things this plan already lists as prerequisites: a privacy policy
+disclosing analytics and ad cookies, and basic trust pages. None of that requires
+traffic, and the Site was already running Google Analytics site-wide with no privacy
+disclosure anywhere, independent of AdSense entirely. So `/privacy/` and `/terms/` were
+added now, scoped honestly to the current state (verification live, visible ads not
+yet released), while the activation gate, stop-loss rules, and sponsorship proof gate
+below are unchanged and still govern when ads actually show to a visitor.
+
 ## Purpose
 
 Use programmatic ads as the first monetization layer after search CTR, impressions, measured pageviews, and page performance reach a defensible baseline. Sponsorship outreach follows only after the site can show real results.
