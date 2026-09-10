@@ -1,0 +1,50 @@
+name: Verify Gauley Integration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'api/gauley-*.js'
+      - 'scripts/*gauley*'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/verify-gauley-integration.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install pinned dependencies
+        run: npm ci --ignore-scripts
+      - name: Verify Gauley routing and provenance
+        run: npm run benchmark:gauley-routing
+      - name: Build Gauley deployment mirror
+        run: node scripts/sync-gauley-release-live.mjs
+      - name: Exercise first-party Gauley page renderer
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const handler=require('./api/gauley-page.js');
+          let statusCode=200,body='';
+          const res={
+            setHeader(){},
+            status(code){statusCode=code;return this;},
+            send(value){body=String(value);return this;}
+          };
+          handler({},res);
+          if(statusCode!==200) throw new Error(`page renderer HTTP ${statusCode}`);
+          for(const marker of ['Private paddle','Raft guest','data-persona="watch"','data-persona="photo"','Since your last check','persona-tabs','decision-card']){
+            if(!body.includes(marker)) throw new Error(`missing ${marker}`);
+          }
+          if(!body.includes('/api/gauley-live')||!body.includes('/api/gauley-history')) throw new Error('first-party API remap missing');
+          console.log('Gauley first-party persona renderer: PASS');
+          NODE
