@@ -10,11 +10,25 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify public state pages and live APIs
+      - name: Verify public aurora pages, APIs and sitemap
         shell: bash
         run: |
           set -euo pipefail
-          check() {
+
+          fetch_retry() {
+            url="$1"
+            out="$2"
+            for attempt in 1 2 3 4 5 6; do
+              if curl -L --fail --silent --show-error --max-time 30 "$url" -o "$out"; then
+                return 0
+              fi
+              echo "Attempt ${attempt} failed for ${url}; retrying..."
+              sleep 10
+            done
+            return 1
+          }
+
+          check_state() {
             state_slug="$1"
             api_host="$2"
             region="$3"
@@ -22,12 +36,12 @@ jobs:
             page="https://chrisizworski.com/national-tools/aurora/${state_slug}/"
             api="https://${api_host}/api/aurora?region=${region}"
 
-            echo "Checking $state_name page: $page"
-            curl -L --fail --silent --show-error --max-time 30 "$page" -o /tmp/page.html
+            echo "Checking $state_name parent: $page"
+            fetch_retry "$page" /tmp/page.html
             grep -Fq "https://${api_host}/api/aurora?region=" /tmp/page.html
 
             echo "Checking $state_name API: $api"
-            curl -L --fail --silent --show-error --max-time 30 "$api" -o /tmp/api.json
+            fetch_retry "$api" /tmp/api.json
             STATE_NAME="$state_name" node - <<'NODE'
           const fs = require('fs');
           const d = JSON.parse(fs.readFileSync('/tmp/api.json','utf8'));
@@ -39,8 +53,51 @@ jobs:
           NODE
           }
 
-          check alaska alaska-aurora-live.vercel.app fairbanks Alaska
-          check minnesota minnesota-aurora-live.vercel.app voyageurs Minnesota
-          check north-dakota north-dakota-aurora-live.vercel.app peace-garden 'North Dakota'
-          check montana montana-aurora-live.vercel.app glacier Montana
-          check maine maine-aurora-live.vercel.app allagash Maine
+          check_page() {
+            path="$1"
+            canonical="https://chrisizworski.com${path}"
+            echo "Checking child page: $canonical"
+            fetch_retry "$canonical" /tmp/child.html
+            grep -Fq "<link rel=\"canonical\" href=\"${canonical}\"" /tmp/child.html
+            grep -Fq 'FAQPage' /tmp/child.html
+          }
+
+          check_state alaska alaska-aurora-live.vercel.app fairbanks Alaska
+          check_state minnesota minnesota-aurora-live.vercel.app voyageurs Minnesota
+          check_state north-dakota north-dakota-aurora-live.vercel.app peace-garden 'North Dakota'
+          check_state montana montana-aurora-live.vercel.app glacier Montana
+          check_state maine maine-aurora-live.vercel.app allagash Maine
+
+          check_page /national-tools/aurora/alaska/fairbanks/
+          check_page /national-tools/aurora/alaska/anchorage/
+          check_page /national-tools/aurora/alaska/denali/
+          check_page /national-tools/aurora/minnesota/duluth/
+          check_page /national-tools/aurora/minnesota/grand-marais/
+          check_page /national-tools/aurora/minnesota/ely-boundary-waters/
+          check_page /national-tools/aurora/minnesota/voyageurs/
+          check_page /national-tools/aurora/north-dakota/fargo/
+          check_page /national-tools/aurora/north-dakota/bismarck/
+          check_page /national-tools/aurora/north-dakota/grand-forks/
+          check_page /national-tools/aurora/montana/glacier-national-park/
+          check_page /national-tools/aurora/montana/whitefish/
+          check_page /national-tools/aurora/montana/billings/
+          check_page /national-tools/aurora/maine/presque-isle/
+          check_page /national-tools/aurora/maine/bangor/
+          check_page /national-tools/aurora/maine/acadia-national-park/
+          check_page /northern-lights-michigan/keweenaw/
+          check_page /northern-lights-michigan/marquette/
+          check_page /northern-lights-michigan/munising/
+          check_page /northern-lights-michigan/mackinaw-city/
+
+          echo 'Checking aurora sitemap'
+          fetch_retry https://chrisizworski.com/sitemap-aurora-states.xml /tmp/sitemap.xml
+          count=$(grep -o '<url>' /tmp/sitemap.xml | wc -l | tr -d ' ')
+          if [ "$count" != '26' ]; then
+            echo "Expected 26 aurora sitemap URLs, got $count"
+            cat /tmp/sitemap.xml
+            exit 1
+          fi
+          grep -Fq 'https://chrisizworski.com/northern-lights-michigan/keweenaw/' /tmp/sitemap.xml
+          grep -Fq 'https://chrisizworski.com/national-tools/aurora/maine/acadia-national-park/' /tmp/sitemap.xml
+
+          echo 'Aurora production smoke passed: 5 parent engines, 20 child pages, 26 sitemap URLs.'
