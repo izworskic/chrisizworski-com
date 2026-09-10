@@ -1,0 +1,41 @@
+name: Niagara rainbow intent production smoke
+on:
+  push:
+    paths:
+      - 'public/national-tools/niagara-rainbow/**'
+      - 'api/niagara-rainbow.js'
+      - 'lib/niagara-rainbow-engine.mjs'
+      - 'public/sitemap-niagara-rainbow.xml'
+      - '.github/workflows/niagara-rainbow-intent-production-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Verify Niagara live intent pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE='https://chrisizworski.com'
+          probe(){
+            name="$1"; url="$2"
+            for n in $(seq 1 18); do
+              code=$(curl -L -sS --max-time 30 -o /tmp/out -w '%{http_code}' "$url" || true)
+              if [ "$code" = '200' ]; then echo "$name OK"; return 0; fi
+              echo "$name returned $code on attempt $n"; sleep 10
+            done
+            return 1
+          }
+          probe api "$BASE/api/niagara-rainbow?smoke=$GITHUB_SHA"
+          python -c "import json; d=json.load(open('/tmp/out')); assert d.get('ok') is True and d.get('days') and d.get('viewpoints')"
+          probe best-time "$BASE/national-tools/niagara-rainbow/best-time-today/?smoke=$GITHUB_SHA"
+          grep -Fq 'https://chrisizworski.com/national-tools/niagara-rainbow/best-time-today/' /tmp/out
+          grep -Fq 'No nighttime rainbow score is shown' /tmp/out || grep -Fq 'daylight' /tmp/out
+          probe best-viewpoint "$BASE/national-tools/niagara-rainbow/best-viewpoint/?smoke=$GITHUB_SHA"
+          grep -Fq 'https://chrisizworski.com/national-tools/niagara-rainbow/best-viewpoint/' /tmp/out
+          grep -Fq '/api/niagara-rainbow' /tmp/out || grep -Fq 'intent.js' /tmp/out
+          probe sitemap "$BASE/sitemap-niagara-rainbow.xml?smoke=$GITHUB_SHA"
+          test "$(grep -o '<url>' /tmp/out | wc -l | tr -d ' ')" = '3'
