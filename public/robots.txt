@@ -12,3 +12,4 @@ Sitemap: https://chrisizworski.com/sitemap-white-christmas.xml
 Sitemap: https://chrisizworski.com/sitemap-aurora-states.xml
 Sitemap: https://chrisizworski.com/sitemap-blue-spring.xml
 Sitemap: https://chrisizworski.com/sitemap-melvin-price.xml
+Sitemap: https://chrisizworski.com/sitemap-niagara-rainbow.xml
