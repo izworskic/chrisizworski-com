@@ -26,6 +26,16 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Sep 10 2026 (second pass): expanded 5 of the 21 /chris-izworski-* identity/citation
+  // pages with facts already published and verified elsewhere on this same site (media,
+  // timeline, citations) that hadn't been cross-referenced into the topic-specific page yet.
+  // No invented career detail -- see the PR body for exactly which source each addition
+  // came from. Re-crawl after production release, then remove this declaration.
+  "/chris-izworski-apco/",
+  "/chris-izworski-bridge-michigan/",
+  "/chris-izworski-gpt-trainer-case-study/",
+  "/chris-izworski-nena-the-call/",
+  "/chris-izworski-wcmu-public-radio/",
   // Sep 10 2026: added /privacy/ and /terms/ trust pages (AdSense/GA4 compliance gap: the
   // site injects Google Analytics and Google AdSense site-wide but had no privacy or terms
   // page anywhere in the repo). These three existing pages now link to them.
