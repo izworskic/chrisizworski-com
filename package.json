@@ -4,7 +4,7 @@
   "private": true,
   "description": "Source-controlled deployment for chrisizworski.com",
   "scripts": {
-    "vercel-build": "node scripts/sync-ontario-finder.mjs && node scripts/sync-ballard-locks.mjs && node scripts/add-tahquamenon-to-tools.mjs && node scripts/sync-melvin-price-national-route.mjs && node scripts/add-melvin-price-to-sitemap.mjs && node scripts/add-gauley-to-sitemap.mjs && node scripts/verify-gauley-routing.mjs && node scripts/inject-ga4.mjs && node scripts/generate-ice-out-location-pages.mjs",
+    "vercel-build": "node scripts/sync-ontario-finder.mjs && node scripts/sync-ballard-locks.mjs && node scripts/add-tahquamenon-to-tools.mjs && node scripts/sync-melvin-price-national-route.mjs && node scripts/sync-gauley-release-live.mjs && node scripts/add-melvin-price-to-sitemap.mjs && node scripts/add-gauley-to-sitemap.mjs && node scripts/verify-gauley-routing.mjs && node scripts/inject-ga4.mjs && node scripts/generate-ice-out-location-pages.mjs",
     "audit:live": "node scripts/crawl-live.mjs",
     "audit:boat-launch-source": "node scripts/audit-boat-launch-source.mjs",
     "benchmark:border": "node scripts/benchmark-border-crossing.mjs --check",
@@ -51,7 +51,7 @@
     "benchmark:up-fall-rank": "node scripts/benchmark-upper-peninsula-fall-rank.mjs",
     "benchmark:fall-weekend-planner-ctr": "node scripts/benchmark-fall-weekend-planner-ctr.mjs",
     "benchmark:garden-page-one-ctr": "node scripts/benchmark-garden-page-one-ctr.mjs",
-    "benchmark:entity-discovery-ctr": "node scripts/benchmark-entity-discovery-ctr.mjs",
+    "benchmark:entity-discovery-ctr": "node scripts/benchmark-entity-surface.mjs",
     "benchmark:circle-tour-rank": "node scripts/benchmark-circle-tour-rank-distribution.mjs",
     "benchmark:serp-length": "node scripts/benchmark-serp-length.mjs",
     "benchmark:outdoors-now-growth": "node scripts/benchmark-outdoors-now-growth-system.mjs",
@@ -62,6 +62,7 @@
     "benchmark:white-christmas-indexing": "node scripts/verify-white-christmas-indexing.mjs"
   },
   "dependencies": {
+    "gauley-release-live": "github:izworskic/gauley-release-live-#c3d152416a28fb42b113bb25e45f3a34c1e04ae2",
     "national-ballard-locks": "github:izworskic/national-ballard-locks#e742334d61e9856be77fc613c642e845a4f3227a",
     "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#317abdf164792692a5202078cee3d3fae36b9322"
   },
