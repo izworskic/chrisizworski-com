@@ -745,6 +745,18 @@
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/gauley-release-live/:path*"
     },
     {
+      "source": "/national-tools/elk-rut",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/elk-rut/"
+    },
+    {
+      "source": "/national-tools/elk-rut/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/elk-rut/"
+    },
+    {
+      "source": "/national-tools/elk-rut/_api/live",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/elk-rut/_api/live"
+    },
+    {
       "source": "/national-tools/:path*",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"
     }
