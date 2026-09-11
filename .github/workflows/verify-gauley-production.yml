@@ -24,9 +24,10 @@ jobs:
         run: |
           set -euo pipefail
           BASE='https://chrisizworski.com/national-tools/gauley-release-live/'
+          PAGE="${BASE}?persona-smoke=${GITHUB_RUN_ID}"
           ok=0
           for attempt in $(seq 1 30); do
-            code=$(curl -L -sS --max-time 25 -o /tmp/page.html -w '%{http_code}' "$BASE" || true)
+            code=$(curl -L -sS -H 'Cache-Control: no-cache' --max-time 25 -o /tmp/page.html -w '%{http_code}' "$PAGE" || true)
             if [ "$code" = '200' ] \
               && grep -q 'Private paddle' /tmp/page.html \
               && grep -q 'Raft guest' /tmp/page.html \
@@ -43,8 +44,8 @@ jobs:
           done
           test "$ok" = '1'
 
-          curl -fsSL --max-time 30 "${BASE}api/live" -o /tmp/live.json
-          curl -fsSL --max-time 30 "${BASE}api/history" -o /tmp/history.json
+          curl -fsSL -H 'Cache-Control: no-cache' --max-time 30 "${BASE}api/live?persona-smoke=${GITHUB_RUN_ID}" -o /tmp/live.json
+          curl -fsSL -H 'Cache-Control: no-cache' --max-time 30 "${BASE}api/history?persona-smoke=${GITHUB_RUN_ID}" -o /tmp/history.json
           python - <<'PY'
           import json
           live=json.load(open('/tmp/live.json'))
