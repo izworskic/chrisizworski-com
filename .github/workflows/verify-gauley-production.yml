@@ -26,7 +26,7 @@ jobs:
           BASE='https://chrisizworski.com/national-tools/gauley-release-live/'
           PAGE="${BASE}?persona-smoke=${GITHUB_RUN_ID}"
           ok=0
-          for attempt in $(seq 1 30); do
+          for attempt in $(seq 1 36); do
             code=$(curl -L -sS -H 'Cache-Control: no-cache' --max-time 25 -o /tmp/page.html -w '%{http_code}' "$PAGE" || true)
             if [ "$code" = '200' ] \
               && grep -q 'Private paddle' /tmp/page.html \
