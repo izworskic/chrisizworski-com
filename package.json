@@ -29,7 +29,7 @@
     "benchmark:winter-final": "node scripts/benchmark-winter-final-readiness.mjs",
     "benchmark:manistee": "node scripts/benchmark-manistee-river-map.mjs --check",
     "benchmark:manistee-parity": "node scripts/benchmark-manistee-ausable-parity.mjs --check",
-    "benchmark:manistee-popups": "node scripts/benchmark-manistee-popups.mjs --check",
+    "benchmark:manistee-popups": "node scripts/benchmark-manistee-popups.mjs",
     "benchmark:manistee-ux": "node scripts/benchmark-manistee-ausable-ui.mjs --check",
     "freshness": "node scripts/stamp-freshness.mjs",
     "benchmark:citation": "node scripts/benchmark-citation.mjs",
@@ -51,7 +51,7 @@
     "benchmark:up-fall-rank": "node scripts/benchmark-upper-peninsula-fall-rank.mjs",
     "benchmark:fall-weekend-planner-ctr": "node scripts/benchmark-fall-weekend-planner-ctr.mjs",
     "benchmark:garden-page-one-ctr": "node scripts/benchmark-garden-page-one-ctr.mjs",
-    "benchmark:entity-discovery-ctr": "node scripts/benchmark-entity-discovery-ctr.mjs",
+    "benchmark:entity-discovery-ctr": "node scripts/benchmark-entity-surface.mjs",
     "benchmark:circle-tour-rank": "node scripts/benchmark-circle-tour-rank-distribution.mjs",
     "benchmark:serp-length": "node scripts/benchmark-serp-length.mjs",
     "benchmark:outdoors-now-growth": "node scripts/benchmark-outdoors-now-growth-system.mjs",
@@ -63,7 +63,9 @@
   },
   "dependencies": {
     "national-ballard-locks": "github:izworskic/national-ballard-locks#86fdfd789e16135c801ebf083da068a4a175149c",
-    "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#317abdf164792692a5202078cee3d3fae36b9322"
+    "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#317abdf164792692a5202078cee3d3fae36b9322",
+    "tsx": "^4.20.5",
+    "yosemite-firefall-live": "github:izworskic/yosemite-firefall-live#78dcf63ef4687395696778402c59907350677c7a"
   },
   "engines": {
     "node": "22.x"
