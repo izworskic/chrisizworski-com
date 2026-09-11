@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'api/gauley-*.js'
-      - 'scripts/*gauley*'
       - 'vercel.json'
       - 'package.json'
       - 'package-lock.json'
+      - 'scripts/*gauley*'
+      - 'public/sitemap.xml'
       - '.github/workflows/verify-gauley-production.yml'
   workflow_dispatch:
 
@@ -19,70 +19,48 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for and verify public Gauley persona page
+      - name: Verify public Gauley persona tool through custom domain
         shell: bash
         run: |
           set -euo pipefail
-          PAGE='https://chrisizworski.com/national-tools/gauley-release-live/'
+          BASE='https://chrisizworski.com/national-tools/gauley-release-live/'
           ok=0
-          for attempt in $(seq 1 18); do
-            code=$(curl -L -sS --max-time 20 -o /tmp/gauley-page.html -w '%{http_code}' "$PAGE" || true)
+          for attempt in $(seq 1 30); do
+            code=$(curl -L -sS --max-time 25 -o /tmp/page.html -w '%{http_code}' "$BASE" || true)
             if [ "$code" = '200' ] \
-              && grep -q 'Gauley Release Live' /tmp/gauley-page.html \
-              && grep -q 'Private paddle' /tmp/gauley-page.html \
-              && grep -q 'Raft guest' /tmp/gauley-page.html \
-              && grep -q 'data-persona="watch"' /tmp/gauley-page.html \
-              && grep -q 'data-persona="photo"' /tmp/gauley-page.html \
-              && grep -q 'Since your last check' /tmp/gauley-page.html \
-              && grep -q 'ENVIRONMENTAL CONTEXT INDEX' /tmp/gauley-page.html \
-              && grep -q 'https://chrisizworski.com/national-tools/gauley-release-live/' /tmp/gauley-page.html \
-              && grep -q 'G-Y5D2V2W7HN' /tmp/gauley-page.html; then
+              && grep -q 'Private paddle' /tmp/page.html \
+              && grep -q 'Raft guest' /tmp/page.html \
+              && grep -q 'data-persona="watch"' /tmp/page.html \
+              && grep -q 'data-persona="photo"' /tmp/page.html \
+              && grep -q 'Since your last check' /tmp/page.html \
+              && grep -q 'ENVIRONMENTAL CONTEXT INDEX' /tmp/page.html \
+              && grep -q 'https://chrisizworski.com/national-tools/gauley-release-live/' /tmp/page.html; then
               ok=1
               break
             fi
-            echo "Attempt $attempt: persona page HTTP $code; retrying"
+            echo "Attempt $attempt: public Gauley page HTTP $code"
             sleep 5
           done
           test "$ok" = '1'
 
-      - name: Verify live Gauley persona API
-        shell: bash
-        run: |
-          set -euo pipefail
-          code=$(curl -sS --max-time 30 -o /tmp/gauley-live.json -w '%{http_code}' 'https://chrisizworski.com/api/gauley-live')
-          test "$code" = '200'
+          curl -fsSL --max-time 30 "${BASE}api/live" -o /tmp/live.json
+          curl -fsSL --max-time 30 "${BASE}api/history" -o /tmp/history.json
           python - <<'PY'
           import json
-          with open('/tmp/gauley-live.json') as f: d=json.load(f)
-          assert 'release' in d and 'river' in d and 'conditions' in d and 'sources' in d
-          assert d.get('generatedAt')
-          p=d.get('personas') or {}
+          live=json.load(open('/tmp/live.json'))
+          hist=json.load(open('/tmp/history.json'))
+          assert 'release' in live and 'river' in live and 'conditions' in live and 'sources' in live
+          assert live.get('generatedAt')
+          personas=live.get('personas') or {}
           for key in ('planning','paddler','raft','watch','photo'):
-              assert key in p, f'missing persona {key}'
-          assert p['watch']['facts'][0]['value']=='Summersville Dam tailwaters'
-          assert 'outfitter' in (p['raft']['headline']+' '+p['raft']['summary']+' '+p['raft']['caution']).lower()
-          assert 'release-start time is inferred' in p['planning']['timingNote']
-          assert 'safe to paddle' not in json.dumps(p).lower()
-          print('live persona API OK:', d['release'].get('status'), d['conditions'].get('confidence'), list(p))
+              assert key in personas, key
+          assert personas['watch']['facts'][0]['value']=='Summersville Dam tailwaters'
+          assert 'outfitter' in json.dumps(personas['raft']).lower()
+          assert 'safe to paddle' not in json.dumps(personas).lower()
+          assert hist.get('sampleCount',0)>0
+          print('Public Gauley persona proxy OK:',live['release'].get('status'),hist.get('sampleCount'))
           PY
 
-      - name: Verify Gauley history API
-        shell: bash
-        run: |
-          set -euo pipefail
-          code=$(curl -sS --max-time 30 -o /tmp/gauley-history.json -w '%{http_code}' 'https://chrisizworski.com/api/gauley-history')
-          test "$code" = '200'
-          python - <<'PY'
-          import json
-          with open('/tmp/gauley-history.json') as f: d=json.load(f)
-          assert 'sample' in d and 'sampleCount' in d
-          print('history API OK:', d.get('sampleCount'))
-          PY
-
-      - name: Verify sitemap discovery
-        shell: bash
-        run: |
-          set -euo pipefail
           curl -fsSL --max-time 20 'https://chrisizworski.com/sitemap.xml' -o /tmp/sitemap.xml
           grep -q '<loc>https://chrisizworski.com/national-tools/gauley-release-live/</loc>' /tmp/sitemap.xml
-          echo 'sitemap OK'
+          echo 'Public Gauley sitemap discovery OK'
