@@ -1,0 +1,102 @@
+name: Apply Elk Release Current V2
+
+on:
+  push:
+    branches: [fix/elk-public-router-current]
+    paths:
+      - ".github/workflows/apply-elk-release-current-v2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: fix/elk-public-router-current
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Apply elk release patch
+        run: |
+          node scripts/apply-elk-release-current.mjs
+          git diff --check
+          if git diff --unified=0 | grep -qi 'white-christmas'; then
+            echo "Refusing to alter White Christmas pages or sitemap entries." >&2
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add vercel.json tests/ballard-locks-extracted.test.js scripts/verify-extracted-routing.mjs public/national-tools/blue-spring-live/index.html public/national-tools/blue-spring-live/manatee-conditions-today/index.html public/northern-lights-michigan/keweenaw/index.html public/northern-lights-michigan/mackinaw-city/index.html public/northern-lights-michigan/marquette/index.html public/northern-lights-michigan/munising/index.html
+          git commit -m "Route Rocky Mountain elk tool through public shell"
+
+      - name: Reconcile freshness
+        run: |
+          node scripts/stamp-freshness.mjs
+          git diff --check
+          if git diff --unified=0 | grep -qi 'white-christmas'; then
+            echo "Refusing to alter White Christmas pages or sitemap entries." >&2
+            exit 1
+          fi
+          if ! git diff --quiet; then
+            git add -A
+            git commit -m "Sync freshness metadata after elk routing"
+          fi
+
+      - name: Repin generated reputation sitemap
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const crypto = require('crypto');
+          const sitemap = fs.readFileSync('public/sitemap-reputation.xml');
+          const hash = crypto.createHash('sha256').update(sitemap).digest('hex');
+          const file = 'scripts/verify-source.mjs';
+          let text = fs.readFileSync(file, 'utf8');
+          const pin = /\["\/sitemap-reputation\.xml", "[a-f0-9]{64}"\]/g;
+          const matches = text.match(pin) || [];
+          if (matches.length !== 1) throw new Error(`Expected exactly one reputation sitemap pin; found ${matches.length}`);
+          text = text.replace(pin, `["/sitemap-reputation.xml", "${hash}"]`);
+          fs.writeFileSync(file, text);
+          NODE
+          git diff --check
+          if git diff --unified=0 | grep -qi 'white-christmas'; then
+            echo "Refusing to alter White Christmas pages or sitemap entries." >&2
+            exit 1
+          fi
+          if ! git diff --quiet; then
+            git add scripts/verify-source.mjs
+            git commit -m "Repin reputation sitemap after freshness sync"
+          fi
+
+      - name: Repair dependency lock
+        run: |
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          git diff --check
+          if ! git diff --quiet -- package.json; then
+            echo "Refusing unexpected package.json mutation." >&2
+            exit 1
+          fi
+          if ! git diff --quiet -- package-lock.json; then
+            git add package-lock.json
+            git commit -m "Sync package lock with current dependencies"
+          fi
+          if ! git diff --quiet; then
+            echo "Unexpected uncommitted files before install." >&2
+            git status --short
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run full production gate
+        run: npm run verify:all
+
+      - name: Push verified release
+        run: git push origin HEAD:fix/elk-public-router-current
