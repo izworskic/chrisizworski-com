@@ -23,7 +23,9 @@ const edits = [
   ['public/northern-lights-michigan/mackinaw-city/index.html', 'Can you see the northern lights near Mackinaw City tonight? Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Mackinaw City, the Straits and Headlands area.', 'Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Mackinaw City, the Straits and Headlands tonight.'],
   ['public/northern-lights-michigan/marquette/index.html', 'Northern Lights Marquette Tonight: Live Aurora Forecast | Chris Izworski', 'Northern Lights Marquette Tonight | Chris Izworski'],
   ['public/northern-lights-michigan/marquette/index.html', 'Can you see the northern lights in Marquette tonight? Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Marquette and the central Upper Peninsula.', "Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Marquette and Michigan's central Upper Peninsula tonight."],
-  ['public/northern-lights-michigan/munising/index.html', 'Northern Lights Munising Tonight: Pictured Rocks Aurora Forecast | Chris Izworski', 'Northern Lights Munising Tonight | Chris Izworski']
+  ['public/northern-lights-michigan/munising/index.html', 'Northern Lights Munising Tonight: Pictured Rocks Aurora Forecast | Chris Izworski', 'Northern Lights Munising Tonight | Chris Izworski'],
+  ['public/yosemite-firefall-live/index.html', 'Yosemite Firefall Live: Horsetail Fall Forecast & Best Viewing Night', 'Yosemite Firefall Live Forecast | Chris Izworski'],
+  ['public/national-tools/yosemite-firefall-live/index.html', 'Yosemite Firefall Live: Horsetail Fall Forecast & Best Viewing Night', 'Yosemite Firefall Live Forecast | Chris Izworski']
 ];
 for (const edit of edits) replaceKnown(...edit);
 
