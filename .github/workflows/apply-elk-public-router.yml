@@ -5,6 +5,7 @@ on:
     branches: [fix/elk-public-router]
     paths:
       - ".github/workflows/apply-elk-public-router.yml"
+      - "tests/ballard-locks-extracted.test.js"
   workflow_dispatch:
 
 permissions:
