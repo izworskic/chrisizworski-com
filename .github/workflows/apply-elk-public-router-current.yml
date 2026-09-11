@@ -148,6 +148,25 @@ jobs:
             git commit -m "Repin reputation sitemap after freshness sync"
           fi
 
+      - name: Repair current dependency lock
+        run: |
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          git diff --check
+          if ! git diff --quiet -- package.json; then
+            echo "Refusing an unexpected package.json mutation while repairing the lockfile." >&2
+            git diff -- package.json
+            exit 1
+          fi
+          if ! git diff --quiet -- package-lock.json; then
+            git add package-lock.json
+            git commit -m "Sync package lock with current dependencies"
+          fi
+          if ! git diff --quiet; then
+            echo "Unexpected files changed during lockfile repair." >&2
+            git status --short
+            exit 1
+          fi
+
       - name: Install dependencies
         run: npm ci
 
