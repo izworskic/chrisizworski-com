@@ -1,0 +1,76 @@
+name: Apply Elk Public Router
+
+on:
+  push:
+    branches: [fix/elk-public-router]
+    paths:
+      - ".github/workflows/apply-elk-public-router.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  route-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: fix/elk-public-router
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Add explicit elk routes
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = 'vercel.json';
+          const config = JSON.parse(fs.readFileSync(path, 'utf8'));
+          const rewrites = config.rewrites || [];
+          const marker = rewrites.findIndex(r => r.source === '/national-tools/:path*');
+          if (marker < 0) throw new Error('National Tools catch-all rewrite not found');
+
+          const additions = [
+            {
+              source: '/national-tools/elk-rut',
+              destination: 'https://national-outdoor-tools-hub.vercel.app/national-tools/elk-rut/'
+            },
+            {
+              source: '/national-tools/elk-rut/',
+              destination: 'https://national-outdoor-tools-hub.vercel.app/national-tools/elk-rut/'
+            },
+            {
+              source: '/national-tools/elk-rut/_api/live',
+              destination: 'https://national-outdoor-tools-hub.vercel.app/national-tools/elk-rut/_api/live'
+            }
+          ];
+
+          const existing = new Set(rewrites.map(r => r.source));
+          const missing = additions.filter(r => !existing.has(r.source));
+          rewrites.splice(marker, 0, ...missing);
+          config.rewrites = rewrites;
+          fs.writeFileSync(path, JSON.stringify(config, null, 2) + '\n');
+          console.log(`Inserted ${missing.length} explicit elk routes before National Tools catch-all`);
+          NODE
+          node -e "JSON.parse(require('fs').readFileSync('vercel.json','utf8')); console.log('vercel.json: valid JSON')"
+          git diff --check
+
+      - name: Commit routing change locally
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add vercel.json
+          git commit -m "Route Rocky Mountain elk tool through public shell"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run full production gate
+        run: npm run verify:all
+
+      - name: Push verified routing commit
+        run: git push origin HEAD:fix/elk-public-router
