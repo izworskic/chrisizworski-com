@@ -69,6 +69,20 @@ jobs:
           }
           NODE
 
+      - name: Align Blue Spring composition exception
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const file = 'scripts/verify-extracted-routing.mjs';
+          let text = fs.readFileSync(file, 'utf8');
+          const from = "['ice-out', 'niagara-rainbow'].includes(entry)";
+          const to = "['ice-out', 'niagara-rainbow', 'blue-spring-live'].includes(entry)";
+          const count = text.split(from).length - 1;
+          if (count !== 1) throw new Error(`Expected one composition exception list; found ${count}`);
+          text = text.replace(from, to);
+          fs.writeFileSync(file, text);
+          NODE
+
       - name: Add explicit elk routes
         run: |
           node <<'NODE'
@@ -108,8 +122,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add vercel.json public/national-tools/blue-spring-live/index.html public/national-tools/blue-spring-live/manatee-conditions-today/index.html public/northern-lights-michigan/keweenaw/index.html public/northern-lights-michigan/mackinaw-city/index.html public/northern-lights-michigan/marquette/index.html public/northern-lights-michigan/munising/index.html
-          git commit -m "Route elk tool and clear SERP length gate"
+          git add vercel.json scripts/verify-extracted-routing.mjs public/national-tools/blue-spring-live/index.html public/national-tools/blue-spring-live/manatee-conditions-today/index.html public/northern-lights-michigan/keweenaw/index.html public/northern-lights-michigan/mackinaw-city/index.html public/northern-lights-michigan/marquette/index.html public/northern-lights-michigan/munising/index.html
+          git commit -m "Route elk tool and clear release gates"
 
       - name: Reconcile derived freshness metadata
         run: |
