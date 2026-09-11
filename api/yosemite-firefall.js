@@ -4,17 +4,11 @@
 // the verified Yosemite TypeScript engine can be required without turning the
 // entire site into ESM (which would break existing serverless handlers).
 require('tsx/cjs');
-const path = require('node:path');
 
-let model;
-function loadModel() {
-  if (!model) {
-    const packageJson = require.resolve('yosemite-firefall-live/package.json');
-    const modelPath = path.join(path.dirname(packageJson), 'lib', 'model.ts');
-    model = require(modelPath);
-  }
-  return model;
-}
+// Keep this import static. Vercel's Node File Trace follows static require()
+// calls and includes the Yosemite model plus its transitive source files in the
+// serverless bundle. A dynamically constructed path was omitted at runtime.
+const { buildFirefallSnapshot } = require('yosemite-firefall-live/lib/model.ts');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -26,7 +20,6 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { buildFirefallSnapshot } = loadModel();
     const snapshot = await buildFirefallSnapshot();
     return res.status(200).json(snapshot);
   } catch (error) {
