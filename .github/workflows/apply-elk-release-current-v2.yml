@@ -33,7 +33,7 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add vercel.json tests/ballard-locks-extracted.test.js scripts/verify-extracted-routing.mjs public/national-tools/blue-spring-live/index.html public/national-tools/blue-spring-live/manatee-conditions-today/index.html public/northern-lights-michigan/keweenaw/index.html public/northern-lights-michigan/mackinaw-city/index.html public/northern-lights-michigan/marquette/index.html public/northern-lights-michigan/munising/index.html
+          git add vercel.json tests/ballard-locks-extracted.test.js scripts/verify-extracted-routing.mjs public/national-tools/blue-spring-live/index.html public/national-tools/blue-spring-live/manatee-conditions-today/index.html public/northern-lights-michigan/keweenaw/index.html public/northern-lights-michigan/mackinaw-city/index.html public/northern-lights-michigan/marquette/index.html public/northern-lights-michigan/munising/index.html public/yosemite-firefall-live/index.html public/national-tools/yosemite-firefall-live/index.html
           git commit -m "Route Rocky Mountain elk tool through public shell"
 
       - name: Reconcile freshness
