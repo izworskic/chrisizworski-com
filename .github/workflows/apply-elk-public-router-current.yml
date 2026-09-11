@@ -1,0 +1,158 @@
+name: Apply Elk Public Router Current
+
+on:
+  push:
+    branches: [fix/elk-public-router-current]
+    paths:
+      - ".github/workflows/apply-elk-public-router-current.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  route-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: fix/elk-public-router-current
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Apply verified release patch
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+
+          function replaceKnown(file, oldText, newText) {
+            let text = fs.readFileSync(file, 'utf8');
+            if (text.includes(newText)) return;
+            if (!text.includes(oldText)) throw new Error(`Neither expected old nor new text found in ${file}`);
+            fs.writeFileSync(file, text.replace(oldText, newText));
+          }
+
+          const pkg = JSON.parse(fs.readFileSync('package.json','utf8'));
+          const ballardPin = 'github:izworskic/national-ballard-locks#86fdfd789e16135c801ebf083da068a4a175149c';
+          if (pkg.dependencies['national-ballard-locks'] !== ballardPin) throw new Error(`Unexpected Ballard pin: ${pkg.dependencies['national-ballard-locks']}`);
+          replaceKnown(
+            'tests/ballard-locks-extracted.test.js',
+            'github:izworskic/national-ballard-locks#e742334d61e9856be77fc613c642e845a4f3227a',
+            ballardPin
+          );
+
+          const edits = [
+            ['public/national-tools/blue-spring-live/index.html',
+              'Blue Spring Live combines current spring and St. Johns River temperatures, weather, manatee signals and park planning to help you choose the best time to visit Blue Spring State Park.',
+              'Live Blue Spring manatee conditions, spring and St. Johns River temperatures, weather, park planning and the best time to visit Blue Spring State Park.'],
+            ['public/national-tools/blue-spring-live/manatee-conditions-today/index.html',
+              'Blue Spring Manatee Conditions Today | Latest Published Count',
+              'Blue Spring Manatee Conditions Today | Latest Count'],
+            ['public/national-tools/blue-spring-live/manatee-conditions-today/index.html',
+              'Check Blue Spring manatee conditions today with the latest published count, live spring and St. Johns River temperatures, refuge difference and weather context.',
+              'Check Blue Spring manatee conditions today with the latest published count, live spring and river temperatures, refuge difference and weather context.'],
+            ['public/northern-lights-michigan/keweenaw/index.html',
+              'Northern Lights Keweenaw Tonight: Live Aurora Forecast | Chris Izworski',
+              'Northern Lights Keweenaw Tonight | Chris Izworski'],
+            ['public/northern-lights-michigan/keweenaw/index.html',
+              'Can you see the northern lights in the Keweenaw tonight? Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Copper Harbor, Houghton and the Keweenaw Peninsula.',
+              'Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Copper Harbor, Houghton and the Keweenaw Peninsula tonight.'],
+            ['public/northern-lights-michigan/mackinaw-city/index.html',
+              'Northern Lights Mackinaw City Tonight: Headlands Aurora Forecast | Chris Izworski',
+              'Northern Lights Mackinaw City Tonight | Chris Izworski'],
+            ['public/northern-lights-michigan/mackinaw-city/index.html',
+              'Can you see the northern lights near Mackinaw City tonight? Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Mackinaw City, the Straits and Headlands area.',
+              'Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Mackinaw City, the Straits and Headlands tonight.'],
+            ['public/northern-lights-michigan/marquette/index.html',
+              'Northern Lights Marquette Tonight: Live Aurora Forecast | Chris Izworski',
+              'Northern Lights Marquette Tonight | Chris Izworski'],
+            ['public/northern-lights-michigan/marquette/index.html',
+              'Can you see the northern lights in Marquette tonight? Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Marquette and the central Upper Peninsula.',
+              "Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Marquette and Michigan's central Upper Peninsula tonight."],
+            ['public/northern-lights-michigan/munising/index.html',
+              'Northern Lights Munising Tonight: Pictured Rocks Aurora Forecast | Chris Izworski',
+              'Northern Lights Munising Tonight | Chris Izworski']
+          ];
+          for (const args of edits) replaceKnown(...args);
+
+          replaceKnown(
+            'scripts/verify-extracted-routing.mjs',
+            "['ice-out', 'niagara-rainbow'].includes(entry)",
+            "['ice-out', 'niagara-rainbow', 'blue-spring-live'].includes(entry)"
+          );
+
+          const vpath = 'vercel.json';
+          const config = JSON.parse(fs.readFileSync(vpath, 'utf8'));
+          const rewrites = config.rewrites || [];
+          const marker = rewrites.findIndex(r => r.source === '/national-tools/:path*');
+          if (marker < 0) throw new Error('National Tools catch-all rewrite not found');
+          const additions = [
+            {source:'/national-tools/elk-rut',destination:'https://national-outdoor-tools-hub.vercel.app/national-tools/elk-rut/'},
+            {source:'/national-tools/elk-rut/',destination:'https://national-outdoor-tools-hub.vercel.app/national-tools/elk-rut/'},
+            {source:'/national-tools/elk-rut/_api/live',destination:'https://national-outdoor-tools-hub.vercel.app/national-tools/elk-rut/_api/live'}
+          ];
+          const existing = new Set(rewrites.map(r => r.source));
+          const missing = additions.filter(r => !existing.has(r.source));
+          rewrites.splice(marker, 0, ...missing);
+          config.rewrites = rewrites;
+          fs.writeFileSync(vpath, JSON.stringify(config, null, 2) + '\n');
+          NODE
+          git diff --check
+
+      - name: Commit candidate
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add vercel.json tests/ballard-locks-extracted.test.js scripts/verify-extracted-routing.mjs public/national-tools/blue-spring-live/index.html public/national-tools/blue-spring-live/manatee-conditions-today/index.html public/northern-lights-michigan/keweenaw/index.html public/northern-lights-michigan/mackinaw-city/index.html public/northern-lights-michigan/marquette/index.html public/northern-lights-michigan/munising/index.html
+          git commit -m "Route Rocky Mountain elk tool through public shell"
+
+      - name: Reconcile freshness
+        run: |
+          node scripts/stamp-freshness.mjs
+          git diff --check
+          if git diff --unified=0 | grep -qi 'white-christmas'; then
+            echo "Refusing to alter White Christmas pages or sitemap entries." >&2
+            exit 1
+          fi
+          if ! git diff --quiet; then
+            git add -A
+            git commit -m "Sync freshness metadata after elk routing"
+          fi
+
+      - name: Repin generated reputation sitemap
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const crypto = require('crypto');
+          const sitemap = fs.readFileSync('public/sitemap-reputation.xml');
+          const hash = crypto.createHash('sha256').update(sitemap).digest('hex');
+          const file = 'scripts/verify-source.mjs';
+          let text = fs.readFileSync(file, 'utf8');
+          const pin = /\["\/sitemap-reputation\.xml", "[a-f0-9]{64}"\]/g;
+          const matches = text.match(pin) || [];
+          if (matches.length !== 1) throw new Error(`Expected exactly one reputation sitemap pin; found ${matches.length}`);
+          text = text.replace(pin, `["/sitemap-reputation.xml", "${hash}"]`);
+          fs.writeFileSync(file, text);
+          NODE
+          git diff --check
+          if git diff --unified=0 | grep -qi 'white-christmas'; then
+            echo "Refusing to alter White Christmas pages or sitemap entries." >&2
+            exit 1
+          fi
+          if ! git diff --quiet; then
+            git add scripts/verify-source.mjs
+            git commit -m "Repin reputation sitemap after freshness sync"
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run full production gate
+        run: npm run verify:all
+
+      - name: Push verified candidate
+        run: git push origin HEAD:fix/elk-public-router-current
