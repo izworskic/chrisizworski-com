@@ -1,21 +1,22 @@
-import 'tsx';
-import { createRequire } from 'node:module';
-import { dirname, join } from 'node:path';
-import { pathToFileURL } from 'node:url';
+'use strict';
 
-const require = createRequire(import.meta.url);
-let modelPromise;
+// The main site is a CommonJS Vercel project. Register tsx's CommonJS hook so
+// the verified Yosemite TypeScript engine can be required without turning the
+// entire site into ESM (which would break existing serverless handlers).
+require('tsx/cjs');
+const path = require('node:path');
 
-async function loadModel() {
-  if (!modelPromise) {
+let model;
+function loadModel() {
+  if (!model) {
     const packageJson = require.resolve('yosemite-firefall-live/package.json');
-    const modelPath = join(dirname(packageJson), 'lib', 'model.ts');
-    modelPromise = import(pathToFileURL(modelPath).href);
+    const modelPath = path.join(path.dirname(packageJson), 'lib', 'model.ts');
+    model = require(modelPath);
   }
-  return modelPromise;
+  return model;
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1800');
@@ -25,7 +26,7 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { buildFirefallSnapshot } = await loadModel();
+    const { buildFirefallSnapshot } = loadModel();
     const snapshot = await buildFirefallSnapshot();
     return res.status(200).json(snapshot);
   } catch (error) {
@@ -36,4 +37,4 @@ export default async function handler(req, res) {
       generatedAt: new Date().toISOString(),
     });
   }
-}
+};
