@@ -5,10 +5,15 @@
 // entire site into ESM (which would break existing serverless handlers).
 require('tsx/cjs');
 
-// Keep this import static. Vercel's Node File Trace follows static require()
-// calls and includes the Yosemite model plus its transitive source files in the
-// serverless bundle. A dynamically constructed path was omitted at runtime.
-const { buildFirefallSnapshot } = require('yosemite-firefall-live/lib/model.ts');
+let model;
+function loadModel() {
+  if (!model) {
+    // Keep the specifier literal so Vercel's Node File Trace can include the
+    // Yosemite model and its transitive source files in this function bundle.
+    model = require('yosemite-firefall-live/lib/model.ts');
+  }
+  return model;
+}
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,6 +25,7 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
+    const { buildFirefallSnapshot } = loadModel();
     const snapshot = await buildFirefallSnapshot();
     return res.status(200).json(snapshot);
   } catch (error) {
@@ -27,6 +33,7 @@ module.exports = async function handler(req, res) {
     return res.status(503).json({
       error: 'Firefall data temporarily unavailable',
       detail: error instanceof Error ? error.message : 'Unknown error',
+      code: error && typeof error === 'object' && 'code' in error ? error.code : undefined,
       generatedAt: new Date().toISOString(),
     });
   }
