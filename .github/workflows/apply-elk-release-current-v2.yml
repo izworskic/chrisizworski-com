@@ -96,7 +96,19 @@ jobs:
         run: npm ci
 
       - name: Run full production gate
-        run: npm run verify:all
+        run: |
+          set +e
+          npm run verify:all > /tmp/verify-all.log 2>&1
+          status=$?
+          set -e
+          if [ "$status" -ne 0 ]; then
+            echo "=== verify:all failure tail ==="
+            tail -n 180 /tmp/verify-all.log
+            echo "=== focused failure lines ==="
+            grep -nEi 'failed|failure|error|assert|not ok|hard veto|over the limit|mismatch|expected' /tmp/verify-all.log | tail -n 80 || true
+            exit "$status"
+          fi
+          tail -n 50 /tmp/verify-all.log
 
       - name: Push verified release
         run: git push origin HEAD:fix/elk-public-router-current
