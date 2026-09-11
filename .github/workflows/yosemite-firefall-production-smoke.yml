@@ -1,0 +1,32 @@
+name: Yosemite Firefall production smoke
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'package.json'
+      - 'vercel.json'
+      - 'api/national-tools-hub.js'
+      - 'api/yosemite-firefall.js'
+      - 'public/yosemite-firefall-live/**'
+      - 'public/national-tools/yosemite-firefall-live/**'
+      - 'scripts/add-yosemite-firefall-to-sitemap.mjs'
+      - 'scripts/yosemite-firefall-production-smoke.mjs'
+      - '.github/workflows/yosemite-firefall-production-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify Yosemite page, engine and National Tools card
+        run: node scripts/yosemite-firefall-production-smoke.mjs
