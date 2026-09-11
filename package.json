@@ -51,7 +51,7 @@
     "benchmark:up-fall-rank": "node scripts/benchmark-upper-peninsula-fall-rank.mjs",
     "benchmark:fall-weekend-planner-ctr": "node scripts/benchmark-fall-weekend-planner-ctr.mjs",
     "benchmark:garden-page-one-ctr": "node scripts/benchmark-garden-page-one-ctr.mjs",
-    "benchmark:entity-discovery-ctr": "node scripts/benchmark-entity-surface.mjs",
+    "benchmark:entity-discovery-ctr": "node scripts/benchmark-entity-discovery-ctr.mjs",
     "benchmark:circle-tour-rank": "node scripts/benchmark-circle-tour-rank-distribution.mjs",
     "benchmark:serp-length": "node scripts/benchmark-serp-length.mjs",
     "benchmark:outdoors-now-growth": "node scripts/benchmark-outdoors-now-growth-system.mjs",
