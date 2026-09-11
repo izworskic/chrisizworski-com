@@ -4,7 +4,7 @@
   "private": true,
   "description": "Source-controlled deployment for chrisizworski.com",
   "scripts": {
-    "vercel-build": "node scripts/sync-ontario-finder.mjs && node scripts/sync-ballard-locks.mjs && node scripts/add-tahquamenon-to-tools.mjs && node scripts/sync-melvin-price-national-route.mjs && node scripts/sync-gauley-release-live.mjs && node scripts/add-melvin-price-to-sitemap.mjs && node scripts/add-gauley-to-sitemap.mjs && node scripts/verify-gauley-routing.mjs && node scripts/inject-ga4.mjs && node scripts/generate-ice-out-location-pages.mjs",
+    "vercel-build": "node scripts/sync-ontario-finder.mjs && node scripts/sync-ballard-locks.mjs && node scripts/add-tahquamenon-to-tools.mjs && node scripts/sync-melvin-price-national-route.mjs && node scripts/add-melvin-price-to-sitemap.mjs && node scripts/add-gauley-to-sitemap.mjs && node scripts/verify-gauley-routing.mjs && node scripts/inject-ga4.mjs && node scripts/generate-ice-out-location-pages.mjs",
     "audit:live": "node scripts/crawl-live.mjs",
     "audit:boat-launch-source": "node scripts/audit-boat-launch-source.mjs",
     "benchmark:border": "node scripts/benchmark-border-crossing.mjs --check",
@@ -62,7 +62,6 @@
     "benchmark:white-christmas-indexing": "node scripts/verify-white-christmas-indexing.mjs"
   },
   "dependencies": {
-    "gauley-release-live": "github:izworskic/gauley-release-live-#c124a15a0d1a260fe4dd883a3adf830e3bb26c28",
     "national-ballard-locks": "github:izworskic/national-ballard-locks#86fdfd789e16135c801ebf083da068a4a175149c",
     "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#317abdf164792692a5202078cee3d3fae36b9322"
   },
