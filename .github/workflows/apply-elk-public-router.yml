@@ -111,6 +111,22 @@ jobs:
           git add vercel.json public/national-tools/blue-spring-live/index.html public/national-tools/blue-spring-live/manatee-conditions-today/index.html public/northern-lights-michigan/keweenaw/index.html public/northern-lights-michigan/mackinaw-city/index.html public/northern-lights-michigan/marquette/index.html public/northern-lights-michigan/munising/index.html
           git commit -m "Route elk tool and clear SERP length gate"
 
+      - name: Reconcile derived freshness metadata
+        run: |
+          node scripts/stamp-freshness.mjs
+          git diff --check
+          echo "Freshness changes:"
+          git status --short
+          if git diff --unified=0 | grep -qi 'white-christmas'; then
+            echo "Refusing to alter White Christmas pages or sitemap entries." >&2
+            git diff --unified=0 | grep -i -C 2 'white-christmas' || true
+            exit 1
+          fi
+          if ! git diff --quiet; then
+            git add -A
+            git commit -m "Sync freshness metadata after routing prep"
+          fi
+
       - name: Install dependencies
         run: npm ci
 
