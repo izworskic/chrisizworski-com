@@ -50,8 +50,6 @@ jobs:
           rm -f public/national-tools/gauley-release-live/index.html
           rmdir public/national-tools/gauley-release-live 2>/dev/null || true
           rm -f data/gauley-release-mirror.json
-          rm -f .github/workflows/sync-gauley-static.yml
-          rm -f .github/workflows/promote-gauley-static.yml
 
           cat > scripts/verify-gauley-routing.mjs <<'EOF'
           import fs from 'node:fs';
@@ -84,70 +82,6 @@ jobs:
           console.log('Gauley generic National Tools proxy routing: PASS');
           EOF
 
-          cat > .github/workflows/verify-gauley-production.yml <<'EOF'
-          name: Verify Gauley Production
-
-          on:
-            push:
-              branches: [main]
-              paths:
-                - 'vercel.json'
-                - 'package.json'
-                - 'package-lock.json'
-                - 'scripts/*gauley*'
-                - 'public/sitemap.xml'
-                - '.github/workflows/verify-gauley-production.yml'
-            workflow_dispatch:
-
-          permissions:
-            contents: read
-
-          jobs:
-            smoke:
-              runs-on: ubuntu-latest
-              steps:
-                - name: Verify public Gauley persona tool through custom domain
-                  shell: bash
-                  run: |
-                    set -euo pipefail
-                    BASE='https://chrisizworski.com/national-tools/gauley-release-live/'
-                    ok=0
-                    for attempt in $(seq 1 30); do
-                      code=$(curl -L -sS --max-time 25 -o /tmp/page.html -w '%{http_code}' "$BASE" || true)
-                      if [ "$code" = '200' ] \
-                        && grep -q 'Private paddle' /tmp/page.html \
-                        && grep -q 'Raft guest' /tmp/page.html \
-                        && grep -q 'data-persona="watch"' /tmp/page.html \
-                        && grep -q 'data-persona="photo"' /tmp/page.html \
-                        && grep -q 'Since your last check' /tmp/page.html; then
-                        ok=1
-                        break
-                      fi
-                      echo "Attempt $attempt: public page HTTP $code"
-                      sleep 5
-                    done
-                    test "$ok" = '1'
-                    curl -fsSL --max-time 30 "${BASE}api/live" -o /tmp/live.json
-                    curl -fsSL --max-time 30 "${BASE}api/history" -o /tmp/history.json
-                    python - <<'PY'
-                    import json
-                    live=json.load(open('/tmp/live.json'))
-                    hist=json.load(open('/tmp/history.json'))
-                    personas=live.get('personas') or {}
-                    for key in ('planning','paddler','raft','watch','photo'):
-                        assert key in personas, key
-                    assert personas['watch']['facts'][0]['value']=='Summersville Dam tailwaters'
-                    assert 'outfitter' in json.dumps(personas['raft']).lower()
-                    assert 'safe to paddle' not in json.dumps(personas).lower()
-                    assert hist.get('sampleCount',0)>0
-                    assert live.get('generatedAt')
-                    print('Public Gauley persona proxy OK:',live['release'].get('status'),hist.get('sampleCount'))
-                    PY
-                    curl -fsSL --max-time 20 'https://chrisizworski.com/sitemap.xml' -o /tmp/sitemap.xml
-                    grep -q '<loc>https://chrisizworski.com/national-tools/gauley-release-live/</loc>' /tmp/sitemap.xml
-                    echo 'Public Gauley sitemap discovery OK'
-          EOF
-
       - name: Validate cleanup before commit
         run: |
           npm ci --ignore-scripts
@@ -160,7 +94,8 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A
+          git add package.json package-lock.json vercel.json scripts/verify-gauley-routing.mjs public/sitemap.xml
+          git add -u api/gauley-live.js api/gauley-history.js scripts/sync-gauley-release-live.mjs public/national-tools/gauley-release-live/index.html data/gauley-release-mirror.json || true
           if git diff --cached --quiet; then
             echo 'No migration changes to commit.'
             exit 0
