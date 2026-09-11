@@ -8,7 +8,7 @@ const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
 const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8'));
 const url='https://chrisizworski.com/national-tools/gauley-release-live/';
 const clean='/national-tools/gauley-release-live';
-const hub='https://national-outdoor-tools-hub.vercel.app/national-tools/:path*';
+const hub='https://national-outdoor-tools-hub.vercel.app/national-tools/gauley-release-live';
 
 assert.ok(!middleware.includes('GAULEY_'),'Gauley must not use special middleware routing');
 assert.ok(!middleware.includes('gauley-release-live'),'Gauley must not depend on middleware self-fetching');
@@ -19,10 +19,23 @@ assert.ok(!fs.existsSync('api/gauley-history.js'),'Main site must not duplicate 
 assert.ok(!fs.existsSync('public/national-tools/gauley-release-live/index.html'),'Main site must not carry a stale Gauley page mirror');
 assert.ok(!String(pkg.scripts['vercel-build']).includes('sync-gauley-release-live'),'Main build must not sync Gauley locally');
 assert.ok(!Object.keys(vercel.functions||{}).some(k=>k.includes('gauley')),'Main Vercel function config must not package Gauley');
-assert.ok(!(vercel.rewrites||[]).some(r=>String(r.source||'').startsWith(clean)),'Gauley must use the generic National Tools proxy, not a special rewrite');
-const catchAll=(vercel.rewrites||[]).find(r=>r.source==='/national-tools/:path*');
-assert.ok(catchAll,'National Tools catch-all proxy missing');
-assert.equal(catchAll.destination,hub,'National Tools catch-all must point at the National Outdoor Tools hub');
+
+const rewrites=vercel.rewrites||[];
+const expected=new Map([
+  [clean,`${hub}/`],
+  [`${clean}/`,`${hub}/`],
+  [`${clean}/:path*`,`${hub}/:path*`]
+]);
+for(const [source,destination] of expected){
+  const matches=rewrites.filter(r=>r.source===source);
+  assert.equal(matches.length,1,`Expected exactly one Gauley rewrite for ${source}`);
+  assert.equal(matches[0].destination,destination,`Wrong Gauley destination for ${source}`);
+}
+const catchAllIndex=rewrites.findIndex(r=>r.source==='/national-tools/:path*');
+assert.ok(catchAllIndex>=0,'National Tools catch-all proxy missing');
+for(const source of expected.keys()){
+  assert.ok(rewrites.findIndex(r=>r.source===source)<catchAllIndex,`${source} must precede the generic catch-all`);
+}
 assert.ok(sitemap.includes(`<loc>${url}</loc>`),'Gauley sitemap URL missing');
 assert.equal(sitemap.split(url).length-1,1,'Gauley sitemap URL must be unique');
-console.log('Gauley generic National Tools proxy routing: PASS');
+console.log('Gauley explicit external hub proxy routing: PASS');

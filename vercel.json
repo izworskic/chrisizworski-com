@@ -733,6 +733,18 @@
       "destination": "/melvin-price/index.html"
     },
     {
+      "source": "/national-tools/gauley-release-live",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/gauley-release-live/"
+    },
+    {
+      "source": "/national-tools/gauley-release-live/",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/gauley-release-live/"
+    },
+    {
+      "source": "/national-tools/gauley-release-live/:path*",
+      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/gauley-release-live/:path*"
+    },
+    {
       "source": "/national-tools/:path*",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"
     }
