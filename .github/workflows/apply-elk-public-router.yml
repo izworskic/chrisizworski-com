@@ -127,6 +127,32 @@ jobs:
             git commit -m "Sync freshness metadata after routing prep"
           fi
 
+      - name: Repin generated reputation sitemap
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const crypto = require('crypto');
+          const sitemap = fs.readFileSync('public/sitemap-reputation.xml');
+          const hash = crypto.createHash('sha256').update(sitemap).digest('hex');
+          const file = 'scripts/verify-source.mjs';
+          let text = fs.readFileSync(file, 'utf8');
+          const pin = /\["\/sitemap-reputation\.xml", "[a-f0-9]{64}"\]/g;
+          const matches = text.match(pin) || [];
+          if (matches.length !== 1) throw new Error(`Expected exactly one reputation sitemap pin; found ${matches.length}`);
+          text = text.replace(pin, `["/sitemap-reputation.xml", "${hash}"]`);
+          fs.writeFileSync(file, text);
+          console.log(`Reputation sitemap SHA-256: ${hash}`);
+          NODE
+          git diff --check
+          if git diff --unified=0 | grep -qi 'white-christmas'; then
+            echo "Refusing to alter White Christmas pages or sitemap entries." >&2
+            exit 1
+          fi
+          if ! git diff --quiet; then
+            git add scripts/verify-source.mjs
+            git commit -m "Repin reputation sitemap after freshness sync"
+          fi
+
       - name: Install dependencies
         run: npm ci
 
