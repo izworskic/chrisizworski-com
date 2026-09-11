@@ -25,6 +25,50 @@ jobs:
           node-version: "22"
           cache: npm
 
+      - name: Fix existing SERP length violations
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const edits = [
+            ['public/national-tools/blue-spring-live/index.html',
+              'Blue Spring Live combines current spring and St. Johns River temperatures, weather, manatee signals and park planning to help you choose the best time to visit Blue Spring State Park.',
+              'Live Blue Spring manatee conditions, spring and St. Johns River temperatures, weather, park planning and the best time to visit Blue Spring State Park.'],
+            ['public/national-tools/blue-spring-live/manatee-conditions-today/index.html',
+              'Blue Spring Manatee Conditions Today | Latest Published Count',
+              'Blue Spring Manatee Conditions Today | Latest Count'],
+            ['public/national-tools/blue-spring-live/manatee-conditions-today/index.html',
+              'Check Blue Spring manatee conditions today with the latest published count, live spring and St. Johns River temperatures, refuge difference and weather context.',
+              'Check Blue Spring manatee conditions today with the latest published count, live spring and river temperatures, refuge difference and weather context.'],
+            ['public/northern-lights-michigan/keweenaw/index.html',
+              'Northern Lights Keweenaw Tonight: Live Aurora Forecast | Chris Izworski',
+              'Northern Lights Keweenaw Tonight | Chris Izworski'],
+            ['public/northern-lights-michigan/keweenaw/index.html',
+              'Can you see the northern lights in the Keweenaw tonight? Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Copper Harbor, Houghton and the Keweenaw Peninsula.',
+              'Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Copper Harbor, Houghton and the Keweenaw Peninsula tonight.'],
+            ['public/northern-lights-michigan/mackinaw-city/index.html',
+              'Northern Lights Mackinaw City Tonight: Headlands Aurora Forecast | Chris Izworski',
+              'Northern Lights Mackinaw City Tonight | Chris Izworski'],
+            ['public/northern-lights-michigan/mackinaw-city/index.html',
+              'Can you see the northern lights near Mackinaw City tonight? Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Mackinaw City, the Straits and Headlands area.',
+              'Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Mackinaw City, the Straits and Headlands tonight.'],
+            ['public/northern-lights-michigan/marquette/index.html',
+              'Northern Lights Marquette Tonight: Live Aurora Forecast | Chris Izworski',
+              'Northern Lights Marquette Tonight | Chris Izworski'],
+            ['public/northern-lights-michigan/marquette/index.html',
+              'Can you see the northern lights in Marquette tonight? Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Marquette and the central Upper Peninsula.',
+              "Live NOAA aurora signal, Kp, solar wind and NWS cloud cover for Marquette and Michigan's central Upper Peninsula tonight."],
+            ['public/northern-lights-michigan/munising/index.html',
+              'Northern Lights Munising Tonight: Pictured Rocks Aurora Forecast | Chris Izworski',
+              'Northern Lights Munising Tonight | Chris Izworski']
+          ];
+          for (const [file, from, to] of edits) {
+            let text = fs.readFileSync(file, 'utf8');
+            if (!text.includes(from)) throw new Error(`Expected SERP string not found in ${file}`);
+            text = text.replace(from, to);
+            fs.writeFileSync(file, text);
+          }
+          NODE
+
       - name: Add explicit elk routes
         run: |
           node <<'NODE'
@@ -60,12 +104,12 @@ jobs:
           node -e "JSON.parse(require('fs').readFileSync('vercel.json','utf8')); console.log('vercel.json: valid JSON')"
           git diff --check
 
-      - name: Commit routing change locally
+      - name: Commit candidate changes locally
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add vercel.json
-          git commit -m "Route Rocky Mountain elk tool through public shell"
+          git add vercel.json public/national-tools/blue-spring-live/index.html public/national-tools/blue-spring-live/manatee-conditions-today/index.html public/northern-lights-michigan/keweenaw/index.html public/northern-lights-michigan/mackinaw-city/index.html public/northern-lights-michigan/marquette/index.html public/northern-lights-michigan/munising/index.html
+          git commit -m "Route elk tool and clear SERP length gate"
 
       - name: Install dependencies
         run: npm ci
@@ -73,5 +117,5 @@ jobs:
       - name: Run full production gate
         run: npm run verify:all
 
-      - name: Push verified routing commit
+      - name: Push verified candidate
         run: git push origin HEAD:fix/elk-public-router
