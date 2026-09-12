@@ -3,6 +3,8 @@
 const LIVE_URL = 'https://raw.githubusercontent.com/izworskic/rocky-mountain-elk-rut-live/main/public/live.json';
 
 module.exports = async function handler(req, res) {
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     res.setHeader('Allow', 'GET, HEAD');
     return res.status(405).json({ error: 'Method not allowed' });
