@@ -33,8 +33,12 @@ jobs:
         run: npm run benchmark:manistee-page-one -- --check && npm run benchmark:fall-aurora-ctr -- --check && npm run benchmark:up-fall-rank -- --check
       - name: Rank gates B
         run: npm run benchmark:fall-weekend-planner-ctr -- --check && npm run benchmark:beach-detail-ctr -- --check && npm run benchmark:garden-page-one-ctr -- --check
-      - name: Entity and circle routing gates
-        run: npm run benchmark:entity-discovery-ctr -- --check && npm run benchmark:circle-tour-rank -- --check && npm run benchmark:extracted-routing
+      - name: Entity discovery CTR gate
+        run: npm run benchmark:entity-discovery-ctr -- --check
+      - name: Circle Tour rank gate
+        run: npm run benchmark:circle-tour-rank -- --check
+      - name: Extracted routing gate
+        run: npm run benchmark:extracted-routing
       - name: National routing and indexing gates
         run: npm run benchmark:gauley-routing && npm run benchmark:tool-entities && npm run benchmark:white-christmas-indexing
       - name: Upload boat launch source audit
