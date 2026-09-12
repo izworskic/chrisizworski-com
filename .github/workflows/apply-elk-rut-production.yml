@@ -1,0 +1,106 @@
+name: Apply Elk Rut Production Route
+
+on:
+  push:
+    branches: [fix/elk-rut-live-production]
+    paths:
+      - ".github/workflows/apply-elk-rut-production.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: fix/elk-rut-live-production
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Apply route and architecture assertions
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+
+          const vercelPath = 'vercel.json';
+          let vercel = fs.readFileSync(vercelPath, 'utf8');
+          if (!vercel.includes('"source": "/national-tools/elk-rut"')) {
+            const marker = '    {\n      "source": "/national-tools/:path*",\n      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"\n    }';
+            if (!vercel.includes(marker)) throw new Error('National Tools catch-all marker not found');
+            const elkRoutes = [
+              '    {',
+              '      "source": "/national-tools/elk-rut/_api/live",',
+              '      "destination": "/api/elk-rut-live"',
+              '    },',
+              '    {',
+              '      "source": "/national-tools/elk-rut",',
+              '      "destination": "/api/elk-rut-page"',
+              '    },',
+              '    {',
+              '      "source": "/national-tools/elk-rut/",',
+              '      "destination": "/api/elk-rut-page"',
+              '    },',
+            ].join('\n');
+            vercel = vercel.replace(marker, `${elkRoutes}\n${marker}`);
+            fs.writeFileSync(vercelPath, vercel);
+          }
+
+          const verifierPath = 'scripts/verify-extracted-routing.mjs';
+          let verifier = fs.readFileSync(verifierPath, 'utf8');
+          const oldAllow = "['ice-out', 'niagara-rainbow'].includes(entry)";
+          const newAllow = "['ice-out', 'niagara-rainbow', 'blue-spring-live', 'yosemite-firefall-live'].includes(entry)";
+          if (verifier.includes(oldAllow)) {
+            verifier = verifier.replace(oldAllow, newAllow);
+            fs.writeFileSync(verifierPath, verifier);
+          }
+
+          const agentsPath = 'AGENTS.md';
+          let agents = fs.readFileSync(agentsPath, 'utf8');
+          if (!agents.includes('izworskic/rocky-mountain-elk-rut-live')) {
+            const anchor = '- `izworskic/national-white-christmas`\n';
+            if (!agents.includes(anchor)) throw new Error('AGENTS authoritative-repo anchor not found');
+            agents = agents.replace(anchor, `${anchor}- \`izworskic/rocky-mountain-elk-rut-live\` — Rocky Mountain elk-rut decision engine and source snapshots\n`);
+            fs.writeFileSync(agentsPath, agents);
+          }
+          NODE
+
+          git diff --check
+          if git diff --unified=0 | grep -qi 'white-christmas'; then
+            echo "Refusing to alter White Christmas pages or routes." >&2
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add vercel.json scripts/verify-extracted-routing.mjs AGENTS.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Wire elk rut through production site"
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run full production gate
+        run: |
+          set +e
+          npm run verify:all > /tmp/verify-all.log 2>&1
+          status=$?
+          set -e
+          if [ "$status" -ne 0 ]; then
+            echo "=== verify:all failure tail ==="
+            tail -n 220 /tmp/verify-all.log
+            echo "=== focused failure lines ==="
+            grep -nEi 'failed|failure|error|assert|not ok|hard veto|over the limit|mismatch|expected|unexpected local national' /tmp/verify-all.log | tail -n 100 || true
+            exit "$status"
+          fi
+          tail -n 80 /tmp/verify-all.log
+
+      - name: Push verified branch
+        run: git push origin HEAD:fix/elk-rut-live-production
