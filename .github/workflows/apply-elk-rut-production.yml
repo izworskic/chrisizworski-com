@@ -69,6 +69,15 @@ jobs:
             agents = agents.replace(anchor, `${anchor}- \`izworskic/rocky-mountain-elk-rut-live\` — Rocky Mountain elk-rut decision engine and source snapshots\n`);
             fs.writeFileSync(agentsPath, agents);
           }
+
+          const ballardTestPath = 'tests/ballard-locks-extracted.test.js';
+          let ballardTest = fs.readFileSync(ballardTestPath, 'utf8');
+          const stalePin = 'github:izworskic/national-ballard-locks#e742334d61e9856be77fc613c642e845a4f3227a';
+          const authoritativePin = 'github:izworskic/national-ballard-locks#86fdfd789e16135c801ebf083da068a4a175149c';
+          if (ballardTest.includes(stalePin)) {
+            ballardTest = ballardTest.replace(stalePin, authoritativePin);
+            fs.writeFileSync(ballardTestPath, ballardTest);
+          }
           NODE
 
           git diff --check
@@ -79,7 +88,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add vercel.json scripts/verify-extracted-routing.mjs AGENTS.md
+          git add vercel.json scripts/verify-extracted-routing.mjs AGENTS.md tests/ballard-locks-extracted.test.js
           if ! git diff --cached --quiet; then
             git commit -m "Wire elk rut through production site"
           fi
