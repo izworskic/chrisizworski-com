@@ -25,6 +25,17 @@ test('current model requires tide and waves',()=>{
   assert.ok(strong.score>=70);
 });
 
+test('stale observations cannot drive a current score',()=>{
+  const fresh={ageMin:20,heightM:1.8,periodS:10};
+  const degraded={ageMin:120,heightM:1.8,periodS:10};
+  const stale={ageMin:181,heightM:1.8,periodS:10};
+  assert.equal(m.observationStatus(fresh.ageMin),'ok');
+  assert.equal(m.observationStatus(degraded.ageMin),'degraded');
+  assert.equal(m.observationStatus(stale.ageMin),'stale');
+  assert.equal(m.usableCurrent(stale),null);
+  assert.equal(m.usableCurrent(degraded),degraded);
+});
+
 test('closure and high surf override visitor recommendation without changing phenomenon score',()=>{
   const potential=m.computePotential({minutesToHigh:-90,waveHeightM:2.2,wavePeriodS:11,waveDirectionDeg:120}).score;
   assert.ok(potential>=70);
@@ -35,11 +46,17 @@ test('closure and high surf override visitor recommendation without changing phe
   assert.equal(hazard.status,'HAZARDOUS CONDITIONS');
 });
 
+test('far-future opportunity does not masquerade as an approaching same-day window',()=>{
+  const safety={status:'OPEN / VERIFY ONSITE'};
+  assert.equal(m.visitStatus({potential:30,safety,minutesToBest:180}),'GOOD WINDOW APPROACHING');
+  assert.equal(m.visitStatus({potential:30,safety,minutesToBest:900}),'BETTER LATER');
+});
+
 test('missing or stale source data lowers confidence',()=>{
   const high=m.confidence({waveAgeMin:20,waveDirectionDeg:120,waterAgeMin:10,npsVerified:true,hasForecastWave:true});
   const low=m.confidence({waveAgeMin:240,waveDirectionDeg:null,waterAgeMin:200,npsVerified:false,hasForecastWave:false,forecastHorizonHours:24});
   assert.ok(high.score>low.score);
-  assert.equal(low.label,'Low');
+  assert.equal(low.label,'Insufficient');
 });
 
 test('NDBC parser preserves missing values as null rather than zero',()=>{
