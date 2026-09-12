@@ -26,6 +26,7 @@ here.** Their authoritative implementation sources are:
 - `izworskic/national-coastal-water`
 - `izworskic/national-snowpack-melt`
 - `izworskic/national-white-christmas`
+- `izworskic/rocky-mountain-elk-rut-live` — Rocky Mountain elk-rut decision engine and source snapshots
 - `izworskic/isle-royale-outdoors`
 
 If work is requested on one of those products, make the implementation change in its owning
