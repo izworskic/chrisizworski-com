@@ -1,0 +1,54 @@
+name: Verify Elk Devils Advocate Live
+
+on:
+  push:
+    branches: [verify/elk-devils-advocate-live]
+    paths:
+      - ".github/workflows/verify-elk-devils-advocate-live.yml"
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify upgraded production page and live API
+        run: |
+          set -euo pipefail
+          page_url="https://chrisizworski.com/national-tools/elk-rut/"
+          api_url="https://chrisizworski.com/national-tools/elk-rut/_api/live"
+          for attempt in $(seq 1 12); do
+            page_status=$(curl -L -sS -o /tmp/elk-page.html -w '%{http_code}' "$page_url" || true)
+            api_status=$(curl -L -sS -o /tmp/elk-live.json -w '%{http_code}' "$api_url" || true)
+            if [ "$page_status" = "200" ] && [ "$api_status" = "200" ] \
+              && grep -q 'Best within 42 hours' /tmp/elk-page.html \
+              && grep -q 'Best planning fits for the recommended window' /tmp/elk-page.html; then
+              if node <<'NODE'
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('/tmp/elk-live.json', 'utf8'));
+          if (data.title !== 'Rocky Mountain Elk Rut Live') process.exit(1);
+          if (!data.primary || !data.nextWindow) process.exit(1);
+          if (!Array.isArray(data.windows) || !data.windows.length) process.exit(1);
+          if (!Array.isArray(data.spots) || !data.spots.length) process.exit(1);
+          const ageMs = Date.now() - new Date(data.generatedAt).getTime();
+          if (!Number.isFinite(ageMs) || ageMs < -300000 || ageMs > 20 * 60 * 1000) process.exit(1);
+          console.log('PAGE_STATUS=200');
+          console.log('PAGE_UPGRADE_MARKERS=true');
+          console.log('API_STATUS=200');
+          console.log('API_MODE=' + data.mode);
+          console.log('API_PRIMARY=' + data.primary.key);
+          console.log('API_NEXT=' + data.nextWindow.key);
+          console.log('API_GENERATED_AT=' + data.generatedAt);
+          console.log('API_WINDOWS=' + data.windows.length);
+          console.log('API_SPOTS=' + data.spots.length);
+          NODE
+              then
+                exit 0
+              fi
+            fi
+            sleep 10
+          done
+          echo "Production did not expose the upgraded elk page/API after retries." >&2
+          echo "PAGE_STATUS=${page_status:-unknown}" >&2
+          echo "API_STATUS=${api_status:-unknown}" >&2
+          head -c 500 /tmp/elk-live.json 2>/dev/null || true
+          exit 1
