@@ -1,0 +1,43 @@
+name: Verify Elk Production Live
+
+on:
+  push:
+    branches: [verify/elk-production-live]
+    paths:
+      - ".github/workflows/verify-elk-production-live.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify production page and API
+        run: |
+          set -euo pipefail
+          page_url="https://chrisizworski.com/national-tools/elk-rut/"
+          api_url="https://chrisizworski.com/national-tools/elk-rut/_api/live"
+
+          page_status=$(curl -L -sS -o /tmp/elk-page.html -w '%{http_code}' "$page_url")
+          echo "PAGE_STATUS=$page_status"
+          test "$page_status" = "200"
+          grep -q 'Rocky Mountain Elk Rut Live' /tmp/elk-page.html
+          grep -q 'https://chrisizworski.com/national-tools/elk-rut/' /tmp/elk-page.html
+          echo "PAGE_TITLE=$(grep -o '<title>[^<]*</title>' /tmp/elk-page.html | head -1)"
+          echo "PAGE_OK=true"
+
+          api_status=$(curl -L -sS -o /tmp/elk-live.json -w '%{http_code}' "$api_url")
+          echo "API_STATUS=$api_status"
+          test "$api_status" = "200"
+          node <<'NODE'
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('/tmp/elk-live.json','utf8'));
+          if (data.title !== 'Rocky Mountain Elk Rut Live') throw new Error('Wrong API title');
+          if (!Array.isArray(data.windows) || !data.windows.length) throw new Error('No viewing windows');
+          if (!data.primary) throw new Error('No primary recommendation');
+          console.log('API_TITLE=' + data.title);
+          console.log('API_MODE=' + data.mode);
+          console.log('API_WINDOWS=' + data.windows.length);
+          console.log('API_OK=true');
+          NODE
