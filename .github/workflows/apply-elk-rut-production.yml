@@ -24,7 +24,7 @@ jobs:
           node-version: "22"
           cache: npm
 
-      - name: Apply route and architecture assertions
+      - name: Apply route and release reconciliations
         run: |
           mkdir -p public/national-tools/elk-rut
           curl --fail --silent --show-error --location \
@@ -98,6 +98,48 @@ jobs:
             apiContract = apiContract.replace(directHtmlAssertion, delegatedHtmlAssertion);
             fs.writeFileSync(apiContractPath, apiContract);
           }
+
+          function updateMeta(file, { title, description }) {
+            let text = fs.readFileSync(file, 'utf8');
+            if (title) {
+              if (!/<title>[\s\S]*?<\/title>/i.test(text)) throw new Error(`Missing title in ${file}`);
+              text = text.replace(/<title>[\s\S]*?<\/title>/i, `<title>${title}</title>`);
+            }
+            if (description) {
+              if (!/<meta\s+name=["']description["']\s+content=["'][^"']*["']\s*\/?\s*>/i.test(text)) throw new Error(`Missing description in ${file}`);
+              text = text.replace(/<meta\s+name=["']description["']\s+content=["'][^"']*["']\s*\/?\s*>/i, `<meta name="description" content="${description}">`);
+            }
+            fs.writeFileSync(file, text);
+          }
+
+          updateMeta('public/national-tools/blue-spring-live/index.html', {
+            description: 'See Blue Spring manatee conditions, spring and river temperatures, weather, and visit timing to choose the best time to visit Blue Spring State Park.'
+          });
+          updateMeta('public/national-tools/blue-spring-live/manatee-conditions-today/index.html', {
+            title: 'Blue Spring Manatee Conditions Today | Latest Count',
+            description: 'See Blue Spring manatee conditions today with the latest published count, spring and St. Johns River temperatures, refuge difference, and weather.'
+          });
+          updateMeta('public/national-tools/yosemite-firefall-live/index.html', {
+            title: "Yosemite Firefall Live: Tonight's Viewing Forecast"
+          });
+          updateMeta('public/yosemite-firefall-live/index.html', {
+            title: "Yosemite Firefall Live: Tonight's Viewing Forecast"
+          });
+          updateMeta('public/northern-lights-michigan/keweenaw/index.html', {
+            title: 'Keweenaw Northern Lights Tonight | Aurora Forecast',
+            description: "Check Keweenaw northern lights conditions tonight with live aurora signals, cloud cover, timing, and viewing guidance for Michigan's Upper Peninsula."
+          });
+          updateMeta('public/northern-lights-michigan/mackinaw-city/index.html', {
+            title: 'Mackinaw City Northern Lights Tonight | Aurora Forecast',
+            description: 'Check Mackinaw City northern lights conditions tonight with live aurora signals, cloud cover, timing, and viewing guidance near the Straits of Mackinac.'
+          });
+          updateMeta('public/northern-lights-michigan/marquette/index.html', {
+            title: 'Marquette Northern Lights Tonight | Aurora Forecast',
+            description: 'Check Marquette northern lights conditions tonight with live aurora signals, cloud cover, timing, and viewing guidance along Lake Superior.'
+          });
+          updateMeta('public/northern-lights-michigan/munising/index.html', {
+            title: 'Munising Northern Lights Tonight | Aurora Forecast'
+          });
           NODE
 
           git diff --check
@@ -108,9 +150,58 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add vercel.json scripts/verify-extracted-routing.mjs AGENTS.md tests/ballard-locks-extracted.test.js tests/api-contract.test.js public/national-tools/elk-rut/index.html
+          git add \
+            vercel.json scripts/verify-extracted-routing.mjs AGENTS.md \
+            tests/ballard-locks-extracted.test.js tests/api-contract.test.js \
+            public/national-tools/elk-rut/index.html \
+            public/national-tools/blue-spring-live/index.html \
+            public/national-tools/blue-spring-live/manatee-conditions-today/index.html \
+            public/national-tools/yosemite-firefall-live/index.html \
+            public/yosemite-firefall-live/index.html \
+            public/northern-lights-michigan/keweenaw/index.html \
+            public/northern-lights-michigan/mackinaw-city/index.html \
+            public/northern-lights-michigan/marquette/index.html \
+            public/northern-lights-michigan/munising/index.html
           if ! git diff --cached --quiet; then
             git commit -m "Wire elk rut through production site"
+          fi
+
+      - name: Reconcile freshness
+        run: |
+          node scripts/stamp-freshness.mjs
+          git diff --check
+          if git diff --unified=0 | grep -qi 'white-christmas'; then
+            echo "Refusing to alter White Christmas pages or sitemap entries." >&2
+            exit 1
+          fi
+          if ! git diff --quiet; then
+            git add -A
+            git commit -m "Sync freshness metadata after elk routing"
+          fi
+
+      - name: Repin generated reputation sitemap
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const crypto = require('crypto');
+          const sitemap = fs.readFileSync('public/sitemap-reputation.xml');
+          const hash = crypto.createHash('sha256').update(sitemap).digest('hex');
+          const file = 'scripts/verify-source.mjs';
+          let text = fs.readFileSync(file, 'utf8');
+          const pin = /\["\/sitemap-reputation\.xml", "[a-f0-9]{64}"\]/g;
+          const matches = text.match(pin) || [];
+          if (matches.length !== 1) throw new Error(`Expected exactly one reputation sitemap pin; found ${matches.length}`);
+          text = text.replace(pin, `["/sitemap-reputation.xml", "${hash}"]`);
+          fs.writeFileSync(file, text);
+          NODE
+          git diff --check
+          if git diff --unified=0 | grep -qi 'white-christmas'; then
+            echo "Refusing to alter White Christmas pages or sitemap entries." >&2
+            exit 1
+          fi
+          if ! git diff --quiet; then
+            git add scripts/verify-source.mjs
+            git commit -m "Repin reputation sitemap after freshness sync"
           fi
 
       - name: Install dependencies
@@ -124,12 +215,12 @@ jobs:
           set -e
           if [ "$status" -ne 0 ]; then
             echo "=== verify:all failure tail ==="
-            tail -n 220 /tmp/verify-all.log
+            tail -n 240 /tmp/verify-all.log
             echo "=== focused failure lines ==="
-            grep -nEi 'failed|failure|error|assert|not ok|hard veto|over the limit|mismatch|expected|unexpected local national' /tmp/verify-all.log | tail -n 100 || true
+            grep -nEi 'failed|failure|error|assert|not ok|hard veto|over the limit|mismatch|expected|unexpected local national' /tmp/verify-all.log | tail -n 120 || true
             exit "$status"
           fi
-          tail -n 80 /tmp/verify-all.log
+          tail -n 100 /tmp/verify-all.log
 
       - name: Push verified branch
         run: git push origin HEAD:fix/elk-rut-live-production
