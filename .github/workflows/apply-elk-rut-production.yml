@@ -26,8 +26,19 @@ jobs:
 
       - name: Apply route and architecture assertions
         run: |
+          mkdir -p public/national-tools/elk-rut
+          curl --fail --silent --show-error --location \
+            "https://raw.githubusercontent.com/izworskic/rocky-mountain-elk-rut-live/4d4f2a20d22d19a11231376559903f5e134eb5cf/public/national-tools/elk-rut/index.html" \
+            --output public/national-tools/elk-rut/index.html
+
           node <<'NODE'
           const fs = require('fs');
+
+          const mirrorPath = 'public/national-tools/elk-rut/index.html';
+          const mirror = fs.readFileSync(mirrorPath, 'utf8');
+          if (!mirror.includes('Rocky Mountain Elk Rut Live') || !mirror.includes('https://chrisizworski.com/national-tools/elk-rut/')) {
+            throw new Error('Authoritative elk mirror failed integrity check');
+          }
 
           const vercelPath = 'vercel.json';
           let vercel = fs.readFileSync(vercelPath, 'utf8');
@@ -41,11 +52,11 @@ jobs:
               '    },',
               '    {',
               '      "source": "/national-tools/elk-rut",',
-              '      "destination": "/api/elk-rut-page"',
+              '      "destination": "/national-tools/elk-rut/index.html"',
               '    },',
               '    {',
               '      "source": "/national-tools/elk-rut/",',
-              '      "destination": "/api/elk-rut-page"',
+              '      "destination": "/national-tools/elk-rut/index.html"',
               '    },',
             ].join('\n');
             vercel = vercel.replace(marker, `${elkRoutes}\n${marker}`);
@@ -55,7 +66,7 @@ jobs:
           const verifierPath = 'scripts/verify-extracted-routing.mjs';
           let verifier = fs.readFileSync(verifierPath, 'utf8');
           const oldAllow = "['ice-out', 'niagara-rainbow'].includes(entry)";
-          const newAllow = "['ice-out', 'niagara-rainbow', 'blue-spring-live', 'yosemite-firefall-live'].includes(entry)";
+          const newAllow = "['ice-out', 'niagara-rainbow', 'blue-spring-live', 'yosemite-firefall-live', 'elk-rut'].includes(entry)";
           if (verifier.includes(oldAllow)) {
             verifier = verifier.replace(oldAllow, newAllow);
             fs.writeFileSync(verifierPath, verifier);
@@ -88,7 +99,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add vercel.json scripts/verify-extracted-routing.mjs AGENTS.md tests/ballard-locks-extracted.test.js
+          git add vercel.json scripts/verify-extracted-routing.mjs AGENTS.md tests/ballard-locks-extracted.test.js public/national-tools/elk-rut/index.html
           if ! git diff --cached --quiet; then
             git commit -m "Wire elk rut through production site"
           fi
