@@ -14,6 +14,15 @@ const isoMinute=s=>s?new Date(String(s).replace(' ','T')+'Z'):null;
 const ageMinutes=d=>d instanceof Date&&!Number.isNaN(d)?Math.max(0,(Date.now()-d.getTime())/60000):null;
 const circular=(a,b)=>{let d=Math.abs(a-b)%360;return d>180?360-d:d};
 
+function observationStatus(ageMin,{fresh=90,max=180}={}){
+  if(!Number.isFinite(ageMin))return 'unavailable';
+  if(ageMin<=fresh)return 'ok';
+  if(ageMin<=max)return 'degraded';
+  return 'stale';
+}
+function usableCurrent(observation,{max=180}={}){
+  return observation&&Number.isFinite(observation.ageMin)&&observation.ageMin<=max?observation:null;
+}
 function tideFit(minutesToHigh){
   if(!Number.isFinite(minutesToHigh))return null;
   if(minutesToHigh>240||minutesToHigh<-150)return 5;
@@ -68,7 +77,7 @@ function computePotential(input={}){
 }
 function confidence({waveAgeMin,waveDirectionDeg,waterAgeMin,forecastHorizonHours=0,npsVerified=true,hasForecastWave=true}={}){
   let score=100;
-  if(waveAgeMin==null)score-=45;else if(waveAgeMin>180)score-=40;else if(waveAgeMin>90)score-=22;else if(waveAgeMin>45)score-=8;
+  if(waveAgeMin==null)score-=45;else if(waveAgeMin>180)score-=55;else if(waveAgeMin>90)score-=22;else if(waveAgeMin>45)score-=8;
   if(!Number.isFinite(waveDirectionDeg))score-=12;
   if(waterAgeMin==null)score-=10;else if(waterAgeMin>90)score-=10;
   if(forecastHorizonHours>6&&!hasForecastWave)score-=30;
@@ -89,13 +98,13 @@ function classifySafety({npsAlerts=[],nwsAlerts=[],npsVerified=false}={}){
 function visitStatus({potential,safety,minutesToBest=0}={}){
   if(safety?.status==='CLOSED'||safety?.status==='HAZARDOUS CONDITIONS')return safety.status;
   if(potential==null)return 'INSUFFICIENT DATA';
-  if(minutesToBest>45&&potential<75)return 'GOOD WINDOW APPROACHING';
+  if(minutesToBest>45&&minutesToBest<=240&&potential<75)return 'GOOD WINDOW APPROACHING';
   if(potential>=70)return 'GO NOW';
   if(potential>=50)return 'WAIT';
   return 'BETTER LATER';
 }
 function explanation(potential,components,minutesToHigh){
-  if(potential==null)return 'Live tide and wave observations are both required before the model will issue a Thunder Potential score.';
+  if(potential==null)return 'A sufficiently recent tide and wave observation are both required before the model will issue a current Thunder Potential score.';
   const bits=[];
   if(components.tide>=70)bits.push('the tide is in the preferred pre-high window');
   else if(minutesToHigh>0)bits.push('the preferred tidal stage is still ahead');
@@ -183,10 +192,11 @@ function candidateWindows({hilo,marine,currentWave,waterResidualFt,currentWind,n
     for(const offset of [-150,-120,-90,-60,-30,0]){
       const t=new Date(high.getTime()+offset*60000);const horizon=(t-now)/3600000;
       if(horizon<-2)continue;
-      let w=horizon<=2&&currentWave?currentWave:marineAt(marine,t);
+      const forecastWave=marineAt(marine,t);
+      const w=horizon<=2&&currentWave?currentWave:forecastWave;
       if(!w)continue;
       const model=computePotential({minutesToHigh:offset,waveHeightM:w.heightM,wavePeriodS:w.periodS,waveDirectionDeg:w.directionDeg,waterResidualFt,windSpeedMs:currentWind?.speedMs,windDirectionDeg:currentWind?.directionDeg});
-      const conf=confidence({waveAgeMin:horizon<=2?currentWave?.ageMin:null,waveDirectionDeg:w.directionDeg,waterAgeMin:null,forecastHorizonHours:Math.max(0,horizon),npsVerified,hasForecastWave:!!marineAt(marine,t)});
+      const conf=confidence({waveAgeMin:horizon<=2&&currentWave?currentWave.ageMin:null,waveDirectionDeg:w.directionDeg,waterAgeMin:null,forecastHorizonHours:Math.max(0,horizon),npsVerified,hasForecastWave:!!forecastWave});
       const row={time:t.toISOString(),highTide:high.toISOString(),score:model.score,band:model.band,confidence:conf.label,components:model.components};
       if(model.score!=null&&(!best||model.score>best.score))best=row;
     }
@@ -194,6 +204,7 @@ function candidateWindows({hilo,marine,currentWave,waterResidualFt,currentWind,n
   }
   return out.sort((a,b)=>new Date(a.time)-new Date(b.time)).slice(0,6);
 }
+function localDayKey(date){return new Intl.DateTimeFormat('en-CA',{timeZone:THUNDER.tz,year:'numeric',month:'2-digit',day:'2-digit'}).format(date);}
 
 module.exports=async function handler(req,res){
   res.setHeader('Access-Control-Allow-Origin','*');
@@ -212,39 +223,46 @@ module.exports=async function handler(req,res){
   const currentPred=contR.status==='fulfilled'?nearestContinuous(contR.value,now):null;
   const waterRaw=waterR.status==='fulfilled'?(waterR.value?.data||[])[0]:null;
   const waterDate=waterRaw?.t?isoMinute(waterRaw.t):null;
+  const waterAgeMin=ageMinutes(waterDate);
   const waterObservedFt=num(waterRaw?.v);
-  const residual=waterObservedFt!=null&&currentPred?.heightFt!=null?waterObservedFt-currentPred.heightFt:null;
+  const rawResidual=waterObservedFt!=null&&currentPred?.heightFt!=null?waterObservedFt-currentPred.heightFt:null;
+  const residual=waterAgeMin!=null&&waterAgeMin<=90?rawResidual:null;
   const ndbc=ndbcR.status==='fulfilled'?parseNdbc(ndbcR.value):{wave:null,wind:null};
+  const currentWave=usableCurrent(ndbc.wave,{max:180});
+  const currentWind=usableCurrent(ndbc.wind,{max:180});
   const nws=nwsR.status==='fulfilled'?nwsR.value:{hourly:[],alerts:[],marine:null};
   const nps=npsR.status==='fulfilled'?npsR.value:{verified:false,alerts:[],note:'NPS status unavailable'};
   const high=nextHigh(hilo,now);const minutesToHigh=high?Math.round((high.date-now)/60000):null;
-  const current=computePotential({minutesToHigh,waveHeightM:ndbc.wave?.heightM,wavePeriodS:ndbc.wave?.periodS,waveDirectionDeg:ndbc.wave?.directionDeg,waterResidualFt:residual,windSpeedMs:ndbc.wind?.speedMs,windDirectionDeg:ndbc.wind?.directionDeg});
+  const current=computePotential({minutesToHigh,waveHeightM:currentWave?.heightM,wavePeriodS:currentWave?.periodS,waveDirectionDeg:currentWave?.directionDeg,waterResidualFt:residual,windSpeedMs:currentWind?.speedMs,windDirectionDeg:currentWind?.directionDeg});
   const safety=classifySafety({npsAlerts:nps.alerts,nwsAlerts:nws.alerts,npsVerified:nps.verified});
-  const windows=candidateWindows({hilo,marine:nws.marine,currentWave:ndbc.wave,waterResidualFt:residual,currentWind:ndbc.wind,npsVerified:nps.verified});
-  const nextBest=windows.filter(w=>new Date(w.time)>=now).sort((a,b)=>(b.score||0)-(a.score||0))[0]||null;
+  const windows=candidateWindows({hilo,marine:nws.marine,currentWave:currentWave&&currentWave.ageMin<=90?currentWave:null,waterResidualFt:residual,currentWind,npsVerified:nps.verified});
+  const futureWindows=windows.filter(w=>new Date(w.time)>=now);
+  const nextBest=futureWindows.sort((a,b)=>(b.score||0)-(a.score||0))[0]||null;
+  const todayKey=localDayKey(now);
+  const bestToday=futureWindows.filter(w=>localDayKey(new Date(w.time))===todayKey).sort((a,b)=>(b.score||0)-(a.score||0))[0]||null;
   const minutesToBest=nextBest?Math.round((new Date(nextBest.time)-now)/60000):0;
-  const conf=confidence({waveAgeMin:ndbc.wave?.ageMin,waveDirectionDeg:ndbc.wave?.directionDeg,waterAgeMin:ageMinutes(waterDate),forecastHorizonHours:0,npsVerified:nps.verified,hasForecastWave:!!nws.marine});
+  const conf=confidence({waveAgeMin:ndbc.wave?.ageMin,waveDirectionDeg:currentWave?.directionDeg,waterAgeMin,forecastHorizonHours:0,npsVerified:nps.verified,hasForecastWave:!!nws.marine});
   const visit=visitStatus({potential:current.score,safety,minutesToBest});
-  sources.tide={name:'NOAA CO-OPS Bar Harbor',station:BAR_HARBOR,status:hilo.length?'ok':'unavailable',observed_at:waterDate?.toISOString()||null};
-  sources.waves={name:'NDBC Eastern Maine Shelf',station:NDBC,status:ndbc.wave?'ok':'unavailable',observed_at:ndbc.wave?.observedAt||null};
+  sources.tide={name:'NOAA CO-OPS Bar Harbor',station:BAR_HARBOR,status:hilo.length?'ok':'unavailable',observed_at:waterDate?.toISOString()||null,age_minutes:round(waterAgeMin)};
+  sources.waves={name:'NDBC Eastern Maine Shelf',station:NDBC,status:ndbc.wave?observationStatus(ndbc.wave.ageMin):'unavailable',observed_at:ndbc.wave?.observedAt||null,age_minutes:round(ndbc.wave?.ageMin)};
   sources.weather={name:'National Weather Service',status:nwsR.status==='fulfilled'?'ok':'unavailable'};
   sources.park={name:'National Park Service Acadia alerts',status:nps.verified?'ok':'unverified'};
   const body={
     location:{name:'Thunder Hole, Acadia National Park, Maine',latitude:THUNDER.lat,longitude:THUNDER.lon,timezone:THUNDER.tz},
     retrieved_at:new Date().toISOString(),model_version:MODEL_VERSION,
-    decision:{thunder_potential:current.score,band:current.band,visit_status:visit,confidence:conf.label,confidence_score:conf.score,explanation:explanation(current.score,current.components,minutesToHigh),safety},
-    tide:{station:BAR_HARBOR,next_high_time:high?.time||null,next_high_height_ft:high?.heightFt??null,minutes_to_high:minutesToHigh,observed_level_ft:waterObservedFt,predicted_level_ft:currentPred?.heightFt??null,residual_ft:round(residual,2)},
-    waves:ndbc.wave?{station:NDBC,height_m:ndbc.wave.heightM,height_ft:round(ndbc.wave.heightM*3.28084,1),dominant_period_s:ndbc.wave.periodS,direction_deg:ndbc.wave.directionDeg,observed_at:ndbc.wave.observedAt,age_minutes:round(ndbc.wave.ageMin)}:null,
-    wind:ndbc.wind?{speed_m_s:ndbc.wind.speedMs,speed_mph:round(ndbc.wind.speedMs*2.23694),direction_deg:ndbc.wind.directionDeg,gust_mph:ndbc.wind.gustMs==null?null:round(ndbc.wind.gustMs*2.23694),observed_at:ndbc.wind.observedAt}:null,
+    decision:{thunder_potential:current.score,band:current.band,visit_status:visit,confidence:conf.label,confidence_score:conf.score,explanation:explanation(current.score,current.components,minutesToHigh),safety,best_window_today:bestToday,next_best_window:nextBest},
+    tide:{station:BAR_HARBOR,next_high_time:high?.time||null,next_high_height_ft:high?.heightFt??null,minutes_to_high:minutesToHigh,observed_level_ft:waterObservedFt,predicted_level_ft:currentPred?.heightFt??null,residual_ft:round(rawResidual,2),residual_used_in_score:residual!=null,observation_age_minutes:round(waterAgeMin)},
+    waves:ndbc.wave?{station:NDBC,height_m:ndbc.wave.heightM,height_ft:round(ndbc.wave.heightM*3.28084,1),dominant_period_s:ndbc.wave.periodS,direction_deg:ndbc.wave.directionDeg,observed_at:ndbc.wave.observedAt,age_minutes:round(ndbc.wave.ageMin),status:observationStatus(ndbc.wave.ageMin),used_in_current_score:!!currentWave}:null,
+    wind:ndbc.wind?{speed_m_s:ndbc.wind.speedMs,speed_mph:round(ndbc.wind.speedMs*2.23694),direction_deg:ndbc.wind.directionDeg,gust_mph:ndbc.wind.gustMs==null?null:round(ndbc.wind.gustMs*2.23694),observed_at:ndbc.wind.observedAt,age_minutes:round(ndbc.wind.ageMin),status:observationStatus(ndbc.wind.ageMin),used_in_current_score:!!currentWind}:null,
     components:current.components,upcoming_windows:windows,
     weather:{hourly:nws.hourly.slice(0,12).map(p=>({time:p.startTime,temp_f:p.temperature,wind:p.windSpeed,wind_direction:p.windDirection,forecast:p.shortForecast,precip_probability:p.probabilityOfPrecipitation?.value??null})),alerts:nws.alerts},
     access:{verified:nps.verified,alerts:nps.alerts,note:nps.note,official_conditions_url:'https://www.nps.gov/acad/planyourvisit/conditions.htm'},
     sources,
-    methodology:{score_is_probability:false,nps_timing_prior:'NPS recommends 1–2 hours before high tide for the best chance of hearing Thunder Hole roar.',direction_note:'Directional fit is deliberately broad and provisional; NPS preserves a historical description favoring wind south of east.',safety_note:'Thunder Potential describes physical spectacle conditions. Visit Status independently gates closures and hazards.'}
+    methodology:{score_is_probability:false,nps_timing_prior:'NPS recommends 1–2 hours before high tide for the best chance of hearing Thunder Hole roar.',direction_note:'Directional fit is deliberately broad and provisional; NPS preserves a historical description favoring wind south of east.',safety_note:'Thunder Potential describes physical spectacle conditions. Visit Status independently gates closures and hazards.',freshness_note:'Wave observations older than 180 minutes are never used for the current score; 90–180 minutes is explicitly degraded. Water-level residuals older than 90 minutes are not used.'}
   };
   res.setHeader('Cache-Control','public, s-maxage=300, stale-while-revalidate=900');
   if(req.method==='HEAD')return res.status(200).end();
   return res.status(200).json(body);
 };
 
-module.exports._test={tideFit,waveForcing,directionFit,waterLevelContext,windContext,computePotential,confidence,classifySafety,visitStatus,parseNdbc,band,explanation};
+module.exports._test={observationStatus,usableCurrent,tideFit,waveForcing,directionFit,waterLevelContext,windContext,computePotential,confidence,classifySafety,visitStatus,parseNdbc,band,explanation};
