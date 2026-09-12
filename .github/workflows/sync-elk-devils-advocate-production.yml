@@ -1,0 +1,54 @@
+name: Sync Elk Devils Advocate Production
+
+on:
+  push:
+    branches: [sync/elk-devils-advocate-production]
+    paths:
+      - ".github/workflows/sync-elk-devils-advocate-production.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: sync/elk-devils-advocate-production
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Sync authoritative elk page and live engine
+        run: |
+          set -euo pipefail
+          ELK_COMMIT="5c47505b154b6330a484726804a3c1eaf49a5ca1"
+          curl --fail --silent --show-error --location \
+            "https://raw.githubusercontent.com/izworskic/rocky-mountain-elk-rut-live/${ELK_COMMIT}/public/national-tools/elk-rut/index.html" \
+            --output public/national-tools/elk-rut/index.html
+          curl --fail --silent --show-error --location \
+            "https://raw.githubusercontent.com/izworskic/rocky-mountain-elk-rut-live/${ELK_COMMIT}/api/live.js" \
+            --output /tmp/elk-rut-live.js
+          {
+            echo "// Deployment mirror of izworskic/rocky-mountain-elk-rut-live api/live.js @ ${ELK_COMMIT}"
+            cat /tmp/elk-rut-live.js
+          } > api/elk-rut-live.js
+          grep -q 'Best within 42 hours' public/national-tools/elk-rut/index.html
+          grep -q 'nextWindow' api/elk-rut-live.js
+          grep -q 'hazard === "thunder"' api/elk-rut-live.js
+          git diff --check
+      - name: Commit mirror sync before verification
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add api/elk-rut-live.js public/national-tools/elk-rut/index.html
+          git commit -m "Sync improved elk rut production mirror"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run full production gate
+        run: npm run verify:all
+      - name: Push verified mirror
+        run: git push origin HEAD:sync/elk-devils-advocate-production
