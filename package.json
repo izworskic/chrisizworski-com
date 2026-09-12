@@ -63,9 +63,7 @@
   },
   "dependencies": {
     "national-ballard-locks": "github:izworskic/national-ballard-locks#86fdfd789e16135c801ebf083da068a4a175149c",
-    "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#317abdf164792692a5202078cee3d3fae36b9322",
-    "tsx": "^4.20.5",
-    "yosemite-firefall-live": "github:izworskic/yosemite-firefall-live#78dcf63ef4687395696778402c59907350677c7a"
+    "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#317abdf164792692a5202078cee3d3fae36b9322"
   },
   "engines": {
     "node": "22.x"

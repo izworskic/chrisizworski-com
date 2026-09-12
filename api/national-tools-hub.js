@@ -19,11 +19,27 @@ function ensureYosemite(html) {
     try {
       const schema = JSON.parse(schemaMatch[1]);
       const list = schema?.['@graph']?.find(item => item?.['@id'] === 'https://chrisizworski.com/national-tools/#toollist');
-      if (list && !list.itemListElement.some(item => item.url === YOSEMITE_URL)) {
-        list.itemListElement.push({ '@type': 'ListItem', position: list.itemListElement.length + 1, url: YOSEMITE_URL, name: 'Yosemite Firefall Live' });
-        list.itemListElement.forEach((item, index) => { item.position = index + 1; });
-        list.numberOfItems = list.itemListElement.length;
-        html = html.replace(schemaMatch[0], `<script type="application/ld+json">${JSON.stringify(schema)}</script>`);
+      if (list) {
+        // The owner hub already injects its own Yosemite entry (pointed at the
+        // nested /national-tools/ path). Match it by name so this layer
+        // corrects that one entry to the canonical root URL instead of
+        // pushing a second, duplicate ListItem when the URLs disagree.
+        const existing = list.itemListElement.find(item => item.name === 'Yosemite Firefall Live' || (item.url || '').includes('yosemite-firefall-live'));
+        let changed = false;
+        if (existing) {
+          if (existing.url !== YOSEMITE_URL) {
+            existing.url = YOSEMITE_URL;
+            changed = true;
+          }
+        } else {
+          list.itemListElement.push({ '@type': 'ListItem', position: list.itemListElement.length + 1, url: YOSEMITE_URL, name: 'Yosemite Firefall Live' });
+          changed = true;
+        }
+        if (changed) {
+          list.itemListElement.forEach((item, index) => { item.position = index + 1; });
+          list.numberOfItems = list.itemListElement.length;
+          html = html.replace(schemaMatch[0], `<script type="application/ld+json">${JSON.stringify(schema)}</script>`);
+        }
       }
     } catch (error) {
       console.warn('Could not extend National Tools JSON-LD for Yosemite', error);
@@ -36,3 +52,7 @@ module.exports = publicToolPage(
   'https://national-outdoor-tools-hub.vercel.app/national-tools/',
   ensureYosemite
 );
+// Exposed for tests only: verifies the correction stays a single-entry fix
+// (no duplicate ListItem) rather than the mutation layer AGENTS.md warns
+// against for a full card re-injection.
+module.exports.ensureYosemite = ensureYosemite;
