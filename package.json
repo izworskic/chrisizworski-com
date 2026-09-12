@@ -4,7 +4,7 @@
   "private": true,
   "description": "Source-controlled deployment for chrisizworski.com",
   "scripts": {
-    "vercel-build": "node scripts/sync-ontario-finder.mjs && node scripts/sync-ballard-locks.mjs && node scripts/add-tahquamenon-to-tools.mjs && node scripts/sync-melvin-price-national-route.mjs && node scripts/add-melvin-price-to-sitemap.mjs && node scripts/add-gauley-to-sitemap.mjs && node scripts/add-yosemite-firefall-to-sitemap.mjs && node scripts/verify-gauley-routing.mjs && node scripts/inject-ga4.mjs && node scripts/generate-ice-out-location-pages.mjs",
+    "vercel-build": "node scripts/sync-ontario-finder.mjs && node scripts/sync-ballard-locks.mjs && node scripts/add-tahquamenon-to-tools.mjs && node scripts/sync-melvin-price-national-route.mjs && node scripts/add-melvin-price-to-sitemap.mjs && node scripts/add-gauley-to-sitemap.mjs && node scripts/add-yosemite-firefall-to-sitemap.mjs && node scripts/add-thunder-hole-to-sitemap.mjs && node scripts/verify-gauley-routing.mjs && node scripts/inject-ga4.mjs && node scripts/generate-ice-out-location-pages.mjs",
     "audit:live": "node scripts/crawl-live.mjs",
     "audit:boat-launch-source": "node scripts/audit-boat-launch-source.mjs",
     "benchmark:border": "node scripts/benchmark-border-crossing.mjs --check",
@@ -48,7 +48,7 @@
     "benchmark:au-sable-search": "node scripts/benchmark-au-sable-map-access-expansion.mjs",
     "benchmark:manistee-page-one": "node scripts/benchmark-manistee-page-one-push.mjs",
     "benchmark:fall-aurora-ctr": "node scripts/benchmark-fall-aurora-ctr.mjs",
-    "benchmark:up-fall-rank": "node scripts/benchmark-upper-peninsula-fall-rank.mjs",
+    "benchmark:up-fall-rank": "node scripts/benchmark-upper-peninsula-fall-rank-distribution.mjs",
     "benchmark:fall-weekend-planner-ctr": "node scripts/benchmark-fall-weekend-planner-ctr.mjs",
     "benchmark:garden-page-one-ctr": "node scripts/benchmark-garden-page-one-ctr.mjs",
     "benchmark:entity-discovery-ctr": "node scripts/benchmark-entity-discovery-ctr.mjs",
