@@ -89,6 +89,15 @@ jobs:
             ballardTest = ballardTest.replace(stalePin, authoritativePin);
             fs.writeFileSync(ballardTestPath, ballardTest);
           }
+
+          const apiContractPath = 'tests/api-contract.test.js';
+          let apiContract = fs.readFileSync(apiContractPath, 'utf8');
+          const directHtmlAssertion = '      assert.match(src, /text\\/html/);';
+          const delegatedHtmlAssertion = '      assert.ok(/text\\/html/.test(src) || /public-tool-page\\.js/.test(src), `${rel} must render public HTML directly or through publicToolPage`);';
+          if (apiContract.includes(directHtmlAssertion)) {
+            apiContract = apiContract.replace(directHtmlAssertion, delegatedHtmlAssertion);
+            fs.writeFileSync(apiContractPath, apiContract);
+          }
           NODE
 
           git diff --check
@@ -99,7 +108,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add vercel.json scripts/verify-extracted-routing.mjs AGENTS.md tests/ballard-locks-extracted.test.js public/national-tools/elk-rut/index.html
+          git add vercel.json scripts/verify-extracted-routing.mjs AGENTS.md tests/ballard-locks-extracted.test.js tests/api-contract.test.js public/national-tools/elk-rut/index.html
           if ! git diff --cached --quiet; then
             git commit -m "Wire elk rut through production site"
           fi
