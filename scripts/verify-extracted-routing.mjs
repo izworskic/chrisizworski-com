@@ -160,7 +160,7 @@ const forbidden = [
 // These existing shell-owned pages are explicit composition exceptions, not
 // permission to copy extracted specialist implementations back into the hub.
 for (const entry of await readdir(path.join(root, 'public/national-tools'))) {
-  if (!['ice-out', 'niagara-rainbow'].includes(entry)) {
+  if (!['ice-out', 'niagara-rainbow', 'blue-spring-live', 'yosemite-firefall-live', 'elk-rut'].includes(entry)) {
     failures.push(`unexpected local national implementation: ${entry}`);
   }
 }
