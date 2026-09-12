@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://chrisizworski.com/national-tools/yosemite-firefall-live/">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="/national-tools/yosemite-firefall-live/styles.css?v=20260911-2">
+<link rel="stylesheet" href="/national-tools/yosemite-firefall-live/styles.css?v=20260912-1">
 <meta name="google-adsense-account" content="ca-pub-8222782620788075">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Yosemite Firefall Live","url":"https://chrisizworski.com/national-tools/yosemite-firefall-live/","applicationCategory":"WeatherApplication","operatingSystem":"Web","description":"Independent Horsetail Fall Firefall decision support using water, western-sky, atmosphere and solar geometry signals.","about":{"@type":"Place","name":"Horsetail Fall, Yosemite National Park"}}</script>
@@ -21,11 +21,11 @@
 <header class="site-header"><a href="/">Chris Izworski</a><nav><a href="/tools/">Michigan Tools</a><a href="/national-tools/">U.S. Outdoor Tools</a></nav></header>
 <main>
 <section class="hero">
-  <div class="hero-copy"><p class="eyebrow">YOSEMITE · HORSETAIL FALL</p><h1>Firefall Live</h1><p class="lede">Should you go, which night is strongest, when should you arrive, and what could stop the glow?</p><p class="status-line" id="generated">Loading live decision data…</p></div>
+  <div class="hero-copy"><p class="eyebrow">YOSEMITE · HORSETAIL FALL</p><h1>Firefall Live</h1><span class="mode-badge" id="mode-badge">Loading…</span><p class="lede">Should you go, which night is strongest, when should you arrive, and what could stop the glow?</p><p class="status-line" id="generated">Loading live decision data…</p></div>
   <div class="decision" id="decision" aria-live="polite"><div class="decision-label">CURRENT OUTLOOK</div><div class="decision-value">—</div><div class="decision-sub">Connecting to the Firefall engine</div></div>
 </section>
 <section class="section current" aria-labelledby="current-title">
-  <div class="section-head"><div><p class="eyebrow dark">THE DECISION</p><h2 id="current-title">Best current Firefall attempt</h2></div><span class="confidence" id="confidence">Confidence —</span></div>
+  <div class="section-head"><div><p class="eyebrow dark" id="current-eyebrow">THE DECISION</p><h2 id="current-title">Best current Firefall attempt</h2></div><span class="confidence" id="confidence">Confidence —</span></div>
   <div class="timing-grid">
     <article><span>Best night</span><strong id="best-date">—</strong></article>
     <article><span>Peak glow</span><strong id="peak-time">—</strong></article>
@@ -40,13 +40,13 @@
     <article><span>Atmospheric clarity</span><strong id="clarity">—</strong><small>Visibility + humidity</small></article>
   </div>
 </section>
-<section class="section" aria-labelledby="week-title"><div class="section-head"><div><p class="eyebrow dark">SEVEN-NIGHT VIEW</p><h2 id="week-title">Compare upcoming evenings</h2></div></div><div class="days" id="days"><div class="loading-card">Loading seven-night outlook…</div></div></section>
+<section class="section" aria-labelledby="week-title"><div class="section-head"><div><p class="eyebrow dark" id="week-eyebrow">SEVEN-NIGHT VIEW</p><h2 id="week-title">Compare upcoming evenings</h2><p class="section-copy" id="week-note"></p></div></div><div class="days" id="days"><div class="loading-card">Loading seven-night outlook…</div></div></section>
 <section class="section trip" id="trip-section" aria-labelledby="trip-title"><div class="section-head"><div><p class="eyebrow dark">TRIP PLANNER</p><h2 id="trip-title">What do extra nights buy you?</h2></div></div><p class="section-copy">Adjacent weather nights are correlated, so the model does not pretend each night is an independent lottery ticket.</p><div class="trip-grid" id="trip-windows"></div></section>
 <section class="section access" aria-labelledby="access-title"><div class="access-card"><p class="eyebrow">ACCESS STATUS</p><h2 id="access-title">Verify this season’s Yosemite rules</h2><p id="access-status">Loading current guidance status…</p><div id="alerts"></div><a href="https://www.nps.gov/yose/planyourvisit/horsetailfall.htm" target="_blank" rel="noreferrer">Official NPS Horsetail Fall guidance ↗</a></div></section>
 <section class="section" aria-labelledby="sources-title"><div class="section-head"><div><p class="eyebrow dark">DATA HEALTH</p><h2 id="sources-title">What the engine is using</h2></div></div><div class="sources" id="sources"></div></section>
 <section class="section method" aria-labelledby="method-title"><p class="eyebrow dark">HOW IT WORKS</p><h2 id="method-title">Three things must line up</h2><div class="method-grid"><article><b>01 · Source water</b><p>Nearby Sierra snow-water measurements, snowpack change, temperature-driven melt and recent precipitation establish whether Horsetail has a plausible source. Merced River discharge is corroborating basin context only.</p></article><article><b>02 · Western sky</b><p>The engine samples the setting-sun corridor west-southwest of Yosemite rather than trusting a generic local cloud percentage. Near the event window, GOES-18 can replace forecast uncertainty with satellite evidence.</p></article><article><b>03 · Solar alignment</b><p>Sun position is calculated minute by minute. The score hard-stops outside the Firefall alignment envelope; a pretty weather forecast cannot overcome impossible geometry.</p></article></div><p class="fineprint" id="method-version">Independent experimental decision support. Probabilities are not guarantees.</p></section>
 </main>
 <footer><a href="/national-tools/">← U.S. Outdoor Tools</a><span>Data: NOAA/NWS · NOAA GOES-18 · California DWR CDEC · USGS · National Park Service</span></footer>
-<script src="/national-tools/yosemite-firefall-live/app.js?v=20260911-2" defer></script>
+<script src="/national-tools/yosemite-firefall-live/app.js?v=20260912-1" defer></script>
 </body>
 </html>
