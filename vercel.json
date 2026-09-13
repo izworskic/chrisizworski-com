@@ -653,6 +653,14 @@
       "destination": "https://national-outdoor-core.vercel.app/national-tools/smoke/:path*"
     },
     {
+      "source": "/national-tools/fall-color/blue-ridge-parkway",
+      "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/blue-ridge-parkway/index.html"
+    },
+    {
+      "source": "/national-tools/fall-color/blue-ridge-parkway/",
+      "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/blue-ridge-parkway/index.html"
+    },
+    {
       "source": "/national-tools/fall-color/:path*",
       "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/:path*"
     },
