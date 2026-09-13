@@ -13,7 +13,7 @@ function title(html) {
 test("Mackinac toll page leads with the page-one price answer", () => {
   const html = read("public/mackinac-bridge-tolls/index.html");
   const tollExperiment = JSON.parse(read("benchmarks/transport-365-growth.json")).experiments[0];
-  assert.equal(title(html), "Mackinac Bridge Toll Cost 2026: $4 Car Fare &amp; Calculator");
+  assert.equal(title(html), "Mackinac Bridge Toll 2026: $4 Cars + RV/Trailer Calculator");
   assert.ok(title(html).replaceAll("&amp;", "&").length <= 60);
   // Revised pre-release 2026-09-01. The old description answered the query outright, so a searcher
   // asking what the toll costs had no reason to open the page: 1,190 impressions, 0.17% CTR, from
