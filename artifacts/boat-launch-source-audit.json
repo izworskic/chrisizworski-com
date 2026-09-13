@@ -1,19 +1,19 @@
 {
-  "generatedAt": "2026-09-03T12:01:38.502Z",
-  "dnrLayerLastEdit": 1786979205547,
+  "generatedAt": "2026-09-13T13:48:16.777Z",
+  "dnrLayerLastEdit": 1788535465001,
   "counts": {
     "totalLayer": 1202,
     "boatingAccessSites": 1189,
-    "open": 1152,
-    "usableDnr": 1151,
+    "open": 1153,
+    "usableDnr": 1152,
     "greatLakes": 145,
-    "inlandOrOther": 1006,
+    "inlandOrOther": 1007,
     "municipal": 1,
-    "sourceBacked": 1152,
+    "sourceBacked": 1153,
     "withheld": 0
   },
   "conditionCounts": {
-    "Not reported": 1151
+    "Not reported": 1152
   },
   "coverage": [
     {

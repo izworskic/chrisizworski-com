@@ -12,7 +12,7 @@ test("Fall hub exposes an honest seasonal fallback while preserving its snippet"
   const description = html.match(/<meta name="description" content="([^"]+)"/i)?.[1] || "";
   assert.equal(title, "Michigan Fall Color Map 2026: Live Peak Color Forecast");
   assert.ok(title.length <= 60);
-  assert.equal(description, "See where Michigan's fall color is peaking now on a live map built from canopy camera and weather data, with regional peak dates and a forecast.");
+  assert.equal(description, "Michigan fall color map 2026: see where leaves are peaking now, regional peak forecasts, live canopy signals and trip-ready color updates across the state.");
   assert.ok(description.length >= 110 && description.length <= 158);
   assert.match(html, /<h1[^>]*>Michigan Fall Color<\/h1>/);
   assert.match(html, /id="statewideStatusLabel">Seasonal planning baseline/);

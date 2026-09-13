@@ -71,8 +71,8 @@
         "averagePositionMax": 10
       },
       "treatment": {
-        "title": "Mackinac Bridge Toll Cost 2026: $4 Car Fare & Calculator",
-        "metaDescription": "Mackinac Bridge tolls for 2026: work out what your car, RV, trailer or motorhome actually pays, using the official per-axle rates from the Bridge Authority.",
+        "title": "Mackinac Bridge Toll 2026: $4 Cars + RV/Trailer Calculator",
+        "metaDescription": "Mackinac Bridge tolls for 2026: $4 passenger cars plus official RV, trailer and motorhome rates. Use the per-axle calculator before you cross.",
         "h1": "Mackinac Bridge Toll Cost: 2026 Fares & Calculator",
         "firstAnswer": "The Mackinac Bridge toll is $4 one way, or $8 round trip, for a standard two-axle passenger car in 2026."
       },
@@ -97,7 +97,7 @@
           "date": "2026-09-01",
           "field": "metaDescription",
           "from": "Mackinac Bridge toll 2026: $4 one way for a standard car, $8 round trip. Calculate RV, trailer and motorhome costs from official axle rates.",
-          "to": "Mackinac Bridge tolls for 2026: work out what your car, RV, trailer or motorhome actually pays, using the official per-axle rates from the Bridge Authority.",
+          "to": "Mackinac Bridge tolls for 2026: $4 passenger cars plus official RV, trailer and motorhome rates. Use the per-axle calculator before you cross.",
           "rationale": "Pre-release revision; the clock has not started. The page ran 1,190 impressions at 0.17% CTR from position 8.0 in the 28 days to Aug 29. The old description answered the query completely — '$4 one way, $8 round trip' — so a searcher asking what the toll costs had no reason to open it. The flat fare stays ON the page, where the gate requires it and where it is honest; the description now leads with the thing a result snippet cannot answer, which is what a specific vehicle with more than two axles pays. This is a hypothesis about snippet self-cannibalisation, not a measured result, and the window will test it."
         }
       ]
