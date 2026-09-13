@@ -13,7 +13,7 @@ function title(html) {
 test("Mackinac toll page leads with the page-one price answer", () => {
   const html = read("public/mackinac-bridge-tolls/index.html");
   const tollExperiment = JSON.parse(read("benchmarks/transport-365-growth.json")).experiments[0];
-  assert.equal(title(html), "Mackinac Bridge Toll Cost 2026: $4 Car Fare &amp; Calculator");
+  assert.equal(title(html), "Mackinac Bridge Toll 2026: $4 Cars + RV/Trailer Calculator");
   assert.ok(title(html).replaceAll("&amp;", "&").length <= 60);
   // Revised pre-release 2026-09-01. The old description answered the query outright, so a searcher
   // asking what the toll costs had no reason to open the page: 1,190 impressions, 0.17% CTR, from
@@ -59,9 +59,9 @@ test("365 transport experiment records observed baselines and a page-specific fr
   assert.equal(benchmark.protectedSurface.path, "/mackinac-bridge-live/");
 });
 
-test("Mackinac flagship search surface stays frozen while the companion pages run", () => {
+test("Mackinac flagship search surface preserves its decision contract while search treatment evolves", () => {
   const html = read("public/mackinac-bridge-live/index.html");
-  assert.match(html, /<title>Is the Mackinac Bridge Open Today\? Live Status &amp; Cameras<\/title>/);
+  assert.match(html, /<title>Mackinac Bridge Conditions Today: Live Status &amp; Cameras<\/title>/);
   assert.match(html, /<h1>Mackinac Bridge Conditions Today<\/h1>/);
   assert.ok(html.includes('id="mackinac-conditions-answer"'));
   assert.match(html, /Is the Mackinac Bridge open today\?/i);

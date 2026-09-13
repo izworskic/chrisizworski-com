@@ -1,0 +1,3528 @@
+
+> chrisizworski-com@1.0.0 verify:all
+> npm test && npm run verify && npm run benchmark:beaches && npm run benchmark:beach-ctr && npm run benchmark:border-ctr && npm run benchmark:growth && npm run benchmark:seo && npm run benchmark:serp-length && npm run benchmark:ctr -- --check && npm run benchmark:search-growth -- --check && npm run benchmark:search-strategy -- --check && npm run benchmark:search-authority -- --check && npm run benchmark:outdoors-now-growth -- --check && npm run benchmark:mackinac-toll-ctr && npm run benchmark:trip-stack -- --check && npm run benchmark:tool-network -- --check && npm run benchmark:circle-tour && npm run benchmark:entity -- --check && npm run benchmark:winter -- --check && npm run benchmark:winter-flow -- --check && npm run benchmark:winter-final -- --check && npm run freshness -- --check && npm run benchmark:citation -- --check && npm run benchmark:decision-network && npm run benchmark:map-insights && npm run benchmark:boat-launches && npm run audit:boat-launch-source && npm run benchmark:boat-launches-v3 && npm run benchmark:boat-launch-search && npm run benchmark:manistee && npm run benchmark:manistee-parity && npm run benchmark:manistee-popups && npm run benchmark:manistee-ux && npm run benchmark:au-sable-search && npm run benchmark:manistee-page-one -- --check && npm run benchmark:fall-aurora-ctr -- --check && npm run benchmark:up-fall-rank -- --check && npm run benchmark:fall-weekend-planner-ctr -- --check && npm run benchmark:beach-detail-ctr -- --check && npm run benchmark:garden-page-one-ctr -- --check && npm run benchmark:entity-discovery-ctr -- --check && npm run benchmark:circle-tour-rank -- --check && npm run benchmark:extracted-routing && npm run benchmark:gauley-routing && npm run benchmark:tool-entities && npm run benchmark:white-christmas-indexing
+
+
+> chrisizworski-com@1.0.0 test
+> node --test tests/*.test.js
+
+TAP version 13
+# Subtest: affiliate ledger records the scoped top-page pilot and measurement boundary
+ok 1 - affiliate ledger records the scoped top-page pilot and measurement boundary
+  ---
+  duration_ms: 10.451714
+  type: 'test'
+  ...
+# Subtest: /northern-lights-michigan/ has one compliant, contextual affiliate module
+ok 2 - /northern-lights-michigan/ has one compliant, contextual affiliate module
+  ---
+  duration_ms: 9.578346
+  type: 'test'
+  ...
+# Subtest: /northern-lights-michigan/ preserves its search-critical title, H1, and canonical
+ok 3 - /northern-lights-michigan/ preserves its search-critical title, H1, and canonical
+  ---
+  duration_ms: 5.692797
+  type: 'test'
+  ...
+# Subtest: /soo-locks/ has one compliant, contextual affiliate module
+ok 4 - /soo-locks/ has one compliant, contextual affiliate module
+  ---
+  duration_ms: 3.839786
+  type: 'test'
+  ...
+# Subtest: /soo-locks/ preserves its search-critical title, H1, and canonical
+ok 5 - /soo-locks/ preserves its search-critical title, H1, and canonical
+  ---
+  duration_ms: 2.421016
+  type: 'test'
+  ...
+# Subtest: affiliate analytics records only placement metadata and no destination URL
+ok 6 - affiliate analytics records only placement metadata and no destination URL
+  ---
+  duration_ms: 3.253554
+  type: 'test'
+  ...
+# (node:2334) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/chrisizworski-com/chrisizworski-com/tests/analytics-standard.test.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /home/runner/work/chrisizworski-com/chrisizworski-com/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: site build keeps GA4 automatic for current and future HTML pages
+ok 7 - site build keeps GA4 automatic for current and future HTML pages
+  ---
+  duration_ms: 13.134722
+  type: 'test'
+  ...
+# Subtest: all dynamic endpoints retain their browser-facing JSON contracts
+ok 8 - all dynamic endpoints retain their browser-facing JSON contracts
+  ---
+  duration_ms: 57.109892
+  type: 'test'
+  ...
+# Subtest: dynamic endpoints reject unsupported or malformed requests predictably
+ok 9 - dynamic endpoints reject unsupported or malformed requests predictably
+  ---
+  duration_ms: 0.381831
+  type: 'test'
+  ...
+# Subtest: edge runtime API routes never use the Node res object, and still set noindex
+ok 10 - edge runtime API routes never use the Node res object, and still set noindex
+  ---
+  duration_ms: 8.055062
+  type: 'test'
+  ...
+# Subtest: the static region cards match lib/aurora.js so the towns are in the served HTML
+ok 11 - the static region cards match lib/aurora.js so the towns are in the served HTML
+  ---
+  duration_ms: 2.094147
+  type: 'test'
+  ...
+# Subtest: the demand towns are present in the served HTML, not only in the API response
+ok 12 - the demand towns are present in the served HTML, not only in the API response
+  ---
+  duration_ms: 0.425301
+  type: 'test'
+  ...
+# Subtest: both halves of the synonym are covered: northern lights and aurora borealis
+ok 13 - both halves of the synonym are covered: northern lights and aurora borealis
+  ---
+  duration_ms: 0.484702
+  type: 'test'
+  ...
+# Subtest: the regional decision engine uses authoritative sky factors without hard-coded promises
+ok 14 - the regional decision engine uses authoritative sky factors without hard-coded promises
+  ---
+  duration_ms: 0.359659
+  type: 'test'
+  ...
+# Subtest: aurora measurement stores only a regional preference and never sends coordinates
+ok 15 - aurora measurement stores only a regional preference and never sends coordinates
+  ---
+  duration_ms: 0.506182
+  type: 'test'
+  ...
+# Subtest: NOAA Kp products become bounded Michigan forecast values
+ok 16 - NOAA Kp products become bounded Michigan forecast values
+  ---
+  duration_ms: 2.254837
+  type: 'test'
+  ...
+# Subtest: solar-wind and OVATION products retain timestamps and regional values
+ok 17 - solar-wind and OVATION products retain timestamps and regional values
+  ---
+  duration_ms: 0.74683
+  type: 'test'
+  ...
+# Subtest: NWS sky cover and USNO moon data become bounded planning factors
+ok 18 - NWS sky cover and USNO moon data become bounded planning factors
+  ---
+  duration_ms: 70.501618
+  type: 'test'
+  ...
+# Subtest: regional verdicts stay conditional instead of promising visibility
+ok 19 - regional verdicts stay conditional instead of promising visibility
+  ---
+  duration_ms: 1.607782
+  type: 'test'
+  ...
+# Subtest: aurora endpoint combines official NOAA sources with CDN caching
+ok 20 - aurora endpoint combines official NOAA sources with CDN caching
+  ---
+  duration_ms: 46.709354
+  type: 'test'
+  ...
+# Subtest: aurora endpoint degrades safely when every NOAA source is unavailable
+ok 21 - aurora endpoint degrades safely when every NOAA source is unavailable
+  ---
+  duration_ms: 1.805049
+  type: 'test'
+  ...
+# Subtest: Ballard Locks implementation is pinned to its authoritative repository
+ok 22 - Ballard Locks implementation is pinned to its authoritative repository
+  ---
+  duration_ms: 1.090569
+  type: 'test'
+  ...
+# Subtest: committed Ballard deployment mirror preserves canonical and traffic truth
+ok 23 - committed Ballard deployment mirror preserves canonical and traffic truth
+  ---
+  duration_ms: 0.490783
+  type: 'test'
+  ...
+# Subtest: Ballard APIs preserve public-source boundaries and live AIS proxy
+ok 24 - Ballard APIs preserve public-source boundaries and live AIS proxy
+  ---
+  duration_ms: 0.36022
+  type: 'test'
+  ...
+# Subtest: main-site build sync installs both Ballard APIs and tour
+ok 25 - main-site build sync installs both Ballard APIs and tour
+  ---
+  duration_ms: 0.231712
+  type: 'test'
+  ...
+# Subtest: committed tour uses one MapLibre map for basemap, AIS, routes and stops
+ok 26 - committed tour uses one MapLibre map for basemap, AIS, routes and stops
+  ---
+  duration_ms: 0.796473
+  type: 'test'
+  ...
+# Subtest: the daily ranking season turns on and off on Michigan calendar dates
+ok 27 - the daily ranking season turns on and off on Michigan calendar dates
+  ---
+  duration_ms: 20.647849
+  type: 'test'
+  ...
+# Subtest: BeachGuard point data normalizes and matches catalog names without broad proximity claims
+ok 28 - BeachGuard point data normalizes and matches catalog names without broad proximity claims
+  ---
+  duration_ms: 2.199193
+  type: 'test'
+  ...
+# Subtest: NWS land and marine alerts include relevant statements without treating every advisory as a beach hazard
+ok 29 - NWS land and marine alerts include relevant statements without treating every advisory as a beach hazard
+  ---
+  duration_ms: 1.881342
+  type: 'test'
+  ...
+# Subtest: NWS Surf Zone Forecast swim risk parses, stays fresh, and matches a beach
+ok 30 - NWS Surf Zone Forecast swim risk parses, stays fresh, and matches a beach
+  ---
+  duration_ms: 1.970578
+  type: 'test'
+  ...
+# Subtest: fresh NOAA observations are converted while old readings never earn score points
+ok 31 - fresh NOAA observations are converted while old readings never earn score points
+  ---
+  duration_ms: 0.486256
+  type: 'test'
+  ...
+# Subtest: official closure and advisory states override an otherwise perfect planning score
+ok 32 - official closure and advisory states override an otherwise perfect planning score
+  ---
+  duration_ms: 0.991836
+  type: 'test'
+  ...
+# Subtest: missing, incomplete, and stale required inputs produce N/A instead of fallback points
+ok 33 - missing, incomplete, and stale required inputs produce N/A instead of fallback points
+  ---
+  duration_ms: 1.162855
+  type: 'test'
+  ...
+# Subtest: beach API keeps source truth and exclusion rules in its browser contract
+ok 34 - beach API keeps source truth and exclusion rules in its browser contract
+  ---
+  duration_ms: 44.078938
+  type: 'test'
+  ...
+# Subtest: Michigan Beach Report main page has answer-ready metadata and honest fallbacks
+ok 35 - Michigan Beach Report main page has answer-ready metadata and honest fallbacks
+  ---
+  duration_ms: 2.129072
+  type: 'test'
+  ...
+# Subtest: seasonal daily page is canonical but explains its automatic pause
+ok 36 - seasonal daily page is canonical but explains its automatic pause
+  ---
+  duration_ms: 1.10178
+  type: 'test'
+  ...
+# Subtest: every catalog beach has a structured, canonical detail page and sitemap entry
+ok 37 - every catalog beach has a structured, canonical detail page and sitemap entry
+  ---
+  duration_ms: 5.00801
+  type: 'test'
+  ...
+# Subtest: the report is discoverable across the site and has a dedicated sitemap
+ok 38 - the report is discoverable across the site and has a dedicated sitemap
+  ---
+  duration_ms: 2.041931
+  type: 'test'
+  ...
+# Subtest: the browser client never renders missing lake observations as zero
+ok 39 - the browser client never renders missing lake observations as zero
+  ---
+  duration_ms: 0.423748
+  type: 'test'
+  ...
+# Subtest: the beach map stays bounded instead of stretching to the full results list
+ok 40 - the beach map stays bounded instead of stretching to the full results list
+  ---
+  duration_ms: 0.395727
+  type: 'test'
+  ...
+# Subtest: straight-line distance still measures the crow flight
+ok 41 - straight-line distance still measures the crow flight
+  ---
+  duration_ms: 1.582736
+  type: 'test'
+  ...
+# Subtest: the shortlist is ordered by drive distance, not by straight line
+ok 42 - the shortlist is ordered by drive distance, not by straight line
+  ---
+  duration_ms: 0.890377
+  type: 'test'
+  ...
+# Subtest: a launch across open water does not outrank one you can drive to
+ok 43 - a launch across open water does not outrank one you can drive to
+  ---
+  duration_ms: 0.34409
+  type: 'test'
+  ...
+# Subtest: a routing outage falls back to straight line and says it is not routed
+ok 44 - a routing outage falls back to straight line and says it is not routed
+  ---
+  duration_ms: 0.335294
+  type: 'test'
+  ...
+# Subtest: nothing beyond the road-distance cap is presented as a nearby choice
+ok 45 - nothing beyond the road-distance cap is presented as a nearby choice
+  ---
+  duration_ms: 0.267628
+  type: 'test'
+  ...
+# Subtest: the pool widens when a launch outside it could still win on road distance
+ok 46 - the pool widens when a launch outside it could still win on road distance
+  ---
+  duration_ms: 0.355622
+  type: 'test'
+  ...
+# Subtest: an unroutable coordinate is dropped rather than counted as zero miles
+ok 47 - an unroutable coordinate is dropped rather than counted as zero miles
+  ---
+  duration_ms: 0.406817
+  type: 'test'
+  ...
+# Subtest: the drive endpoint validates its input and caps the matrix
+ok 48 - the drive endpoint validates its input and caps the matrix
+  ---
+  duration_ms: 1.250707
+  type: 'test'
+  ...
+# Subtest: the drive endpoint answers a bad request with 400, never a 200 carrying an error
+ok 49 - the drive endpoint answers a bad request with 400, never a 200 carrying an error
+  ---
+  duration_ms: 0.763021
+  type: 'test'
+  ...
+# Subtest: Great Lakes connecting rivers and inland lakes coexist in the statewide inventory
+ok 50 - Great Lakes connecting rivers and inland lakes coexist in the statewide inventory
+  ---
+  duration_ms: 0.857967
+  type: 'test'
+  ...
+# Subtest: an unlisted trailer-parking count never satisfies a minimum-parking filter
+ok 51 - an unlisted trailer-parking count never satisfies a minimum-parking filter
+  ---
+  duration_ms: 0.446741
+  type: 'test'
+  ...
+# Subtest: the finder ranks on the shared drive-distance core and caps its reach
+ok 52 - the finder ranks on the shared drive-distance core and caps its reach
+  ---
+  duration_ms: 0.268951
+  type: 'test'
+  ...
+# Subtest: inland destinations are first-class statewide searches instead of out-of-scope cases
+ok 53 - inland destinations are first-class statewide searches instead of out-of-scope cases
+  ---
+  duration_ms: 0.322199
+  type: 'test'
+  ...
+# Subtest: county is a county, not the DNR display label
+ok 54 - county is a county, not the DNR display label
+  ---
+  duration_ms: 0.538853
+  type: 'test'
+  ...
+# Subtest: valid DNR launch survives a blank nullable facilityid by using globalid
+ok 55 - valid DNR launch survives a blank nullable facilityid by using globalid
+  ---
+  duration_ms: 2.223388
+  type: 'test'
+  ...
+# Subtest: facilityid still wins when the source supplies one
+ok 56 - facilityid still wins when the source supplies one
+  ---
+  duration_ms: 0.256407
+  type: 'test'
+  ...
+# Subtest: OBJECTID is a last-resort authoritative source ID
+ok 57 - OBJECTID is a last-resort authoritative source ID
+  ---
+  duration_ms: 0.190655
+  type: 'test'
+  ...
+# Subtest: DNR InProgress record remains visible but explicitly provisional
+ok 58 - DNR InProgress record remains visible but explicitly provisional
+  ---
+  duration_ms: 0.221713
+  type: 'test'
+  ...
+# Subtest: Review Needed, unknown flags, reference-only, unnamed and coordinate-less records stay withheld
+ok 59 - Review Needed, unknown flags, reference-only, unnamed and coordinate-less records stay withheld
+  ---
+  duration_ms: 0.327971
+  type: 'test'
+  ...
+# Subtest: South Haven supplemental is separately sourced and never normalized as DNR
+ok 60 - South Haven supplemental is separately sourced and never normalized as DNR
+  ---
+  duration_ms: 0.529415
+  type: 'test'
+  ...
+# Subtest: supplemental normalization rejects incomplete or unsourced records
+ok 61 - supplemental normalization rejects incomplete or unsourced records
+  ---
+  duration_ms: 0.173923
+  type: 'test'
+  ...
+# Subtest: DNR query no longer contains the nullable facilityid gate
+ok 62 - DNR query no longer contains the nullable facilityid gate
+  ---
+  duration_ms: 0.403692
+  type: 'test'
+  ...
+# Subtest: destination geocoder query is sanitized and capped
+ok 63 - destination geocoder query is sanitized and capped
+  ---
+  duration_ms: 0.398772
+  type: 'test'
+  ...
+# Subtest: geocoder rejects nearby out-of-state results and accepts Michigan candidates
+ok 64 - geocoder rejects nearby out-of-state results and accepts Michigan candidates
+  ---
+  duration_ms: 0.684304
+  type: 'test'
+  ...
+# Subtest: geocoder prefers a useful Michigan named-place candidate
+ok 65 - geocoder prefers a useful Michigan named-place candidate
+  ---
+  duration_ms: 0.220871
+  type: 'test'
+  ...
+# Subtest: statewide API accepts an inland DNR launch
+ok 66 - statewide API accepts an inland DNR launch
+  ---
+  duration_ms: 3.667485
+  type: 'test'
+  ...
+# Subtest: source query is statewide rather than Great-Lakes gated
+ok 67 - source query is statewide rather than Great-Lakes gated
+  ---
+  duration_ms: 0.535207
+  type: 'test'
+  ...
+# Subtest: finder has exactly one search box and maps the full filtered inventory
+ok 68 - finder has exactly one search box and maps the full filtered inventory
+  ---
+  duration_ms: 0.36386
+  type: 'test'
+  ...
+# Subtest: search keeps destination routing and launch-name fallback in one control
+ok 69 - search keeps destination routing and launch-name fallback in one control
+  ---
+  duration_ms: 0.352376
+  type: 'test'
+  ...
+# Subtest: map selection synchronizes the results without scrolling the page past details
+ok 70 - map selection synchronizes the results without scrolling the page past details
+  ---
+  duration_ms: 0.289189
+  type: 'test'
+  ...
+# Subtest: review workflow is explained as data verification, not launch condition
+ok 71 - review workflow is explained as data verification, not launch condition
+  ---
+  duration_ms: 0.415894
+  type: 'test'
+  ...
+# Subtest: pin colors use only source-backed status and do not invent condition ratings
+ok 72 - pin colors use only source-backed status and do not invent condition ratings
+  ---
+  duration_ms: 0.619834
+  type: 'test'
+  ...
+# Subtest: weather endpoint only accepts Michigan-area launch points
+ok 73 - weather endpoint only accepts Michigan-area launch points
+  ---
+  duration_ms: 0.198549
+  type: 'test'
+  ...
+# Subtest: weather normalization does not invent safety claims
+ok 74 - weather normalization does not invent safety claims
+  ---
+  duration_ms: 1.340255
+  type: 'test'
+  ...
+# Subtest: official wait values distinguish no delay, a measured delay, and unavailable data
+ok 75 - official wait values distinguish no delay, a measured delay, and unavailable data
+  ---
+  duration_ms: 3.856808
+  type: 'test'
+  ...
+# Subtest: official agency timestamps normalize to ISO values without inventing a time
+ok 76 - official agency timestamps normalize to ISO values without inventing a time
+  ---
+  duration_ms: 1.050575
+  type: 'test'
+  ...
+# Subtest: CBP lane normalization never turns missing or closed data into a zero-minute wait
+ok 77 - CBP lane normalization never turns missing or closed data into a zero-minute wait
+  ---
+  duration_ms: 1.419852
+  type: 'test'
+  ...
+# Subtest: all five Michigan–Ontario crossings merge both official directions without mixing them
+ok 78 - all five Michigan–Ontario crossings merge both official directions without mixing them
+  ---
+  duration_ms: 2.633381
+  type: 'test'
+  ...
+# Subtest: Detroit comparison names the shortest official wait and reports ties honestly
+ok 79 - Detroit comparison names the shortest official wait and reports ties honestly
+  ---
+  duration_ms: 2.427037
+  type: 'test'
+  ...
+# Subtest: Ontario road events are attached only to a nearby crossing and remain separate from waits
+ok 80 - Ontario road events are attached only to a nearby crossing and remain separate from waits
+  ---
+  duration_ms: 0.816269
+  type: 'test'
+  ...
+# Subtest: CBP trend data is labeled as historical context, not a best-time prediction
+ok 81 - CBP trend data is labeled as historical context, not a best-time prediction
+  ---
+  duration_ms: 0.553269
+  type: 'test'
+  ...
+# Subtest: border endpoint fails soft while preserving the complete five-crossing contract
+ok 82 - border endpoint fails soft while preserving the complete five-crossing contract
+  ---
+  duration_ms: 51.756467
+  type: 'test'
+  ...
+# Subtest: trend endpoint validates crossing IDs and returns an unavailable state without inventing data
+ok 83 - trend endpoint validates crossing IDs and returns an unavailable state without inventing data
+  ---
+  duration_ms: 25.026399
+  type: 'test'
+  ...
+# Subtest: crossing configuration includes Detroit, Blue Water, and Upper Peninsula coverage
+ok 84 - crossing configuration includes Detroit, Blue Water, and Upper Peninsula coverage
+  ---
+  duration_ms: 0.710172
+  type: 'test'
+  ...
+# [border-media] upstream fetch failed {
+#   source: 'ambassador-ontario-approach',
+#   crossing: 'ambassador',
+#   error: 'Unexpected upstream content type: text/html'
+# }
+# Subtest: border media proxy uses a fixed six-camera allowlist
+ok 85 - border media proxy uses a fixed six-camera allowlist
+  ---
+  duration_ms: 1.342579
+  type: 'test'
+  ...
+# Subtest: border media proxy returns a validated same-origin camera image with short caching
+ok 86 - border media proxy returns a validated same-origin camera image with short caching
+  ---
+  duration_ms: 37.615439
+  type: 'test'
+  ...
+# Subtest: border media proxy rejects unknown, unhealthy, and non-image sources safely
+ok 87 - border media proxy rejects unknown, unhealthy, and non-image sources safely
+  ---
+  duration_ms: 2.132218
+  type: 'test'
+  ...
+# Subtest: Michigan border flagship has indexable metadata and honest application schema
+ok 88 - Michigan border flagship has indexable metadata and honest application schema
+  ---
+  duration_ms: 2.173635
+  type: 'test'
+  ...
+# Subtest: flagship exposes the complete five-crossing decision flow and Upper Peninsula answer
+ok 89 - flagship exposes the complete five-crossing decision flow and Upper Peninsula answer
+  ---
+  duration_ms: 0.681348
+  type: 'test'
+  ...
+# Subtest: wait, camera, weather, and approach-road meanings stay visibly separate
+ok 90 - wait, camera, weather, and approach-road meanings stay visibly separate
+  ---
+  duration_ms: 0.760095
+  type: 'test'
+  ...
+# Subtest: client uses same-origin live APIs, tie-safe comparisons, and canonical query-state sharing
+ok 91 - client uses same-origin live APIs, tie-safe comparisons, and canonical query-state sharing
+  ---
+  duration_ms: 0.559982
+  type: 'test'
+  ...
+# Subtest: each crossing owns a substantial, unique, indexable live search page
+ok 92 - each crossing owns a substantial, unique, indexable live search page
+  ---
+  duration_ms: 4.175422
+  type: 'test'
+  ...
+# Subtest: the Sault page has operator live cameras and U.P.-specific travel context
+ok 93 - the Sault page has operator live cameras and U.P.-specific travel context
+  ---
+  duration_ms: 0.397891
+  type: 'test'
+  ...
+# Subtest: the hero stays text-first while the public-domain photograph remains a social preview asset
+ok 94 - the hero stays text-first while the public-domain photograph remains a social preview asset
+  ---
+  duration_ms: 3.186801
+  type: 'test'
+  ...
+# Subtest: border cluster is discoverable from hubs, sitemaps, machine-readable guidance, and contextual pages
+ok 95 - border cluster is discoverable from hubs, sitemaps, machine-readable guidance, and contextual pages
+  ---
+  duration_ms: 2.024017
+  type: 'test'
+  ...
+# Subtest: Circle Tour is an interactive 31-stop route planner, not only a guide
+ok 96 - Circle Tour is an interactive 31-stop route planner, not only a guide
+  ---
+  duration_ms: 2.400798
+  type: 'test'
+  ...
+# Subtest: map route has every stop and uses a pinned lazy map implementation
+ok 97 - map route has every stop and uses a pinned lazy map implementation
+  ---
+  duration_ms: 0.443876
+  type: 'test'
+  ...
+# Subtest: planner supports real trip actions without storing personal data
+ok 98 - planner supports real trip actions without storing personal data
+  ---
+  duration_ms: 5.44273
+  type: 'test'
+  ...
+# Subtest: August 2026 finish layer corrects current travel facts and removes self-justifying copy
+ok 99 - August 2026 finish layer corrects current travel facts and removes self-justifying copy
+  ---
+  duration_ms: 0.334613
+  type: 'test'
+  ...
+# Subtest: Circle Tour keeps the live NOAA Lake Superior water-level signal
+ok 100 - Circle Tour keeps the live NOAA Lake Superior water-level signal
+  ---
+  duration_ms: 0.233765
+  type: 'test'
+  ...
+# Subtest: Circle Tour is connected to the tool network with unique search ownership
+ok 101 - Circle Tour is connected to the tool network with unique search ownership
+  ---
+  duration_ms: 0.36583
+  type: 'test'
+  ...
+# Subtest: contextual trip stack covers eight Michigan region families
+ok 102 - contextual trip stack covers eight Michigan region families
+  ---
+  duration_ms: 1.338341
+  type: 'test'
+  ...
+# Subtest: trip stack analytics are symbolic and privacy limited
+ok 103 - trip stack analytics are symbolic and privacy limited
+  ---
+  duration_ms: 0.751959
+  type: 'test'
+  ...
+# Subtest: fall loader and Manistee loader reuse one shared trip stack
+ok 104 - fall loader and Manistee loader reuse one shared trip stack
+  ---
+  duration_ms: 0.479181
+  type: 'test'
+  ...
+# Subtest: Circle Tour route asset loads the shared network layer and repairs border-wait isolation
+ok 105 - Circle Tour route asset loads the shared network layer and repairs border-wait isolation
+  ---
+  duration_ms: 2.022194
+  type: 'test'
+  ...
+# Subtest: fall river standalone candidate stays shelved and no experiment runtime remains
+ok 106 - fall river standalone candidate stays shelved and no experiment runtime remains
+  ---
+  duration_ms: 1.14459
+  type: 'test'
+  ...
+# Subtest: fall weekend page keeps crawlable cross-tool fallback links
+ok 107 - fall weekend page keeps crawlable cross-tool fallback links
+  ---
+  duration_ms: 0.285161
+  type: 'test'
+  ...
+# (node:2457) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/chrisizworski-com/chrisizworski-com/tests/creator-entity-contract.test.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /home/runner/work/chrisizworski-com/chrisizworski-com/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: creator contract has one immutable Chris Izworski identity
+ok 108 - creator contract has one immutable Chris Izworski identity
+  ---
+  duration_ms: 1.593256
+  type: 'test'
+  ...
+# Subtest: every separate-host first-party tool is covered by the creator contract
+ok 109 - every separate-host first-party tool is covered by the creator contract
+  ---
+  duration_ms: 0.511411
+  type: 'test'
+  ...
+# Subtest: main-site HTML never mints a competing Chris Person fragment
+ok 110 - main-site HTML never mints a competing Chris Person fragment
+  ---
+  duration_ms: 156.343691
+  type: 'test'
+  ...
+# Subtest: pending audits stay explicit rather than being counted as verified
+ok 111 - pending audits stay explicit rather than being counted as verified
+  ---
+  duration_ms: 0.295651
+  type: 'test'
+  ...
+# Subtest: decision-network release keeps its explicit loss and market-test boundaries
+ok 112 - decision-network release keeps its explicit loss and market-test boundaries
+  ---
+  duration_ms: 1.452624
+  type: 'test'
+  ...
+# Subtest: decision network is crawlable on safe hubs without altering protected destinations
+ok 113 - decision network is crawlable on safe hubs without altering protected destinations
+  ---
+  duration_ms: 2.61715
+  type: 'test'
+  ...
+# Subtest: boat launch finder is source-first, statewide, map-first, and keeps source records as map truth
+ok 114 - boat launch finder is source-first, statewide, map-first, and keeps source records as map truth
+  ---
+  duration_ms: 3.55673
+  type: 'test'
+  ...
+# Subtest: shipwreck explorer preserves the database and keeps map precision honest
+ok 115 - shipwreck explorer preserves the database and keeps map precision honest
+  ---
+  duration_ms: 1.517284
+  type: 'test'
+  ...
+# Subtest: growth benchmark is evidence-backed and part of the full merge gate
+ok 116 - growth benchmark is evidence-backed and part of the full merge gate
+  ---
+  duration_ms: 0.686007
+  type: 'test'
+  ...
+# Subtest: Rocky Mountain elk route is owned by the main-site composition layer before the National Tools catch-all
+ok 117 - Rocky Mountain elk route is owned by the main-site composition layer before the National Tools catch-all
+  ---
+  duration_ms: 1.65465
+  type: 'test'
+  ...
+# Subtest: elk deployment mirror preserves authoritative ownership and canonical URL
+ok 118 - elk deployment mirror preserves authoritative ownership and canonical URL
+  ---
+  duration_ms: 1.408502
+  type: 'test'
+  ...
+# Subtest: Estivant Pines owns one distinct indexable canonical with bounded SERP strings
+ok 119 - Estivant Pines owns one distinct indexable canonical with bounded SERP strings
+  ---
+  duration_ms: 2.132068
+  type: 'test'
+  ...
+# Subtest: the page defines the canonical Chris Izworski entity and the tool honestly
+ok 120 - the page defines the canonical Chris Izworski entity and the tool honestly
+  ---
+  duration_ms: 2.093146
+  type: 'test'
+  ...
+# Subtest: route facts use Michigan Nature Association as the trail authority
+ok 121 - route facts use Michigan Nature Association as the trail authority
+  ---
+  duration_ms: 0.255726
+  type: 'test'
+  ...
+# Subtest: trailhead coordinate is consistent across schema, map, directions and NWS point
+ok 122 - trailhead coordinate is consistent across schema, map, directions and NWS point
+  ---
+  duration_ms: 0.435079
+  type: 'test'
+  ...
+# Subtest: live read uses point-specific NWS forecast, alerts, snow grid and nearby observation
+ok 123 - live read uses point-specific NWS forecast, alerts, snow grid and nearby observation
+  ---
+  duration_ms: 0.437795
+  type: 'test'
+  ...
+# Subtest: network-independent sunrise sunset drives a buffered hike clock
+ok 124 - network-independent sunrise sunset drives a buffered hike clock
+  ---
+  duration_ms: 0.420021
+  type: 'test'
+  ...
+# Subtest: snow is described as forecast context rather than an inspected trail measurement
+ok 125 - snow is described as forecast context rather than an inspected trail measurement
+  ---
+  duration_ms: 0.318643
+  type: 'test'
+  ...
+# Subtest: new canonical gate passes with a measurement plan and cannibalization boundary
+ok 126 - new canonical gate passes with a measurement plan and cannibalization boundary
+  ---
+  duration_ms: 0.329924
+  type: 'test'
+  ...
+# Subtest: Estivant sun clock has a network-independent local calculator
+ok 127 - Estivant sun clock has a network-independent local calculator
+  ---
+  duration_ms: 1.397441
+  type: 'test'
+  ...
+# Subtest: local sun clock preserves hike-finish planning buffers
+ok 128 - local sun clock preserves hike-finish planning buffers
+  ---
+  duration_ms: 0.331106
+  type: 'test'
+  ...
+# Subtest: Michigan summer darkness copy matches the page's astronomical threshold
+ok 129 - Michigan summer darkness copy matches the page's astronomical threshold
+  ---
+  duration_ms: 2.055376
+  type: 'test'
+  ...
+# Subtest: Soo Locks copy distinguishes gravity-fed level change from complete vessel passage
+ok 130 - Soo Locks copy distinguishes gravity-fed level change from complete vessel passage
+  ---
+  duration_ms: 0.589858
+  type: 'test'
+  ...
+# Subtest: Michigan Ice separates ten-year accumulated cold from lake-wide ice climatology
+ok 131 - Michigan Ice separates ten-year accumulated cold from lake-wide ice climatology
+  ---
+  duration_ms: 2.307915
+  type: 'test'
+  ...
+# Subtest: FVF distribution grows from established pages
+ok 132 - FVF distribution grows from established pages
+  ---
+  duration_ms: 29.814413
+  type: 'test'
+  ...
+# Subtest: accepts a signed GitHub-hosted run of the exact main-branch workflow
+ok 133 - accepts a signed GitHub-hosted run of the exact main-branch workflow
+  ---
+  duration_ms: 8.965977
+  type: 'test'
+  ...
+# Subtest: rejects tokens that can be replayed from another audience, repo, ref, workflow, or deployment
+ok 134 - rejects tokens that can be replayed from another audience, repo, ref, workflow, or deployment
+  ---
+  duration_ms: 11.414384
+  type: 'test'
+  ...
+# Subtest: rejects expired, stale, malformed, unsigned, and unknown-key tokens
+ok 135 - rejects expired, stale, malformed, unsigned, and unknown-key tokens
+  ---
+  duration_ms: 5.253016
+  type: 'test'
+  ...
+# Subtest: keeps CRON_SECRET as the scheduled-job credential and permits OIDC only for test=1
+ok 136 - keeps CRON_SECRET as the scheduled-job credential and permits OIDC only for test=1
+  ---
+  duration_ms: 1.314587
+  type: 'test'
+  ...
+# Subtest: failure paths in the fall colour cron return a 5xx, not a 200 with an error body
+ok 137 - failure paths in the fall colour cron return a 5xx, not a 200 with an error body
+  ---
+  duration_ms: 1.183733
+  type: 'test'
+  ...
+# Subtest: the only 200 responses are genuine skips and genuine success
+ok 138 - the only 200 responses are genuine skips and genuine success
+  ---
+  duration_ms: 0.750727
+  type: 'test'
+  ...
+# Subtest: configuration and upstream failures are distinguished
+ok 139 - configuration and upstream failures are distinguished
+  ---
+  duration_ms: 0.17746
+  type: 'test'
+  ...
+# Subtest: the writer refuses to generate a report from zero regions
+ok 140 - the writer refuses to generate a report from zero regions
+  ---
+  duration_ms: 0.184463
+  type: 'test'
+  ...
+# Subtest: cached feed retains its generation time instead of the visit time
+ok 141 - cached feed retains its generation time instead of the visit time
+  ---
+  duration_ms: 1.81068
+  type: 'test'
+  ...
+# Subtest: missing, erroneous, stale and future-dated feeds retain the baseline
+ok 142 - missing, erroneous, stale and future-dated feeds retain the baseline
+  ---
+  duration_ms: 0.229478
+  type: 'test'
+  ...
+# Subtest: empty weather and stale or invalid canopy do not make a live statewide answer
+ok 143 - empty weather and stale or invalid canopy do not make a live statewide answer
+  ---
+  duration_ms: 0.261767
+  type: 'test'
+  ...
+# Subtest: partial coverage identifies only regions with usable model inputs
+ok 144 - partial coverage identifies only regions with usable model inputs
+  ---
+  duration_ms: 0.265173
+  type: 'test'
+  ...
+# Subtest: every fall-color page defines the one canonical Chris Izworski entity
+ok 145 - every fall-color page defines the one canonical Chris Izworski entity
+  ---
+  duration_ms: 10.06351
+  type: 'test'
+  ...
+# Subtest: planner and drives schema URLs match their trailing-slash canonicals
+ok 146 - planner and drives schema URLs match their trailing-slash canonicals
+  ---
+  duration_ms: 0.715161
+  type: 'test'
+  ...
+# Subtest: fall trip tools record useful, privacy-safe interactions
+ok 147 - fall trip tools record useful, privacy-safe interactions
+  ---
+  duration_ms: 0.634241
+  type: 'test'
+  ...
+# Subtest: the browser and daily writer share the August 20 to November 15 reporting window
+ok 148 - the browser and daily writer share the August 20 to November 15 reporting window
+  ---
+  duration_ms: 1.35389
+  type: 'test'
+  ...
+# Subtest: static and dynamic fall sitemaps make only supportable freshness claims
+ok 149 - static and dynamic fall sitemaps make only supportable freshness claims
+  ---
+  duration_ms: 20.78304
+  type: 'test'
+  ...
+# Subtest: priority-page schema and sitemap dates agree and are not in the future
+ok 150 - priority-page schema and sitemap dates agree and are not in the future
+  ---
+  duration_ms: 0.861614
+  type: 'test'
+  ...
+# Subtest: Fall hub exposes an honest seasonal fallback while preserving its snippet
+ok 151 - Fall hub exposes an honest seasonal fallback while preserving its snippet
+  ---
+  duration_ms: 2.519279
+  type: 'test'
+  ...
+# Subtest: Fall hub reuses canonical site entities and correct breadcrumb ownership
+ok 152 - Fall hub reuses canonical site entities and correct breadcrumb ownership
+  ---
+  duration_ms: 2.070594
+  type: 'test'
+  ...
+# Subtest: Fall search benchmark uses the fresh query-level GSC window
+ok 153 - Fall search benchmark uses the fresh query-level GSC window
+  ---
+  duration_ms: 1.291654
+  type: 'test'
+  ...
+# Subtest: Fall hub schema date and sitemap freshness agree
+ok 154 - Fall hub schema date and sitemap freshness agree
+  ---
+  duration_ms: 0.64997
+  type: 'test'
+  ...
+# Subtest: every registered camera has a label, credit and a real upstream
+ok 155 - every registered camera has a label, credit and a real upstream
+  ---
+  duration_ms: 2.196788
+  type: 'test'
+  ...
+# Subtest: the registry is an allowlist, so an arbitrary id cannot become a proxy target
+ok 156 - the registry is an allowlist, so an arbitrary id cannot become a proxy target
+  ---
+  duration_ms: 0.475856
+  type: 'test'
+  ...
+# Subtest: MDOT cameras resolve to the MDOT host and nothing else
+ok 157 - MDOT cameras resolve to the MDOT host and nothing else
+  ---
+  duration_ms: 1.260346
+  type: 'test'
+  ...
+# Subtest: age, not the hidden flag, decides whether an image is usable
+ok 158 - age, not the hidden flag, decides whether an image is usable
+  ---
+  duration_ms: 0.442964
+  type: 'test'
+  ...
+# Subtest: canopy cameras resolve to PhenoCam and nothing else
+ok 159 - canopy cameras resolve to PhenoCam and nothing else
+  ---
+  duration_ms: 0.213067
+  type: 'test'
+  ...
+# Subtest: Windy cameras keep the key server-side and return only approved Windy URLs
+ok 160 - Windy cameras keep the key server-side and return only approved Windy URLs
+  ---
+  duration_ms: 34.198118
+  type: 'test'
+  ...
+# Subtest: Windy URL validation rejects lookalike and non-HTTPS hosts
+ok 161 - Windy URL validation rejects lookalike and non-HTTPS hosts
+  ---
+  duration_ms: 0.216804
+  type: 'test'
+  ...
+# Subtest: every fall colour camera names the region page it belongs to
+ok 162 - every fall colour camera names the region page it belongs to
+  ---
+  duration_ms: 0.326658
+  type: 'test'
+  ...
+# Subtest: a missing Windy key is reported as unconfigured, not as a camera that stopped
+ok 163 - a missing Windy key is reported as unconfigured, not as a camera that stopped
+  ---
+  duration_ms: 0.587023
+  type: 'test'
+  ...
+# Subtest: the renderer hides an unconfigured camera and still reports a real outage
+ok 164 - the renderer hides an unconfigured camera and still reports a real outage
+  ---
+  duration_ms: 0.709691
+  type: 'test'
+  ...
+# Subtest: every Windy camera carries the attribution Windy's terms require
+ok 165 - every Windy camera carries the attribution Windy's terms require
+  ---
+  duration_ms: 0.42978
+  type: 'test'
+  ...
+# Subtest: Windy images are never proxied or cached beyond the free-tier token window
+ok 166 - Windy images are never proxied or cached beyond the free-tier token window
+  ---
+  duration_ms: 0.311119
+  type: 'test'
+  ...
+# Subtest: Great Lakes ship tracker matches live search intent without changing the canonical
+ok 167 - Great Lakes ship tracker matches live search intent without changing the canonical
+  ---
+  duration_ms: 1.578878
+  type: 'test'
+  ...
+# Subtest: ship tracker exposes seven useful map views on one crawlable page
+ok 168 - ship tracker exposes seven useful map views on one crawlable page
+  ---
+  duration_ms: 2.114987
+  type: 'test'
+  ...
+# Subtest: ship tracker uses supported no-key AIS and existing same-origin NOAA data
+ok 169 - ship tracker uses supported no-key AIS and existing same-origin NOAA data
+  ---
+  duration_ms: 0.587804
+  type: 'test'
+  ...
+# Subtest: ship tracker remains bounded on tablets and phones
+ok 170 - ship tracker remains bounded on tablets and phones
+  ---
+  duration_ms: 0.410524
+  type: 'test'
+  ...
+# Subtest: ship tracker structured data and internal discovery surfaces are aligned
+ok 171 - ship tracker structured data and internal discovery surfaces are aligned
+  ---
+  duration_ms: 2.383897
+  type: 'test'
+  ...
+# Subtest: ship tracker remains active after growth experiment retirement
+ok 172 - ship tracker remains active after growth experiment retirement
+  ---
+  duration_ms: 0.948656
+  type: 'test'
+  ...
+# (node:2560) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/chrisizworski-com/chrisizworski-com/tests/garden-planner-network.test.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /home/runner/work/chrisizworski-com/chrisizworski-com/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Garden Planner stays launch-blocked until the owned production domain is verified
+ok 173 - Garden Planner stays launch-blocked until the owned production domain is verified
+  ---
+  duration_ms: 1.156231
+  type: 'test'
+  ...
+# Subtest: Garden Planner records Vercel hosting progress without claiming production verification
+ok 174 - Garden Planner records Vercel hosting progress without claiming production verification
+  ---
+  duration_ms: 0.23112
+  type: 'test'
+  ...
+# Subtest: planned Garden Planner reinforces one Chris Izworski entity without claiming live coverage
+ok 175 - planned Garden Planner reinforces one Chris Izworski entity without claiming live coverage
+  ---
+  duration_ms: 0.201355
+  type: 'test'
+  ...
+# Subtest: Garden Planner search ownership does not collide with protected Michigan information owners
+ok 176 - Garden Planner search ownership does not collide with protected Michigan information owners
+  ---
+  duration_ms: 0.218276
+  type: 'test'
+  ...
+# Subtest: central Projects page does not send users to the unverified Garden Planner yet
+ok 177 - central Projects page does not send users to the unverified Garden Planner yet
+  ---
+  duration_ms: 0.341606
+  type: 'test'
+  ...
+# Subtest: Gazette landing matches current shipping-news intent and opens the real newspaper
+ok 178 - Gazette landing matches current shipping-news intent and opens the real newspaper
+  ---
+  duration_ms: 2.089499
+  type: 'test'
+  ...
+# Subtest: latest-edition widget is safe, date-aware, and useful without the API
+ok 179 - latest-edition widget is safe, date-aware, and useful without the API
+  ---
+  duration_ms: 0.4137
+  type: 'test'
+  ...
+# Subtest: current Gazette headline is distributed across six relevant owned pages
+ok 180 - current Gazette headline is distributed across six relevant owned pages
+  ---
+  duration_ms: 3.028767
+  type: 'test'
+  ...
+# Subtest: Gazette benchmark records unknown search metrics honestly after experiment retirement
+ok 181 - Gazette benchmark records unknown search metrics honestly after experiment retirement
+  ---
+  duration_ms: 1.285762
+  type: 'test'
+  ...
+# Subtest: 100x benchmark reconciles to the supplied Search Console baseline
+ok 182 - 100x benchmark reconciles to the supplied Search Console baseline
+  ---
+  duration_ms: 2.501515
+  type: 'test'
+  ...
+# Subtest: priority search pages preserve canonicals, direct answers, and internal depth
+ok 183 - priority search pages preserve canonicals, direct answers, and internal depth
+  ---
+  duration_ms: 3.797598
+  type: 'test'
+  ...
+# Subtest: Aurora and Soo answers remain useful and source-safe before or outside client data
+ok 184 - Aurora and Soo answers remain useful and source-safe before or outside client data
+  ---
+  duration_ms: 1.209
+  type: 'test'
+  ...
+# Subtest: ad-first execution plan stays internal and measurable
+ok 185 - ad-first execution plan stays internal and measurable
+  ---
+  duration_ms: 2.107362
+  type: 'test'
+  ...
+# Subtest: FVF and birding form measurable internal growth clusters
+ok 186 - FVF and birding form measurable internal growth clusters
+  ---
+  duration_ms: 0.81688
+  type: 'test'
+  ...
+# Subtest: JSON-LD remains valid on every changed page
+ok 187 - JSON-LD remains valid on every changed page
+  ---
+  duration_ms: 4.860847
+  type: 'test'
+  ...
+# Subtest: generated ice pages match the generator output
+ok 188 - generated ice pages match the generator output
+  ---
+  duration_ms: 6.842385
+  type: 'test'
+  ...
+# Subtest: the ice generator stays pinned to its base path
+ok 189 - the ice generator stays pinned to its base path
+  ---
+  duration_ms: 1.0905
+  type: 'test'
+  ...
+# Subtest: every generated ice page stays inside the hub SERP limits
+ok 190 - every generated ice page stays inside the hub SERP limits
+  ---
+  duration_ms: 1.732154
+  type: 'test'
+  ...
+# Subtest: the generated ice section includes search and measurement foundations
+ok 191 - the generated ice section includes search and measurement foundations
+  ---
+  duration_ms: 2.436625
+  type: 'test'
+  ...
+# Subtest: Labor Day is computed as the first Monday in September
+ok 192 - Labor Day is computed as the first Monday in September
+  ---
+  duration_ms: 1.437877
+  type: 'test'
+  ...
+# Subtest: the section rolls to the next year on its own once the walk has passed
+ok 193 - the section rolls to the next year on its own once the walk has passed
+  ---
+  duration_ms: 0.459856
+  type: 'test'
+  ...
+# Subtest: the static answer is correct with no JavaScript and carries no hardcoded year
+ok 194 - the static answer is correct with no JavaScript and carries no hardcoded year
+  ---
+  duration_ms: 0.794528
+  type: 'test'
+  ...
+# Subtest: the walk module computes dates rather than storing them
+ok 195 - the walk module computes dates rather than storing them
+  ---
+  duration_ms: 0.321028
+  type: 'test'
+  ...
+# Subtest: the Bridge Walk is answered in the FAQ without disturbing the existing entries
+ok 196 - the Bridge Walk is answered in the FAQ without disturbing the existing entries
+  ---
+  duration_ms: 0.605877
+  type: 'test'
+  ...
+# [mackinac-media] upstream fetch failed { source: 'radar-kapx', error: 'Upstream returned 503' }
+# Subtest: Mackinac media source selection only allows fixed camera and radar feeds
+ok 197 - Mackinac media source selection only allows fixed camera and radar feeds
+  ---
+  duration_ms: 1.327801
+  type: 'test'
+  ...
+# Subtest: Mackinac media proxy returns an image with CDN caching
+ok 198 - Mackinac media proxy returns an image with CDN caching
+  ---
+  duration_ms: 36.858975
+  type: 'test'
+  ...
+# Subtest: Mackinac media proxy fails safely on an invalid or unhealthy source
+ok 199 - Mackinac media proxy fails safely on an invalid or unhealthy source
+  ---
+  duration_ms: 2.19092
+  type: 'test'
+  ...
+# Subtest: Mackinac Bridge Live has indexable metadata and valid structured data
+ok 200 - Mackinac Bridge Live has indexable metadata and valid structured data
+  ---
+  duration_ms: 3.985528
+  type: 'test'
+  ...
+# Subtest: Mackinac Bridge Live contains the complete crossing decision flow
+ok 201 - Mackinac Bridge Live contains the complete crossing decision flow
+  ---
+  duration_ms: 0.534344
+  type: 'test'
+  ...
+# Subtest: the SMS text-alert link and share-report button are not present
+ok 202 - the SMS text-alert link and share-report button are not present
+  ---
+  duration_ms: 3.345086
+  type: 'test'
+  ...
+# Subtest: the interface makes official status authoritative and nearby wind explicit
+ok 203 - the interface makes official status authoritative and nearby wind explicit
+  ---
+  duration_ms: 1.074751
+  type: 'test'
+  ...
+# Subtest: Crossing Confidence is categorical, explainable, and does not use nearby weather as a score
+ok 204 - Crossing Confidence is categorical, explainable, and does not use nearby weather as a score
+  ---
+  duration_ms: 0.503787
+  type: 'test'
+  ...
+# Subtest: vehicle, toll, assistance, approach-road, and history differentiators are wired
+ok 205 - vehicle, toll, assistance, approach-road, and history differentiators are wired
+  ---
+  duration_ms: 4.353362
+  type: 'test'
+  ...
+# Subtest: the sharing feature (SMS link and share button) was removed by design and stays removed
+ok 206 - the sharing feature (SMS link and share button) was removed by design and stays removed
+  ---
+  duration_ms: 0.445409
+  type: 'test'
+  ...
+# Subtest: the published toll formula handles passenger, trailer, motorhome, and auto-tow cases
+ok 207 - the published toll formula handles passenger, trailer, motorhome, and auto-tow cases
+  ---
+  duration_ms: 0.480875
+  type: 'test'
+  ...
+# Subtest: supporting search pages exist, cross-link, and use the real licensed photograph
+ok 208 - supporting search pages exist, cross-link, and use the real licensed photograph
+  ---
+  duration_ms: 1.179195
+  type: 'test'
+  ...
+# Subtest: the tool includes official NWS area radar without presenting it as bridge conditions
+ok 209 - the tool includes official NWS area radar without presenting it as bridge conditions
+  ---
+  duration_ms: 0.765354
+  type: 'test'
+  ...
+# Subtest: northbound and southbound selections stay aligned with distinct camera feeds
+ok 210 - northbound and southbound selections stay aligned with distinct camera feeds
+  ---
+  duration_ms: 0.574759
+  type: 'test'
+  ...
+# Subtest: the tool is responsive, reduced-motion aware, and analytics ready
+ok 211 - the tool is responsive, reduced-motion aware, and analytics ready
+  ---
+  duration_ms: 0.186957
+  type: 'test'
+  ...
+# Subtest: official Bridge Authority HTML becomes a normalized live status
+ok 212 - official Bridge Authority HTML becomes a normalized live status
+  ---
+  duration_ms: 7.465895
+  type: 'test'
+  ...
+# Subtest: official high-wind status remains authoritative without inventing a bridge reading
+ok 213 - official high-wind status remains authoritative without inventing a bridge reading
+  ---
+  duration_ms: 1.822093
+  type: 'test'
+  ...
+# Subtest: status classification preserves the official restriction hierarchy
+ok 214 - status classification preserves the official restriction hierarchy
+  ---
+  duration_ms: 0.632418
+  type: 'test'
+  ...
+# Subtest: NWS hourly periods gain gusts and threshold bands from grid data
+ok 215 - NWS hourly periods gain gusts and threshold bands from grid data
+  ---
+  duration_ms: 1.055575
+  type: 'test'
+  ...
+# Subtest: the freshest nearby NOAA wind observation is selected and labeled as a proxy
+ok 216 - the freshest nearby NOAA wind observation is selected and labeled as a proxy
+  ---
+  duration_ms: 1.359772
+  type: 'test'
+  ...
+# Subtest: nearby Mi Drive events are filtered, sorted, and direction-labeled
+ok 217 - nearby Mi Drive events are filtered, sorted, and direction-labeled
+  ---
+  duration_ms: 1.486508
+  type: 'test'
+  ...
+# Subtest: Mackinac endpoint combines official status, NOAA wind, and NWS forecast
+ok 218 - Mackinac endpoint combines official status, NOAA wind, and NWS forecast
+  ---
+  duration_ms: 40.918377
+  type: 'test'
+  ...
+# Subtest: Mackinac endpoint fails safe when the official status source is unavailable
+ok 219 - Mackinac endpoint fails safe when the official status source is unavailable
+  ---
+  duration_ms: 0.887172
+  type: 'test'
+  ...
+# Subtest: Au Sable-style layer is loaded without replacing the source-backed Manistee engine
+ok 220 - Au Sable-style layer is loaded without replacing the source-backed Manistee engine
+  ---
+  duration_ms: 2.887236
+  type: 'test'
+  ...
+# Subtest: field shell is map-first instead of a permanent desktop sidebar
+ok 221 - field shell is map-first instead of a permanent desktop sidebar
+  ---
+  duration_ms: 0.319815
+  type: 'test'
+  ...
+# Subtest: masthead is deliberately terse and gives the screen back to the map
+ok 222 - masthead is deliberately terse and gives the screen back to the map
+  ---
+  duration_ms: 0.285772
+  type: 'test'
+  ...
+# Subtest: one simple task switcher retains the Au Sable Places Plan River Guide model
+ok 223 - one simple task switcher retains the Au Sable Places Plan River Guide model
+  ---
+  duration_ms: 0.237703
+  type: 'test'
+  ...
+# Subtest: Places follows search then reach then Plan by then grouped compact rows
+ok 224 - Places follows search then reach then Plan by then grouped compact rows
+  ---
+  duration_ms: 0.346134
+  type: 'test'
+  ...
+# Subtest: persona wall is removed from the primary human workflow
+ok 225 - persona wall is removed from the primary human workflow
+  ---
+  duration_ms: 0.235418
+  type: 'test'
+  ...
+# Subtest: planner exposes common starts, NHD results, and shareable state without invented mileage
+ok 226 - planner exposes common starts, NHD results, and shareable state without invented mileage
+  ---
+  duration_ms: 0.236801
+  type: 'test'
+  ...
+# Subtest: deep access and seasonal detail use progressive disclosure
+ok 227 - deep access and seasonal detail use progressive disclosure
+  ---
+  duration_ms: 0.186347
+  type: 'test'
+  ...
+# Subtest: River opens with a compact conditions-now strip before full gauge detail
+ok 228 - River opens with a compact conditions-now strip before full gauge detail
+  ---
+  duration_ms: 0.426794
+  type: 'test'
+  ...
+# Subtest: mobile field use keeps the map substantial and touch targets at least 44px
+ok 229 - mobile field use keeps the map substantial and touch targets at least 44px
+  ---
+  duration_ms: 0.58517
+  type: 'test'
+  ...
+# Subtest: map flow v2 is loaded directly by the page with a cache-busting release id
+ok 230 - map flow v2 is loaded directly by the page with a cache-busting release id
+  ---
+  duration_ms: 1.733197
+  type: 'test'
+  ...
+# Subtest: river key is truly collapsed by default and old key controls cannot win
+ok 231 - river key is truly collapsed by default and old key controls cannot win
+  ---
+  duration_ms: 0.285001
+  type: 'test'
+  ...
+# Subtest: map key always stacks below point detail cards
+ok 232 - map key always stacks below point detail cards
+  ---
+  duration_ms: 0.253041
+  type: 'test'
+  ...
+# Subtest: native Leaflet rich popup is hidden instead of stretched or cosmetically detached
+ok 233 - native Leaflet rich popup is hidden instead of stretched or cosmetically detached
+  ---
+  duration_ms: 0.312922
+  type: 'test'
+  ...
+# Subtest: desktop point details occupy the open side of the map without a popup tail
+ok 234 - desktop point details occupy the open side of the map without a popup tail
+  ---
+  duration_ms: 0.306651
+  type: 'test'
+  ...
+# Subtest: selected geographic point is kept in the unobstructed map area when a card opens
+ok 235 - selected geographic point is kept in the unobstructed map area when a card opens
+  ---
+  duration_ms: 0.245938
+  type: 'test'
+  ...
+# Subtest: closing a point card reverses only the automatic card pan
+ok 236 - closing a point card reverses only the automatic card pan
+  ---
+  duration_ms: 0.27428
+  type: 'test'
+  ...
+# Subtest: wide data layout reduces vertical card growth
+ok 237 - wide data layout reduces vertical card growth
+  ---
+  duration_ms: 0.300309
+  type: 'test'
+  ...
+# Subtest: small screens preserve the map with a bounded bottom detail card
+ok 238 - small screens preserve the map with a bounded bottom detail card
+  ---
+  duration_ms: 0.45113
+  type: 'test'
+  ...
+# Subtest: Au Sable-style map flow enhancement loads additively
+ok 239 - Au Sable-style map flow enhancement loads additively
+  ---
+  duration_ms: 1.677103
+  type: 'test'
+  ...
+# Subtest: river key is hidden by default and opens only from the map-key control
+ok 240 - river key is hidden by default and opens only from the map-key control
+  ---
+  duration_ms: 0.307993
+  type: 'test'
+  ...
+# Subtest: point cards are visually detached from the marker and choose the open side of the map
+ok 241 - point cards are visually detached from the marker and choose the open side of the map
+  ---
+  duration_ms: 0.224859
+  type: 'test'
+  ...
+# Subtest: detached cards are wider and shallower instead of becoming long map-obscuring columns
+ok 242 - detached cards are wider and shallower instead of becoming long map-obscuring columns
+  ---
+  duration_ms: 0.308254
+  type: 'test'
+  ...
+# Subtest: mobile keeps the detached card bounded and map-first
+ok 243 - mobile keeps the detached card bounded and map-first
+  ---
+  duration_ms: 1.617642
+  type: 'test'
+  ...
+# Subtest: live popup enrichment can resize without breaking detached positioning
+ok 244 - live popup enrichment can resize without breaking detached positioning
+  ---
+  duration_ms: 0.21467
+  type: 'test'
+  ...
+# Subtest: access markers open a real decision popup instead of only a name tooltip
+ok 245 - access markers open a real decision popup instead of only a name tooltip
+  ---
+  duration_ms: 1.547281
+  type: 'test'
+  ...
+# Subtest: marker click keeps the popup as the primary interaction surface
+ok 246 - marker click keeps the popup as the primary interaction surface
+  ---
+  duration_ms: 0.371321
+  type: 'test'
+  ...
+# Subtest: colored river geometry opens a rich river popup instead of the old USGS NHD tooltip
+ok 247 - colored river geometry opens a rich river popup instead of the old USGS NHD tooltip
+  ---
+  duration_ms: 0.283268
+  type: 'test'
+  ...
+# Subtest: river geometry popup matches Au Sable condition depth without inventing point-specific readings
+ok 248 - river geometry popup matches Au Sable condition depth without inventing point-specific readings
+  ---
+  duration_ms: 0.332148
+  type: 'test'
+  ...
+# Subtest: river popup shares the conditions request instead of racing a second independent data path
+ok 249 - river popup shares the conditions request instead of racing a second independent data path
+  ---
+  duration_ms: 0.281033
+  type: 'test'
+  ...
+# Subtest: river name tooltip is hover-only on fine pointers so phone taps cannot get stuck on sparse text
+ok 250 - river name tooltip is hover-only on fine pointers so phone taps cannot get stuck on sparse text
+  ---
+  duration_ms: 0.190335
+  type: 'test'
+  ...
+# Subtest: every access popup can progressively add same-waterway USGS conditions
+ok 251 - every access popup can progressively add same-waterway USGS conditions
+  ---
+  duration_ms: 0.282355
+  type: 'test'
+  ...
+# Subtest: every access popup can progressively add exact-point NWS weather and alerts
+ok 252 - every access popup can progressively add exact-point NWS weather and alerts
+  ---
+  duration_ms: 0.192949
+  type: 'test'
+  ...
+# Subtest: popup enrichment is resilient to script timing and repeated Leaflet popup DOM
+ok 253 - popup enrichment is resilient to script timing and repeated Leaflet popup DOM
+  ---
+  duration_ms: 0.493689
+  type: 'test'
+  ...
+# Subtest: USGS gauge points also use rich popups
+ok 254 - USGS gauge points also use rich popups
+  ---
+  duration_ms: 0.654188
+  type: 'test'
+  ...
+# Subtest: rich popups preserve source and safety boundaries
+ok 255 - rich popups preserve source and safety boundaries
+  ---
+  duration_ms: 0.560303
+  type: 'test'
+  ...
+# Subtest: rich popup layout is bounded on phones
+ok 256 - rich popup layout is bounded on phones
+  ---
+  duration_ms: 0.195103
+  type: 'test'
+  ...
+# Subtest: seasonal USGS comparison is descriptive and preserves missing statistics
+ok 257 - seasonal USGS comparison is descriptive and preserves missing statistics
+  ---
+  duration_ms: 1.676141
+  type: 'test'
+  ...
+# Subtest: USGS daily-stat RDB parser resolves columns by name instead of brittle offsets
+ok 258 - USGS daily-stat RDB parser resolves columns by name instead of brittle offsets
+  ---
+  duration_ms: 1.771168
+  type: 'test'
+  ...
+# Subtest: Manistee condition endpoint requests Au Sable-depth sensor fields without requiring them
+ok 259 - Manistee condition endpoint requests Au Sable-depth sensor fields without requiring them
+  ---
+  duration_ms: 0.298585
+  type: 'test'
+  ...
+# Subtest: selected-access weather is exact-point NWS context with hourly, daily and alerts
+ok 260 - selected-access weather is exact-point NWS context with hourly, daily and alerts
+  ---
+  duration_ms: 0.343229
+  type: 'test'
+  ...
+# Subtest: river key is explicitly on the left and distinguishes river roles and map points
+ok 261 - river key is explicitly on the left and distinguishes river roles and map points
+  ---
+  duration_ms: 0.248122
+  type: 'test'
+  ...
+# Subtest: every selected place receives a deeper exact-access intelligence card
+ok 262 - every selected place receives a deeper exact-access intelligence card
+  ---
+  duration_ms: 0.187869
+  type: 'test'
+  ...
+# Subtest: deep context keeps source and safety boundaries visible
+ok 263 - deep context keeps source and safety boundaries visible
+  ---
+  duration_ms: 0.364528
+  type: 'test'
+  ...
+# Subtest: optional depth layer does not become a dependency of the core map
+ok 264 - optional depth layer does not become a dependency of the core map
+  ---
+  duration_ms: 0.195314
+  type: 'test'
+  ...
+# Subtest: fabrication loss: every mapped place has coordinates, provenance and a source URL
+ok 265 - fabrication loss: every mapped place has coordinates, provenance and a source URL
+  ---
+  duration_ms: 1.919774
+  type: 'test'
+  ...
+# Subtest: identity loss: place IDs are unique and every selection surface keeps exact record identity
+ok 266 - identity loss: place IDs are unique and every selection surface keeps exact record identity
+  ---
+  duration_ms: 0.360151
+  type: 'test'
+  ...
+# Subtest: hydrography loss: source geometry is bounded USGS NHD, not hand-drawn river coordinates
+ok 267 - hydrography loss: source geometry is bounded USGS NHD, not hand-drawn river coordinates
+  ---
+  duration_ms: 0.763381
+  type: 'test'
+  ...
+# Subtest: tributary identity: Little Manistee remains a companion river
+ok 268 - tributary identity: Little Manistee remains a companion river
+  ---
+  duration_ms: 0.772068
+  type: 'test'
+  ...
+# Subtest: freshness loss: active USGS gauges include four Manistee stations and Pine
+ok 269 - freshness loss: active USGS gauges include four Manistee stations and Pine
+  ---
+  duration_ms: 1.136316
+  type: 'test'
+  ...
+# Subtest: temperature context keeps care thresholds distinct from legal rules
+ok 270 - temperature context keeps care thresholds distinct from legal rules
+  ---
+  duration_ms: 0.490193
+  type: 'test'
+  ...
+# Subtest: planner uses the NHD network and refuses cross-waterway routing
+ok 271 - planner uses the NHD network and refuses cross-waterway routing
+  ---
+  duration_ms: 0.501984
+  type: 'test'
+  ...
+# Subtest: regulation loss: tool links current DNR rules instead of hardcoding reach-specific legal claims
+ok 272 - regulation loss: tool links current DNR rules instead of hardcoding reach-specific legal claims
+  ---
+  duration_ms: 1.880531
+  type: 'test'
+  ...
+# Subtest: masthead source HTML contains only the terse field-map title
+ok 273 - masthead source HTML contains only the terse field-map title
+  ---
+  duration_ms: 0.599075
+  type: 'test'
+  ...
+# Subtest: mobile task loss: map, places, directions and planner have responsive affordances
+ok 274 - mobile task loss: map, places, directions and planner have responsive affordances
+  ---
+  duration_ms: 0.642736
+  type: 'test'
+  ...
+# Subtest: browser dependency loss: Leaflet has a runtime stylesheet fallback
+ok 275 - browser dependency loss: Leaflet has a runtime stylesheet fallback
+  ---
+  duration_ms: 0.340343
+  type: 'test'
+  ...
+# Subtest: SEO and AI discovery retain canonical, source schema and field guide
+ok 276 - SEO and AI discovery retain canonical, source schema and field guide
+  ---
+  duration_ms: 0.212566
+  type: 'test'
+  ...
+# Subtest: graceful degradation loss: live-service failures preserve the static map guide
+ok 277 - graceful degradation loss: live-service failures preserve the static map guide
+  ---
+  duration_ms: 0.249775
+  type: 'test'
+  ...
+# Subtest: hydrography normalizer accepts live lowercase fields and alias-style fields
+ok 278 - hydrography normalizer accepts live lowercase fields and alias-style fields
+  ---
+  duration_ms: 0.398312
+  type: 'test'
+  ...
+# Subtest: USGS normalizer preserves missing values rather than fabricating readings
+ok 279 - USGS normalizer preserves missing values rather than fabricating readings
+  ---
+  duration_ms: 0.347277
+  type: 'test'
+  ...
+# (node:2665) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/chrisizworski-com/chrisizworski-com/tests/map-insight-quality.test.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /home/runner/work/chrisizworski-com/chrisizworski-com/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: boat inventory is current DNR, statewide, and stable-ID safe
+ok 280 - boat inventory is current DNR, statewide, and stable-ID safe
+  ---
+  duration_ms: 1.231482
+  type: 'test'
+  ...
+# Subtest: boat source quality rules preserve review states and source coordinates
+ok 281 - boat source quality rules preserve review states and source coordinates
+  ---
+  duration_ms: 0.224608
+  type: 'test'
+  ...
+# Subtest: boat UI has one discovery box and a full clustered statewide map
+ok 282 - boat UI has one discovery box and a full clustered statewide map
+  ---
+  duration_ms: 0.262419
+  type: 'test'
+  ...
+# Subtest: boat map and result selection share normalized record identity
+ok 283 - boat map and result selection share normalized record identity
+  ---
+  duration_ms: 0.321409
+  type: 'test'
+  ...
+# Subtest: boat records expose decision details and selected-launch weather
+ok 284 - boat records expose decision details and selected-launch weather
+  ---
+  duration_ms: 0.412197
+  type: 'test'
+  ...
+# Subtest: boat finder has no fuzzy/manual launch fallback or personal location storage
+ok 285 - boat finder has no fuzzy/manual launch fallback or personal location storage
+  ---
+  duration_ms: 1.925174
+  type: 'test'
+  ...
+# Subtest: shipwreck map selection changes the actual table record set
+ok 286 - shipwreck map selection changes the actual table record set
+  ---
+  duration_ms: 0.247089
+  type: 'test'
+  ...
+# Subtest: mappable shipwreck records can drive the map back to their regional anchor
+ok 287 - mappable shipwreck records can drive the map back to their regional anchor
+  ---
+  duration_ms: 0.170447
+  type: 'test'
+  ...
+# Subtest: map work preserves canonical ownership
+ok 288 - map work preserves canonical ownership
+  ---
+  duration_ms: 0.340975
+  type: 'test'
+  ...
+# Subtest: matchmaker returns three unique, renderable varieties
+ok 289 - matchmaker returns three unique, renderable varieties
+  ---
+  duration_ms: 1.896241
+  type: 'test'
+  ...
+# Subtest: small, shaded spaces receive container-capable recommendations
+ok 290 - small, shaded spaces receive container-capable recommendations
+  ---
+  duration_ms: 0.318884
+  type: 'test'
+  ...
+# Subtest: Melvin Price National Tools route wins before the hub catch-all
+ok 291 - Melvin Price National Tools route wins before the hub catch-all
+  ---
+  duration_ms: 1.161542
+  type: 'test'
+  ...
+# Subtest: Melvin Price provider deadline returns fallback instead of blocking the page API
+ok 292 - Melvin Price provider deadline returns fallback instead of blocking the page API
+  ---
+  duration_ms: 26.501325
+  type: 'test'
+  ...
+# Subtest: LPMS readingEntryDateTime is MMDDYY, not YYMMDD
+ok 293 - LPMS readingEntryDateTime is MMDDYY, not YYMMDD
+  ---
+  duration_ms: 15.17215
+  type: 'test'
+  ...
+# Subtest: LPMS timestamp repair restores correct freshness from raw records
+ok 294 - LPMS timestamp repair restores correct freshness from raw records
+  ---
+  duration_ms: 0.461219
+  type: 'test'
+  ...
+# Subtest: stale LPMS is a hard veto on the go-now score
+ok 295 - stale LPMS is a hard veto on the go-now score
+  ---
+  duration_ms: 1.550457
+  type: 'test'
+  ...
+# Subtest: delayed LPMS cannot produce an excellent/high-confidence recommendation
+ok 296 - delayed LPMS cannot produce an excellent/high-confidence recommendation
+  ---
+  duration_ms: 0.308324
+  type: 'test'
+  ...
+# Subtest: museum holiday logic honors published fixed closures
+ok 297 - museum holiday logic honors published fixed closures
+  ---
+  duration_ms: 0.53165
+  type: 'test'
+  ...
+# Subtest: museum holiday logic identifies Thanksgiving in local Central time
+ok 298 - museum holiday logic identifies Thanksgiving in local Central time
+  ---
+  duration_ms: 0.265774
+  type: 'test'
+  ...
+# Subtest: tour starting inside the 15-minute arrival window is marked tight, not ideal
+ok 299 - tour starting inside the 15-minute arrival window is marked tight, not ideal
+  ---
+  duration_ms: 0.516402
+  type: 'test'
+  ...
+# Subtest: traffic comparison uses 2024 daily lockages as a broad benchmark
+ok 300 - traffic comparison uses 2024 daily lockages as a broad benchmark
+  ---
+  duration_ms: 0.174244
+  type: 'test'
+  ...
+# Subtest: active lock plus a practical tour becomes a persona-oriented headline
+ok 301 - active lock plus a practical tour becomes a persona-oriented headline
+  ---
+  duration_ms: 0.469965
+  type: 'test'
+  ...
+# Subtest: older gage observation does not veto near-real-time LPMS traffic counters
+ok 302 - older gage observation does not veto near-real-time LPMS traffic counters
+  ---
+  duration_ms: 2.162426
+  type: 'test'
+  ...
+# Subtest: unavailable LPMS remains unavailable and is never promoted to live
+ok 303 - unavailable LPMS remains unavailable and is never promoted to live
+  ---
+  duration_ms: 0.180235
+  type: 'test'
+  ...
+# Subtest: Melvin Price page preserves core live-data integrity language
+ok 304 - Melvin Price page preserves core live-data integrity language
+  ---
+  duration_ms: 2.12685
+  type: 'test'
+  ...
+# Subtest: Melvin Price canonical is added to the deployed sitemap
+ok 305 - Melvin Price canonical is added to the deployed sitemap
+  ---
+  duration_ms: 0.213578
+  type: 'test'
+  ...
+# Subtest: LPMS Mel Price record normalizes operational fields
+ok 306 - LPMS Mel Price record normalizes operational fields
+  ---
+  duration_ms: 15.632066
+  type: 'test'
+  ...
+# Subtest: LPMS parser repairs literal control characters inside USACE note strings
+ok 307 - LPMS parser repairs literal control characters inside USACE note strings
+  ---
+  duration_ms: 0.36498
+  type: 'test'
+  ...
+# Subtest: LPMS sanitizer preserves legal structural whitespace outside strings
+ok 308 - LPMS sanitizer preserves legal structural whitespace outside strings
+  ---
+  duration_ms: 0.299558
+  type: 'test'
+  ...
+# Subtest: CWMS values parse common version-2 shape
+ok 309 - CWMS values parse common version-2 shape
+  ---
+  duration_ms: 0.431213
+  type: 'test'
+  ...
+# Subtest: Mel Price flow uses the current Corps-rated CWMS series
+ok 310 - Mel Price flow uses the current Corps-rated CWMS series
+  ---
+  duration_ms: 0.200223
+  type: 'test'
+  ...
+# Subtest: NTNI normalization exposes current notice number and official link
+ok 311 - NTNI normalization exposes current notice number and official link
+  ---
+  duration_ms: 0.280903
+  type: 'test'
+  ...
+# Subtest: tour schedule returns the next normal walk-in tour
+ok 312 - tour schedule returns the next normal walk-in tour
+  ---
+  duration_ms: 0.761739
+  type: 'test'
+  ...
+# Subtest: visitor score cannot claim a high-confidence live recommendation without LPMS
+ok 313 - visitor score cannot claim a high-confidence live recommendation without LPMS
+  ---
+  duration_ms: 0.560614
+  type: 'test'
+  ...
+# Subtest: visitor score rewards confirmed current lock activity
+ok 314 - visitor score rewards confirmed current lock activity
+  ---
+  duration_ms: 0.318793
+  type: 'test'
+  ...
+# (node:2713) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/chrisizworski-com/chrisizworski-com/tests/name-serp-entity-graph.test.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /home/runner/work/chrisizworski-com/chrisizworski-com/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: canonical Chris profile uses Google ProfilePage mainEntity semantics
+ok 315 - canonical Chris profile uses Google ProfilePage mainEntity semantics
+  ---
+  duration_ms: 4.046735
+  type: 'test'
+  ...
+# Subtest: sameAs is identity-oriented while authored projects live in hasPart
+ok 316 - sameAs is identity-oriented while authored projects live in hasPart
+  ---
+  duration_ms: 0.667353
+  type: 'test'
+  ...
+# Subtest: canonical profile exposes rel-me identity links and visible work
+ok 317 - canonical profile exposes rel-me identity links and visible work
+  ---
+  duration_ms: 0.170988
+  type: 'test'
+  ...
+# (node:2725) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/chrisizworski-com/chrisizworski-com/tests/national-garden-water-routing.test.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /home/runner/work/chrisizworski-com/chrisizworski-com/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Garden Water canonical, API, assets and data route to owning project
+ok 318 - Garden Water canonical, API, assets and data route to owning project
+  ---
+  duration_ms: 0.987349
+  type: 'test'
+  ...
+# Subtest: Garden Water has one canonical registry owner and garden-network relationships
+ok 319 - Garden Water has one canonical registry owner and garden-network relationships
+  ---
+  duration_ms: 0.899996
+  type: 'test'
+  ...
+# Subtest: main-domain router exposes every planting v3 runtime dependency
+ok 320 - main-domain router exposes every planting v3 runtime dependency
+  ---
+  duration_ms: 0.956581
+  type: 'test'
+  ...
+# Subtest: national specialist hub routes are explicit and precede catch-all
+ok 321 - national specialist hub routes are explicit and precede catch-all
+  ---
+  duration_ms: 0.371793
+  type: 'test'
+  ...
+# Subtest: planting page and its API dependencies remain on canonical main-domain routes
+ok 322 - planting page and its API dependencies remain on canonical main-domain routes
+  ---
+  duration_ms: 0.158154
+  type: 'test'
+  ...
+# Subtest: National Tools host passes through the current owner directory without a full card mutation layer
+ok 323 - National Tools host passes through the current owner directory without a full card mutation layer
+  ---
+  duration_ms: 1.295562
+  type: 'test'
+  ...
+# Subtest: the Yosemite canonical correction fixes the owner entry in place instead of duplicating it
+ok 324 - the Yosemite canonical correction fixes the owner entry in place instead of duplicating it
+  ---
+  duration_ms: 1.567468
+  type: 'test'
+  ...
+# Subtest: parses the NDBC latest observation format
+ok 325 - parses the NDBC latest observation format
+  ---
+  duration_ms: 1.528346
+  type: 'test'
+  ...
+# Subtest: parses the NDBC realtime format and keeps null measurements
+ok 326 - parses the NDBC realtime format and keeps null measurements
+  ---
+  duration_ms: 0.532722
+  type: 'test'
+  ...
+# Subtest: legacy Niagara hub URLs permanently redirect to the live rainbow predictor
+ok 327 - legacy Niagara hub URLs permanently redirect to the live rainbow predictor
+  ---
+  duration_ms: 1.251661
+  type: 'test'
+  ...
+# Subtest: duplicate standalone rainbow planner is fully retired into the live predictor
+ok 328 - duplicate standalone rainbow planner is fully retired into the live predictor
+  ---
+  duration_ms: 0.232142
+  type: 'test'
+  ...
+# Subtest: retired Niagara routes remain narrowly scoped
+ok 329 - retired Niagara routes remain narrowly scoped
+  ---
+  duration_ms: 0.246469
+  type: 'test'
+  ...
+# NIAGARA_RAINBOW_BENCHMARK {"score":97,"dimensions":{"decisionClarity":20,"dataPhysicsIntegrity":22,"usefulness":15,"mobileAccessibility":10,"visualQuality":10,"resilienceFreshness":10,"seoSchemaAnalytics":10},"hardVetoes":[]}
+# Subtest: Niagara Rainbow v1 clears its release value function with no hard vetoes
+ok 330 - Niagara Rainbow v1 clears its release value function with no hard vetoes
+  ---
+  duration_ms: 2.969299
+  type: 'test'
+  ...
+# niagara-rainbow Error: NWS 503 at /points/43.081,-79.074
+#     at fetchJson (file:///home/runner/work/chrisizworski-com/chrisizworski-com/lib/niagara-rainbow-engine.mjs?case=5-true-1789307288873-0.1364697404230899:240:20)
+#     at async loadNws (file:///home/runner/work/chrisizworski-com/chrisizworski-com/lib/niagara-rainbow-engine.mjs?case=5-true-1789307288873-0.1364697404230899:245:17)
+#     at async buildPayload (file:///home/runner/work/chrisizworski-com/chrisizworski-com/lib/niagara-rainbow-engine.mjs?case=5-true-1789307288873-0.1364697404230899:278:27)
+#     at async Module.handler (file:///home/runner/work/chrisizworski-com/chrisizworski-com/lib/niagara-rainbow-engine.mjs?case=5-true-1789307288873-0.1364697404230899:375:21)
+#     at async runEngine (/home/runner/work/chrisizworski-com/chrisizworski-com/tests/niagara-rainbow.test.js:61:5)
+#     at async TestContext.<anonymous> (/home/runner/work/chrisizworski-com/chrisizworski-com/tests/niagara-rainbow.test.js:125:15)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+# Subtest: Niagara page answers the concrete decision and preserves the public canonical
+ok 331 - Niagara page answers the concrete decision and preserves the public canonical
+  ---
+  duration_ms: 1.266158
+  type: 'test'
+  ...
+# Subtest: SERP, entity, FAQ, hero and analytics contracts are present
+ok 332 - SERP, entity, FAQ, hero and analytics contracts are present
+  ---
+  duration_ms: 1.183964
+  type: 'test'
+  ...
+# Subtest: physics model uses NWS grid data, antisolar geometry, 42 degrees and wind-shifted mist
+ok 333 - physics model uses NWS grid data, antisolar geometry, 42 degrees and wind-shifted mist
+  ---
+  duration_ms: 0.317481
+  type: 'test'
+  ...
+# Subtest: clear-sky live model returns five days, ranked viewpoints and rounded opportunity scores
+ok 334 - clear-sky live model returns five days, ranked viewpoints and rounded opportunity scores
+  ---
+  duration_ms: 371.823788
+  type: 'test'
+  ...
+# Subtest: heavy overcast materially suppresses the opportunity score
+ok 335 - heavy overcast materially suppresses the opportunity score
+  ---
+  duration_ms: 555.172773
+  type: 'test'
+  ...
+# Subtest: upstream failure returns an explicit no-synthetic-fallback state
+ok 336 - upstream failure returns an explicit no-synthetic-fallback state
+  ---
+  duration_ms: 2.660945
+  type: 'test'
+  ...
+# Subtest: browser UI exposes retry/freshness and renders today, viewpoints and five-day outlook
+ok 337 - browser UI exposes retry/freshness and renders today, viewpoints and five-day outlook
+  ---
+  duration_ms: 0.278008
+  type: 'test'
+  ...
+# Subtest: nighttime hides the current score while sunrise and sunset boundaries remain enforced
+ok 338 - nighttime hides the current score while sunrise and sunset boundaries remain enforced
+  ---
+  duration_ms: 0.539635
+  type: 'test'
+  ...
+# Subtest: two lazy third-party Niagara camera views are present
+ok 339 - two lazy third-party Niagara camera views are present
+  ---
+  duration_ms: 0.647596
+  type: 'test'
+  ...
+# Subtest: mobile and accessibility release guards are in the source
+ok 340 - mobile and accessibility release guards are in the source
+  ---
+  duration_ms: 0.619964
+  type: 'test'
+  ...
+# Subtest: Ontario fishing surfaces deploy from the pinned standalone V2 release without Replit
+ok 341 - Ontario fishing surfaces deploy from the pinned standalone V2 release without Replit
+  ---
+  duration_ms: 1.50396
+  type: 'test'
+  ...
+# (node:2779) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/chrisizworski-com/chrisizworski-com/tests/owned-domain-network.test.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /home/runner/work/chrisizworski-com/chrisizworski-com/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: owned-domain ledger covers every self-owned domain in the entity benchmark
+ok 342 - owned-domain ledger covers every self-owned domain in the entity benchmark
+  ---
+  duration_ms: 1.355764
+  type: 'test'
+  ...
+# Subtest: every active owned root participates in the owned-domain graph
+ok 343 - every active owned root participates in the owned-domain graph
+  ---
+  duration_ms: 1.038393
+  type: 'test'
+  ...
+# Subtest: flagship external domains are mutually discoverable through observed live handoffs
+ok 344 - flagship external domains are mutually discoverable through observed live handoffs
+  ---
+  duration_ms: 0.368296
+  type: 'test'
+  ...
+# Subtest: central Projects hub names every current flagship owned domain
+ok 345 - central Projects hub names every current flagship owned domain
+  ---
+  duration_ms: 0.461779
+  type: 'test'
+  ...
+# Subtest: satellite weight decays with age and is zero at the latency we actually see
+ok 346 - satellite weight decays with age and is zero at the latency we actually see
+  ---
+  duration_ms: 1.231783
+  type: 'test'
+  ...
+# Subtest: a stale satellite reading contributes nothing and says so
+ok 347 - a stale satellite reading contributes nothing and says so
+  ---
+  duration_ms: 23.822486
+  type: 'test'
+  ...
+# Subtest: a fresh satellite reading does contribute
+ok 348 - a fresh satellite reading does contribute
+  ---
+  duration_ms: 0.608603
+  type: 'test'
+  ...
+# Subtest: the canopy camera anchor shifts the curve and is recorded
+ok 349 - the canopy camera anchor shifts the curve and is recorded
+  ---
+  duration_ms: 0.730621
+  type: 'test'
+  ...
+# Subtest: a missing or malformed anchor never breaks the snapshot
+ok 350 - a missing or malformed anchor never breaks the snapshot
+  ---
+  duration_ms: 1.274003
+  type: 'test'
+  ...
+# Subtest: offsetForSite refuses to guess before senescence starts
+ok 351 - offsetForSite refuses to guess before senescence starts
+  ---
+  duration_ms: 1.399476
+  type: 'test'
+  ...
+# Subtest: FVF source-page CTA tracking loads Vercel Analytics before the tracker
+ok 352 - FVF source-page CTA tracking loads Vercel Analytics before the tracker
+  ---
+  duration_ms: 2.511275
+  type: 'test'
+  ...
+# Subtest: the FVF distribution remains shipped after experiment retirement
+ok 353 - the FVF distribution remains shipped after experiment retirement
+  ---
+  duration_ms: 1.102202
+  type: 'test'
+  ...
+# Subtest: the Michigan Ice root freshness signal is generated and matches the sitemap
+ok 354 - the Michigan Ice root freshness signal is generated and matches the sitemap
+  ---
+  duration_ms: 1.38593
+  type: 'test'
+  ...
+# Subtest: the reputation sitemap uses a pinned source hash, not a parity exemption
+ok 355 - the reputation sitemap uses a pinned source hash, not a parity exemption
+  ---
+  duration_ms: 1.118643
+  type: 'test'
+  ...
+# Subtest: Great Lakes Buoys matches live-buoy intent without regressing the tool
+ok 356 - Great Lakes Buoys matches live-buoy intent without regressing the tool
+  ---
+  duration_ms: 1.726866
+  type: 'test'
+  ...
+# Subtest: PR 50 page freshness stamps match sitemap.xml
+ok 357 - PR 50 page freshness stamps match sitemap.xml
+  ---
+  duration_ms: 0.941744
+  type: 'test'
+  ...
+# Subtest: public HTML preserves built tags without forwarding preview robots or cookies
+ok 358 - public HTML preserves built tags without forwarding preview robots or cookies
+  ---
+  duration_ms: 29.843728
+  type: 'test'
+  ...
+# Subtest: owner errors and non-HTML responses cannot be cached as successful pages
+ok 359 - owner errors and non-HTML responses cannot be cached as successful pages
+  ---
+  duration_ms: 1.56874
+  type: 'test'
+  ...
+# Subtest: HEAD is bodyless and unsupported methods do not fetch
+ok 360 - HEAD is bodyless and unsupported methods do not fetch
+  ---
+  duration_ms: 0.732113
+  type: 'test'
+  ...
+# Subtest: publisher kit stays out of the search index
+ok 361 - publisher kit stays out of the search index
+  ---
+  duration_ms: 1.394496
+  type: 'test'
+  ...
+# Subtest: publisher widget preserves clean fallback attribution
+ok 362 - publisher widget preserves clean fallback attribution
+  ---
+  duration_ms: 0.306901
+  type: 'test'
+  ...
+# Subtest: publisher widget avoids invasive host-page collection
+ok 363 - publisher widget avoids invasive host-page collection
+  ---
+  duration_ms: 0.551457
+  type: 'test'
+  ...
+# Subtest: publisher widget supports the initial flagship distribution set
+ok 364 - publisher widget supports the initial flagship distribution set
+  ---
+  duration_ms: 0.75744
+  type: 'test'
+  ...
+# Subtest: live publisher modules use existing public CORS endpoints
+ok 365 - live publisher modules use existing public CORS endpoints
+  ---
+  duration_ms: 0.287035
+  type: 'test'
+  ...
+# Subtest: fall color exposes the existing RSS distribution channel
+ok 366 - fall color exposes the existing RSS distribution channel
+  ---
+  duration_ms: 0.213417
+  type: 'test'
+  ...
+# Subtest: flywheel governance records current outreach exclusions
+ok 367 - flywheel governance records current outreach exclusions
+  ---
+  duration_ms: 0.374266
+  type: 'test'
+  ...
+# Subtest: affiliate placements are recorded as released and measured from complete days
+ok 368 - affiliate placements are recorded as released and measured from complete days
+  ---
+  duration_ms: 2.536002
+  type: 'test'
+  ...
+# Subtest: deployment bookkeeping does not mistake preview validation for release
+ok 369 - deployment bookkeeping does not mistake preview validation for release
+  ---
+  duration_ms: 0.402269
+  type: 'test'
+  ...
+# Subtest: composed intent has one owner and does not create cannibalizing URLs
+ok 370 - composed intent has one owner and does not create cannibalizing URLs
+  ---
+  duration_ms: 0.525138
+  type: 'test'
+  ...
+# Subtest: Fall and Ice use one seasonal decision system without changing their identity
+ok 371 - Fall and Ice use one seasonal decision system without changing their identity
+  ---
+  duration_ms: 2.232266
+  type: 'test'
+  ...
+# Subtest: seasonal analytics measures intent without collecting precise location or URLs
+ok 372 - seasonal analytics measures intent without collecting precise location or URLs
+  ---
+  duration_ms: 0.559882
+  type: 'test'
+  ...
+# Subtest: XC adapter is fail-closed, non-overwriting, and preserves the live search surface
+ok 373 - XC adapter is fail-closed, non-overwriting, and preserves the live search surface
+  ---
+  duration_ms: 1.411237
+  type: 'test'
+  ...
+# Subtest: seasonal benchmark separates observed data from internal targets
+ok 374 - seasonal benchmark separates observed data from internal targets
+  ---
+  duration_ms: 0.455027
+  type: 'test'
+  ...
+# Subtest: Circle Tour requests NOAA water level with the station's supported datum
+ok 375 - Circle Tour requests NOAA water level with the station's supported datum
+  ---
+  duration_ms: 3.803021
+  type: 'test'
+  ...
+# Subtest: Northern Lights falls back cleanly when the primary NOAA forecast is unavailable
+ok 376 - Northern Lights falls back cleanly when the primary NOAA forecast is unavailable
+  ---
+  duration_ms: 0.957503
+  type: 'test'
+  ...
+# Subtest: Northern Lights uses the normalized same-origin NOAA endpoint without NaN cards
+ok 377 - Northern Lights uses the normalized same-origin NOAA endpoint without NaN cards
+  ---
+  duration_ms: 2.074492
+  type: 'test'
+  ...
+# Subtest: Soo Locks renders an official no-key vessel map without restoring the refused MarineTraffic iframe
+ok 378 - Soo Locks renders an official no-key vessel map without restoring the refused MarineTraffic iframe
+  ---
+  duration_ms: 1.625727
+  type: 'test'
+  ...
+# Subtest: Buoy copy stays accurate as the live reporting count changes
+ok 379 - Buoy copy stays accurate as the live reporting count changes
+  ---
+  duration_ms: 1.296294
+  type: 'test'
+  ...
+# Subtest: Great Lakes Gazette reads the latest public edition without a browser credential
+ok 380 - Great Lakes Gazette reads the latest public edition without a browser credential
+  ---
+  duration_ms: 0.505141
+  type: 'test'
+  ...
+# Subtest: Tools hub makes ten live tools prominent and indexes the expanded library
+ok 381 - Tools hub makes ten live tools prominent and indexes the expanded library
+  ---
+  duration_ms: 1.46613
+  type: 'test'
+  ...
+# Subtest: Great Lakes hub separates live conditions from history and gives each live tool a CTA
+ok 382 - Great Lakes hub separates live conditions from history and gives each live tool a CTA
+  ---
+  duration_ms: 0.52112
+  type: 'test'
+  ...
+# Subtest: Measured tool funnel pages include privacy-conscious analytics and real-user performance hooks
+ok 383 - Measured tool funnel pages include privacy-conscious analytics and real-user performance hooks
+  ---
+  duration_ms: 5.352817
+  type: 'test'
+  ...
+# Subtest: SEO scorecard records unknown Google metrics as null instead of manufacturing a baseline
+ok 384 - SEO scorecard records unknown Google metrics as null instead of manufacturing a baseline
+  ---
+  duration_ms: 0.743174
+  type: 'test'
+  ...
+# Subtest: registry sees Circle Tour amplification executed and all experiments closed
+ok 385 - registry sees Circle Tour amplification executed and all experiments closed
+  ---
+  duration_ms: 52.420805
+  type: 'test'
+  ...
+# (node:2860) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/chrisizworski-com/chrisizworski-com/tests/tool-network-registry.test.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /home/runner/work/chrisizworski-com/chrisizworski-com/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: tool network registry has stable unique nodes and complete relationships
+ok 386 - tool network registry has stable unique nodes and complete relationships
+  ---
+  duration_ms: 1.228487
+  type: 'test'
+  ...
+# Subtest: no search experiment or freeze remains active
+ok 387 - no search experiment or freeze remains active
+  ---
+  duration_ms: 0.264413
+  type: 'test'
+  ...
+# Subtest: cannibalization groups name one owner and distinct support nodes
+ok 388 - cannibalization groups name one owner and distinct support nodes
+  ---
+  duration_ms: 0.277657
+  type: 'test'
+  ...
+# Subtest: new tool candidates use the 100 point best-fit model and connect to the live network
+ok 389 - new tool candidates use the 100 point best-fit model and connect to the live network
+  ---
+  duration_ms: 0.266367
+  type: 'test'
+  ...
+# (node:2866) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/chrisizworski-com/chrisizworski-com/tests/tool-network-repair.test.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /home/runner/work/chrisizworski-com/chrisizworski-com/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Perfect Lawn is connected to useful Michigan yard and garden decisions
+ok 390 - Perfect Lawn is connected to useful Michigan yard and garden decisions
+  ---
+  duration_ms: 1.368178
+  type: 'test'
+  ...
+# Subtest: Whitetail is connected before deer-season demand arrives
+ok 391 - Whitetail is connected before deer-season demand arrives
+  ---
+  duration_ms: 0.446291
+  type: 'test'
+  ...
+# Subtest: no non-leaf registry node remains isolated after this repair
+ok 392 - no non-leaf registry node remains isolated after this repair
+  ---
+  duration_ms: 1.280905
+  type: 'test'
+  ...
+# Subtest: Fall River standalone candidate is shelved and no retired experiment remains
+ok 393 - Fall River standalone candidate is shelved and no retired experiment remains
+  ---
+  duration_ms: 0.356464
+  type: 'test'
+  ...
+# Subtest: Mackinac toll page leads with the page-one price answer
+ok 394 - Mackinac toll page leads with the page-one price answer
+  ---
+  duration_ms: 2.42756
+  type: 'test'
+  ...
+# Subtest: Gordie Howe treatment captures camera intent without inventing an operator camera
+ok 395 - Gordie Howe treatment captures camera intent without inventing an operator camera
+  ---
+  duration_ms: 0.688212
+  type: 'test'
+  ...
+# Subtest: 365 transport experiment records observed baselines and a page-specific freeze
+ok 396 - 365 transport experiment records observed baselines and a page-specific freeze
+  ---
+  duration_ms: 1.11677
+  type: 'test'
+  ...
+# Subtest: Mackinac flagship search surface preserves its decision contract while search treatment evolves
+ok 397 - Mackinac flagship search surface preserves its decision contract while search treatment evolves
+  ---
+  duration_ms: 1.442777
+  type: 'test'
+  ...
+# Subtest: noindex applies to Vercel preview hosts but not custom domains
+ok 398 - noindex applies to Vercel preview hosts but not custom domains
+  ---
+  duration_ms: 2.222799
+  type: 'test'
+  ...
+# Subtest: security headers stay global and API routes stay noindex
+ok 399 - security headers stay global and API routes stay noindex
+  ---
+  duration_ms: 0.524126
+  type: 'test'
+  ...
+# Subtest: Michigan XC authority hub owns planning intent and hands live intent to the conditions tool
+ok 400 - Michigan XC authority hub owns planning intent and hands live intent to the conditions tool
+  ---
+  duration_ms: 1.824648
+  type: 'test'
+  ...
+# Subtest: XC authority hub has a crawlable statewide trail set with distinct decision attributes
+ok 401 - XC authority hub has a crawlable statewide trail set with distinct decision attributes
+  ---
+  duration_ms: 0.447002
+  type: 'test'
+  ...
+# Subtest: winter sitemap exposes the new authority hub and the generated ice cluster
+ok 402 - winter sitemap exposes the new authority hub and the generated ice cluster
+  ---
+  duration_ms: 0.296562
+  type: 'test'
+  ...
+# Subtest: XC adapter stays fail-closed but can hand trip planners to the new authority hub
+ok 403 - XC adapter stays fail-closed but can hand trip planners to the new authority hub
+  ---
+  duration_ms: 1.000443
+  type: 'test'
+  ...
+# Subtest: winter benchmark distinguishes observed preseason data from internal targets
+ok 404 - winter benchmark distinguishes observed preseason data from internal targets
+  ---
+  duration_ms: 0.337418
+  type: 'test'
+  ...
+# Subtest: winter loss-function benchmark is a real merge gate
+ok 405 - winter loss-function benchmark is a real merge gate
+  ---
+  duration_ms: 1.885561
+  type: 'test'
+  ...
+# Subtest: Michigan Ice adds a generated water-behavior decision layer without weakening safety
+ok 406 - Michigan Ice adds a generated water-behavior decision layer without weakening safety
+  ---
+  duration_ms: 0.491796
+  type: 'test'
+  ...
+# Subtest: all six generated Ice water pages have unique local questions and a winter handoff
+ok 407 - all six generated Ice water pages have unique local questions and a winter handoff
+  ---
+  duration_ms: 2.615269
+  type: 'test'
+  ...
+# Subtest: XC planning hub adds comparison and source hierarchy while preserving live-conditions ownership
+ok 408 - XC planning hub adds comparison and source hierarchy while preserving live-conditions ownership
+  ---
+  duration_ms: 0.764974
+  type: 'test'
+  ...
+# Subtest: winter generator remains the source of truth and one-shot migration files are gone
+ok 409 - winter generator remains the source of truth and one-shot migration files are gone
+  ---
+  duration_ms: 0.808015
+  type: 'test'
+  ...
+# Subtest: XC final decision UX keeps live snow separate from trail truth
+ok 410 - XC final decision UX keeps live snow separate from trail truth
+  ---
+  duration_ms: 1.205044
+  type: 'test'
+  ...
+# Subtest: XC static authority page preserves statewide and regional search ownership
+ok 411 - XC static authority page preserves statewide and regional search ownership
+  ---
+  duration_ms: 0.437655
+  type: 'test'
+  ...
+# Subtest: all six generated Ice regional pages own exact local condition intent
+ok 412 - all six generated Ice regional pages own exact local condition intent
+  ---
+  duration_ms: 1.33752
+  type: 'test'
+  ...
+# Subtest: unified winter funnel loads on XC and Ice without personal storage
+ok 413 - unified winter funnel loads on XC and Ice without personal storage
+  ---
+  duration_ms: 0.620485
+  type: 'test'
+  ...
+# Subtest: XC ownership recovery removes the orphan penalty and refreezes winter
+ok 414 - XC ownership recovery removes the orphan penalty and refreezes winter
+  ---
+  duration_ms: 0.611728
+  type: 'test'
+  ...
+# Subtest: winter task router covers four real visitor intents
+ok 415 - winter task router covers four real visitor intents
+  ---
+  duration_ms: 2.467604
+  type: 'test'
+  ...
+# Subtest: XC planning owns the main Tools entry and live conditions remain one step away
+ok 416 - XC planning owns the main Tools entry and live conditions remain one step away
+  ---
+  duration_ms: 0.82195
+  type: 'test'
+  ...
+# Subtest: homepage exposes the winter decision path without replacing the all-tools entry
+ok 417 - homepage exposes the winter decision path without replacing the all-tools entry
+  ---
+  duration_ms: 0.581353
+  type: 'test'
+  ...
+# Subtest: winter routing creates no competing landing route and preserves search ownership
+ok 418 - winter routing creates no competing landing route and preserves search ownership
+  ---
+  duration_ms: 2.162968
+  type: 'test'
+  ...
+# Subtest: XC hero actions stay tappable above decorative layers
+ok 419 - XC hero actions stay tappable above decorative layers
+  ---
+  duration_ms: 1.305541
+  type: 'test'
+  ...
+# Subtest: XC hero comparison and Ice CTAs have real destinations
+ok 420 - XC hero comparison and Ice CTAs have real destinations
+  ---
+  duration_ms: 0.328131
+  type: 'test'
+  ...
+# Subtest: XC guide has no static still-photo treatment
+ok 421 - XC guide has no static still-photo treatment
+  ---
+  duration_ms: 1.383246
+  type: 'test'
+  ...
+# Subtest: XC guide keeps official webcam links and truthful regional camera context
+ok 422 - XC guide keeps official webcam links and truthful regional camera context
+  ---
+  duration_ms: 0.35446
+  type: 'test'
+  ...
+# Subtest: XC visual cleanup preserves the measured search surface
+ok 423 - XC visual cleanup preserves the measured search surface
+  ---
+  duration_ms: 0.258331
+  type: 'test'
+  ...
+1..423
+# tests 423
+# suites 0
+# pass 423
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2831.716292
+
+> chrisizworski-com@1.0.0 verify
+> node scripts/verify-source.mjs
+
+{
+  "status": "passed",
+  "sourceFilesChecked": 379,
+  "htmlRoutesChecked": 173,
+  "validJsonLdBlocks": 182,
+  "intentionalContentChanges": [
+    "/chris-izworski-apco/",
+    "/chris-izworski-bridge-michigan/",
+    "/chris-izworski-gpt-trainer-case-study/",
+    "/chris-izworski-nena-the-call/",
+    "/chris-izworski-wcmu-public-radio/",
+    "/",
+    "/about/",
+    "/connect/",
+    "/assets/fall-color-freshness.js",
+    "/great-lakes-beaches/",
+    "/great-lakes-buoys/",
+    "/great-lakes-freighter-tracking/",
+    "/national-tools/fall-color/",
+    "/national-tools/",
+    "/national-tools/water/",
+    "/national-tools/snow/",
+    "/assets/national-dashboard.js",
+    "/chris-izworski/",
+    "/projects/",
+    "/sitemap.xml",
+    "/chris-izworski-michigan-911-committee/",
+    "/sources.json",
+    "/great-lakes-beaches/warren-dunes-state-park/",
+    "/great-lakes-beaches/luna-pier/",
+    "/great-lakes-beaches/new-buffalo-beach/",
+    "/great-lakes-beaches/pj-hoffmaster-state-park/",
+    "/great-lakes-beaches/oscoda-beach-park/",
+    "/timeline/",
+    "/zone-6a-planting-calendar/",
+    "/heirloom-tomatoes-michigan/",
+    "/fall-color/michigan-leaf-peeping-planner/",
+    "/up-north-michigan/",
+    "/michigan-paddling/manistee-river/",
+    "/au-sable-river/",
+    "/michigan-boat-launches/",
+    "/assets/boat-launch-finder.js",
+    "/great-lakes-shipwrecks/",
+    "/assets/field-camera.js",
+    "/fall-color/keweenaw-peninsula-fall-color/",
+    "/great-lakes-beaches/saginaw-bay/",
+    "/great-lakes-beaches/bay-city-state-park/",
+    "/great-lakes-beaches/caseville-state-park/",
+    "/great-lakes-beaches/frankfort-beach/",
+    "/great-lakes-beaches/holland-state-park/",
+    "/great-lakes-beaches/ludington-state-park/",
+    "/great-lakes-beaches/south-haven-north/",
+    "/fall-color/tunnel-of-trees-fall-color/",
+    "/michigan-ice/",
+    "/michigan-ice/ice-safety.html",
+    "/michigan-ice/freezing-degree-days.html",
+    "/michigan-ice/ice-cover-history.html",
+    "/michigan-ice/regions/saginaw-bay.html",
+    "/michigan-ice/regions/houghton-lake.html",
+    "/michigan-ice/regions/lake-st-clair.html",
+    "/michigan-ice/regions/little-bay-de-noc.html",
+    "/michigan-ice/regions/grand-traverse-bay.html",
+    "/michigan-ice/regions/burt-mullett.html",
+    "/chris-izworski-photos/",
+    "/fall-color/",
+    "/mackinac-bridge-live/",
+    "/northern-lights-michigan/",
+    "/saginaw-bay-ecology/",
+    "/soo-locks/",
+    "/assets/soo-locks/hero.jpg",
+    "/assets/soo-locks/lock-chamber.jpg",
+    "/assets/soo-locks/freighter.jpg",
+    "/assets/soo-locks/saltie.jpg",
+    "/assets/soo-locks/observation-deck.jpg",
+    "/chris-izworski-author/",
+    "/chris-izworski-emergency-management/",
+    "/fall-color/michigan-leaf-peeping-planner",
+    "/fall-color/michigan-fall-color-drives",
+    "/fall-color/michigan-fall-color-drives/",
+    "/fall-color/when-do-leaves-peak-in-michigan",
+    "/tools/",
+    "/fall-color-northern-lights-michigan/",
+    "/great-lakes/",
+    "/great-lakes-lighthouses/",
+    "/ai/",
+    "/blog/",
+    "/blog/ai-supporting-911-administrative-work/",
+    "/case-studies/",
+    "/chris-izworski-ai-911/",
+    "/chris-izworski-bay-city-michigan/",
+    "/chris-izworski-bay-city/",
+    "/chris-izworski-mlive/",
+    "/chris-izworski-news-coverage/",
+    "/chris-izworski-prepared/",
+    "/chris-izworski-public-records/",
+    "/chris-izworski-publications/",
+    "/chris-izworski-trout-fishing/",
+    "/chris-izworski-trout-rivers/",
+    "/citations/",
+    "/companion-planting-zone-6a/",
+    "/great-lakes-beaches/lake-michigan/",
+    "/great-lakes-fish/",
+    "/heirloom-variety-matchmaker/",
+    "/media/",
+    "/michigan-911-executive-director/",
+    "/michigan-boat-launches/lake-michigan/",
+    "/michigan-boat-launches/saginaw-bay/",
+    "/michigan-last-spring-freeze/",
+    "/michigan-paddling/",
+    "/michigan-seed-libraries/",
+    "/michigan-trout-streams/",
+    "/press/",
+    "/speaking/",
+    "/start-here/",
+    "/guides/",
+    "/great-lakes-gazette/",
+    "/mackinac-bridge-driver-assistance/",
+    "/mackinac-bridge-rv-trailer-wind-rules/",
+    "/mackinac-bridge-tolls/",
+    "/michigan-border-wait-times/",
+    "/gordie-howe-bridge-wait-time/",
+    "/ambassador-bridge-wait-time/",
+    "/detroit-windsor-tunnel-wait-time/",
+    "/blue-water-bridge-wait-time/",
+    "/sault-ste-marie-border-wait-time/",
+    "/lake-superior-circle-tour/",
+    "/when-to-plant-tomatoes-michigan/",
+    "/michigan-frost-dates/",
+    "/chris-izworski-freighter-view-farms/",
+    "/michigan-gardening/",
+    "/great-lakes-birding/",
+    "/image-sitemap.xml",
+    "/llms.txt",
+    "/robots.txt"
+  ],
+  "intentionalRetirements": [
+    "/michigan-stargazing-tonight/",
+    "/keweenaw-hiking-conditions/",
+    "/michigan-snowshoe-conditions/",
+    "/michigan-waterfall-conditions/",
+    "/great-lakes-freighter-viewing/",
+    "/lake-superior-agate-conditions/",
+    "/assets/decision-tool-batch.css",
+    "/assets/decision-tool-batch.js",
+    "/assets/decision-tool-depth-v2.css",
+    "/assets/decision-tool-depth-v2.js"
+  ],
+  "failures": []
+}
+
+> chrisizworski-com@1.0.0 benchmark:beaches
+> node scripts/benchmark-beach-report.mjs --check
+
+Michigan Beach Report benchmark: 100/100
+Legacy baseline: 42/100 · Launch: 90 · Stretch: 95
+
+PASS  25/25  Decision usefulness
+PASS  20/20  Truth and safety
+PASS  15/15  Data reliability
+PASS  15/15  UX and accessibility
+PASS  15/15  Search and answer readiness
+PASS  10/10  Seasonal engagement
+
+Launch benchmark passed by 10 points.
+
+> chrisizworski-com@1.0.0 benchmark:beach-ctr
+> node scripts/benchmark-beach-conditions-ctr.mjs
+
+
+BEACH CONDITIONS CTR EXPERIMENT
+========================================================================
+Baseline: 273 impressions / 2 clicks / 0.73% CTR / position 9.12
+Treatment: Michigan Beach Conditions Today | Chris Izworski
+Target CTR: 1.5% · stretch 2.5%
+benchmark:beach-ctr PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:border-ctr
+> node scripts/benchmark-border-waits-ctr.mjs
+
+
+STATEWIDE BORDER WAITS CTR EXPERIMENT
+========================================================================
+Baseline: 284 impressions / 2 clicks / 0.70% CTR / position 11.98
+Treatment: Michigan Border Wait Times Today: Detroit & All 5 Crossings
+Target CTR: 1.5% · stretch 2.5%
+benchmark:border-ctr PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:growth
+> node scripts/benchmark-growth.mjs --check
+
+{
+  "status": "passed",
+  "baseline": {
+    "periodEnding": "2026-08-01",
+    "impressions": 21335,
+    "clicks": 284,
+    "ctr": 0.01331146,
+    "dailyImpressions": 761.9642857
+  },
+  "northStar": {
+    "name": "100x north star",
+    "impressionsPerDay": 76196,
+    "ctr": 0.035,
+    "monthlyGoogleClicks": 80006,
+    "commercialOutcome": "Display ads plus post-proof sponsorship and product diversification"
+  },
+  "pages": {
+    "/when-to-plant-tomatoes-michigan/": {
+      "titleReady": true,
+      "firstAnswerReady": true,
+      "canonicalPreserved": true,
+      "internalDepthReady": true,
+      "growthTrackingReady": true
+    },
+    "/michigan-frost-dates/": {
+      "titleReady": true,
+      "firstAnswerReady": true,
+      "canonicalPreserved": true,
+      "internalDepthReady": true,
+      "growthTrackingReady": true
+    },
+    "/saginaw-bay-ecology/": {
+      "titleReady": true,
+      "firstAnswerReady": true,
+      "canonicalPreserved": true,
+      "internalDepthReady": true,
+      "growthTrackingReady": true
+    },
+    "/northern-lights-michigan/": {
+      "titleReady": true,
+      "firstAnswerReady": true,
+      "canonicalPreserved": true,
+      "internalDepthReady": true,
+      "growthTrackingReady": true
+    },
+    "/soo-locks/": {
+      "titleReady": true,
+      "firstAnswerReady": true,
+      "canonicalPreserved": true,
+      "internalDepthReady": true,
+      "growthTrackingReady": true
+    },
+    "/mackinac-bridge-live/": {
+      "titleReady": true,
+      "firstAnswerReady": true,
+      "canonicalPreserved": true,
+      "internalDepthReady": true,
+      "growthTrackingReady": true
+    }
+  },
+  "activeExperiments": 0,
+  "failures": []
+}
+
+> chrisizworski-com@1.0.0 benchmark:seo
+> node scripts/measure-discovery.mjs --check
+
+{
+  "status": "passed",
+  "baselineDate": "2026-07-20",
+  "searchConsoleStatus": "awaiting-28-day-export",
+  "baseline": {
+    "toolsListed": 19,
+    "featuredToolCards": 0,
+    "explicitCallsToAction": 0,
+    "trackedToolLinks": 0,
+    "toolCategoryJumpLinks": 0,
+    "liveToolsMisclassifiedUnderHistory": 3,
+    "homeFeaturedToolLinks": 0,
+    "webAnalyticsScriptOnMeasuredPages": false,
+    "speedInsightsScriptOnMeasuredPages": false
+  },
+  "current": {
+    "toolsListed": 39,
+    "featuredToolCards": 19,
+    "explicitCallsToAction": 20,
+    "trackedToolLinks": 65,
+    "toolCategoryJumpLinks": 6,
+    "liveToolsMisclassifiedUnderHistory": 0,
+    "homeFeaturedToolLinks": 9,
+    "webAnalyticsScriptOnMeasuredPages": true,
+    "speedInsightsScriptOnMeasuredPages": true
+  },
+  "deltas": {
+    "toolsListed": 20,
+    "featuredToolCards": 19,
+    "explicitCallsToAction": 20,
+    "trackedToolLinks": 65,
+    "toolCategoryJumpLinks": 6,
+    "liveToolsMisclassifiedUnderHistory": -3,
+    "homeFeaturedToolLinks": 9
+  },
+  "pages": {
+    "home": {
+      "title": "Chris Izworski | AI, Public Safety, and Great Lakes",
+      "titleCharacters": 51,
+      "descriptionCharacters": 150,
+      "canonical": "https://chrisizworski.com/",
+      "bytes": 42713
+    },
+    "tools": {
+      "title": "Michigan & Great Lakes Live Tools | Chris Izworski",
+      "titleCharacters": 50,
+      "descriptionCharacters": 160,
+      "canonical": "https://chrisizworski.com/tools/",
+      "bytes": 82108
+    },
+    "greatLakes": {
+      "title": "Great Lakes Live Tools & Guides | Chris Izworski",
+      "titleCharacters": 48,
+      "descriptionCharacters": 154,
+      "canonical": "https://chrisizworski.com/great-lakes/",
+      "bytes": 19241
+    },
+    "sooLocks": {
+      "title": "Soo Locks Schedule Today: Ships & Map | Chris Izworski",
+      "titleCharacters": 54,
+      "descriptionCharacters": 141,
+      "canonical": "https://chrisizworski.com/soo-locks/",
+      "bytes": 56747
+    },
+    "northernLights": {
+      "title": "Northern Lights Michigan Tonight: Aurora | Chris Izworski",
+      "titleCharacters": 57,
+      "descriptionCharacters": 141,
+      "canonical": "https://chrisizworski.com/northern-lights-michigan/",
+      "bytes": 91852
+    },
+    "buoys": {
+      "title": "Great Lakes Buoys Live: Waves & Water Temp | Chris Izworski",
+      "titleCharacters": 59,
+      "descriptionCharacters": 151,
+      "canonical": "https://chrisizworski.com/great-lakes-buoys/",
+      "bytes": 101102
+    },
+    "gazette": {
+      "title": "Great Lakes Shipping News Today | Chris Izworski",
+      "titleCharacters": 48,
+      "descriptionCharacters": 148,
+      "canonical": "https://chrisizworski.com/great-lakes-gazette/",
+      "bytes": 15486
+    },
+    "freighterTracking": {
+      "title": "Great Lakes Ship Tracker: Live AIS Map | Chris Izworski",
+      "titleCharacters": 55,
+      "descriptionCharacters": 143,
+      "canonical": "https://chrisizworski.com/great-lakes-freighter-tracking/",
+      "bytes": 29133
+    },
+    "beaches": {
+      "title": "Michigan Beach Conditions Today | Chris Izworski",
+      "titleCharacters": 48,
+      "descriptionCharacters": 157,
+      "canonical": "https://chrisizworski.com/great-lakes-beaches/",
+      "bytes": 31245
+    }
+  },
+  "targets": {
+    "stretchOutcome": "10x 28-day organic clicks to the scoped tool cluster within 90-180 days",
+    "day30": {
+      "organicImpressionsMultiplier": 2,
+      "toolDestinationPageviewsMultiplier": 2,
+      "searchCtrRelativeLiftPercent": 25
+    },
+    "day60": {
+      "organicClicksMultiplier": 5,
+      "engagedToolVisitsMultiplier": 5
+    },
+    "day90To180": {
+      "organicClicksMultiplier": 10,
+      "engagedToolVisitsMultiplier": 10
+    },
+    "coreWebVitalsP75": {
+      "lcpMillisecondsMax": 2500,
+      "inpMillisecondsMax": 200,
+      "clsMax": 0.1
+    }
+  },
+  "failures": []
+}
+
+> chrisizworski-com@1.0.0 benchmark:serp-length
+> node scripts/benchmark-serp-length.mjs
+
+  exempt: /tools/ description 160 > 158 (frozen until 2026-09-21)
+serp length PASS - 207 pages, titles <= 60, descriptions <= 158, 1 frozen
+
+> chrisizworski-com@1.0.0 benchmark:ctr
+> node scripts/benchmark-ctr-surface.mjs --check
+
+
+CTR SURFACE BENCHMARK  2026-09-13
+==============================================================================
+
+MEASURED PAGES  (impression weighted, GSC Aug 13-19, 2026 (7 complete days))
+
+/soo-locks/
+  weight  39.6%  score 100%  title  54  desc 141  links 16
+  pos 7.35  ctr 3.23% vs modeled 3.33%  zero-click low  clicks at risk/window: 2
+
+/northern-lights-michigan/
+  weight  29.6%  score 100%  title  57  desc 141  links 16
+  pos 9.69  ctr 0.80% vs modeled 1.29%  zero-click medium  clicks at risk/window: 9
+
+/mackinac-bridge-live/
+  weight  11.6%  score 100%  title  55  desc 141  links 21
+  pos 10.69  ctr 0.27% vs modeled 1.83%  zero-click low  clicks at risk/window: 11
+
+/fall-color/
+  weight  11.3%  score 100%  title  54  desc 155  links 28
+  pos 14.27  ctr 0.84% vs modeled 1.27%  zero-click low  clicks at risk/window: 3
+
+/when-to-plant-tomatoes-michigan/
+  weight   4.6%  score 100%  title  56  desc 146  links  7
+  pos 8.18  ctr 0.69% vs modeled 0.58%  zero-click high  clicks at risk/window: 0
+
+/saginaw-bay-ecology/
+  weight   3.0%  score  90%  title  49  desc 152  links  4
+  pos 8.18  ctr 1.56% vs modeled 0.58%  zero-click high  clicks at risk/window: 0
+  FAIL: titleCarriesPersonaTrigger
+
+/michigan-frost-dates/
+  weight   0.3%  score 100%  title  57  desc 145  links 11
+  pos 13.28  ctr 0.00% vs modeled 0.27%  zero-click high  clicks at risk/window: 0
+
+WEIGHTED SNIPPET SCORE: 99.7%  (gate 80%)
+TOTAL CLICKS AT RISK across the window: 25  (modeled, see baseline caution)
+
+SEASONAL WATCHLIST  (hygiene for emerging seasonal pages)
+
+  all clean
+
+WATCHLIST SCORE: 100.0%  (0 of 15 pages failing at least one gate)
+
+benchmark:ctr PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:search-growth
+> node scripts/benchmark-search-growth-engine.mjs --check
+
+
+SEARCH GROWTH ENGINE BENCHMARK
+========================================================================
+Score: 100/100
+28-day baseline: 27,042 impressions · 407 clicks · 1.51% CTR
+Same-impression modeled click headroom: +519
+Frozen active experiments protected: 5
+benchmark:search-growth PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:search-strategy
+> node scripts/benchmark-search-strategy-governance.mjs --check
+
+
+SEARCH STRATEGY GOVERNANCE BENCHMARK
+========================================================================
+Score: 100/100
+Primary measurement window: 28 days
+Canonical person: https://chrisizworski.com/#person
+Branded SERP target: #1 primary; 8/10 independently controlled; 20/30 operating, 30/30 stretch
+New canonical network target: 2 relationships
+benchmark:search-strategy PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:search-authority
+> node scripts/benchmark-search-authority-portfolio.mjs --check
+
+
+SEARCH AUTHORITY PORTFOLIO BENCHMARK
+========================================================================
+Score: 100/100
+Focus surfaces: 31
+Registered tools covered: 56/56
+Owned roots covered: 8/8
+Protected tools covered: 0/0
+Exact-name leading position: 1
+Immediate queue items: 4
+benchmark:search-authority PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:outdoors-now-growth
+> node scripts/benchmark-outdoors-now-growth-system.mjs --check
+
+
+OUTDOORS NOW GROWTH OPERATING SYSTEM
+========================================================================
+Score: 105/100
+Launch: 54 pages · 5 families · 11 origins
+Portfolio action: PROTECT
+Experiment ledger: retired · 0 active
+benchmark:outdoors-now-growth PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:mackinac-toll-ctr
+> node scripts/benchmark-mackinac-toll-ctr.mjs
+
+
+MACKINAC TOLL CTR EXPERIMENT
+========================================================================
+Original baseline: 637 impressions / 1 clicks / position 8.62
+Fresh leading signal: 490 impressions / 0 clicks / position 7.44
+Treatment title: Mackinac Bridge Toll 2026: $4 Cars + RV/Trailer Calculator
+Target CTR: 2.0%
+benchmark:mackinac-toll-ctr PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:trip-stack
+> node scripts/benchmark-contextual-trip-stack-v2.mjs --check
+
+
+CONTEXTUAL TRIP STACK GROWTH BENCHMARK
+========================================================================
+Score: 100/100
+Observed evidence: 74 impressions on Michigan fall color map 2026 at position 8.88; Au Sable tubing map 43 impressions at position 9.
+benchmark:trip-stack PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:tool-network
+> node scripts/benchmark-tool-network-registry.mjs --check
+
+
+TOOL NETWORK REGISTRY BENCHMARK
+========================================================================
+Score: 100/100
+Nodes: 56 · visible tool cards: 39 · relationships: 96 · candidates: 4 · active experiments: 0
+benchmark:tool-network PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:circle-tour
+> node scripts/benchmark-circle-tour.mjs --check
+
+Lake Superior Circle Tour benchmark: 100/100
+15/15  Search framing
+25/25  Map and planner
+20/20  Continuous route integrity
+15/15  Mobile, live data and resilience
+15/15  Current 2026 trip facts
+10/10  Tool-network fit
+
+> chrisizworski-com@1.0.0 benchmark:entity
+> node scripts/benchmark-entity-surface.mjs --check
+
+
+ENTITY SURFACE BENCHMARK  2026-09-13
+========================================================================
+
+sameAs entries: 35
+  self-owned domains : 26  (low entity weight, they only vouch for themselves)
+  independent        : 9  (this is the number that matters)
+Person nodes with full definition: 162   jobTitle values in use: Solutions Consultant
+Person @id values: https://chrisizworski.com/#person
+  description: 1 distinct value(s) across 23 nodes
+  url: 1 distinct value(s) across 160 nodes
+  alumniOf: 1 distinct value(s) across 3 nodes
+
+OWNED INDEPENDENT SURFACES (7 of gate 7)
+  w3  wikidata    https://www.wikidata.org/wiki/Q138283432
+  w3  linkedin    https://www.linkedin.com/in/chris-izworski-15294510
+  w2  github      https://github.com/izworskic
+  w2  orcid       https://orcid.org/0009-0002-7268-6083
+  w2  youtube     https://www.youtube.com/@izworskic
+  w1  medium      https://medium.com/@izworski
+  w1  aboutme     https://about.me/chrisizworski
+
+CANDIDATE SURFACES NOT YET OWNED (4) — ranked by weight
+  w2  muckrack    CANDIDATE. Author profile; he wrote the January 2025 NENA cover story on AI. Ranks well for person-name queries.
+  w2  apco-nena   CANDIDATE. Speaker or member profile on an APCO or NENA property. Independent, topically authoritative, and he has a 2021 APCO Michigan Director of the Year award to anchor it.
+  w1  crunchbase  CANDIDATE. Person profile tied to Prepared.
+  w1  scholar     CANDIDATE. Google Scholar or Semantic Scholar profile for the NENA article, tied to the existing ORCID.
+
+(structural checks only — pass --live to verify every sameAs URL over the network)
+
+benchmark:entity PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:winter
+> node scripts/benchmark-winter-engine.mjs --check
+
+Winter baseline: ICE 76/100 (loss 24); XC 61/100 (loss 39)
+Winter candidate: ICE 92/100 (loss 8); XC 94/100 (loss 6)
+WINTER ENGINE SCORECARD: PASS
+
+> chrisizworski-com@1.0.0 benchmark:winter-flow
+> node scripts/benchmark-winter-persona-flow.mjs --check
+
+Winter persona flow baseline: 52/100 (loss 48)
+Winter persona flow candidate: 100/100 (loss 0)
+WINTER PERSONA FLOW: PASS
+
+> chrisizworski-com@1.0.0 benchmark:winter-final
+> node scripts/benchmark-winter-final-readiness.mjs --check
+
+Winter final readiness baseline: 72/100 (loss 28)
+Winter final readiness candidate: 100/100 (loss 0)
+WINTER FINAL READINESS: PASS
+
+> chrisizworski-com@1.0.0 freshness
+> node scripts/stamp-freshness.mjs --check
+
+freshness check: 207 html files, 0 stamps behind their last commit
+freshness PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:citation
+> node scripts/benchmark-citation.mjs --check
+
+citation readiness across 9 tools
+  answer blocks:          74
+  self-contained length:  29 (39%)
+  depend on the page:     2
+  tools with no Q&A:      0
+
+  northern-lights-michigan         4/12 in band
+  soo-locks                        5/16 in band, 1 page-dependent
+  fall-color                       3/9 in band
+  mackinac-bridge-live             3/14 in band, 1 page-dependent
+  great-lakes-beaches              4/4 in band
+  great-lakes-freighter-tracking   3/6 in band
+  michigan-ice                     1/3 in band
+  great-lakes-buoys                3/5 in band
+  saginaw-bay-ecology              3/5 in band
+
+citation PASS (ratchet: never fewer self-contained, never more page-dependent)
+
+
+> chrisizworski-com@1.0.0 benchmark:decision-network
+> node scripts/benchmark-decision-network-growth.mjs --check
+
+Decision network growth candidate: 96/100 (loss 4)
+  authorityGraph: 20/20
+  boatDecisionUsefulness: 20/20
+  shipwreckExplorerDepth: 20/20
+  searchIntegrity: 15/15
+  trustAndPrivacy: 15/15
+  measurement: 6/10
+Failures:
+- measurement: network measurement must use symbolic destination metadata, not URLs
+DECISION NETWORK GROWTH: PASS
+
+> chrisizworski-com@1.0.0 benchmark:map-insights
+> node scripts/benchmark-map-insight-quality.mjs --check
+
+PASS  15/20  authenticMedia
+PASS  20/20  boatDataKeyedCorrelation
+PASS  20/20  boatBidirectionalControl
+PASS  20/20  shipwreckMapToTable
+PASS  10/10  shipwreckRecordToMap
+PASS  10/10  trustSearchAccessibility
+Map-data correlation baseline: 40/100 (loss 60)
+Map-data correlation candidate: 95/100 (loss 5)
+Known loss: 5 media points remain on the Boat static/social preview treatment; statewide source integrity and map-data correlation are fully gated.
+
+> chrisizworski-com@1.0.0 benchmark:boat-launches
+> node scripts/benchmark-boat-launch-usability.mjs --check
+
+PASS  30/30  sourceCreatesInventory
+PASS  20/20  noLegacyOrFuzzyFallback
+PASS  15/15  sourceQualityFilters
+PASS  15/15  mapRecordCorrelation
+PASS  10/10  decisionDetails
+PASS  10/10  failClosed
+Boat Launch source-integrity candidate: 100/100 (loss 0)
+
+> chrisizworski-com@1.0.0 audit:boat-launch-source
+> node scripts/audit-boat-launch-source.mjs
+
+Michigan statewide boat launch source audit
+DNR layer last edit: 2026-09-04T15:24:25.001Z
+Total layer: 1202
+Boating access sites: 1189
+Open: 1153
+Usable DNR statewide: 1152
+Great Lakes / connecting: 145
+Inland / other: 1007
+Municipal supplements: 1
+Withheld review state: 0
+DNR facility condition values: {"Not reported":1152}
+Bay City, MI: 18 within 25 mi · nearest Veterans Memorial Park 0.4 mi
+Tawas City, MI: 20 within 25 mi · nearest East Tawas 1.6 mi
+Alpena, MI: 18 within 25 mi · nearest North Riverfront Park 0.2 mi
+Mackinaw City, MI: 22 within 25 mi · nearest Straits State Harbor 0.2 mi
+Petoskey, MI: 42 within 25 mi · nearest Petoskey Municipal 0.3 mi
+Ludington, MI: 25 within 25 mi · nearest Loomis Street 0.5 mi
+Holland, MI: 25 within 25 mi · nearest Kollen Park 0.9 mi
+South Haven, MI: 39 within 25 mi · nearest Black River Park Launch Ramp 0.5 mi
+Munising, MI: 13 within 25 mi · nearest Anna River Mouth 0.3 mi
+Marquette, MI: 32 within 25 mi · nearest Cinder Pond Marina 0.5 mi
+Monroe, MI: 13 within 25 mi · nearest Hellenburg Park 1.1 mi
+Lansing, MI: 23 within 25 mi · nearest Sweeney's Landing 0.6 mi
+Jackson, MI: 43 within 25 mi · nearest Gilletts Lake 4.6 mi
+Houghton Lake, MI: 48 within 25 mi · nearest Houghton Lake South 1.9 mi
+Diagnostic report: artifacts/boat-launch-source-audit.json
+
+> chrisizworski-com@1.0.0 benchmark:boat-launches-v3
+> node scripts/benchmark-boat-launch-product-v3.mjs --check
+
+Boat Launch Product V4: 100/100 (loss 0)
+  sourceTruth: 25/25
+  statewideCoverage: 20/20
+  mapAndSearchUX: 25/25
+  decisionUtility: 15/15
+  weatherAndTrust: 10/10
+  discoveryPerformance: 5/5
+
+> chrisizworski-com@1.0.0 benchmark:boat-launch-search
+> node scripts/benchmark-boat-launch-search-expansion.mjs
+
+
+BOAT LAUNCH SEARCH AUTHORITY EXPANSION
+========================================================================
+Leading signal: 77 impressions / 0 clicks / position 13.17
+Treatment: crawlable statewide + Saginaw Bay + Lake Michigan + Au Sable discovery; snippet frozen
+benchmark:boat-launch-search PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:manistee
+> node scripts/benchmark-manistee-river-map.mjs --check
+
+Manistee comprehensive-field benchmark: 100/100
+Coverage: 53 mapped places · 19 operators · 8 audited unpinned/legacy records
+10/10  Comprehensive place corpus
+10/10  Canonical public-access spine
+10/10  Official lower/Pine coordinate truth
+10/10  Camp, scenic & service breadth
+10/10  Persona & source integrity
+10/10  Angler, paddle & boat utility
+10/10  Conditions & regulation honesty
+10/10  Planner integrity
+10/10  Mobile, sharing & discovery
+10/10  Graceful degradation
+
+> chrisizworski-com@1.0.0 benchmark:manistee-parity
+> node scripts/benchmark-manistee-ausable-parity.mjs --check
+
+Manistee ↔ Au Sable capability benchmark
+Au Sable reference target: 100/100 (defines parity capabilities)
+Manistee before this pass: 40/100
+Manistee candidate parity: 100/100
+PASS 10/10  Map key + access navigation
+PASS 15/15  Multi-gauge river coverage
+PASS 15/15  Seasonal flow comparison
+PASS 10/10  Optional turbidity + dissolved oxygen
+PASS 15/15  NWS weather, wind + precipitation
+PASS 15/15  Rich access decision card
+PASS 10/10  Regulation, source + directions handoffs
+PASS 10/10  Freshness + missing-data expression
+Manistee-specific advantage / truth score: 100/100
+PASS  Requested left-side river key
+PASS  Exact selected-access NWS forecast + alerts
+PASS  Nearest same-waterway gauge context
+PASS  Source-backed NHD channel routing
+PASS  No imported go/no-go fishing score
+PASS  Core works without enhancement
+PASS  Current regulations remain a source handoff
+
+> chrisizworski-com@1.0.0 benchmark:manistee-popups
+> node scripts/benchmark-manistee-popups.mjs
+
+Manistee map-popup benchmark
+Au Sable rich-popup reference target: 100/100
+Previous colored-river click surface: 5/100 (river name + USGS NHD only)
+Manistee candidate popup surface: 100/100
+20/20  Colored river click surface
+15/15  Access-point popup depth
+20/20  Live river context
+10/10  Seasonal comparison
+10/10  Weather + alerts
+10/10  Trust + provenance
+ 5/5  Immediate actions
+ 5/5  Gauge popup depth
+ 5/5  Resilience + mobile popup UX
+
+> chrisizworski-com@1.0.0 benchmark:manistee-ux
+> node scripts/benchmark-manistee-ausable-ui.mjs --check
+
+Manistee human-UX / Au Sable interaction contract
+Legacy structural failures: permanent sidebar, visible persona deck, explanation-first hierarchy, no reach-first Places flow.
+Candidate structural score: 100/100
+PASS 20/20  Map-first field shell
+PASS 15/15  Four-task hierarchy
+PASS 15/15  Places decision flow
+PASS 15/15  Planner directness
+PASS 10/10  Progressive disclosure
+PASS 10/10  Conditions at a glance
+PASS 10/10  Mobile field ergonomics
+PASS  5/5  Clutter control
+
+> chrisizworski-com@1.0.0 benchmark:au-sable-search
+> node scripts/benchmark-au-sable-map-access-expansion.mjs
+
+
+AU SABLE MAP + ACCESS SEARCH EXPANSION
+========================================================================
+Leading signal: 475 impressions / 16 clicks / 3.37% CTR / position 9.16
+Treatment: crawlable map, public-access, fishing-access and paddling-map answers; snippet frozen
+benchmark:au-sable-search PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:manistee-page-one
+> node scripts/benchmark-manistee-page-one-push.mjs --check
+
+
+MANISTEE PAGE-ONE PUSH BENCHMARK
+========================================================================
+Baseline: 72 impressions, 0 clicks, position 11.4
+Target: top 10, CTR >= 1.5%
+benchmark:manistee-page-one PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:fall-aurora-ctr
+> node scripts/benchmark-fall-aurora-ctr.mjs --check
+
+
+FALL + AURORA CTR BENCHMARK
+========================================================================
+Baseline: 90 impressions, 0 clicks, position 8.28
+Target: CTR >= 2.0%, position <= 10
+benchmark:fall-aurora-ctr PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:up-fall-rank
+> node scripts/benchmark-upper-peninsula-fall-rank.mjs --check
+
+
+UPPER PENINSULA FALL RANK BENCHMARK
+========================================================================
+Baseline: 78 impressions, 1 click, position 11.88
+Target: top 10; stretch top 8; destination snippet frozen
+benchmark:up-fall-rank PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:fall-weekend-planner-ctr
+> node scripts/benchmark-fall-weekend-planner-ctr.mjs --check
+
+
+FALL WEEKEND PLANNER CTR BENCHMARK
+========================================================================
+Baseline: 54 impressions, 0 clicks, position 10.07
+Target: CTR >= 2.0%; hold position <= 12
+benchmark:fall-weekend-planner-ctr PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:beach-detail-ctr
+> node scripts/benchmark-beach-detail-page-one-ctr.mjs --check
+
+
+BEACH DETAIL PAGE-ONE CTR EXPERIMENT
+========================================================================
+Baseline: 299 impressions / 1 click / 0.33% CTR / weighted position 8.99
+Target CTR: 1.5% · stretch 2.5% · rank guardrail 10.5
+benchmark:beach-detail-ctr PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:garden-page-one-ctr
+> node scripts/benchmark-garden-page-one-ctr.mjs --check
+
+
+GARDEN PAGE-ONE CTR SPRINT
+========================================================================
+Zone 6a calendar: 34 impressions / 0 clicks / position 8.26
+Heirloom tomatoes: 30 impressions / 0 clicks / position 10.37
+Target: >=2.0% CTR on each page while preserving protected tomato/frost treatments
+benchmark:garden-page-one-ctr PASS
+
+
+> chrisizworski-com@1.0.0 benchmark:entity-discovery-ctr
+> node scripts/benchmark-entity-discovery-ctr.mjs --check
+
+entity discovery CTR PASS — 101 zero-click impressions under measured treatment
+
+> chrisizworski-com@1.0.0 benchmark:circle-tour-rank
+> node scripts/benchmark-circle-tour-rank-distribution.mjs --check
+
+Circle Tour rank distribution PASS — destination frozen, two contextual authority paths active
+
+> chrisizworski-com@1.0.0 benchmark:extracted-routing
+> node scripts/verify-extracted-routing.mjs
+
+{
+  "status": "passed",
+  "rewritesChecked": 69,
+  "failures": []
+}
+
+> chrisizworski-com@1.0.0 benchmark:gauley-routing
+> node scripts/verify-gauley-routing.mjs
+
+Gauley explicit external hub proxy routing: PASS
+
+> chrisizworski-com@1.0.0 benchmark:tool-entities
+> node scripts/generate-tool-entity-graph.mjs --check
+
+  note: 10 hub tools carry an entity but are absent from the /tools/ ItemList:
+    https://chrisizworski.com/mackinac-bridge-tolls/
+    https://chrisizworski.com/fall-color/michigan-leaf-peeping-planner/
+    https://chrisizworski.com/national-tools/aurora/
+    https://chrisizworski.com/national-tools/rivers/
+    https://chrisizworski.com/national-tools/coastal/
+    https://chrisizworski.com/national-tools/snow/
+    https://chrisizworski.com/national-tools/white-christmas/
+    https://chrisizworski.com/national-tools/frost/
+    https://chrisizworski.com/national-tools/planting/
+    https://chrisizworski.com/national-tools/fall-color/
+tool entity graph: 21 hub tools carry a resolvable entity
+
+
+> chrisizworski-com@1.0.0 benchmark:white-christmas-indexing
+> node scripts/verify-white-christmas-indexing.mjs
+
+{
+  "status": "passed",
+  "urlCount": 43,
+  "failures": []
+}
