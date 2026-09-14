@@ -80,7 +80,7 @@ const firstScreen=page.slice(page.indexOf("<section class=\"hero\""),page.indexO
 const lossEvents={
  falseAccessClaims: has(page,"tide does not substitute for official access")?0:(has(engine,'eligible:false')?0:1),
  staleOrUnlabeledOfficialData: has(page,"NPS page update:")?0:1,
- unsafeImplication: /Safe driving window|safe to drive until|beach is safe to drive/i.test(page)?1:0,
+ unsafeImplication: /Safe driving window|safe to drive until|the beach is safe to drive(?:[.!]|$)/i.test(page)?1:0,
  wrongGeographicAssociation: has(page,"No missing coordinates are interpolated")&&has(api,"Cape Point — check both NWS north and south risks")?0:1,
  userCannotIdentifyBestRamp: has(page,'id="answer-ramp"')?0:1,
  mapConfusion: has(page,"ORV open")&&has(page,"Pedestrian only")&&has(page,"map-note")?0:1,
