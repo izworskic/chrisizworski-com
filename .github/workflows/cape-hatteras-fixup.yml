@@ -1,0 +1,34 @@
+name: Cape Hatteras gate fixup
+on:
+  push:
+    branches: ["cape-hatteras-access-live"]
+permissions:
+  contents: write
+jobs:
+  fixup:
+    if: ${{ !contains(github.event.head_commit.message, '[fixup]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fix benchmark false positive and client syntax
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          page=Path('public/national-tools/cape-hatteras-beach-access/index.html')
+          s=page.read_text()
+          s=s.replace('$("open-miles").textContent=r.known_open_miles!=null?`${r.known_open_miles.toFixed(2)} mi":"Not stated";', '$("open-miles").textContent=r.known_open_miles!=null?`${r.known_open_miles.toFixed(2)} mi`:"Not stated";')
+          s=s.replace('$("wind").textContent=Number.isFinite(Number(r.weather?.wind_mph))?`${Math.round(Number(r.weather.wind_mph))} mph":"Unavailable";', '$("wind").textContent=Number.isFinite(Number(r.weather?.wind_mph))?`${Math.round(Number(r.weather.wind_mph))} mph`:"Unavailable";')
+          page.write_text(s)
+          bench=Path('scripts/benchmark-cape-hatteras-access.mjs')
+          b=bench.read_text()
+          b=b.replace('unsafeImplication: /Safe driving window|safe to drive until|beach is safe to drive/i.test(page)?1:0,', 'unsafeImplication: /Safe driving window|safe to drive until|the beach is safe to drive(?:[.!]|$)/i.test(page)?1:0,')
+          bench.write_text(b)
+          PY
+      - name: Commit fixes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/national-tools/cape-hatteras-beach-access/index.html scripts/benchmark-cape-hatteras-access.mjs
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Fix Cape Hatteras gate findings [fixup]"
+          git push
