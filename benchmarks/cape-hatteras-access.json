@@ -1,0 +1,58 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-09-13",
+  "product": "Cape Hatteras Beach Access Live",
+  "canonical": "https://chrisizworski.com/national-tools/cape-hatteras-beach-access/",
+  "northStar": "A visitor can answer where to enter the beach today in under ten seconds without confusing official access, derived convenience, and ocean safety.",
+  "releaseThreshold": 90,
+  "productionTarget": 92,
+  "valueFunction": {
+    "userDecisionUsefulness": { "weight": 24, "description": "Immediate activity/area-specific answer, directional access, hours, tide context and official handoff." },
+    "dataTruthAndSourceFidelity": { "weight": 20, "description": "NPS is the eligibility gate; source failure is conservative; tide/surf/transport boundaries are explicit." },
+    "mapAndGeographicComprehension": { "weight": 15, "description": "Real geographic map, verified-only coordinates, understandable legend and complete list fallback." },
+    "repeatVisitValue": { "weight": 12, "description": "Status-change comparison, source timestamps and next meaningful tide/access context." },
+    "searchValue": { "weight": 10, "description": "Distinct canonical intent, crawlable answer/context, query-aligned metadata and no ramp doorway pages." },
+    "mobileUsabilityAndPerformance": { "weight": 8, "description": "390px-friendly first answer loads before map complexity and has responsive controls." },
+    "maintainability": { "weight": 6, "description": "Ramp registry, parser, decision helpers and source contracts are isolated and testable." },
+    "accessibility": { "weight": 5, "description": "Semantic controls, aria state, readable contrast, reduced-motion support and non-map fallback." }
+  },
+  "lossFunction": {
+    "formula": "falseAccessClaims*10 + staleOrUnlabeledOfficialData*8 + unsafeImplication*8 + wrongGeographicAssociation*7 + userCannotIdentifyBestRamp*6 + mapConfusion*5 + firstScreenJargon*4 + unnecessaryClicks*3 + latency*3 + seoDuplication*3 + visualClutter*2",
+    "weights": {
+      "falseAccessClaims": 10,
+      "staleOrUnlabeledOfficialData": 8,
+      "unsafeImplication": 8,
+      "wrongGeographicAssociation": 7,
+      "userCannotIdentifyBestRamp": 6,
+      "mapConfusion": 5,
+      "firstScreenJargon": 4,
+      "unnecessaryClicks": 3,
+      "latency": 3,
+      "seoDuplication": 3,
+      "visualClutter": 2
+    },
+    "releaseLossTarget": 0,
+    "principle": "The largest avoidable failure is a confident false access claim. No numerical product score can override a hard veto."
+  },
+  "hardVetoes": [
+    "A known closed ramp can be recommended as best access.",
+    "Missing or unparseable NPS access becomes open or otherwise produces a positive ORV recommendation.",
+    "Tide is presented as proof of vehicle safety, sand firmness or driveability.",
+    "Directional access is collapsed in a way that changes official semantics.",
+    "NPS field-sign authority is omitted.",
+    "Official source/update context is omitted.",
+    "Map coordinates are interpolated or fabricated.",
+    "Pedestrian-only access is represented as fully closed.",
+    "Rip-current risk is represented as official NPS ORV closure status.",
+    "High rip-current risk is hidden from beach-day users.",
+    "The canonical is wrong, noindex is present, the public path 404s, or the live API fails.",
+    "Precise location is required to use the product.",
+    "Thin indexable ramp pages are mass-produced at launch."
+  ],
+  "evaluation": {
+    "preRelease": ["node scripts/benchmark-cape-hatteras-access.mjs --check", "npm test", "npm run vercel-build", "npm run verify:all"],
+    "production": ["canonical HTTP 200", "API HTTP 200 or explicit conservative 503 on NPS failure", "real map markup present", "NPS update/status context visible", "no preview-host canonical leakage"],
+    "searchWindowsDays": [14, 28, 60],
+    "primarySearchMetrics": ["impressions", "non-branded clicks", "CTR", "average position", "ramp-number query diversity"]
+  }
+}
