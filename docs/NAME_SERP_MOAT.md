@@ -1,6 +1,6 @@
 # Chris Izworski Exact-Name SERP Moat
 
-Updated: August 29, 2026 (America/Detroit)
+Updated: September 14, 2026 (America/Detroit)
 
 ## Objective
 
@@ -57,6 +57,29 @@ The primary identity page at `/chris-izworski/` should use Google-compatible `Pr
 - active owned properties should link back to the canonical identity surface while preserving their own non-branded purpose.
 
 This distinction matters because a strong entity graph is not a list of every URL Chris controls. It is a set of accurate identity, authorship, and ownership relationships that independent search systems can reconcile.
+
+## September 14 Bing position-one treatment
+
+The neutral US-English Bing census found a Facebook repost at position 1, the canonical
+`/chris-izworski/` profile at position 2, the biography at position 3, and the homepage at
+position 11. The first move is therefore to improve the existing position-2 identity result, not
+to create another name page.
+
+The reversible treatment:
+
+- changes the canonical profile title to `Chris Izworski | Senior Sales Engineer at Axon`;
+- leads the visible profile answer with the owner-confirmed current role;
+- cites the official Michigan State 911 Committee Technology Forum agenda that lists
+  `Chris Izworski, Axon/Prepared`;
+- aligns repeated canonical Person `jobTitle` and `worksFor` data site-wide;
+- adds one contextual homepage link to the canonical profile;
+- preserves every route, canonical, ProfilePage `mainEntity`, independent source, and historical
+  Prepared role.
+
+After a successful production release, submit the homepage, canonical profile, and two existing
+Prepared-context URLs through the repository's normal IndexNow process. Hold the treatment for 28
+days unless a stop-loss in `benchmarks/name-serp-governance.json` fires. IndexNow requests
+recrawling; they do not guarantee position 1.
 
 ## Page-one operating model
 

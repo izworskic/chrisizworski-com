@@ -26,6 +26,34 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Sep 14 2026: owner-confirmed current-role correction. Canonical Person definitions
+  // now consistently identify Senior Sales Engineer at Axon; Prepared remains accurate
+  // product/team and historical context. The homepage/profile treatment targets the observed
+  // Bing exact-name position #2 without changing routes or canonicals. Re-crawl after release.
+  "/chris-izworski-911/",
+  "/chris-izworski-biography/",
+  "/chris-izworski-prepared911/",
+  "/chris-izworski-save-our-shoreline/",
+  "/chris-izworski-source-guide/",
+  "/chris-izworski-speaking/",
+  "/chris-izworski-wnem-tv5/",
+  "/chris-izworski-works/",
+  "/chris-izworski-wsgw/",
+  "/estivant-pines/",
+  "/fall-color/ann-arbor-irish-hills-fall-color/",
+  "/fall-color/au-sable-river-fall-color/",
+  "/fall-color/mackinac-island-fall-color/",
+  "/fall-color/porcupine-mountains-fall-color/",
+  "/fall-color/saginaw-bay-fall-color/",
+  "/fall-color/saugatuck-southwest-michigan-fall-color/",
+  "/fall-color/sleeping-bear-dunes-fall-color/",
+  "/fall-color/tahquamenon-falls-fall-color/",
+  "/fall-color/upper-peninsula-fall-color/",
+  "/fall-color/when-do-leaves-peak-in-michigan/",
+  "/great-lakes-maritime-history/",
+  "/privacy/",
+  "/terms/",
+  "/sitemap-reputation.xml",
   // Sep 10 2026 (second pass): expanded 5 of the 21 /chris-izworski-* identity/citation
   // pages with facts already published and verified elsewhere on this same site (media,
   // timeline, citations) that hadn't been cross-referenced into the topic-specific page yet.

@@ -3,6 +3,19 @@
 One dated entry per production change, so Search Console movement can be attributed to a cause
 instead of guessed at. Do not ship two page clusters on the same day.
 
+## 2026-09-14 - Current Axon role aligned for the Bing name result
+
+- Owner-confirmed current role is Senior Sales Engineer at Axon.
+- The canonical profile now leads with that current role, cites the official Michigan State 911
+  Committee Technology Forum agenda, and keeps its URL, canonical, and Person ID unchanged.
+- The homepage keeps its established broad search title and adds one contextual authority link to
+  the canonical profile.
+- All repeated canonical Person definitions use the same `jobTitle` and Axon `worksFor` value.
+  Prepared remains in accurate product/team and historical context.
+- Baseline: neutral US-English Bing placed a Facebook repost at #1 and the canonical profile at #2
+  on 2026-09-14. Evaluate after 28 days in production; IndexNow is a recrawl request, not a ranking
+  guarantee.
+
 ## 2026-08-19 - Boat launch finder ranked on driving distance
 
 - Shortlist now ranks by real driving distance and drive time (`api/boat-launch-drive.js`,

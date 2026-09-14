@@ -1,5 +1,5 @@
 {
-  "version": "1.6.0",
+  "version": "1.7.0",
   "updated": "2026-09-14",
   "objective": "Make Chris Izworski the clear primary result for his name and build a durable page-one moat of independently controlled, truthful, useful Chris Izworski properties while preserving strong earned authority, one canonical Person entity, and distinct non-branded search ownership.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
@@ -14,6 +14,47 @@
     "controlledIndependentTop10": 4,
     "controlledIndependentTop10Gap": 4,
     "googleStatus": "blocked-human-verification"
+  },
+  "currentRole": {
+    "confirmedByOwner": "2026-09-14",
+    "jobTitle": "Senior Sales Engineer",
+    "employer": {
+      "name": "Axon",
+      "url": "https://www.axon.com/"
+    },
+    "preparedContext": "Prepared is retained only as accurate product/team and historical context; it is not presented as the current employer.",
+    "evidence": [
+      {
+        "kind": "owner-confirmation",
+        "scope": "Current job title and employer",
+        "observed": "2026-09-14"
+      },
+      {
+        "kind": "official-government-agenda",
+        "url": "https://www.michigan.gov/msp/divisions/911committee/911-technology-forum/agenda",
+        "scope": "Corroborates the current Axon/Prepared affiliation; it does not establish the job title."
+      }
+    ],
+    "bingTreatment": {
+      "primaryRoute": "https://chrisizworski.com/chris-izworski/",
+      "baseline": {
+        "engine": "Bing",
+        "query": "Chris Izworski",
+        "observed": "2026-09-14",
+        "position": 2,
+        "positionOne": "Facebook repost of the October 2025 Saginaw County resignation coverage"
+      },
+      "hypothesis": "A current exact-name title, visible direct answer, consistent canonical Person employment data, official corroboration, and a homepage authority link can move the canonical profile from position 2 to position 1.",
+      "starts": "first successful production release containing this treatment",
+      "observationDays": 28,
+      "primaryTargetPosition": 1,
+      "secondaryGuardrail": "Do not weaken homepage or controlled-origin top-10 occupancy.",
+      "stopLoss": [
+        "Canonical profile leaves the Bing top 5 across two neutral weekly checks.",
+        "The homepage or canonical profile drops out of Bing's first results page.",
+        "Canonical, ProfilePage mainEntity, indexing, accessibility, performance, or structured-data validation regresses."
+      ]
+    }
   },
   "brandedQueryFamily": [
     "Chris Izworski",
@@ -166,9 +207,9 @@
       "property": "ORCID 0009-0002-7268-6083",
       "url": "https://orcid.org/0009-0002-7268-6083",
       "observedLabel": "Axon Enterprise in the record header and employment section; Prepared in the biography",
-      "correctLabel": "One confirmed current employer, with any former affiliation end-dated",
+      "correctLabel": "Senior Sales Engineer at Axon; retain Prepared only where historically or product-contextually accurate",
       "status": "owner-authenticated-fix-required",
-      "reason": "A conflicting employer on a high-authority identity record fragments current-role consistency across ORCID, LinkedIn, and the canonical Person entity."
+      "reason": "The owner confirmed the current title and employer on 2026-09-14. Update the ORCID biography and any stale employment record so the high-authority identity surface agrees with the canonical Person entity."
     },
     {
       "priority": "P1",

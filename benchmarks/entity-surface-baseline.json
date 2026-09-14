@@ -1,29 +1,105 @@
 {
-  "benchmarkVersion": "1.2.0",
+  "benchmarkVersion": "1.3.0",
   "baselineCreated": "2026-08-06",
   "lastPublicAudit": "2026-09-14",
   "latestSerpSnapshot": "benchmarks/name-serp-snapshot-2026-09-14.json",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "purpose": "Track ownership of the search surfaces that carry the Chris Izworski entity, so the name SERP cannot be contested and AI answer engines resolve the entity correctly. Runs alongside every build; it is never finished.",
   "principle": "Eight of nine slots on the name SERP already belong to chrisizworski.com. That is a single point of failure, not a moat: Google generally shows at most two results per domain outside navigational queries. Durable ownership comes from INDEPENDENT third-party surfaces that agree with each other and link back, not from more pages on the owned domain.",
-  "selfOwnedDomains": ["chrisizworski.com","michigantroutreport.com","michiganbirdingreport.com","greatlakeslevels.org","freighterviewfarms.com","izworskic.github.io","aibreakdown5.wordpress.com","911ai.wordpress.com","izworski-vrwxz.wordpress.com"],
+  "selfOwnedDomains": [
+    "chrisizworski.com",
+    "michigantroutreport.com",
+    "michiganbirdingreport.com",
+    "greatlakeslevels.org",
+    "freighterviewfarms.com",
+    "izworskic.github.io",
+    "aibreakdown5.wordpress.com",
+    "911ai.wordpress.com",
+    "izworski-vrwxz.wordpress.com"
+  ],
   "botBlockedHosts": {
     "www.linkedin.com": "returns HTTP 999 to all non-browser agents",
     "medium.com": "returns HTTP 403 to bots",
     "www.crunchbase.com": "bot challenge"
   },
   "independentSurfaces": [
-    { "id": "wikidata",  "url": "https://www.wikidata.org/wiki/Q138283432", "status": "owned",  "weight": 3, "note": "Feeds the Google Knowledge Panel and most AI answer engines. Highest leverage single surface. Needs current employer and missing properties." },
-    { "id": "linkedin",  "url": "https://www.linkedin.com/in/chris-izworski-15294510", "status": "owned", "weight": 3, "note": "The September 14 Bing exact-name result identifies Prepared. Preserve the exact name, current role, and canonical-site link; the full public headline remains bot-restricted outside the search result." },
-    { "id": "github",    "url": "https://github.com/izworskic", "status": "owned", "weight": 2, "note": "Profile README can carry the entity description and sameAs links." },
-    { "id": "orcid",     "url": "https://orcid.org/0009-0002-7268-6083", "status": "owned", "weight": 2, "note": "The canonical website backlink is present. The public header and employment section list Axon Enterprise while the biography says Prepared; confirm the current employer and end-date or remove the stale affiliation." },
-    { "id": "youtube",   "url": "https://www.youtube.com/@izworskic", "status": "owned", "weight": 2, "note": "Live with the exact name and a distinct Michigan/Great Lakes description; no visible canonical-site link was detected. Add the canonical profile as the primary channel link." },
-    { "id": "medium",    "url": "https://medium.com/@izworski", "status": "owned", "weight": 1, "note": "Bot-blocked, cannot verify from CI." },
-    { "id": "aboutme",   "url": "https://about.me/chrisizworski", "status": "owned", "weight": 1, "note": "Low authority; keep, do not invest." },
-    { "id": "muckrack",  "url": null, "status": "absent", "weight": 2, "note": "CANDIDATE. Author profile; he wrote the January 2025 NENA cover story on AI. Ranks well for person-name queries." },
-    { "id": "crunchbase","url": null, "status": "absent", "weight": 1, "note": "CANDIDATE. Person profile tied to Prepared." },
-    { "id": "scholar",   "url": null, "status": "absent", "weight": 1, "note": "CANDIDATE. Google Scholar or Semantic Scholar profile for the NENA article, tied to the existing ORCID." },
-    { "id": "apco-nena", "url": null, "status": "absent", "weight": 2, "note": "CANDIDATE. Speaker or member profile on an APCO or NENA property. Independent, topically authoritative, and he has a 2021 APCO Michigan Director of the Year award to anchor it." }
+    {
+      "id": "wikidata",
+      "url": "https://www.wikidata.org/wiki/Q138283432",
+      "status": "owned",
+      "weight": 3,
+      "note": "Feeds the Google Knowledge Panel and many AI answer systems. Align the current employer and role only from verified facts; retain historical roles with dates."
+    },
+    {
+      "id": "linkedin",
+      "url": "https://www.linkedin.com/in/chris-izworski-15294510",
+      "status": "owned",
+      "weight": 3,
+      "note": "The September 14 Bing exact-name result still identifies Prepared. Update the owner-controlled headline and current employer to Senior Sales Engineer at Axon, preserve Prepared as relevant team/product history, and retain the canonical-site link."
+    },
+    {
+      "id": "github",
+      "url": "https://github.com/izworskic",
+      "status": "owned",
+      "weight": 2,
+      "note": "Profile README can carry the entity description and sameAs links."
+    },
+    {
+      "id": "orcid",
+      "url": "https://orcid.org/0009-0002-7268-6083",
+      "status": "owned",
+      "weight": 2,
+      "note": "The canonical website backlink is present and Axon Enterprise appears in the public header/employment section. Update the Prepared biography and any undated affiliation to the owner-confirmed current role: Senior Sales Engineer at Axon."
+    },
+    {
+      "id": "youtube",
+      "url": "https://www.youtube.com/@izworskic",
+      "status": "owned",
+      "weight": 2,
+      "note": "Live with the exact name and a distinct Michigan/Great Lakes description; no visible canonical-site link was detected. Add the canonical profile as the primary channel link."
+    },
+    {
+      "id": "medium",
+      "url": "https://medium.com/@izworski",
+      "status": "owned",
+      "weight": 1,
+      "note": "Bot-blocked, cannot verify from CI."
+    },
+    {
+      "id": "aboutme",
+      "url": "https://about.me/chrisizworski",
+      "status": "owned",
+      "weight": 1,
+      "note": "Low authority; keep, do not invest."
+    },
+    {
+      "id": "muckrack",
+      "url": null,
+      "status": "absent",
+      "weight": 2,
+      "note": "CANDIDATE. Author profile; he wrote the January 2025 NENA cover story on AI. Ranks well for person-name queries."
+    },
+    {
+      "id": "crunchbase",
+      "url": null,
+      "status": "absent",
+      "weight": 1,
+      "note": "CANDIDATE. Person profile tied to Prepared."
+    },
+    {
+      "id": "scholar",
+      "url": null,
+      "status": "absent",
+      "weight": 1,
+      "note": "CANDIDATE. Google Scholar or Semantic Scholar profile for the NENA article, tied to the existing ORCID."
+    },
+    {
+      "id": "apco-nena",
+      "url": null,
+      "status": "absent",
+      "weight": 2,
+      "note": "CANDIDATE. Speaker or member profile on an APCO or NENA property. Independent, topically authoritative, and he has a 2021 APCO Michigan Director of the Year award to anchor it."
+    }
   ],
   "gates": {
     "minIndependentOwnedSurfaces": 7,
@@ -33,6 +109,6 @@
     "minBacklinkRateAmongVerifiable": 0.8
   },
   "knownDrift": {
-    "currentEmployer": "ORCID presents Axon Enterprise in its record header and employment section while the ORCID biography, canonical Person entity, and Bing's LinkedIn result identify Prepared. Confirm the current employer and reconcile ORCID before adding or cloning current-role facts elsewhere."
+    "currentEmployer": "Owner confirmed Senior Sales Engineer at Axon on 2026-09-14. The canonical site is aligned in this draft; LinkedIn's Bing snippet and the ORCID biography still require owner-authenticated updates. Prepared remains valid only as product/team and historical context."
   }
 }
