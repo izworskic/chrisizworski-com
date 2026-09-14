@@ -1,0 +1,45 @@
+name: Diagnose Cape Hatteras site-wide gate
+on:
+  push:
+    branches: ["cape-hatteras-access-live"]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --ignore-scripts --no-audit --no-fund
+      - name: verify source
+        continue-on-error: true
+        run: npm run verify
+      - name: benchmark beaches
+        continue-on-error: true
+        run: npm run benchmark:beaches
+      - name: benchmark beach ctr
+        continue-on-error: true
+        run: npm run benchmark:beach-ctr
+      - name: benchmark border ctr
+        continue-on-error: true
+        run: npm run benchmark:border-ctr
+      - name: benchmark growth
+        continue-on-error: true
+        run: npm run benchmark:growth
+      - name: benchmark seo
+        continue-on-error: true
+        run: npm run benchmark:seo
+      - name: benchmark serp length
+        continue-on-error: true
+        run: npm run benchmark:serp-length
+      - name: benchmark ctr
+        continue-on-error: true
+        run: npm run benchmark:ctr -- --check
+      - name: benchmark search growth
+        continue-on-error: true
+        run: npm run benchmark:search-growth -- --check
+      - name: benchmark search strategy
+        continue-on-error: true
+        run: npm run benchmark:search-strategy -- --check
