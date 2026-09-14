@@ -1,0 +1,23 @@
+name: Cape Hatteras access build
+on:
+  push:
+    branches: ["cape-hatteras-access-live"]
+permissions:
+  contents: read
+jobs:
+  product-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Cape Hatteras benchmark and loss
+        run: node scripts/benchmark-cape-hatteras-access.mjs --check
+      - name: Repository tests
+        run: npm test
+      - name: Production build
+        run: npm run vercel-build
+      - name: Full repository gate
+        run: npm run verify:all
