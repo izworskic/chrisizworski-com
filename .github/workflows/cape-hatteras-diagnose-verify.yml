@@ -13,45 +13,66 @@ jobs:
         with:
           node-version: 22
       - run: npm install --ignore-scripts --no-audit --no-fund
-      - name: search authority
+      - name: boat launches
         continue-on-error: true
-        run: npm run benchmark:search-authority -- --check
-      - name: outdoors growth
+        run: npm run benchmark:boat-launches
+      - name: boat source audit
         continue-on-error: true
-        run: npm run benchmark:outdoors-now-growth -- --check
-      - name: mackinac toll ctr
+        run: npm run audit:boat-launch-source
+      - name: boat launches v3
         continue-on-error: true
-        run: npm run benchmark:mackinac-toll-ctr
-      - name: trip stack
+        run: npm run benchmark:boat-launches-v3
+      - name: boat search
         continue-on-error: true
-        run: npm run benchmark:trip-stack -- --check
-      - name: tool network
+        run: npm run benchmark:boat-launch-search
+      - name: manistee
         continue-on-error: true
-        run: npm run benchmark:tool-network -- --check
-      - name: circle tour
+        run: npm run benchmark:manistee
+      - name: manistee parity
         continue-on-error: true
-        run: npm run benchmark:circle-tour
-      - name: entity
+        run: npm run benchmark:manistee-parity
+      - name: manistee popups
         continue-on-error: true
-        run: npm run benchmark:entity -- --check
-      - name: winter
+        run: npm run benchmark:manistee-popups
+      - name: manistee ux
         continue-on-error: true
-        run: npm run benchmark:winter -- --check
-      - name: winter flow
+        run: npm run benchmark:manistee-ux
+      - name: au sable search
         continue-on-error: true
-        run: npm run benchmark:winter-flow -- --check
-      - name: winter final
+        run: npm run benchmark:au-sable-search
+      - name: manistee page one
         continue-on-error: true
-        run: npm run benchmark:winter-final -- --check
-      - name: freshness
+        run: npm run benchmark:manistee-page-one -- --check
+      - name: fall aurora ctr
         continue-on-error: true
-        run: npm run freshness -- --check
-      - name: citation
+        run: npm run benchmark:fall-aurora-ctr -- --check
+      - name: upper peninsula fall rank
         continue-on-error: true
-        run: npm run benchmark:citation -- --check
-      - name: decision network
+        run: npm run benchmark:up-fall-rank -- --check
+      - name: fall weekend planner ctr
         continue-on-error: true
-        run: npm run benchmark:decision-network
-      - name: map insights
+        run: npm run benchmark:fall-weekend-planner-ctr -- --check
+      - name: beach detail ctr
         continue-on-error: true
-        run: npm run benchmark:map-insights
+        run: npm run benchmark:beach-detail-ctr -- --check
+      - name: garden page one
+        continue-on-error: true
+        run: npm run benchmark:garden-page-one-ctr -- --check
+      - name: entity discovery ctr
+        continue-on-error: true
+        run: npm run benchmark:entity-discovery-ctr -- --check
+      - name: circle tour rank
+        continue-on-error: true
+        run: npm run benchmark:circle-tour-rank -- --check
+      - name: extracted routing
+        continue-on-error: true
+        run: npm run benchmark:extracted-routing
+      - name: gauley routing
+        continue-on-error: true
+        run: npm run benchmark:gauley-routing
+      - name: tool entities
+        continue-on-error: true
+        run: npm run benchmark:tool-entities
+      - name: white christmas indexing
+        continue-on-error: true
+        run: npm run benchmark:white-christmas-indexing
