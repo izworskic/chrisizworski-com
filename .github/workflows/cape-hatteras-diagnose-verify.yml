@@ -13,33 +13,45 @@ jobs:
         with:
           node-version: 22
       - run: npm install --ignore-scripts --no-audit --no-fund
-      - name: verify source
+      - name: search authority
         continue-on-error: true
-        run: npm run verify
-      - name: benchmark beaches
+        run: npm run benchmark:search-authority -- --check
+      - name: outdoors growth
         continue-on-error: true
-        run: npm run benchmark:beaches
-      - name: benchmark beach ctr
+        run: npm run benchmark:outdoors-now-growth -- --check
+      - name: mackinac toll ctr
         continue-on-error: true
-        run: npm run benchmark:beach-ctr
-      - name: benchmark border ctr
+        run: npm run benchmark:mackinac-toll-ctr
+      - name: trip stack
         continue-on-error: true
-        run: npm run benchmark:border-ctr
-      - name: benchmark growth
+        run: npm run benchmark:trip-stack -- --check
+      - name: tool network
         continue-on-error: true
-        run: npm run benchmark:growth
-      - name: benchmark seo
+        run: npm run benchmark:tool-network -- --check
+      - name: circle tour
         continue-on-error: true
-        run: npm run benchmark:seo
-      - name: benchmark serp length
+        run: npm run benchmark:circle-tour
+      - name: entity
         continue-on-error: true
-        run: npm run benchmark:serp-length
-      - name: benchmark ctr
+        run: npm run benchmark:entity -- --check
+      - name: winter
         continue-on-error: true
-        run: npm run benchmark:ctr -- --check
-      - name: benchmark search growth
+        run: npm run benchmark:winter -- --check
+      - name: winter flow
         continue-on-error: true
-        run: npm run benchmark:search-growth -- --check
-      - name: benchmark search strategy
+        run: npm run benchmark:winter-flow -- --check
+      - name: winter final
         continue-on-error: true
-        run: npm run benchmark:search-strategy -- --check
+        run: npm run benchmark:winter-final -- --check
+      - name: freshness
+        continue-on-error: true
+        run: npm run freshness -- --check
+      - name: citation
+        continue-on-error: true
+        run: npm run benchmark:citation -- --check
+      - name: decision network
+        continue-on-error: true
+        run: npm run benchmark:decision-network
+      - name: map insights
+        continue-on-error: true
+        run: npm run benchmark:map-insights
