@@ -29,7 +29,7 @@ export const config = {
   ],
 };
 
-export default function middleware(request: Request) {
+export default async function middleware(request: Request) {
   const url = new URL(request.url);
 
   if (
@@ -66,7 +66,17 @@ export default function middleware(request: Request) {
   if (url.pathname.startsWith(`${FORT_MADISON_PATH}/`)) {
     const upstreamPath = url.pathname.slice(FORT_MADISON_PATH.length) || '/';
     const upstream = new URL(`${upstreamPath}${url.search}`, FORT_MADISON_UPSTREAM);
-    return fetch(new Request(upstream, request));
+    const upstreamRequest = new Request(upstream, request);
+    const response = await fetch(upstreamRequest, { cache: 'no-store' });
+    const headers = new Headers(response.headers);
+    headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    headers.set('CDN-Cache-Control', 'no-store');
+    headers.set('Vercel-CDN-Cache-Control', 'no-store');
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
   }
 
   if (url.pathname.startsWith(`${GRAND_COULEE_PATH}/`)) {
