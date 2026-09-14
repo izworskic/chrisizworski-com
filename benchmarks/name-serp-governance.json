@@ -1,11 +1,20 @@
 {
-  "version": "1.5.0",
-  "updated": "2026-08-29",
+  "version": "1.6.0",
+  "updated": "2026-09-14",
   "objective": "Make Chris Izworski the clear primary result for his name and build a durable page-one moat of independently controlled, truthful, useful Chris Izworski properties while preserving strong earned authority, one canonical Person entity, and distinct non-branded search ownership.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "primaryBrandResult": "https://chrisizworski.com/",
   "primaryIdentitySurface": "https://chrisizworski.com/chris-izworski/",
   "playbook": "docs/NAME_SERP_MOAT.md",
+  "latestObservedSnapshot": {
+    "file": "benchmarks/name-serp-snapshot-2026-09-14.json",
+    "engine": "Bing",
+    "query": "Chris Izworski",
+    "primarySitePosition": 2,
+    "controlledIndependentTop10": 4,
+    "controlledIndependentTop10Gap": 4,
+    "googleStatus": "blocked-human-verification"
+  },
   "brandedQueryFamily": [
     "Chris Izworski",
     "Chris Izworski Michigan",
@@ -151,6 +160,33 @@
       "correctLabel": "Chris Izworski",
       "status": "external-fix-required",
       "reason": "This is an independent civic authority surface. The misspelled board heading fragments exact-name entity consistency even though the accompanying bio uses the correct surname."
+    },
+    {
+      "priority": "P0",
+      "property": "ORCID 0009-0002-7268-6083",
+      "url": "https://orcid.org/0009-0002-7268-6083",
+      "observedLabel": "Axon Enterprise in the record header and employment section; Prepared in the biography",
+      "correctLabel": "One confirmed current employer, with any former affiliation end-dated",
+      "status": "owner-authenticated-fix-required",
+      "reason": "A conflicting employer on a high-authority identity record fragments current-role consistency across ORCID, LinkedIn, and the canonical Person entity."
+    },
+    {
+      "priority": "P1",
+      "property": "About.me Chris Izworski profile",
+      "url": "https://about.me/chrisizworski",
+      "observedLabel": "public Safety and AI Builder; primary button points to Freighter View Farms",
+      "correctLabel": "Public Safety and AI Builder; primary identity link points to the canonical Chris Izworski profile",
+      "status": "owner-authenticated-fix-required",
+      "reason": "Exact-name capitalization and a reciprocal canonical identity link are controllable consistency signals on a target moat profile that is absent from the observed Bing top 30."
+    },
+    {
+      "priority": "P1",
+      "property": "YouTube @izworskic channel",
+      "url": "https://www.youtube.com/@izworskic",
+      "observedLabel": "Exact-name outdoors channel with no visible canonical-site link detected",
+      "correctLabel": "Retain the distinct channel description and add the canonical Chris Izworski profile as the primary channel link",
+      "status": "owner-authenticated-fix-required",
+      "reason": "YouTube is a target independent profile but does not appear in the observed Bing top 30; reciprocal identity discovery is the smallest truthful repair."
     }
   ],
   "rules": {

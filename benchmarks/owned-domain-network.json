@@ -1,6 +1,6 @@
 {
-  "version": "1.3.0",
-  "updated": "2026-08-29",
+  "version": "1.4.0",
+  "updated": "2026-09-14",
   "purpose": "Track Chris Izworski-owned web properties separately from the tool-only registry so a 100/100 tool score cannot hide an unconnected first-party domain or planned subproperty.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "roots": [
@@ -54,6 +54,22 @@
     {
       "host": "aibreakdown5.wordpress.com",
       "name": "AI Breakdown",
+      "role": "legacy-writing",
+      "status": "legacy",
+      "coverage": "entity-surface",
+      "measurement": "not-required"
+    },
+    {
+      "host": "911ai.wordpress.com",
+      "name": "911 AI",
+      "role": "legacy-writing",
+      "status": "legacy",
+      "coverage": "entity-surface",
+      "measurement": "not-required"
+    },
+    {
+      "host": "izworski-vrwxz.wordpress.com",
+      "name": "Izworski Blog",
       "role": "legacy-writing",
       "status": "legacy",
       "coverage": "entity-surface",

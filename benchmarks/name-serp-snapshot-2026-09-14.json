@@ -1,0 +1,374 @@
+{
+  "version": "1.0.0",
+  "observed": "2026-09-14",
+  "query": "Chris Izworski",
+  "purpose": "Record the exact-name organic result census separately from durable targets. This is a signed-out US-English desktop observation, not a ranking guarantee.",
+  "countingRulesSource": "benchmarks/name-serp-governance.json",
+  "method": {
+    "locale": "United States / English",
+    "device": "desktop cloud browser",
+    "personalization": "signed out",
+    "organicDefinition": "Visible Bing web results only. Image packs, related searches, Copilot modules, and navigation links were excluded; organic results were renumbered sequentially across result pages.",
+    "engines": {
+      "bing": {
+        "status": "measured",
+        "depth": 30,
+        "searchUrl": "https://www.bing.com/search?q=Chris+Izworski"
+      },
+      "google": {
+        "status": "blocked-human-verification",
+        "depth": 0,
+        "reason": "Google returned its unusual-traffic human-verification page on the initial request and one permitted reload. No Google ordering is claimed."
+      }
+    }
+  },
+  "summary": {
+    "top10": {
+      "controlledOrSupportingResults": 9,
+      "uniqueControlledGroups": 4,
+      "controlledGroups": [
+        "chrisizworski.com",
+        "github",
+        "wordpress.com",
+        "linkedin"
+      ],
+      "favorableEarned": 0,
+      "other": 1,
+      "chrisAttributable": 10,
+      "uniqueControlledTarget": 8,
+      "uniqueControlledGap": 4
+    },
+    "top20": {
+      "controlledOrSupportingResults": 17,
+      "uniqueControlledGroups": 5,
+      "controlledGroups": [
+        "chrisizworski.com",
+        "github",
+        "wordpress.com",
+        "linkedin",
+        "medium"
+      ],
+      "favorableEarned": 0,
+      "other": 3,
+      "chrisAttributable": 20,
+      "broaderOccupancyTarget": 15,
+      "broaderOccupancyTargetMet": true
+    },
+    "top30": {
+      "controlledOrSupportingResults": 23,
+      "uniqueControlledGroups": 5,
+      "controlledGroups": [
+        "chrisizworski.com",
+        "github",
+        "wordpress.com",
+        "linkedin",
+        "medium"
+      ],
+      "favorableEarned": 2,
+      "other": 5,
+      "chrisAttributable": 30,
+      "broaderOccupancyTarget": 20,
+      "broaderOccupancyTargetMet": true
+    }
+  },
+  "findings": [
+    "The primary chrisizworski.com identity page is Bing result 2, one position below the primary-site target.",
+    "Nine of the first ten results are owned or supporting surfaces, but they collapse to only four independently controlled origin/platform groups under the repository counting rules.",
+    "The number-one result is an uncontrolled Facebook repost about the October 2025 Saginaw County 911 resignation.",
+    "Medium first appears at result 16. Freighter View Farms, About.me, YouTube, and ORCID do not appear in the observed Bing top 30.",
+    "APCO International and the Police Officers Association of Michigan are the first strong favorable earned authorities, at results 22 and 24.",
+    "The observed raw occupancy is broad, but control is concentrated in chrisizworski.com, GitHub, WordPress.com, LinkedIn, and Medium. The top-10 unique-control gap is four origins/platforms."
+  ],
+  "ownerControlledRepairQueue": [
+    {
+      "priority": "P0",
+      "surface": "ORCID",
+      "url": "https://orcid.org/0009-0002-7268-6083",
+      "observed": "The public record header and employment section identify Axon Enterprise, while the biography identifies Prepared and the canonical site and LinkedIn result also identify Prepared.",
+      "repair": "Confirm the current employer, then remove or end-date the stale affiliation and make the biography and employment section agree.",
+      "status": "requires-authenticated-owner-publish"
+    },
+    {
+      "priority": "P1",
+      "surface": "About.me",
+      "url": "https://about.me/chrisizworski",
+      "observed": "The public headline begins with lower-case 'public Safety' and the primary button points to Freighter View Farms rather than the canonical identity page.",
+      "repair": "Capitalize the headline consistently and make the canonical Chris Izworski profile the primary identity link while retaining Freighter View Farms as a project link.",
+      "status": "requires-authenticated-owner-publish"
+    },
+    {
+      "priority": "P1",
+      "surface": "YouTube",
+      "url": "https://www.youtube.com/@izworskic",
+      "observed": "The public channel has the exact name and a substantive Michigan/Great Lakes description, but no visible canonical-site link was detected and the channel does not appear in the Bing top 30.",
+      "repair": "Add https://chrisizworski.com/chris-izworski/ as the primary channel link and retain the distinct outdoors-focused description.",
+      "status": "requires-authenticated-owner-publish"
+    },
+    {
+      "priority": "P2",
+      "surface": "Medium",
+      "url": "https://medium.com/@izworski",
+      "observed": "The exact-name profile ranks at 16 and has a clear public-safety AI bio, but no canonical-site link was visible in the public profile audit.",
+      "repair": "Add the canonical identity URL where Medium permits it without cloning the main biography.",
+      "status": "requires-authenticated-owner-publish"
+    },
+    {
+      "priority": "P2",
+      "surface": "Poe",
+      "url": "https://poe.com/chrisizworski",
+      "observed": "A name-matched profile ranks at 21 and contains Michigan gardening and trout bots, but the public bio is blank and no reciprocal ownership signal was found.",
+      "repair": "Confirm ownership before counting it; if owner-controlled, add a short truthful bio and canonical identity link.",
+      "status": "ownership-confirmation-required"
+    }
+  ],
+  "results": [
+    {
+      "rank": 1,
+      "url": "https://www.facebook.com/BreakingNews989/posts/the-saginaw-county-911-director-chris-izworski-just-resigned-as-of-october-8-202/662915196888065/",
+      "title": "The Saginaw County 911 director, Chris... - Breaking …",
+      "class": "other",
+      "controlledGroup": null,
+      "chrisAttributable": true,
+      "note": "Uncontrolled October 2025 resignation repost; not counted as favorable earned authority."
+    },
+    {
+      "rank": 2,
+      "url": "https://chrisizworski.com/chris-izworski/",
+      "title": "Chris Izworski: Verified Profile | Bay City, Michigan",
+      "class": "controlled",
+      "controlledGroup": "chrisizworski.com",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 3,
+      "url": "https://chrisizworski.com/chris-izworski-biography/",
+      "title": "Chris Izworski Biography | Public Safety and AI",
+      "class": "supportingOwned",
+      "controlledGroup": "chrisizworski.com",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 4,
+      "url": "https://izworskic.github.io/911/",
+      "title": "Chris Izworski 911 Emergency Communications Work: Bay County, …",
+      "class": "controlled",
+      "controlledGroup": "github",
+      "chrisAttributable": true,
+      "note": "First observed GitHub-controlled surface; coalesced with the GitHub profile."
+    },
+    {
+      "rank": 5,
+      "url": "https://izworskic.github.io/about/",
+      "title": "About Chris Izworski: Bay City, Michigan Career, Education, and …",
+      "class": "supportingOwned",
+      "controlledGroup": "github",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 6,
+      "url": "https://911ai.wordpress.com/2026/02/15/chris-izworski-911-director-to-prepared911/",
+      "title": "Chris Izworski: From 911 Executive Director to Prepared911",
+      "class": "controlled",
+      "controlledGroup": "wordpress.com",
+      "chrisAttributable": true,
+      "note": "Ownership corroborated by reciprocal links in the Chris Izworski WordPress network; all WordPress.com properties are conservatively coalesced to one platform group."
+    },
+    {
+      "rank": 7,
+      "url": "https://www.linkedin.com/in/chris-izworski-15294510",
+      "title": "Chris Izworski - Prepared | LinkedIn",
+      "class": "controlled",
+      "controlledGroup": "linkedin",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 8,
+      "url": "https://aibreakdown5.wordpress.com/2026/02/18/saginaw-county-911-prepared-chris-izworski-ai-dispatch/",
+      "title": "From Saginaw County 911 to Prepared — Chris Izworski and the …",
+      "class": "supportingOwned",
+      "controlledGroup": "wordpress.com",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 9,
+      "url": "https://aibreakdown5.wordpress.com/2026/02/15/911-director-to-prepared911-solutions-consultant/",
+      "title": "From 911 Director to Solutions Consultant: Chris Izworski at ...",
+      "class": "supportingOwned",
+      "controlledGroup": "wordpress.com",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 10,
+      "url": "https://izworski-vrwxz.wordpress.com/2026/04/27/chris-izworski-twenty-years-of-michigan-public-safety-and-building-what-should-exist/",
+      "title": "Chris Izworski: Twenty Years of Michigan Public Safety and Building ...",
+      "class": "supportingOwned",
+      "controlledGroup": "wordpress.com",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 11,
+      "url": "https://chrisizworski.com/",
+      "title": "Chris Izworski | AI, Public Safety, and Great Lakes",
+      "class": "supportingOwned",
+      "controlledGroup": "chrisizworski.com",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 12,
+      "url": "https://chrisizworski.com/timeline/",
+      "title": "Chris Izworski Timeline: 911, AI & Public Safety",
+      "class": "supportingOwned",
+      "controlledGroup": "chrisizworski.com",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 13,
+      "url": "https://izworskic.github.io/",
+      "title": "Chris Izworski | GitHub, Public Projects, and Verified Source Links",
+      "class": "supportingOwned",
+      "controlledGroup": "github",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 14,
+      "url": "https://chrisizworski.com/chris-izworski-works/",
+      "title": "Chris Izworski Works | Projects and Publications",
+      "class": "supportingOwned",
+      "controlledGroup": "chrisizworski.com",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 15,
+      "url": "https://chrisizworski.com/chris-izworski-public-records/",
+      "title": "Chris Izworski Public Records and Sources",
+      "class": "supportingOwned",
+      "controlledGroup": "chrisizworski.com",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 16,
+      "url": "https://medium.com/@izworski",
+      "title": "Chris Izworski – Medium",
+      "class": "controlled",
+      "controlledGroup": "medium",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 17,
+      "url": "https://izworskic.github.io/writing/",
+      "title": "Chris Izworski Writing: Medium, Substack, Freighter View Farms, and …",
+      "class": "supportingOwned",
+      "controlledGroup": "github",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 18,
+      "url": "https://izworskic.github.io/projects/",
+      "title": "Chris Izworski Public Projects: Michigan Trout Report, Birding Report ...",
+      "class": "supportingOwned",
+      "controlledGroup": "github",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 19,
+      "url": "https://www.linkedin.com/pub/dir/chris/izworski",
+      "title": "2 \"Chris Izworski\" profiles | LinkedIn",
+      "class": "other",
+      "controlledGroup": null,
+      "chrisAttributable": true,
+      "note": "Platform directory, not the controlled profile/account."
+    },
+    {
+      "rank": 20,
+      "url": "https://www.mylife.com/christopher-izworski/e397352031900",
+      "title": "Christopher Michael Izworski, 52 - Bay City, MI - MyLife.com",
+      "class": "other",
+      "controlledGroup": null,
+      "chrisAttributable": true,
+      "note": "Uncontrolled people-search directory."
+    },
+    {
+      "rank": 21,
+      "url": "https://poe.com/chrisizworski",
+      "title": "Chris Izworski - Poe",
+      "class": "other",
+      "controlledGroup": null,
+      "chrisAttributable": true,
+      "note": "Likely owner-controlled based on the Michigan garden and trout bots, but ownership is not reciprocally verified; excluded from controlled scoring."
+    },
+    {
+      "rank": 22,
+      "url": "https://www.apcointl.org/courses/lessons-learned-from-the-first-eccs-to-automate-non-emergency-calls-webinar-78131/",
+      "title": "Lessons Learned from the First ECCs to Automate Non-Emergency …",
+      "class": "favorableEarned",
+      "controlledGroup": null,
+      "chrisAttributable": true
+    },
+    {
+      "rank": 23,
+      "url": "https://medium.com/@izworski/what-911-centers-need-to-know-before-adopting-ai-218dfbf769eb",
+      "title": "What 911 Centers Need to Know Before Adopting AI - Medium",
+      "class": "supportingOwned",
+      "controlledGroup": "medium",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 24,
+      "url": "https://www.poam.net/poam-news/why-michigan-lacks-911-dispatchers/",
+      "title": "Michigan 911 Dispatchers | Police Officers Association …",
+      "class": "favorableEarned",
+      "controlledGroup": null,
+      "chrisAttributable": true
+    },
+    {
+      "rank": 25,
+      "url": "https://izworskic.github.io/chrisizworski.github.io/",
+      "title": "Chris Izworski | GitHub Project Profile and Great Lakes Tools",
+      "class": "supportingOwned",
+      "controlledGroup": "github",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 26,
+      "url": "https://list23.com/805040-the-central-dispatch-in-saginaw-county-has-received-a-new-director/",
+      "title": "The Central Dispatch in Saginaw County has received a new director",
+      "class": "other",
+      "controlledGroup": null,
+      "chrisAttributable": true,
+      "note": "Uncontrolled secondary publication; not counted as strong earned authority."
+    },
+    {
+      "rank": 27,
+      "url": "https://gazette.chrisizworski.com/archive",
+      "title": "Great Lakes Gazette Archive: Every Daily Edition by Chris Izworski",
+      "class": "supportingOwned",
+      "controlledGroup": "chrisizworski.com",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 28,
+      "url": "https://phenology.chrisizworski.com/",
+      "title": "Michigan Phenology by Chris Izworski: Saginaw Bay and the AuSable …",
+      "class": "supportingOwned",
+      "controlledGroup": "chrisizworski.com",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 29,
+      "url": "https://www.linkedin.com/pulse/intelligence-getting-cheap-insight-isnt-chris-izworski-dzrgc",
+      "title": "Intelligence Is Getting Cheap. Insight Isn’t. - LinkedIn",
+      "class": "supportingOwned",
+      "controlledGroup": "linkedin",
+      "chrisAttributable": true
+    },
+    {
+      "rank": 30,
+      "url": "https://daily.michiganbirdingreport.com/post/2026-08-21-genesee-county",
+      "title": "Chris Izworski: Genesee County: August 21, 2026",
+      "class": "supportingOwned",
+      "controlledGroup": "michiganbirdingreport.com",
+      "chrisAttributable": true,
+      "note": "Independent owned product root retained as supporting authority under current governance rather than counted as a name-only moat slot."
+    }
+  ]
+}
