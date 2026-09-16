@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Columbia Salmon Run Live | Bonneville Fish Count Today</title>
+<meta name="description" content="See today's Columbia River adult salmon counts at Bonneville, The Dalles, John Day and McNary, plus the 7-day Chinook, Coho and steelhead trend and seasonal run context.">
+<link rel="canonical" href="https://chrisizworski.com/national-tools/columbia-salmon-run/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:title" content="Columbia Salmon Run Live">
+<meta property="og:description" content="Current Columbia River adult salmon counts, 7-day direction and run timing from Bonneville through McNary.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://chrisizworski.com/national-tools/columbia-salmon-run/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="/national-tools/columbia-salmon-run/styles.css?v=20260916-1">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<meta name="google-adsense-account" content="ca-pub-8222782620788075">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Columbia Salmon Run Live","url":"https://chrisizworski.com/national-tools/columbia-salmon-run/","applicationCategory":"TravelApplication","operatingSystem":"Any","description":"Current Columbia River adult salmon passage counts and seven-day run direction from Bonneville through McNary.","author":{"@type":"Person","name":"Chris Izworski","url":"https://chrisizworski.com/"},"isAccessibleForFree":true}</script>
+</head>
+<body class="loading">
+<div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
+<div class="nav"><a href="/">Home</a><a href="/tools/">Michigan Tools</a><a href="/national-tools/" class="active">U.S. Outdoor Tools</a></div>
+<main class="page">
+<div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/national-tools/">U.S. Outdoor Tools</a> &rsaquo; Columbia Salmon Run Live</div>
+<section class="hero">
+<div><p class="eyebrow">Pacific Northwest · live migration intelligence</p><h1>Columbia Salmon Run Live</h1><p class="hero-lede">How many salmon are moving through the Columbia right now, and is the run building or easing? Start with the fish ladders, not a vague seasonal calendar.</p><div class="status-row"><span class="status-pill" id="latest-date">Loading latest counts…</span><span class="status-pill" id="data-age">Checking reporting lag…</span><span class="status-pill" id="run-context">Reading run context…</span></div></div>
+<aside class="source-card"><strong>Primary live source: Fish Passage Center</strong><p>Daily adult passage counts are reported for Columbia and Snake River dams. This tool uses the latest seven reported days and keeps each dam's reporting date visible.</p></aside>
+</section>
+<div class="error" id="error" role="alert"></div>
+<section class="decision" aria-labelledby="decision-title">
+<div class="decision-head"><div><p class="eyebrow">Bonneville first read</p><h2 id="decision-title">Reading the run…</h2><p class="decision-summary" id="decision-summary">Loading the latest adult-passage pattern.</p></div><div class="big-count"><span>Adult Chinook</span><strong id="chinook-count">—</strong><small id="chinook-date">latest reporting day</small></div></div>
+<div class="decision-grid">
+<div class="metric"><span>7-day Chinook direction</span><strong id="chinook-trend">—</strong><small>first 3 reporting days vs latest 3</small></div>
+<div class="metric"><span>Latest Coho adults</span><strong id="coho-count">—</strong><small id="coho-trend">7-day direction</small></div>
+<div class="metric"><span>Latest Steelhead</span><strong id="steelhead-count">—</strong><small id="steelhead-trend">7-day direction</small></div>
+<div class="metric"><span>Chinook jacks</span><strong id="jack-count">—</strong><small>same Bonneville reporting day</small></div>
+<div class="metric"><span>Bonneville YTD Chinook</span><strong id="ytd-chinook">—</strong><small>reported year-to-date total</small></div>
+</div>
+</section>
+<section class="section" aria-labelledby="trend-title">
+<div class="section-head"><div><p class="eyebrow">Seven reported days</p><h2 id="trend-title">Is passage building or easing?</h2></div><p>The chart uses raw reported daily counts. Missing reporting days are not silently converted to zero.</p></div>
+<div class="trend-controls" role="group" aria-label="Choose fish count series"><button class="trend-button" type="button" data-species="chinookAdult" aria-pressed="true">Adult Chinook</button><button class="trend-button" type="button" data-species="cohoAdult" aria-pressed="false">Coho</button><button class="trend-button" type="button" data-species="steelhead" aria-pressed="false">Steelhead</button></div>
+<p class="eyebrow" id="trend-label">Bonneville trend loading…</p><div class="chart" id="trend-chart" aria-label="Seven-day fish passage bar chart"></div>
+</section>
+<section class="section" aria-labelledby="corridor-title">
+<div class="section-head"><div><p class="eyebrow">Mainstem checkpoints</p><h2 id="corridor-title">What are the downstream dams reporting?</h2></div><p>Counts are observations at fish ladders. They are not GPS positions and they do not prove the same group of fish is moving dam-to-dam.</p></div>
+<div class="corridor" id="corridor"></div><p class="caveat" id="corridor-note">Loading checkpoint counts…</p>
+</section>
+<section class="section" aria-labelledby="timing-title">
+<div class="section-head"><div><p class="eyebrow">Historical timing guardrail</p><h2 id="timing-title">Is the calendar in a normal peak window?</h2></div><p>These are historical earliest-to-latest annual peak dates at Bonneville from the 2026 Fish Passage Plan, not a claim that today's count is the year's peak.</p></div>
+<div class="context-grid">
+<article class="context-card"><h3>Fall Chinook</h3><p>Primary count period: Aug. 1–Nov. 15. Historical annual peak dates have occurred from <strong>Aug. 30 through Sep. 17</strong>.</p><p id="peak-fall">Checking today's date…</p></article>
+<article class="context-card"><h3>Coho</h3><p>Primary count period: Jul. 15–Nov. 15. Historical annual peak dates have occurred from <strong>Aug. 29 through Oct. 11</strong>.</p><p id="peak-coho">Checking today's date…</p></article>
+<article class="context-card"><h3>Steelhead</h3><p>Counted year-round. Historical annual peak dates have occurred from <strong>Jul. 16 through Sep. 22</strong>.</p><p id="peak-steelhead">Checking today's date…</p></article>
+</div>
+</section>
+<section class="method" aria-labelledby="method-title"><p class="eyebrow">How to read this</p><h2 id="method-title">A count tool, not a probability machine.</h2><p>This page deliberately avoids turning salmon into a fake percentage. It shows observed fish-ladder counts, the recent direction of those counts, and historical seasonal context.</p><ul><li>The 7-day direction compares the average of the first three available reported days with the latest three. A change of at least 15% is labeled rising or falling.</li><li>Counts at different dams may be reported on different dates, and fish leave the mainstem for tributaries. The corridor view is therefore checkpoint evidence, not a location forecast.</li><li>Fish Passage Center notes that current-year zeros can sometimes mean data have not yet been reported. This tool treats missing values separately rather than assuming no fish passed.</li><li>The U.S. Army Corps of Engineers' 2026 Bonneville plan supplies the seasonal count windows and historical peak-date envelopes.</li></ul><p id="source-updated">Live source status loading…</p><p><a id="source-link" href="https://www.fpc.org/currentdaily/HistFishTwo_7day-ytd_Adults.htm" rel="noopener">Open the Fish Passage Center 7-day adult count table</a> · <a href="https://www.nwp.usace.army.mil/Missions/Environmental-Stewardship/Fish/Counts/" rel="noopener">USACE fish-count methods</a></p></section>
+<aside class="source-card" style="margin-top:28px"><strong>Pacific Northwest network</strong><p>This tool joins <a href="https://chrisizworski.com/ballard-locks/">Ballard Locks Live</a> and <a href="/national-tools/grand-coulee/">Grand Coulee Live</a>. Return to the <a href="/national-tools/">U.S. Outdoor Tools hub</a> for the full network.</p></aside>
+</main>
+<div class="footer">&copy; 2026 <a href="/">Chris Izworski</a> &middot; Public-data outdoor decision tools with source limits preserved.</div>
+<script src="/national-tools/columbia-salmon-run/app.js?v=20260916-1" defer></script>
+</body>
+</html>
