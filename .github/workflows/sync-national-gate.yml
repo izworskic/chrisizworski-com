@@ -15,8 +15,8 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      HUB_COMMIT: a97eed1124d86b287e43b2daafa49ff7e1afe6d0
-      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/a97eed1124d86b287e43b2daafa49ff7e1afe6d0
+      HUB_COMMIT: ef076571aadba7f4c54655b3672707c8e6cc8c4b
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/ef076571aadba7f4c54655b3672707c8e6cc8c4b
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -93,7 +93,6 @@ jobs:
           v.functions ||= {};
           for (const api of ['api/bird-migration-morning.js','api/birding-local-action.js','api/columbia-salmon.js','api/florida-red-tide.js','api/space-coast-launch.js','api/trail-ridge-road.js','api/yellowstone-geysers.js']) delete v.functions[api];
           v.rewrites ||= [];
-
           const routes=[
             ['/national-tools','/synced-national-tools/index.html'],
             ['/national-tools/','/synced-national-tools/index.html'],
@@ -133,7 +132,6 @@ jobs:
             ['/national-tools/yellowstone-geysers/','/synced-national-tools/yellowstone-geysers/index.html'],
             ['/national-tools/yellowstone-geysers/:path*','/synced-national-tools/yellowstone-geysers/:path*']
           ];
-
           const sources=new Set(routes.map(([source])=>source));
           v.rewrites=v.rewrites.filter(r=>!sources.has(r.source));
           const fallbackIndex=v.rewrites.findIndex(r=>r.source==='/national-tools/:path*');
@@ -209,7 +207,9 @@ jobs:
           grep -q 'weather assessment never overrides it' api/trail-ridge-road.js
           grep -q 'does not calculate its own eruption model' api/yellowstone-geysers.js
           grep -q 'Open Database License' api/yellowstone-geysers.js
-          grep -q "X-Robots-Tag','noindex, nofollow" api/columbia-salmon.js
+          for api in api/columbia-salmon.js api/florida-red-tide.js api/space-coast-launch.js api/trail-ridge-road.js api/yellowstone-geysers.js; do
+            grep -q "X-Robots-Tag','noindex, nofollow" "$api"
+          done
 
           grep -q 'Where should you bird this morning?' public/synced-national-tools/bird-migration/index.html
           grep -q 'Strongest current evidence' public/synced-national-tools/bird-migration/index.html
