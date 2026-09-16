@@ -62,8 +62,8 @@ jobs:
           const file='vercel.json';
           const v=JSON.parse(fs.readFileSync(file,'utf8'));
           v.functions ||= {};
-          v.functions['api/bird-migration-morning.js']={maxDuration:20};
-          v.functions['api/columbia-salmon.js']={maxDuration:20};
+          delete v.functions['api/bird-migration-morning.js'];
+          delete v.functions['api/columbia-salmon.js'];
           v.rewrites ||= [];
 
           const routes=[
@@ -103,8 +103,8 @@ jobs:
           grep -q 'numberOfItems":29' public/synced-national-tools/index.html
           grep -q 'What can you actually check this morning?' public/synced-national-tools/bird-migration/index.html
           grep -q 'Columbia Salmon Run Live' public/synced-national-tools/columbia-salmon-run/index.html
-          node -e "const v=require('./vercel.json'); if(!v.rewrites.some(r=>r.source==='/national-tools/bird-migration/:path*')) process.exit(1); if(!v.rewrites.some(r=>r.source==='/national-tools/columbia-salmon-run/:path*')) process.exit(1);"
-          node -e "require('./api/bird-migration-morning.js'); require('./api/columbia-salmon.js');"
+          node -e "const v=require('./vercel.json'); if(!v.rewrites.some(r=>r.source==='/national-tools/bird-migration/:path*')) process.exit(1); if(!v.rewrites.some(r=>r.source==='/national-tools/columbia-salmon-run/:path*')) process.exit(1); if(v.functions['api/bird-migration-morning.js']||v.functions['api/columbia-salmon.js']) process.exit(1);"
+          node -e "require('./api/bird-migration-morning.js'); import('./api/columbia-salmon.js').then(()=>console.log('National APIs load')).catch(e=>{console.error(e);process.exit(1)})"
 
       - name: Commit production gate
         shell: bash
