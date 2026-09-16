@@ -126,6 +126,55 @@
     if(!list.children.length){const p=document.createElement('p');p.className='empty-note';p.textContent=action?.ok?'No non-private notable species surfaced in the current nearby window.':'Nearby notable-bird data could not be loaded; the rest of the morning read remains usable.';list.appendChild(p);}
   }
 
+  function setChoice(prefix,place,{emptyTitle,emptyDetail}={}){
+    const card=$(`#${prefix}-choice-card`);
+    const name=$(`#${prefix}-choice-name`);
+    const detail=$(`#${prefix}-choice-detail`);
+    const targets=$(`#${prefix}-choice-targets`);
+    const link=$(`#${prefix}-choice-link`);
+    if(!card||!name||!detail||!targets||!link)return;
+
+    if(!place){
+      card.classList.add('is-empty');
+      name.textContent=emptyTitle||'No qualifying option surfaced';
+      detail.textContent=emptyDetail||'The current nearby eBird sample did not produce a qualifying alternative.';
+      targets.textContent='';
+      link.hidden=true;
+      return;
+    }
+
+    card.classList.remove('is-empty');
+    name.textContent=place.name||'eBird hotspot';
+    const bits=[
+      `${fmt(place.recentSpeciesCount)} recent species represented`,
+      Number.isFinite(place.distanceMi)?`${place.distanceMi.toFixed(1)} mi away`:null,
+      place.evidenceBand||null,
+    ].filter(Boolean);
+    if(prefix==='closer'&&Number.isFinite(place.distanceSavedMi))bits.push(`saves ${place.distanceSavedMi.toFixed(1)} mi`);
+    if(prefix==='closer'&&Number.isFinite(place.speciesTradeoff)&&place.speciesTradeoff>0)bits.push(`${place.speciesTradeoff} fewer species represented than strongest evidence`);
+    detail.textContent=bits.join(' · ');
+    const targetNames=(place.targetSpecies||[]).map(s=>s.name).filter(Boolean).slice(0,5);
+    targets.textContent=targetNames.length?`Recent targets: ${targetNames.join(', ')}`:'';
+    link.href=place.ebirdUrl||'https://ebird.org/hotspots';
+    link.hidden=false;
+  }
+
+  function renderDecisionChoices(action){
+    const choices=action?.decisionChoices||{};
+    const strongest=choices.strongestCurrentEvidence||action?.topPlaces?.[0]||null;
+    const closer=choices.closerStrongOption||null;
+    setChoice('strongest',strongest,{
+      emptyTitle:'No strongest-evidence hotspot surfaced',
+      emptyDetail:'Recent local records were not sufficient to identify a strongest current-evidence hotspot.',
+    });
+    setChoice('closer',closer,{
+      emptyTitle:'No closer strong alternative',
+      emptyDetail:'No meaningfully closer hotspot also cleared the strong current-evidence threshold. A nearer place may still be worth checking, but the current data do not support presenting it as an equivalent strong option.',
+    });
+    const rule=$('#choice-rule');
+    if(rule&&choices.rule)rule.textContent=`${choices.rule} These are two different decisions, not a first- and second-place ranking.`;
+  }
+
   function renderPlaces(local,action){
     const locationsList=$('#locations-list');
     locationsList.innerHTML='';
@@ -168,6 +217,8 @@
     const ebirdSource=$('#ebird-source');
     ebirdSource.href=data.sources?.ebird?.url||local.sourceUrl||'https://ebird.org/explore';
 
+    renderDecisionChoices(action);
+
     if(!local.available){
       pill.textContent='Local reports unavailable';pill.classList.remove('high');
       summary.textContent=action?.topPlaces?.length?`${action.topPlaces.length} nearby hotspots still have current eBird action data, but the county-level species panel is unavailable.`:'Recent local eBird records could not be loaded. Migration and weather remain usable.';
@@ -204,8 +255,13 @@
     const label=area.countyName?`${area.countyName} County, ${location.stateCode}`:(location.displayName||location.query||'Selected location');
     $('#location-label').textContent=label;
     $('#decision-headline').textContent=data.decision?.headline||'Migration read unavailable.';
-    const topPlace=data.birdingAction?.topPlaces?.[0];
-    $('#decision-detail').textContent=topPlace?`${data.decision?.detail||'Review the independent signals below.'} First place to investigate from current eBird hotspot activity: ${topPlace.name}.`:data.decision?.detail||'No migration amount is being inferred.';
+    const choices=data.birdingAction?.decisionChoices||{};
+    const strongest=choices.strongestCurrentEvidence||data.birdingAction?.topPlaces?.[0]||null;
+    const closer=choices.closerStrongOption||null;
+    let decisionText=data.decision?.detail||'Review the independent signals below.';
+    if(strongest)decisionText+=` Strongest current hotspot evidence: ${strongest.name}.`;
+    if(closer)decisionText+=` Closer strong option: ${closer.name}${Number.isFinite(closer.distanceSavedMi)?`, ${closer.distanceSavedMi.toFixed(1)} miles closer`:''}.`;
+    $('#decision-detail').textContent=decisionText;
     const livePill=$('#live-pill');
     livePill.textContent=bird.live?'BirdCast live feed':bird.available?'BirdCast migration data':'BirdCast data unavailable';
     livePill.classList.toggle('high',Boolean(bird.live));
