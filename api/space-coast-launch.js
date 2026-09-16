@@ -47,6 +47,7 @@ async function nwsFor(lat,lon,when){
 
 module.exports=async function handler(req,res){
   res.setHeader('Cache-Control','s-maxage=600, stale-while-revalidate=1800');
+  res.setHeader('X-Robots-Tag','noindex, nofollow');
   try{
     const response=await fetch(LAUNCHES,{headers:{'User-Agent':'ChrisIzworskiOutdoorTools/1.0','Accept':'application/json'},signal:AbortSignal.timeout(12000)});
     if(!response.ok)throw new Error(`Launch Library ${response.status}`);
