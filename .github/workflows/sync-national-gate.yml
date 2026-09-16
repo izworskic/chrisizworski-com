@@ -15,8 +15,8 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      HUB_COMMIT: ff5586ce2e6b22a75dd8f4b1b12f45a3dc0bdd28
-      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/ff5586ce2e6b22a75dd8f4b1b12f45a3dc0bdd28
+      HUB_COMMIT: 329ca6f885d2139b4ef357a0d80329b314355b13
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/329ca6f885d2139b4ef357a0d80329b314355b13
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -118,6 +118,8 @@ jobs:
           grep -q "ACTION='/api/birding-local-action'" public/synced-national-tools/bird-migration/app.js
           grep -q 'michiganbirdingreport.com/api/observations' api/bird-migration-morning.js
           grep -q 'michiganbirdingreport.com/api/local-action' api/birding-local-action.js
+          grep -q "DECISION_SURFACE='two-choice-v1'" api/birding-local-action.js
+          grep -q 'decisionSurface:DECISION_SURFACE' api/birding-local-action.js
           grep -q 'Columbia Salmon Run Live' public/synced-national-tools/columbia-salmon-run/index.html
           node -e "const v=require('./vercel.json'); if(!v.rewrites.some(r=>r.source==='/national-tools/bird-migration/:path*')) process.exit(1); if(!v.rewrites.some(r=>r.source==='/national-tools/columbia-salmon-run/:path*')) process.exit(1); if(v.functions['api/bird-migration-morning.js']||v.functions['api/birding-local-action.js']||v.functions['api/columbia-salmon.js']) process.exit(1);"
           node -e "require('./api/bird-migration-morning.js'); require('./api/birding-local-action.js'); import('./api/columbia-salmon.js').then(()=>console.log('National APIs load')).catch(e=>{console.error(e);process.exit(1)})"
