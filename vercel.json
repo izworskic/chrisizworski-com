@@ -797,6 +797,10 @@
       "destination": "/synced-national-tools/assets/southeast-tool.css"
     },
     {
+      "source": "/national-tools/assets/mountain-tool.css",
+      "destination": "/synced-national-tools/assets/mountain-tool.css"
+    },
+    {
       "source": "/national-tools/northeast-great-lakes",
       "destination": "/synced-national-tools/northeast-great-lakes/index.html"
     },
@@ -827,6 +831,14 @@
     {
       "source": "/national-tools/great-plains/",
       "destination": "/synced-national-tools/great-plains/index.html"
+    },
+    {
+      "source": "/national-tools/rockies",
+      "destination": "/synced-national-tools/rockies/index.html"
+    },
+    {
+      "source": "/national-tools/rockies/",
+      "destination": "/synced-national-tools/rockies/index.html"
     },
     {
       "source": "/national-tools/pacific-northwest",
@@ -883,6 +895,30 @@
     {
       "source": "/national-tools/space-coast-launch/:path*",
       "destination": "/synced-national-tools/space-coast-launch/:path*"
+    },
+    {
+      "source": "/national-tools/trail-ridge-road",
+      "destination": "/synced-national-tools/trail-ridge-road/index.html"
+    },
+    {
+      "source": "/national-tools/trail-ridge-road/",
+      "destination": "/synced-national-tools/trail-ridge-road/index.html"
+    },
+    {
+      "source": "/national-tools/trail-ridge-road/:path*",
+      "destination": "/synced-national-tools/trail-ridge-road/:path*"
+    },
+    {
+      "source": "/national-tools/yellowstone-geysers",
+      "destination": "/synced-national-tools/yellowstone-geysers/index.html"
+    },
+    {
+      "source": "/national-tools/yellowstone-geysers/",
+      "destination": "/synced-national-tools/yellowstone-geysers/index.html"
+    },
+    {
+      "source": "/national-tools/yellowstone-geysers/:path*",
+      "destination": "/synced-national-tools/yellowstone-geysers/:path*"
     },
     {
       "source": "/national-tools/:path*",
