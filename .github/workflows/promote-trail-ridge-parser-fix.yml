@@ -1,0 +1,70 @@
+name: Promote Trail Ridge parser fix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/promote-trail-ridge-parser-fix.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    env:
+      HUB_COMMIT: af22d3027591ce516592e677bb005d0ed45bf95d
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/af22d3027591ce516592e677bb005d0ed45bf95d
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Pull corrected Trail Ridge API
+        run: |
+          set -euo pipefail
+          curl -fLsS "$HUB_RAW/api/trail-ridge-road.js" -o api/trail-ridge-road.js
+
+      - name: Advance National Tools production pin
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const file='.github/workflows/sync-national-gate.yml';
+          let s=fs.readFileSync(file,'utf8');
+          const sha=process.env.HUB_COMMIT;
+          s=s.replace(/HUB_COMMIT: [0-9a-f]{40}/,`HUB_COMMIT: ${sha}`);
+          s=s.replace(/https:\/\/raw\.githubusercontent\.com\/izworskic\/national-outdoor-tools-hub\/[0-9a-f]{40}/,`https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/${sha}`);
+          fs.writeFileSync(file,s);
+          NODE
+
+      - name: Verify corrected live parser contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q "const roadLead=" api/trail-ridge-road.js
+          grep -q "sourceTextMatched" api/trail-ridge-road.js
+          grep -q "HUB_COMMIT: $HUB_COMMIT" .github/workflows/sync-national-gate.yml
+          node - <<'NODE'
+          const api=require('./api/trail-ridge-road.js');
+          const text='Trail Ridge Road (U.S. Highway 34 inside Rocky Mountain National Park) is Open to Through Travel Trail Ridge Road (U.S. Hwy 34 inside Rocky Mountain National Park) is open to through travel. Timed Entry Reservations are required for Trail Ridge Road from 9 am to 2 pm.';
+          const d=api._test.roadStatus(text);
+          if(d.level!=='open'||d.sourceTextMatched!==true||!/9 am to 2 pm/i.test(d.timedEntry||'')) process.exit(1);
+          console.log(JSON.stringify(d));
+          NODE
+
+      - name: Commit production parser fix
+        shell: bash
+        run: |
+          if git diff --quiet -- api/trail-ridge-road.js .github/workflows/sync-national-gate.yml; then
+            echo 'Trail Ridge parser fix already promoted.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add api/trail-ridge-road.js .github/workflows/sync-national-gate.yml
+          git commit -m 'Promote Trail Ridge live parser fix'
+          git push
