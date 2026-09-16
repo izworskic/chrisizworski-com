@@ -15,8 +15,8 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      HUB_COMMIT: c61a3e9f1a2e9952ea7ee21cd406d39253083f82
-      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/c61a3e9f1a2e9952ea7ee21cd406d39253083f82
+      HUB_COMMIT: 7452d1d37ffd8ad41abe929508e8caec77582bb2
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/7452d1d37ffd8ad41abe929508e8caec77582bb2
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -106,6 +106,8 @@ jobs:
           grep -q 'numberOfItems":29' public/synced-national-tools/index.html
           grep -q 'What can you actually check this morning?' public/synced-national-tools/bird-migration/index.html
           grep -q 'Columbia Salmon Run Live' public/synced-national-tools/columbia-salmon-run/index.html
+          grep -q 'recent species records' public/synced-national-tools/bird-migration/app.js
+          grep -q 'michiganbirdingreport.com/api/observations' api/bird-migration-morning.js
           node -e "const v=require('./vercel.json'); if(!v.rewrites.some(r=>r.source==='/national-tools/bird-migration/:path*')) process.exit(1); if(!v.rewrites.some(r=>r.source==='/national-tools/columbia-salmon-run/:path*')) process.exit(1); if(v.functions['api/bird-migration-morning.js']||v.functions['api/columbia-salmon.js']) process.exit(1);"
           node -e "require('./api/bird-migration-morning.js'); import('./api/columbia-salmon.js').then(()=>console.log('National APIs load')).catch(e=>{console.error(e);process.exit(1)})"
 
