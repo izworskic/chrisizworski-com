@@ -27,3 +27,5 @@ jobs:
           grep -q 'data-tool-id="columbia-salmon"' public/synced-national-tools/index.html
           grep -q 'What can you actually check this morning?' public/synced-national-tools/bird-migration/index.html
           node -e "require('./api/bird-migration-morning.js'); import('./api/columbia-salmon.js').then(()=>console.log('National APIs load')).catch(e=>{console.error(e);process.exit(1)})"
+      - name: Ask Vercel CLI to validate and build the project
+        run: npx --yes vercel@latest build --yes
