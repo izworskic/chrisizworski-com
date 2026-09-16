@@ -11,6 +11,25 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
+      - name: Wait for and verify public birding action release
+        shell: bash
+        run: |
+          set -euo pipefail
+          url='https://chrisizworski.com/national-tools/bird-migration/?gate-smoke=20260916-action'
+          page=''
+          for attempt in $(seq 1 24); do
+            page="$(curl --retry 2 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' "$url" || true)"
+            if grep -q 'Where should you bird this morning?' <<<"$page" && grep -q 'Top places to check' <<<"$page" && grep -q 'Notable nearby' <<<"$page"; then
+              break
+            fi
+            sleep 5
+          done
+          grep -q 'Where should you bird this morning?' <<<"$page"
+          grep -q 'Top places to check' <<<"$page"
+          grep -q 'Notable nearby' <<<"$page"
+          grep -q 'BirdCast' <<<"$page"
+          grep -q 'eBird' <<<"$page"
+
       - name: Verify public directory and regional desks
         shell: bash
         run: |
@@ -52,16 +71,10 @@ jobs:
           }
           NODE
 
-      - name: Verify Bird Migration public page and nationally enriched live API
+      - name: Verify Bird Migration live API enrichment
         shell: bash
         run: |
           set -euo pipefail
-          page="$(curl --retry 4 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/bird-migration/?gate-smoke=20260916')"
-          grep -q 'Did birds move over you last night?' <<<"$page"
-          grep -q 'What can you actually check this morning?' <<<"$page"
-          grep -q 'BirdCast' <<<"$page"
-          grep -q 'eBird' <<<"$page"
-
           mi="$(curl --retry 4 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/bird-migration-morning?lat=42.2808&lon=-83.7430&state=MI&gate-smoke=20260916-enriched')"
           oh="$(curl --retry 4 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/bird-migration-morning?lat=39.9612&lon=-82.9988&state=OH&gate-smoke=20260916-enriched')"
           node - <<'NODE' "$mi" "$oh"
@@ -72,7 +85,26 @@ jobs:
             if(!d.ok||!d.birdcast||!d.weather||!d.decision) process.exit(1);
             if(local.available!==true||local.sourceMode!=='michigan-birding-report'||local.observationSemantics!=='deduped-species-records') process.exit(1);
             if(!Number.isFinite(local.speciesCount)||local.speciesCount<1||!mapped) process.exit(1);
-            console.log(JSON.stringify({label,region:local.region,speciesCount:local.speciesCount,sourceMode:local.sourceMode,semantics:local.observationSemantics,topLocation:{name:mapped.name,speciesCount:mapped.speciesCount,lat:mapped.lat,lon:mapped.lon}}));
+            console.log(JSON.stringify({label,region:local.region,speciesCount:local.speciesCount,topLocation:{name:mapped.name,speciesCount:mapped.speciesCount,lat:mapped.lat,lon:mapped.lon}}));
+          }
+          NODE
+
+      - name: Verify national where-to-bird action API in Michigan and Ohio
+        shell: bash
+        run: |
+          set -euo pipefail
+          mi="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/birding-local-action?lat=42.2808&lon=-83.7430&distKm=40&back=3&gate-smoke=mi')"
+          oh="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/birding-local-action?lat=39.9612&lon=-82.9988&distKm=40&back=3&gate-smoke=oh')"
+          node - <<'NODE' "$mi" "$oh"
+          for(const [label,raw] of [['MI',process.argv[2]],['OH',process.argv[3]]]){
+            const d=JSON.parse(raw);
+            if(d.ok!==true||d.sourceMode!=='michigan-birding-report-local-action') process.exit(1);
+            if(d.observationSemantics!=='recent-species-records-at-ebird-hotspots') process.exit(1);
+            if(!Array.isArray(d.topPlaces)||d.topPlaces.length<1) process.exit(1);
+            const top=d.topPlaces[0];
+            if(!top.name||!Number.isFinite(top.lat)||!Number.isFinite(top.lon)||!Number.isFinite(top.distanceMi)) process.exit(1);
+            if(!Number.isFinite(top.recentSpeciesCount)||top.recentSpeciesCount<1||!Array.isArray(top.targetSpecies)) process.exit(1);
+            console.log(JSON.stringify({label,speciesCount:d.speciesCount,nearbyHotspotCount:d.nearbyHotspotCount,notableCount:Array.isArray(d.notableSightings)?d.notableSightings.length:null,topPlace:{name:top.name,recentSpeciesCount:top.recentSpeciesCount,distanceMi:top.distanceMi,targetSpecies:top.targetSpecies.slice(0,3).map(x=>x.name)}}));
           }
           NODE
 
