@@ -793,6 +793,10 @@
       "destination": "/synced-national-tools/assets/region-hub.css"
     },
     {
+      "source": "/national-tools/assets/southeast-tool.css",
+      "destination": "/synced-national-tools/assets/southeast-tool.css"
+    },
+    {
       "source": "/national-tools/northeast-great-lakes",
       "destination": "/synced-national-tools/northeast-great-lakes/index.html"
     },
@@ -807,6 +811,14 @@
     {
       "source": "/national-tools/appalachia/",
       "destination": "/synced-national-tools/appalachia/index.html"
+    },
+    {
+      "source": "/national-tools/southeast",
+      "destination": "/synced-national-tools/southeast/index.html"
+    },
+    {
+      "source": "/national-tools/southeast/",
+      "destination": "/synced-national-tools/southeast/index.html"
     },
     {
       "source": "/national-tools/great-plains",
@@ -847,6 +859,30 @@
     {
       "source": "/national-tools/columbia-salmon-run/:path*",
       "destination": "/synced-national-tools/columbia-salmon-run/:path*"
+    },
+    {
+      "source": "/national-tools/florida-red-tide",
+      "destination": "/synced-national-tools/florida-red-tide/index.html"
+    },
+    {
+      "source": "/national-tools/florida-red-tide/",
+      "destination": "/synced-national-tools/florida-red-tide/index.html"
+    },
+    {
+      "source": "/national-tools/florida-red-tide/:path*",
+      "destination": "/synced-national-tools/florida-red-tide/:path*"
+    },
+    {
+      "source": "/national-tools/space-coast-launch",
+      "destination": "/synced-national-tools/space-coast-launch/index.html"
+    },
+    {
+      "source": "/national-tools/space-coast-launch/",
+      "destination": "/synced-national-tools/space-coast-launch/index.html"
+    },
+    {
+      "source": "/national-tools/space-coast-launch/:path*",
+      "destination": "/synced-national-tools/space-coast-launch/:path*"
     },
     {
       "source": "/national-tools/:path*",
