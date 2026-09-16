@@ -60,6 +60,7 @@ async function nws(){
 
 module.exports=async function handler(req,res){
   res.setHeader('Cache-Control','s-maxage=300, stale-while-revalidate=900');
+  res.setHeader('X-Robots-Tag','noindex, nofollow');
   try{
     const npsRes=await fetch(ROAD_URL,{headers:{'User-Agent':'ChrisIzworskiOutdoorTools/1.0 (chrisizworski.com)','Accept':'text/html'},signal:AbortSignal.timeout(12000)});
     if(!npsRes.ok)throw new Error(`NPS road status ${npsRes.status}`);
