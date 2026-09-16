@@ -2,6 +2,7 @@
 
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import sitePolicyLinks from '../lib/site-policy-links.js';
 
 const ROOT = path.join(process.cwd(), 'public');
 const MEASUREMENT_ID = 'G-Y5D2V2W7HN';
@@ -55,14 +56,15 @@ async function walk(dir) {
     }
     if (!entry.isFile() || !entry.name.toLowerCase().endsWith('.html')) continue;
     scanned += 1;
-    const html = await readFile(fullPath, 'utf8');
+    const originalHtml = await readFile(fullPath, 'utf8');
+    const html = sitePolicyLinks(originalHtml);
     const needsGa4 = !html.includes(MEASUREMENT_ID);
     const needsAdsense = !/<meta\b[^>]*name=["']google-adsense-account["']/i.test(html);
     const needsAdsenseScript = !/<script\b[^>]*src=["'][^"']*pagead\/js\/adsbygoogle\.js\b/i.test(html);
 
     if (!needsGa4) ga4AlreadyTagged += 1;
     if (!needsAdsense) adsenseAlreadyTagged += 1;
-    if (!needsGa4 && !needsAdsense && !needsAdsenseScript) continue;
+    if (!needsGa4 && !needsAdsense && !needsAdsenseScript && html === originalHtml) continue;
 
     if (!/<\/head>/i.test(html)) {
       throw new Error(`Cannot inject site tags: missing </head> in ${path.relative(ROOT, fullPath)}`);
