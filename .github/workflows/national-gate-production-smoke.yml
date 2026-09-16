@@ -28,7 +28,7 @@ jobs:
           grep -q 'Top places to check' <<<"$page"
           grep -q 'Notable nearby' <<<"$page"
           grep -q 'comparable recent species evidence' <<<"$page"
-          grep -q 'farther place needs materially stronger current evidence' <<<"$page"
+          grep -q 'farther place therefore needs materially stronger current evidence' <<<"$page"
           grep -q 'BirdCast' <<<"$page"
           grep -q 'eBird' <<<"$page"
 
