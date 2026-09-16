@@ -793,6 +793,14 @@
       "destination": "/synced-national-tools/assets/region-hub.css"
     },
     {
+      "source": "/national-tools/northeast-great-lakes",
+      "destination": "/synced-national-tools/northeast-great-lakes/index.html"
+    },
+    {
+      "source": "/national-tools/northeast-great-lakes/",
+      "destination": "/synced-national-tools/northeast-great-lakes/index.html"
+    },
+    {
       "source": "/national-tools/appalachia",
       "destination": "/synced-national-tools/appalachia/index.html"
     },
