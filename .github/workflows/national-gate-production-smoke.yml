@@ -15,7 +15,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          url='https://chrisizworski.com/national-tools/bird-migration/?gate-smoke=20260916-two-choice'
+          url='https://chrisizworski.com/national-tools/bird-migration/?gate-smoke=20260916-two-choice-v2'
           page=''
           for attempt in $(seq 1 24); do
             page="$(curl --retry 2 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' "$url" || true)"
@@ -32,11 +32,15 @@ jobs:
           grep -q 'BirdCast' <<<"$page"
           grep -q 'eBird' <<<"$page"
 
-          css="$(curl --retry 4 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/bird-migration/styles.css?gate-smoke=20260916-two-choice')"
+          css="$(curl --retry 4 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/bird-migration/styles.css?gate-smoke=20260916-two-choice-v2')"
           grep -q '.choice-grid{display:grid' <<<"$css"
           grep -q '.choice-card.primary-choice' <<<"$css"
           grep -q '.choice-card.closer-choice' <<<"$css"
           grep -q '.notable-panel{grid-column:1/-1}' <<<"$css"
+
+          js="$(curl --retry 4 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/bird-migration/app.js?gate-smoke=20260916-two-choice-v2')"
+          grep -q 'decisionChoices' <<<"$js"
+          grep -q 'No closer strong alternative' <<<"$js"
 
       - name: Verify public directory and regional desks
         shell: bash
@@ -101,23 +105,34 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mi="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/birding-local-action?lat=42.2808&lon=-83.7430&distKm=40&back=3&gate-smoke=mi-two-choice')"
-          oh="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/birding-local-action?lat=39.9612&lon=-82.9988&distKm=40&back=3&gate-smoke=oh-two-choice')"
+          mi="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/birding-local-action?lat=42.2808&lon=-83.7430&distKm=40&back=3&gate-smoke=mi-two-choice-v2')"
+          oh="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/birding-local-action?lat=39.9612&lon=-82.9988&distKm=40&back=3&gate-smoke=oh-two-choice-v2')"
           node - <<'NODE' "$mi" "$oh"
           for(const [label,raw] of [['MI',process.argv[2]],['OH',process.argv[3]]]){
             const d=JSON.parse(raw);
             if(d.ok!==true||d.sourceMode!=='michigan-birding-report-local-action') process.exit(1);
+            if(d.decisionSurface!=='two-choice-v1') process.exit(1);
             if(d.observationSemantics!=='recent-species-records-at-ebird-hotspots'||!d.rankingRule) process.exit(1);
             const choices=d.decisionChoices||{};
             const strongest=choices.strongestCurrentEvidence;
             const closer=choices.closerStrongOption;
             if(!strongest?.name||!Number.isFinite(strongest.recentSpeciesCount)||!Number.isFinite(strongest.distanceMi)) process.exit(1);
-            if(!closer?.name||!Number.isFinite(closer.distanceMi)||!Number.isFinite(closer.distanceSavedMi)) process.exit(1);
-            if(!['top current evidence','strong current evidence'].includes(closer.evidenceBand)) process.exit(1);
-            if(!(closer.distanceMi<strongest.distanceMi)||closer.distanceSavedMi<2) process.exit(1);
-            if(strongest.recentSpeciesCount<closer.recentSpeciesCount) process.exit(1);
             if(!choices.rule?.includes('meaningfully closer')) process.exit(1);
-            console.log(JSON.stringify({label,speciesCount:d.speciesCount,nearbyHotspotCount:d.nearbyHotspotCount,strongest:{name:strongest.name,recentSpeciesCount:strongest.recentSpeciesCount,distanceMi:strongest.distanceMi,evidenceBand:strongest.evidenceBand},closerStrong:{name:closer.name,recentSpeciesCount:closer.recentSpeciesCount,distanceMi:closer.distanceMi,distanceSavedMi:closer.distanceSavedMi,speciesTradeoff:closer.speciesTradeoff,evidenceBand:closer.evidenceBand}}));
+
+            if(closer!=null){
+              if(!closer.name||!Number.isFinite(closer.distanceMi)||!Number.isFinite(closer.distanceSavedMi)) process.exit(1);
+              if(!['top current evidence','strong current evidence'].includes(closer.evidenceBand)) process.exit(1);
+              if(!(closer.distanceMi<strongest.distanceMi)||closer.distanceSavedMi<2) process.exit(1);
+              if(strongest.recentSpeciesCount<closer.recentSpeciesCount) process.exit(1);
+            }
+
+            console.log(JSON.stringify({
+              label,
+              speciesCount:d.speciesCount,
+              nearbyHotspotCount:d.nearbyHotspotCount,
+              strongest:{name:strongest.name,recentSpeciesCount:strongest.recentSpeciesCount,distanceMi:strongest.distanceMi,evidenceBand:strongest.evidenceBand},
+              closerStrong:closer?{name:closer.name,recentSpeciesCount:closer.recentSpeciesCount,distanceMi:closer.distanceMi,distanceSavedMi:closer.distanceSavedMi,speciesTradeoff:closer.speciesTradeoff,evidenceBand:closer.evidenceBand}:null
+            }));
           }
           NODE
 
