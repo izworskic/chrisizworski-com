@@ -134,7 +134,6 @@ function ageDays(isoDate){
 }
 
 export default async function handler(req,res){
-  res.setHeader('X-Robots-Tag','noindex, nofollow');
   res.setHeader('Cache-Control','s-maxage=900, stale-while-revalidate=3600');
   res.setHeader('Access-Control-Allow-Origin','*');
   try{
