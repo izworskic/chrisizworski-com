@@ -28,12 +28,6 @@
     },
     "api/**/*.js": {
       "maxDuration": 10
-    },
-    "api/bird-migration-morning.js": {
-      "maxDuration": 20
-    },
-    "api/columbia-salmon.js": {
-      "maxDuration": 20
     }
   },
   "redirects": [
