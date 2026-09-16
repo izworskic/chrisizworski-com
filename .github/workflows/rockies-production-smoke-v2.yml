@@ -1,0 +1,84 @@
+name: Rockies production smoke v2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rockies-production-smoke-v2.yml'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify Rockies pages and directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          fetch() { curl --retry 5 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' "$1"; }
+          rockies="$(fetch 'https://chrisizworski.com/national-tools/rockies/?gate-smoke=20260916-rockies-v2')"
+          grep -q 'Rocky Mountain Elk Rut Live' <<<"$rockies"
+          grep -q 'Trail Ridge Road Live' <<<"$rockies"
+          grep -q 'Yellowstone Geyser Timing' <<<"$rockies"
+          grep -q 'numberOfItems":3' <<<"$rockies"
+          directory="$(fetch 'https://chrisizworski.com/national-tools/?gate-smoke=20260916-rockies-v2')"
+          grep -q 'data-tool-id="trail-ridge-road"' <<<"$directory"
+          grep -q 'data-tool-id="yellowstone-geysers"' <<<"$directory"
+          grep -q 'href="/national-tools/rockies/"' <<<"$directory"
+          grep -q 'numberOfItems":34' <<<"$directory"
+
+      - name: Verify corrected Trail Ridge live API
+        shell: bash
+        run: |
+          set -euo pipefail
+          raw="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/trail-ridge-road?gate-smoke=20260916-rockies-v2')"
+          node - <<'NODE' "$raw"
+          const d=JSON.parse(process.argv[2]);
+          if(d.ok!==true||!d.road||!d.alpine?.weather?.assessment) process.exit(1);
+          if(d.road.sourceTextMatched!==true) process.exit(1);
+          if(!['open','closed'].includes(d.road.level)) process.exit(1);
+          if(d.alpine.elevationFt!==11796) process.exit(1);
+          if(!Array.isArray(d.sources)||!d.sources.some(s=>String(s.role||'').includes('Official current road status'))) process.exit(1);
+          if(!Array.isArray(d.limits)||!d.limits.some(x=>/authoritative/i.test(x)&&/never overrides/i.test(x))) process.exit(1);
+          console.log(JSON.stringify({road:{level:d.road.level,label:d.road.label,timedEntry:d.road.timedEntry||null},weather:d.alpine.weather.assessment,alerts:d.alpine.alerts?.length||0}));
+          NODE
+
+      - name: Verify Yellowstone live API
+        shell: bash
+        run: |
+          set -euo pipefail
+          raw="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/yellowstone-geysers?gate-smoke=20260916-rockies-v2')"
+          node - <<'NODE' "$raw"
+          const d=JSON.parse(process.argv[2]);
+          if(d.ok!==true||!Array.isArray(d.predictions)||d.predictions.length!==6) process.exit(1);
+          const expected=new Set(['Old Faithful','Castle','Daisy','Grand','Riverside','Great Fountain']);
+          for(const p of d.predictions){
+            if(!expected.has(p.geyserName)) process.exit(1);
+            if(p.available&&(!p.source||(!p.prediction&&!p.windowOpen&&!p.windowClose))) process.exit(1);
+          }
+          if(d.next){
+            if(!expected.has(d.next.geyserName)||!d.next.available) process.exit(1);
+            const grace=Date.now()-5*60*1000;
+            if(d.next.windowClose&&new Date(d.next.windowClose).getTime()<grace) process.exit(1);
+            if(d.next.expiration&&new Date(d.next.expiration).getTime()<grace) process.exit(1);
+          }
+          if(!Array.isArray(d.sources)||!d.sources.some(s=>/GeyserTimes/i.test(s.name||''))) process.exit(1);
+          if(!Array.isArray(d.limits)||!d.limits.some(x=>/does not calculate/i.test(x))) process.exit(1);
+          console.log(JSON.stringify({next:d.next?{geyser:d.next.geyserName,prediction:d.next.prediction,windowOpen:d.next.windowOpen,windowClose:d.next.windowClose,source:d.next.source}:null,available:d.predictions.filter(p=>p.available).map(p=>({geyser:p.geyserName,source:p.source}))}));
+          NODE
+
+      - name: Verify existing production regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          fetch() { curl --retry 4 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' "$1"; }
+          southeast="$(fetch 'https://chrisizworski.com/national-tools/southeast/?gate-smoke=20260916-rockies-v2-regression')"
+          grep -q 'Florida Red Tide Live' <<<"$southeast"
+          grep -q 'Space Coast Launch Viewing' <<<"$southeast"
+          northeast="$(fetch 'https://chrisizworski.com/national-tools/northeast-great-lakes/?gate-smoke=20260916-rockies-v2-regression')"
+          grep -q 'Great Lakes Levels' <<<"$northeast"
+          grep -q 'Thunder Hole Live' <<<"$northeast"
+          bird="$(fetch 'https://chrisizworski.com/national-tools/bird-migration/?gate-smoke=20260916-rockies-v2-regression')"
+          grep -q 'Where should you bird this morning?' <<<"$bird"
+          columbia="$(fetch 'https://chrisizworski.com/national-tools/columbia-salmon-run/?gate-smoke=20260916-rockies-v2-regression')"
+          grep -q 'Columbia Salmon Run Live' <<<"$columbia"
