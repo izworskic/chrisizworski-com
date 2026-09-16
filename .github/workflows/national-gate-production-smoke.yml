@@ -11,28 +11,31 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for and verify public birding action release
+      - name: Wait for and verify public two-choice birding release
         shell: bash
         run: |
           set -euo pipefail
-          url='https://chrisizworski.com/national-tools/bird-migration/?gate-smoke=20260916-ranking'
+          url='https://chrisizworski.com/national-tools/bird-migration/?gate-smoke=20260916-two-choice'
           page=''
           for attempt in $(seq 1 24); do
             page="$(curl --retry 2 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' "$url" || true)"
-            if grep -q 'Where should you bird this morning?' <<<"$page" && grep -q 'comparable recent species evidence' <<<"$page"; then
+            if grep -q 'Strongest current evidence' <<<"$page" && grep -q 'Closer strong option' <<<"$page" && grep -q 'Other places to check' <<<"$page"; then
               break
             fi
             sleep 5
           done
           grep -q 'Where should you bird this morning?' <<<"$page"
-          grep -q 'Top places to check' <<<"$page"
-          grep -q 'Notable nearby' <<<"$page"
-          grep -q 'comparable recent species evidence' <<<"$page"
-          grep -q 'farther place therefore needs materially stronger current evidence' <<<"$page"
+          grep -q 'Strongest current evidence' <<<"$page"
+          grep -q 'Closer strong option' <<<"$page"
+          grep -q 'Other places to check' <<<"$page"
+          grep -q 'at least 2 miles closer and at least 15% closer' <<<"$page"
           grep -q 'BirdCast' <<<"$page"
           grep -q 'eBird' <<<"$page"
 
-          css="$(curl --retry 4 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/bird-migration/styles.css?gate-smoke=20260916-ranking')"
+          css="$(curl --retry 4 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/bird-migration/styles.css?gate-smoke=20260916-two-choice')"
+          grep -q '.choice-grid{display:grid' <<<"$css"
+          grep -q '.choice-card.primary-choice' <<<"$css"
+          grep -q '.choice-card.closer-choice' <<<"$css"
           grep -q '.notable-panel{grid-column:1/-1}' <<<"$css"
 
       - name: Verify public directory and regional desks
@@ -94,22 +97,27 @@ jobs:
           }
           NODE
 
-      - name: Verify national evidence-band where-to-bird API in Michigan and Ohio
+      - name: Verify national two-choice where-to-bird API in Michigan and Ohio
         shell: bash
         run: |
           set -euo pipefail
-          mi="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/birding-local-action?lat=42.2808&lon=-83.7430&distKm=40&back=3&gate-smoke=mi-ranking')"
-          oh="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/birding-local-action?lat=39.9612&lon=-82.9988&distKm=40&back=3&gate-smoke=oh-ranking')"
+          mi="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/birding-local-action?lat=42.2808&lon=-83.7430&distKm=40&back=3&gate-smoke=mi-two-choice')"
+          oh="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/birding-local-action?lat=39.9612&lon=-82.9988&distKm=40&back=3&gate-smoke=oh-two-choice')"
           node - <<'NODE' "$mi" "$oh"
           for(const [label,raw] of [['MI',process.argv[2]],['OH',process.argv[3]]]){
             const d=JSON.parse(raw);
             if(d.ok!==true||d.sourceMode!=='michigan-birding-report-local-action') process.exit(1);
             if(d.observationSemantics!=='recent-species-records-at-ebird-hotspots'||!d.rankingRule) process.exit(1);
-            if(!Array.isArray(d.topPlaces)||d.topPlaces.length<1) process.exit(1);
-            const top=d.topPlaces[0];
-            if(!top.name||!Number.isFinite(top.lat)||!Number.isFinite(top.lon)||!Number.isFinite(top.distanceMi)) process.exit(1);
-            if(!Number.isFinite(top.recentSpeciesCount)||top.recentSpeciesCount<1||!Array.isArray(top.targetSpecies)||!top.evidenceBand) process.exit(1);
-            console.log(JSON.stringify({label,speciesCount:d.speciesCount,nearbyHotspotCount:d.nearbyHotspotCount,notableCount:Array.isArray(d.notableSightings)?d.notableSightings.length:null,rankingRule:d.rankingRule,topPlace:{name:top.name,evidenceBand:top.evidenceBand,recentSpeciesCount:top.recentSpeciesCount,notableCount:top.notableCount,distanceMi:top.distanceMi,targetSpecies:top.targetSpecies.slice(0,3).map(x=>x.name)}}));
+            const choices=d.decisionChoices||{};
+            const strongest=choices.strongestCurrentEvidence;
+            const closer=choices.closerStrongOption;
+            if(!strongest?.name||!Number.isFinite(strongest.recentSpeciesCount)||!Number.isFinite(strongest.distanceMi)) process.exit(1);
+            if(!closer?.name||!Number.isFinite(closer.distanceMi)||!Number.isFinite(closer.distanceSavedMi)) process.exit(1);
+            if(!['top current evidence','strong current evidence'].includes(closer.evidenceBand)) process.exit(1);
+            if(!(closer.distanceMi<strongest.distanceMi)||closer.distanceSavedMi<2) process.exit(1);
+            if(strongest.recentSpeciesCount<closer.recentSpeciesCount) process.exit(1);
+            if(!choices.rule?.includes('meaningfully closer')) process.exit(1);
+            console.log(JSON.stringify({label,speciesCount:d.speciesCount,nearbyHotspotCount:d.nearbyHotspotCount,strongest:{name:strongest.name,recentSpeciesCount:strongest.recentSpeciesCount,distanceMi:strongest.distanceMi,evidenceBand:strongest.evidenceBand},closerStrong:{name:closer.name,recentSpeciesCount:closer.recentSpeciesCount,distanceMi:closer.distanceMi,distanceSavedMi:closer.distanceSavedMi,speciesTradeoff:closer.speciesTradeoff,evidenceBand:closer.evidenceBand}}));
           }
           NODE
 
