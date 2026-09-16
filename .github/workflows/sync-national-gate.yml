@@ -15,8 +15,8 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      HUB_COMMIT: 5645d356d1b954f2319f765bf11568a5c27797d1
-      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/5645d356d1b954f2319f765bf11568a5c27797d1
+      HUB_COMMIT: b1ee96f5f649f01156fe091c5745e2fcc16fc0e3
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/b1ee96f5f649f01156fe091c5745e2fcc16fc0e3
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
