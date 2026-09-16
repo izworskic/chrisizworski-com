@@ -15,8 +15,8 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      HUB_COMMIT: f8228f5aee999e5913315b823e77c1a22a84ef04
-      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/f8228f5aee999e5913315b823e77c1a22a84ef04
+      HUB_COMMIT: ff5586ce2e6b22a75dd8f4b1b12f45a3dc0bdd28
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/ff5586ce2e6b22a75dd8f4b1b12f45a3dc0bdd28
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -107,10 +107,14 @@ jobs:
           grep -q 'data-tool-id="columbia-salmon"' public/synced-national-tools/index.html
           grep -q 'numberOfItems":29' public/synced-national-tools/index.html
           grep -q 'Where should you bird this morning?' public/synced-national-tools/bird-migration/index.html
-          grep -q 'Top places to check' public/synced-national-tools/bird-migration/index.html
-          grep -q 'Notable nearby' public/synced-national-tools/bird-migration/index.html
-          grep -q 'comparable recent species evidence' public/synced-national-tools/bird-migration/index.html
+          grep -q 'Strongest current evidence' public/synced-national-tools/bird-migration/index.html
+          grep -q 'Closer strong option' public/synced-national-tools/bird-migration/index.html
+          grep -q 'Other places to check' public/synced-national-tools/bird-migration/index.html
+          grep -q 'at least 2 miles closer and at least 15% closer' public/synced-national-tools/bird-migration/index.html
+          grep -q '.choice-grid{display:grid' public/synced-national-tools/bird-migration/styles.css
           grep -q '.notable-panel{grid-column:1/-1}' public/synced-national-tools/bird-migration/styles.css
+          grep -q 'decisionChoices' public/synced-national-tools/bird-migration/app.js
+          grep -q 'distanceSavedMi' public/synced-national-tools/bird-migration/app.js
           grep -q "ACTION='/api/birding-local-action'" public/synced-national-tools/bird-migration/app.js
           grep -q 'michiganbirdingreport.com/api/observations' api/bird-migration-morning.js
           grep -q 'michiganbirdingreport.com/api/local-action' api/birding-local-action.js
