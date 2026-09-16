@@ -2,6 +2,7 @@
 (function(){
   const GEOCODE='/api/national-geocode';
   const LIVE='/api/bird-migration-morning';
+  const ACTION='/api/birding-local-action';
   const form=document.getElementById('location-form');
   const input=document.getElementById('location-input');
   const locate=document.getElementById('locate-button');
@@ -14,7 +15,7 @@
   let map=null;
   let mapLayer=null;
 
-  function setLoading(on,text='Checking migration and morning weather…'){
+  function setLoading(on,text='Checking migration, nearby hotspots and morning weather…'){
     document.body.classList.toggle('loading',on);
     loading.textContent=text;
     form.querySelector('button[type="submit"]').disabled=on;
@@ -35,8 +36,14 @@
   async function geocodeQuery(q){return json(`${GEOCODE}?q=${encodeURIComponent(q)}`);}
   async function reverseGeocode(latitude,longitude){return json(GEOCODE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({latitude,longitude})});}
   async function analyze(location){
-    const params=new URLSearchParams({lat:String(location.latitude),lon:String(location.longitude),state:String(location.stateCode||'')});
-    const data=await json(`${LIVE}?${params}`);
+    const base={lat:String(location.latitude),lon:String(location.longitude)};
+    const migrationParams=new URLSearchParams({...base,state:String(location.stateCode||'')});
+    const actionParams=new URLSearchParams({...base,distKm:'40',back:'3'});
+    const [data,action]=await Promise.all([
+      json(`${LIVE}?${migrationParams}`),
+      json(`${ACTION}?${actionParams}`).catch(()=>null),
+    ]);
+    if(action?.ok)data.birdingAction=action;
     render(location,data);
     try{localStorage.setItem('birdMigrationLastLocation',JSON.stringify({q:location.query||location.displayName||'',displayName:location.displayName||'',latitude:location.latitude,longitude:location.longitude,stateCode:location.stateCode}));}catch{}
   }
@@ -58,7 +65,22 @@
     });
   }
 
-  function renderMap(location,local){
+  function mapPlaces(local,action){
+    if(action?.topPlaces?.length){
+      return action.topPlaces.map(p=>({
+        name:p.name,
+        lat:p.lat,
+        lon:p.lon,
+        speciesCount:p.recentSpeciesCount,
+        distanceMi:p.distanceMi,
+        notableCount:p.notableCount,
+        ebirdUrl:p.ebirdUrl,
+      }));
+    }
+    return local.topLocations||[];
+  }
+
+  function renderMap(location,local,action){
     if(!window.L)return;
     const center=[Number(location.latitude),Number(location.longitude)];
     if(!map){
@@ -68,46 +90,98 @@
     if(mapLayer)mapLayer.remove();
     mapLayer=L.layerGroup().addTo(map);
     const bounds=[];
-    const selected=L.circleMarker(center,{radius:8,weight:2,fillOpacity:.75}).addTo(mapLayer).bindTooltip('Selected location');
+    L.circleMarker(center,{radius:8,weight:2,fillOpacity:.75}).addTo(mapLayer).bindTooltip('Selected location');
     bounds.push(center);
-    (local.topLocations||[]).forEach((place,index)=>{
+    mapPlaces(local,action).forEach((place,index)=>{
       if(!Number.isFinite(place.lat)||!Number.isFinite(place.lon))return;
       const point=[place.lat,place.lon];bounds.push(point);
       const marker=L.circleMarker(point,{radius:7,weight:2,fillOpacity:.7}).addTo(mapLayer);
       const node=document.createElement('div');
-      const title=document.createElement('strong');title.textContent=place.name||`Recent location ${index+1}`;
-      const detail=document.createElement('div');detail.textContent=`${place.speciesCount||0} recently reported species represented`;
-      node.append(title,detail);marker.bindPopup(node);
+      const title=document.createElement('strong');title.textContent=place.name||`Birding location ${index+1}`;
+      const detail=document.createElement('div');
+      const bits=[`${place.speciesCount||0} recent species represented`];
+      if(Number.isFinite(place.distanceMi))bits.push(`${place.distanceMi.toFixed(1)} mi away`);
+      if(place.notableCount)bits.push(`${place.notableCount} notable`);
+      detail.textContent=bits.join(' · ');
+      node.append(title,detail);
+      if(place.ebirdUrl){const link=document.createElement('a');link.href=place.ebirdUrl;link.target='_blank';link.rel='noopener';link.textContent='Open eBird hotspot';node.append(document.createElement('br'),link);}
+      marker.bindPopup(node);
     });
     if(bounds.length>1)map.fitBounds(bounds,{padding:[28,28],maxZoom:11});
     setTimeout(()=>map.invalidateSize(),0);
-    return selected;
+  }
+
+  function renderNotables(action){
+    const list=$('#notable-list');
+    list.innerHTML='';
+    const sightings=action?.notableSightings||[];
+    sightings.forEach(bird=>{
+      const row=document.createElement('div');row.className='bird-row';
+      const name=document.createElement('strong');name.textContent=bird.name||'Notable bird';
+      const detail=document.createElement('span');
+      const bits=[bird.obsDt||'recent record',bird.location||null,Number.isFinite(bird.count)?`${fmt(bird.count)} reported`:null].filter(Boolean);
+      detail.textContent=bits.join(' · ');
+      row.append(name,detail);list.appendChild(row);
+    });
+    if(!list.children.length){const p=document.createElement('p');p.className='empty-note';p.textContent=action?.ok?'No non-private notable species surfaced in the current nearby window.':'Nearby notable-bird data could not be loaded; the rest of the morning read remains usable.';list.appendChild(p);}
+  }
+
+  function renderPlaces(local,action){
+    const locationsList=$('#locations-list');
+    locationsList.innerHTML='';
+    if(action?.topPlaces?.length){
+      action.topPlaces.forEach((place,index)=>{
+        const row=document.createElement('div');row.className='place-row';
+        const rank=document.createElement('span');rank.className='rank';rank.textContent=String(index+1);
+        const body=document.createElement('div');
+        const strong=document.createElement('strong');
+        if(place.ebirdUrl){const link=document.createElement('a');link.href=place.ebirdUrl;link.target='_blank';link.rel='noopener';link.textContent=place.name||'eBird hotspot';strong.appendChild(link);}else strong.textContent=place.name||'eBird hotspot';
+        const detail=document.createElement('span');
+        const bits=[`${fmt(place.recentSpeciesCount)} recent species represented`,Number.isFinite(place.distanceMi)?`${place.distanceMi.toFixed(1)} mi`:null,place.latest?`latest ${place.latest}`:null].filter(Boolean);
+        detail.textContent=bits.join(' · ');
+        const why=document.createElement('span');why.textContent=place.why||'Recent eBird species records surfaced this hotspot.';
+        body.append(strong,detail,why);
+        const targets=(place.targetSpecies||[]).map(s=>s.name).filter(Boolean).slice(0,5);
+        if(targets.length){const target=document.createElement('span');target.textContent=`Recent targets: ${targets.join(', ')}`;body.appendChild(target);}
+        row.append(rank,body);locationsList.appendChild(row);
+      });
+      return;
+    }
+    (local.topLocations||[]).forEach((place,index)=>{
+      const row=document.createElement('div');row.className='place-row';
+      const rank=document.createElement('span');rank.className='rank';rank.textContent=String(index+1);
+      const body=document.createElement('div');
+      const name=document.createElement('strong');name.textContent=place.name||'Recent reporting location';
+      const detail=document.createElement('span');detail.textContent=`${fmt(place.speciesCount)} recently reported species represented${place.latest?` · latest ${place.latest}`:''}`;
+      body.append(name,detail);row.append(rank,body);locationsList.appendChild(row);
+    });
+    if(!locationsList.children.length){const p=document.createElement('p');p.className='empty-note';p.textContent='Recent species records are present, but no nearby hotspot could be ranked from the available data.';locationsList.appendChild(p);}
   }
 
   function renderLocal(location,data){
     const local=data.localBirds||{};
+    const action=data.birdingAction||null;
     const pill=$('#local-pill');
     const speciesList=$('#species-list');
-    const locationsList=$('#locations-list');
     const summary=$('#local-summary');
-    speciesList.innerHTML='';locationsList.innerHTML='';
+    speciesList.innerHTML='';
     const ebirdSource=$('#ebird-source');
     ebirdSource.href=data.sources?.ebird?.url||local.sourceUrl||'https://ebird.org/explore';
 
     if(!local.available){
       pill.textContent='Local reports unavailable';pill.classList.remove('high');
-      summary.textContent='Recent local eBird records could not be loaded. Migration and weather remain usable.';
+      summary.textContent=action?.topPlaces?.length?`${action.topPlaces.length} nearby hotspots still have current eBird action data, but the county-level species panel is unavailable.`:'Recent local eBird records could not be loaded. Migration and weather remain usable.';
       const birdEmpty=document.createElement('p');birdEmpty.className='empty-note';birdEmpty.textContent='Use the eBird regional link for current species reports.';speciesList.appendChild(birdEmpty);
-      const locEmpty=document.createElement('p');locEmpty.className='empty-note';locEmpty.textContent='No recent reporting locations are being ranked from incomplete data.';locationsList.appendChild(locEmpty);
-      renderMap(location,{topLocations:[]});
+      renderPlaces(local,action);renderNotables(action);renderMap(location,local,action);
       return;
     }
 
     pill.textContent=`${fmt(local.speciesCount)} species · ${local.windowDays||3} days`;pill.classList.add('high');
+    const actionPhrase=action?.topPlaces?.length?` ${action.topPlaces.length} nearby eBird hotspots surfaced enough recent species evidence to rank as places to check within about ${action.radiusMi||25} miles.`:'';
     if(local.observationSemantics==='deduped-species-records'){
-      summary.textContent=`${fmt(local.speciesCount)} distinct species have recent eBird records in the selected region. The upstream feed keeps the most recent record per species, so this is not a count of every checklist or sighting.`;
+      summary.textContent=`${fmt(local.speciesCount)} distinct species have recent eBird records in the selected region. The upstream regional feed keeps the most recent record per species, so this is not a count of every checklist or sighting.${actionPhrase}`;
     }else{
-      summary.textContent=`${fmt(local.speciesCount)} species across ${fmt(local.observationCount)} recent eBird observations in the selected reporting region. Use those records to choose habitat; do not treat the count as a complete inventory.`;
+      summary.textContent=`${fmt(local.speciesCount)} species across ${fmt(local.observationCount)} recent eBird observations in the selected reporting region. Use those records to choose habitat; do not treat the count as a complete inventory.${actionPhrase}`;
     }
     (local.recentSpecies||[]).forEach(bird=>{
       const row=document.createElement('div');row.className='bird-row';
@@ -119,16 +193,9 @@
     });
     if(!speciesList.children.length){const p=document.createElement('p');p.className='empty-note';p.textContent='No recent species rows were returned for this reporting region.';speciesList.appendChild(p);}
 
-    (local.topLocations||[]).forEach((place,index)=>{
-      const row=document.createElement('div');row.className='place-row';
-      const rank=document.createElement('span');rank.className='rank';rank.textContent=String(index+1);
-      const body=document.createElement('div');
-      const name=document.createElement('strong');name.textContent=place.name||'Recent reporting location';
-      const detail=document.createElement('span');detail.textContent=`${fmt(place.speciesCount)} recently reported species represented${place.latest?` · latest ${place.latest}`:''}`;
-      body.append(name,detail);row.append(rank,body);locationsList.appendChild(row);
-    });
-    if(!locationsList.children.length){const p=document.createElement('p');p.className='empty-note';p.textContent='Recent species records are present, but no reporting locations could be ranked.';locationsList.appendChild(p);}
-    renderMap(location,local);
+    renderPlaces(local,action);
+    renderNotables(action);
+    renderMap(location,local,action);
   }
 
   function render(location,data){
@@ -137,7 +204,8 @@
     const label=area.countyName?`${area.countyName} County, ${location.stateCode}`:(location.displayName||location.query||'Selected location');
     $('#location-label').textContent=label;
     $('#decision-headline').textContent=data.decision?.headline||'Migration read unavailable.';
-    $('#decision-detail').textContent=data.decision?.detail||'No migration amount is being inferred.';
+    const topPlace=data.birdingAction?.topPlaces?.[0];
+    $('#decision-detail').textContent=topPlace?`${data.decision?.detail||'Review the independent signals below.'} First place to investigate from current eBird hotspot activity: ${topPlace.name}.`:data.decision?.detail||'No migration amount is being inferred.';
     const livePill=$('#live-pill');
     livePill.textContent=bird.live?'BirdCast live feed':bird.available?'BirdCast migration data':'BirdCast data unavailable';
     livePill.classList.toggle('high',Boolean(bird.live));
@@ -164,7 +232,7 @@
     e.preventDefault();clearError();result.classList.remove('visible');
     const q=input.value.trim();if(q.length<2){showError('Enter a U.S. city or ZIP code.');return;}
     setLoading(true,'Finding the location…');
-    try{const location=await geocodeQuery(q);setLoading(true,'Checking BirdCast, local reports and NWS morning weather…');await analyze(location);}catch(err){showError(err.message||'The migration check could not be completed.');}finally{setLoading(false);}
+    try{const location=await geocodeQuery(q);setLoading(true,'Checking BirdCast, nearby hotspots, recent birds and NWS morning weather…');await analyze(location);}catch(err){showError(err.message||'The birding check could not be completed.');}finally{setLoading(false);}
   });
 
   locate.addEventListener('click',()=>{
@@ -172,7 +240,7 @@
     if(!navigator.geolocation){showError('This browser does not provide location access. Enter a city or ZIP instead.');return;}
     setLoading(true,'Getting your approximate location…');
     navigator.geolocation.getCurrentPosition(async pos=>{
-      try{const location=await reverseGeocode(pos.coords.latitude,pos.coords.longitude);input.value=location.displayName||location.query||'';setLoading(true,'Checking BirdCast, local reports and NWS morning weather…');await analyze(location);}catch(err){showError(err.message||'The migration check could not be completed.');}finally{setLoading(false);}
+      try{const location=await reverseGeocode(pos.coords.latitude,pos.coords.longitude);input.value=location.displayName||location.query||'';setLoading(true,'Checking BirdCast, nearby hotspots, recent birds and NWS morning weather…');await analyze(location);}catch(err){showError(err.message||'The birding check could not be completed.');}finally{setLoading(false);}
     },err=>{setLoading(false);showError(err.code===1?'Location permission was not granted. Enter a city or ZIP instead.':'Your location could not be determined. Enter a city or ZIP instead.');},{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
   });
 
