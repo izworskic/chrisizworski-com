@@ -2,7 +2,8 @@ const BIRDCAST_BASE='https://dashboard.birdcast.org/region/';
 const TIGER_COUNTIES='https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1';
 const NWS_POINTS='https://api.weather.gov/points';
 const EBIRD_BASE='https://api.ebird.org/v2';
-const UA='ChrisIzworski-NationalTools/1.1 (+https://chrisizworski.com/national-tools/)';
+const BIRDING_PROXY='https://michiganbirdingreport.com/api/observations';
+const UA='ChrisIzworski-NationalTools/1.2 (+https://chrisizworski.com/national-tools/)';
 
 function finite(v){const n=Number(v);return Number.isFinite(n)?n:null;}
 function clampCoord(v,min,max){const n=finite(v);return n!=null&&n>=min&&n<=max?n:null;}
@@ -40,19 +41,7 @@ function parseBirdCast(html,region){
   const high=/\bHigh\b/i.test(text.slice(trafficAt,trafficAt+450));
   let label=firstMatch(text,/Migration Dashboard\s+(?:Search regions\s+)?([^\d]{2,80}?)\s+(?:Tonight|Monday night|Tuesday night|Wednesday night|Thursday night|Friday night|Saturday night|Sunday night)/i);
   if(label)label=label.replace(/Search regions.*$/i,'').trim();
-  return {
-    region,
-    regionLabel:label||null,
-    available:!unavailable&&(birdsCrossedRaw!=null||inFlightRaw!=null),
-    offSeason,
-    live,
-    high,
-    birdsCrossed:numberFrom(birdsCrossedRaw),
-    birdsInFlight:numberFrom(inFlightRaw),
-    direction,directionName,speedMph:speed,altitudeFt:altitude,
-    recorded:recorded?.trim()||null,starting:starting?.trim()||null,ending:ending?.trim()||null,
-    sourceUrl:`${BIRDCAST_BASE}${encodeURIComponent(region)}`
-  };
+  return {region,regionLabel:label||null,available:!unavailable&&(birdsCrossedRaw!=null||inFlightRaw!=null),offSeason,live,high,birdsCrossed:numberFrom(birdsCrossedRaw),birdsInFlight:numberFrom(inFlightRaw),direction,directionName,speedMph:speed,altitudeFt:altitude,recorded:recorded?.trim()||null,starting:starting?.trim()||null,ending:ending?.trim()||null,sourceUrl:`${BIRDCAST_BASE}${encodeURIComponent(region)}`};
 }
 
 async function fetchJson(url,headers={}){
@@ -94,11 +83,7 @@ async function birdCastFor(region,state){
 
 function windNumber(v){const m=String(v||'').match(/\d+/);return m?Number(m[0]):null;}
 function periodHour(p){const m=String(p?.startTime||'').match(/T(\d{2}):/);return m?Number(m[1]):null;}
-function morningPeriods(periods=[]){
-  const morning=periods.filter(p=>p?.isDaytime&&periodHour(p)!=null&&periodHour(p)>=5&&periodHour(p)<=11).slice(0,4);
-  if(morning.length)return morning;
-  return periods.filter(p=>p?.isDaytime).slice(0,4);
-}
+function morningPeriods(periods=[]){const morning=periods.filter(p=>p?.isDaytime&&periodHour(p)!=null&&periodHour(p)>=5&&periodHour(p)<=11).slice(0,4);return morning.length?morning:periods.filter(p=>p?.isDaytime).slice(0,4);}
 function weatherFit(periods=[]){
   if(!periods.length)return {rating:'unknown',maxPrecip:null,maxWindMph:null,summary:'Morning weather unavailable'};
   const precip=periods.map(p=>finite(p?.probabilityOfPrecipitation?.value)).filter(Number.isFinite);
@@ -127,42 +112,47 @@ function summarizeEbird(observations=[]){
     if(!o?.comName)continue;
     const speciesKey=o.speciesCode||o.comName;
     const current=species.get(speciesKey);
-    if(!current||String(o.obsDt||'')>String(current.obsDt||'')){
-      species.set(speciesKey,{name:o.comName,sciName:o.sciName||null,speciesCode:o.speciesCode||null,obsDt:o.obsDt||null,location:o.locName||null,count:finite(o.howMany)});
-    }
+    if(!current||String(o.obsDt||'')>String(current.obsDt||''))species.set(speciesKey,{name:o.comName,sciName:o.sciName||null,speciesCode:o.speciesCode||null,obsDt:o.obsDt||null,location:o.locName||null,count:finite(o.howMany)});
     const locKey=o.locId||`${o.locName||''}:${o.lat||''}:${o.lng||''}`;
     if(!locKey)continue;
-    if(!locations.has(locKey))locations.set(locKey,{locId:o.locId||null,name:o.locName||'Recent reporting location',lat:finite(o.lat),lon:finite(o.lng),species:new Set(),reports:0,latest:o.obsDt||null});
-    const loc=locations.get(locKey);
-    loc.species.add(speciesKey);loc.reports+=1;
-    if(String(o.obsDt||'')>String(loc.latest||''))loc.latest=o.obsDt||null;
+    if(!locations.has(locKey))locations.set(locKey,{locId:o.locId||null,name:o.locName||'Recent reporting location',lat:finite(o.lat),lon:finite(o.lng),species:new Set(),records:0,latest:o.obsDt||null});
+    const loc=locations.get(locKey);loc.species.add(speciesKey);loc.records+=1;if(String(o.obsDt||'')>String(loc.latest||''))loc.latest=o.obsDt||null;
   }
   const recentSpecies=[...species.values()].sort((a,b)=>String(b.obsDt||'').localeCompare(String(a.obsDt||''))).slice(0,8);
-  const topLocations=[...locations.values()].map(l=>({...l,speciesCount:l.species.size,species:undefined})).sort((a,b)=>b.speciesCount-a.speciesCount||b.reports-a.reports).slice(0,5);
+  const topLocations=[...locations.values()].map(l=>({...l,speciesCount:l.species.size,species:undefined})).sort((a,b)=>b.speciesCount-a.speciesCount||b.records-a.records).slice(0,5);
   return {speciesCount:species.size,observationCount:observations.length,recentSpecies,topLocations};
 }
+
 async function ebirdLocal(region){
   const token=process.env.EBIRD_API_TOKEN;
-  if(!token)return {available:false,reason:'not-configured',region,speciesCount:null,observationCount:null,recentSpecies:[],topLocations:[]};
+  let directError=null;
+  if(token){
+    try{
+      const url=`${EBIRD_BASE}/data/obs/${encodeURIComponent(region)}/recent?back=3&maxResults=300`;
+      const observations=await fetchJson(url,{'x-ebirdapitoken':token,'user-agent':UA});
+      return {available:true,region,windowDays:3,sourceMode:'direct-ebird',observationSemantics:'recent-observations',...summarizeEbird(Array.isArray(observations)?observations:[]),sourceUrl:`https://ebird.org/region/${encodeURIComponent(region)}`};
+    }catch(error){directError=error;}
+  }
   try{
-    const url=`${EBIRD_BASE}/data/obs/${encodeURIComponent(region)}/recent?back=3&maxResults=300`;
-    const observations=await fetchJson(url,{'x-ebirdapitoken':token,'user-agent':UA});
-    return {available:true,region,windowDays:3,...summarizeEbird(Array.isArray(observations)?observations:[]),sourceUrl:`https://ebird.org/region/${encodeURIComponent(region)}`};
+    const params=new URLSearchParams({region,back:'3',max:'200'});
+    const proxied=await fetchJson(`${BIRDING_PROXY}?${params}`,{'user-agent':UA});
+    const observations=Array.isArray(proxied?.observations)?proxied.observations:[];
+    return {available:true,region,windowDays:Number(proxied?.back)||3,sourceMode:'michigan-birding-report',observationSemantics:'deduped-species-records',...summarizeEbird(observations),sourceUrl:`https://ebird.org/region/${encodeURIComponent(region)}`,viaUrl:BIRDING_PROXY};
   }catch(error){
-    return {available:false,reason:'temporarily-unavailable',region,speciesCount:null,observationCount:null,recentSpecies:[],topLocations:[],detail:String(error?.message||error)};
+    return {available:false,reason:'temporarily-unavailable',region,speciesCount:null,observationCount:null,recentSpecies:[],topLocations:[],detail:String((directError||error)?.message||directError||error)};
   }
 }
 
 function decision(bird,weather,local={}){
-  if(bird.offSeason)return {level:'off-season',headline:'BirdCast live migration feed is off-season.',detail:local.available&&local.speciesCount?`Migration radar is paused, but ${local.speciesCount} species have recent eBird reports in the selected region.`:'Use recent local observations year-round and return during spring or fall for live migration radar.'};
-  if(!bird.available)return {level:'unknown',headline:'Live migration evidence is unavailable for this region.',detail:local.available&&local.speciesCount?`${local.speciesCount} species still have recent local eBird reports. No radar migration amount is being inferred.`:'No migration amount is being inferred.'};
+  if(bird.offSeason)return {level:'off-season',headline:'BirdCast live migration feed is off-season.',detail:local.available&&local.speciesCount?`Migration radar is paused, but ${local.speciesCount} species have recent eBird records in the selected region.`:'Use recent local observations year-round and return during spring or fall for live migration radar.'};
+  if(!bird.available)return {level:'unknown',headline:'Live migration evidence is unavailable for this region.',detail:local.available&&local.speciesCount?`${local.speciesCount} species still have recent local eBird records. No radar migration amount is being inferred.`:'No migration amount is being inferred.'};
   const activeLocal=local.available&&Number(local.speciesCount)>=20;
-  if(bird.high&&weather.rating==='good'&&activeLocal)return {level:'strong',headline:'Strong migration, workable weather, and active local reporting.',detail:`BirdCast marks the movement high and ${local.speciesCount} species have been reported locally in the past 3 days. Start with the active locations below.`};
+  if(bird.high&&weather.rating==='good'&&activeLocal)return {level:'strong',headline:'Strong migration, workable weather, and active local reporting.',detail:`BirdCast marks the movement high and ${local.speciesCount} species have recent local records from the past 3 days. Start with the active locations below.`};
   if(bird.high&&weather.rating==='good')return {level:'strong',headline:'Strong migration signal with workable morning weather.',detail:'That combination is worth a local habitat check this morning, but radar does not guarantee birds at a specific site.'};
   if(bird.high&&weather.rating==='poor')return {level:'weather-limited',headline:'Strong migration signal, but morning weather may limit field conditions.',detail:'Bird movement was strong; rain or wind may make viewing less productive or comfortable.'};
-  if(bird.high)return {level:'strong',headline:'BirdCast marks the migration signal as high.',detail:activeLocal?`${local.speciesCount} species also have recent local reports. Use the active-location list to decide where to start.`:'Use local habitat and the morning weather panel before deciding where to go.'};
-  if(weather.rating==='good')return {level:'workable',headline:'Migration was detected and morning weather looks workable.',detail:activeLocal?`${local.speciesCount} species have recent local reports even though BirdCast is not labeling the migration high.`:'The radar signal is real, but this page does not label it high unless BirdCast does.'};
-  return {level:'mixed',headline:'Migration was detected, with mixed morning field conditions.',detail:activeLocal?`Local reporting is still active with ${local.speciesCount} species in the past 3 days.`:'Check the reported movement and weather separately before choosing a site.'};
+  if(bird.high)return {level:'strong',headline:'BirdCast marks the migration signal as high.',detail:activeLocal?`${local.speciesCount} species also have recent local records. Use the active-location list to decide where to start.`:'Use local habitat and the morning weather panel before deciding where to go.'};
+  if(weather.rating==='good')return {level:'workable',headline:'Migration was detected and morning weather looks workable.',detail:activeLocal?`${local.speciesCount} species have recent local records even though BirdCast is not labeling the migration high.`:'The radar signal is real, but this page does not label it high unless BirdCast does.'};
+  return {level:'mixed',headline:'Migration was detected, with mixed morning field conditions.',detail:activeLocal?`Local reporting is still active with ${local.speciesCount} species represented in recent records.`:'Check the reported movement and weather separately before choosing a site.'};
 }
 
 module.exports=async function handler(req,res){
@@ -177,10 +167,8 @@ module.exports=async function handler(req,res){
     const bird=birdResult.value;
     const weather=weatherResult.status==='fulfilled'?weatherResult.value:{rating:'unknown',maxPrecip:null,maxWindMph:null,summary:'NWS morning weather unavailable',periods:[]};
     const local=ebirdResult.status==='fulfilled'?ebirdResult.value:{available:false,reason:'temporarily-unavailable',region:area.region,recentSpecies:[],topLocations:[]};
-    return res.status(200).json({ok:true,generatedAt:new Date().toISOString(),area,birdcast:bird,weather,localBirds:local,decision:decision(bird,weather,local),sources:{birdcast:{name:'BirdCast Migration Dashboard · Cornell Lab of Ornithology',url:bird.sourceUrl},weather:{name:'National Weather Service',url:'https://www.weather.gov/'},geography:{name:'U.S. Census Bureau TIGERweb',url:'https://tigerweb.geo.census.gov/'},ebird:{name:'eBird · Cornell Lab of Ornithology',url:local.sourceUrl||'https://ebird.org/explore'}}});
-  }catch(error){
-    return res.status(502).json({ok:false,error:'Bird migration morning data are temporarily unavailable.',detail:String(error?.message||error)});
-  }
+    return res.status(200).json({ok:true,generatedAt:new Date().toISOString(),area,birdcast:bird,weather,localBirds:local,decision:decision(bird,weather,local),sources:{birdcast:{name:'BirdCast Migration Dashboard · Cornell Lab of Ornithology',url:bird.sourceUrl},weather:{name:'National Weather Service',url:'https://www.weather.gov/'},geography:{name:'U.S. Census Bureau TIGERweb',url:'https://tigerweb.geo.census.gov/'},ebird:{name:'eBird · Cornell Lab of Ornithology',url:local.sourceUrl||'https://ebird.org/explore',via:local.sourceMode==='michigan-birding-report'?'Michigan Birding Report server-side API':null}}});
+  }catch(error){return res.status(502).json({ok:false,error:'Bird migration morning data are temporarily unavailable.',detail:String(error?.message||error)});}
 };
 
 module.exports._test={cleanText,parseBirdCast,weatherFit,decision,periodHour,morningPeriods,summarizeEbird};
