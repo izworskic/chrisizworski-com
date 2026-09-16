@@ -15,8 +15,8 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      HUB_COMMIT: f6a0b927e22ac10c329d3e040eceea43b67b0f34
-      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/f6a0b927e22ac10c329d3e040eceea43b67b0f34
+      HUB_COMMIT: 5645d356d1b954f2319f765bf11568a5c27797d1
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/5645d356d1b954f2319f765bf11568a5c27797d1
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,11 +32,14 @@ jobs:
           mkdir -p public/synced-national-tools/appalachia
           mkdir -p public/synced-national-tools/southeast
           mkdir -p public/synced-national-tools/great-plains
+          mkdir -p public/synced-national-tools/rockies
           mkdir -p public/synced-national-tools/pacific-northwest
           mkdir -p public/synced-national-tools/bird-migration
           mkdir -p public/synced-national-tools/columbia-salmon-run
           mkdir -p public/synced-national-tools/florida-red-tide
           mkdir -p public/synced-national-tools/space-coast-launch
+          mkdir -p public/synced-national-tools/trail-ridge-road
+          mkdir -p public/synced-national-tools/yellowstone-geysers
           mkdir -p api
 
           curl -fLsS "$HUB_RAW/public/national-tools/index.html" -o public/synced-national-tools/index.html
@@ -44,11 +47,13 @@ jobs:
           curl -fLsS "$HUB_RAW/public/national-tools/assets/national-tools-directory.js" -o public/synced-national-tools/assets/national-tools-directory.js
           curl -fLsS "$HUB_RAW/public/national-tools/assets/region-hub.css" -o public/synced-national-tools/assets/region-hub.css
           curl -fLsS "$HUB_RAW/public/national-tools/assets/southeast-tool.css" -o public/synced-national-tools/assets/southeast-tool.css
+          curl -fLsS "$HUB_RAW/public/national-tools/assets/mountain-tool.css" -o public/synced-national-tools/assets/mountain-tool.css
 
           curl -fLsS "$HUB_RAW/public/national-tools/northeast-great-lakes/index.html" -o public/synced-national-tools/northeast-great-lakes/index.html
           curl -fLsS "$HUB_RAW/public/national-tools/appalachia/index.html" -o public/synced-national-tools/appalachia/index.html
           curl -fLsS "$HUB_RAW/public/national-tools/southeast/index.html" -o public/synced-national-tools/southeast/index.html
           curl -fLsS "$HUB_RAW/public/national-tools/great-plains/index.html" -o public/synced-national-tools/great-plains/index.html
+          curl -fLsS "$HUB_RAW/public/national-tools/rockies/index.html" -o public/synced-national-tools/rockies/index.html
           curl -fLsS "$HUB_RAW/public/national-tools/pacific-northwest/index.html" -o public/synced-national-tools/pacific-northwest/index.html
 
           curl -fLsS "$HUB_RAW/public/national-tools/bird-migration/index.html" -o public/synced-national-tools/bird-migration/index.html
@@ -70,6 +75,14 @@ jobs:
           curl -fLsS "$HUB_RAW/public/national-tools/space-coast-launch/app.js" -o public/synced-national-tools/space-coast-launch/app.js
           curl -fLsS "$HUB_RAW/api/space-coast-launch.js" -o api/space-coast-launch.js
 
+          curl -fLsS "$HUB_RAW/public/national-tools/trail-ridge-road/index.html" -o public/synced-national-tools/trail-ridge-road/index.html
+          curl -fLsS "$HUB_RAW/public/national-tools/trail-ridge-road/app.js" -o public/synced-national-tools/trail-ridge-road/app.js
+          curl -fLsS "$HUB_RAW/api/trail-ridge-road.js" -o api/trail-ridge-road.js
+
+          curl -fLsS "$HUB_RAW/public/national-tools/yellowstone-geysers/index.html" -o public/synced-national-tools/yellowstone-geysers/index.html
+          curl -fLsS "$HUB_RAW/public/national-tools/yellowstone-geysers/app.js" -o public/synced-national-tools/yellowstone-geysers/app.js
+          curl -fLsS "$HUB_RAW/api/yellowstone-geysers.js" -o api/yellowstone-geysers.js
+
       - name: Pin production routes ahead of stale hub fallback
         shell: bash
         run: |
@@ -78,7 +91,7 @@ jobs:
           const file='vercel.json';
           const v=JSON.parse(fs.readFileSync(file,'utf8'));
           v.functions ||= {};
-          for (const api of ['api/bird-migration-morning.js','api/birding-local-action.js','api/columbia-salmon.js','api/florida-red-tide.js','api/space-coast-launch.js']) delete v.functions[api];
+          for (const api of ['api/bird-migration-morning.js','api/birding-local-action.js','api/columbia-salmon.js','api/florida-red-tide.js','api/space-coast-launch.js','api/trail-ridge-road.js','api/yellowstone-geysers.js']) delete v.functions[api];
           v.rewrites ||= [];
 
           const routes=[
@@ -88,6 +101,7 @@ jobs:
             ['/national-tools/assets/national-tools-directory.js','/synced-national-tools/assets/national-tools-directory.js'],
             ['/national-tools/assets/region-hub.css','/synced-national-tools/assets/region-hub.css'],
             ['/national-tools/assets/southeast-tool.css','/synced-national-tools/assets/southeast-tool.css'],
+            ['/national-tools/assets/mountain-tool.css','/synced-national-tools/assets/mountain-tool.css'],
             ['/national-tools/northeast-great-lakes','/synced-national-tools/northeast-great-lakes/index.html'],
             ['/national-tools/northeast-great-lakes/','/synced-national-tools/northeast-great-lakes/index.html'],
             ['/national-tools/appalachia','/synced-national-tools/appalachia/index.html'],
@@ -96,6 +110,8 @@ jobs:
             ['/national-tools/southeast/','/synced-national-tools/southeast/index.html'],
             ['/national-tools/great-plains','/synced-national-tools/great-plains/index.html'],
             ['/national-tools/great-plains/','/synced-national-tools/great-plains/index.html'],
+            ['/national-tools/rockies','/synced-national-tools/rockies/index.html'],
+            ['/national-tools/rockies/','/synced-national-tools/rockies/index.html'],
             ['/national-tools/pacific-northwest','/synced-national-tools/pacific-northwest/index.html'],
             ['/national-tools/pacific-northwest/','/synced-national-tools/pacific-northwest/index.html'],
             ['/national-tools/bird-migration','/synced-national-tools/bird-migration/index.html'],
@@ -109,7 +125,13 @@ jobs:
             ['/national-tools/florida-red-tide/:path*','/synced-national-tools/florida-red-tide/:path*'],
             ['/national-tools/space-coast-launch','/synced-national-tools/space-coast-launch/index.html'],
             ['/national-tools/space-coast-launch/','/synced-national-tools/space-coast-launch/index.html'],
-            ['/national-tools/space-coast-launch/:path*','/synced-national-tools/space-coast-launch/:path*']
+            ['/national-tools/space-coast-launch/:path*','/synced-national-tools/space-coast-launch/:path*'],
+            ['/national-tools/trail-ridge-road','/synced-national-tools/trail-ridge-road/index.html'],
+            ['/national-tools/trail-ridge-road/','/synced-national-tools/trail-ridge-road/index.html'],
+            ['/national-tools/trail-ridge-road/:path*','/synced-national-tools/trail-ridge-road/:path*'],
+            ['/national-tools/yellowstone-geysers','/synced-national-tools/yellowstone-geysers/index.html'],
+            ['/national-tools/yellowstone-geysers/','/synced-national-tools/yellowstone-geysers/index.html'],
+            ['/national-tools/yellowstone-geysers/:path*','/synced-national-tools/yellowstone-geysers/:path*']
           ];
 
           const sources=new Set(routes.map(([source])=>source));
@@ -127,15 +149,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          grep -q 'data-tool-id="bird-migration"' public/synced-national-tools/index.html
-          grep -q 'data-tool-id="columbia-salmon"' public/synced-national-tools/index.html
-          grep -q 'data-tool-id="great-lakes-levels"' public/synced-national-tools/index.html
-          grep -q 'data-tool-id="florida-red-tide"' public/synced-national-tools/index.html
-          grep -q 'data-tool-id="space-coast-launch"' public/synced-national-tools/index.html
+          for id in bird-migration columbia-salmon great-lakes-levels florida-red-tide space-coast-launch trail-ridge-road yellowstone-geysers; do
+            grep -q "data-tool-id=\"$id\"" public/synced-national-tools/index.html
+          done
           grep -q 'href="/national-tools/northeast-great-lakes/"' public/synced-national-tools/index.html
           grep -q 'href="/national-tools/southeast/"' public/synced-national-tools/index.html
+          grep -q 'href="/national-tools/rockies/"' public/synced-national-tools/index.html
           grep -q 'href="https://greatlakeslevels.org/"' public/synced-national-tools/index.html
-          grep -q 'numberOfItems":32' public/synced-national-tools/index.html
+          grep -q 'numberOfItems":34' public/synced-national-tools/index.html
 
           grep -q 'Northeast &amp; Great Lakes' public/synced-national-tools/northeast-great-lakes/index.html
           grep -q 'Great Lakes Levels' public/synced-national-tools/northeast-great-lakes/index.html
@@ -152,11 +173,24 @@ jobs:
           grep -q 'viewing weather' public/synced-national-tools/space-coast-launch/index.html
           grep -q 'Clear skies do not mean the rocket will launch' public/synced-national-tools/space-coast-launch/index.html
 
+          grep -q 'Rocky Mountain Elk Rut Live' public/synced-national-tools/rockies/index.html
+          grep -q 'Trail Ridge Road Live' public/synced-national-tools/rockies/index.html
+          grep -q 'Yellowstone Geyser Timing' public/synced-national-tools/rockies/index.html
+          grep -q 'numberOfItems":3' public/synced-national-tools/rockies/index.html
+          grep -q 'Road first. Weather second.' public/synced-national-tools/trail-ridge-road/index.html
+          grep -qi 'official NPS road status comes first' public/synced-national-tools/trail-ridge-road/index.html
+          grep -q 'A window, not an appointment.' public/synced-national-tools/yellowstone-geysers/index.html
+          grep -qi 'does not invent an eruption schedule' public/synced-national-tools/yellowstone-geysers/index.html
+
           grep -q 'Insufficient recent sampling nearby' api/florida-red-tide.js
           grep -qi 'not an all-clear' api/florida-red-tide.js
           grep -q 'isFutureLaunch' api/space-coast-launch.js
           grep -q 'filter(l=>isFutureLaunch(l,now))' api/space-coast-launch.js
           grep -q 'NWS hourly guidance does not yet cover the launch time' api/space-coast-launch.js
+          grep -q 'NPS road status is authoritative' api/trail-ridge-road.js
+          grep -q 'weather assessment never overrides it' api/trail-ridge-road.js
+          grep -q 'does not calculate its own eruption model' api/yellowstone-geysers.js
+          grep -q 'Open Database License' api/yellowstone-geysers.js
 
           grep -q 'Where should you bird this morning?' public/synced-national-tools/bird-migration/index.html
           grep -q 'Strongest current evidence' public/synced-national-tools/bird-migration/index.html
@@ -174,18 +208,18 @@ jobs:
           grep -q 'decisionSurface:DECISION_SURFACE' api/birding-local-action.js
           grep -q 'Columbia Salmon Run Live' public/synced-national-tools/columbia-salmon-run/index.html
 
-          node -e "const v=require('./vercel.json'); const needed=['/national-tools/northeast-great-lakes/','/national-tools/southeast/','/national-tools/bird-migration/:path*','/national-tools/columbia-salmon-run/:path*','/national-tools/florida-red-tide/:path*','/national-tools/space-coast-launch/:path*']; for(const source of needed) if(!v.rewrites.some(r=>r.source===source)) process.exit(1); for(const f of ['api/bird-migration-morning.js','api/birding-local-action.js','api/columbia-salmon.js','api/florida-red-tide.js','api/space-coast-launch.js']) if(v.functions[f]) process.exit(1);"
-          node -e "require('./api/bird-migration-morning.js'); require('./api/birding-local-action.js'); require('./api/florida-red-tide.js'); require('./api/space-coast-launch.js'); import('./api/columbia-salmon.js').then(()=>console.log('National APIs load')).catch(e=>{console.error(e);process.exit(1)})"
+          node -e "const v=require('./vercel.json'); const needed=['/national-tools/northeast-great-lakes/','/national-tools/southeast/','/national-tools/rockies/','/national-tools/bird-migration/:path*','/national-tools/columbia-salmon-run/:path*','/national-tools/florida-red-tide/:path*','/national-tools/space-coast-launch/:path*','/national-tools/trail-ridge-road/:path*','/national-tools/yellowstone-geysers/:path*']; for(const source of needed) if(!v.rewrites.some(r=>r.source===source)) process.exit(1); for(const f of ['api/bird-migration-morning.js','api/birding-local-action.js','api/columbia-salmon.js','api/florida-red-tide.js','api/space-coast-launch.js','api/trail-ridge-road.js','api/yellowstone-geysers.js']) if(v.functions[f]) process.exit(1);"
+          node -e "require('./api/bird-migration-morning.js'); require('./api/birding-local-action.js'); require('./api/florida-red-tide.js'); require('./api/space-coast-launch.js'); require('./api/trail-ridge-road.js'); require('./api/yellowstone-geysers.js'); import('./api/columbia-salmon.js').then(()=>console.log('National APIs load')).catch(e=>{console.error(e);process.exit(1)})"
 
       - name: Commit production gate
         shell: bash
         run: |
-          if git diff --quiet -- vercel.json api/bird-migration-morning.js api/birding-local-action.js api/columbia-salmon.js api/florida-red-tide.js api/space-coast-launch.js public/synced-national-tools; then
+          if git diff --quiet -- vercel.json api/bird-migration-morning.js api/birding-local-action.js api/columbia-salmon.js api/florida-red-tide.js api/space-coast-launch.js api/trail-ridge-road.js api/yellowstone-geysers.js public/synced-national-tools; then
             echo 'Verified National Tools gate already synced.'
             exit 0
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add vercel.json api/bird-migration-morning.js api/birding-local-action.js api/columbia-salmon.js api/florida-red-tide.js api/space-coast-launch.js public/synced-national-tools
+          git add vercel.json api/bird-migration-morning.js api/birding-local-action.js api/columbia-salmon.js api/florida-red-tide.js api/space-coast-launch.js api/trail-ridge-road.js api/yellowstone-geysers.js public/synced-national-tools
           git commit -m 'Sync verified National Tools production gate'
           git push
