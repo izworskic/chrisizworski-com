@@ -11,6 +11,29 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
+      - name: Wait for and verify Northeast and Great Lakes release
+        shell: bash
+        run: |
+          set -euo pipefail
+          page=''
+          for attempt in $(seq 1 24); do
+            page="$(curl --retry 2 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/northeast-great-lakes/?gate-smoke=20260916-negl' || true)"
+            if grep -q 'Northeast &amp; Great Lakes' <<<"$page" && grep -q 'Great Lakes Levels' <<<"$page" && grep -q 'Niagara Falls Rainbow Predictor' <<<"$page" && grep -q 'Thunder Hole Live' <<<"$page"; then
+              break
+            fi
+            sleep 5
+          done
+          grep -q 'Northeast &amp; Great Lakes' <<<"$page"
+          grep -q 'Great Lakes Levels' <<<"$page"
+          grep -q 'Niagara Falls Rainbow Predictor' <<<"$page"
+          grep -q 'Thunder Hole Live' <<<"$page"
+          grep -q 'https://greatlakeslevels.org/' <<<"$page"
+
+          directory="$(curl --retry 4 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/?gate-smoke=20260916-negl')"
+          grep -q 'data-tool-id="great-lakes-levels"' <<<"$directory"
+          grep -q 'href="/national-tools/northeast-great-lakes/"' <<<"$directory"
+          grep -q 'href="https://greatlakeslevels.org/"' <<<"$directory"
+
       - name: Wait for and verify public two-choice birding release
         shell: bash
         run: |
@@ -51,8 +74,16 @@ jobs:
           directory="$(fetch 'https://chrisizworski.com/national-tools/?gate-smoke=20260916')"
           grep -q 'data-tool-id="bird-migration"' <<<"$directory"
           grep -q 'data-tool-id="columbia-salmon"' <<<"$directory"
+          grep -q 'data-tool-id="great-lakes-levels"' <<<"$directory"
           grep -q 'Bird Migration Morning Index' <<<"$directory"
           grep -q 'Columbia Salmon Run Live' <<<"$directory"
+          grep -q 'Great Lakes Levels' <<<"$directory"
+
+          northeast="$(fetch 'https://chrisizworski.com/national-tools/northeast-great-lakes/?gate-smoke=20260916')"
+          grep -q 'Northeast &amp; Great Lakes' <<<"$northeast"
+          grep -q 'Great Lakes Levels' <<<"$northeast"
+          grep -q 'Niagara Falls Rainbow Predictor' <<<"$northeast"
+          grep -q 'Thunder Hole Live' <<<"$northeast"
 
           appalachia="$(fetch 'https://chrisizworski.com/national-tools/appalachia/?gate-smoke=20260916')"
           grep -q 'Appalachia &amp; Ohio Valley' <<<"$appalachia"
