@@ -15,8 +15,8 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      HUB_COMMIT: 329ca6f885d2139b4ef357a0d80329b314355b13
-      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/329ca6f885d2139b4ef357a0d80329b314355b13
+      HUB_COMMIT: 3e61c2935898d18915b35dfec788671a7976adbc
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/3e61c2935898d18915b35dfec788671a7976adbc
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -28,6 +28,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p public/synced-national-tools/assets
+          mkdir -p public/synced-national-tools/northeast-great-lakes
           mkdir -p public/synced-national-tools/appalachia
           mkdir -p public/synced-national-tools/great-plains
           mkdir -p public/synced-national-tools/pacific-northwest
@@ -40,6 +41,7 @@ jobs:
           curl -fLsS "$HUB_RAW/public/national-tools/assets/national-tools-directory.js" -o public/synced-national-tools/assets/national-tools-directory.js
           curl -fLsS "$HUB_RAW/public/national-tools/assets/region-hub.css" -o public/synced-national-tools/assets/region-hub.css
 
+          curl -fLsS "$HUB_RAW/public/national-tools/northeast-great-lakes/index.html" -o public/synced-national-tools/northeast-great-lakes/index.html
           curl -fLsS "$HUB_RAW/public/national-tools/appalachia/index.html" -o public/synced-national-tools/appalachia/index.html
           curl -fLsS "$HUB_RAW/public/national-tools/great-plains/index.html" -o public/synced-national-tools/great-plains/index.html
           curl -fLsS "$HUB_RAW/public/national-tools/pacific-northwest/index.html" -o public/synced-national-tools/pacific-northwest/index.html
@@ -74,6 +76,8 @@ jobs:
             ['/national-tools/assets/national-tools-directory.css','/synced-national-tools/assets/national-tools-directory.css'],
             ['/national-tools/assets/national-tools-directory.js','/synced-national-tools/assets/national-tools-directory.js'],
             ['/national-tools/assets/region-hub.css','/synced-national-tools/assets/region-hub.css'],
+            ['/national-tools/northeast-great-lakes','/synced-national-tools/northeast-great-lakes/index.html'],
+            ['/national-tools/northeast-great-lakes/','/synced-national-tools/northeast-great-lakes/index.html'],
             ['/national-tools/appalachia','/synced-national-tools/appalachia/index.html'],
             ['/national-tools/appalachia/','/synced-national-tools/appalachia/index.html'],
             ['/national-tools/great-plains','/synced-national-tools/great-plains/index.html'],
@@ -105,7 +109,14 @@ jobs:
           set -euo pipefail
           grep -q 'data-tool-id="bird-migration"' public/synced-national-tools/index.html
           grep -q 'data-tool-id="columbia-salmon"' public/synced-national-tools/index.html
-          grep -q 'numberOfItems":29' public/synced-national-tools/index.html
+          grep -q 'data-tool-id="great-lakes-levels"' public/synced-national-tools/index.html
+          grep -q 'href="/national-tools/northeast-great-lakes/"' public/synced-national-tools/index.html
+          grep -q 'href="https://greatlakeslevels.org/"' public/synced-national-tools/index.html
+          grep -q 'numberOfItems":30' public/synced-national-tools/index.html
+          grep -q 'Northeast &amp; Great Lakes' public/synced-national-tools/northeast-great-lakes/index.html
+          grep -q 'Great Lakes Levels' public/synced-national-tools/northeast-great-lakes/index.html
+          grep -q 'Niagara Falls Rainbow Predictor' public/synced-national-tools/northeast-great-lakes/index.html
+          grep -q 'Thunder Hole Live' public/synced-national-tools/northeast-great-lakes/index.html
           grep -q 'Where should you bird this morning?' public/synced-national-tools/bird-migration/index.html
           grep -q 'Strongest current evidence' public/synced-national-tools/bird-migration/index.html
           grep -q 'Closer strong option' public/synced-national-tools/bird-migration/index.html
@@ -121,7 +132,7 @@ jobs:
           grep -q "DECISION_SURFACE='two-choice-v1'" api/birding-local-action.js
           grep -q 'decisionSurface:DECISION_SURFACE' api/birding-local-action.js
           grep -q 'Columbia Salmon Run Live' public/synced-national-tools/columbia-salmon-run/index.html
-          node -e "const v=require('./vercel.json'); if(!v.rewrites.some(r=>r.source==='/national-tools/bird-migration/:path*')) process.exit(1); if(!v.rewrites.some(r=>r.source==='/national-tools/columbia-salmon-run/:path*')) process.exit(1); if(v.functions['api/bird-migration-morning.js']||v.functions['api/birding-local-action.js']||v.functions['api/columbia-salmon.js']) process.exit(1);"
+          node -e "const v=require('./vercel.json'); if(!v.rewrites.some(r=>r.source==='/national-tools/northeast-great-lakes/')) process.exit(1); if(!v.rewrites.some(r=>r.source==='/national-tools/bird-migration/:path*')) process.exit(1); if(!v.rewrites.some(r=>r.source==='/national-tools/columbia-salmon-run/:path*')) process.exit(1); if(v.functions['api/bird-migration-morning.js']||v.functions['api/birding-local-action.js']||v.functions['api/columbia-salmon.js']) process.exit(1);"
           node -e "require('./api/bird-migration-morning.js'); require('./api/birding-local-action.js'); import('./api/columbia-salmon.js').then(()=>console.log('National APIs load')).catch(e=>{console.error(e);process.exit(1)})"
 
       - name: Commit production gate
