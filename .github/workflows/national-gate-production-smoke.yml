@@ -35,6 +35,23 @@ jobs:
           grep -q 'Pacific Northwest' <<<"$pnw"
           grep -q 'Columbia Salmon Run Live' <<<"$pnw"
 
+      - name: Verify Michigan birding eBird proxy supports national county regions
+        shell: bash
+        run: |
+          set -euo pipefail
+          mi="$(curl --retry 3 --retry-delay 2 --retry-all-errors -fLsS 'https://michiganbirdingreport.com/api/observations?region=US-MI-161&back=3&max=200')"
+          oh="$(curl --retry 3 --retry-delay 2 --retry-all-errors -fLsS 'https://michiganbirdingreport.com/api/observations?region=US-OH-049&back=3&max=200')"
+          node - <<'NODE' "$mi" "$oh"
+          const mi=JSON.parse(process.argv[2]);
+          const oh=JSON.parse(process.argv[3]);
+          for(const [label,data,region] of [['MI',mi,'US-MI-161'],['OH',oh,'US-OH-049']]){
+            if(data.region!==region||!Array.isArray(data.observations)||!Number.isFinite(data.speciesCount)||data.speciesCount<1) process.exit(1);
+            const sample=data.observations.find(o=>o&&o.comName&&o.locName);
+            if(!sample) process.exit(1);
+            console.log(JSON.stringify({label,region:data.region,speciesCount:data.speciesCount,sample:{species:sample.comName,location:sample.locName,lat:sample.lat??null,lng:sample.lng??null}}));
+          }
+          NODE
+
       - name: Verify Bird Migration public page and live API
         shell: bash
         run: |
