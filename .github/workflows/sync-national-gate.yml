@@ -94,6 +94,9 @@ jobs:
           fs.writeFileSync(file,JSON.stringify(v,null,2)+'\n');
           NODE
 
+      - name: Apply main-site shell metadata
+        run: node scripts/normalize-national-shell.mjs
+
       - name: Verify production bundle
         shell: bash
         run: |

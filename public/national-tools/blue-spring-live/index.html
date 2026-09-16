@@ -12,16 +12,44 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://chrisizworski.com/national-tools/blue-spring-live/">
   <meta property="og:image" content="https://commons.wikimedia.org/wiki/Special:Redirect/file/Manatees%20in%20Blue%20Spring%20State%20Park%20%288501212290%29.jpg?width=1600">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","name":"Blue Spring Live","url":"https://chrisizworski.com/national-tools/blue-spring-live/","dateModified":"2026-09-16","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}}]}</script>
   <style>
-    html,body{margin:0;width:100%;height:100%;background:#062f37;overflow:hidden}
-    .tool-frame{display:block;width:100%;height:100dvh;border:0;background:#062f37}
-    .fallback{position:fixed;inset:auto 16px 16px;z-index:2;padding:10px 12px;border-radius:8px;background:rgba(6,47,55,.92);color:#fff;font:13px/1.4 Arial,sans-serif;text-align:center}
-    .fallback a{color:#bce9dc}
-    @media(min-width:700px){.fallback{left:auto;max-width:390px}}
+    *{box-sizing:border-box}body{margin:0;background:#f5f7f4;color:#183a3d;font:16px/1.65 system-ui,sans-serif}
+    a{color:#145e64}header,main>section,footer{max-width:1100px;margin:auto;padding:20px}
+    header{display:flex;gap:20px;flex-wrap:wrap}h1,h2{line-height:1.2}h1{font-size:clamp(28px,5vw,42px);margin:8px 0}h2{font-size:24px}
+    .intro p{max-width:850px}.byline{font-size:14px;color:#526b6a}.tool-frame{display:block;width:100%;height:800px;border:1px solid #cad9d5;border-radius:12px;background:#062f37}
+    .choices{display:flex;gap:12px;flex-wrap:wrap}.choices a{padding:10px 14px;background:#e5eeea;border-radius:8px;text-decoration:none}
+    .notes{display:grid;grid-template-columns:1fr 1fr;gap:28px}.notes p{margin:10px 0}footer{border-top:1px solid #cad9d5;font-size:14px}
+    @media(max-width:700px){.notes{grid-template-columns:1fr;gap:8px}.tool-frame{height:780px}header,main>section,footer{padding:16px}}
   </style>
 </head>
 <body>
-  <iframe class="tool-frame" title="Blue Spring Live" src="https://blue-spring-live-6h8f.vercel.app/" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-  <noscript><p class="fallback">Blue Spring Live requires JavaScript. <a href="https://blue-spring-live-6h8f.vercel.app/">Open the tool directly</a>.</p></noscript>
+<header><a href="/">Chris Izworski</a><a href="/national-tools/">U.S. Outdoor Tools</a></header>
+<main>
+<section class="intro">
+<p class="byline">Orange City, Florida · Independent visitor planning</p>
+<h1>Blue Spring Live</h1>
+<p>Is Blue Spring worth a manatee-watching trip? Compare the latest reported manatee conditions, spring and river temperatures, and weather before deciding when to visit. A recent count tells you what was observed; water temperatures help explain the conditions behind it. Neither guarantees what you will see when you arrive.</p>
+<nav class="choices" aria-label="Blue Spring planning"><a href="/national-tools/blue-spring-live/manatee-conditions-today/">Manatee conditions</a><a href="/national-tools/blue-spring-live/water-temperature/">Water temperatures</a><a href="/national-tools/blue-spring-live/best-time-to-visit/">Visit timing</a></nav>
+</section>
+<section aria-label="Live Blue Spring dashboard">
+<iframe class="tool-frame" title="Blue Spring Live conditions and visit planner" src="https://blue-spring-live-6h8f.vercel.app/" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+<p>Dashboard not displaying? <a href="https://blue-spring-live-6h8f.vercel.app/">Open Blue Spring Live directly</a>, or use the individual condition pages above.</p>
+</section>
+<section class="notes" aria-label="How to plan a visit">
+<div><h2>Read the count and its date together</h2>
+<p>Start with the observation date attached to the manatee count. An older report can describe a previous cold spell without describing today's activity. If the report is missing, treat the count as unknown, not zero. Check the temperature and weather panels separately before making a special trip.</p>
+<p>Florida State Parks describes Blue Spring as a winter manatee refuge with approximately 72°F spring water. Manatees gather in that warmer water when surrounding waters cool. That is why the difference between spring and river temperature is more useful planning context than a calendar date alone. <a href="https://www.floridastateparks.org/parks-and-trails/blue-spring-state-park/manatees-blue-spring-state-park">Read the park's manatee guidance</a>.</p></div>
+<div><h2>Compare temperatures without confusing the locations</h2>
+<p>The water page identifies the USGS monitoring stations alongside their readings. The St. Johns River reading near DeLand is regional context; it is not a measurement at every point along the spring run. Check the observation time and location before comparing values. Missing readings should not be interpreted as normal conditions.</p>
+<p>Use the <a href="/national-tools/blue-spring-live/water-temperature/">water-temperature comparison</a> to understand that difference, then the <a href="/national-tools/blue-spring-live/best-time-to-visit/">visit planner</a> to weigh conditions against your available day.</p></div>
+<div><h2>Check access before leaving</h2>
+<p>A favorable wildlife signal does not establish whether the park has space, whether a particular activity is available, or whether an area is closed. Confirm hours, entry information and current notices with <a href="https://www.floridastateparks.org/parks-and-trails/blue-spring-state-park">Florida State Parks</a> before you drive. The park's instructions take precedence over this independent planner.</p></div>
+<div><h2>What this page adds</h2>
+<p>This guide connects the reported wildlife activity, station readings and visit-timing tools into one planning sequence: check the report's age, compare the water conditions, review the weather, then verify park access. It does not provide a live animal census, reserve admission, or predict an exact number of manatees for your visit.</p>
+<p>Built by <a href="/about/">Chris Izworski</a>. Questions or corrections? <a href="/connect/">Contact Chris</a>.</p></div>
+</section>
+</main>
+<footer>© 2026 Chris Izworski · Updated September 16, 2026 · <a href="/privacy/">Privacy Policy</a> · <a href="/terms/">Terms of Use</a></footer>
 </body>
 </html>
