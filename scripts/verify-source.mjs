@@ -26,6 +26,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Sep 16: replace the embed-only Blue Spring shell with visible visitor guidance.
+  "/national-tools/blue-spring-live/",
   // Sep 10 2026 (second pass): expanded 5 of the 21 /chris-izworski-* identity/citation
   // pages with facts already published and verified elsewhere on this same site (media,
   // timeline, citations) that hadn't been cross-referenced into the topic-specific page yet.

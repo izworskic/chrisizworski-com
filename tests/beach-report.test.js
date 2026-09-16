@@ -300,7 +300,9 @@ test("missing, incomplete, and stale required inputs produce N/A instead of fall
   assert.match(incompleteForecast.reasons.join(" "), /missing one or more required/i);
 });
 
-test("beach API keeps source truth and exclusion rules in its browser contract", async () => {
+test("beach API keeps source truth and exclusion rules in its browser contract", async (t) => {
+  // This fixture represents July conditions; do not let the real season change its contract.
+  t.mock.timers.enable({ apis: ["Date"], now: new Date("2026-07-31T16:00:00Z") });
   const originalFetch = global.fetch;
   const latest = `#STN LAT LON YYYY MM DD hh mm WDIR WSPD GST WVHT DPD APD MWD PRES PTDY ATMP WTMP DEWP VIS TIDE
 #text units units yr mo dy hr mn degT m/s m/s m sec sec degT hPa hPa degC degC degC nmi ft

@@ -3,6 +3,7 @@
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import sitePolicyLinks from '../lib/site-policy-links.js';
+import adsenseEligibility from '../lib/adsense-eligibility.js';
 
 const ROOT = path.join(process.cwd(), 'public');
 const MEASUREMENT_ID = 'G-Y5D2V2W7HN';
@@ -22,7 +23,7 @@ const MIGRATED_TOOLS_SECTION = `
 <section id="first-party-migrated-tools" class="decision-network" aria-labelledby="first-party-migrated-title">
   <div class="decision-network__head">
     <h2 id="first-party-migrated-title">More first-party live tools</h2>
-    <p>These tools run from ChrisIzworski.com and Vercel. No Replit runtime is required.</p>
+    <p>Find fishing access, compare waterfall conditions, or plan a Niagara Falls rainbow visit.</p>
   </div>
   <div class="decision-network__grid">
     <div class="decision-network__lane">
@@ -57,10 +58,12 @@ async function walk(dir) {
     if (!entry.isFile() || !entry.name.toLowerCase().endsWith('.html')) continue;
     scanned += 1;
     const originalHtml = await readFile(fullPath, 'utf8');
-    const html = sitePolicyLinks(originalHtml);
+    const pathname = '/' + path.relative(ROOT, fullPath).split(path.sep).join('/');
+    const allowAds = adsenseEligibility.eligible(originalHtml, pathname);
+    const html = sitePolicyLinks(allowAds ? originalHtml : adsenseEligibility.removeAdLoader(originalHtml));
     const needsGa4 = !html.includes(MEASUREMENT_ID);
     const needsAdsense = !/<meta\b[^>]*name=["']google-adsense-account["']/i.test(html);
-    const needsAdsenseScript = !/<script\b[^>]*src=["'][^"']*pagead\/js\/adsbygoogle\.js\b/i.test(html);
+    const needsAdsenseScript = allowAds && !/<script\b[^>]*src=["'][^"']*pagead\/js\/adsbygoogle\.js\b/i.test(html);
 
     if (!needsGa4) ga4AlreadyTagged += 1;
     if (!needsAdsense) adsenseAlreadyTagged += 1;

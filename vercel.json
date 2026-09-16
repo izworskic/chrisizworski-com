@@ -186,6 +186,22 @@
   ],
   "rewrites": [
     {
+      "source": "/national-tools/coastal/thunder-hole-live",
+      "destination": "/api/thunder-hole-page"
+    },
+    {
+      "source": "/national-tools/coastal/thunder-hole-live/",
+      "destination": "/api/thunder-hole-page"
+    },
+    {
+      "source": "/national-tools/coastal/thunder-hole-live/_api/live",
+      "destination": "https://national-coastal-water.vercel.app/api/thunder-hole"
+    },
+    {
+      "source": "/national-tools/coastal/thunder-hole-live/:path*",
+      "destination": "https://national-coastal-water.vercel.app/national-tools/thunder-hole-live/:path*"
+    },
+    {
       "source": "/api/fall-color-conditions",
       "destination": "/api/fall-color?view=conditions"
     },
