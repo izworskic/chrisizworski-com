@@ -11,6 +11,82 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
+      - name: Wait for and verify Southeast release
+        shell: bash
+        run: |
+          set -euo pipefail
+          southeast=''
+          for attempt in $(seq 1 24); do
+            southeast="$(curl --retry 2 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/southeast/?gate-smoke=20260916-southeast-v1' || true)"
+            if grep -q 'Regional decision desk' <<<"$southeast" && grep -q 'Blue Spring Live' <<<"$southeast" && grep -q 'Florida Red Tide Live' <<<"$southeast" && grep -q 'Space Coast Launch Viewing' <<<"$southeast"; then
+              break
+            fi
+            sleep 5
+          done
+          grep -q 'Regional decision desk' <<<"$southeast"
+          grep -q 'Blue Spring Live' <<<"$southeast"
+          grep -q 'Florida Red Tide Live' <<<"$southeast"
+          grep -q 'Space Coast Launch Viewing' <<<"$southeast"
+
+          directory="$(curl --retry 4 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/?gate-smoke=20260916-southeast-v1')"
+          grep -q 'data-tool-id="florida-red-tide"' <<<"$directory"
+          grep -q 'data-tool-id="space-coast-launch"' <<<"$directory"
+          grep -q 'href="/national-tools/southeast/"' <<<"$directory"
+          grep -q 'numberOfItems":32' <<<"$directory"
+
+          red="$(curl --retry 4 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/florida-red-tide/?gate-smoke=20260916-southeast-v1')"
+          grep -qi 'no nearby sample is not the same thing as no red tide' <<<"$red"
+          grep -q 'FWC-FWRI' <<<"$red"
+
+          launch="$(curl --retry 4 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/space-coast-launch/?gate-smoke=20260916-southeast-v1')"
+          grep -qi 'schedule confidence' <<<"$launch"
+          grep -qi 'viewing weather' <<<"$launch"
+          grep -q 'Clear skies do not mean the rocket will launch' <<<"$launch"
+
+          css="$(curl --retry 4 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/assets/southeast-tool.css?gate-smoke=20260916-southeast-v1')"
+          grep -q '.decision-grid' <<<"$css"
+          grep -q '.status' <<<"$css"
+
+      - name: Verify Southeast live APIs
+        shell: bash
+        run: |
+          set -euo pipefail
+          red="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/florida-red-tide?gate-smoke=20260916-southeast-v1')"
+          local_red="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/florida-red-tide?lat=27.3364&lon=-82.5307&gate-smoke=20260916-southeast-v1-local')"
+          launch="$(curl --retry 5 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/space-coast-launch?gate-smoke=20260916-southeast-v1')"
+          node - <<'NODE' "$red" "$local_red" "$launch"
+          const red=JSON.parse(process.argv[2]);
+          const local=JSON.parse(process.argv[3]);
+          const launch=JSON.parse(process.argv[4]);
+
+          if(red.ok!==true||!Array.isArray(red.samples)||!red.statewide||!red.source) process.exit(1);
+          if(!Number.isFinite(red.statewide.sampleCount)||red.statewide.sampleCount!==red.samples.length) process.exit(1);
+          if(!String(red.source.coverage||'').toLowerCase().includes('eight')) process.exit(1);
+
+          if(local.ok!==true||!local.local||!local.local.decision||!Array.isArray(local.local.nearest)) process.exit(1);
+          if(local.local.samplesWithin25===0&&local.local.decision.level!=='insufficient') process.exit(1);
+          if(local.local.samplesWithin25>0&&local.local.decision.level==='insufficient') process.exit(1);
+
+          if(launch.ok!==true||!Array.isArray(launch.upcoming)||!launch.nextDecision?.schedule) process.exit(1);
+          const now=Date.now()-60000;
+          for(const item of launch.upcoming){
+            const net=new Date(item.net).getTime();
+            if(!Number.isFinite(net)||net<=now) process.exit(1);
+            if(!item.scheduleConfidence) process.exit(1);
+          }
+          if(launch.next){
+            if(!launch.next.net||!launch.next.scheduleConfidence||!launch.next.pad) process.exit(1);
+            if(new Date(launch.next.net).getTime()<=now) process.exit(1);
+          }
+          if(launch.weather?.period&&launch.next?.net){
+            const t=new Date(launch.next.net).getTime();
+            const a=new Date(launch.weather.period.startTime).getTime();
+            const b=new Date(launch.weather.period.endTime).getTime();
+            if(!(t>=a&&t<b)) process.exit(1);
+          }
+          console.log(JSON.stringify({redTide:{sampleCount:red.statewide.sampleCount,highest:red.statewide.highestCategory,localDecision:local.local.decision.level,localSamples:local.local.samplesWithin25},spaceCoast:{next:launch.next?.name||null,net:launch.next?.net||null,schedule:launch.nextDecision.schedule.label,weather:launch.nextDecision.viewingWeather?.label||null}}));
+          NODE
+
       - name: Wait for and verify Northeast and Great Lakes release
         shell: bash
         run: |
@@ -75,9 +151,18 @@ jobs:
           grep -q 'data-tool-id="bird-migration"' <<<"$directory"
           grep -q 'data-tool-id="columbia-salmon"' <<<"$directory"
           grep -q 'data-tool-id="great-lakes-levels"' <<<"$directory"
+          grep -q 'data-tool-id="florida-red-tide"' <<<"$directory"
+          grep -q 'data-tool-id="space-coast-launch"' <<<"$directory"
           grep -q 'Bird Migration Morning Index' <<<"$directory"
           grep -q 'Columbia Salmon Run Live' <<<"$directory"
           grep -q 'Great Lakes Levels' <<<"$directory"
+          grep -q 'Florida Red Tide Live' <<<"$directory"
+          grep -q 'Space Coast Launch Viewing' <<<"$directory"
+
+          southeast="$(fetch 'https://chrisizworski.com/national-tools/southeast/?gate-smoke=20260916')"
+          grep -q 'Blue Spring Live' <<<"$southeast"
+          grep -q 'Florida Red Tide Live' <<<"$southeast"
+          grep -q 'Space Coast Launch Viewing' <<<"$southeast"
 
           northeast="$(fetch 'https://chrisizworski.com/national-tools/northeast-great-lakes/?gate-smoke=20260916')"
           grep -q 'Northeast &amp; Great Lakes' <<<"$northeast"
@@ -149,21 +234,13 @@ jobs:
             const closer=choices.closerStrongOption;
             if(!strongest?.name||!Number.isFinite(strongest.recentSpeciesCount)||!Number.isFinite(strongest.distanceMi)) process.exit(1);
             if(!choices.rule?.includes('meaningfully closer')) process.exit(1);
-
             if(closer!=null){
               if(!closer.name||!Number.isFinite(closer.distanceMi)||!Number.isFinite(closer.distanceSavedMi)) process.exit(1);
               if(!['top current evidence','strong current evidence'].includes(closer.evidenceBand)) process.exit(1);
               if(!(closer.distanceMi<strongest.distanceMi)||closer.distanceSavedMi<2) process.exit(1);
               if(strongest.recentSpeciesCount<closer.recentSpeciesCount) process.exit(1);
             }
-
-            console.log(JSON.stringify({
-              label,
-              speciesCount:d.speciesCount,
-              nearbyHotspotCount:d.nearbyHotspotCount,
-              strongest:{name:strongest.name,recentSpeciesCount:strongest.recentSpeciesCount,distanceMi:strongest.distanceMi,evidenceBand:strongest.evidenceBand},
-              closerStrong:closer?{name:closer.name,recentSpeciesCount:closer.recentSpeciesCount,distanceMi:closer.distanceMi,distanceSavedMi:closer.distanceSavedMi,speciesTradeoff:closer.speciesTradeoff,evidenceBand:closer.evidenceBand}:null
-            }));
+            console.log(JSON.stringify({label,speciesCount:d.speciesCount,nearbyHotspotCount:d.nearbyHotspotCount,strongest:{name:strongest.name,recentSpeciesCount:strongest.recentSpeciesCount,distanceMi:strongest.distanceMi,evidenceBand:strongest.evidenceBand},closerStrong:closer?{name:closer.name,recentSpeciesCount:closer.recentSpeciesCount,distanceMi:closer.distanceMi,distanceSavedMi:closer.distanceSavedMi,speciesTradeoff:closer.speciesTradeoff,evidenceBand:closer.evidenceBand}:null}));
           }
           NODE
 
@@ -175,6 +252,5 @@ jobs:
           grep -q 'Columbia Salmon Run Live' <<<"$page"
           grep -q 'Bonneville' <<<"$page"
           grep -q 'The Dalles' <<<"$page"
-
           api="$(curl --retry 3 --retry-delay 2 --retry-all-errors -fLsS 'https://chrisizworski.com/api/columbia-salmon')"
           node -e 'const d=JSON.parse(process.argv[1]); if(!d.ok) process.exit(1); console.log(JSON.stringify({ok:d.ok,generatedAt:d.generatedAt||null}))' "$api"
