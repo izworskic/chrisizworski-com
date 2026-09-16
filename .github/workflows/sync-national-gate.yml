@@ -15,8 +15,8 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      HUB_COMMIT: 7452d1d37ffd8ad41abe929508e8caec77582bb2
-      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/7452d1d37ffd8ad41abe929508e8caec77582bb2
+      HUB_COMMIT: 4df36c8ada8b7b8cd53d1783019dde912afcef83
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/4df36c8ada8b7b8cd53d1783019dde912afcef83
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -48,6 +48,7 @@ jobs:
           curl -fLsS "$HUB_RAW/public/national-tools/bird-migration/app.js" -o public/synced-national-tools/bird-migration/app.js
           curl -fLsS "$HUB_RAW/public/national-tools/bird-migration/styles.css" -o public/synced-national-tools/bird-migration/styles.css
           curl -fLsS "$HUB_RAW/api/bird-migration-morning.js" -o api/bird-migration-morning.js
+          curl -fLsS "$HUB_RAW/api/birding-local-action.js" -o api/birding-local-action.js
 
           curl -fLsS "$HUB_RAW/public/national-tools/columbia-salmon-run/index.html" -o public/synced-national-tools/columbia-salmon-run/index.html
           curl -fLsS "$HUB_RAW/public/national-tools/columbia-salmon-run/app.js" -o public/synced-national-tools/columbia-salmon-run/app.js
@@ -63,6 +64,7 @@ jobs:
           const v=JSON.parse(fs.readFileSync(file,'utf8'));
           v.functions ||= {};
           delete v.functions['api/bird-migration-morning.js'];
+          delete v.functions['api/birding-local-action.js'];
           delete v.functions['api/columbia-salmon.js'];
           v.rewrites ||= [];
 
@@ -104,22 +106,25 @@ jobs:
           grep -q 'data-tool-id="bird-migration"' public/synced-national-tools/index.html
           grep -q 'data-tool-id="columbia-salmon"' public/synced-national-tools/index.html
           grep -q 'numberOfItems":29' public/synced-national-tools/index.html
-          grep -q 'What can you actually check this morning?' public/synced-national-tools/bird-migration/index.html
-          grep -q 'Columbia Salmon Run Live' public/synced-national-tools/columbia-salmon-run/index.html
-          grep -q 'deduped-species-records' public/synced-national-tools/bird-migration/app.js
+          grep -q 'Where should you bird this morning?' public/synced-national-tools/bird-migration/index.html
+          grep -q 'Top places to check' public/synced-national-tools/bird-migration/index.html
+          grep -q 'Notable nearby' public/synced-national-tools/bird-migration/index.html
+          grep -q "ACTION='/api/birding-local-action'" public/synced-national-tools/bird-migration/app.js
           grep -q 'michiganbirdingreport.com/api/observations' api/bird-migration-morning.js
-          node -e "const v=require('./vercel.json'); if(!v.rewrites.some(r=>r.source==='/national-tools/bird-migration/:path*')) process.exit(1); if(!v.rewrites.some(r=>r.source==='/national-tools/columbia-salmon-run/:path*')) process.exit(1); if(v.functions['api/bird-migration-morning.js']||v.functions['api/columbia-salmon.js']) process.exit(1);"
-          node -e "require('./api/bird-migration-morning.js'); import('./api/columbia-salmon.js').then(()=>console.log('National APIs load')).catch(e=>{console.error(e);process.exit(1)})"
+          grep -q 'michiganbirdingreport.com/api/local-action' api/birding-local-action.js
+          grep -q 'Columbia Salmon Run Live' public/synced-national-tools/columbia-salmon-run/index.html
+          node -e "const v=require('./vercel.json'); if(!v.rewrites.some(r=>r.source==='/national-tools/bird-migration/:path*')) process.exit(1); if(!v.rewrites.some(r=>r.source==='/national-tools/columbia-salmon-run/:path*')) process.exit(1); if(v.functions['api/bird-migration-morning.js']||v.functions['api/birding-local-action.js']||v.functions['api/columbia-salmon.js']) process.exit(1);"
+          node -e "require('./api/bird-migration-morning.js'); require('./api/birding-local-action.js'); import('./api/columbia-salmon.js').then(()=>console.log('National APIs load')).catch(e=>{console.error(e);process.exit(1)})"
 
       - name: Commit production gate
         shell: bash
         run: |
-          if git diff --quiet -- vercel.json api/bird-migration-morning.js api/columbia-salmon.js public/synced-national-tools; then
+          if git diff --quiet -- vercel.json api/bird-migration-morning.js api/birding-local-action.js api/columbia-salmon.js public/synced-national-tools; then
             echo 'Verified National Tools gate already synced.'
             exit 0
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add vercel.json api/bird-migration-morning.js api/columbia-salmon.js public/synced-national-tools
+          git add vercel.json api/bird-migration-morning.js api/birding-local-action.js api/columbia-salmon.js public/synced-national-tools
           git commit -m 'Sync verified National Tools production gate'
           git push
