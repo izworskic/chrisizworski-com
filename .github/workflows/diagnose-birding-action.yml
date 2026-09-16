@@ -1,0 +1,35 @@
+name: Diagnose public birding action
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/diagnose-birding-action.yml'
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print non-secret public API shape
+        shell: bash
+        run: |
+          set -euo pipefail
+          mi="$(curl --retry 5 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/birding-local-action?lat=42.2808&lon=-83.7430&distKm=40&back=3&diag=shape-mi-v2')"
+          oh="$(curl --retry 5 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/birding-local-action?lat=39.9612&lon=-82.9988&distKm=40&back=3&diag=shape-oh-v2')"
+          node - <<'NODE' "$mi" "$oh"
+          for (const [label, raw] of [['MI', process.argv[2]], ['OH', process.argv[3]]]) {
+            const d=JSON.parse(raw);
+            console.log(JSON.stringify({
+              label,
+              ok:d.ok,
+              sourceMode:d.sourceMode,
+              decisionSurface:d.decisionSurface,
+              observationSemantics:d.observationSemantics,
+              hasRankingRule:Boolean(d.rankingRule),
+              speciesCount:d.speciesCount,
+              choices:d.decisionChoices||null,
+              topPlaces:(d.topPlaces||[]).slice(0,3).map(p=>({name:p.name,evidenceBand:p.evidenceBand,recentSpeciesCount:p.recentSpeciesCount,distanceMi:p.distanceMi}))
+            }));
+          }
+          NODE
