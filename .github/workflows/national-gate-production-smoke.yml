@@ -52,7 +52,7 @@ jobs:
           }
           NODE
 
-      - name: Verify Bird Migration public page and live API
+      - name: Verify Bird Migration public page and nationally enriched live API
         shell: bash
         run: |
           set -euo pipefail
@@ -62,8 +62,19 @@ jobs:
           grep -q 'BirdCast' <<<"$page"
           grep -q 'eBird' <<<"$page"
 
-          api="$(curl --retry 3 --retry-delay 2 --retry-all-errors -fLsS 'https://chrisizworski.com/api/bird-migration-morning?lat=42.2808&lon=-83.7430&state=MI')"
-          node -e 'const d=JSON.parse(process.argv[1]); if(!d.ok||!d.birdcast||!d.weather||!d.decision) process.exit(1); console.log(JSON.stringify({region:d.birdcast.region,available:d.birdcast.available,weather:d.weather.rating,localBirds:d.localBirds?.available,localReason:d.localBirds?.reason||null}))' "$api"
+          mi="$(curl --retry 4 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/bird-migration-morning?lat=42.2808&lon=-83.7430&state=MI&gate-smoke=20260916-enriched')"
+          oh="$(curl --retry 4 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/bird-migration-morning?lat=39.9612&lon=-82.9988&state=OH&gate-smoke=20260916-enriched')"
+          node - <<'NODE' "$mi" "$oh"
+          for(const [label,raw] of [['MI',process.argv[2]],['OH',process.argv[3]]]){
+            const d=JSON.parse(raw);
+            const local=d.localBirds||{};
+            const mapped=(local.topLocations||[]).find(p=>Number.isFinite(p.lat)&&Number.isFinite(p.lon));
+            if(!d.ok||!d.birdcast||!d.weather||!d.decision) process.exit(1);
+            if(local.available!==true||local.sourceMode!=='michigan-birding-report'||local.observationSemantics!=='deduped-species-records') process.exit(1);
+            if(!Number.isFinite(local.speciesCount)||local.speciesCount<1||!mapped) process.exit(1);
+            console.log(JSON.stringify({label,region:local.region,speciesCount:local.speciesCount,sourceMode:local.sourceMode,semantics:local.observationSemantics,topLocation:{name:mapped.name,speciesCount:mapped.speciesCount,lat:mapped.lat,lon:mapped.lon}}));
+          }
+          NODE
 
       - name: Verify Columbia Salmon public page and live API
         shell: bash
