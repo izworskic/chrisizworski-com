@@ -15,8 +15,8 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      HUB_COMMIT: edaca8a9965aa641a4924adbe6991a652181c228
-      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/edaca8a9965aa641a4924adbe6991a652181c228
+      HUB_COMMIT: a97eed1124d86b287e43b2daafa49ff7e1afe6d0
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/a97eed1124d86b287e43b2daafa49ff7e1afe6d0
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -209,6 +209,7 @@ jobs:
           grep -q 'weather assessment never overrides it' api/trail-ridge-road.js
           grep -q 'does not calculate its own eruption model' api/yellowstone-geysers.js
           grep -q 'Open Database License' api/yellowstone-geysers.js
+          grep -q "X-Robots-Tag','noindex, nofollow" api/columbia-salmon.js
 
           grep -q 'Where should you bird this morning?' public/synced-national-tools/bird-migration/index.html
           grep -q 'Strongest current evidence' public/synced-national-tools/bird-migration/index.html
