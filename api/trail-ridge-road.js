@@ -13,9 +13,10 @@ function textify(html=''){
 }
 function roadStatus(text){
   const t=String(text);
-  const open=/Trail Ridge Road[^.]{0,260}?is Open to Through Travel/i.test(t);
-  const closedSeason=/Trail Ridge Road[^.]{0,260}?is Closed for the Season/i.test(t);
-  const closed=/Trail Ridge Road[^.]{0,260}?is (?:Closed|Not Open) to Through Travel/i.test(t);
+  const roadLead='Trail Ridge Road(?:\\s*\\([^)]*\\))?\\s+is\\s+';
+  const open=new RegExp(`${roadLead}Open to Through Travel`,'i').test(t);
+  const closedSeason=new RegExp(`${roadLead}Closed for the Season`,'i').test(t);
+  const closed=new RegExp(`${roadLead}(?:Closed|Not Open) to Through Travel`,'i').test(t);
   const unknown=!open&&!closedSeason&&!closed;
   let label='Status not parsed from current NPS page',level='unknown';
   if(open){label='Open to through travel';level='open';}
