@@ -437,14 +437,6 @@
       "destination": "https://national-garden-water.vercel.app/data/national-garden-water-crops.json"
     },
     {
-      "source": "/national-tools",
-      "destination": "/api/national-tools-hub"
-    },
-    {
-      "source": "/national-tools/",
-      "destination": "/api/national-tools-hub"
-    },
-    {
       "source": "/national-tools/ice-out",
       "destination": "/national-tools/ice-out/index.html"
     },
@@ -779,6 +771,74 @@
     {
       "source": "/national-tools/elk-rut/",
       "destination": "/national-tools/elk-rut/index.html"
+    },
+    {
+      "source": "/national-tools",
+      "destination": "/synced-national-tools/index.html"
+    },
+    {
+      "source": "/national-tools/",
+      "destination": "/synced-national-tools/index.html"
+    },
+    {
+      "source": "/national-tools/assets/national-tools-directory.css",
+      "destination": "/synced-national-tools/assets/national-tools-directory.css"
+    },
+    {
+      "source": "/national-tools/assets/national-tools-directory.js",
+      "destination": "/synced-national-tools/assets/national-tools-directory.js"
+    },
+    {
+      "source": "/national-tools/assets/region-hub.css",
+      "destination": "/synced-national-tools/assets/region-hub.css"
+    },
+    {
+      "source": "/national-tools/appalachia",
+      "destination": "/synced-national-tools/appalachia/index.html"
+    },
+    {
+      "source": "/national-tools/appalachia/",
+      "destination": "/synced-national-tools/appalachia/index.html"
+    },
+    {
+      "source": "/national-tools/great-plains",
+      "destination": "/synced-national-tools/great-plains/index.html"
+    },
+    {
+      "source": "/national-tools/great-plains/",
+      "destination": "/synced-national-tools/great-plains/index.html"
+    },
+    {
+      "source": "/national-tools/pacific-northwest",
+      "destination": "/synced-national-tools/pacific-northwest/index.html"
+    },
+    {
+      "source": "/national-tools/pacific-northwest/",
+      "destination": "/synced-national-tools/pacific-northwest/index.html"
+    },
+    {
+      "source": "/national-tools/bird-migration",
+      "destination": "/synced-national-tools/bird-migration/index.html"
+    },
+    {
+      "source": "/national-tools/bird-migration/",
+      "destination": "/synced-national-tools/bird-migration/index.html"
+    },
+    {
+      "source": "/national-tools/bird-migration/:path*",
+      "destination": "/synced-national-tools/bird-migration/:path*"
+    },
+    {
+      "source": "/national-tools/columbia-salmon-run",
+      "destination": "/synced-national-tools/columbia-salmon-run/index.html"
+    },
+    {
+      "source": "/national-tools/columbia-salmon-run/",
+      "destination": "/synced-national-tools/columbia-salmon-run/index.html"
+    },
+    {
+      "source": "/national-tools/columbia-salmon-run/:path*",
+      "destination": "/synced-national-tools/columbia-salmon-run/:path*"
     },
     {
       "source": "/national-tools/:path*",

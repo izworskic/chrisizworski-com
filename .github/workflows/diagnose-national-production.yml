@@ -1,0 +1,31 @@
+name: Diagnose National Tools production build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/diagnose-national-production.yml'
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate Vercel configuration JSON
+        run: node -e "const fs=require('fs'); const v=JSON.parse(fs.readFileSync('vercel.json','utf8')); console.log('rewrites',v.rewrites?.length,'functions',Object.keys(v.functions||{}).length)"
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Reproduce repository Vercel build command
+        run: npm run vercel-build
+      - name: Verify synced National Tools survive build mutations
+        run: |
+          grep -q 'data-tool-id="bird-migration"' public/synced-national-tools/index.html
+          grep -q 'data-tool-id="columbia-salmon"' public/synced-national-tools/index.html
+          grep -q 'What can you actually check this morning?' public/synced-national-tools/bird-migration/index.html
+          node -e "require('./api/bird-migration-morning.js'); import('./api/columbia-salmon.js').then(()=>console.log('National APIs load')).catch(e=>{console.error(e);process.exit(1)})"
+      - name: Ask Vercel CLI to validate and build the project
+        run: npx --yes vercel@latest build --yes

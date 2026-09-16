@@ -1,0 +1,78 @@
+name: National Tools production gate smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/national-gate-production-smoke.yml'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify public directory and regional desks
+        shell: bash
+        run: |
+          set -euo pipefail
+          fetch() { curl --retry 4 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' "$1"; }
+
+          directory="$(fetch 'https://chrisizworski.com/national-tools/?gate-smoke=20260916')"
+          grep -q 'data-tool-id="bird-migration"' <<<"$directory"
+          grep -q 'data-tool-id="columbia-salmon"' <<<"$directory"
+          grep -q 'Bird Migration Morning Index' <<<"$directory"
+          grep -q 'Columbia Salmon Run Live' <<<"$directory"
+
+          appalachia="$(fetch 'https://chrisizworski.com/national-tools/appalachia/?gate-smoke=20260916')"
+          grep -q 'Appalachia &amp; Ohio Valley' <<<"$appalachia"
+          grep -q 'Blue Ridge Parkway Fall Color' <<<"$appalachia"
+
+          plains="$(fetch 'https://chrisizworski.com/national-tools/great-plains/?gate-smoke=20260916')"
+          grep -q 'Mississippi &amp; Great Plains' <<<"$plains"
+          grep -q 'Platte Crane Live' <<<"$plains"
+
+          pnw="$(fetch 'https://chrisizworski.com/national-tools/pacific-northwest/?gate-smoke=20260916')"
+          grep -q 'Pacific Northwest' <<<"$pnw"
+          grep -q 'Columbia Salmon Run Live' <<<"$pnw"
+
+      - name: Verify Michigan birding eBird proxy supports national county regions
+        shell: bash
+        run: |
+          set -euo pipefail
+          mi="$(curl --retry 3 --retry-delay 2 --retry-all-errors -fLsS 'https://michiganbirdingreport.com/api/observations?region=US-MI-161&back=3&max=200')"
+          oh="$(curl --retry 3 --retry-delay 2 --retry-all-errors -fLsS 'https://michiganbirdingreport.com/api/observations?region=US-OH-049&back=3&max=200')"
+          node - <<'NODE' "$mi" "$oh"
+          const mi=JSON.parse(process.argv[2]);
+          const oh=JSON.parse(process.argv[3]);
+          for(const [label,data,region] of [['MI',mi,'US-MI-161'],['OH',oh,'US-OH-049']]){
+            if(data.region!==region||!Array.isArray(data.observations)||!Number.isFinite(data.speciesCount)||data.speciesCount<1) process.exit(1);
+            const sample=data.observations.find(o=>o&&o.comName&&o.locName);
+            if(!sample) process.exit(1);
+            console.log(JSON.stringify({label,region:data.region,speciesCount:data.speciesCount,sample:{species:sample.comName,location:sample.locName,lat:sample.lat??null,lng:sample.lng??null}}));
+          }
+          NODE
+
+      - name: Verify Bird Migration public page and live API
+        shell: bash
+        run: |
+          set -euo pipefail
+          page="$(curl --retry 4 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/bird-migration/?gate-smoke=20260916')"
+          grep -q 'Did birds move over you last night?' <<<"$page"
+          grep -q 'What can you actually check this morning?' <<<"$page"
+          grep -q 'BirdCast' <<<"$page"
+          grep -q 'eBird' <<<"$page"
+
+          api="$(curl --retry 3 --retry-delay 2 --retry-all-errors -fLsS 'https://chrisizworski.com/api/bird-migration-morning?lat=42.2808&lon=-83.7430&state=MI')"
+          node -e 'const d=JSON.parse(process.argv[1]); if(!d.ok||!d.birdcast||!d.weather||!d.decision) process.exit(1); console.log(JSON.stringify({region:d.birdcast.region,available:d.birdcast.available,weather:d.weather.rating,localBirds:d.localBirds?.available,localReason:d.localBirds?.reason||null}))' "$api"
+
+      - name: Verify Columbia Salmon public page and live API
+        shell: bash
+        run: |
+          set -euo pipefail
+          page="$(curl --retry 4 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/national-tools/columbia-salmon-run/?gate-smoke=20260916')"
+          grep -q 'Columbia Salmon Run Live' <<<"$page"
+          grep -q 'Bonneville' <<<"$page"
+          grep -q 'The Dalles' <<<"$page"
+
+          api="$(curl --retry 3 --retry-delay 2 --retry-all-errors -fLsS 'https://chrisizworski.com/api/columbia-salmon')"
+          node -e 'const d=JSON.parse(process.argv[1]); if(!d.ok) process.exit(1); console.log(JSON.stringify({ok:d.ok,generatedAt:d.generatedAt||null}))' "$api"

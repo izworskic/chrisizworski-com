@@ -31,8 +31,8 @@ const expected = new Map(Object.entries({
   "/assets/isle-royale-water-intelligence.js": "https://isle-royale-outdoors.vercel.app/assets/isle-royale-water-intelligence.js",
   "/data/national-usgs-streamflow-sites.json": "https://national-rivers.vercel.app/data/national-usgs-streamflow-sites.json",
   "/data/national-planting-crops.json": "https://national-planting.vercel.app/data/national-planting-crops.json",
-  "/national-tools": "/api/national-tools-hub",
-  "/national-tools/": "/api/national-tools-hub",
+  "/national-tools": "/synced-national-tools/index.html",
+  "/national-tools/": "/synced-national-tools/index.html",
   "/national-tools/aurora": "https://national-aurora.vercel.app/national-tools/aurora/",
   "/national-tools/aurora/": "https://national-aurora.vercel.app/national-tools/aurora/",
   "/national-tools/rivers": "https://national-rivers.vercel.app/national-tools/rivers/",
@@ -86,6 +86,14 @@ for (const [source, destination] of expected) {
   if (bySource.get(source) !== destination) {
     failures.push(`rewrite drift: ${source} -> ${bySource.get(source) || "missing"}; expected ${destination}`);
   }
+}
+
+// The verified National Tools sync now supplies this canonical shell route.
+try {
+  const hubHtml = await readFile(path.join(root, 'public/synced-national-tools/index.html'), 'utf8');
+  if (!hubHtml.includes('https://chrisizworski.com/national-tools/')) failures.push('synced hub lost canonical URL');
+} catch {
+  failures.push('synced hub route has no backing HTML file');
 }
 
 const hubIndex = rewrites.findIndex(item => item.source === "/national-tools/:path*");

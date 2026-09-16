@@ -23,9 +23,11 @@ These changes address observed defects; approval remains Google's decision.
 - Replace homepage SEO-facing wording and a newspaper placeholder with reader-facing copy. No homepage links, identity nodes or tools are removed.
 - Pin the beach API test clock to its July fixture. The prior test expected summer ranking availability on the real September 16 date. Production season behavior is unchanged.
 
+- Incorporate concurrent National Tools sync; apply main-site title/description limits and API noindex headers during sync without changing owner tool behavior. Update the routing assertion to check the deliberately synced directory and its backing HTML instead of the superseded proxy destination.
+
 ## Verification
 
-- Full npm run verify:all required before release.
+- Full npm run verify:all passed after incorporating the September 16 National Tools sync and correcting its API header, metadata limits and routing assertion.
 - Focused eligibility and navigation checks cover utility exclusions, noindex and redirects, retained verification metadata, normal content eligibility and idempotent links.
 - Static injection exercised on a separate copy of all 207 source pages: all body-bearing pages have privacy navigation; tested utility pages have zero ad loaders and the homepage/Soo Locks retain one.
 - Verify deployment completion and the changed live routes after release.

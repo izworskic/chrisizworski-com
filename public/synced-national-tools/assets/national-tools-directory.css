@@ -1,0 +1,80 @@
+/* National Tools single-directory presentation, styled to match the rest of chrisizworski.com */
+*{box-sizing:border-box}
+:root{--paper:#faf9f6;--surface:#fff;--ink:#2c2c2c;--body:#3a3a3a;--muted:#6b6b6b;--faint:#999;--line:#e8e4dc;--panel-line:#d9d3c8;--accent:#2c5f2d;--accent-dark:#214a22;--kicker:#7a684c;--chip-bg:#f4f9f4;--chip-line:#c8dfc8}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--body);font-family:Georgia,"Times New Roman",serif;line-height:1.75}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.header{text-align:center;padding:32px 20px 24px;border-bottom:1px solid var(--line)}
+.header .site-title{margin:0;font-size:22px;font-weight:normal;letter-spacing:1px}
+.header .site-title a{color:var(--accent);text-decoration:none}
+.nav{text-align:center;padding:12px 20px;border-bottom:1px solid var(--line);font-size:14px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 0}
+.nav a{color:#5a5a5a;text-decoration:none;margin:4px 10px;letter-spacing:.4px;white-space:nowrap}
+.nav a:hover,.nav a.active{color:var(--accent)}
+.nav a.active{font-weight:bold}
+.page{max-width:920px;margin:0 auto;padding:44px 20px 60px}
+.breadcrumb{margin-bottom:24px;color:var(--faint);font-size:13px}.breadcrumb a{color:var(--faint)}
+.hero{margin:0 0 32px}
+.eyebrow{margin:0 0 9px;color:var(--kicker);font:700 11px/1.2 Arial,sans-serif;letter-spacing:.09em;text-transform:uppercase}
+.hero h1{max-width:700px;margin:0;color:var(--ink);font:normal clamp(30px,4vw,38px)/1.2 Georgia,"Times New Roman",serif}
+.hero-lede{max-width:700px;margin:14px 0 0;color:#6b6b6b;font:italic 18px/1.55 Georgia,"Times New Roman",serif}
+.hero-note{margin:22px 0 0;padding:18px 20px;border:1px solid var(--panel-line);border-top:4px solid var(--accent);border-radius:5px;background:var(--surface);color:#555;font-size:14px;line-height:1.65}
+.hero-note strong{display:block;margin-bottom:4px;color:var(--ink);font-size:15px}
+.finder{position:relative;margin:0 0 42px;padding:20px;border:1px solid var(--panel-line);border-radius:6px;background:var(--surface)}
+.finder-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:14px}
+.finder h2{margin:0;color:var(--accent);font:normal 24px/1.25 Georgia,"Times New Roman",serif}
+.finder-hint{max-width:400px;margin:0;color:var(--muted);font-size:13px;text-align:right}
+.persona-picks{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.persona-pick{min-height:64px;padding:10px 11px;border:1px solid var(--chip-line);border-radius:4px;background:var(--chip-bg);color:var(--ink);cursor:pointer;text-align:left;font:700 12.5px/1.3 Arial,sans-serif;transition:background .15s,border-color .15s}
+.persona-pick span{display:block;margin-top:4px;color:#718078;font-size:11px;font-weight:400}
+.persona-pick:hover{border-color:var(--accent)}
+.persona-pick[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:#fff}
+.persona-pick[aria-pressed="true"] span{color:#d9ebe4}
+.search-row{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:14px}
+.tool-search{width:100%;min-height:44px;padding:10px 12px;border:1px solid #cfc8ba;border-radius:3px;background:#fdfcf9;color:var(--ink);font:16px/1.3 Georgia,"Times New Roman",serif}
+.tool-search::placeholder{color:#9a9384}
+.season-button{min-height:44px;padding:10px 15px;border:1px solid var(--chip-line);border-radius:3px;background:var(--chip-bg);color:var(--accent);cursor:pointer;font:700 12px/1.2 Arial,sans-serif;letter-spacing:.02em}
+.season-button[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.finder-status{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-top:12px}
+.finder-count,.reset-note{margin:0;color:var(--muted);font-size:12px}.reset-note{font-style:italic}
+.catalog-group{margin:0 0 48px}
+.catalog-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,.7fr);gap:22px;align-items:end;margin:0 0 16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.catalog-head h2{margin:0;color:var(--accent);font:normal 26px/1.25 Georgia,"Times New Roman",serif}
+.catalog-head p{margin:0;color:var(--muted);font-size:13px}
+.catalog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.directory-card{display:flex;min-height:250px;flex-direction:column;padding:18px;border:1px solid var(--panel-line);border-top:4px solid var(--accent);border-radius:5px;background:var(--surface)}
+.directory-card[hidden],.catalog-group[hidden]{display:none}
+.card-top{display:flex;min-height:22px;justify-content:space-between;gap:8px;align-items:start}
+.kind{font:700 10px/1.2 Arial,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--kicker)}
+.season-label{padding:3px 8px;border-radius:2px;background:var(--chip-bg);border:1px solid var(--chip-line);color:var(--accent);font:700 10px/1.2 Arial,sans-serif;letter-spacing:.05em;text-transform:uppercase}
+.directory-card h3{margin:11px 0 3px;color:var(--ink);font:normal 20px/1.25 Georgia,"Times New Roman",serif}
+.place{margin:0 0 9px;color:#728078;font-size:13px;font-style:italic}
+.description{margin:0;color:#536159;font-size:14px;line-height:1.6}
+.audience{margin:11px 0 0;padding:9px 10px;border-radius:3px;background:var(--chip-bg);color:#52635b;font-size:12px;line-height:1.5}
+.signals{margin:auto 0 0;padding-top:15px;color:#778079;font-size:12px}
+.signals strong{color:#4d5d55}
+.card-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:12px}
+.primary-action{display:inline-flex;min-height:38px;align-items:center;padding:8px 13px;border-radius:3px;background:var(--accent);color:#fff;text-decoration:none;font:700 13px/1.2 Arial,sans-serif}
+.primary-action:hover{background:var(--accent-dark);color:#fff;text-decoration:none}
+.tool-variants{margin:12px 0 0;padding-top:11px;border-top:1px solid var(--line);color:#66736c;font-size:12px}
+.tool-variants strong{color:#475950}
+.variant-links{display:flex;flex-wrap:wrap;gap:4px 11px;margin-top:5px}
+.variant-links a{font-weight:700}
+.empty{display:none;margin:8px 0 44px;padding:20px;border:1px dashed #c8c1af;border-radius:4px;color:#536159;background:#faf9f4;font-size:14px}
+.guide-strip{margin-top:54px;padding:26px;border:1px solid var(--panel-line);border-top:4px solid var(--accent);border-radius:6px;background:var(--surface)}
+.guide-strip h2{margin:0;color:var(--accent);font:normal 25px/1.25 Georgia,"Times New Roman",serif}
+.guide-strip>p{max-width:680px;margin:8px 0 18px;color:var(--muted);font-size:13px}
+.guide-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.guide-card{padding:14px;border:1px solid var(--line);border-radius:4px;background:var(--paper)}
+.guide-card span{display:block;margin-bottom:5px;color:var(--kicker);font:700 10px/1.2 Arial,sans-serif;letter-spacing:.07em;text-transform:uppercase}
+.guide-card a{color:var(--accent);font:normal 16px/1.3 Georgia,"Times New Roman",serif}
+.network-note{margin:26px 0 0;padding:16px 18px;border:1px solid var(--line);border-radius:4px;background:#f7f8f5;font-size:13px}
+.network-note strong{color:var(--ink)}
+.footer{text-align:center;padding:20px;border-top:1px solid var(--line);font-size:13px;color:var(--faint);margin-top:48px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media(max-width:900px){.persona-picks{grid-template-columns:repeat(2,minmax(0,1fr))}.persona-pick:first-child{grid-column:1/-1}.guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.header{padding:24px 16px 18px}.nav{gap:8px 0}.page{padding:30px 16px 56px}.hero h1{font-size:30px}.finder{padding:16px}.finder-head,.catalog-head{display:block}.finder-hint{margin-top:6px;text-align:left}.persona-picks,.catalog-grid,.guide-grid{grid-template-columns:1fr}.persona-pick:first-child{grid-column:auto}.search-row{grid-template-columns:1fr}.catalog-head p{margin-top:6px}.directory-card{min-height:0}.guide-strip{padding:20px}.finder-status{align-items:flex-start;flex-direction:column;gap:3px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.persona-pick{transition:none}}
+.season-now{margin:0 0 30px;padding:18px 20px;border:1px solid var(--panel-line);border-top:4px solid var(--accent);border-radius:5px;background:var(--surface)}
+.season-now h2{margin:0 0 8px;color:var(--accent);font:normal 22px/1.25 Georgia,"Times New Roman",serif}
+.season-now p{margin:0;color:#3a3a3a;font-size:15px;line-height:1.7}
