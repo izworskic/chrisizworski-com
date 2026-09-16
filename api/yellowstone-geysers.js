@@ -37,6 +37,7 @@ function soonest(items,now=Date.now()){
 
 module.exports=async function handler(req,res){
   res.setHeader('Cache-Control','s-maxage=65, stale-while-revalidate=180');
+  res.setHeader('X-Robots-Tag','noindex, nofollow');
   try{
     const response=await fetch(GT,{headers:{'User-Agent':'ChrisIzworskiOutdoorTools/1.0 (chrisizworski.com)','Accept':'application/json'},signal:AbortSignal.timeout(12000)});
     if(!response.ok)throw new Error(`GeyserTimes ${response.status}`);
