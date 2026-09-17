@@ -1,6 +1,8 @@
 # AdSense tool value and data audit — September 17, 2026
 
-**Recommendation: hold resubmission.** This review found useful, distinct tools and repairable defects. It does not establish that every tool meets every policy, and cannot guarantee Google approval. The reported rejection category is low value; Google's exact page-level reasoning is unavailable.
+**Owner update after this audit:** Chris confirms that he has the data permissions discussed below; supporting documents are not available in this chat. Treat permission as owner-confirmed, not independently inspected. The earlier permission follow-ups below describe the audit-time evidence and are superseded by that confirmation. Endpoint configuration, functional checks and Google account review remain separate.
+
+**Original audit recommendation: hold resubmission pending the listed checks.** This review found useful, distinct tools and repairable defects. It does not establish that every tool meets every policy, and cannot guarantee Google approval. The reported rejection category is low value; Google's exact page-level reasoning is unavailable.
 
 ## What was inspected
 
@@ -150,3 +152,5 @@ All URLs below returned HTTP 200 during the crawl. “Distinct use” records ob
 - These checks validate the changed behavior and existing repository contracts. They do not establish complete interactive coverage or commercial source entitlement for the 81-tool network.
 
 Follow-up validation: legacy report API and RSS tests confirm AI/model disclosure also covers previously saved notes. The preceding release passed 51 production assertions across 15 routes/endpoints; browser checks loaded the fall-color regional readings, Firefall off-season view, road conditions, tentative launch list and current geyser windows. Full 81-tool interactive coverage remains incomplete.
+
+Soo Locks follow-up: the MyShipTracking iframe returned an internal server error while its parent falsely showed a loaded/live status. Replaced it with a bounded Open Waters AIS feed and on-page map/list, preserving upstream attribution and actual report times. The owner confirmed data permissions before this repair.

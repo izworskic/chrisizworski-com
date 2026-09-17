@@ -1,6 +1,6 @@
 {
   "auditedOn": "2026-09-17",
-  "decision": "Hold resubmission pending commercial-source permissions and remaining verification. No approval guarantee.",
+  "decision": "Owner confirms data permissions. Remaining functional, archive and AdSense account checks must be resolved before readiness can be established. No approval guarantee.",
   "coverage": {
     "fetchedUrls": 335,
     "http200": 335,
@@ -348,7 +348,7 @@
         "https://chrisizworski.com/soo-locks/"
       ],
       "observedValue": "Lock visit planning, official confirmation and local viewing context",
-      "followUp": "Public map embedding has a provider-supported mechanism; retain attribution and verify third-party camera permissions.",
+      "followUp": "Failed MyShipTracking iframe replaced with Open Waters AIS map/list; source credits and report ages retained. Owner confirms data permissions.",
       "approvalStatus": "not certified"
     },
     {
@@ -1156,5 +1156,10 @@
       "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
       "approvalStatus": "not certified"
     }
-  ]
+  ],
+  "ownerPermissionConfirmation": {
+    "confirmedOn": "2026-09-17",
+    "status": "Owner confirms the discussed data permissions; documents unavailable in this chat.",
+    "independentlyInspected": false
+  }
 }

@@ -656,10 +656,14 @@ if (!sooLocks.includes("https://ais.boatnerd.com/passage/port/soo-locks")) {
 if (!sooLocks.includes("tel:+19062021333") || sooLocks.includes("Soo-Locks-Schedule/")) {
   failures.push("Soo Locks is missing the current official schedule hotline or still links the obsolete USACE schedule path");
 }
-if (!sooLocks.includes("https://embed.myshiptracking.com/embed?myst") || !sooLocks.includes("lat=46.5036") || !sooLocks.includes("lng=-84.36")) {
-  failures.push("Soo Locks is missing the official no-key live map centered on the lock complex");
+const sooAisClient = await readFile(path.join(publicRoot, "assets", "soo-ais.js"), "utf8");
+if (!sooLocks.includes('id="sooVesselMap"') || !sooLocks.includes('/assets/soo-ais.js') || !sooAisClient.includes("/api/soo-ais") || !sooAisClient.includes('[46.5036,-84.36]')) {
+  failures.push("Soo Locks is missing its live vessel feed or lock-centered map");
 }
-if (/AISSTREAM_API_KEY|\/api\/soo-vessels|leaflet@1\.9\.4/.test(sooLocks)) {
+if (/<iframe[^>]+embed\.myshiptracking/i.test(sooLocks)) {
+  failures.push("Soo Locks still embeds the provider endpoint that returned a server error");
+}
+if (/AISSTREAM_API_KEY|\/api\/soo-vessels/.test(sooLocks)) {
   failures.push("Soo Locks still depends on the retired keyed AIS implementation");
 }
 

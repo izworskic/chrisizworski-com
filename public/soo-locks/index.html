@@ -44,7 +44,7 @@
       "url": "https://chrisizworski.com/soo-locks/",
       "isPartOf": { "@id": "https://chrisizworski.com/#website" },
       "author": { "@id": "https://chrisizworski.com/#person" },
-      "dateModified": "2026-09-01",
+      "dateModified": "2026-09-17",
       "inLanguage": "en-US"
     },
     {
@@ -119,7 +119,7 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .status-progress-bar{background:#2c5f2d;height:100%;transition:width .4s}
 @media(max-width:540px){.status-panel{grid-template-columns:1fr}.status-icon{font-size:42px}}
 
-/* Official live vessel map embed */
+/* Live vessel map and accessible report list */
 .map-wrap{margin:20px 0 28px;border:1px solid #e0dbd2;border-radius:4px;overflow:hidden;background:#f4efe5}
 .vessel-map-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;background:#0d3545;color:#dfe9f0;border-bottom:1px solid rgba(255,255,255,.14)}
 .vessel-map-status{display:flex;align-items:center;gap:8px;min-width:0;font-size:12px;line-height:1.45}
@@ -207,6 +207,8 @@ figure.fig.hero{margin:6px 0 28px}
 <script defer src="/assets/gazette-latest.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can you watch a 1,000-footer go through the locks?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Poe Lock handles all 1,000-foot vessels, and the Visitor Center viewing platform is immediately adjacent. The best time is during the morning or afternoon traffic peaks. Check the daily vessel schedule or the AIS map above to time your arrival."}},{"@type":"Question","name":"Is there a fee to use the locks?","acceptedAnswer":{"@type":"Answer","text":"No. The Soo Locks are operated by the U.S. Army Corps of Engineers and are toll-free. Commercial vessels do not pay a transit fee, unlike the Panama Canal or Suez Canal. The locks are funded as part of federal navigation infrastructure."}},{"@type":"Question","name":"When does the new lock open?","acceptedAnswer":{"@type":"Answer","text":"The new replacement lock (which will match the Poe in size) is under construction on the site of the decommissioned Davis and Sabin Locks. USACE projects an operational date in the mid-2030s. Construction began in 2020."}},{"@type":"Question","name":"Why does the lock close from January to March?","acceptedAnswer":{"@type":"Answer","text":"Ice. The St. Marys River and the eastern end of Lake Superior freeze over during the winter, and operating the locks through pack ice damages the gates and structures. The shutdown is also used for major scheduled maintenance, dewatering inspections, and repairs that cannot be done while vessels are transiting."}},{"@type":"Question","name":"What is the most-transited vessel at the Soo?","acceptedAnswer":{"@type":"Answer","text":"The 1,013-foot Paul R. Tregurtha makes the most transits annually, running iron ore, coal, and limestone year-round during the navigation season. The Edwin H. Gott and Edgar B. Speer also rank among the highest-frequency transits."}},{"@type":"Question","name":"Can pleasure craft use the locks?","acceptedAnswer":{"@type":"Answer","text":"Yes. Pleasure craft use the smaller Canadian Sault Ste. Marie Canal lock on the Canadian side (not operated by USACE). The U.S. locks handle commercial vessels and occasional government and special-use traffic; pleasure craft are not typically routed through the Poe or MacArthur."}},{"@type":"Question","name":"How can I get notified when specific ships are transiting?","acceptedAnswer":{"@type":"Answer","text":"The Great Lakes Gazette daily brief mentions notable vessel movements at the Soo. MarineTraffic offers paid vessel tracking with email alerts. The Boatnerd \"Calumet River Reporter\" and similar AIS-driven Discord and Twitter feeds also push notifications for specific ship arrivals."}},{"@type":"Question","name":"When is the best time to visit the Soo Locks in fall?","acceptedAnswer":{"@type":"Answer","text":"Late September into early October. The navigation season is still running at full pace, the Visitor Center platform is far quieter than in July and August, and fall color in the eastern Upper Peninsula is typically at or near peak in that stretch. Visitor Center hours are seasonal and shorten in the fall, so confirm them before making the drive."}}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","@id":"https://chrisizworski.com/soo-locks/#app","name":"Soo Locks Ship Schedule Today","url":"https://chrisizworski.com/soo-locks/","description":"What ships are in the Soo Locks today: schedule sources, the boat hotline, a live AIS map, webcams, and Sault Ste. Marie locks visitor hours.","applicationCategory":"TravelApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"creator":{"@id":"https://chrisizworski.com/#person"},"author":{"@id":"https://chrisizworski.com/#person"}}</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>.soo-vessel-results{padding:18px;background:#fff}.soo-vessel-results h3{margin:0 0 8px}.soo-vessel-results p,.soo-vessel-results li{font-size:13px}.soo-vessel-results ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px}.soo-vessel-results li{padding:10px;border:1px solid #e0dbd2;border-radius:4px}.soo-vessel-results li span{display:block;margin-top:4px;color:#555}.soo-vessel-results button{font:inherit;font-weight:bold;text-decoration:underline;color:#165d71;background:none;border:0;padding:0;cursor:pointer}.soo-vessel-results button:focus-visible{outline:2px solid #165d71;outline-offset:3px}#sooVesselMap{z-index:0}#sooAisCredits{overflow-wrap:anywhere;margin:12px 0 0}.leaflet-popup-content p{font-size:13px;margin:7px 0}</style>
 </head>
 <body data-analytics-page="soo-locks">
 <div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
@@ -277,13 +279,14 @@ figure.fig.hero{margin:6px 0 28px}
   <div class="vessel-map-toolbar">
     <div class="vessel-map-status" role="status" aria-live="polite">
       <span class="vessel-map-status-dot" id="vesselMapDot" aria-hidden="true"></span>
-      <span id="vesselMapStatus">Loading the live Soo Locks vessel map...</span>
+      <span id="vesselMapStatus">Loading recent vessel reports...</span>
     </div>
-    <button class="map-refresh" id="vesselMapRefresh" type="button">Reload map</button>
+    <button class="map-refresh" id="vesselMapRefresh" type="button">Refresh vessels</button>
   </div>
   <div class="vessel-map-stage">
-    <iframe id="sooVesselMap" title="Live AIS vessel map centered on the Soo Locks" src="https://embed.myshiptracking.com/embed?myst&amp;zoom=13&amp;lat=46.5036&amp;lng=-84.36&amp;show_names=1&amp;scroll_wheel=0&amp;show_menu=0&amp;map_style=simple&amp;ref=https%3A%2F%2Fchrisizworski.com%2Fsoo-locks%2F" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <div id="sooVesselMap" role="region" aria-label="Live AIS vessel map centered on the Soo Locks"></div>
   </div>
+  <div class="soo-vessel-results"><h3>Vessels near the locks</h3><p>Tap a name to find its last reported position. Blue markers indicate reported movement; amber markers indicate little or no movement; gray means speed is unavailable. Positions are received reports, not a guaranteed transit schedule.</p><ul id="sooVesselList"><li>Waiting for vessel reports...</li></ul><p id="sooAisCredits">Source: Open Waters AIS. Individual source credits appear with the reports.</p></div>
   <div class="live-map-panel">
     <div class="live-map-kicker">Live Great Lakes AIS tracking</div>
     <h3>Need the wider Great Lakes traffic picture?</h3>
@@ -294,7 +297,7 @@ figure.fig.hero{margin:6px 0 28px}
       <a class="live-map-button secondary" href="https://www.marinetraffic.com" target="_blank" rel="noopener">Open MarineTraffic &#8599;</a>
     </div>
   </div>
-  <div class="map-caption">AIS positions are informational, may be delayed or incomplete, and must not be used for navigation. Live map via <a href="https://www.myshiptracking.com/more/embed-our-map" target="_blank" rel="noopener">MyShipTracking</a>. Additional Great Lakes tracking via <a href="https://ais.boatnerd.com/" target="_blank" rel="noopener">BoatNerd</a>.</div>
+  <div class="map-caption">AIS positions are informational, may be delayed or incomplete, and must not be used for navigation. Vessel reports via <a href="https://openwaters.io/ais/" target="_blank" rel="noopener">Open Waters AIS</a>, with upstream source credit retained. Another map provider: <a href="https://www.myshiptracking.com/more/embed-our-map" target="_blank" rel="noopener">MyShipTracking</a>. Additional Great Lakes tracking via <a href="https://ais.boatnerd.com/" target="_blank" rel="noopener">BoatNerd</a>.</div>
 </div>
 
 <div class="cta-card">
@@ -547,28 +550,9 @@ figure.fig.hero{margin:6px 0 28px}
   }
 })();
 
-// Report when the official no-key vessel map is ready and allow a manual reload.
-(function(){
-  const mapFrame = document.getElementById('sooVesselMap');
-  const statusElement = document.getElementById('vesselMapStatus');
-  const dotElement = document.getElementById('vesselMapDot');
-  const refreshButton = document.getElementById('vesselMapRefresh');
-  const mapSource = mapFrame.src;
-
-  mapFrame.addEventListener('load', function(){
-    dotElement.className = 'vessel-map-status-dot live';
-    statusElement.textContent = 'Live AIS vessel map loaded';
-    refreshButton.disabled = false;
-  });
-
-  refreshButton.addEventListener('click', function(){
-    dotElement.className = 'vessel-map-status-dot';
-    statusElement.textContent = 'Reloading the live Soo Locks vessel map...';
-    refreshButton.disabled = true;
-    mapFrame.src = mapSource + '&refresh=' + Date.now();
-  });
-})();
 </script>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script defer src="/assets/soo-ais.js?v=20260917"></script>
 <script defer src="/assets/field-camera.js"></script>
 </body>
 </html>
