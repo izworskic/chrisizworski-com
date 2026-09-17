@@ -26,6 +26,9 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Replace the failing AIS iframe with recent vessel reports and a native map.
+  "/assets/freighter-tracker.js",
+  "/assets/freighter-tracker.css",
   // Sep 17: accurate advertising, location, storage and contact disclosures.
   "/privacy/",
   // Sep 17 2026: source context and distinct branded coverage value.

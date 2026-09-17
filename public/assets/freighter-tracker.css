@@ -202,3 +202,5 @@ button,a{-webkit-tap-highlight-color:transparent}
 }
 
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+#freighterMap{z-index:0}.map-tools{z-index:500}.vessel-results{padding:20px}.vessel-results ul{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;max-height:360px;overflow:auto}.vessel-results li{border:1px solid #cdd9da;padding:10px}.vessel-results button{background:none;border:0;text-decoration:underline;color:#146c86;font:inherit;cursor:pointer}.vessel-results span{display:block;font-size:12px}.vessel-results p{font-size:13px;overflow-wrap:anywhere}.vessel-results button:focus-visible{outline:2px solid #146c86}

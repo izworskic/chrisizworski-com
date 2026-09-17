@@ -99,15 +99,45 @@
   var waterValue = document.getElementById("waterValue");
   var conditionTime = document.getElementById("conditionTime");
   var activeView = "overview";
-  var loadTimer = null;
   var stationsPromise = null;
 
-  function mapUrl(view, refresh) {
-    var ref = encodeURIComponent("https://chrisizworski.com/great-lakes-freighter-tracking/");
-    var url = "https://embed.myshiptracking.com/embed?myst&zoom=" + view.zoom +
-      "&lat=" + view.lat + "&lng=" + view.lng +
-      "&show_names=1&scroll_wheel=0&show_menu=0&map_style=simple&ref=" + ref;
-    return refresh ? url + "&refresh=" + Date.now() : url;
+  var map = typeof L !== "undefined" ? L.map(mapFrame, {scrollWheelZoom:false}).setView([44.8,-84.7],5) : null;
+  var layer = map ? L.layerGroup().addTo(map) : null;
+  if (map) L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+  else mapFrame.textContent = "Map unavailable; recent vessel reports are listed below.";
+  var reports = null, busy = false, lastFailed = false;
+  var vesselList = document.getElementById("freighterVessels");
+  var sourceCredits = document.getElementById("freighterCredits");
+  function node(tag, value) {var el=document.createElement(tag);el.textContent=value;return el;}
+  function renderVessels() {
+    if (!reports) return;
+    var view=views[activeView];
+    var vessels=reports.vessels.filter(function(v){return Date.now()-Date.parse(v.seen)<=1800000 && (activeView === "overview" || distanceMiles(view.lat,view.lng,v.lat,v.lon)<= (activeView === "saginaw" ? 60 : 35));});
+    vesselList.replaceChildren(); if(layer) layer.clearLayers();
+    vessels.forEach(function(v){
+      var name=v.name || "Vessel " + v.mmsi;
+      var detail=(v.speedKnots===null?"Speed unavailable":(v.speedKnots*1.15078).toFixed(1)+" mph ("+v.speedKnots.toFixed(1)+" kn)")+" · reported "+Math.max(0,Math.round((Date.now()-Date.parse(v.seen))/60000))+" min ago · "+v.source;
+      var item=document.createElement("li"), popup=document.createElement("div");
+      popup.append(node("strong",name),node("p",detail),node("p","MMSI "+v.mmsi));
+      if(v.course!==null) popup.append(node("p","Course "+Math.round(v.course)+"°"));
+      if(map){
+        var marker=L.circleMarker([v.lat,v.lon],{radius:v.shipType>=70&&v.shipType<90?8:5,color:"#fff",weight:1,fillColor:v.speedKnots===null?"#64748b":v.speedKnots>0.5?"#146c86":"#a6651e",fillOpacity:0.95}).addTo(layer).bindTooltip(node("span",name)).bindPopup(popup);
+        var button=node("button",name);button.type="button";button.addEventListener("click",function(){map.setView([v.lat,v.lon],13);marker.openPopup();mapFrame.scrollIntoView({block:"center",behavior:"smooth"});});item.append(button);
+      }else item.append(node("strong",name));
+      item.append(node("span",detail));vesselList.append(item);
+    });
+    if(!vessels.length) vesselList.append(node("li","No recent reports returned for this view. This does not mean there are no ships; check the passage source below."));
+    setStatus((lastFailed?"Refresh unavailable; retained ":"")+vessels.length+" recent reports · "+view.label+" · checked "+new Date(reports.checkedAt).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/Detroit",timeZoneName:"short"})+(map?"":" · map unavailable"),lastFailed?"slow":vessels.length?"loaded":"");
+    sourceCredits.textContent="Source credits: "+reports.attribution.map(function(a){return a.credit;}).join(" · ");
+  }
+  async function loadVessels() {
+    if(busy)return;busy=true;refreshButton.disabled=true;
+    try{
+      var r=await fetch("/api/freighter-ais",{signal:AbortSignal.timeout(12000)}), data=await r.json();
+      if(!r.ok||!data.ok||!Array.isArray(data.vessels))throw new Error("AIS unavailable");
+      reports=data;lastFailed=false;renderVessels();
+    }catch(_){lastFailed=true;if(reports)renderVessels();else{setStatus("Vessel reports unavailable. Try refresh or the passage links below.","slow");vesselList.replaceChildren(node("li","The feed did not return usable data. This is not a zero-traffic report."));}}
+    finally{busy=false;refreshButton.disabled=false;}
   }
 
   function cleanHash(value) {
@@ -157,6 +187,7 @@
   }
 
   function finite(value) {
+    if (value === null || value === undefined || value === "" || typeof value === "boolean") return null;
     var number = Number(value);
     return Number.isFinite(number) ? number : null;
   }
@@ -260,16 +291,8 @@
     watchNote.textContent = view.watch;
     passageLink.href = view.passage;
     passageLink.textContent = view.passageLabel + " ↗";
-    setStatus("Loading " + view.label + " AIS view…", "");
-    refreshButton.disabled = true;
-    mapFrame.title = "Live AIS vessel map centered on " + view.label;
-    mapFrame.src = mapUrl(view, Boolean(settings.refresh));
-    window.clearTimeout(loadTimer);
-    loadTimer = window.setTimeout(function () {
-      if (activeView !== key) return;
-      setStatus("The live map is taking longer than expected. Passage links remain available below.", "slow");
-      refreshButton.disabled = false;
-    }, 12000);
+    if(map) map.setView([view.lat,view.lng],view.zoom);
+    if(reports) renderVessels(); else loadVessels();
     renderNearestCondition(key);
 
     if (settings.updateHash !== false) {
@@ -279,15 +302,8 @@
     if (settings.track !== false) trackView(key);
   }
 
-  mapFrame.addEventListener("load", function () {
-    window.clearTimeout(loadTimer);
-    setStatus("Map frame loaded: " + views[activeView].label + ". AIS coverage may be delayed or incomplete.", "loaded");
-    refreshButton.disabled = false;
-  });
-
-  refreshButton.addEventListener("click", function () {
-    selectView(activeView, { refresh: true, updateHash: false, track: false });
-  });
+  refreshButton.addEventListener("click", function () {loadVessels(); stationsPromise=null;renderNearestCondition(activeView);});
+  setInterval(function(){if(!document.hidden)loadVessels();},60000);
 
   document.querySelectorAll("[data-freighter-view]").forEach(function (button) {
     button.addEventListener("click", function () {
