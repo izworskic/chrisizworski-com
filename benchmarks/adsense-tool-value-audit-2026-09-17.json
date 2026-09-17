@@ -1,0 +1,1160 @@
+{
+  "auditedOn": "2026-09-17",
+  "decision": "Hold resubmission pending commercial-source permissions and remaining verification. No approval guarantee.",
+  "coverage": {
+    "fetchedUrls": 335,
+    "http200": 335,
+    "cataloguedToolsAndGuides": 81,
+    "sourceRepositoriesCloned": 43,
+    "limitations": "HTTP availability and visible value are not proof of successful JavaScript interactions or Google eligibility. Source scanning was targeted, not line-by-line certification. Separate domains may need their own AdSense review. Regional/generated archives are not all covered."
+  },
+  "repositories": [
+    {
+      "repository": "izworskic/alaska-aurora-live",
+      "reviewBase": "d0969a7ebd2e5bfc275d600bb6af490a5e4545f8"
+    },
+    {
+      "repository": "izworskic/blue-spring-live",
+      "reviewBase": "8bbf3e1eb01e9e1e79ebf4484a7aba35750a7680"
+    },
+    {
+      "repository": "izworskic/fort-madison-live",
+      "reviewBase": "5348747a117d42b578959371eb0d4deb75a3af4f"
+    },
+    {
+      "repository": "izworskic/gauley-release-live-",
+      "reviewBase": "8dc8ddbcaa955adc64914ee805bac1b64736617e"
+    },
+    {
+      "repository": "izworskic/grand-coulee-live",
+      "reviewBase": "1765b9c1140d94668a15e358573dc76281c73040"
+    },
+    {
+      "repository": "izworskic/great-lakes-levels",
+      "reviewBase": "17251b4d04e7a4ffc8a9c24e5dfa8e075e081c69"
+    },
+    {
+      "repository": "izworskic/isle-royale-outdoors",
+      "reviewBase": "167ca62b7bfe20dd7b4d41b46cb34403d098ffb7"
+    },
+    {
+      "repository": "izworskic/lawn-advisor",
+      "reviewBase": "1a63526960ff85470962de7fca1ac30790c1fd01"
+    },
+    {
+      "repository": "izworskic/lspp-ice-out",
+      "reviewBase": "47e59fa282eb1a006a9ab3733b4c89cae9e8dade"
+    },
+    {
+      "repository": "izworskic/maine-aurora-live",
+      "reviewBase": "6270c2a3e524020a65c5891514f9a8f14f0f83ef"
+    },
+    {
+      "repository": "izworskic/michigan-birding-daily",
+      "reviewBase": "6144d8f9cfb8b611697fce2254afc3fc8ac0f3b8"
+    },
+    {
+      "repository": "izworskic/michigan-birding-report",
+      "reviewBase": "78a0ea3457ea3bf06825fe535c54cc0305b3370e"
+    },
+    {
+      "repository": "izworskic/michigan-morel-report",
+      "reviewBase": "a6bb04a353a516cca3052c0525fbaf869a86280c"
+    },
+    {
+      "repository": "izworskic/michigan-outdoors-now",
+      "reviewBase": "107e9c1ab101f1436d8cb6b7f8f85cafe1d607af"
+    },
+    {
+      "repository": "izworskic/michigan-trout-daily",
+      "reviewBase": "b9f8810992edbd8e2c7df11e2f2faad5f4b90094"
+    },
+    {
+      "repository": "izworskic/michigan-trout-report",
+      "reviewBase": "19deb59d64d35f9cbe482fa56117534e36551176"
+    },
+    {
+      "repository": "izworskic/minnesota-aurora-live",
+      "reviewBase": "adba26761ea4eb66da1545f834a5424c949306be"
+    },
+    {
+      "repository": "izworskic/monarch-migration-live",
+      "reviewBase": "f4922a88d746610820a882f52acb44869a946ea5"
+    },
+    {
+      "repository": "izworskic/montana-aurora-live",
+      "reviewBase": "1e6d93cd6864fc88af4657bfd1fb95e01a5aad97"
+    },
+    {
+      "repository": "izworskic/national-aurora",
+      "reviewBase": "5e1661fd5a629d6094a05a5b2ac9c067c48e49e4"
+    },
+    {
+      "repository": "izworskic/national-ballard-locks",
+      "reviewBase": "86fdfd789e16135c801ebf083da068a4a175149c"
+    },
+    {
+      "repository": "izworskic/national-coastal-water",
+      "reviewBase": "9b914f116e589d3f05bfe208101382b3fac1de6f"
+    },
+    {
+      "repository": "izworskic/national-cumberland-moonbow",
+      "reviewBase": "ec56aba31427dbe6d5ef8e7e31d53367505d7202"
+    },
+    {
+      "repository": "izworskic/national-fall-color",
+      "reviewBase": "73f00cd679c49c1434fa7d3ca02ac466377cf59c"
+    },
+    {
+      "repository": "izworskic/national-frost",
+      "reviewBase": "9ff1cff5ab31f8adc68581f8cb9e25a2365f16a9"
+    },
+    {
+      "repository": "izworskic/national-garden-water",
+      "reviewBase": "90f1560ebc3adb8ffa1dccf8caa2e5e61dd7e160"
+    },
+    {
+      "repository": "izworskic/national-outdoor-core",
+      "reviewBase": "18a3512305a645e7f0f1ce705c0e4bc79050b451"
+    },
+    {
+      "repository": "izworskic/national-outdoor-tools-hub",
+      "reviewBase": "c2d628549840e79dcf35eeea01bc037ba4cf6609"
+    },
+    {
+      "repository": "izworskic/national-planting",
+      "reviewBase": "1b815d8c0c593f08fdf40602718a8a86905ab8a2"
+    },
+    {
+      "repository": "izworskic/national-rivers",
+      "reviewBase": "f2da62b1056170d5519e77e1449409687f37ec7b"
+    },
+    {
+      "repository": "izworskic/national-snowpack-melt",
+      "reviewBase": "cdd5771d90ddce28b01769962bca4845a64b3150"
+    },
+    {
+      "repository": "izworskic/national-white-christmas",
+      "reviewBase": "94e968e621064659f98d8efad117c27a3577234c"
+    },
+    {
+      "repository": "izworskic/north-dakota-aurora-live",
+      "reviewBase": "35f8a55ffd9383f5db3e606460b3ed41736a2750"
+    },
+    {
+      "repository": "izworskic/ontario-fishing-lake-finder",
+      "reviewBase": "94bdd9ee3f7c67762f471f5770a6b1afbb32b576"
+    },
+    {
+      "repository": "izworskic/phenology-michigan",
+      "reviewBase": "de97bc77665bd159eb85db8b7d7b352c7ca3fb1a"
+    },
+    {
+      "repository": "izworskic/platte-crane-live",
+      "reviewBase": "93c255d6e87cb78954d7fc7e324fca8d190b0058"
+    },
+    {
+      "repository": "izworskic/rocky-mountain-elk-rut-live",
+      "reviewBase": "ebae20741456735e2bac783eb395febda875b7b5"
+    },
+    {
+      "repository": "izworskic/saginaw-bay-realtime-fishing-guide",
+      "reviewBase": "a5f37e9c4d50af1086feb70bca0b2f07639140cc"
+    },
+    {
+      "repository": "izworskic/saginaw-bay-report",
+      "reviewBase": "ffa1f854078e732b41d317d62a7d210867e4b8e7"
+    },
+    {
+      "repository": "izworskic/tahquamenon-falls-live",
+      "reviewBase": "75066ceec13c9bb368b5d3daffc7744ff1226d95"
+    },
+    {
+      "repository": "izworskic/tcwine",
+      "reviewBase": "d59db8eb10ab66267ef14b9fe9a60aae4944f7e6"
+    },
+    {
+      "repository": "izworskic/xcski",
+      "reviewBase": "654d7783b7a60f68f0dafb4ddbf0302adb358646"
+    },
+    {
+      "repository": "izworskic/yosemite-firefall-live",
+      "reviewBase": "78dcf63ef4687395696778402c59907350677c7a"
+    }
+  ],
+  "tools": [
+    {
+      "number": 1,
+      "name": "Michigan Trout Report",
+      "url": "https://michigantroutreport.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://michigantroutreport.com/"
+      ],
+      "observedValue": "River-specific fishing conditions and season context",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 2,
+      "name": "Michigan Trout Stream Map",
+      "url": "https://michigantroutreport.com/map.html",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://michigantroutreport.com/map.html"
+      ],
+      "observedValue": "Geographic stream discovery and map filters",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 3,
+      "name": "Michigan Trout Daily",
+      "url": "https://daily.michigantroutreport.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://daily.michigantroutreport.com"
+      ],
+      "observedValue": "Dated river analysis and report archive",
+      "followUp": "Editorial and source-rights review remains for the complete automated archive.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 4,
+      "name": "Michigan Salmon and Steelhead Run Tracker",
+      "url": "https://michigantroutreport.com/salmon-run/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://michigantroutreport.com/salmon-run/"
+      ],
+      "observedValue": "River-by-river salmon and steelhead run context",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 5,
+      "name": "Saginaw Bay Report",
+      "url": "https://saginawbay.chrisizworski.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://saginawbay.chrisizworski.com/"
+      ],
+      "observedValue": "Bay zones combined with wind and buoy conditions",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 6,
+      "name": "Michigan Whitetail Report",
+      "url": "https://whitetail.chrisizworski.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://whitetail.chrisizworski.com/"
+      ],
+      "observedValue": "Regional whitetail and harvest context",
+      "followUp": "Owner repository was unavailable to this source audit; verify live fallbacks and source rights.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 7,
+      "name": "Michigan Ice Report",
+      "url": "https://chrisizworski.com/michigan-ice/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/michigan-ice/"
+      ],
+      "observedValue": "Regional cold accumulation with explicit limits on ice safety",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 8,
+      "name": "Michigan Phenology",
+      "url": "https://phenology.chrisizworski.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://phenology.chrisizworski.com/"
+      ],
+      "observedValue": "Multiple seasonal biology signals in a local almanac",
+      "followUp": "Commercial access unresolved: Open-Meteo and eBird; BirdCast-derived content also needs permission review.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 9,
+      "name": "Michigan Border Wait Times",
+      "url": "https://chrisizworski.com/michigan-border-wait-times/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/michigan-border-wait-times/"
+      ],
+      "observedValue": "Crossing comparison with direction-specific official wait information",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 10,
+      "name": "Mackinac Bridge Live",
+      "url": "https://chrisizworski.com/mackinac-bridge-live/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/mackinac-bridge-live/"
+      ],
+      "observedValue": "Vehicle and crossing conditions interpreted for bridge trips",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 11,
+      "name": "Great Lakes Gazette",
+      "url": "https://chrisizworski.com/great-lakes-gazette/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/great-lakes-gazette/"
+      ],
+      "observedValue": "Shipping news organized into editions with source links",
+      "followUp": "AI and source-health corrections from Gazette PR8 are live; source-content permissions and the complete archive still need review.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 12,
+      "name": "Great Lakes Ship Tracker",
+      "url": "https://chrisizworski.com/great-lakes-freighter-tracking/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/great-lakes-freighter-tracking/"
+      ],
+      "observedValue": "Corridor selection, vessel map and NOAA travel context",
+      "followUp": "Public MyShipTracking embed supports website embedding; verify other media permissions and keep attribution.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 13,
+      "name": "SS Edmund Fitzgerald",
+      "url": "https://chrisizworski.com/edmund-fitzgerald/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/edmund-fitzgerald/"
+      ],
+      "observedValue": "Substantial ship history and interpretive guide",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 14,
+      "name": "Soo Locks Live",
+      "url": "https://chrisizworski.com/soo-locks/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/soo-locks/"
+      ],
+      "observedValue": "Lock visit planning, official confirmation and local viewing context",
+      "followUp": "Public map embedding has a provider-supported mechanism; retain attribution and verify third-party camera permissions.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 15,
+      "name": "Great Lakes Buoy Dashboard",
+      "url": "https://chrisizworski.com/great-lakes-buoys/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/great-lakes-buoys/"
+      ],
+      "observedValue": "Nearest buoy and lake comparisons for different activities",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 16,
+      "name": "Michigan Beach Report",
+      "url": "https://chrisizworski.com/great-lakes-beaches/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/great-lakes-beaches/"
+      ],
+      "observedValue": "Beach rankings, individual access context and weather comparisons",
+      "followUp": "Commercial Open-Meteo access unresolved. Similar beach templates need continued review of unique local information.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 17,
+      "name": "Great Lakes Levels",
+      "url": "https://greatlakeslevels.org/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://greatlakeslevels.org"
+      ],
+      "observedValue": "Lake-level discovery leading to regional station and history pages",
+      "followUp": "Landing page checked; all station/history pages on this separate domain were not exhaustively crawled.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 18,
+      "name": "Michigan Boat Launch Finder",
+      "url": "https://chrisizworski.com/michigan-boat-launches/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/michigan-boat-launches/"
+      ],
+      "observedValue": "Access-point discovery and boat-launch filters",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 19,
+      "name": "Great Lakes Shipwreck Explorer",
+      "url": "https://chrisizworski.com/great-lakes-shipwrecks/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/great-lakes-shipwrecks/"
+      ],
+      "observedValue": "Filterable wreck locations and historical context",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 20,
+      "name": "Great Lakes Lighthouses",
+      "url": "https://chrisizworski.com/great-lakes-lighthouses/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/great-lakes-lighthouses/"
+      ],
+      "observedValue": "Lighthouse discovery with visitor and access information",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 21,
+      "name": "Au Sable Field Map",
+      "url": "https://ausable.chrisizworski.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://ausable.chrisizworski.com/"
+      ],
+      "observedValue": "River access, float-time assumptions and leg-by-leg trip planning",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 22,
+      "name": "Au Sable River Guide",
+      "url": "https://chrisizworski.com/au-sable-river/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/au-sable-river/"
+      ],
+      "observedValue": "Narrative river guide supporting the separate interactive map",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 23,
+      "name": "Manistee River Field Map",
+      "url": "https://chrisizworski.com/manistee-river-map/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/manistee-river-map/"
+      ],
+      "observedValue": "Manistee-specific access points and float planning",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 24,
+      "name": "Michigan Outdoors Now",
+      "url": "https://michiganoutdoorsnow.chrisizworski.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://michiganoutdoorsnow.chrisizworski.com"
+      ],
+      "observedValue": "Place-based outdoor decision planning",
+      "followUp": "Commercial Open-Meteo access unresolved, including forecast, air-quality and elevation products.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 25,
+      "name": "Michigan Outdoor Weekend",
+      "url": "https://weekend.chrisizworski.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://weekend.chrisizworski.com/"
+      ],
+      "observedValue": "Curated weekend destinations and trip guides",
+      "followUp": "Owner repository was unavailable; complete generated-guide and source-rights review remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 26,
+      "name": "Traverse City Winery Map & Wine Tour Planner",
+      "url": "https://tcwine.chrisizworski.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://tcwine.chrisizworski.com"
+      ],
+      "observedValue": "Winery constraints, selections and tour itinerary planning",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 27,
+      "name": "Pictured Rocks Planner",
+      "url": "https://picturedrocks.chrisizworski.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://picturedrocks.chrisizworski.com/"
+      ],
+      "observedValue": "Route and activity choices for different Pictured Rocks visits",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 28,
+      "name": "Lake Superior Circle Tour",
+      "url": "https://chrisizworski.com/lake-superior-circle-tour/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/lake-superior-circle-tour/"
+      ],
+      "observedValue": "Substantial original route, stop and itinerary content",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 29,
+      "name": "Michigan Cross-Country Skiing",
+      "url": "https://chrisizworski.com/michigan-cross-country-skiing/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/michigan-cross-country-skiing/"
+      ],
+      "observedValue": "Trail type and access planning rather than a current snow report",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 30,
+      "name": "Northern Michigan XC Live Conditions",
+      "url": "https://xcski.chrisizworski.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://xcski.chrisizworski.com/"
+      ],
+      "observedValue": "Trail-level skiing conditions and planning controls",
+      "followUp": "Commercial Open-Meteo access unresolved; current browser calls need a server proxy if a secret paid key is used.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 31,
+      "name": "Michigan Morel Report",
+      "url": "https://morel.chrisizworski.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://morel.chrisizworski.com/"
+      ],
+      "observedValue": "Soil and seasonal morel context with uncertainty",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 32,
+      "name": "Northern Lights Michigan",
+      "url": "https://chrisizworski.com/northern-lights-michigan/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/northern-lights-michigan/"
+      ],
+      "observedValue": "Regional darkness, clouds and geomagnetic viewing context",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 33,
+      "name": "Michigan Fall Color",
+      "url": "https://chrisizworski.com/fall-color/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/fall-color/"
+      ],
+      "observedValue": "Regional leaf-color timing and weather-informed trip planning",
+      "followUp": "Missing weather/partial history correction included in this release. Commercial Open-Meteo access unresolved.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 34,
+      "name": "Michigan Birding Report",
+      "url": "https://michiganbirdingreport.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://michiganbirdingreport.com"
+      ],
+      "observedValue": "Local bird observation discovery and migration planning",
+      "followUp": "eBird commercial written permission unverified; BirdCast-derived content also requires permission review.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 35,
+      "name": "Michigan Birding Daily",
+      "url": "https://daily.michiganbirdingreport.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://daily.michiganbirdingreport.com/"
+      ],
+      "observedValue": "County birding briefs and dated archives",
+      "followUp": "eBird commercial written permission unverified; complete automated archive review remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 36,
+      "name": "Zone 6a Planting Calculator",
+      "url": "https://chrisizworski.com/zone-6a-planting-calendar/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/zone-6a-planting-calendar/"
+      ],
+      "observedValue": "Crop-specific planting date calculation for Zone 6a",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 37,
+      "name": "Heirloom Variety Matchmaker",
+      "url": "https://chrisizworski.com/heirloom-variety-matchmaker/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/heirloom-variety-matchmaker/"
+      ],
+      "observedValue": "Variety matching against gardener constraints",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 38,
+      "name": "Heirloom Seed Saving Guide",
+      "url": "https://chrisizworski.com/heirloom-seed-saving-guide/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/heirloom-seed-saving-guide/"
+      ],
+      "observedValue": "Crop-specific seed-saving techniques",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 39,
+      "name": "Michigan Frost Dates",
+      "url": "https://chrisizworski.com/michigan-frost-dates/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/michigan-frost-dates/"
+      ],
+      "observedValue": "Station-based frost-date probabilities and local context",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 40,
+      "name": "Seed Starting Guide",
+      "url": "https://chrisizworski.com/seed-starting-guide/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/seed-starting-guide/"
+      ],
+      "observedValue": "Seed-starting timing by crop and zone",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 41,
+      "name": "Perfect Lawn Advisor",
+      "url": "https://lawn.chrisizworski.com/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://lawn.chrisizworski.com"
+      ],
+      "observedValue": "Address-based lawn planning",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 42,
+      "name": "When to Plant Tomatoes in Michigan",
+      "url": "https://chrisizworski.com/when-to-plant-tomatoes-michigan/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/when-to-plant-tomatoes-michigan/"
+      ],
+      "observedValue": "Soil, region and seedling considerations for tomato planting",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 43,
+      "name": "Estivant Pines Hike Planner",
+      "url": "https://chrisizworski.com/estivant-pines/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/estivant-pines/"
+      ],
+      "observedValue": "Short-term forecast and walking choices for one destination",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 44,
+      "name": "Isle Royale Interactive Map",
+      "url": "https://chrisizworski.com/isle-royale-map/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/isle-royale-map/"
+      ],
+      "observedValue": "Island access, trail and trip-planning map layers",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 45,
+      "name": "Aurora Tonight \u2014 U.S.",
+      "url": "https://chrisizworski.com/national-tools/aurora/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/aurora/"
+      ],
+      "observedValue": "Location-based aurora viewing decision",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 46,
+      "name": "U.S. River Conditions",
+      "url": "https://chrisizworski.com/national-tools/rivers/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/rivers/"
+      ],
+      "observedValue": "Nearest river gauges, trends and historical context",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 47,
+      "name": "U.S. Frost Dates & Freeze Risk",
+      "url": "https://chrisizworski.com/national-tools/frost/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/frost/"
+      ],
+      "observedValue": "Nearby station normals and freeze probabilities",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 48,
+      "name": "U.S. Planting Calendar",
+      "url": "https://chrisizworski.com/national-tools/planting/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/planting/"
+      ],
+      "observedValue": "Crop windows and succession timing",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 49,
+      "name": "U.S. Garden Water Decision Tool",
+      "url": "https://chrisizworski.com/national-tools/garden-water/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/garden-water/"
+      ],
+      "observedValue": "Root-zone watering decision rather than planting dates",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 50,
+      "name": "U.S. Fall Color Timing",
+      "url": "https://chrisizworski.com/national-tools/fall-color/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/fall-color/"
+      ],
+      "observedValue": "Seasonal timing estimates distinguished from observed leaf color",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 51,
+      "name": "U.S. Beach & Coastal Conditions",
+      "url": "https://chrisizworski.com/national-tools/coastal/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/coastal/"
+      ],
+      "observedValue": "Official coastal risk, buoy and tide context",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 52,
+      "name": "U.S. Snowpack & Snowmelt Conditions",
+      "url": "https://chrisizworski.com/national-tools/snow/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/snow/"
+      ],
+      "observedValue": "Measured snowpack distinguished from atmospheric melt conditions",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 53,
+      "name": "Will I Have a White Christmas?",
+      "url": "https://chrisizworski.com/national-tools/white-christmas/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/white-christmas/"
+      ],
+      "observedValue": "Lead-time-aware forecast and climate interpretation",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 54,
+      "name": "White Christmas Probability Map",
+      "url": "https://chrisizworski.com/white-christmas-probability-map/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/white-christmas-probability-map/"
+      ],
+      "observedValue": "Historical probability map with interpretation",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 55,
+      "name": "White Christmas Michigan",
+      "url": "https://chrisizworski.com/white-christmas-michigan/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/white-christmas-michigan/"
+      ],
+      "observedValue": "Michigan climate and lake-effect context",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 56,
+      "name": "Gauley Release Live",
+      "url": "https://chrisizworski.com/national-tools/gauley-release-live/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/gauley-release-live/"
+      ],
+      "observedValue": "Release pulse information distinguished from recreation schedules",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 57,
+      "name": "Niagara Falls Rainbow Predictor",
+      "url": "https://chrisizworski.com/national-tools/niagara-rainbow/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/niagara-rainbow/"
+      ],
+      "observedValue": "Rainbow geometry combined with mist, wind and cloud context",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 58,
+      "name": "Cumberland Falls Moonbow Window",
+      "url": "https://national-cumberland-moonbow-4k27.vercel.app/cumberland-falls-moonbow",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://national-cumberland-moonbow-4k27.vercel.app/cumberland-falls-moonbow"
+      ],
+      "observedValue": "Moon geometry, river flow and viewing-window planning",
+      "followUp": "Commercial Open-Meteo access unresolved.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 59,
+      "name": "Blue Spring Live: Manatee Conditions & Best Time to Visit",
+      "url": "https://chrisizworski.com/national-tools/blue-spring-live/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/blue-spring-live/"
+      ],
+      "observedValue": "Thermal refuge, manatee and arrival-time guidance around the embedded tool",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 60,
+      "name": "Ballard Locks Live: Ships, Salmon & Tides",
+      "url": "https://chrisizworski.com/ballard-locks/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/ballard-locks/"
+      ],
+      "observedValue": "Lock operations, salmon, tides and vessel context",
+      "followUp": "Open Waters commercial tier and each upstream AIS source permission/attribution remain unverified.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 61,
+      "name": "Ballard Locks Interactive Tour & Live AIS Map",
+      "url": "https://chrisizworski.com/ballard-locks/tour/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/ballard-locks/tour/"
+      ],
+      "observedValue": "Visitor tour and map distinct from the live conditions overview",
+      "followUp": "Open Waters commercial tier and each upstream AIS source permission/attribution remain unverified.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 62,
+      "name": "Melvin Price Live: Tows, Locks & River",
+      "url": "https://chrisizworski.com/national-tools/melvin-price-live/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/melvin-price/"
+      ],
+      "observedValue": "River, tow, lock and visit decisions",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 63,
+      "name": "Fort Madison Live: Trains, Barges & Swing Bridge Openings",
+      "url": "https://chrisizworski.com/national-tools/fort-madison-live/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/fort-madison-live/"
+      ],
+      "observedValue": "Train and tow convergence and swing-bridge viewing context",
+      "followUp": "Commercial rail-feed entitlement and source/media permissions remain unverified.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 64,
+      "name": "Grand Coulee Live: Lake Roosevelt, Outflow, Tours & Laser Show",
+      "url": "https://chrisizworski.com/national-tools/grand-coulee/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/grand-coulee/"
+      ],
+      "observedValue": "Visitor timing, lake levels, outflow and show planning",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 65,
+      "name": "Waterfall Window",
+      "url": "https://chrisizworski.com/national-tools/waterfalls/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/waterfalls/"
+      ],
+      "observedValue": "Reach-specific hydrology and waterfall viewing conditions",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 66,
+      "name": "Wildfire Smoke & Outdoor Air Window",
+      "url": "https://chrisizworski.com/national-tools/smoke/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/smoke/"
+      ],
+      "observedValue": "Outdoor timing windows distinguished from observed air quality",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 67,
+      "name": "Monarch Migration Live: Butterfly Migration Intelligence",
+      "url": "https://chrisizworski.com/national-tools/monarch-migration-live",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/monarch-migration-live"
+      ],
+      "observedValue": "Migration observations and flight-weather interpretation",
+      "followUp": "Code includes licensed-observation handling; per-record and photo rights still need sampling.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 68,
+      "name": "Platte Crane Live: Nebraska Sandhill Crane Migration Intelligence",
+      "url": "https://chrisizworski.com/national-tools/platte-crane-live",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/platte-crane-live"
+      ],
+      "observedValue": "Seasonal crane planning with live abundance model explicitly disabled",
+      "followUp": "Open-Meteo appears in historical backfill tooling; confirm rights/access before commercial refresh. Live abundance model is disabled.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 69,
+      "name": "Lake Ice-Out Forecast",
+      "url": "https://chrisizworski.com/national-tools/ice-out/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/ice-out/"
+      ],
+      "observedValue": "Thaw and historical context for lake ice-out",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 70,
+      "name": "Yosemite Firefall Live",
+      "url": "https://chrisizworski.com/national-tools/yosemite-firefall-live/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/yosemite-firefall-live/"
+      ],
+      "observedValue": "Seasonal light geometry, runoff and clouds for a specific phenomenon",
+      "followUp": "Identical alias consolidated by exact redirects to established /yosemite-firefall-live/ canonical; discovery corrected.",
+      "approvalStatus": "not certified",
+      "canonicalAfterRelease": "https://chrisizworski.com/yosemite-firefall-live/"
+    },
+    {
+      "number": 71,
+      "name": "Rocky Mountain Elk Rut Live",
+      "url": "https://chrisizworski.com/national-tools/elk-rut/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/elk-rut/"
+      ],
+      "observedValue": "Seasonal dawn/dusk elk-viewing context with access information",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 72,
+      "name": "Blue Ridge Parkway Fall Color Live",
+      "url": "https://chrisizworski.com/national-tools/fall-color/blue-ridge-parkway/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/fall-color/blue-ridge-parkway/"
+      ],
+      "observedValue": "Elevation-specific fall timing with observation and webcam context",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 73,
+      "name": "Columbia Salmon Run Live",
+      "url": "https://chrisizworski.com/national-tools/columbia-salmon-run/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/columbia-salmon-run/"
+      ],
+      "observedValue": "Dam counts, seven-day trends and species comparisons",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 74,
+      "name": "Bird Migration Morning Index",
+      "url": "https://chrisizworski.com/national-tools/bird-migration/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/bird-migration/"
+      ],
+      "observedValue": "Migration and weather signals for morning birding decisions",
+      "followUp": "eBird commercial written permission unverified; BirdCast-derived content also requires permission review.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 75,
+      "name": "Thunder Hole Live: Best Time to Hear the Boom",
+      "url": "https://chrisizworski.com/national-tools/coastal/thunder-hole-live/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/coastal/thunder-hole-live/"
+      ],
+      "observedValue": "Tide and wave timing with uncertainty for Thunder Hole visits",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 76,
+      "name": "Florida Red Tide Live",
+      "url": "https://chrisizworski.com/national-tools/florida-red-tide/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/florida-red-tide/"
+      ],
+      "observedValue": "Distance and age of field samples rather than an unsupported all-clear",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 77,
+      "name": "Space Coast Launch Viewing",
+      "url": "https://chrisizworski.com/national-tools/space-coast-launch/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/space-coast-launch/"
+      ],
+      "observedValue": "Launch schedule confidence separated from visibility weather",
+      "followUp": "Missing-weather and wind-range corrections included in this release.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 78,
+      "name": "Trail Ridge Road Live",
+      "url": "https://chrisizworski.com/national-tools/trail-ridge-road/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/trail-ridge-road/"
+      ],
+      "observedValue": "Official road access separated from alpine travel weather",
+      "followUp": "Missing forecasts/alerts can no longer produce a workable-weather verdict in this release.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 79,
+      "name": "Yellowstone Geyser Timing",
+      "url": "https://chrisizworski.com/national-tools/yellowstone-geysers/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/national-tools/yellowstone-geysers/"
+      ],
+      "observedValue": "Current eruption-window comparison with source and timing context",
+      "followUp": "Invalid/expired window correction included in this release. Independent GeyserTimes permission verification blocked by site access denial.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 80,
+      "name": "Tahquamenon Falls Live",
+      "url": "https://chrisizworski.com/tahquamenon-falls/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/tahquamenon-falls/"
+      ],
+      "observedValue": "Flow, weather and route choices for different waterfall visitors",
+      "followUp": "Commercial Open-Meteo access unresolved.",
+      "approvalStatus": "not certified"
+    },
+    {
+      "number": 81,
+      "name": "Ontario Fishing Lake Finder",
+      "url": "https://chrisizworski.com/ontario-fishing-lake-finder/",
+      "httpStatusAtAudit": 200,
+      "canonicalAtAudit": [
+        "https://chrisizworski.com/ontario-fishing-lake-finder/"
+      ],
+      "observedValue": "Lake discovery with explicit limits on verified fish-record coverage",
+      "followUp": "Distinct use is visible; full interactive, source-rights and failure-state verification remains.",
+      "approvalStatus": "not certified"
+    }
+  ]
+}

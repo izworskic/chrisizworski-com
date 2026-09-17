@@ -120,6 +120,16 @@
       "source": "/national-tools/waterfalls/niagara-falls-live/:path*",
       "destination": "/national-tools/niagara-rainbow/",
       "permanent": true
+    },
+    {
+      "source": "/national-tools/yosemite-firefall-live",
+      "destination": "/yosemite-firefall-live/",
+      "permanent": true
+    },
+    {
+      "source": "/national-tools/yosemite-firefall-live/",
+      "destination": "/yosemite-firefall-live/",
+      "permanent": true
     }
   ],
   "headers": [
