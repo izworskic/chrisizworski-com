@@ -36,6 +36,7 @@ function soonest(items,now=Date.now()){
 }
 
 module.exports=async function handler(req,res){
+  res.setHeader('X-Robots-Tag','noindex, nofollow');
   res.setHeader('Cache-Control','s-maxage=65, stale-while-revalidate=180');
   try{
     const response=await fetch(GT,{headers:{'User-Agent':'ChrisIzworskiOutdoorTools/1.0 (chrisizworski.com)','Accept':'application/json'},signal:AbortSignal.timeout(12000)});

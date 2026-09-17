@@ -59,6 +59,7 @@ async function nws(){
 }
 
 module.exports=async function handler(req,res){
+  res.setHeader('X-Robots-Tag','noindex, nofollow');
   res.setHeader('Cache-Control','s-maxage=300, stale-while-revalidate=900');
   try{
     const npsRes=await fetch(ROAD_URL,{headers:{'User-Agent':'ChrisIzworskiOutdoorTools/1.0 (chrisizworski.com)','Accept':'text/html'},signal:AbortSignal.timeout(12000)});
