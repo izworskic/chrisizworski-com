@@ -641,6 +641,134 @@
       "destination": "https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/"
     },
     {
+      "source": "/national-tools/aurora/alaska/fairbanks",
+      "destination": "https://alaska-aurora-live.vercel.app/fairbanks/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/fairbanks/",
+      "destination": "https://alaska-aurora-live.vercel.app/fairbanks/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/anchorage",
+      "destination": "https://alaska-aurora-live.vercel.app/anchorage/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/anchorage/",
+      "destination": "https://alaska-aurora-live.vercel.app/anchorage/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/denali",
+      "destination": "https://alaska-aurora-live.vercel.app/denali/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/denali/",
+      "destination": "https://alaska-aurora-live.vercel.app/denali/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/duluth",
+      "destination": "https://minnesota-aurora-live.vercel.app/duluth/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/duluth/",
+      "destination": "https://minnesota-aurora-live.vercel.app/duluth/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/grand-marais",
+      "destination": "https://minnesota-aurora-live.vercel.app/grand-marais/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/grand-marais/",
+      "destination": "https://minnesota-aurora-live.vercel.app/grand-marais/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/ely-boundary-waters",
+      "destination": "https://minnesota-aurora-live.vercel.app/ely-boundary-waters/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/ely-boundary-waters/",
+      "destination": "https://minnesota-aurora-live.vercel.app/ely-boundary-waters/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/voyageurs",
+      "destination": "https://minnesota-aurora-live.vercel.app/voyageurs/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/voyageurs/",
+      "destination": "https://minnesota-aurora-live.vercel.app/voyageurs/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/fargo",
+      "destination": "https://north-dakota-aurora-live.vercel.app/fargo/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/fargo/",
+      "destination": "https://north-dakota-aurora-live.vercel.app/fargo/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/bismarck",
+      "destination": "https://north-dakota-aurora-live.vercel.app/bismarck/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/bismarck/",
+      "destination": "https://north-dakota-aurora-live.vercel.app/bismarck/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/grand-forks",
+      "destination": "https://north-dakota-aurora-live.vercel.app/grand-forks/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/grand-forks/",
+      "destination": "https://north-dakota-aurora-live.vercel.app/grand-forks/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/montana/glacier-national-park",
+      "destination": "https://montana-aurora-live.vercel.app/glacier-national-park/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/montana/glacier-national-park/",
+      "destination": "https://montana-aurora-live.vercel.app/glacier-national-park/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/montana/whitefish",
+      "destination": "https://montana-aurora-live.vercel.app/whitefish/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/montana/whitefish/",
+      "destination": "https://montana-aurora-live.vercel.app/whitefish/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/montana/billings",
+      "destination": "https://montana-aurora-live.vercel.app/billings/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/montana/billings/",
+      "destination": "https://montana-aurora-live.vercel.app/billings/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/presque-isle",
+      "destination": "https://maine-aurora-live.vercel.app/presque-isle/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/presque-isle/",
+      "destination": "https://maine-aurora-live.vercel.app/presque-isle/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/bangor",
+      "destination": "https://maine-aurora-live.vercel.app/bangor/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/bangor/",
+      "destination": "https://maine-aurora-live.vercel.app/bangor/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/acadia-national-park",
+      "destination": "https://maine-aurora-live.vercel.app/acadia-national-park/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/maine/acadia-national-park/",
+      "destination": "https://maine-aurora-live.vercel.app/acadia-national-park/index.html"
+    },
+    {
       "source": "/national-tools/aurora/alaska/:path*",
       "destination": "https://alaska-aurora-live.vercel.app/:path*"
     },
