@@ -34,13 +34,13 @@ test("Northern Lights uses the normalized same-origin NOAA endpoint without NaN 
   assert.ok(!html.includes("const max72 = rows.slice(0,24)"));
 });
 
-test("Soo Locks renders an official no-key vessel map without restoring the refused MarineTraffic iframe", () => {
+test("Soo Locks renders its own vessel map without restoring either failed third-party iframe", () => {
   const html = readFileSync(path.join(__dirname, "../public/soo-locks/index.html"), "utf8");
   assert.doesNotMatch(html, /<iframe[^>]+marinetraffic/i);
   assert.ok(html.includes('id="sooVesselMap"'));
-  assert.ok(html.includes("https://embed.myshiptracking.com/embed?myst"));
-  assert.ok(html.includes("lat=46.5036"));
-  assert.ok(html.includes("lng=-84.36"));
+  assert.ok(html.includes("/assets/soo-ais.js"));
+  assert.ok(html.includes('id="sooVesselList"'));
+  assert.doesNotMatch(html, /<iframe[^>]+embed\.myshiptracking/i);
   assert.ok(html.includes('loading="lazy"'));
   assert.ok(html.includes("AIS positions are informational"));
   assert.ok(html.includes("https://ais.boatnerd.com/"));
@@ -48,7 +48,7 @@ test("Soo Locks renders an official no-key vessel map without restoring the refu
   assert.ok(html.includes("https://www.marinetraffic.com"));
   assert.ok(!html.includes("AISSTREAM_API_KEY"));
   assert.ok(!html.includes("fetch('/api/soo-vessels'"));
-  assert.ok(!html.includes("leaflet@1.9.4"));
+  assert.ok(html.includes("leaflet@1.9.4"));
 
   const toolsHtml = readFileSync(path.join(__dirname, "../public/tools/index.html"), "utf8");
   const guidesHtml = readFileSync(path.join(__dirname, "../public/guides/index.html"), "utf8");
