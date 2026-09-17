@@ -28,7 +28,7 @@ function roadStatus(text){
 }
 function maxWind(period){
   const nums=String(period?.windSpeed||'').match(/\d+/g)?.map(Number)||[];
-  return nums.length?Math.max(...nums):0;
+  return nums.length?Math.max(...nums):null;
 }
 function weatherAssessment(periods,alerts){
   const slice=(periods||[]).slice(0,12);
@@ -36,9 +36,10 @@ function weatherAssessment(periods,alerts){
   const warning=alertNames.some(x=>/warning/i.test(x));
   const watch=alertNames.some(x=>/watch|advisory/i.test(x));
   const severe=slice.some(p=>/snow|freezing|thunder|ice|blizzard/i.test(`${p.shortForecast||''} ${p.detailedForecast||''}`)||maxWind(p)>=40);
-  const caution=slice.some(p=>Number(p?.probabilityOfPrecipitation?.value||0)>=30||maxWind(p)>=25||Number(p?.temperature)<=35);
+  const caution=slice.some(p=>(Number.isFinite(p?.probabilityOfPrecipitation?.value)&&p.probabilityOfPrecipitation.value>=30)||maxWind(p)>=25||(Number.isFinite(p?.temperature)&&p.temperature<=35));
   if(warning||severe)return {level:'high',label:'High-alpine weather may disrupt travel',detail:'NWS guidance includes a warning-level signal, wintry/thunder weather, or very strong wind in the next 12 hours. Official NPS road status remains the controlling source.',alerts:alertNames};
   if(watch||caution)return {level:'caution',label:'Use extra caution in the alpine zone',detail:'The next 12 hours include colder, wetter, or windier periods that can change road conditions quickly. Check NPS status again before climbing.',alerts:alertNames};
+  if(!slice.length||!Array.isArray(alerts)||slice.some(p=>!Number.isFinite(p.temperature)||!Number.isFinite(maxWind(p))||!p.shortForecast||!Number.isFinite(p?.probabilityOfPrecipitation?.value)))return {level:'unknown',label:'Alpine weather evidence is incomplete',detail:'Missing forecast or alert data cannot establish a workable weather window. Check the official NPS road status and NWS forecast before travel.',alerts:alertNames};
   return {level:'workable',label:'No major high-alpine weather signal in the next 12 hours',detail:'NWS hourly guidance looks comparatively workable, but mountain conditions can change faster than the forecast and the NPS road status controls.',alerts:alertNames};
 }
 async function nws(){
@@ -53,9 +54,9 @@ async function nws(){
   ]);
   if(!hourlyRes.ok)throw new Error(`NWS hourly ${hourlyRes.status}`);
   const hourly=await hourlyRes.json();
-  const alerts=alertsRes.ok?await alertsRes.json():{features:[]};
-  const periods=(hourly?.properties?.periods||[]).slice(0,12);
-  return {periods,alerts:alerts.features||[],assessment:weatherAssessment(periods,alerts.features||[])};
+  const alerts=alertsRes.ok?await alertsRes.json():null;
+  const periods=(hourly?.properties?.periods||[]).filter(p=>new Date(p.endTime).getTime()>Date.now()).slice(0,12);
+  return {periods,alerts:alerts?.features||[],alertsAvailable:Array.isArray(alerts?.features),assessment:weatherAssessment(periods,alerts?.features)};
 }
 
 module.exports=async function handler(req,res){

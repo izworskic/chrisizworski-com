@@ -21,9 +21,10 @@ function selectCurrent(predictions,now=Date.now()){
   for(const p of predictions.map(normalize)){
     if(!p.geyserName)continue;
     const close=millis(p.windowClose||p.prediction);
+    const open=millis(p.windowOpen||p.prediction);
     const expiration=millis(p.expiration);
-    if(Number.isFinite(close)&&close<now-5*60*1000)continue;
-    if(Number.isFinite(expiration)&&expiration<now-5*60*1000)continue;
+    if(!Number.isFinite(open)||!Number.isFinite(close)||open>close||close<now)continue;
+    if(Number.isFinite(expiration)&&expiration<now)continue;
     if(p.forecastNumber>1)continue;
     const key=p.geyserName.toLowerCase();
     const cur=by.get(key);

@@ -22,12 +22,15 @@ function scheduleConfidence(l){
 }
 function weatherGrade(period){
   if(!period)return {level:'unknown',label:'Weather window unavailable',detail:'NWS hourly guidance does not yet cover the launch time.'};
-  const pop=Number(period?.probabilityOfPrecipitation?.value??0);
+  const pop=period?.probabilityOfPrecipitation?.value;
   const text=String(period.shortForecast||'').toLowerCase();
-  const wind=Number(String(period.windSpeed||'').match(/\d+/)?.[0]||0);
+  const winds=String(period.windSpeed||'').match(/\d+/g)?.map(Number)||[];
+  const wind=winds.length?Math.max(...winds):null;
+  const rainText=Number.isFinite(pop)?`precipitation chance ${pop}%`:'precipitation chance unavailable';
   const cloudBad=/overcast|cloudy|showers|thunder|rain/.test(text);
-  if(pop>=50||/thunder/.test(text))return {level:'poor',label:'Weather could limit viewing',detail:`${period.shortForecast}; precipitation chance ${pop}%. This is a visibility read, not a launch-weather forecast.`};
-  if(pop>=25||cloudBad||wind>=20)return {level:'mixed',label:'Mixed viewing weather',detail:`${period.shortForecast}; precipitation chance ${pop}%. Clouds or weather may reduce visibility.`};
+  if(pop>=50||/thunder/.test(text))return {level:'poor',label:'Weather could limit viewing',detail:`${period.shortForecast}; ${rainText}. This is a visibility read, not a launch-weather forecast.`};
+  if(pop>=25||cloudBad||wind>=20)return {level:'mixed',label:'Mixed viewing weather',detail:`${period.shortForecast}; ${rainText}. Clouds or weather may reduce visibility.`};
+  if(!text||!Number.isFinite(pop)||!Number.isFinite(wind))return {level:'unknown',label:'Viewing weather evidence is incomplete',detail:'Missing sky, rain or wind fields cannot establish favorable viewing. Check the official local forecast.'};
   return {level:'good',label:'Viewing weather looks workable',detail:`${period.shortForecast}; precipitation chance ${pop}%. Launch operations can still scrub for other reasons.`};
 }
 async function nwsFor(lat,lon,when){
@@ -66,3 +69,5 @@ module.exports=async function handler(req,res){
     res.status(502).json({ok:false,error:'Space Coast launch feed is temporarily unavailable.',detail:String(error?.message||error),official:KSC});
   }
 };
+
+module.exports._test={weatherGrade,scheduleConfidence,isFutureLaunch};

@@ -76,7 +76,7 @@
         "height": 630
       },
       "datePublished": "2026-03-15",
-      "dateModified": "2026-09-13",
+      "dateModified": "2026-09-17",
       "author": {
         "@id": "https://chrisizworski.com/#person"
       },
@@ -898,6 +898,7 @@ function bandData(r){
 
 // ---- forecast ----
 function wx(code){
+  if(!Number.isFinite(code))return{t:"Unavailable",c:C.muted};
   if(code===0)return{t:"Clear",c:C.gold};
   if(code===1||code===2)return{t:"Partly cloudy",c:C.amber};
   if(code===3)return{t:"Overcast",c:C.cloud};
@@ -907,7 +908,7 @@ function wx(code){
   if(code>=80&&code<=82)return{t:"Showers",c:C.rain};
   if((code>=71&&code<=77)||(code>=85&&code<=86))return{t:"Snow",c:C.snow};
   if(code>=95)return{t:"Storms",c:C.rain};
-  return{t:"Mild",c:C.muted};
+  return{t:"Unavailable",c:C.muted};
 }
 function fc(regionId){
   const f=LIVE&&LIVE[regionId]&&LIVE[regionId].forecast;
