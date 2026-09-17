@@ -36,13 +36,14 @@ test("ship tracker uses supported no-key AIS and existing same-origin NOAA data"
   const html = read("public/great-lakes-freighter-tracking/index.html");
   const script = read("public/assets/freighter-tracker.js");
 
-  assert.ok(html.includes("https://embed.myshiptracking.com/embed?myst"));
-  assert.ok(html.includes("https://www.myshiptracking.com/more/embed-our-map"));
+  assert.ok(!html.includes("https://embed.myshiptracking.com/embed?myst"));
+  assert.ok(script.includes('fetch("/api/freighter-ais"'));
+  assert.ok(html.includes("https://openwaters.io/ais/"));
   assert.ok(html.includes("https://ais.boatnerd.com/passage/port/soo-locks"));
   assert.ok(html.includes("must not be used for navigation"));
   assert.ok(script.includes('fetch("/api/buoys"'));
   assert.ok(script.includes("distanceMiles"));
-  assert.ok(script.includes("AIS coverage may be delayed or incomplete"));
+  assert.ok(script.includes("Vessel reports unavailable"));
   assert.ok(!html.includes("AISSTREAM_API_KEY"));
   assert.ok(!script.includes("AISSTREAM_API_KEY"));
   assert.ok(!script.includes("fetch(\"https://ais.boatnerd.com"));
@@ -84,4 +85,36 @@ test("ship tracker remains active after growth experiment retirement", () => {
   assert.equal(ledger.operatingMode, "ship-and-observe");
   assert.deepEqual(ledger.activeExperiments, []);
   assert.match(ledger.note, /No title, description, H1, canonical, structured-data, or indexability experiment freeze is active/);
+});
+
+
+test("NOAA missing readings do not become calm wind or freezing water", () => {
+  const vm = require("node:vm");
+  const script = read("public/assets/freighter-tracker.js");
+  const context = {};
+  vm.runInNewContext(script.slice(script.indexOf("  function finite("), script.indexOf("  function resetConditions(")), context);
+  for (const value of [null, undefined, "", false]) {
+    assert.equal(context.knots(value), "—");
+    assert.equal(context.fahrenheit(value), "—");
+    assert.equal(context.feet(value), "—");
+  }
+  assert.equal(context.knots(0), "0 kt");
+  assert.equal(context.fahrenheit(0), "32°F");
+});
+
+test("lake-wide AIS request stays within provider area limits and preserves a Duluth report", async t => {
+  const handler = require("../api/freighter-ais");
+  let requested;
+  t.mock.method(global, "fetch", async url => {
+    requested = new URL(url);
+    return {ok:true,json:async()=>({type:"FeatureCollection",features:[{type:"Feature",geometry:{type:"Point",coordinates:[-92.08,46.78]},properties:{mmsi:366904910,name:"TEST REPORT",seen:new Date().toISOString(),sog:0,source:"aishub"}}],attribution:{aishub:"AISHub via Open Waters"}})};
+  });
+  const res={setHeader(){},status(n){this.code=n;return this},json(d){this.data=d}};
+  await handler({method:"GET"},res);
+  const area=requested.searchParams.getAll("bbox").map(s=>s.split(",").map(Number)).reduce((sum,[s,w,n,e])=>sum+(n-s)*(e-w),0);
+  assert.ok(area<=100);
+  assert.equal(res.code,200);
+  assert.equal(res.data.vessels.length,1);
+  assert.equal(res.data.vessels[0].lon,-92.08);
+  assert.equal(res.data.attribution[0].credit,"AISHub via Open Waters");
 });

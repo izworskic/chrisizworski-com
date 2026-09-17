@@ -52,7 +52,7 @@
       "applicationCategory": "TravelApplication",
       "operatingSystem": "Any web browser",
       "isAccessibleForFree": true,
-      "dateModified": "2026-09-13",
+      "dateModified": "2026-09-17",
       "inLanguage": "en-US",
       "author": {"@id": "https://chrisizworski.com/#person"},
       "isPartOf": {"@id": "https://chrisizworski.com/#website"}
@@ -104,7 +104,9 @@
 <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 <script defer src="/assets/tool-engagement.js"></script>
-<script defer src="/assets/freighter-tracker.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script defer src="/assets/freighter-tracker.js?v=20260917"></script>
 <script defer src="/assets/gazette-latest.js"></script>
 </head>
 <body data-analytics-page="great-lakes-freighter-tracker">
@@ -193,9 +195,9 @@
       </div>
 
       <div class="map-stage">
-        <iframe id="freighterMap" title="Live AIS vessel map centered on all five Great Lakes" src="https://embed.myshiptracking.com/embed?myst&amp;zoom=5&amp;lat=44.8&amp;lng=-84.7&amp;show_names=1&amp;scroll_wheel=0&amp;show_menu=0&amp;map_style=simple&amp;ref=https%3A%2F%2Fchrisizworski.com%2Fgreat-lakes-freighter-tracking%2F" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <div id="freighterMap" role="region" aria-label="Live Great Lakes vessel map"></div>
         <div class="map-tools">
-          <button class="map-tool" id="mapRefresh" type="button">Reload map</button>
+          <button class="map-tool" id="mapRefresh" type="button">Refresh vessels</button>
         </div>
       </div>
 
@@ -203,6 +205,7 @@
         <p class="map-disclaimer">JavaScript is required for corridor switching. You can still use the <a href="https://ais.boatnerd.com/">BoatNerd Great Lakes map</a> or <a href="https://www.myshiptracking.com/">MyShipTracking</a>.</p>
       </noscript>
 
+      <section class="vessel-results" aria-labelledby="vessel-list-heading"><h3 id="vessel-list-heading">Recent vessel reports</h3><p>Tap a name to see its position. Blue means reported movement, amber means little or no movement, and gray means speed unavailable. Only reports less than 30 minutes old appear. A missing ship does not prove empty water.</p><ul id="freighterVessels"><li>Waiting for vessel reports…</li></ul><p id="freighterCredits"></p></section>
       <div class="tracker-context">
         <div class="corridor-panel">
           <p class="context-label" id="corridorLabel">Current map: All Great Lakes</p>
@@ -228,11 +231,11 @@
           <a class="conditions-link" href="/great-lakes-buoys/" data-track-tool="great-lakes-buoys" data-placement="freighter-conditions">Open the full Great Lakes buoy dashboard &rarr;</a>
         </aside>
       </div>
-      <p class="map-disclaimer">AIS positions are informational, may be delayed or incomplete, and must not be used for navigation. Embedded map provided through <a href="https://www.myshiptracking.com/more/embed-our-map" target="_blank" rel="noopener">MyShipTracking's public map widget</a>. Passage links open <a href="https://ais.boatnerd.com/" target="_blank" rel="noopener">BoatNerd AIS</a>. NOAA observations are nearby context, not conditions aboard a vessel.</p>
+      <p class="map-disclaimer">AIS positions are informational, may be delayed or incomplete, and must not be used for navigation. Vessel reports provided through <a href="https://openwaters.io/ais/" target="_blank" rel="noopener">Open Waters AIS</a>, with upstream source credits below. Passage links open <a href="https://ais.boatnerd.com/" target="_blank" rel="noopener">BoatNerd AIS</a>. NOAA observations are nearby context, not conditions aboard a vessel.</p>
     </div>
 
     <div class="trust-row" aria-label="Data and privacy notes">
-      <div class="trust-item"><strong>No AIS key exposed</strong><span>The vessel layer stays inside the map provider's supported public embed.</span></div>
+      <div class="trust-item"><strong>No AIS key exposed</strong><span>Vessel reports load through this site's server; any provider credential stays private.</span></div>
       <div class="trust-item"><strong>No copied ship schedule</strong><span>Named passage lists remain with BoatNerd instead of being scraped or republished here.</span></div>
       <div class="trust-item"><strong>Useful if live data fails</strong><span>Corridor explanations, watching locations, and source links remain crawlable and available.</span></div>
     </div>
@@ -293,7 +296,7 @@
   <section class="content-section" aria-labelledby="freighter-faq">
     <h2 class="section-heading" id="freighter-faq">Great Lakes Ship Tracking FAQ</h2>
     <div class="faq-list">
-      <details><summary>How do I track Great Lakes freighters live?</summary><p>Start with the live AIS ship map on this page, which covers all five Great Lakes, then narrow to the corridor where the ship you want is likely to be: the Soo Locks, the Straits of Mackinac, Duluth-Superior, Port Huron, the Detroit River or Saginaw Bay. Tap a vessel marker or name and the map provider may show the ship's name, reported destination, speed, course and the time of its last AIS update. Check that timestamp first, because a marker is only as current as its last broadcast. For recent named-ship activity, open the matching BoatNerd passage list for that corridor, which records arrivals and departures instead of live positions. Public AIS coverage can be delayed or incomplete, so pair the map with a passage list when timing matters, and treat every position as a shoreside watching aid rather than navigation data. If the embedded map fails to load, the BoatNerd and MyShipTracking links still work.</p></details>
+      <details><summary>How do I track Great Lakes freighters live?</summary><p>Start with the live AIS ship map on this page, which covers all five Great Lakes, then narrow to the corridor where the ship you want is likely to be: the Soo Locks, the Straits of Mackinac, Duluth-Superior, Port Huron, the Detroit River or Saginaw Bay. Tap a vessel marker or name and the map provider may show the ship's name, reported destination, speed, course and the time of its last AIS update. Check that timestamp first, because a marker is only as current as its last broadcast. For recent named-ship activity, open the matching BoatNerd passage list for that corridor, which records arrivals and departures instead of live positions. Public AIS coverage can be delayed or incomplete, so pair the map with a passage list when timing matters, and treat every position as a shoreside watching aid rather than navigation data. If the live map fails to load, the BoatNerd and MyShipTracking links still work.</p></details>
       <details><summary>Does every Great Lakes ship appear on AIS?</summary><p>No. Most large commercial vessels people follow transmit AIS, but public receiver and provider coverage can be delayed or incomplete. Small recreational boats may not carry AIS at all.</p></details>
       <details><summary>Can I see which ships are going through the Soo Locks today?</summary><p>Yes. Choose the Soo Locks corridor on the live map to see AIS-equipped vessels approaching, waiting at and leaving the locks at Sault Ste. Marie, then open the dedicated <a href="/soo-locks/">Soo Locks schedule-today flow</a> on this site. That page combines the live map with the <a href="https://ais.boatnerd.com/passage/port/soo-locks" target="_blank" rel="noopener">BoatNerd Soo Locks passage list</a>, which records each named ship as it locks through, and the official U.S. Army Corps of Engineers vessel hotline. Use the three together: the map shows where ships are right now, the passage list confirms which ones have already gone through, and the hotline is the Corps' own statement of what is expected. Because public AIS can lag or drop out, a ship that appears stopped on the map may already be in the chamber, and the passage list settles it. If you want to watch in person, the Soo Locks observation deck is the best public vantage point on the system.</p></details>
       <details><summary>Where can I watch freighters from shore?</summary><p>Strong public options include the Soo Locks observation deck at Sault Ste. Marie, where ships pass within a short walk of the viewing platform; Canal Park in Duluth, where the harbor and aerial lift bridge approach make arrivals easy to see and easy to pair with a passage list; Vantage Point in Port Huron on the St. Clair River, where the upper river funnels Lake Huron traffic past the waterfront; the Mackinaw City and St. Ignace waterfronts on either side of the Straits of Mackinac; Belle Isle on the Detroit River, with broad views of a busy international and industrial corridor; and Bay City's Saginaw River waterfront for the Saginaw Bay run. Each of these sits on a corridor the live map can be set to, so you can confirm a ship is actually inbound before you drive. Pair the corridor view with the matching BoatNerd passage list to see what has already passed and when.</p></details>
@@ -316,7 +319,7 @@
 
   <aside class="author-note">
     <div class="author-mark" aria-hidden="true">CI</div>
-    <p><strong>Built by Chris Izworski in Bay City, Michigan.</strong> I live on Saginaw Bay and have watched freighters on the bay and Saginaw River for years; they are the reason I named my garden project <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms</a>. This page combines that local experience with supported AIS embeds, BoatNerd passage links, and NOAA station data. Last reviewed August 3, 2026.</p>
+    <p><strong>Built by Chris Izworski in Bay City, Michigan.</strong> I live on Saginaw Bay and have watched freighters on the bay and Saginaw River for years; they are the reason I named my garden project <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms</a>. This page combines that local experience with recent AIS position reports, BoatNerd passage links, and NOAA station data. Last reviewed September 17, 2026.</p>
   </aside>
 </main>
 
