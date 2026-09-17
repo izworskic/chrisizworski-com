@@ -26,7 +26,7 @@ Main repository: `npm run verify:all` passed, including 430 tests and all regist
 
 Gazette repository: `npm test` passed. Regression checks prove invalid dates, insufficient source data and missing headlines cause zero Redis writes; a valid edition retains normal persistence. A pre-existing growth test was corrected to expect the already deployed GA4 gateway wrapper and verify its delegation.
 
-Production verification follows deployment. This document records the release basis, not an account-side approval claim.
+Production checks after PR #368 confirmed the 14 tool landing pages retain their original titles, canonicals and links, gain policy navigation and load one ad script each. The rivers browser search returned 21 rivers and 31 monitors. The privacy and Gazette disclosures were present. The 16 aurora routes still failed with the sitemap's trailing slash even though slashless owner routes worked; a follow-up adds exact routes to each owner's existing `index.html` file for both public URL forms. Tests now enforce these exact routes ahead of the wildcards. Final production checks follow that deployment. This document records the release basis, not an account-side approval claim.
 
 ## Remaining account-side checks
 

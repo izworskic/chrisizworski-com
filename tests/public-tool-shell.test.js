@@ -34,6 +34,12 @@ test('all listed state aurora destinations route to their state owner before the
   let checked=0;
   for(const m of xml.matchAll(/<loc>https:\/\/chrisizworski.com\/national-tools\/aurora\/([^/]+)\/([^/]+)\/<\/loc>/g)){
     const [,state,place]=m;
+    for(const slash of ['', '/']) {
+      const source=`/national-tools/aurora/${state}/${place}${slash}`;
+      const exactIndex=rewrites.findIndex(r=>r.source===source);
+      assert.ok(exactIndex>=0 && exactIndex<rewrites.findIndex(r=>r.source===`/national-tools/aurora/${state}/:path*`));
+      assert.equal(rewrites[exactIndex].destination,`https://${state}-aurora-live.vercel.app/${place}/index.html`);
+    }
     const index=rewrites.findIndex(r=>r.source===`/national-tools/aurora/${state}/:path*`);
     assert.ok(index>=0 && index<rewrites.findIndex(r=>r.source==='/national-tools/aurora/:path*'));
     assert.equal(rewrites[index].destination,`https://${state}-aurora-live.vercel.app/:path*`);checked++;
