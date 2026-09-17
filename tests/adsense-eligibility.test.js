@@ -4,7 +4,7 @@ const { eligible, removeAdLoader } = require('../lib/adsense-eligibility');
 const sitePolicyLinks = require('../lib/site-policy-links');
 const loader = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>';
 test('ad loading excludes utility and unpublished pages without excluding normal tools', () => {
-  for (const path of ['/privacy/', '/terms/index.html', '/connect/?from=tool', '/for-publishers/']) assert.equal(eligible('<html></html>', path), false);
+  for (const path of ['/privacy/', '/privacy.html', '/terms/index.html', '/connect/?from=tool', '/for-publishers/', '/404.html', '/500.html?source=error']) assert.equal(eligible('<html></html>', path), false);
   for (const meta of ['<meta name="robots" content="noindex,follow">', "<meta content='none' name='googlebot'>", '<meta http-equiv="refresh" content="0;url=/tools/">']) assert.equal(eligible(meta, '/tool/'), false);
   assert.equal(eligible('<meta name="robots" content="index,follow">', '/soo-locks/'), true);
 });

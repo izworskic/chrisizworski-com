@@ -26,6 +26,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Sep 17: accurate advertising, location, storage and contact disclosures.
+  "/privacy/",
   // Sep 17 2026: source context and distinct branded coverage value.
   "/chris-izworski-prepared911/",
   "/chris-izworski-save-our-shoreline/",

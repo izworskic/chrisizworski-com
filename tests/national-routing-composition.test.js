@@ -6,6 +6,12 @@ const path=require('node:path');
 const cfg=JSON.parse(fs.readFileSync(path.join(__dirname,'../vercel.json'),'utf8'));
 const rewrites=cfg.rewrites||[];
 const bySource=new Map(rewrites.map(r=>[r.source,r.destination]));
+const publicToolSources=require('../lib/public-tool-sources.js');
+function sourceDestination(source){
+  const destination=bySource.get(source);
+  const shell=destination?.match(/^\/api\/public-tool-shell\?tool=([a-z-]+)$/);
+  return shell ? publicToolSources[shell[1]] : destination;
+}
 
 const plantingOrigin='https://national-planting.vercel.app';
 const hubOrigin='https://national-outdoor-tools-hub.vercel.app';
@@ -40,14 +46,14 @@ test('national specialist hub routes are explicit and precede catch-all',()=>{
   const catchAll=rewrites.findIndex(r=>r.source==='/national-tools/:path*');
   assert.ok(catchAll>=0,'national tools catch-all must exist');
   for(const [source,destination] of Object.entries(hubRoutes)){
-    assert.equal(bySource.get(source),destination,source+' must route to national hub');
+    assert.equal(sourceDestination(source),destination,source+' must route to national hub');
     const index=rewrites.findIndex(r=>r.source===source);
     assert.ok(index>=0&&index<catchAll,source+' must precede the hub catch-all');
   }
 });
 
 test('planting page and its API dependencies remain on canonical main-domain routes',()=>{
-  assert.equal(bySource.get('/national-tools/planting/'),plantingOrigin+'/national-tools/planting/');
+  assert.equal(sourceDestination('/national-tools/planting/'),plantingOrigin+'/national-tools/planting/');
   assert.equal(bySource.get('/api/national-geocode'),'https://national-outdoor-core.vercel.app/api/national-geocode');
   assert.equal(bySource.get('/api/national-frost'),'https://national-frost.vercel.app/api/national-frost');
 });

@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
+import publicToolSources from '../lib/public-tool-sources.js';
 
 const middleware=fs.readFileSync('middleware.ts','utf8');
 const vercel=JSON.parse(fs.readFileSync('vercel.json','utf8'));
@@ -29,7 +30,9 @@ const expected=new Map([
 for(const [source,destination] of expected){
   const matches=rewrites.filter(r=>r.source===source);
   assert.equal(matches.length,1,`Expected exactly one Gauley rewrite for ${source}`);
-  assert.equal(matches[0].destination,destination,`Wrong Gauley destination for ${source}`);
+  const actual=matches[0].destination;
+  const owner=actual==='/api/public-tool-shell?tool=gauley-release-live' ? publicToolSources['gauley-release-live'] : actual;
+  assert.equal(owner,destination,`Wrong Gauley destination for ${source}`);
 }
 const catchAllIndex=rewrites.findIndex(r=>r.source==='/national-tools/:path*');
 assert.ok(catchAllIndex>=0,'National Tools catch-all proxy missing');

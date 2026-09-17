@@ -127,9 +127,11 @@ test("edge runtime API routes never use the Node res object, and still set noind
     const isEdge = /runtime:\s*['"]edge['"]/.test(src);
     const rel = path.relative(dir, file);
     // This handler renders the public /national-tools/ HTML page, not a data API.
-    if (['national-tools-hub.js', 'garden-water-page.js', 'thunder-hole-page.js'].includes(rel)) {
+    if (['national-tools-hub.js', 'garden-water-page.js', 'thunder-hole-page.js', 'public-tool-shell.js'].includes(rel)) {
       assert.ok(/text\/html/.test(src) || /public-tool-page\.js/.test(src), `${rel} must render public HTML directly or through publicToolPage`);
-      assert.ok(!/setHeader\(['"]X-Robots-Tag['"],\s*['"]noindex/i.test(src));
+      // The allowlisted shell marks only unknown-tool 404 responses noindex;
+      // its successful HTML response is checked behaviorally in public-tool-shell.test.js.
+      if (rel !== 'public-tool-shell.js') assert.ok(!/setHeader\(['"]X-Robots-Tag['"],\s*['"]noindex/i.test(src));
       continue;
     }
     if (isEdge) {

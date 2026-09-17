@@ -446,35 +446,35 @@
     },
     {
       "source": "/national-tools/garden",
-      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/garden/"
+      "destination": "/api/public-tool-shell?tool=garden"
     },
     {
       "source": "/national-tools/garden/",
-      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/garden/"
+      "destination": "/api/public-tool-shell?tool=garden"
     },
     {
       "source": "/national-tools/fall",
-      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/fall/"
+      "destination": "/api/public-tool-shell?tool=fall"
     },
     {
       "source": "/national-tools/fall/",
-      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/fall/"
+      "destination": "/api/public-tool-shell?tool=fall"
     },
     {
       "source": "/national-tools/water",
-      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/water/"
+      "destination": "/api/public-tool-shell?tool=water"
     },
     {
       "source": "/national-tools/water/",
-      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/water/"
+      "destination": "/api/public-tool-shell?tool=water"
     },
     {
       "source": "/national-tools/waterfalls",
-      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/waterfalls/"
+      "destination": "/api/public-tool-shell?tool=waterfalls"
     },
     {
       "source": "/national-tools/waterfalls/",
-      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/waterfalls/"
+      "destination": "/api/public-tool-shell?tool=waterfalls"
     },
     {
       "source": "/national-tools/waterfalls/:path*",
@@ -482,11 +482,11 @@
     },
     {
       "source": "/national-tools/night-sky",
-      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/night-sky/"
+      "destination": "/api/public-tool-shell?tool=night-sky"
     },
     {
       "source": "/national-tools/night-sky/",
-      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/night-sky/"
+      "destination": "/api/public-tool-shell?tool=night-sky"
     },
     {
       "source": "/national-tools/aurora/alaska",
@@ -530,35 +530,35 @@
     },
     {
       "source": "/national-tools/aurora",
-      "destination": "https://national-aurora.vercel.app/national-tools/aurora/"
+      "destination": "/api/public-tool-shell?tool=aurora"
     },
     {
       "source": "/national-tools/aurora/",
-      "destination": "https://national-aurora.vercel.app/national-tools/aurora/"
+      "destination": "/api/public-tool-shell?tool=aurora"
     },
     {
       "source": "/national-tools/rivers",
-      "destination": "https://national-rivers.vercel.app/national-tools/rivers/"
+      "destination": "/api/public-tool-shell?tool=rivers"
     },
     {
       "source": "/national-tools/rivers/",
-      "destination": "https://national-rivers.vercel.app/national-tools/rivers/"
+      "destination": "/api/public-tool-shell?tool=rivers"
     },
     {
       "source": "/national-tools/frost",
-      "destination": "https://national-frost.vercel.app/national-tools/frost/"
+      "destination": "/api/public-tool-shell?tool=frost"
     },
     {
       "source": "/national-tools/frost/",
-      "destination": "https://national-frost.vercel.app/national-tools/frost/"
+      "destination": "/api/public-tool-shell?tool=frost"
     },
     {
       "source": "/national-tools/planting",
-      "destination": "https://national-planting.vercel.app/national-tools/planting/"
+      "destination": "/api/public-tool-shell?tool=planting"
     },
     {
       "source": "/national-tools/planting/",
-      "destination": "https://national-planting.vercel.app/national-tools/planting/"
+      "destination": "/api/public-tool-shell?tool=planting"
     },
     {
       "source": "/national-tools/garden-water",
@@ -578,27 +578,27 @@
     },
     {
       "source": "/national-tools/fall-color",
-      "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/"
+      "destination": "/api/public-tool-shell?tool=fall-color"
     },
     {
       "source": "/national-tools/fall-color/",
-      "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/"
+      "destination": "/api/public-tool-shell?tool=fall-color"
     },
     {
       "source": "/national-tools/coastal",
-      "destination": "https://national-coastal-water.vercel.app/national-tools/coastal/"
+      "destination": "/api/public-tool-shell?tool=coastal"
     },
     {
       "source": "/national-tools/coastal/",
-      "destination": "https://national-coastal-water.vercel.app/national-tools/coastal/"
+      "destination": "/api/public-tool-shell?tool=coastal"
     },
     {
       "source": "/national-tools/snow",
-      "destination": "https://national-snowpack-melt.vercel.app/national-tools/snow/"
+      "destination": "/api/public-tool-shell?tool=snow"
     },
     {
       "source": "/national-tools/snow/",
-      "destination": "https://national-snowpack-melt.vercel.app/national-tools/snow/"
+      "destination": "/api/public-tool-shell?tool=snow"
     },
     {
       "source": "/national-tools/white-christmas",
@@ -626,11 +626,11 @@
     },
     {
       "source": "/isle-royale-map",
-      "destination": "https://isle-royale-outdoors.vercel.app/isle-royale-map/"
+      "destination": "/api/public-tool-shell?tool=isle-royale-map"
     },
     {
       "source": "/isle-royale-map/",
-      "destination": "https://isle-royale-outdoors.vercel.app/isle-royale-map/"
+      "destination": "/api/public-tool-shell?tool=isle-royale-map"
     },
     {
       "source": "/tahquamenon-falls",
@@ -639,6 +639,26 @@
     {
       "source": "/tahquamenon-falls/",
       "destination": "https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/:path*",
+      "destination": "https://alaska-aurora-live.vercel.app/:path*"
+    },
+    {
+      "source": "/national-tools/aurora/minnesota/:path*",
+      "destination": "https://minnesota-aurora-live.vercel.app/:path*"
+    },
+    {
+      "source": "/national-tools/aurora/north-dakota/:path*",
+      "destination": "https://north-dakota-aurora-live.vercel.app/:path*"
+    },
+    {
+      "source": "/national-tools/aurora/montana/:path*",
+      "destination": "https://montana-aurora-live.vercel.app/:path*"
+    },
+    {
+      "source": "/national-tools/aurora/maine/:path*",
+      "destination": "https://maine-aurora-live.vercel.app/:path*"
     },
     {
       "source": "/national-tools/aurora/:path*",
@@ -750,11 +770,11 @@
     },
     {
       "source": "/national-tools/gauley-release-live",
-      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/gauley-release-live/"
+      "destination": "/api/public-tool-shell?tool=gauley-release-live"
     },
     {
       "source": "/national-tools/gauley-release-live/",
-      "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/gauley-release-live/"
+      "destination": "/api/public-tool-shell?tool=gauley-release-live"
     },
     {
       "source": "/national-tools/gauley-release-live/:path*",

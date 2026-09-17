@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
+import publicToolSources from '../lib/public-tool-sources.js';
 
 const root = path.resolve(import.meta.dirname, "..");
 const cfg = JSON.parse(await readFile(path.join(root, "vercel.json"), "utf8"));
@@ -83,7 +84,12 @@ const failures = [];
 const rewrites = cfg.rewrites || [];
 const bySource = new Map(rewrites.map(item => [item.source, item.destination]));
 for (const [source, destination] of expected) {
-  if (bySource.get(source) !== destination) {
+  const actual = bySource.get(source);
+  const key = actual?.match(/^\/api\/public-tool-shell\?tool=([a-z-]+)$/)?.[1];
+  // Resolve the HTML composition layer to its fixed owner URL. This still
+  // checks exact ownership; it does not exempt or allow arbitrary proxies.
+  const owner = key ? publicToolSources[key] : actual;
+  if (owner !== destination) {
     failures.push(`rewrite drift: ${source} -> ${bySource.get(source) || "missing"}; expected ${destination}`);
   }
 }
