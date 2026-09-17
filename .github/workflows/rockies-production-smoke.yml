@@ -5,52 +5,84 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/rockies-production-smoke.yml'
+      - 'public/synced-national-tools/trail-ridge-road/**'
+      - 'public/synced-national-tools/yellowstone-geysers/**'
+      - 'public/synced-national-tools/assets/mountain-tool.css'
+      - 'api/trail-ridge-road.js'
+      - 'api/yellowstone-geysers.js'
   workflow_dispatch:
 
 jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for Rockies pages and directory
+      - name: Wait for AdSense-ready Rockies pages and directory
         shell: bash
         run: |
           set -euo pipefail
           fetch() { curl --retry 4 --retry-delay 2 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' "$1"; }
-          rockies=''
-          for attempt in $(seq 1 48); do
-            rockies="$(fetch 'https://chrisizworski.com/national-tools/rockies/?gate-smoke=20260916-rockies-v2' || true)"
-            if grep -q 'Rocky Mountain Elk Rut Live' <<<"$rockies" && grep -q 'Trail Ridge Road Live' <<<"$rockies" && grep -q 'Yellowstone Geyser Timing' <<<"$rockies"; then break; fi
+          trail=''
+          geysers=''
+          directory=''
+          for attempt in $(seq 1 60); do
+            trail="$(fetch 'https://chrisizworski.com/national-tools/trail-ridge-road/?gate-smoke=20260916-content-v3' || true)"
+            geysers="$(fetch 'https://chrisizworski.com/national-tools/yellowstone-geysers/?gate-smoke=20260916-content-v3' || true)"
+            directory="$(fetch 'https://chrisizworski.com/national-tools/?gate-smoke=20260916-content-v3' || true)"
+            if grep -q 'Plan the drive, not just the status' <<<"$trail" && grep -q 'Choose the geyser that fits your day' <<<"$geysers" && grep -q 'numberOfItems":34' <<<"$directory"; then break; fi
             sleep 5
           done
+
+          rockies="$(fetch 'https://chrisizworski.com/national-tools/rockies/?gate-smoke=20260916-content-v3')"
           grep -q 'Rocky Mountain Elk Rut Live' <<<"$rockies"
           grep -q 'Trail Ridge Road Live' <<<"$rockies"
           grep -q 'Yellowstone Geyser Timing' <<<"$rockies"
           grep -q 'numberOfItems":3' <<<"$rockies"
 
-          directory="$(fetch 'https://chrisizworski.com/national-tools/?gate-smoke=20260916-rockies-v2')"
           grep -q 'data-tool-id="elk-rut"' <<<"$directory"
           grep -q 'data-tool-id="trail-ridge-road"' <<<"$directory"
           grep -q 'data-tool-id="yellowstone-geysers"' <<<"$directory"
           grep -q 'href="/national-tools/rockies/"' <<<"$directory"
           grep -q 'numberOfItems":34' <<<"$directory"
 
-          trail="$(fetch 'https://chrisizworski.com/national-tools/trail-ridge-road/?gate-smoke=20260916-rockies-v2')"
           grep -q 'Road first. Weather second.' <<<"$trail"
-          grep -qi 'official NPS road status comes first' <<<"$trail"
+          grep -q 'How to read the live answer' <<<"$trail"
+          grep -q 'Plan the drive, not just the status' <<<"$trail"
+          grep -q 'A practical cross-park drive' <<<"$trail"
+          grep -q 'Road status is not the same as trip quality' <<<"$trail"
+          grep -q 'Trail Ridge Road FAQ' <<<"$trail"
+          grep -q 'How this page is built' <<<"$trail"
+          grep -q 'Primary sources and further reading' <<<"$trail"
+          grep -q '48 miles' <<<"$trail"
+          grep -q '12,183 feet' <<<"$trail"
+          grep -q '1.5 to 2 hours' <<<"$trail"
+          grep -q 'Many Parks Curve' <<<"$trail"
+          grep -q 'Milner Pass' <<<"$trail"
+          grep -q 'Reviewed against official NPS source material' <<<"$trail"
 
-          geysers="$(fetch 'https://chrisizworski.com/national-tools/yellowstone-geysers/?gate-smoke=20260916-rockies-v2')"
           grep -q 'A window, not an appointment.' <<<"$geysers"
-          grep -qi 'does not invent an eruption schedule' <<<"$geysers"
+          grep -q 'How to use a geyser prediction window' <<<"$geysers"
+          grep -q 'Choose the geyser that fits your day' <<<"$geysers"
+          grep -q 'Build a geyser day without spending it waiting' <<<"$geysers"
+          grep -q 'Why Yellowstone geyser predictions change' <<<"$geysers"
+          grep -q 'Upper Geyser Basin versus Lower Geyser Basin' <<<"$geysers"
+          grep -q 'Yellowstone geyser timing FAQ' <<<"$geysers"
+          grep -q 'How this page is built' <<<"$geysers"
+          grep -q 'Primary sources and further reading' <<<"$geysers"
+          for name in 'Old Faithful' Castle Daisy Grand Riverside 'Great Fountain'; do grep -q "$name" <<<"$geysers"; done
+          grep -q 'Reviewed against official Yellowstone NPS source material' <<<"$geysers"
 
-          css="$(fetch 'https://chrisizworski.com/national-tools/assets/mountain-tool.css?gate-smoke=20260916-rockies-v2')"
+          css="$(fetch 'https://chrisizworski.com/national-tools/assets/mountain-tool.css?gate-smoke=20260916-content-v3')"
           grep -q '.decision-grid' <<<"$css"
-          grep -q '.status' <<<"$css"
+          grep -q '.plan-steps' <<<"$css"
+          grep -q '.decision-table' <<<"$css"
+          grep -q '.faq-item' <<<"$css"
+          grep -q '.sources' <<<"$css"
 
       - name: Verify Trail Ridge live API
         shell: bash
         run: |
           set -euo pipefail
-          raw="$(curl --retry 8 --retry-delay 4 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/trail-ridge-road?gate-smoke=20260916-rockies-v2')"
+          raw="$(curl --retry 8 --retry-delay 4 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/trail-ridge-road?gate-smoke=20260916-content-v3')"
           node - <<'NODE' "$raw"
           const d=JSON.parse(process.argv[2]);
           if(d.ok!==true||!d.road||!d.alpine?.weather?.assessment) process.exit(1);
@@ -67,7 +99,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          raw="$(curl --retry 8 --retry-delay 4 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/yellowstone-geysers?gate-smoke=20260916-rockies-v2')"
+          raw="$(curl --retry 8 --retry-delay 4 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' 'https://chrisizworski.com/api/yellowstone-geysers?gate-smoke=20260916-content-v3')"
           node - <<'NODE' "$raw"
           const d=JSON.parse(process.argv[2]);
           if(d.ok!==true||!Array.isArray(d.predictions)||d.predictions.length!==6) process.exit(1);
@@ -95,13 +127,13 @@ jobs:
         run: |
           set -euo pipefail
           fetch() { curl --retry 4 --retry-delay 3 --retry-all-errors -fLsS -H 'Cache-Control: no-cache' "$1"; }
-          southeast="$(fetch 'https://chrisizworski.com/national-tools/southeast/?gate-smoke=20260916-rockies-regression')"
+          southeast="$(fetch 'https://chrisizworski.com/national-tools/southeast/?gate-smoke=20260916-content-regression')"
           grep -q 'Florida Red Tide Live' <<<"$southeast"
           grep -q 'Space Coast Launch Viewing' <<<"$southeast"
-          northeast="$(fetch 'https://chrisizworski.com/national-tools/northeast-great-lakes/?gate-smoke=20260916-rockies-regression')"
+          northeast="$(fetch 'https://chrisizworski.com/national-tools/northeast-great-lakes/?gate-smoke=20260916-content-regression')"
           grep -q 'Great Lakes Levels' <<<"$northeast"
           grep -q 'Thunder Hole Live' <<<"$northeast"
-          bird="$(fetch 'https://chrisizworski.com/national-tools/bird-migration/?gate-smoke=20260916-rockies-regression')"
+          bird="$(fetch 'https://chrisizworski.com/national-tools/bird-migration/?gate-smoke=20260916-content-regression')"
           grep -q 'Where should you bird this morning?' <<<"$bird"
-          columbia="$(fetch 'https://chrisizworski.com/national-tools/columbia-salmon-run/?gate-smoke=20260916-rockies-regression')"
+          columbia="$(fetch 'https://chrisizworski.com/national-tools/columbia-salmon-run/?gate-smoke=20260916-content-regression')"
           grep -q 'Columbia Salmon Run Live' <<<"$columbia"

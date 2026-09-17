@@ -15,8 +15,8 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      HUB_COMMIT: b1ee96f5f649f01156fe091c5745e2fcc16fc0e3
-      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/b1ee96f5f649f01156fe091c5745e2fcc16fc0e3
+      HUB_COMMIT: 1ded0f3862349532be1c5a1f3d38df82a0757fdf
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/1ded0f3862349532be1c5a1f3d38df82a0757fdf
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -93,7 +93,6 @@ jobs:
           v.functions ||= {};
           for (const api of ['api/bird-migration-morning.js','api/birding-local-action.js','api/columbia-salmon.js','api/florida-red-tide.js','api/space-coast-launch.js','api/trail-ridge-road.js','api/yellowstone-geysers.js']) delete v.functions[api];
           v.rewrites ||= [];
-
           const routes=[
             ['/national-tools','/synced-national-tools/index.html'],
             ['/national-tools/','/synced-national-tools/index.html'],
@@ -133,7 +132,6 @@ jobs:
             ['/national-tools/yellowstone-geysers/','/synced-national-tools/yellowstone-geysers/index.html'],
             ['/national-tools/yellowstone-geysers/:path*','/synced-national-tools/yellowstone-geysers/:path*']
           ];
-
           const sources=new Set(routes.map(([source])=>source));
           v.rewrites=v.rewrites.filter(r=>!sources.has(r.source));
           const fallbackIndex=v.rewrites.findIndex(r=>r.source==='/national-tools/:path*');
@@ -177,10 +175,28 @@ jobs:
           grep -q 'Trail Ridge Road Live' public/synced-national-tools/rockies/index.html
           grep -q 'Yellowstone Geyser Timing' public/synced-national-tools/rockies/index.html
           grep -q 'numberOfItems":3' public/synced-national-tools/rockies/index.html
+
           grep -q 'Road first. Weather second.' public/synced-national-tools/trail-ridge-road/index.html
-          grep -qi 'official NPS road status comes first' public/synced-national-tools/trail-ridge-road/index.html
+          grep -q 'How to read the live answer' public/synced-national-tools/trail-ridge-road/index.html
+          grep -q 'Plan the drive, not just the status' public/synced-national-tools/trail-ridge-road/index.html
+          grep -q 'A practical cross-park drive' public/synced-national-tools/trail-ridge-road/index.html
+          grep -q 'Road status is not the same as trip quality' public/synced-national-tools/trail-ridge-road/index.html
+          grep -q 'Trail Ridge Road FAQ' public/synced-national-tools/trail-ridge-road/index.html
+          grep -q 'How this page is built' public/synced-national-tools/trail-ridge-road/index.html
+          grep -q 'Primary sources and further reading' public/synced-national-tools/trail-ridge-road/index.html
+          grep -q '48 miles' public/synced-national-tools/trail-ridge-road/index.html
+          grep -q '12,183 feet' public/synced-national-tools/trail-ridge-road/index.html
+          grep -q '1.5 to 2 hours' public/synced-national-tools/trail-ridge-road/index.html
+
           grep -q 'A window, not an appointment.' public/synced-national-tools/yellowstone-geysers/index.html
-          grep -qi 'does not invent an eruption schedule' public/synced-national-tools/yellowstone-geysers/index.html
+          grep -q 'How to use a geyser prediction window' public/synced-national-tools/yellowstone-geysers/index.html
+          grep -q 'Choose the geyser that fits your day' public/synced-national-tools/yellowstone-geysers/index.html
+          grep -q 'Build a geyser day without spending it waiting' public/synced-national-tools/yellowstone-geysers/index.html
+          grep -q 'Why Yellowstone geyser predictions change' public/synced-national-tools/yellowstone-geysers/index.html
+          grep -q 'Upper Geyser Basin versus Lower Geyser Basin' public/synced-national-tools/yellowstone-geysers/index.html
+          grep -q 'Yellowstone geyser timing FAQ' public/synced-national-tools/yellowstone-geysers/index.html
+          grep -q 'How this page is built' public/synced-national-tools/yellowstone-geysers/index.html
+          grep -q 'Primary sources and further reading' public/synced-national-tools/yellowstone-geysers/index.html
 
           grep -q 'Insufficient recent sampling nearby' api/florida-red-tide.js
           grep -qi 'not an all-clear' api/florida-red-tide.js
@@ -191,6 +207,9 @@ jobs:
           grep -q 'weather assessment never overrides it' api/trail-ridge-road.js
           grep -q 'does not calculate its own eruption model' api/yellowstone-geysers.js
           grep -q 'Open Database License' api/yellowstone-geysers.js
+          for api in api/columbia-salmon.js api/florida-red-tide.js api/space-coast-launch.js api/trail-ridge-road.js api/yellowstone-geysers.js; do
+            grep -q "X-Robots-Tag','noindex, nofollow" "$api"
+          done
 
           grep -q 'Where should you bird this morning?' public/synced-national-tools/bird-migration/index.html
           grep -q 'Strongest current evidence' public/synced-national-tools/bird-migration/index.html

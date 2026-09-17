@@ -136,6 +136,7 @@ function ageDays(isoDate){
 export default async function handler(req,res){
   res.setHeader('Cache-Control','s-maxage=900, stale-while-revalidate=3600');
   res.setHeader('Access-Control-Allow-Origin','*');
+  res.setHeader('X-Robots-Tag','noindex, nofollow');
   try{
     const response=await fetch(SOURCE_URL,{headers:{'User-Agent':'ChrisIzworski-NationalTools/1.0 (+https://chrisizworski.com/national-tools/)','Accept':'text/html'}});
     if(!response.ok)throw new Error(`FPC returned ${response.status}`);
