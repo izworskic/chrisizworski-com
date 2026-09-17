@@ -576,7 +576,7 @@
         "https://chrisizworski.com/fall-color/"
       ],
       "observedValue": "Regional leaf-color timing and weather-informed trip planning",
-      "followUp": "Missing weather/partial history correction included in this release. Commercial Open-Meteo access unresolved.",
+      "followUp": "Missing weather/partial history correction included in this release. Commercial Open-Meteo access unresolved. AI/model provenance disclosed on the page, API and RSS; future generation retains input sources. Full archive fact-checking remains open.",
       "approvalStatus": "not certified"
     },
     {

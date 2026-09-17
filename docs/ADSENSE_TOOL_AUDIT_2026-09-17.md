@@ -17,6 +17,7 @@ The useful distinction is visible in this network: a frost probability, a crop p
 ## Changes in this release
 
 - Michigan Fall Color: reject failed weather responses; missing sky/rain/temperature stays unknown. A partial history no longer masquerades as a complete warm spell. Preserve genuine zero rain and clear-sky observations.
+- Michigan Fall Color daily note: explicitly identify AI generation and model-based interpretation on the page, report API and RSS, including previously stored notes. Future generation receives actual source drivers/dates and retains its input provenance. This improves transparency; it does not retroactively fact-check the archive.
 - Trail Ridge Road: incomplete forecasts or unavailable alert data cannot establish workable travel weather; positive hazard evidence remains visible. Expired forecast periods are excluded.
 - Space Coast: missing precipitation/wind remains unknown, and the strongest wind in a range is considered.
 - Yellowstone: malformed, reversed, expired or missing eruption windows cannot be displayed as current predictions.
@@ -143,7 +144,9 @@ All URLs below returned HTTP 200 during the crawl. “Distinct use” records ob
 
 ## Release validation
 
-- Main site: `npm run verify:all` passed, including all 437 tests and the required source, routing, search, entity, freshness and product benchmarks.
+- Main site: `npm run verify:all` passed, including all 439 tests and the required source, routing, search, entity, freshness and product benchmarks.
 - National directory: all 68 tests passed; its Yosemite sync script was run before testing.
 - Seven new regression tests exercise incomplete weather, real zero values, failed weather responses, wind ranges, invalid/expired geyser predictions and exact Firefall canonical redirects.
 - These checks validate the changed behavior and existing repository contracts. They do not establish complete interactive coverage or commercial source entitlement for the 81-tool network.
+
+Follow-up validation: legacy report API and RSS tests confirm AI/model disclosure also covers previously saved notes. The preceding release passed 51 production assertions across 15 routes/endpoints; browser checks loaded the fall-color regional readings, Firefall off-season view, road conditions, tentative launch list and current geyser windows. Full 81-tool interactive coverage remains incomplete.
