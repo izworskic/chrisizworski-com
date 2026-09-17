@@ -1,5 +1,7 @@
 # AdSense readiness review — September 17, 2026
 
+**Release update:** see [final release record](ADSENSE_FINAL_RELEASE_2026-09-17.md) for the later AIS repairs, Gazette archive corrections, expanded verification and remaining signed-in account checks. The counts below describe earlier stages, not the final state.
+
 This is a technical and content review, not an AdSense approval. Google has not supplied a specific rejection reason. Only the account's Sites status and Google's review can establish approval.
 
 ## Evidence

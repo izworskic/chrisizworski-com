@@ -1,5 +1,7 @@
 # AdSense tool value and data audit — September 17, 2026
 
+**Later release record:** [September 17 final remediation](ADSENSE_FINAL_RELEASE_2026-09-17.md) records subsequent fixes and live checks. Preserve this original inventory as evidence of what the earlier audit did and did not establish.
+
 **Owner update after this audit:** Chris confirms that he has the data permissions discussed below; supporting documents are not available in this chat. Treat permission as owner-confirmed, not independently inspected. The earlier permission follow-ups below describe the audit-time evidence and are superseded by that confirmation. Endpoint configuration, functional checks and Google account review remain separate.
 
 **Original audit recommendation: hold resubmission pending the listed checks.** This review found useful, distinct tools and repairable defects. It does not establish that every tool meets every policy, and cannot guarantee Google approval. The reported rejection category is low value; Google's exact page-level reasoning is unavailable.
