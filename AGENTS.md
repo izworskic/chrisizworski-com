@@ -334,3 +334,21 @@ For every new White Christmas hub, region, city, state, history, watch, or trave
 6. `npm run benchmark:extracted-routing` and the full `npm run verify:all` gate must pass before merge.
 
 If the owner production deployment is not green, the sitemap change waits.
+
+## /petoskey-wine/ (vendored static export)
+
+`public/petoskey-wine/` is build output, not hand-edited source. The source lives in
+`izworskic/petoskey-wine-region`, which builds as a Next.js static export with
+`basePath: "/petoskey-wine"`. To update the section:
+
+```bash
+# in izworskic/petoskey-wine-region
+NEXT_PUBLIC_CARTO_API_KEY=<carto key> npm run export:hub
+cp -r out/. <hub>/public/petoskey-wine/
+node scripts/build-petoskey-wine-sitemap.mjs   # in the hub
+npm test
+```
+
+The one server dependency is `api/petoskey-route.js`, the road routing proxy the planner
+calls at `/api/petoskey-route`. Everything else is static. Do not edit files under
+`public/petoskey-wine/` directly; they will be overwritten on the next export.
