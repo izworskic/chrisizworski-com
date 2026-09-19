@@ -1,6 +1,12 @@
 # Google AdSense launch plan
 
-Status: technical and audience preparation only. No display-ad network is active in this change.
+Status as of September 19, 2026: Chris reports Google approved the site and explicitly
+authorized serving ads. A live AdSense placement was observed on `/petoskey-wine/`.
+The production build supplies the verified publisher ID and the async ad
+loader in eligible page heads; `/ads.txt` authorizes the matching publisher.
+The older traffic/CTR activation thresholds below are historical planning guidance,
+superseded by this owner authorization. They must not block this release.
+Account approval is owner-reported; private account settings were not inspected.
 
 **Sep 10 2026 clarification.** This plan bundles two different gates that need to stay
 separate: (1) getting the AdSense **account and site approved by Google**, and (2)

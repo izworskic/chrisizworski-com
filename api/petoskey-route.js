@@ -30,11 +30,12 @@ module.exports = async function handler(req, res) {
   if (!Array.isArray(coords) || coords.length < 2) {
     return res.status(400).json({ ok: false, error: "need 2+ coordinates" });
   }
-  if (coords.length > 12) {
+  // The planner saves up to 12 stops, plus the start and return coordinates.
+  if (coords.length > 14) {
     return res.status(400).json({ ok: false, error: "too many coordinates" });
   }
   for (const c of coords) {
-    if (!Array.isArray(c) || c.length !== 2 || !Number.isFinite(c[0]) || !Number.isFinite(c[1])) {
+    if (!Array.isArray(c) || c.length !== 2 || !Number.isFinite(c[0]) || !Number.isFinite(c[1]) || Math.abs(c[0]) > 180 || Math.abs(c[1]) > 90) {
       return res.status(400).json({ ok: false, error: "bad coordinate" });
     }
   }

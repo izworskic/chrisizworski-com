@@ -343,7 +343,7 @@ If the owner production deployment is not green, the sitemap change waits.
 
 ```bash
 # in izworskic/petoskey-wine-region
-NEXT_PUBLIC_CARTO_API_KEY=<carto key> npm run export:hub
+npm run export:hub
 cp -r out/. <hub>/public/petoskey-wine/
 node scripts/build-petoskey-wine-sitemap.mjs   # in the hub
 npm test
