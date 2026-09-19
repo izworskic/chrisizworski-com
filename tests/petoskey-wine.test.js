@@ -52,10 +52,8 @@ test('every exported page is in the section sitemap and the sitemap is in robots
 });
 
 test('the section never advertises the retired hosts it replaced', () => {
-  // The /tools/ card is deliberately not in this change: /tools/ is inside a live
-  // 28-day entity CTR measurement window through 2026-09-21 and is guarded by
-  // protect-existing-winners. It lands in a follow-up once the window closes.
   const tools = read('public', 'tools', 'index.html');
+  assert.match(tools, /href="\/petoskey-wine\/"/);
   assert.doesNotMatch(tools, /petoskey-wine-region\.vercel\.app/);
   assert.doesNotMatch(tools, /petoskeywine\.chrisizworski\.com/);
   assert.doesNotMatch(home, /petoskey-wine-region\.vercel\.app/);
