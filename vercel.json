@@ -28,6 +28,9 @@
     },
     "api/**/*.js": {
       "maxDuration": 10
+    },
+    "api/old-sow-live.js": {
+      "maxDuration": 30
     }
   },
   "redirects": [
