@@ -15,6 +15,7 @@ const handlers = {
   rss: require("../lib/fall-color/routes/rss.js"),
   sitemap: require("../lib/fall-color/routes/sitemap.js"),
   cron: require("../lib/fall-color/routes/cron.js"),
+  "old-sow-live": require("../lib/old-sow/route.js"),
 };
 
 module.exports = async (req, res) => {
