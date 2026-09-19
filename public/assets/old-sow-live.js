@@ -7,6 +7,48 @@ const tm=(t,z=DEER_ZONE)=>new Intl.DateTimeFormat('en-US',{timeZone:z,hour:'nume
 const dateKey=(t,z=DEER_ZONE)=>{const p=new Intl.DateTimeFormat('en-CA',{timeZone:z,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(t));const o=Object.fromEntries(p.map(x=>[x.type,x.value]));return `${o.year}-${o.month}-${o.day}`};
 const addMin=(t,n)=>new Date(new Date(t).getTime()+n*60000);
 const setText=(id,v)=>{const e=$(id);if(e)e.textContent=v??'—'};
+const LETETE_DEPARTURES=['06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:30','21:30','22:30'];
+const hmToMinutes=(s)=>{const [h,m]=s.split(':').map(Number);return h*60+m};
+const clock12=(s)=>{const [h,m]=s.split(':').map(Number),hh=((h+11)%12)+1;return `${hh}:${String(m).padStart(2,'0')} ${h>=12?'PM':'AM'}`};
+function localParts(t,z=DEER_ZONE){
+  const p=new Intl.DateTimeFormat('en-US',{timeZone:z,year:'numeric',month:'2-digit',day:'2-digit',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(t));
+  return Object.fromEntries(p.map(x=>[x.type,x.value]));
+}
+function ferryPlanForArrival(arrival){
+  const p=localParts(arrival,DEER_ZONE);
+  const arrivalMinutes=Number(p.hour)*60+Number(p.minute);
+  const isSunday=p.weekday==='Sun';
+  const departures=LETETE_DEPARTURES.filter(t=>!(isSunday&&(t==='08:30'||t==='10:00')));
+  const latestComfortable=arrivalMinutes-60;
+  const eligible=departures.filter(t=>hmToMinutes(t)<=latestComfortable);
+  const target=eligible.at(-1)||null;
+  const next=target?departures[departures.indexOf(target)+1]||null:departures[0]||null;
+  return {target,next,isSunday,date:`${p.year}-${p.month}-${p.day}`,arrivalMinutes};
+}
+function renderFerryPlan(){
+  const w=selectedWindow();if(!w)return;
+  const arrive=addMin(w.start,-30);
+  const plan=ferryPlanForArrival(arrive);
+  if(!plan.target){
+    setText('#targetFerry','Come over the night before');
+    setText('#targetFerryDetail','No same-day Letete departure leaves a full one-hour ferry + island-road buffer before this early viewing window.');
+    setText('#ferryPlanSummary','For this early recommendation, camping on Deer Island the night before is the cleanest plan.');
+    return;
+  }
+  const nowP=localParts(new Date(),DEER_ZONE);
+  const sameDay=`${nowP.year}-${nowP.month}-${nowP.day}`===plan.date;
+  const nowMinutes=Number(nowP.hour)*60+Number(nowP.minute);
+  const passed=sameDay&&hmToMinutes(plan.target)<=nowMinutes;
+  if(passed){
+    setText('#targetFerry',`${clock12(plan.target)} has passed`);
+    setText('#targetFerryDetail','If you are still on the mainland, use a later Old Sow viewing window instead of rushing the ferry connection.');
+    setText('#ferryPlanSummary','This recommended window is no longer a comfortable same-day connection from Letete.');
+    return;
+  }
+  setText('#targetFerry',`Target the ${clock12(plan.target)} ferry from Letete`);
+  setText('#targetFerryDetail',`Free, year-round · Atlantic Time${plan.isSunday?' · Sunday maintenance schedule applied':''}`);
+  setText('#ferryPlanSummary',`To be at Deer Island Point by ${tm(arrive,DEER_ZONE)}, the planner leaves about an hour between the Letete departure and your recommended arrival. ${plan.next?`The next scheduled ferry is ${clock12(plan.next)}, but it cuts into that buffer.`:''}`);
+}
 function strength(w){const p=Number(w?.currentPercentile);if(!Number.isFinite(p))return 'Current strength unavailable';if(p>=85)return 'well above average';if(p>=65)return 'above average';if(p>=35)return 'near average';return 'below average'}
 function weather(w){const c=w?.weather?.visibility?.classification;if(c==='impaired')return 'NWS flags poor visibility for this period.';if(c==='possibly_impaired')return 'NWS mentions weather that could reduce visibility.';if(c==='clear')return 'NWS indicates good visibility.';if(c==='not_stated')return 'NWS does not currently flag fog, mist or poor visibility.';return 'Weather detail is not available for this window yet.'}
 function highTide(w){const h=w?.nearestEastportHigh;if(!h||!Number.isFinite(Number(h.offsetMinutesFromPeak)))return 'High-tide cross-check unavailable';const n=Math.abs(Math.round(Number(h.offsetMinutesFromPeak)));return `${n} min ${Number(h.offsetMinutesFromPeak)>=0?'before':'after'} Eastport high tide`}
@@ -30,6 +72,7 @@ function renderAnswer(){
   setText('#tripOutlook',relativeStrength==='below average'?'Good timing, calmer cycle':relativeStrength==='near average'?'Good timing, normal cycle':relativeStrength==='above average'?'Good timing, stronger cycle':relativeStrength==='well above average'?'Strong viewing opportunity':'Viewing window available');
   setText('#tripConditions',`Predicted flood current is ${relativeStrength}. ${weather(w)}`);
   setText('#answerWhy',`${expectation(w)} ${highTide(w)}.`);
+  renderFerryPlan();
 }
 function renderNow(){
   const p=state.data?.decision?.phase||{};const x=String(p.phase||'').toLowerCase();let h='Current phase could not be determined.';
