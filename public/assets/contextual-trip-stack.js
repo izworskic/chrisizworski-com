@@ -22,11 +22,12 @@ const DEST={
   beaches:{label:'Michigan Beach Report',detail:'Check beach hazards, lake observations and notices.',href:'/great-lakes-beaches/'},
   buoys:{label:'Great Lakes buoy conditions',detail:'Check live wind, waves and nearby Lake Michigan conditions.',href:'/great-lakes-buoys/'},
   fall:{label:'Michigan fall color',detail:'Check current color timing before choosing the river day.',href:'/fall-color/'},
+  tahquamenon:{label:'Tahquamenon visit planner',detail:'Turn the fall-color read into an Upper Falls, Lower Falls, hiking, food and accessibility plan.',href:'/tahquamenon-falls/?intent=fall-color'},
   tools:{label:'All Michigan tools',detail:'Browse the full Michigan and Great Lakes tool network.',href:'/tools/'}
 };
 const REGION={
   wup:{title:'Build the rest of a western U.P. trip',keys:['aurora','circle','pictured','weekend']},
-  eup:{title:'Build the rest of an eastern U.P. trip',keys:['bridge','soo','pictured','aurora']},
+  eup:{title:'Build the rest of an eastern U.P. trip',keys:['tahquamenon','bridge','soo','pictured','aurora']},
   tip:{title:'Build the rest of a Straits trip',keys:['bridge','aurora','weekend','outdoors']},
   nwl:{title:'Build the rest of a northwest Michigan trip',keys:['wine','outdoors','aurora','weekend']},
   nel:{title:'Build the rest of a northeast Michigan trip',keys:['ausable','manistee','trout','aurora']},
