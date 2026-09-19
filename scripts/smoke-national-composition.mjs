@@ -37,8 +37,15 @@ await check('national hub links branded Lake Ice-Out',async()=>{
 await check('national hub links Melvin Price Live',async()=>{
   // Exact public URL: verify all user-facing Melvin discovery surfaces survive production composition.
   const {text}=await request('/national-tools/',{cacheBust:false,noCacheHeader:false});
-  for(const marker of ['Time a Melvin Price Locks visit','Melvin Price Live','Melvin Price Live: Tows, Locks &amp; River']){
+  // The build-time intent link ("Time a Melvin Price Locks visit") was retired when
+  // Melvin Price was consolidated into a single maintained directory card. Assert the
+  // card that actually ships, and match the JSON-LD name without depending on whether
+  // the ampersand arrives escaped.
+  for(const marker of ['Melvin Price Live','data-tool-id="melvin-price"','Melvin Price Live: Tows, Locks']){
     if(!text.includes(marker))throw new Error('Melvin Price hub marker missing: '+marker);
+  }
+  if((text.match(/data-tool-id="melvin-price"/g)||[]).length!==1){
+    throw new Error('Melvin Price directory card is duplicated on the hub');
   }
   if(!text.includes('href="https://chrisizworski.com/national-tools/melvin-price-live/"')&&!text.includes('href="/national-tools/melvin-price-live/"')){
     throw new Error('hub does not link to canonical Melvin Price Live route');
@@ -49,7 +56,7 @@ await check('national hub links Melvin Price Live',async()=>{
 await check('branded Lake Ice-Out page is live',async()=>{
   const {text}=await request('/national-tools/ice-out/',{cacheBust:false,noCacheHeader:false});
   for(const marker of [
-    '<title>Lake Ice-Out Forecast — Northern U.S. & Canada | Chris Izworski</title>',
+    '<title>Lake Ice-Out Forecast: U.S. &amp; Canada | Chris Izworski</title>',
     '<link rel="canonical" href="https://chrisizworski.com/national-tools/ice-out/"',
     'G-Y5D2V2W7HN',
     'ca-pub-8222782620788075',
