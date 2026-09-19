@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Old Sow Live | Best Whirlpool Viewing Windows</title>
+  <meta name="description" content="Plan when and where to view the Old Sow whirlpool near Eastport, Maine and Deer Island, New Brunswick using NOAA tide/current predictions, daylight and weather context." />
+  <meta name="theme-color" content="#edf4f2" />
+  <meta name="google-adsense-account" content="ca-pub-8222782620788075" />
+  <link rel="canonical" href="https://chrisizworski.com/old-sow-live/" />
+  <meta property="og:title" content="Old Sow Live" />
+  <meta property="og:description" content="Next promising Old Sow viewing window, best land viewpoint, NOAA current context and two-clock trip planning." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://chrisizworski.com/old-sow-live/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="/assets/old-sow-live.css" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
+  <script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[
+    {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
+    {"@type":"Place","name":"Old Sow whirlpool viewing area","geo":{"@type":"GeoCoordinates","latitude":44.9239,"longitude":-66.9866},"description":"Western Passage between Eastport, Maine and Deer Island, New Brunswick."},
+    {"@type":"WebApplication","name":"Old Sow Live","applicationCategory":"TravelApplication","operatingSystem":"Web","url":"https://chrisizworski.com/old-sow-live/","description":"NOAA-based Old Sow viewing-window and viewpoint planner.","author":{"@id":"https://chrisizworski.com/#person"}}
+  ]}</script>
+</head>
+<body>
+<a class="skip" href="#decision">Skip to next viewing window</a>
+<header class="topbar"><a href="https://chrisizworski.com/" rel="author" class="brand">Chris Izworski</a><nav aria-label="Page"><a href="#planner">Plan</a><a href="#map-section">Map</a><a href="#method">Method</a></nav></header>
+<main>
+  <section class="hero" id="decision" aria-labelledby="title">
+    <div class="hero-copy">
+      <span class="eyebrow">OLD SOW LIVE · FORECAST, NOT A LIVE VORTEX SENSOR</span>
+      <h1 id="title">When should you go see Old Sow?</h1>
+      <p class="lede">NOAA tide and nearby current predictions translated into a practical viewing window for Eastport and Deer Island.</p>
+    </div>
+    <article class="answer-card" aria-live="polite" aria-busy="true" id="answerCard">
+      <div class="answer-status"><span id="sourceState" class="pill neutral">Loading NOAA</span><span id="forecastBadge" class="pill outline">FORECAST</span></div>
+      <div class="countdown-label">Next promising window starts in</div>
+      <div class="countdown" id="countdown">—</div>
+      <h2 id="windowHeadline">Checking the next flood cycle…</h2>
+      <div class="answer-grid">
+        <div><span>Best land view</span><strong id="bestView">Deer Point, NB</strong></div>
+        <div><span>Predicted peak</span><strong id="peakTime">—</strong></div>
+        <div><span>Nearby current</span><strong id="currentStrength">—</strong></div>
+        <div><span>Visibility</span><strong id="visibility">—</strong></div>
+      </div>
+      <p id="why" class="why">Building the source relationship.</p>
+      <div class="clock-switch" role="group" aria-label="Clock zone"><button type="button" data-zone="America/New_York" class="active">Eastport clock</button><button type="button" data-zone="America/Moncton">Deer Island clock</button></div>
+      <p class="truth-note"><strong>Important:</strong> a predicted flood current is not an observed whirlpool. A large funnel is never guaranteed.</p>
+    </article>
+  </section>
+
+  <section class="quick-context" aria-label="Current context">
+    <div><span>Right now</span><strong id="phase">—</strong><small id="phaseDetail">Prediction phase loading</small></div>
+    <div><span>Forecast source</span><strong id="proxy">NOAA current station</strong><small>Not a sensor at Old Sow</small></div>
+    <div><span>Coverage</span><strong id="coverage">—</strong><small id="freshness">Source freshness loading</small></div>
+  </section>
+
+  <section class="section" id="pulse">
+    <div class="section-head"><div><span class="eyebrow">48-HOUR TIDAL PULSE</span><h2>See tide and nearby current separately.</h2><p>Two scales, one time axis. Drag the marker to inspect the relationship without implying the current station is Old Sow itself.</p></div></div>
+    <div class="chart-card"><svg id="pulseChart" viewBox="0 0 900 340" role="img" aria-label="48-hour chart of Eastport tide height and nearby predicted current"></svg><div class="chart-legend"><span><i class="line tide"></i>Eastport tide · ft MLLW</span><span><i class="line current"></i><span id="chartCurrentLegend">Nearby current · knots (+ flood / − ebb)</span></span></div><input id="timeScrubber" type="range" min="0" max="1000" value="0" aria-label="Explore the next 48 hours" /><div id="scrubReadout" class="scrub-readout">Move the slider to inspect a time.</div></div>
+  </section>
+
+  <section class="section planner" id="planner">
+    <div class="section-head"><div><span class="eyebrow">VISIT PLANNER</span><h2>Pick the cycle that fits your trip.</h2><p>Browse NOAA-derived flood windows through two weeks. Weather is only shown where an official forecast exists.</p></div></div>
+    <div class="planner-controls">
+      <label>Date <input id="dateFilter" type="date" /></label>
+      <label>Viewpoint <select id="viewpointSelect"><option value="deer-point">Deer Point, NB</option><option value="eastport">Eastport, ME</option></select></label>
+      <label class="check"><input id="daylightOnly" type="checkbox" checked /> Daylight only</label>
+      <button id="sharePlan" type="button" class="button secondary">Copy plan link</button><a id="plannerDirections" class="button secondary" target="_blank" rel="noopener">Viewpoint directions ↗</a>
+    </div>
+    <div id="windowList" class="window-list" aria-live="polite"></div>
+    <aside class="travel-links" aria-label="Official travel links">
+      <div><span class="eyebrow">GETTING TO DEER ISLAND</span><strong>Check the operator for your actual travel date.</strong><p>Schedules are outbound references, not live availability inside this tool. No direct Eastport–Deer Island ferry is assumed.</p></div>
+      <div class="travel-actions">
+        <a class="button secondary" href="https://deerisland.coastaltransport.ca/" target="_blank" rel="noopener">Letete–Deer Island ferry ↗</a>
+        <a class="button secondary" href="https://eastcoastferriesltd.com/" target="_blank" rel="noopener">Deer Island–Campobello seasonal ferry ↗</a>
+      </div>
+    </aside>
+  </section>
+
+  <section class="section map-section" id="map-section">
+    <div class="section-head"><div><span class="eyebrow">REAL MAP · NO FIXED VORTEX DOT</span><h2>Viewpoints and source stations.</h2><p>Old Sow shifts within the turbulent water. The map marks land viewpoints and NOAA source stations, not a fictional permanent center.</p></div><button id="recenterMap" class="button secondary" type="button">Recenter</button></div>
+    <div class="map-shell"><div id="map" aria-label="Interactive map of Old Sow viewing area and NOAA stations"></div><div class="map-gate" id="mapGate"><strong>Map interaction is off</strong><span>This keeps page scrolling easy on a phone.</span><button id="enableMap" class="button primary" type="button">Use map</button></div><aside id="mapCard" class="map-card" hidden><button id="closeMapCard" type="button" aria-label="Close map details">×</button><span class="eyebrow">SELECTED MAP POINT</span><h3 id="mapName"></h3><p id="mapText"></p></aside></div>
+    <div id="mapList" class="accessible-map-list" aria-label="Map locations list"></div>
+  </section>
+
+  <section class="section split">
+    <article><span class="eyebrow">WHAT YOU MAY SEE</span><h2>Boils and eddies are the normal target.</h2><p>A dramatic funnel is uncommon and cannot be promised from a tide prediction. Look for rotating eddies, standing water, boils, troughs and patches of sharply textured water.</p><div class="archive-photo"><div class="photo-placeholder" aria-hidden="true">1941 archive image</div><div><strong>Rights-cleared archive reference</strong><p>Wikimedia Commons identifies “Old Sow 1941” as a Royal Canadian Geographical Society image in the public domain in Canada. The production build intentionally does not hotlink it; bundle the verified asset before launch.</p><a href="https://commons.wikimedia.org/wiki/File:Old_Sow_1941.png" target="_blank" rel="noopener">View rights/source record ↗</a></div></div></article>
+    <article class="safety"><span class="eyebrow">SMALL-CRAFT BOUNDARY</span><h2>This is a viewing tool, not a passage planner.</h2><p>NOAA describes Old Sow’s turbulent water as dangerous to small craft. This product does not recommend routes, launch times, or “safe” transits.</p><a href="https://oceanservice.noaa.gov/facts/old-sow.html" target="_blank" rel="noopener">NOAA: What is Old Sow? ↗</a></article>
+  </section>
+
+  <section class="section" id="method">
+    <div class="section-head"><div><span class="eyebrow">SOURCES & METHOD</span><h2>What the forecast actually knows.</h2></div></div>
+    <div class="method-grid">
+      <article><h3>1. Nearby current prediction</h3><p id="methodCurrent">NOAA current-prediction station selection is provisional and visible by name.</p></article>
+      <article><h3>2. Eastport tide cross-check</h3><p>Eastport station 8410140 supplies tide predictions plus observed water level and wind when available. Observed Eastport water level is still not an Old Sow observation.</p></article>
+      <article><h3>3. Daylight + weather</h3><p>Daylight is calculated in code. NWS forecast language is treated as untrusted data and may be narrowly classified by the private decision harness; missing visibility wording stays “not stated.”</p></article>
+      <article><h3>4. Unknown stays unknown</h3><p>No visitor report means no observation. No camera means no live-view claim. Current strength percentiles describe a nearby prediction, not whirlpool intensity.</p></article>
+    </div>
+    <details><summary>Source health and provenance</summary><div id="sourceList" class="source-list"></div></details>
+    <details><summary>Why the forecast can miss</summary><p>The method is a documented hypothesis until reviewed field observations span different tide strengths and seasons. Bathymetry, local countercurrents, wind, visibility and the shifting geometry of the vortex can all make a promising flood cycle look different from the prediction.</p></details>
+  </section>
+</main>
+<footer><div><strong>Old Sow Live</strong><span>Forecast decision support for Eastport, Maine & Deer Island, New Brunswick.</span></div><div>© 2026 <a href="https://chrisizworski.com/">Chris Izworski</a></div></footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script type="module" src="/assets/old-sow-live.js"></script>
+</body>
+</html>
