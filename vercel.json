@@ -752,11 +752,11 @@
     },
     {
       "source": "/tahquamenon-falls",
-      "destination": "https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/?origin_build=seasonal-20260919-v3"
+      "destination": "https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/?origin_build=seasonal-20260919-v4"
     },
     {
       "source": "/tahquamenon-falls/",
-      "destination": "https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/?origin_build=seasonal-20260919-v3"
+      "destination": "https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/?origin_build=seasonal-20260919-v4"
     },
     {
       "source": "/national-tools/aurora/alaska/fairbanks",
