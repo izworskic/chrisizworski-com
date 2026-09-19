@@ -1,6 +1,6 @@
 {
   "version": "1.3.0",
-  "updated": "2026-09-03",
+  "updated": "2026-09-19",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -850,10 +850,10 @@
         "impressions": 9,
         "averagePosition": 31.33,
         "evidenceWindow": "7-day leading snapshot through 2026-08-20",
-        "nextMeasurement": "Hold the 54-page cluster stable, collect page × query Search Console evidence plus attributed planner/departure/directions events, then expand only families that pass both demand and downstream-value gates."
+        "nextMeasurement": "Hold the 54-page cluster stable, collect page \u00d7 query Search Console evidence plus attributed planner/departure/directions events, then expand only families that pass both demand and downstream-value gates."
       },
       "measurement": {
-        "search": "Google Search Console page × query",
+        "search": "Google Search Console page \u00d7 query",
         "product": "Vercel fixed-label events",
         "decisionWindowDays": 28,
         "privacy": "No exact coordinates, device location, or free-text semantic query in growth analytics."
@@ -1520,7 +1520,7 @@
     },
     {
       "id": "national-aurora",
-      "name": "Aurora Tonight — U.S.",
+      "name": "Aurora Tonight \u2014 U.S.",
       "canonical": "https://chrisizworski.com/national-tools/aurora/",
       "aliases": [],
       "kind": "flagship-live",
@@ -1890,6 +1890,43 @@
       },
       "searchEvidence": {
         "status": "documented-primary-source"
+      }
+    },
+    {
+      "id": "petoskey-wine",
+      "name": "Petoskey Wine Region Map & Day Planner",
+      "canonical": "https://chrisizworski.com/petoskey-wine/",
+      "aliases": [
+        "https://chrisizworski.com/petoskey-wine"
+      ],
+      "kind": "flagship-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Petoskey wine region map and winery day planner",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "geographies": [
+        "northwest-lower-michigan",
+        "petoskey",
+        "little-traverse-bay"
+      ],
+      "personas": [
+        "traveler",
+        "group-planner",
+        "wine-traveler"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new-surface",
+        "note": "Launched 2026-09-19 as a hub section migrated off its own project. No impression history yet; the Tip of the Mitt trail has no routed planner competing for it."
       }
     }
   ],
@@ -2589,6 +2626,38 @@
       "surface": "michigan-handoff",
       "reason": "Michigan gardeners can continue into the established Michigan planting calendar.",
       "strength": "optional"
+    },
+    {
+      "from": "tc-wine",
+      "to": "petoskey-wine",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "tools-catalog",
+      "reason": "Traverse City wine travelers heading north are the most likely audience for the Tip of the Mitt trail."
+    },
+    {
+      "from": "petoskey-wine",
+      "to": "tc-wine",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "tools-catalog",
+      "reason": "The Petoskey trail is 25 stops against Traverse City's 74, so the larger peninsula loop is the natural next trip."
+    },
+    {
+      "from": "petoskey-wine",
+      "to": "fall-color",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "tools-catalog",
+      "reason": "The Tunnel of Trees leg is a peak color drive, so color timing decides when the loop is worth taking."
+    },
+    {
+      "from": "petoskey-wine",
+      "to": "mackinac-bridge",
+      "type": "decision-next",
+      "strength": "optional",
+      "surface": "tools-catalog",
+      "reason": "Petoskey is the last wine stop before the Straits for travelers continuing into the U.P."
     }
   ],
   "cannibalizationGroups": [
