@@ -134,6 +134,23 @@
   ],
   "headers": [
     {
+      "source": "/assets/tahquamenon-seasonal.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Vercel-CDN-Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
       "source": "/tahquamenon-falls",
       "headers": [
         {
@@ -406,6 +423,14 @@
       "destination": "https://tahquamenon-falls-live-94is.vercel.app/api/tahquamenon-falls"
     },
     {
+      "source": "/api/visit-plan",
+      "destination": "https://tahquamenon-falls-live-94is.vercel.app/api/visit-plan"
+    },
+    {
+      "source": "/api/tahquamenon-seasonal-context",
+      "destination": "https://tahquamenon-falls-live-94is.vercel.app/api/tahquamenon-seasonal-context"
+    },
+    {
       "source": "/assets/national-tools.css",
       "destination": "https://national-outdoor-core.vercel.app/assets/national-tools.css"
     },
@@ -480,6 +505,10 @@
     {
       "source": "/assets/tahquamenon-falls.js",
       "destination": "https://tahquamenon-falls-live-94is.vercel.app/assets/tahquamenon-falls.js"
+    },
+    {
+      "source": "/assets/tahquamenon-seasonal.js",
+      "destination": "https://tahquamenon-falls-live-94is.vercel.app/assets/tahquamenon-seasonal.js"
     },
     {
       "source": "/assets/tahquamenon-falls.css",
