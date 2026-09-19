@@ -14,9 +14,13 @@ test('fall color dispatcher exposes the reusable snapshot view',()=>{
   assert.ok(route.includes('inSeason: inSeason()'));
 });
 
-test('Tahquamenon fall color hands visitors into the destination planner',()=>{
+test('Tahquamenon fall color hands visitors into the destination planner through the protected trip stack',()=>{
   const html=read('public/fall-color/tahquamenon-falls-fall-color/index.html');
-  assert.ok(html.includes('data-tahquamenon-planner-cta'));
-  assert.ok(html.includes('/tahquamenon-falls/?intent=fall-color'));
-  assert.ok(html.includes('Build your Tahquamenon visit'));
+  const loader=read('public/assets/field-camera.js');
+  const stack=read('public/assets/contextual-trip-stack.js');
+  assert.ok(html.includes('data-field-camera="m123-tahquamenon"'));
+  assert.ok(loader.includes('/assets/contextual-trip-stack.js'));
+  assert.ok(stack.includes("tahquamenon:{label:'Tahquamenon visit planner'"));
+  assert.ok(stack.includes("href:'/tahquamenon-falls/?intent=fall-color'"));
+  assert.ok(stack.includes("eup:{title:'Build the rest of an eastern U.P. trip',keys:['tahquamenon'"));
 });
