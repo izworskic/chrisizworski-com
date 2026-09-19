@@ -7,10 +7,10 @@ const tm=(t,z=DEER_ZONE)=>new Intl.DateTimeFormat('en-US',{timeZone:z,hour:'nume
 const dateKey=(t,z=DEER_ZONE)=>{const p=new Intl.DateTimeFormat('en-CA',{timeZone:z,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(t));const o=Object.fromEntries(p.map(x=>[x.type,x.value]));return `${o.year}-${o.month}-${o.day}`};
 const addMin=(t,n)=>new Date(new Date(t).getTime()+n*60000);
 const setText=(id,v)=>{const e=$(id);if(e)e.textContent=v??'—'};
-function strength(w){const p=Number(w?.currentPercentile);if(!Number.isFinite(p))return 'Current signal unavailable';if(p>=85)return 'Very strong';if(p>=65)return 'Strong';if(p>=35)return 'Typical';return 'Weaker'}
-function weather(w){const c=w?.weather?.visibility?.classification;if(c==='impaired')return 'Visibility may be poor';if(c==='possibly_impaired')return 'Visibility may be reduced';if(c==='clear')return 'Good visibility';if(c==='not_stated')return 'No visibility issue stated';return 'Weather not available yet'}
+function strength(w){const p=Number(w?.currentPercentile);if(!Number.isFinite(p))return 'Current strength unavailable';if(p>=85)return 'well above average';if(p>=65)return 'above average';if(p>=35)return 'near average';return 'below average'}
+function weather(w){const c=w?.weather?.visibility?.classification;if(c==='impaired')return 'NWS flags poor visibility for this period.';if(c==='possibly_impaired')return 'NWS mentions weather that could reduce visibility.';if(c==='clear')return 'NWS indicates good visibility.';if(c==='not_stated')return 'NWS does not currently flag fog, mist or poor visibility.';return 'Weather detail is not available for this window yet.'}
 function highTide(w){const h=w?.nearestEastportHigh;if(!h||!Number.isFinite(Number(h.offsetMinutesFromPeak)))return 'High-tide cross-check unavailable';const n=Math.abs(Math.round(Number(h.offsetMinutesFromPeak)));return `${n} min ${Number(h.offsetMinutesFromPeak)>=0?'before':'after'} Eastport high tide`}
-function expectation(w){const s=strength(w);if(s==='Very strong')return 'One of the stronger nearby predicted flood-current windows in this forecast set. Look for broad rotation, boils, seams and energetic eddies; a deep funnel is still not guaranteed.';if(s==='Strong')return 'A strong nearby flood-current window. This is a good time to look for obvious rotation, boils and sharply textured water.';if(s==='Typical')return 'A usable flood-current window, but not an unusually strong one. Expect active water more than a dramatic funnel.';return 'A weaker flood-current window. If your schedule is flexible, compare the stronger upcoming options below.'}
+function expectation(w){const s=strength(w);if(s==='well above average')return 'This is one of the stronger predicted flood-current cycles in the forecast set. Expect more energetic water, with broad rotation, boils and strong seams possible.';if(s==='above average')return 'This is a stronger-than-average predicted flood-current cycle, making it a solid window for visibly active water.';if(s==='near average')return 'This is a normal predicted flood-current cycle. It is still a valid viewing window, but not an unusually energetic one.';if(s==='below average')return 'This is a below-average predicted flood-current cycle. The timing is still valid, but stronger water is likely in other upcoming cycles.';return 'Current strength could not be compared with the rest of the forecast set.'}
 function selectedWindow(){return state.selected||state.data?.decision?.nextWindow||null}
 function renderAnswer(){
   const d=state.data,w=selectedWindow();if(!d||!w)return;
@@ -24,9 +24,11 @@ function renderAnswer(){
   setText('#answerHeading',`Be at Deer Island Point by ${dt(arrive,DEER_ZONE,{weekday:undefined,month:undefined,day:undefined})}`);
   setText('#answerSummary',`Recommended viewing period: ${dt(w.start,DEER_ZONE)} to ${tm(w.end,DEER_ZONE)}. Eastport clock at arrival: ${dt(arrive,EASTPORT_ZONE,{weekday:undefined,month:undefined,day:undefined})}.`);
   setText('#arriveBy',tm(arrive,DEER_ZONE));
+  setText('#bestWater',tm(w.peak,DEER_ZONE));
   setText('#stayThrough',tm(w.end,DEER_ZONE));
-  setText('#signalStrength',strength(w));
-  setText('#weatherSummary',weather(w));
+  const relativeStrength=strength(w);
+  setText('#tripOutlook',relativeStrength==='below average'?'Good timing, calmer cycle':relativeStrength==='near average'?'Good timing, normal cycle':relativeStrength==='above average'?'Good timing, stronger cycle':relativeStrength==='well above average'?'Strong viewing opportunity':'Viewing window available');
+  setText('#tripConditions',`Predicted flood current is ${relativeStrength}. ${weather(w)}`);
   setText('#answerWhy',`${expectation(w)} ${highTide(w)}.`);
 }
 function renderNow(){
@@ -58,8 +60,8 @@ function renderWindows(){
   rows.sort((a,b)=>new Date(a.start)-new Date(b.start));
   host.innerHTML=rows.map(w=>`<article class="window-row ${w.id===recommended?'best':''}">
     <div><span>${w.id===recommended?'Recommended':'Viewing window'}</span><strong class="window-time">${esc(dt(w.start,DEER_ZONE,{timeZoneName:undefined}))}</strong><small>Arrive by ${esc(tm(addMin(w.start,-30),DEER_ZONE))} · stay through ${esc(tm(w.end,DEER_ZONE))}</small></div>
-    <div><span>Flood-current signal</span><strong>${esc(strength(w))}</strong><small>${Number.isFinite(Number(w.predictedMaxFloodKnots))?Number(w.predictedMaxFloodKnots).toFixed(1)+' kt nearby prediction':'Unavailable'}</small></div>
-    <div><span>Trip context</span><strong>${esc(weather(w))}</strong><small>${esc(highTide(w))}</small></div>
+    <div><span>Water strength</span><strong>${esc(strength(w))}</strong><small>${Number.isFinite(Number(w.predictedMaxFloodKnots))?Number(w.predictedMaxFloodKnots).toFixed(1)+' kt nearby prediction':'Unavailable'}</small></div>
+    <div><span>Visibility</span><strong>${esc(weather(w))}</strong><small>${esc(highTide(w))}</small></div>
     <button type="button" data-window-id="${esc(w.id)}">Use this time</button>
   </article>`).join('');
   $$('[data-window-id]').forEach(b=>b.addEventListener('click',()=>{state.selected=(state.data.windows||[]).find(w=>w.id===b.dataset.windowId)||null;renderAnswer();document.querySelector('#old-sow-answer').scrollIntoView({behavior:'smooth'});}));
