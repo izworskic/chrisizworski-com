@@ -1,19 +1,19 @@
 {
-  "generatedAt": "2026-09-13T13:48:16.777Z",
-  "dnrLayerLastEdit": 1788535465001,
+  "generatedAt": "2026-09-19T14:51:07.596Z",
+  "dnrLayerLastEdit": 1789484816085,
   "counts": {
-    "totalLayer": 1202,
-    "boatingAccessSites": 1189,
-    "open": 1153,
-    "usableDnr": 1152,
+    "totalLayer": 1203,
+    "boatingAccessSites": 1190,
+    "open": 1154,
+    "usableDnr": 1153,
     "greatLakes": 145,
-    "inlandOrOther": 1007,
+    "inlandOrOther": 1008,
     "municipal": 1,
-    "sourceBacked": 1153,
+    "sourceBacked": 1154,
     "withheld": 0
   },
   "conditionCounts": {
-    "Not reported": 1152
+    "Not reported": 1153
   },
   "coverage": [
     {
@@ -350,7 +350,7 @@
           "scope": "great-lakes"
         },
         {
-          "name": "Marquette City",
+          "name": "Presque Isle Marina",
           "miles": 2.66,
           "scope": "great-lakes"
         },
