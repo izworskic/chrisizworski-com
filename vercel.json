@@ -28,9 +28,6 @@
     },
     "api/**/*.js": {
       "maxDuration": 10
-    },
-    "api/old-sow-live.js": {
-      "maxDuration": 30
     }
   },
   "redirects": [
@@ -249,6 +246,18 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/old-sow-live",
+      "destination": "/old-sow-live/index.html"
+    },
+    {
+      "source": "/old-sow-live/",
+      "destination": "/old-sow-live/index.html"
+    },
+    {
+      "source": "/api/old-sow-live",
+      "destination": "/api/fall-color?view=old-sow-live"
+    },
     {
       "source": "/national-tools/coastal/thunder-hole-live",
       "destination": "/api/thunder-hole-page"
