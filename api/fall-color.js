@@ -12,6 +12,7 @@
 const handlers = {
   conditions: require("../lib/fall-color/routes/conditions.js"),
   report: require("../lib/fall-color/routes/report.js"),
+  snapshot: require("../lib/fall-color/routes/snapshot.js"),
   rss: require("../lib/fall-color/routes/rss.js"),
   sitemap: require("../lib/fall-color/routes/sitemap.js"),
   cron: require("../lib/fall-color/routes/cron.js"),
