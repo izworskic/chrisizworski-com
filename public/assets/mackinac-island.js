@@ -192,7 +192,7 @@
       return;
     }
     if(!originText){
-      setText('builderStatus','Add a starting city before building the trip.');
+      setText('builderStatus','Enter starting location before building the trip.');
       setText('leaveHome','Add date + city + time');
       return;
     }
