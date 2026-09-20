@@ -618,7 +618,7 @@ test('Mackinac live cameras use one switchable viewer and JEV stays closed-set',
   assert.match(html,/id="webcamViewer"/);
   assert.match(html,/id="webcamPicker"/);
   assert.match(html,/Choose a camera/);
-  assert.match(html,/Only one camera runs at a time/);
+  assert.match(html,/Six views play directly here; Town Crier opens its own live view/);
   assert.match(css,/\.webcam-viewer\{display:grid/);
   assert.match(css,/\.webcam-choice\.active/);
   assert.match(js,/webcamSelectedId/);
