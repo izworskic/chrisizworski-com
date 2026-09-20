@@ -172,7 +172,7 @@
       if(!ok)return;
     }
     if(!state.departTime){
-      setText('heroLeave','Add leave time');
+      setText('heroLeave','Add date + city + time');
       setOriginStatus('Date and starting city are set. Add the time you plan to leave home to calculate the reachable ferry and island arrival.','error');
       return;
     }
@@ -192,7 +192,7 @@
       return;
     }
     if(!originText){
-      setText('builderStatus','Add a starting city before building the trip.');
+      setText('builderStatus','Enter where you are leaving from before building the trip.');
       setText('leaveHome','Add date + city + time');
       return;
     }
