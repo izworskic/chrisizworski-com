@@ -1,4 +1,4 @@
-const $=s=>document.querySelector(s);let DATA=null,MAP=null,LAYER=null,CLOSURE_LAYER=null,SNOW_LAYER=null;
+const $=s=>document.querySelector(s);const ORIGIN_NAMES={'43.5945,-83.8889':'Bay City','43.4195,-83.9508':'Saginaw','43.6156,-84.2472':'Midland','42.7325,-84.5555':'Lansing','42.9634,-85.6681':'Grand Rapids','42.3314,-83.0458':'Detroit','44.7631,-85.6206':'Traverse City'};let DATA=null,MAP=null,LAYER=null,CLOSURE_LAYER=null,SNOW_LAYER=null;
 function track(name,params={}){try{if(typeof window.gtag==='function')window.gtag('event',name,params)}catch{}}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function bandClass(b){return b==='CLOSED'||b==='POOR'?'danger':b==='MARGINAL'||b==='OFF_SEASON'?'warning':''}
@@ -26,6 +26,35 @@ function render(d){
  $('#sources').innerHTML=(d.sources||[]).map(s=>`<li><a href="${esc(s.url)}" target="_blank" rel="noopener" data-source-name="${esc(s.name)}">${esc(s.name)}</a> — ${esc(s.authority)}</li>`).join('');
  drawMap(d.scoredGeometry||d.geometry,d.closures);
  track('snowmobile_decision_rendered',{season_active:Boolean(active),condition:r.band||'unknown',route_state:r.routeState||'unknown',confidence:r.confidence??null});
+}
+function formatDuration(min){const h=Math.floor(min/60),m=Math.round(min%60);return h?`${h}h ${m}m`:`${m}m`}
+function departureFor(best,driveMinutes){
+  if(!best?.startTime||!Number.isFinite(Number(driveMinutes)))return null;
+  const d=new Date(new Date(best.startTime).getTime()-(Number(driveMinutes)+30)*60000);
+  return Number.isFinite(d.getTime())?new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',weekday:'short',hour:'numeric',minute:'2-digit'}).format(d):null;
+}
+function personalizedVerdict(d,route,maxHours,label){
+  const min=Number(route?.driveMinutes),miles=Number(route?.driveMiles);if(!Number.isFinite(min))return'<strong>Drive time unavailable.</strong> No trip verdict was generated.';
+  const drive=`${formatDuration(min)} · ${Number.isFinite(miles)?miles.toFixed(0)+' mi':'distance unavailable'} to Grayling`;
+  if(!d.season?.active)return `<strong>${esc(label)} → Grayling: ${drive}.</strong> Riding conditions are off-season, so there is no ride recommendation yet.`;
+  if(min>Number(maxHours)*60)return `<strong>NO for your ${esc(maxHours)}-hour limit.</strong> ${esc(label)} → Grayling is about ${drive}. This limit decision is independent of trail quality.`;
+  if(d.route?.routeState==='ROUTE_BROKEN')return `<strong>NO.</strong> The drive is within your limit, but an official closure match breaks the required corridor.`;
+  const s=Number(d.route?.score),conf=Number(d.route?.confidence);
+  const depart=departureFor(d.timing?.best,min);
+  const timing=depart?` To reach Grayling about 30 minutes before ${esc(d.timing.best.name)} begins, leave around <strong>${esc(depart)}</strong>.`:'';
+  if(conf<50)return `<strong>UNCERTAIN.</strong> ${esc(label)} → Grayling is ${drive}, but evidence confidence is only ${Number.isFinite(conf)?conf:'unknown'}/100.${timing}`;
+  if(s>=72)return `<strong>YES, within your drive limit.</strong> ${esc(label)} → Grayling is ${drive}, and the corridor currently scores ${s}/100.${timing}`;
+  if(s>=58)return `<strong>BORDERLINE.</strong> The drive is within your limit (${drive}), but corridor quality is only ${s}/100.${timing}`;
+  return `<strong>NO for now.</strong> The drive is within your limit (${drive}), but current corridor evidence scores only ${Number.isFinite(s)?s:'unknown'}/100.`;
+}
+async function checkOrigin(point,label){
+  const host=$('#personalDrive'),max=$('#maxDrive')?.value||'3';if(!host)return;
+  host.textContent='Checking road time to Grayling…';
+  track('snowmobile_origin_check',{origin:label||'location',max_hours:Number(max)});
+  try{
+    const r=await fetch('/api/snowmobile-drive?from='+encodeURIComponent(point));const j=await r.json();if(!r.ok)throw new Error(j.detail||j.error||String(r.status));
+    host.innerHTML=personalizedVerdict(DATA,j,max,label||'Your location')+` <span class="route-source">${esc(j.source)}. ${esc(j.boundary)}</span>`;
+  }catch(e){host.innerHTML='<strong>Drive time unavailable.</strong> The routing service did not return a usable result, so no travel time was guessed.'}
 }
 function agoTime(iso){
  if(!iso)return'no dated source timestamp';
@@ -101,6 +130,11 @@ function toggleSnowDepth(){
 }
 document.addEventListener('click',e=>{
  if(e.target?.id==='toggleSnowDepth')toggleSnowDepth();
+ if(e.target?.id==='checkDrive'){const v=$('#originPreset')?.value;if(v)checkOrigin(v,ORIGIN_NAMES[v]||'Selected origin')}
+ if(e.target?.id==='useMyLocation'){
+   const host=$('#personalDrive');if(!navigator.geolocation){if(host)host.textContent='Browser location is unavailable.'}
+   else{if(host)host.textContent='Requesting your location…';navigator.geolocation.getCurrentPosition(pos=>checkOrigin(`${pos.coords.latitude.toFixed(5)},${pos.coords.longitude.toFixed(5)}`,'Your location'),()=>{if(host)host.textContent='Location was not shared. Choose a city instead.'},{enableHighAccuracy:false,timeout:10000,maximumAge:300000})}
+ }
  const a=e.target?.closest?.('[data-source-name]');if(a)track('snowmobile_source_verify',{source:a.getAttribute('data-source-name')||'unknown'});
 });
 async function load(){try{const r=await fetch('/api/snowmobile');const d=await r.json();if(!r.ok)throw new Error(d.detail||d.error||r.status);render(d)}catch(e){$('#status').textContent='DATA UNAVAILABLE';$('#drive').innerHTML='<strong>No ride recommendation.</strong> Live source verification failed, so the page is not substituting guessed conditions.';$('#segments').innerHTML='<p>'+esc(e.message)+'</p>';}}
