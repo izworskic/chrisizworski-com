@@ -49,7 +49,7 @@
       syncOriginInputs(j.origin?.label||q);syncOriginSide();
       const alt=(j.routes||[]).find(x=>x.port!==j.preferred_port);
       const alternate=alt&&Number.isFinite(Number(alt.drive_minutes))?` · ${alt.port} ${driveLabel(alt.drive_minutes)}`:'';
-      setOriginStatus(`${j.origin?.label||q} → ${j.preferred_port} about ${driveLabel(j.drive_minutes)}${alternate}. Planning drive times, not live traffic.`,'resolved');
+      setOriginStatus(`${j.origin?.label||q} → ${j.preferred_port} about ${driveLabel(j.drive_minutes)}${alternate}. Both port drive times feed ferry feasibility and leave-home timing. Planning estimates, not live traffic.`,'resolved');
       track('mackinac_start_city_selected',{origin_city:j.origin?.label||q,preferred_port:j.preferred_port,source});
       if(reload)loadDecision();
       return true;
@@ -70,6 +70,10 @@
       p.set('origin_name',state.originResolved.origin?.label||state.originQuery);
       p.set('origin_drive_minutes',String(state.originResolved.drive_minutes));
       p.set('origin_preferred_port',state.originResolved.preferred_port);
+      const mackinaw=(state.originResolved.routes||[]).find(x=>x.port==='Mackinaw City');
+      const stIgnace=(state.originResolved.routes||[]).find(x=>x.port==='St. Ignace');
+      if(Number.isFinite(Number(mackinaw?.drive_minutes)))p.set('origin_mackinaw_minutes',String(mackinaw.drive_minutes));
+      if(Number.isFinite(Number(stIgnace?.drive_minutes)))p.set('origin_st_ignace_minutes',String(stIgnace.drive_minutes));
     }
     const interests=[...document.querySelectorAll('#interestChoices input:checked')].map(x=>x.value);
     const must=[...document.querySelectorAll('#mustDoChoices input:checked')].map(x=>x.value);
