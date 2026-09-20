@@ -7,7 +7,7 @@ This release gate turns the product prompt's persona simulation and loss functio
 The build must satisfy all of the following:
 
 - 15 / 15 benchmark personas produce a feasible answer.
-- 45 / 45 persona-specific assertions pass.
+- 49 / 49 persona-specific assertions pass.
 - 15 / 15 personas produce materially distinct plan signatures.
 - Weighted product loss is <= 0.05.
 - Multiplicative product value is >= 0.90.
@@ -65,7 +65,7 @@ decision_speed
 After the late-day and rainy-day fixes:
 
 - Persona passes: **15 / 15**
-- Assertions: **45 / 45**
+- Assertions: **49 / 49**
 - Distinct plan signatures: **15 / 15**
 - Total loss: **0.0000**
 - Value product: **1.0000**
