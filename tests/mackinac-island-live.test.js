@@ -92,8 +92,8 @@ test('JEV is bounded to a deterministic closed candidate set', () => {
 
 test('client degrades explicitly instead of fabricating a ferry plan', () => {
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(js,/No recommendation is being invented/);
-  assert.match(js,/official ferry operator links/i);
+  assert.match(js,/not guessing at a ferry time/i);
+  assert.match(js,/ferry operators below/i);
   assert.match(js,/Last scheduled: unavailable/);
   assert.match(js,/mackinac_persona_selected/);
   assert.match(js,/mackinac_share_plan/);
