@@ -1,11 +1,17 @@
-const { classifyVisitor, intakeSchema, PROFILE_VERSION } = require("../lib/mackinac-island/intelligence");
+const { classifyVisitor, chooseSurfaceFocus, intakeSchema, PROFILE_VERSION } = require("../lib/mackinac-island/intelligence");
 
-function bodyObject(req){
-  if(req?.body && typeof req.body==="object")return req.body.answers&&typeof req.body.answers==="object"?req.body.answers:req.body;
+function parsedBody(req){
+  if(req?.body && typeof req.body==="object")return req.body||{};
   if(typeof req?.body==="string"){
-    try{const parsed=JSON.parse(req.body);return parsed?.answers&&typeof parsed.answers==="object"?parsed.answers:parsed||{};}catch{return{};}
+    try{return JSON.parse(req.body)||{};}catch{return{};}
   }
   return{};
+}
+function answersFromBody(body){
+  return body?.answers&&typeof body.answers==="object"&&!Array.isArray(body.answers)?body.answers:(body&&typeof body==="object"?body:{});
+}
+function surfaceFromBody(body){
+  return String(body?.surface||"").trim().slice(0,60);
 }
 
 module.exports=async function handler(req,res){
@@ -19,11 +25,21 @@ module.exports=async function handler(req,res){
   if(req.method==="GET")return res.status(200).json(intakeSchema());
   if(req.method!=="POST"){res.setHeader("Allow","GET, POST, OPTIONS");return res.status(405).json({error:"Method not allowed"});}
   try{
-    const profile=await classifyVisitor(bodyObject(req),{useJev:true});
-    return res.status(200).json({generated_at:new Date().toISOString(),profile_version:PROFILE_VERSION,profile});
+    const body=parsedBody(req);
+    const profile=await classifyVisitor(answersFromBody(body),{useJev:true});
+    const requestedSurface=surfaceFromBody(body);
+    const surfaceDecision=requestedSurface
+      ? await chooseSurfaceFocus(profile,requestedSurface,{useJev:true})
+      : null;
+    return res.status(200).json({
+      generated_at:new Date().toISOString(),
+      profile_version:PROFILE_VERSION,
+      profile,
+      surface_decision:surfaceDecision
+    });
   }catch(e){
     return res.status(503).json({error:"Mackinac visitor profile unavailable",detail:String(e?.message||e).slice(0,180),profile_version:PROFILE_VERSION});
   }
 };
 
-module.exports._test={bodyObject};
+module.exports._test={parsedBody,answersFromBody,surfaceFromBody};
