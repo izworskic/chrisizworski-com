@@ -285,3 +285,11 @@ img,svg{max-width:100%}
 .trip-tuning-buttons .trip-tuning-reset{border-style:dashed;color:var(--muted)}
 .trip-tuning>small{display:block;margin-top:8px}
 @media(max-width:560px){.trip-tuning-copy{display:block}.trip-tuning-copy span{display:block;margin-top:3px}.trip-tuning-buttons{display:grid;grid-template-columns:1fr 1fr}.trip-tuning-buttons button{min-height:42px}}
+
+/* Mackinac destination hub primary navigation, hub1 */
+.destination-nav-wrap{position:sticky;top:0;z-index:10;background:rgba(245,242,232,.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.mackinac-destination-nav{display:flex;gap:7px;overflow-x:auto;scrollbar-width:thin;padding:9px 0}
+.mackinac-destination-nav a{flex:0 0 auto;text-decoration:none;border:1px solid transparent;border-radius:999px;padding:8px 11px;font-size:12px;font-weight:800;color:var(--body);white-space:nowrap}
+.mackinac-destination-nav a:hover{background:var(--paper);border-color:var(--line)}
+.mackinac-destination-nav a[aria-current="page"]{background:var(--green);border-color:var(--green);color:#fff}
+@media(max-width:680px){.destination-nav-wrap{top:0}.mackinac-destination-nav{padding-bottom:8px}}
