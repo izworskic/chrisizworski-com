@@ -47,3 +47,10 @@ test("spatial map uses area anchors and states the navigation boundary",()=>{
   assert.match(plan.truth,/not claim live walking times/);
   assert.ok(plan.map_points.some(p=>/Planning orientation only/.test(p.detail)));
 });
+
+
+test("spatial scoring does not depend on non-schema biking or relaxation dimensions",()=>{
+  const visitor={answers:{trip_duration:"day"},vector:{pace:.8,outdoors:.98,photography:.6,kids_priority:.1,history:.2,iconic_priority:.4,budget_sensitivity:.4,walking_tolerance:.85,regional_exploration:.2}};
+  const c=spatial.buildCandidates({visitor,places:places(),profile:{trip:"day-trip",mobility:"standard",bikes:"rent",interests:["biking"]}});
+  assert.equal(c[0].id,"active-island");
+});
