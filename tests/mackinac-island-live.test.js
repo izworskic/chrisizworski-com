@@ -665,7 +665,7 @@ test('JEV webcam fit favors cameras that play in-page', () => {
 });
 
 
-test('Chippewa and Horns use raw HLS streams instead of Restreamer shells',()=>{const js=fs.readFileSync(jsPath,'utf8');const route=fs.readFileSync(routePath,'utf8');assert.match(js,/loadHlsJs/);assert.match(js,/mountHlsVideo/);assert.match(js,/hls\.js@1/);assert.match(route,/8183\/hls\/live\.stream\.m3u8/);assert.doesNotMatch(route,/8184\/hls\/live\.stream\.m3u8/);assert.doesNotMatch(route,/embed_url:"https:\/\/island\.networkingdesign\.com:818[34]\/?"/);});
+test('Chippewa uses raw HLS without Restreamer shell',()=>{const js=fs.readFileSync(jsPath,'utf8');const route=fs.readFileSync(routePath,'utf8');assert.match(js,/loadHlsJs/);assert.match(js,/mountHlsVideo/);assert.match(js,/hls\.js@1/);assert.match(route,/8183\/hls\/live\.stream\.m3u8/);assert.doesNotMatch(route,/8184\/hls\/live\.stream\.m3u8/);assert.doesNotMatch(route,/embed_url:"https:\/\/island\.networkingdesign\.com:818[34]\/?"/);});
 
 
 test('Horns uses official-page fallback instead of brittle raw stream',()=>{const js=fs.readFileSync(jsPath,'utf8');const route=fs.readFileSync(routePath,'utf8');assert.match(route,/id:"horns-main-street"[\s\S]{0,450}external_only:true/);assert.doesNotMatch(route,/8184\/hls\/live\.stream\.m3u8/);assert.match(js,/Watch Horn’s live ↗/);assert.match(js,/Open official live camera ↗/);});
