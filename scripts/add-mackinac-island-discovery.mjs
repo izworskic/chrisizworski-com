@@ -3,12 +3,19 @@ import fs from 'node:fs';
 const sitemap='public/sitemap.xml';
 if(fs.existsSync(sitemap)){
   let xml=fs.readFileSync(sitemap,'utf8');
-  const loc='https://chrisizworski.com/mackinac-island/';
-  if(!xml.includes(loc)){
-    const row=`\n  <url><loc>${loc}</loc><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
-    xml=xml.replace(/\s*<\/urlset>\s*$/,`${row}</urlset>\n`);
-    fs.writeFileSync(sitemap,xml);
+  const urls=[
+    ['https://chrisizworski.com/mackinac-island/','daily','0.9'],
+    ['https://chrisizworski.com/mackinac-island/day-trip/','weekly','0.85'],
+    ['https://chrisizworski.com/mackinac-island/with-kids/','weekly','0.82'],
+    ['https://chrisizworski.com/mackinac-island/2-day-itinerary/','weekly','0.82'],
+    ['https://chrisizworski.com/mackinac-island/ferry-planner/','daily','0.86']
+  ];
+  for(const [loc,freq,priority] of urls){
+    if(xml.includes('<loc>'+loc+'</loc>'))continue;
+    const row='\n  <url><loc>'+loc+'</loc><changefreq>'+freq+'</changefreq><priority>'+priority+'</priority></url>\n';
+    xml=xml.replace(/\s*<\/urlset>\s*$/,row+'</urlset>\n');
   }
+  fs.writeFileSync(sitemap,xml);
 }
 
 const fall='public/fall-color/mackinac-island-fall-color/index.html';
