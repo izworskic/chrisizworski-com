@@ -36,14 +36,14 @@ async function geocode(q){
 }
 async function routeMatrix(origin,host){
   const coords=[[origin.lon,origin.lat],...PORTS.map(p=>[p.lon,p.lat])].map(x=>x.join(',')).join(';');
-  const params=new URLSearchParams({sources:'0',destinations:'1;2',annotations:'duration,distance'});
+  const params=new URLSearchParams({sources:'0',destinations:'1;2',annotations:'duration'});
   const data=await fetchJson(`${host.base}/${coords}?${params}`,host.timeoutMs);
-  const durations=data?.durations?.[0],distances=data?.distances?.[0];
+  const durations=data?.durations?.[0];
   if(!Array.isArray(durations)||durations.length<2)throw new Error('Router did not return both port durations');
   return PORTS.map((p,i)=>({
     port:p.name,
     drive_minutes:Number.isFinite(Number(durations[i]))?Math.round(Number(durations[i])/60):null,
-    drive_miles:Array.isArray(distances)&&Number.isFinite(Number(distances[i]))?Math.round(Number(distances[i])/1609.344*10)/10:null
+    drive_miles:null
   }));
 }
 async function routePorts(origin){
