@@ -95,20 +95,17 @@
       <div class="primary-rec" id="primaryRec">Comparing Mackinaw City and St. Ignace departures…</div>
       <div class="hero-trip-glance" id="heroTripGlance" aria-label="Recommended trip at a glance">
         <div class="trip-glance-head"><span>Your trip at a glance</span><strong id="heroTripContext">Quick day-trip plan</strong></div>
-        <div class="hero-origin-quick">
-          <label for="heroOriginCity">Starting city</label>
-          <select id="heroOriginCity" aria-label="Starting city for drive and ferry planning">
-            <option value="">Choose a starting city…</option>
-            <option value="grand-rapids">Grand Rapids</option>
-            <option value="detroit">Detroit</option>
-            <option value="lansing">Lansing</option>
-            <option value="chicago">Chicago</option>
-            <option value="traverse-city">Traverse City</option>
-            <option value="marquette">Marquette</option>
-            <option value="sault-ste-marie">Sault Ste. Marie</option>
-          </select>
-          <small>Sets the drive estimate, reachable ferry and best mainland port.</small>
-        </div>
+        <form class="hero-origin-quick" id="heroOriginForm">
+          <div class="origin-entry-copy">
+            <label for="heroOriginInput">Where are you starting?</label>
+            <small>Enter any city, state/province, ZIP or postal code.</small>
+          </div>
+          <div class="origin-entry-controls">
+            <input id="heroOriginInput" type="search" inputmode="search" autocomplete="postal-code" placeholder="Bay City, MI" aria-label="Starting city, state, ZIP or postal code">
+            <button class="btn small" type="submit" id="heroOriginSubmit">Use city</button>
+          </div>
+          <div class="origin-status" id="heroOriginStatus" aria-live="polite">We’ll compare the drive to Mackinaw City and St. Ignace, then use the better ferry port.</div>
+        </form>
         <div class="trip-glance-grid">
           <div><span>Leave</span><strong id="heroLeave">Add a starting city</strong></div>
           <div><span>Ferry</span><strong id="heroFerry">Checking…</strong></div>
@@ -166,7 +163,7 @@
           <label><span>Trip</span><select id="tripMode" name="trip"><option value="day-trip">Day trip</option><option value="overnight">Staying overnight</option></select></label>
           <label><span>Adults</span><input id="adultCount" name="adults" type="number" min="1" max="12" value="2" inputmode="numeric"></label>
           <label><span>Children</span><input id="childCount" name="children" type="number" min="0" max="8" value="0" inputmode="numeric"></label>
-          <label><span>Starting city</span><select id="originCity" name="origin_city"><option value="">Use peninsula choice above</option><option value="grand-rapids">Grand Rapids</option><option value="detroit">Detroit</option><option value="lansing">Lansing</option><option value="chicago">Chicago</option><option value="traverse-city">Traverse City</option><option value="marquette">Marquette</option><option value="sault-ste-marie">Sault Ste. Marie</option></select></label>
+          <label><span>Starting city</span><input id="originCityInput" name="origin_text" type="search" inputmode="search" autocomplete="postal-code" placeholder="City, state or ZIP"></label>
           <label><span>Bikes</span><select id="bikePlan" name="bikes"><option value="none">No bike plan</option><option value="rent">Rent on island</option><option value="bring">Bring our bikes</option></select></label>
           <label><span>Physical pace</span><select id="pace" name="pace"><option value="easy">Easy</option><option value="balanced" selected>Balanced</option><option value="active">Active</option></select></label>
           <label><span>Mobility</span><select id="mobility" name="mobility"><option value="standard">Standard walking</option><option value="limited">Limit steep / long walking</option></select></label>
