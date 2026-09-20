@@ -568,8 +568,8 @@ test('journey candidates carry route wait and door-to-island cost', () => {
 test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260920-live7/);
-  assert.match(html,/mackinac-island\.css\?v=20260920-live7/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live8/);
+  assert.match(html,/mackinac-island\.css\?v=20260920-live8/);
   assert.doesNotMatch(js,/Add a starting city/);
   assert.doesNotMatch(html,/Add a starting city/);
 });
@@ -579,9 +579,9 @@ test('Mackinac first-screen route inputs are explicit and cache-safe', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
   const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
-  assert.match(html,/data-mackinac-build="20260920-live7"/);
+  assert.match(html,/data-mackinac-build="20260920-live8"/);
   assert.match(html,/<span>Starting city<\/span><input id="heroOriginInput"/);
-  assert.match(html,/mackinac-island\.js\?v=20260920-live7/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live8/);
   assert.doesNotMatch(html,/Add a starting city/i);
   assert.doesNotMatch(js,/Add a starting city/i);
   assert.match(html,/Enter date, city \+ time above/);
@@ -607,4 +607,41 @@ test('responsive visitor-first Mackinac surface survives phone tablet and landsc
   assert.match(css,/\.origin-city-control\{grid-column:1\/-1;grid-row:2\}/);
   assert.match(css,/\.builder-grid\{grid-template-columns:repeat\(4,minmax\(0,1fr\)\)\}/);
   assert.doesNotMatch(js,/JEV-ranked feasible plan|deterministic ranking/);
+});
+
+
+test('Mackinac live cameras are provider-linked, lazy and JEV camera selection stays closed-set', () => {
+  const html=fs.readFileSync(htmlPath,'utf8');
+  const css=fs.readFileSync(cssPath,'utf8');
+  const js=fs.readFileSync(jsPath,'utf8');
+  const route=fs.readFileSync(routePath,'utf8');
+  assert.match(html,/id="webcams"/);
+  assert.match(html,/Pick the live view that answers your trip question/);
+  assert.match(html,/does <strong>not<\/strong> inspect or interpret the live video/);
+  assert.match(css,/\.webcam-grid\{display:grid/);
+  assert.match(js,/data-webcam-embed/);
+  assert.match(js,/Player loads only when requested/);
+  assert.match(route,/WEBCAM_CATALOG/);
+  assert.match(route,/Choose exactly one supplied camera id or NONE/);
+  assert.match(route,/Do not claim to see or analyze the live webcam image or video/);
+  assert.match(route,/player\.castr\.com\/live_4fb405e028e311ef91eb49267aef0a7e/);
+  assert.match(route,/uid=2e25804bc117f7aa96781ae3e4593a00/);
+  assert.match(route,/uid=bf59fb1cfad0aee22ea7d00974c48669/);
+  assert.match(route,/www\.hornsbar\.com\/webcamlarge/);
+  assert.match(route,/www\.windermerehotel\.com\/webcam\.html/);
+  assert.match(route,/www\.chippewahotel\.com\/web-cams/);
+  assert.match(route,/mackinacislandnews\.com\/view-fort-mackinac-live/);
+  assert.doesNotMatch(html,/<iframe[^>]+mackinacisland\.org/i);
+});
+
+test('Mackinac webcam registry covers the tourism-bureau viewpoints and ranks trip context', () => {
+  assert.equal(t.WEBCAM_CATALOG.length,7);
+  const ids=new Set(t.WEBCAM_CATALOG.map(x=>x.id));
+  for(const id of ['chippewa-main-street','horns-main-street','island-house-harbor','town-crier-market','mission-point-lawn','windermere-point','sheplers-bridge']) assert.ok(ids.has(id),id);
+  const ctx={personas:['day-trip'],origin:'lower',profile:{interests:[],must_do:[],origin_preset:{preferred_port:'Mackinaw City'}},crowd:{index:78},marine:{score:70},weather:{available:true}};
+  const ranked=t.webcamCandidates(ctx,{outbound:{origin_port:'Mackinaw City',arrival_minutes:12*60}});
+  assert.equal(ranked.length,7);
+  assert.ok(ranked[0].fit_score>=ranked[1].fit_score);
+  assert.ok(ranked.find(x=>x.id==='sheplers-bridge').fit_score>50);
+  assert.ok(ranked.find(x=>x.id==='horns-main-street').fit_score>50);
 });
