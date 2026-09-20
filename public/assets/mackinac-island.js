@@ -2,7 +2,7 @@
   'use strict';
   const API='/api/mackinac-island';
   const ORIGIN_API='/api/mackinac-origin';
-  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',originRequestId:0,tripDate:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[]};
+  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',originRequestId:0,tripDate:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[],webcamSelectedId:null};
   const $=id=>document.getElementById(id);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const track=(name,params={})=>{try{if(typeof window.gtag==='function')window.gtag('event',name,params);}catch{}};
@@ -327,42 +327,65 @@
   }
 
 
-  function renderWebcams(d){
-    const w=d.webcams||{},cams=Array.isArray(w.list)?w.list:[],best=w.recommended||cams.find(x=>x.id===w.recommended_id)||cams[0]||null;
-    setText('webcamEngine',w.engine==='shared-harness-jev'?'Matched to your trip':'Matched to your trip');
-    const bestHost=$('webcamBest');
-    if(bestHost){
-      bestHost.innerHTML=best
-        ? `<div><span>Best camera for this plan</span><strong>${esc(best.name)}</strong><p>${esc(best.reason||best.default_reason||best.view||'Open the live view for a visual check.')}</p></div>`
-        : '<div><span>Best camera for this plan</span><strong>Camera directory unavailable</strong><p>Use the provider links in the source section if live views are unavailable here.</p></div>';
+  function cameraOwner(name){
+    return String(name||'').split(' · ')[0]||'camera owner';
+  }
+
+  function renderWebcamViewer(cams,w){
+    const recommendedId=w?.recommended_id||w?.recommended?.id||cams[0]?.id||null;
+    if(!state.webcamSelectedId || !cams.some(cam=>cam.id===state.webcamSelectedId)) state.webcamSelectedId=recommendedId;
+    const cam=cams.find(x=>x.id===state.webcamSelectedId)||cams.find(x=>x.id===recommendedId)||cams[0]||null;
+    const stage=$('webcamStage'),action=$('webcamViewerAction');
+    if(!cam){
+      if(stage)stage.innerHTML='<div class="webcam-stage-placeholder"><strong>Live cameras unavailable</strong><p>Try again later.</p></div>';
+      setText('webcamTitle','Live cameras unavailable');setText('webcamView','');setText('webcamWhy','');setText('webcamSuggested','');
+      if(action)action.innerHTML='';setText('webcamAttribution','');
+      return;
     }
-    const grid=$('webcamGrid'); if(!grid)return;
-    if(!cams.length){grid.innerHTML='<p class="muted">Live-camera links are temporarily unavailable.</p>';return;}
-    grid.innerHTML=cams.map(cam=>{
-      const isBest=cam.id===w.recommended_id;
-      const watch=cam.embed_url?`<button class="btn small webcam-watch" type="button" data-webcam-embed="${esc(cam.embed_url)}" data-webcam-id="${esc(cam.id)}">Watch here</button>`:'';
-      return `<article class="webcam-card ${isBest?'recommended':''}" data-camera-id="${esc(cam.id)}">
-        <span class="cam-kicker">${isBest?'Best match · ':''}${esc(cam.location||'Mackinac Island')}</span>
-        <h3>${esc(cam.name)}</h3>
-        <p class="cam-view">${esc(cam.view||'Live Mackinac Island view')}</p>
-        <p class="cam-why">${esc(cam.reason||cam.default_reason||'Use this view as a visual trip check.')}</p>
-        <div class="webcam-actions">${watch}<a class="text-link" href="${esc(cam.source_url)}" target="_blank" rel="noopener">Open provider ↗</a></div>
-        <div class="webcam-player" hidden></div>
-        <p class="webcam-provider-note">${cam.embed_url?'Player loads only when requested.':'Opens the original camera provider page.'}</p>
-      </article>`;
-    }).join('');
-    grid.querySelectorAll('.webcam-watch').forEach(btn=>btn.addEventListener('click',()=>{
-      const card=btn.closest('.webcam-card'),host=card?.querySelector('.webcam-player'),url=btn.dataset.webcamEmbed;
-      if(!host||!url)return;
-      if(host.hidden){
-        host.hidden=false;
-        host.innerHTML=`<iframe src="${esc(url)}" title="${esc(card.querySelector('h3')?.textContent||'Mackinac Island live camera')}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
-        btn.textContent='Hide live view';
-        track('mackinac_webcam_opened',{camera:btn.dataset.webcamId||'unknown',embedded:true});
+
+    setText('webcamSuggested',cam.id===recommendedId?'Suggested for this trip':'You selected this view');
+    setText('webcamTitle',cam.name);
+    setText('webcamView',cam.view||'Live Mackinac Island view');
+    setText('webcamWhy',cam.id===recommendedId?(cam.reason||cam.default_reason||'A useful visual check for this trip.'):'Switch anytime using the camera choices below.');
+    setText('webcamAttribution',`Camera: ${cameraOwner(cam.name)}`);
+
+    if(stage){
+      if(cam.embed_url){
+        stage.innerHTML=`<iframe src="${esc(cam.embed_url)}" title="${esc(cam.name)} live camera" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
       }else{
-        host.hidden=true;host.innerHTML='';btn.textContent='Watch here';
+        stage.innerHTML=`<div class="webcam-stage-placeholder"><strong>${esc(cam.name)}</strong><p>This camera cannot be shown cleanly inside the page.</p></div>`;
       }
+    }
+    if(action){
+      action.innerHTML=cam.embed_url?'':`<a class="btn primary webcam-external" href="${esc(cam.source_url)}" target="_blank" rel="noopener">Open live camera ↗</a>`;
+    }
+  }
+
+  function renderWebcams(d){
+    const w=d.webcams||{},cams=Array.isArray(w.list)?w.list:[];
+    const picker=$('webcamPicker'); if(!picker)return;
+    if(!cams.length){
+      picker.innerHTML='<p class="muted">Live cameras are temporarily unavailable.</p>';
+      renderWebcamViewer([],w);
+      return;
+    }
+    const recommendedId=w.recommended_id||w.recommended?.id||cams[0]?.id||null;
+    if(!state.webcamSelectedId || !cams.some(cam=>cam.id===state.webcamSelectedId)) state.webcamSelectedId=recommendedId;
+    picker.innerHTML=cams.map(cam=>{
+      const selected=cam.id===state.webcamSelectedId,recommended=cam.id===recommendedId;
+      return `<button class="webcam-choice ${selected?'active':''}" type="button" aria-pressed="${selected?'true':'false'}" data-webcam-id="${esc(cam.id)}">
+        <span>${esc(cam.location||'Mackinac Island')}</span>
+        <strong>${esc(cam.name)}</strong>
+        ${recommended?'<small>Suggested</small>':''}
+      </button>`;
+    }).join('');
+    picker.querySelectorAll('.webcam-choice').forEach(btn=>btn.addEventListener('click',()=>{
+      state.webcamSelectedId=btn.dataset.webcamId||null;
+      const selected=cams.find(cam=>cam.id===state.webcamSelectedId);
+      track('mackinac_webcam_selected',{camera:state.webcamSelectedId||'unknown',embedded:Boolean(selected?.embed_url),recommended:state.webcamSelectedId===recommendedId});
+      renderWebcams(d);
     }));
+    renderWebcamViewer(cams,w);
   }
 
   function renderCrowdsOpen(d){

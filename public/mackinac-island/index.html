@@ -19,7 +19,7 @@
 <meta name="twitter:title" content="Mackinac Island Today: Best Ferry, Weather & Day Plan">
 <meta name="twitter:description" content="A live decision tool for choosing the ferry, timing the island, biking and getting home comfortably.">
 <link rel="preconnect" href="https://api.weather.gov">
-<link rel="stylesheet" href="/assets/mackinac-island.css?v=20260920-live8">
+<link rel="stylesheet" href="/assets/mackinac-island.css?v=20260920-live9">
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -63,7 +63,7 @@
 }
 </script>
 </head>
-<body data-mackinac-build="20260920-live8">
+<body data-mackinac-build="20260920-live9">
 <a class="skip" href="#main">Skip to live decision</a>
 <header class="sitebar">
   <div class="shell sitebar-inner">
@@ -249,13 +249,39 @@
 
     <section class="section webcam-section" id="webcams" aria-labelledby="webcams-title">
       <div class="section-head">
-        <div><div class="eyebrow">See the Island right now</div><h2 id="webcams-title">Pick the live view that answers your trip question</h2><p class="section-dek">Downtown crowds, the harbor, lake visibility, ferry traffic and the mainland approach all look different from different cameras. We match the most useful view to your trip, then leave the actual live picture to the camera.</p></div>
-        <span class="source-pill" id="webcamEngine">Matching a live view…</span>
+        <div>
+          <div class="eyebrow">Live Mackinac Island views</div>
+          <h2 id="webcams-title">Choose a camera</h2>
+          <p class="section-dek">Start with the suggested view, then switch cameras anytime. Only one camera runs at a time.</p>
+        </div>
       </div>
-      <div class="webcam-best" id="webcamBest"><div><span>Best camera for this plan</span><strong>Choosing a viewpoint…</strong><p>Matching your visit to the camera that can answer the most useful question.</p></div></div>
-      <div class="webcam-grid" id="webcamGrid"><p class="muted">Loading the Mackinac Island live-camera directory…</p></div>
-      <p class="truth-note">Streams belong to their original camera providers and can go offline independently. Embeddable players load only after you choose “Watch here”; other cameras open on the provider’s own page.</p>
-      <details class="method-details"><summary>How the camera recommendation works</summary><p>The same guarded JEV ranking layer used by the trip planner can choose among the known Mackinac viewpoints using your visitor type, likely ferry port, crowd model and weather context. It does <strong>not</strong> inspect or interpret the live video, and it cannot invent what a camera is showing.</p></details>
+
+      <div class="webcam-viewer" id="webcamViewer">
+        <div class="webcam-stage" id="webcamStage">
+          <div class="webcam-stage-placeholder">
+            <strong>Loading the suggested camera…</strong>
+            <p>The live view will appear here.</p>
+          </div>
+        </div>
+        <div class="webcam-viewer-copy">
+          <span class="webcam-suggested" id="webcamSuggested">Suggested for this trip</span>
+          <h3 id="webcamTitle">Choosing a camera…</h3>
+          <p class="webcam-view" id="webcamView">Matching the camera to your visit.</p>
+          <p class="webcam-why" id="webcamWhy"></p>
+          <div class="webcam-viewer-action" id="webcamViewerAction"></div>
+          <p class="webcam-attribution" id="webcamAttribution"></p>
+        </div>
+      </div>
+
+      <div class="webcam-picker-head">
+        <strong>Switch camera</strong>
+        <span>Tap any view below. Your current camera is replaced, not stacked.</span>
+      </div>
+      <div class="webcam-picker" id="webcamPicker" aria-label="Mackinac Island live cameras">
+        <p class="muted">Loading live cameras…</p>
+      </div>
+
+      <p class="truth-note">The trip planner suggests a useful viewpoint from your ferry port, visit type and conditions. It does not interpret the live video. Camera availability is controlled by each camera owner.</p>
     </section>
 
     <section class="section split-section" id="crowds-open" aria-labelledby="crowds-title">
@@ -304,6 +330,6 @@
   </div>
 </main>
 <footer class="footer"><div class="shell"><p>Built by <a href="/">Chris Izworski</a>. Live source agencies and ferry operators remain authoritative for their own conditions and schedules. This tool is trip-planning guidance, not a guarantee of service or weather.</p><p><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p></div></footer>
-<script src="/assets/mackinac-island.js?v=20260920-live8" defer></script>
+<script src="/assets/mackinac-island.js?v=20260920-live9" defer></script>
 </body>
 </html>

@@ -568,8 +568,8 @@ test('journey candidates carry route wait and door-to-island cost', () => {
 test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260920-live8/);
-  assert.match(html,/mackinac-island\.css\?v=20260920-live8/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live9/);
+  assert.match(html,/mackinac-island\.css\?v=20260920-live9/);
   assert.doesNotMatch(js,/Add a starting city/);
   assert.doesNotMatch(html,/Add a starting city/);
 });
@@ -579,9 +579,9 @@ test('Mackinac first-screen route inputs are explicit and cache-safe', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
   const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
-  assert.match(html,/data-mackinac-build="20260920-live8"/);
+  assert.match(html,/data-mackinac-build="20260920-live9"/);
   assert.match(html,/<span>Starting city<\/span><input id="heroOriginInput"/);
-  assert.match(html,/mackinac-island\.js\?v=20260920-live8/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live9/);
   assert.doesNotMatch(html,/Add a starting city/i);
   assert.doesNotMatch(js,/Add a starting city/i);
   assert.match(html,/Enter date, city \+ time above/);
@@ -610,27 +610,29 @@ test('responsive visitor-first Mackinac surface survives phone tablet and landsc
 });
 
 
-test('Mackinac live cameras are provider-linked, lazy and JEV camera selection stays closed-set', () => {
+test('Mackinac live cameras use one switchable viewer and JEV stays closed-set', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const css=fs.readFileSync(cssPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
   const route=fs.readFileSync(routePath,'utf8');
-  assert.match(html,/id="webcams"/);
-  assert.match(html,/Pick the live view that answers your trip question/);
-  assert.match(html,/does <strong>not<\/strong> inspect or interpret the live video/);
-  assert.match(css,/\.webcam-grid\{display:grid/);
-  assert.match(js,/data-webcam-embed/);
-  assert.match(js,/Player loads only when requested/);
+  assert.match(html,/id="webcamViewer"/);
+  assert.match(html,/id="webcamPicker"/);
+  assert.match(html,/Choose a camera/);
+  assert.match(html,/Only one camera runs at a time/);
+  assert.match(css,/\.webcam-viewer\{display:grid/);
+  assert.match(css,/\.webcam-choice\.active/);
+  assert.match(js,/webcamSelectedId/);
+  assert.match(js,/renderWebcamViewer/);
+  assert.match(js,/Open live camera ↗/);
+  assert.doesNotMatch(js,/Open provider ↗/);
+  assert.doesNotMatch(js,/Hide live view/);
+  assert.doesNotMatch(js,/data-webcam-embed/);
   assert.match(route,/WEBCAM_CATALOG/);
   assert.match(route,/Choose exactly one supplied camera id or NONE/);
   assert.match(route,/Do not claim to see or analyze the live webcam image or video/);
   assert.match(route,/player\.castr\.com\/live_4fb405e028e311ef91eb49267aef0a7e/);
   assert.match(route,/uid=2e25804bc117f7aa96781ae3e4593a00/);
   assert.match(route,/uid=bf59fb1cfad0aee22ea7d00974c48669/);
-  assert.match(route,/www\.hornsbar\.com\/webcamlarge/);
-  assert.match(route,/www\.windermerehotel\.com\/webcam\.html/);
-  assert.match(route,/www\.chippewahotel\.com\/web-cams/);
-  assert.match(route,/mackinacislandnews\.com\/view-fort-mackinac-live/);
   assert.doesNotMatch(html,/<iframe[^>]+mackinacisland\.org/i);
 });
 

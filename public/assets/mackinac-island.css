@@ -139,22 +139,31 @@ img,svg{max-width:100%}
 }
 
 
-/* Mackinac live-camera decision layer, live8 */
-.webcam-best{border:1px solid #bfd1cb;background:#f5faf7;border-radius:16px;padding:16px 18px;margin-bottom:14px}
-.webcam-best span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:820}
-.webcam-best strong{display:block;font-size:20px;line-height:1.2;margin-top:5px}
-.webcam-best p{margin:6px 0 0;color:var(--body);font-size:13px}
-.webcam-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.webcam-card{border:1px solid var(--line);border-radius:15px;padding:16px;background:#fbfaf5;min-width:0;display:flex;flex-direction:column}
-.webcam-card.recommended{border-color:var(--green);box-shadow:0 0 0 2px var(--green-soft);background:#f7fbf8}
-.webcam-card .cam-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.075em;color:var(--muted);font-weight:820}
-.webcam-card h3{font-size:17px;margin:6px 0 3px}
-.webcam-card .cam-view{font-size:12px;color:var(--body);margin:0 0 8px}
-.webcam-card .cam-why{font-size:12px;color:var(--muted);margin:0 0 12px;flex:1}
-.webcam-actions{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
-.webcam-actions .btn{width:auto}
-.webcam-player{margin-top:12px;border-radius:12px;overflow:hidden;background:#17201f;aspect-ratio:16/9;border:1px solid #bfc8c5}
-.webcam-player iframe{display:block;width:100%;height:100%;border:0;background:#17201f}
-.webcam-provider-note{font-size:10px;color:var(--muted);margin:9px 0 0}
-@media(max-width:900px){.webcam-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:560px){.webcam-grid{grid-template-columns:1fr}.webcam-card{padding:14px}.webcam-actions{display:grid;grid-template-columns:1fr 1fr}.webcam-actions .btn,.webcam-actions .text-link{text-align:center;width:100%}}
+/* Mackinac single-view camera experience, live9 */
+.webcam-viewer{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(260px,.45fr);gap:18px;border:1px solid var(--line);border-radius:18px;padding:14px;background:#fbfaf5}
+.webcam-stage{aspect-ratio:16/9;border-radius:13px;overflow:hidden;background:#17201f;border:1px solid #bfc8c5;min-width:0}
+.webcam-stage iframe{display:block;width:100%;height:100%;border:0;background:#17201f}
+.webcam-stage-placeholder{height:100%;min-height:260px;display:grid;place-content:center;text-align:center;padding:22px;color:#f5f2e8}
+.webcam-stage-placeholder strong{font-size:18px}
+.webcam-stage-placeholder p{margin:6px 0 0;color:#c8d1ce;font-size:13px}
+.webcam-viewer-copy{padding:8px 6px;display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.webcam-suggested{display:inline-flex;padding:5px 8px;border-radius:999px;background:var(--green-soft);color:var(--green);font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.07em}
+.webcam-viewer-copy h3{font-size:23px;line-height:1.15;margin:12px 0 5px}
+.webcam-viewer-copy .webcam-view{font-size:13px;color:var(--body);margin:0 0 10px}
+.webcam-viewer-copy .webcam-why{font-size:13px;color:var(--muted);margin:0 0 15px}
+.webcam-viewer-action{margin-top:auto}
+.webcam-attribution{font-size:10px;color:var(--muted);margin:12px 0 0}
+.webcam-picker-head{display:flex;align-items:end;justify-content:space-between;gap:14px;margin:18px 0 9px}
+.webcam-picker-head strong{font-size:14px}
+.webcam-picker-head span{font-size:11px;color:var(--muted)}
+.webcam-picker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.webcam-choice{appearance:none;border:1px solid var(--line);background:#fffdf8;border-radius:13px;padding:11px 12px;text-align:left;cursor:pointer;min-width:0;min-height:72px;color:inherit}
+.webcam-choice:hover,.webcam-choice:focus-visible{border-color:#8da69e;outline:0}
+.webcam-choice.active{border-color:var(--green);background:#f2f8f4;box-shadow:0 0 0 2px var(--green-soft)}
+.webcam-choice span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:820}
+.webcam-choice strong{display:block;font-size:13px;line-height:1.2;margin-top:4px;overflow-wrap:anywhere}
+.webcam-choice small{display:inline-block;margin-top:5px;font-size:9px;color:var(--green);font-weight:850;text-transform:uppercase;letter-spacing:.06em}
+.webcam-external{display:inline-flex;text-decoration:none}
+@media(max-width:980px){.webcam-viewer{grid-template-columns:1fr}.webcam-viewer-copy{padding:4px 2px}.webcam-picker{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:680px){.webcam-picker{grid-template-columns:repeat(2,minmax(0,1fr))}.webcam-picker-head{align-items:flex-start;flex-direction:column;gap:3px}.webcam-stage-placeholder{min-height:200px}}
+@media(max-width:390px){.webcam-picker{grid-template-columns:1fr}.webcam-choice{min-height:62px}.webcam-stage-placeholder{min-height:180px}}
