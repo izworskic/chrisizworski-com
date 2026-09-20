@@ -12,16 +12,16 @@
     pace:new Set(["easy","balanced","active"]),
     mobility:new Set(["standard","limited"]),
     dinner:new Set(["none","casual","sit-down"]),
-    duration:new Set(["day","one-night","two-three","four-plus"]),
+    duration:new Set(["day","one-night","two-three","four-plus","unsure"]),
     party:new Set(["solo","couple","family-young","family-teens","adults-friends","multigenerational","large-group"]),
-    loss:new Set(["crowds","rushed","walking","missing","cost","weather"]),
-    lodging:new Set(["downtown","quiet","resort","historic","space","unsure"]),
-    walk:new Set(["low","medium","high"]),
-    bikeStyle:new Set(["none","shoreline","hills","unsure"]),
-    budget:new Set(["save","balanced","splurge"]),
-    kidsAges:new Set(["under-6","6-11","12-plus","mixed"]),
-    regional:new Set(["island-only","maybe","yes"]),
-    weatherFlex:new Set(["fixed","some","flexible"])
+    loss:new Set(["waiting","missing","walking","rushed","spending","crowds","weather","flexible"]),
+    lodging:new Set(["downtown","quiet","resort","iconic"]),
+    walk:new Set(["low","moderate","high"]),
+    bikeStyle:new Set(["shoreline","mixed","hills"]),
+    budget:new Set(["save","balanced","convenience"]),
+    kidsAges:new Set(["under-6","6-12","teens","mixed"]),
+    regional:new Set(["island-only","maybe","regional"]),
+    weatherFlex:new Set(["fixed","shift-hours","shift-day"])
   };
   function cleanText(v,max=100){return String(v||"").trim().replace(/\s+/g," ").slice(0,max);}
   function cleanDate(v){const s=String(v||"");return /^\d{4}-\d{2}-\d{2}$/.test(s)?s:"";}
