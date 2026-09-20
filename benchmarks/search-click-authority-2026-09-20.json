@@ -1,0 +1,47 @@
+{
+  "name": "Search Click + Chris Izworski Authority Sprint",
+  "date": "2026-09-20",
+  "source": "Google Search Console export: last 24 hours",
+  "baseline": {
+    "site": {
+      "clicks": 65,
+      "impressions": 3233,
+      "ctr": 0.0201,
+      "clicksPer1000Impressions": 20.1
+    },
+    "pages": [
+      {"path": "/soo-locks/", "action": "PROTECT", "clicks": 34, "impressions": 372, "ctr": 0.0914, "position": 4.42},
+      {"path": "/fall-color/", "action": "PUSH", "clicks": 5, "impressions": 352, "ctr": 0.0142, "position": 7.33},
+      {"path": "/great-lakes-freighter-tracking/", "action": "PUSH", "clicks": 3, "impressions": 350, "ctr": 0.0086, "position": 7.59},
+      {"path": "/northern-lights-michigan/", "action": "PUSH", "clicks": 0, "impressions": 257, "ctr": 0, "position": 7.51},
+      {"path": "/mackinac-bridge-tolls/", "action": "PUSH", "clicks": 0, "impressions": 251, "ctr": 0, "position": 8.37},
+      {"path": "/mackinac-bridge-live/", "action": "PUSH", "clicks": 1, "impressions": 184, "ctr": 0.0054, "position": 8.66}
+    ]
+  },
+  "targets": {
+    "clicksPer1000Impressions": 40,
+    "measurementRule": "Observe comparable multi-day windows; do not claim causality from a single day.",
+    "brandRule": "Strengthen the canonical Chris Izworski entity without weakening non-branded search intent."
+  },
+  "hardVetoes": [
+    "canonical URL changes on priority pages",
+    "noindex or crawl blocking",
+    "broken live data or decision logic",
+    "removal of the canonical Person @id https://chrisizworski.com/#person",
+    "new thin name-search doorway pages",
+    "ad changes that materially obscure the first-screen answer"
+  ],
+  "score": {
+    "searchIntentAndSnippet": 25,
+    "firstScreenDecisionValue": 20,
+    "entityAndAuthorshipClarity": 20,
+    "canonicalAndIndexabilityIntegrity": 15,
+    "mobileUxAndAdRestraint": 10,
+    "measurementAndRegressionProtection": 10,
+    "pass": 92
+  },
+  "lossFunction": {
+    "formula": "L = 10*hardVeto + 5*breakage + 4*canonicalOrIndexingRegression + 3*entityDrift + 2*intentMismatch + 2*mobileUxRegression + 1*adIntrusion",
+    "objective": "Minimize loss while increasing organic click yield and preserving truthful utility."
+  }
+}
