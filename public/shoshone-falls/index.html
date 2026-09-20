@@ -18,6 +18,20 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="/assets/shoshone-falls.css?v=20260919-1">
+<script>
+(function(){
+  try{
+    const u=new URL(window.location.href);
+    let changed=false;
+    for(const key of [...u.searchParams.keys()]){
+      if(key.toLowerCase().startsWith('utm_')||key.toLowerCase()==='gclid'||key.toLowerCase()==='fbclid'){
+        u.searchParams.delete(key);changed=true;
+      }
+    }
+    if(changed) history.replaceState(null,'',u.pathname+(u.searchParams.toString()?'?'+u.searchParams.toString():'')+u.hash);
+  }catch(e){}
+})();
+</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Shoshone Falls Live","url":"https://chrisizworski.com/shoshone-falls/","applicationCategory":"TravelApplication","operatingSystem":"Web","description":"Current decision support for visiting Shoshone Falls using source-aware river context, weather, access and the official live view.","about":{"@type":"TouristAttraction","name":"Shoshone Falls","address":{"@type":"PostalAddress","addressLocality":"Twin Falls","addressRegion":"ID","addressCountry":"US"}}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"U.S. Outdoor Tools","item":"https://chrisizworski.com/national-tools/"},{"@type":"ListItem","position":3,"name":"Shoshone Falls Live","item":"https://chrisizworski.com/shoshone-falls/"}]}]}</script>
