@@ -110,6 +110,23 @@
     renderTuningButtons();
   }
 
+
+  function intentSeed(){
+    const id=new URLSearchParams(location.search).get('intent');
+    const map={
+      'day-trip':{trip_duration:'day'},
+      'with-kids':{trip_vision:['kids']},
+      'two-day':{trip_duration:'one-night'},
+      'ferry-planner':{}
+    };
+    if(!Object.prototype.hasOwnProperty.call(map,id||''))return null;
+    return {intent:id,intake:{...map[id]}};
+  }
+  function firstMissingBaseQuestion(schema,answers){
+    const questions=schema?.base_questions||[];
+    return questions.findIndex(q=>q.type==='multi'?!(Array.isArray(answers?.[q.id])&&answers[q.id].length):!answers?.[q.id]);
+  }
+
   const TAB_TARGETS={
     'my-trip':'#planner','live':'#conditions','getting-there':'#ferries','island':'#crowds-open',
     'map':'#map-section','stay':'#stay-guide','eat':'#eat-guide','events':'#seasonal','around-straits':'#straits-guide'
@@ -306,7 +323,14 @@
       const r=await fetch(PROFILE_API,{headers:{accept:'application/json'}});const schema=await r.json();if(!r.ok)throw new Error(`HTTP ${r.status}`);
       state.intakeSchema=schema;
       if(seedAnswers&&Object.values(seedAnswers).some(v=>Array.isArray(v)?v.length:Boolean(v))){
-        state.intakeAnswers={...seedAnswers};state.adaptiveAsked=true;
+        state.intakeAnswers={...seedAnswers};
+        const missing=firstMissingBaseQuestion(schema,state.intakeAnswers);
+        if(missing>=0){
+          state.intakeStep=missing;state.adaptiveAsked=false;
+          renderIntakeStep();$('intakeReset').hidden=false;
+          return;
+        }
+        state.adaptiveAsked=true;
         await classifyIntake({scroll:false});
         setText('intakeProgress','Trip style restored');$('intakeReset').hidden=false;
         return;
@@ -879,8 +903,9 @@
   document.addEventListener('click',e=>{const a=e.target.closest('#ferries a');if(a)track('mackinac_ferry_compared',{});});
   async function boot(){
     const shared=sharedPlanFromHash();
-    const saved=shared?null:futureSavedPlan();
-    const seed=shared||saved;
+    const intent=intentSeed();
+    const saved=(shared||intent)?null:futureSavedPlan();
+    const seed=shared||intent||saved;
     if(seed)hydratePlanInputs(seed,{includeIntake:true});
     else syncTripDateInputs(detroitToday());
     syncTripModeUi();
@@ -894,7 +919,8 @@
     if(shared){
       setText('shareStateStatus','Shared trip restored · live details refreshed');
       track('mackinac_shared_plan_opened',{state_version:TRIP_STATE?.VERSION||'none'});
-    }else if(saved)setText('shareStateStatus','Saved trip restored on this device');
+    }else if(intent)setText('shareStateStatus','Started from the '+String(intent.intent||'Mackinac')+' planning guide');
+    else if(saved)setText('shareStateStatus','Saved trip restored on this device');
     await loadDecision();
   }
   boot();
