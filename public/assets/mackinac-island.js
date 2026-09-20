@@ -34,6 +34,26 @@
   function syncOriginSide(){
     document.querySelectorAll('#originSwitch button').forEach(x=>{const a=x.dataset.origin===state.origin;x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
   }
+  const dateLabel=value=>{
+    if(!value)return '—';
+    const d=new Date(`${value}T12:00:00`);
+    return Number.isNaN(d.getTime())?String(value):d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  };
+  function syncTripModeUi(){
+    const overnight=$('tripMode')?.value==='overnight'||state.personas.has('overnight');
+    const field=$('nightCountField'),input=$('nightCount');
+    if(field)field.hidden=!overnight;
+    if(input){input.disabled=!overnight;if(!overnight)input.value='1';}
+  }
+  function returnPlanText(d){
+    const f=d?.ferry||{},rp=f.return_plan||{},profile=d?.trip_profile||{};
+    if(profile.trip!=='overnight')return f.recommended_return?.departure_time||'No feasible return';
+    const day=dateLabel(rp.return_date);
+    if(rp.mode==='deadline'&&rp.recommended)return `${day} · ${rp.recommended.departure_time}`;
+    if(rp.mode==='deadline-unmet')return `${day} · deadline unmet`;
+    if(rp.mode==='unavailable')return `${day} · schedule unavailable`;
+    return `${day} · flexible`;
+  }
   function clearResolvedOrigin({clearInputs=false}={}){
     state.originResolved=null;state.originQuery='';
     if(clearInputs)syncOriginInputs('');
@@ -73,7 +93,7 @@
     const p=new URLSearchParams();
     p.set('personas',selectedPersonas().join(','));
     p.set('origin',state.origin);
-    const simple={trip:'tripMode',adults:'adultCount',children:'childCount',bikes:'bikePlan',pace:'pace',mobility:'mobility',dinner:'dinner',return_by:'returnBy',event_start:'eventStart'};
+    const simple={trip:'tripMode',nights:'nightCount',adults:'adultCount',children:'childCount',bikes:'bikePlan',pace:'pace',mobility:'mobility',dinner:'dinner',return_by:'returnBy',event_start:'eventStart'};
     Object.entries(simple).forEach(([key,id])=>{const el=$(id);if(el&&String(el.value).trim())p.set(key,String(el.value).trim());});
     if(state.originResolved){
       p.set('origin_name',state.originResolved.origin?.label||state.originQuery);
@@ -104,6 +124,7 @@
     if(state.personas.has(p)){ if(state.personas.size>1)state.personas.delete(p); }
     else { if(state.personas.size>=3){const first=[...state.personas].find(x=>x!=='day-trip'&&x!=='overnight')||[...state.personas][0];state.personas.delete(first);} state.personas.add(p); }
     document.querySelectorAll('#personaChips .chip').forEach(x=>{const a=state.personas.has(x.dataset.persona);x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
+    syncTripModeUi();
     track('mackinac_persona_selected',{personas:selectedPersonas().join('|')});
     loadDecision();
   }));
@@ -167,6 +188,7 @@
       state.personas.delete(trip==='overnight'?'day-trip':'overnight');
       state.personas.add(trip);
       document.querySelectorAll('#personaChips .chip').forEach(x=>{const a=state.personas.has(x.dataset.persona);x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
+      syncTripModeUi();
     }
     setText('builderStatus','Trip inputs changed. Tap “Build this trip” to rerun the full plan.');
     track('mackinac_itinerary_changed',{});
@@ -187,8 +209,11 @@
     setText('bikeTop',d.bike?`${d.bike.label} · ${Math.round(d.bike.score||0)}/100`:'—');
     setText('weatherTop',d.weather?.visitor_summary||'Forecast unavailable');
     setText('marineTop',d.marine?.comfort_label||'Observation unavailable');
-    setText('returnTop',d.ferry?.recommended_return?.departure_time||'—');
-    setText('lastTop',d.ferry?.last_scheduled_return?`Last scheduled: ${d.ferry.last_scheduled_return.departure_time}`:'Last scheduled: unavailable');
+    setText('returnTop',returnPlanText(d));
+    const rp=d.ferry?.return_plan||{};
+    setText('lastTop',d.ferry?.last_scheduled_return
+      ? `${d.trip_profile?.trip==='overnight'?`Last ${dateLabel(rp.return_date)}`:'Last scheduled'}: ${d.ferry.last_scheduled_return.departure_time}`
+      : d.trip_profile?.trip==='overnight'?'Return-day schedule unavailable':'Last scheduled: unavailable');
     const port=plan.origin_port||'the better mainland port';
     const dep=plan.departure_time||'a verified departure';
     $('primaryRec').innerHTML=plan.departure_time?`<strong>Take the ${esc(dep)} from ${esc(port)}.</strong> ${esc(dec.primary_reason||'This preserves the strongest usable island window.')}`:'<strong>No verified ferry recommendation.</strong> Use the official operator links below before leaving.';
@@ -196,11 +221,11 @@
     if(state.originResolved?.origin?.label)syncOriginInputs(state.originResolved.origin.label);
     const party=`${Number(profile.adults||2)} adult${Number(profile.adults||2)===1?'':'s'}${Number(profile.children||0)?` + ${profile.children} child${Number(profile.children)===1?'':'ren'}`:''}`;
     const priorities=[...(profile.interests||[]),...(profile.must_do||[]).map(x=>`must: ${x}`)].slice(0,3);
-    setText('heroTripContext',[party,profile.trip==='overnight'?'overnight':'day trip',priorities.length?priorities.join(' · '):null].filter(Boolean).join(' · '));
+    setText('heroTripContext',[party,profile.trip==='overnight'?`${profile.nights||1} night${Number(profile.nights||1)===1?'':'s'}`:'day trip',priorities.length?priorities.join(' · '):null].filter(Boolean).join(' · '));
     setText('heroLeave',d.leave_home?.time||(state.originResolved?(state.departTime?'No reachable ferry':'Add leave time'):'Add city + leave time'));
     setText('heroFerry',plan.departure_time?`${plan.departure_time} · ${plan.origin_port}`:'No verified ferry');
     setText('heroIsland',plan.arrival_time||'—');
-    setText('heroReturn',d.ferry?.recommended_return?.departure_time||(profile.trip==='overnight'?'Overnight':'—'));
+    setText('heroReturn',returnPlanText(d));
     if(state.originResolved&&state.departTime){
       const leaveMinutes=inputTimeMinutes(state.departTime);
       const selected=(state.originResolved.routes||[]).find(x=>x.port===plan.origin_port);
@@ -241,8 +266,10 @@
       const card=$(key+'Card');card?.classList.toggle('recommended',plan.origin_port===name);
       renderTimeline(key+'Timeline',p.departures||[],plan.origin_port===name?plan:null);
     });
-    setText('recommendedReturn',f.recommended_return?.departure_time||'—');setText('literalLast',f.last_scheduled_return?.departure_time||'—');
-    setText('returnReason',f.return_reason||'Provides a practical margin before the last boat.');
+    const rp=f.return_plan||{};
+    setText('recommendedReturn',returnPlanText(d));
+    setText('literalLast',f.last_scheduled_return?`${dateLabel(rp.return_date)} · ${f.last_scheduled_return.departure_time}`:'Unavailable');
+    setText('returnReason',f.return_reason||'Return timing depends on the trip duration and any deadline you supplied.');
   }
 
   function renderConditions(d){
@@ -271,12 +298,15 @@
   function renderPlanner(d){
     const it=d.itinerary||[],p=d.trip_profile||{};
     setText('plannerSummary',d.itinerary_summary||'A feasible plan could not be built from the verified inputs.');
+    const days=d.trip_days||[];
+    const dayHost=$('tripDays');
+    if(dayHost)dayHost.innerHTML=days.length?days.map(x=>`<article class="trip-day ${esc(x.role||'')}"><span>Day ${esc(x.day)} · ${esc(dateLabel(x.date))}</span><strong>${esc(x.title||'Trip day')}</strong><p>${esc(x.summary||'')}</p></article>`).join(''):'';
     $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title||x.label||'Plan stop')}</strong>${x.movement?`<span class="movement">${esc(x.movement)}</span>`:''}<p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>No complete itinerary</strong><p>Use the official ferry source links before leaving.</p></div></li>';
     setText('plannerExplain',d.itinerary_reason||'');
     setText('leaveHome',d.leave_home?.time||(state.originResolved?(state.departTime?'No reachable ferry':'Add leave time'):'Add city + leave time'));
     setText('leaveHomeNote',d.leave_home?.detail||(state.originResolved&&state.departTime?'No ferry in the verified schedule can be reached from that city after your entered leave-home time.':'Enter both a starting city and leave-home time. Drive estimates are not live traffic.'));
     const party=`${Number(p.adults||2)} adult${Number(p.adults||2)===1?'':'s'}${Number(p.children||0)?` + ${p.children} child${Number(p.children)===1?'':'ren'}`:''}`;
-    const fit=[party,p.trip==='overnight'?'overnight':'day trip',p.pace?`${p.pace} pace`:null,p.bikes&&p.bikes!=='none'?`${p.bikes} bikes`:null,p.mobility==='limited'?'limited steep walking':null].filter(Boolean);
+    const fit=[party,p.trip==='overnight'?`${p.nights||1} night${Number(p.nights||1)===1?'':'s'}`:'day trip',p.pace?`${p.pace} pace`:null,p.bikes&&p.bikes!=='none'?`${p.bikes} bikes`:null,p.mobility==='limited'?'limited steep walking':null].filter(Boolean);
     setText('tripFit',fit.join(' · '));
     const priorities=[...(p.interests||[]),...(p.must_do||[]).map(x=>`must: ${x}`)];
     setText('tripFitNote',priorities.length?`Priorities: ${priorities.join(', ')}.`:`Using the selected visitor modes plus live ferry/weather constraints.`);
@@ -290,6 +320,7 @@
     const order=Object.entries(src);$('sourceList').innerHTML=order.length?order.map(([k,s])=>`<div class="source-row"><a href="${esc(s.url||'#')}" target="_blank" rel="noopener">${esc(s.name||k.replace(/_/g,' '))}</a><span class="source-state ${s.available?'ok':'warn'}">${esc(s.status_label||(s.available?'available':'unavailable'))}</span></div>`).join(''):'<p>No source-provenance payload was returned.</p>';
     const refs=d.planning_references||{};
     if(refs.accessibility?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.accessibility.url)}" target="_blank" rel="noopener">${esc(refs.accessibility.name||'Accessibility planning source')}</a><span class="source-state ok">planning reference</span></div>`);
+    if(refs.ferry_ticket_flexibility?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.ferry_ticket_flexibility.url)}" target="_blank" rel="noopener">${esc(refs.ferry_ticket_flexibility.name||'Ferry ticket flexibility')}</a><span class="source-state ok">flexible ticket reference</span></div>`);
     if(refs.drive_times?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.drive_times.url)}" target="_blank" rel="noopener">${esc(refs.drive_times.label||'Origin drive-time reference')}</a><span class="source-state ok">planning estimate · not live traffic</span></div>`);
     if(core.length)$('sourceList').insertAdjacentHTML('beforeend','<div class="error-panel"><strong>Core source check needed.</strong> Recheck the unavailable ferry or weather source before relying on the plan.</div>');
     else if(optional.length)$('sourceList').insertAdjacentHTML('beforeend','<div class="source-note"><strong>Optional planning context is limited right now.</strong> The ferry and weather decision remains available; unavailable optional sources are labeled above.</div>');
@@ -361,10 +392,11 @@
 
   $('sharePlan').addEventListener('click',async()=>{
     const d=state.data,plan=d?.ferry?.recommended_plan;if(!d||!plan)return;
-    const text=`Our Mackinac plan: ${plan.departure_time} from ${plan.origin_port}, island arrival ${plan.arrival_time}, return ${d.ferry?.recommended_return?.departure_time||'check schedule'}. ${location.href}`;
-    try{if(navigator.share)await navigator.share({title:'Our Mackinac Day',text,url:location.href});else{await navigator.clipboard.writeText(text);$('sharePlan').textContent='Copied';setTimeout(()=>$('sharePlan').textContent='Share plan',1600);}track('mackinac_share_plan',{method:navigator.share?'native':'clipboard'});}catch{}
+    const text=`Our Mackinac plan: ${plan.departure_time} from ${plan.origin_port}, island arrival ${plan.arrival_time}, return ${returnPlanText(d)}. ${location.href}`;
+    try{if(navigator.share)await navigator.share({title:'Our Mackinac Trip',text,url:location.href});else{await navigator.clipboard.writeText(text);$('sharePlan').textContent='Copied';setTimeout(()=>$('sharePlan').textContent='Share plan',1600);}track('mackinac_share_plan',{method:navigator.share?'native':'clipboard'});}catch{}
   });
 
   document.addEventListener('click',e=>{const a=e.target.closest('#ferries a');if(a)track('mackinac_ferry_compared',{});});
+  syncTripModeUi();
   loadDecision();
 })();

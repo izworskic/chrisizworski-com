@@ -61,8 +61,8 @@ test('public surface makes the decision first and keeps return vs last ferry dis
   const html=fs.readFileSync(htmlPath,'utf8');
   assert.match(html,/Mackinac Island Today/);
   assert.match(html,/Best island arrival/);
-  assert.match(html,/Recommended ferry home/);
-  assert.match(html,/Literal last scheduled ferry/);
+  assert.match(html,/Return plan/);
+  assert.match(html,/Last published ferry for return day/);
   assert.match(html,/Why this plan\?/);
   assert.match(html,/Build my day/);
   assert.match(html,/Modeled, not counted/);
@@ -510,4 +510,18 @@ test('client replaces stale starting-city prompt after city resolution', () => {
   assert.doesNotMatch(js,/d\.leave_home\?\.time\|\|'Add a starting city'/);
   assert.match(js,/state\.originResolved\?\(state\.departTime\?'No reachable ferry':'Add leave time'\):'Add city \+ leave time'/);
   assert.match(js,/leave \$\{clock\(leaveMinutes\)\} → \$\{plan\.origin_port\}/);
+});
+
+
+test('multi-day planner exposes nights and flexible return semantics', () => {
+  const html=fs.readFileSync(htmlPath,'utf8');
+  const js=fs.readFileSync(jsPath,'utf8');
+  const route=fs.readFileSync(routePath,'utf8');
+  assert.match(html,/id="nightCount"/);
+  assert.match(html,/Need to leave island by \(optional\)/);
+  assert.doesNotMatch(html,/Recommended ferry home/);
+  assert.match(js,/returnPlanText/);
+  assert.match(js,/trip_days/);
+  assert.match(route,/returnPlanForStay/);
+  assert.match(route,/Published 2026 ferry tickets are not day or time specific/);
 });
