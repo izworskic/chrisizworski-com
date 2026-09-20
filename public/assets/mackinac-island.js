@@ -232,7 +232,12 @@
     setText('confidence',`${String(dec.confidence||'medium').toUpperCase()} CONFIDENCE${dec.engine==='shared-harness-jev'?' · JEV-ranked feasible plan':' · deterministic ranking'}`);
     const banner=$('planningBanner');
     if(d.planning_mode==='tomorrow'){banner.hidden=false;banner.textContent=d.planning_reason||`Today’s useful day-trip window has closed. Planning ${d.plan_date_label||'tomorrow'} instead.`;$('page-title').textContent='Mackinac Island Tomorrow';}
-    else {banner.hidden=true;$('page-title').textContent='Mackinac Island Today';}
+    else if(d.planning_mode==='selected-date'){
+      const selectedToday=d.target_date===d.local_now?.date;
+      banner.hidden=selectedToday&&!d.planning_reason;
+      banner.textContent=d.planning_reason||`Planning ${dateLabel(d.target_date)} from your selected trip date.`;
+      $('page-title').textContent=selectedToday?'Mackinac Island Today':`Mackinac Island · ${dateLabel(d.target_date)}`;
+    } else {banner.hidden=true;$('page-title').textContent='Mackinac Island Today';}
     setText('bestArrival',plan.arrival_time||'No verified plan');
     setText('crowdsTop',d.crowds?.label||'—');
     setText('bikeTop',d.bike?`${d.bike.label} · ${Math.round(d.bike.score||0)}/100`:'—');
@@ -247,21 +252,23 @@
     const dep=plan.departure_time||'a verified departure';
     $('primaryRec').innerHTML=plan.departure_time?`<strong>Take the ${esc(dep)} from ${esc(port)}.</strong> ${esc(dec.primary_reason||'This preserves the strongest usable island window.')}`:'<strong>No verified ferry recommendation.</strong> Use the official operator links below before leaving.';
     const profile=d.trip_profile||{};
+    if(profile.trip_date)syncTripDateInputs(profile.trip_date);
     if(state.originResolved?.origin?.label)syncOriginInputs(state.originResolved.origin.label);
     const party=`${Number(profile.adults||2)} adult${Number(profile.adults||2)===1?'':'s'}${Number(profile.children||0)?` + ${profile.children} child${Number(profile.children)===1?'':'ren'}`:''}`;
     const priorities=[...(profile.interests||[]),...(profile.must_do||[]).map(x=>`must: ${x}`)].slice(0,3);
     setText('heroTripContext',[party,profile.trip==='overnight'?`${profile.nights||1} night${Number(profile.nights||1)===1?'':'s'}`:'day trip',priorities.length?priorities.join(' · '):null].filter(Boolean).join(' · '));
-    setText('heroLeave',d.leave_home?.time||(state.originResolved?(state.departTime?'No reachable ferry':'Add leave time'):'Add city + leave time'));
+    setText('heroLeave',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Add date + city + time'));
     setText('heroFerry',plan.departure_time?`${plan.departure_time} · ${plan.origin_port}`:'No verified ferry');
     setText('heroIsland',plan.arrival_time||'—');
     setText('heroReturn',returnPlanText(d));
-    if(state.originResolved&&state.departTime){
-      const leaveMinutes=inputTimeMinutes(state.departTime);
-      const selected=(state.originResolved.routes||[]).find(x=>x.port===plan.origin_port);
-      const drive=Number.isFinite(Number(selected?.drive_minutes))?driveLabel(selected.drive_minutes):'drive time unavailable';
+    if(state.tripDate&&state.originResolved&&state.departTime){
+      const j=d.journey||{};
+      const leave=j.leave_time||clock(inputTimeMinutes(state.departTime));
+      const drive=Number.isFinite(Number(j.mainland_drive_minutes))?driveLabel(j.mainland_drive_minutes):'drive time unavailable';
+      const wait=Number.isFinite(Number(j.pre_ferry_idle_minutes))?` · ${Math.round(j.pre_ferry_idle_minutes)} min before check-in window`:'';
       setOriginStatus(plan.departure_time
-        ? `${state.originResolved.origin?.label||state.originQuery} · leave ${clock(leaveMinutes)} → ${plan.origin_port} (${drive}) → ${plan.departure_time} ferry → ${plan.arrival_time} island arrival.`
-        : `${state.originResolved.origin?.label||state.originQuery} · leave ${clock(leaveMinutes)}. No verified ferry is reachable under the current trip constraints.`,
+        ? `${dateLabel(j.trip_date||state.tripDate)} · ${j.origin_label||state.originResolved.origin?.label||state.originQuery} ${leave} → ${j.ferry_port||plan.origin_port} (${drive})${wait} → ${j.ferry_departure||plan.departure_time} ferry → ${j.island_arrival||plan.arrival_time} island.`
+        : `${dateLabel(state.tripDate)} · ${state.originResolved.origin?.label||state.originQuery} at ${clock(inputTimeMinutes(state.departTime))}. No published ferry is reachable under the current constraints.`,
         plan.departure_time?'resolved':'error');
     }
     const f=d.generated_at?new Date(d.generated_at).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):'—';
