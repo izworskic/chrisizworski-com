@@ -5,13 +5,13 @@ const { buildDecision } = require("../lib/snowmobile-engine.js");
 const { interpretReports } = require("../lib/snowmobile-harness.js");
 
 let cache = null;
-const CACHE_MS = 5 * 60 * 1000;
+const CACHE_MS = 15 * 60 * 1000;
 const STALE_MS = 6 * 60 * 60 * 1000;
 
 function send(res, status, payload) {
   res.status(status);
   res.setHeader("Content-Type", "application/json; charset=utf-8");
-  res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=900");
+  res.setHeader("Cache-Control", "public, s-maxage=900, stale-while-revalidate=3600");
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-Robots-Tag", "noindex, nofollow");
   res.json(payload);
