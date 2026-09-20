@@ -104,7 +104,7 @@
     ['Mackinaw City','St. Ignace'].forEach((name,i)=>{
       const key=i===0?'mackinaw':'stIgnace',p=ports[name]||{};
       setText(`${key}Best`,p.best_departure?`${p.best_departure.departure_time} · ${p.best_departure.operator}`:'No verified departure');
-      setText(`${key}Meta`,p.next_departure?`Next available ${p.next_departure.departure_time} · ${p.departure_count||0} departures in the modeled schedule`:'No current departure found');
+      setText(`${key}Meta`,p.next_departure?`${p.next_departure_origin_adjusted?'Next reachable from your start':'Next available'} ${p.next_departure.departure_time} · ${p.departure_count||0} departures in the modeled schedule`:'No current departure found');
       const card=$(key+'Card');card?.classList.toggle('recommended',plan.origin_port===name);
       renderTimeline(key+'Timeline',p.departures||[],plan.origin_port===name?plan:null);
     });
