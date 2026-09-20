@@ -7,7 +7,9 @@ const pages=[
   ["from-detroit","Detroit to Mackinac Island Trip Planner"],
   ["from-chicago","Chicago to Mackinac Island Trip Planner"],
   ["from-traverse-city","Traverse City to Mackinac Island Trip Planner"],
-  ["from-grand-rapids","Grand Rapids to Mackinac Island Trip Planner"]
+  ["from-grand-rapids","Grand Rapids to Mackinac Island Trip Planner"],
+  ["limited-walking","Mackinac Island With Less Walking Planner"],
+  ["bike-day","Mackinac Island Bike Day & M-185 Planner"]
 ];
 let fail=false;
 for(const [slug,title] of pages){
@@ -48,5 +50,11 @@ for(const [slug,encoded] of Object.entries(originSeeds)){
   if(!html.includes("?intent=ferry-planner&amp;from="+encoded+"#main")&&!html.includes("?intent=ferry-planner&from="+encoded+"#main")){
     console.error(slug+" missing preseeded origin CTA");fail=true;
   }
+}
+if(fail)process.exit(1);
+
+for(const [slug,needle] of [["limited-walking","Official Mackinac accessibility guide"],["bike-day","Current Mackinac e-bike rules"]]){
+  const html=fs.readFileSync("public/mackinac-island/"+slug+"/index.html","utf8");
+  if(!html.includes(needle)){console.error(slug+" missing source-backed intent content");fail=true;}
 }
 if(fail)process.exit(1);
