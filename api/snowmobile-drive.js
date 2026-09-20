@@ -1,63 +1,91 @@
 "use strict";
 
-const NOMINATIM = "https://nominatim.openstreetmap.org/search";
-const MICHIGAN_VIEWBOX = "-90.6,49.6,-82.0,41.5";
 const DESTINATION = { name: "Grayling trail access", lat: 44.6614, lon: -84.7148 };
 const UA = "ChrisIzworskiSnowmobile/1.0 (+https://chrisizworski.com/snowmobile/)";
 const cache = new Map();
+
+const PRESET_ORIGINS = new Map([
+  ["bay city", { displayName:"Bay City, MI", lat:43.5945, lon:-83.8889 }],
+  ["saginaw", { displayName:"Saginaw, MI", lat:43.4195, lon:-83.9508 }],
+  ["midland", { displayName:"Midland, MI", lat:43.6156, lon:-84.2472 }],
+  ["lansing", { displayName:"Lansing, MI", lat:42.7325, lon:-84.5555 }],
+  ["detroit", { displayName:"Detroit, MI", lat:42.3314, lon:-83.0458 }],
+  ["grand rapids", { displayName:"Grand Rapids, MI", lat:42.9634, lon:-85.6681 }],
+  ["traverse city", { displayName:"Traverse City, MI", lat:44.7631, lon:-85.6206 }],
+  ["cadillac", { displayName:"Cadillac, MI", lat:44.2519, lon:-85.4012 }]
+]);
 
 function cleanQuery(value) {
   return String(value || "").trim().replace(/\s+/g, " ").slice(0, 100);
 }
 
-function isMichiganCandidate(row = {}) {
-  const a = row.address || {};
-  const state = String(a.state || "").toLowerCase();
-  const stateCode = String(a["ISO3166-2-lvl4"] || a.state_code || "").toUpperCase();
-  const display = String(row.display_name || "").toLowerCase();
-  return state === "michigan" || stateCode === "US-MI" || stateCode === "MI" || /(?:^|,\s*)michigan(?:,|$)/.test(display);
+function normalizedCityKey(value) {
+  return cleanQuery(value)
+    .toLowerCase()
+    .replace(/,?\s*michigan\b/g, "")
+    .replace(/,?\s*mi\b/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-function chooseCandidate(rows = []) {
-  const valid = rows.filter(row => {
-    const lat = Number(row?.lat);
-    const lon = Number(row?.lon);
-    return Number.isFinite(lat) && Number.isFinite(lon) &&
-      lat >= 41.5 && lat <= 49.6 && lon >= -90.6 && lon <= -82.0 &&
-      isMichiganCandidate(row);
-  });
-  if (!valid.length) return null;
-  return valid.find(row => /city|town|village|hamlet|administrative|postcode/i.test(`${row.type || ""} ${row.class || row.category || ""}`)) || valid[0];
+function presetOrigin(origin) {
+  const row = PRESET_ORIGINS.get(normalizedCityKey(origin));
+  return row ? { ...row, source:"preset" } : null;
+}
+
+function mapboxMichiganFeature(feature) {
+  if (!feature?.center || feature.center.length < 2) return null;
+  const [lon,lat] = feature.center.map(Number);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+  if (lat < 41.5 || lat > 49.6 || lon < -90.6 || lon > -82.0) return null;
+  const context = [feature, ...(feature.context || [])];
+  const region = context.find(x => String(x.id || "").startsWith("region."));
+  const regionText = String(region?.short_code || region?.text || "").toLowerCase();
+  if (regionText && !/us-mi|michigan/.test(regionText)) return null;
+  return {
+    displayName: feature.place_name || feature.text || "Michigan origin",
+    lat, lon, source:"mapbox"
+  };
 }
 
 async function geocode(origin) {
-  const params = new URLSearchParams({
-    q: origin,
-    format: "jsonv2",
-    limit: "5",
-    countrycodes: "us",
-    viewbox: MICHIGAN_VIEWBOX,
-    bounded: "1",
-    addressdetails: "1"
-  });
-  const response = await fetch(`${NOMINATIM}?${params}`, {
-    headers: {
-      accept: "application/json",
-      "accept-language": "en-US,en;q=0.8",
-      "user-agent": UA
-    },
+  const preset = presetOrigin(origin);
+  const token = process.env.MAPBOX_TOKEN;
+  if (!token) {
+    if (preset) return preset;
+    throw new Error("Custom geocoding is unavailable because MAPBOX_TOKEN is not configured");
+  }
+
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(origin)}.json?country=US&types=place,postcode,locality&limit=5&proximity=-84.6,44.7&access_token=${encodeURIComponent(token)}`;
+  const response = await fetch(url, {
+    headers: { accept:"application/json", "user-agent":UA },
     signal: AbortSignal.timeout(8000)
   });
-  if (!response.ok) throw new Error(`Geocoder returned ${response.status}`);
-  return chooseCandidate(await response.json());
+  if (!response.ok) throw new Error(`Mapbox geocoder returned ${response.status}`);
+  const payload = await response.json();
+  for (const feature of payload.features || []) {
+    const row = mapboxMichiganFeature(feature);
+    if (row) return row;
+  }
+  return preset;
 }
 
 async function route(origin) {
-  const coordStr = `${Number(origin.lon)},${Number(origin.lat)};${DESTINATION.lon},${DESTINATION.lat}`;
   const token = process.env.MAPBOX_TOKEN;
-  const url = token
-    ? `https://api.mapbox.com/directions/v5/mapbox/driving/${coordStr}?overview=false&access_token=${encodeURIComponent(token)}`
-    : `https://router.project-osrm.org/route/v1/driving/${coordStr}?overview=false`;
+  const coordStr = `${Number(origin.lon)},${Number(origin.lat)};${DESTINATION.lon},${DESTINATION.lat}`;
+  let url;
+  let provider;
+
+  if (token) {
+    provider = "mapbox";
+    url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coordStr}?overview=false&access_token=${encodeURIComponent(token)}`;
+  } else if (process.env.ALLOW_PUBLIC_OSRM === "1") {
+    provider = "osrm";
+    url = `https://router.project-osrm.org/route/v1/driving/${coordStr}?overview=false`;
+  } else {
+    throw new Error("Road routing is unavailable because MAPBOX_TOKEN is not configured");
+  }
+
   const response = await fetch(url, {
     headers: { "user-agent": UA, accept: "application/json" },
     signal: AbortSignal.timeout(9000)
@@ -67,7 +95,7 @@ async function route(origin) {
   const r = payload.routes?.[0];
   if (!r) throw new Error("No route returned");
   return {
-    provider: token ? "mapbox" : "osrm",
+    provider,
     durationMinutes: Math.round(Number(r.duration || 0) / 60),
     distanceMiles: Math.round(Number(r.distance || 0) / 1609.34)
   };
@@ -99,14 +127,15 @@ module.exports = async function handler(req, res) {
       ok: true,
       origin: {
         query: origin,
-        displayName: row.display_name || origin,
+        displayName: row.displayName || origin,
         lat: Number(row.lat),
-        lon: Number(row.lon)
+        lon: Number(row.lon),
+        geocodeProvider: row.source
       },
       destination: DESTINATION,
       ...routing,
-      geocodingAttribution: "© OpenStreetMap contributors via Nominatim",
-      routeAttribution: routing.provider === "osrm" ? "Routing via OSRM / OpenStreetMap" : "Routing via Mapbox"
+      geocodingAttribution: row.source === "mapbox" ? "Geocoding via Mapbox" : "Preset Michigan city coordinates",
+      routeAttribution: routing.provider === "mapbox" ? "Routing via Mapbox" : "Routing via OSRM / OpenStreetMap"
     };
     cache.set(key, { savedAt: Date.now(), payload });
     return res.status(200).json(payload);
@@ -116,4 +145,4 @@ module.exports = async function handler(req, res) {
   }
 };
 
-module.exports._test = { cleanQuery, chooseCandidate, isMichiganCandidate, DESTINATION };
+module.exports._test = { cleanQuery, normalizedCityKey, presetOrigin, mapboxMichiganFeature, DESTINATION };
