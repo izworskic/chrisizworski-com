@@ -356,3 +356,20 @@ test('Mackinac hero trip strip fails closed when the live bundle fails', () => {
   assert.match(js,/setText\('heroIsland','Unavailable'\)/);
   assert.match(js,/setText\('heroReturn','Unavailable'\)/);
 });
+
+
+test('trip-at-a-glance exposes and synchronizes a starting-city control', () => {
+  const html=fs.readFileSync(htmlPath,'utf8');
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(html,/id="heroOriginCity"/);
+  assert.match(html,/Starting city for drive and ferry planning/);
+  assert.match(js,/syncOriginControls/);
+  assert.match(js,/mackinac_start_city_selected/);
+});
+
+test('optional Mackinac feed gaps are not dumped as raw degraded-input diagnostics', () => {
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(js,/OPTIONAL_FAILURES=new Set\(\['fall_color','tourism','attractions'\]\)/);
+  assert.doesNotMatch(js,/Degraded inputs:/);
+  assert.match(js,/Optional planning context is limited right now/);
+});
