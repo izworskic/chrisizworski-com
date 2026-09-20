@@ -119,6 +119,12 @@
       'with-kids':{trip_vision:['kids']},
       'two-day':{trip_duration:'one-night'},
       'ferry-planner':{},
+      'stay':{},
+      'dining':{},
+      'explore':{},
+      'events':{},
+      'straits':{regional_interest:'regional'},
+      'fall':{trip_vision:['scenery']},
       'limited-walking':{trip_loss:'walking'},
       'bike-day':{trip_duration:'day',trip_vision:['biking']}
     };
