@@ -850,7 +850,7 @@
     if(seed)hydratePlanInputs(seed,{includeIntake:true});
     else syncTripDateInputs(detroitToday());
     syncTripModeUi();
-    await initIntake({seedAnswers:seed?.intake||null,ignoreLocal:Boolean(shared)});
+    await initIntake({seedAnswers:seed?.intake||null,ignoreLocal:Boolean(seed)});
     if(seed)hydratePlanInputs(seed,{includeIntake:false});
     const originText=cleanOrigin(seed?.origin_text);
     if(originText){
