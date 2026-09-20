@@ -7,8 +7,8 @@ const pages=[
   ["ferry-planner","Mackinac Island Ferry Planner"],
   ["from-detroit","Detroit to Mackinac Island Trip Planner"],
   ["from-chicago","Chicago to Mackinac Island Trip Planner"],
-  ["from-traverse-city","Traverse City to Mackinac Island Trip Planner"],
-  ["from-grand-rapids","Grand Rapids to Mackinac Island Trip Planner"],
+  ["from-traverse-city","Traverse City to Mackinac Island Planner"],
+  ["from-grand-rapids","Grand Rapids to Mackinac Island Planner"],
   ["limited-walking","Mackinac Island With Less Walking Planner"],
   ["bike-day","Mackinac Island Bike Day & M-185 Planner"],
   ["fall","Mackinac Island Fall Trip Planner"]
