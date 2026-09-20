@@ -568,8 +568,8 @@ test('journey candidates carry route wait and door-to-island cost', () => {
 test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260920-live10/);
-  assert.match(html,/mackinac-island\.css\?v=20260920-live10/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live11/);
+  assert.match(html,/mackinac-island\.css\?v=20260920-live11/);
   assert.doesNotMatch(js,/Add a starting city/);
   assert.doesNotMatch(html,/Add a starting city/);
 });
@@ -579,9 +579,9 @@ test('Mackinac first-screen route inputs are explicit and cache-safe', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
   const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
-  assert.match(html,/data-mackinac-build="20260920-live10"/);
+  assert.match(html,/data-mackinac-build="20260920-live11"/);
   assert.match(html,/<span>Starting city<\/span><input id="heroOriginInput"/);
-  assert.match(html,/mackinac-island\.js\?v=20260920-live10/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live11/);
   assert.doesNotMatch(html,/Add a starting city/i);
   assert.doesNotMatch(js,/Add a starting city/i);
   assert.match(html,/Enter date, city \+ time above/);
@@ -632,8 +632,8 @@ test('Mackinac live cameras use one switchable viewer and JEV stays closed-set',
   assert.match(route,/Choose exactly one supplied camera id or NONE/);
   assert.match(route,/Do not claim to see or analyze the live webcam image or video/);
   assert.match(route,/player\.castr\.com\/live_4fb405e028e311ef91eb49267aef0a7e/);
-  assert.match(route,/island\.networkingdesign\.com:8183/);
-  assert.match(route,/island\.networkingdesign\.com:8184/);
+  assert.match(route,/island\.networkingdesign\.com:8183\/hls\/live\.stream\.m3u8/);
+  assert.match(route,/island\.networkingdesign\.com:8184\/hls\/live\.stream\.m3u8/);
   assert.match(route,/youtube-nocookie\.com\/embed\/GHAC6-T14TU/);
   assert.match(route,/Prefer a camera that plays directly in the page/);
   assert.match(route,/uid=2e25804bc117f7aa96781ae3e4593a00/);
@@ -663,3 +663,6 @@ test('JEV webcam fit favors cameras that play in-page', () => {
   assert.ok(clean.every(x=>x.playable_in_page===true));
   assert.ok(ranked[0].playable_in_page, 'default recommendation should be watchable in-page');
 });
+
+
+test('Chippewa and Horns use raw HLS streams instead of Restreamer shells',()=>{const js=fs.readFileSync(jsPath,'utf8');const route=fs.readFileSync(routePath,'utf8');assert.match(js,/loadHlsJs/);assert.match(js,/mountHlsVideo/);assert.match(js,/hls\.js@1/);assert.match(route,/8183\/hls\/live\.stream\.m3u8/);assert.match(route,/8184\/hls\/live\.stream\.m3u8/);assert.doesNotMatch(route,/embed_url:"https:\/\/island\.networkingdesign\.com:818[34]\/?"/);});
