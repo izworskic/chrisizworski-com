@@ -130,7 +130,7 @@
   function renderPlanner(d){
     const it=d.itinerary||[],p=d.trip_profile||{};
     setText('plannerSummary',d.itinerary_summary||'A feasible plan could not be built from the verified inputs.');
-    $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title)}</strong>${x.movement?`<span class="movement">${esc(x.movement)}</span>`:''}<p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>No complete itinerary</strong><p>Use the official ferry source links before leaving.</p></div></li>';
+    $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title||x.label||'Plan stop')}</strong>${x.movement?`<span class="movement">${esc(x.movement)}</span>`:''}<p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>No complete itinerary</strong><p>Use the official ferry source links before leaving.</p></div></li>';
     setText('plannerExplain',d.itinerary_reason||'');
     setText('leaveHome',d.leave_home?.time||'Start from the ferry dock');
     setText('leaveHomeNote',d.leave_home?.detail||'Choose a supported starting city to add a planning leave time. Drive estimates are not live traffic.');
@@ -173,7 +173,9 @@
     });
   }
   async function buildMap(){
-    const btn=$('loadMap');btn.disabled=true;btn.textContent='Loading map…';
+    const btn=$('loadMap');
+    if(!state.data){btn.disabled=false;btn.textContent='Load planning map';return;}
+    btn.disabled=true;btn.textContent='Loading map…';
     try{await loadLeaflet();const host=$('map');host.className='leaflet-map';host.innerHTML='';const map=L.map(host,{scrollWheelZoom:false}).setView([45.852,-84.617],13);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
       const points=state.mapPoints?.length?state.mapPoints:[{id:'downtown',name:'Downtown / ferry docks',lat:45.8492,lon:-84.6176},{id:'fort',name:'Fort Mackinac',lat:45.8527,lon:-84.6177},{id:'arch-rock',name:'Arch Rock',lat:45.8548,lon:-84.5936},{id:'british-landing',name:'British Landing',lat:45.8731,lon:-84.6411},{id:'grand-hotel',name:'Grand Hotel',lat:45.8498,lon:-84.6294}];
       const routeIds=Array.isArray(state.routeIds)?state.routeIds:[];
@@ -199,7 +201,7 @@
     }catch(e){btn.disabled=false;btn.textContent='Retry map';$('map').innerHTML='<div><strong>Interactive map could not load.</strong><p>The movement notes remain available and the live decision does not depend on the map provider.</p></div>';state.mapLoaded=false;}
   }
   $('loadMap').addEventListener('click',buildMap);
-  const observer=new IntersectionObserver(entries=>{if(entries.some(x=>x.isIntersecting)&&!state.mapLoaded)buildMap();},{rootMargin:'200px'});observer.observe($('map-section'));
+  const observer=new IntersectionObserver(entries=>{if(entries.some(x=>x.isIntersecting)&&!state.mapLoaded&&state.data)buildMap();},{rootMargin:'200px'});observer.observe($('map-section'));
 
   $('sharePlan').addEventListener('click',async()=>{
     const d=state.data,plan=d?.ferry?.recommended_plan;if(!d||!plan)return;
