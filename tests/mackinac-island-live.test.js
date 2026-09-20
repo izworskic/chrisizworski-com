@@ -711,7 +711,7 @@ test('place intelligence is source-backed and never presented as live availabili
   assert.match(route,/require\("\.\/catalog"\)/);
   assert.match(route,/place_intelligence:placeIntelligence/);
   assert.match(js,/renderPlaceCards/);
-  assert.match(js,/No room availability or live rate/);
+  assert.match(js,/Room availability and live rates are not assumed/);
   assert.match(js,/current hours, waits and reservations still need checking/);
   assert.match(html,/id="straitsGuideCards"/);
   assert.match(html,/20260920-live14/);
