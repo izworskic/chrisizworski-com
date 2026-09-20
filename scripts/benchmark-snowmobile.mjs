@@ -23,7 +23,7 @@ add('Source provenance + confidence',10,api.includes('truthBoundary')&&api.inclu
 add('Route/corridor intelligence',10,engine.includes('worst.score+18')&&engine.includes("routeState:worst.score<35?'DETOUR_OR_AVOID'")&&api.includes('Grayling → Frederic → Waters → Gaylord')&&api.includes('sectionOrder'));
 add('Mobile/map UX',5,css.includes('@media(max-width:760px)')&&page.includes('id="map"')&&ui.includes('L.geoJSON')&&page.includes('id="outlook72"')&&page.includes('id="useMyLocation"'));
 add('Search/entity architecture',5,page.includes('rel="canonical" href="https://chrisizworski.com/snowmobile/"')&&page.includes('WebApplication')&&sitemap.includes('https://chrisizworski.com/snowmobile/'));
-add('JEV safety + deterministic fallback',5,harness.includes("choice!=='NONE'")&&harness.includes('injection_dependency')&&harness.includes("mode:'deterministic'")&&harness.includes('Do not invent grooming'));
+add('JEV safety + deterministic fallback',5,harness.includes('allowed.has(choice)')&&harness.includes('injection_dependency')&&harness.includes("mode:'deterministic'")&&harness.includes('Do not invent grooming')&&harness.includes('structured_condition'));
 const hardVetoes=[
  ['Natural snow must not become trail base',api.includes('naturalSnowIsTrailBase:false')],
  ['NOHRSC depth must not become trail base',api.includes('nohrscSnowDepthIsTrailBase:false')],
