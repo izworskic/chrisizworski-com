@@ -117,7 +117,11 @@
       'day-trip':{trip_duration:'day'},
       'with-kids':{trip_vision:['kids']},
       'two-day':{trip_duration:'one-night'},
-      'ferry-planner':{}
+      'ferry-planner':{},
+      'accessibility':{},
+      'bike-route':{trip_vision:['biking']},
+      'where-to-stay':{},
+      'fall':{trip_vision:['scenery']}
     };
     if(!Object.prototype.hasOwnProperty.call(map,id||''))return null;
     return {intent:id,intake:{...map[id]}};
