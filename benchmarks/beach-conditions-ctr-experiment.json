@@ -85,5 +85,21 @@
     "structuredData",
     "canonical",
     "indexability"
-  ]
+  ],
+  "latestObserved": {
+    "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-09-20",
+    "exportedThrough": "2026-09-17",
+    "windowDays": 7,
+    "page": {
+      "impressions": 452,
+      "clicks": 2,
+      "ctr": 0.004424778761061947,
+      "averagePosition": 8.32
+    },
+    "interpretation": "Average position improved versus the 2026-08-19 baseline while CTR is lower. Keep the statewide search surface frozen because the experiment is still protected and beach-season demand is declining; do not infer failure from a late-season window alone."
+  },
+  "measurementDecision": {
+    "action": "observe-no-rewrite",
+    "reason": "Preserve title, meta description, H1, first answer, structured data, canonical and indexability while collecting comparable windows."
+  }
 }

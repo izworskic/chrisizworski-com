@@ -80,5 +80,62 @@
     "indexability"
   ],
   "releaseDateModified": "2026-08-25",
-  "releaseDateModifiedNote": "The dateModified every treated page must carry. Was hardcoded as 2026-08-22 in the benchmark script, which broke the moment the stamper told the truth about a later content change. Keep it here so the pin and the config cannot disagree. Bump it whenever the treatment re-ships before its window opens; do not bump it once status is running."
+  "releaseDateModifiedNote": "The dateModified every treated page must carry. Was hardcoded as 2026-08-22 in the benchmark script, which broke the moment the stamper told the truth about a later content change. Keep it here so the pin and the config cannot disagree. Bump it whenever the treatment re-ships before its window opens; do not bump it once status is running.",
+  "latestObserved": {
+    "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-09-20",
+    "exportedThrough": "2026-09-17",
+    "windowDays": 7,
+    "aggregate": {
+      "impressions": 363,
+      "clicks": 3,
+      "ctr": 0.008264462809917356,
+      "weightedAveragePosition": 7.8212672176308535
+    },
+    "pages": [
+      {
+        "path": "/great-lakes-beaches/warren-dunes-state-park/",
+        "impressions": 118,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 8.38
+      },
+      {
+        "path": "/great-lakes-beaches/luna-pier/",
+        "impressions": 7,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 7
+      },
+      {
+        "path": "/great-lakes-beaches/new-buffalo-beach/",
+        "impressions": 76,
+        "clicks": 2,
+        "ctr": 0.02631578947368421,
+        "averagePosition": 7.49
+      },
+      {
+        "path": "/great-lakes-beaches/pj-hoffmaster-state-park/",
+        "impressions": 150,
+        "clicks": 1,
+        "ctr": 0.006666666666666667,
+        "averagePosition": 7.78
+      },
+      {
+        "path": "/great-lakes-beaches/oscoda-beach-park/",
+        "impressions": 12,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 5.42
+      }
+    ],
+    "interpretation": "Aggregate CTR and weighted position improved versus baseline. New Buffalo is above the experiment CTR target; Warren Dunes and P.J. Hoffmaster are the highest-impression laggards. Preserve the five-page freeze and evaluate those outliers separately after a clean measurement window rather than resetting the whole cluster."
+  },
+  "measurementDecision": {
+    "action": "observe-no-rewrite",
+    "reason": "The experiment is improving overall and summer beach demand is rolling off after September 15. Search-facing changes now would confound the treatment and seasonal interpretation.",
+    "nextOutliers": [
+      "/great-lakes-beaches/warren-dunes-state-park/",
+      "/great-lakes-beaches/pj-hoffmaster-state-park/"
+    ]
+  }
 }
