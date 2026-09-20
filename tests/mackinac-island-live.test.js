@@ -9,6 +9,8 @@ const cssPath = path.join(__dirname, '..', 'public', 'assets', 'mackinac-island.
 const jsPath = path.join(__dirname, '..', 'public', 'assets', 'mackinac-island.js');
 const route = require(routePath);
 const t = route._test;
+const originApi = require(path.join(__dirname, '..', 'api', 'mackinac-origin.js'));
+const originT = originApi._test;
 
 function sum(obj){ return Object.values(obj).reduce((a,b)=>a+Number(b||0),0); }
 
@@ -358,18 +360,45 @@ test('Mackinac hero trip strip fails closed when the live bundle fails', () => {
 });
 
 
-test('trip-at-a-glance exposes and synchronizes a starting-city control', () => {
+test('trip-at-a-glance accepts a real free-form starting city', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/id="heroOriginCity"/);
-  assert.match(html,/Starting city for drive and ferry planning/);
-  assert.match(js,/syncOriginControls/);
+  assert.match(html,/id="heroOriginForm"/);
+  assert.match(html,/id="heroOriginInput"/);
+  assert.match(html,/placeholder="Bay City, MI"/);
+  assert.match(html,/id="originCityInput"/);
+  assert.doesNotMatch(html,/id="heroOriginCity"/);
+  assert.doesNotMatch(html,/id="originCity"/);
+  assert.match(js,/const ORIGIN_API='\/api\/mackinac-origin'/);
+  assert.match(js,/async function resolveOrigin/);
   assert.match(js,/mackinac_start_city_selected/);
 });
 
-test('optional Mackinac feed gaps are not dumped as raw degraded-input diagnostics', () => {
+test('tourism event reference is not treated as a live degraded dependency', () => {
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(js,/OPTIONAL_FAILURES=new Set\(\['fall_color','tourism','attractions'\]\)/);
+  const routeSource=fs.readFileSync(routePath,'utf8');
+  assert.match(js,/OPTIONAL_FAILURES=new Set\(\['fall_color','attractions'\]\)/);
   assert.doesNotMatch(js,/Degraded inputs:/);
-  assert.match(js,/Optional planning context is limited right now/);
+  assert.doesNotMatch(routeSource,/fetchSource\(SOURCE_URLS\.tourism/);
+  assert.doesNotMatch(routeSource,/tourism:tourismR/);
+  assert.match(routeSource,/status_label:"published 2026 reference"/);
+});
+
+
+test('dynamic routed origin overrides the old preset-only city model', () => {
+  const p=t.profileFromQuery({
+    origin_name:'Bay City, Michigan, US',
+    origin_drive_minutes:'125',
+    origin_preferred_port:'Mackinaw City'
+  },['day-trip'],'lower');
+  assert.equal(p.origin_name,'Bay City, Michigan, US');
+  assert.equal(p.origin_preset.preferred_port,'Mackinaw City');
+  assert.equal(p.origin_preset.drive_minutes,125);
+  assert.match(p.origin_preset.confidence,/OpenStreetMap\/OSRM/);
+});
+
+test('starting-city resolver bounds text and compares both ferry ports', () => {
+  assert.equal(originT.cleanQuery('  Bay   City, MI  '),'Bay City, MI');
+  assert.equal(originT.cleanQuery('x'.repeat(150)).length,100);
+  assert.deepEqual(originT.PORTS.map(x=>x.name),['Mackinaw City','St. Ignace']);
 });
