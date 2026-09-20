@@ -179,3 +179,93 @@ test('client renders route-aware map and itinerary labels', () => {
   assert.match(js,/routeIds\.includes\('m185'\)/);
   assert.match(js,/state\.mapWasOpened/);
 });
+
+
+test('explicit full-builder trip mode overrides conflicting quick persona', () => {
+  const day=t.profileFromQuery({trip:'day-trip'},['overnight','photography'],'lower');
+  assert.equal(day.trip,'day-trip');
+  assert.ok(day.personas.includes('day-trip'));
+  assert.ok(!day.personas.includes('overnight'));
+});
+
+test('derived form constraints are preserved without persona truncation', () => {
+  const p=t.profileFromQuery({
+    trip:'day-trip',children:'2',bikes:'rent',
+    interests:'fall-color,photography',must_do:'m185,sunset'
+  },['day-trip','first-visit','fall-color'],'lower');
+  for (const name of ['kids','biking','photography','fall-color']) assert.ok(p.personas.includes(name), name);
+});
+
+test('same-day origin drive time can make an early ferry infeasible', () => {
+  const date='2026-09-20';
+  const profile=t.profileFromQuery({origin_city:'grand-rapids'},['day-trip'],'lower');
+  const ctx={
+    date,personas:profile.personas,origin:'lower',profile,hourly:[],
+    marine:{score:90},attractions:t.attractionState(date,7*60),events:[],
+    sunrise:t.solarMinutes(date,45.8497,-84.6189,true),
+    sunset:t.solarMinutes(date,45.8497,-84.6189,false),sameDay:true,nowMinutes:7*60
+  };
+  const records=[...t.arnoldSchedule(date,true),...t.sheplersSchedule(date,true)];
+  const plans=t.planCandidates(records,ctx);
+  assert.ok(plans.length>0);
+  assert.ok(plans.every(x=>x.outbound.departure_minutes>=7*60+profile.origin_preset.drive_minutes+15+x.outbound.checkin_buffer_minutes));
+});
+
+test('fixed event time is protected from flexible bike activity overlap', () => {
+  const date='2026-09-20';
+  const profile=t.profileFromQuery({
+    event_start:'1:00 PM',bikes:'rent',interests:'events,biking',must_do:'m185'
+  },['event','day-trip'],'lower');
+  const ctx={
+    date,personas:profile.personas,origin:'lower',profile,hourly:[],
+    marine:{score:90},attractions:t.attractionState(date,10*60+30),events:[],
+    sunrise:t.solarMinutes(date,45.8497,-84.6189,true),
+    sunset:t.solarMinutes(date,45.8497,-84.6189,false),sameDay:true,nowMinutes:10*60+30
+  };
+  const records=[...t.arnoldSchedule(date,true),...t.sheplersSchedule(date,true)];
+  const plan=t.planCandidates(records,ctx)[0];
+  const itinerary=t.itineraryFor(plan,ctx);
+  const event=itinerary.find(x=>x.label==='Event block');
+  assert.ok(event);
+  assert.ok(event.minute<=12*60+25);
+  const preEvent=itinerary.filter(x=>x.minute<event.minute && /Ride M-185|Pick up rental bikes/.test(x.label));
+  assert.equal(preEvent.length,0);
+});
+
+test('carriage must-do produces a carriage block for standard mobility', () => {
+  const date='2026-09-20';
+  const profile=t.profileFromQuery({must_do:'carriage',pace:'balanced'},['day-trip'],'lower');
+  const ctx={
+    date,personas:profile.personas,origin:'lower',profile,hourly:[],
+    marine:{score:90},attractions:t.attractionState(date,8*60),events:[],
+    sunrise:t.solarMinutes(date,45.8497,-84.6189,true),
+    sunset:t.solarMinutes(date,45.8497,-84.6189,false),sameDay:false,nowMinutes:7*60
+  };
+  const records=[...t.arnoldSchedule(date,true),...t.sheplersSchedule(date,true)];
+  const plan=t.planCandidates(records,ctx)[0];
+  const labels=t.itineraryFor(plan,ctx).map(x=>x.label).join('|');
+  assert.match(labels,/Horse-drawn carriage \/ taxi orientation/);
+});
+
+test('sit-down dinner constrains the selected return ferry', () => {
+  const date='2026-09-20';
+  const profile=t.profileFromQuery({dinner:'sit-down'},['day-trip'],'lower');
+  const ctx={
+    date,personas:profile.personas,origin:'lower',profile,hourly:[],
+    marine:{score:90},attractions:t.attractionState(date,8*60),events:[],
+    sunrise:t.solarMinutes(date,45.8497,-84.6189,true),
+    sunset:t.solarMinutes(date,45.8497,-84.6189,false),sameDay:false,nowMinutes:7*60
+  };
+  const records=[...t.arnoldSchedule(date,true),...t.sheplersSchedule(date,true)];
+  const plan=t.planCandidates(records,ctx)[0];
+  assert.ok(plan?.return);
+  assert.ok(plan.return.departure_minutes>=19*60+10);
+  assert.match(t.itineraryFor(plan,ctx).map(x=>x.label).join('|'),/Sit-down dinner/);
+});
+
+test('browser renders planning references in the trust layer', () => {
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(js,/planning_references/);
+  assert.match(js,/planning estimate · not live traffic/);
+  assert.match(js,/Accessibility planning source/);
+});
