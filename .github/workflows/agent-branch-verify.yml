@@ -21,8 +21,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Install deployment dependencies
+        run: npm install --no-audit --no-fund --ignore-scripts
       - name: Run full repository gate
         run: npm run verify:all
+      - name: Run Vercel build diagnostic
+        run: npm run vercel-build
       - name: Upload boat launch source audit
         if: always()
         uses: actions/upload-artifact@v4
