@@ -40,9 +40,10 @@ module.exports=async function(req,res){
         {name:'Michigan DNR designated snowmobile trails',url:'https://www.michigan.gov/dnr/things-to-do/snowmobiling/where',authority:'official designated-trail geometry and attributes'},
         {name:'Michigan DNR temporary trail closures',url:'https://www.michigan.gov/dnr/about/newsroom/closures',authority:'official current closure/detour evidence'},
         {name:'MISORVA trail reports',url:'https://misorva.org/trail-report/',authority:'club/operator condition evidence; DNR does not control timeliness or accuracy'},
+        {name:'NOAA / NOHRSC snow analysis',url:'https://mapservices.weather.noaa.gov/raster/rest/services/snow/NOHRSC_Snow_Analysis/MapServer',authority:'regional analyzed snow depth; context only, not trail base'},
         {name:'National Weather Service',url:'https://weather.gov/',authority:'weather forecast'}
       ],
-      truthBoundary:{naturalSnowIsTrailBase:false,forecastSnowIsAccumulatedSnow:false,openDoesNotMeanGood:true,missingClosureIsNotConfirmedOpen:true,statusFieldDoesNotSetLegalState:true,jevCannotSetLegalStatus:true},
+      truthBoundary:{naturalSnowIsTrailBase:false,nohrscSnowDepthIsTrailBase:false,forecastSnowIsAccumulatedSnow:false,openDoesNotMeanGood:true,missingClosureIsNotConfirmedOpen:true,statusFieldDoesNotSetLegalState:true,jevCannotSetLegalStatus:true},
       operational:{dataState:'fresh',jev,sourceFailures:{closures:closuresR.status==='rejected'?String(closuresR.reason):null,weather:weatherR.status==='rejected'?String(weatherR.reason):null},modelBoundary:'JEV can only classify bounded report relevance. It cannot invent facts, set legal status, alter geometry, or convert snow depth into trail base.'}
     };
     cache={savedAt:Date.now(),payload};return send(res,payload);
