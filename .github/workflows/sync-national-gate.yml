@@ -179,9 +179,9 @@ jobs:
           grep -q 'Yellowstone Geyser Timing' public/synced-national-tools/rockies/index.html
           grep -q 'numberOfItems":4' public/synced-national-tools/rockies/index.html
           grep -q 'Road first. Weather second.' public/synced-national-tools/trail-ridge-road/index.html
-          grep -qi 'official NPS road status comes first' public/synced-national-tools/trail-ridge-road/index.html
+          grep -qi 'NPS road status remains authoritative' public/synced-national-tools/trail-ridge-road/index.html
           grep -q 'A window, not an appointment.' public/synced-national-tools/yellowstone-geysers/index.html
-          grep -qi 'does not invent an eruption schedule' public/synced-national-tools/yellowstone-geysers/index.html
+          grep -qi 'does not erupt on an exact hourly schedule' public/synced-national-tools/yellowstone-geysers/index.html
 
           grep -q 'Insufficient recent sampling nearby' api/florida-red-tide.js
           grep -qi 'not an all-clear' api/florida-red-tide.js
