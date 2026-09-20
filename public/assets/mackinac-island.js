@@ -9,7 +9,19 @@
   const labelScore=n=>n>=84?'EXCELLENT':n>=74?'GOOD':n>=62?'FAIR':n>=48?'MARGINAL':'POOR';
   const setText=(id,v)=>{const el=$(id);if(el)el.textContent=v??'—';};
   const selectedPersonas=()=>[...state.personas];
-  const buildUrl=()=>`${API}?personas=${encodeURIComponent(selectedPersonas().join(','))}&origin=${encodeURIComponent(state.origin)}`;
+  function plannerParams(){
+    const p=new URLSearchParams();
+    p.set('personas',selectedPersonas().join(','));
+    p.set('origin',state.origin);
+    const simple={trip:'tripMode',adults:'adultCount',children:'childCount',origin_city:'originCity',bikes:'bikePlan',pace:'pace',mobility:'mobility',dinner:'dinner',return_by:'returnBy',event_start:'eventStart'};
+    Object.entries(simple).forEach(([key,id])=>{const el=$(id);if(el&&String(el.value).trim())p.set(key,String(el.value).trim());});
+    const interests=[...document.querySelectorAll('#interestChoices input:checked')].map(x=>x.value);
+    const must=[...document.querySelectorAll('#mustDoChoices input:checked')].map(x=>x.value);
+    if(interests.length)p.set('interests',interests.join(','));
+    if(must.length)p.set('must_do',must.join(','));
+    return p;
+  }
+  const buildUrl=()=>`${API}?${plannerParams().toString()}`;
   function scrollToTarget(selector){const el=document.querySelector(selector);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});track('mackinac_section_opened',{section:selector.slice(1)});}}
   document.querySelectorAll('[data-scroll]').forEach(b=>b.addEventListener('click',()=>scrollToTarget(b.dataset.scroll)));
 
@@ -28,6 +40,16 @@
     document.querySelectorAll('#originSwitch button').forEach(x=>{const a=x===btn;x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
     track('mackinac_start_location_entered',{origin:state.origin});loadDecision();
   }));
+  $('tripBuilder')?.addEventListener('submit',e=>{
+    e.preventDefault();
+    setText('builderStatus','Rebuilding ferry choice and itinerary from your constraints…');
+    track('mackinac_itinerary_created',{personas:selectedPersonas().join('|'),origin_city:$('originCity')?.value||'none',children:Number($('childCount')?.value||0),bikes:$('bikePlan')?.value||'none',pace:$('pace')?.value||'balanced'});
+    loadDecision();
+  });
+  $('tripBuilder')?.addEventListener('change',()=>{
+    setText('builderStatus','Trip inputs changed. Tap “Build this trip” to rerun the full plan.');
+    track('mackinac_itinerary_changed',{});
+  });
 
   function renderTop(d){
     const dec=d.decision||{}, score=Math.round(dec.score||0), plan=d.ferry?.recommended_plan||{};
@@ -106,9 +128,18 @@
   }
 
   function renderPlanner(d){
-    const it=d.itinerary||[];setText('plannerSummary',d.itinerary_summary||'A feasible plan could not be built from the verified inputs.');
+    const it=d.itinerary||[],p=d.trip_profile||{};
+    setText('plannerSummary',d.itinerary_summary||'A feasible plan could not be built from the verified inputs.');
     $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title)}</strong><p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>No complete itinerary</strong><p>Use the official ferry source links before leaving.</p></div></li>';
     setText('plannerExplain',d.itinerary_reason||'');
+    setText('leaveHome',d.leave_home?.time||'Start from the ferry dock');
+    setText('leaveHomeNote',d.leave_home?.detail||'Choose a supported starting city to add a planning leave time. Drive estimates are not live traffic.');
+    const party=`${Number(p.adults||2)} adult${Number(p.adults||2)===1?'':'s'}${Number(p.children||0)?` + ${p.children} child${Number(p.children)===1?'':'ren'}`:''}`;
+    const fit=[party,p.trip==='overnight'?'overnight':'day trip',p.pace?`${p.pace} pace`:null,p.bikes&&p.bikes!=='none'?`${p.bikes} bikes`:null,p.mobility==='limited'?'limited steep walking':null].filter(Boolean);
+    setText('tripFit',fit.join(' · '));
+    const priorities=[...(p.interests||[]),...(p.must_do||[]).map(x=>`must: ${x}`)];
+    setText('tripFitNote',priorities.length?`Priorities: ${priorities.join(', ')}.`:`Using the selected visitor modes plus live ferry/weather constraints.`);
+    setText('builderStatus',d.degraded?'Trip rebuilt; some source inputs are degraded and are labeled below.':'Trip rebuilt from the current live decision bundle.');
   }
 
   function renderSources(d){
