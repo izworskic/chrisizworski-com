@@ -81,6 +81,7 @@
     "benchmark:mackinac-hub": "node scripts/generate-mackinac-hub-pages.mjs && node scripts/generate-mackinac-intent-pages.mjs && node scripts/add-mackinac-island-discovery.mjs && node scripts/verify-mackinac-hub.mjs"
   },
   "dependencies": {
+    "@vercel/oidc": "3.8.8",
     "national-ballard-locks": "github:izworskic/national-ballard-locks#c0d0db1726dff6922efd059e3bf4da2091c01108",
     "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#74e532c79f369eed442c0b950dc9af9b64457632"
   },
