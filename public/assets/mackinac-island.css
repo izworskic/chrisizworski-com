@@ -259,3 +259,17 @@ img,svg{max-width:100%}
 .share-actions{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
 .share-actions small{max-width:220px;text-align:right;color:var(--muted);font-size:10px;line-height:1.3}
 @media(max-width:560px){.share-actions{align-items:flex-start}.share-actions small{text-align:left}}
+
+/* Multi-day Mackinac itinerary, live17 */
+.trip-days:has(.trip-day-stops){grid-template-columns:1fr}
+.trip-day:has(.trip-day-stops){padding:16px 17px}
+.trip-day em{display:inline-block;margin-top:6px;padding:4px 7px;border-radius:999px;background:#f0eee6;color:var(--muted);font-size:9px;font-style:normal;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.trip-day-stops{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:12px 0 0;padding:0;list-style:none}
+.trip-day-stops li{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff}
+.trip-day-stops strong{font-size:12px;margin:0}
+.trip-day-stops small{display:block;margin-top:3px;color:var(--muted);font-size:10px;line-height:1.4}
+.trip-day-stops a{display:inline-block;margin-top:5px;color:var(--lake-dark);font-size:9px;font-weight:800;text-decoration:none}
+.trip-day.arrival{border-left:4px solid var(--lake)}
+.trip-day.return{border-left:4px solid var(--green)}
+.trip-day.full-day{border-left:4px solid var(--gold)}
+@media(max-width:620px){.trip-day-stops{grid-template-columns:1fr}}
