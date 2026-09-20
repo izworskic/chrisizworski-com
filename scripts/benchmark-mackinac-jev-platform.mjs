@@ -32,10 +32,10 @@ const primaryIds=PRIMARY_NAV.map(x=>x.id);
 for(const id of primaryIds){
   check("surface-"+id,"Primary surface "+id+" is covered by shared trip intelligence",intel.includes(id+":[")||(id==="today"&&intel.includes("today:[")),3);
 }
-check("surface-api","Profile API can return a bounded surface decision",allIncludes(api,["chooseSurfaceFocus","surface_decision","mode:\"surface\"","primary_id"]),10);
+check("surface-api","Profile API can return a bounded surface decision",allIncludes(api,["chooseSurfaceFocus","surface_decision",'body?.mode==="surface"',"primary_id"]),10);
 check("cached-profile","Cross-page personalization reuses the saved JEV persona instead of reclassifying on each page",allIncludes(intel,["profileWithCachedPrimary","cached-jev-profile"])&&intelligenceClient.includes('mode:"surface"')&&intelligenceClient.includes("primary_id"),8);
 
-check("four-questions","Every destination entry can run the four-question intake",allIncludes(hub,["base_questions","Question \"+step+\" of \"+total","mackinac_intake_answered","classifyAndRender"]),12);
+check("four-questions","Every destination entry can run the four-question intake",allIncludes(intelligenceClient,["base_questions","Question \"+step+\" of \"+total","mackinac_intake_answered","classifyAndRender"]),12);
 check("one-followup","Client asks at most one adaptive follow-up before preserving the profile",allIncludes(intelligenceClient,["state.adaptiveAsked","next_question","Optional follow-up"]),6);
 check("state-continuity","Cross-page CTAs preserve the shared Mackinac trip state",allIncludes(intelligenceClient,["mackinac-trip-plan-v1","MackinacTripState","plannerHref","rewritePlannerLinks"]),10);
 check("surface-focus-ui","Each page can render its visitor-specific focus above generic content",allIncludes(intelligenceClient,["surface-focus","surface_decision","mackinac_surface_personalized"])&&css.includes(".surface-focus"),8);
