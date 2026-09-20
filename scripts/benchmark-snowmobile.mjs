@@ -15,7 +15,7 @@ const drive=read('api/snowmobile-drive.js');
 const checks=[];
 const add=(name,points,ok,detail='')=>checks.push({name,points,earned:ok?points:0,ok,detail});
 add('First-screen riding decision',20,['id="status"','id="best"','id="risk"','id="grooming"','id="forecastSnow"','id="routeStatus"','id="confidence"','id="drive"','id="sourceLine"','id="corridorSections"','id="originPreset"'].every(x=>page.includes(x))&&engine.includes('rankRideWindows')&&drive.includes("label:'Grayling, Michigan'"));
-add('Trail/segment condition integrity',15,engine.includes('scoreSegment')&&api.includes('corridorSection')&&api.includes('featureLatitude')&&api.includes('statusFieldDoesNotSetLegalState'));
+add('Trail/segment condition integrity',15,engine.includes('scoreSegment')&&api.includes('corridorSection')&&api.includes('featureLatitude')&&api.includes('statusFieldDoesNotSetLegalState')&&sources.includes('DNRTrailsOPENDATA')&&engine.includes('CLOSED_DNR_TRAIL_STATUS'));
 add('Grooming freshness',10,api.includes("freshness(r.lastGroomedAt,'grooming')")&&engine.includes('not used as current grooming evidence'));
 add('Closure/reroute integrity',10,sources.includes('DNR_Trail_Temporary_Closures')&&engine.includes("routeState:'ROUTE_BROKEN'")&&engine.includes('verifiedClosure'));
 add('Snow + freeze/thaw intelligence',10,engine.includes('maxTempF>=40')&&engine.includes('rainSignal===true')&&engine.includes('snowIn>=8')&&api.includes('NOHRSC_Snow_Analysis')&&page.includes('toggleSnowDepth'));
@@ -30,6 +30,7 @@ const hardVetoes=[
  ['Forecast snow must not become observed accumulation',api.includes('forecastSnowIsAccumulatedSnow:false')],
  ['Missing closure must not mean confirmed open',api.includes('missingClosureIsNotConfirmedOpen:true')],
  ['General Status field must not control legal state',api.includes('statusFieldDoesNotSetLegalState:true')],
+ ['Explicit DNR snowmobile status can close trail',api.includes('explicitSnowmobileOpenClosedStatusIsAuthoritative:true')&&engine.includes('CLOSED_DNR_TRAIL_STATUS')],
  ['JEV cannot set legal status',api.includes('jevCannotSetLegalStatus:true')],
  ['Closure must override route score',engine.includes("routeState:'ROUTE_BROKEN'")],
  ['Off-season must not manufacture ride score',engine.includes("score:null,band:'OFF_SEASON'")],
