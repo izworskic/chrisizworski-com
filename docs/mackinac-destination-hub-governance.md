@@ -1,4 +1,4 @@
-# Mackinac Destination Hub — Governing Build Prompt v1
+# Mackinac Destination Hub — Governing Build Prompt v2
 
 ## Role
 
@@ -32,9 +32,11 @@ The product must reduce the work required to plan a Mackinac trip, not merely pr
    - Ferry feasibility, origin routing, dates, leave-home time, multi-day logic, visitor profile, tuning, spatial plan, lodging/dining fit, weather, marine inputs, attraction facts, and trip-state persistence remain shared.
    - No hub page may implement a second copy of planner logic.
 
-2. **The current live planner remains authoritative for live decisions.**
-   - Do not fork ferry, weather, marine, attraction, or routing logic into static pages.
-   - Static pages explain, collect context, and hand the visitor into the shared planner.
+2. **The current live planner remains authoritative for live facts, but trip intelligence belongs everywhere.**
+   - Do not fork ferry, weather, marine, attraction, or routing logic into destination pages.
+   - Every Mackinac entry surface must be able to create or reuse the same visitor profile.
+   - Every destination surface may ask the shared bounded preference layer what decision focus matters most on that page.
+   - Search pages are entry surfaces into the same product, not static articles that merely hand off elsewhere.
 
 3. **JEV remains bounded.**
    JEV may:
@@ -42,7 +44,8 @@ The product must reduce the work required to plan a Mackinac trip, not merely pr
    - choose among supplied adaptive questions;
    - rank already-valid deterministic plan candidates;
    - rank supplied spatial/multi-day candidates;
-   - resolve preference tradeoffs among source-backed known options.
+   - resolve preference tradeoffs among source-backed known options;
+   - choose one supplied decision focus for the current destination surface.
 
    JEV may not:
    - invent ferry times, attraction hours, events, prices, availability, drive times, accessibility facts, weather, route geometry, or business status;
@@ -153,13 +156,14 @@ Hub pages may read:
 
 Hub pages must not treat stored profile data as verified live fact.
 
-Every hub page should:
+Every Mackinac page should:
 - detect an existing Mackinac visitor profile when available;
-- acknowledge the saved trip context;
-- offer a clear “continue my trip” handoff;
-- preserve the same shared planner rather than silently starting a second plan.
+- reuse the previously classified visitor archetype instead of reclassifying the person on every page;
+- ask only the new bounded question appropriate to the current page, such as which Stay/Eat/Ferry/Explore tradeoff deserves priority;
+- preserve the same shared planner rather than silently starting a second plan;
+- keep live facts out of local storage and recalculate them when the planner is opened.
 
-If no profile exists, the page should work normally and invite the visitor into the progressive intake.
+If no profile exists, the page must offer the same four-question progressive intake in place. The visitor should not have to leave a search landing page just to become personalized. At most one adaptive follow-up may be asked after the four base answers, and only when it can materially change a trip decision.
 
 ## Page contract
 
@@ -294,7 +298,9 @@ Run the architecture against at least these 15 behavioral profiles:
 For each persona, simulate at least:
 - arrival through the primary hub;
 - arrival through one relevant search-intent page;
-- movement to a second destination surface;
+- completion or reuse of the shared four-question profile;
+- a page-specific bounded decision focus selected from the supplied options;
+- movement to a second destination surface without losing the profile;
 - planner generation;
 - one bounded replan/tuning action.
 
@@ -335,6 +341,8 @@ Release fails regardless of weighted score if any of these occur:
 - a primary page is missing from destination navigation or sitemap;
 - a primary page is thin/near-duplicate doorway content;
 - saved visitor context is silently discarded during a normal hub journey;
+- a Mackinac destination/search surface cannot create or reuse the shared visitor profile;
+- page-specific personalization is implemented by free-form generated prose instead of a closed supplied option set;
 - live outputs are frozen into static/shareable state;
 - navigation exceeds eight primary items;
 - accessibility, e-bike, ferry, event, lodging, dining, or availability claims exceed their source evidence;
