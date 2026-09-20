@@ -1,4 +1,4 @@
-const { classifyVisitor, chooseSurfaceFocus, intakeSchema, PROFILE_VERSION } = require("../lib/mackinac-island/intelligence");
+const { classifyVisitor, profileWithCachedPrimary, chooseSurfaceFocus, intakeSchema, PROFILE_VERSION } = require("../lib/mackinac-island/intelligence");
 
 function parsedBody(req){
   if(req?.body && typeof req.body==="object")return req.body||{};
@@ -26,7 +26,11 @@ module.exports=async function handler(req,res){
   if(req.method!=="POST"){res.setHeader("Allow","GET, POST, OPTIONS");return res.status(405).json({error:"Method not allowed"});}
   try{
     const body=parsedBody(req);
-    const profile=await classifyVisitor(answersFromBody(body),{useJev:true});
+    const answers=answersFromBody(body);
+    const surfaceOnly=body?.mode==="surface";
+    const profile=surfaceOnly
+      ? profileWithCachedPrimary(answers,body?.primary_id)
+      : await classifyVisitor(answers,{useJev:true});
     const requestedSurface=surfaceFromBody(body);
     const surfaceDecision=requestedSurface
       ? await chooseSurfaceFocus(profile,requestedSurface,{useJev:true})
