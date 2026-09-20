@@ -504,14 +504,14 @@ test('entered leave-home time controls reachable ferry candidates and itinerary 
   const leave=itinerary.find(x=>x.stop_id==='mainland-drive');
   assert.ok(leave);
   assert.equal(leave.minute,7*60+30);
-  assert.match(leave.detail,/Your entered leave-home time/);
+  assert.match(leave.detail,/Uses your entered 7:30 AM leave-home time/);
 });
 
 test('client replaces stale starting-city prompt after city resolution', () => {
   const js=fs.readFileSync(jsPath,'utf8');
   assert.doesNotMatch(js,/d\.leave_home\?\.time\|\|'Add a starting city'/);
   assert.match(js,/state\.tripDate&&state\.originResolved&&state\.departTime\?'No reachable ferry':'Add date \+ city \+ time'/);
-  assert.match(js,/leave \$\{clock\(leaveMinutes\)\} → \$\{plan\.origin_port\}/);
+  assert.match(js,/\$\{dateLabel\(j\.trip_date\|\|state\.tripDate\)\} · \$\{j\.origin_label/);
 });
 
 
