@@ -44,7 +44,7 @@
         "@id": "https://chrisizworski.com/#person"
       },
       "description": "A curated set of Michigan Zone 6a gardening guides covering planting calendars, frost dates, heirloom tomatoes, seed saving, and companion planting.",
-      "dateModified": "2026-08-07",
+      "dateModified": "2026-09-20",
       "hasPart": [
         {
           "@type": "Article",
@@ -267,6 +267,18 @@ a:hover { text-decoration: underline; }
 
 /* ─── MAIN WRAP ─── */
 .wrap { max-width: 960px; margin: 0 auto; padding: 0 22px 80px; }
+
+/* ─── START-HERE DECISION STRIP ─── */
+.start-here{margin-top:34px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:24px}
+.start-here .eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--lighter);font-weight:800;margin-bottom:6px}
+.start-here h2{font-size:1.25rem;line-height:1.25;margin-bottom:7px}
+.start-here>p{font-size:.9rem;color:var(--muted);max-width:720px}
+.start-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.start-card{display:block;border:1px solid var(--border);border-radius:7px;padding:15px 16px;background:var(--green-light);color:var(--text)}
+.start-card:hover{text-decoration:none;border-color:var(--green);background:#f7fbf7}
+.start-card strong{display:block;color:var(--green-dark);font-size:.94rem;margin-bottom:4px}
+.start-card span{display:block;color:var(--muted);font-size:.8rem;line-height:1.5}
+@media(max-width:720px){.start-grid{grid-template-columns:1fr}}
 
 /* ─── CATEGORY SECTIONS ─── */
 .category {
@@ -534,6 +546,17 @@ a:hover { text-decoration: underline; }
 
 <!-- MAIN CONTENT -->
 <div class="wrap">
+
+  <section class="start-here" aria-labelledby="garden-start-title">
+    <div class="eyebrow">Start with the decision</div>
+    <h2 id="garden-start-title">What are you trying to plant or time?</h2>
+    <p>The fastest path into the Michigan garden guides is the question you actually have: a city-specific calendar, a warm-season transplant date, or a tomato variety that can finish in Michigan.</p>
+    <div class="start-grid">
+      <a class="start-card" href="/zone-6a-planting-calendar/"><strong>Michigan Zone 6a planting calendar by city</strong><span>Compute indoor seed-starting, transplant, direct-sow and fall-sow windows for 47 crops from 78 Michigan frost stations.</span></a>
+      <a class="start-card" href="/when-to-plant-tomatoes-michigan/"><strong>When to plant tomatoes in Michigan</strong><span>Regional 2026 transplant dates plus the soil-temperature, night-temperature and frost checks that decide whether it is actually time.</span></a>
+      <a class="start-card" href="/heirloom-tomatoes-michigan/"><strong>Best heirloom tomatoes for Michigan</strong><span>Compare Michigan-suitable varieties by maturity, reliability, disease pressure, flavor and use before choosing seed.</span></a>
+    </div>
+  </section>
 
   <!-- CATEGORY: TIMING & SEASONS -->
   <section class="category" aria-labelledby="cat-timing">
