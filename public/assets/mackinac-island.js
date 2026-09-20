@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const API='/api/mackinac-island';
-  const state={personas:new Set(['day-trip']),origin:'lower',data:null,mapLoaded:false};
+  const state={personas:new Set(['day-trip']),origin:'lower',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[]};
   const $=id=>document.getElementById(id);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const track=(name,params={})=>{try{if(typeof window.gtag==='function')window.gtag('event',name,params);}catch{}};
@@ -149,8 +149,15 @@
   }
 
   function renderMapPoints(d){
+    const refresh=state.mapWasOpened;
     state.mapPoints=d.map_points||[];
     state.routeIds=d.map?.recommended_stop_ids||[];
+    if(refresh){
+      try{state.mapInstance?.remove();}catch{}
+      state.mapInstance=null;state.mapLoaded=false;
+      const host=$('map');if(host){host.className='map-placeholder';host.innerHTML='<div><strong>Your itinerary changed.</strong><p>Refreshing the route and recommended stops…</p></div>';}
+      buildMap();
+    }
   }
   function renderAll(d){state.data=d;renderTop(d);renderWhy(d);renderFerries(d);renderConditions(d);renderCrowdsOpen(d);renderSeasonal(d);renderPlanner(d);renderSources(d);renderMapPoints(d);}
 
@@ -165,18 +172,19 @@
   }
 
   function loadLeaflet(){
-    if(state.mapLoaded)return Promise.resolve();
-    state.mapLoaded=true;
+    if(window.L)return Promise.resolve();
     return new Promise((resolve,reject)=>{
-      const css=document.createElement('link');css.rel='stylesheet';css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(css);
-      const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=resolve;s.onerror=reject;document.head.appendChild(s);
+      if(!document.querySelector('link[data-mackinac-leaflet]')){const css=document.createElement('link');css.rel='stylesheet';css.dataset.mackinacLeaflet='1';css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(css);}
+      const existing=document.querySelector('script[data-mackinac-leaflet]');
+      if(existing){existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return;}
+      const scr=document.createElement('script');scr.dataset.mackinacLeaflet='1';scr.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';scr.onload=resolve;scr.onerror=reject;document.head.appendChild(scr);
     });
   }
   async function buildMap(){
     const btn=$('loadMap');
     if(!state.data){btn.disabled=false;btn.textContent='Load planning map';return;}
     btn.disabled=true;btn.textContent='Loading map…';
-    try{await loadLeaflet();const host=$('map');host.className='leaflet-map';host.innerHTML='';const map=L.map(host,{scrollWheelZoom:false}).setView([45.852,-84.617],13);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+    try{await loadLeaflet();const host=$('map');host.className='leaflet-map';host.innerHTML='';const map=L.map(host,{scrollWheelZoom:false}).setView([45.852,-84.617],13);state.mapInstance=map;state.mapLoaded=true;state.mapWasOpened=true;L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
       const points=state.mapPoints?.length?state.mapPoints:[{id:'downtown',name:'Downtown / ferry docks',lat:45.8492,lon:-84.6176},{id:'fort',name:'Fort Mackinac',lat:45.8527,lon:-84.6177},{id:'arch-rock',name:'Arch Rock',lat:45.8548,lon:-84.5936},{id:'british-landing',name:'British Landing',lat:45.8731,lon:-84.6411},{id:'grand-hotel',name:'Grand Hotel',lat:45.8498,lon:-84.6294}];
       const routeIds=Array.isArray(state.routeIds)?state.routeIds:[];
       const orderedUnique=[...new Set(routeIds.filter(Boolean))];
@@ -198,7 +206,7 @@
       if(routeIds.includes('m185')) L.polyline(loop,{weight:4,opacity:.75}).addTo(map).bindTooltip('M-185 perimeter · approximate orientation');
       if(itineraryPoints.length) map.fitBounds(L.latLngBounds(itineraryPoints.map(p=>[p.lat||p.latitude,p.lon||p.longitude])).pad(.25),{maxZoom:14});
       btn.textContent='Map loaded';track('mackinac_map_opened',{points:points.length,itinerary_points:itineraryPoints.length});
-    }catch(e){btn.disabled=false;btn.textContent='Retry map';$('map').innerHTML='<div><strong>Interactive map could not load.</strong><p>The movement notes remain available and the live decision does not depend on the map provider.</p></div>';state.mapLoaded=false;}
+    }catch(e){btn.disabled=false;btn.textContent='Retry map';$('map').innerHTML='<div><strong>Interactive map could not load.</strong><p>The movement notes remain available and the live decision does not depend on the map provider.</p></div>';state.mapLoaded=false;state.mapInstance=null;}
   }
   $('loadMap').addEventListener('click',buildMap);
   const observer=new IntersectionObserver(entries=>{if(entries.some(x=>x.isIntersecting)&&!state.mapLoaded&&state.data)buildMap();},{rootMargin:'200px'});observer.observe($('map-section'));
