@@ -326,6 +326,45 @@
     const alerts=w.alerts||[];const box=$('alertBox');if(alerts.length){box.hidden=false;box.innerHTML=`<strong>Weather alert:</strong> ${alerts.slice(0,2).map(x=>esc(x.headline||x.event)).join(' · ')}`;}else box.hidden=true;
   }
 
+
+  function renderWebcams(d){
+    const w=d.webcams||{},cams=Array.isArray(w.list)?w.list:[],best=w.recommended||cams.find(x=>x.id===w.recommended_id)||cams[0]||null;
+    setText('webcamEngine',w.engine==='shared-harness-jev'?'Matched to your trip':'Matched to your trip');
+    const bestHost=$('webcamBest');
+    if(bestHost){
+      bestHost.innerHTML=best
+        ? `<div><span>Best camera for this plan</span><strong>${esc(best.name)}</strong><p>${esc(best.reason||best.default_reason||best.view||'Open the live view for a visual check.')}</p></div>`
+        : '<div><span>Best camera for this plan</span><strong>Camera directory unavailable</strong><p>Use the provider links in the source section if live views are unavailable here.</p></div>';
+    }
+    const grid=$('webcamGrid'); if(!grid)return;
+    if(!cams.length){grid.innerHTML='<p class="muted">Live-camera links are temporarily unavailable.</p>';return;}
+    grid.innerHTML=cams.map(cam=>{
+      const isBest=cam.id===w.recommended_id;
+      const watch=cam.embed_url?`<button class="btn small webcam-watch" type="button" data-webcam-embed="${esc(cam.embed_url)}" data-webcam-id="${esc(cam.id)}">Watch here</button>`:'';
+      return `<article class="webcam-card ${isBest?'recommended':''}" data-camera-id="${esc(cam.id)}">
+        <span class="cam-kicker">${isBest?'Best match · ':''}${esc(cam.location||'Mackinac Island')}</span>
+        <h3>${esc(cam.name)}</h3>
+        <p class="cam-view">${esc(cam.view||'Live Mackinac Island view')}</p>
+        <p class="cam-why">${esc(cam.reason||cam.default_reason||'Use this view as a visual trip check.')}</p>
+        <div class="webcam-actions">${watch}<a class="text-link" href="${esc(cam.source_url)}" target="_blank" rel="noopener">Open provider ↗</a></div>
+        <div class="webcam-player" hidden></div>
+        <p class="webcam-provider-note">${cam.embed_url?'Player loads only when requested.':'Opens the original camera provider page.'}</p>
+      </article>`;
+    }).join('');
+    grid.querySelectorAll('.webcam-watch').forEach(btn=>btn.addEventListener('click',()=>{
+      const card=btn.closest('.webcam-card'),host=card?.querySelector('.webcam-player'),url=btn.dataset.webcamEmbed;
+      if(!host||!url)return;
+      if(host.hidden){
+        host.hidden=false;
+        host.innerHTML=`<iframe src="${esc(url)}" title="${esc(card.querySelector('h3')?.textContent||'Mackinac Island live camera')}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+        btn.textContent='Hide live view';
+        track('mackinac_webcam_opened',{camera:btn.dataset.webcamId||'unknown',embedded:true});
+      }else{
+        host.hidden=true;host.innerHTML='';btn.textContent='Watch here';
+      }
+    }));
+  }
+
   function renderCrowdsOpen(d){
     const c=d.crowds||{};setText('crowdLabel',c.label||'—');setText('crowdWindows',c.summary||'Crowd outlook unavailable.');setText('crowdConfidence',`${String(c.confidence||'medium').toUpperCase()} confidence`);setText('crowdBasis',c.basis||'Estimated from the calendar, weather and events.');
     const attrs=d.attractions||[];$('attractionList').innerHTML=attrs.length?attrs.map(x=>`<div class="status-item"><span>${esc(x.name)}</span><strong class="${x.open?'status-open':'status-closed'}">${x.open?`OPEN${x.hours?' · '+esc(x.hours):''}`:`${esc(x.status||'CLOSED')}`}</strong></div>`).join(''):'<p>No attraction-status data available.</p>';
@@ -379,7 +418,7 @@
       buildMap();
     }
   }
-  function renderAll(d){state.data=d;renderTop(d);renderWhy(d);renderFerries(d);renderConditions(d);renderCrowdsOpen(d);renderSeasonal(d);renderPlanner(d);renderSources(d);renderMapPoints(d);}
+  function renderAll(d){state.data=d;renderTop(d);renderWhy(d);renderFerries(d);renderConditions(d);renderWebcams(d);renderCrowdsOpen(d);renderSeasonal(d);renderPlanner(d);renderSources(d);renderMapPoints(d);}
 
   async function loadDecision(){
     $('decisionPanel').setAttribute('aria-busy','true');
