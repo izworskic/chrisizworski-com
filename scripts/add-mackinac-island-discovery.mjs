@@ -8,7 +8,11 @@ if(fs.existsSync(sitemap)){
     ['https://chrisizworski.com/mackinac-island/day-trip/','weekly','0.85'],
     ['https://chrisizworski.com/mackinac-island/with-kids/','weekly','0.82'],
     ['https://chrisizworski.com/mackinac-island/2-day-itinerary/','weekly','0.82'],
-    ['https://chrisizworski.com/mackinac-island/ferry-planner/','daily','0.86']
+    ['https://chrisizworski.com/mackinac-island/ferry-planner/','daily','0.86'],
+    ['https://chrisizworski.com/mackinac-island/accessibility/','weekly','0.82'],
+    ['https://chrisizworski.com/mackinac-island/bike-route/','weekly','0.84'],
+    ['https://chrisizworski.com/mackinac-island/where-to-stay/','weekly','0.84'],
+    ['https://chrisizworski.com/mackinac-island/fall/','daily','0.86']
   ];
   for(const [loc,freq,priority] of urls){
     if(xml.includes('<loc>'+loc+'</loc>'))continue;
