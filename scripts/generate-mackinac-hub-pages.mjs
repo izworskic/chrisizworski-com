@@ -178,7 +178,7 @@ function pageHtml(p){
 ${p.body}
 <section class="hub-section faq"><div class="shell"><div class="eyebrow">Common questions</div><h2>Before you lock this part of the trip</h2>${faqHtml(p.faq)}</div></section>
 <section class="hub-section"><div class="shell"><p class="truth"><strong>Truth boundary:</strong> ${esc(p.truth)}</p><div class="planner-cta"><h2>Carry this decision into the same Mackinac planner</h2><p>Your visitor profile and trip inputs belong to one shared engine. Moving to another Mackinac page should not create a separate trip.</p><a class="btn" data-mackinac-planner-cta href="${p.primaryCta}">${esc(p.primaryLabel)}</a></div><p class="sources"><strong>Primary planning references:</strong> ${p.sources.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join(" · ")}</p></div></section>
-</main><footer><div class="shell">Built by <a href="/">Chris Izworski</a>. Live agencies, operators and businesses remain authoritative for their own schedules, conditions, accessibility, prices and availability.</div></footer><script src="/assets/mackinac-trip-state.js?v=20260920-live20"></script><script src="/assets/mackinac-hub.js?v=20260920-hub2" defer></script></body></html>`;
+</main><footer><div class="shell">Built by <a href="/">Chris Izworski</a>. Live agencies, operators and businesses remain authoritative for their own schedules, conditions, accessibility, prices and availability.</div></footer><script src="/assets/mackinac-trip-state.js?v=20260920-live20"></script><script src="/assets/mackinac-hub.js?v=20260920-hub2" defer></script><script src="/assets/mackinac-intelligence-client.js?v=20260920-intel1" defer></script></body></html>`;
 }
 
 const slugs=pages.map(x=>x.slug);
