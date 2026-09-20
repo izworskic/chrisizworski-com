@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {isSnowmobileSeason,freshness,scoreSegment,routeDecision,confidence,closureForSegment,corridorSection} from '../lib/snowmobile/engine.mjs';
+import {isSnowmobileSeason,freshness,scoreSegment,routeDecision,confidence,closureForSegment,corridorSection,rankRideWindows} from '../lib/snowmobile/engine.mjs';
 
 test('season boundary prevents September ride scoring',()=>{
   assert.equal(isSnowmobileSeason(new Date('2026-09-19T12:00:00-04:00')),false);
@@ -53,4 +53,25 @@ test('corridor segmentation is spatial, not array-order based',()=>{
   assert.equal(corridorSection(44.78),'frederic');
   assert.equal(corridorSection(44.90),'waters');
   assert.equal(corridorSection(45.03),'gaylord');
+});
+
+test('forecast-period ranking does not upgrade trail state and prefers colder dry period',()=>{
+  const weather={
+    grayling:{periods:[
+      {name:'Saturday',startTime:'2026-01-10T08:00:00-05:00',isDaytime:true,temperature:24,windSpeed:'10 mph',shortForecast:'Mostly Sunny',detailedForecast:'Cold and dry.'},
+      {name:'Sunday',startTime:'2026-01-11T08:00:00-05:00',isDaytime:true,temperature:41,windSpeed:'12 mph',shortForecast:'Rain Showers',detailedForecast:'Rain likely.'}
+    ]},
+    gaylord:{periods:[
+      {name:'Saturday',startTime:'2026-01-10T08:00:00-05:00',isDaytime:true,temperature:22,windSpeed:'12 mph',shortForecast:'Partly Cloudy',detailedForecast:'Cold.'},
+      {name:'Sunday',startTime:'2026-01-11T08:00:00-05:00',isDaytime:true,temperature:39,windSpeed:'15 mph',shortForecast:'Rain',detailedForecast:'Rain.'}
+    ]}
+  };
+  const ranked=rankRideWindows(weather,true);
+  assert.equal(ranked.best.name,'Saturday');
+  assert.match(ranked.boundary,/does not upgrade trail condition/i);
+});
+
+test('forecast timing is disabled off season',()=>{
+  const ranked=rankRideWindows({grayling:{periods:[{name:'Today',startTime:'2026-09-19T08:00:00-04:00',temperature:30}]}},false);
+  assert.equal(ranked.best,null);
 });
