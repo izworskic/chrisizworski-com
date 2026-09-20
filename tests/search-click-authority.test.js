@@ -42,5 +42,7 @@ test("search click authority benchmark preserves the measured baseline and loss 
   assert.equal(benchmark.targets.clicksPer1000Impressions, 40);
   assert.equal(benchmark.score.pass, 92);
   assert.match(benchmark.lossFunction.formula, /canonicalOrIndexingRegression/);
-  assert.equal(benchmark.baseline.pages.find(p => p.path === "/soo-locks/").action, "PROTECT");
+  for (const page of benchmark.baseline.pages) {
+    assert.equal(page.action, "PROTECT", page.path);
+  }
 });

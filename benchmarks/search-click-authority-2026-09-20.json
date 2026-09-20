@@ -11,11 +11,11 @@
     },
     "pages": [
       {"path": "/soo-locks/", "action": "PROTECT", "clicks": 34, "impressions": 372, "ctr": 0.0914, "position": 4.42},
-      {"path": "/fall-color/", "action": "PUSH", "clicks": 5, "impressions": 352, "ctr": 0.0142, "position": 7.33},
-      {"path": "/great-lakes-freighter-tracking/", "action": "PUSH", "clicks": 3, "impressions": 350, "ctr": 0.0086, "position": 7.59},
-      {"path": "/northern-lights-michigan/", "action": "PUSH", "clicks": 0, "impressions": 257, "ctr": 0, "position": 7.51},
-      {"path": "/mackinac-bridge-tolls/", "action": "PUSH", "clicks": 0, "impressions": 251, "ctr": 0, "position": 8.37},
-      {"path": "/mackinac-bridge-live/", "action": "PUSH", "clicks": 1, "impressions": 184, "ctr": 0.0054, "position": 8.66}
+      {"path": "/fall-color/", "action": "PROTECT", "clicks": 5, "impressions": 352, "ctr": 0.0142, "position": 7.33},
+      {"path": "/great-lakes-freighter-tracking/", "action": "PROTECT", "clicks": 3, "impressions": 350, "ctr": 0.0086, "position": 7.59},
+      {"path": "/northern-lights-michigan/", "action": "PROTECT", "clicks": 0, "impressions": 257, "ctr": 0, "position": 7.51},
+      {"path": "/mackinac-bridge-tolls/", "action": "PROTECT", "clicks": 0, "impressions": 251, "ctr": 0, "position": 8.37},
+      {"path": "/mackinac-bridge-live/", "action": "PROTECT", "clicks": 1, "impressions": 184, "ctr": 0.0054, "position": 8.66}
     ]
   },
   "targets": {
