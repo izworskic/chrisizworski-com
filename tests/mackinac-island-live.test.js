@@ -451,3 +451,63 @@ test('browser sends both routed port times to the Mackinac decision API', () => 
   assert.match(js,/origin_st_ignace_minutes/);
   assert.match(js,/Both port drive times feed ferry feasibility and leave-home timing/);
 });
+
+
+test('Mackinac quick planner requires city and leave-home time as explicit inputs', () => {
+  const html=fs.readFileSync(htmlPath,'utf8');
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(html,/id="heroDepartTime"/);
+  assert.match(html,/id="departTime"/);
+  assert.match(html,/Where and when are you starting\?/);
+  assert.match(html,/Add city \+ leave time/);
+  assert.doesNotMatch(html,/id="heroLeave">Add a starting city/);
+  assert.match(js,/p\.set\('depart_at',state\.departTime\)/);
+  assert.match(js,/Ferry feasibility depends on it/);
+  assert.match(js,/Starting city is set\. Add the time you plan to leave home/);
+});
+
+test('24-hour leave-home input becomes a deterministic departure minute', () => {
+  assert.equal(t.parseTimeField('07:15'),7*60+15);
+  assert.equal(t.parseTimeField('13:40'),13*60+40);
+  assert.equal(t.parseTimeField('25:00'),null);
+  const p=t.profileFromQuery({depart_at:'07:15'},['day-trip'],'lower');
+  assert.equal(p.departure_minutes,7*60+15);
+});
+
+test('entered leave-home time controls reachable ferry candidates and itinerary start', () => {
+  const date='2026-09-20';
+  const profile=t.profileFromQuery({
+    origin_name:'Bay City, Michigan, US',
+    origin_drive_minutes:'125',
+    origin_preferred_port:'Mackinaw City',
+    origin_mackinaw_minutes:'125',
+    origin_st_ignace_minutes:'162',
+    depart_at:'07:30'
+  },['day-trip'],'lower');
+  const ctx={
+    date,personas:profile.personas,origin:'lower',profile,hourly:[],
+    marine:{score:90},attractions:t.attractionState(date,7*60+30),events:[],
+    sunrise:t.solarMinutes(date,45.8497,-84.6189,true),
+    sunset:t.solarMinutes(date,45.8497,-84.6189,false),sameDay:true,nowMinutes:6*60
+  };
+  const records=[...t.arnoldSchedule(date,true),...t.sheplersSchedule(date,true)];
+  const plans=t.planCandidates(records,ctx);
+  assert.ok(plans.length>0);
+  for(const plan of plans){
+    const drive=t.driveMinutesForPort(profile,plan.outbound.origin_port);
+    assert.ok(plan.outbound.departure_minutes>=profile.departure_minutes+drive+15+plan.outbound.checkin_buffer_minutes);
+  }
+  const chosen=plans[0];
+  const itinerary=t.itineraryFor(chosen,ctx);
+  const leave=itinerary.find(x=>x.stop_id==='mainland-drive');
+  assert.ok(leave);
+  assert.equal(leave.minute,7*60+30);
+  assert.match(leave.detail,/Your entered leave-home time/);
+});
+
+test('client replaces stale starting-city prompt after city resolution', () => {
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.doesNotMatch(js,/d\.leave_home\?\.time\|\|'Add a starting city'/);
+  assert.match(js,/state\.originResolved\?\(state\.departTime\?'No reachable ferry':'Add leave time'\):'Add city \+ leave time'/);
+  assert.match(js,/leave \$\{clock\(leaveMinutes\)\} → \$\{plan\.origin_port\}/);
+});
