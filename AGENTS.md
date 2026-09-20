@@ -10,6 +10,14 @@ on merge to `main`. There is no staging step between a merge and real traffic.
 
 Read this file before making any change.
 
+## Display ad pilot (September 20, 2026)
+
+Manage slot `1011148508` only through `config/display-ad-experiment.json`.
+`docs/DISPLAY_AD_PILOT.md` lists all three placements, sizes, evidence and removal
+commands. `npm run ads:off` disables the pilot on the next committed deployment.
+Do not scatter this slot into tool HTML or remove the shared AdSense loader to
+turn off this experiment. The build injects these marked blocks last.
+
 ## 0. Extracted tool repositories are authoritative
 
 This repository still contains deployment mirrors for some national tools and Isle Royale so

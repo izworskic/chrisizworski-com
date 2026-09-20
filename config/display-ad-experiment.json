@@ -1,0 +1,34 @@
+{
+  "id": "display-horizontal-pilot-v1",
+  "enabled": true,
+  "publisherId": "ca-pub-8222782620788075",
+  "slotId": "1011148508",
+  "adSenseName": "General display ad = experiment 1",
+  "ownerRepository": "izworskic/chrisizworski-com",
+  "placements": [
+    {
+      "id": "aurora-after-viewing-map",
+      "enabled": true,
+      "route": "/northern-lights-michigan/",
+      "before": "<!-- Aurora oval image -->",
+      "description": "After the forecast, location finder and viewing map; before the NOAA oval and explanatory guide.",
+      "evidence": "benchmarks/search-exploitation-2026-09-13.json: 142 search clicks, 12998 impressions. Export ends September 10; not current pageviews."
+    },
+    {
+      "id": "soo-after-live-camera",
+      "enabled": true,
+      "route": "/soo-locks/",
+      "before": "<h2 class=\"sh\">The Locks</h2>",
+      "description": "After the vessel map, source links and live camera; before the lock guide.",
+      "evidence": "benchmarks/search-growth-engine-2026-08-15.json: 272 search clicks, 15904 impressions in the stored page table. Historical evidence, not a current traffic ranking."
+    },
+    {
+      "id": "freighters-after-live-map",
+      "enabled": true,
+      "route": "/great-lakes-freighter-tracking/",
+      "before": "<section class=\"content-section\" aria-labelledby=\"how-to-track\">",
+      "description": "After the entire AIS map, vessel list, conditions and source notes; before How to Find a Freighter.",
+      "evidence": "benchmarks/search-exploitation-2026-09-13.json: 80 search clicks, 6628 impressions. Export ends September 10; not current pageviews."
+    }
+  ]
+}
