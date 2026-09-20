@@ -55,3 +55,85 @@
 .origin-status.error{color:var(--red);font-weight:700}
 .source-note{margin-top:10px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.5);font-size:13px;line-height:1.45}
 @media(max-width:620px){.hero-origin-quick{grid-template-columns:1fr}.origin-entry-controls{grid-template-columns:1fr 1fr}.origin-entry-controls label[for="heroTripDate"]{grid-column:1;grid-row:1}.origin-entry-controls label[for="heroDepartTime"]{grid-column:2;grid-row:1}.origin-entry-controls>input[type="search"]{grid-column:1/-1;grid-row:2}.origin-entry-controls .btn{grid-column:1/-1;grid-row:3;width:100%}.hero-origin-quick input{font-size:16px}.origin-status{grid-column:1}}
+
+
+/* Mackinac responsive + visitor-facing layout, live7 */
+html,body{max-width:100%;overflow-x:hidden}
+body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+img,svg{max-width:100%}
+.hero,.decision-panel,.hero-photo,.controls-card,.section,.feature-card,.trip-builder,.builder-grid,.control-group,.origin-entry-controls,.ferry-columns,.map-layout,.prose-grid{min-width:0}
+.hero{grid-template-columns:minmax(0,1.32fr) minmax(320px,.68fr);align-items:stretch}
+.decision-panel{container:decision / inline-size}
+.hero-intro{max-width:690px;margin:-10px 0 22px;color:var(--body);font-size:15px;line-height:1.55}
+.hero-origin-quick{grid-template-columns:1fr;align-items:stretch;padding:14px;margin-top:12px}
+.origin-entry-copy{grid-template-columns:minmax(180px,.55fr) minmax(0,1.45fr);align-items:end;gap:8px 16px}
+.origin-entry-copy small{font-size:11px;line-height:1.45}
+.origin-entry-controls{grid-template-columns:minmax(138px,.58fr) minmax(220px,1.25fr) minmax(128px,.56fr) auto;gap:9px;align-items:end}
+.origin-city-control{min-width:0}
+.origin-entry-controls .btn{min-height:44px}
+.hero-origin-quick input,.builder-grid input,.builder-grid select{min-height:44px}
+.chip,.segmented button,.btn{min-height:42px}
+.trip-glance-grid>div,.metric{min-width:0}
+.metric strong,.trip-glance-grid strong,.planner-decision-grid strong{overflow-wrap:anywhere}
+.builder-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.map-layout{grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr)}
+.section,.feature-card{scroll-margin-top:14px}
+
+@container decision (max-width:760px){
+  .origin-entry-copy{grid-template-columns:1fr}
+  .origin-entry-controls{grid-template-columns:1fr 1fr}
+  .origin-city-control{grid-column:1/-1;grid-row:2}
+  .origin-entry-controls .btn{grid-column:1/-1;grid-row:3;width:100%}
+}
+@container decision (max-width:460px){
+  .origin-entry-controls{grid-template-columns:1fr}
+  .origin-entry-controls .origin-time-control,.origin-city-control,.origin-entry-controls .btn{grid-column:1;grid-row:auto}
+  .trip-glance-grid{grid-template-columns:1fr}
+  .trip-glance-grid>div{border-right:0;border-bottom:1px solid #d6e4df}
+  .trip-glance-grid>div:last-child{border-bottom:0}
+}
+
+@media(min-width:1500px){:root{--max:1280px}}
+@media(max-width:1120px){
+  .hero{grid-template-columns:1fr}
+  .hero-photo{min-height:0;aspect-ratio:16/6}
+  .hero-photo img{min-height:0;max-height:none;aspect-ratio:16/6}
+  .builder-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .map-layout{grid-template-columns:1fr}
+}
+@media(min-width:760px) and (max-width:1120px){
+  .controls-card{grid-template-columns:minmax(0,1.25fr) minmax(240px,.75fr)}
+  .controls-intro{grid-column:1/-1}
+  .why-grid,.conditions-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:759px){
+  .builder-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .controls-card{grid-template-columns:1fr}
+  .controls-intro{grid-column:auto}
+  .why-grid,.conditions-grid,.split-section,.ferry-columns,.return-box{grid-template-columns:1fr}
+  .section-head{gap:10px}
+  .source-row{overflow-wrap:anywhere}
+}
+@media(max-width:520px){
+  .builder-grid{grid-template-columns:1fr}
+  .hero-actions{grid-template-columns:1fr 1fr}
+  .decision-grid{grid-template-columns:1fr 1fr}
+  .hero-intro{font-size:14px;margin-bottom:18px}
+  .section,.feature-card{padding-inline:14px}
+}
+@media(max-width:360px){
+  .decision-grid,.hero-actions{grid-template-columns:1fr}
+  .score-ring{width:72px;height:72px}
+  h1{font-size:34px}
+}
+@media(orientation:landscape) and (max-height:650px) and (max-width:1120px){
+  .sitebar-inner{min-height:46px}
+  .hero{padding-top:12px}
+  .hero-photo{aspect-ratio:21/6;max-height:260px}
+  .hero-photo img{aspect-ratio:21/6;max-height:230px}
+  .decision-panel{padding-block:20px}
+  .content-stack{gap:14px}
+}
+@media(pointer:coarse){
+  .chip,.segmented button,.btn,.hero-origin-quick input,.builder-grid input,.builder-grid select{min-height:44px}
+}
