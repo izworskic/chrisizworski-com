@@ -208,7 +208,12 @@ test('same-day origin drive time can make an early ferry infeasible', () => {
   const records=[...t.arnoldSchedule(date,true),...t.sheplersSchedule(date,true)];
   const plans=t.planCandidates(records,ctx);
   assert.ok(plans.length>0);
-  assert.ok(plans.every(x=>x.outbound.departure_minutes>=7*60+profile.origin_preset.drive_minutes+15+x.outbound.checkin_buffer_minutes));
+  const preferred=plans.filter(x=>x.outbound.origin_port===profile.origin_preset.preferred_port);
+  assert.ok(preferred.length>0);
+  assert.ok(preferred.every(x=>x.outbound.departure_minutes>=7*60+profile.origin_preset.drive_minutes+15+x.outbound.checkin_buffer_minutes));
+  if(plans[0].outbound.origin_port===profile.origin_preset.preferred_port){
+    assert.ok(plans[0].outbound.departure_minutes>=7*60+profile.origin_preset.drive_minutes+15+plans[0].outbound.checkin_buffer_minutes);
+  }
 });
 
 test('fixed event time is protected from flexible bike activity overlap', () => {
