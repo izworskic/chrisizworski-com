@@ -33,3 +33,10 @@ test("share hash stays compact and arrays are deduplicated",()=>{
   assert.deepEqual(out.interests,["food","scenery"]);
   assert.deepEqual(out.must_do,["fort"]);
 });
+
+
+test("share codec preserves every current adaptive answer family",()=>{
+  const adaptive={trip_duration:"unsure",party:"multigenerational",trip_vision:["icons","special"],trip_loss:"waiting",lodging_style:"iconic",walking_tolerance:"moderate",bike_style:"mixed",budget_tradeoff:"convenience",kids_ages:"6-12",regional_interest:"regional",weather_flexibility:"shift-hours"};
+  const out=state.decode(state.encode({intake:adaptive}));
+  assert.deepEqual(out.intake,adaptive);
+});
