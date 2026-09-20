@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const API='/api/mackinac-island';
-  const state={personas:new Set(['day-trip']),origin:'lower',data:null,mapLoaded:false};
+  const state={personas:new Set(['day-trip']),origin:'lower',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[]};
   const $=id=>document.getElementById(id);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const track=(name,params={})=>{try{if(typeof window.gtag==='function')window.gtag('event',name,params);}catch{}};
@@ -9,7 +9,19 @@
   const labelScore=n=>n>=84?'EXCELLENT':n>=74?'GOOD':n>=62?'FAIR':n>=48?'MARGINAL':'POOR';
   const setText=(id,v)=>{const el=$(id);if(el)el.textContent=v??'—';};
   const selectedPersonas=()=>[...state.personas];
-  const buildUrl=()=>`${API}?personas=${encodeURIComponent(selectedPersonas().join(','))}&origin=${encodeURIComponent(state.origin)}`;
+  function plannerParams(){
+    const p=new URLSearchParams();
+    p.set('personas',selectedPersonas().join(','));
+    p.set('origin',state.origin);
+    const simple={trip:'tripMode',adults:'adultCount',children:'childCount',origin_city:'originCity',bikes:'bikePlan',pace:'pace',mobility:'mobility',dinner:'dinner',return_by:'returnBy',event_start:'eventStart'};
+    Object.entries(simple).forEach(([key,id])=>{const el=$(id);if(el&&String(el.value).trim())p.set(key,String(el.value).trim());});
+    const interests=[...document.querySelectorAll('#interestChoices input:checked')].map(x=>x.value);
+    const must=[...document.querySelectorAll('#mustDoChoices input:checked')].map(x=>x.value);
+    if(interests.length)p.set('interests',interests.join(','));
+    if(must.length)p.set('must_do',must.join(','));
+    return p;
+  }
+  const buildUrl=()=>`${API}?${plannerParams().toString()}`;
   function scrollToTarget(selector){const el=document.querySelector(selector);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});track('mackinac_section_opened',{section:selector.slice(1)});}}
   document.querySelectorAll('[data-scroll]').forEach(b=>b.addEventListener('click',()=>scrollToTarget(b.dataset.scroll)));
 
@@ -17,6 +29,8 @@
     const p=btn.dataset.persona;
     if(p==='day-trip' && state.personas.has('overnight')) state.personas.delete('overnight');
     if(p==='overnight' && state.personas.has('day-trip')) state.personas.delete('day-trip');
+    if(p==='day-trip' && $('tripMode')) $('tripMode').value='day-trip';
+    if(p==='overnight' && $('tripMode')) $('tripMode').value='overnight';
     if(state.personas.has(p)){ if(state.personas.size>1)state.personas.delete(p); }
     else { if(state.personas.size>=3){const first=[...state.personas].find(x=>x!=='day-trip'&&x!=='overnight')||[...state.personas][0];state.personas.delete(first);} state.personas.add(p); }
     document.querySelectorAll('#personaChips .chip').forEach(x=>{const a=state.personas.has(x.dataset.persona);x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
@@ -28,6 +42,22 @@
     document.querySelectorAll('#originSwitch button').forEach(x=>{const a=x===btn;x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
     track('mackinac_start_location_entered',{origin:state.origin});loadDecision();
   }));
+  $('tripBuilder')?.addEventListener('submit',e=>{
+    e.preventDefault();
+    setText('builderStatus','Rebuilding ferry choice and itinerary from your constraints…');
+    track('mackinac_itinerary_created',{personas:selectedPersonas().join('|'),origin_city:$('originCity')?.value||'none',children:Number($('childCount')?.value||0),bikes:$('bikePlan')?.value||'none',pace:$('pace')?.value||'balanced'});
+    loadDecision();
+  });
+  $('tripBuilder')?.addEventListener('change',e=>{
+    if(e.target?.id==='tripMode'){
+      const trip=e.target.value;
+      state.personas.delete(trip==='overnight'?'day-trip':'overnight');
+      state.personas.add(trip);
+      document.querySelectorAll('#personaChips .chip').forEach(x=>{const a=state.personas.has(x.dataset.persona);x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
+    }
+    setText('builderStatus','Trip inputs changed. Tap “Build this trip” to rerun the full plan.');
+    track('mackinac_itinerary_changed',{});
+  });
 
   function renderTop(d){
     const dec=d.decision||{}, score=Math.round(dec.score||0), plan=d.ferry?.recommended_plan||{};
@@ -74,7 +104,7 @@
     ['Mackinaw City','St. Ignace'].forEach((name,i)=>{
       const key=i===0?'mackinaw':'stIgnace',p=ports[name]||{};
       setText(`${key}Best`,p.best_departure?`${p.best_departure.departure_time} · ${p.best_departure.operator}`:'No verified departure');
-      setText(`${key}Meta`,p.next_departure?`Next available ${p.next_departure.departure_time} · ${p.departure_count||0} departures in the modeled schedule`:'No current departure found');
+      setText(`${key}Meta`,p.next_departure?`${p.next_departure_origin_adjusted?'Next reachable from your start':'Next available'} ${p.next_departure.departure_time} · ${p.departure_count||0} departures in the modeled schedule`:'No current departure found');
       const card=$(key+'Card');card?.classList.toggle('recommended',plan.origin_port===name);
       renderTimeline(key+'Timeline',p.departures||[],plan.origin_port===name?plan:null);
     });
@@ -106,18 +136,40 @@
   }
 
   function renderPlanner(d){
-    const it=d.itinerary||[];setText('plannerSummary',d.itinerary_summary||'A feasible plan could not be built from the verified inputs.');
-    $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title)}</strong><p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>No complete itinerary</strong><p>Use the official ferry source links before leaving.</p></div></li>';
+    const it=d.itinerary||[],p=d.trip_profile||{};
+    setText('plannerSummary',d.itinerary_summary||'A feasible plan could not be built from the verified inputs.');
+    $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title||x.label||'Plan stop')}</strong>${x.movement?`<span class="movement">${esc(x.movement)}</span>`:''}<p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>No complete itinerary</strong><p>Use the official ferry source links before leaving.</p></div></li>';
     setText('plannerExplain',d.itinerary_reason||'');
+    setText('leaveHome',d.leave_home?.time||'Start from the ferry dock');
+    setText('leaveHomeNote',d.leave_home?.detail||'Choose a supported starting city to add a planning leave time. Drive estimates are not live traffic.');
+    const party=`${Number(p.adults||2)} adult${Number(p.adults||2)===1?'':'s'}${Number(p.children||0)?` + ${p.children} child${Number(p.children)===1?'':'ren'}`:''}`;
+    const fit=[party,p.trip==='overnight'?'overnight':'day trip',p.pace?`${p.pace} pace`:null,p.bikes&&p.bikes!=='none'?`${p.bikes} bikes`:null,p.mobility==='limited'?'limited steep walking':null].filter(Boolean);
+    setText('tripFit',fit.join(' · '));
+    const priorities=[...(p.interests||[]),...(p.must_do||[]).map(x=>`must: ${x}`)];
+    setText('tripFitNote',priorities.length?`Priorities: ${priorities.join(', ')}.`:`Using the selected visitor modes plus live ferry/weather constraints.`);
+    setText('builderStatus',d.degraded?'Trip rebuilt; some source inputs are degraded and are labeled below.':'Trip rebuilt from the current live decision bundle.');
   }
 
   function renderSources(d){
     const src=d.sources||{};setText('overallDataState',d.degraded?'DEGRADED · some source gaps':'CORE SOURCES AVAILABLE');
     const order=Object.entries(src);$('sourceList').innerHTML=order.length?order.map(([k,s])=>`<div class="source-row"><a href="${esc(s.url||'#')}" target="_blank" rel="noopener">${esc(s.name||k.replace(/_/g,' '))}</a><span class="source-state ${s.available?'ok':'warn'}">${s.available?'available':'unavailable'}</span></div>`).join(''):'<p>No source-provenance payload was returned.</p>';
+    const refs=d.planning_references||{};
+    if(refs.accessibility?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.accessibility.url)}" target="_blank" rel="noopener">${esc(refs.accessibility.name||'Accessibility planning source')}</a><span class="source-state ok">planning reference</span></div>`);
+    if(refs.drive_times?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.drive_times.url)}" target="_blank" rel="noopener">${esc(refs.drive_times.label||'Origin drive-time reference')}</a><span class="source-state ok">planning estimate · not live traffic</span></div>`);
     if(d.failures?.length){$('sourceList').insertAdjacentHTML('beforeend',`<div class="error-panel"><strong>Degraded inputs:</strong> ${d.failures.map(x=>esc(x.source||x.name||x.message||x.error||'source unavailable')).join(' · ')}</div>`);}
   }
 
-  function renderMapPoints(d){state.mapPoints=d.map_points||[];}
+  function renderMapPoints(d){
+    const refresh=state.mapWasOpened;
+    state.mapPoints=d.map_points||[];
+    state.routeIds=d.map?.recommended_stop_ids||[];
+    if(refresh){
+      try{state.mapInstance?.remove();}catch{}
+      state.mapInstance=null;state.mapLoaded=false;
+      const host=$('map');if(host){host.className='map-placeholder';host.innerHTML='<div><strong>Your itinerary changed.</strong><p>Refreshing the route and recommended stops…</p></div>';}
+      buildMap();
+    }
+  }
   function renderAll(d){state.data=d;renderTop(d);renderWhy(d);renderFerries(d);renderConditions(d);renderCrowdsOpen(d);renderSeasonal(d);renderPlanner(d);renderSources(d);renderMapPoints(d);}
 
   async function loadDecision(){
@@ -131,24 +183,44 @@
   }
 
   function loadLeaflet(){
-    if(state.mapLoaded)return Promise.resolve();
-    state.mapLoaded=true;
+    if(window.L)return Promise.resolve();
     return new Promise((resolve,reject)=>{
-      const css=document.createElement('link');css.rel='stylesheet';css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(css);
-      const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=resolve;s.onerror=reject;document.head.appendChild(s);
+      if(!document.querySelector('link[data-mackinac-leaflet]')){const css=document.createElement('link');css.rel='stylesheet';css.dataset.mackinacLeaflet='1';css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(css);}
+      const existing=document.querySelector('script[data-mackinac-leaflet]');
+      if(existing){existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return;}
+      const scr=document.createElement('script');scr.dataset.mackinacLeaflet='1';scr.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';scr.onload=resolve;scr.onerror=reject;document.head.appendChild(scr);
     });
   }
   async function buildMap(){
-    const btn=$('loadMap');btn.disabled=true;btn.textContent='Loading map…';
-    try{await loadLeaflet();const host=$('map');host.className='leaflet-map';host.innerHTML='';const map=L.map(host,{scrollWheelZoom:false}).setView([45.852,-84.617],13);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
-      const points=state.mapPoints?.length?state.mapPoints:[{name:'Downtown / ferry docks',lat:45.8492,lon:-84.6176},{name:'Fort Mackinac',lat:45.8527,lon:-84.6177},{name:'Arch Rock',lat:45.8548,lon:-84.5936},{name:'British Landing',lat:45.8731,lon:-84.6411},{name:'Grand Hotel',lat:45.8498,lon:-84.6294}];
-      points.forEach(p=>L.marker([p.lat||p.latitude,p.lon||p.longitude]).addTo(map).bindPopup(`<strong>${esc(p.name)}</strong>${(p.note||p.detail)?`<br>${esc(p.note||p.detail)}`:''}`));
-      const loop=[[45.849,-84.618],[45.848,-84.600],[45.855,-84.587],[45.870,-84.588],[45.884,-84.610],[45.879,-84.639],[45.865,-84.655],[45.849,-84.645],[45.849,-84.618]];L.polyline(loop,{weight:4,opacity:.75}).addTo(map).bindTooltip('M-185 perimeter · approximate orientation');
-      btn.textContent='Map loaded';track('mackinac_map_opened',{points:points.length});
-    }catch(e){btn.disabled=false;btn.textContent='Retry map';$('map').innerHTML='<div><strong>Interactive map could not load.</strong><p>The movement notes remain available and the live decision does not depend on the map provider.</p></div>';state.mapLoaded=false;}
+    const btn=$('loadMap');
+    if(!state.data){btn.disabled=false;btn.textContent='Load planning map';return;}
+    btn.disabled=true;btn.textContent='Loading map…';
+    try{await loadLeaflet();const host=$('map');host.className='leaflet-map';host.innerHTML='';const map=L.map(host,{scrollWheelZoom:false}).setView([45.852,-84.617],13);state.mapInstance=map;state.mapLoaded=true;state.mapWasOpened=true;L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+      const points=state.mapPoints?.length?state.mapPoints:[{id:'downtown',name:'Downtown / ferry docks',lat:45.8492,lon:-84.6176},{id:'fort',name:'Fort Mackinac',lat:45.8527,lon:-84.6177},{id:'arch-rock',name:'Arch Rock',lat:45.8548,lon:-84.5936},{id:'british-landing',name:'British Landing',lat:45.8731,lon:-84.6411},{id:'grand-hotel',name:'Grand Hotel',lat:45.8498,lon:-84.6294}];
+      const routeIds=Array.isArray(state.routeIds)?state.routeIds:[];
+      const orderedUnique=[...new Set(routeIds.filter(Boolean))];
+      const byId=new Map(points.map(p=>[p.id,p]));
+      const itineraryPoints=orderedUnique.map(id=>byId.get(id)).filter(Boolean);
+      points.forEach(p=>{
+        const planned=orderedUnique.includes(p.id);
+        const marker=planned
+          ? L.circleMarker([p.lat||p.latitude,p.lon||p.longitude],{radius:8,weight:3,fillOpacity:.85})
+          : L.marker([p.lat||p.latitude,p.lon||p.longitude]);
+        marker.addTo(map).bindPopup(`<strong>${esc(p.name)}</strong>${planned?'<br><em>In your recommended itinerary</em>':''}${(p.note||p.detail)?`<br>${esc(p.note||p.detail)}`:''}`);
+      });
+      if(itineraryPoints.length>=2){
+        L.polyline(itineraryPoints.map(p=>[p.lat||p.latitude,p.lon||p.longitude]),{weight:3,dashArray:'7 7',opacity:.75})
+          .addTo(map)
+          .bindTooltip('Your itinerary · orientation only, not turn-by-turn routing');
+      }
+      const loop=[[45.849,-84.618],[45.848,-84.600],[45.855,-84.587],[45.870,-84.588],[45.884,-84.610],[45.879,-84.639],[45.865,-84.655],[45.849,-84.645],[45.849,-84.618]];
+      if(routeIds.includes('m185')) L.polyline(loop,{weight:4,opacity:.75}).addTo(map).bindTooltip('M-185 perimeter · approximate orientation');
+      if(itineraryPoints.length) map.fitBounds(L.latLngBounds(itineraryPoints.map(p=>[p.lat||p.latitude,p.lon||p.longitude])).pad(.25),{maxZoom:14});
+      btn.textContent='Map loaded';track('mackinac_map_opened',{points:points.length,itinerary_points:itineraryPoints.length});
+    }catch(e){btn.disabled=false;btn.textContent='Retry map';$('map').innerHTML='<div><strong>Interactive map could not load.</strong><p>The movement notes remain available and the live decision does not depend on the map provider.</p></div>';state.mapLoaded=false;state.mapInstance=null;}
   }
   $('loadMap').addEventListener('click',buildMap);
-  const observer=new IntersectionObserver(entries=>{if(entries.some(x=>x.isIntersecting)&&!state.mapLoaded)buildMap();},{rootMargin:'200px'});observer.observe($('map-section'));
+  const observer=new IntersectionObserver(entries=>{if(entries.some(x=>x.isIntersecting)&&!state.mapLoaded&&state.data)buildMap();},{rootMargin:'200px'});observer.observe($('map-section'));
 
   $('sharePlan').addEventListener('click',async()=>{
     const d=state.data,plan=d?.ferry?.recommended_plan;if(!d||!plan)return;

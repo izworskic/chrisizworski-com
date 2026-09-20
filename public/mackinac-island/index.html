@@ -186,7 +186,50 @@
     </section>
 
     <section class="section planner-section" id="planner" aria-labelledby="planner-title">
-      <div class="section-head"><div><div class="eyebrow">Build my Mackinac day</div><h2 id="planner-title">A day that fits the ferry and the weather</h2></div><button class="btn small" id="sharePlan">Share plan</button></div>
+      <div class="section-head"><div><div class="eyebrow">Build my Mackinac day</div><h2 id="planner-title">Solve the whole trip, not just the ferry</h2><p class="section-dek">Tell the planner who is going and what matters. Ferry timing, pace, activities and the return plan change together.</p></div><button class="btn small" id="sharePlan" type="button">Share plan</button></div>
+
+      <form class="trip-builder" id="tripBuilder">
+        <div class="builder-grid">
+          <label><span>Trip</span><select id="tripMode" name="trip"><option value="day-trip">Day trip</option><option value="overnight">Staying overnight</option></select></label>
+          <label><span>Adults</span><input id="adultCount" name="adults" type="number" min="1" max="12" value="2" inputmode="numeric"></label>
+          <label><span>Children</span><input id="childCount" name="children" type="number" min="0" max="8" value="0" inputmode="numeric"></label>
+          <label><span>Starting city</span><select id="originCity" name="origin_city"><option value="">Use peninsula choice above</option><option value="grand-rapids">Grand Rapids</option><option value="detroit">Detroit</option><option value="lansing">Lansing</option><option value="chicago">Chicago</option><option value="traverse-city">Traverse City</option><option value="marquette">Marquette</option><option value="sault-ste-marie">Sault Ste. Marie</option></select></label>
+          <label><span>Bikes</span><select id="bikePlan" name="bikes"><option value="none">No bike plan</option><option value="rent">Rent on island</option><option value="bring">Bring our bikes</option></select></label>
+          <label><span>Physical pace</span><select id="pace" name="pace"><option value="easy">Easy</option><option value="balanced" selected>Balanced</option><option value="active">Active</option></select></label>
+          <label><span>Mobility</span><select id="mobility" name="mobility"><option value="standard">Standard walking</option><option value="limited">Limit steep / long walking</option></select></label>
+          <label><span>Dinner</span><select id="dinner" name="dinner"><option value="none" selected>No dinner block</option><option value="casual">Casual meal</option><option value="sit-down">Sit-down dinner</option></select></label>
+          <label><span>Desired ferry home</span><select id="returnBy" name="return_by"><option value="auto">Choose for me</option><option>4:30 PM</option><option>5:30 PM</option><option>6:30 PM</option><option>7:30 PM</option><option>8:30 PM</option></select></label>
+          <label><span>Event starts</span><select id="eventStart" name="event_start"><option value="">No fixed event time</option><option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option></select></label>
+        </div>
+
+        <fieldset class="choice-fieldset"><legend>What matters most?</legend><div class="check-chips" id="interestChoices">
+          <label><input type="checkbox" name="interests" value="history"><span>History</span></label>
+          <label><input type="checkbox" name="interests" value="biking"><span>Biking</span></label>
+          <label><input type="checkbox" name="interests" value="scenery"><span>Scenery</span></label>
+          <label><input type="checkbox" name="interests" value="food"><span>Food</span></label>
+          <label><input type="checkbox" name="interests" value="shopping"><span>Shopping</span></label>
+          <label><input type="checkbox" name="interests" value="horses"><span>Horses</span></label>
+          <label><input type="checkbox" name="interests" value="photography"><span>Photography</span></label>
+          <label><input type="checkbox" name="interests" value="fall-color"><span>Fall color</span></label>
+          <label><input type="checkbox" name="interests" value="events"><span>Event</span></label>
+        </div></fieldset>
+
+        <fieldset class="choice-fieldset"><legend>Must-do if practical</legend><div class="check-chips" id="mustDoChoices">
+          <label><input type="checkbox" name="must_do" value="fort"><span>Fort Mackinac</span></label>
+          <label><input type="checkbox" name="must_do" value="arch-rock"><span>Arch Rock</span></label>
+          <label><input type="checkbox" name="must_do" value="m185"><span>M-185 loop</span></label>
+          <label><input type="checkbox" name="must_do" value="downtown"><span>Downtown / fudge</span></label>
+          <label><input type="checkbox" name="must_do" value="carriage"><span>Carriage / horses</span></label>
+          <label><input type="checkbox" name="must_do" value="sunset"><span>Sunset / golden light</span></label>
+        </div></fieldset>
+
+        <div class="builder-actions"><button class="btn primary" type="submit" id="buildTrip">Build this trip</button><span id="builderStatus" aria-live="polite">The live recommendation above uses the quick visitor modes. Submit this form for the full itinerary.</span></div>
+      </form>
+
+      <div class="planner-decision-grid">
+        <article><span>Leave home</span><strong id="leaveHome">Add a supported starting city</strong><p id="leaveHomeNote">Drive estimates are planning values, not live traffic.</p></article>
+        <article><span>Trip fit</span><strong id="tripFit">Building…</strong><p id="tripFitNote">Your constraints will show here.</p></article>
+      </div>
       <div class="planner-summary" id="plannerSummary">Building a realistic day from the selected visitor modes…</div>
       <ol class="itinerary" id="itinerary"><li><time>—</time><div><strong>Loading your plan</strong><p>Checking feasible timing.</p></div></li></ol>
       <p class="planner-explain" id="plannerExplain"></p>
