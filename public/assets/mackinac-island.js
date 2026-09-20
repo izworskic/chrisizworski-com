@@ -333,7 +333,7 @@
   }
 
   function renderSeasonal(d){
-    const events=d.events||[];$('eventsList').innerHTML=events.length?events.map(x=>`<div class="status-item"><span>${esc(x.title)}</span><strong>${esc(x.impact_label||x.impact||'Today')}</strong></div>`).join(''):'<p>No major event signal in the modeled calendar today.</p>';
+    const events=d.events||[];$('eventsList').innerHTML=events.length?events.map(x=>`<div class="status-item"><span>${esc(x.title)}</span><strong>${esc(x.impact_label||x.impact||'Today')}</strong></div>`).join(''):'<p>Nothing major on the Island calendar is expected to reshape the day.</p>';
     const f=d.fall_color||{};setText('fallColorLabel',f.label||'Not a primary factor');setText('fallColorText',f.summary||'Fall-color guidance is out of season or temporarily unavailable.');
   }
 
