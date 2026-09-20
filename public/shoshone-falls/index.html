@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Shoshone Falls Live: Is It Flowing Today? | Chris Izworski</title>
-<meta name="description" content="Is Shoshone Falls worth visiting today? Check the official live view, current Snake River context, park access, weather, best viewing window and a time-based visit plan.">
+<meta name="description" content="Plan Shoshone Falls from I-84 to the overlook: live camera, current conditions, drive-time guidance, parking and walking facts, an interactive map, persona-based visit plans, Dierkes Lake and Perrine Bridge.">
 <link rel="canonical" href="https://chrisizworski.com/shoshone-falls/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:title" content="Shoshone Falls Live: Is It Flowing Today?">
@@ -17,7 +17,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="stylesheet" href="/assets/shoshone-falls.css?v=20260919-1">
+<link rel="stylesheet" href="/assets/shoshone-falls.css?v=20260919-2">
 <script>
 (function(){
   try{
@@ -84,8 +84,8 @@
   </div>
 
   <div class="metric-grid">
-    <article class="metric"><span>WATER OVER FALLS</span><strong id="flow-status">Checking</strong><small>Direct spill only when verified</small></article>
-    <article class="metric"><span>SNAKE RIVER BELOW FALLS</span><strong id="river-value">—</strong><small>Context, not waterfall spill</small></article>
+    <article class="metric"><span>WHAT WILL THE FALLS LOOK LIKE?</span><strong id="flow-status">Checking</strong><small id="flow-meaning">Turning the evidence into a visitor decision…</small></article>
+    <article class="metric"><span>RIVER SIGNAL</span><strong id="river-value">—</strong><small id="river-meaning">Context, not waterfall spill</small></article>
     <article class="metric"><span>PARK ACCESS</span><strong id="access-context">Checking</strong><small id="access-detail">City gate status</small></article>
     <article class="metric"><span>WEATHER</span><strong id="weather-context">Checking</strong><small id="weather-detail">Current conditions</small></article>
   </div>
@@ -109,10 +109,81 @@
   </div>
 </section>
 
+<section class="section trip-intel" id="visit-plan">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow dark">BUILD THE VISIT</p>
+      <h2>From the highway to the overlook.</h2>
+    </div>
+    <p class="muted">The useful question is not just “what is the river doing?” It is how much time this stop takes, where to go first, and whether the falls justify the detour for your kind of trip.</p>
+  </div>
+
+  <div class="trip-math" aria-label="Shoshone Falls trip timing">
+    <article><span>FROM PERRINE BRIDGE</span><strong>~10 min</strong><small>About 5 road miles to the falls.</small></article>
+    <article><span>FROM I-84</span><strong>~20 min each way</strong><small>Planning estimate via Perrine / Blue Lakes.</small></article>
+    <article><span>PARKING → OVERLOOK</span><strong>75 ft</strong><small>Closest parking to the main viewing platform.</small></article>
+    <article><span>QUICK I-84 DETOUR</span><strong>~60–75 min</strong><small>Drive in, see the main overlook, drive back.</small></article>
+  </div>
+
+  <div class="persona-block">
+    <div class="persona-picker">
+      <span>What kind of visit is this?</span>
+      <div class="persona-tabs" id="persona-tabs" role="group" aria-label="Choose a visitor plan">
+        <button data-persona="first" class="active">First visit</button>
+        <button data-persona="i84">Passing on I-84</button>
+        <button data-persona="family">Family / easy access</button>
+        <button data-persona="photo">Photography</button>
+        <button data-persona="halfday">Half day</button>
+      </div>
+    </div>
+
+    <article class="persona-answer" aria-live="polite">
+      <div class="persona-answer-top">
+        <div>
+          <span class="decision-label">YOUR SHOSHONE PLAN</span>
+          <h3 id="persona-title">Start with the falls. Give it about an hour.</h3>
+        </div>
+        <strong id="persona-duration" class="duration-pill">45–60 min</strong>
+      </div>
+      <p id="persona-summary">Check the live camera before you leave, then go straight to the main overlook. If the falls are thin, Dierkes Lake is the immediate trip-value backup.</p>
+      <div id="persona-callout" class="persona-callout">Current conditions are being folded into this plan.</div>
+      <ol id="persona-steps" class="persona-steps"></ol>
+    </article>
+  </div>
+
+  <div class="ground-grid">
+    <div>
+      <div class="map-head">
+        <div><p class="eyebrow dark">WHERE TO GO</p><h3>Shoshone Falls visitor map</h3></div>
+        <a class="text-link" href="https://www.google.com/maps/dir/?api=1&destination=4155+Shoshone+Falls+Grade+Road+Twin+Falls+ID+83301" target="_blank" rel="noopener">Directions to falls ↗</a>
+      </div>
+      <div id="map" class="map" aria-label="Interactive map of Shoshone Falls, Dierkes Lake and Perrine Bridge"><div class="map-loading">Loading visitor map…</div></div>
+    </div>
+
+    <aside class="route-card">
+      <p class="eyebrow dark">THE SIMPLE ROUTE</p>
+      <button class="route-stop active" data-map-target="falls">
+        <span class="route-num">1</span><span><strong>Shoshone Falls overlook</strong><small>Go here first. The closest parking is only about 75 ft from the main platform.</small></span>
+      </button>
+      <button class="route-stop" data-map-target="dierkes">
+        <span class="route-num">2</span><span><strong>Dierkes Lake</strong><small>Same recreation complex. Use it when the falls are weak, kids need more, or you have 1–2 hours.</small></span>
+      </button>
+      <button class="route-stop" data-map-target="perrine">
+        <span class="route-num">3</span><span><strong>Perrine Bridge</strong><small>Best add-on on the way back toward town / I-84. Walk the bridge or use the canyon viewpoints.</small></span>
+      </button>
+      <div class="arrival-box">
+        <strong>When you arrive</strong>
+        <p>Descend Shoshone Falls Grade, pay the seasonal vehicle fee when in effect, park near the overlook, and see the falls before committing time to the rest of the complex.</p>
+        <div class="arrival-facts"><span>$5 vehicle fee March–fall</span><span>Current gate notice: 7 AM–9 PM</span><span>ADA viewpoints</span><span>No overnight camping</span></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
 <section class="section planner">
   <div class="section-heading">
-    <div><p class="eyebrow dark">PLAN THE STOP</p><h2>How much time do you have?</h2></div>
-    <p class="muted">The itinerary changes when the falls are weak or uncertain instead of pretending every day deserves the same visit.</p>
+    <div><p class="eyebrow dark">FOLLOW THE ROUTE</p><h2>How much time do you actually have?</h2></div>
+    <p class="muted">Pick your real time budget. The route changes when the waterfall signal is weak instead of sending everyone through the same generic attraction list.</p>
   </div>
   <div class="time-tabs" id="time-tabs">
     <button data-time="30" class="active">30 min</button>
@@ -163,19 +234,11 @@
   </div>
 </section>
 
-<section class="section map-section">
-  <div class="section-heading">
-    <div><p class="eyebrow dark">ON THE GROUND</p><h2>Falls, lake and canyon stops.</h2></div>
-    <button id="load-map" class="map-button secondary">Load interactive map</button>
-  </div>
-  <div id="map" class="map" hidden aria-label="Map of Shoshone Falls and nearby stops"></div>
-</section>
-
 <section class="section faq">
   <p class="eyebrow dark">PLAN YOUR VISIT</p><h2>What visitors usually need to know.</h2>
   <details><summary>Why can Shoshone Falls look nearly dry?</summary><p>The Snake River is heavily managed upstream for irrigation and reservoir operations. Late summer and fall can be minimal, while spring snowmelt and release periods can produce much larger displays.</p></details>
   <details><summary>When is Shoshone Falls usually strongest?</summary><p>Spring is normally the strongest season. The City of Twin Falls says typical spring peaks can be roughly 10,000–12,000 cfs, with wet years higher.</p></details>
-  <details><summary>How much walking is required?</summary><p>The closest parking is about 75 feet from the main viewing platform, and multiple viewpoints are ADA accessible.</p></details>
+  <details><summary>How much walking is required?</summary><p>The closest parking is about 75 feet from the main viewing platform, and multiple viewpoints are ADA accessible. You can make this a very low-walking stop, or extend it with canyon-rim viewpoints and Dierkes Lake trails.</p></details><details><summary>How long should I budget from I-84?</summary><p>Perrine Bridge is about 10 minutes south of I-84, and Shoshone Falls is about another 10 minutes from the bridge. For a quick out-and-back from the interstate, budget roughly 60–75 minutes total: about 20 minutes each way plus 20–35 minutes at the main overlook.</p></details><details><summary>Where should a first-time visitor go first?</summary><p>Drive directly to the Shoshone Falls main overlook. See the waterfall first. If the flow looks weak or you have extra time, add Dierkes Lake in the same recreation complex; Perrine Bridge is the best logical stop as you return toward Twin Falls and I-84.</p></details>
   <details><summary>Can I camp at Shoshone Falls?</summary><p>No. Overnight camping is not allowed at Shoshone Falls or Dierkes Lake.</p></details>
 </section>
 
@@ -188,6 +251,6 @@
 </section>
 </main>
 <footer><strong>Shoshone Falls Live</strong><span>Part of <a href="/national-tools/">U.S. Outdoor Tools</a></span><span>Public data · source boundaries preserved</span></footer>
-<script src="/assets/shoshone-falls.js?v=20260919-1" defer></script>
+<script src="/assets/shoshone-falls.js?v=20260919-2" defer></script>
 </body>
 </html>
