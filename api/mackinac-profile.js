@@ -10,6 +10,7 @@ function parsedBody(req){
 function answersFromBody(body){
   return body?.answers&&typeof body.answers==="object"&&!Array.isArray(body.answers)?body.answers:(body&&typeof body==="object"?body:{});
 }
+function bodyObject(req){return answersFromBody(parsedBody(req));}
 function surfaceFromBody(body){
   return String(body?.surface||"").trim().slice(0,60);
 }
@@ -46,4 +47,4 @@ module.exports=async function handler(req,res){
   }
 };
 
-module.exports._test={parsedBody,answersFromBody,surfaceFromBody};
+module.exports._test={parsedBody,answersFromBody,bodyObject,surfaceFromBody};
