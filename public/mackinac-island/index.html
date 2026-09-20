@@ -19,7 +19,7 @@
 <meta name="twitter:title" content="Mackinac Island Today: Best Ferry, Weather & Day Plan">
 <meta name="twitter:description" content="A live decision tool for choosing the ferry, timing the island, biking and getting home comfortably.">
 <link rel="preconnect" href="https://api.weather.gov">
-<link rel="stylesheet" href="/assets/mackinac-island.css?v=20260920-live12">
+<link rel="stylesheet" href="/assets/mackinac-island.css?v=20260920-live13">
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -63,7 +63,7 @@
 }
 </script>
 </head>
-<body data-mackinac-build="20260920-live12">
+<body data-mackinac-build="20260920-live13">
 <a class="skip" href="#main">Skip to live decision</a>
 <header class="sitebar">
   <div class="shell sitebar-inner">
@@ -129,32 +129,73 @@
     </figure>
   </section>
 
-  <section class="controls-wrap" aria-labelledby="visitor-mode-title">
-    <div class="shell controls-card">
-      <div class="controls-intro"><div class="eyebrow">Make it your Mackinac</div><h2 id="visitor-mode-title">What kind of Island visit are you planning?</h2><p>Choose what sounds most like your trip. We’ll adjust the timing and itinerary around it.</p></div>
-      <div class="control-group">
-        <span class="control-label">I’m…</span>
-        <div class="chips" id="personaChips">
-          <button class="chip active" data-persona="day-trip" aria-pressed="true">Day-tripping</button>
-          <button class="chip" data-persona="first-visit" aria-pressed="false">First visit</button>
-          <button class="chip" data-persona="kids" aria-pressed="false">Bringing kids</button>
-          <button class="chip" data-persona="biking" aria-pressed="false">Biking</button>
-          <button class="chip" data-persona="overnight" aria-pressed="false">Staying overnight</button>
-          <button class="chip" data-persona="fall-color" aria-pressed="false">Fall color</button>
-          <button class="chip" data-persona="photography" aria-pressed="false">Photography</button>
-          <button class="chip" data-persona="event" aria-pressed="false">Here for an event</button>
+  <section class="intake-wrap shell" id="trip-intake" aria-labelledby="visitor-mode-title">
+    <div class="intake-card">
+      <div class="intake-intro">
+        <div class="eyebrow">Make it your Mackinac</div>
+        <h2 id="visitor-mode-title">Tell us the trip you’re actually picturing.</h2>
+        <p>Four quick choices are enough to shape the Island plan. We’ll only ask one more question if it can materially change the trip.</p>
+      </div>
+      <div class="intake-work" id="intakeWork">
+        <div class="intake-progress-row">
+          <span id="intakeProgress">Loading trip questions…</span>
+          <button class="text-button" id="intakeReset" type="button" hidden>Start over</button>
+        </div>
+        <div class="intake-question" id="intakeQuestion" aria-live="polite">
+          <strong>Loading your trip builder…</strong>
+        </div>
+        <div class="intake-options" id="intakeOptions"></div>
+        <div class="intake-actions" id="intakeActions" hidden>
+          <button class="btn primary" id="intakeContinue" type="button">Continue</button>
         </div>
       </div>
-      <div class="control-group">
-        <span class="control-label">Mainland approach</span>
-        <div class="segmented" id="originSwitch">
-          <button class="active" data-origin="lower" aria-pressed="true">Lower Peninsula</button>
-          <button data-origin="upper" aria-pressed="false">Upper Peninsula</button>
-          <button data-origin="nearby" aria-pressed="false">Already nearby</button>
+      <aside class="trip-profile-card" id="tripProfileCard" hidden aria-live="polite">
+        <span class="profile-kicker">Your Mackinac style</span>
+        <h3 id="tripProfileName">Building your trip profile…</h3>
+        <p id="tripProfileSummary"></p>
+        <div class="profile-focus" id="tripProfileFocus"></div>
+        <div class="adaptive-question" id="adaptiveQuestion" hidden></div>
+        <div class="profile-actions">
+          <button class="btn primary" id="profileBuildTrip" type="button">Use this trip style</button>
+          <button class="btn" id="profileEdit" type="button">Change answers</button>
         </div>
-      </div>
+      </aside>
     </div>
+    <details class="manual-style">
+      <summary>Prefer to set the trip style manually?</summary>
+      <div class="manual-style-grid">
+        <div class="control-group">
+          <span class="control-label">Visit style</span>
+          <div class="chips" id="personaChips">
+            <button class="chip active" data-persona="day-trip" aria-pressed="true">Day-tripping</button>
+            <button class="chip" data-persona="first-visit" aria-pressed="false">First visit</button>
+            <button class="chip" data-persona="kids" aria-pressed="false">Bringing kids</button>
+            <button class="chip" data-persona="biking" aria-pressed="false">Biking</button>
+            <button class="chip" data-persona="overnight" aria-pressed="false">Staying overnight</button>
+            <button class="chip" data-persona="fall-color" aria-pressed="false">Fall color</button>
+            <button class="chip" data-persona="photography" aria-pressed="false">Photography</button>
+            <button class="chip" data-persona="event" aria-pressed="false">Here for an event</button>
+          </div>
+        </div>
+        <div class="control-group">
+          <span class="control-label">Mainland approach</span>
+          <div class="segmented horizontal" id="originSwitch">
+            <button class="active" data-origin="lower" aria-pressed="true">Lower Peninsula</button>
+            <button data-origin="upper" aria-pressed="false">Upper Peninsula</button>
+            <button data-origin="nearby" aria-pressed="false">Already nearby</button>
+          </div>
+        </div>
+      </div>
+    </details>
   </section>
+
+  <nav class="trip-tabs-wrap shell" id="tripTabsWrap" aria-label="Your Mackinac trip" hidden>
+    <div class="trip-tabs-copy">
+      <span>Built around <strong id="tripTabsProfile">your trip</strong></span>
+      <small>Most useful sections first. You can still open anything.</small>
+    </div>
+    <div class="trip-tabs" id="tripTabs"></div>
+  </nav>
 
   <div class="shell content-stack">
     <section class="section planner-section" id="planner" aria-labelledby="planner-title">
@@ -312,6 +353,24 @@
       </div>
     </section>
 
+    <section class="section trip-depth-section" id="stay-guide" aria-labelledby="stay-guide-title">
+      <div class="section-head"><div><div class="eyebrow">Where the night fits</div><h2 id="stay-guide-title">Stay strategy for this trip</h2><p class="section-dek" id="stayGuideText">Your trip style will determine whether downtown convenience, quieter evenings or resort amenities deserve priority.</p></div><a class="btn small" href="https://www.mackinacisland.org/stay/" target="_blank" rel="noopener">Browse official lodging</a></div>
+      <div class="depth-grid" id="stayGuideCards"></div>
+    </section>
+
+    <section class="section trip-depth-section" id="eat-guide" aria-labelledby="eat-guide-title">
+      <div class="section-head"><div><div class="eyebrow">Meals that fit the day</div><h2 id="eat-guide-title">Build food around the trip, not around a directory</h2><p class="section-dek" id="eatGuideText">We’ll use your pace, party and crowd tolerance to decide how much time meals deserve and when they fit best.</p></div><a class="btn small" href="https://www.mackinacisland.org/dining/" target="_blank" rel="noopener">Browse official dining</a></div>
+      <div class="depth-grid" id="eatGuideCards"></div>
+    </section>
+
+    <section class="section trip-depth-section" id="straits-guide" aria-labelledby="straits-guide-title">
+      <div class="section-head"><div><div class="eyebrow">Around the Straits</div><h2 id="straits-guide-title">Only add mainland stops when they improve the trip</h2><p class="section-dek" id="straitsGuideText">Your profile will tell us whether this should stay Island-focused or become a broader Straits trip.</p></div></div>
+      <div class="gateway-grid">
+        <a class="gateway-card" href="https://mackinawcity.com/" target="_blank" rel="noopener"><span>South gateway</span><strong>Mackinaw City</strong><small>Useful when your route approaches from the Lower Peninsula.</small></a>
+        <a class="gateway-card" href="https://stignace.com/" target="_blank" rel="noopener"><span>North gateway</span><strong>St. Ignace</strong><small>Useful when your route approaches from the Upper Peninsula.</small></a>
+      </div>
+    </section>
+
     <section class="section source-section" id="sources" aria-labelledby="sources-title">
       <div class="section-head"><div><div class="eyebrow">Trip details checked</div><h2 id="sources-title">What this plan is using</h2></div><span class="source-pill" id="overallDataState">Loading…</span></div>
       <div id="sourceList" class="source-list"><p>Loading source status…</p></div>
@@ -330,6 +389,6 @@
   </div>
 </main>
 <footer class="footer"><div class="shell"><p>Built by <a href="/">Chris Izworski</a>. Live source agencies and ferry operators remain authoritative for their own conditions and schedules. This tool is trip-planning guidance, not a guarantee of service or weather.</p><p><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p></div></footer>
-<script src="/assets/mackinac-island.js?v=20260920-live12" defer></script>
+<script src="/assets/mackinac-island.js?v=20260920-live13" defer></script>
 </body>
 </html>

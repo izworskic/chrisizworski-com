@@ -82,3 +82,12 @@ test("phase-one registries cover truth, search, tabs and analytics",()=>{
   assert.ok(intel.DATA_SOURCE_REGISTRY.some(x=>x.id==="webcams"&&x.truth_role==="human-confirmation"));
   assert.ok(intel.ANALYTICS_EVENTS.includes("mackinac_profile_classified"));
 });
+
+
+test("tab rankings only reference durable regional-shell ids",()=>{
+  const allowed=new Set(intel.TABS.map(x=>x.id));
+  for(const id of Object.keys(intel.ARCHETYPES)){
+    const p=intel.deterministicProfile({trip_duration:"two-three",party:"couple",trip_vision:["relaxed"],trip_loss:"crowds"});
+    assert.ok(p.tabs.every(x=>allowed.has(x.id)));
+  }
+});
