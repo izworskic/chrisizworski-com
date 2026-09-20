@@ -77,7 +77,7 @@ const personas=[
   },
   {
     id:'D',name:'Overnight photographer',question:'Where and when is the best light?',
-    personas:['overnight','photography'],query:{trip:'overnight',adults:'1',pace:'balanced',dinner:'sit-down',interests:'photography,scenery',must_do:'sunset'},
+    personas:['overnight','photography'],query:{trip:'overnight',adults:'1',pace:'balanced',dinner:'none',interests:'photography,scenery',must_do:'sunset'},
     checks:r=>[
       check('no same-day return ferry',r.plan?.return==null,'Overnight removes last-ferry pressure'),
       check('golden light block',includesLabel(r.itinerary,/Golden-hour/),'Photography needs solar timing'),
