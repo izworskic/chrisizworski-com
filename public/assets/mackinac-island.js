@@ -2,7 +2,7 @@
   'use strict';
   const API='/api/mackinac-island';
   const ORIGIN_API='/api/mackinac-origin';
-  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',tripDate:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[]};
+  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',originRequestId:0,tripDate:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[]};
   const $=id=>document.getElementById(id);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const track=(name,params={})=>{try{if(typeof window.gtag==='function')window.gtag('event',name,params);}catch{}};
@@ -68,7 +68,7 @@
   function clearResolvedOrigin({clearInputs=false}={}){
     state.originResolved=null;state.originQuery='';
     if(clearInputs)syncOriginInputs('');
-    setText('heroLeave','Add date + city + time');
+    setText('heroLeave','Enter date, city + time above');
     setOriginStatus('Choose the trip date, starting city and leave-home time for a drive-aware ferry plan.');
   }
   function originMatches(value){
@@ -78,22 +78,25 @@
   }
   async function resolveOrigin(value,{reload=true,source='trip-at-a-glance'}={}){
     const q=cleanOrigin(value);
+    const requestId=++state.originRequestId;
     if(!q){clearResolvedOrigin({clearInputs:true});if(reload)loadDecision();return true;}
     setOriginStatus('Finding that city and comparing both ferry ports…','loading');
     const submit=$('heroOriginSubmit');if(submit)submit.disabled=true;
     try{
       const r=await fetch(`${ORIGIN_API}?q=${encodeURIComponent(q)}`,{headers:{accept:'application/json'}});
       const j=await r.json();if(!r.ok)throw new Error(j.detail||j.error||`HTTP ${r.status}`);
+      if(requestId!==state.originRequestId)return false;
       state.originResolved=j;state.originQuery=q;state.origin=j.preferred_port==='St. Ignace'?'upper':'lower';
       syncOriginInputs(j.origin?.label||q);syncOriginSide();
       const alt=(j.routes||[]).find(x=>x.port!==j.preferred_port);
       const alternate=alt&&Number.isFinite(Number(alt.drive_minutes))?` · ${alt.port} ${driveLabel(alt.drive_minutes)}`:'';
       setOriginStatus(`${j.origin?.label||q} → ${j.preferred_port} about ${driveLabel(j.drive_minutes)}${alternate}. Add the trip date and leave-home time so the planner can choose the actual reachable ferry.`,'resolved');
-      setText('heroLeave',state.departTime?'Calculating…':'Add leave time');
+      setText('heroLeave',state.departTime?'Calculating…':'Enter leave time above');
       track('mackinac_start_city_selected',{origin_city:j.origin?.label||q,preferred_port:j.preferred_port,source});
       if(reload&&state.departTime)loadDecision();
       return true;
     }catch(err){
+      if(requestId!==state.originRequestId)return false;
       state.originResolved=null;state.originQuery='';
       setOriginStatus(`Couldn’t resolve “${q}.” Try city + state/province or a ZIP/postal code.`,'error');
       setText('builderStatus','Starting city was not resolved. Add a state/province or ZIP/postal code and try again.');
@@ -146,11 +149,11 @@
   }));
   $('heroTripDate')?.addEventListener('change',e=>{
     syncTripDateInputs(e.target.value);
-    setText('heroLeave',state.tripDate&&state.originResolved&&state.departTime?'Ready to plan':'Add date + city + time');
+    setText('heroLeave',state.tripDate&&state.originResolved&&state.departTime?'Ready to plan':'Enter date, city + time above');
   });
   $('heroDepartTime')?.addEventListener('change',e=>{
     syncDepartInputs(e.target.value);
-    if(state.originResolved)setText('heroLeave',state.tripDate&&state.departTime?'Ready to plan':'Add date + city + time');
+    if(state.originResolved)setText('heroLeave',state.tripDate&&state.departTime?'Ready to plan':'Enter date, city + time above');
   });
   $('heroOriginForm')?.addEventListener('submit',async e=>{
     e.preventDefault();
@@ -159,12 +162,14 @@
     syncDepartInputs($('heroDepartTime')?.value||'');
     if(!state.tripDate){
       setOriginStatus('Choose the trip date first.','error');
-      setText('heroLeave','Add date + city + time');
+      $('heroTripDate')?.focus();
+      setText('heroLeave','Enter date, city + time above');
       return;
     }
     if(!originText){
       setOriginStatus('Enter your starting city first.','error');
-      setText('heroLeave','Add date + city + time');
+      $('heroOriginInput')?.focus();
+      setText('heroLeave','Enter date, city + time above');
       return;
     }
     if(!originMatches(originText)){
@@ -172,7 +177,8 @@
       if(!ok)return;
     }
     if(!state.departTime){
-      setText('heroLeave','Add leave time');
+      setText('heroLeave','Enter leave time above');
+      $('heroDepartTime')?.focus();
       setOriginStatus('Date and starting city are set. Add the time you plan to leave home to calculate the reachable ferry and island arrival.','error');
       return;
     }
@@ -188,12 +194,12 @@
     syncDepartInputs($('departTime')?.value||'');
     if(!state.tripDate){
       setText('builderStatus','Add the trip date before building the trip.');
-      setText('leaveHome','Add date + city + time');
+      setText('leaveHome','Enter date, city + time above');
       return;
     }
     if(!originText){
       setText('builderStatus','Enter starting location before building the trip.');
-      setText('leaveHome','Add date + city + time');
+      setText('leaveHome','Enter date, city + time above');
       return;
     }
     if(originText&&!originMatches(originText)){
@@ -202,8 +208,8 @@
     }
     if(!state.departTime){
       setText('builderStatus','Add the time you plan to leave home. Ferry feasibility depends on it.');
-      setText('leaveHome','Add leave time');
-      setText('heroLeave','Add leave time');
+      setText('leaveHome','Enter leave time above');
+      setText('heroLeave','Enter leave time above');
       return;
     }
     track('mackinac_itinerary_created',{personas:selectedPersonas().join('|'),trip_date:state.tripDate,origin_city:state.originResolved?.origin?.label||'none',depart_at:state.departTime,children:Number($('childCount')?.value||0),bikes:$('bikePlan')?.value||'none',pace:$('pace')?.value||'balanced'});
@@ -257,7 +263,7 @@
     const party=`${Number(profile.adults||2)} adult${Number(profile.adults||2)===1?'':'s'}${Number(profile.children||0)?` + ${profile.children} child${Number(profile.children)===1?'':'ren'}`:''}`;
     const priorities=[...(profile.interests||[]),...(profile.must_do||[]).map(x=>`must: ${x}`)].slice(0,3);
     setText('heroTripContext',[party,profile.trip==='overnight'?`${profile.nights||1} night${Number(profile.nights||1)===1?'':'s'}`:'day trip',priorities.length?priorities.join(' · '):null].filter(Boolean).join(' · '));
-    setText('heroLeave',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Add date + city + time'));
+    setText('heroLeave',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Enter date, city + time above'));
     setText('heroFerry',plan.departure_time?`${plan.departure_time} · ${plan.origin_port}`:'No verified ferry');
     setText('heroIsland',plan.arrival_time||'—');
     setText('heroReturn',returnPlanText(d));
@@ -339,7 +345,7 @@
     if(dayHost)dayHost.innerHTML=days.length?days.map(x=>`<article class="trip-day ${esc(x.role||'')}"><span>Day ${esc(x.day)} · ${esc(dateLabel(x.date))}</span><strong>${esc(x.title||'Trip day')}</strong><p>${esc(x.summary||'')}</p></article>`).join(''):'';
     $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title||x.label||'Plan stop')}</strong>${x.movement?`<span class="movement">${esc(x.movement)}</span>`:''}<p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>No complete itinerary</strong><p>Use the official ferry source links before leaving.</p></div></li>';
     setText('plannerExplain',d.itinerary_reason||'');
-    setText('leaveHome',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Add date + city + time'));
+    setText('leaveHome',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Enter date, city + time above'));
     setText('leaveHomeNote',d.leave_home?.detail||(state.tripDate&&state.originResolved&&state.departTime?'No ferry in the verified schedule can be reached from that city on that date after your entered leave-home time.':'Enter the trip date, starting city and leave-home time. Drive estimates are not live traffic.'));
     const party=`${Number(p.adults||2)} adult${Number(p.adults||2)===1?'':'s'}${Number(p.children||0)?` + ${p.children} child${Number(p.children)===1?'':'ren'}`:''}`;
     const fit=[party,p.trip==='overnight'?`${p.nights||1} night${Number(p.nights||1)===1?'':'s'}`:'day trip',p.pace?`${p.pace} pace`:null,p.bikes&&p.bikes!=='none'?`${p.bikes} bikes`:null,p.mobility==='limited'?'limited steep walking':null].filter(Boolean);
