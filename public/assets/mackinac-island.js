@@ -726,6 +726,7 @@
 
   function renderTripShape(d){
     const p=d.spatial_plan,host=$('tripShapePanel');if(!host)return;
+    if(d.multi_day_plan){host.hidden=true;return;}
     if(!p){host.hidden=true;return;}
     host.hidden=false;setText('tripShapeSummary',p.summary||'A practical way to group the trip without unnecessary backtracking.');
     setText('tripShapeBadge',p.label||'Trip shape');
@@ -739,7 +740,11 @@
     setText('plannerSummary',d.itinerary_summary||'We couldn’t put together a comfortable plan from the trip details we could verify.');
     const days=d.trip_days||[];
     const dayHost=$('tripDays');
-    if(dayHost)dayHost.innerHTML=days.length?days.map(x=>`<article class="trip-day ${esc(x.role||'')}"><span>Day ${esc(x.day)} · ${esc(dateLabel(x.date))}</span><strong>${esc(x.title||'Trip day')}</strong><p>${esc(x.summary||'')}</p></article>`).join(''):'';
+    if(dayHost)dayHost.innerHTML=days.length?days.map((x,i)=>{
+      const stops=(x.stops||[]).map(s=>`<li><strong>${esc(s.name)}</strong><small>${esc(s.why||'')}</small>${s.source_url?`<a href="${esc(s.source_url)}" target="_blank" rel="noopener">Official info ↗</a>`:''}</li>`).join('');
+      const precision=x.precision?`<em>${esc(x.precision)}</em>`:'';
+      return `<article class="trip-day ${esc(x.role||'')}"><span>Day ${i+1} · ${esc(dateLabel(x.date))}</span><strong>${esc(x.title||'Trip day')}</strong>${precision}<p>${esc(x.summary||'')}</p>${stops?`<ol class="trip-day-stops">${stops}</ol>`:''}</article>`;
+    }).join(''):'';
     $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title||x.label||'Plan stop')}</strong>${x.movement?`<span class="movement">${esc(x.movement)}</span>`:''}<p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>Your Island plan needs a recheck</strong><p>Check the ferry links below before heading to the dock.</p></div></li>';
     setText('plannerExplain',d.itinerary_reason||'');
     setText('leaveHome',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Enter date, city + time above'));
