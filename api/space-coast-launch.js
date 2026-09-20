@@ -28,7 +28,7 @@ function weatherGrade(period){
   if(!period)return {level:'unknown',label:'Weather window unavailable',detail:'NWS hourly guidance does not yet cover the launch time.'};
   const text=String(period.shortForecast||'').trim().toLowerCase();
   const rawPop=period?.probabilityOfPrecipitation?.value;
-  const pop=Number(rawPop);
+  const pop=rawPop==null||rawPop===''?NaN:Number(rawPop);
   const wind=maxWind(period);
 
   if(/thunder/.test(text)){
