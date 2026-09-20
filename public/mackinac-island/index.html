@@ -90,7 +90,7 @@
         <div class="metric"><span>Bike loop</span><strong id="bikeTop">Checking…</strong></div>
         <div class="metric"><span>Weather</span><strong id="weatherTop">Checking…</strong></div>
         <div class="metric"><span>Ferry ride</span><strong id="marineTop">Checking…</strong></div>
-        <div class="metric return-metric"><span>Recommended ferry home</span><strong id="returnTop">Checking…</strong><small id="lastTop"></small></div>
+        <div class="metric return-metric"><span>Return plan</span><strong id="returnTop">Checking…</strong><small id="lastTop"></small></div>
       </div>
       <div class="primary-rec" id="primaryRec">Comparing Mackinaw City and St. Ignace departures…</div>
       <div class="hero-trip-glance" id="heroTripGlance" aria-label="Recommended trip at a glance">
@@ -111,7 +111,7 @@
           <div><span>Leave home</span><strong id="heroLeave">Add city + leave time</strong></div>
           <div><span>Ferry</span><strong id="heroFerry">Checking…</strong></div>
           <div><span>On island</span><strong id="heroIsland">Checking…</strong></div>
-          <div><span>Head home</span><strong id="heroReturn">Checking…</strong></div>
+          <div><span>Return</span><strong id="heroReturn">Checking…</strong></div>
         </div>
       </div>
       <div class="hero-actions" aria-label="Mackinac planning actions">
@@ -162,6 +162,7 @@
       <form class="trip-builder" id="tripBuilder">
         <div class="builder-grid">
           <label><span>Trip</span><select id="tripMode" name="trip"><option value="day-trip">Day trip</option><option value="overnight">Staying overnight</option></select></label>
+          <label class="overnight-field" id="nightCountField" hidden><span>Nights on island</span><input id="nightCount" name="nights" type="number" min="1" max="7" value="1" inputmode="numeric" disabled></label>
           <label><span>Adults</span><input id="adultCount" name="adults" type="number" min="1" max="12" value="2" inputmode="numeric"></label>
           <label><span>Children</span><input id="childCount" name="children" type="number" min="0" max="8" value="0" inputmode="numeric"></label>
           <label><span>Starting city</span><input id="originCityInput" name="origin_text" type="search" inputmode="search" autocomplete="off" placeholder="City, state or ZIP"></label>
@@ -170,7 +171,7 @@
           <label><span>Physical pace</span><select id="pace" name="pace"><option value="easy">Easy</option><option value="balanced" selected>Balanced</option><option value="active">Active</option></select></label>
           <label><span>Mobility</span><select id="mobility" name="mobility"><option value="standard">Standard walking</option><option value="limited">Limit steep / long walking</option></select></label>
           <label><span>Dinner</span><select id="dinner" name="dinner"><option value="none" selected>No dinner block</option><option value="casual">Casual meal</option><option value="sit-down">Sit-down dinner</option></select></label>
-          <label><span>Desired ferry home</span><select id="returnBy" name="return_by"><option value="auto">Choose for me</option><option>4:30 PM</option><option>5:30 PM</option><option>6:30 PM</option><option>7:30 PM</option><option>8:30 PM</option></select></label>
+          <label><span>Need to leave island by (optional)</span><select id="returnBy" name="return_by"><option value="auto">No deadline</option><option>4:30 PM</option><option>5:30 PM</option><option>6:30 PM</option><option>7:30 PM</option><option>8:30 PM</option></select></label>
           <label><span>Event starts</span><select id="eventStart" name="event_start"><option value="">No fixed event time</option><option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option></select></label>
         </div>
 
@@ -202,7 +203,8 @@
         <article><span>Leave home</span><strong id="leaveHome">Add city + leave time</strong><p id="leaveHomeNote">Your entered departure time sets the earliest ferry you can physically reach. Drive estimates are not live traffic.</p></article>
         <article><span>Trip fit</span><strong id="tripFit">Building…</strong><p id="tripFitNote">Your constraints will show here.</p></article>
       </div>
-      <div class="planner-summary" id="plannerSummary">Building a realistic day from the selected visitor modes…</div>
+      <div class="planner-summary" id="plannerSummary">Building a realistic trip from the selected visitor modes…</div>
+      <div class="trip-days" id="tripDays" aria-live="polite"></div>
       <ol class="itinerary" id="itinerary"><li><time>—</time><div><strong>Loading your plan</strong><p>Checking feasible timing.</p></div></li></ol>
       <p class="planner-explain" id="plannerExplain"></p>
     </section>
@@ -225,7 +227,7 @@
         <article class="port-card" id="mackinawCard"><div class="port-kicker">Mackinaw City</div><h3 id="mackinawBest">Loading departures…</h3><p id="mackinawMeta"></p><div class="timeline" id="mackinawTimeline" aria-label="Mackinaw City ferry timeline"></div></article>
         <article class="port-card" id="stIgnaceCard"><div class="port-kicker">St. Ignace</div><h3 id="stIgnaceBest">Loading departures…</h3><p id="stIgnaceMeta"></p><div class="timeline" id="stIgnaceTimeline" aria-label="St. Ignace ferry timeline"></div></article>
       </div>
-      <div class="return-box"><div><span>Recommended return</span><strong id="recommendedReturn">—</strong><p id="returnReason">Keeps a practical buffer.</p></div><div><span>Literal last scheduled ferry</span><strong id="literalLast">—</strong><p>This is the schedule limit, not our recommendation.</p></div></div>
+      <div class="return-box"><div><span>Return plan</span><strong id="recommendedReturn">—</strong><p id="returnReason">Return timing depends on whether this is a day trip or a multi-day stay.</p></div><div><span>Last published ferry for return day</span><strong id="literalLast">—</strong><p>Shown as a schedule boundary, not a recommendation.</p></div></div>
       <p class="truth-note">Published schedules can change. The live tool identifies the schedule version used and links the operator source; always recheck the operator before boarding.</p>
     </section>
 
