@@ -165,7 +165,7 @@ const pages=[
 function pageHtml(p){
   const canonical=`https://chrisizworski.com/mackinac-island/${p.slug}/`;
   const jsonLd=JSON.stringify({"@context":"https://schema.org","@graph":[
-    {"@type":"WebPage","@id":canonical,"url":canonical,"name":p.title,"description":p.description,"isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Place","name":"Mackinac Island","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}}},
+    {"@type":"WebPage","@id":canonical,"url":canonical,"name":p.title,"description":p.description,"dateModified":"2026-09-20","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Place","name":"Mackinac Island","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}}},
     {"@type":"FAQPage","mainEntity":p.faq.map(x=>({"@type":"Question","name":x[0],"acceptedAnswer":{"@type":"Answer","text":x[1]}}))},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Chris Izworski","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Mackinac Island","item":"https://chrisizworski.com/mackinac-island/"},{"@type":"ListItem","position":3,"name":p.title,"item":canonical}]}
   ]});
