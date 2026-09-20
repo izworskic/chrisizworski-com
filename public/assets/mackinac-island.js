@@ -224,7 +224,7 @@
     const work=$('intakeWork');if(work)work.hidden=true;
     const reset=$('intakeReset');if(reset)reset.hidden=false;
     renderTripTabs(profile);renderDepthGuides(profile,state.data);renderTuningButtons();storageSet();
-    track('mackinac_profile_classified',{profile:profile.primary?.id||'unknown',engine:profile.engine||'unknown',confidence:profile.jev_confidence??profile.confidence??0});
+    track('mackinac_profile_classified',{profile:profile.primary?.id||'unknown',engine:profile.engine||'unknown',confidence:profile.jev_confidence??profile.confidence??0,intent:new URLSearchParams(location.search).get('intent')||'none'});
     if(profile.next_question&&!state.adaptiveAsked)renderAdaptiveQuestion(profile.next_question);
     else if($('adaptiveQuestion'))$('adaptiveQuestion').hidden=true;
   }
@@ -471,7 +471,7 @@
   $('intakeContinue')?.addEventListener('click',()=>{const q=state.intakeSchema?.base_questions?.[state.intakeStep];if(!q)return;const v=state.intakeAnswers[q.id];if(q.type==='multi'&&Array.isArray(v)&&v.length){track('mackinac_intake_answered',{question:q.id,answer:v.join('|')});state.intakeStep++;renderIntakeStep();}});
   $('intakeReset')?.addEventListener('click',()=>{storageClear();planStorageClear();history.replaceState(null,'',location.pathname+location.search);state.intakeAnswers={};state.tripProfile=null;state.tunings.clear();state.intakeStep=0;state.adaptiveAsked=false;$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;$('tripTabsWrap').hidden=true;$('intakeReset').hidden=true;track('mackinac_intake_started',{restart:true});renderIntakeStep();});
   $('profileEdit')?.addEventListener('click',()=>{$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;state.intakeStep=0;renderIntakeStep();});
-  $('profileBuildTrip')?.addEventListener('click',()=>{applyProfileToPlanner(state.tripProfile);track('mackinac_plan_generated',{profile:state.tripProfile?.primary?.id||'unknown'});loadDecision();scrollToTarget('#planner');});
+  $('profileBuildTrip')?.addEventListener('click',()=>{applyProfileToPlanner(state.tripProfile);track('mackinac_plan_generated',{profile:state.tripProfile?.primary?.id||'unknown',intent:new URLSearchParams(location.search).get('intent')||'none'});loadDecision();scrollToTarget('#planner');});
   $('tripTuning')?.querySelectorAll('[data-tune]').forEach(btn=>btn.addEventListener('click',()=>applyTuningChange(btn.dataset.tune)));
   $('tripTuningReset')?.addEventListener('click',async()=>{state.tunings.clear();renderTuningButtons();const saved=capturePlanInputs();if(saved)planStorageSet(saved);track('mackinac_plan_tuned',{tuning:'reset',active:false,count:0});await loadDecision();renderTuningButtons();});
 
@@ -904,6 +904,7 @@
   async function boot(){
     const shared=sharedPlanFromHash();
     const intent=intentSeed();
+    if(intent)track('mackinac_intent_entry',{intent:intent.intent,source:'search-intent-page'});
     const saved=(shared||intent)?null:futureSavedPlan();
     const seed=shared||intent||saved;
     if(seed)hydratePlanInputs(seed,{includeIntake:true});

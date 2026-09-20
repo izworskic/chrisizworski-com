@@ -792,3 +792,12 @@ test('Mackinac search-intent entries preseed only known answers and keep the rem
   assert.match(html,/\/mackinac-island\/day-trip\//);
   assert.match(html,/\/mackinac-island\/ferry-planner\//);
 });
+
+
+test('Mackinac intent funnel tracks landing entry classification and plan generation',()=>{
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(js,/mackinac_intent_entry/);
+  assert.match(js,/source:'search-intent-page'/);
+  assert.match(js,/mackinac_profile_classified[\s\S]{0,260}intent:/);
+  assert.match(js,/mackinac_plan_generated[\s\S]{0,220}intent:/);
+});
