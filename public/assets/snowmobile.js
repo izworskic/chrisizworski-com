@@ -93,6 +93,7 @@ function renderWhy(d){
    if(d.route?.legalVerification==='CURRENT_LAYER_CHECKED')reasons.push('The current DNR temporary-closure layer was checked. No closure match is not the same thing as a guarantee that every segment is legally rideable.');
  }
  for(const x of (d.contradictions||[]))reasons.push(`Conflict: ${x.message}`);
+ if(d.trailSource?.provider)reasons.push(`Official trail geometry/status source: ${d.trailSource.provider}${d.trailSource.fallbackReason?' (primary open-data feed fell back)':''}.`);
  if(d.sourceSummary?.newestDatedSource)reasons.push(`Newest dated source evidence: ${agoTime(d.sourceSummary.newestDatedSource)}.`);
  host.innerHTML=reasons.map(x=>`<li>${esc(x)}</li>`).join('')||'<li>No explanation is available.</li>';
 }
@@ -116,7 +117,7 @@ function drawMap(fc,closureState){
  if(LAYER)LAYER.remove(); if(CLOSURE_LAYER)CLOSURE_LAYER.remove();
  LAYER=L.geoJSON(fc,{
    style:f=>{const p=f.properties||{};return {weight:p.band==='CLOSED'?7:5,opacity:.9,color:mapBandColor(p.band)}},
-   onEachFeature:(f,l)=>{const p=f.properties||{};const title=p.trailNetwork||p.Trail_Netw||p.id||p.Unique_ID||'DNR trail segment';const band=p.band||'DNR DESIGNATED';const score=Number.isFinite(p.score)?` · ${p.score}/100`:'';const why=Array.isArray(p.reasons)&&p.reasons.length?`<br>${esc(p.reasons[0])}`:'';l.bindPopup(`<strong>${esc(title)}</strong><br>${esc(band)}${score}<br>${esc(p.groomingSponsor||p.Groom_Spon||'Grooming sponsor not stated')}${why}`);l.on('click',()=>track('snowmobile_segment_open',{segment:String(p.id||p.Unique_ID||title),band:String(p.band||'unknown')}))}
+   onEachFeature:(f,l)=>{const p=f.properties||{};const title=p.trailNetwork||p.Trail_Netw||p.id||p.Unique_ID||'DNR trail segment';const band=p.band||'DNR DESIGNATED';const score=Number.isFinite(p.score)?` · ${p.score}/100`:'';const why=Array.isArray(p.reasons)&&p.reasons.length?`<br>${esc(p.reasons[0])}`:'';const status=p.officialStatus?`<br>DNR snowmobile status: ${esc(p.officialStatus)}`:'';const groom=p.groomType?`<br>Grooming type: ${esc(p.groomType)} · ${esc(p.groomingSponsor||'sponsor not stated')}`:`<br>${esc(p.groomingSponsor||p.Groom_Spon||'Grooming sponsor not stated')}`;l.bindPopup(`<strong>${esc(title)}</strong><br>${esc(band)}${score}${status}${groom}${why}`);l.on('click',()=>track('snowmobile_segment_open',{segment:String(p.id||p.Unique_ID||title),band:String(p.band||'unknown')}))}
  }).addTo(MAP);
  const closures=closureState?.features||[];
  if(closures.length){
