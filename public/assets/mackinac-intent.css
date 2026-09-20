@@ -19,3 +19,22 @@
 .catalog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:16px}.catalog-card{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:16px}.catalog-top>span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:820}.catalog-top>strong{display:block;font-size:18px;margin-top:5px}.catalog-top>small{display:block;color:var(--muted);margin-top:3px}.catalog-card>p{font-size:12px;line-height:1.5;color:var(--body)}.catalog-traits{display:flex;flex-wrap:wrap;gap:5px}.catalog-traits span{background:var(--green-soft);border:1px solid #cfe0d8;border-radius:999px;padding:5px 7px;font-size:9px;font-weight:760}.catalog-status{display:block;color:var(--muted);margin-top:10px;line-height:1.4}
 .event-list{display:grid;gap:9px;margin-top:15px}.event-list article{display:grid;grid-template-columns:165px minmax(170px,.55fr) 1fr;gap:14px;align-items:start;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px}.event-list time{font-size:11px;font-weight:850;color:var(--green)}.event-list strong{font-size:15px}.event-list span{font-size:12px;line-height:1.45;color:var(--muted)}
 @media(max-width:760px){.hub-home-link{display:none}.trip-context{align-items:flex-start;flex-direction:column}.flow-grid,.decision-grid-2,.experience-grid,.catalog-grid{grid-template-columns:1fr}.event-list article{grid-template-columns:1fr;gap:4px}.destination-nav-wrap{top:0}.mackinac-destination-nav{padding-bottom:8px}}
+
+
+/* Shared Mackinac trip intelligence — hub2 */
+.trip-context{align-items:stretch;display:grid;grid-template-columns:minmax(180px,.72fr) minmax(280px,1.35fr) auto;gap:18px;margin-top:18px}
+.trip-context-copy{align-self:start}.trip-context-work{min-width:0}.trip-context-actions{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:7px}
+.trip-context[data-mode="intake"]{background:#f7f5ed}.trip-context[data-mode="loading"]{background:#f4f7f5}.trip-context[data-mode="error"]{background:#faf4ef}
+.trip-question{display:grid;gap:10px}.trip-question-progress{font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:850;color:var(--green)}
+.trip-question>strong{font-size:17px;line-height:1.3}.trip-answer-grid{display:flex;flex-wrap:wrap;gap:7px}
+.trip-answer{appearance:none;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 10px;font:inherit;font-size:11px;font-weight:760;color:var(--body);cursor:pointer}
+.trip-answer:hover,.trip-answer:focus-visible{border-color:var(--lake);outline:none}.trip-answer.selected{background:var(--green);border-color:var(--green);color:#fff}
+.trip-question-actions{display:flex;align-items:center;gap:10px}.trip-question-actions .btn[disabled]{opacity:.45;pointer-events:none}
+.text-button{appearance:none;border:0;background:transparent;padding:5px 0;font:inherit;font-size:11px;font-weight:760;color:var(--green);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.surface-focus{border-left:3px solid var(--green);padding:2px 0 2px 12px}.surface-focus>span{font-size:9px}.surface-focus>strong{font-size:17px}.surface-focus>p{margin-top:4px}
+.trip-intelligence-loading{font-size:12px;color:var(--muted);padding:7px 0}
+.mackinac-destination-nav a.trip-priority:not([aria-current="page"]){background:#eef7f2;border-color:#c8ddd2}
+.mackinac-destination-nav a.trip-priority::after{content:" · " attr(data-trip-rank);font-size:9px;opacity:.65}
+body:has(.trip-context[data-mode="profile"]) [data-generic-decision-strip]{opacity:.82}
+@media(max-width:900px){.trip-context{grid-template-columns:1fr 1.35fr}.trip-context-actions{grid-column:1/-1;flex-direction:row;align-items:center;justify-content:flex-start}}
+@media(max-width:620px){.trip-context{grid-template-columns:1fr;gap:12px;padding:14px}.trip-context-actions{grid-column:auto}.trip-answer{font-size:11px;padding:9px 10px}.trip-answer-grid{gap:6px}.surface-focus{padding-left:10px}}
