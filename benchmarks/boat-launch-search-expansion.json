@@ -1,10 +1,10 @@
 {
   "version": "1.0.0",
-  "updated": "2026-08-25",
+  "updated": "2026-09-20",
   "id": "boat-launch-search-expansion-2026-08-22",
   "surface": "https://chrisizworski.com/michigan-boat-launches/",
-  "status": "ready-for-production-release",
-  "strategy": "Expand crawlable search coverage and internal authority without changing the current title, meta description, H1, canonical or dynamic statewide finder.",
+  "status": "ship-and-observe",
+  "strategy": "Expand crawlable, manually reviewed source guidance and internal authority while keeping the current title, meta description, H1, canonical and dynamic statewide finder stable.",
   "evidence": {
     "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-08-21",
     "exportedThrough": "2026-08-19",
@@ -62,7 +62,11 @@
       "Great Lakes, connecting rivers and inland waters",
       "Saginaw Bay boat launches",
       "Lake Michigan boat launches",
-      "Au Sable River access"
+      "Au Sable River access",
+      "How to use Michigan DNR boat launch data",
+      "boat launch near you",
+      "Michigan DNR boat launch map",
+      "Near-me privacy"
     ]
   },
   "measurement": {
@@ -88,6 +92,18 @@
     "finderBehavior",
     "sourceTruth"
   ],
-  "releaseDateModified": "2026-08-25",
-  "releaseDateModifiedNote": "The dateModified the treated surface must carry. Was hardcoded as 2026-08-22 in the benchmark script, which broke the moment stamp-freshness told the truth about a later content change. Keep it here so the pin and the config cannot disagree. Bump it whenever the treatment re-ships before its window opens; do not bump it once status is running. Same fix as benchmarks/beach-detail-page-one-ctr.json."
+  "releaseDateModified": "2026-09-20",
+  "releaseDateModifiedNote": "The dateModified the treated surface must carry. Was hardcoded as 2026-08-22 in the benchmark script, which broke the moment stamp-freshness told the truth about a later content change. Keep it here so the pin and the config cannot disagree. Bump it whenever the treatment re-ships before its window opens; do not bump it once status is running. Same fix as benchmarks/beach-detail-page-one-ctr.json.",
+  "latestObserved": {
+    "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-09-20",
+    "exportedThrough": "2026-09-17",
+    "windowDays": 7,
+    "page": {
+      "impressions": 819,
+      "clicks": 3,
+      "ctr": 0.003663003663003663,
+      "averagePosition": 8.526251526251526
+    },
+    "changeFromLeadingBaseline": "Weekly impressions increased from 77 to 819 while average position improved from 13.17 to 8.53. Treat seasonality as context; preserve the canonical parent and deepen useful publisher content rather than cloning query variants."
+  }
 }
