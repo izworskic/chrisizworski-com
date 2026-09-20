@@ -42,7 +42,7 @@ function routeStatusLabel(d){
 }
 function forecastSnowLabel(d){
  const rows=[['Grayling',d.weather?.grayling],['Gaylord',d.weather?.gaylord]].filter(([,w])=>w&&!w.error);
- const amounts=rows.filter(([,w])=>Number.isFinite(w.snowIn)).map(([n,w])=>`${n} ${Number(w.snowIn).toFixed(1).replace(/\.0$/,'')}″`);
+ const amounts=rows.filter(([,w])=>Number.isFinite(w.snowHighIn??w.snowIn)).map(([n,w])=>{const lo=Number(w.snowLowIn),hi=Number(w.snowHighIn??w.snowIn);const fmt=x=>x.toFixed(1).replace(/\.0$/,'');return `${n} ${Number.isFinite(lo)&&lo!==hi?fmt(lo)+'–'+fmt(hi):fmt(hi)}″`});
  if(amounts.length)return amounts.join(' · ');
  if(rows.some(([,w])=>w.snowSignal===true))return'Snow forecast; amount unstated';
  return rows.length?'No snow mentioned in current NWS periods':'Not verified';
@@ -64,7 +64,7 @@ function renderOutlook(d){
  const host=$('#outlookCards');if(!host)return;
  if(!d.season?.active){host.innerHTML='<article class="outlook-card"><strong>Pre-season</strong><p>The 72-hour riding-window rank activates Dec. 1. Weather can still be viewed below without turning September conditions into a snowmobile recommendation.</p></article>';return}
  const rows=(d.timing?.windows||[]).slice(0,6);
- host.innerHTML=rows.length?rows.map((w,i)=>`<article class="outlook-card ${i===0?'best-period':''}"><span>${esc(w.name||'Forecast period')}</span><strong>${w.score}/100 weather window</strong><p>${Number.isFinite(w.maxTempF)?'High '+Math.round(w.maxTempF)+'°F · ':''}${Number.isFinite(w.maxWindMph)?'wind to '+Math.round(w.maxWindMph)+' mph · ':''}${esc((w.reasons||[]).join(', ')||'No major weather penalty identified')}</p>${i===0?'<b>Best forecast timing</b>':''}</article>`).join(''):'<article class="outlook-card">NWS forecast timing is unavailable.</article>';
+ host.innerHTML=rows.length?rows.map((w)=>{const isBest=Boolean(d.timing?.best?.startTime&&w.startTime===d.timing.best.startTime);return `<article class="outlook-card ${isBest?'best-period':''}"><span>${esc(w.name||'Forecast period')}</span><strong>${w.score}/100 weather window</strong><p>${Number.isFinite(w.maxTempF)?'High '+Math.round(w.maxTempF)+'°F · ':''}${Number.isFinite(w.maxWindMph)?'wind to '+Math.round(w.maxWindMph)+' mph · ':''}${esc((w.reasons||[]).join(', ')||'No major weather penalty identified')}</p>${isBest?'<b>Best forecast timing</b>':''}</article>`}).join(''):'<article class="outlook-card">NWS forecast timing is unavailable.</article>';
 }
 function bestWindow(d){const b=d.timing?.best;if(!b)return'Weather window not verified';const when=b.name||new Date(b.startTime).toLocaleString();const t=Number.isFinite(b.maxTempF)?` · high ${Math.round(b.maxTempF)}°F`:'';return when+t}
 function renderSections(d){
