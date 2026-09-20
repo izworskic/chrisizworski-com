@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Michigan Snowmobile Trail Conditions | Grayling to Gaylord Live</title>
+<meta name="description" content="Live Michigan snowmobile decision tool for the Grayling to Gaylord corridor: official DNR trail status, local reports, weather, grooming confidence, route cautions and best-window guidance.">
+<link rel="canonical" href="https://chrisizworski.com/snowmobile/">
+<meta property="og:title" content="Michigan Snowmobile Conditions — Grayling to Gaylord">
+<meta property="og:description" content="Decide whether the Grayling to Gaylord snowmobile corridor is worth the drive using official trail status, local reports, weather and confidence.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://chrisizworski.com/snowmobile/">
+<link rel="stylesheet" href="/snowmobile/assets/snowmobile.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"WebApplication","@id":"https://chrisizworski.com/snowmobile/#app","name":"Michigan Snowmobile Conditions","url":"https://chrisizworski.com/snowmobile/","applicationCategory":"TravelApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"description":"Decision-first Michigan snowmobile trail conditions tool using official trail status, local trail reports and weather.","author":{"@id":"https://chrisizworski.com/#person"}},
+{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Michigan Snowmobile Conditions","item":"https://chrisizworski.com/snowmobile/"}]},
+{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"}
+]}
+</script>
+</head>
+<body>
+<header class="sitebar">
+  <a class="brand" href="/">CHRIS IZWORSKI</a>
+  <nav aria-label="Primary"><a href="/tools/">Michigan tools</a><a href="/michigan-cross-country-skiing/">XC skiing</a></nav>
+</header>
+
+<main>
+  <section class="decision-shell" aria-labelledby="page-title">
+    <div class="eyebrow">MICHIGAN SNOWMOBILE CONDITIONS</div>
+    <div class="route-line">
+      <div>
+        <h1 id="page-title">Grayling → Gaylord</h1>
+        <p class="route-sub">Trail 7 corridor intelligence · official status + local reports + weather</p>
+      </div>
+      <button class="compact-btn" id="refreshButton" type="button">Refresh</button>
+    </div>
+
+    <div id="primaryDecision" class="decision-card" aria-live="polite">
+      <div class="decision-top">
+        <div>
+          <div class="status-label" id="conditionLabel">Checking conditions…</div>
+          <div class="status-score" id="conditionScore">—</div>
+        </div>
+        <div class="confidence">
+          <span>Confidence</span>
+          <strong id="confidenceValue">—</strong>
+          <small id="confidenceLabel">Loading</small>
+        </div>
+      </div>
+
+      <div class="quick-grid">
+        <div><span>Best riding</span><strong id="bestWindow">Checking…</strong></div>
+        <div><span>Route status</span><strong id="routeStatus">Checking…</strong></div>
+        <div><span>Thaw risk</span><strong id="thawRisk">Checking…</strong></div>
+        <div><span>Evidence</span><strong id="evidenceAge">Checking…</strong></div>
+      </div>
+
+      <div class="drive-box" id="driveBox">
+        <div>
+          <span class="kicker">Worth the drive?</span>
+          <strong id="driveVerdict">Checking the corridor…</strong>
+          <p id="driveExplanation">The answer is gated by legal trail status before weather or snow can make a route look favorable.</p>
+        </div>
+      </div>
+
+      <button class="why-toggle" id="whyToggle" aria-expanded="false" aria-controls="whyPanel">Why this answer?</button>
+      <div class="why-panel" id="whyPanel" hidden></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="route-title">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">ROUTE INTELLIGENCE</div>
+        <h2 id="route-title">What part of the route is actually good or bad?</h2>
+      </div>
+      <p>The route is not averaged into a feel-good score. A closed or broken required segment overrides the numeric condition score.</p>
+    </div>
+    <div class="segment-list" id="segmentList">
+      <div class="loading-card">Loading official DNR trail segments…</div>
+    </div>
+  </section>
+
+  <section class="section map-section" id="mapSection" aria-labelledby="map-title">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">OFFICIAL GEOGRAPHY</div>
+        <h2 id="map-title">Grayling → Gaylord trail map</h2>
+      </div>
+      <p>Official Michigan DNR snowmobile geometry is the map backbone. Map color never replaces the text status.</p>
+    </div>
+    <div class="map-frame">
+      <div id="trailMap" role="img" aria-label="Map of official snowmobile trail segments between Grayling and Gaylord">
+        <div class="map-placeholder">Map loads after the decision content.</div>
+      </div>
+      <div class="map-legend"><span class="legend-route"></span>DNR snowmobile trail <span class="legend-closure"></span>official closure/reroute evidence</div>
+    </div>
+  </section>
+
+  <section class="section split" aria-labelledby="evidence-title">
+    <div>
+      <div class="eyebrow">LOCAL EVIDENCE</div>
+      <h2 id="evidence-title">Grooming and trail-report freshness</h2>
+      <p class="lede">Each source keeps its own timestamp. A current weather forecast cannot make an old grooming field look current.</p>
+      <div id="reportList" class="report-list"></div>
+    </div>
+    <aside class="semantic-card">
+      <div class="eyebrow">DATA RULES</div>
+      <h3>What we will not pretend</h3>
+      <ul>
+        <li>Natural snow depth is <strong>not</strong> trail base.</li>
+        <li>Forecast snow is <strong>not</strong> observed snowfall.</li>
+        <li>A groomer nearby does <strong>not</strong> mean the whole trail was groomed.</li>
+        <li>No closure record does <strong>not</strong> automatically mean “confirmed open.”</li>
+        <li>Fresh snow after a storm can mean <strong>wait for grooming</strong>, not “excellent.”</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="section" aria-labelledby="outlook-title">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">72-HOUR OUTLOOK</div>
+        <h2 id="outlook-title">Improving, holding, or deteriorating?</h2>
+      </div>
+    </div>
+    <div class="outlook-grid" id="outlookGrid">
+      <div class="loading-card">Loading NWS hourly weather at Grayling, Frederic and Gaylord…</div>
+    </div>
+  </section>
+
+  <section class="section preseason-note" id="preseasonSection">
+    <div class="eyebrow">SEASON CONTEXT</div>
+    <h2>Built before the snow arrives on purpose.</h2>
+    <p>Michigan state-designated snowmobile trails run December 1 through March 31 and grooming is snow-dependent. During the off-season, this page stays useful by validating the official corridor, source freshness and preseason readiness without manufacturing a ride score.</p>
+  </section>
+
+  <section class="section sources" aria-labelledby="sources-title">
+    <div class="eyebrow">PROVENANCE</div>
+    <h2 id="sources-title">Where the answer comes from</h2>
+    <div class="source-grid">
+      <a href="https://www.michigan.gov/dnr/things-to-do/snowmobiling/where" rel="noopener">Michigan DNR trail maps & data<span>Geometry, trail attributes, closures and reroutes</span></a>
+      <a href="https://www.weather.gov/documentation/services-web-api" rel="noopener">National Weather Service<span>Hourly temperature and precipitation language</span></a>
+      <a href="https://www.gaylordmichigan.net/pick-your-season/winter/snowmobile/" rel="noopener">Gaylord trail report<span>Local trail and grooming narrative</span></a>
+      <a href="https://frederic-mi.com/" rel="noopener">Sledheads of Frederic<span>Frederic / Trail 7 local observations</span></a>
+      <a href="https://misorva.org/trail-report/" rel="noopener">MISORVA trail reports<span>Club/operator trail-report network</span></a>
+    </div>
+    <p class="source-note" id="sourceNote">Live source status will appear here.</p>
+  </section>
+
+  <section class="related">
+    <a href="/michigan-cross-country-skiing/"><span>Prefer Nordic skiing?</span><strong>Michigan XC Ski Conditions →</strong></a>
+    <a href="/tahquamenon-falls/"><span>Heading to the eastern U.P.?</span><strong>Tahquamenon Falls Live →</strong></a>
+    <a href="/tools/"><span>More Michigan decisions</span><strong>Explore live tools →</strong></a>
+  </section>
+</main>
+
+<footer>
+  <p>Michigan Snowmobile Conditions is a planning aid, not a substitute for official closures, on-trail signage, local operator guidance or safe riding judgment.</p>
+</footer>
+
+<script src="/snowmobile/assets/snowmobile.js" defer></script>
+</body>
+</html>
