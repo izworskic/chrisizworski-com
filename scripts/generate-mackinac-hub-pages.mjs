@@ -51,7 +51,7 @@ const pages=[
     sources:[["Official Mackinac trip planning","https://www.mackinacisland.org/plan-your-trip/"],["Official suggested itineraries","https://www.mackinacisland.org/plan-your-trip/suggested-itineraries/"],["Mackinac State Historic Parks itineraries","https://www.mackinacparks.com/visit/plan/itineraries/"]]
   },
   {
-    slug:"where-to-stay",surface:"stay",title:"Where to Stay on Mackinac Island",description:"Choose where to stay on Mackinac Island by matching downtown convenience, quiet, resort amenities, historic character and trip length to the way you actually plan to use the Island.",
+    slug:"where-to-stay",surface:"stay",title:"Where to Stay on Mackinac Island",description:"Choose where to stay on Mackinac Island by balancing downtown convenience, quiet, resort amenities, character and trip length.",
     h1:"Choose a Mackinac stay by what you want the night to do for the trip",
     lede:"The most useful lodging question is not which hotel has the highest generic rating. It is whether the stay should reduce transitions, become part of the experience, create a quieter evening, support kids, or put you near a specific part of the Island.",
     primaryCta:"/mackinac-island/?intent=stay#trip-intake",primaryLabel:"Match lodging to my trip",
@@ -95,7 +95,7 @@ const pages=[
     sources:[["Official Mackinac dining directory","https://www.mackinacisland.org/dining/"],["Official lunch and dinner guide","https://www.mackinacisland.org/blog/post/where-to-eat-lunch-dinner-on-mackinac-island/"],["Official 2026 season updates","https://www.mackinacisland.org/season-updates/"]]
   },
   {
-    slug:"things-to-do",surface:"explore",title:"Things to Do on Mackinac Island — Trip-Fit Guide",description:"Choose what to do on Mackinac Island by matching Fort Mackinac, M-185, Arch Rock, carriage tours, downtown, scenery and State Park time to your actual trip.",
+    slug:"things-to-do",surface:"explore",title:"Mackinac Island Things to Do",description:"Choose what to do on Mackinac Island by matching Fort Mackinac, M-185, Arch Rock, carriage tours, downtown, scenery and State Park time to your actual trip.",
     h1:"Choose the Mackinac experiences that deserve your limited Island time",
     lede:"Mackinac has more worthwhile things to do than most visitors can fit. The planning problem is not finding attractions—it is deciding which experiences belong together given ferry arrival, weather, hills, crowds, party type and trip length.",
     primaryCta:"/mackinac-island/#trip-intake",primaryLabel:"Build my experience mix",
@@ -117,7 +117,7 @@ const pages=[
     sources:[["Official things to do","https://www.mackinacisland.org/do/"],["Official getting around guide","https://www.mackinacisland.org/plan-your-trip/getting-around/"],["Mackinac State Historic Parks","https://www.mackinacparks.com/"]]
   },
   {
-    slug:"events",surface:"events",title:"Mackinac Island Events Trip Planner",description:"Plan around Mackinac Island events by protecting fixed event times, accounting for crowd and lodging pressure, and fitting ferries and sightseeing around the event anchor.",
+    slug:"events",surface:"events",title:"Mackinac Island Events Trip Planner",description:"Plan Mackinac Island events around fixed start times, crowd pressure, ferry timing, lodging demand and sightseeing that fits around the event.",
     h1:"If an event is why you are coming, the event owns the itinerary",
     lede:"An event trip should not be a normal sightseeing itinerary with an event squeezed into the middle. Fixed start times, crowd pressure, lodging demand and ferry arrival margin need to be protected first.",
     primaryCta:"/mackinac-island/?intent=events#trip-intake",primaryLabel:"Plan around my event",
@@ -165,7 +165,7 @@ const pages=[
 function pageHtml(p){
   const canonical=`https://chrisizworski.com/mackinac-island/${p.slug}/`;
   const jsonLd=JSON.stringify({"@context":"https://schema.org","@graph":[
-    {"@type":"WebPage","@id":canonical,"url":canonical,"name":p.title,"description":p.description,"isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Place","name":"Mackinac Island","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}}},
+    {"@type":"WebPage","@id":canonical,"url":canonical,"name":p.title,"description":p.description,"dateModified":"2026-09-20","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Place","name":"Mackinac Island","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}}},
     {"@type":"FAQPage","mainEntity":p.faq.map(x=>({"@type":"Question","name":x[0],"acceptedAnswer":{"@type":"Answer","text":x[1]}}))},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Chris Izworski","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Mackinac Island","item":"https://chrisizworski.com/mackinac-island/"},{"@type":"ListItem","position":3,"name":p.title,"item":canonical}]}
   ]});
