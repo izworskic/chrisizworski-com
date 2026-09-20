@@ -1,4 +1,4 @@
-const $=s=>document.querySelector(s);let DATA=null,MAP=null,LAYER=null,CLOSURE_LAYER=null;
+const $=s=>document.querySelector(s);let DATA=null,MAP=null,LAYER=null,CLOSURE_LAYER=null,SNOW_LAYER=null;
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function bandClass(b){return b==='CLOSED'||b==='POOR'?'danger':b==='MARGINAL'||b==='OFF_SEASON'?'warning':''}
 function render(d){
@@ -37,5 +37,16 @@ function drawMap(fc,closureState){
  const cv=$('#closureVerify'); if(cv)cv.textContent=closureState?.verified?`Official DNR closure feed checked · ${closures.length} corridor record${closures.length===1?'':'s'} returned`:'Official closure feed unavailable — legal status is not confirmed';
  try{MAP.fitBounds(LAYER.getBounds(),{padding:[15,15]})}catch{}
 }
+function toggleSnowDepth(){
+ const btn=$('#toggleSnowDepth'); if(!MAP||!btn)return;
+ if(SNOW_LAYER&&MAP.hasLayer(SNOW_LAYER)){MAP.removeLayer(SNOW_LAYER);btn.textContent='Show NOAA snow depth';btn.setAttribute('aria-pressed','false');return}
+ if(!SNOW_LAYER){
+   const base='https://mapservices.weather.noaa.gov/raster/rest/services/snow/NOHRSC_Snow_Analysis/MapServer/export';
+   const q=new URLSearchParams({bbox:'-84.86,44.55,-84.48,45.12',bboxSR:'4326',imageSR:'4326',size:'900,1100',format:'png32',transparent:'true',layers:'show:0',f:'image'});
+   SNOW_LAYER=L.imageOverlay(base+'?'+q.toString(),[[44.55,-84.86],[45.12,-84.48]],{opacity:.48,interactive:false});
+ }
+ SNOW_LAYER.addTo(MAP);btn.textContent='Hide NOAA snow depth';btn.setAttribute('aria-pressed','true');SNOW_LAYER.bringToBack();
+}
+document.addEventListener('click',e=>{if(e.target?.id==='toggleSnowDepth')toggleSnowDepth()});
 async function load(){try{const r=await fetch('/api/snowmobile');const d=await r.json();if(!r.ok)throw new Error(d.detail||d.error||r.status);render(d)}catch(e){$('#status').textContent='DATA UNAVAILABLE';$('#drive').innerHTML='<strong>No ride recommendation.</strong> Live source verification failed, so the page is not substituting guessed conditions.';$('#segments').innerHTML='<p>'+esc(e.message)+'</p>';}}
 load();
