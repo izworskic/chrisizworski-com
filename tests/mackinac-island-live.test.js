@@ -573,3 +573,21 @@ test('Mackinac page cache-busts planner asset and removes stale starting-city co
   assert.doesNotMatch(js,/Add a starting city/);
   assert.doesNotMatch(html,/Add a starting city/);
 });
+
+
+test('Mackinac first-screen route inputs are explicit and cache-safe', () => {
+  const html=fs.readFileSync(htmlPath,'utf8');
+  const js=fs.readFileSync(jsPath,'utf8');
+  const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
+  assert.match(html,/data-mackinac-build="20260920-live6"/);
+  assert.match(html,/<span>Starting city<\/span><input id="heroOriginInput"/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live6/);
+  assert.doesNotMatch(html,/Add a starting city/i);
+  assert.doesNotMatch(js,/Add a starting city/i);
+  assert.match(html,/Enter date, city \+ time above/);
+  for (const source of ['/mackinac-island','/mackinac-island/:path*','/assets/mackinac-island.:ext(css|js)']) {
+    const rule=config.headers.find(x=>x.source===source);
+    assert.ok(rule, source);
+    assert.ok(rule.headers.some(h=>h.key==='Cache-Control' && /no-store/.test(h.value)), source);
+  }
+});
