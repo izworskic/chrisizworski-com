@@ -71,3 +71,5 @@
 @media(max-width:430px){
   .trip-math{grid-template-columns:1fr}
 }
+
+.trip-source{margin:-16px 0 24px;color:var(--muted);font-size:10px;line-height:1.5}
