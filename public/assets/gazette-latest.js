@@ -41,10 +41,11 @@
 
   function normalize(payload) {
     payload = payload || {};
+    if (payload.success === false) throw new Error("Gazette feed is unavailable");
     var brief = payload && payload.brief ? payload.brief : {};
     var data = payload && payload.data ? payload.data : {};
     var generatedAt = payload.generated_at || brief.generated_at || "";
-    var date = payload.date || generatedAt.slice(0, 10);
+    var date = payload.date || (generatedAt ? michiganDateKey(new Date(generatedAt)) : "");
     var sections = Array.isArray(brief.sections) ? brief.sections : [];
     var lead = sections.find(function (section) { return !cleanText(section.kicker); });
     var body = lead && lead.body ? lead.body : brief.brief;
@@ -73,8 +74,10 @@
     var sourceLabel = edition.healthyAis > 0
       ? edition.healthyAis + " AIS corridors checked"
       : "NOAA and NWS sources checked";
+    if (!isToday) sourceLabel = "Today's edition is delayed. Showing the latest published edition.";
 
     section.classList.add("is-loaded");
+    section.classList.remove("is-fallback");
     section.classList.toggle("is-live", isToday);
     setText(section, "[data-gazette-label]", isToday ? "Today's Great Lakes Gazette" : "Latest Great Lakes Gazette");
     setText(section, "[data-gazette-date]", dateLabel);
@@ -90,7 +93,14 @@
   var widgets = Array.prototype.slice.call(document.querySelectorAll("[data-gazette-latest]"));
   if (!widgets.length) return;
 
-  fetch(API, { headers: { Accept: "application/json" } })
+  var inFlight = false;
+  var lastEdition = null;
+  function refresh() {
+    if (inFlight || document.hidden) return;
+    inFlight = true;
+    var controller = new AbortController();
+    var timeout = setTimeout(function () { controller.abort(); }, 15000);
+    return fetch(API, { headers: { Accept: "application/json" }, cache: "no-store", signal: controller.signal })
     .then(function (response) {
       if (!response.ok) throw new Error("Gazette API returned " + response.status);
       return response.json();
@@ -98,11 +108,29 @@
     .then(normalize)
     .then(function (edition) {
       widgets.forEach(function (widget) { render(widget, edition); });
+      lastEdition = edition;
     })
     .catch(function () {
       widgets.forEach(function (widget) {
         widget.classList.add("is-fallback");
-        setText(widget, "[data-gazette-date]", "Latest edition");
+        widget.classList.remove("is-live");
+        setText(widget, "[data-gazette-label]", "Latest Great Lakes Gazette");
+        setText(widget, "[data-gazette-primary-label]", "Read the latest edition");
+        setText(widget, "[data-gazette-source-status]", lastEdition
+          ? "Update unavailable. Showing the last loaded edition."
+          : "Edition feed unavailable. Open the Gazette for the latest issue.");
+        if (!lastEdition) setText(widget, "[data-gazette-date]", "Latest edition");
       });
+    })
+    .finally(function () {
+      clearTimeout(timeout);
+      inFlight = false;
     });
+  }
+
+  refresh();
+  setInterval(refresh, 5 * 60 * 1000);
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) refresh();
+  });
 })();
