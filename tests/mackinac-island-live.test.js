@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const routePath = path.join(__dirname, '..', 'lib', 'mackinac-island', 'route.js');
+const harnessPath = path.join(__dirname, '..', 'lib', 'mackinac-island', 'harness.js');
 const htmlPath = path.join(__dirname, '..', 'public', 'mackinac-island', 'index.html');
 const cssPath = path.join(__dirname, '..', 'public', 'assets', 'mackinac-island.css');
 const jsPath = path.join(__dirname, '..', 'public', 'assets', 'mackinac-island.js');
@@ -80,12 +81,18 @@ test('mobile-first and accessible controls are present', () => {
   assert.match(html,/Skip to live decision/);
 });
 
-test('JEV is bounded to a deterministic closed candidate set', () => {
+test('JEV is bounded through the shared authenticated closed-set harness client', () => {
   const route=fs.readFileSync(routePath,'utf8');
+  const harness=fs.readFileSync(harnessPath,'utf8');
   assert.match(route,/Choose exactly one supplied plan id or NONE/);
-  assert.match(route,/top\.some\(c=>c\.id===id\)/);
-  assert.match(route,/conf < \.52/);
-  assert.match(route,/injection_dependency/);
+  assert.match(route,/require\("\.\/harness"\)/);
+  assert.match(route,/decideClosedSet/);
+  assert.match(harness,/getVercelOidcToken/);
+  assert.match(harness,/ids\.includes\(id\)/);
+  assert.match(harness,/confidence<minConfidence/);
+  assert.match(harness,/injection_dependency/);
+  assert.doesNotMatch(route,/process\.env\.VERCEL_OIDC_TOKEN/);
+  assert.doesNotMatch(route,/process\.env\.HARNESS_ACCESS_KEY/);
   assert.doesNotMatch(route,/api\.typesafe\.ai/);
   assert.doesNotMatch(route,/TYPESAFE_API_KEY/);
 });
