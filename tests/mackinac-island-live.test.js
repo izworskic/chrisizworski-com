@@ -449,7 +449,7 @@ test('browser sends both routed port times to the Mackinac decision API', () => 
   const js=fs.readFileSync(jsPath,'utf8');
   assert.match(js,/origin_mackinaw_minutes/);
   assert.match(js,/origin_st_ignace_minutes/);
-  assert.match(js,/Both port drive times feed ferry feasibility and leave-home timing/);
+  assert.match(js,/Add the time you plan to leave home so we can determine which ferries are actually reachable/);
 });
 
 
