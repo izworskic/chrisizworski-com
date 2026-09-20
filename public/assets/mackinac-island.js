@@ -186,6 +186,7 @@
     catch(err){
       $('planningBanner').hidden=false;$('planningBanner').textContent='Live decision unavailable. Use the official ferry operator links below before relying on departure times.';
       setText('verdict','LIVE DATA DEGRADED');setText('confidence','No recommendation is being invented');setText('primaryRec','We could not verify enough live inputs to build a reliable plan.');
+      setText('heroTripContext','Live planning unavailable');setText('heroLeave','Unavailable');setText('heroFerry','Unavailable');setText('heroIsland','Unavailable');setText('heroReturn','Unavailable');
       $('sourceList').innerHTML=`<div class="error-panel">${esc(err.message)}. <a href="https://www.arnoldtransitcompany.com/summer-schedule/" target="_blank" rel="noopener">Arnold schedule</a> · <a href="https://www.sheplersferry.com/" target="_blank" rel="noopener">Shepler’s schedule</a></div>`;
     } finally{$('decisionPanel').setAttribute('aria-busy','false');}
   }
