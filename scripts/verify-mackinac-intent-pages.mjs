@@ -15,7 +15,9 @@ for(const [slug,title] of pages){
     [html.includes('rel="canonical" href="https://chrisizworski.com/mackinac-island/'+slug+'/'),"canonical"],
     [html.includes("Build this trip live"),"planner CTA"],
     [html.includes("Truth boundary:"),"truth boundary"],
-    [html.includes("application/ld+json"),"structured data"],
+    [html.includes("application/ld+json")&&html.includes("FAQPage"),"structured FAQ data"],
+    [html.includes('name="robots" content="index,follow,max-image-preview:large'),"indexing metadata"],
+    [html.includes("Michael Barera / Wikimedia Commons"),"image attribution"],
     [html.length>7000,"substantive content"],
     [!html.includes("utm_source"),"clean links"]
   ];
@@ -27,3 +29,6 @@ const sitemap=fs.readFileSync("public/sitemap.xml","utf8");
 for(const [slug] of pages)if(!sitemap.includes('https://chrisizworski.com/mackinac-island/'+slug+'/')){console.error("sitemap missing "+slug);fail=true;}
 if(fail)process.exit(1);
 console.log("PASS: Mackinac intent pages are substantive, canonical, internally linked and discoverable.");
+
+const ferry=fs.readFileSync("public/mackinac-island/ferry-planner/index.html","utf8");
+if(!ferry.includes("?intent=ferry-planner#main")){console.error("ferry planner CTA must land on date/city/time controls");process.exit(1);}
