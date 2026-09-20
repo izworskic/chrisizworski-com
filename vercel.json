@@ -134,6 +134,57 @@
   ],
   "headers": [
     {
+      "source": "/assets/shoshone-falls.:ext(css|js)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Vercel-CDN-Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/shoshone-falls/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Vercel-CDN-Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/shoshone-falls",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Vercel-CDN-Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
       "source": "/assets/tahquamenon-seasonal.js",
       "headers": [
         {
@@ -737,18 +788,6 @@
     {
       "source": "/api/shoshone-falls",
       "destination": "https://tahquamenon-falls-live-94is.vercel.app/api/shoshone-falls"
-    },
-    {
-      "source": "/shoshone-falls",
-      "destination": "https://tahquamenon-falls-live-94is.vercel.app/shoshone-falls/"
-    },
-    {
-      "source": "/shoshone-falls/",
-      "destination": "https://tahquamenon-falls-live-94is.vercel.app/shoshone-falls/"
-    },
-    {
-      "source": "/shoshone-falls/:path*",
-      "destination": "https://tahquamenon-falls-live-94is.vercel.app/shoshone-falls/:path*"
     },
     {
       "source": "/tahquamenon-falls",
