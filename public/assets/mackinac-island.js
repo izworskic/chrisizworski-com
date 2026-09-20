@@ -652,8 +652,18 @@
     const f=d.fall_color||{};setText('fallColorLabel',f.label||'Not a primary factor');setText('fallColorText',f.summary||'Fall-color guidance is out of season or temporarily unavailable.');
   }
 
+  function renderTripShape(d){
+    const p=d.spatial_plan,host=$('tripShapePanel');if(!host)return;
+    if(!p){host.hidden=true;return;}
+    host.hidden=false;setText('tripShapeSummary',p.summary||'A practical way to group the trip without unnecessary backtracking.');
+    setText('tripShapeBadge',p.label||'Trip shape');
+    const days=$('tripShapeDays');if(days)days.innerHTML=(p.days||[]).map((day,i)=>`<article class="shape-day"><span>Part ${i+1}</span><h4>${esc(day.title||'Trip block')}</h4><ol>${(day.stops||[]).map(s=>`<li><strong>${esc(s.name)}</strong><small>${esc(s.why||'Fits this trip.')}</small>${s.source_url?`<a href="${esc(s.source_url)}" target="_blank" rel="noopener">Official info ↗</a>`:''}</li>`).join('')}</ol></article>`).join('');
+    const avoid=$('tripShapeAvoid');if(avoid)avoid.innerHTML=(p.avoid||[]).length?`<strong>What not to force</strong><ul>${p.avoid.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'';
+    setText('tripShapeTruth',p.truth||'Planning orientation only.');
+  }
+
   function renderPlanner(d){
-    const it=d.itinerary||[],p=d.trip_profile||{};
+    const it=d.itinerary||[],p=d.trip_profile||{};renderTripShape(d);
     setText('plannerSummary',d.itinerary_summary||'We couldn’t put together a comfortable plan from the trip details we could verify.');
     const days=d.trip_days||[];
     const dayHost=$('tripDays');

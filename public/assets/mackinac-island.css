@@ -236,3 +236,22 @@ img,svg{max-width:100%}
 #straitsGuideCards .place-card{background:#fbfaf5}
 @media(max-width:820px){#eatGuideCards{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){#eatGuideCards{grid-template-columns:1fr}.place-footer{display:block}.place-footer a{display:block;margin-top:7px}}
+
+.trip-shape-panel{margin:16px 0 18px;padding:18px;border:1px solid var(--line);border-radius:16px;background:#f7f8f3}
+.trip-shape-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
+.trip-shape-head h3{font-size:24px;line-height:1.1;margin:3px 0 6px}
+.trip-shape-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.5;max-width:680px}
+.shape-badge{flex:0 0 auto;border-radius:999px;background:var(--green);color:#fff;padding:7px 10px;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.05em}
+.trip-shape-days{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.shape-day{background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px}
+.shape-day>span{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:800}
+.shape-day h4{font-size:17px;margin:4px 0 8px}
+.shape-day ol{margin:0;padding-left:19px}
+.shape-day li{padding:7px 0}
+.shape-day li strong,.shape-day li small,.shape-day li a{display:block}
+.shape-day li small{font-size:11px;color:var(--muted);line-height:1.4;margin-top:2px}
+.shape-day li a{font-size:10px;margin-top:4px;color:var(--lake-dark);font-weight:800;text-decoration:none}
+.trip-shape-avoid{margin-top:12px;padding:12px 14px;border-left:3px solid var(--gold);background:#fff9ec;font-size:12px}
+.trip-shape-avoid ul{margin:6px 0 0;padding-left:18px}
+.trip-shape-truth{font-size:10px;color:var(--muted);margin:10px 0 0}
+@media(max-width:650px){.trip-shape-head{display:block}.shape-badge{display:inline-block;margin-top:10px}.trip-shape-days{grid-template-columns:1fr}}
