@@ -99,6 +99,27 @@ test('client degrades explicitly instead of fabricating a ferry plan', () => {
   assert.match(js,/mackinac_share_plan/);
 });
 
+test('default Today view does not masquerade as an explicit selected trip date', () => {
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(js,/tripDateExplicit:false/);
+  assert.match(js,/syncTripDateInputs\(detroitToday\(\),\{explicit:false\}\)/);
+  assert.match(js,/state\.tripDate&&state\.tripDateExplicit\)p\.set\('trip_date',state\.tripDate\)/);
+  assert.match(js,/trip_date:state\.tripDateExplicit\?state\.tripDate:''/);
+});
+
+test('missing Mackinac decision scores are withheld instead of rendered as zero', () => {
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(js,/hasScore=dec\.score!==null&&dec\.score!==undefined&&Number\.isFinite\(rawScore\)/);
+  assert.match(js,/hasScore\?score:'—'/);
+  assert.match(js,/Visit score unavailable/);
+  assert.doesNotMatch(js,/score=Math\.round\(dec\.score\|\|0\)/);
+});
+
+test('Mackinac decision client asset is cache-busted after score-state fix', () => {
+  const html=fs.readFileSync(htmlPath,'utf8');
+  assert.match(html,/mackinac-island\.js\?v=20260920-live20/);
+});
+
 
 test('full trip profile converts constraints into persona behavior', () => {
   const p=t.profileFromQuery({
