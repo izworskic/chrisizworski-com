@@ -17,6 +17,28 @@ function send(res, status, payload) {
   res.json(payload);
 }
 
+function compactWeatherLocations(points = []) {
+  return points.map(point => ({
+    id: point.id,
+    name: point.name,
+    lat: point.lat,
+    lon: point.lon,
+    source: point.source,
+    office: point.office || null,
+    retrievedAt: point.retrievedAt,
+    error: point.error || null,
+    hourly: Array.isArray(point.hourly)
+      ? point.hourly.slice(0, 36).map(period => ({
+          startTime: period.startTime,
+          temperature: period.temperature,
+          temperatureUnit: period.temperatureUnit,
+          probabilityOfPrecipitation: period.probabilityOfPrecipitation?.value ?? null,
+          shortForecast: period.shortForecast
+        }))
+      : []
+  }));
+}
+
 async function fresh(now) {
   const bundle = await fetchBundle();
   const reports = await interpretReports(bundle.reports);
@@ -24,6 +46,7 @@ async function fresh(now) {
   const harnessModes = reports.map(r => r.jev?.mode).filter(Boolean);
   return {
     ...product,
+    weatherLocations: compactWeatherLocations(bundle.weather),
     operational: {
       dataState: "fresh",
       dnrSource: "Michigan DNR DNRTrailsOPENDATA FeatureServer",
