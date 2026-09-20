@@ -1,5 +1,6 @@
 import fs from "node:fs";
-import path from "node:path";\nimport {navHtml} from "./mackinac-site-architecture.mjs";
+import path from "node:path";
+import {navHtml} from "./mackinac-site-architecture.mjs";
 
 const root="public/mackinac-island";
 const hero="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Mackinac_Island_July_2010_05_%28harbor_from_Fort_Street%29.JPG/1280px-Mackinac_Island_July_2010_05_%28harbor_from_Fort_Street%29.JPG";
