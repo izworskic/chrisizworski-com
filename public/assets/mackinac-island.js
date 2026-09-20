@@ -118,7 +118,9 @@
       'day-trip':{trip_duration:'day'},
       'with-kids':{trip_vision:['kids']},
       'two-day':{trip_duration:'one-night'},
-      'ferry-planner':{}
+      'ferry-planner':{},
+      'limited-walking':{trip_loss:'walking'},
+      'bike-day':{trip_duration:'day',trip_vision:['biking']}
     };
     if(!Object.prototype.hasOwnProperty.call(map,id||''))return null;
     return {intent:id,intake:{...map[id]},origin_text:cleanOrigin(qs.get('from')||'')};
