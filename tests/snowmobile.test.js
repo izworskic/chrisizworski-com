@@ -75,3 +75,16 @@ test('forecast timing is disabled off season',()=>{
   const ranked=rankRideWindows({grayling:{periods:[{name:'Today',startTime:'2026-09-19T08:00:00-04:00',temperature:30}]}},false);
   assert.equal(ranked.best,null);
 });
+
+test('hourly five-hour windows support a precise riding window without changing trail truth',()=>{
+  const make=(temp,rain=false)=>Array.from({length:6},(_,i)=>({
+    startTime:`2026-01-10T${String(8+i).padStart(2,'0')}:00:00-05:00`,
+    endTime:`2026-01-10T${String(9+i).padStart(2,'0')}:00:00-05:00`,
+    isDaytime:true,temperature:temp+i,windSpeed:'10 mph',
+    shortForecast:rain?'Rain':'Mostly Sunny'
+  }));
+  const ranked=rankRideWindows({grayling:{hourly:make(20)},gaylord:{hourly:make(18)}},true);
+  assert.equal(ranked.mode,'nws-hourly-5h');
+  assert.match(ranked.best.name,/Saturday 8 AM.*1 PM/);
+  assert.match(ranked.boundary,/does not upgrade trail condition/i);
+});
