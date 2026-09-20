@@ -568,8 +568,8 @@ test('journey candidates carry route wait and door-to-island cost', () => {
 test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260920-live12/);
-  assert.match(html,/mackinac-island\.css\?v=20260920-live12/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live13/);
+  assert.match(html,/mackinac-island\.css\?v=20260920-live13/);
   assert.doesNotMatch(js,/Add a starting city/);
   assert.doesNotMatch(html,/Add a starting city/);
 });
@@ -579,9 +579,9 @@ test('Mackinac first-screen route inputs are explicit and cache-safe', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
   const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
-  assert.match(html,/data-mackinac-build="20260920-live12"/);
+  assert.match(html,/data-mackinac-build="20260920-live13"/);
   assert.match(html,/<span>Starting city<\/span><input id="heroOriginInput"/);
-  assert.match(html,/mackinac-island\.js\?v=20260920-live12/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live13/);
   assert.doesNotMatch(html,/Add a starting city/i);
   assert.doesNotMatch(js,/Add a starting city/i);
   assert.match(html,/Enter date, city \+ time above/);
@@ -669,3 +669,36 @@ test('Chippewa uses raw HLS without Restreamer shell',()=>{const js=fs.readFileS
 
 
 test('Horns uses official-page fallback instead of brittle raw stream',()=>{const js=fs.readFileSync(jsPath,'utf8');const route=fs.readFileSync(routePath,'utf8');assert.match(route,/id:"horns-main-street"[\s\S]{0,450}external_only:true/);assert.doesNotMatch(route,/8184\/hls\/live\.stream\.m3u8/);assert.match(js,/Watch Horn’s live ↗/);assert.match(js,/Open official live camera ↗/);});
+
+
+test('regional intake replaces the busy persona wall with profile-driven navigation',()=>{
+  const html=fs.readFileSync(htmlPath,'utf8');
+  const js=fs.readFileSync(jsPath,'utf8');
+  const css=fs.readFileSync(cssPath,'utf8');
+  assert.match(html,/id="trip-intake"/);
+  assert.match(html,/Tell us the trip you’re actually picturing/);
+  assert.match(html,/id="tripProfileCard"/);
+  assert.match(html,/id="tripTabs"/);
+  assert.match(html,/id="stay-guide"/);
+  assert.match(html,/id="eat-guide"/);
+  assert.match(html,/id="straits-guide"/);
+  assert.match(js,/PROFILE_API='\/api\/mackinac-profile'/);
+  assert.match(js,/mackinac-trip-profile-v1/);
+  assert.match(js,/renderTripTabs/);
+  assert.match(js,/applyProfileToPlanner/);
+  assert.match(js,/mackinac_profile_classified/);
+  assert.match(css,/\.intake-card/);
+  assert.match(css,/\.trip-tabs-wrap/);
+});
+
+test('intake answers are causal inputs to the deterministic planner and bounded JEV ranker',()=>{
+  const js=fs.readFileSync(jsPath,'utf8');
+  const route=fs.readFileSync(routePath,'utf8');
+  assert.match(js,/intake_trip_duration/);
+  assert.match(js,/intake_trip_vision/);
+  assert.match(route,/hasIntake/);
+  assert.match(route,/visitor_archetype/);
+  assert.match(route,/preference_vector/);
+  assert.match(route,/visitor_intelligence:visitorIntelligence/);
+  assert.match(route,/resolve tradeoffs among feasible plans/);
+});
