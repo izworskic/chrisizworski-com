@@ -15,14 +15,14 @@
   const optionalFailures=d=>(d?.failures||[]).filter(x=>OPTIONAL_FAILURES.has(failureKey(x)));
   const coreFailures=d=>(d?.failures||[]).filter(x=>!OPTIONAL_FAILURES.has(failureKey(x)));
   const cleanOrigin=s=>String(s||'').trim().replace(/\s+/g,' ').slice(0,100);
-  const driveLabel=m=>{const n=Math.max(0,Math.round(Number(m)||0));const h=Math.floor(n/60),min=n%60;return h?\`${h} hr${min?\` ${min} min\`:''}\`:\`${min} min\`;};
+  const driveLabel=m=>{const n=Math.max(0,Math.round(Number(m)||0));const h=Math.floor(n/60),min=n%60;return h?`${h} hr${min?` ${min} min`:''}`:`${min} min`;};
   function syncOriginInputs(value){
     const v=String(value||'');
     if($('originCityInput')&&$('originCityInput').value!==v)$('originCityInput').value=v;
     if($('heroOriginInput')&&$('heroOriginInput').value!==v)$('heroOriginInput').value=v;
   }
   function setOriginStatus(text,kind=''){
-    const el=$('heroOriginStatus');if(!el)return;el.textContent=text;el.className=\`origin-status${kind?\` ${kind}\`:''}\`;
+    const el=$('heroOriginStatus');if(!el)return;el.textContent=text;el.className=`origin-status${kind?` ${kind}`:''}`;
   }
   function syncOriginSide(){
     document.querySelectorAll('#originSwitch button').forEach(x=>{const a=x.dataset.origin===state.origin;x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
@@ -43,19 +43,19 @@
     setOriginStatus('Finding that city and comparing both ferry ports…','loading');
     const submit=$('heroOriginSubmit');if(submit)submit.disabled=true;
     try{
-      const r=await fetch(\`${ORIGIN_API}?q=${encodeURIComponent(q)}\`,{headers:{accept:'application/json'}});
-      const j=await r.json();if(!r.ok)throw new Error(j.detail||j.error||\`HTTP ${r.status}\`);
+      const r=await fetch(`${ORIGIN_API}?q=${encodeURIComponent(q)}`,{headers:{accept:'application/json'}});
+      const j=await r.json();if(!r.ok)throw new Error(j.detail||j.error||`HTTP ${r.status}`);
       state.originResolved=j;state.originQuery=q;state.origin=j.preferred_port==='St. Ignace'?'upper':'lower';
       syncOriginInputs(j.origin?.label||q);syncOriginSide();
       const alt=(j.routes||[]).find(x=>x.port!==j.preferred_port);
-      const alternate=alt&&Number.isFinite(Number(alt.drive_minutes))?\` · ${alt.port} ${driveLabel(alt.drive_minutes)}\`:'';
-      setOriginStatus(\`${j.origin?.label||q} → ${j.preferred_port} about ${driveLabel(j.drive_minutes)}${alternate}. Planning drive times, not live traffic.\`,'resolved');
+      const alternate=alt&&Number.isFinite(Number(alt.drive_minutes))?` · ${alt.port} ${driveLabel(alt.drive_minutes)}`:'';
+      setOriginStatus(`${j.origin?.label||q} → ${j.preferred_port} about ${driveLabel(j.drive_minutes)}${alternate}. Planning drive times, not live traffic.`,'resolved');
       track('mackinac_start_city_selected',{origin_city:j.origin?.label||q,preferred_port:j.preferred_port,source});
       if(reload)loadDecision();
       return true;
     }catch(err){
       state.originResolved=null;state.originQuery='';
-      setOriginStatus(\`Couldn’t resolve “${q}.” Try city + state/province or a ZIP/postal code.\`,'error');
+      setOriginStatus(`Couldn’t resolve “${q}.” Try city + state/province or a ZIP/postal code.`,'error');
       setText('builderStatus','Starting city was not resolved. Add a state/province or ZIP/postal code and try again.');
       return false;
     }finally{if(submit)submit.disabled=false;}
