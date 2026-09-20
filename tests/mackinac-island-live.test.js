@@ -568,8 +568,8 @@ test('journey candidates carry route wait and door-to-island cost', () => {
 test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260920-live13/);
-  assert.match(html,/mackinac-island\.css\?v=20260920-live13/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live14/);
+  assert.match(html,/mackinac-island\.css\?v=20260920-live14/);
   assert.doesNotMatch(js,/Add a starting city/);
   assert.doesNotMatch(html,/Add a starting city/);
 });
@@ -579,9 +579,9 @@ test('Mackinac first-screen route inputs are explicit and cache-safe', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
   const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
-  assert.match(html,/data-mackinac-build="20260920-live13"/);
+  assert.match(html,/data-mackinac-build="20260920-live14"/);
   assert.match(html,/<span>Starting city<\/span><input id="heroOriginInput"/);
-  assert.match(html,/mackinac-island\.js\?v=20260920-live13/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live14/);
   assert.doesNotMatch(html,/Add a starting city/i);
   assert.doesNotMatch(js,/Add a starting city/i);
   assert.match(html,/Enter date, city \+ time above/);
@@ -701,4 +701,18 @@ test('intake answers are causal inputs to the deterministic planner and bounded 
   assert.match(route,/preference_vector/);
   assert.match(route,/visitor_intelligence:visitorIntelligence/);
   assert.match(route,/resolve tradeoffs among feasible plans/);
+});
+
+
+test('place intelligence is source-backed and never presented as live availability',()=>{
+  const route=fs.readFileSync(routePath,'utf8');
+  const js=fs.readFileSync(jsPath,'utf8');
+  const html=fs.readFileSync(htmlPath,'utf8');
+  assert.match(route,/require\("\.\/catalog"\)/);
+  assert.match(route,/place_intelligence:placeIntelligence/);
+  assert.match(js,/renderPlaceCards/);
+  assert.match(js,/No room availability or live rate/);
+  assert.match(js,/current hours, waits and reservations still need checking/);
+  assert.match(html,/id="straitsGuideCards"/);
+  assert.match(html,/20260920-live14/);
 });
