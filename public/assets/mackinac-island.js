@@ -69,7 +69,7 @@
     state.originResolved=null;state.originQuery='';
     if(clearInputs)syncOriginInputs('');
     setText('heroLeave','Enter date, city + time above');
-    setOriginStatus('Choose the trip date, starting city and leave-home time for a drive-aware ferry plan.');
+    setOriginStatus('Add your trip date, starting city and leave time. We’ll compare both ferry ports and line up the smoothest arrival.');
   }
   function originMatches(value){
     const q=cleanOrigin(value).toLowerCase();
@@ -80,7 +80,7 @@
     const q=cleanOrigin(value);
     const requestId=++state.originRequestId;
     if(!q){clearResolvedOrigin({clearInputs:true});if(reload)loadDecision();return true;}
-    setOriginStatus('Finding that city and comparing both ferry ports…','loading');
+    setOriginStatus('Finding your starting point and comparing both ferry ports…','loading');
     const submit=$('heroOriginSubmit');if(submit)submit.disabled=true;
     try{
       const r=await fetch(`${ORIGIN_API}?q=${encodeURIComponent(q)}`,{headers:{accept:'application/json'}});
@@ -161,7 +161,7 @@
     syncTripDateInputs($('heroTripDate')?.value||'');
     syncDepartInputs($('heroDepartTime')?.value||'');
     if(!state.tripDate){
-      setOriginStatus('Choose the trip date first.','error');
+      setOriginStatus('Choose your trip date first.','error');
       $('heroTripDate')?.focus();
       setText('heroLeave','Enter date, city + time above');
       return;
@@ -179,7 +179,7 @@
     if(!state.departTime){
       setText('heroLeave','Enter leave time above');
       $('heroDepartTime')?.focus();
-      setOriginStatus('Date and starting city are set. Add the time you plan to leave home to calculate the reachable ferry and island arrival.','error');
+      setOriginStatus('Date and starting city are set. Add the time you’d like to leave home and we’ll line up the ferry.','error');
       return;
     }
     setText('heroLeave','Calculating…');
@@ -188,17 +188,17 @@
   });
   $('tripBuilder')?.addEventListener('submit',async e=>{
     e.preventDefault();
-    setText('builderStatus','Rebuilding ferry choice and itinerary from your constraints…');
+    setText('builderStatus','Updating your ferry and Island day around those choices…');
     const originText=cleanOrigin($('originCityInput')?.value);
     syncTripDateInputs($('tripDate')?.value||'');
     syncDepartInputs($('departTime')?.value||'');
     if(!state.tripDate){
-      setText('builderStatus','Add the trip date before building the trip.');
+      setText('builderStatus','Add your trip date before building the plan.');
       setText('leaveHome','Enter date, city + time above');
       return;
     }
     if(!originText){
-      setText('builderStatus','Enter starting location before building the trip.');
+      setText('builderStatus','Add your starting city before building the plan.');
       setText('leaveHome','Enter date, city + time above');
       return;
     }
@@ -207,7 +207,7 @@
       if(!ok)return;
     }
     if(!state.departTime){
-      setText('builderStatus','Add the time you plan to leave home. Ferry feasibility depends on it.');
+      setText('builderStatus','Add the time you’d like to leave home so we can find the ferry you can comfortably reach.');
       setText('leaveHome','Enter leave time above');
       setText('heroLeave','Enter leave time above');
       return;
@@ -225,7 +225,7 @@
       document.querySelectorAll('#personaChips .chip').forEach(x=>{const a=state.personas.has(x.dataset.persona);x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
       syncTripModeUi();
     }
-    setText('builderStatus','Trip inputs changed. Tap “Build this trip” to rerun the full plan.');
+    setText('builderStatus','Your trip details changed. Tap “Build my Island plan” to update the day.');
     track('mackinac_itinerary_changed',{});
   });
 
@@ -235,7 +235,7 @@
     setText('scoreValue',score||'—');
     $('scoreRing').className='score-ring '+(score>=74?'good':score>=55?'fair':'poor');
     $('scoreRing').setAttribute('aria-label',`Visit score ${score} out of 100`);
-    setText('confidence',`${String(dec.confidence||'medium').toUpperCase()} CONFIDENCE${dec.engine==='shared-harness-jev'?' · JEV-ranked feasible plan':' · deterministic ranking'}`);
+    setText('confidence',`${String(dec.confidence||'medium').toUpperCase()} PLAN CONFIDENCE · ferry, weather and timing checked`);
     const banner=$('planningBanner');
     if(d.planning_mode==='tomorrow'){banner.hidden=false;banner.textContent=d.planning_reason||`Today’s useful day-trip window has closed. Planning ${d.plan_date_label||'tomorrow'} instead.`;$('page-title').textContent='Mackinac Island Tomorrow';}
     else if(d.planning_mode==='selected-date'){
@@ -256,7 +256,7 @@
       : d.trip_profile?.trip==='overnight'?'Return-day schedule unavailable':'Last scheduled: unavailable');
     const port=plan.origin_port||'the better mainland port';
     const dep=plan.departure_time||'a verified departure';
-    $('primaryRec').innerHTML=plan.departure_time?`<strong>Take the ${esc(dep)} from ${esc(port)}.</strong> ${esc(dec.primary_reason||'This preserves the strongest usable island window.')}`:'<strong>No verified ferry recommendation.</strong> Use the official operator links below before leaving.';
+    $('primaryRec').innerHTML=plan.departure_time?`<strong>For an easy start, take the ${esc(dep)} from ${esc(port)}.</strong> ${esc(dec.primary_reason||'That gives you a strong window to enjoy the Island without making the day feel rushed.')}`:'<strong>We can’t confidently choose a ferry yet.</strong> Check the operator links below before you head for the dock.';
     const profile=d.trip_profile||{};
     if(profile.trip_date)syncTripDateInputs(profile.trip_date);
     if(state.originResolved?.origin?.label)syncOriginInputs(state.originResolved.origin.label);
@@ -279,14 +279,14 @@
     }
     const f=d.generated_at?new Date(d.generated_at).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):'—';
     const optional=optionalFailures(d),core=coreFailures(d);
-    const sourceNote=core.length?'Core source gap — verify sources below':optional.length?'Core ferry/weather plan available · optional planning feeds limited':'Core inputs available';
-    setText('freshLine',`Decision generated ${f} ET · ${sourceNote}`);
+    const sourceNote=core.length?'A key trip detail needs a recheck':optional.length?'Ferry and weather are ready · a few extras are limited':'Trip details checked';
+    setText('freshLine',`Updated ${f} ET · ${sourceNote}`);
   }
 
   function reasonList(id,items){const el=$(id);el.innerHTML=(items&&items.length?items:['No material factor identified.']).slice(0,5).map(x=>`<li>${esc(x)}</li>`).join('');}
   function renderWhy(d){
     const dec=d.decision||{};reasonList('helping',dec.helping);reasonList('hurting',dec.hurting);reasonList('whyFerry',dec.why_ferry);
-    setText('engineBadge',dec.engine==='shared-harness-jev'?'Structured candidates + JEV ranking':'Structured deterministic ranking');
+    setText('engineBadge',dec.engine==='shared-harness-jev'?'Live trip inputs checked':'Live trip inputs checked');
     const comps=dec.components||{};const max=Object.values(comps).reduce((m,v)=>Math.max(m,Number(v)||0),100)||100;
     $('componentBars').innerHTML=Object.entries(comps).map(([k,v])=>`<div class="component-row"><span>${esc(k.replace(/_/g,' '))}</span><div class="component-track"><i style="width:${Math.max(3,Math.round((Number(v)||0)/max*100))}%"></i></div><strong>${Math.round(Number(v)||0)}</strong></div>`).join('');
   }
@@ -298,27 +298,27 @@
   }
   function renderFerries(d){
     const f=d.ferry||{},plan=f.recommended_plan||{};
-    $('ferryPick').innerHTML=plan.departure_time?`<strong>${esc(plan.origin_port)} is the better fit for this plan.</strong> Target ${esc(plan.operator)} at ${esc(plan.departure_time)}; island arrival about ${esc(plan.arrival_time)}.`:'<strong>Ferry plan degraded.</strong> We could not verify enough schedule data to choose a departure safely.';
+    $('ferryPick').innerHTML=plan.departure_time?`<strong>${esc(plan.origin_port)} lines up best for this visit.</strong> Aim for the ${esc(plan.departure_time)} ${esc(plan.operator)} ferry and you should step onto the Island around ${esc(plan.arrival_time)}.`:'<strong>Ferry timing needs a recheck.</strong> We couldn’t verify enough schedule detail to comfortably pick a boat.';
     setText('ferryFreshness',f.freshness?.label||'Schedule status unavailable');
     const ports=f.port_summary||{};
     ['Mackinaw City','St. Ignace'].forEach((name,i)=>{
       const key=i===0?'mackinaw':'stIgnace',p=ports[name]||{};
-      setText(`${key}Best`,p.best_departure?`${p.best_departure.departure_time} · ${p.best_departure.operator}`:'No verified departure');
-      setText(`${key}Meta`,p.next_departure?`${p.next_departure_origin_adjusted?'Next reachable from your start':'Next available'} ${p.next_departure.departure_time} · ${p.departure_count||0} departures in the modeled schedule`:'No current departure found');
+      setText(`${key}Best`,p.best_departure?`${p.best_departure.departure_time} · ${p.best_departure.operator}`:'No departure verified');
+      setText(`${key}Meta`,p.next_departure?`${p.next_departure_origin_adjusted?'Next one you can comfortably reach':'Next available'} ${p.next_departure.departure_time} · ${p.departure_count||0} published departures in this schedule`:'No current departure found');
       const card=$(key+'Card');card?.classList.toggle('recommended',plan.origin_port===name);
       renderTimeline(key+'Timeline',p.departures||[],plan.origin_port===name?plan:null);
     });
     const rp=f.return_plan||{};
     setText('recommendedReturn',returnPlanText(d));
     setText('literalLast',f.last_scheduled_return?`${dateLabel(rp.return_date)} · ${f.last_scheduled_return.departure_time}`:'Unavailable');
-    setText('returnReason',f.return_reason||'Return timing depends on the trip duration and any deadline you supplied.');
+    setText('returnReason',f.return_reason||'Your ferry back depends on how long you’re staying and whether you gave us a time you want to be back.');
   }
 
   function renderConditions(d){
     const w=d.weather||{},m=d.marine||{},b=d.bike||{},a=d.astronomy||{};
     setText('weatherFreshness',w.freshness_label||'NWS forecast');
     setText('islandWeather',w.visitor_summary||'Unavailable');setText('islandWeatherNote',w.detail||'');
-    setText('ferryComfort',m.comfort_label||'Unavailable');setText('ferryComfortNote',m.comfort_note||'Marine observations are context, not an operating-status feed.');
+    setText('ferryComfort',m.comfort_label||'Unavailable');setText('ferryComfortNote',m.comfort_note||'Marine observations help describe the ride; your ferry operator decides service.');
     setText('bikeWeather',b.label?`${b.label} · ${Math.round(b.score||0)}/100`:'Unavailable');setText('bikeWeatherNote',b.best_window||b.note||'');
     setText('walkingComfort',w.walking?.label||'Unavailable');setText('walkingComfortNote',w.walking?.note||'');
     setText('photoConditions',w.photo?.label||'Unavailable');setText('photoNote',w.photo?.note||'');
@@ -327,45 +327,45 @@
   }
 
   function renderCrowdsOpen(d){
-    const c=d.crowds||{};setText('crowdLabel',c.label||'—');setText('crowdWindows',c.summary||'Crowd estimate unavailable.');setText('crowdConfidence',`${String(c.confidence||'medium').toUpperCase()} confidence`);setText('crowdBasis',c.basis||'Modeled from calendar, weather and events.');
+    const c=d.crowds||{};setText('crowdLabel',c.label||'—');setText('crowdWindows',c.summary||'Crowd outlook unavailable.');setText('crowdConfidence',`${String(c.confidence||'medium').toUpperCase()} confidence`);setText('crowdBasis',c.basis||'Estimated from the calendar, weather and events.');
     const attrs=d.attractions||[];$('attractionList').innerHTML=attrs.length?attrs.map(x=>`<div class="status-item"><span>${esc(x.name)}</span><strong class="${x.open?'status-open':'status-closed'}">${x.open?`OPEN${x.hours?' · '+esc(x.hours):''}`:`${esc(x.status||'CLOSED')}`}</strong></div>`).join(''):'<p>No attraction-status data available.</p>';
     setText('openness',d.island_openness?.label?`Island openness: ${d.island_openness.label}`:'');
   }
 
   function renderSeasonal(d){
-    const events=d.events||[];$('eventsList').innerHTML=events.length?events.map(x=>`<div class="status-item"><span>${esc(x.title)}</span><strong>${esc(x.impact_label||x.impact||'Today')}</strong></div>`).join(''):'<p>No major event signal in the modeled calendar today.</p>';
-    const f=d.fall_color||{};setText('fallColorLabel',f.label||'Not a primary factor');setText('fallColorText',f.summary||'Shared statewide color intelligence is unavailable or out of season; no replacement estimate is invented.');
+    const events=d.events||[];$('eventsList').innerHTML=events.length?events.map(x=>`<div class="status-item"><span>${esc(x.title)}</span><strong>${esc(x.impact_label||x.impact||'Today')}</strong></div>`).join(''):'<p>Nothing major on the Island calendar is expected to reshape the day.</p>';
+    const f=d.fall_color||{};setText('fallColorLabel',f.label||'Not a primary factor');setText('fallColorText',f.summary||'Fall-color guidance is out of season or temporarily unavailable.');
   }
 
   function renderPlanner(d){
     const it=d.itinerary||[],p=d.trip_profile||{};
-    setText('plannerSummary',d.itinerary_summary||'A feasible plan could not be built from the verified inputs.');
+    setText('plannerSummary',d.itinerary_summary||'We couldn’t put together a comfortable plan from the trip details we could verify.');
     const days=d.trip_days||[];
     const dayHost=$('tripDays');
     if(dayHost)dayHost.innerHTML=days.length?days.map(x=>`<article class="trip-day ${esc(x.role||'')}"><span>Day ${esc(x.day)} · ${esc(dateLabel(x.date))}</span><strong>${esc(x.title||'Trip day')}</strong><p>${esc(x.summary||'')}</p></article>`).join(''):'';
-    $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title||x.label||'Plan stop')}</strong>${x.movement?`<span class="movement">${esc(x.movement)}</span>`:''}<p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>No complete itinerary</strong><p>Use the official ferry source links before leaving.</p></div></li>';
+    $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title||x.label||'Plan stop')}</strong>${x.movement?`<span class="movement">${esc(x.movement)}</span>`:''}<p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>Your Island plan needs a recheck</strong><p>Check the ferry links below before heading to the dock.</p></div></li>';
     setText('plannerExplain',d.itinerary_reason||'');
     setText('leaveHome',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Enter date, city + time above'));
-    setText('leaveHomeNote',d.leave_home?.detail||(state.tripDate&&state.originResolved&&state.departTime?'No ferry in the verified schedule can be reached from that city on that date after your entered leave-home time.':'Enter the trip date, starting city and leave-home time. Drive estimates are not live traffic.'));
+    setText('leaveHomeNote',d.leave_home?.detail||(state.tripDate&&state.originResolved&&state.departTime?'No ferry in the verified schedule can be reached from that city on that date after your entered leave-home time.':'Add your trip date, starting city and leave time. Drive times are planning estimates, not live traffic.'));
     const party=`${Number(p.adults||2)} adult${Number(p.adults||2)===1?'':'s'}${Number(p.children||0)?` + ${p.children} child${Number(p.children)===1?'':'ren'}`:''}`;
     const fit=[party,p.trip==='overnight'?`${p.nights||1} night${Number(p.nights||1)===1?'':'s'}`:'day trip',p.pace?`${p.pace} pace`:null,p.bikes&&p.bikes!=='none'?`${p.bikes} bikes`:null,p.mobility==='limited'?'limited steep walking':null].filter(Boolean);
     setText('tripFit',fit.join(' · '));
     const priorities=[...(p.interests||[]),...(p.must_do||[]).map(x=>`must: ${x}`)];
-    setText('tripFitNote',priorities.length?`Priorities: ${priorities.join(', ')}.`:`Using the selected visitor modes plus live ferry/weather constraints.`);
+    setText('tripFitNote',priorities.length?`You want to make time for: ${priorities.join(', ')}.`:`Built around the kind of Island visit you selected, plus current ferry and weather details.`);
     const optional=optionalFailures(d),core=coreFailures(d);
-    setText('builderStatus',core.length?'Trip rebuilt, but a core source needs rechecking below.':optional.length?'Trip rebuilt. Core ferry/weather planning is available; some optional context is limited.':'Trip rebuilt from the current live decision bundle.');
+    setText('builderStatus',core.length?'Plan updated, but one important trip detail needs a recheck below.':optional.length?'Plan updated. Ferry and weather details are ready; a few optional extras are limited.':'Your Island plan is updated.');
   }
 
   function renderSources(d){
     const src=d.sources||{},optional=optionalFailures(d),core=coreFailures(d);
-    setText('overallDataState',core.length?'CORE SOURCE GAP':optional.length?'CORE SOURCES AVAILABLE · OPTIONAL CONTEXT LIMITED':'CORE SOURCES AVAILABLE');
-    const order=Object.entries(src);$('sourceList').innerHTML=order.length?order.map(([k,s])=>`<div class="source-row"><a href="${esc(s.url||'#')}" target="_blank" rel="noopener">${esc(s.name||k.replace(/_/g,' '))}</a><span class="source-state ${s.available?'ok':'warn'}">${esc(s.status_label||(s.available?'available':'unavailable'))}</span></div>`).join(''):'<p>No source-provenance payload was returned.</p>';
+    setText('overallDataState',core.length?'RECHECK NEEDED':optional.length?'TRIP READY · A FEW EXTRAS LIMITED':'TRIP DETAILS READY');
+    const order=Object.entries(src);$('sourceList').innerHTML=order.length?order.map(([k,s])=>`<div class="source-row"><a href="${esc(s.url||'#')}" target="_blank" rel="noopener">${esc(s.name||k.replace(/_/g,' '))}</a><span class="source-state ${s.available?'ok':'warn'}">${esc(s.status_label||(s.available?'available':'unavailable'))}</span></div>`).join(''):'<p>Source details are temporarily unavailable.</p>';
     const refs=d.planning_references||{};
     if(refs.accessibility?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.accessibility.url)}" target="_blank" rel="noopener">${esc(refs.accessibility.name||'Accessibility planning source')}</a><span class="source-state ok">planning reference</span></div>`);
     if(refs.ferry_ticket_flexibility?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.ferry_ticket_flexibility.url)}" target="_blank" rel="noopener">${esc(refs.ferry_ticket_flexibility.name||'Ferry ticket flexibility')}</a><span class="source-state ok">flexible ticket reference</span></div>`);
     if(refs.drive_times?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.drive_times.url)}" target="_blank" rel="noopener">${esc(refs.drive_times.label||'Origin drive-time reference')}</a><span class="source-state ok">planning estimate · not live traffic</span></div>`);
-    if(core.length)$('sourceList').insertAdjacentHTML('beforeend','<div class="error-panel"><strong>Core source check needed.</strong> Recheck the unavailable ferry or weather source before relying on the plan.</div>');
-    else if(optional.length)$('sourceList').insertAdjacentHTML('beforeend','<div class="source-note"><strong>Optional planning context is limited right now.</strong> The ferry and weather decision remains available; unavailable optional sources are labeled above.</div>');
+    if(core.length)$('sourceList').insertAdjacentHTML('beforeend','<div class="error-panel"><strong>One important trip detail needs a recheck.</strong> Check the unavailable ferry or weather source before you rely on the timing.</div>');
+    else if(optional.length)$('sourceList').insertAdjacentHTML('beforeend','<div class="source-note"><strong>A few optional details are limited right now.</strong> Your ferry and weather plan is still available; the missing extras are labeled above.</div>');
   }
 
   function renderMapPoints(d){
@@ -375,7 +375,7 @@
     if(refresh){
       try{state.mapInstance?.remove();}catch{}
       state.mapInstance=null;state.mapLoaded=false;
-      const host=$('map');if(host){host.className='map-placeholder';host.innerHTML='<div><strong>Your itinerary changed.</strong><p>Refreshing the route and recommended stops…</p></div>';}
+      const host=$('map');if(host){host.className='map-placeholder';host.innerHTML='<div><strong>Your Island day changed.</strong><p>Updating the map and recommended stops…</p></div>';}
       buildMap();
     }
   }
@@ -385,9 +385,9 @@
     $('decisionPanel').setAttribute('aria-busy','true');
     try{const r=await fetch(buildUrl(),{headers:{accept:'application/json'}});const j=await r.json();if(!r.ok)throw new Error(j.error||`HTTP ${r.status}`);renderAll(j);track('mackinac_decision_loaded',{score:j.decision?.score,engine:j.decision?.engine,planning_mode:j.planning_mode,origin:j.ferry?.recommended_plan?.origin_port||'none'});}
     catch(err){
-      $('planningBanner').hidden=false;$('planningBanner').textContent='Live decision unavailable. Use the official ferry operator links below before relying on departure times.';
-      setText('verdict','LIVE DATA DEGRADED');setText('confidence','No recommendation is being invented');setText('primaryRec','We could not verify enough live inputs to build a reliable plan.');
-      setText('heroTripContext','Live planning unavailable');setText('heroLeave','Unavailable');setText('heroFerry','Unavailable');setText('heroIsland','Unavailable');setText('heroReturn','Unavailable');
+      $('planningBanner').hidden=false;$('planningBanner').textContent='Live trip details are temporarily unavailable. Check the ferry operators below before relying on a departure time.';
+      setText('verdict','TRIP DETAILS NEED A RECHECK');setText('confidence','We’re not guessing at a ferry time');setText('primaryRec','We couldn’t verify enough live details to comfortably choose your ferry right now.');
+      setText('heroTripContext','Live trip details unavailable');setText('heroLeave','Unavailable');setText('heroFerry','Unavailable');setText('heroIsland','Unavailable');setText('heroReturn','Unavailable');
       $('sourceList').innerHTML=`<div class="error-panel">${esc(err.message)}. <a href="https://www.arnoldtransitcompany.com/summer-schedule/" target="_blank" rel="noopener">Arnold schedule</a> · <a href="https://www.sheplersferry.com/" target="_blank" rel="noopener">Shepler’s schedule</a></div>`;
     } finally{$('decisionPanel').setAttribute('aria-busy','false');}
   }
@@ -427,7 +427,7 @@
       if(routeIds.includes('m185')) L.polyline(loop,{weight:4,opacity:.75}).addTo(map).bindTooltip('M-185 perimeter · approximate orientation');
       if(itineraryPoints.length) map.fitBounds(L.latLngBounds(itineraryPoints.map(p=>[p.lat||p.latitude,p.lon||p.longitude])).pad(.25),{maxZoom:14});
       btn.textContent='Map loaded';track('mackinac_map_opened',{points:points.length,itinerary_points:itineraryPoints.length});
-    }catch(e){btn.disabled=false;btn.textContent='Retry map';$('map').innerHTML='<div><strong>Interactive map could not load.</strong><p>The movement notes remain available and the live decision does not depend on the map provider.</p></div>';state.mapLoaded=false;state.mapInstance=null;}
+    }catch(e){btn.disabled=false;btn.textContent='Retry map';$('map').innerHTML='<div><strong>The Island map could not load.</strong><p>Your walking and biking notes are still here, so you can keep planning.</p></div>';state.mapLoaded=false;state.mapInstance=null;}
   }
   $('loadMap').addEventListener('click',buildMap);
   const observer=new IntersectionObserver(entries=>{if(entries.some(x=>x.isIntersecting)&&!state.mapLoaded&&state.data)buildMap();},{rootMargin:'200px'});observer.observe($('map-section'));
