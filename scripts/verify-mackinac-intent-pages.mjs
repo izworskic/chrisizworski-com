@@ -1,4 +1,5 @@
 import fs from "node:fs";
+const htmlEsc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 const pages=[
   ["day-trip","Mackinac Island Day Trip Planner"],
   ["with-kids","Mackinac Island With Kids Planner"],
@@ -17,7 +18,7 @@ for(const [slug,title] of pages){
   if(!fs.existsSync(file)){console.error("missing",file);fail=true;continue;}
   const html=fs.readFileSync(file,"utf8");
   const checks=[
-    [html.includes("<title>"+title+" | Chris Izworski</title>"),"unique title"],
+    [html.includes("<title>"+htmlEsc(title)+" | Chris Izworski</title>"),"unique title"],
     [html.includes('rel="canonical" href="https://chrisizworski.com/mackinac-island/'+slug+'/'),"canonical"],
     [html.includes("Build this trip live"),"planner CTA"],
     [html.includes("Truth boundary:"),"truth boundary"],
