@@ -6,7 +6,7 @@
   const PROFILE_STORAGE_KEY='mackinac-trip-profile-v1';
   const PLAN_STORAGE_KEY='mackinac-trip-plan-v1';
   const TRIP_STATE=window.MackinacTripState||null;
-  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',originRequestId:0,tripDate:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[],webcamSelectedId:null,webcamHls:null,intakeSchema:null,intakeAnswers:{},intakeStep:0,tripProfile:null,adaptiveAsked:false,tunings:new Set()};
+  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',originRequestId:0,tripDate:'',tripDateExplicit:false,departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[],webcamSelectedId:null,webcamHls:null,intakeSchema:null,intakeAnswers:{},intakeStep:0,tripProfile:null,adaptiveAsked:false,tunings:new Set()};
   const $=id=>document.getElementById(id);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const track=(name,params={})=>{try{if(typeof window.gtag==='function')window.gtag('event',name,params);}catch{}};
@@ -35,7 +35,7 @@
   function checkedValues(selector){return [...document.querySelectorAll(selector)].filter(x=>x.checked).map(x=>x.value);}
   function capturePlanInputs(){
     return TRIP_STATE?.sanitize({
-      trip_date:state.tripDate,
+      trip_date:state.tripDateExplicit?state.tripDate:'',
       origin_text:cleanOrigin($('originCityInput')?.value||$('heroOriginInput')?.value||state.originQuery),
       depart_at:state.departTime,
       trip:$('tripMode')?.value,
@@ -362,9 +362,10 @@
     if($('originCityInput')&&$('originCityInput').value!==v)$('originCityInput').value=v;
     if($('heroOriginInput')&&$('heroOriginInput').value!==v)$('heroOriginInput').value=v;
   }
-  function syncTripDateInputs(value){
+  function syncTripDateInputs(value,{explicit=true}={}){
     const v=String(value||'').trim();
     state.tripDate=v;
+    state.tripDateExplicit=Boolean(v)&&Boolean(explicit);
     if($('tripDate')&&$('tripDate').value!==v)$('tripDate').value=v;
     if($('heroTripDate')&&$('heroTripDate').value!==v)$('heroTripDate').value=v;
   }
@@ -465,7 +466,7 @@
       if(Number.isFinite(Number(mackinaw?.drive_minutes)))p.set('origin_mackinaw_minutes',String(mackinaw.drive_minutes));
       if(Number.isFinite(Number(stIgnace?.drive_minutes)))p.set('origin_st_ignace_minutes',String(stIgnace.drive_minutes));
     }
-    if(state.tripDate)p.set('trip_date',state.tripDate);
+    if(state.tripDate&&state.tripDateExplicit)p.set('trip_date',state.tripDate);
     if(state.departTime)p.set('depart_at',state.departTime);
     const interests=[...document.querySelectorAll('#interestChoices input:checked')].map(x=>x.value);
     const must=[...document.querySelectorAll('#mustDoChoices input:checked')].map(x=>x.value);
@@ -586,12 +587,12 @@
   });
 
   function renderTop(d){
-    const dec=d.decision||{}, score=Math.round(dec.score||0), plan=d.ferry?.recommended_plan||{};
-    setText('verdict',`${labelScore(score)} — ${score}/100`);
-    setText('scoreValue',score||'—');
-    $('scoreRing').className='score-ring '+(score>=74?'good':score>=55?'fair':'poor');
-    $('scoreRing').setAttribute('aria-label',`Visit score ${score} out of 100`);
-    setText('confidence',`${String(dec.confidence||'medium').toUpperCase()} PLAN CONFIDENCE · ferry, weather and timing checked`);
+    const dec=d.decision||{}, rawScore=Number(dec.score), hasScore=dec.score!==null&&dec.score!==undefined&&Number.isFinite(rawScore), score=hasScore?Math.round(rawScore):null, plan=d.ferry?.recommended_plan||{};
+    setText('verdict',hasScore?`${labelScore(score)} — ${score}/100`:(dec.label||'NO FEASIBLE TRIP'));
+    setText('scoreValue',hasScore?score:'—');
+    $('scoreRing').className='score-ring '+(hasScore?(score>=74?'good':score>=55?'fair':'poor'):'');
+    $('scoreRing').setAttribute('aria-label',hasScore?`Visit score ${score} out of 100`:'Visit score unavailable');
+    setText('confidence',hasScore?`${String(dec.confidence||'medium').toUpperCase()} PLAN CONFIDENCE · ferry, weather and timing checked`:'No numeric score is shown without a feasible itinerary');
     const banner=$('planningBanner');
     if(d.planning_mode==='tomorrow'){banner.hidden=false;banner.textContent=d.planning_reason||`Today’s useful day-trip window has closed. Planning ${d.plan_date_label||'tomorrow'} instead.`;$('page-title').textContent='Mackinac Island Tomorrow';}
     else if(d.planning_mode==='selected-date'){
@@ -602,7 +603,7 @@
     } else {banner.hidden=true;$('page-title').textContent='Mackinac Island Today';}
     setText('bestArrival',plan.arrival_time||'No verified plan');
     setText('crowdsTop',d.crowds?.label||'—');
-    setText('bikeTop',d.bike?`${d.bike.label} · ${Math.round(d.bike.score||0)}/100`:'—');
+    setText('bikeTop',d.bike&&d.bike.score!==null&&d.bike.score!==undefined&&Number.isFinite(Number(d.bike.score))?`${d.bike.label} · ${Math.round(Number(d.bike.score))}/100`:(d.bike?.label||'—'));
     setText('weatherTop',d.weather?.visitor_summary||'Forecast unavailable');
     setText('marineTop',d.marine?.comfort_label||'Observation unavailable');
     setText('returnTop',returnPlanText(d));
@@ -917,7 +918,7 @@
     const saved=(shared||intent)?null:futureSavedPlan();
     const seed=shared||intent||saved;
     if(seed)hydratePlanInputs(seed,{includeIntake:true});
-    else syncTripDateInputs(detroitToday());
+    else syncTripDateInputs(detroitToday(),{explicit:false});
     syncTripModeUi();
     await initIntake({seedAnswers:seed?.intake||null,ignoreLocal:Boolean(seed)});
     if(seed)hydratePlanInputs(seed,{includeIntake:false});

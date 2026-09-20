@@ -99,6 +99,27 @@ test('client degrades explicitly instead of fabricating a ferry plan', () => {
   assert.match(js,/mackinac_share_plan/);
 });
 
+test('default Today view does not masquerade as an explicit selected trip date', () => {
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(js,/tripDateExplicit:false/);
+  assert.match(js,/syncTripDateInputs\(detroitToday\(\),\{explicit:false\}\)/);
+  assert.match(js,/state\.tripDate&&state\.tripDateExplicit\)p\.set\('trip_date',state\.tripDate\)/);
+  assert.match(js,/trip_date:state\.tripDateExplicit\?state\.tripDate:''/);
+});
+
+test('missing Mackinac decision scores are withheld instead of rendered as zero', () => {
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(js,/hasScore=dec\.score!==null&&dec\.score!==undefined&&Number\.isFinite\(rawScore\)/);
+  assert.match(js,/hasScore\?score:'—'/);
+  assert.match(js,/Visit score unavailable/);
+  assert.doesNotMatch(js,/score=Math\.round\(dec\.score\|\|0\)/);
+});
+
+test('Mackinac decision client asset is cache-busted after score-state fix', () => {
+  const html=fs.readFileSync(htmlPath,'utf8');
+  assert.match(html,/mackinac-island\.js\?v=20260920-live20/);
+});
+
 
 test('full trip profile converts constraints into persona behavior', () => {
   const p=t.profileFromQuery({
@@ -568,7 +589,7 @@ test('journey candidates carry route wait and door-to-island cost', () => {
 test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260920-live19/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live20/);
   assert.match(html,/mackinac-island\.css\?v=20260920-live19/);
   assert.doesNotMatch(js,/Add a starting city/);
   assert.doesNotMatch(html,/Add a starting city/);
@@ -581,7 +602,7 @@ test('Mackinac first-screen route inputs are explicit and cache-safe', () => {
   const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
   assert.match(html,/data-mackinac-build="20260920-live19"/);
   assert.match(html,/<span>Starting city<\/span><input id="heroOriginInput"/);
-  assert.match(html,/mackinac-island\.js\?v=20260920-live19/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live20/);
   assert.doesNotMatch(html,/Add a starting city/i);
   assert.doesNotMatch(js,/Add a starting city/i);
   assert.match(html,/Enter date, city \+ time above/);
