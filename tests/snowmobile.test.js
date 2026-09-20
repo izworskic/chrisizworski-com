@@ -88,3 +88,17 @@ test('hourly five-hour windows support a precise riding window without changing 
   assert.match(ranked.best.name,/Saturday 8 AM.*1 PM/);
   assert.match(ranked.boundary,/does not upgrade trail condition/i);
 });
+
+test('explicit DNR snowmobile closed status is a hard veto',()=>{
+  const s={id:'x',officialStatus:'Closed Permanent'};
+  const scored={...s,...scoreSegment(s,{season:true,verifiedClosure:null})};
+  assert.equal(scored.band,'CLOSED');
+  assert.equal(scored.legalState,'CLOSED_DNR_TRAIL_STATUS');
+  assert.equal(routeDecision([scored],{season:true,closureLayerVerified:true}).routeState,'ROUTE_BROKEN');
+});
+
+test('DNR grooming type is not current grooming evidence',()=>{
+  const s={groomType:'Groomed',groomingSponsor:'Example Sponsor'};
+  const scored=scoreSegment(s,{season:true,clubReport:null,weather:null});
+  assert.ok(!scored.reasons.some(x=>/recent|today|last groomed/i.test(x)));
+});
