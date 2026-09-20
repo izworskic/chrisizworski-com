@@ -237,7 +237,7 @@ if(process.argv.includes('--check')){
   const failures=[];
   if(results.some(r=>r.failed.length)) failures.push('one or more persona expectations failed');
   if(noPlan) failures.push('one or more benchmark personas had no feasible plan');
-  if(signatures<13) failures.push(`only ${signatures}/15 materially distinct plan signatures`);
+  if(signatures<15) failures.push(`only ${signatures}/15 materially distinct plan signatures`);
   if(totalLoss>.05) failures.push(`loss ${totalLoss.toFixed(3)} exceeds 0.05 gate`);
   if(valueProduct<.90) failures.push(`value product ${valueProduct.toFixed(3)} below 0.90 gate`);
   if(failures.length){console.error('\nFAIL:',failures.join('; '));process.exit(1);}
