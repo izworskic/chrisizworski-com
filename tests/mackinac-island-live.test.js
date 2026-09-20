@@ -64,7 +64,7 @@ test('public surface makes the decision first and keeps return vs last ferry dis
   assert.match(html,/Return plan/);
   assert.match(html,/Last published ferry for return day/);
   assert.match(html,/Why this plan\?/);
-  assert.match(html,/Build my day/);
+  assert.match(html,/Build my Mackinac trip/);
   assert.match(html,/Modeled, not counted/);
   assert.match(html,/CC BY-SA 4\.0/);
   assert.match(html,/\/privacy\//);
