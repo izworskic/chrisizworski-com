@@ -1,5 +1,5 @@
 import fs from "node:fs";
-const slugs=["day-trip","with-kids","2-day-itinerary","ferry-planner","from-detroit","from-chicago","from-traverse-city","from-grand-rapids"];
+const slugs=["day-trip","with-kids","2-day-itinerary","ferry-planner","from-detroit","from-chicago","from-traverse-city","from-grand-rapids","limited-walking","bike-day"];
 let fail=false;
 const asset=fs.readFileSync("public/assets/mackinac-intent.js","utf8");
 for(const event of ["mackinac_intent_landing","mackinac_intent_to_planner"])if(!asset.includes(event)){console.error("missing intent event "+event);fail=true;}
@@ -14,4 +14,8 @@ console.log("PASS: Mackinac intent landing-to-planner funnel is instrumented.");
 
 const plannerJs=fs.readFileSync("public/assets/mackinac-island.js","utf8");
 if(!plannerJs.includes("origin_text:cleanOrigin(qs.get('from')||'')")){console.error("planner does not consume origin seed");fail=true;}
+if(fail)process.exit(1);
+
+if(!plannerJs.includes("'limited-walking':{trip_loss:'walking'}")){console.error("limited-walking intent is not causal");fail=true;}
+if(!plannerJs.includes("'bike-day':{trip_duration:'day',trip_vision:['biking']}")){console.error("bike-day intent is not causal");fail=true;}
 if(fail)process.exit(1);
