@@ -8,7 +8,7 @@
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55}
 a{color:inherit}
-button{font:inherit}
+button,input{font:inherit}
 .sitebar{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 22px;border-bottom:1px solid var(--line);background:rgba(244,241,233,.96);position:sticky;top:0;z-index:20;backdrop-filter:blur(10px)}
 .brand{font-weight:850;letter-spacing:.08em;text-decoration:none;font-size:.84rem}
 .sitebar nav{display:flex;gap:16px}
@@ -36,13 +36,24 @@ h3{font-size:1.3rem;margin:0 0 8px}
 .quick-grid>div{background:var(--card);padding:14px 16px;min-width:0}
 .quick-grid span{display:block;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:800}
 .quick-grid strong{display:block;font-size:.92rem;margin-top:4px;line-height:1.35}
-.drive-box{margin:20px 0 14px;padding:18px;border-radius:16px;background:#edf3ee;border:1px solid #cadace}
+.origin-form{margin:18px 0 0;padding:14px 0 2px;border-top:1px solid var(--line)}
+.origin-form label{display:flex;justify-content:space-between;gap:12px;align-items:baseline;margin-bottom:8px}
+.origin-form label span{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:850}
+.origin-form label strong{font-size:.86rem}
+.origin-controls{display:grid;grid-template-columns:1fr auto;gap:8px}
+.origin-controls input{width:100%;min-width:0;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;color:var(--ink)}
+.origin-controls button{border:0;background:var(--evergreen);color:#fff;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
+.origin-form p{margin:7px 0 0;color:var(--muted);font-size:.78rem}
+.drive-box{margin:16px 0 14px;padding:18px;border-radius:16px;background:#edf3ee;border:1px solid #cadace}
 .drive-box .kicker{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;font-weight:850;color:var(--evergreen-2);margin-bottom:4px}
 .drive-box strong{font-family:var(--serif);font-size:1.55rem}
 .drive-box p{margin:5px 0 0;color:var(--muted)}
 .why-toggle{width:100%;text-align:left}
 .why-panel{padding:14px 2px 2px;color:var(--muted)}
 .why-panel ul{margin:0;padding-left:20px}
+.what-is{margin:34px auto 0;max-width:980px;padding:20px 22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(240px,.8fr) minmax(0,1.2fr);gap:28px;align-items:start}
+.what-is h2{font-size:1.65rem;margin-bottom:0}
+.what-is p{margin:2px 0 0;color:var(--muted)}
 .section{margin:52px 0 0;padding-top:4px}
 .section-head{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.8fr);gap:28px;align-items:end;margin-bottom:18px}
 .section-head p{margin:0}
@@ -60,6 +71,12 @@ h3{font-size:1.3rem;margin:0 0 8px}
 .map-legend{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)}
 .legend-route,.legend-closure{width:24px;height:4px;border-radius:99px;display:inline-block}
 .legend-route{background:var(--evergreen-2)} .legend-closure{background:var(--red);margin-left:14px}
+.utility-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.utility-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;min-height:225px}
+.utility-kicker{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:850;color:var(--evergreen-2);margin-bottom:6px}
+.utility-card p{color:var(--muted);font-size:.9rem;margin:0 0 14px}
+.utility-card a{margin-top:auto;font-weight:800;text-decoration:none}
+.utility-card a:hover{text-decoration:underline}
 .split{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,.75fr);gap:28px}
 .report-list{display:grid;gap:10px;margin-top:18px}
 .report-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px}
@@ -98,15 +115,19 @@ footer p{max-width:980px;margin:0 auto}
   .quick-grid>div{padding:12px}
   .decision-top{gap:10px}
   .confidence{min-width:88px}
+  .origin-form label{display:block}.origin-form label strong{display:block;margin-top:2px}
   .section{margin-top:38px}
-  .section-head,.split{grid-template-columns:1fr;gap:12px}
+  .section-head,.split,.what-is{grid-template-columns:1fr;gap:12px}
+  .what-is{padding:18px 4px}
   #trailMap{height:420px}
-  .outlook-grid,.source-grid,.related{grid-template-columns:1fr}
+  .outlook-grid,.source-grid,.related,.utility-grid{grid-template-columns:1fr}
+  .utility-card{min-height:0}
   .segment-card{grid-template-columns:1fr}
 }
 @media(max-width:420px){
   h1{font-size:2.25rem}
   .status-label{font-size:1.55rem}
   .drive-box strong{font-size:1.3rem}
+  .origin-controls{grid-template-columns:1fr}
   #trailMap{height:360px}
 }
