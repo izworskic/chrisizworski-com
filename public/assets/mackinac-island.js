@@ -351,7 +351,7 @@
       state.webcamHls=hls;hls.loadSource(cam.stream_url);hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play().catch(()=>{}));
     }).catch(()=>{
-      stage.innerHTML=`<div class="webcam-stage-placeholder"><strong>${esc(cam.name)}</strong><p>The live stream could not start in this browser.</p></div>`;
+      stage.innerHTML=`<div class="webcam-stage-placeholder"><strong>${esc(cam.name)}</strong><p>The live stream is unavailable here right now.</p><a class="btn primary webcam-external" href="${esc(cam.source_url)}" target="_blank" rel="noopener">Open official live camera ↗</a></div>`;
     });
   }
 
@@ -388,7 +388,7 @@
       }
     }
     if(action){
-      action.innerHTML=cam.embed_url?'':`<a class="btn primary webcam-external" href="${esc(cam.source_url)}" target="_blank" rel="noopener">Watch Town Crier live ↗</a>`;
+      action.innerHTML=cam.embed_url||cam.stream_url?'':`<a class="btn primary webcam-external" href="${esc(cam.source_url)}" target="_blank" rel="noopener">${cam.id==='horns-main-street'?'Watch Horn’s live ↗':cam.id==='town-crier-market'?'Watch Town Crier live ↗':'Open official live camera ↗'}</a>`;
     }
   }
 
@@ -407,7 +407,7 @@
       return `<button class="webcam-choice ${selected?'active':''}" type="button" aria-pressed="${selected?'true':'false'}" data-webcam-id="${esc(cam.id)}">
         <span>${esc(cam.location||'Mackinac Island')}</span>
         <strong>${esc(cam.name)}</strong>
-        ${recommended?'<small>Suggested</small>':(!cam.embed_url?'<small>Opens separately</small>':'')}
+        ${recommended?'<small>Suggested</small>':(!(cam.embed_url||cam.stream_url)?'<small>Opens separately</small>':'')}
       </button>`;
     }).join('');
     picker.querySelectorAll('.webcam-choice').forEach(btn=>btn.addEventListener('click',()=>{
