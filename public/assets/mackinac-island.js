@@ -392,10 +392,11 @@
 
   $('sharePlan').addEventListener('click',async()=>{
     const d=state.data,plan=d?.ferry?.recommended_plan;if(!d||!plan)return;
-    const text=`Our Mackinac plan: ${plan.departure_time} from ${plan.origin_port}, island arrival ${plan.arrival_time}, return ${d.ferry?.recommended_return?.departure_time||'check schedule'}. ${location.href}`;
-    try{if(navigator.share)await navigator.share({title:'Our Mackinac Day',text,url:location.href});else{await navigator.clipboard.writeText(text);$('sharePlan').textContent='Copied';setTimeout(()=>$('sharePlan').textContent='Share plan',1600);}track('mackinac_share_plan',{method:navigator.share?'native':'clipboard'});}catch{}
+    const text=`Our Mackinac plan: ${plan.departure_time} from ${plan.origin_port}, island arrival ${plan.arrival_time}, return ${returnPlanText(d)}. ${location.href}`;
+    try{if(navigator.share)await navigator.share({title:'Our Mackinac Trip',text,url:location.href});else{await navigator.clipboard.writeText(text);$('sharePlan').textContent='Copied';setTimeout(()=>$('sharePlan').textContent='Share plan',1600);}track('mackinac_share_plan',{method:navigator.share?'native':'clipboard'});}catch{}
   });
 
   document.addEventListener('click',e=>{const a=e.target.closest('#ferries a');if(a)track('mackinac_ferry_compared',{});});
+  syncTripModeUi();
   loadDecision();
 })();
