@@ -12,7 +12,7 @@ const html = fs.readFileSync(path.join(root, 'public', 'ontario-fishing-lake-fin
 test('Ontario fishing surfaces deploy from the pinned standalone V2 release without Replit', () => {
   assert.equal(
     pkg.dependencies?.['ontario-fishing-lake-finder'],
-    'github:izworskic/ontario-fishing-lake-finder#5d633f518db03f406c3bf9d6dcc8a8fdb895a06f'
+    'github:izworskic/ontario-fishing-lake-finder#74e532c79f369eed442c0b950dc9af9b64457632'
   );
   assert.match(pkg.scripts?.['vercel-build'] || '', /sync-ontario-finder\.mjs/);
   assert.match(api, /ontario-fishing-lake-finder\/api\/lakes/);
