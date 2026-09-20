@@ -79,6 +79,14 @@
     const port=plan.origin_port||'the better mainland port';
     const dep=plan.departure_time||'a verified departure';
     $('primaryRec').innerHTML=plan.departure_time?`<strong>Take the ${esc(dep)} from ${esc(port)}.</strong> ${esc(dec.primary_reason||'This preserves the strongest usable island window.')}`:'<strong>No verified ferry recommendation.</strong> Use the official operator links below before leaving.';
+    const profile=d.trip_profile||{};
+    const party=`${Number(profile.adults||2)} adult${Number(profile.adults||2)===1?'':'s'}${Number(profile.children||0)?` + ${profile.children} child${Number(profile.children)===1?'':'ren'}`:''}`;
+    const priorities=[...(profile.interests||[]),...(profile.must_do||[]).map(x=>`must: ${x}`)].slice(0,3);
+    setText('heroTripContext',[party,profile.trip==='overnight'?'overnight':'day trip',priorities.length?priorities.join(' · '):null].filter(Boolean).join(' · '));
+    setText('heroLeave',d.leave_home?.time||'Add a starting city');
+    setText('heroFerry',plan.departure_time?`${plan.departure_time} · ${plan.origin_port}`:'No verified ferry');
+    setText('heroIsland',plan.arrival_time||'—');
+    setText('heroReturn',d.ferry?.recommended_return?.departure_time||(profile.trip==='overnight'?'Overnight':'—'));
     const f=d.generated_at?new Date(d.generated_at).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):'—';
     setText('freshLine',`Decision generated ${f} ET · ${d.degraded?'Some inputs are degraded':'Core inputs available'}`);
   }
