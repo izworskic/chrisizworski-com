@@ -64,7 +64,7 @@ test('public surface makes the decision first and keeps return vs last ferry dis
   assert.match(html,/Return plan/);
   assert.match(html,/Last published ferry for return day/);
   assert.match(html,/Why this plan\?/);
-  assert.match(html,/Build my day/);
+  assert.match(html,/Build my Mackinac trip/);
   assert.match(html,/Modeled, not counted/);
   assert.match(html,/CC BY-SA 4\.0/);
   assert.match(html,/\/privacy\//);
@@ -449,21 +449,23 @@ test('browser sends both routed port times to the Mackinac decision API', () => 
   const js=fs.readFileSync(jsPath,'utf8');
   assert.match(js,/origin_mackinaw_minutes/);
   assert.match(js,/origin_st_ignace_minutes/);
-  assert.match(js,/Add the time you plan to leave home so we can determine which ferries are actually reachable/);
+  assert.match(js,/Add the trip date and leave-home time so the planner can choose the actual reachable ferry/);
 });
 
 
-test('Mackinac quick planner requires city and leave-home time as explicit inputs', () => {
+test('Mackinac personalized planner requires date city and leave-home time', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(html,/id="heroTripDate"/);
+  assert.match(html,/id="tripDate"/);
   assert.match(html,/id="heroDepartTime"/);
   assert.match(html,/id="departTime"/);
-  assert.match(html,/Where and when are you starting\?/);
-  assert.match(html,/Add city \+ leave time/);
-  assert.doesNotMatch(html,/id="heroLeave">Add a starting city/);
+  assert.match(html,/Plan the actual trip/);
+  assert.match(html,/Add date \+ city \+ time/);
+  assert.match(js,/p\.set\('trip_date',state\.tripDate\)/);
   assert.match(js,/p\.set\('depart_at',state\.departTime\)/);
-  assert.match(js,/Ferry feasibility depends on it/);
-  assert.match(js,/Starting city is set\. Add the time you plan to leave home/);
+  assert.match(js,/Choose the trip date first/);
+  assert.match(js,/Date and starting city are set\. Add the time you plan to leave home/);
 });
 
 test('24-hour leave-home input becomes a deterministic departure minute', () => {
@@ -502,14 +504,14 @@ test('entered leave-home time controls reachable ferry candidates and itinerary 
   const leave=itinerary.find(x=>x.stop_id==='mainland-drive');
   assert.ok(leave);
   assert.equal(leave.minute,7*60+30);
-  assert.match(leave.detail,/Your entered leave-home time/);
+  assert.match(leave.detail,/Uses your entered 7:30 AM leave-home time/);
 });
 
 test('client replaces stale starting-city prompt after city resolution', () => {
   const js=fs.readFileSync(jsPath,'utf8');
   assert.doesNotMatch(js,/d\.leave_home\?\.time\|\|'Add a starting city'/);
-  assert.match(js,/state\.originResolved\?\(state\.departTime\?'No reachable ferry':'Add leave time'\):'Add city \+ leave time'/);
-  assert.match(js,/leave \$\{clock\(leaveMinutes\)\} → \$\{plan\.origin_port\}/);
+  assert.match(js,/state\.tripDate&&state\.originResolved&&state\.departTime\?'No reachable ferry':'Add date \+ city \+ time'/);
+  assert.match(js,/\$\{dateLabel\(j\.trip_date\|\|state\.tripDate\)\} · \$\{j\.origin_label/);
 });
 
 
@@ -524,4 +526,40 @@ test('multi-day planner exposes nights and flexible return semantics', () => {
   assert.match(js,/trip_days/);
   assert.match(route,/returnPlanForStay/);
   assert.match(route,/Published 2026 ferry tickets are not day or time specific/);
+});
+
+
+test('trip date is validated and preserved as a real planning input', () => {
+  assert.equal(t.parseDateField('2026-09-20'),'2026-09-20');
+  assert.equal(t.parseDateField('2026-02-31'),null);
+  assert.equal(t.parseDateField('09/20/2026'),null);
+  const p=t.profileFromQuery({trip_date:'2026-10-26',depart_at:'07:00'},['day-trip'],'lower');
+  assert.equal(p.trip_date,'2026-10-26');
+  assert.equal(p.departure_minutes,7*60);
+});
+
+test('journey candidates carry route wait and door-to-island cost', () => {
+  const date='2026-09-20';
+  const profile=t.profileFromQuery({
+    trip_date:date,
+    origin_name:'Bay City, Michigan, US',
+    origin_drive_minutes:'125',
+    origin_preferred_port:'Mackinaw City',
+    origin_mackinaw_minutes:'125',
+    origin_st_ignace_minutes:'162',
+    depart_at:'06:00'
+  },['day-trip'],'lower');
+  const ctx={
+    date,personas:profile.personas,origin:'lower',profile,hourly:[],
+    marine:{score:90},attractions:t.attractionState(date,6*60),events:[],
+    sunrise:t.solarMinutes(date,45.8497,-84.6189,true),
+    sunset:t.solarMinutes(date,45.8497,-84.6189,false),sameDay:false,nowMinutes:6*60
+  };
+  const records=[...t.arnoldSchedule(date,true),...t.sheplersSchedule(date,true)];
+  const plan=t.planCandidates(records,ctx)[0];
+  assert.ok(plan);
+  assert.ok(Number.isFinite(plan.mainland_drive_minutes));
+  assert.ok(Number.isFinite(plan.pre_ferry_idle_minutes));
+  assert.ok(Number.isFinite(plan.door_to_island_minutes));
+  assert.equal(plan.trip_start_minutes,6*60);
 });

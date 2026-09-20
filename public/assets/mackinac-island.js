@@ -2,7 +2,7 @@
   'use strict';
   const API='/api/mackinac-island';
   const ORIGIN_API='/api/mackinac-origin';
-  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[]};
+  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',tripDate:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[]};
   const $=id=>document.getElementById(id);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const track=(name,params={})=>{try{if(typeof window.gtag==='function')window.gtag('event',name,params);}catch{}};
@@ -22,6 +22,12 @@
     if($('originCityInput')&&$('originCityInput').value!==v)$('originCityInput').value=v;
     if($('heroOriginInput')&&$('heroOriginInput').value!==v)$('heroOriginInput').value=v;
   }
+  function syncTripDateInputs(value){
+    const v=String(value||'').trim();
+    state.tripDate=v;
+    if($('tripDate')&&$('tripDate').value!==v)$('tripDate').value=v;
+    if($('heroTripDate')&&$('heroTripDate').value!==v)$('heroTripDate').value=v;
+  }
   function syncDepartInputs(value){
     const v=String(value||'').trim();
     state.departTime=v;
@@ -38,6 +44,11 @@
     if(!value)return '—';
     const d=new Date(`${value}T12:00:00`);
     return Number.isNaN(d.getTime())?String(value):d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  };
+  const detroitToday=()=>{
+    const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+    const get=t=>parts.find(p=>p.type===t)?.value||'';
+    return `${get('year')}-${get('month')}-${get('day')}`;
   };
   function syncTripModeUi(){
     const overnight=$('tripMode')?.value==='overnight'||state.personas.has('overnight');
@@ -57,8 +68,8 @@
   function clearResolvedOrigin({clearInputs=false}={}){
     state.originResolved=null;state.originQuery='';
     if(clearInputs)syncOriginInputs('');
-    setText('heroLeave','Add city + leave time');
-    setOriginStatus('Enter a starting city and leave-home time for a drive-aware ferry plan.');
+    setText('heroLeave','Add date + city + time');
+    setOriginStatus('Choose the trip date, starting city and leave-home time for a drive-aware ferry plan.');
   }
   function originMatches(value){
     const q=cleanOrigin(value).toLowerCase();
@@ -77,7 +88,7 @@
       syncOriginInputs(j.origin?.label||q);syncOriginSide();
       const alt=(j.routes||[]).find(x=>x.port!==j.preferred_port);
       const alternate=alt&&Number.isFinite(Number(alt.drive_minutes))?` · ${alt.port} ${driveLabel(alt.drive_minutes)}`:'';
-      setOriginStatus(`${j.origin?.label||q} → ${j.preferred_port} about ${driveLabel(j.drive_minutes)}${alternate}. Add the time you plan to leave home so we can determine which ferries are actually reachable.`,'resolved');
+      setOriginStatus(`${j.origin?.label||q} → ${j.preferred_port} about ${driveLabel(j.drive_minutes)}${alternate}. Add the trip date and leave-home time so the planner can choose the actual reachable ferry.`,'resolved');
       setText('heroLeave',state.departTime?'Calculating…':'Add leave time');
       track('mackinac_start_city_selected',{origin_city:j.origin?.label||q,preferred_port:j.preferred_port,source});
       if(reload&&state.departTime)loadDecision();
@@ -104,6 +115,7 @@
       if(Number.isFinite(Number(mackinaw?.drive_minutes)))p.set('origin_mackinaw_minutes',String(mackinaw.drive_minutes));
       if(Number.isFinite(Number(stIgnace?.drive_minutes)))p.set('origin_st_ignace_minutes',String(stIgnace.drive_minutes));
     }
+    if(state.tripDate)p.set('trip_date',state.tripDate);
     if(state.departTime)p.set('depart_at',state.departTime);
     const interests=[...document.querySelectorAll('#interestChoices input:checked')].map(x=>x.value);
     const must=[...document.querySelectorAll('#mustDoChoices input:checked')].map(x=>x.value);
@@ -132,17 +144,27 @@
     state.origin=btn.dataset.origin;clearResolvedOrigin({clearInputs:true});syncOriginSide();
     track('mackinac_start_location_entered',{origin:state.origin});loadDecision();
   }));
+  $('heroTripDate')?.addEventListener('change',e=>{
+    syncTripDateInputs(e.target.value);
+    setText('heroLeave',state.tripDate&&state.originResolved&&state.departTime?'Ready to plan':'Add date + city + time');
+  });
   $('heroDepartTime')?.addEventListener('change',e=>{
     syncDepartInputs(e.target.value);
-    if(state.originResolved)setText('heroLeave',state.departTime?'Ready to plan':'Add leave time');
+    if(state.originResolved)setText('heroLeave',state.tripDate&&state.departTime?'Ready to plan':'Add date + city + time');
   });
   $('heroOriginForm')?.addEventListener('submit',async e=>{
     e.preventDefault();
     const originText=cleanOrigin($('heroOriginInput')?.value);
+    syncTripDateInputs($('heroTripDate')?.value||'');
     syncDepartInputs($('heroDepartTime')?.value||'');
+    if(!state.tripDate){
+      setOriginStatus('Choose the trip date first.','error');
+      setText('heroLeave','Add date + city + time');
+      return;
+    }
     if(!originText){
       setOriginStatus('Enter your starting city first.','error');
-      setText('heroLeave','Add city + leave time');
+      setText('heroLeave','Add date + city + time');
       return;
     }
     if(!originMatches(originText)){
@@ -151,21 +173,27 @@
     }
     if(!state.departTime){
       setText('heroLeave','Add leave time');
-      setOriginStatus('Starting city is set. Add the time you plan to leave home to calculate reachable ferries.','error');
+      setOriginStatus('Date and starting city are set. Add the time you plan to leave home to calculate the reachable ferry and island arrival.','error');
       return;
     }
     setText('heroLeave','Calculating…');
-    setOriginStatus('Calculating the drive to both ports and the first ferries you can actually reach…','loading');
+    setOriginStatus(`Planning ${dateLabel(state.tripDate)} from ${state.originResolved?.origin?.label||state.originQuery}: drive to both ports, check-in timing, ferry wait and island arrival…`,'loading');
     loadDecision();
   });
   $('tripBuilder')?.addEventListener('submit',async e=>{
     e.preventDefault();
     setText('builderStatus','Rebuilding ferry choice and itinerary from your constraints…');
     const originText=cleanOrigin($('originCityInput')?.value);
+    syncTripDateInputs($('tripDate')?.value||'');
     syncDepartInputs($('departTime')?.value||'');
+    if(!state.tripDate){
+      setText('builderStatus','Add the trip date before building the trip.');
+      setText('leaveHome','Add date + city + time');
+      return;
+    }
     if(!originText){
       setText('builderStatus','Add a starting city before building the trip.');
-      setText('leaveHome','Add city + leave time');
+      setText('leaveHome','Add date + city + time');
       return;
     }
     if(originText&&!originMatches(originText)){
@@ -178,10 +206,11 @@
       setText('heroLeave','Add leave time');
       return;
     }
-    track('mackinac_itinerary_created',{personas:selectedPersonas().join('|'),origin_city:state.originResolved?.origin?.label||'none',depart_at:state.departTime,children:Number($('childCount')?.value||0),bikes:$('bikePlan')?.value||'none',pace:$('pace')?.value||'balanced'});
+    track('mackinac_itinerary_created',{personas:selectedPersonas().join('|'),trip_date:state.tripDate,origin_city:state.originResolved?.origin?.label||'none',depart_at:state.departTime,children:Number($('childCount')?.value||0),bikes:$('bikePlan')?.value||'none',pace:$('pace')?.value||'balanced'});
     loadDecision();
   });
   $('tripBuilder')?.addEventListener('change',e=>{
+    if(e.target?.id==='tripDate')syncTripDateInputs(e.target.value);
     if(e.target?.id==='departTime')syncDepartInputs(e.target.value);
     if(e.target?.id==='tripMode'){
       const trip=e.target.value;
@@ -203,7 +232,12 @@
     setText('confidence',`${String(dec.confidence||'medium').toUpperCase()} CONFIDENCE${dec.engine==='shared-harness-jev'?' · JEV-ranked feasible plan':' · deterministic ranking'}`);
     const banner=$('planningBanner');
     if(d.planning_mode==='tomorrow'){banner.hidden=false;banner.textContent=d.planning_reason||`Today’s useful day-trip window has closed. Planning ${d.plan_date_label||'tomorrow'} instead.`;$('page-title').textContent='Mackinac Island Tomorrow';}
-    else {banner.hidden=true;$('page-title').textContent='Mackinac Island Today';}
+    else if(d.planning_mode==='selected-date'){
+      const selectedToday=d.target_date===d.local_now?.date;
+      banner.hidden=selectedToday&&!d.planning_reason;
+      banner.textContent=d.planning_reason||`Planning ${dateLabel(d.target_date)} from your selected trip date.`;
+      $('page-title').textContent=selectedToday?'Mackinac Island Today':`Mackinac Island · ${dateLabel(d.target_date)}`;
+    } else {banner.hidden=true;$('page-title').textContent='Mackinac Island Today';}
     setText('bestArrival',plan.arrival_time||'No verified plan');
     setText('crowdsTop',d.crowds?.label||'—');
     setText('bikeTop',d.bike?`${d.bike.label} · ${Math.round(d.bike.score||0)}/100`:'—');
@@ -218,21 +252,23 @@
     const dep=plan.departure_time||'a verified departure';
     $('primaryRec').innerHTML=plan.departure_time?`<strong>Take the ${esc(dep)} from ${esc(port)}.</strong> ${esc(dec.primary_reason||'This preserves the strongest usable island window.')}`:'<strong>No verified ferry recommendation.</strong> Use the official operator links below before leaving.';
     const profile=d.trip_profile||{};
+    if(profile.trip_date)syncTripDateInputs(profile.trip_date);
     if(state.originResolved?.origin?.label)syncOriginInputs(state.originResolved.origin.label);
     const party=`${Number(profile.adults||2)} adult${Number(profile.adults||2)===1?'':'s'}${Number(profile.children||0)?` + ${profile.children} child${Number(profile.children)===1?'':'ren'}`:''}`;
     const priorities=[...(profile.interests||[]),...(profile.must_do||[]).map(x=>`must: ${x}`)].slice(0,3);
     setText('heroTripContext',[party,profile.trip==='overnight'?`${profile.nights||1} night${Number(profile.nights||1)===1?'':'s'}`:'day trip',priorities.length?priorities.join(' · '):null].filter(Boolean).join(' · '));
-    setText('heroLeave',d.leave_home?.time||(state.originResolved?(state.departTime?'No reachable ferry':'Add leave time'):'Add city + leave time'));
+    setText('heroLeave',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Add date + city + time'));
     setText('heroFerry',plan.departure_time?`${plan.departure_time} · ${plan.origin_port}`:'No verified ferry');
     setText('heroIsland',plan.arrival_time||'—');
     setText('heroReturn',returnPlanText(d));
-    if(state.originResolved&&state.departTime){
-      const leaveMinutes=inputTimeMinutes(state.departTime);
-      const selected=(state.originResolved.routes||[]).find(x=>x.port===plan.origin_port);
-      const drive=Number.isFinite(Number(selected?.drive_minutes))?driveLabel(selected.drive_minutes):'drive time unavailable';
+    if(state.tripDate&&state.originResolved&&state.departTime){
+      const j=d.journey||{};
+      const leave=j.leave_time||clock(inputTimeMinutes(state.departTime));
+      const drive=Number.isFinite(Number(j.mainland_drive_minutes))?driveLabel(j.mainland_drive_minutes):'drive time unavailable';
+      const wait=Number.isFinite(Number(j.pre_ferry_idle_minutes))?` · ${Math.round(j.pre_ferry_idle_minutes)} min before check-in window`:'';
       setOriginStatus(plan.departure_time
-        ? `${state.originResolved.origin?.label||state.originQuery} · leave ${clock(leaveMinutes)} → ${plan.origin_port} (${drive}) → ${plan.departure_time} ferry → ${plan.arrival_time} island arrival.`
-        : `${state.originResolved.origin?.label||state.originQuery} · leave ${clock(leaveMinutes)}. No verified ferry is reachable under the current trip constraints.`,
+        ? `${dateLabel(j.trip_date||state.tripDate)} · ${j.origin_label||state.originResolved.origin?.label||state.originQuery} ${leave} → ${j.ferry_port||plan.origin_port} (${drive})${wait} → ${j.ferry_departure||plan.departure_time} ferry → ${j.island_arrival||plan.arrival_time} island.`
+        : `${dateLabel(state.tripDate)} · ${state.originResolved.origin?.label||state.originQuery} at ${clock(inputTimeMinutes(state.departTime))}. No published ferry is reachable under the current constraints.`,
         plan.departure_time?'resolved':'error');
     }
     const f=d.generated_at?new Date(d.generated_at).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):'—';
@@ -303,8 +339,8 @@
     if(dayHost)dayHost.innerHTML=days.length?days.map(x=>`<article class="trip-day ${esc(x.role||'')}"><span>Day ${esc(x.day)} · ${esc(dateLabel(x.date))}</span><strong>${esc(x.title||'Trip day')}</strong><p>${esc(x.summary||'')}</p></article>`).join(''):'';
     $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title||x.label||'Plan stop')}</strong>${x.movement?`<span class="movement">${esc(x.movement)}</span>`:''}<p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>No complete itinerary</strong><p>Use the official ferry source links before leaving.</p></div></li>';
     setText('plannerExplain',d.itinerary_reason||'');
-    setText('leaveHome',d.leave_home?.time||(state.originResolved?(state.departTime?'No reachable ferry':'Add leave time'):'Add city + leave time'));
-    setText('leaveHomeNote',d.leave_home?.detail||(state.originResolved&&state.departTime?'No ferry in the verified schedule can be reached from that city after your entered leave-home time.':'Enter both a starting city and leave-home time. Drive estimates are not live traffic.'));
+    setText('leaveHome',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Add date + city + time'));
+    setText('leaveHomeNote',d.leave_home?.detail||(state.tripDate&&state.originResolved&&state.departTime?'No ferry in the verified schedule can be reached from that city on that date after your entered leave-home time.':'Enter the trip date, starting city and leave-home time. Drive estimates are not live traffic.'));
     const party=`${Number(p.adults||2)} adult${Number(p.adults||2)===1?'':'s'}${Number(p.children||0)?` + ${p.children} child${Number(p.children)===1?'':'ren'}`:''}`;
     const fit=[party,p.trip==='overnight'?`${p.nights||1} night${Number(p.nights||1)===1?'':'s'}`:'day trip',p.pace?`${p.pace} pace`:null,p.bikes&&p.bikes!=='none'?`${p.bikes} bikes`:null,p.mobility==='limited'?'limited steep walking':null].filter(Boolean);
     setText('tripFit',fit.join(' · '));
@@ -397,6 +433,7 @@
   });
 
   document.addEventListener('click',e=>{const a=e.target.closest('#ferries a');if(a)track('mackinac_ferry_compared',{});});
+  syncTripDateInputs(detroitToday());
   syncTripModeUi();
   loadDecision();
 })();
