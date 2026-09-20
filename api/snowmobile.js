@@ -5,7 +5,7 @@ module.exports=async function(req,res){
   if(req.method!=='GET')return send(res,{error:'Method not allowed'},405);
   const now=new Date();if(cache&&Date.now()-cache.savedAt<300000)return send(res,{...cache.payload,operational:{...cache.payload.operational,dataState:'cached-fresh'}});
   try{
-    const [{fetchDnrCorridor,fetchDnrClosures,fetchClub,fetchWeather},{isSnowmobileSeason,freshness,featureLatitude,corridorSection,closureForSegment,scoreSegment,routeDecision,confidence},{interpretClubReport}]=await Promise.all([
+    const [{fetchDnrCorridor,fetchDnrClosures,fetchClub,fetchWeather},{isSnowmobileSeason,freshness,featureLatitude,corridorSection,closureForSegment,scoreSegment,routeDecision,confidence,rankRideWindows},{interpretClubReport}]=await Promise.all([
       import('../lib/snowmobile/sources.mjs'),import('../lib/snowmobile/engine.mjs'),import('../lib/snowmobile/harness.mjs')
     ]);
     const [dnrR,closuresR,grayR,gayR,weatherR]=await Promise.allSettled([fetchDnrCorridor(),fetchDnrClosures(),fetchClub('grayling'),fetchClub('gaylord'),fetchWeather()]);
@@ -24,6 +24,10 @@ module.exports=async function(req,res){
       return {...base,...scoreSegment(base,{clubReport:report,weather:wx,season,verifiedClosure})};
     });
     const route=routeDecision(segments,{season,closureLayerVerified:closuresR.status==='fulfilled'});
+    const sectionOrder=['grayling','frederic','waters','gaylord'];
+    const sectionLabels={grayling:'Grayling',frederic:'Frederic',waters:'Waters',gaylord:'Gaylord'};
+    const sections=sectionOrder.map(key=>{const ss=segments.filter(s=>s.section===key);const d=routeDecision(ss,{season,closureLayerVerified:closuresR.status==='fulfilled'});return {key,label:sectionLabels[key],segmentCount:ss.length,...d};});
+    const timing=rankRideWindows(weather,season);
     const coverage=features.length?Math.min(1,segments.length/features.length):0;
     const conflicts=[gray,gay].filter(r=>r?.condition&&r?.groomingFreshness?.state==='STALE').length;
     const conf=confidence({officialFresh:true,closureLayerVerified:closuresR.status==='fulfilled',clubReports:[gray,gay].filter(Boolean),weatherFresh:weatherR.status==='fulfilled',segmentCoverage:coverage,conflicts});
@@ -31,7 +35,7 @@ module.exports=async function(req,res){
     const allowed=segments.slice(0,20).map(s=>s.id);
     const jev=await Promise.all([gray,gay].filter(r=>r?.reportText).map(r=>interpretClubReport({text:r.reportText,source:r.name,allowedSegments:allowed},requestOidc)));
     const payload={generatedAt:now.toISOString(),season:{active:season,officialWindow:'Dec. 1–Mar. 31'},
-      route:{name:'Grayling → Frederic → Waters → Gaylord',...route,confidence:conf},
+      route:{name:'Grayling → Frederic → Waters → Gaylord',...route,confidence:conf},sections,timing,
       segments,
       scoredGeometry:{type:'FeatureCollection',features:segments.map(s=>({type:'Feature',properties:{id:s.id,section:s.section,trailNetwork:s.trailNetwork,groomingSponsor:s.groomingSponsor,score:s.score,band:s.band,legalState:s.legalState,surface:s.surface,onRoad:s.onRoad,miles:s.miles,reasons:s.reasons},geometry:s.geometry}))},
       geometry:{type:'FeatureCollection',features},closures:{verified:closuresR.status==='fulfilled',features:closures},
