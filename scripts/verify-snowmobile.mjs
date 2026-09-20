@@ -33,7 +33,7 @@ check("canonical", content.html.includes('<link rel="canonical" href="https://ch
 check("decision-before-map", content.html.indexOf('id="primaryDecision"') > 0 && content.html.indexOf('id="primaryDecision"') < content.html.indexOf('id="mapSection"'));
 check("no-decorative-hero-before-decision", !content.html.slice(0,content.html.indexOf('id="primaryDecision"')).match(/<img|hero-image|background-image/i));
 check("condition-and-confidence", content.html.includes('id="conditionLabel"') && content.html.includes('id="confidenceValue"'));
-check("origin-personalization", content.html.includes('id="originForm"') && content.drive.includes("NOMINATIM") && content.drive.includes("router.project-osrm.org"));
+check("origin-personalization", content.html.includes('id="originForm"') && content.drive.includes("MAPBOX_TOKEN") && content.drive.includes("PRESET_ORIGINS"));
 check("official-dnr-backbone", content.sources.includes("DNRTrailsOPENDATA") && content.sources.includes("arcgisUrl(15"));
 check("closure-reroute-layers", content.sources.includes("arcgisUrl(0") && content.sources.includes("arcgisUrl(1"));
 check("trail7-route-gate", content.engine.includes("isTrail7Segment") && content.engine.includes("ROUTE_BROKEN"));
