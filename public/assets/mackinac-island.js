@@ -339,8 +339,8 @@
     if(dayHost)dayHost.innerHTML=days.length?days.map(x=>`<article class="trip-day ${esc(x.role||'')}"><span>Day ${esc(x.day)} · ${esc(dateLabel(x.date))}</span><strong>${esc(x.title||'Trip day')}</strong><p>${esc(x.summary||'')}</p></article>`).join(''):'';
     $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title||x.label||'Plan stop')}</strong>${x.movement?`<span class="movement">${esc(x.movement)}</span>`:''}<p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>No complete itinerary</strong><p>Use the official ferry source links before leaving.</p></div></li>';
     setText('plannerExplain',d.itinerary_reason||'');
-    setText('leaveHome',d.leave_home?.time||(state.originResolved?(state.departTime?'No reachable ferry':'Add leave time'):'Add city + leave time'));
-    setText('leaveHomeNote',d.leave_home?.detail||(state.originResolved&&state.departTime?'No ferry in the verified schedule can be reached from that city after your entered leave-home time.':'Enter both a starting city and leave-home time. Drive estimates are not live traffic.'));
+    setText('leaveHome',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Add date + city + time'));
+    setText('leaveHomeNote',d.leave_home?.detail||(state.tripDate&&state.originResolved&&state.departTime?'No ferry in the verified schedule can be reached from that city on that date after your entered leave-home time.':'Enter the trip date, starting city and leave-home time. Drive estimates are not live traffic.'));
     const party=`${Number(p.adults||2)} adult${Number(p.adults||2)===1?'':'s'}${Number(p.children||0)?` + ${p.children} child${Number(p.children)===1?'':'ren'}`:''}`;
     const fit=[party,p.trip==='overnight'?`${p.nights||1} night${Number(p.nights||1)===1?'':'s'}`:'day trip',p.pace?`${p.pace} pace`:null,p.bikes&&p.bikes!=='none'?`${p.bikes} bikes`:null,p.mobility==='limited'?'limited steep walking':null].filter(Boolean);
     setText('tripFit',fit.join(' · '));
@@ -433,6 +433,7 @@
   });
 
   document.addEventListener('click',e=>{const a=e.target.closest('#ferries a');if(a)track('mackinac_ferry_compared',{});});
+  syncTripDateInputs(detroitToday());
   syncTripModeUi();
   loadDecision();
 })();
