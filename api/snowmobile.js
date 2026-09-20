@@ -1,6 +1,27 @@
 let cache=null;
 function send(res,payload,status=200){res.status(status);res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','public, s-maxage=300, stale-while-revalidate=900');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('X-Robots-Tag','noindex, nofollow');res.json(payload);}
 function reportDate(raw){if(!raw)return null;const cleaned=String(raw).replace(/(\d+)(st|nd|rd|th)/,'$1').replace('@',' ');const d=new Date(cleaned);return Number.isFinite(d.getTime())?d.toISOString():null;}
+function parseSourceTime(value){
+  if(value==null||value==='')return null;
+  let raw=value;
+  if(typeof raw==='string'&&/^\d+$/.test(raw.trim()))raw=Number(raw.trim());
+  if(typeof raw==='number'&&Number.isFinite(raw)&&raw<1e12)raw*=1000;
+  const d=new Date(raw);return Number.isFinite(d.getTime())?d.toISOString():null;
+}
+function newestIso(values){
+  const valid=values.map(parseSourceTime).filter(Boolean).map(x=>new Date(x)).sort((a,b)=>b-a);
+  return valid[0]?.toISOString()||null;
+}
+function groomingSummary(reports=[]){
+  const known=reports.filter(r=>r?.lastGroomedAt);
+  if(!known.length)return {state:'UNKNOWN',label:'Grooming not verified',known:0,recent:0};
+  const recent=known.filter(r=>['LIVE','VERY_RECENT','RECENT'].includes(r.groomingFreshness?.state));
+  const aging=known.filter(r=>r.groomingFreshness?.state==='AGING');
+  if(recent.length===known.length)return {state:'RECENT',label:known.length>1?'Both club grooming fields are within 24h':'Club grooming field is within 24h',known:known.length,recent:recent.length};
+  if(recent.length)return {state:'MIXED',label:`${recent.length} of ${known.length} club grooming fields are within 24h`,known:known.length,recent:recent.length};
+  if(aging.length)return {state:'AGING',label:'Latest structured grooming evidence is more than 24h old',known:known.length,recent:0};
+  return {state:'STALE',label:'Structured grooming fields are stale',known:known.length,recent:0};
+}
 module.exports=async function(req,res){
   if(req.method!=='GET')return send(res,{error:'Method not allowed'},405);
   const now=new Date();if(cache&&Date.now()-cache.savedAt<300000)return send(res,{...cache.payload,operational:{...cache.payload.operational,dataState:'cached-fresh'}});
@@ -28,6 +49,18 @@ module.exports=async function(req,res){
     const sectionLabels={grayling:'Grayling',frederic:'Frederic',waters:'Waters',gaylord:'Gaylord'};
     const sections=sectionOrder.map(key=>{const ss=segments.filter(s=>s.section===key);const d=routeDecision(ss,{season,closureLayerVerified:closuresR.status==='fulfilled'});return {key,label:sectionLabels[key],segmentCount:ss.length,...d};});
     const timing=rankRideWindows(weather,season);
+    const grooming=groomingSummary([gray,gay].filter(Boolean));
+    const trailEdited=newestIso(features.map(f=>f?.properties?.EditDate));
+    const closureEdited=newestIso(closures.map(f=>f?.properties?.last_edite||f?.properties?.created_da));
+    const newestDatedSource=newestIso([gray?.reportedAt,gay?.reportedAt,weather?.grayling?.generatedAt,weather?.gaylord?.generatedAt,trailEdited,closureEdited]);
+    const decisionFeedCount=[
+      features.length>0,
+      closuresR.status==='fulfilled',
+      gray&&!gray.error,
+      gay&&!gay.error,
+      weatherR.status==='fulfilled'&&(!weather?.grayling?.error||!weather?.gaylord?.error)
+    ].filter(Boolean).length;
+    const sourceSummary={decisionFeedCount,contextFeedCount:1,newestDatedSource,trailEdited,closureEdited,label:`${decisionFeedCount} decision feed${decisionFeedCount===1?'':'s'} + NOAA snow map`};
     const coverage=features.length?Math.min(1,segments.length/features.length):0;
     const conflicts=[gray,gay].filter(r=>r?.condition&&r?.groomingFreshness?.state==='STALE').length;
     const conf=confidence({officialFresh:true,closureLayerVerified:closuresR.status==='fulfilled',clubReports:[gray,gay].filter(Boolean),weatherFresh:weatherR.status==='fulfilled',segmentCoverage:coverage,conflicts});
@@ -35,7 +68,7 @@ module.exports=async function(req,res){
     const allowed=segments.slice(0,20).map(s=>s.id);
     const jev=await Promise.all([gray,gay].filter(r=>r?.reportText).map(r=>interpretClubReport({text:r.reportText,source:r.name,allowedSegments:allowed},requestOidc)));
     const payload={generatedAt:now.toISOString(),season:{active:season,officialWindow:'Dec. 1–Mar. 31'},
-      route:{name:'Grayling → Frederic → Waters → Gaylord',...route,confidence:conf},sections,timing,
+      route:{name:'Grayling → Frederic → Waters → Gaylord',...route,confidence:conf},sections,timing,grooming,sourceSummary,
       segments,
       scoredGeometry:{type:'FeatureCollection',features:segments.map(s=>({type:'Feature',properties:{id:s.id,section:s.section,trailNetwork:s.trailNetwork,groomingSponsor:s.groomingSponsor,score:s.score,band:s.band,legalState:s.legalState,surface:s.surface,onRoad:s.onRoad,miles:s.miles,reasons:s.reasons},geometry:s.geometry}))},
       geometry:{type:'FeatureCollection',features},closures:{verified:closuresR.status==='fulfilled',features:closures},
