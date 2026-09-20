@@ -1,0 +1,32 @@
+name: Mackinac install Vercel OIDC
+
+on:
+  push:
+    branches:
+      - 'feature/mackinac-jev-platform'
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/mackinac-jev-platform
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Add Vercel OIDC helper
+        run: |
+          npm install @vercel/oidc --save-exact --ignore-scripts --no-audit --no-fund
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- package.json package-lock.json; then
+            exit 0
+          fi
+          git add package.json package-lock.json
+          git commit -m "Add Vercel OIDC helper for shared JEV"
+          git push origin HEAD:feature/mackinac-jev-platform
