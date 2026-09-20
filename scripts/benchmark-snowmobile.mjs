@@ -1,4 +1,5 @@
-// Snowmobile release gate v1 — rerun after authority/closure hardening.\nimport fs from 'node:fs';
+// Snowmobile release gate v1 — rerun after authority/closure hardening.
+import fs from 'node:fs';
 import path from 'node:path';
 const root=process.cwd();
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
