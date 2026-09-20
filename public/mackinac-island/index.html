@@ -19,7 +19,7 @@
 <meta name="twitter:title" content="Mackinac Island Today: Best Ferry, Weather & Day Plan">
 <meta name="twitter:description" content="A live decision tool for choosing the ferry, timing the island, biking and getting home comfortably.">
 <link rel="preconnect" href="https://api.weather.gov">
-<link rel="stylesheet" href="/assets/mackinac-island.css?v=20260920-live14">
+<link rel="stylesheet" href="/assets/mackinac-island.css?v=20260920-live15">
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -63,7 +63,7 @@
 }
 </script>
 </head>
-<body data-mackinac-build="20260920-live14">
+<body data-mackinac-build="20260920-live15">
 <a class="skip" href="#main">Skip to live decision</a>
 <header class="sitebar">
   <div class="shell sitebar-inner">
@@ -247,6 +247,12 @@
         <article><span>Your visit</span><strong id="tripFit">Building…</strong><p id="tripFitNote">Your constraints will show here.</p></article>
       </div>
       <div class="planner-summary" id="plannerSummary">Building a realistic trip from the selected visitor modes…</div>
+      <section class="trip-shape-panel" id="tripShapePanel" hidden aria-labelledby="trip-shape-title">
+        <div class="trip-shape-head"><div><span class="eyebrow">How the trip should flow</span><h3 id="trip-shape-title">Your Mackinac trip shape</h3><p id="tripShapeSummary"></p></div><span class="shape-badge" id="tripShapeBadge">Planning</span></div>
+        <div class="trip-shape-days" id="tripShapeDays"></div>
+        <div class="trip-shape-avoid" id="tripShapeAvoid"></div>
+        <p class="trip-shape-truth" id="tripShapeTruth"></p>
+      </section>
       <div class="trip-days" id="tripDays" aria-live="polite"></div>
       <ol class="itinerary" id="itinerary"><li><time>—</time><div><strong>Loading your plan</strong><p>Checking feasible timing.</p></div></li></ol>
       <p class="planner-explain" id="plannerExplain"></p>
@@ -389,6 +395,6 @@
   </div>
 </main>
 <footer class="footer"><div class="shell"><p>Built by <a href="/">Chris Izworski</a>. Live source agencies and ferry operators remain authoritative for their own conditions and schedules. This tool is trip-planning guidance, not a guarantee of service or weather.</p><p><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p></div></footer>
-<script src="/assets/mackinac-island.js?v=20260920-live14" defer></script>
+<script src="/assets/mackinac-island.js?v=20260920-live15" defer></script>
 </body>
 </html>
