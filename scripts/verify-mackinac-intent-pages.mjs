@@ -10,7 +10,8 @@ const pages=[
   ["from-traverse-city","Traverse City to Mackinac Island Trip Planner"],
   ["from-grand-rapids","Grand Rapids to Mackinac Island Trip Planner"],
   ["limited-walking","Mackinac Island With Less Walking Planner"],
-  ["bike-day","Mackinac Island Bike Day & M-185 Planner"]
+  ["bike-day","Mackinac Island Bike Day & M-185 Planner"],
+  ["fall","Mackinac Island Fall Trip Planner"]
 ];
 let fail=false;
 for(const [slug,title] of pages){
