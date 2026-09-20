@@ -25,11 +25,11 @@ Site baseline from the September 20, 2026 Search Console last-24-hours export:
 Priority pages:
 
 - `/soo-locks/`: PROTECT. 372 impressions, 34 clicks, 9.14% CTR, position 4.42.
-- `/fall-color/`: PUSH. 352 impressions, 5 clicks, 1.42% CTR, position 7.33.
-- `/great-lakes-freighter-tracking/`: PUSH. 350 impressions, 3 clicks, 0.86% CTR, position 7.59.
-- `/northern-lights-michigan/`: PUSH. 257 impressions, 0 clicks, position 7.51.
-- `/mackinac-bridge-tolls/`: PUSH. 251 impressions, 0 clicks, position 8.37.
-- `/mackinac-bridge-live/`: PUSH. 184 impressions, 1 click, 0.54% CTR, position 8.66.
+- `/fall-color/`: PROTECT. 352 impressions, 5 clicks, 1.42% CTR, position 7.33.
+- `/great-lakes-freighter-tracking/`: PROTECT. 350 impressions, 3 clicks, 0.86% CTR, position 7.59.
+- `/northern-lights-michigan/`: PROTECT. 257 impressions, 0 clicks, position 7.51.
+- `/mackinac-bridge-tolls/`: PROTECT. 251 impressions, 0 clicks, position 8.37.
+- `/mackinac-bridge-live/`: PROTECT. 184 impressions, 1 click, 0.54% CTR, position 8.66.
 
 ## Success target
 
@@ -51,20 +51,17 @@ Do not claim causal uplift from a single day.
 
 ## Execution order
 
-### 1. Protect the winner
+### 1. Protect the winners
 
-Treat `/soo-locks/` as the control pattern. Preserve its query-first title, live answer, AIS utility, canonical, and first-screen hierarchy.
+Treat all six priority pages as protected winners. Preserve their current query-first title, H1, canonical, first-screen hierarchy, structured data, and live decision utility.
 
-### 2. Fix high-impression, low-click pages before building adjacent URLs
+Do not rewrite search-facing treatment on these pages from a one-day CTR reading. Future changes should be additive, evidence-backed, and independently measured.
 
-For each PUSH page:
+### 2. Improve around the winners, not through them
 
-- confirm the current title matches the actual query family,
-- confirm the meta description promises what the page immediately delivers,
-- confirm the first screen answers the decision without requiring a long scroll,
-- preserve one canonical owner for the topic,
-- strengthen internal links from semantically related pages,
-- connect the visible publisher attribution to `/chris-izworski/`.
+Prefer contextual internal links, supporting authority, source quality, freshness, and adjacent distinct utilities over changing the winners themselves.
+
+Any future title, H1, meta-description, canonical, first-answer, or schema treatment on one of these six pages requires a documented reason, a clean measurement plan, and the full release gate.
 
 ### 3. Strengthen name SEO without cannibalizing tool intent
 
