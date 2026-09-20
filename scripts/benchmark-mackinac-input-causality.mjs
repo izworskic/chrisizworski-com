@@ -70,7 +70,7 @@ const checks={
     /id="tripDate"/.test(html) &&
     /trip_date/.test(js) &&
     /pre_ferry_idle_minutes/.test(js) &&
-    /door-to-island/i.test(html+js+route)
+    /Your mainland start|mainland_drive_minutes|door-to-island/i.test(html+js+route)
 };
 
 const weights={
