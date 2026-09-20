@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-08-22",
+  "updated": "2026-09-20",
   "timezone": "America/Detroit",
   "objective": "Convert two unprotected gardening pages already at the page-one threshold into qualified clicks without changing the active tomato-planting or frost-date experiments.",
   "source": {
@@ -61,5 +61,42 @@
         "stopLossAveragePositionWorseThan": 15
       }
     }
-  ]
+  ],
+  "latestObserved": {
+    "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-09-20",
+    "exportedThrough": "2026-09-17",
+    "windowDays": 7,
+    "pages": {
+      "zone-6a-calendar": {
+        "impressions": 136,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 9.18
+      },
+      "heirloom-tomatoes": {
+        "impressions": 152,
+        "clicks": 1,
+        "ctr": 0.006578947368421052,
+        "averagePosition": 7.12
+      }
+    },
+    "protectedNeighborSignals": {
+      "when-to-plant-tomatoes-michigan": {
+        "impressions": 270,
+        "clicks": 0,
+        "ctr": 0,
+        "averagePosition": 6.24
+      }
+    },
+    "interpretation": "Visibility expanded sharply across the cluster. Preserve the active page treatments and add authority/navigation from the Michigan Gardening hub instead of resetting titles or H1s."
+  },
+  "authoritySupport": {
+    "surface": "/michigan-gardening/",
+    "requiredLinks": [
+      "/zone-6a-planting-calendar/",
+      "/when-to-plant-tomatoes-michigan/",
+      "/heirloom-tomatoes-michigan/"
+    ],
+    "rule": "Support protected page-one experiments from the hub; do not rewrite their title, H1, canonical or first-answer treatment during this authority pass."
+  }
 }
