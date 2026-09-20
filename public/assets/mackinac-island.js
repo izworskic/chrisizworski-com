@@ -56,25 +56,58 @@
       track('mackinac_tab_opened',{tab:btn.dataset.tripTab,profile:profile.primary?.id||'unknown'});
     }));
   }
-  function renderDepthGuides(profile){
+  function matchLabel(score){
+    const n=Number(score)||0;
+    return n>=88?'Excellent fit':n>=78?'Strong fit':n>=68?'Good fit':'Worth considering';
+  }
+  function renderPlaceCards(hostId,items,{kind='place',limit=4}={}){
+    const host=$(hostId);if(!host)return;
+    const rows=(items||[]).slice(0,limit);
+    if(!rows.length){host.innerHTML='<article class="depth-card"><strong>No ranked options yet</strong><p>Use the official directory while this part of the trip is being expanded.</p></article>';return;}
+    host.innerHTML=rows.map((item,index)=>{
+      const meta=[item.district||item.gateway||'',item.type||item.style||'',item.price_band||''].filter(Boolean).join(' · ');
+      const season=item.season_status_label||'Seasonal status: verify';
+      const traits=(item.traits||[]).slice(0,4).join(' · ');
+      return `<article class="place-card${item.season_eligible===false?' season-past':''}">
+        <div class="place-card-top"><span class="fit-pill">${index===0?'Best match':matchLabel(item.fit_score)}</span><small>${esc(String(item.fit_score||0))}% profile fit</small></div>
+        <h3>${esc(item.name)}</h3>
+        <p class="place-meta">${esc(meta)}</p>
+        <p>${esc(item.fit_reason||item.note||'Fits this trip profile.')}</p>
+        ${traits?`<p class="place-traits">${esc(traits)}</p>`:''}
+        <div class="place-footer"><span>${esc(season)}</span><a href="${esc(item.source_url)}" target="_blank" rel="noopener">Official info ↗</a></div>
+      </article>`;
+    }).join('');
+  }
+  function renderDepthGuides(profile,d=null){
     if(!profile)return;const v=profile.vector||{},a=profile.answers||{};
+    const places=d?.place_intelligence||state.data?.place_intelligence||null;
     const overnight=['one-night','two-three','four-plus'].includes(a.trip_duration);
     setText('stayGuideText',overnight
-      ? (v.crowd_avoidance>=.72?'Your profile favors getting value from the Island after day-trip crowds ease. Compare quiet location against the convenience of staying downtown.':'Your stay should minimize friction between lodging, meals and the experiences you care about most.')
-      : 'This profile is a day trip, so lodging stays out of the way unless you decide the quiet evening and early morning are worth adding a night.');
-    const stayCards=$('stayGuideCards');if(stayCards)stayCards.innerHTML=[
-      ['Location',v.crowd_avoidance>=.72?'Quiet after the ferries':'Convenient to your day','Use location as a trip decision, not just a room filter.'],
-      ['Experience',v.special_occasion>=.68?'Make the stay part of the memory':'Keep lodging proportional','Resort, historic inn, B&B or simple room should match why you are here.'],
-      ['Trip length',overnight?'Use the no-ferry hours':'Day trip stays lean',overnight?'Early and late Island time is part of the value.':'Do not let lodging research distract from a same-day plan.']
-    ].map(x=>`<article class="depth-card"><span>${esc(x[0])}</span><strong>${esc(x[1])}</strong><p>${esc(x[2])}</p></article>`).join('');
-    setText('eatGuideText',v.food>=.72?'Food is part of the experience for this profile, so the itinerary should protect a real meal window instead of squeezing one in wherever there is a gap.':v.kids_priority>=.7?'Meals should protect energy and avoid letting hunger become the thing that breaks the day.':'Meals should fit the route and crowd pattern rather than forcing unnecessary backtracking.');
-    const eatCards=$('eatGuideCards');if(eatCards)eatCards.innerHTML=[
-      ['Timing',v.crowd_avoidance>=.72?'Favor off-peak windows':'Fit the route first',v.crowd_avoidance>=.72?'Shift the meal when that buys you a calmer Island experience.':'Avoid crossing the Island just to satisfy a rigid meal clock.'],
-      ['Pace',v.food>=.72?'Protect 60–90 minutes':'Keep it flexible',v.food>=.72?'A real meal belongs in the plan.':'Use a shorter meal when activities matter more.'],
-      ['Party',v.kids_priority>=.7?'Easy + forgiving':'Match the occasion',v.kids_priority>=.7?'Shorter waits and flexible menus matter more with kids.':v.special_occasion>=.68?'The meal can be one of the anchor experiences.':'Let location and timing do most of the work.']
-    ].map(x=>`<article class="depth-card"><span>${esc(x[0])}</span><strong>${esc(x[1])}</strong><p>${esc(x[2])}</p></article>`).join('');
-    setText('straitsGuideText',v.regional_exploration>=.72?'This profile has enough time and appetite for a broader Straits trip. We’ll favor stops that lie naturally on your approach or departure instead of creating side-trip sprawl.':v.regional_exploration<=.2?'Keep this one Island-focused. Mainland stops should only appear when they solve a timing or weather problem.':'Treat Mackinaw City and St. Ignace as useful gateways, not mandatory add-ons. Add a mainland stop only when it fits the route or fills otherwise dead time.');
+      ? (v.crowd_avoidance>=.72?'Your profile favors getting value from the Island after day-trip crowds ease. These are fit matches, not availability claims.':'These stays are ranked against your trip style. Room availability and live rates are not assumed.')
+      : 'This is a day trip, so lodging is intentionally lower priority. These are only options if you decide the quiet evening and early morning are worth adding a night.');
+    if(places?.lodging?.recommended){
+      renderPlaceCards('stayGuideCards',places.lodging.recommended,{kind:'lodging',limit:overnight?4:3});
+    }else{
+      const stayCards=$('stayGuideCards');if(stayCards)stayCards.innerHTML=[
+        ['Location',v.crowd_avoidance>=.72?'Quiet after the ferries':'Convenient to your day','Use location as a trip decision, not just a room filter.'],
+        ['Experience',v.special_occasion>=.68?'Make the stay part of the memory':'Keep lodging proportional','Resort, historic inn, B&B or simple room should match why you are here.'],
+        ['Trip length',overnight?'Use the no-ferry hours':'Day trip stays lean',overnight?'Early and late Island time is part of the value.':'Do not let lodging research distract from a same-day plan.']
+      ].map(x=>`<article class="depth-card"><span>${esc(x[0])}</span><strong>${esc(x[1])}</strong><p>${esc(x[2])}</p></article>`).join('');
+    }
+    setText('eatGuideText',v.food>=.72?'Food is part of the experience for this profile. These matches are ranked by trip fit; current hours, waits and reservations still need checking.':v.kids_priority>=.7?'Meals should protect energy and avoid letting hunger become the thing that breaks the day.':'Meals should fit the route and crowd pattern rather than forcing unnecessary backtracking.');
+    if(places?.dining?.recommended){
+      renderPlaceCards('eatGuideCards',places.dining.recommended,{kind:'dining',limit:5});
+    }else{
+      const eatCards=$('eatGuideCards');if(eatCards)eatCards.innerHTML=[
+        ['Timing',v.crowd_avoidance>=.72?'Favor off-peak windows':'Fit the route first',v.crowd_avoidance>=.72?'Shift the meal when that buys you a calmer Island experience.':'Avoid crossing the Island just to satisfy a rigid meal clock.'],
+        ['Pace',v.food>=.72?'Protect 60–90 minutes':'Keep it flexible',v.food>=.72?'A real meal belongs in the plan.':'Use a shorter meal when activities matter more.'],
+        ['Party',v.kids_priority>=.7?'Easy + forgiving':'Match the occasion',v.kids_priority>=.7?'Shorter waits and flexible menus matter more with kids.':v.special_occasion>=.68?'The meal can be one of the anchor experiences.':'Let location and timing do most of the work.']
+      ].map(x=>`<article class="depth-card"><span>${esc(x[0])}</span><strong>${esc(x[1])}</strong><p>${esc(x[2])}</p></article>`).join('');
+    }
+    setText('straitsGuideText',v.regional_exploration>=.72?'This profile has enough time and appetite for a broader Straits trip. The matches below favor stops that naturally fit a gateway instead of creating side-trip sprawl.':v.regional_exploration<=.2?'Keep this one Island-focused. Mainland stops should only appear when they solve a timing or weather problem.':'Treat Mackinaw City and St. Ignace as useful gateways, not mandatory add-ons.');
+    if(places?.regional?.recommended)renderPlaceCards('straitsGuideCards',places.regional.recommended,{kind:'regional',limit:v.regional_exploration>=.45?4:2});
   }
+
   function renderProfile(profile){
     state.tripProfile=profile;if(!profile)return;
     const card=$('tripProfileCard');if(card)card.hidden=false;
@@ -83,7 +116,7 @@
     const focus=$('tripProfileFocus');if(focus)focus.innerHTML=profileFocusLabels(profile).map(x=>`<span>${esc(x)}</span>`).join('');
     const work=$('intakeWork');if(work)work.hidden=true;
     const reset=$('intakeReset');if(reset)reset.hidden=false;
-    renderTripTabs(profile);renderDepthGuides(profile);storageSet();
+    renderTripTabs(profile);renderDepthGuides(profile,state.data);storageSet();
     track('mackinac_profile_classified',{profile:profile.primary?.id||'unknown',engine:profile.engine||'unknown',confidence:profile.jev_confidence??profile.confidence??0});
     if(profile.next_question&&!state.adaptiveAsked)renderAdaptiveQuestion(profile.next_question);
     else if($('adaptiveQuestion'))$('adaptiveQuestion').hidden=true;
@@ -661,7 +694,7 @@
       buildMap();
     }
   }
-  function renderAll(d){state.data=d;renderTop(d);renderWhy(d);renderFerries(d);renderConditions(d);renderWebcams(d);renderCrowdsOpen(d);renderSeasonal(d);renderPlanner(d);renderSources(d);renderMapPoints(d);if(state.tripProfile){renderTripTabs(state.tripProfile);renderDepthGuides(state.tripProfile);}else if(d.visitor_intelligence){renderTripTabs(d.visitor_intelligence);renderDepthGuides(d.visitor_intelligence);}}
+  function renderAll(d){state.data=d;renderTop(d);renderWhy(d);renderFerries(d);renderConditions(d);renderWebcams(d);renderCrowdsOpen(d);renderSeasonal(d);renderPlanner(d);renderSources(d);renderMapPoints(d);if(state.tripProfile){renderTripTabs(state.tripProfile);renderDepthGuides(state.tripProfile,d);}else if(d.visitor_intelligence){renderTripTabs(d.visitor_intelligence);renderDepthGuides(d.visitor_intelligence,d);}}
 
   async function loadDecision(){
     $('decisionPanel').setAttribute('aria-busy','true');
