@@ -63,7 +63,7 @@ test('public surface makes the decision first and keeps return vs last ferry dis
   assert.match(html,/Best island arrival/);
   assert.match(html,/Return plan/);
   assert.match(html,/Last published ferry for return day/);
-  assert.match(html,/Why this plan\?/);
+  assert.match(html,/Why this timing\?/);
   assert.match(html,/Build my Mackinac trip/);
   assert.match(html,/Modeled, not counted/);
   assert.match(html,/CC BY-SA 4\.0/);
@@ -460,7 +460,7 @@ test('Mackinac personalized planner requires date city and leave-home time', () 
   assert.match(html,/id="tripDate"/);
   assert.match(html,/id="heroDepartTime"/);
   assert.match(html,/id="departTime"/);
-  assert.match(html,/Plan the actual trip/);
+  assert.match(html,/Start with your travel day/);
   assert.match(html,/Enter date, city \+ time above/);
   assert.match(js,/p\.set\('trip_date',state\.tripDate\)/);
   assert.match(js,/p\.set\('depart_at',state\.departTime\)/);
@@ -568,8 +568,8 @@ test('journey candidates carry route wait and door-to-island cost', () => {
 test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260920-live6/);
-  assert.match(html,/mackinac-island\.css\?v=20260920-live6/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live7/);
+  assert.match(html,/mackinac-island\.css\?v=20260920-live7/);
   assert.doesNotMatch(js,/Add a starting city/);
   assert.doesNotMatch(html,/Add a starting city/);
 });
@@ -579,9 +579,9 @@ test('Mackinac first-screen route inputs are explicit and cache-safe', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
   const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
-  assert.match(html,/data-mackinac-build="20260920-live6"/);
+  assert.match(html,/data-mackinac-build="20260920-live7"/);
   assert.match(html,/<span>Starting city<\/span><input id="heroOriginInput"/);
-  assert.match(html,/mackinac-island\.js\?v=20260920-live6/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live7/);
   assert.doesNotMatch(html,/Add a starting city/i);
   assert.doesNotMatch(js,/Add a starting city/i);
   assert.match(html,/Enter date, city \+ time above/);
@@ -590,4 +590,21 @@ test('Mackinac first-screen route inputs are explicit and cache-safe', () => {
     assert.ok(rule, source);
     assert.ok(rule.headers.some(h=>h.key==='Cache-Control' && /no-store/.test(h.value)), source);
   }
+});
+
+
+test('responsive visitor-first Mackinac surface survives phone tablet and landscape layouts', () => {
+  const html=fs.readFileSync(htmlPath,'utf8');
+  const css=fs.readFileSync(cssPath,'utf8');
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(html,/Make it your Mackinac/);
+  assert.match(html,/Which ferry gets you onto the Island best\?/);
+  assert.match(html,/What it should feel like while you’re here/);
+  assert.match(html,/Build my Island plan/);
+  assert.match(css,/container:decision \/ inline-size/);
+  assert.match(css,/@container decision \(max-width:760px\)/);
+  assert.match(css,/@media\(orientation:landscape\) and \(max-height:650px\)/);
+  assert.match(css,/\.origin-city-control\{grid-column:1\/-1;grid-row:2\}/);
+  assert.match(css,/\.builder-grid\{grid-template-columns:repeat\(4,minmax\(0,1fr\)\)\}/);
+  assert.doesNotMatch(js,/JEV-ranked feasible plan|deterministic ranking/);
 });
