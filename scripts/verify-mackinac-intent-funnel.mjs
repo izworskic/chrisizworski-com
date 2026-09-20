@@ -1,5 +1,5 @@
 import fs from "node:fs";
-const slugs=["day-trip","with-kids","2-day-itinerary","ferry-planner","from-detroit","from-chicago","from-traverse-city","from-grand-rapids","limited-walking","bike-day"];
+const slugs=["day-trip","with-kids","2-day-itinerary","ferry-planner","from-detroit","from-chicago","from-traverse-city","from-grand-rapids","limited-walking","bike-day","fall"];
 let fail=false;
 const asset=fs.readFileSync("public/assets/mackinac-intent.js","utf8");
 for(const event of ["mackinac_intent_landing","mackinac_intent_to_planner"])if(!asset.includes(event)){console.error("missing intent event "+event);fail=true;}
