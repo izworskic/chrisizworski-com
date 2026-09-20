@@ -461,7 +461,7 @@ test('Mackinac personalized planner requires date city and leave-home time', () 
   assert.match(html,/id="heroDepartTime"/);
   assert.match(html,/id="departTime"/);
   assert.match(html,/Plan the actual trip/);
-  assert.match(html,/Add date \+ city \+ time/);
+  assert.match(html,/Enter date, city \+ time above/);
   assert.match(js,/p\.set\('trip_date',state\.tripDate\)/);
   assert.match(js,/p\.set\('depart_at',state\.departTime\)/);
   assert.match(js,/Choose the trip date first/);
@@ -510,7 +510,7 @@ test('entered leave-home time controls reachable ferry candidates and itinerary 
 test('client replaces stale starting-city prompt after city resolution', () => {
   const js=fs.readFileSync(jsPath,'utf8');
   assert.doesNotMatch(js,/d\.leave_home\?\.time\|\|'Add a starting city'/);
-  assert.match(js,/state\.tripDate&&state\.originResolved&&state\.departTime\?'No reachable ferry':'Add date \+ city \+ time'/);
+  assert.match(js,/state\.tripDate&&state\.originResolved&&state\.departTime\?'No reachable ferry':'Enter date, city \+ time above'/);
   assert.match(js,/\$\{dateLabel\(j\.trip_date\|\|state\.tripDate\)\} · \$\{j\.origin_label/);
 });
 
@@ -568,8 +568,26 @@ test('journey candidates carry route wait and door-to-island cost', () => {
 test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260920-live5/);
-  assert.match(html,/mackinac-island\.css\?v=20260920-live5/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live6/);
+  assert.match(html,/mackinac-island\.css\?v=20260920-live6/);
   assert.doesNotMatch(js,/Add a starting city/);
   assert.doesNotMatch(html,/Add a starting city/);
+});
+
+
+test('Mackinac first-screen route inputs are explicit and cache-safe', () => {
+  const html=fs.readFileSync(htmlPath,'utf8');
+  const js=fs.readFileSync(jsPath,'utf8');
+  const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
+  assert.match(html,/data-mackinac-build="20260920-live6"/);
+  assert.match(html,/<span>Starting city<\/span><input id="heroOriginInput"/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live6/);
+  assert.doesNotMatch(html,/Add a starting city/i);
+  assert.doesNotMatch(js,/Add a starting city/i);
+  assert.match(html,/Enter date, city \+ time above/);
+  for (const source of ['/mackinac-island','/mackinac-island/:path*','/assets/mackinac-island.:ext(css|js)']) {
+    const rule=config.headers.find(x=>x.source===source);
+    assert.ok(rule, source);
+    assert.ok(rule.headers.some(h=>h.key==='Cache-Control' && /no-store/.test(h.value)), source);
+  }
 });

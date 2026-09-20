@@ -19,7 +19,7 @@
 <meta name="twitter:title" content="Mackinac Island Today: Best Ferry, Weather & Day Plan">
 <meta name="twitter:description" content="A live decision tool for choosing the ferry, timing the island, biking and getting home comfortably.">
 <link rel="preconnect" href="https://api.weather.gov">
-<link rel="stylesheet" href="/assets/mackinac-island.css?v=20260920-live5">
+<link rel="stylesheet" href="/assets/mackinac-island.css?v=20260920-live6">
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -63,7 +63,7 @@
 }
 </script>
 </head>
-<body>
+<body data-mackinac-build="20260920-live6">
 <a class="skip" href="#main">Skip to live decision</a>
 <header class="sitebar">
   <div class="shell sitebar-inner">
@@ -102,14 +102,14 @@
           </div>
           <div class="origin-entry-controls">
             <label class="origin-time-control" for="heroTripDate"><span>Trip date</span><input id="heroTripDate" type="date" aria-label="Trip date"></label>
-            <input id="heroOriginInput" type="search" inputmode="search" autocomplete="off" placeholder="Bay City, MI" aria-label="Starting city, state, ZIP or postal code">
+            <label class="origin-time-control origin-city-control" for="heroOriginInput"><span>Starting city</span><input id="heroOriginInput" type="search" inputmode="search" autocomplete="off" placeholder="Bay City, MI" aria-label="Starting city, state, ZIP or postal code"></label>
             <label class="origin-time-control" for="heroDepartTime"><span>Leave home</span><input id="heroDepartTime" type="time" aria-label="Time you plan to leave home"></label>
             <button class="btn small" type="submit" id="heroOriginSubmit">Build route</button>
           </div>
           <div class="origin-status" id="heroOriginStatus" aria-live="polite">Choose the date, where you’re leaving from, and when you’ll leave. The planner will calculate the drive, port, check-in window, ferry and island arrival.</div>
         </form>
         <div class="trip-glance-grid">
-          <div><span>Leave home</span><strong id="heroLeave">Add city + leave time</strong></div>
+          <div><span>Leave home</span><strong id="heroLeave">Enter date, city + time above</strong></div>
           <div><span>Ferry</span><strong id="heroFerry">Checking…</strong></div>
           <div><span>On island</span><strong id="heroIsland">Checking…</strong></div>
           <div><span>Return</span><strong id="heroReturn">Checking…</strong></div>
@@ -202,7 +202,7 @@
       </form>
 
       <div class="planner-decision-grid">
-        <article><span>Door-to-island start</span><strong id="leaveHome">Add date + city + time</strong><p id="leaveHomeNote">Your selected date, origin and leave time determine the reachable port/ferry and total journey. Drive estimates are not live traffic.</p></article>
+        <article><span>Door-to-island start</span><strong id="leaveHome">Enter date, city + time above</strong><p id="leaveHomeNote">Your selected date, origin and leave time determine the reachable port/ferry and total journey. Drive estimates are not live traffic.</p></article>
         <article><span>Trip fit</span><strong id="tripFit">Building…</strong><p id="tripFitNote">Your constraints will show here.</p></article>
       </div>
       <div class="planner-summary" id="plannerSummary">Building a realistic trip from the selected visitor modes…</div>
@@ -292,6 +292,6 @@
   </div>
 </main>
 <footer class="footer"><div class="shell"><p>Built by <a href="/">Chris Izworski</a>. Live source agencies and ferry operators remain authoritative for their own conditions and schedules. This tool is trip-planning guidance, not a guarantee of service or weather.</p><p><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p></div></footer>
-<script src="/assets/mackinac-island.js?v=20260920-live5" defer></script>
+<script src="/assets/mackinac-island.js?v=20260920-live6" defer></script>
 </body>
 </html>
