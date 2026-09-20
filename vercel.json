@@ -327,6 +327,10 @@
       "destination": "/api/fall-color?view=old-sow-live"
     },
     {
+      "source": "/api/mackinac-island",
+      "destination": "/api/fall-color?view=mackinac-island"
+    },
+    {
       "source": "/national-tools/coastal/thunder-hole-live",
       "destination": "/api/thunder-hole-page"
     },
