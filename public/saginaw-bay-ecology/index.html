@@ -47,7 +47,7 @@
       "publisher": {
         "@id": "https://chrisizworski.com/#person"
       },
-      "dateModified": "2026-08-25",
+      "dateModified": "2026-09-20",
       "isPartOf": {
         "@id": "https://chrisizworski.com/#website"
       }
@@ -165,6 +165,7 @@ td{padding:7px 10px;border-bottom:1px solid #f0ece4;vertical-align:top;line-heig
 .tag-lim{background:#fff8e1;color:#f57f17;border:1px solid #ffe082}
 .tag-nrhp{background:#e8eaf6;color:#283593;border:1px solid #9fa8da}
 .depth-answer{background:#edf6f0;border-left:4px solid var(--green);border-radius:0 5px 5px 0;padding:15px 17px;margin:14px 0 20px;color:#34423a;font-size:15px;line-height:1.65}
+.depth-profile{background:#fff;border:1px solid var(--border);border-radius:6px;padding:18px 18px 16px;margin:18px 0 24px}.depth-profile h2{margin:0 0 6px;border:0;padding:0;font-size:18px}.depth-profile>p{margin-bottom:12px}.depth-svg{display:block;width:100%;height:auto;max-height:240px;background:linear-gradient(#edf7fa,#fff);border:1px solid #dbe7e8;border-radius:5px}.depth-key{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.depth-key div{background:#f8faf8;border:1px solid var(--border);border-radius:4px;padding:10px}.depth-key strong{display:block;color:var(--green);font-size:13px}.depth-key span{display:block;color:var(--muted);font-size:11px;line-height:1.45;margin-top:2px}.depth-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.depth-actions a{display:inline-block;border:1px solid var(--green);border-radius:4px;padding:7px 10px;font-size:12px;font-weight:bold;background:#fff}.depth-actions a.primary{background:var(--green);color:#fff}.depth-actions a:hover{text-decoration:none;filter:brightness(.98)}@media(max-width:650px){.depth-key{grid-template-columns:1fr}.depth-svg{max-height:none}}
 .faq-section{margin-top:36px}
 .faq-section>h2{font-size:19px;font-weight:normal;margin-bottom:4px;border-bottom:1px solid var(--border);padding-bottom:6px}
 .faq-intro{font-size:13px;color:#666;margin-bottom:14px;line-height:1.75}
@@ -217,7 +218,7 @@ footer{text-align:center;padding:18px;border-top:1px solid var(--border);font-si
 </nav>
 <div class="wrap">
 <h1>How Deep Is Saginaw Bay? Depth, Ecology &amp; Fishing Areas</h1>
-<div class="meta">Compiled by <a href="https://chrisizworski.com">Chris Izworski</a> · Bay City, Michigan on Saginaw Bay · Updated August 2026. Local context backed by NOAA, Michigan DNR, USGS, and EPA sources.</div>
+<div class="meta">Compiled by <a href="https://chrisizworski.com">Chris Izworski</a> · Bay City, Michigan on Saginaw Bay · Updated September 2026. Local context backed by NOAA, Michigan DNR, USGS, and EPA sources.</div>
 <div class="depth-answer" id="saginaw-depth-answer"><strong>The Inner Saginaw Bay reaches about 19 feet, while the Outer Bay opens into Lake Huron and exceeds 100 feet in places.</strong> The inner basin averages roughly 12 feet; the outer basin commonly runs 25 to 35 feet before deepening toward Lake Huron. This is a geographic reference, not a navigation chart.</div>
 <p>Saginaw Bay is a large embayment on the western shore of Lake Huron in Michigan, covering approximately 1,740 square miles. The bay is a critical ecological transition zone between the intensive agricultural landscape of the Saginaw Valley and the open waters of Lake Huron. It supports some of the most important waterfowl staging habitat in the Great Lakes, significant commercial and recreational fisheries, and a diversity of coastal wetlands and aquatic habitats. Data draws from <a href="https://www.glerl.noaa.gov" target="_blank" rel="noopener">NOAA GLERL</a>, <a href="https://www.michigan.gov/dnr" target="_blank" rel="noopener">Michigan DNR</a>, and <a href="https://www.usgs.gov/centers/great-lakes-science-center" target="_blank" rel="noopener">USGS Great Lakes Science Center</a>.</p>
 <div class="stat-grid">
@@ -227,6 +228,37 @@ footer{text-align:center;padding:18px;border-top:1px solid var(--border);font-si
   <div class="stat"><span class="stat-n">~19 ft</span><span class="stat-l">Max depth, inner bay</span></div>
   <div class="stat"><span class="stat-n">>100 ft</span><span class="stat-l">Max depth, outer bay</span></div>
 </div>
+<section class="depth-profile" aria-labelledby="depth-profile-title">
+  <h2 id="depth-profile-title">Saginaw Bay depth at a glance</h2>
+  <p>The bay changes character quickly as it opens toward Lake Huron. This simplified profile is for geographic context only; it is <strong>not a navigation chart</strong>.</p>
+  <svg class="depth-svg" viewBox="0 0 900 220" role="img" aria-labelledby="depth-svg-title depth-svg-desc">
+    <title id="depth-svg-title">Simplified depth profile from the Saginaw River through Inner and Outer Saginaw Bay to Lake Huron</title>
+    <desc id="depth-svg-desc">The Inner Bay averages about 12 feet and reaches about 19 feet. The Outer Bay commonly runs 25 to 35 feet before deeper Lake Huron water exceeds 100 feet in places.</desc>
+    <rect width="900" height="220" fill="#eef8fa"/>
+    <path d="M0 72 L170 82 L340 98 L520 126 L700 168 L900 205 L900 220 L0 220 Z" fill="#78b5c8" opacity=".72"/>
+    <path d="M0 72 L170 82 L340 98 L520 126 L700 168 L900 205" fill="none" stroke="#285f72" stroke-width="3"/>
+    <line x1="0" y1="55" x2="900" y2="55" stroke="#aacbd4" stroke-dasharray="5 6"/>
+    <text x="18" y="43" font-size="16" fill="#34545d">Saginaw River</text>
+    <text x="190" y="43" font-size="16" fill="#34545d">Inner Bay</text>
+    <text x="445" y="43" font-size="16" fill="#34545d">Outer Bay</text>
+    <text x="735" y="43" font-size="16" fill="#34545d">Lake Huron</text>
+    <text x="190" y="120" font-size="15" fill="#163f4c">~12 ft mean · ~19 ft max</text>
+    <text x="455" y="155" font-size="15" fill="#163f4c">commonly 25–35 ft</text>
+    <text x="735" y="195" font-size="15" fill="#fff">&gt;100 ft in places</text>
+  </svg>
+  <div class="depth-key">
+    <div><strong>Inner Bay</strong><span>Shallow and productive. River inflow, wind and warming affect it quickly.</span></div>
+    <div><strong>Outer Bay</strong><span>Deeper transition water with stronger Lake Huron influence and major fishing structure.</span></div>
+    <div><strong>For real navigation</strong><span>Use current NOAA ENC data and official charts; this page is explanatory only.</span></div>
+  </div>
+  <div class="depth-actions">
+    <a class="primary" href="https://nauticalcharts.noaa.gov/charts/noaa-custom-charts.html" target="_blank" rel="noopener">Build an official NOAA Custom Chart ↗</a>
+    <a href="https://saginawbay.chrisizworski.com/map.html">Open the Saginaw Bay fishing map</a>
+    <a href="/michigan-boat-launches/saginaw-bay/">Find Saginaw Bay boat launches</a>
+    <a href="/great-lakes-beaches/saginaw-bay/">Check Saginaw Bay beaches</a>
+    <a href="/great-lakes-buoys/">Check Great Lakes buoy conditions</a>
+  </div>
+</section>
 <aside class="commercial-invite" aria-label="Related Saginaw Bay wildlife resources">
   <p class="commercial-eyebrow">Explore Saginaw Bay as a living migration corridor</p>
   <p>Connect the bay's depth and wetland ecology to seasonal bird movement, Michigan hotspots, and the live birding companion.</p>
@@ -291,6 +323,6 @@ footer{text-align:center;padding:18px;border-top:1px solid var(--border);font-si
 <section class="faq-section" itemscope itemtype="https://schema.org/FAQPage"><h2>Frequently Asked Questions</h2><p class="faq-intro">Common questions about this topic answered from the data.</p><details class="faq" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question"><summary itemprop="name">What is Saginaw Bay?</summary><div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><div itemprop="text">Saginaw Bay is a large embayment on the western shore of Lake Huron in Michigan, covering approximately 1,740 square miles. It is divided into two basins that behave almost like separate bodies of water. The inner bay is shallow, warmer and highly productive; the outer bay is deeper, cleaner and closer to open Lake Huron. The Saginaw River drains 8,750 square miles of central Michigan farmland into the inner bay, which is why the inner bay carries most of the nutrient load and most of the resulting problems. That same productivity makes it one of the most important waterfowl staging areas in the Great Lakes and the base of a significant walleye and perch fishery. Bay City, Essexville and Standish sit on the western shore, Caseville and Sebewaing on the Thumb side to the east.</div></div></details><details class="faq" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question"><summary itemprop="name">What fish are in Saginaw Bay?</summary><div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><div itemprop="text">Saginaw Bay supports a diverse fishery, with walleye as the premier sport fish and yellow perch close behind. Also present are smallmouth and largemouth bass, channel catfish, northern pike, carp, lake whitefish in the outer bay, steelhead in the Saginaw River tributaries, and Chinook and Coho salmon. Where you fish depends on what you want. Walleye concentrate on the rocky shoals of the outer bay, particularly around the Thumb reefs, and move shallower in spring and again in autumn. The inner bay and the river mouths hold excellent carp and catfish through summer. Perch move constantly and are the mainstay of the winter ice fishery, which is among the most heavily fished ice sheets in Michigan. Tributary steelhead runs come in spring and again in late autumn. Walleye were restored here after a collapse and the bay is now considered one of the strongest walleye fisheries on the Great Lakes.</div></div></details><details class="faq" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question"><summary itemprop="name">Is Saginaw Bay safe for swimming?</summary><div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><div itemprop="text">Water quality varies significantly by location and by season, so the honest answer depends on where and when. The outer bay near open Lake Huron is generally clean. The inner bay near the Saginaw River mouth can carry elevated bacterial counts after heavy rain, when agricultural runoff and stormwater reach the bay faster than they can dilute. Harmful algal blooms of cyanobacteria occasionally affect the inner bay in late summer, roughly July through September, and they favour warm, calm, sunny stretches rather than windy ones. Avoid contact with water that looks like spilled paint or thick green scum, and keep dogs out of it, since they are affected at lower doses than people. Check current advisories with the local health department before swimming; conditions can change within a day of a storm. Beaches on the Thumb side and toward the outer bay generally clear faster after rain than those close to the river mouth.</div></div></details><details class="faq" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question"><summary itemprop="name">What wildlife lives in Saginaw Bay?</summary><div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><div itemprop="text">Saginaw Bay and its surrounding wetlands support a remarkable diversity of wildlife. Birds: hundreds of thousands of waterfowl stage during migration, including Canvasback, Redhead, Tundra Swan, and scaup. Bald Eagles nest along the shore year-round. Sandhill Cranes stage in fall agricultural fields. Mammals: white-tailed deer, muskrat, river otter, mink, and beaver are common in bay wetlands. Reptiles: Blanding's Turtle and Map Turtle are found in coastal marshes.</div></div></details><details class="faq" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question"><summary itemprop="name">What is the water quality like in Saginaw Bay?</summary><div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><div itemprop="text">Saginaw Bay has undergone significant water quality improvement since the 1970s. The Saginaw River was heavily polluted with industrial and agricultural runoff, triggering phosphorus-driven algae blooms. The Clean Water Act and upgraded wastewater treatment plants dramatically reduced phosphorus loading. However, agricultural nutrient runoff remains a challenge. Invasive dreissenid mussels (zebra and quagga mussels) have dramatically improved water clarity in the outer bay by filter-feeding phytoplankton, though this has shifted the food web in complex ways.</div></div></details></section>
 </div>
 <div class="rl-wrap"><h2 class="rl-head">Related Great Lakes Resources</h2><div class="rl-grid"><div class="rl-card"><a href="https://chrisizworski.com/great-lakes-fish/">Great Lakes Fish Species</a><p>All 65 fish species, native, stocked, invasive, naturalized.</p></div><div class="rl-card"><a href="https://chrisizworski.com/great-lakes-shipwrecks/">Great Lakes Shipwrecks Database</a><p>180+ shipwrecks across the Upper Great Lakes with depth, location, and dive access.</p></div><div class="rl-card"><a href="https://chrisizworski.com/great-lakes-lighthouses/">Great Lakes Lighthouses Directory</a><p>250+ lighthouses on Lakes Superior, Huron, and Michigan.</p></div><div class="rl-card"><a href="https://chrisizworski.com/great-lakes-birding/">Birding the Great Lakes</a><p>Migration corridors, species lists, and top hotspot guide.</p></div><div class="rl-card"><a href="https://chrisizworski.com/great-lakes-maritime-history/">Great Lakes Maritime History</a><p>Key facts, shipping data, and historical timeline.</p></div><div class="rl-card"><a href="https://chrisizworski.com/lake-superior-circle-tour/">Lake Superior Circle Tour</a><p>Complete stop-by-stop guide and trip planner for the 1,300-mile route.</p></div></div></div>
-<footer>Updated August 2026, Compiled by <a href="https://chrisizworski.com">Chris Izworski</a>, <a href="/tools/">Back to Tools</a></footer>
+<footer>Updated September 2026, Compiled by <a href="https://chrisizworski.com">Chris Izworski</a>, <a href="/tools/">Back to Tools</a></footer>
 </body>
 </html>

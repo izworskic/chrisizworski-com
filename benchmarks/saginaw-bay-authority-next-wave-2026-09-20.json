@@ -1,0 +1,99 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-09-20",
+  "timezone": "America/Detroit",
+  "id": "saginaw-bay-authority-next-wave-2026-09-20",
+  "surface": "https://chrisizworski.com/saginaw-bay-ecology/",
+  "objective": "Preserve the page-one 'How deep is Saginaw Bay?' owner while turning its depth/ecology visibility into a stronger original reference and a relevant handoff into Saginaw Bay live decision tools.",
+  "evidence": {
+    "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-09-20",
+    "exportedThrough": "2026-09-17",
+    "windowDays": 7,
+    "current": {
+      "impressions": 228,
+      "clicks": 2,
+      "ctr": 0.008771929824561403,
+      "averagePosition": 7.89
+    },
+    "priorPortfolio": {
+      "impressions": 192,
+      "clicks": 3,
+      "ctr": 0.0156,
+      "averagePosition": 8.18
+    },
+    "sitewideQuerySignals": [
+      {
+        "query": "how deep is saginaw bay",
+        "impressions": 6,
+        "clicks": 0,
+        "position": 2.17
+      },
+      {
+        "query": "saginaw bay depth map",
+        "impressions": 6,
+        "clicks": 0,
+        "position": 9.17
+      },
+      {
+        "query": "saginaw bay depth",
+        "impressions": 5,
+        "clicks": 0,
+        "position": 5.4
+      },
+      {
+        "query": "saginaw bay beaches",
+        "impressions": 4,
+        "clicks": 0,
+        "position": 7.25
+      },
+      {
+        "query": "is saginaw bay safe to swim in",
+        "impressions": 4,
+        "clicks": 0,
+        "position": 8.25
+      }
+    ],
+    "queryAttributionCaution": "Queries are sitewide directional evidence, not a page-query join."
+  },
+  "treatment": {
+    "preserve": [
+      "title",
+      "metaDescription",
+      "h1",
+      "canonical",
+      "depth quick answer"
+    ],
+    "add": [
+      "original non-navigational inner-to-outer bay depth profile",
+      "NOAA Custom Chart handoff for official ENC-derived depths",
+      "Saginaw Bay fishing-map handoff",
+      "Saginaw Bay boat-launch handoff",
+      "Saginaw Bay beach handoff",
+      "Great Lakes buoy handoff"
+    ],
+    "noNewIndexablePage": true,
+    "adDensityChange": false
+  },
+  "valueFunction": {
+    "originalPublisherValue": 30,
+    "searchIntentPreservation": 25,
+    "authoritativeSourceHandoff": 20,
+    "decisionNetwork": 15,
+    "adsenseGuardrail": 10,
+    "total": 100,
+    "releaseThreshold": 92
+  },
+  "measurement": {
+    "windowDays": 28,
+    "primaryMetrics": [
+      "page impressions",
+      "page CTR",
+      "average position",
+      "outbound NOAA chart opens",
+      "internal Saginaw Bay handoffs"
+    ],
+    "ctrRecoveryTarget": 0.012,
+    "positionGuardrail": 9.5,
+    "decisionRule": "Keep if the page maintains first-page depth ownership while internal decision handoffs or CTR improve. Do not create separate depth-query pages unless they provide genuinely distinct manually reviewed utility."
+  }
+}
