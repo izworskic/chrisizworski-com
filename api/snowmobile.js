@@ -118,7 +118,7 @@ module.exports=async function(req,res){
         {name:'National Weather Service',url:'https://weather.gov/',authority:'weather forecast'}
       ],
       truthBoundary:{naturalSnowIsTrailBase:false,nohrscSnowDepthIsTrailBase:false,forecastSnowIsAccumulatedSnow:false,openDoesNotMeanGood:true,missingClosureIsNotConfirmedOpen:true,statusFieldDoesNotSetLegalState:true,jevCannotSetLegalStatus:true},
-      operational:{dataState:'fresh',jev:jevReports,sourceFailures:{closures:closuresR.status==='rejected'?String(closuresR.reason):null,weather:weatherR.status==='rejected'?String(weatherR.reason):null},modelBoundary:'JEV can only classify bounded report relevance. It cannot invent facts, set legal status, alter geometry, or convert snow depth into trail base.'}
+      operational:{dataState:'fresh',jev:jevReports,sourceFailures:{closures:closuresR.status==='rejected'?String(closuresR.reason):null,weather:weatherR.status==='rejected'?String(weatherR.reason):null},modelBoundary:'JEV can only classify the bounded overall condition expressed by club narrative text as a supplemental cross-check. Structured club fields remain authoritative. JEV cannot invent facts, set legal status, alter geometry or timestamps, or convert snow depth into trail base.'}
     };
     cache={savedAt:Date.now(),payload};return send(res,payload);
   }catch(error){
