@@ -520,7 +520,7 @@ test('multi-day planner exposes nights and flexible return semantics', () => {
   const js=fs.readFileSync(jsPath,'utf8');
   const route=fs.readFileSync(routePath,'utf8');
   assert.match(html,/id="nightCount"/);
-  assert.match(html,/Need to leave island by \(optional\)/);
+  assert.match(html,/Back on mainland by \(optional\)/);
   assert.doesNotMatch(html,/Recommended ferry home/);
   assert.match(js,/returnPlanText/);
   assert.match(js,/trip_days/);
