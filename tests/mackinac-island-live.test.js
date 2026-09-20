@@ -96,3 +96,58 @@ test('client degrades explicitly instead of fabricating a ferry plan', () => {
   assert.match(js,/mackinac_persona_selected/);
   assert.match(js,/mackinac_share_plan/);
 });
+
+
+test('full trip profile converts constraints into persona behavior', () => {
+  const p=t.profileFromQuery({
+    trip:'day-trip', adults:'2', children:'2', origin_city:'grand-rapids',
+    bikes:'rent', pace:'easy', mobility:'standard', dinner:'casual',
+    interests:'history,biking,photography', must_do:'fort,m185', return_by:'6:30 PM'
+  },['day-trip'],'lower');
+  assert.equal(p.adults,2);
+  assert.equal(p.children,2);
+  assert.equal(p.origin_preset.preferred_port,'Mackinaw City');
+  assert.ok(p.personas.includes('kids'));
+  assert.ok(p.personas.includes('biking'));
+  assert.ok(p.personas.includes('photography'));
+  assert.equal(p.desired_return_minutes,18*60+30);
+});
+
+test('Marquette profile prefers St. Ignace', () => {
+  const p=t.profileFromQuery({origin_city:'marquette'},['day-trip'],'upper');
+  assert.equal(t.preferredPort('upper',p),'St. Ignace');
+  assert.equal(p.origin_preset.drive_minutes,166);
+});
+
+test('limited mobility itinerary substitutes carriage orientation for aggressive route', () => {
+  const date='2026-09-20';
+  const profile=t.profileFromQuery({mobility:'limited',pace:'easy',interests:'history,horses',must_do:'fort'},['first-visit','day-trip'],'lower');
+  const ctx={
+    date,personas:profile.personas,origin:'lower',profile,hourly:[],
+    marine:{score:90},attractions:t.attractionState(date,8*60),events:[],
+    sunrise:t.solarMinutes(date,45.8497,-84.6189,true),
+    sunset:t.solarMinutes(date,45.8497,-84.6189,false),sameDay:false,nowMinutes:7*60
+  };
+  const records=[...t.arnoldSchedule(date,true),...t.sheplersSchedule(date,true)];
+  const plan=t.planCandidates(records,ctx)[0];
+  const itinerary=t.itineraryFor(plan,ctx);
+  const labels=itinerary.map(x=>x.label).join('|');
+  assert.match(labels,/Horse-drawn taxi \/ carriage/);
+  assert.doesNotMatch(labels,/Ride M-185/);
+  assert.doesNotMatch(labels,/Arch Rock/);
+});
+
+test('event start removes arrivals without a practical margin', () => {
+  const date='2026-09-20';
+  const profile=t.profileFromQuery({event_start:'1:00 PM',interests:'events'},['event','day-trip'],'lower');
+  const ctx={
+    date,personas:profile.personas,origin:'lower',profile,hourly:[],
+    marine:{score:90},attractions:t.attractionState(date,8*60),events:[],
+    sunrise:t.solarMinutes(date,45.8497,-84.6189,true),
+    sunset:t.solarMinutes(date,45.8497,-84.6189,false),sameDay:false,nowMinutes:7*60
+  };
+  const records=[...t.arnoldSchedule(date,true),...t.sheplersSchedule(date,true)];
+  const plans=t.planCandidates(records,ctx);
+  assert.ok(plans.length>0);
+  assert.ok(plans.every(x=>x.outbound.arrival_minutes<=12*60+15));
+});
