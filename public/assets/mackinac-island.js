@@ -455,6 +455,7 @@
     if(state.tunings?.size)p.set('tune',[...state.tunings].join(','));
     for(const key of ['lodging_style','walking_tolerance','bike_style','budget_tradeoff','kids_ages','regional_interest','weather_flexibility'])if(ia[key])p.set(`intake_${key}`,ia[key]);
     p.set('origin',state.origin);
+    if(state.tripProfile?.primary?.id)p.set('visitor_primary',state.tripProfile.primary.id);
     const simple={trip:'tripMode',nights:'nightCount',adults:'adultCount',children:'childCount',bikes:'bikePlan',pace:'pace',mobility:'mobility',dinner:'dinner',return_by:'returnBy',event_start:'eventStart'};
     Object.entries(simple).forEach(([key,id])=>{const el=$(id);if(el&&String(el.value).trim())p.set(key,String(el.value).trim());});
     if(state.originResolved){
