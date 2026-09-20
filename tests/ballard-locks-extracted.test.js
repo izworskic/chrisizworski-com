@@ -12,7 +12,7 @@ const aisApiPath = path.join(root, 'api', 'ballard-ais.js');
 const syncPath = path.join(root, 'scripts', 'sync-ballard-locks.mjs');
 
 test('Ballard Locks implementation is pinned to its authoritative repository', () => {
-  assert.equal(pkg.dependencies['national-ballard-locks'], 'github:izworskic/national-ballard-locks#86fdfd789e16135c801ebf083da068a4a175149c');
+  assert.equal(pkg.dependencies['national-ballard-locks'], 'github:izworskic/national-ballard-locks#c0d0db1726dff6922efd059e3bf4da2091c01108');
 });
 
 test('committed Ballard deployment mirror preserves canonical and traffic truth', () => {

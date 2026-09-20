@@ -12,7 +12,7 @@ const sitemapPath = path.resolve('public/sitemap.xml');
 const canonical = 'https://chrisizworski.com/ballard-locks/';
 const tourCanonical = 'https://chrisizworski.com/ballard-locks/tour/';
 const salmonCanonical = 'https://chrisizworski.com/ballard-locks/salmon-counts/';
-const salmonSourceCommit = '86fdfd789e16135c801ebf083da068a4a175149c';
+const salmonSourceCommit = 'c0d0db1726dff6922efd059e3bf4da2091c01108';
 const salmonRawUrl = `https://raw.githubusercontent.com/izworskic/national-ballard-locks/${salmonSourceCommit}/public/ballard-locks/salmon-counts/index.html`;
 
 if (!fs.existsSync(sourcePage)) throw new Error(`Ballard sync: missing ${sourcePage}`);

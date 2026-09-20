@@ -72,7 +72,7 @@
     "ads:apply": "node scripts/display-ad-pilot.mjs"
   },
   "dependencies": {
-    "national-ballard-locks": "github:izworskic/national-ballard-locks#86fdfd789e16135c801ebf083da068a4a175149c",
+    "national-ballard-locks": "github:izworskic/national-ballard-locks#c0d0db1726dff6922efd059e3bf4da2091c01108",
     "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#317abdf164792692a5202078cee3d3fae36b9322"
   },
   "engines": {
