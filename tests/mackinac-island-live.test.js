@@ -563,3 +563,13 @@ test('journey candidates carry route wait and door-to-island cost', () => {
   assert.ok(Number.isFinite(plan.door_to_island_minutes));
   assert.equal(plan.trip_start_minutes,6*60);
 });
+
+
+test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
+  const html=fs.readFileSync(htmlPath,'utf8');
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(html,/mackinac-island\.js\?v=20260920-live5/);
+  assert.match(html,/mackinac-island\.css\?v=20260920-live5/);
+  assert.doesNotMatch(js,/Add a starting city/);
+  assert.doesNotMatch(html,/Add a starting city/);
+});
