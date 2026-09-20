@@ -112,7 +112,8 @@
 
 
   function intentSeed(){
-    const id=new URLSearchParams(location.search).get('intent');
+    const qs=new URLSearchParams(location.search);
+    const id=qs.get('intent');
     const map={
       'day-trip':{trip_duration:'day'},
       'with-kids':{trip_vision:['kids']},
@@ -120,7 +121,7 @@
       'ferry-planner':{}
     };
     if(!Object.prototype.hasOwnProperty.call(map,id||''))return null;
-    return {intent:id,intake:{...map[id]}};
+    return {intent:id,intake:{...map[id]},origin_text:cleanOrigin(qs.get('from')||'')};
   }
   function firstMissingBaseQuestion(schema,answers){
     const questions=schema?.base_questions||[];
@@ -904,7 +905,7 @@
   async function boot(){
     const shared=sharedPlanFromHash();
     const intent=intentSeed();
-    if(intent)track('mackinac_intent_entry',{intent:intent.intent,source:'search-intent-page'});
+    if(intent)track('mackinac_intent_entry',{intent:intent.intent,source:'search-intent-page',origin_seed:intent.origin_text||'none'});
     const saved=(shared||intent)?null:futureSavedPlan();
     const seed=shared||intent||saved;
     if(seed)hydratePlanInputs(seed,{includeIntake:true});
