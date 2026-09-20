@@ -29,6 +29,8 @@
     const p=btn.dataset.persona;
     if(p==='day-trip' && state.personas.has('overnight')) state.personas.delete('overnight');
     if(p==='overnight' && state.personas.has('day-trip')) state.personas.delete('day-trip');
+    if(p==='day-trip' && $('tripMode')) $('tripMode').value='day-trip';
+    if(p==='overnight' && $('tripMode')) $('tripMode').value='overnight';
     if(state.personas.has(p)){ if(state.personas.size>1)state.personas.delete(p); }
     else { if(state.personas.size>=3){const first=[...state.personas].find(x=>x!=='day-trip'&&x!=='overnight')||[...state.personas][0];state.personas.delete(first);} state.personas.add(p); }
     document.querySelectorAll('#personaChips .chip').forEach(x=>{const a=state.personas.has(x.dataset.persona);x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
@@ -46,7 +48,13 @@
     track('mackinac_itinerary_created',{personas:selectedPersonas().join('|'),origin_city:$('originCity')?.value||'none',children:Number($('childCount')?.value||0),bikes:$('bikePlan')?.value||'none',pace:$('pace')?.value||'balanced'});
     loadDecision();
   });
-  $('tripBuilder')?.addEventListener('change',()=>{
+  $('tripBuilder')?.addEventListener('change',e=>{
+    if(e.target?.id==='tripMode'){
+      const trip=e.target.value;
+      state.personas.delete(trip==='overnight'?'day-trip':'overnight');
+      state.personas.add(trip);
+      document.querySelectorAll('#personaChips .chip').forEach(x=>{const a=state.personas.has(x.dataset.persona);x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
+    }
     setText('builderStatus','Trip inputs changed. Tap “Build this trip” to rerun the full plan.');
     track('mackinac_itinerary_changed',{});
   });
@@ -145,6 +153,9 @@
   function renderSources(d){
     const src=d.sources||{};setText('overallDataState',d.degraded?'DEGRADED · some source gaps':'CORE SOURCES AVAILABLE');
     const order=Object.entries(src);$('sourceList').innerHTML=order.length?order.map(([k,s])=>`<div class="source-row"><a href="${esc(s.url||'#')}" target="_blank" rel="noopener">${esc(s.name||k.replace(/_/g,' '))}</a><span class="source-state ${s.available?'ok':'warn'}">${s.available?'available':'unavailable'}</span></div>`).join(''):'<p>No source-provenance payload was returned.</p>';
+    const refs=d.planning_references||{};
+    if(refs.accessibility?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.accessibility.url)}" target="_blank" rel="noopener">${esc(refs.accessibility.name||'Accessibility planning source')}</a><span class="source-state ok">planning reference</span></div>`);
+    if(refs.drive_times?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.drive_times.url)}" target="_blank" rel="noopener">${esc(refs.drive_times.label||'Origin drive-time reference')}</a><span class="source-state ok">planning estimate · not live traffic</span></div>`);
     if(d.failures?.length){$('sourceList').insertAdjacentHTML('beforeend',`<div class="error-panel"><strong>Degraded inputs:</strong> ${d.failures.map(x=>esc(x.source||x.name||x.message||x.error||'source unavailable')).join(' · ')}</div>`);}
   }
 
