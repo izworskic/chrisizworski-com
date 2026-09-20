@@ -60,12 +60,12 @@ test('fall operating hours do not recommend the British Landing Nature Center', 
 test('public surface makes the decision first and keeps return vs last ferry distinct', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   assert.match(html,/Mackinac Island Today/);
-  assert.match(html,/Best island arrival/);
+  assert.match(html,/Best time to arrive/);
   assert.match(html,/Return plan/);
   assert.match(html,/Last published ferry for return day/);
   assert.match(html,/Why this timing\?/);
-  assert.match(html,/Build my Mackinac trip/);
-  assert.match(html,/Modeled, not counted/);
+  assert.match(html,/Plan your Island day/);
+  assert.match(html,/When it feels busiest/);
   assert.match(html,/CC BY-SA 4\.0/);
   assert.match(html,/\/privacy\//);
 });
@@ -353,7 +353,7 @@ test('client exposes planning references and keeps trip controls synchronized', 
 
 test('Mackinac hero trip strip fails closed when the live bundle fails', () => {
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(js,/setText\('heroTripContext','Live planning unavailable'\)/);
+  assert.match(js,/setText\('heroTripContext','Live trip details unavailable'\)/);
   assert.match(js,/setText\('heroFerry','Unavailable'\)/);
   assert.match(js,/setText\('heroIsland','Unavailable'\)/);
   assert.match(js,/setText\('heroReturn','Unavailable'\)/);
@@ -464,8 +464,8 @@ test('Mackinac personalized planner requires date city and leave-home time', () 
   assert.match(html,/Enter date, city \+ time above/);
   assert.match(js,/p\.set\('trip_date',state\.tripDate\)/);
   assert.match(js,/p\.set\('depart_at',state\.departTime\)/);
-  assert.match(js,/Choose the trip date first/);
-  assert.match(js,/Date and starting city are set\. Add the time you plan to leave home/);
+  assert.match(js,/Choose your trip date first/);
+  assert.match(js,/Date and starting city are set\. Add the time you’d like to leave home/);
 });
 
 test('24-hour leave-home input becomes a deterministic departure minute', () => {
