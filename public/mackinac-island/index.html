@@ -97,17 +97,18 @@
         <div class="trip-glance-head"><span>Your trip at a glance</span><strong id="heroTripContext">Quick day-trip plan</strong></div>
         <form class="hero-origin-quick" id="heroOriginForm">
           <div class="origin-entry-copy">
-            <label for="heroOriginInput">Where are you starting?</label>
-            <small>Enter any city, state/province, ZIP or postal code.</small>
+            <label for="heroOriginInput">Where and when are you starting?</label>
+            <small>City + the time you expect to leave home. Both are required for a drive-aware ferry plan.</small>
           </div>
           <div class="origin-entry-controls">
             <input id="heroOriginInput" type="search" inputmode="search" autocomplete="off" placeholder="Bay City, MI" aria-label="Starting city, state, ZIP or postal code">
-            <button class="btn small" type="submit" id="heroOriginSubmit">Use city</button>
+            <label class="origin-time-control" for="heroDepartTime"><span>Leave home</span><input id="heroDepartTime" type="time" aria-label="Time you plan to leave home"></label>
+            <button class="btn small" type="submit" id="heroOriginSubmit">Plan trip</button>
           </div>
-          <div class="origin-status" id="heroOriginStatus" aria-live="polite">We’ll compare the drive to Mackinaw City and St. Ignace, then use the better ferry port.</div>
+          <div class="origin-status" id="heroOriginStatus" aria-live="polite">Enter a starting city and leave-home time. We’ll calculate the drive to both ferry ports and reject ferries you cannot physically reach.</div>
         </form>
         <div class="trip-glance-grid">
-          <div><span>Leave</span><strong id="heroLeave">Add a starting city</strong></div>
+          <div><span>Leave home</span><strong id="heroLeave">Add city + leave time</strong></div>
           <div><span>Ferry</span><strong id="heroFerry">Checking…</strong></div>
           <div><span>On island</span><strong id="heroIsland">Checking…</strong></div>
           <div><span>Head home</span><strong id="heroReturn">Checking…</strong></div>
@@ -164,6 +165,7 @@
           <label><span>Adults</span><input id="adultCount" name="adults" type="number" min="1" max="12" value="2" inputmode="numeric"></label>
           <label><span>Children</span><input id="childCount" name="children" type="number" min="0" max="8" value="0" inputmode="numeric"></label>
           <label><span>Starting city</span><input id="originCityInput" name="origin_text" type="search" inputmode="search" autocomplete="off" placeholder="City, state or ZIP"></label>
+          <label><span>Leave home</span><input id="departTime" name="depart_at" type="time"></label>
           <label><span>Bikes</span><select id="bikePlan" name="bikes"><option value="none">No bike plan</option><option value="rent">Rent on island</option><option value="bring">Bring our bikes</option></select></label>
           <label><span>Physical pace</span><select id="pace" name="pace"><option value="easy">Easy</option><option value="balanced" selected>Balanced</option><option value="active">Active</option></select></label>
           <label><span>Mobility</span><select id="mobility" name="mobility"><option value="standard">Standard walking</option><option value="limited">Limit steep / long walking</option></select></label>
@@ -197,7 +199,7 @@
       </form>
 
       <div class="planner-decision-grid">
-        <article><span>Leave home</span><strong id="leaveHome">Add a supported starting city</strong><p id="leaveHomeNote">Drive estimates are planning values, not live traffic.</p></article>
+        <article><span>Leave home</span><strong id="leaveHome">Add city + leave time</strong><p id="leaveHomeNote">Your entered departure time sets the earliest ferry you can physically reach. Drive estimates are not live traffic.</p></article>
         <article><span>Trip fit</span><strong id="tripFit">Building…</strong><p id="tripFitNote">Your constraints will show here.</p></article>
       </div>
       <div class="planner-summary" id="plannerSummary">Building a realistic day from the selected visitor modes…</div>
