@@ -95,6 +95,20 @@
       <div class="primary-rec" id="primaryRec">Comparing Mackinaw City and St. Ignace departures…</div>
       <div class="hero-trip-glance" id="heroTripGlance" aria-label="Recommended trip at a glance">
         <div class="trip-glance-head"><span>Your trip at a glance</span><strong id="heroTripContext">Quick day-trip plan</strong></div>
+        <div class="hero-origin-quick">
+          <label for="heroOriginCity">Starting city</label>
+          <select id="heroOriginCity" aria-label="Starting city for drive and ferry planning">
+            <option value="">Choose a starting city…</option>
+            <option value="grand-rapids">Grand Rapids</option>
+            <option value="detroit">Detroit</option>
+            <option value="lansing">Lansing</option>
+            <option value="chicago">Chicago</option>
+            <option value="traverse-city">Traverse City</option>
+            <option value="marquette">Marquette</option>
+            <option value="sault-ste-marie">Sault Ste. Marie</option>
+          </select>
+          <small>Sets the drive estimate, reachable ferry and best mainland port.</small>
+        </div>
         <div class="trip-glance-grid">
           <div><span>Leave</span><strong id="heroLeave">Add a starting city</strong></div>
           <div><span>Ferry</span><strong id="heroFerry">Checking…</strong></div>
