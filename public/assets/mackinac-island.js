@@ -359,7 +359,6 @@
     if(action){
       action.innerHTML=cam.embed_url?'':`<a class="btn primary webcam-external" href="${esc(cam.source_url)}" target="_blank" rel="noopener">Open live camera ↗</a>`;
     }
-    track('mackinac_webcam_selected',{camera:cam.id,embedded:Boolean(cam.embed_url),recommended:cam.id===recommendedId});
   }
 
   function renderWebcams(d){
@@ -374,7 +373,7 @@
     if(!state.webcamSelectedId || !cams.some(cam=>cam.id===state.webcamSelectedId)) state.webcamSelectedId=recommendedId;
     picker.innerHTML=cams.map(cam=>{
       const selected=cam.id===state.webcamSelectedId,recommended=cam.id===recommendedId;
-      return `<button class="webcam-choice ${selected?'active':''}" type="button" role="listitem" aria-pressed="${selected?'true':'false'}" data-webcam-id="${esc(cam.id)}">
+      return `<button class="webcam-choice ${selected?'active':''}" type="button" aria-pressed="${selected?'true':'false'}" data-webcam-id="${esc(cam.id)}">
         <span>${esc(cam.location||'Mackinac Island')}</span>
         <strong>${esc(cam.name)}</strong>
         ${recommended?'<small>Suggested</small>':''}
@@ -382,6 +381,8 @@
     }).join('');
     picker.querySelectorAll('.webcam-choice').forEach(btn=>btn.addEventListener('click',()=>{
       state.webcamSelectedId=btn.dataset.webcamId||null;
+      const selected=cams.find(cam=>cam.id===state.webcamSelectedId);
+      track('mackinac_webcam_selected',{camera:state.webcamSelectedId||'unknown',embedded:Boolean(selected?.embed_url),recommended:state.webcamSelectedId===recommendedId});
       renderWebcams(d);
     }));
     renderWebcamViewer(cams,w);
