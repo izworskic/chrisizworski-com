@@ -1,0 +1,99 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-09-20",
+  "timezone": "America/Detroit",
+  "id": "great-lakes-buoys-next-wave-2026-09-20",
+  "surface": "https://chrisizworski.com/great-lakes-buoys/",
+  "objective": "Convert expanding page-one Great Lakes buoy visibility into more qualified clicks without discarding the title/H1 treatment that improved average position or creating thin station doorway pages.",
+  "evidence": {
+    "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-09-20",
+    "exportedThrough": "2026-09-17",
+    "windowDays": 7,
+    "current": {
+      "impressions": 388,
+      "clicks": 7,
+      "ctr": 0.01804123711340206,
+      "averagePosition": 8.83
+    },
+    "priorProtectedSnapshot": {
+      "impressions": 219,
+      "clicks": 7,
+      "ctr": 0.032,
+      "averagePosition": 12.28
+    },
+    "interpretation": "Visibility expanded and average position improved materially, while CTR diluted as Google exposed the page to more queries. Preserve the successful search-facing core and improve task completion for station-number intent.",
+    "sitewideQuerySignals": [
+      {
+        "query": "great lakes buoys",
+        "impressions": 20,
+        "clicks": 1,
+        "position": 9.8
+      },
+      {
+        "query": "weather buoy 45005",
+        "impressions": 10,
+        "clicks": 0,
+        "position": 7.9
+      },
+      {
+        "query": "great lakes buoy data",
+        "impressions": 4,
+        "clicks": 0,
+        "position": 8.5
+      },
+      {
+        "query": "lake michigan buoys map",
+        "impressions": 4,
+        "clicks": 0,
+        "position": 10.25
+      },
+      {
+        "query": "45029 buoy",
+        "impressions": 2,
+        "clicks": 0,
+        "position": 17.5
+      }
+    ],
+    "queryAttributionCaution": "Query rows are sitewide directional evidence and are not treated as a page-query join."
+  },
+  "treatment": {
+    "preserve": [
+      "title",
+      "metaDescription",
+      "h1",
+      "canonical",
+      "primary live map",
+      "activity filters"
+    ],
+    "add": [
+      "searchable station ID/name control inside the reporting-station list",
+      "crawlable station-number explanation with manually curated 45005 and 45029 examples",
+      "explicit missing-sensor truth boundary",
+      "stronger handoffs to boat-launch and beach decision surfaces"
+    ],
+    "noNewIndexableStationPages": true,
+    "adDensityChange": false
+  },
+  "valueFunction": {
+    "searchTaskUtility": 30,
+    "sourceAndSensorTruth": 25,
+    "internalDecisionNetwork": 20,
+    "searchSurfacePreservation": 15,
+    "adsensePublisherValueGuardrail": 10,
+    "total": 100,
+    "releaseThreshold": 92
+  },
+  "measurement": {
+    "windowDays": 28,
+    "primaryMetrics": [
+      "page CTR",
+      "page impressions",
+      "average position",
+      "station lookup engagement"
+    ],
+    "targetCtr": 0.025,
+    "stretchCtr": 0.035,
+    "positionGuardrail": 10.5,
+    "decisionRule": "Keep if CTR improves or impressions/query diversity expand while average position remains at or better than 10.5. Do not create station pages solely because an ID appears in Search Console; require distinct, manually reviewed visitor value first."
+  }
+}

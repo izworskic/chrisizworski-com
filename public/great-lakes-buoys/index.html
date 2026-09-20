@@ -26,7 +26,7 @@
   "@graph": [
     {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},
     {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","givenName":"Chris","familyName":"Izworski","url":"https://chrisizworski.com/","sameAs":["https://www.wikidata.org/wiki/Q138283432","https://chrisizworski.com/","https://www.linkedin.com/in/chrisizworski"],"address":{"@type":"PostalAddress","addressLocality":"Bay City","addressRegion":"MI","addressCountry":"US"},"description":"Sales engineer at Prepared, former Bay County 911 Director (2013-2022) and Saginaw County 911 Executive Director (2022-2025), board member of Save Our Shoreline, lifelong Great Lakes researcher and writer based in Bay City, Michigan."},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/great-lakes-buoys/","name":"Great Lakes Buoys Live: Waves, Wind and Water Temperature","description":"Live data from more than 100 NOAA buoys and coastal stations across the Great Lakes with an interactive map and activity-based viewing recommendations.","url":"https://chrisizworski.com/great-lakes-buoys/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-09-05","inLanguage":"en-US","mainContentOfPage":{"@type":"WebPageElement","cssSelector":"#buoyMap"}},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/great-lakes-buoys/","name":"Great Lakes Buoys Live: Waves, Wind and Water Temperature","description":"Live data from more than 100 NOAA buoys and coastal stations across the Great Lakes with an interactive map and activity-based viewing recommendations.","url":"https://chrisizworski.com/great-lakes-buoys/","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-09-20","inLanguage":"en-US","mainContentOfPage":{"@type":"WebPageElement","cssSelector":"#buoyMap"}},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Great Lakes Buoys","item":"https://chrisizworski.com/great-lakes-buoys/"}]}
   ]
 }
@@ -169,6 +169,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 .station-table-controls{padding:12px 16px;border-bottom:1px solid #e0dbd2;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 .station-table-controls .stc-count{font-size:13px;color:#666}
 .station-table-controls .stc-count strong{color:#2c5f2d}
+.station-search{display:flex;align-items:center;gap:7px;font-size:11px;color:#666}.station-search input{width:min(260px,55vw);border:1px solid #d9d5cc;border-radius:4px;padding:7px 9px;font:13px Georgia,serif;color:#2c2c2c;background:#fff}.station-search input:focus{outline:2px solid #9ebd9f;outline-offset:1px}.station-lookup{background:#f7faf7;border:1px solid #d5e2d6;border-radius:6px;padding:18px 20px;margin:0 0 26px}.station-lookup h2{font-size:18px;color:#2c5f2d;margin:0 0 7px}.station-lookup p{font-size:13px!important;color:#555!important;margin:0 0 12px!important}.station-jump-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.station-jump{appearance:none;text-align:left;background:#fff;border:1px solid #d9ded9;border-radius:5px;padding:11px 12px;cursor:pointer;font:13px/1.45 Georgia,serif;color:#444}.station-jump:hover{border-color:#2c5f2d;background:#fbfdfb}.station-jump strong{display:block;color:#2c5f2d;font-size:14px}.station-lookup .sensor-note{margin-top:12px!important;font-size:12px!important;color:#666!important}@media(max-width:620px){.station-jump-grid{grid-template-columns:1fr}.station-search{width:100%;align-items:stretch;flex-direction:column}.station-search input{width:100%}}
 .lake-pills{display:flex;flex-wrap:wrap;gap:6px}
 .lake-pill{background:transparent;border:1px solid #e0dbd2;padding:5px 11px;border-radius:14px;font-size:11px;cursor:pointer;font-family:Georgia,serif;color:#666;letter-spacing:.3px;text-transform:uppercase}
 .lake-pill:hover{border-color:#2c5f2d;color:#2c5f2d}
@@ -234,7 +235,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/tools/">Tools</a> &rsaquo; Great Lakes Buoys</div>
 
 <h1 class="page-title">Great Lakes Buoys Live: Waves, Wind &amp; Water Temperature</h1>
-<p class="sub">Live wave height, wind, and water temperature from 100+ NOAA stations across Lakes Superior, Michigan, Huron, Erie, and Ontario</p>
+<p class="sub">Live wave height, wind, and water temperature from reporting NOAA/NDBC stations across Lakes Superior, Michigan, Huron, Erie, and Ontario</p>
 
 <div class="byline">
   <a href="/about/" aria-label="About Chris Izworski"><div class="byline-avatar">CI</div></a>
@@ -248,7 +249,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
   <p>Use the map or station list below to check the latest available NOAA/NDBC readings from Lakes Superior, Michigan, Huron, Erie, and Ontario. Each station shows wave height, wind and gusts, water temperature, air temperature, and pressure when that station reports them. Source observations are typically 5 to 30 minutes old, and this page refreshes its server-side feed every 10 minutes.</p>
 </section>
 
-<p>This dashboard pulls real-time observations from more than 100 National Data Buoy Center (NDBC) buoys and coastal stations across the Great Lakes basin. The reporting total changes as stations are added, serviced, or seasonally retrieved. Wave height, wind speed and gusts, water temperature, air temperature, and barometric pressure appear wherever each station reports them. The map below renders the current set at once. Tap any buoy on the map to open a detail view with current conditions and a 5-day history of wave height, wind speed, water temperature, air temperature, and pressure. Use the activity filter to color-code stations by safety thresholds for your specific lake activity.</p>
+<p>This dashboard pulls real-time observations from reporting National Data Buoy Center (NDBC) buoys and coastal stations across the Great Lakes basin. The reporting total changes as stations are added, serviced, or seasonally retrieved. Wave height, wind speed and gusts, water temperature, air temperature, and barometric pressure appear wherever each station reports them. The map below renders the current set at once. Tap any buoy on the map to open a detail view with current conditions and a 5-day history of wave height, wind speed, water temperature, air temperature, and pressure. Use the activity filter to color-code stations by safety thresholds for your specific lake activity.</p>
 
 <p>I built this because I could not find a single tool that shows all Great Lakes buoys on one map with multi-parameter filtering. The official NDBC maps are clunky, the lake-by-lake aggregators miss CMAN stations, and the marine weather apps do not let you filter by activity. This is the tool I wanted as a Saginaw Bay sailor, ice fisherman, and freighter watcher. Operationally, the page hits a serverless function I run on this domain that fetches NDBC every ten minutes server-side and aggregates the result, so the page loads with a single request regardless of how many buoys are reporting.</p>
 
@@ -298,10 +299,21 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
   </div>
 </div>
 
+<section class="station-lookup" aria-labelledby="station-lookup-title">
+  <h2 id="station-lookup-title">Find a Great Lakes buoy by station number</h2>
+  <p>Already know the buoy number? Search the live station list by NOAA/NDBC ID or station name. This is useful when a marine forecast, harbor report, fishing report, or weather app gives you a station number but not the surrounding Great Lakes context.</p>
+  <div class="station-jump-grid">
+    <button class="station-jump" type="button" data-buoy-jump="45005"><strong>45005 · West Erie</strong>Open the western Lake Erie station used in marine-weather searches near Lorain and the western basin.</button>
+    <button class="station-jump" type="button" data-buoy-jump="45029"><strong>45029 · Holland Buoy</strong>Open the Lake Michigan buoy west of Holland for waves, wind and water temperature when those sensors are reporting.</button>
+  </div>
+  <p class="sensor-note"><strong>Sensor availability matters:</strong> a station can keep reporting wind or pressure while wave or water-temperature sensors are missing or under maintenance. This dashboard leaves missing fields blank instead of estimating them; the detail view links directly to the official NDBC station page.</p>
+</section>
+
 <h2 class="sh">All Reporting Great Lakes Stations</h2>
 <div class="station-table-wrap">
   <div class="station-table-controls">
     <div class="stc-count"><strong id="stcCount">--</strong> stations shown</div>
+    <label class="station-search" for="stationSearch"><span>Station ID or name</span><input id="stationSearch" type="search" inputmode="search" autocomplete="off" placeholder="45005, Holland, Lakeport…"></label>
     <div class="lake-pills" id="lakePills">
       <button class="lake-pill active" data-lake="all">All</button>
       <button class="lake-pill" data-lake="Superior">Superior</button>
@@ -353,6 +365,8 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
 
 <h2 class="sh">Related Pages on This Site</h2>
 <div class="related">
+  <a href="/michigan-boat-launches/"><strong>Michigan Boat Launch Finder</strong>Choose the ramp first, then use the buoy dashboard to check the water you are launching into.</a>
+  <a href="/great-lakes-beaches/"><strong>Michigan Beach Conditions</strong>BeachGuard notices, NWS swim risk, waves, water temperature and weather for 50 Michigan Great Lakes beaches.</a>
   <a href="https://phenology.chrisizworski.com/"><strong>Michigan Phenology</strong>The Saginaw Bay buoy interpreted: water temperature, wind, and chop read against hatches, fish movement, and the season.</a>
   <a href="/great-lakes-gazette/"><strong>Great Lakes Gazette</strong>Daily Great Lakes freighter and vessel-movement brief. Tracks bulk carriers, tankers, and tug-barge traffic across all five lakes, written from Bay City.</a>
   <a href="/lake-superior-circle-tour/"><strong>Lake Superior Circle Tour</strong>The full 1,300-mile circumnavigation guide. Many Circle Tour stops are at or near these buoy locations.</a>
@@ -507,7 +521,12 @@ function renderSummary(stations) {
 // === Render station list ===
 function renderList(stations) {
   const list = document.getElementById('stationList');
-  const filtered = stations.filter(s => currentLake === 'all' || s.lake === currentLake);
+  const query = (document.getElementById('stationSearch')?.value || '').trim().toLowerCase();
+  const filtered = stations.filter(s => {
+    const lakeMatch = currentLake === 'all' || s.lake === currentLake;
+    const text = (String(s.id || '') + ' ' + String(s.name || '') + ' Lake ' + String(s.lake || '')).toLowerCase();
+    return lakeMatch && (!query || text.includes(query));
+  });
   document.getElementById('stcCount').textContent = filtered.length;
   list.innerHTML = filtered.map(s => `
     <div class="station-row" data-sid="${s.id}">
@@ -774,6 +793,19 @@ document.getElementById('lakePills').addEventListener('click', e => {
   renderMap(allStations);
   renderList(allStations);
 });
+
+document.getElementById('stationSearch').addEventListener('input', () => renderList(allStations));
+document.querySelectorAll('[data-buoy-jump]').forEach(btn => btn.addEventListener('click', () => {
+  const id = btn.dataset.buoyJump;
+  const input = document.getElementById('stationSearch');
+  input.value = id;
+  currentLake = 'all';
+  document.querySelectorAll('.lake-pill').forEach(p => p.classList.toggle('active', p.dataset.lake === 'all'));
+  renderList(allStations);
+  const station = allStations.find(s => s.id === id);
+  if (station) openDetail(station);
+  else document.getElementById('stationList').scrollIntoView({behavior:'smooth',block:'start'});
+}));
 
 document.getElementById('geoBtn').addEventListener('click', findMyBuoys);
 document.getElementById('modalClose').addEventListener('click', closeModal);
