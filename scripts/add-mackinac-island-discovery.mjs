@@ -12,7 +12,9 @@ if(fs.existsSync(sitemap)){
     ['https://chrisizworski.com/mackinac-island/from-detroit/','weekly','0.80'],
     ['https://chrisizworski.com/mackinac-island/from-chicago/','weekly','0.80'],
     ['https://chrisizworski.com/mackinac-island/from-traverse-city/','weekly','0.80'],
-    ['https://chrisizworski.com/mackinac-island/from-grand-rapids/','weekly','0.80']
+    ['https://chrisizworski.com/mackinac-island/from-grand-rapids/','weekly','0.80'],
+    ['https://chrisizworski.com/mackinac-island/limited-walking/','weekly','0.84'],
+    ['https://chrisizworski.com/mackinac-island/bike-day/','weekly','0.84']
   ];
   for(const [loc,freq,priority] of urls){
     if(xml.includes('<loc>'+loc+'</loc>'))continue;
