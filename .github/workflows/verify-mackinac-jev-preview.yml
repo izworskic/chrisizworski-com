@@ -1,0 +1,61 @@
+name: Verify Mackinac JEV preview
+
+on:
+  push:
+    branches:
+      - 'feature/mackinac-jev-platform'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify preview JEV decisions
+        shell: bash
+        env:
+          PREVIEW: https://chrisizworski-com-git-featur-d1bc19-izworski-gmailcoms-projects.vercel.app
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 30); do
+            code=$(curl -sS -o /tmp/page.html -w '%{http_code}' "$PREVIEW/mackinac-island/plan/" || true)
+            if [ "$code" = "200" ] && grep -q 'mackinac-intelligence-client.js?v=20260920-intel1' /tmp/page.html; then break; fi
+            sleep 4
+          done
+          grep -q 'mackinac-intelligence-client.js?v=20260920-intel1' /tmp/page.html
+
+          cat >/tmp/profile.json <<'JSON'
+          {"answers":{"trip_duration":"two-three","party":"couple","trip_vision":["scenery","relaxed"],"trip_loss":"crowds"},"surface":"stay"}
+          JSON
+          curl -fsSL --retry 8 --retry-delay 3 --retry-all-errors             -H 'content-type: application/json' -H 'accept: application/json'             --data-binary @/tmp/profile.json             "$PREVIEW/api/mackinac-profile" -o /tmp/profile-out.json
+
+          curl -fsSL --retry 8 --retry-delay 3 --retry-all-errors             -H 'accept: application/json'             "$PREVIEW/api/mackinac-island" -o /tmp/live.json
+
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/profile-out.json'))
+          l=json.load(open('/tmp/live.json'))
+          summary={
+            "profile_engine":p.get("profile",{}).get("engine"),
+            "profile_note":p.get("profile",{}).get("engine_note"),
+            "adaptive_engine":p.get("profile",{}).get("adaptive_question_engine"),
+            "surface_engine":p.get("surface_decision",{}).get("engine"),
+            "surface_auth":p.get("surface_decision",{}).get("auth_source"),
+            "surface_focus":p.get("surface_decision",{}).get("selected",{}).get("id"),
+            "live_engine":l.get("decision",{}).get("engine"),
+            "live_note":l.get("decision",{}).get("engine_note"),
+            "live_score":l.get("decision",{}).get("score"),
+            "spatial_engine":(l.get("spatial_plan") or {}).get("engine"),
+            "multiday_engine":(l.get("multi_day_plan") or {}).get("engine"),
+            "webcam_engine":(l.get("webcams") or {}).get("engine"),
+          }
+          print(json.dumps(summary,indent=2))
+          failures=[]
+          if summary["profile_engine"]!="shared-harness-jev": failures.append("profile classification is not JEV")
+          if summary["surface_engine"]!="shared-harness-jev": failures.append("surface focus is not JEV")
+          if summary["live_engine"]!="shared-harness-jev": failures.append("live plan ranking is not JEV")
+          if summary["spatial_engine"]!="shared-harness-jev": failures.append("spatial trip selection is not JEV")
+          if summary["webcam_engine"]!="shared-harness-jev": failures.append("webcam selection is not JEV")
+          if failures: raise SystemExit("; ".join(failures))
+          PY
