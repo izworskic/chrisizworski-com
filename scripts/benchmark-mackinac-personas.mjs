@@ -54,6 +54,7 @@ const personas=[
     checks:r=>[
       check('uses Mackinaw City',r.plan?.outbound.origin_port==='Mackinaw City','Lower Peninsula approach should not add a bridge crossing'),
       check('gives leave-home time',includesLabel(r.itinerary,/Leave Grand Rapids/),'Trip must start before the dock'),
+      check('leave-home time is still reachable',Number(r.itinerary.find(x=>x.stop_id==='mainland-drive')?.minute)>=r.ctx.nowMinutes,'Do not recommend a ferry whose required home departure is already in the past'),
       check('includes Fort Mackinac',includesLabel(r.itinerary,/Fort Mackinac/),'First trip should protect the classic history stop')
     ]
   },
@@ -104,12 +105,17 @@ const personas=[
   },
   {
     id:'G',name:'Major-event visitor',question:'Which ferry gets me there safely before the event?',
-    personas:['event','day-trip'],query:{adults:'2',origin_city:'grand-rapids',event_start:'1:00 PM',interests:'events',pace:'balanced'},
-    checks:r=>[
-      check('arrival margin before event',r.plan?.outbound.arrival_minutes<=12*60+15,'Need at least 45 minutes before 1 PM event'),
-      check('event block exists',includesLabel(r.itinerary,/Event block/),'Itinerary must protect the actual event'),
-      check('event persona active',r.profile.personas.includes('event'),'Event must change weighting')
-    ]
+    nowMinutes:10*60+30,personas:['event','day-trip'],query:{adults:'2',event_start:'1:00 PM',bikes:'rent',interests:'events,biking',must_do:'m185',pace:'balanced'},
+    checks:r=>{
+      const eventIndex=r.itinerary.findIndex(x=>/Event block/.test(x.label));
+      const rideIndex=r.itinerary.findIndex(x=>/Ride M-185/.test(x.label));
+      return [
+        check('arrival margin before event',r.plan?.outbound.arrival_minutes<=12*60+15,'Need at least 45 minutes before 1 PM event'),
+        check('event block exists',eventIndex>=0,'Itinerary must protect the actual event'),
+        check('fixed event precedes deferred ride',rideIndex<0||eventIndex<rideIndex,'A flexible bike ride may not push a fixed event late'),
+        check('event persona active',r.profile.personas.includes('event'),'Event must change weighting')
+      ];
+    }
   },
   {
     id:'H',name:'Last-minute 1 PM visitor',question:'Is today still worth it?',
@@ -153,7 +159,9 @@ const personas=[
     checks:r=>[
       check('Fort is explicit',includesLabel(r.itinerary,/Fort Mackinac/),'Must-do history needs a reserved block'),
       check('meal is explicit',includesLabel(r.itinerary,/Lunch \/ real break/),'Easy pace preserves meal time'),
-      check('flex is explicit',includesLabel(r.itinerary,/Easy flex block/),'Easy pace should not be dense')
+      check('flex is explicit',includesLabel(r.itinerary,/Easy flex block/),'Easy pace should not be dense'),
+      check('casual dinner is explicit',includesLabel(r.itinerary,/Casual dinner/),'Dinner preference may not be silently discarded'),
+      check('return is late enough for dinner',Number(r.plan?.return?.departure_minutes)>=18*60+40,'Return ferry must leave enough time for dinner plus boarding buffer')
     ]
   },
   {
