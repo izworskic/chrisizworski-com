@@ -66,8 +66,7 @@
   },
   "dependencies": {
     "national-ballard-locks": "github:izworskic/national-ballard-locks#86fdfd789e16135c801ebf083da068a4a175149c",
-    "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#317abdf164792692a5202078cee3d3fae36b9322",
-    "@vercel/oidc": "3.8.7"
+    "ontario-fishing-lake-finder": "github:izworskic/ontario-fishing-lake-finder#317abdf164792692a5202078cee3d3fae36b9322"
   },
   "engines": {
     "node": "22.x"
