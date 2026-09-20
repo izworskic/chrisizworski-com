@@ -91,3 +91,35 @@ test("tab rankings only reference durable regional-shell ids",()=>{
     assert.ok(p.tabs.every(x=>allowed.has(x.id)));
   }
 });
+
+
+test("every primary destination surface has a closed decision-focus library",()=>{
+  for(const id of ["today","plan","ferries","stay","eat","explore","events","straits"]){
+    const rows=intel.SURFACE_FOCUS_LIBRARY[id];
+    assert.ok(Array.isArray(rows)&&rows.length>=4,id);
+    assert.equal(new Set(rows.map(x=>x.id)).size,rows.length,id);
+  }
+});
+
+test("surface focus changes materially with the visitor profile",()=>{
+  const family=intel.deterministicProfile({trip_duration:"day",party:"family-young",trip_vision:["kids"],trip_loss:"walking"});
+  const couple=intel.deterministicProfile({trip_duration:"two-three",party:"couple",trip_vision:["special","relaxed"],trip_loss:"crowds"});
+  const familyEat=intel.surfaceFocusCandidates(family,"eat")[0];
+  const coupleEat=intel.surfaceFocusCandidates(couple,"eat")[0];
+  assert.notEqual(familyEat.id,coupleEat.id);
+  assert.ok(["family-break","route-efficient"].includes(familyEat.id));
+  assert.ok(["destination-meal","off-peak"].includes(coupleEat.id));
+});
+
+test("cached JEV primary survives cross-page deterministic rehydration",()=>{
+  const answers={trip_duration:"two-three",party:"couple",trip_vision:["scenery","relaxed"],trip_loss:"crowds"};
+  const p=intel.profileWithCachedPrimary(answers,"scenery-photo");
+  assert.equal(p.primary.id,"scenery-photo");
+  assert.equal(p.engine,"cached-jev-profile");
+  assert.ok(p.tabs.some(x=>x.id==="live"));
+});
+
+test("profile API surface mode keeps answers bounded",()=>{
+  assert.equal(api._test.surfaceFromBody({surface:"where-to-stay"}),"where-to-stay");
+  assert.deepEqual(api._test.answersFromBody({answers:{party:"couple"}}),{party:"couple"});
+});
