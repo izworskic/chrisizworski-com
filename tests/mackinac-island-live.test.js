@@ -568,8 +568,8 @@ test('journey candidates carry route wait and door-to-island cost', () => {
 test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260920-live11/);
-  assert.match(html,/mackinac-island\.css\?v=20260920-live11/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live12/);
+  assert.match(html,/mackinac-island\.css\?v=20260920-live12/);
   assert.doesNotMatch(js,/Add a starting city/);
   assert.doesNotMatch(html,/Add a starting city/);
 });
@@ -579,9 +579,9 @@ test('Mackinac first-screen route inputs are explicit and cache-safe', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
   const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
-  assert.match(html,/data-mackinac-build="20260920-live11"/);
+  assert.match(html,/data-mackinac-build="20260920-live12"/);
   assert.match(html,/<span>Starting city<\/span><input id="heroOriginInput"/);
-  assert.match(html,/mackinac-island\.js\?v=20260920-live11/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live12/);
   assert.doesNotMatch(html,/Add a starting city/i);
   assert.doesNotMatch(js,/Add a starting city/i);
   assert.match(html,/Enter date, city \+ time above/);
@@ -665,4 +665,7 @@ test('JEV webcam fit favors cameras that play in-page', () => {
 });
 
 
-test('Chippewa and Horns use raw HLS streams instead of Restreamer shells',()=>{const js=fs.readFileSync(jsPath,'utf8');const route=fs.readFileSync(routePath,'utf8');assert.match(js,/loadHlsJs/);assert.match(js,/mountHlsVideo/);assert.match(js,/hls\.js@1/);assert.match(route,/8183\/hls\/live\.stream\.m3u8/);assert.match(route,/8184\/hls\/live\.stream\.m3u8/);assert.doesNotMatch(route,/embed_url:"https:\/\/island\.networkingdesign\.com:818[34]\/?"/);});
+test('Chippewa and Horns use raw HLS streams instead of Restreamer shells',()=>{const js=fs.readFileSync(jsPath,'utf8');const route=fs.readFileSync(routePath,'utf8');assert.match(js,/loadHlsJs/);assert.match(js,/mountHlsVideo/);assert.match(js,/hls\.js@1/);assert.match(route,/8183\/hls\/live\.stream\.m3u8/);assert.doesNotMatch(route,/8184\/hls\/live\.stream\.m3u8/);assert.doesNotMatch(route,/embed_url:"https:\/\/island\.networkingdesign\.com:818[34]\/?"/);});
+
+
+test('Horns uses official-page fallback instead of brittle raw stream',()=>{const js=fs.readFileSync(jsPath,'utf8');const route=fs.readFileSync(routePath,'utf8');assert.match(route,/id:"horns-main-street"[\s\S]{0,450}external_only:true/);assert.doesNotMatch(route,/8184\/hls\/live\.stream\.m3u8/);assert.match(js,/Watch Horn’s live ↗/);assert.match(js,/Open official live camera ↗/);});
