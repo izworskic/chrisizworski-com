@@ -68,7 +68,7 @@ test('forecast-period ranking does not upgrade trail state and prefers colder dr
   };
   const ranked=rankRideWindows(weather,true);
   assert.equal(ranked.best.name,'Saturday');
-  assert.match(ranked.boundary,/does not upgrade trail condition/i);
+  assert.match(ranked.boundary,/do(?:es)? not upgrade trail condition/i);
 });
 
 test('forecast timing is disabled off season',()=>{
@@ -86,7 +86,7 @@ test('hourly five-hour windows support a precise riding window without changing 
   const ranked=rankRideWindows({grayling:{hourly:make(20)},gaylord:{hourly:make(18)}},true);
   assert.equal(ranked.mode,'nws-hourly-5h');
   assert.match(ranked.best.name,/Saturday 8 AM.*1 PM/);
-  assert.match(ranked.boundary,/does not upgrade trail condition/i);
+  assert.match(ranked.boundary,/do(?:es)? not upgrade trail condition/i);
 });
 
 test('explicit DNR snowmobile closed status is a hard veto',()=>{

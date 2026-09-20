@@ -347,3 +347,12 @@ test('client exposes planning references and keeps trip controls synchronized', 
   assert.match(js,/tripMode/);
   assert.match(js,/state\.personas\.delete\(trip==='overnight'\?'day-trip':'overnight'\)/);
 });
+
+
+test('Mackinac hero trip strip fails closed when the live bundle fails', () => {
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(js,/setText\('heroTripContext','Live planning unavailable'\)/);
+  assert.match(js,/setText\('heroFerry','Unavailable'\)/);
+  assert.match(js,/setText\('heroIsland','Unavailable'\)/);
+  assert.match(js,/setText\('heroReturn','Unavailable'\)/);
+});

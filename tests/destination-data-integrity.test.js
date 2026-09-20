@@ -28,3 +28,10 @@ test('only usable, nonexpired geyser windows can be presented as current predict
   for(const invalid of [{geyserName:'Old Faithful'}, {...record,windowOpen:'2026-09-17T20:00:00Z'}, {...record,windowClose:'2026-09-17T17:59:00Z'}, {...record,expiration:'2026-09-17T17:59:00Z'}])assert.equal(geyser.selectCurrent([invalid],now).find(x=>x.geyserName==='Old Faithful').available,false);
   assert.equal(geyser.selectCurrent([record],now).find(x=>x.geyserName==='Old Faithful').available,true);
 });
+
+
+test('Trail Ridge will not call a partial sunny period workable', () => {
+  const partial=[{shortForecast:'Sunny',windSpeed:'8 mph',temperature:52,probabilityOfPrecipitation:{value:null}}];
+  const result=road.weatherAssessment(partial,[]);
+  assert.equal(result.level,'unknown');
+});

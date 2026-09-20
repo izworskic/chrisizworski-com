@@ -1,6 +1,6 @@
 {
-  "version": "1.3.0",
-  "updated": "2026-09-19",
+  "version": "1.3.1",
+  "updated": "2026-09-20",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -850,10 +850,10 @@
         "impressions": 9,
         "averagePosition": 31.33,
         "evidenceWindow": "7-day leading snapshot through 2026-08-20",
-        "nextMeasurement": "Hold the 54-page cluster stable, collect page \u00d7 query Search Console evidence plus attributed planner/departure/directions events, then expand only families that pass both demand and downstream-value gates."
+        "nextMeasurement": "Hold the 54-page cluster stable, collect page × query Search Console evidence plus attributed planner/departure/directions events, then expand only families that pass both demand and downstream-value gates."
       },
       "measurement": {
-        "search": "Google Search Console page \u00d7 query",
+        "search": "Google Search Console page × query",
         "product": "Vercel fixed-label events",
         "decisionWindowDays": 28,
         "privacy": "No exact coordinates, device location, or free-text semantic query in growth analytics."
@@ -1044,6 +1044,35 @@
       ],
       "personas": [
         "skier"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "preseason"
+      }
+    },
+    {
+      "id": "snowmobile",
+      "name": "Michigan Snowmobile Trail Conditions",
+      "canonical": "https://chrisizworski.com/snowmobile/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "winter-recreation",
+      "primaryIntent": "Michigan snowmobile trail conditions and riding windows",
+      "seasons": [
+        12,
+        1,
+        2,
+        3
+      ],
+      "geographies": [
+        "northern-michigan"
+      ],
+      "personas": [
+        "snowmobiler",
+        "winter-traveler"
       ],
       "networkRole": "destination",
       "searchTreatment": {
@@ -1520,7 +1549,7 @@
     },
     {
       "id": "national-aurora",
-      "name": "Aurora Tonight \u2014 U.S.",
+      "name": "Aurora Tonight — U.S.",
       "canonical": "https://chrisizworski.com/national-tools/aurora/",
       "aliases": [],
       "kind": "flagship-live",
@@ -2658,6 +2687,30 @@
       "strength": "optional",
       "surface": "tools-catalog",
       "reason": "Petoskey is the last wine stop before the Straits for travelers continuing into the U.P."
+    },
+    {
+      "from": "snowmobile",
+      "to": "xc-planning",
+      "type": "winter-activity-sibling",
+      "strength": "strong",
+      "surface": "winter",
+      "reason": "The same northern Michigan snow setup can support different winter trips; XC planning owns ski trail selection while Snowmobile owns motorized trail and riding-window intent."
+    },
+    {
+      "from": "snowmobile",
+      "to": "national-snow",
+      "type": "evidence-depth",
+      "strength": "optional",
+      "surface": "winter",
+      "reason": "Snowmobile riders can inspect broader measured snowpack context without treating snow depth as trail base, grooming or legal trail status."
+    },
+    {
+      "from": "xc-planning",
+      "to": "snowmobile",
+      "type": "winter-activity-sibling",
+      "strength": "optional",
+      "surface": "winter",
+      "reason": "Visitors comparing northern Michigan winter activities can move from ski planning to the distinct snowmobile trail-condition decision."
     }
   ],
   "cannibalizationGroups": [

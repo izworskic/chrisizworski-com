@@ -115,6 +115,7 @@ const SITEMAPS = [
 ];
 async function syncSitemaps(dateByRoute) {
   let updated = 0;
+  const mismatches = [];
   for (const name of SITEMAPS) {
     const file = path.join(publicRoot, name);
     let xml;
@@ -125,6 +126,7 @@ async function syncSitemaps(dateByRoute) {
         const want = dateByRoute.get(route) || dateByRoute.get(route.replace(/\/$/, "") + "/");
         if (!want || want === current) return whole;
         updated += 1;
+        mismatches.push({ sitemap:name, route, current, want });
         return `<loc>https://chrisizworski.com${route}</loc>${gap}<lastmod>${want}</lastmod>`;
       },
     );
@@ -140,12 +142,13 @@ async function syncSitemaps(dateByRoute) {
         const want = dateByRoute.get(route) || dateByRoute.get(route.replace(/\/$/, "") + "/");
         if (!want) return whole;
         updated += 1;
+        mismatches.push({ sitemap:name, route, current:null, want });
         return `<loc>https://chrisizworski.com${route}</loc>${gap}<lastmod>${want}</lastmod>${gap}<`;
       },
     );
     if (next !== xml && !CHECK) await writeFile(file, next);
   }
-  return updated;
+  return { updated, mismatches };
 }
 
 const files = walk(publicRoot);
@@ -185,10 +188,14 @@ for (const file of files) {
 
 const bad = lagging.filter((l) => l.lagDays > TOLERANCE_DAYS);
 
-const sitemapDrift = await syncSitemaps(dateByRoute);
+const sitemapSync = await syncSitemaps(dateByRoute);
+const sitemapDrift = sitemapSync.updated;
 
 if (CHECK) {
-  if (sitemapDrift) console.log(`  sitemap lastmod entries disagreeing with their page: ${sitemapDrift}`);
+  if (sitemapDrift) {
+    console.log(`  sitemap lastmod entries disagreeing with their page: ${sitemapDrift}`);
+    for (const d of sitemapSync.mismatches) console.log(`    ${d.sitemap}  ${d.route}  ${d.current||"missing"} -> ${d.want}`);
+  }
   console.log(`freshness check: ${files.length} html files, ${lagging.length} stamps behind their last commit`);
   if (skippedNoHistory) console.log(`  ${skippedNoHistory} skipped, no git history (shallow clone?)`);
   for (const l of bad.slice(0, 12)) console.log(`  ${String(l.lagDays).padStart(4)}d behind  claims ${l.claimed}, real ${l.real}  ${l.rel}`);
