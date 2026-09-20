@@ -26,6 +26,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Sep 20: refresh shared Gazette cards and disclose delayed/unavailable editions.
+  "/assets/gazette-latest.js",
   // Replace the failing AIS iframe with recent vessel reports and a native map.
   "/assets/freighter-tracker.js",
   "/assets/freighter-tracker.css",
