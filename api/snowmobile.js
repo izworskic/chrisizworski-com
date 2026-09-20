@@ -12,6 +12,23 @@ function newestIso(values){
   const valid=values.map(parseSourceTime).filter(Boolean).map(x=>new Date(x)).sort((a,b)=>b-a);
   return valid[0]?.toISOString()||null;
 }
+function reportHazards(text=''){
+  const s=String(text).toLowerCase(),out=[];
+  if(/standing water|water hole|water on|wet swamp|water near/.test(s))out.push('WATER');
+  if(/\bmud|muddy|soft dirt/.test(s))out.push('MUD');
+  if(/logging|log trucks|timber operation/.test(s))out.push('LOGGING');
+  if(/road riding|road section|road shoulder/.test(s))out.push('ROAD');
+  if(/\bicy|ice base|bare ice/.test(s))out.push('ICE');
+  return [...new Set(out)];
+}
+function conditionBand(raw=''){
+  const s=String(raw).toLowerCase();
+  if(/excellent/.test(s))return'EXCELLENT';
+  if(/poor|bad|bare|mud/.test(s))return'POOR';
+  if(/fair|mixed/.test(s))return'FAIR';
+  if(/good|great/.test(s))return'GOOD';
+  return null;
+}
 function groomingSummary(reports=[]){
   const known=reports.filter(r=>r?.lastGroomedAt);
   if(!known.length)return {state:'UNKNOWN',label:'Grooming not verified',known:0,recent:0};
@@ -34,7 +51,7 @@ module.exports=async function(req,res){
     const season=isSnowmobileSeason(now),dnr=dnrR.value;
     const closures=closuresR.status==='fulfilled'?(closuresR.value.features||[]):[];
     const gray=grayR.status==='fulfilled'?grayR.value:null,gay=gayR.status==='fulfilled'?gayR.value:null,weather=weatherR.status==='fulfilled'?weatherR.value:{};
-    for(const r of [gray,gay])if(r){r.reportedAt=reportDate(r.reportedRaw);r.lastGroomedAt=reportDate(r.lastGroomedRaw);r.freshness=freshness(r.reportedAt,'report');r.groomingFreshness=freshness(r.lastGroomedAt,'grooming');}
+    for(const r of [gray,gay])if(r){r.reportedAt=reportDate(r.reportedRaw);r.lastGroomedAt=reportDate(r.lastGroomedRaw);r.freshness=freshness(r.reportedAt,'report');r.groomingFreshness=freshness(r.lastGroomedAt,'grooming');r.hazards=reportHazards(r.reportText);}
     const features=(dnr.features||[]).filter(f=>f?.geometry);
     const segments=features.slice(0,300).map((f,i)=>{
       const p=f.properties||{},lat=featureLatitude(f.geometry),section=corridorSection(lat);
@@ -76,11 +93,17 @@ module.exports=async function(req,res){
         }
       }
     }
+    const requestOidc=Array.isArray(req.headers?.['x-vercel-oidc-token'])?req.headers['x-vercel-oidc-token'][0]:(req.headers?.['x-vercel-oidc-token']||'');
+    const jevPairs=(await Promise.all([['grayling',gray],['gaylord',gay]].filter(([,r])=>r?.reportText).map(async([key,r])=>[key,await interpretClubReport({text:r.reportText,source:r.name,structuredCondition:r.condition},requestOidc)])));
+    const jevReports=Object.fromEntries(jevPairs);
+    for(const [key,r] of [['grayling',gray],['gaylord',gay]]){
+      const interpreted=jevReports[key],structured=conditionBand(r?.condition);
+      if(interpreted?.accepted&&interpreted.condition&&structured&&interpreted.condition!==structured){
+        contradictions.push({type:'JEV_STRUCTURED_CONDITION_MISMATCH',area:key==='grayling'?'Grayling':'Gaylord',severity:'low',message:`JEV read the narrative as ${interpreted.condition}, while the club’s structured condition field is ${structured}. The structured club field remains authoritative; JEV does not alter the score.`});
+      }
+    }
     const conflicts=contradictions.length;
     const conf=confidence({officialFresh:true,closureLayerVerified:closuresR.status==='fulfilled',clubReports:[gray,gay].filter(Boolean),weatherFresh:weatherR.status==='fulfilled',segmentCoverage:coverage,conflicts});
-    const requestOidc=Array.isArray(req.headers?.['x-vercel-oidc-token'])?req.headers['x-vercel-oidc-token'][0]:(req.headers?.['x-vercel-oidc-token']||'');
-    const allowed=segments.slice(0,20).map(s=>s.id);
-    const jev=await Promise.all([gray,gay].filter(r=>r?.reportText).map(r=>interpretClubReport({text:r.reportText,source:r.name,allowedSegments:allowed},requestOidc)));
     const payload={generatedAt:now.toISOString(),season:{active:season,officialWindow:'Dec. 1–Mar. 31'},
       route:{name:'Grayling → Frederic → Waters → Gaylord',...route,confidence:conf},sections,timing,grooming,sourceSummary,contradictions,
       segments,
@@ -95,7 +118,7 @@ module.exports=async function(req,res){
         {name:'National Weather Service',url:'https://weather.gov/',authority:'weather forecast'}
       ],
       truthBoundary:{naturalSnowIsTrailBase:false,nohrscSnowDepthIsTrailBase:false,forecastSnowIsAccumulatedSnow:false,openDoesNotMeanGood:true,missingClosureIsNotConfirmedOpen:true,statusFieldDoesNotSetLegalState:true,jevCannotSetLegalStatus:true},
-      operational:{dataState:'fresh',jev,sourceFailures:{closures:closuresR.status==='rejected'?String(closuresR.reason):null,weather:weatherR.status==='rejected'?String(weatherR.reason):null},modelBoundary:'JEV can only classify bounded report relevance. It cannot invent facts, set legal status, alter geometry, or convert snow depth into trail base.'}
+      operational:{dataState:'fresh',jev:jevReports,sourceFailures:{closures:closuresR.status==='rejected'?String(closuresR.reason):null,weather:weatherR.status==='rejected'?String(weatherR.reason):null},modelBoundary:'JEV can only classify bounded report relevance. It cannot invent facts, set legal status, alter geometry, or convert snow depth into trail base.'}
     };
     cache={savedAt:Date.now(),payload};return send(res,payload);
   }catch(error){
