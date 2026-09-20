@@ -2,7 +2,7 @@
   'use strict';
   const API='/api/mackinac-island';
   const ORIGIN_API='/api/mackinac-origin';
-  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',originRequestId:0,tripDate:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[],webcamSelectedId:null};
+  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',originRequestId:0,tripDate:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[],webcamSelectedId:null,webcamHls:null};
   const $=id=>document.getElementById(id);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const track=(name,params={})=>{try{if(typeof window.gtag==='function')window.gtag('event',name,params);}catch{}};
@@ -327,6 +327,34 @@
   }
 
 
+  function loadHlsJs(){
+    if(window.Hls)return Promise.resolve(window.Hls);
+    return new Promise((resolve,reject)=>{
+      const existing=document.querySelector('script[data-hlsjs]');
+      if(existing){existing.addEventListener('load',()=>resolve(window.Hls),{once:true});existing.addEventListener('error',reject,{once:true});return;}
+      const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js';s.async=true;s.dataset.hlsjs='1';
+      s.onload=()=>resolve(window.Hls);s.onerror=reject;document.head.appendChild(s);
+    });
+  }
+
+  function mountHlsVideo(stage,cam){
+    if(state.webcamHls){try{state.webcamHls.destroy();}catch{} state.webcamHls=null;}
+    stage.innerHTML=`<video class="webcam-video" controls muted autoplay playsinline aria-label="${esc(cam.name)} live camera"></video>`;
+    const video=stage.querySelector('video');
+    if(video.canPlayType('application/vnd.apple.mpegurl')){
+      video.src=cam.stream_url;video.play().catch(()=>{});
+      return;
+    }
+    loadHlsJs().then(Hls=>{
+      if(!Hls||!Hls.isSupported())throw new Error('HLS unsupported');
+      const hls=new Hls({enableWorker:true,lowLatencyMode:true});
+      state.webcamHls=hls;hls.loadSource(cam.stream_url);hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play().catch(()=>{}));
+    }).catch(()=>{
+      stage.innerHTML=`<div class="webcam-stage-placeholder"><strong>${esc(cam.name)}</strong><p>The live stream could not start in this browser.</p></div>`;
+    });
+  }
+
   function cameraOwner(name){
     return String(name||'').split(' · ')[0]||'camera owner';
   }
@@ -350,7 +378,10 @@
     setText('webcamAttribution',`Camera: ${cameraOwner(cam.name)}`);
 
     if(stage){
-      if(cam.embed_url){
+      if(state.webcamHls){try{state.webcamHls.destroy();}catch{} state.webcamHls=null;}
+      if(cam.stream_url){
+        mountHlsVideo(stage,cam);
+      }else if(cam.embed_url){
         stage.innerHTML=`<iframe src="${esc(cam.embed_url)}" title="${esc(cam.name)} live camera" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
       }else{
         stage.innerHTML=`<div class="webcam-stage-placeholder"><strong>${esc(cam.name)}</strong><p>This owner publishes this view on its own live-camera page.</p></div>`;
@@ -382,7 +413,7 @@
     picker.querySelectorAll('.webcam-choice').forEach(btn=>btn.addEventListener('click',()=>{
       state.webcamSelectedId=btn.dataset.webcamId||null;
       const selected=cams.find(cam=>cam.id===state.webcamSelectedId);
-      track('mackinac_webcam_selected',{camera:state.webcamSelectedId||'unknown',embedded:Boolean(selected?.embed_url),recommended:state.webcamSelectedId===recommendedId});
+      track('mackinac_webcam_selected',{camera:state.webcamSelectedId||'unknown',embedded:Boolean(selected?.embed_url||selected?.stream_url),recommended:state.webcamSelectedId===recommendedId});
       renderWebcams(d);
     }));
     renderWebcamViewer(cams,w);
