@@ -3,7 +3,11 @@ const pages=[
   ["day-trip","Mackinac Island Day Trip Planner"],
   ["with-kids","Mackinac Island With Kids Planner"],
   ["2-day-itinerary","2-Day Mackinac Island Itinerary Planner"],
-  ["ferry-planner","Mackinac Island Ferry Planner"]
+  ["ferry-planner","Mackinac Island Ferry Planner"],
+  ["accessibility","Mackinac Island Accessibility & Limited Walking Planner"],
+  ["bike-route","Mackinac Island Bike Route Planner"],
+  ["where-to-stay","Where to Stay on Mackinac Island Planner"],
+  ["fall","Mackinac Island Fall Trip Planner"]
 ];
 let fail=false;
 for(const [slug,title] of pages){
