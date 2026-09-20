@@ -36,7 +36,7 @@ for(const slug of PRIMARY_GENERATED_SURFACES){
   for(const item of PRIMARY_NAV)if(!html.includes(`href="${item.path}"`))addFailure("ia",`${slug} navigation missing ${item.id}`);
 }
 
-for(const slug of SECONDARY_GOVERNED_SURFACES.filter(x=>x!=="fall")){
+for(const slug of SECONDARY_GOVERNED_SURFACES){
   const file=`public/mackinac-island/${slug}/index.html`;
   const html=read(file);
   if(!html){addFailure("ia",`missing governed search surface ${slug}`);continue;}
