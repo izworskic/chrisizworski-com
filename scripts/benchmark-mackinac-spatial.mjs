@@ -8,7 +8,7 @@ const cases=[
   {name:"slow couple",want:"scenic-slow",answers:{trip_duration:"two-three",party:"couple",trip_vision:["relaxed","food-shopping"],trip_loss:"crowds"},profile:{trip:"overnight",nights:2,mobility:"standard",bikes:"none",interests:["food"]}},
   {name:"young family",want:"family-easy",answers:{trip_duration:"one-night",party:"family-young",trip_vision:["kids","relaxed"],trip_loss:"rushed"},profile:{trip:"overnight",nights:1,mobility:"standard",bikes:"none",interests:[]}},
   {name:"active biker",want:"active-island",answers:{trip_duration:"day",party:"adults-friends",trip_vision:["biking","scenery"],trip_loss:"flexible",bike_style:"mixed"},profile:{trip:"day-trip",mobility:"standard",bikes:"rent",interests:["biking","scenery"]}},
-  {name:"mobility-limited first visit",want:"family-easy",answers:{trip_duration:"day",party:"couple",trip_vision:["icons","history"],trip_loss:"walking",walking_tolerance:"low"},profile:{trip:"day-trip",mobility:"limited",bikes:"none",interests:["history"]}},
+  {name:"mobility-limited first visit",want:"compact-core",answers:{trip_duration:"day",party:"couple",trip_vision:["icons","history"],trip_loss:"walking",walking_tolerance:"low"},profile:{trip:"day-trip",mobility:"limited",bikes:"none",interests:["history"]}},
   {name:"regional history stay",want:"regional-strata",topN:2,answers:{trip_duration:"four-plus",party:"couple",trip_vision:["history","scenery"],trip_loss:"flexible",regional_interest:"regional"},profile:{trip:"overnight",nights:4,mobility:"standard",bikes:"none",interests:["history","scenery"]}}
 ];
 
