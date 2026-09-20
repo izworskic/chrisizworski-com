@@ -45,6 +45,11 @@
     const d=new Date(`${value}T12:00:00`);
     return Number.isNaN(d.getTime())?String(value):d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
   };
+  const detroitToday=()=>{
+    const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+    const get=t=>parts.find(p=>p.type===t)?.value||'';
+    return `${get('year')}-${get('month')}-${get('day')}`;
+  };
   function syncTripModeUi(){
     const overnight=$('tripMode')?.value==='overnight'||state.personas.has('overnight');
     const field=$('nightCountField'),input=$('nightCount');
@@ -139,17 +144,27 @@
     state.origin=btn.dataset.origin;clearResolvedOrigin({clearInputs:true});syncOriginSide();
     track('mackinac_start_location_entered',{origin:state.origin});loadDecision();
   }));
+  $('heroTripDate')?.addEventListener('change',e=>{
+    syncTripDateInputs(e.target.value);
+    setText('heroLeave',state.tripDate&&state.originResolved&&state.departTime?'Ready to plan':'Add date + city + time');
+  });
   $('heroDepartTime')?.addEventListener('change',e=>{
     syncDepartInputs(e.target.value);
-    if(state.originResolved)setText('heroLeave',state.departTime?'Ready to plan':'Add leave time');
+    if(state.originResolved)setText('heroLeave',state.tripDate&&state.departTime?'Ready to plan':'Add date + city + time');
   });
   $('heroOriginForm')?.addEventListener('submit',async e=>{
     e.preventDefault();
     const originText=cleanOrigin($('heroOriginInput')?.value);
+    syncTripDateInputs($('heroTripDate')?.value||'');
     syncDepartInputs($('heroDepartTime')?.value||'');
+    if(!state.tripDate){
+      setOriginStatus('Choose the trip date first.','error');
+      setText('heroLeave','Add date + city + time');
+      return;
+    }
     if(!originText){
       setOriginStatus('Enter your starting city first.','error');
-      setText('heroLeave','Add city + leave time');
+      setText('heroLeave','Add date + city + time');
       return;
     }
     if(!originMatches(originText)){
@@ -158,21 +173,27 @@
     }
     if(!state.departTime){
       setText('heroLeave','Add leave time');
-      setOriginStatus('Starting city is set. Add the time you plan to leave home to calculate reachable ferries.','error');
+      setOriginStatus('Date and starting city are set. Add the time you plan to leave home to calculate the reachable ferry and island arrival.','error');
       return;
     }
     setText('heroLeave','Calculating…');
-    setOriginStatus('Calculating the drive to both ports and the first ferries you can actually reach…','loading');
+    setOriginStatus(`Planning ${dateLabel(state.tripDate)} from ${state.originResolved?.origin?.label||state.originQuery}: drive to both ports, check-in timing, ferry wait and island arrival…`,'loading');
     loadDecision();
   });
   $('tripBuilder')?.addEventListener('submit',async e=>{
     e.preventDefault();
     setText('builderStatus','Rebuilding ferry choice and itinerary from your constraints…');
     const originText=cleanOrigin($('originCityInput')?.value);
+    syncTripDateInputs($('tripDate')?.value||'');
     syncDepartInputs($('departTime')?.value||'');
+    if(!state.tripDate){
+      setText('builderStatus','Add the trip date before building the trip.');
+      setText('leaveHome','Add date + city + time');
+      return;
+    }
     if(!originText){
       setText('builderStatus','Add a starting city before building the trip.');
-      setText('leaveHome','Add city + leave time');
+      setText('leaveHome','Add date + city + time');
       return;
     }
     if(originText&&!originMatches(originText)){
@@ -185,10 +206,11 @@
       setText('heroLeave','Add leave time');
       return;
     }
-    track('mackinac_itinerary_created',{personas:selectedPersonas().join('|'),origin_city:state.originResolved?.origin?.label||'none',depart_at:state.departTime,children:Number($('childCount')?.value||0),bikes:$('bikePlan')?.value||'none',pace:$('pace')?.value||'balanced'});
+    track('mackinac_itinerary_created',{personas:selectedPersonas().join('|'),trip_date:state.tripDate,origin_city:state.originResolved?.origin?.label||'none',depart_at:state.departTime,children:Number($('childCount')?.value||0),bikes:$('bikePlan')?.value||'none',pace:$('pace')?.value||'balanced'});
     loadDecision();
   });
   $('tripBuilder')?.addEventListener('change',e=>{
+    if(e.target?.id==='tripDate')syncTripDateInputs(e.target.value);
     if(e.target?.id==='departTime')syncDepartInputs(e.target.value);
     if(e.target?.id==='tripMode'){
       const trip=e.target.value;
