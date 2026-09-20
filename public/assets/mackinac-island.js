@@ -1,7 +1,8 @@
 (() => {
   'use strict';
   const API='/api/mackinac-island';
-  const state={personas:new Set(['day-trip']),origin:'lower',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[]};
+  const ORIGIN_API='/api/mackinac-origin';
+  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[]};
   const $=id=>document.getElementById(id);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const track=(name,params={})=>{try{if(typeof window.gtag==='function')window.gtag('event',name,params);}catch{}};
@@ -9,29 +10,67 @@
   const labelScore=n=>n>=84?'EXCELLENT':n>=74?'GOOD':n>=62?'FAIR':n>=48?'MARGINAL':'POOR';
   const setText=(id,v)=>{const el=$(id);if(el)el.textContent=v??'—';};
   const selectedPersonas=()=>[...state.personas];
-  const OPTIONAL_FAILURES=new Set(['fall_color','tourism','attractions']);
+  const OPTIONAL_FAILURES=new Set(['fall_color','attractions']);
   const failureKey=x=>String(x?.source||x?.name||'').trim().toLowerCase();
   const optionalFailures=d=>(d?.failures||[]).filter(x=>OPTIONAL_FAILURES.has(failureKey(x)));
   const coreFailures=d=>(d?.failures||[]).filter(x=>!OPTIONAL_FAILURES.has(failureKey(x)));
-  function syncOriginControls(value,{reload=false,source='planner'}={}){
+  const cleanOrigin=s=>String(s||'').trim().replace(/\s+/g,' ').slice(0,100);
+  const driveLabel=m=>{const n=Math.max(0,Math.round(Number(m)||0));const h=Math.floor(n/60),min=n%60;return h?\`${h} hr${min?\` ${min} min\`:''}\`:\`${min} min\`;};
+  function syncOriginInputs(value){
     const v=String(value||'');
-    if($('originCity')&&$('originCity').value!==v)$('originCity').value=v;
-    if($('heroOriginCity')&&$('heroOriginCity').value!==v)$('heroOriginCity').value=v;
-    if(v){
-      state.origin=['marquette','sault-ste-marie'].includes(v)?'upper':'lower';
-      document.querySelectorAll('#originSwitch button').forEach(x=>{const a=x.dataset.origin===state.origin;x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
-    }
-    if(reload){
-      track('mackinac_start_city_selected',{origin_city:v||'none',surface:source});
-      loadDecision();
-    }
+    if($('originCityInput')&&$('originCityInput').value!==v)$('originCityInput').value=v;
+    if($('heroOriginInput')&&$('heroOriginInput').value!==v)$('heroOriginInput').value=v;
+  }
+  function setOriginStatus(text,kind=''){
+    const el=$('heroOriginStatus');if(!el)return;el.textContent=text;el.className=\`origin-status${kind?\` ${kind}\`:''}\`;
+  }
+  function syncOriginSide(){
+    document.querySelectorAll('#originSwitch button').forEach(x=>{const a=x.dataset.origin===state.origin;x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
+  }
+  function clearResolvedOrigin({clearInputs=false}={}){
+    state.originResolved=null;state.originQuery='';
+    if(clearInputs)syncOriginInputs('');
+    setOriginStatus('Using the peninsula choice below. Enter a city anytime for a drive-aware ferry plan.');
+  }
+  function originMatches(value){
+    const q=cleanOrigin(value).toLowerCase();
+    if(!q||!state.originResolved)return false;
+    return q===cleanOrigin(state.originQuery).toLowerCase()||q===cleanOrigin(state.originResolved.origin?.label).toLowerCase();
+  }
+  async function resolveOrigin(value,{reload=true,source='trip-at-a-glance'}={}){
+    const q=cleanOrigin(value);
+    if(!q){clearResolvedOrigin({clearInputs:true});if(reload)loadDecision();return true;}
+    setOriginStatus('Finding that city and comparing both ferry ports…','loading');
+    const submit=$('heroOriginSubmit');if(submit)submit.disabled=true;
+    try{
+      const r=await fetch(\`${ORIGIN_API}?q=${encodeURIComponent(q)}\`,{headers:{accept:'application/json'}});
+      const j=await r.json();if(!r.ok)throw new Error(j.detail||j.error||\`HTTP ${r.status}\`);
+      state.originResolved=j;state.originQuery=q;state.origin=j.preferred_port==='St. Ignace'?'upper':'lower';
+      syncOriginInputs(j.origin?.label||q);syncOriginSide();
+      const alt=(j.routes||[]).find(x=>x.port!==j.preferred_port);
+      const alternate=alt&&Number.isFinite(Number(alt.drive_minutes))?\` · ${alt.port} ${driveLabel(alt.drive_minutes)}\`:'';
+      setOriginStatus(\`${j.origin?.label||q} → ${j.preferred_port} about ${driveLabel(j.drive_minutes)}${alternate}. Planning drive times, not live traffic.\`,'resolved');
+      track('mackinac_start_city_selected',{origin_city:j.origin?.label||q,preferred_port:j.preferred_port,source});
+      if(reload)loadDecision();
+      return true;
+    }catch(err){
+      state.originResolved=null;state.originQuery='';
+      setOriginStatus(\`Couldn’t resolve “${q}.” Try city + state/province or a ZIP/postal code.\`,'error');
+      setText('builderStatus','Starting city was not resolved. Add a state/province or ZIP/postal code and try again.');
+      return false;
+    }finally{if(submit)submit.disabled=false;}
   }
   function plannerParams(){
     const p=new URLSearchParams();
     p.set('personas',selectedPersonas().join(','));
     p.set('origin',state.origin);
-    const simple={trip:'tripMode',adults:'adultCount',children:'childCount',origin_city:'originCity',bikes:'bikePlan',pace:'pace',mobility:'mobility',dinner:'dinner',return_by:'returnBy',event_start:'eventStart'};
+    const simple={trip:'tripMode',adults:'adultCount',children:'childCount',bikes:'bikePlan',pace:'pace',mobility:'mobility',dinner:'dinner',return_by:'returnBy',event_start:'eventStart'};
     Object.entries(simple).forEach(([key,id])=>{const el=$(id);if(el&&String(el.value).trim())p.set(key,String(el.value).trim());});
+    if(state.originResolved){
+      p.set('origin_name',state.originResolved.origin?.label||state.originQuery);
+      p.set('origin_drive_minutes',String(state.originResolved.drive_minutes));
+      p.set('origin_preferred_port',state.originResolved.preferred_port);
+    }
     const interests=[...document.querySelectorAll('#interestChoices input:checked')].map(x=>x.value);
     const must=[...document.querySelectorAll('#mustDoChoices input:checked')].map(x=>x.value);
     if(interests.length)p.set('interests',interests.join(','));
@@ -55,16 +94,24 @@
     loadDecision();
   }));
   document.querySelectorAll('#originSwitch button').forEach(btn=>btn.addEventListener('click',()=>{
-    state.origin=btn.dataset.origin;
-    document.querySelectorAll('#originSwitch button').forEach(x=>{const a=x===btn;x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
+    state.origin=btn.dataset.origin;clearResolvedOrigin({clearInputs:true});syncOriginSide();
     track('mackinac_start_location_entered',{origin:state.origin});loadDecision();
   }));
-  $('heroOriginCity')?.addEventListener('change',e=>syncOriginControls(e.target.value,{reload:true,source:'trip-at-a-glance'}));
-  $('originCity')?.addEventListener('change',e=>syncOriginControls(e.target.value,{reload:false,source:'full-planner'}));
-  $('tripBuilder')?.addEventListener('submit',e=>{
+  $('heroOriginForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();
+    await resolveOrigin($('heroOriginInput')?.value,{reload:true,source:'trip-at-a-glance'});
+  });
+  $('tripBuilder')?.addEventListener('submit',async e=>{
     e.preventDefault();
     setText('builderStatus','Rebuilding ferry choice and itinerary from your constraints…');
-    track('mackinac_itinerary_created',{personas:selectedPersonas().join('|'),origin_city:$('originCity')?.value||'none',children:Number($('childCount')?.value||0),bikes:$('bikePlan')?.value||'none',pace:$('pace')?.value||'balanced'});
+    const originText=cleanOrigin($('originCityInput')?.value);
+    if(originText&&!originMatches(originText)){
+      const ok=await resolveOrigin(originText,{reload:false,source:'full-planner'});
+      if(!ok)return;
+    }else if(!originText&&state.originResolved){
+      clearResolvedOrigin({clearInputs:true});
+    }
+    track('mackinac_itinerary_created',{personas:selectedPersonas().join('|'),origin_city:state.originResolved?.origin?.label||'none',children:Number($('childCount')?.value||0),bikes:$('bikePlan')?.value||'none',pace:$('pace')?.value||'balanced'});
     loadDecision();
   });
   $('tripBuilder')?.addEventListener('change',e=>{
@@ -99,7 +146,7 @@
     const dep=plan.departure_time||'a verified departure';
     $('primaryRec').innerHTML=plan.departure_time?`<strong>Take the ${esc(dep)} from ${esc(port)}.</strong> ${esc(dec.primary_reason||'This preserves the strongest usable island window.')}`:'<strong>No verified ferry recommendation.</strong> Use the official operator links below before leaving.';
     const profile=d.trip_profile||{};
-    if(profile.origin_city)syncOriginControls(profile.origin_city);
+    if(state.originResolved?.origin?.label)syncOriginInputs(state.originResolved.origin.label);
     const party=`${Number(profile.adults||2)} adult${Number(profile.adults||2)===1?'':'s'}${Number(profile.children||0)?` + ${profile.children} child${Number(profile.children)===1?'':'ren'}`:''}`;
     const priorities=[...(profile.interests||[]),...(profile.must_do||[]).map(x=>`must: ${x}`)].slice(0,3);
     setText('heroTripContext',[party,profile.trip==='overnight'?'overnight':'day trip',priorities.length?priorities.join(' · '):null].filter(Boolean).join(' · '));
@@ -184,7 +231,7 @@
   function renderSources(d){
     const src=d.sources||{},optional=optionalFailures(d),core=coreFailures(d);
     setText('overallDataState',core.length?'CORE SOURCE GAP':optional.length?'CORE SOURCES AVAILABLE · OPTIONAL CONTEXT LIMITED':'CORE SOURCES AVAILABLE');
-    const order=Object.entries(src);$('sourceList').innerHTML=order.length?order.map(([k,s])=>`<div class="source-row"><a href="${esc(s.url||'#')}" target="_blank" rel="noopener">${esc(s.name||k.replace(/_/g,' '))}</a><span class="source-state ${s.available?'ok':'warn'}">${s.available?'available':'unavailable'}</span></div>`).join(''):'<p>No source-provenance payload was returned.</p>';
+    const order=Object.entries(src);$('sourceList').innerHTML=order.length?order.map(([k,s])=>`<div class="source-row"><a href="${esc(s.url||'#')}" target="_blank" rel="noopener">${esc(s.name||k.replace(/_/g,' '))}</a><span class="source-state ${s.available?'ok':'warn'}">${esc(s.status_label||(s.available?'available':'unavailable'))}</span></div>`).join(''):'<p>No source-provenance payload was returned.</p>';
     const refs=d.planning_references||{};
     if(refs.accessibility?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.accessibility.url)}" target="_blank" rel="noopener">${esc(refs.accessibility.name||'Accessibility planning source')}</a><span class="source-state ok">planning reference</span></div>`);
     if(refs.drive_times?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.drive_times.url)}" target="_blank" rel="noopener">${esc(refs.drive_times.label||'Origin drive-time reference')}</a><span class="source-state ok">planning estimate · not live traffic</span></div>`);
