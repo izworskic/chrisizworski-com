@@ -57,7 +57,7 @@ module.exports=async function(req,res){
       const p=f.properties||{},lat=featureLatitude(f.geometry),section=corridorSection(lat);
       const report=section==='gaylord'||section==='waters'?gay:gray;
       const wx=section==='gaylord'||section==='waters'?weather?.gaylord:weather?.grayling;
-      const base={id:p.Unique_ID||`seg-${i+1}`,section,latitude:lat,trailNetwork:p.Trail_Netw||null,groomingSponsor:p.Groom_Spon||null,sourceStatusField:p.Status||null,surface:p.Surface||null,onRoad:p.On_Road||null,miles:Number(p.Miles)||null,comments:p.Comments||null,properties:p,geometry:f.geometry};
+      const base={id:p.Unique_ID||p.GlobalID||`seg-${i+1}`,section,latitude:lat,trailNetwork:p.Trail_Netw||p.TrailNetwork||p.TrailNamePrimary||null,groomingSponsor:p.Groom_Spon||p.TrailGrooming||null,groomType:p.TrailGroomType||null,officialStatus:p.OpenClosedStatusSnowmobile||null,sourceStatusField:p.Status||p.TrailApprovalStatus||null,surface:p.Surface||p.SurfaceType||null,onRoad:p.On_Road||p.TrailOnRoad||null,miles:Number(p.Miles??p.SegmentLengthMiles)||null,comments:p.Comments||p.PublicComments||null,county:p.County||null,sourceProvider:dnr.provider||'Michigan DNR',properties:p,geometry:f.geometry};
       const verifiedClosure=closuresR.status==='fulfilled'?closureForSegment(base,closures):null;
       return {...base,...scoreSegment(base,{clubReport:report,weather:wx,season,verifiedClosure})};
     });
@@ -67,7 +67,7 @@ module.exports=async function(req,res){
     const sections=sectionOrder.map(key=>{const ss=segments.filter(s=>s.section===key);const d=routeDecision(ss,{season,closureLayerVerified:closuresR.status==='fulfilled'});return {key,label:sectionLabels[key],segmentCount:ss.length,...d};});
     const timing=rankRideWindows(weather,season);
     const grooming=groomingSummary([gray,gay].filter(Boolean));
-    const trailEdited=newestIso(features.map(f=>f?.properties?.EditDate));
+    const trailEdited=newestIso(features.map(f=>f?.properties?.last_edited_date||f?.properties?.EditDate));
     const closureEdited=newestIso(closures.map(f=>f?.properties?.last_edite||f?.properties?.created_da));
     const newestDatedSource=newestIso([gray?.reportedAt,gay?.reportedAt,weather?.grayling?.generatedAt,weather?.gaylord?.generatedAt,trailEdited,closureEdited]);
     const decisionFeedCount=[
@@ -105,9 +105,9 @@ module.exports=async function(req,res){
     const conflicts=contradictions.length;
     const conf=confidence({officialFresh:true,closureLayerVerified:closuresR.status==='fulfilled',clubReports:[gray,gay].filter(Boolean),weatherFresh:weatherR.status==='fulfilled',segmentCoverage:coverage,conflicts});
     const payload={generatedAt:now.toISOString(),season:{active:season,officialWindow:'Dec. 1–Mar. 31'},
-      route:{name:'Grayling → Frederic → Waters → Gaylord',...route,confidence:conf},sections,timing,grooming,sourceSummary,contradictions,
+      route:{name:'Grayling → Frederic → Waters → Gaylord',...route,confidence:conf},trailSource:{provider:dnr.provider||'Michigan DNR',fallbackReason:dnr.primaryError||null},sections,timing,grooming,sourceSummary,contradictions,
       segments,
-      scoredGeometry:{type:'FeatureCollection',features:segments.map(s=>({type:'Feature',properties:{id:s.id,section:s.section,trailNetwork:s.trailNetwork,groomingSponsor:s.groomingSponsor,score:s.score,band:s.band,legalState:s.legalState,surface:s.surface,onRoad:s.onRoad,miles:s.miles,reasons:s.reasons},geometry:s.geometry}))},
+      scoredGeometry:{type:'FeatureCollection',features:segments.map(s=>({type:'Feature',properties:{id:s.id,section:s.section,trailNetwork:s.trailNetwork,groomingSponsor:s.groomingSponsor,groomType:s.groomType,officialStatus:s.officialStatus,score:s.score,band:s.band,legalState:s.legalState,surface:s.surface,onRoad:s.onRoad,miles:s.miles,reasons:s.reasons},geometry:s.geometry}))},
       geometry:{type:'FeatureCollection',features},closures:{verified:closuresR.status==='fulfilled',features:closures},
       reports:{grayling:gray,gaylord:gay},weather,
       sources:[
@@ -117,7 +117,7 @@ module.exports=async function(req,res){
         {name:'NOAA / NOHRSC snow analysis',url:'https://mapservices.weather.noaa.gov/raster/rest/services/snow/NOHRSC_Snow_Analysis/MapServer',authority:'regional analyzed snow depth; context only, not trail base'},
         {name:'National Weather Service',url:'https://weather.gov/',authority:'weather forecast'}
       ],
-      truthBoundary:{naturalSnowIsTrailBase:false,nohrscSnowDepthIsTrailBase:false,forecastSnowIsAccumulatedSnow:false,openDoesNotMeanGood:true,missingClosureIsNotConfirmedOpen:true,statusFieldDoesNotSetLegalState:true,jevCannotSetLegalStatus:true},
+      truthBoundary:{naturalSnowIsTrailBase:false,nohrscSnowDepthIsTrailBase:false,forecastSnowIsAccumulatedSnow:false,openDoesNotMeanGood:true,missingClosureIsNotConfirmedOpen:true,statusFieldDoesNotSetLegalState:true,explicitSnowmobileOpenClosedStatusIsAuthoritative:true,jevCannotSetLegalStatus:true},
       operational:{dataState:'fresh',jev:jevReports,sourceFailures:{closures:closuresR.status==='rejected'?String(closuresR.reason):null,weather:weatherR.status==='rejected'?String(weatherR.reason):null},modelBoundary:'JEV can only classify the bounded overall condition expressed by club narrative text as a supplemental cross-check. Structured club fields remain authoritative. JEV cannot invent facts, set legal status, alter geometry or timestamps, or convert snow depth into trail base.'}
     };
     cache={savedAt:Date.now(),payload};return send(res,payload);
