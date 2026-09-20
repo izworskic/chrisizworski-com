@@ -1,49 +1,47 @@
 let cache=null;
-function send(res,payload,status=200){
-  res.status(status);res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','public, s-maxage=300, stale-while-revalidate=900');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('X-Robots-Tag','noindex, nofollow');res.json(payload);
-}
-function reportDate(raw){
-  if(!raw)return null;
-  const cleaned=String(raw).replace(/(\d+)(st|nd|rd|th)/,'$1').replace('@',' ');
-  const d=new Date(cleaned); return Number.isFinite(d.getTime())?d.toISOString():null;
-}
+function send(res,payload,status=200){res.status(status);res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','public, s-maxage=300, stale-while-revalidate=900');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('X-Robots-Tag','noindex, nofollow');res.json(payload);}
+function reportDate(raw){if(!raw)return null;const cleaned=String(raw).replace(/(\d+)(st|nd|rd|th)/,'$1').replace('@',' ');const d=new Date(cleaned);return Number.isFinite(d.getTime())?d.toISOString():null;}
 module.exports=async function(req,res){
   if(req.method!=='GET')return send(res,{error:'Method not allowed'},405);
-  const now=new Date();
-  if(cache&&Date.now()-cache.savedAt<300000)return send(res,{...cache.payload,operational:{...cache.payload.operational,dataState:'cached-fresh'}});
+  const now=new Date();if(cache&&Date.now()-cache.savedAt<300000)return send(res,{...cache.payload,operational:{...cache.payload.operational,dataState:'cached-fresh'}});
   try{
-    const [{fetchDnrCorridor,fetchClub,fetchWeather},{isSnowmobileSeason,freshness,scoreSegment,routeDecision,confidence},{interpretClubReport}]=await Promise.all([
+    const [{fetchDnrCorridor,fetchDnrClosures,fetchClub,fetchWeather},{isSnowmobileSeason,freshness,featureLatitude,corridorSection,closureForSegment,scoreSegment,routeDecision,confidence},{interpretClubReport}]=await Promise.all([
       import('../lib/snowmobile/sources.mjs'),import('../lib/snowmobile/engine.mjs'),import('../lib/snowmobile/harness.mjs')
     ]);
-    const [dnrR,grayR,gayR,weatherR]=await Promise.allSettled([fetchDnrCorridor(),fetchClub('grayling'),fetchClub('gaylord'),fetchWeather()]);
+    const [dnrR,closuresR,grayR,gayR,weatherR]=await Promise.allSettled([fetchDnrCorridor(),fetchDnrClosures(),fetchClub('grayling'),fetchClub('gaylord'),fetchWeather()]);
     if(dnrR.status==='rejected')throw dnrR.reason;
-    const season=isSnowmobileSeason(now);
-    const dnr=dnrR.value; const gray=grayR.status==='fulfilled'?grayR.value:null; const gay=gayR.status==='fulfilled'?gayR.value:null; const weather=weatherR.status==='fulfilled'?weatherR.value:{};
-    for(const r of [gray,gay]) if(r){r.reportedAt=reportDate(r.reportedRaw);r.lastGroomedAt=reportDate(r.lastGroomedRaw);r.freshness=freshness(r.reportedAt,'report');r.groomingFreshness=freshness(r.lastGroomedAt,'grooming');}
+    const season=isSnowmobileSeason(now),dnr=dnrR.value;
+    const closures=closuresR.status==='fulfilled'?(closuresR.value.features||[]):[];
+    const gray=grayR.status==='fulfilled'?grayR.value:null,gay=gayR.status==='fulfilled'?gayR.value:null,weather=weatherR.status==='fulfilled'?weatherR.value:{};
+    for(const r of [gray,gay])if(r){r.reportedAt=reportDate(r.reportedRaw);r.lastGroomedAt=reportDate(r.lastGroomedRaw);r.freshness=freshness(r.reportedAt,'report');r.groomingFreshness=freshness(r.lastGroomedAt,'grooming');}
     const features=(dnr.features||[]).filter(f=>f?.geometry);
-    const segments=features.slice(0,250).map((f,i)=>{
-      const p=f.properties||{}; const mid=i<features.length/2?'grayling':'gaylord'; const report=mid==='grayling'?gray:gay; const wx=weather?.[mid];
-      const base={id:p.Unique_ID||`seg-${i+1}`,trailNetwork:p.Trail_Netw||null,groomingSponsor:p.Groom_Spon||null,officialStatus:p.Status||null,surface:p.Surface||null,onRoad:p.On_Road||null,miles:Number(p.Miles)||null,comments:p.Comments||null,properties:p,geometry:f.geometry};
-      return {...base,...scoreSegment(base,{clubReport:report,weather:wx,season})};
+    const segments=features.slice(0,300).map((f,i)=>{
+      const p=f.properties||{},lat=featureLatitude(f.geometry),section=corridorSection(lat);
+      const report=section==='gaylord'||section==='waters'?gay:gray;
+      const wx=section==='gaylord'||section==='waters'?weather?.gaylord:weather?.grayling;
+      const base={id:p.Unique_ID||`seg-${i+1}`,section,latitude:lat,trailNetwork:p.Trail_Netw||null,groomingSponsor:p.Groom_Spon||null,sourceStatusField:p.Status||null,surface:p.Surface||null,onRoad:p.On_Road||null,miles:Number(p.Miles)||null,comments:p.Comments||null,properties:p,geometry:f.geometry};
+      const verifiedClosure=closuresR.status==='fulfilled'?closureForSegment(base,closures):null;
+      return {...base,...scoreSegment(base,{clubReport:report,weather:wx,season,verifiedClosure})};
     });
-    const route=routeDecision(segments,{season});
+    const route=routeDecision(segments,{season,closureLayerVerified:closuresR.status==='fulfilled'});
     const coverage=features.length?Math.min(1,segments.length/features.length):0;
-    const conf=confidence({officialFresh:true,clubReports:[gray,gay].filter(Boolean),weatherFresh:weatherR.status==='fulfilled',segmentCoverage:coverage,conflicts:0});
+    const conflicts=[gray,gay].filter(r=>r?.condition&&r?.groomingFreshness?.state==='STALE').length;
+    const conf=confidence({officialFresh:true,closureLayerVerified:closuresR.status==='fulfilled',clubReports:[gray,gay].filter(Boolean),weatherFresh:weatherR.status==='fulfilled',segmentCoverage:coverage,conflicts});
     const requestOidc=Array.isArray(req.headers?.['x-vercel-oidc-token'])?req.headers['x-vercel-oidc-token'][0]:(req.headers?.['x-vercel-oidc-token']||'');
-    const jev=await Promise.all([gray,gay].filter(r=>r?.reportText).map(r=>interpretClubReport({text:r.reportText,source:r.name,allowedSegments:segments.slice(0,12).map(s=>s.id)},requestOidc)));
-    const payload={
-      generatedAt:now.toISOString(),season:{active:season,officialWindow:'Dec. 1–Mar. 31'},
-      route:{name:'Grayling → Gaylord',...route,confidence:conf},
-      segments,geometry:{type:'FeatureCollection',features:features},
+    const allowed=segments.slice(0,20).map(s=>s.id);
+    const jev=await Promise.all([gray,gay].filter(r=>r?.reportText).map(r=>interpretClubReport({text:r.reportText,source:r.name,allowedSegments:allowed},requestOidc)));
+    const payload={generatedAt:now.toISOString(),season:{active:season,officialWindow:'Dec. 1–Mar. 31'},
+      route:{name:'Grayling → Frederic → Waters → Gaylord',...route,confidence:conf},
+      segments,geometry:{type:'FeatureCollection',features},closures:{verified:closuresR.status==='fulfilled',features:closures},
       reports:{grayling:gray,gaylord:gay},weather,
       sources:[
-        {name:'Michigan DNR designated snowmobile trails',url:'https://www.michigan.gov/dnr/things-to-do/snowmobiling/where',authority:'official geometry / designated trail attributes'},
-        {name:'Michigan DNR closures',url:'https://www.michigan.gov/dnr/about/newsroom/closures',authority:'official closures / detours'},
-        {name:'MISORVA trail reports',url:'https://misorva.org/trail-report/',authority:'club/operator condition evidence'},
+        {name:'Michigan DNR designated snowmobile trails',url:'https://www.michigan.gov/dnr/things-to-do/snowmobiling/where',authority:'official designated-trail geometry and attributes'},
+        {name:'Michigan DNR temporary trail closures',url:'https://www.michigan.gov/dnr/about/newsroom/closures',authority:'official current closure/detour evidence'},
+        {name:'MISORVA trail reports',url:'https://misorva.org/trail-report/',authority:'club/operator condition evidence; DNR does not control timeliness or accuracy'},
         {name:'National Weather Service',url:'https://weather.gov/',authority:'weather forecast'}
       ],
-      truthBoundary:{naturalSnowIsTrailBase:false,openDoesNotMeanGood:true,missingClosureIsNotConfirmedOpen:true,jevCannotSetLegalStatus:true},
-      operational:{dataState:'fresh',jev,modelBoundary:'JEV can only classify bounded report relevance. It cannot invent facts, set legal status, alter geometry, or convert snow depth into trail base.'}
+      truthBoundary:{naturalSnowIsTrailBase:false,forecastSnowIsAccumulatedSnow:false,openDoesNotMeanGood:true,missingClosureIsNotConfirmedOpen:true,statusFieldDoesNotSetLegalState:true,jevCannotSetLegalStatus:true},
+      operational:{dataState:'fresh',jev,sourceFailures:{closures:closuresR.status==='rejected'?String(closuresR.reason):null,weather:weatherR.status==='rejected'?String(weatherR.reason):null},modelBoundary:'JEV can only classify bounded report relevance. It cannot invent facts, set legal status, alter geometry, or convert snow depth into trail base.'}
     };
     cache={savedAt:Date.now(),payload};return send(res,payload);
   }catch(error){
