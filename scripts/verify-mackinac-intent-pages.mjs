@@ -3,7 +3,11 @@ const pages=[
   ["day-trip","Mackinac Island Day Trip Planner"],
   ["with-kids","Mackinac Island With Kids Planner"],
   ["2-day-itinerary","2-Day Mackinac Island Itinerary Planner"],
-  ["ferry-planner","Mackinac Island Ferry Planner"]
+  ["ferry-planner","Mackinac Island Ferry Planner"],
+  ["from-detroit","Detroit to Mackinac Island Trip Planner"],
+  ["from-chicago","Chicago to Mackinac Island Trip Planner"],
+  ["from-traverse-city","Traverse City to Mackinac Island Trip Planner"],
+  ["from-grand-rapids","Grand Rapids to Mackinac Island Trip Planner"]
 ];
 let fail=false;
 for(const [slug,title] of pages){
@@ -32,3 +36,17 @@ console.log("PASS: Mackinac intent pages are substantive, canonical, internally 
 
 const ferry=fs.readFileSync("public/mackinac-island/ferry-planner/index.html","utf8");
 if(!ferry.includes("?intent=ferry-planner#main")){console.error("ferry planner CTA must land on date/city/time controls");process.exit(1);}
+
+const originSeeds={
+  "from-detroit":"Detroit%2C%20MI",
+  "from-chicago":"Chicago%2C%20IL",
+  "from-traverse-city":"Traverse%20City%2C%20MI",
+  "from-grand-rapids":"Grand%20Rapids%2C%20MI"
+};
+for(const [slug,encoded] of Object.entries(originSeeds)){
+  const html=fs.readFileSync("public/mackinac-island/"+slug+"/index.html","utf8");
+  if(!html.includes("?intent=ferry-planner&amp;from="+encoded+"#main")&&!html.includes("?intent=ferry-planner&from="+encoded+"#main")){
+    console.error(slug+" missing preseeded origin CTA");fail=true;
+  }
+}
+if(fail)process.exit(1);
