@@ -21,7 +21,8 @@
     budget:new Set(["save","balanced","convenience"]),
     kidsAges:new Set(["under-6","6-12","teens","mixed"]),
     regional:new Set(["island-only","maybe","regional"]),
-    weatherFlex:new Set(["fixed","shift-hours","shift-day"])
+    weatherFlex:new Set(["fixed","shift-hours","shift-day"]),
+    tuning:new Set(["relaxed","less-walking","outdoors","better-dinner","less-downtown","history"])
   };
   function cleanText(v,max=100){return String(v||"").trim().replace(/\s+/g," ").slice(0,max);}
   function cleanDate(v){const s=String(v||"");return /^\d{4}-\d{2}-\d{2}$/.test(s)?s:"";}
@@ -51,6 +52,7 @@
       personas:cleanList(input.personas,5,24),
       interests:cleanList(input.interests,9,24),
       must_do:cleanList(input.must_do,6,24),
+      tuning:cleanList(input.tuning,4,24).filter(x=>ENUMS.tuning.has(x)),
       intake:{
         trip_duration:cleanEnum(intake.trip_duration,"duration"),
         party:cleanEnum(intake.party,"party"),
@@ -76,6 +78,7 @@
     if(x.personas.length)set("personas",x.personas.join(","));
     if(x.interests.length)set("likes",x.interests.join(","));
     if(x.must_do.length)set("must",x.must_do.join(","));
+    if(x.tuning.length)set("tune",x.tuning.join(","));
     const q=x.intake;
     set("duration",q.trip_duration);set("party",q.party);
     if(q.trip_vision.length)set("vision",q.trip_vision.join(","));
@@ -92,7 +95,7 @@
     return sanitize({
       trip_date:p.get("date"),origin_text:p.get("from"),depart_at:p.get("leave"),trip:p.get("trip"),
       nights:p.get("n"),adults:p.get("a"),children:p.get("c"),bikes:p.get("bikes"),pace:p.get("pace"),mobility:p.get("walk"),dinner:p.get("dinner"),
-      return_by:p.get("back"),event_start:p.get("event"),personas:p.get("personas"),interests:p.get("likes"),must_do:p.get("must"),
+      return_by:p.get("back"),event_start:p.get("event"),personas:p.get("personas"),interests:p.get("likes"),must_do:p.get("must"),tuning:p.get("tune"),
       intake:{trip_duration:p.get("duration"),party:p.get("party"),trip_vision:p.get("vision"),trip_loss:p.get("loss"),lodging_style:p.get("lodging"),walking_tolerance:p.get("walktol"),bike_style:p.get("bikestyle"),budget_tradeoff:p.get("budget"),kids_ages:p.get("kids"),regional_interest:p.get("regional"),weather_flexibility:p.get("wxflex")}
     });
   }

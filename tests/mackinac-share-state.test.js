@@ -40,3 +40,9 @@ test("share codec preserves every current adaptive answer family",()=>{
   const out=state.decode(state.encode({intake:adaptive}));
   assert.deepEqual(out.intake,adaptive);
 });
+
+
+test("share codec preserves bounded trip tuning",()=>{
+  const out=state.decode(state.encode({tuning:["less-walking","better-dinner","less-downtown","bogus"]}));
+  assert.deepEqual(out.tuning,["less-walking","better-dinner","less-downtown"]);
+});

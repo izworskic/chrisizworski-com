@@ -6,7 +6,7 @@
   const PROFILE_STORAGE_KEY='mackinac-trip-profile-v1';
   const PLAN_STORAGE_KEY='mackinac-trip-plan-v1';
   const TRIP_STATE=window.MackinacTripState||null;
-  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',originRequestId:0,tripDate:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[],webcamSelectedId:null,webcamHls:null,intakeSchema:null,intakeAnswers:{},intakeStep:0,tripProfile:null,adaptiveAsked:false};
+  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',originRequestId:0,tripDate:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[],webcamSelectedId:null,webcamHls:null,intakeSchema:null,intakeAnswers:{},intakeStep:0,tripProfile:null,adaptiveAsked:false,tunings:new Set()};
   const $=id=>document.getElementById(id);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const track=(name,params={})=>{try{if(typeof window.gtag==='function')window.gtag('event',name,params);}catch{}};
@@ -51,7 +51,8 @@
       personas:selectedPersonas(),
       interests:checkedValues('#interestChoices input'),
       must_do:checkedValues('#mustDoChoices input'),
-      intake:{...(state.intakeAnswers||{})}
+      intake:{...(state.intakeAnswers||{})},
+      tuning:[...state.tunings]
     })||null;
   }
   function hydratePlanInputs(plan,{includeIntake=true}={}){
@@ -67,6 +68,8 @@
     const applyChecks=(selector,values)=>{const wanted=new Set(values||[]);document.querySelectorAll(selector).forEach(x=>{x.checked=wanted.has(x.value);});};
     applyChecks('#interestChoices input',plan.interests);applyChecks('#mustDoChoices input',plan.must_do);
     if(includeIntake&&plan.intake)state.intakeAnswers={...plan.intake};
+    state.tunings=new Set(plan.tuning||[]);
+    renderTuningButtons();
     syncPersonaButtons();syncTripModeUi();
   }
   function futureSavedPlan(){
@@ -82,6 +85,29 @@
     if(!TRIP_STATE)return location.href.split('#')[0];
     const hash=TRIP_STATE.encode(capturePlanInputs()||{});
     return location.origin+location.pathname+hash;
+  }
+
+
+  function renderTuningButtons(){
+    const host=$('tripTuning');if(!host)return;
+    host.hidden=!state.tripProfile;
+    host.querySelectorAll('[data-tune]').forEach(btn=>{
+      const active=state.tunings.has(btn.dataset.tune);
+      btn.classList.toggle('active',active);btn.setAttribute('aria-pressed',String(active));
+    });
+    setText('tripTuningStatus',state.tunings.size?`${state.tunings.size} adjustment${state.tunings.size===1?'':'s'} active · plan recalculates from the same trip facts.`:'');
+  }
+  async function applyTuningChange(id){
+    if(state.tunings.has(id))state.tunings.delete(id);else{
+      if(state.tunings.size>=4){setText('tripTuningStatus','Use up to four adjustments at once.');return;}
+      state.tunings.add(id);
+    }
+    renderTuningButtons();
+    const saved=capturePlanInputs();if(saved)planStorageSet(saved);
+    track('mackinac_plan_tuned',{tuning:id,active:state.tunings.has(id),count:state.tunings.size});
+    setText('tripTuningStatus','Rebuilding the trip around your adjustment…');
+    await loadDecision();
+    renderTuningButtons();
   }
 
   const TAB_TARGETS={
@@ -180,7 +206,7 @@
     const focus=$('tripProfileFocus');if(focus)focus.innerHTML=profileFocusLabels(profile).map(x=>`<span>${esc(x)}</span>`).join('');
     const work=$('intakeWork');if(work)work.hidden=true;
     const reset=$('intakeReset');if(reset)reset.hidden=false;
-    renderTripTabs(profile);renderDepthGuides(profile,state.data);storageSet();
+    renderTripTabs(profile);renderDepthGuides(profile,state.data);renderTuningButtons();storageSet();
     track('mackinac_profile_classified',{profile:profile.primary?.id||'unknown',engine:profile.engine||'unknown',confidence:profile.jev_confidence??profile.confidence??0});
     if(profile.next_question&&!state.adaptiveAsked)renderAdaptiveQuestion(profile.next_question);
     else if($('adaptiveQuestion'))$('adaptiveQuestion').hidden=true;
@@ -392,6 +418,7 @@
     if(ia.party)p.set('intake_party',ia.party);
     if(Array.isArray(ia.trip_vision)&&ia.trip_vision.length)p.set('intake_trip_vision',ia.trip_vision.join(','));
     if(ia.trip_loss)p.set('intake_trip_loss',ia.trip_loss);
+    if(state.tunings?.size)p.set('tune',[...state.tunings].join(','));
     for(const key of ['lodging_style','walking_tolerance','bike_style','budget_tradeoff','kids_ages','regional_interest','weather_flexibility'])if(ia[key])p.set(`intake_${key}`,ia[key]);
     p.set('origin',state.origin);
     const simple={trip:'tripMode',nights:'nightCount',adults:'adultCount',children:'childCount',bikes:'bikePlan',pace:'pace',mobility:'mobility',dinner:'dinner',return_by:'returnBy',event_start:'eventStart'};
@@ -418,9 +445,11 @@
   document.querySelectorAll('[data-scroll]').forEach(b=>b.addEventListener('click',()=>scrollToTarget(b.dataset.scroll)));
 
   $('intakeContinue')?.addEventListener('click',()=>{const q=state.intakeSchema?.base_questions?.[state.intakeStep];if(!q)return;const v=state.intakeAnswers[q.id];if(q.type==='multi'&&Array.isArray(v)&&v.length){track('mackinac_intake_answered',{question:q.id,answer:v.join('|')});state.intakeStep++;renderIntakeStep();}});
-  $('intakeReset')?.addEventListener('click',()=>{storageClear();planStorageClear();history.replaceState(null,'',location.pathname+location.search);state.intakeAnswers={};state.tripProfile=null;state.intakeStep=0;state.adaptiveAsked=false;$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;$('tripTabsWrap').hidden=true;$('intakeReset').hidden=true;track('mackinac_intake_started',{restart:true});renderIntakeStep();});
+  $('intakeReset')?.addEventListener('click',()=>{storageClear();planStorageClear();history.replaceState(null,'',location.pathname+location.search);state.intakeAnswers={};state.tripProfile=null;state.tunings.clear();state.intakeStep=0;state.adaptiveAsked=false;$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;$('tripTabsWrap').hidden=true;$('intakeReset').hidden=true;track('mackinac_intake_started',{restart:true});renderIntakeStep();});
   $('profileEdit')?.addEventListener('click',()=>{$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;state.intakeStep=0;renderIntakeStep();});
   $('profileBuildTrip')?.addEventListener('click',()=>{applyProfileToPlanner(state.tripProfile);track('mackinac_plan_generated',{profile:state.tripProfile?.primary?.id||'unknown'});loadDecision();scrollToTarget('#planner');});
+  $('tripTuning')?.querySelectorAll('[data-tune]').forEach(btn=>btn.addEventListener('click',()=>applyTuningChange(btn.dataset.tune)));
+  $('tripTuningReset')?.addEventListener('click',async()=>{state.tunings.clear();renderTuningButtons();const saved=capturePlanInputs();if(saved)planStorageSet(saved);track('mackinac_plan_tuned',{tuning:'reset',active:false,count:0});await loadDecision();renderTuningButtons();});
 
   document.querySelectorAll('#personaChips .chip').forEach(btn=>btn.addEventListener('click',()=>{
     const p=btn.dataset.persona;

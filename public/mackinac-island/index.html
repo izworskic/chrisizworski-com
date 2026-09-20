@@ -19,7 +19,7 @@
 <meta name="twitter:title" content="Mackinac Island Today: Best Ferry, Weather & Day Plan">
 <meta name="twitter:description" content="A live decision tool for choosing the ferry, timing the island, biking and getting home comfortably.">
 <link rel="preconnect" href="https://api.weather.gov">
-<link rel="stylesheet" href="/assets/mackinac-island.css?v=20260920-live17">
+<link rel="stylesheet" href="/assets/mackinac-island.css?v=20260920-live18">
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -63,7 +63,7 @@
 }
 </script>
 </head>
-<body data-mackinac-build="20260920-live17">
+<body data-mackinac-build="20260920-live18">
 <a class="skip" href="#main">Skip to live decision</a>
 <header class="sitebar">
   <div class="shell sitebar-inner">
@@ -161,6 +161,20 @@
         </div>
       </aside>
     </div>
+    <div class="trip-tuning" id="tripTuning" hidden>
+      <div class="trip-tuning-copy"><strong>Fine-tune this trip</strong><span>Adjust the plan without starting over.</span></div>
+      <div class="trip-tuning-buttons">
+        <button type="button" data-tune="relaxed" aria-pressed="false">More relaxed</button>
+        <button type="button" data-tune="less-walking" aria-pressed="false">Less walking</button>
+        <button type="button" data-tune="outdoors" aria-pressed="false">More outdoors</button>
+        <button type="button" data-tune="better-dinner" aria-pressed="false">Better dinner</button>
+        <button type="button" data-tune="less-downtown" aria-pressed="false">Less downtown</button>
+        <button type="button" data-tune="history" aria-pressed="false">More history</button>
+        <button type="button" class="trip-tuning-reset" id="tripTuningReset">Reset adjustments</button>
+      </div>
+      <small id="tripTuningStatus" aria-live="polite"></small>
+    </div>
+
     <details class="manual-style">
       <summary>Prefer to set the trip style manually?</summary>
       <div class="manual-style-grid">
@@ -395,7 +409,7 @@
   </div>
 </main>
 <footer class="footer"><div class="shell"><p>Built by <a href="/">Chris Izworski</a>. Live source agencies and ferry operators remain authoritative for their own conditions and schedules. This tool is trip-planning guidance, not a guarantee of service or weather.</p><p><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p></div></footer>
-<script src="/assets/mackinac-trip-state.js?v=20260920-live17"></script>
-<script src="/assets/mackinac-island.js?v=20260920-live17" defer></script>
+<script src="/assets/mackinac-trip-state.js?v=20260920-live18"></script>
+<script src="/assets/mackinac-island.js?v=20260920-live18" defer></script>
 </body>
 </html>

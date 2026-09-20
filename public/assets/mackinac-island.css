@@ -273,3 +273,15 @@ img,svg{max-width:100%}
 .trip-day.return{border-left:4px solid var(--green)}
 .trip-day.full-day{border-left:4px solid var(--gold)}
 @media(max-width:620px){.trip-day-stops{grid-template-columns:1fr}}
+
+/* Bounded Mackinac trip tuning, live18 */
+.trip-tuning{margin-top:9px;border:1px solid var(--line);border-radius:14px;background:#f7f8f3;padding:13px 14px}
+.trip-tuning-copy{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.trip-tuning-copy strong{font-size:13px}
+.trip-tuning-copy span,.trip-tuning>small{font-size:10px;color:var(--muted)}
+.trip-tuning-buttons{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.trip-tuning-buttons button{border:1px solid var(--line);border-radius:999px;background:#fff;padding:8px 10px;font-size:11px;font-weight:780;cursor:pointer}
+.trip-tuning-buttons button.active{background:var(--green);border-color:var(--green);color:#fff}
+.trip-tuning-buttons .trip-tuning-reset{border-style:dashed;color:var(--muted)}
+.trip-tuning>small{display:block;margin-top:8px}
+@media(max-width:560px){.trip-tuning-copy{display:block}.trip-tuning-copy span{display:block;margin-top:3px}.trip-tuning-buttons{display:grid;grid-template-columns:1fr 1fr}.trip-tuning-buttons button{min-height:42px}}
