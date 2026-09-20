@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mackinac Island Today: Best Ferry, Weather & Day Plan | Chris Izworski</title>
+<meta name="description" content="Mackinac Island Live combines today's ferry schedules, weather, Straits conditions, crowds, biking, attractions and events into one practical visit plan.">
+<link rel="canonical" href="https://chrisizworski.com/mackinac-island/">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="author" content="Chris Izworski">
+<meta name="theme-color" content="#f5f2e8">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chris Izworski">
+<meta property="og:title" content="Mackinac Island Today: Best Ferry, Weather & Day Plan">
+<meta property="og:description" content="Pick the better port and ferry, see the best bike window, crowd pressure and a realistic island day plan from current conditions.">
+<meta property="og:url" content="https://chrisizworski.com/mackinac-island/">
+<meta property="og:image" content="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Mackinac_Island_July_2010_05_%28harbor_from_Fort_Street%29.JPG/1280px-Mackinac_Island_July_2010_05_%28harbor_from_Fort_Street%29.JPG">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mackinac Island Today: Best Ferry, Weather & Day Plan">
+<meta name="twitter:description" content="A live decision tool for choosing the ferry, timing the island, biking and getting home comfortably.">
+<link rel="preconnect" href="https://api.weather.gov">
+<link rel="stylesheet" href="/assets/mackinac-island.css">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebApplication",
+      "@id":"https://chrisizworski.com/mackinac-island/#app",
+      "name":"Mackinac Island Live",
+      "url":"https://chrisizworski.com/mackinac-island/",
+      "description":"A live Mackinac Island visit decision tool combining ferry schedules, weather, Straits conditions, crowds, biking conditions, attraction hours and events.",
+      "applicationCategory":"TravelApplication",
+      "operatingSystem":"Any web browser",
+      "isAccessibleForFree":true,
+      "author":{"@id":"https://chrisizworski.com/#person"}
+    },
+    {
+      "@type":"TouristAttraction",
+      "@id":"https://chrisizworski.com/mackinac-island/#place",
+      "name":"Mackinac Island",
+      "address":{"@type":"PostalAddress","addressLocality":"Mackinac Island","addressRegion":"MI","addressCountry":"US"},
+      "geo":{"@type":"GeoCoordinates","latitude":45.8497,"longitude":-84.6189},
+      "publicAccess":true
+    },
+    {
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},
+        {"@type":"ListItem","position":2,"name":"Michigan tools","item":"https://chrisizworski.com/tools/"},
+        {"@type":"ListItem","position":3,"name":"Mackinac Island Live"}
+      ]
+    },
+    {
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"How much time do you need for a Mackinac Island day trip?","acceptedAnswer":{"@type":"Answer","text":"A useful day trip usually needs about six or more hours on the island once ferry travel is removed. This tool compares actual ferry combinations so the recommended arrival and return preserve usable island time."}},
+        {"@type":"Question","name":"Should I take the ferry from Mackinaw City or St. Ignace?","acceptedAnswer":{"@type":"Answer","text":"The better port depends on your approach direction, parking and the day's departure alignment. Mackinac Island Live compares both ports instead of assuming one is always best."}},
+        {"@type":"Question","name":"Can you bike around Mackinac Island?","acceptedAnswer":{"@type":"Answer","text":"Yes. M-185 makes an approximately 8.2-mile shoreline loop. The live bike window here considers temperature, precipitation, wind, daylight and crowds rather than treating every day alike."}}
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to live decision</a>
+<header class="sitebar">
+  <div class="shell sitebar-inner">
+    <a class="brand" href="/">Chris Izworski</a>
+    <nav aria-label="Breadcrumb"><a href="/tools/">Michigan tools</a><span aria-hidden="true">/</span><span>Mackinac Island Live</span></nav>
+  </div>
+</header>
+<main id="main">
+  <section class="hero shell" aria-labelledby="page-title">
+    <div class="decision-panel" id="decisionPanel" aria-live="polite">
+      <div class="eyebrow"><span class="live-dot" aria-hidden="true"></span>Mackinac Island Live <span class="dot-sep">·</span> Eastern Time</div>
+      <div class="planning-banner" id="planningBanner" hidden></div>
+      <h1 id="page-title">Mackinac Island Today</h1>
+      <div class="decision-head">
+        <div>
+          <div class="verdict" id="verdict">Checking today…</div>
+          <div class="confidence" id="confidence">Loading ferries, weather and Straits conditions</div>
+        </div>
+        <div class="score-ring" id="scoreRing" aria-label="Visit score loading"><span id="scoreValue">—</span><small>/100</small></div>
+      </div>
+      <div class="decision-grid" id="decisionGrid">
+        <div class="metric"><span>Best island arrival</span><strong id="bestArrival">Checking…</strong></div>
+        <div class="metric"><span>Crowds</span><strong id="crowdsTop">Checking…</strong></div>
+        <div class="metric"><span>Bike loop</span><strong id="bikeTop">Checking…</strong></div>
+        <div class="metric"><span>Weather</span><strong id="weatherTop">Checking…</strong></div>
+        <div class="metric"><span>Ferry ride</span><strong id="marineTop">Checking…</strong></div>
+        <div class="metric return-metric"><span>Recommended ferry home</span><strong id="returnTop">Checking…</strong><small id="lastTop"></small></div>
+      </div>
+      <div class="primary-rec" id="primaryRec">Comparing Mackinaw City and St. Ignace departures…</div>
+      <div class="hero-actions" aria-label="Mackinac planning actions">
+        <button class="btn primary" data-scroll="#why">Why this plan?</button>
+        <button class="btn" data-scroll="#planner">Build my day</button>
+        <button class="btn" data-scroll="#ferries">Ferries</button>
+        <button class="btn" data-scroll="#map-section">Map</button>
+      </div>
+      <div class="fresh-line" id="freshLine">Live sources are loading.</div>
+    </div>
+    <figure class="hero-photo">
+      <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Mackinac_Island_July_2010_05_%28harbor_from_Fort_Street%29.JPG/1280px-Mackinac_Island_July_2010_05_%28harbor_from_Fort_Street%29.JPG" alt="Mackinac Island harbor viewed from Fort Street" width="1280" height="853" fetchpriority="high">
+      <figcaption>Mackinac Island harbor. <a href="https://commons.wikimedia.org/wiki/File:Mackinac_Island_July_2010_05_(harbor_from_Fort_Street).JPG" target="_blank" rel="noopener">Michael Barera / Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a></figcaption>
+    </figure>
+  </section>
+
+  <section class="controls-wrap" aria-labelledby="visitor-mode-title">
+    <div class="shell controls-card">
+      <div class="controls-intro"><div class="eyebrow">Make it yours</div><h2 id="visitor-mode-title">What kind of visit is this?</h2><p>The recommendation changes, not just the wording.</p></div>
+      <div class="control-group">
+        <span class="control-label">I’m…</span>
+        <div class="chips" id="personaChips">
+          <button class="chip active" data-persona="day-trip" aria-pressed="true">Day-tripping</button>
+          <button class="chip" data-persona="first-visit" aria-pressed="false">First visit</button>
+          <button class="chip" data-persona="kids" aria-pressed="false">Bringing kids</button>
+          <button class="chip" data-persona="biking" aria-pressed="false">Biking</button>
+          <button class="chip" data-persona="overnight" aria-pressed="false">Staying overnight</button>
+          <button class="chip" data-persona="fall-color" aria-pressed="false">Fall color</button>
+          <button class="chip" data-persona="photography" aria-pressed="false">Photography</button>
+          <button class="chip" data-persona="event" aria-pressed="false">Here for an event</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <span class="control-label">Coming from…</span>
+        <div class="segmented" id="originSwitch">
+          <button class="active" data-origin="lower" aria-pressed="true">Lower Peninsula</button>
+          <button data-origin="upper" aria-pressed="false">Upper Peninsula</button>
+          <button data-origin="nearby" aria-pressed="false">Already nearby</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="shell content-stack">
+    <section class="section" id="why" aria-labelledby="why-title">
+      <div class="section-head"><div><div class="eyebrow">Decision logic</div><h2 id="why-title">Why this plan</h2></div><p id="engineBadge" class="engine-badge">Structured evaluation</p></div>
+      <div class="why-grid">
+        <article class="reason-card positive"><h3>Helping today</h3><ul id="helping"><li>Loading live inputs…</li></ul></article>
+        <article class="reason-card negative"><h3>Working against it</h3><ul id="hurting"><li>Loading live inputs…</li></ul></article>
+        <article class="reason-card"><h3>Why this ferry</h3><ul id="whyFerry"><li>Comparing feasible departures…</li></ul></article>
+      </div>
+      <details class="method-details"><summary>How the recommendation is made</summary><p>Ferry schedules, times, weather, marine observations, attraction hours and daylight are handled as structured facts. Candidate day plans are scored first. The private JEV decision layer may rank only those feasible candidate plans; it cannot invent or alter ferry times, weather, closures or safety facts. If that layer is unavailable or below its confidence gate, the deterministic ranking remains the answer.</p><div class="component-bars" id="componentBars"></div></details>
+    </section>
+
+    <section class="section" id="ferries" aria-labelledby="ferry-title">
+      <div class="section-head"><div><div class="eyebrow">Mainland access</div><h2 id="ferry-title">Which ferry makes the day work?</h2></div><span class="source-pill" id="ferryFreshness">Verifying schedules…</span></div>
+      <div class="ferry-pick" id="ferryPick"><strong>Comparing both ports…</strong></div>
+      <div class="ferry-columns">
+        <article class="port-card" id="mackinawCard"><div class="port-kicker">Mackinaw City</div><h3 id="mackinawBest">Loading departures…</h3><p id="mackinawMeta"></p><div class="timeline" id="mackinawTimeline" aria-label="Mackinaw City ferry timeline"></div></article>
+        <article class="port-card" id="stIgnaceCard"><div class="port-kicker">St. Ignace</div><h3 id="stIgnaceBest">Loading departures…</h3><p id="stIgnaceMeta"></p><div class="timeline" id="stIgnaceTimeline" aria-label="St. Ignace ferry timeline"></div></article>
+      </div>
+      <div class="return-box"><div><span>Recommended return</span><strong id="recommendedReturn">—</strong><p id="returnReason">Keeps a practical buffer.</p></div><div><span>Literal last scheduled ferry</span><strong id="literalLast">—</strong><p>This is the schedule limit, not our recommendation.</p></div></div>
+      <p class="truth-note">Published schedules can change. The live tool identifies the schedule version used and links the operator source; always recheck the operator before boarding.</p>
+    </section>
+
+    <section class="section" id="conditions" aria-labelledby="conditions-title">
+      <div class="section-head"><div><div class="eyebrow">What the day feels like</div><h2 id="conditions-title">Conditions translated for a visitor</h2></div><span class="source-pill" id="weatherFreshness">Weather loading…</span></div>
+      <div class="conditions-grid">
+        <article class="condition-card"><span>Island weather</span><strong id="islandWeather">—</strong><p id="islandWeatherNote"></p></article>
+        <article class="condition-card"><span>Ferry ride</span><strong id="ferryComfort">—</strong><p id="ferryComfortNote"></p></article>
+        <article class="condition-card"><span>Bike weather</span><strong id="bikeWeather">—</strong><p id="bikeWeatherNote"></p></article>
+        <article class="condition-card"><span>Walking comfort</span><strong id="walkingComfort">—</strong><p id="walkingComfortNote"></p></article>
+        <article class="condition-card"><span>Photo conditions</span><strong id="photoConditions">—</strong><p id="photoNote"></p></article>
+        <article class="condition-card"><span>Daylight</span><strong id="daylightWindow">—</strong><p id="daylightNote"></p></article>
+      </div>
+      <div class="alert-box" id="alertBox" hidden></div>
+    </section>
+
+    <section class="section split-section" id="crowds-open" aria-labelledby="crowds-title">
+      <article class="feature-card crowd-card">
+        <div class="eyebrow">Modeled, not counted</div><h2 id="crowds-title">Mackinac crowd index</h2>
+        <div class="big-label" id="crowdLabel">—</div><p id="crowdWindows">Loading crowd pressure…</p><div class="confidence-row"><strong id="crowdConfidence">— confidence</strong><span id="crowdBasis"></span></div>
+      </article>
+      <article class="feature-card">
+        <div class="eyebrow">Season reality</div><h2>What’s open today</h2><div id="attractionList" class="status-list"><p>Loading attraction status…</p></div>
+        <div class="openness" id="openness"></div>
+      </article>
+    </section>
+
+    <section class="section split-section" id="seasonal">
+      <article class="feature-card"><div class="eyebrow">What changes the day</div><h2>Events today</h2><div id="eventsList" class="status-list"><p>Checking the island calendar…</p></div></article>
+      <article class="feature-card"><div class="eyebrow">Shared Michigan intelligence</div><h2>Fall color</h2><div class="big-label smaller" id="fallColorLabel">—</div><p id="fallColorText">Using the existing Michigan fall-color layer when it is current.</p><a class="text-link" href="/fall-color/mackinac-island-fall-color/">Mackinac fall-color field guide →</a></article>
+    </section>
+
+    <section class="section planner-section" id="planner" aria-labelledby="planner-title">
+      <div class="section-head"><div><div class="eyebrow">Build my Mackinac day</div><h2 id="planner-title">A day that fits the ferry and the weather</h2></div><button class="btn small" id="sharePlan">Share plan</button></div>
+      <div class="planner-summary" id="plannerSummary">Building a realistic day from the selected visitor modes…</div>
+      <ol class="itinerary" id="itinerary"><li><time>—</time><div><strong>Loading your plan</strong><p>Checking feasible timing.</p></div></li></ol>
+      <p class="planner-explain" id="plannerExplain"></p>
+    </section>
+
+    <section class="section map-section" id="map-section" aria-labelledby="map-title">
+      <div class="section-head"><div><div class="eyebrow">Orientation + movement</div><h2 id="map-title">Know where the day goes</h2></div><button class="btn small" id="loadMap">Load interactive map</button></div>
+      <div class="map-layout">
+        <div class="map-placeholder" id="map"><div><strong>Map loads only when you need it.</strong><p>Ferry docks, downtown, Fort Mackinac, Arch Rock, British Landing, Grand Hotel and the perimeter loop.</p></div></div>
+        <div class="movement-list" id="movementList">
+          <div><strong>Downtown → Fort Mackinac</strong><span>~0.4 mi · 10–15 min walking · uphill</span></div>
+          <div><strong>Downtown → Arch Rock</strong><span>~1.5 mi walking/biking · climbing inland</span></div>
+          <div><strong>M-185 perimeter</strong><span>~8.2 mi · mostly level shoreline loop</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section source-section" id="sources" aria-labelledby="sources-title">
+      <div class="section-head"><div><div class="eyebrow">Trust layer</div><h2 id="sources-title">Live sources and freshness</h2></div><span class="source-pill" id="overallDataState">Loading…</span></div>
+      <div id="sourceList" class="source-list"><p>Loading source status…</p></div>
+      <details><summary>What happens when a source fails?</summary><p>Optional sources fail soft. A missing webcam, event feed or fall-color feed does not invent a replacement. If a schedule source cannot be verified, the ferry recommendation is explicitly degraded and the operator links remain available. Marine observations are treated as ferry-comfort context, not proof that a ferry will or will not operate.</p></details>
+    </section>
+
+    <section class="section seo-section" aria-labelledby="guide-title">
+      <div class="eyebrow">Useful even before the live data loads</div><h2 id="guide-title">How to plan a Mackinac Island day trip</h2>
+      <div class="prose-grid">
+        <div><h3>How much time do you need?</h3><p>For a first day trip, six or more usable island hours is a strong target. That is why the planner evaluates ferry combinations rather than simply pointing at the earliest departure. A late arrival can still work, but the itinerary should shrink instead of pretending a full-day plan is possible.</p><h3>Mackinaw City or St. Ignace?</h3><p>Use the port that fits the direction you are already traveling and the departure that preserves the better island window. Lower Peninsula travelers usually avoid an unnecessary bridge crossing by using Mackinaw City. Upper Peninsula travelers usually do the reverse. Schedule alignment can still change the answer.</p></div>
+        <div><h3>Biking M-185</h3><p>The classic shoreline loop is about 8.2 miles. Wind, rain timing and crowds matter more than raw temperature on many days. Interior routes climb considerably more than the perimeter, so this tool keeps the easy classic loop distinct from hillier inland riding.</p><h3>Why the “last ferry” is not the plan</h3><p>The last scheduled boat is a hard limit. A comfortable return is earlier when weather is deteriorating, children are involved, or the day’s itinerary leaves little margin. The live screen shows both so theoretical island time is never mistaken for a sensible return strategy.</p></div>
+      </div>
+    </section>
+
+    <section class="section related-section"><div class="eyebrow">Keep planning</div><h2>Related Michigan tools</h2><div class="related-links"><a href="/mackinac-bridge-live/">Mackinac Bridge Live</a><a href="/fall-color/">Michigan Fall Color</a><a href="/great-lakes-buoys/">Great Lakes Buoys</a><a href="/soo-locks/">Soo Locks Live</a><a href="/tools/">All Michigan tools</a></div></section>
+  </div>
+</main>
+<footer class="footer"><div class="shell"><p>Built by <a href="/">Chris Izworski</a>. Live source agencies and ferry operators remain authoritative for their own conditions and schedules. This tool is trip-planning guidance, not a guarantee of service or weather.</p><p><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p></div></footer>
+<script src="/assets/mackinac-island.js" defer></script>
+</body>
+</html>

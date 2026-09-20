@@ -17,6 +17,7 @@ const handlers = {
   sitemap: require("../lib/fall-color/routes/sitemap.js"),
   cron: require("../lib/fall-color/routes/cron.js"),
   "old-sow-live": require("../lib/old-sow/route.js"),
+  "mackinac-island": require("../lib/mackinac-island/route.js"),
 };
 
 module.exports = async (req, res) => {
