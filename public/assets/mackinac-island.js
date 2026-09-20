@@ -16,6 +16,7 @@
   const coreFailures=d=>(d?.failures||[]).filter(x=>!OPTIONAL_FAILURES.has(failureKey(x)));
   const cleanOrigin=s=>String(s||'').trim().replace(/\s+/g,' ').slice(0,100);
   const driveLabel=m=>{const n=Math.max(0,Math.round(Number(m)||0));const h=Math.floor(n/60),min=n%60;return h?`${h} hr${min?` ${min} min`:''}`:`${min} min`;};
+  const inputTimeMinutes=value=>{const m=String(value||'').match(/^(\d{1,2}):(\d{2})$/);if(!m)return null;const h=Number(m[1]),min=Number(m[2]);return h>=0&&h<=23&&min>=0&&min<=59?h*60+min:null;};
   function syncOriginInputs(value){
     const v=String(value||'');
     if($('originCityInput')&&$('originCityInput').value!==v)$('originCityInput').value=v;
@@ -179,7 +180,7 @@
     $('scoreRing').setAttribute('aria-label',`Visit score ${score} out of 100`);
     setText('confidence',`${String(dec.confidence||'medium').toUpperCase()} CONFIDENCE${dec.engine==='shared-harness-jev'?' · JEV-ranked feasible plan':' · deterministic ranking'}`);
     const banner=$('planningBanner');
-    if(d.planning_mode==='tomorrow'){banner.hidden=false;banner.textContent=`Today’s useful day-trip window has closed. Planning ${d.plan_date_label||'tomorrow'} instead.`;$('page-title').textContent='Mackinac Island Tomorrow';}
+    if(d.planning_mode==='tomorrow'){banner.hidden=false;banner.textContent=d.planning_reason||`Today’s useful day-trip window has closed. Planning ${d.plan_date_label||'tomorrow'} instead.`;$('page-title').textContent='Mackinac Island Tomorrow';}
     else {banner.hidden=true;$('page-title').textContent='Mackinac Island Today';}
     setText('bestArrival',plan.arrival_time||'No verified plan');
     setText('crowdsTop',d.crowds?.label||'—');
@@ -200,6 +201,15 @@
     setText('heroFerry',plan.departure_time?`${plan.departure_time} · ${plan.origin_port}`:'No verified ferry');
     setText('heroIsland',plan.arrival_time||'—');
     setText('heroReturn',d.ferry?.recommended_return?.departure_time||(profile.trip==='overnight'?'Overnight':'—'));
+    if(state.originResolved&&state.departTime){
+      const leaveMinutes=inputTimeMinutes(state.departTime);
+      const selected=(state.originResolved.routes||[]).find(x=>x.port===plan.origin_port);
+      const drive=Number.isFinite(Number(selected?.drive_minutes))?driveLabel(selected.drive_minutes):'drive time unavailable';
+      setOriginStatus(plan.departure_time
+        ? `${state.originResolved.origin?.label||state.originQuery} · leave ${clock(leaveMinutes)} → ${plan.origin_port} (${drive}) → ${plan.departure_time} ferry → ${plan.arrival_time} island arrival.`
+        : `${state.originResolved.origin?.label||state.originQuery} · leave ${clock(leaveMinutes)}. No verified ferry is reachable under the current trip constraints.`,
+        plan.departure_time?'resolved':'error');
+    }
     const f=d.generated_at?new Date(d.generated_at).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):'—';
     const optional=optionalFailures(d),core=coreFailures(d);
     const sourceNote=core.length?'Core source gap — verify sources below':optional.length?'Core ferry/weather plan available · optional planning feeds limited':'Core inputs available';
