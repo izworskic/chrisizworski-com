@@ -618,7 +618,7 @@ test('Mackinac live cameras use one switchable viewer and JEV stays closed-set',
   assert.match(html,/id="webcamViewer"/);
   assert.match(html,/id="webcamPicker"/);
   assert.match(html,/Choose a camera/);
-  assert.match(html,/Six views play directly here; Town Crier opens its own live view/);
+  assert.match(html,/Five views play directly here\. Horn’s and Town Crier open their official live-camera pages/);
   assert.match(css,/\.webcam-viewer\{display:grid/);
   assert.match(css,/\.webcam-choice\.active/);
   assert.match(js,/webcamSelectedId/);
@@ -633,7 +633,7 @@ test('Mackinac live cameras use one switchable viewer and JEV stays closed-set',
   assert.match(route,/Do not claim to see or analyze the live webcam image or video/);
   assert.match(route,/player\.castr\.com\/live_4fb405e028e311ef91eb49267aef0a7e/);
   assert.match(route,/island\.networkingdesign\.com:8183\/hls\/live\.stream\.m3u8/);
-  assert.match(route,/island\.networkingdesign\.com:8184\/hls\/live\.stream\.m3u8/);
+  assert.doesNotMatch(route,/island\.networkingdesign\.com:8184\/hls\/live\.stream\.m3u8/);
   assert.match(route,/youtube-nocookie\.com\/embed\/GHAC6-T14TU/);
   assert.match(route,/Prefer a camera that plays directly in the page/);
   assert.match(route,/uid=2e25804bc117f7aa96781ae3e4593a00/);
