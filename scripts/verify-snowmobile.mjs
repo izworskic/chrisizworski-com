@@ -43,7 +43,7 @@ check("weather-alone-cannot-score", content.engine.includes("weatherAloneCreates
 check("snow-depth-semantics", content.engine.includes("naturalSnowDepthIsTrailBase: false") && content.html.includes("Natural snow depth is <strong>not</strong> trail base"));
 check("nws-three-points", content.sources.includes('id: "grayling"') && content.sources.includes('id: "frederic"') && content.sources.includes('id: "gaylord"'));
 check("nohrsc-disclosed-gap", content.html.includes("NOHRSC") && content.html.includes("point feed is not yet connected"));
-check("private-jev-server-only", content.harness.includes("getVercelOidcToken") && !content.client.includes("agentbase-registry"));
+check("private-jev-server-only", content.harness.includes("VERCEL_OIDC_TOKEN") && !content.client.includes("agentbase-registry"));
 check("injection-screen", content.harness.includes('action: "screen_evidence"') && content.harness.includes("injectionProbability"));
 check("closed-jev-options", content.harness.includes("CONDITION_CHOICES") && content.harness.includes("Choose only a supplied option or NONE"));
 check("deterministic-jev-fallback", content.harness.includes('mode: "deterministic"'));
