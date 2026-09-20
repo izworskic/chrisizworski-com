@@ -21,10 +21,9 @@ function selectCurrent(predictions,now=Date.now()){
   for(const p of predictions.map(normalize)){
     if(!p.geyserName)continue;
     const close=millis(p.windowClose||p.prediction);
-    const open=millis(p.windowOpen||p.prediction);
     const expiration=millis(p.expiration);
-    if(!Number.isFinite(open)||!Number.isFinite(close)||open>close||close<now)continue;
-    if(Number.isFinite(expiration)&&expiration<now)continue;
+    if(Number.isFinite(close)&&close<now-5*60*1000)continue;
+    if(Number.isFinite(expiration)&&expiration<now-5*60*1000)continue;
     if(p.forecastNumber>1)continue;
     const key=p.geyserName.toLowerCase();
     const cur=by.get(key);
@@ -37,8 +36,8 @@ function soonest(items,now=Date.now()){
 }
 
 module.exports=async function handler(req,res){
-  res.setHeader('X-Robots-Tag','noindex, nofollow');
   res.setHeader('Cache-Control','s-maxage=65, stale-while-revalidate=180');
+  res.setHeader('X-Robots-Tag','noindex, nofollow');
   try{
     const response=await fetch(GT,{headers:{'User-Agent':'ChrisIzworskiOutdoorTools/1.0 (chrisizworski.com)','Accept':'application/json'},signal:AbortSignal.timeout(12000)});
     if(!response.ok)throw new Error(`GeyserTimes ${response.status}`);

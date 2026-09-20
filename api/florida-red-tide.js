@@ -27,8 +27,8 @@ function decision(samples){
 }
 
 module.exports=async function handler(req,res){
-  res.setHeader('X-Robots-Tag','noindex, nofollow');
   res.setHeader('Cache-Control','s-maxage=900, stale-while-revalidate=3600');
+  res.setHeader('X-Robots-Tag','noindex, nofollow');
   try{
     const params=new URLSearchParams({where:'1=1',outFields:'HAB_ID,SampleDate_t,LOCATION,LATITUDE,LONGITUDE,Abundance,ExportDate',returnGeometry:'false',f:'json'});
     const response=await fetch(`${SOURCE}?${params}`,{headers:{'User-Agent':'ChrisIzworskiOutdoorTools/1.0'},signal:AbortSignal.timeout(12000)});
