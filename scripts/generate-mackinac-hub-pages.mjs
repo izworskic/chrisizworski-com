@@ -45,7 +45,7 @@ const pages=[
     truth:"The visitor profile guides preference ranking. It does not change published schedules, attraction facts, weather, accessibility rules or route feasibility.",
     faq:[
       ["How many questions do I need to answer?","The base intake uses four high-value questions. At most one additional adaptive question is asked when it can materially change the trip."],
-      ["Does the planner use AI to invent the itinerary?","No. The planner creates valid deterministic candidates first. JEV is bounded to classification or ranking among supplied valid options."],
+      ["Does the planner use AI to invent the itinerary?","No. The planner creates valid deterministic candidates first. The preference layer is bounded to classification or ranking among supplied valid options."],
       ["Can I change the plan later?","Yes. The live planner supports bounded adjustments such as more relaxed, less walking, more outdoors, better dinner, less downtown and more history without restarting the intake."]
     ],
     sources:[["Official Mackinac trip planning","https://www.mackinacisland.org/plan-your-trip/"],["Official suggested itineraries","https://www.mackinacisland.org/plan-your-trip/suggested-itineraries/"],["Mackinac State Historic Parks itineraries","https://www.mackinacparks.com/visit/plan/itineraries/"]]
