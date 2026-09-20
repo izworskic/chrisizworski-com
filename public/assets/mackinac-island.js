@@ -2,7 +2,7 @@
   'use strict';
   const API='/api/mackinac-island';
   const ORIGIN_API='/api/mackinac-origin';
-  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[]};
+  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',tripDate:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[]};
   const $=id=>document.getElementById(id);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const track=(name,params={})=>{try{if(typeof window.gtag==='function')window.gtag('event',name,params);}catch{}};
@@ -21,6 +21,12 @@
     const v=String(value||'');
     if($('originCityInput')&&$('originCityInput').value!==v)$('originCityInput').value=v;
     if($('heroOriginInput')&&$('heroOriginInput').value!==v)$('heroOriginInput').value=v;
+  }
+  function syncTripDateInputs(value){
+    const v=String(value||'').trim();
+    state.tripDate=v;
+    if($('tripDate')&&$('tripDate').value!==v)$('tripDate').value=v;
+    if($('heroTripDate')&&$('heroTripDate').value!==v)$('heroTripDate').value=v;
   }
   function syncDepartInputs(value){
     const v=String(value||'').trim();
@@ -57,8 +63,8 @@
   function clearResolvedOrigin({clearInputs=false}={}){
     state.originResolved=null;state.originQuery='';
     if(clearInputs)syncOriginInputs('');
-    setText('heroLeave','Add city + leave time');
-    setOriginStatus('Enter a starting city and leave-home time for a drive-aware ferry plan.');
+    setText('heroLeave','Add date + city + time');
+    setOriginStatus('Choose the trip date, starting city and leave-home time for a drive-aware ferry plan.');
   }
   function originMatches(value){
     const q=cleanOrigin(value).toLowerCase();
@@ -77,7 +83,7 @@
       syncOriginInputs(j.origin?.label||q);syncOriginSide();
       const alt=(j.routes||[]).find(x=>x.port!==j.preferred_port);
       const alternate=alt&&Number.isFinite(Number(alt.drive_minutes))?` · ${alt.port} ${driveLabel(alt.drive_minutes)}`:'';
-      setOriginStatus(`${j.origin?.label||q} → ${j.preferred_port} about ${driveLabel(j.drive_minutes)}${alternate}. Add the time you plan to leave home so we can determine which ferries are actually reachable.`,'resolved');
+      setOriginStatus(`${j.origin?.label||q} → ${j.preferred_port} about ${driveLabel(j.drive_minutes)}${alternate}. Add the trip date and leave-home time so the planner can choose the actual reachable ferry.`,'resolved');
       setText('heroLeave',state.departTime?'Calculating…':'Add leave time');
       track('mackinac_start_city_selected',{origin_city:j.origin?.label||q,preferred_port:j.preferred_port,source});
       if(reload&&state.departTime)loadDecision();
@@ -104,6 +110,7 @@
       if(Number.isFinite(Number(mackinaw?.drive_minutes)))p.set('origin_mackinaw_minutes',String(mackinaw.drive_minutes));
       if(Number.isFinite(Number(stIgnace?.drive_minutes)))p.set('origin_st_ignace_minutes',String(stIgnace.drive_minutes));
     }
+    if(state.tripDate)p.set('trip_date',state.tripDate);
     if(state.departTime)p.set('depart_at',state.departTime);
     const interests=[...document.querySelectorAll('#interestChoices input:checked')].map(x=>x.value);
     const must=[...document.querySelectorAll('#mustDoChoices input:checked')].map(x=>x.value);
