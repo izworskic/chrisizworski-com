@@ -148,7 +148,10 @@
     if(d.failures?.length){$('sourceList').insertAdjacentHTML('beforeend',`<div class="error-panel"><strong>Degraded inputs:</strong> ${d.failures.map(x=>esc(x.source||x.name||x.message||x.error||'source unavailable')).join(' · ')}</div>`);}
   }
 
-  function renderMapPoints(d){state.mapPoints=d.map_points||[];}
+  function renderMapPoints(d){
+    state.mapPoints=d.map_points||[];
+    state.routeIds=d.map?.recommended_stop_ids||[];
+  }
   function renderAll(d){state.data=d;renderTop(d);renderWhy(d);renderFerries(d);renderConditions(d);renderCrowdsOpen(d);renderSeasonal(d);renderPlanner(d);renderSources(d);renderMapPoints(d);}
 
   async function loadDecision(){
@@ -172,10 +175,27 @@
   async function buildMap(){
     const btn=$('loadMap');btn.disabled=true;btn.textContent='Loading map…';
     try{await loadLeaflet();const host=$('map');host.className='leaflet-map';host.innerHTML='';const map=L.map(host,{scrollWheelZoom:false}).setView([45.852,-84.617],13);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
-      const points=state.mapPoints?.length?state.mapPoints:[{name:'Downtown / ferry docks',lat:45.8492,lon:-84.6176},{name:'Fort Mackinac',lat:45.8527,lon:-84.6177},{name:'Arch Rock',lat:45.8548,lon:-84.5936},{name:'British Landing',lat:45.8731,lon:-84.6411},{name:'Grand Hotel',lat:45.8498,lon:-84.6294}];
-      points.forEach(p=>L.marker([p.lat||p.latitude,p.lon||p.longitude]).addTo(map).bindPopup(`<strong>${esc(p.name)}</strong>${(p.note||p.detail)?`<br>${esc(p.note||p.detail)}`:''}`));
-      const loop=[[45.849,-84.618],[45.848,-84.600],[45.855,-84.587],[45.870,-84.588],[45.884,-84.610],[45.879,-84.639],[45.865,-84.655],[45.849,-84.645],[45.849,-84.618]];L.polyline(loop,{weight:4,opacity:.75}).addTo(map).bindTooltip('M-185 perimeter · approximate orientation');
-      btn.textContent='Map loaded';track('mackinac_map_opened',{points:points.length});
+      const points=state.mapPoints?.length?state.mapPoints:[{id:'downtown',name:'Downtown / ferry docks',lat:45.8492,lon:-84.6176},{id:'fort',name:'Fort Mackinac',lat:45.8527,lon:-84.6177},{id:'arch-rock',name:'Arch Rock',lat:45.8548,lon:-84.5936},{id:'british-landing',name:'British Landing',lat:45.8731,lon:-84.6411},{id:'grand-hotel',name:'Grand Hotel',lat:45.8498,lon:-84.6294}];
+      const routeIds=Array.isArray(state.routeIds)?state.routeIds:[];
+      const orderedUnique=[...new Set(routeIds.filter(Boolean))];
+      const byId=new Map(points.map(p=>[p.id,p]));
+      const itineraryPoints=orderedUnique.map(id=>byId.get(id)).filter(Boolean);
+      points.forEach(p=>{
+        const planned=orderedUnique.includes(p.id);
+        const marker=planned
+          ? L.circleMarker([p.lat||p.latitude,p.lon||p.longitude],{radius:8,weight:3,fillOpacity:.85})
+          : L.marker([p.lat||p.latitude,p.lon||p.longitude]);
+        marker.addTo(map).bindPopup(`<strong>${esc(p.name)}</strong>${planned?'<br><em>In your recommended itinerary</em>':''}${(p.note||p.detail)?`<br>${esc(p.note||p.detail)}`:''}`);
+      });
+      if(itineraryPoints.length>=2){
+        L.polyline(itineraryPoints.map(p=>[p.lat||p.latitude,p.lon||p.longitude]),{weight:3,dashArray:'7 7',opacity:.75})
+          .addTo(map)
+          .bindTooltip('Your itinerary · orientation only, not turn-by-turn routing');
+      }
+      const loop=[[45.849,-84.618],[45.848,-84.600],[45.855,-84.587],[45.870,-84.588],[45.884,-84.610],[45.879,-84.639],[45.865,-84.655],[45.849,-84.645],[45.849,-84.618]];
+      if(routeIds.includes('m185')) L.polyline(loop,{weight:4,opacity:.75}).addTo(map).bindTooltip('M-185 perimeter · approximate orientation');
+      if(itineraryPoints.length) map.fitBounds(L.latLngBounds(itineraryPoints.map(p=>[p.lat||p.latitude,p.lon||p.longitude])).pad(.25),{maxZoom:14});
+      btn.textContent='Map loaded';track('mackinac_map_opened',{points:points.length,itinerary_points:itineraryPoints.length});
     }catch(e){btn.disabled=false;btn.textContent='Retry map';$('map').innerHTML='<div><strong>Interactive map could not load.</strong><p>The movement notes remain available and the live decision does not depend on the map provider.</p></div>';state.mapLoaded=false;}
   }
   $('loadMap').addEventListener('click',buildMap);
