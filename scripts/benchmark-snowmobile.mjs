@@ -75,7 +75,7 @@ add("Search/entity architecture",5,
 );
 
 add("JEV safety + deterministic fallback",5,
-  (harness.includes("getVercelOidcToken") && harness.includes('action: "screen_evidence"') &&
+  (harness.includes("VERCEL_OIDC_TOKEN") && harness.includes('action: "screen_evidence"') &&
    harness.includes("CONDITION_CHOICES") && harness.includes('mode: "deterministic"') &&
    !client.includes("agentbase-registry")) ? 5 : 0,
   []
