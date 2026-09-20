@@ -151,3 +151,31 @@ test('event start removes arrivals without a practical margin', () => {
   assert.ok(plans.length>0);
   assert.ok(plans.every(x=>x.outbound.arrival_minutes<=12*60+15));
 });
+
+
+test('itinerary exposes movement context for actionable trip stops', () => {
+  const date='2026-09-20';
+  const profile=t.profileFromQuery({origin_city:'grand-rapids',bikes:'rent',pace:'balanced',interests:'biking,history',must_do:'m185,fort'},['first-visit','day-trip'],'lower');
+  const ctx={
+    date,personas:profile.personas,origin:'lower',profile,hourly:[],
+    marine:{score:90},attractions:t.attractionState(date,8*60),events:[],
+    sunrise:t.solarMinutes(date,45.8497,-84.6189,true),
+    sunset:t.solarMinutes(date,45.8497,-84.6189,false),sameDay:false,nowMinutes:7*60
+  };
+  const records=[...t.arnoldSchedule(date,true),...t.sheplersSchedule(date,true)];
+  const plan=t.planCandidates(records,ctx)[0];
+  const itinerary=t.itineraryFor(plan,ctx);
+  assert.ok(itinerary.length>5);
+  assert.ok(itinerary.filter(x=>x.stop_id).every(x=>typeof x.movement==='string' && x.movement.length>4));
+  assert.match(itinerary.find(x=>x.stop_id==='m185').movement,/8\.2 mi/);
+  assert.match(itinerary.find(x=>x.stop_id==='fort').movement,/0\.4 mi/);
+});
+
+test('client renders route-aware map and itinerary labels', () => {
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(js,/x\.title\|\|x\.label/);
+  assert.match(js,/recommended_stop_ids/);
+  assert.match(js,/Your itinerary · orientation only, not turn-by-turn routing/);
+  assert.match(js,/routeIds\.includes\('m185'\)/);
+  assert.match(js,/state\.mapWasOpened/);
+});
