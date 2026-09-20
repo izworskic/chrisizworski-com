@@ -568,8 +568,8 @@ test('journey candidates carry route wait and door-to-island cost', () => {
 test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260920-live16/);
-  assert.match(html,/mackinac-island\.css\?v=20260920-live16/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live17/);
+  assert.match(html,/mackinac-island\.css\?v=20260920-live17/);
   assert.doesNotMatch(js,/Add a starting city/);
   assert.doesNotMatch(html,/Add a starting city/);
 });
@@ -579,9 +579,9 @@ test('Mackinac first-screen route inputs are explicit and cache-safe', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
   const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
-  assert.match(html,/data-mackinac-build="20260920-live16"/);
+  assert.match(html,/data-mackinac-build="20260920-live17"/);
   assert.match(html,/<span>Starting city<\/span><input id="heroOriginInput"/);
-  assert.match(html,/mackinac-island\.js\?v=20260920-live16/);
+  assert.match(html,/mackinac-island\.js\?v=20260920-live17/);
   assert.doesNotMatch(html,/Add a starting city/i);
   assert.doesNotMatch(js,/Add a starting city/i);
   assert.match(html,/Enter date, city \+ time above/);
@@ -714,7 +714,7 @@ test('place intelligence is source-backed and never presented as live availabili
   assert.match(js,/Room availability and live rates are not assumed/);
   assert.match(js,/current hours, waits and reservations still need checking/);
   assert.match(html,/id="straitsGuideCards"/);
-  assert.match(html,/20260920-live16/);
+  assert.match(html,/20260920-live17/);
 });
 
 
@@ -729,14 +729,14 @@ test('spatial trip shape is closed-set, mapped and visible to the planner',()=>{
   assert.match(route,/recommendedMapIds/);
   assert.match(js,/renderTripShape/);
   assert.match(html,/id="tripShapePanel"/);
-  assert.match(html,/20260920-live16/);
+  assert.match(html,/20260920-live17/);
 });
 
 
 test('shareable Mackinac state restores inputs but never freezes live outputs',()=>{
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-trip-state\.js\?v=20260920-live16/);
+  assert.match(html,/mackinac-trip-state\.js\?v=20260920-live17/);
   assert.match(html,/id="shareStateStatus"/);
   assert.match(js,/PLAN_STORAGE_KEY='mackinac-trip-plan-v1'/);
   assert.match(js,/sharedPlanFromHash/);
@@ -744,4 +744,19 @@ test('shareable Mackinac state restores inputs but never freezes live outputs',(
   assert.match(js,/Shared trip restored · live details refreshed/);
   assert.match(js,/Open the link to rebuild it with current ferry and weather data/);
   assert.match(js,/resolveOrigin\(originText,\{reload:false,source:shared\?'shared-plan':'saved-plan'\}\)/);
+});
+
+
+test('overnight trips use a bounded multi-day composer instead of summary-only repeated days',()=>{
+  const route=fs.readFileSync(routePath,'utf8');
+  const js=fs.readFileSync(jsPath,'utf8');
+  const html=fs.readFileSync(htmlPath,'utf8');
+  assert.match(route,/require\("\.\/multiday"\)/);
+  assert.match(route,/chooseMultiDayWithJev/);
+  assert.match(route,/JEV multi-day output did not pass closed-set confidence gates/);
+  assert.match(route,/multi_day_plan:multiDayPlan/);
+  assert.match(route,/trip_days:multiDayPlan\?\.days\|\|tripDays/);
+  assert.match(js,/trip-day-stops/);
+  assert.match(js,/if\(d\.multi_day_plan\)\{host\.hidden=true;return;\}/);
+  assert.match(html,/20260920-live17/);
 });
