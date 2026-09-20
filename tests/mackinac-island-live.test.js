@@ -389,11 +389,17 @@ test('dynamic routed origin overrides the old preset-only city model', () => {
   const p=t.profileFromQuery({
     origin_name:'Bay City, Michigan, US',
     origin_drive_minutes:'125',
-    origin_preferred_port:'Mackinaw City'
+    origin_preferred_port:'Mackinaw City',
+    origin_mackinaw_minutes:'125',
+    origin_st_ignace_minutes:'162'
   },['day-trip'],'lower');
   assert.equal(p.origin_name,'Bay City, Michigan, US');
   assert.equal(p.origin_preset.preferred_port,'Mackinaw City');
   assert.equal(p.origin_preset.drive_minutes,125);
+  assert.deepEqual(p.origin_routes,{'Mackinaw City':125,'St. Ignace':162});
+  assert.equal(t.driveMinutesForPort(p,'Mackinaw City'),125);
+  assert.equal(t.driveMinutesForPort(p,'St. Ignace'),162);
+  assert.ok(t.accessScore('Mackinaw City','lower',p)>t.accessScore('St. Ignace','lower',p));
   assert.match(p.origin_preset.confidence,/OpenStreetMap\/OSRM/);
 });
 
@@ -401,4 +407,47 @@ test('starting-city resolver bounds text and compares both ferry ports', () => {
   assert.equal(originT.cleanQuery('  Bay   City, MI  '),'Bay City, MI');
   assert.equal(originT.cleanQuery('x'.repeat(150)).length,100);
   assert.deepEqual(originT.PORTS.map(x=>x.name),['Mackinaw City','St. Ignace']);
+});
+
+
+test('routed starting city constrains every ferry candidate by that port drive time', () => {
+  const date='2026-09-20';
+  const profile=t.profileFromQuery({
+    origin_name:'Bay City, Michigan, US',
+    origin_drive_minutes:'125',
+    origin_preferred_port:'Mackinaw City',
+    origin_mackinaw_minutes:'125',
+    origin_st_ignace_minutes:'162'
+  },['day-trip'],'lower');
+  const ctx={
+    date,personas:profile.personas,origin:'lower',profile,hourly:[],
+    marine:{score:90},attractions:t.attractionState(date,7*60),events:[],
+    sunrise:t.solarMinutes(date,45.8497,-84.6189,true),
+    sunset:t.solarMinutes(date,45.8497,-84.6189,false),sameDay:true,nowMinutes:7*60
+  };
+  const records=[...t.arnoldSchedule(date,true),...t.sheplersSchedule(date,true)];
+  const plans=t.planCandidates(records,ctx);
+  assert.ok(plans.length>0);
+  for(const plan of plans){
+    const drive=t.driveMinutesForPort(profile,plan.outbound.origin_port);
+    assert.ok(Number.isFinite(drive), plan.outbound.origin_port);
+    assert.equal(plan.mainland_drive_minutes,drive);
+    assert.ok(
+      plan.outbound.departure_minutes>=ctx.nowMinutes+drive+15+plan.outbound.checkin_buffer_minutes,
+      `${plan.outbound.origin_port} ${plan.outbound.departure_time} must include ${drive} minutes of mainland driving`
+    );
+  }
+  const stIgnace=plans.find(x=>x.outbound.origin_port==='St. Ignace');
+  assert.ok(stIgnace);
+  const driveItem=t.itineraryFor(stIgnace,ctx).find(x=>x.stop_id==='mainland-drive');
+  assert.ok(driveItem);
+  assert.match(driveItem.detail,/to St\. Ignace/);
+  assert.equal(driveItem.minute,stIgnace.outbound.departure_minutes-stIgnace.outbound.checkin_buffer_minutes-162-15);
+});
+
+test('browser sends both routed port times to the Mackinac decision API', () => {
+  const js=fs.readFileSync(jsPath,'utf8');
+  assert.match(js,/origin_mackinaw_minutes/);
+  assert.match(js,/origin_st_ignace_minutes/);
+  assert.match(js,/Both port drive times feed ferry feasibility and leave-home timing/);
 });
