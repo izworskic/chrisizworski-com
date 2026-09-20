@@ -4,6 +4,8 @@
   const ORIGIN_API='/api/mackinac-origin';
   const PROFILE_API='/api/mackinac-profile';
   const PROFILE_STORAGE_KEY='mackinac-trip-profile-v1';
+  const PLAN_STORAGE_KEY='mackinac-trip-plan-v1';
+  const TRIP_STATE=window.MackinacTripState||null;
   const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',originRequestId:0,tripDate:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[],webcamSelectedId:null,webcamHls:null,intakeSchema:null,intakeAnswers:{},intakeStep:0,tripProfile:null,adaptiveAsked:false};
   const $=id=>document.getElementById(id);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -19,6 +21,68 @@
   const cleanOrigin=s=>String(s||'').trim().replace(/\s+/g,' ').slice(0,100);
   const driveLabel=m=>{const n=Math.max(0,Math.round(Number(m)||0));const h=Math.floor(n/60),min=n%60;return h?`${h} hr${min?` ${min} min`:''}`:`${min} min`;};
   const inputTimeMinutes=value=>{const m=String(value||'').match(/^(\d{1,2}):(\d{2})$/);if(!m)return null;const h=Number(m[1]),min=Number(m[2]);return h>=0&&h<=23&&min>=0&&min<=59?h*60+min:null;};
+
+  function planStorageGet(){
+    try{const raw=localStorage.getItem(PLAN_STORAGE_KEY);return raw?JSON.parse(raw):null;}catch{return null;}
+  }
+  function planStorageSet(plan){
+    try{localStorage.setItem(PLAN_STORAGE_KEY,JSON.stringify({plan,saved_at:Date.now()}));setText('shareStateStatus','Saved on this device');}catch{}
+  }
+  function planStorageClear(){
+    try{localStorage.removeItem(PLAN_STORAGE_KEY);}catch{}
+    setText('shareStateStatus','');
+  }
+  function checkedValues(selector){return [...document.querySelectorAll(selector)].filter(x=>x.checked).map(x=>x.value);}
+  function capturePlanInputs(){
+    return TRIP_STATE?.sanitize({
+      trip_date:state.tripDate,
+      origin_text:cleanOrigin($('originCityInput')?.value||$('heroOriginInput')?.value||state.originQuery),
+      depart_at:state.departTime,
+      trip:$('tripMode')?.value,
+      nights:$('nightCount')?.value,
+      adults:$('adultCount')?.value,
+      children:$('childCount')?.value,
+      bikes:$('bikePlan')?.value,
+      pace:$('pace')?.value,
+      mobility:$('mobility')?.value,
+      dinner:$('dinner')?.value,
+      return_by:$('returnBy')?.value,
+      event_start:$('eventStart')?.value,
+      personas:selectedPersonas(),
+      interests:checkedValues('#interestChoices input'),
+      must_do:checkedValues('#mustDoChoices input'),
+      intake:{...(state.intakeAnswers||{})}
+    })||null;
+  }
+  function hydratePlanInputs(plan,{includeIntake=true}={}){
+    if(!plan)return;
+    if(plan.trip_date)syncTripDateInputs(plan.trip_date);
+    if(plan.depart_at)syncDepartInputs(plan.depart_at);
+    if(plan.origin_text)syncOriginInputs(plan.origin_text);
+    if(plan.personas?.length)state.personas=new Set(plan.personas);
+    const setValue=(id,value)=>{const el=$(id);if(el&&value!==''&&value!=null)el.value=String(value);};
+    setValue('tripMode',plan.trip);setValue('nightCount',plan.nights);setValue('adultCount',plan.adults);setValue('childCount',plan.children);
+    setValue('bikePlan',plan.bikes);setValue('pace',plan.pace);setValue('mobility',plan.mobility);setValue('dinner',plan.dinner);
+    setValue('returnBy',plan.return_by);setValue('eventStart',plan.event_start);
+    const applyChecks=(selector,values)=>{const wanted=new Set(values||[]);document.querySelectorAll(selector).forEach(x=>{x.checked=wanted.has(x.value);});};
+    applyChecks('#interestChoices input',plan.interests);applyChecks('#mustDoChoices input',plan.must_do);
+    if(includeIntake&&plan.intake)state.intakeAnswers={...plan.intake};
+    syncPersonaButtons();syncTripModeUi();
+  }
+  function futureSavedPlan(){
+    const saved=planStorageGet()?.plan;if(!saved||!TRIP_STATE)return null;
+    const clean=TRIP_STATE.sanitize(saved);
+    const today=detroitToday();
+    return clean.trip_date&&clean.trip_date>=today?clean:null;
+  }
+  function sharedPlanFromHash(){
+    return TRIP_STATE?.decode(location.hash)||null;
+  }
+  function shareablePlanUrl(){
+    if(!TRIP_STATE)return location.href.split('#')[0];
+    const hash=TRIP_STATE.encode(capturePlanInputs()||{});
+    return location.origin+location.pathname+hash;
+  }
 
   const TAB_TARGETS={
     'my-trip':'#planner','live':'#conditions','getting-there':'#ferries','island':'#crowds-open',
@@ -210,11 +274,17 @@
       }
     }));
   }
-  async function initIntake(){
-    const restored=storageGet();
+  async function initIntake({seedAnswers=null,ignoreLocal=false}={}){
+    const restored=ignoreLocal?null:storageGet();
     try{
       const r=await fetch(PROFILE_API,{headers:{accept:'application/json'}});const schema=await r.json();if(!r.ok)throw new Error(`HTTP ${r.status}`);
       state.intakeSchema=schema;
+      if(seedAnswers&&Object.values(seedAnswers).some(v=>Array.isArray(v)?v.length:Boolean(v))){
+        state.intakeAnswers={...seedAnswers};state.adaptiveAsked=true;
+        await classifyIntake({scroll:false});
+        setText('intakeProgress','Trip style restored');$('intakeReset').hidden=false;
+        return;
+      }
       if(restored?.answers&&restored?.profile){
         state.intakeAnswers=restored.answers;state.tripProfile=restored.profile;state.adaptiveAsked=true;
         renderProfile(restored.profile);applyProfileToPlanner(restored.profile);
@@ -348,7 +418,7 @@
   document.querySelectorAll('[data-scroll]').forEach(b=>b.addEventListener('click',()=>scrollToTarget(b.dataset.scroll)));
 
   $('intakeContinue')?.addEventListener('click',()=>{const q=state.intakeSchema?.base_questions?.[state.intakeStep];if(!q)return;const v=state.intakeAnswers[q.id];if(q.type==='multi'&&Array.isArray(v)&&v.length){track('mackinac_intake_answered',{question:q.id,answer:v.join('|')});state.intakeStep++;renderIntakeStep();}});
-  $('intakeReset')?.addEventListener('click',()=>{storageClear();state.intakeAnswers={};state.tripProfile=null;state.intakeStep=0;state.adaptiveAsked=false;$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;$('tripTabsWrap').hidden=true;$('intakeReset').hidden=true;track('mackinac_intake_started',{restart:true});renderIntakeStep();});
+  $('intakeReset')?.addEventListener('click',()=>{storageClear();planStorageClear();history.replaceState(null,'',location.pathname+location.search);state.intakeAnswers={};state.tripProfile=null;state.intakeStep=0;state.adaptiveAsked=false;$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;$('tripTabsWrap').hidden=true;$('intakeReset').hidden=true;track('mackinac_intake_started',{restart:true});renderIntakeStep();});
   $('profileEdit')?.addEventListener('click',()=>{$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;state.intakeStep=0;renderIntakeStep();});
   $('profileBuildTrip')?.addEventListener('click',()=>{applyProfileToPlanner(state.tripProfile);track('mackinac_plan_generated',{profile:state.tripProfile?.primary?.id||'unknown'});loadDecision();scrollToTarget('#planner');});
 
@@ -406,6 +476,7 @@
     }
     setText('heroLeave','Calculating…');
     setOriginStatus(`Planning ${dateLabel(state.tripDate)} from ${state.originResolved?.origin?.label||state.originQuery}: drive to both ports, check-in timing, ferry wait and island arrival…`,'loading');
+    const savedPlan=capturePlanInputs();if(savedPlan)planStorageSet(savedPlan);
     loadDecision();
   });
   $('tripBuilder')?.addEventListener('submit',async e=>{
@@ -435,6 +506,7 @@
       return;
     }
     track('mackinac_itinerary_created',{personas:selectedPersonas().join('|'),trip_date:state.tripDate,origin_city:state.originResolved?.origin?.label||'none',depart_at:state.departTime,children:Number($('childCount')?.value||0),bikes:$('bikePlan')?.value||'none',pace:$('pace')?.value||'balanced'});
+    const savedPlan=capturePlanInputs();if(savedPlan)planStorageSet(savedPlan);
     loadDecision();
   });
   $('tripBuilder')?.addEventListener('change',e=>{
@@ -759,13 +831,37 @@
 
   $('sharePlan').addEventListener('click',async()=>{
     const d=state.data,plan=d?.ferry?.recommended_plan;if(!d||!plan)return;
-    const text=`Our Mackinac plan: ${plan.departure_time} from ${plan.origin_port}, island arrival ${plan.arrival_time}, return ${returnPlanText(d)}. ${location.href}`;
-    try{if(navigator.share)await navigator.share({title:'Our Mackinac Trip',text,url:location.href});else{await navigator.clipboard.writeText(text);$('sharePlan').textContent='Copied';setTimeout(()=>$('sharePlan').textContent='Share plan',1600);}track('mackinac_share_plan',{method:navigator.share?'native':'clipboard'});}catch{}
+    const inputs=capturePlanInputs();if(inputs)planStorageSet(inputs);
+    const url=shareablePlanUrl();
+    const text=`Our Mackinac plan: ${plan.departure_time} from ${plan.origin_port}, island arrival ${plan.arrival_time}, return ${returnPlanText(d)}. Open the link to rebuild it with current ferry and weather data.`;
+    try{
+      if(navigator.share)await navigator.share({title:'Our Mackinac Trip',text,url});
+      else{await navigator.clipboard.writeText(url);$('sharePlan').textContent='Link copied';setTimeout(()=>$('sharePlan').textContent='Share plan',1600);}
+      setText('shareStateStatus','Share link rebuilds with current live data');
+      track('mackinac_share_plan',{method:navigator.share?'native':'clipboard',state_version:TRIP_STATE?.VERSION||'none'});
+    }catch{}
   });
 
   document.addEventListener('click',e=>{const a=e.target.closest('#ferries a');if(a)track('mackinac_ferry_compared',{});});
-  syncTripDateInputs(detroitToday());
-  syncTripModeUi();
-  initIntake();
-  loadDecision();
+  async function boot(){
+    const shared=sharedPlanFromHash();
+    const saved=shared?null:futureSavedPlan();
+    const seed=shared||saved;
+    if(seed)hydratePlanInputs(seed,{includeIntake:true});
+    else syncTripDateInputs(detroitToday());
+    syncTripModeUi();
+    await initIntake({seedAnswers:seed?.intake||null,ignoreLocal:Boolean(shared)});
+    if(seed)hydratePlanInputs(seed,{includeIntake:false});
+    const originText=cleanOrigin(seed?.origin_text);
+    if(originText){
+      const ok=await resolveOrigin(originText,{reload:false,source:shared?'shared-plan':'saved-plan'});
+      if(!ok)setText('shareStateStatus',shared?'Shared starting city needs a recheck':'Saved starting city needs a recheck');
+    }
+    if(shared){
+      setText('shareStateStatus','Shared trip restored · live details refreshed');
+      track('mackinac_shared_plan_opened',{state_version:TRIP_STATE?.VERSION||'none'});
+    }else if(saved)setText('shareStateStatus','Saved trip restored on this device');
+    await loadDecision();
+  }
+  boot();
 })();
