@@ -209,8 +209,11 @@
     setText('bikeTop',d.bike?`${d.bike.label} · ${Math.round(d.bike.score||0)}/100`:'—');
     setText('weatherTop',d.weather?.visitor_summary||'Forecast unavailable');
     setText('marineTop',d.marine?.comfort_label||'Observation unavailable');
-    setText('returnTop',d.ferry?.recommended_return?.departure_time||'—');
-    setText('lastTop',d.ferry?.last_scheduled_return?`Last scheduled: ${d.ferry.last_scheduled_return.departure_time}`:'Last scheduled: unavailable');
+    setText('returnTop',returnPlanText(d));
+    const rp=d.ferry?.return_plan||{};
+    setText('lastTop',d.ferry?.last_scheduled_return
+      ? `${d.trip_profile?.trip==='overnight'?`Last ${dateLabel(rp.return_date)}`:'Last scheduled'}: ${d.ferry.last_scheduled_return.departure_time}`
+      : d.trip_profile?.trip==='overnight'?'Return-day schedule unavailable':'Last scheduled: unavailable');
     const port=plan.origin_port||'the better mainland port';
     const dep=plan.departure_time||'a verified departure';
     $('primaryRec').innerHTML=plan.departure_time?`<strong>Take the ${esc(dep)} from ${esc(port)}.</strong> ${esc(dec.primary_reason||'This preserves the strongest usable island window.')}`:'<strong>No verified ferry recommendation.</strong> Use the official operator links below before leaving.';
@@ -218,11 +221,11 @@
     if(state.originResolved?.origin?.label)syncOriginInputs(state.originResolved.origin.label);
     const party=`${Number(profile.adults||2)} adult${Number(profile.adults||2)===1?'':'s'}${Number(profile.children||0)?` + ${profile.children} child${Number(profile.children)===1?'':'ren'}`:''}`;
     const priorities=[...(profile.interests||[]),...(profile.must_do||[]).map(x=>`must: ${x}`)].slice(0,3);
-    setText('heroTripContext',[party,profile.trip==='overnight'?'overnight':'day trip',priorities.length?priorities.join(' · '):null].filter(Boolean).join(' · '));
+    setText('heroTripContext',[party,profile.trip==='overnight'?`${profile.nights||1} night${Number(profile.nights||1)===1?'':'s'}`:'day trip',priorities.length?priorities.join(' · '):null].filter(Boolean).join(' · '));
     setText('heroLeave',d.leave_home?.time||(state.originResolved?(state.departTime?'No reachable ferry':'Add leave time'):'Add city + leave time'));
     setText('heroFerry',plan.departure_time?`${plan.departure_time} · ${plan.origin_port}`:'No verified ferry');
     setText('heroIsland',plan.arrival_time||'—');
-    setText('heroReturn',d.ferry?.recommended_return?.departure_time||(profile.trip==='overnight'?'Overnight':'—'));
+    setText('heroReturn',returnPlanText(d));
     if(state.originResolved&&state.departTime){
       const leaveMinutes=inputTimeMinutes(state.departTime);
       const selected=(state.originResolved.routes||[]).find(x=>x.port===plan.origin_port);
@@ -263,8 +266,10 @@
       const card=$(key+'Card');card?.classList.toggle('recommended',plan.origin_port===name);
       renderTimeline(key+'Timeline',p.departures||[],plan.origin_port===name?plan:null);
     });
-    setText('recommendedReturn',f.recommended_return?.departure_time||'—');setText('literalLast',f.last_scheduled_return?.departure_time||'—');
-    setText('returnReason',f.return_reason||'Provides a practical margin before the last boat.');
+    const rp=f.return_plan||{};
+    setText('recommendedReturn',returnPlanText(d));
+    setText('literalLast',f.last_scheduled_return?`${dateLabel(rp.return_date)} · ${f.last_scheduled_return.departure_time}`:'Unavailable');
+    setText('returnReason',f.return_reason||'Return timing depends on the trip duration and any deadline you supplied.');
   }
 
   function renderConditions(d){
