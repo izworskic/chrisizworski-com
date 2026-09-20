@@ -32,7 +32,8 @@ test('New Buffalo clears target while Warren Dunes and Hoffmaster remain measure
 
 test('protected beach titles and H1s remain frozen during measurement',()=>{
   for(const {cfg,html} of detailPages){
-    assert.match(html,new RegExp('<title>'+cfg.title.replace(/[.*+?^$()|[\]\\]/g,'\\$&')+'<\\/title>'));
+    const expectedTitle=cfg.title.replace(/&/g,'&amp;');
+    assert.match(html,new RegExp('<title>'+expectedTitle.replace(/[.*+?^$()|[\]\\]/g,'\\    assert.match(html,new RegExp('<title>'+cfg.title.replace(/[.*+?^$()|[\]\\]/g,'\\$&')+'<\\/title>'));')+'<\\/title>'));
     assert.match(html,new RegExp('<h1[^>]*>'+cfg.h1.replace(/[.*+?^$()|[\]\\]/g,'\\$&')+'<\\/h1>'));
   }
   const rootHtml=fs.readFileSync(path.join(root,'public/great-lakes-beaches/index.html'),'utf8');
