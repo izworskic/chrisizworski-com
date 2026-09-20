@@ -353,11 +353,11 @@
       if(cam.embed_url){
         stage.innerHTML=`<iframe src="${esc(cam.embed_url)}" title="${esc(cam.name)} live camera" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
       }else{
-        stage.innerHTML=`<div class="webcam-stage-placeholder"><strong>${esc(cam.name)}</strong><p>This camera cannot be shown cleanly inside the page.</p></div>`;
+        stage.innerHTML=`<div class="webcam-stage-placeholder"><strong>${esc(cam.name)}</strong><p>This owner publishes this view on its own live-camera page.</p></div>`;
       }
     }
     if(action){
-      action.innerHTML=cam.embed_url?'':`<a class="btn primary webcam-external" href="${esc(cam.source_url)}" target="_blank" rel="noopener">Open live camera ↗</a>`;
+      action.innerHTML=cam.embed_url?'':`<a class="btn primary webcam-external" href="${esc(cam.source_url)}" target="_blank" rel="noopener">Watch Town Crier live ↗</a>`;
     }
   }
 
@@ -376,7 +376,7 @@
       return `<button class="webcam-choice ${selected?'active':''}" type="button" aria-pressed="${selected?'true':'false'}" data-webcam-id="${esc(cam.id)}">
         <span>${esc(cam.location||'Mackinac Island')}</span>
         <strong>${esc(cam.name)}</strong>
-        ${recommended?'<small>Suggested</small>':''}
+        ${recommended?'<small>Suggested</small>':(!cam.embed_url?'<small>Opens separately</small>':'')}
       </button>`;
     }).join('');
     picker.querySelectorAll('.webcam-choice').forEach(btn=>btn.addEventListener('click',()=>{
