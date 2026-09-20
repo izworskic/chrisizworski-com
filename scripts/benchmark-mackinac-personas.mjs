@@ -208,7 +208,7 @@ const signatures=new Set(results.map(r=>r.signature)).size;
 const staticFactors={
   mobile_friction:/@media\(max-width:390px\)/.test(css)&&/\.builder-grid\{grid-template-columns:1fr\}/.test(css)?0:1,
   stale_or_unverified_data:/published-unverified-this-request/.test(routeText)&&/planning estimate only; not live traffic/i.test(routeText)&&/Live sources and freshness/.test(html)?0:1,
-  unnecessary_clicks:/id="tripBuilder"/.test(html)&&/Build this trip/.test(html)&&/Best island arrival/.test(html)?0:1,
+  unnecessary_clicks:/id="tripBuilder"/.test(html)&&/Build my Island plan/.test(html)&&/Best island arrival/.test(html)?0:1,
   page_load_cost:/defer/.test(html)&&/IntersectionObserver/.test(js)&&/loadLeaflet/.test(js)?0:1,
   inaccessible_information:/<label>/.test(html)&&/<fieldset/.test(html)&&/aria-live="polite"/.test(html)&&/:focus-visible/.test(css)?0:1,
   visual_clutter:/planner-decision-grid/.test(css)&&/choice-fieldset/.test(css)?0:1
