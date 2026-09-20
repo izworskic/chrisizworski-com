@@ -20,6 +20,7 @@ function render(d){
  renderSections(d);
  renderOutlook(d);
  renderWhy(d);
+ renderContradictions(d);
  const segs=(d.segments||[]).sort((a,b)=>(a.score??999)-(b.score??999)).slice(0,10);
  $('#segments').innerHTML=segs.length?segs.map(s=>`<div class="segment"><div><span class="badge ${bandClass(s.band)}">${esc(s.band)}</span> <strong>${esc(s.trailNetwork||s.id)}</strong></div><div class="small">${esc(s.groomingSponsor||'Grooming sponsor not stated')} · ${s.miles?esc(s.miles.toFixed(1))+' mi':'length not stated'} · ${esc(s.surface||'surface unknown')}</div><div>${esc((s.reasons||[])[0]||'No condition explanation available.')}</div></div>`).join(''):'<p>No corridor segments returned.</p>';
  $('#reports').innerHTML=['grayling','gaylord'].map(k=>{const x=d.reports?.[k]; if(!x)return''; return `<div class="segment"><strong>${esc(x.name)}</strong><div>${esc(x.condition||'Condition not stated')}</div><div class="small">Report: ${esc(x.reportedRaw||'unknown')} · Grooming field: ${esc(x.lastGroomedRaw||'not verified')}</div><a href="${esc(x.url)}" target="_blank" rel="noopener">Verify source ↗</a></div>`}).join('');
@@ -76,6 +77,11 @@ function forecastSnowLabel(d){
  if(rows.some(([,w])=>w.snowSignal===true))return'Snow forecast; amount unstated';
  return rows.length?'No snow mentioned in current NWS periods':'Not verified';
 }
+function renderContradictions(d){
+ const host=$('#conflictNotice');if(!host)return;const rows=d.contradictions||[];
+ if(!rows.length){host.hidden=true;host.innerHTML='';return}
+ host.hidden=false;host.innerHTML='<strong>Evidence conflict detected</strong>'+rows.map(x=>`<p>${esc(x.message)}</p>`).join('');
+}
 function renderWhy(d){
  const host=$('#whyList');if(!host)return;
  const reasons=[];
@@ -86,6 +92,7 @@ function renderWhy(d){
    if(d.timing?.best)reasons.push(`Best forecast period: ${d.timing.best.name}; weather-period score ${d.timing.best.score}/100. This timing score cannot override trail condition.`);
    if(d.route?.legalVerification==='CURRENT_LAYER_CHECKED')reasons.push('The current DNR temporary-closure layer was checked. No closure match is not the same thing as a guarantee that every segment is legally rideable.');
  }
+ for(const x of (d.contradictions||[]))reasons.push(`Conflict: ${x.message}`);
  if(d.sourceSummary?.newestDatedSource)reasons.push(`Newest dated source evidence: ${agoTime(d.sourceSummary.newestDatedSource)}.`);
  host.innerHTML=reasons.map(x=>`<li>${esc(x)}</li>`).join('')||'<li>No explanation is available.</li>';
 }
