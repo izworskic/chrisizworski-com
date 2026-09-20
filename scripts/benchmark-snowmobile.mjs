@@ -16,7 +16,7 @@ add('First-screen riding decision',20,['id="status"','id="best"','id="risk"','id
 add('Trail/segment condition integrity',15,engine.includes('scoreSegment')&&api.includes('corridorSection')&&api.includes('featureLatitude')&&api.includes('statusFieldDoesNotSetLegalState'));
 add('Grooming freshness',10,api.includes("freshness(r.lastGroomedAt,'grooming')")&&engine.includes('not used as current grooming evidence'));
 add('Closure/reroute integrity',10,sources.includes('DNR_Trail_Temporary_Closures')&&engine.includes("routeState:'ROUTE_BROKEN'")&&engine.includes('verifiedClosure'));
-add('Snow + freeze/thaw intelligence',10,engine.includes('maxTempF>=40')&&engine.includes('rainIn>=0.1')&&engine.includes('snowIn>=8'));
+add('Snow + freeze/thaw intelligence',10,engine.includes('maxTempF>=40')&&engine.includes('rainIn>=0.1')&&engine.includes('snowIn>=8')&&api.includes('NOHRSC_Snow_Analysis')&&page.includes('toggleSnowDepth'));
 add('Source provenance + confidence',10,api.includes('truthBoundary')&&api.includes('confidence:conf')&&page.includes('Source contract'));
 add('Route/corridor intelligence',10,engine.includes('worst.score+18')&&engine.includes("routeState:worst.score<35?'DETOUR_OR_AVOID'")&&api.includes('Grayling → Frederic → Waters → Gaylord'));
 add('Mobile/map UX',5,css.includes('@media(max-width:760px)')&&page.includes('id="map"')&&ui.includes('L.geoJSON'));
@@ -24,6 +24,7 @@ add('Search/entity architecture',5,page.includes('rel="canonical" href="https://
 add('JEV safety + deterministic fallback',5,harness.includes("choice!=='NONE'")&&harness.includes('injection_dependency')&&harness.includes("mode:'deterministic'")&&harness.includes('Do not invent grooming'));
 const hardVetoes=[
  ['Natural snow must not become trail base',api.includes('naturalSnowIsTrailBase:false')],
+ ['NOHRSC depth must not become trail base',api.includes('nohrscSnowDepthIsTrailBase:false')],
  ['Forecast snow must not become observed accumulation',api.includes('forecastSnowIsAccumulatedSnow:false')],
  ['Missing closure must not mean confirmed open',api.includes('missingClosureIsNotConfirmedOpen:true')],
  ['General Status field must not control legal state',api.includes('statusFieldDoesNotSetLegalState:true')],
