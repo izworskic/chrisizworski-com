@@ -34,6 +34,26 @@
   function syncOriginSide(){
     document.querySelectorAll('#originSwitch button').forEach(x=>{const a=x.dataset.origin===state.origin;x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
   }
+  const dateLabel=value=>{
+    if(!value)return '—';
+    const d=new Date(`${value}T12:00:00`);
+    return Number.isNaN(d.getTime())?String(value):d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  };
+  function syncTripModeUi(){
+    const overnight=$('tripMode')?.value==='overnight'||state.personas.has('overnight');
+    const field=$('nightCountField'),input=$('nightCount');
+    if(field)field.hidden=!overnight;
+    if(input){input.disabled=!overnight;if(!overnight)input.value='1';}
+  }
+  function returnPlanText(d){
+    const f=d?.ferry||{},rp=f.return_plan||{},profile=d?.trip_profile||{};
+    if(profile.trip!=='overnight')return f.recommended_return?.departure_time||'No feasible return';
+    const day=dateLabel(rp.return_date);
+    if(rp.mode==='deadline'&&rp.recommended)return `${day} · ${rp.recommended.departure_time}`;
+    if(rp.mode==='deadline-unmet')return `${day} · deadline unmet`;
+    if(rp.mode==='unavailable')return `${day} · schedule unavailable`;
+    return `${day} · flexible`;
+  }
   function clearResolvedOrigin({clearInputs=false}={}){
     state.originResolved=null;state.originQuery='';
     if(clearInputs)syncOriginInputs('');
@@ -73,7 +93,7 @@
     const p=new URLSearchParams();
     p.set('personas',selectedPersonas().join(','));
     p.set('origin',state.origin);
-    const simple={trip:'tripMode',adults:'adultCount',children:'childCount',bikes:'bikePlan',pace:'pace',mobility:'mobility',dinner:'dinner',return_by:'returnBy',event_start:'eventStart'};
+    const simple={trip:'tripMode',nights:'nightCount',adults:'adultCount',children:'childCount',bikes:'bikePlan',pace:'pace',mobility:'mobility',dinner:'dinner',return_by:'returnBy',event_start:'eventStart'};
     Object.entries(simple).forEach(([key,id])=>{const el=$(id);if(el&&String(el.value).trim())p.set(key,String(el.value).trim());});
     if(state.originResolved){
       p.set('origin_name',state.originResolved.origin?.label||state.originQuery);
@@ -104,6 +124,7 @@
     if(state.personas.has(p)){ if(state.personas.size>1)state.personas.delete(p); }
     else { if(state.personas.size>=3){const first=[...state.personas].find(x=>x!=='day-trip'&&x!=='overnight')||[...state.personas][0];state.personas.delete(first);} state.personas.add(p); }
     document.querySelectorAll('#personaChips .chip').forEach(x=>{const a=state.personas.has(x.dataset.persona);x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
+    syncTripModeUi();
     track('mackinac_persona_selected',{personas:selectedPersonas().join('|')});
     loadDecision();
   }));
@@ -167,6 +188,7 @@
       state.personas.delete(trip==='overnight'?'day-trip':'overnight');
       state.personas.add(trip);
       document.querySelectorAll('#personaChips .chip').forEach(x=>{const a=state.personas.has(x.dataset.persona);x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
+      syncTripModeUi();
     }
     setText('builderStatus','Trip inputs changed. Tap “Build this trip” to rerun the full plan.');
     track('mackinac_itinerary_changed',{});
