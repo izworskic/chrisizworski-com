@@ -4,7 +4,7 @@
   "private": true,
   "description": "Source-controlled deployment for chrisizworski.com",
   "scripts": {
-    "vercel-build": "node scripts/sync-ontario-finder.mjs && node scripts/sync-ballard-locks.mjs && node scripts/add-tahquamenon-to-tools.mjs && node scripts/sync-melvin-price-national-route.mjs && node scripts/add-melvin-price-to-sitemap.mjs && node scripts/add-gauley-to-sitemap.mjs && node scripts/add-yosemite-firefall-to-sitemap.mjs && node scripts/add-thunder-hole-to-sitemap.mjs && node scripts/verify-gauley-routing.mjs && node scripts/benchmark-shoshone-journey.mjs && node scripts/inject-ga4.mjs && node scripts/generate-ice-out-location-pages.mjs && node scripts/add-mackinac-island-discovery.mjs && node --test tests/mackinac-island-live.test.js tests/mackinac-intelligence.test.js && node scripts/benchmark-mackinac-island-live.mjs --check && node scripts/benchmark-mackinac-personas.mjs --check && node scripts/benchmark-mackinac-trip-duration.mjs --check && node scripts/benchmark-mackinac-input-causality.mjs --check && node scripts/display-ad-pilot.mjs",
+    "vercel-build": "node scripts/sync-ontario-finder.mjs && node scripts/sync-ballard-locks.mjs && node scripts/add-tahquamenon-to-tools.mjs && node scripts/sync-melvin-price-national-route.mjs && node scripts/add-melvin-price-to-sitemap.mjs && node scripts/add-gauley-to-sitemap.mjs && node scripts/add-yosemite-firefall-to-sitemap.mjs && node scripts/add-thunder-hole-to-sitemap.mjs && node scripts/verify-gauley-routing.mjs && node scripts/benchmark-shoshone-journey.mjs && node scripts/inject-ga4.mjs && node scripts/generate-ice-out-location-pages.mjs && node scripts/add-mackinac-island-discovery.mjs && node --test tests/mackinac-island-live.test.js tests/mackinac-intelligence.test.js tests/mackinac-catalog.test.js && node scripts/benchmark-mackinac-island-live.mjs --check && node scripts/benchmark-mackinac-personas.mjs --check && node scripts/benchmark-mackinac-trip-duration.mjs --check && node scripts/benchmark-mackinac-input-causality.mjs --check && node scripts/display-ad-pilot.mjs",
     "audit:live": "node scripts/crawl-live.mjs",
     "audit:boat-launch-source": "node scripts/audit-boat-launch-source.mjs",
     "benchmark:border": "node scripts/benchmark-border-crossing.mjs --check",
@@ -70,7 +70,8 @@
     "ads:on": "node scripts/display-ad-pilot.mjs on",
     "ads:off": "node scripts/display-ad-pilot.mjs off",
     "ads:apply": "node scripts/display-ad-pilot.mjs",
-    "benchmark:mackinac-intelligence": "node --test tests/mackinac-intelligence.test.js"
+    "benchmark:mackinac-intelligence": "node --test tests/mackinac-intelligence.test.js",
+    "benchmark:mackinac-catalog": "node --test tests/mackinac-catalog.test.js"
   },
   "dependencies": {
     "national-ballard-locks": "github:izworskic/national-ballard-locks#c0d0db1726dff6922efd059e3bf4da2091c01108",

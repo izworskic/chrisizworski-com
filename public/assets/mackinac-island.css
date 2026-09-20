@@ -219,3 +219,20 @@ img,svg{max-width:100%}
 .gateway-card small{display:block;color:var(--muted);margin-top:5px;line-height:1.4}
 @media(max-width:820px){.intake-card{grid-template-columns:1fr}.intake-work{border-left:0;border-top:1px solid var(--line);padding:20px 0 0}.trip-profile-card{grid-column:1}.manual-style-grid{grid-template-columns:1fr}.depth-grid{grid-template-columns:1fr 1fr}.trip-tabs-wrap{top:56px}}
 @media(max-width:560px){.intake-card{padding:18px 14px}.intake-options{grid-template-columns:1fr}.intake-question strong{font-size:21px}.trip-profile-card{padding:17px 15px}.trip-profile-card h3{font-size:25px}.trip-tabs-copy{display:block}.trip-tabs-copy small{display:block;margin-top:3px}.depth-grid,.gateway-grid{grid-template-columns:1fr}.trip-tab{min-height:42px}}
+
+.place-card{border:1px solid var(--line);border-radius:14px;padding:15px;background:#fbfaf5;min-width:0;display:flex;flex-direction:column}
+.place-card.season-past{opacity:.68}
+.place-card-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.place-card-top small{font-size:10px;color:var(--muted);font-weight:750}
+.fit-pill{display:inline-block;border-radius:999px;padding:5px 8px;background:var(--green-soft);color:var(--green);font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.04em}
+.place-card h3{font-size:18px;line-height:1.1;margin:10px 0 4px}
+.place-card>p{font-size:12px;line-height:1.48;color:var(--body);margin:6px 0 0}
+.place-card .place-meta{font-size:10px;color:var(--muted);font-weight:750;text-transform:uppercase;letter-spacing:.04em}
+.place-card .place-traits{color:var(--muted)}
+.place-footer{margin-top:auto;padding-top:12px;display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);font-size:10px;color:var(--muted)}
+.place-footer a{color:var(--lake-dark);font-weight:850;text-decoration:none}
+.place-footer a:hover{text-decoration:underline}
+#eatGuideCards{grid-template-columns:repeat(3,minmax(0,1fr))}
+#straitsGuideCards .place-card{background:#fbfaf5}
+@media(max-width:820px){#eatGuideCards{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){#eatGuideCards{grid-template-columns:1fr}.place-footer{display:block}.place-footer a{display:block;margin-top:7px}}
