@@ -26,6 +26,14 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Sep 20: Search Console CTR + branded-authority sprint. Existing publisher credits on
+  // priority search pages now link to the canonical Chris Izworski profile; no titles,
+  // H1s, canonicals, live logic or ad settings changed. Re-crawl after production release.
+  "/soo-locks/",
+  "/fall-color/",
+  "/northern-lights-michigan/",
+  "/mackinac-bridge-live/",
+  "/mackinac-bridge-tolls/",
   // Sep 20: refresh shared Gazette cards and disclose delayed/unavailable editions.
   "/assets/gazette-latest.js",
   // Replace the failing AIS iframe with recent vessel reports and a native map.
