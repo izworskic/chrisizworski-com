@@ -32,6 +32,6 @@ test('only usable, nonexpired geyser windows can be presented as current predict
 
 test('Trail Ridge will not call a partial sunny period workable', () => {
   const partial=[{shortForecast:'Sunny',windSpeed:'8 mph',temperature:52,probabilityOfPrecipitation:{value:null}}];
-  const result=trail.weatherAssessment(partial,[]);
+  const result=road.weatherAssessment(partial,[]);
   assert.equal(result.level,'unknown');
 });
