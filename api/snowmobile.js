@@ -62,13 +62,27 @@ module.exports=async function(req,res){
     ].filter(Boolean).length;
     const sourceSummary={decisionFeedCount,contextFeedCount:1,newestDatedSource,trailEdited,closureEdited,label:`${decisionFeedCount} decision feed${decisionFeedCount===1?'':'s'} + NOAA snow map`};
     const coverage=features.length?Math.min(1,segments.length/features.length):0;
-    const conflicts=[gray,gay].filter(r=>r?.condition&&r?.groomingFreshness?.state==='STALE').length;
+    const contradictions=[];
+    for(const [area,r] of [['Grayling',gray],['Gaylord',gay]]){
+      if(r?.condition&&r?.freshness?.state&&!['STALE','UNKNOWN'].includes(r.freshness.state)&&r?.groomingFreshness?.state==='STALE'){
+        contradictions.push({type:'STALE_GROOMING_FIELD',area,severity:'medium',message:`${area} has a current/recent condition report beside a stale structured “last groomed” field. The stale grooming date is not averaged into current grooming evidence.`});
+      }
+    }
+    const closedSegments=segments.filter(s=>s.veto||s.band==='CLOSED');
+    if(closedSegments.length){
+      for(const [area,r] of [['Grayling',gray],['Gaylord',gay]]){
+        if(r?.condition&&/good|excellent/i.test(r.condition)){
+          contradictions.push({type:'OFFICIAL_CLOSURE_OVERRIDES_FAVORABLE_CLUB_CONDITION',area,severity:'high',message:`A favorable ${area} club condition cannot override a matched official DNR closure on a required corridor segment.`});
+        }
+      }
+    }
+    const conflicts=contradictions.length;
     const conf=confidence({officialFresh:true,closureLayerVerified:closuresR.status==='fulfilled',clubReports:[gray,gay].filter(Boolean),weatherFresh:weatherR.status==='fulfilled',segmentCoverage:coverage,conflicts});
     const requestOidc=Array.isArray(req.headers?.['x-vercel-oidc-token'])?req.headers['x-vercel-oidc-token'][0]:(req.headers?.['x-vercel-oidc-token']||'');
     const allowed=segments.slice(0,20).map(s=>s.id);
     const jev=await Promise.all([gray,gay].filter(r=>r?.reportText).map(r=>interpretClubReport({text:r.reportText,source:r.name,allowedSegments:allowed},requestOidc)));
     const payload={generatedAt:now.toISOString(),season:{active:season,officialWindow:'Dec. 1–Mar. 31'},
-      route:{name:'Grayling → Frederic → Waters → Gaylord',...route,confidence:conf},sections,timing,grooming,sourceSummary,
+      route:{name:'Grayling → Frederic → Waters → Gaylord',...route,confidence:conf},sections,timing,grooming,sourceSummary,contradictions,
       segments,
       scoredGeometry:{type:'FeatureCollection',features:segments.map(s=>({type:'Feature',properties:{id:s.id,section:s.section,trailNetwork:s.trailNetwork,groomingSponsor:s.groomingSponsor,score:s.score,band:s.band,legalState:s.legalState,surface:s.surface,onRoad:s.onRoad,miles:s.miles,reasons:s.reasons},geometry:s.geometry}))},
       geometry:{type:'FeatureCollection',features},closures:{verified:closuresR.status==='fulfilled',features:closures},
