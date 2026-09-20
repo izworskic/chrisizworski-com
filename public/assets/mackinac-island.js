@@ -298,12 +298,15 @@
   function renderPlanner(d){
     const it=d.itinerary||[],p=d.trip_profile||{};
     setText('plannerSummary',d.itinerary_summary||'A feasible plan could not be built from the verified inputs.');
+    const days=d.trip_days||[];
+    const dayHost=$('tripDays');
+    if(dayHost)dayHost.innerHTML=days.length?days.map(x=>`<article class="trip-day ${esc(x.role||'')}"><span>Day ${esc(x.day)} · ${esc(dateLabel(x.date))}</span><strong>${esc(x.title||'Trip day')}</strong><p>${esc(x.summary||'')}</p></article>`).join(''):'';
     $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title||x.label||'Plan stop')}</strong>${x.movement?`<span class="movement">${esc(x.movement)}</span>`:''}<p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>No complete itinerary</strong><p>Use the official ferry source links before leaving.</p></div></li>';
     setText('plannerExplain',d.itinerary_reason||'');
     setText('leaveHome',d.leave_home?.time||(state.originResolved?(state.departTime?'No reachable ferry':'Add leave time'):'Add city + leave time'));
     setText('leaveHomeNote',d.leave_home?.detail||(state.originResolved&&state.departTime?'No ferry in the verified schedule can be reached from that city after your entered leave-home time.':'Enter both a starting city and leave-home time. Drive estimates are not live traffic.'));
     const party=`${Number(p.adults||2)} adult${Number(p.adults||2)===1?'':'s'}${Number(p.children||0)?` + ${p.children} child${Number(p.children)===1?'':'ren'}`:''}`;
-    const fit=[party,p.trip==='overnight'?'overnight':'day trip',p.pace?`${p.pace} pace`:null,p.bikes&&p.bikes!=='none'?`${p.bikes} bikes`:null,p.mobility==='limited'?'limited steep walking':null].filter(Boolean);
+    const fit=[party,p.trip==='overnight'?`${p.nights||1} night${Number(p.nights||1)===1?'':'s'}`:'day trip',p.pace?`${p.pace} pace`:null,p.bikes&&p.bikes!=='none'?`${p.bikes} bikes`:null,p.mobility==='limited'?'limited steep walking':null].filter(Boolean);
     setText('tripFit',fit.join(' · '));
     const priorities=[...(p.interests||[]),...(p.must_do||[]).map(x=>`must: ${x}`)];
     setText('tripFitNote',priorities.length?`Priorities: ${priorities.join(', ')}.`:`Using the selected visitor modes plus live ferry/weather constraints.`);
@@ -317,6 +320,7 @@
     const order=Object.entries(src);$('sourceList').innerHTML=order.length?order.map(([k,s])=>`<div class="source-row"><a href="${esc(s.url||'#')}" target="_blank" rel="noopener">${esc(s.name||k.replace(/_/g,' '))}</a><span class="source-state ${s.available?'ok':'warn'}">${esc(s.status_label||(s.available?'available':'unavailable'))}</span></div>`).join(''):'<p>No source-provenance payload was returned.</p>';
     const refs=d.planning_references||{};
     if(refs.accessibility?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.accessibility.url)}" target="_blank" rel="noopener">${esc(refs.accessibility.name||'Accessibility planning source')}</a><span class="source-state ok">planning reference</span></div>`);
+    if(refs.ferry_ticket_flexibility?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.ferry_ticket_flexibility.url)}" target="_blank" rel="noopener">${esc(refs.ferry_ticket_flexibility.name||'Ferry ticket flexibility')}</a><span class="source-state ok">flexible ticket reference</span></div>`);
     if(refs.drive_times?.url)$('sourceList').insertAdjacentHTML('beforeend',`<div class="source-row"><a href="${esc(refs.drive_times.url)}" target="_blank" rel="noopener">${esc(refs.drive_times.label||'Origin drive-time reference')}</a><span class="source-state ok">planning estimate · not live traffic</span></div>`);
     if(core.length)$('sourceList').insertAdjacentHTML('beforeend','<div class="error-panel"><strong>Core source check needed.</strong> Recheck the unavailable ferry or weather source before relying on the plan.</div>');
     else if(optional.length)$('sourceList').insertAdjacentHTML('beforeend','<div class="source-note"><strong>Optional planning context is limited right now.</strong> The ferry and weather decision remains available; unavailable optional sources are labeled above.</div>');
