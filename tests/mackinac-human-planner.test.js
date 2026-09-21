@@ -18,7 +18,7 @@ test("human planner assets parse and mount at the shared trip intake",()=>{
 test("human planner asks for an earliest-leave constraint instead of requiring a guessed leave time",()=>{
   assert.match(js,/I already know when I’m leaving/);
   assert.match(js,/Leave this blank if you want the planner to tell you when to leave/);
-  assert.match(js,/if\(state\.earliestLeave\)p\.set\("depart_at",state\.earliestLeave\)/);
+  assert.match(js,/if\(state\.earliestLeave\)p\.set\("depart_not_before",state\.earliestLeave\)/);
   assert.doesNotMatch(js,/if\(!state\.earliestLeave\).*return false/);
 });
 
@@ -97,4 +97,24 @@ test("legacy detail remains secondary and explicitly revealable",()=>{
 test("mobile human planner has dedicated breakpoints",()=>{
   assert.match(css,/@media\(max-width:800px\)/);
   assert.match(css,/@media\(max-width:480px\)/);
+});
+
+
+test("not-before time remains a constraint instead of becoming a fake exact departure",()=>{
+  const route=require("../lib/mackinac-island/route")._test;
+  const profile=route.profileFromQuery({depart_not_before:"07:00"},["day-trip"],"lower");
+  assert.equal(profile.not_before_minutes,7*60);
+  assert.equal(profile.departure_minutes,null);
+  const date="2026-09-20";
+  const ctx={
+    date,personas:profile.personas,origin:"lower",profile,hourly:[],
+    marine:{score:90},attractions:route.attractionState(date,7*60),events:[],
+    sunrise:route.solarMinutes(date,45.8497,-84.6189,true),
+    sunset:route.solarMinutes(date,45.8497,-84.6189,false),sameDay:false,nowMinutes:0
+  };
+  const records=[...route.arnoldSchedule(date,true),...route.sheplersSchedule(date,true)];
+  const plans=route.planCandidates(records,ctx);
+  assert.ok(plans.length>0);
+  assert.ok(plans.every(p=>p.trip_start_minutes>=7*60));
+  assert.ok(plans.some(p=>p.trip_start_minutes>7*60));
 });
