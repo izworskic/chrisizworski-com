@@ -48,7 +48,7 @@ test("Detroit Outdoors uses the writer as an editor rather than a template fille
  assert.match(route,/Desk read: 80 to 115 words/);
  assert.match(route,/Card notes: write only for candidate IDs listed in cardBriefs/);
  assert.match(route,/Return JSON only/);
- assert.match(route,/detroit-outdoors:edition:v5/);
+ assert.match(route,/detroit-outdoors:edition:v6/);
  assert.match(route,/placements:editorialPlan\.cardNotes/);
  assert.match(route,/Do not explain the tool, model, JEV, Gem, APIs, rankings, scores, signals, prompts or data stack/);
 });
@@ -64,9 +64,9 @@ test("Detroit Outdoors lets JEV choose where prose adds value before the writer 
  assert.match(route,/DRIVE_DECISION/);
  assert.match(route,/NEXT_CHECK/);
  assert.match(route,/SEASONAL_CONTEXT/);
- assert.match(route,/The writer will receive only this treatment brief and sealed verified facts/);
+ assert.match(route,/The writer will receive only this treatment brief and sealed verified facts/);\n assert.match(route,/editorialQuestion/);\n assert.match(route,/question:x\.question/);
  assert.match(route,/You do not choose what gets written and you do not choose placement/);
- assert.match(route,/notes object may contain only candidate IDs supplied in cardBriefs/);
+ assert.match(route,/notes object may contain only candidate IDs supplied in cardBriefs/);\n assert.match(route,/If you cannot add material value beyond visibleCard, omit that candidate from notes/);\n assert.match(route,/synthesize at least two verified facts/);
  assert.match(route,/placement:\`card:\$\{x\.candidateId\}:after-weather\`/);
 });
 
@@ -94,4 +94,17 @@ test("Detroit Outdoors is discoverable from the tools hub and sitemap",()=>{
  const sitemap=read("public/sitemap.xml");
  assert.match(tools,/href="\/detroit-outdoors\/"/);
  assert.match(sitemap,/https:\/\/chrisizworski\.com\/detroit-outdoors\//);
+});
+
+test("Detroit Outdoors rejects low-value generated card prose instead of backfilling filler",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const client=read("public/assets/detroit-outdoors.js");
+ assert.match(route,/async function reviewEditorialNote/);
+ assert.match(route,/async function validateEditorialNotes/);
+ assert.match(route,/fallbackId:"REJECT"/);
+ assert.match(route,/Reject generic encouragement, weather restatement, score restatement, travel-time restatement/);
+ assert.match(route,/const edition=await validateEditorialNotes/);
+ assert.match(route,/notes:\{\}/);
+ assert.doesNotMatch(route,/else if\(fallback\.notes&&fallback\.notes\[candidate\.id\]\)/);
+ assert.match(client,/Why this matters/);
 });
