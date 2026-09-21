@@ -7,8 +7,8 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 
 function pageFor(region) {
   const canonical = `https://chrisizworski.com/snowmobile/regions/${region.key}.html`;
-  const title = `${region.label} Snowmobile Conditions | Chris Izworski`;
-  const description = `${region.label} snowmobile trail conditions from official Michigan DNR trail data and closures${region.legacyCorridor ? ', two verified MISORVA club reports and a live MDOT camera' : ' and National Weather Service forecasts'}.`;
+  const title = `${region.shortLabel} Snowmobile Conditions | Chris Izworski`;
+  const description = `${region.shortLabel} snowmobile conditions from Michigan DNR trail data, closures and NWS forecasts${region.legacyCorridor ? ', plus verified Grayling and Gaylord club reports' : ''}.`;
   const corridorBlock = region.legacyCorridor ? `
   <section id="corridor-sections-wrap" class="panel corridor-strip"><div class="section-headline"><div><div class="eyebrow">Required corridor</div><h2>Where the route gets weaker</h2></div><span class="small">Grayling \u2192 Frederic \u2192 Waters \u2192 Gaylord</span></div><div id="corridorSections" class="corridor-sections"><div class="corridor-section">Loading corridor segments\u2026</div></div></section>` : '';
   const cameraBlock = region.cameraId ? `
