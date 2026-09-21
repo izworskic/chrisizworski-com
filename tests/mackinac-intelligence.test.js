@@ -70,9 +70,13 @@ test("legacy planner inputs can seed the new intelligence layer without changing
   assert.ok(["relaxed-couple","scenery-photo","overnight-explorer","special-occasion"].includes(p.primary.id));
 });
 
-test("profile API body parser accepts wrapped answers and does not require persistence",()=>{
-  assert.deepEqual(api._test.bodyObject({body:{answers:{party:"couple"}}}),{party:"couple"});
-  assert.deepEqual(api._test.bodyObject({body:'{"answers":{"trip_duration":"day"}}'}),{trip_duration:"day"});
+test("profile API body parser preserves surface context and extracts wrapped answers",()=>{
+  const objectBody=api._test.bodyObject({body:{answers:{party:"couple"},surface:"stay"}});
+  assert.deepEqual(objectBody,{answers:{party:"couple"},surface:"stay"});
+  assert.deepEqual(api._test.answerObject(objectBody),{party:"couple"});
+  const stringBody=api._test.bodyObject({body:'{"answers":{"trip_duration":"day"},"surface":"plan"}'});
+  assert.deepEqual(stringBody,{answers:{trip_duration:"day"},surface:"plan"});
+  assert.deepEqual(api._test.answerObject(stringBody),{trip_duration:"day"});
 });
 
 test("phase-one registries cover truth, search, tabs and analytics",()=>{
