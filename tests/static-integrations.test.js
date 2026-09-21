@@ -93,8 +93,9 @@ test("Tools hub makes ten live tools prominent and indexes the expanded library"
   // 39 since 2026-09-01 evening: the Isle Royale canoe planner is listed as a tool for anyone.
   // 40 since 2026-09-01 evening: Estivant Pines joined the public catalog and structured tool list.
   // 41 since 2026-09-20: Mackinac Island Live joined the public catalog and structured tool list.
-  assert.equal(itemList.numberOfItems, 41);
-  assert.equal(itemList.itemListElement.length, 41);
+  // 42 since 2026-09-21: Detroit Outdoors Today joined as the Southeast Michigan live opportunity desk.
+  assert.equal(itemList.numberOfItems, 42);
+  assert.equal(itemList.itemListElement.length, 42);
   // Derived from git, so pin the shape not the day.
   assert.match(collection.dateModified, /^\d{4}-\d{2}-\d{2}$/);
   assert.ok(Date.parse(collection.dateModified) <= Date.now(), "dateModified must not be in the future");
@@ -102,6 +103,11 @@ test("Tools hub makes ten live tools prominent and indexes the expanded library"
   assert.ok(
     itemList.itemListElement.some(
       (entry) => entry.item?.url === "https://chrisizworski.com/mackinac-bridge-live/",
+    ),
+  );
+  assert.ok(
+    itemList.itemListElement.some(
+      (entry) => entry.item?.url === "https://chrisizworski.com/detroit-outdoors/",
     ),
   );
   assert.ok(
