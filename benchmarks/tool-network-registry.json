@@ -1,6 +1,6 @@
 {
   "version": "1.3.1",
-  "updated": "2026-09-20",
+  "updated": "2026-09-21",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -857,6 +857,52 @@
         "product": "Vercel fixed-label events",
         "decisionWindowDays": 28,
         "privacy": "No exact coordinates, device location, or free-text semantic query in growth analytics."
+      }
+    },
+    {
+      "id": "detroit-outdoors",
+      "name": "Detroit Outdoors Today",
+      "canonical": "https://chrisizworski.com/detroit-outdoors/",
+      "aliases": [],
+      "kind": "live-opportunity-desk",
+      "cluster": "trip-planning",
+      "primaryIntent": "what to do outdoors around Detroit today",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "detroit-metro",
+        "southeast-michigan"
+      ],
+      "personas": [
+        "outdoor-generalist",
+        "trip-planner",
+        "day-tripper"
+      ],
+      "networkRole": "hub",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unknown",
+        "note": "New Southeast Michigan pilot. Hold scope stable and measure demand plus downstream specialist handoffs before any geographic expansion."
+      },
+      "measurement": {
+        "search": "Google Search Console page × query",
+        "product": "GA4 page and outbound specialist handoff events",
+        "decisionWindowDays": 28,
+        "privacy": "No exact user coordinates, precise location, or free-text query is required by this page."
       }
     },
     {
