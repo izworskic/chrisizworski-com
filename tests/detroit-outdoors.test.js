@@ -376,3 +376,25 @@ test("Detroit Outdoors dynamic headline understands specialist opportunity types
  assert.match(client,/engine==="night-sky-aurora"/);
  assert.match(client,/engine==="fall-color-phenology"/);
 });
+
+
+test("Detroit Outdoors lets JEV reassign a repeatedly rejected editorial job instead of weakening review",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/async function recoverEditorialSlot/);
+ assert.match(route,/originally assigned Detroit Outdoors card-writing job has repeatedly failed editorial review/);
+ assert.match(route,/Choose a DIFFERENT editorial job/);
+ assert.match(route,/attempt=5/);
+ assert.match(route,/activeSlot=await recoverEditorialSlot\(candidate,slot,fallSnapshot\)/);
+ assert.match(route,/The original editorial job was repeatedly rejected\. JEV has reassigned this card to a different job/);
+ assert.match(route,/review=await reviewEditorialNote\(candidate,activeSlot,note\)/);
+ assert.match(route,/reassignedFrom:activeSlot\.reassignedFrom\|\|null/);
+});
+
+test("Detroit Outdoors exposes the actual reassigned treatment and evidence sources",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/const actualPlacements=\[\]/);
+ assert.match(route,/noteSources\[result\.candidateId\]=result\.sources/);
+ assert.match(route,/treatment:result\.treatment\|\|planned&&planned\.treatment/);
+ assert.match(route,/noteSources:Object\.keys\(editorial\.noteSources\|\|\{\}\)\.length\?editorial\.noteSources/);
+ assert.match(route,/placements:editorial\.actualPlacements&&editorial\.actualPlacements\.length\?editorial\.actualPlacements/);
+});
