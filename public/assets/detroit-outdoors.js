@@ -63,7 +63,7 @@ function renderSource(name,state,total){
 async function load(){
   $("#edition-date").textContent=fmtDate();
   try{
-    const res=await fetch("/api/detroit-outdoors",{headers:{accept:"application/json"}});
+    const res=await fetch("/api/detroit-outdoors?edition=journal-v3",{headers:{accept:"application/json"}});
     const data=await res.json();
     if(!res.ok||!data.ok)throw new Error(data.error||"Live edition unavailable");
 
