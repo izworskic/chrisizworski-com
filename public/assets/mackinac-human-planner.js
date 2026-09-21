@@ -136,7 +136,8 @@
     return {
       trip_date:state.dateMode==="flexible"?"":state.tripDate,
       origin_text:state.originMode==="from-home"?(state.originResolved?.origin?.label||clean(state.originText)):(state.originMode==="nearby"?"Already near the Straits":""),
-      depart_at:state.earliestLeave||"",
+      depart_at:"",
+      depart_not_before:state.earliestLeave||"",
       trip:tripMode(),
       nights:nights(),
       adults,
@@ -346,7 +347,7 @@
     p.set("intake_trip_loss",state.loss);
     p.set("intake_walking_tolerance",state.walking);
     if(state.dateMode!=="flexible"&&state.tripDate)p.set("trip_date",state.tripDate);
-    if(state.earliestLeave)p.set("depart_at",state.earliestLeave);
+    if(state.earliestLeave)p.set("depart_not_before",state.earliestLeave);
     if(state.tunings.length)p.set("tune",state.tunings.join(","));
     if(state.originResolved){
       p.set("origin_name",state.originResolved.origin?.label||state.originText);
