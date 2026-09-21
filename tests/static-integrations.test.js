@@ -117,6 +117,27 @@ test("Tools hub makes ten live tools prominent and indexes the expanded library"
   );
 });
 
+test("Tools hub gives Detroit Outdoors a distinct live opportunity-desk spotlight", () => {
+  const html = readFileSync(path.join(__dirname, "../public/tools/index.html"), "utf8");
+  assert.ok(html.includes('data-spotlight-tool="detroit-outdoors"'));
+  assert.ok(html.includes("Don’t pick an activity first. See what became worth doing."));
+  assert.ok(html.includes("starts with the day, not a destination"));
+  assert.ok(html.includes("If nothing earns attention, it does not manufacture a recommendation."));
+  assert.ok(html.includes('id="detroit-tools-lead"'));
+  assert.ok(html.includes('id="detroit-tools-board"'));
+  assert.ok(html.includes("fetch('/api/detroit-outdoors?edition=cards-v1&surface=tools-hub'"));
+  assert.ok(html.includes("great-lakes-ais"));
+  assert.ok(html.includes("great-lakes-water"));
+  assert.ok(html.includes("sunset-photography"));
+  assert.ok(html.includes("night-sky-aurora"));
+  assert.ok(html.includes("fall-color-phenology"));
+  assert.ok(html.includes('data-track-tool="detroit-outdoors" data-placement="tools-spotlight"'));
+  assert.ok(html.includes('data-track-tool="detroit-outdoors" data-placement="tools-spotlight-cta"'));
+  assert.equal((html.match(/data-featured-tool=/g) || []).length, 10, "Detroit spotlight should stand apart from the ordinary featured-card grid");
+  const spotlight = html.match(/<article class="detroit-spotlight"[\s\S]*?<\/article>/)[0];
+  assert.doesNotMatch(spotlight, /\bJEV\b|Haiku|deterministic/i);
+});
+
 test("Great Lakes hub separates live conditions from history and gives each live tool a CTA", () => {
   const html = readFileSync(path.join(__dirname, "../public/great-lakes/index.html"), "utf8");
   assert.ok(html.includes("Live Great Lakes Conditions and Vessel Tools"));
