@@ -1,0 +1,64 @@
+name: Detroit Anthropic production smoke
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'lib/detroit-outdoors/route.js'
+      - '.github/workflows/detroit-anthropic-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify production Anthropic configuration
+        env:
+          EXPECTED_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          URL="https://chrisizworski.com/api/detroit-outdoors?edition=cards-v1&smoke=${EXPECTED_SHA}"
+          for attempt in $(seq 1 30); do
+            if body="$(curl -fsS --max-time 35 "${URL}&attempt=${attempt}")"; then
+              status="$(printf '%s' "$body" | node -e '
+                let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{
+                  const d=JSON.parse(s);
+                  const r=d.runtime||{};
+                  const e=(d.decision&&d.decision.editorial)||{};
+                  console.log(JSON.stringify({
+                    commitSha:r.commitSha||null,
+                    vercelEnv:r.vercelEnv||null,
+                    anthropicKeyConfigured:r.anthropicKeyConfigured===true,
+                    writerModel:r.writerModel||null,
+                    editorialMode:e.mode||null,
+                    editorialReason:e.reason||null
+                  }));
+                });
+              ')"
+              echo "Production diagnostics: $status"
+              current="$(printf '%s' "$status" | node -pe 'JSON.parse(require("fs").readFileSync(0,"utf8")).commitSha || ""')"
+              if [ "$current" = "$EXPECTED_SHA" ]; then
+                printf '%s' "$status" | node -e '
+                  let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{
+                    const x=JSON.parse(s);
+                    if (!x.anthropicKeyConfigured) {
+                      console.error("ANTHROPIC_API_KEY is not configured in the production runtime.");
+                      process.exit(2);
+                    }
+                    if (x.editorialMode === "deterministic") {
+                      console.error("Anthropic key exists, but Detroit editorial is still deterministic. Reason:", x.editorialReason || "unknown");
+                      process.exit(3);
+                    }
+                    console.log("Anthropic production configuration is active.");
+                  });
+                '
+                exit 0
+              fi
+            fi
+            sleep 10
+          done
+          echo "Production did not reach expected commit $EXPECTED_SHA during smoke window."
+          exit 4
