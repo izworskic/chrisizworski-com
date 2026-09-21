@@ -234,7 +234,7 @@ test("Detroit Outdoors rejects unsupported bird specificity before JEV acceptanc
 });
 
 
-test("Detroit Outdoors gives Haiku an explicit evidence whitelist and a third rescue pass",()=>{
+test("Detroit Outdoors gives Haiku an explicit evidence whitelist and constrained rescue passes",()=>{
  const route=read("lib/detroit-outdoors/route.js");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
  assert.match(route,/function evidenceVocabulary/);
@@ -243,7 +243,13 @@ test("Detroit Outdoors gives Haiku an explicit evidence whitelist and a third re
  assert.match(route,/attempt=3/);
  assert.match(route,/Write a restrained evidence-only card explanation/);
  assert.match(route,/45 to 70 words/);
+ assert.match(route,/attempt=4/);
+ assert.match(route,/previous drafts were rejected because they did not add enough specific decision value/);
+ assert.match(route,/exactly two short sentences, 35 to 55 words total/);
+ assert.match(route,/one concrete place-specific fact/);
+ assert.match(route,/one seasonal or specialist fact/);
  assert.match(workflow,/reason:w&&w\.reason\|\|null/);
+ assert.match(workflow,/detroit-outdoors\.js\?v=20260921c/);
 });
 
 
