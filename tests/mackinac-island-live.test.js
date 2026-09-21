@@ -693,6 +693,8 @@ test('Chippewa uses raw HLS without Restreamer shell',()=>{const js=fs.readFileS
 
 test('Horns uses official-page fallback instead of brittle raw stream',()=>{const js=fs.readFileSync(jsPath,'utf8');const route=fs.readFileSync(routePath,'utf8');assert.match(route,/id:"horns-main-street"[\s\S]{0,450}external_only:true/);assert.doesNotMatch(route,/8184\/hls\/live\.stream\.m3u8/);assert.match(js,/Watch Horn’s live ↗/);assert.match(js,/Open official live camera ↗/);});
 
+test('HLS runtime failures fall back to official camera page',()=>{const js=fs.readFileSync(jsPath,'utf8');assert.match(js,/video\.addEventListener\('error',showFallback/);assert.match(js,/Hls\.Events\.ERROR/);assert.match(js,/data\?\.fatal/);assert.match(js,/The live stream is unavailable here right now\./);});
+
 
 test('regional intake replaces the busy persona wall with profile-driven navigation',()=>{
   const html=fs.readFileSync(htmlPath,'utf8');
