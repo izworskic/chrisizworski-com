@@ -16,7 +16,7 @@ test("human planner assets parse and mount at the shared trip intake",()=>{
 });
 
 test("human planner asks for an earliest-leave constraint instead of requiring a guessed leave time",()=>{
-  assert.match(js,/I already know when I’m leaving/);
+  assert.match(js,/I cannot leave before/);
   assert.match(js,/Leave this blank if you want the planner to tell you when to leave/);
   assert.match(js,/if\(state\.earliestLeave\)p\.set\("depart_not_before",state\.earliestLeave\)/);
   assert.doesNotMatch(js,/if\(!state\.earliestLeave\).*return false/);
@@ -117,4 +117,29 @@ test("not-before time remains a constraint instead of becoming a fake exact depa
   assert.ok(plans.length>0);
   assert.ok(plans.every(p=>p.trip_start_minutes>=7*60));
   assert.ok(plans.some(p=>p.trip_start_minutes>7*60));
+});
+
+
+test("stay length is explicit instead of hiding 2 versus 3 nights",()=>{
+  assert.match(js,/["two-night","2 nights"/);
+  assert.match(js,/["three-night","3 nights"/);
+  assert.match(js,/id="humanNightCount"/);
+  assert.match(js,/state.tripDuration==="two-night"?2:state.tripDuration==="three-night"?3/);
+  assert.match(js,/buildAnswers().trip_duration/);
+});
+
+test("nearby visitors identify their side of the Straits before exact ferry planning",()=>{
+  assert.match(js,/Which side are you on?/);
+  assert.match(js,/data-value="mackinaw"/);
+  assert.match(js,/data-value="st-ignace"/);
+  assert.match(js,/data-value="either"/);
+  assert.match(js,/state.originMode==="nearby"&&!state.nearbySide/);
+  assert.match(js,/state.nearbySide==="mackinaw"?"mackinaw-city":state.nearbySide==="st-ignace"?"st-ignace":"nearby"/);
+});
+
+test("saved trips hydrate back into the human planner instead of restarting question one",()=>{
+  assert.match(js,/function hydrateFromSavedTrip/);
+  assert.match(js,/restoredProfile?.complete&&restoredPlan/);
+  assert.match(js,/draftLooksComplete=.*hydrateFromSavedTrip()/s);
+  assert.match(js,/restored:true,mode:"plan"/);
 });
