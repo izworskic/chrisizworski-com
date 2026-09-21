@@ -13,39 +13,40 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          must(){ label="$1"; pattern="$2"; file="$3"; if grep -q "$pattern" "$file"; then echo "PASS $label"; else echo "FAIL $label"; grep -E '<h1|data-mackinac-nav|mackinac-(hub|island)\\.js|profileTrip|profileOrigin|profileDepart|data-trip-context' "$file" | head -40 || true; exit 1; fi; }
+          must_not(){ label="$1"; pattern="$2"; file="$3"; if grep -q "$pattern" "$file"; then echo "FAIL $label"; grep -E 'data-mackinac-nav' "$file" | head -20 || true; exit 1; else echo "PASS $label"; fi; }
           base="https://chrisizworski.com/mackinac-island"
           curl -fsSL -H 'Cache-Control: no-cache' --max-time 30 "$base/?prod-smoke=${GITHUB_RUN_ID}" -o /tmp/root.html
-          grep -q 'Build Your Mackinac Island Trip' /tmp/root.html
-          grep -q 'data-mackinac-surface="my-trip"' /tmp/root.html
-          grep -q 'data-mackinac-nav="my-trip"' /tmp/root.html
-          ! grep -q 'data-mackinac-nav="today"' /tmp/root.html
-          ! grep -q 'data-mackinac-nav="plan"' /tmp/root.html
-          grep -q 'class="profile-logistics"' /tmp/root.html
-          grep -q 'id="profileTripDate"' /tmp/root.html
-          grep -q 'id="profileOriginInput"' /tmp/root.html
-          grep -q 'id="profileDepartTime"' /tmp/root.html
-          grep -q 'mackinac-island.js?v=20260921-trip1' /tmp/root.html
-          grep -q 'mackinac-hub.js?v=20260921-trip1' /tmp/root.html
+          must root-h1 'Build Your Mackinac Island Trip' /tmp/root.html
+          must root-surface 'data-mackinac-surface="my-trip"' /tmp/root.html
+          must root-my-trip-nav 'data-mackinac-nav="my-trip"' /tmp/root.html
+          must_not root-no-today-nav 'data-mackinac-nav="today"' /tmp/root.html
+          must_not root-no-plan-nav 'data-mackinac-nav="plan"' /tmp/root.html
+          must root-logistics 'class="profile-logistics"' /tmp/root.html
+          must root-date 'id="profileTripDate"' /tmp/root.html
+          must root-origin 'id="profileOriginInput"' /tmp/root.html
+          must root-depart 'id="profileDepartTime"' /tmp/root.html
+          must root-island-js 'mackinac-island.js?v=20260921-trip1' /tmp/root.html
+          must root-hub-js 'mackinac-hub.js?v=20260921-trip1' /tmp/root.html
 
           for path in ferry-planner where-to-stay dining things-to-do events around-the-straits; do
             curl -fsSL -H 'Cache-Control: no-cache' --max-time 30 "$base/$path/?prod-smoke=${GITHUB_RUN_ID}" -o "/tmp/$path.html"
-            grep -q 'data-mackinac-nav="my-trip"' "/tmp/$path.html"
-            ! grep -q 'data-mackinac-nav="today"' "/tmp/$path.html"
-            ! grep -q 'data-mackinac-nav="plan"' "/tmp/$path.html"
-            grep -q 'data-trip-context' "/tmp/$path.html"
-            grep -q 'mackinac-hub.js?v=20260921-trip1' "/tmp/$path.html"
+            must "$path-my-trip-nav" 'data-mackinac-nav="my-trip"' "/tmp/$path.html"
+            must_not "$path-no-today-nav" 'data-mackinac-nav="today"' "/tmp/$path.html"
+            must_not "$path-no-plan-nav" 'data-mackinac-nav="plan"' "/tmp/$path.html"
+            must "$path-trip-context" 'data-trip-context' "/tmp/$path.html"
+            must "$path-hub-js" 'mackinac-hub.js?v=20260921-trip1' "/tmp/$path.html"
           done
 
           curl -fsSL -H 'Cache-Control: no-cache' --max-time 30 "https://chrisizworski.com/assets/mackinac-hub.js?v=20260921-trip1&prod-smoke=${GITHUB_RUN_ID}" -o /tmp/hub.js
-          grep -q 'mackinac-trip-plan-v1' /tmp/hub.js
-          grep -q 'Using your saved Mackinac plan' /tmp/hub.js
-          grep -q 'mackinac_trip_gate_shown' /tmp/hub.js
-          grep -q 'renderStartGate' /tmp/hub.js
+          must hub-plan-key 'mackinac-trip-plan-v1' /tmp/hub.js
+          must hub-saved-copy 'Using your saved Mackinac plan' /tmp/hub.js
+          must hub-gate-event 'mackinac_trip_gate_shown' /tmp/hub.js
+          must hub-start-gate 'renderStartGate' /tmp/hub.js
 
           curl -fsSL -H 'Cache-Control: no-cache' --max-time 30 "https://chrisizworski.com/assets/mackinac-island.js?v=20260921-trip1&prod-smoke=${GITHUB_RUN_ID}" -o /tmp/root.js
-          grep -q 'mackinac-plan-ready' /tmp/root.js
-          grep -q 'profileTripDate' /tmp/root.js
-          grep -q 'profileOriginInput' /tmp/root.js
-          grep -q 'profileDepartTime' /tmp/root.js
-
-          echo "Mackinac production smoke PASS"
+          must root-js-ready 'mackinac-plan-ready' /tmp/root.js
+          must root-js-date 'profileTripDate' /tmp/root.js
+          must root-js-origin 'profileOriginInput' /tmp/root.js
+          must root-js-depart 'profileDepartTime' /tmp/root.js
+          echo 'Mackinac production smoke PASS'
