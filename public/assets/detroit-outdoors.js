@@ -14,16 +14,16 @@ function renderWeather(w){
   chip("AQI",w.aqi)
  ].join("");
 }
-function renderCard(c,note){
+function renderCard(c,note,sources){
  const specialist=c.specialist?`<div class="specialist"><strong>${esc(c.specialist.label)}:</strong> ${esc(c.specialist.headline)}</div>`:"";
- const reasons=((c.story&&c.story.whyToday)||c.reasons||[]).slice(0,3).map(r=>`<li>${esc(r)}</li>`).join("");
+ const reasons=((c.story&&c.story.whyToday)||c.reasons||[]).slice(0,3).map(r=>`<li>${esc(r)}</li>`).join("");\n const sourceLine=note&&Array.isArray(sources)&&sources.length?`<div class="card-source">Context: ${sources.map(s=>`<a href="${esc(s.url)}" rel="noopener">${esc(s.label)}</a>`).join(" · ")}</div>`:"";
  return `<article class="card">
    <div class="slot">${esc(c.slot)}</div>
    <h3>${esc(c.place.name)}</h3>
    <div class="meta">${esc(c.place.area)} · ${esc(c.place.drive)} from central Detroit · ${esc(c.title)}</div>
    <div class="scoreline"><span class="score">${esc(c.score)}/100</span><span class="quality">${esc(c.quality)}</span></div>
    <div class="weather">${renderWeather(c.weather)}</div>
-   ${note?`<div class="card-read"><span>Why this matters</span><p>${esc(note)}</p></div>`:""}
+   ${note?`<div class="card-read"><span>Why this matters</span><p>${esc(note)}</p>${sourceLine}</div>`:""}
    <ul class="reasons">${reasons}</ul>
    ${specialist}
    <p class="caveat">${esc(c.caveat)}</p>
@@ -51,7 +51,7 @@ async function load(){
   $("#desk-note").textContent=data.editorial;
   const cards=$("#opportunity-grid");
   if(data.opportunities&&data.opportunities.length){
-    cards.innerHTML=data.opportunities.map(c=>renderCard(c,data.edition?.notes?.[c.id])).join("");
+    cards.innerHTML=data.opportunities.map(c=>renderCard(c,data.edition?.notes?.[c.id],data.edition?.noteSources?.[c.id])).join("");
   }else{
     cards.innerHTML='<div class="error">The desk is holding because live source coverage is too thin to make a useful recommendation.</div>';
   }
