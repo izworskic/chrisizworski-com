@@ -35,7 +35,7 @@ test("Detroit Outdoors keeps safety deterministic and JEV closed-set",()=>{
  assert.match(route,/safeCandidatesFrom/);
  assert.match(route,/if\(hazard\.hard\).*suppressed:true/);
  assert.match(route,/Choose exactly one supplied option/);
- assert.match(route,/Never override a deterministic hazard suppression or activity hard stop/);
+ assert.match(route,/Every candidate in this pool has already passed deterministic hard-safety and required-data gates/);
  assert.match(route,/activity-specific hard stops/);
  assert.doesNotMatch(route,/JEV.*legal status/i);
 });
