@@ -2,6 +2,7 @@
   "use strict";
 
   const KEY="mackinac-trip-profile-v1";
+  const PLAN_KEY="mackinac-trip-plan-v1";
   const API="/api/mackinac-profile";
   const body=document.body;
   const rawSurface=body?.dataset?.mackinacSurface||body?.dataset?.mackinacIntent||"today";
@@ -13,6 +14,26 @@
   }
   function write(value){
     try{localStorage.setItem(KEY,JSON.stringify({...value,saved_at:Date.now()}));}catch{}
+  }
+  function readPlan(){
+    try{const raw=localStorage.getItem(PLAN_KEY);return raw?JSON.parse(raw)?.plan||null:null;}catch{return null;}
+  }
+  function dateLabel(value){
+    if(!value)return "";
+    const d=new Date(`${value}T12:00:00`);
+    return Number.isNaN(d.getTime())?String(value):d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+  }
+  function planFacts(plan){
+    if(!plan)return [];
+    const facts=[];
+    if(plan.trip_date)facts.push(dateLabel(plan.trip_date));
+    if(plan.origin_text)facts.push(`from ${plan.origin_text}`);
+    if(plan.depart_at)facts.push(`leave ${plan.depart_at}`);
+    if(plan.trip==="overnight")facts.push(`${Number(plan.nights||1)} night${Number(plan.nights||1)===1?"":"s"}`);
+    else if(plan.trip)facts.push("day trip");
+    const adults=Number(plan.adults||0),children=Number(plan.children||0);
+    if(adults||children)facts.push([adults?`${adults} adult${adults===1?"":"s"}`:"",children?`${children} child${children===1?"":"ren"}`:""].filter(Boolean).join(" + "));
+    return facts.filter(Boolean);
   }
   function track(name,params={}){
     try{if(typeof window.gtag==="function")window.gtag("event",name,params);}catch{}
