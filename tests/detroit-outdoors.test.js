@@ -1,29 +1,34 @@
 const test=require("node:test");const assert=require("node:assert/strict");const fs=require("node:fs");const path=require("node:path");
 const root=path.resolve(__dirname,"..");const read=p=>fs.readFileSync(path.join(root,p),"utf8");
 
-test("Detroit Outdoors ships as a distinct canonical daily front page",()=>{
+test("Detroit Outdoors ships as a canonical daily journal",()=>{
  const html=read("public/detroit-outdoors/index.html");
  assert.match(html,/<title>Detroit Outdoors Today \| Chris Izworski<\/title>/);
  assert.match(html,/rel="canonical" href="https:\/\/chrisizworski\.com\/detroit-outdoors\/"/);
  assert.match(html,/max-image-preview:large/);
  assert.match(html,/ca-pub-8222782620788075/);
  assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
- assert.match(html,/Your outdoor front page for Detroit/i);
- assert.match(html,/where to go, what to do, whether the drive is worth it/i);
- assert.doesNotMatch(html,/not a generic trip planner/i);
+ assert.match(html,/A daily read on the few places where the day is actually doing something useful/i);
+ assert.match(html,/Fraunces/);
+ assert.match(html,/Newsreader/);
+ assert.doesNotMatch(html,/hero-media/);
  assert.doesNotMatch(html,/opportunity detector/i);
+ assert.doesNotMatch(html,/front page for Detroit/i);
 });
 
-test("Detroit Outdoors cards are decisions rather than raw condition summaries",()=>{
- const route=read("lib/detroit-outdoors/route.js");
+test("Detroit Outdoors foregrounds prose, not giant media or software cards",()=>{
+ const html=read("public/detroit-outdoors/index.html");
+ const css=read("public/assets/detroit-outdoors.css");
  const client=read("public/assets/detroit-outdoors.js");
- assert.match(route,/function storyFor/);
- assert.match(route,/function worthDrive/);
- assert.match(route,/function humanReason/);
- assert.match(route,/CHECK \+ GO/);
- assert.match(client,/Worth the drive\?/);
- assert.match(client,/The move/);
- assert.match(client,/Why today/);
+ assert.match(html,/id="desk-note"/);
+ assert.match(html,/id="opportunity-list"/);
+ assert.match(client,/edition\.notes/);
+ assert.match(client,/place-note/);
+ assert.match(css,/font-family:"Newsreader"/);
+ assert.match(css,/font-family:"Fraunces"/);
+ assert.match(css,/\.read-body\{font-size:19px/);
+ assert.doesNotMatch(css,/\.lead-media/);
+ assert.doesNotMatch(client,/hero-img/);
 });
 
 test("Detroit Outdoors keeps safety deterministic and JEV closed-set",()=>{
@@ -37,13 +42,17 @@ test("Detroit Outdoors keeps safety deterministic and JEV closed-set",()=>{
  assert.doesNotMatch(route,/JEV.*legal status/i);
 });
 
-test("Detroit Outdoors writing prompt favors readable local decision prose",()=>{
+test("Detroit Outdoors uses the writer as an editor rather than a template filler",()=>{
  const route=read("lib/detroit-outdoors/route.js");
- assert.match(route,/short local outdoors column/);
- assert.match(route,/Start with the decision/);
- assert.match(route,/Do not explain the system, the tool, the model, the data stack/);
- assert.match(route,/Every sentence must help the reader make a decision/);
- assert.match(route,/Never use phrases such as 'signal stack'/);
+ assert.match(route,/small daily outdoors journal/);
+ assert.match(route,/plain, exact, unhurried, observant and local/);
+ assert.match(route,/field journal edited by a very good regional newspaper/);
+ assert.match(route,/The main read should be 130 to 190 words/);
+ assert.match(route,/Each place note should be 35 to 65 words/);
+ assert.match(route,/Return JSON only/);
+ assert.match(route,/detroit-outdoors:edition:v2/);
+ assert.match(route,/edition:\{headline:editorial\.headline,read:editorial\.read,notes:editorial\.notes\|\|\{\}\}/);
+ assert.match(route,/Do not mention scores, models, APIs, JEV/);
 });
 
 test("Detroit Outdoors reuses existing engines and gates generated copy",()=>{
@@ -52,8 +61,7 @@ test("Detroit Outdoors reuses existing engines and gates generated copy",()=>{
  assert.match(route,/api\/opportunities\?scope=all/);
  assert.match(route,/api\/fall-color-conditions/);
  assert.match(route,/ANTHROPIC_API_KEY/);
- assert.match(route,/detroit-outdoors:editorial/);
- assert.match(route,/File photos are selected only from a small licensed allowlist/);
+ assert.match(route,/claude-sonnet-4-6/);
 });
 
 test("Detroit Outdoors uses the existing fall-color dispatcher instead of adding a serverless function",()=>{
