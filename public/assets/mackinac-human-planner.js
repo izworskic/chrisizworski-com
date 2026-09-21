@@ -464,7 +464,7 @@
         '<div class="human-result-hero"><span class="human-planner-kicker">'+esc(readiness)+'</span><h2>'+esc(humanTripTitle())+'</h2><p>'+esc(d.itinerary_summary||d.decision?.primary_reason||profile.primary?.summary||"The plan is built from your trip and the available verified inputs.")+'</p><div class="human-result-meta">'+planMeta().map(x=>"<span>"+esc(x)+"</span>").join("")+'</div></div>'+
         '<div class="human-result-body">'+
           '<div class="human-first-move"><div class="human-first-move-head"><span>Your first move</span><strong>'+esc(port)+'</strong></div><div class="human-journey">'+
-            '<div class="human-journey-step"><span>Leave</span><strong>'+esc(leave)+'</strong><small>'+(state.earliestLeave?"Your leave-time constraint is respected.":"Calculated for the selected ferry; you did not have to guess it.")+'</small></div>'+
+            '<div class="human-journey-step"><span>'+(state.originMode==="nearby"?"Head to dock":"Leave home")+'</span><strong>'+esc(leave)+'</strong><small>'+(state.earliestLeave?"Your leave-time constraint is respected.":"Calculated for the selected ferry; you did not have to guess it.")+'</small></div>'+
             '<div class="human-journey-step"><span>Be at the dock</span><strong>'+esc(journey.dock_ready_time||"Allow check-in time")+'</strong><small>'+esc(port)+'</small></div>'+
             '<div class="human-journey-step"><span>Ferry</span><strong>'+esc(ferry)+'</strong><small>'+esc(plan.operator||"Published schedule")+'</small></div>'+
             '<div class="human-journey-step"><span>On the Island</span><strong>'+esc(arrival)+'</strong><small>This is when the Island day actually starts.</small></div>'+
