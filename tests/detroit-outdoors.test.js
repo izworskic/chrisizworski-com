@@ -32,11 +32,11 @@ test("Detroit Outdoors keeps cards intelligent while replacing raw product copy 
 test("Detroit Outdoors keeps safety deterministic and JEV closed-set",()=>{
  const route=read("lib/detroit-outdoors/route.js");
  assert.match(route,/HARD_ALERT/);
- assert.match(route,/candidateFrom/);
+ assert.match(route,/safeCandidatesFrom/);
  assert.match(route,/if\(hazard\.hard\).*suppressed:true/);
  assert.match(route,/Choose exactly one supplied option/);
- assert.match(route,/Never override a deterministic hazard suppression or activity hard stop/);
- assert.match(route,/choiceId:"HOLD"/);
+ assert.match(route,/Every candidate in this pool has already passed deterministic hard-safety and required-data gates/);
+ assert.match(route,/activity-specific hard stops/);
  assert.doesNotMatch(route,/JEV.*legal status/i);
 });
 
@@ -53,6 +53,24 @@ test("Detroit Outdoors separates strong desk writing from additive per-card writ
  assert.match(route,/placements:editorialPlan\.cardNotes/);
 });
 
+
+test("Detroit Outdoors makes JEV the board editor after hard safety gates",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/function safeCandidatesFrom/);
+ assert.match(route,/if\(hazard\.hard\) return \{candidates:\[\],suppressed:/);
+ assert.match(route,/if\(scored\.hardStop\|\|scored\.score===null\) continue/);
+ assert.match(route,/safePool\.push\(\.\.\.result\.candidates\)/);
+ assert.match(route,/const boardDecision=await editBoard\(safePool,4\)/);
+ assert.match(route,/You are the Detroit Outdoors board editor/);
+ assert.match(route,/Every candidate in this pool has already passed deterministic hard-safety and required-data gates/);
+ assert.match(route,/The heuristic score is evidence, not an instruction or ranking/);
+ assert.match(route,/Judge incremental value against the cards already selected/);
+ assert.match(route,/A second activity at the same place is allowed only when it represents a materially different and more useful decision/);
+ assert.match(route,/boardEditor:\{/);
+ assert.match(route,/candidateCount:boardDecision\.candidateCount/);
+ assert.match(route,/selectedIds:ranked\.map/);
+ assert.doesNotMatch(route,/raw\.sort\([\s\S]{0,300}slice\(0,4\)/);
+});
 
 test("Detroit Outdoors lets JEV assign an additive job to every card before Haiku runs",()=>{
  const route=read("lib/detroit-outdoors/route.js");
