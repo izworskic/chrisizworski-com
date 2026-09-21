@@ -132,3 +132,17 @@ test("Detroit Outdoors expands migration cards with classifier-driven authoritat
  assert.match(client,/Context:/);
  assert.match(css,/\.card-source/);
 });
+
+
+test("Detroit Outdoors exposes safe Anthropic runtime diagnostics and production smoke coverage",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
+ assert.match(route,/reason:"missing ANTHROPIC_API_KEY"/);
+ assert.match(route,/anthropicKeyConfigured:Boolean\(process\.env\.ANTHROPIC_API_KEY\)/);
+ assert.match(route,/commitSha:process\.env\.VERCEL_GIT_COMMIT_SHA/);
+ assert.match(route,/writerModel:process\.env\.OUTDOORS_WRITER_MODEL\|\|WRITER_MODEL_DEFAULT/);
+ assert.doesNotMatch(route,/anthropicKey:/);
+ assert.match(workflow,/ANTHROPIC_API_KEY is not configured in the production runtime/);
+ assert.match(workflow,/editorialMode/);
+ assert.match(workflow,/EXPECTED_SHA/);
+});
