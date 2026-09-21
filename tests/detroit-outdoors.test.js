@@ -50,7 +50,7 @@ test("Detroit Outdoors uses the writer as an editor rather than a template fille
  assert.match(route,/The main read should be 130 to 190 words/);
  assert.match(route,/Each place note should be 35 to 65 words/);
  assert.match(route,/Return JSON only/);
- assert.match(route,/detroit-outdoors:edition:v2/);
+ assert.match(route,/detroit-outdoors:edition:v3/);
  assert.match(route,/edition:\{headline:editorial\.headline,read:editorial\.read,notes:editorial\.notes\|\|\{\}\}/);
  assert.match(route,/Do not mention scores, models, APIs, JEV/);
 });
@@ -61,7 +61,7 @@ test("Detroit Outdoors reuses existing engines and gates generated copy",()=>{
  assert.match(route,/api\/opportunities\?scope=all/);
  assert.match(route,/api\/fall-color-conditions/);
  assert.match(route,/ANTHROPIC_API_KEY/);
- assert.match(route,/claude-sonnet-4-6/);
+ assert.match(route,/claude-sonnet-4-6/);\n assert.match(route,/AbortSignal\\.timeout\\(32000\\)/);\n assert.match(route,/s-maxage=300/);
 });
 
 test("Detroit Outdoors uses the existing fall-color dispatcher instead of adding a serverless function",()=>{
