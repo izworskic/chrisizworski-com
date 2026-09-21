@@ -223,3 +223,12 @@ test("Detroit Outdoors gives Haiku an explicit evidence whitelist and a third re
  assert.match(route,/45 to 70 words/);
  assert.match(workflow,/reason:w&&w\.reason\|\|null/);
 });
+
+
+test("Detroit Outdoors distinguishes explicit JEV reject from low-confidence reviewer fallback",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/if\(decision\.mode==="shared-harness-jev"\)/);
+ assert.match(route,/accepted:decision\.choiceId==="ACCEPT"/);
+ assert.match(route,/mode:"deterministic-evidence-review-fallback"/);
+ assert.match(route,/deterministic evidence gate passed/);
+});
