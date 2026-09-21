@@ -175,47 +175,24 @@
     return q.type==="multi"?Array.isArray(value)&&value.length>0:Boolean(value);
   }
 
-  async function renderIntake(existing={}){
+  function renderStartGate(){
     const host=ensureIntakeHost();
-    try{
-      const r=await fetch(API,{headers:{accept:"application/json"}});const schema=await r.json();if(!r.ok)throw new Error(`HTTP ${r.status}`);
-      const answers={...existing};
-      const questions=schema.base_questions||[];
-      const next=questions.find(q=>!valuePresent(q,answers[q.id]));
-      if(!next){await personalize(answers);return;}
-      const selected=new Set(Array.isArray(answers[next.id])?answers[next.id]:[]);
-      host.innerHTML=`<div class="shell"><div class="platform-intake-card"><div><span class="platform-kicker">Make this page about your trip</span><h2>${esc(next.prompt)}</h2><p>Four high-value answers shape the whole Mackinac platform. You won't restart when you change pages.</p></div><div class="platform-choice-row">${(next.options||[]).map(([value,label])=>`<button type="button" data-intake-value="${esc(value)}" aria-pressed="${selected.has(value)?"true":"false"}">${esc(label)}</button>`).join("")}</div>${next.type==="multi"?'<button type="button" class="btn primary" data-intake-continue disabled>Continue</button>':""}<button type="button" class="text-button" data-intake-skip>Use the general page</button></div></div>`;
-      const buttons=[...host.querySelectorAll("[data-intake-value]")];
-      if(next.type==="multi"){
-        const cont=host.querySelector("[data-intake-continue]");
-        buttons.forEach(btn=>btn.addEventListener("click",()=>{
-          const value=btn.dataset.intakeValue;
-          if(selected.has(value))selected.delete(value);else if(selected.size<Number(next.max||2))selected.add(value);
-          buttons.forEach(b=>b.setAttribute("aria-pressed",String(selected.has(b.dataset.intakeValue))));
-          cont.disabled=selected.size===0;
-        }));
-        cont?.addEventListener("click",()=>{answers[next.id]=[...selected];write({answers});track("mackinac_intake_answered",{question:next.id,surface:rawSurface});renderIntake(answers);});
-      }else{
-        buttons.forEach(btn=>btn.addEventListener("click",()=>{answers[next.id]=btn.dataset.intakeValue;write({answers});track("mackinac_intake_answered",{question:next.id,surface:rawSurface});renderIntake(answers);}));
-      }
-      host.querySelector("[data-intake-skip]")?.addEventListener("click",()=>{host.remove();track("mackinac_intake_skipped",{surface:rawSurface,question:next.id});});
-      track("mackinac_platform_intake_shown",{surface:rawSurface,question:next.id});
-    }catch{
-      host.remove();
-    }
+    host.innerHTML=`<div class="shell"><div class="platform-intake-card"><div><span class="platform-kicker">Start with one shared trip</span><h2>Build your Mackinac trip first</h2><p>Answer the trip questions once on My Trip. Your dates, starting point and preferences will then follow you through Ferries, Stay, Eat, Explore, Events and Straits.</p></div><a class="btn primary" data-mackinac-planner-cta href="/mackinac-island/#trip-intake">Build my trip</a></div></div>`;
+    host.querySelector("[data-mackinac-planner-cta]")?.addEventListener("click",()=>track("mackinac_planner_cta",{surface:rawSurface,start_gate:true}));
+    track("mackinac_trip_gate_shown",{surface:rawSurface});
   }
-
   function wireTracking(){
     document.querySelectorAll("[data-mackinac-nav]").forEach(a=>a.addEventListener("click",()=>track("mackinac_destination_nav",{surface:rawSurface,target:a.dataset.mackinacNav||"unknown"})));
     document.querySelectorAll("[data-mackinac-planner-cta]").forEach(a=>a.addEventListener("click",()=>track("mackinac_planner_cta",{surface:rawSurface})));
   }
 
   async function apply(){
+    normalizePrimaryNav();
     wireTracking();
     if(isLive)return;
     const saved=read();
     if(saved?.profile?.complete&&saved?.answers)await personalize(saved.answers);
-    else await renderIntake(saved?.answers||{});
+    else renderStartGate();
   }
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",apply,{once:true});else apply();
