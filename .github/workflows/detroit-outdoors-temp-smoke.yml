@@ -1,0 +1,63 @@
+name: Detroit Outdoors temporary live smoke
+
+on:
+  push:
+    branches:
+      - build/detroit-outdoors-opportunity-desk
+    paths:
+      - '.github/workflows/detroit-outdoors-temp-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify production page and API
+        shell: bash
+        run: |
+          node <<'NODE'
+          const assert = require('node:assert/strict');
+          const sleep = ms => new Promise(r => setTimeout(r, ms));
+          async function get(url) {
+            const r = await fetch(url, { headers: { 'user-agent': 'Detroit-Outdoors-production-smoke/1.0', 'cache-control': 'no-cache' } });
+            return { r, text: await r.text() };
+          }
+          async function retry(label, fn) {
+            let last;
+            for (let i=1;i<=12;i++) {
+              try { const out=await fn(); console.log(label+': PASS on attempt '+i); return out; }
+              catch (e) { last=e; console.log(label+': attempt '+i+' failed: '+e.message); if(i<12) await sleep(10000); }
+            }
+            throw last;
+          }
+          await retry('Detroit Outdoors page', async () => {
+            const {r,text}=await get('https://chrisizworski.com/detroit-outdoors/');
+            assert.equal(r.status,200,'page status '+r.status);
+            assert.match(text,/<title>Detroit Outdoors Today \| Chris Izworski<\/title>/);
+            assert.match(text,/rel="canonical" href="https:\/\/chrisizworski\.com\/detroit-outdoors\/"/);
+            assert.match(text,/ca-pub-8222782620788075/);
+            return true;
+          });
+          await retry('Detroit Outdoors API', async () => {
+            const {r,text}=await get('https://chrisizworski.com/api/detroit-outdoors');
+            assert.equal(r.status,200,'api status '+r.status+' body '+text.slice(0,300));
+            const data=JSON.parse(text);
+            assert.equal(data.ok,true);
+            assert.equal(data.market,'Detroit / Southeast Michigan');
+            assert.ok(data.verdict && data.verdict.label);
+            assert.ok(Array.isArray(data.opportunities));
+            assert.ok(data.decision && data.decision.lead);
+            assert.ok(data.sourceHealth && data.sourceHealth.outdoorsNowPlaces);
+            console.log('API verdict:', data.verdict.label, 'opportunities:', data.opportunities.length, 'JEV mode:', data.decision.lead.mode, 'writer:', data.decision.editorial.mode);
+            console.log('Source health:', JSON.stringify(data.sourceHealth));
+            return true;
+          });
+          await retry('Tools hub link', async () => {
+            const {r,text}=await get('https://chrisizworski.com/tools/');
+            assert.equal(r.status,200,'tools status '+r.status);
+            assert.match(text,/href="\/detroit-outdoors\/"/);
+            return true;
+          });
+          NODE
