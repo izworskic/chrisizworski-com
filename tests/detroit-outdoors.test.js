@@ -49,7 +49,7 @@ test("Detroit Outdoors separates strong desk writing from additive per-card writ
  assert.match(route,/Use the supplied place context/);
  assert.match(route,/Return JSON only: \{\\"note\\":\\"\.\.\.\\"\}/);
  assert.match(route,/detroit-outdoors:desk:v8/);
- assert.match(route,/detroit-outdoors:card:v9/);
+ assert.match(route,/detroit-outdoors:card:v10/);
  assert.match(route,/placements:editorialPlan\.cardNotes/);
 });
 
