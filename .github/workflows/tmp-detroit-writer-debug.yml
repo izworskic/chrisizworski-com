@@ -1,0 +1,26 @@
+name: Temporary Detroit writer debug
+on:
+  push:
+    branches:
+      - redesign/detroit-outdoors-journal
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspect production writer
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL --max-time 45 'https://chrisizworski.com/api/detroit-outdoors?debug=writer' | node -e '
+            let s="";
+            process.stdin.on("data",d=>s+=d);
+            process.stdin.on("end",()=>{
+              const d=JSON.parse(s);
+              console.log("ok",d.ok);
+              console.log("writer",JSON.stringify(d.decision?.editorial));
+              console.log("headline",d.edition?.headline);
+              console.log("read",d.edition?.read);
+              console.log("noteIds",Object.keys(d.edition?.notes||{}));
+              console.log("lead",JSON.stringify(d.decision?.lead));
+              console.log("sourceHealth",JSON.stringify(d.sourceHealth));
+            });'
