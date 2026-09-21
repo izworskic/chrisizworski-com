@@ -1,0 +1,42 @@
+name: Temporary Detroit front-page production smoke
+on:
+  push:
+    branches:
+      - redesign/detroit-outdoors-front-page
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Wait for production and verify Detroit Outdoors
+        shell: bash
+        run: |
+          set -euo pipefail
+          page="https://chrisizworski.com/detroit-outdoors/"
+          api="https://chrisizworski.com/api/detroit-outdoors"
+          for i in $(seq 1 30); do
+            echo "Attempt $i"
+            html="$(curl -fsSL --max-time 20 "$page" || true)"
+            json="$(curl -fsSL --max-time 30 "$api" || true)"
+            if printf '%s' "$html" | grep -Fq 'Your outdoor front page for Detroit.'               && printf '%s' "$html" | grep -Fq 'Worth the drive?'               && printf '%s' "$json" | grep -Fq '"frontPage"'               && printf '%s' "$json" | grep -Fq '"worthIt"'; then
+              echo "PAGE PASS"
+              printf '%s' "$json" | node -e '
+                let s="";process.stdin.on("data",d=>s+=d);process.stdin.on("end",()=>{
+                  const d=JSON.parse(s);
+                  if(!d.ok) process.exit(2);
+                  if(!d.frontPage?.headline) process.exit(3);
+                  if(!d.opportunities?.[0]?.story?.call) process.exit(4);
+                  console.log("API PASS");
+                  console.log("Verdict:",d.verdict?.label);
+                  console.log("Lead:",d.frontPage.headline);
+                  console.log("Call:",d.opportunities[0].story.call);
+                  console.log("Worth:",d.opportunities[0].story.worthIt);
+                  console.log("Writer:",d.decision?.editorial?.mode);
+                  console.log("JEV:",d.decision?.lead?.mode);
+                })'
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Production never showed the new front-page build in time."
+          exit 1
