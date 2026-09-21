@@ -64,9 +64,13 @@ test("Detroit Outdoors lets JEV choose where prose adds value before the writer 
  assert.match(route,/DRIVE_DECISION/);
  assert.match(route,/NEXT_CHECK/);
  assert.match(route,/SEASONAL_CONTEXT/);
- assert.match(route,/The writer will receive only this treatment brief and sealed verified facts/);\n assert.match(route,/editorialQuestion/);\n assert.match(route,/question:x\.question/);
+ assert.match(route,/The writer will receive only this treatment brief and sealed verified facts/);
+ assert.match(route,/editorialQuestion/);
+ assert.match(route,/question:x\.question/);
  assert.match(route,/You do not choose what gets written and you do not choose placement/);
- assert.match(route,/notes object may contain only candidate IDs supplied in cardBriefs/);\n assert.match(route,/If you cannot add material value beyond visibleCard, omit that candidate from notes/);\n assert.match(route,/synthesize at least two verified facts/);
+ assert.match(route,/notes object may contain only candidate IDs supplied in cardBriefs/);
+ assert.match(route,/If you cannot add material value beyond visibleCard, omit that candidate from notes/);
+ assert.match(route,/synthesize at least two verified facts/);
  assert.match(route,/placement:\`card:\$\{x\.candidateId\}:after-weather\`/);
 });
 
