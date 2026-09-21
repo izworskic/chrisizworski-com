@@ -288,6 +288,12 @@ test("Detroit Outdoors mixes reusable specialist engines into one hard-safe JEV 
  assert.match(engines,/function waterCandidate/);
  assert.match(engines,/function nightSkyCandidate/);
  assert.match(engines,/function fallColorCandidates/);
+ assert.match(engines,/function sunsetPhotographyCandidate/);
+ assert.match(engines,/function freighterWatchingCandidate/);
+ assert.match(engines,/api\/freighter-ais/);
+ assert.match(route,/Detroit Riverfront Conservancy/);
+ assert.match(route,/sunset-photography/);
+ assert.match(route,/great-lakes-ais/);
  assert.match(engines,/function hardGateSpecialistCandidates/);
  assert.match(engines,/function dedupeMixedPool/);
  assert.match(engines,/WATER_HARD_ALERT/);
@@ -318,4 +324,21 @@ test("Detroit Outdoors propagates specialist hard vetoes over legacy equivalents
  assert.match(engines,/specialistId:veto\.id/);
  assert.match(engines,/Required NWS park-point alert feed is unavailable/);
  assert.match(engines,/Required NWS alert feed is unavailable/);
+});
+
+
+test("Detroit Outdoors can surface non-park Riverfront opportunities without changing the card UI",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const engines=read("lib/detroit-outdoors/engines.js");
+ const client=read("public/assets/detroit-outdoors.js");
+ assert.match(engines,/id:"detroit-riverfront"/);
+ assert.match(engines,/sourceEngine:"sunset-photography"/);
+ assert.match(engines,/sourceEngine:"great-lakes-ais"/);
+ assert.match(engines,/opportunityType:"sunset-photography"/);
+ assert.match(engines,/opportunityType:"live-freighter-passage"/);
+ assert.match(route,/photography:"Sunset \/ photography window"/);
+ assert.match(route,/"freighter-watching":"Live freighter window"/);
+ assert.match(route,/The Detroit Riverwalk is a public riverfront corridor stretching almost five miles/);
+ assert.match(client,/function renderCard/);
+ assert.doesNotMatch(client,/sunset-photography.*special-case|great-lakes-ais.*special-case/);
 });
