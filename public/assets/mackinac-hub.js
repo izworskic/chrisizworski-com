@@ -29,6 +29,7 @@
     if(plan.trip_date)facts.push(dateLabel(plan.trip_date));
     if(plan.origin_text)facts.push(`from ${plan.origin_text}`);
     if(plan.depart_at)facts.push(`leave ${plan.depart_at}`);
+    else if(plan.depart_not_before)facts.push(`can leave after ${plan.depart_not_before}`);
     if(plan.trip==="overnight")facts.push(`${Number(plan.nights||1)} night${Number(plan.nights||1)===1?"":"s"}`);
     else if(plan.trip)facts.push("day trip");
     const adults=Number(plan.adults||0),children=Number(plan.children||0);
