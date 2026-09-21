@@ -618,7 +618,7 @@
       document.querySelectorAll('#personaChips .chip').forEach(x=>{const a=state.personas.has(x.dataset.persona);x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
       syncTripModeUi();
     }
-    setText('builderStatus','Your trip details changed. Tap “Build my Island plan” to update the day.');
+    setText('builderStatus','Your trip details changed. Tap “Update my plan” to recalculate the day.');
     track('mackinac_itinerary_changed',{});
   });
 
@@ -635,8 +635,8 @@
       const selectedToday=d.target_date===d.local_now?.date;
       banner.hidden=selectedToday&&!d.planning_reason;
       banner.textContent=d.planning_reason||`Planning ${dateLabel(d.target_date)} from your selected trip date.`;
-      $('page-title').textContent=selectedToday?'Mackinac Island Today':`Mackinac Island · ${dateLabel(d.target_date)}`;
-    } else {banner.hidden=true;$('page-title').textContent='Mackinac Island Today';}
+      $('page-title').textContent=`Your Mackinac Island Trip · ${dateLabel(d.target_date)}`;
+    } else {banner.hidden=true;$('page-title').textContent='Your Mackinac Island Trip';}
     setText('bestArrival',plan.arrival_time||'No verified plan');
     setText('crowdsTop',d.crowds?.label||'—');
     setText('bikeTop',d.bike&&d.bike.score!==null&&d.bike.score!==undefined&&Number.isFinite(Number(d.bike.score))?`${d.bike.label} · ${Math.round(Number(d.bike.score))}/100`:(d.bike?.label||'—'));
