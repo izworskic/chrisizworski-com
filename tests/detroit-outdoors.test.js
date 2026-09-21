@@ -266,7 +266,7 @@ test("Detroit Outdoors client bundle parses as JavaScript",()=>{
 test("Detroit Outdoors cache-busts the live client bundle",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
- assert.match(html,/detroit-outdoors\.js\?v=20260921b/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260921c/);
  assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/detroit-outdoors\/index\.html/);
@@ -342,4 +342,31 @@ test("Detroit Outdoors can surface non-park Riverfront opportunities without cha
  assert.match(route,/The Detroit Riverwalk is a public riverfront corridor stretching almost five miles/);
  assert.match(client,/function renderCard/);
  assert.doesNotMatch(client,/sunset-photography.*special-case|great-lakes-ais.*special-case/);
+});
+
+
+test("Detroit Outdoors uses the most valuable top-line space for the live board, not product explanation",()=>{
+ const html=read("public/detroit-outdoors/index.html");
+ const client=read("public/assets/detroit-outdoors.js");
+ assert.match(html,/id="live-headline"/);
+ assert.match(html,/id="live-dek"/);
+ assert.match(html,/Detroit Outdoors Today/);
+ assert.doesNotMatch(html,/A live look at the few outings that make sense today/);
+ assert.doesNotMatch(html,/Weather, active NWS hazards, seasonal timing and specialist checks are compared in the background/);
+ const top=html.slice(html.indexOf('<main class="shell">'),html.indexOf('<section class="hero"'));
+ assert.doesNotMatch(top,/Built and published by/);
+ assert.match(html,/Sources, safety rules, and how the ranking works[\s\S]*Built and published by/);
+ assert.match(client,/function renderTopline/);
+ assert.match(client,/renderTopline\(data\.opportunities\)/);
+ assert.match(client,/is on the Detroit River right now/);
+ assert.match(client,/rest\.join\(" · "\)/);
+});
+
+test("Detroit Outdoors dynamic headline understands specialist opportunity types",()=>{
+ const client=read("public/assets/detroit-outdoors.js");
+ assert.match(client,/engine==="great-lakes-ais"/);
+ assert.match(client,/engine==="sunset-photography"/);
+ assert.match(client,/engine==="great-lakes-water"/);
+ assert.match(client,/engine==="night-sky-aurora"/);
+ assert.match(client,/engine==="fall-color-phenology"/);
 });

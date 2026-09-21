@@ -25,10 +25,9 @@
 <header class="top"><div class="topin"><a class="brand" href="/">Chris Izworski</a><nav class="topnav"><a href="/tools/">Tools</a><a href="https://michiganoutdoorsnow.chrisizworski.com">Build a personal day trip</a></nav></div></header>
 <main class="shell">
   <div class="crumb"><a href="/">Home</a> › <a href="/tools/">Tools</a> › Detroit Outdoors Today</div>
-  <div class="eyebrow">Southeast Michigan opportunity desk</div>
-  <h1>What’s worth doing outside around Detroit today?</h1>
-  <p class="dek">A live look at the few outings that make sense today. Weather, active NWS hazards, seasonal timing and specialist checks are compared in the background; the page keeps the answer short and shows the evidence behind it.</p>
-  <p class="updated">Built and published by <a href="/chris-izworski/">Chris Izworski</a>.</p>
+  <div class="eyebrow" id="live-kicker">Detroit Outdoors Today</div>
+  <h1 id="live-headline">Loading today’s Detroit opportunities…</h1>
+  <p class="dek" id="live-dek">Finding the strongest live windows now.</p>
   <div class="status"><span class="verdict" id="verdict">CHECKING</span><span id="verdict-detail">Reading today’s Southeast Michigan conditions.</span><span class="updated" id="updated">Loading live read…</span></div>
 
   <section class="hero" aria-labelledby="desk-heading">
@@ -68,6 +67,7 @@
   <details class="sources">
     <summary>Sources, safety rules, and how the ranking works</summary>
     <p>The first layer is deterministic: live place conditions from Michigan Outdoors Now, air quality, a conservative NWS alert veto, the statewide short-window opportunity comparison, and the Southeast Lower fall-color model when in season. JEV then makes a closed-set lead judgment. It cannot create a place, change a source fact or override a hazard stop. A separately gated writer turns the structured result into the short desk note and is cached so the prose changes only when the underlying state meaningfully changes.</p>
+    <p class="updated">Built and published by <a href="/chris-izworski/">Chris Izworski</a>.</p>
     <div class="source-grid" id="source-grid"></div>
     <p class="updated">Editorial mode: <span id="writer-mode">checking</span>. <span id="suppressed"></span></p>
   </details>
@@ -75,6 +75,6 @@
 <footer class="footer"><div class="footerin">© 2026 Chris Izworski · <a href="/tools/">Michigan &amp; Great Lakes tools</a><a href="/great-lakes-beaches/">Beach conditions</a><a href="/great-lakes-buoys/">Great Lakes buoys</a><a href="/northern-lights-michigan/">Northern Lights Michigan</a></div></footer>
 <script src="/_vercel/insights/script.js" defer></script>
 <script src="/_vercel/speed-insights/script.js" defer></script>
-<script src="/assets/detroit-outdoors.js?v=20260921b" defer></script>
+<script src="/assets/detroit-outdoors.js?v=20260921c" defer></script>
 </body>
 </html>

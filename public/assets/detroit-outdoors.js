@@ -14,6 +14,53 @@ function renderWeather(w){
   chip("AQI",w.aqi)
  ].join("");
 }
+function cleanOpportunityTitle(value){
+ return String(value||"").replace(/\s+window$/i,"").replace(/\s+/g," ").trim();
+}
+function vesselName(c){
+ const headline=String(c?.specialist?.headline||"");
+ const name=headline.split("·")[0].trim();
+ return name&&!/fresh great lakes ais|water check/i.test(name)?name:"A freighter";
+}
+function compactOpportunity(c){
+ if(!c)return"";
+ const engine=String(c.sourceEngine||"");
+ const place=String(c.place?.name||"Southeast Michigan");
+ if(engine==="great-lakes-ais")return vesselName(c)+" on the Detroit River";
+ if(engine==="sunset-photography")return"Detroit River sunset";
+ if(engine==="great-lakes-water")return"Lake St. Clair calm water";
+ if(engine==="night-sky-aurora")return place+" night sky";
+ if(engine==="fall-color-phenology")return place+" fall color";
+ const title=cleanOpportunityTitle(c.title);
+ return title?place+" "+title.toLowerCase():place;
+}
+function leadHeadline(c){
+ if(!c)return"Nothing clears the bar right now.";
+ const engine=String(c.sourceEngine||"");
+ const place=String(c.place?.name||"Southeast Michigan");
+ if(engine==="great-lakes-ais")return vesselName(c)+" is on the Detroit River right now.";
+ if(engine==="sunset-photography")return"Detroit River sunset conditions are lining up tonight.";
+ if(engine==="great-lakes-water")return"Lake St. Clair has a calm-water window.";
+ if(engine==="night-sky-aurora")return place+" has a night-sky window tonight.";
+ if(engine==="fall-color-phenology")return place+" has a fall-color window today.";
+ const story=String(c.story?.headline||"").trim();
+ if(story)return story;
+ const title=cleanOpportunityTitle(c.title).toLowerCase();
+ return title?place+" leads today for "+title+".":place+" leads today.";
+}
+function renderTopline(opportunities){
+ const items=Array.isArray(opportunities)?opportunities.filter(Boolean):[];
+ const h=$("#live-headline"),dek=$("#live-dek");
+ if(!h||!dek)return;
+ if(!items.length){
+  h.textContent="Nothing clears the bar right now.";
+  dek.textContent="No strong outdoor window has made the short list yet.";
+  return;
+ }
+ h.textContent=leadHeadline(items[0]);
+ const rest=items.slice(1,4).map(compactOpportunity).filter(Boolean);
+ dek.textContent=rest.length?rest.join(" · "):compactOpportunity(items[0]);
+}
 function renderCard(c,note,sources){
  const specialist=c.specialist?`<div class="specialist"><strong>${esc(c.specialist.label)}:</strong> ${esc(c.specialist.headline)}</div>`:"";
  const reasons=((c.story&&c.story.whyToday)||c.reasons||[]).slice(0,3).map(r=>`<li>${esc(r)}</li>`).join("");
@@ -49,6 +96,7 @@ async function load(){
   if(data.verdict.label==="QUIET")verdict.classList.add("quiet");
   $("#verdict-detail").textContent=data.verdict.detail;
   $("#updated").textContent="Updated "+fmtTime(data.generatedAt);
+  renderTopline(data.opportunities);
   $("#desk-note").textContent=data.editorial;
   const cards=$("#opportunity-grid");
   if(data.opportunities&&data.opportunities.length){
