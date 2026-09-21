@@ -57,7 +57,7 @@ async function waitFor(send,expression,timeoutMs=20000){
 test("Mackinac preview executes the human planner and restores a shared trip",async()=>{
   const bin=command("google-chrome")||command("chromium")||command("chromium-browser");
   assert.ok(bin,"Chromium/Chrome is required for preview runtime smoke");
-  const port=9333;
+  let port=0;
   const userDir="/tmp/mackinac-cdp-"+process.pid;
   fs.rmSync(userDir,{recursive:true,force:true});
   let chromeStderr="";
@@ -65,19 +65,26 @@ test("Mackinac preview executes the human planner and restores a shared trip",as
     "--headless","--no-sandbox","--disable-gpu","--disable-dev-shm-usage",
     "--disable-background-networking","--no-first-run","--no-default-browser-check",
     "--remote-allow-origins=*",
-    `--remote-debugging-port=${port}`,`--user-data-dir=${userDir}`,"about:blank"
+    "--remote-debugging-port=0",`--user-data-dir=${userDir}`,"about:blank"
   ],{stdio:["ignore","ignore","pipe"]});
   chrome.stderr.on("data",chunk=>{chromeStderr+=String(chunk).slice(0,4000);});
   try{
     let ready=false;
-    for(let i=0;i<30;i++){
-      try{
-        const r=await fetch(`http://127.0.0.1:${port}/json/version`);
-        if(r.ok){ready=true;break;}
-      }catch{}
+    const activePortFile=userDir+"/DevToolsActivePort";
+    for(let i=0;i<75;i++){
+      if(fs.existsSync(activePortFile)){
+        const first=fs.readFileSync(activePortFile,"utf8").split(/\r?\n/)[0];
+        port=Number(first)||0;
+        if(port){
+          try{
+            const r=await fetch(`http://127.0.0.1:${port}/json/version`);
+            if(r.ok){ready=true;break;}
+          }catch{}
+        }
+      }
       await sleep(200);
     }
-    assert.ok(ready,`Chrome DevTools endpoint did not start; exit=${chrome.exitCode}; stderr=${chromeStderr.slice(-1500)}`);
+    assert.ok(ready,`Chrome DevTools endpoint did not start; port=${port}; exit=${chrome.exitCode}; stderr=${chromeStderr.slice(-1500)}`);
 
     const target=await debugTarget(port,ROOT);
     const {ws,send}=await connect(target.webSocketDebuggerUrl);
