@@ -265,10 +265,16 @@
     );
   }
 
-  function renderStage(){
+  function focusAfterRender(selector){
+    if(!selector)return;
+    requestAnimationFrame(()=>shell.querySelector(selector)?.focus());
+  }
+
+  function renderStage({focusSelector=""}={}){
     state.step=Math.max(0,Math.min(3,Number(state.step)||0));
     [stage0,stage1,stage2,stage3][state.step]();
     saveDraft();
+    focusAfterRender(focusSelector);
   }
 
   function setError(message){
@@ -548,7 +554,23 @@
       }
       if(key==="originMode"&&value!=="from-home")state.originResolved=null;
       saveDraft();
-      renderStage();
+
+      // Only rebuild the stage when the choice reveals or removes dependent controls.
+      // Otherwise update the pressed state in place so keyboard/screen-reader focus is preserved.
+      if(["tripDuration","dateMode","originMode"].includes(key)){
+        let focusSelector=`[data-set="${key}"][data-value="${value}"]`;
+        if(key==="tripDuration"&&value==="four-plus")focusSelector="#humanNightCount";
+        if(key==="dateMode"&&value==="date")focusSelector="#humanTripDate";
+        if(key==="originMode"&&value==="from-home")focusSelector="#humanOrigin";
+        if(key==="originMode"&&value==="nearby")focusSelector='[data-set="nearbySide"]';
+        renderStage({focusSelector});
+      }else{
+        shell.querySelectorAll(`[data-set="${key}"]`).forEach(btn=>{
+          const active=btn.dataset.value===value;
+          btn.classList.toggle("selected",active);
+          btn.setAttribute("aria-pressed",String(active));
+        });
+      }
       return;
     }
     const vision=e.target.closest("[data-vision]");
@@ -559,7 +581,11 @@
       else if(current.size<2)current.add(value);
       state.visions=[...current];
       saveDraft();
-      stage3();
+      shell.querySelectorAll("[data-vision]").forEach(btn=>{
+        const active=state.visions.includes(btn.dataset.vision);
+        btn.classList.toggle("selected",active);
+        btn.setAttribute("aria-pressed",String(active));
+      });
       return;
     }
     const tune=e.target.closest("[data-tune]");
