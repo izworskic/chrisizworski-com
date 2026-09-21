@@ -285,6 +285,7 @@ test("Detroit Outdoors mixes reusable specialist engines into one hard-safe JEV 
  assert.match(route,/diagnostics:\{\s*opportunityEngines:opportunityEngineDiagnostics/);
  assert.match(engines,/https:\/\/chrisizworski\.com\/api\/buoys/);
  assert.match(engines,/https:\/\/chrisizworski\.com\/api\/aurora/);
+ assert.match(engines,/api\.weather\.gov\/alerts\/active\/zone\/LCZ460/);
  assert.match(engines,/function waterCandidate/);
  assert.match(engines,/function nightSkyCandidate/);
  assert.match(engines,/function fallColorCandidates/);
