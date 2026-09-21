@@ -50,7 +50,7 @@ test("Detroit Outdoors separates strong desk writing from additive per-card writ
  assert.match(route,/Return JSON only: \{\\"note\\":\\"\.\.\.\\"\}/);
  assert.match(route,/detroit-outdoors:desk:v8/);
  assert.match(route,/detroit-outdoors:card:v10/);
- assert.match(route,/placements:editorialPlan\.cardNotes/);
+ assert.match(route,/placements:editorial\.actualPlacements/);
 });
 
 
@@ -127,10 +127,10 @@ test("Detroit Outdoors validates and repairs each Haiku card independently",()=>
  assert.match(route,/async function reviewEditorialNote/);
  assert.match(route,/fallbackId:"REJECT"/);
  assert.match(route,/Reject generic encouragement, weather restatement, score restatement, travel-time restatement/);
- assert.match(route,/let review=await reviewEditorialNote\(candidate,slot,note\)/);
+ assert.match(route,/let review=await reviewEditorialNote\\(candidate,activeSlot,note\\)/);
  assert.match(route,/if\(!review\.accepted\)/);
  assert.match(route,/The reviewer rejected the first draft/);
- assert.match(route,/review=await reviewEditorialNote\(candidate,slot,note\)/);
+ assert.match(route,/review=await reviewEditorialNote\\(candidate,activeSlot,note\\)/);
  assert.match(route,/mode:"anthropic-rejected"/);
  assert.match(client,/Why this matters/);
 });
@@ -238,7 +238,7 @@ test("Detroit Outdoors gives Haiku an explicit evidence whitelist and constraine
  const route=read("lib/detroit-outdoors/route.js");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
  assert.match(route,/function evidenceVocabulary/);
- assert.match(route,/allowedSpecificLanguage:evidenceVocabulary\(slot\)/);
+ assert.match(route,/allowedSpecificLanguage:evidenceVocabulary\(activeSlot\)/);
  assert.match(route,/hard whitelist for named bird groups and strength words/);
  assert.match(route,/attempt=3/);
  assert.match(route,/Write a restrained evidence-only card explanation/);
