@@ -601,10 +601,47 @@
     try{return JSON.parse(localStorage.getItem(PLAN_KEY)||"null")?.plan||null;}catch{return null;}
   })();
 
+  function hydrateFromSavedTrip(){
+    if(!(restoredProfile?.complete&&restoredPlan))return false;
+    const a=restoredProfile.answers||restoredPlan.intake||{};
+    if(!state.tripDuration){
+      state.tripDuration=a.trip_duration||(
+        restoredPlan.trip==="day-trip"?"day":
+        restoredPlan.trip==="overnight"?(Number(restoredPlan.nights)>=4?"four-plus":Number(restoredPlan.nights)>=2?"two-three":"one-night"):""
+      );
+    }
+    if(!state.dateMode){
+      state.dateMode=restoredPlan.trip_date?(restoredPlan.trip_date===detroitToday()?"today":"date"):"flexible";
+    }
+    if(!state.tripDate&&restoredPlan.trip_date)state.tripDate=restoredPlan.trip_date;
+    if(!state.originMode){
+      if(restoredPlan.origin_text==="Already near the Straits")state.originMode="nearby";
+      else if(clean(restoredPlan.origin_text)){state.originMode="from-home";state.originText=restoredPlan.origin_text;}
+      else state.originMode="later";
+    }
+    if(!state.originText&&state.originMode==="from-home")state.originText=restoredPlan.origin_text||"";
+    if(!state.earliestLeave&&restoredPlan.depart_not_before)state.earliestLeave=restoredPlan.depart_not_before;
+    if(!state.party)state.party=a.party||(
+      Number(restoredPlan.children)>0?"family-young":
+      Number(restoredPlan.adults)===1?"solo":
+      Number(restoredPlan.adults)===2?"couple":"adults-friends"
+    );
+    if(!state.walking)state.walking=a.walking_tolerance||(
+      restoredPlan.mobility==="limited"?"low":
+      restoredPlan.pace==="active"?"high":"moderate"
+    );
+    if(!state.visions.length&&Array.isArray(a.trip_vision))state.visions=[...a.trip_vision].slice(0,2);
+    if(!state.loss)state.loss=a.trip_loss||"flexible";
+    if(!state.tunings.length&&Array.isArray(restoredPlan.tuning))state.tunings=[...restoredPlan.tuning];
+    state.profile=restoredProfile;
+    saveDraft();
+    return Boolean(state.tripDuration&&state.dateMode&&state.originMode&&state.party&&state.walking&&state.visions.length&&state.loss);
+  }
+
   async function boot(){
     const draftLooksComplete=Boolean(
       state.tripDuration&&state.dateMode&&state.originMode&&state.party&&state.walking&&state.visions.length&&state.loss
-    );
+    )||hydrateFromSavedTrip();
     if(restoredProfile?.complete&&restoredPlan&&draftLooksComplete){
       state.profile=restoredProfile;
       if(state.dateMode==="today")state.tripDate=detroitToday();
