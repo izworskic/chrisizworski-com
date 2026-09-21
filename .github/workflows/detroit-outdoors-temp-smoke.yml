@@ -19,6 +19,7 @@ jobs:
         run: |
           node <<'NODE'
           const assert = require('node:assert/strict');
+          (async () => {
           const sleep = ms => new Promise(r => setTimeout(r, ms));
           async function get(url) {
             const r = await fetch(url, { headers: { 'user-agent': 'Detroit-Outdoors-production-smoke/1.0', 'cache-control': 'no-cache' } });
@@ -60,4 +61,5 @@ jobs:
             assert.match(text,/href="\/detroit-outdoors\/"/);
             return true;
           });
+          })().catch(err => { console.error(err); process.exit(1); });
           NODE
