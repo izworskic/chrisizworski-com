@@ -17,7 +17,10 @@ if(!main)addFailure("ia","missing Mackinac root page");
 for(const item of PRIMARY_NAV){
   if(!main.includes(`href="${item.path}"`))addFailure("ia",`root navigation missing ${item.id}`);
 }
-if(!main.includes('data-mackinac-surface="today"'))addFailure("clarity","root is not identified as the Today surface");
+if(!main.includes('data-mackinac-surface="my-trip"'))addFailure("clarity","root is not identified as the My Trip workspace");
+if(!main.includes("Build Your Mackinac Island Trip"))addFailure("clarity","root does not lead with trip creation");
+if(main.includes('data-mackinac-nav="plan"'))addFailure("ia","root still exposes Plan as a competing primary workspace");
+if(!main.includes('id="profileLogistics"')&&!main.includes('class="profile-logistics"'))addFailure("continuity","root intake does not collect practical trip logistics");
 if(!main.includes("/assets/mackinac-hub.js"))addFailure("continuity","root is missing shared hub client");
 
 const primaryPaths=[];
@@ -50,7 +53,9 @@ if(!hubJs.includes("mackinac-trip-profile-v1"))addFailure("continuity","hub clie
 if(hubJs.length>18000)addFailure("performance","shared Mackinac intelligence client exceeds the compact cross-page budget");
 if(!hubJs.includes("/api/mackinac-profile"))addFailure("continuity","hub client does not use the shared profile/surface intelligence API");
 if(!hubJs.includes("mackinac_surface_personalized"))addFailure("clarity","hub client does not expose a personalized page decision");
-if(!hubJs.includes("data-intake-value"))addFailure("continuity","hub pages cannot continue the four-question trip intake");
+if(!hubJs.includes("mackinac-trip-plan-v1"))addFailure("continuity","hub pages do not read the shared practical trip state");
+if(!hubJs.includes("mackinac_trip_gate_shown"))addFailure("clarity","unplanned subpage visitors are not routed through the root trip builder");
+if(!hubJs.includes("Using your saved Mackinac plan"))addFailure("continuity","downstream pages do not visibly acknowledge the inherited trip");
 if(hubJs.includes("/api/mackinac-island"))addFailure("architecture","hub client must not duplicate the live ferry/weather planner API");
 if(!hubJs.includes("profile-fit-badge"))addFailure("clarity","hub client does not visibly apply place-fit ranking");
 
@@ -58,6 +63,8 @@ const css=read("public/assets/mackinac-intent.css")+read("public/assets/mackinac
 if(!css.includes(".mackinac-destination-nav"))addFailure("mobile","destination navigation has no shared styling");
 if(!css.includes("overflow-x:auto"))addFailure("mobile","destination navigation is not horizontally usable on narrow screens");
 if(!css.includes(".platform-focus-card"))addFailure("mobile","shared trip focus has no integrated responsive styling");
+if(!css.includes("body:not(.mackinac-plan-ready) .content-stack"))addFailure("clarity","root does not progressively disclose the detailed planner");
+if(!css.includes(".profile-logistics-grid"))addFailure("mobile","root trip logistics have no responsive layout");
 if(!css.includes("@media(max-width:390px)"))addFailure("mobile","shared trip intelligence lacks 390px treatment");
 
 const sitemap=read("public/sitemap.xml");
