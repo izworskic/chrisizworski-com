@@ -167,3 +167,13 @@ test("intent and origin query seeds feed the human planner",()=>{
   assert.ok(js.includes('"limited-walking"'));
   assert.ok(js.includes('"bike-day"'));
 });
+
+
+test("choice interactions preserve keyboard focus instead of rebuilding every answer",()=>{
+  assert.ok(js.includes("function focusAfterRender"));
+  assert.ok(js.includes('if(["tripDuration","dateMode","originMode"].includes(key))'));
+  assert.ok(js.includes('shell.querySelectorAll(`[data-set="${key}"]`)'));
+  assert.ok(js.includes('shell.querySelectorAll("[data-vision]")'));
+  assert.ok(js.includes('focusSelector="#humanTripDate"'));
+  assert.ok(js.includes('focusSelector="#humanOrigin"'));
+});
