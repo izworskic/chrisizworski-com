@@ -38,7 +38,7 @@ jobs:
             must "$path-hub-js" 'mackinac-hub.js?v=20260921-trip1' "/tmp/$path.html"
           done
 
-          curl -fsSL -H 'Cache-Control: no-cache' --max-time 30 "https://chrisizworski.com/assets/mackinac-hub.js?v=20260921-trip1&prod-smoke=${GITHUB_RUN_ID}" -o /tmp/hub.js
+          chrome="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || true)"\n          test -n "$chrome"\n          timeout 35s "$chrome" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=4000 --dump-dom "$base/ferry-planner/?browser-smoke=${GITHUB_RUN_ID}" > /tmp/ferry-dom.html 2>/tmp/chrome.err\n          must ferry-runtime-gate 'Build your Mackinac trip first' /tmp/ferry-dom.html\n          must ferry-runtime-intake 'data-mackinac-platform-intake' /tmp/ferry-dom.html\n\n          curl -fsSL -H 'Cache-Control: no-cache' --max-time 30 "https://chrisizworski.com/assets/mackinac-hub.js?v=20260921-trip1&prod-smoke=${GITHUB_RUN_ID}" -o /tmp/hub.js
           must hub-plan-key 'mackinac-trip-plan-v1' /tmp/hub.js
           must hub-saved-copy 'Using your saved Mackinac plan' /tmp/hub.js
           must hub-gate-event 'mackinac_trip_gate_shown' /tmp/hub.js
