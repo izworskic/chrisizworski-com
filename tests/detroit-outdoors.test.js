@@ -48,7 +48,8 @@ test("Detroit Outdoors uses the writer as an editor rather than a template fille
  assert.match(route,/Desk read: 80 to 115 words/);
  assert.match(route,/Card notes: write only for candidate IDs listed in cardBriefs/);
  assert.match(route,/Return JSON only/);
- assert.match(route,/detroit-outdoors:desk:v8/);\n assert.match(route,/detroit-outdoors:card:v8/);
+ assert.match(route,/detroit-outdoors:desk:v8/);
+ assert.match(route,/detroit-outdoors:card:v8/);
  assert.match(route,/placements:editorialPlan\.cardNotes/);
  assert.match(route,/Do not explain the tool, model, JEV, Gem, APIs, rankings, scores, signals, prompts or data stack/);
 });
