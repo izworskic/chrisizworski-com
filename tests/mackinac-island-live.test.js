@@ -82,10 +82,12 @@ test('mobile-first and accessible controls are present', () => {
 
 test('JEV is bounded to a deterministic closed candidate set', () => {
   const route=fs.readFileSync(routePath,'utf8');
+  const harness=fs.readFileSync(path.join(__dirname,'..','lib','mackinac-island','harness.js'),'utf8');
   assert.match(route,/Choose exactly one supplied plan id or NONE/);
-  assert.match(route,/top\.some\(c=>c\.id===id\)/);
-  assert.match(route,/conf < \.52/);
-  assert.match(route,/injection_dependency/);
+  assert.match(route,/harness\.decideClosedSet/);
+  assert.match(harness,/allowed\.has\(id\)/);
+  assert.match(harness,/confidence>=\.52/);
+  assert.match(harness,/injectionDependency>=\.45/);
   assert.doesNotMatch(route,/api\.typesafe\.ai/);
   assert.doesNotMatch(route,/TYPESAFE_API_KEY/);
 });
@@ -745,7 +747,7 @@ test('spatial trip shape is closed-set, mapped and visible to the planner',()=>{
   const html=fs.readFileSync(htmlPath,'utf8');
   assert.match(route,/require\("\.\/spatial"\)/);
   assert.match(route,/chooseSpatialWithJev/);
-  assert.match(route,/JEV spatial output did not pass closed-set confidence gates/);
+  assert.match(route,/harness\.decideClosedSet/);
   assert.match(route,/spatial_plan:spatialPlan/);
   assert.match(route,/recommendedMapIds/);
   assert.match(js,/renderTripShape/);
@@ -774,7 +776,7 @@ test('overnight trips use a bounded multi-day composer instead of summary-only r
   const html=fs.readFileSync(htmlPath,'utf8');
   assert.match(route,/require\("\.\/multiday"\)/);
   assert.match(route,/chooseMultiDayWithJev/);
-  assert.match(route,/JEV multi-day output did not pass closed-set confidence gates/);
+  assert.match(route,/harness\.decideClosedSet/);
   assert.match(route,/multi_day_plan:multiDayPlan/);
   assert.match(route,/trip_days:multiDayPlan\?\.days\|\|tripDays/);
   assert.match(js,/trip-day-stops/);
