@@ -66,6 +66,7 @@
     "benchmark:mackinac-personas": "node scripts/benchmark-mackinac-personas.mjs --check",
     "benchmark:mackinac-trip-duration": "node scripts/benchmark-mackinac-trip-duration.mjs --check",
     "benchmark:mackinac-input-causality": "node scripts/benchmark-mackinac-input-causality.mjs --check",
+    "benchmark:mackinac-human": "node --test tests/mackinac-human-planner.test.js",
     "ads:status": "node scripts/display-ad-pilot.mjs status",
     "ads:on": "node scripts/display-ad-pilot.mjs on",
     "ads:off": "node scripts/display-ad-pilot.mjs off",
