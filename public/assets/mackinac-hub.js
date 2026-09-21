@@ -21,9 +21,9 @@
     const map={today:"Today",plan:"Plan",ferries:"Ferries",stay:"Stay",eat:"Eat",explore:"Explore",events:"Events",straits:"Straits"};
     return map[rawSurface]||rawSurface.replace(/-/g," ");
   }
-  function insertAfterHero(node){
+  function insertAtDecisionFront(node){
     const hero=document.querySelector("main .hero");
-    if(hero&&hero.parentNode){hero.insertAdjacentElement("afterend",node);return;}
+    if(hero&&hero.parentNode){hero.insertAdjacentElement("beforebegin",node);return;}
     const main=document.querySelector("main");if(main)main.prepend(node);
   }
   function ensureFocusHost(){
@@ -32,7 +32,7 @@
     host=document.createElement("section");
     host.className="platform-focus-wrap";
     host.dataset.mackinacPlatformFocus="1";
-    insertAfterHero(host);
+    insertAtDecisionFront(host);
     return host;
   }
   function ensureIntakeHost(){
@@ -41,7 +41,7 @@
     host=document.createElement("section");
     host.className="platform-intake-wrap";
     host.dataset.mackinacPlatformIntake="1";
-    insertAfterHero(host);
+    insertAtDecisionFront(host);
     return host;
   }
 
@@ -88,7 +88,7 @@
       host.dataset.tripContext="1";
       const shell=document.createElement("div");shell.className="shell";shell.appendChild(host);
       const focus=document.querySelector("[data-mackinac-platform-focus]");
-      if(focus)focus.insertAdjacentElement("afterend",shell);else insertAfterHero(shell);
+      if(focus)focus.insertAdjacentElement("afterend",shell);else insertAtDecisionFront(shell);
     }
     const label=profile?.primary?.label||"your Mackinac trip";
     host.hidden=false;
