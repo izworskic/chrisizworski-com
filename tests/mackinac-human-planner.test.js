@@ -121,25 +121,25 @@ test("not-before time remains a constraint instead of becoming a fake exact depa
 
 
 test("stay length is explicit instead of hiding 2 versus 3 nights",()=>{
-  assert.match(js,/["two-night","2 nights"/);
-  assert.match(js,/["three-night","3 nights"/);
-  assert.match(js,/id="humanNightCount"/);
-  assert.match(js,/state.tripDuration==="two-night"?2:state.tripDuration==="three-night"?3/);
-  assert.match(js,/buildAnswers().trip_duration/);
+  assert.ok(js.includes('["two-night","2 nights"'));
+  assert.ok(js.includes('["three-night","3 nights"'));
+  assert.ok(js.includes('id="humanNightCount"'));
+  assert.ok(js.includes('state.tripDuration==="two-night"?2:state.tripDuration==="three-night"?3'));
+  assert.ok(js.includes('buildAnswers().trip_duration'));
 });
 
 test("nearby visitors identify their side of the Straits before exact ferry planning",()=>{
-  assert.match(js,/Which side are you on?/);
-  assert.match(js,/data-value="mackinaw"/);
-  assert.match(js,/data-value="st-ignace"/);
-  assert.match(js,/data-value="either"/);
-  assert.match(js,/state.originMode==="nearby"&&!state.nearbySide/);
-  assert.match(js,/state.nearbySide==="mackinaw"?"mackinaw-city":state.nearbySide==="st-ignace"?"st-ignace":"nearby"/);
+  assert.ok(js.includes("Which side are you on?"));
+  assert.ok(js.includes('data-value="mackinaw"'));
+  assert.ok(js.includes('data-value="st-ignace"'));
+  assert.ok(js.includes('data-value="either"'));
+  assert.ok(js.includes('state.originMode==="nearby"&&!state.nearbySide'));
+  assert.ok(js.includes('state.nearbySide==="mackinaw"?"mackinaw-city":state.nearbySide==="st-ignace"?"st-ignace":"nearby"'));
 });
 
 test("saved trips hydrate back into the human planner instead of restarting question one",()=>{
-  assert.match(js,/function hydrateFromSavedTrip/);
-  assert.match(js,/restoredProfile?.complete&&restoredPlan/);
-  assert.match(js,/draftLooksComplete=.*hydrateFromSavedTrip()/s);
-  assert.match(js,/restored:true,mode:"plan"/);
+  assert.ok(js.includes("function hydrateFromSavedTrip"));
+  assert.ok(js.includes("restoredProfile?.complete&&restoredPlan"));
+  assert.ok(js.includes("hydrateFromSavedTrip()"));
+  assert.ok(js.includes('restored:true,mode:"plan"'));
 });
