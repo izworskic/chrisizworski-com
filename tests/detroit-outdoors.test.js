@@ -107,7 +107,7 @@ test("Detroit Outdoors validates and repairs each Haiku card independently",()=>
  assert.match(route,/Reject generic encouragement, weather restatement, score restatement, travel-time restatement/);
  assert.match(route,/let review=await reviewEditorialNote\(candidate,slot,note\)/);
  assert.match(route,/if\(!review\.accepted\)/);
- assert.match(route,/The JEV reviewer rejected the first draft/);
+ assert.match(route,/The reviewer rejected the first draft/);
  assert.match(route,/review=await reviewEditorialNote\(candidate,slot,note\)/);
  assert.match(route,/mode:"anthropic-rejected"/);
  assert.match(client,/Why this matters/);
@@ -164,7 +164,7 @@ test("Detroit Outdoors runs an independent Haiku job for every ranked card",()=>
  assert.match(route,/This is an independent card-writing job/);
  assert.match(route,/Directly answer the assigned question/);
  assert.match(route,/const repairPrompt=/);
- assert.match(route,/The JEV reviewer rejected the first draft/);
+ assert.match(route,/The reviewer rejected the first draft/);
  assert.match(route,/cardWriters:cardResults\.map/);
  assert.match(route,/PLACE_CONTEXT/);
 });
