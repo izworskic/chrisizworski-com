@@ -20,14 +20,10 @@ function selectCurrent(predictions,now=Date.now()){
   const by=new Map();
   for(const p of predictions.map(normalize)){
     if(!p.geyserName)continue;
-    const predicted=millis(p.prediction);
-    const open=millis(p.windowOpen);
-    const close=millis(p.windowClose);
+    const close=millis(p.windowClose||p.prediction);
     const expiration=millis(p.expiration);
-    const usableWindow=Number.isFinite(predicted)&&Number.isFinite(open)&&Number.isFinite(close)&&open<=predicted&&predicted<=close;
-    if(!usableWindow)continue;
-    if(open>close||close<now-5*60*1000)continue;
-    if(Number.isFinite(expiration)&&expiration<now)continue;
+    if(Number.isFinite(close)&&close<now-5*60*1000)continue;
+    if(Number.isFinite(expiration)&&expiration<now-5*60*1000)continue;
     if(p.forecastNumber>1)continue;
     const key=p.geyserName.toLowerCase();
     const cur=by.get(key);
