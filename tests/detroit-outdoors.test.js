@@ -46,11 +46,28 @@ test("Detroit Outdoors uses the writer as an editor rather than a template fille
  assert.match(route,/clear, specific, understated and readable/);
  assert.match(route,/Turn raw weather and seasonal facts into meaning/);
  assert.match(route,/desk note of 80 to 115 words/);
- assert.match(route,/one compact note of 24 to 42 words/);
+ assert.match(route,/Card notes: write only for candidate IDs listed in cardBriefs/);
  assert.match(route,/Return JSON only/);
- assert.match(route,/detroit-outdoors:edition:v4/);
- assert.match(route,/edition:\{headline:editorial\.headline,read:editorial\.read,notes:editorial\.notes\|\|\{\}\}/);
- assert.match(route,/Do not explain the tool, the model, JEV, APIs, rankings, scores, signals or the data stack/);
+ assert.match(route,/detroit-outdoors:edition:v5/);
+ assert.match(route,/placements:editorialPlan\.cardNotes/);
+ assert.match(route,/Do not explain the tool, model, JEV, Gem, APIs, rankings, scores, signals, prompts or data stack/);
+});
+
+
+test("Detroit Outdoors lets JEV choose where prose adds value before the writer runs",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/MAX_EDITORIAL_CARD_NOTES = 3/);
+ assert.match(route,/async function planEditorialPlacement/);
+ assert.match(route,/Choose the editorial treatment for this one Detroit Outdoors card/);
+ assert.match(route,/NO_NOTE/);
+ assert.match(route,/WHY_TODAY/);
+ assert.match(route,/DRIVE_DECISION/);
+ assert.match(route,/NEXT_CHECK/);
+ assert.match(route,/SEASONAL_CONTEXT/);
+ assert.match(route,/The writer will receive only this treatment brief and sealed verified facts/);
+ assert.match(route,/You do not choose what gets written and you do not choose placement/);
+ assert.match(route,/notes object may contain only candidate IDs supplied in cardBriefs/);
+ assert.match(route,/placement:\`card:\$\{x\.candidateId\}:after-weather\`/);
 });
 
 test("Detroit Outdoors reuses existing engines and gates generated copy",()=>{
@@ -59,7 +76,7 @@ test("Detroit Outdoors reuses existing engines and gates generated copy",()=>{
  assert.match(route,/api\/opportunities\?scope=all/);
  assert.match(route,/api\/fall-color-conditions/);
  assert.match(route,/ANTHROPIC_API_KEY/);
- assert.match(route,/claude-sonnet-4-6/);
+ assert.match(route,/claude-haiku-4-5-20251001/);
  assert.match(route,/AbortSignal\.timeout\(9000\)/);
  assert.match(route,/s-maxage=300/);
 });
