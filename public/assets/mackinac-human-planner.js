@@ -220,7 +220,7 @@
           '<button type="button" class="human-choice'+(state.originMode==="nearby"?" selected":"")+'" data-set="originMode" data-value="nearby" aria-pressed="'+String(state.originMode==="nearby")+'">Already near the Straits<small>Skip the long mainland drive.</small></button>'+
           '<button type="button" class="human-choice'+(state.originMode==="later"?" selected":"")+'" data-set="originMode" data-value="later" aria-pressed="'+String(state.originMode==="later")+'">I will decide later<small>Keep planning, but do not fake ferry reachability.</small></button>'+
         '</div></div>'+
-        (state.originMode==="from-home"?'<div class="human-question"><div class="human-field-grid"><label class="human-field"><span>Starting city, state/province or ZIP/postal code</span><input id="humanOrigin" type="search" autocomplete="off" value="'+esc(state.originText)+'" placeholder="Bay City, MI"></label><label class="human-field"><span>I already know when I’m leaving <em style="font-weight:500;color:#6f817d">(optional)</em></span><input id="humanEarliestLeave" type="time" value="'+esc(state.earliestLeave)+'"></label></div><p class="human-question-help">Leave this blank if you want the planner to tell you when to leave. Add a time only when you already have a real departure-time constraint.</p><div class="human-origin-status'+(state.originResolved?" good":"")+'" id="humanOriginStatus">'+originStatusText()+'</div></div>':
+        (state.originMode==="from-home"?'<div class="human-question"><div class="human-field-grid"><label class="human-field"><span>Starting city, state/province or ZIP/postal code</span><input id="humanOrigin" type="search" autocomplete="off" value="'+esc(state.originText)+'" placeholder="Bay City, MI"></label><label class="human-field"><span>I cannot leave before <em style="font-weight:500;color:#6f817d">(optional)</em></span><input id="humanEarliestLeave" type="time" value="'+esc(state.earliestLeave)+'"></label></div><p class="human-question-help">Leave this blank if you want the planner to tell you when to leave. Add a time only when you truly cannot start the drive before then.</p><div class="human-origin-status'+(state.originResolved?" good":"")+'" id="humanOriginStatus">'+originStatusText()+'</div></div>':
           state.originMode==="nearby"?'<div class="human-question"><span class="human-question-label">Which side are you on?</span><div class="human-choice-grid"><button type="button" class="human-choice'+(state.nearbySide==="mackinaw"?" selected":"")+'" data-set="nearbySide" data-value="mackinaw" aria-pressed="'+String(state.nearbySide==="mackinaw")+'">Mackinaw City side<small>Lower Peninsula side of the bridge.</small></button><button type="button" class="human-choice'+(state.nearbySide==="st-ignace"?" selected":"")+'" data-set="nearbySide" data-value="st-ignace" aria-pressed="'+String(state.nearbySide==="st-ignace")+'">St. Ignace side<small>Upper Peninsula side of the bridge.</small></button><button type="button" class="human-choice'+(state.nearbySide==="either"?" selected":"")+'" data-set="nearbySide" data-value="either" aria-pressed="'+String(state.nearbySide==="either")+'">Either port works<small>I am close enough that the ferry schedule can decide.</small></button></div></div>':
           state.originMode==="later"?'<div class="human-origin-status">We can still build your Mackinac style and decision order. Exact ferry timing stays locked until you add a starting point.</div>':"")+
         '<div class="human-stage-actions"><button class="human-btn" type="button" data-action="back">Back</button><div style="display:flex;gap:10px;align-items:center"><span class="human-error" id="humanStageError"></span><button class="human-btn primary" type="button" data-action="next">Next: who is going</button></div></div>'+
@@ -301,12 +301,14 @@
   function validateStep(){
     if(state.step===0){
       if(!state.tripDuration)return "Choose the trip length that is closest to what you are planning.";
+      if(state.tripDuration==="four-plus"&&(!Number.isFinite(Number(state.nightCount))||Number(state.nightCount)<4||Number(state.nightCount)>7))return "Choose the exact number of nights, from 4 to 7.";
       if(!state.dateMode)return "Tell us whether the date is fixed or still flexible.";
       if(state.dateMode==="date"&&!state.tripDate)return "Choose the trip date.";
     }
     if(state.step===1){
       if(!state.originMode)return "Choose where the trip starts.";
       if(state.originMode==="from-home"&&!clean(state.originText))return "Add the city you are driving from.";
+      if(state.originMode==="nearby"&&!state.nearbySide)return "Choose which side of the Straits you are on, or say either port works.";
     }
     if(state.step===2){
       if(!state.party)return "Choose who is going.";
@@ -343,8 +345,8 @@
     p.set("bikes",state.visions.includes("biking")?"rent":"none");
     p.set("pace",state.walking==="high"?"active":state.walking==="low"?"easy":"balanced");
     p.set("mobility",state.walking==="low"?"limited":"standard");
-    p.set("origin",state.originMode==="nearby"?"nearby":state.originResolved?.preferred_port==="St. Ignace"?"upper":"lower");
-    p.set("intake_trip_duration",state.tripDuration);
+    p.set("origin",state.originMode==="nearby"?(state.nearbySide==="mackinaw"?"mackinaw-city":state.nearbySide==="st-ignace"?"st-ignace":"nearby"):state.originResolved?.preferred_port==="St. Ignace"?"upper":"lower");
+    p.set("intake_trip_duration",buildAnswers().trip_duration);
     p.set("intake_party",state.party);
     p.set("intake_trip_vision",state.visions.join(","));
     p.set("intake_trip_loss",state.loss);
@@ -401,7 +403,8 @@
   function humanTripTitle(){
     if(state.tripDuration==="day")return "Your Mackinac day trip";
     if(state.tripDuration==="one-night")return "Your one-night Mackinac plan";
-    if(state.tripDuration==="two-three")return "Your 2–3 night Mackinac plan";
+    if(state.tripDuration==="two-night")return "Your 2-night Mackinac plan";
+    if(state.tripDuration==="three-night")return "Your 3-night Mackinac plan";
     if(state.tripDuration==="four-plus")return "Your longer Mackinac stay";
     return "Your Mackinac trip";
   }
@@ -592,6 +595,7 @@
 
   shell.addEventListener("input",e=>{
     if(e.target.id==="humanTripDate")state.tripDate=e.target.value;
+    if(e.target.id==="humanNightCount")state.nightCount=Math.max(4,Math.min(7,Number(e.target.value)||4));
     if(e.target.id==="humanOrigin"){state.originText=e.target.value;state.originResolved=null;}
     if(e.target.id==="humanEarliestLeave")state.earliestLeave=e.target.value;
     saveDraft();
@@ -610,15 +614,16 @@
     if(!state.tripDuration){
       state.tripDuration=a.trip_duration||(
         restoredPlan.trip==="day-trip"?"day":
-        restoredPlan.trip==="overnight"?(Number(restoredPlan.nights)>=4?"four-plus":Number(restoredPlan.nights)>=2?"two-three":"one-night"):""
+        restoredPlan.trip==="overnight"?(Number(restoredPlan.nights)>=4?"four-plus":Number(restoredPlan.nights)===3?"three-night":Number(restoredPlan.nights)===2?"two-night":"one-night"):""
       );
     }
+    if(state.tripDuration==="four-plus"&&Number(restoredPlan.nights)>=4)state.nightCount=Math.min(7,Number(restoredPlan.nights));
     if(!state.dateMode){
       state.dateMode=restoredPlan.trip_date?(restoredPlan.trip_date===detroitToday()?"today":"date"):"flexible";
     }
     if(!state.tripDate&&restoredPlan.trip_date)state.tripDate=restoredPlan.trip_date;
     if(!state.originMode){
-      if(restoredPlan.origin_text==="Already near the Straits")state.originMode="nearby";
+      if(["Mackinaw City area","St. Ignace area","Straits area; either port works","Already near the Straits"].includes(restoredPlan.origin_text)){state.originMode="nearby";state.nearbySide=restoredPlan.origin_text==="Mackinaw City area"?"mackinaw":restoredPlan.origin_text==="St. Ignace area"?"st-ignace":"either";}
       else if(clean(restoredPlan.origin_text)){state.originMode="from-home";state.originText=restoredPlan.origin_text;}
       else state.originMode="later";
     }
