@@ -39,7 +39,7 @@ function renderSource(name,state,total){
 }
 async function load(){
  try{
-  const res=await fetch("/api/detroit-outdoors?edition=cards-v1",{headers:{accept:"application/json"}});
+  const res=await fetch("/api/detroit-outdoors?edition=orchestrated-v1",{headers:{accept:"application/json"}});
   const data=await res.json();
   if(!res.ok||!data.ok)throw new Error(data.error||"Live desk unavailable");
   document.body.classList.remove("loading");
@@ -73,7 +73,8 @@ async function load(){
     renderSource("Michigan Outdoors Now place conditions",sh.outdoorsNowPlaces?.ok||0,sh.outdoorsNowPlaces?.total||6),
     renderSource("NWS point alerts",sh.nwsAlerts?.ok||0,sh.nwsAlerts?.total||6),
     `<div class="source-pill"><strong>Opportunity comparison</strong><br><span class="${sh.outdoorsNowOpportunityLayer?.ok?"ok":"partial"}">${sh.outdoorsNowOpportunityLayer?.ok?"live":"degraded"}</span></div>`,
-    `<div class="source-pill"><strong>JEV lead judgment</strong><br><span class="${data.decision?.lead?.mode==="shared-harness-jev"?"ok":"partial"}">${esc(data.decision?.lead?.mode||"deterministic")}</span></div>`
+    `<div class="source-pill"><strong>JEV lead judgment</strong><br><span class="${data.decision?.lead?.mode==="shared-harness-jev"?"ok":"partial"}">${esc(data.decision?.lead?.mode||"deterministic")}</span></div>`,
+    `<div class="source-pill"><strong>JEV editorial placement</strong><br><span class="${data.decision?.editorialPlacement?.mode==="shared-harness-jev"?"ok":"partial"}">${esc(data.editorialPlan?.planId||"fallback")} · ${esc((data.editorialPlan?.slots||[]).length)} prose slot(s)</span></div>`
   ].join("");
   $("#writer-mode").textContent=data.decision?.editorial?.mode||"deterministic";
   $("#suppressed").textContent=data.suppressed?.length?data.suppressed.length+" place(s) suppressed by active NWS hazard rules.":"No place was suppressed by the hard NWS hazard veto on this update.";
