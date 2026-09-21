@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "updated": "2026-09-02",
+  "updated": "2026-09-21",
   "purpose": "Operational overlay for durable Tool Network Registry relationships, released repairs, and launch gates. No growth or search experiment is active.",
   "relationships": [
     {
@@ -74,6 +74,54 @@
       "strength": "strong",
       "surface": "great-lakes-levels-footer",
       "reason": "The live Great Lakes Levels site explicitly hands users to the Great Lakes Buoy Dashboard for current wave, wind, and water-temperature observations."
+    },
+    {
+      "from": "detroit-outdoors",
+      "to": "outdoors-now",
+      "type": "personalize-next",
+      "strength": "essential",
+      "surface": "detroit-opportunity-desk",
+      "reason": "The Detroit desk answers what stands out now; Michigan Outdoors Now owns personalized origin, group-needs, and day-trip planning."
+    },
+    {
+      "from": "detroit-outdoors",
+      "to": "great-lakes-buoys",
+      "type": "specialist-verify",
+      "strength": "strong",
+      "surface": "detroit-opportunity-card",
+      "reason": "Any paddling lead remains weather-only until the visitor verifies waves, wind, water temperature, and marine context in the Great Lakes buoy specialist."
+    },
+    {
+      "from": "detroit-outdoors",
+      "to": "aurora",
+      "type": "specialist-verify",
+      "strength": "strong",
+      "surface": "detroit-opportunity-card",
+      "reason": "Night-sky candidates hand off to Northern Lights Michigan for live space-weather and visibility verification."
+    },
+    {
+      "from": "detroit-outdoors",
+      "to": "fall-color",
+      "type": "seasonal-evidence",
+      "strength": "strong",
+      "surface": "detroit-seasonal-context",
+      "reason": "The Southeast Lower fall-color model adds seasonal context without transferring statewide fall-color search ownership to the Detroit desk."
+    },
+    {
+      "from": "detroit-outdoors",
+      "to": "birding",
+      "type": "specialist-next",
+      "strength": "optional",
+      "surface": "detroit-opportunity-card",
+      "reason": "Weather-fit birding windows can continue to the Michigan Birding Report for actual sightings and hotspots rather than implying sightings from weather alone."
+    },
+    {
+      "from": "outdoors-now",
+      "to": "detroit-outdoors",
+      "type": "live-opportunity-next",
+      "strength": "optional",
+      "surface": "southeast-michigan-live-window",
+      "reason": "The personalized statewide planner can hand Southeast Michigan visitors to the Detroit desk when they want the small set of unusually useful windows happening now."
     }
   ],
   "repairs": [
