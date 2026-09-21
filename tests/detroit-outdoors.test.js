@@ -232,3 +232,10 @@ test("Detroit Outdoors distinguishes explicit JEV reject from low-confidence rev
  assert.match(route,/mode:"deterministic-evidence-review-fallback"/);
  assert.match(route,/deterministic evidence gate passed/);
 });
+
+
+test("Detroit Outdoors client bundle parses as JavaScript",()=>{
+ const client=read("public/assets/detroit-outdoors.js");
+ assert.doesNotThrow(()=>new Function(client));
+ assert.doesNotMatch(client,/\\n const sourceLine/);
+});
