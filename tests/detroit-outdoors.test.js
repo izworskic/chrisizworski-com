@@ -62,7 +62,7 @@ test("Detroit Outdoors reuses existing engines and gates generated copy",()=>{
  assert.match(route,/api\/fall-color-conditions/);
  assert.match(route,/ANTHROPIC_API_KEY/);
  assert.match(route,/claude-sonnet-4-6/);
- assert.match(route,/AbortSignal\\.timeout\\(32000\\)/);
+ assert.match(route,/AbortSignal\.timeout\(32000\)/);
  assert.match(route,/s-maxage=300/);
 });
 
