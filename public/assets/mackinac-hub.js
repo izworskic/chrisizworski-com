@@ -148,8 +148,8 @@
     host.querySelector("[data-adaptive-skip]")?.addEventListener("click",()=>host.querySelector("[data-platform-adaptive]")?.remove());
   }
 
-  async function classify(answers){
-    const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json",accept:"application/json"},body:JSON.stringify({answers,surface:rawSurface})});
+  async function classify(answers,plan=null){
+    const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json",accept:"application/json"},body:JSON.stringify({answers,surface:rawSurface,trip_date:plan?.trip_date||null})});
     const data=await r.json();
     if(!r.ok)throw new Error(data?.detail||data?.error||`HTTP ${r.status}`);
     return data;
@@ -157,8 +157,8 @@
 
   async function personalize(answers){
     try{
-      const data=await classify(answers);
       const plan=readPlan();
+      const data=await classify(answers,plan);
       write({answers:data.profile?.answers||answers,profile:data.profile});
       document.querySelector("[data-mackinac-platform-intake]")?.remove();
       renderFocus(data.profile,data.surface,data.profile?.answers||answers);
