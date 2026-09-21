@@ -27,6 +27,20 @@ test('closure matching requires official closure semantics and trail identity',(
   assert.equal(closureForSegment({id:'8',trailNetwork:'Trail 8'},closures),null);
 });
 
+test('closure matching is exact, not substring, so one closed trail number does not falsely close every trail number that starts with it',()=>{
+  // Regression test for a real bug found live against the DNR closures
+  // layer: a single closure for "LP 4" was silently also matching (and
+  // therefore closing) LP 47, LP 487, LP 482 and LP 404, because the
+  // matcher used name.includes()/cname.includes() instead of an exact
+  // comparison. DNRTrail is always the literal placeholder "DNR Trail" on
+  // every real closure record, never a usable id, so it must never match.
+  const closures=[{properties:{DNRTrail:'DNR Trail',TrailNameP:'LP 4',OpenClosed:'Temporarily Closed',Snowmobile:'Yes'}}];
+  assert.ok(closureForSegment({id:'seg-1',trailNetwork:'LP 4'},closures),'the actually-closed trail must still match');
+  for(const name of ['LP 47','LP 487','LP 482','LP 404','LP 4 Spur']){
+    assert.equal(closureForSegment({id:`seg-${name}`,trailNetwork:name},closures),null,`"${name}" must not falsely match the "LP 4" closure`);
+  }
+});
+
 test('stale grooming stays stale independently of page freshness',()=>{
   const f=freshness('2023-03-06T12:00:00Z','grooming',new Date('2026-01-15T12:00:00Z').getTime());
   assert.equal(f.state,'STALE');
