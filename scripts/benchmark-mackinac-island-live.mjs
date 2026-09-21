@@ -6,14 +6,14 @@ const route=fs.readFileSync('lib/mackinac-island/route.js','utf8');
 const all=html+'\n'+css+'\n'+js+'\n'+route;
 const pass=(...checks)=>checks.every(Boolean);
 const factors={
-  decision_confusion: pass(/Mackinac Island Today/.test(html),/Best time to arrive/.test(html),/primaryRec/.test(js),/Why this plan fits today/.test(html))?0:1,
+  decision_confusion: pass(/Build Your Mackinac Island Trip/.test(html),/profile-logistics/.test(html),/mackinac-plan-ready/.test(css),/Fine-tune your Mackinac plan/.test(html))?0:1,
   recommendation_unreliability: pass(/Choose exactly one supplied plan id or NONE/.test(route),/recommended_return/.test(route),/last_scheduled_return/.test(route),/not guessing at a ferry time/i.test(js))?0:1,
   stale_or_unverified_data: pass(/freshness/.test(route),/published-unverified-this-request/.test(route),/source_failures|failures/.test(route),/What this plan is using/.test(html))?0:1,
   mobile_friction: pass(/max-width:390px/.test(css),/viewport-fit=cover/.test(html),/hero-actions/.test(css),/@container decision \(max-width:760px\)/.test(css),/orientation:landscape/.test(css))?0:1,
   generic_travel_content: pass(/This tool is trip-planning guidance/.test(html),/Which ferry gets you onto the Island best/.test(html),/Make it your Mackinac/.test(html))?0:1,
   unnecessary_clicks: pass(/Best time to arrive/.test(html),/Downtown crowds/.test(html),/Biking/.test(html),/Head back/.test(html))?0:1,
   page_load_cost: pass(/defer/.test(html),/IntersectionObserver/.test(js),/loadLeaflet/.test(js))?0:1,
-  inaccessible_information: pass(/Skip to live decision/.test(html),/:focus-visible/.test(css),/aria-live/.test(html),/aria-pressed/.test(html))?0:1,
+  inaccessible_information: pass(/Skip to trip planner/.test(html),/:focus-visible/.test(css),/aria-live/.test(html),/aria-pressed/.test(html))?0:1,
   visual_clutter: pass(!/glassmorphism/i.test(all),!/<svg[^>]*>[^<]{0,30}<\/svg>/i.test(html),/decision-grid/.test(html))?0:1
 };
 const weights={decision_confusion:25,recommendation_unreliability:20,stale_or_unverified_data:15,mobile_friction:10,generic_travel_content:10,unnecessary_clicks:8,page_load_cost:5,inaccessible_information:4,visual_clutter:3};

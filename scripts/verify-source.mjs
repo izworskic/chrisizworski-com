@@ -26,6 +26,30 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Sep 21: Mackinac destination UX rebuild. One shared My Trip intake now owns
+  // profile + practical trip state and downstream pages inherit that context.
+  "/mackinac-island/",
+  "/mackinac-island/plan/",
+  "/mackinac-island/ferry-planner/",
+  "/mackinac-island/where-to-stay/",
+  "/mackinac-island/dining/",
+  "/mackinac-island/things-to-do/",
+  "/mackinac-island/events/",
+  "/mackinac-island/around-the-straits/",
+  "/mackinac-island/day-trip/",
+  "/mackinac-island/with-kids/",
+  "/mackinac-island/2-day-itinerary/",
+  "/mackinac-island/from-detroit/",
+  "/mackinac-island/from-chicago/",
+  "/mackinac-island/from-traverse-city/",
+  "/mackinac-island/from-grand-rapids/",
+  "/mackinac-island/limited-walking/",
+  "/mackinac-island/bike-day/",
+  "/mackinac-island/fall/",
+  "/assets/mackinac-island.js",
+  "/assets/mackinac-island.css",
+  "/assets/mackinac-hub.js",
+  "/assets/mackinac-intent.css",
   // Sep 20: Search Console CTR + branded-authority sprint. Existing publisher credits on
   // priority search pages now link to the canonical Chris Izworski profile; no titles,
   // H1s, canonicals, live logic or ad settings changed. Re-crawl after production release.

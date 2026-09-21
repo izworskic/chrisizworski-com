@@ -57,3 +57,8 @@
   .platform-choice-row button{text-align:left;border-radius:12px}
   .platform-adaptive .platform-choice-row{grid-template-columns:1fr}
 }
+
+.trip-context-facts{font-weight:780;color:var(--green)!important}
+.platform-intake-card{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:18px}
+.platform-intake-card>.btn{align-self:center;white-space:nowrap}
+@media(max-width:760px){.platform-intake-card{grid-template-columns:1fr}.platform-intake-card>.btn{justify-self:start;margin-top:0}}

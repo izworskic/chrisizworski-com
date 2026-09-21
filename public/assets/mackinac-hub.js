@@ -2,6 +2,7 @@
   "use strict";
 
   const KEY="mackinac-trip-profile-v1";
+  const PLAN_KEY="mackinac-trip-plan-v1";
   const API="/api/mackinac-profile";
   const body=document.body;
   const rawSurface=body?.dataset?.mackinacSurface||body?.dataset?.mackinacIntent||"today";
@@ -14,12 +15,38 @@
   function write(value){
     try{localStorage.setItem(KEY,JSON.stringify({...value,saved_at:Date.now()}));}catch{}
   }
+  function readPlan(){
+    try{const raw=localStorage.getItem(PLAN_KEY);return raw?JSON.parse(raw)?.plan||null:null;}catch{return null;}
+  }
+  function dateLabel(value){
+    if(!value)return "";
+    const d=new Date(`${value}T12:00:00`);
+    return Number.isNaN(d.getTime())?String(value):d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+  }
+  function planFacts(plan){
+    if(!plan)return [];
+    const facts=[];
+    if(plan.trip_date)facts.push(dateLabel(plan.trip_date));
+    if(plan.origin_text)facts.push(`from ${plan.origin_text}`);
+    if(plan.depart_at)facts.push(`leave ${plan.depart_at}`);
+    if(plan.trip==="overnight")facts.push(`${Number(plan.nights||1)} night${Number(plan.nights||1)===1?"":"s"}`);
+    else if(plan.trip)facts.push("day trip");
+    const adults=Number(plan.adults||0),children=Number(plan.children||0);
+    if(adults||children)facts.push([adults?`${adults} adult${adults===1?"":"s"}`:"",children?`${children} child${children===1?"":"ren"}`:""].filter(Boolean).join(" + "));
+    return facts.filter(Boolean);
+  }
   function track(name,params={}){
     try{if(typeof window.gtag==="function")window.gtag("event",name,params);}catch{}
   }
   function surfaceLabel(){
-    const map={today:"Today",plan:"Plan",ferries:"Ferries",stay:"Stay",eat:"Eat",explore:"Explore",events:"Events",straits:"Straits"};
+    const map={"my-trip":"My Trip",today:"My Trip",plan:"Trip guide",ferries:"Ferries",stay:"Stay",eat:"Eat",explore:"Explore",events:"Events",straits:"Straits"};
     return map[rawSurface]||rawSurface.replace(/-/g," ");
+  }
+  function normalizePrimaryNav(){
+    const nav=document.querySelector(".mackinac-destination-nav");if(!nav)return;
+    const root=nav.querySelector('[data-mackinac-nav="today"],[data-mackinac-nav="my-trip"]');
+    if(root){root.dataset.mackinacNav="my-trip";root.textContent="My Trip";root.href="/mackinac-island/";}
+    nav.querySelector('[data-mackinac-nav="plan"]')?.remove();
   }
   function insertAtDecisionFront(node){
     const hero=document.querySelector("main .hero");
@@ -49,11 +76,14 @@
     const nav=document.querySelector(".mackinac-destination-nav");
     if(!nav||!order.length)return;
     const links=new Map([...nav.querySelectorAll("[data-mackinac-nav]")].map(a=>[a.dataset.mackinacNav,a]));
-    for(const item of order){
+    const seen=new Set();
+    const normalized=order.map(item=>({...item,id:(item.id==="today"||item.id==="plan")?"my-trip":item.id})).filter(item=>!seen.has(item.id)&&seen.add(item.id));
+    for(const item of normalized){
       const a=links.get(item.id);
       if(a)nav.appendChild(a);
     }
-    const first=order.find(x=>x.id!==rawSurface&&links.has(x.id));
+    const current=rawSurface==="today"?"my-trip":rawSurface;
+    const first=normalized.find(x=>x.id!==current&&links.has(x.id));
     nav.querySelectorAll("a").forEach(a=>a.classList.remove("trip-next"));
     if(first)links.get(first.id)?.classList.add("trip-next");
   }
@@ -80,7 +110,7 @@
     }
   }
 
-  function renderSavedContext(profile,surface){
+  function renderSavedContext(profile,surface,plan){
     let host=document.querySelector("[data-trip-context]");
     if(!host){
       host=document.createElement("aside");
@@ -91,8 +121,9 @@
       if(focus)focus.insertAdjacentElement("afterend",shell);else insertAtDecisionFront(shell);
     }
     const label=profile?.primary?.label||"your Mackinac trip";
+    const facts=planFacts(plan);
     host.hidden=false;
-    host.innerHTML=`<div><span>Your Mackinac trip stays with you</span><strong>You're planning a ${esc(label)} trip</strong><p>${esc(profile?.primary?.summary||"Your choices are shaping the same trip across every Mackinac page.")}</p></div><a class="btn primary" data-mackinac-planner-cta href="/mackinac-island/#trip-intake">Open my full trip</a>`;
+    host.innerHTML=`<div><span>Using your saved Mackinac plan</span><strong>${esc(label)}</strong><p class="trip-context-facts">${facts.length?facts.map(esc).join(" · "):esc(profile?.primary?.summary||"Your choices are shaping the same trip across every Mackinac page.")}</p><p>${esc(profile?.primary?.summary||"This page is already using the trip you built.")}</p></div><a class="btn primary" data-mackinac-planner-cta href="/mackinac-island/#trip-intake">Edit my trip</a>`;
     host.querySelector("[data-mackinac-planner-cta]")?.addEventListener("click",()=>track("mackinac_planner_cta",{surface:rawSurface,personalized:true}));
     if(surface?.engine==="shared-harness-jev")host.dataset.engine="jev";
   }
@@ -126,10 +157,11 @@
   async function personalize(answers){
     try{
       const data=await classify(answers);
+      const plan=readPlan();
       write({answers:data.profile?.answers||answers,profile:data.profile});
       document.querySelector("[data-mackinac-platform-intake]")?.remove();
       renderFocus(data.profile,data.surface,data.profile?.answers||answers);
-      renderSavedContext(data.profile,data.surface);
+      renderSavedContext(data.profile,data.surface,plan);
       applyNavOrder(data.surface?.nav_order);
       applyPlaceRanking(data.surface);
       track("mackinac_surface_personalized",{surface:data.surface?.surface||rawSurface,profile:data.profile?.primary?.id||"unknown",engine:data.surface?.engine||data.profile?.engine||"deterministic"});
@@ -143,47 +175,24 @@
     return q.type==="multi"?Array.isArray(value)&&value.length>0:Boolean(value);
   }
 
-  async function renderIntake(existing={}){
+  function renderStartGate(){
     const host=ensureIntakeHost();
-    try{
-      const r=await fetch(API,{headers:{accept:"application/json"}});const schema=await r.json();if(!r.ok)throw new Error(`HTTP ${r.status}`);
-      const answers={...existing};
-      const questions=schema.base_questions||[];
-      const next=questions.find(q=>!valuePresent(q,answers[q.id]));
-      if(!next){await personalize(answers);return;}
-      const selected=new Set(Array.isArray(answers[next.id])?answers[next.id]:[]);
-      host.innerHTML=`<div class="shell"><div class="platform-intake-card"><div><span class="platform-kicker">Make this page about your trip</span><h2>${esc(next.prompt)}</h2><p>Four high-value answers shape the whole Mackinac platform. You won't restart when you change pages.</p></div><div class="platform-choice-row">${(next.options||[]).map(([value,label])=>`<button type="button" data-intake-value="${esc(value)}" aria-pressed="${selected.has(value)?"true":"false"}">${esc(label)}</button>`).join("")}</div>${next.type==="multi"?'<button type="button" class="btn primary" data-intake-continue disabled>Continue</button>':""}<button type="button" class="text-button" data-intake-skip>Use the general page</button></div></div>`;
-      const buttons=[...host.querySelectorAll("[data-intake-value]")];
-      if(next.type==="multi"){
-        const cont=host.querySelector("[data-intake-continue]");
-        buttons.forEach(btn=>btn.addEventListener("click",()=>{
-          const value=btn.dataset.intakeValue;
-          if(selected.has(value))selected.delete(value);else if(selected.size<Number(next.max||2))selected.add(value);
-          buttons.forEach(b=>b.setAttribute("aria-pressed",String(selected.has(b.dataset.intakeValue))));
-          cont.disabled=selected.size===0;
-        }));
-        cont?.addEventListener("click",()=>{answers[next.id]=[...selected];write({answers});track("mackinac_intake_answered",{question:next.id,surface:rawSurface});renderIntake(answers);});
-      }else{
-        buttons.forEach(btn=>btn.addEventListener("click",()=>{answers[next.id]=btn.dataset.intakeValue;write({answers});track("mackinac_intake_answered",{question:next.id,surface:rawSurface});renderIntake(answers);}));
-      }
-      host.querySelector("[data-intake-skip]")?.addEventListener("click",()=>{host.remove();track("mackinac_intake_skipped",{surface:rawSurface,question:next.id});});
-      track("mackinac_platform_intake_shown",{surface:rawSurface,question:next.id});
-    }catch{
-      host.remove();
-    }
+    host.innerHTML=`<div class="shell"><div class="platform-intake-card"><div><span class="platform-kicker">Start with one shared trip</span><h2>Build your Mackinac trip first</h2><p>Answer the trip questions once on My Trip. Your dates, starting point and preferences will then follow you through Ferries, Stay, Eat, Explore, Events and Straits.</p></div><a class="btn primary" data-mackinac-planner-cta href="/mackinac-island/#trip-intake">Build my trip</a></div></div>`;
+    host.querySelector("[data-mackinac-planner-cta]")?.addEventListener("click",()=>track("mackinac_planner_cta",{surface:rawSurface,start_gate:true}));
+    track("mackinac_trip_gate_shown",{surface:rawSurface});
   }
-
   function wireTracking(){
     document.querySelectorAll("[data-mackinac-nav]").forEach(a=>a.addEventListener("click",()=>track("mackinac_destination_nav",{surface:rawSurface,target:a.dataset.mackinacNav||"unknown"})));
     document.querySelectorAll("[data-mackinac-planner-cta]").forEach(a=>a.addEventListener("click",()=>track("mackinac_planner_cta",{surface:rawSurface})));
   }
 
   async function apply(){
+    normalizePrimaryNav();
     wireTracking();
     if(isLive)return;
     const saved=read();
     if(saved?.profile?.complete&&saved?.answers)await personalize(saved.answers);
-    else await renderIntake(saved?.answers||{});
+    else renderStartGate();
   }
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",apply,{once:true});else apply();
