@@ -143,7 +143,7 @@ test("saved trips hydrate back into the human planner instead of restarting ques
   assert.ok(js.includes("function hydrateFromSavedTrip"));
   assert.ok(js.includes("restoredProfile?.complete&&restoredPlan"));
   assert.ok(js.includes("hydrateFromSavedTrip()"));
-  assert.ok(js.includes('restored:true,mode:"plan"'));
+  assert.ok(js.includes('restored:true,source,mode:"plan"'));
 });
 
 
