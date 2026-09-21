@@ -62,7 +62,7 @@ test("Detroit Outdoors makes JEV the board editor after hard safety gates",()=>{
  assert.match(route,/parkSafePool\.push\(\.\.\.result\.candidates\)/);
  assert.match(route,/const emitted=emitSpecialistCandidates/);
  assert.match(route,/const specialistGate=hardGateSpecialistCandidates\(emitted\.candidates\)/);
- assert.match(route,/const mixed=dedupeMixedPool\(parkSafePool,specialistGate\.safe\)/);
+ assert.match(route,/const mixed=dedupeMixedPool\(parkSafePool,specialistGate\.safe,specialistGate\.rejected\)/);
  assert.match(route,/const safePool=mixed\.candidates/);
  assert.match(route,/const boardDecision=await editBoard\(safePool,4\)/);
  assert.match(route,/You are the Detroit Outdoors board editor/);
@@ -306,4 +306,16 @@ test("Detroit Outdoors seals normalized specialist evidence before Haiku and rev
  assert.match(route,/opportunityType:candidate\.opportunityType/);
  assert.match(route,/verifiedEvidence:candidate\.verifiedEvidence/);
  assert.match(route,/specialistHandoff:candidate\.specialistHandoff/);
+});
+
+
+test("Detroit Outdoors propagates specialist hard vetoes over legacy equivalents",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const engines=read("lib/detroit-outdoors/engines.js");
+ assert.match(route,/dedupeMixedPool\(parkSafePool,specialistGate\.safe,specialistGate\.rejected\)/);
+ assert.match(engines,/vetoedLegacy/);
+ assert.match(engines,/legacyId:normalized\.id/);
+ assert.match(engines,/specialistId:veto\.id/);
+ assert.match(engines,/Required NWS park-point alert feed is unavailable/);
+ assert.match(engines,/Required NWS alert feed is unavailable/);
 });
