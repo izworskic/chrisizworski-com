@@ -14,15 +14,16 @@ function renderWeather(w){
   chip("AQI",w.aqi)
  ].join("");
 }
-function renderCard(c){
+function renderCard(c,note){
  const specialist=c.specialist?`<div class="specialist"><strong>${esc(c.specialist.label)}:</strong> ${esc(c.specialist.headline)}</div>`:"";
- const reasons=(c.reasons||[]).map(r=>`<li>${esc(r)}</li>`).join("");
+ const reasons=((c.story&&c.story.whyToday)||c.reasons||[]).slice(0,3).map(r=>`<li>${esc(r)}</li>`).join("");
  return `<article class="card">
    <div class="slot">${esc(c.slot)}</div>
    <h3>${esc(c.place.name)}</h3>
    <div class="meta">${esc(c.place.area)} · ${esc(c.place.drive)} from central Detroit · ${esc(c.title)}</div>
    <div class="scoreline"><span class="score">${esc(c.score)}/100</span><span class="quality">${esc(c.quality)}</span></div>
    <div class="weather">${renderWeather(c.weather)}</div>
+   ${note?`<p class="card-read">${esc(note)}</p>`:""}
    <ul class="reasons">${reasons}</ul>
    ${specialist}
    <p class="caveat">${esc(c.caveat)}</p>
@@ -38,7 +39,7 @@ function renderSource(name,state,total){
 }
 async function load(){
  try{
-  const res=await fetch("/api/detroit-outdoors",{headers:{accept:"application/json"}});
+  const res=await fetch("/api/detroit-outdoors?edition=cards-v1",{headers:{accept:"application/json"}});
   const data=await res.json();
   if(!res.ok||!data.ok)throw new Error(data.error||"Live desk unavailable");
   document.body.classList.remove("loading");
@@ -50,7 +51,7 @@ async function load(){
   $("#desk-note").textContent=data.editorial;
   const cards=$("#opportunity-grid");
   if(data.opportunities&&data.opportunities.length){
-    cards.innerHTML=data.opportunities.map(renderCard).join("");
+    cards.innerHTML=data.opportunities.map(c=>renderCard(c,data.edition?.notes?.[c.id])).join("");
   }else{
     cards.innerHTML='<div class="error">The desk is holding because live source coverage is too thin to make a useful recommendation.</div>';
   }
