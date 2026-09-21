@@ -76,3 +76,11 @@ test("cross-page client actively classifies and shapes instead of only tracking 
   assert.match(js,/profile-fit-badge/);
   assert.doesNotMatch(js,/\/api\/mackinac-island/);
 });
+
+
+test("downstream Mackinac personalization carries the saved trip date",()=>{
+  const hub=fs.readFileSync(path.join(__dirname,"..","public","assets","mackinac-hub.js"),"utf8");
+  assert.match(hub,/async function classify\(answers,plan=null\)/);
+  assert.match(hub,/trip_date:plan\?\.trip_date\|\|null/);
+  assert.match(hub,/const plan=readPlan\(\);\s*const data=await classify\(answers,plan\);/);
+});
