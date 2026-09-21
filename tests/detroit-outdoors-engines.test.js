@@ -117,6 +117,19 @@ test("extreme observed alerts are hard vetoes even when the event name is outsid
   assert.match(gate.rejected[0].reasons.join(" "),/dangerous weather warning/i);
 });
 
+test("water candidates fail closed when required water temperature is missing",()=>{
+  const state=safeBuoyState();
+  state.data.stations[0].water_t=null;
+  const candidates=_test.waterCandidate({
+    placeStates:[placeState("lake-st-clair-metropark")],
+    alertStates:emptyAlerts(1),
+    waterState:state
+  });
+  const gate=hardGateSpecialistCandidates(candidates);
+  assert.equal(gate.safe.length,0);
+  assert.match(gate.rejected[0].reasons.join(" "),/water-temperature observation is unavailable/i);
+});
+
 test("water candidates fail closed when the dedicated marine alert source is unavailable",()=>{
   const state=safeBuoyState();
   state.marineAlerts={ok:false,error:"NWS unavailable",data:null};
