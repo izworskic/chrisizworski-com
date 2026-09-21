@@ -1,0 +1,42 @@
+name: Mackinac preview runtime smoke
+
+on:
+  push:
+    branches:
+      - mackinac-human-planner-v2-20260921
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Smoke live preview in Chromium
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="https://chrisizworski-com-git-mackin-cdf0c1-izworski-gmailcoms-projects.vercel.app/mackinac-island/"
+          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$BROWSER"
+
+          curl --retry 5 --retry-delay 2 --fail -Ls "$ROOT" -o /tmp/root.html
+          grep -q 'mackinac-human-planner.js?v=20260921-human2' /tmp/root.html
+          grep -q 'mackinac-human-planner.css?v=20260921-human2' /tmp/root.html
+
+          "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=7000 --dump-dom "$ROOT" > /tmp/root-dom.html
+          grep -q 'mackinac-human-v2' /tmp/root-dom.html
+          grep -q 'human-planner-shell' /tmp/root-dom.html
+          grep -q 'Build a Mackinac trip that actually fits.' /tmp/root-dom.html
+          grep -q '1 · Trip shape' /tmp/root-dom.html
+          grep -q 'I cannot leave before' /tmp/root-dom.html
+
+          SHARED='https://chrisizworski-com-git-mackin-cdf0c1-izworski-gmailcoms-projects.vercel.app/mackinac-island/#plan=v1&date=2026-09-27&from=Mackinaw+City+area&trip=day-trip&n=1&a=2&c=0&bikes=none&pace=balanced&walk=standard&dinner=none&personas=day-trip%2Cfirst-visit&duration=day&party=couple&vision=icons%2Cscenery&loss=rushed&walktol=moderate'
+          "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=12000 --dump-dom "$SHARED" > /tmp/shared-dom.html
+          grep -q 'Your first move' /tmp/shared-dom.html
+          grep -q 'Head to dock' /tmp/shared-dom.html
+          grep -q 'What to decide next' /tmp/shared-dom.html
+          ! grep -q 'Question 1 of' /tmp/shared-dom.html
+
+          echo "PASS: Mackinac human planner preview executed in Chromium."
