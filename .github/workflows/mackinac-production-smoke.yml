@@ -1,0 +1,51 @@
+name: Mackinac production smoke
+
+on:
+  push:
+    branches:
+      - mackinac-production-smoke-20260921
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify live Mackinac trip architecture
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://chrisizworski.com/mackinac-island"
+          curl -fsSL -H 'Cache-Control: no-cache' --max-time 30 "$base/?prod-smoke=${GITHUB_RUN_ID}" -o /tmp/root.html
+          grep -q 'Build Your Mackinac Island Trip' /tmp/root.html
+          grep -q 'data-mackinac-surface="my-trip"' /tmp/root.html
+          grep -q 'data-mackinac-nav="my-trip"' /tmp/root.html
+          ! grep -q 'data-mackinac-nav="today"' /tmp/root.html
+          ! grep -q 'data-mackinac-nav="plan"' /tmp/root.html
+          grep -q 'class="profile-logistics"' /tmp/root.html
+          grep -q 'id="profileTripDate"' /tmp/root.html
+          grep -q 'id="profileOriginInput"' /tmp/root.html
+          grep -q 'id="profileDepartTime"' /tmp/root.html
+          grep -q 'mackinac-island.js?v=20260921-trip1' /tmp/root.html
+          grep -q 'mackinac-hub.js?v=20260921-trip1' /tmp/root.html
+
+          for path in ferry-planner where-to-stay dining things-to-do events around-the-straits; do
+            curl -fsSL -H 'Cache-Control: no-cache' --max-time 30 "$base/$path/?prod-smoke=${GITHUB_RUN_ID}" -o "/tmp/$path.html"
+            grep -q 'data-mackinac-nav="my-trip"' "/tmp/$path.html"
+            ! grep -q 'data-mackinac-nav="today"' "/tmp/$path.html"
+            ! grep -q 'data-mackinac-nav="plan"' "/tmp/$path.html"
+            grep -q 'data-trip-context' "/tmp/$path.html"
+            grep -q 'mackinac-hub.js?v=20260921-trip1' "/tmp/$path.html"
+          done
+
+          curl -fsSL -H 'Cache-Control: no-cache' --max-time 30 "https://chrisizworski.com/assets/mackinac-hub.js?v=20260921-trip1&prod-smoke=${GITHUB_RUN_ID}" -o /tmp/hub.js
+          grep -q 'mackinac-trip-plan-v1' /tmp/hub.js
+          grep -q 'Using your saved Mackinac plan' /tmp/hub.js
+          grep -q 'mackinac_trip_gate_shown' /tmp/hub.js
+          grep -q 'renderStartGate' /tmp/hub.js
+
+          curl -fsSL -H 'Cache-Control: no-cache' --max-time 30 "https://chrisizworski.com/assets/mackinac-island.js?v=20260921-trip1&prod-smoke=${GITHUB_RUN_ID}" -o /tmp/root.js
+          grep -q 'mackinac-plan-ready' /tmp/root.js
+          grep -q 'profileTripDate' /tmp/root.js
+          grep -q 'profileOriginInput' /tmp/root.js
+          grep -q 'profileDepartTime' /tmp/root.js
+
+          echo "Mackinac production smoke PASS"
