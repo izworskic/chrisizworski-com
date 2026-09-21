@@ -48,7 +48,7 @@ test("Detroit Outdoors uses the writer as an editor rather than a template fille
  assert.match(route,/Desk read: 80 to 115 words/);
  assert.match(route,/Card notes: write only for candidate IDs listed in cardBriefs/);
  assert.match(route,/Return JSON only/);
- assert.match(route,/detroit-outdoors:edition:v7/);
+ assert.match(route,/detroit-outdoors:desk:v8/);\n assert.match(route,/detroit-outdoors:card:v8/);
  assert.match(route,/placements:editorialPlan\.cardNotes/);
  assert.match(route,/Do not explain the tool, model, JEV, Gem, APIs, rankings, scores, signals, prompts or data stack/);
 });
@@ -56,10 +56,10 @@ test("Detroit Outdoors uses the writer as an editor rather than a template fille
 
 test("Detroit Outdoors lets JEV choose where prose adds value before the writer runs",()=>{
  const route=read("lib/detroit-outdoors/route.js");
- assert.match(route,/MAX_EDITORIAL_CARD_NOTES = 3/);
+ assert.doesNotMatch(route,/MAX_EDITORIAL_CARD_NOTES/);
  assert.match(route,/async function planEditorialPlacement/);
  assert.match(route,/Choose the editorial treatment for this one Detroit Outdoors card/);
- assert.match(route,/NO_NOTE/);
+ assert.match(route,/PLACE_CONTEXT/);
  assert.match(route,/WHY_TODAY/);
  assert.match(route,/DRIVE_DECISION/);
  assert.match(route,/NEXT_CHECK/);
@@ -69,7 +69,7 @@ test("Detroit Outdoors lets JEV choose where prose adds value before the writer 
  assert.match(route,/question:x\.question/);
  assert.match(route,/You do not choose what gets written and you do not choose placement/);
  assert.match(route,/notes object may contain only candidate IDs supplied in cardBriefs/);
- assert.match(route,/If you cannot add material value beyond visibleCard and additiveEvidence, omit that candidate from notes/);
+ assert.match(route,/Every displayed card gets its own Haiku writer/);
  assert.match(route,/synthesize at least two verified facts/);
  assert.match(route,/placement:\`card:\$\{x\.candidateId\}:after-weather\`/);
 });
@@ -145,4 +145,40 @@ test("Detroit Outdoors exposes safe Anthropic runtime diagnostics and production
  assert.match(workflow,/ANTHROPIC_API_KEY is not configured in the production runtime/);
  assert.match(workflow,/editorialMode/);
  assert.match(workflow,/EXPECTED_SHA/);
+});
+
+
+test("Detroit Outdoors runs an independent Haiku job for every ranked card",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/const cardNotes=mapped\.map/);
+ assert.doesNotMatch(route,/\.slice\(0,MAX_EDITORIAL_CARD_NOTES\)/);
+ assert.match(route,/async function writeCardEditorial/);
+ assert.match(route,/Promise\.all\(\(plan\.cardNotes\|\|\[\]\)\.map/);
+ assert.match(route,/This is an independent card-writing job/);
+ assert.match(route,/Directly answer the assigned question/);
+ assert.match(route,/const repairPrompt=/);
+ assert.match(route,/The JEV reviewer rejected the first draft/);
+ assert.match(route,/cardWriters:cardResults\.map/);
+ assert.match(route,/PLACE_CONTEXT/);
+});
+
+test("Detroit Outdoors gives every card verified place context before Haiku writes",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/const PLACE_CONTEXT/);
+ assert.match(route,/Belle Isle is a 985-acre island park/);
+ assert.match(route,/more than 700 acres of forests, fields, fens and swamps/);
+ assert.match(route,/contains 11 inland lakes/);
+ assert.match(route,/offers more than 12 miles of trails/);
+ assert.match(route,/state-designated dark sky preserves/);
+ assert.match(route,/evidence\.contextFacts\.push\(\.\.\.placeContext\.facts\)/);
+ assert.match(route,/evidence\.sources\.push\(\{label:placeContext\.sourceLabel,url:placeContext\.sourceUrl\}\)/);
+});
+
+test("Detroit Outdoors separates the desk writer from per-card writers",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/async function writeDeskEditorial/);
+ assert.match(route,/Card explanations are written separately by independent card writers/);
+ assert.match(route,/const deskPromise=writeDeskEditorial/);
+ assert.match(route,/const cardPromise=Promise\.all/);
+ assert.match(route,/const \[desk,cardResults\]=await Promise\.all/);
 });
