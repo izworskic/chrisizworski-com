@@ -56,6 +56,7 @@ jobs:
                     boardSelectedEngineCountByEngine:b.selectedEngineCountByEngine||{},
                     opportunitySourceEngines:opportunities.map(o=>o&&o.sourceEngine||null),
                     engineDiagnostics:oe,
+                    vetoedLegacyCandidates:Array.isArray(oe.vetoedLegacyCandidates)?oe.vetoedLegacyCandidates:[],
                     boardPostureMode:b.posture&&b.posture.mode||null,
                     boardSlotModes:Array.isArray(b.slots)?b.slots.map(s=>({position:s.position||null,mode:s.mode||null,choiceId:s.choiceId||null})):[],
                     cardWriterCount:writers.length,
@@ -121,6 +122,11 @@ jobs:
                     if (x.opportunityIds.some(id=>rejectedIds.has(id))) {
                       console.error("A deterministically rejected specialist candidate reached the rendered board.", ed.hardRejected, x.opportunityIds);
                       process.exit(17);
+                    }
+                    const vetoedLegacyIds=new Set((x.vetoedLegacyCandidates||[]).map(r=>r&&r.legacyId).filter(Boolean));
+                    if (x.opportunityIds.some(id=>vetoedLegacyIds.has(id))) {
+                      console.error("A legacy candidate survived an authoritative specialist hard veto.", x.vetoedLegacyCandidates, x.opportunityIds);
+                      process.exit(18);
                     }
                     if (!["shared-harness-jev","mixed"].includes(x.boardEditorMode)) {
                       console.error("Detroit board selection is not using JEV.", x.boardEditorMode, x.boardSlotModes);
