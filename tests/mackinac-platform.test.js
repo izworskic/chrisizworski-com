@@ -69,7 +69,10 @@ test("cross-page client actively classifies and shapes instead of only tracking 
   assert.match(js,/\/api\/mackinac-profile/);
   assert.match(js,/surface:rawSurface/);
   assert.match(js,/mackinac_surface_personalized/);
-  assert.match(js,/data-intake-value/);
+  assert.match(js,/mackinac-trip-plan-v1/);
+  assert.match(js,/mackinac_trip_gate_shown/);
+  assert.match(js,/Using your saved Mackinac plan/);
+  assert.doesNotMatch(js,/data-intake-value/);
   assert.match(js,/profile-fit-badge/);
   assert.doesNotMatch(js,/\/api\/mackinac-island/);
 });
