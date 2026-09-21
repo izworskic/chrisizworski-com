@@ -698,6 +698,12 @@
     if(state.webcamHls){try{state.webcamHls.destroy();}catch{} state.webcamHls=null;}
     stage.innerHTML=`<video class="webcam-video" controls muted autoplay playsinline aria-label="${esc(cam.name)} live camera"></video>`;
     const video=stage.querySelector('video');
+    const showFallback=()=>{
+      if(state.webcamSelectedId!==cam.id || !stage.contains(video))return;
+      if(state.webcamHls){try{state.webcamHls.destroy();}catch{} state.webcamHls=null;}
+      stage.innerHTML=`<div class="webcam-stage-placeholder"><strong>${esc(cam.name)}</strong><p>The live stream is unavailable here right now.</p><a class="btn primary webcam-external" href="${esc(cam.source_url)}" target="_blank" rel="noopener">Open official live camera ↗</a></div>`;
+    };
+    video.addEventListener('error',showFallback,{once:true});
     if(video.canPlayType('application/vnd.apple.mpegurl')){
       video.src=cam.stream_url;video.play().catch(()=>{});
       return;
@@ -707,9 +713,8 @@
       const hls=new Hls({enableWorker:true,lowLatencyMode:true});
       state.webcamHls=hls;hls.loadSource(cam.stream_url);hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play().catch(()=>{}));
-    }).catch(()=>{
-      stage.innerHTML=`<div class="webcam-stage-placeholder"><strong>${esc(cam.name)}</strong><p>The live stream is unavailable here right now.</p><a class="btn primary webcam-external" href="${esc(cam.source_url)}" target="_blank" rel="noopener">Open official live camera ↗</a></div>`;
-    });
+      hls.on(Hls.Events.ERROR,(_event,data)=>{if(data?.fatal)showFallback();});
+    }).catch(showFallback);
   }
 
   function cameraOwner(name){
