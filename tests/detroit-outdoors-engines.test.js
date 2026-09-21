@@ -3,6 +3,7 @@
 const test=require("node:test");
 const assert=require("node:assert/strict");
 const {
+  LAKE_ST_CLAIR_MARINE_ALERTS,
   normalizeOpportunityCandidate,
   hardGateSpecialistCandidates,
   dedupeMixedPool,
@@ -54,6 +55,10 @@ function safeBuoyState(){
     }
   };
 }
+
+test("Lake St Clair water gate uses the official NWS marine zone rather than an offshore point lookup",()=>{
+  assert.equal(LAKE_ST_CLAIR_MARINE_ALERTS,"https://api.weather.gov/alerts/active?zone=LCZ460");
+});
 
 test("normalized opportunity contract carries engine, evidence, confidence, travel and uncertainty",()=>{
   const c=normalizeOpportunityCandidate({
