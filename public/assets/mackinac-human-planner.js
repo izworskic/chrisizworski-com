@@ -478,10 +478,10 @@
           '<div class="human-section-title"><h3>Adjust without starting over</h3><p>These change the route; they do not erase the trip</p></div>'+
           '<div class="human-adjust-row">'+[
             ["relaxed","More relaxed"],["less-walking","Less walking"],["outdoors","More outdoors"],["better-dinner","Better dinner"],["less-downtown","Less downtown"],["history","More history"]
-          ].map(([v,l])=>'<button type="button" class="'+(state.tunings.includes(v)?"active":"")+'" data-tune="'+v+'">'+esc(l)+'</button>').join("")+'</div>'+
+          ].map(([v,l])=>'<button type="button" class="'+(state.tunings.includes(v)?"active":"")+'" data-tune="'+v+'">'+esc(l)+'</button>').join("")+'</div><small id="humanTuneStatus" class="human-truth-note">Use up to four adjustments at once.</small>'+
           '<div class="human-section-title"><h3>What to decide next</h3><p>The same saved trip follows you</p></div>'+
           '<div class="human-next-grid">'+nextCards().map(x=>'<a class="human-next-card" href="'+x[0]+'"><span>'+esc(x[1])+'</span><strong>'+esc(x[2])+'</strong><small>'+esc(x[3])+'</small></a>').join("")+'</div>'+
-          '<div class="human-result-actions"><button class="human-btn primary" type="button" data-action="edit">Edit trip answers</button><button class="human-btn" type="button" data-action="details">Show full live detail</button><button class="human-btn" type="button" data-action="reset">Start over</button></div>'+
+          '<div class="human-result-actions"><button class="human-btn primary" type="button" data-action="edit">Edit trip answers</button><button class="human-btn" type="button" data-action="reset">Start over</button></div>'+
           '<p class="human-truth-note">'+esc(d.ferry?.truth||"Published schedules, route feasibility and weather stay deterministic; JEV only ranks bounded planning choices.")+'</p>'+
         '</div>'+
       '</div>';
@@ -564,7 +564,11 @@
     if(tune){
       const value=tune.dataset.tune;
       const current=new Set(state.tunings);
-      current.has(value)?current.delete(value):current.add(value);
+      if(current.has(value))current.delete(value);
+      else if(current.size>=4){
+        const status=shell.querySelector("#humanTuneStatus");if(status)status.textContent="Four adjustments are already active. Remove one before adding another.";
+        return;
+      }else current.add(value);
       state.tunings=[...current];
       saveDraft();savePlan();
       track("mackinac_human_tune",{tune:value,active:current.has(value)});
@@ -583,13 +587,6 @@
     }
     if(action==="build"){await build();return;}
     if(action==="edit"){state.step=0;document.body.classList.remove("mackinac-human-details");renderStage();return;}
-    if(action==="details"){
-      document.body.classList.toggle("mackinac-human-details");
-      const btn=e.target.closest("[data-action=details]");
-      if(btn)btn.textContent=document.body.classList.contains("mackinac-human-details")?"Hide full live detail":"Show full live detail";
-      track("mackinac_human_details_toggle",{open:document.body.classList.contains("mackinac-human-details")});
-      return;
-    }
     if(action==="reset"){reset();}
   });
 
