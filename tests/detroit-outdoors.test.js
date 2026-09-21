@@ -1,34 +1,32 @@
 const test=require("node:test");const assert=require("node:assert/strict");const fs=require("node:fs");const path=require("node:path");
 const root=path.resolve(__dirname,"..");const read=p=>fs.readFileSync(path.join(root,p),"utf8");
 
-test("Detroit Outdoors ships as a canonical daily journal",()=>{
- const html=read("public/detroit-outdoors/index.html");
- assert.match(html,/<title>Detroit Outdoors Today \| Chris Izworski<\/title>/);
- assert.match(html,/rel="canonical" href="https:\/\/chrisizworski\.com\/detroit-outdoors\/"/);
- assert.match(html,/max-image-preview:large/);
- assert.match(html,/ca-pub-8222782620788075/);
- assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
- assert.match(html,/A daily read on the few places where the day is actually doing something useful/i);
- assert.match(html,/Fraunces/);
- assert.match(html,/Newsreader/);
- assert.doesNotMatch(html,/hero-media/);
- assert.doesNotMatch(html,/opportunity detector/i);
- assert.doesNotMatch(html,/front page for Detroit/i);
-});
-
-test("Detroit Outdoors foregrounds prose, not giant media or software cards",()=>{
+test("Detroit Outdoors restores the original card-first decision surface",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const css=read("public/assets/detroit-outdoors.css");
+ assert.match(html,/<title>Detroit Outdoors Today \| Chris Izworski<\/title>/);
+ assert.match(html,/rel="canonical" href="https:\/\/chrisizworski\.com\/detroit-outdoors\/"/);
+ assert.match(html,/id="opportunity-grid"/);
+ assert.match(html,/class="hero"/);
+ assert.match(html,/Where the day points/);
+ assert.match(html,/The short list/);
+ assert.match(css,/\.grid\{display:grid;grid-template-columns:repeat\(2/);
+ assert.match(css,/\.card\{/);
+ assert.match(css,/\.hero\{display:grid/);
+ assert.match(css,/\.hero-media\{min-height:280px/);
+ assert.doesNotMatch(html,/Newsreader/);
+ assert.doesNotMatch(html,/Fraunces/);
+});
+
+test("Detroit Outdoors keeps cards intelligent while replacing raw product copy with readable prose",()=>{
  const client=read("public/assets/detroit-outdoors.js");
- assert.match(html,/id="desk-note"/);
- assert.match(html,/id="opportunity-list"/);
- assert.match(client,/edition\.notes/);
- assert.match(client,/place-note/);
- assert.match(css,/font-family:"Newsreader"/);
- assert.match(css,/font-family:"Fraunces"/);
- assert.match(css,/\.read-body\{font-size:19px/);
- assert.doesNotMatch(css,/\.lead-media/);
- assert.doesNotMatch(client,/hero-img/);
+ const html=read("public/detroit-outdoors/index.html");
+ assert.match(client,/data\.edition\?\.notes\?\.\[c\.id\]/);
+ assert.match(client,/c\.story&&c\.story\.whyToday/);
+ assert.match(client,/card-read/);
+ assert.match(html,/Each card keeps the conditions visible and links to the deeper check/);
+ assert.doesNotMatch(html,/A human read on the signal stack/);
+ assert.doesNotMatch(html,/Comparing the live Southeast Michigan signal stack/);
 });
 
 test("Detroit Outdoors keeps safety deterministic and JEV closed-set",()=>{
