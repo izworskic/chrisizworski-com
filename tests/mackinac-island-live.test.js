@@ -119,7 +119,7 @@ test('missing Mackinac decision scores are withheld instead of rendered as zero'
 
 test('Mackinac decision client asset is cache-busted after score-state fix', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
-  assert.match(html,/mackinac-island\\.js\\?v=20260921-trip1/);
+  assert.match(html,/mackinac-island\.js\?v=20260921-trip1/);
 });
 
 
@@ -591,8 +591,8 @@ test('journey candidates carry route wait and door-to-island cost', () => {
 test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-island\\.js\\?v=20260921-trip1/);
-  assert.match(html,/mackinac-island\\.css\\?v=20260921-trip1/);
+  assert.match(html,/mackinac-island\.js\?v=20260921-trip1/);
+  assert.match(html,/mackinac-island\.css\?v=20260921-trip1/);
   assert.doesNotMatch(js,/Add a starting city/);
   assert.doesNotMatch(html,/Add a starting city/);
 });
@@ -603,8 +603,8 @@ test('Mackinac shared-trip route inputs are explicit and cache-safe', () => {
   const js=fs.readFileSync(jsPath,'utf8');
   const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
   assert.match(html,/data-mackinac-build="20260920-live19"/);
-  assert.match(html,/<span>Starting city<\/span><input id="heroOriginInput"/);
-  assert.match(html,/mackinac-island\\.js\\?v=20260921-trip1/);
+  assert.match(html,/<span>Starting city<\/span><input id="profileOriginInput"/);
+  assert.match(html,/mackinac-island\.js\?v=20260921-trip1/);
   assert.doesNotMatch(html,/Add a starting city/i);
   assert.doesNotMatch(js,/Add a starting city/i);
   assert.match(html,/Enter date, city \+ time above/);
