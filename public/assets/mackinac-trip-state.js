@@ -39,6 +39,7 @@
       trip_date:cleanDate(input.trip_date),
       origin_text:cleanText(input.origin_text,100),
       depart_at:cleanTime(input.depart_at),
+      depart_not_before:cleanTime(input.depart_not_before),
       trip:cleanEnum(input.trip,"trip")||"day-trip",
       nights:cleanInt(input.nights,1,7,"1"),
       adults:cleanInt(input.adults,1,12,"2"),
@@ -72,7 +73,7 @@
     const x=sanitize(input),p=new URLSearchParams();
     p.set("plan",VERSION);
     const set=(k,v)=>{if(v!==""&&v!=null)p.set(k,String(v));};
-    set("date",x.trip_date);set("from",x.origin_text);set("leave",x.depart_at);set("trip",x.trip);
+    set("date",x.trip_date);set("from",x.origin_text);set("leave",x.depart_at);set("after",x.depart_not_before);set("trip",x.trip);
     set("n",x.nights);set("a",x.adults);set("c",x.children);set("bikes",x.bikes);set("pace",x.pace);set("walk",x.mobility);set("dinner",x.dinner);
     set("back",x.return_by);set("event",x.event_start);
     if(x.personas.length)set("personas",x.personas.join(","));
@@ -93,7 +94,7 @@
     const p=new URLSearchParams(raw);
     if(p.get("plan")!==VERSION)return null;
     return sanitize({
-      trip_date:p.get("date"),origin_text:p.get("from"),depart_at:p.get("leave"),trip:p.get("trip"),
+      trip_date:p.get("date"),origin_text:p.get("from"),depart_at:p.get("leave"),depart_not_before:p.get("after"),trip:p.get("trip"),
       nights:p.get("n"),adults:p.get("a"),children:p.get("c"),bikes:p.get("bikes"),pace:p.get("pace"),mobility:p.get("walk"),dinner:p.get("dinner"),
       return_by:p.get("back"),event_start:p.get("event"),personas:p.get("personas"),interests:p.get("likes"),must_do:p.get("must"),tuning:p.get("tune"),
       intake:{trip_duration:p.get("duration"),party:p.get("party"),trip_vision:p.get("vision"),trip_loss:p.get("loss"),lodging_style:p.get("lodging"),walking_tolerance:p.get("walktol"),bike_style:p.get("bikestyle"),budget_tradeoff:p.get("budget"),kids_ages:p.get("kids"),regional_interest:p.get("regional"),weather_flexibility:p.get("wxflex")}
