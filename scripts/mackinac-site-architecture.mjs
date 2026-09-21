@@ -1,8 +1,7 @@
-export const MACKINAC_HUB_VERSION = "mackinac-hub-v1";
+export const MACKINAC_HUB_VERSION = "mackinac-hub-v2";
 
 export const PRIMARY_NAV = Object.freeze([
-  {id:"today",label:"Today",path:"/mackinac-island/",decision:"What is the Island like now, and is today workable?"},
-  {id:"plan",label:"Plan",path:"/mackinac-island/plan/",decision:"What trip shape fits these travelers?"},
+  {id:"my-trip",label:"My Trip",path:"/mackinac-island/",decision:"What trip fits these travelers, dates and priorities?"},
   {id:"ferries",label:"Ferries",path:"/mackinac-island/ferry-planner/",decision:"Which mainland port and reachable ferry fit the trip?"},
   {id:"stay",label:"Stay",path:"/mackinac-island/where-to-stay/",decision:"What lodging style and location fit the trip?"},
   {id:"eat",label:"Eat",path:"/mackinac-island/dining/",decision:"What meal strategy and dining fit the itinerary?"},
@@ -31,7 +30,7 @@ export function navHtml(currentPath=""){
 export function primaryUrlRows(){
   return PRIMARY_NAV.map((item,index)=>[
     "https://chrisizworski.com"+item.path,
-    item.id==="today"||item.id==="ferries"?"daily":"weekly",
+    item.id==="my-trip"||item.id==="ferries"?"daily":"weekly",
     index<3?"0.9":"0.84"
   ]);
 }
