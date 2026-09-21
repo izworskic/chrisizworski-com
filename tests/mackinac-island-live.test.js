@@ -59,12 +59,12 @@ test('fall operating hours do not recommend the British Landing Nature Center', 
 
 test('public surface makes the decision first and keeps return vs last ferry distinct', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
-  assert.match(html,/Mackinac Island Today/);
+  assert.match(html,/Build Your Mackinac Island Trip/);
   assert.match(html,/Best time to arrive/);
   assert.match(html,/Return plan/);
   assert.match(html,/Last published ferry for return day/);
   assert.match(html,/Why this timing\?/);
-  assert.match(html,/Plan your Island day/);
+  assert.match(html,/Fine-tune your Mackinac plan/);
   assert.match(html,/When it feels busiest/);
   assert.match(html,/CC BY-SA 4\.0/);
   assert.match(html,/\/privacy\//);
@@ -77,7 +77,7 @@ test('mobile-first and accessible controls are present', () => {
   assert.match(css,/:focus-visible/);
   assert.match(html,/aria-live="polite"/);
   assert.match(html,/aria-pressed="true"/);
-  assert.match(html,/Skip to live decision/);
+  assert.match(html,/Skip to trip planner/);
 });
 
 test('JEV is bounded to a deterministic closed candidate set', () => {
@@ -101,7 +101,7 @@ test('client degrades explicitly instead of fabricating a ferry plan', () => {
   assert.match(js,/mackinac_share_plan/);
 });
 
-test('default Today view does not masquerade as an explicit selected trip date', () => {
+test('default My Trip view does not masquerade as an explicit selected trip date', () => {
   const js=fs.readFileSync(jsPath,'utf8');
   assert.match(js,/tripDateExplicit:false/);
   assert.match(js,/syncTripDateInputs\(detroitToday\(\),\{explicit:false\}\)/);
@@ -119,7 +119,7 @@ test('missing Mackinac decision scores are withheld instead of rendered as zero'
 
 test('Mackinac decision client asset is cache-busted after score-state fix', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260920-live20/);
+  assert.match(html,/mackinac-island\\.js\\?v=20260921-trip1/);
 });
 
 
@@ -383,11 +383,11 @@ test('Mackinac hero trip strip fails closed when the live bundle fails', () => {
 });
 
 
-test('trip-at-a-glance accepts a real free-form starting city', () => {
+test('shared trip intake accepts a real free-form starting city', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/id="heroOriginForm"/);
-  assert.match(html,/id="heroOriginInput"/);
+  assert.match(html,/class="profile-logistics"/);
+  assert.match(html,/id="profileOriginInput"/);
   assert.match(html,/placeholder="Bay City, MI"/);
   assert.match(html,/id="originCityInput"/);
   assert.doesNotMatch(html,/id="heroOriginCity"/);
@@ -591,20 +591,20 @@ test('journey candidates carry route wait and door-to-island cost', () => {
 test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260920-live20/);
-  assert.match(html,/mackinac-island\.css\?v=20260920-live19/);
+  assert.match(html,/mackinac-island\\.js\\?v=20260921-trip1/);
+  assert.match(html,/mackinac-island\\.css\\?v=20260921-trip1/);
   assert.doesNotMatch(js,/Add a starting city/);
   assert.doesNotMatch(html,/Add a starting city/);
 });
 
 
-test('Mackinac first-screen route inputs are explicit and cache-safe', () => {
+test('Mackinac shared-trip route inputs are explicit and cache-safe', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
   const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
   assert.match(html,/data-mackinac-build="20260920-live19"/);
   assert.match(html,/<span>Starting city<\/span><input id="heroOriginInput"/);
-  assert.match(html,/mackinac-island\.js\?v=20260920-live20/);
+  assert.match(html,/mackinac-island\\.js\\?v=20260921-trip1/);
   assert.doesNotMatch(html,/Add a starting city/i);
   assert.doesNotMatch(js,/Add a starting city/i);
   assert.match(html,/Enter date, city \+ time above/);
