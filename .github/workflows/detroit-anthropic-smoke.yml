@@ -99,7 +99,7 @@ jobs:
                       console.error("Mixed hard-safe engine pool does not match the candidate count sent to JEV.", ed, x.boardCandidateCount);
                       process.exit(12);
                     }
-                    for (const engine of ["park-weather","great-lakes-water","night-sky-aurora","fall-color-phenology"]) {
+                    for (const engine of ["park-weather","great-lakes-water","night-sky-aurora","fall-color-phenology","sunset-photography","great-lakes-ais"]) {
                       if (!Object.prototype.hasOwnProperty.call(emitted,engine)) {
                         console.error("Expected opportunity engine did not report diagnostics.", engine, emitted);
                         process.exit(13);
@@ -109,6 +109,11 @@ jobs:
                         !(sourceStatus["night-sky-aurora"]&&sourceStatus["night-sky-aurora"].ok)) {
                       console.error("Reusable water or aurora specialist engine is not participating in production.", sourceStatus);
                       process.exit(14);
+                    }
+                    if (!Object.prototype.hasOwnProperty.call(sourceStatus,"great-lakes-ais") ||
+                        !Object.prototype.hasOwnProperty.call(sourceStatus,"sunset-photography")) {
+                      console.error("Riverfront opportunity engines are missing from production diagnostics.", sourceStatus);
+                      process.exit(19);
                     }
                     if (x.opportunitySourceEngines.some(engine=>!engine)) {
                       console.error("At least one displayed opportunity is missing its source engine.", x.opportunitySourceEngines);
