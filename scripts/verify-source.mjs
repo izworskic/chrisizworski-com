@@ -26,8 +26,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
-  // Sep 21: Mackinac destination UX rebuild. One shared My Trip intake now owns
-  // profile + practical trip state and downstream pages inherit that context.
+  // Sep 21: Mackinac destination UX rebuild. One shared human-first My Trip flow owns
+  // profile + practical trip state; unknown inputs fail soft instead of fabricating precision.
   "/mackinac-island/",
   "/mackinac-island/plan/",
   "/mackinac-island/ferry-planner/",
@@ -49,6 +49,8 @@ const intentionalChanges = new Set([
   "/assets/mackinac-island.js",
   "/assets/mackinac-island.css",
   "/assets/mackinac-hub.js",
+  "/assets/mackinac-human-planner.js",
+  "/assets/mackinac-human-planner.css",
   "/assets/mackinac-intent.css",
   // Sep 20: Search Console CTR + branded-authority sprint. Existing publisher credits on
   // priority search pages now link to the canonical Chris Izworski profile; no titles,
