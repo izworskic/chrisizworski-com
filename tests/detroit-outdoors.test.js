@@ -50,7 +50,7 @@ test("Detroit Outdoors uses the writer as an editor rather than a template fille
  assert.match(route,/Return JSON only/);
  assert.match(route,/detroit-outdoors:edition:v4/);
  assert.match(route,/edition:\{headline:editorial\.headline,read:editorial\.read,notes:editorial\.notes\|\|\{\}\}/);
- assert.match(route,/Do not mention scores, models, APIs, JEV/);
+ assert.match(route,/Do not explain the tool, the model, JEV, APIs, rankings, scores, signals or the data stack/);
 });
 
 test("Detroit Outdoors reuses existing engines and gates generated copy",()=>{
@@ -60,7 +60,7 @@ test("Detroit Outdoors reuses existing engines and gates generated copy",()=>{
  assert.match(route,/api\/fall-color-conditions/);
  assert.match(route,/ANTHROPIC_API_KEY/);
  assert.match(route,/claude-sonnet-4-6/);
- assert.match(route,/AbortSignal\.timeout\(32000\)/);
+ assert.match(route,/AbortSignal\.timeout\(9000\)/);
  assert.match(route,/s-maxage=300/);
 });
 
