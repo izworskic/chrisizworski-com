@@ -42,13 +42,13 @@ test("Detroit Outdoors keeps safety deterministic and JEV closed-set",()=>{
 
 test("Detroit Outdoors uses the writer as an editor rather than a template filler",()=>{
  const route=read("lib/detroit-outdoors/route.js");
- assert.match(route,/small daily outdoors journal/);
- assert.match(route,/plain, exact, unhurried, observant and local/);
- assert.match(route,/field journal edited by a very good regional newspaper/);
- assert.match(route,/The main read should be 130 to 190 words/);
- assert.match(route,/Each place note should be 35 to 65 words/);
+ assert.match(route,/very good local outdoor editor/);
+ assert.match(route,/clear, specific, understated and readable/);
+ assert.match(route,/Turn raw weather and seasonal facts into meaning/);
+ assert.match(route,/desk note of 80 to 115 words/);
+ assert.match(route,/one compact note of 24 to 42 words/);
  assert.match(route,/Return JSON only/);
- assert.match(route,/detroit-outdoors:edition:v3/);
+ assert.match(route,/detroit-outdoors:edition:v4/);
  assert.match(route,/edition:\{headline:editorial\.headline,read:editorial\.read,notes:editorial\.notes\|\|\{\}\}/);
  assert.match(route,/Do not mention scores, models, APIs, JEV/);
 });
