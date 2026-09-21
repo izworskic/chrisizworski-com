@@ -110,7 +110,7 @@
     }
   }
 
-  function renderSavedContext(profile,surface){
+  function renderSavedContext(profile,surface,plan){
     let host=document.querySelector("[data-trip-context]");
     if(!host){
       host=document.createElement("aside");
@@ -121,8 +121,9 @@
       if(focus)focus.insertAdjacentElement("afterend",shell);else insertAtDecisionFront(shell);
     }
     const label=profile?.primary?.label||"your Mackinac trip";
+    const facts=planFacts(plan);
     host.hidden=false;
-    host.innerHTML=`<div><span>Your Mackinac trip stays with you</span><strong>You're planning a ${esc(label)} trip</strong><p>${esc(profile?.primary?.summary||"Your choices are shaping the same trip across every Mackinac page.")}</p></div><a class="btn primary" data-mackinac-planner-cta href="/mackinac-island/#trip-intake">Open my full trip</a>`;
+    host.innerHTML=`<div><span>Using your saved Mackinac plan</span><strong>${esc(label)}</strong><p class="trip-context-facts">${facts.length?facts.map(esc).join(" · "):esc(profile?.primary?.summary||"Your choices are shaping the same trip across every Mackinac page.")}</p><p>${esc(profile?.primary?.summary||"This page is already using the trip you built.")}</p></div><a class="btn primary" data-mackinac-planner-cta href="/mackinac-island/#trip-intake">Edit my trip</a>`;
     host.querySelector("[data-mackinac-planner-cta]")?.addEventListener("click",()=>track("mackinac_planner_cta",{surface:rawSurface,personalized:true}));
     if(surface?.engine==="shared-harness-jev")host.dataset.engine="jev";
   }
@@ -156,10 +157,11 @@
   async function personalize(answers){
     try{
       const data=await classify(answers);
+      const plan=readPlan();
       write({answers:data.profile?.answers||answers,profile:data.profile});
       document.querySelector("[data-mackinac-platform-intake]")?.remove();
       renderFocus(data.profile,data.surface,data.profile?.answers||answers);
-      renderSavedContext(data.profile,data.surface);
+      renderSavedContext(data.profile,data.surface,plan);
       applyNavOrder(data.surface?.nav_order);
       applyPlaceRanking(data.surface);
       track("mackinac_surface_personalized",{surface:data.surface?.surface||rawSurface,profile:data.profile?.primary?.id||"unknown",engine:data.surface?.engine||data.profile?.engine||"deterministic"});
