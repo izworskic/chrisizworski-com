@@ -65,6 +65,7 @@
     originText:"",
     originResolved:null,
     earliestLeave:"",
+    exactLeave:"",
     party:"",
     walking:"",
     visions:[],
@@ -139,8 +140,8 @@
     return {
       trip_date:state.dateMode==="flexible"?"":state.tripDate,
       origin_text:state.originMode==="from-home"?(state.originResolved?.origin?.label||clean(state.originText)):(state.originMode==="nearby"?(state.nearbySide==="mackinaw"?"Mackinaw City area":state.nearbySide==="st-ignace"?"St. Ignace area":"Straits area; either port works"):""),
-      depart_at:"",
-      depart_not_before:state.earliestLeave||"",
+      depart_at:state.exactLeave||"",
+      depart_not_before:state.exactLeave?"":state.earliestLeave||"",
       trip:tripMode(),
       nights:nights(),
       adults,
@@ -220,7 +221,7 @@
           '<button type="button" class="human-choice'+(state.originMode==="nearby"?" selected":"")+'" data-set="originMode" data-value="nearby" aria-pressed="'+String(state.originMode==="nearby")+'">Already near the Straits<small>Skip the long mainland drive.</small></button>'+
           '<button type="button" class="human-choice'+(state.originMode==="later"?" selected":"")+'" data-set="originMode" data-value="later" aria-pressed="'+String(state.originMode==="later")+'">I will decide later<small>Keep planning, but do not fake ferry reachability.</small></button>'+
         '</div></div>'+
-        (state.originMode==="from-home"?'<div class="human-question"><div class="human-field-grid"><label class="human-field"><span>Starting city, state/province or ZIP/postal code</span><input id="humanOrigin" type="search" autocomplete="off" value="'+esc(state.originText)+'" placeholder="Bay City, MI"></label><label class="human-field"><span>I cannot leave before <em style="font-weight:500;color:#6f817d">(optional)</em></span><input id="humanEarliestLeave" type="time" value="'+esc(state.earliestLeave)+'"></label></div><p class="human-question-help">Leave this blank if you want the planner to tell you when to leave. Add a time only when you truly cannot start the drive before then.</p><div class="human-origin-status'+(state.originResolved?" good":"")+'" id="humanOriginStatus">'+originStatusText()+'</div></div>':
+        (state.originMode==="from-home"?'<div class="human-question"><div class="human-field-grid"><label class="human-field"><span>Starting city, state/province or ZIP/postal code</span><input id="humanOrigin" type="search" autocomplete="off" value="'+esc(state.originText)+'" placeholder="Bay City, MI"></label><label class="human-field"><span>I cannot leave before <em style="font-weight:500;color:#6f817d">(optional)</em></span><input id="humanEarliestLeave" type="time" value="'+esc(state.exactLeave||state.earliestLeave)+'"></label></div><p class="human-question-help">'+(state.exactLeave?'This shared trip contains a fixed leave time. Keep it unchanged to preserve that choice; editing it turns the time into a not-before constraint.':'Leave this blank if you want the planner to tell you when to leave. Add a time only when you truly cannot start the drive before then.')+'</p><div class="human-origin-status'+(state.originResolved?" good":"")+'" id="humanOriginStatus">'+originStatusText()+'</div></div>':
           state.originMode==="nearby"?'<div class="human-question"><span class="human-question-label">Which side are you on?</span><div class="human-choice-grid"><button type="button" class="human-choice'+(state.nearbySide==="mackinaw"?" selected":"")+'" data-set="nearbySide" data-value="mackinaw" aria-pressed="'+String(state.nearbySide==="mackinaw")+'">Mackinaw City side<small>Lower Peninsula side of the bridge.</small></button><button type="button" class="human-choice'+(state.nearbySide==="st-ignace"?" selected":"")+'" data-set="nearbySide" data-value="st-ignace" aria-pressed="'+String(state.nearbySide==="st-ignace")+'">St. Ignace side<small>Upper Peninsula side of the bridge.</small></button><button type="button" class="human-choice'+(state.nearbySide==="either"?" selected":"")+'" data-set="nearbySide" data-value="either" aria-pressed="'+String(state.nearbySide==="either")+'">Either port works<small>I am close enough that the ferry schedule can decide.</small></button></div></div>':
           state.originMode==="later"?'<div class="human-origin-status">We can still build your Mackinac style and decision order. Exact ferry timing stays locked until you add a starting point.</div>':"")+
         '<div class="human-stage-actions"><button class="human-btn" type="button" data-action="back">Back</button><div style="display:flex;gap:10px;align-items:center"><span class="human-error" id="humanStageError"></span><button class="human-btn primary" type="button" data-action="next">Next: who is going</button></div></div>'+
@@ -352,7 +353,8 @@
     p.set("intake_trip_loss",state.loss);
     p.set("intake_walking_tolerance",state.walking);
     if(state.dateMode!=="flexible"&&state.tripDate)p.set("trip_date",state.tripDate);
-    if(state.earliestLeave)p.set("depart_not_before",state.earliestLeave);
+    if(state.exactLeave)p.set("depart_at",state.exactLeave);
+    else if(state.earliestLeave)p.set("depart_not_before",state.earliestLeave);
     if(state.tunings.length)p.set("tune",state.tunings.join(","));
     if(state.originResolved){
       p.set("origin_name",state.originResolved.origin?.label||state.originText);
@@ -464,7 +466,7 @@
         '<div class="human-result-hero"><span class="human-planner-kicker">'+esc(readiness)+'</span><h2>'+esc(humanTripTitle())+'</h2><p>'+esc(d.itinerary_summary||d.decision?.primary_reason||profile.primary?.summary||"The plan is built from your trip and the available verified inputs.")+'</p><div class="human-result-meta">'+planMeta().map(x=>"<span>"+esc(x)+"</span>").join("")+'</div></div>'+
         '<div class="human-result-body">'+
           '<div class="human-first-move"><div class="human-first-move-head"><span>Your first move</span><strong>'+esc(port)+'</strong></div><div class="human-journey">'+
-            '<div class="human-journey-step"><span>'+(state.originMode==="nearby"?"Head to dock":"Leave home")+'</span><strong>'+esc(leave)+'</strong><small>'+(state.earliestLeave?"Your leave-time constraint is respected.":"Calculated for the selected ferry; you did not have to guess it.")+'</small></div>'+
+            '<div class="human-journey-step"><span>'+(state.originMode==="nearby"?"Head to dock":"Leave home")+'</span><strong>'+esc(leave)+'</strong><small>'+(state.exactLeave?"Your fixed leave time is respected.":state.earliestLeave?"Your not-before constraint is respected.":"Calculated for the selected ferry; you did not have to guess it.")+'</small></div>'+
             '<div class="human-journey-step"><span>Be at the dock</span><strong>'+esc(journey.dock_ready_time||"Allow check-in time")+'</strong><small>'+esc(port)+'</small></div>'+
             '<div class="human-journey-step"><span>Ferry</span><strong>'+esc(ferry)+'</strong><small>'+esc(plan.operator||"Published schedule")+'</small></div>'+
             '<div class="human-journey-step"><span>On the Island</span><strong>'+esc(arrival)+'</strong><small>This is when the Island day actually starts.</small></div>'+
@@ -594,7 +596,7 @@
     if(e.target.id==="humanTripDate")state.tripDate=e.target.value;
     if(e.target.id==="humanNightCount")state.nightCount=Math.max(4,Math.min(7,Number(e.target.value)||4));
     if(e.target.id==="humanOrigin"){state.originText=e.target.value;state.originResolved=null;}
-    if(e.target.id==="humanEarliestLeave")state.earliestLeave=e.target.value;
+    if(e.target.id==="humanEarliestLeave"){state.exactLeave="";state.earliestLeave=e.target.value;}
     saveDraft();
   });
 
@@ -604,70 +606,122 @@
   const restoredPlan=(()=>{
     try{return JSON.parse(localStorage.getItem(PLAN_KEY)||"null")?.plan||null;}catch{return null;}
   })();
+  const sharedPlan=window.MackinacTripState?.decode(location.hash)||null;
 
-  function hydrateFromSavedTrip(){
-    if(!(restoredProfile?.complete&&restoredPlan))return false;
-    const a=restoredProfile.answers||restoredPlan.intake||{};
-    if(!state.tripDuration){
-      state.tripDuration=a.trip_duration||(
-        restoredPlan.trip==="day-trip"?"day":
-        restoredPlan.trip==="overnight"?(Number(restoredPlan.nights)>=4?"four-plus":Number(restoredPlan.nights)===3?"three-night":Number(restoredPlan.nights)===2?"two-night":"one-night"):""
-      );
-    }
-    if(state.tripDuration==="four-plus"&&Number(restoredPlan.nights)>=4)state.nightCount=Math.min(7,Number(restoredPlan.nights));
-    if(!state.dateMode){
-      state.dateMode=restoredPlan.trip_date?(restoredPlan.trip_date===detroitToday()?"today":"date"):"flexible";
-    }
-    if(!state.tripDate&&restoredPlan.trip_date)state.tripDate=restoredPlan.trip_date;
-    if(!state.originMode){
-      if(["Mackinaw City area","St. Ignace area","Straits area; either port works","Already near the Straits"].includes(restoredPlan.origin_text)){state.originMode="nearby";state.nearbySide=restoredPlan.origin_text==="Mackinaw City area"?"mackinaw":restoredPlan.origin_text==="St. Ignace area"?"st-ignace":"either";}
-      else if(clean(restoredPlan.origin_text)){state.originMode="from-home";state.originText=restoredPlan.origin_text;}
-      else state.originMode="later";
-    }
-    if(!state.originText&&state.originMode==="from-home")state.originText=restoredPlan.origin_text||"";
-    if(!state.earliestLeave&&restoredPlan.depart_not_before)state.earliestLeave=restoredPlan.depart_not_before;
-    if(!state.party)state.party=a.party||(
-      Number(restoredPlan.children)>0?"family-young":
-      Number(restoredPlan.adults)===1?"solo":
-      Number(restoredPlan.adults)===2?"couple":"adults-friends"
-    );
-    if(!state.walking)state.walking=a.walking_tolerance||(
-      restoredPlan.mobility==="limited"?"low":
-      restoredPlan.pace==="active"?"high":"moderate"
-    );
-    if(!state.visions.length&&Array.isArray(a.trip_vision))state.visions=[...a.trip_vision].slice(0,2);
-    if(!state.loss)state.loss=a.trip_loss||"flexible";
-    if(!state.tunings.length&&Array.isArray(restoredPlan.tuning))state.tunings=[...restoredPlan.tuning];
-    state.profile=restoredProfile;
-    saveDraft();
+  function stateComplete(){
     return Boolean(state.tripDuration&&state.dateMode&&state.originMode&&state.party&&state.walking&&state.visions.length&&state.loss);
   }
 
+  function hydratePlanState(plan,answers={}){
+    if(!plan)return false;
+    const a=answers||plan.intake||{};
+    if(!state.tripDuration){
+      if(a.trip_duration==="unsure")state.tripDuration="unsure";
+      else if(plan.trip==="day-trip")state.tripDuration="day";
+      else if(plan.trip==="overnight"){
+        const count=Number(plan.nights)||1;
+        state.tripDuration=count>=4?"four-plus":count===3?"three-night":count===2?"two-night":"one-night";
+      }else if(a.trip_duration==="one-night")state.tripDuration="one-night";
+      else if(a.trip_duration==="four-plus")state.tripDuration="four-plus";
+      else if(a.trip_duration==="two-three")state.tripDuration=Number(plan.nights)===3?"three-night":"two-night";
+    }
+    if(state.tripDuration==="four-plus"&&Number(plan.nights)>=4)state.nightCount=Math.min(7,Number(plan.nights));
+    if(!state.dateMode)state.dateMode=plan.trip_date?(plan.trip_date===detroitToday()?"today":"date"):"flexible";
+    if(!state.tripDate&&plan.trip_date)state.tripDate=plan.trip_date;
+    if(!state.originMode){
+      if(["Mackinaw City area","St. Ignace area","Straits area; either port works","Already near the Straits"].includes(plan.origin_text)){
+        state.originMode="nearby";
+        state.nearbySide=plan.origin_text==="Mackinaw City area"?"mackinaw":plan.origin_text==="St. Ignace area"?"st-ignace":"either";
+      }else if(clean(plan.origin_text)){state.originMode="from-home";state.originText=plan.origin_text;}
+      else state.originMode="later";
+    }
+    if(!state.originText&&state.originMode==="from-home")state.originText=plan.origin_text||"";
+    if(!state.exactLeave&&plan.depart_at)state.exactLeave=plan.depart_at;
+    if(!state.earliestLeave&&plan.depart_not_before)state.earliestLeave=plan.depart_not_before;
+    if(!state.party)state.party=a.party||(
+      Number(plan.children)>0?"family-young":
+      Number(plan.adults)===1?"solo":
+      Number(plan.adults)===2?"couple":"adults-friends"
+    );
+    if(!state.walking)state.walking=a.walking_tolerance||(
+      plan.mobility==="limited"?"low":
+      plan.pace==="active"?"high":"moderate"
+    );
+    if(!state.visions.length&&Array.isArray(a.trip_vision)&&a.trip_vision.length)state.visions=[...a.trip_vision].slice(0,2);
+    if(!state.visions.length){
+      const inferred=[];
+      if((plan.personas||[]).includes("first-visit"))inferred.push("icons");
+      if((plan.personas||[]).includes("biking")||(plan.interests||[]).includes("biking"))inferred.push("biking");
+      if((plan.interests||[]).includes("history"))inferred.push("history");
+      if((plan.interests||[]).includes("food")||(plan.interests||[]).includes("shopping"))inferred.push("food-shopping");
+      if((plan.personas||[]).includes("photography")||(plan.interests||[]).includes("scenery"))inferred.push("scenery");
+      if((plan.personas||[]).includes("kids"))inferred.push("kids");
+      state.visions=[...new Set(inferred)].slice(0,2);
+    }
+    if(!state.visions.length)state.visions=["icons"];
+    if(!state.loss)state.loss=a.trip_loss||"flexible";
+    if(!state.tunings.length&&Array.isArray(plan.tuning))state.tunings=[...plan.tuning].slice(0,4);
+    saveDraft();
+    return stateComplete();
+  }
+
+  function hydrateFromSavedTrip(){
+    if(!(restoredProfile?.complete&&restoredPlan))return false;
+    state.profile=restoredProfile;
+    return hydratePlanState(restoredPlan,restoredProfile.answers||restoredPlan.intake||{});
+  }
+
+  function applyIntentSeed(){
+    const qs=new URLSearchParams(location.search);
+    const id=qs.get("intent")||"";
+    const from=clean(qs.get("from")||"");
+    if(from&&!state.originMode){state.originMode="from-home";state.originText=from;}
+    const seed={
+      "day-trip":()=>{if(!state.tripDuration)state.tripDuration="day";},
+      "with-kids":()=>{if(!state.party)state.party="family-young";if(!state.visions.length)state.visions=["kids"];},
+      "two-day":()=>{if(!state.tripDuration)state.tripDuration="one-night";},
+      "fall":()=>{if(!state.visions.length)state.visions=["scenery"];},
+      "limited-walking":()=>{if(!state.walking)state.walking="low";},
+      "bike-day":()=>{if(!state.tripDuration)state.tripDuration="day";if(!state.visions.length)state.visions=["biking"];}
+    }[id];
+    if(seed)seed();
+    if(id||from){saveDraft();track("mackinac_human_intent_seeded",{intent:id||"none",origin_seed:from?"yes":"no"});}
+  }
+
+  async function renderHydratedEntry(source){
+    if(state.dateMode==="today")state.tripDate=detroitToday();
+    if(!state.profile||!state.profile.complete)await classify();
+    if(state.tripDuration==="unsure"||state.dateMode==="flexible"||state.originMode==="later"){
+      frameworkResult();
+      track("mackinac_human_planner_loaded",{version:"v2",restored:true,source,mode:"framework"});
+      return true;
+    }
+    loading();
+    if(state.originMode==="from-home"){
+      const ok=await resolveOrigin();
+      if(!ok)throw new Error("Starting point needs a clearer location.");
+    }
+    await buildRoute();
+    exactResult();
+    track("mackinac_human_planner_loaded",{version:"v2",restored:true,source,mode:"plan"});
+    return true;
+  }
+
   async function boot(){
-    const draftLooksComplete=Boolean(
-      state.tripDuration&&state.dateMode&&state.originMode&&state.party&&state.walking&&state.visions.length&&state.loss
-    )||hydrateFromSavedTrip();
-    if(restoredProfile?.complete&&restoredPlan&&draftLooksComplete){
-      state.profile=restoredProfile;
-      if(state.dateMode==="today")state.tripDate=detroitToday();
-      if(state.tripDuration==="unsure"||state.dateMode==="flexible"||state.originMode==="later"){
-        frameworkResult();
-        track("mackinac_human_planner_loaded",{version:"v2",restored:true,mode:"framework"});
+    try{
+      if(sharedPlan&&hydratePlanState(sharedPlan,sharedPlan.intake||{})){
+        state.profile=null;
+        await renderHydratedEntry("shared-link");
         return;
       }
-      loading();
-      try{
-        if(state.originMode==="from-home"){
-          const ok=await resolveOrigin();
-          if(!ok)throw new Error("Starting point needs a clearer location.");
-        }
-        await buildRoute();
-        exactResult();
-        track("mackinac_human_planner_loaded",{version:"v2",restored:true,mode:"plan"});
+      applyIntentSeed();
+      const draftLooksComplete=stateComplete()||hydrateFromSavedTrip();
+      if(restoredProfile?.complete&&restoredPlan&&draftLooksComplete){
+        await renderHydratedEntry("saved-trip");
         return;
-      }catch{
-        state.step=0;
       }
+    }catch{
+      state.step=0;
     }
     renderStage();
     track("mackinac_human_planner_loaded",{version:"v2",restored:false});
