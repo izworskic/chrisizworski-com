@@ -172,6 +172,19 @@ test("night-sky engine can identify a bounded low-cloud nighttime window without
   assert.equal(window.end,"2026-09-22T03:00:00Z");
 });
 
+test("fall-color specialist fails closed when its NWS alert lookup fails",()=>{
+  const rows=_test.fallColorCandidates({
+    placeStates:[placeState("kensington-metropark"),placeState("waterloo")],
+    alertStates:[{ok:false,alerts:[],error:"NWS timeout"},{ok:true,alerts:[]}],
+    fallSnapshot:{phase:"rising",pct:48,label:"Approaching peak",peakWindow:"Oct 20 to Oct 28"}
+  });
+  const kensington=rows.find(c=>c.place.id==="kensington-metropark");
+  assert.ok(kensington);
+  const gate=hardGateSpecialistCandidates([kensington]);
+  assert.equal(gate.safe.length,0);
+  assert.match(gate.rejected[0].reasons.join(" "),/NWS alert feed is unavailable/i);
+});
+
 test("fall-color engine emits regional phenology candidates without claiming park-level proof",()=>{
   const placeStates=[placeState("kensington-metropark"),placeState("waterloo")];
   const rows=_test.fallColorCandidates({
@@ -183,6 +196,47 @@ test("fall-color engine emits regional phenology candidates without claiming par
   assert.ok(rows.every(c=>c.sourceEngine==="fall-color-phenology"));
   assert.ok(rows.every(c=>/regional phenology lead/i.test(c.caveat)));
   assert.ok(rows.every(c=>c.verifiedEvidence.some(e=>/fall-color model/i.test(e.sourceLabel))));
+});
+
+test("specialist hard veto removes the same-place legacy activity before JEV",()=>{
+  const legacy=normalizeOpportunityCandidate({
+    id:"lake-st-clair-metropark-paddling",
+    sourceEngine:"park-weather",
+    opportunityType:"paddling",
+    place:{id:"lake-st-clair-metropark",name:"Lake St. Clair Metropark",drive:"35–50 min",driveClass:"near"},
+    activity:"paddling",
+    score:88,
+    reasons:["weather-only paddling lead"],
+    verifiedEvidence:[{source:"weather",text:"weather"}]
+  });
+  const state=safeBuoyState();
+  state.data.stations[0].wave_ht=.6;
+  const specialist=_test.waterCandidate({
+    placeStates:[placeState("lake-st-clair-metropark")],
+    alertStates:emptyAlerts(1),
+    waterState:state
+  });
+  assert.equal(specialist.length,1);
+  const gate=hardGateSpecialistCandidates(specialist);
+  assert.equal(gate.safe.length,0);
+  assert.equal(gate.rejected.length,1);
+  const mixed=dedupeMixedPool([legacy],gate.safe,gate.rejected);
+  assert.equal(mixed.candidates.length,0);
+  assert.equal(mixed.vetoedLegacy.length,1);
+  assert.equal(mixed.vetoedLegacy[0].legacyId,"lake-st-clair-metropark-paddling");
+  assert.equal(mixed.vetoedLegacy[0].specialistId,"water-lake-st-clair-calm-window");
+});
+
+test("water specialist fails closed when the park-point NWS alert lookup fails",()=>{
+  const candidates=_test.waterCandidate({
+    placeStates:[placeState("lake-st-clair-metropark")],
+    alertStates:[{ok:false,alerts:[],error:"NWS timeout"}],
+    waterState:safeBuoyState()
+  });
+  assert.equal(candidates.length,1);
+  const gate=hardGateSpecialistCandidates(candidates);
+  assert.equal(gate.safe.length,0);
+  assert.match(gate.rejected[0].reasons.join(" "),/park-point alert feed is unavailable/i);
 });
 
 test("specialist engine replaces the weaker same-place legacy activity instead of flooding JEV",()=>{
