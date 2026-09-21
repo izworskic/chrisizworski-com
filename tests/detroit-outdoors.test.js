@@ -239,3 +239,13 @@ test("Detroit Outdoors client bundle parses as JavaScript",()=>{
  assert.doesNotThrow(()=>new Function(client));
  assert.doesNotMatch(client,/\\n const sourceLine/);
 });
+
+
+test("Detroit Outdoors cache-busts the live client bundle",()=>{
+ const html=read("public/detroit-outdoors/index.html");
+ const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
+ assert.match(html,/detroit-outdoors\.js\?v=20260921b/);
+ assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
+ assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
+ assert.match(workflow,/public\/detroit-outdoors\/index\.html/);
+});
