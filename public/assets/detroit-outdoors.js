@@ -58,7 +58,7 @@ async function load(){
   if(data.image){
     $("#hero-img").src=data.image.src;
     $("#hero-img").alt=data.image.alt||"Southeast Michigan outdoors";
-    $("#hero-credit").innerHTML='File photo: <a href="'+esc(data.image.creditUrl)+'" rel="noopener">'+esc(data.image.credit)+'</a> · '+esc(data.image.license);
+    $("#hero-credit").innerHTML='File photo: <a href="'+esc(data.image.creditUrl)+'" rel="noopener">'+esc(data.image.credit)+'</a> · <a href="'+esc(data.image.licenseUrl||data.image.creditUrl)+'" rel="noopener">'+esc(data.image.license)+'</a>';
     media.hidden=false;
   }else media.hidden=true;
   const fall=$("#fall-panel");
@@ -82,6 +82,18 @@ async function load(){
    $("#updated").textContent="Live refresh failed";
  }
 }
+document.addEventListener("click",function(event){
+  const link=event.target.closest("a");
+  if(!link)return;
+  let url;try{url=new URL(link.href,location.href);}catch{return;}
+  if(typeof window.gtag==="function" && (link.closest(".card") || /michiganoutdoorsnow|great-lakes-buoys|northern-lights|michiganbirdingreport|fall-color/.test(url.href))){
+    window.gtag("event","detroit_outdoors_handoff",{
+      destination:url.hostname.replace(/^www\./,""),
+      surface:link.closest(".card")?"opportunity-card":"context-link",
+      transport_type:"beacon"
+    });
+  }
+});
 load();
 setInterval(load,30*60*1000);
 })();
