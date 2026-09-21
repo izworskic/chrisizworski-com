@@ -189,7 +189,23 @@
   async function apply(){
     normalizePrimaryNav();
     wireTracking();
-    if(isLive)return;
+    if(isLive){
+      if(!document.querySelector('link[data-mackinac-human-css]')){
+        const link=document.createElement("link");
+        link.rel="stylesheet";
+        link.href="/assets/mackinac-human-planner.css?v=20260921-human2";
+        link.dataset.mackinacHumanCss="1";
+        document.head.appendChild(link);
+      }
+      if(!document.querySelector('script[data-mackinac-human-js]')){
+        const script=document.createElement("script");
+        script.src="/assets/mackinac-human-planner.js?v=20260921-human2";
+        script.defer=true;
+        script.dataset.mackinacHumanJs="1";
+        document.head.appendChild(script);
+      }
+      return;
+    }
     const saved=read();
     if(saved?.profile?.complete&&saved?.answers)await personalize(saved.answers);
     else renderStartGate();
