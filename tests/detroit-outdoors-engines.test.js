@@ -227,6 +227,55 @@ test("specialist hard veto removes the same-place legacy activity before JEV",()
   assert.equal(mixed.vetoedLegacy[0].specialistId,"water-lake-st-clair-calm-window");
 });
 
+test("unavailable buoy source still emits a rejected specialist veto so legacy paddling cannot survive",()=>{
+  const legacy=normalizeOpportunityCandidate({
+    id:"lake-st-clair-metropark-paddling",
+    sourceEngine:"park-weather",
+    opportunityType:"paddling",
+    place:{id:"lake-st-clair-metropark",name:"Lake St. Clair Metropark",drive:"35–50 min",driveClass:"near"},
+    activity:"paddling",
+    score:90,
+    verifiedEvidence:[{source:"weather",text:"calm land forecast"}]
+  });
+  const candidates=_test.waterCandidate({
+    placeStates:[placeState("lake-st-clair-metropark")],
+    alertStates:emptyAlerts(1),
+    waterState:{ok:false,error:"buoy API unavailable",data:null}
+  });
+  assert.equal(candidates.length,1);
+  const gate=hardGateSpecialistCandidates(candidates);
+  assert.equal(gate.safe.length,0);
+  assert.match(gate.rejected[0].reasons.join(" "),/buoy feed is unavailable/i);
+  const mixed=dedupeMixedPool([legacy],gate.safe,gate.rejected);
+  assert.equal(mixed.candidates.length,0);
+  assert.equal(mixed.vetoedLegacy.length,1);
+});
+
+test("rough water outside the old emission prefilter still vetoes legacy paddling",()=>{
+  const legacy=normalizeOpportunityCandidate({
+    id:"lake-st-clair-metropark-paddling",
+    sourceEngine:"park-weather",
+    opportunityType:"paddling",
+    place:{id:"lake-st-clair-metropark",name:"Lake St. Clair Metropark",drive:"35–50 min",driveClass:"near"},
+    activity:"paddling",
+    score:90,
+    verifiedEvidence:[{source:"weather",text:"calm land forecast"}]
+  });
+  const state=safeBuoyState();
+  state.data.stations[0].wave_ht=.8;
+  const candidates=_test.waterCandidate({
+    placeStates:[placeState("lake-st-clair-metropark")],
+    alertStates:emptyAlerts(1),
+    waterState:state
+  });
+  assert.equal(candidates.length,1);
+  const gate=hardGateSpecialistCandidates(candidates);
+  assert.equal(gate.safe.length,0);
+  assert.match(gate.rejected[0].reasons.join(" "),/wave height/i);
+  const mixed=dedupeMixedPool([legacy],gate.safe,gate.rejected);
+  assert.equal(mixed.candidates.length,0);
+});
+
 test("water specialist fails closed when the park-point NWS alert lookup fails",()=>{
   const candidates=_test.waterCandidate({
     placeStates:[placeState("lake-st-clair-metropark")],
