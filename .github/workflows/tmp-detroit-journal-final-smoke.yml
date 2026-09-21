@@ -1,0 +1,54 @@
+name: Temporary Detroit journal final production smoke
+on:
+  push:
+    branches:
+      - fix/detroit-journal-writer-timeout
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify final Detroit journal on production
+        shell: bash
+        run: |
+          set -euo pipefail
+          page="https://chrisizworski.com/detroit-outdoors/"
+          api="https://chrisizworski.com/api/detroit-outdoors?edition=journal-v3&smoke=final-$(date +%s)"
+          for i in $(seq 1 42); do
+            echo "Attempt $i"
+            html="$(curl -fsSL --max-time 20 "$page" || true)"
+            json="$(curl -fsSL --max-time 55 "$api" || true)"
+            if printf '%s' "$html" | grep -Fq 'A daily read on the few places where the day is actually doing something useful.'               && printf '%s' "$html" | grep -Fq 'Newsreader'               && printf '%s' "$html" | grep -Fq 'Fraunces'               && ! printf '%s' "$html" | grep -Fq 'hero-media'               && printf '%s' "$json" | grep -Fq '"edition"'; then
+              printf '%s' "$json" | node -e '
+                let s="";
+                process.stdin.on("data",d=>s+=d);
+                process.stdin.on("end",()=>{
+                  const d=JSON.parse(s);
+                  const fail=(m,c)=>{console.error("FAIL:",m);process.exit(c)};
+                  if(!d.ok) fail("API ok=false",2);
+                  if(!d.edition?.headline) fail("missing edition headline",3);
+                  if(!d.edition?.read || d.edition.read.length<120) fail("edition read too short",4);
+                  if(!d.edition?.notes || !Object.keys(d.edition.notes).length) fail("missing place notes",5);
+                  if(!Array.isArray(d.opportunities)||d.opportunities.length<1) fail("no ranked places",6);
+                  if(!["anthropic","cached-ai"].includes(d.decision?.editorial?.mode)) fail("writer not live: "+JSON.stringify(d.decision?.editorial),7);
+                  if(d.decision?.lead?.mode!=="shared-harness-jev") fail("JEV not shared harness: "+d.decision?.lead?.mode,8);
+                  if(/signal stack|opportunity detector|weather fit|current read|worth a closer look/i.test(d.edition.read)) fail("product language leaked into prose",9);
+                  if(/\u2014/.test(d.edition.headline+d.edition.read+Object.values(d.edition.notes).join(" "))) fail("em dash leaked into editorial",10);
+                  console.log("PAGE PASS");
+                  console.log("API PASS");
+                  console.log("Headline:",d.edition.headline);
+                  console.log("Read:",d.edition.read);
+                  console.log("Lead:",d.opportunities[0].place?.name);
+                  console.log("Lead note:",d.edition.notes[d.opportunities[0].id]||"(none)");
+                  console.log("Writer:",d.decision?.editorial?.mode,d.decision?.editorial?.model||"");
+                  console.log("JEV:",d.decision?.lead?.mode,d.decision?.lead?.model||"");
+                  console.log("Place sources:",JSON.stringify(d.sourceHealth?.outdoorsNowPlaces));
+                  console.log("NWS:",JSON.stringify(d.sourceHealth?.nwsAlerts));
+                  console.log("Fall:",JSON.stringify(d.sourceHealth?.fallColor));
+                });'
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Production never reached verified final journal state."
+          exit 1
