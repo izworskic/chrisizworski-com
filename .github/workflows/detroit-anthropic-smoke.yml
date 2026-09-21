@@ -30,6 +30,7 @@ jobs:
                   const d=JSON.parse(s);
                   const r=d.runtime||{};
                   const e=(d.decision&&d.decision.editorial)||{};
+                  const b=(d.decision&&d.decision.boardEditor)||{};
                   const writers=Array.isArray(e.cardWriters)?e.cardWriters:[];
                   const opportunities=Array.isArray(d.opportunities)?d.opportunities:[];
                   const placements=Array.isArray(e.placements)?e.placements:[];
@@ -43,6 +44,13 @@ jobs:
                     editorialMode:e.mode||null,
                     editorialReason:e.reason||null,
                     opportunityCount:opportunities.length,
+                    opportunityIds:opportunities.map(o=>o&&o.id).filter(Boolean),
+                    boardEditorMode:b.mode||null,
+                    boardCandidateCount:Number(b.candidateCount)||0,
+                    boardSelectedCount:Number(b.selectedCount)||0,
+                    boardSelectedIds:Array.isArray(b.selectedIds)?b.selectedIds:[],
+                    boardPostureMode:b.posture&&b.posture.mode||null,
+                    boardSlotModes:Array.isArray(b.slots)?b.slots.map(s=>({position:s.position||null,mode:s.mode||null,choiceId:s.choiceId||null})):[],
                     cardWriterCount:writers.length,
                     acceptedCardCount:writers.filter(w=>w&&w.accepted===true).length,
                     cardWriterModes:writers.map(w=>({candidateId:w.candidateId||null,mode:w.mode||null,accepted:w.accepted===true,attempt:w.attempt||null})),
@@ -71,6 +79,18 @@ jobs:
                     if (!x.anthropicKeyConfigured) {
                       console.error("ANTHROPIC_API_KEY is not configured in the production runtime.");
                       process.exit(2);
+                    }
+                    if (!x.boardCandidateCount || x.boardCandidateCount < x.opportunityCount) {
+                      console.error("JEV board editor did not receive the full hard-safe candidate pool.", x);
+                      process.exit(9);
+                    }
+                    if (!["shared-harness-jev","mixed"].includes(x.boardEditorMode)) {
+                      console.error("Detroit board selection is not using JEV.", x.boardEditorMode, x.boardSlotModes);
+                      process.exit(10);
+                    }
+                    if (x.boardSelectedCount !== x.opportunityCount || JSON.stringify(x.boardSelectedIds) !== JSON.stringify(x.opportunityIds)) {
+                      console.error("Displayed board does not match JEV board-editor selection.", x.boardSelectedIds, x.opportunityIds);
+                      process.exit(11);
                     }
                     if (x.editorialMode === "deterministic") {
                       console.error("Anthropic key exists, but Detroit editorial is still deterministic. Reason:", x.editorialReason || "unknown");
