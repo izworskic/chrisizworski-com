@@ -53,6 +53,7 @@ jobs:
                         mode:w&&w.mode||null,
                         accepted:w&&w.accepted===true,
                         attempt:w&&w.attempt||null,
+                        reason:w&&w.reason||null,
                         note:String(id&&notes[id]||"").slice(0,320)
                       };
                     })
