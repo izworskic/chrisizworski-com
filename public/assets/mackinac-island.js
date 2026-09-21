@@ -6,7 +6,7 @@
   const PROFILE_STORAGE_KEY='mackinac-trip-profile-v1';
   const PLAN_STORAGE_KEY='mackinac-trip-plan-v1';
   const TRIP_STATE=window.MackinacTripState||null;
-  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',originRequestId:0,tripDate:'',departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[],webcamSelectedId:null,webcamHls:null,intakeSchema:null,intakeAnswers:{},intakeStep:0,tripProfile:null,adaptiveAsked:false,tunings:new Set()};
+  const state={personas:new Set(['day-trip']),origin:'lower',originResolved:null,originQuery:'',originRequestId:0,tripDate:'',tripDateExplicit:false,departTime:'',data:null,mapLoaded:false,mapInstance:null,mapWasOpened:false,mapPoints:[],routeIds:[],webcamSelectedId:null,webcamHls:null,intakeSchema:null,intakeAnswers:{},intakeStep:0,tripProfile:null,adaptiveAsked:false,tunings:new Set()};
   const $=id=>document.getElementById(id);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const track=(name,params={})=>{try{if(typeof window.gtag==='function')window.gtag('event',name,params);}catch{}};
@@ -35,7 +35,7 @@
   function checkedValues(selector){return [...document.querySelectorAll(selector)].filter(x=>x.checked).map(x=>x.value);}
   function capturePlanInputs(){
     return TRIP_STATE?.sanitize({
-      trip_date:state.tripDate,
+      trip_date:state.tripDateExplicit?state.tripDate:'',
       origin_text:cleanOrigin($('originCityInput')?.value||$('heroOriginInput')?.value||state.originQuery),
       depart_at:state.departTime,
       trip:$('tripMode')?.value,
@@ -119,6 +119,12 @@
       'with-kids':{trip_vision:['kids']},
       'two-day':{trip_duration:'one-night'},
       'ferry-planner':{},
+      'stay':{},
+      'dining':{},
+      'explore':{},
+      'events':{},
+      'straits':{regional_interest:'regional'},
+      'fall':{trip_vision:['scenery']},
       'limited-walking':{trip_loss:'walking'},
       'bike-day':{trip_duration:'day',trip_vision:['biking']}
     };
@@ -220,6 +226,7 @@
 
   function renderProfile(profile){
     state.tripProfile=profile;if(!profile)return;
+    document.body.classList.add('mackinac-profile-ready');
     const card=$('tripProfileCard');if(card)card.hidden=false;
     setText('tripProfileName',profile.primary?.label||'Your Mackinac trip');
     setText('tripProfileSummary',profile.primary?.summary||'We’ll shape the trip around your answers.');
@@ -227,6 +234,9 @@
     const work=$('intakeWork');if(work)work.hidden=true;
     const reset=$('intakeReset');if(reset)reset.hidden=false;
     renderTripTabs(profile);renderDepthGuides(profile,state.data);renderTuningButtons();storageSet();
+    syncTripDateInputs(state.tripDate,{explicit:state.tripDateExplicit});
+    syncOriginInputs(state.originResolved?.origin?.label||state.originQuery||$('originCityInput')?.value||'');
+    syncDepartInputs(state.departTime||$('departTime')?.value||'');
     track('mackinac_profile_classified',{profile:profile.primary?.id||'unknown',engine:profile.engine||'unknown',confidence:profile.jev_confidence??profile.confidence??0,intent:new URLSearchParams(location.search).get('intent')||'none'});
     if(profile.next_question&&!state.adaptiveAsked)renderAdaptiveQuestion(profile.next_question);
     else if($('adaptiveQuestion'))$('adaptiveQuestion').hidden=true;
@@ -293,6 +303,7 @@
       renderProfile(j.profile);applyProfileToPlanner(j.profile);
       if(scroll)$('tripProfileCard')?.scrollIntoView({behavior:'smooth',block:'nearest'});
     }catch(e){
+      document.body.classList.add('mackinac-profile-ready','mackinac-plan-ready');
       $('tripProfileCard').hidden=false;setText('tripProfileName','Use the detailed planner below');setText('tripProfileSummary','The quick trip-style classifier is unavailable right now. Your ferry, weather and detailed planning tools still work normally.');
       track('mackinac_profile_error',{message:String(e?.message||e).slice(0,80)});
     }
@@ -355,21 +366,29 @@
     const v=String(value||'');
     if($('originCityInput')&&$('originCityInput').value!==v)$('originCityInput').value=v;
     if($('heroOriginInput')&&$('heroOriginInput').value!==v)$('heroOriginInput').value=v;
+    if($('profileOriginInput')&&$('profileOriginInput').value!==v)$('profileOriginInput').value=v;
   }
-  function syncTripDateInputs(value){
+  function syncTripDateInputs(value,{explicit=true}={}){
     const v=String(value||'').trim();
     state.tripDate=v;
+    state.tripDateExplicit=Boolean(v)&&Boolean(explicit);
     if($('tripDate')&&$('tripDate').value!==v)$('tripDate').value=v;
     if($('heroTripDate')&&$('heroTripDate').value!==v)$('heroTripDate').value=v;
+    if($('profileTripDate')&&$('profileTripDate').value!==v)$('profileTripDate').value=v;
   }
   function syncDepartInputs(value){
     const v=String(value||'').trim();
     state.departTime=v;
     if($('departTime')&&$('departTime').value!==v)$('departTime').value=v;
     if($('heroDepartTime')&&$('heroDepartTime').value!==v)$('heroDepartTime').value=v;
+    if($('profileDepartTime')&&$('profileDepartTime').value!==v)$('profileDepartTime').value=v;
+  }
+  function setProfileLogisticsStatus(text,kind=''){
+    const el=$('profileLogisticsStatus');if(!el)return;el.textContent=text;el.className=`profile-logistics-status${kind?` ${kind}`:''}`;
   }
   function setOriginStatus(text,kind=''){
-    const el=$('heroOriginStatus');if(!el)return;el.textContent=text;el.className=`origin-status${kind?` ${kind}`:''}`;
+    const el=$('heroOriginStatus');if(el){el.textContent=text;el.className=`origin-status${kind?` ${kind}`:''}`;}
+    setProfileLogisticsStatus(text,kind);
   }
   function syncOriginSide(){
     document.querySelectorAll('#originSwitch button').forEach(x=>{const a=x.dataset.origin===state.origin;x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
@@ -459,7 +478,7 @@
       if(Number.isFinite(Number(mackinaw?.drive_minutes)))p.set('origin_mackinaw_minutes',String(mackinaw.drive_minutes));
       if(Number.isFinite(Number(stIgnace?.drive_minutes)))p.set('origin_st_ignace_minutes',String(stIgnace.drive_minutes));
     }
-    if(state.tripDate)p.set('trip_date',state.tripDate);
+    if(state.tripDate&&state.tripDateExplicit)p.set('trip_date',state.tripDate);
     if(state.departTime)p.set('depart_at',state.departTime);
     const interests=[...document.querySelectorAll('#interestChoices input:checked')].map(x=>x.value);
     const must=[...document.querySelectorAll('#mustDoChoices input:checked')].map(x=>x.value);
@@ -472,9 +491,30 @@
   document.querySelectorAll('[data-scroll]').forEach(b=>b.addEventListener('click',()=>scrollToTarget(b.dataset.scroll)));
 
   $('intakeContinue')?.addEventListener('click',()=>{const q=state.intakeSchema?.base_questions?.[state.intakeStep];if(!q)return;const v=state.intakeAnswers[q.id];if(q.type==='multi'&&Array.isArray(v)&&v.length){track('mackinac_intake_answered',{question:q.id,answer:v.join('|')});state.intakeStep++;renderIntakeStep();}});
-  $('intakeReset')?.addEventListener('click',()=>{storageClear();planStorageClear();history.replaceState(null,'',location.pathname+location.search);state.intakeAnswers={};state.tripProfile=null;state.tunings.clear();state.intakeStep=0;state.adaptiveAsked=false;$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;$('tripTabsWrap').hidden=true;$('intakeReset').hidden=true;track('mackinac_intake_started',{restart:true});renderIntakeStep();});
-  $('profileEdit')?.addEventListener('click',()=>{$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;state.intakeStep=0;renderIntakeStep();});
-  $('profileBuildTrip')?.addEventListener('click',()=>{applyProfileToPlanner(state.tripProfile);track('mackinac_plan_generated',{profile:state.tripProfile?.primary?.id||'unknown',intent:new URLSearchParams(location.search).get('intent')||'none'});loadDecision();scrollToTarget('#planner');});
+  $('intakeReset')?.addEventListener('click',()=>{storageClear();planStorageClear();history.replaceState(null,'',location.pathname+location.search);state.intakeAnswers={};state.tripProfile=null;state.tunings.clear();state.intakeStep=0;state.adaptiveAsked=false;state.originResolved=null;state.originQuery='';syncTripDateInputs(detroitToday(),{explicit:false});syncDepartInputs('');syncOriginInputs('');document.body.classList.remove('mackinac-profile-ready','mackinac-plan-ready');$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;$('tripTabsWrap').hidden=true;$('intakeReset').hidden=true;track('mackinac_intake_started',{restart:true});renderIntakeStep();});
+  $('profileEdit')?.addEventListener('click',()=>{document.body.classList.remove('mackinac-plan-ready');$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;state.intakeStep=0;renderIntakeStep();});
+  $('profileBuildTrip')?.addEventListener('click',async()=>{
+    applyProfileToPlanner(state.tripProfile);
+    const tripDate=String($('profileTripDate')?.value||state.tripDate||'').trim();
+    const originText=cleanOrigin($('profileOriginInput')?.value||$('originCityInput')?.value||'');
+    const depart=String($('profileDepartTime')?.value||state.departTime||'').trim();
+    syncTripDateInputs(tripDate);
+    syncDepartInputs(depart);
+    if(!tripDate){setProfileLogisticsStatus('Choose the date you plan to visit.','error');$('profileTripDate')?.focus();return;}
+    if(!originText){setProfileLogisticsStatus('Add your starting city so we can compare both ferry ports.','error');$('profileOriginInput')?.focus();return;}
+    if(!depart){setProfileLogisticsStatus('Add the time you expect to leave home so we can find a ferry you can comfortably reach.','error');$('profileDepartTime')?.focus();return;}
+    if(!originMatches(originText)){
+      const ok=await resolveOrigin(originText,{reload:false,source:'profile-logistics'});
+      if(!ok)return;
+    }
+    setProfileLogisticsStatus('Building the ferry, timing and Island plan from this shared trip…','loading');
+    document.body.classList.add('mackinac-plan-ready');
+    const savedPlan=capturePlanInputs();if(savedPlan)planStorageSet(savedPlan);
+    track('mackinac_plan_generated',{profile:state.tripProfile?.primary?.id||'unknown',intent:new URLSearchParams(location.search).get('intent')||'none'});
+    await loadDecision();
+    setProfileLogisticsStatus('Trip built. The pages below and the rest of the Mackinac site now use these same trip facts.','resolved');
+    scrollToTarget('#planner');
+  });
   $('tripTuning')?.querySelectorAll('[data-tune]').forEach(btn=>btn.addEventListener('click',()=>applyTuningChange(btn.dataset.tune)));
   $('tripTuningReset')?.addEventListener('click',async()=>{state.tunings.clear();renderTuningButtons();const saved=capturePlanInputs();if(saved)planStorageSet(saved);track('mackinac_plan_tuned',{tuning:'reset',active:false,count:0});await loadDecision();renderTuningButtons();});
 
@@ -495,6 +535,9 @@
     state.origin=btn.dataset.origin;clearResolvedOrigin({clearInputs:true});syncOriginSide();
     track('mackinac_start_location_entered',{origin:state.origin});loadDecision();
   }));
+  $('profileTripDate')?.addEventListener('change',e=>syncTripDateInputs(e.target.value));
+  $('profileDepartTime')?.addEventListener('change',e=>syncDepartInputs(e.target.value));
+  $('profileOriginInput')?.addEventListener('input',e=>{if(!originMatches(e.target.value)){state.originResolved=null;state.originQuery='';}});
   $('heroTripDate')?.addEventListener('change',e=>{
     syncTripDateInputs(e.target.value);
     setText('heroLeave',state.tripDate&&state.originResolved&&state.departTime?'Ready to plan':'Enter date, city + time above');
@@ -575,28 +618,28 @@
       document.querySelectorAll('#personaChips .chip').forEach(x=>{const a=state.personas.has(x.dataset.persona);x.classList.toggle('active',a);x.setAttribute('aria-pressed',String(a));});
       syncTripModeUi();
     }
-    setText('builderStatus','Your trip details changed. Tap “Build my Island plan” to update the day.');
+    setText('builderStatus','Your trip details changed. Tap “Update my plan” to recalculate the day.');
     track('mackinac_itinerary_changed',{});
   });
 
   function renderTop(d){
-    const dec=d.decision||{}, score=Math.round(dec.score||0), plan=d.ferry?.recommended_plan||{};
-    setText('verdict',`${labelScore(score)} — ${score}/100`);
-    setText('scoreValue',score||'—');
-    $('scoreRing').className='score-ring '+(score>=74?'good':score>=55?'fair':'poor');
-    $('scoreRing').setAttribute('aria-label',`Visit score ${score} out of 100`);
-    setText('confidence',`${String(dec.confidence||'medium').toUpperCase()} PLAN CONFIDENCE · ferry, weather and timing checked`);
+    const dec=d.decision||{}, rawScore=Number(dec.score), hasScore=dec.score!==null&&dec.score!==undefined&&Number.isFinite(rawScore), score=hasScore?Math.round(rawScore):null, plan=d.ferry?.recommended_plan||{};
+    setText('verdict',hasScore?`${labelScore(score)} — ${score}/100`:(dec.label||'NO FEASIBLE TRIP'));
+    setText('scoreValue',hasScore?score:'—');
+    $('scoreRing').className='score-ring '+(hasScore?(score>=74?'good':score>=55?'fair':'poor'):'');
+    $('scoreRing').setAttribute('aria-label',hasScore?`Visit score ${score} out of 100`:'Visit score unavailable');
+    setText('confidence',hasScore?`${String(dec.confidence||'medium').toUpperCase()} PLAN CONFIDENCE · ferry, weather and timing checked`:'No numeric score is shown without a feasible itinerary');
     const banner=$('planningBanner');
-    if(d.planning_mode==='tomorrow'){banner.hidden=false;banner.textContent=d.planning_reason||`Today’s useful day-trip window has closed. Planning ${d.plan_date_label||'tomorrow'} instead.`;$('page-title').textContent='Mackinac Island Tomorrow';}
+    if(d.planning_mode==='tomorrow'){banner.hidden=false;banner.textContent=d.planning_reason||`Today’s useful day-trip window has closed. Planning ${d.plan_date_label||'tomorrow'} instead.`;}
     else if(d.planning_mode==='selected-date'){
       const selectedToday=d.target_date===d.local_now?.date;
       banner.hidden=selectedToday&&!d.planning_reason;
       banner.textContent=d.planning_reason||`Planning ${dateLabel(d.target_date)} from your selected trip date.`;
-      $('page-title').textContent=selectedToday?'Mackinac Island Today':`Mackinac Island · ${dateLabel(d.target_date)}`;
-    } else {banner.hidden=true;$('page-title').textContent='Mackinac Island Today';}
+      $('page-title').textContent=`Your Mackinac Island Trip · ${dateLabel(d.target_date)}`;
+    } else {banner.hidden=true;$('page-title').textContent='Your Mackinac Island Trip';}
     setText('bestArrival',plan.arrival_time||'No verified plan');
     setText('crowdsTop',d.crowds?.label||'—');
-    setText('bikeTop',d.bike?`${d.bike.label} · ${Math.round(d.bike.score||0)}/100`:'—');
+    setText('bikeTop',d.bike&&d.bike.score!==null&&d.bike.score!==undefined&&Number.isFinite(Number(d.bike.score))?`${d.bike.label} · ${Math.round(Number(d.bike.score))}/100`:(d.bike?.label||'—'));
     setText('weatherTop',d.weather?.visitor_summary||'Forecast unavailable');
     setText('marineTop',d.marine?.comfort_label||'Observation unavailable');
     setText('returnTop',returnPlanText(d));
@@ -691,6 +734,12 @@
     if(state.webcamHls){try{state.webcamHls.destroy();}catch{} state.webcamHls=null;}
     stage.innerHTML=`<video class="webcam-video" controls muted autoplay playsinline aria-label="${esc(cam.name)} live camera"></video>`;
     const video=stage.querySelector('video');
+    const showFallback=()=>{
+      if(state.webcamSelectedId!==cam.id || !stage.contains(video))return;
+      if(state.webcamHls){try{state.webcamHls.destroy();}catch{} state.webcamHls=null;}
+      stage.innerHTML=`<div class="webcam-stage-placeholder"><strong>${esc(cam.name)}</strong><p>The live stream is unavailable here right now.</p><a class="btn primary webcam-external" href="${esc(cam.source_url)}" target="_blank" rel="noopener">Open official live camera ↗</a></div>`;
+    };
+    video.addEventListener('error',showFallback,{once:true});
     if(video.canPlayType('application/vnd.apple.mpegurl')){
       video.src=cam.stream_url;video.play().catch(()=>{});
       return;
@@ -700,9 +749,8 @@
       const hls=new Hls({enableWorker:true,lowLatencyMode:true});
       state.webcamHls=hls;hls.loadSource(cam.stream_url);hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play().catch(()=>{}));
-    }).catch(()=>{
-      stage.innerHTML=`<div class="webcam-stage-placeholder"><strong>${esc(cam.name)}</strong><p>The live stream is unavailable here right now.</p><a class="btn primary webcam-external" href="${esc(cam.source_url)}" target="_blank" rel="noopener">Open official live camera ↗</a></div>`;
-    });
+      hls.on(Hls.Events.ERROR,(_event,data)=>{if(data?.fatal)showFallback();});
+    }).catch(showFallback);
   }
 
   function cameraOwner(name){
@@ -911,7 +959,8 @@
     const saved=(shared||intent)?null:futureSavedPlan();
     const seed=shared||intent||saved;
     if(seed)hydratePlanInputs(seed,{includeIntake:true});
-    else syncTripDateInputs(detroitToday());
+    else syncTripDateInputs(detroitToday(),{explicit:false});
+    if(seed?.trip_date&&seed?.origin_text&&seed?.depart_at)document.body.classList.add('mackinac-plan-ready');
     syncTripModeUi();
     await initIntake({seedAnswers:seed?.intake||null,ignoreLocal:Boolean(seed)});
     if(seed)hydratePlanInputs(seed,{includeIntake:false});
@@ -925,7 +974,7 @@
       track('mackinac_shared_plan_opened',{state_version:TRIP_STATE?.VERSION||'none'});
     }else if(intent)setText('shareStateStatus','Started from the '+String(intent.intent||'Mackinac')+' planning guide');
     else if(saved)setText('shareStateStatus','Saved trip restored on this device');
-    await loadDecision();
+    if(document.body.classList.contains('mackinac-plan-ready'))await loadDecision();
   }
   boot();
 })();

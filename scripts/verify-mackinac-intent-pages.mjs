@@ -1,4 +1,5 @@
 import fs from "node:fs";
+const htmlEsc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 const pages=[
   ["day-trip","Mackinac Island Day Trip Planner"],
   ["with-kids","Mackinac Island With Kids Planner"],
@@ -6,10 +7,11 @@ const pages=[
   ["ferry-planner","Mackinac Island Ferry Planner"],
   ["from-detroit","Detroit to Mackinac Island Trip Planner"],
   ["from-chicago","Chicago to Mackinac Island Trip Planner"],
-  ["from-traverse-city","Traverse City to Mackinac Island Trip Planner"],
-  ["from-grand-rapids","Grand Rapids to Mackinac Island Trip Planner"],
+  ["from-traverse-city","Traverse City to Mackinac Island"],
+  ["from-grand-rapids","Grand Rapids to Mackinac Island"],
   ["limited-walking","Mackinac Island With Less Walking Planner"],
-  ["bike-day","Mackinac Island Bike Day & M-185 Planner"]
+  ["bike-day","Mackinac Island Bike Day & M-185 Planner"],
+  ["fall","Mackinac Island Fall Trip Planner"]
 ];
 let fail=false;
 for(const [slug,title] of pages){
@@ -17,9 +19,9 @@ for(const [slug,title] of pages){
   if(!fs.existsSync(file)){console.error("missing",file);fail=true;continue;}
   const html=fs.readFileSync(file,"utf8");
   const checks=[
-    [html.includes("<title>"+title+" | Chris Izworski</title>"),"unique title"],
+    [html.includes("<title>"+htmlEsc(title)+" | Chris Izworski</title>"),"unique title"],
     [html.includes('rel="canonical" href="https://chrisizworski.com/mackinac-island/'+slug+'/'),"canonical"],
-    [html.includes("Build this trip live"),"planner CTA"],
+    [html.includes("data-mackinac-planner-cta")&&html.includes("#trip-intake"),"planner CTA"],
     [html.includes("Truth boundary:"),"truth boundary"],
     [html.includes("application/ld+json")&&html.includes("FAQPage"),"structured FAQ data"],
     [html.includes('name="robots" content="index,follow,max-image-preview:large'),"indexing metadata"],
@@ -37,7 +39,8 @@ if(fail)process.exit(1);
 console.log("PASS: Mackinac intent pages are substantive, canonical, internally linked and discoverable.");
 
 const ferry=fs.readFileSync("public/mackinac-island/ferry-planner/index.html","utf8");
-if(!ferry.includes("?intent=ferry-planner#main")){console.error("ferry planner CTA must land on date/city/time controls");process.exit(1);}
+if(!ferry.includes("?intent=ferry-planner#trip-intake")){console.error("ferry planner CTA must land on the shared My Trip intake");process.exit(1);}
+if(ferry.includes("#main")){console.error("ferry planner still points at the retired duplicate planner anchor");process.exit(1);}
 
 const originSeeds={
   "from-detroit":"Detroit%2C%20MI",
@@ -47,7 +50,7 @@ const originSeeds={
 };
 for(const [slug,encoded] of Object.entries(originSeeds)){
   const html=fs.readFileSync("public/mackinac-island/"+slug+"/index.html","utf8");
-  if(!html.includes("?intent=ferry-planner&amp;from="+encoded+"#main")&&!html.includes("?intent=ferry-planner&from="+encoded+"#main")){
+  if(!html.includes("?intent=ferry-planner&amp;from="+encoded+"#trip-intake")&&!html.includes("?intent=ferry-planner&from="+encoded+"#trip-intake")){
     console.error(slug+" missing preseeded origin CTA");fail=true;
   }
 }

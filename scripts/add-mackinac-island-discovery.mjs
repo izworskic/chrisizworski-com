@@ -1,20 +1,21 @@
 import fs from 'node:fs';
+import {primaryUrlRows} from './mackinac-site-architecture.mjs';
 
 const sitemap='public/sitemap.xml';
 if(fs.existsSync(sitemap)){
   let xml=fs.readFileSync(sitemap,'utf8');
   const urls=[
-    ['https://chrisizworski.com/mackinac-island/','daily','0.9'],
+    ...primaryUrlRows(),
     ['https://chrisizworski.com/mackinac-island/day-trip/','weekly','0.85'],
     ['https://chrisizworski.com/mackinac-island/with-kids/','weekly','0.82'],
     ['https://chrisizworski.com/mackinac-island/2-day-itinerary/','weekly','0.82'],
-    ['https://chrisizworski.com/mackinac-island/ferry-planner/','daily','0.86'],
     ['https://chrisizworski.com/mackinac-island/from-detroit/','weekly','0.80'],
     ['https://chrisizworski.com/mackinac-island/from-chicago/','weekly','0.80'],
     ['https://chrisizworski.com/mackinac-island/from-traverse-city/','weekly','0.80'],
     ['https://chrisizworski.com/mackinac-island/from-grand-rapids/','weekly','0.80'],
     ['https://chrisizworski.com/mackinac-island/limited-walking/','weekly','0.84'],
-    ['https://chrisizworski.com/mackinac-island/bike-day/','weekly','0.84']
+    ['https://chrisizworski.com/mackinac-island/bike-day/','weekly','0.84'],
+    ['https://chrisizworski.com/mackinac-island/fall/','daily','0.86']
   ];
   for(const [loc,freq,priority] of urls){
     if(xml.includes('<loc>'+loc+'</loc>'))continue;

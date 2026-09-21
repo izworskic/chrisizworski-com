@@ -66,7 +66,7 @@ const checks={
     earlyPlans.every(x=>Number.isFinite(x.mainland_drive_minutes)&&Number.isFinite(x.pre_ferry_idle_minutes)&&Number.isFinite(x.door_to_island_minutes)) &&
     /preFerryIdle \* \.18/.test(route),
   journey_is_visible:
-    /id="heroTripDate"/.test(html) &&
+    /id="profileTripDate"/.test(html) &&
     /id="tripDate"/.test(html) &&
     /trip_date/.test(js) &&
     /pre_ferry_idle_minutes/.test(js) &&
