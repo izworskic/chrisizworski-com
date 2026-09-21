@@ -15,8 +15,8 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      HUB_COMMIT: 661648d107e428e743b95f967973a4185c23d01f
-      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/661648d107e428e743b95f967973a4185c23d01f
+      HUB_COMMIT: fe8a4e30a90d9ae5484f587acc2cc90c218509f7
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/fe8a4e30a90d9ae5484f587acc2cc90c218509f7
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -149,13 +149,17 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for id in bird-migration columbia-salmon great-lakes-levels florida-red-tide space-coast-launch trail-ridge-road yellowstone-geysers shoshone-falls; do
+          for id in bird-migration columbia-salmon great-lakes-levels florida-red-tide space-coast-launch trail-ridge-road yellowstone-geysers shoshone-falls midwest-xc; do
             grep -q "data-tool-id=\"$id\"" public/synced-national-tools/index.html
           done
           grep -q 'href="/national-tools/northeast-great-lakes/"' public/synced-national-tools/index.html
           grep -q 'href="/national-tools/southeast/"' public/synced-national-tools/index.html
           grep -q 'href="/national-tools/rockies/"' public/synced-national-tools/index.html
           grep -q 'href="https://greatlakeslevels.org/"' public/synced-national-tools/index.html
+          grep -q 'id="region-upper-midwest"' public/synced-national-tools/index.html
+          grep -q 'href="https://xcski.chrisizworski.com/midwest/"' public/synced-national-tools/index.html
+          grep -q 'href="https://xcski.chrisizworski.com/wisconsin/"' public/synced-national-tools/index.html
+          grep -q 'href="https://xcski.chrisizworski.com/minnesota/"' public/synced-national-tools/index.html
           grep -q 'numberOfItems":35' public/synced-national-tools/index.html
 
           grep -q 'Northeast &amp; Great Lakes' public/synced-national-tools/northeast-great-lakes/index.html
