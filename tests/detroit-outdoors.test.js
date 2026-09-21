@@ -49,7 +49,7 @@ test("Detroit Outdoors separates strong desk writing from additive per-card writ
  assert.match(route,/Use the supplied place context/);
  assert.match(route,/Return JSON only: \{\\"note\\":\\"\.\.\.\\"\}/);
  assert.match(route,/detroit-outdoors:desk:v8/);
- assert.match(route,/detroit-outdoors:card:v9/);
+ assert.match(route,/detroit-outdoors:card:v10/);
  assert.match(route,/placements:editorialPlan\.cardNotes/);
 });
 
@@ -209,4 +209,17 @@ test("Detroit Outdoors rejects unsupported bird specificity before JEV acceptanc
  assert.match(route,/Do not name a bird species or bird group unless that exact kind of bird appears/);
  assert.match(route,/Do not call migration peak, ideal, critical or exceptional/);
  assert.match(route,/Reject any named bird species or bird group that does not appear in additiveEvidence\.contextFacts/);
+});
+
+
+test("Detroit Outdoors gives Haiku an explicit evidence whitelist and a third rescue pass",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
+ assert.match(route,/function evidenceVocabulary/);
+ assert.match(route,/allowedSpecificLanguage:evidenceVocabulary\(slot\)/);
+ assert.match(route,/hard whitelist for named bird groups and strength words/);
+ assert.match(route,/attempt=3/);
+ assert.match(route,/Write a restrained evidence-only card explanation/);
+ assert.match(route,/45 to 70 words/);
+ assert.match(workflow,/reason:w&&w\.reason\|\|null/);
 });
