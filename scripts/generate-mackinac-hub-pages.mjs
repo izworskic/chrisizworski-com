@@ -18,13 +18,13 @@ function profileBox(){
 }
 
 function lodgingCards(){
-  return LODGING.map(item=>`<article class="catalog-card"><div class="catalog-top"><span>${esc(item.district)}</span><strong>${esc(item.name)}</strong><small>${esc(item.type)}</small></div><p>${esc(item.note)}</p><div class="catalog-traits">${pillList(item.traits.slice(0,5))}</div>${item.closing_2026?`<small class="catalog-status">Published 2026 closing: ${esc(item.closing_2026)}</small>`:"<small class=\"catalog-status\">Season dates: verify for your trip.</small>"}</article>`).join("");
+  return LODGING.map(item=>`<article class="catalog-card" data-place-id="${esc(item.id)}"><div class="catalog-top"><span>${esc(item.district)}</span><strong>${esc(item.name)}</strong><small>${esc(item.type)}</small></div><p>${esc(item.note)}</p><div class="catalog-traits">${pillList(item.traits.slice(0,5))}</div>${item.closing_2026?`<small class="catalog-status">Published 2026 closing: ${esc(item.closing_2026)}</small>`:"<small class=\"catalog-status\">Season dates: verify for your trip.</small>"}</article>`).join("");
 }
 function diningCards(){
-  return DINING.map(item=>`<article class="catalog-card"><div class="catalog-top"><span>${esc(item.district)}</span><strong>${esc(item.name)}</strong><small>${esc(item.style)} · ${esc(item.price_band)}</small></div><p>${esc(item.note)}</p><div class="catalog-traits">${pillList(item.traits.slice(0,5))}</div><small class="catalog-status">Meals: ${esc(item.meal.join(", "))} · current hours/reservations must be checked.</small></article>`).join("");
+  return DINING.map(item=>`<article class="catalog-card" data-place-id="${esc(item.id)}"><div class="catalog-top"><span>${esc(item.district)}</span><strong>${esc(item.name)}</strong><small>${esc(item.style)} · ${esc(item.price_band)}</small></div><p>${esc(item.note)}</p><div class="catalog-traits">${pillList(item.traits.slice(0,5))}</div><small class="catalog-status">Meals: ${esc(item.meal.join(", "))} · current hours/reservations must be checked.</small></article>`).join("");
 }
 function regionalCards(){
-  return REGIONAL.map(item=>`<article class="catalog-card"><div class="catalog-top"><span>${esc(item.gateway)}</span><strong>${esc(item.name)}</strong><small>${esc(item.type)}</small></div><p>${esc(item.note)}</p><small class="catalog-status">Route fit only. Verify current hours for the trip date.</small></article>`).join("");
+  return REGIONAL.map(item=>`<article class="catalog-card" data-place-id="${esc(item.id)}"><div class="catalog-top"><span>${esc(item.gateway)}</span><strong>${esc(item.name)}</strong><small>${esc(item.type)}</small></div><p>${esc(item.note)}</p><small class="catalog-status">Route fit only. Verify current hours for the trip date.</small></article>`).join("");
 }
 
 const pages=[
@@ -178,7 +178,7 @@ function pageHtml(p){
 ${p.body}
 <section class="hub-section faq"><div class="shell"><div class="eyebrow">Common questions</div><h2>Before you lock this part of the trip</h2>${faqHtml(p.faq)}</div></section>
 <section class="hub-section"><div class="shell"><p class="truth"><strong>Truth boundary:</strong> ${esc(p.truth)}</p><div class="planner-cta"><h2>Carry this decision into the same Mackinac planner</h2><p>Your visitor profile and trip inputs belong to one shared engine. Moving to another Mackinac page should not create a separate trip.</p><a class="btn" data-mackinac-planner-cta href="${p.primaryCta}">${esc(p.primaryLabel)}</a></div><p class="sources"><strong>Primary planning references:</strong> ${p.sources.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join(" · ")}</p></div></section>
-</main><footer><div class="shell">Built by <a href="/">Chris Izworski</a>. Live agencies, operators and businesses remain authoritative for their own schedules, conditions, accessibility, prices and availability.</div></footer><script src="/assets/mackinac-hub.js?v=20260920-hub1" defer></script></body></html>`;
+</main><footer><div class="shell">Built by <a href="/">Chris Izworski</a>. Live agencies, operators and businesses remain authoritative for their own schedules, conditions, accessibility, prices and availability.</div></footer><script src="/assets/mackinac-hub.js?v=20260921-jev2" defer></script></body></html>`;
 }
 
 const slugs=pages.map(x=>x.slug);
