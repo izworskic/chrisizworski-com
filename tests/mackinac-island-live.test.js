@@ -706,7 +706,7 @@ test('regional intake is human-first while preserving the detailed planner as se
   assert.match(html,/id="eat-guide"/);
   assert.match(html,/id="straits-guide"/);
   assert.match(human,/shell\.id="trip-intake"/);
-  assert.match(human,/Plan the trip, not the form/);
+  assert.match(human,/Build a Mackinac trip that actually fits/);
   assert.match(human,/Trip shape/);
   assert.match(human,/Getting there/);
   assert.match(human,/People \+ movement/);
