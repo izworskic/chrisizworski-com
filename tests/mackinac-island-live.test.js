@@ -479,16 +479,16 @@ test('browser sends both routed port times to the Mackinac decision API', () => 
 test('Mackinac personalized planner requires date city and leave-home time', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/id="heroTripDate"/);
+  assert.match(html,/id="profileTripDate"/);
   assert.match(html,/id="tripDate"/);
-  assert.match(html,/id="heroDepartTime"/);
+  assert.match(html,/id="profileDepartTime"/);
   assert.match(html,/id="departTime"/);
-  assert.match(html,/Start with your travel day/);
+  assert.match(html,/Anchor the real trip/);
   assert.match(html,/Enter date, city \+ time above/);
   assert.match(js,/p\.set\('trip_date',state\.tripDate\)/);
   assert.match(js,/p\.set\('depart_at',state\.departTime\)/);
-  assert.match(js,/Choose your trip date first/);
-  assert.match(js,/Date and starting city are set\. Add the time you’d like to leave home/);
+  assert.match(js,/Choose the date you plan to visit/);
+  assert.match(js,/Add the time you expect to leave home/);
 });
 
 test('24-hour leave-home input becomes a deterministic departure minute', () => {
@@ -623,11 +623,11 @@ test('responsive visitor-first Mackinac surface survives phone tablet and landsc
   assert.match(html,/Make it your Mackinac/);
   assert.match(html,/Which ferry gets you onto the Island best\?/);
   assert.match(html,/What it should feel like while you’re here/);
-  assert.match(html,/Build my Island plan/);
+  assert.match(html,/Build my Mackinac plan/);
   assert.match(css,/container:decision \/ inline-size/);
   assert.match(css,/@container decision \(max-width:760px\)/);
   assert.match(css,/@media\(orientation:landscape\) and \(max-height:650px\)/);
-  assert.match(css,/\.origin-city-control\{grid-column:1\/-1;grid-row:2\}/);
+  assert.match(css,/\.profile-logistics-grid\{display:grid/);
   assert.match(css,/\.builder-grid\{grid-template-columns:repeat\(4,minmax\(0,1fr\)\)\}/);
   assert.doesNotMatch(js,/JEV-ranked feasible plan|deterministic ranking/);
 });
