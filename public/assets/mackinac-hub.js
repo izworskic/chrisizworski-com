@@ -39,8 +39,14 @@
     try{if(typeof window.gtag==="function")window.gtag("event",name,params);}catch{}
   }
   function surfaceLabel(){
-    const map={today:"Today",plan:"Plan",ferries:"Ferries",stay:"Stay",eat:"Eat",explore:"Explore",events:"Events",straits:"Straits"};
+    const map={"my-trip":"My Trip",today:"My Trip",plan:"Trip guide",ferries:"Ferries",stay:"Stay",eat:"Eat",explore:"Explore",events:"Events",straits:"Straits"};
     return map[rawSurface]||rawSurface.replace(/-/g," ");
+  }
+  function normalizePrimaryNav(){
+    const nav=document.querySelector(".mackinac-destination-nav");if(!nav)return;
+    const root=nav.querySelector('[data-mackinac-nav="today"],[data-mackinac-nav="my-trip"]');
+    if(root){root.dataset.mackinacNav="my-trip";root.textContent="My Trip";root.href="/mackinac-island/";}
+    nav.querySelector('[data-mackinac-nav="plan"]')?.remove();
   }
   function insertAtDecisionFront(node){
     const hero=document.querySelector("main .hero");
@@ -70,11 +76,14 @@
     const nav=document.querySelector(".mackinac-destination-nav");
     if(!nav||!order.length)return;
     const links=new Map([...nav.querySelectorAll("[data-mackinac-nav]")].map(a=>[a.dataset.mackinacNav,a]));
-    for(const item of order){
+    const seen=new Set();
+    const normalized=order.map(item=>({...item,id:(item.id==="today"||item.id==="plan")?"my-trip":item.id})).filter(item=>!seen.has(item.id)&&seen.add(item.id));
+    for(const item of normalized){
       const a=links.get(item.id);
       if(a)nav.appendChild(a);
     }
-    const first=order.find(x=>x.id!==rawSurface&&links.has(x.id));
+    const current=rawSurface==="today"?"my-trip":rawSurface;
+    const first=normalized.find(x=>x.id!==current&&links.has(x.id));
     nav.querySelectorAll("a").forEach(a=>a.classList.remove("trip-next"));
     if(first)links.get(first.id)?.classList.add("trip-next");
   }
