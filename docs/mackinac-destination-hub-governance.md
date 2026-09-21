@@ -73,46 +73,41 @@ Treat /mackinac-island/ as the destination hub namespace.
 
 Primary destination navigation:
 
-1. **Today** — /mackinac-island/
-   - current conditions;
-   - live visit recommendation;
-   - ferry/weather/bike/crowd picture;
-   - rapid entry into trip planning.
+1. **My Trip** — /mackinac-island/
+   - the single progressive visitor intake;
+   - trip length, party, trip vision and primary loss/constraint;
+   - trip date, starting city and leave-home time;
+   - creation and persistence of the shared trip state;
+   - personalized live ferry/weather/bike/crowd recommendation after the trip is established;
+   - advanced controls are fine-tuning, not a second planning entry point.
 
-2. **Plan** — /mackinac-island/plan/
-   - progressive visitor intake;
-   - trip length;
-   - party;
-   - trip vision;
-   - primary loss/constraint;
-   - explanation of how the personalized planner works;
-   - handoff into the live planner.
+The existing **/mackinac-island/plan/** URL remains an indexable explanatory planning guide and hands the visitor into My Trip. It is deliberately not a competing primary workspace.
 
-3. **Ferries** — /mackinac-island/ferry-planner/
+2. **Ferries** — /mackinac-island/ferry-planner/
    - mainland gateway choice;
    - starting city;
    - leave-home time;
    - reachable departures;
    - day-trip versus overnight return logic.
 
-4. **Stay** — /mackinac-island/where-to-stay/
+3. **Stay** — /mackinac-island/where-to-stay/
    - downtown convenience versus quiet/resort/iconic experience;
    - luggage/transition implications;
    - lodging-fit recommendations from the shared curated catalog;
    - no room-availability claims.
 
-5. **Eat** — /mackinac-island/dining/
+4. **Eat** — /mackinac-island/dining/
    - meal strategy based on trip shape;
    - quick versus destination meals;
    - geography and timing;
    - dining-fit recommendations from the shared curated catalog;
    - no table/hours availability claims without verification.
 
-6. **Explore** — /mackinac-island/things-to-do/
+5. **Explore** — /mackinac-island/things-to-do/
    - choose experiences based on pace, mobility, interests, weather, and available time;
    - route visitors to bike, family, limited-walking, history, scenery, map, and similar decision surfaces.
 
-7. **Events** — /mackinac-island/events/
+6. **Events** — /mackinac-island/events/
    - major event anchors;
    - how events change ferry, lodging, crowd, and itinerary decisions;
    - current-date/event information must be source-backed.
@@ -144,22 +139,22 @@ A new secondary page is allowed only when it has a materially different search i
 
 The visitor should not have to repeat information unnecessarily.
 
-The existing stored Mackinac profile is the shared identity for the trip experience.
+The shared Mackinac trip has two persisted layers:
 
-Hub pages may read:
-- saved intake answers;
-- primary visitor archetype label;
-- high-level preference vector where useful.
+- the visitor profile: saved intake answers, primary archetype and bounded preference vector;
+- the practical trip state: trip date, starting city, leave-home time, trip type, party and other planner inputs.
 
-Hub pages must not treat stored profile data as verified live fact.
+Hub pages may read both layers to make inherited context visible. Stored trip data remains user-supplied planning context, not verified live fact.
 
 Every hub page should:
 - detect an existing Mackinac visitor profile when available;
-- acknowledge the saved trip context;
-- offer a clear “continue my trip” handoff;
+- read the practical trip state when available;
+- acknowledge the saved trip context with useful facts such as date and origin;
+- personalize its surface from the same profile;
+- offer a clear “edit my trip” handoff;
 - preserve the same shared planner rather than silently starting a second plan.
 
-If no profile exists, the page should work normally and invite the visitor into the progressive intake.
+If no profile exists, the page should remain useful as a source-backed guide and point the visitor to the root My Trip intake. It should not create another copy of the intake workflow.
 
 ## Page contract
 
