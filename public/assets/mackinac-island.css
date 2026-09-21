@@ -293,3 +293,46 @@ img,svg{max-width:100%}
 .mackinac-destination-nav a:hover{background:var(--paper);border-color:var(--line)}
 .mackinac-destination-nav a[aria-current="page"]{background:var(--green);border-color:var(--green);color:#fff}
 @media(max-width:680px){.destination-nav-wrap{top:0}.mackinac-destination-nav{padding-bottom:8px}}
+
+
+/* Shared-trip orchestration, 2026-09-21.
+   New visitors establish one trip before the live decision surfaces are revealed. */
+body:not(.mackinac-plan-ready) .decision-head,
+body:not(.mackinac-plan-ready) .decision-grid,
+body:not(.mackinac-plan-ready) .primary-rec,
+body:not(.mackinac-plan-ready) .hero-trip-glance,
+body:not(.mackinac-plan-ready) .hero-actions,
+body:not(.mackinac-plan-ready) .fresh-line,
+body:not(.mackinac-plan-ready) .content-stack,
+body:not(.mackinac-plan-ready) .trip-tabs-wrap,
+body:not(.mackinac-plan-ready) .trip-tuning{display:none!important}
+body:not(.mackinac-plan-ready) .planning-banner{display:none!important}
+body:not(.mackinac-plan-ready) .decision-panel{display:flex;flex-direction:column;justify-content:center;min-height:300px}
+body:not(.mackinac-plan-ready) .hero-intro{font-size:17px;max-width:720px;margin-bottom:0}
+body:not(.mackinac-plan-ready) .mackinac-destination-nav a:not([data-mackinac-nav="my-trip"]){display:none}
+body.mackinac-profile-ready:not(.mackinac-plan-ready) .intake-intro{opacity:.74}
+body.mackinac-plan-ready .intake-intro{display:none}
+body.mackinac-plan-ready .intake-card{grid-template-columns:1fr}
+body.mackinac-plan-ready .trip-profile-card{grid-column:1}
+body.mackinac-plan-ready .manual-style{margin-top:8px}
+.profile-logistics{margin-top:18px;padding-top:17px;border-top:1px solid var(--line)}
+.profile-logistics-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:12px}
+.profile-logistics-head strong{font-size:17px}
+.profile-logistics-head span{max-width:520px;text-align:right;color:var(--muted);font-size:11px;line-height:1.4}
+.profile-logistics-grid{display:grid;grid-template-columns:.85fr 1.35fr .8fr;gap:9px}
+.profile-logistics-grid label{display:grid;gap:5px}
+.profile-logistics-grid label>span{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:820}
+.profile-logistics-grid input{width:100%;min-width:0;min-height:44px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);padding:9px 10px;font:inherit;font-weight:700}
+.profile-logistics-status{margin-top:9px;color:var(--muted);font-size:11px;line-height:1.45}
+.profile-logistics-status.loading{color:var(--lake-dark)}
+.profile-logistics-status.resolved{color:var(--green)}
+.profile-logistics-status.error{color:#8c3b32}
+.mackinac-plan-ready #page-title{max-width:760px}
+.mackinac-plan-ready .hero-intro{max-width:760px}
+@media(max-width:680px){
+  .profile-logistics-head{display:block}
+  .profile-logistics-head span{display:block;text-align:left;margin-top:4px}
+  .profile-logistics-grid{grid-template-columns:1fr}
+  .profile-logistics-grid input{font-size:16px}
+  body:not(.mackinac-plan-ready) .decision-panel{min-height:0}
+}
