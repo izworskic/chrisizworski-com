@@ -61,7 +61,9 @@ test("Detroit Outdoors reuses existing engines and gates generated copy",()=>{
  assert.match(route,/api\/opportunities\?scope=all/);
  assert.match(route,/api\/fall-color-conditions/);
  assert.match(route,/ANTHROPIC_API_KEY/);
- assert.match(route,/claude-sonnet-4-6/);\n assert.match(route,/AbortSignal\\.timeout\\(32000\\)/);\n assert.match(route,/s-maxage=300/);
+ assert.match(route,/claude-sonnet-4-6/);
+ assert.match(route,/AbortSignal\\.timeout\\(32000\\)/);
+ assert.match(route,/s-maxage=300/);
 });
 
 test("Detroit Outdoors uses the existing fall-color dispatcher instead of adding a serverless function",()=>{
