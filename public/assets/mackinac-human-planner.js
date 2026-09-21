@@ -167,7 +167,7 @@
 
   const shell=document.createElement("section");
   shell.className="human-planner-shell";
-  shell.id="humanTripPlanner";
+  shell.id="trip-intake";
   shell.setAttribute("aria-label","Mackinac Island trip planner");
   main.prepend(shell);
 
