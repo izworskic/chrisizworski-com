@@ -145,6 +145,10 @@ test("Detroit Outdoors exposes safe Anthropic runtime diagnostics and production
  assert.match(workflow,/ANTHROPIC_API_KEY is not configured in the production runtime/);
  assert.match(workflow,/editorialMode/);
  assert.match(workflow,/EXPECTED_SHA/);
+ assert.match(workflow,/cardWriterCount/);
+ assert.match(workflow,/acceptedCardCount/);
+ assert.match(workflow,/Not every displayed card has accepted Haiku copy/);
+ assert.match(workflow,/At least one displayed card is not using an Anthropic writer/);
 });
 
 

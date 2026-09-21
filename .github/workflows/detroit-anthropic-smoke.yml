@@ -28,13 +28,19 @@ jobs:
                   const d=JSON.parse(s);
                   const r=d.runtime||{};
                   const e=(d.decision&&d.decision.editorial)||{};
+                  const writers=Array.isArray(e.cardWriters)?e.cardWriters:[];
+                  const opportunities=Array.isArray(d.opportunities)?d.opportunities:[];
                   console.log(JSON.stringify({
                     commitSha:r.commitSha||null,
                     vercelEnv:r.vercelEnv||null,
                     anthropicKeyConfigured:r.anthropicKeyConfigured===true,
                     writerModel:r.writerModel||null,
                     editorialMode:e.mode||null,
-                    editorialReason:e.reason||null
+                    editorialReason:e.reason||null,
+                    opportunityCount:opportunities.length,
+                    cardWriterCount:writers.length,
+                    acceptedCardCount:writers.filter(w=>w&&w.accepted===true).length,
+                    cardWriterModes:writers.map(w=>({candidateId:w.candidateId||null,mode:w.mode||null,accepted:w.accepted===true,attempt:w.attempt||null}))
                   }));
                 });
               ')"
@@ -52,7 +58,19 @@ jobs:
                       console.error("Anthropic key exists, but Detroit editorial is still deterministic. Reason:", x.editorialReason || "unknown");
                       process.exit(3);
                     }
-                    console.log("Anthropic production configuration is active.");
+                    if (!x.opportunityCount || x.cardWriterCount !== x.opportunityCount) {
+                      console.error("Per-card Haiku mismatch. Opportunities:", x.opportunityCount, "card writers:", x.cardWriterCount, x.cardWriterModes);
+                      process.exit(5);
+                    }
+                    if (x.acceptedCardCount !== x.opportunityCount) {
+                      console.error("Not every displayed card has accepted Haiku copy.", x.cardWriterModes);
+                      process.exit(6);
+                    }
+                    if (x.cardWriterModes.some(w=>!["anthropic","cached-ai"].includes(w.mode))) {
+                      console.error("At least one displayed card is not using an Anthropic writer.", x.cardWriterModes);
+                      process.exit(7);
+                    }
+                    console.log("Anthropic production configuration is active on every displayed Detroit card.");
                   });
                 '
                 exit 0
