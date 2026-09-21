@@ -59,7 +59,11 @@ test("Detroit Outdoors makes JEV the board editor after hard safety gates",()=>{
  assert.match(route,/function safeCandidatesFrom/);
  assert.match(route,/if\(hazard\.hard\) return \{candidates:\[\],suppressed:/);
  assert.match(route,/if\(scored\.hardStop\|\|scored\.score===null\) continue/);
- assert.match(route,/safePool\.push\(\.\.\.result\.candidates\)/);
+ assert.match(route,/parkSafePool\.push\(\.\.\.result\.candidates\)/);
+ assert.match(route,/const emitted=emitSpecialistCandidates/);
+ assert.match(route,/const specialistGate=hardGateSpecialistCandidates\(emitted\.candidates\)/);
+ assert.match(route,/const mixed=dedupeMixedPool\(parkSafePool,specialistGate\.safe\)/);
+ assert.match(route,/const safePool=mixed\.candidates/);
  assert.match(route,/const boardDecision=await editBoard\(safePool,4\)/);
  assert.match(route,/You are the Detroit Outdoors board editor/);
  assert.match(route,/Every candidate in this pool has already passed deterministic hard-safety and required-data gates/);
@@ -266,4 +270,40 @@ test("Detroit Outdoors cache-busts the live client bundle",()=>{
  assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/detroit-outdoors\/index\.html/);
+});
+
+
+test("Detroit Outdoors mixes reusable specialist engines into one hard-safe JEV candidate pool",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const engines=read("lib/detroit-outdoors/engines.js");
+ assert.match(route,/require\("\.\/engines\.js"\)/);
+ assert.match(route,/loadSpecialistEngineStates\(\)/);
+ assert.match(route,/sourceEngine:"park-weather"/);
+ assert.match(route,/verifiedEvidence/);
+ assert.match(route,/candidateCountByEngine:countByEngine\(safePool\)/);
+ assert.match(route,/selectedEngineDiversity/);
+ assert.match(route,/diagnostics:\{\s*opportunityEngines:opportunityEngineDiagnostics/);
+ assert.match(engines,/https:\/\/chrisizworski\.com\/api\/buoys/);
+ assert.match(engines,/https:\/\/chrisizworski\.com\/api\/aurora/);
+ assert.match(engines,/function waterCandidate/);
+ assert.match(engines,/function nightSkyCandidate/);
+ assert.match(engines,/function fallColorCandidates/);
+ assert.match(engines,/function hardGateSpecialistCandidates/);
+ assert.match(engines,/function dedupeMixedPool/);
+ assert.match(engines,/WATER_HARD_ALERT/);
+ assert.match(engines,/Required NOAA\/NDBC water observation is older than four hours/);
+ assert.match(engines,/Regional fall-color modeling cannot establish exact foliage at a specific park/);
+ assert.match(engines,/modeled planning signals, not a visibility guarantee/);
+});
+
+test("Detroit Outdoors seals normalized specialist evidence before Haiku and review",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/for\(const item of candidate\.verifiedEvidence\|\|\[\]\)/);
+ assert.match(route,/Opportunity time window:/);
+ assert.match(route,/Why now:/);
+ assert.match(route,/Uncertainty:/);
+ assert.match(route,/sourceEngine:candidate\.sourceEngine/);
+ assert.match(route,/opportunityType:candidate\.opportunityType/);
+ assert.match(route,/verifiedEvidence:candidate\.verifiedEvidence/);
+ assert.match(route,/specialistHandoff:candidate\.specialistHandoff/);
 });
