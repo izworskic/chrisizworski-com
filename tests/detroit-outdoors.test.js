@@ -44,8 +44,8 @@ test("Detroit Outdoors uses the writer as an editor rather than a template fille
  const route=read("lib/detroit-outdoors/route.js");
  assert.match(route,/very good local outdoor editor/);
  assert.match(route,/clear, specific, understated and readable/);
- assert.match(route,/Turn raw weather and seasonal facts into meaning/);
- assert.match(route,/desk note of 80 to 115 words/);
+ assert.match(route,/Prefer concrete implications over adjectives/);
+ assert.match(route,/Desk read: 80 to 115 words/);
  assert.match(route,/Card notes: write only for candidate IDs listed in cardBriefs/);
  assert.match(route,/Return JSON only/);
  assert.match(route,/detroit-outdoors:edition:v5/);
