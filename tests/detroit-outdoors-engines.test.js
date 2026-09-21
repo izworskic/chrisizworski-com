@@ -105,6 +105,17 @@ test("marine hazard is a deterministic veto before the water candidate can reach
   assert.match(gate.rejected[0].reasons.join(" "),/Small Craft Advisory/);
 });
 
+test("extreme observed alerts are hard vetoes even when the event name is outside the explicit warning list",()=>{
+  const candidates=_test.waterCandidate({
+    placeStates:[placeState("lake-st-clair-metropark")],
+    alertStates:[{ok:true,alerts:[{event:"Unusual Hazard",severity:"Extreme",certainty:"Observed",headline:"Extreme observed hazard"}]}],
+    waterState:safeBuoyState()
+  });
+  const gate=hardGateSpecialistCandidates(candidates);
+  assert.equal(gate.safe.length,0);
+  assert.match(gate.rejected[0].reasons.join(" "),/dangerous weather warning/i);
+});
+
 test("stale buoy data is rejected by the deterministic validity gate",()=>{
   const state=safeBuoyState();
   state.data.stations[0].obs_time=new Date(Date.now()-8*60*60*1000).toISOString();
