@@ -606,7 +606,7 @@ test('Mackinac shared-trip route inputs are explicit and cache-safe', () => {
   assert.match(html,/mackinac-human-planner\.js\?v=20260921-human2/);
   assert.match(html,/mackinac-human-planner\.css\?v=20260921-human2/);
   assert.match(human,/Starting city, state\/province or ZIP\/postal code/);
-  assert.match(human,/I already know when I’m leaving/);
+  assert.match(human,/I cannot leave before/);
   assert.match(human,/Leave this blank if you want the planner to tell you when to leave/);
   for (const source of ['/mackinac-island','/mackinac-island/:path*','/assets/mackinac-island.:ext(css|js)']) {
     const rule=config.headers.find(x=>x.source===source);
