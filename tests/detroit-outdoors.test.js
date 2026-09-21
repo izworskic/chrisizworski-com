@@ -40,37 +40,36 @@ test("Detroit Outdoors keeps safety deterministic and JEV closed-set",()=>{
  assert.doesNotMatch(route,/JEV.*legal status/i);
 });
 
-test("Detroit Outdoors uses the writer as an editor rather than a template filler",()=>{
+test("Detroit Outdoors separates strong desk writing from additive per-card writing",()=>{
  const route=read("lib/detroit-outdoors/route.js");
- assert.match(route,/very good local outdoor editor/);
- assert.match(route,/clear, specific, understated and readable/);
- assert.match(route,/Prefer concrete implications over adjectives/);
- assert.match(route,/Desk read: 80 to 115 words/);
- assert.match(route,/Card notes: write only for candidate IDs listed in cardBriefs/);
- assert.match(route,/Return JSON only/);
- assert.match(route,/detroit-outdoors:edition:v7/);
+ assert.match(route,/strong local outdoor editor/);
+ assert.match(route,/knowledgeable local editor, not a chatbot/);
+ assert.match(route,/Card explanations are written separately by independent card writers/);
+ assert.match(route,/Your paragraph must be additive/);
+ assert.match(route,/Use the supplied place context/);
+ assert.match(route,/Return JSON only: \{\\"note\\":\\"\.\.\.\\"\}/);
+ assert.match(route,/detroit-outdoors:desk:v8/);
+ assert.match(route,/detroit-outdoors:card:v8/);
  assert.match(route,/placements:editorialPlan\.cardNotes/);
- assert.match(route,/Do not explain the tool, model, JEV, Gem, APIs, rankings, scores, signals, prompts or data stack/);
 });
 
 
-test("Detroit Outdoors lets JEV choose where prose adds value before the writer runs",()=>{
+test("Detroit Outdoors lets JEV assign an additive job to every card before Haiku runs",()=>{
  const route=read("lib/detroit-outdoors/route.js");
- assert.match(route,/MAX_EDITORIAL_CARD_NOTES = 3/);
+ assert.doesNotMatch(route,/MAX_EDITORIAL_CARD_NOTES/);
  assert.match(route,/async function planEditorialPlacement/);
- assert.match(route,/Choose the editorial treatment for this one Detroit Outdoors card/);
- assert.match(route,/NO_NOTE/);
+ assert.match(route,/Choose the single best additive editorial job for this one Detroit Outdoors card/);
+ assert.match(route,/Every displayed card gets its own Haiku writer/);
+ assert.match(route,/Every card must receive one additive editorial job/);
+ assert.match(route,/PLACE_CONTEXT/);
  assert.match(route,/WHY_TODAY/);
  assert.match(route,/DRIVE_DECISION/);
  assert.match(route,/NEXT_CHECK/);
+ assert.match(route,/MIGRATION_CONTEXT/);
  assert.match(route,/SEASONAL_CONTEXT/);
- assert.match(route,/The writer will receive only this treatment brief and sealed verified facts/);
  assert.match(route,/editorialQuestion/);
- assert.match(route,/question:x\.question/);
- assert.match(route,/You do not choose what gets written and you do not choose placement/);
- assert.match(route,/notes object may contain only candidate IDs supplied in cardBriefs/);
- assert.match(route,/If you cannot add material value beyond visibleCard and additiveEvidence, omit that candidate from notes/);
- assert.match(route,/synthesize at least two verified facts/);
+ assert.match(route,/question:editorialQuestion/);
+ assert.match(route,/const cardNotes=mapped\.map/);
  assert.match(route,/placement:\`card:\$\{x\.candidateId\}:after-weather\`/);
 });
 
@@ -100,16 +99,17 @@ test("Detroit Outdoors is discoverable from the tools hub and sitemap",()=>{
  assert.match(sitemap,/https:\/\/chrisizworski\.com\/detroit-outdoors\//);
 });
 
-test("Detroit Outdoors rejects low-value generated card prose instead of backfilling filler",()=>{
+test("Detroit Outdoors validates and repairs each Haiku card independently",()=>{
  const route=read("lib/detroit-outdoors/route.js");
  const client=read("public/assets/detroit-outdoors.js");
  assert.match(route,/async function reviewEditorialNote/);
- assert.match(route,/async function validateEditorialNotes/);
  assert.match(route,/fallbackId:"REJECT"/);
  assert.match(route,/Reject generic encouragement, weather restatement, score restatement, travel-time restatement/);
- assert.match(route,/const edition=await validateEditorialNotes/);
- assert.match(route,/notes:\{\}/);
- assert.doesNotMatch(route,/else if\(fallback\.notes&&fallback\.notes\[candidate\.id\]\)/);
+ assert.match(route,/let review=await reviewEditorialNote\(candidate,slot,note\)/);
+ assert.match(route,/if\(!review\.accepted\)/);
+ assert.match(route,/The JEV reviewer rejected the first draft/);
+ assert.match(route,/review=await reviewEditorialNote\(candidate,slot,note\)/);
+ assert.match(route,/mode:"anthropic-rejected"/);
  assert.match(client,/Why this matters/);
 });
 
@@ -124,9 +124,9 @@ test("Detroit Outdoors expands migration cards with classifier-driven authoritat
  assert.match(route,/September and October as the best months for fall migratory birds/);
  assert.match(route,/Main Trail as good for warblers in spring and fall/);
  assert.match(route,/function editorialEvidence/);
- assert.match(route,/additiveEvidence:x\.evidence/);
- assert.match(route,/For MIGRATION_CONTEXT, explain the place and habitat significance/);
- assert.match(route,/Write 75 to 110 words that make the migration signal understandable/);
+ assert.match(route,/additiveEvidence:slot\.evidence/);
+ assert.match(route,/Migration timing is not a live bird report/);
+ assert.match(route,/Write 80 to 115 words that make the migration signal understandable/);
  assert.match(route,/noteSources:Object\.fromEntries/);
  assert.match(client,/data\.edition\?\.noteSources\?\.\[c\.id\]/);
  assert.match(client,/Context:/);
@@ -145,4 +145,40 @@ test("Detroit Outdoors exposes safe Anthropic runtime diagnostics and production
  assert.match(workflow,/ANTHROPIC_API_KEY is not configured in the production runtime/);
  assert.match(workflow,/editorialMode/);
  assert.match(workflow,/EXPECTED_SHA/);
+});
+
+
+test("Detroit Outdoors runs an independent Haiku job for every ranked card",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/const cardNotes=mapped\.map/);
+ assert.doesNotMatch(route,/\.slice\(0,MAX_EDITORIAL_CARD_NOTES\)/);
+ assert.match(route,/async function writeCardEditorial/);
+ assert.match(route,/Promise\.all\(\(plan\.cardNotes\|\|\[\]\)\.map/);
+ assert.match(route,/This is an independent card-writing job/);
+ assert.match(route,/Directly answer the assigned question/);
+ assert.match(route,/const repairPrompt=/);
+ assert.match(route,/The JEV reviewer rejected the first draft/);
+ assert.match(route,/cardWriters:cardResults\.map/);
+ assert.match(route,/PLACE_CONTEXT/);
+});
+
+test("Detroit Outdoors gives every card verified place context before Haiku writes",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/const PLACE_CONTEXT/);
+ assert.match(route,/Belle Isle is a 985-acre island park/);
+ assert.match(route,/more than 700 acres of forests, fields, fens and swamps/);
+ assert.match(route,/contains 11 inland lakes/);
+ assert.match(route,/offers more than 12 miles of trails/);
+ assert.match(route,/state-designated dark sky preserves/);
+ assert.match(route,/evidence\.contextFacts\.push\(\.\.\.placeContext\.facts\)/);
+ assert.match(route,/evidence\.sources\.push\(\{label:placeContext\.sourceLabel,url:placeContext\.sourceUrl\}\)/);
+});
+
+test("Detroit Outdoors separates the desk writer from per-card writers",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/async function writeDeskEditorial/);
+ assert.match(route,/Card explanations are written separately by independent card writers/);
+ assert.match(route,/const deskPromise=writeDeskEditorial/);
+ assert.match(route,/const cardPromise=Promise\.all/);
+ assert.match(route,/const \[desk,cardResults\]=await Promise\.all/);
 });
