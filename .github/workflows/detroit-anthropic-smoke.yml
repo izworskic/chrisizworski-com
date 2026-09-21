@@ -30,6 +30,9 @@ jobs:
                   const e=(d.decision&&d.decision.editorial)||{};
                   const writers=Array.isArray(e.cardWriters)?e.cardWriters:[];
                   const opportunities=Array.isArray(d.opportunities)?d.opportunities:[];
+                  const placements=Array.isArray(e.placements)?e.placements:[];
+                  const placementById=new Map(placements.map(p=>[p&&p.candidateId,p]));
+                  const notes=(d.edition&&d.edition.notes&&typeof d.edition.notes==="object")?d.edition.notes:{};
                   console.log(JSON.stringify({
                     commitSha:r.commitSha||null,
                     vercelEnv:r.vercelEnv||null,
@@ -40,7 +43,19 @@ jobs:
                     opportunityCount:opportunities.length,
                     cardWriterCount:writers.length,
                     acceptedCardCount:writers.filter(w=>w&&w.accepted===true).length,
-                    cardWriterModes:writers.map(w=>({candidateId:w.candidateId||null,mode:w.mode||null,accepted:w.accepted===true,attempt:w.attempt||null}))
+                    cardWriterModes:writers.map(w=>({candidateId:w.candidateId||null,mode:w.mode||null,accepted:w.accepted===true,attempt:w.attempt||null})),
+                    cardDetails:writers.map(w=>{
+                      const id=w&&w.candidateId||null;
+                      const placement=placementById.get(id)||{};
+                      return {
+                        candidateId:id,
+                        treatment:placement.treatment||null,
+                        mode:w&&w.mode||null,
+                        accepted:w&&w.accepted===true,
+                        attempt:w&&w.attempt||null,
+                        note:String(id&&notes[id]||"").slice(0,320)
+                      };
+                    })
                   }));
                 });
               ')"
@@ -70,6 +85,11 @@ jobs:
                       console.error("At least one displayed card is not using an Anthropic writer.", x.cardWriterModes);
                       process.exit(7);
                     }
+                    if (x.cardDetails.some(c=>!c.note||!c.note.trim())) {
+                      console.error("At least one displayed card is missing rendered Haiku copy.", x.cardDetails);
+                      process.exit(8);
+                    }
+                    console.log("Per-card editorial detail:", JSON.stringify(x.cardDetails));
                     console.log("Anthropic production configuration is active on every displayed Detroit card.");
                   });
                 '
