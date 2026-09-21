@@ -5,6 +5,7 @@ const fs=require("node:fs");
 const root=fs.readFileSync("public/mackinac-island/index.html","utf8");
 const js=fs.readFileSync("public/assets/mackinac-human-planner.js","utf8");
 const css=fs.readFileSync("public/assets/mackinac-human-planner.css","utf8");
+const route=require("../lib/mackinac-island/route.js")._test;
 
 test("human planner assets parse and mount at the shared trip intake",()=>{
   assert.doesNotThrow(()=>new Function(js));
@@ -15,10 +16,37 @@ test("human planner assets parse and mount at the shared trip intake",()=>{
 });
 
 test("human planner asks for an earliest-leave constraint instead of requiring a guessed leave time",()=>{
-  assert.match(js,/Earliest you can leave/);
+  assert.match(js,/I already know when I’m leaving/);
   assert.match(js,/Leave this blank if you want the planner to tell you when to leave/);
   assert.match(js,/if\(state\.earliestLeave\)p\.set\("depart_at",state\.earliestLeave\)/);
   assert.doesNotMatch(js,/if\(!state\.earliestLeave\).*return false/);
+});
+
+test("future trip without a supplied leave time calculates departure from the chosen ferry",()=>{
+  const date="2026-09-20";
+  const profile=route.profileFromQuery({
+    origin_name:"Bay City, Michigan, US",
+    origin_drive_minutes:"125",
+    origin_preferred_port:"Mackinaw City",
+    origin_mackinaw_minutes:"125",
+    origin_st_ignace_minutes:"162"
+  },["day-trip"],"lower");
+  assert.equal(profile.departure_minutes,null);
+  const ctx={
+    date,personas:profile.personas,origin:"lower",profile,hourly:[],
+    marine:{score:90},attractions:route.attractionState(date,7*60),events:[],
+    sunrise:route.solarMinutes(date,45.8497,-84.6189,true),
+    sunset:route.solarMinutes(date,45.8497,-84.6189,false),
+    sameDay:false,nowMinutes:0
+  };
+  const records=[...route.arnoldSchedule(date,true),...route.sheplersSchedule(date,true)];
+  const plans=route.planCandidates(records,ctx);
+  assert.ok(plans.length>0);
+  const chosen=plans[0];
+  const drive=route.driveMinutesForPort(profile,chosen.outbound.origin_port);
+  const calculatedLeave=chosen.outbound.departure_minutes-chosen.outbound.checkin_buffer_minutes-drive-15;
+  assert.equal(chosen.trip_start_minutes,calculatedLeave);
+  assert.equal(chosen.pre_ferry_idle_minutes,0);
 });
 
 test("missing trip facts fail soft without fabricated ferry precision",()=>{
