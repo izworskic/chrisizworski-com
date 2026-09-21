@@ -60,10 +60,14 @@ test("Mackinac preview executes the human planner and restores a shared trip",as
   const port=9333;
   const userDir="/tmp/mackinac-cdp-"+process.pid;
   fs.rmSync(userDir,{recursive:true,force:true});
+  let chromeStderr="";
   const chrome=cp.spawn(bin,[
-    "--headless=new","--no-sandbox","--disable-gpu","--disable-dev-shm-usage",
+    "--headless","--no-sandbox","--disable-gpu","--disable-dev-shm-usage",
+    "--disable-background-networking","--no-first-run","--no-default-browser-check",
+    "--remote-allow-origins=*",
     `--remote-debugging-port=${port}`,`--user-data-dir=${userDir}`,"about:blank"
-  ],{stdio:"ignore"});
+  ],{stdio:["ignore","ignore","pipe"]});
+  chrome.stderr.on("data",chunk=>{chromeStderr+=String(chunk).slice(0,4000);});
   try{
     let ready=false;
     for(let i=0;i<30;i++){
@@ -73,7 +77,7 @@ test("Mackinac preview executes the human planner and restores a shared trip",as
       }catch{}
       await sleep(200);
     }
-    assert.ok(ready,"Chrome DevTools endpoint did not start");
+    assert.ok(ready,`Chrome DevTools endpoint did not start; exit=${chrome.exitCode}; stderr=${chromeStderr.slice(-1500)}`);
 
     const target=await debugTarget(port,ROOT);
     const {ws,send}=await connect(target.webSocketDebuggerUrl);
