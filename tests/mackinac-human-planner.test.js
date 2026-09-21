@@ -87,11 +87,13 @@ test("tuning preserves the shared trip instead of restarting intake",()=>{
   assert.match(js,/mackinac-trip-plan-v1/);
 });
 
-test("legacy detail remains secondary and explicitly revealable",()=>{
+test("legacy root dashboard stays hidden instead of exposing stale duplicate state",()=>{
   assert.match(css,/body\.mackinac-human-v2 \.hero/);
   assert.match(css,/body\.mackinac-human-v2 \.intake-wrap/);
   assert.match(css,/body\.mackinac-human-v2:not\(\.mackinac-human-details\) \.content-stack/);
-  assert.match(js,/Show full live detail/);
+  assert.doesNotMatch(js,/Show full live detail/);
+  assert.ok(js.includes("/mackinac-island/ferry-planner/"));
+  assert.ok(js.includes("/mackinac-island/things-to-do/"));
 });
 
 test("mobile human planner has dedicated breakpoints",()=>{
@@ -142,4 +144,26 @@ test("saved trips hydrate back into the human planner instead of restarting ques
   assert.ok(js.includes("restoredProfile?.complete&&restoredPlan"));
   assert.ok(js.includes("hydrateFromSavedTrip()"));
   assert.ok(js.includes('restored:true,mode:"plan"'));
+});
+
+
+test("human planner enforces the server four-adjustment limit in the UI",()=>{
+  assert.ok(js.includes("current.size>=4"));
+  assert.ok(js.includes("Four adjustments are already active"));
+  assert.ok(js.includes("Use up to four adjustments at once"));
+});
+
+test("shared plan links hydrate the human planner instead of falling into hidden legacy UI",()=>{
+  assert.ok(js.includes("window.MackinacTripState?.decode(location.hash)"));
+  assert.ok(js.includes('source,"shared-link"') || js.includes('"shared-link"'));
+  assert.ok(js.includes("hydratePlanState(sharedPlan"));
+});
+
+test("intent and origin query seeds feed the human planner",()=>{
+  assert.ok(js.includes('qs.get("intent")'));
+  assert.ok(js.includes('qs.get("from")'));
+  assert.ok(js.includes('"day-trip"'));
+  assert.ok(js.includes('"with-kids"'));
+  assert.ok(js.includes('"limited-walking"'));
+  assert.ok(js.includes('"bike-day"'));
 });
