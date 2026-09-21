@@ -127,10 +127,10 @@ test("Detroit Outdoors validates and repairs each Haiku card independently",()=>
  assert.match(route,/async function reviewEditorialNote/);
  assert.match(route,/fallbackId:"REJECT"/);
  assert.match(route,/Reject generic encouragement, weather restatement, score restatement, travel-time restatement/);
- assert.match(route,/let review=await reviewEditorialNote\\(candidate,activeSlot,note\\)/);
+ assert.match(route,/let review=await reviewEditorialNote\(candidate,activeSlot,note\)/);
  assert.match(route,/if\(!review\.accepted\)/);
  assert.match(route,/The reviewer rejected the first draft/);
- assert.match(route,/review=await reviewEditorialNote\\(candidate,activeSlot,note\\)/);
+ assert.match(route,/review=await reviewEditorialNote\(candidate,activeSlot,note\)/);
  assert.match(route,/mode:"anthropic-rejected"/);
  assert.match(client,/Why this matters/);
 });
