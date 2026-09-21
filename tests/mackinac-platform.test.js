@@ -60,6 +60,7 @@ test("one shared harness client owns Mackinac JEV transport",()=>{
   assert.doesNotMatch(route,/process\.env\.VERCEL_OIDC_TOKEN/);
   assert.doesNotMatch(intelligence,/process\.env\.VERCEL_OIDC_TOKEN/);
   assert.match(client,/getVercelOidcToken/);
+  assert.doesNotMatch(client,/process\.env\.VERCEL_OIDC_TOKEN/);
   assert.match(client,/injectionDependency/);
 });
 
