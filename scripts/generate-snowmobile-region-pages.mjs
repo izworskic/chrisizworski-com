@@ -7,8 +7,8 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 
 function pageFor(region) {
   const canonical = `https://chrisizworski.com/snowmobile/regions/${region.key}.html`;
-  const title = `${region.label} Snowmobile Conditions | Chris Izworski`;
-  const description = `${region.label} snowmobile trail conditions from official Michigan DNR trail data and closures${region.legacyCorridor ? ', two verified MISORVA club reports and a live MDOT camera' : ' and National Weather Service forecasts'}.`;
+  const title = `${region.shortLabel} Snowmobile Conditions | Chris Izworski`;
+  const description = `${region.shortLabel} snowmobile conditions from Michigan DNR trail data, closures and NWS forecasts${region.legacyCorridor ? ', plus verified Grayling and Gaylord club reports' : ''}.`;
   const corridorBlock = region.legacyCorridor ? `
   <section id="corridor-sections-wrap" class="panel corridor-strip"><div class="section-headline"><div><div class="eyebrow">Required corridor</div><h2>Where the route gets weaker</h2></div><span class="small">Grayling \u2192 Frederic \u2192 Waters \u2192 Gaylord</span></div><div id="corridorSections" class="corridor-sections"><div class="corridor-section">Loading corridor segments\u2026</div></div></section>` : '';
   const cameraBlock = region.cameraId ? `
@@ -19,7 +19,7 @@ function pageFor(region) {
   return `<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="${canonical}"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1"><meta name="google-adsense-account" content="ca-pub-8222782620788075"><meta name="theme-color" content="#123246"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="/assets/snowmobile.css">${cameraCss}<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script><script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script><script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: `${region.label} Snowmobile Conditions`, dateModified: '2026-09-20' },
+      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: `${region.label} Snowmobile Conditions`, dateModified: '2026-09-21' },
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://chrisizworski.com/' },
         { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://chrisizworski.com/tools/' },

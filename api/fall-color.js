@@ -18,6 +18,7 @@ const handlers = {
   cron: require("../lib/fall-color/routes/cron.js"),
   "old-sow-live": require("../lib/old-sow/route.js"),
   "mackinac-island": require("../lib/mackinac-island/route.js"),
+  "detroit-outdoors": require("../lib/detroit-outdoors/route.js"),
 };
 
 module.exports = async (req, res) => {
