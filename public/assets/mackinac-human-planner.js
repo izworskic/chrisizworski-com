@@ -214,7 +214,7 @@
           '<button type="button" class="human-choice'+(state.originMode==="nearby"?" selected":"")+'" data-set="originMode" data-value="nearby" aria-pressed="'+String(state.originMode==="nearby")+'">Already near the Straits<small>Skip the long mainland drive.</small></button>'+
           '<button type="button" class="human-choice'+(state.originMode==="later"?" selected":"")+'" data-set="originMode" data-value="later" aria-pressed="'+String(state.originMode==="later")+'">I will decide later<small>Keep planning, but do not fake ferry reachability.</small></button>'+
         '</div></div>'+
-        (state.originMode==="from-home"?'<div class="human-question"><div class="human-field-grid"><label class="human-field"><span>Starting city, state/province or ZIP/postal code</span><input id="humanOrigin" type="search" autocomplete="off" value="'+esc(state.originText)+'" placeholder="Bay City, MI"></label><label class="human-field"><span>Earliest you can leave <em style="font-weight:500;color:#6f817d">(optional)</em></span><input id="humanEarliestLeave" type="time" value="'+esc(state.earliestLeave)+'"></label></div><p class="human-question-help">Leave this blank if you want the planner to tell you when to leave. Add a time only when you truly cannot leave earlier.</p><div class="human-origin-status'+(state.originResolved?" good":"")+'" id="humanOriginStatus">'+originStatusText()+'</div></div>':
+        (state.originMode==="from-home"?'<div class="human-question"><div class="human-field-grid"><label class="human-field"><span>Starting city, state/province or ZIP/postal code</span><input id="humanOrigin" type="search" autocomplete="off" value="'+esc(state.originText)+'" placeholder="Bay City, MI"></label><label class="human-field"><span>I already know when I’m leaving <em style="font-weight:500;color:#6f817d">(optional)</em></span><input id="humanEarliestLeave" type="time" value="'+esc(state.earliestLeave)+'"></label></div><p class="human-question-help">Leave this blank if you want the planner to tell you when to leave. Add a time only when you already have a real departure-time constraint.</p><div class="human-origin-status'+(state.originResolved?" good":"")+'" id="humanOriginStatus">'+originStatusText()+'</div></div>':
           state.originMode==="nearby"?'<div class="human-origin-status good">Good. We will compare the usable ferry choices without pretending you have a long approach drive.</div>':
           state.originMode==="later"?'<div class="human-origin-status">We can still build your Mackinac style and decision order. Exact ferry timing stays locked until you add a starting point.</div>':"")+
         '<div class="human-stage-actions"><button class="human-btn" type="button" data-action="back">Back</button><div style="display:flex;gap:10px;align-items:center"><span class="human-error" id="humanStageError"></span><button class="human-btn primary" type="button" data-action="next">Next: who is going</button></div></div>'+
@@ -447,7 +447,7 @@
         '<div class="human-result-hero"><span class="human-planner-kicker">'+esc(readiness)+'</span><h2>'+esc(profile.primary?.label||"Your Mackinac trip")+'</h2><p>'+esc(d.itinerary_summary||d.decision?.primary_reason||profile.primary?.summary||"The plan is built from your trip and the available verified inputs.")+'</p><div class="human-result-meta">'+planMeta().map(x=>"<span>"+esc(x)+"</span>").join("")+'</div></div>'+
         '<div class="human-result-body">'+
           '<div class="human-first-move"><div class="human-first-move-head"><span>Your first move</span><strong>'+esc(port)+'</strong></div><div class="human-journey">'+
-            '<div class="human-journey-step"><span>Leave</span><strong>'+esc(leave)+'</strong><small>'+(state.earliestLeave?"Your earliest-leave constraint is respected.":"Calculated for the selected ferry; you did not have to guess it.")+'</small></div>'+
+            '<div class="human-journey-step"><span>Leave</span><strong>'+esc(leave)+'</strong><small>'+(state.earliestLeave?"Your leave-time constraint is respected.":"Calculated for the selected ferry; you did not have to guess it.")+'</small></div>'+
             '<div class="human-journey-step"><span>Be at the dock</span><strong>'+esc(journey.dock_ready_time||"Allow check-in time")+'</strong><small>'+esc(port)+'</small></div>'+
             '<div class="human-journey-step"><span>Ferry</span><strong>'+esc(ferry)+'</strong><small>'+esc(plan.operator||"Published schedule")+'</small></div>'+
             '<div class="human-journey-step"><span>On the Island</span><strong>'+esc(arrival)+'</strong><small>This is when the Island day actually starts.</small></div>'+
@@ -590,10 +590,35 @@
     try{return JSON.parse(localStorage.getItem(PLAN_KEY)||"null")?.plan||null;}catch{return null;}
   })();
 
-  if(restoredProfile?.complete&&restoredPlan&&Object.values(state).some(Boolean)){
-    state.profile=restoredProfile;
+  async function boot(){
+    const draftLooksComplete=Boolean(
+      state.tripDuration&&state.dateMode&&state.originMode&&state.party&&state.walking&&state.visions.length&&state.loss
+    );
+    if(restoredProfile?.complete&&restoredPlan&&draftLooksComplete){
+      state.profile=restoredProfile;
+      if(state.dateMode==="today")state.tripDate=detroitToday();
+      if(state.tripDuration==="unsure"||state.dateMode==="flexible"||state.originMode==="later"){
+        frameworkResult();
+        track("mackinac_human_planner_loaded",{version:"v2",restored:true,mode:"framework"});
+        return;
+      }
+      loading();
+      try{
+        if(state.originMode==="from-home"){
+          const ok=await resolveOrigin();
+          if(!ok)throw new Error("Starting point needs a clearer location.");
+        }
+        await buildRoute();
+        exactResult();
+        track("mackinac_human_planner_loaded",{version:"v2",restored:true,mode:"plan"});
+        return;
+      }catch{
+        state.step=0;
+      }
+    }
+    renderStage();
+    track("mackinac_human_planner_loaded",{version:"v2",restored:false});
   }
 
-  renderStage();
-  track("mackinac_human_planner_loaded",{version:"v2"});
+  boot();
 })();
