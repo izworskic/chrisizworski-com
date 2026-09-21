@@ -48,7 +48,7 @@ test("Detroit Outdoors uses the writer as an editor rather than a template fille
  assert.match(route,/Desk read: 80 to 115 words/);
  assert.match(route,/Card notes: write only for candidate IDs listed in cardBriefs/);
  assert.match(route,/Return JSON only/);
- assert.match(route,/detroit-outdoors:edition:v6/);
+ assert.match(route,/detroit-outdoors:edition:v7/);
  assert.match(route,/placements:editorialPlan\.cardNotes/);
  assert.match(route,/Do not explain the tool, model, JEV, Gem, APIs, rankings, scores, signals, prompts or data stack/);
 });
@@ -69,7 +69,7 @@ test("Detroit Outdoors lets JEV choose where prose adds value before the writer 
  assert.match(route,/question:x\.question/);
  assert.match(route,/You do not choose what gets written and you do not choose placement/);
  assert.match(route,/notes object may contain only candidate IDs supplied in cardBriefs/);
- assert.match(route,/If you cannot add material value beyond visibleCard, omit that candidate from notes/);
+ assert.match(route,/If you cannot add material value beyond visibleCard and additiveEvidence, omit that candidate from notes/);
  assert.match(route,/synthesize at least two verified facts/);
  assert.match(route,/placement:\`card:\$\{x\.candidateId\}:after-weather\`/);
 });
@@ -111,4 +111,24 @@ test("Detroit Outdoors rejects low-value generated card prose instead of backfil
  assert.match(route,/notes:\{\}/);
  assert.doesNotMatch(route,/else if\(fallback\.notes&&fallback\.notes\[candidate\.id\]\)/);
  assert.match(client,/Why this matters/);
+});
+
+
+test("Detroit Outdoors expands migration cards with classifier-driven authoritative context",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const client=read("public/assets/detroit-outdoors.js");
+ const css=read("public/assets/detroit-outdoors.css");
+ assert.match(route,/const EDITORIAL_CONTEXT/);
+ assert.match(route,/Michigan DNR Fall Birding/);
+ assert.match(route,/U\.S\. Fish & Wildlife Service/);
+ assert.match(route,/September and October as the best months for fall migratory birds/);
+ assert.match(route,/Main Trail as good for warblers in spring and fall/);
+ assert.match(route,/function editorialEvidence/);
+ assert.match(route,/additiveEvidence:x\.evidence/);
+ assert.match(route,/For MIGRATION_CONTEXT, explain the place and habitat significance/);
+ assert.match(route,/Write 75 to 110 words that make the migration signal understandable/);
+ assert.match(route,/noteSources:Object\.fromEntries/);
+ assert.match(client,/data\.edition\?\.noteSources\?\.\[c\.id\]/);
+ assert.match(client,/Context:/);
+ assert.match(css,/\.card-source/);
 });
