@@ -42,8 +42,9 @@
   const durationOptions=[
     ["day","Day trip","One ferry over and back the same day."],
     ["one-night","One night","Use the quiet evening and next morning."],
-    ["two-three","2–3 nights","Spread the Island out instead of compressing it."],
-    ["four-plus","4+ nights","Make the Island the center of a longer stay."],
+    ["two-night","2 nights","One arrival day, one full day, one return day."],
+    ["three-night","3 nights","More room for a full Island rhythm."],
+    ["four-plus","4+ nights","Choose the exact number once you select this."],
     ["unsure","Not sure yet","Build the shape first; decide the length after."]
   ];
   const labels={
@@ -56,9 +57,11 @@
   const defaults={
     step:0,
     tripDuration:"",
+    nightCount:4,
     dateMode:"",
     tripDate:"",
     originMode:"",
+    nearbySide:"",
     originText:"",
     originResolved:null,
     earliestLeave:"",
@@ -112,7 +115,7 @@
     };
     return map[state.party]||[2,0];
   };
-  const nights=()=>state.tripDuration==="one-night"?1:state.tripDuration==="two-three"?2:state.tripDuration==="four-plus"?4:1;
+  const nights=()=>state.tripDuration==="one-night"?1:state.tripDuration==="two-night"?2:state.tripDuration==="three-night"?3:state.tripDuration==="four-plus"?Math.max(4,Math.min(7,Number(state.nightCount)||4)):1;
   const tripMode=()=>state.tripDuration==="day"?"day-trip":state.tripDuration==="unsure"?"":"overnight";
   const personaList=()=>{
     const p=new Set();
@@ -125,7 +128,7 @@
     return [...p];
   };
   const buildAnswers=()=>({
-    trip_duration:state.tripDuration||"unsure",
+    trip_duration:state.tripDuration==="two-night"||state.tripDuration==="three-night"?"two-three":state.tripDuration||"unsure",
     party:state.party||"adults-friends",
     trip_vision:[...state.visions],
     trip_loss:state.loss||"flexible",
@@ -135,7 +138,7 @@
     const [adults,children]=partyCounts();
     return {
       trip_date:state.dateMode==="flexible"?"":state.tripDate,
-      origin_text:state.originMode==="from-home"?(state.originResolved?.origin?.label||clean(state.originText)):(state.originMode==="nearby"?"Already near the Straits":""),
+      origin_text:state.originMode==="from-home"?(state.originResolved?.origin?.label||clean(state.originText)):(state.originMode==="nearby"?(state.nearbySide==="mackinaw"?"Mackinaw City area":state.nearbySide==="st-ignace"?"St. Ignace area":"Straits area; either port works"):""),
       depart_at:"",
       depart_not_before:state.earliestLeave||"",
       trip:tripMode(),
@@ -196,7 +199,7 @@
     baseCard(
       '<div class="human-stage">'+
         '<div class="human-stage-head"><div><span class="human-planner-kicker">1 · Trip shape</span><h2>What kind of Mackinac trip are you trying to have?</h2><p>Trip length and date change almost every downstream decision. Start there.</p></div><div class="human-stage-note">Nothing here commits you. You can change it later without rebuilding the whole trip.</div></div>'+
-        '<div class="human-question"><span class="human-question-label">How long?</span><div class="human-choice-grid">'+durationOptions.map(([v,l,s])=>'<button type="button" class="human-choice'+(state.tripDuration===v?" selected":"")+'" data-set="tripDuration" data-value="'+v+'" aria-pressed="'+String(state.tripDuration===v)+'">'+esc(l)+'<small>'+esc(s)+'</small></button>').join("")+'</div></div>'+
+        '<div class="human-question"><span class="human-question-label">How long?</span><div class="human-choice-grid">'+durationOptions.map(([v,l,s])=>'<button type="button" class="human-choice'+(state.tripDuration===v?" selected":"")+'" data-set="tripDuration" data-value="'+v+'" aria-pressed="'+String(state.tripDuration===v)+'">'+esc(l)+'<small>'+esc(s)+'</small></button>').join("")+'</div>'+(state.tripDuration==="four-plus"?'<label class="human-field" style="margin-top:12px"><span>How many nights?</span><input id="humanNightCount" type="number" min="4" max="7" inputmode="numeric" value="'+esc(state.nightCount)+'"></label>':"")+'</div>'+
         '<div class="human-question"><span class="human-question-label">When?</span><div class="human-choice-grid">'+
           '<button type="button" class="human-choice'+(state.dateMode==="today"?" selected":"")+'" data-set="dateMode" data-value="today" aria-pressed="'+String(state.dateMode==="today")+'">Today<small>Use what is still realistically reachable.</small></button>'+
           '<button type="button" class="human-choice'+(state.dateMode==="date"?" selected":"")+'" data-set="dateMode" data-value="date" aria-pressed="'+String(state.dateMode==="date")+'">I have a date<small>Use the published schedule and date-specific conditions.</small></button>'+
@@ -218,7 +221,7 @@
           '<button type="button" class="human-choice'+(state.originMode==="later"?" selected":"")+'" data-set="originMode" data-value="later" aria-pressed="'+String(state.originMode==="later")+'">I will decide later<small>Keep planning, but do not fake ferry reachability.</small></button>'+
         '</div></div>'+
         (state.originMode==="from-home"?'<div class="human-question"><div class="human-field-grid"><label class="human-field"><span>Starting city, state/province or ZIP/postal code</span><input id="humanOrigin" type="search" autocomplete="off" value="'+esc(state.originText)+'" placeholder="Bay City, MI"></label><label class="human-field"><span>I already know when I’m leaving <em style="font-weight:500;color:#6f817d">(optional)</em></span><input id="humanEarliestLeave" type="time" value="'+esc(state.earliestLeave)+'"></label></div><p class="human-question-help">Leave this blank if you want the planner to tell you when to leave. Add a time only when you already have a real departure-time constraint.</p><div class="human-origin-status'+(state.originResolved?" good":"")+'" id="humanOriginStatus">'+originStatusText()+'</div></div>':
-          state.originMode==="nearby"?'<div class="human-origin-status good">Good. We will compare the usable ferry choices without pretending you have a long approach drive.</div>':
+          state.originMode==="nearby"?'<div class="human-question"><span class="human-question-label">Which side are you on?</span><div class="human-choice-grid"><button type="button" class="human-choice'+(state.nearbySide==="mackinaw"?" selected":"")+'" data-set="nearbySide" data-value="mackinaw" aria-pressed="'+String(state.nearbySide==="mackinaw")+'">Mackinaw City side<small>Lower Peninsula side of the bridge.</small></button><button type="button" class="human-choice'+(state.nearbySide==="st-ignace"?" selected":"")+'" data-set="nearbySide" data-value="st-ignace" aria-pressed="'+String(state.nearbySide==="st-ignace")+'">St. Ignace side<small>Upper Peninsula side of the bridge.</small></button><button type="button" class="human-choice'+(state.nearbySide==="either"?" selected":"")+'" data-set="nearbySide" data-value="either" aria-pressed="'+String(state.nearbySide==="either")+'">Either port works<small>I am close enough that the ferry schedule can decide.</small></button></div></div>':
           state.originMode==="later"?'<div class="human-origin-status">We can still build your Mackinac style and decision order. Exact ferry timing stays locked until you add a starting point.</div>':"")+
         '<div class="human-stage-actions"><button class="human-btn" type="button" data-action="back">Back</button><div style="display:flex;gap:10px;align-items:center"><span class="human-error" id="humanStageError"></span><button class="human-btn primary" type="button" data-action="next">Next: who is going</button></div></div>'+
       '</div>',1
