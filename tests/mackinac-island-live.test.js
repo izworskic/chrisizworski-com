@@ -600,14 +600,14 @@ test('Mackinac page cache-busts planner asset and removes stale starting-city co
 
 test('Mackinac shared-trip route inputs are explicit and cache-safe', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
+  const human=fs.readFileSync(path.join(__dirname,'..','public','assets','mackinac-human-planner.js'),'utf8');
   const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
-  assert.match(html,/data-mackinac-build="20260920-live19"/);
-  assert.match(html,/<span>Starting city<\/span><input id="profileOriginInput"/);
-  assert.match(html,/mackinac-island\.js\?v=20260921-trip1/);
-  assert.doesNotMatch(html,/Add a starting city/i);
-  assert.doesNotMatch(js,/Add a starting city/i);
-  assert.match(html,/Enter date, city \+ time above/);
+  assert.match(html,/data-mackinac-build="20260921-human2"/);
+  assert.match(html,/mackinac-human-planner\.js\?v=20260921-human2/);
+  assert.match(html,/mackinac-human-planner\.css\?v=20260921-human2/);
+  assert.match(human,/Starting city, state\/province or ZIP\/postal code/);
+  assert.match(human,/I already know when I’m leaving/);
+  assert.match(human,/Leave this blank if you want the planner to tell you when to leave/);
   for (const source of ['/mackinac-island','/mackinac-island/:path*','/assets/mackinac-island.:ext(css|js)']) {
     const rule=config.headers.find(x=>x.source===source);
     assert.ok(rule, source);
@@ -696,24 +696,25 @@ test('Horns uses official-page fallback instead of brittle raw stream',()=>{cons
 test('HLS runtime failures fall back to official camera page',()=>{const js=fs.readFileSync(jsPath,'utf8');assert.match(js,/video\.addEventListener\('error',showFallback/);assert.match(js,/Hls\.Events\.ERROR/);assert.match(js,/data\?\.fatal/);assert.match(js,/The live stream is unavailable here right now\./);});
 
 
-test('regional intake replaces the busy persona wall with profile-driven navigation',()=>{
+test('regional intake is human-first while preserving the detailed planner as secondary',()=>{
   const html=fs.readFileSync(htmlPath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
-  const css=fs.readFileSync(cssPath,'utf8');
-  assert.match(html,/id="trip-intake"/);
-  assert.match(html,/Tell us the trip you’re actually picturing/);
-  assert.match(html,/id="tripProfileCard"/);
+  const human=fs.readFileSync(path.join(__dirname,'..','public','assets','mackinac-human-planner.js'),'utf8');
+  const humanCss=fs.readFileSync(path.join(__dirname,'..','public','assets','mackinac-human-planner.css'),'utf8');
+  assert.match(html,/id="legacy-trip-intake"/);
   assert.match(html,/id="tripTabs"/);
   assert.match(html,/id="stay-guide"/);
   assert.match(html,/id="eat-guide"/);
   assert.match(html,/id="straits-guide"/);
-  assert.match(js,/PROFILE_API='\/api\/mackinac-profile'/);
-  assert.match(js,/mackinac-trip-profile-v1/);
-  assert.match(js,/renderTripTabs/);
-  assert.match(js,/applyProfileToPlanner/);
-  assert.match(js,/mackinac_profile_classified/);
-  assert.match(css,/\.intake-card/);
-  assert.match(css,/\.trip-tabs-wrap/);
+  assert.match(human,/shell\.id="trip-intake"/);
+  assert.match(human,/Plan the trip, not the form/);
+  assert.match(human,/Trip shape/);
+  assert.match(human,/Getting there/);
+  assert.match(human,/People \+ movement/);
+  assert.match(human,/What matters/);
+  assert.match(human,/mackinac-trip-profile-v1/);
+  assert.match(human,/mackinac-trip-plan-v1/);
+  assert.match(humanCss,/\.human-progress/);
+  assert.match(humanCss,/\.mackinac-human-details/);
 });
 
 test('intake answers are causal inputs to the deterministic planner and bounded JEV ranker',()=>{
