@@ -160,7 +160,7 @@ jobs:
           grep -q 'href="https://xcski.chrisizworski.com/midwest/"' public/synced-national-tools/index.html
           grep -q 'href="https://xcski.chrisizworski.com/wisconsin/"' public/synced-national-tools/index.html
           grep -q 'href="https://xcski.chrisizworski.com/minnesota/"' public/synced-national-tools/index.html
-          grep -q 'numberOfItems":35' public/synced-national-tools/index.html
+          grep -q 'numberOfItems":36' public/synced-national-tools/index.html
 
           grep -q 'Northeast &amp; Great Lakes' public/synced-national-tools/northeast-great-lakes/index.html
           grep -q 'Great Lakes Levels' public/synced-national-tools/northeast-great-lakes/index.html
