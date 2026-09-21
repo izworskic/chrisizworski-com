@@ -1,0 +1,43 @@
+name: Temporary Detroit restored production smoke
+on:
+  push:
+    branches:
+      - smoke/detroit-original-restored
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Verify restored Detroit Outdoors production
+        shell: bash
+        run: |
+          set -euo pipefail
+          page="https://chrisizworski.com/detroit-outdoors/"
+          api="https://chrisizworski.com/api/detroit-outdoors?edition=cards-v1&smoke=$(date +%s)"
+          for i in $(seq 1 36); do
+            echo "Attempt $i"
+            html="$(curl -fsSL --max-time 20 "$page" || true)"
+            json="$(curl -fsSL --max-time 35 "$api" || true)"
+            if printf '%s' "$html" | grep -Fq 'id="opportunity-grid"'               && printf '%s' "$html" | grep -Fq 'The short list'               && printf '%s' "$html" | grep -Fq 'Where the day points'               && ! printf '%s' "$html" | grep -Fq 'Newsreader'               && printf '%s' "$json" | grep -Fq '"edition"'; then
+              printf '%s' "$json" | node -e '
+                let s="";
+                process.stdin.on("data",d=>s+=d);
+                process.stdin.on("end",()=>{
+                  const d=JSON.parse(s);
+                  if(!d.ok) process.exit(2);
+                  if(!Array.isArray(d.opportunities)||!d.opportunities.length) process.exit(3);
+                  if(!d.edition?.read) process.exit(4);
+                  if(!d.edition?.notes||!Object.keys(d.edition.notes).length) process.exit(5);
+                  if(d.decision?.lead?.mode!=="shared-harness-jev") process.exit(6);
+                  console.log("PAGE PASS");
+                  console.log("API PASS");
+                  console.log("Lead:",d.opportunities[0].place?.name);
+                  console.log("Writer:",d.decision?.editorial?.mode);
+                  console.log("JEV:",d.decision?.lead?.mode);
+                });'
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Production did not reach restored card build."
+          exit 1
