@@ -184,8 +184,8 @@
   function baseCard(content,active=state.step){
     shell.innerHTML=
       '<div class="human-planner-top">'+
-        '<div><span class="human-planner-kicker">Mackinac Island · one trip brain</span><h1>Plan the trip, not the form.</h1><p>Start with the decisions that actually change a Mackinac visit. The planner handles ferry timing, travel time and Island sequencing after it knows what you are trying to do.</p></div>'+
-        '<div class="human-principle"><strong>You do not need to know the answer before the planner does.</strong><br>Leave time is optional. If you give us a constraint, we respect it. Otherwise we calculate the useful departure for you.</div>'+
+        '<div><span class="human-planner-kicker">Mackinac Island trip planner</span><h1>Build a Mackinac trip that actually fits.</h1><p>Tell us the few things that truly change a Mackinac visit. We’ll solve the mainland drive, ferry timing and Island sequence around your trip.</p></div>'+
+        '<div class="human-principle"><strong>You do not need to know the ferry logistics yet.</strong><br>Leave time is optional. Give us a real constraint if you have one; otherwise we calculate a useful departure for you.</div>'+
       '</div>'+
       '<div class="human-planner-card">'+progressHtml(active)+content+'</div>';
   }
@@ -394,6 +394,14 @@
     return cards.slice(0,4);
   }
 
+  function humanTripTitle(){
+    if(state.tripDuration==="day")return "Your Mackinac day trip";
+    if(state.tripDuration==="one-night")return "Your one-night Mackinac plan";
+    if(state.tripDuration==="two-three")return "Your 2–3 night Mackinac plan";
+    if(state.tripDuration==="four-plus")return "Your longer Mackinac stay";
+    return "Your Mackinac trip";
+  }
+
   function frameworkResult(){
     const profile=state.profile||{};
     const portCopy=state.originResolved?(()=>{
@@ -404,7 +412,7 @@
     })():"We are deliberately not choosing a ferry port yet. Add the missing date or starting point when you are ready, and the planner will calculate it.";
     shell.innerHTML=
       '<div class="human-planner-card human-result">'+
-        '<div class="human-result-hero"><span class="human-planner-kicker">Your trip shape is ready</span><h2>'+esc(profile.primary?.label||"Your Mackinac trip")+'</h2><p>'+esc(profile.primary?.summary||"Your answers are saved. We have enough to shape the experience without pretending exact ferry timing is known.")+'</p><div class="human-result-meta">'+planMeta().map(x=>"<span>"+esc(x)+"</span>").join("")+'</div></div>'+
+        '<div class="human-result-hero"><span class="human-planner-kicker">Your trip shape is ready</span><h2>'+esc(humanTripTitle())+'</h2><p>'+esc(profile.primary?.summary||"Your answers are saved. We have enough to shape the experience without pretending exact ferry timing is known.")+'</p><div class="human-result-meta">'+planMeta().map(x=>"<span>"+esc(x)+"</span>").join("")+'</div></div>'+
         '<div class="human-result-body">'+
           '<div class="human-flex-plan"><h3>We are stopping at the right boundary.</h3><p>'+portCopy+'</p></div>'+
           '<div class="human-section-title"><h3>Your planning order</h3><p>Only the next useful decisions</p></div>'+
@@ -446,7 +454,7 @@
     const readiness=d.decision?.confidence==="LOW"?"Plan built with degraded live inputs":"Your trip is ready to use";
     shell.innerHTML=
       '<div class="human-planner-card human-result">'+
-        '<div class="human-result-hero"><span class="human-planner-kicker">'+esc(readiness)+'</span><h2>'+esc(profile.primary?.label||"Your Mackinac trip")+'</h2><p>'+esc(d.itinerary_summary||d.decision?.primary_reason||profile.primary?.summary||"The plan is built from your trip and the available verified inputs.")+'</p><div class="human-result-meta">'+planMeta().map(x=>"<span>"+esc(x)+"</span>").join("")+'</div></div>'+
+        '<div class="human-result-hero"><span class="human-planner-kicker">'+esc(readiness)+'</span><h2>'+esc(humanTripTitle())+'</h2><p>'+esc(d.itinerary_summary||d.decision?.primary_reason||profile.primary?.summary||"The plan is built from your trip and the available verified inputs.")+'</p><div class="human-result-meta">'+planMeta().map(x=>"<span>"+esc(x)+"</span>").join("")+'</div></div>'+
         '<div class="human-result-body">'+
           '<div class="human-first-move"><div class="human-first-move-head"><span>Your first move</span><strong>'+esc(port)+'</strong></div><div class="human-journey">'+
             '<div class="human-journey-step"><span>Leave</span><strong>'+esc(leave)+'</strong><small>'+(state.earliestLeave?"Your leave-time constraint is respected.":"Calculated for the selected ferry; you did not have to guess it.")+'</small></div>'+
