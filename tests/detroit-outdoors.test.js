@@ -49,7 +49,7 @@ test("Detroit Outdoors separates strong desk writing from additive per-card writ
  assert.match(route,/Use the supplied place context/);
  assert.match(route,/Return JSON only: \{\\"note\\":\\"\.\.\.\\"\}/);
  assert.match(route,/detroit-outdoors:desk:v8/);
- assert.match(route,/detroit-outdoors:card:v8/);
+ assert.match(route,/detroit-outdoors:card:v9/);
  assert.match(route,/placements:editorialPlan\.cardNotes/);
 });
 
@@ -188,4 +188,25 @@ test("Detroit Outdoors separates the desk writer from per-card writers",()=>{
  assert.match(route,/const deskPromise=writeDeskEditorial/);
  assert.match(route,/const cardPromise=Promise\.all/);
  assert.match(route,/const \[desk,cardResults\]=await Promise\.all/);
+});
+
+
+test("Detroit Outdoors does not collapse every birding card into migration context",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/function hasPlaceSpecificMigrationContext/);
+ assert.match(route,/placeSpecificMigrationContext:hasPlaceSpecificMigrationContext\(candidate\)/);
+ assert.match(route,/Use MIGRATION_CONTEXT only when placeSpecificMigrationContext is true/);
+ assert.match(route,/Generic statewide migration timing alone is not enough/);
+ assert.match(route,/hasMigrationSignal\(candidate\)&&hasPlaceSpecificMigrationContext\(candidate\)/);
+});
+
+test("Detroit Outdoors rejects unsupported bird specificity before JEV acceptance",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/const BIRD_TERM_RULES=/);
+ assert.match(route,/function unsupportedSpecificClaims/);
+ assert.match(route,/mode:"deterministic-evidence-gate"/);
+ assert.match(route,/Unsupported specific claim\(s\)/);
+ assert.match(route,/Do not name a bird species or bird group unless that exact kind of bird appears/);
+ assert.match(route,/Do not call migration peak, ideal, critical or exceptional/);
+ assert.match(route,/Reject any named bird species or bird group that does not appear in additiveEvidence\.contextFacts/);
 });
