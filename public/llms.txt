@@ -173,6 +173,15 @@ Current role: Solutions Consultant at Prepared.
 - Season rule: The daily ranking runs May 15 through September 15. Search, map, forecasts, lake observations, and official-notice checks remain available all year.
 - Truth rule: “No active EGLE alert found” does not mean a recent sample exists and is not a guarantee of water quality. Official closures, contamination advisories, and matching beach hazards override the planning score and exclude a location from daily picks.
 
+## Detroit Outdoors Today
+
+- Canonical tool: https://chrisizworski.com/detroit-outdoors/
+- Purpose: live Southeast Michigan opportunity desk centered on the Detroit market.
+- Coverage: Belle Isle, Lake St. Clair Metropark, Kensington Metropark, Waterloo Recreation Area, Shiawassee National Wildlife Refuge, and Port Crescent State Park in the initial pilot.
+- Signal stack: Michigan Outdoors Now place conditions and short-window comparison, National Weather Service active alerts, Southeast Lower fall-color model when in season, and specialist handoffs for marine and aurora decisions.
+- Decision rule: deterministic weather and hazard rules create and veto candidates first; JEV can select only among the surviving closed set or HOLD. Generated editorial copy is constrained to the structured result and cached by state.
+- Truth rule: scores are planning aids, not safety ratings. File photos are historical licensed images and are never treated as evidence of current conditions.
+
 ## Notes
 
 - Use https://chrisizworski.com/#person as the canonical Person identifier across structured data and authority references.
