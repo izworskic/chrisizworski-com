@@ -23,7 +23,7 @@ function renderCard(c,note){
    <div class="meta">${esc(c.place.area)} · ${esc(c.place.drive)} from central Detroit · ${esc(c.title)}</div>
    <div class="scoreline"><span class="score">${esc(c.score)}/100</span><span class="quality">${esc(c.quality)}</span></div>
    <div class="weather">${renderWeather(c.weather)}</div>
-   ${note?`<p class="card-read">${esc(note)}</p>`:""}
+   ${note?`<div class="card-read"><span>Why this matters</span><p>${esc(note)}</p></div>`:""}
    <ul class="reasons">${reasons}</ul>
    ${specialist}
    <p class="caveat">${esc(c.caveat)}</p>
