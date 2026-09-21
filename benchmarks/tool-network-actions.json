@@ -114,14 +114,6 @@
       "strength": "optional",
       "surface": "detroit-opportunity-card",
       "reason": "Weather-fit birding windows can continue to the Michigan Birding Report for actual sightings and hotspots rather than implying sightings from weather alone."
-    },
-    {
-      "from": "outdoors-now",
-      "to": "detroit-outdoors",
-      "type": "live-opportunity-next",
-      "strength": "optional",
-      "surface": "southeast-michigan-live-window",
-      "reason": "The personalized statewide planner can hand Southeast Michigan visitors to the Detroit desk when they want the small set of unusually useful windows happening now."
     }
   ],
   "repairs": [
