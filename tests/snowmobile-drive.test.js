@@ -20,3 +20,21 @@ test('snowmobile routing uses https providers only',()=>{
   assert.ok(drive._test.HOSTS.length>=1);
   assert.ok(drive._test.HOSTS.every(x=>x.base.startsWith('https://')));
 });
+
+test('destinationFor resolves a hub for every statewide region and falls back to Grayling for an unknown key',()=>{
+  const keys=['eastern-up','keweenaw-copper-country','central-western-up','grayling-gaylord','northeast-sunrise','northwest-michigan','west-michigan'];
+  for(const key of keys){
+    const dest=drive._test.destinationFor(key,null);
+    assert.ok(Number.isFinite(dest.lat)&&Number.isFinite(dest.lon),`${key} destination must have numeric coordinates`);
+    assert.ok(dest.label.includes('Michigan'),`${key} destination label should read as a Michigan town`);
+  }
+  assert.deepEqual(drive._test.destinationFor('not-a-real-region',null),drive._test.DESTINATION);
+});
+
+test('destinationFor prefers a live regions list over the static fallback map when both are available',()=>{
+  const fakeRegions=[{key:'eastern-up',hubTown:'Testville',hubLat:1,hubLon:2}];
+  const dest=drive._test.destinationFor('eastern-up',fakeRegions);
+  assert.equal(dest.label,'Testville, Michigan');
+  assert.equal(dest.lat,1);
+  assert.equal(dest.lon,2);
+});
