@@ -46,3 +46,10 @@ test("share codec preserves bounded trip tuning",()=>{
   const out=state.decode(state.encode({tuning:["less-walking","better-dinner","less-downtown","bogus"]}));
   assert.deepEqual(out.tuning,["less-walking","better-dinner","less-downtown"]);
 });
+
+
+test("share codec preserves not-before departure constraints",()=>{
+  const out=state.decode(state.encode({trip_date:"2027-06-15",origin_text:"Bay City, MI",depart_not_before:"08:15"}));
+  assert.equal(out.depart_not_before,"08:15");
+  assert.equal(out.depart_at,"");
+});
