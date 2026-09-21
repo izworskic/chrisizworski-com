@@ -115,7 +115,9 @@
   const nights=()=>state.tripDuration==="one-night"?1:state.tripDuration==="two-three"?2:state.tripDuration==="four-plus"?4:1;
   const tripMode=()=>state.tripDuration==="day"?"day-trip":state.tripDuration==="unsure"?"":"overnight";
   const personaList=()=>{
-    const p=new Set();\n    if(tripMode()==="day-trip")p.add("day-trip");\n    else if(tripMode()==="overnight")p.add("overnight");
+    const p=new Set();
+    if(tripMode()==="day-trip")p.add("day-trip");
+    else if(tripMode()==="overnight")p.add("overnight");
     if(["family-young","family-teens","multigenerational"].includes(state.party))p.add("kids");
     if(state.visions.includes("biking"))p.add("biking");
     if(state.visions.includes("scenery"))p.add("photography");
