@@ -165,16 +165,16 @@ test("Detroit Outdoors exposes safe Anthropic runtime diagnostics and production
  assert.match(route,/commitSha:process\.env\.VERCEL_GIT_COMMIT_SHA/);
  assert.match(route,/writerModel:process\.env\.OUTDOORS_WRITER_MODEL\|\|WRITER_MODEL_DEFAULT/);
  assert.doesNotMatch(route,/anthropicKey:/);
- assert.match(workflow,/ANTHROPIC_API_KEY is not configured in the production runtime/);
- assert.match(workflow,/editorialMode/);
- assert.match(workflow,/cardDetails/);
- assert.match(workflow,/Per-card editorial detail/);
+ assert.match(workflow,/ANTHROPIC_API_KEY is not configured/);
+ assert.match(workflow,/editorialMode:e\.mode/);
+ assert.match(workflow,/writers\.map/);
+ assert.match(workflow,/Detroit production verified/);
  assert.match(workflow,/missing rendered Haiku copy/);
  assert.match(workflow,/EXPECTED_SHA/);
- assert.match(workflow,/cardWriterCount/);
- assert.match(workflow,/acceptedCardCount/);
- assert.match(workflow,/Not every displayed card has accepted Haiku copy/);
- assert.match(workflow,/At least one displayed card is not using an Anthropic writer/);
+ assert.match(workflow,/writers\.length!==ids\.length/);
+ assert.match(workflow,/w=>!w\.accepted/);
+ assert.match(workflow,/a displayed card lacks accepted Anthropic copy/);
+ assert.match(workflow,/\["anthropic","cached-ai"\]\.includes\(w\.mode\)/);
 });
 
 
@@ -249,7 +249,7 @@ test("Detroit Outdoors gives Haiku an explicit evidence whitelist and constraine
  assert.match(route,/exactly two short sentences, 35 to 55 words total/);
  assert.match(route,/one concrete place-specific fact/);
  assert.match(route,/one seasonal or specialist fact/);
- assert.match(workflow,/reason:w&&w\.reason\|\|null/);
+ assert.match(workflow,/writers\.map\(w=>\(\{id:w\.candidateId,mode:w\.mode,attempt:w\.attempt,treatment:w\.treatment\}\)\)/);
  assert.match(workflow,/detroit-outdoors\.js\?v=20260922f/);
 });
 
@@ -446,7 +446,7 @@ test("Detroit hero image loads independently from board and editorial",()=>{
  assert.match(client,/async function loadHeroImage\(opportunities\)/);
  assert.match(client,/mode=image&boardIds=/);
  assert.match(client,/media\.dataset\.independentImage="1"/);
- assert.match(client,/loadHeroImage\(core\.opportunities\);\s*enrichEditorial\(\);/);
+ assert.match(client,/loadHeroImage\(core\.opportunities\);\s*enrichEditorial\(core\);/);
  assert.match(client,/enriched && media\.dataset\.independentImage!=="1"/);
  assert.match(html,/detroit-outdoors\.js\?v=20260922f/);
 });
