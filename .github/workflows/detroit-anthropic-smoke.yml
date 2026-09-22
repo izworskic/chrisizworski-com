@@ -193,8 +193,34 @@ jobs:
                 echo "Verifying live Detroit client bundle parses..."
                 curl -fsS --max-time 20 "https://chrisizworski.com/assets/detroit-outdoors.js?smoke=${EXPECTED_SHA}" -o /tmp/detroit-outdoors.js
                 node --check /tmp/detroit-outdoors.js
-                grep -Fq "/assets/detroit-outdoors.js?v=20260921d" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
+                grep -Fq "/assets/detroit-outdoors.js?v=20260922a" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
                 echo "Live Detroit page references the cache-busted, parseable client bundle."
+
+                echo "Verifying core-first Detroit board..."
+                curl -fsS --max-time 30 "https://chrisizworski.com/api/detroit-outdoors?edition=cards-v1&view=core&smoke=${EXPECTED_SHA}" |
+                  EXPECTED_SHA="${EXPECTED_SHA}" node -e '
+                    let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{
+                      const d=JSON.parse(s);
+                      if (!d.ok || d.mode!=="core-board") {
+                        console.error("Core board mode failed.", d);
+                        process.exit(26);
+                      }
+                      if (!Array.isArray(d.opportunities) || !d.opportunities.length) {
+                        console.error("Core board returned no opportunities.", d);
+                        process.exit(27);
+                      }
+                      if ((d.runtime&&d.runtime.commitSha)!==process.env.EXPECTED_SHA) {
+                        console.error("Core board is not on expected commit.", d.runtime);
+                        process.exit(28);
+                      }
+                      if ((d.decision&&d.decision.editorial&&d.decision.editorial.mode)!=="deferred") {
+                        console.error("Core board unexpectedly waited for editorial.", d.decision);
+                        process.exit(29);
+                      }
+                      console.log("Core-first board verified:", d.elapsedMs+"ms", d.opportunities.map(x=>x.id).join(","));
+                    });
+                  '
+                echo "Core board can render independently of editorial enrichment."
 
                 echo "Verifying Detroit growth landing pages..."
                 declare -A DETROIT_PAGES=(
