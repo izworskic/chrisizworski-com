@@ -25,12 +25,12 @@ jobs:
         run: |
           set -euo pipefail
 
-          EXPECTED_SHA="$(git log -1 --format=%H -- lib/detroit-outdoors/route.js public/assets/detroit-outdoors.js public/detroit-outdoors/index.html)"
+          EXPECTED_SHA="${GITHUB_SHA}"
           if [ -z "${EXPECTED_SHA}" ]; then
-            echo "Could not resolve latest Detroit site-code commit."
+            echo "Could not resolve workflow commit SHA."
             exit 2
           fi
-          echo "Expecting production Detroit site commit: ${EXPECTED_SHA}"
+          echo "Expecting production Detroit deployment commit: ${EXPECTED_SHA}"
 
           for attempt in $(seq 1 30); do
             core_file="/tmp/detroit-core.json"
