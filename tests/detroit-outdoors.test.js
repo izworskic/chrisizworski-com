@@ -249,7 +249,7 @@ test("Detroit Outdoors gives Haiku an explicit evidence whitelist and constraine
  assert.match(route,/one concrete place-specific fact/);
  assert.match(route,/one seasonal or specialist fact/);
  assert.match(workflow,/reason:w&&w\.reason\|\|null/);
- assert.match(workflow,/detroit-outdoors\.js\?v=20260922c/);
+ assert.match(workflow,/detroit-outdoors\.js\?v=20260922d/);
 });
 
 
@@ -272,7 +272,7 @@ test("Detroit Outdoors client bundle parses as JavaScript",()=>{
 test("Detroit Outdoors cache-busts the live client bundle",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
- assert.match(html,/detroit-outdoors\.js\?v=20260922c/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922d/);
  assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/detroit-outdoors\/index\.html/);
@@ -433,6 +433,22 @@ test("Detroit image selection cannot take down the live editorial response",()=>
 
 
 
+test("Detroit hero image is bound to the exact rendered hard-safe board",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const client=read("public/assets/detroit-outdoors.js");
+ const smoke=read(".github/workflows/detroit-image-production-smoke.yml");
+ assert.match(route,/requestedBoardIds=String\(query\.get\("boardIds"\)\|\|""\)/);
+ assert.match(route,/const byId=new Map\(safePool\.map\(candidate=>\[candidate\.id,candidate\]\)\)/);
+ assert.match(route,/error:"stale-board"/);
+ assert.match(route,/imageBoard=resolved/);
+ assert.match(route,/boardIds:imageBoard\.map\(x=>x\.id\)/);
+ assert.match(client,/async function loadHeroImage\(boardIds=\[\]\)/);
+ assert.match(client,/encodeURIComponent\(ids\.join\(","\)\)/);
+ assert.match(client,/loadHeroImage\(\(core\.opportunities\|\|\[\]\)\.map/);
+ assert.match(smoke,/mode=image&boardIds=\$\{board_ids\}/);
+ assert.match(smoke,/image endpoint is not bound to rendered board/);
+});
+
 test("Detroit hero image loads independently from board and editorial",()=>{
  const route=read("lib/detroit-outdoors/route.js");
  const client=read("public/assets/detroit-outdoors.js");
@@ -446,5 +462,5 @@ test("Detroit hero image loads independently from board and editorial",()=>{
  assert.match(client,/media\.dataset\.independentImage="1"/);
  assert.match(client,/loadHeroImage\(\);\s*enrichEditorial\(\);/);
  assert.match(client,/enriched && media\.dataset\.independentImage!=="1"/);
- assert.match(html,/detroit-outdoors\.js\?v=20260922c/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922d/);
 });
