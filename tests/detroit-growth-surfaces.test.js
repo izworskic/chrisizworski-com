@@ -34,7 +34,7 @@ test("Detroit intent API exposes only safety-gated candidates and returns before
   const route=read("lib/detroit-outdoors/route.js");
   const safeIndex=route.indexOf("const safePool=mixed.candidates;");
   const intentIndex=route.indexOf("if(requestedIntent)");
-  const boardIndex=route.indexOf("const boardDecision=await editBoard(safePool,4);");
+  const boardIndex=route.indexOf("const boardDecision=await editBoard(boardPool,4);");
   assert.ok(safeIndex>=0&&intentIndex>safeIndex&&boardIndex>intentIndex);
   assert.match(route,/function intentSnapshot/);
   assert.match(route,/allowed:\["freighter","birding","water","sunset"\]/);
