@@ -190,6 +190,7 @@ Future agents should consult these together before a search-facing change:
 - `benchmarks/owned-domain-network.json` — owned-property discovery governance.
 - `benchmarks/outdoors-now-growth-system.json` — Michigan Outdoors Now cross-repo acquisition + product-value measurement contract.
 - `docs/OUTDOORS_NOW_GROWTH_SYSTEM.md` — operating cadence, expansion gates, and division of responsibility between the tool and central portfolio.
+- `docs/DETROIT_DISCOVERY_PILOT.md` and `benchmarks/detroit-discovery-observation.json` — Detroit product-to-discovery pilot, comparable evidence ledger, and canonical expansion gate.
 - `public/robots.txt`, sitemaps, and `public/llms.txt` — production discovery surfaces.
 
 Run `npm run benchmark:search-strategy -- --check` before merging search-strategy changes. The benchmark is also part of `npm run verify:all`.
