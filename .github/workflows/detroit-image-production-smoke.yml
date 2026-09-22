@@ -17,11 +17,20 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Verify independent Detroit hero image
-        env:
-          EXPECTED_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
+
+          EXPECTED_SHA="$(git log -1 --format=%H -- lib/detroit-outdoors/route.js public/assets/detroit-outdoors.js public/detroit-outdoors/index.html)"
+          if [ -z "${EXPECTED_SHA}" ]; then
+            echo "Could not resolve latest Detroit site-code commit."
+            exit 2
+          fi
+          echo "Expecting production Detroit site commit: ${EXPECTED_SHA}"
 
           for attempt in $(seq 1 30); do
             core_file="/tmp/detroit-core.json"
