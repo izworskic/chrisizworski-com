@@ -210,7 +210,7 @@ jobs:
                 echo "Verifying live Detroit client bundle parses..."
                 curl -fsS --max-time 20 "https://chrisizworski.com/assets/detroit-outdoors.js?smoke=${EXPECTED_SHA}" -o /tmp/detroit-outdoors.js
                 node --check /tmp/detroit-outdoors.js
-                grep -Fq "/assets/detroit-outdoors.js?v=20260922b" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
+                grep -Fq "/assets/detroit-outdoors.js?v=20260922c" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
                 echo "Live Detroit page references the cache-busted, parseable client bundle."
 
                 echo "Verifying core-first Detroit board..."
@@ -238,6 +238,35 @@ jobs:
                     });
                   '
                 echo "Core board can render independently of editorial enrichment."
+
+                echo "Verifying independent JEV hero image decision..."
+                curl -fsS --max-time 35 "https://chrisizworski.com/api/detroit-outdoors?mode=image&smoke=${EXPECTED_SHA}" |
+                  EXPECTED_SHA="${EXPECTED_SHA}" node -e '
+                    let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{
+                      const d=JSON.parse(s);
+                      const image=d.image||null;
+                      const decision=d.decision&&d.decision.image||{};
+                      const pool=Array.isArray(decision.pool)?decision.pool:[];
+                      if (!d.ok || d.mode!=="hero-image") {
+                        console.error("Independent hero image mode failed.", d);
+                        process.exit(32);
+                      }
+                      if ((d.runtime&&d.runtime.commitSha)!==process.env.EXPECTED_SHA) {
+                        console.error("Hero image mode is not on expected commit.", d.runtime);
+                        process.exit(33);
+                      }
+                      if (pool.length>=2 && !["shared-harness-jev","cached-jev-image"].includes(decision.mode)) {
+                        console.error("Hero image is not using JEV with a multi-image pool.", decision);
+                        process.exit(34);
+                      }
+                      if (pool.length && (!image || !decision.choiceId || !pool.includes(decision.choiceId))) {
+                        console.error("Hero image choice is missing or outside the approved pool.", {image,decision});
+                        process.exit(35);
+                      }
+                      console.log("Independent hero image verified:", JSON.stringify({mode:decision.mode,choiceId:decision.choiceId,pool,recentIds:decision.recentIds||[]}));
+                    });
+                  '
+                echo "JEV hero image selection is independent of editorial enrichment."
 
                 echo "Verifying Detroit growth landing pages..."
                 declare -A DETROIT_PAGES=(
