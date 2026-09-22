@@ -117,12 +117,15 @@ test("Tools hub makes ten live tools prominent and indexes the expanded library"
   );
 });
 
+// Chris explicitly approved this protected tools-hub copy change on 2026-09-21.
 test("Tools hub gives Detroit Outdoors a distinct live opportunity-desk spotlight", () => {
   const html = readFileSync(path.join(__dirname, "../public/tools/index.html"), "utf8");
   assert.ok(html.includes('data-spotlight-tool="detroit-outdoors"'));
   assert.ok(html.includes("Don’t pick an activity first. See what became worth doing."));
-  assert.ok(html.includes("starts with the day, not a destination"));
-  assert.ok(html.includes("If nothing earns attention, it does not manufacture a recommendation."));
+  assert.ok(html.includes("Detroit Outdoors starts with what changed today."));
+  assert.ok(html.includes("A freighter on the river. A migration push. Calm water. A sunset window. Fall color."));
+  assert.ok(html.includes("It watches Southeast Michigan and surfaces the few things worth paying attention to now."));
+  assert.ok(!html.includes("One live board &middot; multiple specialist signals &middot; four decisions"));
   assert.ok(html.includes('id="detroit-tools-lead"'));
   assert.ok(html.includes('id="detroit-tools-board"'));
   assert.ok(html.includes("fetch('/api/detroit-outdoors?edition=cards-v1&surface=tools-hub'"));
