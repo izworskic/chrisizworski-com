@@ -418,6 +418,8 @@ test("Detroit Outdoors makes the hero image a JEV board-level decision with fres
  assert.match(route,/recentlyUsedImageIds/);
  assert.match(route,/Relevance is more important than novelty/);
  assert.match(route,/prefer one that is not in recentlyUsedImageIds/i);
+ assert.doesNotMatch(route,/options\.NONE/);
+ assert.match(route,/choose exactly one image/i);
  assert.match(route,/judgeImage\(hold\?\[\]:ranked\)/);
  assert.match(route,/pool:imageResult\.pool\|\|\[\]/);
  assert.match(route,/recentIds:imageResult\.recentIds\|\|\[\]/);
