@@ -162,7 +162,8 @@ test("Detroit core-first client parses and tolerates specialist cards without le
   const client=read("public/assets/detroit-outdoors.js");
   assert.doesNotThrow(()=>new Function(client));
   assert.match(client,/function renderWeather\(w\)\{\s*if\(!w\)return"";/);
-  assert.match(client,/const reasons=\(\(c\.story&&c\.story\.whyToday\)\|\|c\.reasons\|\|\[\]\)/);
+  assert.match(client,/const reasons=bundle\.length>1\?"":\(\(c\.story&&c\.story\.whyToday\)\|\|c\.reasons\|\|\[\]\)/);
+  assert.match(client,/const url=signal&&signal\.specialistHandoff&&signal\.specialistHandoff\.url\|\|signal&&signal\.verifyUrl\|\|""/);
   assert.match(client,/const deeper=c&&c\.specialistHandoff&&c\.specialistHandoff\.url\|\|c&&c\.verifyUrl\|\|""/);
 });
 
