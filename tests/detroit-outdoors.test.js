@@ -433,6 +433,16 @@ test("Detroit Outdoors makes the hero image a JEV board-level decision with fres
  assert.doesNotMatch(route,/async function judgeImage\(lead\)/);
 });
 
+test("Detroit hero image retries a rejected JEV choice without deterministic substitution",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/if\(result\.mode!=="shared-harness-jev"&&pool\.length>1\)/);
+ assert.match(route,/const key=\`IMAGE_\$\{index\+1\}\`/);
+ assert.match(route,/There is no abstain option/);
+ assert.match(route,/Do not answer NONE, abstain, skip, no-image/);
+ assert.match(route,/retry\.mode==="shared-harness-jev"&&retryImage/);
+ assert.match(route,/choiceId:retryImage\.id,retry:true/);
+});
+
 test("Detroit image selection cannot take down the live editorial response",()=>{
  const route=read("lib/detroit-outdoors/route.js");
  assert.match(route,/async function judgeImageUnsafe\(candidates\)/);
