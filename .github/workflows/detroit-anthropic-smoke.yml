@@ -44,6 +44,7 @@ jobs:
                   const e=(d.decision&&d.decision.editorial)||{};
                   const b=(d.decision&&d.decision.boardEditor)||{};
                   const oe=(d.diagnostics&&d.diagnostics.opportunityEngines)||{};
+                  const image=(d.decision&&d.decision.image)||{};
                   const writers=Array.isArray(e.cardWriters)?e.cardWriters:[];
                   const opportunities=Array.isArray(d.opportunities)?d.opportunities:[];
                   const placements=Array.isArray(e.placements)?e.placements:[];
@@ -70,6 +71,11 @@ jobs:
                     vetoedLegacyCandidates:Array.isArray(oe.vetoedLegacyCandidates)?oe.vetoedLegacyCandidates:[],
                     boardPostureMode:b.posture&&b.posture.mode||null,
                     boardSlotModes:Array.isArray(b.slots)?b.slots.map(s=>({position:s.position||null,mode:s.mode||null,choiceId:s.choiceId||null})):[],
+                    imageMode:image.mode||null,
+                    imageChoiceId:image.choiceId||null,
+                    imagePool:Array.isArray(image.pool)?image.pool:[],
+                    imageRecentIds:Array.isArray(image.recentIds)?image.recentIds:[],
+                    imageReason:image.reason||null,
                     cardWriterCount:writers.length,
                     acceptedCardCount:writers.filter(w=>w&&w.accepted===true).length,
                     cardWriterModes:writers.map(w=>({candidateId:w.candidateId||null,mode:w.mode||null,accepted:w.accepted===true,attempt:w.attempt||null})),
@@ -165,6 +171,17 @@ jobs:
                       console.error("Displayed board does not match JEV board-editor selection.", x.boardSelectedIds, x.opportunityIds);
                       process.exit(11);
                     }
+                    if (x.imagePool.length >= 2) {
+                      if (!["shared-harness-jev","cached-jev-image"].includes(x.imageMode)) {
+                        console.error("Detroit hero image is not being selected by JEV when multiple approved board images are available.", x.imageMode, x.imagePool, x.imageReason);
+                        process.exit(30);
+                      }
+                      if (!x.imageChoiceId || x.imageChoiceId==="NONE" || !x.imagePool.includes(x.imageChoiceId)) {
+                        console.error("Detroit hero image choice is missing or outside the approved board image pool.", x.imageChoiceId, x.imagePool);
+                        process.exit(31);
+                      }
+                    }
+                    console.log("Hero image decision:", JSON.stringify({mode:x.imageMode,choiceId:x.imageChoiceId,pool:x.imagePool,recentIds:x.imageRecentIds,reason:x.imageReason}));
                     if (x.editorialMode === "deterministic") {
                       console.error("Anthropic key exists, but Detroit editorial is still deterministic. Reason:", x.editorialReason || "unknown");
                       process.exit(3);
