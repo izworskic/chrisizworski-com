@@ -287,7 +287,8 @@ test("Detroit Outdoors mixes reusable specialist engines into one hard-safe JEV 
  assert.match(route,/loadSpecialistEngineStates\(\)/);
  assert.match(route,/sourceEngine:"park-weather"/);
  assert.match(route,/verifiedEvidence/);
- assert.match(route,/candidateCountByEngine:countByEngine\(boardPool\)/);\n assert.match(route,/bundleCandidatesByPlace/);
+ assert.match(route,/candidateCountByEngine:countByEngine\(boardPool\)/);
+ assert.match(route,/bundleCandidatesByPlace/);
  assert.match(route,/selectedEngineDiversity/);
  assert.match(route,/diagnostics:\{\s*opportunityEngines:opportunityEngineDiagnostics/);
  assert.match(engines,/https:\/\/chrisizworski\.com\/api\/buoys/);
