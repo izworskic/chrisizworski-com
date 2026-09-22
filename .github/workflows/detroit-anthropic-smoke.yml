@@ -193,7 +193,7 @@ jobs:
                 echo "Verifying live Detroit client bundle parses..."
                 curl -fsS --max-time 20 "https://chrisizworski.com/assets/detroit-outdoors.js?smoke=${EXPECTED_SHA}" -o /tmp/detroit-outdoors.js
                 node --check /tmp/detroit-outdoors.js
-                grep -Fq "/assets/detroit-outdoors.js?v=20260921d" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
+                grep -Fq "/assets/detroit-outdoors.js?v=20260922a" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
                 echo "Live Detroit page references the cache-busted, parseable client bundle."
 
                 echo "Verifying Detroit growth landing pages..."
