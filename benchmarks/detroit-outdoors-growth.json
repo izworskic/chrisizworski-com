@@ -1,0 +1,52 @@
+{
+  "name": "Detroit Outdoors AdSense growth benchmark",
+  "version": "2026-09-21",
+  "purpose": "Measure whether Detroit Outdoors grows monetizable discovery and useful onward clicks without increasing intrusive in-page ad density.",
+  "currentScore": 46,
+  "targetScore": 81,
+  "weights": {
+    "incrementalTraffic": 30,
+    "adsenseImpressions": 25,
+    "adsenseClicks": 15,
+    "organicSearchReach": 20,
+    "recirculation": 10
+  },
+  "targetMonthly": {
+    "searchImpressions": 80000,
+    "organicVisits": 3600,
+    "internalReferralVisits": 700,
+    "totalDetroitClusterVisits": 4300,
+    "adsenseImpressionsLow": 3900,
+    "adsenseImpressionsHigh": 6900,
+    "adsenseClicksLow": 10,
+    "adsenseClicksHigh": 40,
+    "onwardClickRatePct": 20
+  },
+  "acquisitionPages": [
+    "/detroit-outdoors/",
+    "/detroit-river-freighters/",
+    "/detroit-birding-today/",
+    "/lake-st-clair-outdoors/",
+    "/detroit-sunset-tonight/"
+  ],
+  "networkDistribution": [
+    "/tools/",
+    "/great-lakes-freighter-tracking/",
+    "/great-lakes-buoys/",
+    "/northern-lights-michigan/",
+    "/fall-color/"
+  ],
+  "events": [
+    "detroit_outdoors_handoff",
+    "detroit_growth_handoff",
+    "detroit_network_open",
+    "Tool Open"
+  ],
+  "guardrails": [
+    "Do not restore intrusive in-page auto ads solely to increase impression count.",
+    "Intent pages must use the same deterministic safety gates as Detroit Outdoors.",
+    "No intent page may claim a live sighting, vessel passage, water clearance, sunset color, or other condition not supported by its evidence.",
+    "Measure search landing traffic separately from internal network traffic.",
+    "Prefer useful second-page clicks over additional ad units on the first screen."
+  ]
+}
