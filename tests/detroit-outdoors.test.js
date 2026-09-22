@@ -250,7 +250,7 @@ test("Detroit Outdoors gives Haiku an explicit evidence whitelist and constraine
  assert.match(route,/one concrete place-specific fact/);
  assert.match(route,/one seasonal or specialist fact/);
  assert.match(workflow,/reason:w&&w\.reason\|\|null/);
- assert.match(workflow,/detroit-outdoors\.js\?v=20260922d/);
+ assert.match(workflow,/detroit-outdoors\.js\?v=20260922e/);
 });
 
 
@@ -273,7 +273,7 @@ test("Detroit Outdoors client bundle parses as JavaScript",()=>{
 test("Detroit Outdoors cache-busts the live client bundle",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
- assert.match(html,/detroit-outdoors\.js\?v=20260922d/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922e/);
  assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/detroit-outdoors\/index\.html/);
@@ -448,5 +448,5 @@ test("Detroit hero image loads independently from board and editorial",()=>{
  assert.match(client,/media\.dataset\.independentImage="1"/);
  assert.match(client,/loadHeroImage\(\);\s*enrichEditorial\(\);/);
  assert.match(client,/enriched && media\.dataset\.independentImage!=="1"/);
- assert.match(html,/detroit-outdoors\.js\?v=20260922d/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922e/);
 });
