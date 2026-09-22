@@ -129,3 +129,26 @@ test("deterministic board fallback values incremental decision utility instead o
   assert.match(route,/fallbackBoardOrder\(remaining,selected\)/);
   assert.doesNotMatch(route,/Variety of place, activity, distance and time-of-day is useful[^\n]+quota[^\n]+fallback/i);
 });
+
+test("Detroit browser renders a core board before editorial enrichment",()=>{
+  const route=read("lib/detroit-outdoors/route.js");
+  const client=read("public/assets/detroit-outdoors.js");
+  const html=read("public/detroit-outdoors/index.html");
+  assert.match(route,/if\(query\.get\("view"\)==="core"\)/);
+  assert.match(route,/mode:"core-board"/);
+  assert.match(route,/editorial:\{mode:"deferred"/);
+  assert.match(client,/requestBoard\("\/api\/detroit-outdoors\?edition=cards-v1&view=core"\)/);
+  assert.match(client,/renderPayload\(core,false\)/);
+  assert.match(client,/enrichEditorial\(\)/);
+  assert.match(client,/editorial unavailable · live board remains current/);
+  assert.doesNotMatch(client,/enrichEditorial[\s\S]{0,1200}Live opportunity data is temporarily unavailable/);
+  assert.match(html,/\/assets\/detroit-outdoors\.js\?v=20260922a/);
+});
+
+test("Detroit core-first client parses and tolerates specialist cards without legacy weather",()=>{
+  const client=read("public/assets/detroit-outdoors.js");
+  assert.doesNotThrow(()=>new Function(client));
+  assert.match(client,/function renderWeather\(w\)\{\s*if\(!w\)return"";/);
+  assert.match(client,/const reasons=\(\(c\.story&&c\.story\.whyToday\)\|\|c\.reasons\|\|\[\]\)/);
+  assert.match(client,/const deeper=c&&c\.specialistHandoff&&c\.specialistHandoff\.url\|\|c&&c\.verifyUrl\|\|""/);
+});
