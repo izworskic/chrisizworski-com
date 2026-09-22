@@ -178,6 +178,22 @@ test("Detroit Outdoors exposes safe Anthropic runtime diagnostics and production
 });
 
 
+test("Detroit freighter cards use a concise ship-sighting editorial job",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const engines=read("lib/detroit-outdoors/engines.js");
+ assert.match(route,/SHIP_SIGHTING/);
+ assert.match(route,/ship-watching spotter brief/);
+ assert.match(route,/not yet a chase-it-now passage signal/);
+ assert.match(route,/Never invent a wait-10-minutes rule/);
+ assert.match(route,/options=pureFreighter[\s\S]*SHIP_SIGHTING/);
+ assert.match(route,/detroit-outdoors:card:v11/);
+ assert.match(engines,/const activePassage=speed!==null&&speed>0\.5/);
+ assert.match(engines,/motionAdjustment=speed===null\?-3:speed<=0\.5\?-12/);
+ assert.match(engines,/possible freighter sighting/);
+ assert.match(engines,/nearby-vessel lead rather than a confirmed passage window/);
+ assert.match(engines,/Current AIS speed does not support an imminent-passage claim/);
+});
+
 test("Detroit Outdoors runs an independent Haiku job for every ranked card",()=>{
  const route=read("lib/detroit-outdoors/route.js");
  assert.match(route,/const cardNotes=mapped\.map/);
