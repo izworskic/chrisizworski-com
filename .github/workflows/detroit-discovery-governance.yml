@@ -15,6 +15,13 @@ on:
       - 'scripts/audit-sitemap-canonicals.mjs'
       - 'tests/detroit-discovery-governance.test.js'
       - 'tests/detroit-growth-surfaces.test.js'
+      - 'lib/detroit-outdoors/route.js'
+      - 'public/assets/detroit-intent.js'
+      - 'public/assets/detroit-intent.css'
+      - 'public/detroit-river-freighters/index.html'
+      - 'public/detroit-birding-today/index.html'
+      - 'public/lake-st-clair-outdoors/index.html'
+      - 'public/detroit-sunset-tonight/index.html'
       - 'package.json'
   push:
     branches: [main]
@@ -31,6 +38,13 @@ on:
       - 'scripts/audit-sitemap-canonicals.mjs'
       - 'tests/detroit-discovery-governance.test.js'
       - 'tests/detroit-growth-surfaces.test.js'
+      - 'lib/detroit-outdoors/route.js'
+      - 'public/assets/detroit-intent.js'
+      - 'public/assets/detroit-intent.css'
+      - 'public/detroit-river-freighters/index.html'
+      - 'public/detroit-birding-today/index.html'
+      - 'public/lake-st-clair-outdoors/index.html'
+      - 'public/detroit-sunset-tonight/index.html'
       - 'package.json'
 
 permissions:
@@ -47,6 +61,8 @@ jobs:
       - name: Verify Detroit discovery system
         run: |
           set -euo pipefail
+          node --check lib/detroit-outdoors/route.js
+          node --check public/assets/detroit-intent.js
           node --test tests/detroit-growth-surfaces.test.js tests/detroit-discovery-governance.test.js
           node scripts/benchmark-tool-network-registry.mjs --check
           node scripts/report-detroit-discovery.mjs --check

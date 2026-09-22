@@ -15,11 +15,11 @@
 <meta property="og:url" content="https://chrisizworski.com/lake-st-clair-outdoors/">
 <meta property="og:site_name" content="Chris Izworski">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="/assets/detroit-intent.css?v=20260921a">
+<link rel="stylesheet" href="/assets/detroit-intent.css?v=20260922a">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
 <script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/lake-st-clair-outdoors/#page","url":"https://chrisizworski.com/lake-st-clair-outdoors/","name":"Lake St. Clair Conditions Today | Paddling & Outdoor Window","description":"Check whether Lake St. Clair clears a conservative calm-water gate using NOAA buoy observations, marine hazards, wind, rain and water temperature.","dateModified":"2026-09-21","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What buoy does this Lake St. Clair page use?","acceptedAnswer":{"@type":"Answer","text":"The Detroit Outdoors water engine uses NOAA/NDBC station 45147 as a regional Lake St. Clair observation and combines it with the Lake St. Clair Metropark forecast and NWS marine alerts."}},{"@type":"Question","name":"Is this a water-safety clearance?","acceptedAnswer":{"@type":"Answer","text":"No. It is a conservative trip-planning gate. Currents, boat traffic, launch conditions and very local wind still need to be checked immediately before entering the water."}},{"@type":"Question","name":"Why can the page say no when the weather looks nice?","acceptedAnswer":{"@type":"Answer","text":"Because the water engine also requires acceptable observed waves, buoy wind, water temperature, marine-alert status and fresh data. A good land forecast cannot override those checks."}}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/lake-st-clair-outdoors/#page","url":"https://chrisizworski.com/lake-st-clair-outdoors/","name":"Lake St. Clair Conditions Today | Paddling & Outdoor Window","description":"Check whether Lake St. Clair clears a conservative calm-water gate using NOAA buoy observations, marine hazards, wind, rain and water temperature.","dateModified":"2026-09-22","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What buoy does this Lake St. Clair page use?","acceptedAnswer":{"@type":"Answer","text":"The Detroit Outdoors water engine uses NOAA/NDBC station 45147 as a regional Lake St. Clair observation and combines it with the Lake St. Clair Metropark forecast and NWS marine alerts."}},{"@type":"Question","name":"Is this a water-safety clearance?","acceptedAnswer":{"@type":"Answer","text":"No. It is a conservative trip-planning gate. Currents, boat traffic, launch conditions and very local wind still need to be checked immediately before entering the water."}},{"@type":"Question","name":"Why can the page say no when the weather looks nice?","acceptedAnswer":{"@type":"Answer","text":"Because the water engine also requires acceptable observed waves, buoy wind, water temperature, marine-alert status and fresh data. A good land forecast cannot override those checks."}}]}]}</script>
 </head>
 <body data-detroit-intent="water">
 <header class="top"><div class="topin"><a class="brand" href="/">Chris Izworski</a><nav class="topnav"><a href="/detroit-outdoors/">Detroit Outdoors</a><a href="/tools/">Michigan tools</a></nav></div></header>
@@ -33,6 +33,7 @@
     <span class="signal-status" id="intent-status">Checking live data</span>
     <h2 id="intent-headline">Reading the current Detroit signal…</h2>
     <p class="signal-copy" id="intent-copy">The live evidence is loading now.</p>
+    <div class="intent-metrics" id="intent-metrics" hidden></div>
     <ul class="signal-reasons" id="intent-reasons"><li>Checking current safety-gated evidence.</li></ul>
     <p class="updated" id="intent-updated">Updating…</p>
   </div>
@@ -46,6 +47,31 @@
     </div>
   </aside>
 </section>
+<section class="editorial-read" id="intent-editorial" hidden aria-live="polite">
+  <div class="editorial-copy">
+    <div class="editorial-meta" id="intent-editorial-meta">Today's editorial lens</div>
+    <h2 id="intent-editorial-title">The local read</h2>
+    <p id="intent-editorial-copy">Choosing the most useful read from today's verified evidence…</p>
+    <div class="editorial-sources" id="intent-editorial-sources"></div>
+  </div>
+  <aside class="editorial-aside">
+    <div class="signal-kicker">Decision flow</div>
+    <h3 id="intent-next-title">How to use this</h3>
+    <ol id="intent-next"><li>Read the live decision.</li><li>Verify the specialist source.</li><li>Commit only if the current evidence still holds.</li></ol>
+  </aside>
+</section>
+<section class="decision-depth" aria-label="Live evidence and uncertainty">
+  <article class="depth-panel">
+    <div class="eyebrow">Evidence behind the read</div>
+    <h2>What the engine actually knows</h2>
+    <ul class="depth-list depth-evidence" id="intent-evidence"><li>Loading verified source evidence…</li></ul>
+  </article>
+  <article class="depth-panel">
+    <div class="eyebrow">What could change the decision</div>
+    <h2>Keep the uncertainty visible</h2>
+    <ul class="depth-list" id="intent-watch"><li>Loading the current caveats and unresolved conditions…</li></ul>
+  </article>
+</section>
 <div class="truth">Detroit Outdoors never turns missing or unsafe evidence into a positive recommendation. If the required source or safety gate fails, this page says so and points you to the underlying specialist source.</div>
 <section class="content-grid"><article class="panel"><div class="eyebrow">The hard gate</div><h2>Weather alone cannot create a paddling recommendation</h2><p>The engine uses NOAA/NDBC station 45147 as a regional Lake St. Clair observation plus the Lake St. Clair Metropark forecast and NWS marine hazards. A weather-only paddling card is suppressed when the water-specific evidence does not pass.</p></article>
 <article class="panel"><div class="eyebrow">Current thresholds</div><h2>What must clear</h2><ul><li>Observed waves: no more than 1.5 ft.</li><li>Observed buoy wind: no more than 10 mph.</li><li>Forecast gusts: no more than 16 mph.</li><li>Rain chance: no more than 30%.</li><li>Observed water temperature: at least 58°F for this broad-audience gate.</li><li>No active marine or dangerous-weather hard stop.</li></ul></article>
@@ -56,5 +82,5 @@
 <footer class="footer"><div class="footerin">© 2026 Chris Izworski <a href="/detroit-outdoors/">Detroit Outdoors Today</a><a href="/tools/">Michigan &amp; Great Lakes tools</a></div></footer>
 <script src="/_vercel/insights/script.js" defer></script>
 <script src="/_vercel/speed-insights/script.js" defer></script>
-<script src="/assets/detroit-intent.js?v=20260921a" defer></script>
+<script src="/assets/detroit-intent.js?v=20260922a" defer></script>
 </body></html>

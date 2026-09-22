@@ -20,8 +20,8 @@ test("Detroit growth pages are indexable, monetizable and share one live intent 
     assert.match(html,/name="google-adsense-account" content="ca-pub-8222782620788075"/);
     assert.match(html,/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/);
     assert.match(html,new RegExp(`data-detroit-intent="${intent}"`));
-    assert.match(html,/\/assets\/detroit-intent\.css\?v=20260921a/);
-    assert.match(html,/\/assets\/detroit-intent\.js\?v=20260921a/);
+    assert.match(html,/\/assets\/detroit-intent\.css\?v=20260922a/);
+    assert.match(html,/\/assets\/detroit-intent\.js\?v=20260922a/);
     assert.match(html,/See all Detroit opportunities/);
   }
   const js=read("public/assets/detroit-intent.js");
@@ -30,7 +30,7 @@ test("Detroit growth pages are indexable, monetizable and share one live intent 
   assert.match(js,/detroit_growth_handoff/);
 });
 
-test("Detroit intent API exposes only safety-gated candidates and returns before JEV board writing",()=>{
+test("Detroit intent core stays hard-gated while editorial enrichment is candidate-bound",()=>{
   const route=read("lib/detroit-outdoors/route.js");
   const safeIndex=route.indexOf("const safePool=mixed.candidates;");
   const intentIndex=route.indexOf("if(requestedIntent)");
@@ -39,7 +39,33 @@ test("Detroit intent API exposes only safety-gated candidates and returns before
   assert.match(route,/function intentSnapshot/);
   assert.match(route,/allowed:\["freighter","birding","water","sunset"\]/);
   assert.match(route,/candidate:candidate\?\{\.\.\.candidate,slot:"Live now",story:storyFor\(candidate,0\)\}:null/);
-  assert.match(route,/rejected:rejected\.map/);
+  assert.match(route,/metrics:intentMetricCards\(intent\.candidate,intent\.id\)/);
+  assert.match(route,/query\.get\("mode"\)==="editorial"/);
+  assert.match(route,/intent-candidate-stale/);
+  assert.match(route,/const enrichment=await intentEditorial\(intent,fallSnapshot\)/);
+  assert.match(route,/const plan=await planEditorialPlacement\(\[candidate\],false,fallSnapshot\)/);
+  assert.match(route,/const result=await writeCardEditorial\(candidate,slot,date,fallSnapshot\)/);
+});
+
+
+test("Detroit intent pages expose adaptive editorial, evidence and uncertainty surfaces",()=>{
+  for(const [slug] of intentPages){
+    const html=read(`public/${slug}/index.html`);
+    assert.match(html,/id="intent-metrics"/);
+    assert.match(html,/id="intent-editorial"/);
+    assert.match(html,/id="intent-editorial-title"/);
+    assert.match(html,/id="intent-next"/);
+    assert.match(html,/id="intent-evidence"/);
+    assert.match(html,/id="intent-watch"/);
+  }
+  const js=read("public/assets/detroit-intent.js");
+  assert.match(js,/mode=editorial&candidateId=/);
+  assert.match(js,/renderEditorial/);
+  assert.match(js,/renderMetrics/);
+  assert.match(js,/renderEvidence/);
+  assert.match(js,/renderWatch/);
+  assert.match(js,/Today's editorial lens/);
+  assert.match(js,/if\(res\.status===409\)\{return load\(\);\}/);
 });
 
 test("Lake St Clair acquisition page publishes the same conservative thresholds as the engine",()=>{

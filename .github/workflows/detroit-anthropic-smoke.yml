@@ -10,7 +10,13 @@ on:
       - 'lib/detroit-outdoors/expanded-engines.js'
       - 'lib/detroit-outdoors/engine-registry.js'
       - 'public/assets/detroit-outdoors.js'
+      - 'public/assets/detroit-intent.js'
+      - 'public/assets/detroit-intent.css'
       - 'public/detroit-outdoors/index.html'
+      - 'public/detroit-river-freighters/index.html'
+      - 'public/detroit-birding-today/index.html'
+      - 'public/lake-st-clair-outdoors/index.html'
+      - 'public/detroit-sunset-tonight/index.html'
       - '.github/workflows/detroit-anthropic-smoke.yml'
 
 permissions:
@@ -109,7 +115,44 @@ jobs:
             curl -fsS --max-time 20 "https://chrisizworski.com/assets/detroit-outdoors.js?smoke=${EXPECTED_SHA}" -o /tmp/detroit-outdoors.js
             node --check /tmp/detroit-outdoors.js
             grep -Fq "/assets/detroit-outdoors.js?v=20260922f" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
-            echo "Detroit board-bound editorial and image production smoke passed."
+
+            curl -fsS --max-time 20 "https://chrisizworski.com/assets/detroit-intent.js?smoke=${EXPECTED_SHA}" -o /tmp/detroit-intent.js
+            node --check /tmp/detroit-intent.js
+            for slug in detroit-river-freighters detroit-birding-today lake-st-clair-outdoors detroit-sunset-tonight; do
+              grep -Fq "/assets/detroit-intent.js?v=20260922a" <(curl -fsS --max-time 20 "https://chrisizworski.com/${slug}/?smoke=${EXPECTED_SHA}")
+            done
+
+            live_intents=0
+            for intent in freighter birding water sunset; do
+              intent_core="/tmp/detroit-intent-${intent}.json"
+              curl -fsS --get --max-time 35 --data-urlencode "intent=${intent}" --data-urlencode "smoke=${EXPECTED_SHA}" "https://chrisizworski.com/api/detroit-outdoors" -o "${intent_core}"
+              candidate_id="$(EXPECTED_SHA="${EXPECTED_SHA}" node -e '
+                const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));
+                if(!d.ok||d.mode!=="intent-core") throw new Error("intent core mode failed");
+                if((d.runtime&&d.runtime.commitSha)!==process.env.EXPECTED_SHA) throw new Error("intent core runtime mismatch");
+                if(!d.intent||!Array.isArray(d.intent.metrics)) throw new Error("intent metrics missing");
+                process.stdout.write(d.intent.candidate&&d.intent.candidate.id||"");
+              ' "${intent_core}")"
+              if [ -n "${candidate_id}" ]; then
+                live_intents=$((live_intents+1))
+                intent_editorial="/tmp/detroit-intent-${intent}-editorial.json"
+                curl -fsS --get --max-time 55 --data-urlencode "intent=${intent}" --data-urlencode "mode=editorial" --data-urlencode "candidateId=${candidate_id}" --data-urlencode "smoke=${EXPECTED_SHA}" "https://chrisizworski.com/api/detroit-outdoors" -o "${intent_editorial}"
+                EXPECTED_SHA="${EXPECTED_SHA}" CANDIDATE_ID="${candidate_id}" node -e '
+                  const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));
+                  if(!d.ok||d.mode!=="intent-editorial-enrichment") throw new Error("intent editorial mode failed");
+                  if((d.runtime&&d.runtime.commitSha)!==process.env.EXPECTED_SHA) throw new Error("intent editorial runtime mismatch");
+                  if(!d.runtime||d.runtime.anthropicKeyConfigured!==true) throw new Error("intent Anthropic key missing");
+                  if(!d.enrichment||d.enrichment.candidateId!==process.env.CANDIDATE_ID) throw new Error("intent editorial detached from live candidate");
+                  if(!String(d.enrichment.note||"").trim()) throw new Error("intent Haiku note missing");
+                  if(!["anthropic","cached-ai"].includes(d.enrichment.mode)) throw new Error("intent writer did not use Anthropic");
+                  console.log("Intent editorial verified:",d.intent.id,d.enrichment.treatment,d.enrichment.mode,d.enrichment.plannerMode);
+                ' "${intent_editorial}"
+              fi
+            done
+            if [ "${live_intents}" -lt 1 ]; then
+              echo "No live Detroit intent candidate existed during this smoke; static and core intent paths still verified."
+            fi
+            echo "Detroit board-bound editorial, image and focused-intent production smoke passed."
             exit 0
           done
 
