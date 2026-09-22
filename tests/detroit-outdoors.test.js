@@ -250,7 +250,7 @@ test("Detroit Outdoors gives Haiku an explicit evidence whitelist and constraine
  assert.match(route,/one concrete place-specific fact/);
  assert.match(route,/one seasonal or specialist fact/);
  assert.match(workflow,/reason:w&&w\.reason\|\|null/);
- assert.match(workflow,/detroit-outdoors\.js\?v=20260922e/);
+ assert.match(workflow,/detroit-outdoors\.js\?v=20260922f/);
 });
 
 
@@ -273,7 +273,7 @@ test("Detroit Outdoors client bundle parses as JavaScript",()=>{
 test("Detroit Outdoors cache-busts the live client bundle",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
- assert.match(html,/detroit-outdoors\.js\?v=20260922e/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922f/);
  assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/detroit-outdoors\/index\.html/);
@@ -448,5 +448,22 @@ test("Detroit hero image loads independently from board and editorial",()=>{
  assert.match(client,/media\.dataset\.independentImage="1"/);
  assert.match(client,/loadHeroImage\(core\.opportunities\);\s*enrichEditorial\(\);/);
  assert.match(client,/enriched && media\.dataset\.independentImage!=="1"/);
- assert.match(html,/detroit-outdoors\.js\?v=20260922e/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922f/);
+});
+
+
+test("Detroit editorial enrichment is bound to the exact rendered JEV board",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const client=read("public/assets/detroit-outdoors.js");
+ const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
+ assert.match(route,/query\.get\("mode"\)==="editorial"&&requestedBoardIds\.length/);
+ assert.match(route,/error:"editorial-board-stale"/);
+ assert.match(route,/boardIds:ranked\.map\(x=>x\.id\)/);
+ assert.match(route,/mode:"editorial-enrichment"/);
+ assert.match(client,/async function enrichEditorial\(core\)/);
+ assert.match(client,/mode=editorial&boardIds=/);
+ assert.match(client,/editorial board changed/);
+ assert.match(client,/enrichEditorial\(core\)/);
+ assert.match(workflow,/mode=editorial/);
+ assert.match(workflow,/editorial endpoint changed the rendered board/);
 });
