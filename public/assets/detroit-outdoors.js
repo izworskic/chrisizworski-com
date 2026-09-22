@@ -113,51 +113,84 @@ function renderSource(name,state,total){
  const cls=state===total?"ok":"partial";
  return `<div class="source-pill"><strong>${esc(name)}</strong><br><span class="${cls}">${esc(state)}/${esc(total)} sources responding</span></div>`;
 }
+function renderPayload(data,enriched){
+ document.body.classList.remove("loading");
+ const verdict=$("#verdict");
+ if(verdict){
+   verdict.textContent=data.verdict?.label||"LIVE";
+   verdict.classList.toggle("quiet",data.verdict?.label==="QUIET");
+ }
+ if($("#verdict-detail")) $("#verdict-detail").textContent=data.verdict?.detail||"Live board loaded.";
+ if($("#updated")) $("#updated").textContent="Updated "+fmtTime(data.generatedAt)+(enriched?"":" · live board");
+ renderTopline(data.opportunities||[]);
+ if($("#desk-note")) $("#desk-note").textContent=enriched
+   ?(data.editorial||data.edition?.read||data.frontPage?.subhead||"")
+   :(data.frontPage?.subhead||data.editorial||"Live opportunities loaded. Editorial detail is still being prepared.");
+ const cards=$("#opportunity-grid");
+ if(cards){
+   if(data.opportunities&&data.opportunities.length){
+     cards.innerHTML=data.opportunities.map(c=>renderCard(c,data.edition?.notes?.[c.id],data.edition?.noteSources?.[c.id])).join("");
+   }else{
+     cards.innerHTML='<div class="error">The desk is holding because live source coverage is too thin to make a useful recommendation.</div>';
+   }
+ }
+ const media=$("#hero-media");
+ if(media){
+   if(data.image){
+     if($("#hero-img")){$("#hero-img").src=data.image.src;$("#hero-img").alt=data.image.alt||"Southeast Michigan outdoors";}
+     if($("#hero-credit")) $("#hero-credit").innerHTML='File photo: <a href="'+esc(data.image.creditUrl)+'" rel="noopener">'+esc(data.image.credit)+'</a> · <a href="'+esc(data.image.licenseUrl||data.image.creditUrl)+'" rel="noopener">'+esc(data.image.license)+'</a>';
+     media.hidden=false;
+   }else if(enriched) media.hidden=true;
+ }
+ const fall=$("#fall-panel");
+ if(fall){
+   if(data.fallColor){
+     if($("#fall-value")) $("#fall-value").textContent=data.fallColor.label+" · ~"+Math.round(Number(data.fallColor.modeledPercent)||0)+"%";
+     if($("#fall-copy")) $("#fall-copy").textContent="Model estimate for the Southeast Lower. Climatological peak window: "+(data.fallColor.peakWindow||"seasonal window")+". Drivers: "+(data.fallColor.drivers||[]).join(", ")+".";
+     fall.hidden=false;
+   }else fall.hidden=true;
+ }
+ const sh=data.sourceHealth||{};
+ if($("#source-grid")) $("#source-grid").innerHTML=[
+   renderSource("Michigan Outdoors Now place conditions",sh.outdoorsNowPlaces?.ok||0,sh.outdoorsNowPlaces?.total||6),
+   renderSource("NWS point alerts",sh.nwsAlerts?.ok||0,sh.nwsAlerts?.total||6),
+   `<div class="source-pill"><strong>Opportunity comparison</strong><br><span class="${sh.outdoorsNowOpportunityLayer?.ok?"ok":"partial"}">${sh.outdoorsNowOpportunityLayer?.ok?"live":"degraded"}</span></div>`,
+   `<div class="source-pill"><strong>JEV board judgment</strong><br><span class="${data.decision?.boardEditor?.mode&&data.decision.boardEditor.mode!=="deterministic"?"ok":"partial"}">${esc(data.decision?.boardEditor?.mode||data.decision?.lead?.mode||"deterministic")}</span></div>`
+ ].join("");
+ if($("#writer-mode")) $("#writer-mode").textContent=enriched?(data.decision?.editorial?.mode||"deterministic"):"board live · editorial loading";
+ if($("#suppressed")) $("#suppressed").textContent=data.suppressed?.length
+   ?data.suppressed.length+" place(s) suppressed by active NWS hazard rules."
+   :"No place was suppressed by the hard NWS hazard veto on this update.";
+}
+
+async function requestBoard(url){
+ const res=await fetch(url,{headers:{accept:"application/json"},cache:"no-store"});
+ const text=await res.text();
+ let data=null;
+ try{data=JSON.parse(text);}catch{}
+ if(!res.ok||!data||!data.ok) throw new Error(data&&data.error||("Detroit board "+res.status));
+ return data;
+}
+
+async function enrichEditorial(){
+ try{
+   const data=await requestBoard("/api/detroit-outdoors?edition=cards-v1");
+   renderPayload(data,true);
+ }catch(error){
+   if($("#writer-mode")) $("#writer-mode").textContent="editorial unavailable · live board remains current";
+ }
+}
+
 async function load(){
  try{
-  const res=await fetch("/api/detroit-outdoors?edition=cards-v1",{headers:{accept:"application/json"}});
-  const data=await res.json();
-  if(!res.ok||!data.ok)throw new Error(data.error||"Live desk unavailable");
-  document.body.classList.remove("loading");
-  const verdict=$("#verdict");
-  verdict.textContent=data.verdict.label;
-  if(data.verdict.label==="QUIET")verdict.classList.add("quiet");
-  $("#verdict-detail").textContent=data.verdict.detail;
-  $("#updated").textContent="Updated "+fmtTime(data.generatedAt);
-  renderTopline(data.opportunities);
-  $("#desk-note").textContent=data.editorial;
-  const cards=$("#opportunity-grid");
-  if(data.opportunities&&data.opportunities.length){
-    cards.innerHTML=data.opportunities.map(c=>renderCard(c,data.edition?.notes?.[c.id],data.edition?.noteSources?.[c.id])).join("");
-  }else{
-    cards.innerHTML='<div class="error">The desk is holding because live source coverage is too thin to make a useful recommendation.</div>';
-  }
-  const media=$("#hero-media");
-  if(data.image){
-    $("#hero-img").src=data.image.src;
-    $("#hero-img").alt=data.image.alt||"Southeast Michigan outdoors";
-    $("#hero-credit").innerHTML='File photo: <a href="'+esc(data.image.creditUrl)+'" rel="noopener">'+esc(data.image.credit)+'</a> · <a href="'+esc(data.image.licenseUrl||data.image.creditUrl)+'" rel="noopener">'+esc(data.image.license)+'</a>';
-    media.hidden=false;
-  }else media.hidden=true;
-  const fall=$("#fall-panel");
-  if(data.fallColor){
-    $("#fall-value").textContent=data.fallColor.label+" · ~"+data.fallColor.modeledPercent+"%";
-    $("#fall-copy").textContent="Model estimate for the Southeast Lower. Climatological peak window: "+data.fallColor.peakWindow+". Drivers: "+(data.fallColor.drivers||[]).join(", ")+".";
-    fall.hidden=false;
-  }else fall.hidden=true;
-  const sh=data.sourceHealth||{};
-  $("#source-grid").innerHTML=[
-    renderSource("Michigan Outdoors Now place conditions",sh.outdoorsNowPlaces?.ok||0,sh.outdoorsNowPlaces?.total||6),
-    renderSource("NWS point alerts",sh.nwsAlerts?.ok||0,sh.nwsAlerts?.total||6),
-    `<div class="source-pill"><strong>Opportunity comparison</strong><br><span class="${sh.outdoorsNowOpportunityLayer?.ok?"ok":"partial"}">${sh.outdoorsNowOpportunityLayer?.ok?"live":"degraded"}</span></div>`,
-    `<div class="source-pill"><strong>JEV lead judgment</strong><br><span class="${data.decision?.lead?.mode==="shared-harness-jev"?"ok":"partial"}">${esc(data.decision?.lead?.mode||"deterministic")}</span></div>`
-  ].join("");
-  $("#writer-mode").textContent=data.decision?.editorial?.mode||"deterministic";
-  $("#suppressed").textContent=data.suppressed?.length?data.suppressed.length+" place(s) suppressed by active NWS hazard rules.":"No place was suppressed by the hard NWS hazard veto on this update.";
+   const core=await requestBoard("/api/detroit-outdoors?edition=cards-v1&view=core");
+   renderPayload(core,false);
+   enrichEditorial();
  }catch(error){
    document.body.classList.remove("loading");
-   $("#opportunity-grid").innerHTML='<div class="error">Live opportunity data is temporarily unavailable. Use the specialist tools below while the desk recovers.</div>';
-   $("#updated").textContent="Live refresh failed";
+   if($("#opportunity-grid")) $("#opportunity-grid").innerHTML='<div class="error">Live opportunity data is temporarily unavailable. Use the specialist tools below while the desk recovers.</div>';
+   if($("#updated")) $("#updated").textContent="Live board unavailable";
+   if($("#writer-mode")) $("#writer-mode").textContent="unavailable";
  }
 }
 document.addEventListener("click",function(event){
