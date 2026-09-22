@@ -181,9 +181,11 @@ async function enrichEditorial(){
  }
 }
 
-async function loadHeroImage(){
+async function loadHeroImage(boardIds=[]){
  try{
-   const data=await requestBoard("/api/detroit-outdoors?mode=image");
+   const ids=Array.isArray(boardIds)?boardIds.filter(Boolean).slice(0,4):[];
+   const boardQuery=ids.length?"&boardIds="+encodeURIComponent(ids.join(",")):"";
+   const data=await requestBoard("/api/detroit-outdoors?mode=image"+boardQuery);
    const media=$("#hero-media");
    if(!media)return;
    if(data.image){
@@ -201,7 +203,7 @@ async function load(){
  try{
    const core=await requestBoard("/api/detroit-outdoors?edition=cards-v1&mode=core");
    renderPayload(core,false);
-   loadHeroImage();
+   loadHeroImage((core.opportunities||[]).map(x=>x&&x.id).filter(Boolean));
    enrichEditorial();
  }catch(error){
    document.body.classList.remove("loading");
