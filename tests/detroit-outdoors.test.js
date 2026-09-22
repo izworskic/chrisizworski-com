@@ -443,10 +443,10 @@ test("Detroit hero image loads independently from board and editorial",()=>{
  assert.match(route,/mode:"hero-image"/);
  assert.match(route,/const imageResult=await judgeImage\(hold\?\[\]:ranked\)/);
  assert.match(route,/Hero image is loaded independently from mode=image/);
- assert.match(client,/async function loadHeroImage\(\)/);
- assert.match(client,/requestBoard\("\/api\/detroit-outdoors\?mode=image"\)/);
+ assert.match(client,/async function loadHeroImage\(opportunities\)/);
+ assert.match(client,/mode=image&boardIds=/);
  assert.match(client,/media\.dataset\.independentImage="1"/);
- assert.match(client,/loadHeroImage\(\);\s*enrichEditorial\(\);/);
+ assert.match(client,/loadHeroImage\(core\.opportunities\);\s*enrichEditorial\(\);/);
  assert.match(client,/enriched && media\.dataset\.independentImage!=="1"/);
  assert.match(html,/detroit-outdoors\.js\?v=20260922e/);
 });
