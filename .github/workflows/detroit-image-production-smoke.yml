@@ -98,7 +98,7 @@ jobs:
                 }));
               ' "${core_file}" "${image_file}"
               curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?image_smoke=${EXPECTED_SHA}" |
-                grep -Fq "/assets/detroit-outdoors.js?v=20260922e"
+                grep -Fq "/assets/detroit-outdoors.js?v=20260922f"
               echo "Independent Detroit JEV image production smoke passed."
               exit 0
             fi
