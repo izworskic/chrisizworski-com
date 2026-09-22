@@ -193,11 +193,11 @@ jobs:
                 echo "Verifying live Detroit client bundle parses..."
                 curl -fsS --max-time 20 "https://chrisizworski.com/assets/detroit-outdoors.js?smoke=${EXPECTED_SHA}" -o /tmp/detroit-outdoors.js
                 node --check /tmp/detroit-outdoors.js
-                grep -Fq "/assets/detroit-outdoors.js?v=20260922a" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
+                grep -Fq "/assets/detroit-outdoors.js?v=20260922b" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
                 echo "Live Detroit page references the cache-busted, parseable client bundle."
 
                 echo "Verifying core-first Detroit board..."
-                curl -fsS --max-time 30 "https://chrisizworski.com/api/detroit-outdoors?edition=cards-v1&view=core&smoke=${EXPECTED_SHA}" |
+                curl -fsS --max-time 30 "https://chrisizworski.com/api/detroit-outdoors?edition=cards-v1&mode=core&smoke=${EXPECTED_SHA}" |
                   EXPECTED_SHA="${EXPECTED_SHA}" node -e '
                     let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{
                       const d=JSON.parse(s);
