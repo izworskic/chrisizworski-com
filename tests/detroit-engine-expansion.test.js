@@ -143,7 +143,7 @@ test("Detroit browser renders a core board before editorial enrichment",()=>{
   assert.match(client,/enrichEditorial\(\)/);
   assert.match(client,/editorial unavailable · live board remains current/);
   assert.ok(client.includes('if($("#writer-mode")) $("#writer-mode").textContent="editorial unavailable · live board remains current";'));
-  assert.match(html,/\/assets\/detroit-outdoors\.js\?v=20260922d/);
+  assert.match(html,/\/assets\/detroit-outdoors\.js\?v=20260922e/);
 });
 
 test("Detroit core mode does not collide with the serverless dispatcher view parameter",()=>{
@@ -199,3 +199,15 @@ test("Detroit browser renders bundled reasons and separate deeper checks inside 
   assert.match(route,/one physical location/);
 });
 
+test("Detroit hero image request is bound to the exact displayed safe board",()=>{
+  const route=read("lib/detroit-outdoors/route.js");
+  const client=read("public/assets/detroit-outdoors.js");
+  const smoke=read(".github/workflows/detroit-image-production-smoke.yml");
+  assert.match(route,/requestedImageBoardIds/);
+  assert.match(route,/image-board-stale/);
+  assert.match(route,/requestedBoard\.length!==requestedImageBoardIds\.length/);
+  assert.match(client,/loadHeroImage\(opportunities\)/);
+  assert.match(client,/boardIds=\"\+encodeURIComponent\(boardIds\.join\(\",\"\)\)/);
+  assert.match(client,/loadHeroImage\(core\.opportunities\)/);
+  assert.match(smoke,/--data-urlencode "boardIds=\$\{board_ids\}"/);
+});
