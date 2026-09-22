@@ -117,6 +117,7 @@ test("Tools hub makes ten live tools prominent and indexes the expanded library"
   );
 });
 
+// Chris explicitly approved this protected tools-hub copy change on 2026-09-21.
 test("Tools hub gives Detroit Outdoors a distinct live opportunity-desk spotlight", () => {
   const html = readFileSync(path.join(__dirname, "../public/tools/index.html"), "utf8");
   assert.ok(html.includes('data-spotlight-tool="detroit-outdoors"'));
