@@ -974,7 +974,12 @@
       track('mackinac_shared_plan_opened',{state_version:TRIP_STATE?.VERSION||'none'});
     }else if(intent)setText('shareStateStatus','Started from the '+String(intent.intent||'Mackinac')+' planning guide');
     else if(saved)setText('shareStateStatus','Saved trip restored on this device');
-    if(document.body.classList.contains('mackinac-plan-ready'))await loadDecision();
+    // Answer first, then refine. PR #389 built this as a mobile-first first-screen
+    // decision, and the engine already returns a complete one with zero input: score,
+    // recommended outbound and return ferry, the literal last boat back, weather, crowd
+    // windows, bike read and an itinerary. Gating the fetch on mackinac-plan-ready meant a
+    // first-time visitor never even requested that answer. Always load it; intake refines it.
+    await loadDecision();
   }
   boot();
 })();
