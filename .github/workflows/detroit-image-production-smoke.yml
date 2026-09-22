@@ -49,7 +49,16 @@ jobs:
               fi
             fi
 
-            if [ "${core_ok}" = "1" ] && curl -fsS --max-time 35 "https://chrisizworski.com/api/detroit-outdoors?mode=image&image_smoke=${EXPECTED_SHA}&attempt=${attempt}" -o "${image_file}"; then
+            board_param=""
+            if [ "${core_ok}" = "1" ]; then
+              board_param="$(node -e '
+                const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));
+                const ids=(Array.isArray(d.opportunities)?d.opportunities:[]).map(x=>x&&x.id).filter(Boolean).slice(0,4);
+                process.stdout.write(encodeURIComponent(ids.join(",")));
+              ' "${core_file}")"
+            fi
+
+            if [ "${core_ok}" = "1" ] && [ -n "${board_param}" ] && curl -fsS --max-time 35 "https://chrisizworski.com/api/detroit-outdoors?mode=image&board=${board_param}&image_smoke=${EXPECTED_SHA}&attempt=${attempt}" -o "${image_file}"; then
               image_current="$(node -e '
                 const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));
                 process.stdout.write((d.runtime&&d.runtime.commitSha)||"");
@@ -89,7 +98,7 @@ jobs:
                 }));
               ' "${core_file}" "${image_file}"
               curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?image_smoke=${EXPECTED_SHA}" |
-                grep -Fq "/assets/detroit-outdoors.js?v=20260922d"
+                grep -Fq "/assets/detroit-outdoors.js?v=20260922e"
               echo "Independent Detroit JEV image production smoke passed."
               exit 0
             fi
