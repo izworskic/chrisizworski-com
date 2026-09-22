@@ -51,34 +51,34 @@ jobs:
             fi
 
             if [ "${core_ok}" = "1" ] && [ "${image_ok}" = "1" ]; then
-              EXPECTED_SHA="${EXPECTED_SHA}" node - <<'NODE' "${core_file}" "${image_file}"
-const fs=require("fs");
-const core=JSON.parse(fs.readFileSync(process.argv[2],"utf8"));
-const image=JSON.parse(fs.readFileSync(process.argv[3],"utf8"));
-if(!core.ok||core.mode!=="core-board") throw new Error("core board mode failed");
-if(!Array.isArray(core.opportunities)||!core.opportunities.length) throw new Error("core board has no opportunities");
-if(!image.ok||image.mode!=="hero-image") throw new Error("hero image mode failed");
-const decision=image.decision&&image.decision.image||{};
-const pool=Array.isArray(decision.pool)?decision.pool:[];
-if(pool.length>=2&&!["shared-harness-jev","cached-jev-image"].includes(decision.mode)){
-  throw new Error("multi-image pool is not using JEV: "+JSON.stringify(decision));
-}
-if(pool.length&&(!image.image||!decision.choiceId||!pool.includes(decision.choiceId))){
-  throw new Error("image choice missing or outside approved pool: "+JSON.stringify({image:image.image,decision}));
-}
-const boardIds=Array.isArray(image.boardIds)?image.boardIds:[];
-if(JSON.stringify(boardIds)!==JSON.stringify(core.opportunities.map(x=>x.id))){
-  throw new Error("image endpoint board differs from core board");
-}
-console.log("Detroit hero image smoke:",JSON.stringify({
-  commitSha:image.runtime&&image.runtime.commitSha,
-  choiceId:decision.choiceId||null,
-  mode:decision.mode||null,
-  pool,
-  recentIds:decision.recentIds||[],
-  boardIds
-}));
-NODE
+              EXPECTED_SHA="${EXPECTED_SHA}" node - "${core_file}" "${image_file}" <<'NODE'
+              const fs=require("fs");
+              const core=JSON.parse(fs.readFileSync(process.argv[2],"utf8"));
+              const image=JSON.parse(fs.readFileSync(process.argv[3],"utf8"));
+              if(!core.ok||core.mode!=="core-board") throw new Error("core board mode failed");
+              if(!Array.isArray(core.opportunities)||!core.opportunities.length) throw new Error("core board has no opportunities");
+              if(!image.ok||image.mode!=="hero-image") throw new Error("hero image mode failed");
+              const decision=image.decision&&image.decision.image||{};
+              const pool=Array.isArray(decision.pool)?decision.pool:[];
+              if(pool.length>=2&&!["shared-harness-jev","cached-jev-image"].includes(decision.mode)){
+                throw new Error("multi-image pool is not using JEV: "+JSON.stringify(decision));
+              }
+              if(pool.length&&(!image.image||!decision.choiceId||!pool.includes(decision.choiceId))){
+                throw new Error("image choice missing or outside approved pool: "+JSON.stringify({image:image.image,decision}));
+              }
+              const boardIds=Array.isArray(image.boardIds)?image.boardIds:[];
+              if(JSON.stringify(boardIds)!==JSON.stringify(core.opportunities.map(x=>x.id))){
+                throw new Error("image endpoint board differs from core board");
+              }
+              console.log("Detroit hero image smoke:",JSON.stringify({
+                commitSha:image.runtime&&image.runtime.commitSha,
+                choiceId:decision.choiceId||null,
+                mode:decision.mode||null,
+                pool,
+                recentIds:decision.recentIds||[],
+                boardIds
+              }));
+              NODE
               curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?image_smoke=${EXPECTED_SHA}" |
                 grep -Fq "/assets/detroit-outdoors.js?v=20260922c"
               echo "Independent Detroit JEV image production smoke passed."
