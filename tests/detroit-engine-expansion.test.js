@@ -145,6 +145,18 @@ test("Detroit browser renders a core board before editorial enrichment",()=>{
   assert.match(html,/\/assets\/detroit-outdoors\.js\?v=20260922b/);
 });
 
+test("Detroit core mode does not collide with the serverless dispatcher view parameter",()=>{
+  const dispatcher=read("api/fall-color.js");
+  const route=read("lib/detroit-outdoors/route.js");
+  const client=read("public/assets/detroit-outdoors.js");
+  assert.match(dispatcher,/req\.query&&req\.query\.view/);
+  assert.match(dispatcher,/"detroit-outdoors": require\("\.\.\/lib\/detroit-outdoors\/route\.js"\)/);
+  assert.match(route,/query\.get\("mode"\)==="core"/);
+  assert.doesNotMatch(route,/query\.get\("view"\)==="core"/);
+  assert.match(client,/mode=core/);
+  assert.doesNotMatch(client,/view=core/);
+});
+
 test("Detroit core-first client parses and tolerates specialist cards without legacy weather",()=>{
   const client=read("public/assets/detroit-outdoors.js");
   assert.doesNotThrow(()=>new Function(client));
