@@ -165,16 +165,16 @@ test("Detroit Outdoors exposes safe Anthropic runtime diagnostics and production
  assert.match(route,/commitSha:process\.env\.VERCEL_GIT_COMMIT_SHA/);
  assert.match(route,/writerModel:process\.env\.OUTDOORS_WRITER_MODEL\|\|WRITER_MODEL_DEFAULT/);
  assert.doesNotMatch(route,/anthropicKey:/);
- assert.match(workflow,/ANTHROPIC_API_KEY is not configured in the production runtime/);
- assert.match(workflow,/editorialMode/);
- assert.match(workflow,/cardDetails/);
- assert.match(workflow,/Per-card editorial detail/);
+ assert.match(workflow,/ANTHROPIC_API_KEY is not configured/);
+ assert.match(workflow,/editorialMode:e\.mode/);
+ assert.match(workflow,/writers\.map/);
+ assert.match(workflow,/Detroit production verified/);
  assert.match(workflow,/missing rendered Haiku copy/);
  assert.match(workflow,/EXPECTED_SHA/);
- assert.match(workflow,/cardWriterCount/);
- assert.match(workflow,/acceptedCardCount/);
- assert.match(workflow,/Not every displayed card has accepted Haiku copy/);
- assert.match(workflow,/At least one displayed card is not using an Anthropic writer/);
+ assert.match(workflow,/writers\.length!==ids\.length/);
+ assert.match(workflow,/w=>!w\.accepted/);
+ assert.match(workflow,/a displayed card lacks accepted Anthropic copy/);
+ assert.match(workflow,/\["anthropic","cached-ai"\]\.includes\(w\.mode\)/);
 });
 
 
@@ -249,8 +249,8 @@ test("Detroit Outdoors gives Haiku an explicit evidence whitelist and constraine
  assert.match(route,/exactly two short sentences, 35 to 55 words total/);
  assert.match(route,/one concrete place-specific fact/);
  assert.match(route,/one seasonal or specialist fact/);
- assert.match(workflow,/reason:w&&w\.reason\|\|null/);
- assert.match(workflow,/detroit-outdoors\.js\?v=20260922e/);
+ assert.match(workflow,/writers\.map\(w=>\(\{id:w\.candidateId,mode:w\.mode,attempt:w\.attempt,treatment:w\.treatment\}\)\)/);
+ assert.match(workflow,/detroit-outdoors\.js\?v=20260922f/);
 });
 
 
@@ -273,7 +273,7 @@ test("Detroit Outdoors client bundle parses as JavaScript",()=>{
 test("Detroit Outdoors cache-busts the live client bundle",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
- assert.match(html,/detroit-outdoors\.js\?v=20260922e/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922f/);
  assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/detroit-outdoors\/index\.html/);
@@ -446,7 +446,24 @@ test("Detroit hero image loads independently from board and editorial",()=>{
  assert.match(client,/async function loadHeroImage\(opportunities\)/);
  assert.match(client,/mode=image&boardIds=/);
  assert.match(client,/media\.dataset\.independentImage="1"/);
- assert.match(client,/loadHeroImage\(core\.opportunities\);\s*enrichEditorial\(\);/);
+ assert.match(client,/loadHeroImage\(core\.opportunities\);\s*enrichEditorial\(core\);/);
  assert.match(client,/enriched && media\.dataset\.independentImage!=="1"/);
- assert.match(html,/detroit-outdoors\.js\?v=20260922e/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922f/);
+});
+
+
+test("Detroit editorial enrichment is bound to the exact rendered JEV board",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const client=read("public/assets/detroit-outdoors.js");
+ const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
+ assert.match(route,/query\.get\("mode"\)==="editorial"&&requestedBoardIds\.length/);
+ assert.match(route,/error:"editorial-board-stale"/);
+ assert.match(route,/boardIds:ranked\.map\(x=>x\.id\)/);
+ assert.match(route,/mode:"editorial-enrichment"/);
+ assert.match(client,/async function enrichEditorial\(core\)/);
+ assert.match(client,/mode=editorial&boardIds=/);
+ assert.match(client,/editorial board changed/);
+ assert.match(client,/enrichEditorial\(core\)/);
+ assert.match(workflow,/mode=editorial/);
+ assert.match(workflow,/editorial endpoint changed the rendered board/);
 });

@@ -207,10 +207,22 @@ async function requestBoard(url){
  return data;
 }
 
-async function enrichEditorial(){
+async function enrichEditorial(core){
  try{
-   const data=await requestBoard("/api/detroit-outdoors?edition=cards-v1");
-   renderPayload(data,true);
+   const opportunities=Array.isArray(core&&core.opportunities)?core.opportunities:[];
+   const boardIds=opportunities.map(x=>x&&x.id).filter(Boolean).slice(0,4);
+   if(!boardIds.length)return;
+   const hold=core&&core.decision&&core.decision.boardEditor&&core.decision.boardEditor.posture&&core.decision.boardEditor.posture.choiceId==="QUIET";
+   const data=await requestBoard("/api/detroit-outdoors?mode=editorial&boardIds="+encodeURIComponent(boardIds.join(","))+"&hold="+(hold?"1":"0"));
+   if(JSON.stringify(data.boardIds||[])!==JSON.stringify(boardIds)) throw new Error("editorial board changed");
+   const merged={
+     ...core,
+     generatedAt:data.generatedAt||core.generatedAt,
+     editorial:data.editorial||core.editorial,
+     edition:data.edition||core.edition,
+     decision:{...(core.decision||{}),editorial:data.decision&&data.decision.editorial||core.decision&&core.decision.editorial}
+   };
+   renderPayload(merged,true);
  }catch(error){
    if($("#writer-mode")) $("#writer-mode").textContent="editorial unavailable · live board remains current";
  }
@@ -239,7 +251,7 @@ async function load(){
    const core=await requestBoard("/api/detroit-outdoors?edition=cards-v1&mode=core");
    renderPayload(core,false);
    loadHeroImage(core.opportunities);
-   enrichEditorial();
+   enrichEditorial(core);
  }catch(error){
    document.body.classList.remove("loading");
    if($("#opportunity-grid")) $("#opportunity-grid").innerHTML='<div class="error">Live opportunity data is temporarily unavailable. Use the specialist tools below while the desk recovers.</div>';
