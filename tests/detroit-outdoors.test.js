@@ -398,3 +398,27 @@ test("Detroit Outdoors exposes the actual reassigned treatment and evidence sour
  assert.match(route,/noteSources:Object\.keys\(editorial\.noteSources\|\|\{\}\)\.length\?editorial\.noteSources/);
  assert.match(route,/placements:editorial\.actualPlacements&&editorial\.actualPlacements\.length\?editorial\.actualPlacements/);
 });
+
+test("Detroit Outdoors makes the hero image a JEV board-level decision with freshness memory",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/const APPROVED_BOARD_IMAGES = \[/);
+ assert.match(route,/belle-isle-skyline-cc-by-sa-4/);
+ assert.match(route,/detroit-riverwalk-cc-by-4/);
+ assert.match(route,/huron-river-ann-arbor-cc-by-3/);
+ assert.match(route,/pointe-mouillee-public-domain/);
+ assert.match(route,/sterling-state-park-cc-by-3/);
+ assert.match(route,/function imagePoolForBoard/);
+ assert.match(route,/function imageCycleKey/);
+ assert.match(route,/detroit-outdoors:image-history:v2/);
+ assert.match(route,/cached-jev-image/);
+ assert.match(route,/Choose the single best hero file photo for today's Detroit Outdoors board/);
+ assert.match(route,/This is a board-level visual decision, not a lead-card illustration/);
+ assert.match(route,/recentlyUsedImageIds/);
+ assert.match(route,/Relevance is more important than novelty/);
+ assert.match(route,/prefer one that is not in recentlyUsedImageIds/i);
+ assert.match(route,/judgeImage\(hold\?\[\]:ranked\)/);
+ assert.match(route,/pool:imageResult\.pool\|\|\[\]/);
+ assert.match(route,/recentIds:imageResult\.recentIds\|\|\[\]/);
+ assert.doesNotMatch(route,/async function judgeImage\(lead\)/);
+});
+
