@@ -7,6 +7,8 @@ on:
     paths:
       - 'lib/detroit-outdoors/route.js'
       - 'lib/detroit-outdoors/engines.js'
+      - 'lib/detroit-outdoors/expanded-engines.js'
+      - 'lib/detroit-outdoors/engine-registry.js'
       - 'public/assets/detroit-outdoors.js'
       - 'public/assets/detroit-intent.js'
       - 'public/assets/detroit-intent.css'
@@ -108,11 +110,24 @@ jobs:
                       console.error("Mixed hard-safe engine pool does not match the candidate count sent to JEV.", ed, x.boardCandidateCount);
                       process.exit(12);
                     }
-                    for (const engine of ["park-weather","great-lakes-water","night-sky-aurora","fall-color-phenology","sunset-photography","great-lakes-ais"]) {
+                    for (const engine of ["park-weather","great-lakes-water","night-sky-aurora","fall-color-phenology","sunset-photography","great-lakes-ais","bird-migration-live","great-lakes-beach","southeast-river","morel-phenology","clean-air-window","lake-st-clair-ice","xc-snow-screen"]) {
                       if (!Object.prototype.hasOwnProperty.call(emitted,engine)) {
                         console.error("Expected opportunity engine did not report diagnostics.", engine, emitted);
                         process.exit(13);
                       }
+                    }
+                    const registry=Array.isArray(ed.registry)?ed.registry:[];
+                    const registryIds=new Set(registry.map(item=>item&&item.id).filter(Boolean));
+                    for (const engine of ["bird-migration-live","great-lakes-beach","southeast-river","morel-phenology","clean-air-window","lake-st-clair-ice","xc-snow-screen","monarch-migration"]) {
+                      if (!registryIds.has(engine)) {
+                        console.error("Expanded Detroit engine is missing from the runtime registry.", engine, registry);
+                        process.exit(24);
+                      }
+                    }
+                    const monarch=registry.find(item=>item&&item.id==="monarch-migration");
+                    if (!monarch || monarch.status!=="rights-review" || monarch.role!=="registered-not-enabled") {
+                      console.error("Monarch must remain rights-held until licensing review is complete.", monarch);
+                      process.exit(25);
                     }
                     if (!(sourceStatus["great-lakes-water"]&&sourceStatus["great-lakes-water"].ok) ||
                         !(sourceStatus["night-sky-aurora"]&&sourceStatus["night-sky-aurora"].ok)) {
