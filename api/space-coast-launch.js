@@ -20,27 +20,14 @@ function scheduleConfidence(l){
   if(status==='tbd'||status==='tbc')return {level:'medium',label:String(l.status?.name||'Tentative'),detail:'The schedule is still provisional and can move.'};
   return {level:'medium',label:l?.status?.name||'Scheduled',detail:'Launch dates and times can change with little notice.'};
 }
-function maxWind(period){
-  const nums=String(period?.windSpeed||'').match(/\d+(?:\.\d+)?/g)?.map(Number).filter(Number.isFinite)||[];
-  return nums.length?Math.max(...nums):NaN;
-}
 function weatherGrade(period){
   if(!period)return {level:'unknown',label:'Weather window unavailable',detail:'NWS hourly guidance does not yet cover the launch time.'};
-  const text=String(period.shortForecast||'').trim().toLowerCase();
-  const rawPop=period?.probabilityOfPrecipitation?.value;
-  const pop=rawPop==null||rawPop===''?NaN:Number(rawPop);
-  const wind=maxWind(period);
-
-  if(/thunder/.test(text)){
-    const precip=Number.isFinite(pop)?`; precipitation chance ${pop}%`:'';
-    return {level:'poor',label:'Weather could limit viewing',detail:`${period.shortForecast||'Thunderstorms'}${precip}. This is a visibility read, not a launch-weather forecast.`};
-  }
-  if(!Number.isFinite(pop)||!Number.isFinite(wind)){
-    return {level:'unknown',label:'Viewing weather incomplete',detail:'The NWS period is missing precipitation or wind guidance, so the tool will not infer a viewing grade.'};
-  }
-  const cloudBad=/overcast|cloudy|showers|rain/.test(text);
-  if(pop>=50)return {level:'poor',label:'Weather could limit viewing',detail:`${period.shortForecast}; precipitation chance ${pop}%. This is a visibility read, not a launch-weather forecast.`};
-  if(pop>=25||cloudBad||wind>=20)return {level:'mixed',label:'Mixed viewing weather',detail:`${period.shortForecast}; precipitation chance ${pop}%. Clouds, wind or weather may reduce visibility.`};
+  const pop=Number(period?.probabilityOfPrecipitation?.value??0);
+  const text=String(period.shortForecast||'').toLowerCase();
+  const wind=Number(String(period.windSpeed||'').match(/\d+/)?.[0]||0);
+  const cloudBad=/overcast|cloudy|showers|thunder|rain/.test(text);
+  if(pop>=50||/thunder/.test(text))return {level:'poor',label:'Weather could limit viewing',detail:`${period.shortForecast}; precipitation chance ${pop}%. This is a visibility read, not a launch-weather forecast.`};
+  if(pop>=25||cloudBad||wind>=20)return {level:'mixed',label:'Mixed viewing weather',detail:`${period.shortForecast}; precipitation chance ${pop}%. Clouds or weather may reduce visibility.`};
   return {level:'good',label:'Viewing weather looks workable',detail:`${period.shortForecast}; precipitation chance ${pop}%. Launch operations can still scrub for other reasons.`};
 }
 async function nwsFor(lat,lon,when){
@@ -79,5 +66,3 @@ module.exports=async function handler(req,res){
     res.status(502).json({ok:false,error:'Space Coast launch feed is temporarily unavailable.',detail:String(error?.message||error),official:KSC});
   }
 };
-
-module.exports._test={isSpaceCoast,isFutureLaunch,scheduleConfidence,maxWind,weatherGrade};

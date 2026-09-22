@@ -13,6 +13,7 @@ const {
 
 function placeState(id,overrides={}){
   const places={
+    "belle-isle":{id,name:"Belle Isle Park",area:"Detroit",setting:"Detroit River island",drive:"15–25 min",driveClass:"near",officialUrl:"https://www.michigan.gov/recsearch/parks/belleisle"},
     "lake-st-clair-metropark":{id,name:"Lake St. Clair Metropark",area:"Harrison Township",setting:"Lake St. Clair shoreline and marsh",drive:"35–50 min",driveClass:"near",officialUrl:"https://www.metroparks.com/lake-st-clair-metropark/"},
     "port-crescent-state-park":{id,name:"Port Crescent State Park",area:"Port Austin",setting:"Lake Huron shoreline, river, and dark-sky preserve",drive:"110–135 min",driveClass:"far",officialUrl:"https://www.michigan.gov/recsearch/parks/portcrescent"},
     "kensington-metropark":{id,name:"Kensington Metropark",area:"Milford",setting:"Inland lake and rolling woodland",drive:"45–65 min",driveClass:"near",officialUrl:"https://www.metroparks.com/kensington-metropark/"},
@@ -348,4 +349,95 @@ test("mixed pool diagnostics expose engine participation without imposing a dive
   assert.equal(diagnostics.selectedEngineDiversity,2);
   assert.deepEqual(diagnostics.selectedIds,[water.id,park.id]);
   assert.ok(Object.hasOwn(diagnostics.emittedCandidateCountByEngine,"night-sky-aurora"));
+});
+
+
+test("sunset photography engine emits a non-park Detroit Riverfront opportunity from solar geometry and NWS sky cover",()=>{
+  const now=new Date("2026-09-21T20:30:00Z");
+  const sunset=_test.solarMinutes("2026-09-21",42.3314,-83.0458,false);
+  assert.ok(sunset>1140&&sunset<1230,`sunset ${sunset}`);
+  const nightSkyState={
+    ok:true,
+    data:{
+      ovation:{regions:[{
+        id:"detroit",
+        sky_cover:{periods:[
+          {start_time:"2026-09-21T22:00:00Z",end_time:"2026-09-21T23:00:00Z",percent:35},
+          {start_time:"2026-09-21T23:00:00Z",end_time:"2026-09-22T00:00:00Z",percent:42},
+          {start_time:"2026-09-22T00:00:00Z",end_time:"2026-09-22T01:00:00Z",percent:48}
+        ]}
+      }]}
+    }
+  };
+  const rows=_test.sunsetPhotographyCandidate({
+    placeStates:[placeState("belle-isle",{precipitationProbability:8,windGust:9,aqi:30})],
+    alertStates:emptyAlerts(1),
+    nightSkyState,
+    now
+  });
+  assert.equal(rows.length,1);
+  assert.equal(rows[0].place.id,"detroit-riverfront");
+  assert.equal(rows[0].sourceEngine,"sunset-photography");
+  assert.equal(rows[0].opportunityType,"sunset-photography");
+  assert.match(rows[0].whyNow,/sunset period/i);
+  assert.ok(rows[0].verifiedEvidence.some(e=>/Detroit Riverwalk/i.test(e.sourceLabel)));
+});
+
+test("sunset photography engine does not claim a colorful sunset from sky-cover percentage alone",()=>{
+  const now=new Date("2026-09-21T20:30:00Z");
+  const nightSkyState={
+    ok:true,
+    data:{ovation:{regions:[{id:"detroit",sky_cover:{periods:[
+      {start_time:"2026-09-21T22:00:00Z",end_time:"2026-09-21T23:00:00Z",percent:35},
+      {start_time:"2026-09-21T23:00:00Z",end_time:"2026-09-22T00:00:00Z",percent:40}
+    ]}}]}}
+  };
+  const row=_test.sunsetPhotographyCandidate({
+    placeStates:[placeState("belle-isle")],
+    alertStates:emptyAlerts(1),
+    nightSkyState,
+    now
+  })[0];
+  assert.ok(row);
+  assert.match(row.caveat,/does not resolve cloud type/i);
+  assert.doesNotMatch(row.whyNow,/guarantee|colorful/i);
+});
+
+test("Great Lakes AIS engine can emit a short-lived Detroit Riverfront freighter-watching candidate",()=>{
+  const aisState={
+    ok:true,
+    data:{
+      vessels:[
+        {mmsi:"366904940",name:"TEST LAKER",lat:42.34,lon:-83.02,seen:"2026-09-21T20:25:00Z",speedKnots:8.4,course:210,heading:208,shipType:70,source:"test"}
+      ],
+      maxAgeMinutes:30
+    }
+  };
+  const rows=_test.freighterWatchingCandidate({
+    placeStates:[placeState("belle-isle")],
+    alertStates:emptyAlerts(1),
+    aisState
+  });
+  assert.equal(rows.length,1);
+  assert.equal(rows[0].place.id,"detroit-riverfront");
+  assert.equal(rows[0].sourceEngine,"great-lakes-ais");
+  assert.equal(rows[0].opportunityType,"live-freighter-passage");
+  assert.match(rows[0].reasons.join(" "),/TEST LAKER/);
+  assert.match(rows[0].caveat,/not a passage schedule/i);
+});
+
+test("AIS engine ignores distant or non-commercial traffic instead of creating candidate noise",()=>{
+  const aisState={
+    ok:true,
+    data:{vessels:[
+      {mmsi:"111111111",name:"PLEASURE",lat:42.34,lon:-83.02,seen:"2026-09-21T20:25:00Z",speedKnots:5,shipType:36,source:"test"},
+      {mmsi:"222222222",name:"FAR LAKER",lat:43.0,lon:-82.4,seen:"2026-09-21T20:25:00Z",speedKnots:8,shipType:70,source:"test"}
+    ]}
+  };
+  const rows=_test.freighterWatchingCandidate({
+    placeStates:[placeState("belle-isle")],
+    alertStates:emptyAlerts(1),
+    aisState
+  });
+  assert.equal(rows.length,0);
 });

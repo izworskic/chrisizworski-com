@@ -50,7 +50,7 @@ test("Detroit Outdoors separates strong desk writing from additive per-card writ
  assert.match(route,/Return JSON only: \{\\"note\\":\\"\.\.\.\\"\}/);
  assert.match(route,/detroit-outdoors:desk:v8/);
  assert.match(route,/detroit-outdoors:card:v10/);
- assert.match(route,/placements:editorialPlan\.cardNotes/);
+ assert.match(route,/placements:editorial\.actualPlacements/);
 });
 
 
@@ -127,10 +127,10 @@ test("Detroit Outdoors validates and repairs each Haiku card independently",()=>
  assert.match(route,/async function reviewEditorialNote/);
  assert.match(route,/fallbackId:"REJECT"/);
  assert.match(route,/Reject generic encouragement, weather restatement, score restatement, travel-time restatement/);
- assert.match(route,/let review=await reviewEditorialNote\(candidate,slot,note\)/);
+ assert.match(route,/let review=await reviewEditorialNote\(candidate,activeSlot,note\)/);
  assert.match(route,/if\(!review\.accepted\)/);
  assert.match(route,/The reviewer rejected the first draft/);
- assert.match(route,/review=await reviewEditorialNote\(candidate,slot,note\)/);
+ assert.match(route,/review=await reviewEditorialNote\(candidate,activeSlot,note\)/);
  assert.match(route,/mode:"anthropic-rejected"/);
  assert.match(client,/Why this matters/);
 });
@@ -234,16 +234,22 @@ test("Detroit Outdoors rejects unsupported bird specificity before JEV acceptanc
 });
 
 
-test("Detroit Outdoors gives Haiku an explicit evidence whitelist and a third rescue pass",()=>{
+test("Detroit Outdoors gives Haiku an explicit evidence whitelist and constrained rescue passes",()=>{
  const route=read("lib/detroit-outdoors/route.js");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
  assert.match(route,/function evidenceVocabulary/);
- assert.match(route,/allowedSpecificLanguage:evidenceVocabulary\(slot\)/);
+ assert.match(route,/allowedSpecificLanguage:evidenceVocabulary\(activeSlot\)/);
  assert.match(route,/hard whitelist for named bird groups and strength words/);
  assert.match(route,/attempt=3/);
  assert.match(route,/Write a restrained evidence-only card explanation/);
  assert.match(route,/45 to 70 words/);
+ assert.match(route,/attempt=4/);
+ assert.match(route,/previous drafts were rejected because they did not add enough specific decision value/);
+ assert.match(route,/exactly two short sentences, 35 to 55 words total/);
+ assert.match(route,/one concrete place-specific fact/);
+ assert.match(route,/one seasonal or specialist fact/);
  assert.match(workflow,/reason:w&&w\.reason\|\|null/);
+ assert.match(workflow,/detroit-outdoors\.js\?v=20260921c/);
 });
 
 
@@ -266,7 +272,7 @@ test("Detroit Outdoors client bundle parses as JavaScript",()=>{
 test("Detroit Outdoors cache-busts the live client bundle",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
- assert.match(html,/detroit-outdoors\.js\?v=20260921b/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260921c/);
  assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/detroit-outdoors\/index\.html/);
@@ -285,9 +291,16 @@ test("Detroit Outdoors mixes reusable specialist engines into one hard-safe JEV 
  assert.match(route,/diagnostics:\{\s*opportunityEngines:opportunityEngineDiagnostics/);
  assert.match(engines,/https:\/\/chrisizworski\.com\/api\/buoys/);
  assert.match(engines,/https:\/\/chrisizworski\.com\/api\/aurora/);
+ assert.match(engines,/api\.weather\.gov\/alerts\/active\/zone\/LCZ460/);
  assert.match(engines,/function waterCandidate/);
  assert.match(engines,/function nightSkyCandidate/);
  assert.match(engines,/function fallColorCandidates/);
+ assert.match(engines,/function sunsetPhotographyCandidate/);
+ assert.match(engines,/function freighterWatchingCandidate/);
+ assert.match(engines,/api\/freighter-ais/);
+ assert.match(route,/Detroit Riverfront Conservancy/);
+ assert.match(route,/sunset-photography/);
+ assert.match(route,/great-lakes-ais/);
  assert.match(engines,/function hardGateSpecialistCandidates/);
  assert.match(engines,/function dedupeMixedPool/);
  assert.match(engines,/WATER_HARD_ALERT/);
@@ -318,4 +331,70 @@ test("Detroit Outdoors propagates specialist hard vetoes over legacy equivalents
  assert.match(engines,/specialistId:veto\.id/);
  assert.match(engines,/Required NWS park-point alert feed is unavailable/);
  assert.match(engines,/Required NWS alert feed is unavailable/);
+});
+
+
+test("Detroit Outdoors can surface non-park Riverfront opportunities without changing the card UI",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const engines=read("lib/detroit-outdoors/engines.js");
+ const client=read("public/assets/detroit-outdoors.js");
+ assert.match(engines,/id:"detroit-riverfront"/);
+ assert.match(engines,/sourceEngine:"sunset-photography"/);
+ assert.match(engines,/sourceEngine:"great-lakes-ais"/);
+ assert.match(engines,/opportunityType:"sunset-photography"/);
+ assert.match(engines,/opportunityType:"live-freighter-passage"/);
+ assert.match(route,/photography:"Sunset \/ photography window"/);
+ assert.match(route,/"freighter-watching":"Live freighter window"/);
+ assert.match(route,/The Detroit Riverwalk is a public riverfront corridor stretching almost five miles/);
+ assert.match(client,/function renderCard/);
+ assert.doesNotMatch(client,/sunset-photography.*special-case|great-lakes-ais.*special-case/);
+});
+
+
+test("Detroit Outdoors uses the most valuable top-line space for the live board, not product explanation",()=>{
+ const html=read("public/detroit-outdoors/index.html");
+ const client=read("public/assets/detroit-outdoors.js");
+ assert.match(html,/id="live-headline"/);
+ assert.match(html,/id="live-dek"/);
+ assert.match(html,/Detroit Outdoors Today/);
+ assert.doesNotMatch(html,/A live look at the few outings that make sense today/);
+ assert.doesNotMatch(html,/Weather, active NWS hazards, seasonal timing and specialist checks are compared in the background/);
+ const top=html.slice(html.indexOf('<main class="shell">'),html.indexOf('<section class="hero"'));
+ assert.doesNotMatch(top,/Built and published by/);
+ assert.match(html,/Sources, safety rules, and how the ranking works[\s\S]*Built and published by/);
+ assert.match(client,/function renderTopline/);
+ assert.match(client,/renderTopline\(data\.opportunities\)/);
+ assert.match(client,/is on the Detroit River right now/);
+ assert.match(client,/rest\.join\(" · "\)/);
+});
+
+test("Detroit Outdoors dynamic headline understands specialist opportunity types",()=>{
+ const client=read("public/assets/detroit-outdoors.js");
+ assert.match(client,/engine==="great-lakes-ais"/);
+ assert.match(client,/engine==="sunset-photography"/);
+ assert.match(client,/engine==="great-lakes-water"/);
+ assert.match(client,/engine==="night-sky-aurora"/);
+ assert.match(client,/engine==="fall-color-phenology"/);
+});
+
+
+test("Detroit Outdoors lets JEV reassign a repeatedly rejected editorial job instead of weakening review",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/async function recoverEditorialSlot/);
+ assert.match(route,/originally assigned Detroit Outdoors card-writing job has repeatedly failed editorial review/);
+ assert.match(route,/Choose a DIFFERENT editorial job/);
+ assert.match(route,/attempt=5/);
+ assert.match(route,/activeSlot=await recoverEditorialSlot\(candidate,slot,fallSnapshot\)/);
+ assert.match(route,/The original editorial job was repeatedly rejected\. JEV has reassigned this card to a different job/);
+ assert.match(route,/review=await reviewEditorialNote\(candidate,activeSlot,note\)/);
+ assert.match(route,/reassignedFrom:activeSlot\.reassignedFrom\|\|null/);
+});
+
+test("Detroit Outdoors exposes the actual reassigned treatment and evidence sources",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/const actualPlacements=\[\]/);
+ assert.match(route,/noteSources\[result\.candidateId\]=result\.sources/);
+ assert.match(route,/treatment:result\.treatment\|\|planned&&planned\.treatment/);
+ assert.match(route,/noteSources:Object\.keys\(editorial\.noteSources\|\|\{\}\)\.length\?editorial\.noteSources/);
+ assert.match(route,/placements:editorial\.actualPlacements&&editorial\.actualPlacements\.length\?editorial\.actualPlacements/);
 });
