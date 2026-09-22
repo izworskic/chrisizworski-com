@@ -86,6 +86,8 @@ test("off-season engines are skipped before network fetch while evergreen engine
   const off=adapters._test.offSeasonState("x","https://example.com");
   assert.equal(off.state,"off-season");
   assert.equal(off.ok,true);
+  const status=adapters.expandedSourceStatus({beach:off});
+  assert.equal(status["great-lakes-beach"].state,"off-season");
 });
 
 test("expanded engine code preserves seasonal and safety truth boundaries",()=>{
