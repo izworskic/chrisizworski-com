@@ -1,6 +1,7 @@
 const $=s=>document.querySelector(s);
 const ORIGIN_NAMES={'43.5945,-83.8889':'Bay City','43.4195,-83.9508':'Saginaw','43.6156,-84.2472':'Midland','42.7325,-84.5555':'Lansing','42.9634,-85.6681':'Grand Rapids','42.3314,-83.0458':'Detroit','44.7631,-85.6206':'Traverse City'};
 let DATA=null,MAP=null,LAYER=null,CLOSURE_LAYER=null,SNOW_LAYER=null,CLOSURES=null;
+let ROUTE_MODE=false,ROUTE_POINTS=[],ROUTE_MARKERS=[],ROUTE_LINE=null;
 function track(name,params={}){try{if(typeof window.gtag==='function')window.gtag('event',name,params)}catch{}}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function bandClass(b){return b==='CLOSED'||b==='POOR'?'bad':b==='MARGINAL'||b==='OFF_SEASON'?'warn':b==='EXCELLENT'||b==='GOOD'?'good':''}
@@ -163,7 +164,7 @@ function mapBandColor(b){return b==='CLOSED'?'#5f2c2a':b==='POOR'?'#a33b32':b===
 function drawMap(d){
   const fc=d.scoredGeometry;
   if(!window.L||!fc)return;
-  if(!MAP){const center=d.mapCenter||[44.9,-85.6];MAP=L.map('map',{scrollWheelZoom:false}).setView(center,d.legacyCorridor?9:8);MAP.once('movestart',()=>track('snowmobile_map_interaction',{action:'move'}));L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'\u00a9 OpenStreetMap contributors'}).addTo(MAP)}
+  if(!MAP){const center=d.mapCenter||[44.9,-85.6];MAP=L.map('map',{scrollWheelZoom:false}).setView(center,d.legacyCorridor?9:8);MAP.once('movestart',()=>track('snowmobile_map_interaction',{action:'move'}));L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'\u00a9 OpenStreetMap contributors'}).addTo(MAP);MAP.on('click',onMapClick)}
   if(LAYER)LAYER.remove(); if(CLOSURE_LAYER)CLOSURE_LAYER.remove();
   LAYER=L.geoJSON(fc,{
     style:f=>{const p=f.properties||{};return {weight:p.band==='CLOSED'?7:5,opacity:.9,color:mapBandColor(p.band)}},
@@ -191,8 +192,92 @@ function toggleSnowDepth(){
   }
   SNOW_LAYER.addTo(MAP);btn.textContent='Hide NOAA snow depth';btn.setAttribute('aria-pressed','true');SNOW_LAYER.bringToBack();track('snowmobile_snow_depth_toggle',{state:'on'});
 }
+function routeModeButton(){return $('#routeModeToggle');}
+function routeHint(){return $('#routeHint');}
+function routeResultHost(){return $('#routeResult');}
+function clearRouteButton(){return $('#clearRoute');}
+const ROUTE_MARK_COLOR='#e8a33d';
+
+function clearRoutePoints(){
+  for(const m of ROUTE_MARKERS)m.remove();
+  ROUTE_MARKERS=[];ROUTE_POINTS=[];
+  if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}
+}
+function setRouteMode(on){
+  ROUTE_MODE=on;
+  const btn=routeModeButton(),hint=routeHint();
+  if(btn)btn.textContent=on?'Cancel':'Plan a route on this map';
+  if(hint)hint.hidden=!on;
+  if(hint&&on)hint.textContent='Click a start point on the map above.';
+  if(MAP)MAP.getContainer().style.cursor=on?'crosshair':'';
+}
+function toggleRouteMode(){
+  if(ROUTE_MODE){setRouteMode(false);return;}
+  const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}
+  clearRoutePoints();
+  const cb=clearRouteButton();if(cb)cb.hidden=true;
+  setRouteMode(true);
+  track('snowmobile_route_mode_start',{region:DATA?.key||'unknown'});
+}
+function clearRoute(){
+  clearRoutePoints();
+  const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}
+  const cb=clearRouteButton();if(cb)cb.hidden=true;
+  setRouteMode(false);
+  track('snowmobile_route_cleared',{region:DATA?.key||'unknown'});
+}
+function onMapClick(e){
+  if(!ROUTE_MODE||!MAP)return;
+  MAP.closePopup();
+  const marker=L.circleMarker(e.latlng,{radius:7,color:'#2a1c0a',weight:2,fillColor:ROUTE_MARK_COLOR,fillOpacity:.95}).addTo(MAP);
+  ROUTE_MARKERS.push(marker);
+  ROUTE_POINTS.push(e.latlng);
+  if(ROUTE_POINTS.length===1){
+    const hint=routeHint();if(hint)hint.textContent='Click an end point on the map above.';
+    return;
+  }
+  setRouteMode(false);
+  computeRoute();
+}
+function routeResultHtml(route){
+  if(!route)return '<p><strong>Route unavailable.</strong> The routing service did not return a usable result.</p>';
+  if(!route.routable)return `<p><strong>No route drawn.</strong> ${esc(route.reason||'These two points are not connected by mapped, open trail.')}</p>`;
+  const worst=route.worstSegmentOnRoute;
+  const worstLine=worst&&Number.isFinite(worst.score)?`<div class="small">Weakest segment on this route: <span class="badge ${bandClass(worst.band)}">${esc(worst.band)}</span> ${esc(worst.trailNetwork||worst.segmentId)}</div>`:'<div class="small">No current condition score available for this route (off-season or unscored segments).</div>';
+  const closedNote=route.closedSegmentsExcludedFromRegion?`<div class="small">${route.closedSegmentsExcludedFromRegion} closed segment${route.closedSegmentsExcludedFromRegion===1?'':'s'} in this region ${route.closedSegmentsExcludedFromRegion===1?'was':'were'} excluded from routing.</div>`:'';
+  return `<div class="route-headline"><strong>${esc(route.distanceMiles)} mi</strong> \u00b7 about ${esc(formatDuration(route.estimatedMinutes))} at an assumed ${esc(route.assumedAvgMph)} mph average</div>
+  <div class="small">${route.segmentsTraversed} DNR trail segment${route.segmentsTraversed===1?'':'s'}, via ${esc(route.trailsVia.slice(0,6).join(' \u2192 '))}${route.trailsVia.length>6?' \u2026':''}</div>
+  ${worstLine}${closedNote}
+  <div class="small route-truth-inline">${esc(route.truth||'')}</div>`;
+}
+async function computeRoute(){
+  const host=routeResultHost();if(!host||!DATA||ROUTE_POINTS.length<2)return;
+  host.hidden=false;host.innerHTML='<p>Computing route along official DNR trail geometry\\u2026</p>';
+  const [a,b]=ROUTE_POINTS;
+  const from=`${a.lat.toFixed(5)},${a.lng.toFixed(5)}`,to=`${b.lat.toFixed(5)},${b.lng.toFixed(5)}`;
+  try{
+    const r=await fetch(`/api/snowmobile-route?region=${encodeURIComponent(DATA.key)}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+    const j=await r.json();
+    if(!r.ok)throw new Error(j.error||j.detail||String(r.status));
+    host.innerHTML=routeResultHtml(j.route);
+    if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}
+    if(j.route?.routable&&j.route.geometry?.coordinates?.length>1){
+      const latlngs=j.route.geometry.coordinates.map(([lon,lat])=>[lat,lon]);
+      ROUTE_LINE=L.polyline(latlngs,{color:ROUTE_MARK_COLOR,weight:6,opacity:.95,dashArray:'1 8',lineCap:'round'}).addTo(MAP);
+      try{MAP.fitBounds(ROUTE_LINE.getBounds(),{padding:[25,25]});}catch{}
+    }
+    const cb=clearRouteButton();if(cb)cb.hidden=false;
+    track('snowmobile_route_computed',{region:DATA.key,routable:Boolean(j.route?.routable),miles:j.route?.distanceMiles??null});
+  }catch(e){
+    host.innerHTML=`<p><strong>Route unavailable.</strong> ${esc(e.message||'The routing service did not return a usable result.')}</p>`;
+    const cb=clearRouteButton();if(cb)cb.hidden=false;
+    track('snowmobile_route_error',{region:DATA.key,message:String(e.message||e).slice(0,120)});
+  }
+}
 document.addEventListener('click',e=>{
   if(e.target?.id==='toggleSnowDepth')toggleSnowDepth();
+  if(e.target?.id==='routeModeToggle')toggleRouteMode();
+  if(e.target?.id==='clearRoute')clearRoute();
   if(e.target?.id==='checkDrive'){const v=$('#originPreset')?.value;if(v)checkOrigin(v,ORIGIN_NAMES[v]||'Selected origin')}
   if(e.target?.id==='useMyLocation'){
     const host=$('#personalDrive');if(!navigator.geolocation){if(host)host.textContent='Browser location is unavailable.'}

@@ -48,6 +48,17 @@
     <div class="panel"><h2>Route map</h2><p class="small">Official Michigan DNR designated snowmobile trail geometry for Northwest MI. In season, line color follows the reconciled segment condition; official temporary closure/detour geometry is overlaid separately.</p><div class="map-tools"><div class="map-legend-inline"><span><i class="lg excellent"></i>good/excellent</span><span><i class="lg fair"></i>fair</span><span><i class="lg marginal"></i>marginal/poor</span><span><i class="lg closure"></i>official closure</span></div><button type="button" id="toggleSnowDepth" class="map-layer-button" aria-pressed="false">Show NOAA snow depth</button></div><div id="map"></div><p class="small snow-note">NOAA NOHRSC snow depth is an analyzed regional snowpack layer built from observations and a snow model. It is useful context, but <strong>it is not trail base and does not prove a groomed surface.</strong></p><p class="small" id="closureVerify">Checking the official DNR closure feed…</p></div>
     <aside class="panel"><h2>Weakest route segments</h2><div id="segments">Loading official trail segments…</div></aside>
   </section>
+  <section class="panel route-planner" id="routePlanner">
+    <div class="section-headline"><div><div class="eyebrow">Plan a trip</div><h2>How far is it, trail-following?</h2></div></div>
+    <p class="small">Pick a start and an end point on the map above and this traces the shortest path along Northwest MI's official DNR trail geometry between them, the same lines shown on the map, and totals the real distance. It will not route through a segment this data marks legally closed; if the only way there is closed, it says so instead of guessing a detour.</p>
+    <div class="route-controls">
+      <button type="button" id="routeModeToggle">Plan a route on this map</button>
+      <button type="button" id="clearRoute" class="secondary-btn" hidden>Clear route</button>
+    </div>
+    <p class="small ui" id="routeHint" hidden>Click a start point, then an end point, on the map above.</p>
+    <div id="routeResult" class="route-result" hidden></div>
+    <p class="small route-truth">Start/end points snap to the nearest mapped trail junction, not necessarily the exact spot clicked. Ride time is a rough estimate from an assumed average trail speed, not a live or personalized prediction. This is not turn-by-turn GPS navigation.</p>
+  </section>
 
   <section class="grid">
     <div class="panel"><h2>Local condition evidence</h2><div id="conflictNotice" class="conflict-notice" hidden></div><p class="small">Club reports can describe surface condition and grooming. They do not override an official closure, and an old “last groomed” field is not treated as current just because the page itself is current.</p><div id="reports"></div></div>
