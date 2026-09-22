@@ -273,7 +273,7 @@ test("Detroit Outdoors client bundle parses as JavaScript",()=>{
 test("Detroit Outdoors cache-busts the live client bundle",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
- assert.match(html,/detroit-outdoors\.js\?v=20260922d/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922e/);
  assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/detroit-outdoors\/index\.html/);
@@ -424,6 +424,18 @@ test("Detroit Outdoors makes the hero image a JEV board-level decision with fres
  assert.doesNotMatch(route,/async function judgeImage\(lead\)/);
 });
 
+test("Detroit image endpoint locks JEV visual selection to the rendered board",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const client=read("public/assets/detroit-outdoors.js");
+ assert.match(route,/const requestedBoardIds=String\(query\.get\("board"\)\|\|""\)/);
+ assert.match(route,/const imageBoard=requestedBoardIds\.map\(id=>byId\.get\(id\)\)\.filter\(Boolean\)/);
+ assert.match(route,/error:"board-changed"/);
+ assert.match(route,/const imageResult=await judgeImage\(imageBoard\)/);
+ assert.match(route,/boardIds:imageBoard\.map\(x=>x\.id\)/);
+ assert.match(client,/boardIds\.join\(","\)/);
+ assert.match(client,/loadHeroImage\(core\.opportunities\)/);
+});
+
 test("Detroit image selection cannot take down the live editorial response",()=>{
  const route=read("lib/detroit-outdoors/route.js");
  assert.match(route,/async function judgeImageUnsafe\(candidates\)/);
@@ -443,10 +455,10 @@ test("Detroit hero image loads independently from board and editorial",()=>{
  assert.match(route,/mode:"hero-image"/);
  assert.match(route,/const imageResult=await judgeImage\(hold\?\[\]:ranked\)/);
  assert.match(route,/Hero image is loaded independently from mode=image/);
- assert.match(client,/async function loadHeroImage\(\)/);
- assert.match(client,/requestBoard\("\/api\/detroit-outdoors\?mode=image"\)/);
+ assert.match(client,/async function loadHeroImage\(opportunities\)/);
+ assert.match(client,/mode=image&board=/);
  assert.match(client,/media\.dataset\.independentImage="1"/);
- assert.match(client,/loadHeroImage\(\);\s*enrichEditorial\(\);/);
+ assert.match(client,/loadHeroImage\(core\.opportunities\);\s*enrichEditorial\(\);/);
  assert.match(client,/enriched && media\.dataset\.independentImage!=="1"/);
  assert.match(html,/detroit-outdoors\.js\?v=20260922d/);
 });
