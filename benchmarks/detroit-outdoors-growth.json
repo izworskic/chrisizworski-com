@@ -48,5 +48,10 @@
     "No intent page may claim a live sighting, vessel passage, water clearance, sunset color, or other condition not supported by its evidence.",
     "Measure search landing traffic separately from internal network traffic.",
     "Prefer useful second-page clicks over additional ad units on the first screen."
-  ]
+  ],
+  "approval": {
+    "approvedBy": "Chris Izworski",
+    "approvedDate": "2026-09-21",
+    "scope": "Execute all five Detroit Outdoors traffic and AdSense growth changes, including protected Michigan Tools surface edits."
+  }
 }
