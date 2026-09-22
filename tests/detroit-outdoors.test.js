@@ -249,7 +249,7 @@ test("Detroit Outdoors gives Haiku an explicit evidence whitelist and constraine
  assert.match(route,/one concrete place-specific fact/);
  assert.match(route,/one seasonal or specialist fact/);
  assert.match(workflow,/reason:w&&w\.reason\|\|null/);
- assert.match(workflow,/detroit-outdoors\.js\?v=20260921d/);
+ assert.match(workflow,/detroit-outdoors\.js\?v=20260922a/);
 });
 
 
@@ -272,7 +272,7 @@ test("Detroit Outdoors client bundle parses as JavaScript",()=>{
 test("Detroit Outdoors cache-busts the live client bundle",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
- assert.match(html,/detroit-outdoors\.js\?v=20260921d/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922a/);
  assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/detroit-outdoors\/index\.html/);
@@ -363,7 +363,7 @@ test("Detroit Outdoors uses the most valuable top-line space for the live board,
  assert.doesNotMatch(top,/Built and published by/);
  assert.match(html,/Sources, safety rules, and how the ranking works[\s\S]*Built and published by/);
  assert.match(client,/function renderTopline/);
- assert.match(client,/renderTopline\(data\.opportunities\)/);
+ assert.match(client,/renderTopline\(data\.opportunities\|\|\[\]\)/);
  assert.match(client,/is on the Detroit River right now/);
  assert.match(client,/rest\.join\(" · "\)/);
 });
