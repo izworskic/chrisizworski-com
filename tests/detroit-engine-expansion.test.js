@@ -142,7 +142,7 @@ test("Detroit browser renders a core board before editorial enrichment",()=>{
   assert.match(client,/enrichEditorial\(\)/);
   assert.match(client,/editorial unavailable · live board remains current/);
   assert.ok(client.includes('if($("#writer-mode")) $("#writer-mode").textContent="editorial unavailable · live board remains current";'));
-  assert.match(html,/\/assets\/detroit-outdoors\.js\?v=20260922a/);
+  assert.match(html,/\/assets\/detroit-outdoors\.js\?v=20260922b/);
 });
 
 test("Detroit core-first client parses and tolerates specialist cards without legacy weather",()=>{
