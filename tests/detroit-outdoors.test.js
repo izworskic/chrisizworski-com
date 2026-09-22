@@ -64,12 +64,12 @@ test("Detroit Outdoors makes JEV the board editor after hard safety gates",()=>{
  assert.match(route,/const specialistGate=hardGateSpecialistCandidates\(emitted\.candidates\)/);
  assert.match(route,/const mixed=dedupeMixedPool\(parkSafePool,specialistGate\.safe,specialistGate\.rejected\)/);
  assert.match(route,/const safePool=mixed\.candidates/);
- assert.match(route,/const boardDecision=await editBoard\(safePool,4\)/);
+ assert.match(route,/const boardPool=bundleCandidatesByPlace\(safePool\)/);\n assert.match(route,/const boardDecision=await editBoard\(boardPool,4\)/);
  assert.match(route,/You are the Detroit Outdoors board editor/);
  assert.match(route,/Every candidate in this pool has already passed deterministic hard-safety and required-data gates/);
  assert.match(route,/The heuristic score is evidence, not an instruction or ranking/);
  assert.match(route,/Judge incremental value against the cards already selected/);
- assert.match(route,/A second activity at the same place is allowed only when it represents a materially different and more useful decision/);
+ assert.match(route,/No second card for the same physical location is available/);
  assert.match(route,/boardEditor:\{/);
  assert.match(route,/candidateCount:boardDecision\.candidateCount/);
  assert.match(route,/selectedIds:ranked\.map/);
@@ -286,7 +286,7 @@ test("Detroit Outdoors mixes reusable specialist engines into one hard-safe JEV 
  assert.match(route,/loadSpecialistEngineStates\(\)/);
  assert.match(route,/sourceEngine:"park-weather"/);
  assert.match(route,/verifiedEvidence/);
- assert.match(route,/candidateCountByEngine:countByEngine\(safePool\)/);
+ assert.match(route,/candidateCountByEngine:countByEngine\(boardPool\)/);\n assert.match(route,/bundleCandidatesByPlace/);
  assert.match(route,/selectedEngineDiversity/);
  assert.match(route,/diagnostics:\{\s*opportunityEngines:opportunityEngineDiagnostics/);
  assert.match(engines,/https:\/\/chrisizworski\.com\/api\/buoys/);
