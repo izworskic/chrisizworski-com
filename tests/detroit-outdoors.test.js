@@ -64,7 +64,8 @@ test("Detroit Outdoors makes JEV the board editor after hard safety gates",()=>{
  assert.match(route,/const specialistGate=hardGateSpecialistCandidates\(emitted\.candidates\)/);
  assert.match(route,/const mixed=dedupeMixedPool\(parkSafePool,specialistGate\.safe,specialistGate\.rejected\)/);
  assert.match(route,/const safePool=mixed\.candidates/);
- assert.match(route,/const boardPool=bundleCandidatesByPlace\(safePool\)/);\n assert.match(route,/const boardDecision=await editBoard\(boardPool,4\)/);
+ assert.match(route,/const boardPool=bundleCandidatesByPlace\(safePool\)/);
+ assert.match(route,/const boardDecision=await editBoard\(boardPool,4\)/);
  assert.match(route,/You are the Detroit Outdoors board editor/);
  assert.match(route,/Every candidate in this pool has already passed deterministic hard-safety and required-data gates/);
  assert.match(route,/The heuristic score is evidence, not an instruction or ranking/);
