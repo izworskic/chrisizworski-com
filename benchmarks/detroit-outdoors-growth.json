@@ -1,6 +1,6 @@
 {
   "name": "Detroit Outdoors AdSense growth benchmark",
-  "version": "2026-09-21",
+  "version": "2026-09-22",
   "purpose": "Measure whether Detroit Outdoors grows monetizable discovery and useful onward clicks without increasing intrusive in-page ad density.",
   "currentScore": 46,
   "targetScore": 81,
@@ -53,5 +53,13 @@
     "approvedBy": "Chris Izworski",
     "approvedDate": "2026-09-21",
     "scope": "Execute all five Detroit Outdoors traffic and AdSense growth changes, including protected Michigan Tools surface edits."
-  }
+  },
+  "observationLedger": "benchmarks/detroit-discovery-observation.json",
+  "reportCommand": "npm run report:detroit-discovery -- --check",
+  "earliestExpansionReview": "2026-10-19",
+  "expansionPolicy": [
+    "Keep the current five Detroit canonical surfaces stable while collecting post-launch evidence.",
+    "Strengthen an existing owner before creating another Detroit URL.",
+    "A new canonical requires recurring distinct query evidence, useful downstream behavior and explicit cannibalization-safe ownership."
+  ]
 }

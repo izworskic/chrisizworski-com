@@ -1,0 +1,53 @@
+name: Detroit discovery governance
+
+on:
+  pull_request:
+    paths:
+      - 'benchmarks/detroit-outdoors-growth.json'
+      - 'benchmarks/detroit-discovery-observation.json'
+      - 'benchmarks/tool-network-registry.json'
+      - 'benchmarks/tool-network-actions.json'
+      - 'docs/DETROIT_DISCOVERY_PILOT.md'
+      - 'docs/SEARCH_STRATEGY.md'
+      - 'public/llms.txt'
+      - 'public/sitemap.xml'
+      - 'scripts/report-detroit-discovery.mjs'
+      - 'scripts/audit-sitemap-canonicals.mjs'
+      - 'tests/detroit-discovery-governance.test.js'
+      - 'tests/detroit-growth-surfaces.test.js'
+      - 'package.json'
+  push:
+    branches: [main]
+    paths:
+      - 'benchmarks/detroit-outdoors-growth.json'
+      - 'benchmarks/detroit-discovery-observation.json'
+      - 'benchmarks/tool-network-registry.json'
+      - 'benchmarks/tool-network-actions.json'
+      - 'docs/DETROIT_DISCOVERY_PILOT.md'
+      - 'docs/SEARCH_STRATEGY.md'
+      - 'public/llms.txt'
+      - 'public/sitemap.xml'
+      - 'scripts/report-detroit-discovery.mjs'
+      - 'scripts/audit-sitemap-canonicals.mjs'
+      - 'tests/detroit-discovery-governance.test.js'
+      - 'tests/detroit-growth-surfaces.test.js'
+      - 'package.json'
+
+permissions:
+  contents: read
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify Detroit discovery system
+        run: |
+          set -euo pipefail
+          node --test tests/detroit-growth-surfaces.test.js tests/detroit-discovery-governance.test.js
+          node scripts/benchmark-tool-network-registry.mjs --check
+          node scripts/report-detroit-discovery.mjs --check
+          node scripts/audit-sitemap-canonicals.mjs --check

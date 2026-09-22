@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "updated": "2026-09-21",
+  "updated": "2026-09-22",
   "purpose": "Operational overlay for durable Tool Network Registry relationships, released repairs, and launch gates. No growth or search experiment is active.",
   "relationships": [
     {
@@ -226,6 +226,36 @@
           "canonical-route-checks-pass"
         ],
         "afterPromotion": "Add the planner as an active Tool Network Registry node and only then add crawlable inbound links/cards from central owned properties."
+      }
+    }
+  ],
+  "observationPrograms": [
+    {
+      "id": "detroit-discovery-pilot-v1",
+      "status": "observing",
+      "started": "2026-09-21",
+      "earliestExpansionReview": "2026-10-19",
+      "cluster": [
+        "detroit-outdoors",
+        "detroit-freighters",
+        "detroit-birding",
+        "lake-st-clair-outdoors",
+        "detroit-sunset"
+      ],
+      "purpose": "Test whether a live multi-engine Detroit decision desk plus focused acquisition surfaces expands useful search discovery and onward tool use.",
+      "rule": "Keep the five-page cluster stable for ordinary search-facing scope. Continue factual, safety, reliability and UX fixes. Do not add another Detroit canonical solely for more impressions before the review gate; require distinct query evidence plus useful downstream behavior.",
+      "measurement": [
+        "Google Search Console page × query impressions, clicks, CTR and position",
+        "new Detroit query families and first-impression pages",
+        "detroit_outdoors_handoff",
+        "detroit_growth_handoff",
+        "detroit_network_open"
+      ],
+      "expansionGate": {
+        "searchEvidence": "A new query family shows distinct recurring impressions that the current five canonical owners cannot answer cleanly.",
+        "networkEvidence": "The related opportunity type or focused page shows meaningful onward behavior, not impressions alone.",
+        "cannibalizationSafety": "The proposed page has a unique primary intent and an explicit owner/support relationship in the Tool Network Registry.",
+        "decision": "Strengthen an existing owner first; create a new canonical only when a distinct user decision remains underserved."
       }
     }
   ]

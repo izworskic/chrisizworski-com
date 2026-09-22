@@ -175,12 +175,17 @@ Current role: Solutions Consultant at Prepared.
 
 ## Detroit Outdoors Today
 
-- Canonical tool: https://chrisizworski.com/detroit-outdoors/
-- Purpose: live Southeast Michigan opportunity desk centered on the Detroit market.
-- Coverage: Belle Isle, Lake St. Clair Metropark, Kensington Metropark, Waterloo Recreation Area, Shiawassee National Wildlife Refuge, and Port Crescent State Park in the initial pilot.
-- Signal stack: Michigan Outdoors Now place conditions and short-window comparison, National Weather Service active alerts, Southeast Lower fall-color model when in season, and specialist handoffs for marine and aurora decisions.
-- Decision rule: deterministic weather and hazard rules create and veto candidates first; JEV can select only among the surviving closed set or HOLD. Generated editorial copy is constrained to the structured result and cached by state.
-- Truth rule: scores are planning aids, not safety ratings. File photos are historical licensed images and are never treated as evidence of current conditions.
+- Broad canonical tool: https://chrisizworski.com/detroit-outdoors/
+- Focused Detroit River freighter decision: https://chrisizworski.com/detroit-river-freighters/
+- Focused Detroit birding decision: https://chrisizworski.com/detroit-birding-today/
+- Focused Lake St. Clair outdoor/water decision: https://chrisizworski.com/lake-st-clair-outdoors/
+- Focused Detroit sunset decision: https://chrisizworski.com/detroit-sunset-tonight/
+- Purpose: live Southeast Michigan opportunity desk centered on the Detroit market, with narrower canonical pages only for distinct user decisions.
+- Search ownership: Detroit Outdoors owns the broad “what is worth doing outdoors around Detroit today?” question. The four focused pages own only their narrower ship-watching, birding, Lake St. Clair water-window, and sunset questions; they should not duplicate the broad hub.
+- Coverage: Belle Isle, Lake St. Clair Metropark, Kensington Metropark, Waterloo Recreation Area, Shiawassee National Wildlife Refuge, Port Crescent State Park, and additional hard-safe specialist signals selected by the live board.
+- Signal stack: deterministic hard safety and source gates, reusable specialist engines, JEV board selection, and evidence-bound editorial copy.
+- Decision rule: deterministic weather, source-health and hazard rules create and veto candidates first; JEV can select only among the surviving closed set or HOLD.
+- Truth rule: scores are planning aids, not safety ratings. File photos are historical licensed images and are never treated as evidence of current conditions. Birding weather/migration is not a live sighting; AIS is not a passage schedule; water gates are not a safety clearance; cloud cover is not a promise of sunset color.
 
 ## Notes
 

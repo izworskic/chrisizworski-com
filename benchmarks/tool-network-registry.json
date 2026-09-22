@@ -1,6 +1,6 @@
 {
-  "version": "1.3.1",
-  "updated": "2026-09-21",
+  "version": "1.4.0",
+  "updated": "2026-09-22",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -903,6 +903,189 @@
         "product": "GA4 page and outbound specialist handoff events",
         "decisionWindowDays": 28,
         "privacy": "No exact user coordinates, precise location, or free-text query is required by this page."
+      }
+    },
+    {
+      "id": "detroit-freighters",
+      "name": "Detroit River Freighters Today",
+      "canonical": "https://chrisizworski.com/detroit-river-freighters/",
+      "aliases": [],
+      "kind": "focused-live-acquisition",
+      "cluster": "great-lakes-shipping",
+      "primaryIntent": "are freighters passing Detroit today",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "detroit-river",
+        "detroit-metro"
+      ],
+      "personas": [
+        "ship-watcher",
+        "day-tripper"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new",
+        "note": "Launched 2026-09-21 as a narrow Detroit acquisition surface. Measure distinct Detroit ship-watching queries and downstream live-map use before expansion."
+      },
+      "measurement": {
+        "search": "Google Search Console page × query",
+        "product": "GA4 fixed-label Detroit growth handoff events",
+        "decisionWindowDays": 28,
+        "privacy": "No exact user coordinates, precise location, or free-text semantic query is required."
+      }
+    },
+    {
+      "id": "detroit-birding",
+      "name": "Detroit Birding Today",
+      "canonical": "https://chrisizworski.com/detroit-birding-today/",
+      "aliases": [],
+      "kind": "focused-live-acquisition",
+      "cluster": "nature-birding",
+      "primaryIntent": "best birding around Detroit today",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "detroit-metro",
+        "southeast-michigan"
+      ],
+      "personas": [
+        "birder",
+        "naturalist",
+        "day-tripper"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new",
+        "note": "Launched 2026-09-21. Owns Detroit weather-and-migration trip timing, while Michigan Birding Report remains the sightings canonical."
+      },
+      "measurement": {
+        "search": "Google Search Console page × query",
+        "product": "GA4 fixed-label Detroit growth handoff events",
+        "decisionWindowDays": 28,
+        "privacy": "No exact user coordinates, precise location, or free-text semantic query is required."
+      }
+    },
+    {
+      "id": "lake-st-clair-outdoors",
+      "name": "Lake St. Clair Outdoors Today",
+      "canonical": "https://chrisizworski.com/lake-st-clair-outdoors/",
+      "aliases": [],
+      "kind": "focused-live-acquisition",
+      "cluster": "great-lakes-conditions",
+      "primaryIntent": "Lake St. Clair paddling and outdoor conditions today",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "lake-st-clair",
+        "detroit-metro"
+      ],
+      "personas": [
+        "paddler",
+        "boater",
+        "day-tripper"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new",
+        "note": "Launched 2026-09-21. Owns a conservative Lake St. Clair trip-window decision; Great Lakes Buoys remains the observation/station canonical."
+      },
+      "measurement": {
+        "search": "Google Search Console page × query",
+        "product": "GA4 fixed-label Detroit growth handoff events",
+        "decisionWindowDays": 28,
+        "privacy": "No exact user coordinates, precise location, or free-text semantic query is required."
+      }
+    },
+    {
+      "id": "detroit-sunset",
+      "name": "Detroit Sunset Tonight",
+      "canonical": "https://chrisizworski.com/detroit-sunset-tonight/",
+      "aliases": [],
+      "kind": "focused-live-acquisition",
+      "cluster": "nature-night-sky",
+      "primaryIntent": "Detroit sunset conditions tonight",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "detroit-metro",
+        "detroit-river"
+      ],
+      "personas": [
+        "photographer",
+        "day-tripper",
+        "outdoor-generalist"
+      ],
+      "networkRole": "bridge",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new",
+        "note": "Launched 2026-09-21. Owns Detroit-specific sunset timing and sky-window intent without claiming sunset color."
+      },
+      "measurement": {
+        "search": "Google Search Console page × query",
+        "product": "GA4 fixed-label Detroit growth handoff events",
+        "decisionWindowDays": 28,
+        "privacy": "No exact user coordinates, precise location, or free-text semantic query is required."
       }
     },
     {
@@ -2757,6 +2940,86 @@
       "strength": "optional",
       "surface": "winter",
       "reason": "Visitors comparing northern Michigan winter activities can move from ski planning to the distinct snowmobile trail-condition decision."
+    },
+    {
+      "from": "detroit-outdoors",
+      "to": "detroit-freighters",
+      "type": "focused-decision",
+      "strength": "strong",
+      "surface": "detroit-opportunity-desk",
+      "reason": "The broad Detroit board hands ship-watchers to the narrow live freighter question without transferring lake-wide tracking ownership."
+    },
+    {
+      "from": "detroit-outdoors",
+      "to": "detroit-birding",
+      "type": "focused-decision",
+      "strength": "strong",
+      "surface": "detroit-opportunity-desk",
+      "reason": "The broad Detroit board hands birders to a Detroit-specific weather and migration decision before live-sighting verification."
+    },
+    {
+      "from": "detroit-outdoors",
+      "to": "lake-st-clair-outdoors",
+      "type": "focused-decision",
+      "strength": "strong",
+      "surface": "detroit-opportunity-desk",
+      "reason": "The broad Detroit board hands paddlers to the conservative Lake St. Clair water-window decision."
+    },
+    {
+      "from": "detroit-outdoors",
+      "to": "detroit-sunset",
+      "type": "focused-decision",
+      "strength": "strong",
+      "surface": "detroit-opportunity-desk",
+      "reason": "The broad Detroit board hands photographers and evening visitors to the Detroit-specific sunset timing and sky-window decision."
+    },
+    {
+      "from": "detroit-freighters",
+      "to": "ship-tracker",
+      "type": "specialist-verify",
+      "strength": "essential",
+      "surface": "detroit-freighter-intent",
+      "reason": "The Detroit page answers whether a nearby vessel creates a possible viewing opportunity; the Great Lakes Ship Tracker owns the final live position check."
+    },
+    {
+      "from": "ship-tracker",
+      "to": "detroit-freighters",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "detroit-network-teaser",
+      "reason": "A Great Lakes ship-tracking visitor can continue into the Detroit-specific viewing decision when the live regional signal is relevant."
+    },
+    {
+      "from": "detroit-birding",
+      "to": "birding",
+      "type": "specialist-verify",
+      "strength": "essential",
+      "surface": "detroit-birding-intent",
+      "reason": "Detroit Birding Today owns weather-and-migration trip timing; Michigan Birding Report owns live sightings and hotspot evidence."
+    },
+    {
+      "from": "lake-st-clair-outdoors",
+      "to": "great-lakes-buoys",
+      "type": "specialist-verify",
+      "strength": "essential",
+      "surface": "lake-st-clair-intent",
+      "reason": "The Lake St. Clair page owns the conservative local trip gate; the buoy dashboard owns live station observations and deeper water verification."
+    },
+    {
+      "from": "great-lakes-buoys",
+      "to": "lake-st-clair-outdoors",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "detroit-network-teaser",
+      "reason": "Visitors already checking Great Lakes observations can continue into the narrower Lake St. Clair decision when that local gate matters."
+    },
+    {
+      "from": "detroit-sunset",
+      "to": "detroit-outdoors",
+      "type": "return-to-live-board",
+      "strength": "strong",
+      "surface": "detroit-sunset-intent",
+      "reason": "After the sunset-specific decision, the live Detroit board remains the broader owner of what else is worth doing outdoors around Detroit today."
     }
   ],
   "cannibalizationGroups": [
@@ -2802,9 +3065,10 @@
       "owner": "ship-tracker",
       "supports": [
         "soo-locks",
-        "gazette"
+        "gazette",
+        "detroit-freighters"
       ],
-      "rule": "Ship tracker owns lake-wide live tracking; Soo owns location-specific lock intent; Gazette owns news."
+      "rule": "Ship Tracker owns lake-wide live tracking; Detroit Freighters owns the narrower Detroit viewing decision; Soo owns location-specific lock intent; Gazette owns news."
     },
     {
       "intent": "Michigan planting timing",
@@ -2893,6 +3157,33 @@
         "national-planting"
       ],
       "rule": "Garden Water owns whether/how-much-to-water intent; National Planting remains the owner of crop timing and succession intent."
+    },
+    {
+      "intent": "Detroit outdoor things to do today",
+      "owner": "detroit-outdoors",
+      "supports": [
+        "detroit-freighters",
+        "detroit-birding",
+        "lake-st-clair-outdoors",
+        "detroit-sunset"
+      ],
+      "rule": "Detroit Outdoors owns the broad multi-activity today decision. Child surfaces may rank only for their narrower ship-watching, birding, Lake St. Clair water-window, or sunset questions and should feed the hub rather than imitate its broad intent."
+    },
+    {
+      "intent": "Michigan bird sightings and local birding trip timing",
+      "owner": "birding",
+      "supports": [
+        "detroit-birding"
+      ],
+      "rule": "Michigan Birding Report owns statewide sightings and hotspot evidence. Detroit Birding Today owns a Detroit-specific weather-and-migration trip-timing decision and must not imply a sighting from weather alone."
+    },
+    {
+      "intent": "Great Lakes observations and Lake St. Clair trip conditions",
+      "owner": "great-lakes-buoys",
+      "supports": [
+        "lake-st-clair-outdoors"
+      ],
+      "rule": "Great Lakes Buoys owns station observations across the lakes. Lake St. Clair Outdoors may own the narrower local trip-window decision produced from those observations plus conservative marine and weather gates."
     }
   ],
   "expansionOpportunities": [

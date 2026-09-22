@@ -1,0 +1,150 @@
+{
+  "name": "Detroit discovery pilot observation ledger",
+  "version": "2026-09-22",
+  "launchDate": "2026-09-21",
+  "earliestExpansionReview": "2026-10-19",
+  "cluster": [
+    {
+      "id": "detroit-outdoors",
+      "url": "https://chrisizworski.com/detroit-outdoors/",
+      "role": "broad-owner"
+    },
+    {
+      "id": "detroit-freighters",
+      "url": "https://chrisizworski.com/detroit-river-freighters/",
+      "role": "focused-owner"
+    },
+    {
+      "id": "detroit-birding",
+      "url": "https://chrisizworski.com/detroit-birding-today/",
+      "role": "focused-owner"
+    },
+    {
+      "id": "lake-st-clair-outdoors",
+      "url": "https://chrisizworski.com/lake-st-clair-outdoors/",
+      "role": "focused-owner"
+    },
+    {
+      "id": "detroit-sunset",
+      "url": "https://chrisizworski.com/detroit-sunset-tonight/",
+      "role": "focused-owner"
+    }
+  ],
+  "queryFamilies": {
+    "broad-detroit": {
+      "terms": [
+        "things to do detroit",
+        "outdoors detroit",
+        "detroit today"
+      ],
+      "owner": "detroit-outdoors"
+    },
+    "freighter": {
+      "terms": [
+        "freighter",
+        "ship",
+        "vessel"
+      ],
+      "owner": "detroit-freighters"
+    },
+    "birding": {
+      "terms": [
+        "bird",
+        "birding",
+        "migration"
+      ],
+      "owner": "detroit-birding"
+    },
+    "lake-st-clair-water": {
+      "terms": [
+        "lake st clair",
+        "paddle",
+        "paddling",
+        "water conditions"
+      ],
+      "owner": "lake-st-clair-outdoors"
+    },
+    "sunset": {
+      "terms": [
+        "sunset",
+        "golden hour"
+      ],
+      "owner": "detroit-sunset"
+    }
+  },
+  "snapshots": [
+    {
+      "id": "prelaunch-7d-2026-09-17",
+      "captured": "2026-09-20",
+      "window": {
+        "type": "last-7-days",
+        "start": "2026-09-11",
+        "end": "2026-09-17"
+      },
+      "source": "Google Search Console export: chrisizworski.com-Performance-on-Search-2026-09-20",
+      "site": {
+        "clicks": 611,
+        "impressions": 23211,
+        "ctr": 0.0263237258,
+        "pagesWithImpressions": 321,
+        "pagesWithClicks": 70,
+        "queryRowsReturned": 999,
+        "note": "Site-wide context only. This window ends before the Detroit five-page cluster launched."
+      },
+      "detroitCluster": {
+        "clicks": 0,
+        "impressions": 0,
+        "pagesWithImpressions": 0,
+        "pagesWithClicks": 0,
+        "pages": {},
+        "queries": [],
+        "note": "No valid post-launch Detroit search evidence exists in this export."
+      },
+      "ga4": {
+        "networkExposures": null,
+        "networkOpens": null,
+        "focusedHandoffs": null,
+        "boardHandoffs": null,
+        "note": "GA4 event counts were not available in the prelaunch Search Console export."
+      }
+    },
+    {
+      "id": "prelaunch-24h-2026-09-20",
+      "captured": "2026-09-20",
+      "window": {
+        "type": "last-24-hours",
+        "start": "2026-09-19",
+        "end": "2026-09-20"
+      },
+      "source": "Google Search Console export: chrisizworski.com-Performance-on-Search-2026-09-20 (24-hour export)",
+      "site": {
+        "clicks": 66,
+        "impressions": 3252,
+        "ctr": 0.020295203,
+        "note": "Hourly export; not comparable to the 7-day snapshot."
+      },
+      "detroitCluster": {
+        "clicks": 0,
+        "impressions": 0,
+        "pagesWithImpressions": 0,
+        "pagesWithClicks": 0,
+        "pages": {},
+        "queries": [],
+        "note": "Detroit URLs were not present in the export because the focused cluster had not launched."
+      },
+      "ga4": {
+        "networkExposures": null,
+        "networkOpens": null,
+        "focusedHandoffs": null,
+        "boardHandoffs": null
+      }
+    }
+  ],
+  "rules": [
+    "Never compare unlike Search Console windows as if they were a growth delta.",
+    "A new query family is a discovery signal, not an automatic new-page instruction.",
+    "Strengthen the current canonical owner before proposing another Detroit URL.",
+    "A new Detroit canonical requires distinct recurring search evidence, useful downstream behavior, and cannibalization-safe ownership.",
+    "Factual, safety, reliability and UX fixes remain allowed during observation."
+  ]
+}

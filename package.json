@@ -79,7 +79,9 @@
     "benchmark:mackinac-intent-pages": "node scripts/generate-mackinac-intent-pages.mjs && node scripts/add-mackinac-island-discovery.mjs && node scripts/verify-mackinac-intent-pages.mjs",
     "benchmark:mackinac-intent-funnel": "node scripts/generate-mackinac-intent-pages.mjs && node scripts/verify-mackinac-intent-funnel.mjs",
     "benchmark:mackinac-hub": "node scripts/generate-mackinac-hub-pages.mjs && node scripts/generate-mackinac-intent-pages.mjs && node scripts/add-mackinac-island-discovery.mjs && node scripts/verify-mackinac-hub.mjs",
-    "benchmark:mackinac-platform": "node scripts/benchmark-mackinac-platform.mjs --check"
+    "benchmark:mackinac-platform": "node scripts/benchmark-mackinac-platform.mjs --check",
+    "report:detroit-discovery": "node scripts/report-detroit-discovery.mjs",
+    "audit:canonical-indexing": "node scripts/audit-sitemap-canonicals.mjs"
   },
   "dependencies": {
     "@vercel/oidc": "3.8.8",
