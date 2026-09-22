@@ -422,3 +422,12 @@ test("Detroit Outdoors makes the hero image a JEV board-level decision with fres
  assert.doesNotMatch(route,/async function judgeImage\(lead\)/);
 });
 
+test("Detroit image selection cannot take down the live editorial response",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/async function judgeImageUnsafe\(candidates\)/);
+ assert.match(route,/async function judgeImage\(candidates\)/);
+ assert.match(route,/return await judgeImageUnsafe\(candidates\)/);
+ assert.match(route,/mode:"deterministic-image-fallback"/);
+ assert.match(route,/Image selector runtime fallback:/);
+});
+
