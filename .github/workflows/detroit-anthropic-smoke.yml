@@ -8,7 +8,16 @@ on:
       - 'lib/detroit-outdoors/route.js'
       - 'lib/detroit-outdoors/engines.js'
       - 'public/assets/detroit-outdoors.js'
+      - 'public/assets/detroit-intent.js'
+      - 'public/assets/detroit-intent.css'
+      - 'public/assets/detroit-network-teaser.js'
+      - 'public/assets/detroit-network-teaser.css'
       - 'public/detroit-outdoors/index.html'
+      - 'public/detroit-river-freighters/index.html'
+      - 'public/detroit-birding-today/index.html'
+      - 'public/lake-st-clair-outdoors/index.html'
+      - 'public/detroit-sunset-tonight/index.html'
+      - 'public/tools/index.html'
       - '.github/workflows/detroit-anthropic-smoke.yml'
 
 permissions:
@@ -171,6 +180,54 @@ jobs:
                 node --check /tmp/detroit-outdoors.js
                 grep -Fq "/assets/detroit-outdoors.js?v=20260921d" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
                 echo "Live Detroit page references the cache-busted, parseable client bundle."
+
+                echo "Verifying Detroit growth landing pages..."
+                declare -A DETROIT_PAGES=(
+                  ["detroit-river-freighters"]="data-detroit-intent=\"freighter\""
+                  ["detroit-birding-today"]="data-detroit-intent=\"birding\""
+                  ["lake-st-clair-outdoors"]="data-detroit-intent=\"water\""
+                  ["detroit-sunset-tonight"]="data-detroit-intent=\"sunset\""
+                )
+                for page in "${!DETROIT_PAGES[@]}"; do
+                  html="/tmp/${page}.html"
+                  curl -fsS --max-time 20 "https://chrisizworski.com/${page}/?smoke=${EXPECTED_SHA}" -o "${html}"
+                  grep -Fq "rel=\"canonical\" href=\"https://chrisizworski.com/${page}/\"" "${html}"
+                  grep -Fq "${DETROIT_PAGES[${page}]}" "${html}"
+                  grep -Fq 'name="google-adsense-account" content="ca-pub-8222782620788075"' "${html}"
+                  grep -Fq '/assets/detroit-intent.js?v=20260921a' "${html}"
+                done
+                echo "All four Detroit growth landing pages are live with canonical, AdSense, and intent wiring."
+
+                echo "Verifying safety-gated Detroit intent API modes..."
+                for intent in freighter water birding sunset; do
+                  curl -fsS --max-time 35 "https://chrisizworski.com/api/detroit-outdoors?intent=${intent}&smoke=${EXPECTED_SHA}" |
+                    INTENT="${intent}" node -e '
+                      let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{
+                        const d=JSON.parse(s), expected=process.env.INTENT;
+                        if (!d.ok || !d.intent || d.intent.id!==expected) {
+                          console.error("Intent API mismatch", expected, d);
+                          process.exit(20);
+                        }
+                        if (!["live-window","no-window","source-unavailable"].includes(d.intent.status)) {
+                          console.error("Unknown intent status", expected, d.intent.status);
+                          process.exit(21);
+                        }
+                        const c=d.intent.candidate;
+                        if (c) {
+                          if (Array.isArray(c.hardStops) && c.hardStops.length) {
+                            console.error("Hard-stopped candidate escaped intent API", expected, c.hardStops);
+                            process.exit(22);
+                          }
+                          if (!Array.isArray(c.verifiedEvidence) || !c.verifiedEvidence.length) {
+                            console.error("Intent candidate missing verified evidence", expected);
+                            process.exit(23);
+                          }
+                        }
+                        console.log("Intent mode verified:", expected, d.intent.status, c&&c.id||"no-candidate");
+                      });
+                    '
+                done
+                echo "All four Detroit intent API modes are live and remain safety-gated."
                 exit 0
               fi
             fi
