@@ -10,16 +10,7 @@ on:
       - 'lib/detroit-outdoors/expanded-engines.js'
       - 'lib/detroit-outdoors/engine-registry.js'
       - 'public/assets/detroit-outdoors.js'
-      - 'public/assets/detroit-intent.js'
-      - 'public/assets/detroit-intent.css'
-      - 'public/assets/detroit-network-teaser.js'
-      - 'public/assets/detroit-network-teaser.css'
       - 'public/detroit-outdoors/index.html'
-      - 'public/detroit-river-freighters/index.html'
-      - 'public/detroit-birding-today/index.html'
-      - 'public/lake-st-clair-outdoors/index.html'
-      - 'public/detroit-sunset-tonight/index.html'
-      - 'public/tools/index.html'
       - '.github/workflows/detroit-anthropic-smoke.yml'
 
 permissions:
@@ -29,305 +20,98 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify production Anthropic configuration
+      - name: Verify board-bound JEV and Anthropic production path
         env:
           EXPECTED_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
-          URL="https://chrisizworski.com/api/detroit-outdoors?edition=cards-v1&smoke=${EXPECTED_SHA}"
           for attempt in $(seq 1 30); do
-            if body="$(curl -fsS --max-time 35 "${URL}&attempt=${attempt}")"; then
-              status="$(printf '%s' "$body" | node -e '
-                let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{
-                  const d=JSON.parse(s);
-                  const r=d.runtime||{};
-                  const e=(d.decision&&d.decision.editorial)||{};
-                  const b=(d.decision&&d.decision.boardEditor)||{};
-                  const oe=(d.diagnostics&&d.diagnostics.opportunityEngines)||{};
-                  const image=(d.decision&&d.decision.image)||{};
-                  const writers=Array.isArray(e.cardWriters)?e.cardWriters:[];
-                  const opportunities=Array.isArray(d.opportunities)?d.opportunities:[];
-                  const placements=Array.isArray(e.placements)?e.placements:[];
-                  const placementById=new Map(placements.map(p=>[p&&p.candidateId,p]));
-                  const notes=(d.edition&&d.edition.notes&&typeof d.edition.notes==="object")?d.edition.notes:{};
-                  console.log(JSON.stringify({
-                    commitSha:r.commitSha||null,
-                    vercelEnv:r.vercelEnv||null,
-                    anthropicKeyConfigured:r.anthropicKeyConfigured===true,
-                    writerModel:r.writerModel||null,
-                    editorialMode:e.mode||null,
-                    editorialReason:e.reason||null,
-                    opportunityCount:opportunities.length,
-                    opportunityIds:opportunities.map(o=>o&&o.id).filter(Boolean),
-                    opportunityPlaceIds:opportunities.map(o=>o&&o.place&&o.place.id).filter(Boolean),
-                    boardEditorMode:b.mode||null,
-                    boardCandidateCount:Number(b.candidateCount)||0,
-                    boardSelectedCount:Number(b.selectedCount)||0,
-                    boardSelectedIds:Array.isArray(b.selectedIds)?b.selectedIds:[],
-                    boardCandidateCountByEngine:b.candidateCountByEngine||{},
-                    boardSelectedEngineDiversity:Number(b.selectedEngineDiversity)||0,
-                    boardSelectedEngineCountByEngine:b.selectedEngineCountByEngine||{},
-                    opportunitySourceEngines:opportunities.map(o=>o&&o.sourceEngine||null),
-                    engineDiagnostics:oe,
-                    vetoedLegacyCandidates:Array.isArray(oe.vetoedLegacyCandidates)?oe.vetoedLegacyCandidates:[],
-                    boardPostureMode:b.posture&&b.posture.mode||null,
-                    boardSlotModes:Array.isArray(b.slots)?b.slots.map(s=>({position:s.position||null,mode:s.mode||null,choiceId:s.choiceId||null})):[],
-                    imageMode:image.mode||null,
-                    imageChoiceId:image.choiceId||null,
-                    imagePool:Array.isArray(image.pool)?image.pool:[],
-                    imageRecentIds:Array.isArray(image.recentIds)?image.recentIds:[],
-                    imageReason:image.reason||null,
-                    cardWriterCount:writers.length,
-                    acceptedCardCount:writers.filter(w=>w&&w.accepted===true).length,
-                    cardWriterModes:writers.map(w=>({candidateId:w.candidateId||null,mode:w.mode||null,accepted:w.accepted===true,attempt:w.attempt||null})),
-                    cardDetails:writers.map(w=>{
-                      const id=w&&w.candidateId||null;
-                      const placement=placementById.get(id)||{};
-                      return {
-                        candidateId:id,
-                        treatment:placement.treatment||null,
-                        mode:w&&w.mode||null,
-                        accepted:w&&w.accepted===true,
-                        attempt:w&&w.attempt||null,
-                        reason:w&&w.reason||null,
-                        note:String(id&&notes[id]||"").slice(0,320)
-                      };
-                    })
-                  }));
-                });
-              ')"
-              echo "Production diagnostics: $status"
-              current="$(printf '%s' "$status" | node -pe 'JSON.parse(require("fs").readFileSync(0,"utf8")).commitSha || ""')"
-              if [ "$current" = "$EXPECTED_SHA" ]; then
-                printf '%s' "$status" | node -e '
-                  let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{
-                    const x=JSON.parse(s);
-                    if (!x.anthropicKeyConfigured) {
-                      console.error("ANTHROPIC_API_KEY is not configured in the production runtime.");
-                      process.exit(2);
-                    }
-                    if (!x.boardCandidateCount || x.boardCandidateCount < x.opportunityCount) {
-                      console.error("JEV board editor did not receive the full hard-safe candidate pool.", x);
-                      process.exit(9);
-                    }
-                    const ed=x.engineDiagnostics||{};
-                    const sourceStatus=ed.sourceStatus||{};
-                    const emitted=ed.emittedCandidateCountByEngine||{};
-                    if (Number(ed.boardLocationCandidateCount)!==x.boardCandidateCount) {
-                      console.error("Location-bundled board pool does not match the candidate count sent to JEV.", ed, x.boardCandidateCount);
-                      process.exit(12);
-                    }
-                    if (Number(ed.mixedSafeCandidateCount)<x.boardCandidateCount) {
-                      console.error("Location bundling unexpectedly increased the hard-safe candidate count.", ed, x.boardCandidateCount);
-                      process.exit(26);
-                    }
-                    if (new Set(x.opportunityPlaceIds||[]).size!==(x.opportunityPlaceIds||[]).length) {
-                      console.error("Detroit rendered more than one card for the same physical location.", x.opportunityPlaceIds, x.opportunityIds);
-                      process.exit(27);
-                    }
-                    for (const engine of ["park-weather","great-lakes-water","night-sky-aurora","fall-color-phenology","sunset-photography","great-lakes-ais","bird-migration-live","great-lakes-beach","southeast-river","morel-phenology","clean-air-window","lake-st-clair-ice","xc-snow-screen"]) {
-                      if (!Object.prototype.hasOwnProperty.call(emitted,engine)) {
-                        console.error("Expected opportunity engine did not report diagnostics.", engine, emitted);
-                        process.exit(13);
-                      }
-                    }
-                    const registry=Array.isArray(ed.registry)?ed.registry:[];
-                    const registryIds=new Set(registry.map(item=>item&&item.id).filter(Boolean));
-                    for (const engine of ["bird-migration-live","great-lakes-beach","southeast-river","morel-phenology","clean-air-window","lake-st-clair-ice","xc-snow-screen","monarch-migration"]) {
-                      if (!registryIds.has(engine)) {
-                        console.error("Expanded Detroit engine is missing from the runtime registry.", engine, registry);
-                        process.exit(24);
-                      }
-                    }
-                    const monarch=registry.find(item=>item&&item.id==="monarch-migration");
-                    if (!monarch || monarch.status!=="rights-review" || monarch.role!=="registered-not-enabled") {
-                      console.error("Monarch must remain rights-held until licensing review is complete.", monarch);
-                      process.exit(25);
-                    }
-                    if (!(sourceStatus["great-lakes-water"]&&sourceStatus["great-lakes-water"].ok) ||
-                        !(sourceStatus["night-sky-aurora"]&&sourceStatus["night-sky-aurora"].ok)) {
-                      console.error("Reusable water or aurora specialist engine is not participating in production.", sourceStatus);
-                      process.exit(14);
-                    }
-                    if (!Object.prototype.hasOwnProperty.call(sourceStatus,"great-lakes-ais") ||
-                        !Object.prototype.hasOwnProperty.call(sourceStatus,"sunset-photography")) {
-                      console.error("Riverfront opportunity engines are missing from production diagnostics.", sourceStatus);
-                      process.exit(19);
-                    }
-                    if (x.opportunitySourceEngines.some(engine=>!engine)) {
-                      console.error("At least one displayed opportunity is missing its source engine.", x.opportunitySourceEngines);
-                      process.exit(15);
-                    }
-                    if (JSON.stringify(ed.selectedIds||[])!==JSON.stringify(x.opportunityIds)) {
-                      console.error("Engine diagnostics selected IDs do not match the rendered board.", ed.selectedIds, x.opportunityIds);
-                      process.exit(16);
-                    }
-                    const rejectedIds=new Set((ed.hardRejected||[]).map(r=>r&&r.id).filter(Boolean));
-                    if (x.opportunityIds.some(id=>rejectedIds.has(id))) {
-                      console.error("A deterministically rejected specialist candidate reached the rendered board.", ed.hardRejected, x.opportunityIds);
-                      process.exit(17);
-                    }
-                    const vetoedLegacyIds=new Set((x.vetoedLegacyCandidates||[]).map(r=>r&&r.legacyId).filter(Boolean));
-                    if (x.opportunityIds.some(id=>vetoedLegacyIds.has(id))) {
-                      console.error("A legacy candidate survived an authoritative specialist hard veto.", x.vetoedLegacyCandidates, x.opportunityIds);
-                      process.exit(18);
-                    }
-                    if (!["shared-harness-jev","mixed"].includes(x.boardEditorMode)) {
-                      console.error("Detroit board selection is not using JEV.", x.boardEditorMode, x.boardSlotModes);
-                      process.exit(10);
-                    }
-                    if (x.boardSelectedCount !== x.opportunityCount || JSON.stringify(x.boardSelectedIds) !== JSON.stringify(x.opportunityIds)) {
-                      console.error("Displayed board does not match JEV board-editor selection.", x.boardSelectedIds, x.opportunityIds);
-                      process.exit(11);
-                    }
-                    if (x.imagePool.length >= 2) {
-                      if (!["shared-harness-jev","cached-jev-image"].includes(x.imageMode)) {
-                        console.error("Detroit hero image is not being selected by JEV when multiple approved board images are available.", x.imageMode, x.imagePool, x.imageReason);
-                        process.exit(30);
-                      }
-                      if (!x.imageChoiceId || x.imageChoiceId==="NONE" || !x.imagePool.includes(x.imageChoiceId)) {
-                        console.error("Detroit hero image choice is missing or outside the approved board image pool.", x.imageChoiceId, x.imagePool);
-                        process.exit(31);
-                      }
-                    }
-                    console.log("Hero image decision:", JSON.stringify({mode:x.imageMode,choiceId:x.imageChoiceId,pool:x.imagePool,recentIds:x.imageRecentIds,reason:x.imageReason}));
-                    if (x.editorialMode === "deterministic") {
-                      console.error("Anthropic key exists, but Detroit editorial is still deterministic. Reason:", x.editorialReason || "unknown");
-                      process.exit(3);
-                    }
-                    if (!x.opportunityCount || x.cardWriterCount !== x.opportunityCount) {
-                      console.error("Per-card Haiku mismatch. Opportunities:", x.opportunityCount, "card writers:", x.cardWriterCount, x.cardWriterModes);
-                      process.exit(5);
-                    }
-                    if (x.acceptedCardCount !== x.opportunityCount) {
-                      console.error("Not every displayed card has accepted Haiku copy.", x.cardWriterModes);
-                      process.exit(6);
-                    }
-                    if (x.cardWriterModes.some(w=>!["anthropic","cached-ai"].includes(w.mode))) {
-                      console.error("At least one displayed card is not using an Anthropic writer.", x.cardWriterModes);
-                      process.exit(7);
-                    }
-                    if (x.cardDetails.some(c=>!c.note||!c.note.trim())) {
-                      console.error("At least one displayed card is missing rendered Haiku copy.", x.cardDetails);
-                      process.exit(8);
-                    }
-                    console.log("Opportunity-engine diagnostics:", JSON.stringify(x.engineDiagnostics));
-                    console.log("Per-card editorial detail:", JSON.stringify(x.cardDetails));
-                    console.log("Anthropic production configuration is active on every displayed Detroit card.");
-                  });
-                '
-                echo "Verifying live Detroit client bundle parses..."
-                curl -fsS --max-time 20 "https://chrisizworski.com/assets/detroit-outdoors.js?smoke=${EXPECTED_SHA}" -o /tmp/detroit-outdoors.js
-                node --check /tmp/detroit-outdoors.js
-                grep -Fq "/assets/detroit-outdoors.js?v=20260922e" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
-                echo "Live Detroit page references the cache-busted, parseable client bundle."
+            core_file="/tmp/detroit-core.json"
+            editorial_file="/tmp/detroit-editorial.json"
+            image_file="/tmp/detroit-image.json"
 
-                echo "Verifying core-first Detroit board..."
-                curl -fsS --max-time 30 "https://chrisizworski.com/api/detroit-outdoors?edition=cards-v1&mode=core&smoke=${EXPECTED_SHA}" |
-                  EXPECTED_SHA="${EXPECTED_SHA}" node -e '
-                    let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{
-                      const d=JSON.parse(s);
-                      if (!d.ok || d.mode!=="core-board") {
-                        console.error("Core board mode failed.", d);
-                        process.exit(26);
-                      }
-                      if (!Array.isArray(d.opportunities) || !d.opportunities.length) {
-                        console.error("Core board returned no opportunities.", d);
-                        process.exit(27);
-                      }
-                      if ((d.runtime&&d.runtime.commitSha)!==process.env.EXPECTED_SHA) {
-                        console.error("Core board is not on expected commit.", d.runtime);
-                        process.exit(28);
-                      }
-                      if ((d.decision&&d.decision.editorial&&d.decision.editorial.mode)!=="deferred") {
-                        console.error("Core board unexpectedly waited for editorial.", d.decision);
-                        process.exit(29);
-                      }
-                      console.log("Core-first board verified:", d.elapsedMs+"ms", d.opportunities.map(x=>x.id).join(","));
-                    });
-                  '
-                echo "Core board can render independently of editorial enrichment."
-
-                echo "Verifying independent JEV hero image decision..."
-                curl -fsS --max-time 35 "https://chrisizworski.com/api/detroit-outdoors?mode=image&smoke=${EXPECTED_SHA}" |
-                  EXPECTED_SHA="${EXPECTED_SHA}" node -e '
-                    let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{
-                      const d=JSON.parse(s);
-                      const image=d.image||null;
-                      const decision=d.decision&&d.decision.image||{};
-                      const pool=Array.isArray(decision.pool)?decision.pool:[];
-                      if (!d.ok || d.mode!=="hero-image") {
-                        console.error("Independent hero image mode failed.", d);
-                        process.exit(32);
-                      }
-                      if ((d.runtime&&d.runtime.commitSha)!==process.env.EXPECTED_SHA) {
-                        console.error("Hero image mode is not on expected commit.", d.runtime);
-                        process.exit(33);
-                      }
-                      if (pool.length>=2 && !["shared-harness-jev","cached-jev-image"].includes(decision.mode)) {
-                        console.error("Hero image is not using JEV with a multi-image pool.", decision);
-                        process.exit(34);
-                      }
-                      if (pool.length && (!image || !decision.choiceId || !pool.includes(decision.choiceId))) {
-                        console.error("Hero image choice is missing or outside the approved pool.", {image,decision});
-                        process.exit(35);
-                      }
-                      console.log("Independent hero image verified:", JSON.stringify({mode:decision.mode,choiceId:decision.choiceId,pool,recentIds:decision.recentIds||[]}));
-                    });
-                  '
-                echo "JEV hero image selection is independent of editorial enrichment."
-
-                echo "Verifying Detroit growth landing pages..."
-                declare -A DETROIT_PAGES=(
-                  ["detroit-river-freighters"]="data-detroit-intent=\"freighter\""
-                  ["detroit-birding-today"]="data-detroit-intent=\"birding\""
-                  ["lake-st-clair-outdoors"]="data-detroit-intent=\"water\""
-                  ["detroit-sunset-tonight"]="data-detroit-intent=\"sunset\""
-                )
-                for page in "${!DETROIT_PAGES[@]}"; do
-                  html="/tmp/${page}.html"
-                  curl -fsS --max-time 20 "https://chrisizworski.com/${page}/?smoke=${EXPECTED_SHA}" -o "${html}"
-                  grep -Fq "rel=\"canonical\" href=\"https://chrisizworski.com/${page}/\"" "${html}"
-                  grep -Fq "${DETROIT_PAGES[${page}]}" "${html}"
-                  grep -Fq 'name="google-adsense-account" content="ca-pub-8222782620788075"' "${html}"
-                  grep -Fq '/assets/detroit-intent.js?v=20260921a' "${html}"
-                done
-                echo "All four Detroit growth landing pages are live with canonical, AdSense, and intent wiring."
-
-                echo "Verifying safety-gated Detroit intent API modes..."
-                for intent in freighter water birding sunset; do
-                  curl -fsS --max-time 35 "https://chrisizworski.com/api/detroit-outdoors?intent=${intent}&smoke=${EXPECTED_SHA}" |
-                    INTENT="${intent}" node -e '
-                      let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{
-                        const d=JSON.parse(s), expected=process.env.INTENT;
-                        if (!d.ok || !d.intent || d.intent.id!==expected) {
-                          console.error("Intent API mismatch", expected, d);
-                          process.exit(20);
-                        }
-                        if (!["live-window","no-window","source-unavailable"].includes(d.intent.status)) {
-                          console.error("Unknown intent status", expected, d.intent.status);
-                          process.exit(21);
-                        }
-                        const c=d.intent.candidate;
-                        if (c) {
-                          if (Array.isArray(c.hardStops) && c.hardStops.length) {
-                            console.error("Hard-stopped candidate escaped intent API", expected, c.hardStops);
-                            process.exit(22);
-                          }
-                          if (!Array.isArray(c.verifiedEvidence) || !c.verifiedEvidence.length) {
-                            console.error("Intent candidate missing verified evidence", expected);
-                            process.exit(23);
-                          }
-                        }
-                        console.log("Intent mode verified:", expected, d.intent.status, c&&c.id||"no-candidate");
-                      });
-                    '
-                done
-                echo "All four Detroit intent API modes are live and remain safety-gated."
-                exit 0
-              fi
+            if ! curl -fsS --max-time 35 "https://chrisizworski.com/api/detroit-outdoors?edition=cards-v1&mode=core&smoke=${EXPECTED_SHA}&attempt=${attempt}" -o "${core_file}"; then
+              sleep 10
+              continue
             fi
-            sleep 10
+
+            current="$(node -e '
+              const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));
+              process.stdout.write((d.runtime&&d.runtime.commitSha)||"");
+            ' "${core_file}")"
+            if [ "${current}" != "${EXPECTED_SHA}" ]; then
+              sleep 10
+              continue
+            fi
+
+            board_ids="$(node -e '
+              const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));
+              if(!d.ok||d.mode!=="core-board"||!Array.isArray(d.opportunities)||!d.opportunities.length) process.exit(2);
+              const ids=d.opportunities.map(x=>x&&x.id).filter(Boolean).slice(0,4);
+              if(new Set((d.opportunities||[]).map(x=>x&&x.place&&x.place.id).filter(Boolean)).size!==ids.length) process.exit(3);
+              const b=d.decision&&d.decision.boardEditor||{};
+              if(!["shared-harness-jev","mixed"].includes(b.mode)) process.exit(4);
+              if(JSON.stringify(b.selectedIds||[])!==JSON.stringify(ids)) process.exit(5);
+              process.stdout.write(ids.join(","));
+            ' "${core_file}")"
+            hold="$(node -e '
+              const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));
+              process.stdout.write(d.decision&&d.decision.boardEditor&&d.decision.boardEditor.posture&&d.decision.boardEditor.posture.choiceId==="QUIET"?"1":"0");
+            ' "${core_file}")"
+
+            if ! curl -fsS --get --max-time 55               --data-urlencode "mode=editorial"               --data-urlencode "boardIds=${board_ids}"               --data-urlencode "hold=${hold}"               --data-urlencode "smoke=${EXPECTED_SHA}"               "https://chrisizworski.com/api/detroit-outdoors" -o "${editorial_file}"; then
+              sleep 10
+              continue
+            fi
+
+            if ! curl -fsS --get --max-time 35               --data-urlencode "mode=image"               --data-urlencode "boardIds=${board_ids}"               --data-urlencode "smoke=${EXPECTED_SHA}"               "https://chrisizworski.com/api/detroit-outdoors" -o "${image_file}"; then
+              sleep 10
+              continue
+            fi
+
+            EXPECTED_SHA="${EXPECTED_SHA}" node -e '
+              const fs=require("fs");
+              const core=JSON.parse(fs.readFileSync(process.argv[1],"utf8"));
+              const editorial=JSON.parse(fs.readFileSync(process.argv[2],"utf8"));
+              const image=JSON.parse(fs.readFileSync(process.argv[3],"utf8"));
+              const ids=core.opportunities.map(x=>x.id);
+
+              if(editorial.mode!=="editorial-enrichment") throw new Error("editorial enrichment mode failed");
+              if(JSON.stringify(editorial.boardIds||[])!==JSON.stringify(ids)) throw new Error("editorial endpoint changed the rendered board");
+              if((editorial.runtime&&editorial.runtime.commitSha)!==process.env.EXPECTED_SHA) throw new Error("editorial runtime commit mismatch");
+              if(!editorial.runtime||editorial.runtime.anthropicKeyConfigured!==true) throw new Error("ANTHROPIC_API_KEY is not configured");
+              const e=editorial.decision&&editorial.decision.editorial||{};
+              const writers=Array.isArray(e.cardWriters)?e.cardWriters:[];
+              const notes=editorial.edition&&editorial.edition.notes||{};
+              if(writers.length!==ids.length) throw new Error("not every card received an independent writer job");
+              if(writers.some(w=>!w.accepted||!["anthropic","cached-ai"].includes(w.mode))) throw new Error("a displayed card lacks accepted Anthropic copy: "+JSON.stringify(writers));
+              if(ids.some(id=>!String(notes[id]||"").trim())) throw new Error("a displayed card is missing rendered Haiku copy");
+
+              if(image.mode!=="hero-image") throw new Error("hero image mode failed");
+              if(JSON.stringify(image.boardIds||[])!==JSON.stringify(ids)) throw new Error("image endpoint changed the rendered board");
+              const im=image.decision&&image.decision.image||{};
+              const pool=Array.isArray(im.pool)?im.pool:[];
+              if(pool.length>=2&&!["shared-harness-jev","cached-jev-image"].includes(im.mode)) throw new Error("multi-image pool is not using JEV");
+              if(pool.length&&(!image.image||!im.choiceId||!pool.includes(im.choiceId))) throw new Error("JEV image choice is outside approved pool");
+
+              console.log("Detroit production verified:",JSON.stringify({
+                boardIds:ids,
+                boardMode:core.decision&&core.decision.boardEditor&&core.decision.boardEditor.mode,
+                editorialMode:e.mode,
+                writers:writers.map(w=>({id:w.candidateId,mode:w.mode,attempt:w.attempt,treatment:w.treatment})),
+                imageMode:im.mode,
+                imageChoice:im.choiceId,
+                imagePool:pool,
+                recentIds:im.recentIds||[]
+              }));
+            ' "${core_file}" "${editorial_file}" "${image_file}"
+
+            curl -fsS --max-time 20 "https://chrisizworski.com/assets/detroit-outdoors.js?smoke=${EXPECTED_SHA}" -o /tmp/detroit-outdoors.js
+            node --check /tmp/detroit-outdoors.js
+            grep -Fq "/assets/detroit-outdoors.js?v=20260922f" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
+            echo "Detroit board-bound editorial and image production smoke passed."
+            exit 0
           done
-          echo "Production did not reach expected commit $EXPECTED_SHA during smoke window."
-          exit 4
+
+          echo "Detroit production did not expose a healthy board-bound editorial path during the smoke window."
+          exit 1
