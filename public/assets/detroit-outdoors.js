@@ -183,7 +183,7 @@ async function enrichEditorial(){
 
 async function load(){
  try{
-   const core=await requestBoard("/api/detroit-outdoors?edition=cards-v1&view=core");
+   const core=await requestBoard("/api/detroit-outdoors?edition=cards-v1&mode=core");
    renderPayload(core,false);
    enrichEditorial();
  }catch(error){
