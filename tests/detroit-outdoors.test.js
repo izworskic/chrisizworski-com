@@ -416,7 +416,7 @@ test("Detroit Outdoors makes the hero image a JEV board-level decision with fres
  assert.match(route,/recentlyUsedImageIds/);
  assert.match(route,/Relevance is more important than novelty/);
  assert.match(route,/prefer one that is not in recentlyUsedImageIds/i);
- assert.match(route,/judgeImage\(hold\?\[\]:ranked\)/);
+ assert.match(route,/const imageResult=await judgeImage\(imageBoard\)/);
  assert.match(route,/pool:imageResult\.pool\|\|\[\]/);
  assert.match(route,/recentIds:imageResult\.recentIds\|\|\[\]/);
  assert.doesNotMatch(route,/async function judgeImage\(lead\)/);
@@ -455,12 +455,12 @@ test("Detroit hero image loads independently from board and editorial",()=>{
  const html=read("public/detroit-outdoors/index.html");
  assert.match(route,/if\(query\.get\("mode"\)==="image"\)/);
  assert.match(route,/mode:"hero-image"/);
- assert.match(route,/const imageResult=await judgeImage\(hold\?\[\]:ranked\)/);
+ assert.match(route,/const imageResult=await judgeImage\(imageBoard\)/);
  assert.match(route,/Hero image is loaded independently from mode=image/);
- assert.match(client,/async function loadHeroImage\(\)/);
- assert.match(client,/requestBoard\("\/api\/detroit-outdoors\?mode=image"\)/);
+ assert.match(client,/async function loadHeroImage\(boardIds=\[\]\)/);
+ assert.match(client,/requestBoard\("\/api\/detroit-outdoors\?mode=image"\+boardQuery\)/);
  assert.match(client,/media\.dataset\.independentImage="1"/);
- assert.match(client,/loadHeroImage\(\);\s*enrichEditorial\(\);/);
+ assert.match(client,/loadHeroImage\(\(core\.opportunities\|\|\[\]\)\.map[\s\S]{0,120}enrichEditorial\(\);/);
  assert.match(client,/enriched && media\.dataset\.independentImage!=="1"/);
  assert.match(html,/detroit-outdoors\.js\?v=20260922d/);
 });
