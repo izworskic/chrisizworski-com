@@ -75,6 +75,19 @@ test("clean-air adapter only emits when the board has a meaningful location cont
   assert.equal(adapters._test.cleanAirCandidate([place("a","A",45),place("b","B",52)]).length,0);
 });
 
+test("off-season engines are skipped before network fetch while evergreen engines remain available",async()=>{
+  const code=read("lib/detroit-outdoors/expanded-engines.js");
+  assert.match(code,/beachSeason\?loadOne\(BEACH_API/);
+  assert.match(code,/iceSeason\?loadOne\(ICE_API/);
+  assert.match(code,/morelSeason\?loadOne\(MOREL_API/);
+  assert.match(code,/xcSeason\?loadOne\(XC_MODEL_API/);
+  assert.match(code,/loadOne\(BIRD_MIGRATION_API/);
+  assert.match(code,/loadOne\(USGS_RIVER_API/);
+  const off=adapters._test.offSeasonState("x","https://example.com");
+  assert.equal(off.state,"off-season");
+  assert.equal(off.ok,true);
+});
+
 test("expanded engine code preserves seasonal and safety truth boundaries",()=>{
   const code=read("lib/detroit-outdoors/expanded-engines.js");
   assert.match(code,/Soil warming is modeled from air temperature/);
