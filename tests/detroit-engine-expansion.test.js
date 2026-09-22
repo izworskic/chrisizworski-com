@@ -116,3 +116,16 @@ test("Detroit mixed-engine loader actually invokes the reused adapter bundle",()
 test("expanded engine adapter parses as JavaScript",()=>{
   assert.doesNotThrow(()=>new Function(read("lib/detroit-outdoors/expanded-engines.js")));
 });
+
+test("deterministic board fallback values incremental decision utility instead of raw score alone",()=>{
+  const route=read("lib/detroit-outdoors/route.js");
+  assert.match(route,/function fallbackUtility\(candidate,selected=\[\]\)/);
+  assert.match(route,/if\(engine!=="park-weather"\) value\+=7/);
+  assert.match(route,/verifiedEvidence/);
+  assert.match(route,/confidence==="high"/);
+  assert.match(route,/x&&x\.activity===candidate\.activity\)\) value-=10/);
+  assert.match(route,/x&&x\.sourceEngine===engine\)\) value-=6/);
+  assert.match(route,/x\.place\.id===candidate\.place\.id\)\) value-=5/);
+  assert.match(route,/fallbackBoardOrder\(remaining,selected\)/);
+  assert.doesNotMatch(route,/Variety of place, activity, distance and time-of-day is useful[^\n]+quota[^\n]+fallback/i);
+});
