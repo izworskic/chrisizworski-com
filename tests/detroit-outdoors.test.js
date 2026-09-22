@@ -249,7 +249,7 @@ test("Detroit Outdoors gives Haiku an explicit evidence whitelist and constraine
  assert.match(route,/one concrete place-specific fact/);
  assert.match(route,/one seasonal or specialist fact/);
  assert.match(workflow,/reason:w&&w\.reason\|\|null/);
- assert.match(workflow,/detroit-outdoors\.js\?v=20260922b/);
+ assert.match(workflow,/detroit-outdoors\.js\?v=20260922c/);
 });
 
 
@@ -272,7 +272,7 @@ test("Detroit Outdoors client bundle parses as JavaScript",()=>{
 test("Detroit Outdoors cache-busts the live client bundle",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
- assert.match(html,/detroit-outdoors\.js\?v=20260922b/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922c/);
  assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/detroit-outdoors\/index\.html/);
@@ -431,3 +431,20 @@ test("Detroit image selection cannot take down the live editorial response",()=>
  assert.match(route,/Image selector runtime fallback:/);
 });
 
+
+
+test("Detroit hero image loads independently from board and editorial",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ const client=read("public/assets/detroit-outdoors.js");
+ const html=read("public/detroit-outdoors/index.html");
+ assert.match(route,/if\(query\.get\("mode"\)==="image"\)/);
+ assert.match(route,/mode:"hero-image"/);
+ assert.match(route,/const imageResult=await judgeImage\(hold\?\[\]:ranked\)/);
+ assert.match(route,/Hero image is loaded independently from mode=image/);
+ assert.match(client,/async function loadHeroImage\(\)/);
+ assert.match(client,/requestBoard\("\/api\/detroit-outdoors\?mode=image"\)/);
+ assert.match(client,/media\.dataset\.independentImage="1"/);
+ assert.match(client,/loadHeroImage\(\);\s*enrichEditorial\(\);/);
+ assert.match(client,/enriched && media\.dataset\.independentImage!=="1"/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922c/);
+});
