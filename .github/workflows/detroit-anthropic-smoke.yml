@@ -59,6 +59,7 @@ jobs:
                     editorialReason:e.reason||null,
                     opportunityCount:opportunities.length,
                     opportunityIds:opportunities.map(o=>o&&o.id).filter(Boolean),
+                    opportunityPlaceIds:opportunities.map(o=>o&&o.place&&o.place.id).filter(Boolean),
                     boardEditorMode:b.mode||null,
                     boardCandidateCount:Number(b.candidateCount)||0,
                     boardSelectedCount:Number(b.selectedCount)||0,
@@ -112,9 +113,17 @@ jobs:
                     const ed=x.engineDiagnostics||{};
                     const sourceStatus=ed.sourceStatus||{};
                     const emitted=ed.emittedCandidateCountByEngine||{};
-                    if (Number(ed.mixedSafeCandidateCount)!==x.boardCandidateCount) {
-                      console.error("Mixed hard-safe engine pool does not match the candidate count sent to JEV.", ed, x.boardCandidateCount);
+                    if (Number(ed.boardLocationCandidateCount)!==x.boardCandidateCount) {
+                      console.error("Location-bundled board pool does not match the candidate count sent to JEV.", ed, x.boardCandidateCount);
                       process.exit(12);
+                    }
+                    if (Number(ed.mixedSafeCandidateCount)<x.boardCandidateCount) {
+                      console.error("Location bundling unexpectedly increased the hard-safe candidate count.", ed, x.boardCandidateCount);
+                      process.exit(26);
+                    }
+                    if (new Set(x.opportunityPlaceIds||[]).size!==(x.opportunityPlaceIds||[]).length) {
+                      console.error("Detroit rendered more than one card for the same physical location.", x.opportunityPlaceIds, x.opportunityIds);
+                      process.exit(27);
                     }
                     for (const engine of ["park-weather","great-lakes-water","night-sky-aurora","fall-color-phenology","sunset-photography","great-lakes-ais","bird-migration-live","great-lakes-beach","southeast-river","morel-phenology","clean-air-window","lake-st-clair-ice","xc-snow-screen"]) {
                       if (!Object.prototype.hasOwnProperty.call(emitted,engine)) {
