@@ -108,6 +108,8 @@
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script defer src="/assets/freighter-tracker.js?v=20260917"></script>
 <script defer src="/assets/gazette-latest.js?v=20260920"></script>
+<link rel="stylesheet" href="/assets/detroit-network-teaser.css?v=20260921a">
+<script defer src="/assets/detroit-network-teaser.js?v=20260921a"></script>
 </head>
 <body data-analytics-page="great-lakes-freighter-tracker">
 <header class="site-header">
@@ -317,6 +319,13 @@
     </div>
   </section>
 
+<section class="detroit-network-teaser" data-detroit-teaser data-detroit-intent="freighter" data-detroit-engine="great-lakes-ais" hidden>
+  <div class="dnt-kicker">Detroit right now</div>
+  <div class="dnt-row">
+    <div><h2 data-dnt-headline>Reading the Detroit Outdoors board…</h2><p data-dnt-copy>Checking the current live opportunity.</p></div>
+    <a class="dnt-link" data-dnt-link href="/detroit-outdoors/">See the Detroit board →</a>
+  </div>
+</section>
   <aside class="author-note">
     <div class="author-mark" aria-hidden="true">CI</div>
     <p><strong>Built by Chris Izworski in Bay City, Michigan.</strong> I live on Saginaw Bay and have watched freighters on the bay and Saginaw River for years; they are the reason I named my garden project <a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms</a>. This page combines that local experience with recent AIS position reports, BoatNerd passage links, and NOAA station data. Last reviewed September 17, 2026.</p>
