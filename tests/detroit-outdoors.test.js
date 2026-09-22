@@ -64,12 +64,13 @@ test("Detroit Outdoors makes JEV the board editor after hard safety gates",()=>{
  assert.match(route,/const specialistGate=hardGateSpecialistCandidates\(emitted\.candidates\)/);
  assert.match(route,/const mixed=dedupeMixedPool\(parkSafePool,specialistGate\.safe,specialistGate\.rejected\)/);
  assert.match(route,/const safePool=mixed\.candidates/);
- assert.match(route,/const boardDecision=await editBoard\(safePool,4\)/);
+ assert.match(route,/const boardPool=bundleCandidatesByPlace\(safePool\)/);
+ assert.match(route,/const boardDecision=await editBoard\(boardPool,4\)/);
  assert.match(route,/You are the Detroit Outdoors board editor/);
  assert.match(route,/Every candidate in this pool has already passed deterministic hard-safety and required-data gates/);
  assert.match(route,/The heuristic score is evidence, not an instruction or ranking/);
  assert.match(route,/Judge incremental value against the cards already selected/);
- assert.match(route,/A second activity at the same place is allowed only when it represents a materially different and more useful decision/);
+ assert.match(route,/No second card for the same physical location is available/);
  assert.match(route,/boardEditor:\{/);
  assert.match(route,/candidateCount:boardDecision\.candidateCount/);
  assert.match(route,/selectedIds:ranked\.map/);
@@ -249,7 +250,7 @@ test("Detroit Outdoors gives Haiku an explicit evidence whitelist and constraine
  assert.match(route,/one concrete place-specific fact/);
  assert.match(route,/one seasonal or specialist fact/);
  assert.match(workflow,/reason:w&&w\.reason\|\|null/);
- assert.match(workflow,/detroit-outdoors\.js\?v=20260922c/);
+ assert.match(workflow,/detroit-outdoors\.js\?v=20260922d/);
 });
 
 
@@ -272,7 +273,7 @@ test("Detroit Outdoors client bundle parses as JavaScript",()=>{
 test("Detroit Outdoors cache-busts the live client bundle",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
- assert.match(html,/detroit-outdoors\.js\?v=20260922c/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922d/);
  assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/detroit-outdoors\/index\.html/);
@@ -286,7 +287,8 @@ test("Detroit Outdoors mixes reusable specialist engines into one hard-safe JEV 
  assert.match(route,/loadSpecialistEngineStates\(\)/);
  assert.match(route,/sourceEngine:"park-weather"/);
  assert.match(route,/verifiedEvidence/);
- assert.match(route,/candidateCountByEngine:countByEngine\(safePool\)/);
+ assert.match(route,/candidateCountByEngine:countByEngine\(boardPool\)/);
+ assert.match(route,/bundleCandidatesByPlace/);
  assert.match(route,/selectedEngineDiversity/);
  assert.match(route,/diagnostics:\{\s*opportunityEngines:opportunityEngineDiagnostics/);
  assert.match(engines,/https:\/\/chrisizworski\.com\/api\/buoys/);
@@ -446,5 +448,5 @@ test("Detroit hero image loads independently from board and editorial",()=>{
  assert.match(client,/media\.dataset\.independentImage="1"/);
  assert.match(client,/loadHeroImage\(\);\s*enrichEditorial\(\);/);
  assert.match(client,/enriched && media\.dataset\.independentImage!=="1"/);
- assert.match(html,/detroit-outdoors\.js\?v=20260922c/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260922d/);
 });

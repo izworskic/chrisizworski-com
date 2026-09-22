@@ -6,6 +6,7 @@ const root=path.resolve(__dirname,"..");
 const read=p=>fs.readFileSync(path.join(root,p),"utf8");
 const adapters=require("../lib/detroit-outdoors/expanded-engines.js");
 const registry=require("../lib/detroit-outdoors/engine-registry.js");
+const engines=require("../lib/detroit-outdoors/engines.js");
 
 test("Detroit engine registry owns the expanded opportunity families and holds monarch behind rights review",()=>{
   const byId=registry.registryById();
@@ -142,7 +143,7 @@ test("Detroit browser renders a core board before editorial enrichment",()=>{
   assert.match(client,/enrichEditorial\(\)/);
   assert.match(client,/editorial unavailable · live board remains current/);
   assert.ok(client.includes('if($("#writer-mode")) $("#writer-mode").textContent="editorial unavailable · live board remains current";'));
-  assert.match(html,/\/assets\/detroit-outdoors\.js\?v=20260922c/);
+  assert.match(html,/\/assets\/detroit-outdoors\.js\?v=20260922d/);
 });
 
 test("Detroit core mode does not collide with the serverless dispatcher view parameter",()=>{
@@ -161,6 +162,40 @@ test("Detroit core-first client parses and tolerates specialist cards without le
   const client=read("public/assets/detroit-outdoors.js");
   assert.doesNotThrow(()=>new Function(client));
   assert.match(client,/function renderWeather\(w\)\{\s*if\(!w\)return"";/);
-  assert.match(client,/const reasons=\(\(c\.story&&c\.story\.whyToday\)\|\|c\.reasons\|\|\[\]\)/);
+  assert.match(client,/const reasons=bundle\.length>1\?"":\(\(c\.story&&c\.story\.whyToday\)\|\|c\.reasons\|\|\[\]\)/);
+  assert.match(client,/const url=signal&&signal\.specialistHandoff&&signal\.specialistHandoff\.url\|\|signal&&signal\.verifyUrl\|\|""/);
   assert.match(client,/const deeper=c&&c\.specialistHandoff&&c\.specialistHandoff\.url\|\|c&&c\.verifyUrl\|\|""/);
 });
+
+test("Detroit board bundles independent live signals into one physical-location candidate",()=>{
+  const place={id:"detroit-riverfront",name:"Detroit Riverfront",area:"Detroit",setting:"riverfront",drive:"5–15 min",driveClass:"near",officialUrl:"https://example.com"};
+  const rows=[
+    {id:"ship",sourceEngine:"great-lakes-ais",opportunityType:"live-freighter-passage",place,activity:"freighter-watching",title:"Live freighter window",score:82,quality:"Strong",reasons:["Fresh AIS vessel nearby"],whyNow:"A named commercial vessel has a fresh AIS position near the Riverfront.",verifiedEvidence:[{sourceUrl:"https://a.example",text:"fresh AIS"}],hardStops:[],timeWindow:{label:"Now"},specialistHandoff:{label:"Ship tracker",url:"/ships"}},
+    {id:"sunset",sourceEngine:"sunset-photography",opportunityType:"sunset-photo-window",place,activity:"photography",title:"Sunset / photography window",score:78,quality:"Strong",reasons:["Usable sunset setup"],whyNow:"The sunset window clears the current weather and sky gate.",verifiedEvidence:[{sourceUrl:"https://b.example",text:"sunset"}],hardStops:[],timeWindow:{label:"Tonight"},specialistHandoff:{label:"Sunset",url:"/sunset"}},
+    {id:"scenic",sourceEngine:"park-weather",opportunityType:"scenic",place,activity:"scenic",title:"Scenic window",score:71,quality:"Good",reasons:["Weather works"],whyNow:"Weather is usable.",verifiedEvidence:[{sourceUrl:"https://c.example",text:"weather"}],hardStops:[]},
+    {id:"walk",sourceEngine:"park-weather",opportunityType:"hiking",place,activity:"hiking",title:"Trail weather",score:69,quality:"Good",reasons:["Weather works"],whyNow:"Weather is usable.",verifiedEvidence:[{sourceUrl:"https://c.example",text:"weather"}],hardStops:[]}
+  ].map(engines.normalizeOpportunityCandidate);
+  const bundled=engines.bundleCandidatesByPlace(rows);
+  assert.equal(bundled.length,1);
+  const card=bundled[0];
+  assert.equal(card.place.id,"detroit-riverfront");
+  assert.equal(card.bundleSignals.length,3,"same park-weather engine should count once");
+  assert.deepEqual(new Set(card.sourceEngines),new Set(["great-lakes-ais","sunset-photography","park-weather"]));
+  assert.match(card.whyNow,/3 separate hard-safe reasons/);
+  assert.ok(card.bundleSignals.some(signal=>signal.sourceEngine==="great-lakes-ais"));
+  assert.ok(card.bundleSignals.some(signal=>signal.sourceEngine==="sunset-photography"));
+});
+
+test("Detroit browser renders bundled reasons and separate deeper checks inside one card",()=>{
+  const client=read("public/assets/detroit-outdoors.js");
+  const css=read("public/assets/detroit-outdoors.css");
+  const route=read("lib/detroit-outdoors/route.js");
+  assert.match(client,/function renderBundleSignals\(c\)/);
+  assert.match(client,/Why this place made the board/);
+  assert.match(client,/function signalAction\(signal\)/);
+  assert.match(client,/bundle\.length>1/);
+  assert.match(css,/\.signal-stack\{/);
+  assert.match(route,/const boardPool=bundleCandidatesByPlace\(safePool\)/);
+  assert.match(route,/one physical location/);
+});
+

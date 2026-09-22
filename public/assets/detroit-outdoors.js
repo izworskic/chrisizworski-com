@@ -24,8 +24,10 @@ function vesselName(c){
 }
 function compactOpportunity(c){
  if(!c)return"";
+ const bundle=Array.isArray(c.bundleSignals)?c.bundleSignals:[];
  const engine=String(c.sourceEngine||"");
  const place=String(c.place?.name||"Southeast Michigan");
+ if(bundle.length>1)return place+": "+bundle.map(signal=>cleanOpportunityTitle(signal.title||signal.opportunityType||signal.activity)).filter(Boolean).join(" + ");
  if(engine==="great-lakes-ais")return vesselName(c)+" on the Detroit River";
  if(engine==="sunset-photography")return"Detroit River sunset";
  if(engine==="great-lakes-water")return"Lake St. Clair calm water";
@@ -36,8 +38,10 @@ function compactOpportunity(c){
 }
 function leadHeadline(c){
  if(!c)return"Nothing clears the bar right now.";
+ const bundle=Array.isArray(c.bundleSignals)?c.bundleSignals:[];
  const engine=String(c.sourceEngine||"");
  const place=String(c.place?.name||"Southeast Michigan");
+ if(bundle.length>1)return place+" has "+bundle.length+" live reasons to go today.";
  if(engine==="great-lakes-ais")return vesselName(c)+" is on the Detroit River right now.";
  if(engine==="sunset-photography")return"Detroit River sunset conditions are lining up tonight.";
  if(engine==="great-lakes-water")return"Lake St. Clair has a calm-water window.";
@@ -78,7 +82,26 @@ function deeperLabel(c){
  if(c&&c.activity==="birding")return"Open live bird sightings";
  return"Open the deeper check";
 }
+function signalAction(signal){
+ const intent=intentPageFor(signal);
+ if(intent)return{url:intent.url,label:intent.label};
+ const url=signal&&signal.specialistHandoff&&signal.specialistHandoff.url||signal&&signal.verifyUrl||"";
+ if(!url)return null;
+ return{url,label:deeperLabel(signal)};
+}
 function cardActions(c){
+ const bundle=Array.isArray(c&&c.bundleSignals)?c.bundleSignals:[];
+ if(bundle.length>1){
+   const seen=new Set(),actions=[];
+   for(const signal of bundle){
+     const action=signalAction(signal);
+     if(!action||!action.url||seen.has(action.url))continue;
+     seen.add(action.url);actions.push(action);
+   }
+   const official=c&&c.place&&c.place.officialUrl||"";
+   if(official&&!seen.has(official))actions.push({url:official,label:"Official place info",official:true});
+   return actions.slice(0,3).map((action,index)=>`<a class="btn${index?" secondary":""}" href="${esc(action.url)}"${action.official?' rel="noopener"':""}>${esc(action.label)}</a>`).join("");
+ }
  const intent=intentPageFor(c);
  const deeper=c&&c.specialistHandoff&&c.specialistHandoff.url||c&&c.verifyUrl||"";
  const official=c&&c.place&&c.place.officialUrl||"";
@@ -92,18 +115,30 @@ function cardActions(c){
  const secondary=official&&official!==deeper?`<a class="btn secondary" href="${esc(official)}" rel="noopener">Official place info</a>`:"";
  return primary+secondary;
 }
+function renderBundleSignals(c){
+ const bundle=Array.isArray(c&&c.bundleSignals)?c.bundleSignals:[];
+ if(bundle.length<=1)return"";
+ return `<div class="signal-stack"><span>Why this place made the board</span>${bundle.map(signal=>{
+   const label=signal.title||signal.opportunityType||signal.activity||"Live signal";
+   const detail=signal.whyNow||(Array.isArray(signal.reasons)&&signal.reasons[0])||"Live evidence cleared the current gate.";
+   return `<div class="signal-row"><strong>${esc(label)}</strong><p>${esc(detail)}</p></div>`;
+ }).join("")}</div>`;
+}
 function renderCard(c,note,sources){
- const specialist=c.specialist?`<div class="specialist"><strong>${esc(c.specialist.label)}:</strong> ${esc(c.specialist.headline)}</div>`:"";
- const reasons=((c.story&&c.story.whyToday)||c.reasons||[]).slice(0,3).map(r=>`<li>${esc(r)}</li>`).join("");
+ const bundle=Array.isArray(c&&c.bundleSignals)?c.bundleSignals:[];
+ const specialist=bundle.length>1?"":c.specialist?`<div class="specialist"><strong>${esc(c.specialist.label)}:</strong> ${esc(c.specialist.headline)}</div>`:"";
+ const reasons=bundle.length>1?"":((c.story&&c.story.whyToday)||c.reasons||[]).slice(0,3).map(r=>`<li>${esc(r)}</li>`).join("");
  const sourceLine=note&&Array.isArray(sources)&&sources.length?`<div class="card-source">Context: ${sources.map(s=>`<a href="${esc(s.url)}" rel="noopener">${esc(s.label)}</a>`).join(" · ")}</div>`:"";
+ const metaTitle=bundle.length>1?bundle.length+" live reasons today":c.title;
  return `<article class="card">
    <div class="slot">${esc(c.slot)}</div>
    <h3>${esc(c.place.name)}</h3>
-   <div class="meta">${esc(c.place.area)} · ${esc(c.place.drive)} from central Detroit · ${esc(c.title)}</div>
+   <div class="meta">${esc(c.place.area)} · ${esc(c.place.drive)} from central Detroit · ${esc(metaTitle)}</div>
    <div class="scoreline"><span class="score">${esc(c.score)}/100</span><span class="quality">${esc(c.quality)}</span></div>
    <div class="weather">${renderWeather(c.weather)}</div>
+   ${renderBundleSignals(c)}
    ${note?`<div class="card-read"><span>Why this matters</span><p>${esc(note)}</p>${sourceLine}</div>`:""}
-   <ul class="reasons">${reasons}</ul>
+   ${reasons?`<ul class="reasons">${reasons}</ul>`:""}
    ${specialist}
    <p class="caveat">${esc(c.caveat)}</p>
    <div class="actions">${cardActions(c)}</div>
