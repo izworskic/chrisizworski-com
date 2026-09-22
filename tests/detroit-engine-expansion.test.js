@@ -134,10 +134,10 @@ test("Detroit browser renders a core board before editorial enrichment",()=>{
   const route=read("lib/detroit-outdoors/route.js");
   const client=read("public/assets/detroit-outdoors.js");
   const html=read("public/detroit-outdoors/index.html");
-  assert.match(route,/if\(query\.get\("view"\)==="core"\)/);
+  assert.match(route,/if\(query\.get\("mode"\)==="core"\)/);
   assert.match(route,/mode:"core-board"/);
   assert.match(route,/editorial:\{mode:"deferred"/);
-  assert.match(client,/requestBoard\("\/api\/detroit-outdoors\?edition=cards-v1&view=core"\)/);
+  assert.match(client,/requestBoard\("\/api\/detroit-outdoors\?edition=cards-v1&mode=core"\)/);
   assert.match(client,/renderPayload\(core,false\)/);
   assert.match(client,/enrichEditorial\(\)/);
   assert.match(client,/editorial unavailable · live board remains current/);
