@@ -62,13 +62,13 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 12px;border-
 .detroit-spotlight-proof{font:700 11px/1.5 Arial,sans-serif;letter-spacing:.035em;color:#55716c;margin:0 0 16px}
 .spotlight-cta{display:inline-flex;align-items:center;min-height:42px;padding:8px 13px;border-radius:3px;background:#164b42;color:#fff;font:700 13px/1.2 Arial,sans-serif;text-decoration:none}
 .spotlight-cta:hover{background:#103b34;color:#fff;text-decoration:none}
-.detroit-live-board{display:flex;flex-direction:column;justify-content:center;padding:22px 23px;background:#183f38;color:#fff}
+.detroit-live-board{display:flex;flex-direction:column;justify-content:center;padding:22px 23px;background:#183f38;color:#fff;text-decoration:none}.detroit-live-board:hover{background:#12352f;color:#fff;text-decoration:none}
 .detroit-live-kicker{font:700 10.5px/1.2 Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#b8d0c9;margin-bottom:9px}
 .detroit-live-lead{font-size:20px;font-weight:normal;line-height:1.35;margin:0 0 13px;color:#fff}
 .detroit-live-list{list-style:none;margin:0;padding:0;border-top:1px solid rgba(255,255,255,.17)}
 .detroit-live-list li{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.12);font:600 12px/1.35 Arial,sans-serif;color:#e7efec}
 .detroit-live-list li:first-child{font-weight:700;color:#fff}
-.detroit-live-meta{display:block;margin-top:10px;font:400 10.5px/1.4 Arial,sans-serif;color:#b8d0c9}
+.detroit-live-evidence{display:block;margin-top:10px;font:600 11px/1.4 Arial,sans-serif;color:#e5efeb}.detroit-live-meta{display:block;margin-top:8px;font:400 10.5px/1.4 Arial,sans-serif;color:#b8d0c9}
 @media(max-width:720px){.detroit-spotlight{grid-template-columns:1fr}.detroit-live-board{padding:19px 20px}.detroit-spotlight h3{font-size:23px}}
 .featured-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:14px}
 .featured-head h2{font-size:23px;font-weight:normal;color:#2c5f2d;line-height:1.3}
@@ -212,14 +212,15 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 12px;border-
       <p>It watches Southeast Michigan and surfaces the few things worth paying attention to now.</p>
       <a class="spotlight-cta" href="/detroit-outdoors/" data-track-tool="detroit-outdoors" data-placement="tools-spotlight-cta">Open today’s Detroit board <span aria-hidden="true">&rarr;</span></a>
     </div>
-    <aside class="detroit-live-board" aria-label="Detroit Outdoors live board preview" aria-live="polite">
+    <a class="detroit-live-board" href="/detroit-outdoors/" data-track-tool="detroit-outdoors" data-placement="tools-spotlight-live-board" aria-label="Open the Detroit Outdoors live board" aria-live="polite">
       <span class="detroit-live-kicker">Live board now</span>
       <strong class="detroit-live-lead" id="detroit-tools-lead">Reading today’s Southeast Michigan opportunities…</strong>
       <ol class="detroit-live-list" id="detroit-tools-board">
         <li>Migration, water, freighter traffic, sky and seasonal windows can all compete here.</li>
       </ol>
+      <span class="detroit-live-evidence" id="detroit-tools-evidence">Opening the live evidence…</span>
       <span class="detroit-live-meta" id="detroit-tools-updated">Live preview from Detroit Outdoors Today</span>
-    </aside>
+    </a>
   </article>
   <div class="feature-grid">
     <article class="feature-card" data-featured-tool="michigan-border-wait-times">
@@ -575,6 +576,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 12px;border-
   var detroitLead=document.getElementById('detroit-tools-lead');
   var detroitBoard=document.getElementById('detroit-tools-board');
   var detroitUpdated=document.getElementById('detroit-tools-updated');
+  var detroitEvidence=document.getElementById('detroit-tools-evidence');
 
   function detroitLabel(op){
     if(!op) return '';
@@ -600,6 +602,10 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 12px;border-
         if(!opportunities.length) throw new Error('No Detroit opportunities');
         var lead=opportunities[0];
         detroitLead.textContent=(lead.story&&lead.story.headline)||lead.title||detroitLabel(lead);
+        if(detroitEvidence){
+          var evidence=(lead.specialist&&lead.specialist.headline)||(Array.isArray(lead.reasons)&&lead.reasons[0])||'Live evidence cleared the current Detroit board.';
+          detroitEvidence.textContent=evidence;
+        }
         detroitBoard.textContent='';
         opportunities.forEach(function(op,index){
           var li=document.createElement('li');
@@ -621,6 +627,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 12px;border-
           li.textContent=label;
           detroitBoard.appendChild(li);
         });
+        if(detroitEvidence) detroitEvidence.textContent='Open the board for the current evidence.';
         if(detroitUpdated) detroitUpdated.textContent='Open the live board for the current short list';
       });
   }

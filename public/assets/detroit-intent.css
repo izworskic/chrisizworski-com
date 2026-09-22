@@ -1,0 +1,34 @@
+:root{--ink:#24302c;--muted:#66706c;--paper:#f5f3ec;--card:#fff;--line:#d8d6cd;--green:#174a3f;--green2:#276b5c;--sand:#eee8da;--warn:#8a542b}
+*{box-sizing:border-box}
+html{background:var(--paper);color:var(--ink);font-family:Georgia,"Times New Roman",serif}
+body{margin:0;background:var(--paper);line-height:1.55}
+a{color:var(--green2)}
+.top{border-bottom:1px solid var(--line);background:rgba(245,243,236,.96)}
+.topin{max-width:980px;margin:auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.brand{font-weight:700;color:var(--ink);text-decoration:none}
+.topnav{display:flex;gap:14px;font:600 12px/1.2 Arial,sans-serif}.topnav a{text-decoration:none;color:var(--green)}
+.shell{max-width:980px;margin:auto;padding:26px 20px 52px}
+.crumb,.eyebrow,.updated,.signal-kicker,.metric-label{font-family:Arial,sans-serif}
+.crumb{font-size:12px;color:#777;margin-bottom:24px}.crumb a{color:#666}
+.eyebrow,.signal-kicker{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--green2)}
+h1{font-size:clamp(34px,6vw,58px);line-height:1.02;font-weight:400;letter-spacing:-.025em;max-width:860px;margin:8px 0 14px}
+.lede{font-size:18px;line-height:1.55;max-width:760px;color:#4e5954;margin:0 0 24px}
+.intent-live{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);border:1px solid #b7c9c2;border-top:5px solid var(--green);border-radius:8px;overflow:hidden;background:var(--card);margin:28px 0}
+.signal-main{padding:24px}.signal-side{padding:24px;background:var(--green);color:#fff}
+.signal-status{display:inline-flex;border:1px solid #b9d1c8;border-radius:999px;padding:5px 9px;font:800 10px/1 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--green2);margin-bottom:12px}
+.signal-status.no-window{color:var(--warn);border-color:#d8b899}.signal-status.source-unavailable{color:#8b3b31;border-color:#d1a5a0}
+.intent-live h2{font-size:28px;line-height:1.2;font-weight:400;margin:0 0 10px}.signal-copy{font-size:15px;color:#515b57;margin:0 0 14px}
+.signal-reasons{margin:12px 0 0;padding-left:20px;font-size:14px}.signal-reasons li{margin:6px 0}
+.updated{font-size:11px;color:#7a827f;margin-top:14px}
+.signal-side .updated{color:#c4d6d0}
+.signal-side h3{font-size:20px;font-weight:400;margin:6px 0 8px}.signal-side p{font-size:13px;color:#e2ece8;margin:0 0 16px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 13px;border-radius:4px;background:var(--green);color:#fff!important;text-decoration:none;font:800 12px/1.2 Arial,sans-serif}
+.btn.secondary{background:transparent;color:var(--green)!important;border:1px solid #a9bbb4}
+.signal-side .btn{background:#fff;color:var(--green)!important}.signal-side .btn.secondary{color:#fff!important;border-color:#8fb1a5;background:transparent}
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:32px 0}.panel{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:22px}.panel h2{font-size:23px;font-weight:400;line-height:1.25;margin:5px 0 10px}.panel p,.panel li{font-size:14px;color:#525b57}.panel ul{padding-left:20px}
+.intent-links{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:28px 0}.intent-link{border:1px solid var(--line);background:#fff;padding:14px;border-radius:5px;text-decoration:none;color:var(--ink)}.intent-link strong{display:block;font-size:14px}.intent-link span{display:block;font:11px/1.4 Arial,sans-serif;color:#737b77;margin-top:4px}
+.truth{border-left:4px solid var(--green);padding:12px 16px;background:#eef3f0;font-size:13px;color:#4b5651;margin:22px 0}
+.footer{border-top:1px solid var(--line);padding:20px}.footerin{max-width:980px;margin:auto;font:12px/1.5 Arial,sans-serif;color:#777;display:flex;gap:14px;flex-wrap:wrap}
+@media(max-width:720px){.intent-live,.content-grid{grid-template-columns:1fr}.intent-links{grid-template-columns:1fr 1fr}.topnav{display:none}.shell{padding-left:16px;padding-right:16px}.signal-main,.signal-side{padding:19px}h1{font-size:38px}.lede{font-size:16px}}
+@media(max-width:440px){.intent-links{grid-template-columns:1fr}.actions .btn{width:100%}}

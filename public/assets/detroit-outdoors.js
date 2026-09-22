@@ -61,6 +61,37 @@ function renderTopline(opportunities){
  const rest=items.slice(1,4).map(compactOpportunity).filter(Boolean);
  dek.textContent=rest.length?rest.join(" · "):compactOpportunity(items[0]);
 }
+function intentPageFor(c){
+ const engine=String(c&&c.sourceEngine||"");
+ if(engine==="great-lakes-ais")return{url:"/detroit-river-freighters/",label:"Open Detroit River freighter read"};
+ if(engine==="great-lakes-water")return{url:"/lake-st-clair-outdoors/",label:"Check Lake St. Clair window"};
+ if(engine==="sunset-photography")return{url:"/detroit-sunset-tonight/",label:"Check Detroit sunset tonight"};
+ if(c&&c.activity==="birding")return{url:"/detroit-birding-today/",label:"Open Detroit birding today"};
+ return null;
+}
+function deeperLabel(c){
+ const engine=String(c&&c.sourceEngine||"");
+ if(engine==="great-lakes-ais")return"Open live ship map";
+ if(engine==="great-lakes-water")return"Open Great Lakes buoys";
+ if(engine==="night-sky-aurora")return"Check Northern Lights Michigan";
+ if(engine==="fall-color-phenology")return"Open fall color report";
+ if(c&&c.activity==="birding")return"Open live bird sightings";
+ return"Open the deeper check";
+}
+function cardActions(c){
+ const intent=intentPageFor(c);
+ const deeper=c&&c.specialistHandoff&&c.specialistHandoff.url||c&&c.verifyUrl||"";
+ const official=c&&c.place&&c.place.officialUrl||"";
+ if(intent){
+  const secondary=deeper&&deeper!==intent.url
+    ?`<a class="btn secondary" href="${esc(deeper)}" rel="noopener">${esc(deeperLabel(c))}</a>`
+    :official?`<a class="btn secondary" href="${esc(official)}" rel="noopener">Official place info</a>`:"";
+  return `<a class="btn" href="${esc(intent.url)}">${esc(intent.label)}</a>${secondary}`;
+ }
+ const primary=deeper?`<a class="btn" href="${esc(deeper)}">${esc(deeperLabel(c))}</a>`:"";
+ const secondary=official&&official!==deeper?`<a class="btn secondary" href="${esc(official)}" rel="noopener">Official place info</a>`:"";
+ return primary+secondary;
+}
 function renderCard(c,note,sources){
  const specialist=c.specialist?`<div class="specialist"><strong>${esc(c.specialist.label)}:</strong> ${esc(c.specialist.headline)}</div>`:"";
  const reasons=((c.story&&c.story.whyToday)||c.reasons||[]).slice(0,3).map(r=>`<li>${esc(r)}</li>`).join("");
@@ -75,10 +106,7 @@ function renderCard(c,note,sources){
    <ul class="reasons">${reasons}</ul>
    ${specialist}
    <p class="caveat">${esc(c.caveat)}</p>
-   <div class="actions">
-     <a class="btn" href="${esc(c.verifyUrl)}">Open the deeper check</a>
-     <a class="btn secondary" href="${esc(c.place.officialUrl)}" rel="noopener">Official place info</a>
-   </div>
+   <div class="actions">${cardActions(c)}</div>
  </article>`;
 }
 function renderSource(name,state,total){

@@ -4,7 +4,7 @@ const root=path.resolve(__dirname,"..");const read=p=>fs.readFileSync(path.join(
 test("Detroit Outdoors restores the original card-first decision surface",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const css=read("public/assets/detroit-outdoors.css");
- assert.match(html,/<title>Detroit Outdoors Today \| Chris Izworski<\/title>/);
+ assert.match(html,/<title>Things to Do in Detroit Today \| Detroit Outdoors<\/title>/);
  assert.match(html,/rel="canonical" href="https:\/\/chrisizworski\.com\/detroit-outdoors\/"/);
  assert.match(html,/id="opportunity-grid"/);
  assert.match(html,/class="hero"/);
@@ -249,7 +249,7 @@ test("Detroit Outdoors gives Haiku an explicit evidence whitelist and constraine
  assert.match(route,/one concrete place-specific fact/);
  assert.match(route,/one seasonal or specialist fact/);
  assert.match(workflow,/reason:w&&w\.reason\|\|null/);
- assert.match(workflow,/detroit-outdoors\.js\?v=20260921c/);
+ assert.match(workflow,/detroit-outdoors\.js\?v=20260921d/);
 });
 
 
@@ -272,7 +272,7 @@ test("Detroit Outdoors client bundle parses as JavaScript",()=>{
 test("Detroit Outdoors cache-busts the live client bundle",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
- assert.match(html,/detroit-outdoors\.js\?v=20260921c/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260921d/);
  assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/detroit-outdoors\/index\.html/);

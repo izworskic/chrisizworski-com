@@ -1,0 +1,8 @@
+.detroit-network-teaser{margin:30px 0;padding:18px 20px;border:1px solid #c9d6d0;border-left:5px solid #174a3f;border-radius:5px;background:#f6faf8;color:#26342f}
+.detroit-network-teaser .dnt-kicker{font:800 10.5px/1.2 Arial,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#477067;margin-bottom:6px}
+.detroit-network-teaser .dnt-row{display:flex;align-items:flex-end;justify-content:space-between;gap:18px}
+.detroit-network-teaser h2{font:400 21px/1.25 Georgia,serif!important;margin:0 0 6px!important;color:#203a33!important}
+.detroit-network-teaser p{font:13px/1.5 Arial,sans-serif!important;margin:0!important;color:#59645f!important}
+.detroit-network-teaser a.dnt-link{flex:0 0 auto;display:inline-flex;min-height:40px;align-items:center;padding:8px 12px;background:#174a3f;color:#fff!important;text-decoration:none;border-radius:3px;font:800 12px/1.2 Arial,sans-serif}
+.detroit-network-teaser a.dnt-link:hover{background:#10382f}
+@media(max-width:620px){.detroit-network-teaser .dnt-row{display:block}.detroit-network-teaser a.dnt-link{width:100%;justify-content:center;margin-top:14px}}
