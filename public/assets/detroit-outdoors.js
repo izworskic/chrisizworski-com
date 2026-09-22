@@ -140,7 +140,7 @@ function renderPayload(data,enriched){
      if($("#hero-img")){$("#hero-img").src=data.image.src;$("#hero-img").alt=data.image.alt||"Southeast Michigan outdoors";}
      if($("#hero-credit")) $("#hero-credit").innerHTML='File photo: <a href="'+esc(data.image.creditUrl)+'" rel="noopener">'+esc(data.image.credit)+'</a> · <a href="'+esc(data.image.licenseUrl||data.image.creditUrl)+'" rel="noopener">'+esc(data.image.license)+'</a>';
      media.hidden=false;
-   }else if(enriched) media.hidden=true;
+   }else if(enriched && media.dataset.independentImage!=="1") media.hidden=true;
  }
  const fall=$("#fall-panel");
  if(fall){
@@ -181,10 +181,27 @@ async function enrichEditorial(){
  }
 }
 
+async function loadHeroImage(){
+ try{
+   const data=await requestBoard("/api/detroit-outdoors?mode=image");
+   const media=$("#hero-media");
+   if(!media)return;
+   if(data.image){
+     if($("#hero-img")){$("#hero-img").src=data.image.src;$("#hero-img").alt=data.image.alt||"Southeast Michigan outdoors";}
+     if($("#hero-credit")) $("#hero-credit").innerHTML='File photo: <a href="'+esc(data.image.creditUrl)+'" rel="noopener">'+esc(data.image.credit)+'</a> · <a href="'+esc(data.image.licenseUrl||data.image.creditUrl)+'" rel="noopener">'+esc(data.image.license)+'</a>';
+     media.dataset.independentImage="1";
+     media.hidden=false;
+   }
+ }catch(error){
+   // The board and editorial remain usable if the hero image selector is unavailable.
+ }
+}
+
 async function load(){
  try{
    const core=await requestBoard("/api/detroit-outdoors?edition=cards-v1&mode=core");
    renderPayload(core,false);
+   loadHeroImage();
    enrichEditorial();
  }catch(error){
    document.body.classList.remove("loading");
