@@ -204,6 +204,13 @@ test("Detroit Outdoors gives every card verified place context before Haiku writ
  assert.match(route,/evidence\.sources\.push\(\{label:placeContext\.sourceLabel,url:placeContext\.sourceUrl\}\)/);
 });
 
+test("Detroit editorial fingerprint tolerates specialist cards without legacy weather",()=>{
+ const route=read("lib/detroit-outdoors/route.js");
+ assert.match(route,/const weather=x&&x\.weather\|\|\{\}/);
+ assert.match(route,/h:round\(weather\.high,5\)/);
+ assert.doesNotMatch(route,/round\(x\.weather\.high,5\)/);
+});
+
 test("Detroit Outdoors separates the desk writer from per-card writers",()=>{
  const route=read("lib/detroit-outdoors/route.js");
  assert.match(route,/async function writeDeskEditorial/);
