@@ -15,11 +15,11 @@
 <meta property="og:url" content="https://chrisizworski.com/detroit-birding-today/">
 <meta property="og:site_name" content="Chris Izworski">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="/assets/detroit-intent.css?v=20260921a">
+<link rel="stylesheet" href="/assets/detroit-intent.css?v=20260922a">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
 <script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/detroit-birding-today/#page","url":"https://chrisizworski.com/detroit-birding-today/","name":"Detroit Birding Today | Best Weather & Migration Window","description":"Find the strongest Detroit-area birding window today using weather, hazards and seasonal migration context, then check live Michigan bird sightings before you go.","dateModified":"2026-09-21","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Detroit Birding Today a live sighting report?","acceptedAnswer":{"@type":"Answer","text":"No. It is a weather, hazard and seasonal decision layer. It links to the Michigan Birding Report for actual recent observations and hotspots."}},{"@type":"Question","name":"Why can a birding place rank well during migration season?","acceptedAnswer":{"@type":"Answer","text":"Seasonal migration context can make a usable weather window more relevant, but Detroit Outdoors does not treat migration timing as proof that specific birds are present."}},{"@type":"Question","name":"What should I check before going birding?","acceptedAnswer":{"@type":"Answer","text":"Check the live bird-observation feed, current weather and alerts, and official access information for the place you plan to visit."}}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/detroit-birding-today/#page","url":"https://chrisizworski.com/detroit-birding-today/","name":"Detroit Birding Today | Best Weather & Migration Window","description":"Find the strongest Detroit-area birding window today using weather, hazards and seasonal migration context, then check live Michigan bird sightings before you go.","dateModified":"2026-09-22","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Detroit Birding Today a live sighting report?","acceptedAnswer":{"@type":"Answer","text":"No. It is a weather, hazard and seasonal decision layer. It links to the Michigan Birding Report for actual recent observations and hotspots."}},{"@type":"Question","name":"Why can a birding place rank well during migration season?","acceptedAnswer":{"@type":"Answer","text":"Seasonal migration context can make a usable weather window more relevant, but Detroit Outdoors does not treat migration timing as proof that specific birds are present."}},{"@type":"Question","name":"What should I check before going birding?","acceptedAnswer":{"@type":"Answer","text":"Check the live bird-observation feed, current weather and alerts, and official access information for the place you plan to visit."}}]}]}</script>
 </head>
 <body data-detroit-intent="birding">
 <header class="top"><div class="topin"><a class="brand" href="/">Chris Izworski</a><nav class="topnav"><a href="/detroit-outdoors/">Detroit Outdoors</a><a href="/tools/">Michigan tools</a></nav></div></header>
@@ -33,6 +33,7 @@
     <span class="signal-status" id="intent-status">Checking live data</span>
     <h2 id="intent-headline">Reading the current Detroit signal…</h2>
     <p class="signal-copy" id="intent-copy">The live evidence is loading now.</p>
+    <div class="intent-metrics" id="intent-metrics" hidden></div>
     <ul class="signal-reasons" id="intent-reasons"><li>Checking current safety-gated evidence.</li></ul>
     <p class="updated" id="intent-updated">Updating…</p>
   </div>
@@ -46,6 +47,31 @@
     </div>
   </aside>
 </section>
+<section class="editorial-read" id="intent-editorial" hidden aria-live="polite">
+  <div class="editorial-copy">
+    <div class="editorial-meta" id="intent-editorial-meta">Today's editorial lens</div>
+    <h2 id="intent-editorial-title">The local read</h2>
+    <p id="intent-editorial-copy">Choosing the most useful read from today's verified evidence…</p>
+    <div class="editorial-sources" id="intent-editorial-sources"></div>
+  </div>
+  <aside class="editorial-aside">
+    <div class="signal-kicker">Decision flow</div>
+    <h3 id="intent-next-title">How to use this</h3>
+    <ol id="intent-next"><li>Read the live decision.</li><li>Verify the specialist source.</li><li>Commit only if the current evidence still holds.</li></ol>
+  </aside>
+</section>
+<section class="decision-depth" aria-label="Live evidence and uncertainty">
+  <article class="depth-panel">
+    <div class="eyebrow">Evidence behind the read</div>
+    <h2>What the engine actually knows</h2>
+    <ul class="depth-list depth-evidence" id="intent-evidence"><li>Loading verified source evidence…</li></ul>
+  </article>
+  <article class="depth-panel">
+    <div class="eyebrow">What could change the decision</div>
+    <h2>Keep the uncertainty visible</h2>
+    <ul class="depth-list" id="intent-watch"><li>Loading the current caveats and unresolved conditions…</li></ul>
+  </article>
+</section>
 <div class="truth">Detroit Outdoors never turns missing or unsafe evidence into a positive recommendation. If the required source or safety gate fails, this page says so and points you to the underlying specialist source.</div>
 <section class="content-grid"><article class="panel"><div class="eyebrow">What this answers</div><h2>Which place has the best birding setup today?</h2><p>The Detroit board compares park weather, active NWS hazards, drive friction and seasonal migration context. A birding card can rise when the day supports being outside and the season makes bird movement relevant.</p><p>That is a planning signal. It is not evidence that a particular species was seen there today.</p></article>
 <article class="panel"><div class="eyebrow">Live sightings</div><h2>Use the bird report for what is actually being seen</h2><p>After choosing a place window here, open the <a href="https://michiganbirdingreport.com/" rel="noopener">Michigan Birding Report</a> for recent observations, notable species and hotspots. Keeping those two jobs separate prevents weather or migration season from being misrepresented as a sighting.</p></article>
@@ -56,5 +82,5 @@
 <footer class="footer"><div class="footerin">© 2026 Chris Izworski <a href="/detroit-outdoors/">Detroit Outdoors Today</a><a href="/tools/">Michigan &amp; Great Lakes tools</a></div></footer>
 <script src="/_vercel/insights/script.js" defer></script>
 <script src="/_vercel/speed-insights/script.js" defer></script>
-<script src="/assets/detroit-intent.js?v=20260921a" defer></script>
+<script src="/assets/detroit-intent.js?v=20260922a" defer></script>
 </body></html>
