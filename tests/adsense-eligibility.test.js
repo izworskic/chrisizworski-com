@@ -19,23 +19,32 @@ test('publisher links remain reachable and repeated composition adds no duplicat
   assert.equal((result.match(/Privacy/g) || []).length, 1);
   assert.equal(sitePolicyLinks(result), result);
 });
-test('Auto ads stay off: every loader form is rewritten to the plain manual-units loader', () => {
-  const { normalizeAdLoader, AUTO_ADS_ENABLED, LOADER_SRC } = require('../lib/adsense-eligibility');
-  assert.equal(AUTO_ADS_ENABLED, false);
+test('every loader form is rewritten to the plain loader so Auto ads cannot start from code', () => {
+  const { normalizeAdLoader, LOADER_SRC } = require('../lib/adsense-eligibility');
   assert.equal(LOADER_SRC, 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js');
-  const forms = [
-    loader,
+  for (const form of [loader,
     '<script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script>',
-    "<script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075'></script>"
-  ];
-  for (const form of forms) {
+    "<script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075'></script>"]) {
     const out = normalizeAdLoader(form);
-    assert.ok(!out.includes('?client='), out);
-    assert.ok(out.includes(LOADER_SRC), out);
-    assert.ok(/\basync\b/.test(out), out);
+    assert.ok(!out.includes('?client=') && out.includes(LOADER_SRC) && /\basync\b/.test(out), out);
     assert.equal(normalizeAdLoader(out), out);
   }
-  // Placed units still name the publisher on the unit itself, so they keep serving.
-  const unit = '<ins class="adsbygoogle" data-ad-client="ca-pub-8222782620788075" data-ad-slot="1011148508"></ins>';
-  assert.equal(normalizeAdLoader(unit), unit);
+});
+test('in-article placer tag carries the configured slot, respects the switch and exclusions', () => {
+  const { placerTag, hasPlacer } = require('../lib/adsense-eligibility');
+  const cfg = { enabled: true, publisherId: 'ca-pub-8222782620788075', slotId: '8700232579', maxPerPage: 3, excludeRoutes: ['/skip/'] };
+  const tag = placerTag('/soo-locks/index.html', cfg);
+  assert.match(tag, /src="\/assets\/in-article-ads\.js\?v=1"/);
+  assert.match(tag, /data-slot="8700232579"/); assert.match(tag, /data-max="3"/); assert.match(tag, /\bdefer\b/);
+  assert.ok(hasPlacer(tag));
+  assert.equal(placerTag('/skip/index.html', cfg), '');
+  assert.equal(placerTag('/soo-locks/', { ...cfg, enabled: false }), '');
+  assert.throws(() => placerTag('/x/', { ...cfg, slotId: 'abc' }));
+  const live = require('../config/in-article-ads.json');
+  assert.equal(live.slotId, '8700232579'); assert.equal(live.publisherId, 'ca-pub-8222782620788075');
+});
+test('the placer script never targets cards, grids, lists, maps or the reader\'s view', () => {
+  const js = require('node:fs').readFileSync(require('node:path').join(__dirname, '../public/assets/in-article-ads.js'), 'utf8');
+  for (const s of ['firstMin', 'table,li', '.leaflet-container', 'looksLikeCard', 'grid|flex', 'scrollY + vh', 'data-ad-layout="in-article"', 'data-ad-format="fluid"', "'chrisizworski.com'"]) assert.ok(js.includes(s), s);
+  assert.ok(!/enable_page_level_ads|setInterval/.test(js));
 });
