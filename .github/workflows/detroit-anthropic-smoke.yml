@@ -119,8 +119,17 @@ jobs:
 
             curl -fsS --max-time 20 "https://chrisizworski.com/assets/detroit-intent.js?smoke=${EXPECTED_SHA}" -o /tmp/detroit-intent.js
             node --check /tmp/detroit-intent.js
-            grep -Fq "setInterval(load,2*60*1000)" /tmp/detroit-intent.js
-            grep -Fq 'cache:"no-store"' /tmp/detroit-intent.js
+            grep -Fq 'intent==="freighter"?5*60*1000:10*60*1000' /tmp/detroit-intent.js
+            grep -Fq 'editorialSig=' /tmp/detroit-intent.js
+            grep -Fq 'sessionStorage' /tmp/detroit-intent.js
+            if grep -Fq '&fresh=' /tmp/detroit-intent.js; then
+              echo "Focused Detroit client still defeats shared edge caching with a per-minute fresh query."
+              exit 1
+            fi
+            if grep -Fq 'cache:"no-store"' /tmp/detroit-intent.js; then
+              echo "Focused Detroit client still bypasses browser/edge reuse."
+              exit 1
+            fi
             for slug in detroit-river-freighters detroit-birding-today lake-st-clair-outdoors detroit-sunset-tonight; do
               curl -fsS --max-time 20 "https://chrisizworski.com/${slug}/?smoke=${EXPECTED_SHA}" -o "/tmp/${slug}.html"
               grep -Fq "/assets/detroit-intent.js?v=20260922b" "/tmp/${slug}.html"
@@ -172,7 +181,7 @@ jobs:
             if [ "${live_intents}" -lt 1 ]; then
               echo "No live Detroit intent candidate existed during this smoke; static and core intent paths still verified."
             fi
-            echo "Detroit board-bound editorial, image, live refresh and focused-intent production smoke passed."
+            echo "Detroit board-bound editorial, image, cost-aware refresh and focused-intent production smoke passed."
             exit 0
           done
 
