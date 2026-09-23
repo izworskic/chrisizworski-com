@@ -3,7 +3,12 @@ const $=s=>document.querySelector(s);
 const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const intent=document.body.dataset.detroitIntent;
 let loadGeneration=0;
-const minuteBucket=()=>Math.floor(Date.now()/60000);
+let lastCoreAt=0;
+const CORE_TTL_MS=intent==="freighter"?5*60*1000:10*60*1000;
+const EDITORIAL_TTL_MS=30*60*1000;
+const CORE_CACHE_KEY=`detroit-intent-core-v3:${intent}`;
+const EDITORIAL_CACHE_KEY=`detroit-intent-editorial-v3:${intent}`;
+const minuteBucket=()=>Math.floor(Date.now()/CORE_TTL_MS);
 const liveUrl=extra=>"/api/detroit-outdoors?intent="+encodeURIComponent(intent)+"&fresh="+minuteBucket()+(extra||"");
 const configs={
  freighter:{
@@ -40,7 +45,23 @@ const configs={
  }
 };
 const config=configs[intent]||configs.birding;
-
+function readCache(key){
+ try{return JSON.parse(localStorage.getItem(key)||"null");}catch{return null;}
+}
+function writeCache(key,value){
+ try{localStorage.setItem(key,JSON.stringify(value));}catch{}
+}
+function candidateSignature(candidate){
+ if(!candidate)return"none";
+ return JSON.stringify([
+  candidate.id||null,
+  candidate.specialist&&candidate.specialist.headline||null,
+  candidate.timeWindow&&candidate.timeWindow.start||null,
+  candidate.timeWindow&&candidate.timeWindow.label||null,
+  candidate.whyNow||null,
+  Array.isArray(candidate.reasons)?candidate.reasons.slice(0,4):[]
+ ]);
+}
 function reasonText(candidate){
  const reasons=Array.isArray(candidate&&candidate.reasons)?candidate.reasons:[];
  return reasons.slice(0,4);
@@ -67,10 +88,7 @@ function renderMetrics(metrics){
 function renderEvidence(candidate){
  const el=$("#intent-evidence");if(!el)return;
  const rows=Array.isArray(candidate&&candidate.verifiedEvidence)?candidate.verifiedEvidence.slice(0,3):[];
- if(!rows.length){
-  el.innerHTML="<li>Live evidence is summarized in the decision card above.</li>";
-  return;
- }
+ if(!rows.length){el.innerHTML="<li>Live evidence is summarized in the decision card above.</li>";return;}
  el.innerHTML=rows.map(row=>{
   const label=esc(row.sourceLabel||row.source||"Verified source");
   const text=esc(row.text||"");
@@ -120,56 +138,70 @@ function timeLabel(iso){
 }
 async function loadEditorial(candidate,generation){
  if(!candidate||!candidate.id)return;
+ const signature=candidateSignature(candidate);
+ const cached=readCache(EDITORIAL_CACHE_KEY);
+ if(cached&&cached.signature===signature&&Date.now()-Number(cached.at||0)<EDITORIAL_TTL_MS&&cached.enrichment){
+  renderEditorial(cached.enrichment,candidate);
+  return;
+ }
  setEditorialLoading(candidate);
  try{
   const url=liveUrl("&mode=editorial&candidateId="+encodeURIComponent(candidate.id));
   const res=await fetch(url,{headers:{accept:"application/json"},cache:"no-store"});
   const data=await res.json();
   if(generation!==loadGeneration)return;
-  if(res.status===409){return load();}
+  if(res.status===409){lastCoreAt=0;return load();}
   if(!res.ok||!data.ok)throw new Error(data.error||"Editorial unavailable");
+  writeCache(EDITORIAL_CACHE_KEY,{at:Date.now(),signature,enrichment:data.enrichment});
   renderEditorial(data.enrichment,candidate);
  }catch{
   if(generation===loadGeneration)renderEditorial(null,candidate);
  }
 }
-async function load(){
- const generation=++loadGeneration;
+function renderCore(data,generation){
+ if(generation!==loadGeneration||!data||!data.intent)return;
  const status=$("#intent-status"),title=$("#intent-headline"),copy=$("#intent-copy"),list=$("#intent-reasons"),updated=$("#intent-updated"),primary=$("#intent-primary"),context=$("#intent-context"),editorial=$("#intent-editorial");
+ const signal=data.intent,c=signal.candidate;
+ status.textContent=statusLabel(signal.status);status.className="signal-status "+signal.status;
+ title.textContent=headline(c);
+ copy.textContent=c?(c.whyNow||config.context):(signal.noSignal||config.fallback);
+ const reasons=c?reasonText(c):((signal.rejected||[]).flatMap(r=>r.reasons||[]).slice(0,4));
+ list.innerHTML=reasons.length?reasons.map(r=>"<li>"+esc(r)+"</li>").join(""):"<li>"+esc(config.context)+"</li>";
+ const refreshed=timeLabel(data.generatedAt);
+ const sourceTime=intent==="freighter"&&c&&c.timeWindow?timeLabel(c.timeWindow.start):null;
+ updated.textContent=sourceTime?"AIS report "+sourceTime+(refreshed?" · page refreshed "+refreshed:""):(refreshed?"Updated "+refreshed:"Updated now");
+ context.textContent=config.context;
+ primary.href=c&&c.specialistHandoff&&c.specialistHandoff.url||signal.deeperUrl||"/detroit-outdoors/";
+ primary.textContent=config.cta+" →";
+ renderMetrics(signal.metrics);renderEvidence(c);renderWatch(c,signal);renderNext();
+ if(c)loadEditorial(c,generation);else if(editorial)editorial.hidden=true;
+}
+async function load(){
+ const now=Date.now();
+ if(lastCoreAt&&now-lastCoreAt<CORE_TTL_MS)return;
+ const generation=++loadGeneration;
+ const cached=readCache(CORE_CACHE_KEY);
+ if(cached&&cached.data&&now-Number(cached.at||0)<CORE_TTL_MS){
+  lastCoreAt=Number(cached.at||now);
+  renderCore(cached.data,generation);
+  return;
+ }
+ const status=$("#intent-status"),title=$("#intent-headline"),copy=$("#intent-copy"),list=$("#intent-reasons"),updated=$("#intent-updated"),primary=$("#intent-primary"),editorial=$("#intent-editorial");
  try{
   const res=await fetch(liveUrl(""),{headers:{accept:"application/json"},cache:"no-store"});
   const data=await res.json();
   if(generation!==loadGeneration)return;
   if(!res.ok||!data.ok||!data.intent)throw new Error(data.error||"Intent signal unavailable");
-  const signal=data.intent,c=signal.candidate;
-  status.textContent=statusLabel(signal.status);status.className="signal-status "+signal.status;
-  title.textContent=headline(c);
-  copy.textContent=c?(c.whyNow||config.context):(signal.noSignal||config.fallback);
-  const reasons=c?reasonText(c):((signal.rejected||[]).flatMap(r=>r.reasons||[]).slice(0,4));
-  list.innerHTML=reasons.length?reasons.map(r=>"<li>"+esc(r)+"</li>").join(""):"<li>"+esc(config.context)+"</li>";
-  const refreshed=timeLabel(data.generatedAt);
-  const sourceTime=intent==="freighter"&&c&&c.timeWindow?timeLabel(c.timeWindow.start):null;
-  updated.textContent=sourceTime?"AIS report "+sourceTime+(refreshed?" · page refreshed "+refreshed:""):(refreshed?"Updated "+refreshed:"Updated now");
-  context.textContent=config.context;
-  primary.href=c&&c.specialistHandoff&&c.specialistHandoff.url||signal.deeperUrl||"/detroit-outdoors/";
-  primary.textContent=config.cta+" →";
-  renderMetrics(signal.metrics);
-  renderEvidence(c);
-  renderWatch(c,signal);
-  renderNext();
-  if(c){
-    loadEditorial(c,generation);
-  }else if(editorial){
-    editorial.hidden=true;
-  }
+  lastCoreAt=Date.now();
+  writeCache(CORE_CACHE_KEY,{at:lastCoreAt,data});
+  renderCore(data,generation);
  }catch(err){
   if(generation!==loadGeneration)return;
   status.textContent="Live refresh unavailable";status.className="signal-status source-unavailable";
   title.textContent=config.fallback;copy.textContent=config.context;list.innerHTML="<li>Open the deeper specialist tool for the latest source data.</li>";
   primary.href="/detroit-outdoors/";primary.textContent="Open Detroit Outdoors Today →";
   updated.textContent="Live signal temporarily unavailable";
-  renderMetrics([]);renderNext();
-  if(editorial)editorial.hidden=true;
+  renderMetrics([]);renderNext();if(editorial)editorial.hidden=true;
  }
 }
 document.addEventListener("click",e=>{
