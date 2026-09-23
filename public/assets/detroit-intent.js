@@ -6,7 +6,7 @@ let loadGeneration=0;
 let lastLoadAt=0;
 let lastEditorialSignature="";
 const refreshMs=intent==="freighter"?5*60*1000:10*60*1000;
-const editorialSessionTtlMs=30*60*1000;
+const editorialSessionTtlMs=intent==="freighter"?10*60*1000:30*60*1000;
 const liveUrl=extra=>"/api/detroit-outdoors?intent="+encodeURIComponent(intent)+(extra||"");
 const configs={
  freighter:{
@@ -123,29 +123,21 @@ function fnv1a(value){
  for(let i=0;i<value.length;i++){hash^=value.charCodeAt(i);hash=Math.imul(hash,16777619);}
  return (hash>>>0).toString(36);
 }
-function numberFrom(text,pattern){
- const match=String(text||"").match(pattern);
- return match?Number(match[1]):null;
-}
 function editorialSignature(candidate){
  if(!candidate)return"none";
- const specialist=String(candidate.specialist&&candidate.specialist.headline||"");
- const normalized=specialist.replace(/\d+(?:\.\d+)?/g,"#");
- const score=Number.isFinite(Number(candidate.score))?Math.round(Number(candidate.score)/10)*10:null;
- let movement="";
- if(intent==="freighter"){
-  const distance=numberFrom(specialist,/([0-9]+(?:\.[0-9]+)?)\s*(?:mi|miles?)/i);
-  const speed=numberFrom(specialist,/([0-9]+(?:\.[0-9]+)?)\s*(?:kn|knots?)/i);
-  const distanceBand=distance===null?"u":distance<=2?"0-2":distance<=5?"2-5":distance<=8?"5-8":"8+";
-  const speedBand=speed===null?"u":speed<3?"slow":speed<5?"moving":"passage";
-  movement=distanceBand+":"+speedBand;
- }
  return fnv1a(JSON.stringify({
-  intent,id:candidate.id,place:candidate.place&&candidate.place.id||null,
-  source:candidate.sourceEngine||null,opportunity:candidate.opportunityType||null,
-  specialist:normalized,movement,score,
-  window:candidate.timeWindow&&candidate.timeWindow.label||null,
-  confidence:candidate.confidence&&candidate.confidence.level||null
+  intent,
+  id:candidate.id,
+  place:candidate.place&&candidate.place.id||null,
+  source:candidate.sourceEngine||null,
+  opportunity:candidate.opportunityType||null,
+  score:Number.isFinite(Number(candidate.score))?Number(candidate.score):null,
+  specialist:candidate.specialist||null,
+  reasons:Array.isArray(candidate.reasons)?candidate.reasons:[],
+  whyNow:candidate.whyNow||null,
+  window:candidate.timeWindow||null,
+  evidence:Array.isArray(candidate.verifiedEvidence)?candidate.verifiedEvidence:[],
+  confidence:candidate.confidence||null
  }));
 }
 function editorialStorageKey(signature){return"detroit-intent-editorial:"+intent+":"+signature;}
