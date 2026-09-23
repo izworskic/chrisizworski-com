@@ -1,0 +1,25 @@
+name: Gatlinburg diagnostic
+
+on:
+  push:
+    branches:
+      - agent/gatlinburg-winter
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Gatlinburg tests
+        continue-on-error: true
+        run: node --test tests/gatlinburg-winter.test.js tests/gatlinburg-winter-v2.test.js tests/gatlinburg-winter-v3.test.js
+      - name: Existing tests without Gatlinburg
+        continue-on-error: true
+        run: find tests -maxdepth 1 -name '*.test.js' ! -name 'gatlinburg-winter*.test.js' -print0 | xargs -0 node --test
+      - name: Source verifier
+        continue-on-error: true
+        run: npm run verify
