@@ -21,7 +21,7 @@ test("Detroit growth pages are indexable, monetizable and share one live intent 
     assert.match(html,/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/);
     assert.match(html,new RegExp(`data-detroit-intent="${intent}"`));
     assert.match(html,/\/assets\/detroit-intent\.css\?v=20260922a/);
-    assert.match(html,/\/assets\/detroit-intent\.js\?v=20260922b/);
+    assert.match(html,/\/assets\/detroit-intent\.js\?v=20260923a/);
     assert.match(html,/See all Detroit opportunities/);
   }
   const js=read("public/assets/detroit-intent.js");
@@ -30,8 +30,16 @@ test("Detroit growth pages are indexable, monetizable and share one live intent 
   assert.match(js,/detroit_growth_handoff/);
 });
 
-test("Detroit intent pages actively refresh instead of relying on stale route cache",()=>{
+test("Detroit intent pages refresh only after their local freshness budget expires",()=>{
   const js=read("public/assets/detroit-intent.js");
+  assert.match(js,/CORE_TTL_MS=intent==="freighter"\?5\*60\*1000:10\*60\*1000/);
+  assert.match(js,/EDITORIAL_TTL_MS=30\*60\*1000/);
+  assert.match(js,/detroit-intent-core-v3/);
+  assert.match(js,/detroit-intent-editorial-v3/);
+  assert.match(js,/lastCoreAt&&now-lastCoreAt<CORE_TTL_MS/);
+  assert.match(js,/cached&&cached\.data&&now-Number\(cached\.at\|\|0\)<CORE_TTL_MS/);
+  assert.match(js,/cached&&cached\.signature===signature&&Date\.now\(\)-Number\(cached\.at\|\|0\)<EDITORIAL_TTL_MS/);
+  assert.match(js,/candidateSignature/);
   assert.match(js,/minuteBucket/);
   assert.match(js,/&fresh=/);
   assert.match(js,/cache:"no-store"/);
@@ -57,7 +65,6 @@ test("Detroit intent core stays hard-gated while editorial enrichment is candida
   assert.match(route,/const plan=await planEditorialPlacement\(\[candidate\],false,fallSnapshot\)/);
   assert.match(route,/const result=await writeCardEditorial\(candidate,slot,date,fallSnapshot\)/);
 });
-
 
 test("Detroit intent pages expose adaptive editorial, evidence and uncertainty surfaces",()=>{
   for(const [slug] of intentPages){
