@@ -1,2 +1,2 @@
 "use strict";
-module.exports = require("../lib/gatlinburg-winter/route.js");
+module.exports = require("../lib/gatlinburg-winter/route-v2.js");
