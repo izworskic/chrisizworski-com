@@ -65,10 +65,14 @@ test("Detroit intent core stays hard-gated while editorial enrichment is candida
   assert.match(route,/const enrichment=await intentEditorial\(intent,fallSnapshot\)/);
   assert.match(route,/const plan=await planEditorialPlacement\(\[candidate\],false,fallSnapshot\)/);
   assert.match(route,/const result=await writeCardEditorial\(candidate,slot,date,fallSnapshot\)/);
-  assert.match(dispatcher,/DETROIT_FREIGHTER_SAFE_CACHE = "public, s-maxage=60, must-revalidate"/);
-  assert.match(dispatcher,/DETROIT_FOCUSED_CACHE = "public, s-maxage=300, must-revalidate"/);
-  assert.match(dispatcher,/intent && intent !== "freighter"/);
-  assert.doesNotMatch(dispatcher,/DETROIT_FREIGHTER_SAFE_CACHE[^\n]*stale-while-revalidate/);
+  assert.match(dispatcher,/DETROIT_FREIGHTER_SAFE_CACHE_SECONDS = 60/);
+  assert.match(dispatcher,/DETROIT_FOCUSED_CACHE_SECONDS = 300/);
+  assert.match(dispatcher,/DETROIT_AIS_PUBLIC_MAX_AGE_MS = 10 \* 60 \* 1000/);
+  assert.match(dispatcher,/responseAisRemainingSeconds/);
+  assert.match(dispatcher,/detroit-ais-expired-during-render/);
+  assert.match(dispatcher,/context\.mode === "editorial" && requestReferencesFreighter\(req\)/);
+  assert.match(dispatcher,/Math\.min\(ttl, Math\.max\(0, Math\.floor\(aisRemainingSeconds\)\)\)/);
+  assert.doesNotMatch(dispatcher,/stale-while-revalidate/);
 });
 
 
@@ -118,8 +122,11 @@ test("Detroit freighter signal stays inside the public ten-minute AIS budget whi
   assert.match(api,/publicDecisionMaxAgeMinutes: 10/);
   assert.match(api,/speed > 0\.5/);
   assert.match(api,/data\.detroitSignal/);
-  assert.match(api,/s-maxage=10, stale-while-revalidate=10/);
-  assert.match(dispatcher,/s-maxage=60, must-revalidate/);
+  assert.match(api,/s-maxage=10, must-revalidate/);
+  assert.doesNotMatch(api,/s-maxage=10, stale-while-revalidate=10/);
+  assert.match(dispatcher,/candidateAisRemainingSeconds/);
+  assert.match(dispatcher,/timeWindow && signal\.timeWindow\.start/);
+  assert.match(dispatcher,/s-maxage=\$\{ttl\}, must-revalidate/);
 });
 
 test("Detroit sunset page preserves evidence limitations",()=>{
