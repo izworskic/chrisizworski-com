@@ -701,7 +701,7 @@ test('regional intake replaces the busy persona wall with profile-driven navigat
   const js=fs.readFileSync(jsPath,'utf8');
   const css=fs.readFileSync(cssPath,'utf8');
   assert.match(html,/id="trip-intake"/);
-  assert.match(html,/Tell us the trip you’re actually picturing/);
+  assert.match(html,/Make this read your trip/);
   assert.match(html,/id="tripProfileCard"/);
   assert.match(html,/id="tripTabs"/);
   assert.match(html,/id="stay-guide"/);
@@ -714,6 +714,22 @@ test('regional intake replaces the busy persona wall with profile-driven navigat
   assert.match(js,/mackinac_profile_classified/);
   assert.match(css,/\.intake-card/);
   assert.match(css,/\.trip-tabs-wrap/);
+});
+
+test('the first-screen decision is never gated behind intake',()=>{
+  const js=fs.readFileSync(jsPath,'utf8');
+  const css=fs.readFileSync(cssPath,'utf8');
+  // PR #389 built this as a mobile-first first-screen decision, and the engine returns a
+  // complete one with zero input. Gating the fetch meant a first-time visitor never asked
+  // for it, so the answer must load unconditionally on boot.
+  assert.doesNotMatch(js,/classList\.contains\('mackinac-plan-ready'\)\)\s*await loadDecision/);
+  assert.match(js,/^\s*await loadDecision\(\);/m);
+  // The answer, the page content and the destination nav must not be display:none
+  // until a trip exists.
+  for(const sel of ['.decision-head','.decision-grid','.primary-rec','.content-stack','.planning-banner']){
+    assert.ok(!css.includes(`body:not(.mackinac-plan-ready) ${sel}`),`${sel} is gated behind intake again`);
+  }
+  assert.ok(!/body:not\(\.mackinac-plan-ready\) \.mackinac-destination-nav/.test(css),'destination nav is hidden until intake again');
 });
 
 test('intake answers are causal inputs to the deterministic planner and bounded JEV ranker',()=>{
