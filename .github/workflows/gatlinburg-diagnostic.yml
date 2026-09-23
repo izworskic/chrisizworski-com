@@ -24,3 +24,66 @@ jobs:
       - name: Source verifier
         continue-on-error: true
         run: npm run verify
+      - name: Verify chunk A
+        continue-on-error: true
+        run: |
+          set -e
+          npm run benchmark:beaches
+          npm run benchmark:beach-ctr
+          npm run benchmark:border-ctr
+          npm run benchmark:growth
+          npm run benchmark:seo
+          npm run benchmark:serp-length
+          npm run benchmark:ctr -- --check
+          npm run benchmark:search-growth -- --check
+          npm run benchmark:search-strategy -- --check
+          npm run benchmark:search-authority -- --check
+      - name: Verify chunk B
+        continue-on-error: true
+        run: |
+          set -e
+          npm run benchmark:outdoors-now-growth -- --check
+          npm run benchmark:mackinac-toll-ctr
+          npm run benchmark:trip-stack -- --check
+          npm run benchmark:tool-network -- --check
+          npm run benchmark:circle-tour
+          npm run benchmark:entity -- --check
+          npm run benchmark:winter -- --check
+          npm run benchmark:winter-flow -- --check
+          npm run benchmark:winter-final -- --check
+          npm run freshness -- --check
+          npm run benchmark:citation -- --check
+      - name: Verify chunk C
+        continue-on-error: true
+        run: |
+          set -e
+          npm run benchmark:decision-network
+          npm run benchmark:map-insights
+          npm run benchmark:boat-launches
+          npm run audit:boat-launch-source
+          npm run benchmark:boat-launches-v3
+          npm run benchmark:boat-launch-search
+          npm run benchmark:manistee
+          npm run benchmark:manistee-parity
+          npm run benchmark:manistee-popups
+          npm run benchmark:manistee-ux
+      - name: Verify chunk D
+        continue-on-error: true
+        run: |
+          set -e
+          npm run benchmark:au-sable-search
+          npm run benchmark:manistee-page-one -- --check
+          npm run benchmark:fall-aurora-ctr -- --check
+          npm run benchmark:up-fall-rank -- --check
+          npm run benchmark:fall-weekend-planner-ctr -- --check
+          npm run benchmark:beach-detail-ctr -- --check
+          npm run benchmark:garden-page-one-ctr -- --check
+          npm run benchmark:entity-discovery-ctr -- --check
+          npm run benchmark:circle-tour-rank -- --check
+          npm run benchmark:extracted-routing
+          npm run benchmark:gauley-routing
+          npm run benchmark:tool-entities
+          npm run benchmark:white-christmas-indexing
+          npm run benchmark:mackinac-hub
+          npm run benchmark:mackinac-platform
+          npm run benchmark:snowmobile
