@@ -6,6 +6,7 @@ on:
       - agent/gatlinburg-winter
   workflow_dispatch:
 
+# Temporary workflow used only to isolate the repository-wide verification failure.
 jobs:
   diagnose:
     runs-on: ubuntu-latest
