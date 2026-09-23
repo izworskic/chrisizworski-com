@@ -19,3 +19,23 @@ test('publisher links remain reachable and repeated composition adds no duplicat
   assert.equal((result.match(/Privacy/g) || []).length, 1);
   assert.equal(sitePolicyLinks(result), result);
 });
+test('Auto ads stay off: every loader form is rewritten to the plain manual-units loader', () => {
+  const { normalizeAdLoader, AUTO_ADS_ENABLED, LOADER_SRC } = require('../lib/adsense-eligibility');
+  assert.equal(AUTO_ADS_ENABLED, false);
+  assert.equal(LOADER_SRC, 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js');
+  const forms = [
+    loader,
+    '<script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script>',
+    "<script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075'></script>"
+  ];
+  for (const form of forms) {
+    const out = normalizeAdLoader(form);
+    assert.ok(!out.includes('?client='), out);
+    assert.ok(out.includes(LOADER_SRC), out);
+    assert.ok(/\basync\b/.test(out), out);
+    assert.equal(normalizeAdLoader(out), out);
+  }
+  // Placed units still name the publisher on the unit itself, so they keep serving.
+  const unit = '<ins class="adsbygoogle" data-ad-client="ca-pub-8222782620788075" data-ad-slot="1011148508"></ins>';
+  assert.equal(normalizeAdLoader(unit), unit);
+});

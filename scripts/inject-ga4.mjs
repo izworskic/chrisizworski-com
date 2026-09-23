@@ -18,7 +18,7 @@ const GA4_TAG = `<!-- Google tag (gtag.js) -->
   gtag('config', '${MEASUREMENT_ID}');
 </script>`;
 const ADSENSE_TAG = `<meta name="google-adsense-account" content="${ADSENSE_PUBLISHER_ID}">`;
-const ADSENSE_SCRIPT = `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}" crossorigin="anonymous"></script>`;
+const ADSENSE_SCRIPT = adsenseEligibility.LOADER_TAG;
 
 const MIGRATED_TOOLS_SECTION = `
 <section id="first-party-migrated-tools" class="decision-network" aria-labelledby="first-party-migrated-title">
@@ -62,7 +62,7 @@ async function walk(dir) {
     const integratedHtml = replaceAisEmbeds(originalHtml);
     const pathname = '/' + path.relative(ROOT, fullPath).split(path.sep).join('/');
     const allowAds = adsenseEligibility.eligible(originalHtml, pathname);
-    const html = sitePolicyLinks(allowAds ? integratedHtml : adsenseEligibility.removeAdLoader(integratedHtml));
+    const html = sitePolicyLinks(allowAds ? adsenseEligibility.normalizeAdLoader(integratedHtml) : adsenseEligibility.removeAdLoader(integratedHtml));
     const needsGa4 = !html.includes(MEASUREMENT_ID);
     const needsAdsense = !/<meta\b[^>]*name=["']google-adsense-account["']/i.test(html);
     const needsAdsenseScript = allowAds && !/<script\b[^>]*src=["'][^"']*pagead\/js\/adsbygoogle\.js\b/i.test(html);
