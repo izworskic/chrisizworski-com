@@ -20,7 +20,7 @@ test('the production injector puts one correct AdSense loader in every Petoskey 
       const html = fs.readFileSync(path.join(temp, 'public/petoskey-wine', file), 'utf8');
       const head = html.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i)?.[1] || '';
       assert.match(head, /name="google-adsense-account" content="ca-pub-8222782620788075"/, file);
-      const loaders = head.match(/<script\b[^>]*src="https:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js\?client=ca-pub-8222782620788075"[^>]*>/g) || [];
+      const loaders = head.match(/<script\b[^>]*src="https:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js"[^>]*>/g) || [];
       if (file.includes('404')) {
         assert.equal(loaders.length, 0, file);
       } else {

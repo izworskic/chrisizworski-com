@@ -18,6 +18,15 @@ commands. `npm run ads:off` disables the pilot on the next committed deployment.
 Do not scatter this slot into tool HTML or remove the shared AdSense loader to
 turn off this experiment. The build injects these marked blocks last.
 
+## Auto ads are OFF (September 23, 2026)
+
+Chris reported Google Auto ads underlining words as ads and splitting tool cards in
+half. `AUTO_ADS_ENABLED = false` in `lib/adsense-eligibility.js` makes every page
+(static build and proxied tools) load the plain `adsbygoogle.js` with no `?client=`,
+so Google has no account to fetch Auto ads for. Placed units still serve. Do not add
+`?client=` back to any loader or generator; `normalizeAdLoader` rewrites it anyway.
+Flip the constant to true only if Chris asks for Auto ads back.
+
 ## 0. Extracted tool repositories are authoritative
 
 This repository still contains deployment mirrors for some national tools and Isle Royale so

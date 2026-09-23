@@ -118,3 +118,6 @@ this document describes the reporting setup, not reports already saved there.
 
 - 2026-09-20: owner-authorized three-page horizontal pilot; centralized registry,
   build-time injection/removal and tests. No sitewide placement rollout.
+- 2026-09-23: Auto ads turned off in code (`AUTO_ADS_ENABLED = false`, lib/adsense-eligibility.js)
+  after Auto ads underlined words as ads and split tool cards. The three pilot units are now
+  the only ads served. Also switch off Auto ads for chrisizworski.com in the AdSense dashboard.
