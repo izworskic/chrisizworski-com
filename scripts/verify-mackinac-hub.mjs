@@ -63,7 +63,15 @@ const css=read("public/assets/mackinac-intent.css")+read("public/assets/mackinac
 if(!css.includes(".mackinac-destination-nav"))addFailure("mobile","destination navigation has no shared styling");
 if(!css.includes("overflow-x:auto"))addFailure("mobile","destination navigation is not horizontally usable on narrow screens");
 if(!css.includes(".platform-focus-card"))addFailure("mobile","shared trip focus has no integrated responsive styling");
-if(!css.includes("body:not(.mackinac-plan-ready) .content-stack"))addFailure("clarity","root does not progressively disclose the detailed planner");
+// Progressive disclosure applies to the detailed planner controls, never to the answer.
+// This check used to require the content stack itself to be hidden until intake, which
+// withheld a complete zero-input decision (score, ferries out and back, last boat, weather,
+// crowds, bike, itinerary) from every first-time visitor.
+if(!css.includes("body:not(.mackinac-plan-ready) .trip-tuning"))addFailure("clarity","root does not progressively disclose the detailed planner");
+for(const sel of [".decision-head",".decision-grid",".primary-rec",".content-stack",".planning-banner"]){
+  if(css.includes(`body:not(.mackinac-plan-ready) ${sel}`))addFailure("clarity",`root withholds ${sel} until intake; the zero-input answer must render first`);
+}
+if(/body:not\(\.mackinac-plan-ready\) \.mackinac-destination-nav/.test(css))addFailure("clarity","destination navigation is hidden until intake");
 if(!css.includes(".profile-logistics-grid"))addFailure("mobile","root trip logistics have no responsive layout");
 if(!css.includes("@media(max-width:390px)"))addFailure("mobile","shared trip intelligence lacks 390px treatment");
 
