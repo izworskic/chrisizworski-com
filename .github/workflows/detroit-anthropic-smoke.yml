@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - 'api/freighter-ais.js'
       - 'lib/detroit-outdoors/route.js'
       - 'lib/detroit-outdoors/engines.js'
       - 'lib/detroit-outdoors/expanded-engines.js'
@@ -118,14 +119,33 @@ jobs:
 
             curl -fsS --max-time 20 "https://chrisizworski.com/assets/detroit-intent.js?smoke=${EXPECTED_SHA}" -o /tmp/detroit-intent.js
             node --check /tmp/detroit-intent.js
+            grep -Fq "setInterval(load,2*60*1000)" /tmp/detroit-intent.js
+            grep -Fq 'cache:"no-store"' /tmp/detroit-intent.js
             for slug in detroit-river-freighters detroit-birding-today lake-st-clair-outdoors detroit-sunset-tonight; do
-              grep -Fq "/assets/detroit-intent.js?v=20260922a" <(curl -fsS --max-time 20 "https://chrisizworski.com/${slug}/?smoke=${EXPECTED_SHA}")
+              curl -fsS --max-time 20 "https://chrisizworski.com/${slug}/?smoke=${EXPECTED_SHA}" -o "/tmp/${slug}.html"
+              grep -Fq "/assets/detroit-intent.js?v=20260922b" "/tmp/${slug}.html"
             done
+
+            curl -fsS --max-time 25 -A "ChrisIzworski.com Detroit Outdoors specialist adapter" "https://chrisizworski.com/api/freighter-ais?freshness_smoke=${EXPECTED_SHA}" -o /tmp/detroit-freighter-ais.json
+            node -e '
+              const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));
+              if(!d.ok) throw new Error("Detroit AIS specialist response failed");
+              if(!d.detroitSignal||d.detroitSignal.movingOnly!==true||d.detroitSignal.maxAgeMinutes!==10) throw new Error("Detroit AIS freshness contract missing");
+              const now=Date.now();
+              for(const v of d.vessels||[]){
+                const seen=Date.parse(v&&v.seen||"");
+                const speed=Number(v&&v.speedKnots);
+                if(!Number.isFinite(seen)||now-seen>10*60*1000) throw new Error("Detroit AIS returned a vessel older than 10 minutes: "+JSON.stringify(v));
+                if(!Number.isFinite(speed)||speed<=0.5) throw new Error("Detroit AIS returned a non-passing vessel: "+JSON.stringify(v));
+              }
+              console.log("Detroit AIS live contract verified:",JSON.stringify({vessels:(d.vessels||[]).map(v=>({name:v.name,seen:v.seen,speedKnots:v.speedKnots}))}));
+            ' /tmp/detroit-freighter-ais.json
 
             live_intents=0
             for intent in freighter birding water sunset; do
               intent_core="/tmp/detroit-intent-${intent}.json"
-              curl -fsS --get --max-time 35 --data-urlencode "intent=${intent}" --data-urlencode "smoke=${EXPECTED_SHA}" "https://chrisizworski.com/api/detroit-outdoors" -o "${intent_core}"
+              fresh_bucket="$(date +%s)"
+              curl -fsS --get --max-time 35 --data-urlencode "intent=${intent}" --data-urlencode "fresh=${fresh_bucket}" --data-urlencode "smoke=${EXPECTED_SHA}" "https://chrisizworski.com/api/detroit-outdoors" -o "${intent_core}"
               candidate_id="$(EXPECTED_SHA="${EXPECTED_SHA}" node -e '
                 const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));
                 if(!d.ok||d.mode!=="intent-core") throw new Error("intent core mode failed");
@@ -136,7 +156,7 @@ jobs:
               if [ -n "${candidate_id}" ]; then
                 live_intents=$((live_intents+1))
                 intent_editorial="/tmp/detroit-intent-${intent}-editorial.json"
-                curl -fsS --get --max-time 55 --data-urlencode "intent=${intent}" --data-urlencode "mode=editorial" --data-urlencode "candidateId=${candidate_id}" --data-urlencode "smoke=${EXPECTED_SHA}" "https://chrisizworski.com/api/detroit-outdoors" -o "${intent_editorial}"
+                curl -fsS --get --max-time 55 --data-urlencode "intent=${intent}" --data-urlencode "mode=editorial" --data-urlencode "candidateId=${candidate_id}" --data-urlencode "fresh=${fresh_bucket}" --data-urlencode "smoke=${EXPECTED_SHA}" "https://chrisizworski.com/api/detroit-outdoors" -o "${intent_editorial}"
                 EXPECTED_SHA="${EXPECTED_SHA}" CANDIDATE_ID="${candidate_id}" node -e '
                   const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));
                   if(!d.ok||d.mode!=="intent-editorial-enrichment") throw new Error("intent editorial mode failed");
@@ -152,7 +172,7 @@ jobs:
             if [ "${live_intents}" -lt 1 ]; then
               echo "No live Detroit intent candidate existed during this smoke; static and core intent paths still verified."
             fi
-            echo "Detroit board-bound editorial, image and focused-intent production smoke passed."
+            echo "Detroit board-bound editorial, image, live refresh and focused-intent production smoke passed."
             exit 0
           done
 
