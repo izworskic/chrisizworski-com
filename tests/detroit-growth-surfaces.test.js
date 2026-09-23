@@ -30,15 +30,20 @@ test("Detroit growth pages are indexable, monetizable and share one live intent 
   assert.match(js,/detroit_growth_handoff/);
 });
 
-test("Detroit intent pages actively refresh instead of relying on stale route cache",()=>{
+test("Detroit intent pages use shared cache and bounded refresh instead of per-open cache busting",()=>{
   const js=read("public/assets/detroit-intent.js");
-  assert.match(js,/minuteBucket/);
-  assert.match(js,/&fresh=/);
-  assert.match(js,/cache:"no-store"/);
-  assert.match(js,/setInterval\(load,2\*60\*1000\)/);
+  assert.doesNotMatch(js,/minuteBucket/);
+  assert.doesNotMatch(js,/&fresh=/);
+  assert.doesNotMatch(js,/cache:"no-store"/);
+  assert.match(js,/intent==="freighter"\?5\*60\*1000:10\*60\*1000/);
+  assert.match(js,/Date\.now\(\)-lastLoadAt<refreshMs/);
   assert.match(js,/visibilitychange/);
   assert.match(js,/AIS report /);
   assert.match(js,/loadGeneration/);
+  assert.match(js,/editorialSignature/);
+  assert.match(js,/editorialSig=/);
+  assert.match(js,/sessionStorage/);
+  assert.match(js,/signature!==lastEditorialSignature/);
 });
 
 test("Detroit intent core stays hard-gated while editorial enrichment is candidate-bound",()=>{
@@ -56,6 +61,7 @@ test("Detroit intent core stays hard-gated while editorial enrichment is candida
   assert.match(route,/const enrichment=await intentEditorial\(intent,fallSnapshot\)/);
   assert.match(route,/const plan=await planEditorialPlacement\(\[candidate\],false,fallSnapshot\)/);
   assert.match(route,/const result=await writeCardEditorial\(candidate,slot,date,fallSnapshot\)/);
+  assert.match(route,/public, s-maxage=300, stale-while-revalidate=900/);
 });
 
 
@@ -76,7 +82,7 @@ test("Detroit intent pages expose adaptive editorial, evidence and uncertainty s
   assert.match(js,/renderEvidence/);
   assert.match(js,/renderWatch/);
   assert.match(js,/Today's editorial lens/);
-  assert.match(js,/if\(res\.status===409\)\{return load\(\);\}/);
+  assert.match(js,/if\(res\.status===409\)\{lastLoadAt=0;return load\(true\);\}/);
 });
 
 test("Lake St Clair acquisition page publishes the same conservative thresholds as the engine",()=>{
