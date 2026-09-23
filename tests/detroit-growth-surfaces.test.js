@@ -21,13 +21,24 @@ test("Detroit growth pages are indexable, monetizable and share one live intent 
     assert.match(html,/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/);
     assert.match(html,new RegExp(`data-detroit-intent="${intent}"`));
     assert.match(html,/\/assets\/detroit-intent\.css\?v=20260922a/);
-    assert.match(html,/\/assets\/detroit-intent\.js\?v=20260922a/);
+    assert.match(html,/\/assets\/detroit-intent\.js\?v=20260922b/);
     assert.match(html,/See all Detroit opportunities/);
   }
   const js=read("public/assets/detroit-intent.js");
   assert.doesNotThrow(()=>new Function(js));
   assert.match(js,/\/api\/detroit-outdoors\?intent=/);
   assert.match(js,/detroit_growth_handoff/);
+});
+
+test("Detroit intent pages actively refresh instead of relying on stale route cache",()=>{
+  const js=read("public/assets/detroit-intent.js");
+  assert.match(js,/minuteBucket/);
+  assert.match(js,/&fresh=/);
+  assert.match(js,/cache:"no-store"/);
+  assert.match(js,/setInterval\(load,2\*60\*1000\)/);
+  assert.match(js,/visibilitychange/);
+  assert.match(js,/AIS report /);
+  assert.match(js,/loadGeneration/);
 });
 
 test("Detroit intent core stays hard-gated while editorial enrichment is candidate-bound",()=>{
@@ -82,12 +93,21 @@ test("Lake St Clair acquisition page publishes the same conservative thresholds 
   assert.match(html,/not launch-specific/i);
 });
 
-test("Detroit freighter and sunset pages preserve evidence limitations",()=>{
+test("Detroit freighter signal requires recent active movement while lake-wide tracker stays broader",()=>{
   const freighter=read("public/detroit-river-freighters/index.html");
-  const sunset=read("public/detroit-sunset-tonight/index.html");
-  assert.match(freighter,/AIS is informational, not a passage schedule/);
-  assert.match(freighter,/30 minutes/);
+  const api=read("api/freighter-ais.js");
+  assert.match(freighter,/10 minutes/);
+  assert.match(freighter,/active reported movement/);
   assert.match(freighter,/roughly 12 miles/);
+  assert.match(api,/Detroit Outdoors specialist adapter/);
+  assert.match(api,/DETROIT_SIGNAL_MAX_AGE_MS = 10 \* 60 \* 1000/);
+  assert.match(api,/speed > 0\.5/);
+  assert.match(api,/data\.detroitSignal/);
+  assert.match(api,/s-maxage=10, stale-while-revalidate=10/);
+});
+
+test("Detroit sunset page preserves evidence limitations",()=>{
+  const sunset=read("public/detroit-sunset-tonight/index.html");
   assert.match(sunset,/Cloud cover is not sunset color/);
   assert.match(sunset,/cannot promise orange, pink or red skies/);
 });

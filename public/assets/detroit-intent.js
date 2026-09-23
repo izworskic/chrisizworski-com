@@ -2,14 +2,17 @@
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const intent=document.body.dataset.detroitIntent;
+let loadGeneration=0;
+const minuteBucket=()=>Math.floor(Date.now()/60000);
+const liveUrl=extra=>"/api/detroit-outdoors?intent="+encodeURIComponent(intent)+"&fresh="+minuteBucket()+(extra||"");
 const configs={
  freighter:{
   cta:"Open live Great Lakes ship map",
-  fallback:"No fresh commercial-vessel window is close enough to Detroit right now.",
-  context:"The detector looks for fresh named commercial-vessel AIS reports within the Detroit River window. AIS can move or disappear quickly, so the map is the last check before leaving.",
+  fallback:"No fresh moving commercial-vessel passage is close enough to Detroit right now.",
+  context:"The Detroit signal now requires a very fresh named commercial-vessel AIS report with active movement. Nearby stopped or crawling vessels do not keep this page pinned after the passage opportunity is gone. The live ship map is still the last check before leaving.",
   editorialTitle:"The ship-watcher read",
   nextTitle:"Use this like a spotter, not a schedule",
-  next:["Read the current named-vessel signal.","Open the live ship map immediately before leaving.","Use the Riverwalk as the viewing corridor only after the live position still makes sense."]
+  next:["Read the current moving-vessel signal.","Open the live ship map immediately before leaving.","Use the Riverwalk as the viewing corridor only after the live position still makes sense."]
  },
  birding:{
   cta:"Open live Michigan bird sightings",
@@ -51,7 +54,7 @@ function headline(candidate){
  return candidate.story&&candidate.story.headline||candidate.title||"Live Detroit outdoor window";
 }
 function statusLabel(state){
- if(state==="live-window")return"Live window";
+ if(state==="live-window")return intent==="freighter"?"Passing signal":"Live window";
  if(state==="source-unavailable")return"Source unavailable";
  return"Not a window now";
 }
@@ -111,25 +114,32 @@ function renderEditorial(enrichment,candidate){
   sources.innerHTML=rows.map(s=>s.url?`<a href="${esc(s.url)}" rel="noopener">${esc(s.label||"Source")}</a>`:"").filter(Boolean).join("");
  }
 }
-async function loadEditorial(candidate){
+function timeLabel(iso){
+ const date=new Date(iso||"");
+ return Number.isFinite(date.getTime())?date.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}):null;
+}
+async function loadEditorial(candidate,generation){
  if(!candidate||!candidate.id)return;
  setEditorialLoading(candidate);
  try{
-  const url="/api/detroit-outdoors?intent="+encodeURIComponent(intent)+"&mode=editorial&candidateId="+encodeURIComponent(candidate.id);
-  const res=await fetch(url,{headers:{accept:"application/json"}});
+  const url=liveUrl("&mode=editorial&candidateId="+encodeURIComponent(candidate.id));
+  const res=await fetch(url,{headers:{accept:"application/json"},cache:"no-store"});
   const data=await res.json();
+  if(generation!==loadGeneration)return;
   if(res.status===409){return load();}
   if(!res.ok||!data.ok)throw new Error(data.error||"Editorial unavailable");
   renderEditorial(data.enrichment,candidate);
  }catch{
-  renderEditorial(null,candidate);
+  if(generation===loadGeneration)renderEditorial(null,candidate);
  }
 }
 async function load(){
+ const generation=++loadGeneration;
  const status=$("#intent-status"),title=$("#intent-headline"),copy=$("#intent-copy"),list=$("#intent-reasons"),updated=$("#intent-updated"),primary=$("#intent-primary"),context=$("#intent-context"),editorial=$("#intent-editorial");
  try{
-  const res=await fetch("/api/detroit-outdoors?intent="+encodeURIComponent(intent),{headers:{accept:"application/json"}});
+  const res=await fetch(liveUrl(""),{headers:{accept:"application/json"},cache:"no-store"});
   const data=await res.json();
+  if(generation!==loadGeneration)return;
   if(!res.ok||!data.ok||!data.intent)throw new Error(data.error||"Intent signal unavailable");
   const signal=data.intent,c=signal.candidate;
   status.textContent=statusLabel(signal.status);status.className="signal-status "+signal.status;
@@ -137,7 +147,9 @@ async function load(){
   copy.textContent=c?(c.whyNow||config.context):(signal.noSignal||config.fallback);
   const reasons=c?reasonText(c):((signal.rejected||[]).flatMap(r=>r.reasons||[]).slice(0,4));
   list.innerHTML=reasons.length?reasons.map(r=>"<li>"+esc(r)+"</li>").join(""):"<li>"+esc(config.context)+"</li>";
-  updated.textContent="Updated "+new Date(data.generatedAt).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+  const refreshed=timeLabel(data.generatedAt);
+  const sourceTime=intent==="freighter"&&c&&c.timeWindow?timeLabel(c.timeWindow.start):null;
+  updated.textContent=sourceTime?"AIS report "+sourceTime+(refreshed?" · page refreshed "+refreshed:""):(refreshed?"Updated "+refreshed:"Updated now");
   context.textContent=config.context;
   primary.href=c&&c.specialistHandoff&&c.specialistHandoff.url||signal.deeperUrl||"/detroit-outdoors/";
   primary.textContent=config.cta+" →";
@@ -146,11 +158,12 @@ async function load(){
   renderWatch(c,signal);
   renderNext();
   if(c){
-    loadEditorial(c);
+    loadEditorial(c,generation);
   }else if(editorial){
     editorial.hidden=true;
   }
  }catch(err){
+  if(generation!==loadGeneration)return;
   status.textContent="Live refresh unavailable";status.className="signal-status source-unavailable";
   title.textContent=config.fallback;copy.textContent=config.context;list.innerHTML="<li>Open the deeper specialist tool for the latest source data.</li>";
   primary.href="/detroit-outdoors/";primary.textContent="Open Detroit Outdoors Today →";
@@ -165,5 +178,6 @@ document.addEventListener("click",e=>{
   window.gtag("event","detroit_growth_handoff",{intent:intent,destination:a.href,surface:a.id==="intent-primary"?"intent-primary":"intent-related",transport_type:"beacon"});
  }
 });
-load();setInterval(load,30*60*1000);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")load();});
+load();setInterval(load,2*60*1000);
 })();
