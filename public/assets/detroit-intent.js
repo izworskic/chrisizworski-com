@@ -150,7 +150,8 @@ async function loadEditorial(candidate,generation){
   const res=await fetch(url,{headers:{accept:"application/json"},cache:"no-store"});
   const data=await res.json();
   if(generation!==loadGeneration)return;
-  if(res.status===409){lastCoreAt=0;return load();}
+  if(res.status===409)lastCoreAt=0;
+  if(res.status===409){return load();}
   if(!res.ok||!data.ok)throw new Error(data.error||"Editorial unavailable");
   writeCache(EDITORIAL_CACHE_KEY,{at:Date.now(),signature,enrichment:data.enrichment});
   renderEditorial(data.enrichment,candidate);
