@@ -3,7 +3,11 @@ const BBOX = [41, -93, 49, -76];
 // Three adjoining lake regions, 82 square degrees in one request, within the
 // documented 100-square-degree anonymous area cap. No unbounded map proxy.
 const BOXES = [[46, -93, 49, -84], [41, -88, 46, -81], [41, -81, 45, -76]];
-const DETROIT_SIGNAL_MAX_AGE_MS = 10 * 60 * 1000;
+// Detroit's public decision surface has a hard 10-minute AIS freshness limit.
+// Admit only reports <=8 minutes old here so the specialist endpoint's own
+// 20-second cache budget plus the Detroit shell's 60-second shared cache can
+// never carry a valid-at-generation vessel beyond that 10-minute boundary.
+const DETROIT_SIGNAL_MAX_AGE_MS = 8 * 60 * 1000;
 module.exports = async function handler(req, res) {
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
   if (req.method && req.method !== 'GET') { res.setHeader('Allow','GET'); return res.status(405).json({ok:false,error:'Method not allowed'}); }
@@ -29,7 +33,8 @@ module.exports = async function handler(req, res) {
       data.detroitSignal = {
         movingOnly: true,
         minSpeedKnotsExclusive: 0.5,
-        maxAgeMinutes: 10
+        maxAgeMinutes: 8,
+        publicDecisionMaxAgeMinutes: 10
       };
       res.setHeader('Cache-Control','public, s-maxage=10, stale-while-revalidate=10');
     } else {

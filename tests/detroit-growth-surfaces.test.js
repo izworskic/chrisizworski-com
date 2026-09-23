@@ -30,19 +30,28 @@ test("Detroit growth pages are indexable, monetizable and share one live intent 
   assert.match(js,/detroit_growth_handoff/);
 });
 
-test("Detroit intent pages actively refresh instead of relying on stale route cache",()=>{
+test("Detroit intent pages use shared cache and bounded refresh instead of per-open cache busting",()=>{
   const js=read("public/assets/detroit-intent.js");
-  assert.match(js,/minuteBucket/);
-  assert.match(js,/&fresh=/);
-  assert.match(js,/cache:"no-store"/);
-  assert.match(js,/setInterval\(load,2\*60\*1000\)/);
+  assert.doesNotMatch(js,/minuteBucket/);
+  assert.doesNotMatch(js,/&fresh=/);
+  assert.doesNotMatch(js,/cache:"no-store"/);
+  assert.match(js,/intent==="freighter"\?5\*60\*1000:10\*60\*1000/);
+  assert.match(js,/editorialSessionTtlMs=intent==="freighter"\?10\*60\*1000:30\*60\*1000/);
+  assert.match(js,/Date\.now\(\)-lastLoadAt<refreshMs/);
   assert.match(js,/visibilitychange/);
   assert.match(js,/AIS report /);
   assert.match(js,/loadGeneration/);
+  assert.match(js,/editorialSignature/);
+  assert.match(js,/evidence:Array\.isArray\(candidate\.verifiedEvidence\)\?candidate\.verifiedEvidence:\[\]/);
+  assert.match(js,/window:candidate\.timeWindow\|\|null/);
+  assert.match(js,/editorialSig=/);
+  assert.match(js,/sessionStorage/);
+  assert.match(js,/signature!==lastEditorialSignature/);
 });
 
 test("Detroit intent core stays hard-gated while editorial enrichment is candidate-bound",()=>{
   const route=read("lib/detroit-outdoors/route.js");
+  const dispatcher=read("api/fall-color.js");
   const safeIndex=route.indexOf("const safePool=mixed.candidates;");
   const intentIndex=route.indexOf("if(requestedIntent)");
   const boardIndex=route.indexOf("const boardDecision=await editBoard(boardPool,4);");
@@ -56,6 +65,10 @@ test("Detroit intent core stays hard-gated while editorial enrichment is candida
   assert.match(route,/const enrichment=await intentEditorial\(intent,fallSnapshot\)/);
   assert.match(route,/const plan=await planEditorialPlacement\(\[candidate\],false,fallSnapshot\)/);
   assert.match(route,/const result=await writeCardEditorial\(candidate,slot,date,fallSnapshot\)/);
+  assert.match(dispatcher,/DETROIT_FREIGHTER_SAFE_CACHE = "public, s-maxage=60, must-revalidate"/);
+  assert.match(dispatcher,/DETROIT_FOCUSED_CACHE = "public, s-maxage=300, must-revalidate"/);
+  assert.match(dispatcher,/intent && intent !== "freighter"/);
+  assert.doesNotMatch(dispatcher,/DETROIT_FREIGHTER_SAFE_CACHE[^\n]*stale-while-revalidate/);
 });
 
 
@@ -76,7 +89,7 @@ test("Detroit intent pages expose adaptive editorial, evidence and uncertainty s
   assert.match(js,/renderEvidence/);
   assert.match(js,/renderWatch/);
   assert.match(js,/Today's editorial lens/);
-  assert.match(js,/if\(res\.status===409\)\{return load\(\);\}/);
+  assert.match(js,/if\(res\.status===409\)\{lastLoadAt=0;return load\(true\);\}/);
 });
 
 test("Lake St Clair acquisition page publishes the same conservative thresholds as the engine",()=>{
@@ -93,17 +106,20 @@ test("Lake St Clair acquisition page publishes the same conservative thresholds 
   assert.match(html,/not launch-specific/i);
 });
 
-test("Detroit freighter signal requires recent active movement while lake-wide tracker stays broader",()=>{
+test("Detroit freighter signal stays inside the public ten-minute AIS budget while lake-wide tracker stays broader",()=>{
   const freighter=read("public/detroit-river-freighters/index.html");
   const api=read("api/freighter-ais.js");
+  const dispatcher=read("api/fall-color.js");
   assert.match(freighter,/10 minutes/);
   assert.match(freighter,/active reported movement/);
   assert.match(freighter,/roughly 12 miles/);
   assert.match(api,/Detroit Outdoors specialist adapter/);
-  assert.match(api,/DETROIT_SIGNAL_MAX_AGE_MS = 10 \* 60 \* 1000/);
+  assert.match(api,/DETROIT_SIGNAL_MAX_AGE_MS = 8 \* 60 \* 1000/);
+  assert.match(api,/publicDecisionMaxAgeMinutes: 10/);
   assert.match(api,/speed > 0\.5/);
   assert.match(api,/data\.detroitSignal/);
   assert.match(api,/s-maxage=10, stale-while-revalidate=10/);
+  assert.match(dispatcher,/s-maxage=60, must-revalidate/);
 });
 
 test("Detroit sunset page preserves evidence limitations",()=>{

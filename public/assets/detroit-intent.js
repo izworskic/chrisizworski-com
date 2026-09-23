@@ -3,13 +3,16 @@ const $=s=>document.querySelector(s);
 const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const intent=document.body.dataset.detroitIntent;
 let loadGeneration=0;
-const minuteBucket=()=>Math.floor(Date.now()/60000);
-const liveUrl=extra=>"/api/detroit-outdoors?intent="+encodeURIComponent(intent)+"&fresh="+minuteBucket()+(extra||"");
+let lastLoadAt=0;
+let lastEditorialSignature="";
+const refreshMs=intent==="freighter"?5*60*1000:10*60*1000;
+const editorialSessionTtlMs=intent==="freighter"?10*60*1000:30*60*1000;
+const liveUrl=extra=>"/api/detroit-outdoors?intent="+encodeURIComponent(intent)+(extra||"");
 const configs={
  freighter:{
   cta:"Open live Great Lakes ship map",
   fallback:"No fresh moving commercial-vessel passage is close enough to Detroit right now.",
-  context:"The Detroit signal now requires a very fresh named commercial-vessel AIS report with active movement. Nearby stopped or crawling vessels do not keep this page pinned after the passage opportunity is gone. The live ship map is still the last check before leaving.",
+  context:"The Detroit signal requires a fresh named commercial-vessel AIS report with active movement. Nearby stopped or crawling vessels do not keep this page pinned after the passage opportunity is gone. The live ship map is still the last check before leaving.",
   editorialTitle:"The ship-watcher read",
   nextTitle:"Use this like a spotter, not a schedule",
   next:["Read the current moving-vessel signal.","Open the live ship map immediately before leaving.","Use the Riverwalk as the viewing corridor only after the live position still makes sense."]
@@ -67,10 +70,7 @@ function renderMetrics(metrics){
 function renderEvidence(candidate){
  const el=$("#intent-evidence");if(!el)return;
  const rows=Array.isArray(candidate&&candidate.verifiedEvidence)?candidate.verifiedEvidence.slice(0,3):[];
- if(!rows.length){
-  el.innerHTML="<li>Live evidence is summarized in the decision card above.</li>";
-  return;
- }
+ if(!rows.length){el.innerHTML="<li>Live evidence is summarized in the decision card above.</li>";return;}
  el.innerHTML=rows.map(row=>{
   const label=esc(row.sourceLabel||row.source||"Verified source");
   const text=esc(row.text||"");
@@ -118,29 +118,68 @@ function timeLabel(iso){
  const date=new Date(iso||"");
  return Number.isFinite(date.getTime())?date.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}):null;
 }
-async function loadEditorial(candidate,generation){
+function fnv1a(value){
+ let hash=2166136261;
+ for(let i=0;i<value.length;i++){hash^=value.charCodeAt(i);hash=Math.imul(hash,16777619);}
+ return (hash>>>0).toString(36);
+}
+function editorialSignature(candidate){
+ if(!candidate)return"none";
+ return fnv1a(JSON.stringify({
+  intent,
+  id:candidate.id,
+  place:candidate.place&&candidate.place.id||null,
+  source:candidate.sourceEngine||null,
+  opportunity:candidate.opportunityType||null,
+  score:Number.isFinite(Number(candidate.score))?Number(candidate.score):null,
+  specialist:candidate.specialist||null,
+  reasons:Array.isArray(candidate.reasons)?candidate.reasons:[],
+  whyNow:candidate.whyNow||null,
+  window:candidate.timeWindow||null,
+  evidence:Array.isArray(candidate.verifiedEvidence)?candidate.verifiedEvidence:[],
+  confidence:candidate.confidence||null
+ }));
+}
+function editorialStorageKey(signature){return"detroit-intent-editorial:"+intent+":"+signature;}
+function readEditorialSession(signature){
+ try{
+  const raw=sessionStorage.getItem(editorialStorageKey(signature));
+  const parsed=JSON.parse(raw||"null");
+  if(!parsed||!parsed.enrichment||Date.now()-Number(parsed.at||0)>editorialSessionTtlMs)return null;
+  return parsed.enrichment;
+ }catch{return null;}
+}
+function writeEditorialSession(signature,enrichment){
+ try{sessionStorage.setItem(editorialStorageKey(signature),JSON.stringify({at:Date.now(),enrichment}));}catch{}
+}
+async function loadEditorial(candidate,generation,signature){
  if(!candidate||!candidate.id)return;
+ const cached=readEditorialSession(signature);
+ if(cached){renderEditorial(cached,candidate);return;}
  setEditorialLoading(candidate);
  try{
-  const url=liveUrl("&mode=editorial&candidateId="+encodeURIComponent(candidate.id));
-  const res=await fetch(url,{headers:{accept:"application/json"},cache:"no-store"});
+  const url=liveUrl("&mode=editorial&candidateId="+encodeURIComponent(candidate.id)+"&editorialSig="+encodeURIComponent(signature));
+  const res=await fetch(url,{headers:{accept:"application/json"}});
   const data=await res.json();
   if(generation!==loadGeneration)return;
-  if(res.status===409){return load();}
+  if(res.status===409){lastLoadAt=0;return load(true);}
   if(!res.ok||!data.ok)throw new Error(data.error||"Editorial unavailable");
+  writeEditorialSession(signature,data.enrichment);
   renderEditorial(data.enrichment,candidate);
  }catch{
   if(generation===loadGeneration)renderEditorial(null,candidate);
  }
 }
-async function load(){
+async function load(force=false){
+ if(!force&&lastLoadAt&&Date.now()-lastLoadAt<refreshMs)return;
  const generation=++loadGeneration;
  const status=$("#intent-status"),title=$("#intent-headline"),copy=$("#intent-copy"),list=$("#intent-reasons"),updated=$("#intent-updated"),primary=$("#intent-primary"),context=$("#intent-context"),editorial=$("#intent-editorial");
  try{
-  const res=await fetch(liveUrl(""),{headers:{accept:"application/json"},cache:"no-store"});
+  const res=await fetch(liveUrl(""),{headers:{accept:"application/json"}});
   const data=await res.json();
   if(generation!==loadGeneration)return;
   if(!res.ok||!data.ok||!data.intent)throw new Error(data.error||"Intent signal unavailable");
+  lastLoadAt=Date.now();
   const signal=data.intent,c=signal.candidate;
   status.textContent=statusLabel(signal.status);status.className="signal-status "+signal.status;
   title.textContent=headline(c);
@@ -158,8 +197,13 @@ async function load(){
   renderWatch(c,signal);
   renderNext();
   if(c){
-    loadEditorial(c,generation);
+    const signature=editorialSignature(c);
+    if(signature!==lastEditorialSignature){
+      lastEditorialSignature=signature;
+      loadEditorial(c,generation,signature);
+    }
   }else if(editorial){
+    lastEditorialSignature="";
     editorial.hidden=true;
   }
  }catch(err){
@@ -178,6 +222,6 @@ document.addEventListener("click",e=>{
   window.gtag("event","detroit_growth_handoff",{intent:intent,destination:a.href,surface:a.id==="intent-primary"?"intent-primary":"intent-related",transport_type:"beacon"});
  }
 });
-document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")load();});
-load();setInterval(load,2*60*1000);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&Date.now()-lastLoadAt>=refreshMs)load();});
+load(true);setInterval(()=>load(),refreshMs);
 })();

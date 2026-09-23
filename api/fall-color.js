@@ -21,6 +21,17 @@ const handlers = {
   "detroit-outdoors": require("../lib/detroit-outdoors/route.js"),
 };
 
+const DETROIT_FREIGHTER_SAFE_CACHE = "public, s-maxage=60, must-revalidate";
+const DETROIT_FOCUSED_CACHE = "public, s-maxage=300, must-revalidate";
+function detroitCachePolicy(req) {
+  const query = new URL(req.url || "/", "https://chrisizworski.com").searchParams;
+  const intent = String((req.query && req.query.intent) || query.get("intent") || "");
+  // Broad board/image/editorial responses can contain AIS, so they get the same
+  // short hard-expiry policy as the focused freighter surface. Explicitly
+  // non-freighter focused pages can use the longer shared cache.
+  return intent && intent !== "freighter" ? DETROIT_FOCUSED_CACHE : DETROIT_FREIGHTER_SAFE_CACHE;
+}
+
 module.exports = async (req, res) => {
   res.setHeader("X-Robots-Tag", "noindex");
   const view = String((req.query && req.query.view) || "conditions");
@@ -28,6 +39,17 @@ module.exports = async (req, res) => {
   if (!handler) {
     res.status(404).json({ error: "unknown view", view: view });
     return;
+  }
+
+  if (view === "detroit-outdoors") {
+    const cachePolicy = detroitCachePolicy(req);
+    const setHeader = res.setHeader.bind(res);
+    res.setHeader = (name, value) => {
+      if (String(name).toLowerCase() === "cache-control" && /s-maxage/i.test(String(value || ""))) {
+        return setHeader(name, cachePolicy);
+      }
+      return setHeader(name, value);
+    };
   }
   return handler(req, res);
 };
