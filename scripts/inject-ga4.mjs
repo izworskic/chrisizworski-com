@@ -66,10 +66,11 @@ async function walk(dir) {
     const needsGa4 = !html.includes(MEASUREMENT_ID);
     const needsAdsense = !/<meta\b[^>]*name=["']google-adsense-account["']/i.test(html);
     const needsAdsenseScript = allowAds && !/<script\b[^>]*src=["'][^"']*pagead\/js\/adsbygoogle\.js\b/i.test(html);
+    const placer = allowAds && !adsenseEligibility.hasPlacer(html) ? adsenseEligibility.placerTag(pathname) : '';
 
     if (!needsGa4) ga4AlreadyTagged += 1;
     if (!needsAdsense) adsenseAlreadyTagged += 1;
-    if (!needsGa4 && !needsAdsense && !needsAdsenseScript && html === originalHtml) continue;
+    if (!needsGa4 && !needsAdsense && !needsAdsenseScript && !placer && html === originalHtml) continue;
 
     if (!/<\/head>/i.test(html)) {
       throw new Error(`Cannot inject site tags: missing </head> in ${path.relative(ROOT, fullPath)}`);
@@ -85,6 +86,7 @@ async function walk(dir) {
       adsenseInjected += 1;
     }
     if (needsAdsenseScript) tags.push(ADSENSE_SCRIPT);
+    if (placer) tags.push(placer);
 
     await writeFile(fullPath, html.replace(/<\/head>/i, `${tags.join('\n')}\n</head>`));
   }

@@ -10,22 +10,17 @@ on merge to `main`. There is no staging step between a merge and real traffic.
 
 Read this file before making any change.
 
-## Display ad pilot (September 20, 2026)
+## Ads: in-article only (September 23, 2026)
 
-Manage slot `1011148508` only through `config/display-ad-experiment.json`.
-`docs/DISPLAY_AD_PILOT.md` lists all three placements, sizes, evidence and removal
-commands. `npm run ads:off` disables the pilot on the next committed deployment.
-Do not scatter this slot into tool HTML or remove the shared AdSense loader to
-turn off this experiment. The build injects these marked blocks last.
-
-## Auto ads are OFF (September 23, 2026)
-
-Chris reported Google Auto ads underlining words as ads and splitting tool cards in
-half. `AUTO_ADS_ENABLED = false` in `lib/adsense-eligibility.js` makes every page
-(static build and proxied tools) load the plain `adsbygoogle.js` with no `?client=`,
-so Google has no account to fetch Auto ads for. Placed units still serve. Do not add
-`?client=` back to any loader or generator; `normalizeAdLoader` rewrites it anyway.
-Flip the constant to true only if Chris asks for Auto ads back.
+Chris asked for Auto ads gone (they underlined words as ads and split cards) and
+for in-article ads placed with care. Auto ads are OFF in the AdSense account and
+every page loads the plain `adsbygoogle.js` with no `?client=` (`lib/adsense-eligibility.js`).
+The only ads are in-article units, slot `8700232579`, placed at runtime by
+`public/assets/in-article-ads.js` and configured only in `config/in-article-ads.json`
+(`enabled`, `maxPerPage`, `excludeRoutes`). See `docs/IN_ARTICLE_ADS.md`.
+Do not paste `<ins class="adsbygoogle">` into pages, re-add `?client=`, or turn Auto ads
+back on. A page can opt out with `<meta name="in-article-ads" content="off">`; a block
+can opt out with `data-no-ads`.
 
 ## 0. Extracted tool repositories are authoritative
 
