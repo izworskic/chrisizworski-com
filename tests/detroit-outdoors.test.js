@@ -1,7 +1,7 @@
 const test=require("node:test");const assert=require("node:assert/strict");const fs=require("node:fs");const path=require("node:path");
 const root=path.resolve(__dirname,"..");const read=p=>fs.readFileSync(path.join(root,p),"utf8");
 
-test("Detroit Outdoors restores the original card-first decision surface",()=>{
+test("Detroit Outdoors keeps the card-first decision surface",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const css=read("public/assets/detroit-outdoors.css");
  assert.match(html,/<title>Things to Do in Detroit Today \| Detroit Outdoors<\/title>/);
@@ -13,7 +13,7 @@ test("Detroit Outdoors restores the original card-first decision surface",()=>{
  assert.match(css,/\.grid\{display:grid;grid-template-columns:repeat\(2/);
  assert.match(css,/\.card\{/);
  assert.match(css,/\.hero\{display:grid/);
- assert.match(css,/\.hero-media\{min-height:280px/);
+ assert.match(css,/\.hero-media\{min-height:275px/);
  assert.doesNotMatch(html,/Newsreader/);
  assert.doesNotMatch(html,/Fraunces/);
 });
@@ -24,7 +24,7 @@ test("Detroit Outdoors keeps cards intelligent while replacing raw product copy 
  assert.match(client,/data\.edition\?\.notes\?\.\[c\.id\]/);
  assert.match(client,/c\.story&&c\.story\.whyToday/);
  assert.match(client,/card-read/);
- assert.match(html,/Each card keeps the conditions visible and links to the deeper check/);
+ assert.match(html,/Each card shows the usable window, travel friction, evidence level and the final source to check before you commit/);
  assert.doesNotMatch(html,/A human read on the signal stack/);
  assert.doesNotMatch(html,/Comparing the live Southeast Michigan signal stack/);
 });
@@ -273,7 +273,7 @@ test("Detroit Outdoors gives Haiku an explicit evidence whitelist and constraine
  assert.match(route,/one concrete place-specific fact/);
  assert.match(route,/one seasonal or specialist fact/);
  assert.match(workflow,/writers\.map\(w=>\(\{id:w\.candidateId,mode:w\.mode,attempt:w\.attempt,treatment:w\.treatment\}\)\)/);
- assert.match(workflow,/detroit-outdoors\.js\?v=20260922f/);
+ assert.match(workflow,/detroit-outdoors\.js\?v=20260924a/);
 });
 
 
@@ -296,7 +296,7 @@ test("Detroit Outdoors client bundle parses as JavaScript",()=>{
 test("Detroit Outdoors cache-busts the live client bundle",()=>{
  const html=read("public/detroit-outdoors/index.html");
  const workflow=read(".github/workflows/detroit-anthropic-smoke.yml");
- assert.match(html,/detroit-outdoors\.js\?v=20260922f/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260924a/);
  assert.match(workflow,/node --check \/tmp\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/assets\/detroit-outdoors\.js/);
  assert.match(workflow,/public\/detroit-outdoors\/index\.html/);
@@ -358,7 +358,6 @@ test("Detroit Outdoors propagates specialist hard vetoes over legacy equivalents
  assert.match(engines,/Required NWS alert feed is unavailable/);
 });
 
-
 test("Detroit Outdoors can surface non-park Riverfront opportunities without changing the card UI",()=>{
  const route=read("lib/detroit-outdoors/route.js");
  const engines=read("lib/detroit-outdoors/engines.js");
@@ -386,7 +385,7 @@ test("Detroit Outdoors uses the most valuable top-line space for the live board,
  assert.doesNotMatch(html,/Weather, active NWS hazards, seasonal timing and specialist checks are compared in the background/);
  const top=html.slice(html.indexOf('<main class="shell">'),html.indexOf('<section class="hero"'));
  assert.doesNotMatch(top,/Built and published by/);
- assert.match(html,/Sources, safety rules, and how the ranking works[\s\S]*Built and published by/);
+ assert.match(html,/Sources, freshness, safety rules, and how the ranking works[\s\S]*Built and published by/);
  assert.match(client,/function renderTopline/);
  assert.match(client,/renderTopline\(data\.opportunities\|\|\[\]\)/);
  assert.match(client,/is on the Detroit River right now/);
@@ -483,7 +482,7 @@ test("Detroit hero image loads independently from board and editorial",()=>{
  assert.match(client,/media\.dataset\.independentImage="1"/);
  assert.match(client,/loadHeroImage\(core\.opportunities\);\s*enrichEditorial\(core\);/);
  assert.match(client,/enriched && media\.dataset\.independentImage!=="1"/);
- assert.match(html,/detroit-outdoors\.js\?v=20260922f/);
+ assert.match(html,/detroit-outdoors\.js\?v=20260924a/);
 });
 
 
