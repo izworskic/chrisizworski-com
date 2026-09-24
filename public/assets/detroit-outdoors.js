@@ -2,6 +2,35 @@
 "use strict";
 const $=s=>document.querySelector(s);
 const esc=v=>String(v==null?"":v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const OBS_PREFIX="detroit-observation:";
+function observe(event,params={},dedupeKey=""){
+ if(typeof window.gtag!=="function")return;
+ if(dedupeKey){
+  const key=OBS_PREFIX+event+":"+dedupeKey;
+  try{if(sessionStorage.getItem(key))return;sessionStorage.setItem(key,"1");}catch{}
+ }
+ window.gtag("event",event,{...params,transport_type:"beacon"});
+}
+function boardSignature(opportunities){
+ return (Array.isArray(opportunities)?opportunities:[]).map(c=>c&&c.id).filter(Boolean).slice(0,4).join("|")||"empty";
+}
+function degradedSourceCount(sourceHealth){
+ const sh=sourceHealth||{};
+ let count=0;
+ if(Number(sh.outdoorsNowPlaces?.ok||0)<Number(sh.outdoorsNowPlaces?.total||6))count++;
+ if(Number(sh.nwsAlerts?.ok||0)<Number(sh.nwsAlerts?.total||6))count++;
+ if(!sh.outdoorsNowOpportunityLayer?.ok)count++;
+ return count;
+}
+function heroRepeat(imageId){
+ if(!imageId)return false;
+ try{
+  const key="detroit-outdoors:last-hero-id";
+  const previous=localStorage.getItem(key)||"";
+  localStorage.setItem(key,imageId);
+  return previous===imageId;
+ }catch{return false;}
+}
 function fmtTime(iso){try{return new Intl.DateTimeFormat("en-US",{timeZone:"America/Detroit",hour:"numeric",minute:"2-digit",month:"short",day:"numeric"}).format(new Date(iso))+" ET";}catch{return "just now";}}
 function chip(label,value,suffix=""){if(value==null)return"";return `<span>${esc(label)} ${esc(value)}${suffix}</span>`;}
 function renderWeather(w){
@@ -164,7 +193,7 @@ function renderCard(c,note,sources,index){
  const reasons=bundle.length>1?"":((c.story&&c.story.whyToday)||c.reasons||[]).slice(0,3).map(r=>`<li>${esc(r)}</li>`).join("");
  const sourceLine=note&&Array.isArray(sources)&&sources.length?`<div class="card-source">Context: ${sources.map(s=>`<a href="${esc(s.url)}" rel="noopener">${esc(s.label)}</a>`).join(" · ")}</div>`:"";
  const metaTitle=bundle.length>1?bundle.length+" live reasons today":c.title;
- return `<article class="card${index===0?" lead-card":""}">
+ return `<article class="card${index===0?" lead-card":""}" data-candidate-id="${esc(c.id)}" data-source-engine="${esc(c.sourceEngine||"")}" data-place-id="${esc(c.place&&c.place.id||"")}">
    <div class="slot">${esc(c.slot)}</div>
    <h3>${esc(c.place.name)}</h3>
    <div class="meta">${esc(c.place.area)} · ${esc(metaTitle)}</div>
@@ -244,9 +273,8 @@ async function requestBoard(url){
 }
 
 async function enrichEditorial(core){
+ const boardIds=(Array.isArray(core&&core.opportunities)?core.opportunities:[]).map(x=>x&&x.id).filter(Boolean).slice(0,4);
  try{
-   const opportunities=Array.isArray(core&&core.opportunities)?core.opportunities:[];
-   const boardIds=opportunities.map(x=>x&&x.id).filter(Boolean).slice(0,4);
    if(!boardIds.length)return;
    const hold=core&&core.decision&&core.decision.boardEditor&&core.decision.boardEditor.posture&&core.decision.boardEditor.posture.choiceId==="QUIET";
    const data=await requestBoard("/api/detroit-outdoors?mode=editorial&boardIds="+encodeURIComponent(boardIds.join(","))+"&hold="+(hold?"1":"0"));
@@ -259,14 +287,26 @@ async function enrichEditorial(core){
      decision:{...(core.decision||{}),editorial:data.decision&&data.decision.editorial||core.decision&&core.decision.editorial}
    };
    renderPayload(merged,true);
+   const writers=Array.isArray(data.decision?.editorial?.cardWriters)?data.decision.editorial.cardWriters:[];
+   observe("detroit_editorial_observation",{
+     board_signature:boardIds.join("|"),
+     editorial_mode:data.decision?.editorial?.mode||"unknown",
+     writer_count:writers.length,
+     accepted_count:writers.filter(w=>w&&w.accepted).length,
+     rejected_count:writers.filter(w=>w&&!w.accepted).length,
+     retry_count:writers.filter(w=>Number(w&&w.attempt||0)>1).length,
+     reassigned_count:writers.filter(w=>w&&w.reassignedFrom).length,
+     note_count:Object.keys(data.edition?.notes||{}).length
+   },String(data.generatedAt||core.generatedAt||"")+":"+boardIds.join("|"));
  }catch(error){
    if($("#writer-mode")) $("#writer-mode").textContent="editorial unavailable · live board remains current";
+   observe("detroit_live_failure",{layer:"editorial",reason:String(error&&error.message||"editorial unavailable").slice(0,100)},boardIds.join("|")+":editorial");
  }
 }
 
 async function loadHeroImage(opportunities){
+ const boardIds=(Array.isArray(opportunities)?opportunities:[]).map(x=>x&&x.id).filter(Boolean).slice(0,4);
  try{
-   const boardIds=(Array.isArray(opportunities)?opportunities:[]).map(x=>x&&x.id).filter(Boolean).slice(0,4);
    if(!boardIds.length)return;
    const data=await requestBoard("/api/detroit-outdoors?mode=image&boardIds="+encodeURIComponent(boardIds.join(",")));
    const media=$("#hero-media");
@@ -276,8 +316,17 @@ async function loadHeroImage(opportunities){
      if($("#hero-credit")) $("#hero-credit").innerHTML='File photo: <a href="'+esc(data.image.creditUrl)+'" rel="noopener">'+esc(data.image.credit)+'</a> · <a href="'+esc(data.image.licenseUrl||data.image.creditUrl)+'" rel="noopener">'+esc(data.image.license)+'</a>';
      media.dataset.independentImage="1";
      media.hidden=false;
+     const imageId=String(data.image.id||data.image.src||"unknown");
+     observe("detroit_hero_observation",{
+       board_signature:boardIds.join("|"),
+       image_id:imageId.slice(0,100),
+       selection_mode:data.decision?.image?.mode||"unknown",
+       pool_size:Array.isArray(data.decision?.image?.pool)?data.decision.image.pool.length:null,
+       repeated_previous:heroRepeat(imageId)?1:0
+     },String(data.generatedAt||"")+":"+boardIds.join("|")+":"+imageId);
    }
  }catch(error){
+   observe("detroit_live_failure",{layer:"hero",reason:String(error&&error.message||"hero unavailable").slice(0,100)},boardIds.join("|")+":hero");
    // The board and editorial remain usable if the hero image selector is unavailable.
  }
 }
@@ -286,6 +335,20 @@ async function load(){
  try{
    const core=await requestBoard("/api/detroit-outdoors?edition=cards-v1&mode=core");
    renderPayload(core,false);
+   const opportunities=Array.isArray(core.opportunities)?core.opportunities:[];
+   const lead=opportunities[0]||null;
+   const signature=boardSignature(opportunities);
+   observe("detroit_board_observation",{
+     board_signature:signature,
+     opportunity_count:opportunities.length,
+     lead_candidate:lead&&lead.id||"none",
+     lead_engine:lead&&lead.sourceEngine||"none",
+     lead_place:lead&&lead.place&&lead.place.id||"none",
+     board_mode:core.decision?.boardEditor?.mode||core.decision?.lead?.mode||"deterministic",
+     verdict:core.verdict?.label||"unknown",
+     suppressed_count:Array.isArray(core.suppressed)?core.suppressed.length:0,
+     degraded_source_count:degradedSourceCount(core.sourceHealth)
+   },String(core.generatedAt||"")+":"+signature);
    loadHeroImage(core.opportunities);
    enrichEditorial(core);
  }catch(error){
@@ -294,16 +357,23 @@ async function load(){
    if($("#updated")) $("#updated").textContent="Live board unavailable";
    if($("#writer-mode")) $("#writer-mode").textContent="unavailable";
    renderSummary([]);
+   observe("detroit_live_failure",{layer:"core",reason:String(error&&error.message||"core unavailable").slice(0,100)},"core:"+Math.floor(Date.now()/(30*60*1000)));
  }
 }
 document.addEventListener("click",function(event){
   const link=event.target.closest("a");
   if(!link)return;
   let url;try{url=new URL(link.href,location.href);}catch{return;}
-  if(typeof window.gtag==="function" && (link.closest(".card") || link.closest(".route-card") || /michiganoutdoorsnow|great-lakes-buoys|northern-lights|michiganbirdingreport|fall-color/.test(url.href))){
+  const card=link.closest(".card");
+  const route=link.closest(".route-card");
+  if(typeof window.gtag==="function" && (card || route || /michiganoutdoorsnow|great-lakes-buoys|northern-lights|michiganbirdingreport|fall-color/.test(url.href))){
     window.gtag("event","detroit_outdoors_handoff",{
       destination:url.hostname.replace(/^www\./,""),
-      surface:link.closest(".card")?"opportunity-card":link.closest(".route-card")?"question-route":"context-link",
+      destination_path:url.pathname,
+      surface:card?"opportunity-card":route?"question-route":"context-link",
+      candidate_id:card&&card.dataset.candidateId||"",
+      source_engine:card&&card.dataset.sourceEngine||"",
+      place_id:card&&card.dataset.placeId||"",
       transport_type:"beacon"
     });
   }

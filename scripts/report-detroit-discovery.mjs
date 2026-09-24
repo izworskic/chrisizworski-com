@@ -5,6 +5,7 @@ import path from 'node:path';
 const root=path.resolve(import.meta.dirname,'..');
 const read=rel=>readFile(path.join(root,rel),'utf8');
 const ledger=JSON.parse(await read('benchmarks/detroit-discovery-observation.json'));
+const growth=JSON.parse(await read('benchmarks/detroit-outdoors-growth.json'));
 const registry=JSON.parse(await read('benchmarks/tool-network-registry.json'));
 const actions=JSON.parse(await read('benchmarks/tool-network-actions.json'));
 const sitemap=await read('public/sitemap.xml');
@@ -20,6 +21,7 @@ const previousComparable=latest
 const pct=n=>Number.isFinite(n)?(n*100).toFixed(2)+'%':'n/a';
 const delta=(a,b)=>Number.isFinite(a)&&Number.isFinite(b)&&b!==0?(a-b)/b:null;
 const sum=(rows,key)=>rows.reduce((n,r)=>n+Number(r?.[key]||0),0);
+const num=value=>value===null||value===undefined||value===''?null:(Number.isFinite(Number(value))?Number(value):null);
 
 function familyFor(query){
   const q=String(query||'').toLowerCase();
@@ -61,15 +63,27 @@ const earliest=observation?.earliestExpansionReview||ledger.earliestExpansionRev
 const today=new Date().toISOString().slice(0,10);
 const reviewOpen=Boolean(earliest&&today>=earliest);
 
+const requiredTelemetry=(growth.events||[]).filter(name=>/^detroit_/.test(name));
+const telemetryContract=ledger.telemetryContract||{};
+const missingTelemetry=requiredTelemetry.filter(name=>!telemetryContract[name]&&!["detroit_network_open"].includes(name));
+
 const pageRows=Object.entries(latest?.detroitCluster?.pages||{}).map(([url,v])=>({url,...v}));
 const positionOpportunities=pageRows.filter(r=>Number(r.impressions||0)>0&&Number(r.position||0)>=4&&Number(r.position||0)<=15);
 const clusterImpressions=Number(latest?.detroitCluster?.impressions ?? sum(pageRows,'impressions'));
 const clusterClicks=Number(latest?.detroitCluster?.clicks ?? sum(pageRows,'clicks'));
 const clusterCtr=clusterImpressions?clusterClicks/clusterImpressions:null;
 const ga4=latest?.ga4||{};
-const exposure=Number.isFinite(Number(ga4.networkExposures))?Number(ga4.networkExposures):null;
-const networkOpens=Number.isFinite(Number(ga4.networkOpens))?Number(ga4.networkOpens):null;
+const exposure=num(ga4.networkExposures);
+const networkOpens=num(ga4.networkOpens);
 const handoffRate=exposure&&networkOpens!==null?networkOpens/exposure:null;
+const editorialAccepted=num(ga4.editorialAccepted);
+const editorialRejected=num(ga4.editorialRejected);
+const editorialReviewed=editorialAccepted!==null||editorialRejected!==null?(editorialAccepted||0)+(editorialRejected||0):null;
+const editorialAcceptanceRate=editorialReviewed?Number(editorialAccepted||0)/editorialReviewed:null;
+const heroSelections=num(ga4.heroSelections);
+const heroRepeats=num(ga4.heroRepeatSelections);
+const heroRepeatRate=heroSelections&&heroRepeats!==null?heroRepeats/heroSelections:null;
+const adsense=latest?.adsense||{};
 
 let status='OBSERVE';
 let reason='The five-page cluster is still inside its first observation window.';
@@ -106,10 +120,29 @@ console.log('New owned families in latest comparable window:',newFamilies);
 console.log('Position 4–15 Detroit opportunities:',positionOpportunities.map(r=>({url:r.url,impressions:r.impressions,position:r.position,ctr:r.ctr})));
 console.log('Unowned/emerging queries:',emergingOther.slice(0,10).map(r=>({query:r.query,impressions:r.impressions,clicks:r.clicks,position:r.position})));
 console.log('Network handoff rate:',handoffRate===null?'not yet loaded':pct(handoffRate));
+console.log('Product observations:',{
+  boardObservations:num(ga4.boardObservations),
+  editorialObservations:num(ga4.editorialObservations),
+  editorialAcceptanceRate:editorialAcceptanceRate===null?'not yet loaded':pct(editorialAcceptanceRate),
+  editorialRetries:num(ga4.editorialRetries),
+  editorialReassignments:num(ga4.editorialReassignments),
+  heroSelections,
+  heroRepeatRate:heroRepeatRate===null?'not yet loaded':pct(heroRepeatRate),
+  intentObservations:num(ga4.intentObservations),
+  intentEditorialObservations:num(ga4.intentEditorialObservations),
+  liveFailures:num(ga4.liveFailures)
+});
+console.log('AdSense observation:',{
+  adImpressions:num(adsense.adImpressions),
+  adClicks:num(adsense.adClicks),
+  estimatedEarnings:num(adsense.estimatedEarnings),
+  pageRpm:num(adsense.pageRpm)
+});
 console.log('Governance checks:',{
   missingRegistry,
   missingSitemap,
   missingLlms,
+  missingTelemetry,
   observationProgram:Boolean(observation)
 });
 
@@ -117,6 +150,7 @@ const fatal=[
   ...missingRegistry.map(x=>'registry:'+x),
   ...missingSitemap.map(x=>'sitemap:'+x),
   ...missingLlms.map(x=>'llms:'+x),
+  ...missingTelemetry.map(x=>'telemetry:'+x),
   ...(!observation?['observation-program:missing']:[])
 ];
 if(process.argv.includes('--check')){

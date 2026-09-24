@@ -1,6 +1,6 @@
 {
   "name": "Detroit discovery pilot observation ledger",
-  "version": "2026-09-22",
+  "version": "2026-09-24",
   "launchDate": "2026-09-21",
   "earliestExpansionReview": "2026-10-19",
   "cluster": [
@@ -72,6 +72,40 @@
       "owner": "detroit-sunset"
     }
   },
+  "telemetryContract": {
+    "detroit_board_observation": {
+      "purpose": "Observe which sealed board actually rendered and whether source coverage was degraded.",
+      "keyParameters": ["board_signature", "lead_candidate", "lead_engine", "lead_place", "board_mode", "verdict", "suppressed_count", "degraded_source_count"]
+    },
+    "detroit_editorial_observation": {
+      "purpose": "Measure whether card writing adds value without hiding retries, rejections or treatment reassignment.",
+      "keyParameters": ["board_signature", "editorial_mode", "writer_count", "accepted_count", "rejected_count", "retry_count", "reassigned_count", "note_count"]
+    },
+    "detroit_hero_observation": {
+      "purpose": "Observe JEV hero selection, pool size and consecutive visitor-side repetition.",
+      "keyParameters": ["board_signature", "image_id", "selection_mode", "pool_size", "repeated_previous"]
+    },
+    "detroit_intent_observation": {
+      "purpose": "Observe live-window, no-window and source-unavailable states on the four focused pages.",
+      "keyParameters": ["intent", "status", "candidate_id", "source_engine", "place_id", "confidence", "score", "metric_count", "rejected_count"]
+    },
+    "detroit_intent_editorial": {
+      "purpose": "Observe focused-page editorial treatment, cache reuse, source count and whether a note survived.",
+      "keyParameters": ["intent", "candidate_id", "source_engine", "treatment", "note_present", "source_count", "reassigned", "cache_hit"]
+    },
+    "detroit_live_failure": {
+      "purpose": "Separate core, editorial, hero and focused-page failures so one degraded layer is not mistaken for a full outage.",
+      "keyParameters": ["layer", "intent", "candidate_id", "reason"]
+    },
+    "detroit_outdoors_handoff": {
+      "purpose": "Measure card, question-route and specialist handoffs from the broad board.",
+      "keyParameters": ["destination", "destination_path", "surface", "candidate_id", "source_engine", "place_id"]
+    },
+    "detroit_growth_handoff": {
+      "purpose": "Measure focused-page onward behavior with candidate context.",
+      "keyParameters": ["intent", "destination_host", "destination_path", "surface", "candidate_id", "source_engine", "status"]
+    }
+  },
   "snapshots": [
     {
       "id": "prelaunch-7d-2026-09-17",
@@ -105,7 +139,25 @@
         "networkOpens": null,
         "focusedHandoffs": null,
         "boardHandoffs": null,
+        "boardObservations": null,
+        "editorialObservations": null,
+        "editorialAccepted": null,
+        "editorialRejected": null,
+        "editorialRetries": null,
+        "editorialReassignments": null,
+        "heroSelections": null,
+        "heroRepeatSelections": null,
+        "intentObservations": null,
+        "intentEditorialObservations": null,
+        "liveFailures": null,
         "note": "GA4 event counts were not available in the prelaunch Search Console export."
+      },
+      "adsense": {
+        "adImpressions": null,
+        "adClicks": null,
+        "estimatedEarnings": null,
+        "pageRpm": null,
+        "note": "AdSense was not part of this prelaunch Search Console snapshot."
       }
     },
     {
@@ -136,7 +188,24 @@
         "networkExposures": null,
         "networkOpens": null,
         "focusedHandoffs": null,
-        "boardHandoffs": null
+        "boardHandoffs": null,
+        "boardObservations": null,
+        "editorialObservations": null,
+        "editorialAccepted": null,
+        "editorialRejected": null,
+        "editorialRetries": null,
+        "editorialReassignments": null,
+        "heroSelections": null,
+        "heroRepeatSelections": null,
+        "intentObservations": null,
+        "intentEditorialObservations": null,
+        "liveFailures": null
+      },
+      "adsense": {
+        "adImpressions": null,
+        "adClicks": null,
+        "estimatedEarnings": null,
+        "pageRpm": null
       }
     }
   ],
@@ -145,6 +214,7 @@
     "A new query family is a discovery signal, not an automatic new-page instruction.",
     "Strengthen the current canonical owner before proposing another Detroit URL.",
     "A new Detroit canonical requires distinct recurring search evidence, useful downstream behavior, and cannibalization-safe ownership.",
-    "Factual, safety, reliability and UX fixes remain allowed during observation."
+    "Factual, safety, reliability, instrumentation and UX fixes remain allowed during observation.",
+    "Observation events must not add paid model calls, extra live-source calls, or browser-location transmission."
   ]
 }
