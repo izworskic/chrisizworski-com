@@ -20,8 +20,8 @@ function usableWindow(p,now){
   const prediction=millis(p.prediction),open=millis(p.windowOpen),close=millis(p.windowClose),expiration=millis(p.expiration);
   if(!Number.isFinite(prediction)||!Number.isFinite(open)||!Number.isFinite(close))return false;
   if(open>close||prediction<open||prediction>close)return false;
-  if(close<now-5*60*1000)return false;
-  if(Number.isFinite(expiration)&&expiration<now-5*60*1000)return false;
+  if(close<now)return false;
+  if(Number.isFinite(expiration)&&expiration<now)return false;
   return true;
 }
 function selectCurrent(predictions,now=Date.now()){
@@ -35,7 +35,7 @@ function selectCurrent(predictions,now=Date.now()){
   return GEYSERS.map(name=>by.get(name.toLowerCase())||{geyserName:name,available:false}).map(p=>p.available===false?p:{...p,available:true});
 }
 function soonest(items,now=Date.now()){
-  return items.filter(x=>x.available).map(x=>({...x,_t:millis(x.windowOpen||x.prediction)})).filter(x=>Number.isFinite(x._t)&&millis(x.windowClose||x.prediction)>=now-5*60*1000).sort((a,b)=>a._t-b._t)[0]||null;
+  return items.filter(x=>x.available).map(x=>({...x,_t:millis(x.windowOpen||x.prediction)})).filter(x=>Number.isFinite(x._t)&&millis(x.windowClose||x.prediction)>=now).sort((a,b)=>a._t-b._t)[0]||null;
 }
 
 module.exports=async function handler(req,res){
