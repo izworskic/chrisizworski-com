@@ -35,15 +35,4 @@ addCanonical({
   label: 'Gatlinburg Winter'
 });
 
-// Blue Ridge Parkway owns one broad visitor decision: which Parkway section is
-// worth driving from this gateway, with this amount of time, under current road
-// and mountain-weather conditions. Gateway variants stay inside the tool.
-addCanonical({
-  url: 'https://chrisizworski.com/blue-ridge-parkway/',
-  lastmod: '2026-09-24',
-  changefreq: 'daily',
-  priority: '0.9',
-  label: 'Blue Ridge Parkway Today'
-});
-
 fs.writeFileSync(file, xml);

@@ -1,4 +1,3 @@
-# Temporary diagnostic capture for PR #517; remove before merge.
 name: Agent branch verification
 
 on:
@@ -23,19 +22,7 @@ jobs:
         with:
           node-version: '22'
       - name: Run full repository gate
-        shell: bash
-        run: |
-          mkdir -p artifacts
-          set -o pipefail
-          npm run verify:all 2>&1 | tee artifacts/verify-all.log
-      - name: Upload full verification log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: verify-all-log
-          path: artifacts/verify-all.log
-          if-no-files-found: error
-          retention-days: 1
+        run: npm run verify:all
       - name: Upload boat launch source audit
         if: always()
         uses: actions/upload-artifact@v4
