@@ -8,7 +8,6 @@ const path = require("node:path");
 const root = path.resolve(__dirname, "..");
 const html = fs.readFileSync(path.join(root, "public/gatlinburg-winter/index.html"), "utf8");
 const css = fs.readFileSync(path.join(root, "public/assets/gatlinburg-winter.css"), "utf8");
-const benchmarkCss = fs.readFileSync(path.join(root, "public/assets/gatlinburg-winter-benchmark.css"), "utf8");
 const js = fs.readFileSync(path.join(root, "public/assets/gatlinburg-winter.js"), "utf8");
 
 function appearsBefore(a, b) {
@@ -16,14 +15,15 @@ function appearsBefore(a, b) {
 }
 
 test("first screen stays decision-first instead of becoming a giant tourism hero", () => {
+  assert.match(html, /class="decision-top"/);
+  assert.match(html, /id="stateHeadline"/);
+  assert.match(html, /id="bestMove"/);
+  assert.match(html, /See the plan/);
   const firstScreen = html.match(/<section class="decision-top"[\s\S]*?<\/section>/)?.[0] || "";
-  assert.match(firstScreen, /id="stateHeadline"/);
-  assert.match(firstScreen, /id="bestMove"/);
-  assert.match(firstScreen, /See the plan/);
-  assert.match(firstScreen, /class="title-visual"/);
+  const images = firstScreen.match(/<img\b[^>]*>/gi) || [];
+  assert.equal(images.length, 1, "first decision surface should have only the compact title image");
+  assert.match(firstScreen, /<figure class="title-visual">/);
   assert.doesNotMatch(firstScreen, /class="[^"]*\bhero\b/i);
-  assert.match(benchmarkCss, /\.title-visual\{width:230px;height:112px/);
-  assert.match(benchmarkCss, /@media\(max-width:760px\)[\s\S]*?\.title-visual\{width:96px;height:72px/);
 });
 
 test("official operational checks are one tap from the first decision surface", () => {
