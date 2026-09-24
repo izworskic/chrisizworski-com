@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "researched": "2026-09-24",
+  "scale": "0-5 internal product rubric; not a market-share or company-quality ranking",
+  "dimensions": [
+    "immediateAnswer",
+    "liveEvidence",
+    "activityFit",
+    "localSpecificity",
+    "bestWindow",
+    "travelFriction",
+    "safetyUncertainty",
+    "sourceTransparency",
+    "specialistDepth",
+    "mobileScannability"
+  ],
+  "comparators": [
+    {"name":"AllTrails","scores":[4,4,5,2,3,4,4,4,5,5],"total":40,"url":"https://www.alltrails.com/"},
+    {"name":"Windy","scores":[3,5,3,2,5,2,5,5,5,5],"total":40,"url":"https://www.windy.com/menu"},
+    {"name":"MarineTraffic","scores":[4,5,5,4,4,2,4,5,5,5],"total":43,"url":"https://support.marinetraffic.com/en/articles/9552656-vessels"},
+    {"name":"eBird","scores":[3,5,5,4,3,4,3,5,5,4],"total":41,"url":"https://support.ebird.org/en/support/solutions/articles/48001280356"},
+    {"name":"Detroit tourism and riverfront","scores":[3,2,4,5,2,5,4,4,4,5],"total":38,"url":"https://www.detroitriverfront.org/plan-your-visit/visitor-info/visitor-info"},
+    {"name":"Best-window planning class","scores":[5,4,5,2,5,4,4,4,4,5],"total":42,"url":"https://bouldi.app/features"}
+  ],
+  "releaseTarget": {
+    "minimumTotal": 48,
+    "criticalDimensions": ["immediateAnswer","liveEvidence","bestWindow","travelFriction","safetyUncertainty","specialistDepth"],
+    "minimumCriticalScore": 5,
+    "rule": "Combine the strongest benchmark behaviors without copying their layout or weakening deterministic truth gates."
+  },
+  "implementationContract": {
+    "atAGlance": ["lead","best window","drive","confidence"],
+    "cardFacts": ["best window","drive","confidence","conditions","why this matters","final check"],
+    "leadCardDominance": true,
+    "focusedRoutes": ["freighters","birding","Lake St. Clair water","sunset"],
+    "scoreIsSecondary": true,
+    "deterministicSafetyUnchanged": true,
+    "jevClosedSetUnchanged": true,
+    "writerCannotInventFacts": true
+  }
+}
