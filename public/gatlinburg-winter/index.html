@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gatlinburg Winter Planner 2026-27 | Chris Izworski</title>
+<meta name="description" content="Live Gatlinburg winter planner using weather, Winter Magic dates, park closures and attraction status to build a realistic day or evening plan.">
+<link rel="canonical" href="https://chrisizworski.com/gatlinburg-winter/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="in-article-ads" content="off">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Gatlinburg Winter Planner 2026-27">
+<meta property="og:description" content="A live Gatlinburg winter decision planner built around your date, time, conditions and priorities.">
+<meta property="og:url" content="https://chrisizworski.com/gatlinburg-winter/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="/assets/gatlinburg-winter.css">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"Person",
+      "@id":"https://chrisizworski.com/#person",
+      "name":"Chris Izworski",
+      "url":"https://chrisizworski.com/"
+    },
+    {
+      "@type":"WebApplication",
+      "@id":"https://chrisizworski.com/gatlinburg-winter/#app",
+      "name":"Gatlinburg Winter Planner",
+      "url":"https://chrisizworski.com/gatlinburg-winter/",
+      "applicationCategory":"TravelApplication",
+      "operatingSystem":"Any",
+      "description":"A live winter decision planner for Gatlinburg, Tennessee that combines weather, daylight, seasonal events, park closures and a controlled attraction set into a realistic visit plan.",
+      "author":{"@id":"https://chrisizworski.com/#person"},
+      "publisher":{"@id":"https://chrisizworski.com/#person"}
+    },
+    {
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},
+        {"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},
+        {"@type":"ListItem","position":3,"name":"Gatlinburg Winter","item":"https://chrisizworski.com/gatlinburg-winter/"}
+      ]
+    },
+    {
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"When is Gatlinburg Winter Magic in 2026-27?","acceptedAnswer":{"@type":"Answer","text":"The published 2026-27 Gatlinburg Winter Magic season runs November 5, 2026 through February 15, 2027. This planner checks the selected date before using Winter Magic in a plan."}},
+        {"@type":"Question","name":"Does this planner show live Gatlinburg weather?","acceptedAnswer":{"@type":"Answer","text":"For dates inside the National Weather Service forecast window, the planner uses current NWS forecast data. Dates farther out are clearly labeled as not yet verifiable rather than filled with fake live weather."}},
+        {"@type":"Question","name":"Does this planner guarantee mountain roads are safe?","acceptedAnswer":{"@type":"Answer","text":"No. It surfaces current official closure and advisory information when available and links to official sources. It does not make road-safety guarantees."}}
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<header class="site-head">
+  <a class="brand" href="/">Chris Izworski</a>
+  <nav aria-label="Primary"><a href="/tools/">Tools</a><a href="/national-tools/">National tools</a></nav>
+</header>
+
+<main>
+  <section class="decision-top" data-no-ads>
+    <div class="title-row">
+      <div>
+        <p class="eyebrow">Seasonal decision desk · Gatlinburg, Tennessee</p>
+        <h1>Gatlinburg Winter</h1>
+        <p id="dateLabel" class="date-line">Loading Gatlinburg time…</p>
+      </div>
+      <span id="liveState" class="state-pill">CHECKING</span>
+    </div>
+
+    <div class="top-read">
+      <div class="verdict">
+        <p class="kicker">Planning read</p>
+        <h2 id="stateHeadline">Winter Magic begins November 5</h2>
+        <p id="bestMove" class="best-move">Choose your visit date and the planner will sequence daylight, lights, weather and the strongest grounded options.</p>
+      </div>
+      <dl class="signal-grid">
+        <div><dt>Best overall window</dt><dd id="bestWindow">—</dd></div>
+        <div><dt>Winter Magic</dt><dd id="winterMagic">Nov 5–Feb 15</dd></div>
+        <div><dt>Weather</dt><dd id="weatherRead">Forecast loads when available</dd></div>
+        <div><dt>Downtown snow</dt><dd id="snowRead">Not yet verified</dd></div>
+        <div><dt>Mountain visibility</dt><dd id="visibilityRead">Not yet verified</dd></div>
+        <div><dt>Crowd pressure estimate</dt><dd id="crowdRead">Date dependent</dd></div>
+      </dl>
+    </div>
+    <p id="assumptionNote" class="trust-note" hidden></p>
+  </section>
+
+  <section class="personalize" id="build" data-no-ads>
+    <div class="section-heading compact">
+      <div><p class="eyebrow">Build this around me</p><h2>Tell the planner what matters</h2></div>
+      <span id="refreshState" class="refresh-state" aria-live="polite">Ready</span>
+    </div>
+    <div class="persona-row" id="personaRow" role="group" aria-label="Visit style">
+      <button class="persona active" data-persona="first">First visit</button>
+      <button class="persona" data-persona="family">Family with kids</button>
+      <button class="persona" data-persona="couple">Couple / date</button>
+      <button class="persona" data-persona="christmas">Christmas atmosphere</button>
+      <button class="persona" data-persona="snow">Snow / winter activities</button>
+      <button class="persona" data-persona="attractions">Attractions</button>
+      <button class="persona" data-persona="food-lights">Food + lights</button>
+      <button class="persona" data-persona="budget">Mostly free</button>
+      <button class="persona" data-persona="evening">One evening</button>
+      <button class="persona" data-persona="full-day">Full day</button>
+      <button class="persona" data-persona="multi-day">Multi-day trip</button>
+    </div>
+
+    <div class="core-controls">
+      <label><span>Visit date</span><input id="visitDate" type="date" min="2026-11-01" max="2027-02-28"></label>
+      <label><span>Arrive</span><input id="startTime" type="time" value="14:00"></label>
+      <label><span>Done by</span><input id="endTime" type="time" value="22:00"></label>
+      <button id="buildButton" class="primary-action">Build my visit</button>
+    </div>
+
+    <details class="more-controls">
+      <summary>Fine-tune the visit</summary>
+      <div class="fine-grid">
+        <label><span>Kids' ages</span><input id="kids" inputmode="numeric" placeholder="6, 10" aria-describedby="kidsHelp"><small id="kidsHelp">Comma-separated</small></label>
+        <label><span>Budget</span><select id="budget"><option value="any">Any</option><option value="low">Keep costs down</option><option value="medium">Moderate</option></select></label>
+        <label><span>Crowds</span><select id="crowds"><option value="normal">Normal</option><option value="avoid">Avoid them</option><option value="embrace">Event energy is fine</option></select></label>
+        <label><span>Walking</span><select id="mobility"><option value="normal">Normal</option><option value="low-walk">Less walking</option><option value="stroller">Stroller</option></select></label>
+        <label><span>Weather preference</span><select id="weatherPref"><option value="balanced">Balanced</option><option value="outdoor">Mostly outdoors</option><option value="indoor">Prefer indoors</option></select></label>
+        <label class="check"><input id="mustLights" type="checkbox"><span>Christmas lights are a must</span></label>
+        <label class="check"><input id="mustSnow" type="checkbox"><span>Snow is the priority</span></label>
+      </div>
+    </details>
+  </section>
+
+  <section class="plan-section" id="plan" data-no-ads>
+    <div class="section-heading">
+      <div><p class="eyebrow">Your plan</p><h2 id="planTitle">Building the strongest sequence…</h2></div>
+      <span id="engineBadge" class="engine-badge">Grounded fallback ready</span>
+    </div>
+    <p id="planSummary" class="plan-summary">The planner is checking the finite candidate set, current constraints and official sources.</p>
+    <ol id="timeline" class="timeline" aria-live="polite"></ol>
+    <div class="why-strip">
+      <div><span>Why this plan</span><strong id="whyPlan">Waiting for the decision engine</strong></div>
+      <div><span>Constraint that mattered most</span><strong id="decisiveConstraint">—</strong></div>
+    </div>
+  </section>
+
+  <section class="evidence-section" id="why-answer">
+    <div class="section-heading"><div><p class="eyebrow">What changed the answer</p><h2>Why this sequence won</h2></div></div>
+    <div id="influenceRows" class="condition-rows"></div>
+  </section>
+
+  <section class="evidence-section" id="conditions">
+    <div class="section-heading"><div><p class="eyebrow">Conditions that matter</p><h2>Only the inputs that can change the plan</h2></div></div>
+    <div id="conditionRows" class="condition-rows"></div>
+  </section>
+
+  <section class="evidence-section" id="data-context">
+    <div class="section-heading"><div><p class="eyebrow">Useful supporting data</p><h2>Transit, Smokies monitoring and market scale</h2></div></div>
+    <div id="dataContext" class="condition-rows"></div>
+    <p class="trust-note">Transit registry data supports route awareness; official city service information governs actual trolley operation. AirDNA is market context only and is not treated as a live crowd sensor.</p>
+  </section>
+
+  <section class="events-section" id="events">
+    <div class="section-heading"><div><p class="eyebrow">What's happening</p><h2 id="eventsTitle">Seasonal events on your date</h2></div></div>
+    <div id="eventRows" class="event-rows"><p class="empty-note">The selected date will determine which published events appear here.</p></div>
+  </section>
+
+  <section class="alternatives-section" id="alternatives">
+    <div class="section-heading"><div><p class="eyebrow">Alternatives</p><h2>Different plans that actually fit the clock</h2></div></div>
+    <div id="alternativeRows" class="alternative-rows"></div>
+  </section>
+
+  <section class="map-section" id="mapSection" data-no-ads>
+    <div class="section-heading"><div><p class="eyebrow">Plan geography</p><h2>See how the day moves</h2></div><span class="map-note">Selected stops only</span></div>
+    <div id="routeMap" class="route-map" role="img" aria-label="Map of the selected Gatlinburg winter itinerary"></div>
+    <p class="map-caption">Planning buffers are used between zones. They are not live traffic estimates.</p>
+  </section>
+
+  <section class="change-section" id="changes">
+    <div class="section-heading"><div><p class="eyebrow">What could change</p><h2>Recheck these before you commit</h2></div></div>
+    <ul id="changeList" class="change-list"></ul>
+  </section>
+
+  <section class="sources-section" id="sources">
+    <div class="section-heading"><div><p class="eyebrow">Source freshness</p><h2>Official sources first, context sources second</h2></div></div>
+    <div id="sourceRows" class="source-rows"></div>
+    <p class="trust-note">National Weather Service and National Park Service data outrank inferred planning signals. Attraction operators govern their own hours and ticket status. Secondary sources add context but do not override primary sources.</p>
+  </section>
+
+  <section class="search-context">
+    <h2>Use this for a Gatlinburg winter day, not a generic list</h2>
+    <p>Static travel guides can tell you that Winter Magic, mountain attractions, the aquarium and Great Smoky Mountains National Park exist. This planner is for the next decision: which of those choices still fit your actual date, time window, weather, daylight, closures, budget and group.</p>
+    <p>The published 2026–27 Winter Magic season runs from November 5, 2026 through February 15, 2027. Live weather is only shown when the selected date is inside the available National Weather Service forecast window. Farther-out dates remain useful for seasonal planning without pretending a forecast exists.</p>
+    <div class="context-links"><a href="https://www.gatlinburg.com/events/annual-events/winter-magic/" rel="noopener">Official Winter Magic</a><a href="https://www.nps.gov/grsm/planyourvisit/temproadclose.htm" rel="noopener">Official Smokies closures</a><a href="/tools/">More Chris Izworski tools</a></div>
+  </section>
+</main>
+
+<footer>
+  <span>© 2026 Chris Izworski</span>
+  <span>Built as a grounded seasonal decision tool.</span>
+</footer>
+<script src="/assets/gatlinburg-winter.js" defer></script>
+</body>
+</html>
