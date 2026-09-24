@@ -30,7 +30,8 @@ function windValues(period){return String(period?.windSpeed||'').match(/\d+/g)?.
 function maxWind(period){const nums=windValues(period);return nums.length?Math.max(...nums):null;}
 function completePeriod(period){
   const pop=period?.probabilityOfPrecipitation?.value;
-  return Boolean(String(period?.shortForecast||'').trim())&&Number.isFinite(Number(period?.temperature))&&Number.isFinite(Number(pop))&&Number.isFinite(maxWind(period));
+  const hasPop=pop!==null&&pop!==undefined&&pop!==''&&Number.isFinite(Number(pop));
+  return Boolean(String(period?.shortForecast||'').trim())&&Number.isFinite(Number(period?.temperature))&&hasPop&&Number.isFinite(maxWind(period));
 }
 function weatherAssessment(periods,alerts){
   const slice=Array.isArray(periods)?periods.slice(0,12):[];
