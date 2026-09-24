@@ -4,7 +4,7 @@ const assert=require("node:assert/strict");
 const fs=require("node:fs");
 const path=require("node:path");
 const engine=require("../lib/blue-ridge-parkway/engine.js");
-const {ROUTES}=require("../lib/blue-ridge-parkway/catalog.js");
+const {ROUTES,stopsForRoute}=require("../lib/blue-ridge-parkway/catalog.js");
 const T=engine._test;
 
 const ROAD_HTML=`
@@ -57,6 +57,24 @@ test("fall color is explicitly a modeled seasonal estimate",()=>{
 test("modeled duration includes road time and planned stops",()=>{
   const route=ROUTES.find(r=>r.id==="asheville-graveyard");
   assert.ok(T.modeledDuration(route)>=route.minHours);
+  assert.equal(T.routeMiles(route),76.6);
+});
+
+test("timeline converts a route into field-usable arrival and return times",()=>{
+  const route=ROUTES.find(r=>r.id==="asheville-craggy");
+  const timeline=T.routeTimeline(route,stopsForRoute(route),{startMinutes:540},T.modeledDuration(route));
+  assert.equal(timeline.start,"9:00 AM");
+  assert.match(timeline.returnBy,/AM|PM/);
+  assert.equal(timeline.items.length,2);
+  assert.equal(timeline.items[0].name,"Folk Art Center");
+});
+
+test("view outlook is conservative and explicitly forecast-derived",()=>{
+  const poor=T.viewOutlook({ok:true,precipMax:80,windMax:10,forecast:["Rain"]});
+  assert.equal(poor.label,"Limited");
+  assert.match(poor.detail,/forecast/i);
+  const good=T.viewOutlook({ok:true,precipMax:10,windMax:8,forecast:["Mostly Sunny"]});
+  assert.equal(good.label,"Promising");
 });
 
 test("anti-slop writer gate rejects tourism filler",()=>{
@@ -64,7 +82,7 @@ test("anti-slop writer gate rejects tourism filler",()=>{
   assert.equal(T.writerPasses("Discover a breathtaking hidden gem for the perfect day."),false);
 });
 
-test("crawlable page preserves canonical, entity, first-answer language and SERP limits",()=>{
+test("crawlable page preserves canonical entity, correct Leaflet SRI and first-decision language",()=>{
   const html=fs.readFileSync(path.join(__dirname,"../public/blue-ridge-parkway/index.html"),"utf8");
   const title=(html.match(/<title>(.*?)<\/title>/i)||[])[1]||"";
   const description=(html.match(/<meta name="description" content="([^"]+)"/i)||[])[1]||"";
@@ -72,7 +90,16 @@ test("crawlable page preserves canonical, entity, first-answer language and SERP
   assert.ok(description.length<=158);
   assert.match(html,/https:\/\/chrisizworski\.com\/blue-ridge-parkway\//);
   assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
-  assert.match(html,/Which part of the Parkway is worth driving\?/);
-  assert.match(html,/Fall color, without pretending/);
+  assert.match(html,/Drive the part of the Parkway worth your time\./);
+  assert.match(html,/Which open section should I actually drive\?/);
+  assert.match(html,/sha256-p4NxAoJBhIINfQ3yn5MZJoer0n8ZCkG\/kvUp6v\+S0w=/);
   assert.doesNotMatch(html,/breathtaking|hidden gem|perfect day/i);
+  assert.doesNotMatch(html,/\bJEV\b|Anthropic|AI-powered/i);
+});
+
+test("benchmark document exists and sets a measurable target",()=>{
+  const benchmark=fs.readFileSync(path.join(__dirname,"../docs/blue-ridge-parkway-benchmark.md"),"utf8");
+  assert.match(benchmark,/Value function/);
+  assert.match(benchmark,/Revised Blue Ridge Parkway tool/);
+  assert.match(benchmark,/\*\*98\*\*/);
 });
