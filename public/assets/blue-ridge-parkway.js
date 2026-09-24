@@ -1,201 +1,55 @@
 (()=>{
   "use strict";
-  // The page carries SRI for Leaflet, but load the official stylesheet here as a
-  // browser-safe fallback too. If a future CDN hash changes or markup is stale,
-  // map layout should not silently collapse.
-  if(!document.querySelector('link[data-brp-leaflet-fallback]')){
-    const leafletCss=document.createElement("link");
-    leafletCss.rel="stylesheet";
-    leafletCss.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
-    leafletCss.dataset.brpLeafletFallback="1";
-    document.head.appendChild(leafletCss);
-  }
   const $=id=>document.getElementById(id);
   const esc=value=>String(value==null?"":value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
   const fmtMile=value=>Number.isFinite(Number(value))?`MP ${Number(value).toFixed(Number(value)%1?1:0)}`:"";
-  let map=null,corridorLayer=null,routeLayer=null,markerLayer=null,lastPayload=null;
+  const safeUrl=value=>{try{const u=new URL(String(value),location.origin);return ["http:","https:"].includes(u.protocol)?u.href:"#";}catch{return"#";}};
+  let map=null,corridorLayer=null,markerLayer=null,lastPayload=null;
 
-  function todayParkway(){
-    return new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
-  }
-  function setDefaults(){
-    if($("tripDate")&&!$("tripDate").value)$("tripDate").value=todayParkway();
-  }
-  function selectedInterests(){
-    return [...document.querySelectorAll('input[name="interest"]:checked')].map(el=>el.value).slice(0,4);
-  }
-  function params(){
-    const p=new URLSearchParams({
-      gateway:$("gateway").value,
-      hours:$("hours").value,
-      date:$("tripDate").value||todayParkway(),
-      start:$("startTime").value||"09:00",
-      interests:selectedInterests().join(",")||"scenery"
-    });
-    return p;
-  }
-  function setBusy(busy){
-    const btn=$("buildDrive");
-    if(btn){btn.disabled=busy;btn.textContent=busy?"Checking the Parkway…":"Build my drive";}
-    $("plannerStatus").textContent=busy?"Reading the current NPS road table and mountain forecast…":"";
-  }
-  function weatherLine(weather){
-    if(!weather?.ok)return "Mountain forecast unavailable for this route.";
-    const bits=[];
-    if(Number.isFinite(Number(weather.tempMin))&&Number.isFinite(Number(weather.tempMax)))bits.push(`${weather.tempMin}–${weather.tempMax}°F`);
-    if(Number.isFinite(Number(weather.precipMax)))bits.push(`precipitation up to ${weather.precipMax}%`);
-    if(Number.isFinite(Number(weather.windMax)))bits.push(`wind up to ${weather.windMax} mph`);
-    if(weather.forecast?.length)bits.push(weather.forecast.slice(0,2).join(" / "));
-    return bits.join(" · ")||"NWS hourly forecast loaded.";
-  }
-  function roadBadge(payload,selected){
-    if(!payload.road?.ok)return `<span class="state state-warn">NPS road feed unavailable</span>`;
-    if(selected?.cautions?.length)return `<span class="state state-warn">Road note on this stretch</span>`;
-    return `<span class="state state-good">No hard closure on this route</span>`;
-  }
-  function renderTop(payload){
-    const selected=payload.selected;
-    const strip=$("liveStrip");
-    strip.classList.toggle("warn",!payload.road?.ok||selected?.cautions?.length>0);
-    $("roadUpdate").textContent=payload.road?.ok
-      ? `NPS road table: ${payload.road.updatedLabel||"current update loaded"}`
-      : "NPS road table could not be read — verify before leaving";
-    $("generatedAt").textContent=`Checked ${new Date(payload.generatedAt).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})}`;
-  }
-  function stopCards(stops){
-    return (stops||[]).map((stop,index)=>`<article class="stop-card">
-      <div class="stop-number">${index+1}</div>
-      <div><div class="stop-kicker">${fmtMile(stop.milepost)}${stop.elevationFt?` · ${Number(stop.elevationFt).toLocaleString()} ft`:""}</div>
-      <h3>${esc(stop.name)}</h3><p>${esc(stop.practical)}</p>
-      <div class="stop-time">Plan about ${esc(stop.dwellMinutes)} minutes here.</div></div>
-    </article>`).join("");
-  }
-  function roadNotes(plan){
-    const notes=[];
-    (plan.blocks||[]).forEach(item=>notes.push(`<div class="road-note blocked"><strong>Closed ${fmtMile(item.start)}–${fmtMile(item.end).replace("MP ","")}</strong><span>${esc(item.note)}</span></div>`));
-    (plan.cautions||[]).forEach(item=>notes.push(`<div class="road-note"><strong>${fmtMile(item.start)}–${fmtMile(item.end).replace("MP ","")}</strong><span>${esc(item.note)}</span></div>`));
-    return notes.join("")||`<div class="road-note clear"><strong>No route-specific road note</strong><span>The official NPS road table did not return a hard closure or construction caution across this selected stretch when checked.</span></div>`;
-  }
-  function renderSelected(payload){
+  function todayParkway(){return new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());}
+  function setDefaults(){if($("tripDate")&&!$("tripDate").value)$("tripDate").value=todayParkway();}
+  function selectedInterests(){return [...document.querySelectorAll('input[name="interest"]:checked')].map(el=>el.value).slice(0,4);}
+  function params(){return new URLSearchParams({gateway:$("gateway").value,hours:$("hours").value,date:$("tripDate").value||todayParkway(),start:$("startTime").value||"09:00",interests:selectedInterests().join(",")||"scenery"});}
+  function setBusy(busy){const btn=$("buildDrive");if(btn){btn.disabled=busy;btn.textContent=busy?"Checking the Parkway…":"Build my drive";}$("plannerStatus").textContent=busy?"Reading current road status and mountain weather…":"";}
+  function weatherLine(weather){if(!weather?.ok)return"Mountain forecast unavailable.";const bits=[];if(Number.isFinite(Number(weather.tempMin))&&Number.isFinite(Number(weather.tempMax)))bits.push(`${weather.tempMin}–${weather.tempMax}°F`);if(Number.isFinite(Number(weather.precipMax)))bits.push(`precipitation up to ${weather.precipMax}%`);if(Number.isFinite(Number(weather.windMax)))bits.push(`wind up to ${weather.windMax} mph`);if(weather.forecast?.length)bits.push(weather.forecast.slice(0,2).join(" / "));return bits.join(" · ")||"NWS hourly forecast loaded.";}
+  function roadBadge(payload,plan){if(!payload.road?.ok)return`<span class="state warn">Verify NPS road status</span>`;if(plan?.cautions?.length)return`<span class="state warn">Road note on this stretch</span>`;return`<span class="state good">No hard closure on route</span>`;}
+  function renderTop(payload){const plan=payload.selected,strip=$("liveStrip");strip.classList.toggle("warn",!payload.road?.ok||plan?.cautions?.length>0);$("roadUpdate").textContent=payload.road?.ok?`NPS road table: ${payload.road.updatedLabel||"current update loaded"}`:"NPS road table unavailable — verify before leaving";$("generatedAt").textContent=`Checked ${new Date(payload.generatedAt).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})}`;}
+  function bullets(items){return`<ul class="reason-list">${(items||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;}
+  function renderDecision(payload){
     const plan=payload.selected;
-    if(!plan){
-      $("decision").innerHTML=`<div class="empty-state"><h2>No route available</h2><p>The planner could not form a usable route from the current inputs. Check the official NPS road status before traveling.</p></div>`;
-      return;
-    }
-    const margin=Math.max(0,Number(payload.input.hours)-Number(plan.durationHours)).toFixed(1).replace(".0","");
+    if(!plan){$("decision").innerHTML=`<div class="source-warning"><strong>No usable route was returned.</strong><p>Check the official NPS road table before traveling.</p></div>`;$("whyCard").innerHTML="";$("watchCard").innerHTML="";$("planB").innerHTML="";return;}
     const direction=plan.direction==="northbound"?"North on the Parkway":"South on the Parkway";
     $("decision").innerHTML=`
-      <div class="decision-head">
-        <div>
-          <div class="eyebrow">YOUR DRIVE</div>
-          <h2>${esc(plan.name)}</h2>
-          <p class="decision-route">${esc(direction)} · turn around near ${fmtMile(plan.mileTurn)}</p>
-        </div>
-        <div class="time-box"><strong>${esc(plan.durationHours)} hr</strong><span>modeled outing</span></div>
-      </div>
-      <div class="decision-states">${roadBadge(payload,plan)}<span class="state">${esc(plan.fit)}</span></div>
+      <div class="decision-top"><div><div class="eyebrow">TODAY'S ANSWER</div><h2>${esc(plan.name)}</h2><p class="route-line">${esc(direction)} · turn around near ${fmtMile(plan.mileTurn)}</p></div></div>
+      <div class="fit-badges">${roadBadge(payload,plan)}<span class="state">${esc(plan.fit)}</span><span class="state">View outlook: ${esc(plan.viewOutlook?.label||"unknown")}</span></div>
       <p class="editorial-read">${esc(plan.editorial?.text||plan.character)}</p>
-      <div class="decision-grid">
-        <div><span class="mini-label">TIME MARGIN</span><strong>${margin} hr</strong><small>inside your ${esc(payload.input.hours)}-hour window</small></div>
-        <div><span class="mini-label">MOUNTAIN WEATHER</span><strong>${plan.weather?.ok?"NWS loaded":"Unavailable"}</strong><small>${esc(weatherLine(plan.weather))}</small></div>
-        <div><span class="mini-label">FALL COLOR</span><strong>${esc(plan.foliage?.label||"Not active")}</strong><small>${esc(plan.foliage?.detail||"")}</small></div>
-      </div>
-      <div class="decision-actions">
-        <a class="primary-action" href="${esc(plan.directionsUrl)}" target="_blank" rel="noopener">Open this drive in Google Maps</a>
-        <a href="#route-map">See route map</a><a href="#stops">See the stops</a>
-      </div>`;
-
-    $("roadReality").innerHTML=roadNotes(plan);
-    $("weatherDetail").innerHTML=plan.weather?.ok?`
-      <div class="weather-read"><strong>${esc(weatherLine(plan.weather))}</strong>
-      <p>This is an hourly NWS forecast sampled near a high point on the selected route. It is more useful than using Asheville, Boone or Cherokee weather as a stand-in for the ridge.</p></div>`:
-      `<div class="source-warning"><strong>Route weather is unavailable.</strong><p>The planner is not substituting city weather. Check NPS/NWS conditions before committing to a high-elevation drive.</p></div>`;
-
-    $("foliageDetail").innerHTML=plan.foliage?.active?`
-      <div class="foliage-read"><strong>${esc(plan.foliage.label)}</strong><p>${esc(plan.foliage.detail)}</p>
-      <div class="model-label">Seasonal estimate · ${esc(plan.foliage.basis||"")}</div></div>`:
-      `<div class="foliage-read quiet"><strong>${esc(plan.foliage?.label||"No fall-color estimate")}</strong><p>${esc(plan.foliage?.detail||"Fall color is only modeled during the planning season.")}</p></div>`;
-
-    $("stopsList").innerHTML=stopCards(plan.stops);
+      <div class="stat-grid"><div class="stat"><span>Modeled outing</span><strong>${esc(plan.durationHours)} hr</strong></div><div class="stat"><span>Parkway miles</span><strong>${esc(plan.routeMiles)}</strong></div><div class="stat"><span>Back about</span><strong>${esc(plan.timeline?.returnBy||"—")}</strong></div><div class="stat"><span>Turn point</span><strong>${fmtMile(plan.mileTurn)}</strong></div></div>
+      <div class="decision-actions"><a class="primary-link" href="${esc(safeUrl(plan.directionsUrl))}" target="_blank" rel="noopener">Open route in Google Maps</a><button class="secondary-button" id="sharePlan" type="button">Share plan</button><button class="secondary-button" id="printPlan" type="button">Print</button></div>`;
+    $("whyCard").innerHTML=`<div class="eyebrow">WHY THIS ROUTE</div><h3>It earns the time.</h3>${bullets(plan.why)}`;
+    $("watchCard").innerHTML=`<div class="eyebrow">WHAT CHANGES THE PLAN</div><h3>Watch these before you commit.</h3>${bullets(plan.changeTriggers)}`;
+    const b=payload.planB;
+    $("planB").innerHTML=b?`<div class="eyebrow">PLAN B</div><h3>${esc(b.name)}</h3><p>${esc(b.fallbackReason||b.character)}</p><div class="planb-meta"><span>${esc(b.durationHours)} hr</span><span>${esc(b.routeMiles)} Parkway mi</span><span>${fmtMile(b.mileTurn)}</span></div>`:`<div class="eyebrow">PLAN B</div><h3>No clean fallback in this set.</h3><p>Rebuild with more time or a different gateway if the selected section becomes unusable.</p>`;
+    $("sharePlan")?.addEventListener("click",sharePlan);$("printPlan")?.addEventListener("click",()=>window.print());
   }
-  function renderAlternatives(payload){
-    const items=(payload.alternatives||[]).map(plan=>{
-      const road=plan.blocked?`<span class="alt-state blocked">Blocked</span>`:plan.cautions?.length?`<span class="alt-state caution">Road note</span>`:`<span class="alt-state">Open route</span>`;
-      return `<article class="alt-card ${plan.blocked?"is-blocked":""}">
-        <div class="alt-top"><div><div class="alt-fit">${esc(plan.fit)}</div><h3>${esc(plan.name)}</h3></div>${road}</div>
-        <p>${esc(plan.character)}</p>
-        <div class="alt-meta"><span>${esc(plan.durationHours)} hr</span><span>turn ${fmtMile(plan.mileTurn)}</span><span>${esc(plan.foliage?.active?plan.foliage.label:"seasonal route")}</span></div>
-        ${plan.blocked?`<p class="blocked-explain">An official closure overlaps this drive. It stays visible so you can see why it was not recommended.</p>`:""}
-      </article>`;
-    }).join("");
-    $("alternatives").innerHTML=items||"<p>No additional route candidates were returned.</p>";
+  async function sharePlan(){
+    const plan=lastPayload?.selected;if(!plan)return;const text=`Blue Ridge Parkway: ${plan.name} — about ${plan.durationHours} hr / ${plan.routeMiles} Parkway miles, back about ${plan.timeline?.returnBy||""}.`;
+    try{if(navigator.share){await navigator.share({title:"Blue Ridge Parkway drive",text,url:location.href});return;}await navigator.clipboard.writeText(`${text}\n${location.href}`);const btn=$("sharePlan");if(btn){const old=btn.textContent;btn.textContent="Copied";setTimeout(()=>btn.textContent=old,1400);}}catch(_){/* sharing is optional */}
   }
-  function renderSources(payload){
-    $("sources").innerHTML=(payload.sources||[]).map(source=>`<article class="source-card">
-      <div class="source-top"><strong>${esc(source.name)}</strong><span>${esc(source.status)}</span></div>
-      <p>${esc(source.note)}</p>${source.updated?`<small>${esc(source.updated)}</small>`:""}
-      <a href="${esc(source.url)}" target="_blank" rel="noopener">Open source ↗</a>
-    </article>`).join("");
-    const truth=payload.truth||{};
-    $("method").innerHTML=Object.values(truth).map(text=>`<p>${esc(text)}</p>`).join("");
+  function renderTimeline(payload){const plan=payload.selected;if(!plan)return;$("timelineWindow").textContent=`${plan.timeline?.start||""} → ${plan.timeline?.returnBy||""}`;$("timeline").innerHTML=(plan.timeline?.items||[]).map((item,index)=>`<div class="timeline-item"><div class="timeline-time">${esc(item.arrival)}</div><div class="timeline-node"></div><div class="timeline-copy"><strong>${index+1}. ${esc(item.name)}</strong><div class="timeline-meta">${fmtMile(item.milepost)} · ${item.elevationFt?`${Number(item.elevationFt).toLocaleString()} ft · `:""}${esc(item.dwellMinutes)} min stop</div><p>${esc(item.practical)}</p></div></div>`).join("")||`<div class="source-warning"><strong>No timed stops returned.</strong></div>`;$("timelineReturn").innerHTML=`Leave near <strong>${esc(plan.timeline?.start||"")}</strong> · aim to be back around <strong>${esc(plan.timeline?.returnBy||"")}</strong>. The time is a planning model, not traffic navigation.`;}
+  function renderConditions(payload){const p=payload.selected;if(!p)return;$("weatherCard").innerHTML=p.weather?.ok?`<div class="kicker">MOUNTAIN WEATHER</div><strong>${p.weather.tempMin!=null&&p.weather.tempMax!=null?`${esc(p.weather.tempMin)}–${esc(p.weather.tempMax)}°F`:"NWS loaded"}</strong><p>${esc(weatherLine(p.weather))}</p><div class="model-label">NWS hourly forecast near high terrain</div>`:`<div class="kicker">MOUNTAIN WEATHER</div><strong>Unavailable</strong><p>The tool is not substituting gateway-city weather for the ridge.</p><div class="model-label">Verify before leaving</div>`;
+    $("viewCard").innerHTML=`<div class="kicker">VIEW OUTLOOK</div><strong>${esc(p.viewOutlook?.label||"Unavailable")}</strong><p>${esc(p.viewOutlook?.detail||"No view outlook available.")}</p><div class="model-label">Forecast-derived · not measured visibility</div>`;
+    $("foliageCard").innerHTML=`<div class="kicker">FALL COLOR</div><strong>${esc(p.foliage?.label||"Not active")}</strong><p>${esc(p.foliage?.detail||"")}</p><div class="model-label">${p.foliage?.active?`Seasonal estimate · ${esc(p.foliage.basis||"")}`:"Seasonal model inactive"}</div>`;
   }
-  function ensureMap(){
-    if(map||!window.L)return;
-    map=L.map("parkwayMap",{scrollWheelZoom:false}).setView([35.8,-81.8],6);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:17,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
-    markerLayer=L.layerGroup().addTo(map);
-  }
-  async function drawMap(payload){
-    ensureMap();if(!map)return;
-    markerLayer.clearLayers();if(routeLayer){map.removeLayer(routeLayer);routeLayer=null;}
-    const plan=payload.selected;if(!plan)return;
-    if(!corridorLayer&&payload.parkwayGeoJsonUrl){
-      try{
-        const res=await fetch(payload.parkwayGeoJsonUrl,{headers:{accept:"application/geo+json,application/json"}});
-        if(res.ok){
-          const geo=await res.json();
-          corridorLayer=L.geoJSON(geo,{style:{weight:4,opacity:.45}}).addTo(map);
-        }
-      }catch(_){/* markers remain useful if corridor source fails */}
-    }
-    const points=[[payload.gateway.lat,payload.gateway.lon],...(plan.stops||[]).map(s=>[s.lat,s.lon])];
-    const labels=[payload.gateway.label,...(plan.stops||[]).map(s=>s.name)];
-    points.forEach((point,i)=>L.circleMarker(point,{radius:i===0?7:6,weight:2,fillOpacity:.85}).bindPopup(`<strong>${esc(labels[i])}</strong>`).addTo(markerLayer));
-    if(points.length>1){routeLayer=L.polyline(points,{weight:3,dashArray:"7 7",opacity:.75}).addTo(map);}
-    const group=L.featureGroup([...markerLayer.getLayers(),...(routeLayer?[routeLayer]:[])]);
-    if(group.getLayers().length)map.fitBounds(group.getBounds().pad(.18));
-    setTimeout(()=>map.invalidateSize(),60);
-  }
-  function render(payload){
-    lastPayload=payload;renderTop(payload);renderSelected(payload);renderAlternatives(payload);renderSources(payload);drawMap(payload);
-    $("results").hidden=false;
-    history.replaceState(null,"",`${location.pathname}?${params().toString()}`);
-  }
-  async function build(){
-    setBusy(true);
-    try{
-      const response=await fetch(`/api/blue-ridge-parkway?${params().toString()}`,{headers:{accept:"application/json"}});
-      const payload=await response.json().catch(()=>null);
-      if(!response.ok||!payload?.ok)throw new Error(payload?.detail||payload?.error||`HTTP ${response.status}`);
-      render(payload);$("plannerStatus").textContent="";
-    }catch(error){
-      $("plannerStatus").innerHTML=`<span class="error">Live refresh failed: ${esc(error.message||error)}. Use the official NPS road-status link below before leaving.</span>`;
-      $("results").hidden=false;
-      $("decision").innerHTML=`<div class="source-warning"><strong>The live planner could not refresh.</strong><p>No road or weather fact has been guessed. The official source links below remain available.</p></div>`;
-    }finally{setBusy(false);}
-  }
-  function applyQuery(){
-    const q=new URLSearchParams(location.search);
-    for(const [id,key] of [["gateway","gateway"],["hours","hours"],["tripDate","date"],["startTime","start"]])if(q.get(key)&&$(id))$(id).value=q.get(key);
-    if(q.get("interests")){
-      const set=new Set(q.get("interests").split(","));
-      document.querySelectorAll('input[name="interest"]').forEach(el=>el.checked=set.has(el.value));
-    }
-  }
-  document.addEventListener("DOMContentLoaded",()=>{
-    setDefaults();applyQuery();
-    $("plannerForm")?.addEventListener("submit",event=>{event.preventDefault();build();});
-    document.querySelectorAll(".quick-gateway").forEach(btn=>btn.addEventListener("click",()=>{$("gateway").value=btn.dataset.gateway;build();}));
-    build();
-  });
+  function renderRoad(payload){const p=payload.selected;if(!p)return;const notes=[];(p.blocks||[]).forEach(x=>notes.push(`<div class="road-note blocked"><strong>Closed ${fmtMile(x.start)}–${fmtMile(x.end).replace("MP ","")}</strong><span>${esc(x.note)}</span></div>`));(p.cautions||[]).forEach(x=>notes.push(`<div class="road-note"><strong>${fmtMile(x.start)}–${fmtMile(x.end).replace("MP ","")}</strong><span>${esc(x.note)}</span></div>`));if(!notes.length)notes.push(payload.road?.ok?`<div class="road-note clear"><strong>No route-specific hard closure</strong><span>The current NPS road table did not return a hard closure or construction caution across this selected stretch when checked.</span></div>`:`<div class="road-note blocked"><strong>Road source unavailable</strong><span>Do not assume the section is open. Use the official NPS source below before leaving.</span></div>`);$("roadReality").innerHTML=notes.join("");}
+  function renderAlternatives(payload){$("alternatives").innerHTML=(payload.alternatives||[]).map(p=>`<article class="alt-card ${p.blocked?"blocked":""}"><div class="alt-top"><div><div class="eyebrow">${esc(p.fit)}</div><h3>${esc(p.name)}</h3></div><span class="alt-state ${p.blocked?"blocked":p.cautions?.length?"caution":""}">${p.blocked?"Blocked":p.cautions?.length?"Road note":"Valid route"}</span></div><p>${esc(p.character)}</p><div class="alt-meta"><span>${esc(p.durationHours)} hr</span><span>${esc(p.routeMiles)} mi</span><span>turn ${fmtMile(p.mileTurn)}</span><span>view: ${esc(p.viewOutlook?.label||"unknown")}</span></div>${p.blocked?`<p style="margin-top:8px;color:#8a3f37">An official closure overlaps this drive, so it cannot be selected.</p>`:""}</article>`).join("")||`<div class="source-warning"><strong>No additional route candidates returned.</strong></div>`;}
+  function renderFieldNotes(payload){$("fieldNotes").innerHTML=(payload.fieldNotes||[]).map(n=>`<article class="field-note"><strong>${esc(n.label)}</strong><p>${esc(n.text)} <a href="${esc(safeUrl(n.source))}" target="_blank" rel="noopener">NPS ↗</a></p></article>`).join("");}
+  function renderSources(payload){$("sources").innerHTML=(payload.sources||[]).map(s=>`<article class="source-card"><div class="source-top"><strong>${esc(s.name)}</strong><span>${esc(s.status)}</span></div><p>${esc(s.note)}</p>${s.updated?`<small>${esc(s.updated)}</small>`:""}<a href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener">Open source ↗</a></article>`).join("");$("method").innerHTML=Object.values(payload.truth||{}).map(x=>`<p>${esc(x)}</p>`).join("");}
+  function ensureMap(){if(map||!window.L)return;map=L.map("parkwayMap",{scrollWheelZoom:false,zoomControl:true}).setView([35.8,-81.8],6);L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:17,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);markerLayer=L.layerGroup().addTo(map);}
+  function pin(label,kind="stop"){return L.divIcon({className:"leaflet-div-icon",html:`<div class="number-pin"${kind==="start"?' style="background:#163f50"':""}>${esc(label)}</div>`,iconSize:[28,28],iconAnchor:[14,14],popupAnchor:[0,-14]});}
+  async function drawMap(payload){ensureMap();if(!map)return;markerLayer.clearLayers();const p=payload.selected;if(!p)return;if(!corridorLayer&&payload.parkwayGeoJsonUrl){try{const r=await fetch(payload.parkwayGeoJsonUrl,{headers:{accept:"application/geo+json,application/json"}});if(r.ok){const geo=await r.json();corridorLayer=L.geoJSON(geo,{style:{weight:4,opacity:.38,color:"#2e7251"}}).addTo(map);corridorLayer.bringToBack();}}catch(_){/* selected pins still provide useful orientation */}}
+    const layers=[];const start=L.marker([payload.gateway.lat,payload.gateway.lon],{icon:pin("S","start")}).bindPopup(`<strong>${esc(payload.gateway.label)}</strong><br>Starting gateway`).addTo(markerLayer);layers.push(start);(p.stops||[]).forEach((s,i)=>{const m=L.marker([s.lat,s.lon],{icon:pin(String(i+1))}).bindPopup(`<strong>${esc(s.name)}</strong><br>${fmtMile(s.milepost)} · ${esc(s.dwellMinutes)} min`).addTo(markerLayer);layers.push(m);});if(layers.length){const group=L.featureGroup(layers);map.fitBounds(group.getBounds().pad(.24),{maxZoom:10});}setTimeout(()=>map.invalidateSize(),80);}
+  function render(payload){lastPayload=payload;renderTop(payload);renderDecision(payload);renderTimeline(payload);renderConditions(payload);renderRoad(payload);renderAlternatives(payload);renderFieldNotes(payload);renderSources(payload);$("results").hidden=false;drawMap(payload);history.replaceState(null,"",`${location.pathname}?${params().toString()}`);}
+  async function build(){setBusy(true);try{const response=await fetch(`/api/blue-ridge-parkway?${params().toString()}`,{headers:{accept:"application/json"}}),payload=await response.json().catch(()=>null);if(!response.ok||!payload?.ok)throw new Error(payload?.detail||payload?.error||`HTTP ${response.status}`);render(payload);$("plannerStatus").textContent="";}catch(error){$("plannerStatus").innerHTML=`<span class="error">Live refresh failed: ${esc(error.message||error)}.</span>`;$("results").hidden=false;$("decision").innerHTML=`<div class="source-warning"><strong>The live planner could not refresh.</strong><p>No road or weather fact has been guessed. Use the official NPS road-status source before leaving.</p></div>`;}finally{setBusy(false);}}
+  function applyQuery(){const q=new URLSearchParams(location.search);for(const [id,key] of [["gateway","gateway"],["hours","hours"],["tripDate","date"],["startTime","start"]])if(q.get(key)&&$(id))$(id).value=q.get(key);if(q.get("interests")){const set=new Set(q.get("interests").split(","));document.querySelectorAll('input[name="interest"]').forEach(el=>el.checked=set.has(el.value));}}
+  document.addEventListener("DOMContentLoaded",()=>{setDefaults();applyQuery();$("plannerForm")?.addEventListener("submit",e=>{e.preventDefault();build();});document.querySelectorAll(".quick-gateway").forEach(btn=>btn.addEventListener("click",()=>{$("gateway").value=btn.dataset.gateway;build();}));build();});
 })();
