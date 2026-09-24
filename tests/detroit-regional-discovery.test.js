@@ -12,8 +12,10 @@ test("Detroit regional discovery widens the universe without random rotation",()
   const source=fs.readFileSync(path.join(root,"lib/detroit-outdoors/regional-discovery.js"),"utf8");
   assert.match(source,/api\/discover/);
   assert.match(source,/maxDriveHours:2/);
-  assert.match(source,/MAX_DISCOVERY_PLACES=18/);
-  assert.match(source,/MAX_EVALUATED_PLACES=10/);
+  assert.match(source,/breadth:"regional"/);
+  assert.match(source,/maxResults:MAX_DISCOVERY_PLACES/);
+  assert.match(source,/MAX_DISCOVERY_PLACES=40/);
+  assert.match(source,/MAX_EVALUATED_PLACES=12/);
   assert.doesNotMatch(source,/Math\.random/);
   assert.doesNotMatch(source,/shuffle/i);
 });
