@@ -1,5 +1,15 @@
 (()=>{
   "use strict";
+  // The page carries SRI for Leaflet, but load the official stylesheet here as a
+  // browser-safe fallback too. If a future CDN hash changes or markup is stale,
+  // map layout should not silently collapse.
+  if(!document.querySelector('link[data-brp-leaflet-fallback]')){
+    const leafletCss=document.createElement("link");
+    leafletCss.rel="stylesheet";
+    leafletCss.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+    leafletCss.dataset.brpLeafletFallback="1";
+    document.head.appendChild(leafletCss);
+  }
   const $=id=>document.getElementById(id);
   const esc=value=>String(value==null?"":value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
   const fmtMile=value=>Number.isFinite(Number(value))?`MP ${Number(value).toFixed(Number(value)%1?1:0)}`:"";
