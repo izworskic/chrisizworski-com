@@ -52,7 +52,8 @@ test("nearby dates remain mobile-scannable rather than becoming a long card stac
 
 test("crowd language is explicitly an estimate", () => {
   assert.match(html, /<dt>Crowd pressure estimate<\/dt>/);
-  assert.match(js, /not treated as a live crowd sensor/);
+  assert.match(html, /AirDNA is market context only and is not treated as a live crowd sensor/);
+  assert.match(js, /Not used as a live crowd estimate/);
 });
 
 test("methodology and secondary market context stay below the visitor decision", () => {
