@@ -187,10 +187,21 @@ function renderBundleSignals(c){
    return `<div class="signal-row"><strong>${esc(label)}</strong><p>${esc(detail)}</p></div>`;
  }).join("")}</div>`;
 }
+function fallbackCardNote(c){
+ const direct=String(c&&c.whyNow||"").trim();
+ if(direct)return direct;
+ const storyReasons=Array.isArray(c&&c.story&&c.story.whyToday)?c.story.whyToday:[];
+ const reasons=storyReasons.length?storyReasons:(Array.isArray(c&&c.reasons)?c.reasons:[]);
+ const first=String(reasons.find(Boolean)||"").trim();
+ const place=String(c&&c.place&&c.place.name||"This place").trim();
+ if(first)return `${place} made today's short list because ${first.replace(/[.!?]+$/,"")}. Use the deeper check below before committing.`;
+ return `${place} cleared the current evidence and safety gates strongly enough to make today's short list. Use the live conditions and final source check below before committing.`;
+}
 function renderCard(c,note,sources,index){
  const bundle=Array.isArray(c&&c.bundleSignals)?c.bundleSignals:[];
  const specialist=bundle.length>1?"":c.specialist?`<div class="specialist"><strong>${esc(c.specialist.label)}:</strong> ${esc(c.specialist.headline)}</div>`:"";
  const reasons=bundle.length>1?"":((c.story&&c.story.whyToday)||c.reasons||[]).slice(0,3).map(r=>`<li>${esc(r)}</li>`).join("");
+ const cardNote=String(note||fallbackCardNote(c)).trim();
  const sourceLine=note&&Array.isArray(sources)&&sources.length?`<div class="card-source">Context: ${sources.map(s=>`<a href="${esc(s.url)}" rel="noopener">${esc(s.label)}</a>`).join(" · ")}</div>`:"";
  const metaTitle=bundle.length>1?bundle.length+" live reasons today":c.title;
  return `<article class="card${index===0?" lead-card":""}" data-candidate-id="${esc(c.id)}" data-source-engine="${esc(c.sourceEngine||"")}" data-place-id="${esc(c.place&&c.place.id||"")}">
@@ -201,7 +212,7 @@ function renderCard(c,note,sources,index){
    ${renderDecisionFacts(c)}
    <div class="weather">${renderWeather(c.weather)}</div>
    ${renderBundleSignals(c)}
-   ${note?`<div class="card-read"><span>Why this matters</span><p>${esc(note)}</p>${sourceLine}</div>`:""}
+   <div class="card-read"><span>Why this matters</span><p>${esc(cardNote)}</p>${sourceLine}</div>
    ${reasons?`<ul class="reasons">${reasons}</ul>`:""}
    ${specialist}
    <p class="caveat">${esc(c.caveat)}</p>
