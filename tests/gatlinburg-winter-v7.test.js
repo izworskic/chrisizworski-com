@@ -84,3 +84,24 @@ test("season facts are source backed and avoid pretending they are forecasts", (
   assert.ok(facts.every(x => /^https:\/\//.test(x.sourceUrl)));
   assert.match(facts.find(x => x.label === "Mountain weather").note, /not a forecast substitute/i);
 });
+
+test("look-now links are official and plan-specific", () => {
+  const data = fixture({ input: { date: "2026-12-12", start: "14:00", end: "22:00", persona: "christmas", mustLights: true } });
+  const cards = T.stopFacts(data);
+  const rows = T.buildLookNow(data, cards);
+  assert.ok(rows.some(x => /webcam/i.test(x.sourceLabel)));
+  assert.ok(rows.some(x => /Winter Magic/.test(x.sourceLabel)));
+  assert.ok(rows.some(x => /City parking/.test(x.sourceLabel)));
+  assert.ok(rows.every(x => /^https:\/\//.test(x.sourceUrl)));
+});
+
+test("NPS plans get a separate park conditions look-now link", () => {
+  const data = fixture({
+    itinerary: [
+      { id: "newfound-gap", name: "Newfound Gap scenic drive/view", zone: "nps-newfound-gap", start: "14:00", end: "16:30", durationMinutes: 150, verificationRequired: false, officialUrl: "https://www.nps.gov/grsm/planyourvisit/conditions.htm" },
+      { id: "winter-magic-walk", name: "Winter Magic downtown lights", zone: "downtown-core", start: "17:30", end: "18:45", durationMinutes: 75, verificationRequired: false, officialUrl: "https://www.gatlinburg.com/events/seasonal-events/winter/wintermagic/" }
+    ]
+  });
+  const rows = T.buildLookNow(data, T.stopFacts(data));
+  assert.ok(rows.some(x => /NPS conditions/.test(x.sourceLabel)));
+});
