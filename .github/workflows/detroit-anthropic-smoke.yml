@@ -116,8 +116,7 @@ jobs:
 
             curl -fsS --max-time 20 "https://chrisizworski.com/assets/detroit-outdoors.js?smoke=${EXPECTED_SHA}" -o /tmp/detroit-outdoors.js
             node --check /tmp/detroit-outdoors.js
-            grep -Fq "/assets/detroit-outdoors.js?v=20260922f" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
-
+            grep -Fq "/assets/detroit-outdoors.js?v=20260924a" <(curl -fsS --max-time 20 "https://chrisizworski.com/detroit-outdoors/?smoke=${EXPECTED_SHA}")
             curl -fsS --max-time 20 "https://chrisizworski.com/assets/detroit-intent.js?smoke=${EXPECTED_SHA}" -o /tmp/detroit-intent.js
             node --check /tmp/detroit-intent.js
             grep -Fq 'intent==="freighter"?5*60*1000:10*60*1000' /tmp/detroit-intent.js
