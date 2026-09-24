@@ -12,8 +12,8 @@ permissions:
   contents: read
 
 jobs:
-  source-diagnostic:
-    name: Diagnose source verification
+  diagnostics:
+    name: Diagnose inherited repository failures
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,21 +22,36 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run source verifier
-        id: verify_source
+      - name: Capture failing gates
         shell: bash
         run: |
           set +e
+          npm test > node-tests.log 2>&1
+          echo $? > node-tests.exit
           npm run verify > source-verify.log 2>&1
-          code=$?
-          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          echo $? > source-verify.exit
+          npm run benchmark:beaches > beaches.log 2>&1
+          echo $? > beaches.exit
+          npm run benchmark:winter -- --check > winter.log 2>&1
+          echo $? > winter.exit
           exit 0
-      - name: Upload source verifier output
+      - name: Upload diagnostic output
         uses: actions/upload-artifact@v4
         with:
-          name: source-verify-log
-          path: source-verify.log
+          name: repository-gate-diagnostics
+          path: |
+            node-tests.log
+            node-tests.exit
+            source-verify.log
+            source-verify.exit
+            beaches.log
+            beaches.exit
+            winter.log
+            winter.exit
           retention-days: 1
-      - name: Preserve verifier result
+      - name: Preserve gate status
         shell: bash
-        run: exit "${{ steps.verify_source.outputs.exit_code }}"
+        run: |
+          for f in *.exit; do
+            if [ "$(cat "$f")" != "0" ]; then exit 1; fi
+          done
