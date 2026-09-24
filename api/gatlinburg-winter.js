@@ -1,13 +1,11 @@
 "use strict";
 
-const handler = require("../lib/gatlinburg-winter/route-v7.js");
+const handler = require("../lib/gatlinburg-winter/route-v9.js");
 
-async function gatlinburgWinter(req, res) {
+function gatlinburgWinter(req, res) {
   res.setHeader("X-Robots-Tag", "noindex");
   return handler(req, res);
 }
 
-gatlinburgWinter.buildDecision = handler.buildDecision;
-gatlinburgWinter._test = handler._test;
-
+Object.assign(gatlinburgWinter, handler);
 module.exports = gatlinburgWinter;
