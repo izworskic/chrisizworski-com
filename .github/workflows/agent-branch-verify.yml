@@ -23,7 +23,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Repair stale integrity records
+      - name: Repair stale integrity records and SERP metadata
         shell: bash
         run: |
           node <<'NODE'
@@ -56,12 +56,51 @@ jobs:
             sitemap = sitemap.replace(re, `$1${date}$2`);
           }
           fs.writeFileSync(sitemapPath, sitemap);
+
+          const edits = [
+            ['public/detroit-birding-today/index.html',
+              'Find the strongest Detroit-area birding window today using weather, hazards and seasonal migration context, then check live Michigan bird sightings before you go.',
+              "Find Detroit's strongest birding window today using weather, hazards and seasonal migration context, then check live Michigan bird sightings before you go."],
+            ['public/detroit-outdoors/index.html',
+              'See what’s worth doing outdoors around Detroit today: bird migration, Detroit River freighters, Lake St. Clair water, sunset, fall color and unusually good park windows.',
+              'See what’s worth doing outdoors around Detroit today: freighters, bird migration, Lake St. Clair, sunset, fall color and unusually good park windows.'],
+            ['public/detroit-river-freighters/index.html',
+              'See whether a fresh moving commercial-vessel AIS report creates a Detroit River freighter-watching window now, then verify the live Great Lakes ship map before leaving.',
+              'See whether a fresh moving commercial-vessel AIS report creates a Detroit River freighter-watching window now, then verify the live ship map before leaving.'],
+            ['public/gatlinburg-winter/index.html',
+              'Gatlinburg Winter Planner 2026-27 | Live Itinerary, Weather & Winter Magic',
+              'Gatlinburg Winter Today: Best Plan for Your Visit'],
+            ['public/gatlinburg-winter/index.html',
+              'Plan a Gatlinburg winter visit around your exact date, available time, live weather when verifiable, Winter Magic, park conditions, parking, trolley hours and attraction status.',
+              'Plan a Gatlinburg winter visit around your date, available time, current weather, Winter Magic, park conditions, parking, trolley hours and attractions.'],
+            ['public/synced-national-tools/trail-ridge-road/index.html',
+              'Trail Ridge Road Status Today | RMNP Drive Planner + Alpine Weather',
+              'Trail Ridge Road Today: Open Status & Alpine Weather'],
+            ['public/synced-national-tools/trail-ridge-road/index.html',
+              "Check Trail Ridge Road's current RMNP status, then plan the 48-mile cross-park drive with alpine weather, timed-entry context, stops, elevation guidance and practical trip decisions.",
+              "Check Trail Ridge Road's official NPS status plus high-alpine weather, alerts and practical travel context before driving Rocky Mountain National Park."],
+            ['public/tools/index.html',
+              'Free Michigan and Great Lakes live tools for Soo Locks ships, Mackinac Bridge, beaches, aurora, rivers, ice, border waits, fishing, gardening and trip planning.',
+              'Free Michigan and Great Lakes live tools for ships, Mackinac Bridge, beaches, aurora, rivers, ice, border waits, fishing, gardening and trip planning.'],
+          ];
+          for (const [file, from, to] of edits) {
+            let body = fs.readFileSync(file, 'utf8');
+            if (!body.includes(from)) {
+              if (body.includes(to)) continue;
+              throw new Error(`SERP source string missing in ${file}`);
+            }
+            body = body.split(from).join(to);
+            fs.writeFileSync(file, body);
+          }
           NODE
-          if ! git diff --quiet -- scripts/verify-source.mjs public/sitemap.xml; then
+          if ! git diff --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add scripts/verify-source.mjs public/sitemap.xml
-            git commit -m "Repair stale source audit and sitemap dates"
+            git add scripts/verify-source.mjs public/sitemap.xml \
+              public/detroit-birding-today/index.html public/detroit-outdoors/index.html \
+              public/detroit-river-freighters/index.html public/gatlinburg-winter/index.html \
+              public/synced-national-tools/trail-ridge-road/index.html public/tools/index.html
+            git commit -m "Repair stale integrity records and SERP metadata"
             git push origin HEAD:${GITHUB_HEAD_REF}
           fi
       - name: Run full repository gate
