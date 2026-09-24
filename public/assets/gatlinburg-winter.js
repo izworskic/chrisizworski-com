@@ -335,8 +335,9 @@
 
     const map = window.L.map(host, { scrollWheelZoom: false, zoomControl: true });
     state.map = map;
-    window.L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    window.L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88", {
       maxZoom: 19,
+      subdomains: "abcd",
       attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
     }).addTo(map);
 
