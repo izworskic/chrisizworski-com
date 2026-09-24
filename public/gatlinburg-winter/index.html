@@ -3,14 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Gatlinburg Winter Planner 2026-27 | Chris Izworski</title>
-<meta name="description" content="Live Gatlinburg winter planner using weather, Winter Magic dates, park closures and attraction status to build a realistic day or evening plan.">
+<title>Gatlinburg Winter Planner 2026-27 | Live Itinerary, Weather & Winter Magic</title>
+<meta name="description" content="Plan a Gatlinburg winter visit around your exact date, available time, live weather when verifiable, Winter Magic, park conditions, parking, trolley hours and attraction status.">
 <link rel="canonical" href="https://chrisizworski.com/gatlinburg-winter/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="in-article-ads" content="off">
+<meta name="theme-color" content="#12382f">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Gatlinburg Winter Planner 2026-27">
-<meta property="og:description" content="A live Gatlinburg winter decision planner built around your date, time, conditions and priorities.">
+<meta property="og:description" content="A live Gatlinburg winter decision planner that builds a realistic itinerary, explains the day’s turning points and compares nearby dates.">
 <meta property="og:url" content="https://chrisizworski.com/gatlinburg-winter/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="/assets/gatlinburg-winter.css">
@@ -31,7 +32,7 @@
       "url":"https://chrisizworski.com/gatlinburg-winter/",
       "applicationCategory":"TravelApplication",
       "operatingSystem":"Any",
-      "description":"A live winter decision planner for Gatlinburg, Tennessee that combines weather, daylight, seasonal events, park closures and a controlled attraction set into a realistic visit plan.",
+      "description":"A live winter decision planner for Gatlinburg, Tennessee that combines weather, daylight, seasonal events, park closures, operating status, date intelligence and a controlled attraction set into a realistic visit plan.",
       "author":{"@id":"https://chrisizworski.com/#person"},
       "publisher":{"@id":"https://chrisizworski.com/#person"}
     },
@@ -65,7 +66,7 @@
   <section class="decision-top" data-no-ads>
     <div class="title-row">
       <div>
-        <p class="eyebrow">Seasonal decision desk · Gatlinburg, Tennessee</p>
+        <p class="eyebrow">Winter decision desk · Gatlinburg, Tennessee</p>
         <h1>Gatlinburg Winter</h1>
         <p id="dateLabel" class="date-line">Loading Gatlinburg time…</p>
       </div>
@@ -74,9 +75,13 @@
 
     <div class="top-read">
       <div class="verdict">
-        <p class="kicker">Planning read</p>
+        <p class="kicker">Your visit, right now</p>
         <h2 id="stateHeadline">Winter Magic begins November 5</h2>
         <p id="bestMove" class="best-move">Choose your visit date and the planner will sequence daylight, lights, weather and the strongest grounded options.</p>
+        <div class="verdict-actions">
+          <a class="jump-primary" href="#plan">See the plan</a>
+          <a class="jump-secondary" href="#build">Change the trip</a>
+        </div>
       </div>
       <dl class="signal-grid">
         <div><dt>Best overall window</dt><dd id="bestWindow">—</dd></div>
@@ -86,13 +91,28 @@
         <div><dt>Mountain visibility</dt><dd id="visibilityRead">Not yet verified</dd></div>
         <div><dt>Crowd pressure estimate</dt><dd id="crowdRead">Date dependent</dd></div>
       </dl>
+      <div class="official-checks" aria-label="Official live checks">
+        <a href="https://www.gatlinburg.com/plan/parking/" target="_blank" rel="noopener"><span>Parking</span><strong>Official live info ↗</strong></a>
+        <a href="https://www.gatlinburg.com/things-to-do/trolley/" target="_blank" rel="noopener"><span>Trolley</span><strong>Hours + map ↗</strong></a>
+        <a href="https://www.nps.gov/grsm/learn/photosmultimedia/webcams.htm" target="_blank" rel="noopener"><span>Mountain view</span><strong>NPS webcams ↗</strong></a>
+        <a href="https://www.nps.gov/grsm/planyourvisit/conditions.htm" target="_blank" rel="noopener"><span>Smokies</span><strong>Roads + alerts ↗</strong></a>
+      </div>
     </div>
     <p id="assumptionNote" class="trust-note" hidden></p>
   </section>
 
+  <nav class="journey-nav" aria-label="Gatlinburg winter planner sections" data-no-ads>
+    <a href="#plan">Plan</a>
+    <a href="#visitOperationsSection">Getting around</a>
+    <a href="#decisionClockSection">Decision clock</a>
+    <a href="#dateIntelligenceSection">Compare dates</a>
+    <a href="#conditions">Conditions</a>
+    <a href="#mapSection">Map</a>
+  </nav>
+
   <section class="personalize" id="build" data-no-ads>
     <div class="section-heading compact">
-      <div><p class="eyebrow">Build this around me</p><h2>Tell the planner what matters</h2></div>
+      <div><p class="eyebrow">Make it yours</p><h2>Tell the planner what matters</h2></div>
       <span id="refreshState" class="refresh-state" aria-live="polite">Ready</span>
     </div>
     <div class="persona-row" id="personaRow" role="group" aria-label="Visit style">
@@ -113,7 +133,7 @@
       <label><span>Visit date</span><input id="visitDate" type="date" min="2026-11-01" max="2027-02-28"></label>
       <label><span>Arrive</span><input id="startTime" type="time" value="14:00"></label>
       <label><span>Done by</span><input id="endTime" type="time" value="22:00"></label>
-      <button id="buildButton" class="primary-action">Build my visit</button>
+      <button id="buildButton" class="primary-action">Rebuild my visit</button>
     </div>
 
     <details class="more-controls">
@@ -144,59 +164,64 @@
   </section>
 
   <section class="evidence-section" id="why-answer">
-    <div class="section-heading"><div><p class="eyebrow">What changed the answer</p><h2>Why this sequence won</h2></div></div>
+    <div class="section-heading"><div><p class="eyebrow">What changed the answer</p><h2>The few facts that moved the plan</h2></div></div>
     <div id="influenceRows" class="condition-rows"></div>
   </section>
 
   <section class="evidence-section" id="conditions">
-    <div class="section-heading"><div><p class="eyebrow">Conditions that matter</p><h2>Only the inputs that can change the plan</h2></div></div>
+    <div class="section-heading"><div><p class="eyebrow">Conditions that matter</p><h2>Only inputs that can change what you do</h2></div></div>
     <div id="conditionRows" class="condition-rows"></div>
   </section>
 
-  <section class="evidence-section" id="data-context">
-    <div class="section-heading"><div><p class="eyebrow">Useful supporting data</p><h2>Transit, Smokies monitoring and market scale</h2></div></div>
-    <div id="dataContext" class="condition-rows"></div>
-    <p class="trust-note">Transit registry data supports route awareness; official city service information governs actual trolley operation. AirDNA is market context only and is not treated as a live crowd sensor.</p>
-  </section>
-
   <section class="events-section" id="events">
-    <div class="section-heading"><div><p class="eyebrow">What's happening</p><h2 id="eventsTitle">Seasonal events on your date</h2></div></div>
+    <div class="section-heading"><div><p class="eyebrow">On your date</p><h2 id="eventsTitle">Seasonal events on your date</h2></div></div>
     <div id="eventRows" class="event-rows"><p class="empty-note">The selected date will determine which published events appear here.</p></div>
   </section>
 
   <section class="alternatives-section" id="alternatives">
-    <div class="section-heading"><div><p class="eyebrow">Alternatives</p><h2>Different plans that actually fit the clock</h2></div></div>
+    <div class="section-heading"><div><p class="eyebrow">If you want a different shape</p><h2>Other plans that still fit the clock</h2></div></div>
     <div id="alternativeRows" class="alternative-rows"></div>
   </section>
 
   <section class="map-section" id="mapSection" data-no-ads>
-    <div class="section-heading"><div><p class="eyebrow">Plan geography</p><h2>See how the day moves</h2></div><span class="map-note">Selected stops only</span></div>
+    <div class="section-heading"><div><p class="eyebrow">Plan geography</p><h2>See how the visit moves</h2></div><span class="map-note">Selected stops only</span></div>
     <div id="routeMap" class="route-map" role="img" aria-label="Map of the selected Gatlinburg winter itinerary"></div>
     <p class="map-caption">Planning buffers are used between zones. They are not live traffic estimates.</p>
   </section>
 
   <section class="change-section" id="changes">
-    <div class="section-heading"><div><p class="eyebrow">What could change</p><h2>Recheck these before you commit</h2></div></div>
+    <div class="section-heading"><div><p class="eyebrow">Before you commit</p><h2>Recheck these if your plan is still hours away</h2></div></div>
     <ul id="changeList" class="change-list"></ul>
   </section>
 
   <section class="sources-section" id="sources">
-    <div class="section-heading"><div><p class="eyebrow">Source freshness</p><h2>Official sources first, context sources second</h2></div></div>
+    <div class="section-heading"><div><p class="eyebrow">Trust + freshness</p><h2>Where the answer came from</h2></div></div>
     <div id="sourceRows" class="source-rows"></div>
     <p class="trust-note">National Weather Service and National Park Service data outrank inferred planning signals. Attraction operators govern their own hours and ticket status. Secondary sources add context but do not override primary sources.</p>
   </section>
 
+  <section class="supporting-section" id="data-context">
+    <details class="supporting-data">
+      <summary>Supporting data and methodology</summary>
+      <div class="supporting-data-inner">
+        <p class="supporting-intro">These inputs add context but are intentionally kept below the actual visit decision.</p>
+        <div id="dataContext" class="condition-rows"></div>
+        <p class="trust-note">Transit registry data supports route awareness; official city service information governs actual trolley operation. AirDNA is market context only and is not treated as a live crowd sensor.</p>
+      </div>
+    </details>
+  </section>
+
   <section class="search-context">
-    <h2>Use this for a Gatlinburg winter day, not a generic list</h2>
-    <p>Static travel guides can tell you that Winter Magic, mountain attractions, the aquarium and Great Smoky Mountains National Park exist. This planner is for the next decision: which of those choices still fit your actual date, time window, weather, daylight, closures, budget and group.</p>
-    <p>The published 2026–27 Winter Magic season runs from November 5, 2026 through February 15, 2027. Live weather is only shown when the selected date is inside the available National Weather Service forecast window. Farther-out dates remain useful for seasonal planning without pretending a forecast exists.</p>
-    <div class="context-links"><a href="https://www.gatlinburg.com/events/annual-events/winter-magic/" rel="noopener">Official Winter Magic</a><a href="https://www.nps.gov/grsm/planyourvisit/temproadclose.htm" rel="noopener">Official Smokies closures</a><a href="/tools/">More Chris Izworski tools</a></div>
+    <div><span class="context-number">01</span><strong>Live only when verifiable</strong><p>Forecasts and operating status are not fabricated for future dates.</p></div>
+    <div><span class="context-number">02</span><strong>Complete schedules only</strong><p>JEV chooses among plans that already fit your clock.</p></div>
+    <div><span class="context-number">03</span><strong>Official sources first</strong><p>NWS, NPS, city and operator data outrank planning estimates.</p></div>
+    <div class="context-links"><a href="https://www.gatlinburg.com/events/seasonal-events/winter/wintermagic/" rel="noopener">Winter Magic ↗</a><a href="https://www.nps.gov/grsm/planyourvisit/conditions.htm" rel="noopener">Smokies conditions ↗</a><a href="/tools/">More decision tools</a></div>
   </section>
 </main>
 
 <footer>
   <span>© 2026 Chris Izworski</span>
-  <span>Built as a grounded seasonal decision tool.</span>
+  <span>Grounded winter planning for one real visit at a time.</span>
 </footer>
 <script src="/assets/gatlinburg-winter.js" defer></script>
 </body>
