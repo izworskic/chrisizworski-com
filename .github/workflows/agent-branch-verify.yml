@@ -12,8 +12,7 @@ permissions:
   contents: read
 
 jobs:
-  diagnostics:
-    name: Diagnose inherited repository failures
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,36 +21,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Capture failing gates
-        shell: bash
-        run: |
-          set +e
-          npm test > node-tests.log 2>&1
-          echo $? > node-tests.exit
-          npm run verify > source-verify.log 2>&1
-          echo $? > source-verify.exit
-          npm run benchmark:beaches > beaches.log 2>&1
-          echo $? > beaches.exit
-          npm run benchmark:winter -- --check > winter.log 2>&1
-          echo $? > winter.exit
-          exit 0
-      - name: Upload diagnostic output
+      - name: Run full repository gate
+        run: npm run verify:all
+      - name: Upload boat launch source audit
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: repository-gate-diagnostics
-          path: |
-            node-tests.log
-            node-tests.exit
-            source-verify.log
-            source-verify.exit
-            beaches.log
-            beaches.exit
-            winter.log
-            winter.exit
-          retention-days: 1
-      - name: Preserve gate status
-        shell: bash
-        run: |
-          for f in *.exit; do
-            if [ "$(cat "$f")" != "0" ]; then exit 1; fi
-          done
+          name: boat-launch-source-audit
+          path: artifacts/boat-launch-source-audit.json
+          if-no-files-found: ignore
+          retention-days: 7
