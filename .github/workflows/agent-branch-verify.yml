@@ -22,19 +22,7 @@ jobs:
         with:
           node-version: '22'
       - name: Run full repository gate
-        shell: bash
-        run: |
-          set -o pipefail
-          npm run verify:all 2>&1 | tee verify-all.log
-          exit ${PIPESTATUS[0]}
-      - name: Upload verify output
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: verify-all-output
-          path: verify-all.log
-          if-no-files-found: error
-          retention-days: 1
+        run: npm run verify:all
       - name: Upload boat launch source audit
         if: always()
         uses: actions/upload-artifact@v4
