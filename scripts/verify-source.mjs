@@ -26,6 +26,9 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Sep 23 2026: Mackinac discovery resync added the existing live planner handoff.
+  // Re-crawl after production release, then remove this declaration.
+  "/fall-color/mackinac-island-fall-color/",
   // Sep 21: Mackinac destination UX rebuild. One shared My Trip intake now owns
   // profile + practical trip state and downstream pages inherit that context.
   "/mackinac-island/",
