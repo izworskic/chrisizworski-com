@@ -137,7 +137,7 @@ test("13 hard benchmark invariants preserve truth and the JEV closed-set boundar
   assert.equal(T.normalizeInput({gateway:"bogus",hours:99,start:"99:99",interests:"bogus"}).gateway,"asheville","8 invalid gateway normalizes safely");
   assert.equal(T.normalizeInput({hours:99}).hours,8,"9 requested time is bounded");
   assert.ok(T.routeMiles(craggy)>0&&T.modeledDuration(craggy)>=craggy.minHours,"10 geometry and dwell produce a positive conservative duration");
-  assert.match(source,/const feasible=all\.filter\(x=>!x\.road\.blocked&&x\.durationHours<=input\.hours\+\.3\)/,"11 feasible pool excludes blocked and materially overlong routes");
+  assert.match(source,/feasible=all\.filter\(x=>!x\.road\.blocked&&x\.durationHours<=input\.hours\+\.3\)/,"11 feasible pool excludes blocked and materially overlong routes");
   assert.match(source,/Object\.fromEntries\(feasible\.slice\(0,4\)/,"12 JEV receives only the already-feasible finite option set");
   assert.match(source,/chosen=feasible\.find\(x=>x\.route\.id===jev\.choiceId\)\|\|fallback/,"13 an out-of-set JEV choice falls back instead of inventing a route");
 });
