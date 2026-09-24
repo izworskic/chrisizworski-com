@@ -13,8 +13,11 @@
 <meta property="og:title" content="Gatlinburg Winter Planner 2026-27">
 <meta property="og:description" content="A live Gatlinburg winter decision planner that builds a realistic itinerary, explains the day’s turning points and compares nearby dates.">
 <meta property="og:url" content="https://chrisizworski.com/gatlinburg-winter/">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/3/32/Gatlinburg%2C_Tennessee_at_night_2022_11_22.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3yn5pckbMZsD8UF9N1GZbMZl4J93A=" crossorigin="">
 <link rel="stylesheet" href="/assets/gatlinburg-winter.css">
+<link rel="stylesheet" href="/assets/gatlinburg-winter-benchmark.css">
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -65,12 +68,16 @@
 <main>
   <section class="decision-top" data-no-ads>
     <div class="title-row">
-      <div>
+      <div class="title-copy">
         <p class="eyebrow">Winter decision desk · Gatlinburg, Tennessee</p>
         <h1>Gatlinburg Winter</h1>
         <p id="dateLabel" class="date-line">Loading Gatlinburg time…</p>
       </div>
-      <span id="liveState" class="state-pill">CHECKING</span>
+      <figure class="title-visual">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/32/Gatlinburg%2C_Tennessee_at_night_2022_11_22.jpg" alt="Downtown Gatlinburg illuminated at night in late November" loading="eager" fetchpriority="high">
+        <span id="liveState" class="state-pill">CHECKING</span>
+        <figcaption><a href="https://commons.wikimedia.org/wiki/File:Gatlinburg,_Tennessee_at_night_2022_11_22.jpg" target="_blank" rel="noopener">Sarrail · CC BY-SA 4.0</a></figcaption>
+      </figure>
     </div>
 
     <div class="top-read">
@@ -97,6 +104,14 @@
         <a href="https://www.nps.gov/grsm/learn/photosmultimedia/webcams.htm" target="_blank" rel="noopener"><span>Mountain view</span><strong>NPS webcams ↗</strong></a>
         <a href="https://www.nps.gov/grsm/planyourvisit/conditions.htm" target="_blank" rel="noopener"><span>Smokies</span><strong>Roads + alerts ↗</strong></a>
       </div>
+      <div id="visitSnapshot" class="snapshot-strip" aria-live="polite">
+        <div><span>Plan</span><strong id="snapStops">Building…</strong></div>
+        <div><span>Time</span><strong id="snapTime">—</strong></div>
+        <div><span>Spend</span><strong id="snapSpend">—</strong></div>
+        <div><span>Walking</span><strong id="snapWalk">—</strong></div>
+        <div><span>Execution</span><strong id="snapRoute">—</strong></div>
+        <div><span>Before committing</span><strong id="snapVerify">—</strong></div>
+      </div>
     </div>
     <p id="assumptionNote" class="trust-note" hidden></p>
   </section>
@@ -106,6 +121,7 @@
     <a href="#visitOperationsSection">Getting around</a>
     <a href="#decisionClockSection">Decision clock</a>
     <a href="#dateIntelligenceSection">Compare dates</a>
+    <a href="#commit">Before you go</a>
     <a href="#conditions">Conditions</a>
     <a href="#mapSection">Map</a>
   </nav>
@@ -163,6 +179,11 @@
     </div>
   </section>
 
+  <section class="commit-section" id="commit" data-no-ads>
+    <div class="section-heading"><div><p class="eyebrow">Before you go</p><h2>What is checked — and what still needs a recheck</h2></div></div>
+    <div id="commitRows" class="commit-rows"><p class="empty-note">Building the commit checklist…</p></div>
+  </section>
+
   <section class="evidence-section" id="why-answer">
     <div class="section-heading"><div><p class="eyebrow">What changed the answer</p><h2>The few facts that moved the plan</h2></div></div>
     <div id="influenceRows" class="condition-rows"></div>
@@ -185,8 +206,8 @@
 
   <section class="map-section" id="mapSection" data-no-ads>
     <div class="section-heading"><div><p class="eyebrow">Plan geography</p><h2>See how the visit moves</h2></div><span class="map-note">Selected stops only</span></div>
-    <div id="routeMap" class="route-map" role="img" aria-label="Map of the selected Gatlinburg winter itinerary"></div>
-    <p class="map-caption">Planning buffers are used between zones. They are not live traffic estimates.</p>
+    <div id="routeMap" class="route-map" role="region" aria-label="Interactive map of the selected Gatlinburg winter itinerary"></div>
+    <p class="map-caption">Numbered markers follow your itinerary. Planning buffers are not live traffic estimates. Basemap © OpenStreetMap contributors, © CARTO.</p>
   </section>
 
   <section class="change-section" id="changes">
@@ -223,6 +244,7 @@
   <span>© 2026 Chris Izworski</span>
   <span>Grounded winter planning for one real visit at a time.</span>
 </footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
 <script src="/assets/gatlinburg-winter.js" defer></script>
 </body>
 </html>
