@@ -22,16 +22,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run source verifier and expose failure
+      - name: Run source verifier
+        id: verify_source
         shell: bash
         run: |
           set +e
-          npm run verify > /tmp/source-verify.log 2>&1
+          npm run verify > source-verify.log 2>&1
           code=$?
-          while IFS= read -r line; do
-            safe=${line//'%'/'%25'}
-            safe=${safe//$'\r'/'%0D'}
-            safe=${safe//$'\n'/'%0A'}
-            echo "::error title=source-verify::$safe"
-          done < <(tail -n 45 /tmp/source-verify.log)
-          exit "$code"
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Upload source verifier output
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-verify-log
+          path: source-verify.log
+          retention-days: 1
+      - name: Preserve verifier result
+        shell: bash
+        run: exit "${{ steps.verify_source.outputs.exit_code }}"
