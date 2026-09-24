@@ -49,6 +49,7 @@
       ["#plan","Your plan"],
       ["#stopFactsSection","Stop details"],
       ["#dateIntelligenceSection","Compare dates"],
+      ["#lookNowSection","Look now"],
       ["#mapSection","Map"],
       ["#commitSection","Before you go"]
     ].map(([href,label]) => `<a href="${href}">${label}</a>`).join("");
@@ -111,6 +112,26 @@
       </article>`).join("") : '<p class="empty-note">No selected stops are available to expand yet.</p>';
   }
 
+  function renderLookNow(data) {
+    const map = document.getElementById("mapSection");
+    const plan = document.getElementById("plan");
+    if ((!map && !plan) || !Array.isArray(data.lookNow) || !data.lookNow.length) return;
+    const section = ensure(
+      "lookNowSection",
+      '<div class="look-now-shell"><div class="section-heading"><div><p class="eyebrow">Look now</p><h2>Four checks worth opening before you commit</h2></div><span class="map-note">Official sources</span></div><div id="lookNowGrid" class="look-now-grid"></div></div>',
+      map || plan,
+      map ? "beforebegin" : "afterend"
+    );
+    const host = section.querySelector("#lookNowGrid");
+    host.innerHTML = data.lookNow.map(row => `
+      <a class="look-now-item" href="${esc(row.sourceUrl)}" target="_blank" rel="noopener">
+        <span>${esc(row.sourceLabel)}</span>
+        <strong>${esc(row.label)}</strong>
+        <small>${esc(row.note)}</small>
+        <b>Open ↗</b>
+      </a>`).join("");
+  }
+
   function renderCommit(data) {
     const changes = document.getElementById("changes");
     if (!changes || !Array.isArray(data.commitChecks)) return;
@@ -146,7 +167,7 @@
         </div>
         <ul class="benchmark-static-list">
           <li><strong>Winter Magic</strong>Use the official self-guided map and snowpeople scavenger hunt if you want to extend the lights portion after the core itinerary. <a href="https://www.gatlinburg.com/events/seasonal-events/winter/wintermagic/" target="_blank" rel="noopener">Official page ↗</a></li>
-          <li><strong>Downtown parking</strong>City garage availability belongs to the city, not this planner. Check the live city source before entering the core. <a href="https://www.gatlinburgtn.gov/documents/departments/parking/479808" target="_blank" rel="noopener">City parking ↗</a></li>
+          <li><strong>Downtown parking</strong>Visit Gatlinburg links to the City of Gatlinburg's live parking information. Check that city source before entering the core. <a href="https://www.gatlinburgtn.gov/page/parking" target="_blank" rel="noopener">City parking ↗</a></li>
           <li><strong>Smokies parking tag</strong>A parking tag is required for vehicles parked longer than 15 minutes in Great Smoky Mountains National Park. <a href="https://www.nps.gov/grsm/planyourvisit/fees.htm" target="_blank" rel="noopener">NPS parking tags ↗</a></li>
           <li><strong>Winter trolley</strong>General winter service is published for 10:30 AM–10:00 PM from November 1–April 30; route/event service can vary. <a href="https://www.gatlinburg.com/things-to-do/trolley/" target="_blank" rel="noopener">Official trolley ↗</a></li>
         </ul>
@@ -159,6 +180,7 @@
     renderSeasonFacts(data);
     renderBrief(data);
     renderStopFacts(data);
+    renderLookNow(data);
     renderCommit(data);
     renderStaticGuide();
   }
