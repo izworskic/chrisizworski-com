@@ -1,6 +1,6 @@
 {
   "name": "Detroit Outdoors AdSense growth benchmark",
-  "version": "2026-09-22",
+  "version": "2026-09-24",
   "purpose": "Measure whether Detroit Outdoors grows monetizable discovery and useful onward clicks without increasing intrusive in-page ad density.",
   "currentScore": 46,
   "targetScore": 81,
@@ -40,14 +40,33 @@
     "detroit_outdoors_handoff",
     "detroit_growth_handoff",
     "detroit_network_open",
+    "detroit_board_observation",
+    "detroit_editorial_observation",
+    "detroit_hero_observation",
+    "detroit_intent_observation",
+    "detroit_intent_editorial",
+    "detroit_live_failure",
     "Tool Open"
+  ],
+  "observationQuestions": [
+    "Which candidate and source engine most often become the Detroit board lead?",
+    "How often does JEV use shared-harness decisions versus deterministic fallback?",
+    "How often do Haiku card drafts survive review, require retries, or require treatment reassignment?",
+    "Does the selected hero repeat across consecutive visitor sessions despite server-side image-history controls?",
+    "Which board cards and focused pages produce specialist-tool handoffs?",
+    "How often do core, editorial, hero, or focused live layers fail independently?",
+    "Do focused pages receive a live candidate, a no-window answer, or a source-unavailable answer?",
+    "Do Search Console impressions and CTR grow without adding another Detroit canonical before the review gate?",
+    "Do AdSense impressions and earnings rise without restoring intrusive in-page auto ads?"
   ],
   "guardrails": [
     "Do not restore intrusive in-page auto ads solely to increase impression count.",
     "Intent pages must use the same deterministic safety gates as Detroit Outdoors.",
     "No intent page may claim a live sighting, vessel passage, water clearance, sunset color, or other condition not supported by its evidence.",
     "Measure search landing traffic separately from internal network traffic.",
-    "Prefer useful second-page clicks over additional ad units on the first screen."
+    "Prefer useful second-page clicks over additional ad units on the first screen.",
+    "Observation telemetry must not add JEV, Haiku, AIS, weather, or other paid/live-data calls.",
+    "Do not transmit browser geolocation through Detroit observation events."
   ],
   "approval": {
     "approvedBy": "Chris Izworski",

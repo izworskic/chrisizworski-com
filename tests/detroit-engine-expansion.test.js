@@ -143,7 +143,7 @@ test("Detroit browser renders a core board before editorial enrichment",()=>{
   assert.match(client,/enrichEditorial\(core\)/);
   assert.match(client,/editorial unavailable · live board remains current/);
   assert.ok(client.includes('if($("#writer-mode")) $("#writer-mode").textContent="editorial unavailable · live board remains current";'));
-  assert.match(html,/\/assets\/detroit-outdoors\.js\?v=20260922f/);
+  assert.match(html,/\/assets\/detroit-outdoors\.js\?v=20260924a/);
 });
 
 test("Detroit core mode does not collide with the serverless dispatcher view parameter",()=>{

@@ -1,89 +1,421 @@
 (() => {
   "use strict";
-  const $=id=>document.getElementById(id);
-  const state={persona:"first",generation:0,data:null,usedDefaults:false};
-  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
-  const fmtTime=v=>{if(!/^\d\d:\d\d$/.test(v||""))return v||"—";const [h,m]=v.split(":").map(Number),s=h>=12?"PM":"AM";return `${h%12||12}:${String(m).padStart(2,"0")} ${s}`};
-  function event(name,params={}){try{window.gtag?.("event",name,params)}catch{}}
-  function defaultDate(){const now=new Date();const fmt=new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit"});const today=fmt.format(now);if(today<"2026-11-05")return "2026-11-05";if(today>"2027-02-15")return "2027-02-15";return today}
-  function hydrateUrl(){
-    const q=new URLSearchParams(location.search);
-    state.usedDefaults=!q.has("date")&&!q.has("persona")&&!q.has("start")&&!q.has("end");
-    if(q.get("persona"))state.persona=q.get("persona");
-    $("visitDate").value=q.get("date")||defaultDate();
-    $("startTime").value=q.get("start")||(state.persona==="full-day"?"09:30":"14:00");
-    $("endTime").value=q.get("end")||"22:00";
-    $("kids").value=q.get("kids")||"";
-    $("budget").value=q.get("budget")||"any";
-    $("crowds").value=q.get("crowds")||"normal";
-    $("mobility").value=q.get("mobility")||"normal";
-    $("weatherPref").value=q.get("weather")||"balanced";
-    $("mustLights").checked=q.get("mustLights")==="1";
-    $("mustSnow").checked=q.get("mustSnow")==="1";
-    syncPersona()
+  const $ = id => document.getElementById(id);
+  const state = { persona: "first", generation: 0, data: null, usedDefaults: false, map: null };
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c]));
+  const fmtTime = v => {
+    if (!/^\d\d:\d\d$/.test(v || "")) return v || "—";
+    const [h, m] = v.split(":").map(Number), suffix = h >= 12 ? "PM" : "AM";
+    return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${suffix}`;
+  };
+
+  function event(name, params = {}) { try { window.gtag?.("event", name, params); } catch {} }
+  function defaultDate() {
+    const now = new Date();
+    const fmt = new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" });
+    const today = fmt.format(now);
+    if (today < "2026-11-05") return "2026-11-05";
+    if (today > "2027-02-15") return "2027-02-15";
+    return today;
   }
-  function syncPersona(){document.querySelectorAll(".persona").forEach(b=>b.classList.toggle("active",b.dataset.persona===state.persona));if(state.persona==="budget")$("budget").value="low";if(state.persona==="christmas"||state.persona==="food-lights")$("mustLights").checked=true;if(state.persona==="snow")$("mustSnow").checked=true;if(state.persona==="family"&&!$("kids").value)$("kids").value="6, 10";if(state.persona==="evening"){if($("startTime").value<"16:00")$("startTime").value="16:00";$("endTime").value="22:00"}if(state.persona==="full-day"){$("startTime").value="09:30";$("endTime").value="21:30"}}
-  function params(){const q=new URLSearchParams({date:$("visitDate").value,start:$("startTime").value,end:$("endTime").value,persona:state.persona,budget:$("budget").value,crowds:$("crowds").value,mobility:$("mobility").value,weather:$("weatherPref").value});if($("kids").value.trim())q.set("kids",$("kids").value.trim());if($("mustLights").checked)q.set("mustLights","1");if($("mustSnow").checked)q.set("mustSnow","1");if(state.usedDefaults)q.set("assumed","1");return q}
-  function saveUrl(q){const clean=new URLSearchParams(q);clean.delete("assumed");history.replaceState(null,"",`${location.pathname}?${clean.toString()}`)}
-  function setLoading(){$("refreshState").textContent="Checking current inputs…";$("liveState").textContent="CHECKING";$("liveState").className="state-pill";$("buildButton").disabled=true}
-  async function load(reason="initial"){
-    const gen=++state.generation;setLoading();const q=params();saveUrl(q);event("gatlinburg_plan_request",{reason,persona:state.persona,date:q.get("date")});
-    try{
-      const res=await fetch(`/api/gatlinburg-winter?${q}`,{headers:{accept:"application/json"}});const data=await res.json();if(gen!==state.generation)return;if(!res.ok||!data.ok)throw new Error(data.detail||data.error||`HTTP ${res.status}`);state.data=data;render(data);event("gatlinburg_plan_generated",{persona:state.persona,mode:data.mode,version:data.version||"1",jev_mode:data.decision?.jev?.mode,writer_mode:data.decision?.writer?.mode,valid_candidates:data.diagnostics?.validCandidates||0,realized_options:data.diagnostics?.realizedPlanOptions||0,degraded_count:data.diagnostics?.degradedSources?.length||0})
-    }catch(err){if(gen!==state.generation)return;renderError(err)}finally{if(gen===state.generation)$("buildButton").disabled=false}
+
+  function hydrateUrl() {
+    const q = new URLSearchParams(location.search);
+    state.usedDefaults = !q.has("date") && !q.has("persona") && !q.has("start") && !q.has("end");
+    if (q.get("persona")) state.persona = q.get("persona");
+    $("visitDate").value = q.get("date") || defaultDate();
+    $("startTime").value = q.get("start") || (state.persona === "full-day" ? "09:30" : "14:00");
+    $("endTime").value = q.get("end") || "22:00";
+    $("kids").value = q.get("kids") || "";
+    $("budget").value = q.get("budget") || "any";
+    $("crowds").value = q.get("crowds") || "normal";
+    $("mobility").value = q.get("mobility") || "normal";
+    $("weatherPref").value = q.get("weather") || "balanced";
+    $("mustLights").checked = q.get("mustLights") === "1";
+    $("mustSnow").checked = q.get("mustSnow") === "1";
+    syncPersona();
   }
-  function render(d){
-    $("dateLabel").textContent=d.headline.dateLabel;$("stateHeadline").textContent=d.headline.state;$("bestMove").textContent=d.headline.bestMove;$("bestWindow").textContent=d.headline.bestWindow;$("winterMagic").textContent=d.headline.winterMagic;$("weatherRead").textContent=d.headline.weather;$("snowRead").textContent=d.headline.snow;$("visibilityRead").textContent=d.headline.mountainVisibility;$("crowdRead").textContent=d.headline.crowdPressure;
-    const assumption=$("assumptionNote");if(assumption){assumption.textContent=d.assumptions?.summary||"";assumption.hidden=!d.assumptions?.isDefault}
-    const degraded=d.diagnostics.degradedSources.length;$("liveState").textContent=degraded?`${degraded} INPUT${degraded===1?"":"S"} DEGRADED`:d.mode==="preseason"?"PRE-SEASON":"LIVE PLAN";$("liveState").className=`state-pill${degraded?" degraded":""}`;$("refreshState").textContent=`Updated ${new Date(d.generatedAt).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})}`;
-    $("planTitle").textContent=d.decision.label;$("planSummary").textContent=d.decision.summary;$("whyPlan").textContent=d.decision.why;$("decisiveConstraint").textContent=d.decision.decisiveConstraint||"overall fit";$("engineBadge").textContent=d.decision.jev.mode==="shared-harness-jev"?"JEV chose a fully scheduled plan":"Grounded scheduled fallback";
-    renderTimeline(d.itinerary);renderOperations(d.visitOperations);renderDecisionClock(d.decisionClock);renderDateIntelligence(d.dateIntelligence);renderInfluences(d.whatChangedTheAnswer||[]);renderConditions(d.conditions);renderEvents(d.events,d.headline.dateLabel);renderAlternatives(d.alternatives);renderMap(d.map);renderChanges(d.whatCouldChange);renderSources(d.sources);renderContext(d)
+
+  function syncPersona() {
+    document.querySelectorAll(".persona").forEach(b => b.classList.toggle("active", b.dataset.persona === state.persona));
+    if (state.persona === "budget") $("budget").value = "low";
+    if (state.persona === "christmas" || state.persona === "food-lights") $("mustLights").checked = true;
+    if (state.persona === "snow") $("mustSnow").checked = true;
+    if (state.persona === "family" && !$("kids").value) $("kids").value = "6, 10";
+    if (state.persona === "evening") {
+      if ($("startTime").value < "16:00") $("startTime").value = "16:00";
+      $("endTime").value = "22:00";
+    }
+    if (state.persona === "full-day") {
+      $("startTime").value = "09:30";
+      $("endTime").value = "21:30";
+    }
   }
-  function renderTimeline(items){const host=$("timeline");if(!items.length){host.innerHTML='<li><div class="time">—</div><div><strong>No realistic sequence yet</strong><small>Adjust the date or available time.</small></div></li>';return}host.innerHTML=items.map(x=>`<li><div class="time">${esc(fmtTime(x.start))}</div><div><strong>${esc(x.name)}</strong><small>${esc(x.verificationRequired?"Official future-date hours still need verification · ":"")}${esc(Math.round(x.durationMinutes))} min planned</small></div><a class="official-link outbound" href="${esc(x.officialUrl)}" target="_blank" rel="noopener" data-outbound="${esc(x.id)}">Official check ↗</a></li>`).join("");bindOutbound()}
-  function renderOperations(ops){
-    let section=$("visitOperationsSection");
-    if(!ops){if(section)section.remove();return}
-    if(!section){section=document.createElement("section");section.id="visitOperationsSection";section.className="evidence-section";section.innerHTML='<div class="section-heading"><div><p class="eyebrow">Getting around this plan</p><h2>Arrival, parking and movement</h2></div></div><div id="visitOperationsRows" class="condition-rows"></div>';document.querySelector(".plan-section")?.insertAdjacentElement("afterend",section)}
-    const rows=[
-      ["Move",ops.movement,"calculated",ops.sources?.parking],
-      ["Trolley",ops.trolley,"published",ops.sources?.trolley],
-      ["Parking",ops.parking,"published",ops.sources?.cityParking],
-      ["Separate blocks",ops.special,"calculated",ops.npsStops?ops.sources?.npsConditions:ops.sources?.parking]
+
+  function params() {
+    const q = new URLSearchParams({
+      date: $("visitDate").value,
+      start: $("startTime").value,
+      end: $("endTime").value,
+      persona: state.persona,
+      budget: $("budget").value,
+      crowds: $("crowds").value,
+      mobility: $("mobility").value,
+      weather: $("weatherPref").value
+    });
+    if ($("kids").value.trim()) q.set("kids", $("kids").value.trim());
+    if ($("mustLights").checked) q.set("mustLights", "1");
+    if ($("mustSnow").checked) q.set("mustSnow", "1");
+    if (state.usedDefaults) q.set("assumed", "1");
+    return q;
+  }
+
+  function saveUrl(q) {
+    const clean = new URLSearchParams(q);
+    clean.delete("assumed");
+    history.replaceState(null, "", `${location.pathname}?${clean.toString()}`);
+  }
+
+  function setLoading() {
+    $("refreshState").textContent = "Checking current inputs…";
+    $("liveState").textContent = "CHECKING";
+    $("liveState").className = "state-pill";
+    $("buildButton").disabled = true;
+  }
+
+  async function load(reason = "initial") {
+    const gen = ++state.generation;
+    setLoading();
+    const q = params();
+    saveUrl(q);
+    event("gatlinburg_plan_request", { reason, persona: state.persona, date: q.get("date") });
+    try {
+      const res = await fetch(`/api/gatlinburg-winter?${q}`, { headers: { accept: "application/json" } });
+      const data = await res.json();
+      if (gen !== state.generation) return;
+      if (!res.ok || !data.ok) throw new Error(data.detail || data.error || `HTTP ${res.status}`);
+      state.data = data;
+      render(data);
+      event("gatlinburg_plan_generated", {
+        persona: state.persona,
+        mode: data.mode,
+        version: data.version || "1",
+        jev_mode: data.decision?.jev?.mode,
+        writer_mode: data.decision?.writer?.mode,
+        valid_candidates: data.diagnostics?.validCandidates || 0,
+        realized_options: data.diagnostics?.realizedPlanOptions || 0,
+        degraded_count: data.diagnostics?.degradedSources?.length || 0
+      });
+    } catch (err) {
+      if (gen !== state.generation) return;
+      renderError(err);
+    } finally {
+      if (gen === state.generation) $("buildButton").disabled = false;
+    }
+  }
+
+  function render(d) {
+    $("dateLabel").textContent = d.headline.dateLabel;
+    $("stateHeadline").textContent = d.headline.state;
+    $("bestMove").textContent = d.headline.bestMove;
+    $("bestWindow").textContent = d.headline.bestWindow;
+    $("winterMagic").textContent = d.headline.winterMagic;
+    $("weatherRead").textContent = d.headline.weather;
+    $("snowRead").textContent = d.headline.snow;
+    $("visibilityRead").textContent = d.headline.mountainVisibility;
+    $("crowdRead").textContent = d.headline.crowdPressure;
+
+    const assumption = $("assumptionNote");
+    if (assumption) {
+      assumption.textContent = d.assumptions?.summary || "";
+      assumption.hidden = !d.assumptions?.isDefault;
+    }
+
+    const degraded = d.diagnostics?.degradedSources?.length || 0;
+    $("liveState").textContent = degraded ? `${degraded} INPUT${degraded === 1 ? "" : "S"} DEGRADED` : d.mode === "preseason" ? "PRE-SEASON" : "LIVE PLAN";
+    $("liveState").className = `state-pill${degraded ? " degraded" : ""}`;
+    $("refreshState").textContent = `Updated ${new Date(d.generatedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}`;
+
+    $("planTitle").textContent = d.decision.label;
+    $("planSummary").textContent = d.decision.summary;
+    $("whyPlan").textContent = d.decision.why;
+    $("decisiveConstraint").textContent = d.decision.decisiveConstraint || "overall fit";
+    $("engineBadge").textContent = d.decision?.jev?.mode === "shared-harness-jev" ? "JEV chose a fully scheduled plan" : "Grounded scheduled fallback";
+
+    renderSnapshot(d.visitSnapshot);
+    renderTimeline(d.itinerary || []);
+    renderOperations(d.visitOperations);
+    renderDecisionClock(d.decisionClock);
+    renderDateIntelligence(d.dateIntelligence);
+    renderCommit(d.commitChecklist || []);
+    renderInfluences(d.whatChangedTheAnswer || []);
+    renderConditions(d.conditions || []);
+    renderEvents(d.events || [], d.headline.dateLabel);
+    renderAlternatives(d.alternatives || []);
+    renderMap(d.map || []);
+    renderChanges(d.whatCouldChange || []);
+    renderSources(d.sources || []);
+    renderContext(d);
+  }
+
+  function renderSnapshot(snap) {
+    if (!snap) return;
+    $("snapStops").textContent = snap.stopLabel || "—";
+    $("snapTime").textContent = snap.span || "—";
+    $("snapSpend").textContent = snap.spend || "—";
+    $("snapWalk").textContent = snap.walking || "—";
+    $("snapRoute").textContent = snap.route || "—";
+    $("snapVerify").textContent = snap.verification && snap.verification !== "No future-hours flags" ? snap.verification : (snap.booking || "—");
+  }
+
+  function renderTimeline(items) {
+    const host = $("timeline");
+    if (!items.length) {
+      host.innerHTML = '<li><div class="time">—</div><div><strong>No realistic sequence yet</strong><small>Adjust the date or available time.</small></div></li>';
+      return;
+    }
+    host.innerHTML = items.map(x => {
+      const badges = [
+        x.categoryLabel,
+        `${Math.round(x.durationMinutes)} min`,
+        x.costLabel,
+        x.walkingLabel,
+        x.exposureLabel,
+        x.reservationFlag ? x.bookingLabel : null
+      ].filter(Boolean).map(value => `<span class="stop-badge">${esc(value)}</span>`).join("");
+      const verify = x.verificationRequired ? '<span class="stop-badge warn">Hours need recheck</span>' : "";
+      return `<li>
+        <div class="time">${esc(fmtTime(x.start))}</div>
+        <div>
+          <div class="stop-head"><strong>${esc(x.name)}</strong></div>
+          <div class="stop-badges">${badges}${verify}</div>
+          <small class="stop-why">${esc(x.whyNow || "")}</small>
+          <small class="stop-note">${esc(x.executionNote || "")}</small>
+        </div>
+        <a class="official-link outbound" href="${esc(x.officialUrl)}" target="_blank" rel="noopener" data-outbound="${esc(x.id)}">Official check ↗</a>
+      </li>`;
+    }).join("");
+    bindOutbound();
+  }
+
+  function renderCommit(rows) {
+    const host = $("commitRows");
+    if (!host) return;
+    if (!rows.length) {
+      host.innerHTML = '<p class="empty-note">No commit checks are available for this plan yet.</p>';
+      return;
+    }
+    host.innerHTML = rows.map(row => {
+      const label = row.state === "checked" ? "checked" : row.state === "arrival-check" ? "arrival check" : "recheck";
+      const link = row.sourceUrl ? ` <a class="outbound" href="${esc(row.sourceUrl)}" target="_blank" rel="noopener">Official source ↗</a>` : "";
+      return `<div class="commit-row"><strong>${esc(row.label)}</strong><p>${esc(row.detail)}${link}</p><span class="commit-state" data-state="${esc(row.state)}">${esc(label)}</span></div>`;
+    }).join("");
+    bindOutbound();
+  }
+
+  function renderOperations(ops) {
+    let section = $("visitOperationsSection");
+    if (!ops) { if (section) section.remove(); return; }
+    if (!section) {
+      section = document.createElement("section");
+      section.id = "visitOperationsSection";
+      section.className = "evidence-section";
+      section.innerHTML = '<div class="section-heading"><div><p class="eyebrow">Getting around this plan</p><h2>Arrival, parking and movement</h2></div></div><div id="visitOperationsRows" class="condition-rows"></div>';
+      document.querySelector(".plan-section")?.insertAdjacentElement("afterend", section);
+    }
+    const rows = [
+      ["Move", ops.movement, "calculated", ops.sources?.parking],
+      ["Trolley", ops.trolley, "published", ops.sources?.trolley],
+      ["Parking", ops.parking, "published", ops.sources?.cityParking],
+      ["Separate blocks", ops.special, "calculated", ops.npsStops ? ops.sources?.npsConditions : ops.sources?.parking]
     ];
-    $("visitOperationsRows").innerHTML=rows.map(([label,value,stateName,url])=>`<div class="condition-row"><strong>${esc(label)}</strong><p>${esc(value)}</p><a class="status-dot outbound" data-state="${esc(stateName)}" href="${esc(url||"#")}" target="_blank" rel="noopener">${esc(stateName)}</a></div>`).join("");bindOutbound()
+    $("visitOperationsRows").innerHTML = rows.map(([label, value, stateName, url]) => `<div class="condition-row"><strong>${esc(label)}</strong><p>${esc(value)}</p><a class="status-dot outbound" data-state="${esc(stateName)}" href="${esc(url || "#")}" target="_blank" rel="noopener">${esc(stateName)}</a></div>`).join("");
+    bindOutbound();
   }
-  function renderDecisionClock(clock){
-    let section=$("decisionClockSection");
-    if(!clock){if(section)section.remove();return}
-    if(!section){section=document.createElement("section");section.id="decisionClockSection";section.className="events-section";section.innerHTML='<div class="section-heading"><div><p class="eyebrow">Decision clock</p><h2>The day turns here</h2></div></div><p id="decisionSignature" class="plan-summary"></p><div id="decisionClockRows" class="event-rows"></div><div id="decisionPivotRows" class="condition-rows" style="margin-top:16px"></div><p id="decisionClockPolicy" class="trust-note"></p>';const anchor=$("visitOperationsSection")||document.querySelector(".plan-section");anchor?.insertAdjacentElement("afterend",section)}
-    $("decisionSignature").textContent=clock.signature||"This visit does not have a strong timing pivot yet.";
-    $("decisionClockRows").innerHTML=(clock.points||[]).length?(clock.points||[]).map(p=>`<div class="event-row"><time>${esc(fmtTime(p.time))}</time><div><h3>${esc(p.label)}</h3><p>${esc(p.effect)}</p></div><a class="outbound" href="${esc(p.sourceUrl)}" target="_blank" rel="noopener">${esc(p.state)} ↗</a></div>`).join(""):'<p class="empty-note">No exact turning point can be grounded for this visit yet.</p>';
-    $("decisionPivotRows").innerHTML=(clock.pivots||[]).length?(clock.pivots||[]).map(p=>`<div class="condition-row"><strong>If this changes</strong><p><b>${esc(p.trigger)}:</b> ${esc(p.response)}</p><span class="status-dot" data-state="calculated">pivot</span></div>`).join(""):'';
-    $("decisionClockPolicy").textContent=clock.sourcePolicy||"";bindOutbound()
+
+  function renderDecisionClock(clock) {
+    let section = $("decisionClockSection");
+    if (!clock) { if (section) section.remove(); return; }
+    if (!section) {
+      section = document.createElement("section");
+      section.id = "decisionClockSection";
+      section.className = "events-section";
+      section.innerHTML = '<div class="section-heading"><div><p class="eyebrow">Decision clock</p><h2>The day turns here</h2></div></div><p id="decisionSignature" class="plan-summary"></p><div id="decisionClockRows" class="event-rows"></div><div id="decisionPivotRows" class="condition-rows" style="margin-top:16px"></div><p id="decisionClockPolicy" class="trust-note"></p>';
+      const anchor = $("visitOperationsSection") || document.querySelector(".plan-section");
+      anchor?.insertAdjacentElement("afterend", section);
+    }
+    $("decisionSignature").textContent = clock.signature || "This visit does not have a strong timing pivot yet.";
+    $("decisionClockRows").innerHTML = (clock.points || []).length ? (clock.points || []).map(p => `<div class="event-row"><time>${esc(fmtTime(p.time))}</time><div><h3>${esc(p.label)}</h3><p>${esc(p.effect)}</p></div><a class="outbound" href="${esc(p.sourceUrl)}" target="_blank" rel="noopener">${esc(p.state)} ↗</a></div>`).join("") : '<p class="empty-note">No exact turning point can be grounded for this visit yet.</p>';
+    $("decisionPivotRows").innerHTML = (clock.pivots || []).length ? (clock.pivots || []).map(p => `<div class="condition-row"><strong>If this changes</strong><p><b>${esc(p.trigger)}:</b> ${esc(p.response)}</p><span class="status-dot" data-state="calculated">pivot</span></div>`).join("") : "";
+    $("decisionClockPolicy").textContent = clock.sourcePolicy || "";
+    bindOutbound();
   }
-  function renderDateIntelligence(intel){
-    let section=$("dateIntelligenceSection");
-    if(!intel){if(section)section.remove();return}
-    if(!section){section=document.createElement("section");section.id="dateIntelligenceSection";section.className="alternatives-section";section.innerHTML='<div class="section-heading"><div><p class="eyebrow">Date intelligence</p><h2>Why this date?</h2></div></div><p id="whyDateSummary" class="plan-summary"></p><div id="whyDateRows" class="condition-rows"></div><div class="section-heading compact" style="margin-top:24px"><div><p class="eyebrow">Nearby dates</p><h2>What changes within three days?</h2></div></div><p id="nearbyDateAdvantage" class="plan-summary"></p><div id="nearbyDateRows" class="alternative-rows"></div><p id="dateIntelPolicy" class="trust-note"></p>';const anchor=$("decisionClockSection")||$("visitOperationsSection")||document.querySelector(".plan-section");anchor?.insertAdjacentElement("afterend",section)}
-    $("whyDateSummary").textContent=intel.whyThisDate?.summary||"The selected date does not have a strong date-specific advantage yet.";
-    $("whyDateRows").innerHTML=(intel.whyThisDate?.reasons||[]).map(r=>`<div class="condition-row"><strong>${esc(r.label)}</strong><p>${esc(r.value)}</p><span class="status-dot" data-state="calculated">date</span></div>`).join("");
-    const advantage=intel.nearbyAdvantage;$("nearbyDateAdvantage").textContent=advantage?`${advantage.dateLabel}: ${advantage.potentialAdvantage}`:"Nearby dates are shown as changes, not as an invented overall score.";
-    $("nearbyDateRows").innerHTML=(intel.nearby||[]).map(r=>`<article class="alternative"><p class="eyebrow">${esc(r.changeLevel)} change</p><h3>${esc(r.dateLabel)}</h3><p><strong>${esc(r.headline)}</strong></p><ul>${(r.details||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul><button class="alt-use" type="button" data-nearby-date="${esc(r.date)}">Use this date</button></article>`).join("");
-    $("dateIntelPolicy").textContent=intel.sourcePolicy||"";
-    section.querySelectorAll("button[data-nearby-date]").forEach(button=>button.addEventListener("click",()=>{markCustomized();$("visitDate").value=button.dataset.nearbyDate;event("gatlinburg_nearby_date_selected",{from_date:intel.selected?.date,to_date:button.dataset.nearbyDate,persona:state.persona});load("nearby-date")}))
+
+  function renderDateIntelligence(intel) {
+    let section = $("dateIntelligenceSection");
+    if (!intel) { if (section) section.remove(); return; }
+    if (!section) {
+      section = document.createElement("section");
+      section.id = "dateIntelligenceSection";
+      section.className = "alternatives-section";
+      section.innerHTML = '<div class="section-heading"><div><p class="eyebrow">Date intelligence</p><h2>Why this date?</h2></div></div><p id="whyDateSummary" class="plan-summary"></p><div id="whyDateRows" class="condition-rows"></div><div class="section-heading compact" style="margin-top:24px"><div><p class="eyebrow">Nearby dates</p><h2>What changes within three days?</h2></div></div><p id="nearbyDateAdvantage" class="plan-summary"></p><div id="nearbyDateRows" class="alternative-rows"></div><p id="dateIntelPolicy" class="trust-note"></p>';
+      const anchor = $("decisionClockSection") || $("visitOperationsSection") || document.querySelector(".plan-section");
+      anchor?.insertAdjacentElement("afterend", section);
+    }
+    $("whyDateSummary").textContent = intel.whyThisDate?.summary || "The selected date does not have a strong date-specific advantage yet.";
+    $("whyDateRows").innerHTML = (intel.whyThisDate?.reasons || []).map(r => `<div class="condition-row"><strong>${esc(r.label)}</strong><p>${esc(r.value)}</p><span class="status-dot" data-state="calculated">date</span></div>`).join("");
+    const advantage = intel.nearbyAdvantage;
+    $("nearbyDateAdvantage").textContent = advantage ? `${advantage.dateLabel}: ${advantage.potentialAdvantage}` : "Nearby dates are shown as changes, not as an invented overall score.";
+    $("nearbyDateRows").innerHTML = (intel.nearby || []).map(r => `<article class="alternative"><p class="eyebrow">${esc(r.changeLevel)} change</p><h3>${esc(r.dateLabel)}</h3><p><strong>${esc(r.headline)}</strong></p><ul>${(r.details || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul><button class="alt-use" type="button" data-nearby-date="${esc(r.date)}">Use this date</button></article>`).join("");
+    $("dateIntelPolicy").textContent = intel.sourcePolicy || "";
+    section.querySelectorAll("button[data-nearby-date]").forEach(button => button.addEventListener("click", () => {
+      markCustomized();
+      $("visitDate").value = button.dataset.nearbyDate;
+      event("gatlinburg_nearby_date_selected", { from_date: intel.selected?.date, to_date: button.dataset.nearbyDate, persona: state.persona });
+      load("nearby-date");
+    }));
   }
-  function renderInfluences(rows){const host=$("influenceRows");if(!host)return;host.innerHTML=rows.length?rows.map(r=>`<div class="condition-row"><strong>${esc(r.factor)}</strong><p>${esc(r.evidence)}</p><span class="status-dot" data-state="calculated">${esc(r.effect)}</span></div>`).join(""):'<p class="empty-note">No single factor materially changed the baseline plan.</p>'}
-  function renderConditions(rows){$("conditionRows").innerHTML=rows.map(r=>`<div class="condition-row"><strong>${esc(r.label)}</strong><p>${esc(r.value)}</p><a class="status-dot outbound" data-state="${esc(r.state)}" href="${esc(r.sourceUrl)}" target="_blank" rel="noopener">${esc(r.state)}</a></div>`).join("");bindOutbound()}
-  function renderEvents(rows,date){$("eventsTitle").textContent=`Published seasonal events · ${date}`;$("eventRows").innerHTML=rows.length?rows.map(e=>`<div class="event-row"><time>${esc(e.time)}</time><div><h3>${esc(e.name)}</h3><p>${esc(e.note)}</p></div><a class="outbound" href="${esc(e.sourceUrl)}" target="_blank" rel="noopener">Official event ↗</a></div>`).join(""):'<p class="empty-note">No major date-specific event from the controlled seasonal calendar. Winter Magic may still be active.</p>';bindOutbound()}
-  function renderAlternatives(rows){$("alternativeRows").innerHTML=rows.length?rows.map(r=>`<article class="alternative"><h3>${esc(r.label)}</h3><p>${esc(r.why)}</p>${r.window?`<small>${esc(r.window)}</small>`:""}<ul>${r.items.slice(0,4).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></article>`).join(""):'<p class="empty-note">No materially different fully scheduled alternative fit this time window.</p>'}
-  function renderChanges(rows){$("changeList").innerHTML=rows.map(x=>`<li>${esc(x)}</li>`).join("")}
-  function renderSources(rows){$("sourceRows").innerHTML=rows.map(r=>{const t=r.updatedAt?new Date(r.updatedAt).toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}):"No timestamp";const authority=r.authority?.label?`${r.authority.label} · `:"";return `<div class="source-row"><strong>${esc(r.name)}</strong><p>${esc(authority+(r.note||`Checked ${t}`))}</p><a class="status-dot outbound" data-state="${esc(r.state)}" href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.state)}</a></div>`}).join("");bindOutbound()}
-  function renderContext(d){const host=$("dataContext");if(!host)return;const rows=[];if(d.transit)rows.push(`<div class="condition-row"><strong>Trolley data</strong><p>${esc(d.transit.note)}</p><a class="status-dot outbound" data-state="${d.transit.realtimeGtfs?"live":"published"}" href="${esc(d.transit.sourceUrl)}" target="_blank" rel="noopener">${d.transit.realtimeGtfs?"GTFS-RT":"registry"}</a></div>`);if(d.parkMonitoring)rows.push(`<div class="condition-row"><strong>Smokies monitoring</strong><p>${esc(d.parkMonitoring.note||"NPS park monitoring context available.")}</p><a class="status-dot outbound" data-state="${esc(d.parkMonitoring.state)}" href="${esc(d.parkMonitoring.webcamsUrl||d.parkMonitoring.sourceUrl)}" target="_blank" rel="noopener">${d.parkMonitoring.webcams15m?"15-min webcams":"NPS"}</a></div>`);if(d.marketContext)rows.push(`<div class="condition-row"><strong>Lodging-market scale</strong><p>${esc(d.marketContext.activeShortTermRentals?`${d.marketContext.activeShortTermRentals.toLocaleString()} active short-term rentals; ${d.marketContext.trailingOccupancyPct??"—"}% trailing occupancy. Not used as a live crowd estimate.`:d.marketContext.note)}</p><a class="status-dot outbound" data-state="published" href="https://www.airdna.co/vacation-rental-data/app/us/tennessee/gatlinburg/overview" target="_blank" rel="noopener">context</a></div>`);host.innerHTML=rows.join("");bindOutbound()}
-  function renderMap(points){const host=$("routeMap");if(!points.length){host.innerHTML='<div style="padding:24px;color:#64706b">The selected plan has no mappable stops yet.</div>';return}const valid=points.filter(p=>Number.isFinite(p.lat)&&Number.isFinite(p.lon));if(!valid.length){host.innerHTML='<div style="padding:24px;color:#64706b">Map coordinates unavailable for this plan.</div>';return}const lats=valid.map(p=>p.lat),lons=valid.map(p=>p.lon),minLat=Math.min(...lats),maxLat=Math.max(...lats),minLon=Math.min(...lons),maxLon=Math.max(...lons),pad=.012;const x=lon=>50+(lon-(minLon-pad))/Math.max(.001,(maxLon-minLon)+pad*2)*800;const y=lat=>300-(lat-(minLat-pad))/Math.max(.001,(maxLat-minLat)+pad*2)*245;const line=valid.map(p=>`${x(p.lon)},${y(p.lat)}`).join(" ");host.innerHTML=`<svg viewBox="0 0 900 340" aria-hidden="true"><defs><pattern id="g" width="34" height="34" patternUnits="userSpaceOnUse"><path d="M34 0H0V34" fill="none" stroke="#dce4de" stroke-width="1"/></pattern></defs><rect width="900" height="340" fill="url(#g)"/><polyline points="${line}" fill="none" stroke="#7b9287" stroke-width="4" stroke-dasharray="7 7"/>${valid.map((p,i)=>`<g class="map-marker" tabindex="0" role="button" data-map-id="${esc(p.id)}" transform="translate(${x(p.lon)},${y(p.lat)})"><circle r="13"/><text x="0" y="4" text-anchor="middle" fill="white" font-size="10" font-weight="800">${i+1}</text><text class="map-label" x="19" y="-2">${esc(p.name.length>28?p.name.slice(0,27)+"…":p.name)}</text><text class="map-time" x="19" y="11">${esc(fmtTime(p.start))}</text></g>`).join("")}</svg>`;host.querySelectorAll(".map-marker").forEach(m=>m.addEventListener("click",()=>event("gatlinburg_map_interaction",{stop_id:m.dataset.mapId}))) }
-  function renderError(err){$("liveState").textContent="DEGRADED";$("liveState").className="state-pill error";$("refreshState").textContent="Live refresh unavailable";$("stateHeadline").textContent="The live planner did not refresh";$("bestMove").textContent="Use the official source links below while the live decision engine recovers. No live values have been substituted.";$("planTitle").textContent="Structured fallback";$("planSummary").textContent="Winter Magic dates and official source links remain available, but this refresh could not build a current itinerary.";$("timeline").innerHTML="";$("visitOperationsSection")?.remove();$("decisionClockSection")?.remove();$("dateIntelligenceSection")?.remove();event("gatlinburg_plan_error",{message:String(err?.message||err).slice(0,100)})}
-  function bindOutbound(){document.querySelectorAll("a.outbound:not([data-bound])").forEach(a=>{a.dataset.bound="1";a.addEventListener("click",()=>event("gatlinburg_outbound_click",{href:a.href,source:a.dataset.outbound||"source"}))})}
-  function markCustomized(){state.usedDefaults=false;$("assumptionNote")?.setAttribute("hidden","")}
-  document.addEventListener("DOMContentLoaded",()=>{
-    hydrateUrl();document.querySelectorAll(".persona").forEach(b=>b.addEventListener("click",()=>{markCustomized();state.persona=b.dataset.persona;syncPersona();event("gatlinburg_persona_selected",{persona:state.persona});load("persona")}));$("buildButton").addEventListener("click",()=>{markCustomized();event("gatlinburg_assumptions_modified",{persona:state.persona});load("manual")});["visitDate","startTime","endTime","budget","crowds","mobility","weatherPref","mustLights","mustSnow","kids"].forEach(id=>$(id).addEventListener("change",()=>{markCustomized();$("refreshState").textContent="Plan changed — rebuild ready"}));load("initial")
+
+  function renderInfluences(rows) {
+    const host = $("influenceRows");
+    if (!host) return;
+    host.innerHTML = rows.length ? rows.map(r => `<div class="condition-row"><strong>${esc(r.factor)}</strong><p>${esc(r.evidence)}</p><span class="status-dot" data-state="calculated">${esc(r.effect)}</span></div>`).join("") : '<p class="empty-note">No single factor materially changed the baseline plan.</p>';
+  }
+
+  function renderConditions(rows) {
+    $("conditionRows").innerHTML = rows.map(r => `<div class="condition-row"><strong>${esc(r.label)}</strong><p>${esc(r.value)}</p><a class="status-dot outbound" data-state="${esc(r.state)}" href="${esc(r.sourceUrl)}" target="_blank" rel="noopener">${esc(r.state)}</a></div>`).join("");
+    bindOutbound();
+  }
+
+  function renderEvents(rows, date) {
+    $("eventsTitle").textContent = `Published seasonal events · ${date}`;
+    $("eventRows").innerHTML = rows.length ? rows.map(e => `<div class="event-row"><time>${esc(e.time)}</time><div><h3>${esc(e.name)}</h3><p>${esc(e.note)}</p></div><a class="outbound" href="${esc(e.sourceUrl)}" target="_blank" rel="noopener">Official event ↗</a></div>`).join("") : '<p class="empty-note">No major date-specific event from the controlled seasonal calendar. Winter Magic may still be active.</p>';
+    bindOutbound();
+  }
+
+  function renderAlternatives(rows) {
+    $("alternativeRows").innerHTML = rows.length ? rows.map(r => `<article class="alternative"><h3>${esc(r.label)}</h3><p>${esc(r.why)}</p>${r.window ? `<small>${esc(r.window)}</small>` : ""}<ul>${r.items.slice(0, 4).map(x => `<li>${esc(x)}</li>`).join("")}</ul></article>`).join("") : '<p class="empty-note">No materially different fully scheduled alternative fit this time window.</p>';
+  }
+
+  function renderChanges(rows) { $("changeList").innerHTML = rows.map(x => `<li>${esc(x)}</li>`).join(""); }
+
+  function renderSources(rows) {
+    $("sourceRows").innerHTML = rows.map(r => {
+      const t = r.updatedAt ? new Date(r.updatedAt).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "No timestamp";
+      const authority = r.authority?.label ? `${r.authority.label} · ` : "";
+      return `<div class="source-row"><strong>${esc(r.name)}</strong><p>${esc(authority + (r.note || `Checked ${t}`))}</p><a class="status-dot outbound" data-state="${esc(r.state)}" href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.state)}</a></div>`;
+    }).join("");
+    bindOutbound();
+  }
+
+  function renderContext(d) {
+    const host = $("dataContext");
+    if (!host) return;
+    const rows = [];
+    if (d.transit) rows.push(`<div class="condition-row"><strong>Trolley data</strong><p>${esc(d.transit.note)}</p><a class="status-dot outbound" data-state="${d.transit.realtimeGtfs ? "live" : "published"}" href="${esc(d.transit.sourceUrl)}" target="_blank" rel="noopener">${d.transit.realtimeGtfs ? "GTFS-RT" : "registry"}</a></div>`);
+    if (d.parkMonitoring) rows.push(`<div class="condition-row"><strong>Smokies monitoring</strong><p>${esc(d.parkMonitoring.note || "NPS park monitoring context available.")}</p><a class="status-dot outbound" data-state="${esc(d.parkMonitoring.state)}" href="${esc(d.parkMonitoring.webcamsUrl || d.parkMonitoring.sourceUrl)}" target="_blank" rel="noopener">${d.parkMonitoring.webcams15m ? "15-min webcams" : "NPS"}</a></div>`);
+    if (d.marketContext) rows.push(`<div class="condition-row"><strong>Lodging-market scale</strong><p>${esc(d.marketContext.activeShortTermRentals ? `${d.marketContext.activeShortTermRentals.toLocaleString()} active short-term rentals; ${d.marketContext.trailingOccupancyPct ?? "—"}% trailing occupancy. Not used as a live crowd estimate.` : d.marketContext.note)}</p><a class="status-dot outbound" data-state="published" href="https://www.airdna.co/vacation-rental-data/app/us/tennessee/gatlinburg/overview" target="_blank" rel="noopener">context</a></div>`);
+    host.innerHTML = rows.join("");
+    bindOutbound();
+  }
+
+  function renderMap(points) {
+    const host = $("routeMap");
+    if (state.map) { state.map.remove(); state.map = null; }
+    host.innerHTML = "";
+    const valid = (points || []).filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lon));
+    if (!valid.length) {
+      host.innerHTML = '<div style="padding:24px;color:#64706b">Map coordinates unavailable for this plan.</div>';
+      return;
+    }
+    if (!window.L) {
+      renderFallbackMap(valid, host);
+      return;
+    }
+
+    const map = window.L.map(host, { scrollWheelZoom: false, zoomControl: true });
+    state.map = map;
+    window.L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      maxZoom: 19,
+      attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
+    }).addTo(map);
+
+    const latlngs = valid.map(p => [p.lat, p.lon]);
+    if (latlngs.length > 1) window.L.polyline(latlngs, { color: "#557264", weight: 4, opacity: 0.78, dashArray: "7 8" }).addTo(map);
+    valid.forEach((p, i) => {
+      const icon = window.L.divIcon({
+        className: `plan-pin${i === 0 ? " is-first" : ""}`,
+        html: String(i + 1),
+        iconSize: [28, 28],
+        iconAnchor: [14, 14]
+      });
+      window.L.marker([p.lat, p.lon], { icon }).addTo(map).bindPopup(`<strong>${esc(p.name)}</strong><br>${esc(fmtTime(p.start))}`);
+    });
+
+    if (latlngs.length === 1) map.setView(latlngs[0], 14);
+    else map.fitBounds(window.L.latLngBounds(latlngs), { padding: [28, 28], maxZoom: 14 });
+    setTimeout(() => map.invalidateSize(), 0);
+    map.on("click", () => event("gatlinburg_map_interaction", { stops: valid.length }));
+  }
+
+  function renderFallbackMap(valid, host) {
+    const lats = valid.map(p => p.lat), lons = valid.map(p => p.lon);
+    const minLat = Math.min(...lats), maxLat = Math.max(...lats), minLon = Math.min(...lons), maxLon = Math.max(...lons), pad = .012;
+    const x = lon => 50 + (lon - (minLon - pad)) / Math.max(.001, (maxLon - minLon) + pad * 2) * 800;
+    const y = lat => 300 - (lat - (minLat - pad)) / Math.max(.001, (maxLat - minLat) + pad * 2) * 245;
+    const line = valid.map(p => `${x(p.lon)},${y(p.lat)}`).join(" ");
+    host.innerHTML = `<svg viewBox="0 0 900 340" aria-hidden="true"><defs><pattern id="g" width="34" height="34" patternUnits="userSpaceOnUse"><path d="M34 0H0V34" fill="none" stroke="#dce4de" stroke-width="1"/></pattern></defs><rect width="900" height="340" fill="url(#g)"/><polyline points="${line}" fill="none" stroke="#7b9287" stroke-width="4" stroke-dasharray="7 7"/>${valid.map((p, i) => `<g class="map-marker" tabindex="0" role="button" data-map-id="${esc(p.id)}" transform="translate(${x(p.lon)},${y(p.lat)})"><circle r="13"/><text x="0" y="4" text-anchor="middle" fill="white" font-size="10" font-weight="800">${i + 1}</text><text class="map-label" x="19" y="-2">${esc(p.name.length > 28 ? p.name.slice(0, 27) + "…" : p.name)}</text><text class="map-time" x="19" y="11">${esc(fmtTime(p.start))}</text></g>`).join("")}</svg>`;
+    host.querySelectorAll(".map-marker").forEach(m => m.addEventListener("click", () => event("gatlinburg_map_interaction", { stop_id: m.dataset.mapId })));
+  }
+
+  function renderError(err) {
+    $("liveState").textContent = "DEGRADED";
+    $("liveState").className = "state-pill error";
+    $("refreshState").textContent = "Live refresh unavailable";
+    $("stateHeadline").textContent = "The live planner did not refresh";
+    $("bestMove").textContent = "Use the official source links below while the live decision engine recovers. No live values have been substituted.";
+    $("planTitle").textContent = "Structured fallback";
+    $("planSummary").textContent = "Winter Magic dates and official source links remain available, but this refresh could not build a current itinerary.";
+    $("timeline").innerHTML = "";
+    $("commitRows").innerHTML = '<p class="empty-note">Commit checks are unavailable until the planner refreshes.</p>';
+    ["snapStops", "snapTime", "snapSpend", "snapWalk", "snapRoute", "snapVerify"].forEach(id => { if ($(id)) $(id).textContent = "—"; });
+    $("visitOperationsSection")?.remove();
+    $("decisionClockSection")?.remove();
+    $("dateIntelligenceSection")?.remove();
+    if (state.map) { state.map.remove(); state.map = null; }
+    event("gatlinburg_plan_error", { message: String(err?.message || err).slice(0, 100) });
+  }
+
+  function bindOutbound() {
+    document.querySelectorAll("a.outbound:not([data-bound])").forEach(a => {
+      a.dataset.bound = "1";
+      a.addEventListener("click", () => event("gatlinburg_outbound_click", { href: a.href, source: a.dataset.outbound || "source" }));
+    });
+  }
+
+  function markCustomized() {
+    state.usedDefaults = false;
+    $("assumptionNote")?.setAttribute("hidden", "");
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    hydrateUrl();
+    document.querySelectorAll(".persona").forEach(b => b.addEventListener("click", () => {
+      markCustomized();
+      state.persona = b.dataset.persona;
+      syncPersona();
+      event("gatlinburg_persona_selected", { persona: state.persona });
+      load("persona");
+    }));
+    $("buildButton").addEventListener("click", () => {
+      markCustomized();
+      event("gatlinburg_assumptions_modified", { persona: state.persona });
+      load("manual");
+    });
+    ["visitDate", "startTime", "endTime", "budget", "crowds", "mobility", "weatherPref", "mustLights", "mustSnow", "kids"].forEach(id => $(id).addEventListener("change", () => {
+      markCustomized();
+      $("refreshState").textContent = "Plan changed — rebuild ready";
+    }));
+    load("initial");
   });
 })();
