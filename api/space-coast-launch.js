@@ -29,7 +29,8 @@ function weatherGrade(period){
   const text=String(period.shortForecast||'').trim();
   const lower=text.toLowerCase();
   const rawPop=period?.probabilityOfPrecipitation?.value;
-  const pop=Number(rawPop);
+  const hasPop=rawPop!==null&&rawPop!==undefined&&rawPop!==''&&Number.isFinite(Number(rawPop));
+  const pop=hasPop?Number(rawPop):NaN;
   const wind=maxWind(period);
   const thunder=/thunder/.test(lower);
   const cloudBad=/overcast|cloudy|showers|thunder|rain/.test(lower);
