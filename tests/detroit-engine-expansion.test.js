@@ -77,7 +77,7 @@ test("clean-air adapter only emits when the board has a meaningful location cont
 });
 
 test("off-season engines are skipped before network fetch while evergreen engines remain available",async()=>{
-  const code=read("lib/detroit-outdoors/expanded-engines.js");
+  const code=read("lib/detroit-outdoors/expanded-engines-base.js");
   assert.match(code,/beachSeason\?loadOne\(BEACH_API/);
   assert.match(code,/iceSeason\?loadOne\(ICE_API/);
   assert.match(code,/morelSeason\?loadOne\(MOREL_API/);
@@ -92,7 +92,7 @@ test("off-season engines are skipped before network fetch while evergreen engine
 });
 
 test("expanded engine code preserves seasonal and safety truth boundaries",()=>{
-  const code=read("lib/detroit-outdoors/expanded-engines.js");
+  const code=read("lib/detroit-outdoors/expanded-engines-base.js");
   assert.match(code,/Soil warming is modeled from air temperature/);
   assert.match(code,/not evidence that morels are present at a specific site/);
   assert.match(code,/cannot establish local ice thickness or safe travel/);
