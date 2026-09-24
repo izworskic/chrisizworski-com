@@ -90,3 +90,40 @@ test("deterministic editorial fallback covers every selected stop", () => {
   assert.ok(copy.stopReads.one);
   assert.ok(copy.stopReads.two);
 });
+
+test("future weather outside the forecast window is scheduled, not degraded", () => {
+  const data = {
+    input: { date: "2026-11-05" },
+    headline: { weather: "Forecast unavailable for this date", snow: "Not yet verifiable" },
+    conditions: [
+      { label: "Weather", value: "Forecast unavailable for this date", state: "unavailable" },
+      { label: "Snow", value: "Not yet verifiable", state: "unavailable" },
+      { label: "Smokies access", value: "Available", state: "live" }
+    ],
+    sources: [
+      { name: "NWS Gatlinburg forecast", state: "unavailable" },
+      { name: "Great Smoky Mountains closures", state: "live" }
+    ],
+    diagnostics: { degradedSources: ["NWS Gatlinburg forecast"] }
+  };
+  const out = T.normalizeFutureWeatherState(data, "2026-09-24");
+  assert.equal(out.sources[0].state, "scheduled");
+  assert.equal(out.conditions[0].state, "scheduled");
+  assert.equal(out.conditions[1].state, "scheduled");
+  assert.equal(out.diagnostics.degradedSources.length, 0);
+  assert.equal(out.diagnostics.futureWeatherExpected, true);
+  assert.match(out.headline.weather, /not in range/i);
+});
+
+test("near-term weather failures remain degraded", () => {
+  const data = {
+    input: { date: "2026-09-28" },
+    headline: { weather: "Forecast unavailable for this date", snow: "Not yet verifiable" },
+    conditions: [{ label: "Weather", value: "Forecast unavailable", state: "unavailable" }],
+    sources: [{ name: "NWS Gatlinburg forecast", state: "unavailable" }],
+    diagnostics: { degradedSources: ["NWS Gatlinburg forecast"] }
+  };
+  const out = T.normalizeFutureWeatherState(data, "2026-09-24");
+  assert.equal(out.sources[0].state, "unavailable");
+  assert.deepEqual(out.diagnostics.degradedSources, ["NWS Gatlinburg forecast"]);
+});
