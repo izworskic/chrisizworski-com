@@ -65,6 +65,40 @@ function renderTopline(opportunities){
  const rest=items.slice(1,4).map(compactOpportunity).filter(Boolean);
  dek.textContent=rest.length?rest.join(" · "):compactOpportunity(items[0]);
 }
+function windowLabel(c){
+ const value=String(c&&c.timeWindow&&c.timeWindow.label||"Today").trim();
+ return value||"Today";
+}
+function confidenceLabel(c){
+ const value=String(c&&c.confidence&&c.confidence.level||"medium").trim();
+ return value?value.charAt(0).toUpperCase()+value.slice(1):"Medium";
+}
+function driveLabel(c){
+ return String(c&&c.travel&&c.travel.driveBand||c&&c.place&&c.place.drive||"Local").trim()||"Local";
+}
+function renderDecisionFacts(c){
+ const setting=String(c&&c.place&&c.place.setting||"").trim();
+ return `<div class="decision-facts">
+   <div class="decision-fact"><span>BEST WINDOW</span><strong>${esc(windowLabel(c))}</strong><small>Current usable timing</small></div>
+   <div class="decision-fact"><span>DRIVE</span><strong>${esc(driveLabel(c))}</strong><small>From central Detroit</small></div>
+   <div class="decision-fact"><span>CONFIDENCE</span><strong>${esc(confidenceLabel(c))}</strong><small>${esc(setting||"Evidence-backed local lead")}</small></div>
+ </div>`;
+}
+function renderSummary(opportunities){
+ const lead=Array.isArray(opportunities)?opportunities.find(Boolean):null;
+ const best=$("#summary-best"),windowEl=$("#summary-window"),drive=$("#summary-drive"),confidence=$("#summary-confidence");
+ if(!lead){
+   if(best)best.textContent="No lead yet";
+   if(windowEl)windowEl.textContent="No strong window";
+   if(drive)drive.textContent="—";
+   if(confidence)confidence.textContent="Holding";
+   return;
+ }
+ if(best)best.textContent=lead.place?.name||"Southeast Michigan";
+ if(windowEl)windowEl.textContent=windowLabel(lead);
+ if(drive)drive.textContent=driveLabel(lead);
+ if(confidence)confidence.textContent=confidenceLabel(lead);
+}
 function intentPageFor(c){
  const engine=String(c&&c.sourceEngine||"");
  if(engine==="great-lakes-ais")return{url:"/detroit-river-freighters/",label:"Open Detroit River freighter read"};
@@ -124,17 +158,18 @@ function renderBundleSignals(c){
    return `<div class="signal-row"><strong>${esc(label)}</strong><p>${esc(detail)}</p></div>`;
  }).join("")}</div>`;
 }
-function renderCard(c,note,sources){
+function renderCard(c,note,sources,index){
  const bundle=Array.isArray(c&&c.bundleSignals)?c.bundleSignals:[];
  const specialist=bundle.length>1?"":c.specialist?`<div class="specialist"><strong>${esc(c.specialist.label)}:</strong> ${esc(c.specialist.headline)}</div>`:"";
  const reasons=bundle.length>1?"":((c.story&&c.story.whyToday)||c.reasons||[]).slice(0,3).map(r=>`<li>${esc(r)}</li>`).join("");
  const sourceLine=note&&Array.isArray(sources)&&sources.length?`<div class="card-source">Context: ${sources.map(s=>`<a href="${esc(s.url)}" rel="noopener">${esc(s.label)}</a>`).join(" · ")}</div>`:"";
  const metaTitle=bundle.length>1?bundle.length+" live reasons today":c.title;
- return `<article class="card">
+ return `<article class="card${index===0?" lead-card":""}">
    <div class="slot">${esc(c.slot)}</div>
    <h3>${esc(c.place.name)}</h3>
-   <div class="meta">${esc(c.place.area)} · ${esc(c.place.drive)} from central Detroit · ${esc(metaTitle)}</div>
+   <div class="meta">${esc(c.place.area)} · ${esc(metaTitle)}</div>
    <div class="scoreline"><span class="score">${esc(c.score)}/100</span><span class="quality">${esc(c.quality)}</span></div>
+   ${renderDecisionFacts(c)}
    <div class="weather">${renderWeather(c.weather)}</div>
    ${renderBundleSignals(c)}
    ${note?`<div class="card-read"><span>Why this matters</span><p>${esc(note)}</p>${sourceLine}</div>`:""}
@@ -158,13 +193,14 @@ function renderPayload(data,enriched){
  if($("#verdict-detail")) $("#verdict-detail").textContent=data.verdict?.detail||"Live board loaded.";
  if($("#updated")) $("#updated").textContent="Updated "+fmtTime(data.generatedAt)+(enriched?"":" · live board");
  renderTopline(data.opportunities||[]);
+ renderSummary(data.opportunities||[]);
  if($("#desk-note")) $("#desk-note").textContent=enriched
    ?(data.editorial||data.edition?.read||data.frontPage?.subhead||"")
    :(data.frontPage?.subhead||data.editorial||"Live opportunities loaded. Editorial detail is still being prepared.");
  const cards=$("#opportunity-grid");
  if(cards){
    if(data.opportunities&&data.opportunities.length){
-     cards.innerHTML=data.opportunities.map(c=>renderCard(c,data.edition?.notes?.[c.id],data.edition?.noteSources?.[c.id])).join("");
+     cards.innerHTML=data.opportunities.map((c,index)=>renderCard(c,data.edition?.notes?.[c.id],data.edition?.noteSources?.[c.id],index)).join("");
    }else{
      cards.innerHTML='<div class="error">The desk is holding because live source coverage is too thin to make a useful recommendation.</div>';
    }
@@ -257,16 +293,17 @@ async function load(){
    if($("#opportunity-grid")) $("#opportunity-grid").innerHTML='<div class="error">Live opportunity data is temporarily unavailable. Use the specialist tools below while the desk recovers.</div>';
    if($("#updated")) $("#updated").textContent="Live board unavailable";
    if($("#writer-mode")) $("#writer-mode").textContent="unavailable";
+   renderSummary([]);
  }
 }
 document.addEventListener("click",function(event){
   const link=event.target.closest("a");
   if(!link)return;
   let url;try{url=new URL(link.href,location.href);}catch{return;}
-  if(typeof window.gtag==="function" && (link.closest(".card") || /michiganoutdoorsnow|great-lakes-buoys|northern-lights|michiganbirdingreport|fall-color/.test(url.href))){
+  if(typeof window.gtag==="function" && (link.closest(".card") || link.closest(".route-card") || /michiganoutdoorsnow|great-lakes-buoys|northern-lights|michiganbirdingreport|fall-color/.test(url.href))){
     window.gtag("event","detroit_outdoors_handoff",{
       destination:url.hostname.replace(/^www\./,""),
-      surface:link.closest(".card")?"opportunity-card":"context-link",
+      surface:link.closest(".card")?"opportunity-card":link.closest(".route-card")?"question-route":"context-link",
       transport_type:"beacon"
     });
   }
