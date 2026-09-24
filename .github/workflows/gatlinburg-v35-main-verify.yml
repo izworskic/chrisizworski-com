@@ -1,0 +1,32 @@
+name: Gatlinburg v3.5 main verification
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  gatlinburg-v35-main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check
+        run: |
+          node --check lib/gatlinburg-winter/route-v7.js
+          node --check public/assets/gatlinburg-winter.js
+      - name: Gatlinburg regression suite
+        run: node --test tests/gatlinburg-winter.test.js tests/gatlinburg-winter-v2.test.js tests/gatlinburg-winter-v3.test.js tests/gatlinburg-winter-v4.test.js tests/gatlinburg-winter-v5.test.js tests/gatlinburg-winter-v6.test.js tests/gatlinburg-winter-v7.test.js
+      - name: Production asset smoke check
+        run: |
+          grep -q 'gatlinburg-winter-benchmark.css' public/gatlinburg-winter/index.html
+          grep -q 'leaflet@1.9.4' public/gatlinburg-winter/index.html
+          grep -q 'commitRows' public/gatlinburg-winter/index.html
+          grep -q 'visitSnapshot' public/gatlinburg-winter/index.html
+          grep -q 'Official live checks' public/gatlinburg-winter/index.html
+          grep -q 'journey-nav' public/gatlinburg-winter/index.html
