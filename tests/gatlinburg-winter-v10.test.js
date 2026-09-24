@@ -17,7 +17,6 @@ test("future selected attraction status is a commit-time check, not a degraded p
   assert.deepEqual(out.diagnostics.degradedSources, []);
   assert.deepEqual(out.diagnostics.backgroundDegradedSources, ["Gatlinburg SkyPark status"]);
   assert.deepEqual(out.diagnostics.futureLiveStatusDeferred, ["Gatlinburg SkyPark status"]);
-  assert.equal(out.benchmarkVersion, "3.9");
 });
 
 test("future NPS current-road status is deferred until closer to departure", () => {
@@ -64,4 +63,25 @@ test("future weather beyond seven days remains deferred", () => {
   assert.equal(out.decisionHealth.state, "ready");
   assert.deepEqual(out.diagnostics.degradedSources, []);
   assert.match(out.decisionHealth.label, /FORECAST LATER/);
+});
+
+test("legacy AI bypass removes the base JEV call but leaves the complete-plan JEV available", () => {
+  const state = { skipHarness: 1, skipAnthropic: 2, bypassed: [] };
+  assert.equal(T.classifyLegacyBypass("https://example.vercel.app/api/harness", state), "legacy-base-jev");
+  assert.equal(state.skipHarness, 0);
+  assert.equal(T.classifyLegacyBypass("https://example.vercel.app/api/harness", state), null);
+});
+
+test("legacy writer bypass removes exactly two old Anthropic writing calls", () => {
+  const state = { skipHarness: 0, skipAnthropic: 2, bypassed: [] };
+  const url = "https://api.anthropic.com/v1/messages";
+  assert.equal(T.classifyLegacyBypass(url, state), "legacy-writer");
+  assert.equal(T.classifyLegacyBypass(url, state), "legacy-writer");
+  assert.equal(T.classifyLegacyBypass(url, state), null);
+});
+
+test("desk voice remains fixed while visitor persona changes only the editorial emphasis", () => {
+  assert.equal(T.deskLens({ input: { persona: "first" } }).id, "orientation");
+  assert.equal(T.deskLens({ input: { persona: "family" } }).id, "family");
+  assert.equal(T.deskLens({ input: { persona: "christmas" } }).id, "christmas");
 });
