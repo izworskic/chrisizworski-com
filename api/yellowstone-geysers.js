@@ -16,15 +16,18 @@ function officialScore(p){
 function normalize(p){
   return {geyserID:p.geyserID??null,geyserName:p.geyserName||null,userID:p.userID??null,source:p.userName||'GeyserTimes contributor',prediction:iso(p.prediction),windowOpen:iso(p.windowOpen),windowClose:iso(p.windowClose),expiration:iso(p.expiration),timestamp:iso(p.timestamp),lastReportTime:iso(p.lastReportTime),forecastNumber:Number(p.eruptionForecastNumber||1),probability:p.probability??null,method:p.method||null,comment:p.comment||null,sourcePriority:officialScore(p)};
 }
+function usableWindow(p,now){
+  const prediction=millis(p.prediction),open=millis(p.windowOpen),close=millis(p.windowClose),expiration=millis(p.expiration);
+  if(!Number.isFinite(prediction)||!Number.isFinite(open)||!Number.isFinite(close))return false;
+  if(open>close||prediction<open||prediction>close)return false;
+  if(close<now-5*60*1000)return false;
+  if(Number.isFinite(expiration)&&expiration<now-5*60*1000)return false;
+  return true;
+}
 function selectCurrent(predictions,now=Date.now()){
   const by=new Map();
-  for(const p of predictions.map(normalize)){
-    if(!p.geyserName)continue;
-    const close=millis(p.windowClose||p.prediction);
-    const expiration=millis(p.expiration);
-    if(Number.isFinite(close)&&close<now-5*60*1000)continue;
-    if(Number.isFinite(expiration)&&expiration<now-5*60*1000)continue;
-    if(p.forecastNumber>1)continue;
+  for(const p of (Array.isArray(predictions)?predictions:[]).map(normalize)){
+    if(!p.geyserName||!usableWindow(p,now)||p.forecastNumber>1)continue;
     const key=p.geyserName.toLowerCase();
     const cur=by.get(key);
     if(!cur||p.sourcePriority>cur.sourcePriority||(p.sourcePriority===cur.sourcePriority&&millis(p.timestamp)>millis(cur.timestamp)))by.set(key,p);
@@ -52,4 +55,4 @@ module.exports=async function handler(req,res){
   }
 };
 
-module.exports._test={millis,iso,officialScore,normalize,selectCurrent,soonest};
+module.exports._test={millis,iso,officialScore,normalize,usableWindow,selectCurrent,soonest};
