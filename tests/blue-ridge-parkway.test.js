@@ -4,7 +4,7 @@ const assert=require("node:assert/strict");
 const fs=require("node:fs");
 const path=require("node:path");
 const engine=require("../lib/blue-ridge-parkway/engine.js");
-const {ROUTES,stopsForRoute}=require("../lib/blue-ridge-parkway/catalog.js");
+const {ROUTES,routesForGateway,stopsForRoute}=require("../lib/blue-ridge-parkway/catalog.js");
 const T=engine._test;
 
 const ROAD_HTML=`
@@ -17,6 +17,18 @@ const ROAD_HTML=`
 <tr><td>355.3 - 364.5</td><td>NC 128 to Craggy Gardens</td><td>Open</td><td></td></tr>
 <tr><td>364.5 - 367.6</td><td>Craggy tunnel to picnic area</td><td>Open</td><td>Craggy Gardens Picnic Area CLOSED for a facility closure.</td></tr>
 </table>`;
+
+function deterministicFrontRunner({gateway,hours,interests,date="2026-07-15",road={rows:[]},weather={ok:true,precipMax:10,windMax:8,forecast:["Mostly Sunny"]}}){
+  const input=T.normalizeInput({gateway,hours,interests:interests.join(","),date,start:"09:00"});
+  return routesForGateway(gateway)
+    .map(route=>{
+      const roadResult=T.roadAssessment(route,road);
+      const foliage=T.foliageEstimate(route,date);
+      return{route,road:roadResult,duration:T.modeledDuration(route),score:T.routeScore(route,input,roadResult,weather,foliage)};
+    })
+    .filter(x=>!x.road.blocked&&x.duration<=input.hours+.3)
+    .sort((a,b)=>b.score-a.score)[0]||null;
+}
 
 test("road parser separates official open, partial and hard-closed milepost ranges",()=>{
   const road=T.parseRoadStatus(ROAD_HTML);
@@ -80,6 +92,54 @@ test("view outlook is conservative and explicitly forecast-derived",()=>{
 test("anti-slop writer gate rejects tourism filler",()=>{
   assert.equal(T.writerPasses("A practical route with two stops and enough time to walk them."),true);
   assert.equal(T.writerPasses("Discover a breathtaking hidden gem for the perfect day."),false);
+});
+
+const PERSONA_BENCHMARKS=[
+  ["Asheville · 3h · scenery + short walk","asheville",3,["scenery","short-walk"],"asheville-craggy"],
+  ["Asheville · 4h · high elevation + photography","asheville",4,["high-elevation","photography"],"asheville-mitchell"],
+  ["Asheville · 4h · history + picnic","asheville",4,["history","picnic"],"asheville-pisgah"],
+  ["Asheville · 6h · waterfall + short walk","asheville",6,["waterfall","short-walk"],"asheville-graveyard"],
+  ["Boone · 3.5h · history + short walk","boone",3.5,["history","short-walk"],"boone-high-country"],
+  ["Boone · 5h · waterfall + photography","boone",5,["waterfall","photography"],"boone-linville"],
+  ["Boone · 5h · picnic + history","boone",5,["picnic","history"],"boone-doughton"],
+  ["Roanoke · 3.5h · short walk + picnic","roanoke",3.5,["short-walk","picnic"],"roanoke-peaks"],
+  ["Roanoke · 5.5h · history + photography","roanoke",5.5,["history","photography"],"roanoke-mabry"],
+  ["Floyd · 3h · picnic + scenery","floyd",3,["picnic","scenery"],"floyd-north"],
+  ["Floyd · 4h · history + photography","floyd",4,["history","photography"],"floyd-mabry"],
+  ["Afton · 3h · hike + history","afton",3,["hike","history"],"afton-humpback"],
+  ["Cherokee · 2.5h · sunset + short walk","cherokee",2.5,["sunset","short-walk"],"cherokee-waterrock"],
+  ["Cherokee · 4h · high elevation + photography","cherokee",4,["high-elevation","photography"],"cherokee-balsam"],
+  ["Cherokee · 5h · high elevation + fall color","cherokee",5,["high-elevation","fall-color"],"cherokee-balsam"]
+];
+
+test("15 representative visitor scenarios keep the expected deterministic front-runner before JEV",()=>{
+  for(const [label,gateway,hours,interests,expected] of PERSONA_BENCHMARKS){
+    const winner=deterministicFrontRunner({gateway,hours,interests});
+    assert.equal(winner?.route?.id,expected,label);
+  }
+});
+
+test("13 hard benchmark invariants preserve truth and the JEV closed-set boundary",()=>{
+  const road=T.parseRoadStatus(ROAD_HTML);
+  const source=fs.readFileSync(path.join(__dirname,"../lib/blue-ridge-parkway/engine.js"),"utf8");
+  const asheville2=T.normalizeInput({gateway:"asheville",hours:2,interests:"scenery",date:"2026-10-12"});
+  const craggy=ROUTES.find(r=>r.id==="asheville-craggy");
+  const graveyard=ROUTES.find(r=>r.id==="asheville-graveyard");
+  const doughton=ROUTES.find(r=>r.id==="boone-doughton");
+
+  assert.equal(T.roadAssessment(doughton,road).blocked,true,"1 closure veto precedes preference selection");
+  assert.equal(T.roadAssessment(craggy,road).blocked,false,"2 unrelated facility closure cannot block road geometry");
+  assert.ok(T.modeledDuration(graveyard)>asheville2.hours+.3,"3 a long route remains infeasible for a 2-hour request");
+  assert.equal(T.viewOutlook({ok:false}).label,"Unavailable","4 missing weather never becomes a good-view claim");
+  assert.equal(T.foliageEstimate(craggy,"2026-10-12").kind,"modeled","5 foliage truth label remains modeled");
+  assert.equal(T.foliageEstimate(craggy,"2026-07-12").active,false,"6 summer cannot fabricate fall color");
+  assert.equal(T.writerPasses("Embark on an unforgettable journey awaits."),false,"7 writer gate rejects tourism filler");
+  assert.equal(T.normalizeInput({gateway:"bogus",hours:99,start:"99:99",interests:"bogus"}).gateway,"asheville","8 invalid gateway normalizes safely");
+  assert.equal(T.normalizeInput({hours:99}).hours,8,"9 requested time is bounded");
+  assert.ok(T.routeMiles(craggy)>0&&T.modeledDuration(craggy)>=craggy.minHours,"10 geometry and dwell produce a positive conservative duration");
+  assert.match(source,/const feasible=all\.filter\(x=>!x\.road\.blocked&&x\.durationHours<=input\.hours\+\.3\)/,"11 feasible pool excludes blocked and materially overlong routes");
+  assert.match(source,/Object\.fromEntries\(feasible\.slice\(0,4\)/,"12 JEV receives only the already-feasible finite option set");
+  assert.match(source,/chosen=feasible\.find\(x=>x\.route\.id===jev\.choiceId\)\|\|fallback/,"13 an out-of-set JEV choice falls back instead of inventing a route");
 });
 
 test("crawlable page preserves canonical entity, correct Leaflet SRI and first-decision language",()=>{
