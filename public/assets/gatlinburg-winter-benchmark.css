@@ -33,6 +33,12 @@ main{max-width:1100px}
 .stop-fact-meta{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--bench-line);border-radius:12px;overflow:hidden;background:#fff}.stop-fact-meta div{padding:9px 10px;border-right:1px solid var(--bench-line);border-bottom:1px solid var(--bench-line)}.stop-fact-meta div:nth-child(2n){border-right:0}.stop-fact-meta div:nth-last-child(-n+2){border-bottom:0}.stop-fact-meta span{display:block;font-size:.61rem;text-transform:uppercase;letter-spacing:.07em;font-weight:800;color:#7a867f}.stop-fact-meta strong{font-size:.76rem;line-height:1.25}
 .stop-fact-source{display:inline-block;margin-top:9px;font-size:.72rem;font-weight:760}
 
+.look-now-shell{border:1px solid var(--bench-line);border-radius:18px;padding:20px;background:linear-gradient(180deg,#fff,#f7faf7)}
+.look-now-shell .section-heading{border-top:0;padding-top:0;margin-bottom:12px}
+.look-now-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bench-line);border:1px solid var(--bench-line);border-radius:13px;overflow:hidden}
+.look-now-item{background:#fff;padding:13px;text-decoration:none;color:var(--bench-ink);min-height:126px;display:flex;flex-direction:column}
+.look-now-item:hover{background:#f5f8f5}.look-now-item span{font-size:.61rem;text-transform:uppercase;letter-spacing:.075em;font-weight:820;color:#708078}.look-now-item strong{font-size:.88rem;margin:4px 0 5px;line-height:1.2}.look-now-item small{font-size:.7rem;line-height:1.32;color:#69756f}.look-now-item b{font-size:.68rem;margin-top:auto;padding-top:8px;color:var(--bench-pine)}
+
 .commit-shell{background:linear-gradient(135deg,#10251e,#18372c);color:#fff;border-radius:20px;padding:23px;box-shadow:0 18px 44px rgba(16,37,30,.16)}
 .commit-shell .eyebrow{color:#b9d0c3}.commit-shell h2{color:#fff}.commit-shell .plan-summary{color:#d9e4de;margin-bottom:17px}
 .commit-list{display:grid;grid-template-columns:1fr 1fr;gap:0 22px;margin:0;padding:0;list-style:none}.commit-item{padding:13px 0;border-top:1px solid rgba(255,255,255,.16)}.commit-item-priority{font-size:.61rem;text-transform:uppercase;letter-spacing:.08em;font-weight:820;color:#b8cabe}.commit-item strong{display:block;margin:3px 0 4px}.commit-item p{margin:0;color:#d2ddd7;font-size:.83rem;line-height:1.4}.commit-item a{display:inline-block;margin-top:6px;color:#fff;font-size:.7rem;font-weight:760}
@@ -49,6 +55,7 @@ main{max-width:1100px}
   .season-facts{grid-template-columns:1fr 1fr}.season-fact:nth-child(2){border-right:0}.season-fact:nth-child(-n+2){border-bottom:1px solid var(--bench-line)}
   .plan-brief{grid-template-columns:1fr 1fr}.plan-brief-item:nth-child(4n){border-right:1px solid var(--bench-line)}.plan-brief-item:nth-child(2n){border-right:0}.plan-brief-item:nth-last-child(-n+4){border-bottom:1px solid var(--bench-line)}.plan-brief-item:nth-last-child(-n+2){border-bottom:0}
   .stop-fact{grid-template-columns:48px 1fr;gap:10px 12px}.stop-fact-index{width:38px;height:38px}.stop-fact>div:nth-child(3){grid-column:2}.stop-fact-meta{grid-template-columns:1fr 1fr}
+  .look-now-grid{grid-template-columns:1fr 1fr}.look-now-item{min-height:112px}
   .commit-list{grid-template-columns:1fr}.commit-shell{padding:18px 16px}.benchmark-static-grid{grid-template-columns:1fr;gap:14px}
   #decisionClockSection{padding-left:14px}
 }
@@ -57,4 +64,5 @@ main{max-width:1100px}
   .season-fact{padding:10px 11px}.season-fact strong{font-size:.8rem}.season-fact small{font-size:.65rem}
   .plan-brief-item{padding:9px 10px}.plan-brief-item strong{font-size:.77rem}
   .stop-fact{grid-template-columns:40px 1fr}.stop-fact-meta{grid-template-columns:1fr}.stop-fact-meta div{border-right:0}.stop-fact-meta div:nth-last-child(-n+2){border-bottom:1px solid var(--bench-line)}.stop-fact-meta div:last-child{border-bottom:0}
+  .look-now-grid{grid-template-columns:1fr}.look-now-item{min-height:0}
 }
