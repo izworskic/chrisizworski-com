@@ -1,3 +1,4 @@
+# Temporary diagnostic capture for PR #517; remove before merge.
 name: Agent branch verification
 
 on:
