@@ -35,4 +35,14 @@ addCanonical({
   label: 'Gatlinburg Winter'
 });
 
+// Blue Ridge Parkway is one canonical live route-decision surface. Keep the
+// discovery entry focused on the tool rather than creating gateway/date clones.
+addCanonical({
+  url: 'https://chrisizworski.com/blue-ridge-parkway/',
+  lastmod: '2026-09-24',
+  changefreq: 'daily',
+  priority: '0.9',
+  label: 'Blue Ridge Parkway'
+});
+
 fs.writeFileSync(file, xml);
