@@ -5,6 +5,7 @@
 
   const DHC_BASE = 'https://www.duluthharborcam.com';
   const INDEPENDENT_SHIP_CAM = { lat: 46.7818492, lon: -92.0929547 };
+  const PRIMARY_CANAL_CAMERA_TITLE = 'Canal Cam — Maritime Visitor Center';
 
   const FEEDS = [
     { id: 'canal', name: 'Canal Cam', siteId: 'visitor-center', url: `${DHC_BASE}/p/canal-park-cams.html` },
@@ -85,6 +86,11 @@
     const meta = document.createElement('p');
     meta.textContent = `${feeds.length} Duluth Harbor Cam feed${feeds.length === 1 ? '' : 's'} at this site.`;
     wrap.append(meta);
+    if (site.id === 'visitor-center') {
+      const primary = document.createElement('p');
+      primary.textContent = 'Canal Cam is also the primary in-page video view in the monitor below.';
+      wrap.append(primary);
+    }
     if (site.approximate) {
       const approx = document.createElement('p');
       approx.textContent = 'Map position is approximate at the published facility/site level.';
@@ -107,10 +113,33 @@
     document.head.append(style);
   }
 
+  function findPrimaryCanalMarker() {
+    if (!boatMap || typeof boatMap.eachLayer !== 'function') return null;
+    let match = null;
+    boatMap.eachLayer(layer => {
+      if (match || !layer || !layer.options) return;
+      if (layer.options.title === PRIMARY_CANAL_CAMERA_TITLE && typeof layer.bindPopup === 'function') match = layer;
+    });
+    return match;
+  }
+
+  function adoptPrimaryCanalMarker(site) {
+    const marker = findPrimaryCanalMarker();
+    if (!marker) return null;
+    const feeds = feedsBySite.get(site.id) || [];
+    if (typeof marker.unbindTooltip === 'function') marker.unbindTooltip();
+    marker.bindTooltip(`${site.name} · ${feeds.length} cams`, { direction: 'top' });
+    if (typeof marker.unbindPopup === 'function') marker.unbindPopup();
+    marker.bindPopup(sitePopup(site));
+    siteMarkers.set(site.id, marker);
+    return marker;
+  }
+
   function addSiteMarkers() {
     if (!boatMap || typeof L === 'undefined') return;
     SITES.forEach(site => {
       if (siteMarkers.has(site.id)) return;
+      if (site.id === 'visitor-center' && adoptPrimaryCanalMarker(site)) return;
       const marker = L.marker([site.lat, site.lon], {
         icon: cameraSiteIcon(site),
         keyboard: true,
@@ -151,7 +180,7 @@
     details.append(links);
     const note = document.createElement('p');
     note.className = 'camera-network-note';
-    note.textContent = 'The existing Ship Cam is an additional independent feed, so the monitor exposes 19 camera feeds in total. Regional North Shore cameras stay off the default Canal Park extent until you choose Camera network.';
+    note.textContent = 'The existing Ship Cam is an additional independent feed, so the monitor exposes 19 camera feeds in total. Markers identify the named host site or landmark, not a surveyed camera mount point; Hillside and Cargo Connect are explicitly approximate facility/site positions. Regional North Shore cameras stay off the default Canal Park extent until you choose Camera network.';
     details.append(note);
     panel.append(details);
     monitor.append(panel);
@@ -175,6 +204,15 @@
     const status = document.getElementById('mapStatus');
     if (status && /2 cameras|2 camera locations/.test(status.textContent)) {
       status.textContent = status.textContent.replace(/2 camera locations/g, '19 camera feeds / 15 sites').replace(/2 cameras/g, '19 camera feeds / 15 sites');
+    }
+
+    const watchPick = document.getElementById('watchPick');
+    if (watchPick) {
+      watchPick.querySelectorAll('.watch-note').forEach(note => {
+        if (/both live camera locations/.test(note.textContent || '')) {
+          note.textContent = (note.textContent || '').replace('both live camera locations', 'both primary live camera views, the wider mapped camera network');
+        }
+      });
     }
 
     document.querySelectorAll('.source-item').forEach(item => {
@@ -210,7 +248,7 @@
   }
 
   function observeCopy() {
-    const targets = [document.getElementById('monitorVisual'), document.getElementById('mapStatus')].filter(Boolean);
+    const targets = [document.getElementById('monitorVisual'), document.getElementById('mapStatus'), document.getElementById('watchPick')].filter(Boolean);
     if (!targets.length) return;
     const observer = new MutationObserver(() => window.requestAnimationFrame(() => {
       patchStaticCopy();
