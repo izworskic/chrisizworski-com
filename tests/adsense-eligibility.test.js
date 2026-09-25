@@ -1,5 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const { eligible, removeAdLoader } = require('../lib/adsense-eligibility');
 const sitePolicyLinks = require('../lib/site-policy-links');
 const loader = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>';
@@ -31,10 +33,11 @@ test('every loader form is rewritten to the plain loader so Auto ads cannot star
   }
 });
 test('in-article placer tag carries the configured slot, respects the switch and exclusions', () => {
-  const { placerTag, hasPlacer } = require('../lib/adsense-eligibility');
+  const { placerTag, hasPlacer, PLACER_VERSION } = require('../lib/adsense-eligibility');
   const cfg = { enabled: true, publisherId: 'ca-pub-8222782620788075', slotId: '8700232579', maxPerPage: 3, excludeRoutes: ['/skip/'] };
   const tag = placerTag('/soo-locks/index.html', cfg);
-  assert.match(tag, /src="\/assets\/in-article-ads\.js\?v=1"/);
+  assert.equal(PLACER_VERSION, 2);
+  assert.match(tag, /src="\/assets\/in-article-ads\.js\?v=2"/);
   assert.match(tag, /data-slot="8700232579"/); assert.match(tag, /data-max="3"/); assert.match(tag, /\bdefer\b/);
   assert.ok(hasPlacer(tag));
   assert.equal(placerTag('/skip/index.html', cfg), '');
@@ -44,7 +47,21 @@ test('in-article placer tag carries the configured slot, respects the switch and
   assert.equal(live.slotId, '8700232579'); assert.equal(live.publisherId, 'ca-pub-8222782620788075');
 });
 test('the placer script never targets cards, grids, lists, maps or the reader\'s view', () => {
-  const js = require('node:fs').readFileSync(require('node:path').join(__dirname, '../public/assets/in-article-ads.js'), 'utf8');
-  for (const s of ['firstMin', 'table,li', '.leaflet-container', 'looksLikeCard', 'grid|flex', 'scrollY + vh', 'data-ad-layout="in-article"', 'data-ad-format="fluid"', "'chrisizworski.com'"]) assert.ok(js.includes(s), s);
+  const js = fs.readFileSync(path.join(__dirname, '../public/assets/in-article-ads.js'), 'utf8');
+  for (const s of ['firstMin', 'table,li', '.leaflet-container', 'looksLikeCard', 'grid|flex', 'scrollY + vh', 'data-ad-layout="in-article"', 'data-ad-format="fluid"', "'chrisizworski.com'", 'data-in-article-ad-break', 'if (!blocks.length)']) assert.ok(js.includes(s), s);
   assert.ok(!/enable_page_level_ads|setInterval/.test(js));
+});
+test('Detroit declares two intentional ad seams without hand-written AdSense units', () => {
+  const html = fs.readFileSync(path.join(__dirname, '../public/detroit-outdoors/index.html'), 'utf8');
+  const marker = 'data-in-article-ad-break';
+  const seams = html.match(new RegExp(marker, 'g')) || [];
+  assert.equal(seams.length, 2);
+  const grid = html.indexOf('id="opportunity-grid"');
+  const first = html.indexOf(marker);
+  const routes = html.indexOf('class="question-routes"');
+  const second = html.indexOf(marker, first + marker.length);
+  const context = html.indexOf('class="context"');
+  assert.ok(grid >= 0 && grid < first && first < routes);
+  assert.ok(routes < second && second < context);
+  assert.ok(!/<ins\b[^>]*adsbygoogle/i.test(html));
 });
