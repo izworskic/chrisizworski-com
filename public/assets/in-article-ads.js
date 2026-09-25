@@ -2,7 +2,9 @@
   'use strict';
   // In-article ads between full sections only. Never inside a card, grid, flex
   // row, list, table, map, form or dialog. Never above the reader, so nothing
-  // they are looking at moves. Settings come from this script tag's data-*.
+  // they are looking at moves. Pages may opt into explicit safe seams with
+  // data-in-article-ad-break; otherwise headings are discovered automatically.
+  // Settings come from this script tag's data-*.
   var me = document.currentScript;
   if (!me || !['chrisizworski.com', 'www.chrisizworski.com'].includes(location.hostname)) return;
   var CLIENT = me.dataset.client, SLOT = me.dataset.slot, MAX = +me.dataset.max || 3;
@@ -19,7 +21,7 @@
     var filled = s.backgroundColor && !/^(transparent|rgba\(0, 0, 0, 0\))$/.test(s.backgroundColor);
     return (radius >= 4 && (bordered || filled)) || s.boxShadow !== 'none';
   }
-  // The block to place before: the heading, or the section it opens.
+  // The block to place before: the heading, the section it opens, or an explicit seam.
   function blockFor(h) {
     var block = h;
     while (block.parentElement && block.parentElement !== document.body &&
@@ -65,12 +67,15 @@
   }
   function insert(block) {
     if (placed.length >= MAX || !block.isConnected || !roomFor(block)) return;
+    var parent = block.parentElement;
+    var explicit = block.hasAttribute('data-in-article-ad-break');
     var aside = document.createElement('aside');
     aside.className = 'in-article-ad';
     aside.setAttribute('aria-label', 'Advertisement');
     aside.innerHTML = '<span class="in-article-ad__label">Advertisement</span>' +
       '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="' + CLIENT + '" data-ad-slot="' + SLOT + '"></ins>';
-    block.parentElement.insertBefore(aside, block);
+    parent.insertBefore(aside, block);
+    if (explicit) block.remove();
     placed.push(aside);
     try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (_) { /* ads never break a tool */ }
   }
@@ -81,11 +86,18 @@
       '.in-article-ad__label{display:block;margin:0 0 10px;font:600 10px/14px system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;text-align:center;opacity:.55}' +
       '.in-article-ad:has(ins[data-ad-status="unfilled"]){display:none}@media print{.in-article-ad{display:none}}';
     document.head.appendChild(css);
-    var blocks = [];
-    document.querySelectorAll('h2').forEach(function (h) {
-      var b = blockFor(h);
-      if (blocks.indexOf(b) < 0 && usable(b)) blocks.push(b);
+    var explicit = [];
+    document.querySelectorAll('[data-in-article-ad-break]').forEach(function (marker) {
+      if (usable(marker)) explicit.push(marker);
     });
+    var blocks = explicit;
+    if (!blocks.length) {
+      blocks = [];
+      document.querySelectorAll('h2').forEach(function (h) {
+        var b = blockFor(h);
+        if (blocks.indexOf(b) < 0 && usable(b)) blocks.push(b);
+      });
+    }
     if (!blocks.length) return;
     firstMin = Math.max(innerHeight * 2, toolBottom() + 200, 1200);
     if (!('IntersectionObserver' in window)) return;               // no lazy placement, no ads
