@@ -11,26 +11,27 @@ test('Duluth monitor JavaScript still parses', () => {
   assert.doesNotThrow(() => new vm.Script(js));
 });
 
-test('selected and anticipated vessels use ship silhouettes instead of NEXT/AIS text pins', () => {
+test('selected and anticipated vessels use side-profile ship silhouettes instead of NEXT/AIS text pins', () => {
   assert.match(js, /function shipIcon\(vessel, state = 'candidate'\)/);
   assert.match(js, /class=\"ship-glyph\"/);
-  assert.match(js, /class=\"ship-hull\"/);
+  assert.match(js, /viewBox=\"0 0 72 32\"/);
+  assert.match(js, /class=\"ship-house\"/);
+  assert.match(js, /class=\"ship-stack\"/);
+  assert.match(js, /class=\"ship-hatch\"/);
   assert.doesNotMatch(js, /html: `<span><b>\$\{selected \? 'NEXT' : 'AIS'\}<\/b><\/span>`/);
+  assert.doesNotMatch(js, /viewBox=\"0 0 36 48\"/);
   assert.match(js, /icon: shipIcon\(c, selected \? 'selected' : 'candidate'\)/);
 });
 
-test('nearby AIS vessels also render as ships and use course or heading rotation', () => {
-  assert.match(js, /function shipRotation\(vessel\)/);
-  assert.match(js, /Number\(vessel\?\.heading\)/);
-  assert.match(js, /Number\(vessel\?\.course\)/);
+test('nearby AIS vessels also render as ship silhouettes', () => {
   assert.match(js, /icon: shipIcon\(v, state\)/);
   assert.doesNotMatch(js, /L\.circleMarker\(\[v\.lat, v\.lon\]/);
 });
 
-test('ship marker semantics remain color-based and asset is cache-busted', () => {
+test('ship marker semantics remain color-based', () => {
   assert.match(js, /\.ship-map-marker\.is-selected \.ship-hull\{fill:#b9572a\}/);
   assert.match(js, /\.ship-map-marker\.is-local \.ship-hull\{fill:#567d8b\}/);
   assert.match(js, /\.ship-map-marker\.is-stopped \.ship-hull\{fill:#8a6a42\}/);
-  assert.match(js, /Rust ship = selected next watch/);
+  assert.match(js, /Rust freighter = selected next watch/);
   assert.match(html, /duluth-canal\.js\?v=20260925-ships1/);
 });
