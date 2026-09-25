@@ -45,6 +45,9 @@ test("first visit prefers a representative daylight plus lights day over a gener
   const policy = T.personaPolicy(d, { persona: "first", goal: "classic" });
   const representative = option("representative", ["newfound-gap", "downtown-dinner", "winter-magic-walk"], 60, 65);
   const generic = option("generic", ["ripley-aquarium", "downtown-dinner", "winter-magic-walk"], 70, 15);
+  const representativeFeatures = T.optionFeatures(representative, d);
+  const genericFeatures = T.optionFeatures(generic, d);
+  console.error("FIRST_PERSONA_DIAGNOSTIC", JSON.stringify({ policy, representativeFeatures, genericFeatures, representativeScore: T.personaScore(representative, d, policy), genericScore: T.personaScore(generic, d, policy) }));
   const ranked = T.rankPersonaOptions([generic, representative], d, policy);
   assert.equal(ranked[0].id, "representative");
   assert.match(T.personaReason(policy, ranked[0].personaFeatures), /first-time visitor/i);
