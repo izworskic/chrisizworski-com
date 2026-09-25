@@ -82,7 +82,7 @@ test("Finish is present in static planner markup and the asset is cache-busted",
   assert.match(html,/<label for="finish">Finish<\/label>/);
   assert.match(html,/<select id="finish">/);
   assert.match(html,/Back where I started/);
-  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-3/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-4/);
 });
 
 
@@ -109,4 +109,22 @@ test("browser keeps every checked activity and auto-fits point-to-point time",()
   assert.match(source,/syncHours\(true\)/);
   const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");
   assert.match(html,/id="corridorBudget"/);
+});
+
+
+test("trip results foreground selected-stop detail and collapse normal planner machinery",()=>{
+  const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");
+  const source=fs.readFileSync(path.join(__dirname,"..","public","assets","blue-ridge-parkway.js"),"utf8");
+  assert.match(html,/id="selectedStopSummary"/);
+  assert.match(html,/id="selectedStopDetails"/);
+  assert.match(html,/<details class="trip-technical">/);
+  assert.match(html,/Trip details &amp; sources/);
+  assert.match(html,/id="roadAlertSection" hidden/);
+  assert.ok(html.indexOf('id="selectedStopDetails"') < html.indexOf('<details class="trip-technical">'));
+  assert.ok(html.indexOf('id="roadAlertSection"') < html.indexOf('<details class="trip-technical">'));
+  assert.match(source,/function renderSelectedStopDetails/);
+  assert.match(source,/Why it made your trip/);
+  assert.match(source,/What to do here/);
+  assert.match(source,/renderSelectedStopDetails\(payload\)/);
+  assert.match(source,/alert\.hidden=!urgent\.length/);
 });
