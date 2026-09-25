@@ -140,8 +140,8 @@ test('where-to-watch cards and map are causally linked in both directions', () =
   assert.match(js, /46\.779847/);
   assert.match(js, /46\.778722/);
   assert.match(js, /46\.780067/);
-  assert.match(js, /data-watch-spot/);
-  assert.match(js, /data-watch-focus/);
+  assert.match(js, /dataset\.watchSpot/);
+  assert.match(js, /dataset\.watchFocus/);
   assert.match(js, /Show on map/);
   assert.match(js, /L\.divIcon/);
   assert.match(js, /marker\.on\('click', \(\) => setActiveWatchSpot\(spot\.id\)\)/);
