@@ -82,5 +82,31 @@ test("Finish is present in static planner markup and the asset is cache-busted",
   assert.match(html,/<label for="finish">Finish<\/label>/);
   assert.match(html,/<select id="finish">/);
   assert.match(html,/Back where I started/);
-  assert.match(html,/blue-ridge-parkway\.js\?v=20260924-2/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-3/);
+});
+
+
+test("all selected activities survive normalization",()=>{
+  const interests="scenery,fall-color,short-walk,waterfall,photography,history,picnic,sunset";
+  assert.equal(P.normalizeInput({gateway:"cherokee",finish:"roanoke",hours:12,interests}).interests.length,8);
+});
+
+test("Cherokee to Roanoke uses spare time for activity stops when twelve hours are available",()=>{
+  const interests="scenery,fall-color,short-walk,waterfall,photography,history,picnic,sunset";
+  const input=P.normalizeInput({gateway:"cherokee",finish:"roanoke",hours:12,interests});
+  assert.ok(P.nonstopMinutes(input)/60>10.5);
+  assert.ok(P.nonstopMinutes(input)/60<11.5);
+  const routes=P.buildCandidates(input);
+  assert.ok(routes.some(route=>route.stopIds.length>0));
+  const stopIds=new Set(routes.flatMap(route=>route.stopIds));
+  assert.ok(stopIds.size>0);
+});
+
+test("browser keeps every checked activity and auto-fits point-to-point time",()=>{
+  const source=fs.readFileSync(path.join(__dirname,"..","public","assets","blue-ridge-parkway.js"),"utf8");
+  assert.doesNotMatch(source,/selectedInterests\(\).*slice\(0,4\)/);
+  assert.match(source,/corridorDriveHours/);
+  assert.match(source,/syncHours\(true\)/);
+  const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");
+  assert.match(html,/id="corridorBudget"/);
 });
