@@ -4,6 +4,7 @@ const fs=require('node:fs');
 const engine=require('../public/assets/pictured-rocks-planner-engine.js');
 const html=fs.readFileSync('public/labs/pictured-rocks-planner/index.html','utf8');
 const css=fs.readFileSync('public/assets/pictured-rocks-planner-v2.css','utf8');
+const ui=fs.readFileSync('public/assets/pictured-rocks-planner-v2.js','utf8');
 
 const base={time:'day',base:'munising',walk:'moderate',party:'adults',priority:'cliffs',water:'any'};
 function p(overrides={}){return engine.plan({...base,...overrides});}
@@ -45,6 +46,12 @@ test('young-kid kayak request does not blindly route to kayak',()=>{
   const family=p({party:'kids',priority:'family',water:'kayak'});
   assert.ok(!family.ids.includes('kayak'));
   assert.match(family.hard,/Young kids/);
+});
+
+test('two-day UI splits geography into explicit days and resets the clock',()=>{
+  assert.match(ui,/function inferDayBreak\(ids\)/);
+  assert.match(ui,/day=2;minute=8\*60/);
+  assert.match(ui,/Day \$\{s\.day\} · \$\{s\.time\}/);
 });
 
 test('result surface exposes sequence, tradeoff, fallback, and offline actions',()=>{
