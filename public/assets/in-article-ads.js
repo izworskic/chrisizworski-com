@@ -7,6 +7,28 @@
   // Settings come from this script tag's data-*.
   var me = document.currentScript;
   if (!me || !['chrisizworski.com', 'www.chrisizworski.com'].includes(location.hostname)) return;
+
+  // Canal Park keeps placed/in-article ads, but its navigation should never
+  // trigger Google's vignette overlay. This attribute is Google's documented
+  // per-link opt-out and must also cover links added by the live UI after load.
+  var route = location.pathname.replace(/index\.html$/, '').replace(/\/+$/, '') || '/';
+  if (route === '/duluth-canal-park') {
+    var suppressVignette = function (root) {
+      if (root.matches && root.matches('a')) root.setAttribute('data-google-vignette', 'false');
+      if (root.querySelectorAll) root.querySelectorAll('a').forEach(function (a) {
+        a.setAttribute('data-google-vignette', 'false');
+      });
+    };
+    suppressVignette(document);
+    new MutationObserver(function (records) {
+      records.forEach(function (record) {
+        record.addedNodes.forEach(function (node) {
+          if (node.nodeType === 1) suppressVignette(node);
+        });
+      });
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  }
+
   var CLIENT = me.dataset.client, SLOT = me.dataset.slot, MAX = +me.dataset.max || 3;
   if (!/^ca-pub-\d+$/.test(CLIENT || '') || !/^\d+$/.test(SLOT || '')) return;
   if (document.querySelector('meta[name="in-article-ads"][content="off"]')) return;
