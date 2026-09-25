@@ -110,7 +110,7 @@ test("Detroit Outdoors reuses existing engines and gates generated copy",()=>{
 test("Detroit Outdoors uses the existing fall-color dispatcher instead of adding a serverless function",()=>{
  const dispatcher=read("api/fall-color.js");
  const vercel=read("vercel.json");
- assert.match(dispatcher,/"detroit-outdoors": require\("\.\.\/lib\/detroit-outdoors\/route\.js"\)/);
+ assert.match(dispatcher,/"detroit-outdoors": require\("\.\.\/lib\/detroit-outdoors\/route-v2\.js"\)/);
  assert.match(vercel,/"source": "\/api\/detroit-outdoors"/);
  assert.match(vercel,/"destination": "\/api\/fall-color\?view=detroit-outdoors"/);
 });

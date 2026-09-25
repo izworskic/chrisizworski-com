@@ -18,7 +18,7 @@ const handlers = {
   cron: require("../lib/fall-color/routes/cron.js"),
   "old-sow-live": require("../lib/old-sow/route.js"),
   "mackinac-island": require("../lib/mackinac-island/route.js"),
-  "detroit-outdoors": require("../lib/detroit-outdoors/route.js"),
+  "detroit-outdoors": require("../lib/detroit-outdoors/route-v2.js"),
 };
 
 const DETROIT_FREIGHTER_SAFE_CACHE_SECONDS = 60;
