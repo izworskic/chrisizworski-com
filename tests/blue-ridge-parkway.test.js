@@ -152,7 +152,8 @@ test("crawlable page preserves canonical entity, correct Leaflet SRI and first-d
   assert.match(html,/https:\/\/chrisizworski\.com\/#person/);
   assert.match(html,/Drive the part of the Parkway worth your time\./);
   assert.match(html,/Which open section should I actually drive\?/);
-  assert.match(html,/sha256-p4NxAoJBhIINfQ3yn5MZJoer0n8ZCkG\/kvUp6v\+S0w=/);
+  assert.match(html,/sha256-p4NxAoJBhIIN\+hmNHrzRCf9tD\/miZyoHS5obTRR9BMY=/);
+  assert.doesNotMatch(html,/sha256-p4NxAoJBhIINfQ3yn5MZJoer0n8ZCkG\/kvUp6v\+S0w=/);
   assert.doesNotMatch(html,/breathtaking|hidden gem|perfect day/i);
   assert.doesNotMatch(html,/\bJEV\b|Anthropic|AI-powered/i);
 });
