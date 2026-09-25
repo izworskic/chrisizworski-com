@@ -10,22 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run ad tests and capture output
+      - name: Run full gate and capture output
         shell: bash
         run: |
           set +e
-          node --test tests/adsense-eligibility.test.js > adtest.log 2>&1
+          npm run verify:all > verify-all.log 2>&1
           code=$?
-          cat adtest.log
-          echo "$code" > adtest.exit
+          cat verify-all.log
+          echo "$code" > verify-all.exit
           exit 0
       - uses: actions/upload-artifact@v4
         with:
-          name: detroit-ad-debug
+          name: detroit-ad-full-gate-debug
           path: |
-            adtest.log
-            adtest.exit
+            verify-all.log
+            verify-all.exit
           retention-days: 1
