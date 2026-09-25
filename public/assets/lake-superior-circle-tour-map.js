@@ -31,6 +31,7 @@ const DAY_COLORS = ["#2c5f2d","#007f7b","#b04a35","#5c4fa3","#b27600","#2374ab",
 const status = document.getElementById("mapStatus");
 const page = window.CircleTourPage;
 let map;
+let maplibreApi = null;
 let selectedStopId = null;
 let gatewayPopup = null;
 let filterState = {region: window.circleTourRegion || "all", activity: window.circleTourActivity || "all"};
@@ -50,12 +51,19 @@ function readPresetState() {
 }
 
 function addMapLibreCss() {
-  if (document.querySelector("link[data-circle-tour-map-css]")) return;
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href = MAPLIBRE_CSS;
-  link.dataset.circleTourMapCss = "";
-  document.head.append(link);
+  if (!document.querySelector("link[data-circle-tour-map-css]")) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = MAPLIBRE_CSS;
+    link.dataset.circleTourMapCss = "";
+    document.head.append(link);
+  }
+  if (!document.getElementById("circle-tour-gateway-style")) {
+    const style = document.createElement("style");
+    style.id = "circle-tour-gateway-style";
+    style.textContent = `.circle-tour-gateway-popup{min-width:240px;font-family:Georgia,'Times New Roman',serif;color:#26332c;line-height:1.45}.circle-tour-gateway-popup>strong{display:block;font-size:16px;color:#17352a;margin-bottom:2px}.circle-tour-gateway-popup>span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.45px;color:#777;margin-bottom:9px}.circle-tour-gateway-live{padding:8px 9px;background:#f6f2e8;border-left:3px solid #d39a24;margin:7px 0 9px}.circle-tour-gateway-live strong,.circle-tour-gateway-live span{display:block}.circle-tour-gateway-live strong{font-size:13px}.circle-tour-gateway-live span{font-size:12px;color:#5d665f;margin-top:2px}.circle-tour-gateway-popup p{margin:7px 0 9px;font-size:12px}.circle-tour-gateway-actions{display:flex;gap:10px;flex-wrap:wrap}.circle-tour-gateway-actions a{font-weight:700;font-size:12px;color:#245b3b}`;
+    document.head.append(style);
+  }
 }
 
 function cardData(id) {
@@ -193,16 +201,49 @@ function selectStop(id, {move = true, measure = false} = {}) {
 }
 
 function gatewayPopupHtml() {
-  return `<div class="circle-tour-gateway-popup"><strong>${MACKINAC_GATEWAY.name}</strong><span>${MACKINAC_GATEWAY.subtitle}</span><p>If your trip enters the U.P. here, check the crossing before you commit north.</p><div><a href="${MACKINAC_GATEWAY.liveHref}" data-growth-cta="circle-tour-map-mackinac-live">Bridge conditions →</a><a href="${MACKINAC_GATEWAY.tollHref}" data-growth-cta="circle-tour-map-mackinac-toll">Toll & payment →</a></div></div>`;
+  return `<div class="circle-tour-gateway-popup"><strong>${MACKINAC_GATEWAY.name}</strong><span>${MACKINAC_GATEWAY.subtitle}</span><div class="circle-tour-gateway-live" data-gateway-live><strong>Checking live bridge status…</strong><span>Official bridge report + nearby wind</span></div><p>If your trip enters the U.P. here, this crossing can change the drive before the Circle Tour itself begins.</p><div class="circle-tour-gateway-actions"><a href="${MACKINAC_GATEWAY.liveHref}" data-growth-cta="circle-tour-map-mackinac-live">Bridge conditions →</a><a href="${MACKINAC_GATEWAY.tollHref}" data-growth-cta="circle-tour-map-mackinac-toll">Toll & payment →</a></div></div>`;
 }
 
-function openGatewayPopup(maplibregl, {move = true, measure = false} = {}) {
-  if (!map) return;
+async function hydrateGatewayPopup() {
+  const live = document.querySelector(".circle-tour-gateway-popup [data-gateway-live]");
+  if (!live) return;
+  try {
+    const response = await fetch(`/api/mackinac?minute=${Math.floor(Date.now() / 60000)}`, {
+      cache: "no-store",
+      headers: {accept: "application/json"},
+    });
+    if (!response.ok) throw new Error(`Mackinac status returned ${response.status}`);
+    const data = await response.json();
+    const official = data?.official;
+    const wind = data?.current_wind;
+    const title = official?.available && official?.title ? String(official.title) : "Official status unavailable";
+    const windValue = Number(wind?.speed_mph ?? wind?.wind_mph);
+    const strong = document.createElement("strong");
+    strong.textContent = title;
+    const detail = document.createElement("span");
+    detail.textContent = Number.isFinite(windValue)
+      ? `Nearby wind about ${Math.round(windValue)} mph · open full tool for vehicle-specific restrictions`
+      : "Wind reading unavailable · open full tool for vehicle-specific restrictions";
+    live.replaceChildren(strong, detail);
+    live.dataset.state = official?.available ? "live" : "degraded";
+  } catch (_error) {
+    const strong = document.createElement("strong");
+    strong.textContent = "Live bridge read unavailable";
+    const detail = document.createElement("span");
+    detail.textContent = "Use Bridge conditions for the official status before crossing.";
+    live.replaceChildren(strong, detail);
+    live.dataset.state = "degraded";
+  }
+}
+
+function openGatewayPopup({move = true, measure = false} = {}) {
+  if (!map || !maplibreApi) return;
   if (gatewayPopup) gatewayPopup.remove();
-  gatewayPopup = new maplibregl.Popup({offset: 18, closeButton: true, maxWidth: "310px"})
+  gatewayPopup = new maplibreApi.Popup({offset: 18, closeButton: true, maxWidth: "310px"})
     .setLngLat(MACKINAC_GATEWAY.coordinates)
     .setHTML(gatewayPopupHtml())
     .addTo(map);
+  hydrateGatewayPopup();
   if (move) {
     map.easeTo({center: MACKINAC_GATEWAY.coordinates, zoom: Math.max(map.getZoom(), 6.5), duration: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 550});
   }
@@ -216,8 +257,8 @@ function showFallback(message) {
 
 try {
   addMapLibreCss();
-  const maplibregl = await import(MAPLIBRE_MODULE);
-  map = new maplibregl.Map({
+  maplibreApi = await import(MAPLIBRE_MODULE);
+  map = new maplibreApi.Map({
     container: "circleTourMap",
     style: OPENFREEMAP_STYLE,
     bounds: [[-92.5,45.62],[-84.0,49.3]],
@@ -230,8 +271,8 @@ try {
     attributionControl: {compact: true, customAttribution: "Route overview"},
   });
   map.touchZoomRotate.disableRotation();
-  map.addControl(new maplibregl.NavigationControl({showCompass: false}), "top-right");
-  map.addControl(new maplibregl.ScaleControl({maxWidth: 100, unit: "imperial"}), "bottom-left");
+  map.addControl(new maplibreApi.NavigationControl({showCompass: false}), "top-right");
+  map.addControl(new maplibreApi.ScaleControl({maxWidth: 100, unit: "imperial"}), "bottom-left");
   const loadTimeout = window.setTimeout(() => {
     if (!map.isStyleLoaded()) showFallback("The external basemap service did not respond in time.");
   }, 12000);
@@ -278,8 +319,8 @@ try {
       map.on("mouseenter", layer, () => { map.getCanvas().style.cursor = "pointer"; });
       map.on("mouseleave", layer, () => { map.getCanvas().style.cursor = ""; });
     }
+    map.on("click", "gateway-halo", () => openGatewayPopup({measure: true}));
     for (const layer of ["gateway-halo", "gateway-core", "gateway-label"]) {
-      map.on("click", layer, () => openGatewayPopup(maplibregl, {measure: true}));
       map.on("mouseenter", layer, () => { map.getCanvas().style.cursor = "pointer"; });
       map.on("mouseleave", layer, () => { map.getCanvas().style.cursor = ""; });
     }
@@ -318,5 +359,5 @@ window.addEventListener("circle-tour:stop-open", (event) => selectStop(String(ev
 
 window.CircleTourMap = {
   focusStop: selectStop,
-  focusMackinacGateway: () => import(MAPLIBRE_MODULE).then((maplibregl) => openGatewayPopup(maplibregl, {move: true, measure: true})),
+  focusMackinacGateway: () => openGatewayPopup({move: true, measure: true}),
 };
