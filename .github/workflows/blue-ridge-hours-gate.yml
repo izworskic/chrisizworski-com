@@ -1,0 +1,59 @@
+name: Blue Ridge availability gate
+
+on:
+  push:
+    branches:
+      - fix/blue-ridge-hours-gate
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/blue-ridge-hours-gate
+          fetch-depth: 0
+      - name: Gate schedule-sensitive stops
+        shell: python
+        run: |
+          from pathlib import Path
+
+          catalog=Path('lib/blue-ridge-parkway/catalog.js')
+          s=catalog.read_text()
+          for stop_id in ['nc-minerals-museum','blue-ridge-music-center']:
+              anchor=f'id:"{stop_id}"'
+              pos=s.find(anchor)
+              assert pos>=0, f'{stop_id} missing'
+              block_end=s.find('practical:',pos)
+              segment=s[pos:block_end]
+              if 'scheduleSensitive:true' not in segment:
+                  tag_end=s.find('],',pos,block_end)
+                  assert tag_end>=0, f'tags for {stop_id} missing'
+                  s=s[:tag_end+2]+'\n    scheduleSensitive:true,'+s[tag_end+2:]
+          catalog.write_text(s)
+
+          engine=Path('lib/blue-ridge-parkway/point-to-point.js')
+          s=engine.read_text()
+          old='function stopValue(stop,input,chosen=[]){\n  const matches=matchedInterests(stop,input);if(!matches.length)return-100;'
+          new='function stopValue(stop,input,chosen=[]){\n  if(stop.scheduleSensitive&&!stop.availabilityVerified)return-100;\n  const matches=matchedInterests(stop,input);if(!matches.length)return-100;'
+          assert old in s, 'stopValue entry missing'
+          s=s.replace(old,new,1)
+          engine.write_text(s)
+
+          test=Path('tests/blue-ridge-parkway-destination.test.js')
+          s=test.read_text()
+          if 'schedule-sensitive facilities are never auto-selected without verified availability' not in s:
+              s+='''\n\ntest("schedule-sensitive facilities are never auto-selected without verified availability",()=>{\n  const ptp=require("../lib/blue-ridge-parkway/point-to-point.js")._test;\n  const input=ptp.normalizeInput({gateway:"cherokee",finish:"roanoke",hours:16,interests:"history"});\n  const chosen=ptp.chooseStops(ptp.corridorStops(input.gateway,input.finish),input,300,6);\n  assert.ok(!chosen.some(stop=>["nc-minerals-museum","blue-ridge-music-center"].includes(stop.id)));\n});\n'''
+          test.write_text(s)
+      - name: Run Blue Ridge tests
+        run: node --test tests/blue-ridge-parkway-destination.test.js tests/blue-ridge-parkway-ui.test.js tests/blue-ridge-parkway.test.js
+      - name: Commit gate
+        run: |
+          git config user.name "Chris Izworski"
+          git config user.email "46615230+izworskic@users.noreply.github.com"
+          git add lib/blue-ridge-parkway/catalog.js lib/blue-ridge-parkway/point-to-point.js tests/blue-ridge-parkway-destination.test.js
+          git commit -m "Gate schedule-sensitive Parkway stops"
+          git push origin HEAD:fix/blue-ridge-hours-gate
