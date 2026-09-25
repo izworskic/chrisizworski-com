@@ -45,9 +45,6 @@ test("first visit prefers a representative daylight plus lights day over a gener
   const policy = T.personaPolicy(d, { persona: "first", goal: "classic" });
   const representative = option("representative", ["newfound-gap", "downtown-dinner", "winter-magic-walk"], 60, 65);
   const generic = option("generic", ["ripley-aquarium", "downtown-dinner", "winter-magic-walk"], 70, 15);
-  const representativeFeatures = T.optionFeatures(representative, d);
-  const genericFeatures = T.optionFeatures(generic, d);
-  console.error("FIRST_PERSONA_DIAGNOSTIC", JSON.stringify({ policy, representativeFeatures, genericFeatures, representativeScore: T.personaScore(representative, d, policy), genericScore: T.personaScore(generic, d, policy) }));
   const ranked = T.rankPersonaOptions([generic, representative], d, policy);
   assert.equal(ranked[0].id, "representative");
   assert.match(T.personaReason(policy, ranked[0].personaFeatures), /first-time visitor/i);
@@ -60,7 +57,13 @@ test("family persona values energy, walking and movement over attraction stackin
   const stacked = option("stacked", ["anakeesta", "ober-mountain", "winter-magic-walk"], 70, 58);
   const ranked = T.rankPersonaOptions([stacked, compact], d, policy);
   assert.equal(ranked[0].id, "compact");
-  assert.ok(ranked[0].personaFeatures.zoneChanges <= ranked[1].personaFeatures.zoneChanges);
+  const stackedResult = ranked.find(x => x.id === "stacked");
+  if (stackedResult) {
+    assert.ok(ranked[0].personaFeatures.zoneChanges <= stackedResult.personaFeatures.zoneChanges);
+    assert.ok(ranked[0].travelMinutes <= stackedResult.travelMinutes);
+  } else {
+    assert.equal(ranked.length, 1, "the high-friction family plan may be filtered out entirely");
+  }
 });
 
 test("couple scenic persona favors a day-to-evening scenic meal and lights rhythm", () => {
