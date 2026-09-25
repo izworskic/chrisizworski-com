@@ -110,16 +110,16 @@ test('JEV payload is a sealed closed set and cannot create vessel choices', () =
   assert.equal(MAX_INJECTION_DEPENDENCY, 0.45);
 });
 
-test('visitor page includes the decision, map, real image, live cameras, provenance and fallback surfaces', () => {
+test('visitor page includes the decision, monitor, real image, provenance and fallback surfaces', () => {
   const html = fs.readFileSync(path.join(__dirname, '../public/duluth-canal-park/index.html'), 'utf8');
   const js = fs.readFileSync(path.join(__dirname, '../public/assets/duluth-canal.js'), 'utf8');
   assert.match(html, /Duluth ship schedule &amp; Canal Park live watch/);
   assert.match(html, /id="watchPick"/);
   assert.match(html, /id="duluthVesselMap"/);
+  assert.match(html, /Duluth boat-watcher monitor/);
+  assert.match(html, /id="cameraMonitor"/);
+  assert.match(html, /id="cameraPlayer"/);
   assert.match(html, /Anticipated ships/);
-  assert.match(html, /Live Canal Park cameras/);
-  assert.match(html, /youtube-nocookie\.com\/embed\/HPS48TMmNag/);
-  assert.match(html, /youtube-nocookie\.com\/embed\/H6cm5Hf-yFY/);
   assert.match(html, /harborlookout\.com/);
   assert.match(html, /duluthharborcam\.com/);
   assert.match(html, /Open Waters AIS/);
@@ -142,9 +142,36 @@ test('where-to-watch cards and map are causally linked in both directions', () =
   assert.match(js, /46\.780067/);
   assert.match(js, /dataset\.watchSpot/);
   assert.match(js, /dataset\.watchFocus/);
-  assert.match(js, /Show on map/);
+  assert.match(js, /Show on monitor/);
   assert.match(js, /L\.divIcon/);
   assert.match(js, /marker\.on\('click', \(\) => setActiveWatchSpot\(spot\.id\)\)/);
   assert.match(js, /map\.setView\(\[spot\.lat, spot\.lon\], 16/);
-  assert.match(js, /Green numbered markers match the three viewing cards below/);
+});
+
+test('camera monitor is mapped, linked to vessel watching and lazy-loads video', () => {
+  const html = fs.readFileSync(path.join(__dirname, '../public/duluth-canal-park/index.html'), 'utf8');
+  const js = fs.readFileSync(path.join(__dirname, '../public/assets/duluth-canal.js'), 'utf8');
+  assert.match(js, /const CAMERAS = \[/);
+  assert.match(js, /Canal Cam — Maritime Visitor Center/);
+  assert.match(js, /Ship Cam — Lift Bridge Lodge/);
+  assert.match(js, /46\.779861/);
+  assert.match(js, /46\.7818492/);
+  assert.match(js, /HPS48TMmNag/);
+  assert.match(js, /H6cm5Hf-yFY/);
+  assert.match(js, /camera-map-marker/);
+  assert.match(js, /Open live camera monitor/);
+  assert.match(js, /youtube-nocookie\.com\/embed\/\$\{camera\.youtubeId\}/);
+  assert.match(js, /function selectCamera\(id, load = false\)/);
+  assert.match(js, /function focusCamera\(id, load = false\)/);
+  assert.match(html, /data-camera-id="canal"/);
+  assert.match(html, /data-camera-id="lodge"/);
+  assert.match(html, /Camera markers show where the cameras are/);
+  assert.doesNotMatch(html, /youtube-nocookie\.com\/embed\//);
+});
+
+test('published schedule remains an explicit cross-check until the monitor replaces that job', () => {
+  const html = fs.readFileSync(path.join(__dirname, '../public/duluth-canal-park/index.html'), 'utf8');
+  assert.match(html, />Published ship forecast</);
+  assert.match(html, /Why Harbor Lookout is still linked/);
+  assert.match(html, /published Duluth arrival\/departure forecast cross-check/);
 });
