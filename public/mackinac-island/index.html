@@ -223,23 +223,40 @@
       <div class="section-head"><div><div class="eyebrow">Your generated trip</div><h2 id="planner-title">Fine-tune your Mackinac plan</h2><p class="section-dek">Your opening answers already built the trip. Change only the details that matter here; every update keeps working from the same shared plan.</p></div><div class="share-actions"><button class="btn small" id="sharePlan" type="button">Share plan</button><small id="shareStateStatus" aria-live="polite"></small></div></div>
 
       <form class="trip-builder" id="tripBuilder">
-        <div class="builder-grid">
+        <!-- Measured, not guessed: must-dos changed the itinerary in 100% of runs and dinner
+             changed the plan in 67%, yet the intake never asks about either. Everything else
+             in this form is already set by the intake, so it sits below as a correction. -->
+        <div class="builder-lead">
+          <fieldset class="choice-fieldset"><legend>Don’t miss, if it fits</legend><div class="check-chips" id="mustDoChoices">
+          <label><input type="checkbox" name="must_do" value="fort"><span>Fort Mackinac</span></label>
+          <label><input type="checkbox" name="must_do" value="arch-rock"><span>Arch Rock</span></label>
+          <label><input type="checkbox" name="must_do" value="m185"><span>M-185 loop</span></label>
+          <label><input type="checkbox" name="must_do" value="downtown"><span>Downtown / fudge</span></label>
+          <label><input type="checkbox" name="must_do" value="carriage"><span>Carriage / horses</span></label>
+          <label><input type="checkbox" name="must_do" value="sunset"><span>Sunset / golden light</span></label>
+        </div></fieldset>
+          <div class="builder-grid builder-grid-lead">
+          <label><span>Dinner</span><select id="dinner" name="dinner"><option value="none" selected>No dinner block</option><option value="casual">Casual meal</option><option value="sit-down">Sit-down dinner</option></select></label>
+          </div>
+        </div>
+
+        <details class="builder-more" id="builderMore">
+          <summary><span class="builder-more-title">Correct what we inferred</span><span class="builder-more-hint">Trip length, who’s coming, bikes, pace, walking, interests, dates and fixed times</span></summary>
+          <div class="builder-grid">
           <label><span>Visit</span><select id="tripMode" name="trip"><option value="day-trip">Day trip</option><option value="overnight">Staying overnight</option></select></label>
           <label class="overnight-field" id="nightCountField" hidden><span>Nights on island</span><input id="nightCount" name="nights" type="number" min="1" max="7" value="1" inputmode="numeric" disabled></label>
-          <label><span>Adults</span><input id="adultCount" name="adults" type="number" min="1" max="12" value="2" inputmode="numeric"></label>
           <label><span>Children</span><input id="childCount" name="children" type="number" min="0" max="8" value="0" inputmode="numeric"></label>
+          <label><span>Adults</span><input id="adultCount" name="adults" type="number" min="1" max="12" value="2" inputmode="numeric"></label>
           <label><span>Trip date</span><input id="tripDate" name="trip_date" type="date"></label>
           <label><span>Starting city</span><input id="originCityInput" name="origin_text" type="search" inputmode="search" autocomplete="off" placeholder="City, state or ZIP"></label>
           <label><span>Leave home</span><input id="departTime" name="depart_at" type="time"></label>
           <label><span>Bikes</span><select id="bikePlan" name="bikes"><option value="none">No bike plan</option><option value="rent">Rent on island</option><option value="bring">Bring our bikes</option></select></label>
           <label><span>Pace</span><select id="pace" name="pace"><option value="easy">Easy</option><option value="balanced" selected>Balanced</option><option value="active">Active</option></select></label>
           <label><span>Walking</span><select id="mobility" name="mobility"><option value="standard">Standard walking</option><option value="limited">Limit steep / long walking</option></select></label>
-          <label><span>Dinner</span><select id="dinner" name="dinner"><option value="none" selected>No dinner block</option><option value="casual">Casual meal</option><option value="sit-down">Sit-down dinner</option></select></label>
           <label><span>Back on mainland by (optional)</span><select id="returnBy" name="return_by"><option value="auto">No deadline</option><option>4:30 PM</option><option>5:30 PM</option><option>6:30 PM</option><option>7:30 PM</option><option>8:30 PM</option></select></label>
           <label><span>Event starts</span><select id="eventStart" name="event_start"><option value="">No fixed event time</option><option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option></select></label>
-        </div>
-
-        <fieldset class="choice-fieldset"><legend>What sounds good?</legend><div class="check-chips" id="interestChoices">
+          </div>
+          <fieldset class="choice-fieldset"><legend>What sounds good?</legend><div class="check-chips" id="interestChoices">
           <label><input type="checkbox" name="interests" value="history"><span>History</span></label>
           <label><input type="checkbox" name="interests" value="biking"><span>Biking</span></label>
           <label><input type="checkbox" name="interests" value="scenery"><span>Scenery</span></label>
@@ -250,17 +267,9 @@
           <label><input type="checkbox" name="interests" value="fall-color"><span>Fall color</span></label>
           <label><input type="checkbox" name="interests" value="events"><span>Event</span></label>
         </div></fieldset>
+        </details>
 
-        <fieldset class="choice-fieldset"><legend>Don’t miss, if it fits</legend><div class="check-chips" id="mustDoChoices">
-          <label><input type="checkbox" name="must_do" value="fort"><span>Fort Mackinac</span></label>
-          <label><input type="checkbox" name="must_do" value="arch-rock"><span>Arch Rock</span></label>
-          <label><input type="checkbox" name="must_do" value="m185"><span>M-185 loop</span></label>
-          <label><input type="checkbox" name="must_do" value="downtown"><span>Downtown / fudge</span></label>
-          <label><input type="checkbox" name="must_do" value="carriage"><span>Carriage / horses</span></label>
-          <label><input type="checkbox" name="must_do" value="sunset"><span>Sunset / golden light</span></label>
-        </div></fieldset>
-
-        <div class="builder-actions"><button class="btn primary" type="submit" id="buildTrip">Update my plan</button><span id="builderStatus" aria-live="polite">Adjust anything you want. The trip is already built from your opening answers.</span></div>
+        <div class="builder-actions"><button class="btn primary" type="submit" id="buildTrip">Update my plan</button><span id="builderStatus" aria-live="polite">Your opening answers already set the rest. Open “Correct what we inferred” only if something is off.</span></div>
       </form>
 
       <div class="planner-decision-grid">
