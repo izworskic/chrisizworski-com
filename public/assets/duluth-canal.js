@@ -4,12 +4,39 @@
   const API = '/api/duluth-canal';
   const ZONE = 'America/Chicago';
   const CANAL = [46.7783, -92.0908];
+  const WATCH_SPOTS = [
+    {
+      id: 'north',
+      number: 1,
+      name: 'North side / Visitor Center',
+      lat: 46.779847,
+      lon: -92.092464,
+      note: 'Classic close-up viewing beside the Lake Superior Maritime Visitor Center.'
+    },
+    {
+      id: 'south',
+      number: 2,
+      name: 'South side / Park Point',
+      lat: 46.778722,
+      lon: -92.092028,
+      note: 'South-breakwater side for a strong bridge-and-ship composition.'
+    },
+    {
+      id: 'lakewalk',
+      number: 3,
+      name: 'Canal Park / Lakewalk',
+      lat: 46.780067,
+      lon: -92.091333,
+      note: 'Broader waterfront staging point at the Canal Park end of the Lakewalk.'
+    }
+  ];
   const $ = id => document.getElementById(id);
   let map = null;
   let vesselLayer = null;
   let previous = null;
   let busy = false;
   const markers = new Map();
+  const spotMarkers = new Map();
 
   function el(tag, text, className) {
     const node = document.createElement(tag);
@@ -136,6 +163,109 @@
     return wrap;
   }
 
+  function installWatchSpotStyles() {
+    if ($('duluthWatchSpotStyles')) return;
+    const style = document.createElement('style');
+    style.id = 'duluthWatchSpotStyles';
+    style.textContent = `
+      .watch-place-card{position:relative;transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+      .watch-place-card.is-active{border-color:#2f7057;box-shadow:0 0 0 2px rgba(47,112,87,.12),0 5px 18px rgba(28,43,50,.07);transform:translateY(-1px)}
+      .watch-place-head{display:flex;align-items:flex-start;gap:9px;margin-bottom:6px}
+      .watch-place-head h3{margin:1px 0 0}
+      .watch-place-number{flex:0 0 26px;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#2f7057;color:#fff;border:2px solid #fff;box-shadow:0 1px 5px rgba(23,63,80,.25);font:700 11px/1 Arial,sans-serif}
+      .watch-place-actions{margin-top:10px}
+      .watch-spot-marker{background:transparent;border:0}
+      .watch-spot-marker span{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#2f7057;color:#fff;border:2px solid #fff;box-shadow:0 2px 8px rgba(18,52,64,.35);font:700 12px/1 Arial,sans-serif;transition:transform .15s ease,background .15s ease}
+      .watch-spot-marker.is-active span{background:#173f50;transform:scale(1.18)}
+    `;
+    document.head.append(style);
+  }
+
+  function watchSpotIcon(spot, active) {
+    return L.divIcon({
+      className: `watch-spot-marker${active ? ' is-active' : ''}`,
+      html: `<span>${spot.number}</span>`,
+      iconSize: [30, 30],
+      iconAnchor: [15, 15],
+      popupAnchor: [0, -16]
+    });
+  }
+
+  function watchSpotPopup(spot) {
+    const wrap = el('div');
+    wrap.append(el('strong', `${spot.number}. ${spot.name}`), el('p', spot.note));
+    return wrap;
+  }
+
+  function setActiveWatchSpot(id) {
+    document.querySelectorAll('[data-watch-spot]').forEach(card => {
+      card.classList.toggle('is-active', card.dataset.watchSpot === id);
+    });
+    WATCH_SPOTS.forEach(spot => {
+      const marker = spotMarkers.get(spot.id);
+      if (marker) marker.setIcon(watchSpotIcon(spot, spot.id === id));
+    });
+  }
+
+  function focusWatchSpot(id) {
+    const spot = WATCH_SPOTS.find(item => item.id === id);
+    const marker = spotMarkers.get(id);
+    if (!spot || !map || !marker) return;
+    setActiveWatchSpot(id);
+    map.setView([spot.lat, spot.lon], 16, { animate: true });
+    marker.openPopup();
+    $('duluthVesselMap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    window.setTimeout(() => map.invalidateSize(), 250);
+  }
+
+  function setupWatchSpots() {
+    installWatchSpotStyles();
+    const section = document.querySelector('[aria-labelledby="where-title"]');
+    const cards = section ? Array.from(section.querySelectorAll('.place-card')).slice(0, WATCH_SPOTS.length) : [];
+
+    cards.forEach((card, index) => {
+      const spot = WATCH_SPOTS[index];
+      card.id = `watch-spot-${spot.id}`;
+      card.dataset.watchSpot = spot.id;
+      card.classList.add('watch-place-card');
+
+      const heading = card.querySelector('h3');
+      if (heading && !heading.parentElement.classList.contains('watch-place-head')) {
+        const head = el('div', '', 'watch-place-head');
+        heading.parentNode.insertBefore(head, heading);
+        head.append(el('span', String(spot.number), 'watch-place-number'), heading);
+      }
+
+      if (!card.querySelector('[data-watch-focus]')) {
+        const actions = el('div', '', 'watch-place-actions');
+        const button = el('button', 'Show on map', 'map-jump');
+        button.type = 'button';
+        button.dataset.watchFocus = spot.id;
+        button.addEventListener('click', () => focusWatchSpot(spot.id));
+        actions.append(button);
+        card.append(actions);
+      }
+    });
+
+    if (!map || typeof L === 'undefined') return;
+    WATCH_SPOTS.forEach(spot => {
+      if (spotMarkers.has(spot.id)) return;
+      const marker = L.marker([spot.lat, spot.lon], {
+        icon: watchSpotIcon(spot, false),
+        keyboard: true,
+        title: `${spot.number}. ${spot.name}`,
+        zIndexOffset: 900
+      }).addTo(map).bindTooltip(`${spot.number}. ${spot.name}`, { direction: 'top' }).bindPopup(watchSpotPopup(spot));
+      marker.on('click', () => setActiveWatchSpot(spot.id));
+      spotMarkers.set(spot.id, marker);
+    });
+
+    const caption = document.querySelector('.map-caption');
+    if (caption) caption.textContent = 'Green numbered markers match the three viewing cards below. Blue and brown circles are recent AIS vessel reports. Ships can slow, stop, berth elsewhere or use the Superior Entry.';
+    const mapNode = $('duluthVesselMap');
+    if (mapNode) mapNode.setAttribute('aria-label', 'Recent vessel positions and numbered ship-watching locations near the Duluth Ship Canal');
+  }
+
   function initMap() {
     if (map || typeof L === 'undefined') return;
     map = L.map('duluthVesselMap', { scrollWheelZoom: false }).setView(CANAL, 12);
@@ -157,7 +287,7 @@
     }
     vesselLayer.clearLayers();
     markers.clear();
-    const points = [CANAL];
+    const points = [CANAL, ...WATCH_SPOTS.map(spot => [spot.lat, spot.lon])];
     (data.mapVessels || []).forEach(v => {
       const moving = Number(v.speedKnots) > 0.5;
       const marker = L.circleMarker([v.lat, v.lon], {
@@ -189,8 +319,8 @@
   function renderSource(data, failed) {
     const count = Array.isArray(data.mapVessels) ? data.mapVessels.length : 0;
     $('mapStatus').textContent = failed
-      ? `Refresh unavailable. Showing the last successful check with ${count} recent nearby vessel report${count === 1 ? '' : 's'}.`
-      : `${count} recent nearby vessel report${count === 1 ? '' : 's'} · checked ${time(data.checkedAt)} CT`;
+      ? `Refresh unavailable. Showing the last successful check with ${count} recent nearby vessel report${count === 1 ? '' : 's'} plus 3 viewing spots.`
+      : `${count} recent nearby vessel report${count === 1 ? '' : 's'} · 3 viewing spots · checked ${time(data.checkedAt)} CT`;
     $('liveDot').className = `live-dot${failed ? ' offline' : count ? ' on' : ''}`;
     const credits = (data.attribution || []).map(a => a.credit).filter(Boolean);
     $('sourceCredits').textContent = credits.length ? `AIS credits: ${credits.join(' · ')}` : 'AIS source credits unavailable for this refresh.';
@@ -224,7 +354,7 @@
           el('p', 'The page will not substitute stale or invented vessel timing when the AIS feed is unavailable.')
         );
         $('anticipatedShips').replaceChildren(el('div', 'Anticipated ship estimates are unavailable until fresh AIS data returns.', 'empty-state'));
-        $('mapStatus').textContent = 'Live vessel refresh unavailable. This is not a zero-traffic report.';
+        $('mapStatus').textContent = 'Live vessel refresh unavailable. The 3 viewing spots remain available on the map; this is not a zero-traffic report.';
         $('liveDot').className = 'live-dot offline';
       }
     } finally {
@@ -235,6 +365,7 @@
 
   $('refreshVessels').addEventListener('click', load);
   initMap();
+  setupWatchSpots();
   load();
   setInterval(() => { if (!document.hidden) load(); }, 60000);
 })();
