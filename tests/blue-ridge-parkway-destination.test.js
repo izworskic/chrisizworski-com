@@ -192,3 +192,11 @@ test("result UI reports served and unserved selections without claiming the user
   assert.doesNotMatch(html,/What you picked—and what to do there/);
   assert.match(html,/blue-ridge-parkway\.js\?v=20260925-6/);
 });
+
+
+test("schedule-sensitive facilities are never auto-selected without verified availability",()=>{
+  const ptp=require("../lib/blue-ridge-parkway/point-to-point.js")._test;
+  const input=ptp.normalizeInput({gateway:"cherokee",finish:"roanoke",hours:16,interests:"history"});
+  const chosen=ptp.chooseStops(ptp.corridorStops(input.gateway,input.finish),input,300,6);
+  assert.ok(!chosen.some(stop=>["nc-minerals-museum","blue-ridge-music-center"].includes(stop.id)));
+});
