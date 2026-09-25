@@ -24,7 +24,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          npm run agent:verify > gatlinburg-five-persona-verify.log 2>&1
+          npm run verify:all > gatlinburg-five-persona-verify.log 2>&1
           code=$?
           echo "exit_code=$code" >> gatlinburg-five-persona-verify.log
           exit 0
