@@ -99,6 +99,26 @@ test("snow persona requires an Ober snow block when a complete one is feasible",
   assert.match(T.personaReason(policy, ranked[0].personaFeatures), /downtown snow/i);
 });
 
+test("natural-winter snow goal widens the prepass instead of forcing an Ober category", () => {
+  const widened = T.prepassQuery({ persona: "snow", goal: "natural", mustSnow: "1", date: "2026-12-12" });
+  assert.equal(widened.persona, "first");
+  assert.equal(widened.mustSnow, "0");
+  const activity = T.prepassQuery({ persona: "snow", goal: "activity", mustSnow: "1" });
+  assert.equal(activity.persona, "snow");
+  assert.equal(activity.mustSnow, "1");
+});
+
+test("natural-winter snow goal prefers scenic or NPS winter context over a tubing-first plan", () => {
+  const d = data({ input: { persona: "first", mustSnow: false } });
+  const policy = T.personaPolicy(d, { persona: "snow", goal: "natural" });
+  const natural = option("natural", ["newfound-gap", "casual-food", "winter-magic-walk"], 62, 45);
+  const tubing = option("tubing", ["ober-snow-tubing", "casual-food", "winter-magic-walk"], 76, 25);
+  const ranked = T.rankPersonaOptions([tubing, natural], d, policy);
+  assert.equal(ranked[0].id, "natural");
+  assert.equal(ranked[0].personaFeatures.hasNps, true);
+  assert.equal(ranked[0].personaFeatures.hasTubing, false);
+});
+
 test("legacy pseudo-personas collapse to five real personas and separate priorities", () => {
   const d = data({ input: { persona: "food-lights" } });
   const policy = T.personaPolicy(d, { persona: "food-lights" });
