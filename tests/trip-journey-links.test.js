@@ -1,7 +1,9 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
-import tripJourneyLinks from '../lib/trip-journey-links.js';
+'use strict';
+
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const { readFile } = require('node:fs/promises');
+const tripJourneyLinks = require('../lib/trip-journey-links.js');
 
 const CASES = [
   ['public/lake-superior-circle-tour/index.html', '/lake-superior-circle-tour/index.html'],
