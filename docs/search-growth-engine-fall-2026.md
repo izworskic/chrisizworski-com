@@ -1,105 +1,142 @@
 # Search Growth Engine — Fall 2026
 
-## Goal
+## Current mode: protect the winners
 
-Turn existing Google visibility into more qualified clicks while using fall color as the seasonal authority wedge that expands the Michigan outdoor network.
+Fall Color has moved out of broad expansion mode. The statewide hub and three destination pages now have enough measured search traction that the priority is to preserve ownership, concentrate contextual authority, and avoid diluting the cluster with additional fall-color canonicals.
 
-## Verified baseline
+This document supersedes the earlier "amplify the cluster" posture for Fall Color.
 
-Source: Search Console export `chrisizworski.com-Performance-on-Search-2026-08-15`, with posted data through August 13, 2026.
+## September 25, 2026 Search Console evidence
 
-The latest complete 28-day slice, July 17 through August 13, contains:
+Source: comparable 28-day Search Console exports supplied by the site owner on September 25, 2026.
 
-- **27,042 impressions**
-- **407 clicks**
-- **1.51% CTR**
-- **966 impressions/day**
-- **14.5 clicks/day**
+### Statewide owner
 
-The eight measured opportunity pages contain more than **500 additional same-impression clicks of modeled headroom** if they reach their page-specific target CTRs. That is a prioritization model, not a traffic forecast or guarantee.
+- `/fall-color/`
+- Impressions: **4,997 → 7,581** (**+76%**)
+- Clicks: **114 → 190**
+- Average position: **10.67 → 8.80**
+- Action: **PROTECT**
 
-## October 1, 2026 goals
+### Proven destination owners
 
-- **2,500 daily Google impressions** as the floor on a comparable rolling view.
-- **4,000 daily impressions** as the stretch goal.
-- **2.5% qualified-site CTR** across the opportunity set.
-- Main fall-color page: move its core 2026 map/peak query cluster toward **top-five average position**.
-- Keep the branded **Chris Izworski** SERP at **#1–2** while topical authority expands.
-- Harvest at least **500 incremental clicks of same-impression CTR headroom** over successive clean tests.
+| Canonical | Impressions | Clicks | Average position | Action |
+| --- | ---: | ---: | ---: | --- |
+| `/fall-color/porcupine-mountains-fall-color/` | 2,003 | 67 | 6.20 | PROTECT |
+| `/fall-color/tunnel-of-trees-fall-color/` | 2,012 | 64 | 6.03 | PROTECT |
+| `/fall-color/mackinac-island-fall-color/` | 1,346 | 40 | 6.20 | PROTECT |
 
-## Execution sequence
+Mackinac Island alone increased from **279 → 1,346 impressions** since the prior 28-day export. That growth is now material enough that the page should be treated as a proven destination owner rather than an experimental support page.
 
-### 1. Protect evidence already in flight
+## Search ownership
 
-Northern Lights, Soo Locks, tomato planting, frost dates and the Great Lakes freighter tracker already have active search experiments in the repo ledger. **Do not reset active experiments** just to chase a new idea. Their fresh Search Console rows belong in the opportunity engine, but their frozen title, description, H1 and first-answer treatments stay intact until their current measurement windows allow a decision.
+The canonical ownership model remains:
 
-### 2. Own fall weekend intent now
+1. **Michigan statewide fall-color map / current statewide conditions / peak forecast** → `/fall-color/`
+2. **Porcupine Mountains fall color** → `/fall-color/porcupine-mountains-fall-color/`
+3. **Tunnel of Trees fall color** → `/fall-color/tunnel-of-trees-fall-color/`
+4. **Mackinac Island fall color** → `/fall-color/mackinac-island-fall-color/`
 
-Ship `/fall-color/this-weekend/` as the direct answer between the statewide live map and the existing peak-date, drive and planner cluster.
+The statewide map remains the single statewide canonical. Destination pages own their location-specific intent. Supporting pages may reinforce these owners but must not restate the same primary intent as a competing canonical.
 
-The page should answer one question immediately: **Where are Michigan fall colors best this weekend?** It ranks the eight existing Michigan regions for the coming Saturday using the same 2026 seasonal timing windows as the main tool. When the live fall feed is available, forecast precipitation is used only as a practical viewing and travel tiebreaker.
+## Operating rules
 
-The page must fail soft. If live conditions are unavailable, the seasonal model still produces a useful ranking and the page says that live data is unavailable rather than inventing certainty.
+### 1. Freeze the proven search shells
 
-### 3. Build authority, not doorway pages
+For the four protected owners, do not casually change:
 
-The weekend page is additive and feeds the existing canonical fall ecosystem:
+- `<title>`
+- meta description
+- H1
+- canonical
+- indexability
+- the immediate search-intent answer
 
-1. Live Michigan fall color map
-2. Best region this weekend
-3. Michigan peak dates
-4. Fall color drives
-5. Leaf-peeping planner
-6. Regional destination guides
+Reliability, factual, accessibility, data-quality, safety, and obvious UX fixes remain allowed. Search-facing rewrites require fresh evidence that the current treatment is failing.
 
-Do not create separate pages for every wording variation. New pages require a distinct user decision that the current canonical cannot answer well.
+### 2. Stop broad Fall Color page expansion
 
-### 4. Make discovery explicit
+Do **not** create another Fall Color canonical merely because a related query exists.
 
-The weekend URL belongs in the dynamic fall sitemap and `llms.txt`. The page defines the same canonical `https://chrisizworski.com/#person` Person entity used across the site and visibly identifies Chris Izworski as publisher.
+A new page now requires all of the following:
 
-The live fall hub receives an additive weekend callout through the shared field script without changing the hub's current title, description, H1, canonical or live-map logic.
+- a clearly distinct user decision or location intent;
+- recurring Search Console evidence that an existing owner cannot answer cleanly;
+- an explicit owner/support relationship in the Tool Network Registry;
+- a cannibalization check against the statewide owner and the three proven destination owners.
 
-### 5. Measure before the next rewrite
+The default action for adjacent fall demand is now **strengthen an existing owner or add a contextual handoff**, not build another page.
 
-This release should be judged on complete, comparable Search Console windows. The opportunity benchmark can be refreshed as new exports arrive, but search-facing surfaces already inside a clean experiment should not be casually changed mid-window.
+### 3. Concentrate internal authority
 
-The Search Growth Engine benchmark is intentionally separate from the CTR snippet benchmark: CTR hygiene protects the surface; this benchmark protects the **growth strategy**, baseline math, experiment freezes, seasonal decision architecture and discovery.
+When a Michigan travel, seasonal, outdoor, or Fall Color support surface has a genuinely useful reason to hand off, prioritize this set:
 
-### 6. Roll the engine forward into winter
+- statewide decision → `/fall-color/`
+- western U.P. destination → `/fall-color/porcupine-mountains-fall-color/`
+- northern Lower scenic-drive destination → `/fall-color/tunnel-of-trees-fall-color/`
+- Straits / island destination → `/fall-color/mackinac-island-fall-color/`
 
-After the fall release is stable, use the same scoring logic to determine which authority pages should feed the existing Michigan ice and winter surfaces before demand rises. Do not mass-produce winter pages. Build only where Search Console or a distinct decision intent justifies a separate canonical.
+Do not force all four links onto every page. Links must be contextual and useful to the visitor. The goal is concentrated authority, not template-wide link stuffing.
 
-## Release benchmark
+### 4. Let weaker Fall Color pages support rather than compete
+
+Existing regional, planning, drive, weekend, aurora-overlap, and peak-date pages can remain useful when they answer a distinct question. Their job is to:
+
+- answer that narrower question directly;
+- hand statewide intent back to `/fall-color/`;
+- hand location intent to the strongest matching destination owner;
+- avoid title/H1/meta treatments that drift into the protected owner's primary query.
+
+### 5. Protect the statewide hub from duplication
+
+The statewide map is the only owner for broad queries such as:
+
+- Michigan fall color
+- Michigan fall color map
+- Michigan fall color forecast
+- Michigan peak fall color
+- where are leaves peaking in Michigan
+
+Supporting pages may mention these concepts, but should not be repositioned as alternate statewide hubs.
+
+### 6. Measure preservation, not page count
+
+The Fall Color cluster is now judged primarily by:
+
+- impressions and clicks on the four protected owners;
+- average position stability or improvement;
+- CTR by page/query family;
+- whether supporting pages send useful contextual traffic into the protected owners;
+- cannibalization signals where multiple pages begin ranking for the same primary query family.
+
+More indexed Fall Color URLs are **not** a success metric.
+
+## Principal fall network
+
+The preferred destination structure is now:
+
+**Statewide Fall Color → Porcupine Mountains / Tunnel of Trees / Mackinac Island**
+
+Other Fall Color pages are supporting decision surfaces unless their own Search Console evidence later proves independent ownership.
+
+## Release / regression check
 
 Run:
 
 ```bash
-npm run benchmark:search-growth -- --check
+node scripts/benchmark-fall-color-winner-protection.mjs --check
 ```
 
-Release gate: **95/100 minimum and no fatal failures**. The benchmark is also included in `npm run verify:all`.
-
-The 100-point score covers:
-
-- Search Console baseline reconciliation
-- same-impression click headroom
-- active-experiment protection
-- exact frozen treatment titles
-- weekend page intent/canonical/indexability
-- live-data reuse and honest fallback
-- fall decision-loop links
-- Chris Izworski entity integrity
-- fall sitemap discovery
-- AI/LLM discovery
-- distribution from the live fall hub
-- committed goals and stop-loss rules
+The benchmark protects the four canonical owners and verifies that the statewide hub and relevant supporting surfaces continue to reinforce the proven destination pages.
 
 ## Stop-loss rules
 
-- Do not merge if any existing full-repo gate fails.
-- Do not change canonical URLs or create a competing page for an intent already served by a strong canonical.
-- Do not present weather or camera inputs as direct statewide leaf measurements.
-- If an active experiment's protected title, description, H1 or first-answer treatment changes accidentally, restore it before merge.
-- If the weekend page cannot obtain live conditions, it must remain useful from the crawlable seasonal timing model and state the limitation.
-- Preserve current Manistee, winter, Great Lakes and other-agent changes already on `main`; this release is additive.
+- Do not merge a change that alters a protected canonical unintentionally.
+- Do not launch a new statewide or near-statewide Fall Color page.
+- Do not repurpose an existing support page into a competing owner without query evidence and an explicit registry decision.
+- Do not bulk-inject links merely to manipulate internal PageRank; every handoff must make sense in the visitor journey.
+- Preserve factual corrections and live-data reliability even when a page is protected; protection is not permission to keep a known error.
+
+## Seasonal handoff
+
+Fall Color no longer needs additional page-count pressure. New growth work should increasingly shift toward the next seasonal opportunity set while the fall winners are allowed to compound authority through October.
