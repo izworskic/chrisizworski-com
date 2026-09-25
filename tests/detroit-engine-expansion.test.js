@@ -151,7 +151,7 @@ test("Detroit core mode does not collide with the serverless dispatcher view par
   const route=read("lib/detroit-outdoors/route.js");
   const client=read("public/assets/detroit-outdoors.js");
   assert.match(dispatcher,/req\.query\s*&&\s*req\.query\.view/);
-  assert.match(dispatcher,/"detroit-outdoors": require\("\.\.\/lib\/detroit-outdoors\/route\.js"\)/);
+  assert.match(dispatcher,/"detroit-outdoors": require\("\.\.\/lib\/detroit-outdoors\/route-v2\.js"\)/);
   assert.match(route,/query\.get\("mode"\)==="core"/);
   assert.doesNotMatch(route,/query\.get\("view"\)==="core"/);
   assert.match(client,/mode=core/);
