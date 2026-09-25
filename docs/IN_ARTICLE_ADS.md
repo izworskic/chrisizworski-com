@@ -8,8 +8,13 @@ Owner: Chris Izworski. Replaces the September 20 horizontal display pilot (slot
 - Every eligible page gets the plain loader and `/assets/in-article-ads.js`, added
   at build by `scripts/inject-ga4.mjs` and on proxied tools by `lib/public-tool-page.js`.
 - The script runs only on chrisizworski.com, 1.5s after load, and places at most
-  `maxPerPage` (3) ads. Each goes immediately before an `h2` or the section that
-  heading opens.
+  `maxPerPage` (3) ads.
+- By default it discovers safe insertion points immediately before an `h2` or the
+  section that heading opens.
+- A highly structured tool can instead declare intentional seams with an empty
+  `<div data-in-article-ad-break aria-hidden="true"></div>`. If at least one safe
+  explicit seam exists, the placer uses those seams instead of heading discovery.
+  The same spacing, viewport, card/grid, tool and end-of-page protections still apply.
 
 ## Placement rules (all must pass)
 - The insertion point's parent is normal block flow (not grid, flex or table), is at
