@@ -1,0 +1,1 @@
+Pictured Rocks Planner v2 preview: behavioral suite passes 8/8 locally; benchmark passes 100/100. Canonical subdomain remains unchanged pending source/deployment ownership resolution.
