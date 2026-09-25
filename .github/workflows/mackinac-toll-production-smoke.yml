@@ -1,0 +1,45 @@
+name: Mackinac toll production smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/mackinac-bridge-tolls/**'
+      - '.github/workflows/mackinac-toll-production-smoke.yml'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check live toll page and cache-busted origin path
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE='https://chrisizworski.com/mackinac-bridge-tolls/'
+          BUST="${BASE}?verify=${GITHUB_SHA}"
+
+          echo '=== clean URL headers ==='
+          curl -sSIL "$BASE" | sed -n '1,40p'
+          echo '=== cache-busted URL headers ==='
+          curl -sSIL "$BUST" | sed -n '1,40p'
+
+          clean="$(curl -sSL "$BASE")"
+          bust="$(curl -sSL "$BUST")"
+
+          printf '%s' "$clean" | grep -o '<title>[^<]*</title>' | head -1 || true
+          printf '%s' "$bust" | grep -o '<title>[^<]*</title>' | head -1 || true
+
+          expected='Mackinac Bridge Toll 2026: $4 for a Passenger Car'
+          if printf '%s' "$clean" | grep -Fq "$expected"; then
+            echo 'CLEAN_URL_UPDATED=true'
+          else
+            echo 'CLEAN_URL_UPDATED=false'
+          fi
+          if printf '%s' "$bust" | grep -Fq "$expected"; then
+            echo 'CACHE_BUSTED_URL_UPDATED=true'
+          else
+            echo 'CACHE_BUSTED_URL_UPDATED=false'
+          fi
+
+          printf '%s' "$bust" | grep -Fq "$expected"
