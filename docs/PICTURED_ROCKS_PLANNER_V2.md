@@ -36,4 +36,4 @@ Given the visitor's usable time, starting side, walking tolerance, party constra
 - `node --test tests/pictured-rocks-planner-v2.test.js`
 - `node scripts/benchmark-pictured-rocks-planner-v2.mjs --check`
 
-The local verification at implementation time passed 8/8 behavioral tests and scored 100/100 on the v2 benchmark.
+The final implementation has nine behavioral regression checks and a 100/100 v2 benchmark target result.
