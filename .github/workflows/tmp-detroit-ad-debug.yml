@@ -4,30 +4,30 @@ on:
     branches:
       - fix/detroit-ad-seam-retry
 permissions:
-  contents: read
+  contents: write
 jobs:
-  debug:
+  sync-freshness:
+    if: github.event.head_commit.message != 'Sync Mackinac freshness metadata'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: fix/detroit-ad-seam-retry
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run full gate and capture output
+      - name: Sync derived freshness metadata
         shell: bash
         run: |
-          set +e
-          npm run verify:all > verify-all.log 2>&1
-          code=$?
-          cat verify-all.log
-          echo "$code" > verify-all.exit
-          exit 0
-      - uses: actions/upload-artifact@v4
-        with:
-          name: detroit-ad-full-gate-debug
-          path: |
-            verify-all.log
-            verify-all.exit
-          retention-days: 1
+          node scripts/stamp-freshness.mjs
+          git diff -- public/mackinac-island/index.html public/sitemap.xml
+          git add public/mackinac-island/index.html public/sitemap.xml
+          if git diff --cached --quiet; then
+            echo 'No Mackinac freshness changes needed.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Sync Mackinac freshness metadata'
+          git push origin HEAD:fix/detroit-ad-seam-retry
