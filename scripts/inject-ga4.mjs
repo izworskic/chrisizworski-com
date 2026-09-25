@@ -5,6 +5,7 @@ import path from 'node:path';
 import sitePolicyLinks from '../lib/site-policy-links.js';
 import adsenseEligibility from '../lib/adsense-eligibility.js';
 import replaceAisEmbeds from '../lib/site-ais-embeds.js';
+import tripJourneyLinks from '../lib/trip-journey-links.js';
 
 const ROOT = path.join(process.cwd(), 'public');
 const MEASUREMENT_ID = 'G-Y5D2V2W7HN';
@@ -59,8 +60,8 @@ async function walk(dir) {
     if (!entry.isFile() || !entry.name.toLowerCase().endsWith('.html')) continue;
     scanned += 1;
     const originalHtml = await readFile(fullPath, 'utf8');
-    const integratedHtml = replaceAisEmbeds(originalHtml);
     const pathname = '/' + path.relative(ROOT, fullPath).split(path.sep).join('/');
+    const integratedHtml = tripJourneyLinks(replaceAisEmbeds(originalHtml), pathname);
     const allowAds = adsenseEligibility.eligible(originalHtml, pathname);
     const html = sitePolicyLinks(allowAds ? adsenseEligibility.normalizeAdLoader(integratedHtml) : adsenseEligibility.removeAdLoader(integratedHtml));
     const needsGa4 = !html.includes(MEASUREMENT_ID);
