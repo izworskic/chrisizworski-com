@@ -12,7 +12,7 @@ const [dedicated,main,winter,robots,vercel]=await Promise.all([
 ]);
 const urls=[...dedicated.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
 const failures=[];
-if(urls.length!==43) failures.push(`dedicated White Christmas sitemap must contain 43 canonical URLs; found ${urls.length}`);
+if(urls.length!==65) failures.push(`dedicated White Christmas sitemap must contain 65 canonical URLs; found ${urls.length}`);
 if(new Set(urls).size!==urls.length) failures.push("dedicated White Christmas sitemap contains duplicate URLs");
 for(const url of urls){
   if(!url.startsWith("https://chrisizworski.com/")) failures.push(`non-canonical host in White Christmas sitemap: ${url}`);
