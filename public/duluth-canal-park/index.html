@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duluth Ship Schedule & Live Canal Park Map | Chris Izworski</title>
+<meta name="description" content="See the next supported ship watch at Duluth Canal Park with live AIS, anticipated passage windows, a vessel map, webcam links and Aerial Lift Bridge guidance.">
+<link rel="canonical" href="https://chrisizworski.com/duluth-canal-park/">
+<meta property="og:title" content="Duluth Ship Schedule & Live Canal Park Map">
+<meta property="og:description" content="What ship is worth heading to Canal Park for next? Live AIS, anticipated passage windows, map, viewing spots and visitor guidance.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://chrisizworski.com/duluth-canal-park/">
+<meta property="og:image" content="https://commons.wikimedia.org/wiki/Special:Redirect/file/AerialBridge_and_CanalPark.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="/assets/growth-commercial.css">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski"},
+    {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
+    {"@type":"WebApplication","@id":"https://chrisizworski.com/duluth-canal-park/#app","name":"Duluth Canal Park Ship Watch","url":"https://chrisizworski.com/duluth-canal-park/","applicationCategory":"TravelApplication","operatingSystem":"Web","description":"Live vessel positions and evidence-bounded anticipated Duluth Ship Canal passage windows for Canal Park visitors."},
+    {"@type":"TouristAttraction","name":"Duluth Aerial Lift Bridge and Ship Canal","address":{"@type":"PostalAddress","addressLocality":"Duluth","addressRegion":"MN","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":46.7783,"longitude":-92.0908}},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/duluth-canal-park/","url":"https://chrisizworski.com/duluth-canal-park/","name":"Duluth Ship Schedule & Live Canal Park Map","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/duluth-canal-park/#app"},"dateModified":"2026-09-25","inLanguage":"en-US"},
+    {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Duluth Canal Park","item":"https://chrisizworski.com/duluth-canal-park/"}]}
+  ]
+}
+</script>
+<style>
+*{box-sizing:border-box}
+:root{--ink:#243038;--muted:#68747a;--paper:#faf9f6;--card:#fff;--line:#dcd9d2;--lake:#0d4d67;--lake2:#146c86;--rust:#b9572a;--soft:#eef5f6;--green:#2f7057}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Georgia,'Times New Roman',serif;background:var(--paper);color:var(--ink);line-height:1.65}
+a{color:#1b6179;text-underline-offset:3px}
+a:hover{color:#0d4358}
+.site-header{text-align:center;padding:24px 18px 18px;border-bottom:1px solid #e7e2d9;background:#fff}
+.site-header a{font-size:21px;letter-spacing:.8px;color:#2c5f2d;text-decoration:none}
+.nav{display:flex;flex-wrap:wrap;justify-content:center;gap:5px 18px;padding:10px 16px;border-bottom:1px solid #e7e2d9;background:#fff;font-size:13px}
+.nav a{color:#59656a;text-decoration:none}
+.live-strip{display:flex;gap:9px;align-items:center;justify-content:center;flex-wrap:wrap;padding:9px 14px;background:#0d3545;color:#dbe9ed;font:12px/1.4 Arial,sans-serif;letter-spacing:.2px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#c7a24a;box-shadow:0 0 0 3px rgba(199,162,74,.18)}
+.live-dot.on{background:#5fc88f;box-shadow:0 0 0 3px rgba(95,200,143,.18)}
+.live-dot.offline{background:#cf7f77;box-shadow:0 0 0 3px rgba(207,127,119,.18)}
+.wrap{max-width:920px;margin:0 auto;padding:30px 20px 64px}
+.breadcrumb{font-size:12px;color:#879096;margin-bottom:18px}.breadcrumb a{color:#879096}
+h1{font-size:38px;line-height:1.13;font-weight:normal;margin:0 0 8px;letter-spacing:-.4px}
+.lede{font-size:17px;font-style:italic;color:#68747a;margin:0 0 20px;max-width:760px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 20px}
+.button{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--lake);border-radius:3px;padding:9px 13px;background:var(--lake);color:white;text-decoration:none;font:700 12px Arial,sans-serif;cursor:pointer}
+.button.secondary{background:white;color:var(--lake)}
+.button:disabled{opacity:.6;cursor:wait}
+.watch-card{background:#fff;border:2px solid var(--lake2);border-left:7px solid var(--rust);border-radius:5px;padding:20px 22px;margin:16px 0 25px;box-shadow:0 4px 18px rgba(28,43,50,.06)}
+.watch-card.quiet{border-color:#aebdc2;border-left-color:#8a969b}
+.watch-kicker{font:700 11px/1.3 Arial,sans-serif;letter-spacing:1.2px;color:var(--rust);margin-bottom:6px}
+.watch-card h2{font-size:27px;line-height:1.15;margin:0 0 12px;color:#173f50}
+.watch-card p{margin:10px 0;font-size:14px}
+.watch-heading{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.direction-pill,.confidence-pill{display:inline-block;border-radius:999px;padding:4px 8px;font:700 11px Arial,sans-serif}
+.direction-pill{background:#e6f2f4;color:#15566c}.confidence-pill{background:#f2efe6;color:#685b37}
+.arrival-action{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;background:#f4f8f8;border:1px solid #d8e5e7;padding:12px 14px;border-radius:4px;margin:12px 0}
+.arrival-label{grid-row:1/3;font:700 10px Arial,sans-serif;text-transform:uppercase;letter-spacing:.8px;color:#6b7478;padding-top:4px}
+.arrival-time{font-size:18px;color:#173f50;line-height:1.35}.arrival-detail{grid-column:2;font:12px Arial,sans-serif;color:#69777c}
+.watch-why{font-weight:bold;color:#324850}.watch-note{color:#69777c}.stale-warning{color:#9c4a32!important;font-weight:bold}
+.section{margin-top:40px}.section h2{font-size:24px;font-weight:normal;color:#21576c;border-bottom:1px solid #ddd9d0;padding-bottom:7px;margin:0 0 14px}.section-intro{font-size:15px;color:#536166;max-width:760px}
+.visual{margin:24px 0;border:1px solid #ddd8cf;background:#fff;border-radius:5px;overflow:hidden}.visual img{display:block;width:100%;max-height:455px;object-fit:cover;object-position:center}.visual figcaption{font:11px/1.5 Arial,sans-serif;color:#778186;padding:8px 11px;background:#f7f5ef}
+.ship-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+.ship-card{background:#fff;border:1px solid #d9dfe0;border-radius:4px;padding:15px 16px}.ship-card-top{margin-bottom:4px}.ship-label{font:700 10px Arial,sans-serif;letter-spacing:.8px;text-transform:uppercase;color:#8c633e}.ship-card h3{margin:0 0 5px;font-size:18px;color:#1b5368}.ship-window{font-size:15px;font-weight:bold;color:#293d46}.ship-meta{font:12px/1.5 Arial,sans-serif;color:#707b80;margin:6px 0}.ship-why{font-size:13px;margin:8px 0}.map-jump{border:0;background:transparent;color:#1b6179;text-decoration:underline;text-underline-offset:3px;padding:0;font:700 12px Arial,sans-serif;cursor:pointer}
+.empty-state{border:1px dashed #bcc6c9;border-radius:4px;padding:15px;background:#fff;color:#59666c}.empty-state p{margin:5px 0 0;font-size:13px}
+.map-shell{border:1px solid #d7dcdd;border-radius:5px;overflow:hidden;background:#fff;margin:16px 0}.map-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 13px;background:#0d3545;color:#dce9ed;font:12px/1.45 Arial,sans-serif}.map-toolbar span{min-width:0}.map-toolbar button{border-color:rgba(255,255,255,.55);background:transparent;color:#fff}#duluthVesselMap{height:500px;background:#dce8e9}.map-caption{padding:8px 12px;background:#f8f5ee;color:#758087;font:11px/1.5 Arial,sans-serif}.source-credits{font:11px/1.5 Arial,sans-serif;color:#7b8589;padding:0 3px;margin-top:7px}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:17px 0}.place-card,.explain-card{background:#fff;border:1px solid #dedad2;border-radius:4px;padding:16px}.place-card h3,.explain-card h3{margin:0 0 6px;font-size:16px;color:#245b70}.place-card p,.explain-card p{font-size:13px;margin:0;color:#526066}
+.callout{background:#0f4053;color:#e2edf0;border-radius:5px;padding:19px 20px;margin:22px 0}.callout h3{margin:0 0 5px;color:#fff;font-size:19px}.callout p{font-size:13px;margin:5px 0;color:#dbe8eb}.callout a{color:#fff;font-weight:bold}
+.source-list{display:grid;gap:9px;margin:14px 0}.source-item{background:#fff;border:1px solid #ddd9d1;border-radius:4px;padding:13px 14px}.source-item strong{display:block;color:#23586d;font-size:14px}.source-item span{display:block;font-size:12px;color:#6f797d;margin-top:3px}
+.faq h3{font-size:16px;color:#23586d;margin:22px 0 5px}.faq p{font-size:14px;margin:0}
+.footer{text-align:center;border-top:1px solid #e3ded6;padding:24px 18px 40px;color:#8a9295;font:12px/1.6 Arial,sans-serif}.footer a{color:#5f737a}
+@media(max-width:700px){.wrap{padding:24px 15px 46px}h1{font-size:30px}.lede{font-size:15px}.watch-card{padding:17px 15px}.watch-card h2{font-size:23px}.arrival-action{grid-template-columns:1fr}.arrival-label{grid-row:auto}.arrival-detail{grid-column:auto}.ship-grid,.three{grid-template-columns:1fr}#duluthVesselMap{height:410px}.map-toolbar{align-items:flex-start;flex-wrap:wrap}.map-toolbar .button{padding:7px 9px}.visual img{max-height:360px}.hero-actions .button{flex:1 1 170px}}
+</style>
+</head>
+<body>
+<header class="site-header"><a href="/">Chris Izworski</a></header>
+<nav class="nav" aria-label="Site navigation"><a href="/tools/">Tools</a><a href="/soo-locks/">Soo Locks</a><a href="/great-lakes-freighter-tracking/">Great Lakes ships</a><a href="/great-lakes-buoys/">Great Lakes buoys</a></nav>
+<div class="live-strip"><span id="liveDot" class="live-dot"></span><span>Canal Park ship watch</span><strong id="updated">Checking fresh vessel reports…</strong></div>
+<main class="wrap">
+  <div class="breadcrumb"><a href="/">Home</a> › <a href="/tools/">Tools</a> › Duluth Canal Park</div>
+  <h1>Duluth ship schedule &amp; Canal Park live watch</h1>
+  <p class="lede">The visitor question is simple: <strong>is there a ship worth heading to the canal for, and when should I be there?</strong> This page turns fresh AIS movement into a cautious watch window, then keeps the live map and source trail visible.</p>
+  <div class="hero-actions">
+    <button id="refreshVessels" class="button" type="button">Refresh ships</button>
+    <a class="button secondary" href="https://harborlookout.com/" target="_blank" rel="noopener">Published Duluth ship list</a>
+    <a class="button secondary" href="#live-map">Open live map</a>
+  </div>
+
+  <section id="watchPick" class="watch-card" aria-live="polite">
+    <div class="watch-kicker">CHECKING LIVE AIS</div>
+    <h2>Finding the best supported next Canal Park watch…</h2>
+    <p>The page will only publish a passage window when fresh vessel position and motion support it.</p>
+  </section>
+
+  <figure class="visual">
+    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/AerialBridge_and_CanalPark.jpg" alt="Aerial Lift Bridge and Canal Park at the Duluth Ship Canal" loading="eager" fetchpriority="high">
+    <figcaption>Aerial Lift Bridge and Canal Park. Public-domain photograph by Nick Zlonis via Wikimedia Commons. <a href="https://commons.wikimedia.org/wiki/File:AerialBridge_and_CanalPark.jpg" target="_blank" rel="noopener">Source</a>.</figcaption>
+  </figure>
+
+  <section class="section" aria-labelledby="anticipated-title">
+    <h2 id="anticipated-title">Anticipated ships</h2>
+    <p class="section-intro">These are not copied schedule times. They are a short list of vessels whose <strong>fresh AIS position, current motion and route evidence</strong> support a possible passage through the Duluth Ship Canal. The useful output is a window, not false minute-by-minute precision.</p>
+    <div id="anticipatedShips" class="ship-grid"><div class="empty-state">Building the current candidate set…</div></div>
+  </section>
+
+  <section id="live-map" class="section" aria-labelledby="map-title">
+    <h2 id="map-title">Live Canal Park vessel map</h2>
+    <p class="section-intro">The close-in map shows recent AIS vessel reports around Duluth-Superior. An anticipated ship can appear in the list before it reaches this map because the timing engine watches a wider slice of western Lake Superior.</p>
+    <div class="map-shell">
+      <div class="map-toolbar"><span id="mapStatus">Loading recent vessel reports…</span><button class="button secondary" type="button" onclick="document.getElementById('refreshVessels').click()">Refresh</button></div>
+      <div id="duluthVesselMap" role="region" aria-label="Recent vessel positions near the Duluth Ship Canal"></div>
+      <div class="map-caption">AIS is a reporting system, not a reservation book. A ship shown here can slow, stop, berth elsewhere or use the Superior Entry.</div>
+    </div>
+    <div id="sourceCredits" class="source-credits"></div>
+  </section>
+
+  <section class="section" aria-labelledby="where-title">
+    <h2 id="where-title">Where to watch at Canal Park</h2>
+    <div class="three">
+      <article class="place-card"><h3>North side / Visitor Center</h3><p>The classic close-up choice. You are beside the ship canal with the Lake Superior Maritime Visitor Center immediately at hand and an unobstructed look at vessels entering or leaving.</p></article>
+      <article class="place-card"><h3>South side / Park Point</h3><p>A strong bridge-and-ship composition from the opposite side of the canal. It is useful when the north-side crowd is heavy or photography matters more than being beside the museum.</p></article>
+      <article class="place-card"><h3>Canal Park / Lakewalk</h3><p>Best when you want a broader waterfront visit rather than waiting at the rail. Watch the live map, then move toward the canal as the supported window approaches.</p></article>
+    </div>
+  </section>
+
+  <aside class="callout">
+    <h3>Want the camera before you walk over?</h3>
+    <p>Duluth Harbor Cam maintains a Canal Cam from the Lake Superior Maritime Visitor Center and additional bridge, lighthouse and harbor views. Use it to confirm what the canal looks like right now.</p>
+    <p><a href="https://www.duluthharborcam.com/p/canal-park-cams.html" target="_blank" rel="noopener">Open the live Canal Cam →</a></p>
+  </aside>
+
+  <section class="section" aria-labelledby="how-title">
+    <h2 id="how-title">How the anticipated-ship feature works</h2>
+    <div class="three">
+      <article class="explain-card"><h3>1. Evidence first</h3><p>Only recent AIS reports are eligible. Stale positions, stopped ships without useful motion, bad coordinates and weak route evidence are removed before a visitor recommendation exists.</p></article>
+      <article class="explain-card"><h3>2. Build valid candidates</h3><p>The engine looks for a Duluth-bound vessel moving toward the canal, or a close-in harbor/lake vessel whose course points toward the canal. It models a broad passage window from current distance and speed.</p></article>
+      <article class="explain-card"><h3>3. Pick the useful next watch</h3><p>When several valid candidates exist, the decision layer chooses among those ships only. Near-term timing, evidence quality and visitor interest matter; it cannot invent another ship or rewrite a time window.</p></article>
+    </div>
+    <p class="section-intro"><strong>Why not just show an ETA?</strong> Because Duluth-Superior is an operating port, not an airline gate. Ship speeds, berths, weather, tug work and entrance choice can change. A wider, evidence-bounded window is more honest and more useful for a visitor deciding when to head to the canal.</p>
+  </section>
+
+  <section class="section" aria-labelledby="visitor-title">
+    <h2 id="visitor-title">Visitor details that matter</h2>
+    <div class="source-list">
+      <div class="source-item"><strong>Lake Superior Maritime Visitor Center</strong><span>600 Canal Park Drive, Duluth. The U.S. Army Corps of Engineers operates the free maritime visitor center beside the ship canal. Hours change seasonally; check the official page before planning around museum access.</span><a href="https://www.lrd.usace.army.mil/Missions/Recreation/Display/Article/3649015/lake-superior-maritime-visitor-center/" target="_blank" rel="noopener">Official visitor center details →</a></div>
+      <div class="source-item"><strong>Parking</strong><span>Public Canal Park parking is nearby and seasonal fees apply. The Corps notes that the closest public lot is roughly 100 feet from the Visitor Center.</span></div>
+      <div class="source-item"><strong>Bridge reality</strong><span>The Aerial Lift Bridge is part of an active navigation channel. Treat every watch time here as planning guidance and stay behind public barriers and posted restrictions.</span></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="sources-title">
+    <h2 id="sources-title">Live sources &amp; cross-checks</h2>
+    <div class="source-list">
+      <div class="source-item"><strong>Open Waters AIS</strong><span>Recent vessel positions, motion and available vessel particulars. This page accepts only reports no more than 30 minutes old and exposes source credits returned with the data.</span><a href="https://openwaters.io/api/ais/" target="_blank" rel="noopener">AIS API documentation →</a></div>
+      <div class="source-item"><strong>Harbor Lookout</strong><span>The Lake Superior Maritime Visitor Center points visitors there for Duluth vessel arrival information. Use it as the published schedule cross-check when a trip depends on seeing a particular ship.</span><a href="https://harborlookout.com/" target="_blank" rel="noopener">Harbor Lookout →</a></div>
+      <div class="source-item"><strong>Duluth Harbor Cam</strong><span>Live visual confirmation from Canal Park and the harbor. A camera is especially valuable when visibility, bridge position or close-in vessel location matters.</span><a href="https://www.duluthharborcam.com/p/canal-park-cams.html" target="_blank" rel="noopener">Canal Cam →</a></div>
+    </div>
+  </section>
+
+  <section class="section faq" aria-labelledby="faq-title">
+    <h2 id="faq-title">Duluth ship-watching questions</h2>
+    <h3>When is the next ship coming under the Aerial Lift Bridge?</h3>
+    <p>The top card is the page’s best supported near-term watch based on fresh AIS. If it says there is no supported passage to call, use Harbor Lookout rather than interpreting that as “no ships today.”</p>
+    <h3>How accurate is the anticipated passage window?</h3>
+    <p>It is intentionally a window. The estimate assumes the vessel broadly continues its recent speed and course. Commercial operations can change that quickly, so precision narrows only when a vessel is close to the canal and the evidence is stronger.</p>
+    <h3>Why might a Twin Ports vessel not pass Canal Park?</h3>
+    <p>The Duluth-Superior harbor has more than one entrance. A ship’s presence in the harbor or on western Lake Superior does not by itself prove it will use the Duluth Ship Canal, which is why the candidate engine requires route evidence.</p>
+    <h3>What is the best place for a first-time visitor?</h3>
+    <p>The north side of the ship canal near the Lake Superior Maritime Visitor Center is the simplest starting point: the canal, bridge, lighthouse and visitor center are together in one walkable place.</p>
+  </section>
+
+  <section class="section" aria-labelledby="more-title">
+    <h2 id="more-title">Keep following the ship</h2>
+    <div class="three">
+      <article class="place-card"><h3><a href="/great-lakes-freighter-tracking/">Great Lakes freighter tracking</a></h3><p>Move from one harbor decision to the broader Great Lakes vessel picture.</p></article>
+      <article class="place-card"><h3><a href="/soo-locks/">Soo Locks ships &amp; map</a></h3><p>See the same visitor-first pattern at the other major Great Lakes ship-watching choke point.</p></article>
+      <article class="place-card"><h3><a href="/great-lakes-buoys/">Great Lakes buoy conditions</a></h3><p>Check lake conditions when weather and visibility are part of the day.</p></article>
+    </div>
+  </section>
+</main>
+<footer class="footer">Independent visitor planning tool by <a href="/chris-izworski/">Chris Izworski</a>. Not affiliated with the Port of Duluth-Superior, U.S. Army Corps of Engineers, Harbor Lookout or Open Waters.</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="/assets/duluth-canal.js" defer></script>
+</body>
+</html>
