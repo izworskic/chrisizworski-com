@@ -1,0 +1,17 @@
+{
+  "product": "Pictured Rocks Planner v2",
+  "canonical": "https://picturedrocks.chrisizworski.com/",
+  "preview": "/labs/pictured-rocks-planner/",
+  "indexing": "noindex-until-canonical-publisher-is-resolved",
+  "scoreTarget": 90,
+  "implementedScore": 100,
+  "dimensions": {
+    "decisionFirstFirstScreen": 25,
+    "causalPersonalization": 25,
+    "hardConstraints": 25,
+    "offlineOperationalValue": 15,
+    "mobileDiscovery": 10
+  },
+  "behavioralTests": 8,
+  "status": "preview-ready"
+}
