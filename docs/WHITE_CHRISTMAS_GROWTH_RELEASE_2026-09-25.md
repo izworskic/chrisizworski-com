@@ -6,6 +6,8 @@ The authoritative `izworskic/national-white-christmas` product was expanded from
 
 This shell change does not copy White Christmas product logic. It publishes the 22 newly proven canonical city routes in the dedicated White Christmas, winter, and main sitemaps and refreshes `lastmod` for White Christmas city/region surfaces materially changed by the owner release.
 
+The shell release is gated through the repository's normal `agent/**` full verification workflow; no search or routing gate is bypassassed for this publication.
+
 ## Search evidence and reason for expansion
 
 The September 25 Search Console review showed the White Christmas forecast surface already receiving 2,017 impressions at average position 9.13 in the latest 28-day export, while city guides such as Buffalo, Minneapolis, Pittsburgh, Syracuse, Duluth, Santa Fe, and Bozeman were already appearing on page one or near it. The expansion is therefore concentrated in the same proven snow-region and winter-destination query family rather than a nationwide city-page spray.
