@@ -76,3 +76,11 @@ test("browser planner exposes Finish and sends it to the API",()=>{
   assert.match(source,/Back where I started/);
   assert.match(source,/finishGateway/);
 });
+
+test("Finish is present in static planner markup and the asset is cache-busted",()=>{
+  const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");
+  assert.match(html,/<label for="finish">Finish<\/label>/);
+  assert.match(html,/<select id="finish">/);
+  assert.match(html,/Back where I started/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20260924-2/);
+});
