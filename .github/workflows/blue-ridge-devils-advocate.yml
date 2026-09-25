@@ -17,7 +17,9 @@ jobs:
           ref: improve/blue-ridge-devils-advocate
           fetch-depth: 0
       - name: Apply hostile-review improvements
-        run: python .github/blue-ridge-devils-advocate.py
+        run: |
+          python .github/blue-ridge-devils-advocate.py
+          python .github/blue-ridge-devils-advocate-testfix.py
       - name: Run Blue Ridge tests
         run: node --test tests/blue-ridge-parkway-destination.test.js tests/blue-ridge-parkway-ui.test.js tests/blue-ridge-parkway.test.js
       - name: Commit improvements
