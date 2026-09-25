@@ -12,29 +12,28 @@
     shortName: 'Ship Cam',
     lat: 46.7818492,
     lon: -92.0929547,
-    sourceUrl: 'https://www.youtube.com/live/H6cm5Hf-yFY',
-    embedUrl: 'https://www.youtube-nocookie.com/embed/H6cm5Hf-yFY'
+    embedUrl: 'https://www.youtube-nocookie.com/embed/H6cm5Hf-yFY?autoplay=1&mute=1&rel=0'
   };
 
   const FEEDS = [
-    { id: 'canal', name: 'Canal Cam', siteId: 'visitor-center', url: `${DHC_BASE}/p/canal-park-cams.html`, embedUrl: 'https://camstreamer.com/embed/tyxooOqos1LX6pvVwLo7YYCFjebUYSfKRGovD3VP' },
-    { id: 'bridge', name: 'Bridge Cam', siteId: 'visitor-center', url: `${DHC_BASE}/p/bridge-cam.html`, embedUrl: 'https://camstreamer.com/embed/rc9ESJv9JfnHHXGhtan3R70A85RrOZUIjiA0Y6Vg' },
-    { id: 'lighthouse', name: 'Lighthouse Cam', siteId: 'visitor-center', url: `${DHC_BASE}/p/lighthouse-cam.html`, embedUrl: 'https://camstreamer.com/embed/lDZY136tEMlHXuVDNpBjt5klRIZfjIXE9I7e7tXX' },
-    { id: 'south-pier', name: 'South Pier Lighthouse Cam', siteId: 'south-pier', url: `${DHC_BASE}/p/south-pier-lighthouse-cam.html`, embedUrl: 'https://camstreamer.com/embed/KW6M74xHL0yw1bxWTiKLVyXAWVnG8wyLEMDgkNMQ' },
-    { id: 'gla', name: 'GLA / Harbor Plaza Cam', siteId: 'gla', url: `${DHC_BASE}/p/great-lakes-aquarium.html`, embedUrl: 'https://camstreamer.com/embed/vnpbuwO8ijoqqGF7cQpP3YLiwihrwlgbbK17GHlN' },
+    { id: 'canal', name: 'Canal Cam', siteId: 'visitor-center', url: `${DHC_BASE}/p/canal-park-cams.html` },
+    { id: 'bridge', name: 'Bridge Cam', siteId: 'visitor-center', url: `${DHC_BASE}/p/bridge-cam.html` },
+    { id: 'lighthouse', name: 'Lighthouse Cam', siteId: 'visitor-center', url: `${DHC_BASE}/p/lighthouse-cam.html` },
+    { id: 'south-pier', name: 'South Pier Lighthouse Cam', siteId: 'south-pier', url: `${DHC_BASE}/p/south-pier-lighthouse-cam.html` },
+    { id: 'gla', name: 'GLA / Harbor Plaza Cam', siteId: 'gla', url: `${DHC_BASE}/p/great-lakes-aquarium.html` },
     { id: 'pier-b', name: 'Pier B Cam', siteId: 'pier-b', url: `${DHC_BASE}/p/pier-b-cam.html` },
-    { id: 'bayfront', name: 'Bayfront Cam', siteId: 'hillside', url: `${DHC_BASE}/p/dualc.html`, embedUrl: 'https://camstreamer.com/embed/u3a9TNe05qcM4qK6Yza0Om5JczJmeBqEiHhyY8OS' },
-    { id: 'hillside', name: 'Hillside Cam', siteId: 'hillside', url: `${DHC_BASE}/p/hillside-can.html`, embedUrl: 'https://camstreamer.com/embed/iJ04DdtUqAILdENBaiQbAng9zac4j1igTvhHwJQQ' },
-    { id: 'harbor', name: 'Harbor Cam', siteId: 'hillside', url: `${DHC_BASE}/p/harbor-cam.html`, embedUrl: 'https://camstreamer.com/embed/i2mkqi3dioZzrrKwRBE62MsKV6R924qftGGZydZT' },
-    { id: 'cargo-connect', name: 'Duluth Cargo Connect', siteId: 'cargo', url: `${DHC_BASE}/p/duluth-cargo-connect.html`, embedUrl: 'https://camstreamer.com/embed/P0qy7qnSMY2D3qEXx1pl8rKehclQNacGoDvHdZGH' },
-    { id: 'western-harbor', name: 'Western Harborcam', siteId: 'western', url: `${DHC_BASE}/p/western-harborcam.html`, embedUrl: 'https://camstreamer.com/embed/dobXHszVj7SO8PKux3qBl7zj0VO3lr0NZRE5nM2j' },
-    { id: 'ami', name: 'AMI / Connors Point Cam', siteId: 'ami', url: `${DHC_BASE}/p/ami-cam.html`, embedUrl: 'https://camstreamer.com/embed/LiW55Uwdn7MJFRoV9WwDmw5OhfZTei9pfu4na2zT' },
-    { id: 'fairlawn', name: 'Fairlawn Cam', siteId: 'fairlawn', url: `${DHC_BASE}/p/fairlawn-cam.html`, embedUrl: 'https://camstreamer.com/embed/Rlh3iXgr1r7pnC7J72mj6fijscbUCfBSKhCX3XTu' },
-    { id: 'two-harbors-boat', name: 'Two Harbors Boat Launch', siteId: 'two-harbors-boat', url: `${DHC_BASE}/p/two-harbors-boat.html`, embedUrl: 'https://camstreamer.com/embed/fPBkxzxaLYIDM1b2zrEm4JgTzHeTS3sQ9puI6tfk' },
-    { id: 'wisconsin-point', name: 'Wisconsin Point Cam', siteId: 'wisconsin-point', url: `${DHC_BASE}/p/wisconsin-point-cam.html`, embedUrl: 'https://camstreamer.com/embed/UOgeYRAKSV5tYyRvLJgQUsbUaTp3umy798h32PXM' },
-    { id: 'split-rock', name: 'Split Rock Lighthouse Cam', siteId: 'split-rock', url: `${DHC_BASE}/p/split-rock-lighthouse-cam.html`, embedUrl: 'https://camstreamer.com/embed/Gc7nmBAXKQSlZlj1OIjLZwc92fzgek0zSoQdbCmK' },
+    { id: 'bayfront', name: 'Bayfront Cam', siteId: 'hillside', url: `${DHC_BASE}/p/dualc.html` },
+    { id: 'hillside', name: 'Hillside Cam', siteId: 'hillside', url: `${DHC_BASE}/p/hillside-can.html` },
+    { id: 'harbor', name: 'Harbor Cam', siteId: 'hillside', url: `${DHC_BASE}/p/harbor-cam.html` },
+    { id: 'cargo-connect', name: 'Duluth Cargo Connect', siteId: 'cargo', url: `${DHC_BASE}/p/duluth-cargo-connect.html` },
+    { id: 'western-harbor', name: 'Western Harborcam', siteId: 'western', url: `${DHC_BASE}/p/western-harborcam.html` },
+    { id: 'ami', name: 'AMI / Connors Point Cam', siteId: 'ami', url: `${DHC_BASE}/p/ami-cam.html` },
+    { id: 'fairlawn', name: 'Fairlawn Cam', siteId: 'fairlawn', url: `${DHC_BASE}/p/fairlawn-cam.html` },
+    { id: 'two-harbors-boat', name: 'Two Harbors Boat Launch', siteId: 'two-harbors-boat', url: `${DHC_BASE}/p/two-harbors-boat.html` },
+    { id: 'wisconsin-point', name: 'Wisconsin Point Cam', siteId: 'wisconsin-point', url: `${DHC_BASE}/p/wisconsin-point-cam.html` },
+    { id: 'split-rock', name: 'Split Rock Lighthouse Cam', siteId: 'split-rock', url: `${DHC_BASE}/p/split-rock-lighthouse-cam.html` },
     { id: 'two-harbors-depot', name: 'Two Harbors Depot Cam', siteId: 'two-harbors-depot', url: `${DHC_BASE}/p/two-harbors-depot-cam.html` },
-    { id: 'silver-bay', name: 'Silver Bay Marina Cam', siteId: 'silver-bay', url: `${DHC_BASE}/p/silver-bay-marina-cam.html`, embedUrl: 'https://camstreamer.com/embed/06b000052e8f80f/S-24949' }
+    { id: 'silver-bay', name: 'Silver Bay Marina Cam', siteId: 'silver-bay', url: `${DHC_BASE}/p/silver-bay-marina-cam.html` }
   ];
 
   const SITES = [
@@ -66,13 +65,11 @@
   const originalMapFactory = window.L.map;
 
   function cameraSiteIcon(site) {
-    const count = (feedsBySite.get(site.id) || []).length;
-    const label = count > 1 ? `${count} CAMS` : 'CAM';
     return L.divIcon({
       className: `camera-network-marker${site.scope === 'north-shore' ? ' is-regional' : ''}`,
-      html: `<span>${label}</span>`,
-      iconSize: count > 1 ? [54, 30] : [38, 30],
-      iconAnchor: count > 1 ? [27, 15] : [19, 15],
+      html: '<span>CAM</span>',
+      iconSize: [42, 30],
+      iconAnchor: [21, 15],
       popupAnchor: [0, -16]
     });
   }
@@ -81,6 +78,7 @@
     const url = new URL(value, window.location.href);
     url.searchParams.set('autoplay', '1');
     url.searchParams.set('mute', '1');
+    url.searchParams.set('playsinline', '1');
     url.searchParams.set('rel', '0');
     return url.toString();
   }
@@ -89,8 +87,9 @@
     const frame = document.createElement('iframe');
     frame.src = autoplayUrl(embedUrl);
     frame.title = `${feedName} live stream`;
-    frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen';
+    frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
     frame.allowFullscreen = true;
+    frame.loading = 'eager';
     frame.referrerPolicy = 'strict-origin-when-cross-origin';
     return frame;
   }
@@ -101,23 +100,12 @@
   }
 
   async function resolveEmbed(feed) {
-    if (feed.embedUrl) return feed.embedUrl;
     if (embedCache.has(feed.id)) return embedCache.get(feed.id);
     const response = await fetch(`${CAMERA_API}?feed=${encodeURIComponent(feed.id)}`, { signal: AbortSignal.timeout(9000) });
     const data = await response.json();
-    if (!response.ok || !data?.ok || !data.embedUrl) throw new Error(data?.error || 'Live player unavailable');
+    if (!response.ok || !data?.ok || !data.embedUrl) throw new Error(data?.error || 'Live video unavailable');
     embedCache.set(feed.id, data.embedUrl);
     return data.embedUrl;
-  }
-
-  function sourceLink(feed) {
-    const a = document.createElement('a');
-    a.href = feed.url;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    a.textContent = 'Open source';
-    a.className = 'camera-popup-source';
-    return a;
   }
 
   function liveCameraPopup(title, note, feeds) {
@@ -138,12 +126,11 @@
 
     const tabs = document.createElement('div');
     tabs.className = 'camera-live-tabs';
+    if (feeds.length > 1) wrap.append(tabs);
+
     const player = document.createElement('div');
     player.className = 'camera-live-player';
-    const loading = document.createElement('div');
-    loading.className = 'camera-live-loading';
-    loading.textContent = 'Starting live camera…';
-    player.append(loading);
+    wrap.append(player);
 
     const actions = document.createElement('div');
     actions.className = 'camera-live-actions';
@@ -152,20 +139,18 @@
     pop.className = 'camera-popup-popout';
     pop.textContent = 'Pop out';
     pop.disabled = true;
-    const source = sourceLink(feeds[0]);
-    actions.append(pop, source);
+    actions.append(pop);
+    wrap.append(actions);
 
-    wrap.append(tabs, player, actions);
-
-    let activeId = null;
+    let activeId = '';
     let loadToken = 0;
 
     function activate(feed) {
       activeId = feed.id;
       const token = ++loadToken;
       tabs.querySelectorAll('button').forEach(button => button.classList.toggle('is-active', button.dataset.feedId === feed.id));
-      source.href = feed.url;
       pop.disabled = true;
+      pop.onclick = null;
       player.replaceChildren();
       const state = document.createElement('div');
       state.className = 'camera-live-loading';
@@ -179,18 +164,13 @@
         pop.onclick = () => popOut(embedUrl);
       };
 
-      if (feed.embedUrl) {
-        mount(feed.embedUrl);
-        return;
-      }
-
-      resolveEmbed(feed).then(mount).catch(() => {
+      const direct = feed.embedUrl ? Promise.resolve(feed.embedUrl) : resolveEmbed(feed);
+      direct.then(mount).catch(() => {
         if (token !== loadToken || activeId !== feed.id) return;
-        player.replaceChildren();
         const error = document.createElement('div');
         error.className = 'camera-live-loading is-error';
-        error.textContent = 'Live player unavailable here. Open the source camera instead.';
-        player.append(error);
+        error.textContent = 'Live video unavailable right now.';
+        player.replaceChildren(error);
         pop.disabled = true;
       });
     }
@@ -215,7 +195,6 @@
   function sitePopup(site) {
     const feeds = feedsBySite.get(site.id) || [];
     const notes = [site.note];
-    if (site.id === 'visitor-center') notes.push('Canal Cam is also the primary in-page video view below.');
     if (site.approximate) notes.push('Map position is approximate at the published facility/site level.');
     return liveCameraPopup(site.name, notes.filter(Boolean).join(' '), feeds);
   }
@@ -224,7 +203,6 @@
     return liveCameraPopup(INDEPENDENT_SHIP_CAM.name, 'Independent Ship Cam from the Canal Park side of the bridge.', [{
       id: INDEPENDENT_SHIP_CAM.id,
       name: INDEPENDENT_SHIP_CAM.shortName,
-      url: INDEPENDENT_SHIP_CAM.sourceUrl,
       embedUrl: INDEPENDENT_SHIP_CAM.embedUrl
     }]);
   }
@@ -244,9 +222,9 @@
     const style = document.createElement('style');
     style.id = 'duluthCameraNetworkStyles';
     style.textContent = `
-      .camera-network-marker{background:transparent;border:0}.camera-network-marker span{height:30px;min-width:38px;padding:0 7px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:#6a4c86;color:#fff;border:2px solid #fff;box-shadow:0 2px 9px rgba(18,52,64,.4);font:700 9px/1 Arial,sans-serif;white-space:nowrap}.camera-network-marker.is-regional span{background:#4d617e}
-      .camera-live-popup{width:min(330px,74vw);font:12px/1.35 Arial,sans-serif}.camera-live-title{display:block;color:#173f50;font-size:14px;margin:0 0 4px}.camera-live-note{margin:0 0 7px!important;color:#647178!important;font-size:11px!important}.camera-live-tabs{display:flex;gap:4px;flex-wrap:wrap;margin:0 0 7px}.camera-live-tabs button{border:1px solid #bac8cc;background:#fff;color:#245b70;border-radius:999px;padding:4px 7px;font:700 10px Arial,sans-serif;cursor:pointer}.camera-live-tabs button.is-active{background:#173f50;color:#fff;border-color:#173f50}.camera-live-player{width:100%;aspect-ratio:16/9;background:#102d38;border-radius:5px;overflow:hidden;display:flex;align-items:center;justify-content:center}.camera-live-player iframe{display:block;width:100%;height:100%;border:0}.camera-live-loading{padding:14px;text-align:center;color:#dbe9ed;font:700 11px/1.4 Arial,sans-serif}.camera-live-loading.is-error{color:#f1d4cf}.camera-live-actions{display:flex;align-items:center;gap:10px;margin-top:8px}.camera-popup-popout{border:1px solid #173f50;background:#173f50;color:#fff;border-radius:3px;padding:6px 9px;font:700 11px Arial,sans-serif;cursor:pointer}.camera-popup-popout:disabled{opacity:.5;cursor:wait}.camera-popup-source{font:700 11px Arial,sans-serif}
-      .camera-network-popup-links{display:grid;gap:4px;margin-top:7px}.camera-network-feed{font:700 12px/1.35 Arial,sans-serif}.camera-network-panel{border-top:1px solid #d7dcdd;padding:10px 14px 14px;background:#f8faf9}.camera-network-panel summary{cursor:pointer;color:#1b5368;font:700 12px Arial,sans-serif}.camera-network-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 12px;margin-top:10px}.camera-network-links a{font:700 11px/1.35 Arial,sans-serif}.camera-network-note{margin-top:8px!important;color:#778186!important}.camera-network-count{font-weight:700}.camera-network-control{border-color:#bfcad0!important}.camera-network-control.is-network{background:#6a4c86!important;color:#fff!important;border-color:#6a4c86!important}@media(max-width:700px){.camera-network-links{grid-template-columns:1fr 1fr}.camera-live-popup{width:min(310px,72vw)}}
+      .camera-network-marker{background:transparent;border:0}.camera-network-marker span{height:30px;min-width:42px;padding:0 7px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:#6a4c86;color:#fff;border:2px solid #fff;box-shadow:0 2px 9px rgba(18,52,64,.4);font:700 10px/1 Arial,sans-serif;white-space:nowrap}.camera-network-marker.is-regional span{background:#4d617e}
+      .camera-live-popup{width:min(340px,76vw);font:12px/1.35 Arial,sans-serif}.camera-live-title{display:block;color:#173f50;font-size:14px;margin:0 0 4px}.camera-live-note{margin:0 0 7px!important;color:#647178!important;font-size:11px!important}.camera-live-tabs{display:flex;gap:4px;flex-wrap:wrap;margin:0 0 7px}.camera-live-tabs button{border:1px solid #bac8cc;background:#fff;color:#245b70;border-radius:999px;padding:4px 7px;font:700 10px Arial,sans-serif;cursor:pointer}.camera-live-tabs button.is-active{background:#173f50;color:#fff;border-color:#173f50}.camera-live-player{width:100%;aspect-ratio:16/9;background:#102d38;border-radius:5px;overflow:hidden;display:flex;align-items:center;justify-content:center}.camera-live-player iframe{display:block;width:100%;height:100%;border:0}.camera-live-loading{padding:14px;text-align:center;color:#dbe9ed;font:700 11px/1.4 Arial,sans-serif}.camera-live-loading.is-error{color:#f1d4cf}.camera-live-actions{display:flex;justify-content:flex-end;margin-top:7px}.camera-popup-popout{border:1px solid #173f50;background:#173f50;color:#fff;border-radius:3px;padding:6px 10px;font:700 11px Arial,sans-serif;cursor:pointer}.camera-popup-popout:disabled{opacity:.45;cursor:wait}
+      .camera-network-panel{border-top:1px solid #d7dcdd;padding:10px 14px 14px;background:#f8faf9}.camera-network-panel summary{cursor:pointer;color:#1b5368;font:700 12px Arial,sans-serif}.camera-network-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 12px;margin-top:10px}.camera-network-links a{font:700 11px/1.35 Arial,sans-serif}.camera-network-note{margin-top:8px!important;color:#778186!important}.camera-network-count{font-weight:700}.camera-network-control{border-color:#bfcad0!important}.camera-network-control.is-network{background:#6a4c86!important;color:#fff!important;border-color:#6a4c86!important}@media(max-width:700px){.camera-network-links{grid-template-columns:1fr 1fr}.camera-live-popup{width:min(320px,74vw)}}
     `;
     document.head.append(style);
   }
@@ -261,24 +239,28 @@
     return match;
   }
 
+  function bindCameraPopup(marker, popupFactory) {
+    if (!marker) return null;
+    if (typeof marker.unbindPopup === 'function') marker.unbindPopup();
+    if (typeof marker.setZIndexOffset === 'function') marker.setZIndexOffset(1800);
+    marker.bindPopup(popupFactory, { maxWidth: 380, minWidth: 305, autoPanPadding: [24, 24] });
+    return marker;
+  }
+
   function adoptPrimaryCanalMarker(site) {
     const marker = findMarkerByTitle(PRIMARY_CANAL_CAMERA_TITLE);
     if (!marker) return null;
     const feeds = feedsBySite.get(site.id) || [];
     if (typeof marker.unbindTooltip === 'function') marker.unbindTooltip();
     marker.bindTooltip(`${site.name} · ${feeds.length} cams`, { direction: 'top' });
-    if (typeof marker.unbindPopup === 'function') marker.unbindPopup();
-    marker.bindPopup(() => sitePopup(site), { maxWidth: 370, minWidth: 300, autoPanPadding: [24, 24] });
+    bindCameraPopup(marker, () => sitePopup(site));
     siteMarkers.set(site.id, marker);
     return marker;
   }
 
   function adoptIndependentShipMarker() {
     const marker = findMarkerByTitle(INDEPENDENT_SHIP_CAM.name);
-    if (!marker) return null;
-    if (typeof marker.unbindPopup === 'function') marker.unbindPopup();
-    marker.bindPopup(() => independentPopup(), { maxWidth: 370, minWidth: 300, autoPanPadding: [24, 24] });
-    return marker;
+    return bindCameraPopup(marker, () => independentPopup());
   }
 
   function addSiteMarkers() {
@@ -290,18 +272,16 @@
         icon: cameraSiteIcon(site),
         keyboard: true,
         title: `${site.name} camera site`,
-        zIndexOffset: site.scope === 'north-shore' ? 820 : 1040
-      }).addTo(boatMap).bindTooltip(`${site.name} · ${(feedsBySite.get(site.id) || []).length} cam${(feedsBySite.get(site.id) || []).length === 1 ? '' : 's'}`, { direction: 'top' }).bindPopup(() => sitePopup(site), { maxWidth: 370, minWidth: 300, autoPanPadding: [24, 24] });
+        zIndexOffset: site.scope === 'north-shore' ? 1700 : 1800
+      }).addTo(boatMap).bindTooltip(`${site.name} · ${(feedsBySite.get(site.id) || []).length} cam${(feedsBySite.get(site.id) || []).length === 1 ? '' : 's'}`, { direction: 'top' });
+      bindCameraPopup(marker, () => sitePopup(site));
       siteMarkers.set(site.id, marker);
     });
     adoptIndependentShipMarker();
   }
 
   function allBounds() {
-    return [
-      ...SITES.map(site => [site.lat, site.lon]),
-      [INDEPENDENT_SHIP_CAM.lat, INDEPENDENT_SHIP_CAM.lon]
-    ];
+    return [...SITES.map(site => [site.lat, site.lon]), [INDEPENDENT_SHIP_CAM.lat, INDEPENDENT_SHIP_CAM.lon]];
   }
 
   function focusNetwork() {
@@ -327,7 +307,7 @@
     details.append(links);
     const note = document.createElement('p');
     note.className = 'camera-network-note';
-    note.textContent = 'Click a CAM marker to start its live view in the map popup, then use Pop out for a larger player. The existing Ship Cam is an additional independent feed, so the monitor exposes 19 camera feeds in total. Markers identify the named host site or landmark, not a surveyed camera mount point; Hillside and Cargo Connect are explicitly approximate facility/site positions. Regional North Shore cameras stay off the default Canal Park extent until you choose Camera network.';
+    note.textContent = 'Click a CAM marker and the live video starts in that map bubble. Pop out opens that same video larger. The existing Ship Cam is an additional independent feed, so the monitor exposes 19 camera feeds in total. Markers identify the named host site or landmark, not a surveyed camera mount point; Hillside and Cargo Connect are explicitly approximate facility/site positions. Regional North Shore cameras stay off the default Canal Park extent until you choose Camera network.';
     details.append(note);
     panel.append(details);
     monitor.append(panel);
@@ -339,7 +319,7 @@
       const title = visual.querySelector('.monitor-title');
       const detail = visual.querySelector('.monitor-detail');
       if (title) title.textContent = '19 mapped camera feeds';
-      if (detail) detail.textContent = 'Click a CAM marker to play its live view in the map. 18 Duluth Harbor Cam feeds across 14 sites + the independent Ship Cam.';
+      if (detail) detail.textContent = 'Click a CAM marker to play its live view immediately. 18 Duluth Harbor Cam feeds across 14 sites + the independent Ship Cam.';
     }
 
     const focus = document.getElementById('focusCameras');
