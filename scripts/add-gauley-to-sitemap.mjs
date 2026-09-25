@@ -1,3 +1,4 @@
+import './tune-duluth-discovery.mjs';
 import fs from 'node:fs';
 
 const file='public/sitemap.xml';
