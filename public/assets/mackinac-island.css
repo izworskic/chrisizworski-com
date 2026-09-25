@@ -329,3 +329,15 @@ body.mackinac-plan-ready .manual-style{margin-top:8px}
   .profile-logistics-grid input{font-size:16px}
   body:not(.mackinac-plan-ready) .decision-panel{min-height:0}
 }
+
+/* Fine-tune form: lead with what the intake does not ask, collapse what it already set. */
+.builder-lead{display:grid;gap:14px}
+.builder-grid-lead{grid-template-columns:minmax(0,320px)}
+.builder-more{margin-top:14px;border:1px solid var(--line,rgba(0,0,0,.14));border-radius:12px;padding:0 14px}
+.builder-more>summary{cursor:pointer;list-style:none;display:flex;flex-direction:column;gap:2px;padding:12px 0}
+.builder-more>summary::-webkit-details-marker{display:none}
+.builder-more>summary::before{content:"+";float:right;font-weight:700}
+.builder-more[open]>summary::before{content:"\2212"}
+.builder-more-title{font-weight:700}
+.builder-more-hint{font-size:13px;opacity:.72}
+.builder-more[open]{padding-bottom:14px}
