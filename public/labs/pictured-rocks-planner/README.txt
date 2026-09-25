@@ -1,0 +1,1 @@
+Noncanonical Pictured Rocks Planner v2 preview. Keep noindex until the standalone picturedrocks.chrisizworski.com publisher/source mapping is resolved and this build can replace the canonical safely.
