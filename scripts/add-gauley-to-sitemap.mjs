@@ -1,4 +1,5 @@
 import './tune-duluth-discovery.mjs';
+import './link-duluth-circle-tour.mjs';
 import fs from 'node:fs';
 
 const file='public/sitemap.xml';
