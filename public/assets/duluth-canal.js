@@ -5,52 +5,19 @@
   const ZONE = 'America/Chicago';
   const CANAL = [46.7783, -92.0908];
   const WATCH_SPOTS = [
-    {
-      id: 'north',
-      number: 1,
-      name: 'North side / Visitor Center',
-      lat: 46.779847,
-      lon: -92.092464,
-      note: 'Classic close-up viewing beside the Lake Superior Maritime Visitor Center.'
-    },
-    {
-      id: 'south',
-      number: 2,
-      name: 'South side / Park Point',
-      lat: 46.778722,
-      lon: -92.092028,
-      note: 'South-breakwater side for a strong bridge-and-ship composition.'
-    },
-    {
-      id: 'lakewalk',
-      number: 3,
-      name: 'Canal Park / Lakewalk',
-      lat: 46.780067,
-      lon: -92.091333,
-      note: 'Broader waterfront staging point at the Canal Park end of the Lakewalk.'
-    }
+    { id: 'north', number: 1, name: 'North side / Visitor Center', lat: 46.779847, lon: -92.092464, note: 'Classic close-up viewing beside the Lake Superior Maritime Visitor Center.' },
+    { id: 'south', number: 2, name: 'South side / Park Point', lat: 46.778722, lon: -92.092028, note: 'South-breakwater side for a strong bridge-and-ship composition.' },
+    { id: 'lakewalk', number: 3, name: 'Canal Park / Lakewalk', lat: 46.780067, lon: -92.091333, note: 'Broader waterfront staging point at the Canal Park end of the Lakewalk.' }
   ];
   const CAMERAS = [
     {
-      id: 'canal',
-      name: 'Canal Cam — Maritime Visitor Center',
-      shortName: 'Canal Cam',
-      lat: 46.779861,
-      lon: -92.092361,
-      youtubeId: 'HPS48TMmNag',
-      directUrl: 'https://www.youtube.com/live/HPS48TMmNag',
-      operator: 'Duluth Harbor Cam',
+      id: 'canal', name: 'Canal Cam — Maritime Visitor Center', shortName: 'Canal Cam', lat: 46.779861, lon: -92.092361,
+      youtubeId: 'HPS48TMmNag', directUrl: 'https://www.youtube.com/live/HPS48TMmNag', operator: 'Duluth Harbor Cam',
       note: 'Closest visual cross-check for the Duluth Ship Canal and Aerial Lift Bridge.'
     },
     {
-      id: 'lodge',
-      name: 'Ship Cam — Lift Bridge Lodge',
-      shortName: 'Ship Cam',
-      lat: 46.7818492,
-      lon: -92.0929547,
-      youtubeId: 'H6cm5Hf-yFY',
-      directUrl: 'https://www.youtube.com/live/H6cm5Hf-yFY',
-      operator: 'Vibe with Mike',
+      id: 'lodge', name: 'Ship Cam — Lift Bridge Lodge', shortName: 'Ship Cam', lat: 46.7818492, lon: -92.0929547,
+      youtubeId: 'H6cm5Hf-yFY', directUrl: 'https://www.youtube.com/live/H6cm5Hf-yFY', operator: 'Vibe with Mike',
       note: 'A second nearby angle from the Canal Park side of the bridge.'
     }
   ];
@@ -58,7 +25,9 @@
   const $ = id => document.getElementById(id);
   let map = null;
   let vesselLayer = null;
+  let candidateLayer = null;
   let previous = null;
+  let currentData = null;
   let busy = false;
   let activeCameraId = CAMERAS[0].id;
   const markers = new Map();
@@ -69,6 +38,13 @@
     const node = document.createElement(tag);
     if (text !== undefined && text !== null) node.textContent = text;
     if (className) node.className = className;
+    return node;
+  }
+
+  function button(text, className, handler) {
+    const node = el('button', text, className);
+    node.type = 'button';
+    node.addEventListener('click', handler);
     return node;
   }
 
@@ -89,9 +65,8 @@
     const start = new Date(window.start);
     const end = new Date(window.end);
     if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime())) return 'window unavailable';
-    const sameDay = new Intl.DateTimeFormat('en-US', { timeZone: ZONE, year: 'numeric', month: '2-digit', day: '2-digit' }).format(start) ===
-      new Intl.DateTimeFormat('en-US', { timeZone: ZONE, year: 'numeric', month: '2-digit', day: '2-digit' }).format(end);
-    return sameDay ? `${dayTime(start)}–${time(end)}` : `${dayTime(start)}–${dayTime(end)}`;
+    const df = new Intl.DateTimeFormat('en-US', { timeZone: ZONE, year: 'numeric', month: '2-digit', day: '2-digit' });
+    return df.format(start) === df.format(end) ? `${dayTime(start)}–${time(end)}` : `${dayTime(start)}–${dayTime(end)}`;
   }
 
   function age(v) {
@@ -112,6 +87,12 @@
     return 'The vessel reports a Duluth destination and its current AIS motion points toward the canal.';
   }
 
+  function scrollMap() {
+    const node = $('duluthVesselMap');
+    if (node) node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    window.setTimeout(() => { if (map) map.invalidateSize(); }, 250);
+  }
+
   function renderPick(data, failed) {
     const card = $('watchPick');
     card.replaceChildren();
@@ -121,8 +102,8 @@
       card.append(
         el('div', 'NEXT SHIP TO WATCH', 'watch-kicker'),
         el('h2', 'No supported Canal Park passage to call yet.'),
-        el('p', 'That is not a zero-traffic report. It means the live AIS evidence does not support a useful passage window right now.'),
-        el('p', 'Use the live monitor below, or check Harbor Lookout for the published arrival and departure list.', 'watch-note')
+        el('p', 'That is not a zero-traffic report. The current AIS evidence does not support a useful passage window right now.'),
+        el('p', 'The monitor still gives you recent local vessel reports, both live camera locations and all three in-person watch spots.', 'watch-note')
       );
       return;
     }
@@ -131,31 +112,27 @@
     const direction = pick.direction === 'departure' ? 'Departing through the canal' : 'Arriving through the canal';
     const heading = el('div', '', 'watch-heading');
     heading.append(el('span', direction, 'direction-pill'), el('span', confidenceLabel(pick.confidence), 'confidence-pill'));
-    const why = el('p', explainCandidate(pick), 'watch-why');
     const action = el('div', '', 'arrival-action');
     action.append(
       el('span', 'Plan around', 'arrival-label'),
       el('strong', range(pick.window), 'arrival-time'),
       el('span', `Modeled midpoint ${time(pick.window.midpoint)} · ${pick.distanceNm} NM away at last report`, 'arrival-detail')
     );
-    const monitorButton = el('button', 'Track on map', 'map-jump');
-    monitorButton.type = 'button';
-    monitorButton.addEventListener('click', () => focusVessel(pick.mmsi));
+    const actions = el('div', '', 'watch-actions');
+    actions.append(
+      button('Locate this ship', 'button compact', () => focusVessel(pick.mmsi)),
+      button('Open live camera', 'button secondary compact', () => openCameraMonitor(false))
+    );
     card.append(
       el('div', 'BEST SUPPORTED WATCH', 'watch-kicker'),
-      el('h2', pick.name),
-      heading,
-      action,
-      why,
-      monitorButton,
+      el('h2', pick.name), heading, action, el('p', explainCandidate(pick), 'watch-why'), actions,
       el('p', 'Aim to be at the canal before the start of the window. Ships can change speed, berth, destination or entrance; this is a planning window, not a bridge schedule.', 'watch-note')
     );
     if (failed) card.append(el('p', 'Live refresh failed; this card is retained from the previous successful check.', 'stale-warning'));
   }
 
   function candidateMeta(c) {
-    const parts = [c.sizeLabel, `${c.distanceNm} NM`, `${Number(c.speedKnots).toFixed(1)} kn`, `AIS ${c.ageMinutes} min old`];
-    return parts.join(' · ');
+    return [c.sizeLabel, `${c.distanceNm} NM`, `${Number(c.speedKnots).toFixed(1)} kn`, `AIS ${c.ageMinutes} min old`].join(' · ');
   }
 
   function renderCandidates(data) {
@@ -168,39 +145,79 @@
       list.append(empty);
       return;
     }
-    candidates.slice(0, 6).forEach((c, index) => {
+    const selectedId = data.watchPick ? String(data.watchPick.mmsi) : null;
+    candidates.slice(0, 6).forEach(c => {
       const card = el('article', '', 'ship-card');
+      const selected = String(c.mmsi) === selectedId;
       const top = el('div', '', 'ship-card-top');
-      top.append(el('span', index === 0 ? 'Soonest candidates' : c.direction === 'departure' ? 'Departure candidate' : 'Arrival candidate', 'ship-label'));
-      const title = el('h3', c.name);
-      const timing = el('div', range(c.window), 'ship-window');
-      const meta = el('p', candidateMeta(c), 'ship-meta');
-      const why = el('p', explainCandidate(c), 'ship-why');
-      const button = el('button', 'Show on monitor', 'map-jump');
-      button.type = 'button';
-      button.addEventListener('click', () => focusVessel(c.mmsi));
-      card.append(top, title, timing, meta, why, button);
+      top.append(el('span', selected ? 'NEXT WATCH' : c.direction === 'departure' ? 'Departure candidate' : 'Arrival candidate', 'ship-label'));
+      card.append(
+        top,
+        el('h3', c.name),
+        el('div', range(c.window), 'ship-window'),
+        el('p', candidateMeta(c), 'ship-meta'),
+        el('p', explainCandidate(c), 'ship-why'),
+        button('Show on monitor', 'map-jump', () => focusVessel(c.mmsi))
+      );
       list.append(card);
     });
   }
 
-  function openCameraMonitor(load = false) {
-    selectCamera(activeCameraId, load);
-    const monitor = $('cameraMonitor');
-    if (monitor) monitor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  function renderMonitorSummary(data, failed) {
+    const pick = data.watchPick;
+    const next = $('monitorNext');
+    if (next) {
+      next.replaceChildren(el('div', 'NEXT WATCH', 'monitor-kicker'));
+      if (pick) {
+        next.append(
+          el('strong', pick.name, 'monitor-title'),
+          el('span', range(pick.window), 'monitor-detail'),
+          el('span', `${pick.distanceNm} NM · ${Number(pick.speedKnots).toFixed(1)} kn · ${confidenceLabel(pick.confidence)}`, 'monitor-meta'),
+          button('Locate next ship', 'map-jump', () => focusVessel(pick.mmsi))
+        );
+      } else {
+        next.append(el('strong', 'No supported passage yet', 'monitor-title'), el('span', 'Local AIS, cameras and watch locations remain useful.', 'monitor-detail'));
+      }
+      if (failed) next.append(el('span', 'Last successful AIS picture retained.', 'monitor-stale'));
+    }
+    const visual = $('monitorVisual');
+    if (visual) {
+      visual.replaceChildren(
+        el('div', 'VISUAL CHECK', 'monitor-kicker'),
+        el('strong', '2 mapped live cameras', 'monitor-title'),
+        el('span', 'Canal Cam at the Maritime Visitor Center + Ship Cam at Lift Bridge Lodge.', 'monitor-detail'),
+        button('Focus cameras', 'map-jump', focusAllCameras)
+      );
+    }
+    const inPerson = $('monitorInPerson');
+    if (inPerson) {
+      inPerson.replaceChildren(
+        el('div', 'IN PERSON', 'monitor-kicker'),
+        el('strong', '3 mapped watch spots', 'monitor-title'),
+        el('span', 'North side, Park Point and Lakewalk are tied to green numbered markers.', 'monitor-detail'),
+        button('Show watch spots', 'map-jump', focusAllWatchSpots)
+      );
+    }
   }
 
-  function popup(v) {
+  function vesselPopup(v) {
     const wrap = el('div');
     wrap.append(el('strong', v.name || `Vessel ${v.mmsi}`));
     const motion = v.speedKnots == null ? 'speed unavailable' : `${(v.speedKnots * 1.15078).toFixed(1)} mph (${Number(v.speedKnots).toFixed(1)} kn)`;
     wrap.append(el('p', `${motion} · report ${age(v)}`));
     if (v.destination) wrap.append(el('p', `AIS destination: ${v.destination}`));
     if (v.lengthMeters) wrap.append(el('p', `Length: ${Math.round(v.lengthMeters)} m`));
-    const cameraButton = el('button', 'Open live camera monitor', 'map-jump');
-    cameraButton.type = 'button';
-    cameraButton.addEventListener('click', () => openCameraMonitor(true));
-    wrap.append(cameraButton);
+    wrap.append(button('Open live camera monitor', 'map-jump', () => openCameraMonitor(false)));
+    return wrap;
+  }
+
+  function candidatePopup(c, selected) {
+    const wrap = el('div');
+    wrap.append(el('strong', selected ? `NEXT WATCH · ${c.name}` : c.name));
+    wrap.append(el('p', `${c.direction === 'departure' ? 'Departure' : 'Arrival'} planning window: ${range(c.window)}`));
+    wrap.append(el('p', `${c.distanceNm} NM · ${Number(c.speedKnots).toFixed(1)} kn · AIS ${c.ageMinutes} min old`));
+    wrap.append(el('p', `${confidenceLabel(c.confidence)} · ${c.sizeLabel}`));
+    wrap.append(button('Open live camera monitor', 'map-jump', () => openCameraMonitor(false)));
     return wrap;
   }
 
@@ -213,11 +230,13 @@
       .watch-place-card.is-active{border-color:#2f7057;box-shadow:0 0 0 2px rgba(47,112,87,.12),0 5px 18px rgba(28,43,50,.07);transform:translateY(-1px)}
       .watch-place-head{display:flex;align-items:flex-start;gap:9px;margin-bottom:6px}.watch-place-head h3{margin:1px 0 0}
       .watch-place-number{flex:0 0 26px;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#2f7057;color:#fff;border:2px solid #fff;box-shadow:0 1px 5px rgba(23,63,80,.25);font:700 11px/1 Arial,sans-serif}
-      .watch-place-actions{margin-top:10px}.watch-spot-marker,.camera-map-marker{background:transparent;border:0}
+      .watch-place-actions{margin-top:10px}.watch-spot-marker,.camera-map-marker,.candidate-map-marker{background:transparent;border:0}
       .watch-spot-marker span{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#2f7057;color:#fff;border:2px solid #fff;box-shadow:0 2px 8px rgba(18,52,64,.35);font:700 12px/1 Arial,sans-serif;transition:transform .15s ease,background .15s ease}
       .watch-spot-marker.is-active span{background:#173f50;transform:scale(1.18)}
-      .camera-map-marker span{width:34px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#173f50;color:#fff;border:2px solid #fff;box-shadow:0 2px 9px rgba(18,52,64,.4);font:700 12px/1 Arial,sans-serif;transition:transform .15s ease,background .15s ease}
+      .camera-map-marker span{width:34px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#6a4c86;color:#fff;border:2px solid #fff;box-shadow:0 2px 9px rgba(18,52,64,.4);font:700 10px/1 Arial,sans-serif;transition:transform .15s ease,background .15s ease}
       .camera-map-marker.is-active span{background:#b9572a;transform:scale(1.12)}
+      .candidate-map-marker span{width:28px;height:28px;border-radius:50% 50% 50% 12%;display:flex;align-items:center;justify-content:center;transform:rotate(-45deg);background:#146c86;color:#fff;border:2px solid #fff;box-shadow:0 2px 8px rgba(18,52,64,.35)}
+      .candidate-map-marker span b{transform:rotate(45deg);font:700 9px Arial,sans-serif}.candidate-map-marker.is-selected span{width:35px;height:35px;background:#b9572a;box-shadow:0 0 0 4px rgba(185,87,42,.2),0 2px 9px rgba(18,52,64,.4)}
     `;
     document.head.append(style);
   }
@@ -230,6 +249,14 @@
     return L.divIcon({ className: `camera-map-marker${active ? ' is-active' : ''}`, html: '<span>CAM</span>', iconSize: [34, 28], iconAnchor: [17, 14], popupAnchor: [0, -15] });
   }
 
+  function candidateIcon(selected) {
+    return L.divIcon({
+      className: `candidate-map-marker${selected ? ' is-selected' : ''}`,
+      html: `<span><b>${selected ? 'NEXT' : 'AIS'}</b></span>`,
+      iconSize: selected ? [35, 35] : [28, 28], iconAnchor: selected ? [18, 31] : [14, 25], popupAnchor: [0, -25]
+    });
+  }
+
   function watchSpotPopup(spot) {
     const wrap = el('div');
     wrap.append(el('strong', `${spot.number}. ${spot.name}`), el('p', spot.note));
@@ -239,13 +266,11 @@
   function cameraPopup(camera) {
     const wrap = el('div');
     wrap.append(el('strong', camera.name), el('p', camera.note), el('p', `Feed operator: ${camera.operator}`));
-    const button = el('button', 'Watch this camera', 'map-jump');
-    button.type = 'button';
-    button.addEventListener('click', () => {
+    const watchButton = button('Watch this camera', 'map-jump', () => {
       activeCameraId = camera.id;
       openCameraMonitor(true);
     });
-    wrap.append(button);
+    wrap.append(watchButton);
     return wrap;
   }
 
@@ -264,8 +289,14 @@
     setActiveWatchSpot(id);
     map.setView([spot.lat, spot.lon], 16, { animate: true });
     marker.openPopup();
-    $('duluthVesselMap').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    window.setTimeout(() => map.invalidateSize(), 250);
+    scrollMap();
+  }
+
+  function focusAllWatchSpots() {
+    if (!map) return;
+    setActiveWatchSpot('');
+    map.fitBounds(WATCH_SPOTS.map(spot => [spot.lat, spot.lon]), { padding: [45, 45], maxZoom: 15 });
+    scrollMap();
   }
 
   function setupWatchSpots() {
@@ -285,11 +316,9 @@
       }
       if (!card.querySelector('[data-watch-focus]')) {
         const actions = el('div', '', 'watch-place-actions');
-        const button = el('button', 'Show on monitor', 'map-jump');
-        button.type = 'button';
-        button.dataset.watchFocus = spot.id;
-        button.addEventListener('click', () => focusWatchSpot(spot.id));
-        actions.append(button);
+        const mapButton = button('Show on monitor', 'map-jump', () => focusWatchSpot(spot.id));
+        mapButton.dataset.watchFocus = spot.id;
+        actions.append(mapButton);
         card.append(actions);
       }
     });
@@ -304,10 +333,10 @@
   }
 
   function updateCameraButtons() {
-    document.querySelectorAll('[data-camera-id]').forEach(button => {
-      const active = button.dataset.cameraId === activeCameraId;
-      button.classList.toggle('is-active', active);
-      button.setAttribute('aria-pressed', String(active));
+    document.querySelectorAll('[data-camera-id]').forEach(cameraButton => {
+      const active = cameraButton.dataset.cameraId === activeCameraId;
+      cameraButton.classList.toggle('is-active', active);
+      cameraButton.setAttribute('aria-pressed', String(active));
     });
     CAMERAS.forEach(camera => {
       const marker = cameraMarkers.get(camera.id);
@@ -321,10 +350,7 @@
     player.replaceChildren();
     const placeholder = el('div', '', 'camera-placeholder');
     placeholder.append(el('strong', camera.shortName), el('span', 'Live video stays unloaded until you ask for it.'));
-    const load = el('button', 'Load live camera', 'button');
-    load.type = 'button';
-    load.addEventListener('click', () => loadCamera(camera.id));
-    placeholder.append(load);
+    placeholder.append(button('Load live camera', 'button', () => loadCamera(camera.id)));
     player.append(placeholder);
   }
 
@@ -351,8 +377,7 @@
     if ($('cameraContext')) $('cameraContext').textContent = `${camera.note} Feed operator: ${camera.operator}.`;
     if ($('cameraDirect')) $('cameraDirect').href = camera.directUrl;
     updateCameraButtons();
-    if (load) loadCamera(camera.id);
-    else renderCameraPlaceholder(camera);
+    if (load) loadCamera(camera.id); else renderCameraPlaceholder(camera);
   }
 
   function focusCamera(id, load = false) {
@@ -362,7 +387,19 @@
     selectCamera(id, load);
     map.setView([camera.lat, camera.lon], 16, { animate: true });
     marker.openPopup();
-    $('duluthVesselMap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    scrollMap();
+  }
+
+  function focusAllCameras() {
+    if (!map) return;
+    map.fitBounds(CAMERAS.map(camera => [camera.lat, camera.lon]), { padding: [45, 45], maxZoom: 16 });
+    scrollMap();
+  }
+
+  function openCameraMonitor(load = false) {
+    selectCamera(activeCameraId, load);
+    const monitor = $('cameraMonitor');
+    if (monitor) monitor.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   function setupCameras() {
@@ -374,68 +411,108 @@
       marker.on('click', () => selectCamera(camera.id, false));
       cameraMarkers.set(camera.id, marker);
     });
-    document.querySelectorAll('[data-camera-id]').forEach(button => button.addEventListener('click', () => selectCamera(button.dataset.cameraId, true)));
+    document.querySelectorAll('[data-camera-id]').forEach(cameraButton => cameraButton.addEventListener('click', () => selectCamera(cameraButton.dataset.cameraId, true)));
     const locate = $('cameraOnMap');
     if (locate) locate.addEventListener('click', () => focusCamera(activeCameraId, false));
     selectCamera(activeCameraId, false);
   }
 
+  function setupMonitorControls() {
+    const next = $('focusNext');
+    if (next) next.addEventListener('click', () => currentData?.watchPick && focusVessel(currentData.watchPick.mmsi));
+    const cameras = $('focusCameras');
+    if (cameras) cameras.addEventListener('click', focusAllCameras);
+    const spots = $('focusSpots');
+    if (spots) spots.addEventListener('click', focusAllWatchSpots);
+    const canal = $('resetCanal');
+    if (canal) canal.addEventListener('click', () => { if (map) { map.setView(CANAL, 13, { animate: true }); scrollMap(); } });
+  }
+
   function initMap() {
     if (map || typeof L === 'undefined') return;
+    installMonitorStyles();
     map = L.map('duluthVesselMap', { scrollWheelZoom: false }).setView(CANAL, 12);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
     vesselLayer = L.layerGroup().addTo(map);
-    L.circleMarker(CANAL, { radius: 9, color: '#fff', weight: 2, fillColor: '#c35f2d', fillOpacity: 1 }).addTo(map).bindPopup('<strong>Duluth Ship Canal</strong><br>Canal Park watch zone');
+    candidateLayer = L.layerGroup().addTo(map);
+    L.circleMarker(CANAL, { radius: 9, color: '#fff', weight: 2, fillColor: '#c35f2d', fillOpacity: 1 }).addTo(map).bindTooltip('Duluth Ship Canal', { direction: 'top' }).bindPopup('<strong>Duluth Ship Canal</strong><br>Canal Park watch zone');
   }
 
   function renderMap(data) {
     initMap();
-    if (!map || !vesselLayer) {
+    if (!map || !vesselLayer || !candidateLayer) {
       $('duluthVesselMap').textContent = 'Map could not load. Live vessel details remain available above.';
       return;
     }
     vesselLayer.clearLayers();
+    candidateLayer.clearLayers();
     markers.clear();
-    const points = [CANAL, ...WATCH_SPOTS.map(spot => [spot.lat, spot.lon]), ...CAMERAS.map(camera => [camera.lat, camera.lon])];
+
+    const candidates = Array.isArray(data.candidates) ? data.candidates : [];
+    const candidateIds = new Set(candidates.map(c => String(c.mmsi)));
+    const selectedId = data.watchPick ? String(data.watchPick.mmsi) : null;
+
     (data.mapVessels || []).forEach(v => {
+      if (candidateIds.has(String(v.mmsi))) return;
       const moving = Number(v.speedKnots) > 0.5;
       const marker = L.circleMarker([v.lat, v.lon], { radius: v.lengthMeters >= 220 ? 9 : 6, color: '#fff', weight: 2, fillColor: moving ? '#146c86' : '#8a6a42', fillOpacity: 0.95 })
-        .addTo(vesselLayer).bindTooltip(v.name || `Vessel ${v.mmsi}`, { direction: 'top' }).bindPopup(popup(v));
+        .addTo(vesselLayer).bindTooltip(v.name || `Vessel ${v.mmsi}`, { direction: 'top' }).bindPopup(vesselPopup(v));
       markers.set(String(v.mmsi), marker);
-      points.push([v.lat, v.lon]);
     });
-    if (points.length > 1) map.fitBounds(points, { padding: [28, 28], maxZoom: 12 });
+
+    candidates.forEach(c => {
+      if (!Number.isFinite(Number(c.lat)) || !Number.isFinite(Number(c.lon))) return;
+      const selected = String(c.mmsi) === selectedId;
+      const marker = L.marker([c.lat, c.lon], { icon: candidateIcon(selected), keyboard: true, title: selected ? `Next watch: ${c.name}` : `Anticipated: ${c.name}`, zIndexOffset: selected ? 1200 : 760 })
+        .addTo(candidateLayer).bindTooltip(selected ? `NEXT · ${c.name}` : c.name, { direction: 'top' }).bindPopup(candidatePopup(c, selected));
+      markers.set(String(c.mmsi), marker);
+    });
+
+    if (data.watchPick && Number.isFinite(Number(data.watchPick.lat)) && Number.isFinite(Number(data.watchPick.lon))) {
+      map.fitBounds([CANAL, [data.watchPick.lat, data.watchPick.lon]], { padding: [55, 55], maxZoom: 11 });
+    } else {
+      const local = (data.mapVessels || []).map(v => [v.lat, v.lon]);
+      const points = [CANAL, ...WATCH_SPOTS.map(spot => [spot.lat, spot.lon]), ...CAMERAS.map(camera => [camera.lat, camera.lon]), ...local];
+      if (points.length > 1) map.fitBounds(points, { padding: [30, 30], maxZoom: 12 });
+    }
+
+    const caption = document.querySelector('.map-caption');
+    if (caption) caption.textContent = 'Rust NEXT pin = selected watch. Blue AIS pins = other supported passage candidates. Small blue/brown circles = recent nearby AIS reports. Purple CAM markers = live cameras. Green 1–3 = in-person viewing spots.';
   }
 
   function focusVessel(mmsi) {
     const marker = markers.get(String(mmsi));
     if (!marker || !map) {
-      $('mapStatus').textContent = 'That anticipated vessel is still outside the close-in Canal Park monitor. Its timing card uses the wider western Lake Superior AIS view.';
-      $('duluthVesselMap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      $('mapStatus').textContent = 'That vessel has no current mappable AIS position.';
+      scrollMap();
       return;
     }
     const latlng = marker.getLatLng();
-    map.setView(latlng, 13);
+    map.fitBounds([CANAL, [latlng.lat, latlng.lng]], { padding: [55, 55], maxZoom: 11 });
     marker.openPopup();
-    $('duluthVesselMap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    scrollMap();
   }
 
   function renderSource(data, failed) {
     const count = Array.isArray(data.mapVessels) ? data.mapVessels.length : 0;
+    const candidates = Array.isArray(data.candidates) ? data.candidates.length : 0;
     $('mapStatus').textContent = failed
-      ? `Refresh unavailable. Showing the last successful check with ${count} recent nearby vessel report${count === 1 ? '' : 's'}, 2 camera locations and 3 viewing spots.`
-      : `${count} recent nearby vessel report${count === 1 ? '' : 's'} · 2 camera locations · 3 viewing spots · checked ${time(data.checkedAt)} CT`;
-    $('liveDot').className = `live-dot${failed ? ' offline' : count ? ' on' : ''}`;
+      ? `Refresh unavailable. Last successful AIS picture retained · ${candidates} supported passage candidate${candidates === 1 ? '' : 's'} · 2 cameras · 3 viewing spots.`
+      : `${count} nearby AIS report${count === 1 ? '' : 's'} · ${candidates} supported passage candidate${candidates === 1 ? '' : 's'} · 2 cameras · 3 viewing spots · checked ${time(data.checkedAt)} CT`;
+    $('liveDot').className = `live-dot${failed ? ' offline' : ' on'}`;
     const credits = (data.attribution || []).map(a => a.credit).filter(Boolean);
     $('sourceCredits').textContent = credits.length ? `AIS credits: ${credits.join(' · ')}` : 'AIS source credits unavailable for this refresh.';
     $('updated').textContent = failed ? 'Last successful live check retained' : `Live AIS checked ${time(data.checkedAt)} CT`;
   }
 
   function render(data, failed) {
+    currentData = data;
     renderPick(data, failed);
-    renderCandidates(data);
+    renderMonitorSummary(data, failed);
     renderMap(data);
+    renderCandidates(data);
     renderSource(data, failed);
+    window.setTimeout(() => { if (map) map.invalidateSize(); }, 80);
   }
 
   async function load() {
@@ -454,11 +531,13 @@
         $('watchPick').className = 'watch-card quiet';
         $('watchPick').replaceChildren(
           el('div', 'LIVE DATA TEMPORARILY UNAVAILABLE', 'watch-kicker'),
-          el('h2', 'Use the published Duluth ship list for this check.'),
-          el('p', 'The page will not substitute stale or invented vessel timing when the AIS feed is unavailable.')
+          el('h2', 'The cameras and watch locations still work.'),
+          el('p', 'The page will not substitute stale or invented vessel timing when the AIS feed is unavailable.'),
+          el('p', 'Harbor Lookout remains available below as a published schedule cross-check.', 'watch-note')
         );
         $('anticipatedShips').replaceChildren(el('div', 'Anticipated ship estimates are unavailable until fresh AIS data returns.', 'empty-state'));
-        $('mapStatus').textContent = 'Live vessel refresh unavailable. Camera locations and the 3 viewing spots remain available on the monitor. This is not a zero-traffic report.';
+        renderMonitorSummary({ watchPick: null }, true);
+        $('mapStatus').textContent = 'Live vessel refresh unavailable. The 2 camera locations and 3 viewing spots remain available on the monitor. This is not a zero-traffic report.';
         $('liveDot').className = 'live-dot offline';
       }
     } finally {
@@ -471,6 +550,7 @@
   initMap();
   setupWatchSpots();
   setupCameras();
+  setupMonitorControls();
   load();
   setInterval(() => { if (!document.hidden) load(); }, 60000);
 })();
