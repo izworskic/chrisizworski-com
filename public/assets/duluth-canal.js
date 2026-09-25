@@ -241,7 +241,10 @@
     wrap.append(el('strong', camera.name), el('p', camera.note), el('p', `Feed operator: ${camera.operator}`));
     const button = el('button', 'Watch this camera', 'map-jump');
     button.type = 'button';
-    button.addEventListener('click', () => selectCamera(camera.id, true));
+    button.addEventListener('click', () => {
+      activeCameraId = camera.id;
+      openCameraMonitor(true);
+    });
     wrap.append(button);
     return wrap;
   }
@@ -371,7 +374,7 @@
       marker.on('click', () => selectCamera(camera.id, false));
       cameraMarkers.set(camera.id, marker);
     });
-    document.querySelectorAll('[data-camera-id]').forEach(button => button.addEventListener('click', () => focusCamera(button.dataset.cameraId, true)));
+    document.querySelectorAll('[data-camera-id]').forEach(button => button.addEventListener('click', () => selectCamera(button.dataset.cameraId, true)));
     const locate = $('cameraOnMap');
     if (locate) locate.addEventListener('click', () => focusCamera(activeCameraId, false));
     selectCamera(activeCameraId, false);
