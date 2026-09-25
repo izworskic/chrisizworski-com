@@ -82,7 +82,7 @@ test("Finish is present in static planner markup and the asset is cache-busted",
   assert.match(html,/<label for="finish">Finish<\/label>/);
   assert.match(html,/<select id="finish">/);
   assert.match(html,/Back where I started/);
-  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-7/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-8/);
 });
 
 
@@ -142,7 +142,7 @@ test("selected-stop summary uses returned interests with checked-box fallback",(
   assert.match(source,/checkedInterests=selectedInterests\(\)/);
   assert.match(source,/Serves \$\{servedIds\.length\} of \$\{chosen\.size\} selected interests/);
   const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");
-  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-7/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-8/);
 });
 
 
@@ -190,7 +190,7 @@ test("result UI reports served and unserved selections without claiming the user
   assert.match(source,/NPS stop information/);
   assert.match(html,/Stops chosen for this drive/);
   assert.doesNotMatch(html,/What you picked—and what to do there/);
-  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-7/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-8/);
 });
 
 
@@ -199,4 +199,24 @@ test("schedule-sensitive facilities are never auto-selected without verified ava
   const input=ptp.normalizeInput({gateway:"cherokee",finish:"roanoke",hours:16,interests:"history"});
   const chosen=ptp.chooseStops(ptp.corridorStops(input.gateway,input.finish),input,300,6);
   assert.ok(!chosen.some(stop=>["nc-minerals-museum","blue-ridge-music-center"].includes(stop.id)));
+});
+
+
+test("infeasible point-to-point corridors are not promoted as a selected answer",()=>{
+  const engine=fs.readFileSync(path.join(__dirname,"..","lib","blue-ridge-parkway","point-to-point.js"),"utf8");
+  assert.doesNotMatch(engine,/feasible\[0\]\|\|direct\|\|all\[0\]/);
+  assert.match(engine,/if\(!feasible\.length\)/);
+  assert.match(engine,/selected:null,alternatives,planB:null/);
+  assert.match(engine,/roadBlocked/);
+  assert.match(engine,/timeTooShort/);
+});
+
+test("infeasible result UI keeps interests distinct from planner-selected stops",()=>{
+  const source=fs.readFileSync(path.join(__dirname,"..","public","assets","blue-ridge-parkway.js"),"utf8");
+  assert.match(source,/Your interests are selected; the itinerary is not/);
+  assert.match(source,/0 planner-selected stops/);
+  assert.match(source,/selected interest/);
+  assert.doesNotMatch(source,/No optional stops selected\./);
+  assert.match(source,/ROAD BLOCKS THIS DRIVE/);
+  assert.match(source,/THIS WINDOW DOESN’T FIT/);
 });
