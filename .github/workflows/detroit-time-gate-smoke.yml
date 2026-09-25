@@ -1,0 +1,72 @@
+name: Detroit time gate production smoke
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'lib/detroit-outdoors/route-v2.js'
+      - 'lib/detroit-outdoors/regional-daylight.js'
+      - 'lib/detroit-outdoors/regional-discovery.js'
+      - '.github/workflows/detroit-time-gate-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify deployed Detroit time gate and JEV diagnostics
+        env:
+          EXPECTED_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 30); do
+            file="/tmp/detroit-time-core.json"
+            if ! curl -fsS --max-time 40 "https://chrisizworski.com/api/detroit-outdoors?mode=core&time_gate_smoke=${EXPECTED_SHA}&attempt=${attempt}" -o "${file}"; then
+              sleep 10
+              continue
+            fi
+
+            current="$(node -e '
+              const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));
+              process.stdout.write((d.runtime&&d.runtime.commitSha)||"");
+            ' "${file}")"
+            if [ "${current}" != "${EXPECTED_SHA}" ]; then
+              sleep 10
+              continue
+            fi
+
+            EXPECTED_SHA="${EXPECTED_SHA}" node -e '
+              const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));
+              if(!d.ok||d.mode!=="core-board") throw new Error("Detroit core board unavailable");
+              if((d.runtime&&d.runtime.commitSha)!==process.env.EXPECTED_SHA) throw new Error("runtime commit mismatch");
+              const gate=d.decision&&d.decision.daylightGate||{};
+              if(gate.mode!=="deterministic-pre-jev") throw new Error("pre-JEV time gate diagnostics missing");
+              if(gate.minNightUsableMinutes!==45) throw new Error("night usable-window gate is not 45 minutes");
+              if(gate.minSunsetUsableMinutes!==15) throw new Error("sunset usable-window gate is not 15 minutes");
+              if(!Array.isArray(gate.preJevFilteredCandidateIds)||!Array.isArray(gate.postRenderRemovedCandidateIds)) throw new Error("time-gate filtered-ID diagnostics missing");
+
+              const lead=d.decision&&d.decision.lead||{};
+              const board=d.decision&&d.decision.boardEditor||{};
+              const modes=[lead.mode,board.posture&&board.posture.mode,...(Array.isArray(board.slots)?board.slots.map(x=>x&&x.mode):[])].filter(Boolean);
+              if(board.mode==="mixed"&&!modes.includes("shared-harness-jev")) throw new Error("board reports mixed mode without an actual JEV decision");
+              if(board.mode==="shared-harness-jev"&&modes.some(mode=>mode!=="shared-harness-jev")) throw new Error("board reports full JEV mode but contains a fallback decision");
+
+              console.log("Detroit time/JEV production verified:",JSON.stringify({
+                boardIds:(d.opportunities||[]).map(x=>x&&x.id).filter(Boolean),
+                boardMode:board.mode||null,
+                decisionModes:modes,
+                preJevFiltered:gate.preJevFilteredCandidateIds,
+                postRenderRemoved:gate.postRenderRemovedCandidateIds,
+                minNightUsableMinutes:gate.minNightUsableMinutes,
+                minSunsetUsableMinutes:gate.minSunsetUsableMinutes,
+                evaluatedAt:gate.evaluatedAt
+              }));
+            ' "${file}"
+            exit 0
+          done
+
+          echo "Detroit production did not expose the current time-gate/JEV contract during the smoke window."
+          exit 1
