@@ -59,3 +59,15 @@ test("round-trip handoff mirrors outbound routing points so the return is pulled
   const u=new URL(handoff.url);
   assert.equal(u.searchParams.get("origin"),u.searchParams.get("destination"));
 });
+
+
+test("both planner engines serialize the shared full-route Google Maps handoff",()=>{
+  const fs=require("node:fs");
+  const engine=fs.readFileSync(require.resolve("../lib/blue-ridge-parkway/engine.js"),"utf8");
+  const point=fs.readFileSync(require.resolve("../lib/blue-ridge-parkway/point-to-point.js"),"utf8");
+  const browser=fs.readFileSync(require.resolve("../public/assets/blue-ridge-parkway.js"),"utf8");
+  assert.match(engine,/buildGoogleMapsHandoff/);
+  assert.match(point,/buildGoogleMapsHandoff/);
+  assert.match(browser,/Open full drive in Google Maps/);
+  assert.match(browser,/Parkway routing anchor/);
+});
