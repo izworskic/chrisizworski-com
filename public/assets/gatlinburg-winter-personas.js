@@ -118,6 +118,14 @@
     document.body.dataset.gatlinburgPersona = persona;
   }
 
+  function removeInventedKids() {
+    const field = $("kids");
+    if (kidsExplicit || !field) return false;
+    if (String(field.value || "").replace(/\s/g, "") !== "6,10") return false;
+    field.value = "";
+    return true;
+  }
+
   function updateUrlFromControls() {
     const q = new URLSearchParams(location.search);
     q.set("persona", personaFromUrl());
@@ -126,7 +134,7 @@
     if ($("tripOrigin")) q.set("origin", $("tripOrigin").value);
     if ($("tripPriority")) q.set("priority", $("tripPriority").value);
     if ($("dinnerAnchor")?.checked) q.set("dinner", "1"); else q.delete("dinner");
-    if (!kidsExplicit && String($("kids")?.value || "").replace(/\s/g, "") === "6,10") q.delete("kids");
+    if (!kidsExplicit) q.delete("kids");
     history.replaceState(null, "", `${location.pathname}?${q.toString()}`);
   }
 
@@ -167,7 +175,8 @@
     if (!raw.includes("/api/gatlinburg-winter")) return nativeFetch(input, init);
     const url = new URL(raw, location.origin);
     for (const [key, value] of extraQuery()) url.searchParams.set(key, value);
-    if (!kidsExplicit && String($("kids")?.value || "").replace(/\s/g, "") === "6,10") url.searchParams.delete("kids");
+    if (removeInventedKids()) url.searchParams.delete("kids");
+    if (!kidsExplicit) url.searchParams.delete("kids");
     updateUrlFromControls();
     const response = await nativeFetch(url.pathname + url.search, init);
     try {
@@ -185,7 +194,7 @@
       q.delete("goal");
       history.replaceState(null, "", `${location.pathname}?${q.toString()}`);
       syncGoal();
-      if (button.dataset.persona === "family" && !kidsExplicit && String($("kids")?.value || "").replace(/\s/g, "") === "6,10") $("kids").value = "";
+      removeInventedKids();
       updateUrlFromControls();
     }));
 
