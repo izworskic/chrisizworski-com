@@ -1,0 +1,83 @@
+name: Blue Ridge trip detail upgrade
+
+on:
+  push:
+    branches:
+      - improve/blue-ridge-trip-details
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: improve/blue-ridge-trip-details
+          fetch-depth: 0
+      - name: Refocus results on selected trip stops
+        shell: python
+        run: |
+          from pathlib import Path
+
+          html = Path('public/blue-ridge-parkway/index.html')
+          s = html.read_text()
+
+          css = '''
+.selected-stop-summary{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:0 0 12px;padding:11px 13px;background:#edf4ef;border:1px solid #d5e2d8;border-radius:9px;font-size:12px;color:#496052}.selected-stop-summary strong{color:#214a34}.selected-stop-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.stop-detail-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:var(--shadow)}.stop-detail-head{display:flex;justify-content:space-between;gap:14px;align-items:start}.stop-detail-number{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:#fff;font-size:11px;font-weight:850;flex:0 0 auto}.stop-detail-title{min-width:0;flex:1}.stop-detail-title h3{font:700 20px/1.15 Georgia,serif;margin:0 0 4px}.stop-detail-meta{font-size:11px;color:#718078}.stop-match-row{display:flex;gap:6px;flex-wrap:wrap;margin:13px 0}.stop-match{border:1px solid #bad0c1;background:#edf5ef;color:#28563c;border-radius:999px;padding:4px 7px;font-size:10px;font-weight:800}.stop-detail-block{border-top:1px solid #edf0ed;padding-top:11px;margin-top:11px}.stop-detail-block span{display:block;font-size:9px;font-weight:850;letter-spacing:.8px;text-transform:uppercase;color:#7a857d;margin-bottom:4px}.stop-detail-block p{margin:0;font-size:12px;line-height:1.55;color:#536158}.road-alert-section{border:1px solid #dfc38f;border-left:5px solid var(--amber);border-radius:10px;background:#fffaf0;padding:16px}.road-alert-section[hidden]{display:none!important}.trip-technical{margin:28px 0 8px;border:1px solid var(--line);background:#fff;border-radius:11px;overflow:hidden}.trip-technical>summary{list-style:none;cursor:pointer;padding:15px 17px;display:flex;justify-content:space-between;gap:14px;align-items:center;font-weight:800;color:#2a4936}.trip-technical>summary::-webkit-details-marker{display:none}.trip-technical>summary:after{content:"Show";font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:#718078}.trip-technical[open]>summary:after{content:"Hide"}.trip-technical>summary small{font-weight:500;color:#728078;font-size:11px}.trip-technical-body{border-top:1px solid var(--line);padding:6px 17px 17px}.technical-section{padding:17px 0;border-top:1px solid #edf0ed}.technical-section:first-child{border-top:0}.technical-section h3{font:700 18px/1.2 Georgia,serif;margin:2px 0 10px}.technical-section .section-note{font-size:11px;color:#718078;margin:-4px 0 11px}@media(max-width:700px){.selected-stop-grid{grid-template-columns:1fr}.trip-technical>summary{align-items:flex-start;flex-direction:column}.trip-technical>summary:after{position:absolute;right:18px}.trip-technical{position:relative}}
+'''
+          assert '@media print{' in s
+          s = s.replace('@media print{', css + '@media print{', 1)
+
+          route_marker = '''    </section>\n\n    <section class="section">\n      <div class="section-head"><div><div class="eyebrow">CONDITIONS</div><h2>What the mountain is likely to give you</h2></div><p>Weather and color are labeled differently from road status because they are forecasts or seasonal estimates—not gate facts.</p></div>'''
+          route_replacement = '''    </section>\n\n    <section class="section" id="selected-stops">\n      <div class="section-head"><div><div class="eyebrow">YOUR STOPS</div><h2>What you picked—and what to do there</h2></div><p>This is the useful part of the plan: why each stop matches your interests, when you reach it and how much time it deserves.</p></div>\n      <div class="selected-stop-summary" id="selectedStopSummary"></div>\n      <div class="selected-stop-grid" id="selectedStopDetails"></div>\n    </section>\n\n    <section class="section">\n      <div class="section-head"><div><div class="eyebrow">CONDITIONS</div><h2>What the mountain is likely to give you</h2></div><p>Weather and color are labeled differently from road status because they are forecasts or seasonal estimates—not gate facts.</p></div>'''
+          assert route_marker in s
+          s = s.replace(route_marker, route_replacement, 1)
+
+          road_start = s.index('    <section class="section">\n      <div class="section-head"><div><div class="eyebrow">ROAD REALITY</div>')
+          source_start = s.index('    <section class="section">\n      <div class="section-head"><div><div class="eyebrow">SOURCE DESK</div>', road_start)
+          road_end = s.index('    </section>', source_start) + len('    </section>')
+          compact = '''    <section class="section road-alert-section" id="roadAlertSection" hidden>\n      <div class="section-head"><div><div class="eyebrow">ROAD ALERT</div><h2>This can change your trip</h2></div><p>Only closures, construction cautions or a failed road-status check appear here.</p></div>\n      <div class="road-list" id="roadAlert"></div>\n    </section>\n\n    <details class="trip-technical">\n      <summary><span>Trip details &amp; sources</span><small>Road check, alternatives, field notes and source provenance</small></summary>\n      <div class="trip-technical-body">\n        <section class="technical-section">\n          <h3>Road-status check</h3><p class="section-note">The normal all-clear stays here; anything actionable is promoted above.</p><div class="road-list" id="roadReality"></div>\n        </section>\n        <section class="technical-section">\n          <h3>Other valid stop plans</h3><p class="section-note">Useful if you decide to spend more or less time sightseeing on the same trip.</p><div class="alternatives" id="alternatives"></div>\n        </section>\n        <section class="technical-section">\n          <h3>Before you leave</h3><div class="field-grid" id="fieldNotes"></div>\n        </section>\n        <section class="technical-section">\n          <h3>Sources &amp; method</h3><div class="source-grid" id="sources"></div><div class="method" id="method"></div>\n        </section>\n      </div>\n    </details>'''
+          s = s[:road_start] + compact + s[road_end:]
+          s = s.replace('"dateModified":"2026-09-24"','"dateModified":"2026-09-25"',1)
+          s = s.replace('/assets/blue-ridge-parkway.js?v=20260925-3','/assets/blue-ridge-parkway.js?v=20260925-4',1)
+          html.write_text(s)
+
+          js = Path('public/assets/blue-ridge-parkway.js')
+          s = js.read_text()
+          old = '  const gatewayMileposts={asheville:384.1,boone:290.8,roanoke:121.4,floyd:167.2,afton:0,cherokee:469.1};'
+          new = old + '\n  const interestLabels={scenery:"Big views","fall-color":"Fall color","short-walk":"Short walks",waterfall:"Waterfalls",photography:"Photography",history:"History",picnic:"Picnic",sunset:"Sunset","high-elevation":"High elevation"};'
+          assert old in s
+          s = s.replace(old,new,1)
+
+          marker = '  function renderConditions(payload){'
+          assert marker in s
+          detail_fn = '''  function renderSelectedStopDetails(payload){\n    const plan=payload.selected,grid=$("selectedStopDetails"),summary=$("selectedStopSummary");if(!plan||!grid)return;\n    const chosen=new Set(payload.input?.interests||[]),chosenLabels=[...chosen].map(x=>interestLabels[x]||x);\n    const items=plan.timeline?.items||[];\n    if(summary)summary.innerHTML=`<strong>${items.length} selected stop${items.length===1?"":"s"}</strong><span>You asked for: ${esc(chosenLabels.join(" · ")||"a scenic Parkway drive")}</span>`;\n    if(!items.length){grid.innerHTML=`<article class="stop-detail-card"><div class="stop-detail-title"><h3>No sightseeing stop fits this window yet.</h3><div class="stop-detail-block"><span>What that means</span><p>The fixed drive is consuming the available time. Add time or shorten the corridor and the planner can spend that margin on the interests you selected.</p></div></div></article>`;return;}\n    grid.innerHTML=items.map((item,index)=>{\n      const matches=(item.tags||[]).filter(tag=>chosen.has(tag)),labels=matches.map(tag=>interestLabels[tag]||tag);\n      const why=labels.length>=2?`This stop combines ${labels.slice(0,-1).join(", ")}${labels.length>2?",":""} and ${labels[labels.length-1]} in one stop, so it earns more of your limited time.`:labels.length===1?`You selected ${labels[0]}. This stop directly serves that priority without changing your Parkway corridor.`:`This stop supports the selected route efficiently even though it is not tied to one of your checked interests.`;\n      const chips=labels.length?labels.map(label=>`<span class="stop-match">${esc(label)}</span>`).join(""):`<span class="stop-match">Route fit</span>`;\n      return `<article class="stop-detail-card"><div class="stop-detail-head"><div class="stop-detail-number">${index+1}</div><div class="stop-detail-title"><h3>${esc(item.name)}</h3><div class="stop-detail-meta">${esc(item.arrival||"Time flexible")} · ${fmtMile(item.milepost)}${item.elevationFt?` · ${Number(item.elevationFt).toLocaleString()} ft`:""} · ${esc(item.dwellMinutes)} min</div></div></div><div class="stop-match-row">${chips}</div><div class="stop-detail-block"><span>Why it made your trip</span><p>${esc(why)}</p></div><div class="stop-detail-block"><span>What to do here</span><p>${esc(item.practical||"Use this as a focused Parkway stop and keep the rest of the itinerary on schedule.")}</p></div></article>`;\n    }).join("");\n  }\n'''
+          s = s.replace(marker, detail_fn + marker, 1)
+
+          old_road = '''  function renderRoad(payload){const p=payload.selected;if(!p)return;const notes=[];(p.blocks||[]).forEach(x=>notes.push(`<div class="road-note blocked"><strong>Closed ${fmtMile(x.start)}–${fmtMile(x.end).replace("MP ","")}</strong><span>${esc(x.note)}</span></div>`));(p.cautions||[]).forEach(x=>notes.push(`<div class="road-note"><strong>${fmtMile(x.start)}–${fmtMile(x.end).replace("MP ","")}</strong><span>${esc(x.note)}</span></div>`));if(!notes.length)notes.push(payload.road?.ok?`<div class="road-note clear"><strong>No route-specific hard closure</strong><span>The current NPS road table did not return a hard closure or construction caution across this selected stretch when checked.</span></div>`:`<div class="road-note blocked"><strong>Road source unavailable</strong><span>Do not assume the section is open. Use the official NPS source below before leaving.</span></div>`);$("roadReality").innerHTML=notes.join("");}'''
+          new_road = '''  function renderRoad(payload){const p=payload.selected;if(!p)return;const notes=[],urgent=[];(p.blocks||[]).forEach(x=>{const n=`<div class="road-note blocked"><strong>Closed ${fmtMile(x.start)}–${fmtMile(x.end).replace("MP ","")}</strong><span>${esc(x.note)}</span></div>`;notes.push(n);urgent.push(n);});(p.cautions||[]).forEach(x=>{const n=`<div class="road-note"><strong>${fmtMile(x.start)}–${fmtMile(x.end).replace("MP ","")}</strong><span>${esc(x.note)}</span></div>`;notes.push(n);urgent.push(n);});if(!notes.length){const n=payload.road?.ok?`<div class="road-note clear"><strong>No route-specific hard closure</strong><span>The current NPS road table did not return a hard closure or construction caution across this selected stretch when checked.</span></div>`:`<div class="road-note blocked"><strong>Road source unavailable</strong><span>Do not assume the section is open. Use the official NPS source before leaving.</span></div>`;notes.push(n);if(!payload.road?.ok)urgent.push(n);}$("roadReality").innerHTML=notes.join("");const alert=$("roadAlertSection"),target=$("roadAlert");if(alert&&target){alert.hidden=!urgent.length;target.innerHTML=urgent.join("");}}'''
+          assert old_road in s
+          s = s.replace(old_road,new_road,1)
+
+          old_render = 'renderTop(payload);renderDecision(payload);renderTimeline(payload);renderConditions(payload);renderRoad(payload);renderAlternatives(payload);renderFieldNotes(payload);renderSources(payload);'
+          new_render = 'renderTop(payload);renderDecision(payload);renderTimeline(payload);renderSelectedStopDetails(payload);renderConditions(payload);renderRoad(payload);renderAlternatives(payload);renderFieldNotes(payload);renderSources(payload);'
+          assert old_render in s
+          s = s.replace(old_render,new_render,1)
+          js.write_text(s)
+
+          test = Path('tests/blue-ridge-parkway-destination.test.js')
+          s = test.read_text()
+          s = s.replace('blue-ridge-parkway\\.js\\?v=20260925-3','blue-ridge-parkway\\.js\\?v=20260925-4',1)
+          s += '''\n\ntest("trip results foreground selected-stop detail and collapse normal planner machinery",()=>{\n  const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");\n  const source=fs.readFileSync(path.join(__dirname,"..","public","assets","blue-ridge-parkway.js"),"utf8");\n  assert.match(html,/id="selectedStopSummary"/);\n  assert.match(html,/id="selectedStopDetails"/);\n  assert.match(html,/<details class="trip-technical">/);\n  assert.match(html,/Trip details &amp; sources/);\n  assert.match(html,/id="roadAlertSection" hidden/);\n  assert.ok(html.indexOf('id="selectedStopDetails"') < html.indexOf('<details class="trip-technical">'));\n  assert.ok(html.indexOf('id="roadAlertSection"') < html.indexOf('<details class="trip-technical">'));\n  assert.match(source,/function renderSelectedStopDetails/);\n  assert.match(source,/Why it made your trip/);\n  assert.match(source,/What to do here/);\n  assert.match(source,/renderSelectedStopDetails\\(payload\\)/);\n  assert.match(source,/alert\.hidden=!urgent\.length/);\n});\n'''
+          test.write_text(s)
+      - name: Run Blue Ridge tests
+        run: node --test tests/blue-ridge-parkway-destination.test.js tests/blue-ridge-parkway.test.js
+      - name: Commit upgrade
+        run: |
+          git config user.name "Chris Izworski"
+          git config user.email "46615230+izworskic@users.noreply.github.com"
+          git add public/blue-ridge-parkway/index.html public/assets/blue-ridge-parkway.js tests/blue-ridge-parkway-destination.test.js
+          git commit -m "Refocus Blue Ridge results on selected trip stops"
+          git push origin HEAD:improve/blue-ridge-trip-details
