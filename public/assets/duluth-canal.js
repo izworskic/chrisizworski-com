@@ -354,7 +354,7 @@
           el('p', 'The page will not substitute stale or invented vessel timing when the AIS feed is unavailable.')
         );
         $('anticipatedShips').replaceChildren(el('div', 'Anticipated ship estimates are unavailable until fresh AIS data returns.', 'empty-state'));
-        $('mapStatus').textContent = 'Live vessel refresh unavailable. The 3 viewing spots remain available on the map; this is not a zero-traffic report.';
+        $('mapStatus').textContent = 'Live vessel refresh unavailable. The 3 viewing spots remain available on the map. This is not a zero-traffic report.';
         $('liveDot').className = 'live-dot offline';
       }
     } finally {
