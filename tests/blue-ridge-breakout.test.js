@@ -6,13 +6,19 @@ const path=require('node:path');
 const root=path.join(__dirname,'..');
 const read=rel=>fs.readFileSync(path.join(root,rel),'utf8');
 
-test('Blue Ridge main page exposes live gateway intelligence before personalization',()=>{
+test('Blue Ridge main page explains the product before exposing live gateway intelligence',()=>{
   const html=read('public/blue-ridge-parkway/index.html');
-  assert.match(html,/Blue Ridge Parkway today: know where the road is worth your time/i);
+  assert.match(html,/Which part of the Blue Ridge Parkway should you drive today\?/i);
+  assert.match(html,/Start near Asheville, Boone, Roanoke, Cherokee or another Parkway entrance/i);
+  assert.match(html,/1 · Pick where you’re starting/);
+  assert.match(html,/2 · See today’s best direction/);
+  assert.match(html,/3 · Build a drive that fits your time/);
+  assert.match(html,/STARTING NEAR ONE OF THESE PLACES\?/);
+  assert.match(html,/Here’s what the Parkway looks like from there today\./);
   assert.match(html,/id="gatewaySnapshots"/);
-  assert.match(html,/RIGHT NOW/);
-  assert.match(html,/Four gateways\. Four different Parkway decisions\./);
   assert.ok(html.indexOf('id="gatewaySnapshots"')<html.indexOf('id="plannerForm"'),'live decision desk must render before the planner form');
+  assert.match(html,/TELL US ABOUT YOUR DAY/);
+  assert.match(html,/Build my Parkway drive/);
   assert.match(html,/blue-ridge-parkway-breakout\.js/);
 });
 
