@@ -28,7 +28,7 @@ test("Mackinac toll page leads with the page-one passenger-car answer", () => {
   assert.match(html, /Passenger vehicles are \$2 per axle/i);
   assert.match(html, /Motorhomes and other vehicles outside the passenger classification are \$5 per axle/i);
   assert.match(html, /credit\/debit cards carry a 2\.3% fee/i);
-  assert.match(html, /\$0 return crossing.*within 36 hours/is);
+  assert.match(html, /passenger vehicles not towing a trailer.*\$0 return crossing.*within 36 hours/is);
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-tolls/">'));
 });
 
