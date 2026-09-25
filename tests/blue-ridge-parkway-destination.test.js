@@ -82,7 +82,7 @@ test("Finish is present in static planner markup and the asset is cache-busted",
   assert.match(html,/<label for="finish">Finish<\/label>/);
   assert.match(html,/<select id="finish">/);
   assert.match(html,/Back where I started/);
-  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-4/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-5/);
 });
 
 
@@ -127,4 +127,20 @@ test("trip results foreground selected-stop detail and collapse normal planner m
   assert.match(source,/What to do here/);
   assert.match(source,/renderSelectedStopDetails\(payload\)/);
   assert.match(source,/alert\.hidden=!urgent\.length/);
+});
+
+
+test("round-trip mode preserves every checked activity",()=>{
+  const engine=require("../lib/blue-ridge-parkway/engine.js")._test;
+  const interests="scenery,fall-color,short-walk,waterfall,photography,history,picnic,sunset";
+  assert.equal(engine.normalizeInput({gateway:"asheville",hours:8,interests}).interests.length,8);
+});
+
+test("selected-stop summary uses returned interests with checked-box fallback",()=>{
+  const source=fs.readFileSync(path.join(__dirname,"..","public","assets","blue-ridge-parkway.js"),"utf8");
+  assert.match(source,/responseInterests/);
+  assert.match(source,/checkedInterests=selectedInterests\(\)/);
+  assert.match(source,/Your selections:/);
+  const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");
+  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-5/);
 });
