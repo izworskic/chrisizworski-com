@@ -235,13 +235,15 @@
       .watch-spot-marker.is-active span{background:#173f50;transform:scale(1.18)}
       .camera-map-marker span{width:34px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#6a4c86;color:#fff;border:2px solid #fff;box-shadow:0 2px 9px rgba(18,52,64,.4);font:700 10px/1 Arial,sans-serif;transition:transform .15s ease,background .15s ease}
       .camera-map-marker.is-active span{background:#b9572a;transform:scale(1.12)}
-      .ship-map-marker .ship-glyph{display:block;transform:rotate(var(--ship-rotation));transform-origin:50% 50%;filter:drop-shadow(0 2px 3px rgba(18,52,64,.38));transition:filter .15s ease,transform .15s ease}
+      .ship-map-marker .ship-glyph{display:block;filter:drop-shadow(0 2px 3px rgba(18,52,64,.38));transition:filter .15s ease}
       .ship-map-marker svg{display:block;width:100%;height:100%;overflow:visible}
-      .ship-map-marker .ship-hull{fill:#146c86;stroke:#fff;stroke-width:2.2;stroke-linejoin:round}
-      .ship-map-marker .ship-deck{fill:#fff;opacity:.9}
-      .ship-map-marker .ship-hold{fill:#d8e8ec;opacity:.95}
+      .ship-map-marker .ship-hull{fill:#146c86;stroke:#fff;stroke-width:2.3;stroke-linejoin:round}
+      .ship-map-marker .ship-house,.ship-map-marker .ship-stack{fill:#f8fbfc;stroke:#fff;stroke-width:1.3}
+      .ship-map-marker .ship-hatch{fill:#d8e8ec;stroke:#fff;stroke-width:1}
+      .ship-map-marker .ship-window{fill:#173f50}
+      .ship-map-marker .ship-waterline{stroke:#fff;stroke-width:1.6;opacity:.9}
       .ship-map-marker.is-selected .ship-hull{fill:#b9572a}
-      .ship-map-marker.is-selected .ship-glyph{filter:drop-shadow(0 0 5px rgba(185,87,42,.6)) drop-shadow(0 2px 3px rgba(18,52,64,.42))}
+      .ship-map-marker.is-selected .ship-glyph{filter:drop-shadow(0 0 6px rgba(185,87,42,.7)) drop-shadow(0 2px 3px rgba(18,52,64,.42))}
       .ship-map-marker.is-local .ship-hull{fill:#567d8b}
       .ship-map-marker.is-stopped .ship-hull{fill:#8a6a42}
     `;
@@ -267,11 +269,10 @@
     const selected = state === 'selected';
     const stopped = state === 'stopped';
     const local = state === 'local';
-    const width = selected ? 38 : local || stopped ? 25 : 31;
-    const height = selected ? 50 : local || stopped ? 33 : 41;
+    const width = selected ? 64 : local || stopped ? 38 : 50;
+    const height = selected ? 30 : local || stopped ? 22 : 26;
     const className = ['ship-map-marker', selected ? 'is-selected' : '', local ? 'is-local' : '', stopped ? 'is-stopped' : ''].filter(Boolean).join(' ');
-    const rotation = shipRotation(vessel);
-    const html = `<span class="ship-glyph" style="--ship-rotation:${rotation}deg" aria-hidden="true"><svg viewBox="0 0 36 48" focusable="false"><path class="ship-hull" d="M18 2 L28 12 L26 39 L22 46 L14 46 L10 39 L8 12 Z"/><rect class="ship-deck" x="12" y="31" width="12" height="9" rx="1.5"/><rect class="ship-hold" x="12" y="13" width="12" height="6" rx="1"/><rect class="ship-hold" x="12" y="21" width="12" height="6" rx="1"/></svg></span>`;
+    const html = `<span class="ship-glyph" aria-hidden="true"><svg viewBox="0 0 72 32" focusable="false"><path class="ship-hull" d="M3 19 L8 19 L11 24 L58 24 L67 18 L70 14 L62 14 L55 18 Z"/><path class="ship-house" d="M8 19 V10 H20 V19 Z"/><rect class="ship-stack" x="11" y="5" width="4" height="5" rx="1"/><rect class="ship-window" x="10" y="12" width="3" height="2" rx=".5"/><rect class="ship-window" x="15" y="12" width="3" height="2" rx=".5"/><rect class="ship-hatch" x="24" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="34" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="44" y="15" width="8" height="4" rx="1"/><path class="ship-waterline" d="M12 21.5 H59"/></svg></span>`;
     return L.divIcon({ className, html, iconSize: [width, height], iconAnchor: [Math.round(width / 2), Math.round(height / 2)], popupAnchor: [0, -Math.round(height / 2)] });
   }
 
@@ -496,7 +497,7 @@
     }
 
     const caption = document.querySelector('.map-caption');
-    if (caption) caption.textContent = 'Rust ship = selected next watch. Blue ships = other supported passage candidates. Muted blue/brown ships = recent nearby AIS reports. Purple CAM markers = live cameras. Green 1–3 = in-person viewing spots.';
+    if (caption) caption.textContent = 'Rust freighter = selected next watch. Blue freighters = other supported passage candidates. Muted blue/brown freighters = recent nearby AIS reports. Purple CAM markers = live cameras. Green 1–3 = in-person viewing spots.';
   }
 
   function focusVessel(mmsi) {
