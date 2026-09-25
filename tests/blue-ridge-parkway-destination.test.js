@@ -82,5 +82,5 @@ test("Finish is present in static planner markup and the asset is cache-busted",
   assert.match(html,/<label for="finish">Finish<\/label>/);
   assert.match(html,/<select id="finish">/);
   assert.match(html,/Back where I started/);
-  assert.match(html,/blue-ridge-parkway\.js\?v=20260924-2/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-3/);
 });
