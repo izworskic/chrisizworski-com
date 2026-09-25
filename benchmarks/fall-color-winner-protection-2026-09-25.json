@@ -1,0 +1,133 @@
+{
+  "version": "1.0.0",
+  "created": "2026-09-25",
+  "timezone": "America/Detroit",
+  "mode": "protect-winners",
+  "source": {
+    "type": "Google Search Console",
+    "providedBy": "site-owner",
+    "comparison": "comparable 28-day exports",
+    "note": "Metrics are evidence for ownership and prioritization, not traffic forecasts."
+  },
+  "rules": {
+    "singleStatewideOwner": true,
+    "noBroadExpansionWithoutDistinctIntentEvidence": true,
+    "contextualLinksOnly": true,
+    "protectSearchShell": [
+      "title",
+      "meta-description",
+      "h1",
+      "canonical",
+      "indexability",
+      "immediate-intent-answer"
+    ],
+    "preferredNetwork": [
+      "/fall-color/",
+      "/fall-color/porcupine-mountains-fall-color/",
+      "/fall-color/tunnel-of-trees-fall-color/",
+      "/fall-color/mackinac-island-fall-color/"
+    ]
+  },
+  "owners": [
+    {
+      "id": "fall-color-statewide",
+      "path": "/fall-color/",
+      "primaryIntent": "Michigan fall color map and peak forecast",
+      "action": "PROTECT",
+      "observed": {
+        "previousImpressions": 4997,
+        "impressions": 7581,
+        "previousClicks": 114,
+        "clicks": 190,
+        "previousPosition": 10.67,
+        "position": 8.8
+      },
+      "expected": {
+        "title": "Michigan Fall Color Map 2026: Live Peak Color Forecast",
+        "description": "Michigan fall color map 2026: see where leaves are peaking now, regional peak forecasts, live canopy signals and trip-ready color updates across the state.",
+        "canonical": "https://chrisizworski.com/fall-color/",
+        "h1": "Michigan Fall Color"
+      }
+    },
+    {
+      "id": "porcupine-mountains-fall-color",
+      "path": "/fall-color/porcupine-mountains-fall-color/",
+      "primaryIntent": "Porcupine Mountains fall color",
+      "action": "PROTECT",
+      "observed": {
+        "impressions": 2003,
+        "clicks": 67,
+        "position": 6.2
+      },
+      "expected": {
+        "title": "Porcupine Mountains Fall Color 2026 | Peak Dates",
+        "description": "When the Porcupine Mountains peak, plus the Lake of the Clouds overlook and the Escarpment Trail. Among the first and most intense color in Michigan.",
+        "canonical": "https://chrisizworski.com/fall-color/porcupine-mountains-fall-color/",
+        "h1": "When does fall color peak in the Porcupine Mountains?"
+      }
+    },
+    {
+      "id": "tunnel-of-trees-fall-color",
+      "path": "/fall-color/tunnel-of-trees-fall-color/",
+      "primaryIntent": "Tunnel of Trees fall color",
+      "action": "PROTECT",
+      "observed": {
+        "impressions": 2012,
+        "clicks": 64,
+        "position": 6.03
+      },
+      "expected": {
+        "title": "Tunnel of Trees Fall Color 2026 | M-119 Peak Dates",
+        "description": "Tunnel of Trees fall color typically peaks October 5–13. See the 2026 outlook, live regional conditions, and M-119 stops from Harbor Springs north.",
+        "canonical": "https://chrisizworski.com/fall-color/tunnel-of-trees-fall-color/",
+        "h1": "When does the Tunnel of Trees peak?"
+      }
+    },
+    {
+      "id": "mackinac-island-fall-color",
+      "path": "/fall-color/mackinac-island-fall-color/",
+      "primaryIntent": "Mackinac Island fall color",
+      "action": "PROTECT",
+      "observed": {
+        "previousImpressions": 279,
+        "impressions": 1346,
+        "clicks": 40,
+        "position": 6.2
+      },
+      "expected": {
+        "title": "Mackinac Island Fall Color 2026 | Peak Dates",
+        "description": "When Mackinac Island and the Straits peak, plus Arch Rock and the bluffs. Fall color without cars, where Lakes Michigan and Huron meet.",
+        "canonical": "https://chrisizworski.com/fall-color/mackinac-island-fall-color/",
+        "h1": "When does fall color peak on Mackinac Island?"
+      }
+    }
+  ],
+  "reinforcementChecks": [
+    {
+      "path": "/fall-color/",
+      "mustLinkTo": [
+        "/fall-color/porcupine-mountains-fall-color/",
+        "/fall-color/tunnel-of-trees-fall-color/",
+        "/fall-color/mackinac-island-fall-color/"
+      ]
+    },
+    {
+      "path": "/fall-color/when-do-leaves-peak-in-michigan/",
+      "mustLinkTo": [
+        "/fall-color/",
+        "/fall-color/porcupine-mountains-fall-color/",
+        "/fall-color/tunnel-of-trees-fall-color/",
+        "/fall-color/mackinac-island-fall-color/"
+      ]
+    },
+    {
+      "path": "/fall-color-northern-lights-michigan/",
+      "mustLinkTo": [
+        "/fall-color/",
+        "/fall-color/porcupine-mountains-fall-color/",
+        "/fall-color/tunnel-of-trees-fall-color/",
+        "/fall-color/mackinac-island-fall-color/"
+      ]
+    }
+  ]
+}
