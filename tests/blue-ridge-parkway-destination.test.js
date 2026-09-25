@@ -82,7 +82,7 @@ test("Finish is present in static planner markup and the asset is cache-busted",
   assert.match(html,/<label for="finish">Finish<\/label>/);
   assert.match(html,/<select id="finish">/);
   assert.match(html,/Back where I started/);
-  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-5/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-6/);
 });
 
 
@@ -140,7 +140,55 @@ test("selected-stop summary uses returned interests with checked-box fallback",(
   const source=fs.readFileSync(path.join(__dirname,"..","public","assets","blue-ridge-parkway.js"),"utf8");
   assert.match(source,/responseInterests/);
   assert.match(source,/checkedInterests=selectedInterests\(\)/);
-  assert.match(source,/Your selections:/);
+  assert.match(source,/Serves \$\{servedIds\.length\} of \$\{chosen\.size\} selected interests/);
   const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");
-  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-5/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-6/);
+});
+
+
+test("long point-to-point stop pool includes NPS-backed middle-corridor choices",()=>{
+  const ptp=require("../lib/blue-ridge-parkway/point-to-point.js")._test;
+  const ids=ptp.corridorStops("cherokee","roanoke").map(stop=>stop.id);
+  for(const id of ["crabtree-falls","nc-minerals-museum","jeffress-cascades","the-lump","cumberland-knob","blue-ridge-music-center"])assert.ok(ids.includes(id),`missing ${id}`);
+});
+
+test("long-corridor stop selection rewards distinct interests and geographic spread",()=>{
+  const ptp=require("../lib/blue-ridge-parkway/point-to-point.js")._test;
+  const input=ptp.normalizeInput({gateway:"cherokee",finish:"roanoke",hours:16,interests:"scenery,fall-color,short-walk,waterfall,photography,history,picnic,sunset"});
+  const pool=ptp.corridorStops(input.gateway,input.finish),chosen=ptp.chooseStops(pool,input,300,6),served=ptp.servedInterestSet(chosen,input);
+  assert.ok(chosen.length>=4,`only chose ${chosen.length}`);
+  assert.ok(served.size>=5,`only served ${served.size}`);
+  assert.ok(ptp.maxGapMiles(chosen,input)<120,`gap ${ptp.maxGapMiles(chosen,input)} too large`);
+});
+
+test("stop selection does not invent an unselected scenic preference",()=>{
+  const ptp=require("../lib/blue-ridge-parkway/point-to-point.js")._test;
+  const input=ptp.normalizeInput({gateway:"asheville",finish:"cherokee",hours:8,interests:"history"});
+  const chosen=ptp.chooseStops(ptp.corridorStops(input.gateway,input.finish),input,120,3);
+  assert.ok(chosen.every(stop=>(stop.tags||[]).includes("history")));
+});
+
+test("stop duration includes parking and re-entry overhead",()=>{
+  const ptp=require("../lib/blue-ridge-parkway/point-to-point.js")._test;
+  const input=ptp.normalizeInput({gateway:"asheville",finish:"cherokee",hours:8,interests:"scenery,short-walk"}),stops=ptp.chooseStops(ptp.corridorStops(input.gateway,input.finish),input,90,2),route=ptp.corridorRoute(input,"quick",stops);
+  const base=ptp.routeMiles(route)/32+stops.reduce((n,stop)=>n+(Number(stop.dwellMinutes)||0),0)/60+.25;
+  assert.ok(ptp.modeledDuration(route)>base,`${ptp.modeledDuration(route)} should exceed ${base}`);
+});
+
+test("long corridor weather selects multiple Parkway checkpoints",()=>{
+  const ptp=require("../lib/blue-ridge-parkway/point-to-point.js")._test;
+  const input=ptp.normalizeInput({gateway:"cherokee",finish:"roanoke",hours:12}),points=ptp.weatherCheckpointPoints(input,ptp.corridorStops(input.gateway,input.finish));
+  assert.equal(points.length,3);
+  assert.ok(points.every(point=>point.milepost>121.4&&point.milepost<469.1));
+  assert.ok(new Set(points.map(point=>point.id)).size===3);
+});
+
+test("result UI reports served and unserved selections without claiming the user picked stops",()=>{
+  const source=fs.readFileSync(path.join(__dirname,"..","public","assets","blue-ridge-parkway.js"),"utf8"),html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");
+  assert.match(source,/Serves \$\{servedIds\.length\} of \$\{chosen\.size\} selected interests/);
+  assert.match(source,/Not covered:/);
+  assert.match(source,/NPS stop information/);
+  assert.match(html,/Stops chosen for this drive/);
+  assert.doesNotMatch(html,/What you picked—and what to do there/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-6/);
 });
