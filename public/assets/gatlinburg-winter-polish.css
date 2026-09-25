@@ -4,6 +4,8 @@
 .official-checks{gap:1px;background:#d8e0da;border:1px solid #d8e0da;border-radius:13px;overflow:hidden}.official-checks a{background:#fff;padding:11px 12px;text-decoration:none}.official-checks a:hover{background:#f5f8f5}.official-checks span{font-size:.64rem;text-transform:uppercase;letter-spacing:.07em;font-weight:820;color:#75817a}.official-checks strong{font-size:.77rem;color:#24493a}
 .personalize{border-color:#d4ddd6;background:linear-gradient(180deg,#fff,#fafbf9);box-shadow:0 12px 32px rgba(18,42,33,.05)}
 .persona{border-color:#d4ddd6;background:#fff}.persona.active{box-shadow:0 6px 16px rgba(22,58,45,.12)}
+/* These were never personas: they are priorities or time-window presets. Keep the primary chooser human. */
+#personaRow .persona[data-persona="attractions"],#personaRow .persona[data-persona="food-lights"],#personaRow .persona[data-persona="budget"],#personaRow .persona[data-persona="evening"],#personaRow .persona[data-persona="full-day"],#personaRow .persona[data-persona="multi-day"]{display:none}
 .plan-section .section-heading{padding-bottom:14px;border-bottom:1px solid #e1e6e2}.plan-section .timeline li{border-color:#dbe2dd;transition:background .15s ease,transform .15s ease}.plan-section .timeline li:hover{background:#fbfcfb}.plan-summary{max-width:830px;color:#3a4a42}
 .stop-badge{background:#f4f7f4!important}.stop-badge.warn{background:#fbf3e8!important}
 .evidence-section,.events-section,.alternatives-section,.map-section{scroll-margin-top:92px}.condition-row,.event-row,.alternative{border-color:#d7dfd9!important;box-shadow:0 5px 16px rgba(22,42,34,.035)}
