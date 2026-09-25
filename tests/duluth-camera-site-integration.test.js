@@ -13,8 +13,9 @@ test('expanded camera module parses and reuses the primary Canal Cam marker', ()
   assert.doesNotThrow(() => new vm.Script(network));
   assert.match(core, /Canal Cam — Maritime Visitor Center/);
   assert.match(network, /PRIMARY_CANAL_CAMERA_TITLE = 'Canal Cam — Maritime Visitor Center'/);
-  assert.match(network, /function findPrimaryCanalMarker\(\)/);
+  assert.match(network, /function findMarkerByTitle\(title\)/);
   assert.match(network, /function adoptPrimaryCanalMarker\(site\)/);
+  assert.match(network, /findMarkerByTitle\(PRIMARY_CANAL_CAMERA_TITLE\)/);
   assert.match(network, /site\.id === 'visitor-center' && adoptPrimaryCanalMarker\(site\)/);
   assert.match(network, /siteMarkers\.set\(site\.id, marker\)/);
 });
