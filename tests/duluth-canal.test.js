@@ -163,6 +163,9 @@ test('camera monitor is mapped, linked to vessel watching and lazy-loads video',
   assert.match(js, /youtube-nocookie\.com\/embed\/\$\{camera\.youtubeId\}/);
   assert.match(js, /function selectCamera\(id, load = false\)/);
   assert.match(js, /function focusCamera\(id, load = false\)/);
+  assert.match(js, /activeCameraId = camera\.id;\s*openCameraMonitor\(true\)/);
+  assert.match(js, /button\.addEventListener\('click', \(\) => selectCamera\(button\.dataset\.cameraId, true\)\)/);
+  assert.doesNotMatch(js, /button\.addEventListener\('click', \(\) => focusCamera\(button\.dataset\.cameraId, true\)\)/);
   assert.match(html, /data-camera-id="canal"/);
   assert.match(html, /data-camera-id="lodge"/);
   assert.match(html, /Camera markers show where the cameras are/);
