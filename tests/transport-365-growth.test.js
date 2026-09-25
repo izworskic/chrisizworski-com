@@ -10,23 +10,25 @@ function title(html) {
   return html.match(/<title>(.*?)<\/title>/s)?.[1] || "";
 }
 
-test("Mackinac toll page leads with the page-one price answer", () => {
+test("Mackinac toll page leads with the page-one passenger-car answer", () => {
   const html = read("public/mackinac-bridge-tolls/index.html");
   const tollExperiment = JSON.parse(read("benchmarks/transport-365-growth.json")).experiments[0];
-  assert.equal(title(html), "Mackinac Bridge Toll 2026: $4 Cars + RV/Trailer Calculator");
+  assert.equal(title(html), "Mackinac Bridge Toll 2026: $4 for a Passenger Car");
   assert.ok(title(html).replaceAll("&amp;", "&").length <= 60);
-  // Revised pre-release 2026-09-01. The old description answered the query outright, so a searcher
-  // asking what the toll costs had no reason to open the page: 1,190 impressions, 0.17% CTR, from
-  // position 8.0. Assert the property that matters instead of the sentence — the description must
-  // match the declared treatment, and must NOT hand over the flat fare that is the whole query.
   const tollDescription = /<meta name="description" content="([^"]+)"/.exec(html)?.[1] ?? "";
   assert.equal(tollDescription, tollExperiment.treatment.metaDescription);
-  assert.doesNotMatch(tollDescription, /\$4 one way|\$8 round trip/);
-  assert.match(tollDescription, /axle/i, "the description must promise the multi-axle answer a snippet cannot give");
-  assert.match(html, /<h1>Mackinac Bridge Toll Cost: 2026 Fares &amp; Calculator<\/h1>/);
-  assert.match(html, /The Mackinac Bridge toll is \$4 one way, or \$8 round trip, for a standard two-axle passenger car in 2026\./i);
+  assert.match(tollDescription, /\$4 one way/i);
+  assert.match(tollDescription, /\$8 round trip/i);
+  assert.match(tollDescription, /cash/i);
+  assert.match(tollDescription, /Apple Pay/i);
+  assert.match(tollDescription, /Google Pay/i);
+  assert.match(tollDescription, /MacPass/i);
+  assert.match(html, /<h1>Mackinac Bridge Toll 2026: \$4 for a Passenger Car<\/h1>/);
+  assert.match(html, /The Mackinac Bridge toll is \$4 one way for a standard two-axle passenger car in 2026, or \$8 round trip at the standard rate\./i);
   assert.match(html, /Passenger vehicles are \$2 per axle/i);
-  assert.match(html, /Vehicles outside the passenger classification.*\$5 per axle/is);
+  assert.match(html, /Motorhomes and other vehicles outside the passenger classification are \$5 per axle/i);
+  assert.match(html, /credit\/debit cards carry a 2\.3% fee/i);
+  assert.match(html, /\$0 return crossing.*within 36 hours/is);
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/mackinac-bridge-tolls/">'));
 });
 
@@ -42,7 +44,7 @@ test("Gordie Howe treatment captures camera intent without inventing an operator
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/gordie-howe-bridge-wait-time/">'));
 });
 
-test("365 transport experiment records observed baselines and a page-specific freeze", () => {
+test("365 transport experiment records observed baselines and the focused toll follow-up", () => {
   const benchmark = JSON.parse(read("benchmarks/transport-365-growth.json"));
   const toll = benchmark.experiments.find((item) => item.id === "mackinac-toll-price-led-ctr");
   const gordie = benchmark.experiments.find((item) => item.id === "gordie-howe-wait-camera-ctr");
@@ -51,15 +53,24 @@ test("365 transport experiment records observed baselines and a page-specific fr
   assert.equal(toll.latestLeadingSignal.page.impressions, 490);
   assert.equal(toll.latestLeadingSignal.page.clicks, 0);
   assert.equal(toll.latestLeadingSignal.page.averagePosition, 7.44);
+  assert.equal(toll.latestObservedSignal.page.currentImpressions, 5463);
+  assert.equal(toll.latestObservedSignal.page.currentClicks, 17);
+  assert.equal(toll.latestObservedSignal.page.currentAveragePosition, 8.14);
+  assert.equal(toll.latestObservedSignal.exactQuery.query, "mackinac bridge toll");
+  assert.equal(toll.latestObservedSignal.exactQuery.impressions, 778);
+  assert.equal(toll.latestObservedSignal.exactQuery.clicks, 1);
+  assert.equal(toll.latestObservedSignal.exactQuery.ctr, 0.0013);
+  assert.equal(toll.latestObservedSignal.exactQuery.averagePosition, 9.98);
   assert.equal(toll.target.ctr, 0.02);
   assert.deepEqual(toll.freezeDuringWindow, ["title", "metaDescription", "h1", "firstAnswer", "structuredData", "canonical", "indexability"]);
   assert.equal(gordie.baseline.impressions, 498);
   assert.equal(gordie.baseline.clicks, 17);
   assert.equal(gordie.supportingQuery.impressions, 79);
   assert.equal(benchmark.protectedSurface.path, "/mackinac-bridge-live/");
+  assert.match(benchmark.protectedSurface.reason, /Separate canonical owner/i);
 });
 
-test("Mackinac flagship search surface preserves its decision contract while search treatment evolves", () => {
+test("Mackinac flagship search surface preserves its separate live-conditions decision contract", () => {
   const html = read("public/mackinac-bridge-live/index.html");
   assert.match(html, /<title>Mackinac Bridge Conditions Today: Live Status &amp; Cameras<\/title>/);
   assert.match(html, /<h1>Mackinac Bridge Conditions Today<\/h1>/);
