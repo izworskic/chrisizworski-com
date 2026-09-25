@@ -110,18 +110,22 @@ test('JEV payload is a sealed closed set and cannot create vessel choices', () =
   assert.equal(MAX_INJECTION_DEPENDENCY, 0.45);
 });
 
-test('visitor page includes the decision, map, real image, provenance and fallback surfaces', () => {
+test('visitor page includes the decision, map, real image, live cameras, provenance and fallback surfaces', () => {
   const html = fs.readFileSync(path.join(__dirname, '../public/duluth-canal-park/index.html'), 'utf8');
   const js = fs.readFileSync(path.join(__dirname, '../public/assets/duluth-canal.js'), 'utf8');
   assert.match(html, /Duluth ship schedule &amp; Canal Park live watch/);
   assert.match(html, /id="watchPick"/);
   assert.match(html, /id="duluthVesselMap"/);
   assert.match(html, /Anticipated ships/);
+  assert.match(html, /Live Canal Park cameras/);
+  assert.match(html, /youtube-nocookie\.com\/embed\/HPS48TMmNag/);
+  assert.match(html, /youtube-nocookie\.com\/embed\/H6cm5Hf-yFY/);
   assert.match(html, /harborlookout\.com/);
   assert.match(html, /duluthharborcam\.com/);
   assert.match(html, /Open Waters AIS/);
-  assert.match(html, /AerialBridge_and_CanalPark\.jpg/);
-  assert.match(html, /public-domain photograph/i);
+  assert.match(html, /Duluth%20Ship%20Canal-Lighthouse-1000%20footer\.jpg/);
+  assert.match(html, /Chris Light/);
+  assert.match(html, /CC BY-SA 4\.0/);
   assert.doesNotMatch(html + js, /utm_source=chatgpt\.com/i);
   assert.match(js, /This is not a zero-traffic report/);
   assert.match(js, /setInterval\(\(\) => \{ if \(!document\.hidden\) load\(\); \}, 60000\)/);
