@@ -6,6 +6,20 @@
   const safeUrl=value=>{try{const u=new URL(String(value),location.origin);return ["http:","https:"].includes(u.protocol)?u.href:"#";}catch{return"#";}};
   let map=null,corridorLayer=null,markerLayer=null,lastPayload=null;
 
+  function ensureLeafletCss(){
+    const expected='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    const current=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href===expected);
+    if(current&&current.integrity==='sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=')return;
+    if(current)current.remove();
+    const link=document.createElement('link');
+    link.rel='stylesheet';
+    link.href=expected;
+    link.integrity='sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=';
+    link.crossOrigin='';
+    link.dataset.blueRidgeLeaflet='true';
+    document.head.appendChild(link);
+  }
+
   function todayParkway(){return new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());}
   function setDefaults(){if($("tripDate")&&!$("tripDate").value)$("tripDate").value=todayParkway();}
   function selectedInterests(){return [...document.querySelectorAll('input[name="interest"]:checked')].map(el=>el.value).slice(0,4);}
@@ -51,5 +65,5 @@
   function render(payload){lastPayload=payload;renderTop(payload);renderDecision(payload);renderTimeline(payload);renderConditions(payload);renderRoad(payload);renderAlternatives(payload);renderFieldNotes(payload);renderSources(payload);$("results").hidden=false;drawMap(payload);history.replaceState(null,"",`${location.pathname}?${params().toString()}`);}
   async function build(){setBusy(true);try{const response=await fetch(`/api/blue-ridge-parkway?${params().toString()}`,{headers:{accept:"application/json"}}),payload=await response.json().catch(()=>null);if(!response.ok||!payload?.ok)throw new Error(payload?.detail||payload?.error||`HTTP ${response.status}`);render(payload);$("plannerStatus").textContent="";}catch(error){$("plannerStatus").innerHTML=`<span class="error">Live refresh failed: ${esc(error.message||error)}.</span>`;$("results").hidden=false;$("decision").innerHTML=`<div class="source-warning"><strong>The live planner could not refresh.</strong><p>No road or weather fact has been guessed. Use the official NPS road-status source before leaving.</p></div>`;}finally{setBusy(false);}}
   function applyQuery(){const q=new URLSearchParams(location.search);for(const [id,key] of [["gateway","gateway"],["hours","hours"],["tripDate","date"],["startTime","start"]])if(q.get(key)&&$(id))$(id).value=q.get(key);if(q.get("interests")){const set=new Set(q.get("interests").split(","));document.querySelectorAll('input[name="interest"]').forEach(el=>el.checked=set.has(el.value));}}
-  document.addEventListener("DOMContentLoaded",()=>{setDefaults();applyQuery();$("plannerForm")?.addEventListener("submit",e=>{e.preventDefault();build();});document.querySelectorAll(".quick-gateway").forEach(btn=>btn.addEventListener("click",()=>{$("gateway").value=btn.dataset.gateway;build();}));build();});
+  document.addEventListener("DOMContentLoaded",()=>{ensureLeafletCss();setDefaults();applyQuery();$("plannerForm")?.addEventListener("submit",e=>{e.preventDefault();build();});document.querySelectorAll(".quick-gateway").forEach(btn=>btn.addEventListener("click",()=>{$("gateway").value=btn.dataset.gateway;build();}));build();});
 })();
