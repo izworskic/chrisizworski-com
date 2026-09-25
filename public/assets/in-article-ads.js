@@ -44,9 +44,11 @@
   }
   function top(el) { return el.getBoundingClientRect().top + scrollY; }
 
-  // The tool itself (map, camera, chart, embed, form) is never interrupted: the
-  // first ad goes after the last one that starts in the top 60% of the page,
-  // and never in the first two screens.
+  // The tool itself (map, camera, chart, embed, form) is never interrupted.
+  // Automatic heading placement remains deliberately late (two screens). An
+  // explicit seam is an editorially approved boundary after core content, so it
+  // may begin after 1.25 screens. This keeps short app-like pages monetizable
+  // without putting ads inside their primary decision experience.
   var TOOL = '.leaflet-container,.maplibregl-map,.mapboxgl-map,canvas,iframe,video,form,[data-tool],[class*="map"],[class*="live-"],[class*="tool"]';
   function toolBottom() {
     var bottom = 0, limit = document.documentElement.scrollHeight * 0.6;
@@ -66,7 +68,7 @@
     return placed.every(function (ad) { return Math.abs(top(ad) - y) >= gap; });
   }
   function insert(block) {
-    if (placed.length >= MAX || !block.isConnected || !roomFor(block)) return;
+    if (placed.length >= MAX || !block.isConnected || !roomFor(block)) return false;
     var parent = block.parentElement;
     var explicit = block.hasAttribute('data-in-article-ad-break');
     var aside = document.createElement('aside');
@@ -78,6 +80,7 @@
     if (explicit) block.remove();
     placed.push(aside);
     try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (_) { /* ads never break a tool */ }
+    return true;
   }
 
   function start() {
@@ -99,10 +102,13 @@
       });
     }
     if (!blocks.length) return;
-    firstMin = Math.max(innerHeight * 2, toolBottom() + 200, 1200);
+    var explicitMode = explicit.length > 0;
+    firstMin = Math.max(innerHeight * (explicitMode ? 1.25 : 2), toolBottom() + (explicitMode ? 80 : 200), explicitMode ? 1000 : 1200);
     if (!('IntersectionObserver' in window)) return;               // no lazy placement, no ads
     var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) { insert(e.target); io.unobserve(e.target); } });
+      entries.forEach(function (e) {
+        if (e.isIntersecting && insert(e.target)) io.unobserve(e.target);
+      });
       if (placed.length >= MAX) io.disconnect();
     }, { rootMargin: '0px 0px 1200px 0px' });
     blocks.forEach(function (b) { io.observe(b); });
