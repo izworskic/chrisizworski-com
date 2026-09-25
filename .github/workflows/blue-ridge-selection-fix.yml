@@ -47,6 +47,7 @@ jobs:
 
           test = Path('tests/blue-ridge-parkway-destination.test.js')
           s = test.read_text()
+          s = s.replace('blue-ridge-parkway\\.js\\?v=20260925-4','blue-ridge-parkway\\.js\\?v=20260925-5',1)
           s += '''\n\ntest("round-trip mode preserves every checked activity",()=>{\n  const engine=require("../lib/blue-ridge-parkway/engine.js")._test;\n  const interests="scenery,fall-color,short-walk,waterfall,photography,history,picnic,sunset";\n  assert.equal(engine.normalizeInput({gateway:"asheville",hours:8,interests}).interests.length,8);\n});\n\ntest("selected-stop summary uses returned interests with checked-box fallback",()=>{\n  const source=fs.readFileSync(path.join(__dirname,"..","public","assets","blue-ridge-parkway.js"),"utf8");\n  assert.match(source,/responseInterests/);\n  assert.match(source,/checkedInterests=selectedInterests\(\)/);\n  assert.match(source,/Your selections:/);\n  const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");\n  assert.match(html,/blue-ridge-parkway\\.js\\?v=20260925-5/);\n});\n'''
           test.write_text(s)
       - name: Run Blue Ridge tests
