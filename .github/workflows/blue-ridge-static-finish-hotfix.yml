@@ -1,0 +1,55 @@
+name: Blue Ridge static finish hotfix
+
+on:
+  push:
+    branches:
+      - fix/blue-ridge-static-finish
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/blue-ridge-static-finish
+      - name: Make Finish a first-class form field
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('public/blue-ridge-parkway/index.html')
+          s = p.read_text()
+          old_grid = '.form-grid{display:grid;grid-template-columns:1.35fr .9fr .8fr .72fr;gap:11px}'
+          new_grid = '.form-grid{display:grid;grid-template-columns:1.15fr 1.15fr .8fr .8fr .72fr;gap:11px}'
+          assert old_grid in s, 'planner grid signature missing'
+          s = s.replace(old_grid, new_grid, 1)
+          start = '<div class="field"><label for="gateway">Starting near</label><select id="gateway"><option value="asheville">Asheville</option><option value="boone">Boone / Blowing Rock</option><option value="roanoke">Roanoke</option><option value="floyd">Floyd / Meadows of Dan</option><option value="afton">Afton / Waynesboro</option><option value="cherokee">Cherokee</option></select></div>'
+          finish = '<div class="field"><label for="finish">Finish</label><select id="finish"><option value="return">Back where I started</option><option value="asheville">Asheville</option><option value="boone">Boone / Blowing Rock</option><option value="roanoke">Roanoke</option><option value="floyd">Floyd / Meadows of Dan</option><option value="afton">Afton / Waynesboro</option><option value="cherokee">Cherokee</option></select></div>'
+          assert start in s, 'start field signature missing'
+          assert 'id="finish"' not in s, 'finish already present in static markup'
+          s = s.replace(start, start + '\n        ' + finish, 1)
+          old_script = '<script src="/assets/blue-ridge-parkway.js" defer></script>'
+          new_script = '<script src="/assets/blue-ridge-parkway.js?v=20260924-2" defer></script>'
+          assert old_script in s, 'asset script signature missing'
+          s = s.replace(old_script, new_script, 1)
+          old_lede = 'Start with where you are, how many hours you have and what you came for.'
+          new_lede = 'Start with where you are, where you need to finish, how many hours you have and what you came for.'
+          assert old_lede in s, 'lede signature missing'
+          s = s.replace(old_lede, new_lede, 1)
+          p.write_text(s)
+          PY
+      - name: Verify static contract
+        run: |
+          grep -q 'label for="finish"' public/blue-ridge-parkway/index.html
+          grep -q 'id="finish"' public/blue-ridge-parkway/index.html
+          grep -q 'blue-ridge-parkway.js?v=20260924-2' public/blue-ridge-parkway/index.html
+      - name: Commit patched page
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/blue-ridge-parkway/index.html
+          git commit -m "Make Blue Ridge finish control static"
+          git push origin HEAD:fix/blue-ridge-static-finish
