@@ -1,6 +1,6 @@
 "use strict";
 
-const handler = require("../lib/gatlinburg-winter/route-v13.js");
+const handler = require("../lib/gatlinburg-winter/route-v14.js");
 
 function gatlinburgWinter(req, res) {
   res.setHeader("X-Robots-Tag", "noindex");
