@@ -130,3 +130,21 @@ test('visitor page includes the decision, map, real image, live cameras, provena
   assert.match(js, /This is not a zero-traffic report/);
   assert.match(js, /setInterval\(\(\) => \{ if \(!document\.hidden\) load\(\); \}, 60000\)/);
 });
+
+test('where-to-watch cards and map are causally linked in both directions', () => {
+  const js = fs.readFileSync(path.join(__dirname, '../public/assets/duluth-canal.js'), 'utf8');
+  assert.match(js, /const WATCH_SPOTS = \[/);
+  assert.match(js, /North side \/ Visitor Center/);
+  assert.match(js, /South side \/ Park Point/);
+  assert.match(js, /Canal Park \/ Lakewalk/);
+  assert.match(js, /46\.779847/);
+  assert.match(js, /46\.778722/);
+  assert.match(js, /46\.780067/);
+  assert.match(js, /dataset\.watchSpot/);
+  assert.match(js, /dataset\.watchFocus/);
+  assert.match(js, /Show on map/);
+  assert.match(js, /L\.divIcon/);
+  assert.match(js, /marker\.on\('click', \(\) => setActiveWatchSpot\(spot\.id\)\)/);
+  assert.match(js, /map\.setView\(\[spot\.lat, spot\.lon\], 16/);
+  assert.match(js, /Green numbered markers match the three viewing cards below/);
+});
