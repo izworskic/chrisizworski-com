@@ -48,6 +48,7 @@
   const $ = id => document.getElementById(id);
   const initial = new URLSearchParams(location.search);
   let kidsExplicit = initial.has("kids");
+  let lastResult = null;
 
   function normalizeLegacyUrl() {
     const q = new URLSearchParams(location.search);
@@ -148,14 +149,21 @@
     return q;
   }
 
+  function authoritativeHealth(data = lastResult) {
+    const badge = $("liveState");
+    if (!badge || !data?.decisionHealth) return;
+    const text = data.mode === "preseason" ? "PRE-SEASON" : (data.decisionHealth.label || "PLAN READY");
+    const className = `state-pill${data.decisionHealth.state === "check" ? " degraded" : ""}`;
+    const title = data.decisionHealth.summary || "";
+    if (badge.textContent !== text) badge.textContent = text;
+    if (badge.className !== className) badge.className = className;
+    if (badge.title !== title) badge.title = title;
+  }
+
   function updateResultMeta(data) {
     if (!data || !data.ok) return;
-    const badge = $("liveState");
-    if (badge && data.decisionHealth) {
-      badge.textContent = data.mode === "preseason" ? "PRE-SEASON" : data.decisionHealth.label || "PLAN READY";
-      badge.className = `state-pill${data.decisionHealth.state === "check" ? " degraded" : ""}`;
-      badge.title = data.decisionHealth.summary || "";
-    }
+    lastResult = data;
+    authoritativeHealth(data);
     const engine = $("engineBadge");
     if (engine) {
       const jev = data.decision?.jev?.mode === "shared-harness-jev" ? "JEV plan choice" : "Grounded plan choice";
@@ -181,6 +189,7 @@
     const response = await nativeFetch(url.pathname + url.search, init);
     try {
       const data = await response.clone().json();
+      lastResult = data?.ok ? data : lastResult;
       setTimeout(() => updateResultMeta(data), 0);
     } catch {}
     return response;
@@ -188,6 +197,13 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     syncGoal(new URLSearchParams(location.search).get("goal"));
+
+    const badge = $("liveState");
+    if (badge && typeof MutationObserver !== "undefined") {
+      const observer = new MutationObserver(() => authoritativeHealth());
+      observer.observe(badge, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["class", "title"] });
+    }
+
     document.querySelectorAll(".persona").forEach(button => button.addEventListener("click", () => {
       const q = new URLSearchParams(location.search);
       q.set("persona", button.dataset.persona || "first");
