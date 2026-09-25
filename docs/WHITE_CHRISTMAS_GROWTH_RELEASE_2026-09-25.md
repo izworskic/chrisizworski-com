@@ -6,7 +6,7 @@ The authoritative `izworskic/national-white-christmas` product was expanded from
 
 This shell change does not copy White Christmas product logic. It publishes the 22 newly proven canonical city routes in the dedicated White Christmas, winter, and main sitemaps and refreshes `lastmod` for White Christmas city/region surfaces materially changed by the owner release.
 
-The shell release is gated through the repository's normal `agent/**` full verification workflow; no search or routing gate is bypassassed for this publication.
+The shell release is gated through the repository's normal `agent/**` full verification workflow; no search or routing gate is bypassed for this publication.
 
 ## Search evidence and reason for expansion
 
