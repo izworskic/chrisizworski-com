@@ -31,8 +31,10 @@ addCanonical({
 });
 
 // Blue Ridge Parkway uses one owner per genuinely different search intent.
-// The main live desk owns broad/current Parkway intent; the gateway pages own
-// the concrete "from Asheville/Boone/Roanoke/Cherokee" trip decisions.
+// The main live desk owns broad/current Parkway intent. Gateway pages own
+// concrete start-location decisions. Supporting pages own separate closure,
+// weather, stops, itinerary and map/milepost questions without duplicating
+// the live planner or the dedicated seasonal fall-color canonical.
 addCanonical({
   url: 'https://chrisizworski.com/blue-ridge-parkway/',
   lastmod: '2026-09-25',
@@ -48,6 +50,22 @@ for (const gateway of ['asheville', 'boone', 'roanoke', 'cherokee']) {
     changefreq: 'daily',
     priority: '0.8',
     label: `Blue Ridge Parkway from ${gateway}`
+  });
+}
+
+for (const intent of [
+  { slug: 'closures', changefreq: 'daily', priority: '0.8', label: 'Blue Ridge Parkway closures' },
+  { slug: 'weather', changefreq: 'daily', priority: '0.8', label: 'Blue Ridge Parkway weather' },
+  { slug: 'best-stops', changefreq: 'weekly', priority: '0.8', label: 'Best Blue Ridge Parkway stops' },
+  { slug: 'itinerary', changefreq: 'weekly', priority: '0.8', label: 'Blue Ridge Parkway itinerary' },
+  { slug: 'map', changefreq: 'weekly', priority: '0.8', label: 'Blue Ridge Parkway map and mileposts' }
+]) {
+  addCanonical({
+    url: `https://chrisizworski.com/blue-ridge-parkway/${intent.slug}/`,
+    lastmod: '2026-09-25',
+    changefreq: intent.changefreq,
+    priority: intent.priority,
+    label: intent.label
   });
 }
 
