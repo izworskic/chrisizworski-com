@@ -1,0 +1,60 @@
+name: Blue Ridge selection display fix
+
+on:
+  push:
+    branches:
+      - fix/blue-ridge-selected-interests
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/blue-ridge-selected-interests
+          fetch-depth: 0
+      - name: Fix selected-interest plumbing
+        shell: python
+        run: |
+          from pathlib import Path
+
+          engine = Path('lib/blue-ridge-parkway/engine.js')
+          s = engine.read_text()
+          old = 'const interests=[...new Set(raw.split(",").map(x=>x.trim()).filter(x=>allowed.has(x)))].slice(0,4);if(!interests.length)interests.push("scenery");'
+          new = 'const interests=[...new Set(raw.split(",").map(x=>x.trim()).filter(x=>allowed.has(x)))];if(!interests.length)interests.push("scenery");'
+          assert old in s, 'round-trip interest truncation not found'
+          engine.write_text(s.replace(old,new,1))
+
+          ui = Path('public/assets/blue-ridge-parkway.js')
+          s = ui.read_text()
+          old = 'const chosen=new Set(payload.input?.interests||[]),chosenLabels=[...chosen].map(x=>interestLabels[x]||x);'
+          new = 'const responseInterests=Array.isArray(payload.input?.interests)?payload.input.interests:[],checkedInterests=selectedInterests(),chosenList=responseInterests.length?responseInterests:checkedInterests,chosen=new Set(chosenList),chosenLabels=[...chosen].map(x=>interestLabels[x]||x);'
+          assert old in s, 'selected-stop interest source not found'
+          s = s.replace(old,new,1)
+          old = 'if(summary)summary.innerHTML=`<strong>${items.length} selected stop${items.length===1?"":"s"}</strong><span>You asked for: ${esc(chosenLabels.join(" · ")||"a scenic Parkway drive")}</span>`;'
+          new = 'if(summary)summary.innerHTML=`<strong>${items.length} selected stop${items.length===1?"":"s"}</strong><span>Your selections: ${esc(chosenLabels.join(" · ")||"Scenic drive")}</span>`;'
+          assert old in s, 'selected-stop summary not found'
+          s = s.replace(old,new,1)
+          ui.write_text(s)
+
+          html = Path('public/blue-ridge-parkway/index.html')
+          s = html.read_text()
+          s = s.replace('/assets/blue-ridge-parkway.js?v=20260925-4','/assets/blue-ridge-parkway.js?v=20260925-5',1)
+          html.write_text(s)
+
+          test = Path('tests/blue-ridge-parkway-destination.test.js')
+          s = test.read_text()
+          s += '''\n\ntest("round-trip mode preserves every checked activity",()=>{\n  const engine=require("../lib/blue-ridge-parkway/engine.js")._test;\n  const interests="scenery,fall-color,short-walk,waterfall,photography,history,picnic,sunset";\n  assert.equal(engine.normalizeInput({gateway:"asheville",hours:8,interests}).interests.length,8);\n});\n\ntest("selected-stop summary uses returned interests with checked-box fallback",()=>{\n  const source=fs.readFileSync(path.join(__dirname,"..","public","assets","blue-ridge-parkway.js"),"utf8");\n  assert.match(source,/responseInterests/);\n  assert.match(source,/checkedInterests=selectedInterests\(\)/);\n  assert.match(source,/Your selections:/);\n  const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");\n  assert.match(html,/blue-ridge-parkway\\.js\\?v=20260925-5/);\n});\n'''
+          test.write_text(s)
+      - name: Run Blue Ridge tests
+        run: node --test tests/blue-ridge-parkway-destination.test.js tests/blue-ridge-parkway-ui.test.js tests/blue-ridge-parkway.test.js
+      - name: Commit fix
+        run: |
+          git config user.name "Chris Izworski"
+          git config user.email "46615230+izworskic@users.noreply.github.com"
+          git add lib/blue-ridge-parkway/engine.js public/assets/blue-ridge-parkway.js public/blue-ridge-parkway/index.html tests/blue-ridge-parkway-destination.test.js
+          git commit -m "Fix Blue Ridge selected-interest display"
+          git push origin HEAD:fix/blue-ridge-selected-interests
