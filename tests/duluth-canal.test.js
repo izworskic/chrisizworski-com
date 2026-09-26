@@ -157,9 +157,9 @@ test('visitor page preserves real imagery provenance live sources and honest fal
 
 test('selected and anticipated ships have distinct map markers and candidate positions are not limited to local traffic', () => {
   const js = fs.readFileSync(path.join(__dirname, '../public/assets/duluth-canal.js'), 'utf8');
-  assert.match(js, /candidate-map-marker/);
+  assert.match(js, /icon: shipIcon\(c, selected \? 'selected' : 'candidate'\)/);
   assert.match(js, /is-selected/);
-  assert.match(js, /NEXT · \$\{c\.name\}/);
+  assert.match(js, /title: selected \? `Next watch: \$\{c\.name\}` : `Anticipated: \$\{c\.name\}`/);
   assert.match(js, /const candidateIds = new Set/);
   assert.match(js, /c\.lat, c\.lon/);
   assert.match(js, /map\.fitBounds\(\[CANAL, \[data\.watchPick\.lat, data\.watchPick\.lon\]\]/);
