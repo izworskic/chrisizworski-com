@@ -2,8 +2,8 @@
   'use strict';
   // In-article ads between full sections only. Never inside a card, grid, flex
   // row, list, table, map, form or dialog. Never above the reader, so nothing
-  // they are looking at moves. Explicit seams take priority; otherwise ads can
-  // go only before complete top-level sections, never at a heading inside cards.
+  // they are looking at moves. Explicit seams take priority. Fallback anchors are
+  // top-level sections or headings in plain content flow, never inside cards.
   // Settings come from this script tag's data-*.
   var me = document.currentScript;
   if (!me || !['chrisizworski.com', 'www.chrisizworski.com'].includes(location.hostname)) return;
@@ -33,7 +33,7 @@
   if (!/^ca-pub-\d+$/.test(CLIENT || '') || !/^\d+$/.test(SLOT || '')) return;
   if (document.querySelector('meta[name="in-article-ads"][content="off"]')) return;
 
-  var SKIP = 'header,nav,footer,aside,form,dialog,[role="dialog"],table,li,dl,details,figure,button,label,[data-no-ads],.leaflet-container,.maplibregl-map,.mapboxgl-map';
+  var SKIP = 'header,nav,footer,aside,article,form,dialog,[role="dialog"],[role="listitem"],table,li,dl,details,figure,button,label,[data-no-ads],[class~="card"],[class*="-card"],[class*="card-"],[class*="tile"],.leaflet-container,.maplibregl-map,.mapboxgl-map';
 
   function style(el) { return getComputedStyle(el); }
   function looksLikeCard(el) {
@@ -115,9 +115,19 @@
         }
         if (!nestedSection && !looksLikeCard(section) && usable(section)) blocks.push(section);
       });
+      document.querySelectorAll('h2').forEach(function (heading) {
+        var parent = heading.parentElement;
+        var parentClasses = parent && typeof parent.className === 'string' ? parent.className : '';
+        var plainFlow = parent && (/^(BODY|MAIN)$/.test(parent.tagName) || /(^|\\s)(body|main-content|content)(\\s|$)/i.test(parentClasses));
+        if (plainFlow && !heading.closest('section') && usable(heading)) blocks.push(heading);
+      });
     }
     if (!blocks.length) return;
     firstMin = Math.max(innerHeight * (explicitMode ? 1.25 : 2), toolBottom() + (explicitMode ? 80 : 200), explicitMode ? 1000 : 1200);
+    // Observe only candidates already below the safe threshold. An early
+    // IntersectionObserver event must not strand a seam that failed roomFor().
+    blocks = blocks.filter(function (block) { return top(block) >= firstMin; });
+    if (!blocks.length) return;
     if (!('IntersectionObserver' in window)) return;               // no lazy placement, no ads
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
