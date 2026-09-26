@@ -12,8 +12,9 @@ Owner: Chris Izworski. Replaces the September 20 horizontal display pilot (slot
 - Intentional seams may be declared with an empty
   `<div data-in-article-ad-break aria-hidden="true"></div>`.
 - When no marker exists, the placer can use complete top-level `<section>` boundaries
-  that pass the safety checks. It never guesses from headings inside a section or card.
-- Pages without a reviewed marker or a safe semantic section receive no in-article ad.
+  or headings that are direct children of plain page-content flow. It skips headings
+  inside sections, cards, articles and grids.
+- Pages without a reviewed marker, safe section, or safe content-flow heading receive no in-article ad.
 
 ## Placement rules
 - The insertion point's parent is normal block flow (not grid, flex or table), is at
@@ -23,8 +24,8 @@ Owner: Chris Izworski. Replaces the September 20 horizontal display pilot (slot
   a map, or anything marked `data-no-ads`.
 - Markers and section boundaries are accepted only when their parent and ancestors pass
   the card, grid, width, and block-flow checks.
-- Both placement paths stay after the primary tool. Explicit seams may begin after
-  1.25 screens; automatic section boundaries wait until after two screens.
+- All placement paths stay after the primary tool. Explicit seams may begin after
+  1.25 screens; discovered content boundaries wait until after two screens.
 - Never within 400px of the end, and keep at least 1.5 screens (1000px minimum) between ads.
 - Only insert while the seam is still below the visible screen, so nothing the reader is
   looking at moves. A seam is not discarded merely because it was observed before it was
