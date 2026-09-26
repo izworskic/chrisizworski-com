@@ -36,7 +36,7 @@ test('in-article placer tag carries the configured slot, respects the switch and
   const { placerTag, hasPlacer, PLACER_VERSION } = require('../lib/adsense-eligibility');
   const cfg = { enabled: true, publisherId: 'ca-pub-8222782620788075', slotId: '8700232579', maxPerPage: 3, excludeRoutes: ['/skip/'] };
   const tag = placerTag('/soo-locks/index.html', cfg);
-  assert.equal(PLACER_VERSION, 4);
+  assert.equal(PLACER_VERSION, 5);
   assert.match(tag, /src="\/assets\/in-article-ads\.js\?v=4"/);
   assert.match(tag, /data-slot="8700232579"/); assert.match(tag, /data-max="3"/); assert.match(tag, /\bdefer\b/);
   assert.ok(hasPlacer(tag));
@@ -46,9 +46,10 @@ test('in-article placer tag carries the configured slot, respects the switch and
   const live = require('../config/in-article-ads.json');
   assert.equal(live.slotId, '8700232579'); assert.equal(live.publisherId, 'ca-pub-8222782620788075');
 });
-test('the placer script protects automatic pages while allowing editorial seams on shorter tools', () => {
+test('the placer inserts ads only at explicit reviewed seams, never inferred headings', () => {
   const js = fs.readFileSync(path.join(__dirname, '../public/assets/in-article-ads.js'), 'utf8');
-  for (const s of ['firstMin', 'table,li', '.leaflet-container', 'looksLikeCard', 'grid|flex', 'scrollY + vh', 'data-ad-layout="in-article"', 'data-ad-format="fluid"', "'chrisizworski.com'", 'data-in-article-ad-break', 'if (!blocks.length)', 'explicitMode ? 1.25 : 2', 'explicitMode ? 80 : 200', 'if (e.isIntersecting && insert(e.target))']) assert.ok(js.includes(s), s);
+  for (const s of ['firstMin', 'table,li', '.leaflet-container', 'looksLikeCard', 'grid|flex', 'scrollY + vh', 'data-ad-layout="in-article"', 'data-ad-format="fluid"', "'chrisizworski.com'", 'data-in-article-ad-break', 'if (!blocks.length)', 'innerHeight * 1.25', 'toolBottom() + 80', 'if (e.isIntersecting && insert(e.target))']) assert.ok(js.includes(s), s);
+  assert.ok(!js.includes("document.querySelectorAll('h2')"), 'must not guess ad positions from headings');
   assert.ok(!/enable_page_level_ads|setInterval/.test(js));
 });
 test('Detroit declares two intentional ad seams without hand-written AdSense units', () => {
