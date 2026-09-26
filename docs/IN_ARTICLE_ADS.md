@@ -9,12 +9,10 @@ Owner: Chris Izworski. Replaces the September 20 horizontal display pilot (slot
   at build by `scripts/inject-ga4.mjs` and on proxied tools by `lib/public-tool-page.js`.
 - The script runs only on chrisizworski.com, 1.5s after load, and places at most
   `maxPerPage` (3) ads.
-- By default it discovers safe insertion points immediately before an `h2` or the
-  section that heading opens.
-- A highly structured tool can instead declare intentional seams with an empty
-  `<div data-in-article-ad-break aria-hidden="true"></div>`. If at least one safe
-  explicit seam exists, the placer uses those seams instead of heading discovery.
-  The same card/grid, viewport, spacing and end-of-page protections still apply.
+- Ads are placed only at intentional seams declared with an empty
+  `<div data-in-article-ad-break aria-hidden="true"></div>`.
+- Pages without a reviewed seam receive no in-article ad. The placer never guesses
+  from headings or inserts between cards.
 
 ## Placement rules
 - The insertion point's parent is normal block flow (not grid, flex or table), is at
@@ -22,12 +20,10 @@ Owner: Chris Izworski. Replaces the September 20 horizontal display pilot (slot
   card (rounded with background/border, or shadowed) or a wide multi-item grid/flex row.
 - Never inside header, nav, footer, aside, form, dialog, table, list, details, figure,
   a map, or anything marked `data-no-ads`.
-- Automatic heading placement remains conservative: never before the tool and never
-  in the first two screens.
-- Explicit editorial seams are for short, app-like tools whose primary decision UI is
-  already complete. They may begin after 1.25 screens and at least 80px after a detected
-  tool block. This prevents a short desktop page from becoming permanently ad-free while
-  still keeping ads out of the primary decision experience.
+- A seam is accepted only when its parent and ancestors pass the card, grid, width,
+  and block-flow checks. It must be after the primary tool and at least 80px below it.
+- Approved seams may begin after 1.25 screens. Pages without an explicit safe seam
+  stay ad-free until an editorially reviewed boundary is added.
 - Never within 400px of the end, and keep at least 1.5 screens (1000px minimum) between ads.
 - Only insert while the seam is still below the visible screen, so nothing the reader is
   looking at moves. A seam is not discarded merely because it was observed before it was
