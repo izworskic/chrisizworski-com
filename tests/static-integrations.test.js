@@ -94,8 +94,9 @@ test("Tools hub makes ten live tools prominent and indexes the expanded library"
   // 40 since 2026-09-01 evening: Estivant Pines joined the public catalog and structured tool list.
   // 41 since 2026-09-20: Mackinac Island Live joined the public catalog and structured tool list.
   // 42 since 2026-09-21: Detroit Outdoors Today joined as the Southeast Michigan live opportunity desk.
-  assert.equal(itemList.numberOfItems, 42);
-  assert.equal(itemList.itemListElement.length, 42);
+  // 43 since 2026-09-26: Michigan Snow Totals joined as the statewide NWS snowfall-report map.
+  assert.equal(itemList.numberOfItems, 43);
+  assert.equal(itemList.itemListElement.length, 43);
   // Derived from git, so pin the shape not the day.
   assert.match(collection.dateModified, /^\d{4}-\d{2}-\d{2}$/);
   assert.ok(Date.parse(collection.dateModified) <= Date.now(), "dateModified must not be in the future");
