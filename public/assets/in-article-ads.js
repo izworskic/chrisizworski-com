@@ -2,8 +2,8 @@
   'use strict';
   // In-article ads between full sections only. Never inside a card, grid, flex
   // row, list, table, map, form or dialog. Never above the reader, so nothing
-  // they are looking at moves. Pages may opt into explicit safe seams with
-  // data-in-article-ad-break; otherwise headings are discovered automatically.
+  // they are looking at moves. Ads are allowed only at explicit, reviewed seams
+  // marked with data-in-article-ad-break; headings are never guessed.
   // Settings come from this script tag's data-*.
   var me = document.currentScript;
   if (!me || !['chrisizworski.com', 'www.chrisizworski.com'].includes(location.hostname)) return;
@@ -43,14 +43,6 @@
     var filled = s.backgroundColor && !/^(transparent|rgba\(0, 0, 0, 0\))$/.test(s.backgroundColor);
     return (radius >= 4 && (bordered || filled)) || s.boxShadow !== 'none';
   }
-  // The block to place before: the heading, the section it opens, or an explicit seam.
-  function blockFor(h) {
-    var block = h;
-    while (block.parentElement && block.parentElement !== document.body &&
-           /^(SECTION|ARTICLE|DIV)$/.test(block.parentElement.tagName) &&
-           block.parentElement.firstElementChild === block) block = block.parentElement;
-    return block;
-  }
   function usable(block) {
     var parent = block.parentElement;
     if (!parent || block.closest(SKIP) || !block.previousElementSibling) return false;
@@ -67,10 +59,8 @@
   function top(el) { return el.getBoundingClientRect().top + scrollY; }
 
   // The tool itself (map, camera, chart, embed, form) is never interrupted.
-  // Automatic heading placement remains deliberately late (two screens). An
-  // explicit seam is an editorially approved boundary after core content, so it
-  // may begin after 1.25 screens. This keeps short app-like pages monetizable
-  // without putting ads inside their primary decision experience.
+  // Explicit seams are reviewed boundaries after core content. They may begin
+  // after 1.25 screens; pages without a reviewed seam get no in-article ad.
   var TOOL = '.leaflet-container,.maplibregl-map,.mapboxgl-map,canvas,iframe,video,form,[data-tool],[class*="map"],[class*="live-"],[class*="tool"]';
   function toolBottom() {
     var bottom = 0, limit = document.documentElement.scrollHeight * 0.6;
@@ -116,16 +106,8 @@
       if (usable(marker)) explicit.push(marker);
     });
     var blocks = explicit;
-    if (!blocks.length) {
-      blocks = [];
-      document.querySelectorAll('h2').forEach(function (h) {
-        var b = blockFor(h);
-        if (blocks.indexOf(b) < 0 && usable(b)) blocks.push(b);
-      });
-    }
     if (!blocks.length) return;
-    var explicitMode = explicit.length > 0;
-    firstMin = Math.max(innerHeight * (explicitMode ? 1.25 : 2), toolBottom() + (explicitMode ? 80 : 200), explicitMode ? 1000 : 1200);
+    firstMin = Math.max(innerHeight * 1.25, toolBottom() + 80, 1000);
     if (!('IntersectionObserver' in window)) return;               // no lazy placement, no ads
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
