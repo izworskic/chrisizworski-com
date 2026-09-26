@@ -2,8 +2,8 @@
   'use strict';
   // In-article ads between full sections only. Never inside a card, grid, flex
   // row, list, table, map, form or dialog. Never above the reader, so nothing
-  // they are looking at moves. Ads are allowed only at explicit, reviewed seams
-  // marked with data-in-article-ad-break; headings are never guessed.
+  // they are looking at moves. Explicit seams take priority; otherwise ads can
+  // go only before complete top-level sections, never at a heading inside cards.
   // Settings come from this script tag's data-*.
   var me = document.currentScript;
   if (!me || !['chrisizworski.com', 'www.chrisizworski.com'].includes(location.hostname)) return;
@@ -45,7 +45,7 @@
   }
   function usable(block) {
     var parent = block.parentElement;
-    if (!parent || block.closest(SKIP) || !block.previousElementSibling) return false;
+    if (!parent || style(block).display === 'none' || block.closest(SKIP) || !block.previousElementSibling) return false;
     if (!/^(block|flow-root)$/.test(style(parent).display)) return false;
     var width = parent.getBoundingClientRect().width;
     if (width < 300 || width < Math.min(560, document.documentElement.clientWidth * 0.6)) return false;
@@ -59,8 +59,8 @@
   function top(el) { return el.getBoundingClientRect().top + scrollY; }
 
   // The tool itself (map, camera, chart, embed, form) is never interrupted.
-  // Explicit seams are reviewed boundaries after core content. They may begin
-  // after 1.25 screens; pages without a reviewed seam get no in-article ad.
+  // Explicit seams are reviewed boundaries. Discovered section boundaries are
+  // conservative fallbacks for tool pages without markers. Both stay after core UI.
   var TOOL = '.leaflet-container,.maplibregl-map,.mapboxgl-map,canvas,iframe,video,form,[data-tool],[class*="map"],[class*="live-"],[class*="tool"]';
   function toolBottom() {
     var bottom = 0, limit = document.documentElement.scrollHeight * 0.6;
@@ -106,8 +106,18 @@
       if (usable(marker)) explicit.push(marker);
     });
     var blocks = explicit;
+    var explicitMode = explicit.length > 0;
+    if (!explicitMode) {
+      document.querySelectorAll('section').forEach(function (section) {
+        var nestedSection = false;
+        for (var ancestor = section.parentElement; ancestor && ancestor !== document.body; ancestor = ancestor.parentElement) {
+          if (ancestor.tagName === 'SECTION') { nestedSection = true; break; }
+        }
+        if (!nestedSection && !looksLikeCard(section) && usable(section)) blocks.push(section);
+      });
+    }
     if (!blocks.length) return;
-    firstMin = Math.max(innerHeight * 1.25, toolBottom() + 80, 1000);
+    firstMin = Math.max(innerHeight * (explicitMode ? 1.25 : 2), toolBottom() + (explicitMode ? 80 : 200), explicitMode ? 1000 : 1200);
     if (!('IntersectionObserver' in window)) return;               // no lazy placement, no ads
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
