@@ -4,19 +4,30 @@ const fs = require('node:fs');
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const middleware = fs.readFileSync('middleware.js', 'utf8');
+const middleware = fs.readFileSync('middleware.ts', 'utf8');
 const preview = fs.readFileSync('public/labs/pictured-rocks-planner/index.html', 'utf8');
 
 test('canonical Pictured Rocks hostname is the only host promoted by middleware', () => {
   assert.match(middleware, /PICTURED_ROCKS_HOST\s*=\s*'picturedrocks\.chrisizworski\.com'/);
-  assert.match(middleware, /requestHostname\(request\)\s*!==\s*PICTURED_ROCKS_HOST/);
-  assert.match(middleware, /matcher:\s*\[\s*['"]\/['"]\s*,\s*['"]\/index\.html['"]\s*\]/);
+  assert.match(middleware, /requestHostname\(request\)\s*===\s*PICTURED_ROCKS_HOST/);
+  assert.match(middleware, /url\.pathname\s*===\s*'\/'/);
+  assert.match(middleware, /url\.pathname\s*===\s*'\/index\.html'/);
+});
+
+test('existing routing middleware includes root paths without dropping prior routes', () => {
+  assert.match(middleware, /matcher:\s*\[/);
+  assert.match(middleware, /['"]\/['"]/);
+  assert.match(middleware, /['"]\/index\.html['"]/);
+  assert.match(middleware, /national-tools\/grand-coulee/);
+  assert.match(middleware, /national-tools\/platte-crane-live/);
+  assert.match(middleware, /national-tools\/fort-madison-live/);
+  assert.match(middleware, /national-tools\/niagara-rainbow/);
 });
 
 test('canonical shell serves the tested lab planner rather than a second implementation', () => {
   assert.match(middleware, /PICTURED_ROCKS_SOURCE\s*=\s*'\/labs\/pictured-rocks-planner\/'/);
   assert.match(middleware, /new URL\(PICTURED_ROCKS_SOURCE, request\.url\)/);
-  assert.match(middleware, /fetch\(sourceUrl/);
+  assert.match(middleware, /servePicturedRocksCanonical\(request\)/);
 });
 
 test('lab preview remains noindex while canonical shell promotes only its response', () => {
