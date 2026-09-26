@@ -9,10 +9,11 @@ Owner: Chris Izworski. Replaces the September 20 horizontal display pilot (slot
   at build by `scripts/inject-ga4.mjs` and on proxied tools by `lib/public-tool-page.js`.
 - The script runs only on chrisizworski.com, 1.5s after load, and places at most
   `maxPerPage` (3) ads.
-- Ads are placed only at intentional seams declared with an empty
+- Intentional seams may be declared with an empty
   `<div data-in-article-ad-break aria-hidden="true"></div>`.
-- Pages without a reviewed seam receive no in-article ad. The placer never guesses
-  from headings or inserts between cards.
+- When no marker exists, the placer can use complete top-level `<section>` boundaries
+  that pass the safety checks. It never guesses from headings inside a section or card.
+- Pages without a reviewed marker or a safe semantic section receive no in-article ad.
 
 ## Placement rules
 - The insertion point's parent is normal block flow (not grid, flex or table), is at
@@ -20,10 +21,10 @@ Owner: Chris Izworski. Replaces the September 20 horizontal display pilot (slot
   card (rounded with background/border, or shadowed) or a wide multi-item grid/flex row.
 - Never inside header, nav, footer, aside, form, dialog, table, list, details, figure,
   a map, or anything marked `data-no-ads`.
-- A seam is accepted only when its parent and ancestors pass the card, grid, width,
-  and block-flow checks. It must be after the primary tool and at least 80px below it.
-- Approved seams may begin after 1.25 screens. Pages without an explicit safe seam
-  stay ad-free until an editorially reviewed boundary is added.
+- Markers and section boundaries are accepted only when their parent and ancestors pass
+  the card, grid, width, and block-flow checks.
+- Both placement paths stay after the primary tool. Explicit seams may begin after
+  1.25 screens; automatic section boundaries wait until after two screens.
 - Never within 400px of the end, and keep at least 1.5 screens (1000px minimum) between ads.
 - Only insert while the seam is still below the visible screen, so nothing the reader is
   looking at moves. A seam is not discarded merely because it was observed before it was
