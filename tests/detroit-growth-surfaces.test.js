@@ -163,7 +163,8 @@ test("Detroit network teaser is distributed across four existing traffic surface
 test("Detroit main page owns broad things-to-do intent while focused pages own narrower questions",()=>{
   const main=read("public/detroit-outdoors/index.html");
   assert.match(main,/<title>Things to Do in Detroit Today \| Detroit Outdoors<\/title>/);
-  assert.match(main,/See what’s worth doing outdoors around Detroit today/);
+  assert.match(main,/Find what’s actually worth doing outdoors in Detroit today/);
+  assert.match(main,/<h1 id="live-headline">Things to Do in Detroit Today<\/h1>/);
   for(const [slug] of intentPages) assert.match(main,new RegExp(`href="/${slug}/"`));
   const client=read("public/assets/detroit-outdoors.js");
   assert.match(client,/function intentPageFor/);
@@ -171,6 +172,23 @@ test("Detroit main page owns broad things-to-do intent while focused pages own n
   assert.match(client,/Check Lake St\. Clair window/);
   assert.match(client,/Check Detroit sunset tonight/);
   assert.match(client,/Open Detroit birding today/);
+});
+
+test("Detroit broad owner publishes complete query-aligned social and entity metadata",()=>{
+  const html=read("public/detroit-outdoors/index.html");
+  assert.match(html,/rel="canonical" href="https:\/\/chrisizworski\.com\/detroit-outdoors\/"/);
+  assert.match(html,/name="description" content="Find what’s actually worth doing outdoors in Detroit today\./);
+  assert.match(html,/property="og:title" content="Things to Do in Detroit Today \| Detroit Outdoors"/);
+  assert.match(html,/property="og:locale" content="en_US"/);
+  assert.match(html,/name="twitter:title" content="Things to Do in Detroit Today \| Detroit Outdoors"/);
+  assert.match(html,/"@type":"WebApplication"/);
+  assert.match(html,/"applicationCategory":"TravelApplication"/);
+  assert.match(html,/"featureList":\[/);
+  assert.match(html,/"@type":"City"[^}]*"name":"Detroit"/);
+  assert.match(html,/"@type":"BodyOfWater"[^}]*"name":"Detroit River"/);
+  assert.match(html,/"@type":"BodyOfWater"[^}]*"name":"Lake St\. Clair"/);
+  assert.match(html,/"@type":"Place"[^}]*"name":"Southeast Michigan"/);
+  assert.match(html,/"inLanguage":"en-US"/);
 });
 
 test("Michigan tools spotlight makes the live board itself clickable and shows evidence",()=>{
