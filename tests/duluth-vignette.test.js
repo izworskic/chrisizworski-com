@@ -10,8 +10,8 @@ const js = fs.readFileSync(path.join(__dirname, '../public/assets/in-article-ads
 test('Canal Park stays ad eligible with the placed-ad script', () => {
   assert.equal(eligible('<html><body>Canal Park</body></html>', '/duluth-canal-park/'), true);
   assert.equal(config.excludeRoutes.includes('/duluth-canal-park/'), false);
-  assert.equal(PLACER_VERSION, 5);
-  assert.match(placerTag('/duluth-canal-park/', config), /in-article-ads\.js\?v=5/);
+  assert.equal(PLACER_VERSION, 6);
+  assert.match(placerTag('/duluth-canal-park/', config), /in-article-ads\.js\?v=6/);
 });
 
 test('Canal Park links opt out of Google vignette navigation', () => {
