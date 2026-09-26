@@ -60,7 +60,7 @@ test('Soo Locks has one intentional break after the live camera and before lock 
   const seam = html.indexOf(marker);
   const locks = html.indexOf('<h2 class="sh">The Locks</h2>');
   assert.ok(camera >= 0 && camera < cameraEnd && cameraEnd < seam && seam < locks);
-  assert.ok(!/<ins\\b[^>]*adsbygoogle/i.test(html));
+  assert.ok(!/<ins\b[^>]*adsbygoogle/i.test(html));
 });
 test('Detroit declares two intentional ad seams without hand-written AdSense units', () => {
   const html = fs.readFileSync(path.join(__dirname, '../public/detroit-outdoors/index.html'), 'utf8');
