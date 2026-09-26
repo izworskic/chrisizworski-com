@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Michigan Snow Totals Today: Live Map | Chris Izworski</title>
+<meta name="description" content="Michigan snow totals today from official NWS spotter reports: a live map, the biggest totals ranked by town, 24-hour to 7-day views and winter alerts.">
+<link rel="canonical" href="https://chrisizworski.com/michigan-snow-totals/">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="theme-color" content="#16324a">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chris Izworski">
+<meta property="og:title" content="Michigan Snow Totals Today: Live Map">
+<meta property="og:description" content="Official NWS snowfall reports across Michigan on a live map, ranked by town with report times, plus active winter alerts.">
+<meta property="og:url" content="https://chrisizworski.com/michigan-snow-totals/">
+<meta property="og:image" content="https://chrisizworski.com/og-image.png">
+<meta property="og:image:alt" content="Chris Izworski Michigan outdoor tools">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Michigan Snow Totals Today: Live Map">
+<meta name="twitter:description" content="Official NWS snowfall reports across Michigan, ranked by town with report times.">
+<meta name="twitter:image" content="https://chrisizworski.com/og-image.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="/assets/michigan-snow-totals.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://chrisizworski.com/#person",
+      "name": "Chris Izworski",
+      "url": "https://chrisizworski.com/",
+      "homeLocation": { "@type": "Place", "name": "Bay City, Michigan" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://chrisizworski.com/michigan-snow-totals/#page",
+      "url": "https://chrisizworski.com/michigan-snow-totals/",
+      "name": "Michigan Snow Totals Today: Live Map",
+      "description": "Official National Weather Service snowfall reports for Michigan on a live map, ranked by town with report times, measured or estimated status, observer remarks and active NWS winter alerts.",
+      "datePublished": "2026-09-26",
+      "dateModified": "2026-09-26",
+      "inLanguage": "en-US",
+      "author": { "@id": "https://chrisizworski.com/#person" },
+      "publisher": { "@id": "https://chrisizworski.com/#person" },
+      "mainEntity": { "@id": "https://chrisizworski.com/michigan-snow-totals/#tool" },
+      "breadcrumb": { "@id": "https://chrisizworski.com/michigan-snow-totals/#breadcrumb" },
+      "about": { "@type": "Place", "name": "Michigan", "address": { "@type": "PostalAddress", "addressRegion": "MI", "addressCountry": "US" } }
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://chrisizworski.com/michigan-snow-totals/#tool",
+      "name": "Michigan Snow Totals",
+      "applicationCategory": "WeatherApplication",
+      "operatingSystem": "Any web browser",
+      "isAccessibleForFree": true,
+      "author": { "@id": "https://chrisizworski.com/#person" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://chrisizworski.com/michigan-snow-totals/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Chris Izworski", "item": "https://chrisizworski.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://chrisizworski.com/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "Michigan Snow Totals", "item": "https://chrisizworski.com/michigan-snow-totals/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://chrisizworski.com/michigan-snow-totals/#faq",
+      "mainEntity": [
+        { "@type": "Question", "name": "How much snow did Michigan get today?", "acceptedAnswer": { "@type": "Answer", "text": "This page answers from the official record. Every figure is a National Weather Service Local Storm Report: a snowfall measurement or estimate sent in by a trained spotter, a CoCoRaHS or co-op observer, NWS staff or the public, and published by one of the five NWS offices that cover Michigan. The last 24 hours view shows the largest report from each place that reported, ranked from the most snow down, with the time and the observer's own remark. The number is what that observer had at that moment, so a report sent mid-storm can be passed later by a storm total from the same place. When no snow has been reported anywhere in Michigan, the page says so and shows when and where snow was last reported instead of implying a storm." } },
+        { "@type": "Question", "name": "How much snow did Michigan get yesterday?", "acceptedAnswer": { "@type": "Answer", "text": "Use the 48-hour view. Some of the most reliable reports arrive the morning after a storm: CoCoRaHS volunteers take one daily measurement, ideally around 7 a.m., covering the previous 24 hours, so yesterday's snow often appears in this morning's reports. The 48-hour window catches both the in-storm spotter reports from yesterday and those next-morning measurements, and each place still appears once, at its largest report. Before quoting a big number, read its time and remark: a remark such as storm total or since snow began tells you what period the figure covers, and it may not be the same 24 hours you have in mind." } },
+        { "@type": "Question", "name": "Where does lake effect snow hit hardest in Michigan?", "acceptedAnswer": { "@type": "Answer", "text": "Lake effect snow forms when cold air crosses the relatively warm open water of the Great Lakes, picks up heat and moisture, and drops it in narrow, intense bands downwind. In Michigan that puts the heaviest lake effect along and inland from the Lake Superior shore of the Upper Peninsula, and across western Lower Michigan inland from Lake Michigan, reaching down to the southwest corner. Because the bands are narrow, towns a few miles apart can report very different totals from the same event, which is why this page ranks individual reports instead of averaging a county. Open-water temperature is the fuel, so the season usually fades as the lakes cool and ice over." } },
+        { "@type": "Question", "name": "Why do Michigan snow totals from TV, apps and this page disagree?", "acceptedAnswer": { "@type": "Answer", "text": "They are usually measuring different things at different times. A TV or app total may be a forecast, a radar estimate or a regional summary, while this page lists only ground reports sent to the National Weather Service, each tied to one place and one moment. A report taken mid-storm will be lower than the storm total from the same backyard hours later, an estimated report is less exact than a measured one, and lake effect bands can put very different amounts on neighboring towns. When you need one number for a decision, use the largest recent report closest to where you are going, check its time, and read the remark for the period it covers." } }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="/">Chris Izworski</a>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a href="/">Home</a>
+    <a href="/tools/">Tools</a>
+    <a href="/guides/">Guides</a>
+    <a href="/great-lakes/">Great Lakes</a>
+    <a href="/about/">About</a>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="snow-hero">
+    <p class="kicker">Official NWS snowfall reports · updated through the day</p>
+    <h1>Michigan Snow Totals Today</h1>
+    <p class="lede">How much snow fell, where, and when, from the reports that trained spotters, CoCoRaHS and co-op observers, and National Weather Service staff send in during and after every storm. Each town is ranked once, at its largest report, with the time and the observer's own words.</p>
+    <p class="byline">By <a href="/chris-izworski/" rel="author">Chris Izworski</a>, Bay City, Michigan</p>
+  </section>
+
+  <section class="live" aria-labelledby="live-title">
+    <div class="live-head">
+      <h2 id="live-title">Snow reported across Michigan</h2>
+      <div class="windows" role="group" aria-label="Time window">
+        <button type="button" data-window="24h" aria-pressed="true">Last 24 hours</button>
+        <button type="button" data-window="48h" aria-pressed="false">48 hours</button>
+        <button type="button" data-window="72h" aria-pressed="false">72 hours</button>
+        <button type="button" data-window="168h" aria-pressed="false">7 days</button>
+      </div>
+    </div>
+    <p id="snowSummary" class="summary" aria-live="polite">Loading the latest NWS snow reports for Michigan. Without JavaScript, read the reports directly from the <a href="https://mesonet.agron.iastate.edu/lsr/">Local Storm Report archive</a> or your <a href="https://www.weather.gov/">NWS office</a>.</p>
+    <div id="alertList" class="alerts" aria-live="polite"></div>
+    <div class="map-wrap">
+      <div id="snowMap" role="region" aria-label="Map of Michigan snowfall reports"></div>
+      <p class="map-note">Each dot is one official report, larger and darker for more snow. Tap a dot for the time, source and remark.</p>
+    </div>
+    <div id="officeGrid" class="offices" aria-live="polite"></div>
+    <div class="table-wrap">
+      <table id="snowTable">
+        <caption>Largest report from each place in the selected window</caption>
+        <thead><tr><th scope="col">#</th><th scope="col">Snow</th><th scope="col">Place</th><th scope="col">Reported</th><th scope="col">Source</th></tr></thead>
+        <tbody><tr><td colspan="5">Loading reports.</td></tr></tbody>
+      </table>
+    </div>
+    <p id="snowStamp" class="stamp">Sources: NWS Local Storm Reports through the Iowa Environmental Mesonet archive, and active NWS alerts from api.weather.gov. Times are Eastern.</p>
+  </section>
+
+  <section class="guide" aria-labelledby="read-title">
+    <h2 id="read-title">How to read a snow report</h2>
+    <ul class="read">
+      <li><strong>The number</strong> is snowfall as reported at that moment, in inches. It is not automatically a 24-hour total.</li>
+      <li><strong>The time</strong> matters as much as the number. A mid-storm report from 9 p.m. and a storm total from 7 a.m. at the same place can differ by half a foot.</li>
+      <li><strong>Measured or estimated.</strong> Measured means the observer put a ruler in the snow; estimated means they did not.</li>
+      <li><strong>The source</strong> tells you who reported it: trained spotter, CoCoRaHS volunteer, co-op observer, NWS employee or the public.</li>
+      <li><strong>The remark</strong> is the observer's own note, often with the period covered, such as storm total or since snow began. Every row links to the original NWS text.</li>
+    </ul>
+
+    <h2 id="today">How much snow did Michigan get today?</h2>
+    <p>This page answers from the official record. Every figure is a National Weather Service Local Storm Report: a snowfall measurement or estimate sent in by a trained spotter, a CoCoRaHS or co-op observer, NWS staff or the public, and published by one of the five NWS offices that cover Michigan. The last 24 hours view shows the largest report from each place that reported, ranked from the most snow down, with the time and the observer's own remark. The number is what that observer had at that moment, so a report sent mid-storm can be passed later by a storm total from the same place. When no snow has been reported anywhere in Michigan, the page says so and shows when and where snow was last reported instead of implying a storm.</p>
+
+    <h2 id="yesterday">How much snow did Michigan get yesterday?</h2>
+    <p>Use the 48-hour view. Some of the most reliable reports arrive the morning after a storm: CoCoRaHS volunteers take one daily measurement, ideally around 7 a.m., covering the previous 24 hours, so yesterday's snow often appears in this morning's reports. The 48-hour window catches both the in-storm spotter reports from yesterday and those next-morning measurements, and each place still appears once, at its largest report. Before quoting a big number, read its time and remark: a remark such as storm total or since snow began tells you what period the figure covers, and it may not be the same 24 hours you have in mind.</p>
+
+    <h2 id="offices">Which NWS office reports snow for my part of Michigan?</h2>
+    <p>Five National Weather Service forecast offices share Michigan, and each publishes the snow reports for its own counties. The map and the office summary above group reports the same way.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Office</th><th scope="col">Covers</th></tr></thead>
+        <tbody>
+          <tr><td><a href="https://www.weather.gov/mqt/">NWS Marquette</a></td><td>Central and western Upper Peninsula</td></tr>
+          <tr><td><a href="https://www.weather.gov/apx/">NWS Gaylord</a></td><td>Northern Lower Peninsula and the eastern Upper Peninsula</td></tr>
+          <tr><td><a href="https://www.weather.gov/grr/">NWS Grand Rapids</a></td><td>West and central Lower Michigan</td></tr>
+          <tr><td><a href="https://www.weather.gov/dtx/">NWS Detroit/Pontiac</a></td><td>Southeast Michigan and the Thumb</td></tr>
+          <tr><td><a href="https://www.weather.gov/iwx/">NWS Northern Indiana</a></td><td>Far southwest Michigan</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="lake-effect">Where does lake effect snow hit hardest in Michigan?</h2>
+    <p>Lake effect snow forms when cold air crosses the relatively warm open water of the Great Lakes, picks up heat and moisture, and drops it in narrow, intense bands downwind. In Michigan that puts the heaviest lake effect along and inland from the Lake Superior shore of the Upper Peninsula, and across western Lower Michigan inland from Lake Michigan, reaching down to the southwest corner. Because the bands are narrow, towns a few miles apart can report very different totals from the same event, which is why this page ranks individual reports instead of averaging a county. Open-water temperature is the fuel, so the season usually fades as the lakes cool and ice over.</p>
+    <p>The <a href="/great-lakes-buoys/">Great Lakes Buoy Dashboard</a> shows current water temperatures, the fuel side of that equation. For a sense of scale, the largest official reports in the state during the week of January 15, 2026 came from far southwest Michigan: 17 inches at Barron Lake in Cass County and 16.4 inches in Niles.</p>
+
+    <h2 id="disagree">Why do Michigan snow totals from TV, apps and this page disagree?</h2>
+    <p>They are usually measuring different things at different times. A TV or app total may be a forecast, a radar estimate or a regional summary, while this page lists only ground reports sent to the National Weather Service, each tied to one place and one moment. A report taken mid-storm will be lower than the storm total from the same backyard hours later, an estimated report is less exact than a measured one, and lake effect bands can put very different amounts on neighboring towns. When you need one number for a decision, use the largest recent report closest to where you are going, check its time, and read the remark for the period it covers.</p>
+
+    <h2 id="next">After the snow: where it matters next</h2>
+    <ul class="next">
+      <li><a href="/snowmobile/">Michigan snowmobile trail conditions</a>: whether new snow has turned into a riding window.</li>
+      <li><a href="/michigan-cross-country-skiing/">Michigan cross country ski trails</a>: which trail systems have the base to ski.</li>
+      <li><a href="/national-tools/snow/">Snowpack and snow depth</a>: how much snow is actually on the ground, which is a different question from how much fell.</li>
+      <li><a href="/michigan-ice/">Michigan ice conditions</a>: heavy snow on new ice insulates it and can slow ice growth.</li>
+      <li><a href="/white-christmas-michigan/">White Christmas in Michigan</a>: the odds and history for December.</li>
+      <li><a href="/mackinac-bridge-live/">Mackinac Bridge Live</a>: crossing conditions when a storm is on the Straits.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>Built by <a href="/chris-izworski/">Chris Izworski</a> in Bay City, Michigan. Snow reports are the National Weather Service's; always follow NWS warnings and road advisories.</p>
+  <p><a href="/tools/">All tools</a> · <a href="/guides/">Guides</a> · <a href="/great-lakes/">Great Lakes</a></p>
+  <p>© 2026 Chris Izworski</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="/assets/michigan-snow-totals.js" defer></script>
+</body>
+</html>
