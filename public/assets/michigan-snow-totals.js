@@ -81,7 +81,9 @@
     var d = state.data; if (!d) return;
     var w = d.windows[state.window] || { ranked: [], byOffice: [], placeCount: 0 };
     var rows = w.ranked || [];
-    if (!rows.length && state.window === '168h' && d.lastSnow) rows = d.lastSnow.sameDay || [];
+    // A quiet week plots the last day snow was reported, which the summary names.
+    var quietWeek = !(d.windows['168h'] && d.windows['168h'].placeCount);
+    if (!rows.length && quietWeek && d.lastSnow) rows = d.lastSnow.sameDay || [];
     renderSummary(w); renderAlerts(); renderOffices(w); renderTable(w.ranked || []); renderMap(rows);
     $('snowStamp').textContent = 'Checked ' + when(d.generatedAt) + ' ET. Sources: NWS Local Storm Reports via the Iowa Environmental Mesonet archive, and active NWS alerts from api.weather.gov.' + (d.degraded ? ' Some sources did not respond; figures may be incomplete.' : '');
   }
