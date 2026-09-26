@@ -37,7 +37,7 @@ test('in-article placer tag carries the configured slot, respects the switch and
   const cfg = { enabled: true, publisherId: 'ca-pub-8222782620788075', slotId: '8700232579', maxPerPage: 3, excludeRoutes: ['/skip/'] };
   const tag = placerTag('/soo-locks/index.html', cfg);
   assert.equal(PLACER_VERSION, 5);
-  assert.match(tag, /src="\/assets\/in-article-ads\.js\?v=4"/);
+  assert.match(tag, /src="\/assets\/in-article-ads\.js\?v=5"/);
   assert.match(tag, /data-slot="8700232579"/); assert.match(tag, /data-max="3"/); assert.match(tag, /\bdefer\b/);
   assert.ok(hasPlacer(tag));
   assert.equal(placerTag('/skip/index.html', cfg), '');
