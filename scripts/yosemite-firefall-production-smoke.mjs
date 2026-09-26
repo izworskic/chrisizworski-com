@@ -51,7 +51,13 @@ await fetchWithRetry('/api/yosemite-firefall', async body => {
 
 await fetchWithRetry('/national-tools/', async body => {
   assert.match(body, /data-tool-id="yosemite-firefall"/i, 'Yosemite directory card missing');
-  assert.match(body, /href="https:\/\/chrisizworski\.com\/yosemite-firefall-live\/"/i, 'Yosemite directory link missing');
+  // The upstream hub owns this card and may emit the link root-relative or
+  // absolute; either is fine as long as it lands on the root canonical, not the
+  // nested /national-tools/ path that 308-redirects.
+  const card = body.slice(body.search(/data-tool-id="yosemite-firefall"/i)).split('</article>')[0];
+  const href = card.match(/<a [^>]*class="primary-action"[^>]*href="([^"]+)"/i)?.[1];
+  assert.ok(href, 'Yosemite directory link missing');
+  assert.equal(new URL(href, base).href, `${base}/yosemite-firefall-live/`, 'Yosemite directory link must point at the root canonical');
   assert.match(body, /Yosemite Firefall Live/i, 'Yosemite directory label missing');
   return body;
 }, 'National Tools Yosemite card');
