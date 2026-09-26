@@ -51,6 +51,17 @@ test('the placer targets reviewed seams, whole sections, or headings in plain co
   for (const s of ['firstMin', 'table,li', '.leaflet-container', 'looksLikeCard', 'grid|flex', 'scrollY + vh', 'data-ad-layout="in-article"', 'data-ad-format="fluid"', "'chrisizworski.com'", 'data-in-article-ad-break', "querySelectorAll('section')", "ancestor.tagName === 'SECTION'", "querySelectorAll('h2')", 'plainFlow', "!heading.closest('section')", '[class~="card"]', 'top(block) >= firstMin', 'if (!blocks.length)', 'explicitMode ? 1.25 : 2', 'toolBottom() + (explicitMode ? 80 : 200)', 'if (e.isIntersecting && insert(e.target))']) assert.ok(js.includes(s), s);
   assert.ok(!/enable_page_level_ads|setInterval/.test(js));
 });
+test('Soo Locks has one intentional break after the live camera and before lock reference cards', () => {
+  const html = fs.readFileSync(path.join(__dirname, '../public/soo-locks/index.html'), 'utf8');
+  const marker = 'data-in-article-ad-break';
+  assert.equal((html.match(new RegExp(marker, 'g')) || []).length, 1);
+  const camera = html.indexOf('<div class="field-camera"');
+  const cameraEnd = html.indexOf('</div>', camera);
+  const seam = html.indexOf(marker);
+  const locks = html.indexOf('<h2 class="sh">The Locks</h2>');
+  assert.ok(camera >= 0 && camera < cameraEnd && cameraEnd < seam && seam < locks);
+  assert.ok(!/<ins\\b[^>]*adsbygoogle/i.test(html));
+});
 test('Detroit declares two intentional ad seams without hand-written AdSense units', () => {
   const html = fs.readFileSync(path.join(__dirname, '../public/detroit-outdoors/index.html'), 'utf8');
   const marker = 'data-in-article-ad-break';
