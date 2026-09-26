@@ -10,8 +10,9 @@ Move `https://picturedrocks.chrisizworski.com/` from the older standalone guide 
 - Committed product source: `/public/labs/pictured-rocks-planner/`
 - Live data endpoint: `/api/pictured-rocks-live`
 - Lab preview remains `noindex,nofollow` on `chrisizworski.com`.
-- Root `middleware.js` only intercepts `/` and `/index.html` when the request host is exactly `picturedrocks.chrisizworski.com`.
-- On that host, middleware serves the committed planner and replaces the lab-only robots meta with `index,follow,max-image-preview:large`.
+- The existing root `middleware.ts` includes `/` and `/index.html` in its matcher and only promotes those paths when the request host is exactly `picturedrocks.chrisizworski.com`.
+- Existing Niagara, Grand Coulee, Platte crane, Fort Madison, and API routing in that middleware remains intact.
+- On the Pictured Rocks host, middleware serves the committed planner and replaces the lab-only robots meta with `index,follow,max-image-preview:large`.
 - If the source cannot be fetched or the expected lab noindex marker disappears, the shell returns `503` with `X-Robots-Tag: noindex, nofollow` rather than indexing a broken release.
 
 This keeps one implementation. There is no copied second Pictured Rocks app to drift away from the tested planner.
