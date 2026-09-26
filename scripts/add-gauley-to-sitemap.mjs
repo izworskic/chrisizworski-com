@@ -1,6 +1,7 @@
 import './tune-duluth-discovery.mjs';
 import './link-duluth-circle-tour.mjs';
 import './add-duluth-to-tools.mjs';
+import './amplify-duluth-great-lakes-network.mjs';
 import fs from 'node:fs';
 
 const file='public/sitemap.xml';
