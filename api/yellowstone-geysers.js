@@ -16,18 +16,15 @@ function officialScore(p){
 function normalize(p){
   return {geyserID:p.geyserID??null,geyserName:p.geyserName||null,userID:p.userID??null,source:p.userName||'GeyserTimes contributor',prediction:iso(p.prediction),windowOpen:iso(p.windowOpen),windowClose:iso(p.windowClose),expiration:iso(p.expiration),timestamp:iso(p.timestamp),lastReportTime:iso(p.lastReportTime),forecastNumber:Number(p.eruptionForecastNumber||1),probability:p.probability??null,method:p.method||null,comment:p.comment||null,sourcePriority:officialScore(p)};
 }
-function usablePrediction(p,now){
-  const prediction=millis(p.prediction),open=millis(p.windowOpen),close=millis(p.windowClose),expiration=millis(p.expiration);
-  if(!Number.isFinite(prediction)||!Number.isFinite(open)||!Number.isFinite(close))return false;
-  if(open>prediction||prediction>close||open>close)return false;
-  if(close<now)return false;
-  if(Number.isFinite(expiration)&&expiration<now)return false;
-  return p.forecastNumber<=1;
-}
 function selectCurrent(predictions,now=Date.now()){
   const by=new Map();
-  for(const p of (Array.isArray(predictions)?predictions:[]).map(normalize)){
-    if(!p.geyserName||!usablePrediction(p,now))continue;
+  for(const p of predictions.map(normalize)){
+    if(!p.geyserName)continue;
+    const close=millis(p.windowClose||p.prediction);
+    const expiration=millis(p.expiration);
+    if(Number.isFinite(close)&&close<now-5*60*1000)continue;
+    if(Number.isFinite(expiration)&&expiration<now-5*60*1000)continue;
+    if(p.forecastNumber>1)continue;
     const key=p.geyserName.toLowerCase();
     const cur=by.get(key);
     if(!cur||p.sourcePriority>cur.sourcePriority||(p.sourcePriority===cur.sourcePriority&&millis(p.timestamp)>millis(cur.timestamp)))by.set(key,p);
@@ -35,7 +32,7 @@ function selectCurrent(predictions,now=Date.now()){
   return GEYSERS.map(name=>by.get(name.toLowerCase())||{geyserName:name,available:false}).map(p=>p.available===false?p:{...p,available:true});
 }
 function soonest(items,now=Date.now()){
-  return items.filter(x=>x.available&&usablePrediction(x,now)).map(x=>({...x,_t:millis(x.windowOpen||x.prediction)})).filter(x=>Number.isFinite(x._t)).sort((a,b)=>a._t-b._t)[0]||null;
+  return items.filter(x=>x.available).map(x=>({...x,_t:millis(x.windowOpen||x.prediction)})).filter(x=>Number.isFinite(x._t)&&millis(x.windowClose||x.prediction)>=now-5*60*1000).sort((a,b)=>a._t-b._t)[0]||null;
 }
 
 module.exports=async function handler(req,res){
@@ -55,4 +52,4 @@ module.exports=async function handler(req,res){
   }
 };
 
-module.exports._test={millis,iso,officialScore,normalize,selectCurrent,soonest,usablePrediction};
+module.exports._test={millis,iso,officialScore,normalize,selectCurrent,soonest};
