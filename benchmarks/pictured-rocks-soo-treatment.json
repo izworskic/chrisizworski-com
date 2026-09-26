@@ -1,0 +1,22 @@
+{
+  "product": "Pictured Rocks planner — Soo Locks treatment",
+  "preview": "https://chrisizworski.com/labs/pictured-rocks-planner/",
+  "canonical": "https://picturedrocks.chrisizworski.com/",
+  "releaseMode": "noindex preview",
+  "target": 90,
+  "dimensions": {
+    "firstScreenOperatingPicture": 20,
+    "currentProvenanceAndGracefulDegradation": 20,
+    "decisionModes": 15,
+    "spatialUnderstanding": 15,
+    "causalComposerAndConstraints": 20,
+    "mobileAndEditorialResilience": 10
+  },
+  "hardVetoes": [
+    "Water recommendation is inferred as safe from shoreline weather alone",
+    "Current-state copy is shown without source or freshness context",
+    "Known active access closure remains in a generated route",
+    "Planner loses noindex protection before canonical ownership is resolved",
+    "Map implies turn-by-turn precision it does not possess"
+  ]
+}
