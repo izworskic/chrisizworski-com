@@ -118,7 +118,7 @@
       document.querySelectorAll('h2').forEach(function (heading) {
         var parent = heading.parentElement;
         var parentClasses = parent && typeof parent.className === 'string' ? parent.className : '';
-        var plainFlow = parent && (/^(BODY|MAIN)$/.test(parent.tagName) || /(^|\\s)(body|main-content|content)(\\s|$)/i.test(parentClasses));
+        var plainFlow = parent && (/^(BODY|MAIN)$/.test(parent.tagName) || /(^|\s)(body|main-content|content)(\s|$)/i.test(parentClasses));
         if (plainFlow && !heading.closest('section') && usable(heading)) blocks.push(heading);
       });
     }
