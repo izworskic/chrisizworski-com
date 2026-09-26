@@ -7,9 +7,14 @@ const PLATTE_CRANE_PATH = '/national-tools/platte-crane-live';
 const PLATTE_CRANE_UPSTREAM = 'https://platte-crane-migration-nebraska.vercel.app';
 const FORT_MADISON_PATH = '/national-tools/fort-madison-live';
 const FORT_MADISON_UPSTREAM = 'https://fort-madison-live.vercel.app';
+const PICTURED_ROCKS_HOST = 'picturedrocks.chrisizworski.com';
+const PICTURED_ROCKS_SOURCE = '/labs/pictured-rocks-planner/';
+const PICTURED_ROCKS_INDEXABLE_ROBOTS = '<meta name="robots" content="index,follow,max-image-preview:large">';
 
 export const config = {
   matcher: [
+    '/',
+    '/index.html',
     '/national-tools/waterfalls/niagara-falls-live',
     '/national-tools/waterfalls/niagara-falls-live/',
     '/national-tools/waterfalls/niagara-falls-live/:path*',
@@ -29,8 +34,86 @@ export const config = {
   ],
 };
 
+function requestHostname(request: Request) {
+  const headerHost = request.headers.get('host');
+  const host = headerHost || new URL(request.url).hostname;
+  return String(host).split(':')[0].toLowerCase();
+}
+
+async function servePicturedRocksCanonical(request: Request) {
+  const sourceUrl = new URL(PICTURED_ROCKS_SOURCE, request.url);
+
+  try {
+    // This source path is outside the middleware matcher, so it resolves to the
+    // committed static planner without recursively invoking this middleware.
+    const upstream = await fetch(sourceUrl, {
+      cache: 'no-store',
+      headers: {
+        'x-pictured-rocks-shell': 'canonical-subdomain',
+      },
+    });
+
+    if (!upstream.ok) {
+      return new Response('Pictured Rocks planner is temporarily unavailable.', {
+        status: 503,
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'Cache-Control': 'no-store',
+          'X-Robots-Tag': 'noindex, nofollow',
+        },
+      });
+    }
+
+    let html = await upstream.text();
+    const noindexPattern = /<meta\s+name=["']robots["']\s+content=["']noindex,nofollow["']\s*\/?\s*>/i;
+
+    // The lab page must remain noindex in source. If that contract changes,
+    // fail closed rather than accidentally serving an unverified indexable copy.
+    if (!noindexPattern.test(html)) {
+      return new Response('Pictured Rocks planner release contract is not satisfied.', {
+        status: 503,
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'Cache-Control': 'no-store',
+          'X-Robots-Tag': 'noindex, nofollow',
+        },
+      });
+    }
+
+    html = html.replace(noindexPattern, PICTURED_ROCKS_INDEXABLE_ROBOTS);
+
+    const headers = new Headers(upstream.headers);
+    headers.set('Content-Type', 'text/html; charset=utf-8');
+    headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=900');
+    headers.set('X-Robots-Tag', 'index, follow, max-image-preview:large');
+    headers.set('Vary', 'Host');
+
+    return new Response(html, {
+      status: 200,
+      headers,
+    });
+  } catch (error) {
+    console.error('Pictured Rocks canonical shell failed', error);
+    return new Response('Pictured Rocks planner is temporarily unavailable.', {
+      status: 503,
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-store',
+        'X-Robots-Tag': 'noindex, nofollow',
+      },
+    });
+  }
+}
+
 export default async function middleware(request: Request) {
   const url = new URL(request.url);
+
+  if (
+    requestHostname(request) === PICTURED_ROCKS_HOST &&
+    (url.pathname === '/' || url.pathname === '/index.html')
+  ) {
+    return servePicturedRocksCanonical(request);
+  }
 
   if (
     url.pathname === LEGACY_NIAGARA ||
