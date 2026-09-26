@@ -230,13 +230,22 @@
       .watch-place-card.is-active{border-color:#2f7057;box-shadow:0 0 0 2px rgba(47,112,87,.12),0 5px 18px rgba(28,43,50,.07);transform:translateY(-1px)}
       .watch-place-head{display:flex;align-items:flex-start;gap:9px;margin-bottom:6px}.watch-place-head h3{margin:1px 0 0}
       .watch-place-number{flex:0 0 26px;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#2f7057;color:#fff;border:2px solid #fff;box-shadow:0 1px 5px rgba(23,63,80,.25);font:700 11px/1 Arial,sans-serif}
-      .watch-place-actions{margin-top:10px}.watch-spot-marker,.camera-map-marker,.candidate-map-marker{background:transparent;border:0}
+      .watch-place-actions{margin-top:10px}.watch-spot-marker,.camera-map-marker,.ship-map-marker{background:transparent;border:0}
       .watch-spot-marker span{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#2f7057;color:#fff;border:2px solid #fff;box-shadow:0 2px 8px rgba(18,52,64,.35);font:700 12px/1 Arial,sans-serif;transition:transform .15s ease,background .15s ease}
       .watch-spot-marker.is-active span{background:#173f50;transform:scale(1.18)}
       .camera-map-marker span{width:34px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#6a4c86;color:#fff;border:2px solid #fff;box-shadow:0 2px 9px rgba(18,52,64,.4);font:700 10px/1 Arial,sans-serif;transition:transform .15s ease,background .15s ease}
       .camera-map-marker.is-active span{background:#b9572a;transform:scale(1.12)}
-      .candidate-map-marker span{width:28px;height:28px;border-radius:50% 50% 50% 12%;display:flex;align-items:center;justify-content:center;transform:rotate(-45deg);background:#146c86;color:#fff;border:2px solid #fff;box-shadow:0 2px 8px rgba(18,52,64,.35)}
-      .candidate-map-marker span b{transform:rotate(45deg);font:700 9px Arial,sans-serif}.candidate-map-marker.is-selected span{width:35px;height:35px;background:#b9572a;box-shadow:0 0 0 4px rgba(185,87,42,.2),0 2px 9px rgba(18,52,64,.4)}
+      .ship-map-marker .ship-glyph{display:block;filter:drop-shadow(0 2px 3px rgba(18,52,64,.38));transition:filter .15s ease}
+      .ship-map-marker svg{display:block;width:100%;height:100%;overflow:visible}
+      .ship-map-marker .ship-hull{fill:#146c86;stroke:#fff;stroke-width:2.3;stroke-linejoin:round}
+      .ship-map-marker .ship-house,.ship-map-marker .ship-stack{fill:#f8fbfc;stroke:#fff;stroke-width:1.3}
+      .ship-map-marker .ship-hatch{fill:#d8e8ec;stroke:#fff;stroke-width:1}
+      .ship-map-marker .ship-window{fill:#173f50}
+      .ship-map-marker .ship-waterline{stroke:#fff;stroke-width:1.6;opacity:.9}
+      .ship-map-marker.is-selected .ship-hull{fill:#b9572a}
+      .ship-map-marker.is-selected .ship-glyph{filter:drop-shadow(0 0 6px rgba(185,87,42,.7)) drop-shadow(0 2px 3px rgba(18,52,64,.42))}
+      .ship-map-marker.is-local .ship-hull{fill:#567d8b}
+      .ship-map-marker.is-stopped .ship-hull{fill:#8a6a42}
     `;
     document.head.append(style);
   }
@@ -249,12 +258,22 @@
     return L.divIcon({ className: `camera-map-marker${active ? ' is-active' : ''}`, html: '<span>CAM</span>', iconSize: [34, 28], iconAnchor: [17, 14], popupAnchor: [0, -15] });
   }
 
-  function candidateIcon(selected) {
-    return L.divIcon({
-      className: `candidate-map-marker${selected ? ' is-selected' : ''}`,
-      html: `<span><b>${selected ? 'NEXT' : 'AIS'}</b></span>`,
-      iconSize: selected ? [35, 35] : [28, 28], iconAnchor: selected ? [18, 31] : [14, 25], popupAnchor: [0, -25]
-    });
+  function shipRotation(vessel) {
+    const heading = Number(vessel?.heading);
+    if (Number.isFinite(heading) && heading >= 0 && heading < 360) return heading;
+    const course = Number(vessel?.course);
+    return Number.isFinite(course) && course >= 0 && course < 360 ? course : 0;
+  }
+
+  function shipIcon(vessel, state = 'candidate') {
+    const selected = state === 'selected';
+    const stopped = state === 'stopped';
+    const local = state === 'local';
+    const width = selected ? 64 : local || stopped ? 38 : 50;
+    const height = selected ? 30 : local || stopped ? 22 : 26;
+    const className = ['ship-map-marker', selected ? 'is-selected' : '', local ? 'is-local' : '', stopped ? 'is-stopped' : ''].filter(Boolean).join(' ');
+    const html = `<span class="ship-glyph" aria-hidden="true"><svg viewBox="0 0 72 32" focusable="false"><path class="ship-hull" d="M3 19 L8 19 L11 24 L58 24 L67 18 L70 14 L62 14 L55 18 Z"/><path class="ship-house" d="M8 19 V10 H20 V19 Z"/><rect class="ship-stack" x="11" y="5" width="4" height="5" rx="1"/><rect class="ship-window" x="10" y="12" width="3" height="2" rx=".5"/><rect class="ship-window" x="15" y="12" width="3" height="2" rx=".5"/><rect class="ship-hatch" x="24" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="34" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="44" y="15" width="8" height="4" rx="1"/><path class="ship-waterline" d="M12 21.5 H59"/></svg></span>`;
+    return L.divIcon({ className, html, iconSize: [width, height], iconAnchor: [Math.round(width / 2), Math.round(height / 2)], popupAnchor: [0, -Math.round(height / 2)] });
   }
 
   function watchSpotPopup(spot) {
@@ -455,7 +474,8 @@
     (data.mapVessels || []).forEach(v => {
       if (candidateIds.has(String(v.mmsi))) return;
       const moving = Number(v.speedKnots) > 0.5;
-      const marker = L.circleMarker([v.lat, v.lon], { radius: v.lengthMeters >= 220 ? 9 : 6, color: '#fff', weight: 2, fillColor: moving ? '#146c86' : '#8a6a42', fillOpacity: 0.95 })
+      const state = moving ? 'local' : 'stopped';
+      const marker = L.marker([v.lat, v.lon], { icon: shipIcon(v, state), keyboard: true, title: v.name || `Vessel ${v.mmsi}`, zIndexOffset: 520 })
         .addTo(vesselLayer).bindTooltip(v.name || `Vessel ${v.mmsi}`, { direction: 'top' }).bindPopup(vesselPopup(v));
       markers.set(String(v.mmsi), marker);
     });
@@ -463,8 +483,8 @@
     candidates.forEach(c => {
       if (!Number.isFinite(Number(c.lat)) || !Number.isFinite(Number(c.lon))) return;
       const selected = String(c.mmsi) === selectedId;
-      const marker = L.marker([c.lat, c.lon], { icon: candidateIcon(selected), keyboard: true, title: selected ? `Next watch: ${c.name}` : `Anticipated: ${c.name}`, zIndexOffset: selected ? 1200 : 760 })
-        .addTo(candidateLayer).bindTooltip(selected ? `NEXT · ${c.name}` : c.name, { direction: 'top' }).bindPopup(candidatePopup(c, selected));
+      const marker = L.marker([c.lat, c.lon], { icon: shipIcon(c, selected ? 'selected' : 'candidate'), keyboard: true, title: selected ? `Next watch: ${c.name}` : `Anticipated: ${c.name}`, zIndexOffset: selected ? 1200 : 760 })
+        .addTo(candidateLayer).bindTooltip(selected ? `NEXT WATCH · ${c.name}` : c.name, { direction: 'top' }).bindPopup(candidatePopup(c, selected));
       markers.set(String(c.mmsi), marker);
     });
 
@@ -477,7 +497,7 @@
     }
 
     const caption = document.querySelector('.map-caption');
-    if (caption) caption.textContent = 'Rust NEXT pin = selected watch. Blue AIS pins = other supported passage candidates. Small blue/brown circles = recent nearby AIS reports. Purple CAM markers = live cameras. Green 1–3 = in-person viewing spots.';
+    if (caption) caption.textContent = 'Rust freighter = selected next watch. Blue freighters = other supported passage candidates. Muted blue/brown freighters = recent nearby AIS reports. Purple CAM markers = live cameras. Green 1–3 = in-person viewing spots.';
   }
 
   function focusVessel(mmsi) {

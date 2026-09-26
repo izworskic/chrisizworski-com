@@ -108,12 +108,12 @@ check(
 
 const docs = await read("docs/search-growth-engine-fall-2026.md");
 check(
-  "Execution plan commits goals, measurement and stop-loss rules",
-  docs.includes("October 1, 2026") &&
-    docs.includes("Do not reset active experiments") &&
-    docs.includes("2,500") &&
-    docs.includes("2.5%") &&
-    docs.includes("Stop-loss"),
+  "Current fall strategy commits ownership, measurement and stop-loss rules",
+  docs.includes("September 25, 2026 Search Console evidence") &&
+    docs.includes("Action: **PROTECT**") &&
+    docs.includes("More indexed Fall Color URLs are **not** a success metric") &&
+    docs.includes("Statewide Fall Color → Porcupine Mountains / Tunnel of Trees / Mackinac Island") &&
+    docs.includes("## Stop-loss rules"),
   5,
 );
 

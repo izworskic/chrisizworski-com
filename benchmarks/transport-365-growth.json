@@ -1,13 +1,13 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "created": "2026-08-18",
-  "updated": "2026-08-22",
+  "updated": "2026-09-25",
   "source": {
     "type": "Google Search Console export",
     "file": "chrisizworski.com-Performance-on-Search-2026-08-15",
     "note": "Baselines are observed search data, not traffic forecasts. Start each 28-day evaluation window on the first complete day after production release."
   },
-  "strategy": "Build a 365-day transportation traffic engine without disturbing the pending Mackinac Bridge flagship conditions treatment.",
+  "strategy": "Build a 365-day transportation traffic engine while preserving separate canonical ownership for Mackinac Bridge toll intent and Mackinac Bridge live-conditions intent.",
   "experiments": [
     {
       "id": "mackinac-toll-price-led-ctr",
@@ -15,7 +15,7 @@
       "status": "ready-for-release",
       "releaseDate": null,
       "evaluationWindow": null,
-      "hypothesis": "Leading the snippet, H1 and direct answer with the observed toll-cost query language — 2026, $4 one way and $8 round trip — will convert existing page-one impressions better than the earlier generic fare/calculator treatment.",
+      "hypothesis": "Leading the title, description, H1 and direct answer with the exact passenger-car toll — $4 one way, normally $8 round trip — plus accepted payment methods will better capture the now-material exact 'mackinac bridge toll' query while preserving the calculator for RV, trailer and multi-axle intent.",
       "baseline": {
         "impressions": 637,
         "clicks": 1,
@@ -66,15 +66,36 @@
           }
         ]
       },
+      "latestObservedSignal": {
+        "source": "Google Search Console snapshot supplied 2026-09-25",
+        "purpose": "Ship-and-observe follow-up. Impression growth is substantial while exact toll CTR remains materially undercaptured, so the existing canonical receives a focused snippet treatment rather than a new URL.",
+        "page": {
+          "previousImpressions": 3097,
+          "currentImpressions": 5463,
+          "impressionChangePct": 76,
+          "previousClicks": 8,
+          "currentClicks": 17,
+          "previousAveragePosition": 8,
+          "currentAveragePosition": 8.14,
+          "currentCtr": 0.0031
+        },
+        "exactQuery": {
+          "query": "mackinac bridge toll",
+          "impressions": 778,
+          "clicks": 1,
+          "ctr": 0.0013,
+          "averagePosition": 9.98
+        }
+      },
       "target": {
         "ctr": 0.02,
         "averagePositionMax": 10
       },
       "treatment": {
-        "title": "Mackinac Bridge Toll 2026: $4 Cars + RV/Trailer Calculator",
-        "metaDescription": "Mackinac Bridge tolls for 2026: $4 passenger cars plus official RV, trailer and motorhome rates. Use the per-axle calculator before you cross.",
-        "h1": "Mackinac Bridge Toll Cost: 2026 Fares & Calculator",
-        "firstAnswer": "The Mackinac Bridge toll is $4 one way, or $8 round trip, for a standard two-axle passenger car in 2026."
+        "title": "Mackinac Bridge Toll 2026: $4 for a Passenger Car",
+        "metaDescription": "Mackinac Bridge toll 2026: $4 one way for a passenger car, normally $8 round trip. Pay with cash, cards, Apple Pay, Google Pay or MacPass.",
+        "h1": "Mackinac Bridge Toll 2026: $4 for a Passenger Car",
+        "firstAnswer": "The Mackinac Bridge toll is $4 one way for a standard two-axle passenger car in 2026, or $8 round trip at the standard rate."
       },
       "freezeDuringWindow": [
         "title",
@@ -99,6 +120,13 @@
           "from": "Mackinac Bridge toll 2026: $4 one way for a standard car, $8 round trip. Calculate RV, trailer and motorhome costs from official axle rates.",
           "to": "Mackinac Bridge tolls for 2026: $4 passenger cars plus official RV, trailer and motorhome rates. Use the per-axle calculator before you cross.",
           "rationale": "Pre-release revision; the clock has not started. The page ran 1,190 impressions at 0.17% CTR from position 8.0 in the 28 days to Aug 29. The old description answered the query completely — '$4 one way, $8 round trip' — so a searcher asking what the toll costs had no reason to open it. The flat fare stays ON the page, where the gate requires it and where it is honest; the description now leads with the thing a result snippet cannot answer, which is what a specific vehicle with more than two axles pays. This is a hypothesis about snippet self-cannibalisation, not a measured result, and the window will test it."
+        },
+        {
+          "date": "2026-09-25",
+          "field": "title + metaDescription + h1 + firstAnswer",
+          "from": "Calculator-led title/description treatment",
+          "to": "Immediate $4 passenger-car answer plus round-trip and payment intent",
+          "rationale": "Fresh GSC evidence changed the decision. The page grew from 3,097 to 5,463 impressions and 8 to 17 clicks with position essentially flat, but exact 'mackinac bridge toll' reached 778 impressions at position 9.98 with one click (0.13% CTR). At this volume the undercapture is no longer noise. Strengthen the existing toll canonical rather than creating another search owner."
         }
       ]
     },
@@ -132,6 +160,6 @@
   ],
   "protectedSurface": {
     "path": "/mackinac-bridge-live/",
-    "reason": "Existing pending-clean-window conditions experiment; this branch must not change its title, description, H1, direct-answer block, schema, canonical or indexability."
+    "reason": "Separate canonical owner for Mackinac Bridge live conditions. This toll CTR treatment must not change the live page's title, description, H1, direct-answer block, schema, canonical or indexability."
   }
 }

@@ -102,6 +102,18 @@ test("Cherokee to Roanoke uses spare time for activity stops when twelve hours a
   assert.ok(stopIds.size>0);
 });
 
+test("Asheville to Roanoke cannot choose drive-through when valid interest stops fit",()=>{
+  const input=P.normalizeInput({gateway:"asheville",finish:"roanoke",hours:11,interests:"scenery,short-walk,waterfall,photography,picnic"});
+  const routes=P.buildCandidates(input);
+  const feasible=routes.filter(route=>P.modeledDuration(route)<=input.hours+.3).map(route=>({route,stops:route.stopIds.map(id=>({id}))}));
+  assert.ok(feasible.some(item=>item.route.variant==="direct"&&item.stops.length===0));
+  assert.ok(feasible.some(item=>item.stops.length>0));
+  const selectable=P.choicePool(feasible);
+  assert.ok(selectable.length>0);
+  assert.ok(selectable.every(item=>item.stops.length>0));
+  assert.ok(selectable.every(item=>item.route.variant!=="direct"));
+});
+
 test("browser keeps every checked activity and auto-fits point-to-point time",()=>{
   const source=fs.readFileSync(path.join(__dirname,"..","public","assets","blue-ridge-parkway.js"),"utf8");
   assert.doesNotMatch(source,/selectedInterests\(\).*slice\(0,4\)/);
