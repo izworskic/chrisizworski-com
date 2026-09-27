@@ -112,20 +112,22 @@ async function loadLive(){
 }
 function markerStyle(side,selected=false){
   const colors={west:'#0c6672',central:'#9b6a2f',east:'#486844'};
-  return {radius:selected?9:6,color:'#fff',weight:2,fillColor:colors[side]||'#536568',fillOpacity:selected?1:.86};
+  return {radius:selected?10:7,color:'#fff',weight:3,fillColor:colors[side]||'#536568',fillOpacity:selected?1:.92};
 }
 function initMap(){
   const target=$('#parkMap');
   if(!target)return;
   if(!window.L){target.innerHTML='<div class="map-fallback">Interactive map did not load. Use the official NPS map before navigating in the park.</div>';return;}
   map=L.map(target,{scrollWheelZoom:false,zoomControl:true}).setView([46.54,-86.31],9);
-  const cartoLayer=L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{maxZoom:20,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);
+  if(!document.getElementById('parkMapLabelStyles')){const st=document.createElement('style');st.id='parkMapLabelStyles';st.textContent='.leaflet-tooltip.park-place-label{background:rgba(255,255,255,.96);border:1px solid rgba(22,39,42,.22);border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,.15);color:#173236;font:700 11px/1.2 Inter,system-ui,sans-serif;padding:4px 6px;white-space:nowrap}.leaflet-tooltip-top.park-place-label:before{border-top-color:rgba(255,255,255,.96)}';document.head.appendChild(st);}
+  const cartoLayer=L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{tileSize:256,zoomOffset:0,maxNativeZoom:20,maxZoom:20,updateWhenZooming:false,keepBuffer:3,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);
   let cartoFailures=0,fallbackAdded=false;
   cartoLayer.on('tileerror',()=>{cartoFailures++;if(fallbackAdded||cartoFailures<4)return;fallbackAdded=true;map.removeLayer(cartoLayer);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);});
   Object.entries(engine.PLACES).forEach(([id,p])=>{
     const pt=pointFor(id);if(!pt)return;
     const m=L.circleMarker([pt.lat,pt.lon],markerStyle(p.side)).addTo(map);
     m.bindPopup(`<strong>${esc(p.title)}</strong><br>${esc(p.effort)}<br><span>${esc(p.why)}</span>`);
+    m.bindTooltip(esc(p.title),{permanent:true,direction:'top',offset:[0,-8],opacity:.96,className:'park-place-label'});
     markers[id]=m;
   });
   const all=Object.keys(engine.PLACES).map(pointFor).filter(Boolean).map(p=>[p.lat,p.lon]);
