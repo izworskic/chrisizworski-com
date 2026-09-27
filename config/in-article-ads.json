@@ -1,5 +1,5 @@
 {
-  "loaderMode": "standard",
+  "loaderMode": "legacy",
   "enabled": true,
   "publisherId": "ca-pub-8222782620788075",
   "slotId": "8700232579",

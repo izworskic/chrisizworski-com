@@ -8,7 +8,8 @@ test('public HTML preserves built tags without forwarding preview robots or cook
   const html='<html><head><script src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script></head><body>Garden</body></html>';
   t.mock.method(globalThis, 'fetch', async () => new Response(html, {headers:{'content-type':'text/html','x-robots-tag':'noindex, nofollow, noarchive','set-cookie':'preview=1'}}));
   const res=response(); await publicToolPage('https://owner.example/tool/')({method:'GET'},res);
-  assert.equal(res.code,200);assert.ok(res.body.includes('G-Y5D2V2W7HN'));assert.equal((res.body.match(/googletagmanager.com/g)||[]).length,1);assert.ok(res.body.includes('pagead/js/adsbygoogle.js'));
+  assert.equal(res.code,200);assert.ok(res.body.includes('G-Y5D2V2W7HN'));assert.equal((res.body.match(/googletagmanager.com/g)||[]).length,1);
+  assert.equal(res.body.includes('pagead/js/adsbygoogle.js'), require('../config/in-article-ads.json').loaderMode !== 'off');
   assert.equal(res.headers['x-robots-tag'],undefined);assert.equal(res.headers['set-cookie'],undefined);
 });
 test('owner errors and non-HTML responses cannot be cached as successful pages', async t => {
