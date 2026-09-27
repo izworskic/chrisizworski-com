@@ -1,0 +1,346 @@
+{
+ "note": "Open Waters AIS, St. Marys River bbox 45.9,-85.2,47.0,-83.4, captured 2026-09-27. Mesabi Miner in the Poe Lock upbound; Robert S. Pierson upbound below Neebish; Paul R Tregurtha, Wilfred Sykes and American Mariner downbound.",
+ "now": "2026-09-27T13:38:29.000Z",
+ "response": {
+  "type": "FeatureCollection",
+  "features": [
+   {
+    "type": "Feature",
+    "id": 367313340,
+    "geometry": {
+     "coordinates": [
+      -84.32590666666667,
+      46.49512
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 367313340,
+     "name": "VALERIE B",
+     "seen": "2026-09-27T13:30:25Z",
+     "sog": 0,
+     "cog": 242,
+     "heading": 216,
+     "type": 90,
+     "source": "aishub",
+     "destination": "SOO LOCKS",
+     "eta": "10-01 23:00",
+     "length": 23,
+     "beam": 7
+    }
+   },
+   {
+    "type": "Feature",
+    "id": 368280810,
+    "geometry": {
+     "coordinates": [
+      -84.21007833333333,
+      46.28459833333333
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 368280810,
+     "name": "NEEBISH ISLANDER III",
+     "seen": "2026-09-27T13:36:22Z",
+     "sog": 0,
+     "type": 99,
+     "source": "aishub",
+     "length": 89,
+     "beam": 33
+    }
+   },
+   {
+    "type": "Feature",
+    "id": 366938710,
+    "geometry": {
+     "coordinates": [
+      -84.27016499999999,
+      46.44701
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 366938710,
+     "name": "AMERICAN MARINER",
+     "seen": "2026-09-27T13:36:09Z",
+     "sog": 8.4,
+     "cog": 144.4,
+     "type": 70,
+     "source": "aishub",
+     "destination": "CLEVELAND",
+     "eta": "09-28 21:00",
+     "length": 222,
+     "beam": 23
+    }
+   },
+   {
+    "type": "Feature",
+    "id": 316011905,
+    "geometry": {
+     "coordinates": [
+      -84.18788833333333,
+      46.33837833333334
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 316011905,
+     "name": "ROBERT S. PIERSON",
+     "seen": "2026-09-27T13:36:09Z",
+     "sog": 5.8,
+     "cog": 329.3,
+     "heading": 330,
+     "type": 70,
+     "source": "aishub",
+     "destination": "SOO",
+     "eta": "09-27 18:00",
+     "length": 192,
+     "beam": 21
+    }
+   },
+   {
+    "type": "Feature",
+    "id": 338924170,
+    "geometry": {
+     "coordinates": [
+      -84.34038833333334,
+      46.50091333333333
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 338924170,
+     "name": "HJ LAWSON",
+     "seen": "2026-09-27T13:14:08Z",
+     "sog": 0,
+     "cog": 251.4,
+     "heading": 105,
+     "type": 52,
+     "source": "aisstream",
+     "destination": "SAULT STE. MARIE",
+     "length": 23,
+     "beam": 9
+    }
+   },
+   {
+    "type": "Feature",
+    "id": 316004052,
+    "geometry": {
+     "coordinates": [
+      -84.32720333333333,
+      46.503818333333335
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 316004052,
+     "name": "W I SCOTT PURVIS",
+     "seen": "2026-09-27T13:36:04Z",
+     "sog": 0,
+     "type": 52,
+     "source": "aishub",
+     "destination": "CA SSM",
+     "eta": "06-06 11:00",
+     "length": 27,
+     "beam": 10
+    }
+   },
+   {
+    "type": "Feature",
+    "id": 367736696,
+    "geometry": {
+     "coordinates": [
+      -84.334695,
+      46.498960000000004
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 367736696,
+     "name": "NOKOMIS",
+     "seen": "2026-09-27T13:35:09Z",
+     "sog": 0,
+     "type": 60,
+     "source": "aishub",
+     "destination": "YELLOW & BLUE",
+     "length": 21,
+     "beam": 7
+    }
+   },
+   {
+    "type": "Feature",
+    "id": 366904940,
+    "geometry": {
+     "coordinates": [
+      -84.04873166666667,
+      46.15392666666666
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 366904940,
+     "name": "PAUL R TREGURTHA",
+     "seen": "2026-09-27T13:37:29Z",
+     "sog": 10.3,
+     "cog": 128.6,
+     "heading": 128,
+     "type": 70,
+     "source": "aishub",
+     "destination": "INDY HBR",
+     "eta": "09-28 19:00",
+     "length": 309,
+     "beam": 32
+    }
+   },
+   {
+    "type": "Feature",
+    "id": 338924169,
+    "geometry": {
+     "coordinates": [
+      -84.34146000000001,
+      46.501126666666664
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 338924169,
+     "name": "RJ PEARCE",
+     "seen": "2026-09-27T13:34:12Z",
+     "sog": 0,
+     "cog": 185,
+     "heading": 287,
+     "type": 52,
+     "source": "aishub",
+     "destination": "SAULT STE MARIE, M",
+     "eta": "04-13 14:00",
+     "length": 23,
+     "beam": 9
+    }
+   },
+   {
+    "type": "Feature",
+    "id": 366904880,
+    "geometry": {
+     "coordinates": [
+      -84.35017333333333,
+      46.50308666666667
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 366904880,
+     "name": "MESABI MINER",
+     "seen": "2026-09-27T13:36:16Z",
+     "sog": 0.2,
+     "cog": 266.2,
+     "heading": 266,
+     "type": 70,
+     "source": "aishub",
+     "destination": "TWO HARBORS",
+     "eta": "09-28 15:00",
+     "length": 305,
+     "beam": 32
+    }
+   },
+   {
+    "type": "Feature",
+    "id": 367164090,
+    "geometry": {
+     "coordinates": [
+      -84.36526166666665,
+      46.50382166666667
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 367164090,
+     "name": "NAUTICA QUEEN",
+     "seen": "2026-09-27T13:35:32Z",
+     "sog": 0,
+     "cog": 303.5,
+     "type": 60,
+     "source": "aishub",
+     "destination": "CLEVELAND",
+     "length": 32,
+     "beam": 9
+    }
+   },
+   {
+    "type": "Feature",
+    "id": 367082220,
+    "geometry": {
+     "coordinates": [
+      -83.88033833333334,
+      45.986025000000005
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 367082220,
+     "name": "WILFRED SYKES",
+     "seen": "2026-09-27T13:36:12Z",
+     "sog": 0.9,
+     "cog": 156.8,
+     "heading": 346,
+     "type": 70,
+     "source": "aishub",
+     "destination": "DRUMMOND ISLAND",
+     "eta": "09-27 12:00",
+     "length": 201,
+     "beam": 21
+    }
+   },
+   {
+    "type": "Feature",
+    "id": 367366950,
+    "geometry": {
+     "coordinates": [
+      -84.37108833333333,
+      46.50237166666667
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 367366950,
+     "name": "LEVOYAGEUR",
+     "seen": "2026-09-27T13:35:06Z",
+     "sog": 8,
+     "cog": 274.8,
+     "type": 60,
+     "source": "aishub",
+     "destination": "YELLOW & BLUE",
+     "length": 20,
+     "beam": 7
+    }
+   },
+   {
+    "type": "Feature",
+    "id": 367349450,
+    "geometry": {
+     "coordinates": [
+      -83.88014833333334,
+      45.98879
+     ],
+     "type": "Point"
+    },
+    "properties": {
+     "mmsi": 367349450,
+     "name": "DRUMMOND ISLANDER IV",
+     "seen": "2026-09-27T13:36:21Z",
+     "sog": 3.6,
+     "cog": 253.1,
+     "type": 60,
+     "source": "aishub",
+     "destination": "DRUMMOND ISLAND",
+     "length": 46,
+     "beam": 12
+    }
+   }
+  ],
+  "attribution": {
+   "aishub": "Open Waters AIS (https://openwaters.io/ais/). AISHub (https://www.aishub.net)",
+   "aisstream": "Open Waters AIS (https://openwaters.io/ais/). aisstream.io"
+  }
+ }
+}
