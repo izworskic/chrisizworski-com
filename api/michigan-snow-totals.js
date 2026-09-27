@@ -112,12 +112,23 @@ function summarize(reports, nowMs) {
 
 // When nothing has fallen in a week, find the most recent reported snow so the
 // page can say when and where it last happened instead of implying winter is on.
-// Six 30-day slices in parallel, newest with snow wins. The 8 s cap keeps the
-// quiet-day path (12 s week fetch, then this) inside the 25 s function limit.
+// 30-day slices walked newest first, stopping at the first with snow. Sequential
+// on purpose: six parallel archive requests failed in production while one at a
+// time returns in well under a second each. Each slice gets one retry; a slice
+// that still fails ends the search, because skipping it could name an older
+// snow as the most recent one.
 async function lastSnow(nowMs) {
-  const slices = await Promise.all([1, 2, 3, 4, 5, 6].map(i =>
-    lsrWindow(nowMs - i * 30 * DAY, nowMs - (i - 1) * 30 * DAY, 8000).then(rows => rows.map(normalize).filter(r => r && r.inches > 0))));
-  const found = slices.find(s => s.length);
+  let found = null;
+  const deadline = Date.now() + 10000; // with the 12 s week fetch, stays inside the 25 s function limit
+  for (let i = 1; i <= 6 && !found; i++) {
+    if (Date.now() > deadline) throw new Error('last-snow search ran out of time');
+    const from = nowMs - i * 30 * DAY, to = nowMs - (i - 1) * 30 * DAY;
+    let rows;
+    try { rows = await lsrWindow(from, to, 5000); }
+    catch { rows = await lsrWindow(from, to, 5000); }
+    rows = rows.map(normalize).filter(r => r && r.inches > 0);
+    if (rows.length) found = rows;
+  }
   if (!found) return null;
   found.sort((a, b) => b.reportedAt.localeCompare(a.reportedAt));
   const latest = found[0];
