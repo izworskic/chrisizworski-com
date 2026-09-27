@@ -1,4 +1,4 @@
-name: Pictured Rocks map final render fix
+name: Pictured Rocks map projection repair
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Fix CARTO tiles and expose park locations
+      - name: Repair CARTO map wrapping and regional bounds
         shell: bash
         run: |
           python - <<'PY'
@@ -25,51 +25,55 @@ jobs:
           js_path = Path('public/assets/pictured-rocks-planner-v3.js')
           js = js_path.read_text()
 
-          old_tile = "const cartoLayer=L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{maxZoom:20,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);"
-          new_tile = "const cartoLayer=L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{tileSize:256,zoomOffset:0,maxNativeZoom:20,maxZoom:20,updateWhenZooming:false,keepBuffer:3,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);"
-          if old_tile not in js:
-              raise SystemExit('Expected CARTO tile configuration not found')
-          js = js.replace(old_tile, new_tile, 1)
-
           old_map = "map=L.map(target,{scrollWheelZoom:false,zoomControl:true}).setView([46.54,-86.31],9);"
-          new_map = "map=L.map(target,{scrollWheelZoom:false,zoomControl:true}).setView([46.54,-86.31],9);\n  if(!document.getElementById('parkMapLabelStyles')){const st=document.createElement('style');st.id='parkMapLabelStyles';st.textContent='.leaflet-tooltip.park-place-label{background:rgba(255,255,255,.96);border:1px solid rgba(22,39,42,.22);border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,.15);color:#173236;font:700 11px/1.2 Inter,system-ui,sans-serif;padding:4px 6px;white-space:nowrap}.leaflet-tooltip-top.park-place-label:before{border-top-color:rgba(255,255,255,.96)}';document.head.appendChild(st);}"
+          new_map = "const parkBounds=L.latLngBounds([[45.75,-87.20],[47.15,-85.20]]);\n  map=L.map(target,{scrollWheelZoom:false,zoomControl:true,minZoom:8,maxBounds:parkBounds,maxBoundsViscosity:1,worldCopyJump:false}).setView([46.54,-86.31],9);"
           if old_map not in js:
               raise SystemExit('Expected Leaflet map initializer not found')
           js = js.replace(old_map, new_map, 1)
 
-          old_marker_style = "return {radius:selected?9:6,color:'#fff',weight:2,fillColor:colors[side]||'#536568',fillOpacity:selected?1:.86};"
-          new_marker_style = "return {radius:selected?10:7,color:'#fff',weight:3,fillColor:colors[side]||'#536568',fillOpacity:selected?1:.92};"
-          if old_marker_style not in js:
-              raise SystemExit('Expected marker style not found')
-          js = js.replace(old_marker_style, new_marker_style, 1)
+          old_tile = "const cartoLayer=L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{tileSize:256,zoomOffset:0,maxNativeZoom:20,maxZoom:20,updateWhenZooming:false,keepBuffer:3,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);"
+          new_tile = "const cartoLayer=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',{subdomains:'abcd',tileSize:256,zoomOffset:0,minZoom:8,maxNativeZoom:20,maxZoom:20,noWrap:true,bounds:parkBounds,updateWhenZooming:false,keepBuffer:3,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);"
+          if old_tile not in js:
+              raise SystemExit('Expected current CARTO tile configuration not found')
+          js = js.replace(old_tile, new_tile, 1)
 
-          old_marker = "m.bindPopup(`<strong>${esc(p.title)}</strong><br>${esc(p.effort)}<br><span>${esc(p.why)}</span>`);\n    markers[id]=m;"
-          new_marker = "m.bindPopup(`<strong>${esc(p.title)}</strong><br>${esc(p.effort)}<br><span>${esc(p.why)}</span>`);\n    m.bindTooltip(esc(p.title),{permanent:true,direction:'top',offset:[0,-8],opacity:.96,className:'park-place-label'});\n    markers[id]=m;"
-          if old_marker not in js:
-              raise SystemExit('Expected marker block not found')
-          js = js.replace(old_marker, new_marker, 1)
+          old_fallback = "L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);"
+          new_fallback = "L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{minZoom:8,maxZoom:19,noWrap:true,bounds:parkBounds,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);"
+          if old_fallback not in js:
+              raise SystemExit('Expected OSM fallback configuration not found')
+          js = js.replace(old_fallback, new_fallback, 1)
+
+          old_fit = "if(all.length)map.fitBounds(all,{padding:[18,18]});"
+          new_fit = "if(all.length){map.fitBounds(all,{padding:[18,18],maxZoom:10});setTimeout(()=>map.invalidateSize({pan:false}),0);}"
+          if old_fit not in js:
+              raise SystemExit('Expected map fitBounds line not found')
+          js = js.replace(old_fit, new_fit, 1)
+
           js_path.write_text(js)
 
           html_path = Path('public/labs/pictured-rocks-planner/index.html')
           html = html_path.read_text()
-          old_version = 'src="/assets/pictured-rocks-planner-v3.js?v=20260927-2"'
-          new_version = 'src="/assets/pictured-rocks-planner-v3.js?v=20260927-3"'
+          old_version = 'src="/assets/pictured-rocks-planner-v3.js?v=20260927-3"'
+          new_version = 'src="/assets/pictured-rocks-planner-v3.js?v=20260927-4"'
           if old_version not in html:
-              raise SystemExit('Expected map runtime version not found')
+              raise SystemExit('Expected current map runtime version not found')
           html = html.replace(old_version, new_version, 1)
           html_path.write_text(html)
           PY
-      - name: Verify map patch
+      - name: Verify projection repair
         shell: bash
         run: |
-          grep -Fq '/voyager/{z}/{x}/{y}.png?key=' public/assets/pictured-rocks-planner-v3.js
-          grep -Fq "bindTooltip(esc(p.title)" public/assets/pictured-rocks-planner-v3.js
-          grep -Fq 'pictured-rocks-planner-v3.js?v=20260927-3' public/labs/pictured-rocks-planner/index.html
-      - name: Commit final map fix
+          grep -Fq "noWrap:true" public/assets/pictured-rocks-planner-v3.js
+          grep -Fq "maxBounds:parkBounds" public/assets/pictured-rocks-planner-v3.js
+          grep -Fq "minZoom:8" public/assets/pictured-rocks-planner-v3.js
+          grep -Fq "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png" public/assets/pictured-rocks-planner-v3.js
+          ! grep -Fq "cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88" public/assets/pictured-rocks-planner-v3.js
+          grep -Fq 'pictured-rocks-planner-v3.js?v=20260927-4' public/labs/pictured-rocks-planner/index.html
+      - name: Commit projection repair
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/assets/pictured-rocks-planner-v3.js public/labs/pictured-rocks-planner/index.html
-          git commit -m "Fix Pictured Rocks map tiles and show location labels"
+          git commit -m "Repair Pictured Rocks map wrapping and bounds"
           git push origin HEAD:main
