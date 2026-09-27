@@ -1,0 +1,48 @@
+name: Pictured Rocks alias cutover
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/pictured-rocks-alias-cutover.yml
+
+permissions:
+  contents: write
+
+jobs:
+  cutover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Assign existing Pictured Rocks hostname to active project config
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const file = 'vercel.json';
+          const host = 'picturedrocks.chrisizworski.com';
+          const cfg = JSON.parse(fs.readFileSync(file, 'utf8'));
+          const aliases = Array.isArray(cfg.alias) ? cfg.alias : [];
+          cfg.alias = [...new Set([...aliases, host])];
+          fs.writeFileSync(file, JSON.stringify(cfg, null, 2) + '\n');
+          const check = JSON.parse(fs.readFileSync(file, 'utf8'));
+          if (!Array.isArray(check.alias) || !check.alias.includes(host)) {
+            throw new Error('Pictured Rocks alias was not written');
+          }
+          NODE
+
+      - name: Commit alias config
+        shell: bash
+        run: |
+          if git diff --quiet -- vercel.json; then
+            echo "Alias already present; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add vercel.json
+          git commit -m "Assign Pictured Rocks subdomain to active Vercel project"
+          git push origin HEAD:main
