@@ -18,7 +18,9 @@ jobs:
           fetch-depth: 0
 
       - name: Apply persona-based map interaction repair
-        run: python scripts/pictured-rocks-map-interaction-fix.py
+        run: |
+          python scripts/pictured-rocks-map-interaction-fix.py
+          python scripts/pictured-rocks-map-native-hit-fix.py
 
       - name: Run map hard gates
         run: |
@@ -27,13 +29,15 @@ jobs:
           grep -Fq "noWrap:true" public/assets/pictured-rocks-planner-v3.js
           grep -Fq "?key=" public/assets/pictured-rocks-planner-v3.js
           grep -Fq "m.on('click'" public/assets/pictured-rocks-planner-v3.js
-          grep -Fq "tip.on('click'" public/assets/pictured-rocks-planner-v3.js
+          grep -Fq "data-map-point" public/assets/pictured-rocks-planner-v3.js
+          grep -Fq "target.addEventListener('click'" public/assets/pictured-rocks-planner-v3.js
           grep -Fq 'id="mapStory" aria-live="polite"' public/labs/pictured-rocks-planner/index.html
+          grep -Fq 'pictured-rocks-planner-v3.js?v=20260927-9' public/labs/pictured-rocks-planner/index.html
 
       - name: Commit verified repair
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/assets/pictured-rocks-planner-v3.js public/assets/pictured-rocks-planner-v3.css public/labs/pictured-rocks-planner/index.html tests/pictured-rocks-carto-map.test.js tests/pictured-rocks-map-value.test.js tests/pictured-rocks-map-interaction.test.js
-          git commit -m "Make Pictured Rocks map points reliably actionable"
+          git commit -m "Make Pictured Rocks map labels native touch targets"
           git push origin HEAD:main
