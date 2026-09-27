@@ -1,0 +1,93 @@
+name: Pictured Rocks local Leaflet repair
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/pictured-rocks-local-leaflet-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Vendor Leaflet and harden map CSS
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://unpkg.com/leaflet@1.9.4/dist/leaflet.css -o public/assets/leaflet-1.9.4.css
+          curl -fsSL https://unpkg.com/leaflet@1.9.4/dist/leaflet.js -o public/assets/leaflet-1.9.4.js
+
+          python <<'PY'
+          from pathlib import Path
+
+          html_path = Path('public/labs/pictured-rocks-planner/index.html')
+          css_path = Path('public/assets/pictured-rocks-planner-v3.css')
+
+          html = html_path.read_text()
+          html = html.replace(
+              '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3yn5mZjoMZ6/MEDUKaKLAE5T5R4W0=" crossorigin="">',
+              '<link rel="stylesheet" href="/assets/leaflet-1.9.4.css?v=20260927-1">'
+          )
+          html = html.replace(
+              '<link rel="stylesheet" href="/assets/pictured-rocks-planner-v3.css">',
+              '<link rel="stylesheet" href="/assets/pictured-rocks-planner-v3.css?v=20260927-5">'
+          )
+          html = html.replace(
+              '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>',
+              '<script src="/assets/leaflet-1.9.4.js?v=20260927-1"></script>'
+          )
+          for old in ('pictured-rocks-planner-v3.js?v=20260927-3','pictured-rocks-planner-v3.js?v=20260927-4'):
+              html = html.replace(old, 'pictured-rocks-planner-v3.js?v=20260927-5')
+          html_path.write_text(html)
+
+          css = css_path.read_text()
+          marker = '/* pictured-rocks leaflet hardening 20260927 */'
+          guard = r'''
+/* pictured-rocks leaflet hardening 20260927 */
+#parkMap.leaflet-container{position:relative;overflow:hidden;isolation:isolate;touch-action:pan-x pan-y;background:#dfe9e8}
+#parkMap .leaflet-pane,#parkMap .leaflet-tile,#parkMap .leaflet-marker-icon,#parkMap .leaflet-marker-shadow,#parkMap .leaflet-tile-container,#parkMap .leaflet-pane>svg,#parkMap .leaflet-pane>canvas{position:absolute;left:0;top:0}
+#parkMap .leaflet-map-pane,#parkMap .leaflet-tile-pane,#parkMap .leaflet-overlay-pane,#parkMap .leaflet-marker-pane,#parkMap .leaflet-tooltip-pane,#parkMap .leaflet-popup-pane{position:absolute;left:0;top:0;width:100%;height:100%}
+#parkMap .leaflet-tile-pane{z-index:200}#parkMap .leaflet-overlay-pane{z-index:400}#parkMap .leaflet-marker-pane{z-index:600}#parkMap .leaflet-tooltip-pane{z-index:650}#parkMap .leaflet-popup-pane{z-index:700}
+#parkMap img.leaflet-tile{width:256px!important;height:256px!important;max-width:none!important;max-height:none!important;object-fit:none!important;margin:0!important;padding:0!important;border:0!important}
+#parkMap .leaflet-tile-container{pointer-events:none}#parkMap .leaflet-zoom-animated{transform-origin:0 0}
+#parkMap .leaflet-top,#parkMap .leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}#parkMap .leaflet-top{top:0}#parkMap .leaflet-bottom{bottom:0}#parkMap .leaflet-left{left:0}#parkMap .leaflet-right{right:0}#parkMap .leaflet-control{position:relative;z-index:800;pointer-events:auto}
+'''
+          if marker not in css:
+              css += guard
+          css_path.write_text(css)
+          PY
+
+      - name: Verify repaired map assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s public/assets/leaflet-1.9.4.css
+          test -s public/assets/leaflet-1.9.4.js
+          grep -Fq '/assets/leaflet-1.9.4.css?v=20260927-1' public/labs/pictured-rocks-planner/index.html
+          grep -Fq '/assets/leaflet-1.9.4.js?v=20260927-1' public/labs/pictured-rocks-planner/index.html
+          grep -Fq 'pictured-rocks-planner-v3.css?v=20260927-5' public/labs/pictured-rocks-planner/index.html
+          grep -Fq 'pictured-rocks-planner-v3.js?v=20260927-5' public/labs/pictured-rocks-planner/index.html
+          grep -Fq 'pictured-rocks leaflet hardening 20260927' public/assets/pictured-rocks-planner-v3.css
+          grep -Fq 'noWrap:true' public/assets/pictured-rocks-planner-v3.js
+          grep -Fq 'bindTooltip(esc(p.title)' public/assets/pictured-rocks-planner-v3.js
+
+      - name: Commit map repair
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- public/assets/leaflet-1.9.4.css public/assets/leaflet-1.9.4.js public/assets/pictured-rocks-planner-v3.css public/labs/pictured-rocks-planner/index.html; then
+            echo 'Map repair already applied.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/assets/leaflet-1.9.4.css public/assets/leaflet-1.9.4.js public/assets/pictured-rocks-planner-v3.css public/labs/pictured-rocks-planner/index.html
+          git commit -m 'Vendor Leaflet and harden Pictured Rocks map rendering'
+          git push origin HEAD:main
