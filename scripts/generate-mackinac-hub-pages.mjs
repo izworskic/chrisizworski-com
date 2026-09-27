@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import {writeGeneratedPage} from "./write-generated-page.mjs";
 import {createRequire} from "node:module";
 import {navHtml,PRIMARY_GENERATED_SURFACES} from "./mackinac-site-architecture.mjs";
 
@@ -183,5 +184,5 @@ ${p.body}
 
 const slugs=pages.map(x=>x.slug);
 for(const required of PRIMARY_GENERATED_SURFACES)if(!slugs.includes(required))throw new Error("Missing primary hub generator surface: "+required);
-for(const p of pages){const dir=path.join(root,p.slug);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,"index.html"),pageHtml(p));}
+for(const p of pages){const dir=path.join(root,p.slug);fs.mkdirSync(dir,{recursive:true});writeGeneratedPage(path.join(dir,"index.html"),pageHtml(p));}
 console.log(`Generated ${pages.length} primary Mackinac hub pages.`);
