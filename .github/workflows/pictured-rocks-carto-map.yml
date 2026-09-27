@@ -1,0 +1,60 @@
+name: Pictured Rocks CARTO map fix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/pictured-rocks-carto-map.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch-map:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Replace Pictured Rocks basemap with CARTO Voyager
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const jsFile = 'public/assets/pictured-rocks-planner-v3.js';
+          const htmlFile = 'public/labs/pictured-rocks-planner/index.html';
+          const testFile = 'tests/pictured-rocks-carto-map.test.js';
+          const oldLine = "  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);";
+          const newBlock = `  const cartoLayer=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{subdomains:'abcd',maxZoom:20,detectRetina:true,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);\n  let cartoFailures=0,fallbackAdded=false;\n  cartoLayer.on('tileerror',()=>{cartoFailures++;if(fallbackAdded||cartoFailures<4)return;fallbackAdded=true;map.removeLayer(cartoLayer);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);});`;
+          let js = fs.readFileSync(jsFile, 'utf8');
+          if (!js.includes(oldLine) && !js.includes('basemaps.cartocdn.com/rastertiles/voyager')) {
+            throw new Error('Expected Pictured Rocks OSM basemap line was not found');
+          }
+          if (!js.includes('basemaps.cartocdn.com/rastertiles/voyager')) {
+            js = js.replace(oldLine, newBlock);
+            fs.writeFileSync(jsFile, js);
+          }
+
+          let html = fs.readFileSync(htmlFile, 'utf8');
+          html = html.replace('<link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>', '<link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin>');
+          fs.writeFileSync(htmlFile, html);
+
+          fs.writeFileSync(testFile, `const test=require('node:test');\nconst assert=require('node:assert/strict');\nconst fs=require('node:fs');\n\nconst ui=fs.readFileSync('public/assets/pictured-rocks-planner-v3.js','utf8');\nconst html=fs.readFileSync('public/labs/pictured-rocks-planner/index.html','utf8');\n\ntest('Pictured Rocks uses CARTO Voyager as the primary Leaflet basemap',()=>{\n  assert.match(ui,/basemaps\\.cartocdn\\.com\\/rastertiles\\/voyager/);\n  assert.match(ui,/subdomains:'abcd'/);\n  assert.match(ui,/detectRetina:true/);\n  assert.match(ui,/OpenStreetMap contributors &copy; CARTO/);\n});\n\ntest('Pictured Rocks keeps a resilient OSM fallback and CARTO preconnect',()=>{\n  assert.match(ui,/cartoLayer\\.on\\('tileerror'/);\n  assert.match(ui,/tile\\.openstreetmap\\.org/);\n  assert.match(html,/a\\.basemaps\\.cartocdn\\.com/);\n});\n`);
+          NODE
+
+      - name: Verify map patch
+        run: node --test tests/pictured-rocks-carto-map.test.js
+
+      - name: Commit map fix
+        shell: bash
+        run: |
+          if git diff --quiet -- public/assets/pictured-rocks-planner-v3.js public/labs/pictured-rocks-planner/index.html tests/pictured-rocks-carto-map.test.js; then
+            echo "CARTO map patch already present."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/assets/pictured-rocks-planner-v3.js public/labs/pictured-rocks-planner/index.html tests/pictured-rocks-carto-map.test.js
+          git commit -m "Fix Pictured Rocks map with CARTO Voyager"
+          git push origin HEAD:main
