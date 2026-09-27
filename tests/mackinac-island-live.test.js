@@ -533,7 +533,8 @@ test('entered leave-home time controls reachable ferry candidates and itinerary 
 test('client replaces stale starting-city prompt after city resolution', () => {
   const js=fs.readFileSync(jsPath,'utf8');
   assert.doesNotMatch(js,/d\.leave_home\?\.time\|\|'Add a starting city'/);
-  assert.match(js,/state\.tripDate&&state\.originResolved&&state\.departTime\?'No reachable ferry':'Enter date, city \+ time above'/);
+  // The plan now renders ahead of its form, so the prompt no longer says "above".
+  assert.match(js,/state\.tripDate&&state\.originResolved&&state\.departTime\?'No reachable ferry':'Add date, city \+ leave time'/);
   assert.match(js,/\$\{dateLabel\(j\.trip_date\|\|state\.tripDate\)\} · \$\{j\.origin_label/);
 });
 
@@ -620,7 +621,7 @@ test('responsive visitor-first Mackinac surface survives phone tablet and landsc
   const html=fs.readFileSync(htmlPath,'utf8');
   const css=fs.readFileSync(cssPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/Make it your Mackinac/);
+  assert.match(html,/Make it yours/);
   assert.match(html,/Which ferry gets you onto the Island best\?/);
   assert.match(html,/What it should feel like while you’re here/);
   assert.match(html,/Build my Mackinac plan/);
@@ -701,7 +702,7 @@ test('regional intake replaces the busy persona wall with profile-driven navigat
   const js=fs.readFileSync(jsPath,'utf8');
   const css=fs.readFileSync(cssPath,'utf8');
   assert.match(html,/id="trip-intake"/);
-  assert.match(html,/Make this read your trip/);
+  assert.match(html,/Four taps\. Your plan rebuilds as you go\./);
   assert.match(html,/id="tripProfileCard"/);
   assert.match(html,/id="tripTabs"/);
   assert.match(html,/id="stay-guide"/);
