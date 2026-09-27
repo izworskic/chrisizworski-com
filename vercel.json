@@ -85,6 +85,11 @@
       "permanent": true
     },
     {
+      "source": "/:slug(ann-arbor-irish-hills|au-sable-river|keweenaw-peninsula|mackinac-island|porcupine-mountains|saginaw-bay|saugatuck-southwest-michigan|sleeping-bear-dunes|tahquamenon-falls|tunnel-of-trees|upper-peninsula)-fall-color{/}?",
+      "destination": "/fall-color/:slug-fall-color/",
+      "permanent": true
+    },
+    {
       "source": "/fall-color/western-upper-peninsula-fall-color",
       "destination": "/fall-color/porcupine-mountains-fall-color",
       "permanent": true
