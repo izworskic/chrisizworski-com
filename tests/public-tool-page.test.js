@@ -18,6 +18,27 @@ test('owner errors and non-HTML responses cannot be cached as successful pages',
     assert.equal(res.code,502);assert.equal(res.headers['cache-control'],'no-store');
   }
 });
+test('the public shell reconciles owner loaders with central rollback and disable controls', async t => {
+  const config = require('../config/in-article-ads.json');
+  const originalMode = config.loaderMode;
+  const owner = '<html><head><script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-123"></script><script src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script src="/assets/in-article-ads.js?v=1" data-slot="123"></script></head><body><h1>Owner tool</h1></body></html>';
+  t.mock.method(globalThis, 'fetch', async () => new Response(owner, {headers:{'content-type':'text/html'}}));
+  try {
+    for (const mode of ['standard', 'legacy', 'off']) {
+      config.loaderMode = mode;
+      const res = response();
+      await publicToolPage('https://owner.example/tool/')({method:'GET',url:'/tool/'}, res);
+      assert.equal(res.code, 200);
+      assert.equal((res.body.match(/pagead\/js\/adsbygoogle\.js/g) || []).length, mode === 'off' ? 0 : 1);
+      assert.equal((res.body.match(/src="\/assets\/in-article-ads\.js/g) || []).length, mode === 'off' ? 0 : 1);
+      assert.equal(res.body.includes('?client=ca-pub-8222782620788075'), mode === 'standard');
+      assert.ok(res.body.includes('<h1>Owner tool</h1>'));
+      assert.ok(!res.body.includes('ca-pub-123'));
+    }
+  } finally {
+    config.loaderMode = originalMode;
+  }
+});
 test('HEAD is bodyless and unsupported methods do not fetch',async t=>{
   const fetchMock=t.mock.method(globalThis,'fetch',async()=>new Response('<head></head>',{headers:{'content-type':'text/html'}}));
   const handler=publicToolPage('https://owner.example/');

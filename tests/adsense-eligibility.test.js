@@ -21,15 +21,61 @@ test('publisher links remain reachable and repeated composition adds no duplicat
   assert.equal((result.match(/Privacy/g) || []).length, 1);
   assert.equal(sitePolicyLinks(result), result);
 });
-test('every loader form is rewritten to the plain loader so Auto ads cannot start from code', () => {
+test('every loader form uses the centrally configured publisher and current Google code', () => {
   const { normalizeAdLoader, LOADER_SRC } = require('../lib/adsense-eligibility');
-  assert.equal(LOADER_SRC, 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js');
+  assert.equal(LOADER_SRC, 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075');
   for (const form of [loader,
     '<script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script>',
-    "<script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075'></script>"]) {
+    "<script src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-123'></script>",
+    '<script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>']) {
     const out = normalizeAdLoader(form);
-    assert.ok(!out.includes('?client=') && out.includes(LOADER_SRC) && /\basync\b/.test(out), out);
+    assert.equal(out, loader);
     assert.equal(normalizeAdLoader(out), out);
+  }
+});
+test('central loader rollback and off modes reconcile duplicate and stale scripts', () => {
+  const { applyAdSettings, loaderSrc } = require('../lib/adsense-eligibility');
+  const config = require('../config/in-article-ads.json');
+  const stale = '<script defer src="/assets/in-article-ads.js?v=1" data-slot="123"></script>';
+  const original = `<html><head>${loader}${stale}<script src="/tool.js"></script></head><body><h1>Tool</h1>${loader}<div data-in-article-ad-break aria-hidden="true"></div></body></html>`;
+  let html = original;
+  for (const mode of ['standard', 'legacy', 'off', 'standard']) {
+    const settings = { ...config, loaderMode: mode };
+    html = applyAdSettings(html, '/fall-color/', settings);
+    assert.equal((html.match(/pagead\/js\/adsbygoogle\.js/g) || []).length, mode === 'off' ? 0 : 1);
+    assert.equal((html.match(/src="\/assets\/in-article-ads\.js/g) || []).length, mode === 'off' ? 0 : 1);
+    assert.equal(html.includes('?client='), mode === 'standard');
+    if (mode !== 'off') {
+      assert.ok(html.match(/<head>([\s\S]*?)<\/head>/)[1].includes(loaderSrc(settings)));
+      assert.ok(html.includes('data-slot="8700232579"'));
+    }
+    assert.ok(html.includes('<h1>Tool</h1>'));
+    assert.ok(html.includes('data-in-article-ad-break'));
+    assert.ok(html.includes('<script src="/tool.js"></script>'));
+    assert.ok(!html.includes('data-slot="123"'));
+    assert.equal(applyAdSettings(html, '/fall-color/', settings), html);
+  }
+  assert.throws(() => loaderSrc({ ...config, loaderMode: 'typo' }), /loaderMode/);
+});
+test('disabled placements, route exclusions and unpublished pages remove pre-existing scripts', () => {
+  const { applyAdSettings, placerTag } = require('../lib/adsense-eligibility');
+  const config = require('../config/in-article-ads.json');
+  const html = `<html><head>${loader}${placerTag('/fall-color/')}</head><body>Tool</body></html>`;
+  for (const route of ['/about', '/about/', '/about/index.html?from=tool']) {
+    const result = applyAdSettings(html, route);
+    assert.ok(!result.includes('/assets/in-article-ads.js'));
+    assert.ok(result.includes('adsbygoogle.js'));
+  }
+  for (const result of [
+    applyAdSettings(html, '/fall-color/', { ...config, enabled: false }),
+    applyAdSettings(html.replace('</head>', '<meta content="off" name="in-article-ads"></head>'), '/fall-color/')
+  ]) {
+    assert.ok(!result.includes('/assets/in-article-ads.js'));
+    assert.ok(result.includes('adsbygoogle.js'));
+  }
+  for (const result of [applyAdSettings(html, '/privacy/'), applyAdSettings(html.replace('</head>', '<meta name="robots" content="noindex"></head>'), '/private/')]) {
+    assert.ok(!result.includes('adsbygoogle.js'));
+    assert.ok(!result.includes('/assets/in-article-ads.js'));
   }
 });
 test('in-article placer tag carries the configured slot, respects the switch and exclusions', () => {

@@ -10,17 +10,25 @@ on merge to `main`. There is no staging step between a merge and real traffic.
 
 Read this file before making any change.
 
-## Ads: in-article only (September 23, 2026)
+## Ads: central loader and reviewed placements (September 27, 2026)
 
-Chris asked for Auto ads gone (they underlined words as ads and split cards) and
-for in-article ads placed with care. Auto ads are OFF in the AdSense account and
-every page loads the plain `adsbygoogle.js` with no `?client=` (`lib/adsense-eligibility.js`).
-The only ads are in-article units, slot `8700232579`, placed at runtime by
-`public/assets/in-article-ads.js` and configured only in `config/in-article-ads.json`
-(`enabled`, `maxPerPage`, `excludeRoutes`). See `docs/IN_ARTICLE_ADS.md`.
-Do not paste `<ins class="adsbygoogle">` into pages, re-add `?client=`, or turn Auto ads
-back on. A page can opt out with `<meta name="in-article-ads" content="off">`; a block
-can opt out with `data-no-ads`.
+Chris approved Google's current `?client=` loader and a central rollback control
+on September 27. `config/in-article-ads.json` is the single configuration for this
+repo's static pages and shared public tool shell. `loaderMode` selects `standard`,
+`legacy` (the previous plain loader), or `off` (remove loader and placer scripts).
+`enabled`, `maxPerPage`, and `excludeRoutes` govern our in-article placements.
+`lib/adsense-eligibility.js` reconciles stale/duplicate tags at build and on composed
+tool responses; the build injector must run after every HTML generator.
+
+Our in-article units use slot `8700232579` and `public/assets/in-article-ads.js`.
+Keep their reviewed boundaries and protections against splitting cards and tools.
+Do not paste ad loaders or `<ins class="adsbygoogle">` into individual pages.
+A page can opt out of these placements with
+`<meta name="in-article-ads" content="off">`; a block can use `data-no-ads`.
+Auto ad formats are controlled in the AdSense account; the loader's query string
+does not reliably disable them, and repo files cannot verify their account state.
+Do not change account formats without Chris's direction. See `docs/IN_ARTICLE_ADS.md`
+for scope and rollback instructions, including independently deployed tools.
 
 ## 0. Extracted tool repositories are authoritative
 
