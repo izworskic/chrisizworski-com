@@ -60,7 +60,7 @@ export function siteHeader(nav) {
 // trip's label from localStorage in the same frame.
 export function tripStrip(plannerHref) {
   return `<div class="trip-strip" data-trip-strip>
-<div class="trip-strip-empty"><span class="strip-dot" aria-hidden="true"></span><div><strong>This page can rank itself for your trip.</strong><span>Four taps on My Trip and your dates, starting city and priorities follow you here.</span></div><a class="btn light" data-mackinac-planner-cta href="${plannerHref}">Build my trip</a></div>
+<div class="trip-strip-empty"><span class="strip-dot" aria-hidden="true"></span><div><strong>Make this guide yours.</strong><span>Four taps on My Trip and every page fits your dates, your starting city and your pace.</span></div><a class="btn light" data-mackinac-planner-cta href="${plannerHref}">Build my trip</a></div>
 <aside class="trip-context" data-trip-context><div><span>Using your saved Mackinac plan</span><strong data-trip-context-title>Your trip continues here</strong><p class="trip-context-facts" data-trip-context-summary></p></div><a class="btn light" data-mackinac-planner-cta href="/mackinac-island/#trip-intake">Edit my trip</a></aside>
 </div><script>(function(){try{var s=JSON.parse(localStorage.getItem("mackinac-trip-profile-v1")||"null");if(!s||!s.profile||!s.profile.complete)return;var p=null;try{p=(JSON.parse(localStorage.getItem("mackinac-trip-plan-v1")||"null")||{}).plan||null}catch(e){}var el=document.currentScript.previousElementSibling,t=el.querySelector("[data-trip-context-title]"),f=el.querySelector("[data-trip-context-summary]");t.textContent=(s.profile.primary&&s.profile.primary.label)||"Your Mackinac trip";var x=[];if(p){if(p.trip_date){var d=new Date(p.trip_date+"T12:00:00");x.push(isNaN(d)?p.trip_date:d.toLocaleDateString("en-US",{month:"short",day:"numeric"}))}if(p.origin_text)x.push("from "+p.origin_text);if(p.trip==="overnight"){var n=Number(p.nights||1);x.push(n+" night"+(n===1?"":"s"))}else if(p.trip)x.push("day trip")}f.textContent=x.length?x.join(" · "):((s.profile.primary&&s.profile.primary.summary)||"Your choices shape every Mackinac page.")}catch(e){}})();</script>`;
 }
@@ -69,13 +69,13 @@ export function pageHero({toneKey, crumbs, h1, lede, primaryHref, primaryLabel, 
   const tone = toneFor(toneKey);
   return `<section class="page-hero tone-${esc(toneKey in TONES?toneKey:"plan")}" aria-labelledby="page-title">
 <figure class="page-hero-photo" style="--focus:${tone.pos}"><img src="${HERO_IMG}" alt="Mackinac Island harbor viewed from above downtown" width="1280" height="853" fetchpriority="high"><figcaption>Harbor view from Fort Street · <a href="https://commons.wikimedia.org/wiki/File:Mackinac_Island_July_2010_05_(harbor_from_Fort_Street).JPG" target="_blank" rel="noopener">Michael Barera / Wikimedia Commons</a> · CC BY-SA 4.0</figcaption></figure>
-<div class="shell page-hero-inner"><div class="crumbs">${crumbs}</div><div class="page-hero-copy"><div class="eyebrow surface-mark">${icon(tone.icon)}<span>${esc(tone.label)}</span></div><h1 id="page-title">${esc(h1)}</h1><p class="lede">${esc(lede)}</p><div class="cta-row"><a class="btn primary" data-mackinac-planner-cta href="${primaryHref}">${esc(primaryLabel)}</a><a class="btn ghost" href="/mackinac-island/">Open My Trip</a></div></div>
+<div class="shell page-hero-inner"><div class="crumbs">${crumbs}</div><div class="page-hero-copy"><div class="eyebrow surface-mark">${icon(tone.icon)}<span>${esc(tone.label)}</span></div><h1 id="page-title">${esc(h1)}</h1><p class="lede">${esc(lede)}</p><div class="cta-row"><a class="btn primary" data-mackinac-planner-cta href="${primaryHref}">${esc(primaryLabel)}</a><a class="btn ghost" href="#guide">Read the guide</a></div></div>
 ${tripStrip(plannerHref||primaryHref)}</div></section>`;
 }
 
 // Numbered decision cards that overlap the bottom of the hero.
 export function decisionStrip(rows) {
-  return `<section class="shell decision-strip" aria-label="The decisions this page settles">${rows.map((x,i)=>`<article class="hub-decision"><span class="decision-num">${String(i+1).padStart(2,"0")}<em>${esc(String(x[0]).replace(/^\d+\s*·\s*/,""))}</em></span><h3>${esc(x[1])}</h3><p>${esc(x[2])}</p></article>`).join("")}</section>`;
+  return `<section class="shell decision-strip" id="guide" aria-label="Three things to decide">${rows.map((x,i)=>`<article class="hub-decision"><span class="decision-num">${String(i+1).padStart(2,"0")}<em>${esc(String(x[0]).replace(/^\d+\s*·\s*/,""))}</em></span><h3>${esc(x[1])}</h3><p>${esc(x[2])}</p></article>`).join("")}</section>`;
 }
 
 // Personalised focus lands here. Empty (and collapsed) for visitors without a trip;
@@ -85,7 +85,7 @@ export function focusSlot() {
 }
 
 export function faqSection(faq, title) {
-  return `<section class="hub-section faq"><div class="shell"><div class="section-head"><div class="eyebrow">Common questions</div><h2>${esc(title)}</h2></div><div class="faq-list">${faq.map(x=>`<details><summary>${esc(x[0])}</summary><p>${esc(x[1])}</p></details>`).join("")}</div></div></section>`;
+  return `<section class="hub-section faq"><div class="shell"><div class="section-head"><div class="eyebrow">Good questions</div><h2>${esc(title)}</h2></div><div class="faq-list">${faq.map(x=>`<details><summary>${esc(x[0])}</summary><p>${esc(x[1])}</p></details>`).join("")}</div></div></section>`;
 }
 
 export function plannerBand({title, body, href, label}) {
@@ -102,3 +102,10 @@ export function shellSections(html) {
   return html.replace(/<section class="hub-section([^"]*)">([\s\S]*?)<\/section>/g, (whole, extra, inner) =>
     inner.trimStart().startsWith('<div class="shell') ? whole : `<section class="hub-section${extra}"><div class="shell${/<(div|article|a) class="(?!eyebrow)/.test(inner)?"":" prose-row"}">${inner}</div></section>`);
 }
+
+// Travel-guide prose: heading left, paragraphs right. A para is text or [lead, text].
+export function guideSections(guide=[]) {
+  return guide.map(g=>`<section class="hub-section"><div class="shell prose-row"><div class="eyebrow">${esc(g.eyebrow)}</div><h2>${esc(g.title)}</h2><div class="prose-body">${g.paras.map(p=>Array.isArray(p)?`<p><strong>${esc(p[0])}</strong> ${esc(p[1])}</p>`:`<p>${esc(p)}</p>`).join("")}</div></div></section>`).join("");
+}
+
+export const TRUTH_LABEL = "Before you go:";

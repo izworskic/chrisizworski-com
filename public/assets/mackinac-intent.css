@@ -206,6 +206,10 @@ p{text-wrap:pretty}
 .prose-row>h2{grid-column:1;font-size:clamp(24px,2.4vw,32px);margin-top:10px}
 .prose-row>p{grid-column:2;grid-row:1/span 3;margin-top:0!important;font-size:16px}
 .prose-row>p+p{grid-row:auto;margin-top:14px!important}
+.prose-row>.prose-body{grid-column:2;grid-row:1/span 3}
+.prose-body p{margin:0;font-size:16px;line-height:1.7;color:var(--body)}
+.prose-body p+p{margin-top:14px}
+.prose-body strong{font-family:var(--serif);font-weight:500;font-size:18px;color:var(--ink);margin-right:4px}
 .hub-section:has(>.prose-row)+.hub-section:has(>.prose-row){padding-top:40px}
 
 /* FAQ */
@@ -262,7 +266,7 @@ p{text-wrap:pretty}
   .decision-strip::-webkit-scrollbar{display:none}
   .hub-decision{flex:0 0 82%;scroll-snap-align:center;box-shadow:0 18px 40px -24px rgba(8,30,41,.5)}
   .hub-section>.shell.prose-row{grid-template-columns:1fr}
-  .prose-row>p{grid-column:1;grid-row:auto;margin-top:14px!important}
+  .prose-row>p,.prose-row>.prose-body{grid-column:1;grid-row:auto;margin-top:14px!important}
   .decision-grid-2,.grid{grid-template-columns:1fr}
   .platform-focus-card{grid-template-columns:1fr}
   .platform-focus-card>.btn{justify-self:start}

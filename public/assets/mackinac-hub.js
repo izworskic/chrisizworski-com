@@ -129,14 +129,14 @@
   function adaptiveMarkup(profile){
     const q=profile?.next_question;
     if(!q?.id||!Array.isArray(q.options)||!q.options.length)return"";
-    return `<div class="platform-adaptive" data-platform-adaptive><strong>One answer could sharpen this:</strong><span>${esc(q.prompt)}</span><div class="platform-choice-row">${q.options.map(([value,label])=>`<button type="button" data-adaptive-id="${esc(q.id)}" data-adaptive-value="${esc(value)}">${esc(label)}</button>`).join("")}<button type="button" class="muted-choice" data-adaptive-skip>Skip</button></div></div>`;
+    return `<div class="platform-adaptive" data-platform-adaptive><strong>One more question:</strong><span>${esc(q.prompt)}</span><div class="platform-choice-row">${q.options.map(([value,label])=>`<button type="button" data-adaptive-id="${esc(q.id)}" data-adaptive-value="${esc(value)}">${esc(label)}</button>`).join("")}<button type="button" class="muted-choice" data-adaptive-skip>Skip</button></div></div>`;
   }
 
   function renderFocus(profile,surface,answers){
     const host=ensureFocusHost();
     const focus=surface?.focus;
     if(!focus){host.remove();return;}
-    host.innerHTML=`<div class="platform-focus-card"><div><span class="platform-kicker">Your ${esc(surfaceLabel())} focus</span><h2>${esc(focus.title)}</h2><p>${esc(focus.summary)}</p></div><a class="btn primary" href="${esc(surface.nav_order?.find(x=>x.id===focus.next)?.path||"/mackinac-island/")}">Next: ${esc(({plan:"Trip guide",today:"My Trip",ferries:"Ferries",stay:"Stay",eat:"Eat",explore:"Explore",events:"Events",straits:"Straits"})[focus.next]||"My Trip")}</a>${adaptiveMarkup(profile)}</div>`;
+    host.innerHTML=`<div class="platform-focus-card"><div><span class="platform-kicker">For your trip · ${esc(surfaceLabel())}</span><h2>${esc(focus.title)}</h2><p>${esc(focus.summary)}</p></div><a class="btn primary" href="${esc(surface.nav_order?.find(x=>x.id===focus.next)?.path||"/mackinac-island/")}">Next: ${esc(({plan:"Trip guide",today:"My Trip",ferries:"Ferries",stay:"Stay",eat:"Eat",explore:"Explore",events:"Events",straits:"Straits"})[focus.next]||"My Trip")}</a>${adaptiveMarkup(profile)}</div>`;
     host.querySelectorAll("[data-adaptive-value]").forEach(btn=>btn.addEventListener("click",async()=>{
       const next={...answers,[btn.dataset.adaptiveId]:btn.dataset.adaptiveValue};
       track("mackinac_adaptive_question_answered",{question:btn.dataset.adaptiveId,surface:rawSurface});
@@ -172,7 +172,7 @@
     }catch(error){
       if(cached)return;
       const host=ensureFocusHost();
-      host.innerHTML=`<div class="platform-focus-card degraded"><div><span class="platform-kicker">Your trip is still saved</span><h2>Personalized focus needs a recheck</h2><p>We couldn't refresh the Mackinac intelligence layer on this page. The source-backed page content remains available.</p></div></div>`;
+      host.innerHTML=`<div class="platform-focus-card degraded"><div><span class="platform-kicker">Your trip is saved</span><h2>Your suggestion for this page didn’t load</h2><p>Everything in the guide below still applies. Reload in a moment to see what fits your trip.</p></div></div>`;
     }
   }
 

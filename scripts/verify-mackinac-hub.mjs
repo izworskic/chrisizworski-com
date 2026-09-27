@@ -31,7 +31,8 @@ for(const slug of PRIMARY_GENERATED_SURFACES){
   if(!html){addFailure("ia",`missing primary page ${slug}`);continue;}
   if(html.length<6000)addFailure("seo",`${slug} is too thin to be a primary destination page`);
   if(!html.includes(`rel="canonical" href="https://chrisizworski.com/mackinac-island/${slug}/"`))addFailure("seo",`${slug} canonical mismatch`);
-  if(!html.includes('Truth boundary:'))addFailure("truth",`${slug} missing truth boundary`);
+  // The disclaimer reads "Before you go:" to visitors (was the internal "Truth boundary:").
+  if(!/<p class="truth"><strong>Before you go:<\/strong> \S/.test(html))addFailure("truth",`${slug} missing truth boundary`);
   if(!html.includes('data-trip-context'))addFailure("continuity",`${slug} missing saved-profile continuation surface`);
   if(!html.includes('/assets/mackinac-hub.js'))addFailure("continuity",`${slug} missing shared hub client`);
   if((slug==="where-to-stay"||slug==="dining"||slug==="around-the-straits")&&!html.includes("data-place-id="))addFailure("continuity",`${slug} catalog cannot be reordered by shared trip intelligence`);

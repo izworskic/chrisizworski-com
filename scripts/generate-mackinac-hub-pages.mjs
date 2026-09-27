@@ -3,7 +3,8 @@ import path from "node:path";
 import {writeGeneratedPage} from "./write-generated-page.mjs";
 import {createRequire} from "node:module";
 import {navHtml,PRIMARY_GENERATED_SURFACES} from "./mackinac-site-architecture.mjs";
-import {headAssets,siteHeader,pageHero,decisionStrip,focusSlot,faqSection,plannerBand,siteFooter,shellSections,HUB_JS} from "./mackinac-page-chrome.mjs";
+import {headAssets,siteHeader,pageHero,decisionStrip,focusSlot,faqSection,plannerBand,siteFooter,shellSections,HUB_JS,TRUTH_LABEL} from "./mackinac-page-chrome.mjs";
+import {HUB_COPY} from "./mackinac-guide-copy.mjs";
 
 const require=createRequire(import.meta.url);
 const {LODGING,DINING,REGIONAL}=require("../lib/mackinac-island/catalog.js");
@@ -174,11 +175,12 @@ function pageHtml(p){
 ${decisionStrip(p.decisions)}
 ${focusSlot()}
 ${shellSections(p.body)}
-${faqSection(p.faq,"Before you lock this part of the trip")}
-<section class="hub-section closing"><div class="shell"><p class="truth"><strong>Truth boundary:</strong> ${esc(p.truth)}</p>${plannerBand({title:"Carry this into the same Mackinac plan",body:"Your dates, starting city and priorities belong to one trip. Every Mackinac page reads from it, so nothing here starts over.",href:p.primaryCta,label:p.primaryLabel})}<p class="sources"><strong>Primary planning references:</strong> ${p.sources.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join(" · ")}</p></div></section>
+${faqSection(p.faq,"Before you go")}
+<section class="hub-section closing"><div class="shell"><p class="truth"><strong>${TRUTH_LABEL}</strong> ${esc(p.truth)}</p>${plannerBand({title:"Make it your trip",body:"Four taps on My Trip and every Mackinac page, from ferries to dinner, fits your dates, your people and your pace.",href:p.primaryCta,label:p.primaryLabel})}<p class="sources"><strong>Primary planning references:</strong> ${p.sources.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join(" · ")}</p></div></section>
 </main>${siteFooter("Live agencies, operators and businesses remain authoritative for their own schedules, conditions, accessibility, prices and availability.")}<script src="${HUB_JS}" defer></script></body></html>`;
 }
 
+for(const p of pages){const c=HUB_COPY[p.slug];if(!c)throw new Error("Missing guide copy for "+p.slug);Object.assign(p,c,{body:c.body({lodgingCards,diningCards,regionalCards})});}
 const slugs=pages.map(x=>x.slug);
 for(const required of PRIMARY_GENERATED_SURFACES)if(!slugs.includes(required))throw new Error("Missing primary hub generator surface: "+required);
 for(const p of pages){const dir=path.join(root,p.slug);fs.mkdirSync(dir,{recursive:true});writeGeneratedPage(path.join(dir,"index.html"),pageHtml(p));}

@@ -22,7 +22,7 @@ for(const [slug,title] of pages){
     [html.includes("<title>"+htmlEsc(title)+" | Chris Izworski</title>"),"unique title"],
     [html.includes('rel="canonical" href="https://chrisizworski.com/mackinac-island/'+slug+'/'),"canonical"],
     [html.includes("data-mackinac-planner-cta")&&html.includes("#trip-intake"),"planner CTA"],
-    [html.includes("Truth boundary:"),"truth boundary"],
+    [/<p class="truth"><strong>Before you go:<\/strong> \S/.test(html),"truth boundary"],
     [html.includes("application/ld+json")&&html.includes("FAQPage"),"structured FAQ data"],
     [html.includes('name="robots" content="index,follow,max-image-preview:large'),"indexing metadata"],
     [html.includes("Michael Barera / Wikimedia Commons"),"image attribution"],
