@@ -74,3 +74,11 @@ test('sources module exposes the statewide fetch helpers used by the API', async
   assert.equal(typeof sources.fetchWeatherFor, 'function');
   assert.equal(typeof sources.fetchWeatherForHubs, 'function');
 });
+
+test('Charlevoix County matches under the DNR spelling and the correct one', async () => {
+  const { countyQueryValues } = await import('../lib/snowmobile/sources.mjs');
+  const values = countyQueryValues(['Emmet', 'Charelvoix']);
+  assert.ok(values.includes('Charelvoix'), 'the DNR layer spells it Charelvoix today');
+  assert.ok(values.includes('Charlevoix'), 'a DNR spelling correction must not drop the county');
+  assert.equal(new Set(values).size, values.length);
+});
