@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import {writeGeneratedPage} from "./write-generated-page.mjs";
 import {navHtml} from "./mackinac-site-architecture.mjs";
 
 const root="public/mackinac-island";
@@ -153,6 +154,6 @@ function pageHtml(p){
 }
 
 for(const p of pages){
-  const dir=path.join(root,p.slug);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,"index.html"),pageHtml(p));
+  const dir=path.join(root,p.slug);fs.mkdirSync(dir,{recursive:true});writeGeneratedPage(path.join(dir,"index.html"),pageHtml(p));
 }
 console.log("Generated "+pages.length+" Mackinac intent pages.");
