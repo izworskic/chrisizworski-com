@@ -11,6 +11,7 @@
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const track=(name,params={})=>{try{if(typeof window.gtag==='function')window.gtag('event',name,params);}catch{}};
   const clock=m=>{if(!Number.isFinite(Number(m)))return '—';let n=((Number(m)%1440)+1440)%1440,h=Math.floor(n/60),min=n%60,s=h>=12?'PM':'AM';h=h%12||12;return `${h}:${String(min).padStart(2,'0')} ${s}`;};
+  const titleCase=t=>String(t||'').toLowerCase().replace(/^./,c=>c.toUpperCase());
   const labelScore=n=>n>=84?'EXCELLENT':n>=74?'GOOD':n>=62?'FAIR':n>=48?'MARGINAL':'POOR';
   const setText=(id,v)=>{const el=$(id);if(el)el.textContent=v??'—';};
   const selectedPersonas=()=>[...state.personas];
@@ -161,10 +162,27 @@
     if(v.regional_exploration>=.75)items.push('Explore the Straits');
     return items.slice(0,4);
   }
+  const TAB_LABELS={'my-trip':'Your day','getting-there':'Ferry','live':'Conditions','island':'What’s open','map':'Map','stay':'Stay','eat':'Eat','events':'Events','around-straits':'Straits'};
+  const DEFAULT_TABS={primary:{label:'today’s live plan'},tabs:['my-trip','getting-there','live','island','map','stay','eat','events'].map(id=>({id}))};
+  let tabSpy=null;
+  function spyTripTabs(){
+    const host=$('tripTabs');if(!host||!('IntersectionObserver' in window))return;
+    tabSpy?.disconnect();
+    const buttons=[...host.querySelectorAll('[data-target]')];
+    const byTarget=new Map(buttons.map(b=>[b.dataset.target,b]));
+    tabSpy=new IntersectionObserver(entries=>{
+      const hit=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top)[0];
+      if(!hit)return;const btn=byTarget.get('#'+hit.target.id);if(!btn)return;
+      buttons.forEach(b=>b.classList.toggle('active',b===btn));
+      btn.scrollIntoView({block:'nearest',inline:'nearest'});
+    },{rootMargin:'-35% 0px -55% 0px'});
+    byTarget.forEach((_,sel)=>{const el=document.querySelector(sel);if(el)tabSpy.observe(el);});
+  }
   function renderTripTabs(profile){
     const wrap=$('tripTabsWrap'),host=$('tripTabs');if(!wrap||!host||!profile)return;
     const tabs=(profile.tabs||[]).filter(t=>TAB_TARGETS[t.id]&&document.querySelector(TAB_TARGETS[t.id]));
-    host.innerHTML=tabs.map((t,i)=>`<button class="trip-tab${i===0?' primary':''}" type="button" data-trip-tab="${esc(t.id)}" data-target="${esc(TAB_TARGETS[t.id])}">${esc(t.label)}</button>`).join('');
+    host.innerHTML=tabs.map((t,i)=>`<button class="trip-tab${i===0?' primary':''}" type="button" data-trip-tab="${esc(t.id)}" data-target="${esc(TAB_TARGETS[t.id])}">${esc(TAB_LABELS[t.id]||t.label)}</button>`).join('');
+    spyTripTabs();
     setText('tripTabsProfile',profile.primary?.label||'your trip');
     wrap.hidden=false;
     host.querySelectorAll('[data-trip-tab]').forEach(btn=>btn.addEventListener('click',()=>{
@@ -301,6 +319,7 @@
       const r=await fetch(PROFILE_API,{method:'POST',headers:{'content-type':'application/json',accept:'application/json'},body:JSON.stringify({answers:state.intakeAnswers})});
       const j=await r.json();if(!r.ok||!j.profile)throw new Error(j.error||`HTTP ${r.status}`);
       renderProfile(j.profile);applyProfileToPlanner(j.profile);
+      loadDecision({reason:`Built around ${j.profile.primary?.label||'your trip'}`});
       if(scroll)$('tripProfileCard')?.scrollIntoView({behavior:'smooth',block:'nearest'});
     }catch(e){
       document.body.classList.add('mackinac-profile-ready','mackinac-plan-ready');
@@ -308,10 +327,19 @@
       track('mackinac_profile_error',{message:String(e?.message||e).slice(0,80)});
     }
   }
+  // Rebuild the live plan from the answers so far. The last base answer skips this:
+  // classifyIntake runs next and rebuilds with the full profile.
+  function liveRefine(label){
+    const questions=state.intakeSchema?.base_questions||[];
+    if(state.intakeStep>=questions.length)return;
+    applyProfileToPlanner(null);
+    loadDecision({reason:`Updated for “${label}”`});
+  }
   function renderIntakeStep(){
     const schema=state.intakeSchema,questions=schema?.base_questions||[];if(!questions.length)return;
     const q=questions[state.intakeStep];if(!q){classifyIntake();return;}
     setText('intakeProgress',`Question ${state.intakeStep+1} of ${questions.length}`);
+    $('trip-intake')?.setAttribute('data-step',String(state.intakeStep));
     const question=$('intakeQuestion'),options=$('intakeOptions'),actions=$('intakeActions');
     if(question)question.innerHTML=`<strong>${esc(q.prompt)}</strong>${q.type==='multi'?'<small>Choose up to two.</small>':''}`;
     const current=q.type==='multi'?new Set(Array.isArray(state.intakeAnswers[q.id])?state.intakeAnswers[q.id]:[]):new Set([state.intakeAnswers[q.id]].filter(Boolean));
@@ -328,6 +356,7 @@
         state.intakeAnswers[q.id]=value;
         track('mackinac_intake_answered',{question:q.id,answer:value});
         state.intakeStep++;renderIntakeStep();
+        liveRefine(btn.textContent.trim());
       }
     }));
   }
@@ -490,7 +519,7 @@
   function scrollToTarget(selector){const el=document.querySelector(selector);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});track('mackinac_section_opened',{section:selector.slice(1)});}}
   document.querySelectorAll('[data-scroll]').forEach(b=>b.addEventListener('click',()=>scrollToTarget(b.dataset.scroll)));
 
-  $('intakeContinue')?.addEventListener('click',()=>{const q=state.intakeSchema?.base_questions?.[state.intakeStep];if(!q)return;const v=state.intakeAnswers[q.id];if(q.type==='multi'&&Array.isArray(v)&&v.length){track('mackinac_intake_answered',{question:q.id,answer:v.join('|')});state.intakeStep++;renderIntakeStep();}});
+  $('intakeContinue')?.addEventListener('click',()=>{const q=state.intakeSchema?.base_questions?.[state.intakeStep];if(!q)return;const v=state.intakeAnswers[q.id];if(q.type==='multi'&&Array.isArray(v)&&v.length){track('mackinac_intake_answered',{question:q.id,answer:v.join('|')});state.intakeStep++;renderIntakeStep();liveRefine('your trip picture');}});
   $('intakeReset')?.addEventListener('click',()=>{storageClear();planStorageClear();history.replaceState(null,'',location.pathname+location.search);state.intakeAnswers={};state.tripProfile=null;state.tunings.clear();state.intakeStep=0;state.adaptiveAsked=false;state.originResolved=null;state.originQuery='';syncTripDateInputs(detroitToday(),{explicit:false});syncDepartInputs('');syncOriginInputs('');document.body.classList.remove('mackinac-profile-ready','mackinac-plan-ready');$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;$('tripTabsWrap').hidden=true;$('intakeReset').hidden=true;track('mackinac_intake_started',{restart:true});renderIntakeStep();});
   $('profileEdit')?.addEventListener('click',()=>{document.body.classList.remove('mackinac-plan-ready');$('tripProfileCard').hidden=true;$('intakeWork').hidden=false;state.intakeStep=0;renderIntakeStep();});
   $('profileBuildTrip')?.addEventListener('click',async()=>{
@@ -586,12 +615,12 @@
     syncDepartInputs($('departTime')?.value||'');
     if(!state.tripDate){
       setText('builderStatus','Add your trip date before building the plan.');
-      setText('leaveHome','Enter date, city + time above');
+      setText('leaveHome','Add date, city + leave time');
       return;
     }
     if(!originText){
       setText('builderStatus','Add your starting city before building the plan.');
-      setText('leaveHome','Enter date, city + time above');
+      setText('leaveHome','Add date, city + leave time');
       return;
     }
     if(originText&&!originMatches(originText)){
@@ -600,7 +629,7 @@
     }
     if(!state.departTime){
       setText('builderStatus','Add the time you’d like to leave home so we can find the ferry you can comfortably reach.');
-      setText('leaveHome','Enter leave time above');
+      setText('leaveHome','Add your leave time');
       setText('heroLeave','Enter leave time above');
       return;
     }
@@ -624,11 +653,11 @@
 
   function renderTop(d){
     const dec=d.decision||{}, rawScore=Number(dec.score), hasScore=dec.score!==null&&dec.score!==undefined&&Number.isFinite(rawScore), score=hasScore?Math.round(rawScore):null, plan=d.ferry?.recommended_plan||{};
-    setText('verdict',hasScore?`${labelScore(score)} — ${score}/100`:(dec.label||'NO FEASIBLE TRIP'));
+    setText('verdict',hasScore?`${titleCase(labelScore(score))} day · ${score}/100`:(dec.label||'NO FEASIBLE TRIP'));
     setText('scoreValue',hasScore?score:'—');
     $('scoreRing').className='score-ring '+(hasScore?(score>=74?'good':score>=55?'fair':'poor'):'');
     $('scoreRing').setAttribute('aria-label',hasScore?`Visit score ${score} out of 100`:'Visit score unavailable');
-    setText('confidence',hasScore?`${String(dec.confidence||'medium').toUpperCase()} PLAN CONFIDENCE · ferry, weather and timing checked`:'No numeric score is shown without a feasible itinerary');
+    setText('confidence',hasScore?`${titleCase(String(dec.confidence||'medium'))} confidence · ferry, weather and timing checked`:'No numeric score is shown without a feasible itinerary');
     const banner=$('planningBanner');
     if(d.planning_mode==='tomorrow'){banner.hidden=false;banner.textContent=d.planning_reason||`Today’s useful day-trip window has closed. Planning ${d.plan_date_label||'tomorrow'} instead.`;}
     else if(d.planning_mode==='selected-date'){
@@ -649,14 +678,14 @@
       : d.trip_profile?.trip==='overnight'?'Return-day schedule unavailable':'Last scheduled: unavailable');
     const port=plan.origin_port||'the better mainland port';
     const dep=plan.departure_time||'a verified departure';
-    $('primaryRec').innerHTML=plan.departure_time?`<strong>For an easy start, take the ${esc(dep)} from ${esc(port)}.</strong> ${esc(dec.primary_reason||'That gives you a strong window to enjoy the Island without making the day feel rushed.')}`:'<strong>We can’t confidently choose a ferry yet.</strong> Check the operator links below before you head for the dock.';
+    $('primaryRec').innerHTML=plan.departure_time?`<strong>Take the ${esc(dep)} from ${esc(port)}.</strong> <span>${esc(dec.primary_reason||'That gives you a strong window to enjoy the Island without making the day feel rushed.')}</span>`:'<strong>We can’t confidently choose a ferry yet.</strong> Check the operator links below before you head for the dock.';
     const profile=d.trip_profile||{};
     if(profile.trip_date)syncTripDateInputs(profile.trip_date);
     if(state.originResolved?.origin?.label)syncOriginInputs(state.originResolved.origin.label);
     const party=`${Number(profile.adults||2)} adult${Number(profile.adults||2)===1?'':'s'}${Number(profile.children||0)?` + ${profile.children} child${Number(profile.children)===1?'':'ren'}`:''}`;
     const priorities=[...(profile.interests||[]),...(profile.must_do||[]).map(x=>`must: ${x}`)].slice(0,3);
     setText('heroTripContext',[party,profile.trip==='overnight'?`${profile.nights||1} night${Number(profile.nights||1)===1?'':'s'}`:'day trip',priorities.length?priorities.join(' · '):null].filter(Boolean).join(' · '));
-    setText('heroLeave',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Enter date, city + time above'));
+    setText('heroLeave',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Add your start'));
     setText('heroFerry',plan.departure_time?`${plan.departure_time} · ${plan.origin_port}`:'No verified ferry');
     setText('heroIsland',plan.arrival_time||'—');
     setText('heroReturn',returnPlanText(d));
@@ -851,7 +880,7 @@
     }).join(''):'';
     $('itinerary').innerHTML=it.length?it.map(x=>`<li><time>${esc(x.time||'')}</time><div><strong>${esc(x.title||x.label||'Plan stop')}</strong>${x.movement?`<span class="movement">${esc(x.movement)}</span>`:''}<p>${esc(x.detail||'')}</p></div></li>`).join(''):'<li><time>—</time><div><strong>Your Island plan needs a recheck</strong><p>Check the ferry links below before heading to the dock.</p></div></li>';
     setText('plannerExplain',d.itinerary_reason||'');
-    setText('leaveHome',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Enter date, city + time above'));
+    setText('leaveHome',d.leave_home?.time||(state.tripDate&&state.originResolved&&state.departTime?'No reachable ferry':'Add date, city + leave time'));
     setText('leaveHomeNote',d.leave_home?.detail||(state.tripDate&&state.originResolved&&state.departTime?'No ferry in the verified schedule can be reached from that city on that date after your entered leave-home time.':'Add your trip date, starting city and leave time. Drive times are planning estimates, not live traffic.'));
     const party=`${Number(p.adults||2)} adult${Number(p.adults||2)===1?'':'s'}${Number(p.children||0)?` + ${p.children} child${Number(p.children)===1?'':'ren'}`:''}`;
     const fit=[party,p.trip==='overnight'?`${p.nights||1} night${Number(p.nights||1)===1?'':'s'}`:'day trip',p.pace?`${p.pace} pace`:null,p.bikes&&p.bikes!=='none'?`${p.bikes} bikes`:null,p.mobility==='limited'?'limited steep walking':null].filter(Boolean);
@@ -885,18 +914,48 @@
       buildMap();
     }
   }
-  function renderAll(d){state.data=d;renderTop(d);renderWhy(d);renderFerries(d);renderConditions(d);renderWebcams(d);renderCrowdsOpen(d);renderSeasonal(d);renderPlanner(d);renderSources(d);renderMapPoints(d);if(state.tripProfile){renderTripTabs(state.tripProfile);renderDepthGuides(state.tripProfile,d);}else if(d.visitor_intelligence){renderTripTabs(d.visitor_intelligence);renderDepthGuides(d.visitor_intelligence,d);}}
+  function renderAll(d){state.data=d;renderTop(d);renderWhy(d);renderFerries(d);renderConditions(d);renderWebcams(d);renderCrowdsOpen(d);renderSeasonal(d);renderPlanner(d);renderSources(d);renderMapPoints(d);if(state.tripProfile){renderTripTabs(state.tripProfile);renderDepthGuides(state.tripProfile,d);}else if(d.visitor_intelligence){renderTripTabs({...d.visitor_intelligence,primary:{label:'today’s live plan'}});renderDepthGuides(d.visitor_intelligence,d);}}
 
-  async function loadDecision(){
-    $('decisionPanel').setAttribute('aria-busy','true');
-    try{const r=await fetch(buildUrl(),{headers:{accept:'application/json'}});const j=await r.json();if(!r.ok)throw new Error(j.error||`HTTP ${r.status}`);renderAll(j);track('mackinac_decision_loaded',{score:j.decision?.score,engine:j.decision?.engine,planning_mode:j.planning_mode,origin:j.ferry?.recommended_plan?.origin_port||'none'});}
+  // What a visitor can see move when the plan rebuilds.
+  const WATCHED=[['heroFerry','ferry'],['heroIsland','arrival'],['heroReturn','ferry back'],['heroLeave','leave time'],['verdict','day score'],['tripShapeBadge','day shape'],['itinerary','itinerary'],['stayGuideCards','stays'],['eatGuideCards','meals']];
+  const seenText=id=>($(id)?.textContent||'').replace(/\s+/g,' ').trim();
+  function snapshotPlan(){return Object.fromEntries(WATCHED.map(([id])=>[id,seenText(id)]));}
+  let toastTimer=null;
+  function showPlanToast(title,body){
+    const t=$('planToast');if(!t)return;
+    setText('planToastTitle',title);setText('planToastBody',body);
+    t.hidden=false;requestAnimationFrame(()=>t.classList.add('show'));
+    clearTimeout(toastTimer);toastTimer=setTimeout(hidePlanToast,7000);
+  }
+  function hidePlanToast(){const t=$('planToast');if(!t)return;t.classList.remove('show');setTimeout(()=>{if(!t.classList.contains('show'))t.hidden=true;},260);}
+  function announcePlanChanges(before,reason){
+    const changed=WATCHED.filter(([id])=>before[id]&&before[id]!==seenText(id));
+    changed.forEach(([id])=>{const el=$(id);if(!el)return;el.classList.remove('just-changed');void el.offsetWidth;el.classList.add('just-changed');});
+    const ferryMoved=before.heroFerry&&before.heroFerry!==seenText('heroFerry');
+    const names=changed.map(x=>x[1]).filter(x=>!(ferryMoved&&x==='ferry'));
+    const list=names.length>1?`${names.slice(0,-1).join(', ')} and ${names.at(-1)}`:names[0]||'';
+    const body=ferryMoved
+      ? `New ferry: ${seenText('heroFerry')}.${list?` Also updated: ${list}.`:''}`
+      : list?`Updated your ${list}.`:'The same ferry and timing still fit best. Your day was rechecked against the new answer.';
+    showPlanToast(reason||'Plan updated',body);
+  }
+  let decisionSeq=0,decisionLoaded=false;
+  async function loadDecision({reason=null}={}){
+    const seq=++decisionSeq;const before=decisionLoaded?snapshotPlan():null;
+    $('decisionPanel').setAttribute('aria-busy','true');document.body.classList.add('plan-rebuilding');
+    try{const r=await fetch(buildUrl(),{headers:{accept:'application/json'}});const j=await r.json();if(!r.ok)throw new Error(j.error||`HTTP ${r.status}`);
+      // A newer request was made while this one was in flight; its answer wins.
+      if(seq!==decisionSeq)return;
+      renderAll(j);if(before)announcePlanChanges(before,reason);decisionLoaded=true;track('mackinac_decision_loaded',{score:j.decision?.score,engine:j.decision?.engine,planning_mode:j.planning_mode,origin:j.ferry?.recommended_plan?.origin_port||'none'});}
     catch(err){
       $('planningBanner').hidden=false;$('planningBanner').textContent='Live trip details are temporarily unavailable. Check the ferry operators below before relying on a departure time.';
       setText('verdict','TRIP DETAILS NEED A RECHECK');setText('confidence','We’re not guessing at a ferry time');setText('primaryRec','We couldn’t verify enough live details to comfortably choose your ferry right now.');
       setText('heroTripContext','Live trip details unavailable');setText('heroLeave','Unavailable');setText('heroFerry','Unavailable');setText('heroIsland','Unavailable');setText('heroReturn','Unavailable');
       $('sourceList').innerHTML=`<div class="error-panel">${esc(err.message)}. <a href="https://www.arnoldtransitcompany.com/summer-schedule/" target="_blank" rel="noopener">Arnold schedule</a> · <a href="https://www.sheplersferry.com/" target="_blank" rel="noopener">Shepler’s schedule</a></div>`;
-    } finally{$('decisionPanel').setAttribute('aria-busy','false');}
+    } finally{if(seq===decisionSeq){$('decisionPanel').setAttribute('aria-busy','false');document.body.classList.remove('plan-rebuilding');}}
   }
+
+  $('planToastSee')?.addEventListener('click',()=>{hidePlanToast();document.querySelector('.hero')?.scrollIntoView({behavior:'smooth',block:'start'});});
 
   function loadLeaflet(){
     if(window.L)return Promise.resolve();
@@ -962,6 +1021,7 @@
     else syncTripDateInputs(detroitToday(),{explicit:false});
     if(seed?.trip_date&&seed?.origin_text&&seed?.depart_at)document.body.classList.add('mackinac-plan-ready');
     syncTripModeUi();
+    if(!state.tripProfile)renderTripTabs(DEFAULT_TABS);
     await initIntake({seedAnswers:seed?.intake||null,ignoreLocal:Boolean(seed)});
     if(seed)hydratePlanInputs(seed,{includeIntake:false});
     const originText=cleanOrigin(seed?.origin_text);

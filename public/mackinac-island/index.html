@@ -18,6 +18,9 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Mackinac Island Trip Planner">
 <meta name="twitter:description" content="Answer a few questions once and use the same Mackinac Island trip across every planning page.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700;800&display=swap">
 <link rel="preconnect" href="https://api.weather.gov">
 <link rel="stylesheet" href="/assets/mackinac-island.css?v=20260921-trip1">
 <script type="application/ld+json">
@@ -83,19 +86,42 @@
 </header>
 <div class="destination-nav-wrap"><div class="shell"><nav class="mackinac-destination-nav" aria-label="Mackinac Island trip hub"><a data-mackinac-nav="my-trip" href="/mackinac-island/" aria-current="page">My Trip</a><a data-mackinac-nav="ferries" href="/mackinac-island/ferry-planner/">Ferries</a><a data-mackinac-nav="stay" href="/mackinac-island/where-to-stay/">Stay</a><a data-mackinac-nav="eat" href="/mackinac-island/dining/">Eat</a><a data-mackinac-nav="explore" href="/mackinac-island/things-to-do/">Explore</a><a data-mackinac-nav="events" href="/mackinac-island/events/">Events</a><a data-mackinac-nav="straits" href="/mackinac-island/around-the-straits/">Straits</a></nav></div></div>
 <main id="main">
-  <section class="hero shell" aria-labelledby="page-title">
+  <section class="hero" aria-labelledby="page-title">
+    <figure class="hero-photo">
+      <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Mackinac_Island_July_2010_05_%28harbor_from_Fort_Street%29.JPG/1280px-Mackinac_Island_July_2010_05_%28harbor_from_Fort_Street%29.JPG" alt="Mackinac Island harbor viewed from Fort Street" width="1280" height="853" fetchpriority="high">
+      <figcaption>Mackinac Island harbor. <a href="https://commons.wikimedia.org/wiki/File:Mackinac_Island_July_2010_05_(harbor_from_Fort_Street).JPG" target="_blank" rel="noopener">Michael Barera / Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a></figcaption>
+    </figure>
+    <div class="hero-inner shell">
     <div class="decision-panel" id="decisionPanel" aria-live="polite">
-      <div class="eyebrow">Start here <span class="dot-sep">·</span> One trip, every page</div>
-      <div class="planning-banner" id="planningBanner" hidden></div>
-      <h1 id="page-title">Build Your Mackinac Island Trip</h1><p class="hero-intro">Tell us what kind of trip you want. We’ll ask a few high-value questions once, then use the same plan to shape ferries, where to stay, meals, things to do, events and your time around the Straits.</p>
-      <div class="decision-head">
-        <div>
-          <div class="verdict" id="verdict">Checking today…</div>
-          <div class="confidence" id="confidence">Loading ferries, weather and Straits conditions</div>
+      <div class="hero-lede">
+        <div class="eyebrow"><span class="live-dot" aria-hidden="true"></span>Live for today <span class="dot-sep">·</span> One trip, every page</div>
+        <div class="planning-banner" id="planningBanner" hidden></div>
+        <h1 id="page-title">Build Your Mackinac Island Trip</h1>
+        <div class="primary-rec" id="primaryRec">Comparing Mackinaw City and St. Ignace departures…</div>
+        <div class="decision-head">
+          <div class="score-ring" id="scoreRing" aria-label="Visit score loading"><span id="scoreValue">—</span><small>/100</small></div>
+          <div>
+            <div class="verdict" id="verdict">Checking today…</div>
+            <div class="confidence" id="confidence">Loading ferries, weather and Straits conditions</div>
+          </div>
         </div>
-        <div class="score-ring" id="scoreRing" aria-label="Visit score loading"><span id="scoreValue">—</span><small>/100</small></div>
+        <div class="hero-actions" aria-label="Mackinac planning actions">
+          <button class="btn primary" type="button" data-scroll="#trip-intake">Make it my trip</button>
+          <button class="btn ghost" type="button" data-scroll="#why">Why this timing?</button>
+        </div>
+        <p class="hero-intro">This answer is live right now. Four quick taps rebuild it around your people, pace and trip length, and every Mackinac page follows.</p>
       </div>
-      <div class="decision-grid" id="decisionGrid">
+      <div class="hero-ticket">
+        <div class="hero-trip-glance" id="heroTripGlance" aria-label="Recommended trip at a glance">
+          <div class="trip-glance-head"><span>Your day at a glance</span><strong id="heroTripContext">Quick day-trip plan</strong></div>
+          <div class="trip-glance-grid">
+          <div><span>Leave home</span><strong id="heroLeave">Add your start</strong></div>
+          <div><span>Ferry</span><strong id="heroFerry">Checking…</strong></div>
+          <div><span>Arrive on Island</span><strong id="heroIsland">Checking…</strong></div>
+          <div><span>Ferry back</span><strong id="heroReturn">Checking…</strong></div>
+        </div>
+        </div>
+        <div class="decision-grid" id="decisionGrid">
         <div class="metric"><span>Best time to arrive</span><strong id="bestArrival">Checking…</strong></div>
         <div class="metric"><span>Downtown crowds</span><strong id="crowdsTop">Checking…</strong></div>
         <div class="metric"><span>Biking</span><strong id="bikeTop">Checking…</strong></div>
@@ -103,36 +129,19 @@
         <div class="metric"><span>Ferry ride</span><strong id="marineTop">Checking…</strong></div>
         <div class="metric return-metric"><span>Head back</span><strong id="returnTop">Checking…</strong><small id="lastTop"></small></div>
       </div>
-      <div class="primary-rec" id="primaryRec">Comparing Mackinaw City and St. Ignace departures…</div>
-      <div class="hero-trip-glance" id="heroTripGlance" aria-label="Recommended trip at a glance">
-        <div class="trip-glance-head"><span>Plan your visit</span><strong id="heroTripContext">Quick day-trip plan</strong></div>
-        <div class="trip-glance-grid">
-          <div><span>Leave home</span><strong id="heroLeave">Enter date, city + time above</strong></div>
-          <div><span>Ferry</span><strong id="heroFerry">Checking…</strong></div>
-          <div><span>Arrive on Island</span><strong id="heroIsland">Checking…</strong></div>
-          <div><span>Ferry back</span><strong id="heroReturn">Checking…</strong></div>
-        </div>
+        <div class="fresh-line" id="freshLine">Live sources are loading.</div>
       </div>
-      <div class="hero-actions" aria-label="Mackinac planning actions">
-        <button class="btn primary" data-scroll="#why">Why this timing?</button>
-        <button class="btn" data-scroll="#planner">Build my Island day</button>
-        <button class="btn" data-scroll="#ferries">Compare ferries</button>
-        <button class="btn" data-scroll="#map-section">Island map</button>
-      </div>
-      <div class="fresh-line" id="freshLine">Live sources are loading.</div>
     </div>
-    <figure class="hero-photo">
-      <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Mackinac_Island_July_2010_05_%28harbor_from_Fort_Street%29.JPG/1280px-Mackinac_Island_July_2010_05_%28harbor_from_Fort_Street%29.JPG" alt="Mackinac Island harbor viewed from Fort Street" width="1280" height="853" fetchpriority="high">
-      <figcaption>Mackinac Island harbor. <a href="https://commons.wikimedia.org/wiki/File:Mackinac_Island_July_2010_05_(harbor_from_Fort_Street).JPG" target="_blank" rel="noopener">Michael Barera / Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a></figcaption>
-    </figure>
+    </div>
   </section>
 
   <section class="intake-wrap shell" id="trip-intake" aria-labelledby="visitor-mode-title">
     <div class="intake-card">
       <div class="intake-intro">
-        <div class="eyebrow">Make it your Mackinac</div>
-        <h2 id="visitor-mode-title">Make this read your trip.</h2>
-        <p>The plan above is already live for the next practical crossing. Four quick choices sharpen it to your dates, your people and your pace, and we only ask one more if it can materially change the trip.</p>
+        <div class="eyebrow">Make it yours</div>
+        <h2 id="visitor-mode-title">Four taps. Your plan rebuilds as you go.</h2>
+        <p>Every answer reshapes the ferry, the timing and the day above, and the Stay, Eat and Explore pages follow. We only ask one more if it would actually change the trip.</p>
+        <ol class="intake-steps" aria-hidden="true"><li>Trip length</li><li>Who’s coming</li><li>The trip you picture</li><li>What to avoid</li></ol>
       </div>
       <div class="intake-work" id="intakeWork">
         <div class="intake-progress-row">
@@ -154,7 +163,7 @@
         <div class="profile-focus" id="tripProfileFocus"></div>
         <div class="adaptive-question" id="adaptiveQuestion" hidden></div>
         <div class="profile-logistics">
-          <div class="profile-logistics-head"><strong>Anchor the real trip</strong><span>These three facts let every Mackinac page fill itself around actual timing.</span></div>
+          <div class="profile-logistics-head"><strong>Anchor the real trip <em class="optional-pill">Optional</em></strong><span>Add your date, starting city and leave time for door-to-door timing from home.</span></div>
           <div class="profile-logistics-grid">
             <label for="profileTripDate"><span>Trip date</span><input id="profileTripDate" type="date" aria-label="Trip date"></label>
             <label for="profileOriginInput"><span>Starting city</span><input id="profileOriginInput" type="search" inputmode="search" autocomplete="off" placeholder="Bay City, MI" aria-label="Starting city, state, ZIP or postal code"></label>
@@ -212,17 +221,32 @@
 
   <nav class="trip-tabs-wrap shell" id="tripTabsWrap" aria-label="Your Mackinac trip" hidden>
     <div class="trip-tabs-copy">
-      <span>Built around <strong id="tripTabsProfile">your trip</strong></span>
-      <small>Most useful sections first. You can still open anything.</small>
+      <span>Built around <strong id="tripTabsProfile">today’s live plan</strong></span>
+      <small>Most useful sections first.</small>
     </div>
     <div class="trip-tabs" id="tripTabs"></div>
   </nav>
 
   <div class="shell content-stack">
     <section class="section planner-section" id="planner" aria-labelledby="planner-title">
-      <div class="section-head"><div><div class="eyebrow">Your generated trip</div><h2 id="planner-title">Fine-tune your Mackinac plan</h2><p class="section-dek">Your opening answers already built the trip. Change only the details that matter here; every update keeps working from the same shared plan.</p></div><div class="share-actions"><button class="btn small" id="sharePlan" type="button">Share plan</button><small id="shareStateStatus" aria-live="polite"></small></div></div>
-
-      <form class="trip-builder" id="tripBuilder">
+      <div class="section-head"><div><div class="eyebrow">Your Island day</div><h2 id="planner-title">The day, hour by hour</h2><p class="section-dek">Built from the live ferry schedule, weather and your answers. Adjust anything underneath and the whole plan rebuilds.</p></div><div class="share-actions"><button class="btn small" id="sharePlan" type="button">Share plan</button><small id="shareStateStatus" aria-live="polite"></small></div></div>
+      <div class="planner-decision-grid">
+        <article><span>Your mainland start</span><strong id="leaveHome">Enter date, city + time above</strong><p id="leaveHomeNote">Your selected date, origin and leave time determine the reachable port/ferry and total journey. Drive estimates are not live traffic.</p></article>
+        <article><span>Your visit</span><strong id="tripFit">Building…</strong><p id="tripFitNote">Your constraints will show here.</p></article>
+      </div>
+      <div class="planner-summary" id="plannerSummary">Building a realistic trip from the selected visitor modes…</div>
+      <section class="trip-shape-panel" id="tripShapePanel" hidden aria-labelledby="trip-shape-title">
+        <div class="trip-shape-head"><div><span class="eyebrow">How the trip should flow</span><h3 id="trip-shape-title">Your Mackinac trip shape</h3><p id="tripShapeSummary"></p></div><span class="shape-badge" id="tripShapeBadge">Planning</span></div>
+        <div class="trip-shape-days" id="tripShapeDays"></div>
+        <div class="trip-shape-avoid" id="tripShapeAvoid"></div>
+        <p class="trip-shape-truth" id="tripShapeTruth"></p>
+      </section>
+      <div class="trip-days" id="tripDays" aria-live="polite"></div>
+      <ol class="itinerary" id="itinerary"><li><time>—</time><div><strong>Loading your plan</strong><p>Checking feasible timing.</p></div></li></ol>
+      <p class="planner-explain" id="plannerExplain"></p>
+      <div class="tune-panel" id="tunePanel">
+        <div class="tune-head"><h3>Fine-tune your Mackinac plan</h3><p>Pick the stops you won’t skip and how dinner fits. Everything else was set by your answers.</p></div>
+        <form class="trip-builder" id="tripBuilder">
         <!-- Measured, not guessed: must-dos changed the itinerary in 100% of runs and dinner
              changed the plan in 67%, yet the intake never asks about either. Everything else
              in this form is already set by the intake, so it sits below as a correction. -->
@@ -271,21 +295,7 @@
 
         <div class="builder-actions"><button class="btn primary" type="submit" id="buildTrip">Update my plan</button><span id="builderStatus" aria-live="polite">Your opening answers already set the rest. Open “Correct what we inferred” only if something is off.</span></div>
       </form>
-
-      <div class="planner-decision-grid">
-        <article><span>Your mainland start</span><strong id="leaveHome">Enter date, city + time above</strong><p id="leaveHomeNote">Your selected date, origin and leave time determine the reachable port/ferry and total journey. Drive estimates are not live traffic.</p></article>
-        <article><span>Your visit</span><strong id="tripFit">Building…</strong><p id="tripFitNote">Your constraints will show here.</p></article>
       </div>
-      <div class="planner-summary" id="plannerSummary">Building a realistic trip from the selected visitor modes…</div>
-      <section class="trip-shape-panel" id="tripShapePanel" hidden aria-labelledby="trip-shape-title">
-        <div class="trip-shape-head"><div><span class="eyebrow">How the trip should flow</span><h3 id="trip-shape-title">Your Mackinac trip shape</h3><p id="tripShapeSummary"></p></div><span class="shape-badge" id="tripShapeBadge">Planning</span></div>
-        <div class="trip-shape-days" id="tripShapeDays"></div>
-        <div class="trip-shape-avoid" id="tripShapeAvoid"></div>
-        <p class="trip-shape-truth" id="tripShapeTruth"></p>
-      </section>
-      <div class="trip-days" id="tripDays" aria-live="polite"></div>
-      <ol class="itinerary" id="itinerary"><li><time>—</time><div><strong>Loading your plan</strong><p>Checking feasible timing.</p></div></li></ol>
-      <p class="planner-explain" id="plannerExplain"></p>
     </section>
 
 
@@ -424,6 +434,8 @@
     <section class="section related-section"><div class="eyebrow">Mackinac planning guides</div><h2>Start with the decision you are trying to make</h2><div class="related-links"><a href="/mackinac-island/day-trip/">Day trip planner</a><a href="/mackinac-island/with-kids/">Mackinac with kids</a><a href="/mackinac-island/2-day-itinerary/">2-day itinerary</a><a href="/mackinac-island/ferry-planner/">Ferry planner</a></div><div class="eyebrow" style="margin-top:22px">Plan around how you want to move</div><h2>Walking and biking change the whole Island day</h2><div class="related-links"><a href="/mackinac-island/limited-walking/">Mackinac with less walking</a><a href="/mackinac-island/bike-day/">Mackinac bike day / M-185</a><a href="/mackinac-island/fall/">Mackinac in fall</a></div><div class="eyebrow" style="margin-top:22px">Starting farther away?</div><h2>Plan the drive and ferry together</h2><div class="related-links"><a href="/mackinac-island/from-detroit/">From Detroit</a><a href="/mackinac-island/from-chicago/">From Chicago</a><a href="/mackinac-island/from-traverse-city/">From Traverse City</a><a href="/mackinac-island/from-grand-rapids/">From Grand Rapids</a></div><div class="eyebrow" style="margin-top:22px">Use the Mackinac hub</div><h2>Go deeper without starting a new trip</h2><div class="related-links"><a href="/mackinac-island/plan/">Plan</a><a href="/mackinac-island/where-to-stay/">Stay</a><a href="/mackinac-island/dining/">Eat</a><a href="/mackinac-island/things-to-do/">Explore</a><a href="/mackinac-island/events/">Events</a><a href="/mackinac-island/around-the-straits/">Around the Straits</a></div><div class="eyebrow" style="margin-top:22px">Keep planning</div><h2>Related Michigan tools</h2><div class="related-links"><a href="/mackinac-bridge-live/">Mackinac Bridge Live</a><a href="/fall-color/">Michigan Fall Color</a><a href="/great-lakes-buoys/">Great Lakes Buoys</a><a href="/soo-locks/">Soo Locks Live</a><a href="/tools/">All Michigan tools</a></div></section>
   </div>
 </main>
+<div class="plan-toast" id="planToast" role="status" aria-live="polite" hidden><span class="plan-toast-mark" aria-hidden="true"></span><div class="plan-toast-copy"><strong id="planToastTitle">Plan updated</strong><span id="planToastBody"></span></div><button type="button" class="plan-toast-see" id="planToastSee">See it</button></div>
+
 <footer class="footer"><div class="shell"><p>Built by <a href="/">Chris Izworski</a>. Live source agencies and ferry operators remain authoritative for their own conditions and schedules. This tool is trip-planning guidance, not a guarantee of service or weather.</p><p><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p></div></footer>
 <script src="/assets/mackinac-hub.js?v=20260921-trip1" defer></script>
 <script src="/assets/mackinac-trip-state.js?v=20260920-live19"></script>
