@@ -9,7 +9,7 @@ import tripJourneyLinks from '../lib/trip-journey-links.js';
 
 const ROOT = path.join(process.cwd(), 'public');
 const MEASUREMENT_ID = 'G-Y5D2V2W7HN';
-const ADSENSE_PUBLISHER_ID = 'ca-pub-8222782620788075';
+const ADSENSE_PUBLISHER_ID = adsenseEligibility.PUBLISHER_ID;
 const GA4_TAG = `<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}"></script>
 <script>
@@ -19,7 +19,6 @@ const GA4_TAG = `<!-- Google tag (gtag.js) -->
   gtag('config', '${MEASUREMENT_ID}');
 </script>`;
 const ADSENSE_TAG = `<meta name="google-adsense-account" content="${ADSENSE_PUBLISHER_ID}">`;
-const ADSENSE_SCRIPT = adsenseEligibility.LOADER_TAG;
 
 const MIGRATED_TOOLS_SECTION = `
 <section id="first-party-migrated-tools" class="decision-network" aria-labelledby="first-party-migrated-title">
@@ -62,16 +61,12 @@ async function walk(dir) {
     const originalHtml = await readFile(fullPath, 'utf8');
     const pathname = '/' + path.relative(ROOT, fullPath).split(path.sep).join('/');
     const integratedHtml = tripJourneyLinks(replaceAisEmbeds(originalHtml), pathname);
-    const allowAds = adsenseEligibility.eligible(originalHtml, pathname);
-    const html = sitePolicyLinks(allowAds ? adsenseEligibility.normalizeAdLoader(integratedHtml) : adsenseEligibility.removeAdLoader(integratedHtml));
+    const html = sitePolicyLinks(integratedHtml);
     const needsGa4 = !html.includes(MEASUREMENT_ID);
     const needsAdsense = !/<meta\b[^>]*name=["']google-adsense-account["']/i.test(html);
-    const needsAdsenseScript = allowAds && !/<script\b[^>]*src=["'][^"']*pagead\/js\/adsbygoogle\.js\b/i.test(html);
-    const placer = allowAds && !adsenseEligibility.hasPlacer(html) ? adsenseEligibility.placerTag(pathname) : '';
 
     if (!needsGa4) ga4AlreadyTagged += 1;
     if (!needsAdsense) adsenseAlreadyTagged += 1;
-    if (!needsGa4 && !needsAdsense && !needsAdsenseScript && !placer && html === originalHtml) continue;
 
     if (!/<\/head>/i.test(html)) {
       throw new Error(`Cannot inject site tags: missing </head> in ${path.relative(ROOT, fullPath)}`);
@@ -86,10 +81,9 @@ async function walk(dir) {
       tags.push(ADSENSE_TAG);
       adsenseInjected += 1;
     }
-    if (needsAdsenseScript) tags.push(ADSENSE_SCRIPT);
-    if (placer) tags.push(placer);
-
-    await writeFile(fullPath, html.replace(/<\/head>/i, `${tags.join('\n')}\n</head>`));
+    const taggedHtml = tags.length ? html.replace(/<\/head>/i, `${tags.join('\n')}\n</head>`) : html;
+    const output = adsenseEligibility.applyAdSettings(taggedHtml, pathname);
+    if (output !== originalHtml) await writeFile(fullPath, output);
   }
 }
 
