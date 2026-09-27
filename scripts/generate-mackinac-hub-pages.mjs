@@ -3,6 +3,7 @@ import path from "node:path";
 import {writeGeneratedPage} from "./write-generated-page.mjs";
 import {createRequire} from "node:module";
 import {navHtml,PRIMARY_GENERATED_SURFACES} from "./mackinac-site-architecture.mjs";
+import {headAssets,siteHeader,pageHero,decisionStrip,focusSlot,faqSection,plannerBand,siteFooter,shellSections,HUB_JS} from "./mackinac-page-chrome.mjs";
 
 const require=createRequire(import.meta.url);
 const {LODGING,DINING,REGIONAL}=require("../lib/mackinac-island/catalog.js");
@@ -13,10 +14,6 @@ const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&g
 const pillList=items=>items.map(x=>`<span>${esc(x)}</span>`).join("");
 const decisionCards=rows=>rows.map(x=>`<article class="hub-decision"><span>${esc(x[0])}</span><h3>${esc(x[1])}</h3><p>${esc(x[2])}</p></article>`).join("");
 const faqHtml=faq=>faq.map(x=>`<details><summary>${esc(x[0])}</summary><p>${esc(x[1])}</p></details>`).join("");
-
-function profileBox(){
-  return `<aside class="trip-context" data-trip-context hidden><div><span>Using your saved Mackinac plan</span><strong data-trip-context-title>Your trip continues here</strong><p data-trip-context-summary></p></div><a class="btn primary" data-mackinac-planner-cta href="/mackinac-island/#trip-intake">Edit my trip</a></aside>`;
-}
 
 function lodgingCards(){
   return LODGING.map(item=>`<article class="catalog-card" data-place-id="${esc(item.id)}"><div class="catalog-top"><span>${esc(item.district)}</span><strong>${esc(item.name)}</strong><small>${esc(item.type)}</small></div><p>${esc(item.note)}</p><div class="catalog-traits">${pillList(item.traits.slice(0,5))}</div>${item.closing_2026?`<small class="catalog-status">Published 2026 closing: ${esc(item.closing_2026)}</small>`:"<small class=\"catalog-status\">Season dates: verify for your trip.</small>"}</article>`).join("");
@@ -166,20 +163,20 @@ const pages=[
 function pageHtml(p){
   const canonical=`https://chrisizworski.com/mackinac-island/${p.slug}/`;
   const jsonLd=JSON.stringify({"@context":"https://schema.org","@graph":[
-    {"@type":"WebPage","@id":canonical,"url":canonical,"name":p.title,"description":p.description,"dateModified":"2026-09-21","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Place","name":"Mackinac Island","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}}},
+    {"@type":"WebPage","@id":canonical,"url":canonical,"name":p.title,"description":p.description,"dateModified":"2026-09-27","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Place","name":"Mackinac Island","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}}},
     {"@type":"FAQPage","mainEntity":p.faq.map(x=>({"@type":"Question","name":x[0],"acceptedAnswer":{"@type":"Answer","text":x[1]}}))},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Chris Izworski","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Mackinac Island","item":"https://chrisizworski.com/mackinac-island/"},{"@type":"ListItem","position":3,"name":p.title,"item":canonical}]}
   ]});
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(p.title)} | Chris Izworski</title><meta name="description" content="${esc(p.description)}"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"><meta name="author" content="Chris Izworski"><link rel="canonical" href="${canonical}"><meta property="og:type" content="website"><meta property="og:site_name" content="Chris Izworski"><meta property="og:title" content="${esc(p.title)}"><meta property="og:description" content="${esc(p.description)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${hero}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(p.title)}"><meta name="twitter:description" content="${esc(p.description)}"><meta name="twitter:image" content="${hero}"><link rel="stylesheet" href="/assets/mackinac-intent.css?v=20260920-hub1"><script type="application/ld+json">${jsonLd}</script></head>
-<body data-mackinac-surface="${esc(p.surface)}"><header class="bar"><div class="shell"><a class="brand" href="/">Chris Izworski</a><a class="hub-home-link" href="/mackinac-island/">Mackinac Island trip hub</a></div></header>
-<div class="destination-nav-wrap"><div class="shell">${navHtml("/mackinac-island/"+p.slug+"/")}</div></div>
-<main><section class="hero"><div class="shell"><div class="crumbs"><a href="/">Home</a> / <a href="/mackinac-island/">Mackinac Island</a> / ${esc(p.title)}</div><div class="hero-grid"><div><div class="eyebrow">Mackinac destination intelligence</div><h1>${esc(p.h1)}</h1><p class="lede">${esc(p.lede)}</p><div class="cta-row"><a class="btn primary" data-mackinac-planner-cta href="${p.primaryCta}">${esc(p.primaryLabel)}</a><a class="btn" href="/mackinac-island/">Open My Trip</a></div></div><figure class="intent-hero-photo"><img src="${hero}" alt="Mackinac Island harbor viewed from above downtown"><figcaption>Harbor view from Fort Street · <a href="https://commons.wikimedia.org/wiki/File:Mackinac_Island_July_2010_05_(harbor_from_Fort_Street).JPG" target="_blank" rel="noopener">Michael Barera / Wikimedia Commons</a> · CC BY-SA 4.0</figcaption></figure></div></div></section>
-<div class="shell">${profileBox()}</div>
-<section class="shell decision-strip">${decisionCards(p.decisions)}</section>
-${p.body}
-<section class="hub-section faq"><div class="shell"><div class="eyebrow">Common questions</div><h2>Before you lock this part of the trip</h2>${faqHtml(p.faq)}</div></section>
-<section class="hub-section"><div class="shell"><p class="truth"><strong>Truth boundary:</strong> ${esc(p.truth)}</p><div class="planner-cta"><h2>Carry this decision into the same Mackinac planner</h2><p>Your visitor profile and trip inputs belong to one shared engine. Moving to another Mackinac page should not create a separate trip.</p><a class="btn" data-mackinac-planner-cta href="${p.primaryCta}">${esc(p.primaryLabel)}</a></div><p class="sources"><strong>Primary planning references:</strong> ${p.sources.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join(" · ")}</p></div></section>
-</main><footer><div class="shell">Built by <a href="/">Chris Izworski</a>. Live agencies, operators and businesses remain authoritative for their own schedules, conditions, accessibility, prices and availability.</div></footer><script src="/assets/mackinac-hub.js?v=20260921-trip1" defer></script></body></html>`;
+  const tone={plan:"plan",stay:"stay",eat:"eat",explore:"explore",events:"events",straits:"straits"}[p.surface]||"plan";
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(p.title)} | Chris Izworski</title><meta name="description" content="${esc(p.description)}"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"><meta name="author" content="Chris Izworski"><link rel="canonical" href="${canonical}"><meta property="og:type" content="website"><meta property="og:site_name" content="Chris Izworski"><meta property="og:title" content="${esc(p.title)}"><meta property="og:description" content="${esc(p.description)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${hero}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(p.title)}"><meta name="twitter:description" content="${esc(p.description)}"><meta name="twitter:image" content="${hero}">${headAssets()}<script type="application/ld+json">${jsonLd}</script></head>
+<body data-mackinac-surface="${esc(p.surface)}">${siteHeader(navHtml("/mackinac-island/"+p.slug+"/"))}
+<main>${pageHero({toneKey:tone,crumbs:`<a href="/">Home</a> / <a href="/mackinac-island/">Mackinac Island</a> / ${esc(p.title)}`,h1:p.h1,lede:p.lede,primaryHref:p.primaryCta,primaryLabel:p.primaryLabel})}
+${decisionStrip(p.decisions)}
+${focusSlot()}
+${shellSections(p.body)}
+${faqSection(p.faq,"Before you lock this part of the trip")}
+<section class="hub-section closing"><div class="shell"><p class="truth"><strong>Truth boundary:</strong> ${esc(p.truth)}</p>${plannerBand({title:"Carry this into the same Mackinac plan",body:"Your dates, starting city and priorities belong to one trip. Every Mackinac page reads from it, so nothing here starts over.",href:p.primaryCta,label:p.primaryLabel})}<p class="sources"><strong>Primary planning references:</strong> ${p.sources.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join(" · ")}</p></div></section>
+</main>${siteFooter("Live agencies, operators and businesses remain authoritative for their own schedules, conditions, accessibility, prices and availability.")}<script src="${HUB_JS}" defer></script></body></html>`;
 }
 
 const slugs=pages.map(x=>x.slug);

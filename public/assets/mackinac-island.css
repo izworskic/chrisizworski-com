@@ -696,3 +696,12 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-.012em;font-op
 #map,.leaflet-map{isolation:isolate;position:relative;z-index:0}
 .btn{text-decoration:none}
 .trip-shape-days>:only-child{grid-column:1/-1}
+
+/* Cross-page frame: My Trip and every Mackinac sub-page share this header and nav.
+   Naming them lets the browser hold them still while only the content cross-fades,
+   instead of repainting the whole page on each click. */
+@view-transition{navigation:auto}
+.sitebar{view-transition-name:mack-sitebar}
+.destination-nav-wrap{view-transition-name:mack-nav}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.2s}
+@media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}

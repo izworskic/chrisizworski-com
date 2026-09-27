@@ -48,27 +48,28 @@
     if(root){root.dataset.mackinacNav="my-trip";root.textContent="My Trip";root.href="/mackinac-island/";}
     nav.querySelector('[data-mackinac-nav="plan"]')?.remove();
   }
-  function insertAtDecisionFront(node){
-    const hero=document.querySelector("main .hero");
-    if(hero&&hero.parentNode){hero.insertAdjacentElement("beforebegin",node);return;}
-    const main=document.querySelector("main");if(main)main.prepend(node);
+  // Late content never goes above the hero: that pushed the whole page down after it
+  // had painted. Pages ship a reserved focus slot under the decision cards; this only
+  // covers pages that predate it.
+  function insertAfterDecisions(node){
+    const anchor=document.querySelector("main .decision-strip")||document.querySelector("main .page-hero,main .hero");
+    if(anchor){anchor.insertAdjacentElement("afterend",node);return;}
+    const main=document.querySelector("main");if(main)main.append(node);
+  }
+  const CACHE_KEY="mackinac-surface-cache-v1";
+  function readCache(answers){
+    try{const all=JSON.parse(localStorage.getItem(CACHE_KEY)||"{}");const hit=all[rawSurface];return hit&&hit.sig===JSON.stringify(answers)?hit.data:null;}catch{return null;}
+  }
+  function writeCache(answers,data){
+    try{const all=JSON.parse(localStorage.getItem(CACHE_KEY)||"{}");all[rawSurface]={sig:JSON.stringify(answers),data,at:Date.now()};localStorage.setItem(CACHE_KEY,JSON.stringify(all));}catch{}
   }
   function ensureFocusHost(){
     let host=document.querySelector("[data-mackinac-platform-focus]");
     if(host)return host;
     host=document.createElement("section");
-    host.className="platform-focus-wrap";
+    host.className="shell platform-focus-wrap";
     host.dataset.mackinacPlatformFocus="1";
-    insertAtDecisionFront(host);
-    return host;
-  }
-  function ensureIntakeHost(){
-    let host=document.querySelector("[data-mackinac-platform-intake]");
-    if(host)return host;
-    host=document.createElement("section");
-    host.className="platform-intake-wrap";
-    host.dataset.mackinacPlatformIntake="1";
-    insertAtDecisionFront(host);
+    insertAfterDecisions(host);
     return host;
   }
 
@@ -78,12 +79,10 @@
     const links=new Map([...nav.querySelectorAll("[data-mackinac-nav]")].map(a=>[a.dataset.mackinacNav,a]));
     const seen=new Set();
     const normalized=order.map(item=>({...item,id:(item.id==="today"||item.id==="plan")?"my-trip":item.id})).filter(item=>!seen.has(item.id)&&seen.add(item.id));
-    for(const item of normalized){
-      const a=links.get(item.id);
-      if(a)nav.appendChild(a);
-    }
+    // Primary nav keeps a fixed order on every page. Reordering it per visitor made the
+    // tabs jump under the pointer after each navigation; the next useful stop is marked.
     const current=rawSurface==="today"?"my-trip":rawSurface;
-    const first=normalized.find(x=>x.id!==current&&links.has(x.id));
+    const first=normalized.find(x=>x.id!==current&&x.id!=="my-trip"&&links.has(x.id));
     nav.querySelectorAll("a").forEach(a=>a.classList.remove("trip-next"));
     if(first)links.get(first.id)?.classList.add("trip-next");
   }
@@ -117,8 +116,7 @@
       host.className="trip-context";
       host.dataset.tripContext="1";
       const shell=document.createElement("div");shell.className="shell";shell.appendChild(host);
-      const focus=document.querySelector("[data-mackinac-platform-focus]");
-      if(focus)focus.insertAdjacentElement("afterend",shell);else insertAtDecisionFront(shell);
+      insertAfterDecisions(shell);
     }
     const label=profile?.primary?.label||"your Mackinac trip";
     const facts=planFacts(plan);
@@ -138,7 +136,7 @@
     const host=ensureFocusHost();
     const focus=surface?.focus;
     if(!focus){host.remove();return;}
-    host.innerHTML=`<div class="shell"><div class="platform-focus-card"><div><span class="platform-kicker">Your ${esc(surfaceLabel())} focus</span><h2>${esc(focus.title)}</h2><p>${esc(focus.summary)}</p><small>${surface.engine==="shared-harness-jev"?"JEV ranked this focus from bounded choices after your deterministic visitor profile was built.":"Deterministic fallback is active; your trip facts and profile still control the page."}</small></div><a class="btn primary" href="${esc(surface.nav_order?.find(x=>x.id===focus.next)?.path||"/mackinac-island/")}">Next useful decision</a>${adaptiveMarkup(profile)}</div></div>`;
+    host.innerHTML=`<div class="platform-focus-card"><div><span class="platform-kicker">Your ${esc(surfaceLabel())} focus</span><h2>${esc(focus.title)}</h2><p>${esc(focus.summary)}</p></div><a class="btn primary" href="${esc(surface.nav_order?.find(x=>x.id===focus.next)?.path||"/mackinac-island/")}">Next: ${esc(({plan:"Trip guide",today:"My Trip",ferries:"Ferries",stay:"Stay",eat:"Eat",explore:"Explore",events:"Events",straits:"Straits"})[focus.next]||"My Trip")}</a>${adaptiveMarkup(profile)}</div>`;
     host.querySelectorAll("[data-adaptive-value]").forEach(btn=>btn.addEventListener("click",async()=>{
       const next={...answers,[btn.dataset.adaptiveId]:btn.dataset.adaptiveValue};
       track("mackinac_adaptive_question_answered",{question:btn.dataset.adaptiveId,surface:rawSurface});
@@ -154,20 +152,27 @@
     return data;
   }
 
-  async function personalize(answers){
+  function paint(data,answers){
+    renderFocus(data.profile,data.surface,data.profile?.answers||answers);
+    renderSavedContext(data.profile,data.surface,readPlan());
+    applyNavOrder(data.surface?.nav_order);
+    applyPlaceRanking(data.surface);
+  }
+  async function personalize(answers,{fromCache=false}={}){
+    // Last answer for this page paints immediately; the live answer then refreshes it
+    // in place. Visitors returning to a page never watch it rebuild.
+    const cached=readCache(answers);
+    if(cached&&!fromCache)paint(cached,answers);
     try{
       const data=await classify(answers);
-      const plan=readPlan();
       write({answers:data.profile?.answers||answers,profile:data.profile});
-      document.querySelector("[data-mackinac-platform-intake]")?.remove();
-      renderFocus(data.profile,data.surface,data.profile?.answers||answers);
-      renderSavedContext(data.profile,data.surface,plan);
-      applyNavOrder(data.surface?.nav_order);
-      applyPlaceRanking(data.surface);
+      writeCache(answers,data);
+      if(!cached||JSON.stringify(cached)!==JSON.stringify(data))paint(data,answers);
       track("mackinac_surface_personalized",{surface:data.surface?.surface||rawSurface,profile:data.profile?.primary?.id||"unknown",engine:data.surface?.engine||data.profile?.engine||"deterministic"});
     }catch(error){
+      if(cached)return;
       const host=ensureFocusHost();
-      host.innerHTML=`<div class="shell"><div class="platform-focus-card degraded"><div><span class="platform-kicker">Your trip is still saved</span><h2>Personalized focus needs a recheck</h2><p>We couldn't refresh the Mackinac intelligence layer on this page. The source-backed page content remains available.</p></div></div></div>`;
+      host.innerHTML=`<div class="platform-focus-card degraded"><div><span class="platform-kicker">Your trip is still saved</span><h2>Personalized focus needs a recheck</h2><p>We couldn't refresh the Mackinac intelligence layer on this page. The source-backed page content remains available.</p></div></div>`;
     }
   }
 
@@ -175,10 +180,10 @@
     return q.type==="multi"?Array.isArray(value)&&value.length>0:Boolean(value);
   }
 
+  // The build-your-trip prompt ships in the page's hero strip, so nothing is injected
+  // here; this only records that an unplanned visitor saw it.
   function renderStartGate(){
-    const host=ensureIntakeHost();
-    host.innerHTML=`<div class="shell"><div class="platform-intake-card"><div><span class="platform-kicker">Start with one shared trip</span><h2>Build your Mackinac trip first</h2><p>Answer the trip questions once on My Trip. Your dates, starting point and preferences will then follow you through Ferries, Stay, Eat, Explore, Events and Straits.</p></div><a class="btn primary" data-mackinac-planner-cta href="/mackinac-island/#trip-intake">Build my trip</a></div></div>`;
-    host.querySelector("[data-mackinac-planner-cta]")?.addEventListener("click",()=>track("mackinac_planner_cta",{surface:rawSurface,start_gate:true}));
+    document.documentElement.classList.remove("has-trip");
     track("mackinac_trip_gate_shown",{surface:rawSurface});
   }
   function wireTracking(){
