@@ -37,7 +37,7 @@ async function nextShip(raw, now, checkedAt) {
       inLock: next.inLockList(river.vessels, now),
       candidates,
       pick: selection.pick || null,
-      selection: { mode: selection.mode, confidence: selection.confidence, model: selection.mode === 'shared-harness-jev' ? selection.model : undefined },
+      selection: { mode: selection.mode, confidence: selection.confidence, model: selection.mode === 'shared-harness-jev' ? selection.model : undefined, reason: selection.reason || undefined },
       caveats: [
         'Arrival windows are estimates from each ship’s latest reported position, speed and distance along the river channel, not a published lock schedule.',
         'Ships can wait for a chamber, stop at a dock or fuel pier, or be held for traffic, and positions can be up to 30 minutes old.'
