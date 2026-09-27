@@ -119,7 +119,7 @@ function initMap(){
   if(!target)return;
   if(!window.L){target.innerHTML='<div class="map-fallback">Interactive map did not load. Use the official NPS map before navigating in the park.</div>';return;}
   map=L.map(target,{scrollWheelZoom:false,zoomControl:true}).setView([46.54,-86.31],9);
-  const cartoLayer=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{subdomains:'abcd',maxZoom:20,detectRetina:true,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);
+  const cartoLayer=L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{maxZoom:20,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);
   let cartoFailures=0,fallbackAdded=false;
   cartoLayer.on('tileerror',()=>{cartoFailures++;if(fallbackAdded||cartoFailures<4)return;fallbackAdded=true;map.removeLayer(cartoLayer);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);});
   Object.entries(engine.PLACES).forEach(([id,p])=>{
