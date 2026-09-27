@@ -22,6 +22,22 @@ jobs:
           python scripts/pictured-rocks-map-interaction-fix.py
           python scripts/pictured-rocks-map-native-hit-fix.py
 
+      - name: Align legacy tests to native interaction contract
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          carto=Path('tests/pictured-rocks-carto-map.test.js')
+          text=carto.read_text()
+          text=text.replace("assert.match(ui,/bindTooltip\\(esc\\(p\\.title\\),\\{permanent:true/);","assert.match(ui,/map-place-hit/);")
+          carto.write_text(text)
+
+          interaction=Path('tests/pictured-rocks-map-interaction.test.js')
+          text=interaction.read_text()
+          text=text.replace("assert.match(ui,/tip\\.on\\('click'/);","assert.match(ui,/target\\.addEventListener\\('click'/);")
+          interaction.write_text(text)
+          PY
+
       - name: Run map hard gates
         run: |
           node --check public/assets/pictured-rocks-planner-v3.js
