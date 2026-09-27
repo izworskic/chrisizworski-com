@@ -4,6 +4,14 @@ Owner: Chris Izworski. Replaces the September 20 horizontal display pilot (slot
 1011148508, removed). On September 27 Chris approved Google's current loader and
 central controls to restore the previous loader or disable ad loading.
 
+**Current setting: `legacy`.** The September 27 production trial of `standard`
+successfully served ads, but live DOM inspection also found Google Auto ads
+inside a fall-color card and a contextual-link grid. Our manual slot stayed at
+reviewed boundaries. The prior loader was restored pending an AdSense account
+review of unwanted in-page/intent-driven formats. The account was signed out in
+the available browser, so no account settings could be changed. A legacy loader
+is not a guarantee that Auto ads are disabled; formats must be managed in AdSense.
+
 ## How ads are served
 - One AdSense In-article unit, slot `8700232579`, fluid layout.
 - Every eligible page gets one asynchronous AdSense loader with the configured

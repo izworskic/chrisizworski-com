@@ -22,15 +22,17 @@ test('publisher links remain reachable and repeated composition adds no duplicat
   assert.equal(sitePolicyLinks(result), result);
 });
 test('every loader form uses the centrally configured publisher and current Google code', () => {
-  const { normalizeAdLoader, LOADER_SRC } = require('../lib/adsense-eligibility');
-  assert.equal(LOADER_SRC, 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075');
+  const { normalizeAdLoader, LOADER_SRC, loaderSrc } = require('../lib/adsense-eligibility');
+  const configured = require('../config/in-article-ads.json');
+  const standard = { ...configured, loaderMode: 'standard' };
+  assert.equal(LOADER_SRC, loaderSrc(configured));
   for (const form of [loader,
     '<script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script>',
     "<script src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-123'></script>",
     '<script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>']) {
-    const out = normalizeAdLoader(form);
+    const out = normalizeAdLoader(form, standard);
     assert.equal(out, loader);
-    assert.equal(normalizeAdLoader(out), out);
+    assert.equal(normalizeAdLoader(out, standard), out);
   }
 });
 test('central loader rollback and off modes reconcile duplicate and stale scripts', () => {
@@ -59,16 +61,16 @@ test('central loader rollback and off modes reconcile duplicate and stale script
 });
 test('disabled placements, route exclusions and unpublished pages remove pre-existing scripts', () => {
   const { applyAdSettings, placerTag } = require('../lib/adsense-eligibility');
-  const config = require('../config/in-article-ads.json');
-  const html = `<html><head>${loader}${placerTag('/fall-color/')}</head><body>Tool</body></html>`;
+  const config = { ...require('../config/in-article-ads.json'), loaderMode: 'standard', enabled: true };
+  const html = `<html><head>${loader}${placerTag('/fall-color/', config)}</head><body>Tool</body></html>`;
   for (const route of ['/about', '/about/', '/about/index.html?from=tool']) {
-    const result = applyAdSettings(html, route);
+    const result = applyAdSettings(html, route, config);
     assert.ok(!result.includes('/assets/in-article-ads.js'));
     assert.ok(result.includes('adsbygoogle.js'));
   }
   for (const result of [
     applyAdSettings(html, '/fall-color/', { ...config, enabled: false }),
-    applyAdSettings(html.replace('</head>', '<meta content="off" name="in-article-ads"></head>'), '/fall-color/')
+    applyAdSettings(html.replace('</head>', '<meta content="off" name="in-article-ads"></head>'), '/fall-color/', config)
   ]) {
     assert.ok(!result.includes('/assets/in-article-ads.js'));
     assert.ok(result.includes('adsbygoogle.js'));

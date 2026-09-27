@@ -18,7 +18,7 @@ test('each composed tool keeps owner HTML, identity and a single ad loader while
     assert.equal(res.code,200);assert.equal(res.headers['x-robots-tag'],undefined);
     for(const value of [canonical,'<h1>Original tool</h1>','<p>Owner content</p>','src="/engine.js"','href="/chris-izworski/"'])assert.ok(res.body.includes(value));
     for(const route of ['about','connect','privacy','terms'])assert.ok(res.body.includes(`href="/${route}/"`));
-    assert.equal((res.body.match(/pagead\/js\/adsbygoogle.js/g)||[]).length,1);
+    assert.equal((res.body.match(/pagead\/js\/adsbygoogle.js/g)||[]).length, require('../config/in-article-ads.json').loaderMode === 'off' ? 0 : 1);
   }
 });
 test('unknown and hostile source parameters never fetch arbitrary URLs',async t=>{

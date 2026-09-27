@@ -5,6 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const root = path.join(__dirname, '..');
+const config = require('../config/in-article-ads.json');
 
 test('the production injector puts one correct AdSense loader in every Petoskey content head', () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'petoskey-ads-'));
@@ -20,12 +21,14 @@ test('the production injector puts one correct AdSense loader in every Petoskey 
       const html = fs.readFileSync(path.join(temp, 'public/petoskey-wine', file), 'utf8');
       const head = html.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i)?.[1] || '';
       assert.match(head, /name="google-adsense-account" content="ca-pub-8222782620788075"/, file);
-      const loaders = head.match(/<script\b[^>]*src="https:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js\?client=ca-pub-8222782620788075"[^>]*>/g) || [];
-      if (file.includes('404')) {
+      const loaders = head.match(/<script\b[^>]*src="https:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js[^\"]*"[^>]*>/g) || [];
+      if (!file.includes('404')) contentCount++;
+      if (file.includes('404') || config.loaderMode === 'off') {
         assert.equal(loaders.length, 0, file);
       } else {
-        contentCount++;
         assert.equal(loaders.length, 1, file);
+        const query = config.loaderMode === 'legacy' ? '' : '?client=ca-pub-8222782620788075';
+        assert.equal(loaders[0], `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js${query}" crossorigin="anonymous">`, file);
         assert.match(loaders[0], /\basync\b/);
         assert.match(loaders[0], /crossorigin="anonymous"/);
       }
