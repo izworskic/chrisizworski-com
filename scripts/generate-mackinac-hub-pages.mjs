@@ -3,7 +3,7 @@ import path from "node:path";
 import {writeGeneratedPage} from "./write-generated-page.mjs";
 import {createRequire} from "node:module";
 import {navHtml,PRIMARY_GENERATED_SURFACES} from "./mackinac-site-architecture.mjs";
-import {headAssets,siteHeader,pageHero,decisionStrip,focusSlot,faqSection,plannerBand,siteFooter,shellSections,HUB_JS,TRUTH_LABEL} from "./mackinac-page-chrome.mjs";
+import {headAssets,siteHeader,pageHero,decisionStrip,focusSlot,faqSection,plannerBand,siteFooter,shellSections,HUB_JS,TRUTH_LABEL,AD_BREAK,withAdBreaks} from "./mackinac-page-chrome.mjs";
 import {HUB_COPY} from "./mackinac-guide-copy.mjs";
 
 const require=createRequire(import.meta.url);
@@ -174,8 +174,8 @@ function pageHtml(p){
 <main>${pageHero({toneKey:tone,crumbs:`<a href="/">Home</a> / <a href="/mackinac-island/">Mackinac Island</a> / ${esc(p.title)}`,h1:p.h1,lede:p.lede,primaryHref:p.primaryCta,primaryLabel:p.primaryLabel})}
 ${decisionStrip(p.decisions)}
 ${focusSlot()}
-${shellSections(p.body)}
-${faqSection(p.faq,"Before you go")}
+${withAdBreaks(shellSections(p.body))}
+${AD_BREAK}${faqSection(p.faq,"Before you go")}
 <section class="hub-section closing"><div class="shell"><p class="truth"><strong>${TRUTH_LABEL}</strong> ${esc(p.truth)}</p>${plannerBand({title:"Make it your trip",body:"Four taps on My Trip and every Mackinac page, from ferries to dinner, fits your dates, your people and your pace.",href:p.primaryCta,label:p.primaryLabel})}<p class="sources"><strong>Primary planning references:</strong> ${p.sources.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join(" · ")}</p></div></section>
 </main>${siteFooter("Live agencies, operators and businesses remain authoritative for their own schedules, conditions, accessibility, prices and availability.")}<script src="${HUB_JS}" defer></script></body></html>`;
 }
