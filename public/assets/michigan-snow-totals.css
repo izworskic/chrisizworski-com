@@ -80,3 +80,4 @@ tr[hidden]{display:none}
 .windows button{white-space:nowrap}
 @media (max-width:640px){.kicker{font-size:.7rem;margin-bottom:.2rem}h1{font-size:1.85rem;margin-bottom:.4rem}.lede{font-size:.98rem}.windows button{padding:.4rem .7rem;font-size:.82rem}.live-head h2{font-size:1.2rem}}
 .choices{display:flex;flex-wrap:wrap;gap:.4rem}.choices button{min-height:40px;padding:.35rem .8rem;font-size:.9rem}
+.saved-note{font-size:.82rem;color:var(--muted);margin-top:.5rem!important}.linkish{background:none;border:0;padding:0;color:var(--ice);text-decoration:underline;cursor:pointer;font:inherit}

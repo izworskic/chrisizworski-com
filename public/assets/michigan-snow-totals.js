@@ -5,6 +5,13 @@
   var PAGE = 'https://chrisizworski.com/michigan-snow-totals/';
   var TABLE_STEP = 40;
   var params = C.parseParams(location.search);
+  // "My town" is a per-visitor convenience: it lives only in this browser and
+  // the page works the same when storage is blocked.
+  var SAVED_KEY = 'michigan-snow-totals:town';
+  function savedTown() { try { return localStorage.getItem(SAVED_KEY) || ''; } catch (_) { return ''; } }
+  function saveTown(t) { try { if (t) localStorage.setItem(SAVED_KEY, t); else localStorage.removeItem(SAVED_KEY); } catch (_) {} }
+  var fromSaved = !params.town && Boolean(savedTown());
+  if (fromSaved) params.town = savedTown();
   var state = {
     data: null, season: null, places: null, placesPromise: null,
     window: params.window || '24h', windowChosen: Boolean(params.window), region: params.region, town: params.town,
@@ -196,6 +203,9 @@
       if (result.place) html += stationLines(result.place.lat, result.place.lon);
       if (state.shareRow && !keepMap) focusRow(state.shareRow);
     }
+    if (html && state.town && !state.geo) {
+      html += '<p class="saved-note">' + (fromSaved ? 'Your saved town. ' : 'Saved on this device for your next visit. ') + '<button type="button" class="linkish" id="forgetTown">Forget</button></p>';
+    }
     box.innerHTML = html;
     box.hidden = !html;
     share.hidden = !state.shareRow;
@@ -271,7 +281,8 @@
   $('showAll').addEventListener('click', function () { state.tableLimit = 100000; renderTable(visibleRows()); });
   $('townForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    state.town = $('townSearch').value.trim().slice(0, 60); state.geo = null;
+    state.town = $('townSearch').value.trim().slice(0, 60); state.geo = null; fromSaved = false;
+    saveTown(state.town);
     loadPlaces().then(function () { render(false); });
   });
   $('townSearch').addEventListener('focus', loadPlaces, { once: true });
@@ -289,8 +300,9 @@
   });
   $('shareBtn').addEventListener('click', share);
   $('townResult').addEventListener('click', function (e) {
+    if (e.target.id === 'forgetTown') { saveTown(''); state.town = ''; fromSaved = false; $('townSearch').value = ''; render(false); return; }
     var b = e.target.closest('button[data-town]'); if (!b) return;
-    $('townSearch').value = b.getAttribute('data-town'); state.town = b.getAttribute('data-town').replace(/ Township,.*$/, ''); state.geo = null; render(false);
+    $('townSearch').value = b.getAttribute('data-town'); state.town = b.getAttribute('data-town').replace(/ Township,.*$/, ''); state.geo = null; fromSaved = false; saveTown(state.town); render(false);
   });
 
   // ---- Load ----

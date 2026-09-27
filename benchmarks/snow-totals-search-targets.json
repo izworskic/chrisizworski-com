@@ -1,0 +1,48 @@
+{
+ "tool": "michigan-snow-totals",
+ "goal": "Page one on Google for these ten searches during the 2026-27 season.",
+ "measurement": "Rank is not measured here. This file checks that the page answers each search in crawlable text. Measure rank from a Search Console query export for /michigan-snow-totals/ (position and impressions per query), starting when snow is being reported. Demand evidence is the Sep 26 2026 Google autocomplete pull recorded in benchmarks/snow-totals-personas.json.",
+ "outOfScope": "Snow depth and snow on the ground belong to national-snow (/national-tools/snow/) under the tool-network registry, so no depth query is targeted here.",
+ "targets": [
+  {
+   "query": "michigan snow totals",
+   "answer": "title+h1"
+  },
+  {
+   "query": "michigan snow totals today",
+   "answer": "#today"
+  },
+  {
+   "query": "how much snow did michigan get yesterday",
+   "answer": "#yesterday"
+  },
+  {
+   "query": "michigan snowfall totals",
+   "answer": "kicker+#season-title"
+  },
+  {
+   "query": "michigan snow totals map",
+   "answer": "title+#snowMap"
+  },
+  {
+   "query": "michigan snow totals this season",
+   "answer": "#this-season"
+  },
+  {
+   "query": "first snow in michigan",
+   "answer": "#first-snow"
+  },
+  {
+   "query": "how much snow did michigan get",
+   "answer": "#today"
+  },
+  {
+   "query": "upper peninsula snow totals",
+   "answer": "#upper-peninsula"
+  },
+  {
+   "query": "how much snow did marquette get this year",
+   "answer": "#upper-peninsula+#lastSeasonTable"
+  }
+ ]
+}
