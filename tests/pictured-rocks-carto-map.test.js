@@ -14,7 +14,7 @@ test('hard gate: no world wrap and no continent-scale zoom',()=>{
   assert.match(ui,/minZoom:8/);
 });
 test('hard gate: park locations stay visible',()=>{
-  assert.match(ui,/bindTooltip\(esc\(p\.title\),\{permanent:true/);
+  assert.match(ui,/map-place-hit/);
   assert.match(ui,/minersCastle:\[46\.4929,-86\.5489\]/);
   assert.match(ui,/grandMarais:\[46\.6713,-85\.9850\]/);
 });
@@ -23,5 +23,5 @@ test('hard gate: fallback is also bounded and non-wrapping',()=>{
   assert.match(ui,/minZoom:8,maxZoom:19,noWrap:true,bounds:parkBounds/);
 });
 test('mobile clients get a fresh bundle',()=>{
-  assert.match(html,/pictured-rocks-planner-v3\.js\?v=20260927-8/);
+  assert.match(html,/pictured-rocks-planner-v3\.js\?v=20260927-9/);
 });

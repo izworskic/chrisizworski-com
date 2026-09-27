@@ -16,7 +16,7 @@ test('hard gate: selecting a point has a non-popup DOM response',()=>{
 test('hard gate: both point and visible name are explicit controls',()=>{
   assert.match(ui,/m\.on\('click'/);
   assert.match(ui,/interactive:true,direction:'top'/);
-  assert.match(ui,/tip\.on\('click'/);
+  assert.match(ui,/target\.addEventListener\('click'/);
   assert.match(ui,/aria-label.*open planning details/);
   assert.match(css,/park-place-label\{pointer-events:auto!important;cursor:pointer/);
 });
@@ -33,6 +33,15 @@ test('hard gate: selected place fit stays synchronized with planner answers',()=
 });
 
 test('mobile clients receive fresh interaction assets',()=>{
-  assert.match(html,/pictured-rocks-planner-v3\.js\?v=20260927-8/);
-  assert.match(html,/pictured-rocks-planner-v3\.css\?v=20260927-8/);
+  assert.match(html,/pictured-rocks-planner-v3\.js\?v=20260927-9/);
+  assert.match(html,/pictured-rocks-planner-v3\.css\?v=20260927-9/);
+});
+
+
+test('hard gate: native visible-label target bypasses Leaflet tooltip event ambiguity',()=>{
+  assert.match(ui,/data-map-point=/);
+  assert.match(ui,/target\.addEventListener\('click'/);
+  assert.match(ui,/closest\('\[data-map-point\]'/);
+  assert.match(ui,/selectMapPoint\(id,\{openPopup:true\}\)/);
+  assert.match(css,/map-place-hit\{[^}]*min-width:44px/);
 });

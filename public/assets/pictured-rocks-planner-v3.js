@@ -220,36 +220,39 @@ function initMap(){
     const pt=pointFor(id);if(!pt)return;
     const m=L.circleMarker([pt.lat,pt.lon],{...markerStyle(p.side),interactive:true,bubblingMouseEvents:false}).addTo(map);
     m.bindPopup(mapPopupHtml(id),{maxWidth:340,minWidth:260,className:'park-value-popup'});
-    m.bindTooltip(esc(p.title),{permanent:true,interactive:true,direction:'top',offset:[0,-8],opacity:.96,className:'park-place-label'});
+    m.bindTooltip(`<span class="map-place-hit" data-map-point="${esc(id)}" role="button" tabindex="0" aria-label="${esc(p.title)}: open planning details">${esc(p.title)}</span>`,{permanent:true,interactive:true,direction:'top',offset:[0,-8],opacity:.96,className:'park-place-label'});
     markers[id]=m;
     const activate=(opts={})=>selectMapPoint(id,opts);
     m.on('click',()=>activate({openPopup:true}));
-    m.on('add',()=>{
+    const applyMarkerA11y=()=>{
       const el=m.getElement();
-      if(el){
-        el.setAttribute('tabindex','0');
-        el.setAttribute('role','button');
-        el.setAttribute('aria-label',`${p.title}: open planning details`);
-        el.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();activate({openPopup:true,moveFocus:false});}});
-      }
-    });
-    const tip=m.getTooltip();
-    if(tip){
-      tip.on('click',()=>activate({openPopup:true}));
-      tip.on('add',()=>{
-        const el=tip.getElement();
-        if(el){
-          el.setAttribute('role','button');
-          el.setAttribute('tabindex','0');
-          el.setAttribute('aria-label',`${p.title}: open planning details`);
-          el.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();activate({openPopup:true});}});
-        }
-      });
-    }
+      if(!el||el.dataset.mapA11yReady==='1')return;
+      el.dataset.mapA11yReady='1';
+      el.setAttribute('tabindex','0');
+      el.setAttribute('role','button');
+      el.setAttribute('aria-label',`${p.title}: open planning details`);
+      el.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();activate({openPopup:true,moveFocus:false});}});
+    };
+    applyMarkerA11y();
+    m.on('add',applyMarkerA11y);
   });
   const all=Object.keys(engine.PLACES).map(pointFor).filter(Boolean).map(p=>[p.lat,p.lon]);
   if(all.length){map.fitBounds(all,{padding:[18,18],maxZoom:10});setTimeout(()=>map.invalidateSize({pan:false}),0);}
   $$('#mapZones [data-zone]').forEach(btn=>btn.addEventListener('click',()=>focusZone(btn.dataset.zone)));
+  target.addEventListener('click',event=>{
+    const hit=event.target.closest&&event.target.closest('[data-map-point]');
+    if(!hit)return;
+    const id=hit.dataset.mapPoint;
+    if(!engine.PLACES[id])return;
+    event.preventDefault();event.stopPropagation();
+    selectMapPoint(id,{openPopup:true});
+  });
+  target.addEventListener('keydown',event=>{
+    const hit=event.target.closest&&event.target.closest('[data-map-point]');
+    if(!hit||!engine.PLACES[hit.dataset.mapPoint]||(event.key!=='Enter'&&event.key!==' '))return;
+    event.preventDefault();event.stopPropagation();
+    selectMapPoint(hit.dataset.mapPoint,{openPopup:true});
+  });
 }
 function focusZone(zone){
   if(!map)return;

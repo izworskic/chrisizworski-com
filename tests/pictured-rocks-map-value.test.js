@@ -29,5 +29,5 @@ test('high-value stop caveats are encoded',()=>{
 
 test('map invites point interaction and ships a fresh bundle',()=>{
   assert.match(html,/Tap any point for trip fit, time, effort, access/);
-  assert.match(html,/pictured-rocks-planner-v3\.js\?v=20260927-8/);
+  assert.match(html,/pictured-rocks-planner-v3\.js\?v=20260927-9/);
 });
