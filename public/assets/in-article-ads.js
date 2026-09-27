@@ -83,57 +83,23 @@
     if (placed.length >= MAX || !block.isConnected || !roomFor(block)) return false;
     var parent = block.parentElement;
     var explicit = block.hasAttribute('data-in-article-ad-break');
-    var reserve = explicit && block.getAttribute('data-in-article-ad-break') === 'reserve';
     var aside = document.createElement('aside');
-    aside.className = 'in-article-ad' + (reserve ? ' in-article-ad--reserve' : '');
+    aside.className = 'in-article-ad';
     aside.setAttribute('aria-label', 'Advertisement');
     aside.innerHTML = '<span class="in-article-ad__label">Advertisement</span>' +
       '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="' + CLIENT + '" data-ad-slot="' + SLOT + '"></ins>';
     parent.insertBefore(aside, block);
     if (explicit) block.remove();
     placed.push(aside);
-    if (reserve) keepStill(aside);
     try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (_) { /* ads never break a tool */ }
     return true;
-  }
-
-  // Reserve seams (data-in-article-ad-break="reserve") keep the reader's place. An ad
-  // above the reader can still change height after it is inserted (fill, or Google
-  // shrinking an unfilled unit); some live tools suppress browser scroll anchoring, so
-  // compensate here, before paint, and only by the amount the content below actually
-  // moved (zero where the browser already anchored it). Unfilled units collapse only
-  // while off screen, never under the reader's eyes.
-  function keepStill(aside) {
-    var ins = aside.querySelector('ins'), ref = aside.nextElementSibling;
-    if (!ref) return;
-    var last = ref.getBoundingClientRect().top;
-    function hold() {
-      var now = ref.getBoundingClientRect().top;
-      if (aside.getBoundingClientRect().bottom <= 0 && now !== last) scrollBy({ top: now - last, behavior: 'instant' });
-      last = ref.getBoundingClientRect().top;
-    }
-    addEventListener('scroll', function () { last = ref.getBoundingClientRect().top; }, { passive: true });
-    if ('ResizeObserver' in window) new ResizeObserver(hold).observe(aside);
-    function collapse() {
-      if (aside.hidden) return true;
-      var r = aside.getBoundingClientRect();
-      if (r.top < innerHeight && r.bottom > 0) return false;
-      aside.hidden = true;
-      hold();
-      return true;
-    }
-    function retry() { if (collapse()) removeEventListener('scroll', retry); }
-    new MutationObserver(function () {
-      if (ins.getAttribute('data-ad-status') === 'unfilled' && !collapse()) addEventListener('scroll', retry, { passive: true });
-    }).observe(ins, { attributes: true, attributeFilter: ['data-ad-status'] });
   }
 
   function start() {
     var css = document.createElement('style');
     css.textContent = '.in-article-ad{display:block;clear:both;box-sizing:border-box;width:100%;max-width:760px;margin:40px auto;padding:14px 0 18px;border-top:1px solid color-mix(in srgb,currentColor 18%,transparent);border-bottom:1px solid color-mix(in srgb,currentColor 18%,transparent)}' +
       '.in-article-ad__label{display:block;margin:0 0 10px;font:600 10px/14px system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;text-align:center;opacity:.55}' +
-      '.in-article-ad:not(.in-article-ad--reserve):has(ins[data-ad-status="unfilled"]){display:none}' +
-      '.in-article-ad[hidden]{display:none!important}@media print{.in-article-ad{display:none}}';
+      '.in-article-ad:has(ins[data-ad-status="unfilled"]){display:none}@media print{.in-article-ad{display:none}}';
     document.head.appendChild(css);
     var explicit = [];
     document.querySelectorAll('[data-in-article-ad-break]').forEach(function (marker) {
