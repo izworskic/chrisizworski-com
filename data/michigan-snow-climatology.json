@@ -1,0 +1,1623 @@
+{
+ "generatedAt": "2026-09-27",
+ "sources": {
+  "snowfall": "NOAA Regional Climate Centers ACIS (data.rcc-acis.org), NWS cooperative and airport climate stations, daily snowfall",
+  "normals": "NOAA 1991-2020 daily snowfall normals via ACIS",
+  "firstSnow": "First day with at least 0.1 in. of snowfall after July 1, seasons 1991-92 through 2020-21; seasons with more than 10 missing September-December days are skipped; stations need 24 usable seasons"
+ },
+ "lastSeason": {
+  "label": "2025-26",
+  "start": "2025-07-01",
+  "end": "2026-06-30"
+ },
+ "stations": [
+  {
+   "id": "203744",
+   "name": "Herman",
+   "county": "Baraga",
+   "region": "keweenaw",
+   "lat": 46.6653,
+   "lon": -88.3772,
+   "lastSeason": {
+    "total": 366,
+    "normal": 207.8,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 86,
+    "first": {
+     "date": "2025-11-01",
+     "inches": 0.5
+    },
+    "biggest": {
+     "date": "2026-03-16",
+     "inches": 34
+    },
+    "pctOfNormal": 176,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 30,
+    "median": "Oct 16",
+    "early": "Oct 5",
+    "late": "Nov 1",
+    "earliest": "Sep 22"
+   }
+  },
+  {
+   "id": "208706",
+   "name": "Watton",
+   "county": "Baraga",
+   "region": "keweenaw",
+   "lat": 46.5266,
+   "lon": -88.6424,
+   "lastSeason": {
+    "total": 205.3,
+    "normal": 121.3,
+    "missing": 4,
+    "days": 365,
+    "complete": true,
+    "snowDays": 101,
+    "first": {
+     "date": "2025-11-08",
+     "inches": 0.5
+    },
+    "biggest": {
+     "date": "2026-03-16",
+     "inches": 29
+    },
+    "pctOfNormal": 169,
+    "pctNote": "4 days missing"
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "200718",
+   "name": "Bergland Dam",
+   "county": "Ontonagon",
+   "region": "keweenaw",
+   "lat": 46.5869,
+   "lon": -89.5475,
+   "lastSeason": {
+    "total": 205.2,
+    "normal": 180,
+    "missing": 10,
+    "days": 365,
+    "complete": false,
+    "snowDays": 84,
+    "first": {
+     "date": "2025-11-08",
+     "inches": 0.3
+    },
+    "biggest": {
+     "date": "2025-11-26",
+     "inches": 19.2
+    },
+    "pctOfNormal": null,
+    "pctNote": "incomplete"
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "205184",
+   "name": "Marquette NWS office (Negaunee Twp.)",
+   "county": "Marquette",
+   "region": "central-western-up",
+   "lat": 46.5313,
+   "lon": -87.5491,
+   "lastSeason": {
+    "total": 276.6,
+    "normal": 196.8,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 96,
+    "first": {
+     "date": "2025-11-01",
+     "inches": 0.6
+    },
+    "biggest": {
+     "date": "2026-03-16",
+     "inches": 21.7
+    },
+    "pctOfNormal": 141,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 30,
+    "median": "Oct 14",
+    "early": "Oct 4",
+    "late": "Nov 5",
+    "earliest": "Sep 29"
+   }
+  },
+  {
+   "id": "205178",
+   "name": "Marquette (city)",
+   "county": "Marquette",
+   "region": "central-western-up",
+   "lat": 46.5458,
+   "lon": -87.3795,
+   "lastSeason": {
+    "total": 124.8,
+    "normal": 102,
+    "missing": 1,
+    "days": 365,
+    "complete": true,
+    "snowDays": 60,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 3
+    },
+    "biggest": {
+     "date": "2026-03-16",
+     "inches": 15
+    },
+    "pctOfNormal": 122,
+    "pctNote": "1 day missing"
+   },
+   "firstSnow": {
+    "seasons": 24,
+    "median": "Nov 6",
+    "early": "Oct 18",
+    "late": "Nov 22",
+    "earliest": "Sep 29"
+   }
+  },
+  {
+   "id": "200770",
+   "name": "Big Bay",
+   "county": "Marquette",
+   "region": "central-western-up",
+   "lat": 46.8325,
+   "lon": -87.7504,
+   "lastSeason": {
+    "total": 204.8,
+    "normal": 132.3,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 90,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 7.5
+    },
+    "biggest": {
+     "date": "2025-12-29",
+     "inches": 14.1
+    },
+    "pctOfNormal": 155,
+    "pctNote": ""
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "201435",
+   "name": "Clarksburg",
+   "county": "Marquette",
+   "region": "central-western-up",
+   "lat": 46.4991,
+   "lon": -87.8451,
+   "lastSeason": {
+    "total": 183.5,
+    "normal": 117.8,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 89,
+    "first": {
+     "date": "2025-10-24",
+     "inches": 0.1
+    },
+    "biggest": {
+     "date": "2025-12-29",
+     "inches": 24
+    },
+    "pctOfNormal": 156,
+    "pctNote": ""
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "204104",
+   "name": "Ironwood",
+   "county": "Gogebic",
+   "region": "central-western-up",
+   "lat": 46.4656,
+   "lon": -90.1892,
+   "lastSeason": {
+    "total": 193.4,
+    "normal": 185.5,
+    "missing": 2,
+    "days": 365,
+    "complete": true,
+    "snowDays": 79,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 1
+    },
+    "biggest": {
+     "date": "2025-11-27",
+     "inches": 16
+    },
+    "pctOfNormal": 104,
+    "pctNote": "2 days missing"
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "204090",
+   "name": "Iron Mountain-Kingsford",
+   "county": "Dickinson",
+   "region": "central-western-up",
+   "lat": 45.7858,
+   "lon": -88.0841,
+   "lastSeason": {
+    "total": 73.7,
+    "normal": 61,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 36,
+    "first": {
+     "date": "2025-11-10",
+     "inches": 0.5
+    },
+    "biggest": {
+     "date": "2026-03-16",
+     "inches": 21
+    },
+    "pctOfNormal": 121,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 28,
+    "median": "Nov 9",
+    "early": "Oct 19",
+    "late": "Nov 25",
+    "earliest": "Oct 13"
+   }
+  },
+  {
+   "id": "207812",
+   "name": "Iron River (Stambaugh)",
+   "county": "Iron",
+   "region": "central-western-up",
+   "lat": 46.0555,
+   "lon": -88.6275,
+   "lastSeason": {
+    "total": 87.9,
+    "normal": 67.4,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 74,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 0.5
+    },
+    "biggest": {
+     "date": "2025-12-29",
+     "inches": 9.3
+    },
+    "pctOfNormal": 130,
+    "pctNote": ""
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "202626",
+   "name": "Escanaba",
+   "county": "Delta",
+   "region": "central-western-up",
+   "lat": 45.7438,
+   "lon": -87.0406,
+   "lastSeason": {
+    "total": 76.5,
+    "normal": 46.9,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 22,
+    "first": {
+     "date": "2025-11-30",
+     "inches": 3
+    },
+    "biggest": {
+     "date": "2026-03-16",
+     "inches": 22
+    },
+    "pctOfNormal": 163,
+    "pctNote": ""
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "201486",
+   "name": "Chatham (near Munising)",
+   "county": "Alger",
+   "region": "eastern-up",
+   "lat": 46.3414,
+   "lon": -86.9242,
+   "lastSeason": {
+    "total": 213.5,
+    "normal": 164,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 74,
+    "first": {
+     "date": "2025-11-08",
+     "inches": 0.8
+    },
+    "biggest": {
+     "date": "2026-03-17",
+     "inches": 25.2
+    },
+    "pctOfNormal": 130,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 30,
+    "median": "Oct 29",
+    "early": "Oct 6",
+    "late": "Nov 19",
+    "earliest": "Sep 22"
+   }
+  },
+  {
+   "id": "208043",
+   "name": "Tahquamenon Falls State Park",
+   "county": "Chippewa",
+   "region": "eastern-up",
+   "lat": 46.6013,
+   "lon": -85.2238,
+   "lastSeason": {
+    "total": 212.2,
+    "normal": 169.9,
+    "missing": 4,
+    "days": 365,
+    "complete": true,
+    "snowDays": 80,
+    "first": {
+     "date": "2025-11-08",
+     "inches": 0.3
+    },
+    "biggest": {
+     "date": "2025-12-29",
+     "inches": 15
+    },
+    "pctOfNormal": 125,
+    "pctNote": "4 days missing"
+   },
+   "firstSnow": {
+    "seasons": 26,
+    "median": "Nov 4",
+    "early": "Oct 12",
+    "late": "Nov 21",
+    "earliest": "Oct 1"
+   }
+  },
+  {
+   "id": "207366",
+   "name": "Sault Ste. Marie (airport)",
+   "county": "Chippewa",
+   "region": "eastern-up",
+   "lat": 46.48,
+   "lon": -84.3581,
+   "lastSeason": {
+    "total": 189.2,
+    "normal": 120.1,
+    "missing": 1,
+    "days": 365,
+    "complete": true,
+    "snowDays": 90,
+    "first": {
+     "date": "2025-11-08",
+     "inches": 0.7
+    },
+    "biggest": {
+     "date": "2025-12-08",
+     "inches": 10.2
+    },
+    "pctOfNormal": 158,
+    "pctNote": "1 day missing"
+   },
+   "firstSnow": {
+    "seasons": 29,
+    "median": "Oct 22",
+    "early": "Oct 2",
+    "late": "Nov 15",
+    "earliest": "Sep 26"
+   }
+  },
+  {
+   "id": "206507",
+   "name": "Petoskey",
+   "county": "Emmet",
+   "region": "northwest-lower",
+   "lat": 45.3725,
+   "lon": -84.9766,
+   "lastSeason": {
+    "total": 137.4,
+    "normal": 123.6,
+    "missing": 1,
+    "days": 365,
+    "complete": true,
+    "snowDays": 65,
+    "first": {
+     "date": "2025-11-10",
+     "inches": 1
+    },
+    "biggest": {
+     "date": "2026-03-16",
+     "inches": 16.5
+    },
+    "pctOfNormal": 111,
+    "pctNote": "1 day missing"
+   },
+   "firstSnow": {
+    "seasons": 25,
+    "median": "Nov 16",
+    "early": "Oct 19",
+    "late": "Dec 2",
+    "earliest": "Oct 12"
+   }
+  },
+  {
+   "id": "201468",
+   "name": "Charlevoix",
+   "county": "Charlevoix",
+   "region": "northwest-lower",
+   "lat": 45.3172,
+   "lon": -85.2672,
+   "lastSeason": {
+    "total": 129.7,
+    "normal": 100.2,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 57,
+    "first": {
+     "date": "2025-11-10",
+     "inches": 1
+    },
+    "biggest": {
+     "date": "2026-03-16",
+     "inches": 18
+    },
+    "pctOfNormal": 129,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 25,
+    "median": "Nov 16",
+    "early": "Oct 14",
+    "late": "Dec 3",
+    "earliest": "Oct 2"
+   }
+  },
+  {
+   "id": "202381",
+   "name": "East Jordan",
+   "county": "Charlevoix",
+   "region": "northwest-lower",
+   "lat": 45.1518,
+   "lon": -85.1324,
+   "lastSeason": {
+    "total": 156.1,
+    "normal": 122.2,
+    "missing": 10,
+    "days": 365,
+    "complete": false,
+    "snowDays": 73,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 0.3
+    },
+    "biggest": {
+     "date": "2026-03-16",
+     "inches": 12.8
+    },
+    "pctOfNormal": null,
+    "pctNote": "incomplete"
+   },
+   "firstSnow": {
+    "seasons": 24,
+    "median": "Nov 9",
+    "early": "Oct 14",
+    "late": "Nov 24",
+    "earliest": "Oct 1"
+   }
+  },
+  {
+   "id": "200925",
+   "name": "Boyne Falls",
+   "county": "Charlevoix",
+   "region": "northwest-lower",
+   "lat": 45.1672,
+   "lon": -84.9138,
+   "lastSeason": {
+    "total": 142,
+    "normal": 111.7,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 52,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 2.5
+    },
+    "biggest": {
+     "date": "2026-03-16",
+     "inches": 14
+    },
+    "pctOfNormal": 127,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 30,
+    "median": "Nov 6",
+    "early": "Oct 16",
+    "late": "Nov 23",
+    "earliest": "Oct 1"
+   }
+  },
+  {
+   "id": "205097",
+   "name": "Maple City (Leelanau)",
+   "county": "Leelanau",
+   "region": "northwest-lower",
+   "lat": 44.855,
+   "lon": -85.8352,
+   "lastSeason": {
+    "total": 157,
+    "normal": 143.3,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 78,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 4.2
+    },
+    "biggest": {
+     "date": "2026-03-16",
+     "inches": 14.4
+    },
+    "pctOfNormal": 110,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 28,
+    "median": "Nov 2",
+    "early": "Oct 11",
+    "late": "Nov 20",
+    "earliest": "Oct 4"
+   }
+  },
+  {
+   "id": "206012",
+   "name": "Northwest Michigan Research Farm (Leelanau)",
+   "county": "Leelanau",
+   "region": "northwest-lower",
+   "lat": 44.883,
+   "lon": -85.6752,
+   "lastSeason": {
+    "total": 145.5,
+    "normal": 114.5,
+    "missing": 10,
+    "days": 365,
+    "complete": false,
+    "snowDays": 59,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 0.5
+    },
+    "biggest": {
+     "date": "2026-03-16",
+     "inches": 15
+    },
+    "pctOfNormal": null,
+    "pctNote": "incomplete"
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "204257",
+   "name": "Kalkaska",
+   "county": "Kalkaska",
+   "region": "northwest-lower",
+   "lat": 44.728,
+   "lon": -85.1727,
+   "lastSeason": {
+    "total": 146.8,
+    "normal": 132.1,
+    "missing": 4,
+    "days": 365,
+    "complete": true,
+    "snowDays": 53,
+    "first": {
+     "date": "2025-11-10",
+     "inches": 2
+    },
+    "biggest": {
+     "date": "2025-12-29",
+     "inches": 12
+    },
+    "pctOfNormal": 111,
+    "pctNote": "4 days missing"
+   },
+   "firstSnow": {
+    "seasons": 29,
+    "median": "Nov 6",
+    "early": "Oct 17",
+    "late": "Nov 24",
+    "earliest": "Oct 2"
+   }
+  },
+  {
+   "id": "200758",
+   "name": "Beulah",
+   "county": "Benzie",
+   "region": "northwest-lower",
+   "lat": 44.5316,
+   "lon": -86.1311,
+   "lastSeason": {
+    "total": 112.2,
+    "normal": 92.4,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 61,
+    "first": {
+     "date": "2025-11-10",
+     "inches": 1.2
+    },
+    "biggest": {
+     "date": "2026-01-18",
+     "inches": 8.2
+    },
+    "pctOfNormal": 121,
+    "pctNote": ""
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "204502",
+   "name": "Lake City",
+   "county": "Missaukee",
+   "region": "northwest-lower",
+   "lat": 44.3088,
+   "lon": -85.205,
+   "lastSeason": {
+    "total": 70.1,
+    "normal": 74,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 69,
+    "first": {
+     "date": "2025-11-10",
+     "inches": 0.8
+    },
+    "biggest": {
+     "date": "2026-03-17",
+     "inches": 6.6
+    },
+    "pctOfNormal": 95,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 28,
+    "median": "Nov 1",
+    "early": "Oct 16",
+    "late": "Nov 26",
+    "earliest": "Oct 2"
+   }
+  },
+  {
+   "id": "203099",
+   "name": "Gaylord NWS office",
+   "county": "Otsego",
+   "region": "northeast-lower",
+   "lat": 44.9072,
+   "lon": -84.7189,
+   "lastSeason": {
+    "total": 165.8,
+    "normal": 148.8,
+    "missing": 1,
+    "days": 365,
+    "complete": true,
+    "snowDays": 79,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 1.7
+    },
+    "biggest": {
+     "date": "2025-11-27",
+     "inches": 13.1
+    },
+    "pctOfNormal": 111,
+    "pctNote": "1 day missing"
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "201492",
+   "name": "Cheboygan",
+   "county": "Cheboygan",
+   "region": "northeast-lower",
+   "lat": 45.6523,
+   "lon": -84.4724,
+   "lastSeason": {
+    "total": 103.7,
+    "normal": 87.6,
+    "missing": 1,
+    "days": 365,
+    "complete": true,
+    "snowDays": 41,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 5.5
+    },
+    "biggest": {
+     "date": "2026-03-16",
+     "inches": 21
+    },
+    "pctOfNormal": 118,
+    "pctNote": "1 day missing"
+   },
+   "firstSnow": {
+    "seasons": 30,
+    "median": "Nov 13",
+    "early": "Nov 2",
+    "late": "Nov 25",
+    "earliest": "Oct 7"
+   }
+  },
+  {
+   "id": "203391",
+   "name": "Grayling",
+   "county": "Crawford",
+   "region": "northeast-lower",
+   "lat": 44.6454,
+   "lon": -84.6992,
+   "lastSeason": {
+    "total": 93,
+    "normal": 88.3,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 51,
+    "first": {
+     "date": "2025-11-10",
+     "inches": 1
+    },
+    "biggest": {
+     "date": "2025-11-28",
+     "inches": 10
+    },
+    "pctOfNormal": 105,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 29,
+    "median": "Nov 3",
+    "early": "Oct 17",
+    "late": "Nov 25",
+    "earliest": "Oct 7"
+   }
+  },
+  {
+   "id": "203936",
+   "name": "Houghton Lake (airport)",
+   "county": "Roscommon",
+   "region": "northeast-lower",
+   "lat": 44.359,
+   "lon": -84.6739,
+   "lastSeason": {
+    "total": 72.9,
+    "normal": 65.9,
+    "missing": 2,
+    "days": 365,
+    "complete": true,
+    "snowDays": 52,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 1.1
+    },
+    "biggest": {
+     "date": "2025-11-30",
+     "inches": 5.2
+    },
+    "pctOfNormal": 111,
+    "pctNote": "2 days missing"
+   },
+   "firstSnow": {
+    "seasons": 26,
+    "median": "Nov 9",
+    "early": "Oct 14",
+    "late": "Nov 24",
+    "earliest": "Oct 2"
+   }
+  },
+  {
+   "id": "200164",
+   "name": "Alpena (airport)",
+   "county": "Alpena",
+   "region": "northeast-lower",
+   "lat": 45.0716,
+   "lon": -83.5645,
+   "lastSeason": {
+    "total": 90.4,
+    "normal": 77.6,
+    "missing": 1,
+    "days": 365,
+    "complete": true,
+    "snowDays": 62,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 0.5
+    },
+    "biggest": {
+     "date": "2025-12-29",
+     "inches": 6.1
+    },
+    "pctOfNormal": 116,
+    "pctNote": "1 day missing"
+   },
+   "firstSnow": {
+    "seasons": 28,
+    "median": "Nov 9",
+    "early": "Oct 14",
+    "late": "Nov 23",
+    "earliest": "Oct 3"
+   }
+  },
+  {
+   "id": "205533",
+   "name": "Mio",
+   "county": "Oscoda",
+   "region": "northeast-lower",
+   "lat": 44.6466,
+   "lon": -84.1158,
+   "lastSeason": {
+    "total": 57.5,
+    "normal": 57,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 49,
+    "first": {
+     "date": "2025-11-27",
+     "inches": 2.5
+    },
+    "biggest": {
+     "date": "2025-11-30",
+     "inches": 5.5
+    },
+    "pctOfNormal": 101,
+    "pctNote": ""
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "208800",
+   "name": "West Branch",
+   "county": "Ogemaw",
+   "region": "northeast-lower",
+   "lat": 44.2541,
+   "lon": -84.2011,
+   "lastSeason": {
+    "total": 59.3,
+    "normal": 53,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 43,
+    "first": {
+     "date": "2025-11-27",
+     "inches": 1.1
+    },
+    "biggest": {
+     "date": "2025-11-30",
+     "inches": 7.2
+    },
+    "pctOfNormal": 112,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 30,
+    "median": "Nov 20",
+    "early": "Oct 29",
+    "late": "Dec 9",
+    "earliest": "Oct 21"
+   }
+  },
+  {
+   "id": "202423",
+   "name": "East Tawas",
+   "county": "Iosco",
+   "region": "northeast-lower",
+   "lat": 44.2838,
+   "lon": -83.5036,
+   "lastSeason": {
+    "total": 36.7,
+    "normal": 49.2,
+    "missing": 1,
+    "days": 365,
+    "complete": true,
+    "snowDays": 17,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 0.1
+    },
+    "biggest": {
+     "date": "2025-12-10",
+     "inches": 6
+    },
+    "pctOfNormal": 75,
+    "pctNote": "1 day missing"
+   },
+   "firstSnow": {
+    "seasons": 29,
+    "median": "Nov 23",
+    "early": "Nov 5",
+    "late": "Dec 12",
+    "earliest": "Oct 27"
+   }
+  },
+  {
+   "id": "205712",
+   "name": "Muskegon (airport)",
+   "county": "Muskegon",
+   "region": "west-michigan",
+   "lat": 43.1711,
+   "lon": -86.2368,
+   "lastSeason": {
+    "total": 108.5,
+    "normal": 87.2,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 55,
+    "first": {
+     "date": "2025-11-08",
+     "inches": 0.1
+    },
+    "biggest": {
+     "date": "2026-01-21",
+     "inches": 8.8
+    },
+    "pctOfNormal": 124,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 27,
+    "median": "Nov 17",
+    "early": "Oct 31",
+    "late": "Dec 2",
+    "earliest": "Oct 18"
+   }
+  },
+  {
+   "id": "203632",
+   "name": "Hart",
+   "county": "Oceana",
+   "region": "west-michigan",
+   "lat": 43.6751,
+   "lon": -86.4228,
+   "lastSeason": {
+    "total": 112.8,
+    "normal": 78.5,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 59,
+    "first": {
+     "date": "2025-11-11",
+     "inches": 10.3
+    },
+    "biggest": {
+     "date": "2025-12-02",
+     "inches": 15
+    },
+    "pctOfNormal": 144,
+    "pctNote": ""
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "205567",
+   "name": "Montague",
+   "county": "Muskegon",
+   "region": "west-michigan",
+   "lat": 43.461,
+   "lon": -86.4177,
+   "lastSeason": {
+    "total": 109.2,
+    "normal": 68.9,
+    "missing": 5,
+    "days": 365,
+    "complete": true,
+    "snowDays": 36,
+    "first": {
+     "date": "2025-11-10",
+     "inches": 4
+    },
+    "biggest": {
+     "date": "2025-12-02",
+     "inches": 8
+    },
+    "pctOfNormal": 158,
+    "pctNote": "5 days missing"
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "203333",
+   "name": "Grand Rapids (airport)",
+   "county": "Kent",
+   "region": "west-michigan",
+   "lat": 42.8821,
+   "lon": -85.523,
+   "lastSeason": {
+    "total": 75.4,
+    "normal": 77.6,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 51,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 1.1
+    },
+    "biggest": {
+     "date": "2026-01-27",
+     "inches": 7.3
+    },
+    "pctOfNormal": 97,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 30,
+    "median": "Nov 9",
+    "early": "Oct 18",
+    "late": "Nov 24",
+    "earliest": "Oct 7"
+   }
+  },
+  {
+   "id": "200779",
+   "name": "Big Rapids",
+   "county": "Mecosta",
+   "region": "west-michigan",
+   "lat": 43.7072,
+   "lon": -85.4819,
+   "lastSeason": {
+    "total": 58.5,
+    "normal": 61.3,
+    "missing": 3,
+    "days": 365,
+    "complete": true,
+    "snowDays": 46,
+    "first": {
+     "date": "2025-11-10",
+     "inches": 0.8
+    },
+    "biggest": {
+     "date": "2025-12-10",
+     "inches": 5.6
+    },
+    "pctOfNormal": 95,
+    "pctNote": "3 days missing"
+   },
+   "firstSnow": {
+    "seasons": 27,
+    "median": "Nov 14",
+    "early": "Oct 27",
+    "late": "Nov 29",
+    "earliest": "Oct 11"
+   }
+  },
+  {
+   "id": "200710",
+   "name": "Benton Harbor (airport)",
+   "county": "Berrien",
+   "region": "southwest",
+   "lat": 42.1245,
+   "lon": -86.4266,
+   "lastSeason": {
+    "total": 77.2,
+    "normal": 77.7,
+    "missing": 4,
+    "days": 365,
+    "complete": true,
+    "snowDays": 37,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 0.6
+    },
+    "biggest": {
+     "date": "2026-01-15",
+     "inches": 10
+    },
+    "pctOfNormal": 99,
+    "pctNote": "4 days missing"
+   },
+   "firstSnow": {
+    "seasons": 28,
+    "median": "Nov 23",
+    "early": "Nov 2",
+    "late": "Dec 19",
+    "earliest": "Oct 12"
+   }
+  },
+  {
+   "id": "205892",
+   "name": "Niles",
+   "county": "Berrien",
+   "region": "southwest",
+   "lat": 41.8405,
+   "lon": -86.2658,
+   "lastSeason": {
+    "total": 111.3,
+    "normal": 62.5,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 42,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 1
+    },
+    "biggest": {
+     "date": "2026-01-15",
+     "inches": 12
+    },
+    "pctOfNormal": 178,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 30,
+    "median": "Nov 17",
+    "early": "Oct 27",
+    "late": "Dec 10",
+    "earliest": "Oct 12"
+   }
+  },
+  {
+   "id": "200552",
+   "name": "Battle Creek",
+   "county": "Calhoun",
+   "region": "southwest",
+   "lat": 42.3678,
+   "lon": -85.2634,
+   "lastSeason": {
+    "total": 85.1,
+    "normal": 64.6,
+    "missing": 1,
+    "days": 365,
+    "complete": true,
+    "snowDays": 52,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 3.1
+    },
+    "biggest": {
+     "date": "2025-11-30",
+     "inches": 11.5
+    },
+    "pctOfNormal": 132,
+    "pctNote": "1 day missing"
+   },
+   "firstSnow": {
+    "seasons": 25,
+    "median": "Nov 9",
+    "early": "Oct 24",
+    "late": "Dec 6",
+    "earliest": "Oct 12"
+   }
+  },
+  {
+   "id": "208184",
+   "name": "Three Rivers",
+   "county": "St. Joseph",
+   "region": "southwest",
+   "lat": 41.9299,
+   "lon": -85.6385,
+   "lastSeason": {
+    "total": 44.5,
+    "normal": 41.2,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 36,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 3
+    },
+    "biggest": {
+     "date": "2025-11-30",
+     "inches": 6.8
+    },
+    "pctOfNormal": 108,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 29,
+    "median": "Nov 21",
+    "early": "Nov 9",
+    "late": "Dec 16",
+    "earliest": "Oct 12"
+   }
+  },
+  {
+   "id": "207227",
+   "name": "Saginaw-Bay City-Midland (MBS airport)",
+   "county": "Saginaw",
+   "region": "mid-thumb",
+   "lat": 43.5281,
+   "lon": -84.0813,
+   "lastSeason": {
+    "total": 35.6,
+    "normal": 49,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 43,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 3.4
+    },
+    "biggest": {
+     "date": "2025-12-10",
+     "inches": 5.7
+    },
+    "pctOfNormal": 73,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 30,
+    "median": "Nov 20",
+    "early": "Oct 27",
+    "late": "Dec 6",
+    "earliest": "Oct 12"
+   }
+  },
+  {
+   "id": "202846",
+   "name": "Flint",
+   "county": "Genesee",
+   "region": "mid-thumb",
+   "lat": 42.9668,
+   "lon": -83.75,
+   "lastSeason": {
+    "total": 46.3,
+    "normal": 52.1,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 52,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 1.6
+    },
+    "biggest": {
+     "date": "2026-01-25",
+     "inches": 3
+    },
+    "pctOfNormal": 89,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 30,
+    "median": "Nov 15",
+    "early": "Oct 30",
+    "late": "Dec 3",
+    "earliest": "Oct 12"
+   }
+  },
+  {
+   "id": "204641",
+   "name": "Lansing (airport)",
+   "county": "Clinton",
+   "region": "mid-thumb",
+   "lat": 42.7761,
+   "lon": -84.5997,
+   "lastSeason": {
+    "total": 41.6,
+    "normal": 50.2,
+    "missing": 1,
+    "days": 365,
+    "complete": true,
+    "snowDays": 33,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 2
+    },
+    "biggest": {
+     "date": "2025-11-29",
+     "inches": 3.6
+    },
+    "pctOfNormal": 83,
+    "pctNote": "1 day missing"
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "203170",
+   "name": "Gladwin",
+   "county": "Gladwin",
+   "region": "mid-thumb",
+   "lat": 43.9758,
+   "lon": -84.4908,
+   "lastSeason": {
+    "total": 42.1,
+    "normal": 48.5,
+    "missing": 3,
+    "days": 365,
+    "complete": true,
+    "snowDays": 39,
+    "first": {
+     "date": "2025-11-10",
+     "inches": 0.3
+    },
+    "biggest": {
+     "date": "2025-11-30",
+     "inches": 8
+    },
+    "pctOfNormal": 87,
+    "pctNote": "3 days missing"
+   },
+   "firstSnow": {
+    "seasons": 29,
+    "median": "Nov 20",
+    "early": "Nov 2",
+    "late": "Dec 15",
+    "earliest": "Oct 21"
+   }
+  },
+  {
+   "id": "201361",
+   "name": "Cass City",
+   "county": "Tuscola",
+   "region": "mid-thumb",
+   "lat": 43.5861,
+   "lon": -83.1805,
+   "lastSeason": {
+    "total": 36.2,
+    "normal": 42.5,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 33,
+    "first": {
+     "date": "2025-11-10",
+     "inches": 1
+    },
+    "biggest": {
+     "date": "2025-11-30",
+     "inches": 6
+    },
+    "pctOfNormal": 85,
+    "pctNote": ""
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "203585",
+   "name": "Harbor Beach",
+   "county": "Huron",
+   "region": "mid-thumb",
+   "lat": 43.8322,
+   "lon": -82.6427,
+   "lastSeason": {
+    "total": 41.8,
+    "normal": 47.2,
+    "missing": 1,
+    "days": 365,
+    "complete": true,
+    "snowDays": 39,
+    "first": {
+     "date": "2025-11-11",
+     "inches": 1.4
+    },
+    "biggest": {
+     "date": "2026-01-26",
+     "inches": 5
+    },
+    "pctOfNormal": 89,
+    "pctNote": "1 day missing"
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "202103",
+   "name": "Detroit (DTW airport)",
+   "county": "Wayne",
+   "region": "southeast",
+   "lat": 42.2311,
+   "lon": -83.3312,
+   "lastSeason": {
+    "total": 39.5,
+    "normal": 45,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 43,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 2.2
+    },
+    "biggest": {
+     "date": "2026-01-14",
+     "inches": 5.1
+    },
+    "pctOfNormal": 88,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 30,
+    "median": "Nov 20",
+    "early": "Oct 30",
+    "late": "Dec 7",
+    "earliest": "Oct 12"
+   }
+  },
+  {
+   "id": "200230",
+   "name": "Ann Arbor",
+   "county": "Washtenaw",
+   "region": "southeast",
+   "lat": 42.2981,
+   "lon": -83.6639,
+   "lastSeason": {
+    "total": 58.4,
+    "normal": 61.4,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 54,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 3.2
+    },
+    "biggest": {
+     "date": "2025-11-30",
+     "inches": 5.5
+    },
+    "pctOfNormal": 95,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 26,
+    "median": "Nov 12",
+    "early": "Oct 23",
+    "late": "Nov 26",
+    "earliest": "Oct 12"
+   }
+  },
+  {
+   "id": "206658",
+   "name": "Pontiac",
+   "county": "Oakland",
+   "region": "southeast",
+   "lat": 42.6388,
+   "lon": -83.2555,
+   "lastSeason": {
+    "total": 40.3,
+    "normal": 36,
+    "missing": 4,
+    "days": 365,
+    "complete": true,
+    "snowDays": 27,
+    "first": {
+     "date": "2025-11-30",
+     "inches": 5
+    },
+    "biggest": {
+     "date": "2025-11-30",
+     "inches": 5
+    },
+    "pctOfNormal": 112,
+    "pctNote": "4 days missing"
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "206680",
+   "name": "Port Huron",
+   "county": "St. Clair",
+   "region": "southeast",
+   "lat": 42.975,
+   "lon": -82.4194,
+   "lastSeason": {
+    "total": 19.6,
+    "normal": 35.5,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 19,
+    "first": {
+     "date": "2025-11-29",
+     "inches": 1.5
+    },
+    "biggest": {
+     "date": "2026-01-25",
+     "inches": 3.8
+    },
+    "pctOfNormal": 55,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 29,
+    "median": "Dec 1",
+    "early": "Nov 15",
+    "late": "Dec 20",
+    "earliest": "Nov 11"
+   }
+  },
+  {
+   "id": "208941",
+   "name": "White Lake",
+   "county": "Oakland",
+   "region": "southeast",
+   "lat": 42.698,
+   "lon": -83.4716,
+   "lastSeason": {
+    "total": 58.4,
+    "normal": 62.3,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 50,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 1.4
+    },
+    "biggest": {
+     "date": "2025-12-10",
+     "inches": 5.6
+    },
+    "pctOfNormal": 94,
+    "pctNote": ""
+   },
+   "firstSnow": null
+  },
+  {
+   "id": "203823",
+   "name": "Hillsdale",
+   "county": "Hillsdale",
+   "region": "southeast",
+   "lat": 41.9352,
+   "lon": -84.6411,
+   "lastSeason": {
+    "total": 34.6,
+    "normal": 44.1,
+    "missing": 0,
+    "days": 365,
+    "complete": true,
+    "snowDays": 26,
+    "first": {
+     "date": "2025-11-09",
+     "inches": 2.5
+    },
+    "biggest": {
+     "date": "2025-11-30",
+     "inches": 4
+    },
+    "pctOfNormal": 78,
+    "pctNote": ""
+   },
+   "firstSnow": {
+    "seasons": 25,
+    "median": "Nov 17",
+    "early": "Nov 1",
+    "late": "Dec 13",
+    "earliest": "Oct 20"
+   }
+  }
+ ]
+}

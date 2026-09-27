@@ -71,3 +71,130 @@ test('registry owns the snowfall intent without competing with snowpack', () => 
   assert.ok(group.supports.includes('national-snow'));
   assert.match(group.rule, /doorway/);
 });
+
+// ---- Persona rebuild: shared core, season view, static tables ----
+const core = require('../public/assets/snow-totals-core.js');
+const places = require('../public/assets/michigan-places.json').places;
+const climo = require('../data/michigan-snow-climatology.json');
+const storm = require('./fixtures/snow-lsr-2025-11-30-storm.json');
+const acisFixture = require('./fixtures/snow-acis-2025-07-01-to-2025-11-30.json');
+const stormNow = Date.parse(storm.now);
+const stormReports = storm.properties.map(normalize).filter(Boolean);
+
+async function withRecordedNetwork(fn) {
+  const realFetch = global.fetch, realNow = Date.now;
+  Date.now = () => stormNow;
+  global.fetch = async (url) => {
+    const u = String(url), ok = body => ({ ok: true, status: 200, json: async () => body });
+    if (u.includes('mesonet')) return ok({ features: storm.properties.map(properties => ({ properties })) });
+    if (u.includes('weather.gov')) return ok({ features: [] });
+    if (u.includes('rcc-acis')) return ok(acisFixture.response);
+    throw new Error(u);
+  };
+  try { return await fn(); } finally { global.fetch = realFetch; Date.now = realNow; }
+}
+function call(query) {
+  return withRecordedNetwork(async () => {
+    let status, body;
+    await api({ method: 'GET', query }, { setHeader() {}, status(c) { status = c; return this; }, json(b) { body = b; return this; } });
+    return { status, body };
+  });
+}
+
+test('every Michigan county sits in exactly one region, and snow-belt regions match the snowmobile tool', async () => {
+  const counties = places.filter(p => p[3] === 'c').map(p => p[0]);
+  assert.equal(counties.length, 83);
+  for (const c of counties) assert.ok(core.regionOf(c), c);
+  assert.equal(core.REGIONS.flatMap(r => r.counties).length, 83);
+  const { REGIONS } = await import('../lib/snowmobile/regions.mjs');
+  for (const [key, id] of [['keweenaw-copper-country', 'keweenaw'], ['central-western-up', 'central-western-up'], ['eastern-up', 'eastern-up']]) {
+    assert.deepEqual(REGIONS.find(r => r.key === key).counties.map(core.normCounty).sort(), core.regionById(id).counties.map(core.normCounty).sort(), key);
+  }
+  for (const r of core.REGIONS) for (const t of r.trails) assert.ok(fs.existsSync(path.join(root, 'public', t.href)), t.href);
+});
+
+test('the API sends every reporting place with its region and a clean source name', async () => {
+  const { status, body } = await call({});
+  assert.equal(status, 200);
+  const places = new Set(stormReports.map(r => `${r.place}|${r.county}`));
+  assert.equal(new Set(body.reports.map(r => `${r.place}|${r.county}`)).size, places.size);
+  assert.ok(places.size > 60, 'fixture is a real storm week');
+  assert.equal(core.sourceLabel('Cocorahs'), 'CoCoRaHS observer');
+  assert.ok(body.reports.every(r => r.region || !/^[A-Z][a-z]/.test(r.county) || r.county === 'Elkhart'));
+});
+
+test('town search: own report, nearest reports when a town has none, county, and unknown', () => {
+  const rows = core.rowsFor(stormReports, '48h', stormNow);
+  const rockford = core.findTown('rockford, mi', rows, places);
+  assert.equal(rockford.kind, 'town');
+  assert.equal(rockford.rows[0].inches, 12);
+  const bay = core.findTown('Bay City', rows, places);
+  assert.ok(['town', 'nearby'].includes(bay.kind));
+  const tc = core.findTown('Traverse City', rows, places);
+  assert.equal(tc.kind, 'nearby');
+  assert.ok(tc.nearby.length && tc.nearby.every(n => n.miles <= 25));
+  const kent = core.findTown('Kent County', rows, places);
+  assert.equal(kent.kind, 'county');
+  assert.ok(kent.rows.every(r => r.county === 'Kent'));
+  assert.equal(core.findTown('Zzyzx', rows, places).kind, 'unknown');
+  assert.equal(core.prettyPlace('4 WSW Bates'), '4 mi WSW of Bates');
+  assert.equal(core.lookupPlace('paradise', places).name, 'Paradise Township, Grand Traverse County', 'ambiguous township names say which county they mean');
+});
+
+test('season view compares station totals with normal and never fakes a percentage', async () => {
+  const { status, body } = await call({ view: 'season' });
+  assert.equal(status, 200);
+  assert.equal(body.season.label, '2025-26');
+  assert.equal(body.season.through, '2025-11-30');
+  assert.equal(body.season.stations.length, climo.stations.length);
+  assert.ok(body.season.anySnow);
+  assert.ok(body.season.firstOfSeason.date >= '2025-07-01');
+  for (const s of body.season.stations) {
+    if (s.pctOfNormal != null) assert.ok(s.complete && s.normal >= 2);
+  }
+  const gappy = core.seasonStation(Array.from({ length: 20 }, (_, i) => ['2026-01-' + String(i + 1).padStart(2, '0'), i < 6 ? 'M' : '2.0', '1.0']));
+  assert.equal(gappy.complete, false);
+  assert.equal(gappy.pctOfNormal, null);
+  const summer = core.seasonStation([['2026-07-02', 'M', '0.0'], ['2026-07-03', '0.0', '0.0']]);
+  assert.equal(summer.missing, 0, 'a missing July day cannot hide snow');
+  assert.equal(body.lastSeason.stations.length, climo.stations.length);
+});
+
+test('static first-snow and last-season tables match the computed data, and the copy cites the right counts', async () => {
+  const { tablesHtml } = await import('../scripts/build-snow-reference-data.mjs');
+  const t = tablesHtml(climo);
+  const between = key => html.split(`<!-- ${key}:start -->`)[1].split(`<!-- ${key}:end -->`)[0].trim();
+  assert.equal(between('snow-first'), t.first);
+  assert.equal(between('snow-last-season'), t.last);
+  const n = climo.stations.length;
+  assert.ok(html.includes(`at ${n} National Weather Service`) && html.includes(`final season totals at ${n} stations`));
+  const herman = climo.stations.find(s => s.id === '203744');
+  assert.ok(html.includes(`${herman.lastSeason.total} inches at Herman`) && html.includes(`${herman.lastSeason.pctOfNormal} percent of normal`));
+  const long = md => md.replace(/^Sep/, 'September').replace(/^Oct/, 'October').replace(/^Nov/, 'November').replace(/^Dec/, 'December');
+  assert.ok(html.includes(`around ${long(climo.stations.find(s => s.id === '205184').firstSnow.median)} at the Marquette NWS office`));
+  assert.ok(html.includes(`${long(herman.firstSnow.median)} at Herman`) && html.includes(`${long(herman.firstSnow.earliest)}, at Herman`));
+  assert.ok(html.indexOf('id="townSearch"') < html.indexOf('class="lede"'), 'town search sits under the H1');
+});
+
+test('persona benchmark holds at zero loss', () => {
+  const { execFileSync } = require('node:child_process');
+  execFileSync(process.execPath, [path.join(root, 'scripts/benchmark-snow-totals-personas.mjs'), '--check'], { stdio: 'pipe' });
+});
+
+test('review fixes: since-yesterday starts at Eastern midnight, same-name towns, partial names, trailing state only', () => {
+  // 10 a.m. EST Tuesday Jan 13 2026 -> midnight Monday Jan 12 EST (05:00Z), not 10 a.m. Sunday.
+  assert.equal(new Date(core.windowStart('48h', Date.parse('2026-01-13T15:00:00Z'))).toISOString(), '2026-01-12T05:00:00.000Z');
+  // Across the fall-back change: 11:30 p.m. EST Nov 1 -> midnight Oct 31 EDT (04:00Z).
+  assert.equal(new Date(core.windowStart('48h', Date.parse('2026-11-02T04:30:00Z'))).toISOString(), '2026-10-31T04:00:00.000Z');
+  assert.equal(core.cleanQuery('Lake Michigan Beach'), 'lake michigan beach');
+  assert.equal(core.cleanQuery('Grand Rapids, MI 49503'), 'grand rapids');
+  const choose = core.findTown('Grand', [], places);
+  assert.equal(choose.kind, 'choose');
+  assert.ok(choose.choices.includes('Grand Rapids'));
+  // A "Bear Lake" report 100+ miles from the Bear Lake the gazetteer resolves is not that town's own report.
+  const far = { place: 'Bear Lake', county: 'Kalkaska', lat: 44.6, lon: -85.0, inches: 5, reportedAt: '2026-01-13T12:00:00Z' };
+  const bear = core.lookupPlace('bear lake', places);
+  assert.ok(core.milesBetween(bear.lat, bear.lon, far.lat, far.lon) > 15);
+  assert.notEqual(core.findTown('Bear Lake', [far], places).kind, 'town');
+  assert.equal(core.seasonStation([['2026-01-01', '1.0', '0.5']]).pctNote, 'too early');
+});
