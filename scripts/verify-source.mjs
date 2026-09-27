@@ -347,16 +347,16 @@ const committedDriftHashEntries = [
   // go back to the live snapshot.
   ["/chris-izworski-biography/", "2191b790b006cd1c9ff20308aff607b319f9b79cfbec3cd0e0515ffd78c3d526"],
   ["/chris-izworski-works/", "af21c1ee61fbc79af0830839fe26640caab69ad8b37fcd8cc6e9af0b074b75b5"],
-  ["/fall-color/ann-arbor-irish-hills-fall-color/", "634fefef781139739d04e38bdedfbd284218117ec6d605efa8f324c2ecd87a12"],
-  ["/fall-color/au-sable-river-fall-color/", "b3dcd933063da636e26b0f2560784ab6fcdf0a7a039a2df1e09a1da6bcd89711"],
-  ["/fall-color/mackinac-island-fall-color/", "55015e97be6c220c37ba1f2ee5e8f838327544f01c8337b8116c7b6247b415c3"],
-  ["/fall-color/porcupine-mountains-fall-color/", "1e567e04859ad4e439b065ade09752951ad8749edbd95eb125f7d5c9869144d6"],
-  ["/fall-color/saginaw-bay-fall-color/", "1ea75e836c9f79708789c8268191cdc3f8c2936309f7ff325b5561ac1956b373"],
-  ["/fall-color/saugatuck-southwest-michigan-fall-color/", "87f53ccb48579f6997348408ff1469da25ab0c4f18b7dc3f714776df74fd44cf"],
-  ["/fall-color/sleeping-bear-dunes-fall-color/", "daed7021f8a3420896e5aaaf57697dcb5e4981925f2495d9a9867ee6f4d3ce08"],
-  ["/fall-color/tahquamenon-falls-fall-color/", "053ceed528fa1af060a7b726bfc3ef625aea88e5139b17ca15b3cc17d9804765"],
-  ["/fall-color/upper-peninsula-fall-color/", "1b596e7ef4b40a7a69c817b49964fed92b5976c86d588fa397caed351cb57185"],
-  ["/fall-color/when-do-leaves-peak-in-michigan/", "b54711940707b4d78ddcb9cbd6e7be03a7b5780e90edd67ae882654fd0a577eb"],
+  ["/fall-color/ann-arbor-irish-hills-fall-color/", "ee05322133166c076ca3ec0d02389524f703830e1bd5104c15de67d229490a61"],
+  ["/fall-color/au-sable-river-fall-color/", "30927270360c024f9f0c63c492fe276aa9a529ad530563d6f3984edc2623b5a4"],
+  ["/fall-color/mackinac-island-fall-color/", "3c7e2b336da1380a9b1501e04b5581fed9c9dbd323d94215f52bd344e802da07"],
+  ["/fall-color/porcupine-mountains-fall-color/", "20cd16e7164188f32a27b8e67795731a5453f38f2aa220a2d93de4ff51df2d54"],
+  ["/fall-color/saginaw-bay-fall-color/", "b1819775067b66889e154c8ff6a65dbb1dd0968219c2861b5a1baec4252b9d8c"],
+  ["/fall-color/saugatuck-southwest-michigan-fall-color/", "41dfca2d305fcc0d33641cc9526d7acafb53248d78414216d7490d5051a2a11b"],
+  ["/fall-color/sleeping-bear-dunes-fall-color/", "f573040df0ee00c1a5d0f3b865b4b15af979aa9ed9e1f31cee9af9c9f1efa35f"],
+  ["/fall-color/tahquamenon-falls-fall-color/", "dba3bab61486c451fec87e30433f5ce25829a10ca96520a601de3758706b57dd"],
+  ["/fall-color/upper-peninsula-fall-color/", "47f23fd4a1936831e73c6e54279d76e13e90615c5d568c29f2b14902aa70f461"],
+  ["/fall-color/when-do-leaves-peak-in-michigan/", "636d5d477487af31b94354efb33c77f816449476b7454d841bcde40eeed18a21"],
   ["/great-lakes-maritime-history/", "9bb601c956924248b5906620e61a5af905235c2c89b8324ae30dc6fcc2fd52f2"],
   ["/au-sable-river/", "fa36c47fb8f61618e4f52f8db6ba56e6f3d630e178cc137499f00a6fc4dfef42"],
   ["/edmund-fitzgerald/", "a722575cbf373e9e66c874d48a61dafb089e19a79f2df5e261053940ec3f3f04"],
@@ -522,8 +522,8 @@ if (!toolsHtml.includes("Built by Chris Izworski")) failures.push("The new Tools
 const toolsJsonLdMatch = toolsHtml.match(/<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/i);
 const toolsJsonLd = toolsJsonLdMatch ? JSON.parse(toolsJsonLdMatch[1]) : null;
 const toolsItemList = toolsJsonLd?.["@graph"]?.find((entry) => entry["@type"] === "ItemList");
-if (toolsItemList?.numberOfItems !== 43 || toolsItemList?.itemListElement?.length !== 43) {
-  failures.push("Tools ItemList does not contain exactly 43 entries");
+if (toolsItemList?.numberOfItems !== 42 || toolsItemList?.itemListElement?.length !== 42) {
+  failures.push("Tools ItemList does not contain exactly 42 entries");
 }
 if (!toolsHtml.includes("Michigan &amp; Great Lakes Live Tools") || !toolsHtml.includes("Start with the live tools")) {
   failures.push("Tools discovery title or featured-tools section is missing");
