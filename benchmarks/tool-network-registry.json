@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-09-22",
+  "updated": "2026-09-26",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -2186,6 +2186,40 @@
         "status": "new-surface",
         "note": "Launched 2026-09-19 as a hub section migrated off its own project. No impression history yet; the Tip of the Mitt trail has no routed planner competing for it."
       }
+    },
+    {
+      "id": "michigan-snow-totals",
+      "name": "Michigan Snow Totals",
+      "canonical": "https://chrisizworski.com/michigan-snow-totals/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "winter-snow",
+      "primaryIntent": "Michigan snowfall totals reported by storm and day",
+      "seasons": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3,
+        4
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "michigan-resident",
+        "winter-traveler",
+        "snowmobiler",
+        "driver"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "emerging-demand"
+      }
     }
   ],
   "relationships": [
@@ -3020,6 +3054,54 @@
       "strength": "strong",
       "surface": "detroit-sunset-intent",
       "reason": "After the sunset-specific decision, the live Detroit board remains the broader owner of what else is worth doing outdoors around Detroit today."
+    },
+    {
+      "from": "michigan-snow-totals",
+      "to": "snowmobile",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "after-the-snow",
+      "reason": "Fresh snowfall is the first question a rider asks before checking whether trails are rideable."
+    },
+    {
+      "from": "michigan-snow-totals",
+      "to": "xc-planning",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "after-the-snow",
+      "reason": "Reported snowfall points skiers to the trail systems worth checking next."
+    },
+    {
+      "from": "michigan-snow-totals",
+      "to": "national-snow",
+      "type": "evidence-depth",
+      "strength": "strong",
+      "surface": "after-the-snow",
+      "reason": "How much fell and how much is on the ground are different measurements; snowpack owns depth."
+    },
+    {
+      "from": "michigan-snow-totals",
+      "to": "michigan-ice",
+      "type": "seasonal-handoff",
+      "strength": "optional",
+      "surface": "after-the-snow",
+      "reason": "Heavy snow on new ice insulates it and changes ice growth."
+    },
+    {
+      "from": "michigan-snow-totals",
+      "to": "great-lakes-buoys",
+      "type": "evidence-depth",
+      "strength": "optional",
+      "surface": "lake-effect",
+      "reason": "Open-lake water temperature is the fuel for lake effect snow."
+    },
+    {
+      "from": "snowmobile",
+      "to": "michigan-snow-totals",
+      "type": "evidence-next",
+      "strength": "optional",
+      "surface": "snowfall-check",
+      "reason": "Riders checking conditions want the official snowfall reports behind them."
     }
   ],
   "cannibalizationGroups": [
@@ -3184,6 +3266,17 @@
         "lake-st-clair-outdoors"
       ],
       "rule": "Great Lakes Buoys owns station observations across the lakes. Lake St. Clair Outdoors may own the narrower local trip-window decision produced from those observations plus conservative marine and weather gates."
+    },
+    {
+      "intent": "Michigan snowfall totals by storm and day",
+      "owner": "michigan-snow-totals",
+      "supports": [
+        "national-snow",
+        "snowmobile",
+        "xc-planning",
+        "white-christmas-michigan"
+      ],
+      "rule": "Snow Totals owns reported snowfall (how much fell, where, when) from NWS Local Storm Reports. National Snow owns measured snowpack depth and SWE on the ground. Snowmobile and XC own trail rideability and skiability. Do not create county or city snowfall doorway pages."
     }
   ],
   "expansionOpportunities": [

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Michigan Snow Totals Today: Live Map | Chris Izworski</title>
+<meta name="description" content="Michigan snow totals today from official NWS reports: find your town on a live map, 24-hour to 7-day totals, and season snowfall against normal.">
+<link rel="canonical" href="https://chrisizworski.com/michigan-snow-totals/">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="theme-color" content="#16324a">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chris Izworski">
+<meta property="og:title" content="Michigan Snow Totals Today: Live Map">
+<meta property="og:description" content="Official NWS snowfall reports across Michigan: find your town, see the nearest reports, and check season snowfall against normal.">
+<meta property="og:url" content="https://chrisizworski.com/michigan-snow-totals/">
+<meta property="og:image" content="https://chrisizworski.com/og-image.png">
+<meta property="og:image:alt" content="Chris Izworski Michigan outdoor tools">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Michigan Snow Totals Today: Live Map">
+<meta name="twitter:description" content="Official NWS snowfall reports across Michigan: find your town and check season snowfall against normal.">
+<meta name="twitter:image" content="https://chrisizworski.com/og-image.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="/assets/michigan-snow-totals.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://chrisizworski.com/#person",
+      "name": "Chris Izworski",
+      "url": "https://chrisizworski.com/",
+      "homeLocation": { "@type": "Place", "name": "Bay City, Michigan" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://chrisizworski.com/michigan-snow-totals/#page",
+      "url": "https://chrisizworski.com/michigan-snow-totals/",
+      "name": "Michigan Snow Totals Today: Live Map",
+      "description": "Official National Weather Service snowfall reports for Michigan on a live map: search any town for its own report or the nearest ones, filter by region, and compare season snowfall at 52 NWS climate stations with the 1991-2020 normal.",
+      "datePublished": "2026-09-26",
+      "dateModified": "2026-09-26",
+      "inLanguage": "en-US",
+      "author": { "@id": "https://chrisizworski.com/#person" },
+      "publisher": { "@id": "https://chrisizworski.com/#person" },
+      "mainEntity": { "@id": "https://chrisizworski.com/michigan-snow-totals/#tool" },
+      "breadcrumb": { "@id": "https://chrisizworski.com/michigan-snow-totals/#breadcrumb" },
+      "about": { "@type": "Place", "name": "Michigan", "address": { "@type": "PostalAddress", "addressRegion": "MI", "addressCountry": "US" } }
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://chrisizworski.com/michigan-snow-totals/#tool",
+      "name": "Michigan Snow Totals",
+      "applicationCategory": "WeatherApplication",
+      "operatingSystem": "Any web browser",
+      "isAccessibleForFree": true,
+      "author": { "@id": "https://chrisizworski.com/#person" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://chrisizworski.com/michigan-snow-totals/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Chris Izworski", "item": "https://chrisizworski.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://chrisizworski.com/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "Michigan Snow Totals", "item": "https://chrisizworski.com/michigan-snow-totals/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://chrisizworski.com/michigan-snow-totals/#faq",
+      "mainEntity": [
+        { "@type": "Question", "name": "How much snow did my town in Michigan get today?", "acceptedAnswer": { "@type": "Answer", "text": "Type the town into the search box on this page. Every figure is a National Weather Service Local Storm Report: a snowfall measurement or estimate sent in by a trained spotter, a CoCoRaHS or co-op observer, NWS staff or the public, and published by one of the five NWS offices that cover Michigan. If the town sent its own report, you get its largest one in the chosen window, with the time, the source and the observer's remark. If it did not, you get the three nearest reports with how far away they are and in which direction, which is usually the honest answer after a storm, because reports come from observers rather than from every town. The number is what that observer had at that moment, so a mid-storm report can be passed later by a storm total from the same place. When nothing has been reported anywhere in Michigan, the page says so." } },
+        { "@type": "Question", "name": "How much snow did Michigan get yesterday?", "acceptedAnswer": { "@type": "Answer", "text": "Use the Since yesterday view. It covers every report sent since midnight yesterday, Eastern time, which matters because some of the most reliable reports arrive the morning after a storm: CoCoRaHS volunteers take one daily measurement, ideally around 7 a.m., covering the previous 24 hours, so yesterday's snow often appears in this morning's reports. The view catches both the in-storm spotter reports from yesterday and those next-morning measurements, and each place still appears once, at its largest report. Before quoting a big number, read its time and remark: a remark such as storm total or since snow began tells you what period the figure covers, and a storm total sent this morning can include snow that fell the day before yesterday." } },
+        { "@type": "Question", "name": "How much snow has Michigan had this season?", "acceptedAnswer": { "@type": "Answer", "text": "It depends heavily on where you are, which is why this page answers station by station instead of with one statewide number. The season table adds up daily snowfall since July 1 at 52 National Weather Service cooperative and airport climate stations and sets each total against that station's 1991-2020 normal for the same dates, so 40 inches in Marquette and 40 inches in Detroit read very differently. For scale, last winter (2025-26) ended with 366 inches at Herman in Baraga County, 176 percent of normal; 276.6 inches at the Marquette NWS office; 75.4 inches at the Grand Rapids airport; and 39.5 inches at Detroit Metro Airport. A station missing more than five snow-season days is marked incomplete rather than compared with normal, because a missing day can only hide snow. For a single city's official season total, the NWS climate report for that office is the record of reference." } },
+        { "@type": "Question", "name": "When does Michigan usually get its first snow?", "acceptedAnswer": { "@type": "Answer", "text": "Weeks earlier in the Upper Peninsula snow belt than downstate. Counting the first day with at least a tenth of an inch of snow at National Weather Service climate stations over the 1991-2020 seasons, the median first snow falls around October 14 at the Marquette NWS office near Negaunee, October 16 at Herman and October 22 at Sault Ste. Marie. Downstate it waits until about November 9 at the Grand Rapids airport and Houghton Lake, and November 20 at Detroit Metro Airport and the Saginaw-Bay City-Midland airport. Port Huron has the latest median of the stations measured, December 1. In an early year the first snow comes one to five weeks sooner than the median, and the earliest in those thirty seasons was September 22, at Herman and at Chatham near Munising. A first snow in October rarely lasts on still-warm ground, so it says little about the winter ahead. This page shows each season's first measurable snow as soon as a climate station records it." } },
+        { "@type": "Question", "name": "Is there enough snow to snowmobile or ski in Michigan?", "acceptedAnswer": { "@type": "Answer", "text": "Snowfall totals cannot answer that on their own, because what fell is not the same as what is on the ground. A fresh six inches on warm or bare ground can settle, melt or blow away within a day, while a modest storm on top of an existing base can open a whole trail system. Riding and skiing depend on the depth and firmness of the snowpack, frozen ground and swamps, and grooming, which is why the reliable seasons are in the lake-effect belts of the Upper Peninsula and the northern Lower Peninsula. Use this page to see where new snow is falling and how the season compares with normal, then check measured snow depth and the trail reports before you load the sled or the skis. The snowmobile and cross-country ski tools linked from this page do that region by region." } },
+        { "@type": "Question", "name": "Where does lake effect snow hit hardest in Michigan?", "acceptedAnswer": { "@type": "Answer", "text": "Lake effect snow forms when cold air crosses the relatively warm open water of the Great Lakes, picks up heat and moisture, and drops it in narrow, intense bands downwind. In Michigan that puts the heaviest lake effect along and inland from the Lake Superior shore of the Upper Peninsula, and across western Lower Michigan inland from Lake Michigan, reaching down to the southwest corner. Because the bands are narrow, towns a few miles apart can report very different totals from the same event, which is why this page ranks individual reports instead of averaging a county. Open-water temperature is the fuel, so the season usually fades as the lakes cool and ice over." } },
+        { "@type": "Question", "name": "Why do Michigan snow totals from TV, apps and this page disagree?", "acceptedAnswer": { "@type": "Answer", "text": "They are usually measuring different things at different times. A TV or app total may be a forecast, a radar estimate or a regional summary, while this page lists only ground reports sent to the National Weather Service, each tied to one place and one moment. A report taken mid-storm will be lower than the storm total from the same backyard hours later, an estimated report is less exact than a measured one, and lake effect bands can put very different amounts on neighboring towns. When you need one number for a decision, use the largest recent report closest to where you are going, check its time, and read the remark for the period it covers." } }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="/">Chris Izworski</a>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a href="/">Home</a>
+    <a href="/tools/">Tools</a>
+    <a href="/guides/">Guides</a>
+    <a href="/great-lakes/">Great Lakes</a>
+    <a href="/about/">About</a>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="snow-hero">
+    <p class="kicker">Official NWS snowfall reports · updated through the day</p>
+    <h1>Michigan Snow Totals Today</h1>
+    <form id="townForm" class="town" role="search" aria-label="Find your town">
+      <label for="townSearch">How much snow did your town get?</label>
+      <div class="town-row">
+        <input id="townSearch" name="town" type="search" list="townList" autocomplete="off" placeholder="Town or county, e.g. Marquette" enterkeyhint="search">
+        <button type="submit">Find</button>
+        <button type="button" id="nearMe" class="ghost">Near me</button>
+      </div>
+      <datalist id="townList"></datalist>
+      <div id="townResult" class="town-result" aria-live="polite" hidden></div>
+      <button type="button" id="shareBtn" class="share" hidden>Share this report</button>
+    </form>
+    <p class="lede">How much snow fell in your town, where it fell hardest, and how the season compares with normal, from the reports that trained spotters, CoCoRaHS and co-op observers, and National Weather Service staff send in during and after every storm.</p>
+    <p class="byline">By <a href="/chris-izworski/" rel="author">Chris Izworski</a>, Bay City, Michigan</p>
+  </section>
+
+  <section class="live" aria-labelledby="live-title" data-no-ads>
+    <div class="live-head">
+      <h2 id="live-title">Snow reported across Michigan</h2>
+      <div class="windows" role="group" aria-label="Time window">
+        <button type="button" data-window="24h" aria-pressed="true">24 hours</button>
+        <button type="button" data-window="48h" aria-pressed="false">Since yesterday</button>
+        <button type="button" data-window="72h" aria-pressed="false">72 h</button>
+        <button type="button" data-window="168h" aria-pressed="false">7 days</button>
+      </div>
+    </div>
+    <p id="snowSummary" class="summary" aria-live="polite">Loading the latest NWS snow reports for Michigan. Without JavaScript, read the reports directly from the <a href="https://mesonet.agron.iastate.edu/lsr/">Local Storm Report archive</a> or your <a href="https://www.weather.gov/">NWS office</a>.</p>
+
+
+    <div id="alertList" class="alerts" aria-live="polite"></div>
+
+    <div id="headingOut" class="heading-out">
+      <p><strong>Heading out to ride or ski?</strong> Snowfall is what fell. A riding or skiing base is what is still on the ground.</p>
+      <p class="links"><a href="/national-tools/snow/">Snow depth now</a> <a href="/snowmobile/">Snowmobile trail conditions</a> <a href="/michigan-cross-country-skiing/">Cross-country ski trails</a></p>
+    </div>
+
+    <div id="regionChips" class="chips" role="group" aria-label="Filter by region"></div>
+    <p id="regionTrails" class="region-trails" hidden></p>
+
+    <div class="map-wrap">
+      <div id="snowMap" role="region" aria-label="Map of Michigan snowfall reports"></div>
+      <p id="mapNote" class="map-note">Each dot is one official report, larger and darker for more snow. Tap a dot for the time, source and remark.</p>
+    </div>
+    <div class="table-wrap">
+      <table id="snowTable">
+        <caption>Largest report from each place in the selected window</caption>
+        <thead><tr><th scope="col">#</th><th scope="col">Snow</th><th scope="col">Place</th><th scope="col">Reported</th><th scope="col">Source</th></tr></thead>
+        <tbody><tr><td colspan="5">Loading reports.</td></tr></tbody>
+      </table>
+    </div>
+    <button type="button" id="showAll" class="ghost" hidden>Show every place</button>
+    <p id="snowStamp" class="stamp">Sources: NWS Local Storm Reports through the Iowa Environmental Mesonet archive, and active NWS alerts from api.weather.gov. Times are Eastern.</p>
+  </section>
+
+  <section class="season" id="season" aria-labelledby="season-title" data-no-ads>
+    <h2 id="season-title">Season snowfall so far, against normal</h2>
+    <p id="seasonSummary" class="summary">Season totals add up daily snowfall since July 1 at 52 National Weather Service climate stations and compare each with its 1991-2020 normal for the same dates.</p>
+    <div id="seasonCurrent" class="table-wrap" hidden>
+      <table id="seasonTable">
+        <caption id="seasonCaption">This season</caption>
+        <thead><tr><th scope="col">Station</th><th scope="col">Season so far</th><th scope="col">Normal to date</th><th scope="col">Of normal</th><th scope="col">First snow</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <details id="lastSeasonBox" open>
+      <summary>Last winter (2025-26): final season totals at 52 stations</summary>
+      <div class="table-wrap">
+        <table id="lastSeasonTable">
+          <thead><tr><th scope="col">Station</th><th scope="col">Region</th><th scope="col">Total (in.)</th><th scope="col">Normal (in.)</th><th scope="col">Of normal</th></tr></thead>
+          <tbody>
+<!-- snow-last-season:start -->
+<tr data-region="keweenaw"><td>Herman</td><td>Keweenaw &amp; Copper Country</td><td><strong>366.0</strong></td><td>207.8</td><td>176%</td></tr>
+<tr data-region="keweenaw"><td>Watton</td><td>Keweenaw &amp; Copper Country</td><td><strong>205.3</strong></td><td>121.3</td><td>169% <small>(4 d missing)</small></td></tr>
+<tr data-region="keweenaw"><td>Bergland Dam</td><td>Keweenaw &amp; Copper Country</td><td><strong>205.2</strong></td><td>180.0</td><td><span title="10 snow-season days missing">incomplete</span></td></tr>
+<tr data-region="central-western-up"><td>Marquette NWS office (Negaunee Twp.)</td><td>Central &amp; Western U.P.</td><td><strong>276.6</strong></td><td>196.8</td><td>141%</td></tr>
+<tr data-region="central-western-up"><td>Big Bay</td><td>Central &amp; Western U.P.</td><td><strong>204.8</strong></td><td>132.3</td><td>155%</td></tr>
+<tr data-region="central-western-up"><td>Ironwood</td><td>Central &amp; Western U.P.</td><td><strong>193.4</strong></td><td>185.5</td><td>104% <small>(2 d missing)</small></td></tr>
+<tr data-region="central-western-up"><td>Clarksburg</td><td>Central &amp; Western U.P.</td><td><strong>183.5</strong></td><td>117.8</td><td>156%</td></tr>
+<tr data-region="central-western-up"><td>Marquette (city)</td><td>Central &amp; Western U.P.</td><td><strong>124.8</strong></td><td>102.0</td><td>122% <small>(1 d missing)</small></td></tr>
+<tr data-region="central-western-up"><td>Iron River (Stambaugh)</td><td>Central &amp; Western U.P.</td><td><strong>87.9</strong></td><td>67.4</td><td>130%</td></tr>
+<tr data-region="central-western-up"><td>Escanaba</td><td>Central &amp; Western U.P.</td><td><strong>76.5</strong></td><td>46.9</td><td>163%</td></tr>
+<tr data-region="central-western-up"><td>Iron Mountain-Kingsford</td><td>Central &amp; Western U.P.</td><td><strong>73.7</strong></td><td>61.0</td><td>121%</td></tr>
+<tr data-region="eastern-up"><td>Chatham (near Munising)</td><td>Eastern U.P.</td><td><strong>213.5</strong></td><td>164.0</td><td>130%</td></tr>
+<tr data-region="eastern-up"><td>Tahquamenon Falls State Park</td><td>Eastern U.P.</td><td><strong>212.2</strong></td><td>169.9</td><td>125% <small>(4 d missing)</small></td></tr>
+<tr data-region="eastern-up"><td>Sault Ste. Marie (airport)</td><td>Eastern U.P.</td><td><strong>189.2</strong></td><td>120.1</td><td>158% <small>(1 d missing)</small></td></tr>
+<tr data-region="northwest-lower"><td>Maple City (Leelanau)</td><td>Northwest Lower Michigan</td><td><strong>157.0</strong></td><td>143.3</td><td>110%</td></tr>
+<tr data-region="northwest-lower"><td>East Jordan</td><td>Northwest Lower Michigan</td><td><strong>156.1</strong></td><td>122.2</td><td><span title="10 snow-season days missing">incomplete</span></td></tr>
+<tr data-region="northwest-lower"><td>Kalkaska</td><td>Northwest Lower Michigan</td><td><strong>146.8</strong></td><td>132.1</td><td>111% <small>(4 d missing)</small></td></tr>
+<tr data-region="northwest-lower"><td>Northwest Michigan Research Farm (Leelanau)</td><td>Northwest Lower Michigan</td><td><strong>145.5</strong></td><td>114.5</td><td><span title="10 snow-season days missing">incomplete</span></td></tr>
+<tr data-region="northwest-lower"><td>Boyne Falls</td><td>Northwest Lower Michigan</td><td><strong>142.0</strong></td><td>111.7</td><td>127%</td></tr>
+<tr data-region="northwest-lower"><td>Petoskey</td><td>Northwest Lower Michigan</td><td><strong>137.4</strong></td><td>123.6</td><td>111% <small>(1 d missing)</small></td></tr>
+<tr data-region="northwest-lower"><td>Charlevoix</td><td>Northwest Lower Michigan</td><td><strong>129.7</strong></td><td>100.2</td><td>129%</td></tr>
+<tr data-region="northwest-lower"><td>Beulah</td><td>Northwest Lower Michigan</td><td><strong>112.2</strong></td><td>92.4</td><td>121%</td></tr>
+<tr data-region="northwest-lower"><td>Lake City</td><td>Northwest Lower Michigan</td><td><strong>70.1</strong></td><td>74.0</td><td>95%</td></tr>
+<tr data-region="northeast-lower"><td>Gaylord NWS office</td><td>Northeast Lower &amp; Gaylord</td><td><strong>165.8</strong></td><td>148.8</td><td>111% <small>(1 d missing)</small></td></tr>
+<tr data-region="northeast-lower"><td>Cheboygan</td><td>Northeast Lower &amp; Gaylord</td><td><strong>103.7</strong></td><td>87.6</td><td>118% <small>(1 d missing)</small></td></tr>
+<tr data-region="northeast-lower"><td>Grayling</td><td>Northeast Lower &amp; Gaylord</td><td><strong>93.0</strong></td><td>88.3</td><td>105%</td></tr>
+<tr data-region="northeast-lower"><td>Alpena (airport)</td><td>Northeast Lower &amp; Gaylord</td><td><strong>90.4</strong></td><td>77.6</td><td>116% <small>(1 d missing)</small></td></tr>
+<tr data-region="northeast-lower"><td>Houghton Lake (airport)</td><td>Northeast Lower &amp; Gaylord</td><td><strong>72.9</strong></td><td>65.9</td><td>111% <small>(2 d missing)</small></td></tr>
+<tr data-region="northeast-lower"><td>West Branch</td><td>Northeast Lower &amp; Gaylord</td><td><strong>59.3</strong></td><td>53.0</td><td>112%</td></tr>
+<tr data-region="northeast-lower"><td>Mio</td><td>Northeast Lower &amp; Gaylord</td><td><strong>57.5</strong></td><td>57.0</td><td>101%</td></tr>
+<tr data-region="northeast-lower"><td>East Tawas</td><td>Northeast Lower &amp; Gaylord</td><td><strong>36.7</strong></td><td>49.2</td><td>75% <small>(1 d missing)</small></td></tr>
+<tr data-region="west-michigan"><td>Hart</td><td>West Michigan</td><td><strong>112.8</strong></td><td>78.5</td><td>144%</td></tr>
+<tr data-region="west-michigan"><td>Montague</td><td>West Michigan</td><td><strong>109.2</strong></td><td>68.9</td><td>158% <small>(5 d missing)</small></td></tr>
+<tr data-region="west-michigan"><td>Muskegon (airport)</td><td>West Michigan</td><td><strong>108.5</strong></td><td>87.2</td><td>124%</td></tr>
+<tr data-region="west-michigan"><td>Grand Rapids (airport)</td><td>West Michigan</td><td><strong>75.4</strong></td><td>77.6</td><td>97%</td></tr>
+<tr data-region="west-michigan"><td>Big Rapids</td><td>West Michigan</td><td><strong>58.5</strong></td><td>61.3</td><td>95% <small>(3 d missing)</small></td></tr>
+<tr data-region="southwest"><td>Niles</td><td>Southwest Michigan</td><td><strong>111.3</strong></td><td>62.5</td><td>178%</td></tr>
+<tr data-region="southwest"><td>Battle Creek</td><td>Southwest Michigan</td><td><strong>85.1</strong></td><td>64.6</td><td>132% <small>(1 d missing)</small></td></tr>
+<tr data-region="southwest"><td>Benton Harbor (airport)</td><td>Southwest Michigan</td><td><strong>77.2</strong></td><td>77.7</td><td>99% <small>(4 d missing)</small></td></tr>
+<tr data-region="southwest"><td>Three Rivers</td><td>Southwest Michigan</td><td><strong>44.5</strong></td><td>41.2</td><td>108%</td></tr>
+<tr data-region="mid-thumb"><td>Flint</td><td>Mid-Michigan &amp; the Thumb</td><td><strong>46.3</strong></td><td>52.1</td><td>89%</td></tr>
+<tr data-region="mid-thumb"><td>Gladwin</td><td>Mid-Michigan &amp; the Thumb</td><td><strong>42.1</strong></td><td>48.5</td><td>87% <small>(3 d missing)</small></td></tr>
+<tr data-region="mid-thumb"><td>Harbor Beach</td><td>Mid-Michigan &amp; the Thumb</td><td><strong>41.8</strong></td><td>47.2</td><td>89% <small>(1 d missing)</small></td></tr>
+<tr data-region="mid-thumb"><td>Lansing (airport)</td><td>Mid-Michigan &amp; the Thumb</td><td><strong>41.6</strong></td><td>50.2</td><td>83% <small>(1 d missing)</small></td></tr>
+<tr data-region="mid-thumb"><td>Cass City</td><td>Mid-Michigan &amp; the Thumb</td><td><strong>36.2</strong></td><td>42.5</td><td>85%</td></tr>
+<tr data-region="mid-thumb"><td>Saginaw-Bay City-Midland (MBS airport)</td><td>Mid-Michigan &amp; the Thumb</td><td><strong>35.6</strong></td><td>49.0</td><td>73%</td></tr>
+<tr data-region="southeast"><td>Ann Arbor</td><td>Southeast Michigan</td><td><strong>58.4</strong></td><td>61.4</td><td>95%</td></tr>
+<tr data-region="southeast"><td>White Lake</td><td>Southeast Michigan</td><td><strong>58.4</strong></td><td>62.3</td><td>94%</td></tr>
+<tr data-region="southeast"><td>Pontiac</td><td>Southeast Michigan</td><td><strong>40.3</strong></td><td>36.0</td><td>112% <small>(4 d missing)</small></td></tr>
+<tr data-region="southeast"><td>Detroit (DTW airport)</td><td>Southeast Michigan</td><td><strong>39.5</strong></td><td>45.0</td><td>88%</td></tr>
+<tr data-region="southeast"><td>Hillsdale</td><td>Southeast Michigan</td><td><strong>34.6</strong></td><td>44.1</td><td>78%</td></tr>
+<tr data-region="southeast"><td>Port Huron</td><td>Southeast Michigan</td><td><strong>19.6</strong></td><td>35.5</td><td>55%</td></tr>
+<!-- snow-last-season:end -->
+          </tbody>
+        </table>
+      </div>
+    </details>
+    <p class="stamp">Source: NOAA Regional Climate Centers ACIS, daily snowfall at NWS cooperative and airport climate stations, with 1991-2020 normals. Daily figures are filed the next morning, so the season runs through yesterday. Percent of normal is withheld until the normal to date reaches 2 inches, and for stations missing more than five snow-season days.</p>
+  </section>
+
+  <section class="guide" aria-labelledby="read-title">
+    <h2 id="read-title">How to read a snow report</h2>
+    <ul class="read">
+      <li><strong>The number</strong> is snowfall as reported at that moment, in inches. It is not automatically a 24-hour total.</li>
+      <li><strong>The time</strong> matters as much as the number. A mid-storm report from 9 p.m. and a storm total from 7 a.m. at the same place can differ by half a foot.</li>
+      <li><strong>Measured or estimated.</strong> Measured means the observer put a ruler in the snow; estimated means they did not.</li>
+      <li><strong>The source</strong> tells you who reported it: trained spotter, CoCoRaHS volunteer, co-op observer, NWS employee or the public.</li>
+      <li><strong>The place.</strong> NWS shorthand such as 4 NE Negaunee means four miles northeast of Negaunee; this page writes it out.</li>
+      <li><strong>The remark</strong> is the observer's own note, often with the period covered, such as storm total or since snow began. Every row links to the original NWS text.</li>
+    </ul>
+
+    <h2 id="today">How much snow did my town in Michigan get today?</h2>
+    <p>Type the town into the search box on this page. Every figure is a National Weather Service Local Storm Report: a snowfall measurement or estimate sent in by a trained spotter, a CoCoRaHS or co-op observer, NWS staff or the public, and published by one of the five NWS offices that cover Michigan. If the town sent its own report, you get its largest one in the chosen window, with the time, the source and the observer's remark. If it did not, you get the three nearest reports with how far away they are and in which direction, which is usually the honest answer after a storm, because reports come from observers rather than from every town. The number is what that observer had at that moment, so a mid-storm report can be passed later by a storm total from the same place. When nothing has been reported anywhere in Michigan, the page says so.</p>
+
+    <h2 id="yesterday">How much snow did Michigan get yesterday?</h2>
+    <p>Use the Since yesterday view. It covers every report sent since midnight yesterday, Eastern time, which matters because some of the most reliable reports arrive the morning after a storm: CoCoRaHS volunteers take one daily measurement, ideally around 7 a.m., covering the previous 24 hours, so yesterday's snow often appears in this morning's reports. The view catches both the in-storm spotter reports from yesterday and those next-morning measurements, and each place still appears once, at its largest report. Before quoting a big number, read its time and remark: a remark such as storm total or since snow began tells you what period the figure covers, and a storm total sent this morning can include snow that fell the day before yesterday.</p>
+
+    <h2 id="this-season">How much snow has Michigan had this season?</h2>
+    <p>It depends heavily on where you are, which is why this page answers station by station instead of with one statewide number. The season table adds up daily snowfall since July 1 at 52 National Weather Service cooperative and airport climate stations and sets each total against that station's 1991-2020 normal for the same dates, so 40 inches in Marquette and 40 inches in Detroit read very differently. For scale, last winter (2025-26) ended with 366 inches at Herman in Baraga County, 176 percent of normal; 276.6 inches at the Marquette NWS office; 75.4 inches at the Grand Rapids airport; and 39.5 inches at Detroit Metro Airport. A station missing more than five snow-season days is marked incomplete rather than compared with normal, because a missing day can only hide snow. For a single city's official season total, the NWS climate report for that office is the record of reference.</p>
+
+    <h2 id="first-snow">When does Michigan usually get its first snow?</h2>
+    <p>Weeks earlier in the Upper Peninsula snow belt than downstate. Counting the first day with at least a tenth of an inch of snow at National Weather Service climate stations over the 1991-2020 seasons, the median first snow falls around October 14 at the Marquette NWS office near Negaunee, October 16 at Herman and October 22 at Sault Ste. Marie. Downstate it waits until about November 9 at the Grand Rapids airport and Houghton Lake, and November 20 at Detroit Metro Airport and the Saginaw-Bay City-Midland airport. Port Huron has the latest median of the stations measured, December 1. In an early year the first snow comes one to five weeks sooner than the median, and the earliest in those thirty seasons was September 22, at Herman and at Chatham near Munising. A first snow in October rarely lasts on still-warm ground, so it says little about the winter ahead. This page shows each season's first measurable snow as soon as a climate station records it.</p>
+    <div class="table-wrap">
+      <table id="firstSnowTable">
+        <caption>First measurable snow (0.1 in. or more), 1991-2020 seasons</caption>
+        <thead><tr><th scope="col">Station</th><th scope="col">Region</th><th scope="col">Median date</th><th scope="col">Early to late year</th><th scope="col">Earliest</th></tr></thead>
+        <tbody>
+<!-- snow-first:start -->
+<tr><td>Herman</td><td>Keweenaw &amp; Copper Country</td><td><strong>Oct 16</strong></td><td>Oct 5 to Nov 1</td><td>Sep 22</td></tr>
+<tr><td>Marquette NWS office (Negaunee Twp.)</td><td>Central &amp; Western U.P.</td><td><strong>Oct 14</strong></td><td>Oct 4 to Nov 5</td><td>Sep 29</td></tr>
+<tr><td>Marquette (city)</td><td>Central &amp; Western U.P.</td><td><strong>Nov 6</strong></td><td>Oct 18 to Nov 22</td><td>Sep 29</td></tr>
+<tr><td>Iron Mountain-Kingsford</td><td>Central &amp; Western U.P.</td><td><strong>Nov 9</strong></td><td>Oct 19 to Nov 25</td><td>Oct 13</td></tr>
+<tr><td>Chatham (near Munising)</td><td>Eastern U.P.</td><td><strong>Oct 29</strong></td><td>Oct 6 to Nov 19</td><td>Sep 22</td></tr>
+<tr><td>Tahquamenon Falls State Park</td><td>Eastern U.P.</td><td><strong>Nov 4</strong></td><td>Oct 12 to Nov 21</td><td>Oct 1</td></tr>
+<tr><td>Sault Ste. Marie (airport)</td><td>Eastern U.P.</td><td><strong>Oct 22</strong></td><td>Oct 2 to Nov 15</td><td>Sep 26</td></tr>
+<tr><td>Petoskey</td><td>Northwest Lower Michigan</td><td><strong>Nov 16</strong></td><td>Oct 19 to Dec 2</td><td>Oct 12</td></tr>
+<tr><td>Charlevoix</td><td>Northwest Lower Michigan</td><td><strong>Nov 16</strong></td><td>Oct 14 to Dec 3</td><td>Oct 2</td></tr>
+<tr><td>East Jordan</td><td>Northwest Lower Michigan</td><td><strong>Nov 9</strong></td><td>Oct 14 to Nov 24</td><td>Oct 1</td></tr>
+<tr><td>Boyne Falls</td><td>Northwest Lower Michigan</td><td><strong>Nov 6</strong></td><td>Oct 16 to Nov 23</td><td>Oct 1</td></tr>
+<tr><td>Maple City (Leelanau)</td><td>Northwest Lower Michigan</td><td><strong>Nov 2</strong></td><td>Oct 11 to Nov 20</td><td>Oct 4</td></tr>
+<tr><td>Kalkaska</td><td>Northwest Lower Michigan</td><td><strong>Nov 6</strong></td><td>Oct 17 to Nov 24</td><td>Oct 2</td></tr>
+<tr><td>Lake City</td><td>Northwest Lower Michigan</td><td><strong>Nov 1</strong></td><td>Oct 16 to Nov 26</td><td>Oct 2</td></tr>
+<tr><td>Cheboygan</td><td>Northeast Lower &amp; Gaylord</td><td><strong>Nov 13</strong></td><td>Nov 2 to Nov 25</td><td>Oct 7</td></tr>
+<tr><td>Grayling</td><td>Northeast Lower &amp; Gaylord</td><td><strong>Nov 3</strong></td><td>Oct 17 to Nov 25</td><td>Oct 7</td></tr>
+<tr><td>Houghton Lake (airport)</td><td>Northeast Lower &amp; Gaylord</td><td><strong>Nov 9</strong></td><td>Oct 14 to Nov 24</td><td>Oct 2</td></tr>
+<tr><td>Alpena (airport)</td><td>Northeast Lower &amp; Gaylord</td><td><strong>Nov 9</strong></td><td>Oct 14 to Nov 23</td><td>Oct 3</td></tr>
+<tr><td>West Branch</td><td>Northeast Lower &amp; Gaylord</td><td><strong>Nov 20</strong></td><td>Oct 29 to Dec 9</td><td>Oct 21</td></tr>
+<tr><td>East Tawas</td><td>Northeast Lower &amp; Gaylord</td><td><strong>Nov 23</strong></td><td>Nov 5 to Dec 12</td><td>Oct 27</td></tr>
+<tr><td>Muskegon (airport)</td><td>West Michigan</td><td><strong>Nov 17</strong></td><td>Oct 31 to Dec 2</td><td>Oct 18</td></tr>
+<tr><td>Grand Rapids (airport)</td><td>West Michigan</td><td><strong>Nov 9</strong></td><td>Oct 18 to Nov 24</td><td>Oct 7</td></tr>
+<tr><td>Big Rapids</td><td>West Michigan</td><td><strong>Nov 14</strong></td><td>Oct 27 to Nov 29</td><td>Oct 11</td></tr>
+<tr><td>Benton Harbor (airport)</td><td>Southwest Michigan</td><td><strong>Nov 23</strong></td><td>Nov 2 to Dec 19</td><td>Oct 12</td></tr>
+<tr><td>Niles</td><td>Southwest Michigan</td><td><strong>Nov 17</strong></td><td>Oct 27 to Dec 10</td><td>Oct 12</td></tr>
+<tr><td>Battle Creek</td><td>Southwest Michigan</td><td><strong>Nov 9</strong></td><td>Oct 24 to Dec 6</td><td>Oct 12</td></tr>
+<tr><td>Three Rivers</td><td>Southwest Michigan</td><td><strong>Nov 21</strong></td><td>Nov 9 to Dec 16</td><td>Oct 12</td></tr>
+<tr><td>Saginaw-Bay City-Midland (MBS airport)</td><td>Mid-Michigan &amp; the Thumb</td><td><strong>Nov 20</strong></td><td>Oct 27 to Dec 6</td><td>Oct 12</td></tr>
+<tr><td>Flint</td><td>Mid-Michigan &amp; the Thumb</td><td><strong>Nov 15</strong></td><td>Oct 30 to Dec 3</td><td>Oct 12</td></tr>
+<tr><td>Gladwin</td><td>Mid-Michigan &amp; the Thumb</td><td><strong>Nov 20</strong></td><td>Nov 2 to Dec 15</td><td>Oct 21</td></tr>
+<tr><td>Detroit (DTW airport)</td><td>Southeast Michigan</td><td><strong>Nov 20</strong></td><td>Oct 30 to Dec 7</td><td>Oct 12</td></tr>
+<tr><td>Ann Arbor</td><td>Southeast Michigan</td><td><strong>Nov 12</strong></td><td>Oct 23 to Nov 26</td><td>Oct 12</td></tr>
+<tr><td>Port Huron</td><td>Southeast Michigan</td><td><strong>Dec 1</strong></td><td>Nov 15 to Dec 20</td><td>Nov 11</td></tr>
+<tr><td>Hillsdale</td><td>Southeast Michigan</td><td><strong>Nov 17</strong></td><td>Nov 1 to Dec 13</td><td>Oct 20</td></tr>
+<!-- snow-first:end -->
+        </tbody>
+      </table>
+    </div>
+    <p class="stamp">Computed from NOAA ACIS daily snowfall. Early and late year are the 10th and 90th percentile dates. Seasons with more than ten missing September to December days are skipped, and a station needs 24 usable seasons to be listed.</p>
+
+    <h2 id="ride-ski">Is there enough snow to snowmobile or ski in Michigan?</h2>
+    <p>Snowfall totals cannot answer that on their own, because what fell is not the same as what is on the ground. A fresh six inches on warm or bare ground can settle, melt or blow away within a day, while a modest storm on top of an existing base can open a whole trail system. Riding and skiing depend on the depth and firmness of the snowpack, frozen ground and swamps, and grooming, which is why the reliable seasons are in the lake-effect belts of the Upper Peninsula and the northern Lower Peninsula. Use this page to see where new snow is falling and how the season compares with normal, then check measured snow depth and the trail reports before you load the sled or the skis. The snowmobile and cross-country ski tools linked from this page do that region by region.</p>
+
+    <h2 id="offices">Which NWS office reports snow for my part of Michigan?</h2>
+    <p>Five National Weather Service forecast offices share Michigan, and each publishes the snow reports for its own counties. Each office also publishes the official daily climate reports for its cities.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Office</th><th scope="col">Covers</th></tr></thead>
+        <tbody>
+          <tr><td><a href="https://www.weather.gov/mqt/">NWS Marquette</a></td><td>Central and western Upper Peninsula</td></tr>
+          <tr><td><a href="https://www.weather.gov/apx/">NWS Gaylord</a></td><td>Northern Lower Peninsula and the eastern Upper Peninsula</td></tr>
+          <tr><td><a href="https://www.weather.gov/grr/">NWS Grand Rapids</a></td><td>West and central Lower Michigan</td></tr>
+          <tr><td><a href="https://www.weather.gov/dtx/">NWS Detroit/Pontiac</a></td><td>Southeast Michigan and the Thumb</td></tr>
+          <tr><td><a href="https://www.weather.gov/iwx/">NWS Northern Indiana</a></td><td>Far southwest Michigan</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="lake-effect">Where does lake effect snow hit hardest in Michigan?</h2>
+    <p>Lake effect snow forms when cold air crosses the relatively warm open water of the Great Lakes, picks up heat and moisture, and drops it in narrow, intense bands downwind. In Michigan that puts the heaviest lake effect along and inland from the Lake Superior shore of the Upper Peninsula, and across western Lower Michigan inland from Lake Michigan, reaching down to the southwest corner. Because the bands are narrow, towns a few miles apart can report very different totals from the same event, which is why this page ranks individual reports instead of averaging a county. Open-water temperature is the fuel, so the season usually fades as the lakes cool and ice over.</p>
+    <p>The <a href="/great-lakes-buoys/">Great Lakes Buoy Dashboard</a> shows current water temperatures, the fuel side of that equation. Last winter's season table shows the pattern plainly: Herman, Big Bay and the Marquette NWS office in the Lake Superior belt all finished above 200 inches, while Port Huron, the Saginaw-Bay City-Midland airport and Detroit Metro Airport finished under 40.</p>
+
+    <h2 id="disagree">Why do Michigan snow totals from TV, apps and this page disagree?</h2>
+    <p>They are usually measuring different things at different times. A TV or app total may be a forecast, a radar estimate or a regional summary, while this page lists only ground reports sent to the National Weather Service, each tied to one place and one moment. A report taken mid-storm will be lower than the storm total from the same backyard hours later, an estimated report is less exact than a measured one, and lake effect bands can put very different amounts on neighboring towns. When you need one number for a decision, use the largest recent report closest to where you are going, check its time, and read the remark for the period it covers.</p>
+
+    <h2 id="next">After the snow: where it matters next</h2>
+    <ul class="next">
+      <li><a href="/snowmobile/">Michigan snowmobile trail conditions</a>: whether new snow has turned into a riding window.</li>
+      <li><a href="/michigan-cross-country-skiing/">Michigan cross country ski trails</a>: which trail systems have the base to ski.</li>
+      <li><a href="/national-tools/snow/">Snowpack and snow depth</a>: how much snow is actually on the ground, which is a different question from how much fell.</li>
+      <li><a href="/michigan-ice/">Michigan ice conditions</a>: heavy snow on new ice insulates it and can slow ice growth.</li>
+      <li><a href="/white-christmas-michigan/">White Christmas in Michigan</a>: the odds and history for December.</li>
+      <li><a href="/mackinac-bridge-live/">Mackinac Bridge Live</a>: crossing conditions when a storm is on the Straits.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>Built by <a href="/chris-izworski/">Chris Izworski</a> in Bay City, Michigan. Snow reports are the National Weather Service's and climate data is NOAA's; always follow NWS warnings and road advisories.</p>
+  <p><a href="/tools/">All tools</a> · <a href="/guides/">Guides</a> · <a href="/great-lakes/">Great Lakes</a></p>
+  <p>© 2026 Chris Izworski</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="/assets/snow-totals-core.js" defer></script>
+<script src="/assets/michigan-snow-totals.js" defer></script>
+</body>
+</html>

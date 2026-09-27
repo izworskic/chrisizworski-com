@@ -1,0 +1,9 @@
+{
+  "tool": "michigan-snow-totals",
+  "script": "scripts/benchmark-snow-totals-personas.mjs",
+  "method": "Weighted persona tasks run against the real API handler and shared browser logic, fed recorded official data: NWS Local Storm Reports for the Nov 24 - Dec 1 2025 Michigan storm week (tests/fixtures/snow-lsr-2025-11-30-storm.json) and NOAA ACIS daily snowfall for the curated climate stations (tests/fixtures/snow-acis-2025-07-01-to-2025-11-30.json). loss = 100 - score.",
+  "demandEvidence": "Google autocomplete proxy, not Search Console: 1,452 suggestions from 9 seeds alphabet-expanded on Sep 26 2026; 894 Michigan-relevant. Intent counts: today/24h 148, yesterday 123, this season or this year 77, map 74, Upper Peninsula 44, first snow 32, forecast 23, snow depth 14. 77 distinct towns named, led by Calumet, Houghton, Marquette, Holland, Gaylord and Ironwood.",
+  "weights": { "resident": 28, "yesterday": 9, "recreation": 25, "season": 23, "sharer": 8, "trust": 7 },
+  "baseline": { "build": "8a7e6a69 (first build of the tool)", "measured": "2026-09-26", "score": 3, "loss": 97 },
+  "target": { "maxLoss": 0 }
+}

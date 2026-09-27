@@ -1,0 +1,82 @@
+:root{--ink:#14222e;--muted:#4c5d6b;--paper:#f5f8fb;--card:#fff;--line:#d6e0e8;--snow:#16324a;--ice:#2f6f9f;--frost:#dce9f4;--warn:#9a3b1c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--ice);text-underline-offset:3px}
+.site-header{display:flex;flex-wrap:wrap;gap:.6rem 1.2rem;align-items:center;justify-content:space-between;padding:.8rem 20px;background:var(--snow)}
+.site-header a{color:#eef5fb;text-decoration:none}
+.site-name{font-weight:800}
+.site-nav{display:flex;flex-wrap:wrap;gap:.9rem;font-size:.92rem}
+main{max-width:980px;margin:0 auto;padding:0 20px}
+.snow-hero{padding:1.4rem 0 .6rem}
+.kicker{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 .4rem}
+h1{font-size:clamp(2rem,6vw,3rem);line-height:1.1;margin:0 0 .6rem}
+h2{font-size:clamp(1.3rem,3.6vw,1.7rem);line-height:1.2;margin:1.8rem 0 .5rem}
+.lede{font-size:1.08rem;max-width:62ch;margin:.4rem 0}
+.byline{font-size:.88rem;color:var(--muted)}
+.live{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.2rem;margin:1rem 0 1.5rem}
+.live-head{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between}
+.live-head h2{margin:0}
+.windows{display:flex;flex-wrap:wrap;gap:.4rem}
+.windows button{font:inherit;font-size:.88rem;font-weight:600;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:.45rem .9rem;min-height:40px;cursor:pointer}
+.windows button[aria-pressed="true"]{background:var(--snow);border-color:var(--snow);color:#fff}
+.summary{font-size:1.02rem;margin:.9rem 0}
+.summary strong{font-size:1.15rem}
+.alerts{display:grid;gap:.5rem;margin:.6rem 0}
+.alert{border-left:5px solid var(--warn);background:#fbf1ec;border-radius:8px;padding:.6rem .8rem;font-size:.93rem}
+.alert b{color:var(--warn)}
+.map-wrap{margin:.8rem 0}
+#snowMap{height:430px;border-radius:12px;border:1px solid var(--line);background:var(--frost)}
+.map-note,.stamp{font-size:.82rem;color:var(--muted);margin:.4rem 0}
+.offices{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.6rem;margin:.8rem 0}
+.office{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:.6rem .7rem;font-size:.88rem}
+.office b{display:block;font-size:.95rem}
+.table-wrap{overflow-x:auto;margin:.6rem 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem;background:var(--card)}
+caption{text-align:left;font-weight:700;padding:.4rem 0}
+th,td{text-align:left;padding:.5rem .55rem;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{background:var(--frost);font-size:.82rem;text-transform:uppercase;letter-spacing:.04em}
+td.in{font-weight:800;white-space:nowrap}
+td .rm{display:block;color:var(--muted);font-size:.82rem;margin-top:.2rem}
+.tag{display:inline-block;font-size:.72rem;border:1px solid var(--line);border-radius:999px;padding:.05rem .45rem;margin-left:.3rem;color:var(--muted)}
+.guide{padding-bottom:1rem}
+.read,.next{padding-left:1.2rem}
+.read li,.next li{margin:.45rem 0}
+.site-footer{background:var(--snow);color:#d4e2ee;padding:1.4rem 20px;margin-top:2rem;font-size:.9rem}
+.site-footer a{color:#fff}
+
+button{font:inherit}
+.town{margin:1rem 0;background:var(--frost);border-radius:12px;padding:.9rem}
+.town label{display:block;font-weight:800;font-size:1.05rem;margin-bottom:.45rem}
+.town-row{display:flex;flex-wrap:wrap;gap:.45rem}
+.town-row input{flex:1 1 200px;min-width:0;font:inherit;font-size:1rem;padding:.6rem .75rem;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);min-height:44px}
+.town-row button,.share,.ghost{font-weight:700;border-radius:10px;padding:.55rem 1rem;min-height:44px;cursor:pointer;border:1.5px solid var(--snow);background:var(--snow);color:#fff}
+.ghost{background:#fff;color:var(--snow)}
+.town-result{margin-top:.7rem;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem .85rem}
+.town-result p{margin:.2rem 0}
+.near{list-style:none;padding:0;margin:.4rem 0}
+.near li{padding:.35rem 0;border-top:1px solid var(--line)}
+.near li:first-child{border-top:0}
+.near .when{display:block;font-size:.85rem;color:var(--muted)}
+.near .rm,.town-result .rm{display:block;font-size:.82rem;color:var(--muted)}
+.season-line{font-size:.92rem;margin-top:.5rem!important}
+.share{margin-top:.6rem}
+.heading-out{border-left:5px solid var(--ice);background:var(--paper);border-radius:8px;padding:.6rem .85rem;margin:.8rem 0;font-size:.95rem}
+.heading-out p{margin:.2rem 0}
+.heading-out .links{display:flex;flex-wrap:wrap;gap:.4rem 1rem;font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.8rem 0 .4rem}
+.chips button{font-size:.85rem;font-weight:600;border:1.5px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:.4rem .75rem;min-height:40px;cursor:pointer}
+.chips button span{color:var(--muted);font-weight:700;margin-left:.2rem}
+.chips button.empty{opacity:.6}
+.chips button[aria-pressed="true"]{background:var(--snow);border-color:var(--snow);color:#fff}
+.chips button[aria-pressed="true"] span{color:#cfe1f0}
+.region-trails{font-size:.92rem;margin:.3rem 0 .6rem}
+.season{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.2rem;margin:1.5rem 0}
+.season h2{margin-top:0}
+details summary{cursor:pointer;font-weight:700;padding:.5rem 0}
+tr[hidden]{display:none}
+@media (max-width:640px){#snowMap{height:340px}#snowTable th:nth-child(5),#snowTable td:nth-child(5),#seasonTable th:nth-child(3),#seasonTable td:nth-child(3),#lastSeasonTable th:nth-child(2),#lastSeasonTable td:nth-child(2),#firstSnowTable th:nth-child(2),#firstSnowTable td:nth-child(2){display:none}.live,.season{padding:.9rem}.chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:.3rem;scrollbar-width:thin}.chips button{white-space:nowrap;flex:0 0 auto}}
+.snow-hero .town{margin:.6rem 0 1rem}
+.windows{flex-wrap:nowrap;overflow-x:auto}
+.windows button{white-space:nowrap}
+@media (max-width:640px){.kicker{font-size:.7rem;margin-bottom:.2rem}h1{font-size:1.85rem;margin-bottom:.4rem}.lede{font-size:.98rem}.windows button{padding:.4rem .7rem;font-size:.82rem}.live-head h2{font-size:1.2rem}}
+.choices{display:flex;flex-wrap:wrap;gap:.4rem}.choices button{min-height:40px;padding:.35rem .8rem;font-size:.9rem}

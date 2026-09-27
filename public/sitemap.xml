@@ -422,7 +422,7 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/tools/</loc>
-    <lastmod>2026-09-24</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -452,7 +452,7 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/soo-locks/</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
@@ -1013,4 +1013,10 @@
   <url><loc>https://chrisizworski.com/national-tools/white-christmas/cities/steamboat-springs-co/</loc><lastmod>2026-09-25</lastmod></url>
   <url><loc>https://chrisizworski.com/national-tools/white-christmas/cities/leavenworth-wa/</loc><lastmod>2026-09-25</lastmod></url>
   <url><loc>https://chrisizworski.com/national-tools/white-christmas/cities/mammoth-lakes-ca/</loc><lastmod>2026-09-25</lastmod></url>
+  <url>
+    <loc>https://chrisizworski.com/michigan-snow-totals/</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>
