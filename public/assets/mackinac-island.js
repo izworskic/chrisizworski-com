@@ -174,7 +174,11 @@
       const hit=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top)[0];
       if(!hit)return;const btn=byTarget.get('#'+hit.target.id);if(!btn)return;
       buttons.forEach(b=>b.classList.toggle('active',b===btn));
-      btn.scrollIntoView({block:'nearest',inline:'nearest'});
+      // Scroll only the rail sideways. scrollIntoView() on a button inside the sticky
+      // rail also scrolled the window toward the rail's un-stuck position, so the page
+      // jumped while the reader scrolled.
+      const l=btn.offsetLeft-host.offsetLeft,r=l+btn.offsetWidth;
+      if(l<host.scrollLeft)host.scrollLeft=l-8;else if(r>host.scrollLeft+host.clientWidth)host.scrollLeft=r-host.clientWidth+8;
     },{rootMargin:'-35% 0px -55% 0px'});
     byTarget.forEach((_,sel)=>{const el=document.querySelector(sel);if(el)tabSpy.observe(el);});
   }
