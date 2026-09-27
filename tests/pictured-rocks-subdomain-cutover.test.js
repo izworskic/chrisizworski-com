@@ -46,8 +46,8 @@ test('cutover fails closed if the committed preview contract disappears', () => 
 });
 
 test('subdomain shell keeps live data and assets on the same deployment', () => {
-  assert.match(preview, /href="\/assets\/pictured-rocks-planner-v3\.css"/);
-  assert.match(preview, /src="\/assets\/pictured-rocks-planner-v3\.js"/);
+  assert.match(preview, /href="\/assets\/pictured-rocks-planner-v3\.css(?:\?[^" ]+)?"/);
+  assert.match(preview, /src="\/assets\/pictured-rocks-planner-v3\.js(?:\?[^" ]+)?"/);
   const ui = fs.readFileSync('public/assets/pictured-rocks-planner-v3.js', 'utf8');
   assert.match(ui, /fetch\('\/api\/pictured-rocks-live'/);
 });

@@ -10,6 +10,20 @@ const FORT_MADISON_UPSTREAM = 'https://fort-madison-live.vercel.app';
 const PICTURED_ROCKS_HOST = 'picturedrocks.chrisizworski.com';
 const PICTURED_ROCKS_SOURCE = '/labs/pictured-rocks-planner/';
 const PICTURED_ROCKS_INDEXABLE_ROBOTS = '<meta name="robots" content="index,follow,max-image-preview:large">';
+const NETWORK_ADS_TAG = '<script defer src="https://chrisizworski.com/assets/network-ads-v1.js"></script>';
+
+// HTML documents only: never alter Next flight responses, APIs, assets or errors.
+async function withNetworkAds(response: Response, request: Request) {
+  if (request.method !== 'GET' || !response.ok ||
+      !/text\/html/i.test(response.headers.get('content-type') || '')) return response;
+  const original = await response.text();
+  const html = original.includes('/assets/network-ads-v1.js') ? original :
+    original.replace(/<\/head>/i, NETWORK_ADS_TAG + '\n</head>');
+  const headers = new Headers(response.headers);
+  // These describe the upstream bytes, not the composed document.
+  for (const name of ['content-length', 'content-encoding', 'etag']) headers.delete(name);
+  return new Response(html, { status: response.status, statusText: response.statusText, headers });
+}
 
 export const config = {
   matcher: [
@@ -81,12 +95,14 @@ async function servePicturedRocksCanonical(request: Request) {
     }
 
     html = html.replace(noindexPattern, PICTURED_ROCKS_INDEXABLE_ROBOTS);
+    html = html.replace(/<\/head>/i, NETWORK_ADS_TAG + '\n</head>');
 
     const headers = new Headers(upstream.headers);
     headers.set('Content-Type', 'text/html; charset=utf-8');
     headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=900');
     headers.set('X-Robots-Tag', 'index, follow, max-image-preview:large');
     headers.set('Vary', 'Host');
+    for (const name of ['content-length', 'content-encoding', 'etag']) headers.delete(name);
 
     return new Response(html, {
       status: 200,
@@ -155,11 +171,11 @@ export default async function middleware(request: Request) {
     headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
     headers.set('CDN-Cache-Control', 'no-store');
     headers.set('Vercel-CDN-Cache-Control', 'no-store');
-    return new Response(response.body, {
+    return withNetworkAds(new Response(response.body, {
       status: response.status,
       statusText: response.statusText,
       headers,
-    });
+    }), request);
   }
 
   if (url.pathname.startsWith(`${GRAND_COULEE_PATH}/`)) {
@@ -169,6 +185,6 @@ export default async function middleware(request: Request) {
 
   if (url.pathname.startsWith(`${PLATTE_CRANE_PATH}/`)) {
     const upstream = new URL(`${url.pathname}${url.search}`, PLATTE_CRANE_UPSTREAM);
-    return fetch(new Request(upstream, request));
+    return withNetworkAds(await fetch(new Request(upstream, request)), request);
   }
 }
