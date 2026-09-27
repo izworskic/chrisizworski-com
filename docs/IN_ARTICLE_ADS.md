@@ -88,3 +88,46 @@ well as Auto ads; its documented optimization benefits do not guarantee earnings
 References:
 - https://support.google.com/adsense/answer/12003870
 - https://support.google.com/adsense/answer/9261307
+
+
+## Independent tools: network-ads-v1
+
+`public/assets/network-ads-v1.js` is generated from the existing placement runtime
+and configuration by `scripts/build-network-ads.mjs`. Only exact production hosts
+in `config/network-ads-hosts.json` can initialize it. Preview hosts, noindex pages,
+redirect pages and utility pages are excluded. Existing local in-article placement
+integrations take precedence; an existing Google loader is reused.
+
+Static owners copy `scripts/network-ads-injector.mjs` into their own scripts and run
+it after all HTML generators. Next.js owners load the network script once through
+`next/script` in their shared layout or App. Dynamic HTML handlers also attach the
+script to their document response. The hub middleware covers Fort Madison, Platte
+Crane and the indexable Pictured Rocks host. This does not change canonical URLs,
+content, sitemap membership or AdSense account formats.
+
+The network adapter permits an ad **before an intact top-level section-card** when
+its parent is plain content flow. It still rejects placement inside cards, grids,
+maps, forms and `data-no-ads` ancestors, and preserves spacing, below-viewport and
+maximum-count limits. Tool detection uses actual map containers, media, forms and
+`data-tool`, rather than broad class substrings that can match an entire page.
+Pages with no safe boundary load AdSense but receive no manual placement.
+
+Release order: deploy this repository first, confirm the runtime asset returns
+JavaScript, then merge/deploy the owning-repository integrations. Check production
+HTML and browser network/DOM on each host; a passing build is not proof of ad fill.
+Next.js client navigation keeps the loader available, but boundary discovery runs
+on initial document load; do not claim every SPA transition inserts new units.
+
+The central configuration controls only scripts introduced by this integration.
+`loaderMode: off` prevents the network script from loading Google or placing units
+on subsequent page loads; it cannot remove another repository's existing loader.
+Existing direct integrations (including Whitetail) retain their own controls.
+The personal hub's `/` and `/about/` placement exclusions do not suppress separate
+tool homepages. To roll back an owner, revert its integration PR; to disable the
+new network integration centrally, remove its host from the allowlist and deploy.
+
+September 27 audit: 28 of 124 checked HTML documents had no AdSense reference.
+Au Sable still needs its deployment/source owner identified. Whitetail already has
+a merged source fix but the audited production response was stale. Neither is
+reported as repaired by these PRs. Revenue/filled impressions must be measured in
+AdSense after release; installing the code does not guarantee higher earnings.
