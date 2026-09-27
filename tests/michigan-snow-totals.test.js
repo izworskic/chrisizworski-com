@@ -198,3 +198,20 @@ test('review fixes: since-yesterday starts at Eastern midnight, same-name towns,
   assert.notEqual(core.findTown('Bear Lake', [far], places).kind, 'town');
   assert.equal(core.seasonStation([['2026-01-01', '1.0', '0.5']]).pctNote, 'too early');
 });
+
+test('each of the ten target searches is answered in crawlable text, and none targets snow depth', () => {
+  const targets = require('../benchmarks/snow-totals-search-targets.json').targets;
+  assert.equal(targets.length, 10);
+  const text = html.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').toLowerCase();
+  const stop = new Set(['how', 'much', 'did', 'get', 'this', 'in', 'the']);
+  for (const t of targets) {
+    for (const word of t.query.split(' ').filter(w => !stop.has(w))) assert.ok(text.includes(word), `${t.query}: "${word}" missing`);
+    for (const anchor of t.answer.split('+').filter(a => a.startsWith('#'))) assert.ok(html.includes(`id="${anchor.slice(1)}"`), `${t.query}: ${anchor} missing`);
+    assert.doesNotMatch(t.query, /depth|on the ground/);
+  }
+  // Supporting pages named in the registry link here, so the page is not an orphan behind /tools/.
+  // The homepage is a protected branded surface (config/search-winner-protection), so it is not required here.
+  for (const page of ['snowmobile/index.html', 'michigan-cross-country-skiing/index.html']) {
+    assert.match(fs.readFileSync(path.join(root, 'public', page), 'utf8'), /href="\/michigan-snow-totals\/"/, page);
+  }
+});
