@@ -195,6 +195,25 @@ figure.fig.hero{margin:6px 0 28px}
     .field-camera .camera-credit{margin:0;font-size:.8rem;opacity:.6}
     .field-camera .camera-out{margin:0;font-size:.9rem;opacity:.7}
 
+.next-ship{background:#fff;border:1px solid #cfdde2;border-left:4px solid #165d71;border-radius:0 5px 5px 0;padding:16px 18px;margin:16px 0 18px}
+.next-ship-kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#165d71;font-weight:bold;margin:0 0 4px}
+.next-ship h2{font-size:22px;line-height:1.2;color:#173c2c;margin:0 0 8px}
+.next-ship-tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;padding:0;list-style:none}
+.next-ship-tags li{font-size:12px;padding:3px 8px;border-radius:999px;background:#e8f1f3;color:#1c4a57}
+.next-ship-tags li.big{background:#f6ead8;color:#7a4a12;font-weight:bold}
+.next-ship-window{background:#f4f8f8;border:1px solid #dbe7ea;border-radius:4px;padding:10px 12px;margin:0 0 10px}
+.next-ship-window span{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#5b6d72}
+.next-ship-window strong{display:block;font-size:20px;color:#12384a;margin:2px 0}
+.next-ship-window small{font-size:12px;color:#5b6d72}
+.next-ship p{font-size:14px;color:#3f4a47;margin:0 0 8px}
+.next-ship-now{background:#eef6ee;border:1px solid #cfe3cf;border-radius:4px;padding:9px 12px;margin:0 0 12px;font-size:14px;color:#1f4a24}
+.next-ship-actions{display:flex;flex-wrap:wrap;gap:8px 12px;margin:10px 0 6px}
+.next-ship-actions a,.next-ship-actions button{font:inherit;font-size:13px;font-weight:bold;border:1px solid #165d71;border-radius:3px;padding:8px 11px;color:#165d71;background:#fff;cursor:pointer;text-decoration:none}
+.next-ship-actions button{background:#165d71;color:#fff}
+.next-ship-actions a,.next-ship-actions button{flex:1 1 auto;text-align:center}
+.next-ship-also{font-size:13px!important;color:#5b6d72!important}
+.next-ship-note{font-size:12px!important;color:#6c756e!important;margin:6px 0 0!important}
+@media(max-width:640px){.next-ship h2{font-size:20px}.next-ship-window strong{font-size:18px}}
     .photo-credit{margin:.35rem 0 1.1rem;font-size:.78rem;opacity:.62;line-height:1.4}
     .photo-credit a{color:inherit}
 </style>
@@ -225,6 +244,13 @@ figure.fig.hero{margin:6px 0 28px}
 
 <h1 class="page-title">Soo Locks Schedule Today</h1>
 <p class="sub">Named-vessel passage sources, the official boat hotline, live AIS activity, and Sault Ste. Marie visitor information</p>
+
+<section class="next-ship" id="soo-next-ship" aria-labelledby="soo-next-ship-heading" aria-live="polite" data-no-ads>
+  <p class="next-ship-now" id="sooNextNow" hidden></p>
+  <p class="next-ship-kicker" id="sooNextKicker">Next ship at the locks</p>
+  <h2 id="soo-next-ship-heading">Checking which ship is heading for the locks&hellip;</h2>
+  <div id="sooNextBody"><p>This reads the latest AIS reports along the St. Marys River, from Whitefish Bay to DeTour, and estimates when each approaching ship should reach the locks. If it does not load, use the <a href="#live-vessel-activity">live vessel map</a> or the sources below.</p></div>
+</section>
 
 <section class="schedule-answer" id="soo-schedule-answer" aria-labelledby="soo-schedule-heading">
   <p class="schedule-date" id="sooScheduleDate">Today's Soo Locks planning checklist</p>
@@ -553,7 +579,7 @@ figure.fig.hero{margin:6px 0 28px}
 
 </script>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script defer src="/assets/soo-ais.js?v=20260917"></script>
+<script defer src="/assets/soo-ais.js?v=20260927"></script>
 <script defer src="/assets/field-camera.js"></script>
 </body>
 </html>
