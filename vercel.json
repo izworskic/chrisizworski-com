@@ -1296,5 +1296,8 @@
       "source": "/national-tools/:path*",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"
     }
+  ],
+  "alias": [
+    "picturedrocks.chrisizworski.com"
   ]
 }
