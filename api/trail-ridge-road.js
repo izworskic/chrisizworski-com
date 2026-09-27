@@ -26,18 +26,30 @@ function roadStatus(text){
   const statusLine=t.match(/For updates, call the recorded Trail Ridge Road Status Line[^.]*\./i)?.[0]||null;
   return {level,label,timedEntry:timed,statusLine,sourceTextMatched:!unknown};
 }
+function windValues(period){
+  return String(period?.windSpeed||'').match(/\d+/g)?.map(Number).filter(Number.isFinite)||[];
+}
 function maxWind(period){
-  const nums=String(period?.windSpeed||'').match(/\d+/g)?.map(Number)||[];
+  const nums=windValues(period);
   return nums.length?Math.max(...nums):0;
 }
+function completePeriod(period){
+  const forecast=String(period?.shortForecast||period?.detailedForecast||'').trim();
+  const temperature=Number(period?.temperature);
+  const precip=period?.probabilityOfPrecipitation?.value;
+  return Boolean(forecast)&&Number.isFinite(temperature)&&precip!==null&&precip!==undefined&&Number.isFinite(Number(precip))&&windValues(period).length>0;
+}
 function weatherAssessment(periods,alerts){
-  const slice=(periods||[]).slice(0,12);
-  const alertNames=(alerts||[]).map(a=>a?.properties?.event).filter(Boolean);
+  const periodList=Array.isArray(periods)?periods:[];
+  const alertList=Array.isArray(alerts)?alerts:null;
+  const slice=periodList.slice(0,12);
+  const alertNames=(alertList||[]).map(a=>a?.properties?.event).filter(Boolean);
   const warning=alertNames.some(x=>/warning/i.test(x));
   const watch=alertNames.some(x=>/watch|advisory/i.test(x));
-  const severe=slice.some(p=>/snow|freezing|thunder|ice|blizzard/i.test(`${p.shortForecast||''} ${p.detailedForecast||''}`)||maxWind(p)>=40);
-  const caution=slice.some(p=>Number(p?.probabilityOfPrecipitation?.value||0)>=30||maxWind(p)>=25||Number(p?.temperature)<=35);
+  const severe=slice.some(p=>/snow|freezing|thunder|ice|blizzard/i.test(`${p?.shortForecast||''} ${p?.detailedForecast||''}`)||maxWind(p)>=40);
   if(warning||severe)return {level:'high',label:'High-alpine weather may disrupt travel',detail:'NWS guidance includes a warning-level signal, wintry/thunder weather, or very strong wind in the next 12 hours. Official NPS road status remains the controlling source.',alerts:alertNames};
+  if(alertList===null||!slice.length||slice.some(p=>!completePeriod(p)))return {level:'unknown',label:'Alpine weather evidence is incomplete',detail:'The current hourly forecast or alert evidence is incomplete, so this tool will not call the high-alpine travel window workable. Check NPS road status and the current NWS forecast before climbing.',alerts:alertNames};
+  const caution=slice.some(p=>Number(p?.probabilityOfPrecipitation?.value)>=30||maxWind(p)>=25||Number(p?.temperature)<=35);
   if(watch||caution)return {level:'caution',label:'Use extra caution in the alpine zone',detail:'The next 12 hours include colder, wetter, or windier periods that can change road conditions quickly. Check NPS status again before climbing.',alerts:alertNames};
   return {level:'workable',label:'No major high-alpine weather signal in the next 12 hours',detail:'NWS hourly guidance looks comparatively workable, but mountain conditions can change faster than the forecast and the NPS road status controls.',alerts:alertNames};
 }
