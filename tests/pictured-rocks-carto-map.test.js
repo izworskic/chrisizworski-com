@@ -23,5 +23,5 @@ test('hard gate: fallback is also bounded and non-wrapping',()=>{
   assert.match(ui,/minZoom:8,maxZoom:19,noWrap:true,bounds:parkBounds/);
 });
 test('mobile clients get a fresh bundle',()=>{
-  assert.match(html,/pictured-rocks-planner-v3\.js\?v=20260927-6/);
+  assert.match(html,/pictured-rocks-planner-v3\.js\?v=20260927-7/);
 });
