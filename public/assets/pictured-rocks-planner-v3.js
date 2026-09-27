@@ -118,11 +118,12 @@ function initMap(){
   const target=$('#parkMap');
   if(!target)return;
   if(!window.L){target.innerHTML='<div class="map-fallback">Interactive map did not load. Use the official NPS map before navigating in the park.</div>';return;}
-  map=L.map(target,{scrollWheelZoom:false,zoomControl:true}).setView([46.54,-86.31],9);
+  const parkBounds=L.latLngBounds([[45.75,-87.20],[47.15,-85.20]]);
+  map=L.map(target,{scrollWheelZoom:false,zoomControl:true,minZoom:8,maxBounds:parkBounds,maxBoundsViscosity:1,worldCopyJump:false}).setView([46.54,-86.31],9);
   if(!document.getElementById('parkMapLabelStyles')){const st=document.createElement('style');st.id='parkMapLabelStyles';st.textContent='.leaflet-tooltip.park-place-label{background:rgba(255,255,255,.96);border:1px solid rgba(22,39,42,.22);border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,.15);color:#173236;font:700 11px/1.2 Inter,system-ui,sans-serif;padding:4px 6px;white-space:nowrap}.leaflet-tooltip-top.park-place-label:before{border-top-color:rgba(255,255,255,.96)}';document.head.appendChild(st);}
-  const cartoLayer=L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{tileSize:256,zoomOffset:0,maxNativeZoom:20,maxZoom:20,updateWhenZooming:false,keepBuffer:3,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);
+  const cartoLayer=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',{subdomains:'abcd',tileSize:256,zoomOffset:0,minZoom:8,maxNativeZoom:20,maxZoom:20,noWrap:true,bounds:parkBounds,updateWhenZooming:false,keepBuffer:3,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);
   let cartoFailures=0,fallbackAdded=false;
-  cartoLayer.on('tileerror',()=>{cartoFailures++;if(fallbackAdded||cartoFailures<4)return;fallbackAdded=true;map.removeLayer(cartoLayer);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);});
+  cartoLayer.on('tileerror',()=>{cartoFailures++;if(fallbackAdded||cartoFailures<4)return;fallbackAdded=true;map.removeLayer(cartoLayer);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{minZoom:8,maxZoom:19,noWrap:true,bounds:parkBounds,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);});
   Object.entries(engine.PLACES).forEach(([id,p])=>{
     const pt=pointFor(id);if(!pt)return;
     const m=L.circleMarker([pt.lat,pt.lon],markerStyle(p.side)).addTo(map);
@@ -131,7 +132,7 @@ function initMap(){
     markers[id]=m;
   });
   const all=Object.keys(engine.PLACES).map(pointFor).filter(Boolean).map(p=>[p.lat,p.lon]);
-  if(all.length)map.fitBounds(all,{padding:[18,18]});
+  if(all.length){map.fitBounds(all,{padding:[18,18],maxZoom:10});setTimeout(()=>map.invalidateSize({pan:false}),0);}
   $$('#mapZones [data-zone]').forEach(btn=>btn.addEventListener('click',()=>focusZone(btn.dataset.zone)));
 }
 function focusZone(zone){
