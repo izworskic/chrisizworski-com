@@ -1,4 +1,4 @@
-name: Pictured Rocks map projection repair
+name: Pictured Rocks map hard-gate repair
 
 on:
   push:
@@ -10,70 +10,106 @@ permissions:
   contents: write
 
 jobs:
-  fix-map:
+  repair-and-verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Repair CARTO map wrapping and regional bounds
+
+      - name: Restore authenticated CARTO without reintroducing wrap bugs
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re, subprocess
+
+          # Recover the already-committed CARTO basemap key from the last keyed map build.
+          old = subprocess.check_output([
+              'git','show','f97e1b96931a3b94c1290e7df5f0f1d6326bb86c:public/assets/pictured-rocks-planner-v3.js'
+          ], text=True)
+          m = re.search(r"rastertiles/voyager/\{z\}/\{x\}/\{y\}\.png\?key=([^']+)", old)
+          if not m:
+              raise SystemExit('Could not recover the existing CARTO basemap key from repository history')
+          key = m.group(1)
 
           js_path = Path('public/assets/pictured-rocks-planner-v3.js')
           js = js_path.read_text()
-
-          old_map = "map=L.map(target,{scrollWheelZoom:false,zoomControl:true}).setView([46.54,-86.31],9);"
-          new_map = "const parkBounds=L.latLngBounds([[45.75,-87.20],[47.15,-85.20]]);\n  map=L.map(target,{scrollWheelZoom:false,zoomControl:true,minZoom:8,maxBounds:parkBounds,maxBoundsViscosity:1,worldCopyJump:false}).setView([46.54,-86.31],9);"
-          if old_map not in js:
-              raise SystemExit('Expected Leaflet map initializer not found')
-          js = js.replace(old_map, new_map, 1)
-
-          old_tile = "const cartoLayer=L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{tileSize:256,zoomOffset:0,maxNativeZoom:20,maxZoom:20,updateWhenZooming:false,keepBuffer:3,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);"
-          new_tile = "const cartoLayer=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',{subdomains:'abcd',tileSize:256,zoomOffset:0,minZoom:8,maxNativeZoom:20,maxZoom:20,noWrap:true,bounds:parkBounds,updateWhenZooming:false,keepBuffer:3,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);"
+          old_tile = "const cartoLayer=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',{subdomains:'abcd',tileSize:256,zoomOffset:0,minZoom:8,maxNativeZoom:20,maxZoom:20,noWrap:true,bounds:parkBounds,updateWhenZooming:false,keepBuffer:3,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);"
+          new_tile = f"const cartoLayer=L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{{z}}/{{x}}/{{y}}.png?key={key}',{{tileSize:256,zoomOffset:0,minZoom:8,maxNativeZoom:20,maxZoom:20,noWrap:true,bounds:parkBounds,updateWhenZooming:false,keepBuffer:3,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}}).addTo(map);"
           if old_tile not in js:
-              raise SystemExit('Expected current CARTO tile configuration not found')
+              raise SystemExit('Expected unkeyed CARTO layer not found')
           js = js.replace(old_tile, new_tile, 1)
-
-          old_fallback = "L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);"
-          new_fallback = "L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{minZoom:8,maxZoom:19,noWrap:true,bounds:parkBounds,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);"
-          if old_fallback not in js:
-              raise SystemExit('Expected OSM fallback configuration not found')
-          js = js.replace(old_fallback, new_fallback, 1)
-
-          old_fit = "if(all.length)map.fitBounds(all,{padding:[18,18]});"
-          new_fit = "if(all.length){map.fitBounds(all,{padding:[18,18],maxZoom:10});setTimeout(()=>map.invalidateSize({pan:false}),0);}"
-          if old_fit not in js:
-              raise SystemExit('Expected map fitBounds line not found')
-          js = js.replace(old_fit, new_fit, 1)
-
           js_path.write_text(js)
 
           html_path = Path('public/labs/pictured-rocks-planner/index.html')
           html = html_path.read_text()
-          old_version = 'src="/assets/pictured-rocks-planner-v3.js?v=20260927-3"'
-          new_version = 'src="/assets/pictured-rocks-planner-v3.js?v=20260927-4"'
+          old_version = 'src="/assets/pictured-rocks-planner-v3.js?v=20260927-5"'
+          new_version = 'src="/assets/pictured-rocks-planner-v3.js?v=20260927-6"'
           if old_version not in html:
-              raise SystemExit('Expected current map runtime version not found')
-          html = html.replace(old_version, new_version, 1)
-          html_path.write_text(html)
+              raise SystemExit('Expected current map bundle version not found')
+          html_path.write_text(html.replace(old_version, new_version, 1))
+
+          Path('/tmp/carto-key').write_text(key)
           PY
-      - name: Verify projection repair
+
+      - name: Encode the map loss-function hard gates as tests
         shell: bash
         run: |
-          grep -Fq "noWrap:true" public/assets/pictured-rocks-planner-v3.js
-          grep -Fq "maxBounds:parkBounds" public/assets/pictured-rocks-planner-v3.js
-          grep -Fq "minZoom:8" public/assets/pictured-rocks-planner-v3.js
-          grep -Fq "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png" public/assets/pictured-rocks-planner-v3.js
-          ! grep -Fq "cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88" public/assets/pictured-rocks-planner-v3.js
-          grep -Fq 'pictured-rocks-planner-v3.js?v=20260927-4' public/labs/pictured-rocks-planner/index.html
-      - name: Commit projection repair
+          cat > tests/pictured-rocks-carto-map.test.js <<'EOF'
+          const test=require('node:test');
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const ui=fs.readFileSync('public/assets/pictured-rocks-planner-v3.js','utf8');
+          const html=fs.readFileSync('public/labs/pictured-rocks-planner/index.html','utf8');
+
+          test('hard gate: CARTO Voyager requests are authenticated',()=>{
+            assert.match(ui,/basemaps\.cartocdn\.com\/rastertiles\/voyager\/\{z\}\/\{x\}\/\{y\}\.png\?key=/);
+          });
+          test('hard gate: no world wrap and no continent-scale zoom',()=>{
+            assert.match(ui,/noWrap:true/);
+            assert.match(ui,/worldCopyJump:false/);
+            assert.match(ui,/maxBounds:parkBounds/);
+            assert.match(ui,/minZoom:8/);
+          });
+          test('hard gate: park locations stay visible',()=>{
+            assert.match(ui,/bindTooltip\(esc\(p\.title\),\{permanent:true/);
+            assert.match(ui,/minersCastle:\[46\.4929,-86\.5489\]/);
+            assert.match(ui,/grandMarais:\[46\.6713,-85\.9850\]/);
+          });
+          test('hard gate: fallback is also bounded and non-wrapping',()=>{
+            assert.match(ui,/tile\.openstreetmap\.org/);
+            assert.match(ui,/minZoom:8,maxZoom:19,noWrap:true,bounds:parkBounds/);
+          });
+          test('mobile clients get a fresh bundle',()=>{
+            assert.match(html,/pictured-rocks-planner-v3\.js\?v=20260927-6/);
+          });
+          EOF
+          sed -i 's/^          //' tests/pictured-rocks-carto-map.test.js
+          node --test tests/pictured-rocks-carto-map.test.js
+
+      - name: Verify the existing CARTO key changes a real Pictured Rocks tile response
+        shell: bash
+        run: |
+          set -euo pipefail
+          key="$(cat /tmp/carto-key)"
+          keyed="https://basemaps.cartocdn.com/rastertiles/voyager/9/133/181.png?key=${key}"
+          unkeyed="https://basemaps.cartocdn.com/rastertiles/voyager/9/133/181.png"
+          curl -fsSL --retry 3 --retry-delay 1 "$keyed" -o /tmp/carto-keyed.png
+          curl -fsSL --retry 3 --retry-delay 1 "$unkeyed" -o /tmp/carto-unkeyed.png
+          test "$(wc -c < /tmp/carto-keyed.png)" -gt 1000
+          file /tmp/carto-keyed.png | grep -qi 'PNG image data'
+          if cmp -s /tmp/carto-keyed.png /tmp/carto-unkeyed.png; then
+            echo 'FAIL: authenticated CARTO tile is identical to the unkeyed API-required response'
+            exit 1
+          fi
+          echo 'PASS: authenticated CARTO response is distinct from the API-required tile'
+
+      - name: Commit only after all hard gates pass
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/assets/pictured-rocks-planner-v3.js public/labs/pictured-rocks-planner/index.html
-          git commit -m "Repair Pictured Rocks map wrapping and bounds"
+          git add public/assets/pictured-rocks-planner-v3.js public/labs/pictured-rocks-planner/index.html tests/pictured-rocks-carto-map.test.js
+          git commit -m "Fix CARTO auth and lock Pictured Rocks map hard gates"
           git push origin HEAD:main
