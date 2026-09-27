@@ -21,3 +21,15 @@
 #parkMap img.leaflet-tile{width:256px!important;height:256px!important;max-width:none!important;max-height:none!important;object-fit:none!important;margin:0!important;padding:0!important;border:0!important}
 #parkMap .leaflet-tile-container{pointer-events:none}#parkMap .leaflet-zoom-animated{transform-origin:0 0}
 #parkMap .leaflet-top,#parkMap .leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}#parkMap .leaflet-top{top:0}#parkMap .leaflet-bottom{bottom:0}#parkMap .leaflet-left{left:0}#parkMap .leaflet-right{right:0}#parkMap .leaflet-control{position:relative;z-index:800;pointer-events:auto}
+
+/* pictured-rocks map interaction hardening 20260927 */
+#parkMap .leaflet-tooltip.park-place-label{pointer-events:auto!important;cursor:pointer;touch-action:manipulation;min-height:30px;display:flex;align-items:center}
+#parkMap .leaflet-pane>svg path.leaflet-interactive{pointer-events:auto;cursor:pointer}
+.map-story:focus{outline:3px solid #63b6c2;outline-offset:3px}
+.map-story-detail{color:#536468;font-size:.9rem}
+.map-story-detail p{margin:0 0 10px}
+.map-decision-card{margin-top:6px;color:#173236}
+.map-decision-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}
+.map-decision-zone{font-size:10px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#607579}
+.map-decision-why{font-size:.92rem!important;color:#334d51!important;margin:0 0 10px!important}
+@media(max-width:900px){.map-story[data-selected-point]{border:2px solid #8dbdc3;box-shadow:0 8px 22px rgba(24,44,48,.12)}}

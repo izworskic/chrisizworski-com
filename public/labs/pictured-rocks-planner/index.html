@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://unpkg.com" crossorigin>
 <link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin>
 <link rel="stylesheet" href="/assets/leaflet-1.9.4.css?v=20260927-1">
-<link rel="stylesheet" href="/assets/pictured-rocks-planner-v3.css?v=20260927-5">
+<link rel="stylesheet" href="/assets/pictured-rocks-planner-v3.css?v=20260927-8">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Pictured Rocks Trip Planner","applicationCategory":"TravelApplication","operatingSystem":"Any","isAccessibleForFree":true,"url":"https://picturedrocks.chrisizworski.com/","author":{"@type":"Person","name":"Chris Izworski","url":"https://chrisizworski.com/"}},{"@type":"Place","name":"Pictured Rocks National Lakeshore","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}}]}</script>
 </head>
 <body>
@@ -65,7 +65,7 @@
       <div id="parkMap" role="region" aria-label="Map of Pictured Rocks planning stops"></div>
       <div class="map-caption">Tap any point for trip fit, time, effort, access, and the catch that can change the stop. Approximate planning points only — not turn-by-turn navigation. Download the official NPS map before leaving reliable service.</div>
     </div>
-    <aside class="map-story"><div><p class="eyebrow">Why routes fail</p><h3 id="mapStoryTitle">The park is long.</h3><p id="mapStoryText">Munising and Grand Marais are different trip bases. Chapel sits between them as a major hiking commitment. Crossing back and forth is how a good day turns into a driving day.</p></div><div class="map-legend" aria-label="Map zone legend"><div class="legend-row"><span class="legend-dot west"></span>West: water departures + Miners cluster</div><div class="legend-row"><span class="legend-dot central"></span>Central: Chapel commitment</div><div class="legend-row"><span class="legend-dot east"></span>East: dunes + beaches + lighthouse</div></div></aside>
+    <aside class="map-story" id="mapStory" aria-live="polite"><div><p class="eyebrow">Tap a stop</p><h3 id="mapStoryTitle">Choose a point on the map.</h3><div id="mapStoryText" class="map-story-detail"><p>Tap either a dot or its place name. This panel will show trip fit, time, effort, access, and the catch that can change the stop.</p></div></div><div class="map-legend" aria-label="Map zone legend"><div class="legend-row"><span class="legend-dot west"></span>West: water departures + Miners cluster</div><div class="legend-row"><span class="legend-dot central"></span>Central: Chapel commitment</div><div class="legend-row"><span class="legend-dot east"></span>East: dunes + beaches + lighthouse</div></div></aside>
   </div>
 </section>
 
@@ -113,6 +113,6 @@
 <footer><a href="https://picturedrocks.chrisizworski.com/">Current canonical Pictured Rocks Planner</a><span> · </span><a href="/">Chris Izworski</a></footer>
 <script src="/assets/leaflet-1.9.4.js?v=20260927-1"></script>
 <script src="/assets/pictured-rocks-planner-engine.js"></script>
-<script src="/assets/pictured-rocks-planner-v3.js?v=20260927-7"></script>
+<script src="/assets/pictured-rocks-planner-v3.js?v=20260927-8"></script>
 </body>
 </html>

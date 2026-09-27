@@ -60,6 +60,8 @@ function render(a,{scroll=true}={}){
   $('#timeline').innerHTML=steps.map(s=>`<article class="stop${s.isDayStart&&a.time==='two'?' day-start':''}"><div class="stop-time">${a.time==='two'?`Day ${s.day} · ${s.time}`:s.time}</div><div><h3>${esc(s.title)}</h3><p>${esc(s.why)}</p><div class="meta">${esc(s.effort)} · allow about ${Math.round(s.mins/15)*15} min</div></div></article>`).join('');
   result.hidden=false;
   highlightMap(p.ids);
+  const selectedStory=$('#mapStory');
+  if(selectedStory&&selectedStory.dataset.selectedPoint){selectMapPoint(selectedStory.dataset.selectedPoint,{openPopup:false});}
   if(scroll)result.scrollIntoView({behavior:'smooth',block:'start'});
   try{localStorage.setItem('pictured-rocks-plan-v3',JSON.stringify(a));}catch(e){}
 }
@@ -133,10 +135,9 @@ function currentPlannedIds(){
 }
 function mapPopupHtml(id){
   const p=engine.PLACES[id],d=MAP_DETAILS[id]||{};
-  const blocked=currentAccessBlocks().has(id);
-  const fit=currentPlannedIds().includes(id);
-  const fitLabel=blocked?'Current access issue':fit?'Fits your current plan':'Optional for this plan';
-  const fitClass=blocked?'blocked':fit?'fit':'optional';
+  const state=mapFitState(id);
+  const fitLabel=state.label;
+  const fitClass=state.className;
   const zone=p.side==='west'?'West / Munising':p.side==='central'?'Chapel country':'East / Grand Marais';
   const allow=Math.round(p.mins/15)*15;
   return `<div class="park-popup">
@@ -149,6 +150,42 @@ function mapPopupHtml(id){
     ${d.watch?`<div class="park-popup-row watch"><strong>Know before you go</strong><span>${esc(d.watch)}</span></div>`:''}
     ${d.source?`<a class="park-popup-link" href="${esc(d.source)}" target="_blank" rel="noopener">Official details ↗</a>`:''}
   </div>`;
+}
+function mapFitState(id){
+  const blocked=currentAccessBlocks().has(id);
+  const fit=currentPlannedIds().includes(id);
+  return {blocked,fit,label:blocked?'Current access issue':fit?'Fits your current plan':'Optional for this plan',className:blocked?'blocked':fit?'fit':'optional'};
+}
+function mapDecisionHtml(id){
+  const p=engine.PLACES[id],d=MAP_DETAILS[id]||{},state=mapFitState(id);
+  const zone=p.side==='west'?'West / Munising':p.side==='central'?'Chapel country':'East / Grand Marais';
+  const allow=Math.round(p.mins/15)*15;
+  return `<div class="map-decision-card" data-map-detail="${esc(id)}">
+    <div class="map-decision-top"><span class="map-decision-zone">${esc(zone)}</span><span class="park-popup-fit ${state.className}">${esc(state.label)}</span></div>
+    <p class="map-decision-why">${esc(p.why)}</p>
+    <div class="park-popup-meta"><span>${esc(p.effort)}</span><span>Allow ~${allow} min</span></div>
+    ${d.best?`<div class="park-popup-row"><strong>Why pick it</strong><span>${esc(d.best)}</span></div>`:''}
+    ${d.access?`<div class="park-popup-row"><strong>What it takes</strong><span>${esc(d.access)}</span></div>`:''}
+    ${d.watch?`<div class="park-popup-row watch"><strong>Know before you go</strong><span>${esc(d.watch)}</span></div>`:''}
+    ${d.source?`<a class="park-popup-link" href="${esc(d.source)}" target="_blank" rel="noopener">Official details ↗</a>`:''}
+  </div>`;
+}
+function selectMapPoint(id,{openPopup=true,moveFocus=false}={}){
+  const p=engine.PLACES[id],m=markers[id];
+  if(!p)return;
+  const title=$('#mapStoryTitle'),detail=$('#mapStoryText'),story=$('#mapStory');
+  if(title)title.textContent=p.title;
+  if(detail)detail.innerHTML=mapDecisionHtml(id);
+  Object.entries(markers).forEach(([mid,marker])=>marker.setStyle(markerStyle(engine.PLACES[mid].side,mid===id)));
+  if(m&&openPopup){
+    m.setPopupContent(mapPopupHtml(id));
+    m.openPopup();
+  }
+  if(story){
+    story.dataset.selectedPoint=id;
+    if(moveFocus){story.setAttribute('tabindex','-1');story.focus({preventScroll:true});}
+    if(window.matchMedia&&window.matchMedia('(max-width:900px)').matches){requestAnimationFrame(()=>story.scrollIntoView({behavior:'smooth',block:'nearest'}));}
+  }
 }
 function ensureMapPopupStyles(){
   if(document.getElementById('parkMapPopupStyles'))return;
@@ -174,17 +211,41 @@ function initMap(){
   if(!window.L){target.innerHTML='<div class="map-fallback">Interactive map did not load. Use the official NPS map before navigating in the park.</div>';return;}
   const parkBounds=L.latLngBounds([[45.75,-87.20],[47.15,-85.20]]);
   map=L.map(target,{scrollWheelZoom:false,zoomControl:true,minZoom:8,maxBounds:parkBounds,maxBoundsViscosity:1,worldCopyJump:false}).setView([46.54,-86.31],9);
-  if(!document.getElementById('parkMapLabelStyles')){const st=document.createElement('style');st.id='parkMapLabelStyles';st.textContent='.leaflet-tooltip.park-place-label{background:rgba(255,255,255,.96);border:1px solid rgba(22,39,42,.22);border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,.15);color:#173236;font:700 11px/1.2 Inter,system-ui,sans-serif;padding:4px 6px;white-space:nowrap}.leaflet-tooltip-top.park-place-label:before{border-top-color:rgba(255,255,255,.96)}';document.head.appendChild(st);}
+  if(!document.getElementById('parkMapLabelStyles')){const st=document.createElement('style');st.id='parkMapLabelStyles';st.textContent='.leaflet-tooltip.park-place-label{background:rgba(255,255,255,.96);border:1px solid rgba(22,39,42,.22);border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,.15);color:#173236;font:700 11px/1.2 Inter,system-ui,sans-serif;padding:6px 8px;white-space:nowrap;pointer-events:auto!important;cursor:pointer;touch-action:manipulation}.leaflet-tooltip-top.park-place-label:before{border-top-color:rgba(255,255,255,.96)}';document.head.appendChild(st);}
   ensureMapPopupStyles();
   const cartoLayer=L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{tileSize:256,zoomOffset:0,minZoom:8,maxNativeZoom:20,maxZoom:20,noWrap:true,bounds:parkBounds,updateWhenZooming:false,keepBuffer:3,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);
   let cartoFailures=0,fallbackAdded=false;
   cartoLayer.on('tileerror',()=>{cartoFailures++;if(fallbackAdded||cartoFailures<4)return;fallbackAdded=true;map.removeLayer(cartoLayer);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{minZoom:8,maxZoom:19,noWrap:true,bounds:parkBounds,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);});
   Object.entries(engine.PLACES).forEach(([id,p])=>{
     const pt=pointFor(id);if(!pt)return;
-    const m=L.circleMarker([pt.lat,pt.lon],markerStyle(p.side)).addTo(map);
-    m.bindPopup(()=>mapPopupHtml(id),{maxWidth:340,minWidth:260,className:'park-value-popup'});
-    m.bindTooltip(esc(p.title),{permanent:true,direction:'top',offset:[0,-8],opacity:.96,className:'park-place-label'});
+    const m=L.circleMarker([pt.lat,pt.lon],{...markerStyle(p.side),interactive:true,bubblingMouseEvents:false}).addTo(map);
+    m.bindPopup(mapPopupHtml(id),{maxWidth:340,minWidth:260,className:'park-value-popup'});
+    m.bindTooltip(esc(p.title),{permanent:true,interactive:true,direction:'top',offset:[0,-8],opacity:.96,className:'park-place-label'});
     markers[id]=m;
+    const activate=(opts={})=>selectMapPoint(id,opts);
+    m.on('click',()=>activate({openPopup:true}));
+    m.on('add',()=>{
+      const el=m.getElement();
+      if(el){
+        el.setAttribute('tabindex','0');
+        el.setAttribute('role','button');
+        el.setAttribute('aria-label',`${p.title}: open planning details`);
+        el.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();activate({openPopup:true,moveFocus:false});}});
+      }
+    });
+    const tip=m.getTooltip();
+    if(tip){
+      tip.on('click',()=>activate({openPopup:true}));
+      tip.on('add',()=>{
+        const el=tip.getElement();
+        if(el){
+          el.setAttribute('role','button');
+          el.setAttribute('tabindex','0');
+          el.setAttribute('aria-label',`${p.title}: open planning details`);
+          el.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();activate({openPopup:true});}});
+        }
+      });
+    }
   });
   const all=Object.keys(engine.PLACES).map(pointFor).filter(Boolean).map(p=>[p.lat,p.lon]);
   if(all.length){map.fitBounds(all,{padding:[18,18],maxZoom:10});setTimeout(()=>map.invalidateSize({pan:false}),0);}
