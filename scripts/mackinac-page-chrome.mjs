@@ -113,7 +113,7 @@ export const TRUTH_LABEL = "Before you go:";
 // Reviewed ad seam between two full-width guide sections. public/assets/in-article-ads.js
 // only fills a seam that is still below the reader, at least 1.5 screens from any other
 // ad, so an ad never pushes visible content. Unused seams stay empty.
-export const AD_BREAK = `<div data-in-article-ad-break aria-hidden="true"></div>`;
+export const AD_BREAK = `<div data-in-article-ad-break="reserve" aria-hidden="true"></div>`;
 export function withAdBreaks(sectionsHtml) {
   return sectionsHtml.replace(/<\/section>\s*(?=<section)/g, `</section>${AD_BREAK}`);
 }

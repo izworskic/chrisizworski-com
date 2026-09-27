@@ -57,7 +57,7 @@ test("My Trip and sub-pages pin the header and nav across navigations", () => {
 test("every sub-page offers reviewed in-article ad seams between full sections", () => {
   for (const slug of SUBPAGES) {
     const html = read(`public/mackinac-island/${slug}/index.html`);
-    const seams = html.match(/<\/section>\s*<div data-in-article-ad-break aria-hidden="true"><\/div>\s*<section class="hub-section/g) || [];
+    const seams = html.match(/<\/section>\s*<div data-in-article-ad-break="reserve" aria-hidden="true"><\/div>\s*<section class="hub-section/g) || [];
     assert.ok(seams.length >= 2, `${slug} has ${seams.length} section-boundary ad seams`);
   }
 });

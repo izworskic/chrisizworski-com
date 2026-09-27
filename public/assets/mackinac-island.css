@@ -705,3 +705,10 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-.012em;font-op
 .destination-nav-wrap{view-transition-name:mack-nav}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.2s}
 @media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
+
+/* Content column in block flow (was grid) so public/assets/in-article-ads.js can use the
+   reviewed seams between the lower sections; the placer only inserts in block flow and
+   only below the reader. Same 24px rhythm as the old grid gap. */
+.content-stack{display:block}
+.content-stack>*+*{margin-top:24px}
+.content-stack>[data-in-article-ad-break]{margin-top:0}
