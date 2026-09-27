@@ -1,0 +1,39 @@
+name: Pictured Rocks CARTO retina fix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/pictured-rocks-carto-retina-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix-map:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Normalize CARTO Leaflet tile configuration
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('public/assets/pictured-rocks-planner-v3.js')
+          s=p.read_text()
+          old="const cartoLayer=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{subdomains:'abcd',maxZoom:20,detectRetina:true,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);"
+          new="const cartoLayer=L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{maxZoom:20,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);"
+          if old not in s:
+              raise SystemExit('Expected CARTO tile config not found; aborting')
+          p.write_text(s.replace(old,new,1))
+          PY
+      - name: Commit map fix
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/assets/pictured-rocks-planner-v3.js
+          git commit -m "Fix CARTO tile scaling on Pictured Rocks map"
+          git push origin HEAD:main
