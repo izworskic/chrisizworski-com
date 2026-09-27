@@ -17,50 +17,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Vendor Leaflet and harden map CSS
+      - name: Vendor Leaflet and harden map rendering
         shell: bash
         run: |
           set -euo pipefail
           curl -fsSL https://unpkg.com/leaflet@1.9.4/dist/leaflet.css -o public/assets/leaflet-1.9.4.css
           curl -fsSL https://unpkg.com/leaflet@1.9.4/dist/leaflet.js -o public/assets/leaflet-1.9.4.js
-
           python <<'PY'
           from pathlib import Path
-
-          html_path = Path('public/labs/pictured-rocks-planner/index.html')
-          css_path = Path('public/assets/pictured-rocks-planner-v3.css')
-
-          html = html_path.read_text()
-          html = html.replace(
-              '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3yn5mZjoMZ6/MEDUKaKLAE5T5R4W0=" crossorigin="">',
-              '<link rel="stylesheet" href="/assets/leaflet-1.9.4.css?v=20260927-1">'
-          )
-          html = html.replace(
-              '<link rel="stylesheet" href="/assets/pictured-rocks-planner-v3.css">',
-              '<link rel="stylesheet" href="/assets/pictured-rocks-planner-v3.css?v=20260927-5">'
-          )
-          html = html.replace(
-              '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>',
-              '<script src="/assets/leaflet-1.9.4.js?v=20260927-1"></script>'
-          )
+          html_path=Path('public/labs/pictured-rocks-planner/index.html')
+          css_path=Path('public/assets/pictured-rocks-planner-v3.css')
+          html=html_path.read_text()
+          html=html.replace('<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3yn5mZjoMZ6/MEDUKaKLAE5T5R4W0=" crossorigin="">','<link rel="stylesheet" href="/assets/leaflet-1.9.4.css?v=20260927-1">')
+          html=html.replace('<link rel="stylesheet" href="/assets/pictured-rocks-planner-v3.css">','<link rel="stylesheet" href="/assets/pictured-rocks-planner-v3.css?v=20260927-5">')
+          html=html.replace('<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>','<script src="/assets/leaflet-1.9.4.js?v=20260927-1"></script>')
           for old in ('pictured-rocks-planner-v3.js?v=20260927-3','pictured-rocks-planner-v3.js?v=20260927-4'):
-              html = html.replace(old, 'pictured-rocks-planner-v3.js?v=20260927-5')
+              html=html.replace(old,'pictured-rocks-planner-v3.js?v=20260927-5')
           html_path.write_text(html)
-
-          css = css_path.read_text()
-          marker = '/* pictured-rocks leaflet hardening 20260927 */'
-          guard = r'''
-/* pictured-rocks leaflet hardening 20260927 */
-#parkMap.leaflet-container{position:relative;overflow:hidden;isolation:isolate;touch-action:pan-x pan-y;background:#dfe9e8}
-#parkMap .leaflet-pane,#parkMap .leaflet-tile,#parkMap .leaflet-marker-icon,#parkMap .leaflet-marker-shadow,#parkMap .leaflet-tile-container,#parkMap .leaflet-pane>svg,#parkMap .leaflet-pane>canvas{position:absolute;left:0;top:0}
-#parkMap .leaflet-map-pane,#parkMap .leaflet-tile-pane,#parkMap .leaflet-overlay-pane,#parkMap .leaflet-marker-pane,#parkMap .leaflet-tooltip-pane,#parkMap .leaflet-popup-pane{position:absolute;left:0;top:0;width:100%;height:100%}
-#parkMap .leaflet-tile-pane{z-index:200}#parkMap .leaflet-overlay-pane{z-index:400}#parkMap .leaflet-marker-pane{z-index:600}#parkMap .leaflet-tooltip-pane{z-index:650}#parkMap .leaflet-popup-pane{z-index:700}
-#parkMap img.leaflet-tile{width:256px!important;height:256px!important;max-width:none!important;max-height:none!important;object-fit:none!important;margin:0!important;padding:0!important;border:0!important}
-#parkMap .leaflet-tile-container{pointer-events:none}#parkMap .leaflet-zoom-animated{transform-origin:0 0}
-#parkMap .leaflet-top,#parkMap .leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}#parkMap .leaflet-top{top:0}#parkMap .leaflet-bottom{bottom:0}#parkMap .leaflet-left{left:0}#parkMap .leaflet-right{right:0}#parkMap .leaflet-control{position:relative;z-index:800;pointer-events:auto}
-'''
+          css=css_path.read_text()
+          marker='/* pictured-rocks leaflet hardening 20260927 */'
+          guard='\n/* pictured-rocks leaflet hardening 20260927 */\n#parkMap.leaflet-container{position:relative;overflow:hidden;isolation:isolate;touch-action:pan-x pan-y;background:#dfe9e8}\n#parkMap .leaflet-pane,#parkMap .leaflet-tile,#parkMap .leaflet-marker-icon,#parkMap .leaflet-marker-shadow,#parkMap .leaflet-tile-container,#parkMap .leaflet-pane>svg,#parkMap .leaflet-pane>canvas{position:absolute;left:0;top:0}\n#parkMap .leaflet-map-pane,#parkMap .leaflet-tile-pane,#parkMap .leaflet-overlay-pane,#parkMap .leaflet-marker-pane,#parkMap .leaflet-tooltip-pane,#parkMap .leaflet-popup-pane{position:absolute;left:0;top:0;width:100%;height:100%}\n#parkMap .leaflet-tile-pane{z-index:200}#parkMap .leaflet-overlay-pane{z-index:400}#parkMap .leaflet-marker-pane{z-index:600}#parkMap .leaflet-tooltip-pane{z-index:650}#parkMap .leaflet-popup-pane{z-index:700}\n#parkMap img.leaflet-tile{width:256px!important;height:256px!important;max-width:none!important;max-height:none!important;object-fit:none!important;margin:0!important;padding:0!important;border:0!important}\n#parkMap .leaflet-tile-container{pointer-events:none}#parkMap .leaflet-zoom-animated{transform-origin:0 0}\n#parkMap .leaflet-top,#parkMap .leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}#parkMap .leaflet-top{top:0}#parkMap .leaflet-bottom{bottom:0}#parkMap .leaflet-left{left:0}#parkMap .leaflet-right{right:0}#parkMap .leaflet-control{position:relative;z-index:800;pointer-events:auto}\n'
           if marker not in css:
-              css += guard
+              css+=guard
           css_path.write_text(css)
           PY
 
