@@ -148,7 +148,7 @@ test('page has causal controls, decision map, change layer, webcam and provenanc
   for (const value of ['travel','mobility','experience','plan']) assert.match(html, new RegExp(`data-control="${value}"`));
   assert.match(html, /id="map"/);
   assert.match(html, /Since your last check/);
-  assert.match(html, /youtube-nocookie\.com\/embed\/tk0tfYDxrUA/);
+  assert.match(html, /youtube-nocookie\.com\/embed\/gXKuUyKt8mc/);
   assert.match(html, /Sources & status/i);
   assert.match(html, /No cached live value is being substituted/);
   assert.match(html, /Reported closed by NPS/);
