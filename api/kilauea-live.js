@@ -10,7 +10,7 @@ const NPS_ALERTS_URL = 'https://developer.nps.gov/api/v1/alerts?parkCode=havo&li
 const NPS_VIEWING_URL = 'https://www.nps.gov/havo/planyourvisit/eruption-viewing.htm';
 const HAWAII_DOH_AIR_URL = 'https://air.doh.hawaii.gov/home/text/118';
 const NWS_POINT_URL = 'https://api.weather.gov/points/19.421,-155.287';
-const OFFICIAL_CAM_URL = 'https://www.youtube.com/watch?v=tk0tfYDxrUA';
+const OFFICIAL_CAM_URL = 'https://www.youtube.com/watch?v=gXKuUyKt8mc';
 
 const UA = 'KilaueaLive/0.1 (https://chrisizworski.com/; visitor decision tool)';
 
@@ -357,7 +357,7 @@ module.exports = async function handler(req, res) {
     air: air.air,
     viewpoints: VIEWPOINTS,
     snapshot: compactSnapshot({ eruption:hvo.eruption, access:nps.access, weather:weather.weather, sources }),
-    camera: { label:'USGS V1 Kīlauea summit livestream', url:OFFICIAL_CAM_URL, embedUrl:'https://www.youtube-nocookie.com/embed/tk0tfYDxrUA' },
+    camera: { label:'USGS V1 Kīlauea summit livestream', url:OFFICIAL_CAM_URL, embedUrl:'https://www.youtube-nocookie.com/embed/gXKuUyKt8mc' },
     sources
   });
 };
