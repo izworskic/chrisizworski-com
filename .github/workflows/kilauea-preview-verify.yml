@@ -13,18 +13,52 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify deployed page and live API
-        env:
-          PREVIEW: https://chrisizworski-com-git-agent-836647-izworski-gmailcoms-projects.vercel.app
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Start local product server with real API handler
         run: |
           set -euo pipefail
           mkdir -p artifacts
-          PAGE_CODE=$(curl --retry 4 --retry-delay 3 --connect-timeout 10 --max-time 45 -sS -L -o artifacts/page.html -w '%{http_code}' "$PREVIEW/labs/kilauea-live/")
-          echo "page status=$PAGE_CODE"
-          test "$PAGE_CODE" = "200"
-          API_CODE=$(curl --retry 4 --retry-delay 3 --connect-timeout 10 --max-time 45 -sS -L -o artifacts/api-now.json -w '%{http_code}' "$PREVIEW/api/kilauea-live?travel=here&mobility=short&experience=casual&plan=now")
-          echo "api status=$API_CODE"
-          test "$API_CODE" = "200"
+          cat > /tmp/kilauea-local-server.js <<'NODE'
+          const http = require('http');
+          const fs = require('fs');
+          const path = require('path');
+          const handler = require(process.cwd() + '/api/kilauea-live.js');
+          const page = path.join(process.cwd(), 'public/labs/kilauea-live/index.html');
+          const server = http.createServer(async (req, res) => {
+            const url = new URL(req.url, 'http://127.0.0.1:4173');
+            if (url.pathname === '/api/kilauea-live') {
+              req.method = 'GET';
+              req.query = Object.fromEntries(url.searchParams.entries());
+              const adapter = {
+                setHeader(k,v){ res.setHeader(k,v); },
+                status(code){ res.statusCode = code; return this; },
+                json(value){ if (!res.headersSent) res.setHeader('content-type','application/json; charset=utf-8'); res.end(JSON.stringify(value)); return value; }
+              };
+              try { await handler(req, adapter); }
+              catch (err) { res.statusCode = 500; res.setHeader('content-type','application/json'); res.end(JSON.stringify({ok:false,error:String(err?.stack||err)})); }
+              return;
+            }
+            if (url.pathname === '/' || url.pathname === '/labs/kilauea-live/' || url.pathname === '/labs/kilauea-live/index.html') {
+              res.statusCode = 200;
+              res.setHeader('content-type','text/html; charset=utf-8');
+              res.end(fs.readFileSync(page));
+              return;
+            }
+            res.statusCode = 404; res.end('not found');
+          });
+          server.listen(4173, '127.0.0.1', () => console.log('kilauea local server ready'));
+          NODE
+          node /tmp/kilauea-local-server.js > artifacts/local-server.log 2>&1 &
+          echo $! > /tmp/kilauea-server.pid
+          for i in {1..20}; do curl -fsS http://127.0.0.1:4173/labs/kilauea-live/ >/dev/null && exit 0; sleep 1; done
+          cat artifacts/local-server.log
+          exit 1
+      - name: Exercise live official-source API
+        run: |
+          set -euo pipefail
+          curl --connect-timeout 10 --max-time 45 -fsS "http://127.0.0.1:4173/api/kilauea-live?travel=here&mobility=short&experience=casual&plan=now" > artifacts/api-now.json
           node <<'NODE'
           const fs = require('fs');
           const payload = JSON.parse(fs.readFileSync('artifacts/api-now.json','utf8'));
@@ -32,17 +66,17 @@ jobs:
           if (!payload.decision?.state || !payload.eruption?.activity?.state) throw new Error('live API missing decision/activity state');
           if (!payload.sources?.hvo?.status || !payload.sources?.nps?.status || !payload.sources?.weather?.status) throw new Error('live API missing provenance states');
           if (payload.access?.closureUnknown === true && payload.decision.state !== 'VERIFY ACCESS') throw new Error('unknown NPS access did not hard-gate the live decision');
-          fs.writeFileSync('artifacts/api-summary.txt', JSON.stringify({decision:payload.decision.state, activity:payload.eruption.activity.state, forecastability:payload.eruption.forecastability?.state, closureUnknown:payload.access?.closureUnknown, sources:Object.fromEntries(Object.entries(payload.sources).map(([k,v])=>[k,{status:v.status,observedAt:v.observedAt,fetchedAt:v.fetchedAt}]))}, null, 2));
+          if (['GO NOW','GO','BETTER LATER'].includes(payload.decision.state) && (payload.sources.hvo.status !== 'ok' || payload.sources.nps.status !== 'ok')) throw new Error('positive recommendation escaped degraded official-source gate');
+          fs.writeFileSync('artifacts/api-summary.txt', JSON.stringify({decision:payload.decision.state, headline:payload.decision.headline, activity:payload.eruption.activity.state, forecastability:payload.eruption.forecastability?.state, closureUnknown:payload.access?.closureUnknown, sources:Object.fromEntries(Object.entries(payload.sources).map(([k,v])=>[k,{status:v.status,observedAt:v.observedAt,fetchedAt:v.fetchedAt,note:v.note}]))}, null, 2));
+          console.log(fs.readFileSync('artifacts/api-summary.txt','utf8'));
           NODE
-      - name: Render mobile viewport
-        env:
-          PREVIEW: https://chrisizworski-com-git-agent-836647-izworski-gmailcoms-projects.vercel.app
+      - name: Render 390px mobile product with headless Chrome
         run: |
           set -euo pipefail
           CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
           test -n "$CHROME"
-          "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=390,844 --virtual-time-budget=12000 --screenshot="$PWD/artifacts/mobile-390.png" "$PREVIEW/labs/kilauea-live/"
-          "$CHROME" --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=12000 --dump-dom "$PREVIEW/labs/kilauea-live/" > artifacts/rendered-390.html
+          "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=390,844 --virtual-time-budget=18000 --screenshot="$PWD/artifacts/mobile-390.png" "http://127.0.0.1:4173/labs/kilauea-live/"
+          "$CHROME" --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=18000 --dump-dom "http://127.0.0.1:4173/labs/kilauea-live/" > artifacts/rendered-390.html
           node <<'NODE'
           const fs = require('fs');
           const html = fs.readFileSync('artifacts/rendered-390.html','utf8');
@@ -50,6 +84,7 @@ jobs:
             if (!html.includes(required)) throw new Error(`rendered mobile DOM missing: ${required}`);
           }
           if (html.includes('Building the current viewing picture') || html.includes('Checking official feeds…')) throw new Error('mobile DOM remained stuck in initial loading state');
+          if (!/id="decisionState"[^>]*>[^<]+</.test(html)) throw new Error('rendered decision state is empty');
           NODE
       - name: Upload preview evidence
         if: always()
