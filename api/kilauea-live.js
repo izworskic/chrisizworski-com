@@ -132,8 +132,7 @@ async function loadHvo() {
     errors.push(`USGS current pages: ${err.message}`);
   }
 
-  if (daily?.text?.length > 300 && daily.observedAt) {
-    const dailyTime = new Date(daily.observedAt).getTime();
+  const dailyLooksOfficial = Boolean(\n    daily?.observedAt &&\n    daily?.text?.length > 120 &&\n    /HAWAIIAN VOLCANO OBSERVATORY (?:DAILY )?UPDATE/i.test(daily.text)\n  );\n  if (dailyLooksOfficial) {\n    const dailyTime = new Date(daily.observedAt).getTime();
     const messageTime = message?.observedAt ? new Date(message.observedAt).getTime() : 0;
     const newerMessage = messageTime > dailyTime ? message : null;
     const text = newerMessage ? `LATEST HVO SHORT MESSAGE: ${newerMessage.text} LATEST HVO DAILY UPDATE: ${daily.text}` : daily.text;

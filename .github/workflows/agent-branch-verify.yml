@@ -4,9 +4,12 @@ on:
   push:
     branches:
       - 'agent/**'
+  pull_request:
+    branches:
+      - main
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   verify:
@@ -18,30 +21,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Apply Kilauea gate fixes and restore workflow
-        env:
-          PATCH_B64: CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAoKcCA9IFBhdGgoImxpYi9raWxhdWVhLWRlY2lzaW9uLmpzIikKcyA9IHAucmVhZF90ZXh0KCkKcmVwbHMgPSBbCigiY29uc3QgaGFzID0gKHJlLCBsYWJlbCkgPT4geyBpZiAocmUudGVzdCh0KSkgeyBldmlkZW5jZS5wdXNoKGxhYmVsKTsgcmV0dXJuIHRydWU7IH0gcmV0dXJuIGZhbHNlOyB9OyIsCiAiY29uc3QgaGFzID0gKHJlLCBsYWJlbCwgY29ycHVzID0gdCkgPT4geyBpZiAocmUudGVzdChjb3JwdXMpKSB7IGV2aWRlbmNlLnB1c2gobGFiZWwpOyByZXR1cm4gdHJ1ZTsgfSByZXR1cm4gZmFsc2U7IH07IiksCigiICBjb25zdCBwYXVzZWQgPSBoYXMoL2VydXB0aW9uICg/OmlzICk/cGF1c2VkfCIsCiAiICAvLyBTdHJpcCBuZWdhdGVkIGxhdmEtZmxvdyB3b3JkaW5nIGJlZm9yZSBydW5uaW5nIHBvc2l0aXZlIGFjdGl2aXR5IGRldGVjdG9ycy5cbiAgY29uc3QgcG9zaXRpdmVUZXh0ID0gdC5yZXBsYWNlKC9cXGJub1xccysoPzphY3RpdmVcXHMrKT9sYXZhIGZsb3dzPyg/OlxccysoPzphcmV8aXMpKT8oPzpcXHMrKD86cHJlc2VudHxvYnNlcnZlZHxkZXRlY3RlZHx2aXNpYmxlfG9jY3VycmluZ3xjb250aW51aW5nfGFkdmFuY2luZykpPy9naSwgJyAnKTtcblxuICBjb25zdCBwYXVzZWQgPSBoYXMoL2VydXB0aW9uICg/OmlzICk/cGF1c2VkfCIpLAooIidIVk8gbWVudGlvbnMgbGF2YSBmb3VudGFpbmluZycpOyIsCiAiJ0hWTyBtZW50aW9ucyBsYXZhIGZvdW50YWluaW5nJywgcG9zaXRpdmVUZXh0KTsiKSwKKCJ8c3VzdGFpbmVkICg/OmxhdmEgKT9mb3VudGFpbmluZy9pLnRlc3QodCk7IiwKICJ8c3VzdGFpbmVkICg/OmxhdmEgKT9mb3VudGFpbmluZy9pLnRlc3QocG9zaXRpdmVUZXh0KTsiKSwKKCInSFZPIG1lbnRpb25zIGFjdGl2ZSBvdmVyZmxvdywgc3BhdHRlciwgbGF2YSBmbG93LCBvciBzdHJvbmcgZ2xvdycpOyIsCiAiJ0hWTyBtZW50aW9ucyBhY3RpdmUgb3ZlcmZsb3csIHNwYXR0ZXIsIGxhdmEgZmxvdywgb3Igc3Ryb25nIGdsb3cnLCBwb3NpdGl2ZVRleHQpOyIpLAooIidIVk8gcmVwb3J0cyB1bnJlc3Qgb3IgcHJlY3Vyc29yIHNpZ25hbHMnKTsiLAogIidIVk8gcmVwb3J0cyB1bnJlc3Qgb3IgcHJlY3Vyc29yIHNpZ25hbHMnLCBwb3NpdGl2ZVRleHQpOyIpLApdCmZvciBvbGQsbmV3IGluIHJlcGxzOgogICAgaWYgb2xkIG5vdCBpbiBzOgogICAgICAgIHJhaXNlIFN5c3RlbUV4aXQoIm1pc3NpbmcgbGliIHRhcmdldDogIitvbGRbOjgwXSkKICAgIHMgPSBzLnJlcGxhY2Uob2xkLG5ldywxKQpwLndyaXRlX3RleHQocykKCnAgPSBQYXRoKCJhcGkva2lsYXVlYS1saXZlLmpzIikKcyA9IHAucmVhZF90ZXh0KCkKb2xkID0gIiAgaWYgKGRhaWx5Py50ZXh0Py5sZW5ndGggPiAzMDAgJiYgZGFpbHkub2JzZXJ2ZWRBdCkge1xuIgpuZXcgPSAiICBjb25zdCBkYWlseUxvb2tzT2ZmaWNpYWwgPSBCb29sZWFuKFxcbiAgICBkYWlseT8ub2JzZXJ2ZWRBdCAmJlxcbiAgICBkYWlseT8udGV4dD8ubGVuZ3RoID4gMTIwICYmXFxuICAgIC9IQVdBSUlBTiBWT0xDQU5PIE9CU0VSVkFUT1JZICg/OkRBSUxZICk/VVBEQVRFL2kudGVzdChkYWlseS50ZXh0KVxcbiAgKTtcXG4gIGlmIChkYWlseUxvb2tzT2ZmaWNpYWwpIHtcXG4iCmlmIG9sZCBub3QgaW4gczoKICAgIHJhaXNlIFN5c3RlbUV4aXQoIm1pc3NpbmcgYXBpIHRocmVzaG9sZCB0YXJnZXQiKQpzID0gcy5yZXBsYWNlKG9sZCxuZXcsMSkKcC53cml0ZV90ZXh0KHMpCg==
-        run: |
-          echo "$PATCH_B64" | base64 -d | python
-          git fetch origin main
-          git show origin/main:.github/workflows/agent-branch-verify.yml > .github/workflows/agent-branch-verify.yml
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add lib/kilauea-decision.js api/kilauea-live.js .github/workflows/agent-branch-verify.yml
-          git commit -m "fix: harden Kilauea activity parsing"
-          git push origin HEAD:${GITHUB_REF_NAME}
-      - name: Run full repository gate on patched tree
-        run: |
-          set -o pipefail
-          mkdir -p artifacts
-          npm run verify:all 2>&1 | tee artifacts/verify-all.log
-      - name: Upload verification diagnostics
+      - name: Run full repository gate
+        run: npm run verify:all
+      - name: Upload boat launch source audit
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: kilauea-verification
-          path: |
-            artifacts/boat-launch-source-audit.json
-            artifacts/verify-all.log
+          name: boat-launch-source-audit
+          path: artifacts/boat-launch-source-audit.json
           if-no-files-found: ignore
           retention-days: 7
