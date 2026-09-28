@@ -172,6 +172,7 @@ test('Kilauea copy follows interpretive-ranger voice without impersonating NPS',
   for (const phrase of ['breathtaking','hidden gem','must-see','adventure awaits','nature’s raw power','immerse yourself']) {
     assert.doesNotMatch(combined, new RegExp(phrase, 'i'));
   }
+  assert.doesNotMatch(combined, /\u2014/);
 });
 
 test('live endpoint budgets staged upstream fallbacks inside the 10-second function envelope', () => {
