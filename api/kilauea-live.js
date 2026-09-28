@@ -6,6 +6,7 @@ const HANS_URL = 'https://volcanoes.usgs.gov/hans-public/api/volcano/newestForVo
 const HVO_UPDATES_URL = 'https://www.usgs.gov/volcanoes/kilauea/volcano-updates';
 const HVO_MESSAGES_URL = 'https://www.usgs.gov/volcanoes/kilauea/volcano-updates/volcano-messages';
 const NPS_CONDITIONS_URL = 'https://www.nps.gov/havo/planyourvisit/conditions.htm';
+const NPS_ALERTS_URL = 'https://developer.nps.gov/api/v1/alerts?parkCode=havo&limit=50';
 const NPS_VIEWING_URL = 'https://www.nps.gov/havo/planyourvisit/eruption-viewing.htm';
 const NPS_PARKING_URL = 'https://www.nps.gov/havo/planyourvisit/parking.htm';
 const NWS_POINT_URL = 'https://api.weather.gov/points/19.421,-155.287';
@@ -89,6 +90,7 @@ function parseUsDateFromText(text) {
   const ap = String(m[6] || '').toLowerCase();
   if (ap.startsWith('p') && hour < 12) hour += 12;
   if (ap.startsWith('a') && hour === 12) hour = 0;
+  // Hawaii Standard Time is UTC-10 year-round.
   const utc = Date.UTC(Number(m[3]), months[m[1].toLowerCase()], Number(m[2]), hour + 10, Number(m[5]));
   return new Date(utc).toISOString();
 }
@@ -112,6 +114,7 @@ function extractDailyUpdate(text) {
   const idx = full.search(/HAWAIIAN VOLCANO OBSERVATORY (?:DAILY )?UPDATE/i);
   const body = idx >= 0 ? full.slice(idx) : full;
   const observedAt = parseUsDateFromText(body);
+  // The live page leads with the current update. Cap the extraction so archive/navigation text cannot dominate classification.
   return { observedAt, text: body.slice(0, 24000) };
 }
 
@@ -153,6 +156,7 @@ async function loadHvo() {
     };
   }
 
+  // Fallback to HANS when the USGS presentation pages are unavailable or their timestamp cannot be parsed.
   try {
     const r = await fetchWithTimeout(HANS_URL, { headers: { Accept: 'application/json' } });
     const json = await r.json();
@@ -185,30 +189,70 @@ function localClosureWindow(text, name) {
   return /\bclosed\b|\bclosure\b|not accessible|no access/.test(window);
 }
 
+function parkWideClosure(text) {
+  return /hawai[ʻ'i’\s]+volcanoes national park (?:is|will be|remains) closed|the (?:entire )?park (?:is|will be|remains) closed|all remaining park areas[^.]{0,120}\bclose|park-wide closure|closed to recreational activities/i.test(String(text || ''));
+}
+
 async function loadNps() {
   const fetchedAt = nowIso();
+  let conditions = '';
+  let viewing = '';
+  const errors = [];
+
   try {
     const [conditionsResponse, viewingResponse] = await Promise.all([
       fetchWithTimeout(NPS_CONDITIONS_URL, { headers: { Accept: 'text/html' } }),
       fetchWithTimeout(NPS_VIEWING_URL, { headers: { Accept: 'text/html' } })
     ]);
-    const conditionsHtml = await conditionsResponse.text();
-    const viewingHtml = await viewingResponse.text();
-    const conditions = cleanText(conditionsHtml).slice(0, 60000);
-    const viewing = cleanText(viewingHtml).slice(0, 40000);
-    const explicitParkClosed = /hawai[ʻ'i’\s]+volcanoes national park (?:is|will be|remains) closed|the park (?:is|will be|remains) closed|park-wide closure/i.test(conditions);
-    const closedViewpoints = [];
-    if (localClosureWindow(conditions, 'Uēkahuna')) closedViewpoints.push('uekahuna');
-    if (localClosureWindow(conditions, 'Kīlauea Overlook')) closedViewpoints.push('kilauea-overlook');
-    if (localClosureWindow(conditions, 'Keanakākoʻi')) closedViewpoints.push('keanakakoi');
-    const closureReason = explicitParkClosed ? 'National Park Service current conditions indicate a park closure. Follow NPS instructions before travel.' : null;
-    return {
-      source: { name: 'National Park Service', status: 'ok', fetchedAt, observedAt: null, url: NPS_CONDITIONS_URL, note: 'Access is checked from NPS current conditions; individual closures may change faster than this parser.' },
-      access: { parkClosed: explicitParkClosed, closureReason, closedViewpoints, conditionsText: conditions.slice(0, 9000), viewingText: viewing.slice(0, 9000) }
-    };
+    conditions = cleanText(await conditionsResponse.text()).slice(0, 60000);
+    viewing = cleanText(await viewingResponse.text()).slice(0, 40000);
   } catch (err) {
-    return { source: { name: 'National Park Service', status: 'offline', fetchedAt, observedAt: null, url: NPS_CONDITIONS_URL, note: err.message }, access: { parkClosed: false, closureUnknown: true, closedViewpoints: [] } };
+    errors.push(`NPS pages: ${err.message}`);
   }
+
+  let alerts = [];
+  let alertApiVerified = false;
+  if (process.env.NPS_API_KEY) {
+    try {
+      const response = await fetchWithTimeout(NPS_ALERTS_URL, { headers: { Accept: 'application/json', 'X-Api-Key': process.env.NPS_API_KEY } });
+      const json = await response.json();
+      alerts = asArray(json?.data);
+      alertApiVerified = true;
+    } catch (err) {
+      errors.push(`NPS alerts API: ${err.message}`);
+    }
+  }
+
+  const closureAlerts = alerts.filter(a => /closure/i.test(String(a?.category || '')));
+  const alertText = closureAlerts.map(a => `${a?.title || ''} ${a?.description || ''}`).join(' ');
+  const explicitParkClosed = parkWideClosure(alertText) || parkWideClosure(conditions);
+  const closedViewpoints = [];
+  const closureCorpus = `${alertText} ${conditions}`;
+  if (localClosureWindow(closureCorpus, 'Uēkahuna')) closedViewpoints.push('uekahuna');
+  if (localClosureWindow(closureCorpus, 'Kīlauea Overlook')) closedViewpoints.push('kilauea-overlook');
+  if (localClosureWindow(closureCorpus, 'Keanakākoʻi')) closedViewpoints.push('keanakakoi');
+
+  const webpageLoaded = conditions.length > 100;
+  const closureUnknown = !explicitParkClosed && !alertApiVerified;
+  const sourceStatus = alertApiVerified ? 'ok' : webpageLoaded ? 'degraded' : 'offline';
+  const note = alertApiVerified
+    ? 'Current NPS alerts API checked. The NPS API can lag park-site alert changes by up to roughly two hours.'
+    : webpageLoaded
+      ? 'NPS current-conditions page loaded, but the authenticated alerts API is not verified in this deployment; access is treated as unconfirmed.'
+      : `NPS access could not be verified. ${errors.join(' ')}`;
+
+  return {
+    source: { name: 'National Park Service', status: sourceStatus, fetchedAt, observedAt: null, url: NPS_CONDITIONS_URL, note },
+    access: {
+      parkClosed: explicitParkClosed,
+      closureUnknown,
+      closureReason: explicitParkClosed ? 'National Park Service information indicates a park-wide closure. Follow NPS instructions before travel.' : null,
+      closedViewpoints: [...new Set(closedViewpoints)],
+      activeClosureAlerts: closureAlerts.map(a => ({ title:a?.title || null, category:a?.category || null, url:a?.url || null })).slice(0, 12),
+      conditionsText: conditions.slice(0, 9000),
+      viewingText: viewing.slice(0, 9000)
+    }
+  };
 }
 
 async function loadWeather() {
@@ -245,6 +289,7 @@ async function loadAir() {
     const raw = await response.text();
     const text = cleanText(raw).slice(0, 20000);
     const adverse = /hazardous|very unhealthy|unhealthy|sulfur dioxide[^.]{0,100}(?:elevated|high)|SO2[^.]{0,100}(?:elevated|high)/i.test(text);
+    // We deliberately do not invent a numeric SO2 value when the public text page cannot be parsed reliably.
     return { source: { name: 'Hawaiʻi Department of Health air monitoring', status: text.length > 80 ? 'degraded':'offline', fetchedAt, observedAt: null, url: HAWAII_DOH_AIR_URL, note: text.length > 80 ? 'Air page reachable. Numeric summit SO₂ is not used until a stable machine-readable field is verified.' : 'Air page did not expose a usable current reading.' }, air: { advisoryDetected: adverse, text: text.slice(0, 1200), numericVerified: false } };
   } catch (err) {
     return { source: { name: 'Hawaiʻi Department of Health air monitoring', status: 'offline', fetchedAt, observedAt: null, url: HAWAII_DOH_AIR_URL, note: err.message }, air: { advisoryDetected: false, numericVerified: false } };
@@ -287,6 +332,7 @@ module.exports = async function handler(req, res) {
   const profile = profileFromQuery(req.query || {});
   const decision = buildDecision(input, profile, new Date(generatedAt));
 
+  // Access is unknown when NPS fails. Never let an attractive eruption state read as a fully cleared trip.
   if (nps.access?.closureUnknown && !['CLOSED','LIMITED'].includes(decision.state)) {
     decision.confidence = { level:'Limited data', why:'NPS access status could not be confirmed.', degraded:[...(decision.confidence?.degraded || []), 'National Park Service'] };
     if (/^GO/.test(decision.state)) decision.state = 'VERIFY ACCESS';
