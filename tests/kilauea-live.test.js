@@ -161,6 +161,7 @@ test('Kilauea copy follows interpretive-ranger voice without impersonating NPS',
   const html = fs.readFileSync(path.join(__dirname, '..', 'public', 'labs', 'kilauea-live', 'index.html'), 'utf8');
   const decision = fs.readFileSync(path.join(__dirname, '..', 'lib', 'kilauea-decision.js'), 'utf8');
   const combined = `${html}\n${decision}`;
+  assert.match(html, /USGS Hawaiian Volcano Observatory \(HVO\)/);
   assert.match(html, /What the summit is telling you/);
   assert.match(html, /Use the camera the way a ranger would use a window/);
   assert.match(html, /The official voices behind this answer/);
