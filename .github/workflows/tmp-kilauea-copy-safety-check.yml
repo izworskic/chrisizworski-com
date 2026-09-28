@@ -1,0 +1,17 @@
+name: Temporary Kilauea ranger copy safety check
+on:
+  push:
+    branches:
+      - agent/kilauea-interpretive-ranger-voice-2026-09-28
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check focused Kilauea tests
+        run: node --test tests/kilauea-live.test.js
