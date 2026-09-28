@@ -10,6 +10,8 @@ on:
       - 'package.json'
       - 'scripts/sync-ballard-locks.mjs'
       - 'scripts/ballard-production-smoke.mjs'
+      - 'scripts/ballard-photo-program.mjs'
+      - 'scripts/ballard-photo-production-smoke.mjs'
       - '.github/workflows/ballard-production-smoke.yml'
   workflow_dispatch:
 
@@ -26,3 +28,4 @@ jobs:
         with:
           node-version: 22
       - run: node scripts/ballard-production-smoke.mjs
+      - run: node scripts/ballard-photo-production-smoke.mjs
