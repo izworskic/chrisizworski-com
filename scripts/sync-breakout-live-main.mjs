@@ -20,6 +20,8 @@ const TOOL_SLUGS=BREAKOUT_SLUGS.filter(x=>x!=='live-decisions');
 const CANONICAL_ORIGIN='https://chrisizworski.com';
 const GA4='G-Y5D2V2W7HN';
 const ADSENSE='ca-pub-8222782620788075';
+const DIRECTORY_URL=`${CANONICAL_ORIGIN}/national-tools/live-decisions/`;
+const DIRECTORY_NAME='Live Trip Decisions';
 
 function routePairs(){
   return BREAKOUT_SLUGS.flatMap(slug=>{
@@ -27,6 +29,39 @@ function routePairs(){
     const dest=`/synced-national-tools/${slug}/index.html`;
     return [[base,dest],[`${base}/`,dest]];
   });
+}
+
+function syncDirectoryDiscovery(targetRoot){
+  const file=path.join(targetRoot,'public','synced-national-tools','index.html');
+  if(!fs.existsSync(file)) throw new Error('Breakout sync: synced national directory missing');
+  let html=fs.readFileSync(file,'utf8');
+  const card='<article class="directory-card" data-search-card data-tool-id="live-decisions" data-personas="trip conditions event" data-tags="live trip decisions national parks road status sunrise river lake access current conditions zion glacier yellowstone yosemite rainier grand canyon haleakala acadia lake mead lake powell" data-months="1,2,3,4,5,6,7,8,9,10,11,12"><div class="card-top"><span class="kind">Live decision collection</span><span class="season-label" hidden>Useful now</span></div><h3>Live Trip Decisions</h3><p class="place">Ten destination decisions · United States</p><p class="description">Roads close, rivers rise, clouds erase sunrises and low water changes access. Open the destination-specific live tool that answers the decision before you commit the drive.</p><p class="signals"><strong>Signals:</strong> NPS + USGS + NWS + Bureau of Reclamation source-backed checks</p><div class="card-actions"><a class="primary-action" href="/national-tools/live-decisions/">Open live trip decisions &rarr;</a></div></article>';
+  html=html.replace(/<article class="directory-card"[^>]*data-tool-id="live-decisions"[\s\S]*?<\/article>\s*/g,'');
+  const section=html.indexOf('<section class="catalog-group national-utilities"');
+  if(section<0) throw new Error('Breakout sync: national utilities section missing');
+  const grid=html.indexOf('<div class="catalog-grid">',section);
+  if(grid<0) throw new Error('Breakout sync: national utilities grid missing');
+  const insert=grid+'<div class="catalog-grid">'.length;
+  html=html.slice(0,insert)+'\n'+card+html.slice(insert);
+
+  const schemaRe=/<script type="application\/ld\+json">([\s\S]*?)<\/script>/;
+  const match=html.match(schemaRe);
+  if(!match) throw new Error('Breakout sync: national directory JSON-LD missing');
+  const schema=JSON.parse(match[1]);
+  const graph=schema?.['@graph'];
+  const list=graph?.find(x=>x?.['@id']==='https://chrisizworski.com/national-tools/#toollist');
+  if(!list?.itemListElement) throw new Error('Breakout sync: national directory ItemList missing');
+  list.itemListElement=list.itemListElement.filter(x=>x.url!==DIRECTORY_URL);
+  list.itemListElement.unshift({'@type':'ListItem',position:1,url:DIRECTORY_URL,name:DIRECTORY_NAME});
+  list.itemListElement.forEach((x,i)=>x.position=i+1);
+  list.numberOfItems=list.itemListElement.length;
+  const page=graph.find(x=>x?.['@id']==='https://chrisizworski.com/national-tools/#page');
+  if(page) page.dateModified='2026-09-28';
+  html=html.replace(match[0],`<script type="application/ld+json">${JSON.stringify(schema)}</script>`);
+  const count=(html.match(/data-search-card/g)||[]).length;
+  html=html.replace(/(<p class="finder-count" id="finder-count" aria-live="polite">)\d+ tools shown(<\/p>)/,`$1${count} tools shown$2`);
+  if((html.match(/data-tool-id="live-decisions"/g)||[]).length!==1) throw new Error('Breakout sync: live decisions card must be unique');
+  fs.writeFileSync(file,html,'utf8');
 }
 
 export function installBreakoutLive(coreDir,targetRoot){
@@ -49,6 +84,8 @@ export function installBreakoutLive(coreDir,targetRoot){
     fs.mkdirSync(outDir,{recursive:true});
     fs.writeFileSync(path.join(outDir,'index.html'),html,'utf8');
   }
+
+  syncDirectoryDiscovery(targetRoot);
 
   const vercelPath=path.join(targetRoot,'vercel.json');
   const v=JSON.parse(fs.readFileSync(vercelPath,'utf8'));

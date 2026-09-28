@@ -41,7 +41,7 @@ jobs:
           node "$CORE_DIR/scripts/generate-breakout-live-pages.mjs"
           node "$CORE_DIR/scripts/inject-network-analytics.js"
 
-      - name: Install canonical pages and explicit main routes
+      - name: Install canonical pages, discovery, and explicit main routes
         run: node scripts/sync-breakout-live-main.mjs "$CORE_DIR" "$GITHUB_WORKSPACE"
 
       - name: Verify sync installer contract
@@ -73,6 +73,9 @@ jobs:
           done
           grep -q 'twitter:title' public/synced-national-tools/live-decisions/index.html
           grep -q 'twitter:description' public/synced-national-tools/live-decisions/index.html
+          test "$(grep -o 'data-tool-id="live-decisions"' public/synced-national-tools/index.html | wc -l)" -eq 1
+          grep -q 'href="/national-tools/live-decisions/"' public/synced-national-tools/index.html
+          grep -q 'https://chrisizworski.com/national-tools/live-decisions/' public/synced-national-tools/index.html
           node - <<'NODE'
           const fs=require('fs');
           const v=JSON.parse(fs.readFileSync('vercel.json','utf8'));
@@ -88,6 +91,12 @@ jobs:
               if(v.rewrites.findIndex(r=>r.source===source)>=catchAll) throw new Error(`route after catch-all: ${source}`);
             }
           }
+          const directory=fs.readFileSync('public/synced-national-tools/index.html','utf8');
+          const schema=JSON.parse(directory.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+          const list=schema['@graph'].find(x=>x['@id']==='https://chrisizworski.com/national-tools/#toollist');
+          const live=list.itemListElement.filter(x=>x.url==='https://chrisizworski.com/national-tools/live-decisions/');
+          if(live.length!==1) throw new Error('Live Trip Decisions ItemList entry must be unique');
+          if(list.numberOfItems!==list.itemListElement.length) throw new Error('National ItemList count mismatch');
           NODE
 
       - name: Commit verified production sync
@@ -96,7 +105,7 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add vercel.json public/synced-national-tools/live-decisions public/synced-national-tools/zion-narrows-conditions public/synced-national-tools/grand-canyon-access public/synced-national-tools/going-to-the-sun-road-status public/synced-national-tools/haleakala-sunrise public/synced-national-tools/yellowstone-road-status public/synced-national-tools/tioga-road-status public/synced-national-tools/cadillac-mountain-sunrise public/synced-national-tools/mount-rainier-road-status public/synced-national-tools/lake-mead-access public/synced-national-tools/lake-powell-ramp-status
+          git add vercel.json public/synced-national-tools/index.html public/synced-national-tools/live-decisions public/synced-national-tools/zion-narrows-conditions public/synced-national-tools/grand-canyon-access public/synced-national-tools/going-to-the-sun-road-status public/synced-national-tools/haleakala-sunrise public/synced-national-tools/yellowstone-road-status public/synced-national-tools/tioga-road-status public/synced-national-tools/cadillac-mountain-sunrise public/synced-national-tools/mount-rainier-road-status public/synced-national-tools/lake-mead-access public/synced-national-tools/lake-powell-ramp-status
           if git diff --cached --quiet; then
             echo 'Breakout live production sync already current.'
             exit 0
