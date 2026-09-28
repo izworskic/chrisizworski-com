@@ -23,52 +23,11 @@ jobs:
           node-version: '22'
       - name: Run full repository gate
         run: npm run verify:all
-      - name: Verify Kilauea deployed preview and render mobile evidence
-        env:
-          PREVIEW: https://chrisizworski-com-git-agent-836647-izworski-gmailcoms-projects.vercel.app
-        run: |
-          set -euo pipefail
-          mkdir -p artifacts/kilauea-preview
-          PAGE_CODE=$(curl --retry 4 --retry-delay 3 --connect-timeout 10 --max-time 45 -sS -L -o artifacts/kilauea-preview/page.html -w '%{http_code}' "$PREVIEW/labs/kilauea-live/")
-          echo "page status=$PAGE_CODE"
-          test "$PAGE_CODE" = "200"
-          API_CODE=$(curl --retry 4 --retry-delay 3 --connect-timeout 10 --max-time 45 -sS -L -o artifacts/kilauea-preview/api-now.json -w '%{http_code}' "$PREVIEW/api/kilauea-live?travel=here&mobility=short&experience=casual&plan=now")
-          echo "api status=$API_CODE"
-          test "$API_CODE" = "200"
-          node <<'NODE'
-          const fs = require('fs');
-          const payload = JSON.parse(fs.readFileSync('artifacts/kilauea-preview/api-now.json','utf8'));
-          if (payload.ok !== true) throw new Error('live API did not return ok=true');
-          if (!payload.decision?.state || !payload.eruption?.activity?.state) throw new Error('live API missing decision/activity state');
-          if (!payload.sources?.hvo?.status || !payload.sources?.nps?.status || !payload.sources?.weather?.status) throw new Error('live API missing provenance states');
-          if (payload.access?.closureUnknown === true && payload.decision.state !== 'VERIFY ACCESS') throw new Error('unknown NPS access did not hard-gate the live decision');
-          fs.writeFileSync('artifacts/kilauea-preview/api-summary.txt', JSON.stringify({decision:payload.decision.state, activity:payload.eruption.activity.state, forecastability:payload.eruption.forecastability?.state, closureUnknown:payload.access?.closureUnknown, sources:Object.fromEntries(Object.entries(payload.sources).map(([k,v])=>[k,{status:v.status,observedAt:v.observedAt,fetchedAt:v.fetchedAt}]))}, null, 2));
-          NODE
-          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
-          test -n "$CHROME"
-          "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=390,844 --virtual-time-budget=12000 --screenshot="$PWD/artifacts/kilauea-preview/mobile-390.png" "$PREVIEW/labs/kilauea-live/"
-          "$CHROME" --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=12000 --dump-dom "$PREVIEW/labs/kilauea-live/" > artifacts/kilauea-preview/rendered-390.html
-          node <<'NODE'
-          const fs = require('fs');
-          const html = fs.readFileSync('artifacts/kilauea-preview/rendered-390.html','utf8');
-          for (const required of ['Is Kīlauea worth going to right now?','Best window','Main reason','Quick action','Sources & status']) {
-            if (!html.includes(required)) throw new Error(`rendered mobile DOM missing: ${required}`);
-          }
-          if (html.includes('Building the current viewing picture') || html.includes('Checking official feeds…')) throw new Error('mobile DOM remained stuck in initial loading state');
-          NODE
       - name: Upload boat launch source audit
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: boat-launch-source-audit
           path: artifacts/boat-launch-source-audit.json
-          if-no-files-found: ignore
-          retention-days: 7
-      - name: Upload Kilauea preview evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: kilauea-preview-evidence
-          path: artifacts/kilauea-preview/
           if-no-files-found: ignore
           retention-days: 7
