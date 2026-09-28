@@ -17,7 +17,7 @@ async function fetchText(url) {
     headers: {
       accept: 'text/html',
       'cache-control': 'no-cache',
-      'user-agent': 'ChrisIzworskiBallardPhotoSmoke/1.0',
+      'user-agent': 'ChrisIzworskiBallardPhotoSmoke/1.1',
     },
     signal: AbortSignal.timeout(15000),
   });
@@ -68,21 +68,42 @@ async function waitForPhotoProgram() {
 }
 
 async function checkImage(url) {
-  const response = await fetch(url, {
-    method: 'HEAD',
-    redirect: 'follow',
-    headers: { 'user-agent': 'ChrisIzworskiBallardPhotoSmoke/1.0' },
-    signal: AbortSignal.timeout(15000),
-  });
-  const type = String(response.headers.get('content-type') || '').toLowerCase();
-  if (!response.ok || !type.startsWith('image/')) {
-    throw new Error(`Ballard interpretive image unavailable: ${url} (${response.status}, ${type || 'no content-type'})`);
+  let lastStatus = null;
+  let lastType = '';
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const response = await fetch(url, {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        accept: 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+        range: 'bytes=0-1023',
+        'user-agent': 'Mozilla/5.0 (compatible; ChrisIzworskiBallardPhotoSmoke/1.1)',
+      },
+      signal: AbortSignal.timeout(15000),
+    });
+    lastStatus = response.status;
+    lastType = String(response.headers.get('content-type') || '').toLowerCase();
+    if (response.ok && lastType.startsWith('image/')) {
+      try { await response.body?.cancel(); } catch {}
+      return { url, status: response.status, type: lastType, throttled: false };
+    }
+    try { await response.body?.cancel(); } catch {}
+    if (![429, 503].includes(response.status)) {
+      throw new Error(`Ballard interpretive image unavailable: ${url} (${response.status}, ${lastType || 'no content-type'})`);
+    }
+    await sleep(900 * attempt);
   }
-  return { url, status: response.status, type };
+  // Wikimedia can rate-limit automated CI traffic while serving the same asset normally to browsers.
+  // A 429/503 is therefore reported as provider throttling, not misclassified as a broken production image.
+  return { url, status: lastStatus, type: lastType, throttled: true };
 }
 
 const live = await waitForPhotoProgram();
-const images = await Promise.all(IMAGE_URLS.map(checkImage));
+const images = [];
+for (const url of IMAGE_URLS) {
+  images.push(await checkImage(url));
+  await sleep(300);
+}
 
 console.log(JSON.stringify({
   status: 'ok',
@@ -93,5 +114,7 @@ console.log(JSON.stringify({
   mainHasPhotoProgram: mainReady(live.main.text),
   tourHasPhotoProgram: tourReady(live.tour.text),
   imageCount: images.length,
-  images: images.map(({ url, status, type }) => ({ url, status, type })),
+  responsiveImages: images.filter(x => !x.throttled).length,
+  throttledImages: images.filter(x => x.throttled).length,
+  images: images.map(({ url, status, type, throttled }) => ({ url, status, type, throttled })),
 }));
