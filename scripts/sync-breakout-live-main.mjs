@@ -22,6 +22,8 @@ const GA4='G-Y5D2V2W7HN';
 const ADSENSE='ca-pub-8222782620788075';
 const DIRECTORY_URL=`${CANONICAL_ORIGIN}/national-tools/live-decisions/`;
 const DIRECTORY_NAME='Live Trip Decisions';
+const KILAUEA_URL=`${CANONICAL_ORIGIN}/national-tools/kilauea-live/`;
+const KILAUEA_NAME='Kīlauea Live';
 
 function routePairs(){
   return BREAKOUT_SLUGS.flatMap(slug=>{
@@ -35,14 +37,16 @@ function syncDirectoryDiscovery(targetRoot){
   const file=path.join(targetRoot,'public','synced-national-tools','index.html');
   if(!fs.existsSync(file)) throw new Error('Breakout sync: synced national directory missing');
   let html=fs.readFileSync(file,'utf8');
+  const kilaueaCard='<article class="directory-card" data-search-card data-tool-id="kilauea-live" data-personas="trip volcano eruption viewing photography" data-tags="kilauea volcano hawaii eruption lava national park live viewing hvo nps weather" data-months="1,2,3,4,5,6,7,8,9,10,11,12"><div class="card-top"><span class="kind">Live volcano decision</span><span class="season-label" hidden>Useful now</span></div><h3>Kīlauea Live</h3><p class="place">Hawaiʻi Volcanoes National Park · Hawaiʻi</p><p class="description">See what the summit is doing now, whether the view is worth the trip, and which public viewpoint best fits the current conditions.</p><p class="signals"><strong>Signals:</strong> USGS Hawaiian Volcano Observatory + NPS + NWS + Hawaiʻi DOH</p><div class="card-actions"><a class="primary-action" href="/national-tools/kilauea-live/">Open Kīlauea Live &rarr;</a></div></article>';
   const card='<article class="directory-card" data-search-card data-tool-id="live-decisions" data-personas="trip conditions event" data-tags="live trip decisions national parks road status sunrise river lake access current conditions zion glacier yellowstone yosemite rainier grand canyon haleakala acadia lake mead lake powell" data-months="1,2,3,4,5,6,7,8,9,10,11,12"><div class="card-top"><span class="kind">Live decision collection</span><span class="season-label" hidden>Useful now</span></div><h3>Live Trip Decisions</h3><p class="place">Ten destination decisions · United States</p><p class="description">Roads close, rivers rise, clouds erase sunrises and low water changes access. Open the destination-specific live tool that answers the decision before you commit the drive.</p><p class="signals"><strong>Signals:</strong> NPS + USGS + NWS + Bureau of Reclamation source-backed checks</p><div class="card-actions"><a class="primary-action" href="/national-tools/live-decisions/">Open live trip decisions &rarr;</a></div></article>';
   html=html.replace(/<article class="directory-card"[^>]*data-tool-id="live-decisions"[\s\S]*?<\/article>\s*/g,'');
+  html=html.replace(/<article class="directory-card"[^>]*data-tool-id="kilauea-live"[\s\S]*?<\/article>\s*/g,'');
   const section=html.indexOf('<section class="catalog-group national-utilities"');
   if(section<0) throw new Error('Breakout sync: national utilities section missing');
   const grid=html.indexOf('<div class="catalog-grid">',section);
   if(grid<0) throw new Error('Breakout sync: national utilities grid missing');
   const insert=grid+'<div class="catalog-grid">'.length;
-  html=html.slice(0,insert)+'\n'+card+html.slice(insert);
+  html=html.slice(0,insert)+'\n'+card+'\n'+kilaueaCard+html.slice(insert);
 
   const schemaRe=/<script type="application\/ld\+json">([\s\S]*?)<\/script>/;
   const match=html.match(schemaRe);
@@ -51,7 +55,8 @@ function syncDirectoryDiscovery(targetRoot){
   const graph=schema?.['@graph'];
   const list=graph?.find(x=>x?.['@id']==='https://chrisizworski.com/national-tools/#toollist');
   if(!list?.itemListElement) throw new Error('Breakout sync: national directory ItemList missing');
-  list.itemListElement=list.itemListElement.filter(x=>x.url!==DIRECTORY_URL);
+  list.itemListElement=list.itemListElement.filter(x=>x.url!==DIRECTORY_URL&&x.url!==KILAUEA_URL);
+  list.itemListElement.unshift({'@type':'ListItem',position:1,url:KILAUEA_URL,name:KILAUEA_NAME});
   list.itemListElement.unshift({'@type':'ListItem',position:1,url:DIRECTORY_URL,name:DIRECTORY_NAME});
   list.itemListElement.forEach((x,i)=>x.position=i+1);
   list.numberOfItems=list.itemListElement.length;
@@ -61,6 +66,7 @@ function syncDirectoryDiscovery(targetRoot){
   const count=(html.match(/data-search-card/g)||[]).length;
   html=html.replace(/(<p class="finder-count" id="finder-count" aria-live="polite">)\d+ tools shown(<\/p>)/,`$1${count} tools shown$2`);
   if((html.match(/data-tool-id="live-decisions"/g)||[]).length!==1) throw new Error('Breakout sync: live decisions card must be unique');
+  if((html.match(/data-tool-id="kilauea-live"/g)||[]).length!==1) throw new Error('Breakout sync: Kilauea card must be unique');
   fs.writeFileSync(file,html,'utf8');
 }
 
