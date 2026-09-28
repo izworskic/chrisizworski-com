@@ -1,3 +1,7 @@
+> Superseded default: Chris requested Auto ads across the network on September 27.
+> See [AUTO_ADS_NETWORK.md](AUTO_ADS_NETWORK.md). Manual placement behavior below is
+> retained for rollback/reference and is disabled by default.
+
 # In-article ads
 
 Owner: Chris Izworski. Replaces the September 20 horizontal display pilot (slot

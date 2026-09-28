@@ -42,7 +42,7 @@ test('central loader rollback and off modes reconcile duplicate and stale script
   const original = `<html><head>${loader}${stale}<script src="/tool.js"></script></head><body><h1>Tool</h1>${loader}<div data-in-article-ad-break aria-hidden="true"></div></body></html>`;
   let html = original;
   for (const mode of ['standard', 'legacy', 'off', 'standard']) {
-    const settings = { ...config, loaderMode: mode };
+    const settings = { ...config, enabled: true, loaderMode: mode };
     html = applyAdSettings(html, '/fall-color/', settings);
     assert.equal((html.match(/pagead\/js\/adsbygoogle\.js/g) || []).length, mode === 'off' ? 0 : 1);
     assert.equal((html.match(/src="\/assets\/in-article-ads\.js/g) || []).length, mode === 'off' ? 0 : 1);
@@ -123,4 +123,21 @@ test('Detroit declares two intentional ad seams without hand-written AdSense uni
   assert.ok(grid >= 0 && grid < first && first < routes);
   assert.ok(routes < second && second < context);
   assert.ok(!/<ins\b[^>]*adsbygoogle/i.test(html));
+});
+
+test('Auto ads defaults to every published content page without custom placement markup', () => {
+  const {applyAdSettings}=require('../lib/adsense-eligibility');
+  const config=require('../config/in-article-ads.json');
+  for(const route of ['/','/about/','/new-tool/','/new-tool/future-generated-page/']){
+    const result=applyAdSettings('<html><head></head><body>Useful content</body></html>',route,config);
+    assert.ok(result.includes('adsbygoogle.js?client=ca-pub-8222782620788075'));
+    assert.ok(!result.includes('/assets/in-article-ads.js'));
+  }
+});
+test('central page exceptions are host-scoped and respect path boundaries', () => {
+  const {applyAdSettings}=require('../lib/adsense-eligibility');
+  const cfg={...require('../config/in-article-ads.json'),pageExceptions:[{host:'chrisizworski.com',path:'/problem',match:'section',reason:'Controls overlap'}]};
+  const page='<html><head></head><body>Tool</body></html>';
+  for(const url of ['/problem','/problem/child'])assert.ok(!applyAdSettings(page,url,cfg).includes('adsbygoogle'));
+  for(const url of ['/problem-other','https://tcwine.chrisizworski.com/problem'])assert.ok(applyAdSettings(page,url,cfg).includes('adsbygoogle'));
 });

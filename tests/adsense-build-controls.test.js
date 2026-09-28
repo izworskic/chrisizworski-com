@@ -19,7 +19,7 @@ test('one config change updates, rolls back, or removes ads from already-built s
     const configFile = path.join(temp, 'config/in-article-ads.json');
     const config = JSON.parse(fs.readFileSync(configFile));
     for (const mode of ['standard', 'legacy', 'off', 'standard']) {
-      fs.writeFileSync(configFile, JSON.stringify({ ...config, loaderMode: mode }));
+      fs.writeFileSync(configFile, JSON.stringify({ ...config, enabled: true, loaderMode: mode }));
       execFileSync(process.execPath, ['scripts/inject-ga4.mjs'], { cwd: temp });
       const html = fs.readFileSync(page, 'utf8');
       const head = html.match(/<head>([\s\S]*?)<\/head>/)[1];

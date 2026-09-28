@@ -44,7 +44,7 @@ function scenario({ grid = false, cardParent = false, optout = false } = {}) {
     },
   };
   context.window = { IntersectionObserver: context.IntersectionObserver };
-  vm.runInNewContext(fs.readFileSync('public/assets/network-ads-v1.js', 'utf8'), context);
+  vm.runInNewContext(fs.readFileSync('public/assets/network-ads-v1.js', 'utf8').replace('"enabled":false', '"enabled":true'), context);
   return { inserted, observed, context, parent };
 }
 test('whole section cards can be preceded by ads, with spacing and count limits', () => {
