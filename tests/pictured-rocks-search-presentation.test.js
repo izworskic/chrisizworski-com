@@ -7,7 +7,8 @@ const preview = fs.readFileSync('public/labs/pictured-rocks-planner/index.html',
 
 test('canonical Pictured Rocks shell emits share and favicon metadata', () => {
   assert.match(middleware, /<link rel="icon" href="\/favicon\.ico" sizes="any">/);
-  assert.match(middleware, /<meta property="og:title" content="Pictured Rocks Planner — What to Do Today">/);
+  assert.match(middleware, /PICTURED_ROCKS_TITLE\s*=\s*'Pictured Rocks Trip Planner: Map, Weather & 1-Day Itinerary'/);
+  assert.match(middleware, /<meta property="og:title" content="\$\{PICTURED_ROCKS_TITLE\}">/);
   assert.match(middleware, /<meta property="og:url" content="https:\/\/picturedrocks\.chrisizworski\.com\/">/);
   assert.match(middleware, /<meta property="og:image"/);
   assert.match(middleware, /<meta name="twitter:card" content="summary_large_image">/);
