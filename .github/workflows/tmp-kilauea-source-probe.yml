@@ -9,34 +9,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Inspect NPS alert transport and DOH payload
+      - name: Inspect live source schemas
         run: |
           python - <<'PY'
           import json, re, urllib.request
           def get(url):
-              req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 KilaueaSourceProbe'})
+              req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 KilaueaSourceProbe','Accept':'*/*'})
               with urllib.request.urlopen(req,timeout=20) as r:
+                  print('FETCH',url,'status',r.status,'type',r.headers.get('content-type'))
                   return r.read().decode('utf-8','ignore')
-          nps=get('https://www.nps.gov/havo/planyourvisit/conditions.htm')
-          print('=== NPS endpoint/url candidates ===')
-          urls=[]
-          urls += re.findall(r'https?://[^\"\'<>\s]+', nps)
-          urls += re.findall(r'\"(/[^\"\s]+)\"', nps)
-          for u in urls:
-              if re.search(r'alert|condition|api|road|park',u,re.I): print(u[:500])
-          print('=== NPS alert-code context ===')
-          for pat in [r'activeRoadClosuresAlerts',r'fetch\s*\(',r'ajax\s*\(',r'getJSON',r'parkCode',r'alerts']:
-              for m in list(re.finditer(pat,nps,re.I))[:12]:
-                  print(nps[max(0,m.start()-500):m.end()+900].replace('\n',' ')[:1600])
-          print('=== NPS script sources ===')
-          for src in re.findall(r'<script[^>]+src=[\"\']([^\"\']+)',nps,re.I): print(src)
+          alerts=json.loads(get('https://www.nps.gov/havo/park-alerts-havo.json'))
+          print('=== NPS alert JSON ===')
+          print('type=',type(alerts).__name__,'count=',len(alerts) if isinstance(alerts,list) else None)
+          for a in (alerts[:10] if isinstance(alerts,list) else []):
+              print(json.dumps(a,ensure_ascii=False)[:5000])
           so2=get('https://air.doh.hawaii.gov/HawaiiSO2/')
-          print('=== DOH embedded Data declaration ===')
           m=re.search(r'var\s+Data\s*=\s*(\[.*?\]);',so2,re.S)
-          print('data_found=',bool(m),'chars=',len(m.group(1)) if m else 0)
-          if m:
-              data=json.loads(m.group(1))
-              print('rows=',len(data))
-              for row in data:
-                  print(json.dumps({k:row.get(k) for k in ['stationName','value','Lastvalue','unit','indexVal','indexName','TimeBase','StationTimeBase','DateVal','Active','display','ShortName']},ensure_ascii=False))
+          data=json.loads(m.group(1)) if m else []
+          print('=== DOH first rows complete ===')
+          for row in data[:3]: print(json.dumps(row,ensure_ascii=False)[:9000])
           PY
