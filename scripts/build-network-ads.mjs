@@ -3,19 +3,27 @@ import fs from 'node:fs';
 // Versioned, public integration for independently deployed first-party tools.
 // Keep settings and placement behavior owned by this repository.
 const settings = JSON.parse(fs.readFileSync('config/in-article-ads.json', 'utf8'));
-const hosts = JSON.parse(fs.readFileSync('config/network-ads-hosts.json', 'utf8'));
+if (!['standard','legacy','off'].includes(settings.loaderMode) || !/^ca-pub-\d+$/.test(settings.publisherId)) throw new Error('Invalid AdSense policy');
+for (const rule of settings.pageExceptions || []) {
+  if (!rule.reason || !['exact','section'].includes(rule.match) || !/^[a-z0-9.-]+$/.test(rule.host) ||
+      !rule.path.startsWith('/') || /[?#]/.test(rule.path) || (rule.path !== '/' && rule.path.endsWith('/'))) throw new Error('Invalid page exception');
+}
+
+const hosts = [...new Set([...JSON.parse(fs.readFileSync('config/network-ads-hosts.json', 'utf8')), ...JSON.parse(fs.readFileSync('benchmarks/tool-network-registry.json', 'utf8')).tools.map(t => new URL(t.canonical).hostname).filter(h => h === 'chrisizworski.com' || h.endsWith('.chrisizworski.com'))])].sort();
 const placer = fs.readFileSync('public/assets/in-article-ads.js', 'utf8');
 const originalGuard = "if (!me || !['chrisizworski.com', 'www.chrisizworski.com'].includes(location.hostname)) return;";
 if (!placer.includes(originalGuard)) throw new Error('Review network placement adapter after changing the shared placer');
 const bootstrap = `var settings = ${JSON.stringify(settings)};
   var hosts = ${JSON.stringify(hosts)};
   if (!me || !hosts.includes(location.hostname) || window.__ciNetworkAdsV1) return;
-  if (document.querySelector('script[src*="/assets/in-article-ads.js"]')) return;
+  var hasLocalPlacer = document.querySelector('script[src*="/assets/in-article-ads.js"]');
   if (settings.loaderMode === 'off') return;
   if (document.querySelector('meta[http-equiv="refresh"]')) return;
   if (Array.from(document.querySelectorAll('meta[name="robots"],meta[name="googlebot"]')).some(function (m) { return /\\b(noindex|none)\\b/i.test(m.content); })) return;
   var path = location.pathname.replace(/\\/index\\.html$/, '/').replace(/\\/$/, '') || '/';
+  if (path.endsWith('.html')) path = path.slice(0, -5);
   if (/^\\/(privacy|terms|connect|for-publishers|404|500)(\\/|$)/.test(path)) return;
+  if ((settings.pageExceptions || []).some(function (rule) { return rule.host === location.hostname && (rule.match === 'section' ? path === rule.path || rule.path === '/' || path.indexOf(rule.path + '/') === 0 : path === rule.path); })) return;
   window.__ciNetworkAdsV1 = true;
   if (!document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]')) {
     var loader = document.createElement('script');
@@ -24,7 +32,7 @@ const bootstrap = `var settings = ${JSON.stringify(settings)};
     loader.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js' + (settings.loaderMode === 'standard' ? '?client=' + settings.publisherId : '');
     document.head.appendChild(loader);
   }
-  if (!settings.enabled) return;
+  if (!settings.enabled || hasLocalPlacer) return;
   // Homepage exclusions belong to the personal hub, not tool subdomain roots.
   if (['chrisizworski.com','www.chrisizworski.com'].includes(location.hostname) && settings.excludeRoutes.some(function (p) { return (p.replace(/\\/$/, '') || '/') === path; })) return;
   me.dataset.client = settings.publisherId;

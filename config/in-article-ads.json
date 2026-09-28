@@ -1,6 +1,6 @@
 {
-  "loaderMode": "legacy",
-  "enabled": true,
+  "loaderMode": "standard",
+  "enabled": false,
   "publisherId": "ca-pub-8222782620788075",
   "slotId": "8700232579",
   "adSenseName": "In-article",
@@ -8,5 +8,7 @@
   "excludeRoutes": [
     "/",
     "/about/"
-  ]
+  ],
+  "strategy": "auto",
+  "pageExceptions": []
 }

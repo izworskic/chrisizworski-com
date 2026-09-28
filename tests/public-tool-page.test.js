@@ -31,7 +31,7 @@ test('the public shell reconciles owner loaders with central rollback and disabl
       await publicToolPage('https://owner.example/tool/')({method:'GET',url:'/tool/'}, res);
       assert.equal(res.code, 200);
       assert.equal((res.body.match(/pagead\/js\/adsbygoogle\.js/g) || []).length, mode === 'off' ? 0 : 1);
-      assert.equal((res.body.match(/src="\/assets\/in-article-ads\.js/g) || []).length, mode === 'off' ? 0 : 1);
+      assert.equal((res.body.match(/src="\/assets\/in-article-ads\.js/g) || []).length, mode === 'off' || !config.enabled ? 0 : 1);
       assert.equal(res.body.includes('?client=ca-pub-8222782620788075'), mode === 'standard');
       assert.ok(res.body.includes('<h1>Owner tool</h1>'));
       assert.ok(!res.body.includes('ca-pub-123'));

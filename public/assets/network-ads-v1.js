@@ -7,15 +7,17 @@
   // top-level sections or headings in plain content flow, never inside cards.
   // Settings come from this script tag's data-*.
   var me = document.currentScript;
-  var settings = {"loaderMode":"legacy","enabled":true,"publisherId":"ca-pub-8222782620788075","slotId":"8700232579","adSenseName":"In-article","maxPerPage":3,"excludeRoutes":["/","/about/"]};
-  var hosts = ["chrisizworski.com","www.chrisizworski.com","whitetail.chrisizworski.com","michiganoutdoorsnow.chrisizworski.com","picturedrocks.chrisizworski.com","ausable.chrisizworski.com","morel.chrisizworski.com","phenology.chrisizworski.com","saginawbay.chrisizworski.com","tcwine.chrisizworski.com","weekend.chrisizworski.com","xcski.chrisizworski.com","michigantroutreport.com","www.michigantroutreport.com","daily.michigantroutreport.com","michiganbirdingreport.com","www.michiganbirdingreport.com","daily.michiganbirdingreport.com","greatlakeslevels.org","www.greatlakeslevels.org"];
+  var settings = {"loaderMode":"standard","enabled":false,"publisherId":"ca-pub-8222782620788075","slotId":"8700232579","adSenseName":"In-article","maxPerPage":3,"excludeRoutes":["/","/about/"],"strategy":"auto","pageExceptions":[]};
+  var hosts = ["ausable.chrisizworski.com","chrisizworski.com","daily.michiganbirdingreport.com","daily.michigantroutreport.com","greatlakeslevels.org","lawn.chrisizworski.com","michiganbirdingreport.com","michiganoutdoorsnow.chrisizworski.com","michigantroutreport.com","morel.chrisizworski.com","phenology.chrisizworski.com","picturedrocks.chrisizworski.com","saginawbay.chrisizworski.com","tcwine.chrisizworski.com","weekend.chrisizworski.com","whitetail.chrisizworski.com","www.chrisizworski.com","www.greatlakeslevels.org","www.michiganbirdingreport.com","www.michigantroutreport.com","xcski.chrisizworski.com"];
   if (!me || !hosts.includes(location.hostname) || window.__ciNetworkAdsV1) return;
-  if (document.querySelector('script[src*="/assets/in-article-ads.js"]')) return;
+  var hasLocalPlacer = document.querySelector('script[src*="/assets/in-article-ads.js"]');
   if (settings.loaderMode === 'off') return;
   if (document.querySelector('meta[http-equiv="refresh"]')) return;
   if (Array.from(document.querySelectorAll('meta[name="robots"],meta[name="googlebot"]')).some(function (m) { return /\b(noindex|none)\b/i.test(m.content); })) return;
   var path = location.pathname.replace(/\/index\.html$/, '/').replace(/\/$/, '') || '/';
+  if (path.endsWith('.html')) path = path.slice(0, -5);
   if (/^\/(privacy|terms|connect|for-publishers|404|500)(\/|$)/.test(path)) return;
+  if ((settings.pageExceptions || []).some(function (rule) { return rule.host === location.hostname && (rule.match === 'section' ? path === rule.path || rule.path === '/' || path.indexOf(rule.path + '/') === 0 : path === rule.path); })) return;
   window.__ciNetworkAdsV1 = true;
   if (!document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]')) {
     var loader = document.createElement('script');
@@ -24,7 +26,7 @@
     loader.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js' + (settings.loaderMode === 'standard' ? '?client=' + settings.publisherId : '');
     document.head.appendChild(loader);
   }
-  if (!settings.enabled) return;
+  if (!settings.enabled || hasLocalPlacer) return;
   // Homepage exclusions belong to the personal hub, not tool subdomain roots.
   if (['chrisizworski.com','www.chrisizworski.com'].includes(location.hostname) && settings.excludeRoutes.some(function (p) { return (p.replace(/\/$/, '') || '/') === path; })) return;
   me.dataset.client = settings.publisherId;

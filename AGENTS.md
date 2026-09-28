@@ -10,25 +10,23 @@ on merge to `main`. There is no staging step between a merge and real traffic.
 
 Read this file before making any change.
 
-## Ads: central loader and reviewed placements (September 27, 2026)
+## Ads: Auto ads by default (September 27, 2026)
 
-Chris approved Google's current `?client=` loader and a central rollback control
-on September 27. `config/in-article-ads.json` is the single configuration for this
-repo's static pages and shared public tool shell. `loaderMode` selects `standard`,
-`legacy` (the previous plain loader), or `off` (remove loader and placer scripts).
-`enabled`, `maxPerPage`, and `excludeRoutes` govern our in-article placements.
-`lib/adsense-eligibility.js` reconciles stale/duplicate tags at build and on composed
-tool responses; the build injector must run after every HTML generator.
+Chris explicitly requested Auto ads across existing and future tools/pages, with
+specific-page exceptions. `config/in-article-ads.json` is the compatibility-stable
+central policy: `loaderMode: standard` uses Google's current publisher code;
+`enabled: false` disables only our custom in-article placements. Do not re-enable
+custom placement heuristics as a prerequisite for Auto-ad coverage.
 
-Our in-article units use slot `8700232579` and `public/assets/in-article-ads.js`.
-Keep their reviewed boundaries and protections against splitting cards and tools.
-Do not paste ad loaders or `<ins class="adsbygoogle">` into individual pages.
-A page can opt out of these placements with
-`<meta name="in-article-ads" content="off">`; a block can use `data-no-ads`.
-Auto ad formats are controlled in the AdSense account; the loader's query string
-does not reliably disable them, and repo files cannot verify their account state.
-Do not change account formats without Chris's direction. See `docs/IN_ARTICLE_ADS.md`
-for scope and rollback instructions, including independently deployed tools.
+Keep one loader in every eligible published content document, including generated
+children. New independent tools must integrate the shared network loader in their
+layout/build and register their production host. Run the final emitted-HTML coverage
+check after generators and injection; use the network audit for live drift.
+
+See `docs/AUTO_ADS_NETWORK.md` for the loss function, page exceptions, account
+verification, onboarding and rollback. Do not claim code presence proves delivery,
+site approval, or Auto ads enabled. Account-controlled formats and excluded areas
+must be verified in AdSense. Keep ad-intent links/chips off per Chris's preference.
 
 ## 0. Extracted tool repositories are authoritative
 
