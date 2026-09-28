@@ -15,7 +15,7 @@ const salmonCanonical = 'https://chrisizworski.com/ballard-locks/salmon-counts/'
 
 // Production Ballard is synced from one exact authoritative commit so the main page,
 // tour, salmon interpretation and API cannot drift from one another.
-const ballardSourceCommit = 'f1ae6cc5a789b6e90420f71593027f485c32b89c';
+const ballardSourceCommit = '761a041de378f1265211122b1395c3968106a94e';
 const rawBase = `https://raw.githubusercontent.com/izworskic/national-ballard-locks/${ballardSourceCommit}`;
 const rawSources = {
   main: `${rawBase}/public/ballard-locks-v2/index.html`,
@@ -61,12 +61,18 @@ if (!page.includes('/api/ballard-locks')) throw new Error('Ballard sync: live AP
 if (!page.includes('Best first stop now')) throw new Error('Ballard sync: decision-first recommendation missing');
 if (!page.includes('What might you actually see?')) throw new Error('Ballard sync: vessel intelligence surface missing');
 if (!page.includes('context only')) throw new Error('Ballard sync: tide context boundary missing');
+if (!page.includes('one working system doing three jobs at once')) throw new Error('Ballard sync: ambassador system story missing');
+if (!page.includes('Look up from your phone')) throw new Error('Ballard sync: observation prompts missing');
+if (!page.includes('activity-story')) throw new Error('Ballard sync: live vessel interpretation missing');
 
 const tourFile = path.join(destPage, 'tour', 'index.html');
 const tourPage = fs.readFileSync(tourFile, 'utf8');
 if (!tourPage.includes(tourCanonical)) throw new Error('Ballard sync: tour canonical missing');
 if (!tourPage.includes('/api/ballard-locks')) throw new Error('Ballard sync: tour live API hook missing');
 if (!tourPage.includes('/api/ballard-ais')) throw new Error('Ballard sync: tour AIS API hook missing');
+for (const phrase of ['See this', 'What’s happening', 'Watch for', 'Why it matters', 'RIGHT NOW']) {
+  if (!tourPage.includes(phrase)) throw new Error(`Ballard sync: ambassador tour anatomy missing ${phrase}`);
+}
 if (tourPage.includes('href="https://ballardlocks.org') || tourPage.includes("href='https://ballardlocks.org")) throw new Error('Ballard sync: compromised legacy domain linked as authority');
 
 const salmonFile = path.join(destPage, 'salmon-counts', 'index.html');
