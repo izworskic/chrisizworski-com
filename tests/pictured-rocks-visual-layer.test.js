@@ -2,7 +2,8 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 
-const visual=fs.readFileSync('public/assets/pictured-rocks-visual-layer.js','utf8');
+const visual=fs.readFileSync('public/assets/pictured-rocks-visual-layer-core.js','utf8');
+const loader=fs.readFileSync('public/assets/pictured-rocks-visual-layer.js','utf8');
 const core=fs.readFileSync('public/assets/pictured-rocks-planner-v3.js','utf8');
 const html=fs.readFileSync('public/labs/pictured-rocks-planner/index.html','utf8');
 
@@ -10,6 +11,7 @@ test('v3 runtime loads the visual layer without replacing planner logic',()=>{
   assert.match(core,/pictured-rocks-visual-layer\.js\?v=20260926-1/);
   assert.match(core,/routeWithLiveConstraints/);
   assert.match(core,/highlightMap/);
+  assert.match(loader,/pictured-rocks-visual-layer-core\.js/);
 });
 
 test('visual layer contains six decision-linked destination controls',()=>{
