@@ -167,21 +167,33 @@ function fakeResponse(body, json=false) {
   return { ok:true, status:200, statusText:'OK', text:async()=>String(body), json:async()=>json?body:JSON.parse(body) };
 }
 
+function hawaiiNowStamp() {
+  const parts = Object.fromEntries(new Intl.DateTimeFormat('en-US', {timeZone:'Pacific/Honolulu',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(Date.now() - 10 * 60 * 1000)).filter(p=>p.type!=='literal').map(p=>[p.type,p.value]));
+  return `${parts.year}/${parts.month}/${parts.day} ${parts.hour}:${parts.minute}`;
+}
+
+function dohFixture() {
+  const stamp = hawaiiNowStamp();
+  const station=(name,value,indexVal,indexName)=>({name,Active:1,display:true,DateVal:stamp,latitude:'19.5',longitude:'-155.1',monitors:[{name:'SO2',Pollutantname:'SO2',unit:'ppm',value:String(value),stationName:name,indexVal,indexName,Active:1}]});
+  return `<html><script>var Data=${JSON.stringify([station('Hilo',0.001,0,'Good'),station('Kona',0.002,1,'Good'),station('Pahala',0.015,20,'Good')])};</script></html>`;
+}
+
 function installOfficialFetch({dailyText,messageText}) {
   const originalFetch = global.fetch;
   const originalKey = process.env.NPS_API_KEY;
-  process.env.NPS_API_KEY = 'test-key';
+  delete process.env.NPS_API_KEY;
   global.fetch = async (url) => {
     url=String(url);
     if (url.includes('/volcano-updates/volcano-messages')) return fakeResponse(`<main>${messageText}</main>`);
     if (url.endsWith('/volcano-updates')) return fakeResponse(`<main>${dailyText}</main>`);
-    if (url.includes('developer.nps.gov/api/v1/alerts')) return fakeResponse({data:[]}, true);
-    if (url.includes('/planyourvisit/conditions.htm')) return fakeResponse('<main>National Park Service Current Conditions for Hawaiʻi Volcanoes National Park. The park is open. Visitors should check official alerts before travel.</main>');
+    if (url.includes('/havo/park-alerts-havo.json')) return fakeResponse([{site_code:'havo',is_active:1,category:'Danger',title:'Kīlauea eruption',description:'Volcanic eruptions can be hazardous. Stay out of closed areas and monitor air quality.',url:'https://www.nps.gov/havo/planyourvisit/lava2.htm'}], true);
+    if (url.includes('developer.nps.gov/api/v1/alerts')) throw new Error('developer API fallback should not be needed when NPS park alert feed is healthy');
+    if (url.includes('/planyourvisit/conditions.htm')) return fakeResponse('<main>National Park Service Current Conditions for Hawaiʻi Volcanoes National Park. Visitors should check official alerts before travel.</main>');
     if (url.includes('/planyourvisit/eruption-viewing.htm')) return fakeResponse('<main>National Park Service eruption viewing information.</main>');
     if (url.includes('api.weather.gov/points/')) return fakeResponse({properties:{forecastHourly:'https://api.weather.gov/gridpoints/HFO/1,1/forecast/hourly'}}, true);
-    if (url.includes('/forecast/hourly')) return fakeResponse({properties:{updateTime:'2026-09-28T10:00:00Z',periods:[{number:1,startTime:'2026-09-28T10:00:00Z',endTime:'2026-09-28T14:00:00Z',temperature:61,temperatureUnit:'F',probabilityOfPrecipitation:{value:60},windSpeed:'8 mph',windDirection:'NE',shortForecast:'Rain Showers and Fog',isDaytime:true},{number:2,startTime:'2026-09-28T15:00:00Z',endTime:'2026-09-28T16:00:00Z',temperature:60,temperatureUnit:'F',probabilityOfPrecipitation:{value:10},windSpeed:'6 mph',windDirection:'NE',shortForecast:'Partly Cloudy',isDaytime:true}]}}, true);
-    if (url.includes('air.doh.hawaii.gov')) return fakeResponse('<main>Hawaii air monitoring data page. Current station table rendered separately.</main>');
-    if (url.includes('hans-public')) return fakeResponse({notice:'fallback should not be needed',sent:'2026-09-28T09:00:00Z'}, true);
+    if (url.includes('/forecast/hourly')) return fakeResponse({properties:{updateTime:new Date().toISOString(),periods:[{number:1,startTime:new Date(Date.now()-5*60*1000).toISOString(),endTime:new Date(Date.now()+55*60*1000).toISOString(),temperature:61,temperatureUnit:'F',probabilityOfPrecipitation:{value:60},windSpeed:'8 mph',windDirection:'NE',shortForecast:'Rain Showers and Fog',isDaytime:true},{number:2,startTime:new Date(Date.now()+60*60*1000).toISOString(),endTime:new Date(Date.now()+2*60*60*1000).toISOString(),temperature:60,temperatureUnit:'F',probabilityOfPrecipitation:{value:10},windSpeed:'6 mph',windDirection:'NE',shortForecast:'Partly Cloudy',isDaytime:true}]}}, true);
+    if (url.includes('air.doh.hawaii.gov/HawaiiSO2/')) return fakeResponse(dohFixture());
+    if (url.includes('hans-public')) return fakeResponse({notice:'fallback should not be needed',sent:new Date().toISOString()}, true);
     throw new Error('unexpected URL '+url);
   };
   return () => {
@@ -211,6 +223,12 @@ test('live API synthesizes official current pages and preserves unpredictable ti
   assert.equal(payload.sources.hvo.status,'ok');
   assert.equal(payload.access.closureUnknown,false);
   assert.equal(payload.sources.nps.status,'ok');
+  assert.equal(payload.sources.air.status,'ok');
+  assert.equal(payload.air.numericVerified,true);
+  assert.equal(payload.air.readings.length,3);
+  assert.equal(payload.sourceHealth,'ok');
+  assert.match(payload.sources.nps.note,/park-alert JSON checked directly/i);
+  assert.match(payload.sources.air.note,/15-minute Hawaiʻi Island SO₂ station table/i);
   assert.match(payload.sources.hvo.note,/short message controls current activity/i);
 });
 

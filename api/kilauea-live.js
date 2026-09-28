@@ -7,8 +7,9 @@ const HVO_UPDATES_URL = 'https://www.usgs.gov/volcanoes/kilauea/volcano-updates'
 const HVO_MESSAGES_URL = 'https://www.usgs.gov/volcanoes/kilauea/volcano-updates/volcano-messages';
 const NPS_CONDITIONS_URL = 'https://www.nps.gov/havo/planyourvisit/conditions.htm';
 const NPS_ALERTS_URL = 'https://developer.nps.gov/api/v1/alerts?parkCode=havo&limit=50';
+const NPS_SITE_ALERTS_URL = 'https://www.nps.gov/havo/park-alerts-havo.json';
 const NPS_VIEWING_URL = 'https://www.nps.gov/havo/planyourvisit/eruption-viewing.htm';
-const HAWAII_DOH_AIR_URL = 'https://air.doh.hawaii.gov/home/text/118';
+const HAWAII_DOH_AIR_URL = 'https://air.doh.hawaii.gov/HawaiiSO2/';
 const NWS_POINT_URL = 'https://api.weather.gov/points/19.421,-155.287';
 const OFFICIAL_CAM_URL = 'https://www.youtube.com/watch?v=gXKuUyKt8mc';
 
@@ -196,6 +197,18 @@ function parkWideClosure(text) {
   return /hawai[ʻ'i’\s]+volcanoes national park (?:is|will be|remains) closed|the (?:entire )?park (?:is|will be|remains) closed|all remaining park areas[^.]{0,120}\bclose|park-wide closure|closed to recreational activities/i.test(String(text || ''));
 }
 
+function npsAlertIsCurrent(alert, now = new Date()) {
+  if (!alert || alert.is_active === 0 || alert.is_active === false) return false;
+  const start = alert.start_date ? new Date(alert.start_date) : null;
+  const end = alert.end_date ? new Date(alert.end_date) : null;
+  if (start && !Number.isNaN(start.getTime()) && start.getTime() > now.getTime()) return false;
+  if (end && !Number.isNaN(end.getTime())) {
+    end.setHours(23, 59, 59, 999);
+    if (end.getTime() < now.getTime()) return false;
+  }
+  return true;
+}
+
 async function loadNps() {
   const fetchedAt = nowIso();
   let conditions = '';
@@ -214,14 +227,28 @@ async function loadNps() {
   }
 
   let alerts = [];
-  let alertApiVerified = false;
-  if (process.env.NPS_API_KEY) {
+  let alertFeedVerified = false;
+  let alertFeed = null;
+
+  try {
+    const response = await fetchWithTimeout(NPS_SITE_ALERTS_URL, { headers: { Accept: 'application/json' } });
+    const json = await response.json();
+    if (!Array.isArray(json)) throw new Error('park alert feed was not an array');
+    alerts = json.filter(a => npsAlertIsCurrent(a));
+    alertFeedVerified = true;
+    alertFeed = 'park-site';
+  } catch (err) {
+    errors.push(`NPS park alert feed: ${err.message}`);
+  }
+
+  if (!alertFeedVerified && process.env.NPS_API_KEY) {
     try {
       const response = await fetchWithTimeout(NPS_ALERTS_URL, { headers: { Accept: 'application/json', 'X-Api-Key': process.env.NPS_API_KEY } });
       const json = await response.json();
       if (!Array.isArray(json?.data)) throw new Error('alerts response missing data array');
       alerts = json.data;
-      alertApiVerified = true;
+      alertFeedVerified = true;
+      alertFeed = 'developer-api';
     } catch (err) {
       errors.push(`NPS alerts API: ${err.message}`);
     }
@@ -237,13 +264,15 @@ async function loadNps() {
   if (localClosureWindow(closureCorpus, 'Keanakākoʻi')) closedViewpoints.push('keanakakoi');
 
   const webpageLoaded = conditions.length > 100 && /current conditions|national park service|hawai.?i volcanoes national park/i.test(conditions);
-  const closureUnknown = !explicitParkClosed && !alertApiVerified;
-  const sourceStatus = alertApiVerified ? 'ok' : webpageLoaded ? 'degraded' : 'offline';
-  const note = alertApiVerified
-    ? 'Current NPS alerts API checked. The NPS API can lag park-site alert changes by up to roughly two hours.'
-    : webpageLoaded
-      ? 'NPS current-conditions page loaded, but the authenticated alerts API is not verified in this deployment; access is treated as unconfirmed.'
-      : `NPS access could not be verified. ${errors.join(' ')}`;
+  const closureUnknown = !explicitParkClosed && !alertFeedVerified;
+  const sourceStatus = alertFeedVerified ? 'ok' : webpageLoaded ? 'degraded' : 'offline';
+  const note = alertFeed === 'park-site'
+    ? 'Current HAVO park-alert JSON checked directly from NPS.gov; this is the alert feed rendered by the official Alerts & Conditions page.'
+    : alertFeed === 'developer-api'
+      ? 'Current NPS alerts API checked. The developer API can lag park-site alert changes by roughly two hours.'
+      : webpageLoaded
+        ? `NPS current-conditions page loaded, but the live alert feed could not be verified; access is treated as unconfirmed. ${errors.join(' ')}`
+        : `NPS access could not be verified. ${errors.join(' ')}`;
 
   return {
     source: { name: 'National Park Service', status: sourceStatus, fetchedAt, observedAt: null, url: NPS_CONDITIONS_URL, note },
@@ -295,16 +324,71 @@ async function loadWeather() {
   }
 }
 
+function parseHawaiiSo2Timestamp(value) {
+  const m = String(value || '').match(/^(20\d{2})\/(\d{2})\/(\d{2})\s+(\d{1,2}):(\d{2})/);
+  if (!m) return null;
+  return new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]), Number(m[4]) + 10, Number(m[5]))).toISOString();
+}
+
+function parseDohSo2Html(raw) {
+  const match = String(raw || '').match(/var\s+Data\s*=\s*(\[[\s\S]*?\]);/);
+  if (!match) return [];
+  let stations;
+  try { stations = JSON.parse(match[1]); } catch { return []; }
+  if (!Array.isArray(stations)) return [];
+  return stations.flatMap(station => {
+    if (!station || station.Active === 0 || station.display === false) return [];
+    const monitor = asArray(station.monitors).find(m => /SO2/i.test(String(m?.Pollutantname || m?.name || '')) && String(m?.unit || '').toLowerCase() === 'ppm');
+    if (!monitor) return [];
+    const rawValue = String(monitor.value ?? '').trim();
+    const valuePpm = rawValue === '' ? null : Number(rawValue);
+    const rawIndex = monitor.indexVal ?? station.IndexValue;
+    const advisoryIndex = rawIndex == null || String(rawIndex).trim() === '' ? null : Number(rawIndex);
+    return [{
+      station: monitor.stationName || station.name || 'Unknown station',
+      valuePpm: Number.isFinite(valuePpm) ? valuePpm : null,
+      advisoryIndex: Number.isFinite(advisoryIndex) ? advisoryIndex : null,
+      airQuality: monitor.indexName || station.IndexName || 'No Index',
+      observedAt: parseHawaiiSo2Timestamp(station.DateVal),
+      latitude: Number.isFinite(Number(station.latitude)) ? Number(station.latitude) : null,
+      longitude: Number.isFinite(Number(station.longitude)) ? Number(station.longitude) : null
+    }];
+  });
+}
+
 async function loadAir() {
   const fetchedAt = nowIso();
   try {
-    const response = await fetchWithTimeout(HAWAII_DOH_AIR_URL, { headers: { Accept: 'text/html,text/plain' } }, 3000);
+    const response = await fetchWithTimeout(HAWAII_DOH_AIR_URL, { headers: { Accept: 'text/html' } }, 3000);
     const raw = await response.text();
-    const text = cleanText(raw).slice(0, 20000);
-    const adverse = /hazardous|very unhealthy|unhealthy|sulfur dioxide[^.]{0,100}(?:elevated|high)|SO2[^.]{0,100}(?:elevated|high)/i.test(text);
-    return { source: { name: 'Hawaiʻi Department of Health air monitoring', status: text.length > 80 ? 'degraded':'offline', fetchedAt, observedAt: null, url: HAWAII_DOH_AIR_URL, note: text.length > 80 ? 'Air page reachable. Numeric summit SO₂ is not used until a stable machine-readable field is verified.' : 'Air page did not expose a usable current reading.' }, air: { advisoryDetected: adverse, text: text.slice(0, 1200), numericVerified: false } };
+    const readings = parseDohSo2Html(raw);
+    const numeric = readings.filter(r => r.valuePpm != null && r.observedAt);
+    const observedAt = numeric.map(r => r.observedAt).sort().at(-1) || null;
+    const ageMs = observedAt ? Date.now() - new Date(observedAt).getTime() : Infinity;
+    const fresh = numeric.length >= 3 && ageMs >= -15 * 60 * 1000 && ageMs <= 2 * 60 * 60 * 1000;
+    const ranked = [...numeric].sort((a,b) => (b.advisoryIndex ?? -1) - (a.advisoryIndex ?? -1) || (b.valuePpm ?? -1) - (a.valuePpm ?? -1));
+    const worst = ranked[0] || null;
+    const advisoryDetected = numeric.some(r => (r.advisoryIndex ?? 0) >= 101 || /unhealthy|hazardous/i.test(String(r.airQuality || '')));
+    const elevatedDetected = numeric.some(r => (r.advisoryIndex ?? 0) >= 51 || /moderate|unhealthy|hazardous/i.test(String(r.airQuality || '')));
+    const status = fresh ? 'ok' : readings.length ? 'degraded' : 'offline';
+    const note = fresh
+      ? 'Current 15-minute Hawaiʻi Island SO₂ station table parsed from Hawaiʻi DOH. Regional exposure context; not a summit-crater gas measurement.'
+      : readings.length
+        ? 'Hawaiʻi DOH SO₂ station data parsed, but too few current numeric readings or the newest station timestamp is older than two hours.'
+        : 'Hawaiʻi DOH page loaded, but its current SO₂ station table could not be parsed.';
+    return {
+      source: { name: 'Hawaiʻi DOH short-term SO₂ network', status, fetchedAt, observedAt, url: HAWAII_DOH_AIR_URL, note },
+      air: {
+        advisoryDetected,
+        elevatedDetected,
+        numericVerified: numeric.length >= 3,
+        readings: numeric,
+        worst,
+        text: numeric.slice(0, 9).map(r => `${r.station}: ${r.valuePpm} ppm (${r.airQuality})`).join('; ')
+      }
+    };
   } catch (err) {
-    return { source: { name: 'Hawaiʻi Department of Health air monitoring', status: 'offline', fetchedAt, observedAt: null, url: HAWAII_DOH_AIR_URL, note: err.message }, air: { advisoryDetected: false, numericVerified: false } };
+    return { source: { name: 'Hawaiʻi DOH short-term SO₂ network', status: 'offline', fetchedAt, observedAt: null, url: HAWAII_DOH_AIR_URL, note: err.message }, air: { advisoryDetected: false, elevatedDetected: false, numericVerified: false, readings: [], worst: null } };
   }
 }
 

@@ -104,7 +104,9 @@
     if(f?.state==='UNPREDICTABLE') hurting.push('HVO says the next fountain window cannot be modeled reliably.');
     if(wx?.score<.35) hurting.push(`Visibility may be poor: ${wx.shortForecast||'weather is limiting'}.`);
     if(d.access?.closureUnknown) hurting.push('NPS access status could not be confirmed.');
-    if(d.sources?.air?.status!=='ok') hurting.push('A stable machine-readable summit SO₂ reading is not yet verified in this build.');
+    if(d.air?.advisoryDetected) hurting.push(`Hawaiʻi DOH reports an unhealthy short-term SO₂ signal${d.air?.worst?.station?` at ${d.air.worst.station}`:''}.`);
+    else if(d.sources?.air?.status==='ok') helping.push('Hawaiʻi DOH’s short-term SO₂ network is current with no unhealthy advisory signal across reporting stations.');
+    else hurting.push('Hawaiʻi DOH short-term SO₂ network is stale or unavailable.');
     $('helping').textContent=helping.join(' ')||'No strong positive signal beyond the current official activity state.';
     $('hurting').textContent=hurting.join(' ')||'No major limiting signal is currently identified.';
     $('couldChange').textContent='A new HVO message, confirmed fountaining on official cameras, NPS closure/reopening, or a material summit-weather change.';
