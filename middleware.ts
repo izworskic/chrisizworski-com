@@ -10,22 +10,30 @@ const FORT_MADISON_UPSTREAM = 'https://fort-madison-live.vercel.app';
 const PICTURED_ROCKS_HOST = 'picturedrocks.chrisizworski.com';
 const PICTURED_ROCKS_SOURCE = '/labs/pictured-rocks-planner/';
 const PICTURED_ROCKS_INDEXABLE_ROBOTS = '<meta name="robots" content="index,follow,max-image-preview:large">';
+const PICTURED_ROCKS_TITLE = 'Pictured Rocks Trip Planner: Map, Weather & 1-Day Itinerary';
+const PICTURED_ROCKS_DESCRIPTION = 'Plan Pictured Rocks National Lakeshore with a live map, current weather and access, boat vs. hike choices, and realistic 1-day or 2-day itineraries.';
+const PICTURED_ROCKS_H1 = 'Pictured Rocks National Lakeshore Trip Planner';
 const PICTURED_ROCKS_SOCIAL_IMAGE = 'https://www.nps.gov/common/uploads/structured_data/683601AF-F157-7262-38F31A30A2EA6224.jpg?maxHeight=800&maxWidth=1200&quality=90';
+const PICTURED_ROCKS_SEARCH_SCHEMA = `<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://picturedrocks.chrisizworski.com/#webpage","url":"https://picturedrocks.chrisizworski.com/","name":"${PICTURED_ROCKS_TITLE}","description":"${PICTURED_ROCKS_DESCRIPTION}","inLanguage":"en-US","dateModified":"2026-09-28","isPartOf":{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski"},"about":{"@id":"https://picturedrocks.chrisizworski.com/#destination"},"primaryImageOfPage":{"@type":"ImageObject","url":"${PICTURED_ROCKS_SOCIAL_IMAGE}"}},{"@type":"TouristDestination","@id":"https://picturedrocks.chrisizworski.com/#destination","name":"Pictured Rocks National Lakeshore","description":"National lakeshore on Lake Superior near Munising and Grand Marais, Michigan, known for sandstone cliffs, beaches, waterfalls, dunes, hiking, boat cruises and guided kayaking.","url":"https://www.nps.gov/piro/","sameAs":"https://www.nps.gov/piro/","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}},{"@type":"BreadcrumbList","@id":"https://picturedrocks.chrisizworski.com/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Chris Izworski","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Pictured Rocks Trip Planner","item":"https://picturedrocks.chrisizworski.com/"}]},{"@type":"ItemList","@id":"https://picturedrocks.chrisizworski.com/#trip-modes","name":"Ways to experience Pictured Rocks","itemListElement":[{"@type":"ListItem","position":1,"name":"Boat cruise"},{"@type":"ListItem","position":2,"name":"Guided kayak"},{"@type":"ListItem","position":3,"name":"Chapel Loop hike"},{"@type":"ListItem","position":4,"name":"Drive and short walks"}]}]}</script>`;
 const PICTURED_ROCKS_HEAD_META = `<link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="author" content="Chris Izworski">
+<meta name="application-name" content="Pictured Rocks Trip Planner">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Chris Izworski">
-<meta property="og:title" content="Pictured Rocks Planner — What to Do Today">
-<meta property="og:description" content="Check current Pictured Rocks weather and access, compare boat, kayak, hike or drive, then build a realistic route for your day.">
+<meta property="og:title" content="${PICTURED_ROCKS_TITLE}">
+<meta property="og:description" content="${PICTURED_ROCKS_DESCRIPTION}">
 <meta property="og:url" content="https://picturedrocks.chrisizworski.com/">
 <meta property="og:image" content="${PICTURED_ROCKS_SOCIAL_IMAGE}">
 <meta property="og:image:alt" content="Colored sandstone cliffs rising from Lake Superior at Pictured Rocks National Lakeshore">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Pictured Rocks Planner — What to Do Today">
-<meta name="twitter:description" content="Current conditions, map, photos and a realistic Pictured Rocks route built around your day.">
+<meta name="twitter:title" content="${PICTURED_ROCKS_TITLE}">
+<meta name="twitter:description" content="${PICTURED_ROCKS_DESCRIPTION}">
 <meta name="twitter:image" content="${PICTURED_ROCKS_SOCIAL_IMAGE}">
 <meta name="twitter:image:alt" content="Colored sandstone cliffs rising from Lake Superior at Pictured Rocks National Lakeshore">
+${PICTURED_ROCKS_SEARCH_SCHEMA}
 <style data-pictured-rocks-ssr>.trip-shapes .trip-thumb{height:118px;overflow:hidden;background:#dce8e7}.trip-shapes .trip-thumb img{width:100%;height:100%;object-fit:cover;display:block}</style>`;
 const NETWORK_ADS_TAG = '<script defer src="https://chrisizworski.com/assets/network-ads-v1.js"></script>';
 
@@ -58,6 +66,16 @@ function addPicturedRocksTripThumbnails(html: string) {
     const thumb = `<div class="trip-thumb"><img src="${item.image}" alt="${item.alt}" loading="lazy" decoding="async"></div>`;
     html = html.replace(item.marker, item.marker.replace('><div class="trip-icon">', `>${thumb}<div class="trip-icon">`));
   }
+  return html;
+}
+
+function optimizePicturedRocksSearchSurface(html: string) {
+  html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${PICTURED_ROCKS_TITLE}</title>`);
+  html = html.replace(
+    /<meta\s+name=["']description["']\s+content=["'][^"']*["']\s*\/?\s*>/i,
+    `<meta name="description" content="${PICTURED_ROCKS_DESCRIPTION}">`,
+  );
+  html = html.replace(/<h1>[\s\S]*?<\/h1>/i, `<h1>${PICTURED_ROCKS_H1}</h1>`);
   return html;
 }
 
@@ -144,6 +162,7 @@ async function servePicturedRocksCanonical(request: Request) {
     }
 
     html = html.replace(noindexPattern, PICTURED_ROCKS_INDEXABLE_ROBOTS);
+    html = optimizePicturedRocksSearchSurface(html);
     html = addPicturedRocksTripThumbnails(html);
     html = html.replace(/<\/head>/i, PICTURED_ROCKS_HEAD_META + '\n' + NETWORK_ADS_TAG + '\n</head>');
 
