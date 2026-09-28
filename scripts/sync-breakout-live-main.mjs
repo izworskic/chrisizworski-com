@@ -38,7 +38,7 @@ function syncDirectoryDiscovery(targetRoot){
   if(!fs.existsSync(file)) throw new Error('Breakout sync: synced national directory missing');
   let html=fs.readFileSync(file,'utf8');
   const kilaueaCard='<article class="directory-card" data-search-card data-tool-id="kilauea-live" data-personas="trip volcano eruption viewing photography" data-tags="kilauea volcano hawaii eruption lava national park live viewing hvo nps weather" data-months="1,2,3,4,5,6,7,8,9,10,11,12"><div class="card-top"><span class="kind">Live volcano decision</span><span class="season-label" hidden>Useful now</span></div><h3>Kīlauea Live</h3><p class="place">Hawaiʻi Volcanoes National Park · Hawaiʻi</p><p class="description">See what the summit is doing now, whether the view is worth the trip, and which public viewpoint best fits the current conditions.</p><p class="signals"><strong>Signals:</strong> USGS Hawaiian Volcano Observatory + NPS + NWS + Hawaiʻi DOH</p><div class="card-actions"><a class="primary-action" href="/national-tools/kilauea-live/">Open Kīlauea Live &rarr;</a></div></article>';
-  const card='<article class="directory-card" data-search-card data-tool-id="live-decisions" data-personas="trip conditions event" data-tags="live trip decisions national parks road status sunrise river lake access current conditions zion glacier yellowstone yosemite rainier grand canyon haleakala acadia lake mead lake powell" data-months="1,2,3,4,5,6,7,8,9,10,11,12"><div class="card-top"><span class="kind">Live decision collection</span><span class="season-label" hidden>Useful now</span></div><h3>Live Trip Decisions</h3><p class="place">Ten destination decisions · United States</p><p class="description">Roads close, rivers rise, clouds erase sunrises and low water changes access. Open the destination-specific live tool that answers the decision before you commit the drive.</p><p class="signals"><strong>Signals:</strong> NPS + USGS + NWS + Bureau of Reclamation source-backed checks</p><div class="card-actions"><a class="primary-action" href="/national-tools/live-decisions/">Open live trip decisions &rarr;</a></div></article>';
+  const card='<article class="directory-card" data-search-card data-tool-id="live-decisions" data-personas="trip conditions event" data-tags="live trip decisions national parks road status sunrise river lake access current conditions zion glacier yellowstone yosemite rainier grand canyon haleakala acadia lake mead lake powell" data-months="1,2,3,4,5,6,7,8,9,10,11,12"><div class="card-top"><span class="kind">Live decision collection</span><span class="season-label" hidden>Useful now</span></div><h3>Live Trip Decisions</h3><p class="place">Eleven destination decisions · United States</p><p class="description">Roads close, rivers rise, clouds erase sunrises and low water changes access. Open the destination-specific live tool that answers the decision before you commit the drive.</p><p class="signals"><strong>Signals:</strong> NPS + USGS + NWS + Bureau of Reclamation source-backed checks</p><div class="card-actions"><a class="primary-action" href="/national-tools/live-decisions/">Open live trip decisions &rarr;</a></div></article>';
   html=html.replace(/<article class="directory-card"[^>]*data-tool-id="live-decisions"[\s\S]*?<\/article>\s*/g,'');
   html=html.replace(/<article class="directory-card"[^>]*data-tool-id="kilauea-live"[\s\S]*?<\/article>\s*/g,'');
   const section=html.indexOf('<section class="catalog-group national-utilities"');
@@ -70,6 +70,47 @@ function syncDirectoryDiscovery(targetRoot){
   fs.writeFileSync(file,html,'utf8');
 }
 
+function syncKilaueaLiveDecisionDiscovery(targetRoot){
+  const file=path.join(targetRoot,'public','synced-national-tools','live-decisions','index.html');
+  if(!fs.existsSync(file)) throw new Error('Breakout sync: live decisions page missing');
+  let html=fs.readFileSync(file,'utf8');
+  const card='<a class="decision-link-card" href="/national-tools/kilauea-live/"><span>Kīlauea Live Viewing Decision</span><strong>Is Kīlauea worth going to right now, and which viewpoint fits the conditions?</strong><small>USGS Hawaiian Volcano Observatory · NPS access · NWS weather · Hawaiʻi DOH air context</small></a>';
+  html=html.replace(/<a class="decision-link-card" href="\/national-tools\/kilauea-live\/">[\s\S]*?<\/a>/g,'');
+  html=html.replace('Ten live trip checks','Eleven live trip checks');
+  const grid='<div class="decision-link-grid">';
+  if(!html.includes(grid)) throw new Error('Breakout sync: live decisions grid missing');
+  html=html.replace(grid,grid+card);
+
+  const schemaRe=/<script type="application\/ld\+json">([\s\S]*?)<\/script>/;
+  const match=html.match(schemaRe);
+  if(!match) throw new Error('Breakout sync: live decisions JSON-LD missing');
+  const schema=JSON.parse(match[1]);
+  const graph=schema?.['@graph'];
+  const list=graph?.find(x=>x?.['@id']==='https://chrisizworski.com/national-tools/live-decisions/#list');
+  if(!list?.itemListElement) throw new Error('Breakout sync: live decisions ItemList missing');
+  list.itemListElement=list.itemListElement.filter(x=>x.url!==KILAUEA_URL);
+  list.itemListElement.push({'@type':'ListItem',position:list.itemListElement.length+1,url:KILAUEA_URL,name:'Kīlauea Live Viewing Decision'});
+  list.itemListElement.forEach((x,i)=>x.position=i+1);
+  list.numberOfItems=list.itemListElement.length;
+  const page=graph.find(x=>x?.['@id']==='https://chrisizworski.com/national-tools/live-decisions/#page');
+  if(page) page.dateModified='2026-09-28';
+  html=html.replace(match[0],`<script type="application/ld+json">${JSON.stringify(schema)}</script>`);
+  if((html.match(/<a class="decision-link-card" href="\/national-tools\/kilauea-live\/">/g)||[]).length!==1) throw new Error('Breakout sync: Kilauea live decision card must be unique');
+  fs.writeFileSync(file,html,'utf8');
+}
+
+function syncKilaueaSitemap(targetRoot){
+  const file=path.join(targetRoot,'public','sitemap-breakout-live.xml');
+  if(!fs.existsSync(file)) throw new Error('Breakout sync: breakout sitemap missing');
+  let xml=fs.readFileSync(file,'utf8');
+  xml=xml.replace(/\s*<url><loc>https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\/<\/loc>[\s\S]*?<\/url>/g,'');
+  const entry='  <url><loc>https://chrisizworski.com/national-tools/kilauea-live/</loc><lastmod>2026-09-28</lastmod><changefreq>hourly</changefreq><priority>1.0</priority></url>\n';
+  if(!xml.includes('</urlset>')) throw new Error('Breakout sync: sitemap closing tag missing');
+  xml=xml.replace('</urlset>',entry+'</urlset>');
+  if((xml.match(/https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\//g)||[]).length!==1) throw new Error('Breakout sync: Kilauea sitemap URL must be unique');
+  fs.writeFileSync(file,xml,'utf8');
+}
+
 export function installBreakoutLive(coreDir,targetRoot){
   const cfgPath=path.join(coreDir,'config','breakout-live-pages.json');
   if(!fs.existsSync(cfgPath)) throw new Error('Breakout sync: core config missing');
@@ -92,6 +133,8 @@ export function installBreakoutLive(coreDir,targetRoot){
   }
 
   syncDirectoryDiscovery(targetRoot);
+  syncKilaueaLiveDecisionDiscovery(targetRoot);
+  syncKilaueaSitemap(targetRoot);
 
   const vercelPath=path.join(targetRoot,'vercel.json');
   const v=JSON.parse(fs.readFileSync(vercelPath,'utf8'));
