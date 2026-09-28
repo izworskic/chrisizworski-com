@@ -1,0 +1,90 @@
+name: Temporary Kilauea national tools future proof
+on:
+  push:
+    branches:
+      - agent/kilauea-national-tools-launch-2026-09-28
+permissions:
+  contents: write
+jobs:
+  harden:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/kilauea-national-tools-launch-2026-09-28
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preserve Kilauea through future National Tools syncs
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          sync = Path('scripts/sync-breakout-live-main.mjs')
+          js = sync.read_text()
+          js = js.replace('Ten destination decisions · United States', 'Eleven destination decisions · United States')
+
+          if 'function syncKilaueaLiveDecisionDiscovery(targetRoot)' not in js:
+              marker = '\nexport function installBreakoutLive(coreDir,targetRoot){'
+              fn = r'''
+function syncKilaueaLiveDecisionDiscovery(targetRoot){
+  const file=path.join(targetRoot,'public','synced-national-tools','live-decisions','index.html');
+  if(!fs.existsSync(file)) throw new Error('Breakout sync: live decisions page missing');
+  let html=fs.readFileSync(file,'utf8');
+  const card='<a class="decision-link-card" href="/national-tools/kilauea-live/"><span>Kīlauea Live Viewing Decision</span><strong>Is Kīlauea worth going to right now, and which viewpoint fits the conditions?</strong><small>USGS Hawaiian Volcano Observatory · NPS access · NWS weather · Hawaiʻi DOH air context</small></a>';
+  html=html.replace(/<a class="decision-link-card" href="\/national-tools\/kilauea-live\/">[\s\S]*?<\/a>/g,'');
+  html=html.replace('Ten live trip checks','Eleven live trip checks');
+  const grid='<div class="decision-link-grid">';
+  if(!html.includes(grid)) throw new Error('Breakout sync: live decisions grid missing');
+  html=html.replace(grid,grid+card);
+
+  const schemaRe=/<script type="application\/ld\+json">([\s\S]*?)<\/script>/;
+  const match=html.match(schemaRe);
+  if(!match) throw new Error('Breakout sync: live decisions JSON-LD missing');
+  const schema=JSON.parse(match[1]);
+  const graph=schema?.['@graph'];
+  const list=graph?.find(x=>x?.['@id']==='https://chrisizworski.com/national-tools/live-decisions/#list');
+  if(!list?.itemListElement) throw new Error('Breakout sync: live decisions ItemList missing');
+  list.itemListElement=list.itemListElement.filter(x=>x.url!==KILAUEA_URL);
+  list.itemListElement.push({'@type':'ListItem',position:list.itemListElement.length+1,url:KILAUEA_URL,name:'Kīlauea Live Viewing Decision'});
+  list.itemListElement.forEach((x,i)=>x.position=i+1);
+  list.numberOfItems=list.itemListElement.length;
+  const page=graph.find(x=>x?.['@id']==='https://chrisizworski.com/national-tools/live-decisions/#page');
+  if(page) page.dateModified='2026-09-28';
+  html=html.replace(match[0],`<script type="application/ld+json">${JSON.stringify(schema)}</script>`);
+  if((html.match(/href="\/national-tools\/kilauea-live\/"/g)||[]).length!==1) throw new Error('Breakout sync: Kilauea live decision link must be unique');
+  fs.writeFileSync(file,html,'utf8');
+}
+
+function syncKilaueaSitemap(targetRoot){
+  const file=path.join(targetRoot,'public','sitemap-breakout-live.xml');
+  if(!fs.existsSync(file)) throw new Error('Breakout sync: breakout sitemap missing');
+  let xml=fs.readFileSync(file,'utf8');
+  xml=xml.replace(/\s*<url><loc>https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\/<\/loc>[\s\S]*?<\/url>/g,'');
+  const entry='  <url><loc>https://chrisizworski.com/national-tools/kilauea-live/</loc><lastmod>2026-09-28</lastmod><changefreq>hourly</changefreq><priority>1.0</priority></url>\n';
+  if(!xml.includes('</urlset>')) throw new Error('Breakout sync: sitemap closing tag missing');
+  xml=xml.replace('</urlset>',entry+'</urlset>');
+  fs.writeFileSync(file,xml,'utf8');
+}
+'''
+              if marker not in js:
+                  raise SystemExit('installBreakoutLive marker missing')
+              js = js.replace(marker, '\n' + fn + marker, 1)
+              js = js.replace('  syncDirectoryDiscovery(targetRoot);', '  syncDirectoryDiscovery(targetRoot);\n  syncKilaueaLiveDecisionDiscovery(targetRoot);\n  syncKilaueaSitemap(targetRoot);', 1)
+          sync.write_text(js)
+
+          hub = Path('public/synced-national-tools/index.html')
+          h = hub.read_text().replace('Ten destination decisions · United States', 'Eleven destination decisions · United States')
+          hub.write_text(h)
+          PY
+
+          node --check scripts/sync-breakout-live-main.mjs
+          node --test tests/kilauea-live.test.js
+          grep -n 'Eleven destination decisions' public/synced-national-tools/index.html
+          grep -n 'syncKilaueaLiveDecisionDiscovery' scripts/sync-breakout-live-main.mjs
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/sync-breakout-live-main.mjs public/synced-national-tools/index.html
+          git commit -m 'Preserve Kilauea in National Tools syncs'
+          git push origin HEAD:agent/kilauea-national-tools-launch-2026-09-28
