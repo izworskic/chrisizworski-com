@@ -1,0 +1,49 @@
+{
+  "product": "Pictured Rocks search acquisition",
+  "canonical": "https://picturedrocks.chrisizworski.com/",
+  "objective": "Maximize qualified Google impressions and CTR without creating duplicate indexed owners or degrading the decision-product UX.",
+  "lossFunction": {
+    "formula": "loss = 100 - weighted_score; target loss <= 8",
+    "hardVetoes": [
+      "canonical response is not HTTP 200",
+      "canonical response contains noindex or X-Robots-Tag noindex",
+      "canonical does not self-canonicalize to https://picturedrocks.chrisizworski.com/",
+      "lab preview becomes indexable",
+      "canonical URL is missing from the dedicated Pictured Rocks sitemap",
+      "an indexed duplicate owner is introduced on chrisizworski.com"
+    ],
+    "weights": {
+      "query_fit_title_h1": 25,
+      "snippet_promise": 20,
+      "intent_coverage": 15,
+      "discovery_internal_authority": 15,
+      "structured_social_image_metadata": 15,
+      "freshness_recrawl_signals": 10
+    }
+  },
+  "targetQueries": [
+    "pictured rocks",
+    "pictured rocks national lakeshore",
+    "pictured rocks trip planner",
+    "pictured rocks map",
+    "pictured rocks weather",
+    "pictured rocks itinerary",
+    "pictured rocks one day itinerary",
+    "pictured rocks boat cruise",
+    "pictured rocks hiking",
+    "things to do at pictured rocks",
+    "munising pictured rocks"
+  ],
+  "metadataTarget": {
+    "title": "Pictured Rocks Trip Planner: Map, Weather & 1-Day Itinerary",
+    "description": "Plan Pictured Rocks National Lakeshore with a live map, current weather and access, boat vs. hike choices, and realistic 1-day or 2-day itineraries.",
+    "h1": "Pictured Rocks National Lakeshore Trip Planner"
+  },
+  "baseline": {
+    "gscWindow": "2026-08-29 through 2026-09-25",
+    "impressions": 23,
+    "clicks": 0,
+    "lastGoogleCrawlObserved": "2026-09-06T13:24:30Z",
+    "note": "Baseline predates the September 28 rebuilt-canonical cutover; do not attribute it to the new build."
+  }
+}
