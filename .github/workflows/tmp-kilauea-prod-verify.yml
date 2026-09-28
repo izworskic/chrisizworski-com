@@ -1,0 +1,52 @@
+name: Temporary Kilauea production verification
+on:
+  push:
+    branches: ['agent/kilauea-source-health-2026-09-28']
+permissions:
+  contents: read
+jobs:
+  verify-production:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check live Kilauea source health
+        shell: bash
+        run: |
+          set -euo pipefail
+          endpoint='https://chrisizworski.com/api/kilauea-live?travel=here&mobility=short&experience=casual&plan=now'
+          for attempt in $(seq 1 18); do
+            echo "Attempt ${attempt}"
+            if curl --fail --silent --show-error --max-time 20 "$endpoint" -o /tmp/kilauea.json; then
+              python - <<'PY'
+import json
+p=json.load(open('/tmp/kilauea.json'))
+summary={
+  'sourceHealth':p.get('sourceHealth'),
+  'nps':(p.get('sources') or {}).get('nps'),
+  'air':(p.get('sources') or {}).get('air'),
+  'access':{
+    'parkClosed':(p.get('access') or {}).get('parkClosed'),
+    'closureUnknown':(p.get('access') or {}).get('closureUnknown'),
+  },
+  'airDecision':{
+    'numericVerified':(p.get('air') or {}).get('numericVerified'),
+    'advisoryDetected':(p.get('air') or {}).get('advisoryDetected'),
+    'elevatedDetected':(p.get('air') or {}).get('elevatedDetected'),
+    'readingCount':len((p.get('air') or {}).get('readings') or []),
+    'worst':(p.get('air') or {}).get('worst'),
+  },
+  'decisionState':(p.get('decision') or {}).get('state')
+}
+print(json.dumps(summary, indent=2, ensure_ascii=False))
+healthy=(p.get('sources') or {}).get('nps',{}).get('status')=='ok' and (p.get('sources') or {}).get('air',{}).get('status')=='ok'
+raise SystemExit(0 if healthy else 2)
+PY
+              rc=$?
+              if [ "$rc" -eq 0 ]; then
+                echo 'KILAUEA_PRODUCTION_SOURCES_HEALTHY'
+                exit 0
+              fi
+            fi
+            sleep 10
+          done
+          echo 'KILAUEA_PRODUCTION_SOURCES_NOT_HEALTHY'
+          exit 1
