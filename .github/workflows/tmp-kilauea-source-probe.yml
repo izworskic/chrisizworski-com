@@ -1,0 +1,28 @@
+name: Temporary Kilauea source probe
+on:
+  push:
+    branches: ['agent/kilauea-source-health-2026-09-28']
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe NPS and Hawaii DOH source surfaces
+        run: |
+          set -euo pipefail
+          echo '=== NPS no key ==='
+          curl -sS -o /tmp/nps-none.json -w 'status=%{http_code}\n' 'https://developer.nps.gov/api/v1/alerts?parkCode=havo&limit=50' || true
+          head -c 500 /tmp/nps-none.json || true; echo
+          echo '=== NPS DEMO_KEY ==='
+          curl -sS -o /tmp/nps-demo.json -w 'status=%{http_code}\n' 'https://developer.nps.gov/api/v1/alerts?parkCode=havo&limit=50&api_key=DEMO_KEY' || true
+          head -c 1500 /tmp/nps-demo.json || true; echo
+          echo '=== NPS conditions raw signals ==='
+          curl -fsSL 'https://www.nps.gov/havo/planyourvisit/conditions.htm' -o /tmp/nps.html
+          grep -Eio '.{0,120}(api/v1/alerts|park alert|alert severity|data-alert|closure).{0,220}' /tmp/nps.html | head -n 30 || true
+          echo '=== DOH SO2 current ==='
+          curl -fsSL 'https://air.doh.hawaii.gov/HawaiiSO2/' -o /tmp/so2.html
+          grep -Eio '.{0,100}(Hilo|Kona|Mountain View|Pahala|Ocean View|Leilani|Waikoloa).{0,220}' /tmp/so2.html | head -n 30 || true
+          echo '=== DOH structure hints ==='
+          grep -Eio '.{0,120}(SO2|ppm|air quality|DateTime|monitor).{0,220}' /tmp/so2.html | head -n 40 || true
