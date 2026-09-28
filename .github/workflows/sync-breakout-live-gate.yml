@@ -16,7 +16,7 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      CORE_COMMIT: 548cf54d8c289cd1ccbefdca3024227891e00f92
+      CORE_COMMIT: e1af2138193d1b04e67cff2f8ff0e4747f007d42
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -70,6 +70,9 @@ jobs:
             grep -q "https://chrisizworski.com/national-tools/$slug/" "$file"
             grep -q 'G-Y5D2V2W7HN' "$file"
             grep -q 'ca-pub-8222782620788075' "$file"
+          done
+          for slug in zion-narrows-conditions grand-canyon-access going-to-the-sun-road-status haleakala-sunrise yellowstone-road-status tioga-road-status cadillac-mountain-sunrise mount-rainier-road-status lake-mead-access lake-powell-ramp-status; do
+            grep -q 'assets/breakout-value.js' "public/synced-national-tools/$slug/index.html"
           done
           grep -q 'twitter:title' public/synced-national-tools/live-decisions/index.html
           grep -q 'twitter:description' public/synced-national-tools/live-decisions/index.html
