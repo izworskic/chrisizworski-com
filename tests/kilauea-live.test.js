@@ -149,12 +149,28 @@ test('page has causal controls, decision map, change layer, webcam and provenanc
   assert.match(html, /id="map"/);
   assert.match(html, /Since your last check/);
   assert.match(html, /youtube-nocookie\.com\/embed\/gXKuUyKt8mc/);
-  assert.match(html, /Sources & status/i);
+  assert.match(html, /The official voices behind this answer/i);
   assert.match(html, /No cached live value is being substituted/);
   assert.match(html, /Reported closed by NPS/);
   assert.match(html, /AbortController/);
   assert.match(html, /kilauea-live-prior-official-v2/);
   assert.match(html, /clearEvidence\(\)/);
+});
+
+test('Kilauea copy follows interpretive-ranger voice without impersonating NPS', () => {
+  const html = fs.readFileSync(path.join(__dirname, '..', 'public', 'labs', 'kilauea-live', 'index.html'), 'utf8');
+  const decision = fs.readFileSync(path.join(__dirname, '..', 'lib', 'kilauea-decision.js'), 'utf8');
+  const combined = `${html}\n${decision}`;
+  assert.match(html, /What the summit is telling you/);
+  assert.match(html, /Use the camera the way a ranger would use a window/);
+  assert.match(html, /The official voices behind this answer/);
+  assert.match(html, /Independent interpretive tool; not an NPS or USGS product/);
+  assert.match(decision, /Tomorrow’s weather can be forecast; tomorrow’s eruption cannot/);
+  assert.match(decision, /The eruption is active; the weather is hiding the story/);
+  assert.match(decision, /look across Kaluapele before narrowing in on the vent/i);
+  for (const phrase of ['breathtaking','hidden gem','must-see','adventure awaits','nature’s raw power','immerse yourself']) {
+    assert.doesNotMatch(combined, new RegExp(phrase, 'i'));
+  }
 });
 
 test('live endpoint budgets staged upstream fallbacks inside the 10-second function envelope', () => {
