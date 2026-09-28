@@ -1,15 +1,18 @@
-name: Temporary Kilauea source repair
+name: Agent branch verification
 
 on:
   push:
     branches:
       - 'agent/**'
+  pull_request:
+    branches:
+      - main
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  repair:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,32 +21,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Repair source, verify focused tests, and restore normal workflow
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          p = Path('api/kilauea-live.js')
-          s = p.read_text()
-          old = r"""  const dailyLooksOfficial = Boolean(\n    daily?.observedAt &&\n    daily?.text?.length > 120 &&\n    /HAWAIIAN VOLCANO OBSERVATORY (?:DAILY )?UPDATE/i.test(daily.text)\n  );\n  if (dailyLooksOfficial) {\n"""
-          new = """  const dailyLooksOfficial = Boolean(
-            daily?.observedAt &&
-            daily?.text?.length > 120 &&
-            /HAWAIIAN VOLCANO OBSERVATORY (?:DAILY )?UPDATE/i.test(daily.text)
-          );
-          if (dailyLooksOfficial) {
-          """
-          if old not in s:
-              raise SystemExit('literal-newline HVO block not found')
-          p.write_text(s.replace(old, new, 1))
-          PY
-          git fetch origin main
-          git show origin/main:.github/workflows/agent-branch-verify.yml > .github/workflows/agent-branch-verify.yml
-          node --check api/kilauea-live.js
-          node --test tests/kilauea-live.test.js
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add api/kilauea-live.js .github/workflows/agent-branch-verify.yml
-          git commit -m "fix: repair Kilauea HVO validation syntax"
-          git push origin HEAD:${GITHUB_REF_NAME}
-      - name: Run full repository gate on repaired tree
+      - name: Run full repository gate
         run: npm run verify:all
+      - name: Upload boat launch source audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boat-launch-source-audit
+          path: artifacts/boat-launch-source-audit.json
+          if-no-files-found: ignore
+          retention-days: 7
