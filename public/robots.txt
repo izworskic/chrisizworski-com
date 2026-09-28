@@ -14,3 +14,4 @@ Sitemap: https://chrisizworski.com/sitemap-blue-spring.xml
 Sitemap: https://chrisizworski.com/sitemap-melvin-price.xml
 Sitemap: https://chrisizworski.com/sitemap-petoskey-wine.xml
 Sitemap: https://chrisizworski.com/sitemap-niagara-rainbow.xml
+Sitemap: https://picturedrocks.chrisizworski.com/sitemap-pictured-rocks.xml
