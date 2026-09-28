@@ -17,6 +17,16 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/tmp-kilauea-ranger-copy.py
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('tests/kilauea-live.test.js')
+          s=p.read_text()
+          old="assert.match(html, /Sources & status/i);"
+          new="assert.match(html, /The official voices behind this answer/i);"
+          if old not in s:
+              raise SystemExit('old source-heading assertion not found')
+          p.write_text(s.replace(old,new,1))
+          PY
           node --test tests/kilauea-live.test.js
           rm scripts/tmp-kilauea-ranger-copy.py
           rm .github/workflows/tmp-kilauea-ranger-copy.yml
