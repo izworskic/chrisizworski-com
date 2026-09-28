@@ -16,7 +16,7 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      CORE_COMMIT: 7e4252133da0bc9a07766fc734e8aa175243b11b
+      CORE_COMMIT: 2a7b2b6f71b1b48cf66168eef9d2afb543f46ddd
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -73,6 +73,9 @@ jobs:
           done
           grep -q 'twitter:title' public/synced-national-tools/live-decisions/index.html
           grep -q 'twitter:description' public/synced-national-tools/live-decisions/index.html
+          grep -q 'CollectionPage' public/synced-national-tools/live-decisions/index.html
+          grep -q 'ItemList' public/synced-national-tools/live-decisions/index.html
+          grep -q 'How to use this result' public/synced-national-tools/zion-narrows-conditions/index.html
           test "$(grep -o 'data-tool-id="live-decisions"' public/synced-national-tools/index.html | wc -l)" -eq 1
           grep -q 'href="/national-tools/live-decisions/"' public/synced-national-tools/index.html
           grep -q 'https://chrisizworski.com/national-tools/live-decisions/' public/synced-national-tools/index.html
