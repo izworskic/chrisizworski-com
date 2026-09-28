@@ -20,7 +20,7 @@ test('canonical shell renders four decision thumbnails before client JavaScript'
     assert.match(middleware, new RegExp(heading.replace(/[+]/g, '\\+')));
   }
   assert.match(middleware, /addPicturedRocksTripThumbnails\(html\)/);
-  assert.match(middleware, /class=\\"trip-thumb\\"/);
+  assert.match(middleware, /class="trip-thumb"/);
 });
 
 test('preview remains noindex and canonical ownership remains the subdomain', () => {
