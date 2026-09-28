@@ -109,7 +109,7 @@ test('live API synthesizes official current pages and preserves unpredictable ti
     url=String(url);
     if (url.includes('/volcano-updates/volcano-messages')) return fake('<main>Kilauea Message 2026-09-27 10:15:00 HST Small overflows continue from the north vent. Steam and clouds obscure the vents. Kilauea Message 2026-09-26 20:56:49 HST older</main>');
     if (url.endsWith('/volcano-updates')) return fake('<main>HAWAIIAN VOLCANO OBSERVATORY DAILY UPDATE U.S. Geological Survey Sunday, September 27, 2026, 8:50 AM HST Current Volcano Alert Level: WATCH Current Aviation Color Code: ORANGE Summary: Small overflows, strong glow and intermittent spatter continue. Forecast windows for this episode can no longer be modeled due to irregular changes. Conditions remain favorable but HVO cannot say with certainty that this leads to another fountain event.</main>');
-    if (url.includes('/planyourvisit/conditions.htm')) return fake('<main>Current Conditions. The park is open. Visitors should check weather and alerts.</main>');
+    if (url.includes('/planyourvisit/conditions.htm')) return fake('<main>Current Conditions. The park is open. Visitors should check weather, alerts, construction notices, road conditions, trail conditions, and official National Park Service guidance before travel.</main>');
     if (url.includes('/planyourvisit/eruption-viewing.htm')) return fake('<main>Eruption viewing information.</main>');
     if (url.includes('api.weather.gov/points/')) return fake({properties:{forecastHourly:'https://api.weather.gov/gridpoints/HFO/1,1/forecast/hourly'}}, true);
     if (url.includes('/forecast/hourly')) return fake({properties:{updateTime:'2026-09-27T20:00:00Z',periods:[{number:1,startTime:'2026-09-28T20:00:00Z',endTime:'2026-09-28T21:00:00Z',temperature:61,temperatureUnit:'F',probabilityOfPrecipitation:{value:60},windSpeed:'8 mph',windDirection:'NE',shortForecast:'Rain Showers and Fog',isDaytime:true},{number:2,startTime:'2026-09-28T23:00:00Z',endTime:'2026-09-29T00:00:00Z',temperature:60,temperatureUnit:'F',probabilityOfPrecipitation:{value:10},windSpeed:'6 mph',windDirection:'NE',shortForecast:'Partly Cloudy',isDaytime:true}]}}, true);
@@ -128,5 +128,7 @@ test('live API synthesizes official current pages and preserves unpredictable ti
   assert.equal(payload.decision.state,'WAIT FOR CONFIRMATION');
   assert.equal(payload.decision.viewpoint.id,'uekahuna');
   assert.equal(payload.sources.hvo.status,'ok');
+  assert.equal(payload.access.closureUnknown,true);
+  assert.equal(payload.sources.nps.status,'degraded');
   assert.match(payload.sources.hvo.note,/newer HVO short message/i);
 });
