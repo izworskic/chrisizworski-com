@@ -1293,6 +1293,94 @@
       "destination": "/synced-national-tools/yellowstone-geysers/:path*"
     },
     {
+      "source": "/national-tools/live-decisions",
+      "destination": "/synced-national-tools/live-decisions/index.html"
+    },
+    {
+      "source": "/national-tools/live-decisions/",
+      "destination": "/synced-national-tools/live-decisions/index.html"
+    },
+    {
+      "source": "/national-tools/zion-narrows-conditions",
+      "destination": "/synced-national-tools/zion-narrows-conditions/index.html"
+    },
+    {
+      "source": "/national-tools/zion-narrows-conditions/",
+      "destination": "/synced-national-tools/zion-narrows-conditions/index.html"
+    },
+    {
+      "source": "/national-tools/grand-canyon-access",
+      "destination": "/synced-national-tools/grand-canyon-access/index.html"
+    },
+    {
+      "source": "/national-tools/grand-canyon-access/",
+      "destination": "/synced-national-tools/grand-canyon-access/index.html"
+    },
+    {
+      "source": "/national-tools/going-to-the-sun-road-status",
+      "destination": "/synced-national-tools/going-to-the-sun-road-status/index.html"
+    },
+    {
+      "source": "/national-tools/going-to-the-sun-road-status/",
+      "destination": "/synced-national-tools/going-to-the-sun-road-status/index.html"
+    },
+    {
+      "source": "/national-tools/haleakala-sunrise",
+      "destination": "/synced-national-tools/haleakala-sunrise/index.html"
+    },
+    {
+      "source": "/national-tools/haleakala-sunrise/",
+      "destination": "/synced-national-tools/haleakala-sunrise/index.html"
+    },
+    {
+      "source": "/national-tools/yellowstone-road-status",
+      "destination": "/synced-national-tools/yellowstone-road-status/index.html"
+    },
+    {
+      "source": "/national-tools/yellowstone-road-status/",
+      "destination": "/synced-national-tools/yellowstone-road-status/index.html"
+    },
+    {
+      "source": "/national-tools/tioga-road-status",
+      "destination": "/synced-national-tools/tioga-road-status/index.html"
+    },
+    {
+      "source": "/national-tools/tioga-road-status/",
+      "destination": "/synced-national-tools/tioga-road-status/index.html"
+    },
+    {
+      "source": "/national-tools/cadillac-mountain-sunrise",
+      "destination": "/synced-national-tools/cadillac-mountain-sunrise/index.html"
+    },
+    {
+      "source": "/national-tools/cadillac-mountain-sunrise/",
+      "destination": "/synced-national-tools/cadillac-mountain-sunrise/index.html"
+    },
+    {
+      "source": "/national-tools/mount-rainier-road-status",
+      "destination": "/synced-national-tools/mount-rainier-road-status/index.html"
+    },
+    {
+      "source": "/national-tools/mount-rainier-road-status/",
+      "destination": "/synced-national-tools/mount-rainier-road-status/index.html"
+    },
+    {
+      "source": "/national-tools/lake-mead-access",
+      "destination": "/synced-national-tools/lake-mead-access/index.html"
+    },
+    {
+      "source": "/national-tools/lake-mead-access/",
+      "destination": "/synced-national-tools/lake-mead-access/index.html"
+    },
+    {
+      "source": "/national-tools/lake-powell-ramp-status",
+      "destination": "/synced-national-tools/lake-powell-ramp-status/index.html"
+    },
+    {
+      "source": "/national-tools/lake-powell-ramp-status/",
+      "destination": "/synced-national-tools/lake-powell-ramp-status/index.html"
+    },
+    {
       "source": "/national-tools/:path*",
       "destination": "https://national-outdoor-tools-hub.vercel.app/national-tools/:path*"
     }
