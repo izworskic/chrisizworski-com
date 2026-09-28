@@ -8,9 +8,8 @@ const HVO_MESSAGES_URL = 'https://www.usgs.gov/volcanoes/kilauea/volcano-updates
 const NPS_CONDITIONS_URL = 'https://www.nps.gov/havo/planyourvisit/conditions.htm';
 const NPS_ALERTS_URL = 'https://developer.nps.gov/api/v1/alerts?parkCode=havo&limit=50';
 const NPS_VIEWING_URL = 'https://www.nps.gov/havo/planyourvisit/eruption-viewing.htm';
-const NPS_PARKING_URL = 'https://www.nps.gov/havo/planyourvisit/parking.htm';
-const NWS_POINT_URL = 'https://api.weather.gov/points/19.421,-155.287';
 const HAWAII_DOH_AIR_URL = 'https://air.doh.hawaii.gov/home/text/118';
+const NWS_POINT_URL = 'https://api.weather.gov/points/19.421,-155.287';
 const OFFICIAL_CAM_URL = 'https://www.youtube.com/watch?v=tk0tfYDxrUA';
 
 const UA = 'KilaueaLive/0.1 (https://chrisizworski.com/; visitor decision tool)';
@@ -20,7 +19,7 @@ function asArray(v) { return Array.isArray(v) ? v : v == null ? [] : [v]; }
 function cleanText(v) { return String(v || '').replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/gi, ' ').replace(/&amp;/gi, '&').replace(/&#39;|&apos;/gi, "'").replace(/&quot;/gi, '"').replace(/\s+/g, ' ').trim(); }
 function safeDate(v) { if (!v) return null; const d = new Date(v); return Number.isNaN(d.getTime()) ? null : d.toISOString(); }
 
-async function fetchWithTimeout(url, options = {}, timeoutMs = 8500) {
+async function fetchWithTimeout(url, options = {}, timeoutMs = 3500) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -90,7 +89,6 @@ function parseUsDateFromText(text) {
   const ap = String(m[6] || '').toLowerCase();
   if (ap.startsWith('p') && hour < 12) hour += 12;
   if (ap.startsWith('a') && hour === 12) hour = 0;
-  // Hawaii Standard Time is UTC-10 year-round.
   const utc = Date.UTC(Number(m[3]), months[m[1].toLowerCase()], Number(m[2]), hour + 10, Number(m[5]));
   return new Date(utc).toISOString();
 }
@@ -114,7 +112,6 @@ function extractDailyUpdate(text) {
   const idx = full.search(/HAWAIIAN VOLCANO OBSERVATORY (?:DAILY )?UPDATE/i);
   const body = idx >= 0 ? full.slice(idx) : full;
   const observedAt = parseUsDateFromText(body);
-  // The live page leads with the current update. Cap the extraction so archive/navigation text cannot dominate classification.
   return { observedAt, text: body.slice(0, 24000) };
 }
 
@@ -141,8 +138,10 @@ async function loadHvo() {
     const newerMessage = messageTime > dailyTime ? message : null;
     const text = newerMessage ? `LATEST HVO SHORT MESSAGE: ${newerMessage.text} LATEST HVO DAILY UPDATE: ${daily.text}` : daily.text;
     const observedAt = newerMessage?.observedAt || daily.observedAt;
+    const messageActivity = newerMessage ? classifyActivity(newerMessage.text) : null;
+    const messageForecast = newerMessage ? classifyForecastability(newerMessage.text) : null;
     return {
-      source: { name: 'USGS Hawaiian Volcano Observatory', status: 'ok', fetchedAt, observedAt, url: HVO_UPDATES_URL, note: newerMessage ? 'A newer HVO short message is layered over the latest daily update.' : 'Latest HVO daily update.' },
+      source: { name: 'USGS Hawaiian Volcano Observatory', status: 'ok', fetchedAt, observedAt, url: HVO_UPDATES_URL, note: newerMessage ? 'A newer HVO short message controls current activity; the daily update supplies background context.' : 'Latest HVO daily update.' },
       eruption: {
         text,
         observedAt,
@@ -150,13 +149,12 @@ async function loadHvo() {
         messageObservedAt: message?.observedAt || null,
         alertLevel: detectAlertLevel(daily.text, {}),
         colorCode: detectColorCode(daily.text, {}),
-        activity: classifyActivity(text),
-        forecastability: classifyForecastability(daily.text)
+        activity: messageActivity || classifyActivity(daily.text),
+        forecastability: messageForecast?.state && messageForecast.state !== 'NONE' ? messageForecast : classifyForecastability(daily.text)
       }
     };
   }
 
-  // Fallback to HANS when the USGS presentation pages are unavailable or their timestamp cannot be parsed.
   try {
     const r = await fetchWithTimeout(HANS_URL, { headers: { Accept: 'application/json' } });
     const json = await r.json();
@@ -216,7 +214,8 @@ async function loadNps() {
     try {
       const response = await fetchWithTimeout(NPS_ALERTS_URL, { headers: { Accept: 'application/json', 'X-Api-Key': process.env.NPS_API_KEY } });
       const json = await response.json();
-      alerts = asArray(json?.data);
+      if (!Array.isArray(json?.data)) throw new Error('alerts response missing data array');
+      alerts = json.data;
       alertApiVerified = true;
     } catch (err) {
       errors.push(`NPS alerts API: ${err.message}`);
@@ -232,7 +231,7 @@ async function loadNps() {
   if (localClosureWindow(closureCorpus, 'Kīlauea Overlook')) closedViewpoints.push('kilauea-overlook');
   if (localClosureWindow(closureCorpus, 'Keanakākoʻi')) closedViewpoints.push('keanakakoi');
 
-  const webpageLoaded = conditions.length > 100;
+  const webpageLoaded = conditions.length > 100 && /current conditions|national park service|hawai.?i volcanoes national park/i.test(conditions);
   const closureUnknown = !explicitParkClosed && !alertApiVerified;
   const sourceStatus = alertApiVerified ? 'ok' : webpageLoaded ? 'degraded' : 'offline';
   const note = alertApiVerified
@@ -262,21 +261,30 @@ async function loadWeather() {
     const hourlyUrl = point?.properties?.forecastHourly;
     if (!hourlyUrl) throw new Error('NWS point metadata did not contain forecastHourly.');
     const hourlyJson = await (await fetchWithTimeout(hourlyUrl, { headers: { Accept: 'application/geo+json' } })).json();
-    const periods = asArray(hourlyJson?.properties?.periods).slice(0, 30).map(p => ({
+    const periods = asArray(hourlyJson?.properties?.periods).slice(0, 36).map(p => ({
       number: p.number,
       startTime: p.startTime,
       endTime: p.endTime,
       temperature: p.temperature,
       temperatureUnit: p.temperatureUnit,
       probabilityOfPrecipitation: p.probabilityOfPrecipitation,
-      precipProbability: p.probabilityOfPrecipitation?.value,
+      precipProbability: p.probabilityOfPrecipitation?.value ?? null,
       windSpeed: p.windSpeed,
       windDirection: p.windDirection,
       shortForecast: p.shortForecast,
       isDaytime: p.isDaytime
     }));
     const observedAt = safeDate(hourlyJson?.properties?.updateTime || hourlyJson?.properties?.generatedAt);
-    return { source: { name: 'National Weather Service', status: periods.length ? 'ok':'degraded', fetchedAt, observedAt, url: hourlyUrl, note: periods.length ? null : 'NWS feed returned no hourly periods.' }, weather: { hourly: periods } };
+    const now = Date.now();
+    const current = periods.find(p => {
+      const start = new Date(p?.startTime).getTime();
+      const end = new Date(p?.endTime).getTime();
+      return Number.isFinite(start) && Number.isFinite(end) && start <= now && now < end;
+    });
+    const currentComplete = current && current.precipProbability != null;
+    const status = periods.length && currentComplete ? 'ok' : periods.length ? 'degraded' : 'offline';
+    const note = !periods.length ? 'NWS feed returned no hourly periods.' : !current ? 'NWS hourly feed did not include a period covering the current time; current weather is not inferred from a stale period.' : !currentComplete ? 'The current NWS period is missing precipitation probability; it is not scored as favorable by default.' : null;
+    return { source: { name: 'National Weather Service', status, fetchedAt, observedAt, url: hourlyUrl, note }, weather: { hourly: periods } };
   } catch (err) {
     return { source: { name: 'National Weather Service', status: 'offline', fetchedAt, observedAt: null, url: NWS_POINT_URL, note: err.message }, weather: { hourly: [] } };
   }
@@ -285,11 +293,10 @@ async function loadWeather() {
 async function loadAir() {
   const fetchedAt = nowIso();
   try {
-    const response = await fetchWithTimeout(HAWAII_DOH_AIR_URL, { headers: { Accept: 'text/html,text/plain' } }, 7000);
+    const response = await fetchWithTimeout(HAWAII_DOH_AIR_URL, { headers: { Accept: 'text/html,text/plain' } }, 3000);
     const raw = await response.text();
     const text = cleanText(raw).slice(0, 20000);
     const adverse = /hazardous|very unhealthy|unhealthy|sulfur dioxide[^.]{0,100}(?:elevated|high)|SO2[^.]{0,100}(?:elevated|high)/i.test(text);
-    // We deliberately do not invent a numeric SO2 value when the public text page cannot be parsed reliably.
     return { source: { name: 'Hawaiʻi Department of Health air monitoring', status: text.length > 80 ? 'degraded':'offline', fetchedAt, observedAt: null, url: HAWAII_DOH_AIR_URL, note: text.length > 80 ? 'Air page reachable. Numeric summit SO₂ is not used until a stable machine-readable field is verified.' : 'Air page did not expose a usable current reading.' }, air: { advisoryDetected: adverse, text: text.slice(0, 1200), numericVerified: false } };
   } catch (err) {
     return { source: { name: 'Hawaiʻi Department of Health air monitoring', status: 'offline', fetchedAt, observedAt: null, url: HAWAII_DOH_AIR_URL, note: err.message }, air: { advisoryDetected: false, numericVerified: false } };
@@ -332,13 +339,6 @@ module.exports = async function handler(req, res) {
   const profile = profileFromQuery(req.query || {});
   const decision = buildDecision(input, profile, new Date(generatedAt));
 
-  // Access is unknown when NPS fails. Never let an attractive eruption state read as a fully cleared trip.
-  if (nps.access?.closureUnknown && !['CLOSED','LIMITED'].includes(decision.state)) {
-    decision.confidence = { level:'Limited data', why:'NPS access status could not be confirmed.', degraded:[...(decision.confidence?.degraded || []), 'National Park Service'] };
-    if (/^GO/.test(decision.state)) decision.state = 'VERIFY ACCESS';
-    decision.action = `Confirm NPS current conditions before travel. ${decision.action || ''}`.trim();
-  }
-
   return res.status(200).json({
     ok: true,
     target: 'Kīlauea summit eruption viewing',
@@ -348,7 +348,7 @@ module.exports = async function handler(req, res) {
     decision,
     eruption: hvo.eruption,
     access: nps.access,
-    weather: { hourly: weather.weather.hourly.slice(0, 18) },
+    weather: { hourly: weather.weather.hourly.slice(0, 30) },
     air: air.air,
     viewpoints: VIEWPOINTS,
     snapshot: compactSnapshot({ eruption:hvo.eruption, access:nps.access, weather:weather.weather, sources }),
