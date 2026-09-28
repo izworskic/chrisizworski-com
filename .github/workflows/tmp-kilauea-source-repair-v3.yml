@@ -1,0 +1,28 @@
+name: Execute readable Kilauea source repair
+on:
+  push:
+    branches: ['agent/kilauea-source-health-2026-09-28']
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply and test source repair
+        run: |
+          set -euo pipefail
+          python scripts/tmp-kilauea-source-repair.py
+          node --test tests/kilauea-live.test.js
+          rm .github/workflows/tmp-kilauea-source-probe.yml
+          rm .github/workflows/tmp-kilauea-source-repair-v2.yml
+          rm .github/workflows/tmp-kilauea-source-repair-v3.yml
+          rm scripts/tmp-kilauea-source-repair.py
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add api/kilauea-live.js public/labs/kilauea-live/index.html tests/kilauea-live.test.js .github/workflows scripts/tmp-kilauea-source-repair.py
+          git commit -m 'Fix Kilauea NPS and SO2 source health'
+          git push origin HEAD:agent/kilauea-source-health-2026-09-28
