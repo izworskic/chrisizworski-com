@@ -1,0 +1,105 @@
+name: Sync verified Breakout Live gate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync-breakout-live-gate.yml'
+      - 'scripts/sync-breakout-live-main.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    env:
+      CORE_COMMIT: 7e4252133da0bc9a07766fc734e8aa175243b11b
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch verified breakout core
+        shell: bash
+        run: |
+          set -euo pipefail
+          CORE_DIR="$RUNNER_TEMP/national-outdoor-core"
+          git init "$CORE_DIR"
+          git -C "$CORE_DIR" remote add origin https://github.com/izworskic/national-outdoor-core.git
+          git -C "$CORE_DIR" fetch --depth=1 origin "$CORE_COMMIT"
+          git -C "$CORE_DIR" checkout --detach FETCH_HEAD
+          echo "CORE_DIR=$CORE_DIR" >> "$GITHUB_ENV"
+
+      - name: Generate verified breakout pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          node "$CORE_DIR/scripts/generate-breakout-live-pages.mjs"
+          node "$CORE_DIR/scripts/inject-network-analytics.js"
+
+      - name: Install canonical pages and explicit main routes
+        run: node scripts/sync-breakout-live-main.mjs "$CORE_DIR" "$GITHUB_WORKSPACE"
+
+      - name: Verify sync installer contract
+        run: node --test tests/breakout-live-main-sync.test.js
+
+      - name: Verify production bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          slugs=(
+            live-decisions
+            zion-narrows-conditions
+            grand-canyon-access
+            going-to-the-sun-road-status
+            haleakala-sunrise
+            yellowstone-road-status
+            tioga-road-status
+            cadillac-mountain-sunrise
+            mount-rainier-road-status
+            lake-mead-access
+            lake-powell-ramp-status
+          )
+          for slug in "${slugs[@]}"; do
+            file="public/synced-national-tools/$slug/index.html"
+            test -f "$file"
+            grep -q "https://chrisizworski.com/national-tools/$slug/" "$file"
+            grep -q 'G-Y5D2V2W7HN' "$file"
+            grep -q 'ca-pub-8222782620788075' "$file"
+          done
+          grep -q 'twitter:title' public/synced-national-tools/live-decisions/index.html
+          grep -q 'twitter:description' public/synced-national-tools/live-decisions/index.html
+          node - <<'NODE'
+          const fs=require('fs');
+          const v=JSON.parse(fs.readFileSync('vercel.json','utf8'));
+          const slugs=['live-decisions','zion-narrows-conditions','grand-canyon-access','going-to-the-sun-road-status','haleakala-sunrise','yellowstone-road-status','tioga-road-status','cadillac-mountain-sunrise','mount-rainier-road-status','lake-mead-access','lake-powell-ramp-status'];
+          const catchAll=v.rewrites.findIndex(r=>r.source==='/national-tools/:path*');
+          if(catchAll<0) throw new Error('national-tools catch-all missing');
+          for(const slug of slugs){
+            for(const suffix of ['', '/']){
+              const source=`/national-tools/${slug}${suffix}`;
+              const expected=`/synced-national-tools/${slug}/index.html`;
+              const rows=v.rewrites.filter(r=>r.source===source);
+              if(rows.length!==1||rows[0].destination!==expected) throw new Error(`route mismatch: ${source}`);
+              if(v.rewrites.findIndex(r=>r.source===source)>=catchAll) throw new Error(`route after catch-all: ${source}`);
+            }
+          }
+          NODE
+
+      - name: Commit verified production sync
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add vercel.json public/synced-national-tools/live-decisions public/synced-national-tools/zion-narrows-conditions public/synced-national-tools/grand-canyon-access public/synced-national-tools/going-to-the-sun-road-status public/synced-national-tools/haleakala-sunrise public/synced-national-tools/yellowstone-road-status public/synced-national-tools/tioga-road-status public/synced-national-tools/cadillac-mountain-sunrise public/synced-national-tools/mount-rainier-road-status public/synced-national-tools/lake-mead-access public/synced-national-tools/lake-powell-ramp-status
+          if git diff --cached --quiet; then
+            echo 'Breakout live production sync already current.'
+            exit 0
+          fi
+          git commit -m 'Sync verified breakout live production routes'
+          git push origin HEAD:main
