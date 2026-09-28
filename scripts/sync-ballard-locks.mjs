@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { enhanceBallardMain, enhanceBallardTour } from './ballard-photo-program.mjs';
 
 const sourceRoot = path.resolve('node_modules/national-ballard-locks');
 const sourcePage = path.join(sourceRoot, 'public', 'ballard-locks');
@@ -14,7 +15,8 @@ const tourCanonical = 'https://chrisizworski.com/ballard-locks/tour/';
 const salmonCanonical = 'https://chrisizworski.com/ballard-locks/salmon-counts/';
 
 // Production Ballard is synced from one exact authoritative commit so the main page,
-// tour, salmon interpretation and API cannot drift from one another.
+// tour, salmon interpretation and API cannot drift from one another. The photo layer is
+// an intentionally small production presentation enhancement with its own hard guards.
 const ballardSourceCommit = '761a041de378f1265211122b1395c3968106a94e';
 const rawBase = `https://raw.githubusercontent.com/izworskic/national-ballard-locks/${ballardSourceCommit}`;
 const rawSources = {
@@ -48,10 +50,13 @@ const [mainSource, tourSource, salmonSource, apiSource] = await Promise.all([
   fetchExact(rawSources.api, 'live API'),
 ]);
 
+const mainEnhanced = enhanceBallardMain(mainSource);
+const tourEnhanced = enhanceBallardTour(tourSource);
+
 fs.mkdirSync(path.join(destPage, 'tour'), { recursive: true });
 fs.mkdirSync(path.join(destPage, 'salmon-counts'), { recursive: true });
-fs.writeFileSync(path.join(destPage, 'index.html'), mainSource);
-fs.writeFileSync(path.join(destPage, 'tour', 'index.html'), tourSource);
+fs.writeFileSync(path.join(destPage, 'index.html'), mainEnhanced);
+fs.writeFileSync(path.join(destPage, 'tour', 'index.html'), tourEnhanced);
 fs.writeFileSync(path.join(destPage, 'salmon-counts', 'index.html'), salmonSource);
 fs.writeFileSync(destApi, apiSource);
 
@@ -64,6 +69,11 @@ if (!page.includes('context only')) throw new Error('Ballard sync: tide context 
 if (!page.includes('one working system doing three jobs at once')) throw new Error('Ballard sync: ambassador system story missing');
 if (!page.includes('Look up from your phone')) throw new Error('Ballard sync: observation prompts missing');
 if (!page.includes('activity-story')) throw new Error('Ballard sync: live vessel interpretation missing');
+if (!page.includes('data-photo-program="ballard-interpretive-v1"')) throw new Error('Ballard sync: interpretive photo program missing');
+if (!page.includes('Three views that make the whole place click')) throw new Error('Ballard sync: main photo orientation strip missing');
+if (!page.includes('data-photo-role="water-control"')) throw new Error('Ballard sync: spillway photo interpretation missing');
+if (!page.includes('data-photo-role="small-lock"')) throw new Error('Ballard sync: small-lock photo interpretation missing');
+if (!page.includes('Wikimedia Commons')) throw new Error('Ballard sync: photo attribution missing');
 
 const tourFile = path.join(destPage, 'tour', 'index.html');
 const tourPage = fs.readFileSync(tourFile, 'utf8');
@@ -73,6 +83,9 @@ if (!tourPage.includes('/api/ballard-ais')) throw new Error('Ballard sync: tour 
 for (const phrase of ['See this', 'What’s happening', 'Watch for', 'Why it matters', 'RIGHT NOW']) {
   if (!tourPage.includes(phrase)) throw new Error(`Ballard sync: ambassador tour anatomy missing ${phrase}`);
 }
+if (!tourPage.includes('data-photo-program="ballard-interpretive-v1"')) throw new Error('Ballard sync: tour photo program missing');
+if (!tourPage.includes('const stopImages=')) throw new Error('Ballard sync: stop photo manifest missing');
+if (!tourPage.includes('photoForStop(s.id)')) throw new Error('Ballard sync: stop photos are not wired into popups');
 if (tourPage.includes('href="https://ballardlocks.org') || tourPage.includes("href='https://ballardlocks.org")) throw new Error('Ballard sync: compromised legacy domain linked as authority');
 
 const salmonFile = path.join(destPage, 'salmon-counts', 'index.html');
@@ -104,4 +117,4 @@ if (!sitemap.includes(`<loc>${salmonCanonical}</loc>`)) {
 }
 fs.writeFileSync(sitemapPath, sitemap);
 
-console.log(`Synced Ballard Locks decision v2 from ${ballardSourceCommit}.`);
+console.log(`Synced Ballard Locks decision v2 from ${ballardSourceCommit} with interpretive photo program.`);
