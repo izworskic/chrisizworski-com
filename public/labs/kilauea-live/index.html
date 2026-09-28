@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Kīlauea Live Viewing Decision | Chris Izworski</title>
+<meta name="description" content="A live, evidence-based Kīlauea eruption viewing decision tool: what is happening, whether to go, when to check, and which viewpoint fits your visit.">
+<meta name="theme-color" content="#161817">
+<link rel="preconnect" href="https://unpkg.com">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<style>
+:root{--ink:#f3f0e8;--muted:#b6b3aa;--ash:#e9e5db;--ash2:#d8d1c3;--panel:#222522;--panel2:#292c29;--line:#3b3f3a;--bg:#151714;--lava:#ef6b37;--gold:#d8b26e;--green:#8fb998;--red:#dc7b6e;--blue:#91b6c2;--max:1060px}
+*{box-sizing:border-box}html{background:var(--bg);color-scheme:dark}body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif;line-height:1.55}button,select{font:inherit}a{color:#cddfd7;text-underline-offset:3px}.wrap{max-width:var(--max);margin:0 auto;padding:0 18px}.sitebar{border-bottom:1px solid var(--line);background:#111310}.sitebar .wrap{min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{color:var(--ink);text-decoration:none;font-size:14px;letter-spacing:.04em}.crumb{color:var(--muted);font:12px/1.3 system-ui,-apple-system,sans-serif}.crumb a{color:inherit}.hero{padding:24px 0 18px;border-bottom:1px solid var(--line)}.eyebrow{display:flex;align-items:center;gap:8px;color:var(--muted);font:700 11px/1.3 system-ui,-apple-system,sans-serif;letter-spacing:.12em;text-transform:uppercase}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}.dot.ok{background:var(--green)}.dot.bad{background:var(--red)}h1{font-weight:400;font-size:clamp(24px,7vw,36px);line-height:1.08;margin:9px 0 4px;letter-spacing:-.02em}.sub{margin:0;color:var(--muted);font-size:14px}.decision-shell{padding:16px 0 28px}.decision{border-top:3px solid var(--lava);background:var(--panel);padding:17px 16px 15px}.decision-state{font:800 12px/1 system-ui,-apple-system,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#ffb295;margin-bottom:8px}.decision h2{font-size:clamp(24px,6.7vw,34px);font-weight:400;line-height:1.08;margin:0 0 15px;letter-spacing:-.02em}.decision-grid{border-top:1px solid var(--line)}.decision-row{padding:10px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:92px 1fr;gap:10px}.decision-label{font:700 10px/1.35 system-ui,-apple-system,sans-serif;color:var(--muted);letter-spacing:.09em;text-transform:uppercase}.decision-value{font-size:14px;line-height:1.4}.action{color:#fff}.freshness{margin-top:10px;color:var(--muted);font:11px/1.45 system-ui,-apple-system,sans-serif}.controls{margin-top:12px;display:grid;gap:9px}.control-group{display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:center}.control-label{font:700 10px/1.35 system-ui,-apple-system,sans-serif;color:var(--muted);letter-spacing:.09em;text-transform:uppercase}.seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:3px;overflow:hidden}.seg.two{grid-template-columns:repeat(2,1fr)}.seg button{min-height:38px;border:0;border-right:1px solid var(--line);background:#1a1c19;color:var(--ash2);padding:7px 5px;font:600 11px/1.15 system-ui,-apple-system,sans-serif;cursor:pointer}.seg button:last-child{border-right:0}.seg button[aria-pressed="true"]{background:var(--ash);color:#181a18}.micro{display:flex;gap:8px;flex-wrap:wrap}.micro button{border:1px solid var(--line);background:#1a1c19;color:var(--ash2);border-radius:3px;padding:7px 9px;font:600 11px/1 system-ui,-apple-system,sans-serif;cursor:pointer}.micro button[aria-pressed="true"]{background:var(--ash);color:#181a18}.disclaimer{margin:11px 0 0;font:11px/1.5 system-ui,-apple-system,sans-serif;color:var(--muted)}.section{padding:30px 0;border-top:1px solid var(--line)}.kicker{font:700 10px/1.3 system-ui,-apple-system,sans-serif;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}.section h2{font-weight:400;font-size:25px;line-height:1.15;margin:0 0 7px}.lede{color:var(--muted);font-size:14px;max-width:700px;margin:0 0 17px}.change{background:var(--panel);border-left:3px solid var(--blue);padding:13px 14px;margin-bottom:18px}.change strong{display:block;font:700 12px/1.3 system-ui,-apple-system,sans-serif;letter-spacing:.04em;margin-bottom:5px}.change p{margin:0;color:var(--ash2);font-size:13px}.timeline{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}.time-row{background:var(--panel);display:grid;grid-template-columns:84px 1fr;gap:12px;padding:12px 13px}.time-label{font:700 11px/1.35 system-ui,-apple-system,sans-serif;color:var(--gold)}.time-main{font-size:13px}.time-main b{font-weight:400;color:#fff}.time-meta{font:11px/1.4 system-ui,-apple-system,sans-serif;color:var(--muted);margin-top:3px}.camera-grid{display:grid;gap:14px}.camera{background:#080908;border:1px solid var(--line);aspect-ratio:16/9}.camera iframe{width:100%;height:100%;border:0;display:block}.camera-note{font:11px/1.5 system-ui,-apple-system,sans-serif;color:var(--muted)}.why-grid{display:grid;gap:10px}.why-block{border-top:1px solid var(--line);padding-top:11px}.why-block h3{font:700 11px/1.3 system-ui,-apple-system,sans-serif;text-transform:uppercase;letter-spacing:.09em;margin:0 0 5px;color:var(--muted)}.why-block p{margin:0;font-size:14px}.confidence{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:5px 8px;font:700 10px/1 system-ui,-apple-system,sans-serif;margin-top:9px}.map-grid{display:grid;gap:14px}.mapbox{height:390px;border:1px solid var(--line);background:#252925;color:#161817}.map-fallback{height:100%;display:grid;place-items:center;color:var(--muted);font:12px system-ui,-apple-system,sans-serif;text-align:center;padding:20px}.place-list{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}.place{background:var(--panel);padding:13px}.place h3{font-size:17px;font-weight:400;margin:0 0 3px}.place .why{font-size:13px;margin:0 0 7px}.place .trade{color:var(--muted);font:11px/1.45 system-ui,-apple-system,sans-serif;margin:0}.place.recommended{box-shadow:inset 3px 0 0 var(--lava)}.place-tag{font:700 9px/1 system-ui,-apple-system,sans-serif;color:#ffb295;letter-spacing:.09em;text-transform:uppercase;margin-bottom:6px}.sources{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}.source{background:var(--panel);padding:11px 12px;display:grid;grid-template-columns:1fr auto;gap:10px}.source-name{font-size:13px}.source-meta{font:10px/1.45 system-ui,-apple-system,sans-serif;color:var(--muted);margin-top:2px}.status{font:800 9px/1 system-ui,-apple-system,sans-serif;text-transform:uppercase;letter-spacing:.08em;padding-top:3px}.status.ok{color:var(--green)}.status.degraded{color:var(--gold)}.status.offline{color:var(--red)}.method{margin-top:16px;font-size:12px;color:var(--muted)}.method code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ash)}.footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);font:11px/1.5 system-ui,-apple-system,sans-serif}.loading{animation:pulse 1.2s infinite alternate}@keyframes pulse{to{opacity:.45}}.errorbar{display:none;background:#3a2622;border:1px solid #714137;color:#ffd0c5;padding:10px 12px;margin:12px 0;font:12px/1.45 system-ui,-apple-system,sans-serif}.errorbar.show{display:block}.leaflet-container{font-family:system-ui,-apple-system,sans-serif}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#f5f1e6;color:#1c1e1b}.leaflet-popup-content{margin:12px 14px;font-size:12px;line-height:1.4}.leaflet-popup-content b{font-size:13px}.leaflet-control-attribution{font-size:8px!important}
+@media(min-width:720px){.decision{padding:22px 24px}.decision-grid{display:grid;grid-template-columns:repeat(3,1fr)}.decision-row{grid-template-columns:1fr;gap:5px;border-right:1px solid var(--line);padding:13px 12px}.decision-row:last-child{border-right:0}.controls{grid-template-columns:1.3fr 1fr 1fr}.control-group{grid-template-columns:1fr}.camera-grid{grid-template-columns:1.45fr .55fr;align-items:start}.why-grid{grid-template-columns:repeat(3,1fr)}.map-grid{grid-template-columns:1.45fr .75fr}.mapbox{height:500px}.section{padding:40px 0}.place-list{align-self:start}}
+</style>
+</head>
+<body>
+<header class="sitebar"><div class="wrap"><a class="brand" href="/">Chris Izworski</a><div class="crumb"><a href="/tools/">Tools</a> / lab</div></div></header>
+<main>
+<section class="hero"><div class="wrap"><div class="eyebrow"><span id="healthDot" class="dot"></span><span>Kīlauea · summit viewing</span></div><h1>Is Kīlauea worth going to right now?</h1><p class="sub">Official eruption state + park access + summit weather, interpreted for an actual visit.</p></div></section>
+<section class="decision-shell"><div class="wrap">
+<div id="errorbar" class="errorbar"></div>
+<div class="decision" aria-live="polite">
+<div id="decisionState" class="decision-state loading">Checking official feeds…</div>
+<h2 id="headline" class="loading">Building the current viewing picture</h2>
+<div class="decision-grid">
+<div class="decision-row"><div class="decision-label">Best window</div><div id="bestWindow" class="decision-value loading">Checking weather and activity…</div></div>
+<div class="decision-row"><div class="decision-label">Main reason</div><div id="mainReason" class="decision-value loading">Checking HVO…</div></div>
+<div class="decision-row"><div class="decision-label">Quick action</div><div id="quickAction" class="decision-value action loading">Checking access…</div></div>
+</div>
+<div id="freshness" class="freshness">Live values are loading. No cached value is presented as current.</div>
+<div class="controls" aria-label="Trip choices">
+<div class="control-group"><div class="control-label">Your drive</div><div class="seg" data-control="travel"><button data-value="here" aria-pressed="false">Here now</button><button data-value="one" aria-pressed="true">1 hr away</button><button data-value="three" aria-pressed="false">3 hr away</button></div></div>
+<div class="control-group"><div class="control-label">Walking</div><div class="seg two" data-control="mobility"><button data-value="short" aria-pressed="true">Keep it short</button><button data-value="walk" aria-pressed="false">Walk is fine</button></div></div>
+<div class="control-group"><div class="control-label">Visit</div><div class="seg two" data-control="experience"><button data-value="casual" aria-pressed="true">See it</button><button data-value="photo" aria-pressed="false">Photograph</button></div></div>
+</div>
+<div class="micro" data-control="plan" aria-label="Planning time"><button data-value="now" aria-pressed="true">Now</button><button data-value="today" aria-pressed="false">Later today</button><button data-value="tomorrow" aria-pressed="false">Tomorrow</button></div>
+<p class="disclaimer">A “better window” here means a better <em>viewing</em> window from weather/access evidence. It is not an eruption prediction unless HVO publishes an official forecast window.</p>
+</div>
+</div></section>
+<section class="section"><div class="wrap"><div class="kicker">What changed?</div><h2>Since your last check</h2><div id="changeBox" class="change"><strong>First check on this device</strong><p>After this refresh, the tool will remember the prior state locally and show material changes without treating old values as live.</p></div>
+<div class="kicker">Time machine</div><h2>What matters next</h2><p class="lede">This timeline highlights changes in usable viewing conditions. Eruption onset remains controlled by HVO evidence.</p><div id="timeline" class="timeline"><div class="time-row"><div class="time-label">Now</div><div class="time-main loading">Loading the next useful changes…</div></div></div></div></section>
+<section class="section"><div class="wrap"><div class="kicker">Live evidence</div><h2>Look at the summit before you move</h2><p class="lede">Webcam visibility is evidence, not a guarantee: fog and rain can hide active lava, and a dark frame does not prove the eruption stopped.</p><div class="camera-grid"><div class="camera"><iframe id="camera" title="USGS V1 Kīlauea summit livestream" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen src="https://www.youtube-nocookie.com/embed/tk0tfYDxrUA"></iframe></div><div><div class="why-block"><h3>Use this for</h3><p>Visual confirmation of glow, fountaining, spatter and whether clouds are blocking the crater.</p></div><div class="why-block"><h3>Do not infer</h3><p>No visible lava can mean cloud, darkness, camera trouble or a pause. HVO remains the eruption authority.</p></div><p class="camera-note"><a href="https://www.usgs.gov/volcanoes/kilauea/webcams" rel="noopener">Open all USGS Kīlauea webcams</a></p></div></div></div></section>
+<section class="section"><div class="wrap"><div class="kicker">Why this answer</div><h2>What is driving the decision</h2><div class="why-grid"><div class="why-block"><h3>Helping</h3><p id="helping">Waiting for evidence.</p></div><div class="why-block"><h3>Hurting</h3><p id="hurting">Waiting for evidence.</p></div><div class="why-block"><h3>Could change it</h3><p id="couldChange">A new HVO message, NPS access change, or a material visibility change.</p></div></div><div id="confidence" class="confidence">Confidence: loading</div><p id="confidenceWhy" class="camera-note"></p></div></section>
+<section class="section"><div class="wrap"><div class="kicker">Where to go</div><h2>Choose a viewpoint for this visit</h2><p class="lede">The map is intentionally sparse. Each point represents a different tradeoff in walking, parking and view — not a generic list of park attractions.</p><div class="map-grid"><div id="map" class="mapbox"><div class="map-fallback">Loading the decision map…</div></div><div id="placeList" class="place-list"></div></div><p class="camera-note">Parking counts and crowd guidance are NPS planning information, not live stall occupancy. A “busy” estimate must never be shown as a real-time parking count.</p></div></section>
+<section class="section"><div class="wrap"><div class="kicker">Sources & status</div><h2>What the decision is standing on</h2><p class="lede">Observed, forecast and operational inputs are kept separate. A failed source reduces confidence instead of being silently replaced with model prose.</p><div id="sources" class="sources"><div class="source"><div><div class="source-name">Loading sources…</div></div><div class="status degraded">checking</div></div></div><p class="method">Decision path: <code>official inputs → freshness → hard gates → activity state → viewing window → viewpoint → confidence → explanation</code>. No language model can override a closure or fabricate a missing live input.</p></div></section>
+</main>
+<footer class="footer"><div class="wrap">Experimental noindex lab. Always follow current USGS HVO and National Park Service instructions. © 2026 Chris Izworski.</div></footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+(() => {
+  const state = { travel:'one', mobility:'short', experience:'casual', plan:'now', data:null, map:null, markers:[] };
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const time = iso => { if(!iso) return 'time unavailable'; try{return new Intl.DateTimeFormat('en-US',{timeZone:'Pacific/Honolulu',weekday:'short',hour:'numeric',minute:'2-digit'}).format(new Date(iso))+' HST';}catch{return iso;} };
+  const age = iso => { if(!iso) return null; const h=(Date.now()-new Date(iso).getTime())/36e5; return Number.isFinite(h)?Math.max(0,h):null; };
+  document.querySelectorAll('[data-control] button').forEach(btn => btn.addEventListener('click', () => {
+    const group = btn.closest('[data-control]'); const key=group.dataset.control; state[key]=btn.dataset.value;
+    group.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b===btn)));
+    load();
+  }));
+  function setLoading(on){ ['decisionState','headline','bestWindow','mainReason','quickAction'].forEach(id=>$(id).classList.toggle('loading',on)); }
+  function sourceFreshness(d){
+    const hvo=d.sources?.hvo; const parts=[];
+    if(hvo?.observedAt){const h=age(hvo.observedAt);parts.push(`HVO issued ${time(hvo.observedAt)}${h!=null?` · ${Math.round(h)}h old`:''}`)}else parts.push('HVO issue time unavailable');
+    parts.push(`tool refreshed ${time(d.generatedAt)}`); return parts.join(' · ');
+  }
+  function statusClass(s){return ['ok','degraded','offline'].includes(s)?s:'degraded'}
+  function bestWindow(d){ return d.decision?.bestWindow || (d.decision?.activity?.state==='FOUNTAINING' ? 'Now — verify the camera and access first' : 'No defensible eruption window'); }
+  function render(d){
+    state.data=d; setLoading(false); $('errorbar').classList.remove('show');
+    $('decisionState').textContent=d.decision?.state || 'LIMITED'; $('headline').textContent=d.decision?.headline || 'Live decision unavailable';
+    $('bestWindow').textContent=bestWindow(d); $('mainReason').textContent=d.decision?.mainReason || 'Evidence is incomplete.'; $('quickAction').textContent=d.decision?.action || 'Check official sources.';
+    $('freshness').textContent=sourceFreshness(d);
+    $('healthDot').className='dot '+(d.sourceHealth==='ok'?'ok':d.sourceHealth==='degraded'?'':'bad');
+    renderTimeline(d); renderWhy(d); renderPlaces(d); renderSources(d); renderChange(d); renderMap(d);
+  }
+  function renderTimeline(d){
+    const rows=[]; const wx=d.weather?.hourly||[]; const dec=d.decision||{};
+    const now=wx[0]; rows.push({label:'Now',main:`${dec.activity?.label || 'Activity unknown'}${now?.shortForecast?` · ${now.shortForecast}`:''}`,meta:dec.forecastability?.label || ''});
+    if(dec.wxBest?.startTime) rows.push({label:'Best view',main:`${time(dec.wxBest.startTime)} · ${dec.wxBest.shortForecast||'better visibility signal'}`,meta:'Weather-based viewing window — not an eruption forecast'});
+    const later=wx.find((p,i)=>i>2 && p.shortForecast && p.shortForecast!==now?.shortForecast); if(later) rows.push({label:'Next change',main:`${time(later.startTime)} · ${later.shortForecast}`,meta:'Forecast conditions change'});
+    if(dec.forecastability?.state==='UNPREDICTABLE') rows.push({label:'Eruption timing',main:'No reliable fountain countdown',meta:'HVO wording blocks third-party timing models from driving this recommendation'});
+    $('timeline').innerHTML=rows.map(r=>`<div class="time-row"><div class="time-label">${esc(r.label)}</div><div class="time-main"><b>${esc(r.main)}</b><div class="time-meta">${esc(r.meta)}</div></div></div>`).join('');
+  }
+  function renderWhy(d){
+    const a=d.decision?.activity; const f=d.decision?.forecastability; const wx=d.decision?.wxNow; const c=d.decision?.confidence;
+    const helping=[]; const hurting=[];
+    if(a?.state==='FOUNTAINING') helping.push('HVO reports active fountaining.');
+    if(a?.state==='ELEVATED') helping.push('HVO reports current overflow, spatter, flow or strong glow signals.');
+    if(wx?.score>=.55) helping.push(`Viewing weather is relatively favorable: ${wx.shortForecast||'clearer conditions'}.`);
+    if(!d.access?.parkClosed && !d.access?.closureUnknown) helping.push('No park-wide closure was detected in the NPS current-conditions page.');
+    if(f?.state==='UNPREDICTABLE') hurting.push('HVO says the next fountain window cannot be modeled reliably.');
+    if(wx?.score<.35) hurting.push(`Visibility may be poor: ${wx.shortForecast||'weather is limiting'}.`);
+    if(d.access?.closureUnknown) hurting.push('NPS access status could not be confirmed.');
+    if(d.sources?.air?.status!=='ok') hurting.push('A stable machine-readable summit SO₂ reading is not yet verified in this build.');
+    $('helping').textContent=helping.join(' ')||'No strong positive signal beyond the current official activity state.';
+    $('hurting').textContent=hurting.join(' ')||'No major limiting signal is currently identified.';
+    $('couldChange').textContent='A new HVO message, confirmed fountaining on official cameras, NPS closure/reopening, or a material summit-weather change.';
+    $('confidence').textContent=`Confidence: ${c?.level||'Limited data'}`; $('confidenceWhy').textContent=c?.why||'';
+  }
+  function renderPlaces(d){
+    const rec=d.decision?.viewpoint?.id; $('placeList').innerHTML=(d.viewpoints||[]).map(v=>`<article class="place ${v.id===rec?'recommended':''}" data-place="${esc(v.id)}">${v.id===rec?'<div class="place-tag">Best fit for your choices</div>':''}<h3>${esc(v.name)}</h3><p class="why">${esc(v.why)}</p><p class="trade">${esc(v.tradeoff)} ${v.parkingSpaces?`NPS lists ${v.parkingSpaces} spaces at the associated parking area.`:''}</p></article>`).join('');
+  }
+  function renderMap(d){
+    const el=$('map'); if(!window.L){el.innerHTML='<div class="map-fallback">Map tiles unavailable. The viewpoint list still contains the decision tradeoffs.</div>';return;}
+    if(!state.map){ el.innerHTML=''; state.map=L.map(el,{scrollWheelZoom:false}).setView([19.417,-155.272],13); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap'}).addTo(state.map); }
+    state.markers.forEach(m=>m.remove()); state.markers=[]; const rec=d.decision?.viewpoint?.id;
+    (d.viewpoints||[]).forEach(v=>{const m=L.circleMarker([v.lat,v.lon],{radius:v.id===rec?10:7,weight:v.id===rec?3:2,color:v.id===rec?'#ef6b37':'#4f6257',fillColor:v.id===rec?'#ef6b37':'#d8d1c3',fillOpacity:.9}).addTo(state.map); m.bindPopup(`<b>${esc(v.name)}</b><br>${esc(v.why)}<br><br><b>Tradeoff:</b> ${esc(v.tradeoff)}`); state.markers.push(m);});
+    const open=(d.viewpoints||[]).filter(v=>!(d.access?.closedViewpoints||[]).includes(v.id)); if(open.length){const b=L.latLngBounds(open.map(v=>[v.lat,v.lon]));state.map.fitBounds(b.pad(.28),{maxZoom:14});} setTimeout(()=>state.map.invalidateSize(),40);
+  }
+  function renderSources(d){
+    const order=['hvo','nps','weather','air']; $('sources').innerHTML=order.map(k=>{const s=d.sources?.[k]||{}; const when=s.observedAt?`Observed/issued ${time(s.observedAt)}`:`Fetched ${time(s.fetchedAt)}`; return `<div class="source"><div><div class="source-name"><a href="${esc(s.url||'#')}" rel="noopener">${esc(s.name||k)}</a></div><div class="source-meta">${esc(when)}${s.note?` · ${esc(s.note)}`:''}</div></div><div class="status ${statusClass(s.status)}">${esc(s.status||'unknown')}</div></div>`}).join('');
+  }
+  function renderChange(d){
+    const key='kilauea-live-prior-v1'; let prior=null; try{prior=JSON.parse(localStorage.getItem(key)||'null')}catch{}
+    const current={snapshot:d.snapshot,state:d.decision?.state,activity:d.decision?.activity?.state,forecast:d.decision?.forecastability?.state,weather:d.weather?.hourly?.[0]?.shortForecast,hvo:d.sources?.hvo?.observedAt,at:d.generatedAt};
+    const box=$('changeBox');
+    if(!prior){box.innerHTML='<strong>First check on this device</strong><p>The next visit will compare the official activity state, forecastability and current viewing weather with this check.</p>'}
+    else { const changes=[]; if(prior.activity!==current.activity) changes.push(`activity ${prior.activity||'unknown'} → ${current.activity||'unknown'}`); if(prior.forecast!==current.forecast) changes.push(`eruption timing ${prior.forecast||'unknown'} → ${current.forecast||'unknown'}`); if(prior.weather!==current.weather) changes.push(`weather “${prior.weather||'unknown'}” → “${current.weather||'unknown'}”`); if(prior.state!==current.state) changes.push(`decision ${prior.state||'unknown'} → ${current.state||'unknown'}`); box.innerHTML=changes.length?`<strong>${changes.length} material change${changes.length>1?'s':''}</strong><p>${esc(changes.join('; '))}.</p>`:`<strong>No material decision change</strong><p>The official state and current viewing picture are materially similar to your last check on this device.</p>`; }
+    try{localStorage.setItem(key,JSON.stringify(current))}catch{}
+  }
+  async function load(){
+    setLoading(true); const q=new URLSearchParams({travel:state.travel,mobility:state.mobility,experience:state.experience,plan:state.plan});
+    try{ const r=await fetch('/api/kilauea-live?'+q.toString(),{cache:'no-store'}); if(!r.ok) throw new Error(`Live endpoint returned ${r.status}`); const d=await r.json(); if(!d.ok) throw new Error(d.error||'Live endpoint failed'); render(d); }
+    catch(err){ setLoading(false); $('decisionState').textContent='LIMITED DATA'; $('headline').textContent='Live feeds could not be verified'; $('bestWindow').textContent='No current window shown'; $('mainReason').textContent='The live decision endpoint failed.'; $('quickAction').textContent='Use the official HVO update, USGS webcams and NPS current conditions before travel.'; $('freshness').textContent='No cached live value is being substituted.'; $('errorbar').textContent=`Live decision unavailable: ${err.message}`; $('errorbar').classList.add('show'); $('healthDot').className='dot bad'; }
+  }
+  load();
+})();
+</script>
+</body>
+</html>
