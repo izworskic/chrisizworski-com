@@ -138,6 +138,16 @@
       "source": "/national-tools/yosemite-firefall-live/",
       "destination": "/yosemite-firefall-live/",
       "permanent": true
+    },
+    {
+      "source": "/labs/kilauea-live",
+      "destination": "/national-tools/kilauea-live/",
+      "permanent": true
+    },
+    {
+      "source": "/labs/kilauea-live/",
+      "destination": "/national-tools/kilauea-live/",
+      "permanent": true
     }
   ],
   "headers": [
@@ -1379,6 +1389,14 @@
     {
       "source": "/national-tools/lake-powell-ramp-status/",
       "destination": "/synced-national-tools/lake-powell-ramp-status/index.html"
+    },
+    {
+      "source": "/national-tools/kilauea-live",
+      "destination": "/synced-national-tools/kilauea-live/index.html"
+    },
+    {
+      "source": "/national-tools/kilauea-live/",
+      "destination": "/synced-national-tools/kilauea-live/index.html"
     },
     {
       "source": "/national-tools/:path*",

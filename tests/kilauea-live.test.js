@@ -130,8 +130,10 @@ test('tomorrow planning uses tomorrow weather and never returns GO NOW from curr
 });
 
 test('mobile page exposes the decision before data machinery and labels viewing windows honestly', () => {
-  const html = fs.readFileSync(path.join(__dirname, '..', 'public', 'labs', 'kilauea-live', 'index.html'), 'utf8');
-  assert.match(html, /<meta name="robots" content="noindex,nofollow">/);
+  const html = fs.readFileSync(path.join(__dirname, '..', 'public', 'synced-national-tools', 'kilauea-live', 'index.html'), 'utf8');
+  assert.match(html, /<meta name="robots" content="index,follow,max-image-preview:large">/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\/">/);
+  assert.doesNotMatch(html, /noindex/i);
   assert.match(html, /Is Kīlauea worth going to right now\?/);
   assert.match(html, /Best window/);
   assert.match(html, /Main reason/);
@@ -144,7 +146,7 @@ test('mobile page exposes the decision before data machinery and labels viewing 
 });
 
 test('page has causal controls, decision map, change layer, webcam and provenance', () => {
-  const html = fs.readFileSync(path.join(__dirname, '..', 'public', 'labs', 'kilauea-live', 'index.html'), 'utf8');
+  const html = fs.readFileSync(path.join(__dirname, '..', 'public', 'synced-national-tools', 'kilauea-live', 'index.html'), 'utf8');
   for (const value of ['travel','mobility','experience','plan']) assert.match(html, new RegExp(`data-control="${value}"`));
   assert.match(html, /id="map"/);
   assert.match(html, /Since your last check/);
@@ -158,7 +160,7 @@ test('page has causal controls, decision map, change layer, webcam and provenanc
 });
 
 test('Kilauea copy follows interpretive-ranger voice without impersonating NPS', () => {
-  const html = fs.readFileSync(path.join(__dirname, '..', 'public', 'labs', 'kilauea-live', 'index.html'), 'utf8');
+  const html = fs.readFileSync(path.join(__dirname, '..', 'public', 'synced-national-tools', 'kilauea-live', 'index.html'), 'utf8');
   const decision = fs.readFileSync(path.join(__dirname, '..', 'lib', 'kilauea-decision.js'), 'utf8');
   const combined = `${html}\n${decision}`;
   assert.match(html, /USGS Hawaiian Volcano Observatory \(HVO\)/);
@@ -173,6 +175,18 @@ test('Kilauea copy follows interpretive-ranger voice without impersonating NPS',
     assert.doesNotMatch(combined, new RegExp(phrase, 'i'));
   }
   assert.doesNotMatch(combined, /\u2014/);
+});
+
+test('Kilauea is discoverable as a National Tool and the old lab URL redirects permanently', () => {
+  const vercel = fs.readFileSync(path.join(__dirname, '..', 'vercel.json'), 'utf8');
+  const sitemap = fs.readFileSync(path.join(__dirname, '..', 'public', 'sitemap-breakout-live.xml'), 'utf8');
+  const live = fs.readFileSync(path.join(__dirname, '..', 'public', 'synced-national-tools', 'live-decisions', 'index.html'), 'utf8');
+  const hub = fs.readFileSync(path.join(__dirname, '..', 'public', 'synced-national-tools', 'index.html'), 'utf8');
+  assert.match(vercel, /\/labs\/kilauea-live/);
+  assert.match(vercel, /\/national-tools\/kilauea-live/);
+  assert.match(sitemap, /https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\//);
+  assert.match(live, /href="\/national-tools\/kilauea-live\/"/);
+  assert.match(hub, /data-tool-id="kilauea-live"/);
 });
 
 test('live endpoint budgets staged upstream fallbacks inside the 10-second function envelope', () => {
