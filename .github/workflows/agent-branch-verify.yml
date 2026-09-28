@@ -22,12 +22,17 @@ jobs:
         with:
           node-version: '22'
       - name: Run full repository gate
-        run: npm run verify:all
+        run: |
+          set -o pipefail
+          mkdir -p artifacts
+          npm run verify:all 2>&1 | tee artifacts/verify-all.log
       - name: Upload boat launch source audit
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: boat-launch-source-audit
-          path: artifacts/boat-launch-source-audit.json
+          path: |
+            artifacts/boat-launch-source-audit.json
+            artifacts/verify-all.log
           if-no-files-found: ignore
           retention-days: 7
