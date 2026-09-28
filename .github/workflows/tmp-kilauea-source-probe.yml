@@ -3,26 +3,28 @@ on:
   push:
     branches: ['agent/kilauea-source-health-2026-09-28']
 permissions:
-  contents: write
+  contents: read
 jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Probe NPS and Hawaii DOH source surfaces
+      - name: Inspect NPS alert transport and DOH payload
         run: |
           set -euo pipefail
-          echo '=== NPS no key ==='
-          curl -sS -o /tmp/nps-none.json -w 'status=%{http_code}\n' 'https://developer.nps.gov/api/v1/alerts?parkCode=havo&limit=50' || true
-          head -c 500 /tmp/nps-none.json || true; echo
-          echo '=== NPS DEMO_KEY ==='
-          curl -sS -o /tmp/nps-demo.json -w 'status=%{http_code}\n' 'https://developer.nps.gov/api/v1/alerts?parkCode=havo&limit=50&api_key=DEMO_KEY' || true
-          head -c 1500 /tmp/nps-demo.json || true; echo
-          echo '=== NPS conditions raw signals ==='
           curl -fsSL 'https://www.nps.gov/havo/planyourvisit/conditions.htm' -o /tmp/nps.html
-          grep -Eio '.{0,120}(api/v1/alerts|park alert|alert severity|data-alert|closure).{0,220}' /tmp/nps.html | head -n 30 || true
-          echo '=== DOH SO2 current ==='
+          echo '=== NPS endpoint/url candidates ==='
+          grep -Eino '(https?:[^"'"' ]+|/[A-Za-z0-9_./?=&%-]+)' /tmp/nps.html | grep -Ei '(alert|condition|api|parkCode|road)' | head -n 120 || true
+          echo '=== NPS ajax/fetch context ==='
+          grep -Ein -C 6 '(ajax|fetch\(|getJSON|alerts|parkCode|activeRoadClosuresAlerts)' /tmp/nps.html | head -n 260 || true
+          echo '=== script sources that mention alerts/park data ==='
+          grep -Eio '<script[^>]+src="[^"]+"' /tmp/nps.html | sed -E 's/.*src="([^"]+)".*/\1/' | head -n 120
+          echo '=== DOH embedded Data declaration ==='
           curl -fsSL 'https://air.doh.hawaii.gov/HawaiiSO2/' -o /tmp/so2.html
-          grep -Eio '.{0,100}(Hilo|Kona|Mountain View|Pahala|Ocean View|Leilani|Waikoloa).{0,220}' /tmp/so2.html | head -n 30 || true
-          echo '=== DOH structure hints ==='
-          grep -Eio '.{0,120}(SO2|ppm|air quality|DateTime|monitor).{0,220}' /tmp/so2.html | head -n 40 || true
+          python - <<'PY'
+          import re
+          s=open('/tmp/so2.html',encoding='utf-8',errors='ignore').read()
+          m=re.search(r'var\s+Data\s*=\s*(\[.*?\]);',s,re.S)
+          print('data_found=',bool(m),'chars=',len(m.group(1)) if m else 0)
+          print((m.group(1)[:5000] if m else ''))
+          PY
