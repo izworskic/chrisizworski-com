@@ -4,11 +4,13 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const IMAGE_URLS = [
   'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Ballard_Locks.jpg/960px-Ballard_Locks.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/1/19/Hiram_M._Chittenden_Locks-3.JPG',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Chittenden_Locks_-_sailboat_in_small_lock.jpg/960px-Chittenden_Locks_-_sailboat_in_small_lock.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Chittenden_Locks_-_fish_ladder_viewing_01.jpg/960px-Chittenden_Locks_-_fish_ladder_viewing_01.jpg',
+  'https://media.defense.gov/2022/Dec/20/2003135612/-1/-1/0/220719-A-VA654-876.JPG',
+  'https://media.defense.gov/2022/Dec/20/2003135607/-1/-1/0/220719-A-VA654-372.JPG',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Chittenden_Locks_-_salmon_in_ladder_01.jpg/960px-Chittenden_Locks_-_salmon_in_ladder_01.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Chittenden_Locks_-_fish_ladder_02.jpg/960px-Chittenden_Locks_-_fish_ladder_02.jpg',
   'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Ballard_locks_dam.jpg/960px-Ballard_locks_dam.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Carl_S._English_Gardens_01.jpg/960px-Carl_S._English_Gardens_01.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Chittenden_Locks_from_Carl_P._English_Gardens_01.jpg/960px-Chittenden_Locks_from_Carl_P._English_Gardens_01.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Ballard_Locks%2C_1917.jpg/960px-Ballard_Locks%2C_1917.jpg',
 ];
 
 async function fetchText(url) {
@@ -17,7 +19,7 @@ async function fetchText(url) {
     headers: {
       accept: 'text/html',
       'cache-control': 'no-cache',
-      'user-agent': 'ChrisIzworskiBallardPhotoSmoke/1.2',
+      'user-agent': 'ChrisIzworskiBallardPhotoSmoke/2.0',
     },
     signal: AbortSignal.timeout(15000),
   });
@@ -25,18 +27,17 @@ async function fetchText(url) {
 }
 
 function mainReady(text) {
-  return text.includes('data-photo-program="ballard-interpretive-v1"')
+  return text.includes('data-photo-program="ballard-interpretive-v2"')
     && text.includes('Three views that make the whole place click')
     && text.includes('data-photo-role="water-control"')
     && text.includes('data-photo-role="small-lock"')
-    && text.includes('Best for · First-time visitors')
-    && text.includes('Best for · Boat watchers')
-    && text.includes('upload.wikimedia.org')
+    && text.includes('Gulf Cajun commercial vessel')
+    && text.includes('salmon at the glass')
     && text.includes('Photo:');
 }
 
 function tourReady(text) {
-  return text.includes('data-photo-program="ballard-interpretive-v1"')
+  return text.includes('data-photo-program="ballard-interpretive-v2"')
     && text.includes('Photo guide:')
     && text.includes('const stopImages=')
     && text.includes('photoForStop(s.id)')
@@ -47,6 +48,10 @@ function tourReady(text) {
     && text.includes("fish:{src:")
     && text.includes("spillway:{src:")
     && text.includes("garden:{src:")
+    && text.includes("cavanaugh:{src:")
+    && text.includes('data-photo-role="fish-ladder-anatomy"')
+    && text.includes('data-photo-role="historic-comparison"')
+    && text.includes('Now the word “ladder” makes sense')
     && text.includes('data-authority-layer="ballard-tour-v1"')
     && text.includes('Verify access with USACE')
     && text.includes('data-authority="usace"')
@@ -59,19 +64,19 @@ function tourReady(text) {
 
 async function waitForPhotoProgram() {
   let lastMain, lastTour;
-  for (let attempt = 1; attempt <= 18; attempt++) {
+  for (let attempt = 1; attempt <= 24; attempt++) {
     try {
       [lastMain, lastTour] = await Promise.all([fetchText(MAIN), fetchText(TOUR)]);
       if (lastMain.response.ok && lastTour.response.ok && mainReady(lastMain.text) && tourReady(lastTour.text)) {
         return { main: lastMain, tour: lastTour, attempt };
       }
-      console.log(`Ballard photo/authority program not ready (attempt ${attempt}/18; main=${lastMain.response.status}, tour=${lastTour.response.status}); retrying.`);
+      console.log(`Ballard photo/authority program not ready (attempt ${attempt}/24; main=${lastMain.response.status}, tour=${lastTour.response.status}); retrying.`);
     } catch (error) {
-      console.log(`Ballard photo/authority readiness attempt ${attempt}/18 failed: ${error.message}`);
+      console.log(`Ballard photo/authority readiness attempt ${attempt}/24 failed: ${error.message}`);
     }
     await sleep(5000);
   }
-  throw new Error('Ballard interpretive photo + restrained authority programs did not become visible on production');
+  throw new Error('Ballard interpretive photo v2 + restrained authority programs did not become visible on production');
 }
 
 async function checkImage(url) {
@@ -84,7 +89,7 @@ async function checkImage(url) {
       headers: {
         accept: 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
         range: 'bytes=0-1023',
-        'user-agent': 'Mozilla/5.0 (compatible; ChrisIzworskiBallardPhotoSmoke/1.2)',
+        'user-agent': 'Mozilla/5.0 (compatible; ChrisIzworskiBallardPhotoSmoke/2.0)',
       },
       signal: AbortSignal.timeout(15000),
     });
@@ -95,7 +100,8 @@ async function checkImage(url) {
       return { url, status: response.status, type: lastType, throttled: false };
     }
     try { await response.body?.cancel(); } catch {}
-    if (![429, 503].includes(response.status)) {
+    const providerAutomationBlock = response.status === 403 && (url.includes('media.defense.gov') || url.includes('wikimedia.org'));
+    if (![429, 503].includes(response.status) && !providerAutomationBlock) {
       throw new Error(`Ballard interpretive image unavailable: ${url} (${response.status}, ${lastType || 'no content-type'})`);
     }
     await sleep(900 * attempt);
@@ -112,7 +118,7 @@ for (const url of IMAGE_URLS) {
 
 console.log(JSON.stringify({
   status: 'ok',
-  experience: 'ballard-interpretive-photo-authority-v1',
+  experience: 'ballard-interpretive-photo-authority-v2',
   attempt: live.attempt,
   mainStatus: live.main.response.status,
   tourStatus: live.tour.response.status,
