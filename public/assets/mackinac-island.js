@@ -519,7 +519,7 @@
     return p;
   }
   const buildUrl=()=>`${API}?${plannerParams().toString()}`;
-  function scrollToTarget(selector){const el=document.querySelector(selector);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});track('mackinac_section_opened',{section:selector.slice(1)});}}
+  function scrollToTarget(selector){const el=document.querySelector(selector);if(el){for(let d=el.closest('details');d;d=d.parentElement?.closest('details'))d.open=true;el.scrollIntoView({behavior:'smooth',block:'start'});track('mackinac_section_opened',{section:selector.slice(1)});}}
   document.querySelectorAll('[data-scroll]').forEach(b=>b.addEventListener('click',()=>scrollToTarget(b.dataset.scroll)));
 
   $('intakeContinue')?.addEventListener('click',()=>{const q=state.intakeSchema?.base_questions?.[state.intakeStep];if(!q)return;const v=state.intakeAnswers[q.id];if(q.type==='multi'&&Array.isArray(v)&&v.length){track('mackinac_intake_answered',{question:q.id,answer:v.join('|')});state.intakeStep++;renderIntakeStep();liveRefine('your trip picture');}});
@@ -611,25 +611,6 @@
   }
   new MutationObserver(renderIntakePreview).observe($('itinerary'),{childList:true,subtree:true,characterData:true});
 
-  // ---- Live bar: while the answer is scrolled away (answering questions, reading the
-  // plan), the ferry out, ferry back and day score stay on screen and flash when a tap
-  // changes them, so every answer visibly lands.
-  (function liveBar(){
-    const bar=$('liveBar'),hero=document.querySelector('.hero-lede');if(!bar||!hero)return;
-    const pairs=[['heroFerry','lbFerry'],['heroReturn','lbReturn'],['itinerary','lbFirst']];
-    const firstStop=()=>{const out=[];for(const li of document.querySelectorAll('#itinerary li')){const s=li.querySelector('strong')?.textContent?.trim()||'';if(s&&!/^leave\b|dock|ferry|drive|^arrive (at )?(mackinaw|st\.? ignace)/i.test(s))out.push(s.replace(/\s*\(.*?\)\s*/g,' ').trim());if(out.length===3)break;}return out.length?out.join(' · '):'—';};
-    const tidy=(id,t)=>id==='itinerary'?firstStop():(String(t||'').replace(/\s+/g,' ').trim().split(' · ')[0])||'—';
-    function mirror(flash){
-      pairs.forEach(([src,dst])=>{const from=$(src),to=$(dst);if(!from||!to)return;const t=tidy(src,from.textContent);if(to.textContent!==t){to.textContent=t;if(flash){const item=to.closest('.lb-item');item?.classList.remove('just-changed');void item?.offsetWidth;item?.classList.add('just-changed');}}});
-    }
-    mirror(false);
-    const mo=new MutationObserver(()=>mirror(true));
-    pairs.forEach(([src])=>{const el=$(src);if(el)mo.observe(el,{childList:true,characterData:true,subtree:true});});
-    let heroVisible=true;
-    const io=new IntersectionObserver(es=>{heroVisible=es[0].isIntersecting;const show=!heroVisible&&decisionLoaded;bar.hidden=!show;document.body.classList.toggle('live-bar-on',show);},{threshold:0});
-    io.observe(hero);
-    bar.querySelector('.live-bar-inner')?.addEventListener('click',()=>{document.querySelector('.hero')?.scrollIntoView({behavior:'smooth',block:'start'});track('mackinac_live_bar_opened',{});});
-  })();
   $('tripTuningReset')?.addEventListener('click',async()=>{state.tunings.clear();renderTuningButtons();const saved=capturePlanInputs();if(saved)planStorageSet(saved);track('mackinac_plan_tuned',{tuning:'reset',active:false,count:0});await loadDecision();renderTuningButtons();});
 
   document.querySelectorAll('#personaChips .chip').forEach(btn=>btn.addEventListener('click',()=>{
@@ -774,6 +755,10 @@
     setText('heroFerry',plan.departure_time?`${plan.departure_time} · ${plan.origin_port}`:'No verified ferry');
     setText('heroIsland',plan.arrival_time||'—');
     setText('heroReturn',returnPlanText(d));
+    // One plain line under the answer, so phones (where the day-at-a-glance card is
+    // hidden) still see the way home.
+    const backLine=$('heroBackLine');
+    if(backLine){const back=returnPlanText(d),last=d.ferry?.last_scheduled_return?.departure_time;const ok=/\d/.test(String(back||''));backLine.hidden=!ok;backLine.textContent=ok?`Home on the ${back}${last&&!String(back).includes(last)?` · last boat ${last}`:''}.`:'';}
     if(state.tripDate&&state.originResolved&&state.departTime){
       const j=d.journey||{};
       const leave=j.leave_time||clock(inputTimeMinutes(state.departTime));
@@ -788,6 +773,7 @@
     const optional=optionalFailures(d),core=coreFailures(d);
     const sourceNote=core.length?'A key trip detail needs a recheck':optional.length?'Ferry and weather are ready · a few extras are limited':'Trip details checked';
     setText('freshLine',`Updated ${f} ET · ${sourceNote}`);
+    setText('heroFresh',`Updated ${f} ET · live ferries, weather and water`);
   }
 
   function reasonList(id,items){const el=$(id);el.innerHTML=(items&&items.length?items:['No material factor identified.']).slice(0,5).map(x=>`<li>${esc(x)}</li>`).join('');}
@@ -1010,7 +996,7 @@
     const t=$('planToast');if(!t)return;
     setText('planToastTitle',title);setText('planToastBody',body);
     t.hidden=false;requestAnimationFrame(()=>t.classList.add('show'));
-    clearTimeout(toastTimer);toastTimer=setTimeout(hidePlanToast,document.body.classList.contains('live-bar-on')?4500:7000);
+    clearTimeout(toastTimer);toastTimer=setTimeout(hidePlanToast,7000);
   }
   function hidePlanToast(){const t=$('planToast');if(!t)return;t.classList.remove('show');setTimeout(()=>{if(!t.classList.contains('show'))t.hidden=true;},260);}
   function announcePlanChanges(before,reason){
@@ -1022,11 +1008,9 @@
     const body=ferryMoved
       ? `New ferry: ${seenText('heroFerry')}.${list?` Also updated: ${list}.`:''}`
       : list?`Updated your ${list}.`:'The same ferry and timing still fit best. Your day was rechecked against the new answer.';
-    // The answer is on screen and the changed values are flashing: a toast would only
-    // cover what the visitor is about to tap. Announce only changes they can't see.
-    const lede=document.querySelector('.hero-lede');const r=lede?.getBoundingClientRect();
-    if(r&&r.bottom>0&&r.top<innerHeight)return;
-    showPlanToast(reason||'Plan updated',body);
+    // No toast: changed values flash where they are, and the day-so-far list beside the
+    // questions shows the effect. One kind of feedback, nothing covering the page.
+    void body;void reason;
   }
   let decisionSeq=0,decisionLoaded=false;
   async function loadDecision({reason=null}={}){

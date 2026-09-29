@@ -764,3 +764,41 @@ body.mackinac-profile-ready .intake-preview{display:none}
 span.lb-see{display:grid;place-items:center;width:34px;height:34px;padding:0;font-size:16px}
 .intake-preview{margin:14px 0 16px}
 .hero-start{margin-top:22px}
+
+/* ======================================================================
+   Simplified page (2026-09-28): answer → four taps → your day → folded details.
+   Chris: "way too complex, can't decipher what's happening."
+   ====================================================================== */
+.trip-tabs-wrap{display:none!important}
+.intake-card{grid-template-columns:minmax(0,1fr)!important;max-width:760px;margin-inline:auto}
+.hero-back{margin:10px 0 0;font-size:15px;line-height:1.45;color:rgba(255,255,255,.85);font-weight:550}
+.hero-back[hidden]{display:none}
+.hero{min-height:0}
+.hero-inner{padding-block:clamp(28px,6vh,72px) 88px}
+
+/* Folded sections: one quiet row each, opened on demand */
+.more-title{font-size:clamp(24px,2.6vw,32px);margin:36px 0 12px}
+details.more-item,details.fold,details.logistics-more{border-top:1px solid var(--line)}
+details.more-item:last-of-type{border-bottom:1px solid var(--line)}
+details.more-item>summary,details.fold>summary,details.logistics-more>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 2px;font:600 16px/1.3 var(--sans);color:var(--ink)}
+details.more-item>summary::-webkit-details-marker,details.fold>summary::-webkit-details-marker,details.logistics-more>summary::-webkit-details-marker{display:none}
+details.more-item>summary::after,details.fold>summary::after,details.logistics-more>summary::after{content:"+";flex:0 0 28px;height:28px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:var(--paper);font:400 18px var(--sans);color:var(--lake);transition:transform .2s ease}
+details[open].more-item>summary::after,details[open].fold>summary::after,details[open].logistics-more>summary::after{transform:rotate(45deg)}
+details.more-item>section{margin:0 0 20px}
+details.fold{margin-top:6px}
+details.fold>summary{font-size:14.5px;color:var(--body)}
+details.logistics-more{margin-top:14px}
+details.logistics-more>summary{font-size:14px;color:var(--lake-dark)}
+.content-stack>details+details{margin-top:0}
+.content-stack>details.more-item,.content-stack>.more-title{margin-top:0}
+.content-stack>.more-title{margin-top:36px}
+
+@media(max-width:760px){
+  /* On a phone the answer, the way home and the two start choices are the whole hero. */
+  .hero-ticket,.hero .decision-head{display:none}
+  .hero-inner{padding-bottom:64px}
+}
+.planner-explain[hidden]{display:none}
+.hero-fresh{margin:6px 0 0;font-size:12px;color:rgba(255,255,255,.6)}
+.hero-fresh:empty{display:none}
+body.mackinac-plan-ready #profileBuildTrip{display:none}

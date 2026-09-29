@@ -21,8 +21,11 @@ test("a slower, older plan response never overwrites a newer one", () => {
   assert.match(js, /if\(seq!==decisionSeq\)return;/);
 });
 
-test("changes are shown to the visitor and announced to screen readers", () => {
-  assert.match(html, /id="planToast" role="status" aria-live="polite"/);
+test("changes are shown in place, with one kind of feedback", () => {
+  // 2026-09-28 simplification: no toast or floating bar; changed values flash where they
+  // are and the day-so-far list (aria-live) beside the questions shows the effect.
+  assert.doesNotMatch(html, /id="planToast"|id="liveBar"/);
+  assert.match(html, /id="intakePreview" aria-live="polite"/);
   assert.match(js, /function announcePlanChanges\(before,reason\)/);
   assert.match(js, /classList\.add\('just-changed'\)/);
   assert.match(css, /\.just-changed\{animation:/);
@@ -32,7 +35,8 @@ test("changes are shown to the visitor and announced to screen readers", () => {
 test("the hero leads with the answer and carries no em dash in the verdict", () => {
   const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf("</section>", html.indexOf('<section class="hero"')));
   assert.ok(hero.indexOf('id="primaryRec"') < hero.indexOf('id="decisionGrid"'), "the answer must come before the metrics");
-  assert.ok(hero.includes('data-scroll="#trip-intake"'), "the hero must lead into the questions");
+  assert.ok(hero.includes('id="heroStart"'), "the hero must lead into the first choices");
+  assert.ok(hero.includes('id="heroBackLine"'), "the way home sits under the answer");
   assert.doesNotMatch(js, /labelScore\(score\)\} — /);
 });
 

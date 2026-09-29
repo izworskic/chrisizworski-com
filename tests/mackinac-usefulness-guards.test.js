@@ -38,15 +38,14 @@ test("the hero asks starting city and leave time first, one tap each", () => {
   assert.match(js, /if\(state\.originResolved&&state\.departTime\)\{\s*document\.body\.classList\.add\('mackinac-plan-ready'\)/);
 });
 
-test("every answer lands on screen: day-so-far preview and live bar", () => {
+test("every answer lands on screen: the day-so-far preview", () => {
   const html = read("public/mackinac-island/index.html");
   const q = html.indexOf('id="intakeQuestion"'), prev = html.indexOf('id="intakePreview"'), opts = html.indexOf('id="intakeOptions"');
   assert.ok(q < prev && prev < opts, "preview sits between the question and its options");
-  assert.match(html, /id="liveBar"/);
   const js = read("public/assets/mackinac-island.js");
   assert.match(js, /function renderIntakePreview/);
-  assert.match(js, /querySelector\('\.hero-lede'\)/, "live bar tracks the answer, not the whole hero");
-  assert.match(js, /if\(r&&r\.bottom>0&&r\.top<innerHeight\)return;/, "no toast over an answer already on screen");
+  // Simplified 2026-09-28: the preview is the one feedback; no floating bar, no toast.
+  assert.doesNotMatch(html, /id="liveBar"|id="planToast"/);
 });
 
 test("base questions are one tap; no Continue step", () => {
@@ -61,4 +60,16 @@ test("a late start gets an honest short visit, in plain language", () => {
   assert.match(src, /shortVisit:true/);
   assert.match(src, /A short visit: about/);
   assert.doesNotMatch(src, /un-dated|Your entered/);
+});
+
+test("the page stays simple: secondary sections are folded, not stacked", () => {
+  const html = read("public/mackinac-island/index.html");
+  for (const id of ["why", "ferries", "conditions", "webcams", "crowds-open", "seasonal", "map-section", "stay-guide", "eat-guide", "straits-guide", "sources"]) {
+    const i = html.indexOf(`id="${id}"`);
+    const open = html.lastIndexOf('<details class="more-item"', i), close = html.lastIndexOf("</details>", i);
+    assert.ok(open > close, `${id} should sit inside a closed "More about today" row`);
+  }
+  const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf("</section>", html.indexOf('<section class="hero"')));
+  assert.doesNotMatch(hero, /class="hero-actions"|class="live-dot"/);
+  assert.doesNotMatch(html, /class="intake-intro"/);
 });
