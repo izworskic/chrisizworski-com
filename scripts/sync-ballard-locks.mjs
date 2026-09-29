@@ -69,10 +69,12 @@ if (!page.includes('context only')) throw new Error('Ballard sync: tide context 
 if (!page.includes('one working system doing three jobs at once')) throw new Error('Ballard sync: ambassador system story missing');
 if (!page.includes('Look up from your phone')) throw new Error('Ballard sync: observation prompts missing');
 if (!page.includes('activity-story')) throw new Error('Ballard sync: live vessel interpretation missing');
-if (!page.includes('data-photo-program="ballard-interpretive-v1"')) throw new Error('Ballard sync: interpretive photo program missing');
+if (!page.includes('data-photo-program="ballard-interpretive-v2"')) throw new Error('Ballard sync: interpretive photo v2 program missing');
 if (!page.includes('Three views that make the whole place click')) throw new Error('Ballard sync: main photo orientation strip missing');
 if (!page.includes('data-photo-role="water-control"')) throw new Error('Ballard sync: spillway photo interpretation missing');
 if (!page.includes('data-photo-role="small-lock"')) throw new Error('Ballard sync: small-lock photo interpretation missing');
+if (!page.includes('Gulf Cajun commercial vessel')) throw new Error('Ballard sync: commercial-vessel scale photo missing');
+if (!page.includes('salmon at the glass')) throw new Error('Ballard sync: salmon payoff interpretation missing');
 if (!page.includes('Wikimedia Commons')) throw new Error('Ballard sync: photo attribution missing');
 
 const tourFile = path.join(destPage, 'tour', 'index.html');
@@ -83,9 +85,13 @@ if (!tourPage.includes('/api/ballard-ais')) throw new Error('Ballard sync: tour 
 for (const phrase of ['See this', 'What’s happening', 'Watch for', 'Why it matters', 'RIGHT NOW']) {
   if (!tourPage.includes(phrase)) throw new Error(`Ballard sync: ambassador tour anatomy missing ${phrase}`);
 }
-if (!tourPage.includes('data-photo-program="ballard-interpretive-v1"')) throw new Error('Ballard sync: tour photo program missing');
+if (!tourPage.includes('data-photo-program="ballard-interpretive-v2"')) throw new Error('Ballard sync: tour photo v2 program missing');
 if (!tourPage.includes('const stopImages=')) throw new Error('Ballard sync: stop photo manifest missing');
 if (!tourPage.includes('photoForStop(s.id)')) throw new Error('Ballard sync: stop photos are not wired into popups');
+if (!tourPage.includes('cavanaugh:{src:')) throw new Error('Ballard sync: historic Cavanaugh visual missing');
+if (!tourPage.includes('data-photo-role="fish-ladder-anatomy"')) throw new Error('Ballard sync: fish ladder anatomy visual missing');
+if (!tourPage.includes('data-photo-role="historic-comparison"')) throw new Error('Ballard sync: 1917 then-vs-now visual missing');
+if (!tourPage.includes('Now the word “ladder” makes sense')) throw new Error('Ballard sync: fish ladder visual interpretation missing');
 if (!tourPage.includes('data-authority-layer="ballard-tour-v1"')) throw new Error('Ballard sync: restrained authority layer missing');
 if (!tourPage.includes('Verify access with USACE')) throw new Error('Ballard sync: contextual USACE access verification link missing');
 for (const authority of ['data-authority="usace"','data-authority="wdfw"','data-authority="noaa"','data-authority="nws"']) {
@@ -122,4 +128,4 @@ if (!sitemap.includes(`<loc>${salmonCanonical}</loc>`)) {
 }
 fs.writeFileSync(sitemapPath, sitemap);
 
-console.log(`Synced Ballard Locks decision v2 from ${ballardSourceCommit} with interpretive photo + restrained authority layers.`);
+console.log(`Synced Ballard Locks decision v2 from ${ballardSourceCommit} with interpretive photo v2 + restrained authority layers.`);
