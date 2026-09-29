@@ -7,7 +7,7 @@ const preview = fs.readFileSync('public/labs/pictured-rocks-planner/index.html',
 
 test('canonical Pictured Rocks shell emits share and favicon metadata', () => {
   assert.match(middleware, /<link rel="icon" href="\/favicon\.ico" sizes="any">/);
-  assert.match(middleware, /PICTURED_ROCKS_TITLE\s*=\s*'Pictured Rocks Trip Planner: Map, Weather & 1-Day Itinerary'/);
+  assert.match(middleware, /PICTURED_ROCKS_TITLE\s*=\s*'Pictured Rocks Trip Planner 2026: Map, Itinerary & Weather'/);
   assert.match(middleware, /<meta property="og:title" content="\$\{PICTURED_ROCKS_TITLE\}">/);
   assert.match(middleware, /<meta property="og:url" content="https:\/\/picturedrocks\.chrisizworski\.com\/">/);
   assert.match(middleware, /<meta property="og:image"/);
@@ -26,7 +26,7 @@ test('canonical shell renders four decision thumbnails before client JavaScript'
 
 test('preview remains noindex and canonical ownership remains the subdomain', () => {
   assert.match(preview, /<meta name="robots" content="noindex,nofollow">/);
-  assert.match(preview, /<link rel="canonical" href="https:\/\/picturedrocks\.chrisizworski\.com\/">/);
+  assert.match(preview, /<link rel="canonical" href="https:\/\/picturedrocks\.chrisizworski\.com\/"/);
   assert.match(middleware, /PICTURED_ROCKS_INDEXABLE_ROBOTS/);
   assert.match(middleware, /X-Robots-Tag', 'index, follow, max-image-preview:large'/);
 });
