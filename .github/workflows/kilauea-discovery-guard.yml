@@ -1,12 +1,19 @@
 name: Kilauea discovery guard
 
 on:
+  pull_request:
+    paths:
+      - 'scripts/ensure-kilauea-discovery.mjs'
+      - 'tests/kilauea-discovery.test.js'
+      - '.github/workflows/kilauea-discovery-guard.yml'
   push:
     branches: [main]
     paths:
       - 'scripts/ensure-kilauea-discovery.mjs'
       - 'tests/kilauea-discovery.test.js'
       - '.github/workflows/kilauea-discovery-guard.yml'
+      - 'public/synced-national-tools/index.html'
+      - 'public/synced-national-tools/kilauea-live/index.html'
   workflow_run:
     workflows:
       - 'Sync verified National Tools gate'
@@ -19,12 +26,12 @@ permissions:
 
 jobs:
   guard:
-    if: ${{ (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success') && github.actor != 'github-actions[bot]' }}
+    if: ${{ (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success') && (github.event_name != 'push' || github.actor != 'github-actions[bot]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
@@ -62,6 +69,7 @@ jobs:
           NODE
 
       - name: Commit guarded production files
+        if: ${{ github.event_name != 'pull_request' }}
         shell: bash
         run: |
           set -euo pipefail
