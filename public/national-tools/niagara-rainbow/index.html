@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Niagara Falls Rainbow Forecast | Chris Izworski</title>
-<meta name="description" content="See the best daylight time and viewpoint for a Niagara Falls rainbow using live NWS weather, sun angle, mist geometry and live cameras.">
+<title>Best Time to See a Rainbow at Niagara Falls Today</title>
+<meta name="description" content="Find the best time to see a rainbow at Niagara Falls today, with the strongest live viewing window, best viewpoint, NWS cloud and wind conditions, and live cameras.">
 <link rel="canonical" href="https://chrisizworski.com/national-tools/niagara-rainbow/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#0b3142">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Niagara Falls Rainbow Forecast">
-<meta property="og:description" content="A live daylight forecast for when and where a Niagara Falls rainbow is most likely to appear.">
+<meta property="og:title" content="Best Time to See a Rainbow at Niagara Falls Today">
+<meta property="og:description" content="See today’s strongest rainbow window, best viewpoint and live Niagara Falls viewing conditions.">
 <meta property="og:url" content="https://chrisizworski.com/national-tools/niagara-rainbow/">
 <meta property="og:image" content="https://commons.wikimedia.org/wiki/Special:Redirect/file/HorseshoeFallsRainbowA.jpg?width=1800">
 <meta property="og:image:alt" content="Rainbow above Horseshoe Falls at Niagara Falls">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Niagara Falls Rainbow Forecast">
-<meta name="twitter:description" content="Best daylight time + best viewpoint from live weather, sun angle and mist geometry.">
+<meta name="twitter:title" content="Best Time for a Niagara Falls Rainbow Today">
+<meta name="twitter:description" content="Today’s best daylight window and viewpoint from live weather, sun angle and mist geometry.">
 <meta name="twitter:image" content="https://commons.wikimedia.org/wiki/Special:Redirect/file/HorseshoeFallsRainbowA.jpg?width=1800">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -28,8 +28,8 @@
   "@graph":[
     {"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski","publisher":{"@id":"https://chrisizworski.com/#person"}},
     {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
-    {"@type":"WebApplication","@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#app","name":"Niagara Falls Rainbow Forecast","applicationCategory":"WeatherApplication","operatingSystem":"Any","url":"https://chrisizworski.com/national-tools/niagara-rainbow/","description":"Experimental daylight decision engine that estimates the best time and viewpoint to see a Niagara Falls rainbow using NWS weather, solar position and mist geometry.","author":{"@id":"https://chrisizworski.com/#person"}},
-    {"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#page","url":"https://chrisizworski.com/national-tools/niagara-rainbow/","name":"Niagara Falls Rainbow Forecast","isPartOf":{"@id":"https://chrisizworski.com/#website"},"mainEntity":{"@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#app"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-09-06","inLanguage":"en-US"},
+    {"@type":"WebApplication","@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#app","name":"Niagara Falls Rainbow Timing Tool","applicationCategory":"WeatherApplication","operatingSystem":"Any","url":"https://chrisizworski.com/national-tools/niagara-rainbow/","description":"Experimental daylight decision engine that identifies the best time and viewpoint to see a Niagara Falls rainbow today using NWS weather, solar position and mist geometry.","author":{"@id":"https://chrisizworski.com/#person"}},
+    {"@type":"WebPage","@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#page","url":"https://chrisizworski.com/national-tools/niagara-rainbow/","name":"Best Time to See a Rainbow at Niagara Falls Today","isPartOf":{"@id":"https://chrisizworski.com/#website"},"mainEntity":{"@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#app"},"author":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-09-28","inLanguage":"en-US"},
     {"@type":"FAQPage","@id":"https://chrisizworski.com/national-tools/niagara-rainbow/#faq","mainEntity":[
       {"@type":"Question","name":"What is the best time to see a rainbow at Niagara Falls?","acceptedAnswer":{"@type":"Answer","text":"The best time changes with the sun angle, cloud cover, wind and your viewpoint. This live tool evaluates daylight geometry every 10 minutes and identifies the strongest window."}},
       {"@type":"Question","name":"Does it have to be raining to see a rainbow at Niagara Falls?","acceptedAnswer":{"@type":"Answer","text":"No. Niagara Falls continuously produces mist, so direct sunlight reaching that mist at the right angle can create a rainbow even without rain."}},
@@ -45,7 +45,7 @@
 <script defer src="/assets/niagara-rainbow.js"></script>
 </head>
 <body data-analytics-page="niagara-rainbow-predictor">
-<a class="skip-link" href="#forecast">Skip to rainbow forecast</a>
+<a class="skip-link" href="#forecast">Skip to today’s best rainbow time</a>
 <header class="site-header">
   <a class="site-name" href="/">Chris Izworski</a>
   <nav class="site-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/tools/">Tools</a><a href="/national-tools/" aria-current="page">National tools</a><a href="/guides/">Guides</a></nav>
@@ -56,10 +56,10 @@
     <div class="hero-shade" aria-hidden="true"></div>
     <div class="hero-content">
       <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/national-tools/">National tools</a><span>/</span><span>Niagara rainbow</span></nav>
-      <p class="eyebrow">Live Niagara Falls decision tool</p>
-      <h1 id="pageTitle">Will there be a rainbow at Niagara Falls today?</h1>
-      <p class="hero-lede">Find the best time and the best place to stand. The model combines the sun’s position with live NWS clouds, wind and the falls’ mist geometry.</p>
-      <a class="hero-button" href="#forecast">See today’s forecast <span aria-hidden="true">↓</span></a>
+      <p class="eyebrow">Live Niagara Falls viewing conditions</p>
+      <h1 id="pageTitle">Best Time to See a Rainbow at Niagara Falls Today</h1>
+      <p class="hero-lede">See today’s strongest rainbow window and the best place to stand. The model combines the sun’s position with live NWS clouds, wind and the falls’ mist geometry.</p>
+      <a class="hero-button" href="#forecast">See today’s best window <span aria-hidden="true">↓</span></a>
     </div>
     <p class="photo-credit">Hero: Rlevse / Wikimedia Commons · CC BY-SA 3.0</p>
   </section>
