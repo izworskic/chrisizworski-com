@@ -35,14 +35,15 @@ test('Boat Launch near-me flow is explicit, session-only, and reuses the existin
   assert.doesNotMatch(ranking, /latitude=.*searchParams|longitude=.*searchParams/);
 });
 
-test('Ballard build is pinned to the current authoritative decision-and-interpretation package', () => {
+test('Ballard winner remains protected on its existing canonical decision surface', () => {
+  const ballard = read('public/ballard-locks/index.html');
   const pkg = JSON.parse(read('package.json'));
-  const lock = read('package-lock.json');
-  const pin = '761a041de378f1265211122b1395c3968106a94e';
 
-  assert.equal(pkg.dependencies['national-ballard-locks'], `github:izworskic/national-ballard-locks#${pin}`);
-  assert.match(lock, new RegExp(`national-ballard-locks#${pin}`));
-  assert.match(lock, new RegExp(`national-ballard-locks\\.git#${pin}`));
+  assert.match(ballard, /https:\/\/chrisizworski\.com\/ballard-locks\//);
+  assert.match(ballard, /Ballard Locks salmon activity/);
+  assert.match(ballard, /NOAA Tides &amp; Currents/);
+  assert.match(ballard, /not an official lockage count/i);
+  assert.equal(pkg.dependencies['national-ballard-locks'], 'github:izworskic/national-ballard-locks#c0d0db1726dff6922efd059e3bf4da2091c01108');
 });
 
 test('Gordie Howe winner is protected because its existing page already carries the intended decision stack', () => {
