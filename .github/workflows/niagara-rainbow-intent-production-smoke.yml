@@ -31,11 +31,14 @@ jobs:
           }
           probe api "$BASE/api/niagara-rainbow?smoke=$GITHUB_SHA"
           python -c "import json; d=json.load(open('/tmp/out')); assert d.get('ok') is True and d.get('days') and d.get('viewpoints')"
+          probe main "$BASE/national-tools/niagara-rainbow/?smoke=$GITHUB_SHA"
+          grep -Fq 'Best Time to See a Rainbow at Niagara Falls Today' /tmp/out
+          grep -Fq 'https://chrisizworski.com/national-tools/niagara-rainbow/' /tmp/out
           probe best-time "$BASE/national-tools/niagara-rainbow/best-time-today/?smoke=$GITHUB_SHA"
-          grep -Fq 'https://chrisizworski.com/national-tools/niagara-rainbow/best-time-today/' /tmp/out
-          grep -Fq 'No nighttime rainbow score is shown' /tmp/out || grep -Fq 'daylight' /tmp/out
+          grep -Fq 'content="noindex,follow"' /tmp/out
+          grep -Fq '<link rel="canonical" href="https://chrisizworski.com/national-tools/niagara-rainbow/">' /tmp/out
           probe best-viewpoint "$BASE/national-tools/niagara-rainbow/best-viewpoint/?smoke=$GITHUB_SHA"
           grep -Fq 'https://chrisizworski.com/national-tools/niagara-rainbow/best-viewpoint/' /tmp/out
           grep -Fq '/api/niagara-rainbow' /tmp/out || grep -Fq 'intent.js' /tmp/out
           probe sitemap "$BASE/sitemap-niagara-rainbow.xml?smoke=$GITHUB_SHA"
-          test "$(grep -o '<url>' /tmp/out | wc -l | tr -d ' ')" = '3'
+          test "$(grep -o '<url>' /tmp/out | wc -l | tr -d ' ')" = '2'
