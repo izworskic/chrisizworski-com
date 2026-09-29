@@ -48,15 +48,16 @@ jobs:
         run: |
           set -euo pipefail
           test "$(grep -o 'data-tool-id="kilauea-live"' public/synced-national-tools/index.html | wc -l)" -eq 1
-          grep -q 'id="region-hawaii-pacific"' public/synced-national-tools/index.html
+          test "$(grep -o 'id="region-hawaii"' public/synced-national-tools/index.html | wc -l)" -eq 1
           grep -q 'Hawaiʻi &amp; Pacific' public/synced-national-tools/index.html
           grep -q 'class="kilauea-feature"' public/synced-national-tools/index.html
-          grep -q '<title>Kīlauea Eruption Live: Is It Worth Going Right Now?</title>' public/synced-national-tools/kilauea-live/index.html
+          grep -q '<title>Kīlauea Eruption Live Today: Worth Going? | Chris Izworski</title>' public/synced-national-tools/kilauea-live/index.html
           grep -q 'twitter:card" content="summary_large_image"' public/synced-national-tools/kilauea-live/index.html
           grep -q 'twitter:image' public/synced-national-tools/kilauea-live/index.html
           grep -q 'og:image' public/synced-national-tools/kilauea-live/index.html
           grep -q 'BreadcrumbList' public/synced-national-tools/kilauea-live/index.html
           grep -q 'WebApplication' public/synced-national-tools/kilauea-live/index.html
+          grep -q 'Chris Izworski' public/synced-national-tools/kilauea-live/index.html
 
       - name: Commit guarded production files
         if: ${{ github.event_name != 'pull_request' }}
