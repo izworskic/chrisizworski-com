@@ -19,7 +19,8 @@ const LABEL = arg("--label", "run");
 const ONLY = arg("--only", null);
 let BASE = arg("--base", null);
 
-const WEIGHTS = {react: 20, correct: 20, ask: 15, clarity: 15, distinct: 10, continuity: 8, speed: 5, stability: 4, truth: 3};
+// complexity added 2026-09-28 after Chris: "way too complex, can't decipher what's happening".
+const WEIGHTS = {react: 18, correct: 20, ask: 12, clarity: 12, complexity: 15, distinct: 8, continuity: 7, speed: 4, stability: 2, truth: 2};
 const JARGON = /\b(JEV|deterministic|vector|archetypes?|harness|bounded|classif(y|ier|ication)|visitor profile|surface|candidates?|loss function|persona)\b/gi;
 const clamp = x => Math.max(0, Math.min(1, x));
 const DATE = "2026-10-03";
@@ -79,7 +80,13 @@ async function reaction(page) {
     }));
     const t = document.getElementById("planToast");
     const toast = !!t && !t.hidden && t.classList.contains("show");
-    return {anyChange, visibleChange, toast};
+    const shown = el => !!el && !el.hidden && getComputedStyle(el).display !== "none" && el.getBoundingClientRect().height > 0;
+    const kinds = [];
+    if (toast) kinds.push("toast");
+    if (shown(document.getElementById("liveBar"))) kinds.push("bar");
+    const prev = document.getElementById("intakePreview"); if (shown(prev) && inView(prev)) kinds.push("preview");
+    if ([...document.querySelectorAll(".just-changed")].some(inView)) kinds.push("flash");
+    return {anyChange, visibleChange, toast, kinds};
   }, PLAN_SEL);
 }
 async function planText(page) {
@@ -207,6 +214,16 @@ async function runPersona(browser, base, p) {
   const truth = await page.evaluate(() => /updated\s+\d{1,2}:\d{2}/i.test(document.body.innerText));
   const cls = await page.evaluate(() => window.__cls);
   const jargonAfter = await page.evaluate(src => (document.body.innerText.match(new RegExp(src, "gi")) || []), JARGON.source);
+  // How much page is a visitor facing once the plan is built?
+  const size = await page.evaluate(() => {
+    // checkVisibility() treats closed <details> content as hidden; Chrome still gives it a box.
+    const vis = el => { if (el.checkVisibility && !el.checkVisibility({visibilityProperty: true})) return false; const s = getComputedStyle(el); if (s.display === "none" || s.visibility === "hidden") return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+    const main = document.querySelector("main");
+    return {screens: +(document.documentElement.scrollHeight / innerHeight).toFixed(1),
+      controls: [...main.querySelectorAll("button, a.btn, input, select, textarea")].filter(vis).length,
+      words: (main.innerText || "").split(/\s+/).filter(Boolean).length};
+  });
+  const kinds = new Set(log.flatMap(x => x.kinds || []));
 
   // Does the rest of the site follow?
   await page.goto(base + "/mackinac-island/where-to-stay/", {waitUntil: "domcontentloaded"});
@@ -227,13 +244,14 @@ async function runPersona(browser, base, p) {
     react: reactScores.length ? reactScores.reduce((a, b) => a + b, 0) / reactScores.length : 1,
     correct: checks.filter(c => !c.pass).length / checks.length,
     ask: clamp(0.6 * clamp((taps - 4) / 10) + 0.4 * (taps ? wasted / taps : 1)),
+    complexity: [clamp((size.screens - 6) / 14), clamp((size.controls - 25) / 55), clamp((size.words - 800) / 1800), clamp((kinds.size - 1) / 3)].reduce((a, b) => a + b, 0) / 4,
     clarity: [first.answerVisible ? 0 : 1, clamp(Math.max(first.jargon, jargonAfter.length) / 5), clamp((first.words - 90) / 150), clamp((first.ctas - 2) / 4), clamp((first.qScreens - 1) / 2)].reduce((a, b) => a + b, 0) / 5,
     continuity: ((cont.stripOn ? 0 : 1) + (cont.focus ? 0 : 1)) / 2,
     speed: clamp((speedMs - 1500) / 4500),
     stability: clamp(cls / 0.25),
     truth: truth ? 0 : 1
   };
-  return {id: p.id, L, detail: {speedMs, first, taps, wasted, log, checks, primaryRec: primaryRec.slice(0, 160), cls: +cls.toFixed(3), jargon: [...new Set(jargonAfter.map(x => x.toLowerCase()))], continuity: cont}, sig};
+  return {id: p.id, L, detail: {speedMs, first, taps, wasted, log, checks, primaryRec: primaryRec.slice(0, 160), cls: +cls.toFixed(3), jargon: [...new Set(jargonAfter.map(x => x.toLowerCase()))], continuity: cont, size, feedbackKinds: [...kinds]}, sig};
 }
 
 function jaccard(a, b) { const A = new Set(a), B = new Set(b); const i = [...A].filter(x => B.has(x)).length; return i / (A.size + B.size - i || 1); }
@@ -249,7 +267,7 @@ async function main() {
   const results = [];
   for (const p of PERSONAS.filter(x => !ONLY || x.id === ONLY)) {
     try { results.push(await runPersona(browser, BASE, p)); console.error(`  ${p.id} done`); }
-    catch (e) { console.error(`  ${p.id} failed: ${e.message}`); results.push({id: p.id, L: {react: 1, correct: 1, ask: 1, clarity: 1, continuity: 1, speed: 1, stability: 1, truth: 1}, detail: {error: e.message}, sig: []}); }
+    catch (e) { console.error(`  ${p.id} failed: ${e.message}`); results.push({id: p.id, L: {react: 1, correct: 1, ask: 1, clarity: 1, complexity: 1, continuity: 1, speed: 1, stability: 1, truth: 1}, detail: {error: e.message}, sig: []}); }
   }
   await browser.close();
   if (server) server.kill();

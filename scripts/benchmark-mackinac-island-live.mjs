@@ -10,7 +10,7 @@ const factors={
   recommendation_unreliability: pass(/Choose exactly one supplied plan id or NONE/.test(route),/recommended_return/.test(route),/last_scheduled_return/.test(route),/not guessing at a ferry time/i.test(js))?0:1,
   stale_or_unverified_data: pass(/freshness/.test(route),/published-unverified-this-request/.test(route),/source_failures|failures/.test(route),/What this plan is using/.test(html))?0:1,
   mobile_friction: pass(/max-width:390px/.test(css),/viewport-fit=cover/.test(html),/hero-actions/.test(css),/@container decision \(max-width:760px\)/.test(css),/orientation:landscape/.test(css))?0:1,
-  generic_travel_content: pass(/This tool is trip-planning guidance/.test(html),/Which ferry gets you onto the Island best/.test(html),/Four taps\. Your plan rebuilds as you go\./.test(html))?0:1,
+  generic_travel_content: pass(/This tool is trip-planning guidance/.test(html),/Which ferry gets you onto the Island best/.test(html),/Two taps and this becomes your ferry\./.test(html))?0:1,
   unnecessary_clicks: pass(/Best time to arrive/.test(html),/Downtown crowds/.test(html),/Biking/.test(html),/Head back/.test(html))?0:1,
   page_load_cost: pass(/defer/.test(html),/IntersectionObserver/.test(js),/loadLeaflet/.test(js))?0:1,
   inaccessible_information: pass(/Skip to trip planner/.test(html),/:focus-visible/.test(css),/aria-live/.test(html),/aria-pressed/.test(html))?0:1,

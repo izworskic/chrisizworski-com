@@ -94,10 +94,9 @@
     <div class="hero-inner shell">
     <div class="decision-panel" id="decisionPanel" aria-live="polite">
       <div class="hero-lede">
-        <div class="eyebrow"><span class="live-dot" aria-hidden="true"></span>Live for today <span class="dot-sep">·</span> One trip, every page</div>
         <div class="planning-banner" id="planningBanner" hidden></div>
         <h1 id="page-title">Build Your Mackinac Island Trip</h1>
-        <div class="primary-rec" id="primaryRec"><strong>Finding the best ferry for today.</strong>Comparing Mackinaw City and St. Ignace departures against weather, crowds and the last boat back.</div><div class="hero-start" id="heroStart" aria-label="Where you are starting"><div class="start-row"><span class="start-label" id="startCityLabel">Starting from</span><div class="start-chips" role="group" aria-labelledby="startCityLabel"><button type="button" class="start-chip" data-city="Detroit, MI" aria-pressed="false">Detroit</button><button type="button" class="start-chip" data-city="Grand Rapids, MI" aria-pressed="false">Grand Rapids</button><button type="button" class="start-chip" data-city="Lansing, MI" aria-pressed="false">Lansing</button><button type="button" class="start-chip" data-city="Traverse City, MI" aria-pressed="false">Traverse City</button><button type="button" class="start-chip" data-city="Chicago, IL" aria-pressed="false">Chicago</button><button type="button" class="start-chip other" data-city-other aria-expanded="false">Other city</button></div><form class="start-other" id="startCityForm" hidden><input id="startCityInput" type="search" list="startCityList" inputmode="search" autocomplete="off" placeholder="City, state or ZIP" aria-label="Starting city"><button class="start-go" type="submit">Use</button></form></div><div class="start-row"><span class="start-label" id="startLeaveLabel">Leaving at</span><div class="start-chips" role="group" aria-labelledby="startLeaveLabel"><button type="button" class="start-chip" data-leave="06:00" aria-pressed="false">6 AM</button><button type="button" class="start-chip" data-leave="07:00" aria-pressed="false">7 AM</button><button type="button" class="start-chip" data-leave="08:00" aria-pressed="false">8 AM</button><button type="button" class="start-chip" data-leave="09:00" aria-pressed="false">9 AM</button><button type="button" class="start-chip" data-leave="10:00" aria-pressed="false">10 AM</button><button type="button" class="start-chip other" data-leave-other aria-expanded="false">Other time</button></div><form class="start-other" id="startLeaveForm" hidden><input id="startLeaveInput" type="time" aria-label="Leave-home time"><button class="start-go" type="submit">Use</button></form></div><p class="start-status" id="startStatus" aria-live="polite">Two taps and this becomes your ferry.</p><datalist id="startCityList"><option value="Mackinaw City, MI"></option><option value="St. Ignace, MI"></option><option value="Detroit, MI"></option><option value="Ann Arbor, MI"></option><option value="Lansing, MI"></option><option value="East Lansing, MI"></option><option value="Grand Rapids, MI"></option><option value="Kalamazoo, MI"></option><option value="Flint, MI"></option><option value="Saginaw, MI"></option><option value="Bay City, MI"></option><option value="Midland, MI"></option><option value="Traverse City, MI"></option><option value="Petoskey, MI"></option><option value="Cheboygan, MI"></option><option value="Gaylord, MI"></option><option value="Mount Pleasant, MI"></option><option value="Alpena, MI"></option><option value="Muskegon, MI"></option><option value="Holland, MI"></option><option value="Battle Creek, MI"></option><option value="Jackson, MI"></option><option value="Troy, MI"></option><option value="Novi, MI"></option><option value="Livonia, MI"></option><option value="Warren, MI"></option><option value="Sterling Heights, MI"></option><option value="Dearborn, MI"></option><option value="Port Huron, MI"></option><option value="Frankenmuth, MI"></option><option value="Grayling, MI"></option><option value="Cadillac, MI"></option><option value="Ludington, MI"></option><option value="Houghton Lake, MI"></option><option value="Charlevoix, MI"></option><option value="Harbor Springs, MI"></option><option value="Marquette, MI"></option><option value="Sault Ste. Marie, MI"></option><option value="Escanaba, MI"></option><option value="Houghton, MI"></option><option value="Munising, MI"></option><option value="Newberry, MI"></option><option value="Chicago, IL"></option><option value="Milwaukee, WI"></option><option value="Green Bay, WI"></option><option value="Madison, WI"></option><option value="Minneapolis, MN"></option><option value="Indianapolis, IN"></option><option value="Fort Wayne, IN"></option><option value="South Bend, IN"></option><option value="Toledo, OH"></option><option value="Columbus, OH"></option><option value="Cleveland, OH"></option><option value="Cincinnati, OH"></option><option value="Pittsburgh, PA"></option><option value="St. Louis, MO"></option><option value="Louisville, KY"></option><option value="Toronto, ON"></option><option value="London, ON"></option><option value="Windsor, ON"></option><option value="Sault Ste. Marie, ON"></option></datalist></div>
+        <div class="primary-rec" id="primaryRec"><strong>Finding the best ferry for today.</strong>Comparing Mackinaw City and St. Ignace departures against weather, crowds and the last boat back.</div><p class="hero-back" id="heroBackLine" hidden></p><p class="hero-fresh" id="heroFresh"></p><div class="hero-start" id="heroStart" aria-label="Where you are starting"><div class="start-row"><span class="start-label" id="startCityLabel">Starting from</span><div class="start-chips" role="group" aria-labelledby="startCityLabel"><button type="button" class="start-chip" data-city="Detroit, MI" aria-pressed="false">Detroit</button><button type="button" class="start-chip" data-city="Grand Rapids, MI" aria-pressed="false">Grand Rapids</button><button type="button" class="start-chip" data-city="Lansing, MI" aria-pressed="false">Lansing</button><button type="button" class="start-chip" data-city="Traverse City, MI" aria-pressed="false">Traverse City</button><button type="button" class="start-chip" data-city="Chicago, IL" aria-pressed="false">Chicago</button><button type="button" class="start-chip other" data-city-other aria-expanded="false">Other city</button></div><form class="start-other" id="startCityForm" hidden><input id="startCityInput" type="search" list="startCityList" inputmode="search" autocomplete="off" placeholder="City, state or ZIP" aria-label="Starting city"><button class="start-go" type="submit">Use</button></form></div><div class="start-row"><span class="start-label" id="startLeaveLabel">Leaving at</span><div class="start-chips" role="group" aria-labelledby="startLeaveLabel"><button type="button" class="start-chip" data-leave="06:00" aria-pressed="false">6 AM</button><button type="button" class="start-chip" data-leave="07:00" aria-pressed="false">7 AM</button><button type="button" class="start-chip" data-leave="08:00" aria-pressed="false">8 AM</button><button type="button" class="start-chip" data-leave="09:00" aria-pressed="false">9 AM</button><button type="button" class="start-chip" data-leave="10:00" aria-pressed="false">10 AM</button><button type="button" class="start-chip other" data-leave-other aria-expanded="false">Other time</button></div><form class="start-other" id="startLeaveForm" hidden><input id="startLeaveInput" type="time" aria-label="Leave-home time"><button class="start-go" type="submit">Use</button></form></div><p class="start-status" id="startStatus" aria-live="polite">Two taps and this becomes your ferry.</p><datalist id="startCityList"><option value="Mackinaw City, MI"></option><option value="St. Ignace, MI"></option><option value="Detroit, MI"></option><option value="Ann Arbor, MI"></option><option value="Lansing, MI"></option><option value="East Lansing, MI"></option><option value="Grand Rapids, MI"></option><option value="Kalamazoo, MI"></option><option value="Flint, MI"></option><option value="Saginaw, MI"></option><option value="Bay City, MI"></option><option value="Midland, MI"></option><option value="Traverse City, MI"></option><option value="Petoskey, MI"></option><option value="Cheboygan, MI"></option><option value="Gaylord, MI"></option><option value="Mount Pleasant, MI"></option><option value="Alpena, MI"></option><option value="Muskegon, MI"></option><option value="Holland, MI"></option><option value="Battle Creek, MI"></option><option value="Jackson, MI"></option><option value="Troy, MI"></option><option value="Novi, MI"></option><option value="Livonia, MI"></option><option value="Warren, MI"></option><option value="Sterling Heights, MI"></option><option value="Dearborn, MI"></option><option value="Port Huron, MI"></option><option value="Frankenmuth, MI"></option><option value="Grayling, MI"></option><option value="Cadillac, MI"></option><option value="Ludington, MI"></option><option value="Houghton Lake, MI"></option><option value="Charlevoix, MI"></option><option value="Harbor Springs, MI"></option><option value="Marquette, MI"></option><option value="Sault Ste. Marie, MI"></option><option value="Escanaba, MI"></option><option value="Houghton, MI"></option><option value="Munising, MI"></option><option value="Newberry, MI"></option><option value="Chicago, IL"></option><option value="Milwaukee, WI"></option><option value="Green Bay, WI"></option><option value="Madison, WI"></option><option value="Minneapolis, MN"></option><option value="Indianapolis, IN"></option><option value="Fort Wayne, IN"></option><option value="South Bend, IN"></option><option value="Toledo, OH"></option><option value="Columbus, OH"></option><option value="Cleveland, OH"></option><option value="Cincinnati, OH"></option><option value="Pittsburgh, PA"></option><option value="St. Louis, MO"></option><option value="Louisville, KY"></option><option value="Toronto, ON"></option><option value="London, ON"></option><option value="Windsor, ON"></option><option value="Sault Ste. Marie, ON"></option></datalist></div>
         <div class="decision-head">
           <div class="score-ring" id="scoreRing" aria-label="Visit score loading"><span id="scoreValue">—</span><small>/100</small></div>
           <div>
@@ -105,12 +104,7 @@
             <div class="confidence" id="confidence">Loading ferries, weather and Straits conditions</div>
           </div>
         </div>
-        <div class="hero-actions" aria-label="Mackinac planning actions">
-          <button class="btn primary" type="button" data-scroll="#trip-intake">Make it my trip</button>
-          <button class="btn ghost" type="button" data-scroll="#why">Why this timing?</button>
         </div>
-        
-      </div>
       <div class="hero-ticket">
         <div class="hero-trip-glance" id="heroTripGlance" aria-label="Recommended trip at a glance">
           <div class="trip-glance-head"><span>Your day at a glance</span><strong id="heroTripContext">Quick day-trip plan</strong></div>
@@ -137,12 +131,6 @@
 
   <section class="intake-wrap shell" id="trip-intake" aria-labelledby="visitor-mode-title">
     <div class="intake-card">
-      <div class="intake-intro">
-        <div class="eyebrow">Make it yours</div>
-        <h2 id="visitor-mode-title">Four taps. Your plan rebuilds as you go.</h2>
-        <p>Every answer reshapes the ferry, the timing and the day above, and the Stay, Eat and Explore pages follow. We only ask one more if it would actually change the trip.</p>
-        <ol class="intake-steps" aria-hidden="true"><li>Trip length</li><li>Who’s coming</li><li>The trip you picture</li><li>What to avoid</li></ol>
-      </div>
       <div class="intake-work" id="intakeWork">
         <div class="intake-progress-row">
           <span id="intakeProgress">Loading trip questions…</span>
@@ -162,7 +150,7 @@
         <p id="tripProfileSummary"></p>
         <div class="profile-focus" id="tripProfileFocus"></div>
         <div class="adaptive-question" id="adaptiveQuestion" hidden></div>
-        <div class="profile-logistics">
+        <details class="logistics-more"><summary>Change the date, city or leave time</summary><div class="profile-logistics">
           <div class="profile-logistics-head"><strong>Anchor the real trip <em class="optional-pill">Optional</em></strong><span>Add your date, starting city and leave time for door-to-door timing from home.</span></div>
           <div class="profile-logistics-grid">
             <label for="profileTripDate"><span>Trip date</span><input id="profileTripDate" type="date" aria-label="Trip date"></label>
@@ -170,7 +158,7 @@
             <label for="profileDepartTime"><span>Leave home</span><input id="profileDepartTime" type="time" aria-label="Time you plan to leave home"></label>
           </div>
           <div class="profile-logistics-status" id="profileLogisticsStatus" aria-live="polite">Add your date, starting city and leave time. We’ll compare both ferry ports and build the rest of the trip around what you can actually reach.</div>
-        </div>
+        </div></details>
         <div class="profile-actions">
           <button class="btn primary" id="profileBuildTrip" type="button">Build my Mackinac plan</button>
           <button class="btn" id="profileEdit" type="button">Change answers</button>
@@ -230,21 +218,22 @@
   <div class="shell content-stack">
     <section class="section planner-section" id="planner" aria-labelledby="planner-title">
       <div class="section-head"><div><div class="eyebrow">Your Island day</div><h2 id="planner-title">The day, hour by hour</h2><p class="section-dek">Built from the live ferry schedule, weather and your answers. Adjust anything underneath and the whole plan rebuilds.</p></div><div class="share-actions"><button class="btn small" id="sharePlan" type="button">Share plan</button><small id="shareStateStatus" aria-live="polite"></small></div></div>
-      <div class="planner-decision-grid">
-        <article><span>Your mainland start</span><strong id="leaveHome">Enter date, city + time above</strong><p id="leaveHomeNote">Your selected date, origin and leave time determine the reachable port/ferry and total journey. Drive estimates are not live traffic.</p></article>
-        <article><span>Your visit</span><strong id="tripFit">Building…</strong><p id="tripFitNote">Your constraints will show here.</p></article>
-      </div>
-      <div class="planner-summary" id="plannerSummary">Building a realistic trip from the selected visitor modes…</div>
+      
+      
+      
+      <div class="trip-days" id="tripDays" aria-live="polite"></div>
+      <ol class="itinerary" id="itinerary"><li><time>—</time><div><strong>Loading your plan</strong><p>Checking feasible timing.</p></div></li></ol>
       <section class="trip-shape-panel" id="tripShapePanel" hidden aria-labelledby="trip-shape-title">
         <div class="trip-shape-head"><div><span class="eyebrow">How the trip should flow</span><h3 id="trip-shape-title">Your Mackinac trip shape</h3><p id="tripShapeSummary"></p></div><span class="shape-badge" id="tripShapeBadge">Planning</span></div>
         <div class="trip-shape-days" id="tripShapeDays"></div>
         <div class="trip-shape-avoid" id="tripShapeAvoid"></div>
         <p class="trip-shape-truth" id="tripShapeTruth"></p>
       </section>
-      <div class="trip-days" id="tripDays" aria-live="polite"></div>
-      <ol class="itinerary" id="itinerary"><li><time>—</time><div><strong>Loading your plan</strong><p>Checking feasible timing.</p></div></li></ol>
-      <p class="planner-explain" id="plannerExplain"></p>
-      <div class="tune-panel" id="tunePanel">
+      <p class="planner-explain" id="plannerExplain" hidden></p>
+      <details class="fold"><summary>How this day was planned</summary><div class="planner-decision-grid">
+        <article><span>Your mainland start</span><strong id="leaveHome">Enter date, city + time above</strong><p id="leaveHomeNote">Your selected date, origin and leave time determine the reachable port/ferry and total journey. Drive estimates are not live traffic.</p></article>
+        <article><span>Your visit</span><strong id="tripFit">Building…</strong><p id="tripFitNote">Your constraints will show here.</p></article>
+      </div><div class="planner-summary" id="plannerSummary">Building a realistic trip from the selected visitor modes…</div></details><details class="fold"><summary>Fine-tune every detail</summary><div class="tune-panel" id="tunePanel">
         <div class="tune-head"><h3>Fine-tune your Mackinac plan</h3><p>Pick the stops you won’t skip and how dinner fits. Everything else was set by your answers.</p></div>
         <form class="trip-builder" id="tripBuilder">
         <!-- Measured, not guessed: must-dos changed the itinerary in 100% of runs and dinner
@@ -295,11 +284,11 @@
 
         <div class="builder-actions"><button class="btn primary" type="submit" id="buildTrip">Update my plan</button><span id="builderStatus" aria-live="polite">Your opening answers already set the rest. Open “Correct what we inferred” only if something is off.</span></div>
       </form>
-      </div>
+      </div></details>
     </section>
 
 
-    <section class="section" id="why" aria-labelledby="why-title">
+    <h2 class="more-title" id="more-title">More about today</h2><details class="more-item" data-more="why"><summary>Why this timing</summary><section class="section" id="why" aria-labelledby="why-title">
       <div class="section-head"><div><div class="eyebrow">Why this timing</div><h2 id="why-title">Why this plan fits today</h2></div><p id="engineBadge" class="engine-badge">Trip timing checked</p></div>
       <div class="why-grid">
         <article class="reason-card positive"><h3>Working in your favor</h3><ul id="helping"><li>Loading live inputs…</li></ul></article>
@@ -307,9 +296,9 @@
         <article class="reason-card"><h3>Why this ferry fits</h3><ul id="whyFerry"><li>Comparing feasible departures…</li></ul></article>
       </div>
       <details class="method-details"><summary>How we put this plan together</summary><p>The planner first checks the ferry schedule, your mainland drive, weather, daylight and attraction hours. It rules out options that do not fit, then compares the remaining plans. Published ferry times and closures are never changed or invented. If something cannot be checked, the page tells you what needs a recheck.</p><div class="component-bars" id="componentBars"></div></details>
-    </section>
+    </section></details>
 
-    <section class="section" id="ferries" aria-labelledby="ferry-title">
+    <details class="more-item" data-more="ferries"><summary>All ferries from both ports</summary><section class="section" id="ferries" aria-labelledby="ferry-title">
       <div class="section-head"><div><div class="eyebrow">Getting here</div><h2 id="ferry-title">Which ferry gets you onto the Island best?</h2></div><span class="source-pill" id="ferryFreshness">Verifying schedules…</span></div>
       <div class="ferry-pick" id="ferryPick"><strong>Comparing both ports…</strong></div>
       <div class="ferry-columns">
@@ -318,9 +307,9 @@
       </div>
       <div class="return-box"><div><span>Return plan</span><strong id="recommendedReturn">—</strong><p id="returnReason">Return timing depends on whether this is a day trip or a multi-day stay.</p></div><div><span>Last published ferry for return day</span><strong id="literalLast">—</strong><p>Useful as a backstop, not necessarily the ferry we’d choose for your day.</p></div></div>
       <p class="truth-note">Ferry schedules can change. Check your operator before heading to the dock, especially late in the day or in rough weather.</p>
-    </section>
+    </section></details>
 
-    <section class="section" id="conditions" aria-labelledby="conditions-title">
+    <details class="more-item" data-more="conditions"><summary>Weather and water</summary><section class="section" id="conditions" aria-labelledby="conditions-title">
       <div class="section-head"><div><div class="eyebrow">Your Island day</div><h2 id="conditions-title">What it should feel like while you’re here</h2></div><span class="source-pill" id="weatherFreshness">Weather loading…</span></div>
       <div class="conditions-grid">
         <article class="condition-card"><span>Island weather</span><strong id="islandWeather">—</strong><p id="islandWeatherNote"></p></article>
@@ -331,10 +320,10 @@
         <article class="condition-card"><span>Daylight</span><strong id="daylightWindow">—</strong><p id="daylightNote"></p></article>
       </div>
       <div class="alert-box" id="alertBox" hidden></div>
-    </section>
+    </section></details>
 
 
-    <div data-in-article-ad-break aria-hidden="true"></div><section class="section webcam-section" id="webcams" aria-labelledby="webcams-title">
+    <details class="more-item" data-more="webcams"><summary>Live cameras</summary><section class="section webcam-section" id="webcams" aria-labelledby="webcams-title">
       <div class="section-head">
         <div>
           <div class="eyebrow">Live Mackinac Island views</div>
@@ -369,9 +358,9 @@
       </div>
 
       <p class="truth-note">The trip planner suggests a useful viewpoint from your ferry port, visit type and conditions and favors views that play directly on this page. It does not interpret the live video. Camera availability is controlled by each camera owner.</p>
-    </section>
+    </section></details>
 
-    <section class="section split-section" id="crowds-open" aria-labelledby="crowds-title">
+    <details class="more-item" data-more="crowds-open"><summary>Crowds and what’s open</summary><section class="section split-section" id="crowds-open" aria-labelledby="crowds-title">
       <article class="feature-card crowd-card">
         <div class="eyebrow">When it feels busiest</div><h2 id="crowds-title">Crowd outlook</h2>
         <div class="big-label" id="crowdLabel">—</div><p id="crowdWindows">Loading crowd pressure…</p><div class="confidence-row"><strong id="crowdConfidence">— confidence</strong><span id="crowdBasis"></span></div>
@@ -380,14 +369,14 @@
         <div class="eyebrow">Before you set out</div><h2>What’s open today</h2><div id="attractionList" class="status-list"><p>Loading attraction status…</p></div>
         <div class="openness" id="openness"></div>
       </article>
-    </section>
+    </section></details>
 
-    <section class="section split-section" id="seasonal">
+    <details class="more-item" data-more="seasonal"><summary>Events and fall color</summary><section class="section split-section" id="seasonal">
       <article class="feature-card"><div class="eyebrow">Around the Island</div><h2>What’s happening today</h2><div id="eventsList" class="status-list"><p>Checking the island calendar…</p></div></article>
       <article class="feature-card"><div class="eyebrow">Seasonal scenery</div><h2>Fall color on the Island</h2><div class="big-label smaller" id="fallColorLabel">—</div><p id="fallColorText">Using the existing Michigan fall-color layer when it is current.</p><a class="text-link" href="/fall-color/mackinac-island-fall-color/">Mackinac fall-color field guide →</a></article>
-    </section>
+    </section></details>
 
-    <div data-in-article-ad-break aria-hidden="true"></div><section class="section map-section" id="map-section" aria-labelledby="map-title">
+    <details class="more-item" data-more="map-section"><summary>Map of the Island</summary><section class="section map-section" id="map-section" aria-labelledby="map-title">
       <div class="section-head"><div><div class="eyebrow">Getting around</div><h2 id="map-title">Find your way around the Island</h2></div><button class="btn small" id="loadMap">Load interactive map</button></div>
       <div class="map-layout">
         <div class="map-placeholder" id="map"><div><strong>Open the map when you want to see how the day fits together.</strong><p>Ferry docks, downtown, Fort Mackinac, Arch Rock, British Landing, Grand Hotel and the perimeter loop.</p></div></div>
@@ -397,33 +386,33 @@
           <div><strong>M-185 perimeter</strong><span>~8.2 mi · mostly level shoreline loop</span></div>
         </div>
       </div>
-    </section>
+    </section></details>
 
-    <section class="section trip-depth-section" id="stay-guide" aria-labelledby="stay-guide-title">
+    <details class="more-item" data-more="stay-guide"><summary>Where to stay for this trip</summary><section class="section trip-depth-section" id="stay-guide" aria-labelledby="stay-guide-title">
       <div class="section-head"><div><div class="eyebrow">Where the night fits</div><h2 id="stay-guide-title">Stay strategy for this trip</h2><p class="section-dek" id="stayGuideText">Your trip style will determine whether downtown convenience, quieter evenings or resort amenities deserve priority.</p></div><a class="btn small" href="https://www.mackinacisland.org/stay/" target="_blank" rel="noopener">Browse official lodging</a></div>
       <div class="depth-grid" id="stayGuideCards"></div>
-    </section>
+    </section></details>
 
-    <section class="section trip-depth-section" id="eat-guide" aria-labelledby="eat-guide-title">
+    <details class="more-item" data-more="eat-guide"><summary>Where to eat for this trip</summary><section class="section trip-depth-section" id="eat-guide" aria-labelledby="eat-guide-title">
       <div class="section-head"><div><div class="eyebrow">Meals that fit the day</div><h2 id="eat-guide-title">Build food around the trip, not around a directory</h2><p class="section-dek" id="eatGuideText">We’ll use your pace, party and crowd tolerance to decide how much time meals deserve and when they fit best.</p></div><a class="btn small" href="https://www.mackinacisland.org/dining/" target="_blank" rel="noopener">Browse official dining</a></div>
       <div class="depth-grid" id="eatGuideCards"></div>
-    </section>
+    </section></details>
 
-    <section class="section trip-depth-section" id="straits-guide" aria-labelledby="straits-guide-title">
+    <details class="more-item" data-more="straits-guide"><summary>Around the Straits</summary><section class="section trip-depth-section" id="straits-guide" aria-labelledby="straits-guide-title">
       <div class="section-head"><div><div class="eyebrow">Around the Straits</div><h2 id="straits-guide-title">Only add mainland stops when they improve the trip</h2><p class="section-dek" id="straitsGuideText">Your profile will tell us whether this should stay Island-focused or become a broader Straits trip.</p></div></div>
       <div class="gateway-grid" id="straitsGuideCards">
         <a class="gateway-card" href="https://mackinawcity.com/" target="_blank" rel="noopener"><span>South gateway</span><strong>Mackinaw City</strong><small>Useful when your route approaches from the Lower Peninsula.</small></a>
         <a class="gateway-card" href="https://stignace.com/" target="_blank" rel="noopener"><span>North gateway</span><strong>St. Ignace</strong><small>Useful when your route approaches from the Upper Peninsula.</small></a>
       </div>
-    </section>
+    </section></details>
 
-    <div data-in-article-ad-break aria-hidden="true"></div><section class="section source-section" id="sources" aria-labelledby="sources-title">
+    <details class="more-item" data-more="sources"><summary>Sources and freshness</summary><section class="section source-section" id="sources" aria-labelledby="sources-title">
       <div class="section-head"><div><div class="eyebrow">Trip details checked</div><h2 id="sources-title">What this plan is using</h2></div><span class="source-pill" id="overallDataState">Loading…</span></div>
       <div id="sourceList" class="source-list"><p>Loading source status…</p></div>
       <details><summary>What if one of these details can’t be checked?</summary><p>If an optional detail such as events or fall color is unavailable, the rest of the trip can still be planned. If a ferry schedule or weather source cannot be checked, we’ll say so and keep the operator links handy. Marine observations describe ride comfort; the ferry operator remains the authority on service.</p></details>
-    </section>
+    </section></details>
 
-    <div data-in-article-ad-break aria-hidden="true"></div><section class="section seo-section" aria-labelledby="guide-title">
+    <section class="section seo-section" aria-labelledby="guide-title">
       <div class="eyebrow">A little local know-how</div><h2 id="guide-title">Planning a Mackinac Island day trip</h2>
       <div class="prose-grid">
         <div><h3>How much time do you need?</h3><p>For a first day trip, six or more usable island hours is a strong target. That is why the planner evaluates ferry combinations rather than simply pointing at the earliest departure. A late arrival can still work, but the itinerary should shrink instead of pretending a full-day plan is possible.</p><h3>Mackinaw City or St. Ignace?</h3><p>Use the port that fits the direction you are already traveling and the departure that preserves the better island window. Lower Peninsula travelers usually avoid an unnecessary bridge crossing by using Mackinaw City. Upper Peninsula travelers usually do the reverse. Schedule alignment can still change the answer.</p></div>
@@ -434,8 +423,6 @@
     <section class="section related-section"><div class="eyebrow">Mackinac planning guides</div><h2>Start with the decision you are trying to make</h2><div class="related-links"><a href="/mackinac-island/day-trip/">Day trip planner</a><a href="/mackinac-island/with-kids/">Mackinac with kids</a><a href="/mackinac-island/2-day-itinerary/">2-day itinerary</a><a href="/mackinac-island/ferry-planner/">Ferry planner</a></div><div class="eyebrow" style="margin-top:22px">Plan around how you want to move</div><h2>Walking and biking change the whole Island day</h2><div class="related-links"><a href="/mackinac-island/limited-walking/">Mackinac with less walking</a><a href="/mackinac-island/bike-day/">Mackinac bike day / M-185</a><a href="/mackinac-island/fall/">Mackinac in fall</a></div><div class="eyebrow" style="margin-top:22px">Starting farther away?</div><h2>Plan the drive and ferry together</h2><div class="related-links"><a href="/mackinac-island/from-detroit/">From Detroit</a><a href="/mackinac-island/from-chicago/">From Chicago</a><a href="/mackinac-island/from-traverse-city/">From Traverse City</a><a href="/mackinac-island/from-grand-rapids/">From Grand Rapids</a></div><div class="eyebrow" style="margin-top:22px">Use the Mackinac hub</div><h2>Go deeper without starting a new trip</h2><div class="related-links"><a href="/mackinac-island/plan/">Plan</a><a href="/mackinac-island/where-to-stay/">Stay</a><a href="/mackinac-island/dining/">Eat</a><a href="/mackinac-island/things-to-do/">Explore</a><a href="/mackinac-island/events/">Events</a><a href="/mackinac-island/around-the-straits/">Around the Straits</a></div><div class="eyebrow" style="margin-top:22px">Keep planning</div><h2>Related Michigan tools</h2><div class="related-links"><a href="/mackinac-bridge-live/">Mackinac Bridge Live</a><a href="/fall-color/">Michigan Fall Color</a><a href="/great-lakes-buoys/">Great Lakes Buoys</a><a href="/soo-locks/">Soo Locks Live</a><a href="/tools/">All Michigan tools</a></div></section>
   </div>
 </main>
-<div class="live-bar" id="liveBar" hidden><div class="live-bar-inner" role="button" tabindex="0" aria-label="Back to your plan"><div class="lb-item"><small>Ferry</small><strong id="lbFerry">—</strong></div><div class="lb-item"><small>Back</small><strong id="lbReturn">—</strong></div><div class="lb-item lb-first"><small>Your day</small><strong id="lbFirst">—</strong></div><span class="lb-see" aria-hidden="true">↑</span></div></div>
-<div class="plan-toast" id="planToast" role="status" aria-live="polite" hidden><span class="plan-toast-mark" aria-hidden="true"></span><div class="plan-toast-copy"><strong id="planToastTitle">Plan updated</strong><span id="planToastBody"></span></div><button type="button" class="plan-toast-see" id="planToastSee">See it</button></div>
 
 <footer class="footer"><div class="shell"><p>Built by <a href="/">Chris Izworski</a>. Live source agencies and ferry operators remain authoritative for their own conditions and schedules. This tool is trip-planning guidance, not a guarantee of service or weather.</p><p><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p></div></footer>
 <script src="/assets/mackinac-hub.js?v=20260921-trip1" defer></script>

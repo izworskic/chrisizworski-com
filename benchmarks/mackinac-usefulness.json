@@ -26,88 +26,7 @@
         "stability": 0,
         "truth": 0
       },
-      "note": "origin/main (post-#617), same harness as v4-final"
-    },
-    {
-      "label": "v1-start-chips-live-bar",
-      "at": "2026-09-29T00:18:55.081Z",
-      "loss": 0.0971,
-      "terms": {
-        "react": 0.159,
-        "correct": 0.063,
-        "ask": 0.27,
-        "clarity": 0.057,
-        "distinct": 0.036,
-        "continuity": 0,
-        "speed": 0.004,
-        "stability": 0,
-        "truth": 0
-      },
-      "contribution": {
-        "react": 0.0318,
-        "correct": 0.0125,
-        "ask": 0.0405,
-        "clarity": 0.0086,
-        "distinct": 0.0036,
-        "continuity": 0,
-        "speed": 0.0002,
-        "stability": 0,
-        "truth": 0
-      }
-    },
-    {
-      "label": "v2-short-visit-day-bar",
-      "at": "2026-09-29T00:27:14.356Z",
-      "loss": 0.0948,
-      "terms": {
-        "react": 0.142,
-        "correct": 0,
-        "ask": 0.27,
-        "clarity": 0.057,
-        "distinct": 0.172,
-        "continuity": 0,
-        "speed": 0.001,
-        "stability": 0,
-        "truth": 0
-      },
-      "contribution": {
-        "react": 0.0284,
-        "correct": 0,
-        "ask": 0.0405,
-        "clarity": 0.0086,
-        "distinct": 0.0172,
-        "continuity": 0,
-        "speed": 0,
-        "stability": 0,
-        "truth": 0
-      }
-    },
-    {
-      "label": "v3-one-tap-questions",
-      "at": "2026-09-29T00:34:02.720Z",
-      "loss": 0.0805,
-      "terms": {
-        "react": 0.154,
-        "correct": 0,
-        "ask": 0.222,
-        "clarity": 0.057,
-        "distinct": 0,
-        "continuity": 0,
-        "speed": 0.125,
-        "stability": 0.038,
-        "truth": 0
-      },
-      "contribution": {
-        "react": 0.0308,
-        "correct": 0,
-        "ask": 0.0334,
-        "clarity": 0.0086,
-        "distinct": 0,
-        "continuity": 0,
-        "speed": 0.0063,
-        "stability": 0.0015,
-        "truth": 0
-      }
+      "note": "origin/main (post-#617), same harness as v4-final \u00b7 measured before the complexity term; not comparable to later runs"
     },
     {
       "label": "v4-final",
@@ -134,30 +53,93 @@
         "speed": 0,
         "stability": 0,
         "truth": 0
-      }
+      },
+      "note": "measured before the complexity term; not comparable to later runs"
+    },
+    {
+      "label": "live-before-simplify",
+      "at": "2026-09-29T01:59:38.076Z",
+      "loss": 0.2116,
+      "terms": {
+        "react": 0.141,
+        "correct": 0,
+        "ask": 0.222,
+        "clarity": 0.067,
+        "complexity": 1,
+        "distinct": 0,
+        "continuity": 0,
+        "speed": 0.039,
+        "stability": 0,
+        "truth": 0
+      },
+      "contribution": {
+        "react": 0.0253,
+        "correct": 0,
+        "ask": 0.0267,
+        "clarity": 0.008,
+        "complexity": 0.15,
+        "distinct": 0,
+        "continuity": 0,
+        "speed": 0.0016,
+        "stability": 0,
+        "truth": 0
+      },
+      "note": "production after #643, complexity term added (weights rebalanced)"
+    },
+    {
+      "label": "simplified-v2",
+      "at": "2026-09-29T02:17:17.937Z",
+      "loss": 0.0771,
+      "terms": {
+        "react": 0.112,
+        "correct": 0,
+        "ask": 0.222,
+        "clarity": 0.055,
+        "complexity": 0.158,
+        "distinct": 0,
+        "continuity": 0,
+        "speed": 0,
+        "stability": 0,
+        "truth": 0
+      },
+      "contribution": {
+        "react": 0.0201,
+        "correct": 0,
+        "ask": 0.0267,
+        "clarity": 0.0066,
+        "complexity": 0.0237,
+        "distinct": 0,
+        "continuity": 0,
+        "speed": 0,
+        "stability": 0,
+        "truth": 0
+      },
+      "note": "this branch, same weights as live-before-simplify"
     }
   ],
   "latest": {
-    "label": "v4-final",
-    "at": "2026-09-29T00:41:12.940Z",
+    "label": "simplified-v2",
+    "at": "2026-09-29T02:17:17.937Z",
     "base": "http://localhost:8791",
-    "loss": 0.0684,
+    "loss": 0.0771,
     "terms": {
-      "react": 0.125,
+      "react": 0.112,
       "correct": 0,
       "ask": 0.222,
-      "clarity": 0.067,
+      "clarity": 0.055,
+      "complexity": 0.158,
       "distinct": 0,
       "continuity": 0,
-      "speed": 0.001,
+      "speed": 0,
       "stability": 0,
       "truth": 0
     },
     "contribution": {
-      "react": 0.025,
+      "react": 0.0201,
       "correct": 0,
-      "ask": 0.0334,
-      "clarity": 0.01,
+      "ask": 0.0267,
+      "clarity": 0.0066,
+      "complexity": 0.0237,
       "distinct": 0,
       "continuity": 0,
       "speed": 0,
@@ -172,18 +154,19 @@
           "react": 0,
           "correct": 0,
           "ask": 0.12,
-          "clarity": 0.067,
+          "complexity": 0.163,
+          "clarity": 0.055,
           "continuity": 0,
-          "speed": 0.005,
+          "speed": 0,
           "stability": 0,
           "truth": 0
         },
-        "speedMs": 1521,
+        "speedMs": 1359,
         "first": {
           "answerVisible": true,
-          "words": 140,
-          "ctas": 2,
-          "qScreens": 0.590676836492891,
+          "words": 131,
+          "ctas": 0,
+          "qScreens": 0.661618779620853,
           "jargon": 0
         },
         "taps": 6,
@@ -193,37 +176,50 @@
             "what": "start city chip",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "start leave chip",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "trip_duration=day",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview"
+            ]
           },
           {
             "what": "party=couple",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview"
+            ]
           },
           {
             "what": "trip_vision=icons",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview",
+              "flash"
+            ]
           },
           {
             "what": "trip_loss=rushed",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           }
         ],
         "checks": [
@@ -247,26 +243,36 @@
           "stripOn": true,
           "focus": true,
           "top": "lake-view"
-        }
+        },
+        "size": {
+          "screens": 8.8,
+          "controls": 22,
+          "words": 1017
+        },
+        "feedbackKinds": [
+          "preview",
+          "flash"
+        ]
       },
       {
         "id": "gr-family",
         "L": {
-          "react": 0.057,
+          "react": 0,
           "correct": 0,
           "ask": 0.18,
-          "clarity": 0.067,
+          "complexity": 0.168,
+          "clarity": 0.055,
           "continuity": 0,
           "speed": 0,
           "stability": 0,
           "truth": 0
         },
-        "speedMs": 1129,
+        "speedMs": 1014,
         "first": {
           "answerVisible": true,
-          "words": 140,
-          "ctas": 2,
-          "qScreens": 0.590676836492891,
+          "words": 131,
+          "ctas": 0,
+          "qScreens": 0.661618779620853,
           "jargon": 0
         },
         "taps": 7,
@@ -276,43 +282,55 @@
             "what": "start city chip",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "start leave chip",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "trip_duration=day",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview"
+            ]
           },
           {
             "what": "party=family-young",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview",
+              "flash"
+            ]
           },
           {
             "what": "trip_vision=kids",
             "anyChange": true,
-            "visibleChange": false,
-            "toast": true
+            "visibleChange": true,
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "trip_loss=walking",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "adaptive",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           }
         ],
         "checks": [
@@ -336,7 +354,16 @@
           "stripOn": true,
           "focus": true,
           "top": "lake-view"
-        }
+        },
+        "size": {
+          "screens": 9,
+          "controls": 22,
+          "words": 1027
+        },
+        "feedbackKinds": [
+          "preview",
+          "flash"
+        ]
       },
       {
         "id": "tc-couple-night",
@@ -344,18 +371,19 @@
           "react": 0.125,
           "correct": 0,
           "ask": 0.29,
-          "clarity": 0.067,
+          "complexity": 0.158,
+          "clarity": 0.055,
           "continuity": 0,
           "speed": 0,
           "stability": 0,
           "truth": 0
         },
-        "speedMs": 1097,
+        "speedMs": 1057,
         "first": {
           "answerVisible": true,
-          "words": 140,
-          "ctas": 2,
-          "qScreens": 0.590676836492891,
+          "words": 131,
+          "ctas": 0,
+          "qScreens": 0.661618779620853,
           "jargon": 0
         },
         "taps": 8,
@@ -365,31 +393,44 @@
             "what": "start city chip",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "start leave chip",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "trip_duration=one-night",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview",
+              "flash"
+            ]
           },
           {
             "what": "party=couple",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview"
+            ]
           },
           {
             "what": "trip_vision=relaxed",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview",
+              "flash"
+            ]
           },
           {
             "what": "trip_vision=food-shopping (not offered)",
@@ -402,13 +443,15 @@
             "what": "trip_loss=crowds",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "adaptive",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           }
         ],
         "checks": [
@@ -432,26 +475,36 @@
           "stripOn": true,
           "focus": true,
           "top": "lake-view"
-        }
+        },
+        "size": {
+          "screens": 8.6,
+          "controls": 22,
+          "words": 1004
+        },
+        "feedbackKinds": [
+          "preview",
+          "flash"
+        ]
       },
       {
         "id": "lansing-bikes",
         "L": {
-          "react": 0.175,
+          "react": 0.125,
           "correct": 0,
           "ask": 0.24,
-          "clarity": 0.067,
+          "complexity": 0.171,
+          "clarity": 0.055,
           "continuity": 0,
           "speed": 0,
           "stability": 0,
           "truth": 0
         },
-        "speedMs": 1116,
+        "speedMs": 1071,
         "first": {
           "answerVisible": true,
-          "words": 140,
-          "ctas": 2,
-          "qScreens": 0.590676836492891,
+          "words": 131,
+          "ctas": 0,
+          "qScreens": 0.661618779620853,
           "jargon": 0
         },
         "taps": 8,
@@ -461,49 +514,64 @@
             "what": "start city chip",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "start leave other",
             "anyChange": true,
             "visibleChange": false,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "start leave typed",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "trip_duration=day",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview"
+            ]
           },
           {
             "what": "party=adults-friends",
             "anyChange": true,
-            "visibleChange": false,
-            "toast": true
+            "visibleChange": true,
+            "toast": false,
+            "kinds": [
+              "preview"
+            ]
           },
           {
             "what": "trip_vision=biking",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview",
+              "flash"
+            ]
           },
           {
             "what": "trip_loss=weather",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "adaptive",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           }
         ],
         "checks": [
@@ -523,7 +591,16 @@
           "stripOn": true,
           "focus": true,
           "top": "lake-view"
-        }
+        },
+        "size": {
+          "screens": 9,
+          "controls": 24,
+          "words": 1044
+        },
+        "feedbackKinds": [
+          "preview",
+          "flash"
+        ]
       },
       {
         "id": "saginaw-multigen",
@@ -531,18 +608,19 @@
           "react": 0.125,
           "correct": 0,
           "ask": 0.24,
-          "clarity": 0.067,
+          "complexity": 0.183,
+          "clarity": 0.055,
           "continuity": 0,
           "speed": 0,
           "stability": 0,
           "truth": 0
         },
-        "speedMs": 1124,
+        "speedMs": 749,
         "first": {
           "answerVisible": true,
-          "words": 140,
-          "ctas": 2,
-          "qScreens": 0.590676836492891,
+          "words": 131,
+          "ctas": 0,
+          "qScreens": 0.661618779620853,
           "jargon": 0
         },
         "taps": 8,
@@ -552,49 +630,65 @@
             "what": "start city other",
             "anyChange": true,
             "visibleChange": false,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "start city typed",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "start leave chip",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "trip_duration=day",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview"
+            ]
           },
           {
             "what": "party=multigenerational",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview",
+              "flash"
+            ]
           },
           {
             "what": "trip_vision=history",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview",
+              "flash"
+            ]
           },
           {
             "what": "trip_loss=walking",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "adaptive",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           }
         ],
         "checks": [
@@ -618,7 +712,16 @@
           "stripOn": true,
           "focus": true,
           "top": "island-house"
-        }
+        },
+        "size": {
+          "screens": 9.4,
+          "controls": 24,
+          "words": 1083
+        },
+        "feedbackKinds": [
+          "preview",
+          "flash"
+        ]
       },
       {
         "id": "marquette-solo",
@@ -626,18 +729,19 @@
           "react": 0.143,
           "correct": 0,
           "ask": 0.18,
-          "clarity": 0.067,
+          "complexity": 0.074,
+          "clarity": 0.055,
           "continuity": 0,
           "speed": 0,
           "stability": 0,
           "truth": 0
         },
-        "speedMs": 1053,
+        "speedMs": 1319,
         "first": {
           "answerVisible": true,
-          "words": 140,
-          "ctas": 2,
-          "qScreens": 0.590676836492891,
+          "words": 131,
+          "ctas": 0,
+          "qScreens": 0.661618779620853,
           "jargon": 0
         },
         "taps": 7,
@@ -647,43 +751,54 @@
             "what": "start city other",
             "anyChange": true,
             "visibleChange": false,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "start city typed",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "start leave chip",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "trip_duration=day",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview"
+            ]
           },
           {
             "what": "party=solo",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview"
+            ]
           },
           {
             "what": "trip_vision=scenery",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "trip_loss=crowds",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           }
         ],
         "checks": [
@@ -703,7 +818,15 @@
           "stripOn": true,
           "focus": true,
           "top": "sunset-condos"
-        }
+        },
+        "size": {
+          "screens": 8.7,
+          "controls": 24,
+          "words": 987
+        },
+        "feedbackKinds": [
+          "preview"
+        ]
       },
       {
         "id": "baycity-late",
@@ -711,18 +834,19 @@
           "react": 0.25,
           "correct": 0,
           "ask": 0.24,
-          "clarity": 0.067,
+          "complexity": 0.161,
+          "clarity": 0.055,
           "continuity": 0,
           "speed": 0,
           "stability": 0,
           "truth": 0
         },
-        "speedMs": 1109,
+        "speedMs": 1024,
         "first": {
           "answerVisible": true,
-          "words": 140,
-          "ctas": 2,
-          "qScreens": 0.590676836492891,
+          "words": 131,
+          "ctas": 0,
+          "qScreens": 0.661618779620853,
           "jargon": 0
         },
         "taps": 8,
@@ -732,49 +856,64 @@
             "what": "start city other",
             "anyChange": true,
             "visibleChange": false,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "start city typed",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "start leave other",
             "anyChange": true,
             "visibleChange": false,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "start leave typed",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "trip_duration=day",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview"
+            ]
           },
           {
             "what": "party=couple",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview"
+            ]
           },
           {
             "what": "trip_vision=icons",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview",
+              "flash"
+            ]
           },
           {
             "what": "trip_loss=missing",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           }
         ],
         "checks": [
@@ -794,7 +933,16 @@
           "stripOn": true,
           "focus": true,
           "top": "lake-view"
-        }
+        },
+        "size": {
+          "screens": 8.7,
+          "controls": 26,
+          "words": 977
+        },
+        "feedbackKinds": [
+          "preview",
+          "flash"
+        ]
       },
       {
         "id": "chicago-teens",
@@ -802,18 +950,19 @@
           "react": 0.125,
           "correct": 0,
           "ask": 0.29,
-          "clarity": 0.067,
+          "complexity": 0.187,
+          "clarity": 0.055,
           "continuity": 0,
           "speed": 0,
           "stability": 0,
           "truth": 0
         },
-        "speedMs": 1084,
+        "speedMs": 1080,
         "first": {
           "answerVisible": true,
-          "words": 140,
-          "ctas": 2,
-          "qScreens": 0.590676836492891,
+          "words": 131,
+          "ctas": 0,
+          "qScreens": 0.661618779620853,
           "jargon": 0
         },
         "taps": 8,
@@ -823,31 +972,45 @@
             "what": "start city chip",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "start leave chip",
             "anyChange": true,
             "visibleChange": true,
-            "toast": false
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "trip_duration=two-three",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview",
+              "flash"
+            ]
           },
           {
             "what": "party=family-teens",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview",
+              "flash"
+            ]
           },
           {
             "what": "trip_vision=biking",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": [
+              "preview",
+              "flash"
+            ]
           },
           {
             "what": "trip_vision=history (not offered)",
@@ -860,13 +1023,15 @@
             "what": "trip_loss=missing",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           },
           {
             "what": "adaptive",
             "anyChange": true,
             "visibleChange": true,
-            "toast": true
+            "toast": false,
+            "kinds": []
           }
         ],
         "checks": [
@@ -890,7 +1055,16 @@
           "stripOn": true,
           "focus": true,
           "top": "lake-view"
-        }
+        },
+        "size": {
+          "screens": 9.4,
+          "controls": 22,
+          "words": 1109
+        },
+        "feedbackKinds": [
+          "preview",
+          "flash"
+        ]
       }
     ]
   },

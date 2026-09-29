@@ -63,7 +63,7 @@ test('public surface makes the decision first and keeps return vs last ferry dis
   assert.match(html,/Best time to arrive/);
   assert.match(html,/Return plan/);
   assert.match(html,/Last published ferry for return day/);
-  assert.match(html,/Why this timing\?/);
+  assert.match(html,/Why this timing</);
   assert.match(html,/Fine-tune your Mackinac plan/);
   assert.match(html,/When it feels busiest/);
   assert.match(html,/CC BY-SA 4\.0/);
@@ -621,7 +621,7 @@ test('responsive visitor-first Mackinac surface survives phone tablet and landsc
   const html=fs.readFileSync(htmlPath,'utf8');
   const css=fs.readFileSync(cssPath,'utf8');
   const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/Make it yours/);
+  assert.match(html,/Starting from<\/span>/); // intake intro removed 2026-09-28; the hero start row leads
   assert.match(html,/Which ferry gets you onto the Island best\?/);
   assert.match(html,/What it should feel like while you’re here/);
   assert.match(html,/Build my Mackinac plan/);
@@ -702,7 +702,7 @@ test('regional intake replaces the busy persona wall with profile-driven navigat
   const js=fs.readFileSync(jsPath,'utf8');
   const css=fs.readFileSync(cssPath,'utf8');
   assert.match(html,/id="trip-intake"/);
-  assert.match(html,/Four taps\. Your plan rebuilds as you go\./);
+  assert.match(html,/id="intakeProgress"/);
   assert.match(html,/id="tripProfileCard"/);
   assert.match(html,/id="tripTabs"/);
   assert.match(html,/id="stay-guide"/);
