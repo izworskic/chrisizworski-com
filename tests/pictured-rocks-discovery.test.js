@@ -1,3 +1,5 @@
+import responseChecks from './helpers/pictured-rocks-response.cjs';
+const {canonicalResponse, assertIndexableRobots} = responseChecks;
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -17,9 +19,9 @@ test('Pictured Rocks sitemap contains only the canonical production owner', () =
   assert.doesNotMatch(sitemap, /chrisizworski\.com\/labs\/pictured-rocks-planner/);
 });
 
-test('lab preview stays noindex while middleware promotes only the canonical host', () => {
+test('lab preview stays noindex while middleware promotes only the canonical host', async t => {
   assert.match(preview, /<meta name="robots" content="noindex,nofollow">/);
   assert.match(preview, /<link rel="canonical" href="https:\/\/picturedrocks\.chrisizworski\.com\/">/);
   assert.match(middleware, /const PICTURED_ROCKS_HOST = 'picturedrocks\.chrisizworski\.com';/);
-  assert.match(middleware, /index,follow,max-image-preview:large/);
+  assertIndexableRobots((await canonicalResponse(t)).html);
 });

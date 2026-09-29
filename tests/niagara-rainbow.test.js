@@ -66,7 +66,7 @@ async function runEngine({ skyCover = 5, fail = false } = {}) {
 }
 
 test('Niagara page answers the concrete decision and preserves the public canonical', () => {
-  assert.match(PAGE, /Will there be a rainbow at Niagara Falls today\?/i);
+  assert.match(PAGE, /<h1 id="pageTitle">Best Time to See a Rainbow at Niagara Falls Today<\/h1>/i);
   assert.match(PAGE, /id="bestWindow"/);
   assert.match(PAGE, /id="bestViewpoint"/);
   assert.match(PAGE, /id="confidence"/);

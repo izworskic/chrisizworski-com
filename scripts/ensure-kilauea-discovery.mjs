@@ -8,7 +8,7 @@ const KILAUEA_IMAGE='https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium
 const MODIFIED='2026-09-28';
 const TITLE='Kīlauea Live: Should You Go Now? | Chris Izworski';
 const SOCIAL_TITLE='Kīlauea Live: Should You Go Now?';
-const DESCRIPTION='Check current Kīlauea eruption activity, Hawaiʻi Volcanoes National Park access, summit weather, air conditions and the best public viewpoint before you drive.';
+const DESCRIPTION='Check Kīlauea eruption activity, Hawaiʻi Volcanoes National Park access, summit weather, air conditions and the best public viewpoint before you drive.';
 const SOCIAL_DESCRIPTION='Current USGS HVO activity, park access, summit weather and air conditions translated into a practical Kīlauea viewing decision.';
 const IMAGE_ALT='Visitors watch Kīlauea lava fountaining at Hawaiʻi Volcanoes National Park. USGS Hawaiian Volcano Observatory public-domain photo.';
 

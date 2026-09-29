@@ -1,3 +1,4 @@
+const {canonicalResponse, assertIndexableRobots} = require('./helpers/pictured-rocks-response.cjs');
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -10,10 +11,10 @@ const workflow = fs.readFileSync(path.join(root, '.github/workflows/pictured-roc
 
 const host = 'picturedrocks.chrisizworski.com';
 
-test('canonical Pictured Rocks host is served by current middleware shell', () => {
+test('canonical Pictured Rocks host is served by current middleware shell', async t => {
   assert.match(middleware, /PICTURED_ROCKS_HOST\s*=\s*['"]picturedrocks\.chrisizworski\.com['"]/);
   assert.match(middleware, /servePicturedRocksCanonical/);
-  assert.match(middleware, /index,follow,max-image-preview:large/);
+  assertIndexableRobots((await canonicalResponse(t)).html);
 });
 
 test('lab source remains noindex while canonical points to the subdomain', () => {

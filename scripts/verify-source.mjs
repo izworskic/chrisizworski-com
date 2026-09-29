@@ -340,6 +340,8 @@ const intentionalChanges = new Set([
 // Pin their exact source hashes so the known drift passes without broadly exempting
 // the routes from future parity checks.
 const committedDriftHashEntries = [
+  // Sep 29: reviewed Sep 28 Pictured Rocks links + dateModified edits in
+  // cff3d4e, c05799d0 and be0973cf; repinned only their three beach routes below.
   // Aug 25 2026: Person entity consolidated. The canonical @id carried FIVE different
   // description values, two url values and an alumniOf that dropped a school on two of three
   // pages. Verified semantically (parsed JSON-LD compared property by property) that nothing but
@@ -381,7 +383,7 @@ const committedDriftHashEntries = [
   ["/great-lakes-beaches/luna-pier/", "6412706674ad28cd13220a58c68037b4173f73adfcb5209665f36368780cd9aa"],
   ["/great-lakes-beaches/marquette-south-beach/", "153c8975b575baee3cf4c3631705a409ff6abecbebc2d1294a0e34d49a67ba76"],
   ["/great-lakes-beaches/mclain-state-park/", "4480f2fd44d4d0ec33a9e879c09d800f1b98002c1fdc6f073c0f78eda14c6c1e"],
-  ["/great-lakes-beaches/miners-beach/", "df340a592f13f9633fb77f5fc3488a265a7de1133c868b4c551436b5afb4b83c"],
+  ["/great-lakes-beaches/miners-beach/", "9eeefb9a720910006b10d1985e7397dd0d28fca85c7d2586ca143097c24ba489"],
   ["/great-lakes-beaches/muskegon-state-park/", "e73613d551fde16432bf28117864f7f3b749114df4840ba30668e3a61d7a906a"],
   ["/great-lakes-beaches/new-buffalo-beach/", "1f4f522ef570e3701813aa21a6f8a5b4b766995af162e9bfbfedaea354a8bdcf"],
   ["/great-lakes-beaches/north-bar-lake/", "b2c8fbb4f82efde1b6a9d2b307c9bfc605398148b7d2de618aba0d4abdf61463"],
@@ -394,7 +396,7 @@ const committedDriftHashEntries = [
   ["/great-lakes-beaches/port-crescent-state-park/", "9fa886280ff2c850b8e20fe0ad3fa6e2c81c78085f117d39358d1c153716b848"],
   ["/great-lakes-beaches/presque-isle-marquette/", "11cff5b76b4724da7bbe7c5454b867d92de6a6564a1439f49ef9626cb3fb84cb"],
   ["/great-lakes-beaches/rogers-city-lakeside-park/", "dbe9e20a437298217430bb1ca0e374f8d61221d534eb774b2b7427550f420d34"],
-  ["/great-lakes-beaches/sand-point-pictured-rocks/", "8f5f11390512b565551cc7318dd5b603114eb5f3a17b5256b762645cfb07e425"],
+  ["/great-lakes-beaches/sand-point-pictured-rocks/", "a2ba9f5524949bd06e885594c9f53174ec0cff5925b24eaffa90b22afe713e94"],
   ["/great-lakes-beaches/sand-point-saginaw-bay/", "4890b9bd1a7fc38f2bdd5486c779ac4788e91e11a7acd85b35a3f48936f5a1b7"],
   ["/great-lakes-beaches/saugatuck-dunes-state-park/", "44184262f7f929cf1033fc30435ea901b1a32745a4cb2a28b522714ea113be9e"],
   ["/great-lakes-beaches/silver-lake-state-park/", "bf4a8a25edb5c1c83120ac04a1e6f2974ace3a8d0bff6beb23e0c6f46185f88c"],
@@ -404,7 +406,7 @@ const committedDriftHashEntries = [
   ["/great-lakes-beaches/sterling-state-park/", "d58faaa73b2b948843841ffb1a3f7e19315ee84e710b401e3d9be2b2ff080d3a"],
   ["/great-lakes-beaches/tawas-point-state-park/", "9f4cd0110a67c735e4f4b13fd3213483732bab84384d43080e3f87f13f9156b4"],
   ["/great-lakes-beaches/tunnel-park-holland/", "7e90cb9bef5f3697404d4de08976094359a9cca92abacc955679e438b3548da9"],
-  ["/great-lakes-beaches/twelvemile-beach/", "67da0b062d26a3e87de739bbe40bf5054ea1c9c999badcc6e38d9f131b87d2df"],
+  ["/great-lakes-beaches/twelvemile-beach/", "d380f2d5423f19b0137935a5ee3e9fc8968c6f137f24bbbbea8674140addb654"],
   ["/great-lakes-beaches/van-buren-state-park/", "f9a457f829c37b5c8c7c45dfee7f6462155e64ddeca89d9192a5ee8d8e5c2355"],
   ["/great-lakes-beaches/warren-dunes-state-park/", "7809329dd5ee2b85954b29bc3d52e1fc72014f5a61acea582b29de4832539b6b"],
   ["/great-lakes-beaches/wenonah-park/", "92ef0e15291a5bfebf4e89bb3c75226e8352867d0b7fcb35c631178059c176ff"],

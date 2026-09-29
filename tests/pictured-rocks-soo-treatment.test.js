@@ -17,8 +17,9 @@ test('preview remains noindex and points canonical authority to the existing Pic
 });
 
 test('first screen now has a current operating picture before the detailed composer',()=>{
+  assert.ok(html.indexOf('id="today"') >= 0);
   assert.ok(html.indexOf('id="today"') < html.indexOf('id="planner"'));
-  assert.match(html,/What the park is giving you right now/);
+  assert.match(html,/<h2 id="today-title">Pictured Rocks weather and access right now<\/h2>/);
   assert.match(html,/id="westWeather"/);
   assert.match(html,/id="eastWeather"/);
   assert.match(html,/Current weather and access notices/);

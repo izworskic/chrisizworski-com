@@ -37,7 +37,7 @@ function scoreBuild() {
 
   const dimensions = {};
   dimensions.decisionClarity = count([
-    /Will there be a rainbow at Niagara Falls today\?/.test(page),
+    /<h1 id="pageTitle">Best Time to See a Rainbow at Niagara Falls Today<\/h1>/.test(page),
     hasBestTime,
     hasBestViewpoint,
     /recommendation/.test(engine) && /id="confidence"/.test(page),
