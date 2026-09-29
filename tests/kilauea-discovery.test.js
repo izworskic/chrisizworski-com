@@ -8,9 +8,9 @@ function fixtureDirectory(){
   const schema={'@context':'https://schema.org','@graph':[
     {'@type':'CollectionPage','@id':'https://chrisizworski.com/national-tools/#page','dateModified':'2026-09-01'},
     {'@type':'ItemList','@id':'https://chrisizworski.com/national-tools/#toollist','numberOfItems':3,'itemListElement':[
-      {'@type':'ListItem',position:1,url':'https://chrisizworski.com/national-tools/rivers/','name':'River Conditions'},
-      {'@type':'ListItem',position:2,url':'https://chrisizworski.com/national-tools/haleakala-sunrise/','name':'Haleakala Sunrise'},
-      {'@type':'ListItem',position:3,url':'https://chrisizworski.com/national-tools/kilauea-live/','name':'Kīlauea Live'}
+      {'@type':'ListItem',position:1,url:'https://chrisizworski.com/national-tools/rivers/',name:'River Conditions'},
+      {'@type':'ListItem',position:2,url:'https://chrisizworski.com/national-tools/haleakala-sunrise/',name:'Haleakala Sunrise'},
+      {'@type':'ListItem',position:3,url:'https://chrisizworski.com/national-tools/kilauea-live/',name:'Kīlauea Live'}
     ]}
   ]};
   return `<!doctype html><html><head><script type="application/ld+json">${JSON.stringify(schema)}</script></head><body>
