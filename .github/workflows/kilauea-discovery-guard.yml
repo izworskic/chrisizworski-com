@@ -46,7 +46,17 @@ jobs:
         run: node scripts/ensure-kilauea-discovery.mjs "$GITHUB_WORKSPACE"
 
       - name: Enhance Kilauea answer agent
-        run: node scripts/enhance-kilauea-answer-agent.mjs "$GITHUB_WORKSPACE"
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/enhance-kilauea-answer-agent.mjs "$GITHUB_WORKSPACE"
+          node - <<'NODE'
+          const fs=require('fs');
+          const file='public/synced-national-tools/kilauea-live/index.html';
+          let page=fs.readFileSync(file,'utf8');
+          page=page.replace('Live USGS HVO eruption state and episode guidance + webcam + NPS access + summit wind, vog/SO₂, cloud/rain, daylight and parking context, turned into a practical go / wait / where decision.','Live USGS Hawaiian Volcano Observatory (HVO) eruption state and episode guidance + webcam + NPS access + summit wind, vog/SO₂, cloud/rain, daylight and parking context, turned into a practical go / wait / where decision.');
+          fs.writeFileSync(file,page,'utf8');
+          NODE
 
       - name: Verify Kilauea contracts after enforcement
         run: node --test tests/kilauea-live.test.js tests/kilauea-discovery.test.js
@@ -66,13 +76,14 @@ jobs:
           const title=page.match(/<title>(.*?)<\/title>/)?.[1]||'';
           if(title!=='Kīlauea Live: Should You Go Now? | Chris Izworski') throw new Error(`Unexpected title: ${title}`);
           if(title.length>60) throw new Error(`Title exceeds 60 characters: ${title.length}`);
+          if(!page.includes('USGS Hawaiian Volcano Observatory (HVO)')) throw new Error('full HVO attribution missing');
           if(!page.includes('twitter:card" content="summary_large_image"')) throw new Error('summary_large_image missing');
           if(!page.includes('twitter:title" content="Kīlauea Eruption Today: Live Lava Viewing & Webcam"')) throw new Error('search-oriented social title missing');
           if(!page.includes('Is Kīlauea erupting today?')) throw new Error('search-intent description missing');
           if(!page.includes('id="tripFit"') || !page.includes('function renderAnswerAgent(d)') || !page.includes('renderAnswerAgent(d);')) throw new Error('choice personalization layer missing');
           if(!page.includes('id="signalGrid"')) throw new Error('live signal grid missing');
           for(const signal of ['Eruption','Episode','Webcam','NPS access','Wind','Vog / SO₂','Cloud / rain','Daylight','Parking']){
-            if(!page.includes(`['${signal}'`) && !page.includes(`['${signal}",`)) throw new Error(`${signal} signal missing`);
+            if(!page.includes(`['${signal}'`)) throw new Error(`${signal} signal missing`);
           }
           const schema=JSON.parse(page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
           for(const type of ['ImageObject','WebApplication','BreadcrumbList']){
