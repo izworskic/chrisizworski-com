@@ -1,166 +1,112 @@
 (function(){
 'use strict';
 
-const NPS_KAYAK_GUIDES='https://www.nps.gov/piro/planyourvisit/kayak-tours.htm';
-const NPS_COMMERCIAL='https://www.nps.gov/piro/planyourvisit/commercial-tours.htm';
-
-const CRUISE={
-  name:'Pictured Rocks Cruises',
-  url:'https://picturedrocks.com/',
-  phone:'(906) 387-2379',
-  detail:'The NPS-authorized concessioner for narrated Pictured Rocks boat cruises from the Munising City Dock. Classic, Spray Falls, and sunset options are offered seasonally; verify the day’s route and departure directly.'
-};
-
-const KAYAK_GUIDES=[
-  {name:'Big Water Paddle Co.',url:'https://bigwaterpaddle.com/',phone:'(906) 450-8020',detail:'NPS-permitted guided sea-kayak operator based on H-58 near Munising.'},
-  {name:'Paddling Michigan / Uncle Ducky’s',url:'https://www.paddlingmichigan.com/',phone:'(906) 387-1695',detail:'NPS-permitted guided sea-kayak operator with multiple trip lengths and Pictured Rocks routes.'},
-  {name:'Pictured Rocks Kayaking',url:'https://picturedrockskayaking.com/',phone:'(906) 387-5500',detail:'NPS-permitted boat-supported kayak tours that launch offshore near the cliff section.'},
-  {name:'Yooper Yachts',url:'https://yooperyachts.com/',phone:'(906) 202-1551',detail:'NPS-permitted small-group and private guided sea-kayak tours.'}
+const CRUISE_URL='https://picturedrocks.com/fares-schedule/';
+const NPS_GUIDES='https://www.nps.gov/piro/planyourvisit/kayak-tours.htm';
+const GUIDES=[
+  {
+    name:'Big Water Paddle Co.',
+    url:'https://bigwaterpaddle.com/tours/',
+    schedule:'Painted Cove: 10:00 AM or 2:00 PM; about 3 hours. Golden Hour: evening start varies, generally 5:30–6:30 PM; arrive 30 minutes early.',
+    fit:'Small-group shore-launched paddles from the Miners area; also offers a 5-hour Best of the Rocks trip.'
+  },
+  {
+    name:'Paddling Michigan / Uncle Ducky’s',
+    url:'https://www.paddlingmichigan.com/pictured-rocks-kayaking-tours/',
+    schedule:'Taste of the Rocks: 9 AM, noon, 3 PM, 6 PM; about 3 hours. Paddler’s Choice: 9 AM, noon, 3 PM; about 6 hours. Morning Delight: 10 AM; about 2 hours. Check in 30 minutes early.',
+    fit:'Multiple trip lengths from short beginner-friendly paddles to longer cliff-line days.'
+  },
+  {
+    name:'Pictured Rocks Kayaking',
+    url:'https://picturedrockskayaking.com/tours/',
+    schedule:'Miners Castle: about 3 hours. Ultimate: about 4–5 hours. Spray Falls: 5+ hours. Departure inventory varies by date; arrive at least 40 minutes early.',
+    fit:'Boat-supported kayak tours with offshore launches; check the live booking calendar for the day’s departure times.'
+  },
+  {
+    name:'Yooper Yachts',
+    url:'https://yooperyachts.com/products',
+    schedule:'Lovers Arch generally meets at 9 AM and runs to roughly 2:30 PM. Kissing Rock is about 2–2.5 hours. Sunset meeting time shifts with daylight; confirm directly before paying.',
+    fit:'Small public groups and private guided paddles; weather-dependent reservations.'
+  }
 ];
 
-function el(tag,className,html){
-  const node=document.createElement(tag);
-  if(className)node.className=className;
-  if(html!=null)node.innerHTML=html;
-  return node;
+function easternDate(){
+  try{
+    const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+    const get=t=>parts.find(p=>p.type===t)?.value||'';
+    return `${get('year')}-${get('month')}-${get('day')}`;
+  }catch(e){return '';}
 }
 
-function operatorLink(op,label){
-  return `<a href="${op.url}" target="_blank" rel="noopener">${label||op.name} ↗</a>`;
+function cruiseSchedule(){
+  const d=easternDate();
+  if(d>='2026-09-28'&&d<='2026-10-04') return 'Today’s published window: Spray Falls departures at 10 AM, 11 AM, noon, 1 PM, 2 PM, 3 PM and 4 PM; sunset departure 5:45 PM.';
+  if(d>='2026-10-05'&&d<='2026-10-11') return 'Published window: Spray Falls departures at 10 AM, 11 AM, 1 PM, 2 PM and 3:30 PM; sunset departure 5:30 PM.';
+  if(d>='2026-10-12'&&d<='2026-10-18') return 'Published window: Spray Falls departures at 10 AM, 11 AM, 1 PM, 2 PM and 3:30 PM; sunset departure 5:15 PM.';
+  if(d>'2026-10-18') return 'The published 2026 cruise season ended October 18. Check the operator for the next available season.';
+  return 'Multiple daytime and sunset departures operate seasonally. Open the live schedule for the exact date before locking the itinerary.';
 }
 
 function addStyles(){
-  if(document.getElementById('picturedRocksOperatorStyles'))return;
+  if(document.getElementById('picturedRocksBookingStyles'))return;
   const style=document.createElement('style');
-  style.id='picturedRocksOperatorStyles';
+  style.id='picturedRocksBookingStyles';
   style.textContent=`
-  .operator-inline{margin:12px 16px 0;padding:11px 12px;border-radius:9px;background:#f3f7f6;border:1px solid #d9e5e3;font-size:.78rem;line-height:1.45;color:#40575a}
-  .operator-inline strong{display:block;color:#173d43;margin-bottom:2px}.operator-inline a{font-weight:850;color:#0b5966;text-decoration:none}.operator-inline a:hover{text-decoration:underline}
-  .operator-section{border-top:4px solid #0d5662}.operator-intro{max-width:780px;color:#536468}.operator-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.65fr);gap:14px;margin-top:18px}.operator-panel{border:1px solid #d6d8d2;border-radius:14px;background:#fff;padding:17px}.operator-panel h3{font-family:Georgia,'Times New Roman',serif;font-size:1.35rem;font-weight:500;margin:4px 0 8px}.operator-panel>p{color:#526468;margin:0 0 12px;font-size:.88rem}.operator-kicker{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;font-weight:900;color:#0d5662}.operator-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.operator-card{border:1px solid #e0e4df;border-radius:10px;padding:12px;background:#fbfcfa}.operator-card strong{display:block;color:#173d43;margin-bottom:4px}.operator-card p{font-size:.79rem;line-height:1.45;color:#536468;margin:0 0 8px}.operator-card a,.operator-panel>a,.operator-source a{font-weight:850;color:#0b5966;text-decoration:none}.operator-card a:hover,.operator-panel>a:hover,.operator-source a:hover{text-decoration:underline}.operator-phone{font-size:.75rem;color:#66787b;margin-top:5px}.operator-source{margin-top:12px;padding-top:10px;border-top:1px solid #e4e6e1;font-size:.75rem;color:#68777a}.planner-operator-help{margin:10px 0 18px;padding:13px 14px;border-radius:10px;background:#f4f8f7;border:1px solid #d8e4e2}.planner-operator-help h3{font-size:.96rem;margin:0 0 6px}.planner-operator-help p{font-size:.82rem;color:#536468;margin:0 0 8px}.planner-operator-links{display:flex;flex-wrap:wrap;gap:7px}.planner-operator-links a{font-size:.77rem;font-weight:850;background:#fff;border:1px solid #d6dfdd;border-radius:999px;padding:6px 9px;text-decoration:none;color:#0b5966}.result-operators{margin:18px 0;border:1px solid #d6d8d2;border-radius:12px;background:#fbfcfa;padding:15px}.result-operators h3{margin:3px 0 7px;font-family:Georgia,'Times New Roman',serif;font-weight:500}.result-operators p{margin:0 0 10px;color:#536468;font-size:.84rem}.result-operator-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.result-operator-grid a{display:block;border:1px solid #dce3e1;background:#fff;border-radius:8px;padding:9px 10px;text-decoration:none;color:#0b5966;font-weight:850;font-size:.8rem}
-  @media(max-width:760px){.operator-grid{grid-template-columns:1fr}.operator-list,.result-operator-grid{grid-template-columns:1fr}.operator-inline{margin-left:16px;margin-right:16px}}
+  .answer-booking{margin:18px 0;padding:16px;border:1px solid #d6dfdd;border-radius:12px;background:#f8fbfa}
+  .answer-booking .eyebrow{margin-bottom:4px}.answer-booking h3{font-family:Georgia,'Times New Roman',serif;font-weight:500;font-size:1.3rem;margin:3px 0 8px}.answer-booking>p{color:#536468;margin:0 0 11px;font-size:.86rem;line-height:1.5}
+  .answer-booking-card{padding:11px 0;border-top:1px solid #e0e6e4}.answer-booking-card:first-of-type{border-top:0}.answer-booking-card strong{display:block;color:#173d43;margin-bottom:4px}.answer-booking-card p{margin:0 0 7px;color:#526468;font-size:.8rem;line-height:1.45}.answer-booking-card a,.answer-booking-source a{font-weight:850;color:#0b5966;text-decoration:none}.answer-booking-card a:hover,.answer-booking-source a:hover{text-decoration:underline}.answer-booking-source{margin-top:9px;padding-top:9px;border-top:1px solid #e0e6e4;font-size:.75rem;color:#69797b}
   `;
   document.head.appendChild(style);
 }
 
-function waterCards(){
-  const cards=Array.from(document.querySelectorAll('.trip-card'));
-  for(const card of cards){
-    if(card.querySelector('.operator-inline'))continue;
-    const heading=card.querySelector('h3')?.textContent?.trim();
-    if(heading==='Boat cruise'){
-      const box=el('div','operator-inline',`<strong>Who runs it</strong>${operatorLink(CRUISE)} · ${CRUISE.phone}<br>Authorized NPS concessioner; departures are from Munising.`);
-      const button=card.querySelector('button');
-      card.insertBefore(box,button||null);
-    }
-    if(heading==='Guided kayak'){
-      const box=el('div','operator-inline',`<strong>Who can guide it</strong>Four companies are on the NPS 2026 permitted-guide list. <a href="#water-operators">Compare the guides ↓</a>`);
-      const button=card.querySelector('button');
-      card.insertBefore(box,button||null);
-    }
-  }
+function resultMode(){
+  const timeline=(document.getElementById('timeline')?.textContent||'').toLowerCase();
+  if(timeline.includes('authorized guided kayak tour'))return 'kayak';
+  if(timeline.includes('pictured rocks boat cruise'))return 'cruise';
+  return '';
 }
 
-function operatorSection(){
-  if(document.getElementById('water-operators'))return;
-  const shape=document.querySelector('.trip-shapes-section');
-  if(!shape)return;
-  const section=el('section','section operator-section');
-  section.id='water-operators';
-  section.setAttribute('aria-labelledby','operators-title');
-  section.innerHTML=`
-    <div class="section-head"><div><p class="eyebrow">Turn the choice into a booking</p><h2 id="operators-title">Pictured Rocks boat and kayak operators</h2><p class="operator-intro">Use the planner to decide whether a cruise or guided paddle fits the day, then confirm current schedules, prices, age/ability rules, and weather decisions directly with the operator. Kayak companies below are the businesses on the National Park Service’s 2026 permitted-guide list.</p></div></div>
-    <div class="operator-grid">
-      <article class="operator-panel"><span class="operator-kicker">Boat cruise</span><h3>${CRUISE.name}</h3><p>${CRUISE.detail}</p>${operatorLink(CRUISE,'Open cruise schedules')}<div class="operator-phone">${CRUISE.phone}</div><div class="operator-source">NPS commercial-tour context: <a href="${NPS_COMMERCIAL}" target="_blank" rel="noopener">official park page ↗</a></div></article>
-      <article class="operator-panel"><span class="operator-kicker">Guided kayaking</span><h3>NPS-permitted kayak guides</h3><p>These are choices, not rankings. Tour format, launch method, group size, duration, and cancellation policy differ, so pick the operator that fits the trip you actually built.</p><div class="operator-list">${KAYAK_GUIDES.map(op=>`<div class="operator-card"><strong>${op.name}</strong><p>${op.detail}</p>${operatorLink(op,'Operator site')}<div class="operator-phone">${op.phone}</div></div>`).join('')}</div><div class="operator-source">Verify the current permit list before booking: <a href="${NPS_KAYAK_GUIDES}" target="_blank" rel="noopener">NPS kayak tours ↗</a></div></article>
-    </div>`;
-  shape.parentNode.insertBefore(section,shape.nextSibling);
-}
-
-function plannerHelp(){
-  const form=document.getElementById('tripForm');
-  if(!form||document.getElementById('plannerOperatorHelp'))return;
-  const water=Array.from(form.querySelectorAll('input[name="water"]'));
-  if(!water.length)return;
-  const fieldset=water[0].closest('fieldset');
-  const help=el('div','planner-operator-help');
-  help.id='plannerOperatorHelp';
-  fieldset.insertAdjacentElement('afterend',help);
-  function render(){
-    const value=form.querySelector('input[name="water"]:checked')?.value||'any';
-    if(value==='land'){
-      help.innerHTML='<h3>No booking needed for the water portion</h3><p>You selected a land-first plan. The itinerary will stay focused on park access, trails, overlooks, beaches, dunes, and waterfalls.</p>';
-      return;
-    }
-    if(value==='cruise'){
-      help.innerHTML=`<h3>Boat operator for this choice</h3><p>${CRUISE.name} is the NPS-authorized concessioner. Check the live schedule after the planner builds your route.</p><div class="planner-operator-links">${operatorLink(CRUISE,'Pictured Rocks Cruises')}</div>`;
-      return;
-    }
-    if(value==='kayak'){
-      help.innerHTML=`<h3>Choose an NPS-permitted guide</h3><p>The planner decides whether kayaking fits; the guide makes the operational call on the lake.</p><div class="planner-operator-links">${KAYAK_GUIDES.map(op=>operatorLink(op)).join('')}</div>`;
-      return;
-    }
-    help.innerHTML=`<h3>If the planner sends you onto the water</h3><p>You will get the matching cruise or kayak operators with the finished route. You can also compare them now.</p><div class="planner-operator-links"><a href="#water-operators">Compare water operators ↓</a></div>`;
-  }
-  water.forEach(input=>input.addEventListener('change',render));
-  render();
-}
-
-function inferResultMode(){
-  const form=document.getElementById('tripForm');
-  const selected=form?.querySelector('input[name="water"]:checked')?.value;
-  if(selected==='cruise'||selected==='kayak'||selected==='land')return selected;
-  const text=(document.getElementById('result')?.textContent||'').toLowerCase();
-  if(/guided kayak|kayak|paddle/.test(text))return 'kayak';
-  if(/boat cruise|cruise/.test(text))return 'cruise';
-  return 'any';
-}
-
-function resultOperators(){
+function ensureBox(){
   const result=document.getElementById('result');
-  if(!result)return;
-  let box=document.getElementById('resultOperators');
+  if(!result)return null;
+  let box=document.getElementById('resultBooking');
   if(!box){
-    box=el('div','result-operators');
-    box.id='resultOperators';
+    box=document.createElement('section');
+    box.id='resultBooking';
+    box.className='answer-booking';
+    box.setAttribute('aria-label','Booking details for this itinerary');
     const actions=result.querySelector('.action-row');
     result.insertBefore(box,actions||null);
   }
-  const mode=inferResultMode();
-  if(mode==='land'){
-    box.hidden=true;
-    return;
-  }
+  return box;
+}
+
+function renderBooking(){
+  const result=document.getElementById('result');
+  if(!result||result.hidden)return;
+  const mode=resultMode();
+  const box=ensureBox();
+  if(!box)return;
+  if(!mode){box.hidden=true;return;}
   box.hidden=false;
   if(mode==='cruise'){
-    box.innerHTML=`<p class="eyebrow">Book the water anchor</p><h3>${CRUISE.name}</h3><p>${CRUISE.detail}</p><div class="result-operator-grid">${operatorLink(CRUISE,'Check cruise schedule')}</div>`;
+    box.innerHTML=`<p class="eyebrow">Make the reservation fit the route</p><h3>Pictured Rocks Cruises</h3><p>${cruiseSchedule()} Current late-season trips are Spray Falls cruises, about 2 hours, departing from the Munising City Dock at 100 City Park Drive. Arrive early and verify availability and marine status before treating a departure as fixed.</p><div class="answer-booking-card"><strong>Operator</strong><p>NPS-authorized concessioner · (906) 387-2379</p><a href="${CRUISE_URL}" target="_blank" rel="noopener">See live departures and book ↗</a></div>`;
     return;
   }
-  if(mode==='kayak'){
-    box.innerHTML=`<p class="eyebrow">Book the water anchor</p><h3>Choose an NPS-permitted kayak guide</h3><p>Compare the tour format and confirm today’s marine decision directly with the guide.</p><div class="result-operator-grid">${KAYAK_GUIDES.map(op=>operatorLink(op)).join('')}</div>`;
-    return;
-  }
-  box.innerHTML=`<p class="eyebrow">If water is part of this plan</p><h3>Current commercial operators</h3><p>Use the NPS-authorized cruise concessioner or one of the NPS-permitted kayak guides below.</p><div class="result-operator-grid">${operatorLink(CRUISE)}${KAYAK_GUIDES.map(op=>operatorLink(op)).join('')}</div>`;
+  box.innerHTML=`<p class="eyebrow">Choose the guide that fits this answer</p><h3>NPS-permitted guided kayak options</h3><p>The planner has selected a guided paddle as the water anchor. These are choices, not rankings. Lake Superior conditions can change the operating decision, so confirm the departure with the guide before building the rest of the day around it.</p>${GUIDES.map(g=>`<div class="answer-booking-card"><strong>${g.name}</strong><p>${g.schedule}</p><p>${g.fit}</p><a href="${g.url}" target="_blank" rel="noopener">Check schedule / availability ↗</a></div>`).join('')}<div class="answer-booking-source">Permit verification: <a href="${NPS_GUIDES}" target="_blank" rel="noopener">National Park Service permitted kayak guides ↗</a></div>`;
 }
 
-function watchResult(){
-  const result=document.getElementById('result');
-  if(!result)return;
-  const form=document.getElementById('tripForm');
-  if(form)form.addEventListener('submit',()=>setTimeout(resultOperators,0));
-  const timeline=document.getElementById('timeline');
-  if(timeline){
-    const observer=new MutationObserver(()=>resultOperators());
-    observer.observe(timeline,{subtree:true,childList:true,characterData:true});
-  }
-  resultOperators();
-}
-
+function scheduleRender(){setTimeout(renderBooking,0);}
 function init(){
   addStyles();
-  waterCards();
-  operatorSection();
-  plannerHelp();
-  watchResult();
+  const form=document.getElementById('tripForm');
+  if(form)form.addEventListener('submit',scheduleRender);
+  document.addEventListener('click',event=>{
+    if(event.target.closest('[data-trip-shape]'))scheduleRender();
+  });
+  const reset=document.getElementById('resetBtn');
+  if(reset)reset.addEventListener('click',()=>{const box=document.getElementById('resultBooking');if(box)box.hidden=true;});
+  renderBooking();
 }
 
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
