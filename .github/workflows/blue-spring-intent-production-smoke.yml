@@ -42,9 +42,14 @@ jobs:
           python -c "import json; d=json.load(open('/tmp/out')); assert 'retrievedAt' in d"
           probe manatee-api "$BASE/api/blue-spring-manatee?smoke=$GITHUB_SHA"
           python -c "import json; d=json.load(open('/tmp/out')); assert d.get('source') == 'Save the Manatee Club'; assert d.get('latestReport',{}).get('observedDate'); assert 'freshness' in d and 'retrievedAt' in d"
-          probe_expect main "$BASE/national-tools/blue-spring-live/?smoke=$GITHUB_SHA" "Save the Manatee Club's dated morning roll call"
+          probe_expect main "$BASE/national-tools/blue-spring-live/?smoke=$GITHUB_SHA" 'id="heroTitle"'
           grep -Fq 'Blue Spring Manatees Today | Count & Conditions' /tmp/out
-          grep -Fq 'loading="eager"' /tmp/out
+          grep -Fq "Save the Manatee Club's dated morning roll call" /tmp/out
+          grep -Fq 'blue-spring-live-6h8f.vercel.app/styles.css' /tmp/out
+          grep -Fq 'blue-spring-live-6h8f.vercel.app/app.js' /tmp/out
+          if grep -Fq '<iframe' /tmp/out; then echo 'Blue Spring canonical still contains an iframe'; exit 1; fi
+          probe asset-js 'https://blue-spring-live-6h8f.vercel.app/app.js'
+          probe asset-css 'https://blue-spring-live-6h8f.vercel.app/styles.css'
           for slug in manatee-conditions-today best-time-to-visit water-temperature; do
             probe "$slug" "$BASE/national-tools/blue-spring-live/$slug/?smoke=$GITHUB_SHA"
             grep -Fq "rel=\"canonical\" href=\"$BASE/national-tools/blue-spring-live/$slug/\"" /tmp/out
