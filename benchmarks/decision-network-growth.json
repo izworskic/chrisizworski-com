@@ -1,23 +1,24 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "created": "2026-08-18",
+  "updated": "2026-09-29",
   "objective": "Turn existing Michigan and Great Lakes assets into a connected decision network while improving Boat Launches and Shipwrecks without thin URLs, search cannibalization, data overclaims, or active-experiment churn.",
   "maxScore": 100,
   "target": {"minimumEffectiveScore": 95, "maximumLoss": 5, "fatalPenaltyAllowed": false},
   "dimensions": [
     {"key":"authorityGraph","weight":20,"definition":"Safe hub pages expose crawlable task-based links into related tools and measure symbolic handoffs."},
-    {"key":"boatDecisionUsefulness","weight":20,"definition":"The existing 42-launch page becomes faster to search, filter, route and screen without pretending regional buoy data is ramp truth."},
+    {"key":"boatDecisionUsefulness","weight":20,"definition":"The statewide source-backed finder is fast to search, filter, route and screen, and may use explicit one-tap device location only when the calculation stays in-browser and does not persist or transmit the user's coordinates."},
     {"key":"shipwreckExplorerDepth","weight":20,"definition":"The existing wreck database gains useful filtering, presets, orientation mapping and factual consistency without inventing exact coordinates."},
     {"key":"searchIntegrity","weight":15,"definition":"Preserve canonical ownership, entity signals, concise snippets and the existing record-rich parent URLs instead of creating thin children."},
-    {"key":"trustAndPrivacy","weight":15,"definition":"No safety inference, false spatial precision, geolocation, cookies, browser storage or fingerprinting."},
+    {"key":"trustAndPrivacy","weight":15,"definition":"No safety inference, false spatial precision, silent location collection, cookies, browser storage or fingerprinting. User-initiated device location is permitted only when coordinates remain ephemeral in the browser and are not sent to this site."},
     {"key":"measurement","weight":10,"definition":"Measure filters, decisions and cross-tool handoffs using stable first-party event names and non-personal symbolic metadata."}
   ],
   "fatalPenalties": [
     "A new thin or competing launch/shipwreck URL is created without query evidence and substantial unique value.",
     "A nearest NDBC station is presented as on-ramp, harbor-specific, or boating-safety truth.",
     "A regional shipwreck anchor is presented as an exact wreck, navigation, or dive coordinate.",
-    "Either parent canonical changes or the 42-launch / 60-plus-wreck source inventory materially shrinks.",
-    "New code collects precise location, cookies, local/session storage, fingerprinting, or personal identifiers.",
+    "Either parent canonical changes or the statewide launch / 60-plus-wreck source inventory materially shrinks.",
+    "New code silently collects precise location, persists it in cookies/local/session storage, transmits device coordinates to this site, fingerprints a visitor, or collects personal identifiers.",
     "Protected active-experiment search surfaces or the unrelated Circle Tour agent branch are modified for this build."
   ],
   "observedBaseline": {
