@@ -5,6 +5,7 @@ const api=fs.readFileSync('api/boat-launches.js','utf8');
 const geocode=fs.readFileSync('api/boat-launch-geocode.js','utf8');
 const html=fs.readFileSync('public/michigan-boat-launches/index.html','utf8');
 const weather=fs.readFileSync('api/boat-launch-weather.js','utf8');
+const breakout=fs.readFileSync('scripts/apply-breakout-constraints.mjs','utf8');
 const cfg=JSON.parse(fs.readFileSync('benchmarks/boat-launch-usability.json','utf8'));
 const sourceCode=js+'\n'+api+'\n'+geocode+'\n'+weather;
 const pass=(...v)=>v.every(Boolean);
@@ -38,7 +39,9 @@ if(!checks.noLegacyOrFuzzyFallback.ok)fatals.push('Legacy/fuzzy launch creation 
 if(!checks.sourceQualityFilters.ok)fatals.push('Source quality filters are incomplete.');
 if(!checks.mapRecordCorrelation.ok)fatals.push('Map and launch records are not keyed to one normalized source record.');
 if(!checks.failClosed.ok)fatals.push('The tool does not fail closed when source data is unavailable.');
-if(/navigator\.geolocation|getCurrentPosition|localStorage|sessionStorage/.test(sourceCode))fatals.push('Unexpected precise location or persistent browser storage introduced.');
+if(/localStorage|sessionStorage|document\.cookie/.test(sourceCode+'\n'+breakout))fatals.push('Persistent browser storage or cookies were introduced.');
+const optInLocation=breakout.includes('id="launch-near-me"')&&breakout.includes('navigator.geolocation.getCurrentPosition')&&breakout.includes("fetch('/api/boat-launches'")&&breakout.includes('coordinates stay in this browser, are not stored, and are not sent to this site')&&!breakout.includes('/api/boat-launch-geocode')&&!breakout.includes('/api/boat-launch-drive');
+if(!optInLocation)fatals.push('Opt-in near-me location does not satisfy the ephemeral in-browser privacy contract.');
 if(api.includes('facilityid IS NOT NULL'))fatals.push('Nullable facilityid is incorrectly required.');
 if(api.includes("greatlakesaccess LIKE 'Yes%'"))fatals.push('The source query regressed to Great-Lakes-only coverage.');
 const loss=100-score;
