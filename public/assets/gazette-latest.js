@@ -93,6 +93,20 @@
   var widgets = Array.prototype.slice.call(document.querySelectorAll("[data-gazette-latest]"));
   if (!widgets.length) return;
 
+  // Search-intent hierarchy: live decision surfaces should precede the daily editorial block.
+  // Keep this path-specific so the shared Gazette component retains its existing placement elsewhere.
+  widgets.forEach(function (widget) {
+    var placement = widget.getAttribute("data-gazette-placement");
+    if (location.pathname === "/great-lakes-freighter-tracking/" && placement === "freighter-tracker") {
+      var liveMap = document.getElementById("live-map");
+      if (liveMap && liveMap.parentNode) liveMap.insertAdjacentElement("afterend", widget);
+    }
+    if (location.pathname === "/mackinac-bridge-live/" && placement === "mackinac-conditions") {
+      var statusCard = document.getElementById("statusCard");
+      if (statusCard && statusCard.parentNode) statusCard.insertAdjacentElement("afterend", widget);
+    }
+  });
+
   var inFlight = false;
   var lastEdition = null;
   function refresh() {
