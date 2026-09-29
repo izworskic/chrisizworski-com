@@ -1,3 +1,4 @@
+const {assertIndexableRobots} = require('./helpers/pictured-rocks-response.cjs');
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -31,6 +32,6 @@ test('only promoted Pictured Rocks document receives the integration', async t =
   t.mock.method(globalThis, 'fetch', async () => new Response('<html><head><meta name="robots" content="noindex,nofollow"></head><body>Planner</body></html>', {headers:{'content-type':'text/html'}}));
   const response = await middleware(new Request('https://picturedrocks.chrisizworski.com/'));
   const html = await response.text();
-  assert.ok(html.includes('index,follow,max-image-preview:large'));
+  assertIndexableRobots(html);
   assert.ok(html.includes('network-ads-v1.js'));
 });

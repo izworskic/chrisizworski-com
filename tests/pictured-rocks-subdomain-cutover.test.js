@@ -1,3 +1,4 @@
+const {canonicalResponse, assertIndexableRobots} = require('./helpers/pictured-rocks-response.cjs');
 'use strict';
 
 const fs = require('node:fs');
@@ -30,11 +31,11 @@ test('canonical shell serves the tested lab planner rather than a second impleme
   assert.match(middleware, /servePicturedRocksCanonical\(request\)/);
 });
 
-test('lab preview remains noindex while canonical shell promotes only its response', () => {
+test('lab preview remains noindex while canonical shell promotes only its response', async t => {
   assert.match(preview, /<meta name="robots" content="noindex,nofollow">/);
   assert.match(preview, /<link rel="canonical" href="https:\/\/picturedrocks\.chrisizworski\.com\/">/);
   assert.match(middleware, /noindexPattern/);
-  assert.match(middleware, /index,follow,max-image-preview:large/);
+  assertIndexableRobots((await canonicalResponse(t)).html);
   assert.match(middleware, /X-Robots-Tag', 'index, follow, max-image-preview:large'/);
 });
 
