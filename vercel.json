@@ -1303,6 +1303,14 @@
       "destination": "/synced-national-tools/yellowstone-geysers/:path*"
     },
     {
+      "source": "/national-tools/kilauea-live",
+      "destination": "/synced-national-tools/kilauea-live/index.html"
+    },
+    {
+      "source": "/national-tools/kilauea-live/",
+      "destination": "/synced-national-tools/kilauea-live/index.html"
+    },
+    {
       "source": "/national-tools/live-decisions",
       "destination": "/synced-national-tools/live-decisions/index.html"
     },
@@ -1389,14 +1397,6 @@
     {
       "source": "/national-tools/lake-powell-ramp-status/",
       "destination": "/synced-national-tools/lake-powell-ramp-status/index.html"
-    },
-    {
-      "source": "/national-tools/kilauea-live",
-      "destination": "/synced-national-tools/kilauea-live/index.html"
-    },
-    {
-      "source": "/national-tools/kilauea-live/",
-      "destination": "/synced-national-tools/kilauea-live/index.html"
     },
     {
       "source": "/national-tools/:path*",
