@@ -9,24 +9,100 @@ const FORT_MADISON_PATH = '/national-tools/fort-madison-live';
 const FORT_MADISON_UPSTREAM = 'https://fort-madison-live.vercel.app';
 const PICTURED_ROCKS_HOST = 'picturedrocks.chrisizworski.com';
 const PICTURED_ROCKS_SOURCE = '/labs/pictured-rocks-planner/';
+const PICTURED_ROCKS_SITE_URL = 'https://picturedrocks.chrisizworski.com/';
+const PICTURED_ROCKS_SITE_NAME = 'Pictured Rocks Trip Planner';
+const PICTURED_ROCKS_AUTHOR_URL = 'https://chrisizworski.com/chris-izworski/';
 const PICTURED_ROCKS_INDEXABLE_ROBOTS = '<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">';
 const PICTURED_ROCKS_TITLE = 'Pictured Rocks Trip Planner 2026: Map, Itinerary & Weather';
 const PICTURED_ROCKS_DESCRIPTION = 'Plan Pictured Rocks National Lakeshore with an interactive map, current weather and access, best stops, boat vs. hike choices, and 1- or 2-day itineraries.';
 const PICTURED_ROCKS_H1 = 'Pictured Rocks National Lakeshore Trip Planner';
 const PICTURED_ROCKS_SOCIAL_IMAGE = 'https://www.nps.gov/common/uploads/structured_data/683601AF-F157-7262-38F31A30A2EA6224.jpg?maxHeight=800&maxWidth=1200&quality=90';
-const PICTURED_ROCKS_SEARCH_SCHEMA = `<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://picturedrocks.chrisizworski.com/#webpage","url":"https://picturedrocks.chrisizworski.com/","name":"${PICTURED_ROCKS_TITLE}","description":"${PICTURED_ROCKS_DESCRIPTION}","keywords":"Pictured Rocks trip planner, Pictured Rocks map, Pictured Rocks itinerary, Pictured Rocks weather, Pictured Rocks hiking, Pictured Rocks boat cruise","inLanguage":"en-US","dateModified":"2026-09-28","isPartOf":{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","name":"Chris Izworski"},"about":{"@id":"https://picturedrocks.chrisizworski.com/#destination"},"primaryImageOfPage":{"@type":"ImageObject","url":"${PICTURED_ROCKS_SOCIAL_IMAGE}"}},{"@type":"TouristDestination","@id":"https://picturedrocks.chrisizworski.com/#destination","name":"Pictured Rocks National Lakeshore","description":"National lakeshore on Lake Superior near Munising and Grand Marais, Michigan, known for sandstone cliffs, beaches, waterfalls, dunes, hiking, boat cruises and guided kayaking.","url":"https://www.nps.gov/piro/","sameAs":"https://www.nps.gov/piro/","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}},{"@type":"BreadcrumbList","@id":"https://picturedrocks.chrisizworski.com/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Chris Izworski","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Pictured Rocks Trip Planner","item":"https://picturedrocks.chrisizworski.com/"}]},{"@type":"ItemList","@id":"https://picturedrocks.chrisizworski.com/#trip-modes","name":"Ways to experience Pictured Rocks","itemListElement":[{"@type":"ListItem","position":1,"name":"Boat cruise"},{"@type":"ListItem","position":2,"name":"Guided kayak"},{"@type":"ListItem","position":3,"name":"Chapel Loop hike"},{"@type":"ListItem","position":4,"name":"Drive and short walks"}]}]}</script>`;
+const PICTURED_ROCKS_SEARCH_SCHEMA = `<script type="application/ld+json">${JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://picturedrocks.chrisizworski.com/#website',
+      url: PICTURED_ROCKS_SITE_URL,
+      name: PICTURED_ROCKS_SITE_NAME,
+      alternateName: ['Pictured Rocks Planner', 'picturedrocks.chrisizworski.com'],
+      inLanguage: 'en-US',
+      publisher: { '@id': 'https://chrisizworski.com/#person' },
+    },
+    {
+      '@type': 'Person',
+      '@id': 'https://chrisizworski.com/#person',
+      name: 'Chris Izworski',
+      url: PICTURED_ROCKS_AUTHOR_URL,
+    },
+    {
+      '@type': 'WebPage',
+      '@id': 'https://picturedrocks.chrisizworski.com/#webpage',
+      url: PICTURED_ROCKS_SITE_URL,
+      name: PICTURED_ROCKS_TITLE,
+      description: PICTURED_ROCKS_DESCRIPTION,
+      keywords: 'Pictured Rocks trip planner, Pictured Rocks map, Pictured Rocks itinerary, Pictured Rocks weather, Pictured Rocks hiking, Pictured Rocks boat cruise',
+      inLanguage: 'en-US',
+      dateModified: '2026-09-28',
+      isPartOf: { '@id': 'https://picturedrocks.chrisizworski.com/#website' },
+      author: { '@id': 'https://chrisizworski.com/#person' },
+      mainEntity: { '@id': 'https://picturedrocks.chrisizworski.com/#app' },
+      about: { '@id': 'https://picturedrocks.chrisizworski.com/#destination' },
+      breadcrumb: { '@id': 'https://picturedrocks.chrisizworski.com/#breadcrumb' },
+      primaryImageOfPage: { '@id': 'https://picturedrocks.chrisizworski.com/#primaryimage' },
+    },
+    {
+      '@type': 'ImageObject',
+      '@id': 'https://picturedrocks.chrisizworski.com/#primaryimage',
+      url: PICTURED_ROCKS_SOCIAL_IMAGE,
+      contentUrl: PICTURED_ROCKS_SOCIAL_IMAGE,
+      caption: 'Colored sandstone cliffs rising from Lake Superior at Pictured Rocks National Lakeshore',
+    },
+    {
+      '@type': 'TouristDestination',
+      '@id': 'https://picturedrocks.chrisizworski.com/#destination',
+      name: 'Pictured Rocks National Lakeshore',
+      description: 'National lakeshore on Lake Superior near Munising and Grand Marais, Michigan, known for sandstone cliffs, beaches, waterfalls, dunes, hiking, boat cruises and guided kayaking.',
+      url: 'https://www.nps.gov/piro/',
+      sameAs: 'https://www.nps.gov/piro/',
+      address: { '@type': 'PostalAddress', addressRegion: 'MI', addressCountry: 'US' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': 'https://picturedrocks.chrisizworski.com/#breadcrumb',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Chris Izworski', item: 'https://chrisizworski.com/' },
+        { '@type': 'ListItem', position: 2, name: PICTURED_ROCKS_SITE_NAME, item: PICTURED_ROCKS_SITE_URL },
+      ],
+    },
+    {
+      '@type': 'ItemList',
+      '@id': 'https://picturedrocks.chrisizworski.com/#trip-modes',
+      name: 'Ways to experience Pictured Rocks',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Boat cruise' },
+        { '@type': 'ListItem', position: 2, name: 'Guided kayak' },
+        { '@type': 'ListItem', position: 3, name: 'Chapel Loop hike' },
+        { '@type': 'ListItem', position: 4, name: 'Drive and short walks' },
+      ],
+    },
+  ],
+})}</script>`;
 const PICTURED_ROCKS_HEAD_META = `<link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="author" href="${PICTURED_ROCKS_AUTHOR_URL}">
 <meta name="author" content="Chris Izworski">
-<meta name="application-name" content="Pictured Rocks Trip Planner">
+<meta name="application-name" content="${PICTURED_ROCKS_SITE_NAME}">
+<meta name="apple-mobile-web-app-title" content="${PICTURED_ROCKS_SITE_NAME}">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
-<meta property="og:site_name" content="Chris Izworski">
+<meta property="og:site_name" content="${PICTURED_ROCKS_SITE_NAME}">
 <meta property="og:title" content="${PICTURED_ROCKS_TITLE}">
 <meta property="og:description" content="${PICTURED_ROCKS_DESCRIPTION}">
-<meta property="og:url" content="https://picturedrocks.chrisizworski.com/">
+<meta property="og:url" content="${PICTURED_ROCKS_SITE_URL}">
 <meta property="og:image" content="${PICTURED_ROCKS_SOCIAL_IMAGE}">
+<meta property="og:image:secure_url" content="${PICTURED_ROCKS_SOCIAL_IMAGE}">
 <meta property="og:image:alt" content="Colored sandstone cliffs rising from Lake Superior at Pictured Rocks National Lakeshore">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${PICTURED_ROCKS_TITLE}">
