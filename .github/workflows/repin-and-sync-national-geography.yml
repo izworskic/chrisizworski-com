@@ -1,0 +1,69 @@
+name: Repin and sync National Tools geography
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/repin-and-sync-national-geography.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      HUB_COMMIT: f6ea8a4ed502e58f3f3b708ae390a6a24be1e5cc
+      HUB_RAW: https://raw.githubusercontent.com/izworskic/national-outdoor-tools-hub/f6ea8a4ed502e58f3f3b708ae390a6a24be1e5cc
+    steps:
+      - uses: actions/checkout@v4
+      - name: Repin persistent National Tools gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('.github/workflows/sync-national-gate.yml')
+          s=p.read_text()
+          old='1f02001b07733b7795c614fb50e140d890e65ea5'
+          new='f6ea8a4ed502e58f3f3b708ae390a6a24be1e5cc'
+          if old not in s and new not in s:
+              raise SystemExit('Expected National Tools hub pin not found')
+          s=s.replace(old,new)
+          s=s.replace('numberOfItems\\":36','numberOfItems\\":48')
+          p.write_text(s)
+          PY
+      - name: Pull verified geographic directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fLsS "$HUB_RAW/public/national-tools/index.html" -o public/synced-national-tools/index.html
+      - name: Verify geographic ownership
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(grep -o 'data-tool-id="live-decisions"' public/synced-national-tools/index.html | wc -l)" -eq 0
+          for id in zion-narrows-conditions grand-canyon-access lake-mead-access lake-powell-ramp-status going-to-the-sun-road-status yellowstone-road-status tioga-road-status mount-rainier-road-status cadillac-mountain-sunrise haleakala-sunrise kilauea-live; do
+            test "$(grep -o "data-tool-id=\"$id\"" public/synced-national-tools/index.html | wc -l)" -eq 1
+          done
+          grep -q 'id="region-southwest-colorado-plateau"' public/synced-national-tools/index.html
+          grep -q 'id="region-rockies"' public/synced-national-tools/index.html
+          grep -q 'id="region-california-sierra"' public/synced-national-tools/index.html
+          grep -q 'id="region-pacific-northwest"' public/synced-national-tools/index.html
+          grep -q 'id="region-northeast-great-lakes"' public/synced-national-tools/index.html
+          grep -q 'id="region-hawaii"' public/synced-national-tools/index.html
+          grep -q 'numberOfItems":48' public/synced-national-tools/index.html
+          grep -q 'Browse all live destination decisions' public/synced-national-tools/index.html
+      - name: Commit verified directory and persistent pin
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/workflows/sync-national-gate.yml public/synced-national-tools/index.html
+          if git diff --cached --quiet; then
+            echo 'Geographic National Tools directory already current.'
+            exit 0
+          fi
+          git commit -m 'Sync geographic National Tools directory'
+          git push origin HEAD:main
