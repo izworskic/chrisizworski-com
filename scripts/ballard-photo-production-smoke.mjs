@@ -17,7 +17,7 @@ async function fetchText(url) {
     headers: {
       accept: 'text/html',
       'cache-control': 'no-cache',
-      'user-agent': 'ChrisIzworskiBallardPhotoSmoke/1.1',
+      'user-agent': 'ChrisIzworskiBallardPhotoSmoke/1.2',
     },
     signal: AbortSignal.timeout(15000),
   });
@@ -47,6 +47,13 @@ function tourReady(text) {
     && text.includes("fish:{src:")
     && text.includes("spillway:{src:")
     && text.includes("garden:{src:")
+    && text.includes('data-authority-layer="ballard-tour-v1"')
+    && text.includes('Verify access with USACE')
+    && text.includes('data-authority="usace"')
+    && text.includes('data-authority="wdfw"')
+    && text.includes('data-authority="noaa"')
+    && text.includes('data-authority="nws"')
+    && text.includes('Posted signs, closures and on-site USACE staff direction always control')
     && !/carousel|slideshow/i.test(text);
 }
 
@@ -58,13 +65,13 @@ async function waitForPhotoProgram() {
       if (lastMain.response.ok && lastTour.response.ok && mainReady(lastMain.text) && tourReady(lastTour.text)) {
         return { main: lastMain, tour: lastTour, attempt };
       }
-      console.log(`Ballard photo program not ready (attempt ${attempt}/18; main=${lastMain.response.status}, tour=${lastTour.response.status}); retrying.`);
+      console.log(`Ballard photo/authority program not ready (attempt ${attempt}/18; main=${lastMain.response.status}, tour=${lastTour.response.status}); retrying.`);
     } catch (error) {
-      console.log(`Ballard photo readiness attempt ${attempt}/18 failed: ${error.message}`);
+      console.log(`Ballard photo/authority readiness attempt ${attempt}/18 failed: ${error.message}`);
     }
     await sleep(5000);
   }
-  throw new Error('Ballard interpretive photo program did not become visible on both production pages');
+  throw new Error('Ballard interpretive photo + restrained authority programs did not become visible on production');
 }
 
 async function checkImage(url) {
@@ -77,7 +84,7 @@ async function checkImage(url) {
       headers: {
         accept: 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
         range: 'bytes=0-1023',
-        'user-agent': 'Mozilla/5.0 (compatible; ChrisIzworskiBallardPhotoSmoke/1.1)',
+        'user-agent': 'Mozilla/5.0 (compatible; ChrisIzworskiBallardPhotoSmoke/1.2)',
       },
       signal: AbortSignal.timeout(15000),
     });
@@ -93,8 +100,6 @@ async function checkImage(url) {
     }
     await sleep(900 * attempt);
   }
-  // Wikimedia can rate-limit automated CI traffic while serving the same asset normally to browsers.
-  // A 429/503 is therefore reported as provider throttling, not misclassified as a broken production image.
   return { url, status: lastStatus, type: lastType, throttled: true };
 }
 
@@ -107,12 +112,12 @@ for (const url of IMAGE_URLS) {
 
 console.log(JSON.stringify({
   status: 'ok',
-  experience: 'ballard-interpretive-photo-v1',
+  experience: 'ballard-interpretive-photo-authority-v1',
   attempt: live.attempt,
   mainStatus: live.main.response.status,
   tourStatus: live.tour.response.status,
   mainHasPhotoProgram: mainReady(live.main.text),
-  tourHasPhotoProgram: tourReady(live.tour.text),
+  tourHasPhotoAndAuthorityPrograms: tourReady(live.tour.text),
   imageCount: images.length,
   responsiveImages: images.filter(x => !x.throttled).length,
   throttledImages: images.filter(x => x.throttled).length,
