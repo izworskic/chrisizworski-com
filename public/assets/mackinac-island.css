@@ -712,3 +712,55 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-.012em;font-op
 .content-stack{display:block}
 .content-stack>*+*{margin-top:24px}
 .content-stack>[data-in-article-ad-break]{margin-top:0}
+
+/* ---------- Start: city + leave time, in the hero, one tap each ---------- */
+.hero-start{margin-top:26px;max-width:560px;display:grid;gap:12px}
+.start-row{display:grid;gap:7px}
+.start-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.start-chips{display:flex;flex-wrap:wrap;gap:6px}
+.start-chip{appearance:none;border:1px solid rgba(255,255,255,.34);background:rgba(255,255,255,.07);color:#fff;border-radius:999px;padding:8px 13px;font:600 13.5px/1.1 var(--sans);cursor:pointer;transition:background .15s ease,border-color .15s ease,color .15s ease,transform .1s ease}
+.start-chip:hover{background:rgba(255,255,255,.16);border-color:#fff}
+.start-chip:active{transform:translateY(1px)}
+.start-chip.active{background:#fff;border-color:#fff;color:var(--lake-deep)}
+.start-chip.other{border-style:dashed}
+.start-other{display:flex;gap:6px;max-width:360px}
+.start-other[hidden]{display:none}
+.start-other input{flex:1;min-width:0;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.1);color:#fff;border-radius:12px;padding:9px 12px;font:500 15px var(--sans);color-scheme:dark}
+.start-other input::placeholder{color:rgba(255,255,255,.55)}
+.start-go{border:0;background:#fff;color:var(--lake-deep);border-radius:12px;padding:0 14px;font:700 13.5px var(--sans);cursor:pointer}
+.start-status{margin:2px 0 0;font-size:13.5px;line-height:1.45;color:rgba(255,255,255,.72);min-height:1.45em}
+.start-status.resolved{color:#bfe9d6}
+.start-status.error{color:#ffd0c8}
+.start-status.loading{color:rgba(255,255,255,.85)}
+
+/* ---------- Live bar: the answer stays on screen while you answer ---------- */
+.live-bar{position:fixed;left:0;right:0;bottom:0;z-index:55;padding:0 10px max(10px,env(safe-area-inset-bottom));pointer-events:none}
+.live-bar[hidden]{display:none}
+.live-bar-inner{pointer-events:auto;display:flex;align-items:center;gap:6px;max-width:620px;margin:0 auto;padding:8px 8px 8px 16px;border-radius:18px;background:rgba(11,39,53,.96);color:#fff;box-shadow:0 18px 40px -16px rgba(8,30,41,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:mackRiseIn .25s ease both}
+@keyframes mackRiseIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.lb-item{flex:1 1 0;min-width:0;border-radius:10px;padding:4px 6px}
+.lb-item small{display:block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.lb-item strong{display:block;margin-top:2px;font-size:13.5px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.lb-score{flex:0 0 auto}
+.lb-item.just-changed{animation:lbFlash 1.4s ease}
+@keyframes lbFlash{0%{background:rgba(185,138,62,.55)}100%{background:transparent}}
+.lb-see{flex:0 0 auto;border:0;border-radius:12px;background:#fff;color:var(--lake-deep);font:700 12.5px var(--sans);padding:10px 12px;cursor:pointer}
+body.live-bar-on .plan-toast{bottom:calc(84px + env(safe-area-inset-bottom))}
+@media (prefers-reduced-motion:reduce){.lb-item.just-changed,.live-bar-inner{animation:none}}
+
+/* ---------- Your day so far: the plan, beside the question ---------- */
+.intake-preview{margin-top:18px;padding:14px 16px;border-radius:16px;background:var(--lake-mist);border:1px solid #d3e3e9}
+.ip-label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--lake)}
+.ip-list{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:2px}
+.ip-list li{display:grid;grid-template-columns:78px minmax(0,1fr);gap:10px;align-items:baseline;padding:4px 6px;margin:0 -6px;border-radius:8px;font-size:14px;line-height:1.35}
+.ip-list time{font-size:12.5px;font-weight:650;color:var(--lake-dark);font-variant-numeric:tabular-nums}
+.ip-list span{color:var(--ink);font-weight:550;overflow:hidden;text-overflow:ellipsis}
+.ip-list li.just-changed{animation:ipFlash 1.6s ease}
+@keyframes ipFlash{0%{background:rgba(185,138,62,.35)}100%{background:transparent}}
+body.mackinac-profile-ready .intake-preview{display:none}
+@media (prefers-reduced-motion:reduce){.ip-list li.just-changed{animation:none}}
+.live-bar-inner{cursor:pointer}
+.lb-first{flex:1.4 1 0}
+span.lb-see{display:grid;place-items:center;width:34px;height:34px;padding:0;font-size:16px}
+.intake-preview{margin:14px 0 16px}
+.hero-start{margin-top:22px}

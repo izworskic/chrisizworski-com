@@ -1,3 +1,4 @@
+const {lookupOrigin,originResponse}=require('../lib/mackinac-island/origins');
 const NOMINATIM='https://nominatim.openstreetmap.org/search';
 const ROUTERS=[
   {base:'https://routing.openstreetmap.de/routed-car/table/v1/driving',label:'routing.openstreetmap.de',timeoutMs:5000},
@@ -66,6 +67,11 @@ module.exports=async function handler(req,res){
   if(req.method!=='GET'&&req.method!=='HEAD'){res.setHeader('Allow','GET, HEAD');return res.status(405).json({error:'Method not allowed'});}
   const q=cleanQuery(req.query?.q);
   if(q.length<2){res.setHeader('Cache-Control','no-store');return res.status(400).json({error:'Enter a city, state/province, or ZIP/postal code'});}
+  const known=lookupOrigin(q);
+  if(known){
+    res.setHeader('Cache-Control','public, s-maxage=86400, stale-while-revalidate=604800');
+    return res.status(200).json(originResponse(q,known));
+  }
   try{
     const origin=await geocode(q);
     const routed=await routePorts(origin);
