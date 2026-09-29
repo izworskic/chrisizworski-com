@@ -52,10 +52,20 @@ jobs:
           node scripts/enhance-kilauea-answer-agent.mjs "$GITHUB_WORKSPACE"
           node - <<'NODE'
           const fs=require('fs');
-          const file='public/synced-national-tools/kilauea-live/index.html';
-          let page=fs.readFileSync(file,'utf8');
+          const pageFile='public/synced-national-tools/kilauea-live/index.html';
+          let page=fs.readFileSync(pageFile,'utf8');
           page=page.replace('Live USGS HVO eruption state and episode guidance + webcam + NPS access + summit wind, vog/SO₂, cloud/rain, daylight and parking context, turned into a practical go / wait / where decision.','Live USGS Hawaiian Volcano Observatory (HVO) eruption state and episode guidance + webcam + NPS access + summit wind, vog/SO₂, cloud/rain, daylight and parking context, turned into a practical go / wait / where decision.');
-          fs.writeFileSync(file,page,'utf8');
+          fs.writeFileSync(pageFile,page,'utf8');
+
+          const directoryFile='public/synced-national-tools/index.html';
+          let directory=fs.readFileSync(directoryFile,'utf8');
+          const targets=['kilauea eruption today','is kilauea erupting','kilauea live','lava viewing','kilauea webcam','wind','vog','so2','cloud','rain','daylight','parking'];
+          directory=directory.replace(/(<article class="directory-card"[^>]*data-tool-id="kilauea-live"[^>]*data-tags=")([^"]*)(")/,(_,start,tags,end)=>{
+            let merged=tags;
+            for(const term of targets){ if(!merged.toLowerCase().includes(term)) merged+=' '+term; }
+            return start+merged+end;
+          });
+          fs.writeFileSync(directoryFile,directory,'utf8');
           NODE
 
       - name: Verify Kilauea contracts after enforcement
@@ -71,7 +81,10 @@ jobs:
           const directory=fs.readFileSync('public/synced-national-tools/index.html','utf8');
           const hawaii=directory.match(/<section class="catalog-group region-cluster"[^>]*id="region-hawaii"[\s\S]*?<\/section>/)?.[0]||'';
           if(!hawaii.includes('data-tool-id="kilauea-live"')) throw new Error('Kilauea is not in Hawaii region');
-          if(!hawaii.includes('kilauea webcam') || !hawaii.includes('daylight parking')) throw new Error('Kilauea discovery terms missing');
+          const discovery=hawaii.toLowerCase();
+          for(const term of ['kilauea eruption today','is kilauea erupting','kilauea live','lava viewing','kilauea webcam','wind','vog','so2','cloud','rain','daylight','parking']){
+            if(!discovery.includes(term)) throw new Error(`Kilauea discovery term missing: ${term}`);
+          }
           const page=fs.readFileSync('public/synced-national-tools/kilauea-live/index.html','utf8');
           const title=page.match(/<title>(.*?)<\/title>/)?.[1]||'';
           if(title!=='Kīlauea Live: Should You Go Now? | Chris Izworski') throw new Error(`Unexpected title: ${title}`);
