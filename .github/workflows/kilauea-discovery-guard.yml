@@ -4,12 +4,14 @@ on:
   pull_request:
     paths:
       - 'scripts/ensure-kilauea-discovery.mjs'
+      - 'scripts/enhance-kilauea-answer-agent.mjs'
       - 'tests/kilauea-discovery.test.js'
       - '.github/workflows/kilauea-discovery-guard.yml'
   push:
     branches: [main]
     paths:
       - 'scripts/ensure-kilauea-discovery.mjs'
+      - 'scripts/enhance-kilauea-answer-agent.mjs'
       - 'tests/kilauea-discovery.test.js'
       - '.github/workflows/kilauea-discovery-guard.yml'
       - 'public/synced-national-tools/index.html'
@@ -43,6 +45,9 @@ jobs:
       - name: Enforce Kilauea placement and metadata
         run: node scripts/ensure-kilauea-discovery.mjs "$GITHUB_WORKSPACE"
 
+      - name: Enhance Kilauea answer agent
+        run: node scripts/enhance-kilauea-answer-agent.mjs "$GITHUB_WORKSPACE"
+
       - name: Verify Kilauea contracts after enforcement
         run: node --test tests/kilauea-live.test.js tests/kilauea-discovery.test.js
 
@@ -56,16 +61,25 @@ jobs:
           const directory=fs.readFileSync('public/synced-national-tools/index.html','utf8');
           const hawaii=directory.match(/<section class="catalog-group region-cluster"[^>]*id="region-hawaii"[\s\S]*?<\/section>/)?.[0]||'';
           if(!hawaii.includes('data-tool-id="kilauea-live"')) throw new Error('Kilauea is not in Hawaii region');
+          if(!hawaii.includes('kilauea webcam') || !hawaii.includes('daylight parking')) throw new Error('Kilauea discovery terms missing');
           const page=fs.readFileSync('public/synced-national-tools/kilauea-live/index.html','utf8');
           const title=page.match(/<title>(.*?)<\/title>/)?.[1]||'';
           if(title!=='Kīlauea Live: Should You Go Now? | Chris Izworski') throw new Error(`Unexpected title: ${title}`);
           if(title.length>60) throw new Error(`Title exceeds 60 characters: ${title.length}`);
           if(!page.includes('twitter:card" content="summary_large_image"')) throw new Error('summary_large_image missing');
-          if(!page.includes('twitter:image')||!page.includes('og:image')) throw new Error('Social image metadata missing');
+          if(!page.includes('twitter:title" content="Kīlauea Eruption Today: Live Lava Viewing & Webcam"')) throw new Error('search-oriented social title missing');
+          if(!page.includes('Is Kīlauea erupting today?')) throw new Error('search-intent description missing');
+          if(!page.includes('id="tripFit"') || !page.includes('function renderAnswerAgent(d)') || !page.includes('renderAnswerAgent(d);')) throw new Error('choice personalization layer missing');
+          if(!page.includes('id="signalGrid"')) throw new Error('live signal grid missing');
+          for(const signal of ['Eruption','Episode','Webcam','NPS access','Wind','Vog / SO₂','Cloud / rain','Daylight','Parking']){
+            if(!page.includes(`['${signal}'`) && !page.includes(`['${signal}",`)) throw new Error(`${signal} signal missing`);
+          }
           const schema=JSON.parse(page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
           for(const type of ['ImageObject','WebApplication','BreadcrumbList']){
             if(!schema['@graph'].some(x=>x['@type']===type)) throw new Error(`${type} schema missing`);
           }
+          const app=schema['@graph'].find(x=>x['@type']==='WebApplication');
+          if(!Array.isArray(app?.featureList) || app.featureList.length<8) throw new Error('answer-agent feature schema missing');
           NODE
 
       - name: Commit guarded production files
@@ -77,8 +91,8 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add public/synced-national-tools/index.html public/synced-national-tools/kilauea-live/index.html
           if git diff --cached --quiet; then
-            echo 'Kilauea discovery and metadata already current.'
+            echo 'Kilauea discovery, metadata and answer agent already current.'
             exit 0
           fi
-          git commit -m 'Keep Kilauea discoverable in Hawaii'
+          git commit -m 'Keep Kilauea answer agent current'
           git push origin HEAD:main
