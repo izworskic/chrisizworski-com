@@ -342,22 +342,21 @@
   function renderIntakeStep(){
     const schema=state.intakeSchema,questions=schema?.base_questions||[];if(!questions.length)return;
     const q=questions[state.intakeStep];if(!q){classifyIntake();return;}
+    // Every base question is one tap. trip_vision is stored as a one-item list, the shape
+    // the engine reads; the impact-ranked follow-up can add depth when it matters.
+    const oneTap=q.type==='multi';
     setText('intakeProgress',`Question ${state.intakeStep+1} of ${questions.length}`);
     $('trip-intake')?.setAttribute('data-step',String(state.intakeStep));
     const question=$('intakeQuestion'),options=$('intakeOptions'),actions=$('intakeActions');
-    if(question)question.innerHTML=`<strong>${esc(q.prompt)}</strong>${q.type==='multi'?'<small>Choose up to two.</small>':''}`;
+    if(question)question.innerHTML=`<strong>${esc(q.prompt)}</strong>${oneTap?'<small>Pick the one that fits best.</small>':''}`;
     const current=q.type==='multi'?new Set(Array.isArray(state.intakeAnswers[q.id])?state.intakeAnswers[q.id]:[]):new Set([state.intakeAnswers[q.id]].filter(Boolean));
     if(options)options.innerHTML=(q.options||[]).map(([value,label])=>`<button type="button" class="intake-option${current.has(value)?' selected':''}" data-intake-value="${esc(value)}">${esc(label)}</button>`).join('');
-    if(actions)actions.hidden=q.type!=='multi';
+    if(actions)actions.hidden=true;
     if($('intakeContinue'))$('intakeContinue').disabled=q.type==='multi'&&current.size===0;
     options?.querySelectorAll('[data-intake-value]').forEach(btn=>btn.addEventListener('click',()=>{
       const value=btn.dataset.intakeValue;
-      if(q.type==='multi'){
-        const selected=new Set(Array.isArray(state.intakeAnswers[q.id])?state.intakeAnswers[q.id]:[]);
-        if(selected.has(value))selected.delete(value);else if(selected.size<Number(q.max||2))selected.add(value);
-        state.intakeAnswers[q.id]=[...selected];renderIntakeStep();
-      }else{
-        state.intakeAnswers[q.id]=value;
+      {
+        state.intakeAnswers[q.id]=oneTap?[value]:value;
         track('mackinac_intake_answered',{question:q.id,answer:value});
         state.intakeStep++;renderIntakeStep();
         liveRefine(btn.textContent.trim());
@@ -549,6 +548,88 @@
     scrollToTarget('#planner');
   });
   $('tripTuning')?.querySelectorAll('[data-tune]').forEach(btn=>btn.addEventListener('click',()=>applyTuningChange(btn.dataset.tune)));
+
+  // ---- Start: the two inputs that change the headline answer most, asked first, in the
+  // hero, one tap each. Starting city + leave time build the plan directly; there is no
+  // separate form or Build button between the visitor and their ferry.
+  const leaveLabel=v=>{const [h,m]=String(v).split(':').map(Number);if(!Number.isFinite(h))return v;const ap=h>=12?'PM':'AM';const hh=h%12||12;return m?`${hh}:${String(m).padStart(2,'0')} ${ap}`:`${hh} ${ap}`;};
+  function markStartChips(){
+    const city=cleanOrigin(state.originResolved?.query||state.originQuery||'').toLowerCase();
+    document.querySelectorAll('#heroStart [data-city]').forEach(b=>{const on=!!city&&cleanOrigin(b.dataset.city).toLowerCase()===city;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});
+    document.querySelectorAll('#heroStart [data-leave]').forEach(b=>{const on=b.dataset.leave===state.departTime;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});
+  }
+  function startStatus(text,kind=''){const el=$('startStatus');if(el){el.textContent=text;el.className=`start-status${kind?` ${kind}`:''}`;}}
+  function describeStart(){
+    const o=state.originResolved;
+    if(o&&state.departTime)return `From ${o.origin?.label||o.query}, leaving ${leaveLabel(state.departTime)}: ${o.preferred_port} is about ${driveLabel(o.drive_minutes)} away.`;
+    if(o)return `From ${o.origin?.label||o.query}: ${o.preferred_port} is about ${driveLabel(o.drive_minutes)} away. When are you leaving?`;
+    if(state.departTime)return `Leaving ${leaveLabel(state.departTime)}. Where are you starting from?`;
+    return 'Two taps and this becomes your ferry.';
+  }
+  async function applyStart({city=null,leave=null}={}){
+    if(city){
+      startStatus(`Finding the drive from ${city}…`,'loading');
+      const ok=await resolveOrigin(city,{reload:false,source:'hero-start'});
+      if(!ok){startStatus(`Couldn’t find “${city}.” Try city and state, or a ZIP code.`,'error');markStartChips();return;}
+    }
+    if(leave)syncDepartInputs(leave);
+    markStartChips();startStatus(describeStart(),state.originResolved&&state.departTime?'resolved':'');
+    if(state.originResolved&&state.departTime){
+      document.body.classList.add('mackinac-plan-ready');
+      const saved=capturePlanInputs();if(saved)planStorageSet(saved);
+      track('mackinac_plan_generated',{profile:state.tripProfile?.primary?.id||'none',source:'hero-start'});
+    }
+    const o=state.originResolved;
+    await loadDecision({reason:city?`Starting from ${o?.origin?.label||city}`:`Leaving at ${leaveLabel(leave)}`});
+  }
+  document.querySelectorAll('#heroStart [data-city]').forEach(b=>b.addEventListener('click',()=>{$('startCityForm').hidden=true;applyStart({city:b.dataset.city});}));
+  document.querySelectorAll('#heroStart [data-leave]').forEach(b=>b.addEventListener('click',()=>{$('startLeaveForm').hidden=true;applyStart({leave:b.dataset.leave});}));
+  $('heroStart')?.querySelector('[data-city-other]')?.addEventListener('click',e=>{const f=$('startCityForm');f.hidden=!f.hidden;e.currentTarget.setAttribute('aria-expanded',String(!f.hidden));if(!f.hidden)$('startCityInput')?.focus();});
+  $('heroStart')?.querySelector('[data-leave-other]')?.addEventListener('click',e=>{const f=$('startLeaveForm');f.hidden=!f.hidden;e.currentTarget.setAttribute('aria-expanded',String(!f.hidden));if(!f.hidden)$('startLeaveInput')?.focus();});
+  $('startCityForm')?.addEventListener('submit',e=>{e.preventDefault();const v=cleanOrigin($('startCityInput')?.value);if(v)applyStart({city:v});});
+  $('startLeaveForm')?.addEventListener('submit',e=>{e.preventDefault();const v=String($('startLeaveInput')?.value||'').trim();if(v)applyStart({leave:v});});
+
+  // ---- Your day so far: the first stops of the live itinerary, shown inside the
+  // question card, so each answer's effect on the day appears where the visitor taps.
+  function renderIntakePreview(){
+    const list=$('intakePreviewList');if(!list)return;
+    const rows=[];
+    const ferry=$('heroFerry')?.textContent?.trim();
+    if(ferry&&/\d/.test(ferry))rows.push(['Ferry',ferry]);
+    document.querySelectorAll('#itinerary li').forEach(li=>{
+      if(rows.length>=4)return;
+      const t=li.querySelector('time')?.textContent?.trim()||'',s=li.querySelector('strong')?.textContent?.trim()||'';
+      if(!s||/^leave\b|dock|ferry|drive|^arrive (at )?(mackinaw|st\.? ignace)/i.test(s))return;
+      rows.push([t,s]);
+    });
+    const back=$('heroReturn')?.textContent?.trim();
+    if(back&&/\d/.test(back))rows.push(['Back',back]);
+    if(!rows.length)return;
+    const old=[...list.querySelectorAll('li')].map(li=>li.textContent);
+    list.innerHTML=rows.map(([t,s])=>`<li><time>${esc(t)}</time><span>${esc(s)}</span></li>`).join('');
+    [...list.querySelectorAll('li')].forEach((li,i)=>{if(old.length&&old[i]!==li.textContent){li.classList.add('just-changed');}});
+  }
+  new MutationObserver(renderIntakePreview).observe($('itinerary'),{childList:true,subtree:true,characterData:true});
+
+  // ---- Live bar: while the answer is scrolled away (answering questions, reading the
+  // plan), the ferry out, ferry back and day score stay on screen and flash when a tap
+  // changes them, so every answer visibly lands.
+  (function liveBar(){
+    const bar=$('liveBar'),hero=document.querySelector('.hero-lede');if(!bar||!hero)return;
+    const pairs=[['heroFerry','lbFerry'],['heroReturn','lbReturn'],['itinerary','lbFirst']];
+    const firstStop=()=>{const out=[];for(const li of document.querySelectorAll('#itinerary li')){const s=li.querySelector('strong')?.textContent?.trim()||'';if(s&&!/^leave\b|dock|ferry|drive|^arrive (at )?(mackinaw|st\.? ignace)/i.test(s))out.push(s.replace(/\s*\(.*?\)\s*/g,' ').trim());if(out.length===3)break;}return out.length?out.join(' · '):'—';};
+    const tidy=(id,t)=>id==='itinerary'?firstStop():(String(t||'').replace(/\s+/g,' ').trim().split(' · ')[0])||'—';
+    function mirror(flash){
+      pairs.forEach(([src,dst])=>{const from=$(src),to=$(dst);if(!from||!to)return;const t=tidy(src,from.textContent);if(to.textContent!==t){to.textContent=t;if(flash){const item=to.closest('.lb-item');item?.classList.remove('just-changed');void item?.offsetWidth;item?.classList.add('just-changed');}}});
+    }
+    mirror(false);
+    const mo=new MutationObserver(()=>mirror(true));
+    pairs.forEach(([src])=>{const el=$(src);if(el)mo.observe(el,{childList:true,characterData:true,subtree:true});});
+    let heroVisible=true;
+    const io=new IntersectionObserver(es=>{heroVisible=es[0].isIntersecting;const show=!heroVisible&&decisionLoaded;bar.hidden=!show;document.body.classList.toggle('live-bar-on',show);},{threshold:0});
+    io.observe(hero);
+    bar.querySelector('.live-bar-inner')?.addEventListener('click',()=>{document.querySelector('.hero')?.scrollIntoView({behavior:'smooth',block:'start'});track('mackinac_live_bar_opened',{});});
+  })();
   $('tripTuningReset')?.addEventListener('click',async()=>{state.tunings.clear();renderTuningButtons();const saved=capturePlanInputs();if(saved)planStorageSet(saved);track('mackinac_plan_tuned',{tuning:'reset',active:false,count:0});await loadDecision();renderTuningButtons();});
 
   document.querySelectorAll('#personaChips .chip').forEach(btn=>btn.addEventListener('click',()=>{
@@ -929,7 +1010,7 @@
     const t=$('planToast');if(!t)return;
     setText('planToastTitle',title);setText('planToastBody',body);
     t.hidden=false;requestAnimationFrame(()=>t.classList.add('show'));
-    clearTimeout(toastTimer);toastTimer=setTimeout(hidePlanToast,7000);
+    clearTimeout(toastTimer);toastTimer=setTimeout(hidePlanToast,document.body.classList.contains('live-bar-on')?4500:7000);
   }
   function hidePlanToast(){const t=$('planToast');if(!t)return;t.classList.remove('show');setTimeout(()=>{if(!t.classList.contains('show'))t.hidden=true;},260);}
   function announcePlanChanges(before,reason){
@@ -941,6 +1022,10 @@
     const body=ferryMoved
       ? `New ferry: ${seenText('heroFerry')}.${list?` Also updated: ${list}.`:''}`
       : list?`Updated your ${list}.`:'The same ferry and timing still fit best. Your day was rechecked against the new answer.';
+    // The answer is on screen and the changed values are flashing: a toast would only
+    // cover what the visitor is about to tap. Announce only changes they can't see.
+    const lede=document.querySelector('.hero-lede');const r=lede?.getBoundingClientRect();
+    if(r&&r.bottom>0&&r.top<innerHeight)return;
     showPlanToast(reason||'Plan updated',body);
   }
   let decisionSeq=0,decisionLoaded=false;

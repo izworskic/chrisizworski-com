@@ -80,7 +80,8 @@
     "audit:canonical-indexing": "node scripts/audit-sitemap-canonicals.mjs",
     "benchmark:snow-totals": "node scripts/benchmark-snow-totals-personas.mjs --check",
     "build:snow-reference": "node scripts/build-snow-reference-data.mjs",
-    "audit:adsense": "node scripts/audit-adsense-network.mjs --check"
+    "audit:adsense": "node scripts/audit-adsense-network.mjs --check",
+    "benchmark:mackinac-usefulness": "node scripts/benchmark-mackinac-usefulness.mjs"
   },
   "dependencies": {
     "@vercel/oidc": "3.8.8",

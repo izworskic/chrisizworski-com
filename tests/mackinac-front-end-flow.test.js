@@ -55,9 +55,10 @@ test("hidden intake pieces stay hidden despite display rules", () => {
   assert.match(css, /\.timeline\{flex-wrap:wrap/);
 });
 
-test("engine prose uses the right article", () => {
+test("engine headline reason is plain language", () => {
   const src = fs.readFileSync(path.join(root, "lib/mackinac-island/route.js"), "utf8");
-  assert.match(src, /usable island hours with \$\{withArticle\(/);
+  assert.match(src, /hours on the Island, \$\{conditionPhrase\(/);
   assert.doesNotMatch(src, /hours with a \$\{scoreLabel/);
+  assert.doesNotMatch(src, /activity window and a return buffer/);
   assert.equal(typeof route, "function");
 });

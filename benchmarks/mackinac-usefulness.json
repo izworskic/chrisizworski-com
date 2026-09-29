@@ -1,0 +1,1718 @@
+{
+  "runs": [
+    {
+      "label": "main-before",
+      "at": "2026-09-29T00:48:04.397Z",
+      "loss": 0.2569,
+      "terms": {
+        "react": 0.528,
+        "correct": 0.417,
+        "ask": 0.292,
+        "clarity": 0.16,
+        "distinct": 0,
+        "continuity": 0,
+        "speed": 0,
+        "stability": 0,
+        "truth": 0
+      },
+      "contribution": {
+        "react": 0.1057,
+        "correct": 0.0833,
+        "ask": 0.0439,
+        "clarity": 0.024,
+        "distinct": 0,
+        "continuity": 0,
+        "speed": 0,
+        "stability": 0,
+        "truth": 0
+      },
+      "note": "origin/main (post-#617), same harness as v4-final"
+    },
+    {
+      "label": "v1-start-chips-live-bar",
+      "at": "2026-09-29T00:18:55.081Z",
+      "loss": 0.0971,
+      "terms": {
+        "react": 0.159,
+        "correct": 0.063,
+        "ask": 0.27,
+        "clarity": 0.057,
+        "distinct": 0.036,
+        "continuity": 0,
+        "speed": 0.004,
+        "stability": 0,
+        "truth": 0
+      },
+      "contribution": {
+        "react": 0.0318,
+        "correct": 0.0125,
+        "ask": 0.0405,
+        "clarity": 0.0086,
+        "distinct": 0.0036,
+        "continuity": 0,
+        "speed": 0.0002,
+        "stability": 0,
+        "truth": 0
+      }
+    },
+    {
+      "label": "v2-short-visit-day-bar",
+      "at": "2026-09-29T00:27:14.356Z",
+      "loss": 0.0948,
+      "terms": {
+        "react": 0.142,
+        "correct": 0,
+        "ask": 0.27,
+        "clarity": 0.057,
+        "distinct": 0.172,
+        "continuity": 0,
+        "speed": 0.001,
+        "stability": 0,
+        "truth": 0
+      },
+      "contribution": {
+        "react": 0.0284,
+        "correct": 0,
+        "ask": 0.0405,
+        "clarity": 0.0086,
+        "distinct": 0.0172,
+        "continuity": 0,
+        "speed": 0,
+        "stability": 0,
+        "truth": 0
+      }
+    },
+    {
+      "label": "v3-one-tap-questions",
+      "at": "2026-09-29T00:34:02.720Z",
+      "loss": 0.0805,
+      "terms": {
+        "react": 0.154,
+        "correct": 0,
+        "ask": 0.222,
+        "clarity": 0.057,
+        "distinct": 0,
+        "continuity": 0,
+        "speed": 0.125,
+        "stability": 0.038,
+        "truth": 0
+      },
+      "contribution": {
+        "react": 0.0308,
+        "correct": 0,
+        "ask": 0.0334,
+        "clarity": 0.0086,
+        "distinct": 0,
+        "continuity": 0,
+        "speed": 0.0063,
+        "stability": 0.0015,
+        "truth": 0
+      }
+    },
+    {
+      "label": "v4-final",
+      "at": "2026-09-29T00:41:12.940Z",
+      "loss": 0.0684,
+      "terms": {
+        "react": 0.125,
+        "correct": 0,
+        "ask": 0.222,
+        "clarity": 0.067,
+        "distinct": 0,
+        "continuity": 0,
+        "speed": 0.001,
+        "stability": 0,
+        "truth": 0
+      },
+      "contribution": {
+        "react": 0.025,
+        "correct": 0,
+        "ask": 0.0334,
+        "clarity": 0.01,
+        "distinct": 0,
+        "continuity": 0,
+        "speed": 0,
+        "stability": 0,
+        "truth": 0
+      }
+    }
+  ],
+  "latest": {
+    "label": "v4-final",
+    "at": "2026-09-29T00:41:12.940Z",
+    "base": "http://localhost:8791",
+    "loss": 0.0684,
+    "terms": {
+      "react": 0.125,
+      "correct": 0,
+      "ask": 0.222,
+      "clarity": 0.067,
+      "distinct": 0,
+      "continuity": 0,
+      "speed": 0.001,
+      "stability": 0,
+      "truth": 0
+    },
+    "contribution": {
+      "react": 0.025,
+      "correct": 0,
+      "ask": 0.0334,
+      "clarity": 0.01,
+      "distinct": 0,
+      "continuity": 0,
+      "speed": 0,
+      "stability": 0,
+      "truth": 0
+    },
+    "meanPlanSimilarity": 0.262,
+    "personas": [
+      {
+        "id": "detroit-first",
+        "L": {
+          "react": 0,
+          "correct": 0,
+          "ask": 0.12,
+          "clarity": 0.067,
+          "continuity": 0,
+          "speed": 0.005,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 1521,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 0.590676836492891,
+          "jargon": 0
+        },
+        "taps": 6,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "start city chip",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "start leave chip",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "trip_duration=day",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "party=couple",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=icons",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=rushed",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "Mackinaw City port",
+            "pass": true
+          },
+          {
+            "label": "ferry reachable (\u22653h after leaving)",
+            "pass": true
+          },
+          {
+            "label": "return ferry shown",
+            "pass": true
+          }
+        ],
+        "primaryRec": "Take the 12:30 PM from Mackinaw City.\nAbout 5.2 hours on the Island, with great conditions for getting out, and room to spare on the way home.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "lake-view"
+        }
+      },
+      {
+        "id": "gr-family",
+        "L": {
+          "react": 0.057,
+          "correct": 0,
+          "ask": 0.18,
+          "clarity": 0.067,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 1129,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 0.590676836492891,
+          "jargon": 0
+        },
+        "taps": 7,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "start city chip",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "start leave chip",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "trip_duration=day",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "party=family-young",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=kids",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=walking",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "adaptive",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "kids/family pacing",
+            "pass": true
+          },
+          {
+            "label": "low-walking movement",
+            "pass": true
+          },
+          {
+            "label": "ferry reachable (\u22653h)",
+            "pass": true
+          }
+        ],
+        "primaryRec": "Take the 12:30 PM from Mackinaw City.\nAbout 5.2 hours on the Island, with great conditions for getting out, and room to spare on the way home.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "lake-view"
+        }
+      },
+      {
+        "id": "tc-couple-night",
+        "L": {
+          "react": 0.125,
+          "correct": 0,
+          "ask": 0.29,
+          "clarity": 0.067,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 1097,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 0.590676836492891,
+          "jargon": 0
+        },
+        "taps": 8,
+        "wasted": 1,
+        "log": [
+          {
+            "what": "start city chip",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "start leave chip",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "trip_duration=one-night",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "party=couple",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=relaxed",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=food-shopping (not offered)",
+            "anyChange": false,
+            "visibleChange": false,
+            "toast": false,
+            "notOffered": true
+          },
+          {
+            "what": "trip_loss=crowds",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "adaptive",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "overnight shape",
+            "pass": true
+          },
+          {
+            "label": "dinner",
+            "pass": true
+          },
+          {
+            "label": "ferry reachable (\u22652h)",
+            "pass": true
+          }
+        ],
+        "primaryRec": "Take the 1:00 PM from Mackinaw City.\n1 night on the Island, with great conditions for getting out when you arrive. Your trip home is planned for 2026-09-30.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "lake-view"
+        }
+      },
+      {
+        "id": "lansing-bikes",
+        "L": {
+          "react": 0.175,
+          "correct": 0,
+          "ask": 0.24,
+          "clarity": 0.067,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 1116,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 0.590676836492891,
+          "jargon": 0
+        },
+        "taps": 8,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "start city chip",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "start leave other",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "start leave typed",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "trip_duration=day",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "party=adults-friends",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=biking",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=weather",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "adaptive",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "bike loop",
+            "pass": true
+          },
+          {
+            "label": "ferry reachable (\u22653h)",
+            "pass": true
+          }
+        ],
+        "primaryRec": "Take the 11:30 AM from Mackinaw City.\nAbout 6.7 hours on the Island, with great conditions for getting out, and room to spare on the way home.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "lake-view"
+        }
+      },
+      {
+        "id": "saginaw-multigen",
+        "L": {
+          "react": 0.125,
+          "correct": 0,
+          "ask": 0.24,
+          "clarity": 0.067,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 1124,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 0.590676836492891,
+          "jargon": 0
+        },
+        "taps": 8,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "start city other",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "start city typed",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "start leave chip",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "trip_duration=day",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "party=multigenerational",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=history",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=walking",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "adaptive",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "Fort / history",
+            "pass": true
+          },
+          {
+            "label": "carriage / taxi",
+            "pass": true
+          },
+          {
+            "label": "ferry reachable (\u22652.5h)",
+            "pass": true
+          }
+        ],
+        "primaryRec": "Take the 11:30 AM from Mackinaw City.\nAbout 5.7 hours on the Island, with great conditions for getting out, and room to spare on the way home.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "island-house"
+        }
+      },
+      {
+        "id": "marquette-solo",
+        "L": {
+          "react": 0.143,
+          "correct": 0,
+          "ask": 0.18,
+          "clarity": 0.067,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 1053,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 0.590676836492891,
+          "jargon": 0
+        },
+        "taps": 7,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "start city other",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "start city typed",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "start leave chip",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "trip_duration=day",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "party=solo",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=scenery",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=crowds",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "St. Ignace port",
+            "pass": true
+          },
+          {
+            "label": "scenery",
+            "pass": true
+          }
+        ],
+        "primaryRec": "Take the 10:30 AM from St. Ignace.\nAbout 7.7 hours on the Island, with great conditions for getting out, and room to spare on the way home.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "sunset-condos"
+        }
+      },
+      {
+        "id": "baycity-late",
+        "L": {
+          "react": 0.25,
+          "correct": 0,
+          "ask": 0.24,
+          "clarity": 0.067,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 1109,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 0.590676836492891,
+          "jargon": 0
+        },
+        "taps": 8,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "start city other",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "start city typed",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "start leave other",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "start leave typed",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "trip_duration=day",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "party=couple",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=icons",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=missing",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "ferry reachable (\u22652h after 11:30)",
+            "pass": true
+          },
+          {
+            "label": "Mackinaw City port",
+            "pass": true
+          }
+        ],
+        "primaryRec": "Take the 4:00 PM from Mackinaw City.\nA short visit: about 3.2 hours on the Island. Leave earlier or stay the night for a fuller day.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "lake-view"
+        }
+      },
+      {
+        "id": "chicago-teens",
+        "L": {
+          "react": 0.125,
+          "correct": 0,
+          "ask": 0.29,
+          "clarity": 0.067,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 1084,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 0.590676836492891,
+          "jargon": 0
+        },
+        "taps": 8,
+        "wasted": 1,
+        "log": [
+          {
+            "what": "start city chip",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "start leave chip",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": false
+          },
+          {
+            "what": "trip_duration=two-three",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "party=family-teens",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=biking",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=history (not offered)",
+            "anyChange": false,
+            "visibleChange": false,
+            "toast": false,
+            "notOffered": true
+          },
+          {
+            "what": "trip_loss=missing",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "adaptive",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "multiple days",
+            "pass": true
+          },
+          {
+            "label": "bike",
+            "pass": true
+          },
+          {
+            "label": "history / Fort",
+            "pass": true
+          }
+        ],
+        "primaryRec": "Take the 4:00 PM from Mackinaw City.\n2 nights on the Island, with great conditions for getting out when you arrive. Your trip home is planned for 2026-10-01.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "lake-view"
+        }
+      }
+    ]
+  },
+  "baseline": {
+    "label": "main-before",
+    "at": "2026-09-29T00:48:04.397Z",
+    "base": "http://localhost:8791",
+    "loss": 0.2569,
+    "terms": {
+      "react": 0.528,
+      "correct": 0.417,
+      "ask": 0.292,
+      "clarity": 0.16,
+      "distinct": 0,
+      "continuity": 0,
+      "speed": 0,
+      "stability": 0,
+      "truth": 0
+    },
+    "contribution": {
+      "react": 0.1057,
+      "correct": 0.0833,
+      "ask": 0.0439,
+      "clarity": 0.024,
+      "distinct": 0,
+      "continuity": 0,
+      "speed": 0,
+      "stability": 0,
+      "truth": 0
+    },
+    "meanPlanSimilarity": 0.173,
+    "personas": [
+      {
+        "id": "detroit-first",
+        "L": {
+          "react": 0.525,
+          "correct": 0.667,
+          "ask": 0.24,
+          "clarity": 0.16,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 1119,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 1.9345194016587677,
+          "jargon": 0
+        },
+        "taps": 8,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "trip_duration=day",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "party=couple",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=icons",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "trip_vision:continue",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=rushed",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "#profileOriginInput",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "#profileDepartTime",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "build",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "Mackinaw City port",
+            "pass": false
+          },
+          {
+            "label": "ferry reachable (\u22653h after leaving)",
+            "pass": false
+          },
+          {
+            "label": "return ferry shown",
+            "pass": true
+          }
+        ],
+        "primaryRec": "We can\u2019t confidently choose a ferry yet.\nCheck the operator links below before you head for the dock.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "lake-view"
+        }
+      },
+      {
+        "id": "gr-family",
+        "L": {
+          "react": 0.467,
+          "correct": 0.333,
+          "ask": 0.3,
+          "clarity": 0.16,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 893,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 1.9345194016587677,
+          "jargon": 0
+        },
+        "taps": 9,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "trip_duration=day",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "party=family-young",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=kids",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "trip_vision:continue",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=walking",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "adaptive",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "#profileOriginInput",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "#profileDepartTime",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "build",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "kids/family pacing",
+            "pass": true
+          },
+          {
+            "label": "low-walking movement",
+            "pass": true
+          },
+          {
+            "label": "ferry reachable (\u22653h)",
+            "pass": false
+          }
+        ],
+        "primaryRec": "We can\u2019t confidently choose a ferry yet.\nCheck the operator links below before you head for the dock.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "lake-view"
+        }
+      },
+      {
+        "id": "tc-couple-night",
+        "L": {
+          "react": 0.62,
+          "correct": 0,
+          "ask": 0.36,
+          "clarity": 0.16,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 784,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 1.9345194016587677,
+          "jargon": 0
+        },
+        "taps": 10,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "trip_duration=one-night",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "party=couple",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=relaxed",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "trip_vision=food-shopping",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "trip_vision:continue",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=crowds",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "adaptive",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "#profileOriginInput",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "#profileDepartTime",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "build",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          }
+        ],
+        "checks": [
+          {
+            "label": "overnight shape",
+            "pass": true
+          },
+          {
+            "label": "dinner",
+            "pass": true
+          },
+          {
+            "label": "ferry reachable (\u22652h)",
+            "pass": true
+          }
+        ],
+        "primaryRec": "Take the 11:30 AM from Mackinaw City.\n1-night stay with an excellent arrival-day activity window; return planning is separated onto 2026-09-30.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "lake-view"
+        }
+      },
+      {
+        "id": "lansing-bikes",
+        "L": {
+          "react": 0.578,
+          "correct": 0.5,
+          "ask": 0.3,
+          "clarity": 0.16,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 1044,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 1.9345194016587677,
+          "jargon": 0
+        },
+        "taps": 9,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "trip_duration=day",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "party=adults-friends",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=biking",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "trip_vision:continue",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=weather",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "adaptive",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "#profileOriginInput",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "#profileDepartTime",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "build",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          }
+        ],
+        "checks": [
+          {
+            "label": "bike loop",
+            "pass": true
+          },
+          {
+            "label": "ferry reachable (\u22653h)",
+            "pass": false
+          }
+        ],
+        "primaryRec": "Take the 7:30 AM from Mackinaw City.\n7.7 usable island hours with an excellent activity window and a return buffer.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "lake-view"
+        }
+      },
+      {
+        "id": "saginaw-multigen",
+        "L": {
+          "react": 0.467,
+          "correct": 0.333,
+          "ask": 0.3,
+          "clarity": 0.16,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 1141,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 1.9345194016587677,
+          "jargon": 0
+        },
+        "taps": 9,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "trip_duration=day",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "party=multigenerational",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=history",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "trip_vision:continue",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=walking",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "adaptive",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "#profileOriginInput",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "#profileDepartTime",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "build",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "Fort / history",
+            "pass": true
+          },
+          {
+            "label": "carriage / taxi",
+            "pass": true
+          },
+          {
+            "label": "ferry reachable (\u22652.5h)",
+            "pass": false
+          }
+        ],
+        "primaryRec": "We can\u2019t confidently choose a ferry yet.\nCheck the operator links below before you head for the dock.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "island-house"
+        }
+      },
+      {
+        "id": "marquette-solo",
+        "L": {
+          "react": 0.525,
+          "correct": 0.5,
+          "ask": 0.24,
+          "clarity": 0.16,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 1294,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 1.9345194016587677,
+          "jargon": 0
+        },
+        "taps": 8,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "trip_duration=day",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "party=solo",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=scenery",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "trip_vision:continue",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=crowds",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "#profileOriginInput",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "#profileDepartTime",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "build",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "St. Ignace port",
+            "pass": false
+          },
+          {
+            "label": "scenery",
+            "pass": true
+          }
+        ],
+        "primaryRec": "We can\u2019t confidently choose a ferry yet.\nCheck the operator links below before you head for the dock.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "sunset-condos"
+        }
+      },
+      {
+        "id": "baycity-late",
+        "L": {
+          "react": 0.525,
+          "correct": 1,
+          "ask": 0.24,
+          "clarity": 0.16,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 934,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 1.9345194016587677,
+          "jargon": 0
+        },
+        "taps": 8,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "trip_duration=day",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "party=couple",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=icons",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "trip_vision:continue",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=missing",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "#profileOriginInput",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "#profileDepartTime",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "build",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "ferry reachable (\u22652h after 11:30)",
+            "pass": false
+          },
+          {
+            "label": "Mackinaw City port",
+            "pass": false
+          }
+        ],
+        "primaryRec": "We can\u2019t confidently choose a ferry yet.\nCheck the operator links below before you head for the dock.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "lake-view"
+        }
+      },
+      {
+        "id": "chicago-teens",
+        "L": {
+          "react": 0.52,
+          "correct": 0,
+          "ask": 0.36,
+          "clarity": 0.16,
+          "continuity": 0,
+          "speed": 0,
+          "stability": 0,
+          "truth": 0
+        },
+        "speedMs": 929,
+        "first": {
+          "answerVisible": true,
+          "words": 140,
+          "ctas": 2,
+          "qScreens": 1.9345194016587677,
+          "jargon": 0
+        },
+        "taps": 10,
+        "wasted": 0,
+        "log": [
+          {
+            "what": "trip_duration=two-three",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "party=family-teens",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_vision=biking",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "trip_vision=history",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "trip_vision:continue",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": true
+          },
+          {
+            "what": "trip_loss=missing",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "adaptive",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          },
+          {
+            "what": "#profileOriginInput",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "#profileDepartTime",
+            "anyChange": true,
+            "visibleChange": false,
+            "toast": false
+          },
+          {
+            "what": "build",
+            "anyChange": true,
+            "visibleChange": true,
+            "toast": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "multiple days",
+            "pass": true
+          },
+          {
+            "label": "bike",
+            "pass": true
+          },
+          {
+            "label": "history / Fort",
+            "pass": true
+          }
+        ],
+        "primaryRec": "We can\u2019t confidently choose a ferry yet.\nCheck the operator links below before you head for the dock.",
+        "cls": 0,
+        "jargon": [],
+        "continuity": {
+          "stripOn": true,
+          "focus": true,
+          "top": "island-house"
+        }
+      }
+    ]
+  }
+}
