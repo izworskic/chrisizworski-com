@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { enhanceBallardMain, enhanceBallardTour } from './ballard-photo-program.mjs';
+import { enhanceBallardTourAuthority } from './ballard-tour-authority.mjs';
 
 const sourceRoot = path.resolve('node_modules/national-ballard-locks');
 const sourcePage = path.join(sourceRoot, 'public', 'ballard-locks');
@@ -15,8 +16,8 @@ const tourCanonical = 'https://chrisizworski.com/ballard-locks/tour/';
 const salmonCanonical = 'https://chrisizworski.com/ballard-locks/salmon-counts/';
 
 // Production Ballard is synced from one exact authoritative commit so the main page,
-// tour, salmon interpretation and API cannot drift from one another. The photo layer is
-// an intentionally small production presentation enhancement with its own hard guards.
+// tour, salmon interpretation and API cannot drift from one another. The photo and
+// authority layers are intentionally small production presentation enhancements with hard guards.
 const ballardSourceCommit = '761a041de378f1265211122b1395c3968106a94e';
 const rawBase = `https://raw.githubusercontent.com/izworskic/national-ballard-locks/${ballardSourceCommit}`;
 const rawSources = {
@@ -30,7 +31,6 @@ if (!fs.existsSync(sourcePage)) throw new Error(`Ballard sync: missing ${sourceP
 if (!fs.existsSync(sourceApi)) throw new Error(`Ballard sync: missing ${sourceApi}`);
 if (!fs.existsSync(sourceAisApi)) throw new Error(`Ballard sync: missing ${sourceAisApi}`);
 
-// Keep the package-backed mirror as a safe baseline and retain the proven AIS proxy.
 fs.rmSync(destPage, { recursive: true, force: true });
 fs.mkdirSync(path.dirname(destPage), { recursive: true });
 fs.cpSync(sourcePage, destPage, { recursive: true });
@@ -51,7 +51,7 @@ const [mainSource, tourSource, salmonSource, apiSource] = await Promise.all([
 ]);
 
 const mainEnhanced = enhanceBallardMain(mainSource);
-const tourEnhanced = enhanceBallardTour(tourSource);
+const tourEnhanced = enhanceBallardTourAuthority(enhanceBallardTour(tourSource));
 
 fs.mkdirSync(path.join(destPage, 'tour'), { recursive: true });
 fs.mkdirSync(path.join(destPage, 'salmon-counts'), { recursive: true });
@@ -86,6 +86,11 @@ for (const phrase of ['See this', 'What’s happening', 'Watch for', 'Why it mat
 if (!tourPage.includes('data-photo-program="ballard-interpretive-v1"')) throw new Error('Ballard sync: tour photo program missing');
 if (!tourPage.includes('const stopImages=')) throw new Error('Ballard sync: stop photo manifest missing');
 if (!tourPage.includes('photoForStop(s.id)')) throw new Error('Ballard sync: stop photos are not wired into popups');
+if (!tourPage.includes('data-authority-layer="ballard-tour-v1"')) throw new Error('Ballard sync: restrained authority layer missing');
+if (!tourPage.includes('Verify access with USACE')) throw new Error('Ballard sync: contextual USACE access verification link missing');
+for (const authority of ['data-authority="usace"','data-authority="wdfw"','data-authority="noaa"','data-authority="nws"']) {
+  if (!tourPage.includes(authority)) throw new Error(`Ballard sync: official authority link missing ${authority}`);
+}
 if (tourPage.includes('href="https://ballardlocks.org') || tourPage.includes("href='https://ballardlocks.org")) throw new Error('Ballard sync: compromised legacy domain linked as authority');
 
 const salmonFile = path.join(destPage, 'salmon-counts', 'index.html');
@@ -117,4 +122,4 @@ if (!sitemap.includes(`<loc>${salmonCanonical}</loc>`)) {
 }
 fs.writeFileSync(sitemapPath, sitemap);
 
-console.log(`Synced Ballard Locks decision v2 from ${ballardSourceCommit} with interpretive photo program.`);
+console.log(`Synced Ballard Locks decision v2 from ${ballardSourceCommit} with interpretive photo + restrained authority layers.`);
