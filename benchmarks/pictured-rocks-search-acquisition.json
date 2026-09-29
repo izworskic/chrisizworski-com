@@ -1,49 +1,92 @@
 {
   "product": "Pictured Rocks search acquisition",
   "canonical": "https://picturedrocks.chrisizworski.com/",
-  "objective": "Maximize qualified Google impressions and CTR without creating duplicate indexed owners or degrading the decision-product UX.",
+  "objective": "Make the canonical planner the clear Google owner for Pictured Rocks planning intent while preserving the decision-first product and avoiding duplicate owners.",
   "lossFunction": {
-    "formula": "loss = 100 - weighted_score; target loss <= 8",
+    "formula": "loss = 100 - weighted_score; target loss <= 7",
     "hardVetoes": [
       "canonical response is not HTTP 200",
       "canonical response contains noindex or X-Robots-Tag noindex",
       "canonical does not self-canonicalize to https://picturedrocks.chrisizworski.com/",
       "lab preview becomes indexable",
       "canonical URL is missing from the dedicated Pictured Rocks sitemap",
-      "an indexed duplicate owner is introduced on chrisizworski.com"
+      "a duplicate page is intentionally optimized to own generic Pictured Rocks planner, map, itinerary, or weather intent"
     ],
     "weights": {
-      "query_fit_title_h1": 25,
-      "snippet_promise": 20,
-      "intent_coverage": 15,
-      "discovery_internal_authority": 15,
-      "structured_social_image_metadata": 15,
-      "freshness_recrawl_signals": 10
-    }
+      "indexability_and_canonical_integrity": 20,
+      "generic_planner_query_ownership": 20,
+      "serp_title_description_fit": 15,
+      "visible_intent_coverage": 15,
+      "internal_authority_and_anti_cannibalization": 15,
+      "structured_social_metadata": 10,
+      "freshness_and_recrawl_signals": 5
+    },
+    "diagnosticBaselineScore": 73,
+    "diagnosticBaselineLoss": 27,
+    "postChangeTargetScore": 93,
+    "postChangeTargetLoss": 7
   },
   "targetQueries": [
-    "pictured rocks",
-    "pictured rocks national lakeshore",
     "pictured rocks trip planner",
-    "pictured rocks map",
-    "pictured rocks weather",
     "pictured rocks itinerary",
     "pictured rocks one day itinerary",
-    "pictured rocks boat cruise",
-    "pictured rocks hiking",
+    "pictured rocks map",
+    "pictured rocks weather",
     "things to do at pictured rocks",
+    "pictured rocks boat cruise",
+    "pictured rocks kayaking",
+    "pictured rocks hiking",
+    "pictured rocks national lakeshore",
     "munising pictured rocks"
   ],
   "metadataTarget": {
-    "title": "Pictured Rocks Trip Planner: Map, Weather & 1-Day Itinerary",
-    "description": "Plan Pictured Rocks National Lakeshore with a live map, current weather and access, boat vs. hike choices, and realistic 1-day or 2-day itineraries.",
+    "title": "Pictured Rocks Trip Planner 2026: Map, Itinerary & Weather",
+    "description": "Plan Pictured Rocks National Lakeshore with an interactive map, current weather and access, best stops, boat vs. hike choices, and 1- or 2-day itineraries.",
     "h1": "Pictured Rocks National Lakeshore Trip Planner"
   },
-  "baseline": {
-    "gscWindow": "2026-08-29 through 2026-09-25",
-    "impressions": 23,
+  "intentOwnership": {
+    "canonicalPlanner": [
+      "generic trip planning",
+      "map",
+      "weather and access",
+      "one-day itinerary",
+      "two-day itinerary",
+      "boat vs hike vs kayak vs drive"
+    ],
+    "weekendGuide": [
+      "two-day weekend framing",
+      "camping and reservations",
+      "weekend-specific trip structure"
+    ]
+  },
+  "gscBaseline": {
+    "settledThrough": "2026-09-26",
+    "window": "last 28 settled days",
+    "impressions": 21,
     "clicks": 0,
-    "lastGoogleCrawlObserved": "2026-09-06T13:24:30Z",
-    "note": "Baseline predates the September 28 rebuilt-canonical cutover; do not attribute it to the new build."
+    "ctr": 0,
+    "averagePosition": 20.67,
+    "observedQueries": [
+      "kayaking pictured rocks without a guide",
+      "pictured rocks winter"
+    ],
+    "cannibalizationSignal": "The separate weekend guide appeared for 'pictured rocks itinerary' while the canonical planner did not.",
+    "criticalContext": "The rebuilt canonical cut over on 2026-09-28, after the settled GSC window ended. Do not attribute this baseline to the rebuilt planner."
+  },
+  "technicalBaseline": {
+    "inspectionVerdict": "PASS",
+    "coverage": "Submitted and indexed",
+    "robots": "ALLOWED",
+    "pageFetch": "SUCCESSFUL",
+    "lastGoogleCrawl": "2026-09-28T11:25:41Z",
+    "sitemap": "https://picturedrocks.chrisizworski.com/sitemap-pictured-rocks.xml",
+    "sitemapWarnings": 0,
+    "sitemapErrors": 0
+  },
+  "measurementPlan": {
+    "day7": "Confirm impressions are no longer near-zero and inspect which target queries Google assigns to the canonical planner.",
+    "day14": "Look for planner/map/itinerary/weather query ownership and verify the weekend guide is concentrating on weekend-specific searches.",
+    "day28": "Benchmark impressions, CTR, average position, target-query count, and landing-page ownership against this baseline.",
+    "successGate": "At least 5 target-query families receiving impressions on the canonical planner, no generic-intent cannibalization trend, and rising impressions without indexability regressions."
   }
 }
