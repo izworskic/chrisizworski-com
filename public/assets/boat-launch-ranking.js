@@ -176,3 +176,103 @@
     finalizeShortlist,
   };
 });
+
+/*
+ * Optional near-me bridge for the statewide finder.
+ *
+ * Location is requested only after the visitor taps the button. The coordinate
+ * stays in page memory: it is not written to the URL, browser storage, analytics,
+ * this site's APIs, or a third-party geocoder. The existing finder still owns
+ * all ranking, routing, map, source and result rendering.
+ */
+(function () {
+  'use strict';
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  if (location.pathname !== '/michigan-boat-launches/') return;
+  if (!navigator.geolocation || typeof window.fetch !== 'function') return;
+
+  let currentPoint = null;
+  const originalFetch = window.fetch.bind(window);
+
+  window.fetch = function (input, init) {
+    try {
+      const raw = typeof input === 'string' ? input : input && input.url;
+      const url = new URL(raw, location.href);
+      if (
+        currentPoint &&
+        url.origin === location.origin &&
+        url.pathname === '/api/boat-launch-geocode' &&
+        String(url.searchParams.get('q') || '').trim().toLowerCase() === 'near me'
+      ) {
+        const point = currentPoint;
+        currentPoint = null;
+        return Promise.resolve(new Response(JSON.stringify({
+          query: 'near me',
+          displayName: 'Your location',
+          latitude: point.latitude,
+          longitude: point.longitude,
+          type: 'device-location',
+          osmType: null,
+          osmId: null,
+          attribution: 'Location used only in this page session',
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+        }));
+      }
+    } catch (_) {
+      // Fall through to the unchanged fetch path.
+    }
+    return originalFetch(input, init);
+  };
+
+  function install() {
+    const form = document.getElementById('launch-search-form');
+    const input = document.getElementById('launch-search');
+    const filters = form && form.parentElement && form.parentElement.querySelector('.filter-row');
+    if (!form || !input || !filters || document.getElementById('launch-use-location')) return;
+
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px';
+    const button = document.createElement('button');
+    button.id = 'launch-use-location';
+    button.type = 'button';
+    button.textContent = 'Use my location';
+    button.style.cssText = 'min-height:38px;border:1px solid #bdc8c0;border-radius:9px;background:#fff;color:#173d26;padding:0 13px;font-weight:800;cursor:pointer';
+    const note = document.createElement('span');
+    note.textContent = 'Opt-in only · precise location is not stored or sent';
+    note.style.cssText = 'font-size:10px;color:#647068';
+    row.append(button, note);
+    filters.parentElement.insertBefore(row, filters);
+
+    button.addEventListener('click', function () {
+      button.disabled = true;
+      button.textContent = 'Finding you…';
+      navigator.geolocation.getCurrentPosition(function (position) {
+        const latitude = Number(position && position.coords && position.coords.latitude);
+        const longitude = Number(position && position.coords && position.coords.longitude);
+        if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+          button.disabled = false;
+          button.textContent = 'Use my location';
+          note.textContent = 'Location was unavailable. Search a city, lake, river or harbor instead.';
+          return;
+        }
+        currentPoint = { latitude, longitude };
+        input.value = 'near me';
+        button.disabled = false;
+        button.textContent = 'Use my location';
+        note.textContent = 'Using your location for this search only';
+        if (typeof form.requestSubmit === 'function') form.requestSubmit();
+        else form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      }, function () {
+        currentPoint = null;
+        button.disabled = false;
+        button.textContent = 'Use my location';
+        note.textContent = 'Location permission was not available. Search a Michigan place instead.';
+      }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 });
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
+  else install();
+})();
