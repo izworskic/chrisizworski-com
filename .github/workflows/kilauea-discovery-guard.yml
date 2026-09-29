@@ -1,0 +1,74 @@
+name: Kilauea discovery and share guard
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/ensure-kilauea-discovery.mjs'
+      - 'tests/kilauea-discovery.test.js'
+      - '.github/workflows/kilauea-discovery-guard.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/ensure-kilauea-discovery.mjs'
+      - 'tests/kilauea-discovery.test.js'
+      - '.github/workflows/kilauea-discovery-guard.yml'
+      - 'public/synced-national-tools/index.html'
+      - 'public/synced-national-tools/kilauea-live/index.html'
+  workflow_run:
+    workflows:
+      - 'Sync verified National Tools gate'
+      - 'Sync verified Breakout Live gate'
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  guard:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify guard behavior
+        run: node --test tests/kilauea-discovery.test.js
+
+      - name: Enforce Kilauea discovery and metadata
+        run: node scripts/ensure-kilauea-discovery.mjs "$GITHUB_WORKSPACE"
+
+      - name: Verify production files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(grep -o 'data-tool-id="kilauea-live"' public/synced-national-tools/index.html | wc -l)" -eq 1
+          grep -q 'id="region-hawaii-pacific"' public/synced-national-tools/index.html
+          grep -q 'Hawaiʻi &amp; Pacific' public/synced-national-tools/index.html
+          grep -q 'class="kilauea-feature"' public/synced-national-tools/index.html
+          grep -q '<title>Kīlauea Eruption Live: Is It Worth Going Right Now?</title>' public/synced-national-tools/kilauea-live/index.html
+          grep -q 'twitter:card" content="summary_large_image"' public/synced-national-tools/kilauea-live/index.html
+          grep -q 'twitter:image' public/synced-national-tools/kilauea-live/index.html
+          grep -q 'og:image' public/synced-national-tools/kilauea-live/index.html
+          grep -q 'BreadcrumbList' public/synced-national-tools/kilauea-live/index.html
+          grep -q 'WebApplication' public/synced-national-tools/kilauea-live/index.html
+
+      - name: Commit guarded production files
+        if: ${{ github.event_name != 'pull_request' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/synced-national-tools/index.html public/synced-national-tools/kilauea-live/index.html
+          if git diff --cached --quiet; then
+            echo 'Kilauea discovery and metadata already current.'
+            exit 0
+          fi
+          git commit -m 'Keep Kilauea discoverable in Hawaii and Pacific'
+          git push origin HEAD:main
