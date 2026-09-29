@@ -10,6 +10,8 @@ function load(src,id,onload){
   document.body.appendChild(script);
 }
 load('/assets/pictured-rocks-visual-layer-core.js?v=20260928-1','picturedRocksVisualCore',()=>{
-  load('/assets/pictured-rocks-fall-ranger.js?v=20260928-1','picturedRocksFallRanger');
+  load('/assets/pictured-rocks-image-fix.js?v=20260928-1','picturedRocksImageFix',()=>{
+    load('/assets/pictured-rocks-fall-ranger.js?v=20260928-1','picturedRocksFallRanger');
+  });
 });
 })();
