@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pictured Rocks Planner — What to Do Today | Chris Izworski</title>
-<meta name="description" content="Check current Pictured Rocks weather and access, compare boat, kayak, hike or drive, then build a realistic route around your time, party and starting side.">
+<title>Pictured Rocks Trip Planner 2026: Map, Itinerary & Weather</title>
+<meta name="description" content="Plan Pictured Rocks National Lakeshore with an interactive map, current weather and access, best stops, boat vs. hike choices, and 1- or 2-day itineraries.">
 <meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="https://picturedrocks.chrisizworski.com/">
 <meta name="theme-color" content="#093740">
@@ -22,9 +22,9 @@
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-copy">
-      <p class="kicker">Pictured Rocks field planner</p>
-      <h1>Should you go by water, trail, or road today?</h1>
-      <p class="lede">Current weather and access first. Then build a realistic route around where you are starting, who is coming, and how much day you actually have.</p>
+      <p class="kicker">Pictured Rocks National Lakeshore planner</p>
+      <h1>Pictured Rocks National Lakeshore Trip Planner</h1>
+      <p class="lede">Use the live map, current weather and access, then build a realistic 1-day or 2-day Pictured Rocks itinerary around where you are starting, who is coming, and how much day you actually have.</p>
       <div class="hero-actions"><a class="primary link" href="#today">See today’s read</a><a class="secondary link" href="#planner">Build my trip</a></div>
     </div>
     <figure class="hero-photo">
@@ -37,7 +37,7 @@
 <main class="shell">
 <section id="today" class="panel field-board" data-tone="mixed" aria-labelledby="today-title">
   <div class="field-top">
-    <div><p class="eyebrow">The field read</p><h2 id="today-title">What the park is giving you right now</h2><p id="fieldHeadline" class="field-summary">Loading the current weather and access picture…</p><p id="fieldDetail" class="field-summary">The trip composer still works if a live source is unavailable; official NPS checks remain the last word on access.</p></div>
+    <div><p class="eyebrow">The field read</p><h2 id="today-title">Pictured Rocks weather and access right now</h2><p id="fieldHeadline" class="field-summary">Loading the current weather and access picture…</p><p id="fieldDetail" class="field-summary">The trip composer still works if a live source is unavailable; official NPS checks remain the last word on access.</p></div>
     <div id="seasonLabel" class="field-badge">Seasonal context</div>
   </div>
   <div class="current-grid">
@@ -48,7 +48,7 @@
 </section>
 
 <section class="section trip-shapes-section" aria-labelledby="shape-title">
-  <div class="section-head"><div><p class="eyebrow">Choose the experience first</p><h2 id="shape-title">Four trips people call “Pictured Rocks.”</h2></div></div>
+  <div class="section-head"><div><p class="eyebrow">Choose the experience first</p><h2 id="shape-title">Boat cruise, kayak, hike, or drive: choose the Pictured Rocks experience first.</h2></div></div>
   <div class="trip-shapes">
     <article class="trip-card"><div class="trip-icon">Water</div><h3>Boat cruise</h3><p>Best first-timer view of the continuous colored cliff wall with very little walking. The tradeoff is a fixed departure and marine conditions.</p><div class="trip-status" data-mode-status="cruise">Checking current context</div><button type="button" data-trip-shape="cruise">Build around a cruise</button></article>
     <article class="trip-card"><div class="trip-icon">Water</div><h3>Guided kayak</h3><p>The most immersive cliff experience, but also the most condition-sensitive. For inexperienced paddlers, keep this behind an authorized guide’s decision.</p><div class="trip-status" data-mode-status="kayak">Checking current context</div><button type="button" data-trip-shape="kayak">Build around a guided paddle</button></article>
@@ -58,7 +58,7 @@
 </section>
 
 <section class="section map-section" aria-labelledby="map-title">
-  <div class="section-head"><div><p class="eyebrow">The geography is the trick</p><h2 id="map-title">Think west, Chapel, and east — not one giant attraction list.</h2></div></div>
+  <div class="section-head"><div><p class="eyebrow">The geography is the trick</p><h2 id="map-title">Pictured Rocks map: plan west, Chapel, and east — not one giant attraction list.</h2></div></div>
   <div class="map-layout">
     <div class="map-wrap">
       <div class="map-toolbar" id="mapZones"><strong>Planning map</strong><button type="button" data-zone="west">West</button><button type="button" data-zone="central">Chapel</button><button type="button" data-zone="east">East</button></div>
@@ -75,7 +75,7 @@
 </section>
 
 <section id="planner" class="planner-card" aria-labelledby="planner-title">
-  <div class="section-head"><div><p class="eyebrow">Now personalize it</p><h2 id="planner-title">Build the version of Pictured Rocks that fits your day.</h2><p>Every answer changes routing, timing, or what gets excluded. The result is intentionally willing to tell you what <em>not</em> to add.</p></div><button class="ghost" id="resetBtn" type="button">Reset</button></div>
+  <div class="section-head"><div><p class="eyebrow">Now personalize it</p><h2 id="planner-title">Build a Pictured Rocks itinerary that fits your day.</h2><p>Every answer changes routing, timing, or what gets excluded. The result is intentionally willing to tell you what <em>not</em> to add.</p></div><button class="ghost" id="resetBtn" type="button">Reset</button></div>
   <form id="tripForm">
     <fieldset><legend>1. How much usable time do you have?</legend><div class="chips"><label><input type="radio" name="time" value="half" checked><span>3–4 hours</span></label><label><input type="radio" name="time" value="day"><span>One full day</span></label><label><input type="radio" name="time" value="two"><span>Two days</span></label></div></fieldset>
     <fieldset><legend>2. Where are you starting?</legend><div class="chips"><label><input type="radio" name="base" value="munising" checked><span>Munising / west</span></label><label><input type="radio" name="base" value="grand-marais"><span>Grand Marais / east</span></label><label><input type="radio" name="base" value="undecided"><span>Not decided</span></label></div></fieldset>
@@ -102,15 +102,15 @@
 
 <section class="section" aria-labelledby="zones-title"><p class="eyebrow">Build by zone</p><h2 id="zones-title">Three parts of the park, three different days.</h2><div class="three-zones"><article><h3>West / Munising</h3><p>Best concentration of first-timer value: scheduled water departures, Miners Castle, Miners Beach, Miners Falls, and quick shoreline access.</p></article><article><h3>Chapel country</h3><p>Not a drive-by middle. Chapel is a major hike with limited parking. If you choose it, let it own the day.</p></article><article><h3>East / Grand Marais</h3><p>Grand Sable Dunes, Sable Falls, Twelvemile Beach, Hurricane River, Au Sable Light, and a quieter finish in Grand Marais.</p></article></div></section>
 
-<section class="section"><p class="eyebrow">The tradeoff table</p><h2>Boat, kayak, Chapel, or drive?</h2><div class="compare"><article><h3>Boat cruise</h3><p><strong>Gets you:</strong> the full cliff wall efficiently.</p><p><strong>Costs you:</strong> schedule rigidity and marine dependence.</p></article><article><h3>Guided kayak</h3><p><strong>Gets you:</strong> immersion at water level.</p><p><strong>Costs you:</strong> more time, weather sensitivity, and guide constraints.</p></article><article><h3>Chapel Loop</h3><p><strong>Gets you:</strong> the strongest long land hike.</p><p><strong>Costs you:</strong> most of a day and an early parking problem.</p></article><article><h3>Drive + overlooks</h3><p><strong>Gets you:</strong> maximum flexibility.</p><p><strong>Costs you:</strong> no continuous water-facing cliff-wall view.</p></article></div></section>
+<section class="section"><p class="eyebrow">The tradeoff table</p><h2>Pictured Rocks boat cruise, kayaking, hiking, or scenic drive?</h2><div class="compare"><article><h3>Boat cruise</h3><p><strong>Gets you:</strong> the full cliff wall efficiently.</p><p><strong>Costs you:</strong> schedule rigidity and marine dependence.</p></article><article><h3>Guided kayak</h3><p><strong>Gets you:</strong> immersion at water level.</p><p><strong>Costs you:</strong> more time, weather sensitivity, and guide constraints.</p></article><article><h3>Chapel Loop</h3><p><strong>Gets you:</strong> the strongest long land hike.</p><p><strong>Costs you:</strong> most of a day and an early parking problem.</p></article><article><h3>Drive + overlooks</h3><p><strong>Gets you:</strong> maximum flexibility.</p><p><strong>Costs you:</strong> no continuous water-facing cliff-wall view.</p></article></div></section>
 
-<section class="section intent-grid" aria-labelledby="quick-title"><div class="section-head"><div><p class="eyebrow">Common trip shapes</p><h2 id="quick-title">Skip the research spiral.</h2></div></div><article><h3>One day in Pictured Rocks</h3><p>Pick one anchor: water or Chapel. Build everything else around it. Trying to do both usually replaces scenery with parking and clock-watching.</p><button data-preset="one-day">Build a one-day plan</button></article><article><h3>Pictured Rocks with a dog</h3><p>Pet rules materially change the route. The planner removes prohibited backcountry and keeps the legal high-value stops.</p><button data-preset="dog">Build a dog-friendly plan</button></article><article><h3>Pictured Rocks without a boat</h3><p>A land day can be excellent. Just be explicit about the tradeoff: the full colored cliff wall is a water-facing view.</p><button data-preset="land">Build a land-only plan</button></article><article><h3>Two days at Pictured Rocks</h3><p>Split the park geographically. One west/water day and one Chapel or east-end day eliminates the backtracking that ruins rushed itineraries.</p><button data-preset="two">Build a two-day plan</button></article></section>
+<section class="section intent-grid" aria-labelledby="quick-title"><div class="section-head"><div><p class="eyebrow">Common trip shapes</p><h2 id="quick-title">Pictured Rocks itinerary ideas without the research spiral.</h2></div></div><article><h3>One day in Pictured Rocks</h3><p>Pick one anchor: water or Chapel. Build everything else around it. Trying to do both usually replaces scenery with parking and clock-watching.</p><button data-preset="one-day">Build a one-day plan</button></article><article><h3>Pictured Rocks with a dog</h3><p>Pet rules materially change the route. The planner removes prohibited backcountry and keeps the legal high-value stops.</p><button data-preset="dog">Build a dog-friendly plan</button></article><article><h3>Pictured Rocks without a boat</h3><p>A land day can be excellent. Just be explicit about the tradeoff: the full colored cliff wall is a water-facing view.</p><button data-preset="land">Build a land-only plan</button></article><article><h3>Two days at Pictured Rocks</h3><p>Split the park geographically. One west/water day and one Chapel or east-end day eliminates the backtracking that ruins rushed itineraries.</p><button data-preset="two">Build a two-day plan</button></article></section>
 
 <section class="section field-notes"><p class="eyebrow">Before you drive H-58</p><h2>Three things worth knowing before service gets weak.</h2><div class="notes"><article><h3>Save the map</h3><p>Download the official NPS map and offline park content before leaving town. This planning map is not navigation.</p></article><article><h3>Water needs its own go/no-go</h3><p>Land weather is context, not permission to paddle Lake Superior. Use the marine forecast and an authorized guide or operator decision.</p></article><article><h3>Access can break a route</h3><p>The live layer removes known blocked stops when it can, but the NPS current-conditions page remains authoritative at departure time.</p></article></div></section>
 
 <section class="section sources"><p class="eyebrow">Primary checks</p><h2>Use the planner to decide. Use the official sources to commit.</h2><p>Weather, closures, tour schedules, and shoreline conditions change. The tool degrades to “unknown” instead of inventing a green light when a source is unavailable.</p><div class="source-links"><a href="https://www.nps.gov/piro/planyourvisit/conditions.htm" target="_blank" rel="noopener">NPS current conditions ↗</a><a href="https://www.nps.gov/piro/planyourvisit/maps.htm" target="_blank" rel="noopener">NPS maps ↗</a><a href="https://www.nps.gov/piro/planyourvisit/pets.htm" target="_blank" rel="noopener">NPS pet rules ↗</a><a href="https://www.nps.gov/piro/planyourvisit/kayak-tours.htm" target="_blank" rel="noopener">Authorized kayak guides ↗</a><a href="https://www.nps.gov/piro/planyourvisit/safety.htm" target="_blank" rel="noopener">NPS safety ↗</a></div></section>
 </main>
-<footer><a href="https://picturedrocks.chrisizworski.com/">Current canonical Pictured Rocks Planner</a><span> · </span><a href="/">Chris Izworski</a></footer>
+<footer><a href="https://picturedrocks.chrisizworski.com/">Pictured Rocks Trip Planner</a><span> · </span><a href="/">Chris Izworski</a></footer>
 <script src="/assets/leaflet-1.9.4.js?v=20260927-1"></script>
 <script src="/assets/pictured-rocks-planner-engine.js"></script>
 <script src="/assets/pictured-rocks-planner-v3.js?v=20260927-9"></script>
