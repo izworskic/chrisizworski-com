@@ -13,7 +13,7 @@ permissions:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 7
     steps:
       - name: Verify Blue Spring live intent pages
         shell: bash
@@ -22,10 +22,19 @@ jobs:
           BASE='https://chrisizworski.com'
           probe(){
             name="$1"; url="$2"
-            for n in $(seq 1 18); do
+            for n in $(seq 1 24); do
               code=$(curl -L -sS --max-time 30 -o /tmp/out -w '%{http_code}' "$url" || true)
               if [ "$code" = '200' ]; then echo "$name OK"; return 0; fi
               echo "$name returned $code on attempt $n"; sleep 10
+            done
+            return 1
+          }
+          probe_expect(){
+            name="$1"; url="$2"; expected="$3"
+            for n in $(seq 1 24); do
+              code=$(curl -L -sS --max-time 30 -o /tmp/out -w '%{http_code}' "$url" || true)
+              if [ "$code" = '200' ] && grep -Fq "$expected" /tmp/out; then echo "$name OK"; return 0; fi
+              echo "$name waiting for deployed content on attempt $n"; sleep 10
             done
             return 1
           }
@@ -33,6 +42,9 @@ jobs:
           python -c "import json; d=json.load(open('/tmp/out')); assert 'retrievedAt' in d"
           probe manatee-api "$BASE/api/blue-spring-manatee?smoke=$GITHUB_SHA"
           python -c "import json; d=json.load(open('/tmp/out')); assert 'freshness' in d and 'retrievedAt' in d"
+          probe_expect main "$BASE/national-tools/blue-spring-live/?smoke=$GITHUB_SHA" 'Blue Spring Manatees Today | Count & Conditions'
+          grep -Fq 'loading="eager"' /tmp/out
+          grep -Fq 'latest published count' /tmp/out
           for slug in manatee-conditions-today best-time-to-visit water-temperature; do
             probe "$slug" "$BASE/national-tools/blue-spring-live/$slug/?smoke=$GITHUB_SHA"
             grep -Fq "rel=\"canonical\" href=\"$BASE/national-tools/blue-spring-live/$slug/\"" /tmp/out
