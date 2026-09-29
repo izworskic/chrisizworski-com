@@ -1,0 +1,61 @@
+name: Kilauea choice causality guard
+
+on:
+  pull_request:
+    paths:
+      - 'lib/kilauea-decision.js'
+      - 'scripts/ensure-kilauea-choice-causality.mjs'
+      - 'tests/kilauea-choice-causality.test.js'
+      - 'public/synced-national-tools/kilauea-live/index.html'
+      - '.github/workflows/kilauea-choice-causality-guard.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'lib/kilauea-decision.js'
+      - 'scripts/ensure-kilauea-choice-causality.mjs'
+      - 'tests/kilauea-choice-causality.test.js'
+      - '.github/workflows/kilauea-choice-causality-guard.yml'
+  workflow_run:
+    workflows:
+      - 'Sync verified National Tools gate'
+      - 'Sync verified Breakout Live gate'
+      - 'Kilauea discovery guard'
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  guard:
+    if: ${{ (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success') && (github.event_name != 'push' || github.actor != 'github-actions[bot]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Apply visible choice consequences
+        run: node scripts/ensure-kilauea-choice-causality.mjs "$GITHUB_WORKSPACE"
+
+      - name: Verify Kilauea choice behavior
+        run: node --test tests/kilauea-choice-causality.test.js tests/kilauea-live.test.js
+
+      - name: Commit guarded production page
+        if: ${{ github.event_name != 'pull_request' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/synced-national-tools/kilauea-live/index.html
+          if git diff --cached --quiet; then
+            echo 'Kilauea choice causality already current.'
+            exit 0
+          fi
+          git commit -m 'Keep Kilauea choices visibly causal'
+          git push origin HEAD:main
