@@ -41,10 +41,10 @@ jobs:
           probe live-api "$BASE/api/blue-spring-live?smoke=$GITHUB_SHA"
           python -c "import json; d=json.load(open('/tmp/out')); assert 'retrievedAt' in d"
           probe manatee-api "$BASE/api/blue-spring-manatee?smoke=$GITHUB_SHA"
-          python -c "import json; d=json.load(open('/tmp/out')); assert 'freshness' in d and 'retrievedAt' in d"
+          python -c "import json; d=json.load(open('/tmp/out')); assert d.get('source') == 'Save the Manatee Club'; assert d.get('latestReport',{}).get('observedDate'); assert 'freshness' in d and 'retrievedAt' in d"
           probe_expect main "$BASE/national-tools/blue-spring-live/?smoke=$GITHUB_SHA" 'Blue Spring Manatees Today | Count & Conditions'
           grep -Fq 'loading="eager"' /tmp/out
-          grep -Fq 'latest published count' /tmp/out
+          grep -Fq "Save the Manatee Club's dated morning roll call" /tmp/out
           for slug in manatee-conditions-today best-time-to-visit water-temperature; do
             probe "$slug" "$BASE/national-tools/blue-spring-live/$slug/?smoke=$GITHUB_SHA"
             grep -Fq "rel=\"canonical\" href=\"$BASE/national-tools/blue-spring-live/$slug/\"" /tmp/out
