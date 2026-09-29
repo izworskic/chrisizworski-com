@@ -1,0 +1,45 @@
+{
+  "name": "Ballard interpretive photo benchmark v2",
+  "date": "2026-09-28",
+  "thesis": "Every image must help a standing visitor recognize, understand, compare, or anticipate something real at Ballard Locks.",
+  "loss_function": {
+    "no_interpretive_value": 6,
+    "weak_on_site_recognizability": 6,
+    "wrong_persona": 5,
+    "wrong_moment_or_placement": 5,
+    "rights_ambiguity": 5,
+    "poor_mobile_crop": 4,
+    "redundant_visual": 4,
+    "generic_tourism_feel": 4,
+    "caption_must_rescue_photo": 3,
+    "performance_cost": 3
+  },
+  "benchmark_100": {
+    "explains_something_immediately": 20,
+    "recognizable_on_site": 15,
+    "visual_and_emotional_pull": 15,
+    "persona_value": 10,
+    "exact_stop_fit": 10,
+    "caption_can_point_to_something_concrete": 10,
+    "mobile_composition": 10,
+    "reuse_and_authority_provenance": 5,
+    "performance": 5
+  },
+  "release_rules": {
+    "critical_photo_minimum": 90,
+    "secondary_photo_minimum": 85,
+    "absolute_floor": 80,
+    "no_gallery_or_slideshow": true,
+    "question_every_photo_must_answer": "What is this helping the visitor understand?"
+  },
+  "target_assets": [
+    {"role":"orientation","persona":"first-time visitor","target_score":92},
+    {"role":"large-lock commercial scale","persona":"boat watcher","target_score":95},
+    {"role":"small-lock traffic","persona":"recreational boater / first timer","target_score":90},
+    {"role":"salmon through viewing window","persona":"family / salmon watcher","target_score":97},
+    {"role":"fish-ladder anatomy","persona":"systems-curious / salmon visitor","target_score":93},
+    {"role":"spillway water control","persona":"engineering-curious","target_score":90},
+    {"role":"garden-to-locks relationship","persona":"walker / casual visitor","target_score":88},
+    {"role":"1917 then-vs-now","persona":"history visitor","target_score":92}
+  ]
+}
