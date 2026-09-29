@@ -31,10 +31,15 @@ const has = re => t => re.test(t);
 function ferryAtLeast(leave, hours) {
   return (t, d) => { const f = toMin(d.primaryRec); return f != null && f >= hhmm(leave) + hours * 60; };
 }
+// Added 2026-09-29 with the day sheet: the plan has to be a real day, not a ferry plus
+// "Lunch / real break". Counted from the itinerary itself, by the Island's own place names.
+const STOP_NAMES = /fort mackinac|arch rock|grand hotel|main street|m-185|shore loop|carriage tour|mission point|fort holmes|marquette park|british landing|west bluff/gi;
+const realDay = min => (t, d) => new Set((d.itinerary.match(STOP_NAMES) || []).map(x => x.toLowerCase())).size >= min;
+const leavesAfter = leave => (t, d) => d.leaveAt == null || d.leaveAt >= hhmm(leave);
 
 const PERSONAS = [
   {id: "detroit-first", answers: {trip_duration: "day", party: "couple", trip_vision: ["icons"], trip_loss: "rushed"}, origin: "Detroit, MI", leave: "06:00",
-    expect: [["Mackinaw City port", has(/mackinaw city/i)], ["ferry reachable (≥3h after leaving)", ferryAtLeast("06:00", 3)], ["return ferry shown", has(/(ferry back|head back|return)[\s\S]{0,40}\d{1,2}:\d{2}/i)]]},
+    expect: [["Mackinaw City port", has(/mackinaw city/i)], ["ferry reachable (≥3h after leaving)", ferryAtLeast("06:00", 3)], ["return ferry shown", has(/(ferry back|boat back|head back|return)[\s\S]{0,40}\d{1,2}:\d{2}/i)]]},
   {id: "gr-family", answers: {trip_duration: "day", party: "family-young", trip_vision: ["kids"], trip_loss: "walking"}, origin: "Grand Rapids, MI", leave: "07:00",
     expect: [["kids/family pacing", has(/\bkids?\b|family|children|little ones/i)], ["low-walking movement", has(/carriage|taxi|less walking|flat|short walk|easy walk/i)], ["ferry reachable (≥3h)", ferryAtLeast("07:00", 3)]]},
   {id: "tc-couple-night", answers: {trip_duration: "one-night", party: "couple", trip_vision: ["relaxed", "food-shopping"], trip_loss: "crowds"}, origin: "Traverse City, MI", leave: "09:00",
@@ -50,9 +55,22 @@ const PERSONAS = [
   {id: "chicago-teens", answers: {trip_duration: "two-three", party: "family-teens", trip_vision: ["biking", "history"], trip_loss: "missing"}, origin: "Chicago, IL", leave: "07:00",
     expect: [["multiple days", has(/day 2|day 3|full (island )?day|nights?/i)], ["bike", has(/bike|biking|m-185|loop/i)], ["history / Fort", has(/fort|history/i)]]}
 ];
+for (const p of PERSONAS) {
+  p.expect.push(["3+ real Island stops", realDay(p.answers.trip_duration === "day" && p.leave >= "11:00" ? 2 : 3)], ["not told to leave before they can", leavesAfter(p.leave)]);
+}
+// How a visitor states the same trip in the one-sentence planner (2026-09-29).
+function sentenceFor(p) {
+  const a = p.answers, vision = [].concat(a.trip_vision);
+  return {
+    from: p.origin, day: DATE, leave: p.leave,
+    who: {solo: "solo", couple: "couple", "adults-friends": "group", "family-young": "family-young", "family-teens": "family-teens", multigenerational: "grandparents"}[a.party] || "couple",
+    stay: a.trip_duration === "day" ? "day" : a.trip_duration === "one-night" ? "1" : "2",
+    go: vision.includes("biking") ? "bike" : a.trip_loss === "walking" ? "carriage" : "foot"
+  };
+}
 
 // ---------------------------------------------------------------- page helpers
-const PLAN_SEL = ".hero-lede, .hero-ticket, #planner, #tripShapePanel, #tripProfileCard, #trip-intake, #liveBar";
+const PLAN_SEL = ".hero-lede, .hero-ticket, #planner, #tripShapePanel, #tripProfileCard, #trip-intake, #liveBar, #sheet";
 async function snapshot(page) {
   await page.evaluate(sel => {
     window.__snap = new Map();
@@ -90,13 +108,24 @@ async function reaction(page) {
   }, PLAN_SEL);
 }
 async function planText(page) {
-  return page.evaluate(sel => [...document.querySelectorAll(sel)].map(e => e.innerText).join("\n"), ".hero-lede, .hero-ticket, #planner, #tripShapePanel");
+  return page.evaluate(sel => [...document.querySelectorAll(sel)].map(e => e.innerText).join("\n"), ".hero-lede, .hero-ticket, #planner, #tripShapePanel, #sheet");
+}
+async function itineraryFacts(page) {
+  return page.evaluate(() => {
+    const rows = [...document.querySelectorAll("#sheetDays .row, #itinerary li")];
+    const itinerary = rows.map(r => r.querySelector("strong")?.textContent || "").join("\n");
+    const toMin = s => { const m = String(s || "").match(/(\d{1,2}):(\d{2})\s*([AP]M)/i); if (!m) return null; let h = +m[1] % 12; if (/p/i.test(m[3])) h += 12; return h * 60 + +m[2]; };
+    const leaveRow = rows.find(r => /^leave\b/i.test(r.querySelector("strong")?.textContent || ""));
+    return {itinerary, leaveAt: leaveRow ? toMin(leaveRow.innerText) : null};
+  });
 }
 async function signature(page) {
   return page.evaluate(() => {
     // Stops + ferry, as the spec defines it: the plan, not the boilerplate around it.
     const items = new Set();
-    document.querySelectorAll("#itinerary li strong, #tripShapeDays strong, #tripShapeDays li, #tripDays strong").forEach(e => { const t = e.textContent.trim().toLowerCase(); if (t) items.add(t); });
+    document.querySelectorAll("#itinerary li strong, #tripShapeDays strong, #tripShapeDays li, #tripDays strong, #sheetDays .row-body strong").forEach(e => { const t = e.textContent.trim().toLowerCase(); if (t) items.add(t); });
+    const sum = document.getElementById("sheetSummary")?.textContent || "";
+    const boat = sum.match(/(\d{1,2}:\d{2} [AP]M) boat from ([A-Za-z. ]+)/); if (boat) items.add(`ferry ${boat[1]} ${boat[2]}`.toLowerCase().trim());
     const rec = document.getElementById("primaryRec")?.innerText || "";
     const f = rec.match(/take the ([\d:]+ [ap]m) from ([a-z. ]+)/i); if (f) items.add(`ferry ${f[1]} ${f[2]}`.toLowerCase());
     const back = document.getElementById("heroReturn")?.textContent.trim(); if (back) items.add(`back ${back}`.toLowerCase());
@@ -104,6 +133,15 @@ async function signature(page) {
   });
 }
 
+async function choose(page, selector, value, log, what) {
+  const loc = page.locator(selector);
+  await loc.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(250);
+  await snapshot(page);
+  await loc.selectOption(value);
+  const r = await reaction(page);
+  log.push({what, ...r});
+}
 async function tap(page, locator, log, what) {
   await locator.scrollIntoViewIfNeeded();
   await page.waitForTimeout(250);
@@ -119,6 +157,8 @@ async function runPersona(browser, base, p) {
     window.__cls = 0; window.__lastInput = 0;
     addEventListener("pointerdown", () => { window.__lastInput = performance.now(); }, true);
     addEventListener("keydown", () => { window.__lastInput = performance.now(); }, true);
+    // Playwright's selectOption fires change without pointer events; a person's pick does both.
+    addEventListener("change", () => { window.__lastInput = performance.now(); }, true);
     new PerformanceObserver(l => { for (const e of l.getEntries()) if (!e.hadRecentInput && e.startTime - window.__lastInput > 5000) window.__cls += e.value; }).observe({type: "layout-shift", buffered: true});
   });
   const page = await ctx.newPage();
@@ -126,7 +166,7 @@ async function runPersona(browser, base, p) {
   await page.goto(base + "/mackinac-island/", {waitUntil: "domcontentloaded"});
   let speedMs = 15000;
   try {
-    await page.waitForFunction(() => { const s = document.querySelector("#primaryRec strong"); return s && /\d{1,2}:\d{2}/.test(s.textContent); }, null, {timeout: 15000});
+    await page.waitForFunction(() => { const s = document.querySelector("#primaryRec strong, #sheetHeadline"); return s && /\d{1,2}:\d{2}/.test(s.textContent); }, null, {timeout: 15000});
     speedMs = Date.now() - t0;
   } catch {}
   await page.waitForTimeout(800);
@@ -134,18 +174,25 @@ async function runPersona(browser, base, p) {
   // First screen: what does a visitor see before scrolling?
   const first = await page.evaluate(jargonSrc => {
     const inView = el => { const r = el.getBoundingClientRect(); return r.height > 0 && r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth && getComputedStyle(el).visibility !== "hidden" && getComputedStyle(el).display !== "none"; };
-    const rec = document.getElementById("primaryRec");
+    const rec = document.getElementById("primaryRec") || document.getElementById("sheetHeadline");
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     let words = 0;
     while (walker.nextNode()) { const n = walker.currentNode; const el = n.parentElement; if (el && inView(el) && n.textContent.trim()) words += n.textContent.trim().split(/\s+/).length; }
     const ctas = [...document.querySelectorAll("a.btn, button.btn, button.intake-option")].filter(inView).length;
-    const q = document.querySelector("#heroStart .start-chip, #intakeOptions button");
+    const q = document.querySelector("#heroStart .start-chip, #intakeOptions button, #tripForm .pick");
     const qScreens = q ? (q.getBoundingClientRect().top + scrollY) / innerHeight : 9;
     const jargon = (document.body.innerText.match(new RegExp(jargonSrc, "gi")) || []).length;
     return {answerVisible: !!rec && inView(rec) && /\d{1,2}:\d{2}/.test(rec.textContent), words, ctas, qScreens, jargon};
   }, JARGON.source);
 
   const log = [];
+  // The one-sentence planner: change each word the visitor's trip differs on, in reading order.
+  if (await page.locator("#tripForm").count()) {
+    const want = sentenceFor(p);
+    for (const [key, id] of [["from", "#pickFrom"], ["day", "#pickDay"], ["leave", "#pickLeave"], ["who", "#pickWho"], ["stay", "#pickStay"], ["go", "#pickGo"]]) {
+      if (await page.locator(id).inputValue() !== want[key]) await choose(page, id, want[key], log, `${key}=${want[key]}`);
+    }
+  }
   // Where from and when: use the page's own one-tap chips if it offers them.
   if (await page.locator("#heroStart").isVisible().catch(() => false)) {
     const city = page.locator(`#heroStart [data-city="${p.origin}"]`);
@@ -207,8 +254,8 @@ async function runPersona(browser, base, p) {
   await page.waitForTimeout(3000);
 
   const text = await planText(page);
-  const primaryRec = await page.evaluate(() => document.getElementById("primaryRec")?.innerText || "");
-  const d = {primaryRec};
+  const primaryRec = await page.evaluate(() => (document.getElementById("primaryRec") || document.getElementById("sheetSummary"))?.innerText || "");
+  const d = {primaryRec, ...(await itineraryFacts(page))};
   const checks = p.expect.map(([label, fn]) => ({label, pass: !!fn(text, d)}));
   const sig = await signature(page);
   const truth = await page.evaluate(() => /updated\s+\d{1,2}:\d{2}/i.test(document.body.innerText));

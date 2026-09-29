@@ -205,13 +205,16 @@ const totalChecks=results.reduce((n,r)=>n+r.checks.length,0);
 const failedChecks=results.reduce((n,r)=>n+r.failed.length,0);
 const noPlan=results.filter(r=>r.score==null).length;
 const signatures=new Set(results.map(r=>r.signature)).size;
+// Page-source factors, re-stated 2026-09-29 for the one-screen day sheet (the engine persona
+// checks above are unchanged).
+const sheetSrc=fs.readFileSync('lib/mackinac-island/day-sheet.js','utf8');
 const staticFactors={
-  mobile_friction:/@media\(max-width:390px\)/.test(css)&&/\.builder-grid\{grid-template-columns:1fr\}/.test(css)?0:1,
-  stale_or_unverified_data:/published-unverified-this-request/.test(routeText)&&/planning estimate only; not live traffic/i.test(routeText)&&/What this plan is using/.test(html)?0:1,
-  unnecessary_clicks:/id="tripBuilder"/.test(html)&&/Build my Mackinac plan/.test(html)&&/Update my plan/.test(html)&&/Best time to arrive/.test(html)?0:1,
-  page_load_cost:/defer/.test(html)&&/IntersectionObserver/.test(js)&&/loadLeaflet/.test(js)?0:1,
-  inaccessible_information:/<label>/.test(html)&&/<fieldset/.test(html)&&/aria-live="polite"/.test(html)&&/:focus-visible/.test(css)?0:1,
-  visual_clutter:/planner-decision-grid/.test(css)&&/choice-fieldset/.test(css)?0:1
+  mobile_friction:/\.plan-shell\{width:min\(calc\(100% - 32px\)/.test(css)&&/\.pick select\{[^}]*font-size:16px/.test(css)?0:1,
+  stale_or_unverified_data:/published-unverified-this-request/.test(routeText)&&/planning estimate only; not live traffic/i.test(routeText)&&/Drive times are estimates, not live traffic/.test(sheetSrc)?0:1,
+  unnecessary_clicks:/id="tripForm"/.test(html)&&/plan\("load"\)/.test(js)&&/change\(\{ \[key\]: el\.value \}, "sentence"\)/.test(js)&&/id="sheetHeadline"/.test(html)?0:1,
+  page_load_cost:/defer/.test(html)&&js.length<20000&&!/leaflet/i.test(js)?0:1,
+  inaccessible_information:/<label class="pick/.test(html)&&/class="sr-only"/.test(html)&&/aria-live="polite"/.test(html)&&/:focus-within/.test(css)?0:1,
+  visual_clutter:!/<details/.test(html)&&/\.sheet\{/.test(css)?0:1
 };
 const factors={
   decision_confusion:noPlan/personas.length,

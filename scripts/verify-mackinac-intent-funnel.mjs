@@ -13,9 +13,9 @@ if(fail)process.exit(1);
 console.log("PASS: Mackinac intent landing-to-planner funnel is instrumented.");
 
 const plannerJs=fs.readFileSync("public/assets/mackinac-island.js","utf8");
-if(!plannerJs.includes("origin_text:cleanOrigin(qs.get('from')||'')")){console.error("planner does not consume origin seed");fail=true;}
+if(!plannerJs.includes('if (qs.get("from")) state.from = qs.get("from")')){console.error("planner does not consume origin seed");fail=true;}
 if(fail)process.exit(1);
 
-if(!plannerJs.includes("'limited-walking':{trip_loss:'walking'}")){console.error("limited-walking intent is not causal");fail=true;}
-if(!plannerJs.includes("'bike-day':{trip_duration:'day',trip_vision:['biking']}")){console.error("bike-day intent is not causal");fail=true;}
+if(!plannerJs.includes('"limited-walking": { go: "carriage" }')){console.error("limited-walking intent is not causal");fail=true;}
+if(!plannerJs.includes('"bike-day": { go: "bike" }')){console.error("bike-day intent is not causal");fail=true;}
 if(fail)process.exit(1);

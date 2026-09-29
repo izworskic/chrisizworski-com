@@ -5,8 +5,6 @@ const path = require('node:path');
 
 const routePath = path.join(__dirname, '..', 'lib', 'mackinac-island', 'route.js');
 const htmlPath = path.join(__dirname, '..', 'public', 'mackinac-island', 'index.html');
-const cssPath = path.join(__dirname, '..', 'public', 'assets', 'mackinac-island.css');
-const jsPath = path.join(__dirname, '..', 'public', 'assets', 'mackinac-island.js');
 const route = require(routePath);
 const t = route._test;
 const originApi = require(path.join(__dirname, '..', 'api', 'mackinac-origin.js'));
@@ -57,29 +55,6 @@ test('fall operating hours do not recommend the British Landing Nature Center', 
   assert.notEqual(attractions.find(x=>x.name==='Fort Mackinac').status,'closed');
 });
 
-test('public surface makes the decision first and keeps return vs last ferry distinct', () => {
-  const html=fs.readFileSync(htmlPath,'utf8');
-  assert.match(html,/Build Your Mackinac Island Trip/);
-  assert.match(html,/Best time to arrive/);
-  assert.match(html,/Return plan/);
-  assert.match(html,/Last published ferry for return day/);
-  assert.match(html,/Why this timing</);
-  assert.match(html,/Fine-tune your Mackinac plan/);
-  assert.match(html,/When it feels busiest/);
-  assert.match(html,/CC BY-SA 4\.0/);
-  assert.match(html,/\/privacy\//);
-});
-
-test('mobile-first and accessible controls are present', () => {
-  const css=fs.readFileSync(cssPath,'utf8');
-  const html=fs.readFileSync(htmlPath,'utf8');
-  assert.match(css,/@media\(max-width:390px\)/);
-  assert.match(css,/:focus-visible/);
-  assert.match(html,/aria-live="polite"/);
-  assert.match(html,/aria-pressed="true"/);
-  assert.match(html,/Skip to trip planner/);
-});
-
 test('JEV is bounded to a deterministic closed candidate set', () => {
   const route=fs.readFileSync(routePath,'utf8');
   const harness=fs.readFileSync(path.join(__dirname,'..','lib','mackinac-island','harness.js'),'utf8');
@@ -91,37 +66,6 @@ test('JEV is bounded to a deterministic closed candidate set', () => {
   assert.doesNotMatch(route,/api\.typesafe\.ai/);
   assert.doesNotMatch(route,/TYPESAFE_API_KEY/);
 });
-
-test('client degrades explicitly instead of fabricating a ferry plan', () => {
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(js,/not guessing at a ferry time/i);
-  assert.match(js,/ferry operators below/i);
-  assert.match(js,/Last scheduled: unavailable/);
-  assert.match(js,/mackinac_persona_selected/);
-  assert.match(js,/mackinac_share_plan/);
-});
-
-test('default My Trip view does not masquerade as an explicit selected trip date', () => {
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(js,/tripDateExplicit:false/);
-  assert.match(js,/syncTripDateInputs\(detroitToday\(\),\{explicit:false\}\)/);
-  assert.match(js,/state\.tripDate&&state\.tripDateExplicit\)p\.set\('trip_date',state\.tripDate\)/);
-  assert.match(js,/trip_date:state\.tripDateExplicit\?state\.tripDate:''/);
-});
-
-test('missing Mackinac decision scores are withheld instead of rendered as zero', () => {
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(js,/hasScore=dec\.score!==null&&dec\.score!==undefined&&Number\.isFinite\(rawScore\)/);
-  assert.match(js,/hasScore\?score:'—'/);
-  assert.match(js,/Visit score unavailable/);
-  assert.doesNotMatch(js,/score=Math\.round\(dec\.score\|\|0\)/);
-});
-
-test('Mackinac decision client asset is cache-busted after score-state fix', () => {
-  const html=fs.readFileSync(htmlPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260921-trip1/);
-});
-
 
 test('full trip profile converts constraints into persona behavior', () => {
   const p=t.profileFromQuery({
@@ -195,16 +139,6 @@ test('itinerary exposes movement context for actionable trip stops', () => {
   assert.match(itinerary.find(x=>x.stop_id==='m185').movement,/8\.2 mi/);
   assert.match(itinerary.find(x=>x.stop_id==='fort').movement,/0\.4 mi/);
 });
-
-test('client renders route-aware map and itinerary labels', () => {
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(js,/x\.title\|\|x\.label/);
-  assert.match(js,/recommended_stop_ids/);
-  assert.match(js,/Your itinerary · orientation only, not turn-by-turn routing/);
-  assert.match(js,/routeIds\.includes\('m185'\)/);
-  assert.match(js,/state\.mapWasOpened/);
-});
-
 
 test('explicit full-builder trip mode overrides conflicting quick persona', () => {
   const day=t.profileFromQuery({trip:'day-trip'},['overnight','photography'],'lower');
@@ -293,14 +227,6 @@ test('sit-down dinner constrains the selected return ferry', () => {
   assert.match(t.itineraryFor(plan,ctx).map(x=>x.label).join('|'),/Sit-down dinner/);
 });
 
-test('browser renders planning references in the trust layer', () => {
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(js,/planning_references/);
-  assert.match(js,/planning estimate · not live traffic/);
-  assert.match(js,/Accessibility planning source/);
-});
-
-
 test('explicit trip form overrides stale quick-mode persona', () => {
   const p=t.profileFromQuery({trip:'day-trip'},['overnight','photography'],'lower');
   assert.equal(p.trip,'day-trip');
@@ -365,48 +291,12 @@ test('day-trip dinner preference constrains return ferry and appears in itinerar
   assert.match(t.itineraryFor(plan,ctx).map(x=>x.label).join('|'),/Sit-down dinner/);
 });
 
-test('client exposes planning references and keeps trip controls synchronized', () => {
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(js,/planning_references/);
-  assert.match(js,/planning estimate · not live traffic/);
-  assert.match(js,/tripMode/);
-  assert.match(js,/state\.personas\.delete\(trip==='overnight'\?'day-trip':'overnight'\)/);
-});
-
-
-test('Mackinac hero trip strip fails closed when the live bundle fails', () => {
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(js,/setText\('heroTripContext','Live trip details unavailable'\)/);
-  assert.match(js,/setText\('heroFerry','Unavailable'\)/);
-  assert.match(js,/setText\('heroIsland','Unavailable'\)/);
-  assert.match(js,/setText\('heroReturn','Unavailable'\)/);
-});
-
-
-test('shared trip intake accepts a real free-form starting city', () => {
-  const html=fs.readFileSync(htmlPath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/class="profile-logistics"/);
-  assert.match(html,/id="profileOriginInput"/);
-  assert.match(html,/placeholder="Bay City, MI"/);
-  assert.match(html,/id="originCityInput"/);
-  assert.doesNotMatch(html,/id="heroOriginCity"/);
-  assert.doesNotMatch(html,/id="originCity"/);
-  assert.match(js,/const ORIGIN_API='\/api\/mackinac-origin'/);
-  assert.match(js,/async function resolveOrigin/);
-  assert.match(js,/mackinac_start_city_selected/);
-});
-
 test('tourism event reference is not treated as a live degraded dependency', () => {
-  const js=fs.readFileSync(jsPath,'utf8');
   const routeSource=fs.readFileSync(routePath,'utf8');
-  assert.match(js,/OPTIONAL_FAILURES=new Set\(\['fall_color','attractions'\]\)/);
-  assert.doesNotMatch(js,/Degraded inputs:/);
   assert.doesNotMatch(routeSource,/fetchSource\(SOURCE_URLS\.tourism/);
   assert.doesNotMatch(routeSource,/tourism:tourismR/);
   assert.match(routeSource,/status_label:"published 2026 reference"/);
 });
-
 
 test('dynamic routed origin overrides the old preset-only city model', () => {
   const p=t.profileFromQuery({
@@ -468,29 +358,6 @@ test('routed starting city constrains every ferry candidate by that port drive t
   assert.equal(driveItem.minute,stIgnace.outbound.departure_minutes-stIgnace.outbound.checkin_buffer_minutes-162-15);
 });
 
-test('browser sends both routed port times to the Mackinac decision API', () => {
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(js,/origin_mackinaw_minutes/);
-  assert.match(js,/origin_st_ignace_minutes/);
-  assert.match(js,/Add the trip date and leave-home time so the planner can choose the actual reachable ferry/);
-});
-
-
-test('Mackinac personalized planner requires date city and leave-home time', () => {
-  const html=fs.readFileSync(htmlPath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/id="profileTripDate"/);
-  assert.match(html,/id="tripDate"/);
-  assert.match(html,/id="profileDepartTime"/);
-  assert.match(html,/id="departTime"/);
-  assert.match(html,/Anchor the real trip/);
-  assert.match(html,/Enter date, city \+ time above/);
-  assert.match(js,/p\.set\('trip_date',state\.tripDate\)/);
-  assert.match(js,/p\.set\('depart_at',state\.departTime\)/);
-  assert.match(js,/Choose the date you plan to visit/);
-  assert.match(js,/Add the time you expect to leave home/);
-});
-
 test('24-hour leave-home input becomes a deterministic departure minute', () => {
   assert.equal(t.parseTimeField('07:15'),7*60+15);
   assert.equal(t.parseTimeField('13:40'),13*60+40);
@@ -530,28 +397,13 @@ test('entered leave-home time controls reachable ferry candidates and itinerary 
   assert.match(leave.detail,/Uses your entered 7:30 AM leave-home time/);
 });
 
-test('client replaces stale starting-city prompt after city resolution', () => {
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.doesNotMatch(js,/d\.leave_home\?\.time\|\|'Add a starting city'/);
-  // The plan now renders ahead of its form, so the prompt no longer says "above".
-  assert.match(js,/state\.tripDate&&state\.originResolved&&state\.departTime\?'No reachable ferry':'Add date, city \+ leave time'/);
-  assert.match(js,/\$\{dateLabel\(j\.trip_date\|\|state\.tripDate\)\} · \$\{j\.origin_label/);
-});
-
-
 test('multi-day planner exposes nights and flexible return semantics', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
   const route=fs.readFileSync(routePath,'utf8');
-  assert.match(html,/id="nightCount"/);
-  assert.match(html,/Back on mainland by \(optional\)/);
-  assert.doesNotMatch(html,/Recommended ferry home/);
-  assert.match(js,/returnPlanText/);
-  assert.match(js,/trip_days/);
+  assert.match(html,/<option value="2">two-night stay<\/option>/);
   assert.match(route,/returnPlanForStay/);
   assert.match(route,/Published 2026 ferry tickets are not day or time specific/);
 });
-
 
 test('trip date is validated and preserved as a real planning input', () => {
   assert.equal(t.parseDateField('2026-09-20'),'2026-09-20');
@@ -589,26 +441,8 @@ test('journey candidates carry route wait and door-to-island cost', () => {
 });
 
 
-test('Mackinac page cache-busts planner asset and removes stale starting-city copy', () => {
-  const html=fs.readFileSync(htmlPath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-island\.js\?v=20260921-trip1/);
-  assert.match(html,/mackinac-island\.css\?v=20260921-trip1/);
-  assert.doesNotMatch(js,/Add a starting city/);
-  assert.doesNotMatch(html,/Add a starting city/);
-});
-
-
 test('Mackinac shared-trip route inputs are explicit and cache-safe', () => {
-  const html=fs.readFileSync(htmlPath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
   const config=JSON.parse(fs.readFileSync(path.join(__dirname,'..','vercel.json'),'utf8'));
-  assert.match(html,/data-mackinac-build="20260920-live19"/);
-  assert.match(html,/<span>Starting city<\/span><input id="profileOriginInput"/);
-  assert.match(html,/mackinac-island\.js\?v=20260921-trip1/);
-  assert.doesNotMatch(html,/Add a starting city/i);
-  assert.doesNotMatch(js,/Add a starting city/i);
-  assert.match(html,/Enter date, city \+ time above/);
   for (const source of ['/mackinac-island','/mackinac-island/:path*','/assets/mackinac-island.:ext(css|js)']) {
     const rule=config.headers.find(x=>x.source===source);
     assert.ok(rule, source);
@@ -616,42 +450,8 @@ test('Mackinac shared-trip route inputs are explicit and cache-safe', () => {
   }
 });
 
-
-test('responsive visitor-first Mackinac surface survives phone tablet and landscape layouts', () => {
-  const html=fs.readFileSync(htmlPath,'utf8');
-  const css=fs.readFileSync(cssPath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/Starting from<\/span>/); // intake intro removed 2026-09-28; the hero start row leads
-  assert.match(html,/Which ferry gets you onto the Island best\?/);
-  assert.match(html,/What it should feel like while you’re here/);
-  assert.match(html,/Build my Mackinac plan/);
-  assert.match(css,/container:decision \/ inline-size/);
-  assert.match(css,/@container decision \(max-width:760px\)/);
-  assert.match(css,/@media\(orientation:landscape\) and \(max-height:650px\)/);
-  assert.match(css,/\.profile-logistics-grid\{display:grid/);
-  assert.match(css,/\.builder-grid\{grid-template-columns:repeat\(4,minmax\(0,1fr\)\)\}/);
-  assert.doesNotMatch(js,/JEV-ranked feasible plan|deterministic ranking/);
-});
-
-
-test('Mackinac live cameras use one switchable viewer and JEV stays closed-set', () => {
-  const html=fs.readFileSync(htmlPath,'utf8');
-  const css=fs.readFileSync(cssPath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
+test('Mackinac live cameras stay a closed-set catalog in the planner API', () => {
   const route=fs.readFileSync(routePath,'utf8');
-  assert.match(html,/id="webcamViewer"/);
-  assert.match(html,/id="webcamPicker"/);
-  assert.match(html,/Choose a camera/);
-  assert.match(html,/Five views play directly here\. Horn’s and Town Crier open their official live-camera pages/);
-  assert.match(css,/\.webcam-viewer\{display:grid/);
-  assert.match(css,/\.webcam-choice\.active/);
-  assert.match(js,/webcamSelectedId/);
-  assert.match(js,/renderWebcamViewer/);
-  assert.match(js,/Watch Town Crier live ↗/);
-  assert.doesNotMatch(js,/Open provider ↗/);
-  assert.doesNotMatch(js,/Hide live view/);
-  assert.doesNotMatch(js,/data-webcam-embed/);
-  assert.doesNotMatch(js,/cannot be shown cleanly inside the page/);
   assert.match(route,/WEBCAM_CATALOG/);
   assert.match(route,/Choose exactly one supplied camera id or NONE/);
   assert.match(route,/Do not claim to see or analyze the live webcam image or video/);
@@ -662,9 +462,7 @@ test('Mackinac live cameras use one switchable viewer and JEV stays closed-set',
   assert.match(route,/Prefer a camera that plays directly in the page/);
   assert.match(route,/uid=2e25804bc117f7aa96781ae3e4593a00/);
   assert.match(route,/uid=bf59fb1cfad0aee22ea7d00974c48669/);
-  assert.doesNotMatch(html,/<iframe[^>]+mackinacisland\.org/i);
 });
-
 test('Mackinac webcam registry covers the tourism-bureau viewpoints and ranks trip context', () => {
   assert.equal(t.WEBCAM_CATALOG.length,7);
   const ids=new Set(t.WEBCAM_CATALOG.map(x=>x.id));
@@ -689,55 +487,10 @@ test('JEV webcam fit favors cameras that play in-page', () => {
 });
 
 
-test('Chippewa uses raw HLS without Restreamer shell',()=>{const js=fs.readFileSync(jsPath,'utf8');const route=fs.readFileSync(routePath,'utf8');assert.match(js,/loadHlsJs/);assert.match(js,/mountHlsVideo/);assert.match(js,/hls\.js@1/);assert.match(route,/8183\/hls\/live\.stream\.m3u8/);assert.doesNotMatch(route,/8184\/hls\/live\.stream\.m3u8/);assert.doesNotMatch(route,/embed_url:"https:\/\/island\.networkingdesign\.com:818[34]\/?"/);});
-
-
-test('Horns uses official-page fallback instead of brittle raw stream',()=>{const js=fs.readFileSync(jsPath,'utf8');const route=fs.readFileSync(routePath,'utf8');assert.match(route,/id:"horns-main-street"[\s\S]{0,450}external_only:true/);assert.doesNotMatch(route,/8184\/hls\/live\.stream\.m3u8/);assert.match(js,/Watch Horn’s live ↗/);assert.match(js,/Open official live camera ↗/);});
-
-test('HLS runtime failures fall back to official camera page',()=>{const js=fs.readFileSync(jsPath,'utf8');assert.match(js,/video\.addEventListener\('error',showFallback/);assert.match(js,/Hls\.Events\.ERROR/);assert.match(js,/data\?\.fatal/);assert.match(js,/The live stream is unavailable here right now\./);});
-
-
-test('regional intake replaces the busy persona wall with profile-driven navigation',()=>{
-  const html=fs.readFileSync(htmlPath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
-  const css=fs.readFileSync(cssPath,'utf8');
-  assert.match(html,/id="trip-intake"/);
-  assert.match(html,/id="intakeProgress"/);
-  assert.match(html,/id="tripProfileCard"/);
-  assert.match(html,/id="tripTabs"/);
-  assert.match(html,/id="stay-guide"/);
-  assert.match(html,/id="eat-guide"/);
-  assert.match(html,/id="straits-guide"/);
-  assert.match(js,/PROFILE_API='\/api\/mackinac-profile'/);
-  assert.match(js,/mackinac-trip-profile-v1/);
-  assert.match(js,/renderTripTabs/);
-  assert.match(js,/applyProfileToPlanner/);
-  assert.match(js,/mackinac_profile_classified/);
-  assert.match(css,/\.intake-card/);
-  assert.match(css,/\.trip-tabs-wrap/);
-});
-
-test('the first-screen decision is never gated behind intake',()=>{
-  const js=fs.readFileSync(jsPath,'utf8');
-  const css=fs.readFileSync(cssPath,'utf8');
-  // PR #389 built this as a mobile-first first-screen decision, and the engine returns a
-  // complete one with zero input. Gating the fetch meant a first-time visitor never asked
-  // for it, so the answer must load unconditionally on boot.
-  assert.doesNotMatch(js,/classList\.contains\('mackinac-plan-ready'\)\)\s*await loadDecision/);
-  assert.match(js,/^\s*await loadDecision\(\);/m);
-  // The answer, the page content and the destination nav must not be display:none
-  // until a trip exists.
-  for(const sel of ['.decision-head','.decision-grid','.primary-rec','.content-stack','.planning-banner']){
-    assert.ok(!css.includes(`body:not(.mackinac-plan-ready) ${sel}`),`${sel} is gated behind intake again`);
-  }
-  assert.ok(!/body:not\(\.mackinac-plan-ready\) \.mackinac-destination-nav/.test(css),'destination nav is hidden until intake again');
-});
-
+test('Chippewa uses raw HLS without Restreamer shell',()=>{const route=fs.readFileSync(routePath,'utf8');assert.match(route,/8183\/hls\/live\.stream\.m3u8/);assert.doesNotMatch(route,/8184\/hls\/live\.stream\.m3u8/);assert.doesNotMatch(route,/embed_url:"https:\/\/island\.networkingdesign\.com:818[34]\/?"/);});
+test('Horns uses official-page fallback instead of brittle raw stream',()=>{const route=fs.readFileSync(routePath,'utf8');assert.match(route,/id:"horns-main-street"[\s\S]{0,450}external_only:true/);assert.doesNotMatch(route,/8184\/hls\/live\.stream\.m3u8/);});
 test('intake answers are causal inputs to the deterministic planner and bounded JEV ranker',()=>{
-  const js=fs.readFileSync(jsPath,'utf8');
   const route=fs.readFileSync(routePath,'utf8');
-  assert.match(js,/intake_trip_duration/);
-  assert.match(js,/intake_trip_vision/);
   assert.match(route,/hasIntake/);
   assert.match(route,/visitor_archetype/);
   assert.match(route,/preference_vector/);
@@ -745,101 +498,33 @@ test('intake answers are causal inputs to the deterministic planner and bounded 
   assert.match(route,/resolve tradeoffs among feasible plans/);
 });
 
-
 test('place intelligence is source-backed and never presented as live availability',()=>{
   const route=fs.readFileSync(routePath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
-  const html=fs.readFileSync(htmlPath,'utf8');
   assert.match(route,/require\("\.\/catalog"\)/);
   assert.match(route,/place_intelligence:placeIntelligence/);
-  assert.match(js,/renderPlaceCards/);
-  assert.match(js,/Room availability and live rates are not assumed/);
-  assert.match(js,/current hours, waits and reservations still need checking/);
-  assert.match(html,/id="straitsGuideCards"/);
-  assert.match(html,/20260920-live19/);
 });
-
 
 test('spatial trip shape is closed-set, mapped and visible to the planner',()=>{
   const route=fs.readFileSync(routePath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
-  const html=fs.readFileSync(htmlPath,'utf8');
   assert.match(route,/require\("\.\/spatial"\)/);
   assert.match(route,/chooseSpatialWithJev/);
   assert.match(route,/harness\.decideClosedSet/);
   assert.match(route,/spatial_plan:spatialPlan/);
   assert.match(route,/recommendedMapIds/);
-  assert.match(js,/renderTripShape/);
-  assert.match(html,/id="tripShapePanel"/);
-  assert.match(html,/20260920-live19/);
 });
-
-
-test('shareable Mackinac state restores inputs but never freezes live outputs',()=>{
-  const html=fs.readFileSync(htmlPath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(html,/mackinac-trip-state\.js\?v=20260920-live19/);
-  assert.match(html,/id="shareStateStatus"/);
-  assert.match(js,/PLAN_STORAGE_KEY='mackinac-trip-plan-v1'/);
-  assert.match(js,/sharedPlanFromHash/);
-  assert.match(js,/futureSavedPlan/);
-  assert.match(js,/Shared trip restored · live details refreshed/);
-  assert.match(js,/Open the link to rebuild it with current ferry and weather data/);
-  assert.match(js,/resolveOrigin\(originText,\{reload:false,source:shared\?'shared-plan':'saved-plan'\}\)/);
-});
-
 
 test('overnight trips use a bounded multi-day composer instead of summary-only repeated days',()=>{
   const route=fs.readFileSync(routePath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
-  const html=fs.readFileSync(htmlPath,'utf8');
   assert.match(route,/require\("\.\/multiday"\)/);
   assert.match(route,/chooseMultiDayWithJev/);
   assert.match(route,/harness\.decideClosedSet/);
   assert.match(route,/multi_day_plan:multiDayPlan/);
   assert.match(route,/trip_days:multiDayPlan\?\.days\|\|tripDays/);
-  assert.match(js,/trip-day-stops/);
-  assert.match(js,/if\(d\.multi_day_plan\)\{host\.hidden=true;return;\}/);
-  assert.match(html,/20260920-live19/);
 });
-
 
 test('bounded trip tuning is causal, persistent and shareable',()=>{
   const route=fs.readFileSync(routePath,'utf8');
-  const js=fs.readFileSync(jsPath,'utf8');
-  const html=fs.readFileSync(htmlPath,'utf8');
   assert.match(route,/require\("\.\/tuning"\)/);
   assert.match(route,/tuning\.applyProfile/);
   assert.match(route,/tuning\.applyVisitor/);
-  assert.match(js,/state\.tunings/);
-  assert.match(js,/p\.set\('tune'/);
-  assert.match(js,/mackinac_plan_tuned/);
-  assert.match(html,/id="tripTuning"/);
-  assert.match(html,/data-tune="less-walking"/);
-  assert.match(html,/data-tune="less-downtown"/);
-  assert.match(html,/20260920-live19/);
-});
-
-
-test('Mackinac search-intent entries preseed only known answers and keep the remaining intake',()=>{
-  const js=fs.readFileSync(jsPath,'utf8');
-  const html=fs.readFileSync(htmlPath,'utf8');
-  assert.match(js,/function intentSeed\(\)/);
-  assert.match(js,/'day-trip':\{trip_duration:'day'\}/);
-  assert.match(js,/'with-kids':\{trip_vision:\['kids'\]\}/);
-  assert.match(js,/'two-day':\{trip_duration:'one-night'\}/);
-  assert.match(js,/firstMissingBaseQuestion/);
-  assert.match(js,/state\.intakeStep=missing;state\.adaptiveAsked=false/);
-  assert.match(js,/const seed=shared\|\|intent\|\|saved/);
-  assert.match(html,/\/mackinac-island\/day-trip\//);
-  assert.match(html,/\/mackinac-island\/ferry-planner\//);
-});
-
-
-test('Mackinac intent funnel tracks landing entry classification and plan generation',()=>{
-  const js=fs.readFileSync(jsPath,'utf8');
-  assert.match(js,/mackinac_intent_entry/);
-  assert.match(js,/source:'search-intent-page'/);
-  assert.match(js,/mackinac_profile_classified[\s\S]{0,260}intent:/);
-  assert.match(js,/mackinac_plan_generated[\s\S]{0,220}intent:/);
 });

@@ -27,32 +27,20 @@ test("origin API tries the built-in list before the rate-limited geocoder", () =
   assert.ok(src.indexOf("lookupOrigin(q)") > 0 && src.indexOf("lookupOrigin(q)") < src.indexOf("await geocode(q)"));
 });
 
-test("the hero asks starting city and leave time first, one tap each", () => {
+test("the first choice is the starting city, on the first screen", () => {
   const html = read("public/mackinac-island/index.html");
-  const hero = html.slice(html.indexOf('id="primaryRec"'), html.indexOf('class="decision-head"'));
-  assert.match(hero, /id="heroStart"/, "start chips sit directly under the answer");
-  assert.ok((hero.match(/data-city="/g) || []).length >= 5);
-  assert.ok((hero.match(/data-leave="/g) || []).length >= 5);
-  const js = read("public/assets/mackinac-island.js");
-  assert.match(js, /async function applyStart/);
-  assert.match(js, /if\(state\.originResolved&&state\.departTime\)\{\s*document\.body\.classList\.add\('mackinac-plan-ready'\)/);
+  const sentence = html.slice(html.indexOf('id="tripForm"'), html.indexOf("</form>"));
+  assert.match(sentence, /<label class="pick pick-from is-empty" data-pick="from">/);
+  assert.match(sentence, /<option value="" selected>your city<\/option>/);
+  assert.ok(html.indexOf('id="tripForm"') < html.indexOf('id="sheet"'));
 });
 
-test("every answer lands on screen: the day-so-far preview", () => {
+test("every choice is one pick with a sensible default; no Continue or Build step", () => {
   const html = read("public/mackinac-island/index.html");
-  const q = html.indexOf('id="intakeQuestion"'), prev = html.indexOf('id="intakePreview"'), opts = html.indexOf('id="intakeOptions"');
-  assert.ok(q < prev && prev < opts, "preview sits between the question and its options");
-  const js = read("public/assets/mackinac-island.js");
-  assert.match(js, /function renderIntakePreview/);
-  // Simplified 2026-09-28: the preview is the one feedback; no floating bar, no toast.
-  assert.doesNotMatch(html, /id="liveBar"|id="planToast"/);
-});
-
-test("base questions are one tap; no Continue step", () => {
-  const js = read("public/assets/mackinac-island.js");
-  assert.match(js, /if\(actions\)actions\.hidden=true;/);
-  assert.match(js, /state\.intakeAnswers\[q\.id\]=oneTap\?\[value\]:value;/);
-  assert.doesNotMatch(js, /Choose up to two/);
+  assert.equal((html.match(/<select id="pick\w+"/g) || []).length, 6);
+  assert.doesNotMatch(html, /Continue|Build my|intakeContinue|profileBuildTrip/);
+  assert.match(html, /<option value="couple" selected>two adults<\/option>/);
+  assert.match(html, /<option value="06:00" selected>6 AM<\/option>/);
 });
 
 test("a late start gets an honest short visit, in plain language", () => {
@@ -62,14 +50,10 @@ test("a late start gets an honest short visit, in plain language", () => {
   assert.doesNotMatch(src, /un-dated|Your entered/);
 });
 
-test("the page stays simple: secondary sections are folded, not stacked", () => {
+test("the page stays simple: four sections, nothing folded away", () => {
   const html = read("public/mackinac-island/index.html");
-  for (const id of ["why", "ferries", "conditions", "webcams", "crowds-open", "seasonal", "map-section", "stay-guide", "eat-guide", "straits-guide", "sources"]) {
-    const i = html.indexOf(`id="${id}"`);
-    const open = html.lastIndexOf('<details class="more-item"', i), close = html.lastIndexOf("</details>", i);
-    assert.ok(open > close, `${id} should sit inside a closed "More about today" row`);
-  }
-  const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf("</section>", html.indexOf('<section class="hero"')));
-  assert.doesNotMatch(hero, /class="hero-actions"|class="live-dot"/);
-  assert.doesNotMatch(html, /class="intake-intro"/);
+  const main = html.slice(html.indexOf("<main"), html.indexOf("</main>"));
+  assert.equal((main.match(/<section /g) || []).length, 4);
+  assert.doesNotMatch(main, /<details/);
+  assert.ok(read("public/assets/mackinac-island.js").length < 20000, "the planner client grew past 20 KB");
 });

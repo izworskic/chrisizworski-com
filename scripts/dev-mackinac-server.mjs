@@ -7,6 +7,10 @@ import path from "node:path";
 import {createRequire} from "node:module";
 
 const require = createRequire(import.meta.url);
+// The AI chooser's harness answers production with an immediate HTTP 500, so the engine runs
+// deterministically there. Locally the same call crosses the network and can take its full
+// 3.2 s timeout, which made benchmark taps look unanswered. Fail fast here too.
+process.env.HARNESS_URL ||= "http://127.0.0.1:9/harness";
 const ROOT = path.resolve("public");
 const PORT = Number(process.argv[2] || process.env.PORT || 8790);
 const API = {
