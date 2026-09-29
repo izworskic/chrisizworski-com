@@ -145,10 +145,13 @@ function resultOperators(){
 function watchResult(){
   const result=document.getElementById('result');
   if(!result)return;
-  const observer=new MutationObserver(()=>resultOperators());
-  observer.observe(result,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['hidden']});
   const form=document.getElementById('tripForm');
   if(form)form.addEventListener('submit',()=>setTimeout(resultOperators,0));
+  const timeline=document.getElementById('timeline');
+  if(timeline){
+    const observer=new MutationObserver(()=>resultOperators());
+    observer.observe(timeline,{subtree:true,childList:true,characterData:true});
+  }
   resultOperators();
 }
 
