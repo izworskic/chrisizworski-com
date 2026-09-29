@@ -7,27 +7,27 @@ const lab = fs.readFileSync('public/labs/pictured-rocks-planner/index.html', 'ut
 const sitemap = fs.readFileSync('public/sitemap-pictured-rocks.xml', 'utf8');
 const benchmark = JSON.parse(fs.readFileSync('benchmarks/pictured-rocks-search-acquisition.json', 'utf8'));
 
-const title = 'Pictured Rocks Trip Planner: Map, Weather & 1-Day Itinerary';
-const description = 'Plan Pictured Rocks National Lakeshore with a live map, current weather and access, boat vs. hike choices, and realistic 1-day or 2-day itineraries.';
+const title = 'Pictured Rocks Trip Planner 2026: Map, Itinerary & Weather';
+const description = 'Plan Pictured Rocks National Lakeshore with an interactive map, current weather and access, best stops, boat vs. hike choices, and 1- or 2-day itineraries.';
 const h1 = 'Pictured Rocks National Lakeshore Trip Planner';
 
 test('canonical search title is query-first and compact', () => {
-  assert.equal(title.length, 59);
+  assert.equal(title.length, 58);
   assert.match(middleware, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-  assert.match(title, /^Pictured Rocks Trip Planner:/);
+  assert.match(title, /^Pictured Rocks Trip Planner 2026:/);
   assert.match(title, /Map/);
+  assert.match(title, /Itinerary/);
   assert.match(title, /Weather/);
-  assert.match(title, /1-Day Itinerary/);
 });
 
 test('meta description covers the core decision intents without stuffing', () => {
   assert.ok(description.length >= 140 && description.length <= 160);
   assert.match(middleware, /PICTURED_ROCKS_DESCRIPTION/);
   assert.match(description, /Pictured Rocks National Lakeshore/);
-  assert.match(description, /live map/);
+  assert.match(description, /interactive map/);
   assert.match(description, /current weather and access/);
   assert.match(description, /boat vs\. hike/);
-  assert.match(description, /1-day or 2-day itineraries/);
+  assert.match(description, /1- or 2-day itineraries/);
 });
 
 test('canonical H1 names the entity and product directly', () => {
@@ -50,6 +50,7 @@ test('canonical response adds entity and page schema', () => {
   assert.match(middleware, /BreadcrumbList/);
   assert.match(middleware, /ItemList/);
   assert.match(middleware, /WebPage/);
+  assert.match(middleware, /Pictured Rocks trip planner, Pictured Rocks map, Pictured Rocks itinerary/);
 });
 
 test('indexing safety contract remains intact', () => {
@@ -62,9 +63,11 @@ test('indexing safety contract remains intact', () => {
 });
 
 test('loss function preserves hard vetoes and target threshold', () => {
-  assert.equal(benchmark.lossFunction.formula, 'loss = 100 - weighted_score; target loss <= 8');
+  assert.equal(benchmark.lossFunction.formula, 'loss = 100 - weighted_score; target loss <= 7');
   assert.ok(benchmark.lossFunction.hardVetoes.length >= 6);
   assert.equal(Object.values(benchmark.lossFunction.weights).reduce((a, b) => a + b, 0), 100);
+  assert.equal(benchmark.lossFunction.diagnosticBaselineLoss, 27);
+  assert.equal(benchmark.lossFunction.postChangeTargetLoss, 7);
   assert.equal(benchmark.metadataTarget.title, title);
   assert.equal(benchmark.metadataTarget.description, description);
   assert.equal(benchmark.metadataTarget.h1, h1);
