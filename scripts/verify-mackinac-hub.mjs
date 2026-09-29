@@ -18,9 +18,10 @@ for(const item of PRIMARY_NAV){
   if(!main.includes(`href="${item.path}"`))addFailure("ia",`root navigation missing ${item.id}`);
 }
 if(!main.includes('data-mackinac-surface="my-trip"'))addFailure("clarity","root is not identified as the My Trip workspace");
-if(!main.includes("Build Your Mackinac Island Trip"))addFailure("clarity","root does not lead with trip creation");
+// 2026-09-29: the root is one sentence of choices and the day sheet it produces.
+if(!main.includes('id="tripForm"')||!main.includes('id="sheet"'))addFailure("clarity","root does not lead with trip creation");
 if(main.includes('data-mackinac-nav="plan"'))addFailure("ia","root still exposes Plan as a competing primary workspace");
-if(!main.includes('id="profileLogistics"')&&!main.includes('class="profile-logistics"'))addFailure("continuity","root intake does not collect practical trip logistics");
+if(!["pickFrom","pickDay","pickLeave","pickStay"].every(id=>main.includes(`id="${id}"`)))addFailure("continuity","root intake does not collect practical trip logistics");
 if(!main.includes("/assets/mackinac-hub.js"))addFailure("continuity","root is missing shared hub client");
 
 const primaryPaths=[];
@@ -68,12 +69,14 @@ if(!css.includes(".platform-focus-card"))addFailure("mobile","shared trip focus 
 // This check used to require the content stack itself to be hidden until intake, which
 // withheld a complete zero-input decision (score, ferries out and back, last boat, weather,
 // crowds, bike, itinerary) from every first-time visitor.
-if(!css.includes("body:not(.mackinac-plan-ready) .trip-tuning"))addFailure("clarity","root does not progressively disclose the detailed planner");
+// Progressive disclosure used to mean a collapsed fine-tune form. The root now has no detailed
+// planner at all: six picks with defaults, and the answer.
+if(main.includes('id="tripBuilder"')||(main.match(/<select id="pick\w+"/g)||[]).length!==6)addFailure("clarity","root does not progressively disclose the detailed planner");
 for(const sel of [".decision-head",".decision-grid",".primary-rec",".content-stack",".planning-banner"]){
   if(css.includes(`body:not(.mackinac-plan-ready) ${sel}`))addFailure("clarity",`root withholds ${sel} until intake; the zero-input answer must render first`);
 }
 if(/body:not\(\.mackinac-plan-ready\) \.mackinac-destination-nav/.test(css))addFailure("clarity","destination navigation is hidden until intake");
-if(!css.includes(".profile-logistics-grid"))addFailure("mobile","root trip logistics have no responsive layout");
+if(!css.includes(".trip-sentence")||!css.includes(".plan-shell{width:min(calc(100% - 32px)"))addFailure("mobile","root trip logistics have no responsive layout");
 if(!css.includes("@media(max-width:390px)"))addFailure("mobile","shared trip intelligence lacks 390px treatment");
 
 const sitemap=read("public/sitemap.xml");

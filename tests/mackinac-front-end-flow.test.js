@@ -8,51 +8,50 @@ const css = fs.readFileSync(path.join(root, "public/assets/mackinac-island.css")
 const html = fs.readFileSync(path.join(root, "public/mackinac-island/index.html"), "utf8");
 const route = require("../lib/mackinac-island/route.js");
 
-// Before this, answering all four questions only showed a profile label; the plan
-// rebuilt only after date, city and leave time were also entered. Answers must visibly move the trip.
-test("every intake answer rebuilds the live plan", () => {
-  assert.match(js, /function liveRefine\(label\)\{[\s\S]*?applyProfileToPlanner\(null\);[\s\S]*?loadDecision\(\{reason:/);
-  assert.match(js, /state\.intakeStep\+\+;renderIntakeStep\(\);\s*liveRefine\(/);
-  assert.match(js, /renderProfile\(j\.profile\);applyProfileToPlanner\(j\.profile\);\s*loadDecision\(\{reason:/);
+// Rewritten 2026-09-29 for the one-screen day sheet. The questionnaire these tests guarded is
+// gone; the guarantees are the same: every choice visibly replans the day, in place, with no
+// stale answer winning a race, and the answer sits on the first screen.
+const intent = fs.readFileSync(path.join(root, "public/assets/mackinac-intent.css"), "utf8");
+const sheetSrc = fs.readFileSync(path.join(root, "lib/mackinac-island/day-sheet.js"), "utf8");
+
+test("every change to the sentence replans the day", () => {
+  assert.match(js, /change\(\{ \[key\]: el\.value \}, "sentence"\)/);
+  assert.match(js, /function change\(changes, source\) \{[\s\S]*?plan\(source\);/);
+  assert.match(js, /change\(action\.set, "heads-up"\)/);
 });
 
 test("a slower, older plan response never overwrites a newer one", () => {
-  assert.match(js, /const seq=\+\+decisionSeq/);
-  assert.match(js, /if\(seq!==decisionSeq\)return;/);
+  assert.match(js, /const id = \+\+seq;/);
+  assert.match(js, /if \(id !== seq\) return;/);
 });
 
-test("changes are shown to the visitor and announced to screen readers", () => {
-  assert.match(html, /id="planToast" role="status" aria-live="polite"/);
-  assert.match(js, /function announcePlanChanges\(before,reason\)/);
-  assert.match(js, /classList\.add\('just-changed'\)/);
-  assert.match(css, /\.just-changed\{animation:/);
+test("changes are shown in place, with one kind of feedback", () => {
+  assert.doesNotMatch(html, /id="planToast"|id="liveBar"|id="intakePreview"/);
+  assert.match(css, /\.sheet\[aria-busy="true"\] \.sheet-headline/);
+  assert.match(css, /\.pick\.changed\{animation:/);
   assert.match(css, /prefers-reduced-motion:reduce/);
+  assert.match(html, /id="sheetStatus" role="status" aria-live="polite"/);
 });
 
-test("the hero leads with the answer and carries no em dash in the verdict", () => {
-  const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf("</section>", html.indexOf('<section class="hero"')));
-  assert.ok(hero.indexOf('id="primaryRec"') < hero.indexOf('id="decisionGrid"'), "the answer must come before the metrics");
-  assert.ok(hero.includes('data-scroll="#trip-intake"'), "the hero must lead into the questions");
-  assert.doesNotMatch(js, /labelScore\(score\)\} — /);
-});
-
-test("the day renders before the form that adjusts it", () => {
-  const planner = html.slice(html.indexOf('id="planner"'), html.indexOf('id="why"'));
-  assert.ok(planner.indexOf('id="itinerary"') < planner.indexOf('id="tripBuilder"'));
+test("the answer is on the first screen, right under a one-sentence form", () => {
+  assert.ok(html.indexOf('id="page-title"') < html.indexOf('id="tripForm"'));
+  assert.ok(html.indexOf('id="tripForm"') < html.indexOf('id="sheetHeadline"'));
+  assert.match(css, /\.sheet-wrap\{position:relative;z-index:2;margin-top:-64px\}/);
+  assert.ok(!sheetSrc.includes("\u2014"), "no em dashes in visitor-facing sheet copy");
 });
 
 // overflow-x:hidden on both html and body makes body the scroll container, which
 // silently disables every position:sticky element on the page.
 test("sticky navigation actually sticks", () => {
-  assert.match(css, /@supports \(overflow:clip\)\{html,body\{overflow-x:clip\}\}/);
-  assert.doesNotMatch(css, /body:not\(\.mackinac-plan-ready\)\s*\.trip-tabs-wrap/);
-  assert.match(js, /renderTripTabs\(DEFAULT_TABS\)/);
+  assert.match(intent, /@supports \(overflow:clip\)\{html,body\{overflow-x:clip\}\}/);
+  assert.match(intent, /\.destination-nav-wrap\{position:sticky;top:0/);
+  assert.doesNotMatch(css, /(html|body)[^{]*\{[^}]*overflow(-x)?:hidden/);
 });
 
-test("hidden intake pieces stay hidden despite display rules", () => {
-  assert.match(css, /\.intake-actions\[hidden\]/);
-  assert.match(css, /\.ferry-columns>\*\{min-width:0\}/);
-  assert.match(css, /\.timeline\{flex-wrap:wrap/);
+test("hidden pieces stay hidden despite display rules", () => {
+  // .heads sets display:grid, which beats the browser's [hidden] rule without this.
+  assert.match(css, /\.heads\[hidden\]/);
+  assert.match(js, /heads\.hidden = !s\.heads_up\?\.length/);
 });
 
 test("engine headline reason is plain language", () => {

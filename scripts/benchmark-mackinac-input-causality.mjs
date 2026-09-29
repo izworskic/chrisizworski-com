@@ -47,6 +47,7 @@ const oct26=t.arnoldSchedule('2026-10-26',true).filter(x=>x.direction==='to-isla
 const html=fs.readFileSync('public/mackinac-island/index.html','utf8');
 const js=fs.readFileSync('public/assets/mackinac-island.js','utf8');
 const route=fs.readFileSync('lib/mackinac-island/route.js','utf8');
+const sheet=fs.readFileSync('lib/mackinac-island/day-sheet.js','utf8');
 
 const checks={
   trip_date_is_real:
@@ -65,12 +66,16 @@ const checks={
   journey_cost_is_scored:
     earlyPlans.every(x=>Number.isFinite(x.mainland_drive_minutes)&&Number.isFinite(x.pre_ferry_idle_minutes)&&Number.isFinite(x.door_to_island_minutes)) &&
     /preFerryIdle \* \.18/.test(route),
+  // 2026-09-29: date, city and leave time are three picks in the planner's sentence, and the
+  // day sheet opens with the leave-by time and the drive to the chosen dock.
   journey_is_visible:
-    /id="profileTripDate"/.test(html) &&
-    /id="tripDate"/.test(html) &&
-    /trip_date/.test(js) &&
-    /pre_ferry_idle_minutes/.test(js) &&
-    /Your mainland start|mainland_drive_minutes|door-to-island/i.test(html+js+route)
+    /id="pickDay"/.test(html) &&
+    /id="pickFrom"/.test(html) &&
+    /id="pickLeave"/.test(html) &&
+    /p\.set\("trip_date"/.test(js) &&
+    /depart_not_before/.test(js) &&
+    /Leave \$\{origin\.short\} by/.test(sheet) &&
+    /mainland_drive_minutes/.test(sheet+route)
 };
 
 const weights={

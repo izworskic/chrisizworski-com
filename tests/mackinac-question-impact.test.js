@@ -59,18 +59,3 @@ test("visitor-facing question text holds no em dashes", () => {
     for (const [, label] of q.options) assert.ok(!label.includes("\u2014"), `${q.id}: ${label}`);
   }
 });
-
-test("the fine-tune form leads with what the intake never asks and collapses the rest", () => {
-  const html = readFileSync(path.join(__dirname, "../public/mackinac-island/index.html"), "utf8");
-  const form = html.slice(html.indexOf('id="tripBuilder"'), html.indexOf("</form>", html.indexOf('id="tripBuilder"')));
-  const more = form.indexOf('id="builderMore"');
-  assert.ok(more > 0, "fine-tune corrections are no longer collapsed");
-  // Measured: must-dos changed the itinerary in every run and dinner changed the plan in two
-  // thirds, and neither is asked by the intake, so both stay visible.
-  assert.ok(form.indexOf('id="mustDoChoices"') < more, "must-dos were hidden");
-  assert.ok(form.indexOf('id="dinner"') < more, "dinner was hidden");
-  // Everything the intake already sets lives inside the collapsed corrections.
-  for (const id of ["tripMode", "childCount", "adultCount", "bikePlan", "pace", "mobility", "interestChoices", "tripDate", "departTime"]) {
-    assert.ok(form.indexOf(`id="${id}"`) > more, `${id} is back in the always-visible ask`);
-  }
-});

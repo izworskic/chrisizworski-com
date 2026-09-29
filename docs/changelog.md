@@ -3,6 +3,21 @@
 One dated entry per production change, so Search Console movement can be attributed to a cause
 instead of guessed at. Do not ship two page clusters on the same day.
 
+## 2026-09-29 - Mackinac Island Trip Planner rebuilt as one sentence and one day sheet
+
+- /mackinac-island/ replaces the questionnaire, trip profile, fine-tune form and eleven folded
+  "More about today" rows with a one-sentence form (trip length, who, starting city, day,
+  earliest leave time, how you'll get around) and a day sheet: leave-by time, dock and boat,
+  Island stops in order with times, the boat back, the last boat on your line, home time.
+- New `lib/mackinac-island/day-sheet.js` sequences the engine's existing facts (published 2026
+  ferry schedules, Fort hours, crowd windows, events, sunset, dining closings). The engine's own
+  itinerary for most visitors had been a ferry plus "Lunch / real break" for six hours, and with
+  no leave time it told Detroit to leave at 1:28 AM.
+- Title and canonical unchanged; H1 is now "Mackinac Island Trip Planner" (matches the title);
+  meta description, FAQ copy and JSON-LD descriptions rewritten to match; Person node defined.
+- Removed from the root: live cameras, map, weather/water, crowds, events, stay/eat/Straits
+  cards and the sources panel. The API still returns them; the guide pages are unchanged.
+
 ## 2026-08-19 - Boat launch finder ranked on driving distance
 
 - Shortlist now ranks by real driving distance and drive time (`api/boat-launch-drive.js`,
