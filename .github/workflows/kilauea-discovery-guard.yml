@@ -1,0 +1,76 @@
+name: Kilauea discovery guard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/ensure-kilauea-discovery.mjs'
+      - 'tests/kilauea-discovery.test.js'
+      - '.github/workflows/kilauea-discovery-guard.yml'
+  workflow_run:
+    workflows:
+      - 'Sync verified National Tools gate'
+      - 'Sync verified Breakout Live gate'
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  guard:
+    if: ${{ (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success') && github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify guard behavior
+        run: node --test tests/kilauea-discovery.test.js
+
+      - name: Enforce Kilauea placement and metadata
+        run: node scripts/ensure-kilauea-discovery.mjs "$GITHUB_WORKSPACE"
+
+      - name: Verify Kilauea contracts after enforcement
+        run: node --test tests/kilauea-live.test.js tests/kilauea-discovery.test.js
+
+      - name: Verify production files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(grep -o 'data-tool-id="kilauea-live"' public/synced-national-tools/index.html | wc -l)" -eq 1
+          node - <<'NODE'
+          const fs=require('fs');
+          const directory=fs.readFileSync('public/synced-national-tools/index.html','utf8');
+          const hawaii=directory.match(/<section class="catalog-group region-cluster"[^>]*id="region-hawaii"[\s\S]*?<\/section>/)?.[0]||'';
+          if(!hawaii.includes('data-tool-id="kilauea-live"')) throw new Error('Kilauea is not in Hawaii region');
+          const page=fs.readFileSync('public/synced-national-tools/kilauea-live/index.html','utf8');
+          const title=page.match(/<title>(.*?)<\/title>/)?.[1]||'';
+          if(title!=='Kīlauea Live: Should You Go Now? | Chris Izworski') throw new Error(`Unexpected title: ${title}`);
+          if(title.length>60) throw new Error(`Title exceeds 60 characters: ${title.length}`);
+          if(!page.includes('twitter:card" content="summary_large_image"')) throw new Error('summary_large_image missing');
+          if(!page.includes('twitter:image')||!page.includes('og:image')) throw new Error('Social image metadata missing');
+          const schema=JSON.parse(page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+          for(const type of ['ImageObject','WebApplication','BreadcrumbList']){
+            if(!schema['@graph'].some(x=>x['@type']===type)) throw new Error(`${type} schema missing`);
+          }
+          NODE
+
+      - name: Commit guarded production files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/synced-national-tools/index.html public/synced-national-tools/kilauea-live/index.html
+          if git diff --cached --quiet; then
+            echo 'Kilauea discovery and metadata already current.'
+            exit 0
+          fi
+          git commit -m 'Keep Kilauea discoverable in Hawaii'
+          git push origin HEAD:main
