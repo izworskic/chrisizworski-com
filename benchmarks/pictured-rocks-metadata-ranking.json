@@ -1,0 +1,178 @@
+{
+  "product": "Pictured Rocks metadata ranking system",
+  "canonical": "https://picturedrocks.chrisizworski.com/",
+  "created": "2026-09-28",
+  "objective": "Increase qualified Google serving, query ownership, search-result clarity and click-through for the canonical Pictured Rocks planner by improving metadata and entity coherence without keyword stuffing, duplicate intent owners or repeated title churn.",
+  "principles": [
+    "Metadata can improve relevance, entity understanding and search appearance, but it cannot substitute for useful page content.",
+    "The title and prominent page language are relevance signals; the meta description is treated primarily as a snippet and CTR lever.",
+    "Structured data must describe visible truth and may improve Google's understanding or search appearance, but rich results are never assumed or guaranteed.",
+    "The canonical title is frozen long enough to measure before another title experiment is attempted."
+  ],
+  "lossFunction": {
+    "formula": "loss = 100 - weighted_score + hard_veto_penalty; target loss <= 5",
+    "hardVetoPenalty": 100,
+    "hardVetoes": [
+      "canonical response is not HTTP 200",
+      "canonical response is noindex or blocked from indexing",
+      "canonical does not self-canonicalize",
+      "the /labs/ source becomes indexable",
+      "title or H1 no longer clearly names Pictured Rocks",
+      "structured data claims features, ratings, prices, reviews or facts not visible and true on the page",
+      "another owned page is deliberately optimized to own the same generic Pictured Rocks planner/map/itinerary intent"
+    ],
+    "weights": {
+      "crawl_canonical_integrity": 20,
+      "query_title_h1_alignment": 20,
+      "subdomain_site_identity": 15,
+      "entity_graph_coherence": 15,
+      "snippet_click_promise": 10,
+      "preferred_image_consistency": 5,
+      "internal_anchor_reinforcement": 10,
+      "experiment_isolation_and_measurement": 5
+    }
+  },
+  "rubric": {
+    "crawl_canonical_integrity": "Full credit only when the canonical is 200, indexable, self-canonical, sitemap-listed and the lab source remains noindex.",
+    "query_title_h1_alignment": "Full credit when Pictured Rocks + planner intent is explicit and map/itinerary/weather concepts are represented naturally across title, H1 and prominent visible copy without repetition.",
+    "subdomain_site_identity": "Full credit when the root subdomain declares a consistent WebSite name, alternate name, application name and og:site_name specific to this tool.",
+    "entity_graph_coherence": "Full credit when WebSite -> WebPage -> WebApplication -> TouristDestination -> Person relationships use stable @id links and describe the same canonical URL.",
+    "snippet_click_promise": "Full credit when the description accurately previews the map, live conditions, mode comparison and itinerary output in human language.",
+    "preferred_image_consistency": "Full credit when primaryImageOfPage, WebApplication image, og:image and Twitter image resolve to the same crawlable representative image.",
+    "internal_anchor_reinforcement": "Full credit when relevant owned pages link to the canonical with descriptive anchors while avoiding duplicate generic-intent optimization.",
+    "experiment_isolation_and_measurement": "Full credit when title/description variants are frozen during measurement windows and changes are annotated against settled GSC data."
+  },
+  "baselineBeforeThisTreatment": {
+    "score": 76,
+    "loss": 24,
+    "notes": {
+      "crawl_canonical_integrity": "Strong: indexed, self-canonical and dedicated sitemap present.",
+      "query_title_h1_alignment": "Strong after the September 28 search-acquisition rewrite.",
+      "subdomain_site_identity": "Weakest metadata dimension: og:site_name and WebPage isPartOf identified the broader Chris Izworski site rather than the Pictured Rocks subdomain as its own site identity.",
+      "entity_graph_coherence": "Partial: the WebApplication existed but had no stable @id linking it to the canonical WebPage graph.",
+      "measurement": "Settled GSC data still predates the September 28 rebuilt planner, so it cannot be used to judge the new title yet."
+    }
+  },
+  "postTreatmentTarget": {
+    "score": 95,
+    "loss": 5,
+    "requiredMetadataState": [
+      "WebSite node for https://picturedrocks.chrisizworski.com/ named Pictured Rocks Trip Planner",
+      "alternateName includes Pictured Rocks Planner and the lowercase subdomain as fallback",
+      "og:site_name and application-name match the subdomain site identity",
+      "WebPage isPartOf points to the subdomain WebSite node",
+      "WebPage mainEntity points to the WebApplication node",
+      "WebApplication has a stable #app @id and truthful featureList",
+      "WebPage/app/destination/author/image nodes are connected by @id rather than floating duplicate entities",
+      "title and description remain frozen during the first measurement window"
+    ]
+  },
+  "currentMetadataVariant": {
+    "title": "Pictured Rocks Trip Planner 2026: Map, Itinerary & Weather",
+    "description": "Plan Pictured Rocks National Lakeshore with an interactive map, current weather and access, best stops, boat vs. hike choices, and 1- or 2-day itineraries.",
+    "h1": "Pictured Rocks National Lakeshore Trip Planner",
+    "siteName": "Pictured Rocks Trip Planner",
+    "alternateSiteNames": [
+      "Pictured Rocks Planner",
+      "picturedrocks.chrisizworski.com"
+    ],
+    "freezeRule": "Do not alter the title or description again until enough settled post-release Search Console data exists to compare query assignment and CTR."
+  },
+  "serpBenchmark": {
+    "observedCompetitorPatterns": [
+      "NPS owns authoritative Plan Your Visit and Maps intent.",
+      "Commercial competitors explicitly target one-day itinerary and first-time visitor intent.",
+      "The Pictured Rocks planner differentiator is combining map + current conditions + mode choice + personalized itinerary on one page."
+    ],
+    "targetQueryFamilies": [
+      "pictured rocks trip planner",
+      "pictured rocks map",
+      "pictured rocks itinerary",
+      "pictured rocks one day itinerary",
+      "pictured rocks two day itinerary",
+      "pictured rocks weather",
+      "pictured rocks boat cruise",
+      "pictured rocks kayaking",
+      "pictured rocks hiking",
+      "things to do at pictured rocks",
+      "munising pictured rocks"
+    ]
+  },
+  "gscBaseline": {
+    "settledThrough": "2026-09-26",
+    "window": "2026-08-30 through 2026-09-26",
+    "canonicalImpressions": 21,
+    "canonicalClicks": 0,
+    "canonicalCtr": 0,
+    "observedCanonicalQueryRows": [
+      "kayaking pictured rocks without a guide",
+      "pictured rocks winter"
+    ],
+    "networkCannibalizationRow": "pictured rocks itinerary -> https://weekend.chrisizworski.com/guides/pictured-rocks-weekend/",
+    "interpretation": "This is a pre-treatment baseline. The rebuilt canonical and metadata treatment launched after the settled reporting window, so no ranking conclusion should be drawn from these numbers yet."
+  },
+  "plan": [
+    {
+      "phase": "1. Entity and site identity",
+      "status": "executed",
+      "actions": [
+        "Declare the Pictured Rocks subdomain as its own WebSite entity.",
+        "Align WebSite name, application-name and Open Graph site name.",
+        "Connect WebPage, WebApplication, TouristDestination, Person and preferred ImageObject using stable @id values."
+      ]
+    },
+    {
+      "phase": "2. Preserve the current title experiment",
+      "status": "active",
+      "actions": [
+        "Keep the September 28 title, description and H1 unchanged while Google recrawls and assigns queries.",
+        "Do not add meta-keyword-style repetition to visible or hidden metadata."
+      ]
+    },
+    {
+      "phase": "3. Measure serving before CTR",
+      "status": "pending settled data",
+      "actions": [
+        "Measure number of distinct target-query families receiving impressions.",
+        "Measure total impressions and average position for planner/map/itinerary queries.",
+        "Only evaluate CTR after the page is receiving enough impressions at comparable positions."
+      ]
+    },
+    {
+      "phase": "4. Controlled title test if needed",
+      "status": "conditional",
+      "trigger": "After a minimum 14 settled post-release days, if Google still does not assign map/itinerary/planner queries despite healthy indexing.",
+      "candidate": "Pictured Rocks Map & Trip Planner 2026 | 1–2 Day Itineraries",
+      "rule": "Change one major snippet variable at a time, annotate the date, and compare equivalent settled windows."
+    },
+    {
+      "phase": "5. Image/search-appearance treatment if needed",
+      "status": "conditional",
+      "trigger": "If text impressions grow but search appearance remains weak.",
+      "actions": [
+        "Replace the remote preferred image with a stable first-party 1200px+ representative image if one is available.",
+        "Keep primaryImageOfPage, WebApplication image, og:image and Twitter image identical."
+      ]
+    }
+  ],
+  "measurementBenchmark": {
+    "day7": {
+      "goal": "Google begins assigning multiple relevant query families to the canonical planner.",
+      "pass": "At least 3 target-query families show impressions on the canonical after the first complete settled post-release days."
+    },
+    "day14": {
+      "goal": "Generic planner/map/itinerary ownership emerges.",
+      "pass": "At least 5 target-query families show impressions, with at least one of planner/map/itinerary on the canonical and no renewed generic cannibalization from the weekend guide."
+    },
+    "day28": {
+      "goal": "Meaningful expansion in qualified search serving.",
+      "pass": "Impressions materially exceed the pre-treatment 21-impression baseline, target-query diversity rises, and average position improves or remains competitive while query breadth expands."
+    },
+    "doNotOptimizeTo": [
+      "raw CTR before sufficient impressions and comparable positions",
+      "one isolated ranking observation",
+      "search-result title appearance before Google has recrawled the new metadata",
+      "keyword density or hidden keyword lists"
+    ]
+  }
+}
