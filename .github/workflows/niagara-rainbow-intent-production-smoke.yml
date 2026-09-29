@@ -29,16 +29,28 @@ jobs:
             done
             return 1
           }
+          probe_contains(){
+            name="$1"; url="$2"; expected="$3"
+            for n in $(seq 1 24); do
+              code=$(curl -L -sS --max-time 30 -o /tmp/out -w '%{http_code}' "$url" || true)
+              if [ "$code" = '200' ] && grep -Fq "$expected" /tmp/out; then echo "$name OK"; return 0; fi
+              echo "$name not updated yet on attempt $n"; sleep 10
+            done
+            return 1
+          }
           probe api "$BASE/api/niagara-rainbow?smoke=$GITHUB_SHA"
           python -c "import json; d=json.load(open('/tmp/out')); assert d.get('ok') is True and d.get('days') and d.get('viewpoints')"
-          probe main "$BASE/national-tools/niagara-rainbow/?smoke=$GITHUB_SHA"
-          grep -Fq 'Best Time to See a Rainbow at Niagara Falls Today' /tmp/out
+          probe_contains main "$BASE/national-tools/niagara-rainbow/?smoke=$GITHUB_SHA" 'Best Time to See a Rainbow at Niagara Falls Today'
           grep -Fq 'https://chrisizworski.com/national-tools/niagara-rainbow/' /tmp/out
-          probe best-time "$BASE/national-tools/niagara-rainbow/best-time-today/?smoke=$GITHUB_SHA"
-          grep -Fq 'content="noindex,follow"' /tmp/out
+          probe_contains best-time "$BASE/national-tools/niagara-rainbow/best-time-today/?smoke=$GITHUB_SHA" 'content="noindex,follow"'
           grep -Fq '<link rel="canonical" href="https://chrisizworski.com/national-tools/niagara-rainbow/">' /tmp/out
           probe best-viewpoint "$BASE/national-tools/niagara-rainbow/best-viewpoint/?smoke=$GITHUB_SHA"
           grep -Fq 'https://chrisizworski.com/national-tools/niagara-rainbow/best-viewpoint/' /tmp/out
           grep -Fq '/api/niagara-rainbow' /tmp/out || grep -Fq 'intent.js' /tmp/out
-          probe sitemap "$BASE/sitemap-niagara-rainbow.xml?smoke=$GITHUB_SHA"
-          test "$(grep -o '<url>' /tmp/out | wc -l | tr -d ' ')" = '2'
+          for n in $(seq 1 24); do
+            code=$(curl -L -sS --max-time 30 -o /tmp/out -w '%{http_code}' "$BASE/sitemap-niagara-rainbow.xml?smoke=$GITHUB_SHA" || true)
+            count=$(grep -o '<url>' /tmp/out | wc -l | tr -d ' ' || true)
+            if [ "$code" = '200' ] && [ "$count" = '2' ]; then echo 'sitemap OK'; exit 0; fi
+            echo "sitemap not updated yet on attempt $n"; sleep 10
+          done
+          exit 1
