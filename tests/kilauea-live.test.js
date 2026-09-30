@@ -204,6 +204,19 @@ function hawaiiNowStamp() {
   return `${parts.year}/${parts.month}/${parts.day} ${parts.hour}:${parts.minute}`;
 }
 
+// HVO fixtures must be relative to the real clock: the decision layer rejects
+// eruption reports older than HVO_STALE_HOURS, so hard-coded dates go stale on their own.
+function hvoStamps(minutesAgo) {
+  const at = new Date(Date.now() - minutesAgo * 60 * 1000);
+  const fmt = (opts) => Object.fromEntries(new Intl.DateTimeFormat('en-US', {timeZone:'Pacific/Honolulu',...opts}).formatToParts(at).filter(p=>p.type!=='literal').map(p=>[p.type,p.value]));
+  const n = fmt({year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
+  const l = fmt({weekday:'long',month:'long',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
+  return {
+    message: `${n.year}-${n.month}-${n.day} ${n.hour}:${n.minute}:${n.second}`,
+    daily: `${l.weekday}, ${l.month} ${l.day}, ${l.year}, ${l.hour}:${l.minute} ${l.dayPeriod}`
+  };
+}
+
 function dohFixture() {
   const stamp = hawaiiNowStamp();
   const station=(name,value,indexVal,indexName)=>({name,Active:1,display:true,DateVal:stamp,latitude:'19.5',longitude:'-155.1',monitors:[{name:'SO2',Pollutantname:'SO2',unit:'ppm',value:String(value),stationName:name,indexVal,indexName,Active:1}]});
@@ -237,9 +250,10 @@ function installOfficialFetch({dailyText,messageText}) {
 
 test('live API synthesizes official current pages and preserves unpredictable timing guardrail', async () => {
   const handler = require('../api/kilauea-live');
+  const msg = hvoStamps(30), daily = hvoStamps(40), older = hvoStamps(240);
   const restore = installOfficialFetch({
-    messageText:'Kilauea Message 2026-09-28 00:15:00 HST Small overflows continue from the north vent. Steam and clouds obscure the vents. Kilauea Message 2026-09-27 20:56:49 HST older',
-    dailyText:'HAWAIIAN VOLCANO OBSERVATORY DAILY UPDATE U.S. Geological Survey Monday, September 28, 2026, 12:05 AM HST Current Volcano Alert Level: WATCH Current Aviation Color Code: ORANGE Summary: Small overflows, strong glow and intermittent spatter continue. Forecast windows for this episode can no longer be modeled due to irregular changes. Conditions remain favorable but HVO cannot say with certainty that this leads to another fountain event.'
+    messageText:`Kilauea Message ${msg.message} HST Small overflows continue from the north vent. Steam and clouds obscure the vents. Kilauea Message ${older.message} HST older`,
+    dailyText:`HAWAIIAN VOLCANO OBSERVATORY DAILY UPDATE U.S. Geological Survey ${daily.daily} HST Current Volcano Alert Level: WATCH Current Aviation Color Code: ORANGE Summary: Small overflows, strong glow and intermittent spatter continue. Forecast windows for this episode can no longer be modeled due to irregular changes. Conditions remain favorable but HVO cannot say with certainty that this leads to another fountain event.`
   });
   const req={method:'GET',query:{travel:'three',mobility:'short',experience:'casual',plan:'now'}};
   let payload; let statusCode;
@@ -266,9 +280,10 @@ test('live API synthesizes official current pages and preserves unpredictable ti
 
 test('newer HVO pause message overrides contradictory older daily fountaining', async () => {
   const handler = require('../api/kilauea-live');
+  const msg = hvoStamps(30), daily = hvoStamps(40), older = hvoStamps(240);
   const restore = installOfficialFetch({
-    messageText:'Kilauea Message 2026-09-28 00:15:00 HST The eruption is paused. No active lava flows are present. Kilauea Message 2026-09-27 20:56:49 HST older',
-    dailyText:'HAWAIIAN VOLCANO OBSERVATORY DAILY UPDATE U.S. Geological Survey Monday, September 28, 2026, 12:05 AM HST Current Volcano Alert Level: WATCH Current Aviation Color Code: ORANGE Summary: Lava fountains are ongoing and active at the north vent.'
+    messageText:`Kilauea Message ${msg.message} HST The eruption is paused. No active lava flows are present. Kilauea Message ${older.message} HST older`,
+    dailyText:`HAWAIIAN VOLCANO OBSERVATORY DAILY UPDATE U.S. Geological Survey ${daily.daily} HST Current Volcano Alert Level: WATCH Current Aviation Color Code: ORANGE Summary: Lava fountains are ongoing and active at the north vent.`
   });
   const req={method:'GET',query:{travel:'here',mobility:'short',experience:'casual',plan:'now'}};
   let payload;
