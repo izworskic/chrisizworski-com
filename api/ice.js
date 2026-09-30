@@ -1,15 +1,12 @@
-// /api/ice — server side aggregation for the Michigan Ice Report.
+// /api/ice — server-side aggregation for the Michigan Ice Report.
 //
-// Two upstreams, neither of which sends CORS headers or can be called from a
-// browser, plus one that is heavy enough to belong on the server:
-//   1. NOAA GLERL current season daily ice concentration (.dat)
-//   2. NOAA GLERL 54 year daily ice climatology per lake (.txt)
-//   3. ACIS daily temperature records, used to compute accumulated freezing
-//      degree days for the current season and a 10 year normal for today.
+// Upstreams:
+//   1. NOAA GLERL current-season daily lake-wide ice concentration
+//   2. NOAA GLERL daily ice climatology
+//   3. ACIS daily temperatures for accumulated freezing degree days (AFDD)
 //
-// Every section fails independently and returns null rather than taking the
-// whole response down. Cached at the edge for 6 hours because none of these
-// sources update more than daily.
+// Every section fails independently. This endpoint provides thermal-history and
+// lake-wide context; /api/ice-now adds regional USNIC observations and NWS forecasts.
 
 export const config = { runtime: 'edge' };
 
@@ -26,19 +23,14 @@ const REGIONS = [
   { slug: 'burt-mullett', acis: 'KAPN', lake: null }
 ];
 
-// Ice season starts in October. Before October we are still inside the season
-// that began the previous calendar year.
 function seasonStartYear(d) {
   return d.getUTCMonth() + 1 >= 10 ? d.getUTCFullYear() : d.getUTCFullYear() - 1;
 }
-
 function rowLabel(d) {
   return MON[d.getUTCMonth()] + '-' + String(d.getUTCDate()).padStart(2, '0');
 }
-
 function pad(n) { return String(n).padStart(2, '0'); }
 
-/* ---------------------------------------------- GLERL current season cover */
 async function currentCover(now) {
   const y = seasonStartYear(now);
   const url = 'https://apps.glerl.noaa.gov/coastwatch/webdata/statistic/ice/dat/' +
@@ -55,24 +47,16 @@ async function currentCover(now) {
   if (!last) return null;
   return {
     seasonFile: 'g' + y + '_' + (y + 1) + '_ice.dat',
-    year: Number(last[0]),
-    dayOfYear: Number(last[1]),
-    superior: Number(last[2]),
-    michigan: Number(last[3]),
-    huron: Number(last[4]),
-    erie: Number(last[5]),
-    ontario: Number(last[6]),
-    stclair: Number(last[7]),
-    total: Number(last[8])
+    year: Number(last[0]), dayOfYear: Number(last[1]),
+    superior: Number(last[2]), michigan: Number(last[3]), huron: Number(last[4]),
+    erie: Number(last[5]), ontario: Number(last[6]), stclair: Number(last[7]), total: Number(last[8])
   };
 }
 
-/* ---------------------------------------------- GLERL climatology for today */
 async function climatology(lakeCode, now) {
   const file = { huron: 'hur', michigan: 'mic', superior: 'sup', erie: 'eri' }[lakeCode];
   if (!file) return null;
-  const r = await fetch('https://www.glerl.noaa.gov/data/ice/glicd/daily/' + file + '.txt',
-    { headers: UA });
+  const r = await fetch('https://www.glerl.noaa.gov/data/ice/glicd/daily/' + file + '.txt', { headers: UA });
   if (!r.ok) return null;
   const lines = (await r.text()).trim().split('\n');
   const years = lines[0].trim().split(/\s+/);
@@ -89,27 +73,21 @@ async function climatology(lakeCode, now) {
     const median = sorted.length % 2
       ? sorted[(sorted.length - 1) / 2]
       : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2;
-    // current ice year column, labeled by the January calendar year
-    const iceYear = String(now.getUTCMonth() + 1 >= 10
-      ? now.getUTCFullYear() + 1 : now.getUTCFullYear());
+    const iceYear = String(now.getUTCMonth() + 1 >= 10 ? now.getUTCFullYear() + 1 : now.getUTCFullYear());
     const idx = years.indexOf(iceYear);
     const curRaw = idx >= 0 ? cells[idx] : 'NA';
     return {
-      date: label,
-      yearsOfRecord: vals.length,
+      date: label, yearsOfRecord: vals.length,
       mean: Math.round(mean * 10) / 10,
       median: Math.round(median * 10) / 10,
-      min: sorted[0],
-      max: sorted[sorted.length - 1],
+      min: sorted[0], max: sorted[sorted.length - 1],
       current: curRaw === 'NA' ? null : Number(curRaw),
-      firstYear: years[0],
-      lastYear: years[years.length - 1]
+      firstYear: years[0], lastYear: years[years.length - 1]
     };
   }
   return null;
 }
 
-/* ---------------------------------------------- ACIS accumulated cold */
 async function acisRange(sid, sdate, edate) {
   const r = await fetch('https://data.rcc-acis.org/StnData', {
     method: 'POST',
@@ -120,8 +98,6 @@ async function acisRange(sid, sdate, edate) {
   const j = await r.json();
   return (j && j.data) || null;
 }
-
-// Standard net AFDD: running sum of (32 - daily mean), floored at zero.
 function afddFrom(rows) {
   if (!rows) return null;
   let a = 0;
@@ -132,14 +108,19 @@ function afddFrom(rows) {
   }
   return Math.round(a);
 }
+function afddChange(rows, days, current) {
+  if (!rows || current === null) return null;
+  const previous = afddFrom(rows.slice(0, Math.max(0, rows.length - days)));
+  return previous === null ? null : current - previous;
+}
 
 async function coldFor(region, now) {
   const sy = seasonStartYear(now);
   const start = sy + '-11-01';
   const today = now.getUTCFullYear() + '-' + pad(now.getUTCMonth() + 1) + '-' + pad(now.getUTCDate());
-  const cur = afddFrom(await acisRange(region.acis, start, today));
+  const currentRows = await acisRange(region.acis, start, today);
+  const cur = afddFrom(currentRows);
 
-  // 10 year normal for the same calendar window
   const md = pad(now.getUTCMonth() + 1) + '-' + pad(now.getUTCDate());
   const norms = [];
   for (let k = 1; k <= 10; k++) {
@@ -148,10 +129,16 @@ async function coldFor(region, now) {
     const v = afddFrom(await acisRange(region.acis, s, e));
     if (v !== null) norms.push(v);
   }
-  const normal = norms.length
-    ? Math.round(norms.reduce((a, b) => a + b, 0) / norms.length) : null;
+  const normal = norms.length ? Math.round(norms.reduce((a, b) => a + b, 0) / norms.length) : null;
 
-  return { slug: region.slug, station: region.acis, seasonStart: start, afdd: cur, normal, normalYears: norms.length };
+  return {
+    slug: region.slug, station: region.acis, seasonStart: start,
+    afdd: cur, normal, normalYears: norms.length,
+    change24h: afddChange(currentRows, 1, cur),
+    change72h: afddChange(currentRows, 3, cur),
+    change7d: afddChange(currentRows, 7, cur),
+    latestDate: currentRows && currentRows.length ? currentRows[currentRows.length - 1][0] : null
+  };
 }
 
 export default async function handler() {
@@ -170,13 +157,13 @@ export default async function handler() {
   };
 
   const tasks = [
-    currentCover(now).then((v) => { out.cover = v; }).catch(() => { out.cover = null; }),
-    climatology('huron', now).then((v) => { out.climatology.huron = v; }).catch(() => { out.climatology.huron = null; }),
-    climatology('michigan', now).then((v) => { out.climatology.michigan = v; }).catch(() => { out.climatology.michigan = null; })
+    currentCover(now).then(v => { out.cover = v; }).catch(() => { out.cover = null; }),
+    climatology('huron', now).then(v => { out.climatology.huron = v; }).catch(() => { out.climatology.huron = null; }),
+    climatology('michigan', now).then(v => { out.climatology.michigan = v; }).catch(() => { out.climatology.michigan = null; })
   ];
   for (const r of REGIONS) {
-    tasks.push(coldFor(r, now).then((v) => { out.cold.push(v); })
-      .catch(() => { out.cold.push({ slug: r.slug, station: r.acis, afdd: null, normal: null }); }));
+    tasks.push(coldFor(r, now).then(v => { out.cold.push(v); })
+      .catch(() => { out.cold.push({ slug: r.slug, station: r.acis, afdd: null, normal: null, change24h: null, change72h: null, change7d: null }); }));
   }
   await Promise.all(tasks);
 

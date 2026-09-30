@@ -1,9 +1,6 @@
-/* Michigan Ice Report live engine.
-   Server aggregation from /api/ice (GLERL cover, GLERL climatology, ACIS cold).
-   Current observations direct from the National Weather Service API.
-
-   Vocabulary rule for this file: no state is ever labeled safe, good, or ready.
-   Stages describe the freeze progression only. Safety is not a data product. */
+/* Michigan Ice Report live decision engine.
+   Observed regional ice, lake-wide trends, thermal history, and forecast forcing
+   are deliberately kept separate. No state is ever a safety rating. */
 (function () {
   'use strict';
 
@@ -18,64 +15,53 @@
 
   function cToF(c) { return c * 9 / 5 + 32; }
   function msToMph(ms) { return ms * 2.23694; }
-
   function cardinal(deg) {
     if (deg === null || deg === undefined) return '';
     var p = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
       'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
     return p[Math.round(deg / 22.5) % 16];
   }
-
   function set(id, txt) {
     var el = document.getElementById(id);
     if (el) el.textContent = txt;
   }
-
   function fmt(n, dp) {
     if (n === null || n === undefined || isNaN(n)) return 'n/a';
     return Number(n).toFixed(dp === undefined ? 0 : dp);
   }
-
-  /* ------------------------------------------------ season and stage */
+  function signed(n, dp) {
+    if (n === null || n === undefined || isNaN(n)) return 'n/a';
+    return (Number(n) >= 0 ? '+' : '') + Number(n).toFixed(dp === undefined ? 0 : dp);
+  }
   function inIceSeason(d) {
     var m = d.getMonth() + 1;
     return m >= 11 || m <= 3;
   }
+  function dateText(v) {
+    if (!v) return 'time unavailable';
+    var d = new Date(v);
+    if (isNaN(d.getTime())) return 'time unavailable';
+    return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  }
 
-  // Freeze progression. This is a real ordered sequence, which is why it is
-  // presented as stages. None of these labels describe safety.
   function stageFor(afdd, d, tempF) {
-    if (afdd === null || afdd === undefined) {
-      return { label: inIceSeason(d) ? 'No data' : 'Off season', cls: '' };
-    }
+    if (afdd === null || afdd === undefined) return { label: inIceSeason(d) ? 'No thermal data' : 'Off season', cls: '' };
     if (!inIceSeason(d)) return { label: 'Off season', cls: '' };
-    if (tempF !== null && tempF !== undefined && tempF > 40 && afdd > 50) {
-      return { label: 'Thaw underway', cls: 'thaw' };
-    }
-    if (afdd < 25) return { label: 'Open water', cls: '' };
-    if (afdd < 150) return { label: 'Ice forming', cls: '' };
-    if (afdd < 350) return { label: 'Ice building', cls: 'cold' };
+    if (tempF !== null && tempF !== undefined && tempF > 40 && afdd > 50) return { label: 'Thaw underway', cls: 'thaw' };
+    if (afdd < 25) return { label: 'Open-water thermal stage', cls: '' };
+    if (afdd < 150) return { label: 'Freeze-up thermal stage', cls: '' };
+    if (afdd < 350) return { label: 'Cold accumulating', cls: 'cold' };
     if (afdd < 700) return { label: 'Sustained cold', cls: 'cold' };
     return { label: 'Deep cold', cls: 'cold' };
   }
 
-  /* ------------------------------------------------ Stefan range */
-  // Modified Stefan equation, USACE form: thickness (in) = C * sqrt(AFDD).
-  // C spans roughly 0.5 for a snow covered sheltered sheet to 0.8 for a windy
-  // lake with little snow. Reported as a range because a single value would be
-  // false precision. Known to overpredict thin early season ice.
-  function stefanRange(afdd) {
-    if (!afdd || afdd <= 0) return null;
-    return { lo: 0.5 * Math.sqrt(afdd), hi: 0.8 * Math.sqrt(afdd) };
-  }
-
-  /* ------------------------------------------------ fetches */
   function fetchServer() {
-    return fetch('/api/ice')
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .catch(function () { return null; });
+    return fetch('/api/ice').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
   }
-
+  function fetchNow(region) {
+    var u = '/api/ice-now' + (region ? '?region=' + encodeURIComponent(region) : '');
+    return fetch(u).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
+  }
   function fetchObs(region) {
     return fetch('https://api.weather.gov/stations/' + region.nws + '/observations/latest',
       { headers: { Accept: 'application/geo+json' } })
@@ -87,8 +73,7 @@
         var ws = o.windSpeed && o.windSpeed.value;
         var wd = o.windDirection && o.windDirection.value;
         return {
-          region: region,
-          ok: true,
+          region: region, ok: true,
           tempF: (t === null || t === undefined) ? null : cToF(t),
           windMph: (ws === null || ws === undefined) ? null : msToMph(ws),
           windDir: (wd === null || wd === undefined) ? null : wd,
@@ -96,282 +81,434 @@
         };
       })
       .catch(function () { return { region: region, ok: false }; });
-    }
+  }
 
-  /* ------------------------------------------------ accumulation track */
+  function coldMap(server) {
+    var out = {};
+    if (server && Array.isArray(server.cold)) server.cold.forEach(function (c) { out[c.slug] = c; });
+    return out;
+  }
+  function obsMap(obs) {
+    var out = {};
+    (obs || []).forEach(function (o) { if (o && o.region) out[o.region.slug] = o; });
+    return out;
+  }
+  function regional(nowData, slug) {
+    return nowData && nowData.observed && nowData.observed.regions ? nowData.observed.regions[slug] : null;
+  }
+  function usableRegional(r) {
+    return !!(r && r.supported && r.available && !r.stale && r.rangeLabel);
+  }
+  function usableLakeWide(nowData) {
+    var l = nowData && nowData.observed ? nowData.observed.lakeWide : null;
+    return l && l.current && !l.stale ? l : null;
+  }
+
   function paintTrack(container, afdd, normal) {
     if (!container) return;
     var fill = container.querySelector('.acc-fill');
     var mark = container.querySelector('.acc-normal');
     var nowEl = container.querySelector('[data-f="accnow"]');
     var normEl = container.querySelector('[data-f="accnorm"]');
-
     var a = (afdd === null || afdd === undefined) ? 0 : afdd;
     var n = (normal === null || normal === undefined) ? 0 : normal;
-    // Scale so a normal season sits at the midline. Past the midline reads as
-    // ahead of normal at a glance, which is the whole point of the display.
     var scale = Math.max(n * 2, a * 1.15, 100);
     if (fill) fill.style.width = Math.min(100, (a / scale) * 100) + '%';
     if (mark) mark.style.left = Math.min(100, (n / scale) * 100) + '%';
-    if (nowEl) nowEl.textContent = (afdd === null ? 'no data' : a + ' F days');
-    if (normEl) normEl.textContent = (normal === null ? 'normal n/a' : 'normal ' + n);
+    if (nowEl) nowEl.textContent = (afdd === null || afdd === undefined) ? 'no data' : a + ' F days';
+    if (normEl) normEl.textContent = (normal === null || normal === undefined) ? 'normal n/a' : 'normal ' + n;
   }
 
-  /* ------------------------------------------------ index render */
-  function renderIndex(server, obs) {
-    var now = new Date();
-    var coldBySlug = {};
-    if (server && server.cold) {
-      server.cold.forEach(function (c) { coldBySlug[c.slug] = c; });
-    }
-    var obsBySlug = {};
-    obs.forEach(function (o) { obsBySlug[o.region.slug] = o; });
+  function installNowStyles() {
+    if (document.getElementById('ice-now-styles')) return;
+    var style = document.createElement('style');
+    style.id = 'ice-now-styles';
+    style.textContent = [
+      '.ice-now{margin:14px 0 0;border:1px solid #9fc3cc;border-left:5px solid #16606b;border-radius:13px;background:rgba(255,255,255,.82);padding:14px 16px}',
+      '.ice-now__top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}',
+      '.ice-now__kicker{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#5c7280}',
+      '.ice-now__headline{font-family:"Fraunces",Georgia,serif;font-size:22px;line-height:1.18;margin:3px 0 2px}',
+      '.ice-now__stamp{font-size:11px;color:#5c7280}',
+      '.ice-now__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}',
+      '.ice-now__cell{border:1px solid #d3e1e5;border-radius:9px;padding:9px 10px;background:rgba(247,251,252,.82)}',
+      '.ice-now__label{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#5c7280}',
+      '.ice-now__value{font-size:15px;font-weight:700;line-height:1.25;margin-top:2px}',
+      '.ice-now__why{font-size:12px;color:#3f5764;line-height:1.4;margin-top:4px}',
+      '.ice-now__limit{font-size:11.5px;color:#5c7280;margin:10px 0 0}',
+      '.ice-now__stale{border-left-color:#b4472b}',
+      '@media(max-width:620px){.ice-now__grid{grid-template-columns:1fr}.ice-now{padding:12px 13px}.ice-now__headline{font-size:20px}}'
+    ].join('');
+    document.head.appendChild(style);
+  }
 
-    // top stats
-    var afdds = [], norms = [];
+  function ensureNowPanel() {
+    installNowStyles();
+    var panel = document.getElementById('ice-now');
+    if (panel) return panel;
+    panel = document.createElement('section');
+    panel.id = 'ice-now';
+    panel.className = 'ice-now';
+    panel.setAttribute('aria-live', 'polite');
+    panel.innerHTML = '<div class="ice-now__top"><div><div class="ice-now__kicker">ICE NOW</div>' +
+      '<div class="ice-now__headline" id="ice-now-headline">Loading the latest authoritative observations…</div></div>' +
+      '<div class="ice-now__stamp" id="ice-now-stamp"></div></div>' +
+      '<div class="ice-now__grid" id="ice-now-grid"></div>' +
+      '<p class="ice-now__limit" id="ice-now-limit">Observed concentration, thermal history, and forecast weather are separate signals. None measures recreational ice thickness.</p>';
+    var h1 = document.querySelector('h1.page-title, h1');
+    if (h1 && h1.parentNode) h1.parentNode.insertBefore(panel, h1.nextSibling);
+    return panel;
+  }
+
+  function addNowCell(grid, label, value, why) {
+    var cell = document.createElement('div');
+    cell.className = 'ice-now__cell';
+    var l = document.createElement('div'); l.className = 'ice-now__label'; l.textContent = label;
+    var v = document.createElement('div'); v.className = 'ice-now__value'; v.textContent = value;
+    var w = document.createElement('div'); w.className = 'ice-now__why'; w.textContent = why;
+    cell.appendChild(l); cell.appendChild(v); cell.appendChild(w); grid.appendChild(cell);
+  }
+
+  function fastestCold(coldBySlug) {
+    var best = null;
     REGIONS.forEach(function (r) {
       var c = coldBySlug[r.slug];
-      if (c && c.afdd !== null && c.afdd !== undefined) afdds.push(c.afdd);
-      if (c && c.normal !== null && c.normal !== undefined) norms.push(c.normal);
+      if (!c || c.change72h === null || c.change72h === undefined) return;
+      if (!best || c.change72h > best.change72h) best = { name: r.short, change72h: c.change72h };
     });
-    var meanAfdd = afdds.length ? Math.round(afdds.reduce(function (a, b) { return a + b; }, 0) / afdds.length) : null;
-    var meanNorm = norms.length ? Math.round(norms.reduce(function (a, b) { return a + b; }, 0) / norms.length) : null;
+    return best;
+  }
 
-    var sagObs = obsBySlug['saginaw-bay'];
-    var st = stageFor(coldBySlug['saginaw-bay'] ? coldBySlug['saginaw-bay'].afdd : null,
-      now, sagObs && sagObs.ok ? sagObs.tempF : null);
-    set('s-stage', st.label);
-    set('season-stage', st.label);
-    set('s-afdd', meanAfdd === null ? 'n/a' : meanAfdd);
+  function renderNowIndex(server, nowData) {
+    var panel = ensureNowPanel();
+    var grid = document.getElementById('ice-now-grid');
+    var headline = document.getElementById('ice-now-headline');
+    var stamp = document.getElementById('ice-now-stamp');
+    var limit = document.getElementById('ice-now-limit');
+    if (!grid || !headline) return;
+    grid.textContent = '';
+    var now = new Date();
+    var cold = coldMap(server);
+
+    if (!inIceSeason(now)) {
+      headline.textContent = 'Off season — no stale spring ice chart is being presented as current.';
+      addNowCell(grid, 'Live ice season', 'November–March', 'Daily regional ice analysis becomes decision-useful once freeze-up begins.');
+      addNowCell(grid, 'Current status', 'Off season', 'The monitor remains indexed and ready, but it does not imply September ice exists.');
+      addNowCell(grid, 'Next signal', 'Cold accumulation', 'AFDD restarts with the winter season and is compared with a ten-year station normal.');
+      stamp.textContent = 'Season state checked ' + dateText(new Date().toISOString());
+      limit.textContent = 'This is an intentional stale-data state: old winter observations are withheld instead of being relabeled as live.';
+      return;
+    }
+
+    var lake = usableLakeWide(nowData);
+    var sag = regional(nowData, 'saginaw-bay');
+    var fc = nowData && nowData.forecast && nowData.forecast.next72h ? nowData.forecast.next72h : null;
+    var fastest = fastestCold(cold);
+
+    if (lake) {
+      headline.textContent = 'Great Lakes ice: ' + fmt(lake.current.total, 1) + '% today, ' + signed(lake.change72h.total, 1) + ' points over 72 hours.';
+      addNowCell(grid, 'Observed · Great Lakes', fmt(lake.current.total, 1) + '% cover',
+        'NOAA GLERL; ' + signed(lake.change24h.total, 1) + ' pt/24h · ' + signed(lake.change7d.total, 1) + ' pt/7d.');
+    } else {
+      headline.textContent = 'The lake-wide ice observation is unavailable or stale.';
+      addNowCell(grid, 'Observed · Great Lakes', 'Unavailable', 'A stale upstream value is not promoted as current.');
+      panel.classList.add('ice-now__stale');
+    }
+
+    if (usableRegional(sag)) {
+      addNowCell(grid, 'Observed · Saginaw Bay', sag.rangeLabel,
+        'USNIC daily analysis sampled across the bay · confidence ' + sag.confidence + '.');
+    } else if (sag && sag.stale) {
+      addNowCell(grid, 'Observed · Saginaw Bay', 'Stale / withheld', 'The regional chart is older than the live threshold.');
+    } else {
+      addNowCell(grid, 'Observed · Saginaw Bay', 'Unavailable', 'No usable regional concentration classification is available right now.');
+    }
+
+    if (fc) {
+      addNowCell(grid, 'Forecast · next 72h', fc.forcing,
+        fc.freezeHours + ' forecast hours at/below 32°F · max wind ' + fc.maxWindMph + ' mph.');
+    } else {
+      addNowCell(grid, 'Forecast · next 72h', 'Unavailable', 'Current NWS forecast forcing could not be retrieved.');
+    }
+
+    var prior = document.getElementById('ice-now-fastest');
+    if (prior) prior.remove();
+    if (fastest) {
+      var extra = document.createElement('div');
+      extra.id = 'ice-now-fastest';
+      extra.className = 'ice-now__stamp';
+      extra.style.marginTop = '9px';
+      extra.textContent = 'Strongest 72-hour cold accumulation among tracked stations: ' + fastest.name +
+        ' (' + signed(fastest.change72h) + ' F-degree-days). This is a thermal signal, not observed ice growth.';
+      grid.parentNode.insertBefore(extra, limit);
+    }
+    stamp.textContent = lake ? 'Lake-wide observation valid ' + dateText(lake.observedAt) : 'Observation time unavailable';
+    limit.textContent = 'Observed concentration is not thickness. Forecast weather describes forcing, not cracks, sheet movement, local thickness, or safety.';
+  }
+
+  function relabelIndexStats() {
+    var row = document.querySelector('.stat-row');
+    if (!row) return;
+    var stats = row.querySelectorAll('.stat');
+    if (stats[1]) {
+      var l1 = stats[1].querySelector('.lbl'), s1 = stats[1].querySelector('.sub');
+      if (l1) l1.textContent = 'Cold vs normal';
+      if (s1) s1.textContent = 'tracked stations above 10y normal';
+    }
+    if (stats[2]) {
+      var l2 = stats[2].querySelector('.lbl'), s2 = stats[2].querySelector('.sub');
+      if (l2) l2.textContent = 'Great Lakes ice';
+      if (s2) s2.textContent = 'all lakes combined';
+    }
+    if (stats[3]) {
+      var l3 = stats[3].querySelector('.lbl');
+      if (l3) l3.textContent = 'Huron vs 54 year avg';
+    }
+  }
+
+  function renderIndex(server, nowData, obs) {
+    renderNowIndex(server, nowData);
+    relabelIndexStats();
+    var now = new Date();
+    var cold = coldMap(server);
+    var om = obsMap(obs);
+
+    set('s-stage', inIceSeason(now) ? 'Ice season' : 'Off season');
+    set('season-stage', inIceSeason(now) ? 'Ice season' : 'Off season');
+
+    var comparable = 0, above = 0;
+    REGIONS.forEach(function (r) {
+      var c = cold[r.slug];
+      if (c && c.afdd !== null && c.afdd !== undefined && c.normal !== null && c.normal !== undefined) {
+        comparable += 1;
+        if (c.afdd > c.normal) above += 1;
+      }
+    });
+    set('s-afdd', inIceSeason(now) && comparable ? above + '/' + comparable : '—');
+
+    var lake = usableLakeWide(nowData);
+    set('s-cover', inIceSeason(now) && lake ? fmt(lake.current.total, 1) + '%' : (inIceSeason(now) ? 'n/a' : '—'));
+    set('s-cover-sub', inIceSeason(now) ? 'all Great Lakes combined' : 'off season');
 
     var hur = server && server.climatology ? server.climatology.huron : null;
-    var cov = server && server.cover ? server.cover : null;
-    if (cov && cov.huron !== null && cov.huron !== undefined) {
-      set('s-cover', fmt(cov.huron, 1) + '%');
-      set('s-cover-sub', 'Lake Huron');
-    } else {
-      set('s-cover', 'n/a');
-      set('s-cover-sub', 'not published');
-    }
-    if (hur && hur.mean !== null) {
-      var cur = (cov && cov.huron !== null && cov.huron !== undefined) ? cov.huron : hur.current;
-      if (cur !== null && cur !== undefined) {
-        var diff = cur - hur.mean;
-        set('s-vsnorm', (diff >= 0 ? '+' : '') + fmt(diff, 1) + ' pts');
-      } else {
-        set('s-vsnorm', fmt(hur.mean, 1) + '% norm');
-      }
-    } else {
-      set('s-vsnorm', 'n/a');
-    }
+    if (inIceSeason(now) && hur && lake && lake.current.huron !== null && lake.current.huron !== undefined) {
+      set('s-vsnorm', signed(lake.current.huron - hur.mean, 1) + ' pts');
+    } else set('s-vsnorm', '—');
 
-    // accumulation tracks
     REGIONS.forEach(function (r) {
-      var c = coldBySlug[r.slug] || {};
+      var c = cold[r.slug] || {};
       paintTrack(document.getElementById('acc-' + r.slug), c.afdd, c.normal);
     });
     var accStamp = document.getElementById('acc-stamp');
     if (accStamp) {
-      if (!inIceSeason(now)) {
-        accStamp.textContent = 'Tracks read zero because it is the off season. Accumulated cold is a running total ' +
-          'that resets after a sustained thaw, so it sits at zero from spring through fall and begins climbing again ' +
-          'once nights drop below freezing in November.';
-      } else if (meanNorm === null) {
-        accStamp.textContent = 'Accumulated cold is computed from daily temperature records for each station. The ' +
-          'normal comparison is unavailable right now.';
-      } else {
-        accStamp.textContent = 'Accumulated freezing degree days since November 1, computed from daily temperature ' +
-          'records. The marker is the ten year average for this calendar date at each station, so a bar past the ' +
-          'marker means this winter is running colder than normal.';
-      }
+      accStamp.textContent = !inIceSeason(now)
+        ? 'Off season. Accumulated cold begins rebuilding with the winter season; old winter totals are not carried forward as a live condition.'
+        : 'Accumulated freezing degree days come from daily ACIS station records. The marker is the ten-year station normal for this date; the 72-hour change is used only as a thermal-growth signal.';
     }
 
-    // board
+    var table = document.getElementById('board');
+    if (table) {
+      var th = table.closest('table') && table.closest('table').querySelectorAll('th');
+      if (th && th[4]) th[4].textContent = 'Observed regional ice';
+    }
+
     REGIONS.forEach(function (r) {
       var row = document.getElementById('row-' + r.slug);
       if (!row) return;
-      var c = coldBySlug[r.slug] || {};
-      var o = obsBySlug[r.slug] || { ok: false };
+      var c = cold[r.slug] || {};
+      var o = om[r.slug] || { ok: false };
       var s = stageFor(c.afdd, now, o.ok ? o.tempF : null);
-      var coverTxt = 'n/a';
-      if (r.lake && server && server.cover && server.cover[r.lake] !== null && server.cover[r.lake] !== undefined) {
-        coverTxt = fmt(server.cover[r.lake], 1) + '%';
-      } else if (!r.lake) {
-        coverTxt = 'inland';
-      }
+      var ro = regional(nowData, r.slug);
+      var observedText = r.lake ? 'unavailable' : 'no remote obs';
+      if (usableRegional(ro)) observedText = ro.rangeLabel;
+      else if (ro && ro.stale) observedText = 'stale';
       var vals = {
-        afdd: (c.afdd === null || c.afdd === undefined) ? 'n/a' : c.afdd,
+        afdd: (c.afdd === null || c.afdd === undefined) ? 'n/a' : c.afdd + (c.change72h === null || c.change72h === undefined ? '' : ' (' + signed(c.change72h) + '/72h)'),
         temp: o.ok && o.tempF !== null ? fmt(o.tempF) : 'n/a',
         wind: o.ok && o.windMph !== null ? fmt(o.windMph) + ' ' + cardinal(o.windDir) : 'n/a',
-        cover: coverTxt,
+        cover: observedText,
         stage: s.label
       };
       var cells = row.querySelectorAll('[data-f]');
       for (var i = 0; i < cells.length; i++) {
         var f = cells[i].getAttribute('data-f');
-        if (f === 'stage') {
-          cells[i].innerHTML = '<span class="badge ' + s.cls + '">' + s.label + '</span>';
-        } else if (vals[f] !== undefined) {
-          cells[i].textContent = vals[f];
-        }
+        if (f === 'stage') cells[i].innerHTML = '<span class="badge ' + s.cls + '">' + s.label + '</span>';
+        else if (vals[f] !== undefined) cells[i].textContent = vals[f];
       }
     });
 
     var bs = document.getElementById('board-stamp');
     if (bs) {
-      var live = obs.filter(function (o) { return o.ok; }).length;
-      bs.textContent = live + ' of ' + REGIONS.length + ' weather stations reporting. Season cold is accumulated ' +
-        'freezing degree days. Lake ice is satellite cover for the parent Great Lake, not for the individual water. ' +
-        'Inland lakes have no satellite ice product. Stage describes freeze progression only and is not a safety rating.';
+      bs.textContent = 'Regional Great Lakes values are sampled from the daily NOAA/NWS USNIC concentration analysis and expose source freshness. Inland waters have no comparable remote ice observation. Season cold is AFDD; current air and wind are nearby NWS station observations. None is a safety rating.';
     }
 
-    // narrative
     var readEl = document.getElementById('the-read');
     if (readEl) {
       var parts = [];
       if (!inIceSeason(now)) {
-        parts.push('Off season. Michigan ice fishing runs roughly December through March depending on the winter, and ' +
-          'this page tracks accumulated cold from November 1 onward.');
-      } else if (meanAfdd !== null && meanNorm !== null) {
-        var rel = meanAfdd > meanNorm * 1.15 ? 'ahead of'
-          : (meanAfdd < meanNorm * 0.85 ? 'behind' : 'close to');
-        parts.push('Accumulated cold across the tracked waters averages ' + meanAfdd +
-          ' freezing degree days, which is ' + rel + ' the ten year normal of ' + meanNorm + ' for this date.');
-      } else if (meanAfdd !== null) {
-        parts.push('Accumulated cold across the tracked waters averages ' + meanAfdd + ' freezing degree days.');
+        parts.push('Off season. The live ice monitor intentionally withholds old winter observations rather than presenting them as current.');
+      } else {
+        if (lake) parts.push('Combined Great Lakes ice cover is ' + fmt(lake.current.total, 1) + '%, changing ' + signed(lake.change72h.total, 1) + ' points over 72 hours.');
+        var fastest = fastestCold(cold);
+        if (fastest) parts.push('The strongest 72-hour cold accumulation among the six tracked stations is ' + fastest.name + ' at ' + signed(fastest.change72h) + ' F-degree-days; that describes thermal forcing, not measured ice growth.');
+        var sag = regional(nowData, 'saginaw-bay');
+        if (usableRegional(sag)) parts.push('The current USNIC Saginaw Bay analysis spans ' + sag.rangeLabel + '.');
+        var fc = nowData && nowData.forecast && nowData.forecast.next72h;
+        if (fc) parts.push('For Saginaw Bay, the next 72 hours show ' + fc.forcing + ' with ' + fc.freezeHours + ' forecast hours at or below 32°F and a maximum forecast wind near ' + fc.maxWindMph + ' mph.');
       }
-      if (cov && cov.huron !== null && cov.huron !== undefined && hur) {
-        parts.push('Lake Huron satellite ice cover is ' + fmt(cov.huron, 1) +
-          ' percent against a ' + hur.yearsOfRecord + ' year average of ' + fmt(hur.mean, 1) +
-          ' percent for this date, in a record that ranges from ' + fmt(hur.min, 1) + ' to ' + fmt(hur.max, 1) +
-          ' percent.');
-      }
-      var sr = stefanRange(coldBySlug['saginaw-bay'] ? coldBySlug['saginaw-bay'].afdd : null);
-      if (sr && inIceSeason(now)) {
-        parts.push('For Saginaw Bay the accumulated cold implies a modeled sheet somewhere between ' +
-          sr.lo.toFixed(1) + ' and ' + sr.hi.toFixed(1) +
-          ' inches on undisturbed water, which is a physics estimate rather than a measurement and runs optimistic ' +
-          'on thin ice.');
-      }
-      parts.push('None of this describes the ice where you intend to stand.');
+      parts.push('Observed concentration, accumulated cold, and forecast weather are different signals; none measures the ice where a person plans to stand.');
       readEl.textContent = parts.join(' ');
     }
     var rst = document.getElementById('read-stamp');
-    if (rst && server) {
-      rst.textContent = 'Ice cover and climatology from NOAA GLERL. Daily temperatures from ACIS. Current ' +
-        'observations from the National Weather Service. Server data generated ' +
-        (server.generatedAt ? new Date(server.generatedAt).toLocaleString('en-US',
-          { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : 'recently') + '.';
+    if (rst) {
+      rst.textContent = 'Lake-wide ice: NOAA GLERL (valid ' + (lake ? dateText(lake.observedAt) : 'unavailable') + '). Regional ice: NOAA/NWS USNIC. Thermal history: ACIS. Forecast: NWS. Stale values are withheld from the live read.';
     }
   }
 
-  /* ------------------------------------------------ region render */
-  function renderRegion(slug, server, o) {
+  function relabelRegionCover(region) {
+    var el = document.getElementById('r-cover');
+    if (!el) return;
+    var stat = el.closest('.stat');
+    if (!stat) return;
+    var lbl = stat.querySelector('.lbl');
+    var sub = stat.querySelector('.sub');
+    if (lbl) lbl.textContent = 'Regional ice observation';
+    if (sub) sub.textContent = region.lake ? 'USNIC chart; not thickness' : 'not remotely observed';
+  }
+
+  function renderNowRegion(region, server, nowData, c) {
+    var panel = ensureNowPanel();
+    var grid = document.getElementById('ice-now-grid');
+    var headline = document.getElementById('ice-now-headline');
+    var stamp = document.getElementById('ice-now-stamp');
+    var limit = document.getElementById('ice-now-limit');
+    if (!grid || !headline) return;
+    grid.textContent = '';
+    var now = new Date();
+
+    if (!inIceSeason(now)) {
+      headline.textContent = region.short + ': off season — old winter observations are withheld.';
+      addNowCell(grid, 'Observed ice', 'Off season', region.lake ? 'Regional USNIC ice concentration will appear during the live winter window.' : 'No comparable remote ice-analysis product exists for this inland lake.');
+      addNowCell(grid, 'Thermal history', 'Resumes in winter', 'AFDD is rebuilt from daily station temperatures and compared with a ten-year normal.');
+      addNowCell(grid, 'Forecast forcing', 'Not interpreted for ice', 'Warm-season weather is not converted into a winter ice signal.');
+      stamp.textContent = 'Season state checked ' + dateText(new Date().toISOString());
+      limit.textContent = 'No stale spring value is being relabeled as current.';
+      return;
+    }
+
+    var ro = regional(nowData, region.slug);
+    var fc = nowData && nowData.forecast && nowData.forecast.next72h ? nowData.forecast.next72h : null;
+    if (usableRegional(ro)) {
+      headline.textContent = region.short + ': observed regional concentration ' + ro.rangeLabel + '.';
+      addNowCell(grid, 'Observed ice', ro.rangeLabel, 'USNIC daily analysis · ' + ro.samplesMatched + '/' + ro.samplesExpected + ' water samples matched · confidence ' + ro.confidence + '.');
+      stamp.textContent = 'Regional analysis valid ' + dateText(ro.validAt);
+    } else if (region.lake && ro && ro.stale) {
+      headline.textContent = region.short + ': the regional ice analysis is stale, so it is withheld.';
+      addNowCell(grid, 'Observed ice', 'Stale / withheld', 'A fresh fetch time does not make an old source observation current.');
+      panel.classList.add('ice-now__stale');
+    } else if (region.lake) {
+      headline.textContent = region.short + ': no usable regional ice observation is available right now.';
+      addNowCell(grid, 'Observed ice', 'Unavailable', 'This is not interpreted as ice-free water.');
+    } else {
+      headline.textContent = region.short + ': no comparable remote ice observation exists for this inland water.';
+      addNowCell(grid, 'Observed ice', 'Not remotely observed', 'The product does not substitute a Great Lakes number for an inland lake.');
+    }
+
+    if (c && c.afdd !== null && c.afdd !== undefined) {
+      addNowCell(grid, 'Thermal history', c.afdd + ' F-degree-days',
+        (c.change72h === null || c.change72h === undefined ? '72-hour change unavailable.' : signed(c.change72h) + ' F-degree-days over 72h') +
+        (c.normal === null || c.normal === undefined ? '.' : ' · 10y normal ' + c.normal + '.'));
+    } else addNowCell(grid, 'Thermal history', 'Unavailable', 'The nearby ACIS station record could not be retrieved.');
+
+    if (fc) {
+      addNowCell(grid, 'Forecast · next 72h', fc.forcing,
+        fc.freezeHours + 'h at/below 32°F · ' + fc.minTempF + '–' + fc.maxTempF + '°F · max wind ' + fc.maxWindMph + ' mph.');
+    } else addNowCell(grid, 'Forecast · next 72h', 'Unavailable', 'The NWS forecast signal could not be retrieved.');
+
+    limit.textContent = 'Observed regional concentration is not thickness. Thermal history and forecast weather can explain direction of pressure on the ice system, but they cannot establish local cracks, quality, current, thickness, or safety.';
+  }
+
+  function renderRegion(slug, server, nowData, o) {
     var now = new Date();
     var region = REGIONS.filter(function (r) { return r.slug === slug; })[0];
     if (!region) return;
-    var c = null;
-    if (server && server.cold) {
-      c = server.cold.filter(function (x) { return x.slug === slug; })[0] || null;
-    }
+    var cold = coldMap(server);
+    var c = cold[slug] || null;
     var afdd = c ? c.afdd : null;
     var normal = c ? c.normal : null;
     var s = stageFor(afdd, now, o && o.ok ? o.tempF : null);
+    var ro = regional(nowData, slug);
+
+    renderNowRegion(region, server, nowData, c);
+    relabelRegionCover(region);
 
     set('s-stage', s.label);
     set('season-stage', s.label);
     set('r-afdd', afdd === null || afdd === undefined ? 'n/a' : afdd);
-    if (normal === null || normal === undefined || afdd === null || afdd === undefined) {
-      set('r-vsnorm', 'n/a');
-    } else {
-      var d = afdd - normal;
-      set('r-vsnorm', (d >= 0 ? '+' : '') + d);
-    }
+    if (normal === null || normal === undefined || afdd === null || afdd === undefined) set('r-vsnorm', 'n/a');
+    else set('r-vsnorm', signed(afdd - normal));
     if (o && o.ok) {
       set('r-temp', o.tempF !== null ? fmt(o.tempF) : 'n/a');
       set('r-wind', o.windMph !== null ? fmt(o.windMph) : 'n/a');
       set('r-wind-sub', o.windDir !== null ? 'out of the ' + cardinal(o.windDir) : 'mph');
     } else {
-      set('r-temp', 'n/a');
-      set('r-wind', 'n/a');
+      set('r-temp', 'n/a'); set('r-wind', 'n/a');
     }
-    if (region.lake && server && server.cover &&
-        server.cover[region.lake] !== null && server.cover[region.lake] !== undefined) {
-      set('r-cover', fmt(server.cover[region.lake], 1) + '%');
-    } else if (region.lake) {
-      set('r-cover', 'n/a');
-    }
+
+    if (!inIceSeason(now)) set('r-cover', 'off season');
+    else if (usableRegional(ro)) set('r-cover', ro.rangeLabel);
+    else if (!region.lake) set('r-cover', 'no remote obs');
+    else if (ro && ro.stale) set('r-cover', 'stale');
+    else set('r-cover', 'unavailable');
 
     paintTrack(document.getElementById('acc-region'), afdd, normal);
 
     var parts = [];
-    parts.push('Stage: ' + s.label + '.');
-    if (afdd !== null && afdd !== undefined) {
-      if (normal !== null && normal !== undefined) {
-        var rel = afdd > normal * 1.15 ? 'ahead of' : (afdd < normal * 0.85 ? 'behind' : 'close to');
-        parts.push('Accumulated cold is ' + afdd + ' freezing degree days, ' + rel +
-          ' the ten year normal of ' + normal + ' for this date.');
-      } else {
-        parts.push('Accumulated cold is ' + afdd + ' freezing degree days.');
+    if (!inIceSeason(now)) {
+      parts.push('Off season. Old winter observations are withheld rather than presented as current.');
+    } else {
+      if (usableRegional(ro)) parts.push('Observed: the daily USNIC regional concentration analysis spans ' + ro.rangeLabel + ', valid ' + dateText(ro.validAt) + '.');
+      else if (!region.lake) parts.push('Observed: no comparable remote ice-analysis product exists for this inland water, so no lake-wide proxy is substituted.');
+      else if (ro && ro.stale) parts.push('Observed: the latest regional chart is stale and has been withheld from the live read.');
+      else parts.push('Observed: a usable regional ice concentration is unavailable right now; that is not evidence of ice-free water.');
+
+      if (afdd !== null && afdd !== undefined) {
+        var thermal = 'Thermal history: ' + afdd + ' accumulated freezing degree days';
+        if (normal !== null && normal !== undefined) thermal += ' versus a ten-year station normal of ' + normal;
+        if (c.change72h !== null && c.change72h !== undefined) thermal += ', changing ' + signed(c.change72h) + ' F-degree-days over 72 hours';
+        parts.push(thermal + '.');
       }
-      var sr = stefanRange(afdd);
-      if (sr && inIceSeason(now)) {
-        parts.push('That implies a modeled sheet of roughly ' + sr.lo.toFixed(1) + ' to ' + sr.hi.toFixed(1) +
-          ' inches on undisturbed water. It is a model, it assumes a uniform sheet that does not exist, and it ' +
-          'overpredicts thin ice.');
-      }
+
+      var fc = nowData && nowData.forecast && nowData.forecast.next72h;
+      if (fc) parts.push('Forecast: over the next 72 hours, ' + fc.forcing + '; ' + fc.freezeHours + ' hours are forecast at or below 32°F, with maximum wind near ' + fc.maxWindMph + ' mph.');
+      if (o && o.ok && o.windMph !== null) parts.push('Current nearby station wind is ' + fmt(o.windMph) + ' mph ' + cardinal(o.windDir) + '.');
     }
-    if (o && o.ok && o.windMph !== null && o.windMph > 15) {
-      parts.push('Wind is currently ' + fmt(o.windMph) + ' mph out of the ' + cardinal(o.windDir) +
-        ', strong enough to move ice on open water.');
-    }
-    parts.push('Test with a spud bar before you trust any of it.');
+    parts.push('Interpretation: these signals can screen whether the trip deserves more local verification; they do not measure local ice thickness, quality, cracks, current, sheet movement, or safety.');
     set('r-read', parts.join(' '));
 
-    var stamp = 'Accumulated cold from ' + (c ? c.station : 'the local station') +
-      ' daily records since November 1.';
-    if (o && o.ok && o.obsTime) {
-      stamp += ' Weather observed ' + o.obsTime.toLocaleString('en-US',
-        { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + '.';
-    }
+    var stamp = 'Thermal history from ' + (c ? c.station : 'the nearby station') + ' daily ACIS records.';
+    if (usableRegional(ro)) stamp += ' Regional ice chart valid ' + dateText(ro.validAt) + '.';
+    if (o && o.ok && o.obsTime) stamp += ' Weather observed ' + dateText(o.obsTime.toISOString()) + '.';
     set('r-stamp', stamp);
   }
 
-  /* ------------------------------------------------ history page */
   function renderHistory(server) {
     var hur = server && server.climatology ? server.climatology.huron : null;
     var mic = server && server.climatology ? server.climatology.michigan : null;
     var el = document.getElementById('hist-detail');
     if (!el) return;
-    if (!hur && !mic) {
-      el.textContent = 'The climatology record is not reachable right now.';
-      return;
-    }
+    if (!hur && !mic) { el.textContent = 'The climatology record is not reachable right now.'; return; }
     var lines = [];
-    if (hur) {
-      lines.push('On this date the ' + hur.yearsOfRecord + ' year record for Lake Huron averages ' +
-        fmt(hur.mean, 1) + ' percent ice cover, with a median of ' + fmt(hur.median, 1) +
-        ' percent and a range from ' + fmt(hur.min, 1) + ' to ' + fmt(hur.max, 1) + ' percent.');
-    }
-    if (mic) {
-      lines.push('Lake Michigan averages ' + fmt(mic.mean, 1) + ' percent for the same date, ranging from ' +
-        fmt(mic.min, 1) + ' to ' + fmt(mic.max, 1) + ' percent.');
-    }
+    if (hur) lines.push('On this date the ' + hur.yearsOfRecord + ' year record for Lake Huron averages ' + fmt(hur.mean, 1) + '% ice cover, with a median of ' + fmt(hur.median, 1) + '% and a range from ' + fmt(hur.min, 1) + '% to ' + fmt(hur.max, 1) + '%.');
+    if (mic) lines.push('Lake Michigan averages ' + fmt(mic.mean, 1) + '% for the same date, ranging from ' + fmt(mic.min, 1) + '% to ' + fmt(mic.max, 1) + '%.');
     if (hur && hur.current !== null && hur.current !== undefined) {
       var d = hur.current - hur.mean;
-      lines.push('This ice year Lake Huron sits at ' + fmt(hur.current, 1) + ' percent, ' +
-        (d >= 0 ? fmt(d, 1) + ' points above' : fmt(Math.abs(d), 1) + ' points below') + ' the long term average.');
+      lines.push('This ice year Lake Huron sits at ' + fmt(hur.current, 1) + '%, ' + (d >= 0 ? fmt(d, 1) + ' points above' : fmt(Math.abs(d), 1) + ' points below') + ' the long-term average.');
     }
     el.textContent = lines.join(' ');
     var st = document.getElementById('hist-stamp');
-    if (st && hur) {
-      st.textContent = 'NOAA GLERL daily ice climatology, ice years ' + hur.firstYear + ' through ' + hur.lastYear +
-        '. A recorded zero means ice cover was observed and was zero. A gap means it was not measured, and gaps are ' +
-        'excluded rather than counted as zero.';
-    }
+    if (st && hur) st.textContent = 'NOAA GLERL daily ice climatology, ice years ' + hur.firstYear + ' through ' + hur.lastYear + '. Recorded zero and missing observation are kept distinct.';
   }
 
-  /* ------------------------------------------------ boot */
   function boot() {
     var regionEl = document.getElementById('region-live');
     var isIndex = !!document.getElementById('board');
@@ -380,37 +517,27 @@
     if (regionEl) {
       var slug = regionEl.getAttribute('data-region');
       var reg = REGIONS.filter(function (r) { return r.slug === slug; })[0];
-      Promise.all([fetchServer(), reg ? fetchObs(reg) : Promise.resolve(null)])
-        .then(function (res) { renderRegion(slug, res[0], res[1]); });
+      Promise.all([fetchServer(), fetchNow(slug), reg ? fetchObs(reg) : Promise.resolve(null)])
+        .then(function (res) { renderRegion(slug, res[0], res[1], res[2]); });
       return;
     }
 
     if (isIndex) {
-      Promise.all([fetchServer(), Promise.all(REGIONS.map(fetchObs))])
-        .then(function (res) { renderIndex(res[0], res[1]); });
+      Promise.all([fetchServer(), fetchNow(), Promise.all(REGIONS.map(fetchObs))])
+        .then(function (res) { renderIndex(res[0], res[1], res[2]); });
       return;
     }
 
-    if (isHistory) {
-      fetchServer().then(renderHistory);
-      return;
-    }
+    if (isHistory) { fetchServer().then(renderHistory); return; }
 
-    // static pages still get the season stage in the header
     fetchServer().then(function (server) {
       var now = new Date();
-      var c = null;
-      if (server && server.cold) {
-        c = server.cold.filter(function (x) { return x.slug === 'saginaw-bay'; })[0];
-      }
+      var c = coldMap(server)['saginaw-bay'];
       var s = stageFor(c ? c.afdd : null, now, null);
       set('season-stage', s.label);
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot);
-  } else {
-    boot();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();
