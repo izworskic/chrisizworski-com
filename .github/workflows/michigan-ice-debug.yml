@@ -1,0 +1,30 @@
+name: Michigan Ice branch diagnostics
+
+on:
+  push:
+    branches:
+      - 'agent/michigan-ice-breakout-20260930'
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    if: github.head_ref == 'agent/michigan-ice-breakout-20260930' || github.ref_name == 'agent/michigan-ice-breakout-20260930'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned dependencies
+        run: npm ci
+      - name: Michigan ice regression contract
+        run: node --test tests/michigan-ice-breakout.test.js
+      - name: Full Node test suite
+        run: npm test
+      - name: Source parity verification
+        run: npm run verify
