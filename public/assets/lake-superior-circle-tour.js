@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const RELEASE = '2026-08-20';
+  const RELEASE = '2026-09-30';
 
   function addStyles() {
     if (document.getElementById('circle-tour-current-style')) return;
@@ -107,7 +107,9 @@
   function markRelease() {
     document.documentElement.dataset.circleTourRelease = RELEASE;
     const footer = document.querySelector('.footer');
-    if (footer && /Updated August 2026/.test(footer.textContent)) footer.textContent = footer.textContent.replace('Updated August 2026', 'Updated August 20, 2026');
+    if (footer) {
+      footer.textContent = footer.textContent.replace(/Updated (August 2026|August 20, 2026|September 29, 2026)/, 'Updated September 30, 2026');
+    }
   }
 
   async function boot() {
@@ -124,6 +126,7 @@
       markRelease();
       loadLiveLevel();
     }
+    await import('/assets/lake-superior-circle-tour-live-day.js?v=20260930-1');
   }
 
   boot();
