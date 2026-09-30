@@ -24,8 +24,16 @@ jobs:
           node-version: '22'
       - name: Install pinned dependencies
         run: npm ci
-      - name: Diagnostic beach benchmark
+      - name: Diagnostic beaches
         run: npm run benchmark:beaches
+      - name: Diagnostic beach CTR
+        run: npm run benchmark:beach-ctr
+      - name: Diagnostic border CTR
+        run: npm run benchmark:border-ctr
+      - name: Diagnostic growth
+        run: npm run benchmark:growth
+      - name: Diagnostic SEO
+        run: npm run benchmark:seo
       - name: Run full repository gate
         run: npm run verify:all
       - name: Upload boat launch source audit
