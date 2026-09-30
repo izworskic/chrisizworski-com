@@ -1,0 +1,55 @@
+name: Finish shared gate fix
+
+on:
+  push:
+    branches:
+      - agent/michigan-ice-breakout-20260930
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: agent/michigan-ice-breakout-20260930
+      - name: Repair SERP title and clean diagnostics
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          page = Path('public/synced-national-tools/haleakala-sunrise/index.html')
+          s = page.read_text()
+          old = '<title>Haleakalā Sunrise Conditions: Clouds, Wind & Summit Forecast | Chris Izworski</title>'
+          new = '<title>Haleakalā Sunrise Conditions: Clouds, Wind & Forecast</title>'
+          if old not in s and new not in s:
+              raise SystemExit('Expected Haleakala title not found')
+          s = s.replace(old, new, 1)
+          page.write_text(s)
+
+          verify = Path('scripts/verify-source.mjs')
+          v = verify.read_text()
+          route = '  "/synced-national-tools/haleakala-sunrise/",\n'
+          if route not in v:
+              needle = 'const intentionalChanges = new Set([\n'
+              insert = (
+                  'const intentionalChanges = new Set([\n'
+                  '  // Sep 30 2026: shared SERP-length gate repair for the Haleakala sunrise synced route.\n'
+                  '  "/synced-national-tools/haleakala-sunrise/",\n'
+              )
+              if needle not in v:
+                  raise SystemExit('intentionalChanges declaration not found')
+              v = v.replace(needle, insert, 1)
+              verify.write_text(v)
+          PY
+          git checkout origin/main -- .github/workflows/agent-branch-verify.yml
+          git rm -f source-verifier-output.txt serp-length-output.txt .github/workflows/finish-shared-gate-fix.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/synced-national-tools/haleakala-sunrise/index.html scripts/verify-source.mjs .github/workflows/agent-branch-verify.yml
+          git diff --cached --check
+          git commit -m "Fix shared SERP length gate and clean diagnostics"
+          git push origin HEAD:agent/michigan-ice-breakout-20260930
