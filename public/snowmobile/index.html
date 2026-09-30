@@ -1,49 +1,57 @@
-<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Michigan Snowmobile Conditions: Statewide Trail Report</title><meta name="description" content="Michigan snowmobile conditions across seven U.P. and northern Lower Peninsula regions using DNR trails, closures, NWS weather and verified local reports."><link rel="canonical" href="https://chrisizworski.com/snowmobile/"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1"><meta name="google-adsense-account" content="ca-pub-8222782620788075"><meta name="theme-color" content="#123246"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="/assets/snowmobile.css"><script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script><script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/snowmobile/#page","url":"https://chrisizworski.com/snowmobile/","name":"Michigan Snowmobile Conditions","dateModified":"2026-09-27"},{"@type":"WebApplication","name":"Michigan Snowmobile Conditions","url":"https://chrisizworski.com/snowmobile/","applicationCategory":"TravelApplication","operatingSystem":"Web","isAccessibleForFree":true,"description":"Statewide decision support for Michigan snowmobile trail conditions across seven regions, using official DNR trail data, DNR closures, weather and local trail reports where available."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Michigan Snowmobile Conditions","item":"https://chrisizworski.com/snowmobile/"}]}]}</script></head>
+<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Michigan Snowmobile Trail Conditions: Worth the Drive?</title><meta name="description" content="Michigan snowmobile conditions for seven U.P. and northern Lower regions: DNR closures, local reports where available, observed snow, thaw and ride windows."><link rel="canonical" href="https://chrisizworski.com/snowmobile/"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1"><meta name="google-adsense-account" content="ca-pub-8222782620788075"><meta name="theme-color" content="#123246"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="/assets/snowmobile.css"><script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script><script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/snowmobile/#page","url":"https://chrisizworski.com/snowmobile/","name":"Michigan Snowmobile Trail Conditions","dateModified":"2026-09-30"},{"@type":"WebApplication","name":"Michigan Snowmobile Trail Conditions","url":"https://chrisizworski.com/snowmobile/","applicationCategory":"TravelApplication","operatingSystem":"Web","isAccessibleForFree":true,"description":"Michigan snowmobile trip-decision support across seven regions, combining official DNR trail and closure data with current surface reports where available, observed snowfall, recent weather and forecast timing."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Michigan Snowmobile Trail Conditions","item":"https://chrisizworski.com/snowmobile/"}]}]}</script></head>
 <body>
 <header class="top"><div class="topin"><a class="brand" href="/">Chris Izworski</a></div></header>
 <main class="shell">
-  <div class="crumb"><a href="/">Home</a> › <a href="/tools/">Tools</a> › Michigan Snowmobile Conditions</div>
-  <div class="eyebrow">Michigan trail decision intelligence</div>
-  <h1>Michigan Snowmobile Conditions</h1>
-  <p class="lede">Seven regions across the Upper Peninsula and northern Lower Peninsula, scored from official DNR trail data, official DNR closures and weather — not from snow depth alone and not from an "open" status alone. Grayling–Gaylord additionally carries two verified local club reports.</p>
+  <div class="crumb"><a href="/">Home</a> › <a href="/tools/">Tools</a> › Michigan Snowmobile Trail Conditions</div>
+  <div class="eyebrow">Is it worth loading the sleds?</div>
+  <h1>Michigan Snowmobile Trail Conditions</h1>
+  <p class="lede">Start with the trip decision, not the map. Compare seven Upper Peninsula and northern Lower Michigan riding regions using official DNR trail/closure data, current local surface reports where available, recent observed snow, thaw/rain history and the next weather window. If surface evidence is missing, the tool says <strong>UNKNOWN</strong> instead of turning an open trail and a cold forecast into a fake ride-quality score.</p>
   <div id="season-banner" class="season-banner">Checking season…</div>
   <p class="out-of-scope" id="out-of-scope-note"></p>
 
-  <div id="state-map"></div>
-  <div class="map-legend">
-    <span><i class="dot excellent"></i> Excellent / good</span>
-    <span><i class="dot fair"></i> Fair</span>
-    <span><i class="dot marginal"></i> Marginal / poor</span>
-    <span><i class="dot closed"></i> Route-breaking closure</span>
-    <span><i class="dot off-season"></i> Off-season / not yet scored</span>
-  </div>
+  <section aria-labelledby="where-title">
+    <div class="section-headline"><div><div class="eyebrow">Where should I ride?</div><h2 id="where-title">Compare regions before you make the drive</h2></div><span class="small">Freshness and confidence matter as much as the condition label.</span></div>
+    <div id="region-list" class="region-list" aria-live="polite">
+      <div class="panel"><p class="small">Loading statewide conditions…</p></div>
+    </div>
+  </section>
 
-  <div id="region-list" class="region-list" aria-live="polite">
-    <div class="panel"><p class="small">Loading statewide conditions…</p></div>
-  </div>
+  <section class="panel" aria-labelledby="map-title">
+    <div class="section-headline"><div><div class="eyebrow">Explore</div><h2 id="map-title">Michigan riding regions</h2></div><span class="small" id="total-segments"></span></div>
+    <div id="state-map"></div>
+    <div class="map-legend">
+      <span><i class="dot excellent"></i> Excellent / good</span>
+      <span><i class="dot fair"></i> Fair</span>
+      <span><i class="dot marginal"></i> Marginal / poor</span>
+      <span><i class="dot closed"></i> Route-breaking closure</span>
+      <span><i class="dot off-season"></i> Unknown / off-season</span>
+    </div>
+  </section>
 
   <section class="panel">
-    <h2>How this works</h2>
-    <p class="small">Each region combines the Michigan DNR's designated snowmobile trail geometry with the DNR's temporary closures layer (an official closure always overrides everything else) and a National Weather Service forecast for that region's hub town. A route score reflects the <em>worst meaningful bottleneck</em> in a region, not an average — one confirmed closure or hazard segment can cap the whole region's condition, the same way one washed-out bridge closes a real route. Grayling–Gaylord is the one region with two verified MISORVA club reports and a live MDOT camera feeding into its score; the other six regions are scored from DNR trail status, DNR closures and weather only, and say so plainly rather than implying club-level coverage that isn't there yet.</p>
-    <p class="small">Snow depth from NOAA's regional snow analysis is shown on each region's map as context. It is never treated as trail base — wind-packed, sun-crusted or rain-affected snow can sit on a poor trail, and a thin natural snowpack can sit on a well-groomed one.</p> <p class="small">For how much new snow has fallen near a trail region, and when, the official spotter and observer reports are on <a href="/michigan-snow-totals/" data-track-tool="michigan-snow-totals" data-placement="snowmobile-how-it-works">Michigan Snow Totals</a>, which filters by the same U.P. regions used here.</p>
+    <h2>What the verdict does — and does not — mean</h2>
+    <p class="small">A ride-quality score requires a current local trail-surface report. Official Michigan DNR trail status and temporary closures establish the legal/operational boundary; a matched closure always overrides a favorable report. NWS forecasts and recent station observations can downgrade a trail for thaw, rain or icing risk, but favorable weather cannot manufacture a GOOD trail.</p>
+    <p class="small">Official NWS Local Storm Reports show where snow has recently been reported. Those amounts are supporting evidence only: the reporting duration varies, and fresh natural snow does not prove an established base or recent grooming. NOAA/NOHRSC snow depth on the region maps is also context, never a trail-base estimate.</p>
+    <p class="small">For a statewide view of reported snowfall amounts and source details, use <a href="/michigan-snow-totals/" data-track-tool="michigan-snow-totals" data-placement="snowmobile-how-it-works">Michigan Snow Totals</a>.</p>
   </section>
 
   <section class="panel sources">
-    <h2>Sources</h2>
+    <h2>Sources and data age</h2>
     <ul id="source-list" class="small"></ul>
     <p class="small" id="generated-at"></p>
   </section>
 
   <section class="companion">
     <div class="companion-links">
+      <a href="/michigan-snow-totals/">Michigan Snow Totals</a>
       <a href="/michigan-cross-country-skiing/">Michigan Cross-Country Ski Conditions</a>
       <a href="/michigan-ice/">Michigan Ice Report</a>
+      <a href="/northern-lights-michigan/">Northern Lights Michigan</a>
       <a href="/tools/">All Michigan tools</a>
-      <a href="/">Chris Izworski</a>
     </div>
   </section>
 </main>
-<footer class="footer">Built by Chris Izworski &middot; Data from the Michigan DNR, National Weather Service and MISORVA. Not an official DNR product.</footer>
+<footer class="footer">Built by Chris Izworski &middot; Data from the Michigan DNR, National Weather Service, NOAA and local trail sources where configured. Not an official DNR product.</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="/assets/snowmobile-index.js"></script>
 </body></html>
