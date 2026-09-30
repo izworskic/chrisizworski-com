@@ -34,6 +34,18 @@ jobs:
         run: npm run benchmark:growth
       - name: Diagnostic SEO
         run: npm run benchmark:seo
+      - name: Diagnostic SERP length
+        run: npm run benchmark:serp-length
+      - name: Diagnostic CTR
+        run: npm run benchmark:ctr -- --check
+      - name: Diagnostic search growth
+        run: npm run benchmark:search-growth -- --check
+      - name: Diagnostic search strategy
+        run: npm run benchmark:search-strategy -- --check
+      - name: Diagnostic search authority
+        run: npm run benchmark:search-authority -- --check
+      - name: Diagnostic outdoors growth
+        run: npm run benchmark:outdoors-now-growth -- --check
       - name: Run full repository gate
         run: npm run verify:all
       - name: Upload boat launch source audit
