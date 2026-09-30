@@ -9,6 +9,7 @@ const html = read('public/lake-superior-circle-tour/index.html');
 const page = read('public/assets/lake-superior-circle-tour.js');
 const core = read('public/assets/lake-superior-circle-tour-core.js');
 const map = read('public/assets/lake-superior-circle-tour-map.js');
+const today = read('public/assets/lake-superior-circle-tour-today.js');
 const registry = JSON.parse(read('benchmarks/tool-network-registry.json'));
 
 test('Circle Tour is an interactive 31-stop route planner, not only a guide', () => {
@@ -37,11 +38,12 @@ test('planner supports real trip actions without storing personal data', () => {
   for (const token of ['navigator.share','navigator.clipboard','history.replaceState','google.com/maps/dir','mobileTripSheet','printTrip']) {
     assert.ok((html + core).includes(token), `missing ${token}`);
   }
-  assert.doesNotMatch(html + page + core + map, /localStorage|sessionStorage|document\.cookie/);
+  assert.doesNotMatch(html + page + core + map + today, /localStorage|sessionStorage|document\.cookie/);
 });
 
-test('August 2026 finish layer corrects current travel facts and removes self-justifying copy', () => {
-  assert.match(page, /const RELEASE = '2026-08-20'/);
+test('September 2026 finish layer keeps current travel facts and loads route intelligence', () => {
+  assert.match(page, /const RELEASE = '2026-09-29'/);
+  assert.match(page, /lake-superior-circle-tour-today\.js\?v=20260929-1/);
   assert.match(page, /Agawa Canyon Tour Train runs August 1–October 18/);
   assert.match(page, /https:\/\/agawatrain\.com\//);
   assert.match(page, /Gargantua Road is closed for maintenance/);
@@ -50,6 +52,36 @@ test('August 2026 finish layer corrects current travel facts and removes self-ju
   assert.match(page, /Sand Point Road and beach are open/);
   assert.match(page, /block\.remove\(\)/);
   assert.match(page, /article\.dateModified = RELEASE/);
+});
+
+test('Today planner makes time, direction and interests causal', () => {
+  assert.match(today, /Today on the Circle Tour/);
+  assert.match(today, /ctTodayStart/);
+  assert.match(today, /ctTodayEnd/);
+  assert.match(today, /ctTodayHours/);
+  assert.match(today, /chosenInterests/);
+  assert.match(today, /routeOrder\(\)/);
+  assert.match(today, /scoreStop\(id, interests\)/);
+  assert.match(today, /hours - driveHours/);
+  assert.match(today, /Add today’s stops to my trip/);
+  assert.match(today, /google\.com\/maps\/dir/);
+});
+
+test('route intelligence reuses first-party specialist products instead of duplicating them', () => {
+  for (const token of ['/api/duluth-canal','/api/soo-ais','/duluth-canal-park/','/soo-locks/','picturedrocks.chrisizworski.com','/sault-ste-marie-border-wait-time/','/great-lakes-buoys/','/fall-color/','/northern-lights-michigan/']) {
+    assert.ok(today.includes(token), `missing ${token}`);
+  }
+  assert.match(today, /No supported Canal Park passage to call/);
+  assert.match(today, /No fresh inbound ship call right now/);
+});
+
+test('map becomes a route-intelligence control surface', () => {
+  assert.match(today, /Route intelligence/);
+  assert.match(today, /data-map-mode="today"/);
+  assert.match(today, /data-map-mode="ships"/);
+  assert.match(today, /data-map-mode="access"/);
+  assert.match(today, /CircleTourMap\?\.focusStop/);
+  assert.match(today, /renderMapPicks\('today'\)/);
 });
 
 test('Circle Tour keeps the live NOAA Lake Superior water-level signal', () => {

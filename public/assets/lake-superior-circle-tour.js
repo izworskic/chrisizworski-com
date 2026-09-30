@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const RELEASE = '2026-08-20';
+  const RELEASE = '2026-09-29';
 
   function addStyles() {
     if (document.getElementById('circle-tour-current-style')) return;
@@ -54,13 +54,10 @@
   }
 
   function patchAgawaTrain() {
-    document.querySelectorAll('a[href*="agawacanyontrain.com"]').forEach((a) => {
-      a.href = 'https://agawatrain.com/';
-    });
+    document.querySelectorAll('a[href*="agawacanyontrain.com"]').forEach((a) => { a.href = 'https://agawatrain.com/'; });
     const stop = document.getElementById('stop-14');
     const note = stop?.querySelector('.season-note');
     if (note) note.innerHTML = '🗓 <strong>2026 season:</strong> Agawa Canyon Tour Train runs August 1–October 18. Summer fares run through September 14; fall season starts September 15. Reserve ahead, especially for fall color. <a href="https://agawatrain.com/" target="_blank" rel="noopener">Train schedule →</a>';
-
     document.querySelectorAll('.fn-item').forEach((item) => {
       if (!/Agawa Canyon train/i.test(item.textContent)) return;
       item.innerHTML = '<strong>The Agawa Canyon train.</strong> The 2026 season runs August 1–October 18 from Sault Ste. Marie. Fall dates sell quickly; verify the current schedule before building it into a driving day.';
@@ -76,7 +73,6 @@
       alert.innerHTML = '<strong>Pictured Rocks current note</strong>Munising Falls Trail remains closed until further notice. Sand Point Road and beach are open after the planned July closure was postponed. <a href="https://www.nps.gov/piro/planyourvisit/conditions.htm" target="_blank" rel="noopener">Check NPS conditions →</a>';
       pictured.prepend(alert);
     }
-
     const lspp = document.querySelector('#stop-15 .stop-body');
     if (lspp && !lspp.querySelector('[data-current-alert="lspp"]')) {
       const alert = document.createElement('div');
@@ -90,9 +86,7 @@
   function flattenCompanionCards() {
     const grid = document.querySelector('.ct-grid');
     if (!grid) return;
-    Array.from(grid.querySelectorAll('.ct-card')).forEach((card) => {
-      if (card.parentElement !== grid) grid.appendChild(card);
-    });
+    Array.from(grid.querySelectorAll('.ct-card')).forEach((card) => { if (card.parentElement !== grid) grid.appendChild(card); });
   }
 
   function loadContextualTripStack() {
@@ -107,12 +101,13 @@
   function markRelease() {
     document.documentElement.dataset.circleTourRelease = RELEASE;
     const footer = document.querySelector('.footer');
-    if (footer && /Updated August 2026/.test(footer.textContent)) footer.textContent = footer.textContent.replace('Updated August 2026', 'Updated August 20, 2026');
+    if (footer && /Updated (August 20, 2026|August 2026)/.test(footer.textContent)) footer.textContent = footer.textContent.replace(/Updated (August 20, 2026|August 2026)/, 'Updated September 29, 2026');
   }
 
   async function boot() {
     try {
       await import('/assets/lake-superior-circle-tour-core.js?v=20260820');
+      await import('/assets/lake-superior-circle-tour-today.js?v=20260929-1');
     } finally {
       addStyles();
       updateStructuredData();
@@ -123,6 +118,7 @@
       loadContextualTripStack();
       markRelease();
       loadLiveLevel();
+      try { await import('/assets/lake-superior-circle-tour-adaptive.js?v=20260930-1'); } catch {}
     }
   }
 
