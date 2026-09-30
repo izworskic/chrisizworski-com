@@ -1,0 +1,287 @@
+name: Bloom Weather Validation Scratch
+on:
+  push:
+    branches:
+      - research/bloom-weather-validation-20260930
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run archived-weather LOYO hindcast
+        shell: bash
+        run: |
+          cat > /tmp/bloom_weather_remote.py <<'PYCODE'
+          from __future__ import annotations
+          from dataclasses import dataclass
+          from datetime import date, datetime, timedelta
+          from typing import Optional, List, Dict, Tuple
+          import csv, json, math, statistics, urllib.parse, urllib.request, time
+          
+          STAGES=['EMERGING','BUILDING','NEAR_PEAK','PEAK','FADING','DONE']
+          SVAL={s:i for i,s in enumerate(STAGES)}
+          
+          @dataclass(frozen=True)
+          class Obs:
+              destination:str; season:int; day:date; stage:str
+              raw_percent:Optional[float]=None; note:str=''; source_quality:str='primary'
+              expert_peak_min:Optional[int]=None; expert_peak_max:Optional[int]=None
+              damage_risk:str='none'; display_gate:str='NORMAL'
+          
+          OBS=[
+              Obs('UM Peony Garden',2026,date(2026,5,18),'EMERGING',3,'~3% herbaceous bloom'),
+              Obs('UM Peony Garden',2026,date(2026,5,21),'BUILDING',8,'~8%; official says peak about a week or so away',expert_peak_min=7,expert_peak_max=10),
+              Obs('UM Peony Garden',2026,date(2026,5,26),'BUILDING',20,'~20%; opening quickly after sunshine/warmth'),
+              Obs('UM Peony Garden',2026,date(2026,5,28),'NEAR_PEAK',50,'at least half; rapidly nearing peak; weekend spectacular',expert_peak_min=2,expert_peak_max=3),
+              Obs('UM Peony Garden',2026,date(2026,5,30),'PEAK',100,'official peak declaration'),
+              Obs('UM Peony Garden',2026,date(2026,6,2),'PEAK',None,'spectacular; first signs petal drop',damage_risk='possible'),
+              Obs('UM Peony Garden',2026,date(2026,6,5),'PEAK',None,'most in bloom; projected storms may knock petals',damage_risk='high'),
+              Obs('UM Peony Garden',2026,date(2026,6,7),'FADING',None,'officially past peak after rain/wind'),
+              Obs('UM Peony Garden',2026,date(2026,6,10),'DONE',None,'heavy rain + heat accelerated end'),
+              Obs('UM Peony Garden',2024,date(2024,5,15),'BUILDING',None,'GDD50 315 vs 228 in 2023; very early development'),
+              Obs('UM Peony Garden',2024,date(2024,5,22),'PEAK',75,'~75% buds bloomed; ahead of schedule',source_quality='secondary'),
+              Obs('UM Peony Garden',2024,date(2024,5,24),'PEAK',None,'tracker reported peak by Friday',source_quality='secondary'),
+              Obs('UM Peony Garden',2024,date(2024,5,28),'PEAK',None,'still described as reached peak; rain/hail damage noted',damage_risk='high',source_quality='secondary'),
+              Obs('Meijer Gardens Cherries',2025,date(2025,4,3),'BUILDING',None,'phase 2-3 of 5'),
+              Obs('Meijer Gardens Cherries',2025,date(2025,4,9),'BUILDING',None,'phase 3 of 5'),
+              Obs('Meijer Gardens Cherries',2025,date(2025,4,14),'BUILDING',None,'phase 3-4 of 5'),
+              Obs('Meijer Gardens Cherries',2025,date(2025,4,17),'NEAR_PEAK',None,'phase 5 moving to bloom'),
+              Obs('Meijer Gardens Cherries',2025,date(2025,4,21),'NEAR_PEAK',50,'50%; official expects peak over next few days',expert_peak_min=2,expert_peak_max=4),
+              Obs('Meijer Gardens Cherries',2025,date(2025,4,22),'NEAR_PEAK',50,'50%; official expects peak over next few days',expert_peak_min=2,expert_peak_max=3),
+              Obs('Meijer Gardens Cherries',2025,date(2025,4,23),'NEAR_PEAK',None,'official expects 70% peak in next day or two',expert_peak_min=1,expert_peak_max=2),
+              Obs('Meijer Gardens Cherries',2025,date(2025,4,24),'PEAK',70,'official peak 70%'),
+              Obs('Meijer Gardens Cherries',2025,date(2025,4,28),'FADING',None,'most Yoshino dropping flowers'),
+              Obs('NW Michigan Montmorency',2025,date(2025,5,12),'NEAR_PEAK',50,'~50% bloom; forecast uncertainty changed materially'),
+              Obs('NW Michigan Montmorency',2025,date(2025,5,20),'FADING',None,'petal fall after six warm days'),
+              Obs('NW Michigan Montmorency',2026,date(2026,5,12),'BUILDING',None,'early white bud; one more cold night then forecast warm by weekend'),
+              Obs('NW Michigan Montmorency',2026,date(2026,5,18),'PEAK',None,'just past full bloom / first petal fall'),
+              Obs('NW Michigan Montmorency',2026,date(2026,5,19),'FADING',None,'full petal fall after rain/wind'),
+              Obs('Meijer Gardens Cherries',2026,date(2026,4,15),'DONE',None,'many cherry trees producing leaves rather than blooms after -19F winter cold',display_gate='REDUCED'),
+          ]
+          
+          COORDS={
+              'UM Peony Garden':(42.281478,-83.724933),
+              'Meijer Gardens Cherries':(42.98139,-85.5875),
+              'NW Michigan Montmorency':(44.881813,-85.67533),
+          }
+          
+          def nearest_actual(obs:List[Obs], target:date, tolerance=1)->Optional[Obs]:
+              candidates=[o for o in obs if abs((o.day-target).days)<=tolerance]
+              return min(candidates,key=lambda o:abs((o.day-target).days)) if candidates else None
+          
+          def recent_velocity(obs:List[Obs], issue:Obs)->float:
+              prior=sorted([o for o in obs if o.day<=issue.day],key=lambda o:o.day)
+              if len(prior)<2:return 0.0
+              vs=[]
+              for a,b in zip(prior[-4:-1],prior[-3:]):
+                  dt=(b.day-a.day).days
+                  if dt>0:vs.append((SVAL[b.stage]-SVAL[a.stage])/dt)
+              if not vs:return 0.0
+              return ((sum(vs[:-1])+2*vs[-1])/(len(vs)+1)) if len(vs)>=2 else vs[-1]
+          
+          def fetch_run(destination:str, issue_day:date)->dict:
+              lat,lon=COORDS[destination]
+              base='https://single-runs-api.open-meteo.com/v1/forecast'
+              params={
+                  'latitude':lat,'longitude':lon,
+                  'run':issue_day.isoformat()+'T12:00',
+                  'hourly':'temperature_2m,precipitation,wind_gusts_10m',
+                  'models':'ecmwf_ifs','timezone':'America/Detroit','forecast_days':8,
+              }
+              url=base+'?'+urllib.parse.urlencode(params, safe=',/:')
+              req=urllib.request.Request(url,headers={'User-Agent':'bloom-validation/1.0 research'})
+              with urllib.request.urlopen(req,timeout=45) as r:
+                  return json.load(r)
+          
+          def weather_features(payload:dict, issue_day:date, h:int)->dict:
+              hr=payload['hourly']; times=[datetime.fromisoformat(x) for x in hr['time']]
+              temps=hr['temperature_2m']; prec=hr['precipitation']; gust=hr['wind_gusts_10m']
+              start=datetime.combine(issue_day,datetime.min.time())+timedelta(hours=8)
+              end=start+timedelta(days=h)
+              vals=[]
+              for t,T,P,G in zip(times,temps,prec,gust):
+                  if start<=t<end and T is not None:
+                      vals.append((t,float(T),float(P or 0),float(G or 0)))
+              if len(vals)<max(24,h*18):
+                  raise RuntimeError(f'insufficient forecast hours: {len(vals)} for {issue_day} h{h}')
+              byday={}
+              for t,T,P,G in vals:byday.setdefault(t.date(),[]).append((T,P,G))
+              gdd5=0.0; gdd10=0.0
+              for d,xs in byday.items():
+                  mt=sum(x[0] for x in xs)/len(xs)
+                  gdd5+=max(0,mt-5); gdd10+=max(0,mt-10)
+              Ts=[x[1] for x in vals]; Ps=[x[2] for x in vals]; Gs=[x[3] for x in vals]
+              return {
+                  'gdd5':gdd5,'gdd10':gdd10,'mean_temp_c':sum(Ts)/len(Ts),
+                  'min_temp_c':min(Ts),'max_temp_c':max(Ts),
+                  'freeze_hours':sum(T<=0 for T in Ts),'frost_hours':sum(T<=2 for T in Ts),
+                  'warm_hours_15':sum(T>=15 for T in Ts),'hot_hours_27':sum(T>=27 for T in Ts),
+                  'precip_mm':sum(Ps),'max_gust_kmh':max(Gs), 'n_hours':len(vals)
+              }
+          
+          def solve_linear(A,b):
+              n=len(b); M=[list(map(float,A[i]))+[float(b[i])] for i in range(n)]
+              for i in range(n):
+                  pivot=max(range(i,n),key=lambda r:abs(M[r][i]))
+                  if abs(M[pivot][i])<1e-10:continue
+                  M[i],M[pivot]=M[pivot],M[i]
+                  p=M[i][i]
+                  M[i]=[v/p for v in M[i]]
+                  for r in range(n):
+                      if r==i:continue
+                      f=M[r][i]
+                      if f: M[r]=[M[r][c]-f*M[i][c] for c in range(n+1)]
+              return [M[i][-1] for i in range(n)]
+          
+          def ridge_fit(X,y,lmbda=2.0):
+              p=len(X[0]); A=[[0.0]*p for _ in range(p)]; b=[0.0]*p
+              for row,target in zip(X,y):
+                  for i in range(p):
+                      b[i]+=row[i]*target
+                      for j in range(p):A[i][j]+=row[i]*row[j]
+              for i in range(1,p):A[i][i]+=lmbda
+              return solve_linear(A,b)
+          
+          def dot(a,b):return sum(x*y for x,y in zip(a,b))
+          
+          def expert_features(issue:Obs,h:int):
+              if issue.expert_peak_min is None:return (0.0,0.0,0.0)
+              return (
+                  1.0 if h<issue.expert_peak_min else 0.0,
+                  1.0 if issue.expert_peak_min<=h<=issue.expert_peak_max+2 else 0.0,
+                  1.0 if h>issue.expert_peak_max+2 else 0.0,
+              )
+          
+          def feature_vec(row,weather=True,source=False):
+              issue=row['issue']; h=row['h']; w=row['weather']; v=row['velocity']; stage=SVAL[issue.stage]
+              cherry=1.0 if ('Cherr' in issue.destination or 'Montmorency' in issue.destination) else 0.0
+              x=[1.0,h/7.0,v*h,stage/5.0,cherry]
+              if weather:
+                  x += [w['gdd5']/40.0,w['gdd10']/25.0,w['freeze_hours']/24.0,w['precip_mm']/25.0,w['max_gust_kmh']/60.0,w['hot_hours_27']/24.0]
+              if source:
+                  x += list(expert_features(issue,h))
+                  x += [1.0 if issue.damage_risk=='possible' else 0.0,1.0 if issue.damage_risk=='high' else 0.0]
+              return x
+          
+          def predict_delta(beta,x,issue:Obs):
+              raw=dot(beta,x)
+              d=int(math.floor(raw+0.5)) if raw>=0 else int(math.ceil(raw-0.5))
+              return max(0,d)
+          
+          def eval_model(rows,holdout_year:int,weather:bool,source:bool):
+              train=[r for r in rows if r['season']!=holdout_year]
+              test=[r for r in rows if r['season']==holdout_year]
+              X=[feature_vec(r,weather,source) for r in train]
+              y=[SVAL[r['actual'].stage]-SVAL[r['issue'].stage] for r in train]
+              if not X or not test:return [],None
+              beta=ridge_fit(X,y,lmbda=2.5)
+              out=[]
+              for r in test:
+                  issue=r['issue']
+                  d=predict_delta(beta,feature_vec(r,weather,source),issue)
+                  idx=min(5,max(SVAL[issue.stage],SVAL[issue.stage]+d))
+                  if source and issue.expert_peak_min is not None:
+                      before,within,after=expert_features(issue,r['h'])
+                      if before:idx=max(idx,SVAL['NEAR_PEAK'])
+                      if within:idx=SVAL['PEAK']
+                      if after:idx=max(idx,SVAL['FADING'])
+                  if issue.display_gate=='REDUCED':idx=SVAL['DONE']
+                  pred=STAGES[idx]
+                  dist=abs(SVAL[pred]-SVAL[r['actual'].stage])
+                  out.append({
+                      'model':('weather_plus_source' if source else 'weather_ridge' if weather else 'obs_ridge'),
+                      'holdout_year':holdout_year,'destination':issue.destination,'season':r['season'],
+                      'issue_day':issue.day.isoformat(),'horizon':r['h'],'issue_stage':issue.stage,
+                      'predicted_stage':pred,'actual_stage':r['actual'].stage,'stage_distance':dist,
+                      'within_one':dist<=1,'exact':dist==0,**{f'w_{k}':round(v,3) if isinstance(v,float) else v for k,v in r['weather'].items()}
+                  })
+              return out,beta
+          
+          def persistence_eval(rows):
+              out=[]
+              for r in rows:
+                  pred=r['issue'].stage; dist=abs(SVAL[pred]-SVAL[r['actual'].stage])
+                  out.append({'model':'persistence','holdout_year':r['season'],'destination':r['issue'].destination,'season':r['season'],'issue_day':r['issue'].day.isoformat(),'horizon':r['h'],'issue_stage':r['issue'].stage,'predicted_stage':pred,'actual_stage':r['actual'].stage,'stage_distance':dist,'within_one':dist<=1,'exact':dist==0})
+              return out
+          
+          def summarize(results):
+              d={}
+              for model in sorted(set(r['model'] for r in results)):
+                  d[model]={}
+                  for h in (3,5,7):
+                      xs=[r for r in results if r['model']==model and r['horizon']==h]
+                      if not xs:continue
+                      d[model][str(h)]={'n':len(xs),'within_one_pct':round(100*sum(r['within_one'] for r in xs)/len(xs),1),'exact_pct':round(100*sum(r['exact'] for r in xs)/len(xs),1),'mean_stage_distance':round(statistics.mean(r['stage_distance'] for r in xs),3)}
+                  xs=[r for r in results if r['model']==model]
+                  d[model]['all']={'n':len(xs),'within_one_pct':round(100*sum(r['within_one'] for r in xs)/len(xs),1),'exact_pct':round(100*sum(r['exact'] for r in xs)/len(xs),1),'mean_stage_distance':round(statistics.mean(r['stage_distance'] for r in xs),3)}
+              return d
+          
+          def main():
+              groups={}
+              for o in OBS:groups.setdefault((o.destination,o.season),[]).append(o)
+              cache={}; failures=[]; rows=[]; weather_rows=[]
+              for (dest,season),obs in groups.items():
+                  obs=sorted(obs,key=lambda o:o.day)
+                  for issue in obs:
+                      if issue.display_gate=='REDUCED':continue
+                      scoreable=[]
+                      for h in (3,5,7):
+                          actual=nearest_actual(obs,issue.day+timedelta(days=h),1)
+                          if actual and actual.day>issue.day:scoreable.append((h,actual))
+                      if not scoreable:continue
+                      key=(dest,issue.day.isoformat())
+                      try:
+                          if key not in cache:
+                              cache[key]=fetch_run(dest,issue.day); time.sleep(0.15)
+                          for h,actual in scoreable:
+                              w=weather_features(cache[key],issue.day,h)
+                              rows.append({'issue':issue,'actual':actual,'season':season,'h':h,'weather':w,'velocity':recent_velocity(obs,issue)})
+                              weather_rows.append({'destination':dest,'season':season,'issue_day':issue.day.isoformat(),'horizon':h,**w})
+                      except Exception as e:
+                          failures.append({'destination':dest,'season':season,'issue_day':issue.day.isoformat(),'error':repr(e)})
+                          print('FETCH_FAIL',dest,issue.day,repr(e),flush=True)
+              print('WEATHER_ROWS',len(rows),'FAILURES',len(failures),flush=True)
+              results=persistence_eval(rows)
+              betas={}
+              for yr in sorted(set(r['season'] for r in rows)):
+                  for weather,source,name in [(False,False,'obs_ridge'),(True,False,'weather_ridge'),(True,True,'weather_plus_source')]:
+                      rr,b=eval_model(rows,yr,weather,source);results.extend(rr);betas[f'{name}_holdout_{yr}']=b
+              summary={
+                  'weather_source':'Open-Meteo Single Runs API, ECMWF IFS archived 12Z runs',
+                  'no_lookahead':'Each forecast uses a model run initialized on the issue date at 12Z; all fitted coefficients exclude the held-out calendar year.',
+                  'rows':len(rows),'fetch_failures':failures,'fold_years':sorted(set(r['season'] for r in rows)),
+                  'metrics':summarize(results),'betas':betas,
+                  'limitations':['Small biological sample; year folds are not independent of destination mix.','Stage labels are coarse ordinal states and target observations allow +/-1 day.','Weather is one ECMWF deterministic run, not an ensemble.','This test establishes incremental signal, not production-ready calibration.']
+              }
+              with open('bloom_weather_loyo_summary.json','w') as f:json.dump(summary,f,indent=2)
+              if weather_rows:
+                  with open('bloom_weather_features.csv','w',newline='') as f:
+                      w=csv.DictWriter(f,fieldnames=weather_rows[0].keys());w.writeheader();w.writerows(weather_rows)
+              if results:
+                  fields=sorted(set(k for r in results for k in r.keys()))
+                  with open('bloom_weather_loyo_results.csv','w',newline='') as f:
+                      w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(results)
+              print('BLOOM_VALIDATION_SUMMARY_START')
+              print(json.dumps(summary,indent=2))
+              print('BLOOM_VALIDATION_SUMMARY_END')
+          
+          if __name__=='__main__':main()
+          PYCODE
+          python /tmp/bloom_weather_remote.py
+      - name: Upload validation outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bloom-weather-validation
+          path: |
+            bloom_weather_loyo_summary.json
+            bloom_weather_features.csv
+            bloom_weather_loyo_results.csv
+          if-no-files-found: warn
