@@ -16,7 +16,7 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      CORE_COMMIT: b0eca26b3121d98b16964642ed850e1e56711332
+      CORE_COMMIT: 0d6bf5bd2b2a5974c6fb8967a2c6c9f9fa49a6ac
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -78,6 +78,8 @@ jobs:
           grep -q 'assets/haleakala-sunrise.js' public/synced-national-tools/haleakala-sunrise/index.html
           grep -q 'Haleakalā Sunrise Conditions: Clouds, Wind' public/synced-national-tools/haleakala-sunrise/index.html
           grep -q 'No sunrise score' public/synced-national-tools/haleakala-sunrise/index.html
+          grep -q 'href="/national-tools/kilauea-live/"' public/synced-national-tools/haleakala-sunrise/index.html
+          ! grep -q 'href="/national-tools/kilauea-volcano/"' public/synced-national-tools/haleakala-sunrise/index.html
           grep -q 'twitter:title' public/synced-national-tools/live-decisions/index.html
           grep -q 'twitter:description' public/synced-national-tools/live-decisions/index.html
           grep -q 'CollectionPage' public/synced-national-tools/live-decisions/index.html
