@@ -61,5 +61,20 @@ jobs:
           files=(tests/*.test.js)
           (( ${#files[@]} > 120 )) && node --test "${files[@]:120}" || true
       - name: Source parity verification
-        continue-on-error: true
         run: npm run verify
+
+  baseline-main:
+    if: github.head_ref == 'agent/michigan-ice-breakout-20260930' || github.ref_name == 'agent/michigan-ice-breakout-20260930'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout untouched main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned dependencies
+        run: npm ci
+      - name: Run main monolithic Node suite
+        run: npm test
