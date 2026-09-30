@@ -9,6 +9,9 @@ const html = read('public/lake-superior-circle-tour/index.html');
 const page = read('public/assets/lake-superior-circle-tour.js');
 const core = read('public/assets/lake-superior-circle-tour-core.js');
 const map = read('public/assets/lake-superior-circle-tour-map.js');
+const live = read('public/assets/lake-superior-circle-tour-live-day.js');
+const fallDispatcher = read('api/fall-color.js');
+const smokeAdapter = read('lib/fall-color/routes/circle-tour-smoke.js');
 const registry = JSON.parse(read('benchmarks/tool-network-registry.json'));
 
 test('Circle Tour is an interactive 31-stop route planner, not only a guide', () => {
@@ -35,13 +38,14 @@ test('map route has every stop and uses a pinned lazy map implementation', () =>
 
 test('planner supports real trip actions without storing personal data', () => {
   for (const token of ['navigator.share','navigator.clipboard','history.replaceState','google.com/maps/dir','mobileTripSheet','printTrip']) {
-    assert.ok((html + core).includes(token), `missing ${token}`);
+    assert.ok((html + core + live).includes(token), `missing ${token}`);
   }
-  assert.doesNotMatch(html + page + core + map, /localStorage|sessionStorage|document\.cookie/);
+  assert.doesNotMatch(html + page + core + map + live, /localStorage|sessionStorage|document\.cookie/);
 });
 
-test('August 2026 finish layer corrects current travel facts and removes self-justifying copy', () => {
-  assert.match(page, /const RELEASE = '2026-08-20'/);
+test('September 30 finish layer keeps current travel facts and loads the adaptive day engine', () => {
+  assert.match(page, /const RELEASE = '2026-09-30'/);
+  assert.match(page, /lake-superior-circle-tour-live-day\.js\?v=20260930-1/);
   assert.match(page, /Agawa Canyon Tour Train runs August 1–October 18/);
   assert.match(page, /https:\/\/agawatrain\.com\//);
   assert.match(page, /Gargantua Road is closed for maintenance/);
@@ -50,6 +54,59 @@ test('August 2026 finish layer corrects current travel facts and removes self-ju
   assert.match(page, /Sand Point Road and beach are open/);
   assert.match(page, /block\.remove\(\)/);
   assert.match(page, /article\.dateModified = RELEASE/);
+});
+
+test('Today planner uses route, departure time, time budget and interests causally', () => {
+  for (const token of ['ctTodayStart','ctTodayEnd','ctTodayStartTime','ctTodayHours','chosenInterests','scoreStop','stopBudget']) {
+    assert.ok(live.includes(token), `missing ${token}`);
+  }
+  assert.match(live, /used \+ item\.hours <= stopBudget/);
+  assert.doesNotMatch(live, /keep\.size <= 2/);
+  assert.match(live, /if \(start === end\)/);
+  assert.match(live, /id === '1' \|\| id === '30'/);
+  assert.match(live, /page\.setTrip\(p\.ids/);
+});
+
+test('live conditions actually change stop scoring and the day budget', () => {
+  for (const token of ['/api/duluth-canal','/api/soo-ais','/api/buoys','/api/fall-color?view=snapshot','/api/aurora','/api/border-crossings','view=circle-tour-smoke']) {
+    assert.ok(live.includes(token), `missing live source ${token}`);
+  }
+  assert.match(live, /wave_ht/);
+  assert.match(live, /fall\.pct/);
+  assert.match(live, /pm25_aqi/);
+  assert.match(live, /liveDelta/);
+  assert.match(live, /borderMinutes/);
+  assert.match(live, /currentPlan\) buildTodayPlan\(\{measure:false\}\)/);
+  assert.match(live, /data-current-alert="pictured-rocks"/);
+  assert.match(live, /data-current-alert="lspp"/);
+});
+
+test('smoke reuse is an adapter to the canonical national engine, not a second model', () => {
+  assert.match(fallDispatcher, /"circle-tour-smoke": require\("\.\.\/lib\/fall-color\/routes\/circle-tour-smoke\.js"\)/);
+  assert.match(smokeAdapter, /national-outdoor-core\.vercel\.app\/api\/national-smoke-window/);
+  assert.match(smokeAdapter, /Wildfire Smoke & Outdoor Air Window/);
+  assert.match(smokeAdapter, /does not claim that a nearby fire caused/);
+});
+
+test('clock-based day sheet handles time zones, border waits, sunset and tonight', () => {
+  assert.match(live, /function buildDaySheet/);
+  assert.match(live, /America\/Chicago/);
+  assert.match(live, /America\/Detroit/);
+  assert.match(live, /formatClock/);
+  assert.match(live, /Sault Ste\. Marie border crossing/);
+  assert.match(live, /function sunTime/);
+  assert.match(live, /Sunset at the overnight stop/);
+  assert.match(live, /auroraOpportunity/);
+  assert.match(live, /Today’s day sheet/);
+});
+
+test('route intelligence map includes access stop 15 and retries lazy-map focus', () => {
+  assert.match(live, /const ACCESS_STOPS = \['11','13','15','21'\]/);
+  assert.match(live, /data-map-mode="today"/);
+  assert.match(live, /data-map-mode="ships"/);
+  assert.match(live, /data-map-mode="access"/);
+  assert.match(live, /attempts <= 30/);
+  assert.match(live, /CircleTourMap\?\.focusStop/);
 });
 
 test('Circle Tour keeps the live NOAA Lake Superior water-level signal', () => {
