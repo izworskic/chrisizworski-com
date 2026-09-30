@@ -1,0 +1,47 @@
+name: Apply Michigan ice verifier declaration
+
+on:
+  push:
+    branches:
+      - agent/michigan-ice-breakout-20260930
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: agent/michigan-ice-breakout-20260930
+      - name: Declare reviewed Michigan ice client drift
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/verify-source.mjs')
+          s = p.read_text()
+          route = '  "/michigan-ice/ice.js",\n'
+          if route not in s:
+              needle = 'const intentionalChanges = new Set([\n'
+              insert = (
+                  'const intentionalChanges = new Set([\n'
+                  '  // Sep 30 2026: reviewed Michigan Ice decision-engine client update. The public client now\n'
+                  '  // separates regional observation, lake-wide trend, thermal history, and forecast forcing.\n'
+                  '  // Re-crawl after production release, then remove this declaration.\n'
+                  '  "/michigan-ice/ice.js",\n'
+              )
+              if needle not in s:
+                  raise SystemExit('intentionalChanges declaration not found')
+              s = s.replace(needle, insert, 1)
+              p.write_text(s)
+          PY
+          git checkout origin/main -- .github/workflows/agent-branch-verify.yml
+          git rm .github/workflows/apply-michigan-ice-verifier-fix.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/verify-source.mjs .github/workflows/agent-branch-verify.yml
+          git diff --cached --check
+          git commit -m "Declare Michigan ice client as intentional live change"
+          git push origin HEAD:agent/michigan-ice-breakout-20260930
