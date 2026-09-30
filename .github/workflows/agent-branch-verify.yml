@@ -24,10 +24,6 @@ jobs:
           node-version: '22'
       - name: Install pinned dependencies
         run: npm ci
-      - name: Diagnostic test suite
-        run: npm test
-      - name: Diagnostic source verification
-        run: npm run verify
       - name: Run full repository gate
         run: npm run verify:all
       - name: Upload boat launch source audit

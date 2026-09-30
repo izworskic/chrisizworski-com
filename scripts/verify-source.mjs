@@ -26,6 +26,10 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Sep 30 2026: reviewed Michigan Ice decision-engine client update. The public client now
+  // separates regional observation, lake-wide trend, thermal history, and forecast forcing.
+  // Re-crawl after production release, then remove this declaration.
+  "/michigan-ice/ice.js",
   // Sep 23 2026: intentional Mackinac generator resync restored rankable catalog cards and removed generated em dashes. Re-crawl after production release, then remove this declaration.
   "/fall-color/mackinac-island-fall-color/",
   // Sep 21: Mackinac destination UX rebuild. One shared My Trip intake now owns
