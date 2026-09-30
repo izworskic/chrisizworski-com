@@ -1,8 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { execFileSync } from 'node:child_process';
 
 const read = (p) => fs.readFileSync(p, 'utf8');
+
+test('Michigan ice breakout JavaScript parses before deployment', () => {
+  for (const file of ['api/ice.js', 'api/ice-now.js', 'public/michigan-ice/ice.js']) {
+    execFileSync(process.execPath, ['--check', file], { stdio: 'pipe' });
+  }
+});
 
 test('Michigan ice breakout keeps one canonical search owner', () => {
   const html = read('public/michigan-ice/index.html');
