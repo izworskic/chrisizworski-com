@@ -87,12 +87,25 @@ add('High-cost decision failure cases are regression-tested',5,
   &&decisionTests.includes('major thaw forecast lowers')
 );
 
+// Behavioral, not textual. The previous check was !engine.includes('score+=6'), which also
+// matches the forecast-window "cold holds" temperature bonus in scoreForecastWindow (a ranking of
+// FUTURE ride windows by temperature, not a snow upgrade of the current trail score). It failed on
+// honest code and would have passed a snow upgrade written any other way. Exercise the real scorer.
+const {scoreSegment}=await import('../lib/snowmobile/engine.mjs');
+const forecastSnowNeverUpgrades=(()=>{
+  const report={condition:'Good',freshness:{state:'RECENT'},groomingFreshness:{state:'RECENT'}};
+  const surface={observedSnow:{available:true,largest48hInches:5,largest168hInches:8},recentWeather:{available:true,thawRisk:'LOW',rainObserved:false,maxTempF:26}};
+  const at=snowIn=>scoreSegment({},{season:true,clubReport:report,weather:{maxTempF:25,snowIn},surfaceEvidence:surface}).score;
+  const dry=at(0);
+  return Number.isFinite(dry)&&[1,2,4,6,8,12,20].every(n=>at(n)<=dry);
+})();
+
 const hardVetoes=[
  ['Natural snow must not become trail base',buildRegion.includes('naturalSnowIsTrailBase:false')],
  ['Observed snowfall must not become trail base',buildRegion.includes('observedSnowfallIsTrailBase:false')],
  ['NOHRSC depth must not become trail base',buildRegion.includes('nohrscSnowDepthIsTrailBase:false')],
  ['Forecast snow must not become observed accumulation',buildRegion.includes('forecastSnowIsAccumulatedSnow:false')],
- ['Forecast snow cannot upgrade current trail score',buildRegion.includes('forecastSnowCanUpgradeCurrentTrailScore:false')&&!engine.includes('score+=6')],
+ ['Forecast snow cannot upgrade current trail score',buildRegion.includes('forecastSnowCanUpgradeCurrentTrailScore:false')&&forecastSnowNeverUpgrades],
  ['Current surface report is required for ride-quality scoring',buildRegion.includes('currentSurfaceReportRequiredForRideQuality:true')&&engine.includes("band:'UNKNOWN'")&&engine.includes("surfaceState:'UNVERIFIED'")],
  ['No direct surface report can never be high-confidence',engine.includes('return Math.min(45,s)')],
  ['Aging positive report cannot exceed FAIR',engine.includes('Math.min(score,59)')],
