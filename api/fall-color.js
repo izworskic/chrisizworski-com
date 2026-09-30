@@ -16,6 +16,7 @@ const handlers = {
   rss: require("../lib/fall-color/routes/rss.js"),
   sitemap: require("../lib/fall-color/routes/sitemap.js"),
   cron: require("../lib/fall-color/routes/cron.js"),
+  "circle-tour-smoke": require("../lib/fall-color/routes/circle-tour-smoke.js"),
   "old-sow-live": require("../lib/old-sow/route.js"),
   "mackinac-island": require("../lib/mackinac-island/route.js"),
   "detroit-outdoors": require("../lib/detroit-outdoors/route-v2.js"),
