@@ -1,0 +1,11 @@
+
+> chrisizworski-com@1.0.0 benchmark:serp-length
+> node scripts/benchmark-serp-length.mjs
+
+  note: the /tools/ freeze expired 2026-09-21; it is now measured normally.
+
+SERP LENGTH CHECK FAILED: 1 over the limit.
+  /synced-national-tools/haleakala-sunrise/ title 77 > 60
+
+If the page is inside a live measurement window, add it to FROZEN in this file with the
+window end date from its experiment record. Do not remove the limit.
