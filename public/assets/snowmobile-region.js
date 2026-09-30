@@ -4,22 +4,36 @@ let DATA=null,MAP=null,LAYER=null,CLOSURE_LAYER=null,SNOW_LAYER=null,CLOSURES=nu
 let ROUTE_MODE=false,ROUTE_POINTS=[],ROUTE_MARKERS=[],ROUTE_LINE=null;
 function track(name,params={}){try{if(typeof window.gtag==='function')window.gtag('event',name,params)}catch{}}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function bandClass(b){return b==='CLOSED'||b==='POOR'?'bad':b==='MARGINAL'||b==='OFF_SEASON'?'warn':b==='EXCELLENT'||b==='GOOD'?'good':''}
-/* For the legacy Grayling–Gaylord region, weather is {grayling:{...},gaylord:{...}}.
- * For every other region, weather is a single hub-point object. This returns a flat
- * array of the valid (non-error) weather objects either way. */
+function bandClass(b){return b==='CLOSED'||b==='POOR'?'bad':b==='MARGINAL'||b==='OFF_SEASON'||b==='UNKNOWN'?'warn':b==='EXCELLENT'||b==='GOOD'?'good':''}
 function weatherPoints(d){
   if(d.legacyCorridor)return [d.weather?.grayling,d.weather?.gaylord].filter(w=>w&&!w.error);
   return d.weather&&!d.weather.error?[d.weather]:[];
+}
+function snowEvidenceLabel(d){
+  const s=d.surfaceEvidence?.observedSnow;
+  if(!s?.available)return'Observed snowfall unavailable';
+  const fmt=x=>Number(x).toFixed(1).replace(/\.0$/,'');
+  if(Number.isFinite(s.largest48hInches))return`Up to ${fmt(s.largest48hInches)}″ in an NWS snowfall report timestamped in this region within 48h (report duration varies; not trail base)`;
+  if(Number.isFinite(s.largest168hInches))return`Up to ${fmt(s.largest168hInches)}″ in an NWS snowfall report timestamped within 7d (report duration varies; not trail base)`;
+  return'No NWS snowfall report timestamped in this region in the last 7 days';
+}
+function recentWeatherLabel(d){
+  const w=d.surfaceEvidence?.recentWeather;
+  if(!w?.available)return'Recent thaw/rain history unavailable';
+  if(w.rainObserved)return`Rain/icing observed near ${d.hubTown||'the region hub'} in the last 48h`; 
+  if(w.thawRisk==='HIGH')return'High recent thaw/softening risk from NWS station observations';
+  if(w.thawRisk==='MODERATE')return'Moderate recent thaw/softening risk from NWS station observations';
+  if(w.thawRisk==='LOW')return'Low recent thaw/softening risk from available NWS station observations';
+  return'Recent thaw/softening risk unknown';
 }
 function render(d){
   DATA=d; const r=d.route||{}; const active=d.season?.active;
   $('#status').textContent=active?(r.routeState==='ROUTE_BROKEN'?'ROUTE BROKEN':r.band||'UNKNOWN'):'OFF-SEASON';
   $('#status').className='status '+bandClass(active?r.band:'OFF_SEASON');
-  $('#score').textContent=Number.isFinite(r.score)?`\u00b7 ${r.score}/100`:'';
+  $('#score').textContent=Number.isFinite(r.score)?`· ${r.score}/100`:'';
   $('#best').textContent=active?bestWindow(d):'Season opens Dec. 1';
   $('#risk').textContent=active?risk(d):'No current riding score';
-  $('#confidence').textContent=`${r.confidence??'\u2014'}/100`;
+  $('#confidence').textContent=`${r.confidence??'—'}/100`;
   $('#grooming').textContent=d.grooming?.label||'Not verified';
   $('#forecastSnow').textContent=forecastSnowLabel(d);
   $('#routeStatus').textContent=routeStatusLabel(d);
@@ -27,29 +41,22 @@ function render(d){
   $('#sourceLine').textContent=sourceLine(d);
   $('#drive').innerHTML=active?driveVerdict(d):'<strong>Not a riding verdict yet.</strong> In-season condition scoring activates Dec. 1.';
   const sn=$('#seasonNote'); if(sn)sn.hidden=active;
-  renderSections(d);
-  renderOutlook(d);
-  renderWhy(d);
-  renderContradictions(d);
-  const segs=(d.segments||[]).filter(s=>Number.isFinite(s.score)||s.veto).sort((a,b)=>(a.score??999)-(b.score??999)).slice(0,10);
+  renderSections(d);renderOutlook(d);renderWhy(d);renderContradictions(d);
+  const segs=(d.segments||[]).filter(s=>Number.isFinite(s.score)||s.veto||s.band==='UNKNOWN').sort((a,b)=>(a.score??999)-(b.score??999)).slice(0,10);
   const segHead=$('#segments');
-  if(segHead)segHead.innerHTML=segs.length?segs.map(s=>`<div class="segment"><div><span class="badge ${bandClass(s.band)}">${esc(s.band)}</span> <strong>${esc(s.trailNetwork||s.id)}</strong></div><div class="small">${esc(s.groomingSponsor||'Grooming sponsor not stated')} \u00b7 ${s.miles?esc(s.miles.toFixed(1))+' mi':'length not stated'} \u00b7 ${esc(s.surface||'surface unknown')}</div><div>${esc((s.reasons||[])[0]||'No condition explanation available.')}</div></div>`).join(''):(active?'<p>No scored segments yet.</p>':'<p>Off-season: segments are listed by DNR status only.</p>');
+  if(segHead)segHead.innerHTML=segs.length?segs.map(s=>`<div class="segment"><div><span class="badge ${bandClass(s.band)}">${esc(s.band)}</span> <strong>${esc(s.trailNetwork||s.id)}</strong></div><div class="small">${esc(s.groomingSponsor||'Grooming sponsor not stated')} · ${s.miles?esc(s.miles.toFixed(1))+' mi':'length not stated'} · ${esc(s.surface||'surface unknown')}</div><div>${esc((s.reasons||[])[0]||'No condition explanation available.')}</div></div>`).join(''):(active?'<p>No verified segment condition is available.</p>':'<p>Off-season: segments are listed by DNR status only.</p>');
   const evidence=$('#reports');
   if(evidence){
     if(d.legacyCorridor){
-      evidence.innerHTML=['grayling','gaylord'].map(k=>{const x=d.reports?.[k];if(!x)return'';const hazards=(x.hazards||[]).length?`<div class="hazard-line"><strong>Report hazards:</strong> ${esc(x.hazards.join(', '))}</div>`:'';const j=d.jev?.[k];const cross=j?.accepted&&j?.condition?`<div class="small">JEV narrative cross-check: ${esc(j.condition)} \u00b7 confidence ${Math.round((Number(j.confidence)||0)*100)}%. Supplemental only; structured club fields control.</div>`:'';return `<div class="segment"><strong>${esc(x.name)}</strong><div>${esc(x.condition||'Condition not stated')}</div><div class="small">Report: ${esc(x.reportedRaw||'unknown')} \u00b7 Grooming field: ${esc(x.lastGroomedRaw||'not verified')}</div>${hazards}${cross}<a href="${esc(x.url)}" target="_blank" rel="noopener" data-source-name="${esc(x.name)}">Verify source \u2197</a></div>`}).join('');
+      evidence.innerHTML=['grayling','gaylord'].map(k=>{const x=d.reports?.[k];if(!x)return'';const hazards=(x.hazards||[]).length?`<div class="hazard-line"><strong>Report hazards:</strong> ${esc(x.hazards.join(', '))}</div>`:'';const j=d.jev?.[k];const cross=j?.accepted&&j?.condition?`<div class="small">JEV narrative cross-check: ${esc(j.condition)} · confidence ${Math.round((Number(j.confidence)||0)*100)}%. Supplemental only; structured club fields control.</div>`:'';return `<div class="segment"><strong>${esc(x.name)}</strong><div>${esc(x.condition||'Condition not stated')}</div><div class="small">Report: ${esc(x.reportedRaw||'unknown')} · Grooming field: ${esc(x.lastGroomedRaw||'not verified')}</div>${hazards}${cross}<a href="${esc(x.url)}" target="_blank" rel="noopener" data-source-name="${esc(x.name)}">Verify source ↗</a></div>`}).join('');
     }else{
-      evidence.innerHTML='<p class="no-evidence-note">No configured local club evidence source for this region yet. This page relies on DNR designated-trail status, DNR temporary closures, and NWS weather only \u2014 no club/operator condition report is folded in.</p>';
+      evidence.innerHTML=`<p class="no-evidence-note"><strong>No current local surface-report feed is configured for this region.</strong> The tool therefore withholds a ride-quality score instead of inferring conditions from an open DNR trail, snowfall or favorable weather.</p><div class="segment"><strong>Observed snow context</strong><div class="small">${esc(snowEvidenceLabel(d))}</div></div><div class="segment"><strong>Recent weather-damage context</strong><div class="small">${esc(recentWeatherLabel(d))}</div></div>`;
     }
   }
-  $('#sources').innerHTML=(d.sources||[]).map(s=>`<li><a href="${esc(s.url)}" target="_blank" rel="noopener" data-source-name="${esc(s.name)}">${esc(s.name)}</a> \u2014 ${esc(s.authority)}</li>`).join('');
+  $('#sources').innerHTML=(d.sources||[]).map(s=>`<li><a href="${esc(s.url)}" target="_blank" rel="noopener" data-source-name="${esc(s.name)}">${esc(s.name)}</a> — ${esc(s.authority)}</li>`).join('');
   const cv=$('#closureVerify');
-  if(cv){
-    const matched=d.closures?.matched?.features?.length||0;
-    cv.textContent=d.closures?.verified?`Official DNR closure feed checked statewide \u00b7 ${matched} record${matched===1?'':'s'} matched to this region's trails`:'Official closure feed unavailable \u2014 legal status is not confirmed';
-  }
-  CLOSURES=d.closures?.matched?.features||[];
-  drawMap(d);
+  if(cv){const matched=d.closures?.matched?.features?.length||0;cv.textContent=d.closures?.verified?`Official DNR closure feed checked statewide · ${matched} record${matched===1?'':'s'} matched to this region's trails`:'Official closure feed unavailable — legal status is not confirmed';}
+  CLOSURES=d.closures?.matched?.features||[];drawMap(d);
   track('snowmobile_region_decision_rendered',{region:d.key,season_active:Boolean(active),condition:r.band||'unknown',route_state:r.routeState||'unknown',confidence:r.confidence??null});
 }
 function formatDuration(min){const h=Math.floor(min/60),m=Math.round(min%60);return h?`${h}h ${m}m`:`${m}m`}
@@ -61,22 +68,21 @@ function departureFor(best,driveMinutes){
 function personalizedVerdict(d,route,maxHours,label){
   const min=Number(route?.driveMinutes),miles=Number(route?.driveMiles),destLabel=d.hubTown||route?.destination?.label?.split(',')[0]||'the region hub';
   if(!Number.isFinite(min))return'<strong>Drive time unavailable.</strong> No trip verdict was generated.';
-  const drive=`${formatDuration(min)} \u00b7 ${Number.isFinite(miles)?miles.toFixed(0)+' mi':'distance unavailable'} to ${esc(destLabel)}`;
-  if(!d.season?.active)return `<strong>${esc(label)} \u2192 ${esc(destLabel)}: ${drive}.</strong> Riding conditions are off-season, so there is no ride recommendation yet.`;
-  if(min>Number(maxHours)*60)return `<strong>NO for your ${esc(maxHours)}-hour limit.</strong> ${esc(label)} \u2192 ${esc(destLabel)} is about ${drive}. This limit decision is independent of trail quality.`;
+  const drive=`${formatDuration(min)} · ${Number.isFinite(miles)?miles.toFixed(0)+' mi':'distance unavailable'} to ${esc(destLabel)}`;
+  if(!d.season?.active)return `<strong>${esc(label)} → ${esc(destLabel)}: ${drive}.</strong> Riding conditions are off-season, so there is no ride recommendation yet.`;
+  if(min>Number(maxHours)*60)return `<strong>NO for your ${esc(maxHours)}-hour limit.</strong> ${esc(label)} → ${esc(destLabel)} is about ${drive}. This limit decision is independent of trail quality.`;
   if(d.route?.routeState==='ROUTE_BROKEN')return `<strong>NO.</strong> The drive is within your limit, but an official closure match breaks a required corridor segment.`;
-  const s=Number(d.route?.score),conf=Number(d.route?.confidence);
-  const depart=departureFor(d.timing?.best,min);
-  const timing=depart?` To arrive about 30 minutes before ${esc(d.timing.best.name)} begins, leave around <strong>${esc(depart)}</strong>.`:'';
-  if(conf<50)return `<strong>UNCERTAIN.</strong> ${esc(label)} \u2192 ${esc(destLabel)} is ${drive}, but evidence confidence is only ${Number.isFinite(conf)?conf:'unknown'}/100.${timing}`;
-  if(s>=72)return `<strong>YES, within your drive limit.</strong> ${esc(label)} \u2192 ${esc(destLabel)} is ${drive}, and the route currently scores ${s}/100.${timing}`;
+  const rawScore=d.route?.score,s=Number(rawScore),conf=Number(d.route?.confidence);
+  const depart=departureFor(d.timing?.best,min);const timing=depart?` Best weather timing would require leaving around <strong>${esc(depart)}</strong>, but weather timing cannot substitute for trail evidence.`:'';
+  if(!Number.isFinite(rawScore))return `<strong>UNKNOWN — do not make the trip decision from this page alone.</strong> ${esc(label)} → ${esc(destLabel)} is ${drive}, but current local trail-surface evidence is missing or too old.${timing}`;
+  if(conf<50)return `<strong>UNCERTAIN.</strong> ${esc(label)} → ${esc(destLabel)} is ${drive}, but evidence confidence is only ${Number.isFinite(conf)?conf:'unknown'}/100.${timing}`;
+  if(s>=72)return `<strong>STRONGER TARGET.</strong> ${esc(label)} → ${esc(destLabel)} is ${drive}, and verified route evidence currently scores ${s}/100.${timing}`;
   if(s>=58)return `<strong>BORDERLINE.</strong> The drive is within your limit (${drive}), but route quality is only ${s}/100.${timing}`;
-  return `<strong>NO for now.</strong> The drive is within your limit (${drive}), but current route evidence scores only ${Number.isFinite(s)?s:'unknown'}/100.`;
+  return `<strong>NO for now.</strong> The drive is within your limit (${drive}), but current verified route evidence scores only ${Number.isFinite(s)?s:'unknown'}/100.`;
 }
 async function checkOrigin(point,label){
   const host=$('#personalDrive'),max=$('#maxDrive')?.value||'3';if(!host||!DATA)return;
-  const destLabel=DATA.hubTown||'the region hub';
-  host.textContent=`Checking road time to ${destLabel}\u2026`;
+  const destLabel=DATA.hubTown||'the region hub';host.textContent=`Checking road time to ${destLabel}…`;
   track('snowmobile_origin_check',{origin:label||'location',region:DATA.key,max_hours:Number(max)});
   try{
     const r=await fetch(`/api/snowmobile-drive?region=${encodeURIComponent(DATA.key)}&from=`+encodeURIComponent(point));const j=await r.json();if(!r.ok)throw new Error(j.detail||j.error||String(r.status));
@@ -84,12 +90,10 @@ async function checkOrigin(point,label){
   }catch(e){host.innerHTML='<strong>Drive time unavailable.</strong> The routing service did not return a usable result, so no travel time was guessed.'}
 }
 function agoTime(iso){
-  if(!iso)return'no dated source timestamp';
-  const min=Math.max(0,Math.round((Date.now()-new Date(iso).getTime())/60000));
-  if(!Number.isFinite(min))return'timestamp unknown';
-  if(min<2)return'just now';if(min<60)return`${min}m ago`;const h=Math.round(min/60);if(h<48)return`${h}h ago`;return`${Math.round(h/24)}d ago`;
+  if(!iso)return'no dated source timestamp';const min=Math.max(0,Math.round((Date.now()-new Date(iso).getTime())/60000));
+  if(!Number.isFinite(min))return'timestamp unknown';if(min<2)return'just now';if(min<60)return`${min}m ago`;const h=Math.round(min/60);if(h<48)return`${h}h ago`;return`${Math.round(h/24)}d ago`;
 }
-function sourceLine(d){const s=d.sourceSummary;if(!s)return'Source freshness unavailable';return `${s.label||((s.decisionFeedCount||0)+' decision feeds')} \u00b7 newest dated evidence ${agoTime(s.newestDatedSource)}`}
+function sourceLine(d){const s=d.sourceSummary;if(!s)return'Source freshness unavailable';return `${s.label||((s.decisionFeedCount||0)+' decision feeds')} · newest dated evidence ${agoTime(s.newestDatedSource)}`}
 function routeStatusLabel(d){
   if(!d.season?.active)return'Off season';
   if(d.route?.routeState==='ROUTE_BROKEN')return'Official closure matched';
@@ -99,8 +103,8 @@ function routeStatusLabel(d){
 function forecastSnowLabel(d){
   const points=d.legacyCorridor?[['Grayling',d.weather?.grayling],['Gaylord',d.weather?.gaylord]]:[[d.hubTown||'Region',d.weather]];
   const rows=points.filter(([,w])=>w&&!w.error);
-  const amounts=rows.filter(([,w])=>Number.isFinite(w.snowHighIn??w.snowIn)).map(([n,w])=>{const lo=Number(w.snowLowIn),hi=Number(w.snowHighIn??w.snowIn);const fmt=x=>x.toFixed(1).replace(/\.0$/,'');return `${n} ${Number.isFinite(lo)&&lo!==hi?fmt(lo)+'\u2013'+fmt(hi):fmt(hi)}\u2033`});
-  if(amounts.length)return amounts.join(' \u00b7 ');
+  const amounts=rows.filter(([,w])=>Number.isFinite(w.snowHighIn??w.snowIn)).map(([n,w])=>{const lo=Number(w.snowLowIn),hi=Number(w.snowHighIn??w.snowIn);const fmt=x=>x.toFixed(1).replace(/\.0$/,'');return `${n} ${Number.isFinite(lo)&&lo!==hi?fmt(lo)+'–'+fmt(hi):fmt(hi)}″`});
+  if(amounts.length)return amounts.join(' · ');
   if(rows.some(([,w])=>w.snowSignal===true))return'Snow forecast; amount unstated';
   return rows.length?'No snow mentioned in current NWS periods':'Not verified';
 }
@@ -110,83 +114,66 @@ function renderContradictions(d){
   host.hidden=false;host.innerHTML='<strong>Evidence conflict detected</strong>'+rows.map(x=>`<p>${esc(x.message)}</p>`).join('');
 }
 function renderWhy(d){
-  const host=$('#whyList');if(!host)return;
-  const reasons=[];
-  if(!d.season?.active)reasons.push('No riding score is issued outside Michigan\u2019s designated Dec. 1\u2013Mar. 31 snowmobile season.');
+  const host=$('#whyList');if(!host)return;const reasons=[];
+  if(!d.season?.active)reasons.push('No riding score is issued outside Michigan’s designated Dec. 1–Mar. 31 snowmobile season.');
   else{
     if(d.route?.critical?.reasons?.[0])reasons.push(`Weakest required segment: ${d.route.critical.reasons[0]}`);
+    if(!Number.isFinite(d.route?.score))reasons.push('Ride-quality score withheld: current local trail-surface evidence is missing or too old. DNR status, snowfall and weather do not fill that gap.');
     if(d.grooming?.label)reasons.push(`Grooming evidence: ${d.grooming.label}.`);
-    if(d.timing?.best)reasons.push(`Best forecast period: ${d.timing.best.name}; weather-period score ${d.timing.best.score}/100. This timing score cannot override trail condition.`);
+    reasons.push(`Observed snow context: ${snowEvidenceLabel(d)}.`);
+    reasons.push(`Recent weather context: ${recentWeatherLabel(d)}.`);
+    if(d.timing?.best)reasons.push(`Best forecast period: ${d.timing.best.name}; weather-period score ${d.timing.best.score}/100. This timing score cannot upgrade an unverified trail condition.`);
     if(d.route?.legalVerification==='CURRENT_LAYER_CHECKED')reasons.push('The current DNR temporary-closure layer was checked statewide. No closure match is not the same thing as a guarantee that every segment is legally rideable.');
   }
   for(const x of (d.contradictions||[]))reasons.push(`Conflict: ${x.message}`);
   if(d.trailSource?.provider)reasons.push(`Official trail geometry/status source: ${d.trailSource.provider}${d.trailSource.fallbackReason?' (primary open-data feed fell back)':''}.`);
   if(d.sourceSummary?.newestDatedSource)reasons.push(`Newest dated source evidence: ${agoTime(d.sourceSummary.newestDatedSource)}.`);
-  if(!d.legacyCorridor)reasons.push('No local club condition report is configured for this region; this score relies on DNR trail status, DNR closures and weather only.');
+  if(!d.legacyCorridor)reasons.push('No current local club/operator condition feed is configured for this region, so the product withholds a ride-quality score rather than rating the surface from DNR status and weather alone.');
   host.innerHTML=reasons.map(x=>`<li>${esc(x)}</li>`).join('')||'<li>No explanation is available.</li>';
 }
 function renderOutlook(d){
   const host=$('#outlookCards');if(!host)return;
   if(!d.season?.active){host.innerHTML='<article class="outlook-card"><strong>Pre-season</strong><p>The 72-hour riding-window rank activates Dec. 1. Weather can still be viewed below without turning off-season conditions into a snowmobile recommendation.</p></article>';return}
   const rows=(d.timing?.windows||[]).slice(0,6);
-  host.innerHTML=rows.length?rows.map((w)=>{const isBest=Boolean(d.timing?.best?.startTime&&w.startTime===d.timing.best.startTime);return `<article class="outlook-card ${isBest?'best-period':''}"><span>${esc(w.name||'Forecast period')}</span><strong>${w.score}/100 weather window</strong><p>${Number.isFinite(w.maxTempF)?'High '+Math.round(w.maxTempF)+'\u00b0F \u00b7 ':''}${Number.isFinite(w.maxWindMph)?'wind to '+Math.round(w.maxWindMph)+' mph \u00b7 ':''}${esc((w.reasons||[]).join(', ')||'No major weather penalty identified')}</p>${isBest?'<b>Best forecast timing</b>':''}</article>`}).join(''):'<article class="outlook-card">NWS forecast timing is unavailable.</article>';
+  const caveat=!Number.isFinite(d.route?.score)?'<div class="small"><strong>Trail surface unverified:</strong> this ranks weather timing only.</div>':'';
+  host.innerHTML=(rows.length?rows.map((w)=>{const isBest=Boolean(d.timing?.best?.startTime&&w.startTime===d.timing.best.startTime);return `<article class="outlook-card ${isBest?'best-period':''}"><span>${esc(w.name||'Forecast period')}</span><strong>${w.score}/100 weather window</strong><p>${Number.isFinite(w.maxTempF)?'High '+Math.round(w.maxTempF)+'°F · ':''}${Number.isFinite(w.maxWindMph)?'wind to '+Math.round(w.maxWindMph)+' mph · ':''}${esc((w.reasons||[]).join(', ')||'No major weather penalty identified')}</p>${isBest?'<b>Best forecast timing</b>':''}</article>`}).join(''):'<article class="outlook-card">NWS forecast timing is unavailable.</article>')+caveat;
 }
-function bestWindow(d){const b=d.timing?.best;if(!b)return'Weather window not verified';const when=b.name||new Date(b.startTime).toLocaleString();const t=Number.isFinite(b.maxTempF)?` \u00b7 high ${Math.round(b.maxTempF)}\u00b0F`:'';return when+t}
+function bestWindow(d){const b=d.timing?.best;if(!b)return'Weather window not verified';const when=b.name||new Date(b.startTime).toLocaleString();const t=Number.isFinite(b.maxTempF)?` · high ${Math.round(b.maxTempF)}°F`:'';return when+t+(Number.isFinite(d.route?.score)?'':' · weather only')}
 function renderSections(d){
-  /* Flat regions omit the corridor-sections markup from the page entirely
-   * (there is no single linear corridor to sub-divide), so #corridor-sections-wrap
-   * and #corridorSections simply won't exist in the DOM there and this is a no-op. */
-  const wrap=$('#corridor-sections-wrap');
-  if(!d.legacyCorridor){if(wrap)wrap.hidden=true;return}
-  if(wrap)wrap.hidden=false;
+  const wrap=$('#corridor-sections-wrap');if(!d.legacyCorridor){if(wrap)wrap.hidden=true;return}if(wrap)wrap.hidden=false;
   const host=$('#corridorSections');if(!host)return;
-  host.innerHTML=(d.sections||[]).map(s=>{const score=Number.isFinite(s.score)?`${s.score}/100`:'\u2014';const state=s.band||s.routeState||'UNKNOWN';const critical=s.critical?.reasons?.[0]||(!d.season?.active?'Scoring activates Dec. 1.':'No dominant weakness found.');return `<article class="corridor-section"><span>${esc(s.label)}</span><strong class="${bandClass(state)}">${esc(state)}</strong><b>${score}</b><small>${esc(critical)}</small></article>`}).join('')||'<div class="corridor-section">No corridor summary available.</div>';
+  host.innerHTML=(d.sections||[]).map(s=>{const score=Number.isFinite(s.score)?`${s.score}/100`:'—';const state=s.band||s.routeState||'UNKNOWN';const critical=s.critical?.reasons?.[0]||(!d.season?.active?'Scoring activates Dec. 1.':'No verified surface condition available.');return `<article class="corridor-section"><span>${esc(s.label)}</span><strong class="${bandClass(state)}">${esc(state)}</strong><b>${score}</b><small>${esc(critical)}</small></article>`}).join('')||'<div class="corridor-section">No corridor summary available.</div>';
 }
 function risk(d){
-  const c=d.route?.critical;
-  if(c?.band==='CLOSED')return'Official closure on required segment';
-  if(Number.isFinite(c?.score)&&c.score<40)return'Weak required segment';
-  const wx=weatherPoints(d);
-  if(wx.some(x=>Number(x.maxTempF)>=40))return'Thaw';
-  if(wx.some(x=>x.rainSignal===true))return'Rain-on-snow';
-  return'No dominant weather risk found';
+  const c=d.route?.critical;if(c?.band==='CLOSED')return'Official closure on required segment';if(Number.isFinite(c?.score)&&c.score<40)return'Weak required segment';
+  const recent=d.surfaceEvidence?.recentWeather;if(recent?.rainObserved)return'Recent rain/icing observed';if(recent?.thawRisk==='HIGH')return'High recent thaw risk';if(recent?.thawRisk==='MODERATE')return'Moderate recent thaw risk';
+  const wx=weatherPoints(d);if(wx.some(x=>Number(x.maxTempF)>=40))return'Forecast thaw';if(wx.some(x=>x.rainSignal===true))return'Forecast rain-on-snow';
+  if(!Number.isFinite(d.route?.score))return'Trail surface unverified';return'No dominant weather risk found';
 }
 function driveVerdict(d){
   const s=d.route?.score,c=d.route?.confidence;
   if(d.route?.routeState==='ROUTE_BROKEN')return'<strong>NO.</strong> A required segment is officially closed.';
-  if(!Number.isFinite(s))return'<strong>UNKNOWN.</strong> There is not enough verified evidence to call the trip.';
-  if(c<50)return `<strong>UNCERTAIN.</strong> Conditions score ${s}, but evidence confidence is only ${c}. ${d.legacyCorridor?'Verify club reports before leaving.':'No local club report is configured for this region \u2014 verify with a local source before leaving.'}`;
-  if(s>=72)return `<strong>GOOD TARGET.</strong> The route currently scores ${s}, with confidence ${c}. Check the weakest segment below before committing.`;
-  if(s>=58)return `<strong>BORDERLINE ROUTE.</strong> The route is usable on paper, but the weakest segment keeps this from being an easy long-drive recommendation.`;
-  return '<strong>NOT YET.</strong> Current route evidence is not strong enough to target this ride.';
+  if(!Number.isFinite(s))return'<strong>UNKNOWN — not enough evidence to load the sleds.</strong> DNR trail/closure status, observed snow and weather are available as context, but a current local trail-surface report is missing or too old.';
+  if(c<50)return `<strong>UNCERTAIN.</strong> Conditions score ${s}, but evidence confidence is only ${c}. Verify a current local source before committing to a long drive.`;
+  if(s>=72)return `<strong>STRONGER TARGET.</strong> Verified route evidence currently scores ${s}, with confidence ${c}. Check the weakest segment and report age before committing.`;
+  if(s>=58)return `<strong>BORDERLINE ROUTE.</strong> Current evidence supports riding, but the weakest segment keeps this from being an easy long-drive recommendation.`;
+  return '<strong>NOT YET.</strong> Current verified route evidence is not strong enough to target this ride.';
 }
 function mapBandColor(b){return b==='CLOSED'?'#5f2c2a':b==='POOR'?'#a33b32':b==='MARGINAL'?'#b76b1c':b==='FAIR'?'#93641d':b==='GOOD'?'#1f6b46':b==='EXCELLENT'?'#135f3a':'#8a948e'}
 function drawMap(d){
-  const fc=d.scoredGeometry;
-  if(!window.L||!fc)return;
-  if(!MAP){const center=d.mapCenter||[44.9,-85.6];MAP=L.map('map',{scrollWheelZoom:false}).setView(center,d.legacyCorridor?9:8);MAP.once('movestart',()=>track('snowmobile_map_interaction',{action:'move'}));L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'\u00a9 OpenStreetMap contributors'}).addTo(MAP);MAP.on('click',onMapClick)}
+  const fc=d.scoredGeometry;if(!window.L||!fc)return;
+  if(!MAP){const center=d.mapCenter||[44.9,-85.6];MAP=L.map('map',{scrollWheelZoom:false}).setView(center,d.legacyCorridor?9:8);MAP.once('movestart',()=>track('snowmobile_map_interaction',{action:'move'}));L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap contributors'}).addTo(MAP);MAP.on('click',onMapClick)}
   if(LAYER)LAYER.remove(); if(CLOSURE_LAYER)CLOSURE_LAYER.remove();
-  LAYER=L.geoJSON(fc,{
-    style:f=>{const p=f.properties||{};return {weight:p.band==='CLOSED'?7:5,opacity:.9,color:mapBandColor(p.band)}},
-    onEachFeature:(f,l)=>{const p=f.properties||{};const title=p.trailNetwork||p.id||'DNR trail segment';const band=p.band||'DNR DESIGNATED';const score=Number.isFinite(p.score)?` \u00b7 ${p.score}/100`:'';const why=Array.isArray(p.reasons)&&p.reasons.length?`<br>${esc(p.reasons[0])}`:'';const status=p.officialStatus?`<br>DNR snowmobile status: ${esc(p.officialStatus)}`:'';const groom=p.groomType?`<br>Grooming type: ${esc(p.groomType)} \u00b7 ${esc(p.groomingSponsor||'sponsor not stated')}`:`<br>${esc(p.groomingSponsor||'Grooming sponsor not stated')}`;l.bindPopup(`<strong>${esc(title)}</strong><br>${esc(band)}${score}${status}${groom}${why}`);l.on('click',()=>track('snowmobile_segment_open',{segment:String(p.id||title),band:String(p.band||'unknown')}))}
-  }).addTo(MAP);
-  const closures=CLOSURES||[];
-  if(closures.length){
-    CLOSURE_LAYER=L.geoJSON({type:'FeatureCollection',features:closures},{style:{weight:7,opacity:1,color:'#5f2c2a',dashArray:'7 5'},onEachFeature:(f,l)=>{const p=f.properties||{};l.bindPopup(`<strong>Official DNR closure / detour layer</strong><br>${esc(p.TrailNameP||p.DNRTrail||'Trail segment')}<br>${esc(p.PublicComm||p.OpenClosed||'Closure detail available from DNR')}`)}}).addTo(MAP);
-  }
+  LAYER=L.geoJSON(fc,{style:f=>{const p=f.properties||{};return {weight:p.band==='CLOSED'?7:5,opacity:.9,color:mapBandColor(p.band)}},onEachFeature:(f,l)=>{const p=f.properties||{};const title=p.trailNetwork||p.id||'DNR trail segment';const band=p.band||'DNR DESIGNATED';const score=Number.isFinite(p.score)?` · ${p.score}/100`:'';const why=Array.isArray(p.reasons)&&p.reasons.length?`<br>${esc(p.reasons[0])}`:'';const status=p.officialStatus?`<br>DNR snowmobile status: ${esc(p.officialStatus)}`:'';const groom=p.groomType?`<br>Grooming type: ${esc(p.groomType)} · ${esc(p.groomingSponsor||'sponsor not stated')}`:`<br>${esc(p.groomingSponsor||'Grooming sponsor not stated')}`;l.bindPopup(`<strong>${esc(title)}</strong><br>${esc(band)}${score}${status}${groom}${why}`);l.on('click',()=>track('snowmobile_segment_open',{segment:String(p.id||title),band:String(p.band||'unknown')}))}}).addTo(MAP);
+  const closures=CLOSURES||[];if(closures.length)CLOSURE_LAYER=L.geoJSON({type:'FeatureCollection',features:closures},{style:{weight:7,opacity:1,color:'#5f2c2a',dashArray:'7 5'},onEachFeature:(f,l)=>{const p=f.properties||{};l.bindPopup(`<strong>Official DNR temporary closure</strong><br>${esc(p.TrailNameP||p.DNRTrail||'Trail segment')}<br>${esc(p.PublicComm||p.OpenClosed||'Closure detail available from DNR')}`)}}).addTo(MAP);
   try{MAP.fitBounds(LAYER.getBounds(),{padding:[15,15]})}catch{}
 }
 function toggleSnowDepth(){
   const btn=$('#toggleSnowDepth'); if(!MAP||!btn||!DATA)return;
   if(SNOW_LAYER&&MAP.hasLayer(SNOW_LAYER)){MAP.removeLayer(SNOW_LAYER);btn.textContent='Show NOAA snow depth';btn.setAttribute('aria-pressed','false');track('snowmobile_snow_depth_toggle',{state:'off'});return}
   if(!SNOW_LAYER){
-    /* Use the real extent of this region's own returned trail geometry
-     * (computed server-side in bboxFromFeatures) rather than a guessed box,
-     * so the overlay actually lines up with the region being viewed. */
-    const b=DATA&&DATA.bbox;
-    const box=b?{minLon:b.minLon,minLat:b.minLat,maxLon:b.maxLon,maxLat:b.maxLat}:(()=>{const c=DATA.mapCenter||[44.9,-85.6],half=0.6;return {minLon:c[1]-half,minLat:c[0]-half,maxLon:c[1]+half,maxLat:c[0]+half};})();
-    const bbox=[box.minLon,box.minLat,box.maxLon,box.maxLat].join(',');
-    const base='https://mapservices.weather.noaa.gov/raster/rest/services/snow/NOHRSC_Snow_Analysis/MapServer/export';
+    const b=DATA&&DATA.bbox;const box=b?{minLon:b.minLon,minLat:b.minLat,maxLon:b.maxLon,maxLat:b.maxLat}:(()=>{const c=DATA.mapCenter||[44.9,-85.6],half=0.6;return {minLon:c[1]-half,minLat:c[0]-half,maxLon:c[1]+half,maxLat:c[0]+half};})();
+    const bbox=[box.minLon,box.minLat,box.maxLon,box.maxLat].join(','),base='https://mapservices.weather.noaa.gov/raster/rest/services/snow/NOHRSC_Snow_Analysis/MapServer/export';
     const q=new URLSearchParams({bbox,bboxSR:'4326',imageSR:'4326',size:'900,1100',format:'png32',transparent:'true',layers:'show:0',f:'image'});
     SNOW_LAYER=L.imageOverlay(base+'?'+q.toString(),[[box.minLat,box.minLon],[box.maxLat,box.maxLon]],{opacity:.48,interactive:false});
   }
@@ -197,104 +184,40 @@ function routeHint(){return $('#routeHint');}
 function routeResultHost(){return $('#routeResult');}
 function clearRouteButton(){return $('#clearRoute');}
 const ROUTE_MARK_COLOR='#e8a33d';
-
-function clearRoutePoints(){
-  for(const m of ROUTE_MARKERS)m.remove();
-  ROUTE_MARKERS=[];ROUTE_POINTS=[];
-  if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}
-}
-function setRouteMode(on){
-  ROUTE_MODE=on;
-  const btn=routeModeButton(),hint=routeHint();
-  if(btn)btn.textContent=on?'Cancel':'Plan a route on this map';
-  if(hint)hint.hidden=!on;
-  if(hint&&on)hint.textContent='Click a start point on the map above.';
-  if(MAP)MAP.getContainer().style.cursor=on?'crosshair':'';
-}
-function toggleRouteMode(){
-  if(ROUTE_MODE){setRouteMode(false);return;}
-  const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}
-  clearRoutePoints();
-  const cb=clearRouteButton();if(cb)cb.hidden=true;
-  setRouteMode(true);
-  track('snowmobile_route_mode_start',{region:DATA?.key||'unknown'});
-}
-function clearRoute(){
-  clearRoutePoints();
-  const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}
-  const cb=clearRouteButton();if(cb)cb.hidden=true;
-  setRouteMode(false);
-  track('snowmobile_route_cleared',{region:DATA?.key||'unknown'});
-}
-function onMapClick(e){
-  if(!ROUTE_MODE||!MAP)return;
-  MAP.closePopup();
-  const marker=L.circleMarker(e.latlng,{radius:7,color:'#2a1c0a',weight:2,fillColor:ROUTE_MARK_COLOR,fillOpacity:.95}).addTo(MAP);
-  ROUTE_MARKERS.push(marker);
-  ROUTE_POINTS.push(e.latlng);
-  if(ROUTE_POINTS.length===1){
-    const hint=routeHint();if(hint)hint.textContent='Click an end point on the map above.';
-    return;
-  }
-  setRouteMode(false);
-  computeRoute();
-}
+function clearRoutePoints(){for(const m of ROUTE_MARKERS)m.remove();ROUTE_MARKERS=[];ROUTE_POINTS=[];if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}}
+function setRouteMode(on){ROUTE_MODE=on;const btn=routeModeButton(),hint=routeHint();if(btn)btn.textContent=on?'Cancel':'Plan a route on this map';if(hint)hint.hidden=!on;if(hint&&on)hint.textContent='Click a start point on the map above.';if(MAP)MAP.getContainer().style.cursor=on?'crosshair':'';}
+function toggleRouteMode(){if(ROUTE_MODE){setRouteMode(false);return;}const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}clearRoutePoints();const cb=clearRouteButton();if(cb)cb.hidden=true;setRouteMode(true);track('snowmobile_route_mode_start',{region:DATA?.key||'unknown'});}
+function clearRoute(){clearRoutePoints();const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}const cb=clearRouteButton();if(cb)cb.hidden=true;setRouteMode(false);track('snowmobile_route_cleared',{region:DATA?.key||'unknown'});}
+function onMapClick(e){if(!ROUTE_MODE||!MAP)return;MAP.closePopup();const marker=L.circleMarker(e.latlng,{radius:7,color:'#2a1c0a',weight:2,fillColor:ROUTE_MARK_COLOR,fillOpacity:.95}).addTo(MAP);ROUTE_MARKERS.push(marker);ROUTE_POINTS.push(e.latlng);if(ROUTE_POINTS.length===1){const hint=routeHint();if(hint)hint.textContent='Click an end point on the map above.';return;}setRouteMode(false);computeRoute();}
 function routeResultHtml(route){
   if(!route)return '<p><strong>Route unavailable.</strong> The routing service did not return a usable result.</p>';
   if(!route.routable)return `<p><strong>No route drawn.</strong> ${esc(route.reason||'These two points are not connected by mapped, open trail.')}</p>`;
-  const worst=route.worstSegmentOnRoute;
-  const worstLine=worst&&Number.isFinite(worst.score)?`<div class="small">Weakest segment on this route: <span class="badge ${bandClass(worst.band)}">${esc(worst.band)}</span> ${esc(worst.trailNetwork||worst.segmentId)}</div>`:'<div class="small">No current condition score available for this route (off-season or unscored segments).</div>';
+  const worst=route.worstSegmentOnRoute;const worstLine=worst&&Number.isFinite(worst.score)?`<div class="small">Weakest segment on this route: <span class="badge ${bandClass(worst.band)}">${esc(worst.band)}</span> ${esc(worst.trailNetwork||worst.segmentId)}</div>`:'<div class="small">No verified current condition score is available for this route. Distance can still be computed from official geometry.</div>';
   const closedNote=route.closedSegmentsExcludedFromRegion?`<div class="small">${route.closedSegmentsExcludedFromRegion} closed segment${route.closedSegmentsExcludedFromRegion===1?'':'s'} in this region ${route.closedSegmentsExcludedFromRegion===1?'was':'were'} excluded from routing.</div>`:'';
-  return `<div class="route-headline"><strong>${esc(route.distanceMiles)} mi</strong> \u00b7 about ${esc(formatDuration(route.estimatedMinutes))} at an assumed ${esc(route.assumedAvgMph)} mph average</div>
-  <div class="small">${route.segmentsTraversed} DNR trail segment${route.segmentsTraversed===1?'':'s'}, via ${esc(route.trailsVia.slice(0,6).join(' \u2192 '))}${route.trailsVia.length>6?' \u2026':''}</div>
-  ${worstLine}${closedNote}
-  <div class="small route-truth-inline">${esc(route.truth||'')}</div>`;
+  return `<div class="route-headline"><strong>${esc(route.distanceMiles)} mi</strong> · about ${esc(formatDuration(route.estimatedMinutes))} at an assumed ${esc(route.assumedAvgMph)} mph average</div><div class="small">${route.segmentsTraversed} DNR trail segment${route.segmentsTraversed===1?'':'s'}, via ${esc(route.trailsVia.slice(0,6).join(' → '))}${route.trailsVia.length>6?' …':''}</div>${worstLine}${closedNote}<div class="small route-truth-inline">${esc(route.truth||'')}</div>`;
 }
 async function computeRoute(){
-  const host=routeResultHost();if(!host||!DATA||ROUTE_POINTS.length<2)return;
-  host.hidden=false;host.innerHTML='<p>Computing route along official DNR trail geometry\\u2026</p>';
-  const [a,b]=ROUTE_POINTS;
-  const from=`${a.lat.toFixed(5)},${a.lng.toFixed(5)}`,to=`${b.lat.toFixed(5)},${b.lng.toFixed(5)}`;
+  const host=routeResultHost();if(!host||!DATA||ROUTE_POINTS.length<2)return;host.hidden=false;host.innerHTML='<p>Computing route along official DNR trail geometry…</p>';
+  const [a,b]=ROUTE_POINTS;const from=`${a.lat.toFixed(5)},${a.lng.toFixed(5)}`,to=`${b.lat.toFixed(5)},${b.lng.toFixed(5)}`;
   try{
-    const r=await fetch(`/api/snowmobile-route?region=${encodeURIComponent(DATA.key)}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
-    const j=await r.json();
-    if(!r.ok)throw new Error(j.error||j.detail||String(r.status));
-    host.innerHTML=routeResultHtml(j.route);
-    if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}
-    if(j.route?.routable&&j.route.geometry?.coordinates?.length>1){
-      const latlngs=j.route.geometry.coordinates.map(([lon,lat])=>[lat,lon]);
-      ROUTE_LINE=L.polyline(latlngs,{color:ROUTE_MARK_COLOR,weight:6,opacity:.95,dashArray:'1 8',lineCap:'round'}).addTo(MAP);
-      try{MAP.fitBounds(ROUTE_LINE.getBounds(),{padding:[25,25]});}catch{}
-    }
-    const cb=clearRouteButton();if(cb)cb.hidden=false;
-    track('snowmobile_route_computed',{region:DATA.key,routable:Boolean(j.route?.routable),miles:j.route?.distanceMiles??null});
-  }catch(e){
-    host.innerHTML=`<p><strong>Route unavailable.</strong> ${esc(e.message||'The routing service did not return a usable result.')}</p>`;
-    const cb=clearRouteButton();if(cb)cb.hidden=false;
-    track('snowmobile_route_error',{region:DATA.key,message:String(e.message||e).slice(0,120)});
-  }
+    const r=await fetch(`/api/snowmobile-route?region=${encodeURIComponent(DATA.key)}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);const j=await r.json();if(!r.ok)throw new Error(j.error||j.detail||String(r.status));
+    host.innerHTML=routeResultHtml(j.route);if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}
+    if(j.route?.routable&&j.route.geometry?.coordinates?.length>1){const latlngs=j.route.geometry.coordinates.map(([lon,lat])=>[lat,lon]);ROUTE_LINE=L.polyline(latlngs,{color:ROUTE_MARK_COLOR,weight:6,opacity:.95,dashArray:'1 8',lineCap:'round'}).addTo(MAP);try{MAP.fitBounds(ROUTE_LINE.getBounds(),{padding:[25,25]});}catch{}}
+    const cb=clearRouteButton();if(cb)cb.hidden=false;track('snowmobile_route_computed',{region:DATA.key,routable:Boolean(j.route?.routable),miles:j.route?.distanceMiles??null});
+  }catch(e){host.innerHTML=`<p><strong>Route unavailable.</strong> ${esc(e.message||'The routing service did not return a usable result.')}</p>`;const cb=clearRouteButton();if(cb)cb.hidden=false;track('snowmobile_route_error',{region:DATA.key,message:String(e.message||e).slice(0,120)});}
 }
 document.addEventListener('click',e=>{
-  if(e.target?.id==='toggleSnowDepth')toggleSnowDepth();
-  if(e.target?.id==='routeModeToggle')toggleRouteMode();
-  if(e.target?.id==='clearRoute')clearRoute();
+  if(e.target?.id==='toggleSnowDepth')toggleSnowDepth();if(e.target?.id==='routeModeToggle')toggleRouteMode();if(e.target?.id==='clearRoute')clearRoute();
   if(e.target?.id==='checkDrive'){const v=$('#originPreset')?.value;if(v)checkOrigin(v,ORIGIN_NAMES[v]||'Selected origin')}
   if(e.target?.id==='useMyLocation'){
     const host=$('#personalDrive');if(!navigator.geolocation){if(host)host.textContent='Browser location is unavailable.'}
-    else{if(host)host.textContent='Requesting your location\u2026';navigator.geolocation.getCurrentPosition(pos=>checkOrigin(`${pos.coords.latitude.toFixed(5)},${pos.coords.longitude.toFixed(5)}`,'Your location'),()=>{if(host)host.textContent='Location was not shared. Choose a city instead.'},{enableHighAccuracy:false,timeout:10000,maximumAge:300000})}
+    else{if(host)host.textContent='Requesting your location…';navigator.geolocation.getCurrentPosition(pos=>checkOrigin(`${pos.coords.latitude.toFixed(5)},${pos.coords.longitude.toFixed(5)}`,'Your location'),()=>{if(host)host.textContent='Location was not shared. Choose a city instead.'},{enableHighAccuracy:false,timeout:10000,maximumAge:300000})}
   }
   const a=e.target?.closest?.('[data-source-name]');if(a)track('snowmobile_source_verify',{source:a.getAttribute('data-source-name')||'unknown'});
 });
 async function load(){
   const key=window.SNOWMOBILE_REGION;
-  try{
-    const r=await fetch(`/api/snowmobile?region=${encodeURIComponent(key)}`);const payload=await r.json();if(!r.ok)throw new Error(payload.detail||payload.error||r.status);
-    const d={...payload.region,season:payload.season,sources:payload.sources,generatedAt:payload.generatedAt,truthBoundary:payload.truthBoundary,operational:payload.operational};
-    render(d);
-  }catch(e){
-    $('#status').textContent='DATA UNAVAILABLE';
-    $('#drive').innerHTML='<strong>No ride recommendation.</strong> Live source verification failed, so the page is not substituting guessed conditions.';
-    const segHead=$('#segments'); if(segHead)segHead.innerHTML='<p>'+esc(e.message)+'</p>';
-  }
+  try{const r=await fetch(`/api/snowmobile?region=${encodeURIComponent(key)}`);const payload=await r.json();if(!r.ok)throw new Error(payload.detail||payload.error||r.status);const d={...payload.region,season:payload.season,sources:payload.sources,generatedAt:payload.generatedAt,truthBoundary:payload.truthBoundary,operational:payload.operational};render(d);}
+  catch(e){$('#status').textContent='DATA UNAVAILABLE';$('#drive').innerHTML='<strong>No ride recommendation.</strong> Live source verification failed, so the page is not substituting guessed conditions.';const segHead=$('#segments'); if(segHead)segHead.innerHTML='<p>'+esc(e.message)+'</p>';}
 }
 load();
