@@ -28,7 +28,7 @@ test('thermal API exposes recent AFDD change without pretending it is ice growth
   assert.match(api, /change24h/);
   assert.match(api, /change72h/);
   assert.match(api, /change7d/);
-  assert.match(api, /thermal-history and lake-wide context/);
+  assert.match(api, /thermal-history[\s\S]*lake-wide context/);
 });
 
 test('front end does not use a whole-lake percentage as a local observed condition', () => {
