@@ -26,6 +26,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Sep 30 2026: shared SERP-length gate repair for the Haleakala sunrise synced route.
+  "/synced-national-tools/haleakala-sunrise/",
   // Sep 30 2026: reviewed Michigan Ice decision-engine client update. The public client now
   // separates regional observation, lake-wide trend, thermal history, and forecast forcing.
   // Re-crawl after production release, then remove this declaration.
