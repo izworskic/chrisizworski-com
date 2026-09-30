@@ -1,0 +1,42 @@
+name: Haleakala sunrise validation capture
+
+on:
+  schedule:
+    # Haleakala sunrise is roughly 15:45-17:05 UTC through the year.
+    # Five-minute sampling preserves the rolling LCO all-sky source while available.
+    - cron: '*/5 15-17 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: haleakala-sunrise-validation-capture
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Capture OGG validation evidence
+        run: node scripts/capture-haleakala-validation.mjs
+      - name: Commit immutable evidence
+        run: |
+          if git diff --quiet -- data/haleakala-validation 2>/dev/null && [ -z "$(git status --porcelain data/haleakala-validation 2>/dev/null)" ]; then
+            echo "No evidence captured in this run."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/haleakala-validation
+          git commit -m "data: capture Haleakala sunrise validation evidence"
+          git pull --rebase origin main
+          git push origin HEAD:main
