@@ -19,6 +19,10 @@
  * scored geometry a region's detail page shows, through the same cache.
  */
 function send(res,payload,status=200){res.status(status);res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','public, s-maxage=300, stale-while-revalidate=900');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('X-Robots-Tag','noindex, nofollow');res.json(payload);}
+function timingSummary(built){
+  const b=built?.timing?.best;if(!b)return null;
+  return {name:b.name||null,startTime:b.startTime||null,endTime:b.endTime||null,score:Number.isFinite(b.score)?b.score:null,maxTempF:Number.isFinite(b.maxTempF)?b.maxTempF:null,reasons:Array.isArray(b.reasons)?b.reasons.slice(0,3):[]};
+}
 
 module.exports=async function(req,res){
   if(req.method!=='GET')return send(res,{error:'Method not allowed'},405);
@@ -50,7 +54,7 @@ module.exports=async function(req,res){
     const ctx={season,closures,closuresOk,lib};
 
     const built=await Promise.all(REGIONS.map((region)=>buildRegion(region,ctx)));
-    const summaries=built.map(regionSummary);
+    const summaries=built.map(region=>({...regionSummary(region),bestWeatherWindow:timingSummary(region)}));
     const ranked=summaries.filter((r)=>!r.error&&Number.isFinite(r.route?.score)&&r.route?.confidence>=50).sort((a,b)=>b.route.score-a.route.score);
     const totalSegments=summaries.reduce((n,r)=>n+(r.segmentCount||0),0);
     const payload={
@@ -63,7 +67,7 @@ module.exports=async function(req,res){
         {name:'NWS Local Storm Reports',url:'https://mesonet.agron.iastate.edu/lsr/',authority:'official NWS-received snowfall reports; report durations vary'},
         {name:'National Weather Service',url:'https://weather.gov/',authority:'forecast plus recent station-observation context'}
       ],
-      operational:{dataState:'fresh',sourceFailures:{closures:closuresOk?null:closuresR.error},modelBoundary:'A region is not rankable for a long-drive decision unless current surface evidence supports a ride-quality score and confidence is at least 50.'}
+      operational:{dataState:'fresh',sourceFailures:{closures:closuresOk?null:closuresR.error},modelBoundary:'A region is not rankable for a long-drive decision unless current surface evidence supports a ride-quality score and confidence is at least 50. Weather windows identify timing only; they do not turn an unverified trail into a recommended ride.'}
     };
     REGION_CACHE.set(cacheKey,{savedAt:Date.now(),payload});
     return send(res,payload);
