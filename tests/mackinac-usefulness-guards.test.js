@@ -27,12 +27,18 @@ test("origin API tries the built-in list before the rate-limited geocoder", () =
   assert.ok(src.indexOf("lookupOrigin(q)") > 0 && src.indexOf("lookupOrigin(q)") < src.indexOf("await geocode(q)"));
 });
 
-test("the first choice is the starting city, on the first screen", () => {
+test("one question first: where from, and no plan until it's answered", () => {
   const html = read("public/mackinac-island/index.html");
-  const sentence = html.slice(html.indexOf('id="tripForm"'), html.indexOf("</form>"));
-  assert.match(sentence, /<label class="pick pick-from is-empty" data-pick="from">/);
-  assert.match(sentence, /<option value="" selected>your city<\/option>/);
-  assert.ok(html.indexOf('id="tripForm"') < html.indexOf('id="sheet"'));
+  const css = read("public/assets/mackinac-island.css");
+  assert.match(html, /<label class="ask-label" for="askFromSelect">Where are you driving from\?<\/label>/);
+  assert.match(html, /<option value="" selected>Choose your city<\/option>/);
+  assert.ok(html.indexOf('id="askFrom"') < html.indexOf('id="tripSentence"'));
+  assert.ok(html.indexOf('id="tripSentence"') < html.indexOf('id="sheet"'));
+  assert.match(css, /html:not\(\.mk-plan\) \.trip-sentence,html:not\(\.mk-plan\) \.sheet-wrap\{display:none\}/);
+  assert.match(css, /html\.mk-plan \.ask\{display:none\}/);
+  // A returning visitor with a saved city opens straight on the plan, before first paint.
+  const head = html.slice(0, html.indexOf("</head>"));
+  assert.match(head, /mackinac-day-sheet-v1[\s\S]*classList\.add\("mk-plan"\)/);
 });
 
 test("every choice is one pick with a sensible default; no Continue or Build step", () => {
@@ -50,10 +56,10 @@ test("a late start gets an honest short visit, in plain language", () => {
   assert.doesNotMatch(src, /un-dated|Your entered/);
 });
 
-test("the page stays simple: four sections, nothing folded away", () => {
+test("the page stays simple: four blocks, nothing folded away", () => {
   const html = read("public/mackinac-island/index.html");
   const main = html.slice(html.indexOf("<main"), html.indexOf("</main>"));
-  assert.equal((main.match(/<section /g) || []).length, 4);
+  assert.equal((main.match(/<(section|nav) /g) || []).length, 4);
   assert.doesNotMatch(main, /<details/);
   assert.ok(read("public/assets/mackinac-island.js").length < 20000, "the planner client grew past 20 KB");
 });

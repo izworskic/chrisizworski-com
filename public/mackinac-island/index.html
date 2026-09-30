@@ -22,7 +22,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="/assets/mackinac-intent.css?v=20260927-pages2">
-<link rel="stylesheet" href="/assets/mackinac-island.css?v=20260929-sheet1">
+<link rel="stylesheet" href="/assets/mackinac-island.css?v=20260929-line1">
+<script>try{var q=new URLSearchParams(location.search),s=JSON.parse(localStorage.getItem("mackinac-day-sheet-v1")||"null"),o=JSON.parse(localStorage.getItem("mackinac-trip-plan-v1")||"null");if(q.get("from")||(s&&s.from)||(!s&&o&&o.plan&&o.plan.origin_text))document.documentElement.classList.add("mk-plan")}catch(e){}</script>
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -70,15 +71,6 @@
         {"@type":"ListItem","position":2,"name":"Michigan tools","item":"https://chrisizworski.com/tools/"},
         {"@type":"ListItem","position":3,"name":"Mackinac Island Trip Planner"}
       ]
-    },
-    {
-      "@type":"FAQPage",
-      "mainEntity":[
-        {"@type":"Question","name":"How much time do you need for a Mackinac Island day trip?","acceptedAnswer":{"@type":"Answer","text":"Plan on at least five or six hours on the Island. That covers Fort Mackinac, Arch Rock or the bike loop, lunch and Main Street without rushing. If the drive is more than about four hours each way, a night on the Island makes the trip much better."}},
-        {"@type":"Question","name":"Should I take the ferry from Mackinaw City or St. Ignace?","acceptedAnswer":{"@type":"Answer","text":"Use the dock on your side of the Mackinac Bridge: Mackinaw City if you’re coming from the Lower Peninsula, St. Ignace from the Upper Peninsula. Shepler’s and Arnold run from both docks, and published 2026 tickets aren’t tied to a day or departure."}},
-        {"@type":"Question","name":"Can you bike around Mackinac Island?","acceptedAnswer":{"@type":"Answer","text":"Yes. M-185, the shore road, is a flat 8.2-mile loop with no cars. Most people take about two hours with stops. You can rent bikes near the docks or bring your own on the ferry for a fee. The roads through the middle of the Island are much hillier."}},
-        {"@type":"Question","name":"Should I plan on the last ferry back?","acceptedAnswer":{"@type":"Answer","text":"No. The last boat back is a hard limit, so this planner puts you on an earlier boat and shows the last one as your backstop."}}
-      ]
     }
   ]
 }
@@ -98,20 +90,28 @@
   <section class="plan-top" id="trip-intake" aria-labelledby="page-title">
     <div class="shell plan-shell">
       <h1 id="page-title">Mackinac Island Trip Planner</h1>
-      <p class="plan-lede">Two ferry docks, two ferry lines, no cars and one last boat back. Change any word below and your whole day is replanned.</p>
-      <form class="trip-sentence" id="tripForm" aria-label="Your trip" novalidate>
-        <p>Plan a
+      <form class="trip-form" id="tripForm" aria-label="Your trip" novalidate>
+        <div class="ask" id="askFrom">
+          <p class="plan-lede">Two ferry docks, two ferry lines, no cars and one last boat back. We’ll plan around all of it.</p>
+          <label class="ask-label" for="askFromSelect">Where are you driving from?</label>
+          <div class="ask-pick"><select id="askFromSelect" name="ask_from"><option value="" selected>Choose your city</option></select></div>
+          <p class="ask-note">You’ll get when to leave, which boat to take, what to see in what order, and the last boat back.</p>
+        </div>
+        <div class="trip-sentence" id="tripSentence">
+        <p class="sentence-label">Your trip · tap a word to change it</p>
+        <p>A
           <label class="pick" data-pick="stay"><span class="pick-text">day trip</span><span class="sr-only">Trip length</span><select id="pickStay" name="stay"><option value="day">day trip</option><option value="1">one-night stay</option><option value="2">two-night stay</option><option value="3">three-night stay</option></select></label>
           for
           <label class="pick" data-pick="who"><span class="pick-text">two adults</span><span class="sr-only">Who is going</span><select id="pickWho" name="who"><option value="solo">one adult</option><option value="couple" selected>two adults</option><option value="group">a group of adults</option><option value="family-young">a family with young kids</option><option value="family-teens">a family with teens</option><option value="grandparents">a group with grandparents</option></select></label>
           from
-          <label class="pick pick-from is-empty" data-pick="from"><span class="pick-text">your city</span><span class="sr-only">Starting city</span><select id="pickFrom" name="from"><option value="" selected>your city</option><optgroup label="Lower Michigan"><option value="Alpena, MI" data-m="120" data-s="131">Alpena</option><option value="Ann Arbor, MI" data-m="285" data-s="294">Ann Arbor</option><option value="Battle Creek, MI" data-m="296" data-s="305">Battle Creek</option><option value="Bay City, MI" data-m="185" data-s="195">Bay City</option><option value="Cadillac, MI" data-m="160" data-s="169">Cadillac</option><option value="Dearborn, MI" data-m="307" data-s="317">Dearborn</option><option value="Detroit, MI" data-m="302" data-s="311">Detroit</option><option value="East Lansing, MI" data-m="235" data-s="244">East Lansing</option><option value="Flint, MI" data-m="231" data-s="241">Flint</option><option value="Frankenmuth, MI" data-m="211" data-s="221">Frankenmuth</option><option value="Grand Rapids, MI" data-m="255" data-s="265">Grand Rapids</option><option value="Holland, MI" data-m="288" data-s="298">Holland</option><option value="Houghton Lake, MI" data-m="115" data-s="124">Houghton Lake</option><option value="Jackson, MI" data-m="272" data-s="282">Jackson</option><option value="Kalamazoo, MI" data-m="308" data-s="318">Kalamazoo</option><option value="Lansing, MI" data-m="238" data-s="247">Lansing</option><option value="Livonia, MI" data-m="298" data-s="308">Livonia</option><option value="Ludington, MI" data-m="255" data-s="264">Ludington</option><option value="Midland, MI" data-m="181" data-s="191">Midland</option><option value="Mount Pleasant, MI" data-m="164" data-s="174">Mount Pleasant</option><option value="Muskegon, MI" data-m="284" data-s="294">Muskegon</option><option value="Novi, MI" data-m="281" data-s="290">Novi</option><option value="Port Huron, MI" data-m="299" data-s="308">Port Huron</option><option value="Saginaw, MI" data-m="200" data-s="210">Saginaw</option><option value="Sterling Heights, MI" data-m="288" data-s="298">Sterling Heights</option><option value="Traverse City, MI" data-m="148" data-s="158">Traverse City</option><option value="Troy, MI" data-m="279" data-s="289">Troy</option><option value="Warren, MI" data-m="296" data-s="306">Warren</option></optgroup><optgroup label="Up north"><option value="Charlevoix, MI" data-m="81" data-s="90">Charlevoix</option><option value="Cheboygan, MI" data-m="24" data-s="35">Cheboygan</option><option value="Gaylord, MI" data-m="61" data-s="71">Gaylord</option><option value="Grayling, MI" data-m="89" data-s="99">Grayling</option><option value="Harbor Springs, MI" data-m="56" data-s="66">Harbor Springs</option><option value="Mackinaw City, MI" data-m="2" data-s="13">Mackinaw City</option><option value="Newberry, MI" data-m="93" data-s="83">Newberry</option><option value="Petoskey, MI" data-m="56" data-s="66">Petoskey</option><option value="Sault Ste. Marie, MI" data-m="66" data-s="56">Sault Ste. Marie</option><option value="St. Ignace, MI" data-m="15" data-s="1">St. Ignace</option></optgroup><optgroup label="Upper Peninsula"><option value="Escanaba, MI" data-m="182" data-s="173">Escanaba</option><option value="Houghton, MI" data-m="334" data-s="325">Houghton</option><option value="Marquette, MI" data-m="206" data-s="197">Marquette</option><option value="Munising, MI" data-m="152" data-s="143">Munising</option></optgroup><optgroup label="Other states"><option value="Chicago, IL" data-m="455" data-s="465">Chicago, IL</option><option value="Cincinnati, OH" data-m="563" data-s="573">Cincinnati, OH</option><option value="Cleveland, OH" data-m="470" data-s="479">Cleveland, OH</option><option value="Columbus, OH" data-m="508" data-s="517">Columbus, OH</option><option value="Fort Wayne, IN" data-m="381" data-s="391">Fort Wayne, IN</option><option value="Green Bay, WI" data-m="320" data-s="312">Green Bay, WI</option><option value="Indianapolis, IN" data-m="516" data-s="525">Indianapolis, IN</option><option value="Louisville, KY" data-m="632" data-s="642">Louisville, KY</option><option value="Madison, WI" data-m="482" data-s="473">Madison, WI</option><option value="Milwaukee, WI" data-m="445" data-s="437">Milwaukee, WI</option><option value="Minneapolis, MN" data-m="626" data-s="617">Minneapolis, MN</option><option value="Pittsburgh, PA" data-m="598" data-s="607">Pittsburgh, PA</option><option value="South Bend, IN" data-m="382" data-s="392">South Bend, IN</option><option value="St. Louis, MO" data-m="749" data-s="759">St. Louis, MO</option><option value="Toledo, OH" data-m="344" data-s="354">Toledo, OH</option></optgroup><optgroup label="Ontario"><option value="London, ON" data-m="385" data-s="394">London, ON</option><option value="Sault Ste. Marie, ON" data-m="68" data-s="58">Sault Ste. Marie, ON</option><option value="Toronto, ON" data-m="508" data-s="517">Toronto, ON</option><option value="Windsor, ON" data-m="306" data-s="316">Windsor, ON</option></optgroup><optgroup label="Somewhere else"><option value="__other">another city or ZIP…</option></optgroup></select></label>
+          <label class="pick pick-from" data-pick="from"><span class="pick-text">your city</span><span class="sr-only">Starting city</span><select id="pickFrom" name="from"><optgroup label="Lower Michigan"><option value="Alpena, MI" data-m="120" data-s="131">Alpena</option><option value="Ann Arbor, MI" data-m="285" data-s="294">Ann Arbor</option><option value="Battle Creek, MI" data-m="296" data-s="305">Battle Creek</option><option value="Bay City, MI" data-m="185" data-s="195">Bay City</option><option value="Cadillac, MI" data-m="160" data-s="169">Cadillac</option><option value="Dearborn, MI" data-m="307" data-s="317">Dearborn</option><option value="Detroit, MI" data-m="302" data-s="311">Detroit</option><option value="East Lansing, MI" data-m="235" data-s="244">East Lansing</option><option value="Flint, MI" data-m="231" data-s="241">Flint</option><option value="Frankenmuth, MI" data-m="211" data-s="221">Frankenmuth</option><option value="Grand Rapids, MI" data-m="255" data-s="265">Grand Rapids</option><option value="Holland, MI" data-m="288" data-s="298">Holland</option><option value="Houghton Lake, MI" data-m="115" data-s="124">Houghton Lake</option><option value="Jackson, MI" data-m="272" data-s="282">Jackson</option><option value="Kalamazoo, MI" data-m="308" data-s="318">Kalamazoo</option><option value="Lansing, MI" data-m="238" data-s="247">Lansing</option><option value="Livonia, MI" data-m="298" data-s="308">Livonia</option><option value="Ludington, MI" data-m="255" data-s="264">Ludington</option><option value="Midland, MI" data-m="181" data-s="191">Midland</option><option value="Mount Pleasant, MI" data-m="164" data-s="174">Mount Pleasant</option><option value="Muskegon, MI" data-m="284" data-s="294">Muskegon</option><option value="Novi, MI" data-m="281" data-s="290">Novi</option><option value="Port Huron, MI" data-m="299" data-s="308">Port Huron</option><option value="Saginaw, MI" data-m="200" data-s="210">Saginaw</option><option value="Sterling Heights, MI" data-m="288" data-s="298">Sterling Heights</option><option value="Traverse City, MI" data-m="148" data-s="158">Traverse City</option><option value="Troy, MI" data-m="279" data-s="289">Troy</option><option value="Warren, MI" data-m="296" data-s="306">Warren</option></optgroup><optgroup label="Up north"><option value="Charlevoix, MI" data-m="81" data-s="90">Charlevoix</option><option value="Cheboygan, MI" data-m="24" data-s="35">Cheboygan</option><option value="Gaylord, MI" data-m="61" data-s="71">Gaylord</option><option value="Grayling, MI" data-m="89" data-s="99">Grayling</option><option value="Harbor Springs, MI" data-m="56" data-s="66">Harbor Springs</option><option value="Mackinaw City, MI" data-m="2" data-s="13">Mackinaw City</option><option value="Newberry, MI" data-m="93" data-s="83">Newberry</option><option value="Petoskey, MI" data-m="56" data-s="66">Petoskey</option><option value="Sault Ste. Marie, MI" data-m="66" data-s="56">Sault Ste. Marie</option><option value="St. Ignace, MI" data-m="15" data-s="1">St. Ignace</option></optgroup><optgroup label="Upper Peninsula"><option value="Escanaba, MI" data-m="182" data-s="173">Escanaba</option><option value="Houghton, MI" data-m="334" data-s="325">Houghton</option><option value="Marquette, MI" data-m="206" data-s="197">Marquette</option><option value="Munising, MI" data-m="152" data-s="143">Munising</option></optgroup><optgroup label="Other states"><option value="Chicago, IL" data-m="455" data-s="465">Chicago, IL</option><option value="Cincinnati, OH" data-m="563" data-s="573">Cincinnati, OH</option><option value="Cleveland, OH" data-m="470" data-s="479">Cleveland, OH</option><option value="Columbus, OH" data-m="508" data-s="517">Columbus, OH</option><option value="Fort Wayne, IN" data-m="381" data-s="391">Fort Wayne, IN</option><option value="Green Bay, WI" data-m="320" data-s="312">Green Bay, WI</option><option value="Indianapolis, IN" data-m="516" data-s="525">Indianapolis, IN</option><option value="Louisville, KY" data-m="632" data-s="642">Louisville, KY</option><option value="Madison, WI" data-m="482" data-s="473">Madison, WI</option><option value="Milwaukee, WI" data-m="445" data-s="437">Milwaukee, WI</option><option value="Minneapolis, MN" data-m="626" data-s="617">Minneapolis, MN</option><option value="Pittsburgh, PA" data-m="598" data-s="607">Pittsburgh, PA</option><option value="South Bend, IN" data-m="382" data-s="392">South Bend, IN</option><option value="St. Louis, MO" data-m="749" data-s="759">St. Louis, MO</option><option value="Toledo, OH" data-m="344" data-s="354">Toledo, OH</option></optgroup><optgroup label="Ontario"><option value="London, ON" data-m="385" data-s="394">London, ON</option><option value="Sault Ste. Marie, ON" data-m="68" data-s="58">Sault Ste. Marie, ON</option><option value="Toronto, ON" data-m="508" data-s="517">Toronto, ON</option><option value="Windsor, ON" data-m="306" data-s="316">Windsor, ON</option></optgroup><optgroup label="Somewhere else"><option value="__other">another city or ZIP…</option></optgroup></select></label>
           <label class="pick" data-pick="day"><span class="pick-text">today</span><span class="sr-only">Day</span><select id="pickDay" name="day"><option value="">today</option></select></label>,
           leaving after
           <label class="pick" data-pick="leave"><span class="pick-text">6 AM</span><span class="sr-only">Earliest time to leave home</span><select id="pickLeave" name="leave"><option value="05:00">5 AM</option><option value="05:30">5:30 AM</option><option value="06:00" selected>6 AM</option><option value="06:30">6:30 AM</option><option value="07:00">7 AM</option><option value="07:30">7:30 AM</option><option value="08:00">8 AM</option><option value="08:30">8:30 AM</option><option value="09:00">9 AM</option><option value="09:30">9:30 AM</option><option value="10:00">10 AM</option><option value="10:30">10:30 AM</option><option value="11:00">11 AM</option><option value="11:30">11:30 AM</option><option value="12:00">noon</option><option value="12:30">12:30 PM</option><option value="13:00">1 PM</option><option value="13:30">1:30 PM</option><option value="14:00">2 PM</option></select></label>,
           getting around
           <label class="pick" data-pick="go"><span class="pick-text">on foot</span><span class="sr-only">Getting around the Island</span><select id="pickGo" name="go"><option value="foot">on foot</option><option value="bike">by bike</option><option value="carriage">by horse and carriage</option></select></label>.
         </p>
+        </div>
         <div class="other-city" id="otherCity" hidden>
           <label for="otherCityInput">Another city or ZIP</label>
           <div class="other-city-row"><input id="otherCityInput" name="city" autocomplete="address-level2" placeholder="Toledo, OH or 49684" enterkeyhint="go"><button class="btn primary" type="submit">Plan it</button></div>
@@ -142,36 +142,55 @@
     </div>
   </section>
 
-  <section class="hub-section guide-qa" aria-labelledby="guide-title">
+  <section class="hub-section guide-tips" aria-labelledby="tips-title">
     <div class="shell plan-shell">
-      <div class="eyebrow">Good to know</div>
-      <h2 id="guide-title">Planning a Mackinac Island trip</h2>
-      <div class="qa">
-        <h3>How much time do you need for a Mackinac Island day trip?</h3>
-        <p>Plan on at least five or six hours on the Island. That covers Fort Mackinac, Arch Rock or the bike loop, lunch and Main Street without rushing. If the drive is more than about four hours each way, a night on the Island makes the trip much better.</p>
-        <h3>Should I take the ferry from Mackinaw City or St. Ignace?</h3>
-        <p>Use the dock on your side of the Mackinac Bridge: Mackinaw City if you’re coming from the Lower Peninsula, St. Ignace from the Upper Peninsula. Shepler’s and Arnold run from both docks, and published 2026 tickets aren’t tied to a day or departure.</p>
-        <h3>Can you bike around Mackinac Island?</h3>
-        <p>Yes. M-185, the shore road, is a flat 8.2-mile loop with no cars. Most people take about two hours with stops. You can rent bikes near the docks or bring your own on the ferry for a fee. The roads through the middle of the Island are much hillier.</p>
-        <h3>Should I plan on the last ferry back?</h3>
-        <p>No. The last boat back is a hard limit, so this planner puts you on an earlier boat and shows the last one as your backstop.</p>
-      </div>
+      <h2 id="tips-title">Good to know before you go</h2>
+      <ul class="tips">
+        <li><strong>Plan on five or six hours on the Island.</strong> That covers Fort Mackinac, Arch Rock or the bike loop, lunch and Main Street without rushing. If the drive is more than about four hours each way, a night on the Island makes the trip much better.</li>
+        <li><strong>Use the dock on your side of the Mackinac Bridge.</strong> That’s Mackinaw City if you’re coming from the Lower Peninsula, St. Ignace from the Upper Peninsula. Shepler’s and Arnold run from both docks, and published 2026 tickets aren’t tied to a day or departure.</li>
+        <li><strong>The shore loop is a flat 8.2 miles with no cars.</strong> M-185 takes most people about two hours with stops. You can rent bikes near the docks or bring your own on the ferry for a fee. The roads through the middle of the Island are much hillier.</li>
+        <li><strong>Don’t plan on the last boat back.</strong> It’s a hard limit, so this planner puts you on an earlier boat and shows the last one as your backstop.</li>
+      </ul>
     </div>
   </section>
 
-  <section class="hub-section related-section">
+  <nav class="hub-section more-guides" aria-labelledby="guides-title">
     <div class="shell plan-shell">
-      <div class="eyebrow">Mackinac planning guides</div><h2>Start with the decision you are trying to make</h2><div class="related-links"><a href="/mackinac-island/day-trip/">Day trip planner</a><a href="/mackinac-island/with-kids/">Mackinac with kids</a><a href="/mackinac-island/2-day-itinerary/">2-day itinerary</a><a href="/mackinac-island/ferry-planner/">Ferry planner</a></div>
-      <div class="eyebrow">Plan around how you want to move</div><h2>Walking and biking change the whole Island day</h2><div class="related-links"><a href="/mackinac-island/limited-walking/">Mackinac with less walking</a><a href="/mackinac-island/bike-day/">Mackinac bike day / M-185</a><a href="/mackinac-island/fall/">Mackinac in fall</a></div>
-      <div class="eyebrow">Starting farther away?</div><h2>Plan the drive and ferry together</h2><div class="related-links"><a href="/mackinac-island/from-detroit/">From Detroit</a><a href="/mackinac-island/from-chicago/">From Chicago</a><a href="/mackinac-island/from-traverse-city/">From Traverse City</a><a href="/mackinac-island/from-grand-rapids/">From Grand Rapids</a></div>
-      <div class="eyebrow">Use the Mackinac hub</div><h2>Go deeper without starting a new trip</h2><div class="related-links"><a href="/mackinac-island/plan/">Plan</a><a href="/mackinac-island/where-to-stay/">Stay</a><a href="/mackinac-island/dining/">Eat</a><a href="/mackinac-island/things-to-do/">Explore</a><a href="/mackinac-island/events/">Events</a><a href="/mackinac-island/around-the-straits/">Around the Straits</a></div>
-      <div class="eyebrow">Keep planning</div><h2>Related Michigan tools</h2><div class="related-links"><a href="/mackinac-bridge-live/">Mackinac Bridge Live</a><a href="/fall-color/mackinac-island-fall-color/">Mackinac Island fall color</a><a href="/fall-color/">Michigan Fall Color</a><a href="/great-lakes-buoys/">Great Lakes Buoys</a><a href="/soo-locks/">Soo Locks Live</a><a href="/tools/">All Michigan tools</a></div>
+      <h2 id="guides-title">More Mackinac guides</h2>
+      <ul class="guide-links">
+        <li><a href="/mackinac-island/day-trip/">Day trip guide</a></li>
+        <li><a href="/mackinac-island/2-day-itinerary/">Two-day itinerary</a></li>
+        <li><a href="/mackinac-island/with-kids/">Mackinac with kids</a></li>
+        <li><a href="/mackinac-island/limited-walking/">Mackinac with less walking</a></li>
+        <li><a href="/mackinac-island/bike-day/">Biking the Island and M-185</a></li>
+        <li><a href="/mackinac-island/fall/">Mackinac in fall</a></li>
+        <li><a href="/mackinac-island/ferry-planner/">Ferry guide</a></li>
+        <li><a href="/mackinac-island/from-detroit/">Driving from Detroit</a></li>
+        <li><a href="/mackinac-island/from-chicago/">Driving from Chicago</a></li>
+        <li><a href="/mackinac-island/from-traverse-city/">Driving from Traverse City</a></li>
+        <li><a href="/mackinac-island/from-grand-rapids/">Driving from Grand Rapids</a></li>
+        <li><a href="/mackinac-island/plan/">Trip planning guide</a></li>
+        <li><a href="/mackinac-island/where-to-stay/">Where to stay</a></li>
+        <li><a href="/mackinac-island/dining/">Where to eat</a></li>
+        <li><a href="/mackinac-island/things-to-do/">Things to do</a></li>
+        <li><a href="/mackinac-island/events/">Events</a></li>
+        <li><a href="/mackinac-island/around-the-straits/">Around the Straits</a></li>
+      </ul>
+      <h2 class="guides-sub">Related Michigan tools</h2>
+      <ul class="guide-links">
+        <li><a href="/mackinac-bridge-live/">Mackinac Bridge Live</a></li>
+        <li><a href="/fall-color/mackinac-island-fall-color/">Mackinac Island fall color</a></li>
+        <li><a href="/fall-color/">Michigan Fall Color</a></li>
+        <li><a href="/great-lakes-buoys/">Great Lakes Buoys</a></li>
+        <li><a href="/soo-locks/">Soo Locks Live</a></li>
+        <li><a href="/tools/">All Michigan tools</a></li>
+      </ul>
     </div>
-  </section>
+  </nav>
 </main>
 
 <footer class="footer"><div class="shell"><p>Built by <a href="/">Chris Izworski</a>. Ferry operators and park agencies are the final word on their own schedules and hours. This tool is trip-planning guidance, not a guarantee of service or weather.</p><p>© 2026 Chris Izworski · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p></div></footer>
 <script src="/assets/mackinac-hub.js?v=20260927-pages2" defer></script>
-<script src="/assets/mackinac-island.js?v=20260929-sheet1" defer></script>
+<script src="/assets/mackinac-island.js?v=20260929-line1" defer></script>
 </body>
 </html>
