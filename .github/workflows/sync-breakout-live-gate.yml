@@ -16,7 +16,7 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      CORE_COMMIT: 1d0b27053439b6558ba902cf4f29ab4d4a72d338
+      CORE_COMMIT: b0eca26b3121d98b16964642ed850e1e56711332
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -39,6 +39,7 @@ jobs:
         run: |
           set -euo pipefail
           node "$CORE_DIR/scripts/generate-breakout-live-pages.mjs"
+          node "$CORE_DIR/scripts/generate-haleakala-sunrise-page.mjs"
           node "$CORE_DIR/scripts/inject-network-analytics.js"
 
       - name: Install canonical pages and explicit main routes
@@ -74,6 +75,9 @@ jobs:
           for slug in zion-narrows-conditions grand-canyon-access going-to-the-sun-road-status haleakala-sunrise yellowstone-road-status tioga-road-status cadillac-mountain-sunrise mount-rainier-road-status lake-mead-access lake-powell-ramp-status; do
             grep -q 'assets/breakout-value.js' "public/synced-national-tools/$slug/index.html"
           done
+          grep -q 'assets/haleakala-sunrise.js' public/synced-national-tools/haleakala-sunrise/index.html
+          grep -q 'Haleakalā Sunrise Conditions: Clouds, Wind' public/synced-national-tools/haleakala-sunrise/index.html
+          grep -q 'No sunrise score' public/synced-national-tools/haleakala-sunrise/index.html
           grep -q 'twitter:title' public/synced-national-tools/live-decisions/index.html
           grep -q 'twitter:description' public/synced-national-tools/live-decisions/index.html
           grep -q 'CollectionPage' public/synced-national-tools/live-decisions/index.html
