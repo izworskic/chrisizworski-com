@@ -67,6 +67,14 @@ test('ordinary non-AI traffic produces no AI referral event', () => {
   assert.deepEqual(events, []);
 });
 
+test('ordinary Bing organic traffic is not mislabeled as Copilot', () => {
+  const { events } = runMeasurement({
+    referrer: 'https://www.bing.com/search?q=soo+locks',
+    pathname: '/soo-locks/',
+  });
+  assert.deepEqual(events, []);
+});
+
 test('measurement layer does not override native GA4 campaign/source attribution', () => {
   assert.doesNotMatch(source, /campaign_source|campaign_medium|traffic_source|session_source/i);
   assert.match(source, /Do not override GA4 campaign\/source attribution/);
