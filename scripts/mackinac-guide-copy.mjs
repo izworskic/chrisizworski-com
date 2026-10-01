@@ -15,16 +15,16 @@ const pairs = rows => `<div class="decision-grid-2">${rows.map(([t, p]) => `<art
 export const HUB_COPY = {
   plan: {
     h1: "How to plan a Mackinac Island trip",
-    lede: "Mackinac rewards a little planning. The ferry you can make, the nights you have, who’s coming and what you’re hoping for shape the trip far more than any top-ten list. Answer four questions on My Trip and every page here, from ferries to dinner, fits itself to you.",
+    lede: "Mackinac rewards a little planning. The ferry you can make, the nights you have, who’s coming and what you’re hoping for shape the trip far more than any top-ten list. Tell My Trip where you’re driving from and every page here, from ferries to dinner, fits itself to you.",
     primaryLabel: "Start My Trip",
     decisions: [
       ["Time", "How long do you have?", "A day trip, one night and a long weekend are different trips. More nights mean slower mornings and a real full day with no ferry to catch."],
       ["People", "Who’s coming?", "Kids, couples, friends and grandparents want different paces, different meals and different amounts of walking."],
-      ["Priorities", "What would spoil it?", "Crowds, too much walking, rushing, overspending. Say it up front and the plan steers around it."]
+      ["Getting around", "How will you get around?", "On foot, by bike or by horse and carriage. There are no cars, and the Fort and Arch Rock sit up a steep bluff."]
     ],
     body: () => [
-      section("Four questions", "What My Trip asks you",
-        `<p>Four quick taps and the planner knows enough to shape the rest of the site. Your answers follow you from page to page, so you only give them once.</p><div class="flow-grid"><article><strong>Trip length</strong><span>A day · one night · two or three nights · four or more</span></article><article><strong>Who’s coming</strong><span>Solo · couple · family · friends · three generations · group</span></article><article><strong>The trip you picture</strong><span>The icons · slow and easy · biking · history · food · a special occasion · kids · scenery</span></article><article><strong>What to avoid</strong><span>Waiting · missing out · walking · rushing · spending · crowds · weather</span></article></div>`),
+      section("One question", "What My Trip asks you",
+        `<p>My Trip asks one thing: where you’re driving from. Then it plans the whole day and shows what it assumed on one line you can tap to change. Your trip follows you from page to page, so you only tell it once.</p><div class="flow-grid"><article><strong>Trip length</strong><span>A day trip · one, two or three nights</span></article><article><strong>Who’s coming</strong><span>One or two adults · a group · a family with young kids or teens · grandparents along</span></article><article><strong>Leaving after</strong><span>The earliest you can leave home</span></article><article><strong>Getting around</strong><span>On foot · by bike · by horse and carriage</span></article></div>`),
       section("What happens next", "From your driveway to the dock to the Island",
         `<div class="steps"><div class="step"><div><strong>Find the ferry you can actually make</strong><p>Your starting city and leave time are checked against both Mackinaw City and St. Ignace, with room for parking and boarding.</p></div></div><div class="step"><div><strong>Drop the boats you can’t catch</strong><p>Only departures you can reach comfortably make the list.</p></div></div><div class="step"><div><strong>Shape the days</strong><p>Arrival, full and departure days each get their own plan, sized to the hours you’ll really have.</p></div></div><div class="step"><div><strong>Put the best fit first</strong><p>Among the plans that work, the one closest to what you told us comes first.</p></div></div></div>`),
       section("Why it matters", "A shorter trip should be a smaller trip",
@@ -32,9 +32,9 @@ export const HUB_COPY = {
     ].join(""),
     truth: "Your answers shape which suggestions you see and in what order. They don’t change ferry schedules, opening hours, weather or accessibility, which the planner checks separately.",
     faq: [
-      ["How many questions do I need to answer?", "Four: trip length, who’s coming, the trip you picture and what you’d most like to avoid. Occasionally one more, when the answer would really change the plan."],
+      ["How many questions do I need to answer?", "One: where you’re driving from. The plan starts as a day trip for two adults leaving after 6 AM on foot, and you can tap any of those to change it."],
       ["Does the planner use AI to invent the itinerary?", "No. It builds plans from published ferry schedules, drive estimates and known Island places first, and only then uses AI to choose among plans that already work. It never makes up places or times."],
-      ["Can I change the plan later?", "Yes. Once it’s built you can ask for more relaxed, less walking, more outdoors, a better dinner, less downtown or more history without starting over."]
+      ["Can I change the plan later?", "Yes. Tap any word in the trip line, like the day, who’s coming or how you’ll get around, and the whole day is replanned."]
     ]
   },
 
@@ -192,8 +192,8 @@ export const INTENT_COPY = {
     ]}],
     stepsTitle: "Plan it in three steps",
     steps: [
-      ["Tell My Trip your date, starting city and leave time", "It finds the Mackinaw City or St. Ignace ferries you can realistically make."],
-      ["Say who’s coming and what matters", "Four quick taps set the pace, the walking and what gets priority."],
+      ["Tell My Trip where you’re driving from", "It finds the Mackinaw City or St. Ignace boat you can realistically make and the latest time to leave home."],
+      ["Say who’s coming and how you’ll get around", "Kids, grandparents, bikes or a carriage each change the pace and the walking."],
       ["Let a short day be a smaller day", "A later arrival gets a compact plan instead of a rushed one."]
     ],
     cards: [
@@ -227,9 +227,9 @@ export const INTENT_COPY = {
     ]}],
     stepsTitle: "Plan it in three steps",
     steps: [
-      ["Tell My Trip who’s coming", "Young kids, teens and grandparents each change the pace and the walking."],
-      ["Say what would ruin the day", "Too much walking, long waits, crowds or rushing: the plan steers around it."],
-      ["Adjust as you go", "Tap “Less walking” or “More relaxed” after the plan is built, without starting over."]
+      ["Tell My Trip it’s a family with young kids", "The day gets shorter stops, a real lunch and an easy last stop near the boat."],
+      ["Pick how you’ll get around", "On foot, by bike with a trailer or tag-along, or by carriage to skip the climb up to the Fort."],
+      ["Change any word to replan", "Tap the day, the time you’re leaving or how you’re getting around and the plan redraws."]
     ],
     cards: [
       ["Carriages are transport, too", "A horse-drawn taxi up the hill can save tired legs, and the rest of the afternoon."],
@@ -260,9 +260,9 @@ export const INTENT_COPY = {
     ]}],
     stepsTitle: "Plan it in three steps",
     steps: [
-      ["Choose “One night” on My Trip", "You’ll get an arrival day and a departure day, planned for the hours you’ll actually have."],
-      ["Pick your style", "Couples, families, cyclists and history lovers each spend the two days differently."],
-      ["Tune it", "Less walking, a better dinner, more outdoors or less downtown, without starting over."]
+      ["Choose “one-night stay” on My Trip", "You’ll get an arrival day and a departure day, planned for the hours you’ll actually have."],
+      ["Say who’s coming and how you’ll get around", "Couples, families, cyclists and grandparents spend the two days differently."],
+      ["Change any word to replan", "Make it two nights, leave later or switch to bikes, and both days are replanned."]
     ],
     cards: [
       ["One night isn’t a full day", "It removes ferry pressure, but arriving and leaving still take real time."],
@@ -457,9 +457,9 @@ export const INTENT_COPY = {
     ]}],
     stepsTitle: "Plan it in three steps",
     steps: [
-      ["Tell My Trip walking is a concern", "It shapes your plan from the start, not as an afterthought."],
-      ["Add your date, starting city and ferry", "An easier Island day still has to fit the drive and the boat."],
-      ["Tap “Less walking” anytime", "The plan cuts steep transitions without changing your trip."]
+      ["Choose “by horse and carriage” on My Trip", "The carriage tour carries you up to the Fort, and from there the day is downhill and flat."],
+      ["Tell it where you’re driving from", "An easier Island day still has to fit the drive and the boat."],
+      ["Bringing grandparents? Say so", "The plan keeps the walking short and points out where the hill is steep."]
     ],
     cards: [
       ["The shoreline is the easy zone", "The Tourism Bureau describes the 8.2-mile perimeter and downtown as mostly flat, while the interior has hills and bluffs."],
@@ -490,9 +490,9 @@ export const INTENT_COPY = {
     ]}],
     stepsTitle: "Plan it in three steps",
     steps: [
-      ["Start My Trip with biking chosen", "The plan starts from a bike day and asks only what’s missing."],
-      ["Add your ferry and bikes", "Renting on the Island takes pickup time; bringing bikes changes the ferry logistics."],
-      ["Let the weather pick the hours", "The planner scores the riding window for your date."]
+      ["Start My Trip with bikes chosen", "The plan starts from a bike day and asks only where you’re driving from."],
+      ["Rent by the docks or bring your own", "Rental shops are downtown near the ferry docks. Bringing your own bike means paying a bike fare on the ferry."],
+      ["Watch the weather note", "If rain or strong wind is forecast for your day, the plan says so. The shore loop has no cover."]
     ],
     cards: [
       ["A highway with no cars", "M-185 is famous as the state highway where motor vehicles aren’t allowed. It runs about 8.2 miles around the Island."],

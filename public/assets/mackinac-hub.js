@@ -126,23 +126,11 @@
     if(surface?.engine==="shared-harness-jev")host.dataset.engine="jev";
   }
 
-  function adaptiveMarkup(profile){
-    const q=profile?.next_question;
-    if(!q?.id||!Array.isArray(q.options)||!q.options.length)return"";
-    return `<div class="platform-adaptive" data-platform-adaptive><strong>One more question:</strong><span>${esc(q.prompt)}</span><div class="platform-choice-row">${q.options.map(([value,label])=>`<button type="button" data-adaptive-id="${esc(q.id)}" data-adaptive-value="${esc(value)}">${esc(label)}</button>`).join("")}<button type="button" class="muted-choice" data-adaptive-skip>Skip</button></div></div>`;
-  }
-
   function renderFocus(profile,surface,answers){
     const host=ensureFocusHost();
     const focus=surface?.focus;
     if(!focus){host.remove();return;}
-    host.innerHTML=`<div class="platform-focus-card"><div><span class="platform-kicker">For your trip · ${esc(surfaceLabel())}</span><h2>${esc(focus.title)}</h2><p>${esc(focus.summary)}</p></div><a class="btn primary" href="${esc(surface.nav_order?.find(x=>x.id===focus.next)?.path||"/mackinac-island/")}">Next: ${esc(({plan:"Trip guide",today:"My Trip",ferries:"Ferries",stay:"Stay",eat:"Eat",explore:"Explore",events:"Events",straits:"Straits"})[focus.next]||"My Trip")}</a>${adaptiveMarkup(profile)}</div>`;
-    host.querySelectorAll("[data-adaptive-value]").forEach(btn=>btn.addEventListener("click",async()=>{
-      const next={...answers,[btn.dataset.adaptiveId]:btn.dataset.adaptiveValue};
-      track("mackinac_adaptive_question_answered",{question:btn.dataset.adaptiveId,surface:rawSurface});
-      await personalize(next);
-    }));
-    host.querySelector("[data-adaptive-skip]")?.addEventListener("click",()=>host.querySelector("[data-platform-adaptive]")?.remove());
+    host.innerHTML=`<div class="platform-focus-card"><div><span class="platform-kicker">For your trip · ${esc(surfaceLabel())}</span><h2>${esc(focus.title)}</h2><p>${esc(focus.summary)}</p></div><a class="btn primary" href="${esc(surface.nav_order?.find(x=>x.id===focus.next)?.path||"/mackinac-island/")}">Next: ${esc(({plan:"Trip guide",today:"My Trip",ferries:"Ferries",stay:"Stay",eat:"Eat",explore:"Explore",events:"Events",straits:"Straits"})[focus.next]||"My Trip")}</a></div>`;
   }
 
   async function classify(answers){

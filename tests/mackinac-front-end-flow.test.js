@@ -54,6 +54,20 @@ test("hidden pieces stay hidden despite display rules", () => {
   assert.match(js, /heads\.hidden = !s\.heads_up\?\.length/);
 });
 
+// Sep 29 2026, Chris: "You begin by asking questions then you build an itinerary then you ask
+// for more info? That's odd." One straight line: one question, then the plan, then nothing
+// that asks again (no question headings, no pill buttons that look like choices, no follow-up
+// question on the guide pages).
+test("nothing after the plan asks for anything", () => {
+  const afterPlan = html.slice(html.indexOf('id="sheet"'), html.indexOf("</main>"));
+  assert.doesNotMatch(afterPlan, /<h[1-4][^>]*>[^<]*\?\s*<\/h[1-4]>/, "a question heading after the plan");
+  assert.doesNotMatch(afterPlan, /class="related-links"|<select|<input/, "choice-looking controls after the plan");
+  assert.doesNotMatch(html, /"@type":"FAQPage"/, "the page no longer asks questions, so no FAQ markup");
+  const hub = fs.readFileSync(path.join(root, "public/assets/mackinac-hub.js"), "utf8");
+  assert.doesNotMatch(hub, /data-adaptive-value|One more question/, "guide pages ask a follow-up question again");
+  assert.doesNotMatch(sheetSrc, /Pick a date/, "the tomorrow notice tells people to do something");
+});
+
 test("engine headline reason is plain language", () => {
   const src = fs.readFileSync(path.join(root, "lib/mackinac-island/route.js"), "utf8");
   assert.match(src, /hours on the Island, \$\{conditionPhrase\(/);

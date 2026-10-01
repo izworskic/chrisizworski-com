@@ -17,6 +17,13 @@ instead of guessed at. Do not ship two page clusters on the same day.
   meta description, FAQ copy and JSON-LD descriptions rewritten to match; Person node defined.
 - Removed from the root: live cameras, map, weather/water, crowds, events, stay/eat/Straits
   cards and the sources panel. The API still returns them; the guide pages are unchanged.
+- Evening follow-up (Chris: "You begin by asking questions then you build an itinerary then you
+  ask for more info? That's odd"): the page now asks one question first (where are you driving
+  from?) and shows no plan until it's answered; the FAQ became plain tips (FAQPage markup
+  removed), the pill-button related links became a plain guide list (same 23 link targets), the
+  tomorrow notice no longer gives instructions, and guide pages no longer ask "One more
+  question". Guide-page copy that described the old four-question intake was rewritten and the
+  17 guide pages regenerated (dateModified 2026-09-29).
 
 ## 2026-08-19 - Boat launch finder ranked on driving distance
 

@@ -164,7 +164,7 @@ const pages=[
 function pageHtml(p){
   const canonical=`https://chrisizworski.com/mackinac-island/${p.slug}/`;
   const jsonLd=JSON.stringify({"@context":"https://schema.org","@graph":[
-    {"@type":"WebPage","@id":canonical,"url":canonical,"name":p.title,"description":p.description,"dateModified":"2026-09-27","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Place","name":"Mackinac Island","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}}},
+    {"@type":"WebPage","@id":canonical,"url":canonical,"name":p.title,"description":p.description,"dateModified":"2026-09-29","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"about":{"@type":"Place","name":"Mackinac Island","address":{"@type":"PostalAddress","addressRegion":"MI","addressCountry":"US"}}},
     {"@type":"FAQPage","mainEntity":p.faq.map(x=>({"@type":"Question","name":x[0],"acceptedAnswer":{"@type":"Answer","text":x[1]}}))},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Chris Izworski","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Mackinac Island","item":"https://chrisizworski.com/mackinac-island/"},{"@type":"ListItem","position":3,"name":p.title,"item":canonical}]}
   ]});
@@ -176,7 +176,7 @@ ${decisionStrip(p.decisions)}
 ${focusSlot()}
 ${withAdBreaks(shellSections(p.body))}
 ${AD_BREAK}${faqSection(p.faq,"Before you go")}
-<section class="hub-section closing"><div class="shell"><p class="truth"><strong>${TRUTH_LABEL}</strong> ${esc(p.truth)}</p>${plannerBand({title:"Make it your trip",body:"Four taps on My Trip and every Mackinac page, from ferries to dinner, fits your dates, your people and your pace.",href:p.primaryCta,label:p.primaryLabel})}<p class="sources"><strong>Primary planning references:</strong> ${p.sources.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join(" · ")}</p></div></section>
+<section class="hub-section closing"><div class="shell"><p class="truth"><strong>${TRUTH_LABEL}</strong> ${esc(p.truth)}</p>${plannerBand({title:"Make it your trip",body:"Tell My Trip where you’re driving from and every Mackinac page, from ferries to dinner, fits your day.",href:p.primaryCta,label:p.primaryLabel})}<p class="sources"><strong>Primary planning references:</strong> ${p.sources.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join(" · ")}</p></div></section>
 </main>${siteFooter("Live agencies, operators and businesses remain authoritative for their own schedules, conditions, accessibility, prices and availability.")}<script src="${HUB_JS}" defer></script></body></html>`;
 }
 

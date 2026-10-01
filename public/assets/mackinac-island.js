@@ -1,9 +1,11 @@
 // Mackinac Island Trip Planner (My Trip), Sep 29 2026.
 //
-// One sentence of choices, one day sheet. Every change asks the planner for a fresh sheet
-// (/api/mackinac-island?format=sheet) and redraws it in place. No questionnaire, no score:
-// the sheet is when to leave, which boat, what to see in what order, the boat back, the last
-// boat on your line and when you get home.
+// One straight line (Chris, same day: "You begin by asking questions then you build an
+// itinerary then you ask for more info? That's odd"):
+//   1. one question: where are you driving from? No plan is shown before that answer.
+//   2. the plan: a one-line summary of the trip it assumed (tap a word to change it) and the
+//      day sheet from /api/mackinac-island?format=sheet, redrawn in place on every change.
+// Nothing after the plan asks for anything.
 (() => {
   "use strict";
   const API = "/api/mackinac-island";
@@ -15,7 +17,10 @@
   const $ = id => document.getElementById(id);
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const picks = { stay: $("pickStay"), who: $("pickWho"), from: $("pickFrom"), day: $("pickDay"), leave: $("pickLeave"), go: $("pickGo") };
-  if (!picks.stay || !$("sheet")) return;
+  const ask = $("askFromSelect");
+  if (!picks.stay || !$("sheet") || !ask) return;
+  // The first question offers the same measured city list as the trip line.
+  ask.insertAdjacentHTML("beforeend", picks.from.innerHTML);
 
   const DEFAULTS = { stay: "day", who: "couple", from: "", day: "", leave: "06:00", go: "foot" };
   const ADULTS = { solo: 1, couple: 2, group: 4, "family-young": 2, "family-teens": 4, grandparents: 4 };
@@ -67,13 +72,21 @@
   }
   function addCustom(c) {
     custom = c;
-    const group = picks.from.querySelector('optgroup[label="Somewhere else"]');
-    group.querySelectorAll("option[data-custom]").forEach(o => o.remove());
-    const opt = document.createElement("option");
-    opt.value = c.name; opt.textContent = c.name.replace(/,\s*MI$/, ""); opt.dataset.custom = "1";
-    if (Number.isFinite(c.m)) opt.dataset.m = c.m;
-    if (Number.isFinite(c.s)) opt.dataset.s = c.s;
-    group.prepend(opt);
+    for (const sel of [picks.from, ask]) {
+      const group = sel.querySelector('optgroup[label="Somewhere else"]');
+      group.querySelectorAll("option[data-custom]").forEach(o => o.remove());
+      const opt = document.createElement("option");
+      opt.value = c.name; opt.textContent = c.name.replace(/,\s*MI$/, ""); opt.dataset.custom = "1";
+      if (Number.isFinite(c.m)) opt.dataset.m = c.m;
+      if (Number.isFinite(c.s)) opt.dataset.s = c.s;
+      group.prepend(opt);
+    }
+  }
+  // Ask until there's a starting city; after that, show the plan.
+  function setMode() {
+    const planning = Boolean(state.from);
+    document.documentElement.classList.toggle("mk-plan", planning);
+    if (!planning) { ask.value = ""; $("sheet").setAttribute("aria-busy", "true"); }
   }
 
   function sync() {
@@ -82,7 +95,6 @@
       if ([...el.options].some(o => o.value === value)) el.value = value;
       const label = el.closest(".pick");
       label.querySelector(".pick-text").textContent = el.selectedOptions[0]?.textContent || "";
-      if (key === "from") label.classList.toggle("is-empty", !state.from);
     }
   }
   function flash(key) {
@@ -188,8 +200,9 @@
     if (!changed) return;
     if ("day" in changes) fillDays();
     sync();
+    setMode();
     track("mackinac_choice_changed", { source, choice: Object.keys(changes).join(",") });
-    plan(source);
+    if (state.from) plan(source);
   }
 
   // ---------- Other city / another date ----------
@@ -206,6 +219,10 @@
     otherStatus.textContent = "";
     otherInput.focus();
   }
+  ask.addEventListener("change", () => {
+    if (ask.value === "__other") { ask.value = ""; openOther("city"); return; }
+    if (ask.value) change({ from: ask.value }, "first-question");
+  });
   for (const [key, el] of Object.entries(picks)) {
     el.addEventListener("change", () => {
       if (key === "from" && el.value === "__other") { el.value = state.from; sync(); openOther("city"); return; }
@@ -290,8 +307,10 @@
     cleanState();
     fillDays();
     sync();
+    setMode();
     if (qs.get("intent")) track("mackinac_planner_intent", { intent: qs.get("intent") });
-    plan("load");
+    if (state.from) plan("load");
+    else track("mackinac_first_question_shown", { intent: qs.get("intent") || "none" });
   }
   start();
 })();

@@ -74,15 +74,18 @@ Treat /mackinac-island/ as the destination hub namespace.
 Primary destination navigation:
 
 1. **My Trip** — /mackinac-island/
-   - since 2026-09-29, one sentence of choices instead of a questionnaire: trip length, who is
-     going, starting city, day, earliest leave time and how they'll get around (on foot, by bike,
-     by horse and carriage), each with a default so the answer is on the first screen;
+   - since 2026-09-29, one straight line: one question first (where are you driving from?),
+     no plan shown before it is answered; then the trip line (trip length, who is going, starting
+     city, day, earliest leave time, how they'll get around), each word a default the visitor can
+     tap to change;
    - the day sheet (`lib/mackinac-island/day-sheet.js`): when to leave, which dock and boat, the
      Island stops in order with times, the boat back, the last boat on their own ferry line and
      when they'll be home, plus at most three heads-ups that change the day;
    - creation and persistence of the shared trip state: the same saved plan and profile the
      guide pages read;
-   - no profile card, fine-tune form or folded detail rows: the root is one decision surface.
+   - no profile card, fine-tune form or folded detail rows: the root is one decision surface;
+   - nothing after the plan asks for anything: tips are statements, guide links are a plain
+     list, and guide pages never ask a follow-up question.
 
 The existing **/mackinac-island/plan/** URL remains an indexable explanatory planning guide and hands the visitor into My Trip. It is deliberately not a competing primary workspace.
 

@@ -165,9 +165,13 @@ async function runPersona(browser, base, p) {
   const t0 = Date.now();
   await page.goto(base + "/mackinac-island/", {waitUntil: "domcontentloaded"});
   let speedMs = 15000;
+  // A page may open on one question (2026-09-29) instead of a zero-input plan. Then speed is
+  // measured from answering that question to the plan, which is when a visitor is waiting.
+  let askFirst = false;
   try {
-    await page.waitForFunction(() => { const s = document.querySelector("#primaryRec strong, #sheetHeadline"); return s && /\d{1,2}:\d{2}/.test(s.textContent); }, null, {timeout: 15000});
-    speedMs = Date.now() - t0;
+    await page.waitForFunction(() => { const s = document.querySelector("#primaryRec strong, #sheetHeadline"); const q = document.getElementById("askFromSelect"); return (s && /\d{1,2}:\d{2}/.test(s.textContent) && s.checkVisibility()) || (q && q.checkVisibility()); }, null, {timeout: 15000});
+    askFirst = await page.evaluate(() => !!document.getElementById("askFromSelect")?.checkVisibility());
+    if (!askFirst) speedMs = Date.now() - t0;
   } catch {}
   await page.waitForTimeout(800);
 
@@ -179,16 +183,28 @@ async function runPersona(browser, base, p) {
     let words = 0;
     while (walker.nextNode()) { const n = walker.currentNode; const el = n.parentElement; if (el && inView(el) && n.textContent.trim()) words += n.textContent.trim().split(/\s+/).length; }
     const ctas = [...document.querySelectorAll("a.btn, button.btn, button.intake-option")].filter(inView).length;
-    const q = document.querySelector("#heroStart .start-chip, #intakeOptions button, #tripForm .pick");
+    const controls = [...document.querySelectorAll("main select, main input:not([type=hidden]), main button, main .start-chip")].filter(el => inView(el) && (!el.checkVisibility || el.checkVisibility({visibilityProperty: true}))).length;
+    const q = [...document.querySelectorAll("#askFromSelect, #heroStart .start-chip, #intakeOptions button, #tripForm .pick")].find(el => el.checkVisibility());
     const qScreens = q ? (q.getBoundingClientRect().top + scrollY) / innerHeight : 9;
     const jargon = (document.body.innerText.match(new RegExp(jargonSrc, "gi")) || []).length;
-    return {answerVisible: !!rec && inView(rec) && /\d{1,2}:\d{2}/.test(rec.textContent), words, ctas, qScreens, jargon};
+    return {answerVisible: !!rec && inView(rec) && /\d{1,2}:\d{2}/.test(rec.textContent), words, ctas, controls, qScreens, jargon};
   }, JARGON.source);
 
   const log = [];
   // The one-sentence planner: change each word the visitor's trip differs on, in reading order.
   if (await page.locator("#tripForm").count()) {
     const want = sentenceFor(p);
+    if (askFirst) {
+      const ask = page.locator("#askFromSelect");
+      await ask.scrollIntoViewIfNeeded(); await page.waitForTimeout(250); await snapshot(page);
+      const tAsk = Date.now();
+      await ask.selectOption(want.from);
+      try {
+        await page.waitForFunction(() => { const s = document.getElementById("sheetHeadline"); return s && /\d{1,2}:\d{2}/.test(s.textContent) && s.checkVisibility(); }, null, {timeout: 15000});
+        speedMs = Date.now() - tAsk;
+      } catch {}
+      log.push({what: `from=${want.from}`, ...(await reaction(page))});
+    }
     for (const [key, id] of [["from", "#pickFrom"], ["day", "#pickDay"], ["leave", "#pickLeave"], ["who", "#pickWho"], ["stay", "#pickStay"], ["go", "#pickGo"]]) {
       if (await page.locator(id).inputValue() !== want[key]) await choose(page, id, want[key], log, `${key}=${want[key]}`);
     }
@@ -271,6 +287,18 @@ async function runPersona(browser, base, p) {
       words: (main.innerText || "").split(/\s+/).filter(Boolean).length};
   });
   const kinds = new Set(log.flatMap(x => x.kinds || []));
+  // Added 2026-09-29 after Chris: "you build an itinerary then you ask for more info?" Anything
+  // below the answer that asks (a question heading) or looks like a choice to make (a control,
+  // a button, a pill link) counts against clarity.
+  const promptsAfter = await page.evaluate(() => {
+    const answer = document.getElementById("sheet") || document.getElementById("planner");
+    if (!answer) return 0;
+    const bottom = answer.getBoundingClientRect().bottom + scrollY;
+    const vis = el => (el.checkVisibility ? el.checkVisibility({visibilityProperty: true}) : true);
+    return [...document.querySelectorAll("main h1, main h2, main h3, main h4, main select, main input, main textarea, main button, main a.btn, main .related-links a, main .start-chip, main [data-intake-value]")]
+      .filter(el => vis(el) && el.getBoundingClientRect().top + scrollY > bottom)
+      .filter(el => (/^H\d$/.test(el.tagName) ? /\?\s*$/.test(el.textContent) : true)).length;
+  });
 
   // Does the rest of the site follow?
   await page.goto(base + "/mackinac-island/where-to-stay/", {waitUntil: "domcontentloaded"});
@@ -292,13 +320,15 @@ async function runPersona(browser, base, p) {
     correct: checks.filter(c => !c.pass).length / checks.length,
     ask: clamp(0.6 * clamp((taps - 4) / 10) + 0.4 * (taps ? wasted / taps : 1)),
     complexity: [clamp((size.screens - 6) / 14), clamp((size.controls - 25) / 55), clamp((size.words - 800) / 1800), clamp((kinds.size - 1) / 3)].reduce((a, b) => a + b, 0) / 4,
-    clarity: [first.answerVisible ? 0 : 1, clamp(Math.max(first.jargon, jargonAfter.length) / 5), clamp((first.words - 90) / 150), clamp((first.ctas - 2) / 4), clamp((first.qScreens - 1) / 2)].reduce((a, b) => a + b, 0) / 5,
+    // A first screen that asks exactly one question and shows no half-made plan is as clear as
+    // one that shows the answer (2026-09-29: Chris called plan-before-asking "odd").
+    clarity: [first.answerVisible || (askFirst && first.controls === 1) ? 0 : 1, clamp(Math.max(first.jargon, jargonAfter.length) / 5), clamp((first.words - 90) / 150), clamp((first.ctas - 2) / 4), clamp((first.qScreens - 1) / 2), clamp(promptsAfter / 6)].reduce((a, b) => a + b, 0) / 6,
     continuity: ((cont.stripOn ? 0 : 1) + (cont.focus ? 0 : 1)) / 2,
     speed: clamp((speedMs - 1500) / 4500),
     stability: clamp(cls / 0.25),
     truth: truth ? 0 : 1
   };
-  return {id: p.id, L, detail: {speedMs, first, taps, wasted, log, checks, primaryRec: primaryRec.slice(0, 160), cls: +cls.toFixed(3), jargon: [...new Set(jargonAfter.map(x => x.toLowerCase()))], continuity: cont, size, feedbackKinds: [...kinds]}, sig};
+  return {id: p.id, L, detail: {speedMs, first, taps, wasted, log, checks, primaryRec: primaryRec.slice(0, 160), cls: +cls.toFixed(3), jargon: [...new Set(jargonAfter.map(x => x.toLowerCase()))], continuity: cont, size, feedbackKinds: [...kinds], promptsAfter, askFirst}, sig};
 }
 
 function jaccard(a, b) { const A = new Set(a), B = new Set(b); const i = [...A].filter(x => B.has(x)).length; return i / (A.size + B.size - i || 1); }

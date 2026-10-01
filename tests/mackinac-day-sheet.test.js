@@ -133,6 +133,7 @@ test("how you get around changes the day, not just a label", () => {
   assert.equal(/Get off at Fort Mackinac/.test(stops(carriage)[ride].note), next?.id === "fort");
   if (next?.id === "fort") assert.match(next.note, /^The carriage tour leaves you at the top of the hill/);
   for (const r of rows(foot).concat(rows(bike))) assert.doesNotMatch(r.note, /carriage tour leaves you/, "carriage copy leaked into another mode");
+  assert.ok(!stops(carriage).some(r => r.id === "grand"), "carriage days should not send people up the West Bluff on foot");
   const grand = sheetFor({ city: "Saginaw, MI", leave: "07:00", who: "grandparents" }).sheet;
   assert.ok(grand.heads_up.some(h => h.action?.set?.go === "carriage"), "grandparents on foot should be offered the carriage");
 });
@@ -221,8 +222,12 @@ test("the page sends both dock drive times, a leave-after floor, and a date only
   assert.match(html, /<option value="06:00" selected>6 AM<\/option>/);
 });
 
-test("the plan loads on arrival, ignores stale answers and fails out loud", () => {
-  assert.match(js, /plan\("load"\);\s*}\s*start\(\);/);
+test("the plan waits for the starting city, ignores stale answers and fails out loud", () => {
+  // Sep 29 2026, Chris: "You begin by asking questions then you build an itinerary then you ask
+  // for more info?" No plan is requested or shown until the one question is answered.
+  assert.match(js, /if \(state\.from\) plan\("load"\);/);
+  assert.match(js, /function setMode\(\) \{[\s\S]*?classList\.toggle\("mk-plan", planning\)/);
+  assert.match(js, /if \(state\.from\) plan\(source\);/);
   assert.match(js, /if \(id !== seq\) return;/);
   assert.match(js, /The planner didn’t load/);
   assert.doesNotMatch(js, /catch \{\s*\}\s*\n\s*\}\s*\n\s*function render/);

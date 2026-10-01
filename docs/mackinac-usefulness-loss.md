@@ -135,3 +135,30 @@ production's harness does (it answers HTTP 500), instead of waiting out its 3.2 
 
 Every production persona failed the new "3+ real Island stops" check; none fail it on the day sheet.
 
+## One straight line (2026-09-29, evening)
+
+Chris, on the day sheet once it was live: "You begin by asking questions then you build an
+itinerary then you ask for more info? That's odd."
+
+Walking the live page top to bottom showed three things. It showed a plan built for someone
+standing at the dock before it knew where the visitor was coming from. Everything under the
+plan read as more questions: four FAQ headings ("How much time do you need…?") and 27 pill
+links ("From Detroit", "Mackinac with kids") that looked like choices to make. And once a trip
+was saved, the guide pages asked "One more question".
+
+The page is now one straight line: one question (where are you driving from?), then the plan
+with its assumptions on one line you can tap to change, then nothing that asks. Tips are
+statements, the guide links are a plain list, and hub.js no longer renders the follow-up
+question.
+
+The harness changed to match. `clarity` gained a sixth part, prompts after the answer
+(question headings, controls, buttons and pill links below the plan, `clamp(n/6)`). A first
+screen that asks exactly one question and shows no half-made plan now counts the same as one
+that shows the answer; this reverses an earlier assumption because the owner called
+plan-before-asking odd. When a page opens on its question, speed is timed from answering it.
+
+| Run (same harness) | Loss | clarity | prompts after the plan | complexity | speed |
+|---|---|---|---|---|---|
+| production (#650 day sheet) | **0.042** | 0.240 | 27 | 0.046 | 0.055 |
+| one straight line | **0.018** | 0.074 | 0 | 0.032 | 0 |
+
