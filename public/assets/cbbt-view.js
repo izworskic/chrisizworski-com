@@ -27,8 +27,23 @@
   var NWS_RADAR_WMS='https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows';
   var LEAFLET_JS='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js';
   var LEAFLET_CSS='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css';
+  var VDOT_CAMERA_SOURCES=[
+    'https://511.vdot.virginia.gov/services/map/layers/map/cams',
+    'https://www.511virginia.org/data/geojson/icons.cameras.geojson',
+    'https://www.511virginia.org/data/icons.cameras.geojson'
+  ];
+  var VDOT_511_URL='https://511.vdot.virginia.gov/';
+  var CAMERA_REFRESH_MS=30000;
+  var CBBT_CAMERA_ANCHORS=[
+    {id:'south',label:'South approach',lat:36.915,lon:-76.105},
+    {id:'crossing',label:'CBBT area',lat:37.030,lon:-76.083},
+    {id:'north',label:'North approach',lat:37.125,lon:-75.970}
+  ];
+  var cameraState={cameras:[],selected:0,loaded:false,loading:false,refreshTimer:null,opener:null};
 
   function byId(id){return document.getElementById(id);}
+  function escapeHtml(value){return String(value==null?'':value).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];});}
+  function cacheBust(url){return url+(url.indexOf('?')===-1?'?':'&')+'cb='+Date.now();}
 
   function loadLeaflet(done,fail){
     if(window.L&&window.L.map){done();return;}
@@ -99,8 +114,240 @@
     if(byId('cbbtLiveMediaStyles'))return;
     var style=document.createElement('style');
     style.id='cbbtLiveMediaStyles';
-    style.textContent='.experience-grid{display:none!important}.radar-frame{display:block!important;min-height:420px;overflow:hidden;background:#eef4f6}.radar-frame #cbbtRadarMap{width:100%;height:520px;background:#eef4f6}.radar-map-fallback{min-height:360px;display:grid;place-content:center;gap:6px;text-align:center;padding:24px;color:#52646d}.radar-map-fallback strong{color:#10232c}@media(max-width:700px){.radar-frame{min-height:360px}.radar-frame #cbbtRadarMap{height:430px}}.live-visual-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.live-visual-card{display:grid;gap:8px;padding:16px;border:1px solid rgba(13,59,79,.16);border-radius:14px;background:#f8fbfb;text-decoration:none;color:inherit;min-height:142px}.live-visual-card:hover{border-color:rgba(13,59,79,.38);box-shadow:0 8px 24px rgba(15,42,53,.07)}.live-visual-card .live-label{display:inline-flex;width:max-content;border-radius:999px;padding:4px 7px;background:#e2eef2;color:#0d3b4f;font-size:.68rem;font-weight:850;letter-spacing:.05em}.live-visual-card strong{font-size:1.02rem;color:#10232c}.live-visual-card span:last-child{font-size:.82rem;color:#52646d}.live-visual-note{margin:12px 0 0;color:#52646d;font-size:.8rem}.live-visual-note strong{color:#10232c}@media(max-width:700px){.live-visual-grid{grid-template-columns:1fr}.live-visual-card{min-height:0}}';
+    style.textContent=[
+      '.experience-grid{display:none!important}',
+      '.radar-frame{display:block!important;min-height:420px;overflow:hidden;background:#eef4f6}',
+      '.radar-frame #cbbtRadarMap{width:100%;height:520px;background:#eef4f6}',
+      '.radar-map-fallback{min-height:360px;display:grid;place-content:center;gap:6px;text-align:center;padding:24px;color:#52646d}',
+      '.radar-map-fallback strong{color:#10232c}',
+      '.live-visual-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}',
+      '.live-visual-card{display:grid;gap:8px;padding:16px;border:1px solid rgba(13,59,79,.16);border-radius:14px;background:#f8fbfb;text-decoration:none;color:inherit;min-height:142px;text-align:left;font:inherit}',
+      'button.live-visual-card{width:100%;cursor:pointer}',
+      '.live-visual-card:hover{border-color:rgba(13,59,79,.38);box-shadow:0 8px 24px rgba(15,42,53,.07)}',
+      '.live-visual-card .live-label{display:inline-flex;width:max-content;border-radius:999px;padding:4px 7px;background:#e2eef2;color:#0d3b4f;font-size:.68rem;font-weight:850;letter-spacing:.05em}',
+      '.live-visual-card strong{font-size:1.02rem;color:#10232c}',
+      '.live-visual-card span:last-child{font-size:.82rem;color:#52646d}',
+      '.live-visual-note{margin:12px 0 0;color:#52646d;font-size:.8rem}',
+      '.live-visual-note strong{color:#10232c}',
+      '.camera-drawer[hidden]{display:none!important}',
+      '.camera-drawer{position:fixed;inset:0;z-index:1000;background:rgba(5,22,30,.62);display:flex;align-items:flex-end;justify-content:center;padding:18px}',
+      '.camera-dialog{width:min(920px,100%);max-height:min(90vh,820px);overflow:auto;background:#fff;border-radius:20px 20px 14px 14px;box-shadow:0 24px 80px rgba(0,0,0,.28);padding:16px}',
+      '.camera-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}',
+      '.camera-dialog-head h2{margin:2px 0 0;font-size:1.28rem}',
+      '.camera-close{border:1px solid #cfd9dd;background:#fff;color:#10232c;border-radius:999px;min-width:44px;min-height:44px;font-weight:800;cursor:pointer}',
+      '.camera-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:thin}',
+      '.camera-tab{border:1px solid #cbd7db;background:#f5f8f8;color:#24424f;border-radius:999px;padding:8px 11px;min-height:42px;white-space:nowrap;font-weight:750;cursor:pointer}',
+      '.camera-tab[aria-selected=true]{background:#0d3b4f;color:#fff;border-color:#0d3b4f}',
+      '.camera-stage{position:relative;aspect-ratio:16/9;border:1px solid #d9e1e4;border-radius:14px;overflow:hidden;background:#dfe8eb;display:grid;place-items:center}',
+      '.camera-stage img{display:block;width:100%;height:100%;object-fit:cover}',
+      '.camera-live-chip{position:absolute;left:10px;top:10px;border-radius:999px;background:rgba(5,28,38,.86);color:#fff;padding:5px 8px;font-size:.68rem;font-weight:850;letter-spacing:.04em}',
+      '.camera-loading,.camera-error{padding:28px;text-align:center;color:#52646d;display:grid;gap:7px;place-items:center}',
+      '.camera-error strong,.camera-loading strong{color:#10232c}',
+      '.camera-meta{display:grid;gap:4px;padding:11px 2px 3px}',
+      '.camera-meta strong{font-size:1rem;color:#10232c}',
+      '.camera-meta span{font-size:.8rem;color:#52646d}',
+      '.camera-fallback{display:grid;gap:10px}',
+      '.camera-fallback iframe{width:100%;height:min(62vh,620px);border:1px solid #d9e1e4;border-radius:14px;background:#fff}',
+      '.camera-actions{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-top:10px}',
+      '.camera-actions p{margin:0;color:#52646d;font-size:.78rem;max-width:66ch}',
+      '.camera-actions a{font-size:.78rem;font-weight:750;white-space:nowrap}',
+      '@media(max-width:700px){.radar-frame{min-height:360px}.radar-frame #cbbtRadarMap{height:430px}.live-visual-grid{grid-template-columns:1fr}.live-visual-card{min-height:0}.camera-drawer{padding:0;align-items:flex-end}.camera-dialog{max-height:94vh;border-radius:20px 20px 0 0;padding:14px}.camera-stage{aspect-ratio:4/3}.camera-actions{display:grid}.camera-fallback iframe{height:68vh}}',
+      '@media(prefers-reduced-motion:reduce){.camera-dialog{scroll-behavior:auto}}'
+    ].join('');
     document.head.appendChild(style);
+  }
+
+  function toRad(value){return Number(value)*Math.PI/180;}
+  function haversineMiles(a,b){
+    var earth=3958.7613;
+    var dLat=toRad(b.lat-a.lat),dLon=toRad(b.lon-a.lon),lat1=toRad(a.lat),lat2=toRad(b.lat);
+    var h=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLon/2)*Math.sin(dLon/2);
+    return 2*earth*Math.asin(Math.min(1,Math.sqrt(h)));
+  }
+
+  function normalizeCamera(feature){
+    var coordinates=feature&&feature.geometry&&feature.geometry.coordinates;
+    var p=feature&&feature.properties;
+    if(!Array.isArray(coordinates)||coordinates.length<2||!p)return null;
+    var lon=Number(coordinates[0]),lat=Number(coordinates[1]);
+    if(!Number.isFinite(lat)||!Number.isFinite(lon)||p.active===false||p.problem_stream===true||!p.image_url)return null;
+    var nearest=null;
+    CBBT_CAMERA_ANCHORS.forEach(function(anchor){
+      var distance=haversineMiles({lat:lat,lon:lon},anchor);
+      if(!nearest||distance<nearest.distanceMiles)nearest={anchor:anchor,distanceMiles:distance};
+    });
+    if(!nearest||nearest.distanceMiles>30)return null;
+    return{
+      id:String(p.id||p.name||(lat+','+lon)),
+      name:String(p.description||p.name||'VDOT traffic camera'),
+      route:p.route?String(p.route):'',
+      direction:p.direction?String(p.direction):'',
+      imageUrl:String(p.image_url),
+      streamUrl:p.https_url?String(p.https_url):'',
+      latitude:lat,
+      longitude:lon,
+      distanceMiles:nearest.distanceMiles,
+      anchorId:nearest.anchor.id,
+      anchorLabel:nearest.anchor.label
+    };
+  }
+
+  function selectCorridorCameras(payload){
+    var features=payload&&Array.isArray(payload.features)?payload.features:[];
+    var all=features.map(normalizeCamera).filter(Boolean);
+    var selected=[],used={};
+    CBBT_CAMERA_ANCHORS.forEach(function(anchor){
+      var best=all.filter(function(camera){return !used[camera.id];})
+        .map(function(camera){return{camera:camera,distance:haversineMiles({lat:camera.latitude,lon:camera.longitude},anchor)};})
+        .filter(function(entry){return entry.distance<=30;})
+        .sort(function(a,b){return a.distance-b.distance;})[0];
+      if(best){
+        best.camera.buttonLabel=anchor.label;
+        best.camera.anchorId=anchor.id;
+        selected.push(best.camera);
+        used[best.camera.id]=true;
+      }
+    });
+    all.filter(function(camera){return !used[camera.id];})
+      .sort(function(a,b){return a.distanceMiles-b.distanceMiles;})
+      .slice(0,Math.max(0,4-selected.length))
+      .forEach(function(camera){camera.buttonLabel='Nearby';selected.push(camera);used[camera.id]=true;});
+    return selected.slice(0,4);
+  }
+
+  async function fetchCameraPayload(){
+    var lastError=null;
+    for(var i=0;i<VDOT_CAMERA_SOURCES.length;i+=1){
+      try{
+        var response=await fetch(VDOT_CAMERA_SOURCES[i],{headers:{accept:'application/json'},cache:'no-store',mode:'cors'});
+        if(!response.ok)throw new Error('Virginia 511 returned '+response.status);
+        var payload=await response.json();
+        if(!payload||!Array.isArray(payload.features))throw new Error('Virginia 511 camera data was malformed');
+        return payload;
+      }catch(error){lastError=error;}
+    }
+    throw lastError||new Error('Virginia 511 camera data unavailable');
+  }
+
+  function ensureCameraDrawer(){
+    if(byId('cbbtCameraDrawer'))return;
+    var drawer=document.createElement('div');
+    drawer.id='cbbtCameraDrawer';
+    drawer.className='camera-drawer';
+    drawer.hidden=true;
+    drawer.innerHTML='<section class="camera-dialog" role="dialog" aria-modal="true" aria-labelledby="cbbtCameraDrawerHeading"><div class="camera-dialog-head"><div><p class="eyebrow">VDOT 511 · visual traffic check</p><h2 id="cbbtCameraDrawerHeading">CBBT approach cameras</h2></div><button class="camera-close" id="cbbtCameraClose" type="button" aria-label="Close camera viewer">Close</button></div><div id="cbbtCameraContent"><div class="camera-loading"><strong>Loading nearby Virginia 511 cameras…</strong><span>The viewer selects cameras closest to the CBBT corridor.</span></div></div><div class="camera-actions"><p><strong>Visual context only.</strong> Camera images do not determine whether CBBT is open, restricted or closed. The official CBBT status at the top of this page remains authoritative.</p><a href="'+VDOT_511_URL+'" target="_blank" rel="noopener">Open official Virginia 511 ↗</a></div></section>';
+    document.body.appendChild(drawer);
+    byId('cbbtCameraClose').addEventListener('click',closeCameraDrawer);
+    drawer.addEventListener('click',function(event){if(event.target===drawer)closeCameraDrawer();});
+    document.addEventListener('keydown',function(event){if(event.key==='Escape'&&!drawer.hidden)closeCameraDrawer();});
+  }
+
+  function cameraDetail(camera){
+    return [camera.anchorLabel,camera.route,camera.direction,Math.round(camera.distanceMiles*10)/10+' mi from corridor anchor'].filter(Boolean).join(' · ');
+  }
+
+  function renderSelectedCamera(){
+    var camera=cameraState.cameras[cameraState.selected];
+    var image=byId('cbbtCameraImage');
+    var title=byId('cbbtCameraName');
+    var detail=byId('cbbtCameraDetail');
+    if(!camera||!image)return;
+    image.hidden=false;
+    image.alt='Current Virginia 511 traffic camera image: '+camera.name;
+    image.src=cacheBust(camera.imageUrl);
+    if(title)title.textContent=camera.name;
+    if(detail)detail.textContent=cameraDetail(camera);
+    document.querySelectorAll('.camera-tab').forEach(function(button,index){
+      var selected=index===cameraState.selected;
+      button.setAttribute('aria-selected',String(selected));
+      button.tabIndex=selected?0:-1;
+    });
+  }
+
+  function selectCamera(index){
+    if(index<0||index>=cameraState.cameras.length)return;
+    cameraState.selected=index;
+    renderSelectedCamera();
+  }
+
+  function renderCameraViewer(cameras){
+    cameraState.cameras=cameras;
+    cameraState.selected=0;
+    var content=byId('cbbtCameraContent');
+    if(!content)return;
+    content.innerHTML='<div class="camera-tabs" id="cbbtCameraTabs" role="tablist" aria-label="Choose a CBBT-area camera">'+cameras.map(function(camera,index){
+      return '<button type="button" class="camera-tab" role="tab" aria-selected="'+(index===0?'true':'false')+'" tabindex="'+(index===0?'0':'-1')+'" data-camera-index="'+index+'">'+escapeHtml(camera.buttonLabel||('Camera '+(index+1)))+'</button>';
+    }).join('')+'</div><div class="camera-stage"><img id="cbbtCameraImage" alt="" decoding="async"><span class="camera-live-chip">VDOT IMAGE · AUTO REFRESH</span></div><div class="camera-meta"><strong id="cbbtCameraName"></strong><span id="cbbtCameraDetail"></span></div>';
+    document.querySelectorAll('.camera-tab').forEach(function(button){
+      button.addEventListener('click',function(){selectCamera(Number(button.dataset.cameraIndex));});
+      button.addEventListener('keydown',function(event){
+        if(event.key!=='ArrowRight'&&event.key!=='ArrowLeft')return;
+        event.preventDefault();
+        var delta=event.key==='ArrowRight'?1:-1;
+        var next=(cameraState.selected+delta+cameras.length)%cameras.length;
+        selectCamera(next);
+        document.querySelector('.camera-tab[data-camera-index="'+next+'"]').focus();
+      });
+    });
+    var image=byId('cbbtCameraImage');
+    image.addEventListener('error',function(){
+      image.hidden=true;
+      var stage=image.closest('.camera-stage');
+      if(stage&&!stage.querySelector('.camera-error'))stage.insertAdjacentHTML('beforeend','<div class="camera-error"><strong>This camera image is temporarily unavailable.</strong><span>Choose another camera above.</span></div>');
+    });
+    image.addEventListener('load',function(){
+      image.hidden=false;
+      var stage=image.closest('.camera-stage');
+      var error=stage&&stage.querySelector('.camera-error');
+      if(error)error.remove();
+    });
+    renderSelectedCamera();
+    if(cameraState.refreshTimer)window.clearInterval(cameraState.refreshTimer);
+    cameraState.refreshTimer=window.setInterval(function(){
+      var drawer=byId('cbbtCameraDrawer');
+      if(drawer&&!drawer.hidden)renderSelectedCamera();
+    },CAMERA_REFRESH_MS);
+  }
+
+  function renderCameraFallback(){
+    var content=byId('cbbtCameraContent');
+    if(!content)return;
+    content.innerHTML='<div class="camera-fallback"><div class="camera-error"><strong>Direct camera list could not be loaded.</strong><span>The official Virginia 511 map is embedded below so the camera check stays on this page.</span></div><iframe src="'+VDOT_511_URL+'" title="Official Virginia 511 traffic map and cameras" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>';
+  }
+
+  async function loadCameras(){
+    if(cameraState.loaded||cameraState.loading)return;
+    cameraState.loading=true;
+    try{
+      var payload=await fetchCameraPayload();
+      var cameras=selectCorridorCameras(payload);
+      if(!cameras.length)throw new Error('No active cameras near the CBBT corridor');
+      cameraState.loaded=true;
+      renderCameraViewer(cameras);
+    }catch(error){
+      renderCameraFallback();
+    }finally{
+      cameraState.loading=false;
+    }
+  }
+
+  function openCameraDrawer(event){
+    ensureCameraDrawer();
+    var drawer=byId('cbbtCameraDrawer');
+    cameraState.opener=(event&&event.currentTarget)||document.activeElement;
+    drawer.hidden=false;
+    document.body.style.overflow='hidden';
+    byId('cbbtCameraClose').focus();
+    loadCameras();
+    try{if(typeof window.gtag==='function')window.gtag('event','cbbt_camera_viewer_opened',{source:'vdot_511'});}catch(e){}
+  }
+
+  function closeCameraDrawer(){
+    var drawer=byId('cbbtCameraDrawer');
+    if(!drawer)return;
+    drawer.hidden=true;
+    document.body.style.overflow='';
+    if(cameraState.opener&&typeof cameraState.opener.focus==='function')cameraState.opener.focus();
   }
 
   function initLiveVisualLinks(){
@@ -114,8 +361,10 @@
     section.className='section-card';
     section.id='cbbtLiveVisuals';
     section.setAttribute('aria-labelledby','cbbtLiveVisualsHeading');
-    section.innerHTML='<div class="section-heading"><div><p class="eyebrow">Live visual checks</p><h2 id="cbbtLiveVisualsHeading">CBBT cameras and live observations</h2></div><span class="context-chip">Current sources</span></div><div class="live-visual-grid"><a class="live-visual-card" href="https://trafficvision.live/blog/chesapeake-bay-bridge-tunnel-traffic-cameras" target="_blank" rel="noopener"><span class="live-label">LIVE CBBT CAMERAS</span><strong>Virginia CBBT camera viewer</strong><span>Open the CBBT-specific TrafficVision page for current Virginia US-13 bridge-tunnel and approach camera feeds.</span></a><a class="live-visual-card" href="https://511.vdot.virginia.gov/" target="_blank" rel="noopener"><span class="live-label">OFFICIAL VDOT</span><strong>Virginia 511 camera map</strong><span>Open VDOT’s official traveler map and follow US 13 toward the CBBT for current approach cameras.</span></a><a class="live-visual-card" href="https://tidesandcurrents.noaa.gov/stationhome.html?id=8638901" target="_blank" rel="noopener"><span class="live-label">LIVE NOAA STATION</span><strong>CBBT Chesapeake Channel observations</strong><span>Current NOAA station 8638901 / CHBV2 at the bridge-tunnel: wind, gusts, air temperature and water-level observations.</span></a><a class="live-visual-card" href="https://www.cbbt.com/home/tunnel-traffic/" target="_blank" rel="noopener"><span class="live-label">OFFICIAL CBBT</span><strong>CBBT current traffic report</strong><span>Open the bridge-tunnel authority’s current operating report, restrictions and crossing information.</span></a></div><p class="live-visual-note"><strong>Camera feeds are visual context only.</strong> The camera viewer is not used to declare the bridge open or closed; the official CBBT operating status above remains authoritative.</p>';
+    section.innerHTML='<div class="section-heading"><div><p class="eyebrow">Live visual checks</p><h2 id="cbbtLiveVisualsHeading">CBBT cameras and live observations</h2></div><span class="context-chip">Current sources</span></div><div class="live-visual-grid"><button class="live-visual-card" id="cbbtCameraLaunch" type="button"><span class="live-label">LIVE TRAFFIC CAMERAS</span><strong>View CBBT approach cameras</strong><span>Stay on this page. Open a camera drawer and switch between nearby Virginia 511 views.</span></button><a class="live-visual-card" href="https://tidesandcurrents.noaa.gov/stationhome.html?id=8638901" target="_blank" rel="noopener"><span class="live-label">LIVE NOAA STATION</span><strong>CBBT Chesapeake Channel observations</strong><span>Current NOAA station 8638901 / CHBV2 at the bridge-tunnel: wind, gusts, air temperature and water-level observations.</span></a><a class="live-visual-card" href="https://www.cbbt.com/home/tunnel-traffic/" target="_blank" rel="noopener"><span class="live-label">OFFICIAL CBBT</span><strong>CBBT current traffic report</strong><span>Open the bridge-tunnel authority’s current operating report, restrictions and crossing information.</span></a></div><p class="live-visual-note"><strong>Camera feeds are visual context only.</strong> Virginia 511 imagery is not used to declare the bridge open or closed; the official CBBT operating status above remains authoritative.</p>';
     radarCard.insertAdjacentElement('afterend',section);
+    byId('cbbtCameraLaunch').addEventListener('click',openCameraDrawer);
+    ensureCameraDrawer();
   }
 
   document.addEventListener('DOMContentLoaded',function(){
