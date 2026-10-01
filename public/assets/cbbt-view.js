@@ -27,19 +27,31 @@
 
   function byId(id){return document.getElementById(id);}
 
-  function initRadarLink(){
+  function initVisibleRadar(){
     var frame=document.querySelector('.radar-frame');
     var link=byId('radarLink');
     var actions=link&&link.closest('.radar-actions');
-    if(frame){frame.hidden=true;frame.setAttribute('aria-hidden','true');}
+    if(frame){
+      frame.hidden=false;
+      frame.removeAttribute('aria-hidden');
+      frame.innerHTML='';
+      var iframe=document.createElement('iframe');
+      iframe.id='cbbtNwsRadarFrame';
+      iframe.src=CBBT_NWS_RADAR;
+      iframe.title='Live National Weather Service radar centered on the Chesapeake Bay Bridge-Tunnel';
+      iframe.loading='eager';
+      iframe.setAttribute('referrerpolicy','no-referrer-when-downgrade');
+      iframe.setAttribute('allowfullscreen','');
+      frame.appendChild(iframe);
+    }
     if(link){
       link.href=CBBT_NWS_RADAR;
-      link.textContent='Open live NWS radar centered on CBBT ↗';
+      link.textContent='Open full-screen NWS radar centered on CBBT ↗';
       link.dataset.radarSource='nws-cbbt-centered';
     }
     if(actions){
       var copy=actions.querySelector('p');
-      if(copy)copy.textContent='Use the live National Weather Service radar centered on the Chesapeake Bay Bridge-Tunnel for approaching precipitation. Radar does not determine CBBT operating status.';
+      if(copy)copy.textContent='Live National Weather Service radar is shown above, centered on the Chesapeake Bay Bridge-Tunnel. Radar does not determine CBBT operating status.';
     }
   }
 
@@ -47,7 +59,7 @@
     if(byId('cbbtLiveMediaStyles'))return;
     var style=document.createElement('style');
     style.id='cbbtLiveMediaStyles';
-    style.textContent='.experience-grid{display:none!important}.live-visual-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.live-visual-card{display:grid;gap:8px;padding:16px;border:1px solid rgba(13,59,79,.16);border-radius:14px;background:#f8fbfb;text-decoration:none;color:inherit;min-height:142px}.live-visual-card:hover{border-color:rgba(13,59,79,.38);box-shadow:0 8px 24px rgba(15,42,53,.07)}.live-visual-card .live-label{display:inline-flex;width:max-content;border-radius:999px;padding:4px 7px;background:#e2eef2;color:#0d3b4f;font-size:.68rem;font-weight:850;letter-spacing:.05em}.live-visual-card strong{font-size:1.02rem;color:#10232c}.live-visual-card span:last-child{font-size:.82rem;color:#52646d}.live-visual-note{margin:12px 0 0;color:#52646d;font-size:.8rem}.live-visual-note strong{color:#10232c}@media(max-width:700px){.live-visual-grid{grid-template-columns:1fr}.live-visual-card{min-height:0}}';
+    style.textContent='.experience-grid{display:none!important}.radar-frame{display:block!important;min-height:420px;overflow:hidden;background:#eef4f6}.radar-frame iframe{display:block;width:100%;height:520px;border:0;background:#eef4f6}@media(max-width:700px){.radar-frame{min-height:360px}.radar-frame iframe{height:430px}}.live-visual-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.live-visual-card{display:grid;gap:8px;padding:16px;border:1px solid rgba(13,59,79,.16);border-radius:14px;background:#f8fbfb;text-decoration:none;color:inherit;min-height:142px}.live-visual-card:hover{border-color:rgba(13,59,79,.38);box-shadow:0 8px 24px rgba(15,42,53,.07)}.live-visual-card .live-label{display:inline-flex;width:max-content;border-radius:999px;padding:4px 7px;background:#e2eef2;color:#0d3b4f;font-size:.68rem;font-weight:850;letter-spacing:.05em}.live-visual-card strong{font-size:1.02rem;color:#10232c}.live-visual-card span:last-child{font-size:.82rem;color:#52646d}.live-visual-note{margin:12px 0 0;color:#52646d;font-size:.8rem}.live-visual-note strong{color:#10232c}@media(max-width:700px){.live-visual-grid{grid-template-columns:1fr}.live-visual-card{min-height:0}}';
     document.head.appendChild(style);
   }
 
@@ -68,7 +80,7 @@
 
   document.addEventListener('DOMContentLoaded',function(){
     injectLiveVisualStyles();
-    initRadarLink();
+    initVisibleRadar();
     initLiveVisualLinks();
   });
 })();
