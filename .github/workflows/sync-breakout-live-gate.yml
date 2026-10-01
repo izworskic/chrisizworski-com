@@ -16,7 +16,7 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
-      CORE_COMMIT: b0eca26b3121d98b16964642ed850e1e56711332
+      CORE_COMMIT: 2ff558f1a55f4f1bdae2cf34ddb8332bb52707e8
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
