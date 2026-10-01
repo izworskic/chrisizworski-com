@@ -10,7 +10,7 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   verify:
@@ -24,47 +24,8 @@ jobs:
           node-version: '22'
       - name: Install pinned dependencies
         run: npm ci
-      - name: Temporarily sync Mackinac page freshness
-        if: github.event_name == 'push'
-        shell: bash
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          import re
-
-          root = Path('public/mackinac-island')
-          pattern = re.compile(r'("dateModified"\s*:\s*")2026-09-29(")')
-          changed = []
-          count = 0
-          for path in root.rglob('*.html'):
-              text = path.read_text()
-              updated, n = pattern.subn(r'\g<1>2026-10-01\2', text)
-              if n:
-                  path.write_text(updated)
-                  changed.append(path)
-                  count += n
-          if count != 18:
-              raise SystemExit(f'Expected 18 Mackinac page freshness updates, found {count}')
-          print(f'Updated {count} dateModified values across {len(changed)} files')
-          PY
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/mackinac-island
-          git commit -m "Sync Mackinac page freshness metadata"
-          git push origin HEAD:${GITHUB_REF_NAME}
       - name: Run full repository gate
-        shell: bash
-        run: |
-          set -o pipefail
-          npm run verify:all 2>&1 | tee verify-current.log
-      - name: Upload verification log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: verify-current-log
-          path: verify-current.log
-          if-no-files-found: warn
-          retention-days: 1
+        run: npm run verify:all
       - name: Upload boat launch source audit
         if: always()
         uses: actions/upload-artifact@v4
