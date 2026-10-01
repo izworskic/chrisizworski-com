@@ -1,0 +1,100 @@
+name: Bootstrap Oregon coastal production route
+
+on:
+  push:
+    branches:
+      - fix/oregon-coastal-production-route-2026-10-01
+    paths:
+      - ".github/workflows/bootstrap-oregon-coastal-route.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/oregon-coastal-production-route-2026-10-01
+          fetch-depth: 0
+
+      - name: Copy verified Oregon coastal build
+        run: |
+          rm -rf /tmp/national-coastal-water
+          git clone --depth 1 https://github.com/izworskic/national-coastal-water.git /tmp/national-coastal-water
+          rm -rf public/synced-national-tools/oregon-coastal
+          mkdir -p public/synced-national-tools/oregon-coastal
+          cp -R /tmp/national-coastal-water/public/national-tools/coastal/oregon/. public/synced-national-tools/oregon-coastal/
+          cp /tmp/national-coastal-water/api/oregon-window-engine.js api/oregon-window-engine.js
+          cp /tmp/national-coastal-water/api/oregon-coastal.js api/oregon-coastal.js
+
+      - name: Add local Oregon rewrites ahead of coastal proxy
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          p = Path('vercel.json')
+          data = json.loads(p.read_text())
+          rewrites = data['rewrites']
+
+          sources = {
+              '/national-tools/coastal/oregon/_api/decision',
+              '/national-tools/coastal/oregon',
+              '/national-tools/coastal/oregon/',
+              '/national-tools/coastal/oregon/:path*',
+          }
+          rewrites[:] = [r for r in rewrites if r.get('source') not in sources]
+          catch_index = next(i for i, r in enumerate(rewrites) if r.get('source') == '/national-tools/coastal/:path*')
+          local = [
+              {'source': '/national-tools/coastal/oregon/_api/decision', 'destination': '/api/oregon-coastal'},
+              {'source': '/national-tools/coastal/oregon', 'destination': '/synced-national-tools/oregon-coastal/index.html'},
+              {'source': '/national-tools/coastal/oregon/', 'destination': '/synced-national-tools/oregon-coastal/index.html'},
+              {'source': '/national-tools/coastal/oregon/:path*', 'destination': '/synced-national-tools/oregon-coastal/:path*'},
+          ]
+          rewrites[catch_index:catch_index] = local
+          p.write_text(json.dumps(data, indent=2) + '\n')
+          PY
+
+      - name: Add canonical Oregon URLs to sitemap
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('public/sitemap.xml')
+          text = p.read_text()
+          urls = [
+              'https://chrisizworski.com/national-tools/coastal/oregon/',
+              'https://chrisizworski.com/national-tools/coastal/oregon/yaquina-head/',
+              'https://chrisizworski.com/national-tools/coastal/oregon/haystack-rock/',
+              'https://chrisizworski.com/national-tools/coastal/oregon/hug-point/',
+              'https://chrisizworski.com/national-tools/coastal/oregon/thors-well/',
+          ]
+          additions = []
+          for url in urls:
+              if f'<loc>{url}</loc>' not in text:
+                  additions.append(f'''  <url>\n    <loc>{url}</loc>\n    <lastmod>2026-10-01</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.85</priority>\n  </url>''')
+          if additions:
+              text = text.replace('</urlset>', '\n' + '\n'.join(additions) + '\n</urlset>')
+              p.write_text(text)
+          PY
+
+      - name: Validate repair
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('vercel.json','utf8')); console.log('vercel.json valid')"
+          node --check api/oregon-window-engine.js
+          node --check api/oregon-coastal.js
+          node --check public/synced-national-tools/oregon-coastal/app.js
+          test -f public/synced-national-tools/oregon-coastal/index.html
+          grep -q 'national-tools/coastal/oregon/_api/decision' vercel.json
+          grep -q 'national-tools/coastal/oregon/thors-well/' public/sitemap.xml
+
+      - name: Commit production routing repair and remove bootstrap workflow
+        run: |
+          rm .github/workflows/bootstrap-oregon-coastal-route.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add vercel.json public/sitemap.xml api/oregon-window-engine.js api/oregon-coastal.js public/synced-national-tools/oregon-coastal .github/workflows/bootstrap-oregon-coastal-route.yml
+          git commit -m "Fix Oregon coastal production routing"
+          git push origin HEAD:fix/oregon-coastal-production-route-2026-10-01
