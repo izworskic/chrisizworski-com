@@ -25,18 +25,7 @@ jobs:
       - name: Install pinned dependencies
         run: npm ci
       - name: Run full repository gate
-        shell: bash
-        run: |
-          set -o pipefail
-          npm run verify:all 2>&1 | tee verify-current.log
-      - name: Upload verification log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: verify-current-log
-          path: verify-current.log
-          if-no-files-found: warn
-          retention-days: 1
+        run: npm run verify:all
       - name: Upload boat launch source audit
         if: always()
         uses: actions/upload-artifact@v4
