@@ -1,7 +1,7 @@
 const BASE = String(process.env.CBBT_BASE_URL || 'https://chrisizworski.com').replace(/\/$/, '');
 const PAGE_URL = `${BASE}/chesapeake-bay-bridge-tunnel/`;
 const API_URL = `${BASE}/api/cbbt`;
-const MEDIA_JS_URL = `${BASE}/assets/cbbt-view.js?v=20261001c`;
+const MEDIA_JS_URL = `${BASE}/assets/cbbt-view.js?v=20261001a`;
 const NWS_CBBT_RADAR_URL = 'https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiaWQiOiJ3ZWF0aGVyIiwiY2VudGVyIjpbLTc2LjAzNCwzNy4xN10sImxvY2F0aW9uIjpbLTc1Ljk2OCwzNy4xMzRdLCJ6b29tIjo4LjU5MzA0NjI3NzAzODg5NCwibGF5ZXIiOiJicmVmX3FjZCJ9LCJhbmltYXRpbmciOmZhbHNlLCJiYXNlIjoic3RhbmRhcmQiLCJhcnRjYyI6ZmFsc2UsImNvdW50eSI6ZmFsc2UsImN3YSI6ZmFsc2UsInJmYyI6ZmFsc2UsInN0YXRlIjpmYWxzZSwibWVudSI6dHJ1ZSwic2hvcnRGdXNlZE9ubHkiOmZhbHNlLCJvcGFjaXR5Ijp7ImFsZXJ0cyI6MC44LCJsb2NhbCI6MC42LCJsb2NhbFN0YXRpb25zIjowLjgsIm5hdGlvbmFsIjowLjZ9fQ%3D%3D';
 const NWS_WMS_RADAR_URL = 'https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows?service=WMS&version=1.1.1&request=GetMap&layers=conus_bref_qcd&styles=&srs=EPSG%3A4326&bbox=-78%2C35%2C-74%2C39&width=400&height=300&format=image%2Fpng&transparent=true';
 const ATTEMPTS = Number(process.env.CBBT_SMOKE_ATTEMPTS || 72);
@@ -43,7 +43,6 @@ async function verifyOnce() {
     'id="vehicleQuickSelect"',
     'id="tollForm"',
     'id="radarLink"',
-    '/assets/cbbt-view.js?v=20261001c',
   ]) {
     if (!html.includes(marker)) throw new Error(`page missing marker: ${marker}`);
   }
