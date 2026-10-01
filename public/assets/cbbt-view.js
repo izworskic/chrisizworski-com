@@ -28,13 +28,9 @@
     'https://radar.weather.gov/ridge/standard/KAKQ_0.gif',
     '/api/cbbt-media?asset=radar'
   ];
-  var CAMERA_API='/api/cbbt-cameras';
-  var CAMERA_REFRESH_MS=30000;
-  var CAMERA_DATA_REFRESH_MS=300000;
   var radarIndex=0;
 
   function byId(id){return document.getElementById(id);}
-  function escapeHtml(value){return String(value==null?'':value).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];});}
   function cacheBust(url,intervalMs){var stamp=Math.floor(Date.now()/(intervalMs||60000));return url+(url.indexOf('?')===-1?'?':'&')+'cb='+stamp;}
 
   function initRadar(){
@@ -57,67 +53,32 @@
     window.setInterval(function(){load(0);},300000);
   }
 
-  function injectCameraStyles(){
+  function injectLiveVisualStyles(){
     if(byId('cbbtLiveMediaStyles'))return;
     var style=document.createElement('style');
     style.id='cbbtLiveMediaStyles';
-    style.textContent='.cbbt-camera-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.cbbt-camera-card{border:1px solid rgba(13,59,79,.16);border-radius:14px;overflow:hidden;background:#fff}.cbbt-camera-frame{position:relative;aspect-ratio:16/9;background:#dce8ec;overflow:hidden}.cbbt-camera-frame img{display:block;width:100%;height:100%;object-fit:cover}.cbbt-camera-live{position:absolute;left:9px;top:9px;padding:4px 7px;border-radius:999px;background:rgba(5,27,36,.86);color:#fff;font-size:.72rem;font-weight:800;letter-spacing:.04em}.cbbt-camera-copy{padding:11px 12px 12px;display:grid;gap:4px}.cbbt-camera-copy strong{font-size:.98rem;line-height:1.25}.cbbt-camera-copy span{font-size:.82rem;color:#52646d}.cbbt-camera-copy a{font-size:.82rem;font-weight:700}.cbbt-camera-source{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;margin-top:12px}.cbbt-camera-source p{margin:0;max-width:68ch}.cbbt-camera-loading{padding:16px;border:1px dashed rgba(13,59,79,.24);border-radius:12px;color:#52646d}.cbbt-camera-error{padding:16px;border-radius:12px;background:#f4f7f8;color:#33454d}@media(max-width:700px){.cbbt-camera-grid{grid-template-columns:1fr}}';
+    style.textContent='.experience-grid{display:none!important}.live-visual-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.live-visual-card{display:grid;gap:8px;padding:16px;border:1px solid rgba(13,59,79,.16);border-radius:14px;background:#f8fbfb;text-decoration:none;color:inherit;min-height:142px}.live-visual-card:hover{border-color:rgba(13,59,79,.38);box-shadow:0 8px 24px rgba(15,42,53,.07)}.live-visual-card .live-label{display:inline-flex;width:max-content;border-radius:999px;padding:4px 7px;background:#e2eef2;color:#0d3b4f;font-size:.68rem;font-weight:850;letter-spacing:.05em}.live-visual-card strong{font-size:1.02rem;color:#10232c}.live-visual-card span:last-child{font-size:.82rem;color:#52646d}.live-visual-note{margin:12px 0 0;color:#52646d;font-size:.8rem}.live-visual-note strong{color:#10232c}@media(max-width:700px){.live-visual-grid{grid-template-columns:1fr}.live-visual-card{min-height:0}}';
     document.head.appendChild(style);
   }
 
-  function cameraSection(){
-    var existing=byId('cbbtCameraSection');
-    if(existing)return existing;
+  function initLiveVisualLinks(){
+    var staticGrid=document.querySelector('.experience-grid');
+    if(staticGrid){staticGrid.hidden=true;staticGrid.setAttribute('aria-hidden','true');}
+    if(byId('cbbtLiveVisuals'))return;
     var radarHeading=byId('radarHeading');
     var radarCard=radarHeading&&radarHeading.closest('.section-card');
-    if(!radarCard)return null;
+    if(!radarCard)return;
     var section=document.createElement('section');
     section.className='section-card';
-    section.id='cbbtCameraSection';
-    section.setAttribute('aria-labelledby','cbbtCameraHeading');
-    section.innerHTML='<div class="section-heading"><div><p class="eyebrow">Visual traffic check</p><h2 id="cbbtCameraHeading">Live CBBT approach cameras</h2></div><span class="context-chip">VDOT 511</span></div><div id="cbbtCameraGrid" class="cbbt-camera-grid" aria-live="polite"><p class="cbbt-camera-loading">Loading nearby VDOT traffic cameras…</p></div><div class="cbbt-camera-source"><p>Camera imagery is traffic context only. CBBT remains the authority for whether the bridge-tunnel is open, restricted or closed.</p><a href="https://511.vdot.virginia.gov/" target="_blank" rel="noopener">Open Virginia 511 ↗</a></div>';
+    section.id='cbbtLiveVisuals';
+    section.setAttribute('aria-labelledby','cbbtLiveVisualsHeading');
+    section.innerHTML='<div class="section-heading"><div><p class="eyebrow">Live visual checks</p><h2 id="cbbtLiveVisualsHeading">Traffic cameras and official live views</h2></div><span class="context-chip">Current sources</span></div><div class="live-visual-grid"><a class="live-visual-card" href="https://511.vdot.virginia.gov/" target="_blank" rel="noopener"><span class="live-label">LIVE TRAFFIC CAMERAS</span><strong>Virginia 511 camera map</strong><span>Open the official VDOT traveler map for current traffic-camera video on the Virginia Beach and Eastern Shore approaches. Follow US 13 toward the CBBT.</span></a><a class="live-visual-card" href="https://www.cbbt.com/home/tunnel-traffic/" target="_blank" rel="noopener"><span class="live-label">OFFICIAL CBBT</span><strong>CBBT current traffic report</strong><span>Open the bridge-tunnel authority’s current traffic page for the operating report, restrictions and crossing information.</span></a></div><p class="live-visual-note"><strong>Why the video opens at Virginia 511:</strong> VDOT provides third-party traffic-video integration under a user agreement, so this page launches the official live viewer instead of scraping or rehosting those streams. Camera imagery is context only; CBBT remains the authority for bridge-tunnel operating status.</p>';
     radarCard.insertAdjacentElement('afterend',section);
-    return section;
-  }
-
-  function cameraCard(camera){
-    var route=[camera.route,camera.direction].filter(Boolean).join(' · ');
-    var detail=[camera.area,route,camera.distanceMiles!=null?camera.distanceMiles+' mi from corridor anchor':null].filter(Boolean).join(' · ');
-    return '<article class="cbbt-camera-card"><div class="cbbt-camera-frame"><img loading="lazy" decoding="async" data-camera-src="'+escapeHtml(camera.imageUrl)+'" src="'+escapeHtml(cacheBust(camera.imageUrl,CAMERA_REFRESH_MS))+'" alt="Current VDOT traffic camera image: '+escapeHtml(camera.name)+'"><span class="cbbt-camera-live">LIVE IMAGE · 30 SEC</span></div><div class="cbbt-camera-copy"><strong>'+escapeHtml(camera.name)+'</strong><span>'+escapeHtml(detail)+'</span>'+(camera.streamUrl?'<a href="'+escapeHtml(camera.streamUrl)+'" target="_blank" rel="noopener">Open VDOT live stream ↗</a>':'')+'</div></article>';
-  }
-
-  function refreshCameraImages(){
-    document.querySelectorAll('#cbbtCameraGrid img[data-camera-src]').forEach(function(image){
-      var base=image.getAttribute('data-camera-src');
-      if(base)image.src=cacheBust(base,CAMERA_REFRESH_MS);
-    });
-  }
-
-  async function loadCameras(){
-    var section=cameraSection();
-    var grid=byId('cbbtCameraGrid');
-    if(!section||!grid)return;
-    try{
-      var response=await fetch(CAMERA_API,{headers:{accept:'application/json'},cache:'no-store'});
-      if(!response.ok)throw new Error('camera API '+response.status);
-      var payload=await response.json();
-      var cameras=payload&&Array.isArray(payload.cameras)?payload.cameras:[];
-      if(!cameras.length)throw new Error('no nearby cameras');
-      grid.innerHTML=cameras.map(cameraCard).join('');
-      var staticGrid=document.querySelector('.experience-grid');
-      if(staticGrid){staticGrid.hidden=true;staticGrid.setAttribute('aria-hidden','true');}
-      refreshCameraImages();
-    }catch(error){
-      grid.innerHTML='<div class="cbbt-camera-error"><strong>Live camera images are temporarily unavailable.</strong><br><span>Use Virginia 511 for the current camera map. The official CBBT status above is independent of this camera layer.</span></div>';
-    }
   }
 
   document.addEventListener('DOMContentLoaded',function(){
-    injectCameraStyles();
+    injectLiveVisualStyles();
     initRadar();
-    cameraSection();
-    loadCameras();
-    window.setInterval(refreshCameraImages,CAMERA_REFRESH_MS);
-    window.setInterval(loadCameras,CAMERA_DATA_REFRESH_MS);
+    initLiveVisualLinks();
   });
 })();
