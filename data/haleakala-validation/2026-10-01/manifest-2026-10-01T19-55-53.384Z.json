@@ -1,0 +1,38 @@
+{
+  "captured_at_utc": "2026-10-01T19:55:53.384Z",
+  "site": "LCO OGG Haleakala",
+  "errors": [],
+  "sources": {
+    "allsky": {
+      "source": "LCO OGG allsky lastsnap",
+      "final_url": "https://s3.us-west-2.amazonaws.com/cameraview.lco.global/ogg/allsky/20261001-195456.jpg?AWSAccessKeyId=AKIA6FT4CXR4XGJMTB5P&Signature=iJu%2BwIQCmZDo8KgZ58kjohTI0bE%3D&Expires=1790970953",
+      "file": "allsky/2026-10-01T19-55-53.384Z.jpg",
+      "bytes": 62148,
+      "sha256": "27ec00ff67b61c0095057817f5a6b271c36a75f23d5a3617fb9b7f1e5d496c20"
+    },
+    "boltwood-sky-minus-ambient-temperature": {
+      "file": "weather/2026-10-01T19-55-53.384Z-boltwood-sky-minus-ambient-temperature.json",
+      "sha256": "da975684edbdff9ece96fd6e095757bc94cf2fb07ee69f04ed6eafcf5370ff0c"
+    },
+    "weather-humidity-value": {
+      "file": "weather/2026-10-01T19-55-53.384Z-weather-humidity-value.json",
+      "sha256": "da975684edbdff9ece96fd6e095757bc94cf2fb07ee69f04ed6eafcf5370ff0c"
+    },
+    "weather-wind-speed-value": {
+      "file": "weather/2026-10-01T19-55-53.384Z-weather-wind-speed-value.json",
+      "sha256": "da975684edbdff9ece96fd6e095757bc94cf2fb07ee69f04ed6eafcf5370ff0c"
+    },
+    "weather-wind-direction-value": {
+      "file": "weather/2026-10-01T19-55-53.384Z-weather-wind-direction-value.json",
+      "sha256": "da975684edbdff9ece96fd6e095757bc94cf2fb07ee69f04ed6eafcf5370ff0c"
+    },
+    "weather-temperature-value": {
+      "file": "weather/2026-10-01T19-55-53.384Z-weather-temperature-value.json",
+      "sha256": "da975684edbdff9ece96fd6e095757bc94cf2fb07ee69f04ed6eafcf5370ff0c"
+    },
+    "weather-pressure-value": {
+      "file": "weather/2026-10-01T19-55-53.384Z-weather-pressure-value.json",
+      "sha256": "da975684edbdff9ece96fd6e095757bc94cf2fb07ee69f04ed6eafcf5370ff0c"
+    }
+  }
+}
