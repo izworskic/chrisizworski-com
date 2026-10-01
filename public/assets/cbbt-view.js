@@ -23,34 +23,24 @@
   'use strict';
   if(typeof document==='undefined')return;
 
-  var RADAR_SOURCES=[
-    '/api/cbbt-media?asset=radar',
-    'https://radar.weather.gov/ridge/standard/KAKQ_loop.gif',
-    'https://radar.weather.gov/ridge/standard/KAKQ_0.gif'
-  ];
-  var radarIndex=0;
+  var CBBT_NWS_RADAR='https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiaWQiOiJ3ZWF0aGVyIiwiY2VudGVyIjpbLTc2LjAzNCwzNy4xN10sImxvY2F0aW9uIjpbLTc1Ljk2OCwzNy4xMzRdLCJ6b29tIjo4LjU5MzA0NjI3NzAzODg5NCwibGF5ZXIiOiJicmVmX3FjZCJ9LCJhbmltYXRpbmciOmZhbHNlLCJiYXNlIjoic3RhbmRhcmQiLCJhcnRjYyI6ZmFsc2UsImNvdW50eSI6ZmFsc2UsImN3YSI6ZmFsc2UsInJmYyI6ZmFsc2UsInN0YXRlIjpmYWxzZSwibWVudSI6dHJ1ZSwic2hvcnRGdXNlZE9ubHkiOmZhbHNlLCJvcGFjaXR5Ijp7ImFsZXJ0cyI6MC44LCJsb2NhbCI6MC42LCJsb2NhbFN0YXRpb25zIjowLjgsIm5hdGlvbmFsIjowLjZ9fQ%3D%3D';
 
   function byId(id){return document.getElementById(id);}
-  function cacheBust(url,intervalMs){var stamp=Math.floor(Date.now()/(intervalMs||60000));return url+(url.indexOf('?')===-1?'?':'&')+'cb='+stamp;}
 
-  function initRadar(){
-    var image=byId('radarImage');
-    var fallback=byId('radarFallback');
-    if(!image)return;
-    function load(index){
-      radarIndex=index;
-      var source=RADAR_SOURCES[index];
-      if(!source){image.hidden=true;if(fallback)fallback.hidden=false;return;}
-      image.src=cacheBust(source,120000);
+  function initRadarLink(){
+    var frame=document.querySelector('.radar-frame');
+    var link=byId('radarLink');
+    var actions=link&&link.closest('.radar-actions');
+    if(frame){frame.hidden=true;frame.setAttribute('aria-hidden','true');}
+    if(link){
+      link.href=CBBT_NWS_RADAR;
+      link.textContent='Open live NWS radar centered on CBBT ↗';
+      link.dataset.radarSource='nws-cbbt-centered';
     }
-    image.onload=function(){image.hidden=false;if(fallback)fallback.hidden=true;image.dataset.mediaSource=RADAR_SOURCES[radarIndex];};
-    image.onerror=function(){
-      var next=radarIndex+1;
-      if(next<RADAR_SOURCES.length){load(next);return;}
-      image.hidden=true;if(fallback)fallback.hidden=false;
-    };
-    load(0);
-    window.setInterval(function(){load(0);},300000);
+    if(actions){
+      var copy=actions.querySelector('p');
+      if(copy)copy.textContent='Use the live National Weather Service radar centered on the Chesapeake Bay Bridge-Tunnel for approaching precipitation. Radar does not determine CBBT operating status.';
+    }
   }
 
   function injectLiveVisualStyles(){
@@ -78,7 +68,7 @@
 
   document.addEventListener('DOMContentLoaded',function(){
     injectLiveVisualStyles();
-    initRadar();
+    initRadarLink();
     initLiveVisualLinks();
   });
 })();
