@@ -24,9 +24,9 @@
   if(typeof document==='undefined')return;
 
   var RADAR_SOURCES=[
+    '/api/cbbt-media?asset=radar',
     'https://radar.weather.gov/ridge/standard/KAKQ_loop.gif',
-    'https://radar.weather.gov/ridge/standard/KAKQ_0.gif',
-    '/api/cbbt-media?asset=radar'
+    'https://radar.weather.gov/ridge/standard/KAKQ_0.gif'
   ];
   var radarIndex=0;
 
@@ -72,7 +72,7 @@
     section.className='section-card';
     section.id='cbbtLiveVisuals';
     section.setAttribute('aria-labelledby','cbbtLiveVisualsHeading');
-    section.innerHTML='<div class="section-heading"><div><p class="eyebrow">Live visual checks</p><h2 id="cbbtLiveVisualsHeading">Traffic cameras and official live views</h2></div><span class="context-chip">Current sources</span></div><div class="live-visual-grid"><a class="live-visual-card" href="https://511.vdot.virginia.gov/" target="_blank" rel="noopener"><span class="live-label">LIVE TRAFFIC CAMERAS</span><strong>Virginia 511 camera map</strong><span>Open the official VDOT traveler map for current traffic-camera video on the Virginia Beach and Eastern Shore approaches. Follow US 13 toward the CBBT.</span></a><a class="live-visual-card" href="https://www.cbbt.com/home/tunnel-traffic/" target="_blank" rel="noopener"><span class="live-label">OFFICIAL CBBT</span><strong>CBBT current traffic report</strong><span>Open the bridge-tunnel authority’s current traffic page for the operating report, restrictions and crossing information.</span></a></div><p class="live-visual-note"><strong>Why the video opens at Virginia 511:</strong> VDOT provides third-party traffic-video integration under a user agreement, so this page launches the official live viewer instead of scraping or rehosting those streams. Camera imagery is context only; CBBT remains the authority for bridge-tunnel operating status.</p>';
+    section.innerHTML='<div class="section-heading"><div><p class="eyebrow">Live visual checks</p><h2 id="cbbtLiveVisualsHeading">CBBT cameras and live observations</h2></div><span class="context-chip">Current sources</span></div><div class="live-visual-grid"><a class="live-visual-card" href="https://trafficvision.live/blog/chesapeake-bay-bridge-tunnel-traffic-cameras" target="_blank" rel="noopener"><span class="live-label">LIVE CBBT CAMERAS</span><strong>Virginia CBBT camera viewer</strong><span>Open the CBBT-specific TrafficVision page for current Virginia US-13 bridge-tunnel and approach camera feeds.</span></a><a class="live-visual-card" href="https://511.vdot.virginia.gov/" target="_blank" rel="noopener"><span class="live-label">OFFICIAL VDOT</span><strong>Virginia 511 camera map</strong><span>Open VDOT’s official traveler map and follow US 13 toward the CBBT for current approach cameras.</span></a><a class="live-visual-card" href="https://tidesandcurrents.noaa.gov/stationhome.html?id=8638901" target="_blank" rel="noopener"><span class="live-label">LIVE NOAA STATION</span><strong>CBBT Chesapeake Channel observations</strong><span>Current NOAA station 8638901 / CHBV2 at the bridge-tunnel: wind, gusts, air temperature and water-level observations.</span></a><a class="live-visual-card" href="https://www.cbbt.com/home/tunnel-traffic/" target="_blank" rel="noopener"><span class="live-label">OFFICIAL CBBT</span><strong>CBBT current traffic report</strong><span>Open the bridge-tunnel authority’s current operating report, restrictions and crossing information.</span></a></div><p class="live-visual-note"><strong>Camera feeds are visual context only.</strong> The camera viewer is not used to declare the bridge open or closed; the official CBBT operating status above remains authoritative.</p>';
     radarCard.insertAdjacentElement('afterend',section);
   }
 
