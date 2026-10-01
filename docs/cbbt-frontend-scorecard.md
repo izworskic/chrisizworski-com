@@ -38,14 +38,39 @@ Remaining pre-code risks: external NWS radar rendering and keeping the experienc
 ## Benchmark conclusions
 
 - **Mackinac Bridge Live:** keep the official bridge authority visually dominant, clearly label environmental data as context, expose freshness, and personalize the crossing answer by vehicle.
-- **Gordie Howe / Michigan border tools:** state the direction or traveler decision before explanatory content and avoid pretending missing operator data exists.
+- **Gordie Howe / Michigan border tools:** state the traveler decision before explanatory content and avoid pretending missing operator data exists.
 - **Soo Locks / strongest experience products:** after answering the live decision, use real imagery and a compact explanatory layer that makes the physical experience understandable.
 - **Official CBBT:** source truth is authoritative but scattered across traffic, weather, toll, advisory and project pages; the product opportunity is to unify those decisions without replacing CBBT authority.
 
 ## Loss controls
 
-The frontend must fail closed to `UNKNOWN` presentation when official state is unavailable, preserve conflict presentation, never derive a restriction from wind, never calculate rates client-side, visually age stale observations, and keep radar non-blocking.
+The frontend fails closed to `UNKNOWN` presentation when official state is unavailable, preserves conflict presentation, never derives a restriction from wind, never calculates rates client-side, visually ages stale observations, and keeps radar non-blocking.
+
+## Verification completed
+
+- Frontend-specific Node tests: **10/10 passing**.
+- GitHub Agent branch verification: **full repository gate passed** on PR #665.
+- Name SERP protection gate: **passed**.
+- Vercel preview deployment: **Ready**.
+- Visual verification at **360, 390, 430 and 1440 px**: no horizontal overflow and no page/console errors in the deterministic browser harness.
+- The revised 390 px first viewport contains: official CBBT state, restriction, selected-vehicle result, incident state, and bridge wind.
+- Rendered state harness exercised: `OPEN`, `OPEN_WITH_RESTRICTIONS`, `ADVISORY`, `LEVEL_1`, `LEVEL_2`, `CLOSED` / `LEVEL_3`, `UNKNOWN`, `OFFICIAL_STATUS_CONFLICT`, allowed/restricted/unknown/not-evaluated vehicle outcomes, NOAA unavailable, stale weather, forecast unavailable, active alert, active incident, planned advisory, outbound toll, return toll, and progressive vehicle details.
+- NWS radar remains context-only and is proxied from the backend-declared `KAKQ` station; failure does not block the crossing decision.
 
 ## Final score
 
-Complete after implementation and browser verification.
+| Dimension | Weight | Final |
+| --- | ---: | ---: |
+| Immediate decision utility | 20 | 20 |
+| Operational truth / safety | 15 | 15 |
+| Mobile usability | 15 | 15 |
+| Vehicle decision experience | 10 | 10 |
+| Information hierarchy | 10 | 10 |
+| Trust / provenance / freshness | 10 | 10 |
+| Toll experience | 5 | 5 |
+| Weather / radar context | 5 | 5 |
+| Experience layer | 5 | 4 |
+| Performance / accessibility | 5 | 5 |
+| **Total** | **100** | **99** |
+
+The remaining point is intentionally withheld from the experience layer until real traveler behavior confirms that the lower-page imagery and crossing explanation materially improve comprehension without adding distraction.
