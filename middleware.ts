@@ -7,6 +7,7 @@ const PLATTE_CRANE_PATH = '/national-tools/platte-crane-live';
 const PLATTE_CRANE_UPSTREAM = 'https://platte-crane-migration-nebraska.vercel.app';
 const FORT_MADISON_PATH = '/national-tools/fort-madison-live';
 const FORT_MADISON_UPSTREAM = 'https://fort-madison-live.vercel.app';
+const PRIMARY_SITE_URL = 'https://chrisizworski.com';
 const PICTURED_ROCKS_HOST = 'picturedrocks.chrisizworski.com';
 const PICTURED_ROCKS_SOURCE = '/labs/pictured-rocks-planner/';
 const PICTURED_ROCKS_SITE_URL = 'https://picturedrocks.chrisizworski.com/';
@@ -17,6 +18,22 @@ const PICTURED_ROCKS_TITLE = 'Pictured Rocks Trip Planner 2026: Map, Itinerary &
 const PICTURED_ROCKS_DESCRIPTION = 'Plan Pictured Rocks National Lakeshore with an interactive map, current weather and access, best stops, boat vs. hike choices, and 1- or 2-day itineraries.';
 const PICTURED_ROCKS_H1 = 'Pictured Rocks National Lakeshore Trip Planner';
 const PICTURED_ROCKS_SOCIAL_IMAGE = 'https://www.nps.gov/common/uploads/structured_data/683601AF-F157-7262-38F31A30A2EA6224.jpg?maxHeight=800&maxWidth=1200&quality=90';
+const PICTURED_ROCKS_MAIN_SITE_PREFIXES = [
+  '/northern-lights-michigan',
+  '/soo-locks',
+  '/fall-color',
+  '/mackinac-bridge-live',
+  '/great-lakes-beaches',
+  '/great-lakes-freighter-tracking',
+  '/michigan-ice',
+  '/great-lakes-buoys',
+  '/saginaw-bay-ecology',
+  '/tools',
+  '/great-lakes',
+  '/up-north-michigan',
+  '/michigan-border-wait-times',
+  '/michigan-snow-totals',
+];
 const PICTURED_ROCKS_SEARCH_SCHEMA = `<script type="application/ld+json">${JSON.stringify({
   '@context': 'https://schema.org',
   '@graph': [
@@ -155,6 +172,12 @@ function optimizePicturedRocksSearchSurface(html: string) {
   return html;
 }
 
+function isPicturedRocksMainSiteLeak(pathname: string) {
+  return PICTURED_ROCKS_MAIN_SITE_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+}
+
 // HTML documents only: never alter Next flight responses, APIs, assets or errors.
 async function withNetworkAds(response: Response, request: Request) {
   if (request.method !== 'GET' || !response.ok ||
@@ -172,6 +195,20 @@ export const config = {
   matcher: [
     '/',
     '/index.html',
+    '/northern-lights-michigan/:path*',
+    '/soo-locks/:path*',
+    '/fall-color/:path*',
+    '/mackinac-bridge-live/:path*',
+    '/great-lakes-beaches/:path*',
+    '/great-lakes-freighter-tracking/:path*',
+    '/michigan-ice/:path*',
+    '/great-lakes-buoys/:path*',
+    '/saginaw-bay-ecology/:path*',
+    '/tools/:path*',
+    '/great-lakes/:path*',
+    '/up-north-michigan/:path*',
+    '/michigan-border-wait-times/:path*',
+    '/michigan-snow-totals/:path*',
     '/national-tools/waterfalls/niagara-falls-live',
     '/national-tools/waterfalls/niagara-falls-live/',
     '/national-tools/waterfalls/niagara-falls-live/:path*',
@@ -268,12 +305,18 @@ async function servePicturedRocksCanonical(request: Request) {
 
 export default async function middleware(request: Request) {
   const url = new URL(request.url);
+  const host = requestHostname(request);
 
   if (
-    requestHostname(request) === PICTURED_ROCKS_HOST &&
+    host === PICTURED_ROCKS_HOST &&
     (url.pathname === '/' || url.pathname === '/index.html')
   ) {
     return servePicturedRocksCanonical(request);
+  }
+
+  if (host === PICTURED_ROCKS_HOST && isPicturedRocksMainSiteLeak(url.pathname)) {
+    const canonical = new URL(`${url.pathname}${url.search}`, PRIMARY_SITE_URL);
+    return Response.redirect(canonical, 308);
   }
 
   if (

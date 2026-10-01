@@ -114,6 +114,15 @@ Current role: Solutions Consultant at Prepared.
 - Decision flow: current regional status -> best region this weekend -> peak timing -> route planning.
 - Truth rule: seasonal timing is the base model. Live weather is a planning input and is not represented as a statewide direct leaf measurement.
 
+## Northern Lights Michigan
+
+- Canonical tool: https://chrisizworski.com/northern-lights-michigan/
+- Purpose: live Michigan aurora decision support combining NOAA space-weather signals with darkness and regional cloud constraints.
+- Primary space-weather source: https://www.swpc.noaa.gov/
+- Freshness: live conditions refresh frequently; exact visibility is never guaranteed.
+- Search intent: northern lights Michigan tonight, can I see the aurora tonight in Michigan, best time for northern lights in Michigan, where to see northern lights in Michigan.
+- Truth rule: aurora visibility is probabilistic. Geomagnetic guidance, darkness, cloud cover, and location are planning inputs and never a guarantee of visible aurora.
+
 ## Mackinac Bridge Planning Tools
 
 - Live crossing tool: https://chrisizworski.com/mackinac-bridge-live/
