@@ -9,6 +9,7 @@ import tripJourneyLinks from '../lib/trip-journey-links.js';
 
 const ROOT = path.join(process.cwd(), 'public');
 const MEASUREMENT_ID = 'G-Y5D2V2W7HN';
+const AI_REFERRAL_ASSET = '/assets/ai-referral-measurement.js';
 const ADSENSE_PUBLISHER_ID = adsenseEligibility.PUBLISHER_ID;
 const GA4_TAG = `<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}"></script>
@@ -18,6 +19,7 @@ const GA4_TAG = `<!-- Google tag (gtag.js) -->
   gtag('js', new Date());
   gtag('config', '${MEASUREMENT_ID}');
 </script>`;
+const AI_REFERRAL_TAG = `<script defer src="${AI_REFERRAL_ASSET}" data-ai-referral-measurement></script>`;
 const ADSENSE_TAG = `<meta name="google-adsense-account" content="${ADSENSE_PUBLISHER_ID}">`;
 
 const MIGRATED_TOOLS_SECTION = `
@@ -45,6 +47,8 @@ const MIGRATED_TOOLS_SECTION = `
 let scanned = 0;
 let ga4Injected = 0;
 let ga4AlreadyTagged = 0;
+let aiReferralInjected = 0;
+let aiReferralAlreadyTagged = 0;
 let adsenseInjected = 0;
 let adsenseAlreadyTagged = 0;
 
@@ -63,9 +67,11 @@ async function walk(dir) {
     const integratedHtml = tripJourneyLinks(replaceAisEmbeds(originalHtml), pathname);
     const html = sitePolicyLinks(integratedHtml);
     const needsGa4 = !html.includes(MEASUREMENT_ID);
+    const needsAiReferral = !html.includes(AI_REFERRAL_ASSET);
     const needsAdsense = !/<meta\b[^>]*name=["']google-adsense-account["']/i.test(html);
 
     if (!needsGa4) ga4AlreadyTagged += 1;
+    if (!needsAiReferral) aiReferralAlreadyTagged += 1;
     if (!needsAdsense) adsenseAlreadyTagged += 1;
 
     if (!/<\/head>/i.test(html)) {
@@ -76,6 +82,10 @@ async function walk(dir) {
     if (needsGa4) {
       tags.push(GA4_TAG);
       ga4Injected += 1;
+    }
+    if (needsAiReferral) {
+      tags.push(AI_REFERRAL_TAG);
+      aiReferralInjected += 1;
     }
     if (needsAdsense) {
       tags.push(ADSENSE_TAG);
@@ -139,10 +149,13 @@ await walk(ROOT);
 const runtimeFilesChecked = await assertNoReplitRuntime();
 console.log(JSON.stringify({
   measurementId: MEASUREMENT_ID,
+  aiReferralAsset: AI_REFERRAL_ASSET,
   adsensePublisherId: ADSENSE_PUBLISHER_ID,
   scanned,
   ga4Injected,
   ga4AlreadyTagged,
+  aiReferralInjected,
+  aiReferralAlreadyTagged,
   adsenseInjected,
   adsenseAlreadyTagged,
   runtimeFilesChecked,
