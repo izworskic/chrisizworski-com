@@ -1055,6 +1055,22 @@
       "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/:path*"
     },
     {
+      "source": "/national-tools/coastal/oregon/_api/decision",
+      "destination": "/api/oregon-coastal"
+    },
+    {
+      "source": "/national-tools/coastal/oregon",
+      "destination": "/synced-national-tools/oregon-coastal/index.html"
+    },
+    {
+      "source": "/national-tools/coastal/oregon/",
+      "destination": "/synced-national-tools/oregon-coastal/index.html"
+    },
+    {
+      "source": "/national-tools/coastal/oregon/:path*",
+      "destination": "/synced-national-tools/oregon-coastal/:path*"
+    },
+    {
       "source": "/national-tools/coastal/:path*",
       "destination": "https://national-coastal-water.vercel.app/national-tools/coastal/:path*"
     },
