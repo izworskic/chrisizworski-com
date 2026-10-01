@@ -59,6 +59,11 @@ fs.writeFileSync('public/assets/network-ads-v1.js', output);
 if (process.env.VERCEL === '1') {
   const { applyBreakoutConstraints } = await import('./apply-breakout-constraints.mjs');
   applyBreakoutConstraints();
+  // Searchers asking whether the bridge is open should hit official live status
+  // before explanatory copy. Run this after the breakout transform so the order
+  // is deterministic in the deployed artifact without mutating source HTML in CI.
+  const { applyMackinacLiveFirst } = await import('./apply-mackinac-live-first.mjs');
+  applyMackinacLiveFirst();
 }
 
 console.log(`Network ads v1: ${hosts.length} allowed hosts, ${settings.loaderMode} mode`);
