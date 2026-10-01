@@ -24,8 +24,31 @@
   if(typeof document==='undefined')return;
 
   var CBBT_NWS_RADAR='https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiaWQiOiJ3ZWF0aGVyIiwiY2VudGVyIjpbLTc2LjAzNCwzNy4xN10sImxvY2F0aW9uIjpbLTc1Ljk2OCwzNy4xMzRdLCJ6b29tIjo4LjU5MzA0NjI3NzAzODg5NCwibGF5ZXIiOiJicmVmX3FjZCJ9LCJhbmltYXRpbmciOmZhbHNlLCJiYXNlIjoic3RhbmRhcmQiLCJhcnRjYyI6ZmFsc2UsImNvdW50eSI6ZmFsc2UsImN3YSI6ZmFsc2UsInJmYyI6ZmFsc2UsInN0YXRlIjpmYWxzZSwibWVudSI6dHJ1ZSwic2hvcnRGdXNlZE9ubHkiOmZhbHNlLCJvcGFjaXR5Ijp7ImFsZXJ0cyI6MC44LCJsb2NhbCI6MC42LCJsb2NhbFN0YXRpb25zIjowLjgsIm5hdGlvbmFsIjowLjZ9fQ%3D%3D';
+  var NWS_RADAR_WMS='https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows';
+  var LEAFLET_JS='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js';
+  var LEAFLET_CSS='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css';
 
   function byId(id){return document.getElementById(id);}
+
+  function loadLeaflet(done,fail){
+    if(window.L&&window.L.map){done();return;}
+    if(!byId('cbbtLeafletCss')){
+      var css=document.createElement('link');
+      css.id='cbbtLeafletCss';css.rel='stylesheet';css.href=LEAFLET_CSS;
+      document.head.appendChild(css);
+    }
+    var existing=byId('cbbtLeafletScript');
+    if(existing){existing.addEventListener('load',done,{once:true});existing.addEventListener('error',fail,{once:true});return;}
+    var script=document.createElement('script');
+    script.id='cbbtLeafletScript';script.src=LEAFLET_JS;script.async=true;
+    script.onload=done;script.onerror=fail;
+    document.head.appendChild(script);
+  }
+
+  function showRadarFallback(frame){
+    if(!frame)return;
+    frame.innerHTML='<div class="radar-map-fallback"><strong>Live radar map could not load.</strong><span>Open the full National Weather Service radar below.</span></div>';
+  }
 
   function initVisibleRadar(){
     var frame=document.querySelector('.radar-frame');
@@ -34,15 +57,32 @@
     if(frame){
       frame.hidden=false;
       frame.removeAttribute('aria-hidden');
-      frame.innerHTML='';
-      var iframe=document.createElement('iframe');
-      iframe.id='cbbtNwsRadarFrame';
-      iframe.src=CBBT_NWS_RADAR;
-      iframe.title='Live National Weather Service radar centered on the Chesapeake Bay Bridge-Tunnel';
-      iframe.loading='eager';
-      iframe.setAttribute('referrerpolicy','no-referrer-when-downgrade');
-      iframe.setAttribute('allowfullscreen','');
-      frame.appendChild(iframe);
+      frame.innerHTML='<div id="cbbtRadarMap" role="img" aria-label="Live National Weather Service radar centered on the Chesapeake Bay Bridge-Tunnel"></div>';
+      loadLeaflet(function(){
+        try{
+          var mapNode=byId('cbbtRadarMap');
+          if(!mapNode||mapNode.dataset.ready==='true')return;
+          mapNode.dataset.ready='true';
+          var map=window.L.map(mapNode,{scrollWheelZoom:false,attributionControl:true}).setView([37.17,-76.034],8);
+          window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+            maxZoom:19,
+            attribution:'&copy; OpenStreetMap contributors'
+          }).addTo(map);
+          var radar=window.L.tileLayer.wms(NWS_RADAR_WMS,{
+            layers:'conus_bref_qcd',
+            format:'image/png',
+            transparent:true,
+            version:'1.1.1',
+            tiled:true,
+            opacity:0.72,
+            attribution:'Radar: NOAA/NWS'
+          }).addTo(map);
+          window.L.circleMarker([37.134,-75.968],{radius:7,weight:2,color:'#ffffff',fillColor:'#0d3b4f',fillOpacity:1})
+            .addTo(map).bindTooltip('Chesapeake Bay Bridge-Tunnel',{permanent:true,direction:'top',offset:[0,-6]});
+          window.setInterval(function(){radar.setParams({cb:Math.floor(Date.now()/120000)},false);},120000);
+          window.setTimeout(function(){map.invalidateSize();},100);
+        }catch(error){showRadarFallback(frame);}
+      },function(){showRadarFallback(frame);});
     }
     if(link){
       link.href=CBBT_NWS_RADAR;
@@ -51,7 +91,7 @@
     }
     if(actions){
       var copy=actions.querySelector('p');
-      if(copy)copy.textContent='Live National Weather Service radar is shown above, centered on the Chesapeake Bay Bridge-Tunnel. Radar does not determine CBBT operating status.';
+      if(copy)copy.textContent='Live NOAA/NWS base reflectivity is shown above using the National Weather Service WMS radar service, centered on the Chesapeake Bay Bridge-Tunnel. Radar does not determine CBBT operating status.';
     }
   }
 
@@ -59,7 +99,7 @@
     if(byId('cbbtLiveMediaStyles'))return;
     var style=document.createElement('style');
     style.id='cbbtLiveMediaStyles';
-    style.textContent='.experience-grid{display:none!important}.radar-frame{display:block!important;min-height:420px;overflow:hidden;background:#eef4f6}.radar-frame iframe{display:block;width:100%;height:520px;border:0;background:#eef4f6}@media(max-width:700px){.radar-frame{min-height:360px}.radar-frame iframe{height:430px}}.live-visual-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.live-visual-card{display:grid;gap:8px;padding:16px;border:1px solid rgba(13,59,79,.16);border-radius:14px;background:#f8fbfb;text-decoration:none;color:inherit;min-height:142px}.live-visual-card:hover{border-color:rgba(13,59,79,.38);box-shadow:0 8px 24px rgba(15,42,53,.07)}.live-visual-card .live-label{display:inline-flex;width:max-content;border-radius:999px;padding:4px 7px;background:#e2eef2;color:#0d3b4f;font-size:.68rem;font-weight:850;letter-spacing:.05em}.live-visual-card strong{font-size:1.02rem;color:#10232c}.live-visual-card span:last-child{font-size:.82rem;color:#52646d}.live-visual-note{margin:12px 0 0;color:#52646d;font-size:.8rem}.live-visual-note strong{color:#10232c}@media(max-width:700px){.live-visual-grid{grid-template-columns:1fr}.live-visual-card{min-height:0}}';
+    style.textContent='.experience-grid{display:none!important}.radar-frame{display:block!important;min-height:420px;overflow:hidden;background:#eef4f6}.radar-frame #cbbtRadarMap{width:100%;height:520px;background:#eef4f6}.radar-map-fallback{min-height:360px;display:grid;place-content:center;gap:6px;text-align:center;padding:24px;color:#52646d}.radar-map-fallback strong{color:#10232c}@media(max-width:700px){.radar-frame{min-height:360px}.radar-frame #cbbtRadarMap{height:430px}}.live-visual-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.live-visual-card{display:grid;gap:8px;padding:16px;border:1px solid rgba(13,59,79,.16);border-radius:14px;background:#f8fbfb;text-decoration:none;color:inherit;min-height:142px}.live-visual-card:hover{border-color:rgba(13,59,79,.38);box-shadow:0 8px 24px rgba(15,42,53,.07)}.live-visual-card .live-label{display:inline-flex;width:max-content;border-radius:999px;padding:4px 7px;background:#e2eef2;color:#0d3b4f;font-size:.68rem;font-weight:850;letter-spacing:.05em}.live-visual-card strong{font-size:1.02rem;color:#10232c}.live-visual-card span:last-child{font-size:.82rem;color:#52646d}.live-visual-note{margin:12px 0 0;color:#52646d;font-size:.8rem}.live-visual-note strong{color:#10232c}@media(max-width:700px){.live-visual-grid{grid-template-columns:1fr}.live-visual-card{min-height:0}}';
     document.head.appendChild(style);
   }
 
