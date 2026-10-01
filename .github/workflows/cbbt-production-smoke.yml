@@ -1,0 +1,33 @@
+name: CBBT production smoke
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'api/cbbt.js'
+      - 'api/cbbt-media.js'
+      - 'lib/cbbt/**'
+      - 'public/chesapeake-bay-bridge-tunnel/**'
+      - 'public/assets/cbbt-*.js'
+      - 'public/assets/cbbt-live.css'
+      - 'scripts/smoke-cbbt-production.mjs'
+      - '.github/workflows/cbbt-production-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-origin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify public CBBT release
+        run: node scripts/smoke-cbbt-production.mjs
