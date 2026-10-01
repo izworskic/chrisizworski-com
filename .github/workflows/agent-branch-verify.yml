@@ -10,7 +10,7 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   verify:
@@ -24,38 +24,8 @@ jobs:
           node-version: '22'
       - name: Install pinned dependencies
         run: npm ci
-      - name: Fix Haleakala SERP title
-        if: github.event_name == 'push'
-        shell: bash
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          path = Path('public/synced-national-tools/haleakala-sunrise/index.html')
-          text = path.read_text()
-          old = '<title>Haleakalā Sunrise Conditions: Clouds, Wind & Summit Forecast | Chris Izworski</title>'
-          new = '<title>Haleakalā Sunrise Weather & Clouds | Chris Izworski</title>'
-          if old not in text:
-              raise SystemExit('Expected Haleakala title not found')
-          path.write_text(text.replace(old, new, 1))
-          PY
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/synced-national-tools/haleakala-sunrise/index.html
-          git commit -m "Fix Haleakala sunrise SERP title length"
-          git push origin HEAD:${GITHUB_REF_NAME}
       - name: Run full repository gate
-        shell: bash
-        run: |
-          set -o pipefail
-          npm run verify:all 2>&1 | tee verify-current.log
-      - name: Upload verification log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: verify-current-log
-          path: verify-current.log
-          if-no-files-found: warn
-          retention-days: 1
+        run: npm run verify:all
       - name: Upload boat launch source audit
         if: always()
         uses: actions/upload-artifact@v4
