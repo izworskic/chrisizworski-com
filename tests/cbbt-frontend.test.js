@@ -9,6 +9,8 @@ const html = fs.readFileSync(path.join(ROOT, 'public/chesapeake-bay-bridge-tunne
 const js = fs.readFileSync(path.join(ROOT, 'public/assets/cbbt-live.js'), 'utf8');
 const media = fs.readFileSync(path.join(ROOT, 'api/cbbt-media.js'), 'utf8');
 const css = fs.readFileSync(path.join(ROOT, 'public/assets/cbbt-live.css'), 'utf8');
+const sitemap = fs.readFileSync(path.join(ROOT, 'public/sitemap-cbbt.xml'), 'utf8');
+const robots = fs.readFileSync(path.join(ROOT, 'public/robots.txt'), 'utf8');
 
 function meta(name) {
   const m = html.match(new RegExp(`<meta\\s+name=["']${name}["']\\s+content=["']([^"']*)`, 'i'));
@@ -37,7 +39,9 @@ test('frontend consumes the backend and does not embed restriction or toll thres
 
 test('official status states remain explicit and conservative', () => {
   assert.equal(view.statusView({ state: 'OPEN', restrictionLevel: 'NONE' }).word, 'OPEN');
+  assert.match(view.statusView({ state: 'OPEN_WITH_RESTRICTIONS', restrictionLevel: 'ADVISORY' }).headline, /open with restrictions/i);
   assert.match(view.statusView({ state: 'OPEN_WITH_RESTRICTIONS', restrictionLevel: 'LEVEL_1' }).headline, /open with restrictions/i);
+  assert.equal(view.statusView({ state: 'OPEN_WITH_RESTRICTIONS', restrictionLevel: 'LEVEL_2' }).restriction, 'Level 2');
   assert.equal(view.statusView({ state: 'CLOSED', restrictionLevel: 'LEVEL_3' }).word, 'CLOSED');
   assert.match(view.statusView({ state: 'UNKNOWN', restrictionLevel: 'UNKNOWN' }).headline, /status unavailable/i);
   assert.match(view.statusView({ state: 'OFFICIAL_STATUS_CONFLICT', restrictionLevel: 'UNKNOWN' }).copy, /sources currently disagree/i);
@@ -64,6 +68,18 @@ test('toll view renders backend outcomes without a rate table', () => {
   assert.doesNotMatch(html, /<table[^>]*>[^]*toll/i);
 });
 
+test('progressive vehicle form exposes the backend-supported traveler attributes without policy logic', () => {
+  for (const marker of ['exteriorCargo','heightFt','propaneCarried','propaneValveClosed','trailerSubtype','commercialType','payloadLb','highProfile','sixWheel']) {
+    assert.ok(html.includes(`id="${marker}"`), marker);
+  }
+  for (const type of ['motorcycle','rv','towing_trailer','commercial','bus','other']) assert.ok(html.includes(`value="${type}"`), type);
+});
+
+test('CBBT canonical is exposed through a dedicated sitemap declared in robots', () => {
+  assert.match(sitemap, /https:\/\/chrisizworski\.com\/chesapeake-bay-bridge-tunnel\//);
+  assert.match(robots, /Sitemap: https:\/\/chrisizworski\.com\/sitemap-cbbt\.xml/);
+});
+
 test('radar is proxied server-side from the backend-declared station', () => {
   assert.match(html, /src="\/api\/cbbt-media\?asset=radar"/);
   assert.match(media, /RADAR_METADATA\.stationId/);
@@ -75,6 +91,7 @@ test('radar is proxied server-side from the backend-declared station', () => {
 test('required traveler workflows are present and mobile-first markup avoids giant hero media', () => {
   for (const marker of ['vehicleQuickSelect', 'vehicleDetails', 'weatherNow', 'forecastStrip', 'radarImage', 'tollForm', 'advisoryList', 'sourceDetails']) assert.ok(html.includes(`id="${marker}"`), marker);
   assert.match(css, /@media\(max-width:390px\)/i);
+  assert.match(css, /@media\(max-width:390px\)\{\.lede\{display:none\}/i);
   assert.doesNotMatch(html, /<img[^>]+fetchpriority="high"/i);
   assert.match(html, /loading="lazy"/i);
 });
