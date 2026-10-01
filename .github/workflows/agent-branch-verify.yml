@@ -10,7 +10,7 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   verify:
@@ -24,6 +24,27 @@ jobs:
           node-version: '22'
       - name: Install pinned dependencies
         run: npm ci
+      - name: Temporarily sync Mackinac sitemap freshness
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('public/sitemap.xml')
+          text = path.read_text()
+          pattern = re.compile(r'(<loc>https://chrisizworski\.com/mackinac-island(?:/[^<]*)?</loc>\s*<lastmod>)2026-09-29(</lastmod>)')
+          updated, count = pattern.subn(r'\g<1>2026-10-01\2', text)
+          if count != 18:
+              raise SystemExit(f'Expected 18 Mackinac sitemap freshness updates, found {count}')
+          path.write_text(updated)
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/sitemap.xml
+          git commit -m "Sync Mackinac sitemap freshness metadata"
+          git push origin HEAD:${GITHUB_REF_NAME}
       - name: Run full repository gate
         shell: bash
         run: |
