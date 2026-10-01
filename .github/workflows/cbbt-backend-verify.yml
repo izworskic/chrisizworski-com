@@ -39,17 +39,5 @@ jobs:
         run: npm ci
       - name: Run deterministic CBBT tests
         run: node --test tests/cbbt.test.js
-      - name: Inspect live CBBT status markup
-        run: |
-          node <<'NODE'
-          const response = await fetch('https://www.cbbt.com/home/tunnel-traffic/');
-          const html = await response.text();
-          const lower = html.toLowerCase();
-          const index = lower.indexOf('traffic delays');
-          console.log('HTTP', response.status, 'traffic-delays-index', index);
-          if (index >= 0) console.log(html.slice(Math.max(0, index - 1200), index + 700));
-          const tags = [...html.matchAll(/<(?:img|div|span|p|section)[^>]*(?:open|status|traffic)[^>]*>/gi)].slice(0, 30).map((m) => m[0]);
-          console.log('STATUS_TAGS', JSON.stringify(tags, null, 2));
-          NODE
       - name: Run strict live-source smoke test
         run: node scripts/test-cbbt-live.mjs --strict
