@@ -1,0 +1,143 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-10-01",
+  "timezone": "America/Detroit",
+  "objective": "Earn attributable AI-search citations and referrals that land on the correct canonical, monetized decision tools without weakening factual integrity, Google search performance, or the human product experience.",
+  "principle": "Optimize for source-worthiness and click-worthy utility, not for guessed AI ranking factors.",
+  "limitations": [
+    "OpenAI does not publish a deterministic ChatGPT Search ranking formula. This benchmark is a release-readiness and measurement contract, not a citation guarantee.",
+    "Static answer length is a quality heuristic only. It is not treated as a known OpenAI ranking factor.",
+    "Natural web-search prompt tests are useful discovery proxies but are not proof of ChatGPT citation behavior."
+  ],
+  "baselineWindow": {
+    "source": "Google Search Console API",
+    "startDate": "2026-09-01",
+    "endDate": "2026-09-28",
+    "settledThrough": "2026-09-28"
+  },
+  "referenceSurfaces": [
+    {
+      "id": "soo-locks",
+      "url": "https://chrisizworski.com/soo-locks/",
+      "role": "operational-intent winning reference",
+      "impressions": 9912,
+      "clicks": 839,
+      "ctr": 0.08464,
+      "notes": "Strong query-to-answer alignment and source transparency. Protect utility while learning from its answer architecture."
+    },
+    {
+      "id": "northern-lights-michigan",
+      "url": "https://chrisizworski.com/northern-lights-michigan/",
+      "role": "primary AI-search acquisition pilot",
+      "impressions": 12090,
+      "clicks": 139,
+      "ctr": 0.01150,
+      "notes": "Large exposure with weak capture. Best surface for testing answer extraction plus interactive click value without rebuilding the product."
+    },
+    {
+      "id": "mackinac-bridge-live",
+      "url": "https://chrisizworski.com/mackinac-bridge-live/",
+      "role": "authority-and-synthesis pilot",
+      "impressions": 5740,
+      "clicks": 35,
+      "ctr": 0.00610,
+      "notes": "Official authority owns the basic open/closed fact. The product must earn clicks through synthesis, personalization, cameras, timing, and travel decision support."
+    }
+  ],
+  "readinessScore": {
+    "minimumReleaseScore": 95,
+    "weights": {
+      "canonicalDestinationIntegrity": 20,
+      "crawlAndIndexEligibility": 15,
+      "directAnswerAndIntentFit": 15,
+      "provenanceAndFreshness": 15,
+      "uniqueInteractiveValueBeyondAnswer": 15,
+      "referralMeasurement": 10,
+      "monetizationContinuity": 5,
+      "internalDecisionNetwork": 5
+    }
+  },
+  "valueFunction": {
+    "definition": "V = 0.20C + 0.15E + 0.15A + 0.15P + 0.15U + 0.10M + 0.05R + 0.05N",
+    "terms": {
+      "C": "canonical destination integrity",
+      "E": "crawler/index eligibility",
+      "A": "direct answer and conversational intent fit",
+      "P": "provenance, freshness, and uncertainty clarity",
+      "U": "unique interactive utility that creates a reason to click",
+      "M": "measurable referral attribution",
+      "R": "monetization continuity after the click",
+      "N": "useful next-step internal decision network"
+    },
+    "scale": "Each term is scored 0-100 from observable evidence. The function is used for prioritization, not as a claim about OpenAI ranking."
+  },
+  "lossFunction": {
+    "definition": "L = (100 - V) + 100H + 20D + 15B + 10F + 10G",
+    "terms": {
+      "H": "count of hard-veto failures",
+      "D": "count of known wrong-host or duplicate-canonical citation destinations",
+      "B": "measurement blindness indicator: ChatGPT referrals/revenue cannot be attributed",
+      "F": "freshness/provenance failure indicator on a live or risk-sensitive answer",
+      "G": "material Google guardrail regression indicator on a protected winner"
+    },
+    "goal": "Minimize loss. Any H > 0 blocks release regardless of the weighted value score."
+  },
+  "hardVetoes": [
+    "OAI-SearchBot is explicitly blocked from a target canonical surface.",
+    "A tracked main-site decision page is indexable or surfaced on an unintended host.",
+    "Canonical, indexability, or robots behavior points away from the intended production owner.",
+    "A live answer fabricates current data, certainty, thresholds, or source authority.",
+    "A change removes material source provenance or freshness context from a risk-sensitive decision.",
+    "A change breaks the existing analytics or advertising loader contract on an eligible page.",
+    "A new URL duplicates an existing canonical intent owner without materially distinct user value."
+  ],
+  "trackedRoutes": [
+    "/northern-lights-michigan/",
+    "/soo-locks/",
+    "/fall-color/",
+    "/mackinac-bridge-live/",
+    "/great-lakes-beaches/",
+    "/great-lakes-freighter-tracking/",
+    "/michigan-ice/",
+    "/great-lakes-buoys/",
+    "/saginaw-bay-ecology/"
+  ],
+  "pilotPromptCorpus": [
+    {"surface":"northern-lights-michigan","prompt":"Can I see the northern lights in Michigan tonight?","intent":"current yes/no plus uncertainty"},
+    {"surface":"northern-lights-michigan","prompt":"What time are the northern lights most likely in Michigan tonight?","intent":"best time window"},
+    {"surface":"northern-lights-michigan","prompt":"Where should I drive in Michigan tonight to see the aurora?","intent":"location decision"},
+    {"surface":"northern-lights-michigan","prompt":"Will clouds ruin the northern lights in Michigan tonight?","intent":"weather constraint"},
+    {"surface":"northern-lights-michigan","prompt":"Is it worth driving north for the northern lights tonight?","intent":"go/no-go synthesis"},
+    {"surface":"northern-lights-michigan","prompt":"Can I see the northern lights from the Lower Peninsula tonight?","intent":"regional threshold"},
+    {"surface":"soo-locks","prompt":"What ships are going through the Soo Locks today?","intent":"today activity"},
+    {"surface":"soo-locks","prompt":"When is the next freighter at the Soo Locks?","intent":"next event"},
+    {"surface":"soo-locks","prompt":"Is there a Soo Locks ship schedule for today?","intent":"schedule availability and limitation"},
+    {"surface":"soo-locks","prompt":"When should I go to Soo Locks Park today to see ships?","intent":"visit timing"},
+    {"surface":"soo-locks","prompt":"How can I track ships approaching the Soo Locks right now?","intent":"live tracking"},
+    {"surface":"soo-locks","prompt":"Are the Soo Locks open to ships right now?","intent":"operational status"},
+    {"surface":"mackinac-bridge-live","prompt":"Is the Mackinac Bridge open right now?","intent":"official status"},
+    {"surface":"mackinac-bridge-live","prompt":"What are conditions on the Mackinac Bridge right now?","intent":"current crossing conditions"},
+    {"surface":"mackinac-bridge-live","prompt":"Is it too windy to cross the Mackinac Bridge with a trailer?","intent":"vehicle-specific decision"},
+    {"surface":"mackinac-bridge-live","prompt":"How bad is traffic at the Mackinac Bridge right now?","intent":"traffic decision"},
+    {"surface":"mackinac-bridge-live","prompt":"Can I see a live Mackinac Bridge camera?","intent":"visual verification"},
+    {"surface":"mackinac-bridge-live","prompt":"Should I cross the Mackinac Bridge now or wait?","intent":"timing synthesis"}
+  ],
+  "outcomeMetrics": {
+    "citationPresenceRate": "Share of tested AI-search prompts where an owned canonical is cited or linked. Measure externally; do not infer from static code.",
+    "canonicalCitationRate": "Among owned citations, share landing on the intended canonical host. Target 100%.",
+    "chatgptReferralSessions": "Sessions with source/referrer attributable to chatgpt.com, including utm_source=chatgpt.com where present.",
+    "chatgptLandingPages": "Referral sessions grouped by landing page and tool family.",
+    "chatgptRevenue": "Ad and downstream monetization attributable to ChatGPT referral sessions when analytics integration supports it.",
+    "revenuePerChatgptSession": "ChatGPT-attributed revenue divided by ChatGPT referral sessions.",
+    "secondUsefulActionRate": "Share of ChatGPT referral sessions that interact with the tool or continue to another relevant owned decision surface.",
+    "googleGuardrails": "Settled GSC impressions, clicks, CTR, and position on the same canonical surfaces over comparable windows."
+  },
+  "executionOrder": [
+    "Fix crawler and canonical-destination failures before content optimization.",
+    "Restore reliable ChatGPT referral and revenue measurement.",
+    "Use Soo Locks as the reference architecture rather than modifying it speculatively.",
+    "Run the first answer/click-value treatment on Northern Lights because demand is high and capture is weak.",
+    "Use Mackinac Bridge as the authority/synthesis test: official status first, differentiated decision utility second.",
+    "Expand only after prompt-level and business-outcome evidence shows a repeatable pattern."
+  ]
+}
