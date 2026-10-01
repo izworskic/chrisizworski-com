@@ -4,13 +4,19 @@ const {canonicalResponse, assertIndexableRobots} = require('./helpers/pictured-r
 const fs = require('node:fs');
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { stripTypeScriptTypes } = require('node:module');
 
 const middleware = fs.readFileSync('middleware.ts', 'utf8');
 const preview = fs.readFileSync('public/labs/pictured-rocks-planner/index.html', 'utf8');
 
+async function loadMiddleware() {
+  const source = stripTypeScriptTypes(middleware);
+  return (await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'))).default;
+}
+
 test('canonical Pictured Rocks hostname is the only host promoted by middleware', () => {
   assert.match(middleware, /PICTURED_ROCKS_HOST\s*=\s*'picturedrocks\.chrisizworski\.com'/);
-  assert.match(middleware, /requestHostname\(request\)\s*===\s*PICTURED_ROCKS_HOST/);
+  assert.match(middleware, /host\s*===\s*PICTURED_ROCKS_HOST/);
   assert.match(middleware, /url\.pathname\s*===\s*'\/'/);
   assert.match(middleware, /url\.pathname\s*===\s*'\/index\.html'/);
 });
@@ -37,6 +43,13 @@ test('lab preview remains noindex while canonical shell promotes only its respon
   assert.match(middleware, /noindexPattern/);
   assertIndexableRobots((await canonicalResponse(t)).html);
   assert.match(middleware, /X-Robots-Tag', 'index, follow, max-image-preview:large'/);
+});
+
+test('main-site flagship routes redirect off the Pictured Rocks hostname', async () => {
+  const handler = await loadMiddleware();
+  const response = await handler(new Request('https://picturedrocks.chrisizworski.com/mackinac-bridge-live/?source=test'));
+  assert.equal(response.status, 308);
+  assert.equal(response.headers.get('location'), 'https://chrisizworski.com/mackinac-bridge-live/?source=test');
 });
 
 test('cutover fails closed if the committed preview contract disappears', () => {
