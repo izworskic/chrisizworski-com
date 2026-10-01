@@ -10,7 +10,7 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   verify:
@@ -24,6 +24,25 @@ jobs:
           node-version: '22'
       - name: Install pinned dependencies
         run: npm ci
+      - name: Fix Haleakala SERP title
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('public/synced-national-tools/haleakala-sunrise/index.html')
+          text = path.read_text()
+          old = '<title>Haleakalā Sunrise Conditions: Clouds, Wind & Summit Forecast | Chris Izworski</title>'
+          new = '<title>Haleakalā Sunrise Weather & Clouds | Chris Izworski</title>'
+          if old not in text:
+              raise SystemExit('Expected Haleakala title not found')
+          path.write_text(text.replace(old, new, 1))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/synced-national-tools/haleakala-sunrise/index.html
+          git commit -m "Fix Haleakala sunrise SERP title length"
+          git push origin HEAD:${GITHUB_REF_NAME}
       - name: Run full repository gate
         shell: bash
         run: |
