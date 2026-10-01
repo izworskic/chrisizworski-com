@@ -56,13 +56,18 @@ async function verifyOnce() {
     'conus_bref_qcd',
     'cbbtRadarMap',
     'Open full-screen NWS radar centered on CBBT',
-    'trafficvision.live/blog/chesapeake-bay-bridge-tunnel-traffic-cameras',
+    'VDOT_CAMERA_SOURCES=',
+    '511.vdot.virginia.gov/services/map/layers/map/cams',
+    'cbbtCameraDrawer',
+    'role="tablist"',
+    'View CBBT approach cameras',
+    'CAMERA_REFRESH_MS=30000',
     'stationhome.html?id=8638901',
   ]) {
     if (!mediaSource.includes(marker)) throw new Error(`new live-media bundle not promoted yet: ${marker}`);
   }
   if (mediaSource.includes('RADAR_SOURCES=') || mediaSource.includes("CAMERA_API='/api/cbbt-cameras'")) {
-    throw new Error('retired radar-image or camera scrape dependency still present in production media bundle');
+    throw new Error('retired radar-image or server-side camera scrape dependency still present in production media bundle');
   }
 
   const [liveRadar, wmsRadar] = await Promise.all([
@@ -101,7 +106,7 @@ for (let attempt = 1; attempt <= ATTEMPTS; attempt += 1) {
   try {
     const result = await verifyOnce();
     console.log(
-      `CBBT production smoke PASS | page=${result.page} | api=${result.api} | official=${result.officialState} | restriction=${result.restriction} | health=${result.systemHealth} | nws-centered-radar=${result.radar} | nws-wms=${result.wmsRadar} | live-views=linked`,
+      `CBBT production smoke PASS | page=${result.page} | api=${result.api} | official=${result.officialState} | restriction=${result.restriction} | health=${result.systemHealth} | nws-centered-radar=${result.radar} | nws-wms=${result.wmsRadar} | live-cameras=embedded`,
     );
     process.exit(0);
   } catch (error) {
