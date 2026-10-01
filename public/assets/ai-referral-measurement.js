@@ -20,7 +20,7 @@
     },
     {
       id: 'copilot',
-      hosts: ['copilot.microsoft.com', 'www.bing.com'],
+      hosts: ['copilot.microsoft.com'],
       utmSources: ['copilot', 'microsoft_copilot'],
       eventName: 'copilot_referral_landing',
     },
