@@ -1,0 +1,1 @@
+{"stations":[{"id":"8638901","name":"CBBT Chesapeake Channel","lat":37.0329,"lng":-76.0833,"sensors":{"sensorList":[{"sensorID":"C1","name":"Winds","status":1,"message":"OK"},{"sensorID":"A1","name":"Air Temperature","status":1,"message":"OK"},{"sensorID":"B1","name":"Barometric Pressure","status":1,"message":"OK"}]}}]}
