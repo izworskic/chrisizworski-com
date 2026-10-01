@@ -1,0 +1,43 @@
+name: CBBT backend verification
+
+on:
+  push:
+    branches:
+      - 'agent/cbbt-backend-engine-*'
+      - main
+    paths:
+      - 'api/cbbt.js'
+      - 'lib/cbbt/**'
+      - 'tests/cbbt.test.js'
+      - 'tests/fixtures/cbbt/**'
+      - 'scripts/test-cbbt-live.mjs'
+      - '.github/workflows/cbbt-backend-verify.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'api/cbbt.js'
+      - 'lib/cbbt/**'
+      - 'tests/cbbt.test.js'
+      - 'tests/fixtures/cbbt/**'
+      - 'scripts/test-cbbt-live.mjs'
+      - '.github/workflows/cbbt-backend-verify.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-cbbt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned dependencies
+        run: npm ci
+      - name: Run deterministic CBBT tests
+        run: node --test tests/cbbt.test.js
+      - name: Run strict live-source smoke test
+        run: node scripts/test-cbbt-live.mjs --strict
