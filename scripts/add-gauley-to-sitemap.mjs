@@ -1,5 +1,4 @@
 import './tune-duluth-discovery.mjs';
-import './tune-duluth-social.mjs';
 import './link-duluth-circle-tour.mjs';
 import './add-duluth-to-tools.mjs';
 import './amplify-duluth-great-lakes-network.mjs';
