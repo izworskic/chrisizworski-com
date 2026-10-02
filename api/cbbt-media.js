@@ -16,28 +16,22 @@ const RADAR_SOURCES = Object.freeze([
   }),
 ]);
 
-// Mirror the proven Mackinac Bridge pattern: fixed, known camera image URLs are
-// proxied by our own endpoint. Do not discover cameras in the browser or make a
-// directory lookup on every request. The public VDOT camera inventory identifies
-// both feeds as active Virginia Beach cameras on US-60 near the CBBT approach.
+// Match the proven Mackinac Bridge media pattern: each camera slot points to one
+// fixed, known upstream still image and is proxied by this first-party endpoint.
+// Virginia 511 does not publish a camera on the CBBT span itself, so these are
+// explicitly identified as nearby US-60 cameras at the Virginia Beach approach.
 const CAMERA_SOURCES = Object.freeze({
   south: Object.freeze({
-    id: 'vabeachcam013',
-    label: 'CBBT approach',
-    description: 'US-60 / E Stratford Rd',
-    sources: Object.freeze([
-      'https://snapshot.vdotcameras.com/thumbs/vabeachcam013.flv.png',
-      'https://snapshot.vdotcameras.com/thumbs/vabeachcam014.flv.png',
-    ]),
+    id: 'vabeachcam014',
+    label: 'Greenwell Road',
+    description: 'US-60 / Shore Dr and Greenwell Rd',
+    url: 'https://snapshot.vdotcameras.com/thumbs/vabeachcam014.flv.png',
   }),
   north: Object.freeze({
-    id: 'vabeachcam048',
-    label: 'Shore Drive',
-    description: 'US-60 / Shore Dr and N Great Neck Rd',
-    sources: Object.freeze([
-      'https://snapshot.vdotcameras.com/thumbs/vabeachcam048.flv.png',
-      'https://snapshot.vdotcameras.com/thumbs/vabeachcam014.flv.png',
-    ]),
+    id: 'vabeachcam013',
+    label: 'E Stratford Road',
+    description: 'US-60 / E Stratford Rd',
+    url: 'https://snapshot.vdotcameras.com/thumbs/vabeachcam013.flv.png',
   }),
 });
 
@@ -54,7 +48,7 @@ async function fetchImage(url, expectedType) {
       accept: expectedType || 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
       'user-agent': USER_AGENT,
     },
-    signal: AbortSignal.timeout(8_000),
+    signal: AbortSignal.timeout(12_000),
   });
   if (!upstream.ok) throw new Error(`Upstream returned ${upstream.status}`);
 
@@ -70,21 +64,6 @@ async function fetchImage(url, expectedType) {
     contentType,
     bytes: Buffer.from(await upstream.arrayBuffer()),
   };
-}
-
-async function fetchFirstImage(sources, expectedType) {
-  const failures = [];
-  for (const url of sources) {
-    try {
-      const image = await fetchImage(url, expectedType);
-      return { ...image, sourceUrl: url };
-    } catch (error) {
-      failures.push({ url, error: error instanceof Error ? error.message : String(error) });
-    }
-  }
-  const failure = new Error('All fixed image sources failed');
-  failure.failures = failures;
-  throw failure;
 }
 
 async function serveRadar(req, res) {
@@ -114,7 +93,7 @@ async function serveCamera(req, res, slotName) {
   if (!camera) return res.status(400).json({ error: 'Unknown CBBT camera slot' });
 
   try {
-    const image = await fetchFirstImage(camera.sources);
+    const image = await fetchImage(camera.url);
     res.setHeader('Content-Type', image.contentType);
     res.setHeader('Cache-Control', CAMERA_CACHE_CONTROL);
     res.setHeader('Content-Disposition', 'inline');
@@ -125,10 +104,9 @@ async function serveCamera(req, res, slotName) {
     res.setHeader('Content-Length', String(image.bytes.length));
     return res.status(200).send(image.bytes);
   } catch (error) {
-    console.error('[cbbt-media] fixed camera sources failed', {
+    console.error('[cbbt-media] camera fetch failed', {
       slot: slotName,
       camera: camera.id,
-      failures: error && error.failures ? error.failures : undefined,
       error: error instanceof Error ? error.message : String(error),
     });
     res.setHeader('Cache-Control', 'no-store');
