@@ -1,0 +1,56 @@
+name: Oregon production verification
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/oregon-production-verification.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Wait for promoted Oregon routes and verify production
+        shell: bash
+        run: |
+          set -euo pipefail
+          base='https://chrisizworski.com/national-tools/coastal/oregon'
+          ready=0
+          for i in $(seq 1 20); do
+            if curl -fsS --max-time 20 "$base/route-health.txt?smoke=8adcc25" -o /tmp/health.txt \
+              && grep -Fq 'oregon-public-route-fallback=2026-10-02b' /tmp/health.txt; then
+              ready=1
+              break
+            fi
+            sleep 15
+          done
+          test "$ready" -eq 1
+
+          curl -fsS --max-time 20 "$base/?smoke=8adcc25" -o /tmp/overview.html
+          grep -Fq 'Oregon Coast · opportunity desk' /tmp/overview.html
+
+          curl -fsS --max-time 20 "$base/yaquina-head/?smoke=8adcc25" -o /tmp/yaquina.html
+          grep -Fq 'Official-window model' /tmp/yaquina.html
+
+          curl -fsS --max-time 20 "$base/haystack-rock/?smoke=8adcc25" -o /tmp/haystack.html
+          grep -Fq 'Authority-threshold model' /tmp/haystack.html
+
+          curl -fsS --max-time 20 "$base/hug-point/?smoke=8adcc25" -o /tmp/hug.html
+          grep -Fq 'Conservative lower-tide model' /tmp/hug.html
+
+          curl -fsS --max-time 20 "$base/thors-well/?smoke=8adcc25" -o /tmp/thors.html
+          grep -Fq 'Conditions-only / research model' /tmp/thors.html
+
+          curl -fsS --max-time 30 'https://chrisizworski.com/api/oregon-coastal-proxy?date=2026-10-02&smoke=8adcc25' -o /tmp/decision.json
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const data = JSON.parse(fs.readFileSync('/tmp/decision.json','utf8'));
+          if (!Array.isArray(data.sites) || data.sites.length !== 4) throw new Error('expected four Oregon sites');
+          const ids = new Set(data.sites.map(s => s.site));
+          for (const id of ['YAQUINA','HAYSTACK','HUG_POINT','THORS_WELL']) if (!ids.has(id)) throw new Error(`missing ${id}`);
+          console.log(JSON.stringify(data.sites.map(s => ({site:s.site,status:s.decision?.status}))));
+          NODE
