@@ -5,6 +5,7 @@ const MEDIA_JS_URL = `${BASE}/assets/cbbt-view.js?v=20261001b`;
 const RADAR_URL = `${BASE}/api/cbbt-media?asset=radar`;
 const SOUTH_CAMERA_URL = `${BASE}/api/cbbt-media?asset=camera&slot=south`;
 const NORTH_CAMERA_URL = `${BASE}/api/cbbt-media?asset=camera&slot=north`;
+const PAGE_CAMERA_URL = `${BASE}/api/cbbt-media?asset=camera&slot=page`;
 const ATTEMPTS = Number(process.env.CBBT_SMOKE_ATTEMPTS || 12);
 const WAIT_MS = Number(process.env.CBBT_SMOKE_WAIT_MS || 10000);
 const TIMEOUT_MS = Number(process.env.CBBT_SMOKE_TIMEOUT_MS || 25000);
@@ -87,12 +88,16 @@ async function verifyOnce() {
   for (const marker of [
     '/api/cbbt-media?asset=camera&slot=south',
     '/api/cbbt-media?asset=camera&slot=north',
+    '/api/cbbt-media?asset=camera&slot=page',
     'Current visual check',
     'cbbtCameraImage',
+    'Three nearby Virginia 511 still cameras',
     'Greenwell Rd',
     'E Stratford Rd',
+    'Page Ave',
     'snapshot.vdotcameras.com/thumbs/vabeachcam014.flv.png',
     'snapshot.vdotcameras.com/thumbs/vabeachcam013.flv.png',
+    'snapshot.vdotcameras.com/thumbs/vabeachcam015.flv.png',
   ]) {
     if (!mediaJsText.includes(marker)) throw new Error(`CBBT media JS missing marker: ${marker}`);
   }
@@ -124,6 +129,7 @@ async function verifyOnce() {
 
   const southCamera = await requireCameraDelivery(SOUTH_CAMERA_URL, 'Greenwell Road camera route', 'vabeachcam014');
   const northCamera = await requireCameraDelivery(NORTH_CAMERA_URL, 'E Stratford Road camera route', 'vabeachcam013');
+  const pageCamera = await requireCameraDelivery(PAGE_CAMERA_URL, 'Page Avenue camera route', 'vabeachcam015');
 
   return {
     page: page.status,
@@ -134,6 +140,7 @@ async function verifyOnce() {
     radar,
     southCamera,
     northCamera,
+    pageCamera,
   };
 }
 
@@ -142,7 +149,7 @@ for (let attempt = 1; attempt <= ATTEMPTS; attempt += 1) {
   try {
     const result = await verifyOnce();
     console.log(
-      `CBBT production smoke PASS | page=${result.page} | api=${result.api} | official=${result.officialState} | restriction=${result.restriction} | health=${result.systemHealth} | radar=${result.radar} | southCamera=${result.southCamera} | northCamera=${result.northCamera}`,
+      `CBBT production smoke PASS | page=${result.page} | api=${result.api} | official=${result.officialState} | restriction=${result.restriction} | health=${result.systemHealth} | radar=${result.radar} | southCamera=${result.southCamera} | northCamera=${result.northCamera} | pageCamera=${result.pageCamera}`,
     );
     process.exit(0);
   } catch (error) {
