@@ -16,7 +16,7 @@ async function request(url, options = {}) {
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
     return await fetch(url, {
-      redirect: 'follow',
+      redirect: options.redirect || 'follow',
       headers: {
         'user-agent': 'CBBTProductionSmoke/1.0 (+https://chrisizworski.com/chesapeake-bay-bridge-tunnel/)',
         accept: options.accept || '*/*',
@@ -28,12 +28,33 @@ async function request(url, options = {}) {
   }
 }
 
-async function requireImage(url, label) {
-  const response = await request(url, { accept: 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8' });
-  const type = String(response.headers.get('content-type') || '');
-  if (!response.ok) throw new Error(`${label} returned ${response.status}${type ? ` ${type}` : ''}`);
-  if (!type.startsWith('image/')) throw new Error(`${label} returned non-image content type ${type || 'missing'}`);
-  return `${response.status} ${type}`;
+async function requireCameraRedirect(url, label, expectedCameraId) {
+  const response = await request(url, {
+    accept: 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+    redirect: 'manual',
+  });
+  if (![301, 302, 307, 308].includes(response.status)) {
+    const type = String(response.headers.get('content-type') || '');
+    throw new Error(`${label} returned ${response.status}${type ? ` ${type}` : ''} instead of a camera redirect`);
+  }
+
+  const location = response.headers.get('location');
+  if (!location) throw new Error(`${label} redirect is missing Location`);
+  const target = new URL(location, BASE);
+  if (target.protocol !== 'https:' || target.hostname !== 'snapshot.vdotcameras.com') {
+    throw new Error(`${label} redirects to an unexpected host`);
+  }
+  if (target.pathname !== `/thumbs/${expectedCameraId}.flv.png`) {
+    throw new Error(`${label} redirects to an unexpected camera: ${target.pathname}`);
+  }
+  if (response.headers.get('x-cbbt-camera-id') !== expectedCameraId) {
+    throw new Error(`${label} camera identity header mismatch`);
+  }
+  if (response.headers.get('x-cbbt-camera-delivery') !== 'client-redirect') {
+    throw new Error(`${label} delivery contract missing`);
+  }
+
+  return `${response.status} -> ${target.hostname}${target.pathname}`;
 }
 
 async function verifyOnce() {
@@ -58,6 +79,8 @@ async function verifyOnce() {
     '/api/cbbt-media?asset=camera&slot=south',
     '/api/cbbt-media?asset=camera&slot=north',
     'CBBT cameras and weather',
+    'Greenwell Rd',
+    'E Stratford Rd',
   ]) {
     if (!mediaJsText.includes(marker)) throw new Error(`CBBT media JS missing marker: ${marker}`);
   }
@@ -87,8 +110,8 @@ async function verifyOnce() {
     radar = `non-blocking warning (${error.message})`;
   }
 
-  const southCamera = await requireImage(SOUTH_CAMERA_URL, 'south camera proxy');
-  const northCamera = await requireImage(NORTH_CAMERA_URL, 'north camera proxy');
+  const southCamera = await requireCameraRedirect(SOUTH_CAMERA_URL, 'Greenwell Road camera route', 'vabeachcam014');
+  const northCamera = await requireCameraRedirect(NORTH_CAMERA_URL, 'E Stratford Road camera route', 'vabeachcam013');
 
   return {
     page: page.status,
