@@ -16,156 +16,36 @@ const RADAR_SOURCES = Object.freeze([
   }),
 ]);
 
-const CAMERA_FEED_SOURCES = Object.freeze([
-  'https://511.vdot.virginia.gov/services/map/layers/map/cams',
-  'https://www.511virginia.org/data/geojson/icons.cameras.geojson',
-  'https://www.511virginia.org/data/icons.cameras.geojson',
-]);
-
-const CAMERA_SLOTS = Object.freeze({
+// Mirror the proven Mackinac Bridge pattern: fixed, known camera image URLs are
+// proxied by our own endpoint. Do not discover cameras in the browser or make a
+// directory lookup on every request. The public VDOT camera inventory identifies
+// both feeds as active Virginia Beach cameras on US-60 near the CBBT approach.
+const CAMERA_SOURCES = Object.freeze({
   south: Object.freeze({
-    id: 'south',
-    label: 'South approach',
-    latitude: 36.915,
-    longitude: -76.105,
+    id: 'vabeachcam013',
+    label: 'CBBT approach',
+    description: 'US-60 / E Stratford Rd',
+    sources: Object.freeze([
+      'https://snapshot.vdotcameras.com/thumbs/vabeachcam013.flv.png',
+      'https://snapshot.vdotcameras.com/thumbs/vabeachcam014.flv.png',
+    ]),
   }),
   north: Object.freeze({
-    id: 'north',
-    label: 'North approach',
-    latitude: 37.125,
-    longitude: -75.970,
+    id: 'vabeachcam048',
+    label: 'Shore Drive',
+    description: 'US-60 / Shore Dr and N Great Neck Rd',
+    sources: Object.freeze([
+      'https://snapshot.vdotcameras.com/thumbs/vabeachcam048.flv.png',
+      'https://snapshot.vdotcameras.com/thumbs/vabeachcam014.flv.png',
+    ]),
   }),
 });
 
 const RADAR_CACHE_CONTROL = 'public, max-age=60, s-maxage=120, stale-while-revalidate=600';
 const CAMERA_CACHE_CONTROL = 'public, max-age=30, s-maxage=50, stale-while-revalidate=300';
-const CAMERA_DIRECTORY_TTL_MS = 5 * 60 * 1000;
-const MAX_CAMERA_DISTANCE_MILES = 35;
-
-let cameraDirectoryCache = { expiresAt: 0, selections: null };
-let cameraDirectoryPromise = null;
 
 function first(value) {
   return Array.isArray(value) ? value[0] : value;
-}
-
-function toRadians(value) {
-  return (Number(value) * Math.PI) / 180;
-}
-
-function distanceMiles(a, b) {
-  const earthRadiusMiles = 3958.7613;
-  const dLat = toRadians(b.latitude - a.latitude);
-  const dLon = toRadians(b.longitude - a.longitude);
-  const lat1 = toRadians(a.latitude);
-  const lat2 = toRadians(b.latitude);
-  const h =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
-  return 2 * earthRadiusMiles * Math.asin(Math.min(1, Math.sqrt(h)));
-}
-
-function normalizeCamera(feature) {
-  const properties = feature?.properties;
-  const coordinates = feature?.geometry?.coordinates;
-  if (!properties || !Array.isArray(coordinates) || coordinates.length < 2) return null;
-  if (properties.active === false || properties.problem_stream === true || !properties.image_url) return null;
-
-  const longitude = Number(coordinates[0]);
-  const latitude = Number(coordinates[1]);
-  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
-
-  return {
-    id: String(properties.id || properties.name || `${latitude},${longitude}`),
-    name: String(properties.description || properties.name || 'Virginia 511 traffic camera'),
-    route: properties.route ? String(properties.route) : '',
-    direction: properties.direction ? String(properties.direction) : '',
-    imageUrl: String(properties.image_url),
-    latitude,
-    longitude,
-  };
-}
-
-function selectNearestCamera(cameras, slot, excludedIds = new Set()) {
-  return cameras
-    .filter((camera) => !excludedIds.has(camera.id))
-    .map((camera) => ({
-      camera,
-      distance: distanceMiles(
-        { latitude: camera.latitude, longitude: camera.longitude },
-        { latitude: slot.latitude, longitude: slot.longitude },
-      ),
-    }))
-    .filter((entry) => entry.distance <= MAX_CAMERA_DISTANCE_MILES)
-    .sort((a, b) => a.distance - b.distance)[0] || null;
-}
-
-function selectCameraSlots(payload) {
-  const cameras = Array.isArray(payload?.features)
-    ? payload.features.map(normalizeCamera).filter(Boolean)
-    : [];
-  if (!cameras.length) throw new Error('Virginia 511 returned no usable cameras');
-
-  const used = new Set();
-  const selections = {};
-  for (const slot of Object.values(CAMERA_SLOTS)) {
-    const nearest = selectNearestCamera(cameras, slot, used);
-    if (!nearest) continue;
-    used.add(nearest.camera.id);
-    selections[slot.id] = {
-      ...nearest.camera,
-      slot: slot.id,
-      slotLabel: slot.label,
-      distanceMiles: nearest.distance,
-    };
-  }
-
-  if (!selections.south && !selections.north) {
-    throw new Error('No active Virginia 511 cameras were found near the CBBT corridor');
-  }
-  return selections;
-}
-
-async function fetchCameraDirectory() {
-  let lastError = null;
-  for (const url of CAMERA_FEED_SOURCES) {
-    try {
-      const upstream = await fetch(url, {
-        headers: { accept: 'application/json', 'user-agent': USER_AGENT },
-        signal: AbortSignal.timeout(12_000),
-      });
-      if (!upstream.ok) throw new Error(`Upstream returned ${upstream.status}`);
-      const payload = await upstream.json();
-      if (!payload || !Array.isArray(payload.features)) throw new Error('Malformed camera directory');
-      return selectCameraSlots(payload);
-    } catch (error) {
-      lastError = error;
-    }
-  }
-  throw lastError || new Error('Virginia 511 camera directory unavailable');
-}
-
-async function getCameraSelections() {
-  const now = Date.now();
-  if (cameraDirectoryCache.selections && cameraDirectoryCache.expiresAt > now) {
-    return cameraDirectoryCache.selections;
-  }
-  if (cameraDirectoryPromise) return cameraDirectoryPromise;
-
-  cameraDirectoryPromise = (async () => {
-    const selections = await fetchCameraDirectory();
-    cameraDirectoryCache = {
-      selections,
-      expiresAt: Date.now() + CAMERA_DIRECTORY_TTL_MS,
-    };
-    return selections;
-  })();
-
-  try {
-    return await cameraDirectoryPromise;
-  } finally {
-    cameraDirectoryPromise = null;
-  }
 }
 
 async function fetchImage(url, expectedType) {
@@ -174,7 +54,7 @@ async function fetchImage(url, expectedType) {
       accept: expectedType || 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
       'user-agent': USER_AGENT,
     },
-    signal: AbortSignal.timeout(12_000),
+    signal: AbortSignal.timeout(8_000),
   });
   if (!upstream.ok) throw new Error(`Upstream returned ${upstream.status}`);
 
@@ -190,6 +70,21 @@ async function fetchImage(url, expectedType) {
     contentType,
     bytes: Buffer.from(await upstream.arrayBuffer()),
   };
+}
+
+async function fetchFirstImage(sources, expectedType) {
+  const failures = [];
+  for (const url of sources) {
+    try {
+      const image = await fetchImage(url, expectedType);
+      return { ...image, sourceUrl: url };
+    } catch (error) {
+      failures.push({ url, error: error instanceof Error ? error.message : String(error) });
+    }
+  }
+  const failure = new Error('All fixed image sources failed');
+  failure.failures = failures;
+  throw failure;
 }
 
 async function serveRadar(req, res) {
@@ -215,27 +110,25 @@ async function serveRadar(req, res) {
 }
 
 async function serveCamera(req, res, slotName) {
-  const slot = CAMERA_SLOTS[slotName];
-  if (!slot) return res.status(400).json({ error: 'Unknown CBBT camera slot' });
+  const camera = CAMERA_SOURCES[slotName];
+  if (!camera) return res.status(400).json({ error: 'Unknown CBBT camera slot' });
 
   try {
-    const selections = await getCameraSelections();
-    const camera = selections[slotName];
-    if (!camera) throw new Error(`No ${slotName} camera available`);
-
-    const image = await fetchImage(camera.imageUrl);
+    const image = await fetchFirstImage(camera.sources);
     res.setHeader('Content-Type', image.contentType);
     res.setHeader('Cache-Control', CAMERA_CACHE_CONTROL);
     res.setHeader('Content-Disposition', 'inline');
     res.setHeader('X-CBBT-Camera-Slot', slotName);
     res.setHeader('X-CBBT-Camera-Id', camera.id);
-    res.setHeader('X-CBBT-Camera-Name', encodeURIComponent(camera.name));
+    res.setHeader('X-CBBT-Camera-Name', encodeURIComponent(camera.description));
     if (req.method === 'HEAD') return res.status(200).end();
     res.setHeader('Content-Length', String(image.bytes.length));
     return res.status(200).send(image.bytes);
   } catch (error) {
-    console.error('[cbbt-media] camera fetch failed', {
+    console.error('[cbbt-media] fixed camera sources failed', {
       slot: slotName,
+      camera: camera.id,
+      failures: error && error.failures ? error.failures : undefined,
       error: error instanceof Error ? error.message : String(error),
     });
     res.setHeader('Cache-Control', 'no-store');
@@ -252,7 +145,7 @@ function selectMediaSource(query = {}) {
   if (asset === 'radar') return RADAR_SOURCES[0];
   if (asset === 'camera') {
     const slot = String(first(query.slot) || '').toLowerCase();
-    return CAMERA_SLOTS[slot] || null;
+    return CAMERA_SOURCES[slot] || null;
   }
   return null;
 }
@@ -279,7 +172,6 @@ async function handler(req, res) {
 module.exports = handler;
 module.exports.RADAR_SOURCES = RADAR_SOURCES;
 module.exports.RADAR_SOURCE = RADAR_SOURCES[0];
-module.exports.CAMERA_SLOTS = CAMERA_SLOTS;
-module.exports.selectCameraSlots = selectCameraSlots;
+module.exports.CAMERA_SOURCES = CAMERA_SOURCES;
 module.exports.selectMediaSource = selectMediaSource;
 module.exports.selectMediaSources = selectMediaSources;
