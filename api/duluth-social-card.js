@@ -146,6 +146,9 @@ function drawCard() {
 const IMAGE = drawCard();
 
 module.exports = function duluthSocialCard(req, res) {
+  // Repository contract: every /api route is non-indexable (tests/api-contract.test.js).
+  // The PNG is still fetched normally as the og:image for the Duluth pages.
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     res.setHeader('Allow', 'GET, HEAD');
     return res.status(405).end();
