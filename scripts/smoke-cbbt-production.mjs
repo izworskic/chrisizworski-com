@@ -28,14 +28,26 @@ async function request(url, options = {}) {
   }
 }
 
-async function requireCameraRedirect(url, label, expectedCameraId) {
+async function requireCameraDelivery(url, label, expectedCameraId) {
   const response = await request(url, {
     accept: 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
     redirect: 'manual',
   });
+
+  if (response.headers.get('x-cbbt-camera-id') !== expectedCameraId) {
+    throw new Error(`${label} camera identity header mismatch`);
+  }
+
+  const type = String(response.headers.get('content-type') || '');
+  if (response.status === 200) {
+    if (!type.startsWith('image/')) {
+      throw new Error(`${label} returned 200 with non-image content type ${type || 'missing'}`);
+    }
+    return `200 ${type}`;
+  }
+
   if (![301, 302, 307, 308].includes(response.status)) {
-    const type = String(response.headers.get('content-type') || '');
-    throw new Error(`${label} returned ${response.status}${type ? ` ${type}` : ''} instead of a camera redirect`);
+    throw new Error(`${label} returned ${response.status}${type ? ` ${type}` : ''}`);
   }
 
   const location = response.headers.get('location');
@@ -46,9 +58,6 @@ async function requireCameraRedirect(url, label, expectedCameraId) {
   }
   if (target.pathname !== `/thumbs/${expectedCameraId}.flv.png`) {
     throw new Error(`${label} redirects to an unexpected camera: ${target.pathname}`);
-  }
-  if (response.headers.get('x-cbbt-camera-id') !== expectedCameraId) {
-    throw new Error(`${label} camera identity header mismatch`);
   }
   if (response.headers.get('x-cbbt-camera-delivery') !== 'client-redirect') {
     throw new Error(`${label} delivery contract missing`);
@@ -101,17 +110,17 @@ async function verifyOnce() {
   let radar = 'not checked';
   try {
     const response = await request(RADAR_URL, { accept: 'image/gif,image/*,*/*;q=0.8' });
-    const type = String(response.headers.get('content-type') || '');
+    const radarType = String(response.headers.get('content-type') || '');
     if (response.status === 404) throw new Error('radar proxy route returned 404');
-    radar = response.ok && type.startsWith('image/')
-      ? `ok (${type})`
-      : `upstream-degraded (${response.status}${type ? ` ${type}` : ''})`;
+    radar = response.ok && radarType.startsWith('image/')
+      ? `ok (${radarType})`
+      : `upstream-degraded (${response.status}${radarType ? ` ${radarType}` : ''})`;
   } catch (error) {
     radar = `non-blocking warning (${error.message})`;
   }
 
-  const southCamera = await requireCameraRedirect(SOUTH_CAMERA_URL, 'Greenwell Road camera route', 'vabeachcam014');
-  const northCamera = await requireCameraRedirect(NORTH_CAMERA_URL, 'E Stratford Road camera route', 'vabeachcam013');
+  const southCamera = await requireCameraDelivery(SOUTH_CAMERA_URL, 'Greenwell Road camera route', 'vabeachcam014');
+  const northCamera = await requireCameraDelivery(NORTH_CAMERA_URL, 'E Stratford Road camera route', 'vabeachcam013');
 
   return {
     page: page.status,
