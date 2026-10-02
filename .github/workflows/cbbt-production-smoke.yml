@@ -12,6 +12,7 @@ on:
       - 'public/assets/cbbt-*.js'
       - 'public/assets/cbbt-live.css'
       - 'scripts/smoke-cbbt-production.mjs'
+      - 'scripts/smoke-cbbt-browser.mjs'
       - '.github/workflows/cbbt-production-smoke.yml'
   workflow_dispatch:
 
@@ -21,7 +22,7 @@ permissions:
 jobs:
   public-origin:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 8
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -31,3 +32,5 @@ jobs:
           node-version: 22
       - name: Verify public CBBT release
         run: node scripts/smoke-cbbt-production.mjs
+      - name: Verify CBBT radar in Chrome
+        run: node scripts/smoke-cbbt-browser.mjs
