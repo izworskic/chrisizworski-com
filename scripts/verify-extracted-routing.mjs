@@ -108,7 +108,6 @@ for (const source of [...expected.keys()].filter(x => x.startsWith("/national-to
   if (i < 0 || hubIndex < 0 || i >= hubIndex) failures.push(`specific national route must precede hub catch-all: ${source}`);
 }
 
-
 const wcWildcardIndex = rewrites.findIndex(item => item.source === "/national-tools/white-christmas/:path*");
 for (const source of [
   "/national-tools/white-christmas/forecast",
@@ -129,6 +128,8 @@ for (const source of [
 const forbidden = [
   "api/national-aurora.js",
   "api/national-coastal.js",
+  "api/oregon-window-engine.js",
+  "api/oregon-coastal.js",
   "api/national-fall-color.js",
   "api/national-fall-observations.js",
   "api/national-frost.js",
@@ -171,13 +172,38 @@ const forbidden = [
   ".github/workflows/isle-royale-deep-data.yml"
 ];
 
-// These existing shell-owned pages are explicit composition exceptions, not
-// permission to copy extracted specialist implementations back into the hub.
+// These shell-owned pages are explicit composition exceptions, not permission
+// to copy extracted specialist decision engines back into the monolith.
+const shellOwnedNationalPages = new Set([
+  'ice-out',
+  'niagara-rainbow',
+  'blue-spring-live',
+  'yosemite-firefall-live',
+  'elk-rut',
+  'coastal',
+]);
 for (const entry of await readdir(path.join(root, 'public/national-tools'))) {
-  if (!['ice-out', 'niagara-rainbow', 'blue-spring-live', 'yosemite-firefall-live', 'elk-rut'].includes(entry)) {
+  if (!shellOwnedNationalPages.has(entry)) {
     failures.push(`unexpected local national implementation: ${entry}`);
   }
 }
+
+// Oregon is a public-route shell only. Its decision engine remains in
+// izworskic/national-coastal-water and is consumed through a narrow proxy.
+try {
+  const oregonRoot = path.join(root, 'public/national-tools/coastal/oregon');
+  const routeOwner = (await readFile(path.join(oregonRoot, '.route-owner'), 'utf8')).trim();
+  const routeHealth = await readFile(path.join(oregonRoot, 'route-health.txt'), 'utf8');
+  const client = await readFile(path.join(oregonRoot, 'app.js'), 'utf8');
+  const proxy = await readFile(path.join(root, 'api/oregon-coastal-proxy.js'), 'utf8');
+  if (routeOwner !== 'chrisizworski-com') failures.push('Oregon public route shell lost main-site ownership marker');
+  if (!routeHealth.includes('oregon-public-route-fallback=')) failures.push('Oregon public route shell lost route health marker');
+  if (!client.includes("/api/oregon-coastal-proxy")) failures.push('Oregon public route shell must use first-party API proxy');
+  if (!proxy.includes('https://national-coastal-water.vercel.app/api/oregon-coastal')) failures.push('Oregon proxy no longer targets specialist owner API');
+} catch {
+  failures.push('Oregon public route shell is missing ownership/proxy contract');
+}
+
 for (const rel of forbidden) {
   try {
     await access(path.join(root, rel));
@@ -219,7 +245,6 @@ for (const route of [
 ]) {
   if (!sitemap.includes(`<loc>https://chrisizworski.com${route}</loc>`)) failures.push(`sitemap lost canonical route: ${route}`);
 }
-
 
 for (const route of [
   "/national-tools/white-christmas/forecast/",
