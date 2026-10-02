@@ -16,10 +16,11 @@ const RADAR_SOURCES = Object.freeze([
   }),
 ]);
 
-// Match the proven Mackinac Bridge media pattern: each camera slot points to one
-// fixed, known upstream still image and is proxied by this first-party endpoint.
-// Virginia 511 does not publish a camera on the CBBT span itself, so these are
-// explicitly identified as nearby US-60 cameras at the Virginia Beach approach.
+// Each camera slot resolves to one fixed, known Virginia 511 still-image URL.
+// VDOT's snapshot host is intended for client viewing but does not reliably serve
+// Vercel's server-side fetches, so the first-party endpoint returns a controlled
+// redirect instead of downloading/re-serving the image. The camera still renders
+// inside the CBBT viewer while the upstream request is made by the visitor's browser.
 const CAMERA_SOURCES = Object.freeze({
   south: Object.freeze({
     id: 'vabeachcam014',
@@ -88,30 +89,17 @@ async function serveRadar(req, res) {
   return res.status(502).json({ error: 'NWS radar is temporarily unavailable' });
 }
 
-async function serveCamera(req, res, slotName) {
+function serveCamera(req, res, slotName) {
   const camera = CAMERA_SOURCES[slotName];
   if (!camera) return res.status(400).json({ error: 'Unknown CBBT camera slot' });
 
-  try {
-    const image = await fetchImage(camera.url);
-    res.setHeader('Content-Type', image.contentType);
-    res.setHeader('Cache-Control', CAMERA_CACHE_CONTROL);
-    res.setHeader('Content-Disposition', 'inline');
-    res.setHeader('X-CBBT-Camera-Slot', slotName);
-    res.setHeader('X-CBBT-Camera-Id', camera.id);
-    res.setHeader('X-CBBT-Camera-Name', encodeURIComponent(camera.description));
-    if (req.method === 'HEAD') return res.status(200).end();
-    res.setHeader('Content-Length', String(image.bytes.length));
-    return res.status(200).send(image.bytes);
-  } catch (error) {
-    console.error('[cbbt-media] camera fetch failed', {
-      slot: slotName,
-      camera: camera.id,
-      error: error instanceof Error ? error.message : String(error),
-    });
-    res.setHeader('Cache-Control', 'no-store');
-    return res.status(502).json({ error: 'Virginia 511 camera is temporarily unavailable' });
-  }
+  res.setHeader('Location', camera.url);
+  res.setHeader('Cache-Control', CAMERA_CACHE_CONTROL);
+  res.setHeader('X-CBBT-Camera-Slot', slotName);
+  res.setHeader('X-CBBT-Camera-Id', camera.id);
+  res.setHeader('X-CBBT-Camera-Name', encodeURIComponent(camera.description));
+  res.setHeader('X-CBBT-Camera-Delivery', 'client-redirect');
+  return res.status(302).end();
 }
 
 function selectMediaSources(query = {}) {
