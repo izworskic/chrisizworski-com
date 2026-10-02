@@ -27,8 +27,8 @@
   var RADAR_LINK='https://radar.weather.gov/station/KAKQ/standard';
   var CAMERA_REFRESH_MS=30000;
   var CAMERAS=[
-    {id:'south',label:'South approach',detail:'Virginia Beach / south side approach',image:'/api/cbbt-media?asset=camera&slot=south'},
-    {id:'north',label:'North approach',detail:'Eastern Shore / north side approach',image:'/api/cbbt-media?asset=camera&slot=north'}
+    {id:'south',label:'Greenwell Rd',detail:'US-60 / Shore Dr and Greenwell Rd · near the CBBT South Toll Plaza',image:'/api/cbbt-media?asset=camera&slot=south'},
+    {id:'north',label:'E Stratford Rd',detail:'US-60 / E Stratford Rd · near the CBBT south approach',image:'/api/cbbt-media?asset=camera&slot=north'}
   ];
   var selectedCamera='south';
   var refreshTimer=null;
@@ -91,7 +91,7 @@
     drawer.id='cbbtCameraDrawer';
     drawer.className='camera-drawer';
     drawer.hidden=true;
-    drawer.innerHTML='<section class="camera-dialog" role="dialog" aria-modal="true" aria-labelledby="cbbtCameraHeading"><div class="camera-dialog-head"><div><p class="eyebrow">Virginia 511 · live still images</p><h2 id="cbbtCameraHeading">CBBT approach cameras</h2></div><button id="cbbtCameraClose" class="camera-close" type="button">Close</button></div><div class="camera-tabs" role="tablist" aria-label="Choose camera"><button class="camera-tab" data-camera="south" role="tab" aria-selected="true">South approach</button><button class="camera-tab" data-camera="north" role="tab" aria-selected="false">North approach</button></div><div class="camera-frame"><div class="camera-loading" id="cbbtCameraLoading">Loading Virginia 511 camera…</div><img id="cbbtCameraImage" alt="" width="1280" height="720"></div><div class="camera-meta"><strong id="cbbtCameraName">South approach</strong><span id="cbbtCameraDetail">Virginia Beach / south side approach</span></div><div class="camera-actions"><p><strong>Visual context only.</strong> Camera images do not determine whether CBBT is open, restricted or closed.</p><a href="https://511.vdot.virginia.gov/" target="_blank" rel="noopener">Open Virginia 511 ↗</a></div></section>';
+    drawer.innerHTML='<section class="camera-dialog" role="dialog" aria-modal="true" aria-labelledby="cbbtCameraHeading"><div class="camera-dialog-head"><div><p class="eyebrow">Virginia 511 · live still images</p><h2 id="cbbtCameraHeading">CBBT south-approach cameras</h2></div><button id="cbbtCameraClose" class="camera-close" type="button">Close</button></div><div class="camera-tabs" role="tablist" aria-label="Choose camera"><button class="camera-tab" data-camera="south" role="tab" aria-selected="true">Greenwell Rd</button><button class="camera-tab" data-camera="north" role="tab" aria-selected="false">E Stratford Rd</button></div><div class="camera-frame"><div class="camera-loading" id="cbbtCameraLoading">Loading Virginia 511 camera…</div><img id="cbbtCameraImage" alt="" width="1280" height="720"></div><div class="camera-meta"><strong id="cbbtCameraName">Greenwell Rd</strong><span id="cbbtCameraDetail">US-60 / Shore Dr and Greenwell Rd · near the CBBT South Toll Plaza</span></div><div class="camera-actions"><p><strong>Visual context only.</strong> These are nearby Virginia 511 approach cameras, not cameras on the bridge-tunnel span. Images do not determine whether CBBT is open, restricted or closed.</p><a href="https://511.vdot.virginia.gov/" target="_blank" rel="noopener">Open Virginia 511 ↗</a></div></section>';
     document.body.appendChild(drawer);
     byId('cbbtCameraClose').addEventListener('click',closeDrawer);
     drawer.addEventListener('click',function(event){if(event.target===drawer)closeDrawer();});
@@ -99,7 +99,7 @@
     drawer.querySelectorAll('.camera-tab').forEach(function(button){button.addEventListener('click',function(){selectedCamera=button.dataset.camera;refreshCamera();});});
     var image=byId('cbbtCameraImage');
     image.addEventListener('load',function(){var loading=byId('cbbtCameraLoading');if(loading)loading.hidden=true;image.hidden=false;});
-    image.addEventListener('error',function(){var loading=byId('cbbtCameraLoading');if(loading){loading.hidden=false;loading.textContent='This Virginia 511 camera is temporarily unavailable. Try the other approach camera.';}image.hidden=true;});
+    image.addEventListener('error',function(){var loading=byId('cbbtCameraLoading');if(loading){loading.hidden=false;loading.textContent='This Virginia 511 camera is temporarily unavailable. Try the other nearby camera.';}image.hidden=true;});
   }
 
   function refreshCamera(){
@@ -109,7 +109,7 @@
     var loading=byId('cbbtCameraLoading');
     if(loading){loading.hidden=false;loading.textContent='Loading Virginia 511 camera…';}
     image.hidden=false;
-    image.alt='Current Virginia 511 traffic camera for the CBBT '+camera.label.toLowerCase();
+    image.alt='Current Virginia 511 traffic camera at '+camera.label+' near the CBBT south approach';
     image.src=bust(camera.image);
     var name=byId('cbbtCameraName');if(name)name.textContent=camera.label;
     var detail=byId('cbbtCameraDetail');if(detail)detail.textContent=camera.detail+' · refreshed automatically';
@@ -143,7 +143,7 @@
     var section=document.createElement('section');
     section.className='section-card';
     section.id='cbbtLiveVisuals';
-    section.innerHTML='<div class="section-heading"><div><p class="eyebrow">Live visual checks</p><h2>CBBT cameras and weather</h2></div><span class="context-chip">Live sources</span></div><div class="cbbt-live-visuals"><button id="cbbtCameraLaunch" class="cbbt-live-card" type="button"><span class="cbbt-live-label">VIRGINIA 511 CAMERAS</span><strong>View CBBT approach cameras</strong><span>Open the camera viewer and switch between south and north approaches.</span></button><a class="cbbt-live-card" href="https://tidesandcurrents.noaa.gov/stationhome.html?id=8638901" target="_blank" rel="noopener"><span class="cbbt-live-label">NOAA AT CBBT</span><strong>Bridge weather observation</strong><span>Wind, gust, direction and air temperature from the CBBT Chesapeake Channel station.</span></a></div>';
+    section.innerHTML='<div class="section-heading"><div><p class="eyebrow">Live visual checks</p><h2>CBBT cameras and weather</h2></div><span class="context-chip">Live sources</span></div><div class="cbbt-live-visuals"><button id="cbbtCameraLaunch" class="cbbt-live-card" type="button"><span class="cbbt-live-label">VIRGINIA 511 CAMERAS</span><strong>View nearby CBBT approach cameras</strong><span>Open two nearby Virginia 511 views around the CBBT South Toll Plaza.</span></button><a class="cbbt-live-card" href="https://tidesandcurrents.noaa.gov/stationhome.html?id=8638901" target="_blank" rel="noopener"><span class="cbbt-live-label">NOAA AT CBBT</span><strong>Bridge weather observation</strong><span>Wind, gust, direction and air temperature from the CBBT Chesapeake Channel station.</span></a></div>';
     radarCard.insertAdjacentElement('afterend',section);
     byId('cbbtCameraLaunch').addEventListener('click',openDrawer);
   }
