@@ -1,7 +1,7 @@
 const BASE = String(process.env.CBBT_BASE_URL || 'https://chrisizworski.com').replace(/\/$/, '');
 const PAGE_URL = `${BASE}/chesapeake-bay-bridge-tunnel/`;
 const API_URL = `${BASE}/api/cbbt`;
-const MEDIA_JS_URL = `${BASE}/assets/cbbt-view.js?v=20261001a`;
+const MEDIA_JS_URL = `${BASE}/assets/cbbt-view.js?v=20261001b`;
 const RADAR_URL = `${BASE}/api/cbbt-media?asset=radar`;
 const SOUTH_CAMERA_URL = `${BASE}/api/cbbt-media?asset=camera&slot=south`;
 const NORTH_CAMERA_URL = `${BASE}/api/cbbt-media?asset=camera&slot=north`;
@@ -46,6 +46,7 @@ async function verifyOnce() {
     'id="vehicleQuickSelect"',
     'id="tollForm"',
     '/api/cbbt-media?asset=radar',
+    '/assets/cbbt-view.js?v=20261001b',
   ]) {
     if (!html.includes(marker)) throw new Error(`page missing marker: ${marker}`);
   }
