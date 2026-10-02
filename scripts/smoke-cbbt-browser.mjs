@@ -248,5 +248,16 @@ try {
   } catch (_error) {
     // Ignore cleanup errors.
   }
-  fs.rmSync(profileDir, { recursive: true, force: true });
+  for (let attempt = 1; attempt <= 5; attempt += 1) {
+    try {
+      fs.rmSync(profileDir, { recursive: true, force: true });
+      break;
+    } catch (error) {
+      if (attempt === 5) {
+        console.warn(`CBBT browser cleanup warning | ${error.message}`);
+        break;
+      }
+      await sleep(200);
+    }
+  }
 }
