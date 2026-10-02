@@ -1,3 +1,4 @@
+// Release marker: CBBT radar overlay visibility fix, 2026-10-02.
 const BASE = String(process.env.CBBT_BASE_URL || 'https://chrisizworski.com').replace(/\/$/, '');
 const PAGE_URL = `${BASE}/chesapeake-bay-bridge-tunnel/`;
 const API_URL = `${BASE}/api/cbbt`;
