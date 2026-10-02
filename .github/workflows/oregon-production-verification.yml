@@ -12,40 +12,33 @@ permissions:
 jobs:
   verify-production:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 4
     steps:
-      - name: Wait for promoted Oregon routes and verify production
+      - name: Verify promoted Oregon production routes
         shell: bash
         run: |
           set -euo pipefail
           base='https://chrisizworski.com/national-tools/coastal/oregon'
-          ready=0
-          for i in $(seq 1 20); do
-            if curl -fsS --max-time 20 "$base/route-health.txt?smoke=8adcc25" -o /tmp/health.txt \
-              && grep -Fq 'oregon-public-route-fallback=2026-10-02b' /tmp/health.txt; then
-              ready=1
-              break
-            fi
-            sleep 15
-          done
-          test "$ready" -eq 1
 
-          curl -fsS --max-time 20 "$base/?smoke=8adcc25" -o /tmp/overview.html
+          curl -fsS --max-time 20 "$base/route-health.txt?smoke=8adcc25-promoted" -o /tmp/health.txt
+          grep -Fq 'oregon-public-route-fallback=2026-10-02b' /tmp/health.txt
+
+          curl -fsS --max-time 20 "$base/?smoke=8adcc25-promoted" -o /tmp/overview.html
           grep -Fq 'Oregon Coast · opportunity desk' /tmp/overview.html
 
-          curl -fsS --max-time 20 "$base/yaquina-head/?smoke=8adcc25" -o /tmp/yaquina.html
+          curl -fsS --max-time 20 "$base/yaquina-head/?smoke=8adcc25-promoted" -o /tmp/yaquina.html
           grep -Fq 'Official-window model' /tmp/yaquina.html
 
-          curl -fsS --max-time 20 "$base/haystack-rock/?smoke=8adcc25" -o /tmp/haystack.html
+          curl -fsS --max-time 20 "$base/haystack-rock/?smoke=8adcc25-promoted" -o /tmp/haystack.html
           grep -Fq 'Authority-threshold model' /tmp/haystack.html
 
-          curl -fsS --max-time 20 "$base/hug-point/?smoke=8adcc25" -o /tmp/hug.html
+          curl -fsS --max-time 20 "$base/hug-point/?smoke=8adcc25-promoted" -o /tmp/hug.html
           grep -Fq 'Conservative lower-tide model' /tmp/hug.html
 
-          curl -fsS --max-time 20 "$base/thors-well/?smoke=8adcc25" -o /tmp/thors.html
+          curl -fsS --max-time 20 "$base/thors-well/?smoke=8adcc25-promoted" -o /tmp/thors.html
           grep -Fq 'Conditions-only / research model' /tmp/thors.html
 
-          curl -fsS --max-time 30 'https://chrisizworski.com/api/oregon-coastal-proxy?date=2026-10-02&smoke=8adcc25' -o /tmp/decision.json
+          curl -fsS --max-time 30 'https://chrisizworski.com/api/oregon-coastal-proxy?date=2026-10-02&smoke=8adcc25-promoted' -o /tmp/decision.json
           node - <<'NODE'
           const fs = require('node:fs');
           const data = JSON.parse(fs.readFileSync('/tmp/decision.json','utf8'));
