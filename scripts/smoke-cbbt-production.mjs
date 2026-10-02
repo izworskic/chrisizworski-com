@@ -1,7 +1,10 @@
 const BASE = String(process.env.CBBT_BASE_URL || 'https://chrisizworski.com').replace(/\/$/, '');
 const PAGE_URL = `${BASE}/chesapeake-bay-bridge-tunnel/`;
 const API_URL = `${BASE}/api/cbbt`;
+const MEDIA_JS_URL = `${BASE}/assets/cbbt-view.js?v=20261001a`;
 const RADAR_URL = `${BASE}/api/cbbt-media?asset=radar`;
+const SOUTH_CAMERA_URL = `${BASE}/api/cbbt-media?asset=camera&slot=south`;
+const NORTH_CAMERA_URL = `${BASE}/api/cbbt-media?asset=camera&slot=north`;
 const ATTEMPTS = Number(process.env.CBBT_SMOKE_ATTEMPTS || 12);
 const WAIT_MS = Number(process.env.CBBT_SMOKE_WAIT_MS || 10000);
 const TIMEOUT_MS = Number(process.env.CBBT_SMOKE_TIMEOUT_MS || 25000);
@@ -25,6 +28,14 @@ async function request(url, options = {}) {
   }
 }
 
+async function requireImage(url, label) {
+  const response = await request(url, { accept: 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8' });
+  const type = String(response.headers.get('content-type') || '');
+  if (!response.ok) throw new Error(`${label} returned ${response.status}${type ? ` ${type}` : ''}`);
+  if (!type.startsWith('image/')) throw new Error(`${label} returned non-image content type ${type || 'missing'}`);
+  return `${response.status} ${type}`;
+}
+
 async function verifyOnce() {
   const page = await request(PAGE_URL, { accept: 'text/html' });
   if (!page.ok) throw new Error(`page returned ${page.status}`);
@@ -37,6 +48,17 @@ async function verifyOnce() {
     '/api/cbbt-media?asset=radar',
   ]) {
     if (!html.includes(marker)) throw new Error(`page missing marker: ${marker}`);
+  }
+
+  const mediaJs = await request(MEDIA_JS_URL, { accept: 'application/javascript,text/javascript,*/*;q=0.8' });
+  if (!mediaJs.ok) throw new Error(`CBBT media JS returned ${mediaJs.status}`);
+  const mediaJsText = await mediaJs.text();
+  for (const marker of [
+    '/api/cbbt-media?asset=camera&slot=south',
+    '/api/cbbt-media?asset=camera&slot=north',
+    'CBBT cameras and weather',
+  ]) {
+    if (!mediaJsText.includes(marker)) throw new Error(`CBBT media JS missing marker: ${marker}`);
   }
 
   const api = await request(API_URL, { accept: 'application/json' });
@@ -64,6 +86,9 @@ async function verifyOnce() {
     radar = `non-blocking warning (${error.message})`;
   }
 
+  const southCamera = await requireImage(SOUTH_CAMERA_URL, 'south camera proxy');
+  const northCamera = await requireImage(NORTH_CAMERA_URL, 'north camera proxy');
+
   return {
     page: page.status,
     api: api.status,
@@ -71,6 +96,8 @@ async function verifyOnce() {
     restriction: data.officialStatus.restrictionLevel || 'UNKNOWN',
     systemHealth: data.systemHealth.state || 'UNKNOWN',
     radar,
+    southCamera,
+    northCamera,
   };
 }
 
@@ -79,7 +106,7 @@ for (let attempt = 1; attempt <= ATTEMPTS; attempt += 1) {
   try {
     const result = await verifyOnce();
     console.log(
-      `CBBT production smoke PASS | page=${result.page} | api=${result.api} | official=${result.officialState} | restriction=${result.restriction} | health=${result.systemHealth} | radar=${result.radar}`,
+      `CBBT production smoke PASS | page=${result.page} | api=${result.api} | official=${result.officialState} | restriction=${result.restriction} | health=${result.systemHealth} | radar=${result.radar} | southCamera=${result.southCamera} | northCamera=${result.northCamera}`,
     );
     process.exit(0);
   } catch (error) {
