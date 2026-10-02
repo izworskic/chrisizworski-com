@@ -31,6 +31,13 @@ const CAMERA_SOURCES = Object.freeze({
     url: 'https://snapshot.vdotcameras.com/thumbs/vabeachcam013.flv.png',
     contentType: 'image/png',
   }),
+  page: Object.freeze({
+    id: 'vabeachcam015',
+    label: 'Page Avenue',
+    description: 'US-60 / Page Ave',
+    url: 'https://snapshot.vdotcameras.com/thumbs/vabeachcam015.flv.png',
+    contentType: 'image/png',
+  }),
 });
 
 const RADAR_CACHE_CONTROL = 'public, max-age=60, s-maxage=120, stale-while-revalidate=600';

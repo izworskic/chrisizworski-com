@@ -30,7 +30,8 @@
   var RADAR_REFRESH_MS=120000;
   var CAMERAS=[
     {id:'greenwell',label:'Greenwell Rd',detail:'US-60 / Shore Dr and Greenwell Rd · near the CBBT South Toll Plaza',image:'/api/cbbt-media?asset=camera&slot=south',direct:'https://snapshot.vdotcameras.com/thumbs/vabeachcam014.flv.png'},
-    {id:'stratford',label:'E Stratford Rd',detail:'US-60 / E Stratford Rd · near the CBBT south approach',image:'/api/cbbt-media?asset=camera&slot=north',direct:'https://snapshot.vdotcameras.com/thumbs/vabeachcam013.flv.png'}
+    {id:'stratford',label:'E Stratford Rd',detail:'US-60 / E Stratford Rd · near the CBBT south approach',image:'/api/cbbt-media?asset=camera&slot=north',direct:'https://snapshot.vdotcameras.com/thumbs/vabeachcam013.flv.png'},
+    {id:'page',label:'Page Ave',detail:'US-60 / Page Ave · near the CBBT south approach',image:'/api/cbbt-media?asset=camera&slot=page',direct:'https://snapshot.vdotcameras.com/thumbs/vabeachcam015.flv.png'}
   ];
   var selectedCamera='greenwell';
   var cameraFallbackAttempt=false;
@@ -75,10 +76,11 @@
     section.setAttribute('aria-labelledby','cbbtCameraHeading');
     section.innerHTML=''
       +'<div class="section-heading"><div><p class="eyebrow">Current visual check</p><h2 id="cbbtCameraHeading">CBBT approach cameras</h2></div><span class="context-chip">Virginia 511</span></div>'
-      +'<p class="cbbt-camera-note">Two nearby Virginia 511 still cameras on the south approach. They are visual context only and do not determine CBBT operating status.</p>'
+      +'<p class="cbbt-camera-note">Three nearby Virginia 511 still cameras on the south approach. They are visual context only and do not determine CBBT operating status.</p>'
       +'<div class="cbbt-camera-tabs" role="group" aria-label="Choose a CBBT approach camera">'
       +'<button class="cbbt-camera-tab" type="button" data-camera="greenwell" aria-pressed="true">Greenwell Rd</button>'
       +'<button class="cbbt-camera-tab" type="button" data-camera="stratford" aria-pressed="false">E Stratford Rd</button>'
+      +'<button class="cbbt-camera-tab" type="button" data-camera="page" aria-pressed="false">Page Ave</button>'
       +'</div>'
       +'<div class="cbbt-camera-frame">'
       +'<div class="cbbt-camera-loading" id="cbbtCameraLoading">Loading the latest Virginia 511 image…</div>'
@@ -109,7 +111,7 @@
         return;
       }
       var loading=byId('cbbtCameraLoading');
-      if(loading){loading.hidden=false;loading.innerHTML='<span><strong>Camera image unavailable.</strong><br>Try the other view or open Virginia 511.</span>';}
+      if(loading){loading.hidden=false;loading.innerHTML='<span><strong>Camera image unavailable.</strong><br>Try another view or open Virginia 511.</span>';}
       image.hidden=true;
       var refreshed=byId('cbbtCameraRefreshed');
       if(refreshed)refreshed.textContent='Unavailable';
