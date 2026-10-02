@@ -87,9 +87,12 @@ async function verifyOnce() {
   for (const marker of [
     '/api/cbbt-media?asset=camera&slot=south',
     '/api/cbbt-media?asset=camera&slot=north',
-    'CBBT cameras and weather',
+    'Current visual check',
+    'cbbtCameraImage',
     'Greenwell Rd',
     'E Stratford Rd',
+    'snapshot.vdotcameras.com/thumbs/vabeachcam014.flv.png',
+    'snapshot.vdotcameras.com/thumbs/vabeachcam013.flv.png',
   ]) {
     if (!mediaJsText.includes(marker)) throw new Error(`CBBT media JS missing marker: ${marker}`);
   }

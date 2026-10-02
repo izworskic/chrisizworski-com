@@ -16,23 +16,20 @@ const RADAR_SOURCES = Object.freeze([
   }),
 ]);
 
-// Each camera slot resolves to one fixed, known Virginia 511 still-image URL.
-// VDOT's snapshot host is intended for client viewing but does not reliably serve
-// Vercel's server-side fetches, so the first-party endpoint returns a controlled
-// redirect instead of downloading/re-serving the image. The camera still renders
-// inside the CBBT viewer while the upstream request is made by the visitor's browser.
 const CAMERA_SOURCES = Object.freeze({
   south: Object.freeze({
     id: 'vabeachcam014',
     label: 'Greenwell Road',
     description: 'US-60 / Shore Dr and Greenwell Rd',
     url: 'https://snapshot.vdotcameras.com/thumbs/vabeachcam014.flv.png',
+    contentType: 'image/png',
   }),
   north: Object.freeze({
     id: 'vabeachcam013',
     label: 'E Stratford Road',
     description: 'US-60 / E Stratford Rd',
     url: 'https://snapshot.vdotcameras.com/thumbs/vabeachcam013.flv.png',
+    contentType: 'image/png',
   }),
 });
 
@@ -89,17 +86,36 @@ async function serveRadar(req, res) {
   return res.status(502).json({ error: 'NWS radar is temporarily unavailable' });
 }
 
-function serveCamera(req, res, slotName) {
+async function serveCamera(req, res, slotName) {
   const camera = CAMERA_SOURCES[slotName];
   if (!camera) return res.status(400).json({ error: 'Unknown CBBT camera slot' });
 
-  res.setHeader('Location', camera.url);
   res.setHeader('Cache-Control', CAMERA_CACHE_CONTROL);
   res.setHeader('X-CBBT-Camera-Slot', slotName);
   res.setHeader('X-CBBT-Camera-Id', camera.id);
   res.setHeader('X-CBBT-Camera-Name', encodeURIComponent(camera.description));
-  res.setHeader('X-CBBT-Camera-Delivery', 'client-redirect');
-  return res.status(302).end();
+
+  // Match the proven Mackinac media pattern first: fetch the fixed upstream image
+  // and return it from our own origin. VDOT sometimes blocks cloud fetches, so if
+  // that happens we degrade to a controlled redirect to the same allowlisted still.
+  try {
+    const image = await fetchImage(camera.url, camera.contentType);
+    res.setHeader('Content-Type', image.contentType);
+    res.setHeader('Content-Disposition', 'inline');
+    res.setHeader('X-CBBT-Camera-Delivery', 'server-proxy');
+    if (req.method === 'HEAD') return res.status(200).end();
+    res.setHeader('Content-Length', String(image.bytes.length));
+    return res.status(200).send(image.bytes);
+  } catch (error) {
+    console.warn('[cbbt-media] camera proxy failed; falling back to direct still', {
+      slot: slotName,
+      camera: camera.id,
+      error: error instanceof Error ? error.message : String(error),
+    });
+    res.setHeader('Location', camera.url);
+    res.setHeader('X-CBBT-Camera-Delivery', 'client-redirect');
+    return res.status(302).end();
+  }
 }
 
 function selectMediaSources(query = {}) {
