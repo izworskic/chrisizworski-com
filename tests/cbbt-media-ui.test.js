@@ -6,6 +6,7 @@ const path = require('node:path');
 const ROOT = path.join(__dirname, '..');
 const viewJs = fs.readFileSync(path.join(ROOT, 'public/assets/cbbt-view.js'), 'utf8');
 const mediaJs = fs.readFileSync(path.join(ROOT, 'api/cbbt-media.js'), 'utf8');
+const liveCss = fs.readFileSync(path.join(ROOT, 'public/assets/cbbt-live.css'), 'utf8');
 
 test('CBBT camera UI follows the Mackinac persistent image-stage pattern', () => {
   assert.match(viewJs, /Current visual check/);
@@ -38,4 +39,8 @@ test('CBBT radar keeps the first-party path with a direct NWS fallback', () => {
   assert.match(viewJs, /RADAR_IMAGE='\/api\/cbbt-media\?asset=radar'/);
   assert.match(viewJs, /RADAR_DIRECT='https:\/\/radar\.weather\.gov\/ridge\/standard\/KAKQ_loop\.gif'/);
   assert.match(viewJs, /refreshRadar\(true\)/);
+});
+
+test('CBBT radar fallback overlay is actually hidden while radar is healthy', () => {
+  assert.match(liveCss, /\.radar-fallback\[hidden\]\{display:none\}/);
 });
