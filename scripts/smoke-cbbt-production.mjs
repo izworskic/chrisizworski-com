@@ -2,6 +2,7 @@ const BASE = String(process.env.CBBT_BASE_URL || 'https://chrisizworski.com').re
 const PAGE_URL = `${BASE}/chesapeake-bay-bridge-tunnel/`;
 const API_URL = `${BASE}/api/cbbt`;
 const MEDIA_JS_URL = `${BASE}/assets/cbbt-view.js?v=20261001b`;
+const LIVE_CSS_URL = `${BASE}/assets/cbbt-live.css?v=20261001a`;
 const RADAR_URL = `${BASE}/api/cbbt-media?asset=radar`;
 const SOUTH_CAMERA_URL = `${BASE}/api/cbbt-media?asset=camera&slot=south`;
 const NORTH_CAMERA_URL = `${BASE}/api/cbbt-media?asset=camera&slot=north`;
@@ -78,6 +79,7 @@ async function verifyOnce() {
     'id="tollForm"',
     '/api/cbbt-media?asset=radar',
     '/assets/cbbt-view.js?v=20261001b',
+    '/assets/cbbt-live.css?v=20261001a',
   ]) {
     if (!html.includes(marker)) throw new Error(`page missing marker: ${marker}`);
   }
@@ -100,6 +102,13 @@ async function verifyOnce() {
     'snapshot.vdotcameras.com/thumbs/vabeachcam015.flv.png',
   ]) {
     if (!mediaJsText.includes(marker)) throw new Error(`CBBT media JS missing marker: ${marker}`);
+  }
+
+  const liveCss = await request(LIVE_CSS_URL, { accept: 'text/css,*/*;q=0.8' });
+  if (!liveCss.ok) throw new Error(`CBBT live CSS returned ${liveCss.status}`);
+  const liveCssText = await liveCss.text();
+  if (!liveCssText.includes('.radar-fallback[hidden]{display:none}')) {
+    throw new Error('CBBT radar fallback hidden-state CSS missing');
   }
 
   const api = await request(API_URL, { accept: 'application/json' });
@@ -133,6 +142,7 @@ async function verifyOnce() {
 
   return {
     page: page.status,
+    css: liveCss.status,
     api: api.status,
     officialState: data.officialStatus.state,
     restriction: data.officialStatus.restrictionLevel || 'UNKNOWN',
@@ -149,7 +159,7 @@ for (let attempt = 1; attempt <= ATTEMPTS; attempt += 1) {
   try {
     const result = await verifyOnce();
     console.log(
-      `CBBT production smoke PASS | page=${result.page} | api=${result.api} | official=${result.officialState} | restriction=${result.restriction} | health=${result.systemHealth} | radar=${result.radar} | southCamera=${result.southCamera} | northCamera=${result.northCamera} | pageCamera=${result.pageCamera}`,
+      `CBBT production smoke PASS | page=${result.page} | css=${result.css} | api=${result.api} | official=${result.officialState} | restriction=${result.restriction} | health=${result.systemHealth} | radar=${result.radar} | southCamera=${result.southCamera} | northCamera=${result.northCamera} | pageCamera=${result.pageCamera}`,
     );
     process.exit(0);
   } catch (error) {
