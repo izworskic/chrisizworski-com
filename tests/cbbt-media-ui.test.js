@@ -9,10 +9,10 @@ const mediaJs = fs.readFileSync(path.join(ROOT, 'api/cbbt-media.js'), 'utf8');
 
 test('CBBT camera UI follows the Mackinac persistent image-stage pattern', () => {
   assert.match(viewJs, /Current visual check/);
-  assert.match(viewJs, /id=\\"cbbtCameraImage\\"/);
+  assert.match(viewJs, /id="cbbtCameraImage"/);
   assert.match(viewJs, /Latest still image/);
-  assert.match(viewJs, /data-camera=\\"greenwell\\"/);
-  assert.match(viewJs, /data-camera=\\"stratford\\"/);
+  assert.match(viewJs, /data-camera="greenwell"/);
+  assert.match(viewJs, /data-camera="stratford"/);
   assert.match(viewJs, /setInterval\(refreshCamera,CAMERA_REFRESH_MS\)/);
   assert.doesNotMatch(viewJs, /camera-drawer/);
   assert.doesNotMatch(viewJs, /cbbtCameraLaunch/);
