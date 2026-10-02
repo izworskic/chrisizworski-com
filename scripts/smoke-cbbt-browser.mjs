@@ -5,7 +5,6 @@ import path from 'node:path';
 
 const BASE = String(process.env.CBBT_BASE_URL || 'https://chrisizworski.com').replace(/\/$/, '');
 const PAGE_URL = `${BASE}/chesapeake-bay-bridge-tunnel/`;
-const PORT = Number(process.env.CBBT_BROWSER_DEBUG_PORT || 9227);
 const TIMEOUT_MS = Number(process.env.CBBT_BROWSER_TIMEOUT_MS || 45_000);
 
 function findChrome() {
@@ -34,22 +33,43 @@ function findChrome() {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-async function waitForTarget() {
-  const deadline = Date.now() + 15_000;
+async function waitForTarget(profileDir, chromeLog) {
+  const activePortFile = path.join(profileDir, 'DevToolsActivePort');
+  const deadline = Date.now() + 20_000;
+  let port = null;
+
   while (Date.now() < deadline) {
+    if (fs.existsSync(activePortFile)) {
+      const lines = fs.readFileSync(activePortFile, 'utf8').trim().split(/\r?\n/);
+      const parsed = Number(lines[0]);
+      if (Number.isInteger(parsed) && parsed > 0) {
+        port = parsed;
+        break;
+      }
+    }
+    await sleep(100);
+  }
+
+  if (!port) {
+    throw new Error(`Chrome DevTools active-port file did not appear${chromeLog.length ? ` | ${chromeLog.join(' | ')}` : ''}`);
+  }
+
+  const targetDeadline = Date.now() + 10_000;
+  while (Date.now() < targetDeadline) {
     try {
-      const response = await fetch(`http://127.0.0.1:${PORT}/json/list`);
+      const response = await fetch(`http://127.0.0.1:${port}/json/list`);
       if (response.ok) {
         const targets = await response.json();
         const page = targets.find((target) => target.type === 'page' && target.webSocketDebuggerUrl);
         if (page) return page;
       }
     } catch (_error) {
-      // Chrome is still starting.
+      // DevTools HTTP endpoint is still starting.
     }
-    await sleep(150);
+    await sleep(100);
   }
-  throw new Error('Chrome DevTools endpoint did not become ready');
+
+  throw new Error(`Chrome DevTools target did not become ready on port ${port}${chromeLog.length ? ` | ${chromeLog.join(' | ')}` : ''}`);
 }
 
 async function connectCdp(target) {
@@ -79,7 +99,7 @@ async function connectCdp(target) {
     }
     if (message.method === 'Network.responseReceived') {
       const url = message.params.response?.url || requests.get(message.params.requestId) || '';
-      if (/cbbt-media\?asset=radar|radar\.weather\.gov\/ridge\/standard\/KAKQ/i.test(url)) {
+      if (/cbbt-view\.js|cbbt-media\?asset=radar|radar\.weather\.gov\/ridge\/standard\/KAKQ/i.test(url)) {
         events.push({
           type: 'response',
           url,
@@ -92,7 +112,7 @@ async function connectCdp(target) {
     }
     if (message.method === 'Network.loadingFailed') {
       const url = requests.get(message.params.requestId) || '';
-      if (/cbbt-media\?asset=radar|radar\.weather\.gov\/ridge\/standard\/KAKQ/i.test(url)) {
+      if (/cbbt-view\.js|cbbt-media\?asset=radar|radar\.weather\.gov\/ridge\/standard\/KAKQ/i.test(url)) {
         events.push({
           type: 'failed',
           url,
@@ -119,9 +139,11 @@ function radarExpression() {
   return `(() => {
     const image = document.getElementById('radarImage');
     const fallback = document.getElementById('radarFallback');
+    const scripts = Array.from(document.scripts).map((script) => script.src).filter(Boolean);
     return {
       pageUrl: location.href,
       readyState: document.readyState,
+      scripts,
       imagePresent: Boolean(image),
       complete: Boolean(image && image.complete),
       naturalWidth: image ? image.naturalWidth : 0,
@@ -144,13 +166,16 @@ const browser = spawn(
   [
     '--headless=new',
     '--no-sandbox',
+    '--disable-setuid-sandbox',
     '--disable-dev-shm-usage',
     '--disable-gpu',
     '--disable-background-networking',
     '--disable-default-apps',
     '--disable-extensions',
     '--no-first-run',
-    `--remote-debugging-port=${PORT}`,
+    '--remote-debugging-address=127.0.0.1',
+    '--remote-debugging-port=0',
+    '--remote-allow-origins=*',
     `--user-data-dir=${profileDir}`,
     'about:blank',
   ],
@@ -163,11 +188,12 @@ browser.stderr?.on('data', (chunk) => {
 
 let cdp;
 try {
-  const target = await waitForTarget();
+  const target = await waitForTarget(profileDir, chromeLog);
   cdp = await connectCdp(target);
   await cdp.send('Page.enable');
   await cdp.send('Runtime.enable');
   await cdp.send('Network.enable');
+  await cdp.send('Network.setCacheDisabled', { cacheDisabled: true });
   await cdp.send('Page.navigate', { url: PAGE_URL });
 
   const deadline = Date.now() + TIMEOUT_MS;
@@ -194,6 +220,7 @@ try {
       console.log(
         `CBBT browser radar PASS | ${state.naturalWidth}x${state.naturalHeight} | src=${state.currentSrc}`,
       );
+      console.log(`CBBT browser scripts | ${JSON.stringify(state.scripts)}`);
       if (cdp.events.length) console.log(`CBBT browser radar network | ${JSON.stringify(cdp.events)}`);
       process.exitCode = 0;
       break;
@@ -207,6 +234,9 @@ try {
     if (chromeLog.length) console.error(`Chrome stderr: ${chromeLog.join(' | ')}`);
     process.exitCode = 1;
   }
+} catch (error) {
+  console.error(`CBBT browser harness FAIL | ${error.message}`);
+  process.exitCode = 1;
 } finally {
   try {
     cdp?.socket?.close();
