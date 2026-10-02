@@ -24,7 +24,7 @@
   if(typeof document==='undefined')return;
 
   var RADAR_IMAGE='/api/cbbt-media?asset=radar';
-  var RADAR_DIRECT='https://radar.weather.gov/ridge/standard/KAKQ_loop.gif';
+  var RADAR_DIRECT='https://radar.weather.gov/ridge/standard/KAKQ_0.gif';
   var RADAR_LINK='https://radar.weather.gov/station/KAKQ/standard';
   var CAMERA_REFRESH_MS=30000;
   var RADAR_REFRESH_MS=120000;
@@ -140,13 +140,13 @@
     var fallback=byId('radarFallback');
     image.hidden=false;
     if(fallback)fallback.hidden=true;
-    image.src=bust(useDirect?RADAR_DIRECT:RADAR_IMAGE,RADAR_REFRESH_MS);
     image.onerror=function(){
       if(!useDirect){refreshRadar(true);return;}
       image.hidden=true;
       if(fallback)fallback.hidden=false;
     };
     image.onload=function(){image.hidden=false;if(fallback)fallback.hidden=true;};
+    image.src=useDirect?RADAR_DIRECT:bust(RADAR_IMAGE,RADAR_REFRESH_MS);
     var link=byId('radarLink');
     if(link){link.href=RADAR_LINK;link.textContent='Open interactive NWS radar ↗';}
   }
