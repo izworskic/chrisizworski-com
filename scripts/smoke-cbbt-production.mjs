@@ -1,8 +1,8 @@
-// Release marker: CBBT radar overlay visibility fix, 2026-10-02.
+// Release marker: CBBT browser-safe radar delivery, 2026-10-02.
 const BASE = String(process.env.CBBT_BASE_URL || 'https://chrisizworski.com').replace(/\/$/, '');
 const PAGE_URL = `${BASE}/chesapeake-bay-bridge-tunnel/`;
 const API_URL = `${BASE}/api/cbbt`;
-const MEDIA_JS_URL = `${BASE}/assets/cbbt-view.js?v=20261001b`;
+const MEDIA_JS_URL = `${BASE}/assets/cbbt-view.js?v=20261002c`;
 const LIVE_CSS_URL = `${BASE}/assets/cbbt-live.css?v=20261001a`;
 const RADAR_URL = `${BASE}/api/cbbt-media?asset=radar`;
 const SOUTH_CAMERA_URL = `${BASE}/api/cbbt-media?asset=camera&slot=south`;
@@ -79,7 +79,7 @@ async function verifyOnce() {
     'id="vehicleQuickSelect"',
     'id="tollForm"',
     '/api/cbbt-media?asset=radar',
-    '/assets/cbbt-view.js?v=20261001b',
+    '/assets/cbbt-view.js?v=20261002c',
     '/assets/cbbt-live.css?v=20261001a',
   ]) {
     if (!html.includes(marker)) throw new Error(`page missing marker: ${marker}`);
@@ -101,6 +101,8 @@ async function verifyOnce() {
     'snapshot.vdotcameras.com/thumbs/vabeachcam014.flv.png',
     'snapshot.vdotcameras.com/thumbs/vabeachcam013.flv.png',
     'snapshot.vdotcameras.com/thumbs/vabeachcam015.flv.png',
+    'radar.weather.gov/ridge/standard/KAKQ_0.gif',
+    'image.src=useDirect?RADAR_DIRECT:bust(RADAR_IMAGE,RADAR_REFRESH_MS)',
   ]) {
     if (!mediaJsText.includes(marker)) throw new Error(`CBBT media JS missing marker: ${marker}`);
   }
