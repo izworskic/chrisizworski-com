@@ -18,3 +18,141 @@
   function tollView(result){if(!result||result.state==='NOT_EVALUATED')return{tone:'unknown',label:'Not estimated',amount:null,copy:'Add trip details to estimate the toll.'};if(result.state==='ESTIMATED')return{tone:'ok',label:'Estimated CBBT toll',amount:Number(result.amount),copy:'Calculated by the backend using official CBBT class logic and the assumptions shown below.'};if(result.state==='ESTIMATE_REQUIRES_APPROVAL')return{tone:'caution',label:'Estimate requires CBBT approval',amount:Number(result.amount),copy:'This configuration requires prior approval; the returned amount may not be the complete trip cost.'};var reasons={TOLL_CLASS_UNRESOLVED:'The CBBT toll class could not be resolved from these details. Add vehicle class information or check the official toll schedule.',INVALID_TRAVEL_TIME:'The travel time could not be interpreted.',CLASS_75_REQUIRES_EZPASS_AND_29_PRIOR_TRIPS_IN_720_HOURS:'This discount class requires additional E-ZPass trip history.'};return{tone:'unknown',label:'Toll not resolved',amount:null,copy:reasons[result.reason]||'The backend could not determine a toll from these inputs.'};}
   return{statusView:statusView,vehicleView:vehicleView,freshnessText:freshnessText,tollView:tollView,restrictionLabel:restrictionLabel,reasonText:reasonText};
 });
+
+(function(){
+  'use strict';
+  if(typeof document==='undefined')return;
+
+  var RADAR_IMAGE='/api/cbbt-media?asset=radar';
+  var RADAR_LINK='https://radar.weather.gov/station/KAKQ/standard';
+  var CAMERA_REFRESH_MS=30000;
+  var CAMERAS=[
+    {id:'south',label:'South approach',detail:'Virginia Beach / south side approach',image:'/api/cbbt-media?asset=camera&slot=south'},
+    {id:'north',label:'North approach',detail:'Eastern Shore / north side approach',image:'/api/cbbt-media?asset=camera&slot=north'}
+  ];
+  var selectedCamera='south';
+  var refreshTimer=null;
+  var opener=null;
+
+  function byId(id){return document.getElementById(id);}
+  function bust(url){return url+(url.indexOf('?')===-1?'?':'&')+'t='+Math.floor(Date.now()/30000);}
+  function selected(){return CAMERAS.find(function(camera){return camera.id===selectedCamera;})||CAMERAS[0];}
+
+  function injectStyles(){
+    if(byId('cbbtMackinacMediaStyles'))return;
+    var style=document.createElement('style');
+    style.id='cbbtMackinacMediaStyles';
+    style.textContent=[
+      '.experience-grid{display:none!important}',
+      '.cbbt-live-visuals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}',
+      '.cbbt-live-card{display:grid;gap:8px;padding:16px;border:1px solid rgba(13,59,79,.16);border-radius:14px;background:#f8fbfb;text-decoration:none;color:inherit;text-align:left;font:inherit;cursor:pointer}',
+      '.cbbt-live-card strong{font-size:1rem;color:#10232c}',
+      '.cbbt-live-card span{font-size:.82rem;color:#52646d}',
+      '.cbbt-live-label{display:inline-flex;width:max-content;border-radius:999px;padding:4px 7px;background:#e2eef2!important;color:#0d3b4f!important;font-size:.68rem!important;font-weight:850;letter-spacing:.05em}',
+      '.camera-drawer[hidden]{display:none!important}',
+      '.camera-drawer{position:fixed;inset:0;z-index:1000;background:rgba(5,22,30,.62);display:flex;align-items:flex-end;justify-content:center;padding:18px}',
+      '.camera-dialog{width:min(920px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:20px 20px 14px 14px;box-shadow:0 24px 80px rgba(0,0,0,.28);padding:16px}',
+      '.camera-dialog-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}',
+      '.camera-dialog-head h2{margin:2px 0 0}',
+      '.camera-close{border:1px solid #cfd9dd;background:#fff;border-radius:999px;min-width:44px;min-height:44px;font-weight:800;cursor:pointer}',
+      '.camera-tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 0 10px}',
+      '.camera-tab{border:1px solid #cbd7db;background:#f5f8f8;color:#24424f;border-radius:999px;padding:8px 12px;min-height:42px;font-weight:750;cursor:pointer}',
+      '.camera-tab[aria-selected=true]{background:#0d3b4f;color:#fff;border-color:#0d3b4f}',
+      '.camera-frame{position:relative;aspect-ratio:16/9;border:1px solid #d9e1e4;border-radius:14px;overflow:hidden;background:#dfe8eb;display:grid;place-items:center}',
+      '.camera-frame img{display:block;width:100%;height:100%;object-fit:cover}',
+      '.camera-loading{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;color:#52646d;background:#e8eff1}',
+      '.camera-loading[hidden]{display:none}',
+      '.camera-meta{display:grid;gap:3px;padding:10px 2px 0}',
+      '.camera-meta span{font-size:.8rem;color:#52646d}',
+      '.camera-actions{display:flex;justify-content:space-between;gap:14px;margin-top:10px;align-items:flex-start}',
+      '.camera-actions p{margin:0;max-width:68ch;font-size:.78rem;color:#52646d}',
+      '.camera-actions a{font-size:.78rem;font-weight:750;white-space:nowrap}',
+      '@media(max-width:700px){.cbbt-live-visuals{grid-template-columns:1fr}.camera-drawer{padding:0}.camera-dialog{border-radius:20px 20px 0 0}.camera-frame{aspect-ratio:4/3}.camera-actions{display:grid}}'
+    ].join('');
+    document.head.appendChild(style);
+  }
+
+  function refreshRadar(){
+    var image=byId('radarImage');
+    if(!image)return;
+    image.hidden=false;
+    image.src=bust(RADAR_IMAGE);
+    var fallback=byId('radarFallback');
+    if(fallback)fallback.hidden=true;
+    image.addEventListener('load',function(){image.hidden=false;if(fallback)fallback.hidden=true;},{once:false});
+    image.addEventListener('error',function(){image.hidden=true;if(fallback)fallback.hidden=false;},{once:false});
+    var link=byId('radarLink');
+    if(link){link.href=RADAR_LINK;link.textContent='Open full NWS radar ↗';}
+  }
+
+  function ensureCameraDrawer(){
+    if(byId('cbbtCameraDrawer'))return;
+    var drawer=document.createElement('div');
+    drawer.id='cbbtCameraDrawer';
+    drawer.className='camera-drawer';
+    drawer.hidden=true;
+    drawer.innerHTML='<section class="camera-dialog" role="dialog" aria-modal="true" aria-labelledby="cbbtCameraHeading"><div class="camera-dialog-head"><div><p class="eyebrow">Virginia 511 · live still images</p><h2 id="cbbtCameraHeading">CBBT approach cameras</h2></div><button id="cbbtCameraClose" class="camera-close" type="button">Close</button></div><div class="camera-tabs" role="tablist" aria-label="Choose camera"><button class="camera-tab" data-camera="south" role="tab" aria-selected="true">South approach</button><button class="camera-tab" data-camera="north" role="tab" aria-selected="false">North approach</button></div><div class="camera-frame"><div class="camera-loading" id="cbbtCameraLoading">Loading Virginia 511 camera…</div><img id="cbbtCameraImage" alt="" width="1280" height="720"></div><div class="camera-meta"><strong id="cbbtCameraName">South approach</strong><span id="cbbtCameraDetail">Virginia Beach / south side approach</span></div><div class="camera-actions"><p><strong>Visual context only.</strong> Camera images do not determine whether CBBT is open, restricted or closed.</p><a href="https://511.vdot.virginia.gov/" target="_blank" rel="noopener">Open Virginia 511 ↗</a></div></section>';
+    document.body.appendChild(drawer);
+    byId('cbbtCameraClose').addEventListener('click',closeDrawer);
+    drawer.addEventListener('click',function(event){if(event.target===drawer)closeDrawer();});
+    document.addEventListener('keydown',function(event){if(event.key==='Escape'&&!drawer.hidden)closeDrawer();});
+    drawer.querySelectorAll('.camera-tab').forEach(function(button){button.addEventListener('click',function(){selectedCamera=button.dataset.camera;refreshCamera();});});
+    var image=byId('cbbtCameraImage');
+    image.addEventListener('load',function(){var loading=byId('cbbtCameraLoading');if(loading)loading.hidden=true;image.hidden=false;});
+    image.addEventListener('error',function(){var loading=byId('cbbtCameraLoading');if(loading){loading.hidden=false;loading.textContent='This Virginia 511 camera is temporarily unavailable. Try the other approach camera.';}image.hidden=true;});
+  }
+
+  function refreshCamera(){
+    var camera=selected();
+    var image=byId('cbbtCameraImage');
+    if(!image)return;
+    var loading=byId('cbbtCameraLoading');
+    if(loading){loading.hidden=false;loading.textContent='Loading Virginia 511 camera…';}
+    image.hidden=false;
+    image.alt='Current Virginia 511 traffic camera for the CBBT '+camera.label.toLowerCase();
+    image.src=bust(camera.image);
+    var name=byId('cbbtCameraName');if(name)name.textContent=camera.label;
+    var detail=byId('cbbtCameraDetail');if(detail)detail.textContent=camera.detail+' · refreshed automatically';
+    document.querySelectorAll('#cbbtCameraDrawer .camera-tab').forEach(function(button){button.setAttribute('aria-selected',String(button.dataset.camera===camera.id));});
+  }
+
+  function openDrawer(event){
+    ensureCameraDrawer();
+    opener=(event&&event.currentTarget)||document.activeElement;
+    var drawer=byId('cbbtCameraDrawer');
+    drawer.hidden=false;
+    document.body.style.overflow='hidden';
+    refreshCamera();
+    if(refreshTimer)clearInterval(refreshTimer);
+    refreshTimer=setInterval(function(){if(!drawer.hidden)refreshCamera();},CAMERA_REFRESH_MS);
+    byId('cbbtCameraClose').focus();
+  }
+
+  function closeDrawer(){
+    var drawer=byId('cbbtCameraDrawer');if(!drawer)return;
+    drawer.hidden=true;document.body.style.overflow='';
+    if(refreshTimer){clearInterval(refreshTimer);refreshTimer=null;}
+    if(opener&&typeof opener.focus==='function')opener.focus();
+  }
+
+  function initVisualSection(){
+    if(byId('cbbtLiveVisuals'))return;
+    var radarHeading=byId('radarHeading');
+    var radarCard=radarHeading&&radarHeading.closest('.section-card');
+    if(!radarCard)return;
+    var section=document.createElement('section');
+    section.className='section-card';
+    section.id='cbbtLiveVisuals';
+    section.innerHTML='<div class="section-heading"><div><p class="eyebrow">Live visual checks</p><h2>CBBT cameras and weather</h2></div><span class="context-chip">Live sources</span></div><div class="cbbt-live-visuals"><button id="cbbtCameraLaunch" class="cbbt-live-card" type="button"><span class="cbbt-live-label">VIRGINIA 511 CAMERAS</span><strong>View CBBT approach cameras</strong><span>Open the camera viewer and switch between south and north approaches.</span></button><a class="cbbt-live-card" href="https://tidesandcurrents.noaa.gov/stationhome.html?id=8638901" target="_blank" rel="noopener"><span class="cbbt-live-label">NOAA AT CBBT</span><strong>Bridge weather observation</strong><span>Wind, gust, direction and air temperature from the CBBT Chesapeake Channel station.</span></a></div>';
+    radarCard.insertAdjacentElement('afterend',section);
+    byId('cbbtCameraLaunch').addEventListener('click',openDrawer);
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    injectStyles();
+    refreshRadar();
+    initVisualSection();
+    ensureCameraDrawer();
+    setInterval(refreshRadar,120000);
+  });
+})();
