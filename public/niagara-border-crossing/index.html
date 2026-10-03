@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Niagara Border Wait Times: Which Bridge Should You Take?</title>
-<meta name="description" content="Choose the best Niagara border crossing right now. Compare official waits, see what is happening at each bridge, and know what to expect on the approach and crossing.">
+<meta name="description" content="Choose the best Niagara border crossing now. Compare official waits, see what is happening at each bridge, and know what to expect on the approach.">
 <link rel="canonical" href="https://chrisizworski.com/niagara-border-crossing/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#0b314c">
@@ -24,6 +24,7 @@
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="/assets/michigan-border-crossings.css">
 <link rel="stylesheet" href="/assets/niagara-border-experience.css">
+<style>@media(max-width:620px){.niagara-page .trip-answer{scroll-margin-top:12px}}</style>
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -87,8 +88,8 @@
   <section class="niagara-hero">
     <div class="niagara-hero-copy">
       <p class="eyebrow">Buffalo · Niagara Falls · Lewiston</p>
-      <h1>Cross Niagara without guessing.</h1>
-      <p class="lede">See which bridge fits your trip right now, what traffic is doing there, and what you will encounter from the approach road to the other side.</p>
+      <h1>Which Niagara bridge should you take right now?</h1>
+      <p class="lede">Cross Niagara without guessing. See which bridge fits your trip, what traffic is doing there, and what you will encounter from the approach road to the other side.</p>
     </div>
     <figure class="hero-photo">
       <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Rainbow_Bridge%2C_July_2026.jpg?width=1600" width="1200" height="900" alt="Rainbow Bridge over the Niagara River" fetchpriority="high">
@@ -132,6 +133,7 @@
     <div class="trip-answer" aria-live="polite">
       <div class="trip-answer-top">
         <div>
+          <p class="eyebrow">Answer</p>
           <span class="mobile-decision-label">Your crossing right now</span>
           <span class="trip-state is-caution" id="decisionState">Checking</span>
           <h2 id="decisionHeading"><span id="decisionHeadline">Loading official crossing data…</span></h2>
@@ -177,10 +179,20 @@
     <div class="compare-grid" id="compareGrid"></div>
   </section>
 
+  <section class="support-card bridge-orientation" aria-labelledby="orientationHeading">
+    <div class="section-top"><div><p class="eyebrow">Get oriented</p><h2 id="orientationHeading">Where the four bridges sit along the river</h2><p>North is at the top. The Falls crossings are close together; Peace Bridge is much farther south in the Buffalo–Fort Erie corridor.</p></div></div>
+    <div class="river-map" aria-label="Niagara River crossings from north to south">
+      <div><strong>Lewiston–Queenston</strong><span>Lewiston, NY ↔ Queenston, ON · northern highway route</span></div>
+      <div><strong>Whirlpool Rapids</strong><span>Niagara Falls · NEXUS-only specialist crossing</span></div>
+      <div><strong>Rainbow Bridge</strong><span>Niagara Falls · visitor and general passenger crossing</span></div>
+      <div><strong>Peace Bridge</strong><span>Buffalo, NY ↔ Fort Erie, ON · southern QEW route</span></div>
+    </div>
+  </section>
+
   <section class="support-card" aria-label="Approach and weather context">
     <div class="support-grid">
       <div class="support-pane">
-        <p class="eyebrow">Before the plaza</p><h2>Approach roads & cameras</h2>
+        <p class="eyebrow">Before the plaza</p><h2>Traffic cameras and road conditions</h2>
         <p id="approachSummary">Checking official 511 approach context.</p>
         <div class="approach-events" id="approachEvents"></div>
         <div class="official-links" id="approachLinks"><a class="quick-link" href="https://511ny.org/" target="_blank" rel="noopener">Open 511 New York</a><a class="quick-link" href="https://511on.ca/" target="_blank" rel="noopener">Open Ontario 511</a><a class="quick-link" href="https://www.nittec.org/cameras/" target="_blank" rel="noopener">Open NITTEC cameras</a></div>
@@ -200,7 +212,7 @@
 
   <div class="details-stack">
     <details>
-      <summary>How this recommendation is made</summary>
+      <summary id="methodHeading">How this recommendation is made</summary>
       <div class="details-body"><p>The live recommendation starts with published crossing restrictions, then compares fresh official waits for the same direction and traveler type. It will not send you to another bridge for a tiny reported difference that is likely to disappear in the extra drive. Approach traffic is shown separately until a validated route-time feed can be included.</p><p>Whirlpool Rapids remains a special case: it is NEXUS-only, and Niagara Falls Bridge Commission says its wait information does not have the same real-time technology as the other crossings.</p></div>
     </details>
     <details>
