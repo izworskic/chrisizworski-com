@@ -72,7 +72,7 @@
     if (!result?.eligibility?.eligible) return "Not eligible";
     if (result.state === "CROSSING_CLOSED") return "Closed";
     if (result.state === "SOURCE_CONFLICT") return "Source conflict";
-    if (result.context_only) return "Context only";
+    if (result.state === "OPERATOR_CONTEXT_ONLY" || result.context_only) return "Context only";
     if (result.id === decision?.recommended_id) return decision.state === "COMPARABLE_OPTIONS" ? "Stay on route" : "Recommended";
     if (result.id === state.preferred) return "Your normal route";
     if (!result.usable_for_recommendation) return "Not comparable";
@@ -256,7 +256,6 @@
       if (statusNode) { statusNode.className = ""; statusNode.innerHTML = `<strong>511 approach context</strong>${payload.complete ? "New York + Ontario available" : "Partial official feed available"}`; }
       return;
     }
-
     approachState.textContent = payload?.configured ? "511 unavailable" : "511 key-gated";
     approachState.className = "approach-state";
     approachSummary.textContent = payload?.configured
