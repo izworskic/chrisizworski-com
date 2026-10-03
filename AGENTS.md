@@ -69,6 +69,18 @@ and holistic search-authority portfolio governance gates.
 them fails, fix the cause or explain why the expectation itself should change —
 do not merge past a red gate.
 
+The gate runs all 50 steps and prints every failure at the end, so one run gives you the
+complete list; fix them all, then rerun once. (`npm run verify:all -- --fail-fast` stops at
+the first failure if you want the old behaviour.) The step list is the `verify:all` script
+in `package.json`; several benchmarks check that they are still named there, so add steps
+there and never remove one to get green.
+
+**Shallow clones cannot pass the gate.** The freshness step derives each page's date from
+git history; on a `--depth 1` clone it would report hundreds of false mismatches, and the
+stamper would rewrite every page to the wrong date. Both now refuse to run on a shallow
+clone; the gate tries `git fetch --unshallow` itself and otherwise exits INCOMPLETE. If
+your sandbox clones shallow, run `git fetch --unshallow` before anything else.
+
 While you work, run `npm run verify:quick` (about 10 seconds). It runs only the checks
 that most often turn `main` red: API `X-Robots-Tag`, every Tools card registered, the
 creator-entity contract, and sitemap freshness. It is a pre-flight, not a substitute
