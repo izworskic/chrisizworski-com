@@ -2220,6 +2220,39 @@
       "searchEvidence": {
         "status": "emerging-demand"
       }
+    },
+    {
+      "id": "bloom-tracker",
+      "name": "Michigan Bloom Tracker",
+      "canonical": "https://phenology.chrisizworski.com/bloom-tracker",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "natural-year",
+      "primaryIntent": "Michigan flower bloom timing and when to go",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "geographies": [
+        "michigan-statewide"
+      ],
+      "personas": [
+        "michigan-resident",
+        "day-tripper",
+        "photographer",
+        "gardener"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "launch"
+      },
+      "searchEvidence": {
+        "status": "new"
+      }
     }
   ],
   "relationships": [
@@ -3102,6 +3135,14 @@
       "strength": "optional",
       "surface": "snowfall-check",
       "reason": "Riders checking conditions want the official snowfall reports behind them."
+    },
+    {
+      "from": "phenology",
+      "to": "bloom-tracker",
+      "type": "seasonal-router",
+      "strength": "strong",
+      "surface": "natural-year",
+      "reason": "Seasonal phenology signals lead into the specific bloom calls: cherries, tulips, lilacs, lavender and sunflower fields."
     }
   ],
   "cannibalizationGroups": [

@@ -2,9 +2,10 @@ name: Haleakala sunrise validation capture
 
 on:
   schedule:
-    # Haleakala sunrise is roughly 15:45-17:05 UTC through the year.
-    # Five-minute sampling preserves the rolling LCO all-sky source while available.
-    - cron: '*/5 15-17 * * *'
+    # Run once after even the latest Haleakala sunrise +20 minute truth window.
+    # The collector recovers the exact -30/+20 sequence from LCO's rolling archive,
+    # so GitHub scheduler jitter no longer determines whether a case is usable.
+    - cron: '15 18 * * *'
   workflow_dispatch:
 
 permissions:
@@ -17,7 +18,7 @@ concurrency:
 jobs:
   capture:
     runs-on: ubuntu-latest
-    timeout-minutes: 4
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,9 +27,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Capture OGG validation evidence
+      - name: Capture complete OGG sunrise validation case
         run: node scripts/capture-haleakala-validation.mjs
       - name: Commit immutable evidence
+        if: always()
         run: |
           if git diff --quiet -- data/haleakala-validation 2>/dev/null && [ -z "$(git status --porcelain data/haleakala-validation 2>/dev/null)" ]; then
             echo "No evidence captured in this run."

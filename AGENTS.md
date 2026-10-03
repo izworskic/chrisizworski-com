@@ -69,6 +69,12 @@ and holistic search-authority portfolio governance gates.
 them fails, fix the cause or explain why the expectation itself should change —
 do not merge past a red gate.
 
+While you work, run `npm run verify:quick` (about 10 seconds). It runs only the checks
+that most often turn `main` red: API `X-Robots-Tag`, every Tools card registered, the
+creator-entity contract, and sitemap freshness. It is a pre-flight, not a substitute
+for `npm run verify:all`. On a shallow clone it skips the freshness step and says so,
+because freshness reads git history and reports false failures without it.
+
 `benchmark:seo` (`scripts/measure-discovery.mjs`) is the brand guardrail. It
 fails if the `<title>` of these pages does not contain "Chris Izworski":
 
@@ -79,6 +85,31 @@ fails if the `<title>` of these pages does not contain "Chris Izworski":
 
 It also pins the canonical URL on those pages. Both checks exist because a
 previous pass silently stripped the byline from all four.
+
+## 1b. If `main` is red, fix `main` first
+
+Check `main`'s latest `Agent branch verification` run before you start, and again before
+you open or update a PR. If it is red, your first job is to find the failing check and fix
+that, in its own small PR, before anything else. Do not stack feature work on a red
+`main`: on 2026-10-02 `main` stayed red for 11 hours while six more commits landed on top
+of it, and PRs such as #695 failed a gate they had not caused. A PR whose gate is red
+because `main` is red is not finished and not mergeable; update it from `main` after the
+repair and rerun the gate on the resulting SHA.
+
+## 1c. Registering a new tool
+
+A new card on `/tools/` (`public/tools/index.html`) is not done until all of these land in
+the same PR. Each one has failed `main` before when it was forgotten:
+
+1. A node in `benchmarks/tool-network-registry.json`, plus at least one relationship so it
+   is not stranded (`benchmark:tool-network`).
+2. For a tool on a separate host (for example `phenology.chrisizworski.com`), its id in
+   that host's `toolIds` in `benchmarks/creator-entity-contract.json`.
+3. Any API route it adds sends `X-Robots-Tag` (`tests/api-contract.test.js`).
+4. `node scripts/stamp-freshness.mjs` after the edit, so the sitemap `lastmod` matches the
+   page's `dateModified`. Run it on a full-history clone, never a shallow one.
+
+`npm run verify:quick` checks all four in seconds.
 
 ## Search strategy operating system
 
@@ -337,6 +368,11 @@ wrong answer more often than it looks.
 ## 7. Open a PR, do not push to main
 
 Merges are Chris's call. Put the gate results in the PR body.
+
+A push to `main` skips the PR gate: CI only reports after the change has already deployed
+to production. Open a PR, include the `verify:all` result in the body, and let the owner
+merge. Most recent commits on `main` at the time this was written were direct pushes
+rather than PR merges.
 
 ## White Christmas published-route release contract
 
