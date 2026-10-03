@@ -20,6 +20,12 @@ const URLS = Object.freeze({
   eccc: "https://api.weather.gc.ca/collections/weather-alerts/items?f=json&bbox=-79.30,42.80,-78.80,43.30&limit=50",
 });
 
+const REQUIRED_CBSA_NAMES = Object.freeze([
+  "Fort Erie (Peace Bridge)",
+  "Niagara Falls Rainbow Bridge(Travellers only)",
+  "Queenston Lewiston Bridge (Travellers and Commercial)",
+]);
+
 const USER_AGENT =
   "NiagaraBorderCrossingDecision/2.0 (+https://chrisizworski.com/niagara-border-crossing/; contact: izworski@gmail.com)";
 
@@ -39,21 +45,26 @@ function sourceState(result, name, url, role) {
   return { name, url, role, available: result.status === "fulfilled" };
 }
 
+function hasRequiredNiagaraCbsaRows(payload) {
+  const rows = parseCbsaCsv(String(payload || ""));
+  return REQUIRED_CBSA_NAMES.every((name) => rows.has(name));
+}
+
 function resolveCbsaPayload(primaryResult, htmlResult) {
   if (primaryResult?.status === "fulfilled") {
     const primaryText = String(primaryResult.value || "");
-    if (parseCbsaCsv(primaryText).size > 0) {
+    if (hasRequiredNiagaraCbsaRows(primaryText)) {
       return { available: true, text: primaryText, mode: "csv", url: URLS.cbsa };
     }
     const convertedPrimary = cbsaWaitHtmlToLegacyCsv(primaryText);
-    if (convertedPrimary && parseCbsaCsv(convertedPrimary).size > 0) {
+    if (convertedPrimary && hasRequiredNiagaraCbsaRows(convertedPrimary)) {
       return { available: true, text: convertedPrimary, mode: "html-primary", url: URLS.cbsa };
     }
   }
 
   if (htmlResult?.status === "fulfilled") {
     const converted = cbsaWaitHtmlToLegacyCsv(htmlResult.value);
-    if (converted && parseCbsaCsv(converted).size > 0) {
+    if (converted && hasRequiredNiagaraCbsaRows(converted)) {
       return { available: true, text: converted, mode: "html-fallback", url: URLS.cbsaHtml };
     }
   }
@@ -200,7 +211,9 @@ module.exports = async function handler(req, res) {
 };
 
 module.exports.URLS = URLS;
+module.exports.REQUIRED_CBSA_NAMES = REQUIRED_CBSA_NAMES;
 module.exports.attachExperience = attachExperience;
+module.exports.hasRequiredNiagaraCbsaRows = hasRequiredNiagaraCbsaRows;
 module.exports.normalizeEcccAlerts = normalizeEcccAlerts;
 module.exports.resolveCbsaPayload = resolveCbsaPayload;
 module.exports.uniqueAlerts = uniqueAlerts;
