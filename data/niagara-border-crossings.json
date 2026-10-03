@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-02",
+  "crossings": [
+    {
+      "id": "peace",
+      "name": "Peace Bridge",
+      "short_name": "Peace Bridge",
+      "operator": "Buffalo and Fort Erie Public Bridge Authority",
+      "operator_url": "https://www.peacebridge.com/",
+      "traffic_url": "https://www.peacebridge.com/Traffic/index.php",
+      "cbp_port_number": "090101",
+      "cbsa_name": "Fort Erie (Peace Bridge)",
+      "hours": "Open 24 hours",
+      "route": "Buffalo ↔ Fort Erie · I-190 / QEW",
+      "eligibility": {
+        "passenger": true,
+        "commercial": true,
+        "pedestrian": true,
+        "bicycle": true,
+        "bus": true,
+        "tow": true
+      },
+      "nexus_required": false,
+      "nexus": {
+        "supported": true,
+        "to_canada": "Dedicated NEXUS service is published by the bridge authority; Canada-bound service operates 24 hours.",
+        "to_us": "Dedicated NEXUS service is published by the bridge authority; lane hours vary by day."
+      },
+      "restrictions": [],
+      "toll": {
+        "to_canada": "$4 USD E-ZPass / $8 USD standard passenger rate",
+        "to_us": "No bridge toll",
+        "source_url": "https://www.peacebridge.com/e-zpass/"
+      },
+      "cameras": [
+        {
+          "label": "Peace Bridge cameras",
+          "source_name": "NITTEC",
+          "url": "https://www.nittec.org/cameras/"
+        }
+      ]
+    },
+    {
+      "id": "rainbow",
+      "name": "Rainbow Bridge",
+      "short_name": "Rainbow Bridge",
+      "operator": "Niagara Falls Bridge Commission",
+      "operator_url": "https://www.niagarafallsbridges.com/",
+      "traffic_url": "https://www.niagarafallsbridges.com/services/traffic-conditions",
+      "cbp_port_number": "090102",
+      "cbsa_name": "Niagara Falls Rainbow Bridge(Travellers only)",
+      "hours": "Open 24 hours",
+      "route": "Niagara Falls, NY ↔ Niagara Falls, ON · I-190 / Highway 420",
+      "eligibility": {
+        "passenger": true,
+        "commercial": false,
+        "pedestrian": true,
+        "bicycle": true,
+        "bus": true,
+        "tow": true
+      },
+      "nexus_required": false,
+      "nexus": {
+        "supported": true,
+        "to_canada": "No dedicated NEXUS wait is published by CBSA for Rainbow Bridge; use passenger processing.",
+        "to_us": "NEXUS travelers may cross, but the NFBC live table does not publish a dedicated Rainbow NEXUS wait."
+      },
+      "restrictions": [
+        "No commercial vehicles or trucks."
+      ],
+      "toll": {
+        "to_canada": "$6 USD / $8.50 CAD passenger rate",
+        "to_us": "No bridge toll",
+        "source_url": "https://www.niagarafallsbridges.com/crossing-info/toll-cost-vehicle-definitions"
+      },
+      "cameras": [
+        {
+          "label": "Rainbow Bridge cameras",
+          "source_name": "NITTEC",
+          "url": "https://www.nittec.org/cameras/"
+        }
+      ]
+    },
+    {
+      "id": "whirlpool",
+      "name": "Whirlpool Rapids Bridge",
+      "short_name": "Whirlpool Rapids",
+      "operator": "Niagara Falls Bridge Commission",
+      "operator_url": "https://www.niagarafallsbridges.com/",
+      "traffic_url": "https://www.niagarafallsbridges.com/services/traffic-conditions",
+      "cbp_port_number": "090103",
+      "cbsa_name": null,
+      "hours": "7:00 a.m. to 11:00 p.m.",
+      "route": "Niagara Falls, NY ↔ Niagara Falls, ON · NEXUS-only",
+      "eligibility": {
+        "passenger": true,
+        "commercial": false,
+        "pedestrian": false,
+        "bicycle": false,
+        "bus": false,
+        "tow": false
+      },
+      "nexus_required": true,
+      "nexus": {
+        "supported": true,
+        "to_canada": "NEXUS card required.",
+        "to_us": "NEXUS card required; Global Entry is accepted U.S.-bound only according to NFBC."
+      },
+      "restrictions": [
+        "NEXUS cardholders only, except Global Entry is permitted U.S.-bound.",
+        "No commercial vehicles or trucks.",
+        "No pedestrians or bicycles.",
+        "Nothing in tow."
+      ],
+      "toll": {
+        "to_canada": "$6 USD / $8.50 CAD passenger rate",
+        "to_us": "No bridge toll",
+        "source_url": "https://www.niagarafallsbridges.com/crossing-info/toll-cost-vehicle-definitions"
+      },
+      "cameras": [
+        {
+          "label": "NFBC / NITTEC traffic cameras",
+          "source_name": "Niagara Falls Bridge Commission",
+          "url": "https://www.niagarafallsbridges.com/services/traffic-conditions"
+        }
+      ],
+      "dynamic_note": "NFBC states real-time technology is not currently available for Whirlpool; operator values are updated hourly."
+    },
+    {
+      "id": "lewiston-queenston",
+      "name": "Lewiston–Queenston Bridge",
+      "short_name": "Lewiston–Queenston",
+      "operator": "Niagara Falls Bridge Commission",
+      "operator_url": "https://www.niagarafallsbridges.com/",
+      "traffic_url": "https://www.niagarafallsbridges.com/services/traffic-conditions",
+      "cbp_port_number": "090104",
+      "cbsa_name": "Queenston Lewiston Bridge (Travellers and Commercial)",
+      "hours": "Open 24 hours",
+      "route": "Lewiston, NY ↔ Queenston, ON · I-190 / Highway 405",
+      "eligibility": {
+        "passenger": true,
+        "commercial": true,
+        "pedestrian": false,
+        "bicycle": true,
+        "bus": true,
+        "tow": true
+      },
+      "nexus_required": false,
+      "nexus": {
+        "supported": true,
+        "to_canada": "Dedicated NEXUS lane published daily 8:00 a.m.–8:00 p.m.",
+        "to_us": "Dedicated NEXUS lane published Monday–Friday 6:00–8:00 a.m., excluding holidays."
+      },
+      "restrictions": [
+        "No pedestrians."
+      ],
+      "toll": {
+        "to_canada": "$6 USD / $8.50 CAD passenger rate",
+        "to_us": "No bridge toll",
+        "source_url": "https://www.niagarafallsbridges.com/crossing-info/toll-cost-vehicle-definitions"
+      },
+      "cameras": [
+        {
+          "label": "Lewiston–Queenston cameras",
+          "source_name": "NITTEC",
+          "url": "https://www.nittec.org/cameras/"
+        }
+      ]
+    }
+  ],
+  "diversion_policy": {
+    "description": "Conservative bridge-switch buffers are product guardrails, not live route estimates. They intentionally make it harder to recommend a detour without a clearly larger wait-time benefit.",
+    "minimum_net_benefit_minutes": 10,
+    "buffers": {
+      "peace": {
+        "peace": 0,
+        "rainbow": 30,
+        "whirlpool": 35,
+        "lewiston-queenston": 40
+      },
+      "rainbow": {
+        "peace": 30,
+        "rainbow": 0,
+        "whirlpool": 10,
+        "lewiston-queenston": 20
+      },
+      "whirlpool": {
+        "peace": 35,
+        "rainbow": 10,
+        "whirlpool": 0,
+        "lewiston-queenston": 15
+      },
+      "lewiston-queenston": {
+        "peace": 40,
+        "rainbow": 20,
+        "whirlpool": 15,
+        "lewiston-queenston": 0
+      }
+    }
+  }
+}
