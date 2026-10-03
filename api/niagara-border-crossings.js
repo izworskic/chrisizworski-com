@@ -29,7 +29,7 @@ async function fetchSource(url, type) {
       accept: type === "text" ? "text/html, text/csv, text/plain" : "application/geo+json, application/json",
       "user-agent": USER_AGENT,
     },
-    signal: AbortSignal.timeout(12_000),
+    signal: AbortSignal.timeout(8_000),
   });
   if (!response.ok) throw new Error(`Source returned ${response.status}`);
   return type === "text" ? response.text() : response.json();
@@ -39,7 +39,7 @@ function sourceState(result, name, url, role) {
   return { name, url, role, available: result.status === "fulfilled" };
 }
 
-async function resolveCbsaPayload(primaryResult) {
+function resolveCbsaPayload(primaryResult, htmlResult) {
   if (primaryResult?.status === "fulfilled") {
     const primaryText = String(primaryResult.value || "");
     if (parseCbsaCsv(primaryText).size > 0) {
@@ -51,14 +51,11 @@ async function resolveCbsaPayload(primaryResult) {
     }
   }
 
-  try {
-    const html = await fetchSource(URLS.cbsaHtml, "text");
-    const converted = cbsaWaitHtmlToLegacyCsv(html);
+  if (htmlResult?.status === "fulfilled") {
+    const converted = cbsaWaitHtmlToLegacyCsv(htmlResult.value);
     if (converted && parseCbsaCsv(converted).size > 0) {
       return { available: true, text: converted, mode: "html-fallback", url: URLS.cbsaHtml };
     }
-  } catch {
-    // Preserve fail-safe behavior below if both official CBSA surfaces fail.
   }
 
   return { available: false, text: "", mode: "unavailable", url: URLS.cbsaHtml };
@@ -113,10 +110,11 @@ module.exports = async function handler(req, res) {
   }
 
   const selection = normalizeSelection(req.query || {});
-  const [cbpResult, cbsaResult, nfbcResult, peaceResult, nwsBuffaloResult, nwsNiagaraResult, nwsLewistonResult, ecccResult] =
+  const [cbpResult, cbsaResult, cbsaHtmlResult, nfbcResult, peaceResult, nwsBuffaloResult, nwsNiagaraResult, nwsLewistonResult, ecccResult] =
     await Promise.allSettled([
       fetchSource(URLS.cbp, "json"),
       fetchSource(URLS.cbsa, "text"),
+      fetchSource(URLS.cbsaHtml, "text"),
       fetchSource(URLS.nfbc, "text"),
       fetchSource(URLS.peace, "text"),
       fetchSource(URLS.nwsBuffalo, "json"),
@@ -125,7 +123,7 @@ module.exports = async function handler(req, res) {
       fetchSource(URLS.eccc, "json"),
     ]);
 
-  const cbsaResolved = await resolveCbsaPayload(cbsaResult);
+  const cbsaResolved = resolveCbsaPayload(cbsaResult, cbsaHtmlResult);
   const nfbc = nfbcResult.status === "fulfilled"
     ? parseOperatorTrafficHtml(nfbcResult.value, "Niagara Falls Bridge Commission", URLS.nfbc)
     : null;
