@@ -25,6 +25,7 @@
 <link rel="stylesheet" href="/assets/michigan-border-crossings.20261003d.css">
 <link rel="stylesheet" href="/assets/niagara-border-experience.20261003d.css">
 <link rel="stylesheet" href="/assets/niagara-visual-layer.20261003.css">
+<link rel="stylesheet" href="/assets/niagara-persona-polish.20261003.css?v=20261003a">
 <style>
 @media(max-width:620px){.niagara-page .trip-answer{scroll-margin-top:12px}}
 /* Critical readability fallback: light traveler surfaces must stay readable even if a stylesheet is delayed. */
@@ -98,7 +99,7 @@
 <script defer src="/assets/niagara-border-crossing.20261003d.js"></script>
 <script defer src="/assets/niagara-visual-layer.20261003.js"></script>
 </head>
-<body class="niagara-page" data-analytics-page="niagara-border-crossing" data-ui-revision="20261003f">
+<body class="niagara-page" data-analytics-page="niagara-border-crossing" data-ui-revision="20261003i">
 <a class="skip-link" href="#decision">Skip to crossing decision</a>
 <header class="site-header">
   <a class="site-name" href="/">Chris Izworski</a>
@@ -167,21 +168,21 @@
           <option value="pedestrian">Walking</option>
           <option value="bicycle">Bicycle</option>
         </select>
-        <span class="control-help" id="travelerHelp">We compare the lane or traveler type the official source actually reports.</span>
+        <span class="control-help" id="travelerHelp">We compare only waits the official source actually reports. We do not substitute a car wait for walking, bicycles, buses or trailers.</span>
         <div id="commercialOptions" hidden style="margin-top:8px;font:11px/1.4 var(--sans)">
           <input type="checkbox" id="oversizeToggle">
           <label for="oversizeToggle">Oversize / special commercial vehicle</label>
         </div>
       </div>
       <div class="control-group">
-        <label class="field-label" for="preferredSelect">Where would you cross if waits were equal?</label>
+        <label class="field-label" for="preferredSelect">Which corridor already fits your trip?</label>
         <select class="select-control" id="preferredSelect" aria-describedby="preferredHelp">
-          <option value="rainbow">Niagara Falls → Rainbow Bridge</option>
-          <option value="peace">Buffalo / Fort Erie → Peace Bridge</option>
-          <option value="lewiston-queenston">Lewiston / Queenston → Lewiston–Queenston</option>
-          <option value="whirlpool">NEXUS Falls route → Whirlpool Rapids</option>
+          <option value="rainbow">Niagara Falls / tourist district → Rainbow</option>
+          <option value="peace">Buffalo / Fort Erie / QEW → Peace</option>
+          <option value="lewiston-queenston">Lewiston / Niagara-on-the-Lake / Hwy 405 → Lewiston–Queenston</option>
+          <option value="whirlpool">NEXUS near Niagara Falls → Whirlpool Rapids</option>
         </select>
-        <span class="control-help" id="preferredHelp">This keeps a tiny wait difference from sending you on a needless detour.</span>
+        <span class="control-help" id="preferredHelp">Choose the area you are already headed toward. We only recommend leaving that corridor when the reported savings justify the extra drive.</span>
       </div>
     </div>
 
@@ -194,6 +195,7 @@
           <h2 id="decisionHeading"><span id="decisionHeadline">Loading official crossing data…</span></h2>
           <p id="decisionReason">Checking the live reports that match your direction and traveler type.</p>
           <div class="refresh-row"><span class="scene-note" id="decisionSceneNote" style="color:rgba(255,255,255,.72)">Your bridge-by-bridge comparison will appear below.</span><button class="refresh-button" type="button" id="refreshButton">↻ Refresh now</button></div>
+          <nav class="decision-shortcuts" aria-label="Check before you commit"><a href="#bridgeCameras">Live cameras</a><a href="#bridgeMap">Bridge map</a><a href="#eligibilityRules">Rules &amp; tolls</a></nav>
         </div>
         <div class="trip-checked"><span>Checked</span><strong id="freshnessTime">Loading…</strong></div>
       </div>
@@ -234,7 +236,7 @@
     <div class="compare-grid" id="compareGrid"></div>
   </section>
 
-  <section class="support-card bridge-orientation" aria-labelledby="orientationHeading">
+  <section class="support-card bridge-orientation" id="bridgeMap" aria-labelledby="orientationHeading">
     <div class="section-top"><div><p class="eyebrow">Get oriented</p><h2 id="orientationHeading">See where the four crossings actually are</h2><p>The map spans the Niagara River from Buffalo and Fort Erie north through Niagara Falls to Lewiston and Queenston. Tap a marker for the bridge role and its camera source when one is available.</p></div></div>
     <div class="river-map">
       <div class="niagara-visual-map">
@@ -318,7 +320,7 @@
     </div>
   </section>
 
-  <section class="support-card" aria-labelledby="eligibilityHeading">
+  <section class="support-card" id="eligibilityRules" aria-labelledby="eligibilityHeading">
     <div class="section-top"><div><p class="eyebrow">Know before you enter the approach</p><h2 id="eligibilityHeading">Who can use each bridge</h2><p>The important restrictions stay available even if a live wait feed goes down.</p></div></div>
     <div class="eligibility-table-wrap"><table class="eligibility-table"><thead><tr><th>Crossing</th><th>Your trip</th><th>Hours</th><th>Toll this way</th><th>Key rule</th></tr></thead><tbody id="eligibilityBody"><tr><td colspan="5">Loading bridge rules…</td></tr></tbody></table></div>
   </section>
