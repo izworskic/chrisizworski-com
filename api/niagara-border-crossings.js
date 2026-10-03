@@ -4,12 +4,14 @@ const {
   normalizeSelection,
   parseOperatorTrafficHtml,
 } = require("../lib/niagara-border-crossings");
-const { cleanText, normalizeNwsAlerts } = require("../lib/border-crossings");
+const { cleanText, normalizeNwsAlerts, parseCbsaCsv } = require("../lib/border-crossings");
+const { cbsaWaitHtmlToLegacyCsv } = require("../lib/niagara-cbsa-html");
 const experienceData = require("../data/niagara-crossing-experience.json");
 
 const URLS = Object.freeze({
   cbp: "https://bwt.cbp.gov/api/bwtnew",
   cbsa: "https://www.cbsa-asfc.gc.ca/bwt-taf/bwt-eng.csv",
+  cbsaHtml: "https://www.cbsa-asfc.gc.ca/bwt-taf/menu-eng.html",
   nfbc: "https://www.niagarafallsbridges.com/services/traffic-conditions",
   peace: "https://www.peacebridge.com/Traffic/index.php",
   nwsBuffalo: "https://api.weather.gov/alerts/active?point=42.8864,-78.8784",
@@ -35,6 +37,31 @@ async function fetchSource(url, type) {
 
 function sourceState(result, name, url, role) {
   return { name, url, role, available: result.status === "fulfilled" };
+}
+
+async function resolveCbsaPayload(primaryResult) {
+  if (primaryResult?.status === "fulfilled") {
+    const primaryText = String(primaryResult.value || "");
+    if (parseCbsaCsv(primaryText).size > 0) {
+      return { available: true, text: primaryText, mode: "csv", url: URLS.cbsa };
+    }
+    const convertedPrimary = cbsaWaitHtmlToLegacyCsv(primaryText);
+    if (convertedPrimary && parseCbsaCsv(convertedPrimary).size > 0) {
+      return { available: true, text: convertedPrimary, mode: "html-primary", url: URLS.cbsa };
+    }
+  }
+
+  try {
+    const html = await fetchSource(URLS.cbsaHtml, "text");
+    const converted = cbsaWaitHtmlToLegacyCsv(html);
+    if (converted && parseCbsaCsv(converted).size > 0) {
+      return { available: true, text: converted, mode: "html-fallback", url: URLS.cbsaHtml };
+    }
+  } catch {
+    // Preserve fail-safe behavior below if both official CBSA surfaces fail.
+  }
+
+  return { available: false, text: "", mode: "unavailable", url: URLS.cbsaHtml };
 }
 
 function normalizeEcccAlerts(payload) {
@@ -98,6 +125,7 @@ module.exports = async function handler(req, res) {
       fetchSource(URLS.eccc, "json"),
     ]);
 
+  const cbsaResolved = await resolveCbsaPayload(cbsaResult);
   const nfbc = nfbcResult.status === "fulfilled"
     ? parseOperatorTrafficHtml(nfbcResult.value, "Niagara Falls Bridge Commission", URLS.nfbc)
     : null;
@@ -107,7 +135,7 @@ module.exports = async function handler(req, res) {
 
   const crossings = attachExperience(mergeNiagaraSources(
     cbpResult.status === "fulfilled" ? cbpResult.value : [],
-    cbsaResult.status === "fulfilled" ? cbsaResult.value : "",
+    cbsaResolved.text,
     { nfbc, peace },
   ));
   const decision = compareNiagaraCrossings(crossings, selection, new Date());
@@ -121,7 +149,13 @@ module.exports = async function handler(req, res) {
 
   const sources = {
     to_us_waits: sourceState(cbpResult, "U.S. Customs and Border Protection", "https://bwt.cbp.gov/", "PRIMARY AUTHORITY — U.S.-bound border processing"),
-    to_canada_waits: sourceState(cbsaResult, "Canada Border Services Agency", "https://www.cbsa-asfc.gc.ca/bwt-taf/menu-eng.html", "PRIMARY AUTHORITY — Canada-bound processing at Peace, Rainbow and Lewiston–Queenston"),
+    to_canada_waits: {
+      name: "Canada Border Services Agency",
+      url: "https://www.cbsa-asfc.gc.ca/bwt-taf/menu-eng.html",
+      role: "PRIMARY AUTHORITY — Canada-bound processing at Peace, Rainbow and Lewiston–Queenston",
+      available: cbsaResolved.available,
+      ingestion_mode: cbsaResolved.mode,
+    },
     nfbc_operations: sourceState(nfbcResult, "Niagara Falls Bridge Commission", URLS.nfbc, "PRIMARY AUTHORITY — Rainbow, Whirlpool Rapids and Lewiston–Queenston bridge operations; Whirlpool wait context"),
     peace_operations: sourceState(peaceResult, "Buffalo and Fort Erie Public Bridge Authority", URLS.peace, "PRIMARY AUTHORITY — Peace Bridge operations"),
     nws_weather: {
@@ -145,7 +179,7 @@ module.exports = async function handler(req, res) {
   const body = {
     fetched_at: new Date().toISOString(),
     selection,
-    degraded: cbpResult.status !== "fulfilled" || cbsaResult.status !== "fulfilled" || nfbcResult.status !== "fulfilled" || peaceResult.status !== "fulfilled",
+    degraded: cbpResult.status !== "fulfilled" || !cbsaResolved.available || nfbcResult.status !== "fulfilled" || peaceResult.status !== "fulfilled",
     decision,
     crossings,
     warnings: {
@@ -170,4 +204,5 @@ module.exports = async function handler(req, res) {
 module.exports.URLS = URLS;
 module.exports.attachExperience = attachExperience;
 module.exports.normalizeEcccAlerts = normalizeEcccAlerts;
+module.exports.resolveCbsaPayload = resolveCbsaPayload;
 module.exports.uniqueAlerts = uniqueAlerts;
