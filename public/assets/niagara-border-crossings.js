@@ -55,85 +55,101 @@
       bus: "Bus",
       tow: "RV / vehicle in tow",
     };
-    return labels[state.vehicle] || "Traveler";
+    var base = labels[state.vehicle] || "Traveler";
+    if (state.program === "nexus") return base + " · NEXUS";
+    if (state.program === "global_entry") return base + " · Global Entry";
+    return base;
   }
 
-  function freshnessLabel(wait) {
-    var freshness = wait && wait.freshness;
-    if (!freshness) return "Freshness unknown";
-    if (freshness.state === "current") return freshness.age_minutes == null ? "Current" : "Current · " + freshness.age_minutes + "m old";
+  function freshnessLabel(freshness) {
+    if (!freshness) return "Freshness not applicable";
+    if (freshness.state === "fresh") return freshness.age_minutes == null ? "Fresh" : "Fresh · " + freshness.age_minutes + "m old";
     if (freshness.state === "stale") return "Stale · " + freshness.age_minutes + "m old";
     if (freshness.state === "expired") return "Expired · " + freshness.age_minutes + "m old";
+    if (freshness.state === "unavailable") return "Unavailable";
     return "Freshness unknown";
   }
 
   function decisionClass(decision) {
     if (!decision) return "";
-    if (["INSUFFICIENT_DATA"].includes(decision.state)) return " is-danger";
-    if (["COMPARABLE_OPTIONS", "BEST_CURRENT_CROSSING"].includes(decision.state)) return " is-warning";
+    if (decision.state === "INSUFFICIENT_DATA") return " is-danger";
+    if (decision.state === "COMPARABLE_OPTIONS") return " is-warning";
     return "";
   }
 
   function renderDecision(payload) {
-    var decision = payload.decision;
+    var decision = payload.decision || {};
     byId("comparisonEyebrow").textContent = directionLabel() + " · " + vehicleLabel();
     byId("decisionState").className = "decision-state" + decisionClass(decision);
     byId("decisionState").textContent = String(decision.state || "CURRENT DECISION").replace(/_/g, " ");
     byId("comparisonHeadline").textContent = decision.headline || "Current comparison unavailable";
-    byId("comparisonNote").textContent = decision.note || "Use the official crossing links below.";
-    byId("netAdvantage").textContent = Number.isFinite(decision.advantage_minutes) && decision.advantage_minutes > 0
-      ? "Net advantage after diversion buffer: about " + decision.advantage_minutes + " min"
+    byId("comparisonNote").textContent = decision.reason || "Use the official crossing links below.";
+    byId("netAdvantage").textContent = Number.isFinite(decision.net_benefit_minutes) && decision.net_benefit_minutes > 0
+      ? "Net advantage after diversion buffer: about " + decision.net_benefit_minutes + " min"
       : "";
     byId("freshnessTime").textContent = new Date(payload.fetched_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
   }
 
+  function resultPresentation(result, recommendedId) {
+    var eligible = Boolean(result.eligibility && result.eligibility.eligible);
+    if (!eligible || result.state === "CROSSING_INELIGIBLE") {
+      return { wait: "Not eligible", kicker: "Eliminated by crossing rules", unknown: true };
+    }
+    if (result.state === "RESTRICTION_ACTIVE") {
+      return { wait: "Approval required", kicker: "Restriction requires operator review", unknown: true };
+    }
+    if (result.state === "CROSSING_CLOSED") {
+      return { wait: "Closed", kicker: "Do not use this crossing", unknown: true };
+    }
+    if (result.state === "SOURCE_CONFLICT") {
+      return { wait: "Source conflict", kicker: "Official observations disagree", unknown: true };
+    }
+    if (result.context_only || result.state === "OPERATOR_CONTEXT_ONLY") {
+      return { wait: result.display || "Operator context", kicker: "Operator context only · not used to justify a detour", unknown: false };
+    }
+    if (result.state === "SOURCE_STALE") {
+      return { wait: result.display || "Stale", kicker: "Wait is too old for recommendation logic", unknown: false };
+    }
+    if (Number.isFinite(result.wait_minutes)) {
+      return {
+        wait: result.display || (result.wait_minutes === 0 ? "No delay" : result.wait_minutes + " min"),
+        kicker: result.id === recommendedId ? "Current recommendation" : "Current eligible option",
+        unknown: false,
+      };
+    }
+    return { wait: "Not comparable", kicker: "Eligible · live comparison unavailable", unknown: true };
+  }
+
   function renderCrossings(payload) {
     var crossings = new Map(payload.crossings.map(function (crossing) { return [crossing.id, crossing]; }));
-    var recommendedId = payload.decision.recommended_id;
-    byId("niagaraCrossingGrid").innerHTML = payload.decision.results.map(function (result) {
+    var recommendedId = payload.decision && payload.decision.recommended_id;
+    byId("niagaraCrossingGrid").innerHTML = (payload.decision.results || []).map(function (result) {
       var crossing = crossings.get(result.id) || {};
+      var eligible = Boolean(result.eligibility && result.eligibility.eligible);
       var classes = ["crossing-result"];
       if (result.id === recommendedId) classes.push("is-fastest");
-      if (!result.eligible) classes.push("is-ineligible");
-      if (result.source_conflict) classes.push("is-conflict");
-      if (!result.comparable && result.eligible) classes.push("is-unavailable");
+      if (!eligible) classes.push("is-ineligible");
+      if (result.state === "SOURCE_CONFLICT") classes.push("is-conflict");
+      if (!result.usable_for_recommendation && eligible) classes.push("is-unavailable");
 
-      var waitText = "Not comparable";
-      var kicker = "Eligible · live comparison unavailable";
-      if (!result.eligible) {
-        waitText = "Not eligible";
-        kicker = "Eliminated by crossing rules";
-      } else if (result.closed) {
-        waitText = "Closed";
-        kicker = "Do not use this crossing";
-      } else if (result.source_conflict) {
-        waitText = "Source conflict";
-        kicker = "Official observations disagree";
-      } else if (result.wait && result.wait.available) {
-        waitText = result.wait.display || (result.wait.wait_minutes + " min");
-        kicker = result.wait.context_only ? "Operator context only" : result.id === recommendedId ? "Current recommendation" : "Current eligible option";
-      }
-
-      var sourceName = state.direction === "to_us"
-        ? crossing.waits && crossing.waits.to_us && crossing.waits.to_us.source_name
-        : crossing.waits && crossing.waits.to_canada && crossing.waits.to_canada.source_name;
-      if (result.wait && result.wait.source_name) sourceName = result.wait.source_name;
-      var detail = result.eligibility_reason || crossing.route || "Niagara River crossing";
+      var presentation = resultPresentation(result, recommendedId);
+      var detail = result.note || (result.eligibility && result.eligibility.reason) || crossing.route || "Niagara River crossing";
       var buffer = result.diversion_buffer_minutes === 0
         ? "On your selected approach"
         : "Conservative switch buffer: " + result.diversion_buffer_minutes + " min";
+      var sourceName = result.source && result.source.name || crossing.operator || "Official source";
 
       return '<article class="' + classes.join(" ") + '" data-crossing-result="' + esc(result.id) + '">' +
-        '<p class="result-kicker">' + esc(kicker) + '</p>' +
+        '<p class="result-kicker">' + esc(presentation.kicker) + '</p>' +
         '<h4>' + esc(result.name) + '</h4>' +
-        '<strong class="wait-value' + (!result.wait || !result.wait.available ? ' is-unknown' : '') + '">' + esc(waitText) + '</strong>' +
+        '<strong class="wait-value' + (presentation.unknown ? ' is-unknown' : '') + '">' + esc(presentation.wait) + '</strong>' +
         '<p class="wait-detail">' + esc(detail) + '</p>' +
         '<div class="result-meta">' +
-          '<span><strong>Route:</strong> ' + esc(crossing.route || "—") + '</span>' +
+          '<span><strong>Route:</strong> ' + esc(crossing.route || result.route || "—") + '</span>' +
           '<span><strong>Diversion:</strong> ' + esc(buffer) + '</span>' +
-          '<span><strong>Data:</strong> ' + esc(freshnessLabel(result.wait)) + '</span>' +
+          '<span><strong>Data:</strong> ' + esc(freshnessLabel(result.freshness)) + '</span>' +
         '</div>' +
-        '<p class="source-line">' + esc(sourceName || crossing.operator || "Official source") + '</p>' +
+        '<p class="source-line">' + esc(sourceName) + '</p>' +
         '<div class="result-actions"><a href="' + esc(crossing.traffic_url || crossing.operator_url || "#sources") + '" target="_blank" rel="noopener">Official traffic</a>' +
         '<button class="link-button" type="button" data-map-crossing="' + esc(result.id) + '">Show on map</button></div>' +
       '</article>';
@@ -166,32 +182,32 @@
   function renderWarnings(payload) {
     var alerts = payload.warnings && payload.warnings.weather || [];
     if (!alerts.length) {
-      byId("weatherWarnings").innerHTML = '<div class="all-clear">No active NWS alert returned for the Buffalo or Niagara approach points.</div>';
+      byId("weatherWarnings").innerHTML = '<div class="all-clear">No active NWS or Environment Canada alert was returned for the Niagara crossing area.</div>';
     } else {
-      byId("weatherWarnings").innerHTML = '<ul class="alert-list">' + alerts.slice(0, 6).map(function (alert) {
-        return '<li class="alert-item"><strong>' + esc(alert.headline) + '</strong><span>' + esc(alert.region) + ' · ' + esc(alert.severity) + '</span></li>';
+      byId("weatherWarnings").innerHTML = '<ul class="alert-list">' + alerts.slice(0, 8).map(function (alert) {
+        var region = alert.region ? alert.region + " · " : "";
+        return '<li class="alert-item"><strong>' + esc(alert.headline) + '</strong><span>' + esc(region + (alert.severity || alert.source || "Official weather alert")) + '</span></li>';
       }).join("") + '</ul>';
     }
 
-    var crossing = payload.crossings.find(function (item) { return item.id === state.approach_id; });
-    var events = crossing && crossing.approach_traffic || [];
-    if (!events.length) {
-      byId("approachEvents").innerHTML = '<div class="all-clear">No official approach events are available in the configured feeds for this crossing.</div>';
-    } else {
-      byId("approachEvents").innerHTML = '<ul class="alert-list">' + events.map(function (event) {
-        return '<li class="alert-item"><strong>' + esc(event.roadway || event.event_type || "Road event") + '</strong><span>' + esc(event.description || "Official road event") + '</span></li>';
-      }).join("") + '</ul>';
-    }
+    byId("approachEvents").innerHTML =
+      '<div class="source-status"><strong>Official approach systems</strong>' +
+      '<div>V1 does not silently scrape key-gated 511 APIs or convert camera imagery into a traffic estimate.</div>' +
+      '<div class="result-actions"><a href="https://www.nittec.org/" target="_blank" rel="noopener">NITTEC</a>' +
+      '<a href="https://511ny.org/" target="_blank" rel="noopener">511NY</a>' +
+      '<a href="https://511on.ca/" target="_blank" rel="noopener">Ontario 511</a></div></div>';
   }
 
   function renderSources(payload) {
     var sources = payload.sources || {};
     byId("sourceStatusGrid").innerHTML = Object.keys(sources).map(function (key) {
       var source = sources[key] || {};
-      var status = source.available ? "Available" : source.configured === false ? "Not configured" : "Unavailable";
+      var status = source.available === true ? "Available" : source.integrated === false ? "Official links only" : "Unavailable";
+      var url = source.url || (Array.isArray(source.urls) ? source.urls[0] : null);
       return '<div class="source-status"><strong>' + esc(source.name || key) + '</strong><span>' + esc(status) + '</span>' +
-        (source.note ? '<div>' + esc(source.note) + '</div>' : '') +
-        (source.url ? '<div><a href="' + esc(source.url) + '" target="_blank" rel="noopener">Official source</a></div>' : '') +
+        (source.role ? '<div>' + esc(source.role) + '</div>' : '') +
+        (source.reason ? '<div>' + esc(source.reason) + '</div>' : '') +
+        (url ? '<div><a href="' + esc(url) + '" target="_blank" rel="noopener">Official source</a></div>' : '') +
       '</div>';
     }).join("");
   }
@@ -214,12 +230,13 @@
     if (!state.map || !window.L) return;
     state.markers.forEach(function (marker) { marker.remove(); });
     state.markers = [];
-    var resultMap = new Map(payload.decision.results.map(function (result) { return [result.id, result]; }));
+    var resultMap = new Map((payload.decision.results || []).map(function (result) { return [result.id, result]; }));
     payload.crossings.forEach(function (crossing) {
       var point = MAP_POINTS[crossing.id];
       if (!point) return;
       var result = resultMap.get(crossing.id) || {};
-      var status = !result.eligible ? "Not eligible" : result.closed ? "Closed" : result.wait && result.wait.available ? (result.wait.display || "Wait reported") : "No comparable live wait";
+      var eligible = Boolean(result.eligibility && result.eligibility.eligible);
+      var status = !eligible ? "Not eligible" : result.state === "CROSSING_CLOSED" ? "Closed" : Number.isFinite(result.wait_minutes) ? (result.display || "Wait reported") : "No comparable live wait";
       var marker = window.L.marker(point).addTo(state.map).bindPopup(
         '<strong>' + esc(crossing.name) + '</strong><br>' + esc(status) + '<br>' + esc(crossing.route || "")
       );
@@ -246,7 +263,7 @@
     renderWarnings(payload);
     renderSources(payload);
     renderMap(payload);
-    byId("ribbonStatus").textContent = payload.degraded ? "Official wait feeds partially degraded" : "Official Niagara wait feeds connected";
+    byId("ribbonStatus").textContent = payload.degraded ? "Official sources partially degraded" : "Official Niagara sources connected";
     byId("liveDot").className = "live-dot " + (payload.degraded ? "is-degraded" : "is-live");
     byId("ribbonTime").textContent = "Checked " + new Date(payload.fetched_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
   }
