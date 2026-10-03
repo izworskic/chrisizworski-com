@@ -24,14 +24,16 @@ test('first decision surface includes direction, traveler and natural route cont
   assert.match(PAGE, /id="travelerSelect"/);
   assert.match(PAGE, /id="preferredSelect"/);
   assert.match(PAGE, /id="oversizeToggle"/);
+  assert.match(PAGE, /for="travelerSelect"/);
+  assert.match(PAGE, /for="oversizeToggle"/);
 });
 
 test('live reality and journey are driven from the actual decision payload', () => {
   assert.match(JS, /function renderReality\(payload\)/);
   assert.match(JS, /function renderJourney\(payload\)/);
   assert.match(JS, /operator_validation/);
-  assert.match(JS, /result\.source\.name/);
-  assert.match(JS, /crossing\.toll\?\.\[state\.direction\]/);
+  assert.match(JS, /result\?\.source\?\.name/);
+  assert.match(JS, /crossing\?\.toll\?\.\[state\.direction\]/);
   assert.match(JS, /experience/);
 });
 
@@ -49,14 +51,20 @@ test('source health and methodology are progressive disclosure', () => {
   assert.match(PAGE, /<summary(?:\s+[^>]*)?>Official sources and live-feed health<\/summary>/);
 });
 
-test('390px mobile layout keeps the decision and journey compact', () => {
+test('390px mobile layout puts answer before controls and removes the large hero photo', () => {
   assert.match(CSS, /@media\(max-width:620px\)/);
+  assert.match(CSS, /\.hero-photo\{display:none\}/);
+  assert.match(CSS, /\.trip-desk\{display:flex;flex-direction:column/);
+  assert.match(CSS, /\.trip-answer\{order:1/);
+  assert.match(CSS, /\.trip-controls\{order:2/);
   assert.match(CSS, /\.bridge-choice-grid\{grid-template-columns:1fr 1fr/);
   assert.match(CSS, /\.journey-steps\{grid-template-columns:1fr\}/);
 });
 
-test('camera and official traffic actions are generated for the focused bridge', () => {
-  assert.match(JS, /Open live camera \/ traffic view/);
+test('camera action prefers the focused bridge specific official camera link', () => {
+  assert.match(JS, /function exactCameraLink\(crossing\)/);
+  assert.match(JS, /experience\?\.official_links\?\.find/);
+  assert.match(JS, /camera\|webcam/i);
   assert.match(JS, /crossing\.traffic_url/);
   assert.match(JS, /Open official border wait/);
 });
@@ -64,4 +72,68 @@ test('camera and official traffic actions are generated for the focused bridge',
 test('unknown approach state does not become a clear-roads claim', () => {
   assert.match(JS, /That is not a guarantee of clear roads/);
   assert.doesNotMatch(JS, /roads are clear/i);
+});
+
+test('stale waits cannot be presented as current live waits', () => {
+  assert.match(JS, /SOURCE_STALE/);
+  assert.match(JS, /Stale — recheck/);
+  assert.match(JS, /usable_for_recommendation/);
+  assert.match(JS, /it is not treated as current/i);
+});
+
+test('Whirlpool operator context stays operator context instead of border-agency corroboration', () => {
+  assert.match(JS, /source\?\.kind === "operator"/);
+  assert.match(JS, /operator context/i);
+  assert.match(JS, /does not have equivalent real-time wait technology/i);
+  assert.match(JS, /OPERATOR_CONTEXT_ONLY/);
+});
+
+test('bus and trailer travelers never inherit passenger operator context', () => {
+  assert.match(JS, /if \(state\.traveler === "passenger"\) return "passenger";[\s\S]*return null;/);
+});
+
+test('oversize commercial movement preserves approval-required state in the UI', () => {
+  assert.match(JS, /requires_approval/);
+  assert.match(JS, /Approval required/);
+  assert.match(CSS, /\.caution\{color:/);
+});
+
+test('closed crossings are described as closed before static eligibility copy', () => {
+  const currentRule = JS.slice(JS.indexOf('function currentRule'), JS.indexOf('function tripStatus'));
+  assert.ok(currentRule.indexOf('CROSSING_CLOSED') >= 0);
+  assert.ok(currentRule.indexOf('CROSSING_CLOSED') < currentRule.indexOf('eligibility?.eligible'));
+  assert.match(currentRule, /Do not enter this crossing/i);
+});
+
+test('weather feed failure is distinct from a successful no-alert response', () => {
+  assert.match(JS, /nws_weather\?\.available \|\| payload\?\.sources\?\.eccc_weather\?\.available/);
+  assert.match(JS, /Weather check unavailable/);
+  assert.match(JS, /Do not read the absence of alerts as an all-clear/i);
+  assert.match(CSS, /\.weather-unavailable\{/);
+});
+
+test('failed refresh clears every dependent live panel', () => {
+  const failure = JS.slice(JS.indexOf('function renderFailure'), JS.indexOf('function queryString'));
+  for (const marker of [
+    'latestPayload = null',
+    'crossingGrid.innerHTML',
+    'realityGrid.innerHTML',
+    'journeySteps.innerHTML',
+    'compareGrid.innerHTML',
+    'eligibilityBody.innerHTML',
+    'weatherAlerts.innerHTML',
+  ]) assert.match(failure, new RegExp(marker.replace('.', '\\.')));
+});
+
+test('journey exit copy uses side-specific destinations instead of parsing the display route', () => {
+  assert.match(JS, /Niagara Falls, Ontario and Highway 420/);
+  assert.match(JS, /Lewiston, New York and I-190/);
+  assert.match(JS, /destinationLabels\[crossing\?\.id\]\?\.\[state\.direction\]/);
+});
+
+test('no-JavaScript travelers get direct official-source guidance', () => {
+  assert.match(PAGE, /<noscript>/);
+  assert.match(PAGE, /Live comparison needs JavaScript/);
+  assert.match(PAGE, /https:\/\/bwt\.cbp\.gov\//);
+  assert.match(PAGE, /https:\/\/www\.cbsa-asfc\.gc\.ca\/bwt-taf\/menu-eng\.html/);
 });
