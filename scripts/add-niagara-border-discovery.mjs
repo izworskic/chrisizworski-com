@@ -5,7 +5,7 @@ const LASTMOD = '2026-10-03';
 const KEY = 'niagara-border-crossing';
 const NAME = 'Niagara Border Crossing Wait Times — Which Bridge Should You Take?';
 const DESC = 'Compare Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston with official directional border waits, hard vehicle eligibility, NEXUS rules, freshness and conservative diversion-aware guidance.';
-const VISUAL_ASSET_VERSION = '20261003g';
+const VISUAL_ASSET_VERSION = '20261003h';
 
 function patchTools() {
   const file = 'public/tools/index.html';
