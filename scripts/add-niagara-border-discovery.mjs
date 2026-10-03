@@ -151,7 +151,7 @@ function patchVisualAssets() {
     throw new Error('Niagara visual cache bust: expected visual asset references not found');
   }
   html = html.replace(cssPattern, cssUrl).replace(jsPattern, jsUrl);
-  html = html.replace(/data-ui-revision="[^"]+"/, `data-ui-revision="${VISUAL_ASSET_VERSION}` + '-livecams');
+  html = html.replace(/data-ui-revision="[^"]+"/, `data-ui-revision="${VISUAL_ASSET_VERSION}-livecams"`);
   fs.writeFileSync(file, html);
   console.log(`Niagara visual assets cache-busted to ${VISUAL_ASSET_VERSION}.`);
 }
