@@ -7,6 +7,7 @@ const NAME = 'Niagara Border Crossing Wait Times — Which Bridge Should You Tak
 const DESC = 'Compare Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston with official directional border waits, hard vehicle eligibility, NEXUS rules, freshness and conservative diversion-aware guidance.';
 const VISUAL_ASSET_VERSION = '20261003h';
 const FALLBACK_ASSET_VERSION = '20261003a';
+const ELIGIBILITY_ASSET_VERSION = '20261003a';
 
 function patchTools() {
   const file = 'public/tools/index.html';
@@ -147,8 +148,31 @@ function patchDecisionFallback() {
   console.log(`Niagara decision fallback loaded at ${FALLBACK_ASSET_VERSION}.`);
 }
 
+function patchEligibilityLabels() {
+  const file = 'public/niagara-border-crossing/index.html';
+  let html = fs.readFileSync(file, 'utf8');
+  const asset = `/assets/niagara-eligibility-labels.20261003.js?v=${ELIGIBILITY_ASSET_VERSION}`;
+  const assetPattern = /<script defer src="\/assets\/niagara-eligibility-labels\.20261003\.js(?:\?v=[^"]+)?"><\/script>/;
+  const fallbackAnchor = /<script defer src="\/assets\/niagara-decision-fallback\.20261003\.js(?:\?v=[^"]+)?"><\/script>/;
+  const visualAnchor = /<script defer src="\/assets\/niagara-visual-layer\.20261003\.js(?:\?v=[^"]+)?"><\/script>/;
+
+  if (assetPattern.test(html)) {
+    html = html.replace(assetPattern, `<script defer src="${asset}"></script>`);
+  } else if (fallbackAnchor.test(html)) {
+    html = html.replace(fallbackAnchor, (match) => `${match}\n<script defer src="${asset}"></script>`);
+  } else if (visualAnchor.test(html)) {
+    html = html.replace(visualAnchor, (match) => `${match}\n<script defer src="${asset}"></script>`);
+  } else {
+    throw new Error('Niagara eligibility labels: script anchor not found');
+  }
+
+  fs.writeFileSync(file, html);
+  console.log(`Niagara eligibility labels loaded at ${ELIGIBILITY_ASSET_VERSION}.`);
+}
+
 patchTools();
 patchSitemap();
 patchLlms();
 patchVisualAssets();
 patchDecisionFallback();
+patchEligibilityLabels();
