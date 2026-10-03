@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-03",
+  "crossings": {
+    "peace": {
+      "role": "Southern Buffalo–Fort Erie crossing",
+      "human_summary": "The natural full-service crossing when your trip already runs through Buffalo and Fort Erie, especially for commercial traffic or travelers who need pedestrian or bicycle access.",
+      "best_for": [
+        "Buffalo ↔ Fort Erie / QEW trips",
+        "Commercial trucks",
+        "Pedestrians and bicycles",
+        "Travelers who should not make a large northbound detour for a small wait difference"
+      ],
+      "approach_character": "U.S. traffic approaches from the Buffalo I-190 corridor; the Canadian side connects into Fort Erie and the QEW corridor.",
+      "on_the_ground": "This is the southern Niagara River crossing. Moving from Peace Bridge to the Falls-area bridges is a meaningful route change, so a small customs-wait advantage elsewhere is not enough to justify switching.",
+      "watch_for": "Passenger, commercial and trusted-traveler lanes can report different conditions. Pedestrians and bicycles use published inspection routing rather than vehicle lanes.",
+      "official_links": [
+        { "label": "Peace Bridge traffic", "url": "https://www.peacebridge.com/Traffic/index.php" },
+        { "label": "Peace Bridge Canadian webcams", "url": "https://www.peacebridge.com/media-room/canadian-webcams/" },
+        { "label": "Pedestrian crossing instructions", "url": "https://www.peacebridge.com/crossing-information/walk/" }
+      ]
+    },
+    "rainbow": {
+      "role": "Falls-district general traffic crossing",
+      "human_summary": "The most natural bridge for many Niagara Falls visitor trips because it connects the Niagara Falls districts on both sides and accepts general passenger, bus, trailer, pedestrian and bicycle traffic.",
+      "best_for": [
+        "Niagara Falls destination traffic",
+        "Passenger vehicles",
+        "Pedestrians and bicycles",
+        "Travelers whose route already centers on the Falls district"
+      ],
+      "approach_character": "The U.S. approach feeds from I-190 into Niagara Falls; the Canadian side connects toward Highway 420 and the QEW.",
+      "on_the_ground": "Rainbow and Whirlpool are geographically close, but they serve very different travelers: Rainbow is the general Falls crossing, while Whirlpool is a trusted-traveler specialist crossing.",
+      "watch_for": "Commercial trucks are not permitted. A short posted wait at another bridge still has to overcome the route-switch guardrail before the tool recommends leaving the Falls corridor.",
+      "official_links": [
+        { "label": "NFBC traffic conditions", "url": "https://www.niagarafallsbridges.com/services/traffic-conditions" },
+        { "label": "Rainbow Bridge camera", "url": "https://www.nittec.org/cameras/index.html?cid=1011" },
+        { "label": "Which Niagara bridge do I take?", "url": "https://www.niagarafallsbridges.com/crossing-info/which-bridge-do-i-take" }
+      ]
+    },
+    "whirlpool": {
+      "role": "Trusted-traveler specialist crossing",
+      "human_summary": "A specialized Niagara Falls crossing for NEXUS autos, with Global Entry accepted U.S.-bound only. It is not a general-purpose alternate bridge.",
+      "best_for": [
+        "Eligible NEXUS auto travelers",
+        "Global Entry travelers entering the U.S. only",
+        "Trips already positioned for the Whirlpool corridor"
+      ],
+      "approach_character": "The bridge sits in the Niagara Falls urban corridor between Rainbow and Lewiston–Queenston and operates on a more limited schedule than the other vehicle bridges.",
+      "on_the_ground": "Whirlpool can look attractive on a map because it is close to Rainbow, but eligibility is the first question. Its operator wait is hourly context rather than equivalent real-time evidence, so the engine will not use it to justify a switch.",
+      "watch_for": "NEXUS is required Canada-bound. No commercial trucks, pedestrians, bicycles or anything in tow. Published hours are 7:00 a.m. to 11:00 p.m.",
+      "official_links": [
+        { "label": "NFBC traffic conditions", "url": "https://www.niagarafallsbridges.com/services/traffic-conditions" },
+        { "label": "Whirlpool eligibility and directions", "url": "https://www.niagarafallsbridges.com/crossing-info/which-bridge-do-i-take" }
+      ]
+    },
+    "lewiston-queenston": {
+      "role": "Northern highway-oriented crossing",
+      "human_summary": "The northern Niagara option for passenger and commercial traffic, particularly trips naturally running through Lewiston, Queenston, Niagara-on-the-Lake or Highway 405.",
+      "best_for": [
+        "Northern Niagara routes",
+        "Commercial trucks",
+        "Passenger vehicles, buses and trailers",
+        "Bicycles"
+      ],
+      "approach_character": "The U.S. side connects through I-190 and the Lewiston corridor; the Canadian side uses Highway 405 toward the QEW and Queenston.",
+      "on_the_ground": "This crossing is materially north of Rainbow and Whirlpool. It can be an excellent alternate when waits are very different, but a modest border-wait advantage can disappear in the extra drive.",
+      "watch_for": "Pedestrians are not permitted. NEXUS lane availability has published time windows rather than continuous dedicated service in both directions.",
+      "official_links": [
+        { "label": "NFBC traffic conditions", "url": "https://www.niagarafallsbridges.com/services/traffic-conditions" },
+        { "label": "Lewiston–Queenston bridge camera", "url": "https://www.nittec.org/cameras/index.html?cid=1021" },
+        { "label": "Queenston Plaza camera", "url": "https://www.nittec.org/cameras/index.html?cid=1022" },
+        { "label": "Which Niagara bridge do I take?", "url": "https://www.niagarafallsbridges.com/crossing-info/which-bridge-do-i-take" }
+      ]
+    }
+  }
+}
