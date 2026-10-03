@@ -5,6 +5,7 @@ const {
   parseOperatorTrafficHtml,
 } = require("../lib/niagara-border-crossings");
 const { cleanText, normalizeNwsAlerts } = require("../lib/border-crossings");
+const experienceData = require("../data/niagara-crossing-experience.json");
 
 const URLS = Object.freeze({
   cbp: "https://bwt.cbp.gov/api/bwtnew",
@@ -18,7 +19,7 @@ const URLS = Object.freeze({
 });
 
 const USER_AGENT =
-  "NiagaraBorderCrossingDecision/1.0 (+https://chrisizworski.com/niagara-border-crossing/; contact: izworski@gmail.com)";
+  "NiagaraBorderCrossingDecision/2.0 (+https://chrisizworski.com/niagara-border-crossing/; contact: izworski@gmail.com)";
 
 async function fetchSource(url, type) {
   const response = await fetch(url, {
@@ -67,6 +68,13 @@ function uniqueAlerts(alerts) {
   });
 }
 
+function attachExperience(crossings) {
+  return crossings.map((crossing) => ({
+    ...crossing,
+    experience: experienceData.crossings?.[crossing.id] || null,
+  }));
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("X-Robots-Tag", "noindex, nofollow");
@@ -97,11 +105,11 @@ module.exports = async function handler(req, res) {
     ? parseOperatorTrafficHtml(peaceResult.value, "Buffalo and Fort Erie Public Bridge Authority", URLS.peace)
     : null;
 
-  const crossings = mergeNiagaraSources(
+  const crossings = attachExperience(mergeNiagaraSources(
     cbpResult.status === "fulfilled" ? cbpResult.value : [],
     cbsaResult.status === "fulfilled" ? cbsaResult.value : "",
     { nfbc, peace },
-  );
+  ));
   const decision = compareNiagaraCrossings(crossings, selection, new Date());
 
   const nwsAlerts = [
@@ -125,11 +133,12 @@ module.exports = async function handler(req, res) {
     },
     eccc_weather: sourceState(ecccResult, "Environment and Climate Change Canada", "https://weather.gc.ca/", "PRIMARY AUTHORITY — Canadian weather alerts; context only"),
     road_conditions: {
-      name: "NITTEC / 511 New York / Ontario 511",
-      role: "OFFICIAL APPROACH CONTEXT",
+      name: "511 New York / Ontario 511 / NITTEC",
+      role: "OFFICIAL APPROACH CONTEXT — never silently promoted into bridge-choice authority",
       integrated: false,
-      reason: "The documented 511 APIs require developer keys. V1 links to official approach systems rather than silently scraping or using unauthenticated endpoints.",
-      urls: ["https://www.nittec.org/", "https://511ny.org/", "https://511on.ca/"],
+      adapter_url: "/api/niagara-approach-context",
+      reason: "A separate key-gated approach adapter is available for official 511 incidents and cameras. NITTEC remains an official traveler-information link rather than a republished scraped feed.",
+      urls: ["https://511ny.org/", "https://511on.ca/", "https://www.nittec.org/"],
     },
   };
 
@@ -150,6 +159,7 @@ module.exports = async function handler(req, res) {
       source_stale: "The observation is too old for a confident crossing recommendation. Static eligibility and restrictions remain valid.",
       source_conflict: "Material official-source disagreement is exposed rather than silently resolved.",
       whirlpool: "Whirlpool Rapids is NEXUS-only. NFBC says real-time wait technology is not currently available there; operator updates are hourly.",
+      experience: "Human interpretation explains the deterministic result and the physical crossing experience. It never changes eligibility, freshness, source hierarchy or the selected bridge.",
     },
   };
 
@@ -158,5 +168,6 @@ module.exports = async function handler(req, res) {
 };
 
 module.exports.URLS = URLS;
+module.exports.attachExperience = attachExperience;
 module.exports.normalizeEcccAlerts = normalizeEcccAlerts;
 module.exports.uniqueAlerts = uniqueAlerts;
