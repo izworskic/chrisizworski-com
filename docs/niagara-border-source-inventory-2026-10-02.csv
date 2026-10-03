@@ -1,0 +1,13 @@
+Data Need,Authority,URL / Endpoint,Structured?,Refresh / Timestamp,Crossing Coverage,Reliability,Role,Production Suitability
+U.S.-bound passenger/commercial/NEXUS waits,U.S. Customs and Border Protection,https://bwt.cbp.gov/api/bwtnew,JSON,Agency lane timestamps,"Peace; Rainbow; Whirlpool; Lewiston-Queenston",High,PRIMARY AUTHORITY,High
+Canada-bound passenger/commercial waits,Canada Border Services Agency,https://www.cbsa-asfc.gc.ca/bwt-taf/bwt-eng.csv,CSV,Row timestamp,"Peace; Rainbow; Lewiston-Queenston",High,PRIMARY AUTHORITY,High
+Bridge operations / validation,Niagara Falls Bridge Commission,https://www.niagarafallsbridges.com/services/traffic-conditions,HTML table,Operator timestamp,"Lewiston-Queenston; Rainbow; Whirlpool; Peace",High,"PRIMARY bridge authority / validation",High except Whirlpool waits are context-only
+Peace bridge operations / validation,Buffalo and Fort Erie Public Bridge Authority,https://www.peacebridge.com/Traffic/index.php,HTML table,Operator timestamp,Peace,High,"PRIMARY bridge authority / validation",High
+NFBC vehicle eligibility / NEXUS / hours,Niagara Falls Bridge Commission,https://www.niagarafallsbridges.com/crossing-info/which-bridge-do-i-take,Static HTML,Rule changes,"Lewiston-Queenston; Rainbow; Whirlpool",High,PRIMARY AUTHORITY,High
+Peace pedestrian/bicycle rules,Buffalo and Fort Erie Public Bridge Authority,https://www.peacebridge.com/cyclist-pedestrian-crossing/,Static HTML,Rule changes,Peace,High,PRIMARY AUTHORITY,High
+New York approach incidents / cameras,511NY,https://511ny.org/developers/doc,JSON/XML API,Event timestamps,U.S. approaches,High,SECONDARY AUTHORITY,High with registered API key
+Ontario approach incidents / cameras,Ontario 511,https://511on.ca/developers/doc,JSON/XML API,Event timestamps,Canadian approaches,High,SECONDARY AUTHORITY,High with registered API key
+U.S. weather alerts,National Weather Service,https://api.weather.gov/alerts/active,GeoJSON/JSON,Alert timestamps,U.S. approaches,High,PRIMARY WEATHER AUTHORITY,High
+Canadian weather alerts,Environment and Climate Change Canada,https://api.weather.gc.ca/collections/weather-alerts/items,GeoJSON/JSON,Alert timestamps,Ontario approaches,High,PRIMARY WEATHER AUTHORITY,High
+NFBC / NITTEC cameras,Niagara Falls Bridge Commission / NITTEC,https://www.niagarafallsbridges.com/services/traffic-conditions,Mixed,Live visual,"Lewiston-Queenston; Rainbow; regional",Medium-Higher,VISUAL CONTEXT ONLY,Link-first until exact stable stream mapping verified
+Peace cameras,Buffalo and Fort Erie Public Bridge Authority,https://www.peacebridge.com/media-room/canadian-webcams/,Web images,Live visual,Peace,High,VISUAL CONTEXT ONLY,Link-first in V1
