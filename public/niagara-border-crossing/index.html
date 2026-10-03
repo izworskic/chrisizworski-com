@@ -4,98 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Niagara Border Wait Times: Which Bridge Should You Take?</title>
-<meta name="description" content="Compare official Niagara border waits, bridge eligibility and approach context for Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston.">
+<meta name="description" content="Choose the best Niagara border crossing right now. Compare official waits, see what is happening at each bridge, and know what to expect on the approach and crossing.">
 <link rel="canonical" href="https://chrisizworski.com/niagara-border-crossing/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#0b314c">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Niagara Border Wait Times: Which Bridge Should You Take?">
-<meta property="og:description" content="A detour-aware Niagara crossing decision desk using official border and bridge data, with human interpretation and approach context.">
+<meta property="og:description" content="Official waits plus a traveler-first view of Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston: what is happening now, what the crossing is like, and what to do next.">
 <meta property="og:url" content="https://chrisizworski.com/niagara-border-crossing/">
 <meta property="og:image" content="https://commons.wikimedia.org/wiki/Special:Redirect/file/Rainbow_Bridge%2C_July_2026.jpg?width=1800">
 <meta property="og:image:alt" content="Rainbow Bridge crossing the Niagara River between New York and Ontario">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Niagara Border Wait Times: Which Bridge Should You Take?">
-<meta name="twitter:description" content="Official Niagara border waits, eligibility, crossing guidance and approach context.">
+<meta name="twitter:description" content="Which Niagara bridge should you use right now? Official waits, bridge rules, approach context, and what the crossing will be like.">
 <meta name="twitter:image" content="https://commons.wikimedia.org/wiki/Special:Redirect/file/Rainbow_Bridge%2C_July_2026.jpg?width=1800">
 <meta name="twitter:image:alt" content="Rainbow Bridge crossing the Niagara River between New York and Ontario">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="/assets/michigan-border-crossings.css">
-<style>
-  .niagara-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-  .choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-  .decision-state{margin:0 0 8px;display:inline-flex;padding:5px 9px;border-radius:999px;background:var(--green-pale);color:var(--green);font:700 10px/1.3 var(--sans);letter-spacing:.08em;text-transform:uppercase}
-  .decision-state.is-caution{background:var(--gold-pale);color:#75551d}
-  .decision-state.is-stop{background:var(--red-pale);color:var(--red)}
-  .crossing-result.is-recommended{background:var(--green-pale);border-color:#7db39d;box-shadow:inset 0 4px 0 var(--green)}
-  .crossing-result.is-ineligible{background:#f4f5f5;opacity:.82}
-  .metric-row{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
-  .metric-chip{padding:5px 7px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#52636d;font:10px/1.3 var(--sans)}
-  .interpretation-card{margin-top:18px;overflow:hidden}
-  .interpretation-head{padding:22px 24px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#f7fbfa,#eef6f8)}
-  .interpretation-head h2{margin:4px 0 0;color:var(--navy);font-size:28px;font-weight:400}
-  .interpretation-head p:last-child{max-width:800px;margin:8px 0 0;color:var(--muted);font:13px/1.55 var(--sans)}
-  .interpretation-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
-  .interpretation-block{padding:20px 22px;border-right:1px solid var(--line)}
-  .interpretation-block:last-child{border-right:0}
-  .layer-label{display:block;margin-bottom:8px;color:#5d7180;font:700 10px/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase}
-  .interpretation-block h3{margin:0;color:var(--navy);font-size:20px;font-weight:400}
-  .interpretation-block p{margin:8px 0 0;color:#475d69;font:12px/1.58 var(--sans)}
-  .experience-role{display:inline-flex;margin-top:10px;padding:5px 8px;border-radius:999px;background:#edf3f5;color:#34586a;font:700 10px/1.2 var(--sans)}
-  .human-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
-  .human-links a{display:inline-flex;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--navy);font:700 10px/1.2 var(--sans);text-decoration:none}
-  .human-links a:hover{text-decoration:underline}
-  .approach-proof{border-top:1px solid var(--line);padding:18px 22px;background:#fbfcfc}
-  .approach-proof-top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
-  .approach-proof h3{margin:2px 0 0;color:var(--navy);font-size:20px;font-weight:400}
-  .approach-proof p{margin:6px 0 0;color:var(--muted);font:12px/1.55 var(--sans)}
-  .approach-state{display:inline-flex;padding:5px 8px;border-radius:999px;background:var(--gold-pale);color:#75551d;font:700 10px/1.2 var(--sans);white-space:nowrap}
-  .approach-state.is-live{background:var(--green-pale);color:var(--green)}
-  .approach-events{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:14px}
-  .approach-event{padding:12px;border:1px solid var(--line);border-radius:9px;background:#fff}
-  .approach-event strong{display:block;color:var(--navy);font:700 11px/1.35 var(--sans)}
-  .approach-event span{display:block;margin-top:5px;color:#5a6d76;font:11px/1.45 var(--sans)}
-  .river-map{position:relative;min-height:420px;padding:20px 20px 20px 52px;background:linear-gradient(90deg,#eef6f8 0 43%,#dceff4 43% 57%,#f5f8f8 57%);border:1px solid var(--line);border-radius:13px;overflow:hidden}
-  .river-map:before{content:"Niagara River";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-90deg);color:#3d7890;font:700 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase}
-  .map-crossing{position:absolute;left:12%;right:12%;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:.18s ease}
-  .map-crossing:before{content:"";position:absolute;left:31%;right:31%;height:3px;background:var(--navy);z-index:0}
-  .map-crossing span{position:relative;z-index:1;max-width:31%;padding:6px 8px;background:#fff;border:1px solid var(--line);border-radius:7px;color:var(--navy);font:700 10px/1.25 var(--sans)}
-  .map-crossing span:last-child{text-align:right}
-  .map-crossing.is-natural span{border-color:#9fb4be}
-  .map-crossing.is-recommended span{background:var(--green-pale);border-color:#7db39d;color:var(--green)}
-  .map-crossing.is-recommended:before{background:var(--green)}
-  .map-lq{top:11%}.map-whirlpool{top:34%}.map-rainbow{top:54%}.map-peace{top:82%}
-  .map-note{margin:12px 0 0;color:var(--muted);font:11px/1.5 var(--sans)}
-  .source-status{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-  .source-status > div{padding:11px 12px;border:1px solid var(--line);border-radius:9px;background:#f8faf9;font:11px/1.45 var(--sans)}
-  .source-status strong{display:block;color:var(--navy);font-size:12px}
-  .source-status .is-down{background:var(--gold-pale)}
-  .eligibility-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  .eligibility-card{padding:16px;border:1px solid var(--line);border-radius:11px;background:#fafbfb}
-  .eligibility-card h3{margin:0;color:var(--navy);font-size:20px;font-weight:400}
-  .eligibility-card p{margin:6px 0 0;color:var(--muted);font:12px/1.5 var(--sans)}
-  .eligibility-card ul{margin:10px 0 0;padding-left:18px;color:#465b67;font:12px/1.5 var(--sans)}
-  .official-links{display:flex;flex-wrap:wrap;gap:8px}
-  .method-note{padding:16px;border-left:3px solid #8da5b0;background:#f5f8f8;color:#49606c;font:12px/1.6 var(--sans)}
-  @media(max-width:900px){
-    .niagara-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.choice-grid{grid-template-columns:1fr}.source-status,.eligibility-grid{grid-template-columns:1fr}
-    .interpretation-grid{grid-template-columns:1fr}.interpretation-block{border-right:0;border-bottom:1px solid var(--line)}.interpretation-block:last-child{border-bottom:0}
-    .approach-events{grid-template-columns:1fr}
-  }
-  @media(max-width:620px){
-    .page-shell{width:min(100% - 24px,1180px);padding-top:14px}
-    .hero-copy{padding:2px 0}.hero{margin-bottom:15px}h1{font-size:36px;line-height:1}.lede{margin-top:12px;font-size:15px}
-    .trust-strip{grid-template-columns:1fr;margin-bottom:15px}
-    .decision-header{padding:20px}.decision-header h2{font-size:27px}
-    .control-panel{grid-template-columns:1fr;padding:17px}
-    .answer-panel{padding:18px}.answer-topline{display:block}.freshness{margin-top:12px;text-align:left;width:max-content}
-    .niagara-grid{grid-template-columns:1fr}
-    .interpretation-head{padding:19px 18px}.interpretation-head h2{font-size:25px}.interpretation-block,.approach-proof{padding:17px 18px}.approach-proof-top{display:block}.approach-state{margin-top:10px}
-    .river-map{min-height:360px;padding-left:20px}.map-crossing{left:5%;right:5%}.map-crossing span{max-width:38%;font-size:9px}.map-crossing:before{left:35%;right:35%}
-  }
-</style>
+<link rel="stylesheet" href="/assets/niagara-border-experience.css">
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -105,36 +33,27 @@
       "@id":"https://chrisizworski.com/niagara-border-crossing/#page",
       "url":"https://chrisizworski.com/niagara-border-crossing/",
       "name":"Niagara Border Wait Times: Which Bridge Should You Take?",
-      "description":"Detour-aware comparison of official Niagara River border crossing waits, eligibility and approach context.",
+      "description":"Traveler-first comparison of official Niagara River border crossing waits, eligibility, approach context and crossing experience.",
       "dateModified":"2026-10-03",
       "inLanguage":"en-US",
-      "primaryImageOfPage":{"@id":"https://chrisizworski.com/niagara-border-crossing/#primaryimage"},
       "mainEntity":{"@id":"https://chrisizworski.com/niagara-border-crossing/#app"}
-    },
-    {
-      "@type":"ImageObject",
-      "@id":"https://chrisizworski.com/niagara-border-crossing/#primaryimage",
-      "url":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Rainbow_Bridge%2C_July_2026.jpg?width=1800",
-      "caption":"Rainbow Bridge over the Niagara River",
-      "creditText":"PenPineapplePinniped / Wikimedia Commons"
     },
     {
       "@type":"WebApplication",
       "@id":"https://chrisizworski.com/niagara-border-crossing/#app",
-      "name":"Niagara Border Crossing Decision Desk",
+      "name":"Niagara Border Crossing Live",
       "url":"https://chrisizworski.com/niagara-border-crossing/",
       "applicationCategory":"TravelApplication",
       "operatingSystem":"Any web browser",
       "isAccessibleForFree":true,
       "featureList":[
-        "Official CBP waits entering the United States",
-        "Official CBSA waits entering Canada",
-        "Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston eligibility rules",
-        "Conservative route-switch comparison",
-        "Human interpretation of the deterministic crossing decision",
-        "Key-gated official 511 incident and camera context",
-        "NEXUS-only Whirlpool protection",
-        "Official weather-alert context"
+        "Official Canada-bound CBSA waits",
+        "Official U.S.-bound CBP waits",
+        "Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston comparison",
+        "Traveler eligibility and restrictions",
+        "Bridge-operator traffic context",
+        "Official approach-road and weather context",
+        "Bridge-specific crossing guidance"
       ]
     }
   ]
@@ -142,9 +61,11 @@
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+<script defer src="/assets/tool-engagement.js"></script>
 <script defer src="/assets/niagara-border-crossing.js"></script>
 </head>
-<body data-analytics-page="niagara-border-crossing">
+<body class="niagara-page" data-analytics-page="niagara-border-crossing">
 <a class="skip-link" href="#decision">Skip to crossing decision</a>
 <header class="site-header">
   <a class="site-name" href="/">Chris Izworski</a>
@@ -155,127 +76,139 @@
 
 <div class="live-ribbon" id="liveRibbon" role="status" aria-live="polite">
   <span class="live-dot is-loading" id="liveDot" aria-hidden="true"></span>
-  <span class="live-ribbon-label">Niagara crossing desk</span>
+  <span class="live-ribbon-label">Niagara crossings now</span>
   <strong id="ribbonStatus">Checking official border reports…</strong>
   <span class="ribbon-time" id="ribbonTime"></span>
 </div>
 
 <main><div class="page-shell">
-  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/tools/">Tools</a><span aria-hidden="true">/</span><span>Niagara Border Crossing</span></nav>
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/tools/">Tools</a><span>/</span><span>Niagara Border Crossing</span></nav>
 
-  <section class="hero">
-    <div class="hero-copy">
-      <p class="eyebrow">Buffalo · Niagara Falls · Fort Erie · Queenston</p>
-      <h1>Which Niagara bridge should you take right now?</h1>
-      <p class="lede">Start with the crossing decision. Then see why the engine made it, what that choice means on the ground, and which official traffic evidence to check before you commit.</p>
+  <section class="niagara-hero">
+    <div class="niagara-hero-copy">
+      <p class="eyebrow">Buffalo · Niagara Falls · Lewiston</p>
+      <h1>Cross Niagara without guessing.</h1>
+      <p class="lede">See which bridge fits your trip right now, what traffic is doing there, and what you will encounter from the approach road to the other side.</p>
     </div>
+    <figure class="hero-photo">
+      <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Rainbow_Bridge%2C_July_2026.jpg?width=1600" width="1200" height="900" alt="Rainbow Bridge over the Niagara River" fetchpriority="high">
+      <figcaption><strong>Niagara River crossing country</strong>Rainbow Bridge at Niagara Falls. Photograph is not a live camera. <a href="https://commons.wikimedia.org/wiki/File:Rainbow_Bridge,_July_2026.jpg" target="_blank" rel="noopener" style="color:#fff">Wikimedia Commons</a>.</figcaption>
+    </figure>
   </section>
 
-  <div class="trust-strip" aria-label="Decision safeguards">
-    <div class="trust-item"><strong>Eligibility vetoes first</strong><span>Whirlpool is NEXUS-only. Rainbow never becomes a truck option.</span></div>
-    <div class="trust-item"><strong>Direction never crosses wires</strong><span>CBP is U.S.-bound. CBSA is Canada-bound where it publishes the crossing.</span></div>
-    <div class="trust-item"><strong>A shorter wait is not automatically faster</strong><span>Alternates must clear a conservative route-switch guardrail.</span></div>
-  </div>
-
-  <noscript><div class="error-box">This decision desk needs JavaScript for live comparisons. The official source links below still work.</div></noscript>
-
-  <section class="decision-card" id="decision" aria-labelledby="decisionHeading">
-    <header class="decision-header">
-      <p class="eyebrow">Answer</p>
-      <h2 id="decisionHeading">Tell us your direction, traveler type and normal bridge.</h2>
-      <p>Your normal bridge anchors the comparison. The engine only sends you elsewhere when the evidence clears both eligibility rules and the conservative route-switch threshold.</p>
-    </header>
-
-    <div class="control-panel choice-grid">
+  <section class="trip-desk" id="decision" aria-labelledby="decisionHeading">
+    <div class="trip-controls">
       <fieldset>
-        <legend>Direction</legend>
+        <legend>Which way are you going?</legend>
         <div class="segmented">
-          <button class="segment is-selected" type="button" data-direction="to_canada" aria-pressed="true">To Canada<small>U.S. → Ontario</small></button>
-          <button class="segment" type="button" data-direction="to_us" aria-pressed="false">To U.S.<small>Ontario → New York</small></button>
+          <button class="segment is-selected" type="button" data-direction="to_canada" aria-pressed="true">To Canada<small>New York → Ontario</small></button>
+          <button class="segment" type="button" data-direction="to_us" aria-pressed="false">To United States<small>Ontario → New York</small></button>
         </div>
       </fieldset>
-      <label><span class="field-label">Traveler / vehicle</span>
+      <label><span class="field-label">How are you crossing?</span>
         <select class="select-control" id="travelerSelect">
-          <option value="passenger">Passenger vehicle</option><option value="nexus">NEXUS traveler</option><option value="commercial">Commercial truck</option><option value="bus">Bus / coach</option><option value="tow">Vehicle with trailer / tow</option><option value="pedestrian">Pedestrian</option><option value="bicycle">Bicycle</option>
+          <option value="passenger">Car / SUV / personal vehicle</option>
+          <option value="nexus">NEXUS auto traveler</option>
+          <option value="commercial">Commercial truck</option>
+          <option value="bus">Bus</option>
+          <option value="tow">Vehicle with trailer / tow</option>
+          <option value="pedestrian">Walking</option>
+          <option value="bicycle">Bicycle</option>
         </select>
+        <span class="control-help" id="travelerHelp">We compare the lane or traveler type the official source actually reports.</span>
+        <label id="commercialOptions" hidden style="margin-top:8px;font:11px/1.4 var(--sans)"><input type="checkbox" id="oversizeToggle"> Oversize / special commercial vehicle</label>
       </label>
-      <label><span class="field-label">Bridge naturally on your route</span>
+      <label><span class="field-label">Where would you cross if waits were equal?</span>
         <select class="select-control" id="preferredSelect">
-          <option value="rainbow">Rainbow — Niagara Falls</option><option value="peace">Peace — Buffalo / Fort Erie</option><option value="lewiston-queenston">Lewiston–Queenston — northern corridor</option><option value="whirlpool">Whirlpool Rapids — NEXUS route</option>
+          <option value="rainbow">Niagara Falls → Rainbow Bridge</option>
+          <option value="peace">Buffalo / Fort Erie → Peace Bridge</option>
+          <option value="lewiston-queenston">Lewiston / Queenston → Lewiston–Queenston</option>
+          <option value="whirlpool">NEXUS Falls route → Whirlpool Rapids</option>
         </select>
-        <span class="control-help">The bridge you would use if waits were equal.</span>
+        <span class="control-help">This keeps a tiny wait difference from sending you on a needless detour.</span>
       </label>
     </div>
 
-    <div class="answer-panel" aria-live="polite">
-      <div class="answer-topline">
-        <div><span class="decision-state is-caution" id="decisionState">Checking</span><h3 id="decisionHeadline">Loading official crossing data…</h3><p class="answer-note" id="decisionReason">Static crossing rules remain valid even if a live feed fails.</p></div>
-        <div class="freshness"><span>Tool checked</span><strong id="freshnessTime">Loading…</strong></div>
+    <div class="trip-answer" aria-live="polite">
+      <div class="trip-answer-top">
+        <div>
+          <span class="mobile-decision-label">Your crossing right now</span>
+          <span class="trip-state is-caution" id="decisionState">Checking</span>
+          <h2 id="decisionHeading"><span id="decisionHeadline">Loading official crossing data…</span></h2>
+          <p id="decisionReason">Checking the live reports that match your direction and traveler type.</p>
+          <div class="refresh-row"><span class="scene-note" id="decisionSceneNote" style="color:rgba(255,255,255,.72)">Your bridge-by-bridge comparison will appear below.</span><button class="refresh-button" type="button" id="refreshButton">↻ Refresh now</button></div>
+        </div>
+        <div class="trip-checked"><span>Checked</span><strong id="freshnessTime">Loading…</strong></div>
       </div>
-      <div class="crossing-grid niagara-grid" id="crossingGrid">
-        <article class="crossing-result is-unavailable"><p class="result-kicker">Checking</p><h4>Peace Bridge</h4><strong class="wait-value is-unknown">Loading…</strong></article>
-        <article class="crossing-result is-unavailable"><p class="result-kicker">Checking</p><h4>Rainbow Bridge</h4><strong class="wait-value is-unknown">Loading…</strong></article>
-        <article class="crossing-result is-unavailable"><p class="result-kicker">Checking</p><h4>Whirlpool Rapids</h4><strong class="wait-value is-unknown">Loading…</strong></article>
-        <article class="crossing-result is-unavailable"><p class="result-kicker">Checking</p><h4>Lewiston–Queenston</h4><strong class="wait-value is-unknown">Loading…</strong></article>
+      <div class="bridge-choice-grid" id="crossingGrid"></div>
+    </div>
+  </section>
+
+  <section class="reality-card" aria-labelledby="realityHeading">
+    <div class="section-top"><div><p class="eyebrow">What is happening there</p><h2 id="realityHeading">At your crossing right now</h2><p id="realityIntro">Live border delay, bridge-operator traffic, approach context, weather and trip details for the bridge you are actually likely to use.</p></div></div>
+    <div class="live-reality-grid" id="realityGrid">
+      <div class="reality-item"><span class="reality-label">Border wait</span><strong class="reality-value">Checking…</strong></div>
+      <div class="reality-item"><span class="reality-label">Bridge traffic</span><strong class="reality-value">Checking…</strong></div>
+      <div class="reality-item"><span class="reality-label">Approach</span><strong class="reality-value">Checking…</strong></div>
+      <div class="reality-item"><span class="reality-label">Weather</span><strong class="reality-value">Checking…</strong></div>
+      <div class="reality-item"><span class="reality-label">Toll / hours</span><strong class="reality-value">Checking…</strong></div>
+    </div>
+  </section>
+
+  <section class="journey-card" aria-labelledby="journeyHeading">
+    <div class="journey-shell">
+      <div class="journey-main">
+        <p class="eyebrow">Put yourself on the route</p>
+        <h2 class="journey-title" id="journeyHeading">If you take this bridge right now</h2>
+        <span class="journey-role" id="journeyRole">Loading crossing role…</span>
+        <div class="journey-steps" id="journeySteps"></div>
+        <div class="journey-actions" id="journeyActions"></div>
+      </div>
+      <aside class="journey-aside">
+        <h3>Before you commit</h3>
+        <p id="journeySummary">The bridge-specific things worth knowing will appear here.</p>
+        <ul class="watch-list" id="journeyWatch"></ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="compare-card" aria-labelledby="compareHeading">
+    <div class="section-top"><div><p class="eyebrow">All four crossings</p><h2 id="compareHeading">What each bridge is actually for</h2><p>Think of these as four different routes with different jobs—not four interchangeable lines at the same toll booth.</p></div></div>
+    <div class="compare-grid" id="compareGrid"></div>
+  </section>
+
+  <section class="support-card" aria-label="Approach and weather context">
+    <div class="support-grid">
+      <div class="support-pane">
+        <p class="eyebrow">Before the plaza</p><h2>Approach roads & cameras</h2>
+        <p id="approachSummary">Checking official 511 approach context.</p>
+        <div class="approach-events" id="approachEvents"></div>
+        <div class="official-links" id="approachLinks"><a class="quick-link" href="https://511ny.org/" target="_blank" rel="noopener">Open 511 New York</a><a class="quick-link" href="https://511on.ca/" target="_blank" rel="noopener">Open Ontario 511</a><a class="quick-link" href="https://www.nittec.org/cameras/" target="_blank" rel="noopener">Open NITTEC cameras</a></div>
+        <span id="approachState" hidden>Checking</span>
+      </div>
+      <div class="support-pane">
+        <p class="eyebrow">Along the river</p><h2>Weather that could change the trip</h2>
+        <div id="weatherAlerts"><p class="all-clear">Checking NWS and Environment Canada alerts…</p></div>
       </div>
     </div>
   </section>
 
-  <section class="content-card interpretation-card" id="tripInterpretation" aria-labelledby="interpretationHeading">
-    <header class="interpretation-head">
-      <p class="eyebrow">Proof → Experience → Understanding</p>
-      <h2 id="interpretationHeading">What this decision means for your trip</h2>
-      <p id="interpretationIntro">The narrative here is generated only from the deterministic decision, published crossing rules and source state. It does not get a vote in the recommendation.</p>
-    </header>
-    <div class="interpretation-grid">
-      <article class="interpretation-block"><span class="layer-label">Proof · Why this choice</span><h3 id="proofHeadline">Checking the comparison…</h3><p id="proofText">The tool is waiting for current authoritative wait evidence.</p></article>
-      <article class="interpretation-block"><span class="layer-label">Experience · On the ground</span><h3 id="experienceHeadline">Your crossing experience</h3><p id="experienceText">Bridge-specific context will appear after the live decision loads.</p><span class="experience-role" id="experienceRole">Loading crossing role…</span></article>
-      <article class="interpretation-block"><span class="layer-label">Understanding · Before you commit</span><h3 id="commitHeadline">Verify the last mile</h3><p id="commitText">Use current official traffic and camera evidence before leaving your natural route.</p><div class="human-links" id="humanLinks"></div></article>
-    </div>
-    <div class="approach-proof" id="approachProof">
-      <div class="approach-proof-top"><div><span class="layer-label">Proof · Official approach context</span><h3>Traffic cameras and road conditions</h3><p id="approachSummary">Checking whether structured 511 incident and camera feeds are configured.</p></div><span class="approach-state" id="approachState">Checking 511</span></div>
-      <div class="approach-events" id="approachEvents"></div>
-      <div class="human-links" id="approachLinks"><a href="https://511ny.org/" target="_blank" rel="noopener">511 New York</a><a href="https://511on.ca/" target="_blank" rel="noopener">Ontario 511</a><a href="https://www.nittec.org/" target="_blank" rel="noopener">NITTEC</a></div>
-    </div>
+  <section class="support-card" aria-labelledby="eligibilityHeading">
+    <div class="section-top"><div><p class="eyebrow">Know before you enter the approach</p><h2 id="eligibilityHeading">Who can use each bridge</h2><p>The important restrictions stay available even if a live wait feed goes down.</p></div></div>
+    <div class="eligibility-table-wrap"><table class="eligibility-table"><thead><tr><th>Crossing</th><th>Your trip</th><th>Hours</th><th>Toll this way</th><th>Key rule</th></tr></thead><tbody id="eligibilityBody"><tr><td colspan="5">Loading bridge rules…</td></tr></tbody></table></div>
   </section>
 
-  <div class="section-grid">
-    <section class="content-card" aria-labelledby="mapHeading">
-      <p class="eyebrow">Understanding</p><h2 id="mapHeading">Four bridges, four different jobs</h2>
-      <div class="river-map" aria-label="Schematic showing the four Niagara River crossings from north to south">
-        <div class="map-crossing map-lq" data-map-crossing="lewiston-queenston"><span>Lewiston, NY</span><span>Lewiston–Queenston</span><span>Queenston, ON</span></div>
-        <div class="map-crossing map-whirlpool" data-map-crossing="whirlpool"><span>Niagara Falls, NY</span><span>Whirlpool · NEXUS</span><span>Niagara Falls, ON</span></div>
-        <div class="map-crossing map-rainbow" data-map-crossing="rainbow"><span>Niagara Falls, NY</span><span>Rainbow</span><span>Niagara Falls, ON</span></div>
-        <div class="map-crossing map-peace" data-map-crossing="peace"><span>Buffalo, NY</span><span>Peace</span><span>Fort Erie, ON</span></div>
-      </div>
-      <p class="map-note">Schematic only, not to scale. The outlined route is your natural bridge; green marks the current recommendation when one can be made confidently.</p>
-    </section>
-
-    <section class="content-card" aria-labelledby="sourceHeading">
-      <p class="eyebrow">Proof</p><h2 id="sourceHeading">Source health</h2><p>Border processing, bridge operations, weather and approach traffic have different authority roles. The product keeps them separate instead of blending them into one opaque score.</p>
-      <div class="source-status" id="sourceStatus"><div class="is-down"><strong>Checking sources</strong>Waiting for the live endpoint.</div></div>
-      <div class="method-note" style="margin-top:14px"><strong>Approach-data rule:</strong> 511 incidents and cameras are context only in this release. They are never converted into an exact arrival-time claim and never override bridge-owner restrictions or the border-wait authority hierarchy.</div>
-    </section>
+  <div class="details-stack">
+    <details>
+      <summary>How this recommendation is made</summary>
+      <div class="details-body"><p>The live recommendation starts with published crossing restrictions, then compares fresh official waits for the same direction and traveler type. It will not send you to another bridge for a tiny reported difference that is likely to disappear in the extra drive. Approach traffic is shown separately until a validated route-time feed can be included.</p><p>Whirlpool Rapids remains a special case: it is NEXUS-only, and Niagara Falls Bridge Commission says its wait information does not have the same real-time technology as the other crossings.</p></div>
+    </details>
+    <details>
+      <summary>Official sources and live-feed health</summary>
+      <div class="details-body"><div class="source-status" id="sourceStatus"><div><strong>Checking sources</strong>Loading current source state…</div></div><div class="official-links"><a class="quick-link" href="https://bwt.cbp.gov/" target="_blank" rel="noopener">CBP waits</a><a class="quick-link" href="https://www.cbsa-asfc.gc.ca/bwt-taf/menu-eng.html" target="_blank" rel="noopener">CBSA waits</a><a class="quick-link" href="https://www.niagarafallsbridges.com/services/traffic-conditions" target="_blank" rel="noopener">NFBC traffic</a><a class="quick-link" href="https://www.peacebridge.com/Traffic/index.php" target="_blank" rel="noopener">Peace Bridge traffic</a></div></div>
+    </details>
   </div>
-
-  <section class="content-card" aria-labelledby="eligibilityHeading">
-    <p class="eyebrow">Understanding</p><h2 id="eligibilityHeading">Can your vehicle use each crossing?</h2><p>These rules are static authority facts and stay visible even when live wait feeds are stale or unavailable.</p>
-    <div class="eligibility-grid" id="eligibilityGrid"></div>
-  </section>
-
-  <div class="section-grid">
-    <section class="content-card" aria-labelledby="weatherHeading"><p class="eyebrow">Context</p><h2 id="weatherHeading">Official weather alerts</h2><p>Weather can make the approach unpleasant or hazardous, but it does not silently rewrite bridge restrictions.</p><div id="weatherAlerts"><p class="all-clear">Checking NWS and Environment Canada alerts…</p></div></section>
-    <section class="content-card" aria-labelledby="exploreHeading"><p class="eyebrow">Exploration</p><h2 id="exploreHeading">Open the official systems</h2><p>Use these when you want the raw agency view rather than the interpreted decision.</p><div class="official-links"><a class="source-link" href="https://bwt.cbp.gov/" target="_blank" rel="noopener">CBP border waits</a><a class="source-link" href="https://www.cbsa-asfc.gc.ca/bwt-taf/menu-eng.html" target="_blank" rel="noopener">CBSA waits</a><a class="source-link" href="https://www.niagarafallsbridges.com/services/traffic-conditions" target="_blank" rel="noopener">NFBC traffic</a><a class="source-link" href="https://www.peacebridge.com/Traffic/index.php" target="_blank" rel="noopener">Peace Bridge traffic</a><a class="source-link" href="https://511ny.org/" target="_blank" rel="noopener">511 New York</a><a class="source-link" href="https://511on.ca/" target="_blank" rel="noopener">Ontario 511</a><a class="source-link" href="https://www.nittec.org/" target="_blank" rel="noopener">NITTEC</a></div></section>
-  </div>
-
-  <section class="methodology" aria-labelledby="methodHeading">
-    <p class="eyebrow">How the decision works</p><h2 id="methodHeading">Conservative by design</h2>
-    <p>The engine first removes crossings that are ineligible, restricted or closed for your traveler type. It then requires fresh, comparable wait evidence. Your normal bridge has no detour penalty; alternates carry a conservative route-switch guardrail. A switch is recommended only when the alternate still clears the required benefit after that guardrail.</p>
-    <p><strong>The guardrail is not a live route-time estimate.</strong> Exact net-trip routing requires a separately validated, licensed travel-time feed. Official 511 incidents and cameras are surfaced as proof and last-mile context until that standard is met.</p>
-    <p>Whirlpool Rapids is deliberately lower-confidence: NFBC states real-time technology is not currently available there, so its operator value remains context-only and cannot justify a bridge switch.</p>
-  </section>
 </div></main>
-
-<footer class="site-footer"><div><strong>Niagara Border Crossing Decision Desk</strong><span>Official-source comparison for cross-border travelers.</span></div><div><a href="/tools/">All tools</a> · <a href="/about/">About</a></div></footer>
+<footer class="site-footer"><div><strong>Niagara Border Crossing Live</strong><span>Traveler-first crossing guidance from official public data.</span></div><div><a href="/tools/">All tools</a> · <a href="/about/">About</a></div></footer>
 </body>
 </html>
