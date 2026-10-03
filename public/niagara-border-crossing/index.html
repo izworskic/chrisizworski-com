@@ -22,9 +22,37 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="stylesheet" href="/assets/michigan-border-crossings.css?v=20261003c">
-<link rel="stylesheet" href="/assets/niagara-border-experience.css?v=20261003c">
-<style>@media(max-width:620px){.niagara-page .trip-answer{scroll-margin-top:12px}}</style>
+<link rel="stylesheet" href="/assets/michigan-border-crossings.css?v=20261003d">
+<link rel="stylesheet" href="/assets/niagara-border-experience.css?v=20261003d">
+<style>
+@media(max-width:620px){.niagara-page .trip-answer{scroll-margin-top:12px}}
+/* Critical readability fallback: these light surfaces must never inherit white text from a stale/mismatched stylesheet. */
+.niagara-page .trip-controls,
+.niagara-page .reality-card,
+.niagara-page .journey-card,
+.niagara-page .compare-card,
+.niagara-page .support-card,
+.niagara-page .details-stack details{color:#152332;background:#fff}
+.niagara-page .reality-card h2,
+.niagara-page .reality-card h3,
+.niagara-page .journey-card h2,
+.niagara-page .journey-card h3,
+.niagara-page .compare-card h2,
+.niagara-page .compare-card h3,
+.niagara-page .support-card h2,
+.niagara-page .support-card h3,
+.niagara-page .details-stack summary{color:#072336}
+.niagara-page .reality-card p,
+.niagara-page .journey-card p,
+.niagara-page .compare-card p,
+.niagara-page .support-card p,
+.niagara-page .details-stack .details-body,
+.niagara-page .trip-controls .control-help{color:#53656f}
+.niagara-page .eligibility-table,
+.niagara-page .eligibility-table td,
+.niagara-page .eligibility-table th{color:#152332}
+.niagara-page .scene-note{color:#6a7981}
+</style>
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -64,9 +92,9 @@
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 <script defer src="/assets/tool-engagement.js"></script>
-<script defer src="/assets/niagara-border-crossing.js?v=20261003c"></script>
+<script defer src="/assets/niagara-border-crossing.js?v=20261003d"></script>
 </head>
-<body class="niagara-page" data-analytics-page="niagara-border-crossing">
+<body class="niagara-page" data-analytics-page="niagara-border-crossing" data-ui-revision="20261003d">
 <a class="skip-link" href="#decision">Skip to crossing decision</a>
 <header class="site-header">
   <a class="site-name" href="/">Chris Izworski</a>
@@ -219,7 +247,6 @@
         <p id="approachSummary">Checking official 511 approach context.</p>
         <div class="approach-events" id="approachEvents"></div>
         <div class="official-links" id="approachLinks"><a class="quick-link" href="https://511ny.org/" target="_blank" rel="noopener">Open 511 New York</a><a class="quick-link" href="https://511on.ca/" target="_blank" rel="noopener">Open Ontario 511</a><a class="quick-link" href="https://www.nittec.org/cameras/" target="_blank" rel="noopener">Open NITTEC cameras</a></div>
-        <span id="approachState" hidden>Checking</span>
       </div>
       <div class="support-pane">
         <p class="eyebrow">Along the river</p><h2>Weather that could change the trip</h2>
