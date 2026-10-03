@@ -29,6 +29,22 @@ import path from "node:path";
 const root = path.resolve(import.meta.dirname, "..");
 const publicRoot = path.join(root, "public");
 const CHECK = process.argv.includes("--check");
+
+// A shallow clone has one commit, so every file's "last commit" is that commit and every stamp
+// looks wrong at once (248 false mismatches seen in practice). Worse, running the stamper there
+// would rewrite every page to that one date. Refuse rather than report nonsense or corrupt pages.
+try {
+  const shallow = execFileSync("git", ["rev-parse", "--is-shallow-repository"], { cwd: root, encoding: "utf8" }).trim();
+  if (shallow === "true") {
+    console.error(
+      "FRESHNESS: this is a shallow clone, so git history cannot give real last-modified dates.\n" +
+      "Run `git fetch --unshallow` (or clone with full history) and rerun. Nothing was checked or changed.",
+    );
+    process.exit(CHECK ? 1 : 2);
+  }
+} catch {
+  // not a git checkout at all; the per-file "no history" path below handles that
+}
 const TOLERANCE_DAYS = 7;
 const SITE_TIME_ZONE = "America/Detroit";
 const siteDateFormatter = new Intl.DateTimeFormat("en-US", {
