@@ -8,6 +8,7 @@ const DESC = 'Compare Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston 
 const VISUAL_ASSET_VERSION = '20261003h';
 const FALLBACK_ASSET_VERSION = '20261003a';
 const ELIGIBILITY_ASSET_VERSION = '20261003a';
+const LIVE_CAMERA_ASSET_VERSION = '20261003a';
 
 function patchTools() {
   const file = 'public/tools/index.html';
@@ -115,6 +116,30 @@ function patchLlms() {
   }
 }
 
+function patchLiveCameras() {
+  const file = 'public/niagara-border-crossing/index.html';
+  let html = fs.readFileSync(file, 'utf8');
+  const css = `/assets/niagara-live-cameras.20261003.css?v=${LIVE_CAMERA_ASSET_VERSION}`;
+  const js = `/assets/niagara-live-cameras.20261003.js?v=${LIVE_CAMERA_ASSET_VERSION}`;
+  const cssTag = `<link rel="stylesheet" href="${css}">`;
+  const jsTag = `<script defer src="${js}"></script>`;
+  const cssPattern = /<link rel="stylesheet" href="\/assets\/niagara-live-cameras\.20261003\.css(?:\?v=[^"]+)?">/;
+  const jsPattern = /<script defer src="\/assets\/niagara-live-cameras\.20261003\.js(?:\?v=[^"]+)?"><\/script>/;
+  const visualCss = /<link rel="stylesheet" href="\/assets\/niagara-visual-layer\.20261003\.css(?:\?v=[^"]+)?">/;
+  const visualJs = /<script defer src="\/assets\/niagara-visual-layer\.20261003\.js(?:\?v=[^"]+)?"><\/script>/;
+
+  if (cssPattern.test(html)) html = html.replace(cssPattern, cssTag);
+  else if (visualCss.test(html)) html = html.replace(visualCss, (match) => `${cssTag}\n${match}`);
+  else throw new Error('Niagara live cameras: visual CSS anchor not found');
+
+  if (jsPattern.test(html)) html = html.replace(jsPattern, jsTag);
+  else if (visualJs.test(html)) html = html.replace(visualJs, (match) => `${jsTag}\n${match}`);
+  else throw new Error('Niagara live cameras: visual JS anchor not found');
+
+  fs.writeFileSync(file, html);
+  console.log(`Niagara live cameras loaded at ${LIVE_CAMERA_ASSET_VERSION}.`);
+}
+
 function patchVisualAssets() {
   const file = 'public/niagara-border-crossing/index.html';
   let html = fs.readFileSync(file, 'utf8');
@@ -126,7 +151,7 @@ function patchVisualAssets() {
     throw new Error('Niagara visual cache bust: expected visual asset references not found');
   }
   html = html.replace(cssPattern, cssUrl).replace(jsPattern, jsUrl);
-  html = html.replace(/data-ui-revision="[^"]+"/, `data-ui-revision="${VISUAL_ASSET_VERSION}"`);
+  html = html.replace(/data-ui-revision="[^"]+"/, `data-ui-revision="${VISUAL_ASSET_VERSION}` + '-livecams');
   fs.writeFileSync(file, html);
   console.log(`Niagara visual assets cache-busted to ${VISUAL_ASSET_VERSION}.`);
 }
@@ -173,6 +198,7 @@ function patchEligibilityLabels() {
 patchTools();
 patchSitemap();
 patchLlms();
+patchLiveCameras();
 patchVisualAssets();
 patchDecisionFallback();
 patchEligibilityLabels();
