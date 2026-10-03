@@ -289,12 +289,13 @@ test("canonical traveler page is decision-first, mobile-first, real-image, and a
   const root = path.resolve(__dirname, "..");
   const html = fs.readFileSync(path.join(root, "public", "niagara-border-crossing", "index.html"), "utf8");
   const client = fs.readFileSync(path.join(root, "public", "assets", "niagara-border-crossing.js"), "utf8");
+  const experienceCss = fs.readFileSync(path.join(root, "public", "assets", "niagara-border-experience.css"), "utf8");
   assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/niagara-border-crossing\/">/);
   assert.equal((html.match(/<h1\b/g) || []).length, 1);
   assert.match(html, /Which Niagara bridge should you take right now\?/i);
   assert.match(html, /id="travelerSelect"/);
   assert.match(html, /id="preferredSelect"/);
-  assert.match(html, /@media\(max-width:620px\)/);
+  assert.match(experienceCss, /@media\(max-width:620px\)/);
   assert.match(html, /nittec\.org/i);
   assert.match(html, /511ny\.org/i);
   assert.match(html, /511on\.ca/i);
@@ -303,10 +304,10 @@ test("canonical traveler page is decision-first, mobile-first, real-image, and a
   assert.match(html, /Wikimedia Commons/);
   assert.match(client, /\/api\/niagara-border-crossings/);
   assert.match(client, /requestId/);
-  assert.match(client, /OPERATOR_CONTEXT_ONLY/);
+  assert.match(client, /result\.context_only/);
 });
 
-test("primary decision controls render before map, camera links and methodology", () => {
+test("primary decision controls render before orientation, camera links and methodology", () => {
   const root = path.resolve(__dirname, "..");
   const html = fs.readFileSync(path.join(root, "public", "niagara-border-crossing", "index.html"), "utf8");
   const controls = html.indexOf('id="decisionHeading"');
