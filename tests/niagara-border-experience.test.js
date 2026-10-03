@@ -45,8 +45,8 @@ test('main traveler language avoids internal decision-engine jargon', () => {
 test('source health and methodology are progressive disclosure', () => {
   const details = PAGE.match(/<details>/g) || [];
   assert.ok(details.length >= 2, 'expected methodology and source health disclosures');
-  assert.match(PAGE, /<summary>How this recommendation is made<\/summary>/);
-  assert.match(PAGE, /<summary>Official sources and live-feed health<\/summary>/);
+  assert.match(PAGE, /<summary(?:\s+[^>]*)?>How this recommendation is made<\/summary>/);
+  assert.match(PAGE, /<summary(?:\s+[^>]*)?>Official sources and live-feed health<\/summary>/);
 });
 
 test('390px mobile layout keeps the decision and journey compact', () => {
