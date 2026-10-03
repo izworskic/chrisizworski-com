@@ -11,6 +11,7 @@
 
   const $ = (id) => document.getElementById(id);
   let syncQueued = false;
+  let viewerObserver = null;
 
   function selectedCameraId() {
     return document.querySelector("[data-niagara-camera][aria-pressed='true']")?.dataset.niagaraCamera || null;
@@ -102,16 +103,35 @@
 
   function bindSelectionObserver() {
     const tabs = document.querySelector(".niagara-camera-tabs");
-    if (!tabs || !("MutationObserver" in window)) return;
+    if (!tabs || !("MutationObserver" in window) || tabs.dataset.liveVideoObserved === "true") return;
+    tabs.dataset.liveVideoObserved = "true";
     const observer = new MutationObserver(queueSync);
     observer.observe(tabs, { subtree: true, attributes: true, attributeFilter: ["aria-pressed", "class"] });
   }
 
-  function init() {
-    moveAndRetitleSection();
+  function activateEnhancement() {
+    if (!$("niagaraCameraFrame") || !document.querySelector(".niagara-camera-tabs")) return false;
     ensureVideoPlayer();
     bindSelectionObserver();
     queueSync();
+    if (viewerObserver) {
+      viewerObserver.disconnect();
+      viewerObserver = null;
+    }
+    return true;
+  }
+
+  function waitForViewer() {
+    if (activateEnhancement() || !("MutationObserver" in window)) return;
+    const section = $("bridgeCameras");
+    if (!section) return;
+    viewerObserver = new MutationObserver(() => activateEnhancement());
+    viewerObserver.observe(section, { childList: true, subtree: true });
+  }
+
+  function init() {
+    moveAndRetitleSection();
+    waitForViewer();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
