@@ -313,5 +313,5 @@ test("primary decision controls render before map, camera links and methodology"
   assert.ok(controls >= 0);
   assert.ok(html.indexOf('class="river-map"') > controls);
   assert.ok(html.indexOf("Traffic cameras and road conditions") > controls);
-  assert.ok(html.indexOf("How the decision is made") > controls);
+  assert.ok(html.indexOf('id="methodHeading"') > controls);
 });
