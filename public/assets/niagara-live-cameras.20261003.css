@@ -1,29 +1,12 @@
 .niagara-live-cameras-v2{scroll-margin-top:20px}
-.niagara-live-camera-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
-.niagara-live-camera-tab{flex:0 0 auto;border:1px solid #c9d6dd;border-radius:999px;background:#fff;color:#15364b;padding:9px 12px;font:700 12px/1.2 var(--sans,system-ui,sans-serif);cursor:pointer}
-.niagara-live-camera-tab.is-selected{background:#0b314c;color:#fff;border-color:#0b314c}
-.niagara-live-camera-viewer{border:1px solid #d6e0e5;border-radius:16px;overflow:hidden;background:#071c28;box-shadow:0 12px 30px rgba(7,28,40,.12)}
-.niagara-live-camera-media{position:relative;aspect-ratio:16/9;background:#071c28;overflow:hidden}
-.niagara-live-camera-media img,.niagara-live-camera-media iframe{display:block;width:100%;height:100%;border:0;object-fit:cover;background:#071c28}
-.niagara-live-camera-badge{position:absolute;left:12px;top:12px;z-index:2;border-radius:999px;background:rgba(7,28,40,.88);color:#fff;padding:6px 9px;font:800 10px/1 var(--sans,system-ui,sans-serif);letter-spacing:.08em}
-.niagara-live-camera-caption{display:flex;align-items:flex-start;gap:14px;justify-content:space-between;background:#fff;color:#152332;padding:14px 16px}
-.niagara-live-camera-caption>div{min-width:0;display:grid;gap:4px}
-.niagara-live-camera-caption span{font:800 10px/1.2 var(--sans,system-ui,sans-serif);letter-spacing:.08em;text-transform:uppercase;color:#667782}
-.niagara-live-camera-caption strong{font:800 16px/1.25 var(--sans,system-ui,sans-serif);color:#072336}
-.niagara-live-camera-caption p{margin:0;color:#53656f;font:13px/1.45 var(--sans,system-ui,sans-serif)}
-.niagara-live-camera-caption a,.niagara-live-camera-caption button{flex:0 0 auto;border:1px solid #b8c9d2;border-radius:10px;background:#fff;color:#0b4d71;padding:9px 10px;font:700 12px/1.2 var(--sans,system-ui,sans-serif);text-decoration:none;cursor:pointer}
-.niagara-live-camera-empty{background:#fff;color:#152332;padding:24px;border-radius:16px}
-.niagara-live-camera-empty strong{display:block;color:#072336;font:800 18px/1.25 var(--sans,system-ui,sans-serif);margin-bottom:6px}
-.niagara-live-camera-empty p{margin:0 0 14px;color:#53656f}
-.niagara-live-camera-empty a{font-weight:800;color:#0b4d71}
-.niagara-live-camera-caveat{margin:10px 0 0;color:#60727c;font:12px/1.45 var(--sans,system-ui,sans-serif)}
+.niagara-live-cameras-v2 .niagara-camera-frame{position:relative;aspect-ratio:16/9;background:#071c28;overflow:hidden}
+.niagara-live-cameras-v2 .niagara-camera-frame img,
+.niagara-live-cameras-v2 .niagara-camera-frame iframe{display:block;width:100%;height:100%;border:0;object-fit:cover;background:#071c28}
+.niagara-live-cameras-v2 .niagara-camera-video[hidden]{display:none}
+.niagara-live-cameras-v2 .niagara-camera-live-badge{z-index:3}
+.niagara-live-cameras-v2 .niagara-camera-tabs{scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.niagara-live-cameras-v2 .niagara-camera-card{box-shadow:0 12px 30px rgba(7,28,40,.12)}
 @media(max-width:620px){
   .niagara-live-cameras-v2{margin-top:14px}
-  .niagara-live-camera-tabs{margin-right:-14px;padding-right:14px}
-  .niagara-live-camera-tab{padding:9px 11px}
-  .niagara-live-camera-viewer{border-radius:13px}
-  .niagara-live-camera-caption{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
-  .niagara-live-camera-caption>div{grid-column:1/-1}
-  .niagara-live-camera-caption a,.niagara-live-camera-caption button{width:100%;text-align:center}
-  .niagara-live-camera-badge{left:9px;top:9px}
+  .niagara-live-cameras-v2 .niagara-camera-tabs{margin-right:-14px;padding-right:14px}
 }
