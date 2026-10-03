@@ -24,6 +24,7 @@
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="/assets/michigan-border-crossings.20261003d.css">
 <link rel="stylesheet" href="/assets/niagara-border-experience.20261003d.css">
+<link rel="stylesheet" href="/assets/niagara-visual-layer.20261003.css">
 <style>
 @media(max-width:620px){.niagara-page .trip-answer{scroll-margin-top:12px}}
 /* Critical readability fallback: light traveler surfaces must stay readable even if a stylesheet is delayed. */
@@ -82,6 +83,8 @@
         "Traveler eligibility and restrictions",
         "Bridge-operator traffic context",
         "Official approach-road and weather context",
+        "Interactive bridge-location map",
+        "Official traffic-camera links",
         "Bridge-specific crossing guidance"
       ]
     }
@@ -93,8 +96,9 @@
 <script defer src="/_vercel/speed-insights/script.js"></script>
 <script defer src="/assets/tool-engagement.js"></script>
 <script defer src="/assets/niagara-border-crossing.20261003d.js"></script>
+<script defer src="/assets/niagara-visual-layer.20261003.js"></script>
 </head>
-<body class="niagara-page" data-analytics-page="niagara-border-crossing" data-ui-revision="20261003e">
+<body class="niagara-page" data-analytics-page="niagara-border-crossing" data-ui-revision="20261003f">
 <a class="skip-link" href="#decision">Skip to crossing decision</a>
 <header class="site-header">
   <a class="site-name" href="/">Chris Izworski</a>
@@ -231,13 +235,70 @@
   </section>
 
   <section class="support-card bridge-orientation" aria-labelledby="orientationHeading">
-    <div class="section-top"><div><p class="eyebrow">Get oriented</p><h2 id="orientationHeading">Where the four bridges sit along the river</h2><p>North is at the top. The Falls crossings are close together; Peace Bridge is much farther south in the Buffalo–Fort Erie corridor.</p></div></div>
-    <div class="river-map" aria-label="Niagara River crossings from north to south">
-      <div><strong>Lewiston–Queenston</strong><span>Lewiston, NY ↔ Queenston, ON · northern highway route</span></div>
-      <div><strong>Whirlpool Rapids</strong><span>Niagara Falls · NEXUS-only specialist crossing</span></div>
-      <div><strong>Rainbow Bridge</strong><span>Niagara Falls · visitor and general passenger crossing</span></div>
-      <div><strong>Peace Bridge</strong><span>Buffalo, NY ↔ Fort Erie, ON · southern QEW route</span></div>
+    <div class="section-top"><div><p class="eyebrow">Get oriented</p><h2 id="orientationHeading">See where the four crossings actually are</h2><p>The map spans the Niagara River from Buffalo and Fort Erie north through Niagara Falls to Lewiston and Queenston. Tap a marker for the bridge role and its camera source when one is available.</p></div></div>
+    <div class="niagara-visual-map">
+      <div class="niagara-visual-map__canvas" id="niagaraBridgeMap" role="img" aria-label="Interactive map of Peace Bridge, Rainbow Bridge, Whirlpool Rapids Bridge and Lewiston-Queenston Bridge"></div>
+      <div class="niagara-visual-map__fallback" aria-label="Bridge locations from south to north">
+        <a href="#photo-peace"><strong>Peace Bridge</strong><span>Buffalo ↔ Fort Erie · southern crossing</span></a>
+        <a href="#photo-rainbow"><strong>Rainbow Bridge</strong><span>Niagara Falls ↔ Niagara Falls · visitor crossing</span></a>
+        <a href="#photo-whirlpool"><strong>Whirlpool Rapids</strong><span>Niagara Falls · NEXUS-only crossing</span></a>
+        <a href="#photo-lewiston"><strong>Lewiston–Queenston</strong><span>Lewiston ↔ Queenston · northern highway crossing</span></a>
+      </div>
     </div>
+    <p class="niagara-map-note">Map locations are for orientation, not turn-by-turn routing. The bridge operator and border agencies remain the controlling sources for eligibility, closure and wait information.</p>
+  </section>
+
+  <section class="support-card" aria-labelledby="bridgeImagesHeading">
+    <div class="section-top"><div><p class="eyebrow">Know what you are looking for</p><h2 id="bridgeImagesHeading">The four Niagara border bridges</h2><p>Each crossing looks and feels different. These reference photographs help connect the live decision to the bridge you will actually approach.</p></div></div>
+    <div class="bridge-photo-grid">
+      <figure class="bridge-photo-card" id="photo-peace">
+        <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Peace_Bridge_from_Fort_Erie.jpg?width=1200" width="1200" height="730" alt="Peace Bridge seen from Fort Erie across the Niagara River">
+        <figcaption><strong>Peace Bridge</strong><span>Buffalo, New York ↔ Fort Erie, Ontario · broad southern river crossing feeding I-190 and the QEW.</span><a href="https://commons.wikimedia.org/wiki/File:Peace_Bridge_from_Fort_Erie.jpg" target="_blank" rel="noopener">Philcomanforterie · Wikimedia Commons ↗</a></figcaption>
+      </figure>
+      <figure class="bridge-photo-card" id="photo-rainbow">
+        <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Rainbow_Bridge%2C_July_2026.jpg?width=1200" width="1200" height="904" alt="Rainbow Bridge crossing the Niagara River near Niagara Falls">
+        <figcaption><strong>Rainbow Bridge</strong><span>Niagara Falls, New York ↔ Niagara Falls, Ontario · the central visitor and passenger crossing beside the Falls.</span><a href="https://commons.wikimedia.org/wiki/File:Rainbow_Bridge,_July_2026.jpg" target="_blank" rel="noopener">PenPineapplePinniped · Wikimedia Commons ↗</a></figcaption>
+      </figure>
+      <figure class="bridge-photo-card" id="photo-whirlpool">
+        <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Whirlpool_Bridge_%282936545446%29.jpg?width=1200" width="1200" height="900" alt="Whirlpool Rapids Bridge over the Niagara Gorge">
+        <figcaption><strong>Whirlpool Rapids Bridge</strong><span>Niagara Falls · compact gorge crossing reserved for eligible NEXUS auto travelers.</span><a href="https://commons.wikimedia.org/wiki/File:Whirlpool_Bridge_(2936545446).jpg" target="_blank" rel="noopener">Reading Tom · Wikimedia Commons ↗</a></figcaption>
+      </figure>
+      <figure class="bridge-photo-card" id="photo-lewiston">
+        <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Lewiston-Queenston_Bridge_from_Niagara_Gorge.jpg?width=1200" width="1200" height="803" alt="Lewiston-Queenston Bridge spanning the Niagara Gorge">
+        <figcaption><strong>Lewiston–Queenston Bridge</strong><span>Lewiston, New York ↔ Queenston, Ontario · northern highway crossing and a primary commercial-truck route.</span><a href="https://commons.wikimedia.org/wiki/File:Lewiston-Queenston_Bridge_from_Niagara_Gorge.jpg" target="_blank" rel="noopener">Wilson44691 · Wikimedia Commons ↗</a></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="support-card" id="bridgeCameras" aria-labelledby="cameraHeading">
+    <div class="section-top"><div><p class="eyebrow">Visual traffic check</p><h2 id="cameraHeading">Live bridge and border cameras</h2><p>Use the cameras as a visual check on plaza queues and approach conditions. A camera image does not replace the official direction-specific border wait or a closure notice.</p></div></div>
+    <div class="camera-grid">
+      <article class="camera-source-card">
+        <span class="camera-source-kicker">Official bridge authority / NITTEC</span>
+        <h3>Peace Bridge</h3>
+        <p>The Peace Bridge Authority publishes live webcam views, and NITTEC lists several international-bridge views including the deck, plazas and I-190 approach.</p>
+        <div class="camera-actions"><a class="primary" href="https://www.peacebridge.com/media-room/canadian-webcams/" target="_blank" rel="noopener">Open Peace Bridge webcams ↗</a><a href="https://www.nittec.org/cameras/" target="_blank" rel="noopener">NITTEC cameras ↗</a></div>
+      </article>
+      <article class="camera-source-card">
+        <span class="camera-source-kicker">Official NITTEC camera set</span>
+        <h3>Rainbow Bridge</h3>
+        <p>NITTEC publishes dedicated Rainbow Bridge camera views, including traffic looking toward Canada and toward the United States.</p>
+        <div class="camera-actions"><a class="primary" href="https://www.nittec.org/cameras/index.html?cid=1011" target="_blank" rel="noopener">Open Rainbow cameras ↗</a><a href="https://www.niagarafallsbridges.com/services/traffic-conditions" target="_blank" rel="noopener">NFBC traffic page ↗</a></div>
+      </article>
+      <article class="camera-source-card">
+        <span class="camera-source-kicker">Official NITTEC camera set</span>
+        <h3>Lewiston–Queenston</h3>
+        <p>NITTEC provides bridge and plaza camera views on both sides of the crossing, useful for checking queues before committing to Highway 405 or I-190.</p>
+        <div class="camera-actions"><a class="primary" href="https://www.nittec.org/cameras/index.html?cid=1021" target="_blank" rel="noopener">Lewiston cameras ↗</a><a href="https://www.nittec.org/cameras/index.html?cid=1022" target="_blank" rel="noopener">Queenston plaza ↗</a></div>
+      </article>
+      <article class="camera-source-card is-unavailable">
+        <span class="camera-source-kicker">No dedicated live road camera identified</span>
+        <h3>Whirlpool Rapids</h3>
+        <p>Keep Whirlpool in the map and bridge imagery, but do not imply camera coverage that is not available. Use NFBC's traffic page for the crossing's current operator status.</p>
+        <div class="camera-actions"><a href="https://www.niagarafallsbridges.com/services/traffic-conditions" target="_blank" rel="noopener">Open NFBC traffic ↗</a></div>
+      </article>
+    </div>
+    <p class="camera-disclosure"><strong>Camera authority:</strong> NITTEC currently lists nine international-bridge cameras across the Niagara crossings. Peace Bridge also maintains its own webcam pages. Whirlpool Rapids remains separately labeled rather than borrowing a nearby camera.</p>
   </section>
 
   <section class="support-card" aria-label="Approach and weather context">
