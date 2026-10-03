@@ -5,12 +5,14 @@
     direction: "to_canada",
     traveler: "passenger",
     preferred: "rainbow",
+    oversize: false,
     requestId: 0,
   };
 
   const directionButtons = [...document.querySelectorAll("[data-direction]")];
   const travelerSelect = document.getElementById("travelerSelect");
   const preferredSelect = document.getElementById("preferredSelect");
+  const oversizeCheck = document.getElementById("oversizeCheck");
   const crossingGrid = document.getElementById("crossingGrid");
   const decisionState = document.getElementById("decisionState");
   const decisionHeadline = document.getElementById("decisionHeadline");
@@ -62,8 +64,10 @@
 
   function resultKicker(result, recommendedId) {
     if (!result.eligibility?.eligible) return "Not eligible";
+    if (result.state === "RESTRICTION_ACTIVE") return "Approval required";
     if (result.state === "CROSSING_CLOSED") return "Closed";
     if (result.state === "SOURCE_CONFLICT") return "Official sources conflict";
+    if (result.context_only || result.state === "OPERATOR_CONTEXT_ONLY") return "Operator context only";
     if (result.state === "SOURCE_STALE") return "Wait too old to recommend";
     if (result.state === "SOURCE_UNAVAILABLE" || result.state === "INSUFFICIENT_DATA") return "Current wait unavailable";
     if (result.id === recommendedId) return "Recommended";
@@ -85,7 +89,9 @@
           ? "Closed"
           : result.state === "CROSSING_INELIGIBLE"
             ? "Not eligible"
-            : "Not current";
+            : result.state === "RESTRICTION_ACTIVE"
+              ? "Approval required"
+              : "Not current";
 
     const waitClass =
       Number.isFinite(result.wait_minutes) && result.wait_minutes >= 30
@@ -103,6 +109,7 @@
 
     const chips = [
       buffer,
+      result.context_only ? "Not used for bridge-switch recommendation" : null,
       result.freshness ? formatAge(result.freshness) : null,
       Number.isFinite(result.lanes_open) ? `${result.lanes_open} lane${result.lanes_open === 1 ? "" : "s"} open` : null,
     ].filter(Boolean);
@@ -234,6 +241,7 @@
       traveler: state.traveler,
       preferred: state.preferred,
     });
+    if (state.oversize) params.set("oversize", "1");
     return params.toString();
   }
 
@@ -242,6 +250,8 @@
     url.searchParams.set("direction", state.direction);
     url.searchParams.set("traveler", state.traveler);
     url.searchParams.set("preferred", state.preferred);
+    if (state.oversize) url.searchParams.set("oversize", "1");
+    else url.searchParams.delete("oversize");
     window.history.replaceState(null, "", url);
   }
 
@@ -273,6 +283,7 @@
             direction: state.direction,
             traveler: state.traveler,
             preferred: state.preferred,
+            oversize: state.oversize,
             state: payload.decision?.state,
             recommended: payload.decision?.recommended_id,
           },
@@ -292,6 +303,7 @@
     });
     travelerSelect.value = state.traveler;
     preferredSelect.value = state.preferred;
+    if (oversizeCheck) oversizeCheck.checked = state.oversize;
   }
 
   function readInitialState() {
@@ -300,12 +312,13 @@
     const traveler = params.get("traveler");
     const preferred = params.get("preferred");
     if (["to_canada", "to_us"].includes(direction)) state.direction = direction;
-    if (["passenger", "nexus", "commercial", "pedestrian", "bicycle", "bus", "tow"].includes(traveler)) {
+    if (["passenger", "nexus", "global_entry", "commercial", "pedestrian", "bicycle", "bus", "tow"].includes(traveler)) {
       state.traveler = traveler;
     }
     if (["peace", "rainbow", "whirlpool", "lewiston-queenston"].includes(preferred)) {
       state.preferred = preferred;
     }
+    state.oversize = params.get("oversize") === "1";
   }
 
   directionButtons.forEach((button) => {
@@ -318,6 +331,8 @@
 
   travelerSelect.addEventListener("change", () => {
     state.traveler = travelerSelect.value;
+    if (state.traveler !== "commercial") state.oversize = false;
+    applyControls();
     refresh(true);
   });
 
@@ -325,6 +340,13 @@
     state.preferred = preferredSelect.value;
     refresh(true);
   });
+
+  if (oversizeCheck) {
+    oversizeCheck.addEventListener("change", () => {
+      state.oversize = oversizeCheck.checked;
+      refresh(true);
+    });
+  }
 
   readInitialState();
   applyControls();
