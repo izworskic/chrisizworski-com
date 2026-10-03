@@ -5,6 +5,7 @@ const LASTMOD = '2026-10-03';
 const KEY = 'niagara-border-crossing';
 const NAME = 'Niagara Border Crossing Wait Times — Which Bridge Should You Take?';
 const DESC = 'Compare Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston with official directional border waits, hard vehicle eligibility, NEXUS rules, freshness and conservative diversion-aware guidance.';
+const VISUAL_ASSET_VERSION = '20261003g';
 
 function patchTools() {
   const file = 'public/tools/index.html';
@@ -112,6 +113,23 @@ function patchLlms() {
   }
 }
 
+function patchVisualAssets() {
+  const file = 'public/niagara-border-crossing/index.html';
+  let html = fs.readFileSync(file, 'utf8');
+  const cssPattern = /\/assets\/niagara-visual-layer\.20261003\.css(?:\?v=[^"']+)?/g;
+  const jsPattern = /\/assets\/niagara-visual-layer\.20261003\.js(?:\?v=[^"']+)?/g;
+  const cssUrl = `/assets/niagara-visual-layer.20261003.css?v=${VISUAL_ASSET_VERSION}`;
+  const jsUrl = `/assets/niagara-visual-layer.20261003.js?v=${VISUAL_ASSET_VERSION}`;
+  if (!cssPattern.test(html) || !jsPattern.test(html)) {
+    throw new Error('Niagara visual cache bust: expected visual asset references not found');
+  }
+  html = html.replace(cssPattern, cssUrl).replace(jsPattern, jsUrl);
+  html = html.replace(/data-ui-revision="[^"]+"/, `data-ui-revision="${VISUAL_ASSET_VERSION}"`);
+  fs.writeFileSync(file, html);
+  console.log(`Niagara visual assets cache-busted to ${VISUAL_ASSET_VERSION}.`);
+}
+
 patchTools();
 patchSitemap();
 patchLlms();
+patchVisualAssets();
