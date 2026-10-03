@@ -100,23 +100,27 @@ test("exact NFBC camera links remain pinned", () => {
   assert.ok(lewiston.includes("https://www.nittec.org/cameras/index.html?cid=1022"));
 });
 
-test("traveler page follows answer then proof experience understanding exploration", () => {
+test("traveler page follows decision then live reality then journey then supporting evidence", () => {
   const html = read("public/niagara-border-crossing/index.html");
-  const answer = html.indexOf("<p class=\"eyebrow\">Answer</p>");
-  const interpretation = html.indexOf("Proof → Experience → Understanding");
-  const map = html.indexOf("Four bridges, four different jobs");
-  const exploration = html.indexOf("Open the official systems");
-  assert.ok(answer >= 0);
-  assert.ok(interpretation > answer);
-  assert.ok(map > interpretation);
-  assert.ok(exploration > map);
+  const decision = html.indexOf('id="decision"');
+  const reality = html.indexOf("What is happening there");
+  const journey = html.indexOf("Put yourself on the route");
+  const comparison = html.indexOf("What each bridge is actually for");
+  const sources = html.indexOf("Official sources and live-feed health");
+  assert.ok(decision >= 0);
+  assert.ok(reality > decision);
+  assert.ok(journey > reality);
+  assert.ok(comparison > journey);
+  assert.ok(sources > comparison);
+  assert.doesNotMatch(html, /Proof → Experience → Understanding/);
 });
 
-test("human interpretation is downstream of the deterministic decision", () => {
+test("human experience rendering is downstream of the deterministic decision", () => {
   const js = read("public/assets/niagara-border-crossing.js");
-  assert.match(js, /renderDecision\(payload\);\s*renderInterpretation\(payload\);/);
-  assert.match(js, /const focusId = decision\.recommended_id \|\| state\.preferred/);
+  assert.match(js, /function focusId\(payload\)[\s\S]*decision\?\.recommended_id \|\| state\.preferred/);
+  assert.match(js, /renderDecision\(payload\);\s*renderReality\(payload\);\s*renderJourney\(payload\);\s*renderCompare\(payload\);/);
   assert.doesNotMatch(js, /experience.*recommended_id\s*=/i);
+  assert.doesNotMatch(js, /recommended_id\s*=.*experience/i);
 });
 
 test("approach adapter is isolated from the decision endpoint", () => {
@@ -138,7 +142,9 @@ test("NITTEC is not scraped by the production approach adapter", () => {
 test("UI refuses to convert approach context into an exact route claim", () => {
   const html = read("public/niagara-border-crossing/index.html");
   const js = read("public/assets/niagara-border-crossing.js");
-  assert.match(html, /never converted into an exact arrival-time claim/i);
-  assert.match(js, /last-mile context, not inputs to the bridge recommendation/i);
-  assert.match(js, /No invented approach estimate/);
+  assert.match(html, /Approach traffic is shown separately until a validated route-time feed can be included/i);
+  assert.match(js, /approach conditions, not customs wait time/i);
+  assert.match(js, /not a travel-time estimate/i);
+  assert.match(js, /no road-delay estimate is being invented/i);
+  assert.doesNotMatch(js, /travel_time_minutes\s*=/i);
 });
