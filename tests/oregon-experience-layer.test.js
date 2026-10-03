@@ -33,7 +33,10 @@ function lossTerms() {
   const M = Number(!css.includes('.experience-grid{grid-template-columns:1fr}') || !css.includes('@media(max-width:430px)'));
   const P = Number(!app.includes('Experience context explains the outing. It does not alter the decision status above.'));
   const F = Number(!app.includes('If it doesn’t line up') || !app.includes('fallback'));
-  const B = Number((app.match(/experience-scene/g) || []).length < 2);
+  // B (bloat) = any scene paragraph longer than 220 chars. The earlier proxy counted
+  // `experience-scene` occurrences (< 2 failed), which measured markup reuse, not reading load.
+  const scenes = [...app.matchAll(/scene:'([^']*)'/g)].map(m => m[1]);
+  const B = Number(scenes.length === 0 || scenes.some(text => text.length > 220));
   return { D, T, S, O, G, M, P, F, B };
 }
 
