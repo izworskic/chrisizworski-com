@@ -97,6 +97,24 @@
     </figure>
   </section>
 
+  <noscript>
+    <section class="support-card noscript-card" aria-label="Official border sources">
+      <div class="support-pane">
+        <p class="eyebrow">Live comparison needs JavaScript</p>
+        <h2>Use the official crossing reports directly</h2>
+        <p>This page cannot calculate a bridge choice with JavaScript disabled. Check the direction-specific border wait plus the bridge operator before entering the approach.</p>
+        <div class="official-links">
+          <a class="quick-link" href="https://bwt.cbp.gov/">CBP waits</a>
+          <a class="quick-link" href="https://www.cbsa-asfc.gc.ca/bwt-taf/menu-eng.html">CBSA waits</a>
+          <a class="quick-link" href="https://www.niagarafallsbridges.com/services/traffic-conditions">NFBC traffic</a>
+          <a class="quick-link" href="https://www.peacebridge.com/Traffic/index.php">Peace Bridge traffic</a>
+          <a class="quick-link" href="https://511ny.org/">511 New York</a>
+          <a class="quick-link" href="https://511on.ca/">Ontario 511</a>
+        </div>
+      </div>
+    </section>
+  </noscript>
+
   <section class="trip-desk" id="decision" aria-labelledby="decisionHeading">
     <div class="trip-controls">
       <fieldset>
@@ -106,8 +124,9 @@
           <button class="segment" type="button" data-direction="to_us" aria-pressed="false">To United States<small>Ontario → New York</small></button>
         </div>
       </fieldset>
-      <label><span class="field-label">How are you crossing?</span>
-        <select class="select-control" id="travelerSelect">
+      <div class="control-group">
+        <label class="field-label" for="travelerSelect">How are you crossing?</label>
+        <select class="select-control" id="travelerSelect" aria-describedby="travelerHelp">
           <option value="passenger">Car / SUV / personal vehicle</option>
           <option value="nexus">NEXUS auto traveler</option>
           <option value="commercial">Commercial truck</option>
@@ -117,17 +136,21 @@
           <option value="bicycle">Bicycle</option>
         </select>
         <span class="control-help" id="travelerHelp">We compare the lane or traveler type the official source actually reports.</span>
-        <label id="commercialOptions" hidden style="margin-top:8px;font:11px/1.4 var(--sans)"><input type="checkbox" id="oversizeToggle"> Oversize / special commercial vehicle</label>
-      </label>
-      <label><span class="field-label">Where would you cross if waits were equal?</span>
-        <select class="select-control" id="preferredSelect">
+        <div id="commercialOptions" hidden style="margin-top:8px;font:11px/1.4 var(--sans)">
+          <input type="checkbox" id="oversizeToggle">
+          <label for="oversizeToggle">Oversize / special commercial vehicle</label>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="field-label" for="preferredSelect">Where would you cross if waits were equal?</label>
+        <select class="select-control" id="preferredSelect" aria-describedby="preferredHelp">
           <option value="rainbow">Niagara Falls → Rainbow Bridge</option>
           <option value="peace">Buffalo / Fort Erie → Peace Bridge</option>
           <option value="lewiston-queenston">Lewiston / Queenston → Lewiston–Queenston</option>
           <option value="whirlpool">NEXUS Falls route → Whirlpool Rapids</option>
         </select>
-        <span class="control-help">This keeps a tiny wait difference from sending you on a needless detour.</span>
-      </label>
+        <span class="control-help" id="preferredHelp">This keeps a tiny wait difference from sending you on a needless detour.</span>
+      </div>
     </div>
 
     <div class="trip-answer" aria-live="polite">
