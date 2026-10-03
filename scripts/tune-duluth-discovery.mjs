@@ -7,6 +7,11 @@ const SITEMAP = 'public/sitemap.xml';
 const CANONICAL = 'https://chrisizworski.com/duluth-canal-park/';
 const TITLE = 'Duluth Ship Schedule Today & Live Cams | Chris Izworski';
 const DESCRIPTION = 'Duluth ship schedule today with live AIS, Aerial Lift Bridge passage windows, Canal Park cams, vessel map and the best places to watch.';
+const SOCIAL_IMAGE = 'https://chrisizworski.com/api/duluth-social-card';
+const SOCIAL_IMAGE_ID = `${CANONICAL}#primaryimage`;
+const SOCIAL_TITLE = 'Duluth Ship Schedule Today, Live Cams & Map';
+const SOCIAL_DESCRIPTION = 'See which Duluth ship is coming next with live AIS, Aerial Lift Bridge passage windows, live cams, map and Canal Park viewing spots.';
+const SOCIAL_ALT = 'Illustration of a Great Lakes freighter approaching the Duluth Aerial Lift Bridge';
 
 function replaceOnce(source, before, after, label) {
   if (source.includes(after)) return source;
@@ -54,6 +59,12 @@ html = replaceOnce(
   '<meta property="og:description" content="See which Duluth ship is coming next with live AIS, Aerial Lift Bridge passage windows, live cams, map and Canal Park viewing spots.">',
   'Open Graph description'
 );
+html = replaceOnce(
+  html,
+  '<meta property="og:type" content="website">\n<meta property="og:url" content="https://chrisizworski.com/duluth-canal-park/">\n<meta property="og:image" content="https://commons.wikimedia.org/wiki/Special:Redirect/file/Duluth%20Ship%20Canal-Lighthouse-1000%20footer.jpg">\n<meta property="og:image:alt" content="A 1,000-foot Great Lakes freighter passing under Duluth\'s Aerial Lift Bridge">\n<meta name="twitter:card" content="summary_large_image">',
+  `<meta property="og:type" content="website">\n<meta property="og:url" content="${CANONICAL}">\n<meta property="og:site_name" content="Chris Izworski">\n<meta property="og:image" content="${SOCIAL_IMAGE}">\n<meta property="og:image:secure_url" content="${SOCIAL_IMAGE}">\n<meta property="og:image:type" content="image/png">\n<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n<meta property="og:image:alt" content="${SOCIAL_ALT}">\n<meta name="twitter:card" content="summary_large_image">\n<meta name="twitter:title" content="${SOCIAL_TITLE}">\n<meta name="twitter:description" content="${SOCIAL_DESCRIPTION}">\n<meta name="twitter:image" content="${SOCIAL_IMAGE}">\n<meta name="twitter:image:alt" content="${SOCIAL_ALT}">`,
+  'social card metadata'
+);
 
 const jsonLdMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
 if (!jsonLdMatch) throw new Error('Duluth discovery patch: JSON-LD graph not found');
@@ -74,11 +85,29 @@ app.featureList = [
   'Canal Park live camera network',
   'Mapped ship-watching locations'
 ];
+let image = graph.find(node => node?.['@type'] === 'ImageObject' && node?.['@id'] === SOCIAL_IMAGE_ID);
+if (!image) {
+  image = { '@type': 'ImageObject', '@id': SOCIAL_IMAGE_ID };
+  graph.push(image);
+}
+Object.assign(image, {
+  url: SOCIAL_IMAGE,
+  contentUrl: SOCIAL_IMAGE,
+  encodingFormat: 'image/png',
+  width: 1200,
+  height: 630,
+  name: 'Duluth Ship Schedule social preview',
+  caption: SOCIAL_ALT,
+  representativeOfPage: true
+});
+app.image = { '@id': SOCIAL_IMAGE_ID };
 place['@id'] = `${CANONICAL}#place`;
 page.name = 'Duluth Ship Schedule Today, Live Cams & Map';
 page.description = 'Duluth ship schedule today with live AIS, anticipated Aerial Lift Bridge passage windows, Canal Park live cameras, vessel map and ship-watching locations.';
 page.about = { '@id': `${CANONICAL}#place` };
-page.dateModified = '2026-09-25';
+page.primaryImageOfPage = { '@id': SOCIAL_IMAGE_ID };
+page.image = { '@id': SOCIAL_IMAGE_ID };
+page.dateModified = '2026-10-02';
 const updatedJsonLd = `<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n</script>`;
 html = html.replace(jsonLdMatch[0], updatedJsonLd);
 
@@ -160,7 +189,7 @@ let sitemap = fs.readFileSync(SITEMAP, 'utf8');
 const escapedCanonical = CANONICAL.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const existing = new RegExp(`\\s*<url>\\s*<loc>${escapedCanonical}<\\/loc>[\\s\\S]*?<\\/url>\\s*`, 'g');
 sitemap = sitemap.replace(existing, '\n');
-const sitemapEntry = `  <url>\n    <loc>${CANONICAL}</loc>\n    <lastmod>2026-09-25</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
+const sitemapEntry = `  <url>\n    <loc>${CANONICAL}</loc>\n    <lastmod>2026-10-02</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
 if (!sitemap.includes('</urlset>')) throw new Error('Duluth discovery patch: sitemap missing </urlset>');
 sitemap = sitemap.replace('</urlset>', `${sitemapEntry}</urlset>`);
 fs.writeFileSync(SITEMAP, sitemap);
@@ -177,6 +206,13 @@ const checks = [
   ['meta length', textLength(DESCRIPTION) <= 158],
   ['canonical', finalHtml.includes(`<link rel="canonical" href="${CANONICAL}">`)],
   ['indexable robots', /<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">/.test(finalHtml)],
+  ['Open Graph site name', finalHtml.includes('<meta property="og:site_name" content="Chris Izworski">')],
+  ['first-party social image', finalHtml.includes(`<meta property="og:image" content="${SOCIAL_IMAGE}">`)],
+  ['social image dimensions', finalHtml.includes('<meta property="og:image:width" content="1200">') && finalHtml.includes('<meta property="og:image:height" content="630">')],
+  ['explicit X card title', finalHtml.includes(`<meta name="twitter:title" content="${SOCIAL_TITLE}">`)],
+  ['explicit X card description', finalHtml.includes(`<meta name="twitter:description" content="${SOCIAL_DESCRIPTION}">`)],
+  ['explicit X card image', finalHtml.includes(`<meta name="twitter:image" content="${SOCIAL_IMAGE}">`)],
+  ['explicit X card alt', finalHtml.includes(`<meta name="twitter:image:alt" content="${SOCIAL_ALT}">`)],
   ['query-aligned H1', finalHtml.includes('<h1>Duluth ship schedule today &amp; Canal Park live cams</h1>')],
   ['crawlable direct answer', finalHtml.includes('Want to know what ship is coming through Duluth next?')],
   ['Aerial Lift Bridge intent', finalHtml.includes('Aerial Lift Bridge passage')],
@@ -195,8 +231,12 @@ const verifyGraph = verifyLd['@graph'];
 const verifyPerson = verifyGraph.find(node => node?.['@type'] === 'Person');
 const verifyPage = verifyGraph.find(node => node?.['@type'] === 'WebPage' && node?.['@id'] === CANONICAL);
 const verifyApp = verifyGraph.find(node => node?.['@type'] === 'WebApplication' && node?.['@id'] === `${CANONICAL}#app`);
+const verifyImage = verifyGraph.find(node => node?.['@type'] === 'ImageObject' && node?.['@id'] === SOCIAL_IMAGE_ID);
 if (verifyPerson?.['@id'] !== 'https://chrisizworski.com/#person') throw new Error('Duluth discovery verification failed: canonical Person entity');
 if (verifyPage?.author?.['@id'] !== 'https://chrisizworski.com/#person') throw new Error('Duluth discovery verification failed: WebPage author entity');
 if (verifyApp?.name !== 'Duluth Ship Schedule Today, Live Cams & Map') throw new Error('Duluth discovery verification failed: WebApplication name');
+if (verifyImage?.url !== SOCIAL_IMAGE || verifyImage?.width !== 1200 || verifyImage?.height !== 630) throw new Error('Duluth discovery verification failed: social ImageObject');
+if (verifyApp?.image?.['@id'] !== SOCIAL_IMAGE_ID) throw new Error('Duluth discovery verification failed: WebApplication image');
+if (verifyPage?.primaryImageOfPage?.['@id'] !== SOCIAL_IMAGE_ID) throw new Error('Duluth discovery verification failed: WebPage primary image');
 
-console.log(`Duluth discovery treatment verified: ${TITLE} (${textLength(TITLE)} chars); meta ${textLength(DESCRIPTION)} chars; sitemap + inbound link present.`);
+console.log(`Duluth discovery treatment verified: ${TITLE} (${textLength(TITLE)} chars); meta ${textLength(DESCRIPTION)} chars; social card + X metadata + image schema verified; sitemap + inbound link present.`);

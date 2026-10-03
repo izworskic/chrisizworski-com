@@ -35,10 +35,16 @@ test('CBBT camera delivery proxies like Mackinac and has deterministic direct fa
   assert.match(viewJs, /\/api\/cbbt-media\?asset=camera&slot=page/);
 });
 
-test('CBBT radar keeps the first-party path with a direct NWS fallback', () => {
+test('CBBT radar prefers the current official NWS frame and has a direct static fallback', () => {
   assert.match(viewJs, /RADAR_IMAGE='\/api\/cbbt-media\?asset=radar'/);
-  assert.match(viewJs, /RADAR_DIRECT='https:\/\/radar\.weather\.gov\/ridge\/standard\/KAKQ_loop\.gif'/);
-  assert.match(viewJs, /refreshRadar\(true\)/);
+  assert.match(viewJs, /RADAR_DIRECT='https:\/\/radar\.weather\.gov\/ridge\/standard\/KAKQ_0\.gif'/);
+  assert.match(viewJs, /image\.onerror=function\(\)/);
+  assert.match(viewJs, /image\.onload=function\(\)/);
+  assert.match(viewJs, /image\.src=useDirect\?RADAR_DIRECT:bust\(RADAR_IMAGE,RADAR_REFRESH_MS\)/);
+  assert.match(mediaJs, /id: `radar-\$\{STATION_ID\.toLowerCase\(\)\}-current`/);
+  assert.ok(mediaJs.indexOf('_0.gif') < mediaJs.indexOf('_loop.gif'), 'current frame must be attempted before animated loop');
+  assert.match(mediaJs, /X-CBBT-Radar-Delivery', 'server-proxy/);
+  assert.match(mediaJs, /X-CBBT-Radar-Delivery', 'client-redirect/);
 });
 
 test('CBBT radar fallback overlay is actually hidden while radar is healthy', () => {

@@ -5,13 +5,13 @@ const STATION_ID = RADAR_METADATA.stationId;
 
 const RADAR_SOURCES = Object.freeze([
   Object.freeze({
-    id: `radar-${STATION_ID.toLowerCase()}-loop`,
-    url: `https://radar.weather.gov/ridge/standard/${STATION_ID}_loop.gif`,
+    id: `radar-${STATION_ID.toLowerCase()}-current`,
+    url: `https://radar.weather.gov/ridge/standard/${STATION_ID}_0.gif`,
     contentType: 'image/gif',
   }),
   Object.freeze({
-    id: `radar-${STATION_ID.toLowerCase()}-current`,
-    url: `https://radar.weather.gov/ridge/standard/${STATION_ID}_0.gif`,
+    id: `radar-${STATION_ID.toLowerCase()}-loop`,
+    url: `https://radar.weather.gov/ridge/standard/${STATION_ID}_loop.gif`,
     contentType: 'image/gif',
   }),
 ]);
@@ -80,6 +80,7 @@ async function serveRadar(req, res) {
       res.setHeader('Cache-Control', RADAR_CACHE_CONTROL);
       res.setHeader('Content-Disposition', 'inline');
       res.setHeader('X-CBBT-Radar-Source', source.id);
+      res.setHeader('X-CBBT-Radar-Delivery', 'server-proxy');
       if (req.method === 'HEAD') return res.status(200).end();
       res.setHeader('Content-Length', String(image.bytes.length));
       return res.status(200).send(image.bytes);
@@ -88,9 +89,13 @@ async function serveRadar(req, res) {
     }
   }
 
-  console.error('[cbbt-media] all radar sources failed', failures);
+  console.error('[cbbt-media] all radar proxy sources failed; redirecting to the official current frame', failures);
+  const fallback = RADAR_SOURCES[0];
   res.setHeader('Cache-Control', 'no-store');
-  return res.status(502).json({ error: 'NWS radar is temporarily unavailable' });
+  res.setHeader('Location', fallback.url);
+  res.setHeader('X-CBBT-Radar-Source', fallback.id);
+  res.setHeader('X-CBBT-Radar-Delivery', 'client-redirect');
+  return res.status(302).end();
 }
 
 async function serveCamera(req, res, slotName) {
