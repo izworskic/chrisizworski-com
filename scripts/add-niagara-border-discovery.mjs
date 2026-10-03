@@ -6,6 +6,7 @@ const KEY = 'niagara-border-crossing';
 const NAME = 'Niagara Border Crossing Wait Times — Which Bridge Should You Take?';
 const DESC = 'Compare Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston with official directional border waits, hard vehicle eligibility, NEXUS rules, freshness and conservative diversion-aware guidance.';
 const VISUAL_ASSET_VERSION = '20261003h';
+const FALLBACK_ASSET_VERSION = '20261003a';
 
 function patchTools() {
   const file = 'public/tools/index.html';
@@ -129,7 +130,25 @@ function patchVisualAssets() {
   console.log(`Niagara visual assets cache-busted to ${VISUAL_ASSET_VERSION}.`);
 }
 
+function patchDecisionFallback() {
+  const file = 'public/niagara-border-crossing/index.html';
+  let html = fs.readFileSync(file, 'utf8');
+  const asset = `/assets/niagara-decision-fallback.20261003.js?v=${FALLBACK_ASSET_VERSION}`;
+  const assetPattern = /<script defer src="\/assets\/niagara-decision-fallback\.20261003\.js(?:\?v=[^"]+)?"><\/script>/;
+  const anchor = /<script defer src="\/assets\/niagara-visual-layer\.20261003\.js(?:\?v=[^"]+)?"><\/script>/;
+  if (assetPattern.test(html)) {
+    html = html.replace(assetPattern, `<script defer src="${asset}"></script>`);
+  } else if (anchor.test(html)) {
+    html = html.replace(anchor, (match) => `${match}\n<script defer src="${asset}"></script>`);
+  } else {
+    throw new Error('Niagara decision fallback: visual-layer script anchor not found');
+  }
+  fs.writeFileSync(file, html);
+  console.log(`Niagara decision fallback loaded at ${FALLBACK_ASSET_VERSION}.`);
+}
+
 patchTools();
 patchSitemap();
 patchLlms();
 patchVisualAssets();
+patchDecisionFallback();
