@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 
 const URL = 'https://chrisizworski.com/niagara-border-crossing/';
+const LASTMOD = '2026-10-03';
 const KEY = 'niagara-border-crossing';
 const NAME = 'Niagara Border Crossing Wait Times — Which Bridge Should You Take?';
 const DESC = 'Compare Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston with official directional border waits, hard vehicle eligibility, NEXUS rules, freshness and conservative diversion-aware guidance.';
@@ -78,15 +79,25 @@ function patchTools() {
 function patchSitemap() {
   const file = 'public/sitemap.xml';
   let xml = fs.readFileSync(file, 'utf8');
-  if (!xml.includes(`<loc>${URL}</loc>`)) {
-    const entry = `  <url>\n    <loc>${URL}</loc>\n    <lastmod>2026-10-02</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
-    if (!xml.includes('</urlset>')) throw new Error('Niagara discovery: sitemap.xml missing </urlset>');
-    xml = xml.replace('</urlset>', `${entry}</urlset>`);
+  const escapedUrl = URL.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const existingEntryRe = new RegExp(`<url>\\s*<loc>${escapedUrl}<\\/loc>[\\s\\S]*?<\\/url>`, 'm');
+  const entry = `  <url>\n    <loc>${URL}</loc>\n    <lastmod>${LASTMOD}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`;
+
+  if (existingEntryRe.test(xml)) {
+    const existing = xml.match(existingEntryRe)?.[0] || '';
+    const updated = existing.match(/<lastmod>[^<]+<\/lastmod>/)
+      ? existing.replace(/<lastmod>[^<]+<\/lastmod>/, `<lastmod>${LASTMOD}</lastmod>`)
+      : existing.replace('</url>', `  <lastmod>${LASTMOD}</lastmod>\n</url>`);
+    xml = xml.replace(existingEntryRe, updated);
     fs.writeFileSync(file, xml);
-    console.log('Niagara sitemap entry added.');
-  } else {
-    console.log('Niagara sitemap entry already present.');
+    console.log(`Niagara sitemap entry refreshed to ${LASTMOD}.`);
+    return;
   }
+
+  if (!xml.includes('</urlset>')) throw new Error('Niagara discovery: sitemap.xml missing </urlset>');
+  xml = xml.replace('</urlset>', `${entry}\n</urlset>`);
+  fs.writeFileSync(file, xml);
+  console.log(`Niagara sitemap entry added with lastmod ${LASTMOD}.`);
 }
 
 function patchLlms() {
