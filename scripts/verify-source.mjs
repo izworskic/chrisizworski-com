@@ -26,6 +26,9 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Oct 3 2026: Niagara traveler-first frontend rebuild and cache-key repair.
+  // Re-crawl after production release, then remove this declaration.
+  "/niagara-border-crossing/",
   // Sep 30 2026: shared SERP-length gate repair for the Haleakala sunrise synced route.
   "/synced-national-tools/haleakala-sunrise/",
   // Sep 30 2026: reviewed Michigan Ice decision-engine client update. The public client now
