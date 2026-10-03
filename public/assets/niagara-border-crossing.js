@@ -10,33 +10,40 @@
     requestId: 0,
   };
 
+  let latestPayload = null;
+  let latestApproach = null;
+
   const $ = (id) => document.getElementById(id);
   const directionButtons = [...document.querySelectorAll("[data-direction]")];
-  const mapCrossings = [...document.querySelectorAll("[data-map-crossing]")];
   const travelerSelect = $("travelerSelect");
   const preferredSelect = $("preferredSelect");
+  const oversizeToggle = $("oversizeToggle");
+  const commercialOptions = $("commercialOptions");
   const decisionState = $("decisionState");
   const decisionHeadline = $("decisionHeadline");
   const decisionReason = $("decisionReason");
+  const decisionSceneNote = $("decisionSceneNote");
   const freshnessTime = $("freshnessTime");
   const crossingGrid = $("crossingGrid");
+  const compareGrid = $("compareGrid");
+  const realityGrid = $("realityGrid");
+  const realityHeading = $("realityHeading");
+  const realityIntro = $("realityIntro");
+  const journeyHeading = $("journeyHeading");
+  const journeyRole = $("journeyRole");
+  const journeySteps = $("journeySteps");
+  const journeyActions = $("journeyActions");
+  const journeySummary = $("journeySummary");
+  const journeyWatch = $("journeyWatch");
+  const eligibilityBody = $("eligibilityBody");
+  const weatherAlerts = $("weatherAlerts");
+  const sourceStatus = $("sourceStatus");
+  const approachSummary = $("approachSummary");
+  const approachEvents = $("approachEvents");
   const liveDot = $("liveDot");
   const ribbonStatus = $("ribbonStatus");
   const ribbonTime = $("ribbonTime");
-  const weatherAlerts = $("weatherAlerts");
-  const sourceStatus = $("sourceStatus");
-  const eligibilityGrid = $("eligibilityGrid");
-  const proofHeadline = $("proofHeadline");
-  const proofText = $("proofText");
-  const experienceHeadline = $("experienceHeadline");
-  const experienceText = $("experienceText");
-  const experienceRole = $("experienceRole");
-  const commitHeadline = $("commitHeadline");
-  const commitText = $("commitText");
-  const humanLinks = $("humanLinks");
-  const approachState = $("approachState");
-  const approachSummary = $("approachSummary");
-  const approachEvents = $("approachEvents");
+  const refreshButton = $("refreshButton");
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -53,56 +60,102 @@
     return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
   }
 
-  function freshnessLabel(freshness) {
-    if (!freshness) return "No timestamp";
-    if (freshness.state === "fresh") return freshness.age_minutes == null ? "Fresh" : `${freshness.age_minutes} min old`;
-    if (freshness.state === "stale") return `Stale · ${freshness.age_minutes ?? "?"} min old`;
-    if (freshness.state === "expired") return `Expired · ${freshness.age_minutes ?? "?"} min old`;
-    return freshness.state || "Unknown age";
+  function formatUpdated(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "timestamp unavailable";
+    return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
   }
 
   function waitLabel(result) {
-    if (!result) return "not available";
-    if (Number.isFinite(result.wait_minutes)) return `${Math.round(result.wait_minutes)} min`;
+    if (!result) return "Not available";
+    if (Number.isFinite(result.wait_minutes)) return result.wait_minutes === 0 ? "No delay" : `${Math.round(result.wait_minutes)} min`;
     if (result.display && result.display !== "Not reported") return result.display;
-    return "not reported";
+    return "Not reported";
+  }
+
+  function shortWait(result) {
+    if (!result) return "—";
+    if (Number.isFinite(result.wait_minutes)) return result.wait_minutes === 0 ? "No delay" : `${Math.round(result.wait_minutes)} min`;
+    if (result.display && result.display !== "Not reported") return result.display;
+    return "Unavailable";
+  }
+
+  function focusId(payload) {
+    return payload?.decision?.recommended_id || state.preferred;
+  }
+
+  function getResult(payload, id) {
+    return (payload?.decision?.results || []).find((item) => item.id === id) || null;
+  }
+
+  function getCrossing(payload, id) {
+    return (payload?.crossings || []).find((item) => item.id === id) || null;
+  }
+
+  function focusPair(payload) {
+    const id = focusId(payload);
+    return { id, result: getResult(payload, id), crossing: getCrossing(payload, id) };
   }
 
   function resultKicker(result, decision) {
-    if (!result?.eligibility?.eligible) return "Not eligible";
+    if (!result?.eligibility?.eligible) return "Not for this trip";
     if (result.state === "CROSSING_CLOSED") return "Closed";
-    if (result.state === "SOURCE_CONFLICT") return "Source conflict";
-    if (result.state === "OPERATOR_CONTEXT_ONLY" || result.context_only) return "Context only";
-    if (result.id === decision?.recommended_id) return decision.state === "COMPARABLE_OPTIONS" ? "Stay on route" : "Recommended";
-    if (result.id === state.preferred) return "Your normal route";
-    if (!result.usable_for_recommendation) return "Not comparable";
+    if (result.state === "SOURCE_CONFLICT") return "Reports disagree";
+    if (result.context_only) return "Limited live data";
+    if (result.id === decision?.recommended_id) return result.id === state.preferred ? "Recommended · stay on route" : "Recommended · switch";
+    if (result.id === state.preferred) return "Your usual route";
+    if (!result.usable_for_recommendation) return "Live wait unavailable";
     return "Alternate";
   }
 
-  function resultClass(result, decision) {
-    const classes = ["crossing-result"];
-    if (!result?.eligibility?.eligible) classes.push("is-ineligible");
-    if (!result?.usable_for_recommendation) classes.push("is-unavailable");
+  function bridgeChoiceClass(result, decision) {
+    const classes = ["bridge-choice"];
+    if (result?.id === state.preferred) classes.push("is-natural");
     if (result?.id === decision?.recommended_id && decision?.state !== "INSUFFICIENT_DATA") classes.push("is-recommended");
+    if (!result?.eligibility?.eligible) classes.push("is-ineligible");
     return classes.join(" ");
   }
 
-  function renderResult(result, decision) {
-    const chips = [];
-    if (result.route) chips.push(result.route);
-    if (result.freshness) chips.push(freshnessLabel(result.freshness));
-    if (result.diversion_buffer_minutes > 0) chips.push(`${result.diversion_buffer_minutes} min switch guardrail`);
-    if (result.context_only) chips.push("Lower-confidence operator context");
-    if (result.eligibility?.state === "RESTRICTION_ACTIVE") chips.push("Approval required");
-    const restrictions = (result.restrictions || []).slice(0, 2).join(" · ");
-    const note = result.note || restrictions || result.eligibility?.reason || "Current comparable evidence is available.";
-    return `<article class="${resultClass(result, decision)}">
-      <p class="result-kicker">${escapeHtml(resultKicker(result, decision))}</p>
-      <h4>${escapeHtml(result.short_name || result.name)}</h4>
-      <strong class="wait-value${Number.isFinite(result.wait_minutes) ? "" : " is-unknown"}">${escapeHtml(waitLabel(result))}</strong>
-      <p class="result-note">${escapeHtml(note)}</p>
-      <div class="metric-row">${chips.map((chip) => `<span class="metric-chip">${escapeHtml(chip)}</span>`).join("")}</div>
-    </article>`;
+  function travelerLabel() {
+    const labels = {
+      passenger: "passenger vehicle",
+      nexus: "NEXUS auto traveler",
+      commercial: state.oversize ? "oversize commercial vehicle" : "commercial truck",
+      bus: "bus",
+      tow: "vehicle with trailer",
+      pedestrian: "pedestrian",
+      bicycle: "bicycle",
+    };
+    return labels[state.traveler] || "traveler";
+  }
+
+  function selectedTravelerKey() {
+    if (state.traveler === "commercial") return "commercial";
+    if (state.traveler === "nexus") return "nexus";
+    return "passenger";
+  }
+
+  function operatorContext(crossing) {
+    if (!crossing) return null;
+    if (["pedestrian", "bicycle"].includes(state.traveler)) return null;
+    return crossing?.waits?.[state.direction]?.operator_validation?.[selectedTravelerKey()] || null;
+  }
+
+  function destinationSide(crossing) {
+    const route = String(crossing?.route || "");
+    const sides = route.split("↔").map((part) => part.trim());
+    if (sides.length < 2) return route || "the other side of the Niagara River";
+    return state.direction === "to_canada" ? sides[1] : sides[0];
+  }
+
+  function currentRule(crossing, result) {
+    if (!result?.eligibility?.eligible) return result?.eligibility?.reason || "This crossing is not available for your selected trip.";
+    if (crossing?.nexus_required) return "NEXUS is required for this crossing.";
+    if (state.traveler === "commercial" && !crossing?.eligibility?.commercial) return "Commercial trucks cannot use this crossing.";
+    if (state.traveler === "pedestrian" && !crossing?.eligibility?.pedestrian) return "Pedestrians cannot use this crossing.";
+    if (state.traveler === "bicycle" && !crossing?.eligibility?.bicycle) return "Bicycles cannot use this crossing.";
+    if (state.traveler === "tow" && !crossing?.eligibility?.tow) return "Vehicles towing are not permitted here.";
+    return crossing?.restrictions?.[0] || "Your selected traveler type is allowed under the published crossing rules.";
   }
 
   function decisionTone(decision) {
@@ -111,178 +164,228 @@
     return "stop";
   }
 
+  function humanDecisionReason(payload) {
+    const decision = payload?.decision || {};
+    const preferred = getResult(payload, state.preferred);
+    const recommended = getResult(payload, decision.recommended_id);
+    if (decision.state === "USE_PRIMARY_CROSSING") {
+      return `Stay on the route you were already going to use. None of the eligible alternates saves enough border time to make leaving that corridor worthwhile.`;
+    }
+    if (decision.state === "ALTERNATE_CROSSING_BETTER") {
+      if (!preferred?.eligibility?.eligible) return `${preferred?.short_name || "Your usual bridge"} does not work for this trip. ${recommended?.short_name || "The recommended bridge"} is the strongest current eligible option.`;
+      if (preferred?.state === "CROSSING_CLOSED") return `${preferred?.short_name || "Your usual bridge"} is closed. Use ${recommended?.short_name || "the recommended alternate"} if its approach works for your trip.`;
+      return `${recommended?.short_name || "The alternate"} has a large enough current advantage to justify leaving your usual Niagara route.`;
+    }
+    if (decision.state === "COMPARABLE_OPTIONS") return `The reported differences are small enough that your starting point and destination matter more than chasing the lowest number.`;
+    return decision.reason || "The official live reports are not strong enough to make a confident bridge choice right now.";
+  }
+
   function renderDecision(payload) {
     const decision = payload?.decision || {};
     const tone = decisionTone(decision);
+    const focus = focusPair(payload);
     decisionState.textContent = decision.state === "USE_PRIMARY_CROSSING" ? "Stay on route"
       : decision.state === "ALTERNATE_CROSSING_BETTER" ? "Switch bridge"
-        : decision.state === "COMPARABLE_OPTIONS" ? "Options close"
-          : "Uncertain";
-    decisionState.className = `decision-state${tone === "caution" ? " is-caution" : tone === "stop" ? " is-stop" : ""}`;
+        : decision.state === "COMPARABLE_OPTIONS" ? "Routes are close"
+          : "Check before leaving";
+    decisionState.className = `trip-state${tone === "caution" ? " is-caution" : tone === "stop" ? " is-stop" : ""}`;
     decisionHeadline.textContent = decision.headline || "Current crossing comparison is unavailable";
-    decisionReason.textContent = decision.reason || "No confident live decision is available.";
+    decisionReason.textContent = humanDecisionReason(payload);
+    decisionSceneNote.textContent = focus.crossing
+      ? `${focus.crossing.short_name || focus.crossing.name} · ${travelerLabel()} · ${state.direction === "to_canada" ? "entering Canada" : "entering the United States"}`
+      : "Check the official bridge and border links before committing.";
+
     const checked = formatCheckedAt(payload?.fetched_at);
     freshnessTime.textContent = checked;
     ribbonTime.textContent = checked;
     liveDot.className = `live-dot${payload?.degraded || tone === "stop" ? " is-degraded" : " is-live"}`;
-    ribbonStatus.textContent = payload?.degraded ? "Some official sources are degraded; uncertainty is preserved." : decision.headline || "Official crossing data checked.";
+    ribbonStatus.textContent = decision.headline || "Official crossing data checked.";
 
     const ordered = [...(decision.results || [])].sort((a, b) => crossingOrder.indexOf(a.id) - crossingOrder.indexOf(b.id));
-    crossingGrid.innerHTML = ordered.length
-      ? ordered.map((result) => renderResult(result, decision)).join("")
-      : `<article class="crossing-result is-unavailable"><p class="result-kicker">Unavailable</p><h4>No comparison</h4><strong class="wait-value is-unknown">No data</strong></article>`;
-    renderMap(decision);
+    crossingGrid.innerHTML = ordered.map((result) => {
+      const crossing = getCrossing(payload, result.id);
+      const role = crossing?.experience?.role || crossing?.route || "Niagara River crossing";
+      return `<article class="${bridgeChoiceClass(result, decision)}">
+        <p class="bridge-choice-kicker">${escapeHtml(resultKicker(result, decision))}</p>
+        <h3>${escapeHtml(result.short_name || result.name)}</h3>
+        <strong class="bridge-choice-wait">${escapeHtml(shortWait(result))}</strong>
+        <p class="bridge-choice-note">${escapeHtml(result.eligibility?.eligible ? role : result.eligibility?.reason || "Not eligible")}</p>
+        <span class="bridge-choice-route">${escapeHtml(result.route || "")}</span>
+      </article>`;
+    }).join("");
   }
 
-  function proofFor(payload) {
+  function realityItem(label, value, detail, tone = "") {
+    return `<div class="reality-item${tone ? ` is-${tone}` : ""}"><span class="reality-label">${escapeHtml(label)}</span><strong class="reality-value">${escapeHtml(value)}</strong><span class="reality-detail">${escapeHtml(detail)}</span></div>`;
+  }
+
+  function renderReality(payload) {
+    const { result, crossing } = focusPair(payload);
+    if (!crossing) return;
+    const operator = operatorContext(crossing);
+    const alerts = Array.isArray(payload?.warnings?.weather) ? payload.warnings.weather : [];
+    const approach = latestApproach;
+    const waitDetail = result?.source?.available
+      ? `${result.source.name || "Official border agency"} · updated ${formatUpdated(result.source.updated_at)}`
+      : "No matching current official wait is available.";
+    const operatorValue = operator?.available ? (operator.wait_minutes === 0 ? "No delay" : operator.display || `${operator.wait_minutes} min`) : "No matching report";
+    const operatorDetail = operator?.available ? `${crossing.operator} plaza / traffic context` : "Use the operator traffic link before entering the approach.";
+    let approachValue = "Open live maps";
+    let approachDetail = "511 New York, Ontario 511 and NITTEC";
+    if (approach?.available) {
+      const count = Number(approach?.summary?.event_count || 0);
+      approachValue = count ? `${count} nearby event${count === 1 ? "" : "s"}` : "No matching event returned";
+      approachDetail = "Filtered official 511 corridor context; this is not a travel-time estimate.";
+    }
+    const weatherValue = alerts.length ? `${alerts.length} active alert${alerts.length === 1 ? "" : "s"}` : "No active alert returned";
+    const weatherDetail = alerts.length ? (alerts[0]?.headline || "Official weather warning active") : "NWS / Environment Canada check";
+    const toll = crossing?.toll?.[state.direction] || "Check operator";
+    const eligibleTone = result?.eligibility?.eligible ? "good" : "warn";
+
+    realityHeading.textContent = `${crossing.short_name || crossing.name} right now`;
+    realityIntro.textContent = crossing.experience?.human_summary || crossing.route || "Current bridge and border context.";
+    realityGrid.innerHTML = [
+      realityItem("Border wait", shortWait(result), waitDetail, result?.usable_for_recommendation ? "good" : "warn"),
+      realityItem("Bridge traffic", operatorValue, operatorDetail, operator?.available ? "good" : "warn"),
+      realityItem("Approach", approachValue, approachDetail),
+      realityItem("Weather", weatherValue, weatherDetail, alerts.length ? "warn" : "good"),
+      realityItem("Toll / hours", toll, `${crossing.hours || "Check hours"} · ${result?.eligibility?.eligible ? "Allowed for your trip" : "Not eligible for your trip"}`, eligibleTone),
+    ].join("");
+  }
+
+  function renderJourney(payload) {
+    const { result, crossing } = focusPair(payload);
+    if (!crossing) return;
+    const exp = crossing.experience || {};
+    const operator = operatorContext(crossing);
+    const plazaText = result?.source?.available
+      ? `The border agency is currently reporting ${waitLabel(result).toLowerCase()} for your selected trip${result.source.updated_at ? `, last updated ${formatUpdated(result.source.updated_at)}` : ""}.`
+      : `A matching current border wait is not available for this traveler, so do not substitute a passenger-car number.`;
+    const operatorText = operator?.available ? ` The bridge operator is also showing ${String(operator.display || shortWait(operator)).toLowerCase()} in its plaza/traffic context.` : "";
+    const steps = [
+      ["Approach", exp.approach_character || crossing.route || "Follow the signed bridge approach for this corridor."],
+      ["Plaza", `${plazaText}${operatorText}`],
+      ["Cross", `${exp.role || "Niagara River crossing"}. ${currentRule(crossing, result)}`],
+      ["Come off the bridge", `You emerge toward ${destinationSide(crossing)}. ${exp.on_the_ground || "Stay with the route that matches your destination."}`],
+    ];
+
+    journeyHeading.textContent = `If you take ${crossing.short_name || crossing.name} right now`;
+    journeyRole.textContent = exp.role || crossing.route || "Niagara River crossing";
+    journeySteps.innerHTML = steps.map(([title, text], index) => `<article class="journey-step"><span class="journey-step-num">${index + 1}</span><h3>${escapeHtml(title)}</h3><p>${escapeHtml(text)}</p></article>`).join("");
+
+    const camera = crossing.cameras?.[0];
+    const actions = [];
+    if (camera?.url) actions.push(`<a class="primary" href="${escapeHtml(camera.url)}" target="_blank" rel="noopener">Open live camera / traffic view ↗</a>`);
+    if (crossing.traffic_url) actions.push(`<a href="${escapeHtml(crossing.traffic_url)}" target="_blank" rel="noopener">Open ${escapeHtml(crossing.short_name || crossing.name)} traffic ↗</a>`);
+    if (result?.source?.url) actions.push(`<a href="${escapeHtml(result.source.url)}" target="_blank" rel="noopener">Open official border wait ↗</a>`);
+    journeyActions.innerHTML = actions.join("");
+
+    journeySummary.textContent = exp.watch_for || "Check the live camera and bridge operator immediately before entering the approach.";
+    const watch = [
+      ["Your traveler", currentRule(crossing, result)],
+      ["Hours", crossing.hours || "Check operator"],
+      ["Toll this direction", crossing.toll?.[state.direction] || "Check operator"],
+    ];
+    journeyWatch.innerHTML = watch.map(([label, text]) => `<li><strong>${escapeHtml(label)}</strong>${escapeHtml(text)}</li>`).join("");
+  }
+
+  function renderCompare(payload) {
     const decision = payload?.decision || {};
-    const results = decision.results || [];
-    const preferred = results.find((result) => result.id === state.preferred);
-    const recommended = results.find((result) => result.id === decision.recommended_id);
-    const minBenefit = decision.minimum_net_benefit_minutes || 10;
-
-    if (decision.state === "ALTERNATE_CROSSING_BETTER") {
-      if (!preferred?.eligibility?.eligible) {
-        return { headline: "Eligibility decided this before wait time did", text: `${preferred?.short_name || "Your normal crossing"} is not eligible for this traveler. ${recommended?.short_name || "The recommended crossing"} is the strongest fresh eligible option.` };
-      }
-      if (preferred?.state === "CROSSING_CLOSED") {
-        return { headline: "Your normal crossing is closed", text: `${recommended?.short_name || "The alternate"} is the strongest fresh eligible option. This is a closure-driven diversion, not a claim that its route is normally faster.` };
-      }
-      const buffer = recommended?.diversion_buffer_minutes || 0;
-      return {
-        headline: `The alternate cleared the switch guardrail`,
-        text: `${preferred?.short_name || "Your normal bridge"} is reporting ${waitLabel(preferred)}; ${recommended?.short_name || "the alternate"} is reporting ${waitLabel(recommended)}. The engine adds a conservative ${buffer}-minute route-switch guardrail to the alternate, and it still clears the comparison by about ${decision.net_benefit_minutes ?? minBenefit} minutes.`,
-      };
-    }
-    if (decision.state === "USE_PRIMARY_CROSSING") {
-      return {
-        headline: "The wait difference is not worth leaving your route",
-        text: `${preferred?.short_name || "Your normal bridge"} remains the recommendation. No eligible alternate beats it after the alternate's route-switch guardrail and the required ${minBenefit}-minute benefit are applied.`,
-      };
-    }
-    if (decision.state === "COMPARABLE_OPTIONS") {
-      return {
-        headline: "The bridges are too close to justify a detour",
-        text: `An alternate may show a shorter border wait, but it does not clear the route-switch guardrail by the required ${minBenefit} minutes. Staying on the natural route avoids manufacturing precision from a small difference.`,
-      };
-    }
-    return {
-      headline: "The engine is refusing to turn uncertainty into a detour",
-      text: decision.reason || "Your normal bridge lacks fresh comparable evidence, so static rules remain valid but the live data are not strong enough to justify switching crossings.",
-    };
+    const ordered = [...(decision.results || [])].sort((a, b) => crossingOrder.indexOf(a.id) - crossingOrder.indexOf(b.id));
+    compareGrid.innerHTML = ordered.map((result) => {
+      const crossing = getCrossing(payload, result.id);
+      const exp = crossing?.experience || {};
+      const classes = ["compare-bridge"];
+      if (result.id === decision.recommended_id && decision.state !== "INSUFFICIENT_DATA") classes.push("is-recommended");
+      if (!result.eligibility?.eligible) classes.push("is-ineligible");
+      let action = result.eligibility?.reason || result.note || "Check this crossing before departure.";
+      if (result.id === decision.recommended_id && decision.state !== "INSUFFICIENT_DATA") action = result.id === state.preferred ? "Best fit now: stay on the route you were already going to use." : "Best fit now: the current advantage is large enough to justify changing crossings.";
+      else if (result.id === state.preferred && result.eligibility?.eligible) action = "This is your natural route; the tool only moves you off it for a meaningful reason.";
+      return `<article class="${classes.join(" ")}"><div class="compare-head"><div><p class="bridge-choice-kicker">${escapeHtml(resultKicker(result, decision))}</p><h3>${escapeHtml(result.short_name || result.name)}</h3></div><strong class="compare-wait">${escapeHtml(shortWait(result))}</strong></div><p class="compare-role">${escapeHtml(exp.human_summary || exp.role || result.route || "Niagara River crossing")}</p><div class="compare-meta"><span>${escapeHtml(result.route || "")}</span><span>${escapeHtml(crossing?.hours || "Hours vary")}</span></div><p class="compare-action">${escapeHtml(action)}</p></article>`;
+    }).join("");
   }
 
-  function renderInterpretation(payload) {
-    const decision = payload?.decision || {};
-    const focusId = decision.recommended_id || state.preferred;
-    const crossing = (payload?.crossings || []).find((item) => item.id === focusId)
-      || (payload?.crossings || []).find((item) => item.id === state.preferred);
-    const experience = crossing?.experience || {};
-    const proof = proofFor(payload);
-
-    proofHeadline.textContent = proof.headline;
-    proofText.textContent = proof.text;
-    experienceHeadline.textContent = crossing ? `What ${crossing.short_name || crossing.name} means on the ground` : "Your crossing experience";
-    experienceText.textContent = experience.on_the_ground || experience.human_summary || "Bridge-specific experience context is unavailable.";
-    experienceRole.textContent = experience.role || "Crossing role unavailable";
-    commitHeadline.textContent = crossing ? `Before committing to ${crossing.short_name || crossing.name}` : "Before you commit";
-    commitText.textContent = experience.watch_for || "Check current official approach conditions before leaving your natural route.";
-    humanLinks.innerHTML = (experience.official_links || [])
-      .map((link) => `<a href="${escapeHtml(link.url)}" target="_blank" rel="noopener">${escapeHtml(link.label)}</a>`)
-      .join("");
-  }
-
-  function renderMap(decision) {
-    mapCrossings.forEach((row) => {
-      const id = row.dataset.mapCrossing;
-      row.classList.toggle("is-natural", id === state.preferred);
-      row.classList.toggle("is-recommended", Boolean(decision?.recommended_id) && id === decision.recommended_id && decision.state !== "INSUFFICIENT_DATA");
-    });
+  function renderEligibility(payload) {
+    const results = new Map((payload?.decision?.results || []).map((item) => [item.id, item]));
+    const crossings = [...(payload?.crossings || [])].sort((a, b) => crossingOrder.indexOf(a.id) - crossingOrder.indexOf(b.id));
+    eligibilityBody.innerHTML = crossings.map((crossing) => {
+      const result = results.get(crossing.id);
+      const eligible = Boolean(result?.eligibility?.eligible);
+      const rule = currentRule(crossing, result);
+      return `<tr><td><strong>${escapeHtml(crossing.short_name || crossing.name)}</strong><br><span class="scene-note">${escapeHtml(crossing.experience?.role || crossing.route || "")}</span></td><td class="${eligible ? "yes" : "no"}">${eligible ? "Eligible" : "Not eligible"}</td><td>${escapeHtml(crossing.hours || "Check operator")}</td><td>${escapeHtml(crossing.toll?.[state.direction] || "Check operator")}</td><td>${escapeHtml(rule)}</td></tr>`;
+    }).join("");
   }
 
   function renderWeather(payload) {
     const alerts = Array.isArray(payload?.warnings?.weather) ? payload.warnings.weather : [];
     if (!alerts.length) {
-      weatherAlerts.innerHTML = `<p class="all-clear">No active weather alert was returned by the connected NWS / Environment Canada checks.</p>`;
+      weatherAlerts.innerHTML = `<p class="all-clear">No active weather alert was returned by the current NWS / Environment Canada checks. Recheck before departure.</p>`;
       return;
     }
     weatherAlerts.innerHTML = alerts.slice(0, 5).map((alert) => `<div class="weather-alert"><strong>${escapeHtml(alert.headline || "Weather alert")}</strong><span>${escapeHtml(alert.source || "Official weather authority")}</span></div>`).join("");
   }
 
   function renderSources(payload) {
-    const sources = payload?.sources || {};
+    const s = payload?.sources || {};
     const entries = [
-      ["CBP · U.S.-bound waits", sources.to_us_waits?.available],
-      ["CBSA · Canada-bound waits", sources.to_canada_waits?.available],
-      ["NFBC · bridge operations", sources.nfbc_operations?.available],
-      ["Peace Bridge Authority", sources.peace_operations?.available],
-      ["NWS / Environment Canada", Boolean(sources.nws_weather?.available || sources.eccc_weather?.available)],
+      ["CBP · entering the U.S.", s.to_us_waits?.available],
+      ["CBSA · entering Canada", s.to_canada_waits?.available],
+      ["Niagara Falls Bridge Commission", s.nfbc_operations?.available],
+      ["Peace Bridge Authority", s.peace_operations?.available],
+      ["NWS / Environment Canada", Boolean(s.nws_weather?.available || s.eccc_weather?.available)],
+      ["511 approach feeds", Boolean(latestApproach?.available)],
     ];
-    sourceStatus.innerHTML = entries.map(([name, available]) => `<div class="${available ? "" : "is-down"}"><strong>${escapeHtml(name)}</strong>${available ? "Available" : "Unavailable / degraded"}</div>`).join("")
-      + `<div class="is-down" id="approachSourceStatus"><strong>511 approach context</strong>Checking key-gated adapter…</div>`;
-  }
-
-  function humanEligibility(crossing) {
-    const allowed = [];
-    if (crossing.eligibility?.passenger) allowed.push("passenger vehicles");
-    if (crossing.eligibility?.commercial) allowed.push("commercial trucks");
-    if (crossing.eligibility?.bus) allowed.push("buses");
-    if (crossing.eligibility?.tow) allowed.push("trailers / tow");
-    if (crossing.eligibility?.pedestrian) allowed.push("pedestrians");
-    if (crossing.eligibility?.bicycle) allowed.push("bicycles");
-    return allowed.join(", ");
-  }
-
-  function renderEligibility(payload) {
-    const crossings = Array.isArray(payload?.crossings) ? payload.crossings : [];
-    if (!crossings.length) return;
-    const ordered = [...crossings].sort((a, b) => crossingOrder.indexOf(a.id) - crossingOrder.indexOf(b.id));
-    eligibilityGrid.innerHTML = ordered.map((crossing) => {
-      const restrictions = (crossing.restrictions || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
-      const role = crossing.experience?.role ? `<p><strong>Role:</strong> ${escapeHtml(crossing.experience.role)}</p>` : "";
-      return `<article class="eligibility-card"><h3>${escapeHtml(crossing.short_name || crossing.name)}</h3>${role}<p><strong>Allowed:</strong> ${escapeHtml(humanEligibility(crossing))}</p><p><strong>Hours:</strong> ${escapeHtml(crossing.hours)}</p><p><strong>Toll:</strong> ${escapeHtml(crossing.toll?.[state.direction] || "Check operator")}</p>${crossing.nexus_required ? "<p><strong>NEXUS required.</strong></p>" : ""}${restrictions ? `<ul>${restrictions}</ul>` : ""}</article>`;
-    }).join("");
+    sourceStatus.innerHTML = entries.map(([name, available]) => `<div><strong>${escapeHtml(name)}</strong>${available ? "Available" : "Unavailable / not connected"}</div>`).join("");
   }
 
   function renderApproachContext(payload) {
-    const statusNode = $("approachSourceStatus");
+    latestApproach = payload;
     if (payload?.available) {
-      approachState.textContent = payload.complete ? "Official 511 live" : "Official 511 partial";
-      approachState.className = "approach-state is-live";
-      const summary = payload.summary || {};
-      approachSummary.textContent = `${summary.event_count || 0} matching corridor event${summary.event_count === 1 ? "" : "s"} and ${summary.camera_count || 0} camera${summary.camera_count === 1 ? "" : "s"} were returned by the connected official 511 feeds. These are last-mile context, not inputs to the bridge recommendation.`;
       const events = Array.isArray(payload.events) ? payload.events.slice(0, 3) : [];
-      approachEvents.innerHTML = events.length ? events.map((event) => `<div class="approach-event"><strong>${escapeHtml(event.full_closure ? "Full closure · " : "")}${escapeHtml(event.roadway || event.provider)}</strong><span>${escapeHtml(event.description || event.location || "Official corridor event")}</span><span>${escapeHtml(event.provider)}</span></div>`).join("") : `<div class="approach-event"><strong>No matching corridor events returned</strong><span>This only describes the connected feeds and filtered corridor; it is not a guarantee of clear roads.</span></div>`;
-      if (statusNode) { statusNode.className = ""; statusNode.innerHTML = `<strong>511 approach context</strong>${payload.complete ? "New York + Ontario available" : "Partial official feed available"}`; }
-      return;
+      const count = Number(payload?.summary?.event_count || 0);
+      const cameras = Number(payload?.summary?.camera_count || 0);
+      approachSummary.textContent = count
+        ? `Official 511 feeds returned ${count} matching corridor event${count === 1 ? "" : "s"} near the Niagara crossings, plus ${cameras} camera${cameras === 1 ? "" : "s"}. These are approach conditions, not customs wait time.`
+        : `The connected 511 feeds returned no matching corridor events in the filtered Niagara area and ${cameras} camera${cameras === 1 ? "" : "s"}. That is not a guarantee of clear roads—check the live maps before leaving.`;
+      approachEvents.innerHTML = events.length
+        ? events.map((event) => `<div class="approach-event"><strong>${escapeHtml(event.full_closure ? "Full closure · " : "")}${escapeHtml(event.roadway || event.provider || "Road event")}</strong><span>${escapeHtml(event.description || event.location || "Official corridor event")}</span><span>${escapeHtml(event.provider || "Official 511")}</span></div>`).join("")
+        : `<div class="approach-event"><strong>No matching event returned</strong><span>Use the live 511 maps and NITTEC cameras immediately before entering the bridge approach.</span></div>`;
+    } else {
+      approachSummary.textContent = payload?.configured
+        ? "The configured structured 511 feed did not return usable data. Use the official live maps and NITTEC cameras below before entering the approach."
+        : "Structured 511 data is not connected on this deployment. Use the official live maps and NITTEC cameras below for the road picture before you commit.";
+      approachEvents.innerHTML = `<div class="approach-event"><strong>Use the live approach views</strong><span>The crossing recommendation is still based on border and bridge authority data; no road-delay estimate is being invented.</span></div>`;
     }
-    approachState.textContent = payload?.configured ? "511 unavailable" : "511 key-gated";
-    approachState.className = "approach-state";
-    approachSummary.textContent = payload?.configured
-      ? "A configured 511 source did not return usable data. The bridge decision remains independent; use the official links before committing to an approach."
-      : "The structured 511 adapter is built but the developer feeds are not configured on this deployment. Use the official 511 and NITTEC links for approach traffic until keys are connected.";
-    approachEvents.innerHTML = `<div class="approach-event"><strong>No invented approach estimate</strong><span>The product will not scrape NITTEC or turn an unavailable keyed feed into a made-up travel-time claim.</span></div>`;
-    if (statusNode) statusNode.innerHTML = `<strong>511 approach context</strong>${payload?.configured ? "Configured but unavailable" : "Developer feed not configured"}`;
+    if (latestPayload) {
+      renderReality(latestPayload);
+      renderSources(latestPayload);
+    }
   }
 
   function renderApproachFailure() {
-    approachState.textContent = "Approach check failed";
-    approachState.className = "approach-state";
-    approachSummary.textContent = "The optional approach-context endpoint failed. This does not change the border-crossing recommendation; use the official 511 and NITTEC links below.";
-    approachEvents.innerHTML = `<div class="approach-event"><strong>Approach evidence unavailable</strong><span>No route claim is being inferred from the failure.</span></div>`;
-    const statusNode = $("approachSourceStatus");
-    if (statusNode) statusNode.innerHTML = "<strong>511 approach context</strong>Unavailable";
+    renderApproachContext({ available: false, configured: true });
+  }
+
+  function renderAll(payload) {
+    latestPayload = payload;
+    renderDecision(payload);
+    renderReality(payload);
+    renderJourney(payload);
+    renderCompare(payload);
+    renderEligibility(payload);
+    renderWeather(payload);
+    renderSources(payload);
   }
 
   function renderFailure(error) {
     decisionState.textContent = "Live data unavailable";
-    decisionState.className = "decision-state is-stop";
-    decisionHeadline.textContent = "Current crossing comparison cannot be determined";
-    decisionReason.textContent = "The live decision endpoint failed. Do not infer a fastest bridge from this page right now; static eligibility remains valid.";
-    proofHeadline.textContent = "There is no defensible live comparison";
-    proofText.textContent = "The interpretation layer does not fill missing evidence with a guess. Use the official source links and static crossing rules.";
+    decisionState.className = "trip-state is-stop";
+    decisionHeadline.textContent = "Check the official bridge reports before leaving";
+    decisionReason.textContent = "The live Niagara comparison failed. Do not assume the lowest-looking route or substitute an old wait time.";
+    decisionSceneNote.textContent = "Static crossing restrictions still apply.";
+    crossingGrid.innerHTML = `<article class="bridge-choice is-ineligible"><p class="bridge-choice-kicker">Live comparison unavailable</p><h3>Use official reports</h3><strong class="bridge-choice-wait">Verify</strong><span class="bridge-choice-route">CBP / CBSA / bridge operator</span></article>`;
     liveDot.className = "live-dot is-degraded";
-    ribbonStatus.textContent = "Live crossing data is temporarily unavailable.";
+    ribbonStatus.textContent = "Live crossing comparison is temporarily unavailable.";
     ribbonTime.textContent = "";
     console.error("[niagara-border-crossing] live refresh failed", error);
   }
@@ -305,21 +408,17 @@
   async function refresh(track = false) {
     const requestId = ++state.requestId;
     syncUrl();
-    decisionHeadline.textContent = "Checking official crossing data…";
+    decisionHeadline.textContent = "Checking the bridges that fit your trip…";
     liveDot.className = "live-dot is-loading";
-    ribbonStatus.textContent = "Checking official border reports…";
+    ribbonStatus.textContent = "Checking official border and bridge reports…";
     try {
       const response = await fetch(`/api/niagara-border-crossings?${queryString()}`, { headers: { accept: "application/json" }, cache: "no-store" });
       if (!response.ok) throw new Error(`API returned ${response.status}`);
       const payload = await response.json();
       if (requestId !== state.requestId) return;
-      renderDecision(payload);
-      renderInterpretation(payload);
-      renderWeather(payload);
-      renderSources(payload);
-      renderEligibility(payload);
+      renderAll(payload);
       if (track && typeof window.va === "function") {
-        window.va("event", { name: "niagara_crossing_decision", data: { direction: state.direction, traveler: state.traveler, preferred: state.preferred, state: payload.decision?.state, recommended: payload.decision?.recommended_id } });
+        window.va("event", { name: "niagara_crossing_decision", data: { direction: state.direction, traveler: state.traveler, preferred: state.preferred, decision_state: payload.decision?.state, recommended: payload.decision?.recommended_id } });
       }
     } catch (error) {
       if (requestId !== state.requestId) return;
@@ -329,7 +428,7 @@
 
   async function loadApproachContext() {
     try {
-      const response = await fetch("/api/niagara-approach-context", { headers: { accept: "application/json" } });
+      const response = await fetch("/api/niagara-approach-context", { headers: { accept: "application/json" }, cache: "no-store" });
       if (!response.ok) throw new Error(`Approach API returned ${response.status}`);
       renderApproachContext(await response.json());
     } catch (error) {
@@ -346,6 +445,8 @@
     });
     travelerSelect.value = state.traveler;
     preferredSelect.value = state.preferred;
+    commercialOptions.hidden = state.traveler !== "commercial";
+    oversizeToggle.checked = state.oversize;
   }
 
   function readInitialState() {
@@ -356,12 +457,32 @@
     state.oversize = state.traveler === "commercial" && params.get("oversize") === "1";
   }
 
-  directionButtons.forEach((button) => button.addEventListener("click", () => { state.direction = button.dataset.direction; applyControls(); refresh(true); }));
-  travelerSelect.addEventListener("change", () => { state.traveler = travelerSelect.value; if (state.traveler !== "commercial") state.oversize = false; applyControls(); refresh(true); });
-  preferredSelect.addEventListener("change", () => { state.preferred = preferredSelect.value; refresh(true); });
+  directionButtons.forEach((button) => button.addEventListener("click", () => {
+    state.direction = button.dataset.direction;
+    applyControls();
+    refresh(true);
+  }));
+  travelerSelect.addEventListener("change", () => {
+    state.traveler = travelerSelect.value;
+    if (state.traveler !== "commercial") state.oversize = false;
+    applyControls();
+    refresh(true);
+  });
+  preferredSelect.addEventListener("change", () => {
+    state.preferred = preferredSelect.value;
+    refresh(true);
+  });
+  oversizeToggle.addEventListener("change", () => {
+    state.oversize = oversizeToggle.checked;
+    refresh(true);
+  });
+  refreshButton.addEventListener("click", () => refresh(true));
 
   readInitialState();
   applyControls();
   refresh(false);
   loadApproachContext();
+  window.setInterval(() => {
+    if (!document.hidden) refresh(false);
+  }, 60_000);
 })();
