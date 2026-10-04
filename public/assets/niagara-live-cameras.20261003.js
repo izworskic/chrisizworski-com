@@ -104,6 +104,15 @@
     if (reality && reality.nextElementSibling !== section) reality.insertAdjacentElement("afterend", section);
   }
 
+  function loadBridgeCameraMap() {
+    if (document.querySelector('script[data-niagara-bridge-camera-map="true"]')) return;
+    const script = document.createElement("script");
+    script.defer = true;
+    script.dataset.niagaraBridgeCameraMap = "true";
+    script.src = "/assets/niagara-bridge-camera-map.20261004.js";
+    document.head.appendChild(script);
+  }
+
   function bindSelectionObserver() {
     const tabs = document.querySelector(".niagara-camera-tabs");
     if (!tabs || !("MutationObserver" in window) || tabs.dataset.liveVideoObserved === "true") return;
@@ -152,6 +161,7 @@
   function init() {
     moveAndRetitleSection();
     waitForViewer();
+    loadBridgeCameraMap();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
