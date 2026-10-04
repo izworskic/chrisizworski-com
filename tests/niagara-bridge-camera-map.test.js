@@ -8,7 +8,7 @@ const liveJs = fs.readFileSync('public/assets/niagara-live-cameras.20261003.js',
 test('Niagara bridge camera map contains exactly the nine NITTEC international bridge cameras', () => {
   const ids = [...mapJs.matchAll(/sourceId:\s*(\d+)/g)].map((match) => Number(match[1]));
   assert.deepEqual(ids.sort((a, b) => a - b), [688, 1001, 1002, 1003, 1004, 1005, 1011, 1021, 1022]);
-  assert.equal((mapJs.match(/sourceId:/g) || []).length, 9);
+  assert.equal((mapJs.match(/sourceId:\s*\d+/g) || []).length, 9);
 });
 
 test('Niagara bridge camera map uses NITTEC camera coordinates and no fake Whirlpool camera', () => {
