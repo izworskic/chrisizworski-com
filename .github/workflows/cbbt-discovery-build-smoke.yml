@@ -1,0 +1,30 @@
+name: CBBT discovery build smoke
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/tune-cbbt-discovery.mjs'
+      - 'scripts/inject-ga4.mjs'
+      - 'public/chesapeake-bay-bridge-tunnel/**'
+      - 'public/mackinac-bridge-live/**'
+      - 'public/gordie-howe-bridge-wait-time/**'
+      - 'public/niagara-border-crossing/**'
+      - 'public/synced-national-tools/**'
+      - 'package.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install pinned dependencies
+        run: npm ci
+      - name: Run production build
+        run: npm run vercel-build
