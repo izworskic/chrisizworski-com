@@ -30,8 +30,12 @@
   };
 
   const sourceName = (crossing) => {
-    if (state.direction === "to_canada") return crossing?.waits?.to_canada?.source?.name || "Canada Border Services Agency";
-    return crossing?.waits?.to_us?.source?.name || "U.S. Customs and Border Protection";
+    const waits = crossing?.waits?.[state.direction];
+    if (state.traveler === "nexus" && waits?.operator_source?.available) {
+      return waits.operator_source.name;
+    }
+    if (state.direction === "to_canada") return waits?.source?.name || "Canada Border Services Agency";
+    return waits?.source?.name || "U.S. Customs and Border Protection";
   };
 
   function setDirection(direction) {
@@ -94,7 +98,7 @@
     } catch (error) {
       if (requestId !== state.requestId) return;
       $("detailWait").textContent = "Live wait unavailable";
-      $("detailWaitNote").textContent = "Use the official agency link below and recheck before entering the approach.";
+      $("detailWaitNote").textContent = "Use the official agency or bridge-operator source and recheck before entering the approach.";
       const liveDot = $("liveDot");
       if (liveDot) liveDot.className = "live-dot";
       if ($("ribbonStatus")) $("ribbonStatus").textContent = "Official live report unavailable";
