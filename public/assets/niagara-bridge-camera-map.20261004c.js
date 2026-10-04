@@ -1,6 +1,8 @@
 (() => {
   "use strict";
 
+  if (document.currentScript) document.currentScript.dataset.niagaraBridgeCameraMap = "true";
+
   const TILE_SIZE = 256;
   const MIN_ZOOM = 8;
   const MAX_ZOOM = 15;
@@ -78,7 +80,8 @@
   function makeShell(container) {
     container.replaceChildren();
     container.removeAttribute("role");
-    container.dataset.cameraMapReady = "touch-v3";
+    container.dataset.cameraMapReady = "true";
+    container.dataset.cameraMapRuntime = "20261004c";
     container.setAttribute("aria-label", "Interactive CARTO map of nine Niagara border cameras");
     container.innerHTML = `
       <div class="niagara-touch-camera-map" tabindex="0" aria-label="CARTO map with nine Niagara bridge camera pins. Drag to pan and use plus or minus to zoom.">
