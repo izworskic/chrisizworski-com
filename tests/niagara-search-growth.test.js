@@ -43,12 +43,14 @@ test('Niagara has four substantial search-intent bridge pages', () => {
   }
 });
 
-test('Niagara bridge pages preserve direction authority and do not invent total trip time', () => {
+test('Niagara bridge pages preserve direction and trusted-traveler authority without inventing total trip time', () => {
   const js = read('public/assets/niagara-bridge-detail.20261003.js');
   assert.match(js, /state\.direction === "to_canada"/);
   assert.match(js, /Canada Border Services Agency/);
   assert.match(js, /U\.S\. Customs and Border Protection/);
   assert.match(js, /crossing\?\.waits\?\.\[state\.direction\]/);
+  assert.match(js, /state\.traveler === "nexus"/);
+  assert.match(js, /operator_source\?\.available/);
   assert.doesNotMatch(js, /fastestTotalTrip|predictWait|bestWindow/);
 });
 
