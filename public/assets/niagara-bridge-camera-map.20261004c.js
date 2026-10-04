@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const LEAFLET_MAP_SRC = "/assets/niagara-camera-map-leaflet.20261004.js?v=20261004b";
+  const LEAFLET_MAP_SRC = "/assets/niagara-camera-map-leaflet.20261004.js?v=20261004c";
 
   if (document.currentScript) document.currentScript.dataset.niagaraBridgeCameraMap = "true";
 
