@@ -31,6 +31,11 @@ test('Niagara mobile hero does not delay the live decision with a scenic photo',
   assert.match(growthCss, /\.niagara-search-intents/);
 });
 
+test('Niagara hero question uses readable dark text on the light hero surface', () => {
+  assert.match(growthCss, /\.hero-question\{[^}]*color:#0b314c/);
+  assert.doesNotMatch(growthCss, /\.hero-question\{[^}]*color:#d7eef3/);
+});
+
 test('Niagara has four substantial search-intent bridge pages', () => {
   for (const [route, heading] of routes) {
     const html = read(`public/${route}/index.html`);
