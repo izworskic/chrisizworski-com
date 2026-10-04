@@ -1,0 +1,99 @@
+/* Niagara value-first product layer — loaded last and intentionally authoritative. */
+.niagara-page.niagara-v2-active{--nv2-ink:#102631;--nv2-muted:#435b67;--nv2-navy:#072f49;--nv2-line:#c9d5da;--nv2-soft:#f4f8f9;--nv2-focus:#0b6b99;color:var(--nv2-ink)}
+.niagara-v2-active .eyebrow{color:#315567!important;font-size:12px!important;line-height:1.35!important;opacity:1!important}
+.niagara-v2-active .live-ribbon-label,.niagara-v2-active .ribbon-time{color:rgba(255,255,255,.9)!important}
+.niagara-v2-active .niagara-hero{margin-bottom:14px}
+.niagara-v2-active .niagara-hero-copy{padding-bottom:8px}
+.niagara-v2-active .niagara-hero .hero-question,.niagara-v2-active .niagara-hero h1{color:var(--nv2-navy)!important;opacity:1!important;text-shadow:none!important}
+.niagara-v2-active .niagara-hero .hero-question{font-weight:800!important}
+.niagara-v2-active .niagara-hero .lede{color:var(--nv2-muted)!important;font-size:15px!important;line-height:1.5!important}
+.niagara-v2-active .trip-desk{border-color:#aebfc6;box-shadow:0 10px 30px rgba(7,35,54,.09)}
+.niagara-v2-active .trip-controls{display:block!important;padding:16px 18px!important;background:#fff!important;border-bottom:1px solid var(--nv2-line)!important}
+.niagara-v2-active .trip-controls>.niagara-v2-legacy-control{display:none!important}
+.niagara-quick-controls{display:grid;gap:14px}
+.niagara-quick-step{display:grid;gap:8px}
+.niagara-quick-step__head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.niagara-quick-step__head strong{color:var(--nv2-navy);font:800 15px/1.25 var(--sans)}
+.niagara-quick-step__head span{color:var(--nv2-muted);font:12px/1.35 var(--sans)}
+.niagara-quick-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.niagara-quick-buttons.is-corridors{grid-template-columns:repeat(3,minmax(0,1fr))}
+.niagara-quick-button{min-height:48px;padding:10px 12px;border:1px solid #9fb4bd;border-radius:10px;background:#fff;color:#123847;cursor:pointer;text-align:left;font:800 14px/1.2 var(--sans);box-shadow:none}
+.niagara-quick-button small{display:block;margin-top:3px;color:#4b626c;font:12px/1.25 var(--sans);font-weight:500}
+.niagara-quick-button:hover,.niagara-quick-button:focus-visible{border-color:var(--nv2-focus);outline:3px solid rgba(11,107,153,.18);outline-offset:1px}
+.niagara-quick-button[aria-pressed="true"]{border-color:var(--nv2-navy);background:var(--nv2-navy);color:#fff}
+.niagara-quick-button[aria-pressed="true"] small{color:#fff}
+.niagara-quick-button[data-quick-corridor="whirlpool"]{display:none}
+.niagara-v2-nexus .niagara-quick-button[data-quick-corridor="whirlpool"]{display:block}
+.niagara-v2-nexus .niagara-quick-buttons.is-corridors{grid-template-columns:repeat(4,minmax(0,1fr))}
+.niagara-traveler-details{border-top:1px solid #d7e0e4;padding-top:10px}
+.niagara-traveler-details summary{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:#153b4b;font:800 13px/1.25 var(--sans);list-style:none}
+.niagara-traveler-details summary::-webkit-details-marker{display:none}
+.niagara-traveler-details summary::after{content:"Change";color:#315f72;font-weight:700}
+.niagara-traveler-details[open] summary::after{content:"Close"}
+.niagara-traveler-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end;margin-top:10px;padding:11px;border-radius:10px;background:var(--nv2-soft)}
+.niagara-traveler-panel label{display:grid;gap:5px;color:var(--nv2-navy);font:800 12px/1.25 var(--sans)}
+.niagara-traveler-panel select{min-height:44px;padding:8px 10px;border:1px solid #9fb4bd;border-radius:8px;background:#fff;color:#102631;font:700 14px/1.2 var(--sans)}
+.niagara-traveler-note{grid-column:1/-1;margin:0;color:var(--nv2-muted);font:12px/1.45 var(--sans)}
+.niagara-v2-active .trip-answer{padding:20px 22px;background:#082f48;color:#fff}
+.niagara-v2-active .trip-answer .eyebrow{color:#fff!important}
+.niagara-v2-active .trip-answer h2{color:#fff!important;font-size:clamp(30px,5vw,46px);font-weight:650;line-height:1.04}
+.niagara-v2-active .trip-answer p,.niagara-v2-active .trip-answer .scene-note,.niagara-v2-active .trip-answer .mobile-decision-label{color:#fff!important;opacity:1!important}
+.niagara-v2-active .trip-answer p{font-size:15px!important;line-height:1.5!important}
+.niagara-v2-active .trip-answer .mobile-decision-label{font-size:12px!important;font-weight:800!important}
+.niagara-v2-active .decision-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))!important;max-width:420px}
+.niagara-v2-active .decision-shortcuts a{min-height:42px!important;font-size:12px!important;background:#fff!important;color:#0b314c!important;border-color:#fff!important}
+.niagara-v2-active .bridge-choice-grid{margin-top:14px}
+.niagara-v2-active .bridge-choice{min-height:118px}
+.niagara-v2-active .bridge-choice-note{color:#334d59!important;font-size:12px!important}
+.niagara-v2-active .bridge-choice-route{color:#4b606a!important;font-size:11px!important}
+.niagara-v2-active .reality-card,.niagara-v2-active .journey-card,.niagara-v2-active .compare-card,.niagara-v2-active .support-card,.niagara-v2-active .details-stack details{color:var(--nv2-ink)!important;background:#fff!important}
+.niagara-v2-active .section-top p:last-child,.niagara-v2-active .reality-detail,.niagara-v2-active .journey-step p,.niagara-v2-active .journey-aside p,.niagara-v2-active .compare-role,.niagara-v2-active .compare-action,.niagara-v2-active .support-pane p,.niagara-v2-active .details-body,.niagara-v2-active .niagara-map-note,.niagara-v2-active .camera-disclosure{color:var(--nv2-muted)!important}
+.niagara-v2-active .section-top p:last-child{font-size:14px!important}
+.niagara-v2-active .reality-detail,.niagara-v2-active .scene-note{font-size:12px!important;line-height:1.45!important}
+.niagara-v2-active .reality-label,.niagara-v2-active .camera-source-kicker{color:#425b67!important;font-size:11px!important}
+.niagara-v2-active .reality-value{color:var(--nv2-navy)!important}
+.niagara-v2-active #bridgeMap{margin-top:0}
+.niagara-v2-active #bridgeCameras{display:none!important}
+.niagara-more-details{margin:0 0 24px;border:1px solid var(--nv2-line);border-radius:14px;background:#fff;box-shadow:0 8px 24px rgba(7,35,54,.06)}
+.niagara-more-details>summary{cursor:pointer;padding:16px 18px;color:var(--nv2-navy);font:800 14px/1.3 var(--sans);list-style:none}
+.niagara-more-details>summary::-webkit-details-marker{display:none}
+.niagara-more-details>summary::after{content:" +";float:right}
+.niagara-more-details[open]>summary::after{content:" −"}
+.niagara-more-details__body{padding:0 12px 12px}
+.niagara-more-details__body>.journey-card,.niagara-more-details__body>.compare-card,.niagara-more-details__body>.support-card,.niagara-more-details__body>.details-stack{margin-bottom:12px}
+.niagara-camera-dialog{width:min(760px,calc(100% - 24px));max-height:90vh;padding:0;border:0;border-radius:16px;background:#fff;color:#102631;box-shadow:0 24px 80px rgba(0,0,0,.35)}
+.niagara-camera-dialog::backdrop{background:rgba(4,20,30,.74)}
+.niagara-camera-dialog__head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;padding:14px 16px;border-bottom:1px solid #d8e1e5}
+.niagara-camera-dialog__head strong{display:block;color:#072f49;font:800 18px/1.25 var(--sans)}
+.niagara-camera-dialog__head span{display:block;margin-top:3px;color:#435b67;font:12px/1.35 var(--sans)}
+.niagara-camera-dialog__close{width:42px;height:42px;flex:0 0 42px;border:1px solid #aebfc6;border-radius:9px;background:#fff;color:#173f56;cursor:pointer;font:700 24px/1 var(--sans)}
+.niagara-camera-dialog__media{position:relative;display:grid;place-items:center;min-height:260px;aspect-ratio:16/9;background:#0b1f29;overflow:hidden}
+.niagara-camera-dialog__media iframe,.niagara-camera-dialog__media img{display:block;width:100%;height:100%;border:0;object-fit:contain;background:#0b1f29}
+.niagara-camera-dialog__fallback{padding:24px;color:#fff;text-align:center;font:700 14px/1.5 var(--sans)}
+.niagara-camera-dialog__foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;color:#435b67;font:12px/1.4 var(--sans)}
+.niagara-camera-dialog__foot a{color:#0b5c8b;font-weight:800}
+.niagara-v2-active .niagara-leaflet-map-note{font-size:11px!important;color:#213f4c!important}
+.niagara-v2-active .niagara-leaflet-camera-chip{font-size:10px!important}
+.niagara-v2-active .niagara-leaflet-bridge-chip{font-size:11px!important}
+@media(max-width:760px){
+  .niagara-v2-active .niagara-hero{display:block}
+  .niagara-v2-active .niagara-hero .eyebrow{display:block!important;color:#2e5364!important;font-size:11px!important}
+  .niagara-v2-active .niagara-hero .lede{display:block!important}
+  .niagara-v2-active .niagara-hero h1{font-size:31px!important;line-height:1.04!important}
+  .niagara-v2-active .niagara-hero .hero-question{font-size:19px!important;line-height:1.25!important}
+  .niagara-quick-buttons.is-corridors,.niagara-v2-nexus .niagara-quick-buttons.is-corridors{grid-template-columns:1fr}
+  .niagara-quick-button{font-size:15px}
+  .niagara-traveler-panel{grid-template-columns:1fr}
+  .niagara-v2-active .trip-answer{padding:17px 15px}
+  .niagara-v2-active .trip-answer h2{font-size:31px}
+  .niagara-v2-active .trip-answer p{font-size:14px!important}
+  .niagara-v2-active .bridge-choice-grid{grid-template-columns:1fr 1fr}
+  .niagara-v2-active .bridge-choice{padding:12px;min-height:112px}
+  .niagara-v2-active .bridge-choice h3{font-size:17px}
+  .niagara-v2-active .bridge-choice-note{display:none}
+  .niagara-v2-active .live-reality-grid{grid-template-columns:1fr 1fr}
+  .niagara-camera-dialog{width:calc(100% - 16px)}
+  .niagara-camera-dialog__media{aspect-ratio:4/3;min-height:220px}
+  .niagara-camera-dialog__foot{display:block}
+  .niagara-camera-dialog__foot a{display:inline-block;margin-top:6px}
+}

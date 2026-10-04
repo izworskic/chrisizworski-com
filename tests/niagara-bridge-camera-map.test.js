@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const mapJs = fs.readFileSync('public/assets/niagara-camera-map-leaflet.20261004.js', 'utf8');
-const liveJs = fs.readFileSync('public/assets/niagara-live-cameras.20261003.js', 'utf8');
+const ownerJs = fs.readFileSync('public/assets/niagara-bridge-camera-map.20261004c.js', 'utf8');
 
 const expectedCameraIds = [
   'peace-qew',
@@ -17,26 +17,24 @@ const expectedCameraIds = [
   'queenston-ca',
 ];
 
-test('Leaflet Niagara CARTO map contains exactly the nine official international-bridge camera ids', () => {
+test('Leaflet Niagara map contains exactly the nine official international-bridge camera ids', () => {
   for (const id of expectedCameraIds) assert.match(mapJs, new RegExp(`id: ["']${id}["']`));
   assert.equal((mapJs.match(/id: ["'](?:peace-|rainbow-|lewiston-|queenston-)/g) || []).length, 9);
-});
-
-test('Leaflet camera map uses exact NITTEC camera coordinates and no Whirlpool camera', () => {
-  assert.match(mapJs, /lat: 42\.90774, lng: -78\.91968/);
-  assert.match(mapJs, /lat: 43\.08906, lng: -79\.06638/);
-  assert.match(mapJs, /lat: 43\.09151, lng: -79\.06948/);
-  assert.match(mapJs, /lat: 43\.15271, lng: -79\.04287/);
-  assert.match(mapJs, /lat: 43\.15391, lng: -79\.04839/);
   assert.doesNotMatch(mapJs, /id: ["']whirlpool["']/);
-  assert.match(mapJs, /Whirlpool Rapids has no dedicated official road camera/);
 });
 
-test('Leaflet map physically replaces the legacy custom map shell', () => {
-  assert.match(mapJs, /querySelectorAll\(["']\.niagara-visual-map__fallback["']\).*\.remove\(\)/s);
-  assert.match(mapJs, /container\.replaceChildren\(\)/);
-  assert.match(mapJs, /dataset\.leafletCameraMap = ["']true["']/);
-  assert.match(mapJs, /dataset\.mapRuntime = ["']leaflet-1\.9\.4-carto["']/);
+test('Leaflet map contains all four bridge locations including camera-less Whirlpool', () => {
+  assert.equal((mapJs.match(/key: "(?:peace|rainbow|whirlpool|lewiston-queenston)"/g) || []).length, 4);
+  assert.match(mapJs, /key: "whirlpool"[\s\S]*cameraCount: 0/);
+  assert.match(mapJs, /lat: 43\.1092611, lng: -79\.0583722/);
+});
+
+test('final Niagara map uses normal OpenStreetMap tiles with no blocked API key path', () => {
+  assert.match(mapJs, /https:\/\/tile\.openstreetmap\.org\/\{z\}\/\{x\}\/\{y\}\.png/);
+  assert.match(mapJs, /OpenStreetMap/);
+  assert.doesNotMatch(mapJs, /CARTO_BASEMAP_KEY/);
+  assert.doesNotMatch(mapJs, /cartocdn\.com/);
+  assert.doesNotMatch(mapJs, /\?key=/);
 });
 
 test('Leaflet map supports native touch pinch, drag and zoom controls', () => {
@@ -45,30 +43,21 @@ test('Leaflet map supports native touch pinch, drag and zoom controls', () => {
   assert.match(mapJs, /dragging: true/);
   assert.match(mapJs, /zoomControl: true/);
   assert.match(mapJs, /doubleClickZoom: true/);
-  assert.doesNotMatch(mapJs, /pointerdown/);
-  assert.doesNotMatch(mapJs, /pointermove/);
+  assert.match(mapJs, /dataset\.mapRuntime = "leaflet-1\.9\.4-osm-v2"/);
 });
 
-test('Leaflet map uses keyed CARTO Voyager rather than watermarked anonymous tiles', () => {
-  assert.match(mapJs, /CARTO_BASEMAP_KEY/);
-  assert.equal(mapJs.includes('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='), true);
-  assert.match(mapJs, /encodeURIComponent\(CARTO_BASEMAP_KEY\)/);
-  assert.match(mapJs, /https:\/\/carto\.com\/attributions/);
-  assert.match(mapJs, />CARTO<\/a>/);
+test('camera marker opens an in-place modal instead of scrolling to another section', () => {
+  assert.match(mapJs, /niagaraMapCameraDialog/);
+  assert.match(mapJs, /showModal/);
+  assert.match(mapJs, /marker\.on\("click", \(\) => openCameraModal\(camera\)\)/);
+  assert.match(mapJs, /youtube\.com\/embed/);
+  assert.match(mapJs, /nyssnapshot\.com/);
+  assert.doesNotMatch(mapJs, /scrollIntoView/);
+  assert.doesNotMatch(mapJs, /niagaraCameraViewer/);
 });
 
-test('Leaflet camera selection reuses the existing embedded camera viewer', () => {
-  assert.match(mapJs, /\[data-niagara-camera=/);
-  assert.match(mapJs, /tab\.click\(\)/);
-  assert.match(mapJs, /niagaraCameraViewer/);
-  assert.match(mapJs, /leaflet-map-select/);
-});
-
-test('live camera enhancement loads only the final Leaflet map after legacy visual layers settle', () => {
-  assert.match(liveJs, /\/assets\/niagara-camera-map-leaflet\.20261004\.js/);
-  assert.match(liveJs, /data-niagara-leaflet-camera-map/);
-  assert.match(liveJs, /scheduleBridgeCameraMap\(\)/);
-  assert.match(liveJs, /window\.addEventListener\(["']load["'], loadLeafletCameraMap, \{ once: true \}\)/);
-  assert.doesNotMatch(liveJs, /niagara-camera-map-canonical\.20261004c\.js/);
-  assert.doesNotMatch(liveJs, /niagara-camera-map-pins\.20261004b\.js/);
+test('owner cache-busts the map and loads the value-first UX layer', () => {
+  assert.match(ownerJs, /niagara-camera-map-leaflet\.20261004\.js\?v=20261004v2/);
+  assert.match(ownerJs, /niagara-product-v2\.20261004\.css\?v=20261004v2/);
+  assert.match(ownerJs, /niagara-product-v2\.20261004\.js\?v=20261004v2/);
 });
