@@ -3,12 +3,19 @@ import fs from 'node:fs';
 const URL = 'https://chrisizworski.com/niagara-border-crossing/';
 const LASTMOD = '2026-10-03';
 const KEY = 'niagara-border-crossing';
-const NAME = 'Niagara Border Crossing Wait Times — Which Bridge Should You Take?';
-const DESC = 'Compare Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston with official directional border waits, hard vehicle eligibility, NEXUS rules, freshness and conservative diversion-aware guidance.';
+const NAME = 'Niagara Border Wait Times Live — Peace, Rainbow & Lewiston';
+const DESC = 'Compare live Niagara border waits for Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston with traveler eligibility, cameras and conservative bridge-switch guidance.';
 const VISUAL_ASSET_VERSION = '20261003h';
 const FALLBACK_ASSET_VERSION = '20261003a';
 const ELIGIBILITY_ASSET_VERSION = '20261003a';
 const LIVE_CAMERA_ASSET_VERSION = '20261003b';
+const SEARCH_GROWTH_ASSET_VERSION = '20261003a';
+const SEARCH_ROUTES = [
+  { url: 'https://chrisizworski.com/peace-bridge-wait-times/', label: 'Peace Bridge wait times' },
+  { url: 'https://chrisizworski.com/rainbow-bridge-wait-times/', label: 'Rainbow Bridge wait times' },
+  { url: 'https://chrisizworski.com/lewiston-queenston-bridge-wait-times/', label: 'Lewiston–Queenston Bridge wait times' },
+  { url: 'https://chrisizworski.com/whirlpool-rapids-bridge-crossing/', label: 'Whirlpool Rapids Bridge crossing' },
+];
 
 function patchTools() {
   const file = 'public/tools/index.html';
@@ -18,7 +25,7 @@ function patchTools() {
   if (!html.includes(`data-featured-tool="${KEY}"`)) {
     const borderCard = html.match(/    <article class="feature-card" data-featured-tool="michigan-border-wait-times">[\s\S]*?    <\/article>\n/);
     if (!borderCard) throw new Error('Niagara discovery: Michigan border featured-card anchor not found');
-    const card = `    <article class="feature-card" data-featured-tool="${KEY}">\n      <div class="feature-kicker">Live Niagara border decision</div>\n      <h3><a href="/niagara-border-crossing/" data-track-tool="${KEY}" data-placement="tools-featured">Niagara Border Crossing Decision</a></h3>\n      <p>Choose between Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston using official directional waits, traveler eligibility and a conservative detour guardrail.</p>\n      <a class="tool-cta" href="/niagara-border-crossing/" data-track-tool="${KEY}" data-placement="tools-featured">Choose a Niagara crossing <span aria-hidden="true">&rarr;</span></a>\n    </article>\n`;
+    const card = `    <article class="feature-card" data-featured-tool="${KEY}">\n      <div class="feature-kicker">Live Niagara border decision</div>\n      <h3><a href="/niagara-border-crossing/" data-track-tool="${KEY}" data-placement="tools-featured">Niagara Border Wait Times Live</a></h3>\n      <p>Compare Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston using official directional waits, traveler eligibility and a conservative detour guardrail.</p>\n      <a class="tool-cta" href="/niagara-border-crossing/" data-track-tool="${KEY}" data-placement="tools-featured">Check Niagara waits <span aria-hidden="true">&rarr;</span></a>\n    </article>\n`;
     html = html.replace(borderCard[0], `${borderCard[0]}${card}`);
     changed = true;
   }
@@ -80,40 +87,42 @@ function patchTools() {
   console.log(`Niagara tools discovery ${changed ? 'applied' : 'already present'}; catalog count ${catalogCount}.`);
 }
 
-function patchSitemap() {
-  const file = 'public/sitemap.xml';
-  let xml = fs.readFileSync(file, 'utf8');
-  const escapedUrl = URL.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function upsertSitemapEntry(xml, url, priority) {
+  const escapedUrl = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const existingEntryRe = new RegExp(`<url>\\s*<loc>${escapedUrl}<\\/loc>[\\s\\S]*?<\\/url>`, 'm');
-  const entry = `  <url>\n    <loc>${URL}</loc>\n    <lastmod>${LASTMOD}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`;
-
+  const entry = `  <url>\n    <loc>${url}</loc>\n    <lastmod>${LASTMOD}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
   if (existingEntryRe.test(xml)) {
     const existing = xml.match(existingEntryRe)?.[0] || '';
     const updated = existing.match(/<lastmod>[^<]+<\/lastmod>/)
       ? existing.replace(/<lastmod>[^<]+<\/lastmod>/, `<lastmod>${LASTMOD}</lastmod>`)
       : existing.replace('</url>', `  <lastmod>${LASTMOD}</lastmod>\n</url>`);
-    xml = xml.replace(existingEntryRe, updated);
-    fs.writeFileSync(file, xml);
-    console.log(`Niagara sitemap entry refreshed to ${LASTMOD}.`);
-    return;
+    return xml.replace(existingEntryRe, updated);
   }
-
   if (!xml.includes('</urlset>')) throw new Error('Niagara discovery: sitemap.xml missing </urlset>');
-  xml = xml.replace('</urlset>', `${entry}\n</urlset>`);
+  return xml.replace('</urlset>', `${entry}\n</urlset>`);
+}
+
+function patchSitemap() {
+  const file = 'public/sitemap.xml';
+  let xml = fs.readFileSync(file, 'utf8');
+  xml = upsertSitemapEntry(xml, URL, '0.9');
+  for (const route of SEARCH_ROUTES) xml = upsertSitemapEntry(xml, route.url, '0.8');
   fs.writeFileSync(file, xml);
-  console.log(`Niagara sitemap entry added with lastmod ${LASTMOD}.`);
+  console.log(`Niagara sitemap refreshed with flagship plus ${SEARCH_ROUTES.length} bridge-intent pages.`);
 }
 
 function patchLlms() {
   const file = 'public/llms.txt';
-  let text = fs.readFileSync(file, 'utf8');
-  if (!text.includes(URL)) {
-    text = `${text.trimEnd()}\n- Niagara border crossing decision: ${URL}\n`;
-    fs.writeFileSync(file, text);
-    console.log('Niagara llms.txt entry added.');
-  } else {
-    console.log('Niagara llms.txt entry already present.');
+  let text = fs.readFileSync(file, 'utf8').trimEnd();
+  const lines = [
+    ['Niagara border wait times and bridge decision', URL],
+    ...SEARCH_ROUTES.map((route) => [route.label, route.url]),
+  ];
+  for (const [label, url] of lines) {
+    if (!text.includes(url)) text += `\n- ${label}: ${url}`;
   }
+  fs.writeFileSync(file, `${text}\n`);
+  console.log('Niagara llms.txt search cluster refreshed.');
 }
 
 function patchLiveCameras() {
@@ -151,7 +160,7 @@ function patchVisualAssets() {
     throw new Error('Niagara visual cache bust: expected visual asset references not found');
   }
   html = html.replace(cssPattern, cssUrl).replace(jsPattern, jsUrl);
-  html = html.replace(/data-ui-revision="[^"]+"/, `data-ui-revision="${VISUAL_ASSET_VERSION}-livecams"`);
+  html = html.replace(/data-ui-revision="[^"]+"/, `data-ui-revision="${VISUAL_ASSET_VERSION}-livecams-search"`);
   fs.writeFileSync(file, html);
   console.log(`Niagara visual assets cache-busted to ${VISUAL_ASSET_VERSION}.`);
 }
@@ -195,6 +204,86 @@ function patchEligibilityLabels() {
   console.log(`Niagara eligibility labels loaded at ${ELIGIBILITY_ASSET_VERSION}.`);
 }
 
+function patchSearchGrowth() {
+  const file = 'public/niagara-border-crossing/index.html';
+  let html = fs.readFileSync(file, 'utf8');
+  const title = 'Niagara Border Wait Times Live | Peace, Rainbow &amp; Lewiston';
+  const description = 'Live Niagara border wait times for Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston. Compare both directions, cameras, rules and the right bridge.';
+  const ogDescription = 'Live Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston waits with cameras, rules and a traveler-first bridge decision.';
+
+  html = html.replace(/<title>[^<]+<\/title>/, `<title>${title}</title>`);
+  html = html.replace(/<meta name="description" content="[^"]+">/, `<meta name="description" content="${description}">`);
+  html = html.replace(/<meta property="og:title" content="[^"]+">/, '<meta property="og:title" content="Niagara Border Wait Times Live">');
+  html = html.replace(/<meta property="og:description" content="[^"]+">/, `<meta property="og:description" content="${ogDescription}">`);
+  html = html.replace(/<meta name="twitter:title" content="[^"]+">/, '<meta name="twitter:title" content="Niagara Border Wait Times Live">');
+  html = html.replace(/<meta name="twitter:description" content="[^"]+">/, `<meta name="twitter:description" content="${ogDescription}">`);
+
+  if (!html.includes('niagara-search-growth.20261003.css')) {
+    const anchor = /<link rel="stylesheet" href="\/assets\/niagara-persona-polish\.20261003\.css(?:\?v=[^"]+)?">/;
+    if (!anchor.test(html)) throw new Error('Niagara search growth: persona CSS anchor not found');
+    html = html.replace(anchor, (match) => `<link rel="stylesheet" href="/assets/niagara-search-growth.20261003.css?v=${SEARCH_GROWTH_ASSET_VERSION}">\n${match}`);
+  }
+
+  html = html.replace(
+    '<h1>Which Niagara bridge should you take right now?</h1>',
+    '<h1>Niagara Border Wait Times Live</h1>\n      <p class="hero-question">Which Niagara bridge should you take right now?</p>',
+  );
+  html = html.replace(
+    'Cross Niagara without guessing. See which bridge fits your trip, what traffic is doing there, and what you will encounter from the approach road to the other side.',
+    'Compare the current official border waits first, then see which Niagara bridge actually fits your route, traveler type and crossing rules.',
+  );
+
+  if (!html.includes('data-niagara-search-intents')) {
+    const intents = `  <nav class="niagara-search-intents" data-niagara-search-intents aria-label="Niagara bridge wait pages">\n    <a href="/peace-bridge-wait-times/"><strong>Peace Bridge wait times</strong><span>Buffalo ↔ Fort Erie · passenger, NEXUS & trucks</span></a>\n    <a href="/rainbow-bridge-wait-times/"><strong>Rainbow Bridge wait times</strong><span>Niagara Falls · passenger, walking & bicycles</span></a>\n    <a href="/lewiston-queenston-bridge-wait-times/"><strong>Lewiston–Queenston wait times</strong><span>I-190 ↔ Highway 405 · passenger & trucks</span></a>\n    <a href="/whirlpool-rapids-bridge-crossing/"><strong>Whirlpool Rapids rules & wait</strong><span>NEXUS-only · limited hours</span></a>\n  </nav>`;
+    const heroAnchor = '</section>\n\n  <noscript>';
+    if (!html.includes(heroAnchor)) throw new Error('Niagara search growth: hero anchor not found');
+    html = html.replace(heroAnchor, `</section>\n\n${intents}\n\n  <noscript>`);
+  }
+
+  if (!html.includes('id="searchQuestions"')) {
+    const questions = `  <section class="niagara-search-questions" id="searchQuestions" aria-labelledby="searchQuestionsHeading">\n    <p class="eyebrow">Straight answers before you drive</p>\n    <h2 id="searchQuestionsHeading">Niagara border wait time questions</h2>\n    <h3>Which Niagara bridge has the shortest wait right now?</h3>\n    <p>The lowest posted customs number is not automatically the best trip. The live comparison above first removes crossings you cannot use, keeps U.S.-bound and Canada-bound sources separate, and only recommends leaving your natural corridor when the reported savings are large enough to justify it.</p>\n    <h3>What are the Peace Bridge wait times?</h3>\n    <p><a href="/peace-bridge-wait-times/">Open the Peace Bridge live page</a> for Buffalo–Fort Erie passenger, NEXUS and commercial streams, plus webcams and tolls.</p>\n    <h3>What are the Rainbow Bridge wait times?</h3>\n    <p><a href="/rainbow-bridge-wait-times/">Open the Rainbow Bridge live page</a> for the Niagara Falls crossing, camera views, walking access and the commercial-truck restriction.</p>\n    <h3>What are the Lewiston–Queenston Bridge wait times?</h3>\n    <p><a href="/lewiston-queenston-bridge-wait-times/">Open the Lewiston–Queenston live page</a> for passenger, commercial and NEXUS reporting on the I-190 / Highway 405 corridor.</p>\n    <h3>Can anyone use Whirlpool Rapids Bridge?</h3>\n    <p>No. Whirlpool is a specialized trusted-traveler crossing. <a href="/whirlpool-rapids-bridge-crossing/">Check Whirlpool Rapids eligibility, hours and wait context</a> before treating it as an option.</p>\n  </section>`;
+    const detailsAnchor = '  <div class="details-stack">';
+    if (!html.includes(detailsAnchor)) throw new Error('Niagara search growth: details anchor not found');
+    html = html.replace(detailsAnchor, `${questions}\n\n${detailsAnchor}`);
+  }
+
+  if (!html.includes('data-niagara-search-schema')) {
+    const searchSchema = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'BreadcrumbList',
+          '@id': `${URL}#breadcrumb`,
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://chrisizworski.com/' },
+            { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://chrisizworski.com/tools/' },
+            { '@type': 'ListItem', position: 3, name: 'Niagara Border Wait Times', item: URL },
+          ],
+        },
+        {
+          '@type': 'ItemList',
+          '@id': `${URL}#crossings`,
+          name: 'Niagara border crossing live wait pages',
+          numberOfItems: SEARCH_ROUTES.length,
+          itemListElement: SEARCH_ROUTES.map((route, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: route.label,
+            url: route.url,
+          })),
+        },
+      ],
+    };
+    const script = `<script type="application/ld+json" data-niagara-search-schema>${JSON.stringify(searchSchema)}</script>`;
+    const headAnchor = '<script defer src="/_vercel/insights/script.js"></script>';
+    if (!html.includes(headAnchor)) throw new Error('Niagara search growth: head schema anchor not found');
+    html = html.replace(headAnchor, `${script}\n${headAnchor}`);
+  }
+
+  fs.writeFileSync(file, html);
+  console.log('Niagara flagship search title, intent links, mobile hierarchy and query answers applied.');
+}
+
 patchTools();
 patchSitemap();
 patchLlms();
@@ -202,3 +291,4 @@ patchLiveCameras();
 patchVisualAssets();
 patchDecisionFallback();
 patchEligibilityLabels();
+patchSearchGrowth();
