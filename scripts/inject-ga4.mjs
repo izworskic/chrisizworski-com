@@ -10,10 +10,6 @@ import tripJourneyLinks from '../lib/trip-journey-links.js';
 
 const CBBT_DISCOVERY_TUNER = new URL('./tune-cbbt-discovery.mjs', import.meta.url);
 const CBBT_DISCOVERY_PAGE = path.join(process.cwd(), 'public', 'chesapeake-bay-bridge-tunnel', 'index.html');
-if (existsSync(CBBT_DISCOVERY_TUNER) && existsSync(CBBT_DISCOVERY_PAGE)) {
-  await import(CBBT_DISCOVERY_TUNER.href);
-}
-
 const ROOT = path.join(process.cwd(), 'public');
 const MEASUREMENT_ID = 'G-Y5D2V2W7HN';
 const AI_REFERRAL_ASSET = '/assets/ai-referral-measurement.js';
@@ -153,6 +149,9 @@ async function assertNoReplitRuntime() {
 
 await injectMigratedTools();
 await walk(ROOT);
+if (existsSync(CBBT_DISCOVERY_TUNER) && existsSync(CBBT_DISCOVERY_PAGE)) {
+  await import(CBBT_DISCOVERY_TUNER.href);
+}
 const runtimeFilesChecked = await assertNoReplitRuntime();
 console.log(JSON.stringify({
   measurementId: MEASUREMENT_ID,
