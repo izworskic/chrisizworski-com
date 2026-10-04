@@ -36,9 +36,14 @@ test('map camera selection reuses the existing embedded camera viewer', () => {
   assert.match(mapJs, /action: "map-select"/);
 });
 
-test('live camera enhancement loads fingerprinted map only after legacy visual layer is settled', () => {
+test('live camera enhancement loads CARTO camera map plus nine-pin layer after legacy visual layer is settled', () => {
   assert.match(liveJs, /\/assets\/niagara-bridge-camera-map\.20261004\.js/);
   assert.match(liveJs, /data-niagara-bridge-camera-map/);
+  assert.match(liveJs, /\/assets\/niagara-camera-map-pins\.20261004b\.js/);
+  assert.match(liveJs, /data-niagara-nine-camera-pins/);
+  assert.match(liveJs, /const loadMapStack = \(\) =>/);
+  assert.match(liveJs, /loadBridgeCameraMap\(\);/);
+  assert.match(liveJs, /loadBridgeCameraPins\(\);/);
   assert.match(liveJs, /scheduleBridgeCameraMap\(\)/);
-  assert.match(liveJs, /window\.addEventListener\("load", loadBridgeCameraMap, \{ once: true \}\)/);
+  assert.match(liveJs, /window\.addEventListener\("load", loadMapStack, \{ once: true \}\)/);
 });
