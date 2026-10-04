@@ -1,5 +1,7 @@
 /* Niagara value-first product layer — loaded last and intentionally authoritative. */
 .niagara-page.niagara-v2-active{--nv2-ink:#102631;--nv2-muted:#435b67;--nv2-navy:#072f49;--nv2-line:#c9d5da;--nv2-soft:#f4f8f9;--nv2-focus:#0b6b99;color:var(--nv2-ink)}
+.niagara-v2-active .eyebrow{color:#315567!important;font-size:12px!important;line-height:1.35!important;opacity:1!important}
+.niagara-v2-active .live-ribbon-label,.niagara-v2-active .ribbon-time{color:rgba(255,255,255,.9)!important}
 .niagara-v2-active .niagara-hero{margin-bottom:14px}
 .niagara-v2-active .niagara-hero-copy{padding-bottom:8px}
 .niagara-v2-active .niagara-hero .hero-question,.niagara-v2-active .niagara-hero h1{color:var(--nv2-navy)!important;opacity:1!important;text-shadow:none!important}
@@ -33,6 +35,7 @@
 .niagara-traveler-panel select{min-height:44px;padding:8px 10px;border:1px solid #9fb4bd;border-radius:8px;background:#fff;color:#102631;font:700 14px/1.2 var(--sans)}
 .niagara-traveler-note{grid-column:1/-1;margin:0;color:var(--nv2-muted);font:12px/1.45 var(--sans)}
 .niagara-v2-active .trip-answer{padding:20px 22px;background:#082f48;color:#fff}
+.niagara-v2-active .trip-answer .eyebrow{color:#fff!important}
 .niagara-v2-active .trip-answer h2{color:#fff!important;font-size:clamp(30px,5vw,46px);font-weight:650;line-height:1.04}
 .niagara-v2-active .trip-answer p,.niagara-v2-active .trip-answer .scene-note,.niagara-v2-active .trip-answer .mobile-decision-label{color:#fff!important;opacity:1!important}
 .niagara-v2-active .trip-answer p{font-size:15px!important;line-height:1.5!important}
@@ -46,6 +49,7 @@
 .niagara-v2-active .reality-card,.niagara-v2-active .journey-card,.niagara-v2-active .compare-card,.niagara-v2-active .support-card,.niagara-v2-active .details-stack details{color:var(--nv2-ink)!important;background:#fff!important}
 .niagara-v2-active .section-top p:last-child,.niagara-v2-active .reality-detail,.niagara-v2-active .journey-step p,.niagara-v2-active .journey-aside p,.niagara-v2-active .compare-role,.niagara-v2-active .compare-action,.niagara-v2-active .support-pane p,.niagara-v2-active .details-body,.niagara-v2-active .niagara-map-note,.niagara-v2-active .camera-disclosure{color:var(--nv2-muted)!important}
 .niagara-v2-active .section-top p:last-child{font-size:14px!important}
+.niagara-v2-active .reality-detail,.niagara-v2-active .scene-note{font-size:12px!important;line-height:1.45!important}
 .niagara-v2-active .reality-label,.niagara-v2-active .camera-source-kicker{color:#425b67!important;font-size:11px!important}
 .niagara-v2-active .reality-value{color:var(--nv2-navy)!important}
 .niagara-v2-active #bridgeMap{margin-top:0}
