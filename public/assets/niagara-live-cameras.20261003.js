@@ -12,6 +12,7 @@
   const $ = (id) => document.getElementById(id);
   let syncQueued = false;
   let viewerObserver = null;
+  let frameObserver = null;
 
   function selectedCameraId() {
     return document.querySelector("[data-niagara-camera][aria-pressed='true']")?.dataset.niagaraCamera || null;
@@ -54,31 +55,33 @@
         iframe.dataset.videoId = videoId;
       }
       iframe.title = `${$("niagaraCameraTitle")?.textContent || "Peace Bridge"} live traffic camera`;
-      iframe.hidden = false;
-      image.hidden = true;
-      empty.hidden = true;
-      refresh.hidden = true;
-      badge.hidden = false;
-      badge.textContent = "LIVE VIDEO";
-      updated.textContent = "Live embedded video";
+      if (iframe.hidden) iframe.hidden = false;
+
+      // The legacy viewer still owns map selection and still-camera refreshes.
+      // For Peace Bridge, keep its thumbnail refresh from ever covering the live player.
+      if (image.hasAttribute("src")) image.removeAttribute("src");
+      if (!image.hidden) image.hidden = true;
+      if (!empty.hidden) empty.hidden = true;
+      if (!refresh.hidden) refresh.hidden = true;
+      if (badge.hidden) badge.hidden = false;
+      if (badge.textContent !== "LIVE VIDEO") badge.textContent = "LIVE VIDEO";
+      if (updated.textContent !== "Live embedded video") updated.textContent = "Live embedded video";
       return;
     }
 
-    if (!iframe.hidden) {
-      iframe.hidden = true;
-      iframe.removeAttribute("src");
-      delete iframe.dataset.videoId;
-    }
+    if (!iframe.hidden) iframe.hidden = true;
+    if (iframe.hasAttribute("src")) iframe.removeAttribute("src");
+    delete iframe.dataset.videoId;
 
     if (id === "whirlpool") {
-      badge.hidden = true;
-      refresh.hidden = true;
+      if (!badge.hidden) badge.hidden = true;
+      if (!refresh.hidden) refresh.hidden = true;
       return;
     }
 
-    badge.textContent = "LIVE STILL";
-    badge.hidden = false;
-    refresh.hidden = false;
+    if (badge.textContent !== "LIVE STILL") badge.textContent = "LIVE STILL";
+    // Do not force visibility here. The original viewer owns loading, error,
+    // fallback and IntersectionObserver state for NITTEC stills.
   }
 
   function queueSync() {
@@ -106,13 +109,30 @@
     if (!tabs || !("MutationObserver" in window) || tabs.dataset.liveVideoObserved === "true") return;
     tabs.dataset.liveVideoObserved = "true";
     const observer = new MutationObserver(queueSync);
-    observer.observe(tabs, { subtree: true, attributes: true, attributeFilter: ["aria-pressed", "class"] });
+    observer.observe(tabs, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["aria-pressed", "class"],
+    });
+  }
+
+  function bindFrameObserver() {
+    const frame = $("niagaraCameraFrame");
+    if (!frame || !("MutationObserver" in window) || frame.dataset.liveVideoObserved === "true") return;
+    frame.dataset.liveVideoObserved = "true";
+    frameObserver = new MutationObserver(queueSync);
+    frameObserver.observe(frame, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["src", "hidden"],
+    });
   }
 
   function activateEnhancement() {
     if (!$("niagaraCameraFrame") || !document.querySelector(".niagara-camera-tabs")) return false;
     ensureVideoPlayer();
     bindSelectionObserver();
+    bindFrameObserver();
     queueSync();
     if (viewerObserver) {
       viewerObserver.disconnect();
