@@ -3,23 +3,27 @@ import fs from 'node:fs';
 import test from 'node:test';
 
 const html = fs.readFileSync('public/niagara-border-crossing/index.html', 'utf8');
+const legacy = fs.readFileSync('public/assets/niagara-visual-layer.20261003.js', 'utf8');
 const owner = fs.readFileSync('public/assets/niagara-bridge-camera-map.20261004c.js', 'utf8');
 const leaflet = fs.readFileSync('public/assets/niagara-camera-map-leaflet.20261004.js', 'utf8');
 const productCss = fs.readFileSync('public/assets/niagara-product-v2.20261004.css', 'utf8');
 const productJs = fs.readFileSync('public/assets/niagara-product-v2.20261004.js', 'utf8');
 
-test('Niagara page loads the final map owner after the legacy visual layer', () => {
-  const legacy = html.indexOf('/assets/niagara-visual-layer.20261003.js');
-  const finalOwner = html.indexOf('/assets/niagara-bridge-camera-map.20261004c.js');
-  assert.ok(legacy >= 0);
-  assert.ok(finalOwner > legacy);
+test('Niagara has one executable map owner', () => {
+  assert.match(html, /\/assets\/niagara-visual-layer\.20261003\.js/);
+  assert.match(html, /\/assets\/niagara-bridge-camera-map\.20261004c\.js/);
+  assert.match(legacy, /__NIAGARA_LEGACY_VISUAL_LAYER_DISABLED__/);
+  assert.doesNotMatch(legacy, /CARTO_BASEMAP_KEY|cartocdn\.com|function\s+initMap\s*\(|function\s+buildCameraViewer\s*\(/);
+  assert.match(owner, /dataset\.niagaraMapOwner = "leaflet-osm-v3"/);
+  assert.doesNotMatch(owner, /suppressLegacyMap|restoreFinalMapId|niagaraBridgeMapLegacySuppressed/);
 });
 
 test('final map owner cache-busts map plus value-first product layer', () => {
-  assert.match(owner, /niagara-camera-map-leaflet\.20261004\.js\?v=20261004v2/);
-  assert.match(owner, /niagara-product-v2\.20261004\.css\?v=20261004v2/);
-  assert.match(owner, /niagara-product-v2\.20261004\.js\?v=20261004v2/);
+  assert.match(owner, /niagara-camera-map-leaflet\.20261004\.js\?v=20261004singleowner1/);
+  assert.match(owner, /niagara-product-v2\.20261004\.css\?v=20261004singleowner1/);
+  assert.match(owner, /niagara-product-v2\.20261004\.js\?v=20261004singleowner1/);
   assert.match(owner, /currentScript\.dataset\.niagaraBridgeCameraMap = "true"/);
+  assert.match(owner, /clearLegacyMapSurface/);
 });
 
 test('Leaflet implementation maps all four crossings and nine official camera pins without keyed tiles', () => {
@@ -45,8 +49,10 @@ test('mobile product layer forces readable text and a two-step passenger flow', 
   assert.match(productJs, /Car \/ SUV/);
 });
 
-test('camera click stays in context on mobile', () => {
+test('camera pins open the in-context modal instead of a second viewer', () => {
   assert.match(leaflet, /niagaraMapCameraDialog/);
   assert.match(leaflet, /showModal/);
+  assert.match(leaflet, /marker\.on\("click", \(\) => openCameraModal\(camera\)\)/);
   assert.doesNotMatch(leaflet, /scrollIntoView/);
+  assert.doesNotMatch(legacy, /niagaraCameraViewer|selectCamera|activateCameraViewer/);
 });
