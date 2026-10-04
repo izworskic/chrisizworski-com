@@ -143,6 +143,16 @@
     nav.innerHTML = '<a href="#bridgeMap">Map + cameras</a><a href="#niagaraMoreDetails">Rules + more detail</a>';
   }
 
+  function collapseCrossingComparison() {
+    const grid = $("crossingGrid");
+    if (!grid || grid.closest(".niagara-compact-compare")) return;
+    const details = document.createElement("details");
+    details.className = "niagara-compact-compare";
+    details.innerHTML = '<summary>Compare all four crossings</summary><div class="niagara-compact-compare__body"></div>';
+    grid.parentNode.insertBefore(details, grid);
+    details.querySelector(".niagara-compact-compare__body").appendChild(grid);
+  }
+
   function reorderPrimaryValue() {
     const tripDesk = document.querySelector(".trip-desk");
     const reality = document.querySelector(".reality-card");
@@ -195,6 +205,7 @@
     document.body.classList.add("niagara-v2-active");
     buildQuickControls();
     simplifyShortcuts();
+    collapseCrossingComparison();
     reorderPrimaryValue();
     buildProgressiveDisclosure();
     simplifyCopy();
