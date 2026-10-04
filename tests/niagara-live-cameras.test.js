@@ -17,12 +17,29 @@ test('Niagara upgrades Peace Bridge views to actual embedded live video', () => 
   assert.match(js, /allowfullscreen/);
 });
 
-test('Niagara preserves the existing camera selector and map integration', () => {
+test('Niagara enhances the existing camera viewer instead of replacing it', () => {
   assert.match(js, /data-niagara-camera/);
   assert.match(js, /niagaraCameraFrame/);
   assert.match(js, /niagaraCameraImage/);
   assert.match(js, /MutationObserver/);
   assert.match(js, /waitForViewer/);
+  assert.doesNotMatch(js, /section\.innerHTML\s*=/);
+  assert.doesNotMatch(js, /\.camera-grid[^\n]*remove\(/);
+});
+
+test('Niagara preserves source cards, map camera callbacks, and legacy fallback behavior', () => {
+  assert.match(legacy, /#bridgeCameras \.camera-grid/);
+  assert.match(legacy, /sourceGrid\.before\(host\)/);
+  assert.match(legacy, /showCrossingPopup/);
+  assert.match(legacy, /selectCamera\(camera\.id, true\)/);
+  assert.match(legacy, /image\?\.addEventListener\("error"/);
+  assert.match(legacy, /official source link remains available below/);
+});
+
+test('Niagara keeps third-party still cameras lazy-loaded', () => {
+  assert.match(legacy, /loading="lazy"/);
+  assert.doesNotMatch(js, /loading="eager"/);
+  assert.doesNotMatch(js, /nyssnapshot\.com/);
 });
 
 test('Niagara moves live cameras directly after current crossing conditions', () => {
