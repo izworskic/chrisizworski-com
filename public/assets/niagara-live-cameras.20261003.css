@@ -1,0 +1,12 @@
+.niagara-live-cameras-v2{scroll-margin-top:20px}
+.niagara-live-cameras-v2 .niagara-camera-frame{position:relative;aspect-ratio:16/9;background:#071c28;overflow:hidden}
+.niagara-live-cameras-v2 .niagara-camera-frame img,
+.niagara-live-cameras-v2 .niagara-camera-frame iframe{display:block;width:100%;height:100%;border:0;object-fit:cover;background:#071c28}
+.niagara-live-cameras-v2 .niagara-camera-video[hidden]{display:none}
+.niagara-live-cameras-v2 .niagara-camera-live-badge{z-index:3}
+.niagara-live-cameras-v2 .niagara-camera-tabs{scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.niagara-live-cameras-v2 .niagara-camera-card{box-shadow:0 12px 30px rgba(7,28,40,.12)}
+@media(max-width:620px){
+  .niagara-live-cameras-v2{margin-top:14px}
+  .niagara-live-cameras-v2 .niagara-camera-tabs{margin-right:-14px;padding-right:14px}
+}
