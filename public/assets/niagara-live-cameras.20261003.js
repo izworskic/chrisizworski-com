@@ -56,9 +56,6 @@
       }
       iframe.title = `${$("niagaraCameraTitle")?.textContent || "Peace Bridge"} live traffic camera`;
       if (iframe.hidden) iframe.hidden = false;
-
-      // The legacy viewer still owns map selection and still-camera refreshes.
-      // For Peace Bridge, keep its thumbnail refresh from ever covering the live player.
       if (image.hasAttribute("src")) image.removeAttribute("src");
       if (!image.hidden) image.hidden = true;
       if (!empty.hidden) empty.hidden = true;
@@ -80,8 +77,6 @@
     }
 
     if (badge.textContent !== "LIVE STILL") badge.textContent = "LIVE STILL";
-    // Do not force visibility here. The original viewer owns loading, error,
-    // fallback and IntersectionObserver state for NITTEC stills.
   }
 
   function queueSync() {
@@ -104,33 +99,19 @@
     if (reality && reality.nextElementSibling !== section) reality.insertAdjacentElement("afterend", section);
   }
 
-  function loadBridgeCameraMap() {
-    if (document.querySelector('script[data-niagara-bridge-camera-map="true"]')) return;
+  function loadCanonicalCameraMap() {
+    if (document.querySelector('script[data-niagara-canonical-camera-map="true"]')) return;
     const script = document.createElement("script");
-    script.dataset.niagaraBridgeCameraMap = "true";
-    script.src = "/assets/niagara-bridge-camera-map.20261004.js";
-    document.head.appendChild(script);
-  }
-
-  function loadBridgeCameraPins() {
-    if (document.querySelector('script[data-niagara-nine-camera-pins="true"]')) return;
-    const script = document.createElement("script");
-    script.dataset.niagaraNineCameraPins = "true";
-    script.src = "/assets/niagara-camera-map-pins.20261004b.js";
+    script.dataset.niagaraCanonicalCameraMap = "true";
+    script.src = "/assets/niagara-camera-map-canonical.20261004c.js";
     document.head.appendChild(script);
   }
 
   function scheduleBridgeCameraMap() {
-    // The legacy visual layer owns the initial map shell. Wait until all defer
-    // scripts have executed so the camera-map layer always takes over last.
-    const loadMapStack = () => {
-      loadBridgeCameraMap();
-      // Fingerprinted follow-on enhancement removes regional bridge clusters
-      // and exposes all nine official camera pins immediately.
-      loadBridgeCameraPins();
-    };
-    if (document.readyState === "complete") loadMapStack();
-    else window.addEventListener("load", loadMapStack, { once: true });
+    // One final map owner only. The canonical map runs after the legacy visual
+    // layer, deletes the four-bridge fallback and replaces the old map shell.
+    if (document.readyState === "complete") loadCanonicalCameraMap();
+    else window.addEventListener("load", loadCanonicalCameraMap, { once: true });
   }
 
   function bindSelectionObserver() {
