@@ -2,6 +2,7 @@
 
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import './tune-cbbt-discovery.mjs';
 import sitePolicyLinks from '../lib/site-policy-links.js';
 import adsenseEligibility from '../lib/adsense-eligibility.js';
 import replaceAisEmbeds from '../lib/site-ais-embeds.js';
