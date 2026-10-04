@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-09-26",
+  "updated": "2026-10-04",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -850,10 +850,10 @@
         "impressions": 9,
         "averagePosition": 31.33,
         "evidenceWindow": "7-day leading snapshot through 2026-08-20",
-        "nextMeasurement": "Hold the 54-page cluster stable, collect page × query Search Console evidence plus attributed planner/departure/directions events, then expand only families that pass both demand and downstream-value gates."
+        "nextMeasurement": "Hold the 54-page cluster stable, collect page \u00d7 query Search Console evidence plus attributed planner/departure/directions events, then expand only families that pass both demand and downstream-value gates."
       },
       "measurement": {
-        "search": "Google Search Console page × query",
+        "search": "Google Search Console page \u00d7 query",
         "product": "Vercel fixed-label events",
         "decisionWindowDays": 28,
         "privacy": "No exact coordinates, device location, or free-text semantic query in growth analytics."
@@ -899,7 +899,7 @@
         "note": "New Southeast Michigan pilot. Hold scope stable and measure demand plus downstream specialist handoffs before any geographic expansion."
       },
       "measurement": {
-        "search": "Google Search Console page × query",
+        "search": "Google Search Console page \u00d7 query",
         "product": "GA4 page and outbound specialist handoff events",
         "decisionWindowDays": 28,
         "privacy": "No exact user coordinates, precise location, or free-text query is required by this page."
@@ -944,7 +944,7 @@
         "note": "Launched 2026-09-21 as a narrow Detroit acquisition surface. Measure distinct Detroit ship-watching queries and downstream live-map use before expansion."
       },
       "measurement": {
-        "search": "Google Search Console page × query",
+        "search": "Google Search Console page \u00d7 query",
         "product": "GA4 fixed-label Detroit growth handoff events",
         "decisionWindowDays": 28,
         "privacy": "No exact user coordinates, precise location, or free-text semantic query is required."
@@ -990,7 +990,7 @@
         "note": "Launched 2026-09-21. Owns Detroit weather-and-migration trip timing, while Michigan Birding Report remains the sightings canonical."
       },
       "measurement": {
-        "search": "Google Search Console page × query",
+        "search": "Google Search Console page \u00d7 query",
         "product": "GA4 fixed-label Detroit growth handoff events",
         "decisionWindowDays": 28,
         "privacy": "No exact user coordinates, precise location, or free-text semantic query is required."
@@ -1036,7 +1036,7 @@
         "note": "Launched 2026-09-21. Owns a conservative Lake St. Clair trip-window decision; Great Lakes Buoys remains the observation/station canonical."
       },
       "measurement": {
-        "search": "Google Search Console page × query",
+        "search": "Google Search Console page \u00d7 query",
         "product": "GA4 fixed-label Detroit growth handoff events",
         "decisionWindowDays": 28,
         "privacy": "No exact user coordinates, precise location, or free-text semantic query is required."
@@ -1082,7 +1082,7 @@
         "note": "Launched 2026-09-21. Owns Detroit-specific sunset timing and sky-window intent without claiming sunset color."
       },
       "measurement": {
-        "search": "Google Search Console page × query",
+        "search": "Google Search Console page \u00d7 query",
         "product": "GA4 fixed-label Detroit growth handoff events",
         "decisionWindowDays": 28,
         "privacy": "No exact user coordinates, precise location, or free-text semantic query is required."
@@ -1778,7 +1778,7 @@
     },
     {
       "id": "national-aurora",
-      "name": "Aurora Tonight — U.S.",
+      "name": "Aurora Tonight \u2014 U.S.",
       "canonical": "https://chrisizworski.com/national-tools/aurora/",
       "aliases": [],
       "kind": "flagship-live",
@@ -2252,6 +2252,152 @@
       },
       "searchEvidence": {
         "status": "new"
+      }
+    },
+    {
+      "id": "mackinac-island",
+      "name": "Mackinac Island Live",
+      "canonical": "https://chrisizworski.com/mackinac-island/",
+      "aliases": [],
+      "kind": "trip-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Mackinac Island ferry and day trip planning",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "mackinac-island",
+        "straits-of-mackinac"
+      ],
+      "personas": [
+        "trip-planner",
+        "family-traveler"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
+    },
+    {
+      "id": "duluth-canal-park",
+      "name": "Duluth Canal Park Live",
+      "canonical": "https://chrisizworski.com/duluth-canal-park/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "great-lakes-shipping",
+      "primaryIntent": "Duluth ship schedule today and Canal Park ship watching",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "duluth-superior",
+        "lake-superior"
+      ],
+      "personas": [
+        "ship-watcher",
+        "traveler"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new-canonical"
+      }
+    },
+    {
+      "id": "niagara-border",
+      "name": "Niagara Border Wait Times",
+      "canonical": "https://chrisizworski.com/niagara-border-crossing/",
+      "aliases": [],
+      "kind": "trip-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Niagara U.S.\u2013Canada border bridge waits today",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "niagara"
+      ],
+      "personas": [
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
+    },
+    {
+      "id": "tahquamenon",
+      "name": "Tahquamenon Falls Trip Planner",
+      "canonical": "https://chrisizworski.com/tahquamenon-falls/",
+      "aliases": [],
+      "kind": "trip-planner",
+      "cluster": "trip-planning",
+      "primaryIntent": "Tahquamenon Falls visitor trip planning",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "upper-peninsula"
+      ],
+      "personas": [
+        "trip-planner"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unknown"
       }
     }
   ],
@@ -3143,6 +3289,78 @@
       "strength": "strong",
       "surface": "natural-year",
       "reason": "Seasonal phenology signals lead into the specific bloom calls: cherries, tulips, lilacs, lavender and sunflower fields."
+    },
+    {
+      "from": "mackinac-island",
+      "to": "mackinac-bridge",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "tools-trip-planners",
+      "reason": "Driving across the Straits requires a bridge conditions check before choosing the ferry."
+    },
+    {
+      "from": "fall-color",
+      "to": "mackinac-island",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "tools-trip-planners",
+      "reason": "Island fall-color trips need ferry and return-time planning."
+    },
+    {
+      "from": "ship-tracker",
+      "to": "duluth-canal-park",
+      "type": "geographic-handoff",
+      "strength": "strong",
+      "surface": "great-lakes-shipping",
+      "reason": "Lake-wide vessel discovery can deepen into Duluth-specific passage timing, cameras, and Canal Park viewing."
+    },
+    {
+      "from": "circle-tour",
+      "to": "duluth-canal-park",
+      "type": "destination-depth",
+      "strength": "strong",
+      "surface": "lake-superior-trip",
+      "reason": "Duluth is a major Circle Tour stop and the dedicated tool resolves ship-watching timing at Canal Park."
+    },
+    {
+      "from": "duluth-canal-park",
+      "to": "ship-tracker",
+      "type": "broader-tracking",
+      "strength": "optional",
+      "surface": "great-lakes-shipping",
+      "reason": "Visitors who want vessel context beyond Duluth can continue to the lake-wide Great Lakes Ship Tracker."
+    },
+    {
+      "from": "gazette",
+      "to": "duluth-canal-park",
+      "type": "live-story-handoff",
+      "strength": "strong",
+      "surface": "great-lakes-shipping",
+      "reason": "Readers following a Duluth shipping item can move from the daily newspaper into live Canal Park passage timing and cameras."
+    },
+    {
+      "from": "soo-locks",
+      "to": "duluth-canal-park",
+      "type": "ship-watching-sibling",
+      "strength": "optional",
+      "surface": "great-lakes-shipping",
+      "reason": "Soo Locks ship watchers can continue to the distinct Duluth destination tool for western Lake Superior viewing."
+    },
+    {
+      "from": "niagara-border",
+      "to": "border-waits",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "tools-directory",
+      "reason": "A destination trip can continue into the related crossing or seasonal conditions check."
+    },
+    {
+      "from": "tahquamenon",
+      "to": "fall-color",
+      "type": "decision-next",
+      "strength": "strong",
+      "surface": "tools-directory",
+      "reason": "A destination trip can continue into the related crossing or seasonal conditions check."
     }
   ],
   "cannibalizationGroups": [

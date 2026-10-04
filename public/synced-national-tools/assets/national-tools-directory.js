@@ -22,6 +22,7 @@
 
   function apply(){
     const query=(search.value||'').trim().toLowerCase();
+    document.querySelectorAll('[data-directory-context]').forEach(block=>{block.hidden=!!query||filter!=='all'||seasonOnly;});
     let visible=0;
     cards.forEach(card=>{
       const haystack=((card.dataset.tags||'')+' '+(card.textContent||'')).toLowerCase();
@@ -37,8 +38,15 @@
     count.textContent=visible+(visible===1?' tool shown':' tools shown');
   }
 
+  // Measure discovery without sending typed places or search text to analytics.
+  document.addEventListener('click',event=>{
+    const link=event.target.closest?.('a[href]');
+    const card=link?.closest('[data-search-card]');
+    if(card&&typeof window.gtag==='function')window.gtag('event','tool_open',{tool_id:card.dataset.toolId,placement:'national-directory',transport_type:'beacon'});
+  });
   buttons.forEach(button=>button.addEventListener('click',()=>{
     filter=button.dataset.filter;
+    if(typeof window.gtag==='function')window.gtag('event','tool_filter',{filter,placement:'national-directory'});
     buttons.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
     apply();
   }));

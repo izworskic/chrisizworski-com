@@ -80,8 +80,10 @@ test("Tools hub makes ten live tools prominent and indexes the expanded library"
   const html = readFileSync(path.join(__dirname, "../public/tools/index.html"), "utf8");
   assert.ok(html.includes("<title>Michigan &amp; Great Lakes Live Tools | Chris Izworski</title>"));
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/tools/">'));
-  assert.equal((html.match(/data-featured-tool=/g) || []).length, 10);
-  assert.equal((html.match(/class="tool-cta"/g) || []).length, 10);
+  const featuredIds = [...html.matchAll(/data-featured-tool="([^"]+)"/g)].map(match => match[1]);
+  assert.ok(featuredIds.length >= 10, "retain existing featured tools");
+  assert.equal(new Set(featuredIds).size, featuredIds.length);
+  assert.equal((html.match(/class="tool-cta"/g) || []).length, featuredIds.length);
   assert.ok((html.match(/data-track-cluster=/g) || []).length >= 5);
 
   const jsonLd = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
@@ -95,8 +97,13 @@ test("Tools hub makes ten live tools prominent and indexes the expanded library"
   // 41 since 2026-09-20: Mackinac Island Live joined the public catalog and structured tool list.
   // 42 since 2026-09-21: Detroit Outdoors Today joined as the Southeast Michigan live opportunity desk.
   // 43 since 2026-09-26: Michigan Snow Totals joined as the statewide NWS snowfall-report map.
-  assert.equal(itemList.numberOfItems, 43);
-  assert.equal(itemList.itemListElement.length, 43);
+  // Build-time discovery can add cards. Require complete ordered coverage instead of a stale count.
+  const visibleUrls = [...html.matchAll(/<div class="tool-card"[^>]*>[\s\S]*?<div class="tool-title"><a href="([^"]+)"/g)].map(match => new URL(match[1], "https://chrisizworski.com").href);
+  assert.ok(visibleUrls.length >= 43, "retain the existing catalog");
+  assert.equal(itemList.numberOfItems, visibleUrls.length);
+  assert.deepEqual(itemList.itemListElement.map(entry => entry.item.url), visibleUrls);
+  assert.ok(visibleUrls.includes("https://chrisizworski.com/mackinac-island/"));
+  assert.ok(html.indexOf('id="finder"') < html.indexOf('class="winter-router"'), "finder precedes seasonal routing");
   // Derived from git, so pin the shape not the day.
   assert.match(collection.dateModified, /^\d{4}-\d{2}-\d{2}$/);
   assert.ok(Date.parse(collection.dateModified) <= Date.now(), "dateModified must not be in the future");
@@ -137,7 +144,7 @@ test("Tools hub gives Detroit Outdoors a distinct live opportunity-desk spotligh
   assert.ok(html.includes("fall-color-phenology"));
   assert.ok(html.includes('data-track-tool="detroit-outdoors" data-placement="tools-spotlight"'));
   assert.ok(html.includes('data-track-tool="detroit-outdoors" data-placement="tools-spotlight-cta"'));
-  assert.equal((html.match(/data-featured-tool=/g) || []).length, 10, "Detroit spotlight should stand apart from the ordinary featured-card grid");
+  assert.doesNotMatch(html.match(/<article class="detroit-spotlight"[\s\S]*?<\/article>/)[0], /data-featured-tool=/, "Detroit spotlight stands apart from featured cards");
   const spotlight = html.match(/<article class="detroit-spotlight"[\s\S]*?<\/article>/)[0];
   assert.doesNotMatch(spotlight, /\bJEV\b|Haiku|deterministic/i);
 });

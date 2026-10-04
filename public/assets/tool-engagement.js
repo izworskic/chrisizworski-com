@@ -18,6 +18,8 @@
 
   function toolFromLink(link) {
     if (link.dataset.trackTool) return clean(link.dataset.trackTool, "tool");
+    var card = link.closest("[data-tool-id]");
+    if (card) return clean(card.dataset.toolId, "tool");
 
     try {
       var url = new URL(link.href, window.location.href);
@@ -56,6 +58,11 @@
     if (!isToolLink && page === "great-lakes") isToolLink = Boolean(link.closest(".card"));
     if (!isToolLink) return;
 
+    if (typeof window.gtag === "function") window.gtag("event", "tool_open", {
+      tool_id: toolFromLink(link),
+      placement: clean(link.dataset.placement, page + "-list"),
+      transport_type: "beacon",
+    });
     window.va("event", {
       name: "Tool Open",
       data: {

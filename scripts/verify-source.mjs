@@ -26,6 +26,11 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Oct 4 2026: reviewed tool-directory discovery/schema synchronization and GA4 tool-open measurement.
+  // Mirror changes come from the national hub owner; no specialist engine implementation changes.
+  "/assets/tool-engagement.js",
+  "/synced-national-tools/",
+  "/synced-national-tools/assets/national-tools-directory.js",
   // Sep 30 2026: shared SERP-length gate repair for the Haleakala sunrise synced route.
   "/synced-national-tools/haleakala-sunrise/",
   // Sep 30 2026: reviewed Michigan Ice decision-engine client update. The public client now
@@ -530,14 +535,16 @@ if (!toolsHtml.includes("Built by Chris Izworski")) failures.push("The new Tools
 const toolsJsonLdMatch = toolsHtml.match(/<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/i);
 const toolsJsonLd = toolsJsonLdMatch ? JSON.parse(toolsJsonLdMatch[1]) : null;
 const toolsItemList = toolsJsonLd?.["@graph"]?.find((entry) => entry["@type"] === "ItemList");
-if (toolsItemList?.numberOfItems !== 43 || toolsItemList?.itemListElement?.length !== 43) {
-  failures.push("Tools ItemList does not contain exactly 43 entries");
+const visibleToolUrls = [...toolsHtml.matchAll(/<div class="tool-card"[^>]*>[\s\S]*?<div class="tool-title"><a href="([^"]+)"/g)].map(match => new URL(match[1], "https://chrisizworski.com").href);
+if (visibleToolUrls.length < 43 || toolsItemList?.numberOfItems !== visibleToolUrls.length || JSON.stringify(toolsItemList?.itemListElement?.map(entry => entry.item.url)) !== JSON.stringify(visibleToolUrls)) {
+  failures.push("Tools ItemList must preserve the catalog and match every visible card in order");
 }
 if (!toolsHtml.includes("Michigan &amp; Great Lakes Live Tools") || !toolsHtml.includes("Start with the live tools")) {
   failures.push("Tools discovery title or featured-tools section is missing");
 }
-if ((toolsHtml.match(/data-featured-tool=/g) || []).length !== 10 || (toolsHtml.match(/class="tool-cta"/g) || []).length !== 10) {
-  failures.push("Tools page does not contain exactly ten featured tool cards and calls to action");
+const featuredIds = [...toolsHtml.matchAll(/data-featured-tool="([^"]+)"/g)].map(match => match[1]);
+if (featuredIds.length < 10 || new Set(featuredIds).size !== featuredIds.length || (toolsHtml.match(/class="tool-cta"/g) || []).length !== featuredIds.length) {
+  failures.push("Tools page must retain at least ten unique featured tools with a call to action for each");
 }
 if ((toolsHtml.match(/data-track-cluster=/g) || []).length < 5) {
   failures.push("Tools page is missing category jump links");
