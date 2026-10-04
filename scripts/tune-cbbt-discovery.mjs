@@ -51,6 +51,16 @@ function addStaticCbbtBacklink(file) {
   fs.writeFileSync(file, html);
 }
 
+function ensureNationalHubLink() {
+  let html = fs.readFileSync(NATIONAL_HUB, 'utf8');
+  if (html.includes('href="/chesapeake-bay-bridge-tunnel/"')) return;
+  if (!html.includes('</main>')) throw new Error('CBBT discovery tuning: national tools hub has no </main> insertion point');
+
+  const section = `\n<section data-cbbt-national-authority style="max-width:1180px;margin:28px auto;padding:18px 20px;border-top:1px solid rgba(80,100,110,.22)">\n  <h2 style="margin:0 0 .45rem">Bridge crossing decision tools</h2>\n  <p style="margin:0">Planning a Mid-Atlantic crossing? <a href="/chesapeake-bay-bridge-tunnel/"><strong>Check Chesapeake Bay Bridge-Tunnel conditions, vehicle restrictions, radar and tolls</strong></a>.</p>\n</section>\n`;
+  html = html.replace('</main>', `${section}</main>`);
+  fs.writeFileSync(NATIONAL_HUB, html);
+}
+
 let html = fs.readFileSync(CBBT_PAGE, 'utf8');
 
 html = setProperty(html, 'og:site_name', 'Chris Izworski');
@@ -112,10 +122,11 @@ if (!html.includes('href="/niagara-border-crossing/"')) {
 
 fs.writeFileSync(CBBT_PAGE, html);
 BACKLINK_PAGES.forEach(addStaticCbbtBacklink);
+ensureNationalHubLink();
 
 const national = fs.readFileSync(NATIONAL_HUB, 'utf8');
 if (!national.includes('href="/chesapeake-bay-bridge-tunnel/"')) {
-  throw new Error('CBBT discovery tuning: national tools hub no longer links to CBBT');
+  throw new Error('CBBT discovery tuning: failed to restore national tools hub link');
 }
 
 const tuned = fs.readFileSync(CBBT_PAGE, 'utf8');
