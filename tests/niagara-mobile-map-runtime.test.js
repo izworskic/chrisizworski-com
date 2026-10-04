@@ -17,6 +17,9 @@ test('touch map owns the visible CARTO surface and exposes nine camera pins', ()
   assert.equal((map.match(/sourceId:\s*\d+/g) || []).length, 9);
   assert.match(map, /Nine Niagara border cameras on the map/);
   assert.doesNotMatch(map, /Whirlpool Rapids.*sourceId/);
+  assert.match(map, /currentScript\.dataset\.niagaraBridgeCameraMap = "true"/);
+  assert.match(map, /container\.dataset\.cameraMapReady = "true"/);
+  assert.match(map, /container\.dataset\.cameraMapRuntime = "20261004c"/);
 });
 
 test('touch map accepts touch pointers and provides zoom controls', () => {
