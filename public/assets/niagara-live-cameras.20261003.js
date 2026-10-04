@@ -112,11 +112,25 @@
     document.head.appendChild(script);
   }
 
+  function loadBridgeCameraPins() {
+    if (document.querySelector('script[data-niagara-nine-camera-pins="true"]')) return;
+    const script = document.createElement("script");
+    script.dataset.niagaraNineCameraPins = "true";
+    script.src = "/assets/niagara-camera-map-pins.20261004b.js";
+    document.head.appendChild(script);
+  }
+
   function scheduleBridgeCameraMap() {
     // The legacy visual layer owns the initial map shell. Wait until all defer
     // scripts have executed so the camera-map layer always takes over last.
-    if (document.readyState === "complete") loadBridgeCameraMap();
-    else window.addEventListener("load", loadBridgeCameraMap, { once: true });
+    const loadMapStack = () => {
+      loadBridgeCameraMap();
+      // Fingerprinted follow-on enhancement removes regional bridge clusters
+      // and exposes all nine official camera pins immediately.
+      loadBridgeCameraPins();
+    };
+    if (document.readyState === "complete") loadMapStack();
+    else window.addEventListener("load", loadMapStack, { once: true });
   }
 
   function bindSelectionObserver() {
