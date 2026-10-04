@@ -21,7 +21,7 @@ test('regional Niagara camera map exposes all nine bridge cameras instead of thr
   for (const id of expectedCameraIds) assert.match(pins, new RegExp(`id: ["']${id}["']`));
   assert.match(pins, /\.niagara-camera-map__cluster\[data-camera-group\]/);
   assert.match(pins, /cluster\.replaceWith\(fragment\)/);
-  assert.match(pins, /data\.regionalCameraPin = ["']true["']/);
+  assert.match(pins, /dataset\.regionalCameraPin = ["']true["']/);
   assert.match(pins, /9 bridge cameras/);
 });
 
