@@ -51,7 +51,8 @@ test('Leaflet map supports native touch pinch, drag and zoom controls', () => {
 
 test('Leaflet map uses keyed CARTO Voyager rather than watermarked anonymous tiles', () => {
   assert.match(mapJs, /CARTO_BASEMAP_KEY/);
-  assert.match(mapJs, /rastertiles\/voyager\/\{z\}\/\{x\}\/\{y\}\{r\}\.png\?key=/);
+  assert.equal(mapJs.includes('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='), true);
+  assert.match(mapJs, /encodeURIComponent\(CARTO_BASEMAP_KEY\)/);
   assert.match(mapJs, /© CARTO/);
 });
 
