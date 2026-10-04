@@ -1,26 +1,14 @@
 (() => {
   "use strict";
 
-  const LEAFLET_MAP_SRC = "/assets/niagara-camera-map-leaflet.20261004.js?v=20261004v2";
-  const PRODUCT_CSS = "/assets/niagara-product-v2.20261004.css?v=20261004v2";
-  const PRODUCT_JS = "/assets/niagara-product-v2.20261004.js?v=20261004v2";
+  const LEAFLET_MAP_SRC = "/assets/niagara-camera-map-leaflet.20261004.js?v=20261004singleowner1";
+  const PRODUCT_CSS = "/assets/niagara-product-v2.20261004.css?v=20261004singleowner1";
+  const PRODUCT_JS = "/assets/niagara-product-v2.20261004.js?v=20261004singleowner1";
   const MAP_ID = "niagaraBridgeMap";
-  const SUPPRESSED_MAP_ID = "niagaraBridgeMapLegacySuppressed";
 
-  if (document.currentScript) document.currentScript.dataset.niagaraBridgeCameraMap = "true";
-
-  function suppressLegacyMap() {
-    const container = document.getElementById(MAP_ID);
-    if (!container || container.dataset.legacyMapSuppressed === "true") return;
-    container.id = SUPPRESSED_MAP_ID;
-    container.dataset.legacyMapSuppressed = "true";
-  }
-
-  function restoreFinalMapId() {
-    const container = document.getElementById(SUPPRESSED_MAP_ID);
-    if (!container) return;
-    container.id = MAP_ID;
-    delete container.dataset.legacyMapSuppressed;
+  if (document.currentScript) {
+    document.currentScript.dataset.niagaraBridgeCameraMap = "true";
+    document.currentScript.dataset.niagaraMapOwner = "leaflet-osm";
   }
 
   function installProductCss() {
@@ -52,17 +40,34 @@
     document.head.appendChild(style);
   }
 
+  function clearLegacyMapSurface() {
+    const container = document.getElementById(MAP_ID);
+    if (!container) return;
+
+    // Defensive cleanup for clients that may have an older visual-layer asset
+    // in cache. The final map owner always starts from a clean container.
+    container.querySelectorAll(
+      ".niagara-carto-map,.niagara-carto-tiles,.niagara-carto-markers,.niagara-carto-popup,.niagara-visual-map__fallback"
+    ).forEach((node) => node.remove());
+    delete container.dataset.mapReady;
+    delete container.dataset.legacyMapSuppressed;
+    container.dataset.mapOwner = "leaflet-osm";
+  }
+
   function loadScriptOnce(selector, src, datasetKey) {
-    if (document.querySelector(selector)) return;
+    const existing = document.querySelector(selector);
+    if (existing) return existing;
     const script = document.createElement("script");
-    script.defer = true;
+    script.async = false;
     script.dataset[datasetKey] = "true";
     script.src = src;
     document.head.appendChild(script);
+    return script;
   }
 
   function init() {
-    restoreFinalMapId();
+    document.documentElement.dataset.niagaraMapOwner = "leaflet-osm-v3";
+    clearLegacyMapSurface();
     installCriticalContrast();
     installProductCss();
     loadScriptOnce('script[data-niagara-product-v2="true"]', PRODUCT_JS, "niagaraProductV2");
@@ -70,9 +75,6 @@
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("readystatechange", () => {
-      if (document.readyState === "interactive") suppressLegacyMap();
-    }, { once: true });
     document.addEventListener("DOMContentLoaded", init, { once: true });
   } else {
     init();
