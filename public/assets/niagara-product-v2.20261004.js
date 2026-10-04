@@ -16,22 +16,31 @@
     element?.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
-  function setDirection(value) {
-    const original = document.querySelector(`[data-direction="${value}"]`);
-    if (original instanceof HTMLElement) original.click();
+  function syncDirectionButtons(value) {
     document.querySelectorAll("[data-quick-direction]").forEach((button) => {
       button.setAttribute("aria-pressed", String(button.dataset.quickDirection === value));
+    });
+  }
+
+  function setDirection(value) {
+    const original = document.querySelector(`[data-direction="${value}"]`);
+    if (original instanceof HTMLElement && original.getAttribute("aria-pressed") !== "true") original.click();
+    syncDirectionButtons(value);
+  }
+
+  function syncCorridorButtons(value) {
+    document.querySelectorAll("[data-quick-corridor]").forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.quickCorridor === value));
     });
   }
 
   function setCorridor(value) {
     const select = $("preferredSelect");
     if (!select) return;
+    const changed = select.value !== value;
     select.value = value;
-    dispatchChange(select);
-    document.querySelectorAll("[data-quick-corridor]").forEach((button) => {
-      button.setAttribute("aria-pressed", String(button.dataset.quickCorridor === value));
-    });
+    syncCorridorButtons(value);
+    if (changed) dispatchChange(select);
   }
 
   function syncTraveler(value) {
@@ -44,7 +53,7 @@
       dispatchChange(original);
     }
     if (proxy && proxy.value !== value) proxy.value = value;
-    if (summary) summary.firstChild.textContent = `${TRAVELER_LABELS[value] || "Traveler"} `;
+    if (summary?.firstChild) summary.firstChild.textContent = `${TRAVELER_LABELS[value] || "Traveler"} `;
     document.body.classList.toggle("niagara-v2-nexus", value === "nexus");
     if (oversizeRow) oversizeRow.hidden = value !== "commercial";
     if (value !== "nexus" && $("preferredSelect")?.value === "whirlpool") setCorridor("rainbow");
@@ -107,6 +116,7 @@
     proxy?.addEventListener("change", () => syncTraveler(proxy.value));
     const oversizeProxy = $("niagaraQuickOversize");
     const oversizeOriginal = $("oversizeToggle");
+    if (oversizeProxy && oversizeOriginal) oversizeProxy.checked = oversizeOriginal.checked;
     oversizeProxy?.addEventListener("change", () => {
       if (!oversizeOriginal) return;
       oversizeOriginal.checked = oversizeProxy.checked;
@@ -116,18 +126,14 @@
     const direction = document.querySelector("[data-direction][aria-pressed='true']")?.dataset.direction || "to_canada";
     const corridor = $("preferredSelect")?.value || "rainbow";
     const traveler = $("travelerSelect")?.value || "passenger";
-    setDirection(direction);
-    setCorridor(corridor);
+    syncDirectionButtons(direction);
+    syncCorridorButtons(corridor);
     syncTraveler(traveler);
 
     document.querySelectorAll("[data-direction]").forEach((button) => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll("[data-quick-direction]").forEach((quickButton) => {
-          quickButton.setAttribute("aria-pressed", String(quickButton.dataset.quickDirection === button.dataset.direction));
-        });
-      });
+      button.addEventListener("click", () => syncDirectionButtons(button.dataset.direction));
     });
-    $("preferredSelect")?.addEventListener("change", () => setCorridor($("preferredSelect").value));
+    $("preferredSelect")?.addEventListener("change", () => syncCorridorButtons($("preferredSelect").value));
     $("travelerSelect")?.addEventListener("change", () => syncTraveler($("travelerSelect").value));
   }
 
