@@ -8,6 +8,20 @@
   const $ = (id) => document.getElementById(id);
   const buttons = [...document.querySelectorAll("[data-detail-direction]")];
   const travelerSelect = $("detailTraveler");
+  const nexusDefinition = "NEXUS = a Canada–U.S. trusted-traveler program for pre-approved, low-risk travelers. Everyone in the vehicle must be a NEXUS member to use a NEXUS lane.";
+
+  const nexusOption = travelerSelect?.querySelector('option[value="nexus"]');
+  if (nexusOption) {
+    nexusOption.textContent = "NEXUS member";
+    if (!$("detailNexusDefinition")) {
+      const note = document.createElement("p");
+      note.id = "detailNexusDefinition";
+      note.className = "mode-note";
+      note.textContent = nexusDefinition;
+      travelerSelect.insertAdjacentElement("afterend", note);
+    }
+  }
+
   const state = {
     direction: new URLSearchParams(location.search).get("direction") === "to_us" ? "to_us" : "to_canada",
     traveler: travelerSelect?.value || body.dataset.defaultTraveler || "passenger",
