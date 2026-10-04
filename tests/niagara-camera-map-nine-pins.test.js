@@ -26,9 +26,9 @@ test('Leaflet Niagara camera map exposes all nine official bridge cameras', () =
 });
 
 test('Leaflet camera map uses keyed CARTO Voyager tiles and required attribution', () => {
-  assert.match(map, /basemaps\.cartocdn\.com\/rastertiles\/voyager/);
+  assert.equal(map.includes('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='), true);
   assert.match(map, /CARTO_BASEMAP_KEY/);
-  assert.match(map, /\?key=\$\{encodeURIComponent\(CARTO_BASEMAP_KEY\)\}/);
+  assert.match(map, /encodeURIComponent\(CARTO_BASEMAP_KEY\)/);
   assert.match(map, /© CARTO/);
   assert.match(map, /© <a href=["']https:\/\/www\.openstreetmap\.org\/copyright/);
   assert.match(live, /niagara-camera-map-leaflet\.20261004\.js/);
