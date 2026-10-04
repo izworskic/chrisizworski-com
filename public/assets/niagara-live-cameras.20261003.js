@@ -107,10 +107,16 @@
   function loadBridgeCameraMap() {
     if (document.querySelector('script[data-niagara-bridge-camera-map="true"]')) return;
     const script = document.createElement("script");
-    script.defer = true;
     script.dataset.niagaraBridgeCameraMap = "true";
     script.src = "/assets/niagara-bridge-camera-map.20261004.js";
     document.head.appendChild(script);
+  }
+
+  function scheduleBridgeCameraMap() {
+    // The legacy visual layer owns the initial map shell. Wait until all defer
+    // scripts have executed so the camera-map layer always takes over last.
+    if (document.readyState === "complete") loadBridgeCameraMap();
+    else window.addEventListener("load", loadBridgeCameraMap, { once: true });
   }
 
   function bindSelectionObserver() {
@@ -161,7 +167,7 @@
   function init() {
     moveAndRetitleSection();
     waitForViewer();
-    loadBridgeCameraMap();
+    scheduleBridgeCameraMap();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
