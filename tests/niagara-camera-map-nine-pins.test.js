@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
 
-const map = fs.readFileSync('public/assets/niagara-camera-map-canonical.20261004c.js', 'utf8');
+const map = fs.readFileSync('public/assets/niagara-camera-map-leaflet.20261004.js', 'utf8');
 const live = fs.readFileSync('public/assets/niagara-live-cameras.20261003.js', 'utf8');
 
 const expectedCameraIds = [
@@ -17,28 +17,44 @@ const expectedCameraIds = [
   'queenston-ca',
 ];
 
-test('regional Niagara camera map exposes all nine camera pins immediately', () => {
+test('Leaflet Niagara camera map exposes all nine official bridge cameras', () => {
   for (const id of expectedCameraIds) assert.match(map, new RegExp(`id: ["']${id}["']`));
   assert.match(map, /CAMERAS\.forEach/);
-  assert.match(map, /niagara-canonical-map__pin/);
+  assert.match(map, /L\.marker/);
   assert.match(map, /9 bridge cameras/);
-  assert.doesNotMatch(map, /data-camera-group/);
+  assert.doesNotMatch(map, /id: ["']whirlpool["']/);
 });
 
-test('canonical map keeps CARTO Voyager as the visible base layer', () => {
+test('Leaflet camera map uses keyed CARTO Voyager tiles and required attribution', () => {
   assert.match(map, /basemaps\.cartocdn\.com\/rastertiles\/voyager/);
+  assert.match(map, /CARTO_BASEMAP_KEY/);
+  assert.match(map, /\?key=\$\{encodeURIComponent\(CARTO_BASEMAP_KEY\)\}/);
   assert.match(map, /© CARTO/);
-  assert.match(map, /© OpenStreetMap/);
-  assert.match(live, /niagara-camera-map-canonical\.20261004c\.js/);
+  assert.match(map, /© <a href=["']https:\/\/www\.openstreetmap\.org\/copyright/);
+  assert.match(live, /niagara-camera-map-leaflet\.20261004\.js/);
 });
 
-test('regional camera pins fan only for collision avoidance and snap to exact locations at detail zoom', () => {
+test('Niagara camera map mirrors Duluth Leaflet interaction including pinch zoom', () => {
+  assert.match(map, /leaflet@1\.9\.4/);
+  assert.match(map, /L\.map\(container/);
+  assert.match(map, /scrollWheelZoom: false/);
+  assert.match(map, /touchZoom: true/);
+  assert.match(map, /dragging: true/);
+  assert.match(map, /doubleClickZoom: true/);
+  assert.match(map, /map\.fitBounds/);
+});
+
+test('regional camera chips fan only for collision avoidance and snap back at detail zoom', () => {
   assert.match(map, /const DETAIL_ZOOM = 13/);
-  assert.match(map, /state\.zoom < DETAIL_ZOOM \? \{ x: camera\.dx, y: camera\.dy \} : \{ x: 0, y: 0 \}/);
+  assert.match(map, /const fanned = zoom < DETAIL_ZOOM/);
+  assert.match(map, /const dx = fanned \? camera\.dx : 0/);
+  assert.match(map, /const dy = fanned \? camera\.dy : 0/);
+  assert.match(map, /map\.on\(["']zoomend["'], refreshMarkerIcons\)/);
 });
 
-test('map camera pins hand off to the existing embedded camera viewer', () => {
+test('map camera popup hands off to the existing embedded camera viewer', () => {
   assert.match(map, /data-niagara-camera/);
+  assert.match(map, /tab\.click\(\)/);
   assert.match(map, /niagaraCameraViewer/);
-  assert.match(map, /canonical-map-select/);
+  assert.match(map, /leaflet-map-select/);
 });
