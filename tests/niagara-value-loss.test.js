@@ -9,7 +9,8 @@ const css = fs.readFileSync('public/assets/niagara-product-v2.20261004.css', 'ut
 
 function scoreProduct() {
   const hardVetoes = [];
-  if (/cartocdn\.com|CARTO_BASEMAP_KEY|\?key=/.test(map)) hardVetoes.push('blocked/API-key map risk');
+  if (/cartocdn\.com|CARTO_BASEMAP_KEY|\?key=/.test(map)) hardVetoes.push('blocked/API-key final map risk');
+  if (!/suppressLegacyMap/.test(owner) || !/niagaraBridgeMapLegacySuppressed/.test(owner)) hardVetoes.push('legacy blocked-map flash risk');
   if (/scrollIntoView/.test(map)) hardVetoes.push('camera context jump');
   if (/#9ed8ea|#d7eef3/.test(css)) hardVetoes.push('known pale-blue primary text');
   if (/id: ["']whirlpool["']/.test(map)) hardVetoes.push('invented Whirlpool camera');
@@ -35,7 +36,8 @@ function scoreProduct() {
     && bridgeCount === 4
     && cameraCount === 9
     && /cameraCount: 0/.test(map)
-    && !/cartocdn\.com|CARTO_BASEMAP_KEY|\?key=/.test(map);
+    && !/cartocdn\.com|CARTO_BASEMAP_KEY|\?key=/.test(map)
+    && /suppressLegacyMap/.test(owner);
   if (trust) score += 20;
 
   const locality = /niagaraMapCameraDialog/.test(map)
