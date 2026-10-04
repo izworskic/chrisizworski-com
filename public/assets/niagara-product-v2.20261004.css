@@ -42,6 +42,12 @@
 .niagara-v2-active .trip-answer .mobile-decision-label{font-size:12px!important;font-weight:800!important}
 .niagara-v2-active .decision-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))!important;max-width:420px}
 .niagara-v2-active .decision-shortcuts a{min-height:42px!important;font-size:12px!important;background:#fff!important;color:#0b314c!important;border-color:#fff!important}
+.niagara-compact-compare{margin-top:14px;border-top:1px solid rgba(255,255,255,.26);padding-top:12px}
+.niagara-compact-compare>summary{cursor:pointer;list-style:none;color:#fff;font:800 13px/1.3 var(--sans)}
+.niagara-compact-compare>summary::-webkit-details-marker{display:none}
+.niagara-compact-compare>summary::after{content:" +";float:right}
+.niagara-compact-compare[open]>summary::after{content:" −"}
+.niagara-compact-compare__body{padding-top:4px}
 .niagara-v2-active .bridge-choice-grid{margin-top:14px}
 .niagara-v2-active .bridge-choice{min-height:118px}
 .niagara-v2-active .bridge-choice-note{color:#334d59!important;font-size:12px!important}

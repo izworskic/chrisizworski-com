@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
 
+const html = fs.readFileSync('public/niagara-border-crossing/index.html', 'utf8');
 const map = fs.readFileSync('public/assets/niagara-camera-map-leaflet.20261004.js', 'utf8');
 const owner = fs.readFileSync('public/assets/niagara-bridge-camera-map.20261004c.js', 'utf8');
 const ux = fs.readFileSync('public/assets/niagara-product-v2.20261004.js', 'utf8');
@@ -9,12 +10,14 @@ const css = fs.readFileSync('public/assets/niagara-product-v2.20261004.css', 'ut
 
 function scoreProduct() {
   const hardVetoes = [];
+  if (!/niagara-bridge-camera-map\.20261004c\.js\?v=20261004value3/.test(html)) hardVetoes.push('browser can reuse stale top-level Niagara loader');
   if (/cartocdn\.com|CARTO_BASEMAP_KEY|\?key=/.test(map)) hardVetoes.push('blocked/API-key final map risk');
   if (!/suppressLegacyMap/.test(owner) || !/niagaraBridgeMapLegacySuppressed/.test(owner)) hardVetoes.push('legacy blocked-map flash risk');
   if (/scrollIntoView/.test(map)) hardVetoes.push('camera context jump');
   if (/#9ed8ea|#d7eef3/.test(css)) hardVetoes.push('known pale-blue primary text');
   if (/id: ["']whirlpool["']/.test(map)) hardVetoes.push('invented Whirlpool camera');
   if (!/showModal/.test(map)) hardVetoes.push('camera does not open in place');
+  if (!/Compare all four crossings/.test(ux)) hardVetoes.push('four-way comparison competes with primary answer');
 
   let score = 0;
 
@@ -26,6 +29,8 @@ function scoreProduct() {
 
   const decisionClarity = /Map \+ cameras/.test(ux)
     && /Rules \+ more detail/.test(ux)
+    && /Compare all four crossings/.test(ux)
+    && /niagara-compact-compare/.test(css)
     && /niagara-more-details/.test(ux)
     && /More detail — rules, special vehicles, all bridges and sources/.test(ux);
   if (decisionClarity) score += 20;
@@ -37,7 +42,8 @@ function scoreProduct() {
     && cameraCount === 9
     && /cameraCount: 0/.test(map)
     && !/cartocdn\.com|CARTO_BASEMAP_KEY|\?key=/.test(map)
-    && /suppressLegacyMap/.test(owner);
+    && /suppressLegacyMap/.test(owner)
+    && /20261004value3/.test(html);
   if (trust) score += 20;
 
   const locality = /niagaraMapCameraDialog/.test(map)
