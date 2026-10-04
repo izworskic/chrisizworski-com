@@ -15,6 +15,7 @@ function scoreProduct() {
   if (/#9ed8ea|#d7eef3/.test(css)) hardVetoes.push('known pale-blue primary text');
   if (/id: ["']whirlpool["']/.test(map)) hardVetoes.push('invented Whirlpool camera');
   if (!/showModal/.test(map)) hardVetoes.push('camera does not open in place');
+  if (!/Compare all four crossings/.test(ux)) hardVetoes.push('four-way comparison competes with primary answer');
 
   let score = 0;
 
@@ -26,6 +27,8 @@ function scoreProduct() {
 
   const decisionClarity = /Map \+ cameras/.test(ux)
     && /Rules \+ more detail/.test(ux)
+    && /Compare all four crossings/.test(ux)
+    && /niagara-compact-compare/.test(css)
     && /niagara-more-details/.test(ux)
     && /More detail — rules, special vehicles, all bridges and sources/.test(ux);
   if (decisionClarity) score += 20;
