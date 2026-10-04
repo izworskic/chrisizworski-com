@@ -1,12 +1,18 @@
 #!/usr/bin/env node
 
+import { existsSync } from 'node:fs';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import './tune-cbbt-discovery.mjs';
 import sitePolicyLinks from '../lib/site-policy-links.js';
 import adsenseEligibility from '../lib/adsense-eligibility.js';
 import replaceAisEmbeds from '../lib/site-ais-embeds.js';
 import tripJourneyLinks from '../lib/trip-journey-links.js';
+
+const CBBT_DISCOVERY_TUNER = new URL('./tune-cbbt-discovery.mjs', import.meta.url);
+const CBBT_DISCOVERY_PAGE = path.join(process.cwd(), 'public', 'chesapeake-bay-bridge-tunnel', 'index.html');
+if (existsSync(CBBT_DISCOVERY_TUNER) && existsSync(CBBT_DISCOVERY_PAGE)) {
+  await import(CBBT_DISCOVERY_TUNER.href);
+}
 
 const ROOT = path.join(process.cwd(), 'public');
 const MEASUREMENT_ID = 'G-Y5D2V2W7HN';
