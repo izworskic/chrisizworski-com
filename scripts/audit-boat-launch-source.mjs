@@ -12,17 +12,23 @@ function reviewStatus(a){const flag=String(a.flag||'').trim();if(!flag)return 's
 function scopeOf(a){return String(a.greatlakesaccess||'').startsWith('Yes')||CONNECTING.has(String(a.waterbody||'').trim())?'great-lakes':'inland-or-other';}
 function nearby(records,lat,lon,radius=25){return records.map(a=>({...a,_mi:distanceMiles(lat,lon,Number(a.latitude),Number(a.longitude))})).filter(a=>a._mi<=radius).sort((a,b)=>a._mi-b._mi);}
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-async function fetchJson(url){
+const REQUEST_HEADERS={accept:'application/json','user-agent':'ChrisIzworskiBoatLaunchAudit/4.1 (+https://chrisizworski.com/michigan-boat-launches/)'};
+async function fetchJson(url,options={}){
   let lastError;
   for(let attempt=1;attempt<=3;attempt++){
     try{
-      const r=await fetch(url,{headers:{accept:'application/json','user-agent':'ChrisIzworskiBoatLaunchAudit/4.0 (+https://chrisizworski.com/michigan-boat-launches/)'},signal:AbortSignal.timeout(20000)});
+      const r=await fetch(url,{...options,headers:{...REQUEST_HEADERS,...(options.headers||{})},signal:AbortSignal.timeout(20000)});
       if(!r.ok){
         const error=new Error(`HTTP ${r.status} for ${url}`);
         if(r.status!==408&&r.status!==429&&r.status<500)throw error;
         throw error;
       }
-      const j=await r.json();if(j?.error)throw new Error(j.error.message||'ArcGIS query error');return j;
+      const j=await r.json();
+      if(j?.error){
+        const details=Array.isArray(j.error.details)&&j.error.details.length?` · ${j.error.details.join(' · ')}`:'';
+        throw new Error(`${j.error.message||'ArcGIS query error'}${details}`);
+      }
+      return j;
     }catch(error){
       lastError=error;
       const status=Number(String(error?.message||'').match(/^HTTP (\d{3})/)?.[1]||0);
@@ -35,8 +41,17 @@ async function fetchJson(url){
   throw lastError;
 }
 function queryUrl(params){return `${LAYER}/query?${new URLSearchParams({...params,f:'json'})}`;}
+async function postQuery(params){
+  const body=new URLSearchParams({...params,f:'json'}).toString();
+  return fetchJson(`${LAYER}/query`,{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded;charset=UTF-8'},body});
+}
 const fields='OBJECTID,globalid,facilityid,name,waterbody,bas_type,launch_status,condition,greatlakesaccess,referenceonly,flag,flagcomments,latitude,longitude,ntrailerableparking,rampcode_new';
-const [metadata,total,recordsResponse]=await Promise.all([fetchJson(`${LAYER}?f=json`),fetchJson(queryUrl({where:'1=1',returnCountOnly:'true'})),fetchJson(queryUrl({where:"bas_type='Boating Access Site'",outFields:fields,returnGeometry:'false',resultRecordCount:'2000'}))]);
+// Keep the source checks sequential and use ArcGIS POST for the large records query.
+// The hosted service has intermittently rejected the identical long GET from CI as
+// "Invalid query parameters" while the same query succeeds through its POST form.
+const metadata=await fetchJson(`${LAYER}?f=json`);
+const total=await fetchJson(queryUrl({where:'1=1',returnCountOnly:'true'}));
+const recordsResponse=await postQuery({where:"bas_type='Boating Access Site'",outFields:fields,returnGeometry:'false',resultRecordCount:'2000'});
 if(recordsResponse.exceededTransferLimit===true)throw new Error('DNR source audit was truncated');
 const records=(recordsResponse.features||[]).map(f=>f.attributes||{});const open=records.filter(a=>a.launch_status==='Open');
 const eligible=open.filter(a=>String(a.referenceonly||'').toLowerCase()!=='yes'&&hasCoordinate(a)&&a.name);
