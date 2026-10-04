@@ -8,7 +8,7 @@ const DESC = 'Compare Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston 
 const VISUAL_ASSET_VERSION = '20261003h';
 const FALLBACK_ASSET_VERSION = '20261003a';
 const ELIGIBILITY_ASSET_VERSION = '20261003a';
-const LIVE_CAMERA_ASSET_VERSION = '20261003a';
+const LIVE_CAMERA_ASSET_VERSION = '20261003b';
 
 function patchTools() {
   const file = 'public/tools/index.html';

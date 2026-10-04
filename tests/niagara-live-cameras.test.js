@@ -17,12 +17,31 @@ test('Niagara upgrades Peace Bridge views to actual embedded live video', () => 
   assert.match(js, /allowfullscreen/);
 });
 
-test('Niagara preserves the existing camera selector and map integration', () => {
+test('Peace live video cannot be covered by the legacy still refresher', () => {
+  assert.match(js, /bindFrameObserver/);
+  assert.match(js, /attributeFilter: \["src", "hidden"\]/);
+  assert.match(js, /image\.hasAttribute\("src"\)/);
+  assert.match(js, /image\.removeAttribute\("src"\)/);
+  assert.match(js, /image\.hidden = true/);
+});
+
+test('Niagara enhances the existing camera selector and preserves map integration', () => {
   assert.match(js, /data-niagara-camera/);
   assert.match(js, /niagaraCameraFrame/);
   assert.match(js, /niagaraCameraImage/);
   assert.match(js, /MutationObserver/);
   assert.match(js, /waitForViewer/);
+  assert.doesNotMatch(js, /section\.innerHTML\s*=/);
+  assert.match(legacy, /sourceGrid\.before\(host\)/);
+  assert.match(legacy, /selectCamera\(camera\.id, true\)/);
+});
+
+test('Niagara preserves lazy loading and legacy still error fallback', () => {
+  assert.match(legacy, /loading="lazy"/);
+  assert.match(legacy, /image\?\.addEventListener\("error"/);
+  assert.match(legacy, /official source link remains available below/);
+  assert.doesNotMatch(js, /loading="eager"/);
+  assert.doesNotMatch(js, /nyssnapshot\.com/);
 });
 
 test('Niagara moves live cameras directly after current crossing conditions', () => {
@@ -32,9 +51,10 @@ test('Niagara moves live cameras directly after current crossing conditions', ()
   assert.match(js, /Live bridge cameras/);
 });
 
-test('Niagara camera assets are injected and style the existing viewer', () => {
+test('Niagara camera assets are injected with a bumped cache version', () => {
   assert.match(build, /niagara-live-cameras\.20261003\.css/);
   assert.match(build, /niagara-live-cameras\.20261003\.js/);
+  assert.match(build, /LIVE_CAMERA_ASSET_VERSION = '20261003b'/);
   assert.match(build, /patchLiveCameras\(\);/);
   assert.match(css, /niagara-camera-frame iframe/);
   assert.match(css, /niagara-camera-video\[hidden\]/);
