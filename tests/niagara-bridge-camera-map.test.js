@@ -36,8 +36,9 @@ test('map camera selection reuses the existing embedded camera viewer', () => {
   assert.match(mapJs, /action: "map-select"/);
 });
 
-test('live camera enhancement loads the physical fingerprinted camera map asset', () => {
+test('live camera enhancement loads fingerprinted map only after legacy visual layer is settled', () => {
   assert.match(liveJs, /\/assets\/niagara-bridge-camera-map\.20261004\.js/);
   assert.match(liveJs, /data-niagara-bridge-camera-map/);
-  assert.match(liveJs, /loadBridgeCameraMap\(\)/);
+  assert.match(liveJs, /scheduleBridgeCameraMap\(\)/);
+  assert.match(liveJs, /window\.addEventListener\("load", loadBridgeCameraMap, \{ once: true \}\)/);
 });
