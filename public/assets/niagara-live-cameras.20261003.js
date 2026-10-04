@@ -99,19 +99,19 @@
     if (reality && reality.nextElementSibling !== section) reality.insertAdjacentElement("afterend", section);
   }
 
-  function loadCanonicalCameraMap() {
-    if (document.querySelector('script[data-niagara-canonical-camera-map="true"]')) return;
+  function loadLeafletCameraMap() {
+    if (document.querySelector('script[data-niagara-leaflet-camera-map="true"]')) return;
     const script = document.createElement("script");
-    script.dataset.niagaraCanonicalCameraMap = "true";
-    script.src = "/assets/niagara-camera-map-canonical.20261004c.js";
+    script.dataset.niagaraLeafletCameraMap = "true";
+    script.src = "/assets/niagara-camera-map-leaflet.20261004.js";
     document.head.appendChild(script);
   }
 
   function scheduleBridgeCameraMap() {
-    // One final map owner only. The canonical map runs after the legacy visual
-    // layer, deletes the four-bridge fallback and replaces the old map shell.
-    if (document.readyState === "complete") loadCanonicalCameraMap();
-    else window.addEventListener("load", loadCanonicalCameraMap, { once: true });
+    // One final map owner only. The Leaflet map runs after the legacy visual
+    // layer and replaces its old custom four-bridge map shell.
+    if (document.readyState === "complete") loadLeafletCameraMap();
+    else window.addEventListener("load", loadLeafletCameraMap, { once: true });
   }
 
   function bindSelectionObserver() {
