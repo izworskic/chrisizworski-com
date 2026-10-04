@@ -29,8 +29,9 @@ test('Leaflet camera map uses keyed CARTO Voyager tiles and required attribution
   assert.equal(map.includes('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='), true);
   assert.match(map, /CARTO_BASEMAP_KEY/);
   assert.match(map, /encodeURIComponent\(CARTO_BASEMAP_KEY\)/);
-  assert.match(map, /© CARTO/);
-  assert.match(map, /© <a href=["']https:\/\/www\.openstreetmap\.org\/copyright/);
+  assert.match(map, /https:\/\/carto\.com\/attributions/);
+  assert.match(map, />CARTO<\/a>/);
+  assert.match(map, /https:\/\/www\.openstreetmap\.org\/copyright/);
   assert.match(live, /niagara-camera-map-leaflet\.20261004\.js/);
 });
 
