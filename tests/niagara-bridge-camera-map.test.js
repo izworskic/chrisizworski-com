@@ -53,7 +53,8 @@ test('Leaflet map uses keyed CARTO Voyager rather than watermarked anonymous til
   assert.match(mapJs, /CARTO_BASEMAP_KEY/);
   assert.equal(mapJs.includes('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='), true);
   assert.match(mapJs, /encodeURIComponent\(CARTO_BASEMAP_KEY\)/);
-  assert.match(mapJs, /© CARTO/);
+  assert.match(mapJs, /https:\/\/carto\.com\/attributions/);
+  assert.match(mapJs, />CARTO<\/a>/);
 });
 
 test('Leaflet camera selection reuses the existing embedded camera viewer', () => {
