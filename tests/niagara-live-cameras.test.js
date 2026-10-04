@@ -4,71 +4,59 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const root = path.resolve(__dirname, '..');
-const js = fs.readFileSync(path.join(root, 'public/assets/niagara-live-cameras.20261003.js'), 'utf8');
-const css = fs.readFileSync(path.join(root, 'public/assets/niagara-live-cameras.20261003.css'), 'utf8');
+const html = fs.readFileSync(path.join(root, 'public/niagara-border-crossing/index.html'), 'utf8');
+const map = fs.readFileSync(path.join(root, 'public/assets/niagara-camera-map-leaflet.20261004.js'), 'utf8');
+const owner = fs.readFileSync(path.join(root, 'public/assets/niagara-bridge-camera-map.20261004c.js'), 'utf8');
 const legacy = fs.readFileSync(path.join(root, 'public/assets/niagara-visual-layer.20261003.js'), 'utf8');
-const build = fs.readFileSync(path.join(root, 'scripts/add-niagara-border-discovery.mjs'), 'utf8');
 
-test('Niagara upgrades Peace Bridge views to actual embedded live video', () => {
-  assert.match(js, /youtube\.com\/embed/);
-  assert.match(js, /DnUFAShZKus/);
-  assert.match(js, /9En2186vo5g/);
-  assert.match(js, /LIVE VIDEO/);
-  assert.match(js, /allowfullscreen/);
+test('Niagara camera runtime is owned by the Leaflet map, not the legacy viewer', () => {
+  assert.match(owner, /dataset\.niagaraMapOwner = "leaflet-osm-v3"/);
+  assert.match(legacy, /__NIAGARA_LEGACY_VISUAL_LAYER_DISABLED__/);
+  assert.doesNotMatch(legacy, /niagaraCameraViewer|selectCamera|activateCameraViewer|buildCameraViewer/);
+  assert.doesNotMatch(owner, /suppressLegacyMap|restoreFinalMapId|niagaraBridgeMapLegacySuppressed/);
 });
 
-test('Peace live video cannot be covered by the legacy still refresher', () => {
-  assert.match(js, /bindFrameObserver/);
-  assert.match(js, /attributeFilter: \["src", "hidden"\]/);
-  assert.match(js, /image\.hasAttribute\("src"\)/);
-  assert.match(js, /image\.removeAttribute\("src"\)/);
-  assert.match(js, /image\.hidden = true/);
+test('Peace Bridge camera pins open actual embedded video in the map dialog', () => {
+  assert.match(map, /videoId: "SETJ79HmwI0"/);
+  assert.match(map, /videoId: "WPMgP2C3_co"/);
+  assert.match(map, /videoId: "DnUFAShZKus"/);
+  assert.match(map, /videoId: "9En2186vo5g"/);
+  assert.match(map, /videoId: "yygTuX5JaKg"/);
+  assert.match(map, /youtube\.com\/embed/);
+  assert.match(map, /allowfullscreen/);
+  assert.match(map, /marker\.on\("click", \(\) => openCameraModal\(camera\)\)/);
 });
 
-test('Niagara enhances the existing camera selector and preserves map integration', () => {
-  assert.match(js, /data-niagara-camera/);
-  assert.match(js, /niagaraCameraFrame/);
-  assert.match(js, /niagaraCameraImage/);
-  assert.match(js, /MutationObserver/);
-  assert.match(js, /waitForViewer/);
-  assert.doesNotMatch(js, /section\.innerHTML\s*=/);
-  assert.match(legacy, /sourceGrid\.before\(host\)/);
-  assert.match(legacy, /selectCamera\(camera\.id, true\)/);
+test('Rainbow and Lewiston camera pins use the four official NITTEC still-image sources', () => {
+  assert.match(map, /nyssnapshot\.com\/R5_102\.png/);
+  assert.match(map, /nyssnapshot\.com\/R5_103\.png/);
+  assert.match(map, /nyssnapshot\.com\/R5_101\.png/);
+  assert.match(map, /nyssnapshot\.com\/R5_100\.png/);
+  assert.equal((map.match(/imageUrl: "https:\/\/nyssnapshot\.com\/R5_\d+\.png"/g) || []).length, 4);
 });
 
-test('Niagara preserves lazy loading and legacy still error fallback', () => {
-  assert.match(legacy, /loading="lazy"/);
-  assert.match(legacy, /image\?\.addEventListener\("error"/);
-  assert.match(legacy, /official source link remains available below/);
-  assert.doesNotMatch(js, /loading="eager"/);
-  assert.doesNotMatch(js, /nyssnapshot\.com/);
+test('camera media failure degrades to a useful official-source fallback', () => {
+  assert.match(map, /renderMediaFallback/);
+  assert.match(map, /This camera feed did not load here/);
+  assert.match(map, /Official camera source/);
+  assert.match(map, /image\.addEventListener\("error", \(\) => renderMediaFallback\(media, camera\)/);
+  assert.match(map, /sourceLink\.href = camera\.sourceUrl \|\| NITTEC_URL/);
 });
 
-test('Niagara moves live cameras directly after current crossing conditions', () => {
-  assert.match(js, /document\.querySelector\("\.reality-card"\)/);
-  assert.match(js, /insertAdjacentElement\("afterend", section\)/);
-  assert.match(js, /See it before you commit/);
-  assert.match(js, /Live bridge cameras/);
+test('camera interaction remains local on mobile instead of jumping to another section', () => {
+  assert.match(map, /niagaraMapCameraDialog/);
+  assert.match(map, /showModal/);
+  assert.doesNotMatch(map, /scrollIntoView/);
+  assert.doesNotMatch(map, /niagaraCameraViewer/);
 });
 
-test('Niagara camera assets are injected with a bumped cache version', () => {
-  assert.match(build, /niagara-live-cameras\.20261003\.css/);
-  assert.match(build, /niagara-live-cameras\.20261003\.js/);
-  assert.match(build, /LIVE_CAMERA_ASSET_VERSION = '20261003b'/);
-  assert.match(build, /patchLiveCameras\(\);/);
-  assert.match(css, /niagara-camera-frame iframe/);
-  assert.match(css, /niagara-camera-video\[hidden\]/);
+test('Whirlpool is mapped but never invents an official road camera', () => {
+  assert.match(map, /key: "whirlpool"[\s\S]*cameraCount: 0/);
+  assert.match(map, /No dedicated official road camera/);
+  assert.doesNotMatch(map, /id: ["']whirlpool["']/);
 });
 
-test('Rainbow and Lewiston remain official auto-refresh still cameras', () => {
-  assert.match(legacy, /nyssnapshot\.com\/R5_102\.png/);
-  assert.match(legacy, /nyssnapshot\.com\/R5_103\.png/);
-  assert.match(legacy, /nyssnapshot\.com\/R5_101\.png/);
-  assert.match(legacy, /nyssnapshot\.com\/R5_100\.png/);
-  assert.match(legacy, /CAMERA_REFRESH_MS = 30000/);
-});
-
-test('Whirlpool still explicitly reports no dedicated official road camera', () => {
-  assert.match(legacy, /No dedicated official road camera/);
-  assert.match(legacy, /Whirlpool Rapids does not have a dedicated official road camera/);
+test('production HTML keeps the single final Niagara map owner', () => {
+  assert.match(html, /niagara-bridge-camera-map\.20261004c\.js\?v=20261004value3/);
+  assert.equal((html.match(/niagara-bridge-camera-map\.20261004c\.js/g) || []).length, 1);
 });

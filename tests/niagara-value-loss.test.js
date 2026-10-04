@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import test from 'node:test';
 
 const html = fs.readFileSync('public/niagara-border-crossing/index.html', 'utf8');
+const legacy = fs.readFileSync('public/assets/niagara-visual-layer.20261003.js', 'utf8');
 const map = fs.readFileSync('public/assets/niagara-camera-map-leaflet.20261004.js', 'utf8');
 const owner = fs.readFileSync('public/assets/niagara-bridge-camera-map.20261004c.js', 'utf8');
 const ux = fs.readFileSync('public/assets/niagara-product-v2.20261004.js', 'utf8');
@@ -10,13 +11,20 @@ const css = fs.readFileSync('public/assets/niagara-product-v2.20261004.css', 'ut
 
 function scoreProduct() {
   const hardVetoes = [];
-  if (!/niagara-bridge-camera-map\.20261004c\.js\?v=20261004value3/.test(html)) hardVetoes.push('browser can reuse stale top-level Niagara loader');
+
+  if (!/niagara-bridge-camera-map\.20261004c\.js\?v=20261004value3/.test(html)) hardVetoes.push('top-level Niagara owner missing');
+  if (/cartocdn\.com|CARTO_BASEMAP_KEY|\?key=|niagara-carto-map/.test(legacy)) hardVetoes.push('legacy CARTO runtime still executable');
+  if (/function\s+initMap\s*\(|function\s+buildCameraViewer\s*\(/.test(legacy)) hardVetoes.push('legacy map/camera owner still executable');
+  if (!/__NIAGARA_LEGACY_VISUAL_LAYER_DISABLED__/.test(legacy)) hardVetoes.push('legacy visual layer is not an explicit compatibility shim');
+  if (/suppressLegacyMap|niagaraBridgeMapLegacySuppressed|restoreFinalMapId/.test(owner)) hardVetoes.push('map ownership still depends on DOM rename/suppression race');
+  if (!/dataset\.niagaraMapOwner = "leaflet-osm-v3"/.test(owner)) hardVetoes.push('single Leaflet map owner is not declared');
+  if (!/clearLegacyMapSurface/.test(owner)) hardVetoes.push('stale cached legacy surface cannot be cleaned defensively');
   if (/cartocdn\.com|CARTO_BASEMAP_KEY|\?key=/.test(map)) hardVetoes.push('blocked/API-key final map risk');
-  if (!/suppressLegacyMap/.test(owner) || !/niagaraBridgeMapLegacySuppressed/.test(owner)) hardVetoes.push('legacy blocked-map flash risk');
   if (/scrollIntoView/.test(map)) hardVetoes.push('camera context jump');
   if (/#9ed8ea|#d7eef3/.test(css)) hardVetoes.push('known pale-blue primary text');
   if (/id: ["']whirlpool["']/.test(map)) hardVetoes.push('invented Whirlpool camera');
   if (!/showModal/.test(map)) hardVetoes.push('camera does not open in place');
+  if (!/marker\.on\("click", \(\) => openCameraModal\(camera\)\)/.test(map)) hardVetoes.push('camera pins do not open the camera modal');
   if (!/Compare all four crossings/.test(ux)) hardVetoes.push('four-way comparison competes with primary answer');
 
   let score = 0;
@@ -42,8 +50,9 @@ function scoreProduct() {
     && cameraCount === 9
     && /cameraCount: 0/.test(map)
     && !/cartocdn\.com|CARTO_BASEMAP_KEY|\?key=/.test(map)
-    && /suppressLegacyMap/.test(owner)
-    && /20261004value3/.test(html);
+    && /__NIAGARA_LEGACY_VISUAL_LAYER_DISABLED__/.test(legacy)
+    && /niagaraMapOwner = "leaflet-osm-v3"/.test(owner)
+    && !/suppressLegacyMap|niagaraBridgeMapLegacySuppressed/.test(owner);
   if (trust) score += 20;
 
   const locality = /niagaraMapCameraDialog/.test(map)

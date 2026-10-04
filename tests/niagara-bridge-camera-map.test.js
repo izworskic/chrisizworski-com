@@ -4,6 +4,7 @@ import fs from 'node:fs';
 
 const mapJs = fs.readFileSync('public/assets/niagara-camera-map-leaflet.20261004.js', 'utf8');
 const ownerJs = fs.readFileSync('public/assets/niagara-bridge-camera-map.20261004c.js', 'utf8');
+const legacyJs = fs.readFileSync('public/assets/niagara-visual-layer.20261003.js', 'utf8');
 
 const expectedCameraIds = [
   'peace-qew',
@@ -37,6 +38,14 @@ test('final Niagara map uses normal OpenStreetMap tiles with no blocked API key 
   assert.doesNotMatch(mapJs, /\?key=/);
 });
 
+test('legacy visual layer is disabled and cannot compete for map ownership', () => {
+  assert.match(legacyJs, /__NIAGARA_LEGACY_VISUAL_LAYER_DISABLED__/);
+  assert.match(legacyJs, /dataset\.niagaraMapOwner = "none"/);
+  assert.doesNotMatch(legacyJs, /CARTO_BASEMAP_KEY|cartocdn\.com|function\s+initMap\s*\(|function\s+buildCameraViewer\s*\(/);
+  assert.doesNotMatch(ownerJs, /suppressLegacyMap|restoreFinalMapId|niagaraBridgeMapLegacySuppressed/);
+  assert.match(ownerJs, /dataset\.niagaraMapOwner = "leaflet-osm-v3"/);
+});
+
 test('Leaflet map supports native touch pinch, drag and zoom controls', () => {
   assert.match(mapJs, /L\.map\(container/);
   assert.match(mapJs, /touchZoom: true/);
@@ -56,8 +65,9 @@ test('camera marker opens an in-place modal instead of scrolling to another sect
   assert.doesNotMatch(mapJs, /niagaraCameraViewer/);
 });
 
-test('owner cache-busts the map and loads the value-first UX layer', () => {
-  assert.match(ownerJs, /niagara-camera-map-leaflet\.20261004\.js\?v=20261004v2/);
-  assert.match(ownerJs, /niagara-product-v2\.20261004\.css\?v=20261004v2/);
-  assert.match(ownerJs, /niagara-product-v2\.20261004\.js\?v=20261004v2/);
+test('single map owner cache-busts the map and loads the value-first UX layer', () => {
+  assert.match(ownerJs, /niagara-camera-map-leaflet\.20261004\.js\?v=20261004singleowner1/);
+  assert.match(ownerJs, /niagara-product-v2\.20261004\.css\?v=20261004singleowner1/);
+  assert.match(ownerJs, /niagara-product-v2\.20261004\.js\?v=20261004singleowner1/);
+  assert.match(ownerJs, /clearLegacyMapSurface/);
 });
