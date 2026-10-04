@@ -8,7 +8,7 @@ const DESC = 'Compare Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston 
 const VISUAL_ASSET_VERSION = '20261003h';
 const FALLBACK_ASSET_VERSION = '20261003a';
 const ELIGIBILITY_ASSET_VERSION = '20261003a';
-const LIVE_CAMERA_ASSET_VERSION = '20261003a';
+const LIVE_CAMERA_ASSET_VERSION = '20261003b';
 
 function patchTools() {
   const file = 'public/tools/index.html';
@@ -151,7 +151,7 @@ function patchVisualAssets() {
     throw new Error('Niagara visual cache bust: expected visual asset references not found');
   }
   html = html.replace(cssPattern, cssUrl).replace(jsPattern, jsUrl);
-  html = html.replace(/data-ui-revision="[^"]+"/, `data-ui-revision="${VISUAL_ASSET_VERSION}-livecams"`);
+  html = html.replace(/data-ui-revision="[^"]+"/, `data-ui-revision="${VISUAL_ASSET_VERSION}-livecams`);
   fs.writeFileSync(file, html);
   console.log(`Niagara visual assets cache-busted to ${VISUAL_ASSET_VERSION}.`);
 }
