@@ -33,6 +33,15 @@ const PICTURED_ROCKS_MAIN_SITE_PREFIXES = [
   '/up-north-michigan',
   '/michigan-border-wait-times',
   '/michigan-snow-totals',
+  '/national-tools',
+  '/niagara-border-crossing',
+  '/peace-bridge-wait-times',
+  '/rainbow-bridge-wait-times',
+  '/lewiston-queenston-bridge-wait-times',
+  '/whirlpool-rapids-bridge-crossing',
+  '/about',
+  '/chris-izworski',
+  '/chris-izworski-source-guide',
 ];
 const PICTURED_ROCKS_SEARCH_SCHEMA = `<script type="application/ld+json">${JSON.stringify({
   '@context': 'https://schema.org',
@@ -209,6 +218,15 @@ export const config = {
     '/up-north-michigan/:path*',
     '/michigan-border-wait-times/:path*',
     '/michigan-snow-totals/:path*',
+    '/national-tools/:path*',
+    '/niagara-border-crossing/:path*',
+    '/peace-bridge-wait-times/:path*',
+    '/rainbow-bridge-wait-times/:path*',
+    '/lewiston-queenston-bridge-wait-times/:path*',
+    '/whirlpool-rapids-bridge-crossing/:path*',
+    '/about/:path*',
+    '/chris-izworski/:path*',
+    '/chris-izworski-source-guide/:path*',
     '/national-tools/waterfalls/niagara-falls-live',
     '/national-tools/waterfalls/niagara-falls-live/',
     '/national-tools/waterfalls/niagara-falls-live/:path*',
@@ -227,7 +245,6 @@ export const config = {
     '/api/history',
   ],
 };
-
 function requestHostname(request: Request) {
   const headerHost = request.headers.get('host');
   const host = headerHost || new URL(request.url).hostname;
