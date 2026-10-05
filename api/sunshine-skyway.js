@@ -1,4 +1,4 @@
-const { buildSnapshot } = require('../lib/sunshine-skyway');
+const { buildSnapshot } = require('../lib/sunshine-skyway-live');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
