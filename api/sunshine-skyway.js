@@ -1,4 +1,10 @@
-const { buildSnapshot } = require('../lib/sunshine-skyway-live');
+const live = require('../lib/sunshine-skyway-live');
+const weather = require('../lib/sunshine-skyway-weather');
+
+// Keep the proven live FL511 adapter as the operational backbone while the
+// weather wrapper adds resilient NWS fallbacks. If the wrapper export is ever
+// unavailable, fail back to the live adapter rather than breaking the endpoint.
+const buildSnapshot = weather.buildSnapshot || live.buildSnapshot;
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
