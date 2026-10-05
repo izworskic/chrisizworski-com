@@ -1,3 +1,5 @@
+const { authorizeGscRequest } = require('../lib/gsc/github-actions-oidc.js');
+
 module.exports = async (req, res) => {
   res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive');
   res.setHeader('Cache-Control', 'no-store');
@@ -10,9 +12,11 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const auth = req.headers.authorization || '';
-  const expected = process.env.CRON_SECRET ? `Bearer ${process.env.CRON_SECRET}` : '';
-  if (!expected || auth !== expected) {
+  const authorized = await authorizeGscRequest({
+    authorization: req.headers.authorization || '',
+    cronSecret: process.env.CRON_SECRET || '',
+  });
+  if (!authorized) {
     res.status(401).json({ error: 'unauthorized' });
     return;
   }
