@@ -12,6 +12,9 @@
   };
   let requestSerial = 0;
   let selectedCameraId = null;
+  let activeHls = null;
+  let hlsLoaderPromise = null;
+  const HLS_JS_URL = 'https://cdn.jsdelivr.net/npm/hls.js@1.7.3/dist/hls.min.js';
 
   const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
   function fmtTime(value) {
@@ -139,7 +142,83 @@
     els.events.innerHTML = items.length ? items.join('') : '<p class="empty">No Sunshine Skyway-specific FL511 mention or active NWS alert was returned in this snapshot.</p>';
   }
 
+  function destroyHls() {
+    if (!activeHls) return;
+    try { activeHls.destroy(); } catch {}
+    activeHls = null;
+  }
+
+  function ensureHls() {
+    if (window.Hls) return Promise.resolve(window.Hls);
+    if (hlsLoaderPromise) return hlsLoaderPromise;
+    hlsLoaderPromise = new Promise((resolve, reject) => {
+      const existing = document.querySelector('script[data-skyway-hls]');
+      if (existing) {
+        existing.addEventListener('load', () => window.Hls ? resolve(window.Hls) : reject(new Error('HLS_LIBRARY_UNAVAILABLE')), { once:true });
+        existing.addEventListener('error', () => reject(new Error('HLS_LIBRARY_LOAD_FAILED')), { once:true });
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = HLS_JS_URL;
+      script.async = true;
+      script.crossOrigin = 'anonymous';
+      script.dataset.skywayHls = '1';
+      script.addEventListener('load', () => window.Hls ? resolve(window.Hls) : reject(new Error('HLS_LIBRARY_UNAVAILABLE')), { once:true });
+      script.addEventListener('error', () => reject(new Error('HLS_LIBRARY_LOAD_FAILED')), { once:true });
+      document.head.appendChild(script);
+    });
+    return hlsLoaderPromise;
+  }
+
+  function showVideoFallback(message) {
+    const fallback = $('skywayCameraFallback');
+    if (fallback) {
+      fallback.hidden = false;
+      fallback.textContent = message || 'Live video could not start in this browser. Use the FL511 button below.';
+    }
+  }
+
+  function attachHlsVideo(camera) {
+    destroyHls();
+    const video = $('skywayCameraVideo');
+    if (!video || !camera?.videoUrl) return;
+    const source = camera.videoUrl;
+    video.addEventListener('error', () => showVideoFallback(), { once:true });
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = source;
+      video.play().catch(() => {});
+      return;
+    }
+    ensureHls().then(Hls => {
+      if (!document.body.contains(video)) return;
+      if (!Hls.isSupported()) {
+        showVideoFallback('HLS playback is not supported in this browser. Open the official FL511 view below.');
+        return;
+      }
+      activeHls = new Hls({ enableWorker:true });
+      activeHls.loadSource(source);
+      activeHls.attachMedia(video);
+      activeHls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
+      activeHls.on(Hls.Events.ERROR, (_event, data) => {
+        if (!data?.fatal) return;
+        showVideoFallback('The FL511 live stream is temporarily unavailable. Open the official FL511 view below.');
+        destroyHls();
+      });
+    }).catch(() => showVideoFallback('The embedded player could not load. Open the official FL511 view below.'));
+  }
+
+  function cameraStage(camera) {
+    if (camera.videoUrl) {
+      return `<div class="camera-stage"><video id="skywayCameraVideo" controls autoplay muted playsinline preload="metadata" aria-label="Official FL511 live video: ${esc(camera.name || 'Sunshine Skyway Bridge')}"></video><div class="camera-fallback" id="skywayCameraFallback" hidden></div><div class="camera-badge">OFFICIAL FL511 · LIVE VIDEO</div></div>`;
+    }
+    if (camera.imageUrl) {
+      return `<div class="camera-stage"><img src="${esc(camera.imageUrl)}" alt="Official FL511 camera: ${esc(camera.name || 'Sunshine Skyway Bridge')}" loading="lazy"><div class="camera-badge">OFFICIAL FL511 · LIVE IMAGE</div></div>`;
+    }
+    return `<div class="camera-stage"><iframe id="skywayCameraFrame" src="${esc(camera.embedUrl)}" title="Official FL511 camera: ${esc(camera.name || 'Sunshine Skyway Bridge')}" loading="lazy" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="camera-badge">OFFICIAL FL511 · EMBEDDED VIEW</div></div>`;
+  }
+
   function renderCameras(cameras) {
+    destroyHls();
     const usable = (cameras || []).filter(camera => camera.official && camera.embedUrl).slice(0, 6);
     if (!usable.length) {
       selectedCameraId = null;
@@ -149,7 +228,8 @@
     if (!selectedCameraId || !usable.some(camera => camera.id === selectedCameraId)) selectedCameraId = usable[0].id;
     const active = usable.find(camera => camera.id === selectedCameraId) || usable[0];
     const tabs = usable.map((camera, index) => `<button type="button" role="tab" aria-selected="${camera.id === active.id ? 'true' : 'false'}" class="camera-tab" data-camera-id="${esc(camera.id)}">${esc(camera.name || `Camera ${index + 1}`)}</button>`).join('');
-    els.cameras.innerHTML = `<div class="camera-shell"><div class="camera-tabs" role="tablist" aria-label="Choose Sunshine Skyway camera">${tabs}</div><div class="camera-stage"><iframe id="skywayCameraFrame" src="${esc(active.embedUrl)}" title="Official FL511 camera: ${esc(active.name || 'Sunshine Skyway Bridge')}" loading="lazy" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="camera-badge">OFFICIAL FL511 · EMBEDDED VIEW</div></div><div class="camera-meta"><div><strong>${esc(active.name || 'Sunshine Skyway camera')}</strong><small>${esc(active.note || 'Visual conditions only')}</small></div><a class="button-link" href="${esc(active.sourceUrl || active.embedUrl)}" target="_blank" rel="noopener">Open in FL511 ↗</a></div></div>`;
+    els.cameras.innerHTML = `<div class="camera-shell"><div class="camera-tabs" role="tablist" aria-label="Choose Sunshine Skyway camera">${tabs}</div>${cameraStage(active)}<div class="camera-meta"><div><strong>${esc(active.name || 'Sunshine Skyway camera')}</strong><small>${esc(active.note || 'Visual conditions only')}</small></div><a class="button-link" href="${esc(active.sourceUrl || active.embedUrl)}" target="_blank" rel="noopener">Open in FL511 ↗</a></div></div>`;
+    if (active.videoUrl) attachHlsVideo(active);
     els.cameras.querySelectorAll('[data-camera-id]').forEach(button => button.addEventListener('click', () => {
       if (button.dataset.cameraId === selectedCameraId) return;
       selectedCameraId = button.dataset.cameraId;
@@ -178,6 +258,7 @@
       if (window.gtag) window.gtag('event', 'sunshine_skyway_snapshot', { status: data.officialStatus?.state || 'unknown', wind_context: data.windContext?.level || 'unknown' });
     } catch (error) {
       if (serial !== requestSerial) return;
+      destroyHls();
       setTone('unknown');
       els.statusWord.textContent = 'UNAVAILABLE';
       els.statusHeading.textContent = 'Live Sunshine Skyway data could not be loaded';
@@ -205,5 +286,6 @@
   els.axles.addEventListener('change', changed);
   els.payment.addEventListener('change', changed);
   els.refresh.addEventListener('click', load);
+  window.addEventListener('pagehide', destroyHls, { once:true });
   load();
 })();
