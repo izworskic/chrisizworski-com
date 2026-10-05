@@ -37,7 +37,7 @@
     "prepare:source": "node scripts/prepare-source.mjs",
     "test": "node --test tests/*.test.js",
     "verify": "node scripts/verify-source.mjs",
-    "verify:all": "node scripts/verify-all.mjs test verify benchmark:beaches benchmark:beach-ctr benchmark:border-ctr benchmark:growth benchmark:seo benchmark:serp-length benchmark:ctr --check benchmark:search-growth --check benchmark:search-strategy --check benchmark:search-authority --check benchmark:outdoors-now-growth --check benchmark:mackinac-toll-ctr benchmark:trip-stack --check benchmark:tool-network --check benchmark:circle-tour benchmark:entity --check benchmark:winter --check benchmark:winter-flow --check benchmark:winter-final --check freshness --check benchmark:citation --check benchmark:decision-network benchmark:map-insights benchmark:boat-launches audit:boat-launch-source benchmark:boat-launches-v3 benchmark:boat-launch-search benchmark:manistee benchmark:manistee-parity benchmark:manistee-popups benchmark:manistee-ux benchmark:au-sable-search benchmark:manistee-page-one --check benchmark:fall-aurora-ctr --check benchmark:up-fall-rank --check benchmark:fall-weekend-planner-ctr --check benchmark:beach-detail-ctr --check benchmark:garden-page-one-ctr --check benchmark:entity-discovery-ctr --check benchmark:circle-tour-rank --check benchmark:extracted-routing benchmark:gauley-routing benchmark:tool-entities benchmark:white-christmas-indexing benchmark:mackinac-hub benchmark:mackinac-platform benchmark:snowmobile benchmark:snow-totals",
+    "verify:all": "node scripts/verify-all.mjs test benchmark:creator-attribution verify benchmark:beaches benchmark:beach-ctr benchmark:border-ctr benchmark:growth benchmark:seo benchmark:serp-length benchmark:ctr --check benchmark:search-growth --check benchmark:search-strategy --check benchmark:search-authority --check benchmark:outdoors-now-growth --check benchmark:mackinac-toll-ctr benchmark:trip-stack --check benchmark:tool-network --check benchmark:circle-tour benchmark:entity --check benchmark:winter --check benchmark:winter-flow --check benchmark:winter-final --check freshness --check benchmark:citation --check benchmark:decision-network benchmark:map-insights benchmark:boat-launches audit:boat-launch-source benchmark:boat-launches-v3 benchmark:boat-launch-search benchmark:manistee benchmark:manistee-parity benchmark:manistee-popups benchmark:manistee-ux benchmark:au-sable-search benchmark:manistee-page-one --check benchmark:fall-aurora-ctr --check benchmark:up-fall-rank --check benchmark:fall-weekend-planner-ctr --check benchmark:beach-detail-ctr --check benchmark:garden-page-one-ctr --check benchmark:entity-discovery-ctr --check benchmark:circle-tour-rank --check benchmark:extracted-routing benchmark:gauley-routing benchmark:tool-entities benchmark:white-christmas-indexing benchmark:mackinac-hub benchmark:mackinac-platform benchmark:snowmobile benchmark:snow-totals",
     "verify:quick": "node scripts/verify-quick.mjs",
     "verify:production-ready": "node scripts/verify-production-ready.mjs",
     "generate:ice": "python3 scripts/ice/gen_site.py",
@@ -82,7 +82,8 @@
     "benchmark:snow-totals": "node scripts/benchmark-snow-totals-personas.mjs --check",
     "build:snow-reference": "node scripts/build-snow-reference-data.mjs",
     "audit:adsense": "node scripts/audit-adsense-network.mjs --check",
-    "benchmark:mackinac-usefulness": "node scripts/benchmark-mackinac-usefulness.mjs"
+    "benchmark:mackinac-usefulness": "node scripts/benchmark-mackinac-usefulness.mjs",
+    "benchmark:creator-attribution": "node scripts/inject-creator-attribution.mjs --check"
   },
   "dependencies": {
     "@vercel/oidc": "3.8.8",
