@@ -21,3 +21,4 @@ Sitemap: https://chrisizworski.com/sitemap-niagara-border.xml
 Sitemap: https://chrisizworski.com/sitemap-breakout-live.xml
 Sitemap: https://chrisizworski.com/sitemap-cbbt.xml
 Sitemap: https://picturedrocks.chrisizworski.com/sitemap-pictured-rocks.xml
+Sitemap: https://chrisizworski.com/sitemap-nyc-crossing.xml
