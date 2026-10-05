@@ -28,9 +28,9 @@ function recentWeatherLabel(d){
 }
 function render(d){
   DATA=d; const r=d.route||{}; const active=d.season?.active;
-  $('#status').textContent=active?(r.routeState==='ROUTE_BROKEN'?'ROUTE BROKEN':r.band||'UNKNOWN'):'OFF-SEASON';
-  $('#status').className='status '+bandClass(active?r.band:'OFF_SEASON');
-  $('#score').textContent=Number.isFinite(r.score)?`· ${r.score}/100`:'';
+  $('#status').textContent=!window.SnowmobileComparison.bundleFresh(d)?'DATA STALE':active?(r.routeState==='ROUTE_BROKEN'?'ROUTE BROKEN':r.band||'UNKNOWN'):'OFF-SEASON';
+  $('#status').className='status '+bandClass(window.SnowmobileComparison.bundleFresh(d)&&active?r.band:'UNKNOWN');
+  $('#score').textContent=window.SnowmobileComparison.bundleFresh(d)&&Number.isFinite(r.score)?`· ${r.score}/100`:'';
   $('#best').textContent=active?bestWindow(d):'Season opens Dec. 1';
   $('#risk').textContent=active?risk(d):'No current riding score';
   $('#confidence').textContent=`${r.confidence??'—'}/100`;
@@ -66,7 +66,9 @@ function departureFor(best,driveMinutes){
   return Number.isFinite(d.getTime())?new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',weekday:'short',hour:'numeric',minute:'2-digit'}).format(d):null;
 }
 function personalizedVerdict(d,route,maxHours,label){
-  const min=Number(route?.driveMinutes),miles=Number(route?.driveMiles),destLabel=d.hubTown||route?.destination?.label?.split(',')[0]||'the region hub';
+  if(!window.SnowmobileComparison.bundleFresh(d))return '<strong>Current evidence unavailable or too old.</strong> No riding recommendation.';
+  if(d.season?.active&&(d.closures?.verified!==true||d.route?.legalVerification==='UNVERIFIED'))return '<strong>Official closure verification is incomplete.</strong> Check DNR before deciding to ride.';
+  const min=route?.driveMinutes,miles=route?.driveMiles,destLabel=d.hubTown||route?.destination?.label?.split(',')[0]||'the region hub';
   if(!Number.isFinite(min))return'<strong>Drive time unavailable.</strong> No trip verdict was generated.';
   const drive=`${formatDuration(min)} · ${Number.isFinite(miles)?miles.toFixed(0)+' mi':'distance unavailable'} to ${esc(destLabel)}`;
   if(!d.season?.active)return `<strong>${esc(label)} → ${esc(destLabel)}: ${drive}.</strong> Riding conditions are off-season, so there is no ride recommendation yet.`;
@@ -151,6 +153,8 @@ function risk(d){
   if(!Number.isFinite(d.route?.score))return'Trail surface unverified';return'No dominant weather risk found';
 }
 function driveVerdict(d){
+  if(!window.SnowmobileComparison.bundleFresh(d))return '<strong>Current evidence unavailable or too old.</strong> No riding recommendation.';
+  if(d.season?.active&&d.closures?.verified!==true)return '<strong>Closure check incomplete.</strong> Verify DNR before deciding to ride.';
   const s=d.route?.score,c=d.route?.confidence;
   if(d.route?.routeState==='ROUTE_BROKEN')return'<strong>NO.</strong> A required segment is officially closed.';
   if(!Number.isFinite(s))return'<strong>UNKNOWN — not enough evidence to load the sleds.</strong> DNR trail/closure status, observed snow and weather are available as context, but a current local trail-surface report is missing or too old.';
@@ -215,9 +219,17 @@ document.addEventListener('click',e=>{
   }
   const a=e.target?.closest?.('[data-source-name]');if(a)track('snowmobile_source_verify',{source:a.getAttribute('data-source-name')||'unknown'});
 });
+function inheritTrip(){
+  const params=new URLSearchParams(window.location.search),origin=window.SnowmobileComparison.ORIGINS.find(o=>o.id===params.get('origin'));
+  const max=params.get('maxDrive'),allowed=['2','3','4','6','10'];
+  if(!origin)return;
+  $('#originPreset').value=origin.point;
+  if(allowed.includes(max))$('#maxDrive').value=max;
+  checkOrigin(origin.point,origin.label);
+}
 async function load(){
   const key=window.SNOWMOBILE_REGION;
-  try{const r=await fetch(`/api/snowmobile?region=${encodeURIComponent(key)}`);const payload=await r.json();if(!r.ok)throw new Error(payload.detail||payload.error||r.status);const d={...payload.region,season:payload.season,sources:payload.sources,generatedAt:payload.generatedAt,truthBoundary:payload.truthBoundary,operational:payload.operational};render(d);}
+  try{const r=await fetch(`/api/snowmobile?region=${encodeURIComponent(key)}`);const payload=await r.json();if(!r.ok)throw new Error(payload.detail||payload.error||r.status);const d={...payload.region,season:payload.season,sources:payload.sources,generatedAt:payload.generatedAt,truthBoundary:payload.truthBoundary,operational:payload.operational};render(d);inheritTrip();}
   catch(e){$('#status').textContent='DATA UNAVAILABLE';$('#drive').innerHTML='<strong>No ride recommendation.</strong> Live source verification failed, so the page is not substituting guessed conditions.';const segHead=$('#segments'); if(segHead)segHead.innerHTML='<p>'+esc(e.message)+'</p>';}
 }
 load();

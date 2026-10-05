@@ -37,7 +37,7 @@ add('Statewide region roster is real and grounded',5,
 add('Statewide index is lightweight and decision-first',6,
   ['id="state-map"','id="region-list"','map-legend'].every(x=>indexPage.includes(x))
   &&indexPage.indexOf('id="region-list"')<indexPage.indexOf('id="state-map"')
-  &&indexJs.includes("fetch('/api/snowmobile')")&&buildRegion.includes('function regionSummary')&&!api.includes('regions:regionResults')
+  &&(indexJs.includes("fetch('/api/snowmobile')")||indexJs.includes("fetch('/api/snowmobile',"))&&buildRegion.includes('function regionSummary')&&!api.includes('regions:regionResults')
 );
 add('Two-mode API: statewide summary vs single-region detail',6,
   api.includes("req.query?.region")&&api.includes('buildRegion(region,ctx)')&&buildRegion.includes('Unknown region')&&buildRegion.includes('trimSegment')&&buildRegion.includes('scoredGeometryFrom')
