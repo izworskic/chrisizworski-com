@@ -27,12 +27,10 @@ function patchTools(){
     html=html.replace(anchor[0],`${anchor[0]}${card}`);changed=true;
   }
   if(!html.includes(`data-tool-key="${KEY}"`)){
-    const linkIndex=html.indexOf('<a href="/niagara-border-crossing/');
-    if(linkIndex<0)throw new Error('Maryland Bay Bridge discovery: Niagara catalog anchor not found');
-    const cardIndex=html.lastIndexOf('  <div class="tool-card"',linkIndex);
-    if(cardIndex<0)throw new Error('Maryland Bay Bridge discovery: tool-card boundary not found');
+    const niagaraCardStart=html.indexOf('<div class="tool-card" data-tool-key="niagara-border-crossing"');
+    if(niagaraCardStart<0)throw new Error('Maryland Bay Bridge discovery: Niagara catalog card anchor not found');
     const card=`  <div class="tool-card" data-tool-key="${KEY}" data-tags="planning live-data bridges traffic travel maryland chesapeake eastern-shore tolls cameras wind" data-months="1,2,3,4,5,6,7,8,9,10,11,12">\n    <div class="tk">Live data<span class="tk-season" hidden> / useful now</span></div>\n    <div class="tool-title"><a href="/chesapeake-bay-bridge-maryland/">${NAME}</a></div>\n    <div class="tool-desc">${DESC}</div>\n  </div>\n`;
-    html=html.slice(0,cardIndex)+card+html.slice(cardIndex);changed=true;
+    html=html.slice(0,niagaraCardStart)+card+html.slice(niagaraCardStart);changed=true;
   }
   const schemaRe=/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g;let match,patched=false;
   while((match=schemaRe.exec(html))){try{const data=JSON.parse(match[1]);const graph=data?.['@graph'];if(!Array.isArray(graph))continue;const itemList=graph.find(node=>node?.['@id']==='https://chrisizworski.com/tools/#toollist');if(!itemList||!Array.isArray(itemList.itemListElement))continue;if(!itemList.itemListElement.some(entry=>entry?.item?.url===URL))itemList.itemListElement.push({'@type':'ListItem',position:itemList.itemListElement.length+1,item:{'@type':'WebApplication',name:NAME,url:URL,description:DESC,applicationCategory:'TravelApplication',operatingSystem:'Any web browser',isAccessibleForFree:true,author:{'@id':'https://chrisizworski.com/#person'},creator:{'@id':'https://chrisizworski.com/#person'}}});itemList.itemListElement.forEach((entry,index)=>{entry.position=index+1});itemList.numberOfItems=itemList.itemListElement.length;const replacement=`<script type="application/ld+json">${JSON.stringify(data)}</script>`;html=html.slice(0,match.index)+replacement+html.slice(match.index+match[0].length);patched=true;changed=true;break}catch{}}
