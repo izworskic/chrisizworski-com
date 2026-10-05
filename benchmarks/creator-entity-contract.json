@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-08-30",
+  "updated": "2026-10-05",
   "objective": "Keep every serious Chris Izworski tool attached to one canonical Person entity without turning tool interfaces into personal-brand surfaces.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "canonicalProfileUrl": "https://chrisizworski.com/chris-izworski/",
@@ -229,5 +229,92 @@
       "profileUrl": "https://chrisizworski.com/chris-izworski/",
       "reason": "Current production property is registered, but no matching active GitHub repository was discoverable in the portfolio audit."
     }
-  ]
+  ],
+  "authorityValueFunction": {
+    "version": "1.0.0",
+    "objective": "Strengthen Chris Izworski entity authority across every first-party tool while preserving tool usefulness, strong non-branded search ownership, and a quiet product-first interface.",
+    "scoreRange": [
+      0,
+      100
+    ],
+    "releaseTarget": 90,
+    "dimensions": [
+      {
+        "id": "canonical-entity-integrity",
+        "weight": 25,
+        "measure": "Every covered tool resolves creator/author markup to the single canonical Person ID; no conflicting person fragments or dangling references."
+      },
+      {
+        "id": "discreet-visible-attribution",
+        "weight": 25,
+        "measure": "Each production tool has a compact contextual byline or footer credit linked to the canonical profile; no oversized personal-brand banner."
+      },
+      {
+        "id": "contextual-network",
+        "weight": 20,
+        "measure": "Each tool has relevant contextual discovery paths into the central tools/projects surfaces and to adjacent tools when the visitor journey continues."
+      },
+      {
+        "id": "legitimate-name-serp",
+        "weight": 20,
+        "measure": "Track exact-name and close-name result occupancy by independent domain/account; preserve the homepage as primary result and count no duplicate slots."
+      },
+      {
+        "id": "qualified-discovery-and-use",
+        "weight": 10,
+        "measure": "Track branded Search Console impressions, clicks, CTR, and referred tool engagement in comparable windows; do not optimize name visibility at the expense of tool use."
+      }
+    ],
+    "hardStops": [
+      "Any tool creates a second Chris Izworski Person entity ID or conflicting canonical Person properties.",
+      "Any attribution claim is false, unverifiable, or implies official affiliation that does not exist.",
+      "Any change creates a thin name-only page, doorway page, or duplicate search intent.",
+      "Any change weakens a protected winning title, canonical, identity page, or active measurement treatment without its required review.",
+      "Any cross-link is unrelated to a real visitor journey or is added only to manufacture link volume."
+    ],
+    "lossPenalties": [
+      {
+        "condition": "A production tool is missing from the creator-entity contract or has no accountable source",
+        "points": 35,
+        "severity": "critical"
+      },
+      {
+        "condition": "Canonical profile or Person reference is broken, dangling, or conflicting",
+        "points": 35,
+        "severity": "critical"
+      },
+      {
+        "condition": "A tool has neither a discreet visible attribution link nor a verifiable contextual author surface",
+        "points": 25,
+        "severity": "major"
+      },
+      {
+        "condition": "A tool is isolated from a relevant discovery path in the tools/projects network",
+        "points": 15,
+        "severity": "major"
+      },
+      {
+        "condition": "Branded result counts inflate same-root or same-platform duplicates",
+        "points": 20,
+        "severity": "major"
+      }
+    ],
+    "measurement": {
+      "searchWindowDays": 28,
+      "leadingIndicatorDays": 7,
+      "brandedQueryFamily": "benchmarks/name-serp-governance.json",
+      "independentOriginCounting": "benchmarks/name-serp-governance.json",
+      "compareSameEngineLocaleAndDeviceWhenPossible": true,
+      "distinguishImplementationCoverageFromRankingOutcome": true,
+      "noRankingGuarantee": true
+    },
+    "auditState": {
+      "totalTrackedProperties": 18,
+      "pendingSourceRepositoryAudit": [
+        "ausable-field-map",
+        "pictured-rocks"
+      ],
+      "rule": "Pending audit entries receive no verified-coverage credit until an active source repository and production evidence are recorded."
+    }
+  }
 }
