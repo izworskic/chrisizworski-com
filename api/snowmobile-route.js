@@ -1,6 +1,7 @@
 /*
  * Michigan Snowmobile Conditions route planner.
  *
+ * Multi-stop: GET /api/snowmobile-route?region=<key>&points=lat,lon;lat,lon;lat,lon
  * GET /api/snowmobile-route?region=<key>&from=lat,lon&to=lat,lon
  *
  * Finds the shortest legally-ridable path between two points along one
@@ -20,7 +21,7 @@ function fail(res,payload,status){res.setHeader('Cache-Control','no-store');retu
 
 function parsePoint(value){
   const parts=String(value??'').split(',');
-  if(parts.length!==2)return null;
+  if(parts.length!==2||parts.some(p=>!p.trim()))return null;
   const lat=Number(parts[0]),lon=Number(parts[1]);
   if(!Number.isFinite(lat)||!Number.isFinite(lon)||lat<-90||lat>90||lon<-180||lon>180)return null;
   return {lat,lon};
@@ -30,24 +31,27 @@ module.exports=async function(req,res){
   res.setHeader('Access-Control-Allow-Origin','*');
   if(req.method!=='GET'&&req.method!=='HEAD'){res.setHeader('Allow','GET, HEAD');return fail(res,{error:'Method not allowed'},405);}
   const regionParam=String(req.query?.region||'').trim();
+  const points=req.query?.points===undefined?null:String(req.query.points).split(';').map(parsePoint);
   const from=parsePoint(req.query?.from);
   const to=parsePoint(req.query?.to);
   if(!regionParam)return fail(res,{error:'Provide region=<key>'},400);
-  if(!from)return fail(res,{error:'Provide from=lat,lon'},400);
-  if(!to)return fail(res,{error:'Provide to=lat,lon'},400);
+  if(points&&(points.length<2||points.length>12||points.some(p=>!p)))return fail(res,{error:'Provide points as 2–12 lat,lon pairs separated by semicolons'},400);
+  if(!points&&!from)return fail(res,{error:'Provide from=lat,lon'},400);
+  if(!points&&!to)return fail(res,{error:'Provide to=lat,lon'},400);
 
   try{
     const {computeRegionDetail}=await import('../lib/snowmobile/build-region.mjs');
-    const {planRoute}=await import('../lib/snowmobile/routing.mjs');
+    const {planRoute,planItinerary}=await import('../lib/snowmobile/routing.mjs');
     const result=await computeRegionDetail(regionParam);
     if(!result.ok)return fail(res,result.body,result.status);
     const built=result.payload.region;
     if(built.error)return fail(res,{error:'Region trail data is unavailable right now',detail:built.error},503);
 
-    const route=planRoute(built.scoredGeometry,{fromLat:from.lat,fromLon:from.lon,toLat:to.lat,toLon:to.lon});
+    const route=points?planItinerary(built.scoredGeometry,points):planRoute(built.scoredGeometry,{fromLat:from.lat,fromLon:from.lon,toLat:to.lat,toLon:to.lon});
     res.setHeader('Cache-Control','public, s-maxage=300, stale-while-revalidate=900');
     return send(res,{
-      region:regionParam,from,to,
+      region:regionParam,from,to,points,
+      closureVerification:built.closures?.verified===true,
       generatedAt:result.payload.generatedAt,
       season:result.payload.season,
       engine:'deterministic-dijkstra',

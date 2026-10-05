@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildTrailGraph, nearestNode, shortestPath, planRoute, haversineMiles } from '../lib/snowmobile/routing.mjs';
+import { buildTrailGraph, nearestNode, shortestPath, planRoute, planItinerary, haversineMiles } from '../lib/snowmobile/routing.mjs';
 
 // Small grid of real-ish Michigan-latitude coordinates. 0.01 degrees of
 // latitude is close enough to a fixed ~0.69 mi at this latitude for
@@ -183,4 +183,26 @@ test('planRoute estimatedMinutes is derived from distance and a clearly labeled 
   const expectedMinutes = Math.round((route.distanceMiles / route.assumedAvgMph) * 60);
   assert.equal(route.estimatedMinutes, expectedMinutes);
   assert.ok(Number.isFinite(route.assumedAvgMph) && route.assumedAvgMph > 0);
+});
+
+const stop=p=>({lat:p[1],lon:p[0]});
+test('itinerary visits intermediate stops in order and supports returning to the start',()=>{
+ const geometry=fc([feature('s1',[A,B]),feature('s2',[B,D],{score:20,band:'POOR'})]);
+ const route=planItinerary(geometry,[A,B,D,A].map(stop));
+ assert.equal(route.routable,true);assert.equal(route.stopCount,4);assert.equal(route.legs.length,3);
+ assert.deepEqual(route.geometry.coordinates,[A,B,D,B,A]);
+ assert.equal(route.segmentsTraversed,2);assert.equal(route.worstSegmentOnRoute.score,20);
+ assert.equal(route.distanceMiles,Math.round(route.legs.reduce((n,l)=>n+l.distanceMiles,0)*100)/100);
+ assert.ok(route.distanceMiles>planRoute(geometry,{fromLat:A[1],fromLon:A[0],toLat:D[1],toLon:D[0]}).distanceMiles);
+});
+test('a disconnected or closed later leg rejects the entire itinerary without partial geometry',()=>{
+ const geometry=fc([feature('s1',[A,B]),feature('closed',[B,D],{band:'CLOSED'})]);
+ const route=planItinerary(geometry,[A,B,D].map(stop));
+ assert.equal(route.routable,false);assert.equal(route.failedLeg,2);assert.match(route.reason,/Stop 2 → stop 3/);
+ assert.equal(route.geometry,undefined);
+});
+test('itinerary rejects identical adjacent junctions and invalid stop counts',()=>{
+ const geometry=fc([feature('s1',[A,B])]);
+ assert.equal(planItinerary(geometry,[A,A,B].map(stop)).routable,false);
+ for(const points of [[],[stop(A)],Array(13).fill(stop(A)),[{lat:NaN,lon:0},stop(B)]])assert.equal(planItinerary(geometry,points).routable,false);
 });

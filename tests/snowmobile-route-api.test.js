@@ -50,3 +50,13 @@ test('snowmobile-route returns 404 for an unknown region without doing any DNR f
   assert.equal(res._status, 404);
   assert.ok(Array.isArray(res._json.knownRegions));
 });
+
+test('multi-stop API validates all stops before fetching region data',async()=>{
+ for(const points of ['44,-85','44,-85;bad','44,-85;,',Array(13).fill('44,-85').join(';')]){
+  const res=mockRes();await routeApi({method:'GET',query:{region:'grayling-gaylord',points}},res);
+  assert.equal(res._status,400);assert.match(res._json.error,/points/);
+ }
+ const res=mockRes();await routeApi({method:'GET',query:{region:'not-a-real-region',points:'44,-85;44.1,-85'}},res);
+ assert.equal(res._status,404);
+ assert.equal(routeApi._test.parsePoint(' , '),null);
+});

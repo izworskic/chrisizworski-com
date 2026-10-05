@@ -27,3 +27,27 @@ Observe the existing canonical pages in comparable complete 28-day Search Consol
 The separate Maryland search-description repair restores the previously failing baseline. The winter change is additive: all existing regional maps, corridor checks, route planner, local reports, forecast context, camera and companion links are retained. The main-page introduction is shortened; regional title/description generation is brought within the existing length limits. Two new sections supply comparison intake and a static regional directory; every regional page gains local planning/source context.
 
 Rollback the winter commit without reverting the Maryland repair. No data migration, new dependency or change to condition scoring is required.
+
+## Route planning interaction — October 5, 2026
+
+All seven regional planners place controls above the map. Plan a route starts a
+fresh draft; once active the same button is explicitly labeled Start over.
+Trail taps add numbered stops (2–12); nothing computes until Build route is
+chosen. Undo removes the last stop, Edit stops reopens a built draft, and Clear
+route returns to browsing. A retry retains the draft. Restarting or clearing
+aborts pending work and invalidates late responses.
+
+The route API accepts ordered `points=lat,lon;lat,lon;…`, with the existing
+`from`/`to` interface retained. The shared graph is built once and every leg must
+connect through mapped, nonclosed segments before the complete line is drawn.
+Returning to the starting junction is supported; adjacent stops at the same
+junction produce an explicit leg-specific failure. Distances include repeated
+travel, while segment counts are unique. Results show total distance, assumed
+ride time, per-leg distance and trails, snap distances, and segment condition
+bands/scores when available. Unknown surface evidence stays unknown; missing
+closure verification and off-season restrictions remain visible. Stops continue
+to snap to junctions rather than precise positions along long trail lines.
+
+Validation: routing, API and UI tests cover ordered stops, loops, a failed later
+leg, stop count limits, explicit build, undo, restart, edit, retry and late-response
+invalidation. The full 50-step repository gate passes.
