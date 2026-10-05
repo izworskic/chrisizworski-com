@@ -13,6 +13,7 @@ const mainHostTools = registry.tools.filter((tool) => {
   catch { return false; }
 });
 const rewriteRoutes = Array.isArray(vercel.rewrites) ? vercel.rewrites : [];
+const checkOnly = process.argv.includes("--check");
 
 function routeFor(pathname) {
   const candidates = new Set([pathname, pathname.endsWith("/") ? pathname.slice(0, -1) : pathname + "/"]);
@@ -40,8 +41,12 @@ for (const tool of mainHostTools) {
   }
 
   const next = addCreatorAttribution(html);
+  if (!next.includes("Built by") || !next.includes("https://chrisizworski.com/chris-izworski/")) {
+    missing.push(`${tool.id}: attribution helper did not produce the required profile credit`);
+    continue;
+  }
   if (next === html) alreadyCovered += 1;
-  else { await writeFile(file, next); updated += 1; }
+  else { if (!checkOnly) await writeFile(file, next); updated += 1; }
 }
 
 if (missing.length) {
@@ -53,4 +58,4 @@ if (proxyOwned && !/addCreatorAttribution/.test(await readFile(path.join(root, "
   console.error("Proxy-served tools exist, but the shared public page renderer lacks creator attribution.");
   process.exit(1);
 }
-console.log(`Creator attribution: ${updated} static page(s) updated, ${alreadyCovered} already covered, ${proxyOwned} served through the shared creator-aware proxy, ${externallyDelegated} owned by routed deployments; ${mainHostTools.length} tools accounted for.`);
+console.log(`Creator attribution${checkOnly ? " check" : " build"}: ${updated} static page(s) ${checkOnly ? "ready for injection" : "updated"}, ${alreadyCovered} already covered, ${proxyOwned} served through the shared creator-aware proxy, ${externallyDelegated} delegated to routed deployments; ${mainHostTools.length} tools accounted for.`);
