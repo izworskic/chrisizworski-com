@@ -11,3 +11,4 @@ if(!xml.includes(`<loc>${url}</loc>`)){
 }
 fs.writeFileSync(file,xml);
 console.log('Thunder Hole Live direct coastal sitemap entry verified');
+await import('./add-maryland-bay-bridge-discovery.mjs');
