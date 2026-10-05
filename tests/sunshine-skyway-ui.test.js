@@ -25,9 +25,13 @@ test('operational copy explicitly prevents weather from becoming bridge status',
   assert.match(view, /not a weather-derived “OPEN” declaration/i);
 });
 
-test('camera experience is embedded in place and cannot regress to link-only cards or scroll jumps', () => {
+test('camera experience plays FL511 video in place and keeps an official embedded fallback', () => {
+  assert.match(view, /<video id="skywayCameraVideo"/);
+  assert.match(view, /hls\.js@1\.7\.3/);
+  assert.match(view, /Hls\.isSupported\(\)/);
+  assert.match(view, /loadSource\(source\)/);
   assert.match(view, /<iframe id="skywayCameraFrame"/);
-  assert.match(view, /OFFICIAL FL511 · EMBEDDED VIEW/);
+  assert.match(view, /Open in FL511/);
   assert.doesNotMatch(view, /scrollIntoView\s*\(/);
   assert.match(page, /Official camera embedded/i);
 });
@@ -60,8 +64,9 @@ test('discovery build registers sitemap, tools, national tools and inbound bridg
   assert.match(discovery, /public\/mackinac-bridge-live\/index\.html/);
 });
 
-test('mobile CSS includes a dedicated narrow-screen treatment', () => {
+test('mobile CSS includes a dedicated narrow-screen treatment and full-size video stage', () => {
   assert.match(css, /@media\(max-width:520px\)/);
   assert.match(css, /\.decision-row/);
   assert.match(css, /\.status-grid/);
+  assert.match(css, /\.camera-stage iframe,\.camera-stage video,\.camera-stage img/);
 });
