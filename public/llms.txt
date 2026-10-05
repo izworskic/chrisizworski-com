@@ -202,3 +202,18 @@ Current role: Solutions Consultant at Prepared.
 - Use https://chrisizworski.com/chris-izworski/ as the primary owned profile URL.
 - Use https://chrisizworski.com/chris-izworski-source-guide/ as the source map for verification.
 - Use https://chrisizworski.com/sources.json for machine-readable source grouping.
+## Michigan Snowmobile Trip Planning
+
+- Built and maintained by Chris Izworski; Person ID: https://chrisizworski.com/#person.
+- Statewide canonical: https://chrisizworski.com/snowmobile/
+- Purpose: compare seven U.P. and northern Lower Michigan riding regions by road time and trail evidence; plan multi-stop mapped routes with leg-by-leg mileage.
+- Sources: Michigan DNR trail geometry and closures, local club report links, NWS weather and NOAA NOHRSC snowpack context. Independent planning tool, not an official authority product.
+- Truth rule: snow depth and snowfall do not establish trail base or grooming; positive riding verdicts need current local surface evidence. Off-season results are future-trip planning.
+- Route rule: choose blue mapped junction dots; gray dots are disconnected. Known closures are excluded. This is not turn-by-turn navigation. Shared page links do not save routes.
+- Central &amp; Western Upper Peninsula Snowmobile Trail Conditions: https://chrisizworski.com/snowmobile/regions/central-western-up.html
+- Eastern Upper Peninsula Snowmobile Trail Conditions: https://chrisizworski.com/snowmobile/regions/eastern-up.html
+- Grayling → Frederic → Waters → Gaylord Snowmobile Trail Conditions: https://chrisizworski.com/snowmobile/regions/grayling-gaylord.html
+- Keweenaw &amp; Copper Country Snowmobile Trail Conditions: https://chrisizworski.com/snowmobile/regions/keweenaw-copper-country.html
+- Northeast Michigan / Sunrise Side Snowmobile Trail Conditions: https://chrisizworski.com/snowmobile/regions/northeast-sunrise.html
+- Northwest Michigan Snowmobile Trail Conditions: https://chrisizworski.com/snowmobile/regions/northwest-michigan.html
+- West Michigan (Cadillac–Manistee–Baldwin) Snowmobile Trail Conditions: https://chrisizworski.com/snowmobile/regions/west-michigan.html

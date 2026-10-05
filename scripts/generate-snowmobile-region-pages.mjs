@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { REGIONS } from '../lib/snowmobile/regions.mjs';
+import { metadataFor, imageFor, socialExtras, discoveryGraph, discoverySections } from '../lib/snowmobile/discovery.mjs';
 import { planningFor } from '../lib/snowmobile/planning.mjs';
 
 const root = process.cwd();
@@ -8,9 +9,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 
 function pageFor(region) {
   const canonical = `https://chrisizworski.com/snowmobile/regions/${region.key}.html`;
-  const title = [`${region.shortLabel} Snowmobile Conditions | Chris Izworski`, `${region.shortLabel} Snowmobile | Chris Izworski`].find(t=>t.length<=60);
-  const description = `Check ${region.shortLabel} snowmobile trails: DNR closures, local report links, snow and thaw context, maps and road time to ${region.hubTown}.`;
-  if(!title||description.length>158)throw new Error(`Snowmobile search metadata too long: ${region.key}`);
+  const {title,description}=metadataFor(region);
   const planning=planningFor(region.key);
   const reportBlock=`<section class="panel" aria-labelledby="local-planning-title"><h2 id="local-planning-title">Plan the local ride</h2><p>${esc(planning.note)}</p><h3>Check the local report before leaving</h3>${planning.reports.map(r=>`<p><a href="${esc(r.url)}" target="_blank" rel="noopener" data-source-name="${esc(r.name)}">${esc(r.name)}</a><br><span class="small">${esc(r.scope)}</span></p>`).join('')}<p class="small">Check each source’s report date and exact coverage. These links are for manual verification; they are not automated surface evidence for the entire region. <a href="https://misorva.org/trail-report/" target="_blank" rel="noopener">Find other club reports in the MISORVA directory</a>.</p></section>`;
   const corridorBlock = region.legacyCorridor ? `
@@ -19,11 +18,12 @@ function pageFor(region) {
   <section class="panel visual-check" id="visual-check"><div><div class="eyebrow">Visual context</div><h2>What does the ${esc(region.shortLabel)} snowbelt look like?</h2><p>An MDOT road-weather camera near ${esc(region.hubTown)} can confirm whether the regional landscape is snow-covered. It does <strong>not</strong> show a snowmobile trail, prove grooming, or measure trail base.</p></div><div class="field-camera" data-field-camera="${esc(region.cameraId)}"><p class="camera-out">Loading the current MDOT camera image…</p></div></section>` : '';
   const cameraScript = region.cameraId ? `<script defer src="/assets/field-camera.js"></script>` : '';
   const cameraCss = region.cameraId ? `<link rel="stylesheet" href="/assets/field-camera.css">` : '';
-  return `<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="${canonical}"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1"><meta name="google-adsense-account" content="ca-pub-8222782620788075"><meta name="theme-color" content="#123246"><meta property="og:type" content="website"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="https://chrisizworski.com/og-image.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="https://chrisizworski.com/og-image.png"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="/assets/snowmobile.css?v=20261005-junction-dots-5">${cameraCss}<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script><script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script><script type="application/ld+json">${JSON.stringify({
+  return `<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="${canonical}"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1"><meta name="google-adsense-account" content="ca-pub-8222782620788075"><meta name="theme-color" content="#123246"><meta property="og:type" content="website"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${imageFor(region)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${imageFor(region)}">${socialExtras(region)}<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="/assets/snowmobile.css?v=20261005-junction-dots-5">${cameraCss}<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script><script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script><script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org',
     '@graph': [
       { '@type': 'Person', '@id': 'https://chrisizworski.com/#person', name: 'Chris Izworski', url: 'https://chrisizworski.com/' },
-      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: `${region.label} Snowmobile Trail Conditions`, dateModified: '2026-10-05', author: {'@id':'https://chrisizworski.com/#person'}, publisher: {'@id':'https://chrisizworski.com/#person'} },
+      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: `${region.label} Snowmobile Trail Conditions`, description, inLanguage: 'en-US', primaryImageOfPage: {'@id':`${canonical}#primaryimage`}, mainEntity: {'@id':`${canonical}#planner`}, isPartOf: {'@id':'https://chrisizworski.com/snowmobile/#page'}, relatedLink: REGIONS.filter(r=>r.key!==region.key).map(r=>`https://chrisizworski.com/snowmobile/regions/${r.key}.html`), dateModified: '2026-10-05', author: {'@id':'https://chrisizworski.com/#person'}, publisher: {'@id':'https://chrisizworski.com/#person'} },
+      ...discoveryGraph(region),
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://chrisizworski.com/' },
         { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://chrisizworski.com/tools/' },
@@ -89,8 +89,9 @@ ${cameraBlock}
   </section>
   <section class="panel"><h2>How the decision model works</h2><p>The model is bottleneck-aware. A weak required segment can pull a verified route down, and an official closure breaks the route instead of being averaged away. But a positive trail-quality score is issued only when there is current local trail-surface evidence. DNR legal status, snowfall, NOHRSC snow depth and favorable weather can provide context; they cannot manufacture a FAIR or GOOD trail when the surface itself is unverified. Aging positive reports are capped, stale reports become UNKNOWN, and rain/thaw observations or forecasts can downgrade otherwise favorable evidence.${region.legacyCorridor ? ' JEV is used only behind the server-side shared harness for bounded interpretation of unstructured club text. It cannot create trail facts, determine legal status, alter DNR geometry, invent grooming, or convert snow into trail base. If the harness is unavailable, deterministic parsing and scoring continue.' : ''}</p></section>
   <section class="panel companion"><div><div class="eyebrow">Winter network</div><h2>Check the evidence around the ride</h2><p>Snowfall, road-trip weather, evening aurora potential and other winter conditions can matter to the same weekend without being mixed into the trail score.</p></div><div class="companion-links"><a href="/snowmobile/">← All Michigan regions</a><a href="/mackinac-bridge-live/">Mackinac Bridge crossing conditions →</a><a href="https://www.michigan.gov/dnr/things-to-do/snowmobiling/where" target="_blank" rel="noopener">Official DNR trail maps →</a><a href="/michigan-snow-totals/">Michigan Snow Totals →</a><a href="/michigan-cross-country-skiing/">Michigan XC skiing →</a><a href="/michigan-ice/">Michigan ice conditions →</a><a href="/northern-lights-michigan/">Northern Lights →</a><a href="/tools/#winter-task-router">All winter tools →</a></div></section>
+${discoverySections(region)}
 </main>
-<footer class="footer">Built by <a href="/about/">Chris Izworski</a> · Michigan Snowmobile Trail Conditions · © 2026 Chris Izworski</footer>
+<footer class="footer">Built by <a href="/chris-izworski/">Chris Izworski</a> · Michigan Snowmobile Trail Conditions · © 2026 Chris Izworski</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="/assets/snowmobile-comparison.js?v=20261005-trip-compare-1"></script>
 <script src="/assets/snowmobile-region.js?v=20261005-junction-dots-5"></script>
@@ -116,4 +117,23 @@ console.log(sitemapUrls.join('\n'));
 const indexPath=path.join(root,'public/snowmobile/index.html');
 let index=fs.readFileSync(indexPath,'utf8');
 index=index.replace(/(<div class="companion-links" id="region-directory">)[\s\S]*?(<\/div>)/,(_,start,end)=>start+REGIONS.map(r=>`<a href="/snowmobile/regions/${r.key}.html">${esc(r.shortLabel)} — ${esc(r.hubTown)} hub</a>`).join('')+end);
+fs.writeFileSync(indexPath,index);
+
+const {title,description}=metadataFor();
+index=fs.readFileSync(indexPath,'utf8').replace(/<title>[\s\S]*?<\/title>/,`<title>${esc(title)}</title>`);
+for (const [attr,key,value] of [['name','description',description],['property','og:title',title],['property','og:description',description],['name','twitter:title',title],['name','twitter:description',description],['property','og:image',imageFor()],['name','twitter:image',imageFor()]]) {
+  index=index.replace(new RegExp(`<meta ${attr}="${key}"[^>]*>`),`<meta ${attr}="${key}" content="${esc(value)}">`);
+}
+index=index.replace(/<!-- snowmobile social start -->[\s\S]*?<!-- snowmobile social end -->/,'');
+index=index.replace('</head>',`<!-- snowmobile social start -->${socialExtras()}<!-- snowmobile social end --></head>`);
+index=index.replace(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/,(_,raw)=>{
+  const graph=JSON.parse(raw);
+  graph['@graph']=graph['@graph'].filter(n=>n['@type']!=='WebApplication' && !['https://chrisizworski.com/snowmobile/#planner','https://chrisizworski.com/snowmobile/#primaryimage','https://chrisizworski.com/snowmobile/#regions'].includes(n['@id']));
+  const page=graph['@graph'].find(n=>n['@type']==='WebPage');
+  Object.assign(page,{description,inLanguage:'en-US',primaryImageOfPage:{'@id':'https://chrisizworski.com/snowmobile/#primaryimage'},mainEntity:{'@id':'https://chrisizworski.com/snowmobile/#planner'}});
+  graph['@graph'].push(...discoveryGraph());
+  return `<script type="application/ld+json">${JSON.stringify(graph)}</script>`;
+});
+index=index.replace(/<!-- snowmobile discovery start -->[\s\S]*?<!-- snowmobile discovery end -->/,'');
+index=index.replace('</main>',`<!-- snowmobile discovery start -->${discoverySections()}<!-- snowmobile discovery end --></main>`);
 fs.writeFileSync(indexPath,index);

@@ -26,6 +26,14 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  "/snowmobile/regions/west-michigan.html",
+  "/snowmobile/regions/keweenaw-copper-country.html",
+  "/snowmobile/regions/eastern-up.html",
+  "/snowmobile/regions/central-western-up.html",
+  "/snowmobile/regions/northeast-sunrise.html",
+  "/snowmobile/regions/northwest-michigan.html",
+  "/snowmobile/regions/grayling-gaylord.html",
+  "/snowmobile/",
   // Oct 4 2026: reviewed tool-directory discovery/schema synchronization and GA4 tool-open measurement.
   // Mirror changes come from the national hub owner; no specialist engine implementation changes.
   "/assets/tool-engagement.js",
@@ -359,7 +367,7 @@ const committedDriftHashEntries = [
   // url / description / alumniOf moved on these routes. Re-crawl after deploy and these pins can
   // go back to the live snapshot.
   ["/chris-izworski-biography/", "2191b790b006cd1c9ff20308aff607b319f9b79cfbec3cd0e0515ffd78c3d526"],
-  ["/chris-izworski-works/", "af21c1ee61fbc79af0830839fe26640caab69ad8b37fcd8cc6e9af0b074b75b5"],
+  ["/chris-izworski-works/", "8091f6064031fa9302054c981a50d16284bb0b84b791eac5936919f177ac42d7"],
   ["/fall-color/ann-arbor-irish-hills-fall-color/", "ee05322133166c076ca3ec0d02389524f703830e1bd5104c15de67d229490a61"],
   ["/fall-color/au-sable-river-fall-color/", "30927270360c024f9f0c63c492fe276aa9a529ad530563d6f3984edc2623b5a4"],
   ["/fall-color/mackinac-island-fall-color/", "3c7e2b336da1380a9b1501e04b5581fed9c9dbd323d94215f52bd344e802da07"],
@@ -424,7 +432,7 @@ const committedDriftHashEntries = [
   ["/great-lakes-beaches/whitefish-point/", "1dfa103faf8c639a4235ba668a55393b17623793710471579ffb0eb7ccb11a20"],
   ["/great-lakes-beaches/wilderness-state-park/", "6341bdb514bd1ab07c01233bdc8442e2e84e320bcebe2ec7c182b23b19ab5bb1"],
   // Authorized Aug. 29 branded-profile freshness update; keep this as a pinned hash, not an exemption.
-  ["/sitemap-reputation.xml", "18bc09cdb033ea2da03b072c11f61dfc7b480f9367e3becdb93d71fea8979158"],
+  ["/sitemap-reputation.xml", "96bd5bc602607d6c3a8d41dbe16b438fcf8840a3a24cbbaafa60ee1cd914db70"],
   ["/zone-6a-planting-calendar/", "3b34180a82558e2df887dc238ad31dc8d1995e465b3e5d81972ddec260414565"],
 ];
 

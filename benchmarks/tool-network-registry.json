@@ -3361,6 +3361,22 @@
       "strength": "strong",
       "surface": "tools-directory",
       "reason": "A destination trip can continue into the related crossing or seasonal conditions check."
+    },
+    {
+      "from": "mackinac-bridge",
+      "to": "snowmobile",
+      "type": "trip-handoff",
+      "strength": "strong",
+      "surface": "winter-trip",
+      "reason": "Snowmobile travelers crossing the Straits need vehicle-specific bridge restrictions separately from trail conditions."
+    },
+    {
+      "from": "snowmobile",
+      "to": "mackinac-bridge",
+      "type": "trip-handoff",
+      "strength": "strong",
+      "surface": "winter-trip",
+      "reason": "Snowmobile travelers crossing the Straits need vehicle-specific bridge restrictions separately from trail conditions."
     }
   ],
   "cannibalizationGroups": [
