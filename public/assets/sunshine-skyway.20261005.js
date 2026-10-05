@@ -92,8 +92,8 @@
       els.trafficTitle.textContent = 'Active Skyway traffic impact';
       els.trafficCopy.textContent = 'FL511 returned bridge-specific impact language. Read the current evidence below.';
     } else if (liveCount === 2) {
-      els.trafficTitle.textContent = 'No specific bridge impact found';
-      els.trafficCopy.textContent = 'Both FL511 surfaces were checked. The tool does not manufacture speed or delay minutes when a validated bridge value is not available.';
+      els.trafficTitle.textContent = 'Nothing specific is being reported on the Skyway';
+      els.trafficCopy.textContent = "We checked both live FL511 feeds. Neither is showing a Skyway-specific crash, closure or traffic event right now. FL511 isn't giving us a reliable bridge travel-time estimate, so we leave the delay blank instead of guessing.";
     } else {
       els.trafficTitle.textContent = 'Traffic source coverage is partial';
       els.trafficCopy.textContent = 'Open FL511 before traveling if current traffic conditions are important to your decision.';
