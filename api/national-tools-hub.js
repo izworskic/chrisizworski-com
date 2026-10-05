@@ -49,7 +49,7 @@ function ensureYosemite(html) {
 }
 
 module.exports = publicToolPage(
-  'https://national-outdoor-tools-hub.vercel.app/national-tools/',
+  'https://national-outdoor-tools-hub.vercel.app/national-tools/?rev=20261005-maryland',
   ensureYosemite
 );
 // Exposed for tests only: verifies the correction stays a single-entry fix
