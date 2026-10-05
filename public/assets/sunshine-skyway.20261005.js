@@ -82,18 +82,46 @@
     const mentions = traffic?.officialMentions || [];
     const alertsState = sourceHealth?.alerts?.state || 'unavailable';
     const trafficState = sourceHealth?.traffic?.state || 'unavailable';
-    const liveCount = [alertsState, trafficState].filter(state => state === 'ok').length;
+    const speedsState = sourceHealth?.trafficSpeeds?.state || 'unavailable';
+    const eventLiveCount = [alertsState, trafficState].filter(state => state === 'ok').length;
+    const sourceLiveCount = eventLiveCount + (speedsState === 'ok' ? 1 : 0);
+    const flow = traffic?.flow || {};
+    const selected = flow?.selected || {};
+    const flowUsable = selected.state && selected.state !== 'UNAVAILABLE' && speedsState !== 'unavailable';
+    const directionLabel = flow?.selectedDirection === 'southbound' ? 'southbound' : 'northbound';
+    const noEvent = eventLiveCount === 2 && mentions.length === 0;
     els.mentionMetric.textContent = String(mentions.length);
-    els.sourceMetric.textContent = `${liveCount}/2 live`;
+    els.sourceMetric.textContent = `${sourceLiveCount}/3 live`;
+
     if (traffic?.state === 'CLOSED') {
       els.trafficTitle.textContent = 'Official bridge closure signal';
       els.trafficCopy.textContent = 'The closure state above is based on explicit Sunshine Skyway language from an official FL511 source.';
-    } else if (traffic?.state === 'ACTIVE_IMPACT') {
+      return;
+    }
+    if (traffic?.state === 'ACTIVE_IMPACT') {
       els.trafficTitle.textContent = 'Active Skyway traffic impact';
       els.trafficCopy.textContent = 'FL511 returned bridge-specific impact language. Read the current evidence below.';
-    } else if (liveCount === 2) {
+      return;
+    }
+
+    if (flowUsable) {
+      els.trafficTitle.textContent = selected.label || 'Live Skyway traffic';
+      const eventSuffix = noEvent ? ' No Skyway-specific crash, closure or traffic event is being reported in the two event feeds.' : '';
+      const coverageSuffix = speedsState === 'ok' ? '' : ' Speed-layer coverage is partial, so treat this as directional context.';
+      const copy = {
+        MOVING_WELL: `FL511's live Traffic Speeds layer shows ${directionLabel} traffic moving well across the Skyway.`,
+        SOME_SLOWING: `FL511's live Traffic Speeds layer is showing some slower ${directionLabel} segments on the Skyway.`,
+        HEAVY_SLOWING: `FL511's live Traffic Speeds layer is showing heavy ${directionLabel} slowing on at least part of the Skyway.`,
+        STOP_AND_GO: `FL511's live Traffic Speeds layer is showing stop-and-go ${directionLabel} traffic on the Skyway.`,
+        MIXED: `FL511's live Traffic Speeds layer is mixed ${directionLabel}; some sampled bridge segments are moving differently from others.`,
+      }[selected.state] || `FL511's live Traffic Speeds layer is available for the ${directionLabel} crossing.`;
+      els.trafficCopy.textContent = `${copy}${eventSuffix}${coverageSuffix} We do not turn the map colors into made-up mph or delay minutes.`;
+      return;
+    }
+
+    if (eventLiveCount === 2) {
       els.trafficTitle.textContent = 'Nothing specific is being reported on the Skyway';
-      els.trafficCopy.textContent = "We checked both live FL511 feeds. Neither is showing a Skyway-specific crash, closure or traffic event right now. FL511 isn't giving us a reliable bridge travel-time estimate, so we leave the delay blank instead of guessing.";
+      els.trafficCopy.textContent = "We checked both live FL511 event feeds. Neither is showing a Skyway-specific crash, closure or traffic event right now. The Traffic Speeds layer is unavailable, so we do not guess at congestion or delay.";
     } else {
       els.trafficTitle.textContent = 'Traffic source coverage is partial';
       els.trafficCopy.textContent = 'Open FL511 before traveling if current traffic conditions are important to your decision.';
@@ -255,7 +283,7 @@
       renderWind(data.windContext);
       renderEvents(data.traffic, data.windContext);
       renderCameras(data.cameras);
-      if (window.gtag) window.gtag('event', 'sunshine_skyway_snapshot', { status: data.officialStatus?.state || 'unknown', wind_context: data.windContext?.level || 'unknown' });
+      if (window.gtag) window.gtag('event', 'sunshine_skyway_snapshot', { status: data.officialStatus?.state || 'unknown', wind_context: data.windContext?.level || 'unknown', traffic_flow: data.traffic?.flow?.selected?.state || 'unknown' });
     } catch (error) {
       if (serial !== requestSerial) return;
       destroyHls();
