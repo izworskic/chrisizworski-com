@@ -27,8 +27,10 @@ function patchTools(){
     html=html.replace(anchor[0],`${anchor[0]}${card}`);changed=true;
   }
   if(!html.includes(`data-tool-key="${KEY}"`)){
-    const niagaraCardStart=html.indexOf('<div class="tool-card" data-tool-key="niagara-border-crossing"');
-    if(niagaraCardStart<0)throw new Error('Maryland Bay Bridge discovery: Niagara catalog card anchor not found');
+    const niagaraKey=html.indexOf('data-tool-key="niagara-border-crossing"');
+    if(niagaraKey<0)throw new Error('Maryland Bay Bridge discovery: Niagara catalog key not found');
+    const niagaraCardStart=html.lastIndexOf('<div class="tool-card"',niagaraKey);
+    if(niagaraCardStart<0)throw new Error('Maryland Bay Bridge discovery: Niagara catalog card boundary not found');
     const card=`  <div class="tool-card" data-tool-key="${KEY}" data-tags="planning live-data bridges traffic travel maryland chesapeake eastern-shore tolls cameras wind" data-months="1,2,3,4,5,6,7,8,9,10,11,12">\n    <div class="tk">Live data<span class="tk-season" hidden> / useful now</span></div>\n    <div class="tool-title"><a href="/chesapeake-bay-bridge-maryland/">${NAME}</a></div>\n    <div class="tool-desc">${DESC}</div>\n  </div>\n`;
     html=html.slice(0,niagaraCardStart)+card+html.slice(niagaraCardStart);changed=true;
   }
