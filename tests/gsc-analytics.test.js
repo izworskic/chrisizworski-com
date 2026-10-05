@@ -58,3 +58,11 @@ test('querySearchAnalytics paginates beyond a single response', async () => {
   assert.equal(calls, 2);
   assert.equal(rows.length, 3);
 });
+
+test('GSC scheduled endpoint accepts CRON secret or injected valid GitHub OIDC token only', async () => {
+  const { authorizeGscRequest } = require('../lib/gsc/github-actions-oidc.js');
+  assert.equal(await authorizeGscRequest({ authorization: 'Bearer cron-x', cronSecret: 'cron-x' }), true);
+  assert.equal(await authorizeGscRequest({ authorization: 'Bearer oidc-x', cronSecret: 'cron-x', verifyToken: async (token) => token === 'oidc-x' }), true);
+  assert.equal(await authorizeGscRequest({ authorization: 'Bearer bad', cronSecret: 'cron-x', verifyToken: async () => false }), false);
+  assert.equal(await authorizeGscRequest({ authorization: '', cronSecret: 'cron-x', verifyToken: async () => true }), false);
+});
