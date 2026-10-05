@@ -51,3 +51,18 @@ to snap to junctions rather than precise positions along long trail lines.
 Validation: routing, API and UI tests cover ordered stops, loops, a failed later
 leg, stop count limits, explicit build, undo, restart, edit, retry and late-response
 invalidation. The full 50-step repository gate passes.
+
+
+### Selectable junctions
+
+Regional detail bundles now publish `routeJunctions` from the same nonclosed
+router graph. Blue dots represent its actual junctions and mapped trail ends,
+not inferred physical intersections. The first selected dot determines a
+connected component; other components turn gray and cannot be appended.
+Unmarked map/trail taps do not append arbitrary coordinates, and adjacent
+duplicate dots are rejected before a request. Marker clicks send the exact
+node coordinates, regardless of where within the marker the pointer lands.
+Dots support Enter/Space during planning. Orange numbered stop markers do
+not intercept input, so the starting dot can be selected again for a loop.
+The regional bundle request and assets are versioned to avoid stale UI/API
+responses without junction data.

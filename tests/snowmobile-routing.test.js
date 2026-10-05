@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildTrailGraph, nearestNode, shortestPath, planRoute, planItinerary, haversineMiles } from '../lib/snowmobile/routing.mjs';
+import { buildTrailGraph, nearestNode, shortestPath, planRoute, planItinerary, routeJunctions, haversineMiles } from '../lib/snowmobile/routing.mjs';
 
 // Small grid of real-ish Michigan-latitude coordinates. 0.01 degrees of
 // latitude is close enough to a fixed ~0.69 mi at this latitude for
@@ -205,4 +205,22 @@ test('itinerary rejects identical adjacent junctions and invalid stop counts',()
  const geometry=fc([feature('s1',[A,B])]);
  assert.equal(planItinerary(geometry,[A,A,B].map(stop)).routable,false);
  for(const points of [[],[stop(A)],Array(13).fill(stop(A)),[{lat:NaN,lon:0},stop(B)]])assert.equal(planItinerary(geometry,points).routable,false);
+});
+
+test('selectable junctions are router nodes, exclude closed-only endpoints and mark disconnected networks',()=>{
+ const geometry=fc([feature('s1',[A,B]),feature('s2',[B,D]),feature('closed',[D,C],{band:'CLOSED'}),feature('island',[[-85,45],[-85,45.01]])]);
+ const dots=routeJunctions(geometry),graph=buildTrailGraph(geometry);
+ assert.equal(dots.features.length,5);
+ assert.ok(!dots.features.some(f=>f.geometry.coordinates[0]===C[0]));
+ for(const f of dots.features){assert.deepEqual(graph.nodes.get(f.properties.id),f.geometry.coordinates);const [lon,lat]=f.geometry.coordinates;assert.equal(nearestNode(graph,lat,lon).snapMiles,0);}
+ assert.equal(dots.features[0].properties.component,dots.features[2].properties.component);
+ assert.notEqual(dots.features[0].properties.component,dots.features[3].properties.component);
+ const points=dots.features.slice(0,3).map(f=>stop(f.geometry.coordinates));
+ assert.equal(planItinerary(geometry,points).routable,true);
+});
+test('line crossings do not become invented selectable junctions',()=>{
+ const dots=routeJunctions(fc([feature('horizontal',[[-85.01,44],[-84.99,44]]),feature('vertical',[[-85,43.99],[-85,44.01]])]));
+ assert.equal(dots.features.length,4);assert.equal(new Set(dots.features.map(f=>f.properties.component)).size,2);
+ assert.ok(!dots.features.some(f=>f.geometry.coordinates[0]===-85&&f.geometry.coordinates[1]===44));
+ assert.equal(routeJunctions(fc([])).features.length,0);
 });

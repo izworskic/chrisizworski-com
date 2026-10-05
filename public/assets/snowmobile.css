@@ -187,3 +187,6 @@ button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{
 @media(max-width:600px){.route-controls button{padding:8px 10px;min-height:44px;font-size:13px}.route-toolbar{top:0}.route-planner #map{height:420px}}
 
 .route-stops[hidden]{display:none}
+
+.route-junction{cursor:pointer}
+.route-junction:focus{stroke:#112f43;stroke-width:4}

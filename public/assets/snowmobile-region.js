@@ -1,6 +1,6 @@
 const $=s=>document.querySelector(s);
 const ORIGIN_NAMES={'43.5945,-83.8889':'Bay City','43.4195,-83.9508':'Saginaw','43.6156,-84.2472':'Midland','42.7325,-84.5555':'Lansing','42.9634,-85.6681':'Grand Rapids','42.3314,-83.0458':'Detroit','44.7631,-85.6206':'Traverse City'};
-let DATA=null,MAP=null,LAYER=null,CLOSURE_LAYER=null,SNOW_LAYER=null,CLOSURES=null;
+let DATA=null,MAP=null,LAYER=null,CLOSURE_LAYER=null,SNOW_LAYER=null,CLOSURES=null,JUNCTION_LAYER=null;
 let ROUTE_MODE=false,ROUTE_POINTS=[],ROUTE_MARKERS=[],ROUTE_LINE=null;
 const ROUTE_CLICK_EVENTS=new WeakSet();
 let ROUTE_REQUEST_ID=0,ROUTE_ABORT=null;
@@ -172,6 +172,9 @@ function drawMap(d){
   if(LAYER)LAYER.remove(); if(CLOSURE_LAYER)CLOSURE_LAYER.remove();
   LAYER=L.geoJSON(fc,{style:f=>{const p=f.properties||{};return {weight:p.band==='CLOSED'?7:5,opacity:.9,color:mapBandColor(p.band)}},onEachFeature:(f,l)=>{const p=f.properties||{};const title=p.trailNetwork||p.id||'DNR trail segment';const band=p.band||'DNR DESIGNATED';const score=Number.isFinite(p.score)?` · ${p.score}/100`:'';const why=Array.isArray(p.reasons)&&p.reasons.length?`<br>${esc(p.reasons[0])}`:'';const status=p.officialStatus?`<br>DNR snowmobile status: ${esc(p.officialStatus)}`:'';const groom=p.groomType?`<br>Grooming type: ${esc(p.groomType)} · ${esc(p.groomingSponsor||'sponsor not stated')}`:`<br>${esc(p.groomingSponsor||'Grooming sponsor not stated')}`;l.bindPopup(`<strong>${esc(title)}</strong><br>${esc(band)}${score}${status}${groom}${why}`,{autoPan:false});l.on('click',e=>{if(ROUTE_MODE)onMapClick(e);else track('snowmobile_segment_open',{segment:String(p.id||title),band:String(p.band||'unknown')});})}}).addTo(MAP);
   const closures=CLOSURES||[];if(closures.length)CLOSURE_LAYER=L.geoJSON({type:'FeatureCollection',features:closures},{style:{weight:7,opacity:1,color:'#5f2c2a',dashArray:'7 5'},onEachFeature:(f,l)=>{const p=f.properties||{};l.bindPopup(`<strong>Official DNR temporary closure</strong><br>${esc(p.TrailNameP||p.DNRTrail||'Trail segment')}<br>${esc(p.PublicComm||p.OpenClosed||'Closure detail available from DNR')}`)}}).addTo(MAP);
+  if(JUNCTION_LAYER)JUNCTION_LAYER.remove();
+  JUNCTION_LAYER=L.geoJSON(d.routeJunctions||{type:'FeatureCollection',features:[]},{pointToLayer:(f,latlng)=>L.circleMarker(latlng,{radius:6,color:'#fff',weight:2,fillColor:'#176d9c',fillOpacity:1,className:'route-junction'}),onEachFeature:(f,l)=>{l.bindTooltip?.(esc(f.properties.label)+' · route junction',{direction:'top'});l.on('click',e=>{if(!ROUTE_MODE&&ROUTE_POINTS.length){setRouteHint('Choose Edit stops to change this route, or Start over for a new one.');return;}if(!ROUTE_MODE)toggleRouteMode();onMapClick({...e,latlng:{lat:f.geometry.coordinates[1],lng:f.geometry.coordinates[0]},junction:f.properties});});}}).addTo(MAP);
+  updateJunctionStyles();
   try{MAP.fitBounds(LAYER.getBounds(),{padding:[15,15]})}catch{}
 }
 function toggleSnowDepth(){
@@ -192,7 +195,11 @@ let ROUTE_BUSY=false;
 function invalidateRoute(){ROUTE_REQUEST_ID++;if(ROUTE_ABORT)ROUTE_ABORT.abort();ROUTE_ABORT=null;ROUTE_BUSY=false;if(ROUTE_LINE){ROUTE_LINE.remove();ROUTE_LINE=null;}const host=routeResultHost();if(host){host.hidden=true;host.innerHTML='';}}
 function clearRoutePoints(){invalidateRoute();for(const m of ROUTE_MARKERS)m.remove();ROUTE_MARKERS=[];ROUTE_POINTS=[];}
 function setRouteHint(text,on=true){for(const id of ['routeHint','mapRouteHint']){const el=$('#'+id);if(el){el.hidden=!on;el.textContent=text;}}}
-function routeAvailable(){return !!(MAP&&DATA?.scoredGeometry?.features?.some(f=>['LineString','MultiLineString'].includes(f.geometry?.type)));}
+function routeAvailable(){return !!(MAP&&DATA?.routeJunctions?.features?.length);}
+function updateJunctionStyles(){
+  const component=ROUTE_POINTS[0]?.component;
+  JUNCTION_LAYER?.eachLayer?.(l=>{const p=l.feature.properties,connected=component===undefined||p.component===component;l.setStyle?.({radius:ROUTE_MODE?8:6,fillColor:connected?'#176d9c':'#9caaaF',fillOpacity:connected?1:.5});const el=l.getElement?.();if(el){el.setAttribute('role','button');el.setAttribute('tabindex',ROUTE_MODE&&connected?'0':'-1');el.setAttribute('aria-label',p.label+' — '+(connected?'Add route stop':'Not connected to your start'));if(!el.dataset.routeKeyBound){el.dataset.routeKeyBound='1';el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();onMapClick({latlng:l.getLatLng(),junction:p,originalEvent:e});}});}}});
+}
 function syncRouteControls(){
   const n=ROUTE_POINTS.length,available=routeAvailable();
   const btn=routeModeButton();if(btn){btn.disabled=!available;btn.textContent=ROUTE_MODE||n?'Start over':'Plan a route';btn.setAttribute('aria-pressed',String(ROUTE_MODE));}
@@ -200,24 +207,28 @@ function syncRouteControls(){
   const undo=$('#undoRoute');if(undo)undo.disabled=!n||ROUTE_BUSY;
   const edit=$('#editRoute');if(edit)edit.hidden=ROUTE_MODE||!n||ROUTE_BUSY;
   const clear=$('#clearRoute');if(clear)clear.hidden=!n&&!ROUTE_MODE;
-  const list=$('#routeStops');if(list){list.hidden=!n;list.innerHTML=ROUTE_POINTS.map((p,i)=>`<li>${i===0?'Start':`Stop ${i+1}`} · ${p.lat.toFixed(4)}, ${p.lng.toFixed(4)}</li>`).join('');}
-  if(MAP)MAP.getContainer().style.cursor=ROUTE_MODE&&!ROUTE_BUSY?'crosshair':'';
+  const list=$('#routeStops');if(list){list.hidden=!n;list.innerHTML=ROUTE_POINTS.map((p,i)=>`<li>${i===0?'Start':`Stop ${i+1}`} · ${esc(p.label||`${p.lat.toFixed(4)}, ${p.lng.toFixed(4)}`)}</li>`).join('');}
+  if(MAP)MAP.getContainer().style.cursor=ROUTE_MODE&&!ROUTE_BUSY?'pointer':'';updateJunctionStyles();
 }
-function updateRouteAvailability(){syncRouteControls();if(!routeAvailable())setRouteHint(DATA?'Trail route planning is unavailable because the mapped trail data could not be loaded. Use the official DNR trail maps below.':'Loading trail map…');else if(!ROUTE_POINTS.length)setRouteHint(ROUTE_MODE?'Tap your starting point on a mapped trail.':'Choose Plan a route, then tap your stops in order.');}
+function updateRouteAvailability(){syncRouteControls();if(!routeAvailable())setRouteHint(DATA?'Trail route planning is unavailable: no selectable junctions were found in the current mapped, nonclosed trail network. Use the official DNR trail maps below.':'Loading trail map…');else if(!ROUTE_POINTS.length)setRouteHint(ROUTE_MODE?'Tap a blue junction dot to choose your start.':'Blue dots mark selectable junctions and trail ends. Choose Plan a route, or tap a dot to start.');}
 function scrollRouteElement(el){el?.scrollIntoView?.({block:'nearest',behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
 function setRouteMode(on){ROUTE_MODE=on;syncRouteControls();}
 // The main button always starts a fresh draft. It never toggles ambiguously.
-function toggleRouteMode(){if(!routeAvailable()){updateRouteAvailability();return;}clearRoutePoints();setRouteMode(true);setRouteHint('Tap your starting point on a mapped trail.');track('snowmobile_route_mode_start',{region:DATA?.key||'unknown'});}
+function toggleRouteMode(){if(!routeAvailable()){updateRouteAvailability();return;}clearRoutePoints();setRouteMode(true);setRouteHint('Tap a blue junction dot to choose your start.');track('snowmobile_route_mode_start',{region:DATA?.key||'unknown'});}
 function clearRoute(){clearRoutePoints();setRouteMode(false);updateRouteAvailability();track('snowmobile_route_cleared',{region:DATA?.key||'unknown'});}
-function draftHint(){setRouteHint(ROUTE_POINTS.length<2?(ROUTE_POINTS.length?'Start selected. Tap your next stop or finish.':'Tap your starting point on a mapped trail.'):`${ROUTE_POINTS.length} stops selected. Add another stop or choose Build route.`);}
+function draftHint(){setRouteHint(ROUTE_POINTS.length<2?(ROUTE_POINTS.length?'Start selected. Tap another blue junction dot for your next stop or finish.':'Tap a blue junction dot to choose your start.'):`${ROUTE_POINTS.length} stops selected. Tap another blue dot or choose Build route.`);}
 function undoRoute(){if(!ROUTE_POINTS.length||ROUTE_BUSY)return;invalidateRoute();ROUTE_POINTS.pop();ROUTE_MARKERS.pop()?.remove();setRouteMode(true);draftHint();}
 function editRoute(){if(!ROUTE_POINTS.length)return;invalidateRoute();setRouteMode(true);draftHint();}
 function onMapClick(e){
   if(!ROUTE_MODE||!MAP||ROUTE_BUSY)return;
   const original=e.originalEvent;if(original&&typeof original==='object'){if(ROUTE_CLICK_EVENTS.has(original))return;ROUTE_CLICK_EVENTS.add(original);}
-  MAP.closePopup();if(ROUTE_POINTS.length>=12){setRouteHint('12 stops selected. Build route, or undo a stop to change it.');return;}
-  invalidateRoute();const marker=L.circleMarker(e.latlng,{radius:9,color:'#2a1c0a',weight:2,fillColor:ROUTE_MARK_COLOR,fillOpacity:.95}).addTo(MAP);
-  ROUTE_MARKERS.push(marker);ROUTE_POINTS.push(e.latlng);marker.bindTooltip?.(String(ROUTE_POINTS.length),{permanent:true,direction:'top',className:'route-stop-label'});syncRouteControls();draftHint();
+  MAP.closePopup();
+  if(!e.junction){setRouteHint('Tap a blue junction dot, rather than an unmarked spot on the trail. Zoom in to separate nearby dots.');return;}
+  if(ROUTE_POINTS[0]&&e.junction.component!==ROUTE_POINTS[0].component){setRouteHint('That gray junction is on a disconnected trail network. Choose a blue dot, or Start over to plan in that network.');return;}
+  if(ROUTE_POINTS.at(-1)?.junctionId===e.junction.id){setRouteHint('That is your last selected stop. Choose a different blue junction dot.');return;}
+  if(ROUTE_POINTS.length>=12){setRouteHint('12 stops selected. Build route, or undo a stop to change it.');return;}
+  invalidateRoute();const marker=L.circleMarker(e.latlng,{radius:9,color:'#2a1c0a',weight:2,fillColor:ROUTE_MARK_COLOR,fillOpacity:.95,interactive:false}).addTo(MAP);
+  ROUTE_MARKERS.push(marker);ROUTE_POINTS.push({...e.latlng,junctionId:e.junction.id,component:e.junction.component,label:e.junction.label});marker.bindTooltip?.(String(ROUTE_POINTS.length),{permanent:true,direction:'top',className:'route-stop-label'});syncRouteControls();draftHint();
 }
 function routeResultHtml(route){
   if(!route)return '<p><strong>Route unavailable.</strong> The routing service did not return a usable result.</p>';
@@ -260,7 +271,7 @@ function inheritTrip(){
 }
 async function load(){
   const key=window.SNOWMOBILE_REGION;
-  try{const r=await fetch(`/api/snowmobile?region=${encodeURIComponent(key)}`);const payload=await r.json();if(!r.ok)throw new Error(payload.detail||payload.error||r.status);const d={...payload.region,season:payload.season,sources:payload.sources,generatedAt:payload.generatedAt,truthBoundary:payload.truthBoundary,operational:payload.operational};render(d);inheritTrip();}
+  try{const r=await fetch(`/api/snowmobile?region=${encodeURIComponent(key)}&v=20261005-junction-dots-5`);const payload=await r.json();if(!r.ok)throw new Error(payload.detail||payload.error||r.status);const d={...payload.region,season:payload.season,sources:payload.sources,generatedAt:payload.generatedAt,truthBoundary:payload.truthBoundary,operational:payload.operational};render(d);inheritTrip();}
   catch(e){$('#status').textContent='DATA UNAVAILABLE';$('#drive').innerHTML='<strong>No ride recommendation.</strong> Live source verification failed, so the page is not substituting guessed conditions.';updateRouteAvailability();setRouteHint('Trail route planning is unavailable while the source data cannot be loaded. Use the official DNR trail maps below.');const segHead=$('#segments'); if(segHead)segHead.innerHTML='<p>'+esc(e.message)+'</p>';}
 }
 load();
