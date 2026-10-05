@@ -13,10 +13,11 @@ This subsystem replaces the paid GSC Wizard dependency for first-party Search Co
 - Aggregates pages into tool families.
 - Stores full reports privately in the existing Upstash Redis instance for 400 days.
 - Emits a compact `gsc_analytics_summary` object to Vercel runtime logs so portfolio analysis can be inspected without publishing raw query data.
+- Runs daily from `.github/workflows/gsc-analytics.yml` using short-lived GitHub OIDC authentication, so no GitHub secret is required to trigger the protected collector.
 
 ## Security
 
-Raw Search Console data is never written to the public repository or a public endpoint. `/api/gsc-analytics?view=report` and `view=collect` require the existing `CRON_SECRET` bearer token. The health view exposes only readiness booleans.
+Raw Search Console data is never written to the public repository or a public endpoint. `/api/gsc-analytics?view=report` and `view=collect` require either the existing `CRON_SECRET` bearer token or a verified short-lived GitHub OIDC token from the exact GSC analytics workflow on the repository's `main` branch. The health view exposes only readiness booleans.
 
 The Google credential must be stored as a Vercel secret, never committed.
 
@@ -65,4 +66,6 @@ The repository-wide `npm test` command also includes this test automatically bec
 
 ## Scheduling
 
-The collector is safe to run once daily. The root `vercel.json` already owns production cron configuration. Add `/api/gsc-analytics?view=collect` to that cron list only through a full-file verified edit; do not replace or truncate the existing routing configuration. Until that source-controlled cron line is added, the endpoint can be invoked manually with the existing `CRON_SECRET`.
+`.github/workflows/gsc-analytics.yml` runs once daily at `11:37 UTC` and can also be started with `workflow_dispatch`. The workflow requests a GitHub OIDC token whose audience is the GSC analytics endpoint. The endpoint verifies the token signature plus repository ID, owner ID, `main` ref, exact workflow ref, hosted-runner claim, event type, expiration, and audience before collection.
+
+This avoids modifying the large root `vercel.json` and avoids storing the Vercel cron secret in GitHub.
