@@ -73,3 +73,17 @@ test('pending audits stay explicit rather than being counted as verified', () =>
   const pending = contract.properties.filter(item => item.status === 'pending-audit');
   assert.deepEqual(pending.map(item => item.id).sort(), ['ausable-field-map', 'pictured-rocks']);
 });
+
+test('creator authority value function is weighted, measurable, and names the unresolved source audits', () => {
+  const model = contract.authorityValueFunction;
+  assert.ok(model, 'creator authority value function is required');
+  assert.equal(model.scoreRange[0], 0);
+  assert.equal(model.scoreRange[1], 100);
+  assert.equal(model.dimensions.reduce((sum, item) => sum + item.weight, 0), 100);
+  assert.ok(model.releaseTarget >= 90 && model.releaseTarget <= 100);
+  assert.ok(model.hardStops.some(item => item.includes('thin name-only page')));
+  assert.ok(model.hardStops.some(item => item.includes('protected winning title')));
+  assert.equal(model.measurement.distinguishImplementationCoverageFromRankingOutcome, true);
+  assert.deepEqual(model.auditState.pendingSourceRepositoryAudit.sort(), ['ausable-field-map', 'pictured-rocks']);
+  assert.equal(model.auditState.totalTrackedProperties, contract.properties.length);
+});
