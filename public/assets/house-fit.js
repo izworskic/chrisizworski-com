@@ -39,7 +39,7 @@
       askingPrice: Number(valueOf(coreForm, 'askingPrice')),
       monthlyLimit: Number(valueOf(coreForm, 'monthlyLimit')),
       downPayment: Number(valueOf(coreForm, 'downPayment')),
-      ratePct: Number(valueOf(coreForm, 'ratePct')),
+      ratePct: rateTouched ? Number(valueOf(coreForm, 'ratePct')) : '',
       termYears: Number(valueOf(coreForm, 'termYears')),
       propertyTaxAnnual: valueOf(accuracyForm, 'propertyTaxAnnual'),
       homeInsuranceAnnual: valueOf(accuracyForm, 'homeInsuranceAnnual'),
@@ -81,6 +81,13 @@
 
   function render(decision) {
     lastDecision = decision;
+    if (!rateTouched && decision.input && Number.isFinite(Number(decision.input.ratePct))) {
+      coreForm.elements.ratePct.value = Number(decision.input.ratePct).toFixed(2);
+      const rateProv = decision.provenance && decision.provenance.mortgageRate;
+      $('rateSource').textContent = rateProv === 'GOVERNMENT SOURCED'
+        ? 'Freddie Mac 30-year benchmark via FRED · editable'
+        : 'Planning default · editable';
+    }
     const trueCost = decision.trueMonthlyCost || {};
     $('askingPriceResult').textContent = money0(decision.askingPrice);
     $('monthlyLimitResult').textContent = moneyMo(decision.monthlyLimit);
@@ -225,7 +232,11 @@
   function applyScenario(key) {
     if (!lastDecision) return;
     const n = (form, name) => Number(valueOf(form, name)) || 0;
-    if (key === 'rate-down-1') coreForm.elements.ratePct.value = Math.max(0, n(coreForm, 'ratePct') - 1).toFixed(2);
+    if (key === 'rate-down-1') {
+      coreForm.elements.ratePct.value = Math.max(0, n(coreForm, 'ratePct') - 1).toFixed(2);
+      rateTouched = true;
+      $('rateSource').textContent = 'Sensitivity-adjusted planning rate.';
+    }
     if (key === 'down-plus-20') coreForm.elements.downPayment.value = n(coreForm, 'downPayment') + 20000;
     if (key === 'limit-plus-250') coreForm.elements.monthlyLimit.value = n(coreForm, 'monthlyLimit') + 250;
     if (key === 'no-commute') { commuteToggle.checked = false; commuteFields.hidden = true; }
