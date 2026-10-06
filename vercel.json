@@ -29,6 +29,15 @@
     "api/field-camera.js": {
       "maxDuration": 20
     },
+    "api/manistee-river-conditions.js": {
+      "maxDuration": 20
+    },
+    "api/manistee-river-hydrography.js": {
+      "maxDuration": 20
+    },
+    "api/manistee-river-weather.js": {
+      "maxDuration": 20
+    },
     "api/**/*.js": {
       "maxDuration": 10
     }

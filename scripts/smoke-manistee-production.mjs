@@ -5,7 +5,7 @@ const checks=[];
 
 async function fetchText(path,{expectNoindex=false}={}){
   const url=new URL(path,ORIGIN);
-  const response=await fetch(url,{redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/5.1'},signal:AbortSignal.timeout(15000)});
+  const response=await fetch(url,{redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/5.1'},signal:AbortSignal.timeout(25000)});
   const text=await response.text();
   const robots=(response.headers.get('x-robots-tag')||'').toLowerCase();
   if(!response.ok)throw new Error(`${path} returned ${response.status}`);
