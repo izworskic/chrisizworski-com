@@ -2442,12 +2442,12 @@
     },
     {
       "id": "house-fit",
-      "name": "Can I Afford This House? Fit Ceiling",
+      "name": "Can I Afford This House? True Monthly Cost",
       "canonical": "https://chrisizworski.com/can-i-afford-this-house/",
       "aliases": [],
       "kind": "decision-engine",
       "cluster": "consumer-finance",
-      "primaryIntent": "what can I afford to pay for this specific house within my chosen monthly ownership-cost limit",
+      "primaryIntent": "what will this specific house really cost per month from address asking price down payment and mortgage rate",
       "seasons": [
         1,
         2,
