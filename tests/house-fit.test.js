@@ -89,6 +89,17 @@ test('sensitivity scenarios move in expected directions', () => {
   assert.ok(byKey['no-commute'].delta >= 0);
   assert.ok(byKey['insurance-plus-100'].delta <= 0);
 });
+test('formatted currency inputs are normalized safely', () => {
+  const input = normalizeInput(base({ askingPrice: '$425,000', downPayment: '$85,000', propertyTaxAnnual: '$5,200' }), enrichment);
+  assert.equal(input.askingPrice, 425000);
+  assert.equal(input.downPayment, 85000);
+  assert.equal(input.propertyTaxAnnual, 5200);
+});
+test('explanatory price effects avoid dollar-level false precision', () => {
+  const result = buildDecision(base({ includeCommute: true, commuteOneWayMiles: 20 }), enrichment);
+  assert.ok(result.sensitivity.every((x) => x.ceiling % 5000 === 0 && x.delta % 5000 === 0));
+  assert.ok(result.whyCeilingMoved.every((x) => x.fitCeilingEffect % 1000 === 0));
+});
 test('solver is numerically stable on edge inputs', () => {
   const input = normalizeInput(base({ askingPrice: 10000, downPayment: 50000, ratePct: 0, termYears: 15, monthlyLimit: 1500 }), enrichment);
   const ceiling = solveFitCeiling(input, enrichment, { scenario: 'mid' });
