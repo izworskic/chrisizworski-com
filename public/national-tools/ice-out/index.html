@@ -21,14 +21,14 @@
 <link rel="stylesheet" href="https://lspp-ice-out.vercel.app/north-america/portfolio-type.css?v=portfolio-type-v1" />
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Lake Ice-Out Forecast","url":"https://chrisizworski.com/national-tools/ice-out/","applicationCategory":"WeatherApplication","operatingSystem":"Web","isAccessibleForFree":true,"author":{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},"description":"Ice-out status, seasonal outlook, official lake search and satellite monitoring for northern United States and Canada.","publisher":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-09-08"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","@id":"https://chrisizworski.com/national-tools/ice-out/#app","name":"Lake Ice-Out Forecast","url":"https://chrisizworski.com/national-tools/ice-out/","applicationCategory":"WeatherApplication","operatingSystem":"Web","isAccessibleForFree":true,"author":{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},"description":"Search northern U.S. and Canadian lakes for current ice-out status, calibrated spring timing, live thaw signals and NASA satellite imagery.","publisher":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-10-05"}</script>
 </head>
 <body>
 <div class="app">
   <header class="toolbar">
     <div class="identity">
       <div class="brandmark">ICE</div>
-      <div><strong>Lake Ice-Out Forecast</strong><small>Northern U.S. + Canada</small></div>
+      <div><strong>Lake Ice-Out Forecast</strong><small>Northern U.S. + Canada</small><a href="https://chrisizworski.com/" style="display:block;font-size:.75rem;line-height:1.4;color:inherit">Chris Izworski</a></div>
     </div>
     <div class="search-zone">
       <label for="search">Find a lake</label>
@@ -100,6 +100,13 @@
       </article>
     </section>
 
+    <section data-ice-planning-guide aria-labelledby="icePlanningHeading" style="max-width:980px;margin:24px auto;padding:0 20px">
+      <h2 id="icePlanningHeading">How to use the ice-out outlook</h2>
+      <p>Find a lake, choose a target date, and compare the probability window with the historical baseline. The interactive forecast loads after the page opens; a loading message is not an ice-out observation. During spring breakup, available weather and validated thaw signals can adjust the outlook. Outside that season, use the next spring outlook as planning context, rather than treating today's weather as a months-ahead prediction.</p>
+      <p>Use the satellite date control to compare images, keeping cloud cover separate from lake ice. For wider spring context, compare <a href="/national-tools/snow/">measured snowpack and snowmelt</a> and <a href="/national-tools/rivers/">river gauge conditions</a>. Neither establishes that a particular lake is ice-free. Check local observations before making a trip decision.</p>
+      <noscript><p>Interactive forecasts require JavaScript. The planning explanation, forecast method and lake directory remain readable here.</p></noscript>
+    </section>
+
     <details class="method-panel">
       <summary>Data and forecast method</summary>
       <div class="method-body">
@@ -112,6 +119,9 @@
     <div class="safety"><strong>Not an ice-safety tool.</strong> Ice-out probability does not estimate ice thickness or whether ice can support people, vehicles or equipment.</div>
   </main>
 </div>
+<footer style="max-width:980px;margin:24px auto;padding:16px 20px;border-top:1px solid #ddd7cb;font-size:.8rem;line-height:1.5">
+  Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · <a href="/national-tools/">U.S. Outdoor Tools</a> · © 2026 Chris Izworski
+</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="https://lspp-ice-out.vercel.app/north-america/lakes.js"></script>
 <script src="https://lspp-ice-out.vercel.app/north-america/app.js?v=lake-search-v4"></script>

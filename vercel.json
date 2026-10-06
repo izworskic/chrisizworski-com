@@ -675,6 +675,70 @@
       "destination": "/national-tools/ice-out/index.html"
     },
     {
+      "source": "/national-tools/ice-out/lake-vermilion-minnesota",
+      "destination": "/national-tools/ice-out/lake-vermilion-minnesota/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/lake-vermilion-minnesota/",
+      "destination": "/national-tools/ice-out/lake-vermilion-minnesota/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/mille-lacs-minnesota",
+      "destination": "/national-tools/ice-out/mille-lacs-minnesota/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/mille-lacs-minnesota/",
+      "destination": "/national-tools/ice-out/mille-lacs-minnesota/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/leech-lake-minnesota",
+      "destination": "/national-tools/ice-out/leech-lake-minnesota/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/leech-lake-minnesota/",
+      "destination": "/national-tools/ice-out/leech-lake-minnesota/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/houghton-lake-michigan",
+      "destination": "/national-tools/ice-out/houghton-lake-michigan/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/houghton-lake-michigan/",
+      "destination": "/national-tools/ice-out/houghton-lake-michigan/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/lake-winnipesaukee-new-hampshire",
+      "destination": "/national-tools/ice-out/lake-winnipesaukee-new-hampshire/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/lake-winnipesaukee-new-hampshire/",
+      "destination": "/national-tools/ice-out/lake-winnipesaukee-new-hampshire/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/moosehead-lake-maine",
+      "destination": "/national-tools/ice-out/moosehead-lake-maine/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/moosehead-lake-maine/",
+      "destination": "/national-tools/ice-out/moosehead-lake-maine/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/lake-simcoe-ontario",
+      "destination": "/national-tools/ice-out/lake-simcoe-ontario/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/lake-simcoe-ontario/",
+      "destination": "/national-tools/ice-out/lake-simcoe-ontario/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/lake-of-the-woods",
+      "destination": "/national-tools/ice-out/lake-of-the-woods/index.html"
+    },
+    {
+      "source": "/national-tools/ice-out/lake-of-the-woods/",
+      "destination": "/national-tools/ice-out/lake-of-the-woods/index.html"
+    },
+    {
       "source": "/national-tools/garden",
       "destination": "/api/public-tool-shell?tool=garden"
     },
