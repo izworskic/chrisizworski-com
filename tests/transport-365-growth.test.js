@@ -72,7 +72,7 @@ test("365 transport experiment records observed baselines and the focused toll f
 
 test("Mackinac flagship search surface preserves its separate live-conditions decision contract", () => {
   const html = read("public/mackinac-bridge-live/index.html");
-  assert.match(html, /<title>Mackinac Bridge Conditions Today: Open Status, Wind &amp; Cameras<\/title>/);
+  assert.match(html, /<title>Mackinac Bridge Conditions Today: Status, Wind &amp; Cameras<\/title>/);
   assert.match(html, /<h1>Mackinac Bridge Conditions Today<\/h1>/);
   assert.ok(html.includes('id="mackinac-conditions-answer"'));
   assert.match(html, /Is the Mackinac Bridge open today\?/i);
