@@ -4,7 +4,9 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { readFileSync } = require('node:fs');
 const path = require('node:path');
-const { mortgagePI, normalizeInput, costAtPrice, buildDecision } = require('../lib/house-fit/engine');
+const {
+  mortgagePI, normalizeInput, costAtPrice, realityGap, downPaymentBreakpoint, buildDecision,
+} = require('../lib/house-fit/engine');
 
 function base(overrides = {}) {
   return {
@@ -40,7 +42,7 @@ test('first-run form asks only for address, asking price and down payment', () =
   assert.doesNotMatch(html, /name="includeCommute"/);
 });
 
-test('mortgage-rate override exists only in the post-result adjustment form', () => {
+test('mortgage-rate override exists only after the first result', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
   const resultIndex = html.indexOf('id="result"');
   const rateIndex = html.indexOf('id="rateAdjustForm"');
@@ -71,24 +73,6 @@ test('normalization fixes loan term and automatic assumptions instead of exposin
   assert.equal(input.pmiRatePct, 0.6);
 });
 
-test('higher interest rate raises the property monthly cost', () => {
-  const low = buildDecision(base({ ratePct: 5.5 }), enrichment);
-  const high = buildDecision(base({ ratePct: 7.5 }), enrichment);
-  assert.ok(high.trueMonthlyCost.midpoint > low.trueMonthlyCost.midpoint);
-});
-
-test('higher down payment lowers the property monthly cost', () => {
-  const lowDown = buildDecision(base({ downPayment: 40000 }), enrichment);
-  const highDown = buildDecision(base({ downPayment: 120000 }), enrichment);
-  assert.ok(highDown.trueMonthlyCost.midpoint < lowDown.trueMonthlyCost.midpoint);
-});
-
-test('higher asking price raises the automatic monthly cost', () => {
-  const lower = buildDecision(base({ askingPrice: 350000 }), enrichment);
-  const higher = buildDecision(base({ askingPrice: 500000 }), enrichment);
-  assert.ok(higher.trueMonthlyCost.midpoint > lower.trueMonthlyCost.midpoint);
-});
-
 test('monthly cost automatically includes mortgage tax insurance PMI and maintenance', () => {
   const result = buildDecision(base({ askingPrice: 400000, downPayment: 40000 }), enrichment);
   assert.ok(result.breakdown.mortgagePI > 0);
@@ -100,6 +84,26 @@ test('monthly cost automatically includes mortgage tax insurance PMI and mainten
   assert.ok(result.trueMonthlyCost.midpoint >= result.trueMonthlyCost.low);
 });
 
+test('Reality Gap is true monthly cost minus mortgage principal and interest', () => {
+  const result = buildDecision(base({ askingPrice: 400000, downPayment: 40000 }), enrichment);
+  const expectedMid = result.trueMonthlyCost.midpoint - result.breakdown.mortgagePI;
+  assert.ok(Math.abs(result.realityGap.monthlyMidpoint - expectedMid) < 0.01);
+  assert.ok(result.realityGap.monthlyLow > 0);
+  assert.ok(result.realityGap.monthlyHigh >= result.realityGap.monthlyLow);
+  assert.ok(result.realityGap.nonMortgageSharePct > 0);
+  assert.equal(Object.prototype.hasOwnProperty.call(result, 'incomeBenchmark'), false);
+});
+
+test('Reality Gap helper never returns a negative hidden-cost burden', () => {
+  const low = { total: 100, components: { mortgagePI: 120 } };
+  const mid = { total: 100, components: { mortgagePI: 120 } };
+  const high = { total: 100, components: { mortgagePI: 120 } };
+  const gap = realityGap(low, mid, high);
+  assert.equal(gap.monthlyLow, 0);
+  assert.equal(gap.monthlyMidpoint, 0);
+  assert.equal(gap.monthlyHigh, 0);
+});
+
 test('PMI is included below 20 percent down and removed at exactly 20 percent', () => {
   const below = buildDecision(base({ askingPrice: 400000, downPayment: 79999 }), enrichment);
   const exactly = buildDecision(base({ askingPrice: 400000, downPayment: 80000 }), enrichment);
@@ -108,10 +112,49 @@ test('PMI is included below 20 percent down and removed at exactly 20 percent', 
   assert.match(below.provenance.pmi.note, /exceeds 80%/i);
 });
 
-test('missing local tax data still returns a deliberately broad automatic range', () => {
+test('20 percent breakpoint explains exact extra cash and total monthly savings', () => {
+  const result = buildDecision(base({ askingPrice: 400000, downPayment: 60000 }), enrichment);
+  const bp = result.downPaymentBreakpoint;
+  assert.equal(bp.active, true);
+  assert.equal(bp.targetDownPayment, 80000);
+  assert.equal(bp.extraCashTo20, 20000);
+  assert.ok(bp.pmiMonthly > 0);
+  assert.ok(bp.monthlySavingsAt20 > bp.pmiMonthly, 'savings should include PMI plus lower principal and interest');
+  assert.ok(bp.principalInterestSavings > 0);
+});
+
+test('20 percent breakpoint is inactive at or above 20 percent', () => {
+  const result = buildDecision(base({ askingPrice: 400000, downPayment: 80000 }), enrichment);
+  assert.equal(result.downPaymentBreakpoint.active, false);
+  assert.equal(result.downPaymentBreakpoint.extraCashTo20, 0);
+  assert.equal(result.breakdown.pmi, 0);
+});
+
+test('buyer tripwires surface PMI, insurance uncertainty and FEMA flood quote risk', () => {
+  const result = buildDecision(
+    base({ askingPrice: 400000, downPayment: 40000 }),
+    { ...enrichment, flood: { status: 'AVAILABLE', zone: 'AE', sfha: true } }
+  );
+  const keys = new Set(result.buyerTripwires.map((x) => x.key));
+  assert.ok(keys.has('pmi'));
+  assert.ok(keys.has('insurance'));
+  assert.ok(keys.has('flood'));
+  assert.match(result.buyerTripwires.find((x) => x.key === 'flood').note, /will not invent a premium/i);
+});
+
+test('insurance and tax uncertainty drivers are ranked by monthly spread', () => {
+  const result = buildDecision(base(), enrichment);
+  assert.ok(result.uncertaintyDrivers.length >= 1);
+  for (let i = 1; i < result.uncertaintyDrivers.length; i += 1) {
+    assert.ok(result.uncertaintyDrivers[i - 1].monthlySpread >= result.uncertaintyDrivers[i].monthlySpread);
+  }
+});
+
+test('missing local tax data becomes a tripwire and broad automatic range', () => {
   const result = buildDecision(base(), { ...enrichment, tax: { status: 'UNAVAILABLE' } });
   assert.equal(result.provenance.propertyTax.provenance, 'ESTIMATED RANGE');
   assert.ok(result.trueMonthlyCost.high > result.trueMonthlyCost.low);
+  assert.ok(result.buyerTripwires.some((x) => x.key === 'tax'));
 });
 
 test('SFHA is flagged without inventing a flood-insurance premium', () => {
@@ -137,11 +180,19 @@ test('cash-to-close range is automatically derived from down payment and closing
   assert.ok(result.cashToClose.totalHigh > result.cashToClose.totalLow);
 });
 
-test('income benchmark is derived from monthly housing cost without pretending to know debts', () => {
-  const result = buildDecision(base(), enrichment);
-  assert.equal(result.incomeBenchmark.housingRatioPct, 28);
-  assert.ok(result.incomeBenchmark.annualLow > result.trueMonthlyCost.low * 12);
-  assert.match(result.incomeBenchmark.note, /does not include your other debts/i);
+test('higher rate, higher asking price and lower down payment all worsen monthly carrying cost', () => {
+  assert.ok(
+    buildDecision(base({ ratePct: 7.5 }), enrichment).trueMonthlyCost.midpoint >
+    buildDecision(base({ ratePct: 5.5 }), enrichment).trueMonthlyCost.midpoint
+  );
+  assert.ok(
+    buildDecision(base({ askingPrice: 500000 }), enrichment).trueMonthlyCost.midpoint >
+    buildDecision(base({ askingPrice: 350000 }), enrichment).trueMonthlyCost.midpoint
+  );
+  assert.ok(
+    buildDecision(base({ downPayment: 40000 }), enrichment).trueMonthlyCost.midpoint >
+    buildDecision(base({ downPayment: 120000 }), enrichment).trueMonthlyCost.midpoint
+  );
 });
 
 test('formatted currency inputs normalize safely', () => {
@@ -151,29 +202,31 @@ test('formatted currency inputs normalize safely', () => {
   assert.equal(input.ratePct, 6.5);
 });
 
-test('engine has no monthly limit and returns no Fit Ceiling', () => {
-  const withOldField = buildDecision(base({ monthlyLimit: 1 }), enrichment);
-  const withoutOldField = buildDecision(base(), enrichment);
-  assert.equal(withOldField.trueMonthlyCost.midpoint, withoutOldField.trueMonthlyCost.midpoint);
-  assert.equal(Object.prototype.hasOwnProperty.call(withOldField, 'fitCeiling'), false);
-  assert.equal(Object.prototype.hasOwnProperty.call(withOldField, 'monthlyLimit'), false);
+test('engine has no monthly limit, generic income ratio or Fit Ceiling', () => {
+  const result = buildDecision(base({ monthlyLimit: 1 }), enrichment);
+  assert.equal(Object.prototype.hasOwnProperty.call(result, 'fitCeiling'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(result, 'monthlyLimit'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(result, 'incomeBenchmark'), false);
 });
 
-test('page promise is three-input automation with automatic current rate', () => {
+test('page promise centers mortgage-versus-real-cost differentiation', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
-  assert.match(html, /Three inputs\. The app does the rest\./i);
-  assert.match(html, /house address, asking price and your down payment/i);
-  assert.match(html, /current 30-year mortgage benchmark/i);
-  assert.match(html, /PMI when the down payment is below 20%/i);
-  assert.doesNotMatch(html, /reverse-solves/i);
+  assert.match(html, /mortgage payment is only part of the story/i);
+  assert.match(html, /Reality Gap/i);
+  assert.match(html, /What the mortgage calculator misses/i);
+  assert.match(html, /Buyer tripwires/i);
+  assert.match(html, /20% breakpoint/i);
+  assert.doesNotMatch(html, /Gross-income benchmark/i);
+  assert.doesNotMatch(html, /28% front-end/i);
   assert.doesNotMatch(html, /Fit Ceiling/i);
 });
 
-test('mobile page keeps true monthly cost ahead of support content', () => {
+test('mobile page keeps mortgage, true cost and Reality Gap ahead of support content', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
   const css = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.css'), 'utf8');
   assert.match(html, /name="viewport" content="width=device-width,initial-scale=1"/);
-  assert.ok(html.indexOf('id="trueMonthlyResult"') < html.indexOf('id="breakdownGrid"'));
+  assert.ok(html.indexOf('id="mortgageOnlyResult"') < html.indexOf('id="breakdownGrid"'));
+  assert.ok(html.indexOf('id="realityGapResult"') < html.indexOf('id="breakdownGrid"'));
   assert.match(css, /@media\(max-width:390px\)/);
 });
 
@@ -183,4 +236,14 @@ test('cost calculation remains finite on edge inputs', () => {
   for (const value of [cost.total, cost.loanPrincipal, cost.ltv]) assert.ok(Number.isFinite(value));
   assert.equal(cost.loanPrincipal, 0);
   assert.ok(cost.total >= 0);
+});
+
+test('downPaymentBreakpoint helper is stable at exact threshold', () => {
+  const input = normalizeInput(base({ askingPrice: 400000, downPayment: 80000 }), enrichment);
+  const tax = { mode: 'rate-range', lowRatePct: 1, midRatePct: 1, highRatePct: 1 };
+  const insurance = { mode: 'rate-range', lowRatePct: 1, midRatePct: 1, highRatePct: 1 };
+  const flood = { monthly: 0, needsQuote: false };
+  const current = costAtPrice(400000, input, enrichment, { scenario: 'mid', tax, insurance, flood });
+  const bp = downPaymentBreakpoint(input, enrichment, tax, insurance, flood, current);
+  assert.equal(bp.active, false);
 });
