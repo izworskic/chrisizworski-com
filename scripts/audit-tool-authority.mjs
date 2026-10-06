@@ -304,7 +304,7 @@ if (process.argv.includes('--built') || releaseMode) {
             : { status: 200, headers: new Headers(), html: await read(mainHtmlFile(url)) };
           const result = auditDocument(output.html, url, tool, output.headers);
           if (liveMode && output.status !== 200) result.errors.push('Public response status is ' + output.status + '.');
-          if (liveMode && !/text\\/html/i.test(output.headers.get('content-type') || '')) result.errors.push('Public response is not HTML.');
+          if (liveMode && !/text\/html/i.test(output.headers.get('content-type') || '')) result.errors.push('Public response is not HTML.');
           last = { id: tool.id, canonical: url, kind: liveMode ? 'public-fetch' : 'static-emitted', evidence: route, audit: { ...result, status: output.status, attempts: attempt } };
         } catch (error) {
           last = { id: tool.id, canonical: url, kind: liveMode ? 'public-fetch' : 'static-emitted', evidence: route, audit: { checked: false, errors: ['Fetch/read failed: ' + error.message], warnings: [], attempts: attempt } };
@@ -324,7 +324,7 @@ const dispositionCounts = reports.reduce((out, item) => (out[item.kind] = (out[i
 console.log(JSON.stringify({
   mode: releaseMode ? 'post-promotion-changed-public-output' : liveMode ? 'live-public-output' : 'post-injection-emitted-output',
   note: 'Output checks cover each registered non-infrastructure tool when bytes are available. Source ownership and public output are reported separately; an external/pending route is never counted as verified from source readiness.',
-  summary: { registeredTools: tools.length, registeredOutputChecked: checked.filter(item => !item.id.startsWith('petoskey-page:')).length, additionalPetoskeyPages: petoskeyPages.length, additionalMichiganIcePages: reports.filter(item => item.id.startsWith('michigan-ice-page:')).length, outputChecked: checked.length, incompleteRoutes: incomplete.length, dispositionCounts, errors: failures.length, warnings: warnings.length },
+  summary: { registeredTools: tools.length, registeredOutputChecked: checked.filter(item => !item.id.startsWith('petoskey-page:') && !item.id.startsWith('michigan-ice-page:')).length, additionalPetoskeyPages: petoskeyPages.length, additionalMichiganIcePages: reports.filter(item => item.id.startsWith('michigan-ice-page:')).length, outputChecked: checked.length, incompleteRoutes: incomplete.length, dispositionCounts, errors: failures.length, warnings: warnings.length },
   routes: reports,
 }, null, 2));
 if (checkMode && (failures.length || (releaseMode && incomplete.length))) {
