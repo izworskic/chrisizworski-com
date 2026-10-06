@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-10-05",
+  "updated": "2026-10-06",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -2439,6 +2439,43 @@
       "searchEvidence": {
         "status": "unknown"
       }
+    },
+    {
+      "id": "house-fit",
+      "name": "Can I Afford This House? Fit Ceiling",
+      "canonical": "https://chrisizworski.com/can-i-afford-this-house/",
+      "aliases": [],
+      "kind": "decision-engine",
+      "cluster": "consumer-finance",
+      "primaryIntent": "what can I afford to pay for this specific house within my chosen monthly ownership-cost limit",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "united-states"
+      ],
+      "personas": [
+        "home-buyer",
+        "relocating-buyer"
+      ],
+      "networkRole": "leaf",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
     }
   ],
   "relationships": [
@@ -3433,6 +3470,14 @@
       "surface": "transportation-crossings",
       "reason": "Shared live crossing comparison and source freshness patterns",
       "strength": "strong"
+    },
+    {
+      "from": "house-fit",
+      "to": "nyc-crossing",
+      "type": "decision-next",
+      "surface": "commute-cost",
+      "strength": "optional",
+      "reason": "NYC-area buyers who include commute burden can continue into crossing toll and congestion-pricing context without expanding the Fit Ceiling itself."
     }
   ],
   "cannibalizationGroups": [
