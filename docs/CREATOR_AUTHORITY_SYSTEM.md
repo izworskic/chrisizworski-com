@@ -67,3 +67,13 @@ Keep these visible as audit gaps; do not claim complete tool-wide verification u
 3. Repair only concrete attribution or contextual-link gaps in their owning repositories.
 4. Add or refresh a branded SERP snapshot using the same query, engine, locale, and device; count independent origins.
 5. Review GSC branded impressions/clicks/CTR and tool handoff events after a comparable window. Make no broad title or homepage change from a single snapshot.
+
+## Ice-out discovery pilot — October 5, 2026
+
+The existing Lake Ice-Out shell and its eight generated lake pages are a bounded trial of useful initial HTML. The source owns the quiet creator footer, explanatory planning guide and contextual snow/river links. The generator owns each lake's heading, application identity, visible FAQ answers, family links and sitemap content dates. No new canonical URL is introduced.
+
+Each existing lake URL also has an explicit local-file rewrite ahead of the general national-tools proxy. The benchmark treats a missing or shadowed route as a release failure, independently of the HTML score.
+
+`npm run benchmark:ice-out-discovery` builds this family in an isolated directory from the production source and generator, then inspects all nine emitted HTML pages. Its 100-point contract covers page identity (25), indexability (10), readable content (20), discovery links (20), creator identity (20) and date consistency (5); loss is the weighted sum of failed groups. Every page must score 100. `--built` inspects the actual build directory, and the Vercel build runs it after all HTML injections. This is a technical release check, not an SEO ranking score or evidence of traffic uplift.
+
+The prior generator's reproduced output scored 10/100 against this contract. That baseline describes a local reproduction of build output, not a live SERP measurement. Observe tool queries and Chris Izworski queries separately over comparable 28-day Search Console periods before attributing any search change to this release.

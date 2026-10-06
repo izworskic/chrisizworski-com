@@ -26,6 +26,9 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Oct 5 2026: existing ice-out shell discovery pilot. Correct child identities in the
+  // generator; make planning context, creator attribution and relevant links readable.
+  "/national-tools/ice-out/",
   "/snowmobile/regions/west-michigan.html",
   "/snowmobile/regions/keweenaw-copper-country.html",
   "/snowmobile/regions/eastern-up.html",
