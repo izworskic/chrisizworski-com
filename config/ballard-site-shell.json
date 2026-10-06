@@ -1,0 +1,217 @@
+{
+  "modified": "2026-10-06",
+  "pages": {
+    "/ballard-locks/": {
+      "title": "Ballard Locks Live: Ships, Salmon & Tides | Chris Izworski",
+      "description": "Live Ballard Locks ships, salmon counts, access, weather and water levels, with a best-first-stop recommendation and tour map for Seattle.",
+      "graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://chrisizworski.com/ballard-locks/#app",
+          "name": "Ballard Locks Live: Ships, Salmon & Tides",
+          "url": "https://chrisizworski.com/ballard-locks/",
+          "description": "Live visitor intelligence for the Hiram M. Chittenden Locks combining AIS vessel traffic, salmon counts, NOAA tides, weather, operating status and nearby live canal camera links.",
+          "applicationCategory": "TravelApplication",
+          "operatingSystem": "Any web browser",
+          "isAccessibleForFree": true,
+          "dateModified": "2026-09-09",
+          "author": {
+            "@id": "https://chrisizworski.com/#person"
+          },
+          "creator": {
+            "@id": "https://chrisizworski.com/#person"
+          },
+          "about": {
+            "@id": "https://chrisizworski.com/ballard-locks/#place"
+          }
+        },
+        {
+          "@type": "Place",
+          "@id": "https://chrisizworski.com/ballard-locks/#place",
+          "name": "Hiram M. Chittenden Locks (Ballard Locks)",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "3015 NW 54th St",
+            "addressLocality": "Seattle",
+            "addressRegion": "WA",
+            "postalCode": "98107",
+            "addressCountry": "US"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 47.66556,
+            "longitude": -122.39722
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://chrisizworski.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Tools",
+              "item": "https://chrisizworski.com/tools/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Ballard Locks Live",
+              "item": "https://chrisizworski.com/ballard-locks/"
+            }
+          ]
+        },
+        {
+          "@type": "Person",
+          "@id": "https://chrisizworski.com/#person",
+          "name": "Chris Izworski",
+          "url": "https://chrisizworski.com/"
+        }
+      ]
+    },
+    "/ballard-locks/tour/": {
+      "title": "Ballard Locks Tour Map: Live Self-Guided Walk",
+      "description": "Explore the Ballard Locks with an interactive self-guided map, 20-, 45- and 75-minute routes, plus live salmon, lock and water-level context.",
+      "graph": [
+        {
+          "@type": "WebPage",
+          "@id": "https://chrisizworski.com/ballard-locks/tour/#page",
+          "url": "https://chrisizworski.com/ballard-locks/tour/",
+          "name": "Ballard Locks Self-Guided Tour Map",
+          "description": "Interactive self-guided walking tour of the Hiram M. Chittenden Locks with live salmon, tide, lock and water-level context.",
+          "dateModified": "2026-09-09",
+          "isPartOf": {
+            "@id": "https://chrisizworski.com/ballard-locks/#app"
+          },
+          "mainEntity": {
+            "@id": "https://chrisizworski.com/ballard-locks/tour/#stops"
+          }
+        },
+        {
+          "@type": "ItemList",
+          "@id": "https://chrisizworski.com/ballard-locks/tour/#stops",
+          "name": "Ballard Locks tour stops",
+          "numberOfItems": 12,
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Visitor Center and Botanical Garden"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Cavanaugh House"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Large Lock"
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "name": "Small Lock"
+            },
+            {
+              "@type": "ListItem",
+              "position": 5,
+              "name": "Salmon Waves"
+            },
+            {
+              "@type": "ListItem",
+              "position": 6,
+              "name": "Fish Ladder Viewing Room"
+            },
+            {
+              "@type": "ListItem",
+              "position": 7,
+              "name": "Spillway and Water Control"
+            },
+            {
+              "@type": "ListItem",
+              "position": 8,
+              "name": "Great Blue Heron Colony"
+            },
+            {
+              "@type": "ListItem",
+              "position": 9,
+              "name": "Railroad Bridge Viewpoint"
+            },
+            {
+              "@type": "ListItem",
+              "position": 10,
+              "name": "A Salish Welcome"
+            },
+            {
+              "@type": "ListItem",
+              "position": 11,
+              "name": "National Nordic Museum and Frankie Feetsplinters"
+            },
+            {
+              "@type": "ListItem",
+              "position": 12,
+              "name": "Ballard Locks Overview"
+            }
+          ]
+        },
+        {
+          "@type": "Place",
+          "@id": "https://chrisizworski.com/ballard-locks/#place",
+          "name": "Hiram M. Chittenden Locks (Ballard Locks)",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 47.66556,
+            "longitude": -122.39722
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "3015 NW 54th St",
+            "addressLocality": "Seattle",
+            "addressRegion": "WA",
+            "postalCode": "98107",
+            "addressCountry": "US"
+          }
+        }
+      ]
+    },
+    "/ballard-locks/salmon-counts/": {
+      "title": "Ballard Locks Salmon Counts | Chris Izworski",
+      "description": "See the latest Ballard Locks salmon counts for sockeye, Chinook and coho, count dates, 7-day averages, fish ladder hours and current salmon activity signal.",
+      "graph": [
+        {
+          "@type": "WebPage",
+          "name": "Ballard Locks Salmon Counts",
+          "url": "https://chrisizworski.com/ballard-locks/salmon-counts/",
+          "description": "Latest WDFW sockeye, Chinook and coho counts at the Ballard Locks fish ladder."
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Are these Ballard Locks salmon counts live?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "They are the latest published daily counts from the Washington Department of Fish and Wildlife. Each species is shown with its source date so an older count is not presented as a same-day observation."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "When is the Ballard Locks fish ladder open?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The current USACE visitor schedule used by this tool lists the fish ladder as open from 7:00 AM to 8:45 PM, subject to operational changes."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

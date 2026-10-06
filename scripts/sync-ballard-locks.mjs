@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { enhanceBallardMain, enhanceBallardTour } from './ballard-photo-program.mjs';
 import { enhanceBallardTourAuthority } from './ballard-tour-authority.mjs';
+import { applyBallardSiteShell } from './ballard-site-shell.mjs';
 
 const sourceRoot = path.resolve('node_modules/national-ballard-locks');
 const sourcePage = path.join(sourceRoot, 'public', 'ballard-locks');
@@ -50,14 +51,15 @@ const [mainSource, tourSource, salmonSource, apiSource] = await Promise.all([
   fetchExact(rawSources.api, 'live API'),
 ]);
 
-const mainEnhanced = enhanceBallardMain(mainSource);
-const tourEnhanced = enhanceBallardTourAuthority(enhanceBallardTour(tourSource));
+const mainEnhanced = applyBallardSiteShell(enhanceBallardMain(mainSource), '/ballard-locks/');
+const tourEnhanced = applyBallardSiteShell(enhanceBallardTourAuthority(enhanceBallardTour(tourSource)), '/ballard-locks/tour/');
+const salmonEnhanced = applyBallardSiteShell(salmonSource, '/ballard-locks/salmon-counts/');
 
 fs.mkdirSync(path.join(destPage, 'tour'), { recursive: true });
 fs.mkdirSync(path.join(destPage, 'salmon-counts'), { recursive: true });
 fs.writeFileSync(path.join(destPage, 'index.html'), mainEnhanced);
 fs.writeFileSync(path.join(destPage, 'tour', 'index.html'), tourEnhanced);
-fs.writeFileSync(path.join(destPage, 'salmon-counts', 'index.html'), salmonSource);
+fs.writeFileSync(path.join(destPage, 'salmon-counts', 'index.html'), salmonEnhanced);
 fs.writeFileSync(destApi, apiSource);
 
 const page = fs.readFileSync(path.join(destPage, 'index.html'), 'utf8');
