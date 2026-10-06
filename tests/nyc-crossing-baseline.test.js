@@ -30,11 +30,11 @@ test('NYC historical baseline query is tightly bounded to same weekday/hour and 
   assert.equal(url.origin + url.pathname, 'https://data.cityofnewyork.us/resource/i4gi-tjb9.json');
   const where = url.searchParams.get('$where');
   const select = url.searchParams.get('$select');
-  assert.match(select, /avg\(to_number\(travel_time\)\)/);
+  assert.match(select, /avg\(travel_time::number\)/);
   assert.match(select, /count\(travel_time\)/);
   assert.match(where, /status='0'/);
   assert.match(where, /date_extract_dow\(data_as_of\)=2/);
-  assert.match(where, /date_extract_hh\(data_as_of\)=8/);
+  assert.match(where, /date_extract_hh\(data_as_of\)=8/);\n  assert.match(where, /travel_time::number>0/);\n  assert.doesNotMatch(select + ' ' + where, /to_number\(/);
   assert.match(where, /4456510/);
   assert.match(where, /4763652/);
   assert.match(where, /2026-08-11T00:00:00\.000/);
