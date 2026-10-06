@@ -1,0 +1,32 @@
+name: NYC crossing production smoke
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'api/nyc-crossing.js'
+      - 'lib/nyc-crossing/**'
+      - 'public/nyc-crossing/**'
+      - 'public/assets/nyc-crossing.js'
+      - 'public/assets/nyc-crossing.css'
+      - 'scripts/smoke-nyc-crossing-production.mjs'
+      - '.github/workflows/nyc-crossing-production-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-origin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify public NYC crossing release
+        run: node scripts/smoke-nyc-crossing-production.mjs

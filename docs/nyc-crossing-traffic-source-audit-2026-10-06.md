@@ -43,6 +43,10 @@ Port Authority historical values remain authoritative for GWB, Lincoln and Holla
 
 The baseline deliberately uses the public SODA 2.1 resource endpoint. Socrata permits limited unauthenticated queries there, while application tokens raise throttling limits. Because results are cached for six days and baseline failure is non-fatal, throttling can remove the comparison but cannot remove the live authority reading.
 
+## Production verification
+
+The public release has a production smoke contract at `scripts/smoke-nyc-crossing-production.mjs`. It verifies the live page and API, all 11 crossing identities, traffic-source provenance, historical-baseline sample gates, and the invariant that mixed-scope crossing measurements cannot be promoted into a door-to-door fastest-route claim. A temporary upstream traffic outage may reduce live readings but does not by itself fail the smoke check.
+
 ## Sources
 
 - Port Authority crossing conditions: https://www.panynj.gov/bridges-tunnels/en/index.html
