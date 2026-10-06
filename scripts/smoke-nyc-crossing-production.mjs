@@ -1,7 +1,7 @@
 const BASE = String(process.env.NYC_CROSSING_BASE_URL || 'https://chrisizworski.com').replace(/\/$/, '');
 const PAGE_URL = `${BASE}/nyc-crossing/`;
 const API_URL = `${BASE}/api/nyc-crossing?smoke=${process.env.GITHUB_SHA || Date.now()}`;
-const ATTEMPTS = Number(process.env.NYC_CROSSING_SMOKE_ATTEMPTS || 18);
+const ATTEMPTS = Number(process.env.NYC_CROSSING_SMOKE_ATTEMPTS || 36);
 const WAIT_MS = Number(process.env.NYC_CROSSING_SMOKE_WAIT_MS || 10000);
 const TIMEOUT_MS = Number(process.env.NYC_CROSSING_SMOKE_TIMEOUT_MS || 25000);
 
@@ -49,7 +49,7 @@ async function verifyOnce() {
   const html = await page.text();
   for (const marker of [
     'Which NYC crossing should you take?',
-    'Official live bridge and tunnel conditions',
+    'Compare official live bridge and tunnel conditions',
     'NYC DOT real-time traffic feed',
     'NYC Open Data traffic history',
     'TRANSCOM travel-time data',
