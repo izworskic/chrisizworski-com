@@ -74,6 +74,12 @@ The existing Lake Ice-Out shell and its eight generated lake pages are a bounded
 
 Each existing lake URL also has an explicit local-file rewrite ahead of the general national-tools proxy. The benchmark treats a missing or shadowed route as a release failure, independently of the HTML score.
 
+The generator publishes `/sitemap-ice-out.xml` at the public root, outside the national-tools proxy. It is advertised in `robots.txt` and registered with the freshness checker. The benchmark rejects missing publication metadata, proxy shadowing, or a committed sitemap whose URL/date entries differ from the emitted family.
+
+`benchmarks/ice-out-content-dates.json` records the generator's content date from full git history. The freshness checker verifies that exact source date and supplies dates for the eight generated sitemap routes even when their HTML exists only in the build. Lake pages use the later of their parent-template and generator content dates. Generator-only edits therefore cannot silently reuse an old parent date.
+
+The `Ice-out public discovery smoke` workflow fetches that actual public sitemap, robots file and all nine initial HTML responses after a main-branch release. It waits for deployment promotion, then requires the same page contract and the release's URL/date entries. A build score alone does not count as production verification.
+
 `npm run benchmark:ice-out-discovery` builds this family in an isolated directory from the production source and generator, then inspects all nine emitted HTML pages. Its 100-point contract covers page identity (25), indexability (10), readable content (20), discovery links (20), creator identity (20) and date consistency (5); loss is the weighted sum of failed groups. Every page must score 100. `--built` inspects the actual build directory, and the Vercel build runs it after all HTML injections. This is a technical release check, not an SEO ranking score or evidence of traffic uplift.
 
 The prior generator's reproduced output scored 10/100 against this contract. That baseline describes a local reproduction of build output, not a live SERP measurement. Observe tool queries and Chris Izworski queries separately over comparable 28-day Search Console periods before attributing any search change to this release.

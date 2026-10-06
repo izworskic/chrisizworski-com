@@ -123,6 +123,7 @@ const lastCommitDate = lastContentCommitDate;
 // it indexes images, not pages, so it has no page dateModified to agree with.
 const SITEMAPS = [
   "sitemap.xml",
+  "sitemap-ice-out.xml",
   "sitemap-beaches.xml",
   "sitemap-reputation.xml",
   "sitemap-fall.xml",
@@ -204,10 +205,37 @@ for (const file of files) {
 
 const bad = lagging.filter((l) => l.lagDays > TOLERANCE_DAYS);
 
+// These pages are emitted at build time. Their content also depends on the
+// generator, so an absent tracked child HTML file must not bypass freshness.
+const generatedDateDrift = [];
+let iceParent;
+try { iceParent = await readFile(path.join(publicRoot, "national-tools/ice-out/index.html"), "utf8"); }
+catch (error) { if (error.code !== "ENOENT") throw error; }
+if (iceParent !== undefined) {
+  const ledgerPath = path.join(root, "benchmarks/ice-out-content-dates.json");
+  const ledger = JSON.parse(await readFile(ledgerPath, "utf8"));
+  const generatorDate = lastContentCommitDate(path.join(root, ledger.generator));
+  if (!generatorDate) throw new Error("Ice-out generated pages require the generator's full git history for freshness.");
+  if (ledger.generatorModified !== generatorDate) {
+    generatedDateDrift.push({ generator: ledger.generator, claimed: ledger.generatorModified, real: generatorDate });
+    if (!CHECK) await writeFile(ledgerPath, JSON.stringify({ ...ledger, generatorModified: generatorDate }, null, 2) + "\n");
+  }
+  const parentDate = dateByRoute.get(ledger.parent);
+  if (!parentDate) throw new Error("Ice-out parent requires a checked content date before generated-page freshness.");
+  const generatedDate = [parentDate, generatorDate].sort().at(-1);
+  for (const route of ledger.pages) dateByRoute.set(route, generatedDate);
+}
+
 const sitemapSync = await syncSitemaps(dateByRoute);
 const sitemapDrift = sitemapSync.updated;
 
 if (CHECK) {
+  if (generatedDateDrift.length) {
+    console.error("FRESHNESS CHECK FAILED: the generated-page content date does not match the generator's git history.");
+    for (const item of generatedDateDrift) console.error(`  ${item.generator}  ${item.claimed} -> ${item.real}`);
+    console.error("Run: node scripts/stamp-freshness.mjs");
+    process.exit(1);
+  }
   if (sitemapDrift) {
     console.log(`  sitemap lastmod entries disagreeing with their page: ${sitemapDrift}`);
     for (const d of sitemapSync.mismatches) console.log(`    ${d.sitemap}  ${d.route}  ${d.current||"missing"} -> ${d.want}`);

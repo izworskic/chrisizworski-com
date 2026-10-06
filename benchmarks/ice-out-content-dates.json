@@ -1,0 +1,15 @@
+{
+  "parent": "/national-tools/ice-out/",
+  "generator": "scripts/generate-ice-out-location-pages.mjs",
+  "generatorModified": "2026-10-05",
+  "pages": [
+    "/national-tools/ice-out/lake-vermilion-minnesota/",
+    "/national-tools/ice-out/mille-lacs-minnesota/",
+    "/national-tools/ice-out/leech-lake-minnesota/",
+    "/national-tools/ice-out/houghton-lake-michigan/",
+    "/national-tools/ice-out/lake-winnipesaukee-new-hampshire/",
+    "/national-tools/ice-out/moosehead-lake-maine/",
+    "/national-tools/ice-out/lake-simcoe-ontario/",
+    "/national-tools/ice-out/lake-of-the-woods/"
+  ]
+}

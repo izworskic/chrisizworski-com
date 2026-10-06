@@ -18,6 +18,9 @@ const json=v=>JSON.stringify(v).replace(/</g,'\\u003c');
 let source=fs.readFileSync(parentPath,'utf8').replace(/<section[^>]*data-ice-location-directory[\s\S]*?<\/section>/i,'');
 const contentDate=source.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/)?.[1];
 if(!contentDate)throw new Error('Ice-out parent must declare its content date.');
+const contentDates=JSON.parse(fs.readFileSync(path.join(root,'benchmarks/ice-out-content-dates.json'),'utf8'));
+if(!/^\d{4}-\d{2}-\d{2}$/.test(contentDates.generatorModified||''))throw new Error('Ice-out generator content date is missing. Run the full-history freshness stamper.');
+const locationDate=[contentDate,contentDates.generatorModified].sort().at(-1);
 for(const lake of lakes){
   const canonical=`https://chrisizworski.com/national-tools/ice-out/${lake.slug}/`;
   const title=lake.title.replace(' & Spring Timing','').replace(' & Timing','');
@@ -31,7 +34,7 @@ for(const lake of lakes){
     .replace(/(<script[^>]*type="application\/ld\+json"[^>]*>)([\s\S]*?)(<\/script>)/gi,(whole,open,body,close)=>{
       const data=JSON.parse(body);
       if(data['@type']!=='WebApplication')return whole;
-      return open+json({...data,'@id':canonical+'#app',url:canonical,name:lake.name+' Ice-Out Forecast',description:lake.description})+close;
+      return open+json({...data,'@id':canonical+'#app',url:canonical,name:lake.name+' Ice-Out Forecast',description:lake.description,dateModified:locationDate})+close;
     });
   const faq=[
     {q:`When will ${lake.name} be ice-free?`,a:'The forecast updates from the lake’s calibrated seasonal baseline, live spring weather and available seasonal thaw signals. The displayed date is a probability window, not a guaranteed breakup date.'},
@@ -52,5 +55,5 @@ for(const lake of lakes){
 const directory=`<section data-ice-location-directory style="max-width:980px;margin:24px auto;padding:0 20px"><div style="border-top:1px solid #ddd7cb;padding-top:18px"><strong>Popular lake ice-out forecasts</strong><p>${lakes.map(x=>`<a href="/national-tools/ice-out/${x.slug}/">${esc(x.name)}</a>`).join(' · ')}</p></div></section>`;
 fs.writeFileSync(parentPath,source.replace('</main>',`${directory}</main>`));
 const urls=['https://chrisizworski.com/national-tools/ice-out/',...lakes.map(x=>`https://chrisizworski.com/national-tools/ice-out/${x.slug}/`)];
-fs.writeFileSync(path.join(root,'public/national-tools/ice-out/sitemap-locations.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u=>`  <url><loc>${u}</loc><lastmod>${contentDate}</lastmod><changefreq>daily</changefreq></url>`).join('\n')}\n</urlset>\n`);
+fs.writeFileSync(path.join(root,'public/sitemap-ice-out.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u,i)=>`  <url><loc>${u}</loc><lastmod>${i?locationDate:contentDate}</lastmod><changefreq>daily</changefreq></url>`).join('\n')}\n</urlset>\n`);
 console.log(`Generated and verified ${lakes.length} lake ice-out pages.`);
