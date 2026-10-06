@@ -29,8 +29,9 @@ module.exports = async function handler(req, res) {
         closingCostPlanningRangePct: [2, 5],
       },
       intake: {
-        required: ['address', 'askingPrice', 'downPayment', 'ratePct'],
-        note: 'The public tool intentionally asks for only four inputs. Property and location costs are sourced or modeled automatically.',
+        required: ['address', 'askingPrice', 'downPayment'],
+        optionalAfterFirstRun: ['ratePct'],
+        note: 'The first calculation asks for only address, asking price and down payment. The current Freddie Mac 30-year benchmark is used automatically; the user can override the rate after seeing the first result.',
       },
     });
   }
@@ -47,18 +48,18 @@ module.exports = async function handler(req, res) {
   const address = String(body.address || '').trim();
   const askingPrice = Number(body.askingPrice);
   const downPayment = Number(body.downPayment);
-  const rateMissing = body.ratePct === '' || body.ratePct == null;
-  const ratePct = Number(body.ratePct);
+  const hasRateOverride = body.ratePct !== '' && body.ratePct != null;
+  const ratePct = hasRateOverride ? Number(body.ratePct) : null;
 
-  if (address.length < 6 || !(askingPrice > 0) || !Number.isFinite(downPayment) || downPayment < 0 || rateMissing || !Number.isFinite(ratePct) || ratePct < 0 || ratePct > 25) {
+  if (address.length < 6 || !(askingPrice > 0) || !Number.isFinite(downPayment) || downPayment < 0 || (hasRateOverride && (!Number.isFinite(ratePct) || ratePct < 0 || ratePct > 25))) {
     return res.status(400).json({
       error: 'MISSING_REQUIRED_INPUT',
-      message: 'Enter a U.S. street address, positive asking price, down payment of zero or more, and a mortgage rate from 0% to 25%.',
+      message: 'Enter a U.S. street address, positive asking price and down payment of zero or more. Any rate override must be from 0% to 25%.',
     });
   }
 
   const enrichment = await enrichHouse(address);
-  const result = buildDecision({ address, askingPrice, downPayment, ratePct }, enrichment);
+  const result = buildDecision({ address, askingPrice, downPayment, ratePct: hasRateOverride ? ratePct : '' }, enrichment);
 
   return res.status(200).json({
     generatedAt: new Date().toISOString(),

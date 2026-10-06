@@ -3,9 +3,10 @@
 
   const $ = (id) => document.getElementById(id);
   const form = $('houseFitForm');
+  const rateForm = $('rateAdjustForm');
   const result = $('result');
   const status = $('formStatus');
-  let rateTouched = false;
+  let rateOverride = null;
 
   const money0 = (n) => Number.isFinite(Number(n))
     ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(n))
@@ -38,12 +39,13 @@
   }
 
   function buildPayload() {
-    return {
+    const payload = {
       address: valueOf('address').trim(),
       askingPrice: Number(valueOf('askingPrice')),
       downPayment: Number(valueOf('downPayment')),
-      ratePct: Number(valueOf('ratePct')),
     };
+    if (Number.isFinite(rateOverride)) payload.ratePct = rateOverride;
+    return payload;
   }
 
   function costItem(label, value, note) {
@@ -82,12 +84,14 @@
     const income = decision.incomeBenchmark || {};
     const address = decision.enrichment && decision.enrichment.address;
     const flood = decision.enrichment && decision.enrichment.flood || {};
+    const rateSource = decision.enrichment && decision.enrichment.mortgageRate || {};
     const prov = decision.provenance || {};
+    const rate = Number(decision.input && decision.input.ratePct);
 
     $('askingPriceResult').textContent = money0(decision.askingPrice);
     $('trueMonthlyResult').textContent = monthlyRange(trueCost.low, trueCost.high);
     $('loanAmountResult').textContent = money0(loan.principal);
-    $('loanDetail').textContent = Number(loan.termYears || 30) + '-year model · ' + Number(decision.input.ratePct).toFixed(2) + '% rate · ' + Number(loan.downPaymentPct || 0).toFixed(1) + '% down';
+    $('loanDetail').textContent = Number(loan.termYears || 30) + '-year model · ' + rate.toFixed(2) + '% rate · ' + Number(loan.downPaymentPct || 0).toFixed(1) + '% down';
     $('cashToCloseResult').textContent = moneyRange(cash.totalLow, cash.totalHigh);
 
     $('matchedAddress').textContent = address && address.matched
@@ -107,19 +111,26 @@
       ? 'Before any flagged unpriced costs below'
       : 'Mortgage + modeled property costs';
 
+    const isUserRate = prov.mortgageRate === 'USER PROVIDED';
+    $('ratePctAdjust').value = rate.toFixed(2);
+    $('rateSourceResult').textContent = isUserRate
+      ? 'Using your adjusted rate of ' + rate.toFixed(2) + '%.'
+      : 'First run used the current Freddie Mac 30-year benchmark: ' + rate.toFixed(2) + '%' +
+        (rateSource.observationDate ? ' · observation ' + rateSource.observationDate : '') + '.';
+
     const breakdown = decision.breakdown || {};
     const breakdownGrid = $('breakdownGrid');
     breakdownGrid.textContent = '';
     [
-      ['Mortgage principal + interest', breakdown.mortgagePI],
-      ['PMI', breakdown.pmi],
-      ['Property tax estimate', breakdown.propertyTax],
-      ['Homeowners insurance estimate', breakdown.homeInsurance],
-      ['Maintenance reserve', breakdown.maintenance],
-      ['Flood insurance', breakdown.floodInsurance],
+      ['Mortgage principal + interest', breakdown.mortgagePI, rate.toFixed(2) + '% · 30 years'],
+      ['PMI', breakdown.pmi, Number(breakdown.pmi) > 0 ? 'Included because down payment is below 20%.' : ''],
+      ['Property tax estimate', breakdown.propertyTax, 'Address-based Census planning estimate'],
+      ['Homeowners insurance estimate', breakdown.homeInsurance, 'Automatic planning estimate'],
+      ['Maintenance reserve', breakdown.maintenance, 'Modeled reserve, not a bill'],
+      ['Flood insurance', breakdown.floodInsurance, 'Only included when a premium is actually priced'],
     ].forEach((row) => {
       if (Number(row[1]) > 0.005 || row[0] === 'Mortgage principal + interest') {
-        breakdownGrid.appendChild(costItem(row[0], Number(row[1]) || 0));
+        breakdownGrid.appendChild(costItem(row[0], Number(row[1]) || 0, row[2]));
       }
     });
     $('costRangeNote').textContent = Math.abs(Number(trueCost.high) - Number(trueCost.low)) > 5
@@ -135,7 +146,7 @@
       $('floodCopy').textContent = flood.note || (flood.sfha
         ? 'FEMA maps this point in a Special Flood Hazard Area.'
         : 'FEMA flood-zone context loaded for this point.');
-      $('floodSource').textContent = 'Government sourced · FEMA National Flood Hazard Layer. FEMA does not provide the insurance premium used by a carrier.';
+      $('floodSource').textContent = 'Government sourced · FEMA National Flood Hazard Layer. FEMA identifies hazard but does not provide the carrier premium.';
     } else if (flood.status === 'NO_FEATURE') {
       floodState.textContent = 'NO POLYGON RETURNED';
       $('floodCopy').textContent = flood.note || 'No FEMA NFHL polygon was returned for this point.';
@@ -155,7 +166,13 @@
     const list = $('provenanceList');
     list.textContent = '';
     list.append(
-      provRow('Mortgage rate', prov.mortgageRate, 'User-entered rate: ' + Number(decision.input.ratePct).toFixed(2) + '%. Term is automatically fixed at 30 years.'),
+      provRow(
+        'Mortgage rate',
+        prov.mortgageRate,
+        isUserRate
+          ? 'Adjusted by you after the first result: ' + rate.toFixed(2) + '%.'
+          : 'Current Freddie Mac 30-year benchmark via FRED: ' + rate.toFixed(2) + '%' + (rateSource.observationDate ? ' (' + rateSource.observationDate + ')' : '') + '.'
+      ),
       provRow('Property tax', prov.propertyTax && prov.propertyTax.provenance, prov.propertyTax && prov.propertyTax.note),
       provRow('Homeowners insurance', prov.homeInsurance && prov.homeInsurance.provenance, prov.homeInsurance && prov.homeInsurance.note),
       provRow('PMI', prov.pmi && prov.pmi.provenance, prov.pmi && prov.pmi.note),
@@ -168,14 +185,16 @@
     result.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  async function calculate() {
+  async function calculate(source) {
     const payload = buildPayload();
-    if (!payload.address || !(payload.askingPrice > 0) || !(payload.downPayment >= 0) || !Number.isFinite(payload.ratePct) || payload.ratePct < 0 || payload.ratePct > 25) {
-      status.textContent = 'Enter the address, asking price, down payment and mortgage rate.';
+    if (!payload.address || !(payload.askingPrice > 0) || !(payload.downPayment >= 0)) {
+      status.textContent = 'Enter the address, asking price and down payment.';
       return;
     }
 
-    status.textContent = 'Pulling public data and building the full cost picture…';
+    status.textContent = source === 'rate'
+      ? 'Recalculating with your mortgage rate…'
+      : 'Pulling the current mortgage rate and property data…';
     track('calculation_started');
 
     try {
@@ -190,6 +209,8 @@
       status.textContent = 'Updated.';
       track('calculation_completed');
       track('true_cost_viewed');
+      if (source === 'rate') track('mortgage_rate_adjusted');
+      else track('market_rate_used');
     } catch (error) {
       status.textContent = 'Unable to calculate: ' + (error.message || error);
     }
@@ -197,28 +218,20 @@
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    calculate();
+    rateOverride = null;
+    calculate('initial');
   });
 
-  form.elements.ratePct.addEventListener('input', () => {
-    rateTouched = true;
-    $('rateSource').textContent = 'Your mortgage rate · 30-year fixed planning model.';
+  rateForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const candidate = Number($('ratePctAdjust').value);
+    if (!Number.isFinite(candidate) || candidate < 0 || candidate > 25) {
+      status.textContent = 'Enter a mortgage rate from 0% to 25%.';
+      return;
+    }
+    rateOverride = candidate;
+    calculate('rate');
   });
-
-  async function loadDefaults() {
-    try {
-      const response = await fetch('/api/house-fit', { headers: { Accept: 'application/json' } });
-      if (!response.ok) return;
-      const data = await response.json();
-      if (!rateTouched && data.mortgageRate && Number.isFinite(Number(data.mortgageRate.ratePct))) {
-        form.elements.ratePct.value = Number(data.mortgageRate.ratePct).toFixed(2);
-        $('rateSource').textContent = data.mortgageRate.status === 'AVAILABLE'
-          ? 'Current Freddie Mac 30-year benchmark via FRED · ' + (data.mortgageRate.observationDate || 'latest observation') + ' · edit to your quote'
-          : 'Fallback planning rate · edit to your quote';
-      }
-    } catch (_) { /* Required editable rate remains available. */ }
-  }
 
   track('tool_view');
-  loadDefaults();
 })();

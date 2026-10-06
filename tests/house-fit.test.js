@@ -20,7 +20,7 @@ const enrichment = {
   address: { matched: true, status: 'MATCHED', matchedAddress: '4600 SILVER HILL RD, WASHINGTON, DC 20233' },
   tax: { status: 'AVAILABLE', effectiveRatePct: 1.15, geography: 'Example County', sourceDate: '2024 ACS 5-year' },
   flood: { status: 'AVAILABLE', zone: 'X', sfha: false },
-  mortgageRate: { status: 'AVAILABLE', ratePct: 6.5, provenance: 'GOVERNMENT SOURCED' },
+  mortgageRate: { status: 'AVAILABLE', ratePct: 6.42, observationDate: '2026-10-01', provenance: 'GOVERNMENT SOURCED', source: 'Freddie Mac PMMS via FRED' },
 };
 
 test('mortgage math matches a known 30-year P&I example', () => {
@@ -28,13 +28,40 @@ test('mortgage math matches a known 30-year P&I example', () => {
   assert.ok(Math.abs(payment - 1896.20) < 0.75, 'unexpected payment ' + payment);
 });
 
-test('public intake is exactly address, asking price, down payment and mortgage rate', () => {
+test('first-run form asks only for address, asking price and down payment', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
-  const names = [...html.matchAll(/<input[^>]+name="([^"]+)"/g)].map((m) => m[1]);
-  assert.deepEqual(names, ['address', 'askingPrice', 'downPayment', 'ratePct']);
+  const formMatch = html.match(/<form id="houseFitForm">([\s\S]*?)<\/form>/);
+  assert.ok(formMatch);
+  const names = [...formMatch[1].matchAll(/<input[^>]+name="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(names, ['address', 'askingPrice', 'downPayment']);
+  assert.doesNotMatch(formMatch[1], /name="ratePct"/);
   assert.doesNotMatch(html, /name="monthlyLimit"/);
   assert.doesNotMatch(html, /id="accuracyForm"/);
   assert.doesNotMatch(html, /name="includeCommute"/);
+});
+
+test('mortgage-rate override exists only in the post-result adjustment form', () => {
+  const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
+  const resultIndex = html.indexOf('id="result"');
+  const rateIndex = html.indexOf('id="rateAdjustForm"');
+  assert.ok(resultIndex >= 0 && rateIndex > resultIndex);
+  assert.match(html, /id="ratePctAdjust" name="ratePct"/);
+  assert.match(html, /RECALCULATE WITH THIS RATE/);
+});
+
+test('first run defaults to the current mortgage benchmark from enrichment', () => {
+  const input = normalizeInput(base({ ratePct: '' }), enrichment);
+  assert.equal(input.ratePct, 6.42);
+  const result = buildDecision(base({ ratePct: '' }), enrichment);
+  assert.equal(result.input.ratePct, 6.42);
+  assert.equal(result.provenance.mortgageRate, 'GOVERNMENT SOURCED');
+  assert.equal(result.enrichment.mortgageRate.observationDate, '2026-10-01');
+});
+
+test('user rate override replaces the benchmark after first run', () => {
+  const result = buildDecision(base({ ratePct: 5.99 }), enrichment);
+  assert.equal(result.input.ratePct, 5.99);
+  assert.equal(result.provenance.mortgageRate, 'USER PROVIDED');
 });
 
 test('normalization fixes loan term and automatic assumptions instead of exposing extra inputs', () => {
@@ -62,8 +89,8 @@ test('higher asking price raises the automatic monthly cost', () => {
   assert.ok(higher.trueMonthlyCost.midpoint > lower.trueMonthlyCost.midpoint);
 });
 
-test('monthly cost includes mortgage tax insurance PMI and maintenance automatically', () => {
-  const result = buildDecision(base({ downPayment: 40000 }), enrichment);
+test('monthly cost automatically includes mortgage tax insurance PMI and maintenance', () => {
+  const result = buildDecision(base({ askingPrice: 400000, downPayment: 40000 }), enrichment);
   assert.ok(result.breakdown.mortgagePI > 0);
   assert.ok(result.breakdown.propertyTax > 0);
   assert.ok(result.breakdown.homeInsurance > 0);
@@ -73,9 +100,12 @@ test('monthly cost includes mortgage tax insurance PMI and maintenance automatic
   assert.ok(result.trueMonthlyCost.midpoint >= result.trueMonthlyCost.low);
 });
 
-test('20 percent down removes modeled PMI', () => {
-  const result = buildDecision(base({ askingPrice: 400000, downPayment: 80000 }), enrichment);
-  assert.equal(result.breakdown.pmi, 0);
+test('PMI is included below 20 percent down and removed at exactly 20 percent', () => {
+  const below = buildDecision(base({ askingPrice: 400000, downPayment: 79999 }), enrichment);
+  const exactly = buildDecision(base({ askingPrice: 400000, downPayment: 80000 }), enrichment);
+  assert.ok(below.breakdown.pmi > 0);
+  assert.equal(exactly.breakdown.pmi, 0);
+  assert.match(below.provenance.pmi.note, /exceeds 80%/i);
 });
 
 test('missing local tax data still returns a deliberately broad automatic range', () => {
@@ -121,7 +151,7 @@ test('formatted currency inputs normalize safely', () => {
   assert.equal(input.ratePct, 6.5);
 });
 
-test('engine no longer depends on a monthly limit or returns a Fit Ceiling', () => {
+test('engine has no monthly limit and returns no Fit Ceiling', () => {
   const withOldField = buildDecision(base({ monthlyLimit: 1 }), enrichment);
   const withoutOldField = buildDecision(base(), enrichment);
   assert.equal(withOldField.trueMonthlyCost.midpoint, withoutOldField.trueMonthlyCost.midpoint);
@@ -129,11 +159,12 @@ test('engine no longer depends on a monthly limit or returns a Fit Ceiling', () 
   assert.equal(Object.prototype.hasOwnProperty.call(withOldField, 'monthlyLimit'), false);
 });
 
-test('page promise is automation from four inputs, not reverse price solving', () => {
+test('page promise is three-input automation with automatic current rate', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
-  assert.match(html, /Four inputs\. The app does the rest\./i);
-  assert.match(html, /address, asking price, your down payment and mortgage rate/i);
-  assert.match(html, /automatically builds the property-specific monthly cost picture/i);
+  assert.match(html, /Three inputs\. The app does the rest\./i);
+  assert.match(html, /house address, asking price and your down payment/i);
+  assert.match(html, /current 30-year mortgage benchmark/i);
+  assert.match(html, /PMI when the down payment is below 20%/i);
   assert.doesNotMatch(html, /reverse-solves/i);
   assert.doesNotMatch(html, /Fit Ceiling/i);
 });
