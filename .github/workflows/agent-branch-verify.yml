@@ -24,8 +24,12 @@ jobs:
           node-version: '22'
       - name: Install pinned dependencies
         run: npm ci
+      - name: Report baseline tool network
+        run: npm run report:tool-network
       - name: Run full repository gate
         run: npm run verify:all
+      - name: Build production output and audit emitted tool pages
+        run: npm run vercel-build
       - name: Upload boat launch source audit
         if: always()
         uses: actions/upload-artifact@v4

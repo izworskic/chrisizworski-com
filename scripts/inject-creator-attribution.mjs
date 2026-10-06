@@ -2,7 +2,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { addCreatorAttribution } from "../lib/creator-attribution.mjs";
+import { addCreatorAttribution, hasVisibleCreatorAttribution } from "../lib/creator-attribution.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const publicRoot = path.join(root, "public");
@@ -41,7 +41,7 @@ for (const tool of mainHostTools) {
   }
 
   const next = addCreatorAttribution(html);
-  if (!next.includes("Built by") || !next.includes("https://chrisizworski.com/chris-izworski/")) {
+  if (!hasVisibleCreatorAttribution(next)) {
     missing.push(`${tool.id}: attribution helper did not produce the required profile credit`);
     continue;
   }
@@ -58,4 +58,4 @@ if (proxyOwned && !/addCreatorAttribution/.test(await readFile(path.join(root, "
   console.error("Proxy-served tools exist, but the shared public page renderer lacks creator attribution.");
   process.exit(1);
 }
-console.log(`Creator attribution${checkOnly ? " check" : " build"}: ${updated} static page(s) ${checkOnly ? "ready for injection" : "updated"}, ${alreadyCovered} already covered, ${proxyOwned} served through the shared creator-aware proxy, ${externallyDelegated} delegated to routed deployments; ${mainHostTools.length} tools accounted for.`);
+console.log(`Creator attribution${checkOnly ? " check" : " build"}: ${updated} static page(s) ${checkOnly ? "would need injection" : "updated"}, ${alreadyCovered} already visibly covered, ${proxyOwned} proxy routes and ${externallyDelegated} delegated routes inventoried; ${mainHostTools.length} main-host tools inventoried. Routed inventory is not emitted or live output verification.`);

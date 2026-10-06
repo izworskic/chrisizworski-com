@@ -1,0 +1,71 @@
+name: Tool authority public HTML audit
+
+on:
+  push:
+    branches:
+      - 'agent/**'
+      - main
+    paths:
+      - 'benchmarks/tool-network-registry.json'
+      - 'benchmarks/creator-entity-contract.json'
+      - 'middleware.ts'
+      - 'api/garden-water-page.js'
+      - 'public/**'
+      - 'scripts/audit-tool-authority.mjs'
+      - 'scripts/inject-creator-attribution.mjs'
+      - 'lib/creator-attribution.mjs'
+      - 'lib/tool-authority-identity.mjs'
+      - 'lib/garden-water-identity-composition.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/tool-authority-live-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install pinned dependencies
+        run: npm ci
+      - name: Build production output and reconcile its published inventory
+        id: build
+        continue-on-error: true
+        run: npm run vercel-build
+      - name: Audit actual public HTML for every published tool canonical
+        if: always()
+        run: node scripts/audit-tool-authority.mjs --live > tool-authority-live.json
+      - name: Upload public audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tool-authority-public-html
+          path: tool-authority-live.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Wait for the main deployment to propagate
+        if: github.ref == 'refs/heads/main' && steps.build.outcome == 'success'
+        run: node -e "setTimeout(() => process.exit(0), 180000)"
+      - name: Verify changed public outputs after promotion
+        if: github.ref == 'refs/heads/main' && steps.build.outcome == 'success'
+        run: node scripts/audit-tool-authority.mjs --live-release --check > tool-authority-release.json
+      - name: Upload changed-route release report
+        if: always() && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tool-authority-release-html
+          path: tool-authority-release.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Preserve production build gate result
+        if: steps.build.outcome != 'success'
+        run: exit 1

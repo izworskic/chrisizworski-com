@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 
 const URL = 'https://chrisizworski.com/niagara-border-crossing/';
-const LASTMOD = '2026-10-03';
+const LASTMOD = '2026-10-06';
 const KEY = 'niagara-border-crossing';
 const NAME = 'Niagara Border Wait Times Live — Peace, Rainbow & Lewiston';
 const DESC = 'Compare live Niagara border waits for Peace, Rainbow, Whirlpool Rapids and Lewiston–Queenston with traveler eligibility, cameras and conservative bridge-switch guidance.';
@@ -87,15 +87,17 @@ function patchTools() {
   console.log(`Niagara tools discovery ${changed ? 'applied' : 'already present'}; catalog count ${catalogCount}.`);
 }
 
-function upsertSitemapEntry(xml, url, priority) {
+function upsertSitemapEntry(xml, url, priority, preserveLastmod = false) {
   const escapedUrl = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const existingEntryRe = new RegExp(`<url>\\s*<loc>${escapedUrl}<\\/loc>[\\s\\S]*?<\\/url>`, 'm');
   const entry = `  <url>\n    <loc>${url}</loc>\n    <lastmod>${LASTMOD}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
   if (existingEntryRe.test(xml)) {
     const existing = xml.match(existingEntryRe)?.[0] || '';
-    const updated = existing.match(/<lastmod>[^<]+<\/lastmod>/)
-      ? existing.replace(/<lastmod>[^<]+<\/lastmod>/, `<lastmod>${LASTMOD}</lastmod>`)
-      : existing.replace('</url>', `  <lastmod>${LASTMOD}</lastmod>\n</url>`);
+    const currentLastmod = existing.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
+    const nextLastmod = preserveLastmod && currentLastmod ? currentLastmod : LASTMOD;
+    const updated = currentLastmod
+      ? existing.replace(/<lastmod>[^<]+<\/lastmod>/, `<lastmod>${nextLastmod}</lastmod>`)
+      : existing.replace('</url>', `  <lastmod>${nextLastmod}</lastmod>\n</url>`);
     return xml.replace(existingEntryRe, updated);
   }
   if (!xml.includes('</urlset>')) throw new Error('Niagara discovery: sitemap.xml missing </urlset>');
@@ -106,7 +108,7 @@ function patchSitemap() {
   const file = 'public/sitemap.xml';
   let xml = fs.readFileSync(file, 'utf8');
   xml = upsertSitemapEntry(xml, URL, '0.9');
-  for (const route of SEARCH_ROUTES) xml = upsertSitemapEntry(xml, route.url, '0.8');
+  for (const route of SEARCH_ROUTES) xml = upsertSitemapEntry(xml, route.url, '0.8', true);
   fs.writeFileSync(file, xml);
   console.log(`Niagara sitemap refreshed with flagship plus ${SEARCH_ROUTES.length} bridge-intent pages.`);
 }

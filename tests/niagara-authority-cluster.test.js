@@ -99,3 +99,23 @@ test('Northeast Great Lakes hub links both distinct Niagara intents and the auth
   assert.match(region, /href="\/chris-izworski\/"/);
   assert.match(region, /href="\/chris-izworski-source-guide\/"/);
 });
+
+
+test('Niagara flagship author graph resolves to the shared Person and related Michigan crossings', () => {
+  const schemaText = border.split('<script type="application/ld+json">')[1]?.split("</script>")[0];
+  assert.ok(schemaText, 'Niagara page JSON-LD graph is required');
+  const graph = JSON.parse(schemaText)['@graph'];
+  const person = graph.find(node => node['@type'] === 'Person');
+  assert.deepEqual({id: person?.['@id'], name: person?.name, url: person?.url}, {
+    id: 'https://chrisizworski.com/#person',
+    name: 'Chris Izworski',
+    url: 'https://chrisizworski.com/',
+  });
+  for (const type of ['WebPage', 'WebApplication']) {
+    const node = graph.find(item => item['@type'] === type);
+    assert.equal(node.author?.['@id'], person['@id'], type);
+    assert.equal(node.publisher?.['@id'], person['@id'], type);
+  }
+  assert.ok(border.includes('https://chrisizworski.com/michigan-border-wait-times/'));
+  assert.ok(sitemap.includes("<loc>https://chrisizworski.com/niagara-border-crossing/</loc><lastmod>2026-10-06</lastmod>"));
+});

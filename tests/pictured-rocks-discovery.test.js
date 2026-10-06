@@ -25,3 +25,17 @@ test('lab preview stays noindex while middleware promotes only the canonical hos
   assert.match(middleware, /const PICTURED_ROCKS_HOST = 'picturedrocks\.chrisizworski\.com';/);
   assertIndexableRobots((await canonicalResponse(t)).html);
 });
+
+test('canonical response has one consistent creator entity, quiet credit, and current published date', async t => {
+  const {html} = await canonicalResponse(t);
+  const graph = html.split('<script type="application/ld+json">').slice(1).map(script => JSON.parse(script.split('</script>')[0])['@graph'] || []).flat();
+  const people = graph.filter(node => node['@type'] === 'Person');
+  assert.ok(people.length > 0);
+  assert.ok(people.every(person => person['@id'] === 'https://chrisizworski.com/#person' && person.url === 'https://chrisizworski.com/'));
+  assert.ok(html.includes('Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>'));
+  assert.ok(html.includes('href="https://chrisizworski.com/lake-superior-circle-tour/"'));
+  assert.ok(html.includes('href="https://chrisizworski.com/northern-lights-michigan/"'));
+  const published = /<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/.exec(sitemap)?.[1];
+  assert.ok(published);
+  assert.ok(middleware.includes(`dateModified: '${published}'`));
+});

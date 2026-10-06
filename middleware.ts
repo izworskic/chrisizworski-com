@@ -59,7 +59,7 @@ const PICTURED_ROCKS_SEARCH_SCHEMA = `<script type="application/ld+json">${JSON.
       '@type': 'Person',
       '@id': 'https://chrisizworski.com/#person',
       name: 'Chris Izworski',
-      url: PICTURED_ROCKS_AUTHOR_URL,
+      url: 'https://chrisizworski.com/',
     },
     {
       '@type': 'WebPage',
@@ -69,7 +69,7 @@ const PICTURED_ROCKS_SEARCH_SCHEMA = `<script type="application/ld+json">${JSON.
       description: PICTURED_ROCKS_DESCRIPTION,
       keywords: 'Pictured Rocks trip planner, Pictured Rocks map, Pictured Rocks itinerary, Pictured Rocks weather, Pictured Rocks hiking, Pictured Rocks boat cruise',
       inLanguage: 'en-US',
-      dateModified: '2026-09-28',
+      dateModified: '2026-10-06',
       isPartOf: { '@id': 'https://picturedrocks.chrisizworski.com/#website' },
       author: { '@id': 'https://chrisizworski.com/#person' },
       mainEntity: { '@id': 'https://picturedrocks.chrisizworski.com/#app' },
