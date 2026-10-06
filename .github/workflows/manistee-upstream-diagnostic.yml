@@ -22,9 +22,15 @@ jobs:
         run: |
           node <<'NODE'
           const hydro = require('./api/manistee-river-hydrography.js');
+          const native = new URL(hydro._test.queryUrl());
+          native.searchParams.set('where', "GNIS_NAME IN ('Manistee River','Pine River','Bear Creek','Little Manistee River')");
+          native.searchParams.set('outFields', 'GNIS_NAME,REACHCODE,FCODE');
+          native.searchParams.set('f', 'json');
+          const geo = new URL(native);
+          geo.searchParams.set('f', 'geojson');
           const endpoints = [
-            ['public-api', 'https://chrisizworski.com/api/manistee-river-hydrography'],
-            ['primary-source', hydro._test.queryUrl()],
+            ['native-json', native.href],
+            ['uppercase-in-geojson', geo.href],
           ];
           (async () => {
             const results = await Promise.all(endpoints.map(async ([label, url]) => {
@@ -44,7 +50,7 @@ jobs:
                   robots: response.headers.get('x-robots-tag'), bytes: Buffer.byteLength(text),
                   error: data?.error, detail: data?.detail,
                   rawFeatures: data?.features?.length, namedFeatures: cleaned?.features?.length,
-                  names: cleaned ? [...new Set(cleaned.features.map(f => f.properties.name))] : undefined,
+                  names: data?.features ? [...new Set(data.features.map(f => (f.properties || f.attributes)?.GNIS_NAME || (f.properties || f.attributes)?.gnis_name))] : undefined,
                   exceededTransferLimit: data?.exceededTransferLimit,
                   responsePrefix: !response.ok || data?.error || !data ? text.slice(0,1200) : undefined,
                 };
