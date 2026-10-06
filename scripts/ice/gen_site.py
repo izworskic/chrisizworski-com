@@ -8,11 +8,9 @@ from gen_chrome import (head, header, FOOTER, SAFETY_BANNER, breadcrumb,
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = pathlib.Path(os.environ.get("ICE_OUT", str(ROOT / "public" / "michigan-ice")))
 (OUT / "regions").mkdir(parents=True, exist_ok=True)
-# Moved forward 2026-09-01: PR #234 rewrote the Person node on all ten generated pages and this
-# repair rewrote it again, so the pages really did change today. Only ever move this FORWARD, and
-# only with a real content change behind it — the stamper corrects a stale date but never walks an
-# overstated one back.
-ICE_ROOT_DATE_MODIFIED = "2026-09-01"
+# Moved forward 2026-10-06: root and regional pages gained publisher references to the
+# existing canonical Person entity. This identity metadata changed on those seven pages.
+ICE_ROOT_DATE_MODIFIED = "2026-10-06"
 # Sub-pages (ice safety, freezing degree days, ice cover history) gained their
 # dateModified on 2026-08-25. Keep this separate from the root/region date: the stamper
 # only corrects stamps FORWARD, so an overstated date would never be walked back.
@@ -245,14 +243,14 @@ def build_index():
         {"@type": "WebSite", "@id": SITE + "/#website", "name": "Michigan Ice Report", "url": SITE,
          "description": "Michigan ice conditions using freezing degree days, ten-year station normals, NOAA "
                         "lake-wide ice cover, and a 54-year Great Lakes ice climatology.",
-         "author": {"@id": PERSON_ID}},
+         "author": {"@id": PERSON_ID}, "publisher": {"@id": PERSON_ID}},
         {"@type": "WebPage", "@id": url + "#webpage", "url": url,
          "isPartOf": {"@id": SITE + "/#website"},
          "name": "Michigan Ice Report: Accumulated Cold and Great Lakes Ice Cover",
          "description": "Live Michigan ice conditions across six waters using accumulated freezing degree days, "
                         "ten-year station normals, and a 54-year Great Lakes ice climatology.",
          "dateModified": ICE_ROOT_DATE_MODIFIED,
-         "inLanguage": "en-US", "author": {"@id": PERSON_ID},
+         "inLanguage": "en-US", "author": {"@id": PERSON_ID}, "publisher": {"@id": PERSON_ID},
          "breadcrumb": {"@id": url + "#breadcrumb"}},
         breadcrumb([("Michigan Ice Report", url)]),
         {"@type": "ItemList", "@id": url + "#waters", "name": "Michigan ice fishing waters tracked",
