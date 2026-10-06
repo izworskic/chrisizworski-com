@@ -41,6 +41,7 @@ const intentionalChanges = new Set([
   "/seed-starting-guide/",
   "/when-to-plant-tomatoes-michigan/",
   "/niagara-border-crossing/",
+  "/manistee-river-map/",
   // Oct 6 2026: source-owned Petoskey export synced from owner PR #4 build artifact.
   "/petoskey-wine/charlevoix-area-wineries/",
   "/petoskey-wine/",

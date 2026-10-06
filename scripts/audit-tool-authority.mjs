@@ -146,6 +146,7 @@ function auditDocument(html, expectedUrl, tool, headers = new Headers()) {
     `${origin}/tools/`, `${origin}/great-lakes/`, `${origin}/projects/`,
     `${origin}/guides/`, `${origin}/national-tools/`
   ];
+  if (tool.id === 'fall-color') discoveryHubs.push(`${origin}/national-tools/fall-color/`);
   const hubLinks = anchors.filter(anchor => discoveryHubs.some(hub => normalizedUrl(anchor.resolved) === hub));
   if (outgoing.length && !linked.length && !hubLinks.length) errors.push(`No useful contextual discovery path; declared handoffs are ${destinations.map(item => item.id).join(', ')}.`);
   else if (outgoing.length && !linked.length) warnings.push(`Declared handoffs (${destinations.map(item => item.id).join(', ')}) are not directly linked; visible hub links provide discovery.`);
@@ -200,7 +201,7 @@ async function petoskeyPageFiles() {
         const route = relative === 'petoskey-wine/index.html'
           ? '/petoskey-wine/'
           : '/' + relative.slice(0, -'/index.html'.length) + '/';
-        if (route !== '/petoskey-wine/') found.push({ route, canonical: origin + route, evidence: relative });
+        if (route !== '/petoskey-wine/') found.push({ route, canonical: origin + route, evidence: 'public/' + relative });
       }
     }
   };

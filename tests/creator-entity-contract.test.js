@@ -167,7 +167,7 @@ test('vendored Petoskey owner export preserves all 33 useful canonical pages', a
       try { return new URL(anchor.href, canonical).href === 'https://chrisizworski.com/tools/'; } catch { return false; }
     }), route + ': useful Tools discovery link missing');
     assert.ok(sitemap.includes('<loc>' + canonical + '</loc>'), route + ': sitemap entry missing');
-    assert.ok(sitemap.includes('<loc>' + canonical + '</loc>\\n    <lastmod>2026-10-06</lastmod>'), route + ': sitemap freshness mismatch');
+    assert.ok(sitemap.includes('<loc>' + canonical + '</loc>\n    <lastmod>2026-10-06</lastmod>'), route + ': sitemap freshness mismatch');
     assert.doesNotMatch(html, /<meta[^>]+name=["']robots["'][^>]+content=["'][^"']*noindex/i, route + ': page is noindex');
   }
 });
