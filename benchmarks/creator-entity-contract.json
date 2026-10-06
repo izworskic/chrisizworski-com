@@ -216,7 +216,7 @@
       "status": "pending-audit",
       "personId": "https://chrisizworski.com/#person",
       "profileUrl": "https://chrisizworski.com/chris-izworski/",
-      "reason": "Current production property is registered, but no matching active GitHub repository was discoverable in the portfolio audit."
+      "reason": "Complete production HTML recovered and SHA-1 verified against Vercel deployment dpl_9SFegJGzkJR8BG8pz8GJnM1giepA; versioned in tool-sources/ausable-river-map. Auxiliary API source recovery remains pending; original content hashes are recorded for preservation."
     },
     {
       "id": "pictured-rocks",

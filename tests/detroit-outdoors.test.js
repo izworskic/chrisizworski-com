@@ -49,7 +49,7 @@ test("Detroit Outdoors separates strong desk writing from additive per-card writ
  assert.match(route,/Use the supplied place context/);
  assert.match(route,/Return JSON only: \{\\"note\\":\\"\.\.\.\\"\}/);
  assert.match(route,/detroit-outdoors:desk:v8/);
- assert.match(route,/detroit-outdoors:card:v11/);
+ assert.match(route,/detroit-outdoors:card:v12/);
  assert.match(route,/placements:editorial\.actualPlacements/);
 });
 
@@ -186,7 +186,7 @@ test("Detroit freighter cards use a concise ship-sighting editorial job",()=>{
  assert.match(route,/not yet a chase-it-now passage signal/);
  assert.match(route,/Never invent a wait-10-minutes rule/);
  assert.match(route,/options=pureFreighter[\s\S]*SHIP_SIGHTING/);
- assert.match(route,/detroit-outdoors:card:v11/);
+ assert.match(route,/detroit-outdoors:card:v12/);
  assert.match(engines,/const activePassage=speed!==null&&speed>0\.5/);
  assert.match(engines,/motionAdjustment=speed===null\?-3:speed<=0\.5\?-12/);
  assert.match(engines,/possible freighter sighting/);

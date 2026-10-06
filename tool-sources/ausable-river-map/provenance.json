@@ -1,0 +1,261 @@
+{
+  "deploymentId": "dpl_9SFegJGzkJR8BG8pz8GJnM1giepA",
+  "projectId": "prj_RxnFBKojdNecsId0tSc90C0Z3b5r",
+  "canonical": "https://ausable.chrisizworski.com/",
+  "recoveredAt": "2026-10-06",
+  "originalIndexSha1": "dde92e21541d4b07111f94827c0b7eb4b31a4b27",
+  "originalIndexSha256": "a08e1efb39f9a51bf7ecbf4b1ebfd0319e003297559001cb8bd200027620aef0",
+  "originalFiles": [
+    {
+      "path": "api/share.js",
+      "type": "file",
+      "sha": "7e2f0e185e88e0018ec304044bec6f203025c001"
+    },
+    {
+      "path": "api/snapshot.js",
+      "type": "file",
+      "sha": "9d15d5d86fa0fb8d472ba44d7f0762220858f040"
+    },
+    {
+      "path": "b1be9ee40d264668af173e98e30188bf.txt",
+      "type": "file",
+      "sha": "a4a34ca6004cc4b73a4302c63a7b8123db150093"
+    },
+    {
+      "path": "index.html",
+      "type": "file",
+      "sha": "dde92e21541d4b07111f94827c0b7eb4b31a4b27"
+    },
+    {
+      "path": "og.png",
+      "type": "file",
+      "sha": "8bdd2236fd15b46a5cafd25353b6e82d3c04fa0c"
+    },
+    {
+      "path": "og/landing.png",
+      "type": "file",
+      "sha": "8973258f83252cb6c94ef38e6cebc3bb429966e8"
+    },
+    {
+      "path": "og/main__below-foote-launch__au-sable-river-mouth.png",
+      "type": "file",
+      "sha": "113c1fb9ca7167ecef799e006774acc7631098b0"
+    },
+    {
+      "path": "og/main__below-foote-launch__whirlpool-angler-access.png",
+      "type": "file",
+      "sha": "069aea8abf7aacfb4ef9ebb737655061054192a6"
+    },
+    {
+      "path": "og/main__burton-s-landing__mcmasters-bridge.png",
+      "type": "file",
+      "sha": "cce45edc64d40bb0e301cae11ba5c83296794b7b"
+    },
+    {
+      "path": "og/main__burton-s-landing__stephan-bridge.png",
+      "type": "file",
+      "sha": "0019ecde20efe77f44f499d08fc6318d9153c00a"
+    },
+    {
+      "path": "og/main__burton-s-landing__wakeley-bridge.png",
+      "type": "file",
+      "sha": "62d844d1494f506f40b99e48b8d1a27c7205e1a9"
+    },
+    {
+      "path": "og/main__comins-flats-launch__mckinley-landing.png",
+      "type": "file",
+      "sha": "3d724dfc02215062caf0d291b092a9e459d4882f"
+    },
+    {
+      "path": "og/main__connors-flats-launch__mcmasters-bridge.png",
+      "type": "file",
+      "sha": "c527ce519726567c8da96a6e08b22c567d055226"
+    },
+    {
+      "path": "og/main__grayling-public-access__burton-s-landing.png",
+      "type": "file",
+      "sha": "0331039c1be26a261b248b5c27594a8b12344119"
+    },
+    {
+      "path": "og/main__grayling-public-access__mcmasters-bridge.png",
+      "type": "file",
+      "sha": "6cb58cbad3d8a58e8e677bcb96e0d83b4f15025b"
+    },
+    {
+      "path": "og/main__grayling-public-access__stephan-bridge.png",
+      "type": "file",
+      "sha": "6e98c80bcba8a28519c5782edba1c1c7c157173e"
+    },
+    {
+      "path": "og/main__grayling-public-access__wakeley-bridge.png",
+      "type": "file",
+      "sha": "9e2d34c01d5f23f172f80d756f881b5fbc943288"
+    },
+    {
+      "path": "og/main__keystone-landing__stephan-bridge.png",
+      "type": "file",
+      "sha": "6c62915a1f4a7b70e3c8fb763da0b915844a1d20"
+    },
+    {
+      "path": "og/main__keystone-landing__wakeley-bridge.png",
+      "type": "file",
+      "sha": "d965d40715bd5b2e943a3c3849a765cee18d9f67"
+    },
+    {
+      "path": "og/main__louie-s-landing__stephan-bridge.png",
+      "type": "file",
+      "sha": "754bd6a96b03e40dd2361bead72489a172334a42"
+    },
+    {
+      "path": "og/main__louie-s-landing__wakeley-bridge.png",
+      "type": "file",
+      "sha": "0c637a7e43d55bc1468581b9b54c76124149e72c"
+    },
+    {
+      "path": "og/main__mckinley-landing__4001-bridge-landing.png",
+      "type": "file",
+      "sha": "bdad11127e61a4d97b68ccf5f681eeb903578b9e"
+    },
+    {
+      "path": "og/main__mckinley-landing__alcona-dam-launch.png",
+      "type": "file",
+      "sha": "7ab58c351b63784470ccaaca9fa3fb0e0cb07aa0"
+    },
+    {
+      "path": "og/main__mcmasters-bridge__parmalee-bridge.png",
+      "type": "file",
+      "sha": "8ba68bef5a209672d8d9861ca73e5951f88e2ce3"
+    },
+    {
+      "path": "og/main__mio-au-sable-launch__comins-flats-launch.png",
+      "type": "file",
+      "sha": "f73996b7fe63023e626aa6b84c6e423025d8d6c3"
+    },
+    {
+      "path": "og/main__mio-au-sable-launch__mckinley-landing.png",
+      "type": "file",
+      "sha": "45e2c83ee0559698f6fdca4b03aa4cf961eee0c7"
+    },
+    {
+      "path": "og/main__stephan-bridge__mcmasters-bridge.png",
+      "type": "file",
+      "sha": "75d005b2bc986255e91d162b17e3099662bf4e21"
+    },
+    {
+      "path": "og/main__stephan-bridge__parmalee-bridge.png",
+      "type": "file",
+      "sha": "8b34b16396e8408d9a0b245576bbafe25239f6f0"
+    },
+    {
+      "path": "og/main__stephan-bridge__wakeley-bridge.png",
+      "type": "file",
+      "sha": "ed1e0162fe74051a1451ad3f2c5ab05b76fc21d0"
+    },
+    {
+      "path": "og/main__thendara-road-access__stephan-bridge.png",
+      "type": "file",
+      "sha": "50a007e6bcac43bb3145430b4ffc9f233a84c950"
+    },
+    {
+      "path": "og/main__thendara-road-access__wakeley-bridge.png",
+      "type": "file",
+      "sha": "beaecea6802e4171111c30c37bddbc1de37f7507"
+    },
+    {
+      "path": "og/main__wakeley-bridge__connors-flats-launch.png",
+      "type": "file",
+      "sha": "3ba9b0315ec4bf06a7273e24a12cb1d12d444056"
+    },
+    {
+      "path": "og/main__wakeley-bridge__mcmasters-bridge.png",
+      "type": "file",
+      "sha": "1bb76526307e906e1da7338a81755d44f2c9b731"
+    },
+    {
+      "path": "og/main__wakeley-bridge__parmalee-bridge.png",
+      "type": "file",
+      "sha": "aa6efcdedcf01ef4f14b4198f179c01e134b3ab7"
+    },
+    {
+      "path": "og/main__wakeley-bridge__rainbow-bend-campground.png",
+      "type": "file",
+      "sha": "8852b6e695e488b127e0c7c6325c85653d59b92b"
+    },
+    {
+      "path": "og/main__whirlpool-angler-access__au-sable-river-mouth.png",
+      "type": "file",
+      "sha": "0d721a3f788e6dc43a1cc06eb67be818fa40e149"
+    },
+    {
+      "path": "og/main__white-pine-canoe-camp__mcmasters-bridge.png",
+      "type": "file",
+      "sha": "9c67f65caced89ba0053c523283a37f3a3f53d6d"
+    },
+    {
+      "path": "og/north__kelloggs-bridge__north-branch-access-morley-rd.png",
+      "type": "file",
+      "sha": "f3d059f449b5ea10e5949f4a1ab6a78fd961c998"
+    },
+    {
+      "path": "og/north__lovells-canoe-launch__kelloggs-bridge.png",
+      "type": "file",
+      "sha": "c0636b1d10cf81ab0bc0c0763072d1b309af4ef1"
+    },
+    {
+      "path": "og/north__lovells-canoe-launch__north-branch-access-morley-rd.png",
+      "type": "file",
+      "sha": "a49d552e77a6b565c1a8162ede91dab6b9d37a1c"
+    },
+    {
+      "path": "og/north__north-branch-outing-club__kelloggs-bridge.png",
+      "type": "file",
+      "sha": "9944dd3d75cd0b304f1d8ea85553df02fb9aabaa"
+    },
+    {
+      "path": "og/south__canoe-harbor-campground__smith-bridge.png",
+      "type": "file",
+      "sha": "0c0b641cfad6f07fcd28017baea31bcaf5f185c9"
+    },
+    {
+      "path": "og/south__chase-bridge__canoe-harbor-campground.png",
+      "type": "file",
+      "sha": "5ad653c665f379bdd249352d919b82057940da7f"
+    },
+    {
+      "path": "og/south__chase-bridge__mason-tract-access.png",
+      "type": "file",
+      "sha": "2c97ff802d4aa96baec93d6108597cfbbb658d67"
+    },
+    {
+      "path": "og/south__chase-bridge__smith-bridge.png",
+      "type": "file",
+      "sha": "4e3e22febfe0f51ab20d5f49fd24bde8aed17a1b"
+    },
+    {
+      "path": "og/south__mason-tract-access__canoe-harbor-campground.png",
+      "type": "file",
+      "sha": "c27ec9b43a1272546d6a0237d3b1308f866092e4"
+    },
+    {
+      "path": "og/south__mason-tract-access__smith-bridge.png",
+      "type": "file",
+      "sha": "574958d1942217a2e3e7a042a2ab69eba994b8e3"
+    },
+    {
+      "path": "robots.txt",
+      "type": "file",
+      "sha": "99f1594ac9904fcc4cd458045bb599ac9840b721"
+    },
+    {
+      "path": "sitemap.xml",
+      "type": "file",
+      "sha": "c95d2273004d838d327093ca49436b636b7b6533"
+    },
+    {
+      "path": "vercel.json",
+      "type": "file",
+      "sha": "15633732218a5a5990155e7eafb3eafbe6fcf388"
+    }
+  ],
+  "sourceRecovery": "Complete initial HTML verified against the original Vercel file SHA-1. Auxiliary API sources and assets are retained by their original content hashes; complete API source text remains to be recovered."
+}
