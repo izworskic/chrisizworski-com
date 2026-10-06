@@ -133,7 +133,7 @@ const pageChecks = [
   {
     file: "public/mackinac-bridge-live/index.html",
     path: "/mackinac-bridge-live/",
-    title: "Is the Mackinac Bridge Open Today? Live Conditions &amp; Cameras",
+    title: "Mackinac Bridge Conditions Today: Open Status, Wind &amp; Cameras",
     marker: 'id="mackinac-conditions-answer"',
   },
 ];
