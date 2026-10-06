@@ -41,6 +41,8 @@ For audited NYC DOT links, the live adapter now requests a bounded aggregate fro
 
 Port Authority historical values remain authoritative for GWB, Lincoln and Holland. The NYC Open Data comparison is labeled separately as an 8-week average rather than implying it is an authority-provided historical value.
 
+The baseline deliberately uses the public SODA 2.1 resource endpoint. Socrata permits limited unauthenticated queries there, while application tokens raise throttling limits. Because results are cached for six days and baseline failure is non-fatal, throttling can remove the comparison but cannot remove the live authority reading.
+
 ## Sources
 
 - Port Authority crossing conditions: https://www.panynj.gov/bridges-tunnels/en/index.html
