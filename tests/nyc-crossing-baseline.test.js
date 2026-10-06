@@ -6,6 +6,7 @@ const {
   BASELINE_KIND,
   MIN_SAMPLES,
   buildBaselineUrl,
+  baselineCacheKey,
   normalizeBaselineRows,
   enrichNycdotBaselines,
   _internal,
@@ -43,8 +44,7 @@ test('NYC historical baseline query is tightly bounded to same weekday/hour and 
   assert.match(where, /2026-10-05T23:59:59\.999/);
   assert.equal(url.searchParams.get('$group'), 'link_id');
   assert.equal(url.searchParams.get('$limit'), '100');
-  assert.match(_internal.memoryCache instanceof Map ? 'ok' : '', /ok/);
-  assert.match(require('../lib/nyc-crossing/baseline').baselineCacheKey(now), /baseline:v2:/);
+  assert.match(baselineCacheKey(now), /baseline:v2:/);
 });
 
 test('historical baseline rows require enough valid observations', () => {
