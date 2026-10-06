@@ -22,7 +22,7 @@ const relationships = [...(registry.relationships || []), ...(actions.relationsh
 let tools = registry.tools.filter(item => item.kind !== 'developer-infrastructure');
 const checkMode = process.argv.includes('--check');
 const releaseMode = process.argv.includes('--live-release');
-const releaseIds = new Set(['pictured-rocks', 'seed-starting', 'tomato-planting', 'niagara-border', 'manistee-field-map', 'petoskey-wine']);
+const releaseIds = new Set(['michigan-ice', 'pictured-rocks', 'seed-starting', 'tomato-planting', 'niagara-border', 'manistee-field-map', 'petoskey-wine', 'ship-tracker', 'soo-locks', 'beach-report', 'ausable-guide', 'detroit-freighters', 'detroit-birding', 'lake-st-clair-outdoors', 'detroit-sunset', 'xc-planning', 'aurora', 'heirloom-matchmaker', 'estivant-pines', 'duluth-canal-park', 'nyc-crossing', 'national-garden-water']);
 if (releaseMode) tools = tools.filter(item => releaseIds.has(item.id));
 const toolById = new Map(registry.tools.map(item => [item.id, item]));
 const liveMode = process.argv.includes('--live') || releaseMode;
@@ -248,6 +248,17 @@ async function auditTool(tool) {
         last = { id: tool.id, canonical: tool.canonical, ...route, audit: { checked: false, errors: [], warnings: ['No emitted page bytes for this route disposition; a public fetch is required.'] } };
       } else {
         const result = auditDocument(output.html, tool.canonical, tool, output.headers);
+        if (tool.id === 'duluth-canal-park') {
+          let sitemap = '';
+          if (liveMode) {
+            const sitemapResponse = await fetch(origin + '/sitemap.xml', { redirect: 'follow', signal: AbortSignal.timeout(8000) });
+            if (!sitemapResponse.ok) result.errors.push('Public sitemap.xml returned ' + sitemapResponse.status + '.');
+            else sitemap = await sitemapResponse.text();
+          } else {
+            sitemap = await read('public/sitemap.xml');
+          }
+          if (!sitemap.includes('<loc>' + tool.canonical + '</loc>')) result.errors.push('Canonical URL is missing from the main sitemap.');
+        }
         if (tool.id === 'pictured-rocks') await auditPicturedSpecific(output.html, output.headers, output.sourceHtml, result.errors);
         if (liveMode && output.status !== 200) result.errors.push(`Public response status is ${output.status}.`);
         if (liveMode && !/text\/html/i.test(output.headers.get('content-type') || '')) result.errors.push('Public response is not HTML.');
@@ -270,6 +281,41 @@ for (let start = 0; start < petoskeyPages.length; start += limit) {
   reports.push(...await Promise.all(petoskeyPages.slice(start, start + limit).map(auditPetoskeyPage)));
 }
 
+const michiganIceChildPages = [
+  '/michigan-ice/regions/saginaw-bay.html',
+  '/michigan-ice/regions/houghton-lake.html',
+  '/michigan-ice/regions/lake-st-clair.html',
+  '/michigan-ice/regions/little-bay-de-noc.html',
+  '/michigan-ice/regions/grand-traverse-bay.html',
+  '/michigan-ice/regions/burt-mullett.html',
+];
+if (process.argv.includes('--built') || releaseMode) {
+  for (let start = 0; start < michiganIceChildPages.length; start += limit) {
+    const group = michiganIceChildPages.slice(start, start + limit);
+    reports.push(...await Promise.all(group.map(async route => {
+      const url = origin + route;
+      const tool = { id: 'michigan-ice-page:' + route, canonical: url };
+      let last;
+      const attempts = releaseMode ? 5 : 1;
+      for (let attempt = 1; attempt <= attempts; attempt++) {
+        try {
+          const output = liveMode
+            ? await publicDocument(tool)
+            : { status: 200, headers: new Headers(), html: await read(mainHtmlFile(url)) };
+          const result = auditDocument(output.html, url, tool, output.headers);
+          if (liveMode && output.status !== 200) result.errors.push('Public response status is ' + output.status + '.');
+          if (liveMode && !/text\\/html/i.test(output.headers.get('content-type') || '')) result.errors.push('Public response is not HTML.');
+          last = { id: tool.id, canonical: url, kind: liveMode ? 'public-fetch' : 'static-emitted', evidence: route, audit: { ...result, status: output.status, attempts: attempt } };
+        } catch (error) {
+          last = { id: tool.id, canonical: url, kind: liveMode ? 'public-fetch' : 'static-emitted', evidence: route, audit: { checked: false, errors: ['Fetch/read failed: ' + error.message], warnings: [], attempts: attempt } };
+        }
+        if (!releaseMode || (last.audit.checked && last.audit.errors.length === 0) || attempt === attempts) break;
+        await new Promise(resolve => setTimeout(resolve, [3000, 6000, 12000, 20000][attempt - 1]));
+      }
+      return last;
+    })));
+  }
+}
 const checked = reports.filter(item => item.audit.checked);
 const incomplete = reports.filter(item => !item.audit.checked);
 const failures = reports.flatMap(item => item.audit.errors.map(error => `${item.id}: ${error}`));
@@ -278,7 +324,7 @@ const dispositionCounts = reports.reduce((out, item) => (out[item.kind] = (out[i
 console.log(JSON.stringify({
   mode: releaseMode ? 'post-promotion-changed-public-output' : liveMode ? 'live-public-output' : 'post-injection-emitted-output',
   note: 'Output checks cover each registered non-infrastructure tool when bytes are available. Source ownership and public output are reported separately; an external/pending route is never counted as verified from source readiness.',
-  summary: { registeredTools: tools.length, registeredOutputChecked: checked.filter(item => !item.id.startsWith('petoskey-page:')).length, additionalPetoskeyPages: petoskeyPages.length, outputChecked: checked.length, incompleteRoutes: incomplete.length, dispositionCounts, errors: failures.length, warnings: warnings.length },
+  summary: { registeredTools: tools.length, registeredOutputChecked: checked.filter(item => !item.id.startsWith('petoskey-page:')).length, additionalPetoskeyPages: petoskeyPages.length, additionalMichiganIcePages: reports.filter(item => item.id.startsWith('michigan-ice-page:')).length, outputChecked: checked.length, incompleteRoutes: incomplete.length, dispositionCounts, errors: failures.length, warnings: warnings.length },
   routes: reports,
 }, null, 2));
 if (checkMode && (failures.length || (releaseMode && incomplete.length))) {

@@ -60,3 +60,20 @@ test('a conflicting canonical Person definition fails even with complete page li
   }], [{ '@type': 'Person', '@id': personId, name: 'Chris Izworski', url: 'https://chrisizworski.com/chris-izworski/' }]);
   assert.equal(result.errors.some(error => error.includes('Canonical Person definition')), true);
 });
+
+test('a noncanonical Chris role reference cannot be hidden beside canonical links', () => {
+  const result = audit([{
+    '@type': 'WebPage',
+    author: { '@id': 'https://example.com/#chris-izworski', name: 'Chris Izworski' },
+    publisher: { '@id': personId },
+  }]);
+  assert.equal(result.errors.some(error => error.includes('do not resolve to the canonical Person')), true);
+});
+
+test('primary Article and CollectionPage nodes count as page content, unlike nested news articles', () => {
+  const result = audit([
+    { '@type': 'CollectionPage', author: { '@id': personId }, publisher: { '@id': personId } },
+    { '@type': 'Article', author: { '@id': personId }, publisher: { '@id': personId } },
+  ]);
+  assert.deepEqual(result.errors, []);
+});

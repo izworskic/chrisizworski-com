@@ -94,3 +94,16 @@ test("reports only headings visible in the full document context", () => {
   const html = '<template><h1>Template heading</h1></template><div hidden><h1>Hidden heading</h1></div><h1>Useful visible heading</h1>';
   assert.deepEqual(inspectVisibleHtml(html).headings, ["Useful visible heading"]);
 });
+
+
+test("recognizes existing case-insensitive maker bylines without duplicating the credit", () => {
+  const variants = [
+    '<footer><span>Built and maintained by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a></span></footer>',
+    '<footer><span>built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a></span></footer>',
+    '<footer><a href="https://chrisizworski.com/chris-izworski/">Built and maintained by Chris Izworski</a></footer>',
+  ];
+  for (const html of variants) {
+    assert.equal(hasVisibleCreatorAttribution(html), true);
+    assert.equal(addCreatorAttribution(html), html);
+  }
+});
