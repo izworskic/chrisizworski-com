@@ -4,12 +4,12 @@
     "ice-cover-history.html": "a2e1af89824b85143e5f95cd9d8621441d349487f962ff1f54fe2bab52000607",
     "ice-safety.html": "046b8c46d211fc26ec01bc4802dc3cf31969d5285607fbedd641aa43e2511917",
     "index.html": "6e63608a6c82053337ba5c550751fab9d2996823af2ddaf99b0c76defcf13d29",
-    "regions/burt-mullett.html": "de6d8e7282e864d95614003ad82cd48800655515c38a7262454ccc6a613c5363",
-    "regions/grand-traverse-bay.html": "5e4b06cec3209ede6912062d727e701f7c0f6112f489b77cbf6d7cb7c8199676",
-    "regions/houghton-lake.html": "af5eaac03f29f4793efbaf217f82fb35d4995e529460c8699994123a2725d7e2",
-    "regions/lake-st-clair.html": "9844f195224315166e03b1fec05bf205f37f05e782c96aeb9cbb64738bd9770c",
-    "regions/little-bay-de-noc.html": "a8b79becbc220508b7f1d106849ec07753a12cbb10b3ea87c3e09e9c5466e31c",
-    "regions/saginaw-bay.html": "8608f7b689109a414d1a2f41d4e4df4d50d38ec7715033211211be26c7c0e619"
+    "regions/burt-mullett.html": "3dd6e02eba179ed905c930da343f38a21ad380ddfcb860c30e2b95dad2d71026",
+    "regions/grand-traverse-bay.html": "87d20545f6b20b94bebb3dc9f0522656489026d3d257147fd84099c203798a9b",
+    "regions/houghton-lake.html": "ef5be50ac42907053b8a056241a0a9f1e77064dc9a74999449eaae311be13b22",
+    "regions/lake-st-clair.html": "65fe876526a653592cdc647827ac5289c7e616cef1f4fd4aef385490b87c1a02",
+    "regions/little-bay-de-noc.html": "329451b92ea5522bc9ad219a8893b66820c4d8a86c4055842a94aed0ba522722",
+    "regions/saginaw-bay.html": "ba1fa3e1bc803056cb51b235ae1b716627e4b2ed035441e361a322f221e4c343"
   },
   "outputDir": "public/michigan-ice"
 }

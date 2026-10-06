@@ -726,7 +726,7 @@ def build_region(r):
                         f"{r['name']}.",
          "isPartOf": {"@id": SITE + "/#website"},
          "dateModified": ICE_ROOT_DATE_MODIFIED,
-         "inLanguage": "en-US", "author": {"@id": PERSON_ID},
+         "inLanguage": "en-US", "author": {"@id": PERSON_ID}, "publisher": {"@id": PERSON_ID},
          "breadcrumb": {"@id": url + "#breadcrumb"}},
         breadcrumb([("Michigan Ice Report", SITE + "/"), (r["name"], url)]),
         PERSON_NODE,

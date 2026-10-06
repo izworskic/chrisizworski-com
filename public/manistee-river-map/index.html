@@ -17,14 +17,22 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3yn5pTnZL7H3p4y8K3S0Z7z4P2gY0=" crossorigin="anonymous">
 <script type="application/ld+json">
 {
-  "@context": "https://schema.org",
-  "@graph": [
+  "@context":"https://schema.org",
+  "@graph":[
     {
-      "@type": "Person",
-      "@id": "https://chrisizworski.com/#person",
-      "name": "Chris Izworski",
-      "url": "https://chrisizworski.com/"
-    },
+    "@type": "Person",
+    "@id": "https://chrisizworski.com/#person",
+    "name": "Chris Izworski",
+    "url": "https://chrisizworski.com/"
+   },
+   {"@type":"WebApplication","name":"Manistee River Field Map","url":"https://chrisizworski.com/manistee-river-map/",
+  "dateModified":"2026-10-06","applicationCategory":"TravelApplication","operatingSystem":"Any","description":"Interactive Manistee River and tributaries map with access locations, USGS hydrography, current river readings and trip planning."},
+    {"@type":"Dataset","name":"Manistee River Field Map source index","creator": {"@id": "https://chrisizworski.com/#person"},"isBasedOn":["https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer","https://waterdata.usgs.gov/","https://www.michigan.gov/dnr/things-to-do/fishing/fishing-regulations","https://www.fs.usda.gov/r09/huron-manistee"],"description":"A curated index of public river access and recreation locations with coordinate and facility metadata."},
+    {"@type":"FAQPage","mainEntity":[
+      {"@type":"Question","name":"Does this map replace Michigan fishing regulations?","acceptedAnswer":{"@type":"Answer","text":"No. Use the current Michigan DNR fishing regulations and regulation map for reach-specific rules."}},
+      {"@type":"Question","name":"Where do the river lines come from?","acceptedAnswer":{"@type":"Answer","text":"River and tributary geometry comes from the U.S. Geological Survey National Hydrography Dataset."}},
+      {"@type":"Question","name":"Are the flow and temperature readings live?","acceptedAnswer":{"@type":"Answer","text":"The tool requests current USGS readings from active stations on the Manistee and Pine rivers."}}
+    ]},
     {
       "@type": "WebApplication",
       "name": "Manistee River Field Map",
@@ -40,52 +48,6 @@
       "publisher": {
         "@id": "https://chrisizworski.com/#person"
       }
-    },
-    {
-      "@type": "Dataset",
-      "name": "Manistee River Field Map source index",
-      "creator": {
-        "@id": "https://chrisizworski.com/#person"
-      },
-      "isBasedOn": [
-        "https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer",
-        "https://waterdata.usgs.gov/",
-        "https://www.michigan.gov/dnr/things-to-do/fishing/fishing-regulations",
-        "https://www.fs.usda.gov/r09/huron-manistee"
-      ],
-      "description": "A curated index of public river access and recreation locations with coordinate and facility metadata.",
-      "publisher": {
-        "@id": "https://chrisizworski.com/#person"
-      }
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Does this map replace Michigan fishing regulations?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. Use the current Michigan DNR fishing regulations and regulation map for reach-specific rules."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Where do the river lines come from?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "River and tributary geometry comes from the U.S. Geological Survey National Hydrography Dataset."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Are the flow and temperature readings live?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The tool requests current USGS readings from active stations on the Manistee and Pine rivers."
-          }
-        }
-      ]
     }
   ]
 }

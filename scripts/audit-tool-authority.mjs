@@ -301,7 +301,7 @@ if (process.argv.includes('--built') || releaseMode) {
         try {
           const output = liveMode
             ? await publicDocument(tool)
-            : { status: 200, headers: new Headers(), html: await read(mainHtmlFile(url)) };
+            : { status: 200, headers: new Headers(), html: await readFile(mainHtmlFile(url), "utf8") };
           const result = auditDocument(output.html, url, tool, output.headers);
           if (liveMode && output.status !== 200) result.errors.push('Public response status is ' + output.status + '.');
           if (liveMode && !/text\/html/i.test(output.headers.get('content-type') || '')) result.errors.push('Public response is not HTML.');
