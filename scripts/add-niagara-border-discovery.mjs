@@ -93,10 +93,10 @@ function upsertSitemapEntry(xml, url, priority, preserveLastmod = false) {
   const entry = `  <url>\n    <loc>${url}</loc>\n    <lastmod>${LASTMOD}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
   if (existingEntryRe.test(xml)) {
     const existing = xml.match(existingEntryRe)?.[0] || '';
-    const currentLastmod = existing.match(/<lastmod>([^<]+)<\\/lastmod>/)?.[1];
+    const currentLastmod = existing.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
     const nextLastmod = preserveLastmod && currentLastmod ? currentLastmod : LASTMOD;
     const updated = currentLastmod
-      ? existing.replace(/<lastmod>[^<]+<\\/lastmod>/, `<lastmod>${nextLastmod}</lastmod>`)
+      ? existing.replace(/<lastmod>[^<]+<\/lastmod>/, `<lastmod>${nextLastmod}</lastmod>`)
       : existing.replace('</url>', `  <lastmod>${nextLastmod}</lastmod>\n</url>`);
     return xml.replace(existingEntryRe, updated);
   }
