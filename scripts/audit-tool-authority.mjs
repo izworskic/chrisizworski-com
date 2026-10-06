@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { access, readFile } from 'node:fs/promises';
+import { access, readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { stripTypeScriptTypes } from 'node:module';
 import { fileURLToPath } from 'node:url';
@@ -57,9 +57,10 @@ function allPersonRefs(nodes) {
     if (!value || typeof value !== 'object') return;
     if (Array.isArray(value)) { value.forEach(visit); return; }
     const type = Array.isArray(value['@type']) ? value['@type'] : [value['@type']];
-    const isChris = value.name === 'Chris Izworski' || value['@id'] === personId ||
-      (typeof value['@id'] === 'string' && /#(?:person|chris)(?:$|[-_])/i.test(value['@id']));
-    if (isChris && (type.includes('Person') || value.name === 'Chris Izworski' || value['@id'] === personId)) {
+    const authorId = typeof value['@id'] === 'string' ? value['@id'] : '';
+    const isChris = value.name === 'Chris Izworski' || authorId === personId ||
+      /chris[-_]?izworski|#chris(?:$|[-_])/i.test(authorId);
+    if (isChris) {
       refs.push(value['@id'] || '');
     }
     for (const child of Object.values(value)) visit(child);
@@ -120,7 +121,7 @@ function auditDocument(html, expectedUrl, tool, headers = new Headers()) {
     try { resolved = new URL(anchor.href, expectedUrl).href; } catch {}
     return { ...anchor, resolved };
   });
-  const h1 = inspectVisibleHtml(/<h1\b[^>]*>[\s\S]*?<\/h1>/i.exec(html)?.[0] || '').text;
+  const h1 = facts.headings[0] || '';
   const bodyMatch = /<body\b[^>]*>([\s\S]*?)<\/body>/i.exec(html)?.[1] || html;
   const bodyText = inspectVisibleHtml(bodyMatch).text;
   const title = inspectVisibleHtml(/<title\b[^>]*>[\s\S]*?<\/title>/i.exec(html)?.[0] || '').text;
@@ -148,10 +149,22 @@ function auditDocument(html, expectedUrl, tool, headers = new Headers()) {
   const hubLinks = anchors.filter(anchor => discoveryHubs.some(hub => normalizedUrl(anchor.resolved) === hub));
   if (outgoing.length && !linked.length && !hubLinks.length) errors.push(`No useful contextual discovery path; declared handoffs are ${destinations.map(item => item.id).join(', ')}.`);
   else if (outgoing.length && !linked.length) warnings.push(`Declared handoffs (${destinations.map(item => item.id).join(', ')}) are not directly linked; visible hub links provide discovery.`);
-  if (!meta(html, 'og:title', 'property') || !meta(html, 'og:description', 'property') || !meta(html, 'og:url', 'property')) warnings.push('Open Graph preview metadata is incomplete.');
-  if (!meta(html, 'twitter:card') || !meta(html, 'twitter:title') || !meta(html, 'twitter:description')) warnings.push('Twitter preview metadata is incomplete.');
+  const completeOpenGraph = meta(html, 'og:title', 'property') && meta(html, 'og:description', 'property') && meta(html, 'og:url', 'property');
+  const completeTwitter = meta(html, 'twitter:card') && meta(html, 'twitter:title') && meta(html, 'twitter:description');
+  if (!completeOpenGraph && !completeTwitter) warnings.push('Social preview tags are incomplete; page metadata may be used as a fallback.');
   if (outgoing.length && linked.length) warnings.push(`Contextual handoffs resolve to ${linked.map(item => item.id).join(', ')}.`);
-  return { checked: true, errors, warnings, title, canonical: canonical(html), linkedDestinations: linked.map(item => item.id), discoveryHubs: hubLinks.map(item => item.resolved), personDefinitions: people.length };
+  return {
+    checked: true, errors, warnings, title, canonical: canonical(html),
+    linkedDestinations: linked.map(item => item.id), discoveryHubs: hubLinks.map(item => item.resolved),
+    evidence: {
+      visibleHeading: h1,
+      personDefinitions: people.map(person => ({ id: person['@id'] || '', url: person.url || '' })),
+      creatorReferences: refs,
+      visibleCreatorCredit: hasVisibleCreatorAttribution(html) || anchors.some(anchor => anchor.resolved === profileUrl && anchor.text === 'Chris Izworski'),
+      openGraph: Boolean(meta(html, 'og:title', 'property') && meta(html, 'og:description', 'property') && meta(html, 'og:url', 'property')),
+      twitterCard: Boolean(meta(html, 'twitter:card') && meta(html, 'twitter:title') && meta(html, 'twitter:description')),
+    },
+  };
 }
 
 async function auditPicturedSpecific(html, headers, sourceHtml, errors) {
@@ -172,6 +185,49 @@ async function auditPicturedSpecific(html, headers, sourceHtml, errors) {
 async function publicDocument(tool) {
   const response = await fetch(tool.canonical, { redirect: 'follow', headers: { 'user-agent': 'chrisizworski-tool-authority-audit/1.0' }, signal: AbortSignal.timeout(12000) });
   return { status: response.status, headers: response.headers, html: await response.text() };
+}
+
+async function petoskeyPageFiles() {
+  const section = path.join(root, 'public', 'petoskey-wine');
+  const found = [];
+  const walk = async dir => {
+    for (const entry of await readdir(dir, { withFileTypes: true })) {
+      const file = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name !== '404' && entry.name !== '_next') await walk(file);
+      } else if (entry.isFile() && entry.name === 'index.html') {
+        const relative = path.relative(path.join(root, 'public'), file).split(path.sep).join('/');
+        const route = relative === 'petoskey-wine/index.html'
+          ? '/petoskey-wine/'
+          : '/' + relative.slice(0, -'/index.html'.length) + '/';
+        if (route !== '/petoskey-wine/') found.push({ route, canonical: origin + route, evidence: relative });
+      }
+    }
+  };
+  try { await walk(section); } catch {}
+  return found.sort((a, b) => a.route.localeCompare(b.route));
+}
+
+async function auditPetoskeyPage(page) {
+  const route = { kind: 'static-emitted', evidence: page.evidence };
+  let last;
+  const attempts = releaseMode ? 5 : 1;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      const output = liveMode
+        ? await publicDocument({ id: 'petoskey-page:' + page.route, canonical: page.canonical })
+        : { status: 200, headers: new Headers(), html: await read(page.evidence) };
+      const result = auditDocument(output.html, page.canonical, { id: 'petoskey-wine-page' }, output.headers);
+      if (liveMode && output.status !== 200) result.errors.push('Public response status is ' + output.status + '.');
+      if (liveMode && !/text\/html/i.test(output.headers.get('content-type') || '')) result.errors.push('Public response is not HTML.');
+      last = { id: 'petoskey-page:' + page.route, canonical: page.canonical, ...route, audit: { ...result, status: output.status, attempts: attempt } };
+    } catch (error) {
+      last = { id: 'petoskey-page:' + page.route, canonical: page.canonical, ...route, audit: { checked: false, errors: ['Fetch/read failed: ' + error.message], warnings: [], attempts: attempt } };
+    }
+    if (!releaseMode || (last.audit.checked && last.audit.errors.length === 0) || attempt === attempts) return last;
+    await new Promise(resolve => setTimeout(resolve, [3000, 6000, 12000, 20000][attempt - 1]));
+  }
+  return last;
 }
 
 async function builtDocument(tool, route) {
@@ -210,6 +266,10 @@ for (let start = 0; start < tools.length; start += limit) {
   const group = tools.slice(start, start + limit);
   reports.push(...await Promise.all(group.map(auditTool)));
 }
+const petoskeyPages = await petoskeyPageFiles();
+for (let start = 0; start < petoskeyPages.length; start += limit) {
+  reports.push(...await Promise.all(petoskeyPages.slice(start, start + limit).map(auditPetoskeyPage)));
+}
 
 const checked = reports.filter(item => item.audit.checked);
 const incomplete = reports.filter(item => !item.audit.checked);
@@ -219,7 +279,7 @@ const dispositionCounts = reports.reduce((out, item) => (out[item.kind] = (out[i
 console.log(JSON.stringify({
   mode: releaseMode ? 'post-promotion-changed-public-output' : liveMode ? 'live-public-output' : 'post-injection-emitted-output',
   note: 'Output checks cover each registered non-infrastructure tool when bytes are available. Source ownership and public output are reported separately; an external/pending route is never counted as verified from source readiness.',
-  summary: { registeredTools: tools.length, outputChecked: checked.length, incompleteRoutes: incomplete.length, dispositionCounts, errors: failures.length, warnings: warnings.length },
+  summary: { registeredTools: tools.length, registeredOutputChecked: checked.filter(item => !item.id.startsWith('petoskey-page:')).length, additionalPetoskeyPages: petoskeyPages.length, outputChecked: checked.length, incompleteRoutes: incomplete.length, dispositionCounts, errors: failures.length, warnings: warnings.length },
   routes: reports,
 }, null, 2));
 if (checkMode && (failures.length || (releaseMode && incomplete.length))) {
