@@ -3475,9 +3475,9 @@
       "from": "house-fit",
       "to": "nyc-crossing",
       "type": "decision-next",
-      "surface": "commute-cost",
+      "surface": "buyer-travel-context",
       "strength": "optional",
-      "reason": "NYC-area buyers who include commute burden can continue into crossing toll and congestion-pricing context without expanding the Fit Ceiling itself."
+      "reason": "NYC-area home buyers can continue into crossing toll and congestion-pricing context when evaluating the practical cost of a location."
     }
   ],
   "cannibalizationGroups": [
