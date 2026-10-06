@@ -1,17 +1,68 @@
 (function(){
-  const $=id=>document.getElementById(id), money=c=>c==null?'—':new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(c/100);
-  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const $=id=>document.getElementById(id);
+  const money=c=>c==null?'—':new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(c/100);
   const form=$('crossingForm'), results=$('results'), answer=$('answer'), status=$('trafficStatus');
-  function render(data){
-    status.textContent=data.trafficState==='UNAVAILABLE'?'Live times unavailable':'Live Port Authority crossing times';
-    status.className='status '+(data.trafficState==='UNAVAILABLE'?'off':'live');
-    answer.innerHTML='<p class="eyebrow">Recommendation state</p><h2>'+ (data.fastest?('Take '+data.fastest.name):'Compare tolls before you choose') +'</h2><p>'+ (data.fastest?data.fastest.etaMinutes+' minutes estimated, '+money(data.fastest.cost.total)+' in road charges.':'Live full-trip ETAs are not available yet, so the page will not pretend one crossing is fastest.')+'</p><p class="muted">Lowest toll among eligible listed crossings: '+(data.lowestToll?data.lowestToll.name+' at '+money(data.lowestToll.cost.total):'not available')+'.</p>';
-    results.innerHTML=data.routes.map(r=>'<tr><td><div class="route-name">'+r.name+'</div><div class="detail">'+r.corridor+' · '+r.cost.periodLabel+'</div></td><td><span class="status '+(r.etaState==='LIVE'?'live':'off')+'">'+(r.etaMinutes!=null?r.etaMinutes+' min':'Unavailable')+'</span></td><td><div class="cost">'+money(r.cost.total)+'</div><div class="detail">Crossing '+money(r.cost.toll)+' · Zone '+money(r.cost.zone)+(r.cost.credit?' · credit −'+money(r.cost.credit):'')+'</div></td><td><span class="status '+(r.eligibility.state==='ELIGIBLE'?'live':'off')+'">'+r.eligibility.state+'</span><div class="detail">'+r.eligibility.reason+'</div></td><td><a href="'+r.cameraUrl+'" target="_blank" rel="noopener">511NY ↗</a></td></tr>').join('');
-    if(data.recommendationState==='PARTIAL_CROSSING_TIMES') {
-      answer.innerHTML='<p class="eyebrow">Live crossing times + cost</p><h2>Compare NJ → Manhattan crossings</h2><p>GWB, Lincoln and Holland now show the Port Authority’s current crossing and approach times alongside road charges. These start at different approaches—not your starting address—so the shortest crossing time is not necessarily your fastest trip.</p><p class="muted">Times are for travel toward New York now. The departure selector changes the cost calculation, not these live times.</p>';
-    }
-    [...results.rows].forEach((row,i)=>{const r=data.routes[i]; if(r.etaMinutes!=null){const detail=document.createElement('div');detail.className='detail';detail.textContent='Toward NY · '+(r.lane?r.lane+' level · ':'')+(r.reportedAt||'')+' · crossing + approach';row.cells[1].appendChild(detail);}});
+
+  function scopeLabel(scope){
+    return ({
+      CROSSING_ONLY:'crossing',
+      CROSSING_APPROACH:'crossing + approach',
+      APPROACH_CORRIDOR:'approach corridor + crossing',
+      APPROACH_SEGMENT:'approach segment'
+    })[scope] || 'live segment';
   }
-  async function load(){const p=new URLSearchParams(new FormData(form)); try{const res=await fetch('/api/nyc-crossing?'+p.toString());render(await res.json())}catch(e){status.textContent='Unable to load decision service';status.className='status off'} }
-  form.addEventListener('submit',e=>{e.preventDefault();load()});load();setInterval(()=>{if(!document.hidden)load()},60000);
+
+  function delayText(r){
+    if(r.delayMinutes==null) return '';
+    const d=Math.round(r.delayMinutes*10)/10;
+    if(Math.abs(d)<0.5) return ' · about usual';
+    return d>0 ? ' · +'+d+' min vs usual' : ' · '+Math.abs(d)+' min faster than usual';
+  }
+
+  function render(data){
+    const liveCount=data.routes.filter(r=>r.etaState==='LIVE').length;
+    status.textContent=data.trafficState==='UNAVAILABLE'
+      ? 'Live times unavailable'
+      : 'Live official conditions · '+liveCount+' crossings/segments';
+    status.className='status '+(data.trafficState==='UNAVAILABLE'?'off':'live');
+
+    answer.innerHTML='<p class="eyebrow">Decision state</p><h2>Compare live crossing conditions + true road charges</h2><p>'+
+      (liveCount
+        ? 'Official live measurements are connected where available. Segment lengths differ, so the tool will not falsely rank unlike crossing and approach times as a door-to-door fastest route.'
+        : 'Official live measurements are unavailable right now. Toll and congestion-charge comparisons remain available.')+
+      '</p><p class="muted">Lowest road charge among eligible listed crossings: '+
+      (data.lowestToll?data.lowestToll.name+' at '+money(data.lowestToll.cost.total):'not available')+'.</p>';
+
+    results.innerHTML=data.routes.map(r=>{
+      const eta=r.etaMinutes!=null
+        ? '<span class="status live">'+r.etaMinutes+' min</span>'
+        : '<span class="status off">Unavailable</span>';
+      const speed=r.speedMph!=null?' · '+r.speedMph+' mph':'';
+      const detail=r.etaMinutes!=null
+        ? '<div class="detail">'+(r.direction||'Current direction')+' · '+scopeLabel(r.etaScope)+speed+delayText(r)+'</div>'+
+          '<div class="detail">'+(r.trafficSourceName||'Official traffic source')+(r.reportedAt?' · '+r.reportedAt:'')+'</div>'
+        : '<div class="detail">'+(r.trafficPending||'No fresh official reading connected')+'</div>';
+      return '<tr><td><div class="route-name">'+r.name+'</div><div class="detail">'+r.corridor+' · '+r.cost.periodLabel+'</div></td>'+
+        '<td>'+eta+detail+'</td>'+
+        '<td><div class="cost">'+money(r.cost.total)+'</div><div class="detail">Crossing '+money(r.cost.toll)+' · Zone '+money(r.cost.zone)+(r.cost.credit?' · credit −'+money(r.cost.credit):'')+'</div></td>'+
+        '<td><span class="status '+(r.eligibility.state==='ELIGIBLE'?'live':'off')+'">'+r.eligibility.state+'</span><div class="detail">'+r.eligibility.reason+'</div></td>'+
+        '<td><a href="'+r.cameraUrl+'" target="_blank" rel="noopener">511NY ↗</a></td></tr>';
+    }).join('');
+  }
+
+  async function load(){
+    const p=new URLSearchParams(new FormData(form));
+    try{
+      const res=await fetch('/api/nyc-crossing?'+p.toString());
+      if(!res.ok) throw new Error('decision service '+res.status);
+      render(await res.json());
+    }catch(e){
+      status.textContent='Unable to load decision service';
+      status.className='status off';
+    }
+  }
+
+  form.addEventListener('submit',e=>{e.preventDefault();load()});
+  load();
+  setInterval(()=>{if(!document.hidden)load()},60000);
 })();
