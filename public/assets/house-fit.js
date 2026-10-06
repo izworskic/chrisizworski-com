@@ -2,66 +2,51 @@
   'use strict';
 
   const $ = (id) => document.getElementById(id);
-  const coreForm = $('houseFitForm');
-  const accuracyForm = $('accuracyForm');
+  const form = $('houseFitForm');
   const result = $('result');
   const status = $('formStatus');
-  const commuteToggle = $('includeCommute');
-  const commuteFields = $('commuteFields');
-  let lastDecision = null;
   let rateTouched = false;
 
   const money0 = (n) => Number.isFinite(Number(n))
     ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(n))
     : '—';
+
   const moneyMo = (n) => money0(n) + '/mo';
+
   const monthlyRange = (a, b) => {
     const low = Number(a), high = Number(b);
     if (!Number.isFinite(low) || !Number.isFinite(high)) return '—';
     if (Math.abs(high - low) < 5) return moneyMo((low + high) / 2);
     return money0(low) + '–' + money0(high) + '/mo';
   };
-  const rangeMoney = (a, b) => {
+
+  const moneyRange = (a, b) => {
     const low = Number(a), high = Number(b);
     if (!Number.isFinite(low) || !Number.isFinite(high)) return '—';
-    if (Math.abs(high - low) < 2500) return money0((low + high) / 2);
-    const compact = (v) => '$' + Math.round(v / 1000) + 'K';
-    return compact(low) + '–' + compact(high);
+    if (Math.abs(high - low) < 500) return money0((low + high) / 2);
+    return money0(low) + '–' + money0(high);
   };
 
   function track(name) {
     if (typeof window.gtag === 'function') window.gtag('event', name, { tool_id: 'house-fit', transport_type: 'beacon' });
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    window.va('event', { name: name, data: { tool: 'house-fit' } });
+    window.va('event', { name, data: { tool: 'house-fit' } });
   }
 
-  function valueOf(form, name) {
+  function valueOf(name) {
     return form.elements[name] ? form.elements[name].value : '';
   }
 
   function buildPayload() {
     return {
-      address: valueOf(coreForm, 'address').trim(),
-      askingPrice: Number(valueOf(coreForm, 'askingPrice')),
-      monthlyLimit: Number(valueOf(coreForm, 'monthlyLimit')),
-      downPayment: Number(valueOf(coreForm, 'downPayment')),
-      ratePct: rateTouched ? Number(valueOf(coreForm, 'ratePct')) : '',
-      termYears: Number(valueOf(coreForm, 'termYears')),
-      propertyTaxAnnual: valueOf(accuracyForm, 'propertyTaxAnnual'),
-      homeInsuranceAnnual: valueOf(accuracyForm, 'homeInsuranceAnnual'),
-      floodInsuranceAnnual: valueOf(accuracyForm, 'floodInsuranceAnnual'),
-      hoaMonthly: valueOf(accuracyForm, 'hoaMonthly'),
-      maintenanceRatePct: valueOf(accuracyForm, 'maintenanceRatePct'),
-      includeCommute: commuteToggle.checked,
-      commuteOneWayMiles: valueOf(accuracyForm, 'commuteOneWayMiles'),
-      commuteOneWayMinutes: valueOf(accuracyForm, 'commuteOneWayMinutes'),
-      commuteDaysPerWeek: valueOf(accuracyForm, 'commuteDaysPerWeek'),
-      commuteMpg: valueOf(accuracyForm, 'commuteMpg'),
-      gasPrice: valueOf(accuracyForm, 'gasPrice'),
+      address: valueOf('address').trim(),
+      askingPrice: Number(valueOf('askingPrice')),
+      downPayment: Number(valueOf('downPayment')),
+      ratePct: Number(valueOf('ratePct')),
     };
   }
 
-  function costItem(label, value) {
+  function costItem(label, value, note) {
     const div = document.createElement('div');
     div.className = 'cost-item';
     const span = document.createElement('span');
@@ -69,6 +54,11 @@
     const strong = document.createElement('strong');
     strong.textContent = moneyMo(value);
     div.append(span, strong);
+    if (note) {
+      const small = document.createElement('small');
+      small.textContent = note;
+      div.appendChild(small);
+    }
     return div;
   }
 
@@ -86,133 +76,108 @@
   }
 
   function render(decision) {
-    lastDecision = decision;
-    if (!rateTouched && decision.input && Number.isFinite(Number(decision.input.ratePct))) {
-      coreForm.elements.ratePct.value = Number(decision.input.ratePct).toFixed(2);
-      const rateProv = decision.provenance && decision.provenance.mortgageRate;
-      $('rateSource').textContent = rateProv === 'GOVERNMENT SOURCED'
-        ? 'Freddie Mac 30-year benchmark via FRED · editable'
-        : 'Planning default · editable';
-    }
     const trueCost = decision.trueMonthlyCost || {};
-    $('askingPriceResult').textContent = money0(decision.askingPrice);
-    $('monthlyLimitResult').textContent = moneyMo(decision.monthlyLimit);
-    $('trueMonthlyResult').textContent = monthlyRange(trueCost.low, trueCost.high);
-    $('fitCeiling').textContent = rangeMoney(decision.fitCeiling.low, decision.fitCeiling.high);
-
+    const loan = decision.loan || {};
+    const cash = decision.cashToClose || {};
+    const income = decision.incomeBenchmark || {};
     const address = decision.enrichment && decision.enrichment.address;
+    const flood = decision.enrichment && decision.enrichment.flood || {};
+    const prov = decision.provenance || {};
+
+    $('askingPriceResult').textContent = money0(decision.askingPrice);
+    $('trueMonthlyResult').textContent = monthlyRange(trueCost.low, trueCost.high);
+    $('loanAmountResult').textContent = money0(loan.principal);
+    $('loanDetail').textContent = Number(loan.termYears || 30) + '-year model · ' + Number(decision.input.ratePct).toFixed(2) + '% rate · ' + Number(loan.downPaymentPct || 0).toFixed(1) + '% down';
+    $('cashToCloseResult').textContent = moneyRange(cash.totalLow, cash.totalHigh);
+
     $('matchedAddress').textContent = address && address.matched
       ? 'Matched: ' + address.matchedAddress
-      : 'Address could not be matched to Census geography; the engine is using broader planning estimates.';
+      : 'Address could not be matched to Census geography; broader planning estimates are being used.';
 
-    const verdict = decision.verdict || {};
-    $('verdictLabel').textContent = verdict.label || 'RESULT';
-    $('verdictExplanation').textContent = verdict.explanation || '';
-    const badge = $('verdictBadge');
-    badge.textContent = verdict.label || 'RESULT';
-    badge.className = 'verdict-badge ' + (verdict.state === 'FITS' ? 'fits' : verdict.state === 'CLOSE' ? 'close' : verdict.state === 'NEEDS_BETTER_INPUTS' ? 'needs' : 'no');
+    const confidence = decision.confidence || { label: 'Planning estimate', limitations: [] };
+    const badge = $('confidenceBadge');
+    badge.textContent = confidence.label || 'PLANNING ESTIMATE';
+    badge.className = 'verdict-badge ' + (String(confidence.label || '').toLowerCase().includes('good') ? 'fits' : String(confidence.label || '').toLowerCase().includes('flood') ? 'needs' : 'close');
 
-    const missing = decision.confidence && decision.confidence.missing || [];
-    $('confidenceLine').textContent = 'Confidence: ' + decision.confidence.label +
-      (missing.length ? ' · Add ' + missing.join(' and ') + ' to narrow the answer.' : ' · Key property costs are directly supplied or publicly sourced.');
-    $('fitCeilingNote').textContent = decision.confidence.label === 'High' ? 'Property-specific planning ceiling' : 'Range reflects uncertain property costs';
-
-    const whyBody = $('whyBody');
-    whyBody.textContent = '';
-    (decision.whyCeilingMoved || []).forEach((factor) => {
-      const tr = document.createElement('tr');
-      const a = document.createElement('td'); a.textContent = factor.label;
-      const b = document.createElement('td'); b.textContent = '−' + moneyMo(factor.monthlyEffect);
-      const c = document.createElement('td'); c.textContent = '−' + money0(factor.fitCeilingEffect); c.className = 'positive-capacity';
-      tr.append(a, b, c);
-      whyBody.appendChild(tr);
-    });
-    if (!whyBody.children.length) {
-      const tr = document.createElement('tr');
-      const td = document.createElement('td');
-      td.colSpan = 3;
-      td.textContent = 'No additional modeled costs are consuming price capacity in the current inputs.';
-      tr.appendChild(td);
-      whyBody.appendChild(tr);
-    }
+    const limitations = confidence.limitations || [];
+    $('confidenceLine').textContent = limitations.length
+      ? 'What still limits precision: ' + limitations.join(' · ')
+      : 'Public data and model inputs loaded successfully.';
+    $('trueMonthlyNote').textContent = decision.unpricedCosts && decision.unpricedCosts.length
+      ? 'Before any flagged unpriced costs below'
+      : 'Mortgage + modeled property costs';
 
     const breakdown = decision.breakdown || {};
     const breakdownGrid = $('breakdownGrid');
     breakdownGrid.textContent = '';
     [
-      ['Mortgage P&I', breakdown.mortgagePI], ['PMI', breakdown.pmi],
-      ['Property tax', breakdown.propertyTax], ['Home insurance', breakdown.homeInsurance],
-      ['Flood insurance', breakdown.floodInsurance], ['HOA', breakdown.hoa],
-      ['Maintenance reserve', breakdown.maintenance], ['Commute fuel', breakdown.commute],
+      ['Mortgage principal + interest', breakdown.mortgagePI],
+      ['PMI', breakdown.pmi],
+      ['Property tax estimate', breakdown.propertyTax],
+      ['Homeowners insurance estimate', breakdown.homeInsurance],
+      ['Maintenance reserve', breakdown.maintenance],
+      ['Flood insurance', breakdown.floodInsurance],
     ].forEach((row) => {
-      if (Number(row[1]) > 0.005 || row[0] === 'Mortgage P&I') breakdownGrid.appendChild(costItem(row[0], Number(row[1]) || 0));
+      if (Number(row[1]) > 0.005 || row[0] === 'Mortgage principal + interest') {
+        breakdownGrid.appendChild(costItem(row[0], Number(row[1]) || 0));
+      }
     });
-    $('costRangeNote').textContent = Math.abs(trueCost.high - trueCost.low) > 5
-      ? moneyMo(trueCost.low) + ' to ' + moneyMo(trueCost.high) + ' because tax and/or insurance are still estimated.'
-      : moneyMo(trueCost.midpoint) + ' using the values supplied.';
+    $('costRangeNote').textContent = Math.abs(Number(trueCost.high) - Number(trueCost.low)) > 5
+      ? monthlyRange(trueCost.low, trueCost.high) + ' because tax and insurance are estimates, not exact future bills.'
+      : moneyMo(trueCost.midpoint) + ' under the current automatic assumptions.';
 
-    const sensitivityGrid = $('sensitivityGrid');
-    sensitivityGrid.textContent = '';
-    (decision.sensitivity || []).forEach((s) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'scenario';
-      button.dataset.scenario = s.key;
-      const title = document.createElement('strong'); title.textContent = s.label;
-      const ceiling = document.createElement('span'); ceiling.className = 'scenario-ceiling'; ceiling.textContent = money0(s.ceiling);
-      const delta = document.createElement('small');
-      const d = Number(s.delta) || 0;
-      delta.className = d >= 0 ? 'gain' : 'loss';
-      delta.textContent = (d >= 0 ? '+' : '−') + money0(Math.abs(d)) + ' vs current midpoint';
-      button.append(title, ceiling, delta);
-      sensitivityGrid.appendChild(button);
-    });
+    $('incomeBenchmarkResult').textContent = moneyRange(income.annualLow, income.annualHigh) + '/yr';
+    $('incomeBenchmarkNote').textContent = income.note || '';
 
-    const flood = decision.enrichment && decision.enrichment.flood || {};
     const floodState = $('floodState');
     if (flood.status === 'AVAILABLE') {
       floodState.textContent = flood.sfha ? 'ZONE ' + flood.zone + ' · SFHA' : 'ZONE ' + flood.zone;
-      $('floodCopy').textContent = flood.note || (flood.sfha ? 'FEMA maps this point in a Special Flood Hazard Area.' : 'FEMA flood-zone context loaded for this point.');
-      $('floodSource').textContent = 'Government sourced · FEMA National Flood Hazard Layer. Exact flood-insurance premium is not available from this public layer.';
+      $('floodCopy').textContent = flood.note || (flood.sfha
+        ? 'FEMA maps this point in a Special Flood Hazard Area.'
+        : 'FEMA flood-zone context loaded for this point.');
+      $('floodSource').textContent = 'Government sourced · FEMA National Flood Hazard Layer. FEMA does not provide the insurance premium used by a carrier.';
     } else if (flood.status === 'NO_FEATURE') {
       floodState.textContent = 'NO POLYGON RETURNED';
-      $('floodCopy').textContent = flood.note || 'No FEMA NFHL polygon was returned for this point. Verify the official map before relying on the absence of a mapped zone.';
-      $('floodSource').textContent = 'FEMA NFHL query returned no intersecting feature.';
+      $('floodCopy').textContent = flood.note || 'No FEMA NFHL polygon was returned for this point.';
+      $('floodSource').textContent = 'No flood premium was invented.';
     } else {
       floodState.textContent = 'UNAVAILABLE';
-      $('floodCopy').textContent = 'FEMA flood context could not be loaded. The Fit Ceiling still works, but no flood-zone assumption should be treated as verified.';
-      $('floodSource').textContent = 'No flood premium has been invented.';
+      $('floodCopy').textContent = 'FEMA flood context could not be loaded for this calculation.';
+      $('floodSource').textContent = 'The monthly total does not invent a flood premium.';
     }
 
-    const prov = decision.provenance || {};
+    const unpriced = $('unpricedList');
+    unpriced.textContent = '';
+    (decision.unpricedCosts || []).forEach((item) => {
+      unpriced.appendChild(provRow(item.label, item.status, item.note));
+    });
+
     const list = $('provenanceList');
     list.textContent = '';
     list.append(
-      provRow('Mortgage rate', prov.mortgageRate, 'Rate used: ' + Number(decision.input.ratePct).toFixed(2) + '%'),
+      provRow('Mortgage rate', prov.mortgageRate, 'User-entered rate: ' + Number(decision.input.ratePct).toFixed(2) + '%. Term is automatically fixed at 30 years.'),
       provRow('Property tax', prov.propertyTax && prov.propertyTax.provenance, prov.propertyTax && prov.propertyTax.note),
       provRow('Homeowners insurance', prov.homeInsurance && prov.homeInsurance.provenance, prov.homeInsurance && prov.homeInsurance.note),
-      provRow('Flood insurance', prov.floodInsurance && prov.floodInsurance.provenance, prov.floodInsurance && prov.floodInsurance.label),
-      provRow('Maintenance reserve', prov.maintenance && prov.maintenance.provenance, 'Modeled at ' + Number(prov.maintenance && prov.maintenance.ratePct || 0).toFixed(2) + '% of purchase price per year; not a bill.'),
-      provRow('Commute', prov.commute && prov.commute.provenance, decision.input.commuteEnabled
-        ? Math.round(prov.commute.monthlyMiles || 0) + ' miles/month · ' + Number(prov.commute.monthlyHours || 0).toFixed(1) + ' hours/month'
-        : 'Not included in this result.')
+      provRow('PMI', prov.pmi && prov.pmi.provenance, prov.pmi && prov.pmi.note),
+      provRow('Maintenance reserve', prov.maintenance && prov.maintenance.provenance, prov.maintenance && prov.maintenance.note),
+      provRow('Flood insurance', prov.floodInsurance && prov.floodInsurance.provenance, prov.floodInsurance && prov.floodInsurance.label)
     );
-    $('confidenceHelp').textContent = missing.length
-      ? 'The largest next accuracy gain is: ' + missing.join(', ') + '.'
-      : 'The largest uncertain property costs have been replaced with direct inputs or public-source context.';
+    $('confidenceHelp').textContent = 'The app completes the analysis automatically, while separating public-source facts from modeled estimates and unavailable costs.';
 
     result.hidden = false;
     result.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  async function calculate(source) {
+  async function calculate() {
     const payload = buildPayload();
-    if (!payload.address || !(payload.askingPrice > 0) || !(payload.monthlyLimit > 0) || !(payload.downPayment >= 0)) {
-      status.textContent = 'Enter the address, asking price, monthly limit and down payment.';
+    if (!payload.address || !(payload.askingPrice > 0) || !(payload.downPayment >= 0) || !Number.isFinite(payload.ratePct) || payload.ratePct < 0 || payload.ratePct > 25) {
+      status.textContent = 'Enter the address, asking price, down payment and mortgage rate.';
       return;
     }
-    status.textContent = 'Checking public data and solving your Fit Ceiling…';
+
+    status.textContent = 'Pulling public data and building the full cost picture…';
     track('calculation_started');
+
     try {
       const response = await fetch('/api/house-fit', {
         method: 'POST',
@@ -224,46 +189,20 @@
       render(data);
       status.textContent = 'Updated.';
       track('calculation_completed');
-      track('fit_ceiling_viewed');
-      if (source === 'accuracy') {
-        if (payload.propertyTaxAnnual !== '') track('tax_actual_added');
-        if (payload.homeInsuranceAnnual !== '') track('insurance_quote_added');
-        if (payload.includeCommute) track('commute_added');
-      }
+      track('true_cost_viewed');
     } catch (error) {
       status.textContent = 'Unable to calculate: ' + (error.message || error);
     }
   }
 
-  function applyScenario(key) {
-    if (!lastDecision) return;
-    const n = (form, name) => Number(valueOf(form, name)) || 0;
-    if (key === 'rate-down-1') {
-      coreForm.elements.ratePct.value = Math.max(0, n(coreForm, 'ratePct') - 1).toFixed(2);
-      rateTouched = true;
-      $('rateSource').textContent = 'Sensitivity-adjusted planning rate.';
-    }
-    if (key === 'down-plus-20') coreForm.elements.downPayment.value = n(coreForm, 'downPayment') + 20000;
-    if (key === 'limit-plus-250') coreForm.elements.monthlyLimit.value = n(coreForm, 'monthlyLimit') + 250;
-    if (key === 'no-commute') { commuteToggle.checked = false; commuteFields.hidden = true; }
-    if (key === 'insurance-plus-100') accuracyForm.elements.homeInsuranceAnnual.value = Math.round(((lastDecision.breakdown.homeInsurance || 0) + 100) * 12);
-    if (key === 'tax-minus-15' && valueOf(accuracyForm, 'propertyTaxAnnual') !== '') {
-      accuracyForm.elements.propertyTaxAnnual.value = Math.round(n(accuracyForm, 'propertyTaxAnnual') * 0.85);
-    }
-    track('sensitivity_used');
-    calculate('sensitivity');
-  }
-
-  coreForm.addEventListener('submit', (event) => { event.preventDefault(); calculate('core'); });
-  accuracyForm.addEventListener('submit', (event) => { event.preventDefault(); calculate('accuracy'); });
-  coreForm.elements.ratePct.addEventListener('input', () => {
-    rateTouched = true;
-    $('rateSource').textContent = 'Your editable planning rate.';
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    calculate();
   });
-  commuteToggle.addEventListener('change', () => { commuteFields.hidden = !commuteToggle.checked; });
-  $('sensitivityGrid').addEventListener('click', (event) => {
-    const button = event.target.closest('[data-scenario]');
-    if (button) applyScenario(button.dataset.scenario);
+
+  form.elements.ratePct.addEventListener('input', () => {
+    rateTouched = true;
+    $('rateSource').textContent = 'Your mortgage rate · 30-year fixed planning model.';
   });
 
   async function loadDefaults() {
@@ -272,12 +211,12 @@
       if (!response.ok) return;
       const data = await response.json();
       if (!rateTouched && data.mortgageRate && Number.isFinite(Number(data.mortgageRate.ratePct))) {
-        coreForm.elements.ratePct.value = Number(data.mortgageRate.ratePct).toFixed(2);
+        form.elements.ratePct.value = Number(data.mortgageRate.ratePct).toFixed(2);
         $('rateSource').textContent = data.mortgageRate.status === 'AVAILABLE'
-          ? 'Freddie Mac 30-year benchmark via FRED · ' + (data.mortgageRate.observationDate || 'latest observation') + ' · editable'
-          : 'Fallback planning rate · editable';
+          ? 'Current Freddie Mac 30-year benchmark via FRED · ' + (data.mortgageRate.observationDate || 'latest observation') + ' · edit to your quote'
+          : 'Fallback planning rate · edit to your quote';
       }
-    } catch (_) { /* Editable fallback already exists in HTML. */ }
+    } catch (_) { /* Required editable rate remains available. */ }
   }
 
   track('tool_view');
