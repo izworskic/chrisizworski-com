@@ -39,10 +39,18 @@ await check('national hub links Melvin Price Live',async()=>{
   const {text}=await request('/national-tools/',{cacheBust:false,noCacheHeader:false});
   // The build-time intent link ("Time a Melvin Price Locks visit") was retired when
   // Melvin Price was consolidated into a single maintained directory card. Assert the
-  // card that actually ships, and match the JSON-LD name without depending on whether
-  // the ampersand arrives escaped.
-  for(const marker of ['Melvin Price Live','data-tool-id="melvin-price"','Melvin Price Live: Tows, Locks']){
+  // card that actually ships. The maintained ItemList uses that same short name;
+  // the retired expanded title is no longer a valid production expectation.
+  for(const marker of ['Melvin Price Live','data-tool-id="melvin-price"']){
     if(!text.includes(marker))throw new Error('Melvin Price hub marker missing: '+marker);
+  }
+  const schemas=[...text.matchAll(/<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)].flatMap(match=>{
+    const data=JSON.parse(match[1]);return data['@graph']||[data];
+  });
+  const entries=schemas.filter(node=>node['@type']==='ItemList').flatMap(node=>node.itemListElement||[]);
+  const melvin=entries.filter(entry=>entry.url==='https://chrisizworski.com/national-tools/melvin-price-live/');
+  if(melvin.length!==1||melvin[0].name!=='Melvin Price Live'){
+    throw new Error('Melvin Price canonical directory entry is missing, duplicated or incorrectly named');
   }
   if((text.match(/data-tool-id="melvin-price"/g)||[]).length!==1){
     throw new Error('Melvin Price directory card is duplicated on the hub');
