@@ -15,6 +15,12 @@
     ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(n))
     : '—';
   const moneyMo = (n) => money0(n) + '/mo';
+  const monthlyRange = (a, b) => {
+    const low = Number(a), high = Number(b);
+    if (!Number.isFinite(low) || !Number.isFinite(high)) return '—';
+    if (Math.abs(high - low) < 5) return moneyMo((low + high) / 2);
+    return money0(low) + '–' + money0(high) + '/mo';
+  };
   const rangeMoney = (a, b) => {
     const low = Number(a), high = Number(b);
     if (!Number.isFinite(low) || !Number.isFinite(high)) return '—';
@@ -91,7 +97,7 @@
     const trueCost = decision.trueMonthlyCost || {};
     $('askingPriceResult').textContent = money0(decision.askingPrice);
     $('monthlyLimitResult').textContent = moneyMo(decision.monthlyLimit);
-    $('trueMonthlyResult').textContent = rangeMoney(trueCost.low, trueCost.high) + '/mo';
+    $('trueMonthlyResult').textContent = monthlyRange(trueCost.low, trueCost.high);
     $('fitCeiling').textContent = rangeMoney(decision.fitCeiling.low, decision.fitCeiling.high);
 
     const address = decision.enrichment && decision.enrichment.address;
