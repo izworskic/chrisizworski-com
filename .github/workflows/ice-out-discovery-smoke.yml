@@ -9,6 +9,8 @@ on:
       - 'public/robots.txt'
       - 'vercel.json'
       - 'scripts/generate-ice-out-location-pages.mjs'
+      - 'benchmarks/ice-out-content-dates.json'
+      - 'scripts/stamp-freshness.mjs'
       - 'scripts/benchmark-ice-out-discovery.mjs'
       - 'scripts/smoke-ice-out-discovery.mjs'
       - '.github/workflows/ice-out-discovery-smoke.yml'
