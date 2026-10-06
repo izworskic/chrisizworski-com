@@ -15,14 +15,14 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Can I Afford THIS House? True Monthly Cost">
   <meta name="twitter:description" content="Mortgage payment versus the real monthly cost of this exact house, including hidden ownership costs and buyer tripwires.">
-  <link rel="stylesheet" href="/assets/house-fit.css?v=20261006d">
+  <link rel="stylesheet" href="/assets/house-fit.css?v=20261006e">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/can-i-afford-this-house/#page","url":"https://chrisizworski.com/can-i-afford-this-house/","name":"Can I Afford This House? True Monthly Cost","description":"A three-input property-specific cost engine that uses the current mortgage-rate benchmark plus public data and transparent assumptions to estimate a home's real monthly carrying cost.","dateModified":"2026-10-06","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/","name":"Chris Izworski"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/can-i-afford-this-house/#app","name":"Can I Afford This House? True Monthly Cost","url":"https://chrisizworski.com/can-i-afford-this-house/","applicationCategory":"FinanceApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"featureList":["Three-input first-run intake","Current mortgage-rate benchmark with post-result override","Mortgage-versus-true-cost Reality Gap","Buyer tripwires","20% down-payment breakpoint","Mortgage principal and interest","Property-tax planning estimate from Census data","Homeowners-insurance planning range","PMI estimate","Maintenance reserve","FEMA flood-zone context","Cash-to-close planning range","Data provenance and limitations"]}]}</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <script defer src="/assets/tool-engagement.js"></script>
-  <script defer src="/assets/house-fit.js?v=20261006d"></script>
+  <script defer src="/assets/house-fit.js?v=20261006e"></script>
 </head>
 <body data-analytics-page="house-fit">
   <header class="site-header">
@@ -58,29 +58,53 @@
     <section id="result" class="result-shell" hidden aria-live="polite">
       <section class="result-hero" aria-labelledby="decision-title">
         <div class="verdict-row">
-          <div><p class="eyebrow">Property-specific cost picture</p><h2 id="decision-title">What this house really costs</h2><p id="matchedAddress" class="matched-address"></p></div>
+          <div>
+            <p class="eyebrow">Property-specific cost picture</p>
+            <h2 id="decision-title">What this house really costs</h2>
+            <p id="matchedAddress" class="matched-address"></p>
+          </div>
           <div id="confidenceBadge" class="verdict-badge"></div>
         </div>
-        <div class="metric-grid">
-          <article class="metric"><span>Asking price</span><strong id="askingPriceResult">—</strong><small>Seller's asking price</small></article>
-          <article class="metric"><span>Mortgage only</span><strong id="mortgageOnlyResult">—</strong><small>Principal + interest</small></article>
-          <article class="metric fit-ceiling-metric"><span>Estimated true monthly cost</span><strong id="trueMonthlyResult">—</strong><small id="trueMonthlyNote">Mortgage + modeled property costs</small></article>
-          <article class="metric"><span>Reality Gap</span><strong id="realityGapResult">—</strong><small>Monthly cost above principal + interest</small></article>
-          <article class="metric"><span>Cash-to-close planning range</span><strong id="cashToCloseResult">—</strong><small>Down payment + modeled buyer closing costs</small></article>
+
+        <div class="bottom-line" aria-labelledby="bottom-line-title">
+          <p class="eyebrow">Bottom line</p>
+          <h3 id="bottom-line-title"><span id="bottomLineLead">Plan on — per month.</span></h3>
+          <p id="bottomLineExplain">We start with the mortgage-only payment, then add the property costs a basic mortgage calculator leaves out.</p>
+          <p id="bottomLineExcluded" class="bottom-line-excluded"></p>
         </div>
-        <div class="decision-copy">
-          <strong id="costHeadline">THE MORTGAGE IS NOT THE MONTHLY COST</strong>
-          <p id="costExplanation">The Reality Gap shows the taxes, insurance, PMI, maintenance and other modeled carrying costs that sit on top of principal and interest.</p>
-          <p id="confidenceLine" class="confidence-line"></p>
+
+        <div class="cost-flow" aria-label="How the monthly cost builds">
+          <article class="cost-step">
+            <span>1 · Mortgage only</span>
+            <strong id="mortgageOnlyResult">—</strong>
+            <small>Principal + interest</small>
+          </article>
+          <div class="cost-flow-symbol" aria-hidden="true">+</div>
+          <article class="cost-step gap-step">
+            <span>2 · Added ownership costs</span>
+            <strong id="realityGapResult">—</strong>
+            <small>Taxes, insurance, PMI if applicable, maintenance</small>
+          </article>
+          <div class="cost-flow-symbol" aria-hidden="true">=</div>
+          <article class="cost-step total-step">
+            <span>3 · Estimated true monthly cost</span>
+            <strong id="trueMonthlyResult">—</strong>
+            <small id="trueMonthlyNote">Before any unresolved costs listed below</small>
+          </article>
+        </div>
+
+        <div class="purchase-facts" aria-label="Purchase context">
+          <article><span>Asking price</span><strong id="askingPriceResult">—</strong></article>
+          <article><span>Cash to close</span><strong id="cashToCloseResult">—</strong><small>Down payment + modeled buyer closing costs</small></article>
         </div>
       </section>
 
-      <section class="panel" id="reality-gap-section" aria-labelledby="reality-gap-title">
-        <div class="section-head"><div><p class="eyebrow">The subtle difference</p><h2 id="reality-gap-title">What the mortgage calculator misses</h2></div><p id="realityGapShare">—</p></div>
-        <div class="metric-grid">
-          <article class="metric fit-ceiling-metric"><span>Reality Gap</span><strong id="realityGapDetail">—</strong><small id="realityGapAnnual">—</small></article>
+      <section class="panel" id="range-explainer" aria-labelledby="range-explainer-title">
+        <div class="section-head">
+          <div><p class="eyebrow">Why this is a range</p><h2 id="range-explainer-title">What still needs verification</h2></div>
+          <p id="rangeExplainLead">Taxes and insurance are planning estimates until you have the actual tax bill and insurance quote.</p>
         </div>
-        <p id="realityGapCopy" class="confidence-line"></p>
+        <p id="realityGapCopy" class="range-copy"></p>
         <div id="uncertaintyDriversList" class="provenance-list"></div>
       </section>
 
@@ -140,7 +164,7 @@
         <article><strong>Tax planning proxy</strong><span>U.S. Census ACS county medians</span></article>
         <article><strong>Rate reference</strong><span>Freddie Mac PMMS via FRED</span></article>
       </div>
-      <p class="disclaimer"><strong>Planning tool, not underwriting.</strong> The income benchmark is not a lender approval and does not know your other debts, credit profile, taxes, insurance quote, HOA obligations or cash reserves. Verify material costs before making a purchase decision.</p>
+      <p class="disclaimer"><strong>Planning tool, not underwriting.</strong> This is not a lender approval, appraisal or insurance quote. Property taxes, insurance, HOA obligations, utilities and flood-insurance premiums can change the real cost. Verify material costs before making a purchase decision.</p>
     </section>
 
     <section class="panel seo-explainer" aria-labelledby="difference-title">
