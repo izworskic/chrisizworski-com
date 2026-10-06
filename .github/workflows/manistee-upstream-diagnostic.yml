@@ -1,0 +1,55 @@
+name: Manistee upstream diagnostic
+
+on:
+  push:
+    branches: [agent/manistee-upstream-diagnostic-20261005]
+    paths:
+      - '.github/workflows/manistee-upstream-diagnostic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inspect the public API and its primary hydrography source
+        run: |
+          node <<'NODE'
+          const hydro = require('./api/manistee-river-hydrography.js');
+          const endpoints = [
+            ['public-api', 'https://chrisizworski.com/api/manistee-river-hydrography'],
+            ['primary-source', hydro._test.queryUrl()],
+          ];
+          (async () => {
+            const results = await Promise.all(endpoints.map(async ([label, url]) => {
+              const started = Date.now();
+              try {
+                const response = await fetch(url, {
+                  headers: { accept: 'application/json', 'user-agent': 'ChrisIzworskiManisteeDiagnostic/1.0 (https://chrisizworski.com/manistee-river-map/)' },
+                  signal: AbortSignal.timeout(30000),
+                });
+                const text = await response.text();
+                let data;
+                try { data = JSON.parse(text); } catch {}
+                const cleaned = data ? hydro._test.cleanGeoJson(data) : undefined;
+                return {
+                  label, status: response.status, elapsedMs: Date.now() - started,
+                  contentType: response.headers.get('content-type'),
+                  robots: response.headers.get('x-robots-tag'), bytes: Buffer.byteLength(text),
+                  error: data?.error, detail: data?.detail,
+                  rawFeatures: data?.features?.length, namedFeatures: cleaned?.features?.length,
+                  names: cleaned ? [...new Set(cleaned.features.map(f => f.properties.name))] : undefined,
+                  exceededTransferLimit: data?.exceededTransferLimit,
+                  responsePrefix: !response.ok || data?.error || !data ? text.slice(0,1200) : undefined,
+                };
+              } catch (error) { return {label, elapsedMs:Date.now()-started, error:error.message}; }
+            }));
+            console.log(JSON.stringify(results,null,2));
+          })().catch(error => { console.error(error.message); process.exitCode=1; });
+          NODE
