@@ -86,7 +86,7 @@ export function auditIceOutPage(html, page, sitemap = '') {
   group('freshness', 5, [
     ['content date and location sitemap agree', /^\d{4}-\d{2}-\d{2}$/.test(date || '') && sitemap.includes(`<loc>${canonical}</loc><lastmod>${date}</lastmod>`)],
   ]);
-  return { route, score: groups.reduce((total, item) => total + item.score, 0), loss: groups.reduce((total, item) => total + item.weight - item.score, 0), groups, failures };
+  return { route, dateModified: date, score: groups.reduce((total, item) => total + item.score, 0), loss: groups.reduce((total, item) => total + item.weight - item.score, 0), groups, failures };
 }
 
 export async function auditIceOutDirectory(workspace) {
@@ -97,6 +97,11 @@ export async function auditIceOutDirectory(workspace) {
   const config = JSON.parse(await fs.readFile(path.join(workspace, 'vercel.json'), 'utf8'));
   const routingFailures = auditIceOutRoutes(config);
   const publicationFailures = auditIceOutPublication(await fs.readFile(path.join(workspace, 'public/robots.txt'), 'utf8'), await fs.readFile(path.join(workspace, 'scripts/stamp-freshness.mjs'), 'utf8'), config);
+  const contentDates = JSON.parse(await fs.readFile(path.join(workspace, 'benchmarks/ice-out-content-dates.json'), 'utf8'));
+  const expectedRoutes = iceOutPages.slice(1).map(routeOf).sort();
+  if (JSON.stringify([...contentDates.pages].sort()) !== JSON.stringify(expectedRoutes)) publicationFailures.push('content-date coverage must include the existing eight lake pages');
+  const locationDate = [pages[0].dateModified, contentDates.generatorModified].sort().at(-1);
+  if (pages.slice(1).some(page => page.dateModified !== locationDate)) publicationFailures.push('lake-page dates must reflect both the parent and generator content dates');
   return { scope: 'emitted HTML of the existing nine-page ice-out family', metric: 'technical discovery contract, not a prediction of ranking', target: 100, score, loss: Number((100 - score).toFixed(2)), passed: !routingFailures.length && !publicationFailures.length && pages.every(page => !page.failures.length), routingFailures, publicationFailures, pages };
 }
 
@@ -139,6 +144,8 @@ async function main() {
       await fs.copyFile(path.join(root, 'public/robots.txt'), path.join(workspace, 'public/robots.txt'));
       await fs.mkdir(path.join(workspace, 'scripts'), { recursive: true });
       await fs.copyFile(path.join(root, 'scripts/stamp-freshness.mjs'), path.join(workspace, 'scripts/stamp-freshness.mjs'));
+      await fs.mkdir(path.join(workspace, 'benchmarks'), { recursive: true });
+      await fs.copyFile(path.join(root, 'benchmarks/ice-out-content-dates.json'), path.join(workspace, 'benchmarks/ice-out-content-dates.json'));
       execFileSync(process.execPath, [path.join(root, 'scripts/generate-ice-out-location-pages.mjs')], { cwd: workspace, stdio: 'pipe' });
     }
     const report = await auditIceOutDirectory(workspace);

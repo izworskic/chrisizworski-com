@@ -21,6 +21,8 @@ before(async () => {
   await fs.copyFile(path.join(root, 'public/robots.txt'), path.join(workspace, 'public/robots.txt'));
   await fs.mkdir(path.join(workspace, 'scripts'), { recursive: true });
   await fs.copyFile(path.join(root, 'scripts/stamp-freshness.mjs'), path.join(workspace, 'scripts/stamp-freshness.mjs'));
+  await fs.mkdir(path.join(workspace, 'benchmarks'), { recursive: true });
+  await fs.copyFile(path.join(root, 'benchmarks/ice-out-content-dates.json'), path.join(workspace, 'benchmarks/ice-out-content-dates.json'));
   generate();
 });
 after(async () => { if (workspace) await fs.rm(workspace, { recursive: true, force: true }); });
@@ -78,4 +80,17 @@ test('the audit rejects an unadvertised, unregistered or proxy-shadowed sitemap'
   assert.ok(auditIceOutPublication(robots, stamper.replace('"sitemap-ice-out.xml",', ''), config).includes('ice-out sitemap must be registered with the freshness checker'));
   const shadowed = { ...config, rewrites: [{ source: '/sitemap-ice-out.xml', destination: 'https://example.com/sitemap.xml' }, ...config.rewrites] };
   assert.ok(auditIceOutPublication(robots, stamper, shadowed).includes('the root ice-out sitemap must not be shadowed by a proxy rewrite'));
+});
+
+test('new generator content advances only the lake-page dates when the parent is unchanged', async () => {
+  const ledgerPath = path.join(workspace, 'benchmarks/ice-out-content-dates.json');
+  const ledger = JSON.parse(await fs.readFile(ledgerPath, 'utf8'));
+  const beforeReport = await auditIceOutDirectory(workspace);
+  const later = new Date(Date.parse(beforeReport.pages[0].dateModified) + 86400000).toISOString().slice(0, 10);
+  await fs.writeFile(ledgerPath, JSON.stringify({ ...ledger, generatorModified: later }));
+  generate();
+  const report = await auditIceOutDirectory(workspace);
+  assert.equal(report.passed, true);
+  assert.equal(report.pages[0].dateModified, beforeReport.pages[0].dateModified);
+  assert.ok(report.pages.slice(1).every(page => page.dateModified === later));
 });

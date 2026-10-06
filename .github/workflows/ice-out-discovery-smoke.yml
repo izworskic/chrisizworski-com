@@ -17,6 +17,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ice-out-public-discovery
+  cancel-in-progress: true
+
 jobs:
   smoke:
     runs-on: ubuntu-latest
