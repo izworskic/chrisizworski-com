@@ -2447,7 +2447,7 @@
       "aliases": [],
       "kind": "decision-engine",
       "cluster": "consumer-finance",
-      "primaryIntent": "what will this specific house really cost per month from address asking price and down payment using the current mortgage rate automatically",
+      "primaryIntent": "mortgage payment versus true monthly cost for this specific house including hidden ownership costs Reality Gap and buyer tripwires",
       "seasons": [
         1,
         2,
