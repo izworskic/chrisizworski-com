@@ -104,6 +104,18 @@ test('mobile page keeps Fit Ceiling ahead of support content at 390px', () => {
   assert.match(css, /@media\(max-width:390px\)/);
   assert.match(css, /\.fit-ceiling-metric\{grid-column:1\/-1/);
 });
+test('mortgage-rate provenance distinguishes public default from user edit', () => {
+  const benchmark = buildDecision(base({ ratePct: '' }), enrichment);
+  const edited = buildDecision(base({ ratePct: 6.75 }), enrichment);
+  assert.equal(benchmark.provenance.mortgageRate, 'GOVERNMENT SOURCED');
+  assert.equal(edited.provenance.mortgageRate, 'VERIFIED / USER PROVIDED');
+});
+test('missing non-SFHA flood quote is modeled, never presented as a government premium', () => {
+  const result = buildDecision(base({ floodInsuranceAnnual: null }), enrichment);
+  assert.equal(result.provenance.floodInsurance.provenance, 'MODELED');
+  assert.equal(result.breakdown.floodInsurance, 0);
+});
+
 test('page promise is reverse price solving, not generic affordability', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
   assert.match(html, /what I can afford to pay for <strong>this house<\/strong>/i);
