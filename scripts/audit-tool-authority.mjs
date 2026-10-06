@@ -4,6 +4,7 @@ import path from 'node:path';
 import { stripTypeScriptTypes } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { hasVisibleCreatorAttribution, inspectVisibleHtml } from '../lib/creator-attribution.mjs';
+import { auditStructuredAuthority } from '../lib/tool-authority-identity.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const origin = 'https://chrisizworski.com';
@@ -21,7 +22,7 @@ const relationships = [...(registry.relationships || []), ...(actions.relationsh
 let tools = registry.tools.filter(item => item.kind !== 'developer-infrastructure');
 const checkMode = process.argv.includes('--check');
 const releaseMode = process.argv.includes('--live-release');
-const releaseIds = new Set(['pictured-rocks', 'seed-starting', 'tomato-planting', 'niagara-border', 'petoskey-wine']);
+const releaseIds = new Set(['pictured-rocks', 'seed-starting', 'tomato-planting', 'niagara-border', 'manistee-field-map', 'petoskey-wine']);
 if (releaseMode) tools = tools.filter(item => releaseIds.has(item.id));
 const toolById = new Map(registry.tools.map(item => [item.id, item]));
 const liveMode = process.argv.includes('--live') || releaseMode;
@@ -51,22 +52,20 @@ function structuredNodes(html) {
   return nodes;
 }
 
-function allPersonRefs(nodes) {
-  const refs = [];
-  const visit = value => {
-    if (!value || typeof value !== 'object') return;
-    if (Array.isArray(value)) { value.forEach(visit); return; }
-    const type = Array.isArray(value['@type']) ? value['@type'] : [value['@type']];
-    const authorId = typeof value['@id'] === 'string' ? value['@id'] : '';
-    const isChris = value.name === 'Chris Izworski' || authorId === personId ||
-      /chris[-_]?izworski|#chris(?:$|[-_])/i.test(authorId);
-    if (isChris) {
-      refs.push(value['@id'] || '');
+
+function structuredDocumentNodes(html) {
+  const documentNodes = [];
+  const add = value => {
+    if (Array.isArray(value)) {
+      value.forEach(add);
+      return;
     }
-    for (const child of Object.values(value)) visit(child);
+    if (!value || typeof value !== 'object') return;
+    if (Array.isArray(value['@graph'])) documentNodes.push(...value['@graph'].filter(node => node && typeof node === 'object'));
+    else if (value['@type']) documentNodes.push(value);
   };
-  for (const node of nodes) for (const key of ['author', 'creator', 'publisher']) visit(node[key]);
-  return refs;
+  for (const match of html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) add(JSON.parse(match[1]));
+  return documentNodes;
 }
 
 function mainHtmlFile(url) {
@@ -112,9 +111,7 @@ function auditDocument(html, expectedUrl, tool, headers = new Headers()) {
   const check = (condition, message) => { if (!condition) errors.push(message); };
   let nodes = [];
   try { nodes = structuredNodes(html); } catch (error) { errors.push(`Invalid JSON-LD: ${error.message}`); }
-  const people = nodes.filter(node => (Array.isArray(node['@type']) ? node['@type'] : [node['@type']]).includes('Person') && node.name === 'Chris Izworski');
-  const canonicalPeople = people.filter(node => node['@id'] === personId);
-  const refs = allPersonRefs(nodes);
+  const authority = auditStructuredAuthority({ nodes, documentNodes: structuredDocumentNodes(html), personId, homepage: `${origin}/` });
   const facts = inspectVisibleHtml(html);
   const anchors = facts.anchors.map(anchor => {
     let resolved = anchor.href;
@@ -135,8 +132,7 @@ function auditDocument(html, expectedUrl, tool, headers = new Headers()) {
   check(Boolean(title), 'Initial HTML has no title.');
   check(Boolean(description), 'Initial HTML has no meta description.');
   check(Boolean(h1) && Boolean(bodyText) && bodyText !== h1, 'Initial HTML has no readable heading and additional visible body content.');
-  check(canonicalPeople.length > 0 && canonicalPeople.length === people.length && canonicalPeople.every(node => normalizedUrl(node.url) === `${origin}/`), 'Canonical Person definition is missing, duplicated with conflicts, or has a non-homepage url.');
-  check(refs.length > 0 && refs.every(id => id === personId), 'Creator/author/publisher references do not resolve to the canonical Person.');
+  for (const message of authority.errors) check(false, message);
   check(hasVisibleCreatorAttribution(html) || anchors.some(anchor => anchor.resolved === profileUrl && anchor.text === 'Chris Izworski'), 'No visible creator credit or profile byline link was found.');
 
   const outgoing = relationships.filter(edge => edge.from === tool.id && ['essential', 'strong'].includes(edge.strength));
@@ -159,8 +155,10 @@ function auditDocument(html, expectedUrl, tool, headers = new Headers()) {
     linkedDestinations: linked.map(item => item.id), discoveryHubs: hubLinks.map(item => item.resolved),
     evidence: {
       visibleHeading: h1,
-      personDefinitions: people.map(person => ({ id: person['@id'] || '', url: person.url || '' })),
-      creatorReferences: refs,
+      personDefinitions: authority.personDefinitions,
+      authorCreatorReferences: authority.authorCreatorReferences,
+      publisherReferences: authority.publisherReferences,
+      creatorReferences: [...authority.authorCreatorReferences, ...authority.publisherReferences],
       visibleCreatorCredit: hasVisibleCreatorAttribution(html) || anchors.some(anchor => anchor.resolved === profileUrl && anchor.text === 'Chris Izworski'),
       openGraph: Boolean(meta(html, 'og:title', 'property') && meta(html, 'og:description', 'property') && meta(html, 'og:url', 'property')),
       twitterCard: Boolean(meta(html, 'twitter:card') && meta(html, 'twitter:title') && meta(html, 'twitter:description')),
