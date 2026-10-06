@@ -2447,7 +2447,7 @@
       "aliases": [],
       "kind": "decision-engine",
       "cluster": "consumer-finance",
-      "primaryIntent": "what will this specific house really cost per month from address asking price down payment and mortgage rate",
+      "primaryIntent": "what will this specific house really cost per month from address asking price and down payment using the current mortgage rate automatically",
       "seasons": [
         1,
         2,
