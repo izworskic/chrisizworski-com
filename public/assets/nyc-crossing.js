@@ -15,8 +15,9 @@
   function delayText(r){
     if(r.delayMinutes==null) return '';
     const d=Math.round(r.delayMinutes*10)/10;
-    if(Math.abs(d)<0.5) return ' · about usual';
-    return d>0 ? ' · +'+d+' min vs usual' : ' · '+Math.abs(d)+' min faster than usual';
+    const reference=r.baselineKind==='NYCDOT_8_WEEK_HOURLY_AVG'?'8-wk avg':'usual';
+    if(Math.abs(d)<0.5) return ' · about '+reference;
+    return d>0 ? ' · +'+d+' min vs '+reference : ' · '+Math.abs(d)+' min faster than '+reference;
   }
 
   function render(data){

@@ -11,14 +11,14 @@ The NYC Crossing Decision Engine may show an official live travel time only when
 | George Washington Bridge | Port Authority | crossingDisplayName = George Washington Bridge, ToNY | crossing + approach | Port Authority historical travel time and speed | connected |
 | Lincoln Tunnel | Port Authority | crossingDisplayName = Lincoln Tunnel, ToNY | crossing + approach | Port Authority historical travel time and speed | connected |
 | Holland Tunnel | Port Authority | crossingDisplayName = Holland Tunnel, ToNY | crossing + approach | Port Authority historical travel time and speed | connected |
-| Queens–Midtown Tunnel | NYC DOT TMC | link 4456510, QMT W Toll Plaza - Manhattan Side | crossing | historical baseline not yet materialized | connected |
-| Hugh L. Carey Tunnel | NYC DOT TMC | link 4456501, BBT W Toll Plaza - Manhattan Portal | crossing | historical baseline not yet materialized | connected |
-| Brooklyn Bridge | NYC DOT TMC | link 4616339, BQE N Atlantic Ave - BKN Bridge Manhattan Side | approach corridor + crossing | historical baseline not yet materialized | connected |
-| Manhattan Bridge | NYC DOT TMC | link 4616340, BQE N Atlantic Ave - MAN Bridge Manhattan Side | approach corridor + crossing | historical baseline not yet materialized | connected |
+| Queens–Midtown Tunnel | NYC DOT TMC | link 4456510, QMT W Toll Plaza - Manhattan Side | crossing | 8-week same-weekday/hour average from NYC Open Data, cached in Redis when enough valid samples exist | connected |
+| Hugh L. Carey Tunnel | NYC DOT TMC | link 4456501, BBT W Toll Plaza - Manhattan Portal | crossing | 8-week same-weekday/hour average from NYC Open Data, cached in Redis when enough valid samples exist | connected |
+| Brooklyn Bridge | NYC DOT TMC | link 4616339, BQE N Atlantic Ave - BKN Bridge Manhattan Side | approach corridor + crossing | 8-week same-weekday/hour average from NYC Open Data, cached in Redis when enough valid samples exist | connected |
+| Manhattan Bridge | NYC DOT TMC | link 4616340, BQE N Atlantic Ave - MAN Bridge Manhattan Side | approach corridor + crossing | 8-week same-weekday/hour average from NYC Open Data, cached in Redis when enough valid samples exist | connected |
 | Williamsburg Bridge | TRANSCOM | inbound Manhattan corridor confirmed in MTA TRANSCOM analysis | crossing corridor | TRANSCOM registration/feed mapping required | pending registered feed access |
 | Ed Koch Queensboro Bridge | TRANSCOM | inbound Manhattan corridor confirmed in MTA TRANSCOM analysis | crossing corridor | TRANSCOM registration/feed mapping required | pending registered feed access |
-| RFK Bridge | NYC DOT TMC | link 4456452, TBB W - FDR S MANHATTAN TRUSS - E116TH STREET | Manhattan-side approach segment | historical baseline not yet materialized | connected with limited scope |
-| Verrazzano–Narrows Bridge | NYC DOT TMC | link 4763652, VNB E SI GANTRY UPPER LEVEL - BROOKLYN GANTRY UPPER LEVEL | bridge crossing | historical baseline not yet materialized | connected |
+| RFK Bridge | NYC DOT TMC | link 4456452, TBB W - FDR S MANHATTAN TRUSS - E116TH STREET | Manhattan-side approach segment | 8-week same-weekday/hour average from NYC Open Data, cached in Redis when enough valid samples exist | connected with limited scope |
+| Verrazzano–Narrows Bridge | NYC DOT TMC | link 4763652, VNB E SI GANTRY UPPER LEVEL - BROOKLYN GANTRY UPPER LEVEL | bridge crossing | 8-week same-weekday/hour average from NYC Open Data, cached in Redis when enough valid samples exist | connected |
 
 ## Authority hierarchy
 
@@ -35,9 +35,13 @@ The NYC Crossing Decision Engine may show an official live travel time only when
 - A source outage for one agency must not erase fresh readings from another agency.
 - Live measurements with different scopes are informational crossing conditions, not comparable door-to-door route ETAs.
 
-## Next data step
+## Historical delay baseline
 
-Build time-of-week historical baselines for the audited NYC DOT link IDs from NYC Open Data. Store precomputed medians by link ID, weekday and 15-minute interval rather than querying the full historical dataset at request time. This will allow a defensible `+N minutes vs usual` value outside the three Port Authority crossings.
+For audited NYC DOT links, the live adapter now requests a bounded aggregate from NYC Open Data only when a cached day-of-week/hour baseline is missing. The query covers the previous 56 days, requires status 0 and positive travel time, groups by audited link ID, and uses only the same weekday and hour as the current live reading. A link needs at least 24 valid observations before a comparison is shown. Results are cached in Upstash Redis for six days, with an in-memory fallback cache, so normal page traffic does not repeatedly scan the historical dataset.
+
+Port Authority historical values remain authoritative for GWB, Lincoln and Holland. The NYC Open Data comparison is labeled separately as an 8-week average rather than implying it is an authority-provided historical value.
+
+The baseline deliberately uses the public SODA 2.1 resource endpoint. Socrata permits limited unauthenticated queries there, while application tokens raise throttling limits. Because results are cached for six days and baseline failure is non-fatal, throttling can remove the comparison but cannot remove the live authority reading.
 
 ## Sources
 
