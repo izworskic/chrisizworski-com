@@ -53,10 +53,18 @@ function structuredNodes(html) {
 
 function allPersonRefs(nodes) {
   const refs = [];
-  for (const node of nodes) for (const key of ['author', 'creator', 'publisher']) {
-    const values = Array.isArray(node[key]) ? node[key] : [node[key]];
-    for (const value of values) if (value?.['@id']?.endsWith('#person')) refs.push(value['@id']);
-  }
+  const visit = value => {
+    if (!value || typeof value !== 'object') return;
+    if (Array.isArray(value)) { value.forEach(visit); return; }
+    const type = Array.isArray(value['@type']) ? value['@type'] : [value['@type']];
+    const isChris = value.name === 'Chris Izworski' || value['@id'] === personId ||
+      (typeof value['@id'] === 'string' && /#(?:person|chris)(?:$|[-_])/i.test(value['@id']));
+    if (isChris && (type.includes('Person') || value.name === 'Chris Izworski' || value['@id'] === personId)) {
+      refs.push(value['@id'] || '');
+    }
+    for (const child of Object.values(value)) visit(child);
+  };
+  for (const node of nodes) for (const key of ['author', 'creator', 'publisher']) visit(node[key]);
   return refs;
 }
 
@@ -187,7 +195,7 @@ async function auditTool(tool) {
         const result = auditDocument(output.html, tool.canonical, tool, output.headers);
         if (tool.id === 'pictured-rocks') await auditPicturedSpecific(output.html, output.headers, output.sourceHtml, result.errors);
         if (liveMode && output.status !== 200) result.errors.push(`Public response status is ${output.status}.`);
-        if (liveMode && !/text\\/html/i.test(output.headers.get('content-type') || '')) result.errors.push('Public response is not HTML.');
+        if (liveMode && !/text\/html/i.test(output.headers.get('content-type') || '')) result.errors.push('Public response is not HTML.');
         last = { id: tool.id, canonical: tool.canonical, ...route, audit: { ...result, status: output.status, attempts: attempt } };
       }
     } catch (error) {

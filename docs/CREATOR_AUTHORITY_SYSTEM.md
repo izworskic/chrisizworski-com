@@ -63,7 +63,7 @@ Keep source ownership, emitted HTML and live public HTML as separate states. Do 
 2. Resolve the source owner for `ausable-field-map`; its source and public output remain incomplete.
 3. After the Pictured Rocks shell change is released, verify actual public HTML for its canonical, visible credit, Person graph, and sitemap freshness.
 4. Repair only concrete attribution or contextual-link gaps in their owning repositories.
-4. Add or refresh a branded SERP snapshot using the same query, engine, locale, and device; count independent origins.
+5. Add or refresh a branded SERP snapshot using the same query, engine, locale, and device; count independent origins.
 5. Review GSC branded impressions/clicks/CTR and tool handoff events after a comparable window. Make no broad title or homepage change from a single snapshot.
 
 ## Ice-out discovery pilot — October 5, 2026

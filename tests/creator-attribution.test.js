@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { addCreatorAttribution, CREATOR_PROFILE_URL, hasVisibleCreatorAttribution } from "../lib/creator-attribution.mjs";
+import { addCreatorAttribution, CREATOR_PROFILE_URL, hasVisibleCreatorAttribution, inspectVisibleHtml } from "../lib/creator-attribution.mjs";
 
 test("adds a quiet creator credit inside an existing footer", () => {
   const html = "<main><h1>Tool</h1></main><footer><small>Sources</small></footer></body>";
@@ -87,4 +87,10 @@ test("recognizes contextual and fully clickable creator bylines", () => {
   assert.equal(addCreatorAttribution(contextual), contextual);
   assert.equal(hasVisibleCreatorAttribution(fullyClickable), true);
   assert.equal(addCreatorAttribution(fullyClickable), fullyClickable);
+});
+
+
+test("reports only headings visible in the full document context", () => {
+  const html = '<template><h1>Template heading</h1></template><div hidden><h1>Hidden heading</h1></div><h1>Useful visible heading</h1>';
+  assert.deepEqual(inspectVisibleHtml(html).headings, ["Useful visible heading"]);
 });

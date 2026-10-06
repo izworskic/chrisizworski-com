@@ -34,9 +34,12 @@ jobs:
           cache: npm
       - name: Install pinned dependencies
         run: npm ci
-      - name: Build the production output and reconcile its published inventory
+      - name: Build production output and reconcile its published inventory
+        id: build
+        continue-on-error: true
         run: npm run vercel-build
       - name: Audit actual public HTML for every published tool canonical
+        if: always()
         run: node scripts/audit-tool-authority.mjs --live > tool-authority-live.json
       - name: Upload public audit report
         if: always()
@@ -47,10 +50,10 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
       - name: Wait for the main deployment to propagate
-        if: github.ref == 'refs/heads/main'
-        run: node -e "setTimeout(() => process.exit(0), 60000)"
+        if: github.ref == 'refs/heads/main' && steps.build.outcome == 'success'
+        run: node -e "setTimeout(() => process.exit(0), 180000)"
       - name: Verify changed public outputs after promotion
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && steps.build.outcome == 'success'
         run: node scripts/audit-tool-authority.mjs --live-release --check > tool-authority-release.json
       - name: Upload changed-route release report
         if: always() && github.ref == 'refs/heads/main'
@@ -60,3 +63,6 @@ jobs:
           path: tool-authority-release.json
           if-no-files-found: ignore
           retention-days: 7
+      - name: Preserve production build gate result
+        if: steps.build.outcome != 'success'
+        run: exit 1
