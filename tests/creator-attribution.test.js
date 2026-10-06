@@ -78,3 +78,13 @@ test("a later repeated name does not invalidate an existing visible credit", () 
   assert.equal(hasVisibleCreatorAttribution(html), true);
   assert.equal(addCreatorAttribution(html), html);
 });
+
+
+test("recognizes contextual and fully clickable creator bylines", () => {
+  const contextual = '<footer><span>By <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a></span></footer>';
+  const fullyClickable = '<footer><a href="https://chrisizworski.com/chris-izworski/">Built by Chris Izworski</a></footer>';
+  assert.equal(hasVisibleCreatorAttribution(contextual), true);
+  assert.equal(addCreatorAttribution(contextual), contextual);
+  assert.equal(hasVisibleCreatorAttribution(fullyClickable), true);
+  assert.equal(addCreatorAttribution(fullyClickable), fullyClickable);
+});

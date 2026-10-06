@@ -37,6 +37,10 @@ const intentionalChanges = new Set([
   "/snowmobile/regions/northwest-michigan.html",
   "/snowmobile/regions/grayling-gaylord.html",
   "/snowmobile/",
+  // Oct 6 2026: canonical Person identity graph/author reference correction on main-owned pages.
+  "/seed-starting-guide/",
+  "/when-to-plant-tomatoes-michigan/",
+  "/niagara-border-crossing/",
   // Oct 4 2026: reviewed tool-directory discovery/schema synchronization and GA4 tool-open measurement.
   // Mirror changes come from the national hub owner; no specialist engine implementation changes.
   "/assets/tool-engagement.js",

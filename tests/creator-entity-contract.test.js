@@ -69,6 +69,36 @@ test('main-site HTML never mints a competing Chris Person fragment', async () =>
   assert.deepEqual(violations, []);
 });
 
+test('main-owned creator graphs resolve to one canonical homepage Person', async () => {
+  const paths = [
+    '../public/seed-starting-guide/index.html',
+    '../public/when-to-plant-tomatoes-michigan/index.html',
+    '../public/niagara-border-crossing/index.html',
+  ];
+  for (const path of paths) {
+    const html = await readFile(new URL(path, import.meta.url), 'utf8');
+    const graphNodes = [...html.matchAll(/<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)]
+      .flatMap(match => {
+        const data = JSON.parse(match[1]);
+        const nodes = [];
+        const visit = value => {
+          if (!value || typeof value !== 'object') return;
+          if (Array.isArray(value)) { value.forEach(visit); return; }
+          if (value['@type']) nodes.push(value);
+          Object.values(value).forEach(visit);
+        };
+        visit(data);
+        return nodes;
+      });
+    const people = graphNodes.filter(node =>
+      (Array.isArray(node['@type']) ? node['@type'] : [node['@type']]).includes('Person') &&
+      node.name === 'Chris Izworski'
+    );
+    assert.ok(people.length > 0, path);
+    assert.ok(people.every(node => node['@id'] === PERSON && new URL(node.url).href === 'https://chrisizworski.com/'), path);
+  }
+});
+
 test('pending audits stay explicit rather than being counted as verified', () => {
   const pending = contract.properties.filter(item => item.status === 'pending-audit');
   assert.deepEqual(pending.map(item => item.id).sort(), ['ausable-field-map']);

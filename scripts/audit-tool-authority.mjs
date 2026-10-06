@@ -18,10 +18,13 @@ const vercel = JSON.parse(await read('vercel.json'));
 let actions = { relationships: [] };
 try { actions = JSON.parse(await read('benchmarks/tool-network-actions.json')); } catch {}
 const relationships = [...(registry.relationships || []), ...(actions.relationships || [])];
-const tools = registry.tools.filter(item => item.kind !== 'developer-infrastructure');
-const toolById = new Map(registry.tools.map(item => [item.id, item]));
+let tools = registry.tools.filter(item => item.kind !== 'developer-infrastructure');
 const checkMode = process.argv.includes('--check');
-const liveMode = process.argv.includes('--live');
+const releaseMode = process.argv.includes('--live-release');
+const releaseIds = new Set(['pictured-rocks', 'seed-starting', 'tomato-planting', 'niagara-border', 'petoskey-wine']);
+if (releaseMode) tools = tools.filter(item => releaseIds.has(item.id));
+const toolById = new Map(registry.tools.map(item => [item.id, item]));
+const liveMode = process.argv.includes('--live') || releaseMode;
 
 function meta(html, key, attribute = 'name') {
   const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -123,18 +126,24 @@ function auditDocument(html, expectedUrl, tool, headers = new Headers()) {
   check(Boolean(title), 'Initial HTML has no title.');
   check(Boolean(description), 'Initial HTML has no meta description.');
   check(Boolean(h1) && Boolean(bodyText) && bodyText !== h1, 'Initial HTML has no readable heading and additional visible body content.');
-  check(canonicalPeople.length > 0 && canonicalPeople.length === people.length && canonicalPeople.every(node => node.url === `${origin}/`), 'Canonical Person definition is missing, duplicated with conflicts, or has a non-homepage url.');
+  check(canonicalPeople.length > 0 && canonicalPeople.length === people.length && canonicalPeople.every(node => normalizedUrl(node.url) === `${origin}/`), 'Canonical Person definition is missing, duplicated with conflicts, or has a non-homepage url.');
   check(refs.length > 0 && refs.every(id => id === personId), 'Creator/author/publisher references do not resolve to the canonical Person.');
   check(hasVisibleCreatorAttribution(html) || anchors.some(anchor => anchor.resolved === profileUrl && anchor.text === 'Chris Izworski'), 'No visible creator credit or profile byline link was found.');
 
   const outgoing = relationships.filter(edge => edge.from === tool.id && ['essential', 'strong'].includes(edge.strength));
   const destinations = outgoing.map(edge => toolById.get(edge.to)).filter(Boolean);
-  const linked = destinations.filter(target => anchors.some(anchor => anchor.resolved === target.canonical));
-  if (outgoing.length && !linked.length) warnings.push(`No visible href resolves to a declared essential/strong destination (${destinations.map(item => item.id).join(', ')}).`);
+  const linked = destinations.filter(target => anchors.some(anchor => normalizedUrl(anchor.resolved) === normalizedUrl(target.canonical)));
+  const discoveryHubs = [
+    `${origin}/tools/`, `${origin}/great-lakes/`, `${origin}/projects/`,
+    `${origin}/guides/`, `${origin}/national-tools/`
+  ];
+  const hubLinks = anchors.filter(anchor => discoveryHubs.some(hub => normalizedUrl(anchor.resolved) === hub));
+  if (outgoing.length && !linked.length && !hubLinks.length) errors.push(`No useful contextual discovery path; declared handoffs are ${destinations.map(item => item.id).join(', ')}.`);
+  else if (outgoing.length && !linked.length) warnings.push(`Declared handoffs (${destinations.map(item => item.id).join(', ')}) are not directly linked; visible hub links provide discovery.`);
   if (!meta(html, 'og:title', 'property') || !meta(html, 'og:description', 'property') || !meta(html, 'og:url', 'property')) warnings.push('Open Graph preview metadata is incomplete.');
   if (!meta(html, 'twitter:card') || !meta(html, 'twitter:title') || !meta(html, 'twitter:description')) warnings.push('Twitter preview metadata is incomplete.');
   if (outgoing.length && linked.length) warnings.push(`Contextual handoffs resolve to ${linked.map(item => item.id).join(', ')}.`);
-  return { checked: true, errors, warnings, title, canonical: canonical(html), linkedDestinations: linked.map(item => item.id), personDefinitions: people.length };
+  return { checked: true, errors, warnings, title, canonical: canonical(html), linkedDestinations: linked.map(item => item.id), discoveryHubs: hubLinks.map(item => item.resolved), personDefinitions: people.length };
 }
 
 async function auditPicturedSpecific(html, headers, sourceHtml, errors) {
@@ -153,7 +162,7 @@ async function auditPicturedSpecific(html, headers, sourceHtml, errors) {
 }
 
 async function publicDocument(tool) {
-  const response = await fetch(tool.canonical, { redirect: 'follow', headers: { 'user-agent': 'chrisizworski-tool-authority-audit/1.0' }, signal: AbortSignal.timeout(20000) });
+  const response = await fetch(tool.canonical, { redirect: 'follow', headers: { 'user-agent': 'chrisizworski-tool-authority-audit/1.0' }, signal: AbortSignal.timeout(12000) });
   return { status: response.status, headers: response.headers, html: await response.text() };
 }
 
@@ -165,21 +174,33 @@ async function builtDocument(tool, route) {
 
 const reports = [];
 const limit = liveMode ? 5 : 12;
+async function auditTool(tool) {
+  const route = await disposition(tool);
+  let last;
+  const attempts = releaseMode ? 5 : 1;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      const output = liveMode ? await publicDocument(tool) : await builtDocument(tool, route);
+      if (!output) {
+        last = { id: tool.id, canonical: tool.canonical, ...route, audit: { checked: false, errors: [], warnings: ['No emitted page bytes for this route disposition; a public fetch is required.'] } };
+      } else {
+        const result = auditDocument(output.html, tool.canonical, tool, output.headers);
+        if (tool.id === 'pictured-rocks') await auditPicturedSpecific(output.html, output.headers, output.sourceHtml, result.errors);
+        if (liveMode && output.status !== 200) result.errors.push(`Public response status is ${output.status}.`);
+        if (liveMode && !/text\\/html/i.test(output.headers.get('content-type') || '')) result.errors.push('Public response is not HTML.');
+        last = { id: tool.id, canonical: tool.canonical, ...route, audit: { ...result, status: output.status, attempts: attempt } };
+      }
+    } catch (error) {
+      last = { id: tool.id, canonical: tool.canonical, ...route, audit: { checked: false, errors: [`Fetch/read failed: ${error.message}`], warnings: [], attempts: attempt } };
+    }
+    if (!releaseMode || (last.audit.checked && last.audit.errors.length === 0) || attempt === attempts) return last;
+    await new Promise(resolve => setTimeout(resolve, [3000, 6000, 12000, 20000][attempt - 1]));
+  }
+  return last;
+}
 for (let start = 0; start < tools.length; start += limit) {
   const group = tools.slice(start, start + limit);
-  const results = await Promise.all(group.map(async tool => {
-    const route = await disposition(tool);
-    let output = null;
-    try { output = liveMode ? await publicDocument(tool) : await builtDocument(tool, route); }
-    catch (error) { return { id: tool.id, canonical: tool.canonical, ...route, audit: { checked: false, errors: [`Fetch/read failed: ${error.message}`], warnings: [] } }; }
-    if (!output) return { id: tool.id, canonical: tool.canonical, ...route, audit: { checked: false, errors: [], warnings: ['No emitted page bytes for this route disposition; a public fetch is required.'] } };
-    const result = auditDocument(output.html, tool.canonical, tool, output.headers);
-    if (tool.id === 'pictured-rocks') await auditPicturedSpecific(output.html, output.headers, output.sourceHtml, result.errors);
-    if (liveMode && output.status !== 200) result.errors.push(`Public response status is ${output.status}.`);
-    if (liveMode && !/text\/html/i.test(output.headers.get('content-type') || '')) result.errors.push('Public response is not HTML.');
-    return { id: tool.id, canonical: tool.canonical, ...route, audit: { ...result, status: output.status } };
-  }));
-  reports.push(...results);
+  reports.push(...await Promise.all(group.map(auditTool)));
 }
 
 const checked = reports.filter(item => item.audit.checked);
@@ -188,13 +209,13 @@ const failures = reports.flatMap(item => item.audit.errors.map(error => `${item.
 const warnings = reports.flatMap(item => item.audit.warnings.map(warning => `${item.id}: ${warning}`));
 const dispositionCounts = reports.reduce((out, item) => (out[item.kind] = (out[item.kind] || 0) + 1, out), {});
 console.log(JSON.stringify({
-  mode: liveMode ? 'live-public-output' : 'post-injection-emitted-output',
-  note: 'Output checks cover the 69 non-infrastructure registry tools when bytes are available. Source ownership and public output are reported separately; an external/pending route is never counted as verified from source readiness.',
+  mode: releaseMode ? 'post-promotion-changed-public-output' : liveMode ? 'live-public-output' : 'post-injection-emitted-output',
+  note: 'Output checks cover each registered non-infrastructure tool when bytes are available. Source ownership and public output are reported separately; an external/pending route is never counted as verified from source readiness.',
   summary: { registeredTools: tools.length, outputChecked: checked.length, incompleteRoutes: incomplete.length, dispositionCounts, errors: failures.length, warnings: warnings.length },
   routes: reports,
 }, null, 2));
-if (checkMode && failures.length) {
-  console.error(`Tool authority audit failed with ${failures.length} page finding(s):`);
+if (checkMode && (failures.length || (releaseMode && incomplete.length))) {
+  console.error(`Tool authority audit failed with ${failures.length} page finding(s) and ${releaseMode ? incomplete.length : 0} required route(s) without output:`);
   failures.forEach(item => console.error(`- ${item}`));
   process.exitCode = 1;
 } else if (failures.length || incomplete.length) {

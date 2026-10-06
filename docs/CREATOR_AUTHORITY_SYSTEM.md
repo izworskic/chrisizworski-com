@@ -53,18 +53,16 @@ Hard fail for false attribution, a second Chris Person ID, thin name pages, door
 
 The central site already has a canonical Chris Izworski Person entity, an identity/profile surface, cross-property `rel=me` links, a tools directory, and explicit rules for page titles, structured data, footer attribution, and branded result counting. Search results sampled on October 5 surfaced the main site, the project/profile surfaces, and substantive author pages on independent properties.
 
-The creator contract lists 18 separate-host properties. Two remain `pending-audit` because their active source repositories were not discoverable:
+The creator contract lists 18 separate-host properties. `ausable-field-map` remains `pending-audit` because its active source repository is still unknown. `pictured-rocks` is `source-verified` in this main repository: middleware composes the canonical response from the deliberately noindex lab source, but public identity/credit remain unverified until production HTML is fetched after release.
 
-- `ausable-field-map` — `ausable.chrisizworski.com`
-- `pictured-rocks` — `picturedrocks.chrisizworski.com`
-
-Keep these visible as audit gaps; do not claim complete tool-wide verification until their source ownership and production attribution are confirmed. Repo-level entity coverage is not the same as a current SERP rank, and a search snapshot is not a ranking guarantee.
+Keep source ownership, emitted HTML and live public HTML as separate states. Do not claim complete tool-wide verification until all required output checks pass. Repo-level entity coverage is not the same as a current SERP rank, and a search snapshot is not a ranking guarantee.
 
 ## Next execution sequence
 
 1. Keep the already-verified shared Person/profile policy stable.
-2. Resolve source ownership for the two pending tools, then inspect production HTML, visible credit, canonical, and Person schema.
-3. Repair only concrete attribution or contextual-link gaps in their owning repositories.
+2. Resolve the source owner for `ausable-field-map`; its source and public output remain incomplete.
+3. After the Pictured Rocks shell change is released, verify actual public HTML for its canonical, visible credit, Person graph, and sitemap freshness.
+4. Repair only concrete attribution or contextual-link gaps in their owning repositories.
 4. Add or refresh a branded SERP snapshot using the same query, engine, locale, and device; count independent origins.
 5. Review GSC branded impressions/clicks/CTR and tool handoff events after a comparable window. Make no broad title or homepage change from a single snapshot.
 
