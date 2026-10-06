@@ -51,9 +51,14 @@
           <label class="field"><span>Asking price</span><div class="money-input"><b>$</b><input name="askingPrice" inputmode="decimal" min="1" step="1000" required placeholder="425000"></div></label>
           <label class="field"><span>Your monthly limit</span><div class="money-input"><b>$</b><input name="monthlyLimit" inputmode="decimal" min="1" step="50" required placeholder="3600"></div><small>Maximum for the costs included below.</small></label>
           <label class="field"><span>Down payment</span><div class="money-input"><b>$</b><input name="downPayment" inputmode="decimal" min="0" step="1000" required placeholder="85000"></div></label>
-          <label class="field"><span>Mortgage rate</span><div class="suffix-input"><input name="ratePct" inputmode="decimal" min="0" max="25" step="0.01" value="6.50"><b>%</b></div><small id="rateSource">Editable planning default.</small></label>
-          <label class="field"><span>Loan term</span><select name="termYears"><option value="30" selected>30 years</option><option value="20">20 years</option><option value="15">15 years</option><option value="10">10 years</option></select></label>
         </div>
+        <details class="finance-defaults">
+          <summary>Financing defaults <span>Mortgage rate and loan term</span></summary>
+          <div class="form-grid finance-grid">
+            <label class="field"><span>Mortgage rate</span><div class="suffix-input"><input name="ratePct" inputmode="decimal" min="0" max="25" step="0.01" value="6.50"><b>%</b></div><small id="rateSource">Editable planning default.</small></label>
+            <label class="field"><span>Loan term</span><select name="termYears"><option value="30" selected>30 years</option><option value="20">20 years</option><option value="15">15 years</option><option value="10">10 years</option></select></label>
+          </div>
+        </details>
         <div class="submit-row"><button class="primary" type="submit">CHECK THIS HOUSE</button><span id="formStatus" class="form-status" role="status" aria-live="polite"></span></div>
       </form>
     </section>
