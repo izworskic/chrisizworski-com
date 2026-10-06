@@ -74,6 +74,8 @@ async function verifyOnce() {
   assert(data.sources?.nycdotTraffic, 'NYC DOT live source missing');
   assert(data.sources?.nycdotHistory, 'NYC DOT history source missing');
   assert(data.sources?.transcom, 'TRANSCOM source missing');
+  assert(['LIVE', 'NO_MATCH', 'UNAVAILABLE', 'NOT_APPLICABLE'].includes(data.baselineState), `unexpected baselineState ${data.baselineState}`);
+  assert(data.baselineSource, 'NYC DOT historical baseline source missing');
 
   const live = data.routes.filter(route => route.etaState === 'LIVE');
   for (const route of live) {
@@ -88,6 +90,13 @@ async function verifyOnce() {
     }
   }
 
+  const nycdotLive = live.filter(route => route.trafficSourceName === 'NYC DOT Traffic Management Center');
+  const nycdotBaselines = live.filter(route => route.baselineKind === 'NYCDOT_8_WEEK_HOURLY_AVG');
+  if (data.baselineState === 'LIVE') {
+    assert(Number.isFinite(data.baselineCount) && data.baselineCount > 0, 'LIVE baseline state has zero enriched routes');
+    assert(nycdotBaselines.length === data.baselineCount, 'baselineCount does not match enriched NYC DOT routes');
+  }
+
   const pending = new Map(data.routes.filter(route => route.trafficPending).map(route => [route.id, route.trafficPending]));
   assert(/TRANSCOM/.test(pending.get('williamsburg') || ''), 'Williamsburg TRANSCOM pending state missing when no live route is present');
   assert(/TRANSCOM/.test(pending.get('queensboro') || ''), 'Queensboro TRANSCOM pending state missing when no live route is present');
@@ -98,6 +107,10 @@ async function verifyOnce() {
     trafficState: data.trafficState,
     liveCount: live.length,
     baselineCount: live.filter(route => route.baselineMinutes != null).length,
+    nycdotLiveCount: nycdotLive.length,
+    nycdotBaselineCount: nycdotBaselines.length,
+    baselineState: data.baselineState,
+    baselineReason: data.baselineReason,
   };
 }
 
@@ -109,7 +122,7 @@ for (let attempt = 1; attempt <= ATTEMPTS; attempt += 1) {
       ? ' | warning=no fresh official live readings at smoke time'
       : '';
     console.log(
-      `NYC crossing production smoke PASS | page=${result.page} | api=${result.api} | traffic=${result.trafficState} | live=${result.liveCount} | baselines=${result.baselineCount}${suffix}`,
+      `NYC crossing production smoke PASS | page=${result.page} | api=${result.api} | traffic=${result.trafficState} | live=${result.liveCount} | baselines=${result.baselineCount} | nycdotLive=${result.nycdotLiveCount} | nycdotBaselines=${result.nycdotBaselineCount} | baselineState=${result.baselineState} | baselineReason=${result.baselineReason || 'none'}${suffix}`,
     );
     process.exit(0);
   } catch (error) {

@@ -6,6 +6,7 @@ const {
   BASELINE_KIND,
   MIN_SAMPLES,
   buildBaselineUrl,
+  baselineCacheKey,
   normalizeBaselineRows,
   enrichNycdotBaselines,
   _internal,
@@ -43,6 +44,7 @@ test('NYC historical baseline query is tightly bounded to same weekday/hour and 
   assert.match(where, /2026-10-05T23:59:59\.999/);
   assert.equal(url.searchParams.get('$group'), 'link_id');
   assert.equal(url.searchParams.get('$limit'), '100');
+  assert.match(baselineCacheKey(now), /baseline:v2:/);
 });
 
 test('historical baseline rows require enough valid observations', () => {
@@ -80,6 +82,9 @@ test('NYC DOT live route receives an 8-week same-hour delay comparison and cache
   assert.equal(route.baselineKind, BASELINE_KIND);
   assert.equal(route.baselineSamples, 96);
   assert.match(route.baselineSource, /data\.cityofnewyork\.us/);
+  assert.equal(traffic.baselineState, 'LIVE');
+  assert.equal(traffic.baselineCount, 1);
+  assert.match(traffic.baselineReason, /1 NYC DOT live route enriched/);
   assert.ok(cacheWrite);
   assert.equal(cacheWrite[0], 'SET');
 });
@@ -98,6 +103,8 @@ test('cached NYC baseline avoids another historical data request', async () => {
   assert.equal(traffic.routes[0].baselineMinutes, 4);
   assert.equal(traffic.routes[0].delayMinutes, 1);
   assert.equal(traffic.routes[0].baselineSamples, 80);
+  assert.equal(traffic.baselineState, 'LIVE');
+  assert.equal(traffic.baselineCount, 1);
 });
 
 test('historical baseline outage never erases live authority traffic', async () => {
@@ -112,4 +119,7 @@ test('historical baseline outage never erases live authority traffic', async () 
   assert.equal(traffic.routes[0].etaMinutes, 5);
   assert.equal(traffic.routes[0].baselineMinutes, undefined);
   assert.equal(traffic.routes[0].delayMinutes, undefined);
+  assert.equal(traffic.baselineState, 'UNAVAILABLE');
+  assert.equal(traffic.baselineCount, 0);
+  assert.match(traffic.baselineReason, /unavailable/i);
 });
