@@ -1,6 +1,6 @@
 # Creator Authority System
 
-Updated: October 5, 2026
+Updated: October 6, 2026
 
 ## Purpose
 
@@ -24,7 +24,7 @@ Score authority implementation from 0–100:
 | Legitimate name SERP | 20 | Exact-name and close-name coverage is measured by independent domains/accounts, with the home page protected as the primary result. |
 | Qualified discovery and use | 10 | Branded impressions, clicks, CTR and referred tool engagement are measured in comparable windows. |
 
-Target at least 90/100 for a covered release. Any hard stop below overrides the score. The machine-readable definition is `benchmarks/creator-entity-contract.json`.
+Target at least 90/100 for a covered release. Any hard stop below overrides the score. The machine-readable definition is `benchmarks/creator-entity-contract.json`. Source ownership, built output, and public output are separate states; a registered route or injection-ready source is not a verified public page. The emitted and live audits report actual HTML bytes for each registered canonical route when available.
 
 ### Loss function
 

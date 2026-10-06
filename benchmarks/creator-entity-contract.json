@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-10-05",
+  "updated": "2026-10-06",
   "objective": "Keep every serious Chris Izworski tool attached to one canonical Person entity without turning tool interfaces into personal-brand surfaces.",
   "canonicalPersonId": "https://chrisizworski.com/#person",
   "canonicalProfileUrl": "https://chrisizworski.com/chris-izworski/",
@@ -224,10 +224,11 @@
       "toolIds": [
         "pictured-rocks"
       ],
-      "status": "pending-audit",
+      "status": "source-verified",
       "personId": "https://chrisizworski.com/#person",
       "profileUrl": "https://chrisizworski.com/chris-izworski/",
-      "reason": "Current production property is registered, but no matching active GitHub repository was discoverable in the portfolio audit."
+      "repo": "izworskic/chrisizworski-com",
+      "evidence": "Main middleware composes the noindex lab source into the canonical host response; source tests cover the canonical graph. Production output remains subject to the separate live audit."
     }
   ],
   "authorityValueFunction": {
@@ -311,8 +312,7 @@
     "auditState": {
       "totalTrackedProperties": 18,
       "pendingSourceRepositoryAudit": [
-        "ausable-field-map",
-        "pictured-rocks"
+        "ausable-field-map"
       ],
       "rule": "Pending audit entries receive no verified-coverage credit until an active source repository and production evidence are recorded."
     }

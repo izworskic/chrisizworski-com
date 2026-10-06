@@ -71,7 +71,7 @@ test('main-site HTML never mints a competing Chris Person fragment', async () =>
 
 test('pending audits stay explicit rather than being counted as verified', () => {
   const pending = contract.properties.filter(item => item.status === 'pending-audit');
-  assert.deepEqual(pending.map(item => item.id).sort(), ['ausable-field-map', 'pictured-rocks']);
+  assert.deepEqual(pending.map(item => item.id).sort(), ['ausable-field-map']);
 });
 
 test('creator authority value function is weighted, measurable, and names the unresolved source audits', () => {
@@ -84,6 +84,6 @@ test('creator authority value function is weighted, measurable, and names the un
   assert.ok(model.hardStops.some(item => item.includes('thin name-only page')));
   assert.ok(model.hardStops.some(item => item.includes('protected winning title')));
   assert.equal(model.measurement.distinguishImplementationCoverageFromRankingOutcome, true);
-  assert.deepEqual(model.auditState.pendingSourceRepositoryAudit.sort(), ['ausable-field-map', 'pictured-rocks']);
+  assert.deepEqual(model.auditState.pendingSourceRepositoryAudit.sort(), ['ausable-field-map']);
   assert.equal(model.auditState.totalTrackedProperties, contract.properties.length);
 });

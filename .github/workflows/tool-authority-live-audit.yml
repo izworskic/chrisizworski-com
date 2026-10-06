@@ -1,0 +1,29 @@
+name: Tool authority public HTML audit
+
+on:
+  push:
+    branches:
+      - 'agent/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Audit actual public HTML for registered tool canonicals
+        run: node scripts/audit-tool-authority.mjs --live > tool-authority-live.json
+      - name: Upload public audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: tool-authority-public-html
+          path: tool-authority-live.json
+          retention-days: 7

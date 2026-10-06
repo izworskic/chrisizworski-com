@@ -40,6 +40,9 @@ test('title experiment remains frozen while entity metadata changes', () => {
 });
 
 test('canonical ownership and lab noindex safety remain intact', () => {
+  assert.ok(middleware.includes("url: 'https://chrisizworski.com/',"), 'Person url is the canonical homepage');
+  assert.ok(middleware.includes("author: { '@id': 'https://chrisizworski.com/#person' }"));
+  assert.ok(middleware.includes("PICTURED_ROCKS_AUTHOR_URL = 'https://chrisizworski.com/chris-izworski/'"));
   assert.match(planner, /name=\"robots\" content=\"noindex,nofollow\"/);
   assert.match(planner, new RegExp(`rel=\"canonical\" href=\"${canonical.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\"`));
   assert.match(middleware, /PICTURED_ROCKS_INDEXABLE_ROBOTS/);
