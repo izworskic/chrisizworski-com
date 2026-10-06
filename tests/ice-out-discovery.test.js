@@ -39,6 +39,22 @@ test('the production generator emits nine distinct, crawlable pages with one cre
   }
 });
 
+test('valid local HTML cannot pass publication without the configured Vercel build output', async () => {
+  const configPath = path.join(workspace, 'vercel.json');
+  const original = await fs.readFile(configPath, 'utf8');
+  const config = JSON.parse(original);
+  delete config.buildCommand;
+  delete config.outputDirectory;
+  try {
+    await fs.writeFile(configPath, JSON.stringify(config));
+    const report = await auditIceOutDirectory(workspace);
+    assert.equal(report.score, 100);
+    assert.equal(report.passed, false);
+    assert.ok(report.publicationFailures.some(failure => failure.includes('npm run vercel-build')));
+    assert.ok(report.publicationFailures.some(failure => failure.includes('generated public directory')));
+  } finally { await fs.writeFile(configPath, original); }
+});
+
 test('the audit rejects inherited lake identity and non-visible FAQ answers', async () => {
   const page = iceOutPages.find(item => item.slug === 'houghton-lake-michigan');
   const html = await fs.readFile(path.join(directory, page.slug, 'index.html'), 'utf8');

@@ -80,6 +80,8 @@ The generator publishes `/sitemap-ice-out.xml` at the public root, outside the n
 
 The `Ice-out public discovery smoke` workflow fetches that actual public sitemap, robots file and all nine initial HTML responses after a main-branch release. It waits for deployment promotion, then requires the same page contract and the release's URL/date entries. A build score alone does not count as production verification.
 
+Vercel's versioned configuration explicitly runs `npm run vercel-build` and publishes `public`. This executes the generator, creator and analytics injections, and emitted-HTML audit before publication. The benchmark rejects missing build or output settings even when an isolated local generation scores 100, because generated files must reach the deployed artifact.
+
 `npm run benchmark:ice-out-discovery` builds this family in an isolated directory from the production source and generator, then inspects all nine emitted HTML pages. Its 100-point contract covers page identity (25), indexability (10), readable content (20), discovery links (20), creator identity (20) and date consistency (5); loss is the weighted sum of failed groups. Every page must score 100. `--built` inspects the actual build directory, and the Vercel build runs it after all HTML injections. This is a technical release check, not an SEO ranking score or evidence of traffic uplift.
 
 The prior generator's reproduced output scored 10/100 against this contract. That baseline describes a local reproduction of build output, not a live SERP measurement. Observe tool queries and Chris Izworski queries separately over comparable 28-day Search Console periods before attributing any search change to this release.

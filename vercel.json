@@ -1,6 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "public",
   "functions": {
     "api/border-crossings.js": {
       "maxDuration": 20
@@ -27,6 +29,15 @@
       "maxDuration": 25
     },
     "api/field-camera.js": {
+      "maxDuration": 20
+    },
+    "api/manistee-river-conditions.js": {
+      "maxDuration": 20
+    },
+    "api/manistee-river-hydrography.js": {
+      "maxDuration": 20
+    },
+    "api/manistee-river-weather.js": {
       "maxDuration": 20
     },
     "api/**/*.js": {
