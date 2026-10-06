@@ -18,14 +18,14 @@
     const low = Number(a), high = Number(b);
     if (!Number.isFinite(low) || !Number.isFinite(high)) return '—';
     if (Math.abs(high - low) < 5) return moneyMo((low + high) / 2);
-    return money0(low) + '–' + money0(high) + '/mo';
+    return money0(low) + ' – ' + money0(high) + ' /mo';
   };
 
   const moneyRange = (a, b) => {
     const low = Number(a), high = Number(b);
     if (!Number.isFinite(low) || !Number.isFinite(high)) return '—';
     if (Math.abs(high - low) < 500) return money0((low + high) / 2);
-    return money0(low) + '–' + money0(high);
+    return money0(low) + ' – ' + money0(high);
   };
 
   function track(name) {
@@ -88,6 +88,9 @@
     const rateSource = decision.enrichment && decision.enrichment.mortgageRate || {};
     const prov = decision.provenance || {};
     const rate = Number(decision.input && decision.input.ratePct);
+    const breakdown = decision.breakdown || {};
+    const unpricedCosts = decision.unpricedCosts || [];
+    const drivers = decision.uncertaintyDrivers || [];
 
     $('askingPriceResult').textContent = money0(decision.askingPrice);
     $('mortgageOnlyResult').textContent = moneyMo(gap.mortgageOnlyMonthly);
@@ -97,39 +100,75 @@
 
     $('matchedAddress').textContent = address && address.matched
       ? 'Matched: ' + address.matchedAddress
-      : 'Address could not be matched to Census geography; broader planning estimates are being used.';
+      : 'Address match was incomplete, so broader location estimates are being used.';
 
     const confidence = decision.confidence || { label: 'Planning estimate', limitations: [] };
     const badge = $('confidenceBadge');
-    badge.textContent = confidence.label || 'PLANNING ESTIMATE';
-    badge.className = 'verdict-badge ' + (String(confidence.label || '').toLowerCase().includes('good') ? 'fits' : String(confidence.label || '').toLowerCase().includes('flood') ? 'needs' : 'close');
+    const confidenceMap = {
+      'Good planning estimate': 'GOOD DATA COVERAGE',
+      'Moderate planning estimate': 'SOME COSTS ESTIMATED',
+      'Broad planning estimate': 'WIDE RANGE · VERIFY COSTS',
+      'Limited by flood premium': 'FLOOD QUOTE NEEDED',
+    };
+    badge.textContent = confidenceMap[confidence.label] || 'PLANNING ESTIMATE';
+    badge.title = confidence.label || 'Planning estimate';
+    badge.className = 'verdict-badge ' + (
+      confidence.label === 'Good planning estimate' ? 'fits' :
+      confidence.label === 'Limited by flood premium' ? 'needs' : 'close'
+    );
 
-    const limitations = confidence.limitations || [];
-    $('confidenceLine').textContent = limitations.length
-      ? 'What still limits precision: ' + limitations.join(' · ')
-      : 'Public data and model inputs loaded successfully.';
-    $('trueMonthlyNote').textContent = decision.unpricedCosts && decision.unpricedCosts.length
-      ? 'Before any flagged unpriced costs below'
+    $('bottomLineLead').textContent = 'Plan on ' + monthlyRange(trueCost.low, trueCost.high) + ' for this house.';
+
+    const included = [];
+    if (Number(breakdown.propertyTax) > 0) included.push('property taxes');
+    if (Number(breakdown.homeInsurance) > 0) included.push('homeowners insurance');
+    if (Number(breakdown.pmi) > 0) included.push('PMI');
+    if (Number(breakdown.maintenance) > 0) included.push('a maintenance reserve');
+    if (Number(breakdown.floodInsurance) > 0) included.push('flood insurance');
+
+    $('bottomLineExplain').textContent =
+      'Principal + interest is about ' + moneyMo(gap.mortgageOnlyMonthly) +
+      '. Adding ' + (included.length ? included.join(', ') : 'the modeled ownership costs') +
+      ' adds about ' + monthlyRange(gap.monthlyLow, gap.monthlyHigh) +
+      '. That difference is the Reality Gap.';
+
+    $('bottomLineExcluded').textContent = unpricedCosts.length
+      ? 'Still outside this estimate: ' + unpricedCosts.map((item) => item.label).join(', ') + '.'
+      : 'No additional unpriced cost categories are currently flagged.';
+
+    $('trueMonthlyNote').textContent = unpricedCosts.length
+      ? 'Before unresolved costs listed below'
       : 'Mortgage + modeled property costs';
 
-    $('realityGapDetail').textContent = monthlyRange(gap.monthlyLow, gap.monthlyHigh);
-    $('realityGapAnnual').textContent = money0(gap.annualMidpoint) + '/yr at the midpoint';
-    $('realityGapShare').textContent = Number(gap.nonMortgageSharePct || 0).toFixed(0) + '% of the estimated midpoint is above principal + interest';
-    $('realityGapCopy').textContent = 'Mortgage-only payment: ' + moneyMo(gap.mortgageOnlyMonthly) +
-      '. Estimated true monthly cost: ' + monthlyRange(trueCost.low, trueCost.high) +
-      '. The difference is the cost burden ordinary mortgage math leaves out.';
+    if (drivers.length) {
+      const names = drivers.slice(0, 2).map((driver) => driver.label.toLowerCase());
+      $('rangeExplainLead').textContent =
+        'The low and high ends are different because ' + names.join(' and ') +
+        ' are estimates rather than exact bills or quotes.';
+    } else {
+      $('rangeExplainLead').textContent =
+        'The modeled tax and insurance assumptions are producing a relatively narrow range.';
+    }
+
+    $('realityGapCopy').textContent =
+      'The low end uses the lower tax and insurance assumptions; the high end uses the upper assumptions. ' +
+      'This is an uncertainty range for carrying costs, not a prediction that your payment will bounce between the two numbers.';
 
     const driverList = $('uncertaintyDriversList');
     driverList.textContent = '';
-    (decision.uncertaintyDrivers || []).forEach((driver) => {
+    drivers.forEach((driver) => {
       driverList.appendChild(provRow(
         driver.label,
-        'UNCERTAINTY DRIVER',
-        'This assumption accounts for about ' + moneyMo(driver.monthlySpread) + ' of the current low-to-high range.'
+        'WHY THE RANGE MOVES',
+        'This assumption accounts for about ' + moneyMo(driver.monthlySpread) + ' of the low-to-high spread.'
       ));
     });
     if (!driverList.children.length) {
-      driverList.appendChild(provRow('Range width', 'NARROW', 'The modeled tax and insurance cases are not creating a material spread in this result.'));
+      driverList.appendChild(provRow(
+        'Tax + insurance range',
+        'RELATIVELY NARROW',
+        'These modeled assumptions are not creating a large spread in this result.'
+      ));
     }
 
     const breakPanel = $('downPaymentBreakpointPanel');
@@ -160,7 +199,6 @@
       : 'First run used the current Freddie Mac 30-year benchmark: ' + rate.toFixed(2) + '%' +
         (rateSource.observationDate ? ' · observation ' + rateSource.observationDate : '') + '.';
 
-    const breakdown = decision.breakdown || {};
     const breakdownGrid = $('breakdownGrid');
     breakdownGrid.textContent = '';
     [
@@ -176,8 +214,8 @@
       }
     });
     $('costRangeNote').textContent = Math.abs(Number(trueCost.high) - Number(trueCost.low)) > 5
-      ? monthlyRange(trueCost.low, trueCost.high) + ' because tax and insurance are estimates, not exact future bills.'
-      : moneyMo(trueCost.midpoint) + ' under the current automatic assumptions.';
+      ? 'The total is shown as a range because taxes and insurance are not exact future bills yet.'
+      : 'The current tax and insurance assumptions produce a narrow monthly range.';
 
     const floodState = $('floodState');
     if (flood.status === 'AVAILABLE') {
@@ -198,7 +236,7 @@
 
     const unpriced = $('unpricedList');
     unpriced.textContent = '';
-    (decision.unpricedCosts || []).forEach((item) => {
+    unpricedCosts.forEach((item) => {
       unpriced.appendChild(provRow(item.label, item.status, item.note));
     });
 
@@ -218,7 +256,7 @@
       provRow('Maintenance reserve', prov.maintenance && prov.maintenance.provenance, prov.maintenance && prov.maintenance.note),
       provRow('Flood insurance', prov.floodInsurance && prov.floodInsurance.provenance, prov.floodInsurance && prov.floodInsurance.label)
     );
-    $('confidenceHelp').textContent = 'The app separates sourced facts, modeled costs, unresolved costs and the assumptions creating the Reality Gap.';
+    $('confidenceHelp').textContent = 'Sourced facts, modeled costs and unresolved costs are kept separate so you can see what still needs verification.';
 
     result.hidden = false;
     result.scrollIntoView({ behavior: 'smooth', block: 'start' });
