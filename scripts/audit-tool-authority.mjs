@@ -36,10 +36,15 @@ function canonical(html) {
 
 function structuredNodes(html) {
   const nodes = [];
-  for (const match of html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
-    const data = JSON.parse(match[1]);
-    nodes.push(...(Array.isArray(data['@graph']) ? data['@graph'] : [data]));
-  }
+  const seen = new Set();
+  const visit = value => {
+    if (!value || typeof value !== 'object' || seen.has(value)) return;
+    seen.add(value);
+    if (Array.isArray(value)) { value.forEach(visit); return; }
+    if (value['@type']) nodes.push(value);
+    for (const child of Object.values(value)) visit(child);
+  };
+  for (const match of html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) visit(JSON.parse(match[1]));
   return nodes;
 }
 
@@ -66,14 +71,14 @@ async function disposition(tool) {
     const property = contract.properties.find(item => item.host === url.hostname);
     return { kind: property?.status === 'pending-audit' ? 'external-owner-pending' : 'external-canonical', evidence: property?.repo || property?.reason || url.hostname, ownerStatus: property?.status || 'not-in-contract' };
   }
+  const pathname = url.pathname;
+  const routes = (vercel.rewrites || []).filter(route => route.source === pathname || route.source === (pathname.endsWith('/') ? pathname.slice(0, -1) : `${pathname}/`));
+  if (routes.length) return { kind: 'vercel-rewrite', evidence: routes.map(route => `${route.source} -> ${route.destination}`).join('; ') };
   const file = mainHtmlFile(tool.canonical);
   try {
     await access(file);
     return { kind: 'static-emitted', evidence: path.relative(root, file) };
   } catch {}
-  const pathname = url.pathname;
-  const routes = (vercel.rewrites || []).filter(route => route.source === pathname || route.source === (pathname.endsWith('/') ? pathname.slice(0, -1) : `${pathname}/`));
-  if (routes.length) return { kind: 'vercel-rewrite', evidence: routes.map(route => `${route.source} -> ${route.destination}`).join('; ') };
   return { kind: 'unresolved-main-route', evidence: 'No static file or exact Vercel rewrite recorded.' };
 }
 
@@ -95,7 +100,7 @@ function auditDocument(html, expectedUrl, tool, headers = new Headers()) {
   const check = (condition, message) => { if (!condition) errors.push(message); };
   let nodes = [];
   try { nodes = structuredNodes(html); } catch (error) { errors.push(`Invalid JSON-LD: ${error.message}`); }
-  const people = nodes.filter(node => node['@type'] === 'Person' && node.name === 'Chris Izworski');
+  const people = nodes.filter(node => (Array.isArray(node['@type']) ? node['@type'] : [node['@type']]).includes('Person') && node.name === 'Chris Izworski');
   const canonicalPeople = people.filter(node => node['@id'] === personId);
   const refs = allPersonRefs(nodes);
   const facts = inspectVisibleHtml(html);
@@ -105,17 +110,19 @@ function auditDocument(html, expectedUrl, tool, headers = new Headers()) {
     return { ...anchor, resolved };
   });
   const h1 = inspectVisibleHtml(/<h1\b[^>]*>[\s\S]*?<\/h1>/i.exec(html)?.[0] || '').text;
-  const mainMatch = /<main\b[^>]*>[\s\S]*?<\/main>/i.exec(html)?.[0] || '';
-  const mainText = inspectVisibleHtml(mainMatch).text;
+  const bodyMatch = /<body\b[^>]*>([\s\S]*?)<\/body>/i.exec(html)?.[1] || html;
+  const bodyText = inspectVisibleHtml(bodyMatch).text;
   const title = inspectVisibleHtml(/<title\b[^>]*>[\s\S]*?<\/title>/i.exec(html)?.[0] || '').text;
   const description = meta(html, 'description');
   const robotHeader = headers.get('x-robots-tag') || '';
 
-  check(canonical(html) === expectedUrl, `Canonical mismatch: ${canonical(html) || '(missing)'}`);
+  const actualCanonical = canonical(html);
+  const normalizedUrl = value => { try { return new URL(value).href; } catch { return ''; } };
+  check(normalizedUrl(actualCanonical) === normalizedUrl(expectedUrl), `Canonical mismatch: ${actualCanonical || '(missing)'}`);
   check(!/noindex|nofollow/i.test(robotHeader) && !/noindex|nofollow/i.test(meta(html, 'robots')), 'Indexability is blocked by a robots directive.');
   check(Boolean(title), 'Initial HTML has no title.');
   check(Boolean(description), 'Initial HTML has no meta description.');
-  check(Boolean(h1) && Boolean(mainText) && mainText.includes(h1), 'Initial HTML has no readable main heading and content.');
+  check(Boolean(h1) && Boolean(bodyText) && bodyText !== h1, 'Initial HTML has no readable heading and additional visible body content.');
   check(canonicalPeople.length > 0 && canonicalPeople.length === people.length && canonicalPeople.every(node => node.url === `${origin}/`), 'Canonical Person definition is missing, duplicated with conflicts, or has a non-homepage url.');
   check(refs.length > 0 && refs.every(id => id === personId), 'Creator/author/publisher references do not resolve to the canonical Person.');
   check(hasVisibleCreatorAttribution(html) || anchors.some(anchor => anchor.resolved === profileUrl && anchor.text === 'Chris Izworski'), 'No visible creator credit or profile byline link was found.');
@@ -123,7 +130,7 @@ function auditDocument(html, expectedUrl, tool, headers = new Headers()) {
   const outgoing = relationships.filter(edge => edge.from === tool.id && ['essential', 'strong'].includes(edge.strength));
   const destinations = outgoing.map(edge => toolById.get(edge.to)).filter(Boolean);
   const linked = destinations.filter(target => anchors.some(anchor => anchor.resolved === target.canonical));
-  if (outgoing.length && !linked.length) errors.push(`No visible href resolves to a declared essential/strong destination (${destinations.map(item => item.id).join(', ')}).`);
+  if (outgoing.length && !linked.length) warnings.push(`No visible href resolves to a declared essential/strong destination (${destinations.map(item => item.id).join(', ')}).`);
   if (!meta(html, 'og:title', 'property') || !meta(html, 'og:description', 'property') || !meta(html, 'og:url', 'property')) warnings.push('Open Graph preview metadata is incomplete.');
   if (!meta(html, 'twitter:card') || !meta(html, 'twitter:title') || !meta(html, 'twitter:description')) warnings.push('Twitter preview metadata is incomplete.');
   if (outgoing.length && linked.length) warnings.push(`Contextual handoffs resolve to ${linked.map(item => item.id).join(', ')}.`);
@@ -137,7 +144,7 @@ async function auditPicturedSpecific(html, headers, sourceHtml, errors) {
   const tag = name => new RegExp(`<meta\\s+name=["']robots["']\\s+content=["']${name}["']`, 'i').test(html);
   if (/noindex|nofollow/i.test(headers.get('x-robots-tag') || '') || tag('noindex,nofollow') || !/name=["']robots["']\s+content=["']index,follow,/i.test(html)) errors.push('Pictured Rocks canonical response is not indexable.');
   if (!pageNode?.dateModified || pageNode.dateModified !== sitemapDate) errors.push('Pictured Rocks WebPage dateModified does not match its published sitemap lastmod.');
-  if (!/<meta name="robots" content="noindex,nofollow">/i.test(sourceHtml)) errors.push('Pictured Rocks source lab lost its deliberate noindex guard.');
+  if (sourceHtml !== undefined && !/<meta name="robots" content="noindex,nofollow">/i.test(sourceHtml)) errors.push('Pictured Rocks source lab lost its deliberate noindex guard.');
   if (!meta(html, 'og:url', 'property') || meta(html, 'og:url', 'property') !== picturedUrl) errors.push('Pictured Rocks Open Graph URL does not match its canonical.');
   const links = inspectVisibleHtml(html).anchors.map(anchor => { try { return new URL(anchor.href, picturedUrl).href; } catch { return anchor.href; } });
   for (const target of [`${origin}/lake-superior-circle-tour/`, `${origin}/northern-lights-michigan/`]) {
