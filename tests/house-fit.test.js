@@ -108,6 +108,7 @@ test('mortgage-rate provenance distinguishes public default from user edit', () 
   const benchmark = buildDecision(base({ ratePct: '' }), enrichment);
   const edited = buildDecision(base({ ratePct: 6.75 }), enrichment);
   assert.equal(benchmark.provenance.mortgageRate, 'GOVERNMENT SOURCED');
+  assert.equal(benchmark.input.ratePct, 6.5);
   assert.equal(edited.provenance.mortgageRate, 'VERIFIED / USER PROVIDED');
 });
 test('missing non-SFHA flood quote is modeled, never presented as a government premium', () => {
