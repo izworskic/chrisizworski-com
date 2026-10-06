@@ -79,9 +79,10 @@
 
   function render(decision) {
     const trueCost = decision.trueMonthlyCost || {};
+    const gap = decision.realityGap || {};
     const loan = decision.loan || {};
     const cash = decision.cashToClose || {};
-    const income = decision.incomeBenchmark || {};
+    const breakpoint = decision.downPaymentBreakpoint || {};
     const address = decision.enrichment && decision.enrichment.address;
     const flood = decision.enrichment && decision.enrichment.flood || {};
     const rateSource = decision.enrichment && decision.enrichment.mortgageRate || {};
@@ -89,9 +90,9 @@
     const rate = Number(decision.input && decision.input.ratePct);
 
     $('askingPriceResult').textContent = money0(decision.askingPrice);
+    $('mortgageOnlyResult').textContent = moneyMo(gap.mortgageOnlyMonthly);
     $('trueMonthlyResult').textContent = monthlyRange(trueCost.low, trueCost.high);
-    $('loanAmountResult').textContent = money0(loan.principal);
-    $('loanDetail').textContent = Number(loan.termYears || 30) + '-year model · ' + rate.toFixed(2) + '% rate · ' + Number(loan.downPaymentPct || 0).toFixed(1) + '% down';
+    $('realityGapResult').textContent = monthlyRange(gap.monthlyLow, gap.monthlyHigh);
     $('cashToCloseResult').textContent = moneyRange(cash.totalLow, cash.totalHigh);
 
     $('matchedAddress').textContent = address && address.matched
@@ -111,6 +112,47 @@
       ? 'Before any flagged unpriced costs below'
       : 'Mortgage + modeled property costs';
 
+    $('realityGapDetail').textContent = monthlyRange(gap.monthlyLow, gap.monthlyHigh);
+    $('realityGapAnnual').textContent = money0(gap.annualMidpoint) + '/yr at the midpoint';
+    $('realityGapShare').textContent = Number(gap.nonMortgageSharePct || 0).toFixed(0) + '% of the estimated midpoint is above principal + interest';
+    $('realityGapCopy').textContent = 'Mortgage-only payment: ' + moneyMo(gap.mortgageOnlyMonthly) +
+      '. Estimated true monthly cost: ' + monthlyRange(trueCost.low, trueCost.high) +
+      '. The difference is the cost burden ordinary mortgage math leaves out.';
+
+    const driverList = $('uncertaintyDriversList');
+    driverList.textContent = '';
+    (decision.uncertaintyDrivers || []).forEach((driver) => {
+      driverList.appendChild(provRow(
+        driver.label,
+        'UNCERTAINTY DRIVER',
+        'This assumption accounts for about ' + moneyMo(driver.monthlySpread) + ' of the current low-to-high range.'
+      ));
+    });
+    if (!driverList.children.length) {
+      driverList.appendChild(provRow('Range width', 'NARROW', 'The modeled tax and insurance cases are not creating a material spread in this result.'));
+    }
+
+    const breakPanel = $('downPaymentBreakpointPanel');
+    if (breakpoint.active) {
+      breakPanel.hidden = false;
+      $('extraCashTo20').textContent = money0(breakpoint.extraCashTo20);
+      $('targetDownPayment').textContent = '20% down = ' + money0(breakpoint.targetDownPayment);
+      $('monthlySavingsAt20').textContent = moneyMo(breakpoint.monthlySavingsAt20);
+      $('pmiSavingsAt20').textContent = moneyMo(breakpoint.pmiMonthly) + ' is modeled PMI; the rest is lower principal + interest.';
+      $('downBreakpointNote').textContent = breakpoint.note || '';
+    } else {
+      breakPanel.hidden = true;
+    }
+
+    const tripwireList = $('tripwireList');
+    tripwireList.textContent = '';
+    (decision.buyerTripwires || []).forEach((item) => {
+      const effect = Number.isFinite(Number(item.monthlyEffect)) && Number(item.monthlyEffect) > 0
+        ? ' · ' + moneyMo(item.monthlyEffect) + (item.key === 'insurance' || item.key === 'tax' ? ' uncertainty spread' : ' modeled cost')
+        : '';
+      tripwireList.appendChild(provRow(item.label, item.level, (item.note || '') + effect));
+    });
+
     const isUserRate = prov.mortgageRate === 'USER PROVIDED';
     $('ratePctAdjust').value = rate.toFixed(2);
     $('rateSourceResult').textContent = isUserRate
@@ -122,7 +164,7 @@
     const breakdownGrid = $('breakdownGrid');
     breakdownGrid.textContent = '';
     [
-      ['Mortgage principal + interest', breakdown.mortgagePI, rate.toFixed(2) + '% · 30 years'],
+      ['Mortgage principal + interest', breakdown.mortgagePI, rate.toFixed(2) + '% · ' + Number(loan.termYears || 30) + ' years'],
       ['PMI', breakdown.pmi, Number(breakdown.pmi) > 0 ? 'Included because down payment is below 20%.' : ''],
       ['Property tax estimate', breakdown.propertyTax, 'Address-based Census planning estimate'],
       ['Homeowners insurance estimate', breakdown.homeInsurance, 'Automatic planning estimate'],
@@ -137,16 +179,13 @@
       ? monthlyRange(trueCost.low, trueCost.high) + ' because tax and insurance are estimates, not exact future bills.'
       : moneyMo(trueCost.midpoint) + ' under the current automatic assumptions.';
 
-    $('incomeBenchmarkResult').textContent = moneyRange(income.annualLow, income.annualHigh) + '/yr';
-    $('incomeBenchmarkNote').textContent = income.note || '';
-
     const floodState = $('floodState');
     if (flood.status === 'AVAILABLE') {
       floodState.textContent = flood.sfha ? 'ZONE ' + flood.zone + ' · SFHA' : 'ZONE ' + flood.zone;
       $('floodCopy').textContent = flood.note || (flood.sfha
         ? 'FEMA maps this point in a Special Flood Hazard Area.'
         : 'FEMA flood-zone context loaded for this point.');
-      $('floodSource').textContent = 'Government sourced · FEMA National Flood Hazard Layer. FEMA identifies hazard but does not provide the carrier premium.';
+      $('floodSource').textContent = 'Government sourced · FEMA National Flood Hazard Layer. FEMA identifies hazard but does not provide the property-specific carrier premium.';
     } else if (flood.status === 'NO_FEATURE') {
       floodState.textContent = 'NO POLYGON RETURNED';
       $('floodCopy').textContent = flood.note || 'No FEMA NFHL polygon was returned for this point.';
@@ -179,7 +218,7 @@
       provRow('Maintenance reserve', prov.maintenance && prov.maintenance.provenance, prov.maintenance && prov.maintenance.note),
       provRow('Flood insurance', prov.floodInsurance && prov.floodInsurance.provenance, prov.floodInsurance && prov.floodInsurance.label)
     );
-    $('confidenceHelp').textContent = 'The app completes the analysis automatically, while separating public-source facts from modeled estimates and unavailable costs.';
+    $('confidenceHelp').textContent = 'The app separates sourced facts, modeled costs, unresolved costs and the assumptions creating the Reality Gap.';
 
     result.hidden = false;
     result.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -193,7 +232,7 @@
     }
 
     status.textContent = source === 'rate'
-      ? 'Recalculating with your mortgage rate…'
+      ? 'Recalculating the Reality Gap with your mortgage rate…'
       : 'Pulling the current mortgage rate and property data…';
     track('calculation_started');
 
@@ -208,7 +247,8 @@
       render(data);
       status.textContent = 'Updated.';
       track('calculation_completed');
-      track('true_cost_viewed');
+      track('reality_gap_viewed');
+      if (data.downPaymentBreakpoint && data.downPaymentBreakpoint.active) track('pmi_breakpoint_viewed');
       if (source === 'rate') track('mortgage_rate_adjusted');
       else track('market_rate_used');
     } catch (error) {
