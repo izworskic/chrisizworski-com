@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { auditIceOutDirectory, auditIceOutPage, auditIceOutRoutes, iceOutPages } from '../scripts/benchmark-ice-out-discovery.mjs';
+import { auditIceOutDirectory, auditIceOutPage, auditIceOutRoutes, auditIceOutPublication, iceOutPages } from '../scripts/benchmark-ice-out-discovery.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let workspace;
@@ -18,6 +18,9 @@ before(async () => {
   await fs.mkdir(directory, { recursive: true });
   await fs.copyFile(path.join(root, 'public/national-tools/ice-out/index.html'), path.join(directory, 'index.html'));
   await fs.copyFile(path.join(root, 'vercel.json'), path.join(workspace, 'vercel.json'));
+  await fs.copyFile(path.join(root, 'public/robots.txt'), path.join(workspace, 'public/robots.txt'));
+  await fs.mkdir(path.join(workspace, 'scripts'), { recursive: true });
+  await fs.copyFile(path.join(root, 'scripts/stamp-freshness.mjs'), path.join(workspace, 'scripts/stamp-freshness.mjs'));
   generate();
 });
 after(async () => { if (workspace) await fs.rm(workspace, { recursive: true, force: true }); });
@@ -37,7 +40,7 @@ test('the production generator emits nine distinct, crawlable pages with one cre
 test('the audit rejects inherited lake identity and non-visible FAQ answers', async () => {
   const page = iceOutPages.find(item => item.slug === 'houghton-lake-michigan');
   const html = await fs.readFile(path.join(directory, page.slug, 'index.html'), 'utf8');
-  const sitemap = await fs.readFile(path.join(directory, 'sitemap-locations.xml'), 'utf8');
+  const sitemap = await fs.readFile(path.join(workspace, 'public/sitemap-ice-out.xml'), 'utf8');
   const wrongHeading = html.replace('<h1 id="lakeName">Houghton Lake, Michigan</h1>', '<h1 id="lakeName">Lake Vermilion</h1>');
   assert.ok(auditIceOutPage(wrongHeading, page, sitemap).failures.includes('pageIdentity: selected lake heading matches this page'));
   const wrongIdentity = html.replace('"url":"https://chrisizworski.com/national-tools/ice-out/houghton-lake-michigan/"', '"url":"https://chrisizworski.com/national-tools/ice-out/"');
@@ -64,4 +67,15 @@ test('the audit rejects missing lake routes and routes shadowed by the national 
   assert.ok(auditIceOutRoutes(missing).some(failure => failure.startsWith(canonical + ':')));
   const shadowed = { ...config, rewrites: [{ source: '/national-tools/:path*', destination: 'https://example.com/:path*' }, ...config.rewrites] };
   assert.equal(auditIceOutRoutes(shadowed).length, 18);
+});
+
+test('the audit rejects an unadvertised, unregistered or proxy-shadowed sitemap', async () => {
+  const robots = await fs.readFile(path.join(workspace, 'public/robots.txt'), 'utf8');
+  const stamper = await fs.readFile(path.join(workspace, 'scripts/stamp-freshness.mjs'), 'utf8');
+  const config = JSON.parse(await fs.readFile(path.join(workspace, 'vercel.json'), 'utf8'));
+  assert.equal(auditIceOutPublication(robots, stamper, config).length, 0);
+  assert.ok(auditIceOutPublication(robots.replace('Sitemap: https://chrisizworski.com/sitemap-ice-out.xml', ''), stamper, config).includes('ice-out sitemap must be advertised in robots.txt'));
+  assert.ok(auditIceOutPublication(robots, stamper.replace('"sitemap-ice-out.xml",', ''), config).includes('ice-out sitemap must be registered with the freshness checker'));
+  const shadowed = { ...config, rewrites: [{ source: '/sitemap-ice-out.xml', destination: 'https://example.com/sitemap.xml' }, ...config.rewrites] };
+  assert.ok(auditIceOutPublication(robots, stamper, shadowed).includes('the root ice-out sitemap must not be shadowed by a proxy rewrite'));
 });

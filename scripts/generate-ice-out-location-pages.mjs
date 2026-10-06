@@ -52,5 +52,5 @@ for(const lake of lakes){
 const directory=`<section data-ice-location-directory style="max-width:980px;margin:24px auto;padding:0 20px"><div style="border-top:1px solid #ddd7cb;padding-top:18px"><strong>Popular lake ice-out forecasts</strong><p>${lakes.map(x=>`<a href="/national-tools/ice-out/${x.slug}/">${esc(x.name)}</a>`).join(' · ')}</p></div></section>`;
 fs.writeFileSync(parentPath,source.replace('</main>',`${directory}</main>`));
 const urls=['https://chrisizworski.com/national-tools/ice-out/',...lakes.map(x=>`https://chrisizworski.com/national-tools/ice-out/${x.slug}/`)];
-fs.writeFileSync(path.join(root,'public/national-tools/ice-out/sitemap-locations.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u=>`  <url><loc>${u}</loc><lastmod>${contentDate}</lastmod><changefreq>daily</changefreq></url>`).join('\n')}\n</urlset>\n`);
+fs.writeFileSync(path.join(root,'public/sitemap-ice-out.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u=>`  <url><loc>${u}</loc><lastmod>${contentDate}</lastmod><changefreq>daily</changefreq></url>`).join('\n')}\n</urlset>\n`);
 console.log(`Generated and verified ${lakes.length} lake ice-out pages.`);

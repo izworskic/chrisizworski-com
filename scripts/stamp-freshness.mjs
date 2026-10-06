@@ -123,6 +123,7 @@ const lastCommitDate = lastContentCommitDate;
 // it indexes images, not pages, so it has no page dateModified to agree with.
 const SITEMAPS = [
   "sitemap.xml",
+  "sitemap-ice-out.xml",
   "sitemap-beaches.xml",
   "sitemap-reputation.xml",
   "sitemap-fall.xml",
