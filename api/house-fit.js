@@ -47,9 +47,10 @@ module.exports = async function handler(req, res) {
   const address = String(body.address || '').trim();
   const askingPrice = Number(body.askingPrice);
   const downPayment = Number(body.downPayment);
+  const rateMissing = body.ratePct === '' || body.ratePct == null;
   const ratePct = Number(body.ratePct);
 
-  if (address.length < 6 || !(askingPrice > 0) || !Number.isFinite(downPayment) || downPayment < 0 || !Number.isFinite(ratePct) || ratePct < 0 || ratePct > 25) {
+  if (address.length < 6 || !(askingPrice > 0) || !Number.isFinite(downPayment) || downPayment < 0 || rateMissing || !Number.isFinite(ratePct) || ratePct < 0 || ratePct > 25) {
     return res.status(400).json({
       error: 'MISSING_REQUIRED_INPUT',
       message: 'Enter a U.S. street address, positive asking price, down payment of zero or more, and a mortgage rate from 0% to 25%.',
