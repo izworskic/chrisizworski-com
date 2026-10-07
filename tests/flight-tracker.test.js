@@ -378,7 +378,8 @@ test('client resolves scheduled assignment first, then follows the exact tail by
 });
 
 test('client answers whether the assigned aircraft is actually inbound to the departure airport', () => {
-  assert.match(client, /const inboundToOrigin = live\?\.route\?\.destination && userOrigin && sameAirport\(live\.route\.destination,userOrigin\)/);
+  assert.match(client, /const currentRoute = resolvedCurrentRoute\(assignment, live\)/);
+  assert.match(client, /const inboundToOrigin = currentRoute\?\.destination && userOrigin && sameAirport\(currentRoute\.destination,userOrigin\)/);
   assert.match(client, /Your plane is on the way to/);
   assert.match(client, /THIS IS THE PLANE FOR YOUR FLIGHT/);
   assert.match(client, /It is not yet flying into/);
