@@ -218,8 +218,7 @@
 
     try {
       const response = await fetch('/api/flight-tracker?flight=' + encodeURIComponent(normalized), {
-        headers:{accept:'application/json'},
-        cache:'no-store'
+        headers:{accept:'application/json'}
       });
       const data = await response.json();
       if (data.status === 'live') renderLive(data);
