@@ -53,8 +53,9 @@
 
   async function load(){
     const p=new URLSearchParams(new FormData(form));
+    p.set('liveBucket',String(Math.floor(Date.now()/60000)));
     try{
-      const res=await fetch('/api/nyc-crossing?'+p.toString());
+      const res=await fetch('/api/nyc-crossing?'+p.toString(),{cache:'no-store'});
       if(!res.ok) throw new Error('decision service '+res.status);
       render(await res.json());
     }catch(e){
