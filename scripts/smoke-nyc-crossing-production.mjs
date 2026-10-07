@@ -52,8 +52,8 @@ async function verifyOnce() {
     'Compare official live bridge and tunnel conditions',
     'NYC DOT real-time traffic feed',
     'NYC Open Data traffic history',
-    'TRANSCOM travel-time data',
-    '/assets/nyc-crossing.js?v=20261006b',
+    'Mapbox live traffic routing',
+    '/assets/nyc-crossing.js?v=20261006c',
   ]) {
     assert(html.includes(marker), `page missing marker: ${marker}`);
   }
@@ -73,7 +73,8 @@ async function verifyOnce() {
   assert(data.sources?.portAuthority, 'Port Authority source missing');
   assert(data.sources?.nycdotTraffic, 'NYC DOT live source missing');
   assert(data.sources?.nycdotHistory, 'NYC DOT history source missing');
-  assert(data.sources?.transcom, 'TRANSCOM source missing');
+  assert(data.sources?.mapbox, 'Mapbox source missing');
+  assert(['LIVE', 'PARTIAL', 'UNAVAILABLE', 'NOT_CONFIGURED'].includes(data.mapboxState), `unexpected mapboxState ${data.mapboxState}`);
   assert(['LIVE', 'NO_MATCH', 'UNAVAILABLE', 'NOT_APPLICABLE'].includes(data.baselineState), `unexpected baselineState ${data.baselineState}`);
   assert(data.baselineSource, 'NYC DOT historical baseline source missing');
 
@@ -97,9 +98,17 @@ async function verifyOnce() {
     assert(nycdotBaselines.length === data.baselineCount, 'baselineCount does not match enriched NYC DOT routes');
   }
 
-  const pending = new Map(data.routes.filter(route => route.trafficPending).map(route => [route.id, route.trafficPending]));
-  assert(/TRANSCOM/.test(pending.get('williamsburg') || ''), 'Williamsburg TRANSCOM pending state missing when no live route is present');
-  assert(/TRANSCOM/.test(pending.get('queensboro') || ''), 'Queensboro TRANSCOM pending state missing when no live route is present');
+  const fallbackIds = ['williamsburg', 'queensboro'];
+  for (const id of fallbackIds) {
+    const route = data.routes.find(item => item.id === id);
+    assert(route, `${id} route missing`);
+    if (route.etaState === 'LIVE' && route.trafficSourceName === 'Mapbox live traffic routing') {
+      assert(route.baselineKind === 'MAPBOX_TYPICAL_TRAFFIC', `${id} Mapbox typical baseline missing`);
+      assert(Number.isFinite(route.baselineMinutes) && route.baselineMinutes > 0, `${id} Mapbox baseline invalid`);
+    } else {
+      assert(/Mapbox/.test(route.trafficPending || ''), `${id} Mapbox fallback state missing when live route is unavailable`);
+    }
+  }
 
   return {
     page: page.status,
@@ -111,6 +120,8 @@ async function verifyOnce() {
     nycdotBaselineCount: nycdotBaselines.length,
     baselineState: data.baselineState,
     baselineReason: data.baselineReason,
+    mapboxState: data.mapboxState,
+    mapboxCount: data.mapboxCount,
   };
 }
 
@@ -122,7 +133,7 @@ for (let attempt = 1; attempt <= ATTEMPTS; attempt += 1) {
       ? ' | warning=no fresh official live readings at smoke time'
       : '';
     console.log(
-      `NYC crossing production smoke PASS | page=${result.page} | api=${result.api} | traffic=${result.trafficState} | live=${result.liveCount} | baselines=${result.baselineCount} | nycdotLive=${result.nycdotLiveCount} | nycdotBaselines=${result.nycdotBaselineCount} | baselineState=${result.baselineState} | baselineReason=${result.baselineReason || 'none'}${suffix}`,
+      `NYC crossing production smoke PASS | page=${result.page} | api=${result.api} | traffic=${result.trafficState} | live=${result.liveCount} | baselines=${result.baselineCount} | nycdotLive=${result.nycdotLiveCount} | nycdotBaselines=${result.nycdotBaselineCount} | baselineState=${result.baselineState} | mapboxState=${result.mapboxState} | mapbox=${result.mapboxCount || 0} | baselineReason=${result.baselineReason || 'none'}${suffix}`,
     );
     process.exit(0);
   } catch (error) {
