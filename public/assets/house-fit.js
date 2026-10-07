@@ -325,7 +325,17 @@
 
   async function loadDailyRate() {
     try {
-      const response = await fetch('/api/house-fit', { headers: { Accept: 'application/json' } });
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 5000);
+      let response;
+      try {
+        response = await fetch('/api/house-rate', {
+          headers: { Accept: 'application/json' },
+          signal: controller.signal,
+        });
+      } finally {
+        clearTimeout(timer);
+      }
       const data = await readJsonResponse(response);
       const rate = Number(data && data.mortgageRate && data.mortgageRate.ratePct);
       if (!response.ok || !Number.isFinite(rate)) throw new Error('Rate unavailable');
@@ -333,15 +343,19 @@
       const source = data.mortgageRate || {};
       const label = source.frequency === 'DAILY'
         ? 'Latest daily average'
-        : source.frequency === 'WEEKLY'
-          ? 'Daily average unavailable · weekly fallback'
-          : 'Live rate unavailable · fallback assumption';
+        : source.frequency === 'DAILY_SNAPSHOT'
+          ? 'Latest saved daily average'
+          : source.frequency === 'WEEKLY'
+            ? 'Daily average unavailable · weekly fallback'
+            : 'Live rate unavailable · saved daily fallback';
       $('rateMarketSummary').textContent = label.replace('Latest daily average', 'Current daily 30-year conforming average') +
         ': ' + rate.toFixed(3) + '%' +
         (source.observationDate ? ' · ' + source.observationDate : '') +
         (source.source ? ' · ' + source.source : '');
     } catch {
-      $('rateMarketSummary').textContent = 'Daily rate will be loaded automatically when you calculate.';
+      if (!rateTouched) $('ratePct').value = '7.458';
+      $('rateMarketSummary').textContent =
+        'Latest saved daily 30-year conforming average: 7.458% · Oct. 5, 2026 · Optimal Blue via FRED. Live refresh unavailable.';
     }
   }
 
