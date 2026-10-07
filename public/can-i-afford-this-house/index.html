@@ -15,14 +15,14 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Can I Afford THIS House? True Monthly Cost">
   <meta name="twitter:description" content="Mortgage payment versus the real monthly cost of this exact house, including hidden ownership costs and buyer tripwires.">
-  <link rel="stylesheet" href="/assets/house-fit.css?v=20261006k">
+  <link rel="stylesheet" href="/assets/house-fit.css?v=20261006l">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/can-i-afford-this-house/#page","url":"https://chrisizworski.com/can-i-afford-this-house/","name":"Can I Afford This House? True Monthly Cost","description":"A three-input property-specific cost engine that uses the current mortgage-rate benchmark plus public data and transparent assumptions to estimate a home's real monthly carrying cost.","dateModified":"2026-10-06","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/","name":"Chris Izworski"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/can-i-afford-this-house/#app","name":"Can I Afford This House? True Monthly Cost","url":"https://chrisizworski.com/can-i-afford-this-house/","applicationCategory":"FinanceApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"featureList":["Three-input first-run intake","Current mortgage-rate benchmark with post-result override","Mortgage-versus-true-cost Reality Gap","Buyer tripwires","20% down-payment breakpoint","Mortgage principal and interest","Property-tax planning estimate from Census data","Homeowners-insurance planning range","PMI estimate","Maintenance reserve","FEMA flood-zone context","Cash-to-close planning range","Data provenance and limitations"]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/can-i-afford-this-house/#page","url":"https://chrisizworski.com/can-i-afford-this-house/","name":"Can I Afford This House? True Monthly Cost","description":"A property-specific cost engine that prefills the latest daily 30-year conforming mortgage average and combines it with public data and transparent assumptions to estimate a home's real monthly carrying cost.","dateModified":"2026-10-06","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/","name":"Chris Izworski"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/can-i-afford-this-house/#app","name":"Can I Afford This House? True Monthly Cost","url":"https://chrisizworski.com/can-i-afford-this-house/","applicationCategory":"FinanceApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"featureList":["Address, price and down payment intake","Daily mortgage-rate average prefilled and editable before calculation","Mortgage-versus-true-cost Reality Gap","Buyer tripwires","20% down-payment breakpoint","Mortgage principal and interest","Property-tax planning estimate from Census data","Homeowners-insurance planning range","PMI estimate","Maintenance reserve","FEMA flood-zone context","Cash-to-close planning range","Data provenance and limitations"]}]}</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <script defer src="/assets/tool-engagement.js"></script>
-  <script defer src="/assets/house-fit.js?v=20261006k"></script>
+  <script defer src="/assets/house-fit.js?v=20261006l"></script>
 </head>
 <body data-analytics-page="house-fit">
   <header class="site-header">
@@ -34,9 +34,9 @@
     <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/tools/">Tools</a> / Can I Afford This House?</nav>
 
     <section class="intro" aria-labelledby="page-title">
-      <p class="eyebrow">Three inputs. The app does the rest.</p>
+      <p class="eyebrow">Current rate prefilled. Change it if needed.</p>
       <h1 id="page-title">Can I Afford <em>THIS</em> House?</h1>
-      <p class="lede">The mortgage payment is only part of the story. Give the house address, asking price and your down payment. The tool shows what this exact house is likely to cost beyond principal and interest.</p>
+      <p class="lede">The mortgage payment is only part of the story. Give the house address, asking price and your down payment. The current daily 30-year conforming mortgage average is prefilled automatically, and you can change it before calculating.</p>
       <p class="intro-note">It automatically adds taxes, homeowners insurance, PMI below 20% down, maintenance and FEMA flood context, then exposes the <strong>Reality Gap</strong> between the mortgage-only payment and the estimated true monthly cost.</p>
     </section>
 
@@ -50,6 +50,7 @@
           <label class="field wide"><span>House address</span><input name="address" autocomplete="street-address" required placeholder="123 Main St, City, State ZIP"><small>Used to match Census geography and FEMA flood context.</small></label>
           <label class="field"><span>Asking price</span><div class="money-input"><b>$</b><input name="askingPrice" inputmode="decimal" min="1" step="1000" required placeholder="425000"></div></label>
           <label class="field"><span>Down payment</span><div class="money-input"><b>$</b><input name="downPayment" inputmode="decimal" min="0" step="1000" required placeholder="85000"></div></label>
+          <label class="field"><span>Mortgage rate</span><div class="suffix-input"><input id="ratePct" name="ratePct" inputmode="decimal" min="0" max="25" step="0.001" placeholder="Loading…" aria-describedby="rateDefaultNote"><b>%</b></div><small id="rateDefaultNote">Loading the latest daily 30-year conforming average…</small></label>
         </div>
         <div class="submit-row"><button class="primary" type="submit">BUILD THE TRUE COST</button><span id="formStatus" class="form-status" role="status" aria-live="polite"></span></div>
       </form>
@@ -171,16 +172,6 @@
         <div id="tripwireList" class="provenance-list"></div>
       </section>
 
-      <section class="panel" aria-labelledby="rate-adjust-title">
-        <div class="section-head"><div><p class="eyebrow">Easy what-if</p><h2 id="rate-adjust-title">Adjust the mortgage rate</h2></div><p id="rateSourceResult">First run uses the current Freddie Mac 30-year benchmark.</p></div>
-        <form id="rateAdjustForm">
-          <div class="form-grid">
-            <label class="field"><span>Mortgage rate</span><div class="suffix-input"><input id="ratePctAdjust" name="ratePct" inputmode="decimal" min="0" max="25" step="0.01" required><b>%</b></div><small>Change this to your lender quote, then recalculate. All taxes, insurance, PMI and other monthly costs stay in the model.</small></label>
-          </div>
-          <button class="secondary" type="submit">RECALCULATE WITH THIS RATE</button>
-        </form>
-      </section>
-
       <section class="panel flood-panel" aria-labelledby="flood-title">
         <div class="section-head"><div><p class="eyebrow">Automatically checked</p><h2 id="flood-title">FEMA flood context</h2></div><span id="floodState" class="source-state">—</span></div>
         <p id="floodCopy"></p><p class="source-line" id="floodSource"></p>
@@ -199,14 +190,14 @@
 
     <section class="panel method-panel" aria-labelledby="method-title">
       <p class="eyebrow">Method</p><h2 id="method-title">The point is the gap, not the mortgage payment.</h2>
-      <p>The first run uses a fixed 30-year mortgage term and the current Freddie Mac 30-year benchmark rate. It then builds the estimated carrying cost of this property and explicitly subtracts the mortgage-only payment to reveal the Reality Gap. PMI is modeled below 20% down, and the tool calculates how much extra cash reaches 20% and how that changes the monthly estimate.</p>
+      <p>The first run uses a fixed 30-year mortgage term and the latest available daily Optimal Blue 30-year conforming mortgage average, unless you replace it with your own rate. It then builds the estimated carrying cost of this property and explicitly subtracts the mortgage-only payment to reveal the Reality Gap. PMI is modeled below 20% down, and the tool calculates how much extra cash reaches 20% and how that changes the monthly estimate.</p>
       <p><code>Mortgage P&amp;I + PMI + estimated property tax + estimated homeowners insurance + maintenance reserve + any priced flood premium</code></p>
       <p>The monthly result is shown as a range when taxes or insurance are uncertain. HOA dues, utilities and actual flood-insurance premiums are not invented when a dependable nationwide free source cannot provide them.</p>
       <div class="method-grid">
         <article><strong>Address match</strong><span>U.S. Census Geocoder</span></article>
         <article><strong>Flood zone</strong><span>FEMA National Flood Hazard Layer</span></article>
         <article><strong>Tax planning proxy</strong><span>U.S. Census ACS county medians</span></article>
-        <article><strong>Rate reference</strong><span>Freddie Mac PMMS via FRED</span></article>
+        <article><strong>Rate reference</strong><span>Optimal Blue OBMMI daily index via FRED</span></article>
       </div>
       <p class="disclaimer"><strong>Planning tool, not underwriting.</strong> This is not a lender approval, appraisal or insurance quote. Property taxes, insurance, HOA obligations, utilities and flood-insurance premiums can change the real cost. Verify material costs before making a purchase decision.</p>
     </section>

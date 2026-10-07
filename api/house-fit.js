@@ -30,8 +30,8 @@ module.exports = async function handler(req, res) {
       },
       intake: {
         required: ['address', 'askingPrice', 'downPayment'],
-        optionalAfterFirstRun: ['ratePct'],
-        note: 'The first calculation asks for only address, asking price and down payment. The current Freddie Mac 30-year benchmark is used automatically; the user can override the rate after seeing the first result.',
+        prefilledEditable: ['ratePct'],
+        note: 'The opening form prefills the latest available daily 30-year conforming mortgage average. Users can replace it with their own lender rate before calculating.',
       },
     });
   }
