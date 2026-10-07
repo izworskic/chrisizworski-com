@@ -118,7 +118,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007i/);
+  assert.match(html, /flight-tracker\.js\?v=20261007j/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -528,4 +528,51 @@ test('route-missing registration lookup can attach a focus-airport relationship 
   assert.match(source, /focusAirportRelationship/);
   assert.match(client, /data\.focusAirportRelationship/);
   assert.match(client, /originMarker = airportMarker\('origin', focus/);
+});
+
+
+test('previous occurrence context preserves a same-tail landed arrival for the turn state', () => {
+  const selected = {
+    flightNumber:'AA3101',
+    tailNumber:'N919NN',
+    origin:{iata:'DTW',city:'Detroit'},
+    destination:{iata:'DFW',city:'Dallas'},
+    flightStatus:{airborne:false,landed:false}
+  };
+  const landed = {
+    flightNumber:'AA3101',
+    flightId:'1412663702',
+    tailNumber:'N919NN',
+    origin:{iata:'DFW',city:'Dallas'},
+    destination:{iata:'DTW',city:'Detroit'},
+    assignmentState:'landed',
+    flightStatus:{airborne:true,landed:true},
+    note:'The flight has landed'
+  };
+  assert.equal(assignmentApi.isMatchingPreviousOccurrence(landed,selected),true);
+  assert.equal(assignmentApi.isMatchingPreviousOccurrence({...landed,tailNumber:'N920NN'},selected),false);
+  const summary=assignmentApi.previousOccurrenceSummary(landed);
+  assert.equal(summary.destination.iata,'DTW');
+  assert.equal(summary.flightStatus.landed,true);
+  assert.equal(summary.evidence.kind,'same-day-same-flight-same-tail-previous-occurrence');
+});
+
+test('landed previous trip overrides stale airborne narrative and becomes the between-flights state', () => {
+  assert.match(client, /function landedPreviousAtOrigin\(assignment\)/);
+  assert.match(client, /previous\?\.flightStatus\?\.landed !== true/);
+  assert.match(client, /sameAirport\(previous\.destination, assignment\?\.origin\)/);
+  assert.match(client, /function renderArrivedForTurn\(assignment\)/);
+  assert.match(client, /Your plane has arrived in .* and is on the ground/);
+  assert.match(client, /completed .* and .*is still assigned to your/s);
+  assert.match(client, /On ground · between flights/);
+  assert.match(client, /Already at departure airport/);
+  assert.match(client, /if \(assignmentData && renderArrivedForTurn\(assignmentData\)\) \{\s*resetHeldLive\(\);\s*return true;/s);
+  assert.match(client, /if \(renderArrivedForTurn\(assignment\)\) return;/);
+});
+
+test('a grounded live aircraft can never fall through to the generic airborne-style fallback', () => {
+  assert.match(client, /if \(live\?\.aircraft\?\.onGround === true && landedPreviousAtOrigin\(assignment\)\)/);
+  assert.match(client, /if \(live\?\.aircraft\?\.onGround === true\) \{/);
+  assert.match(client, /Your assigned plane is on the ground/);
+  assert.match(client, /currently reporting on the ground/);
 });

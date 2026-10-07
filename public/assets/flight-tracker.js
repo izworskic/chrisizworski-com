@@ -300,6 +300,10 @@
   }
 
   function holdLastLiveOnRefreshMiss(data) {
+    if (assignmentData && renderArrivedForTurn(assignmentData)) {
+      resetHeldLive();
+      return true;
+    }
     if (!activeLiveKey || lastLiveFlight !== activeLiveKey || !lastLiveSuccessAt) return false;
     const elapsedMs = Date.now() - lastLiveSuccessAt;
     if (elapsedMs < 0 || elapsedMs > HOLD_LAST_LIVE_MS) return false;
@@ -538,6 +542,63 @@
     return Boolean(left && right && left === right);
   }
 
+
+  function landedPreviousAtOrigin(assignment) {
+    const previous = assignment?.previousAircraftOccurrence;
+    if (!previous || previous?.flightStatus?.landed !== true) return null;
+    if (!sameAirport(previous.destination, assignment?.origin)) return null;
+    const assignedTail = clean(assignment?.tailNumber);
+    const previousTail = clean(previous?.tailNumber);
+    if (!assignedTail || assignedTail !== previousTail) return null;
+    return previous;
+  }
+
+  function renderArrivedForTurn(assignment) {
+    const previous = landedPreviousAtOrigin(assignment);
+    if (!previous) return false;
+
+    const tail = assignment?.tailNumber;
+    const route = assignmentRoute(assignment);
+    const delay = delayLabel(assignment);
+    const originName = airportPlace(assignment?.origin);
+    const originCode = airportCodeAny(assignment?.origin);
+    const previousRoute = previous?.origin && previous?.destination
+      ? airportPlace(previous.origin) + ' → ' + airportPlace(previous.destination)
+      : null;
+    const equipment = assignment?.equipment?.name || assignment?.equipment?.code;
+    const dep = scheduledTimeLabel(assignment?.origin);
+
+    setAnswer({
+      kicker:'THIS IS THE PLANE FOR YOUR FLIGHT',
+      headline:'Your plane has arrived in ' + originName + ' and is on the ground.',
+      summary:(tail ? tail + ' ' : 'The assigned aircraft ') +
+        (previousRoute ? 'completed ' + previousRoute + ' and ' : '') +
+        'is still assigned to your ' + (route || 'next') + ' flight.',
+      pills:[route,delay,dep ? 'Departure ' + dep : null,tail,equipment].filter(Boolean),
+      next:'What happens next: the aircraft turns at ' + originName +
+        ', then operates your ' + (route || 'next') +
+        ' flight. We’ll keep checking for an aircraft swap or departure.',
+      source:assignmentSourceText()
+    });
+
+    clearLiveMap();
+    flightLabel.textContent = tail || assignment?.flightNumber || 'Assigned aircraft';
+    routeLabel.textContent = 'At ' + originName + (originCode ? ' (' + originCode + ')' : '');
+    routeCodes.textContent = '';
+    detailLabel.textContent = [equipment,tail].filter(Boolean).join(' · ');
+    freshness.textContent = 'Previous flight confirmed landed';
+    freshness.dataset.stale = 'false';
+    glance.hidden = false;
+    mapShell.classList.add('with-progress');
+    phaseLabel.textContent = 'On ground · between flights';
+    distanceLabel.textContent = '—';
+    landingLabel.textContent = 'Already at departure airport';
+    glanceNote.hidden = true;
+    progressBar.hidden = true;
+    setMessage('', 'neutral');
+    return true;
+  }
+
   function renderAssignmentBase(assignment) {
     const route = assignmentRoute(assignment);
     const tail = assignment.tailNumber;
@@ -618,6 +679,11 @@
       return;
     }
 
+    if (live?.aircraft?.onGround === true && landedPreviousAtOrigin(assignment)) {
+      renderArrivedForTurn(assignment);
+      return;
+    }
+
     if (inboundToOrigin) {
       const originName = airportPlace(userOrigin);
       let summary = currentLeg ? 'It is currently flying ' + currentLeg + '.' : 'The aircraft is currently inbound to ' + originName + '.';
@@ -641,6 +707,22 @@
         summary:'That is the aircraft currently assigned to your flight. It is not yet flying into ' + airportPlace(userOrigin) + ', so it may have another flight to make first, or the airline may swap aircraft before your departure.',
         pills:[...pills,currentLeg],
         next:'What happens next: keep watching the assignment. This aircraft may make another flight first, or the airline may swap aircraft before departure.',
+        source:assignmentSourceText()
+      });
+      return;
+    }
+
+    if (live?.aircraft?.onGround === true) {
+      const relationship = live?.focusAirportRelationship;
+      const focusLabel = focusAirportLabel(relationship);
+      setAnswer({
+        kicker:'YOUR ASSIGNED AIRCRAFT',
+        headline:relationship?.state === 'at-airport' && focusLabel
+          ? 'Your plane is on the ground at ' + focusLabel + '.'
+          : 'Your assigned plane is on the ground.',
+        summary:tail + ' is currently reporting on the ground and is assigned to your ' + (route || 'next') + ' flight.',
+        pills,
+        next:'What happens next: we’ll keep checking the aircraft assignment and watch for your flight to depart.',
         source:assignmentSourceText()
       });
       return;
@@ -720,6 +802,7 @@
   }
 
   function renderAssignedNoPosition(assignment, data) {
+    if (renderArrivedForTurn(assignment)) return;
     const tail = assignment?.tailNumber;
     const route = assignmentRoute(assignment);
     const delay = delayLabel(assignment);
