@@ -15,14 +15,14 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Can I Afford THIS House? True Monthly Cost">
   <meta name="twitter:description" content="Mortgage payment versus the real monthly cost of this exact house, including hidden ownership costs and buyer tripwires.">
-  <link rel="stylesheet" href="/assets/house-fit.css?v=20261006f">
+  <link rel="stylesheet" href="/assets/house-fit.css?v=20261006g">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/can-i-afford-this-house/#page","url":"https://chrisizworski.com/can-i-afford-this-house/","name":"Can I Afford This House? True Monthly Cost","description":"A three-input property-specific cost engine that uses the current mortgage-rate benchmark plus public data and transparent assumptions to estimate a home's real monthly carrying cost.","dateModified":"2026-10-06","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/","name":"Chris Izworski"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/can-i-afford-this-house/#app","name":"Can I Afford This House? True Monthly Cost","url":"https://chrisizworski.com/can-i-afford-this-house/","applicationCategory":"FinanceApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"featureList":["Three-input first-run intake","Current mortgage-rate benchmark with post-result override","Mortgage-versus-true-cost Reality Gap","Buyer tripwires","20% down-payment breakpoint","Mortgage principal and interest","Property-tax planning estimate from Census data","Homeowners-insurance planning range","PMI estimate","Maintenance reserve","FEMA flood-zone context","Cash-to-close planning range","Data provenance and limitations"]}]}</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <script defer src="/assets/tool-engagement.js"></script>
-  <script defer src="/assets/house-fit.js?v=20261006f"></script>
+  <script defer src="/assets/house-fit.js?v=20261006g"></script>
 </head>
 <body data-analytics-page="house-fit">
   <header class="site-header">
@@ -66,40 +66,55 @@
           <div id="confidenceBadge" class="verdict-badge"></div>
         </div>
 
-        <div class="math-problem" aria-label="True monthly cost addition">
-          <p class="eyebrow">What the mortgage calculator misses</p>
+        <div class="cost-ledger" aria-label="Estimated monthly house cost ledger">
+          <p class="eyebrow">Monthly cost</p>
 
-          <div class="math-row">
-            <div class="math-sign" aria-hidden="true"></div>
-            <div class="math-label">
-              <strong>Mortgage only</strong>
-              <small>Principal + interest</small>
-            </div>
-            <div class="math-value" id="mortgageOnlyResult">—</div>
+          <div class="ledger-row">
+            <span class="ledger-sign"></span>
+            <span class="ledger-label">Mortgage · principal + interest</span>
+            <strong class="ledger-value" id="mortgageOnlyResult">—</strong>
           </div>
 
-          <div class="math-row">
-            <div class="math-sign" aria-hidden="true">+</div>
-            <div class="math-label">
-              <strong>Added ownership costs</strong>
-              <small>Taxes, insurance, PMI if applicable, maintenance</small>
-            </div>
-            <div class="math-value" id="realityGapResult">—</div>
+          <div class="ledger-row">
+            <span class="ledger-sign">+</span>
+            <span class="ledger-label">Property tax</span>
+            <strong class="ledger-value" id="propertyTaxLedgerResult">—</strong>
           </div>
 
-          <div class="math-rule" aria-hidden="true"></div>
-
-          <div class="math-row math-total">
-            <div class="math-sign" aria-hidden="true"></div>
-            <div class="math-label">
-              <strong>PLAN ON</strong>
-              <small id="trueMonthlyNote">Estimated true monthly cost</small>
-            </div>
-            <div class="math-value" id="trueMonthlyResult">—</div>
+          <div class="ledger-row">
+            <span class="ledger-sign">+</span>
+            <span class="ledger-label">Homeowners insurance</span>
+            <strong class="ledger-value" id="insuranceLedgerResult">—</strong>
           </div>
 
-          <div class="math-explanation">
-            <p id="bottomLineExplain">The difference between the mortgage-only payment and the total is the Reality Gap.</p>
+          <div class="ledger-row" id="pmiLedgerRow">
+            <span class="ledger-sign">+</span>
+            <span class="ledger-label">PMI</span>
+            <strong class="ledger-value" id="pmiLedgerResult">—</strong>
+          </div>
+
+          <div class="ledger-row">
+            <span class="ledger-sign">+</span>
+            <span class="ledger-label">Maintenance reserve</span>
+            <strong class="ledger-value" id="maintenanceLedgerResult">—</strong>
+          </div>
+
+          <div class="ledger-row" id="floodLedgerRow" hidden>
+            <span class="ledger-sign">+</span>
+            <span class="ledger-label">Flood insurance</span>
+            <strong class="ledger-value" id="floodLedgerResult">—</strong>
+          </div>
+
+          <div class="ledger-rule" aria-hidden="true"></div>
+
+          <div class="ledger-row ledger-total">
+            <span class="ledger-sign"></span>
+            <span class="ledger-label"><strong>TOTAL MONTHLY COST</strong></span>
+            <strong class="ledger-value" id="trueMonthlyResult">—</strong>
+          </div>
+
+          <div class="ledger-notes">
+            <p id="bottomLineExplain"></p>
             <p id="bottomLineExcluded" class="bottom-line-excluded"></p>
           </div>
         </div>
