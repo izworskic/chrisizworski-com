@@ -118,7 +118,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007h/);
+  assert.match(html, /flight-tracker\.js\?v=20261007i/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -370,7 +370,8 @@ test('registration lookup support is explicit and preserves grounded aircraft wi
 
 test('client resolves scheduled assignment first, then follows the exact tail by registration', () => {
   assert.match(client, /fetch\('\/api\/flight-assignment\?' \+ params\.toString\(\)/);
-  assert.match(client, /\/api\/flight-tracker\?registration=/);
+  assert.match(client, /const liveParams = new URLSearchParams\(\{registration\}\)/);
+  assert.match(client, /liveParams\.set\('focusAirport', focusAirport\)/);
   assert.match(client, /assignedTail = data\.tailNumber \|\| null/);
   assert.match(client, /assignmentChangedFrom = priorTail && assignedTail && priorTail !== assignedTail/);
   assert.match(client, /setInterval\(\(\) => \{[\s\S]*loadAssignment\(activeFlight,activeDate,activeFlightId,\{silent:true\}\)[\s\S]*\},60000\)/);
@@ -418,13 +419,17 @@ test('answer card includes one bounded what-happens-next interpretation instead 
   assert.doesNotMatch(html, /weather panel|gate history|squawk|vertical speed/i);
 });
 
-test('assigned aircraft states use traveler language rather than aviation or feed jargon', () => {
+test('assigned aircraft states use traveler language and live position relationships', () => {
   assert.match(client, /Your plane is assigned, but we can’t map it live right now/);
   assert.match(client, /Your plane is assigned and on the ground/);
   assert.match(client, /It may be parked at a gate, outside coverage, or between usable position reports/);
   assert.match(client, /We found your plane:/);
-  assert.match(client, /It’s in the air, and we’re tracking it/);
-  assert.match(client, /we can’t yet confirm where this airplane is coming from or where it’s headed/);
+  assert.match(client, /function reportAgeLead\(value\)/);
+  assert.match(client, /Your plane appears to be approaching/);
+  assert.match(client, /Your plane is moving generally toward/);
+  assert.match(client, /Your plane is on the ground at/);
+  assert.match(client, /about ' \+ relationship\.distanceMiles \+ ' miles from/);
+  assert.match(client, /we have not yet confirmed the origin of its current flight/);
   assert.match(client, /Our live aircraft feed can see/);
   assert.doesNotMatch(client, /current airport-to-airport leg/);
   assert.doesNotMatch(client, /The ADS-B network is seeing/);
@@ -466,4 +471,61 @@ test('browser uses a confirmed same-day occurrence only when live route is missi
   assert.match(client, /const currentRoute = resolvedCurrentRoute\(assignment, live\)/);
   assert.match(client, /inboundToOrigin = currentRoute\?\.destination/);
   assert.match(client, /routeLabel\.textContent = airportPlace\(currentRoute\.origin\) \+ ' → ' \+ airportPlace\(currentRoute\.destination\)/);
+});
+
+
+test('airport coordinate index parses VRS CSV and resolves IATA and ICAO codes', () => {
+  const csv = [
+    'Code,Name,ICAO,IATA,Location,CountryISO2,Latitude,Longitude,AltitudeFeet',
+    'KDTW,Detroit Metropolitan Wayne County Airport,KDTW,DTW,Detroit,US,42.212399,-83.353401,645',
+    'KPHL,Philadelphia International Airport,KPHL,PHL,Philadelphia,US,39.871899,-75.241096,36'
+  ].join('\n');
+  const index = api.buildAirportIndex(csv);
+  assert.equal(index.get('DTW').icao,'KDTW');
+  assert.equal(index.get('KDTW').iata,'DTW');
+  assert.equal(index.get('PHL').city,'Philadelphia');
+});
+
+test('position relationship only calls an aircraft approaching when geometry supports it', () => {
+  const dtw = {
+    code:'KDTW',icao:'KDTW',iata:'DTW',name:'Detroit Metropolitan Wayne County Airport',
+    city:'Detroit',country:'US',lat:42.212399,lon:-83.353401
+  };
+  const approaching = testPlane({
+    lat:41.55,lon:-83.72,altitudeFeet:9000,speedKnots:300,verticalRateFpm:-900
+  });
+  approaching.trackDegrees = api.bearingDegrees(approaching,dtw);
+  const relation = api.aircraftAirportRelationship(approaching,dtw,true);
+  assert.equal(relation.state,'approaching');
+  assert.equal(relation.headingRelation,'toward');
+  assert.ok(relation.distanceMiles > 20 && relation.distanceMiles < 100, relation.distanceMiles);
+
+  const crossing = {...approaching,trackDegrees:(approaching.trackDegrees + 90) % 360};
+  assert.notEqual(api.aircraftAirportRelationship(crossing,dtw,true).state,'approaching');
+
+  const stale = api.aircraftAirportRelationship(approaching,dtw,false);
+  assert.equal(stale,null);
+});
+
+test('position relationship recognizes an assigned aircraft on the ground at the departure airport', () => {
+  const dtw = {
+    code:'KDTW',icao:'KDTW',iata:'DTW',name:'Detroit Metropolitan Wayne County Airport',
+    city:'Detroit',country:'US',lat:42.212399,lon:-83.353401
+  };
+  const ground = testPlane({
+    lat:42.209531,lon:-83.34409,onGround:true,altitudeFeet:500,speedKnots:22,
+    verticalRateFpm:null,trackDegrees:28
+  });
+  const relation = api.aircraftAirportRelationship(ground,dtw,true);
+  assert.equal(relation.state,'at-airport');
+  assert.ok(relation.distanceMiles <= 1, relation.distanceMiles);
+});
+
+test('route-missing registration lookup can attach a focus-airport relationship without claiming a route', () => {
+  const source = fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
+  assert.match(source, /VRS_AIRPORTS_URL = 'https:\/\/vrs-standing-data\.adsb\.lol\/airports\.csv'/);
+  assert.match(source, /const focusAirport = !route && focusAirportCode \? await lookupAirportCoordinates\(focusAirportCode\) : null/);
+  assert.match(source, /focusAirportRelationship/);
+  assert.match(client, /data\.focusAirportRelationship/);
+  assert.match(client, /originMarker = airportMarker\('origin', focus/);
 });
