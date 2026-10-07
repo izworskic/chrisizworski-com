@@ -118,7 +118,7 @@ async function verifyOnce(attempt) {
   assert(html.includes('<meta property="og:image" content="https://chrisizworski.com/api/nyc-crossing-social-card">'), 'Open Graph image URL missing');
   assert(html.includes('https://chrisizworski.com/national-tools/'), 'National Tools discovery link missing');
   assert(html.includes('/mackinac-bridge-live/') && html.includes('/niagara-border-crossing/'), 'related crossing links missing');
-  const jsonLdText = html.match(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/)?.[1];
+  const jsonLdText = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
   assert(jsonLdText, 'page JSON-LD missing');
   const graph = JSON.parse(jsonLdText)['@graph'];
   const pageNode = graph.find(item => item['@id'] === 'https://chrisizworski.com/nyc-crossing/#page');
