@@ -222,24 +222,6 @@
       : 'First run used the current Freddie Mac 30-year benchmark: ' + rate.toFixed(2) + '%' +
         (rateSource.observationDate ? ' · observation ' + rateSource.observationDate : '') + '.';
 
-    const breakdownGrid = $('breakdownGrid');
-    breakdownGrid.textContent = '';
-    [
-      ['Mortgage principal + interest', breakdown.mortgagePI, rate.toFixed(2) + '% · ' + Number(loan.termYears || 30) + ' years'],
-      ['PMI', breakdown.pmi, Number(breakdown.pmi) > 0 ? 'Included because down payment is below 20%.' : ''],
-      ['Property tax estimate', breakdown.propertyTax, 'Address-based Census planning estimate'],
-      ['Homeowners insurance estimate', breakdown.homeInsurance, 'Automatic planning estimate'],
-      ['Maintenance reserve', breakdown.maintenance, 'Modeled reserve, not a bill'],
-      ['Flood insurance', breakdown.floodInsurance, 'Only included when a premium is actually priced'],
-    ].forEach((row) => {
-      if (Number(row[1]) > 0.005 || row[0] === 'Mortgage principal + interest') {
-        breakdownGrid.appendChild(costItem(row[0], Number(row[1]) || 0, row[2]));
-      }
-    });
-    $('costRangeNote').textContent = Math.abs(Number(trueCost.high) - Number(trueCost.low)) > 5
-      ? 'The total is shown as a range because taxes and insurance are not exact future bills yet.'
-      : 'The current tax and insurance assumptions produce a narrow monthly range.';
-
     const floodState = $('floodState');
     if (flood.status === 'AVAILABLE') {
       floodState.textContent = flood.sfha ? 'ZONE ' + flood.zone + ' · SFHA' : 'ZONE ' + flood.zone;
