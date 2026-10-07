@@ -78,11 +78,41 @@
   let operatingOccurrenceCacheValue = null;
   let operatingOccurrenceCacheAt = 0;
   const HOLD_LAST_LIVE_MS = 5 * 60 * 1000;
+  const LIVE_POSITION_MAX_AGE_SECONDS = 15 * 60;
   const LAST_KNOWN_MAX_AGE_MS = 12 * 60 * 60 * 1000;
   const LAST_KNOWN_STORAGE_PREFIX = 'flight-tracker:last-known:';
   const OPERATING_OCCURRENCE_CACHE_MS = 45 * 1000;
 
   const $ = value => value == null || value === '' ? null : value;
+  const PASSWORD_MANAGER_ARTIFACT = '1Password menu is available';
+
+  function stripPasswordManagerArtifacts(root=document.body) {
+    if (!root || typeof document.createTreeWalker !== 'function') return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    for (const node of nodes) {
+      if (String(node.nodeValue || '').includes(PASSWORD_MANAGER_ARTIFACT)) {
+        node.nodeValue = String(node.nodeValue || '').replaceAll(PASSWORD_MANAGER_ARTIFACT,'').trim();
+      }
+    }
+  }
+
+  stripPasswordManagerArtifacts();
+  const artifactObserver = new MutationObserver(mutations => {
+    for (const mutation of mutations) {
+      for (const node of mutation.addedNodes) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          if (String(node.nodeValue || '').includes(PASSWORD_MANAGER_ARTIFACT)) {
+            node.nodeValue = String(node.nodeValue || '').replaceAll(PASSWORD_MANAGER_ARTIFACT,'').trim();
+          }
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          stripPasswordManagerArtifacts(node);
+        }
+      }
+    }
+  });
+  if (document.body) artifactObserver.observe(document.body,{childList:true,subtree:true,characterData:true});
 
   function clean(value) {
     return String(value || '').toUpperCase().replace(/[^A-Z0-9]/g,'');
@@ -198,8 +228,27 @@
     return '';
   }
 
+  function statusCheckedClock(assignment) {
+    return formatClock(assignment?.fetchedAt, assignment?.origin?.timezone);
+  }
+
+  function unresolvedStatusIsStale(assignment) {
+    if (!assignment || assignment?.flightStatus?.canceled ||
+        assignment?.flightStatus?.airborne || assignment?.flightStatus?.landed) return false;
+    const departure = Date.parse(
+      assignment?.schedule?.estimatedDepartureUTC ||
+      assignment?.schedule?.scheduledDepartureUTC ||
+      ''
+    );
+    return Number.isFinite(departure) && Date.now() > departure + 90 * 60 * 1000;
+  }
+
   function delayLabel(assignment) {
     if (assignment?.flightStatus?.canceled) return 'Canceled';
+    if (unresolvedStatusIsStale(assignment)) {
+      const checked = statusCheckedClock(assignment);
+      return 'Status may be stale' + (checked ? ' · checked ' + checked : '');
+    }
     const mins = assignment?.flightStatus?.departureDelayMinutes;
     if (Number.isFinite(mins) && mins > 0) return 'Delayed ' + mins + ' min';
     return assignment?.flightStatus?.description || assignment?.flightStatus?.label || 'Scheduled';
@@ -355,9 +404,34 @@
     };
   }
 
+  function assignmentInboundOccurrence(assignment) {
+    const occurrence = assignment?.recentInboundOccurrence;
+    if (!occurrence?.origin || !occurrence?.destination) return null;
+    if (occurrence?.flightStatus?.airborne !== true || occurrence?.flightStatus?.landed === true) return null;
+    if (clean(occurrence?.tailNumber) !== clean(assignment?.tailNumber)) return null;
+    if (!sameAirport(occurrence.destination, assignment?.origin)) return null;
+    return occurrence;
+  }
+
+  function assignmentInboundOccurrenceRoute(assignment, live) {
+    const occurrence = assignmentInboundOccurrence(assignment);
+    if (!occurrence) return null;
+    const liveTail = clean(live?.aircraft?.registration);
+    if (liveTail && liveTail !== clean(assignment?.tailNumber)) return null;
+    const operatingFlight = clean(live?.operatingFlightNumber);
+    if (operatingFlight && clean(occurrence.flightNumber) !== operatingFlight) return null;
+    return {
+      origin:occurrence.origin,
+      destination:occurrence.destination,
+      confirmedBy:'recent-arrival-same-tail-at-origin'
+    };
+  }
+
   function resolvedCurrentRoute(assignment, live) {
     if (live?.route?.origin && live?.route?.destination) return live.route;
-    return crossFlightOccurrenceRoute(live) || confirmedOccurrenceRoute(assignment, live);
+    return crossFlightOccurrenceRoute(live) ||
+      assignmentInboundOccurrenceRoute(assignment, live) ||
+      confirmedOccurrenceRoute(assignment, live);
   }
 
 
@@ -454,7 +528,9 @@
         route:data.route || null,
         focusAirportRelationship:data.focusAirportRelationship || null,
         operatingFlightNumber:data.operatingFlightNumber || null,
-        confirmedOperatingOccurrence:data.confirmedOperatingOccurrence || null
+        confirmedOperatingOccurrence:data.confirmedOperatingOccurrence || null,
+        progress:data.progress || null,
+        positionFresh:data.positionFresh === true
       }
     };
     try {
@@ -477,6 +553,9 @@
   }
 
   async function resolveRecentInboundOccurrence(assignment) {
+    const existing = assignment?.recentInboundOccurrence;
+    if (existing && clean(existing?.tailNumber) === clean(assignment?.tailNumber) &&
+        sameAirport(existing?.destination, assignment?.origin)) return existing;
     if (!assignment?.tailNumber || !assignment?.origin || activeDate !== localDateString()) return null;
     const carrier = carrierCodeFromFlight(assignment.flightNumber);
     const airport = airportCodeAny(assignment.origin);
@@ -499,6 +578,29 @@
     }
   }
 
+  function attachInboundOccurrence(assignment, occurrence) {
+    if (!assignment || !occurrence) return assignment;
+    const enriched = {...assignment,recentInboundOccurrence:occurrence};
+    if (occurrence?.flightStatus?.landed === true) enriched.previousAircraftOccurrence = occurrence;
+    return enriched;
+  }
+
+  function snapshotFromAircraftData(data) {
+    const ac = data?.aircraft;
+    if (!ac || !Number.isFinite(ac.lat) || !Number.isFinite(ac.lon)) return null;
+    const ageMs = Number.isFinite(ac.positionAgeSeconds) ? Math.max(0, ac.positionAgeSeconds * 1000) : 0;
+    return {
+      version:1,
+      registration:clean(data?.registration || ac.registration),
+      savedAt:Date.now(),
+      reportedAt:Date.now() - ageMs,
+      data:{
+        ...data,
+        aircraft:{...ac}
+      }
+    };
+  }
+
   function lastKnownAgeSeconds(snapshot) {
     return snapshot && Number.isFinite(snapshot.reportedAt)
       ? Math.max(0, Math.floor((Date.now() - snapshot.reportedAt) / 1000))
@@ -511,6 +613,27 @@
     if (!ac || !Number.isFinite(ac.lat) || !Number.isFinite(ac.lon)) return false;
 
     const ageSeconds = lastKnownAgeSeconds(snapshot);
+    if (Number.isFinite(ageSeconds) && ageSeconds <= LIVE_POSITION_MAX_AGE_SECONDS) {
+      const recentData = {
+        ...data,
+        status:'live',
+        registration:data?.registration || ac.registration,
+        aircraft:{...ac,positionAgeSeconds:ageSeconds},
+        positionFresh:true,
+        progress:data?.progress || {
+          phase:{code:'unknown',label:ac.onGround === true ? 'On ground' : 'Recent position'},
+          remainingMiles:null,
+          directDistanceMiles:null,
+          directProgressPercent:null,
+          remainingBasis:'straight-line',
+          landingEstimate:null
+        }
+      };
+      renderLive(recentData);
+      renderInboundAnswer(assignment,recentData);
+      setMessage('', 'neutral');
+      return true;
+    }
     const tail = assignment?.tailNumber || data.registration || ac.registration;
     const route = assignmentRoute(assignment);
     const delay = delayLabel(assignment);
@@ -596,7 +719,11 @@
   }
 
   async function recoverNoPositionState(assignment, registration, data) {
-    const occurrence = await resolveRecentInboundOccurrence(assignment);
+    const occurrence = assignment?.recentInboundOccurrence || await resolveRecentInboundOccurrence(assignment);
+    if (occurrence) {
+      assignment = attachInboundOccurrence(assignment,occurrence);
+      assignmentData = assignment;
+    }
     if (occurrence?.flightStatus?.landed === true) {
       assignmentData = {...assignment,previousAircraftOccurrence:occurrence};
       return renderArrivedForTurn(assignmentData);
@@ -635,6 +762,9 @@
       freshness.dataset.stale = 'true';
       return true;
     }
+
+    const responseSnapshot = snapshotFromAircraftData(data);
+    if (responseSnapshot) return renderLastKnownPosition(assignment,responseSnapshot);
 
     const snapshot = loadLastKnownSnapshot(registration);
     if (snapshot) return renderLastKnownPosition(assignment,snapshot);
@@ -709,13 +839,13 @@
     const progress = data.progress;
     glance.hidden = false;
     mapShell.classList.add('with-progress');
-    phaseLabel.textContent = progress?.phase?.label || 'Phase unavailable';
+    phaseLabel.textContent = progress?.phase?.label || (data?.positionFresh ? 'Recent position' : 'Position not current');
     distanceLabel.textContent = Number.isFinite(progress?.remainingMiles)
       ? progress.remainingMiles.toLocaleString() + ' mi' : '—';
     const eta = progress?.landingEstimate;
     landingLabel.textContent = eta
       ? durationLabel(eta.minMinutes) + '–' + durationLabel(eta.maxMinutes)
-      : 'Unavailable';
+      : (data?.positionFresh ? 'No useful estimate' : '—');
 
     const route = data.route;
     const percent = progress?.directProgressPercent;
@@ -754,7 +884,7 @@
     const elapsedSeconds = Math.floor(elapsedMs / 1000);
     const baseAge = Number.isFinite(lastReportedAgeSeconds) ? lastReportedAgeSeconds : 0;
     const apparentAge = baseAge + elapsedSeconds;
-    const meaningfullyStale = apparentAge > 90;
+    const meaningfullyStale = apparentAge > LIVE_POSITION_MAX_AGE_SECONDS;
 
     freshness.textContent = formatAge(apparentAge) + (meaningfullyStale ? ' · refresh retrying' : '');
     freshness.dataset.stale = meaningfullyStale ? 'true' : 'false';
@@ -989,7 +1119,9 @@
 
 
   function landedPreviousAtOrigin(assignment) {
-    const previous = assignment?.previousAircraftOccurrence;
+    const previous = assignment?.recentInboundOccurrence?.flightStatus?.landed === true
+      ? assignment.recentInboundOccurrence
+      : assignment?.previousAircraftOccurrence;
     if (!previous || previous?.flightStatus?.landed !== true) return null;
     if (!sameAirport(previous.destination, assignment?.origin)) return null;
     const assignedTail = clean(assignment?.tailNumber);
@@ -1108,7 +1240,10 @@
     const currentLeg = currentRoute?.origin && currentRoute?.destination
       ? airportPlace(currentRoute.origin) + ' → ' + airportPlace(currentRoute.destination)
       : null;
-    const inboundOccurrence = live?.confirmedOperatingOccurrence || assignment?.currentAircraftOccurrence || null;
+    const inboundOccurrence = live?.confirmedOperatingOccurrence ||
+      assignmentInboundOccurrence(assignment) ||
+      assignment?.currentAircraftOccurrence ||
+      null;
     const currentOperatingFlight = inboundOccurrence?.flightNumber || null;
     const eta = live?.route ? live?.progress?.landingEstimate : null;
     const userOrigin = assignment?.origin;
@@ -1390,18 +1525,27 @@
       const liveParams = new URLSearchParams({registration});
       const focusAirport = airportCodeAny(assignmentData?.origin);
       if (focusAirport) liveParams.set('focusAirport', focusAirport);
-      const response = await fetch('/api/flight-tracker?' + liveParams.toString(), {headers:{accept:'application/json'}});
-      const data = await response.json();
+      const historyPromise = assignmentData
+        ? resolveRecentInboundOccurrence(assignmentData)
+        : Promise.resolve(null);
+      const livePromise = fetch('/api/flight-tracker?' + liveParams.toString(), {headers:{accept:'application/json'}})
+        .then(response => response.json());
+      const [data, recentOccurrence] = await Promise.all([livePromise,historyPromise]);
       if (sequence !== requestSequence || assignedTail !== registration) return;
-      if (data.status === 'live') {
-        renderLive(data);
+
+      if (recentOccurrence && assignmentData) {
+        assignmentData = attachInboundOccurrence(assignmentData,recentOccurrence);
+      }
+
+      if (data.status === 'live' && data.positionFresh === true) {
         if (assignmentData) {
           const operatingOccurrence = await resolveOperatingOccurrence(assignmentData,data);
           if (sequence !== requestSequence || assignedTail !== registration) return;
           data.confirmedOperatingOccurrence = operatingOccurrence;
-          saveLastKnownSnapshot(data);
-          renderInboundAnswer(assignmentData,data);
         }
+        renderLive(data);
+        saveLastKnownSnapshot(data);
+        if (assignmentData) renderInboundAnswer(assignmentData,data);
       } else if (!(silent && holdLastLiveOnRefreshMiss(data))) {
         if (assignmentData) {
           await recoverNoPositionState(assignmentData,registration,data);
