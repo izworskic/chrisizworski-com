@@ -21,6 +21,18 @@
   const progressOrigin = document.getElementById('direct-progress-origin');
   const progressDestination = document.getElementById('direct-progress-destination');
   const progressPercent = document.getElementById('direct-progress-percent');
+  const answerCard = document.getElementById('answer-card');
+  const answerKicker = document.getElementById('answer-kicker');
+  const answerHeadline = document.getElementById('answer-headline');
+  const answerDetail = document.getElementById('answer-detail');
+  const answerYourRoute = document.getElementById('answer-your-route');
+  const answerStatus = document.getElementById('answer-status');
+  const answerTail = document.getElementById('answer-tail');
+  const answerEquipment = document.getElementById('answer-equipment');
+  const answerCurrentRoute = document.getElementById('answer-current-route');
+  const answerCurrentDetail = document.getElementById('answer-current-detail');
+  const answerCaveat = document.getElementById('answer-caveat');
+  const flightChoices = document.getElementById('flight-choices');
 
   let maplibregl;
   try {
@@ -48,6 +60,7 @@
   let originMarker = null;
   let destinationMarker = null;
   let activeFlight = null;
+  let activeFlightId = null;
   let refreshTimer = null;
   let routeKey = '';
   let refreshInFlight = false;
@@ -96,6 +109,138 @@
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return hours ? hours + 'h' + (mins ? ' ' + mins + 'm' : '') : mins + ' min';
+  }
+
+
+  function formatClock(value) {
+    if (!value) return null;
+    const date = new Date(value);
+    if (!Number.isFinite(date.getTime())) return null;
+    return date.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+  }
+
+  function scheduledRoute(scheduled) {
+    if (!scheduled?.origin || !scheduled?.destination) return '';
+    const from = scheduled.origin.city || airportCode(scheduled.origin);
+    const to = scheduled.destination.city || airportCode(scheduled.destination);
+    const codes = [airportCode(scheduled.origin),airportCode(scheduled.destination)].filter(Boolean).join(' → ');
+    return [from + ' → ' + to, codes].filter(Boolean).join(' · ');
+  }
+
+  function renderFlightChoices(data) {
+    answerCard.hidden = false;
+    answerKicker.textContent = 'WHICH FLIGHT?';
+    answerHeadline.textContent = 'Choose your route.';
+    answerDetail.textContent = 'This flight number is used for more than one leg near this time.';
+    answerYourRoute.textContent = '';
+    answerStatus.textContent = '';
+    answerTail.textContent = '';
+    answerEquipment.textContent = '';
+    answerCurrentRoute.textContent = '';
+    answerCurrentDetail.textContent = '';
+    answerCaveat.textContent = '';
+    flightChoices.hidden = false;
+    flightChoices.innerHTML = '';
+    for (const candidate of data.candidates || []) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'flight-choice';
+      const from = airportCode(candidate.origin) || 'Origin';
+      const to = airportCode(candidate.destination) || 'Destination';
+      const time = formatClock(candidate.sortTime);
+      button.textContent = from + ' → ' + to + (time ? ' · ' + time : '');
+      button.addEventListener('click', () => {
+        activeFlightId = candidate.flightId;
+        const url = new URL(location.href);
+        url.searchParams.set('flight',activeFlight);
+        url.searchParams.set('flightId',activeFlightId);
+        history.replaceState({},'',url);
+        loadFlight(activeFlight,{silent:false});
+      });
+      flightChoices.appendChild(button);
+    }
+  }
+
+  function renderJourney(data) {
+    const journey = data.journey;
+    const scheduled = data.scheduledFlight;
+    if (!journey && !scheduled) {
+      answerCard.hidden = true;
+      return;
+    }
+
+    answerCard.hidden = false;
+    flightChoices.hidden = true;
+    flightChoices.innerHTML = '';
+    answerKicker.textContent = journey?.state === 'your-flight-live' ? 'YOUR FLIGHT' : 'WHERE IS YOUR PLANE?';
+    answerHeadline.textContent = journey?.headline || 'Flight found.';
+    answerDetail.textContent = journey?.detail || '';
+
+    answerYourRoute.textContent = scheduled ? scheduledRoute(scheduled) : (data.route
+      ? airportPlace(data.route.origin) + ' → ' + airportPlace(data.route.destination)
+      : data.flightNumber || '');
+    const depTime = formatClock(scheduled?.estimatedDepartureUTC || scheduled?.scheduledDepartureUTC);
+    const statusBits = [];
+    if (scheduled?.statusDescription) statusBits.push(scheduled.statusDescription);
+    if (Number.isFinite(scheduled?.delayMinutes) && scheduled.delayMinutes > 0) statusBits.push(scheduled.delayMinutes + ' min delay');
+    if (depTime) statusBits.push((scheduled?.estimatedDepartureUTC ? 'Est. ' : 'Sched. ') + depTime);
+    answerStatus.textContent = statusBits.join(' · ');
+
+    answerTail.textContent = scheduled?.assignedTail || data.aircraft?.registration || 'Not assigned yet';
+    answerEquipment.textContent = scheduled?.equipment || data.aircraft?.aircraftTypeName || '';
+
+    if (data.aircraft) {
+      answerCurrentRoute.textContent = data.route?.origin && data.route?.destination
+        ? airportPlace(data.route.origin) + ' → ' + airportPlace(data.route.destination)
+        : (data.aircraft.callsign || 'Live aircraft');
+      const nowBits = [aircraftIdentity(data.aircraft), data.progress?.phase?.label].filter(Boolean);
+      if (data.progress?.landingEstimate && scheduled?.origin &&
+          airportCode(data.route?.destination) === airportCode(scheduled.origin)) {
+        nowBits.push('~' + durationLabel(data.progress.landingEstimate.minMinutes) + '–' +
+          durationLabel(data.progress.landingEstimate.maxMinutes) + ' to ' + airportCode(scheduled.origin));
+      }
+      answerCurrentDetail.textContent = nowBits.join(' · ');
+    } else {
+      answerCurrentRoute.textContent = scheduled?.assignedTail ? 'Not currently visible airborne' : 'Assignment unavailable';
+      answerCurrentDetail.textContent = scheduled?.operatedBy || '';
+    }
+
+    answerCaveat.textContent = scheduled?.assignedTail
+      ? 'Aircraft assignments can change before departure.'
+      : '';
+  }
+
+  function clearMapToDefault() {
+    planeMarker = clearMarker(planeMarker);
+    originMarker = clearMarker(originMarker);
+    destinationMarker = clearMarker(destinationMarker);
+    routeKey = '';
+    if (map.getSource('flight-route')) map.getSource('flight-route').setData({type:'FeatureCollection',features:[]});
+    map.easeTo({center:[-98.5,39.5],zoom:3.2,duration:500});
+  }
+
+  function renderScheduledNoPosition(data) {
+    renderJourney(data);
+    glance.hidden = true;
+    glanceNote.hidden = true;
+    progressBar.hidden = true;
+    progressFill.style.width = '0%';
+    mapShell.classList.remove('with-progress');
+    submit.disabled = false;
+    submit.textContent = 'FIND PLANE';
+    flightLabel.textContent = data.flightNumber || activeFlight || 'Flight';
+    routeLabel.textContent = data.scheduledFlight
+      ? (airportPlace(data.scheduledFlight.origin) + ' → ' + airportPlace(data.scheduledFlight.destination))
+      : 'Scheduled flight';
+    routeCodes.textContent = data.scheduledFlight
+      ? (airportCode(data.scheduledFlight.origin) + ' → ' + airportCode(data.scheduledFlight.destination))
+      : '';
+    detailLabel.textContent = data.scheduledFlight?.assignedTail
+      ? 'Assigned aircraft ' + data.scheduledFlight.assignedTail
+      : 'Aircraft assignment not published';
+    freshness.textContent = '';
+    setMessage('', 'neutral');
+    clearMapToDefault();
   }
 
   function renderProgress(data) {
@@ -156,7 +301,7 @@
       : 'Live refresh missed. Showing the last confirmed aircraft report while retrying.';
     setMessage(reason, 'warning');
     submit.disabled = false;
-    submit.textContent = 'TRACK';
+    submit.textContent = 'FIND PLANE';
     return true;
   }
 
@@ -279,10 +424,11 @@
     freshness.textContent = formatAge(ac.positionAgeSeconds);
     freshness.dataset.stale = data.positionFresh ? 'false' : 'true';
     renderProgress(data);
+    renderJourney(data);
 
     setMessage('', 'neutral');
     submit.disabled = false;
-    submit.textContent = 'TRACK';
+    submit.textContent = 'FIND PLANE';
 
     if (!planeMarker) {
       planeMarker = new maplibregl.Marker({
@@ -316,18 +462,14 @@
     routeCodes.textContent = '';
     mapShell.classList.remove('with-progress');
     submit.disabled = false;
-    submit.textContent = 'TRACK';
+    submit.textContent = 'FIND PLANE';
     flightLabel.textContent = data.flightNumber || activeFlight || 'Flight';
     routeLabel.textContent = 'No live position';
     detailLabel.textContent = '';
     freshness.textContent = '';
+    answerCard.hidden = true;
     setMessage(data.message || 'No live aircraft position found.', data.status === 'ambiguous' ? 'warning' : 'neutral');
-    planeMarker = clearMarker(planeMarker);
-    originMarker = clearMarker(originMarker);
-    destinationMarker = clearMarker(destinationMarker);
-    routeKey = '';
-    if (map.getSource('flight-route')) map.getSource('flight-route').setData({type:'FeatureCollection',features:[]});
-    map.easeTo({center:[-98.5,39.5],zoom:3.2,duration:500});
+    clearMapToDefault();
   }
 
   async function loadFlight(flight, {silent=false}={}) {
@@ -340,14 +482,16 @@
       resetHeldLive();
       submit.disabled = true;
       submit.textContent = 'FINDING…';
-      setMessage('Finding the live aircraft…');
+      setMessage('Finding the aircraft assigned to your flight…');
     }
 
     const sequence = ++requestSequence;
     if (silent) refreshInFlight = true;
 
     try {
-      const response = await fetch('/api/flight-tracker?flight=' + encodeURIComponent(normalized), {
+      const params = new URLSearchParams({flight:normalized});
+      if (activeFlightId) params.set('flightId',activeFlightId);
+      const response = await fetch('/api/flight-tracker?' + params.toString(), {
         headers:{accept:'application/json'}
       });
       const data = await response.json();
@@ -355,6 +499,18 @@
       if (sequence !== requestSequence || activeFlight !== normalized) return;
       if (data.status === 'live') {
         renderLive(data);
+      } else if (data.status === 'scheduled') {
+        if (data.aircraft) {
+          renderLive(data);
+        } else if (silent && holdLastLiveOnRefreshMiss(data)) {
+          renderJourney(data);
+        } else {
+          renderScheduledNoPosition(data);
+        }
+      } else if (data.status === 'choose-flight') {
+        renderFlightChoices(data);
+        submit.disabled = false;
+        submit.textContent = 'FIND PLANE';
       } else if (!(silent && holdLastLiveOnRefreshMiss(data))) {
         renderUnavailable(data);
         if (!silent) resetHeldLive();
@@ -363,7 +519,7 @@
       if (sequence !== requestSequence || activeFlight !== normalized) return;
       if (!(silent && holdLastLiveOnRefreshMiss({status:'error'}))) {
         submit.disabled = false;
-        submit.textContent = 'TRACK';
+        submit.textContent = 'FIND PLANE';
         setMessage('Live aircraft data is temporarily unavailable.', 'error');
       }
     } finally {
@@ -376,7 +532,7 @@
     refreshTimer = setInterval(() => {
       if (!activeFlight || document.hidden) return;
       loadFlight(activeFlight,{silent:true});
-    }, 10000);
+    }, 15000);
   }
 
   form.addEventListener('submit', event => {
@@ -388,8 +544,10 @@
       return;
     }
     input.value = value;
+    activeFlightId = null;
     const url = new URL(location.href);
     url.searchParams.set('flight',value);
+    url.searchParams.delete('flightId');
     history.replaceState({},'',url);
     loadFlight(value);
     beginRefresh();
@@ -399,9 +557,11 @@
     if (!document.hidden && activeFlight) loadFlight(activeFlight,{silent:true});
   });
 
-  const initial = clean(new URLSearchParams(location.search).get('flight'));
+  const searchParams = new URLSearchParams(location.search);
+  const initial = clean(searchParams.get('flight'));
   if (initial) {
     input.value = initial;
+    activeFlightId = searchParams.get('flightId');
     loadFlight(initial);
     beginRefresh();
   }
