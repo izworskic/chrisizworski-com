@@ -46,7 +46,9 @@ test('opening form includes the full mortgage-rate what-if module before the fir
   assert.match(formMatch[1], /Change this to your lender quote if needed/);
   assert.match(formMatch[1], /Taxes, insurance, PMI and the other modeled monthly costs stay in the calculation/);
   assert.ok(formMatch[1].indexOf('name="downPayment"') < formMatch[1].indexOf('class="rate-whatif"'));
-  assert.ok(formMatch[1].indexOf('class="rate-whatif"') < formMatch[1].indexOf('BUILD THE TRUE COST'));
+  assert.ok(formMatch[1].indexOf('class="rate-whatif"') < formMatch[1].indexOf('CALCULATE TRUE MONTHLY COST'));
+  assert.match(formMatch[1], /CALCULATE TRUE MONTHLY COST/);
+  assert.match(formMatch[1], /Your address and financial values are used for this calculation/);
   assert.doesNotMatch(html, /id="rateAdjustForm"/);
   assert.doesNotMatch(html, /id="ratePctAdjust"/);
   assert.doesNotMatch(html, /name="monthlyLimit"/);
@@ -141,7 +143,7 @@ test('house client rejects HTML responses before attempting JSON parsing', () =>
   assert.match(js, /House calculator service returned an unexpected response/);
   assert.match(js, /await response\.text\(\)/);
   assert.doesNotMatch(js, /await response\.json\(\)/);
-  assert.match(html, /house-fit\.js\?v=20261007b/);
+  assert.match(html, /house-fit\.js\?v=20261007c/);
 });
 
 test('normalization fixes loan term and automatic assumptions instead of exposing extra inputs', () => {
@@ -298,9 +300,11 @@ test('engine has no monthly limit, generic income ratio or Fit Ceiling', () => {
   assert.equal(Object.prototype.hasOwnProperty.call(result, 'incomeBenchmark'), false);
 });
 
-test('page promise centers mortgage-versus-real-cost differentiation', () => {
+test('page promise is obvious before the first input and stays out of generic affordability territory', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
-  assert.match(html, /mortgage payment is only part of the story/i);
+  assert.match(html, /See what this house is really likely to cost each month/);
+  assert.match(html, /not what a lender says you can borrow/);
+  assert.ok(html.indexOf('See what this house is really likely to cost each month') < html.indexOf('id="houseFitForm"'));
   assert.match(html, /Reality Gap/i);
   assert.match(html, /What the mortgage calculator misses/i);
   assert.match(html, /Buyer tripwires/i);
@@ -339,6 +343,40 @@ test('first result uses the detailed monthly breakdown as the ledger', () => {
   assert.ok(html.indexOf('id="maintenanceLedgerResult"') < html.indexOf('id="trueMonthlyResult"'));
   assert.match(html, /What reaching 20% down would change/);
   assert.ok(html.indexOf('id="downPaymentBreakpointPanel"') < html.indexOf('id="range-explainer"'));
+});
+
+test('post-answer ergonomics consolidate verification instead of stacking audit panels', () => {
+  const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
+  const css = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.css'), 'utf8');
+
+  assert.match(html, /class="panel verify-panel"/);
+  assert.match(html, /Verify this estimate/);
+  assert.match(html, /Biggest uncertainties/);
+  assert.match(html, /Buyer tripwires/);
+  assert.match(html, /FEMA flood check/);
+  assert.match(html, /Not priced automatically/);
+  assert.match(html, /<details class="source-details">/);
+  assert.match(html, /How this estimate was built/);
+  assert.equal((html.match(/id="range-explainer"/g) || []).length, 1);
+  assert.equal((html.match(/id="tripwireList"/g) || []).length, 1);
+  assert.equal((html.match(/id="floodState"/g) || []).length, 1);
+  assert.equal((html.match(/id="unpricedList"/g) || []).length, 1);
+  assert.equal((html.match(/id="provenanceList"/g) || []).length, 1);
+  assert.match(html, /<details class="panel method-panel method-details">/);
+  assert.match(css, /\.verify-grid\{display:grid/);
+  assert.match(css, /\.source-details summary/);
+  assert.match(css, /\.method-details>summary/);
+});
+
+test('mobile first-run flow reduces pre-form reading and keeps the primary action full-width', () => {
+  const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
+  const css = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.css'), 'utf8');
+  const intro = html.match(/<section class="intro"[\s\S]*?<\/section>/)?.[0] || '';
+  assert.match(intro, /<h1/);
+  assert.match(intro, /class="lede"/);
+  assert.doesNotMatch(intro, /intro-note/);
+  assert.doesNotMatch(intro, /class="eyebrow"/);
+  assert.match(css, /@media\(max-width:520px\)[\s\S]*\.submit-row \.primary\{width:100%;flex-basis:100%\}/);
 });
 
 test('ledger renders midpoint rows and one ranged monthly total', () => {
