@@ -53,13 +53,15 @@ async function verifyOnce() {
     'NYC DOT real-time traffic feed',
     'NYC Open Data traffic history',
     'Mapbox live traffic routing',
-    '/assets/nyc-crossing.js?v=20261006c',
+    '/assets/nyc-crossing.js?v=20261007a',
   ]) {
     assert(html.includes(marker), `page missing marker: ${marker}`);
   }
 
   const api = await request(API_URL, 'application/json');
   assert(api.ok, `API returned ${api.status}`);
+  const cacheControl = api.headers.get('cache-control') || '';
+  assert(!/stale-while-revalidate=300/.test(cacheControl), `stale live API cache policy still deployed: ${cacheControl}`);
   const data = await api.json();
 
   assert(Array.isArray(data.routes), 'API routes missing');
