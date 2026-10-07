@@ -83,6 +83,7 @@ function normalizeFlightInput(value) {
 }
 
 function finiteNumber(value) {
+  if (value === null || value === undefined || value === '') return null;
   const n = Number(value);
   return Number.isFinite(n) ? n : null;
 }
@@ -107,6 +108,7 @@ function sanitizeAircraft(ac, callsign) {
     lat: position.lat,
     lon: position.lon,
     altitudeFeet: altitudeRaw,
+    onGround: ac.alt_baro === 'ground' || ac.on_ground === true,
     speedKnots: finiteNumber(ac.gs),
     trackDegrees: finiteNumber(ac.track ?? ac.true_heading ?? ac.mag_heading),
     verticalRateFpm: finiteNumber(ac.baro_rate ?? ac.geom_rate),
@@ -213,6 +215,76 @@ async function lookupRoute(aircraft) {
   }
 }
 
+
+const NM_TO_MILES = 1.15077945;
+
+/**
+ * Aircraft telemetry is not airline flight status. A phase label requires
+ * an actual recent aircraft position; on-ground is not equivalent to landed.
+ */
+function flightPhase(aircraft, positionFresh) {
+  if (!positionFresh) return { code:'unknown', label:'Position not current' };
+  if (aircraft.onGround === true) return { code:'ground', label:'On ground' };
+  const rate = aircraft.verticalRateFpm;
+  if (rate !== null && Number.isFinite(rate) && rate >= 400) return { code:'climbing', label:'Climbing' };
+  if (rate !== null && Number.isFinite(rate) && rate <= -400) return { code:'descending', label:'Descending' };
+  if (aircraft.altitudeFeet >= 14000 && aircraft.speedKnots >= 250) return { code:'cruising', label:'Cruising' };
+  if (aircraft.speedKnots >= 100) return { code:'airborne', label:'In flight' };
+  return { code:'unknown', label:'Phase unavailable' };
+}
+
+function bearingDegrees(a, b) {
+  const rad = degrees => degrees * Math.PI / 180;
+  const lat1 = rad(a.lat), lat2 = rad(b.lat);
+  const dl = rad(b.lon - a.lon);
+  const y = Math.sin(dl) * Math.cos(lat2);
+  const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dl);
+  return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+}
+
+/**
+ * Rough airborne landing window, not an airline ETA or ATC prediction.
+ * Direct great-circle range understates vectors, holding, and arrival routing.
+ * Suppress rather than manufacture an estimate with unreliable telemetry.
+ */
+function flightProgress(aircraft, route, positionFresh) {
+  const phase = flightPhase(aircraft, positionFresh);
+  const result = { phase, remainingMiles:null, remainingBasis:'straight-line', landingEstimate:null };
+  if (!positionFresh || !route?.plausible || !route.destination ||
+      !Number.isFinite(aircraft?.lat) || !Number.isFinite(aircraft?.lon) ||
+      !Number.isFinite(route.destination.lat) || !Number.isFinite(route.destination.lon)) return result;
+
+  const distanceNm = haversineNm(aircraft, route.destination);
+  if (!Number.isFinite(distanceNm) || distanceNm < 0 || distanceNm > 7000) return result;
+  result.remainingMiles = Math.round(distanceNm * NM_TO_MILES / 5) * 5;
+  const speed = aircraft.speedKnots;
+  if (aircraft.onGround === true || !Number.isFinite(speed) || speed < 150 || speed > 650 ||
+      distanceNm < 20 || distanceNm > 5000) return result;
+
+  if (Number.isFinite(aircraft.trackDegrees)) {
+    const bearing = bearingDegrees(aircraft, route.destination);
+    const divergence = Math.abs(((aircraft.trackDegrees - bearing + 540) % 360) - 180);
+    // Aircraft flying materially away from the destination may be diverted,
+    // holding, or following a route we cannot infer from open ADS-B.
+    if (divergence > 100) return result;
+  }
+  const fastAverage = Math.min(600, Math.max(250, speed * 1.08));
+  const slowAverage = Math.max(180, speed * 0.75);
+  const fastestMinutes = distanceNm * 60 / fastAverage + 6;
+  const slowestMinutes = distanceNm * 1.20 * 60 / slowAverage + 20;
+  const step = distanceNm >= 500 ? 15 : 5;
+  const earliest = Math.max(10, Math.floor(fastestMinutes / step) * step);
+  const latest = Math.max(earliest + step * 2, Math.ceil(slowestMinutes / step) * step);
+  result.landingEstimate = {
+    minMinutes:earliest,
+    maxMinutes:latest,
+    confidence:'rough',
+    kind:'calculated-window',
+    note:'Rough estimate from latest reported position and groundspeed; not an airline or ATC arrival time.'
+  };
+  return result;
+}
+
 function chooseUnique(matches) {
   const live = matches.filter(Boolean);
   if (!live.length) return { status:'none', aircraft:null };
@@ -283,6 +355,7 @@ async function buildSnapshot(value) {
 
   const route = resolved.route || await lookupRoute(resolved.aircraft);
   const age = resolved.aircraft.positionAgeSeconds;
+  const positionFresh = Number.isFinite(age) && age >= 0 && age <= POSITION_MAX_AGE_SECONDS;
   return {
     status:'live',
     generatedAt:new Date().toISOString(),
@@ -290,7 +363,8 @@ async function buildSnapshot(value) {
     airline:normalized.airline,
     aircraft:resolved.aircraft,
     route,
-    positionFresh:age === null || age <= POSITION_MAX_AGE_SECONDS,
+    positionFresh,
+    progress:flightProgress(resolved.aircraft, route, positionFresh),
     source:{
       name:'ADSB.lol',
       url:'https://adsb.lol/',
@@ -335,5 +409,8 @@ module.exports._test = {
   buildSnapshot,
   haversineNm,
   routeLooksPlausible,
+  flightPhase,
+  flightProgress,
+  bearingDegrees,
   IATA_TO_CALLSIGNS
 };

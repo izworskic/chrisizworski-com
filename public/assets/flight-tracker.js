@@ -9,6 +9,12 @@
   const routeLabel = document.getElementById('route-label');
   const detailLabel = document.getElementById('detail-label');
   const freshness = document.getElementById('freshness-label');
+  const glance = document.getElementById('flight-glance');
+  const glanceNote = document.getElementById('flight-glance-note');
+  const phaseLabel = document.getElementById('flight-phase');
+  const distanceLabel = document.getElementById('flight-distance');
+  const landingLabel = document.getElementById('landing-window');
+  const mapShell = document.querySelector('.map-shell');
 
   let maplibregl;
   try {
@@ -63,6 +69,30 @@
     if (value < 60) return 'Updated ' + Math.round(value) + ' sec ago';
     const mins = Math.max(1, Math.round(value / 60));
     return 'Last position ' + mins + ' min ago';
+  }
+
+  function durationLabel(minutes) {
+    if (!Number.isFinite(minutes) || minutes < 0) return '—';
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return hours ? hours + 'h' + (mins ? ' ' + mins + 'm' : '') : mins + ' min';
+  }
+
+  function renderProgress(data) {
+    const progress = data.progress;
+    glance.hidden = false;
+    mapShell.classList.add('with-progress');
+    phaseLabel.textContent = progress?.phase?.label || 'Phase unavailable';
+    distanceLabel.textContent = Number.isFinite(progress?.remainingMiles)
+      ? progress.remainingMiles.toLocaleString() + ' mi' : '—';
+    const eta = progress?.landingEstimate;
+    landingLabel.textContent = eta
+      ? durationLabel(eta.minMinutes) + '–' + durationLabel(eta.maxMinutes)
+      : 'Unavailable';
+    glanceNote.hidden = !eta;
+    glanceNote.textContent = eta?.note
+      ? eta.note + ' Miles remaining are straight-line.'
+      : '';
   }
 
   function setMessage(text, kind='neutral') {
@@ -174,6 +204,7 @@
     detailLabel.textContent = details.join(' · ');
     freshness.textContent = formatAge(ac.positionAgeSeconds);
     freshness.dataset.stale = data.positionFresh ? 'false' : 'true';
+    renderProgress(data);
 
     setMessage('', 'neutral');
     submit.disabled = false;
@@ -204,6 +235,9 @@
   }
 
   function renderUnavailable(data) {
+    glance.hidden = true;
+    glanceNote.hidden = true;
+    mapShell.classList.remove('with-progress');
     submit.disabled = false;
     submit.textContent = 'TRACK';
     flightLabel.textContent = data.flightNumber || activeFlight || 'Flight';
