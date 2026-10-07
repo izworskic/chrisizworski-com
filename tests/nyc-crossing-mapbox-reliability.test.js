@@ -10,7 +10,13 @@ const CACHE_URL = 'https://cache.example.test';
 const FIXED_COORDINATES = {
   queensboro: '-73.944306,40.752111;-73.9547,40.7569;-73.9638,40.7603',
   williamsburg: '-73.9586,40.7097;-73.972211,40.713747;-73.9853,40.7181',
+  manhattan: '-73.9876,40.70209;-73.99103,40.70835;-73.99485,40.7158',
+  rfk: '-73.92846,40.8011;-73.92956,40.801305;-73.93128,40.79427',
+  verrazzano: '-74.05227,40.60395;-74.04493,40.60628;-74.03916,40.60818',
 };
+const PROBE_IDS = Object.keys(FIXED_COORDINATES);
+const PROBE_COUNT = PROBE_IDS.length;
+const FIXED_BEARINGS = { manhattan: '340,45;340,45;', rfk: '280,45;280,45;210,60', verrazzano: '67,45;67,45;67,45' };
 
 function routeBody(id = 'queensboro') {
   return {
@@ -19,7 +25,7 @@ function routeBody(id = 'queensboro') {
     routes: [{
       duration: id === 'queensboro' ? 480 : 240,
       duration_typical: 300,
-      distance: id === 'queensboro' ? 2600 : 2400,
+      distance: { queensboro: 2600, williamsburg: 2400, manhattan: 1652, rfk: 1614, verrazzano: 1205 }[id],
       legs: [],
     }],
   };
@@ -52,6 +58,7 @@ function harness(respond = id => response(200, routeBody(id))) {
     const id = Object.keys(FIXED_COORDINATES).find(key => FIXED_COORDINATES[key] === coordinates);
     assert.ok(id, 'request must retain the exact three fixed bridge coordinates');
     assert.equal(parsed.searchParams.get('radiuses'), '200;120;200');
+    assert.equal(parsed.searchParams.get('bearings'), FIXED_BEARINGS[id] || null, 'only new probes add inbound carriageway constraints');
     assert.equal(parsed.searchParams.get('alternatives'), 'false');
     assert.equal(parsed.searchParams.get('depart_at'), 'now');
     h.requests.push({ id, options });
@@ -71,7 +78,7 @@ function assertNoCache(h) {
 test.beforeEach(() => traffic._internal.clearMapboxCache());
 test.afterEach(() => traffic._internal.clearMapboxCache());
 
-test('real attempt signals allow eight seconds; two concurrent probes and one retry bound total routing time to sixteen seconds', async t => {
+test('real attempt signals allow eight seconds; five concurrent probes and one retry bound total routing time to sixteen seconds', async t => {
   t.mock.timers.enable({ apis: ['setTimeout', 'Date'], now: NOW.getTime() });
   const budgets = [];
   t.mock.method(AbortSignal, 'timeout', ms => {
@@ -86,32 +93,32 @@ test('real attempt signals allow eight seconds; two concurrent probes and one re
   const started = Date.now();
   const pending = h.fetch();
   await drain();
-  assert.equal(h.requests.length, 2, 'both probes start concurrently');
+  assert.equal(h.requests.length, PROBE_COUNT, 'all five probes start concurrently');
   t.mock.timers.tick(7999);
   await drain();
-  assert.equal(h.requests.length, 2, 'no premature 2.5-second abort');
+  assert.equal(h.requests.length, PROBE_COUNT, 'no premature 2.5-second abort');
   t.mock.timers.tick(1);
   await drain();
-  assert.equal(h.requests.length, 4, 'one retry per timed-out probe');
+  assert.equal(h.requests.length, PROBE_COUNT * 2, 'one retry per timed-out probe');
   t.mock.timers.tick(8000);
   const result = await pending;
   assert.equal(Date.now() - started, 16000);
   assert.equal(result.state, 'UNAVAILABLE');
   assert.match(result.reason, /timeout \(8000 ms, attempt 1\)/);
   assert.match(result.reason, /timeout \(8000 ms, attempt 2\)/);
-  assert.deepEqual(budgets.filter(ms => ms !== traffic.MAPBOX_CACHE_TIMEOUT_MS), [8000, 8000, 8000, 8000]);
+  assert.deepEqual(budgets.filter(ms => ms !== traffic.MAPBOX_CACHE_TIMEOUT_MS), Array(PROBE_COUNT * 2).fill(8000));
   assertNoCache(h);
 });
 
 test('a timeout is not cached and the very next request can recover immediately', async () => {
   const h = harness(() => { throw new DOMException('deadline', 'TimeoutError'); });
   assert.equal((await h.fetch()).state, 'UNAVAILABLE');
-  assert.equal(h.requests.length, 4);
+  assert.equal(h.requests.length, PROBE_COUNT * 2);
   assertNoCache(h);
   h.respond = id => response(200, routeBody(id));
   const result = await h.fetch();
   assert.equal(result.state, 'LIVE');
-  assert.equal(h.requests.length, 6);
+  assert.equal(h.requests.length, PROBE_COUNT * 3);
 });
 
 test('persistent HTTP 5xx is retried once, is not cached, and recovers on the next request', async () => {
@@ -119,11 +126,11 @@ test('persistent HTTP 5xx is retried once, is not cached, and recovers on the ne
   const failed = await h.fetch();
   assert.equal(failed.state, 'UNAVAILABLE');
   assert.match(failed.reason, /HTTP 503 \(Routing temporarily unavailable\)/);
-  assert.equal(h.requests.length, 4);
+  assert.equal(h.requests.length, PROBE_COUNT * 2);
   assertNoCache(h);
   h.respond = id => response(200, routeBody(id));
   assert.equal((await h.fetch()).state, 'LIVE');
-  assert.equal(h.requests.length, 6);
+  assert.equal(h.requests.length, PROBE_COUNT * 3);
 });
 
 test('a transient HTTP 5xx recovers on the single retry and preserves attempt diagnostics', async () => {
@@ -134,7 +141,7 @@ test('a transient HTTP 5xx recovers on the single retry and preserves attempt di
   });
   const result = await h.fetch();
   assert.equal(result.state, 'LIVE');
-  assert.deepEqual(counts, { queensboro: 2, williamsburg: 2 });
+  assert.deepEqual(counts, Object.fromEntries(PROBE_IDS.map(id => [id, 2])));
   assert.match(result.reason, /HTTP 502/);
   assert.match(result.reason, /LIVE \(\d+ ms, attempt 2\)/);
 });
@@ -148,7 +155,7 @@ test('a transient timeout recovers on exactly one retry per probe', async () => 
   });
   const result = await h.fetch();
   assert.equal(result.state, 'LIVE');
-  assert.deepEqual(counts, { queensboro: 2, williamsburg: 2 });
+  assert.deepEqual(counts, Object.fromEntries(PROBE_IDS.map(id => [id, 2])));
   assert.match(result.reason, /timeout/);
   assert.match(result.reason, /LIVE \(\d+ ms, attempt 2\)/);
 });
@@ -164,21 +171,38 @@ test('successful LIVE routes use normal memory and Redis TTLs and avoid another 
   assert.deepEqual(write.slice(3), ['EX', 90]);
   assert.equal(JSON.parse(write[2]).state, 'LIVE');
   assert.equal(await h.fetch(), result);
-  assert.equal(h.requests.length, 2);
+  assert.equal(h.requests.length, PROBE_COUNT);
   assert.equal(h.commands.filter(command => command[0] === 'GET').length, 1);
   traffic._internal.clearMapboxCache();
   assert.equal((await h.fetch()).state, 'LIVE', 'successful Redis cache can warm memory');
-  assert.equal(h.requests.length, 2);
+  assert.equal(h.requests.length, PROBE_COUNT);
 });
 
 test('PARTIAL results do not delay recovery of their failed probe', async () => {
-  const h = harness(id => id === 'queensboro' ? response(200, routeBody(id)) : response(503, { message: 'Unavailable' }));
+  const h = harness(id => id === 'williamsburg' ? response(503, { message: 'Unavailable' }) : response(200, routeBody(id)));
   assert.equal((await h.fetch()).state, 'PARTIAL');
-  assert.equal(h.requests.length, 3);
+  assert.equal(h.requests.length, PROBE_COUNT + 1);
   assertNoCache(h);
   h.respond = id => response(200, routeBody(id));
   assert.equal((await h.fetch()).state, 'LIVE');
-  assert.equal(h.requests.length, 5);
+  assert.equal(h.requests.length, PROBE_COUNT * 2 + 1);
+});
+
+test('a failure in any new bridge cannot be hidden by the original two LIVE probes or cached', async () => {
+  for (const failedId of ['manhattan', 'rfk', 'verrazzano']) {
+    traffic._internal.clearMapboxCache();
+    const h = harness(id => id === failedId ? response(503, { message: 'Temporary outage' }) : response(200, routeBody(id)));
+    const partial = await h.fetch();
+    assert.equal(partial.state, 'PARTIAL');
+    assert.equal(partial.routes.length, 4);
+    assert.ok(partial.routes.some(route => route.crossingId === 'queensboro'));
+    assert.ok(partial.routes.some(route => route.crossingId === 'williamsburg'));
+    assert.equal(h.requests.length, 6);
+    assertNoCache(h);
+    h.respond = id => response(200, routeBody(id));
+    assert.equal((await h.fetch()).state, 'LIVE');
+    assert.equal(h.requests.length, 11);
+  }
 });
 
 test('NOT_CONFIGURED never fetches or populates either cache', async () => {
@@ -199,7 +223,7 @@ test('old UNAVAILABLE, PARTIAL, and NOT_CONFIGURED documents are ignored on cach
     const h = harness();
     h.cached = JSON.stringify(old);
     assert.equal((await h.fetch()).state, 'LIVE');
-    assert.equal(h.requests.length, 2);
+    assert.equal(h.requests.length, PROBE_COUNT);
   }
 });
 
@@ -209,7 +233,7 @@ test('401, 403, and all other tested 4xx responses never retry or cache', async 
     const result = await h.fetch();
     assert.equal(result.state, 'UNAVAILABLE');
     assert.match(result.reason, new RegExp(`HTTP ${status}`));
-    assert.equal(h.requests.length, 2);
+    assert.equal(h.requests.length, PROBE_COUNT);
     assertNoCache(h);
   }
 });
@@ -218,7 +242,7 @@ test('a known 4xx with a timed-out error body still does not retry', async () =>
   const h = harness(() => ({ ok: false, status: 403, json: async () => { throw new DOMException('deadline', 'TimeoutError'); } }));
   const result = await h.fetch();
   assert.match(result.reason, /HTTP 403/);
-  assert.equal(h.requests.length, 2);
+  assert.equal(h.requests.length, PROBE_COUNT);
   assertNoCache(h);
 });
 
@@ -238,15 +262,15 @@ test('NoRoute, NoSegment, normalization, distance, and waypoint failures are dis
     const result = await h.fetch();
     assert.equal(result.state, 'UNAVAILABLE');
     assert.match(result.reason, reason);
-    assert.equal(h.requests.length, 2);
+    assert.equal(h.requests.length, PROBE_COUNT);
     assertNoCache(h);
   }
 });
 
 test('malformed JSON does not retry; a body timeout does retry once', async () => {
   for (const [error, expectedRequests, reason] of [
-    [new SyntaxError('Unexpected JSON'), 2, /response normalization failure/],
-    [new DOMException('body deadline', 'TimeoutError'), 4, /timeout/],
+    [new SyntaxError('Unexpected JSON'), PROBE_COUNT, /response normalization failure/],
+    [new DOMException('body deadline', 'TimeoutError'), PROBE_COUNT * 2, /timeout/],
   ]) {
     const h = harness(() => ({ ok: true, json: async () => { throw error; } }));
     const result = await h.fetch();
@@ -260,7 +284,7 @@ test('malformed JSON does not retry; a body timeout does retry once', async () =
 test('network failures do not retry and diagnostics redact tokens in messages and URLs', async () => {
   const h = harness(() => { throw new Error(`fetch failed: https://api.mapbox.com?access_token=${h.env.MAPBOX_TOKEN}`); });
   const result = await h.fetch();
-  assert.equal(h.requests.length, 2);
+  assert.equal(h.requests.length, PROBE_COUNT);
   assert.doesNotMatch(result.reason, /synthetic-secret-token/);
   assert.match(result.reason, /redacted/);
   assertNoCache(h);
@@ -270,7 +294,7 @@ test('network failures do not retry and diagnostics redact tokens in messages an
   assert.doesNotMatch(forbidden.reason, /synthetic-secret-token/);
 });
 
-test('both unchanged fixed bridge probes normalize to finite ETA, typical baseline, and valid distance', async () => {
+test('all five fixed bridge probes normalize to finite ETA, typical baseline, and valid distance', async () => {
   const result = await harness().fetch();
   assert.equal(result.state, 'LIVE');
   for (const id of Object.keys(FIXED_COORDINATES)) {
@@ -279,10 +303,82 @@ test('both unchanged fixed bridge probes normalize to finite ETA, typical baseli
     assert.ok(Number.isFinite(route.etaMinutes));
     assert.ok(Number.isFinite(route.baselineMinutes));
     assert.equal(route.baselineKind, 'MAPBOX_TYPICAL_TRAFFIC');
-    assert.equal(route.scope, 'CROSSING_APPROACH');
+    assert.equal(route.scope, traffic.MAPBOX_PROBES[id].scope);
     assert.equal(route.mapboxDistanceMeters, routeBody(id).routes[0].distance);
   }
   assert.equal(buildSnapshot({ traffic: traffic.mergeTraffic([], [], result, NOW) }).fastest, null);
+});
+
+test('new probes keep their own measured segment scopes and do not relabel the official DOT scopes', () => {
+  const expected = { manhattan: 'CROSSING_APPROACH', rfk: 'APPROACH_SEGMENT', verrazzano: 'CROSSING_ONLY' };
+  for (const [id, scope] of Object.entries(expected)) {
+    const route = traffic.normalizeMapboxResponse(id, routeBody(id), NOW);
+    assert.equal(route.scope, scope);
+    assert.equal(traffic.MAPBOX_PROBES[id].coordinates.length, 3);
+    const invalidDistance = routeBody(id);
+    invalidDistance.routes[0].distance = traffic.MAPBOX_PROBES[id].maxDistanceMeters + 1;
+    assert.throws(() => traffic.normalizeMapboxResponse(id, invalidDistance, NOW), /route-distance sanity failure/);
+    const invalidSnap = routeBody(id);
+    invalidSnap.waypoints[1].distance = 251;
+    assert.throws(() => traffic.normalizeMapboxResponse(id, invalidSnap, NOW), /waypoint snap failure/);
+  }
+  assert.equal(traffic.NYCDOT_LINKS['4616340'].scope, 'APPROACH_CORRIDOR');
+  assert.equal(traffic.NYCDOT_LINKS['4456452'].scope, 'APPROACH_SEGMENT');
+  assert.equal(traffic.NYCDOT_LINKS['4763652'].scope, 'CROSSING_ONLY');
+});
+
+test('legacy LIVE caches covering only the original two bridges cannot hide the three new probes', async () => {
+  const old = {
+    state: 'LIVE', reason: 'legacy coverage',
+    routes: ['queensboro', 'williamsburg'].map(id => traffic.normalizeMapboxResponse(id, routeBody(id), NOW)),
+  };
+  traffic._internal.mapboxMemoryCache.value = old;
+  traffic._internal.mapboxMemoryCache.expiresAt = Date.now() + 60000;
+  const h = harness();
+  h.cached = JSON.stringify(old);
+  const result = await h.fetch();
+  assert.equal(result.state, 'LIVE');
+  assert.equal(h.requests.length, PROBE_COUNT);
+  assert.equal(result.routes.length, 5);
+});
+
+test('missing or bad-status official readings for the three bridges get Mapbox fallbacks; restored official readings win immediately', async () => {
+  const links = [
+    ['4616340', 'manhattan', 'BQE N Atlantic Ave - MAN Bridge Manhattan Side'],
+    ['4456452', 'rfk', 'TBB W - FDR S MANHATTAN TRUSS - E116TH STREET'],
+    ['4763652', 'verrazzano', 'VNB E SI GANTRY UPPER LEVEL - BROOKLYN GANTRY UPPER LEVEL'],
+  ];
+  let status = -101;
+  const h = harness();
+  const fetchImpl = (url, options) => {
+    if (url === traffic.PA_SOURCE) return response(200, []);
+    if (url === traffic.NYCDOT_SOURCE) {
+      const eastern = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York', year: 'numeric', month: 'numeric', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23',
+      }).format(new Date()).replace(',', '');
+      const tsv = [
+        'Id\tSpeed\tTravelTime\tStatus\tDataAsOf\tlinkId\tOwner\tTranscom_id\tBorough\tlinkName',
+        ...links.map(([linkId, , name]) => `1\t${status === 0 ? 25 : 0}\t${status === 0 ? 180 : 0}\t${status}\t${eastern}\t${linkId}\tDOT\t${linkId}\tManhattan\t${name}`),
+      ].join('\n');
+      return { ok: true, text: async () => tsv };
+    }
+    return h.fetchImpl(url, options);
+  };
+  const fallback = await traffic.fetchTraffic(fetchImpl, { env: h.env });
+  assert.equal(fallback.mapboxCount, 5);
+  for (const [, id] of links) {
+    assert.equal(fallback.routes.find(route => route.crossingId === id).sourceName, 'Mapbox live traffic routing');
+  }
+  assert.equal(buildSnapshot({ traffic: fallback }).fastest, null);
+  status = 0;
+  const restored = await traffic.fetchTraffic(fetchImpl, { env: h.env });
+  assert.equal(restored.mapboxCount, 2);
+  for (const [, id] of links) {
+    assert.equal(restored.routes.find(route => route.crossingId === id).sourceName, 'NYC DOT Traffic Management Center');
+  }
+  assert.equal(h.requests.length, 5, 'working fallback cache does not mask a returning official reading');
+  assert.equal(buildSnapshot({ traffic: restored }).fastest, null);
 });
 
 test('official PANYNJ and NYC DOT readings still outrank overlapping Mapbox results and unlike scopes never rank fastest', async () => {
@@ -304,7 +400,7 @@ test('official PANYNJ and NYC DOT readings still outrank overlapping Mapbox resu
   const merged = traffic.mergeTraffic(pa, dot, mapbox, NOW);
   assert.equal(merged.routes.find(route => route.crossingId === 'lincoln'), pa[0]);
   assert.equal(merged.routes.find(route => route.crossingId === 'queens-midtown'), dot[0]);
-  assert.equal(merged.mapboxCount, 2);
+  assert.equal(merged.mapboxCount, PROBE_COUNT);
   assert.equal(merged.comparable, false);
   const snapshot = buildSnapshot({ traffic: merged });
   assert.equal(snapshot.fastest, null);
@@ -345,11 +441,11 @@ test('production smoke fails authorization/request errors even when another prob
   }
 });
 
-test('production smoke explicitly reports temporary outages as DEGRADED and only both healthy probes earn PASS', async () => {
+test('production smoke explicitly reports temporary outages as DEGRADED and only all five healthy probes earn PASS', async () => {
   const { evaluateMapboxHealth } = await import('../scripts/smoke-nyc-crossing-production.mjs');
   assert.equal(evaluateMapboxHealth(smokeSnapshot('UNAVAILABLE', 'queensboro: timeout; williamsburg: HTTP 503')), 'DEGRADED');
   assert.equal(evaluateMapboxHealth(smokeSnapshot('PARTIAL', 'williamsburg: timeout', ['queensboro'])), 'DEGRADED');
-  assert.equal(evaluateMapboxHealth(smokeSnapshot('LIVE', 'two live probes', ['queensboro', 'williamsburg'])), 'PASS');
+  assert.equal(evaluateMapboxHealth(smokeSnapshot('LIVE', 'five live probes', PROBE_IDS)), 'PASS');
   assert.throws(() => evaluateMapboxHealth(smokeSnapshot('UNAVAILABLE', 'NoRoute')), /not a temporary/);
   assert.throws(() => evaluateMapboxHealth(smokeSnapshot('UNAVAILABLE', 'timeout; waypoint snap failure')), /route validation failed/);
   assert.throws(() => evaluateMapboxHealth(smokeSnapshot('NOT_CONFIGURED', 'not configured')), /unexpected mapboxState/);
@@ -358,12 +454,12 @@ test('production smoke explicitly reports temporary outages as DEGRADED and only
 
 test('production smoke checks each fixed probe distance limit and finite typical baseline', async () => {
   const { evaluateMapboxHealth } = await import('../scripts/smoke-nyc-crossing-production.mjs');
-  for (const [id, distance] of [['queensboro', 5200], ['williamsburg', 1300]]) {
-    const data = smokeSnapshot('LIVE', 'live', ['queensboro', 'williamsburg']);
+  for (const [id, distance] of [['queensboro', 5200], ['williamsburg', 1300], ['manhattan', 3501], ['rfk', 2501], ['verrazzano', 999]]) {
+    const data = smokeSnapshot('LIVE', 'live', PROBE_IDS);
     data.routes.find(route => route.id === id).probeDistanceMeters = distance;
     assert.throws(() => evaluateMapboxHealth(data), /probe distance invalid/);
   }
-  const data = smokeSnapshot('LIVE', 'live', ['queensboro', 'williamsburg']);
+  const data = smokeSnapshot('LIVE', 'live', PROBE_IDS);
   data.routes.find(route => route.id === 'williamsburg').baselineMinutes = null;
   assert.throws(() => evaluateMapboxHealth(data), /baseline invalid/);
 });
