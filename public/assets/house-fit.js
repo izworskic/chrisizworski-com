@@ -115,6 +115,18 @@
       floodRow.hidden = true;
     }
 
+    const displayedPlanningTotal = [
+      'mortgagePI',
+      'pmi',
+      'propertyTax',
+      'homeInsurance',
+      'maintenance',
+      'floodInsurance',
+    ].reduce((sum, key) => sum + Math.round(Number(breakdown[key]) || 0), 0);
+    const displayedMortgage = Math.round(Number(breakdown.mortgagePI) || 0);
+    const displayedRealityGap = Math.max(0, displayedPlanningTotal - displayedMortgage);
+
+    $('planningTotalResult').textContent = moneyMo(displayedPlanningTotal);
     $('trueMonthlyResult').textContent = monthlyRange(trueCost.low, trueCost.high);
     $('cashToCloseResult').textContent = moneyRange(cash.totalLow, cash.totalHigh);
 
@@ -138,8 +150,7 @@
     );
 
     $('bottomLineExplain').textContent =
-      'Reality Gap: ' + monthlyRange(gap.monthlyLow, gap.monthlyHigh) +
-      ' above the mortgage-only payment.';
+      'Reality Gap: +' + moneyMo(displayedRealityGap) + ' above the mortgage-only payment.';
 
     $('bottomLineExcluded').textContent = unpricedCosts.length
       ? 'Not included: ' + unpricedCosts.map((item) => item.label).join(', ') + '.'
