@@ -224,6 +224,32 @@ test('Mapbox accepts the repo-standard MAPBOX_TOKEN environment variable',async(
   assert.ok(['LIVE','PARTIAL'].includes(result.state));
 });
 
+test('Mapbox accepts MAPBOX_KEY used by the Vercel project',async()=>{
+  trafficInternal.clearMapboxCache();
+  const calls=[];
+  const fetchImpl=async(url)=>{
+    calls.push(String(url));
+    if(String(url).includes('api.mapbox.com')){
+      return {
+        ok:true,
+        json:async()=>({
+          code:'Ok',
+          waypoints:[{distance:1},{distance:1},{distance:1}],
+          routes:[{duration:300,duration_typical:360,distance:2400,legs:[]}]
+        })
+      };
+    }
+    return {ok:true,json:async()=>({result:null})};
+  };
+  const result=await fetchMapboxTraffic({
+    env:{MAPBOX_KEY:'vercel-mapbox-key'},
+    fetchImpl,
+    now:new Date('2026-10-06T23:00:00Z')
+  });
+  assert.ok(calls.some(url=>url.includes('access_token=vercel-mapbox-key')));
+  assert.ok(['LIVE','PARTIAL'].includes(result.state));
+});
+
 test('Mapbox failure diagnostics expose status without leaking the token',async()=>{
   trafficInternal.clearMapboxCache();
   const result=await fetchMapboxTraffic({
