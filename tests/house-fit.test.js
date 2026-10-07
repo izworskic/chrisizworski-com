@@ -237,7 +237,7 @@ test('first result uses the detailed monthly breakdown as the ledger', () => {
   assert.match(html, /class="cost-ledger"/);
   assert.match(html, /Automatically assembled/);
   assert.match(html, /Monthly cost breakdown/);
-  assert.match(html, /Automatically assembled planning estimates\. Verify taxes and insurance before buying/);
+  assert.match(html, /The total is shown as a range because taxes and insurance are not exact future bills yet/);
   assert.match(html, /Mortgage principal \+ interest/);
   assert.match(html, /Included because down payment is below 20%/);
   assert.match(html, /Property tax estimate/);
@@ -247,23 +247,23 @@ test('first result uses the detailed monthly breakdown as the ledger', () => {
   assert.match(html, /Maintenance reserve/);
   assert.match(html, /Modeled reserve, not a bill/);
   assert.match(html, /TOTAL MONTHLY COST/);
-  assert.match(html, /Exact sum of the displayed planning estimates/);
+  assert.match(html, /Estimated carrying-cost range/);
   assert.match(html, /class="ledger-rule"/);
-  assert.match(html, /id="planningTotalResult"/);
+  assert.match(html, /id="trueMonthlyResult"/);
+  assert.doesNotMatch(html, /id="planningTotalResult"/);
   assert.doesNotMatch(html, /LIKELY MONTHLY RANGE/);
-  assert.doesNotMatch(html, /id="trueMonthlyResult"/);
   assert.doesNotMatch(html, /Added ownership costs/);
   assert.doesNotMatch(html, /id="breakdownGrid"/);
   assert.ok(html.indexOf('id="mortgageOnlyResult"') < html.indexOf('id="pmiLedgerResult"'));
   assert.ok(html.indexOf('id="pmiLedgerResult"') < html.indexOf('id="propertyTaxLedgerResult"'));
   assert.ok(html.indexOf('id="propertyTaxLedgerResult"') < html.indexOf('id="insuranceLedgerResult"'));
   assert.ok(html.indexOf('id="insuranceLedgerResult"') < html.indexOf('id="maintenanceLedgerResult"'));
-  assert.ok(html.indexOf('id="maintenanceLedgerResult"') < html.indexOf('id="planningTotalResult"'));
+  assert.ok(html.indexOf('id="maintenanceLedgerResult"') < html.indexOf('id="trueMonthlyResult"'));
   assert.match(html, /What reaching 20% down would change/);
   assert.ok(html.indexOf('id="downPaymentBreakpointPanel"') < html.indexOf('id="range-explainer"'));
 });
 
-test('ledger renders midpoint rows and one reconciled monthly total', () => {
+test('ledger renders midpoint rows and one ranged monthly total', () => {
   const js = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.js'), 'utf8');
   assert.match(js, /mortgageOnlyResult'\)\.textContent = moneyMo\(breakdown\.mortgagePI\)/);
   assert.match(js, /propertyTaxLedgerResult'\)\.textContent = moneyMo\(breakdown\.propertyTax\)/);
@@ -272,9 +272,8 @@ test('ledger renders midpoint rows and one reconciled monthly total', () => {
   assert.match(js, /pmiLedgerResult'\)\.textContent = moneyMo\(breakdown\.pmi\)/);
   assert.match(js, /displayedPlanningTotal = \[/);
   assert.match(js, /Math\.round\(Number\(breakdown\[key\]\) \|\| 0\)/);
-  assert.match(js, /planningTotalResult'\)\.textContent = moneyMo\(displayedPlanningTotal\)/);
-  assert.doesNotMatch(js, /trueMonthlyResult/);
-  assert.doesNotMatch(js, /monthlyRange\(trueCost\.low, trueCost\.high\)/);
+  assert.match(js, /trueMonthlyResult'\)\.textContent = monthlyRange\(trueCost\.low, trueCost\.high\)/);
+  assert.doesNotMatch(js, /planningTotalResult/);
   assert.match(js, /rate\.toFixed\(2\) \+ '% · ' \+ Number\(loan\.termYears \|\| 30\) \+ ' years'/);
 });
 
@@ -322,7 +321,7 @@ test('result copy explicitly distinguishes included costs from unresolved costs'
   assert.match(js, /Reality Gap: \+'/);
   assert.match(js, /moneyMo\(displayedRealityGap\)/);
   assert.match(js, /Not included:/);
-  assert.match(js, /The monthly total is the exact sum of the numbers shown in the ledger/);
+  assert.match(js, /The total range reflects uncertainty in taxes and homeowners insurance/);
   assert.match(js, /ESTIMATES · VERIFY COSTS/);
   assert.match(js, /VERIFY ESTIMATE/);
   assert.doesNotMatch(js, /low end uses the lower tax and insurance assumptions/i);
