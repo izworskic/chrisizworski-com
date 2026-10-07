@@ -22,7 +22,7 @@ const enrichment = {
   address: { matched: true, status: 'MATCHED', matchedAddress: '4600 SILVER HILL RD, WASHINGTON, DC 20233' },
   tax: { status: 'AVAILABLE', effectiveRatePct: 1.15, geography: 'Example County', sourceDate: '2024 ACS 5-year' },
   flood: { status: 'AVAILABLE', zone: 'X', sfha: false },
-  mortgageRate: { status: 'AVAILABLE', ratePct: 6.42, observationDate: '2026-10-01', provenance: 'GOVERNMENT SOURCED', source: 'Freddie Mac PMMS via FRED' },
+  mortgageRate: { status: 'AVAILABLE', ratePct: 7.386, observationDate: '2026-10-05', frequency: 'DAILY', series: 'OBMMIC30YFNA', provenance: 'MARKET SOURCED', source: 'Optimal Blue OBMMI via FRED' },
 };
 
 test('mortgage math matches a known 30-year P&I example', () => {
@@ -30,40 +30,54 @@ test('mortgage math matches a known 30-year P&I example', () => {
   assert.ok(Math.abs(payment - 1896.20) < 0.75, 'unexpected payment ' + payment);
 });
 
-test('first-run form asks only for address, asking price and down payment', () => {
+test('opening form includes editable mortgage rate beside the core house inputs', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
   const formMatch = html.match(/<form id="houseFitForm">([\s\S]*?)<\/form>/);
   assert.ok(formMatch);
   const names = [...formMatch[1].matchAll(/<input[^>]+name="([^"]+)"/g)].map((m) => m[1]);
-  assert.deepEqual(names, ['address', 'askingPrice', 'downPayment']);
-  assert.doesNotMatch(formMatch[1], /name="ratePct"/);
+  assert.deepEqual(names, ['address', 'askingPrice', 'downPayment', 'ratePct']);
+  assert.match(formMatch[1], /id="ratePct" name="ratePct"/);
+  assert.match(formMatch[1], /Loading the latest daily 30-year conforming average/);
+  assert.doesNotMatch(html, /id="rateAdjustForm"/);
+  assert.doesNotMatch(html, /id="ratePctAdjust"/);
   assert.doesNotMatch(html, /name="monthlyLimit"/);
   assert.doesNotMatch(html, /id="accuracyForm"/);
   assert.doesNotMatch(html, /name="includeCommute"/);
 });
 
-test('mortgage-rate override exists only after the first result', () => {
-  const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
-  const resultIndex = html.indexOf('id="result"');
-  const rateIndex = html.indexOf('id="rateAdjustForm"');
-  assert.ok(resultIndex >= 0 && rateIndex > resultIndex);
-  assert.match(html, /id="ratePctAdjust" name="ratePct"/);
-  assert.match(html, /RECALCULATE WITH THIS RATE/);
+test('opening form preloads the daily market rate and only sends an override after user edits it', () => {
+  const js = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.js'), 'utf8');
+  assert.match(js, /fetch\('\/api\/house-fit'/);
+  assert.match(js, /rateTouched = false/);
+  assert.match(js, /if \(rateTouched && Number\.isFinite\(rate\)\) payload\.ratePct = rate/);
+  assert.match(js, /Latest daily average/);
+  assert.match(js, /ratePct'\)\.addEventListener\('input'/);
+  assert.doesNotMatch(js, /rateAdjustForm/);
 });
 
-test('first run defaults to the current mortgage benchmark from enrichment', () => {
+test('first run defaults to the latest daily mortgage average from enrichment', () => {
   const input = normalizeInput(base({ ratePct: '' }), enrichment);
-  assert.equal(input.ratePct, 6.42);
+  assert.equal(input.ratePct, 7.386);
   const result = buildDecision(base({ ratePct: '' }), enrichment);
-  assert.equal(result.input.ratePct, 6.42);
-  assert.equal(result.provenance.mortgageRate, 'GOVERNMENT SOURCED');
-  assert.equal(result.enrichment.mortgageRate.observationDate, '2026-10-01');
+  assert.equal(result.input.ratePct, 7.386);
+  assert.equal(result.provenance.mortgageRate, 'MARKET SOURCED');
+  assert.equal(result.enrichment.mortgageRate.observationDate, '2026-10-05');
+  assert.equal(result.enrichment.mortgageRate.frequency, 'DAILY');
 });
 
-test('user rate override replaces the benchmark after first run', () => {
+test('user rate override replaces the daily average before first calculation', () => {
   const result = buildDecision(base({ ratePct: 5.99 }), enrichment);
   assert.equal(result.input.ratePct, 5.99);
   assert.equal(result.provenance.mortgageRate, 'USER PROVIDED');
+});
+
+test('daily mortgage source uses Optimal Blue conforming non-adjusted index with weekly fallback', () => {
+  const source = readFileSync(path.join(__dirname, '..', 'lib', 'house-fit', 'data-sources.js'), 'utf8');
+  assert.match(source, /OBMMIC30YFNA/);
+  assert.match(source, /frequency: 'DAILY'/);
+  assert.match(source, /Optimal Blue OBMMI via FRED/);
+  assert.match(source, /MORTGAGE30US/);
+  assert.match(source, /Daily mortgage index was temporarily unavailable/);
 });
 
 test('normalization fixes loan term and automatic assumptions instead of exposing extra inputs', () => {
@@ -274,7 +288,7 @@ test('ledger renders midpoint rows and one ranged monthly total', () => {
   assert.match(js, /Math\.round\(Number\(breakdown\[key\]\) \|\| 0\)/);
   assert.match(js, /trueMonthlyResult'\)\.textContent = monthlyRange\(trueCost\.low, trueCost\.high\)/);
   assert.doesNotMatch(js, /planningTotalResult/);
-  assert.match(js, /rate\.toFixed\(2\) \+ '% · ' \+ Number\(loan\.termYears \|\| 30\) \+ ' years'/);
+  assert.match(js, /rate\.toFixed\(3\) \+ '% · ' \+ Number\(loan\.termYears \|\| 30\) \+ ' years'/);
 });
 
 test('mobile ledger keeps monthly amounts aligned and inside the result', () => {
