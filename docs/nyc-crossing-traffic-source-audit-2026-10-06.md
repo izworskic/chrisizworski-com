@@ -57,6 +57,45 @@ Only complete `LIVE` Mapbox results receive the existing 60-second memory / 90-s
 
 The production smoke prints `mapboxReason` and both bridges' individual state/source. Authorization and request errors fail immediately. Genuine temporary third-party outages are explicitly labeled `DEGRADED`, never `PASS`; invalid routes and contradictory live coverage fail. Every smoke attempt uses a fresh URL. Release acceptance additionally requires repeated production calls over several minutes, spanning provider-cache refreshes, with both probes live and finite ETA/typical baseline plus valid bridge-specific distances.
 
+### Three missing official links: Mapbox fallback coverage — 2026-10-07
+
+Production had no accepted official readings for Manhattan Bridge, RFK, and
+Verrazzano–Narrows. The latest records inspected in NYC Open Data for audited
+links `4616340`, `4456452`, and `4763652` were dated 2026-10-07 08:58 ET and
+reported status `-101`, speed `0`, and travel time `0`. These remain rejected;
+the official freshness/status/name checks have not changed.
+
+The existing Queensboro and Williamsburg probes are unchanged. Three new fixed
+Mapbox probes follow the corresponding official link geometry, with the Manhattan
+probe beginning at Flatbush Avenue Extension rather than the official BQE corridor.
+The middle anchor lies on the intended bridge. Inbound bearings on the new probes
+avoid snapping to the opposite carriageway of divided or stacked bridge roadways.
+
+| Fallback | Scope | Measured segment | Accepted distance |
+| --- | --- | --- | --- |
+| Manhattan | `CROSSING_APPROACH` | Flatbush Avenue Extension → Canal Street | 1,200–3,500 m |
+| RFK | `APPROACH_SEGMENT` | Manhattan span → FDR Drive at East 116th Street | 900–2,500 m |
+| Verrazzano | `CROSSING_ONLY` | Staten Island-side gantry → Brooklyn-side gantry | 1,000–2,500 m |
+
+RFK does not claim the full Queens/Bronx trip, and Verrazzano does not claim the
+surrounding expressway approaches or a specific bridge deck. Static OSRM geometry
+checks returned short routes of 1,652 m, 1,614 m, and 1,205 m respectively, with
+small waypoint snap distances. These checks establish road geometry, not live
+Mapbox traffic; repeated live release checks remain necessary.
+
+All five probes run concurrently with the same 8-second attempt timeout and one
+timeout/5xx retry. Routing remains bounded to 16 seconds plus the bounded cache
+read. Only complete five-probe `LIVE` results receive the existing cache TTLs.
+The Redis key advances to `nyc:crossing:mapbox:v3`; legacy two-probe cache documents
+cannot mask missing new coverage. A failed new probe produces uncached `PARTIAL`
+or `UNAVAILABLE` coverage and can recover on the next request.
+
+Official NYC DOT/PANYNJ readings still win immediately, including when Mapbox has
+a cached live result. The official scopes are unchanged. Mapbox typical baselines
+remain tied to each fixed probe, and incomparable scopes still produce no universal
+`fastest`. The production smoke now prints and validates all five fallbacks with
+their individual distance limits, state/source, and finite typical baselines.
+
 ## Sources
 
 - Port Authority crossing conditions: https://www.panynj.gov/bridges-tunnels/en/index.html

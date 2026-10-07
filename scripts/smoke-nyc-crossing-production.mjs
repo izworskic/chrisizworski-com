@@ -1,4 +1,5 @@
 import { pathToFileURL } from 'node:url';
+import traffic from '../lib/nyc-crossing/traffic.js';
 
 const BASE = String(process.env.NYC_CROSSING_BASE_URL || 'https://chrisizworski.com').replace(/\/$/, '');
 const PAGE_URL = `${BASE}/nyc-crossing/`;
@@ -44,7 +45,7 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-const FALLBACK_IDS = ['queensboro', 'williamsburg'];
+const FALLBACK_IDS = Object.keys(traffic.MAPBOX_PROBES);
 
 export function mapboxDiagnostics(data) {
   const probes = FALLBACK_IDS.map(id => {
@@ -70,8 +71,7 @@ export function evaluateMapboxHealth(data) {
       assert(Number.isFinite(route.etaMinutes) && route.etaMinutes > 0, `${id} Mapbox ETA invalid`);
       assert(route.baselineKind === 'MAPBOX_TYPICAL_TRAFFIC', `${id} Mapbox typical baseline missing`);
       assert(Number.isFinite(route.baselineMinutes) && route.baselineMinutes > 0, `${id} Mapbox baseline invalid`);
-      const min = id === 'queensboro' ? 1200 : 1400;
-      const max = id === 'queensboro' ? 5000 : 5500;
+      const { minDistanceMeters: min, maxDistanceMeters: max } = traffic.MAPBOX_PROBES[id];
       assert(Number.isFinite(route.probeDistanceMeters) && route.probeDistanceMeters >= min && route.probeDistanceMeters <= max, `${id} Mapbox probe distance invalid`);
     } else if (route.etaState === 'LIVE' && ['Port Authority', 'NYC DOT Traffic Management Center'].includes(route.trafficSourceName)) {
       // Official evidence may still outrank a working Mapbox fallback.
