@@ -118,7 +118,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007e/);
+  assert.match(html, /flight-tracker\.js\?v=20261007f/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -276,11 +276,12 @@ test('page renders human-readable route, aircraft identity and tiny direct-progr
 test('silent refresh keeps the last confirmed flight through transient source misses', () => {
   assert.match(client, /const HOLD_LAST_LIVE_MS = 5 \* 60 \* 1000/);
   assert.match(client, /function holdLastLiveOnRefreshMiss\(data\)/);
-  assert.match(client, /Showing the last confirmed aircraft report while retrying/);
+  assert.match(client, /const meaningfullyStale = apparentAge > 90/);
   assert.match(client, /if \(silent && refreshInFlight\) return;/);
   assert.match(client, /if \(data\.status === 'live'\) \{\s*renderLive\(data\);\s*\} else if \(!\(silent && holdLastLiveOnRefreshMiss\(data\)\)\)/s);
-  assert.match(client, /freshness\.textContent = formatAge\(apparentAge\) \+ ' · refresh retrying'/);
-  assert.match(client, /if \(apparentAge > 90\) \{\s*phaseLabel\.textContent = 'Last reported';\s*landingLabel\.textContent = 'Refresh pending';/s);
+  assert.match(client, /meaningfullyStale \? ' · refresh retrying' : ''/);
+  assert.match(client, /if \(meaningfullyStale\) \{\s*phaseLabel\.textContent = 'Last reported';\s*landingLabel\.textContent = 'Refresh pending';/s);
+  assert.match(client, /else \{\s*setMessage\('', 'neutral'\);\s*\}/s);
 });
 
 test('refresh resilience is bounded and explicit lookups still fail closed', () => {
