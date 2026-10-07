@@ -15,7 +15,7 @@
   function delayText(r){
     if(r.delayMinutes==null) return '';
     const d=Math.round(r.delayMinutes*10)/10;
-    const reference=r.baselineKind==='NYCDOT_8_WEEK_HOURLY_AVG'?'8-wk avg':'usual';
+    const reference=r.baselineKind==='NYCDOT_8_WEEK_HOURLY_AVG'?'8-wk avg':r.baselineKind==='MAPBOX_TYPICAL_TRAFFIC'?'typical':'usual';
     if(Math.abs(d)<0.5) return ' · about '+reference;
     return d>0 ? ' · +'+d+' min vs '+reference : ' · '+Math.abs(d)+' min faster than '+reference;
   }
@@ -24,12 +24,12 @@
     const liveCount=data.routes.filter(r=>r.etaState==='LIVE').length;
     status.textContent=data.trafficState==='UNAVAILABLE'
       ? 'Live times unavailable'
-      : 'Live official conditions · '+liveCount+' crossings/segments';
+      : 'Live conditions · '+liveCount+' crossings/segments';
     status.className='status '+(data.trafficState==='UNAVAILABLE'?'off':'live');
 
     answer.innerHTML='<p class="eyebrow">Decision state</p><h2>Compare live crossing conditions + true road charges</h2><p>'+
       (liveCount
-        ? 'Official live measurements are connected where available. Segment lengths differ, so the tool will not falsely rank unlike crossing and approach times as a door-to-door fastest route.'
+        ? 'Official live measurements are used where available, with fixed Mapbox traffic probes filling selected source gaps. Segment lengths differ, so the tool will not falsely rank unlike crossing and approach times as a door-to-door fastest route.'
         : 'Official live measurements are unavailable right now. Toll and congestion-charge comparisons remain available.')+
       '</p><p class="muted">Lowest road charge among eligible listed crossings: '+
       (data.lowestToll?data.lowestToll.name+' at '+money(data.lowestToll.cost.total):'not available')+'.</p>';
