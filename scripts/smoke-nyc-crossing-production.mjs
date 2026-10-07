@@ -4,6 +4,7 @@ import traffic from '../lib/nyc-crossing/traffic.js';
 
 const BASE = String(process.env.NYC_CROSSING_BASE_URL || 'https://chrisizworski.com').replace(/\/$/, '');
 const PAGE_URL = `${BASE}/nyc-crossing/`;
+const SOCIAL_CARD_URL = `${BASE}/api/nyc-crossing-social-card`;
 const ATTEMPTS = Number(process.env.NYC_CROSSING_SMOKE_ATTEMPTS || 36);
 const WAIT_MS = Number(process.env.NYC_CROSSING_SMOKE_WAIT_MS || 10000);
 const TIMEOUT_MS = Number(process.env.NYC_CROSSING_SMOKE_TIMEOUT_MS || 35000);
@@ -111,6 +112,27 @@ async function verifyOnce(attempt) {
     assert(html.includes(marker), `page missing marker: ${marker}`);
   }
 
+  assert(html.includes('<link rel="canonical" href="https://chrisizworski.com/nyc-crossing/">'), 'page canonical missing');
+  assert(html.includes('<meta name="robots" content="index,follow,max-image-preview:large">'), 'page must remain indexable');
+  assert(html.includes('<meta name="twitter:card" content="summary_large_image">'), 'large social card metadata missing');
+  assert(html.includes('<meta property="og:image" content="https://chrisizworski.com/api/nyc-crossing-social-card">'), 'Open Graph image URL missing');
+  assert(html.includes('https://chrisizworski.com/national-tools/'), 'National Tools discovery link missing');
+  assert(html.includes('/mackinac-bridge-live/') && html.includes('/niagara-border-crossing/'), 'related crossing links missing');
+  const jsonLdText = html.match(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/)?.[1];
+  assert(jsonLdText, 'page JSON-LD missing');
+  const graph = JSON.parse(jsonLdText)['@graph'];
+  const pageNode = graph.find(item => item['@id'] === 'https://chrisizworski.com/nyc-crossing/#page');
+  assert(pageNode?.author?.['@id'] === 'https://chrisizworski.com/#person', 'canonical author entity missing');
+  assert(pageNode?.breadcrumb?.['@id'] === 'https://chrisizworski.com/nyc-crossing/#breadcrumb', 'breadcrumb entity missing');
+
+  const socialCard = await request(`${SOCIAL_CARD_URL}?smoke=${nonce}`, 'image/png');
+  assert(socialCard.ok, `social card returned ${socialCard.status}`);
+  assert((socialCard.headers.get('content-type') || '').includes('image/png'), 'social card content type is not PNG');
+  assert((socialCard.headers.get('x-robots-tag') || '').includes('noindex'), 'social image route should be non-indexable');
+  const image = Buffer.from(await socialCard.arrayBuffer());
+  assert(image.subarray(0, 8).toString('hex') === '89504e470d0a1a0a', 'social image PNG signature invalid');
+  assert(image.readUInt32BE(16) === 1200 && image.readUInt32BE(20) === 630, 'social image dimensions invalid');
+
   const api = await request(`${BASE}/api/nyc-crossing?smoke=${nonce}`, 'application/json');
   assert(api.ok, `API returned ${api.status}`);
   const cacheControl = api.headers.get('cache-control') || '';
@@ -157,6 +179,7 @@ async function verifyOnce(attempt) {
   return {
     page: page.status,
     api: api.status,
+    socialCard: socialCard.status,
     trafficState: data.trafficState,
     liveCount: live.length,
     baselineCount: live.filter(route => route.baselineMinutes != null).length,
@@ -180,7 +203,7 @@ async function runSmoke() {
         ? ' | warning=no fresh live readings at smoke time'
         : '';
       console.log(
-        `NYC crossing production smoke ${result.mapboxHealth} | page=${result.page} | api=${result.api} | traffic=${result.trafficState} | live=${result.liveCount} | baselines=${result.baselineCount} | nycdotLive=${result.nycdotLiveCount} | nycdotBaselines=${result.nycdotBaselineCount} | baselineState=${result.baselineState} | mapbox=${result.mapboxCount || 0} | ${result.mapboxDiagnostics} | baselineReason=${result.baselineReason || 'none'}${suffix}${result.mapboxHealth === 'DEGRADED' ? ' | warning=temporary Mapbox outage; crossing fallback coverage is incomplete' : ''}`,
+        `NYC crossing production smoke ${result.mapboxHealth} | page=${result.page} | api=${result.api} | socialCard=${result.socialCard} | traffic=${result.trafficState} | live=${result.liveCount} | baselines=${result.baselineCount} | nycdotLive=${result.nycdotLiveCount} | nycdotBaselines=${result.nycdotBaselineCount} | baselineState=${result.baselineState} | mapbox=${result.mapboxCount || 0} | ${result.mapboxDiagnostics} | baselineReason=${result.baselineReason || 'none'}${suffix}${result.mapboxHealth === 'DEGRADED' ? ' | warning=temporary Mapbox outage; crossing fallback coverage is incomplete' : ''}`,
       );
       process.exit(0);
     } catch (error) {
