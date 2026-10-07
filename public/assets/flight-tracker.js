@@ -72,7 +72,11 @@
   let lastLiveFlight = null;
   let lastLiveSuccessAt = 0;
   let lastReportedAgeSeconds = null;
+  let operatingOccurrenceCacheKey = null;
+  let operatingOccurrenceCacheValue = null;
+  let operatingOccurrenceCacheAt = 0;
   const HOLD_LAST_LIVE_MS = 5 * 60 * 1000;
+  const OPERATING_OCCURRENCE_CACHE_MS = 45 * 1000;
 
   const $ = value => value == null || value === '' ? null : value;
 
@@ -197,7 +201,73 @@
 
   function resolvedCurrentRoute(assignment, live) {
     if (live?.route?.origin && live?.route?.destination) return live.route;
-    return confirmedOccurrenceRoute(assignment, live);
+    return crossFlightOccurrenceRoute(live) || confirmedOccurrenceRoute(assignment, live);
+  }
+
+
+  function crossFlightOccurrenceRoute(live) {
+    const occurrence = live?.confirmedOperatingOccurrence;
+    if (!occurrence?.origin || !occurrence?.destination) return null;
+    if (occurrence?.flightStatus?.airborne !== true || occurrence?.flightStatus?.landed === true) return null;
+    return {
+      origin:occurrence.origin,
+      destination:occurrence.destination,
+      confirmedBy:'live-callsign-same-tail-airborne-occurrence'
+    };
+  }
+
+  function operatingOccurrenceMatches(detail, assignment, live) {
+    if (detail?.status !== 'found') return false;
+    if (clean(detail?.flightNumber) !== clean(live?.operatingFlightNumber)) return false;
+    if (clean(detail?.tailNumber) !== clean(assignment?.tailNumber)) return false;
+    if (clean(live?.aircraft?.registration) !== clean(assignment?.tailNumber)) return false;
+    if (detail?.flightStatus?.airborne !== true || detail?.flightStatus?.landed === true) return false;
+    if (!sameAirport(detail?.destination, assignment?.origin)) return false;
+    return true;
+  }
+
+  async function resolveOperatingOccurrence(assignment, live) {
+    const operatingFlight = clean(live?.operatingFlightNumber);
+    const passengerFlight = clean(assignment?.flightNumber);
+    if (!operatingFlight || operatingFlight === passengerFlight) return null;
+    if (assignment?.flightStatus?.airborne === true || live?.aircraft?.onGround === true) return null;
+    if (!activeDate || !assignment?.tailNumber || !assignment?.origin) return null;
+
+    const key = [operatingFlight,clean(assignment.tailNumber),airportCodeAny(assignment.origin),activeDate].join('|');
+    if (key === operatingOccurrenceCacheKey && Date.now() - operatingOccurrenceCacheAt < OPERATING_OCCURRENCE_CACHE_MS) {
+      return operatingOccurrenceCacheValue;
+    }
+
+    let match = null;
+    try {
+      const baseParams = new URLSearchParams({flight:operatingFlight,date:activeDate});
+      const baseResponse = await fetch('/api/flight-assignment?' + baseParams.toString(), {headers:{accept:'application/json'}});
+      const base = await baseResponse.json();
+
+      if (operatingOccurrenceMatches(base, assignment, live)) {
+        match = base;
+      } else if (base?.status === 'choose-flight') {
+        const options = Array.isArray(base.options) ? base.options.slice(0,8) : [];
+        const details = await Promise.all(options.map(async option => {
+          try {
+            const params = new URLSearchParams({flight:operatingFlight,date:activeDate,flightId:option.flightId});
+            const response = await fetch('/api/flight-assignment?' + params.toString(), {headers:{accept:'application/json'}});
+            return await response.json();
+          } catch {
+            return null;
+          }
+        }));
+        const matches = details.filter(detail => operatingOccurrenceMatches(detail, assignment, live));
+        if (matches.length === 1) match = matches[0];
+      }
+    } catch {
+      match = null;
+    }
+
+    operatingOccurrenceCacheKey = key;
+    operatingOccurrenceCacheValue = match;
+    operatingOccurrenceCacheAt = Date.now();
+    return match;
   }
 
 
@@ -657,6 +727,8 @@
     const currentLeg = currentRoute?.origin && currentRoute?.destination
       ? airportPlace(currentRoute.origin) + ' → ' + airportPlace(currentRoute.destination)
       : null;
+    const currentOperatingFlight = live?.confirmedOperatingOccurrence?.flightNumber ||
+      assignment?.currentAircraftOccurrence?.flightNumber || null;
     const eta = live?.route ? live?.progress?.landingEstimate : null;
     const userOrigin = assignment?.origin;
     const inboundToOrigin = currentRoute?.destination && userOrigin && sameAirport(currentRoute.destination,userOrigin);
@@ -686,14 +758,18 @@
 
     if (inboundToOrigin) {
       const originName = airportPlace(userOrigin);
-      let summary = currentLeg ? 'It is currently flying ' + currentLeg + '.' : 'The aircraft is currently inbound to ' + originName + '.';
+      let summary = currentOperatingFlight && currentLeg
+        ? tail + ' is currently operating ' + currentOperatingFlight + ' from ' + airportPlace(currentRoute.origin) + ' to ' + airportPlace(currentRoute.destination) + '.'
+        : currentLeg
+          ? 'It is currently flying ' + currentLeg + '.'
+          : 'The aircraft is currently inbound to ' + originName + '.';
       if (eta) summary += ' From the latest live report, it is roughly ' + durationLabel(eta.minMinutes) + '–' + durationLabel(eta.maxMinutes) + ' from landing there.';
       if (assignmentChangedFrom) summary += ' The airline recently changed the assigned aircraft from ' + assignmentChangedFrom + ' to ' + tail + '.';
       setAnswer({
         kicker:'THIS IS THE PLANE FOR YOUR FLIGHT',
         headline:'Your plane is on the way to ' + originName + '.',
         summary,
-        pills:[...pills,currentLeg],
+        pills:[...pills,currentOperatingFlight,currentLeg],
         next:'What happens next: ' + tail + ' lands at ' + originName + ' → taxis to a gate → turns for your ' + (route || 'next') + ' flight.',
         source:assignmentSourceText()
       });
@@ -704,8 +780,9 @@
       setAnswer({
         kicker:'YOUR ASSIGNED AIRCRAFT',
         headline:'Your plane is currently flying ' + currentLeg + '.',
-        summary:'That is the aircraft currently assigned to your flight. It is not yet flying into ' + airportPlace(userOrigin) + ', so it may have another flight to make first, or the airline may swap aircraft before your departure.',
-        pills:[...pills,currentLeg],
+        summary:(currentOperatingFlight ? 'It is currently operating ' + currentOperatingFlight + '. ' : '') +
+          'That is the aircraft currently assigned to your flight. It is not yet flying into ' + airportPlace(userOrigin) + ', so it may have another flight to make first, or the airline may swap aircraft before your departure.',
+        pills:[...pills,currentOperatingFlight,currentLeg],
         next:'What happens next: keep watching the assignment. This aircraft may make another flight first, or the airline may swap aircraft before departure.',
         source:assignmentSourceText()
       });
@@ -889,7 +966,12 @@
       if (sequence !== requestSequence || assignedTail !== registration) return;
       if (data.status === 'live') {
         renderLive(data);
-        if (assignmentData) renderInboundAnswer(assignmentData,data);
+        if (assignmentData) {
+          const operatingOccurrence = await resolveOperatingOccurrence(assignmentData,data);
+          if (sequence !== requestSequence || assignedTail !== registration) return;
+          data.confirmedOperatingOccurrence = operatingOccurrence;
+          renderInboundAnswer(assignmentData,data);
+        }
       } else if (!(silent && holdLastLiveOnRefreshMiss(data))) {
         if (assignmentData) renderAssignedNoPosition(assignmentData,data);
       }
@@ -1054,6 +1136,9 @@
     assignmentData = null;
     assignedTail = null;
     assignmentChangedFrom = null;
+    operatingOccurrenceCacheKey = null;
+    operatingOccurrenceCacheValue = null;
+    operatingOccurrenceCacheAt = 0;
     activeFlight = clean(flight);
     activeDate = date || localDateString();
     activeFlightId = flightId || null;

@@ -139,6 +139,19 @@ const AIRCRAFT_TYPE_NAMES = Object.freeze({
   AT76:'ATR 72-600'
 });
 
+function marketingFlightFromCallsign(value) {
+  const callsign = cleanFlightInput(value);
+  const match = callsign.match(/^([A-Z]{3})([0-9]{1,4}[A-Z]?)$/);
+  if (!match) return null;
+  const operator = match[1];
+  const suffix = match[2];
+  const matches = Object.entries(IATA_TO_CALLSIGNS)
+    .filter(([,callsigns]) => callsigns.includes(operator))
+    .map(([iata]) => iata);
+  if (matches.length !== 1) return null;
+  return matches[0] + suffix;
+}
+
 function aircraftTypeName(code) {
   const key = String(code || '').trim().toUpperCase();
   return key ? (AIRCRAFT_TYPE_NAMES[key] || key) : null;
@@ -691,6 +704,7 @@ async function buildRegistrationSnapshot(value, focusAirportCode = null) {
     lookup:'registration',
     registration,
     aircraft,
+    operatingFlightNumber:marketingFlightFromCallsign(aircraft.callsign),
     route,
     focusAirportRelationship,
     positionFresh,
@@ -783,6 +797,7 @@ module.exports._test = {
   cleanFlightInput,
   normalizeFlightInput,
   normalizeRegistration,
+  marketingFlightFromCallsign,
   actualPosition,
   sanitizeAircraft,
   sanitizeSeenAircraft,

@@ -118,7 +118,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007j/);
+  assert.match(html, /flight-tracker\.js\?v=20261007k/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -278,7 +278,7 @@ test('silent refresh keeps the last confirmed flight through transient source mi
   assert.match(client, /function holdLastLiveOnRefreshMiss\(data\)/);
   assert.match(client, /const meaningfullyStale = apparentAge > 90/);
   assert.match(client, /if \(silent && refreshInFlight\) return;/);
-  assert.match(client, /if \(data\.status === 'live'\) \{\s*renderLive\(data\);\s*\} else if \(!\(silent && holdLastLiveOnRefreshMiss\(data\)\)\)/s);
+  assert.match(client, /if \(data\.status === 'live'\) \{\s*renderLive\(data\);[\s\S]*\} else if \(!\(silent && holdLastLiveOnRefreshMiss\(data\)\)\)/s);
   assert.match(client, /meaningfullyStale \? ' · refresh retrying' : ''/);
   assert.match(client, /if \(meaningfullyStale\) \{\s*phaseLabel\.textContent = 'Last reported';\s*landingLabel\.textContent = 'Refresh pending';/s);
   assert.match(client, /else \{\s*setMessage\('', 'neutral'\);\s*\}/s);
@@ -575,4 +575,36 @@ test('a grounded live aircraft can never fall through to the generic airborne-st
   assert.match(client, /if \(live\?\.aircraft\?\.onGround === true\) \{/);
   assert.match(client, /Your assigned plane is on the ground/);
   assert.match(client, /currently reporting on the ground/);
+});
+
+
+test('live callsign deterministically exposes a marketing flight number for cross-flight lookup', () => {
+  assert.equal(api.marketingFlightFromCallsign('AAL2317'),'AA2317');
+  assert.equal(api.marketingFlightFromCallsign('DAL2497'),'DL2497');
+  assert.equal(api.marketingFlightFromCallsign('SWA1697'),'WN1697');
+  assert.equal(api.marketingFlightFromCallsign('ZZZ999'),null);
+  const trackerSource = fs.readFileSync(path.join(root,'api','flight-tracker.js'),'utf8');
+  assert.match(trackerSource, /operatingFlightNumber:marketingFlightFromCallsign\(aircraft\.callsign\)/);
+});
+
+test('cross-flight inbound resolver matches a different operating flight only by tail airborne state and destination', () => {
+  assert.match(client, /function operatingOccurrenceMatches\(detail, assignment, live\)/);
+  assert.match(client, /clean\(detail\?\.flightNumber\) !== clean\(live\?\.operatingFlightNumber\)/);
+  assert.match(client, /clean\(detail\?\.tailNumber\) !== clean\(assignment\?\.tailNumber\)/);
+  assert.match(client, /detail\?\.flightStatus\?\.airborne !== true \|\| detail\?\.flightStatus\?\.landed === true/);
+  assert.match(client, /!sameAirport\(detail\?\.destination, assignment\?\.origin\)/);
+  assert.match(client, /async function resolveOperatingOccurrence\(assignment, live\)/);
+  assert.match(client, /operatingFlight === passengerFlight/);
+  assert.match(client, /base\?\.status === 'choose-flight'/);
+  assert.match(client, /matches\.length === 1/);
+});
+
+test('different-flight-number inbound occurrence becomes the traveler-facing current trip', () => {
+  assert.match(client, /function crossFlightOccurrenceRoute\(live\)/);
+  assert.match(client, /live\?\.confirmedOperatingOccurrence/);
+  assert.match(client, /return crossFlightOccurrenceRoute\(live\) \|\| confirmedOccurrenceRoute\(assignment, live\)/);
+  assert.match(client, /const operatingOccurrence = await resolveOperatingOccurrence\(assignmentData,data\)/);
+  assert.match(client, /data\.confirmedOperatingOccurrence = operatingOccurrence/);
+  assert.match(client, /currentOperatingFlight = live\?\.confirmedOperatingOccurrence\?\.flightNumber/);
+  assert.match(client, /is currently operating .* from .* to/s);
 });
