@@ -403,6 +403,10 @@
       "destination": "/old-sow-live/index.html"
     },
     {
+      "source": "/api/house-fit",
+      "destination": "/api/fall-color?view=house-fit"
+    },
+    {
       "source": "/api/old-sow-live",
       "destination": "/api/fall-color?view=old-sow-live"
     },
