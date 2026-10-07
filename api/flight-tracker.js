@@ -2,7 +2,10 @@
 
 const ADSB_BASE = 'https://api.adsb.lol';
 const VRS_ROUTES_BASE = 'https://vrs-standing-data.adsb.lol/routes';
+const VRS_AIRPORTS_URL = 'https://vrs-standing-data.adsb.lol/airports.csv';
 const POSITION_MAX_AGE_SECONDS = 90;
+const AIRPORT_INDEX_MAX_BYTES = 4_000_000;
+let airportIndexPromise = null;
 const CACHE_SECONDS = 5;
 
 const IATA_TO_CALLSIGNS = Object.freeze({
@@ -236,6 +239,103 @@ async function getJson(url, options = {}, timeoutMs = 5500) {
   }
 }
 
+
+async function getText(url, timeoutMs = 5500, maxBytes = AIRPORT_INDEX_MAX_BYTES) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, {
+      headers:{
+        accept:'text/csv,text/plain;q=0.9,*/*;q=0.1',
+        'user-agent':'ChrisIzworski-FlightTracker/1.0 (+https://chrisizworski.com/flight-tracker/)'
+      },
+      signal:controller.signal
+    });
+    if (!response.ok) throw new Error('upstream ' + response.status);
+    const contentLength = Number(response.headers.get('content-length'));
+    if (Number.isFinite(contentLength) && contentLength > maxBytes) throw new Error('upstream file too large');
+    const text = await response.text();
+    if (!text || text.length > maxBytes) throw new Error('upstream file invalid');
+    return text;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function parseCsvLine(line) {
+  const cells = [];
+  let value = '';
+  let quoted = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (quoted && line[i + 1] === '"') {
+        value += '"';
+        i++;
+      } else {
+        quoted = !quoted;
+      }
+    } else if (ch === ',' && !quoted) {
+      cells.push(value);
+      value = '';
+    } else {
+      value += ch;
+    }
+  }
+  cells.push(value);
+  return cells;
+}
+
+function buildAirportIndex(csvText) {
+  const index = new Map();
+  const lines = String(csvText || '').split(/\r?\n/);
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i]) continue;
+    const row = parseCsvLine(lines[i]);
+    if (row.length < 8) continue;
+    const lat = finiteNumber(row[6]);
+    const lon = finiteNumber(row[7]);
+    if (lat === null || lon === null) continue;
+    const airport = {
+      code:String(row[0] || '').trim() || null,
+      name:String(row[1] || '').trim() || null,
+      icao:String(row[2] || '').trim() || null,
+      iata:String(row[3] || '').trim() || null,
+      city:String(row[4] || '').trim() || null,
+      country:String(row[5] || '').trim() || null,
+      lat,
+      lon
+    };
+    for (const key of [airport.iata, airport.icao, airport.code]) {
+      const normalized = String(key || '').trim().toUpperCase();
+      if (normalized && !index.has(normalized)) index.set(normalized, airport);
+    }
+  }
+  return index;
+}
+
+async function getAirportIndex() {
+  if (!airportIndexPromise) {
+    airportIndexPromise = (async () => buildAirportIndex(await getText(VRS_AIRPORTS_URL)))()
+      .catch(error => {
+        airportIndexPromise = null;
+        throw error;
+      });
+  }
+  return airportIndexPromise;
+}
+
+async function lookupAirportCoordinates(value) {
+  const code = String(value || '').trim().toUpperCase();
+  if (!/^[A-Z0-9]{3,4}$/.test(code)) return null;
+  try {
+    const index = await getAirportIndex();
+    return index.get(code) || null;
+  } catch {
+    return null;
+  }
+}
+
 async function lookupCallsign(callsign) {
   try {
     const data = await getJson(ADSB_BASE + '/v2/callsign/' + encodeURIComponent(callsign));
@@ -383,6 +483,73 @@ function bearingDegrees(a, b) {
   return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
 }
 
+
+function headingDifferenceDegrees(a, b) {
+  if (!Number.isFinite(a) || !Number.isFinite(b)) return null;
+  return Math.abs(((a - b + 540) % 360) - 180);
+}
+
+function roundedRelationshipMiles(distanceNm) {
+  const miles = distanceNm * NM_TO_MILES;
+  if (!Number.isFinite(miles) || miles < 0) return null;
+  if (miles < 10) return Math.max(0, Math.round(miles));
+  return Math.round(miles / 5) * 5;
+}
+
+function aircraftAirportRelationship(aircraft, airport, positionFresh) {
+  if (!positionFresh || !airport ||
+      !Number.isFinite(aircraft?.lat) || !Number.isFinite(aircraft?.lon) ||
+      !Number.isFinite(airport?.lat) || !Number.isFinite(airport?.lon)) return null;
+
+  const distanceNm = haversineNm(aircraft, airport);
+  if (!Number.isFinite(distanceNm) || distanceNm < 0 || distanceNm > 7000) return null;
+
+  const distanceMiles = roundedRelationshipMiles(distanceNm);
+  const bearing = bearingDegrees(aircraft, airport);
+  const divergence = headingDifferenceDegrees(aircraft.trackDegrees, bearing);
+  const headingRelation = divergence === null
+    ? 'unknown'
+    : divergence <= 60
+      ? 'toward'
+      : divergence >= 120
+        ? 'away'
+        : 'crossing';
+  const phase = flightPhase(aircraft, positionFresh);
+  const altitude = aircraft.altitudeFeet;
+
+  let state = 'distance-only';
+  if (aircraft.onGround === true && distanceMiles !== null && distanceMiles <= 5) {
+    state = 'at-airport';
+  } else if (aircraft.onGround !== true && distanceMiles !== null && distanceMiles <= 120 &&
+      headingRelation === 'toward' &&
+      (phase.code === 'descending' || (Number.isFinite(altitude) && altitude <= 12000))) {
+    state = 'approaching';
+  } else if (distanceMiles !== null && distanceMiles <= 35) {
+    state = 'nearby';
+  } else if (aircraft.onGround !== true && distanceMiles !== null && distanceMiles <= 200 &&
+      headingRelation === 'toward') {
+    state = 'moving-toward';
+  }
+
+  return {
+    airport:{
+      code:airport.iata || airport.icao || airport.code || null,
+      iata:airport.iata || null,
+      icao:airport.icao || null,
+      name:airport.name || null,
+      city:airport.city || null,
+      country:airport.country || null,
+      lat:airport.lat,
+      lon:airport.lon
+    },
+    distanceMiles,
+    headingRelation,
+    phase,
+    state,
+    basis:'latest-reported-position'
+  };
+}
+
 /**
  * Rough airborne landing window, not an airline ETA or ATC prediction.
  * Direct great-circle range understates vectors, holding, and arrival routing.
@@ -482,7 +649,7 @@ function buildNotFound(normalized) {
   };
 }
 
-async function buildRegistrationSnapshot(value) {
+async function buildRegistrationSnapshot(value, focusAirportCode = null) {
   const registration = normalizeRegistration(value);
   if (!registration) {
     return { status:'invalid', code:'invalid-registration', message:'Invalid aircraft registration.' };
@@ -514,6 +681,10 @@ async function buildRegistrationSnapshot(value) {
   const route = await lookupRoute(aircraft);
   const age = aircraft.positionAgeSeconds;
   const positionFresh = Number.isFinite(age) && age >= 0 && age <= POSITION_MAX_AGE_SECONDS;
+  const focusAirport = !route && focusAirportCode ? await lookupAirportCoordinates(focusAirportCode) : null;
+  const focusAirportRelationship = focusAirport
+    ? aircraftAirportRelationship(aircraft, focusAirport, positionFresh)
+    : null;
   return {
     status:'live',
     generatedAt:new Date().toISOString(),
@@ -521,6 +692,7 @@ async function buildRegistrationSnapshot(value) {
     registration,
     aircraft,
     route,
+    focusAirportRelationship,
     positionFresh,
     progress:flightProgress(aircraft, route, positionFresh),
     source:{
@@ -592,8 +764,9 @@ module.exports = async function handler(req, res) {
 
   const value = Array.isArray(req.query?.flight) ? req.query.flight[0] : req.query?.flight;
   const registration = Array.isArray(req.query?.registration) ? req.query.registration[0] : req.query?.registration;
+  const focusAirport = Array.isArray(req.query?.focusAirport) ? req.query.focusAirport[0] : req.query?.focusAirport;
   try {
-    const body = registration ? await buildRegistrationSnapshot(registration) : await buildSnapshot(value);
+    const body = registration ? await buildRegistrationSnapshot(registration, focusAirport) : await buildSnapshot(value);
     res.statusCode = body.status === 'invalid' ? 400 : 200;
     return res.end(JSON.stringify(body));
   } catch (error) {
@@ -617,6 +790,12 @@ module.exports._test = {
   chooseUnique,
   buildSnapshot,
   buildRegistrationSnapshot,
+  parseCsvLine,
+  buildAirportIndex,
+  lookupAirportCoordinates,
+  aircraftAirportRelationship,
+  headingDifferenceDegrees,
+  roundedRelationshipMiles,
   haversineNm,
   routeLooksPlausible,
   flightPhase,
