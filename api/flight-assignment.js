@@ -115,6 +115,67 @@ function optionsForDate(nextData, date) {
   return options.sort((a,b) => String(a.sortTime || '').localeCompare(String(b.sortTime || '')));
 }
 
+
+function sameTail(a, b) {
+  return Boolean(a && b && clean(a) === clean(b));
+}
+
+function isMatchingAirborneOccurrence(candidate, selectedFlight) {
+  return Boolean(
+    candidate &&
+    selectedFlight &&
+    candidate.flightNumber === selectedFlight.flightNumber &&
+    sameTail(candidate.tailNumber, selectedFlight.tailNumber) &&
+    candidate.flightStatus?.airborne === true &&
+    candidate.flightStatus?.landed !== true
+  );
+}
+
+function currentOccurrenceSummary(candidate) {
+  if (!candidate) return null;
+  return {
+    flightNumber:candidate.flightNumber,
+    flightId:candidate.flightId,
+    tailNumber:candidate.tailNumber,
+    origin:candidate.origin,
+    destination:candidate.destination,
+    schedule:candidate.schedule,
+    flightStatus:candidate.flightStatus,
+    evidence:{
+      kind:'same-day-same-flight-same-tail-airborne',
+      note:'Confirmed from an earlier same-day occurrence with the same flight number and aircraft tail.'
+    },
+    source:candidate.source
+  };
+}
+
+async function findCurrentAircraftOccurrence(options, selected, selectedFlight, marketingFlight) {
+  if (!selectedFlight?.tailNumber || selectedFlight?.flightStatus?.airborne) return null;
+  const selectedIndex = options.findIndex(option => option.flightId === selected.flightId);
+  if (selectedIndex <= 0) return null;
+
+  const candidates = options
+    .slice(Math.max(0, selectedIndex - 3), selectedIndex)
+    .reverse();
+
+  for (const option of candidates) {
+    try {
+      const detailUrl = FLIGHTSTATS_BASE + option.sourcePath;
+      const detailHtml = await fetchText(detailUrl);
+      const detailData = parseNextData(detailHtml);
+      const flightData = detailData?.props?.initialState?.flightTracker?.flight;
+      if (!flightData?.flightId) continue;
+      const occurrence = sanitizeFlight(flightData, marketingFlight, detailUrl);
+      if (isMatchingAirborneOccurrence(occurrence, selectedFlight)) {
+        return currentOccurrenceSummary(occurrence);
+      }
+    } catch {
+      // Current-trip fusion is best effort. Never fail the selected flight lookup.
+    }
+  }
+  return null;
+}
+
 function sanitizeFlight(flight, marketingFlight, detailUrl) {
   const note = flight?.flightNote || {};
   const status = flight?.status || {};
@@ -251,7 +312,10 @@ async function lookupAssignment({ flight, date, flightId }) {
   const flightData = detailData?.props?.initialState?.flightTracker?.flight;
   if (!flightData || !flightData.flightId) throw new Error('Flight status detail was unavailable');
 
-  return sanitizeFlight(flightData, normalized, detailUrl);
+  const selectedFlight = sanitizeFlight(flightData, normalized, detailUrl);
+  const currentAircraftOccurrence = await findCurrentAircraftOccurrence(options, selected, selectedFlight, normalized);
+  if (currentAircraftOccurrence) selectedFlight.currentAircraftOccurrence = currentAircraftOccurrence;
+  return selectedFlight;
 }
 
 module.exports = async function handler(req, res) {
@@ -291,5 +355,9 @@ module.exports._test = {
   optionsForDate,
   sanitizeOption,
   sanitizeFlight,
+  sameTail,
+  isMatchingAirborneOccurrence,
+  currentOccurrenceSummary,
+  findCurrentAircraftOccurrence,
   lookupAssignment
 };

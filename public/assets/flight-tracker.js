@@ -169,6 +169,37 @@
     if (city && code) return city + ' (' + code + ')';
     return city || code || String(ap?.name || '').trim() || 'Airport';
   }
+  function flightNumberSuffix(value) {
+    const match = clean(value).match(/(\d{1,4}[A-Z]?)$/);
+    return match ? match[1] : null;
+  }
+
+  function confirmedOccurrenceRoute(assignment, live) {
+    const occurrence = assignment?.currentAircraftOccurrence;
+    if (!occurrence?.origin || !occurrence?.destination) return null;
+    if (occurrence?.flightStatus?.airborne !== true || occurrence?.flightStatus?.landed === true) return null;
+
+    const assignmentTail = clean(assignment?.tailNumber);
+    const occurrenceTail = clean(occurrence?.tailNumber);
+    const liveTail = clean(live?.aircraft?.registration);
+    if (!assignmentTail || occurrenceTail !== assignmentTail || liveTail !== assignmentTail) return null;
+
+    const marketingNumber = flightNumberSuffix(assignment?.flightNumber);
+    const callsignNumber = flightNumberSuffix(live?.aircraft?.callsign);
+    if (!marketingNumber || !callsignNumber || marketingNumber !== callsignNumber) return null;
+
+    return {
+      origin:occurrence.origin,
+      destination:occurrence.destination,
+      confirmedBy:'same-day-same-flight-same-tail-airborne'
+    };
+  }
+
+  function resolvedCurrentRoute(assignment, live) {
+    if (live?.route?.origin && live?.route?.destination) return live.route;
+    return confirmedOccurrenceRoute(assignment, live);
+  }
+
 
   function aircraftIdentity(ac) {
     return [$(ac?.aircraftTypeName || ac?.aircraftType), $(ac?.registration)].filter(Boolean).join(' · ');
@@ -508,11 +539,19 @@
     const delay = delayLabel(assignment);
     const identity = aircraftIdentity(live?.aircraft) || assignment?.equipment?.name || tail;
     const pills = [route, delay, tail, identity].filter(Boolean);
-    const currentLeg = liveLegText(live);
-    const eta = live?.progress?.landingEstimate;
+    const currentRoute = resolvedCurrentRoute(assignment, live);
+    const currentLeg = currentRoute?.origin && currentRoute?.destination
+      ? airportPlace(currentRoute.origin) + ' → ' + airportPlace(currentRoute.destination)
+      : null;
+    const eta = live?.route ? live?.progress?.landingEstimate : null;
     const userOrigin = assignment?.origin;
-    const inboundToOrigin = live?.route?.destination && userOrigin && sameAirport(live.route.destination,userOrigin);
+    const inboundToOrigin = currentRoute?.destination && userOrigin && sameAirport(currentRoute.destination,userOrigin);
     const userFlightAirborne = assignment?.flightStatus?.airborne === true;
+
+    if (!live?.route && currentRoute) {
+      routeLabel.textContent = airportPlace(currentRoute.origin) + ' → ' + airportPlace(currentRoute.destination);
+      routeCodes.textContent = airportCodeAny(currentRoute.origin) + ' → ' + airportCodeAny(currentRoute.destination);
+    }
 
     if (userFlightAirborne) {
       setAnswer({
