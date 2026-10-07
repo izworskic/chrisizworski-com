@@ -3,26 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Flight Tracker: See Your Plane Live | Chris Izworski</title>
-  <meta name="description" content="Track your flight on a live map. See the plane, flight phase, direct miles remaining and a rough time-to-landing range from real aircraft reports.">
+  <title>Where Is My Plane? Track Your Incoming Aircraft</title>
+  <meta name="description" content="Flight delayed? Enter your flight number to find the aircraft assigned to operate it, see where that plane is now, and track its live position when available.">
   <link rel="canonical" href="https://chrisizworski.com/flight-tracker/">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="google-adsense-account" content="ca-pub-8222782620788075">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Flight Tracker — Where Is My Plane?">
-  <meta property="og:description" content="Enter a flight number. See the aircraft's latest actual reported position on a simple map.">
+  <meta property="og:description" content="Flight delayed? Find the aircraft assigned to your flight, see where it is now, and track its live position when available.">
   <meta property="og:url" content="https://chrisizworski.com/flight-tracker/">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flight Tracker — Where Is My Plane?">
-  <meta name="twitter:description" content="Flight number in. Actual aircraft position on a map.">
+  <meta name="twitter:description" content="Enter your flight number. Find the aircraft assigned to your flight and see where that plane is now.">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@6.3.0/dist/maplibre-gl.css">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/flight-tracker/#page","url":"https://chrisizworski.com/flight-tracker/","name":"Flight Tracker: See Your Plane Live","description":"A stripped-down flight tracker that turns a commercial flight number into the latest actual reported aircraft position on an airport-to-airport map.","dateModified":"2026-10-07","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/","name":"Chris Izworski"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/flight-tracker/#app","name":"Flight Tracker — Where Is My Plane?","url":"https://chrisizworski.com/flight-tracker/","applicationCategory":"TravelApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"featureList":["Flight-number lookup","Latest actual ADS-B aircraft position","Airport city and code route labels","Aircraft type and registration when reported","Direct-distance progress","Airport-to-airport route map","Altitude and groundspeed","Position-age disclosure","No simulated aircraft movement"]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/flight-tracker/#page","url":"https://chrisizworski.com/flight-tracker/","name":"Where Is My Plane? Incoming Aircraft Tracker","description":"A flight decision tool that identifies the aircraft assigned to operate a passenger flight, then shows where that aircraft is now using live aircraft reports when available.","dateModified":"2026-10-07","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/","name":"Chris Izworski"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/flight-tracker/#app","name":"Flight Tracker — Where Is My Plane?","url":"https://chrisizworski.com/flight-tracker/","applicationCategory":"TravelApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"featureList":["Assigned-aircraft lookup before departure","Incoming-aircraft location when available","Flight status and delay context","Tail number and aircraft type","Latest actual ADS-B aircraft position","Current aircraft route","Direct-distance progress","No simulated aircraft movement"]}]}</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <script defer src="/assets/tool-engagement.js"></script>
-  <script defer src="/assets/flight-tracker.js?v=20261007b"></script>
+  <script defer src="/assets/flight-tracker.js?v=20261007c"></script>
   <style>
     :root{--ink:#13202b;--muted:#5d6973;--line:#d9e0e5;--paper:#fff;--wash:#f4f7f8;--accent:#18344a;--danger:#9b312b}
     *{box-sizing:border-box}
@@ -45,6 +45,19 @@
     #tracker-message{margin:9px 0 0;font-size:13px;color:var(--muted);min-height:18px}
     #tracker-message[data-kind="error"]{color:var(--danger)}
     #tracker-message[data-kind="warning"]{color:#805f00}
+    .answer-card{max-width:760px;margin:12px 0 2px;border:1px solid #cfd8de;border-radius:14px;padding:14px;background:#fff;box-shadow:0 3px 16px rgba(19,32,43,.06)}
+    .answer-card[hidden],#flight-choices[hidden]{display:none}
+    .answer-kicker{margin:0 0 4px;font-size:10px;font-weight:950;letter-spacing:.12em;color:var(--muted)}
+    #answer-headline{margin:0;font-size:clamp(21px,4vw,30px);line-height:1.08;letter-spacing:-.03em}
+    #answer-detail{margin:6px 0 12px;color:var(--muted);font-size:13px;line-height:1.4}
+    .answer-grid{display:grid;grid-template-columns:1.2fr .9fr 1.2fr;gap:8px}
+    .answer-cell{min-width:0;background:var(--wash);border-radius:10px;padding:10px}
+    .answer-cell span{display:block;color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+    .answer-cell strong{display:block;margin-top:3px;font-size:14px;line-height:1.3;overflow-wrap:anywhere}
+    .answer-cell small{display:block;margin-top:3px;color:var(--muted);font-size:11px;line-height:1.3}
+    #answer-caveat{margin:8px 0 0;color:var(--muted);font-size:10px;line-height:1.35}
+    #flight-choices{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+    .flight-choice{border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:9px;padding:9px 11px;font-weight:850;cursor:pointer}
     .flight-glance{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:650px;margin:12px 0 0}
     .flight-glance[hidden],.flight-glance-note[hidden]{display:none}
     .glance-cell{min-width:0;background:#f4f7f8;border:1px solid var(--line);border-radius:10px;padding:10px 10px 9px}
@@ -89,6 +102,10 @@
       #flight-number{height:48px;font-size:18px;padding:0 12px}
       #track-flight{height:48px;padding:0 10px;font-size:12px}
       #tracker-message{margin-top:6px}
+      .answer-card{padding:11px;margin-top:9px}
+      .answer-grid{grid-template-columns:1fr}
+      #answer-headline{font-size:22px}
+      .answer-cell{padding:8px}
       .map-shell{height:calc(100vh - 196px);min-height:420px}
       .flight-strip{left:8px;right:8px;top:8px}
       .flight-main{gap:8px}.flight-sub{gap:8px}
@@ -115,13 +132,25 @@
     <section class="tracker-head" aria-labelledby="page-title">
       <p class="breadcrumb"><a href="/">Home</a> / <a href="/tools/">Tools</a> / Flight Tracker</p>
       <h1 id="page-title">Where's My Plane?</h1>
-      <p class="promise">Enter the flight number. See the aircraft's latest actual reported position.</p>
+      <p class="promise"><strong>Flight delayed?</strong> Enter the flight number. We’ll find the aircraft assigned to operate it and show where that plane is now.</p>
       <form id="flight-form" autocomplete="off">
         <label for="flight-number" class="sr-only" style="position:absolute;left:-9999px">Flight number</label>
         <input id="flight-number" name="flight" inputmode="text" autocapitalize="characters" spellcheck="false" maxlength="9" placeholder="DL1234" aria-label="Flight number">
-        <button id="track-flight" type="submit">TRACK</button>
+        <button id="track-flight" type="submit">FIND PLANE</button>
       </form>
       <p id="tracker-message" role="status" aria-live="polite" hidden></p>
+      <div class="answer-card" id="answer-card" aria-live="polite" hidden>
+        <p class="answer-kicker" id="answer-kicker">WHERE IS YOUR PLANE?</p>
+        <h2 id="answer-headline">Finding your aircraft…</h2>
+        <p id="answer-detail"></p>
+        <div class="answer-grid">
+          <div class="answer-cell"><span>Your flight</span><strong id="answer-your-route"></strong><small id="answer-status"></small></div>
+          <div class="answer-cell"><span>Assigned aircraft</span><strong id="answer-tail"></strong><small id="answer-equipment"></small></div>
+          <div class="answer-cell"><span>Aircraft now</span><strong id="answer-current-route"></strong><small id="answer-current-detail"></small></div>
+        </div>
+        <div id="flight-choices" hidden></div>
+        <p id="answer-caveat"></p>
+      </div>
       <div class="flight-glance" id="flight-glance" aria-label="Flight progress" aria-live="polite" hidden>
         <div class="glance-cell"><span>Flight phase</span><strong id="flight-phase">—</strong></div>
         <div class="glance-cell"><span>Direct miles left</span><strong id="flight-distance">—</strong></div>
@@ -145,12 +174,12 @@
           <div class="flight-sub"><span id="detail-label">Actual aircraft position</span><span id="freshness-label"></span></div>
         </div>
       </div>
-      <div class="source-note">Position: <a href="https://adsb.lol/" rel="nofollow noopener">ADSB.lol</a> · Route: <a href="https://github.com/adsblol/vrs-standing-data" rel="nofollow noopener">VRS standing data</a></div>
+      <div class="source-note">Assignment/status: FlightStats · Position: <a href="https://adsb.lol/" rel="nofollow noopener">ADSB.lol</a> · Route: <a href="https://github.com/adsblol/vrs-standing-data" rel="nofollow noopener">VRS standing data</a></div>
     </section>
 
     <section class="below">
-      <p><strong>Actual reports only.</strong> The airplane marker moves only when a new aircraft position is received. The tracker does not animate or invent movement between reports.</p>
-      <p>The tracker maps a passenger airline code to its direct operating callsign when that mapping is unambiguous. Codeshares and some regional flights may not resolve yet; the tracker shows no plane rather than inventing a match.</p>
+      <p><strong>Built for the delayed-flight question.</strong> Before your flight leaves, the tool looks for the aircraft assigned to operate it. If that tail is airborne and reporting, the map follows that aircraft and its current route.</p>
+      <p><strong>Assignments can change.</strong> Airlines can swap aircraft before departure. Live positions come from actual ADS-B/MLAT reports; the tracker never invents movement between reports.</p>
     </section>
   </main>
 
