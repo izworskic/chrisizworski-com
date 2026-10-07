@@ -178,6 +178,7 @@ test('Mapbox traffic response exposes current, typical and delay minutes',()=>{
   assert.equal(route.delayMinutes,3);
   assert.equal(route.baselineKind,'MAPBOX_TYPICAL_TRAFFIC');
   assert.equal(route.sourceName,'Mapbox live traffic routing');
+  assert.equal(route.mapboxDistanceMeters,2600);
   assert.equal(route.incident,'Lane restriction');
 });
 
