@@ -118,7 +118,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007l/);
+  assert.match(html, /flight-tracker\.js\?v=20261007m/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -641,4 +641,86 @@ test('mobile journey strip remains compact at the 390px baseline', () => {
   assert.match(html, /\.answer-journey\{grid-template-columns:minmax\(0,1fr\) 18px minmax\(0,1fr\);gap:6px\}/);
   assert.match(html, /\.journey-primary\{font-size:12\.5px\}/);
   assert.match(html, /\.journey-secondary\{font-size:10px\}/);
+});
+
+
+test('recent-arrival recovery narrows the airport board before checking same-tail details', () => {
+  const now = Date.parse('2026-10-07T17:20:00Z');
+  const nextData = {
+    props:{initialState:{flightTracker:{route:{flights:[
+      {
+        sortTime:'2026-10-07T16:10:00.000Z',
+        carrier:{fs:'AA',flightNumber:'2317'},
+        operatedBy:null,
+        url:'/flight-tracker/AA/2317?year=2026&month=10&date=7&flightId=1412662791',
+        airport:{fs:'SAV',city:'Savannah'}
+      },
+      {
+        sortTime:'2026-10-07T16:15:00.000Z',
+        carrier:{fs:'DL',flightNumber:'999'},
+        operatedBy:null,
+        url:'/flight-tracker/DL/999?year=2026&month=10&date=7&flightId=2',
+        airport:{fs:'ATL',city:'Atlanta'}
+      },
+      {
+        sortTime:'2026-10-06T02:00:00.000Z',
+        carrier:{fs:'AA',flightNumber:'1'},
+        operatedBy:null,
+        url:'/flight-tracker/AA/1?year=2026&month=10&date=6&flightId=3',
+        airport:{fs:'LAX',city:'Los Angeles'}
+      }
+    ]}}}}
+  };
+  const candidates = assignmentApi.recentArrivalCandidates(nextData,{carrier:'AA',airport:'CLT',nowMs:now});
+  assert.equal(candidates.length,1);
+  assert.equal(candidates[0].flightNumber,'AA2317');
+  assert.equal(candidates[0].flightId,'1412662791');
+  assert.equal(candidates[0].destination.iata,'CLT');
+});
+
+test('recent-arrival recovery validates codes and prefers a current airborne or recent landed same-tail occurrence', () => {
+  assert.equal(assignmentApi.normalizeAirportCode(' clt '),'CLT');
+  assert.equal(assignmentApi.normalizeAirportCode('!'),null);
+  assert.equal(assignmentApi.normalizeCarrierCode('aa'),'AA');
+  assert.equal(assignmentApi.normalizeCarrierCode('AAL'),null);
+  const now=Date.parse('2026-10-07T17:20:00Z');
+  const landed={flightStatus:{landed:true,airborne:true}};
+  const airborne={flightStatus:{landed:false,airborne:true}};
+  const scheduled={flightStatus:{landed:false,airborne:false}};
+  const candidate={sortMs:Date.parse('2026-10-07T16:10:00Z')};
+  assert.ok(assignmentApi.recentArrivalMatchScore(airborne,candidate,now) > assignmentApi.recentArrivalMatchScore(landed,candidate,now));
+  assert.ok(assignmentApi.recentArrivalMatchScore(landed,candidate,now) > assignmentApi.recentArrivalMatchScore(scheduled,candidate,now));
+});
+
+test('no-position recovery checks recent arrivals before falling back to a stale last-known map point', () => {
+  assert.match(client, /async function resolveRecentInboundOccurrence\(assignment\)/);
+  assert.match(client, /tail:assignment\.tailNumber/);
+  assert.match(client, /airport,/);
+  assert.match(client, /carrier/);
+  assert.match(client, /status !== 'found-inbound-occurrence'/);
+  assert.match(client, /async function recoverNoPositionState\(assignment, registration, data\)/);
+  assert.match(client, /occurrence\?\.flightStatus\?\.landed === true/);
+  assert.match(client, /previousAircraftOccurrence:occurrence/);
+  assert.match(client, /renderArrivedForTurn\(assignmentData\)/);
+  assert.match(client, /const snapshot = loadLastKnownSnapshot\(registration\)/);
+  assert.match(client, /renderLastKnownPosition\(assignment,snapshot\)/);
+});
+
+test('last-known aircraft position persists locally but is explicitly stale and bounded', () => {
+  assert.match(client, /const LAST_KNOWN_MAX_AGE_MS = 12 \* 60 \* 60 \* 1000/);
+  assert.match(client, /const LAST_KNOWN_STORAGE_PREFIX = 'flight-tracker:last-known:'/);
+  assert.match(client, /function saveLastKnownSnapshot\(data\)/);
+  assert.match(client, /localStorage\.setItem/);
+  assert.match(client, /function loadLastKnownSnapshot\(registration\)/);
+  assert.match(client, /Date\.now\(\) - parsed\.reportedAt > LAST_KNOWN_MAX_AGE_MS/);
+  assert.match(client, /function renderLastKnownPosition\(assignment, snapshot\)/);
+  assert.match(client, /This is not a live location/);
+  assert.match(client, /LAST CONFIRMED AIRCRAFT POSITION/);
+  assert.match(client, /classList\.add\('is-stale'\)/);
+  assert.match(client, /classList\.remove\('is-stale'\)/);
+  assert.match(html, /\.plane-marker\.is-stale\{opacity:\.55;border-style:dashed\}/);
+});
+
+test('flight page loads the last-known recovery client asset', () => {
+  assert.match(html, /flight-tracker\.js\?v=20261007m/);
 });
