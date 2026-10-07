@@ -50,6 +50,12 @@
   let activeFlight = null;
   let refreshTimer = null;
   let routeKey = '';
+  let refreshInFlight = false;
+  let requestSequence = 0;
+  let lastLiveFlight = null;
+  let lastLiveSuccessAt = 0;
+  let lastReportedAgeSeconds = null;
+  const HOLD_LAST_LIVE_MS = 5 * 60 * 1000;
 
   const $ = value => value == null || value === '' ? null : value;
 
@@ -121,6 +127,37 @@
     if (eta?.note) notes.push(eta.note);
     if (showProgress) notes.push('Progress and miles use direct airport-to-airport distance.');
     glanceNote.textContent = notes.join(' ');
+  }
+
+  function resetHeldLive() {
+    lastLiveFlight = null;
+    lastLiveSuccessAt = 0;
+    lastReportedAgeSeconds = null;
+  }
+
+  function holdLastLiveOnRefreshMiss(data) {
+    if (!activeFlight || lastLiveFlight !== activeFlight || !lastLiveSuccessAt) return false;
+    const elapsedMs = Date.now() - lastLiveSuccessAt;
+    if (elapsedMs < 0 || elapsedMs > HOLD_LAST_LIVE_MS) return false;
+
+    const elapsedSeconds = Math.floor(elapsedMs / 1000);
+    const baseAge = Number.isFinite(lastReportedAgeSeconds) ? lastReportedAgeSeconds : 0;
+    const apparentAge = baseAge + elapsedSeconds;
+    freshness.textContent = formatAge(apparentAge) + ' · refresh retrying';
+    freshness.dataset.stale = apparentAge > 90 ? 'true' : 'false';
+
+    if (apparentAge > 90) {
+      phaseLabel.textContent = 'Last reported';
+      landingLabel.textContent = 'Refresh pending';
+    }
+
+    const reason = data?.status === 'ambiguous'
+      ? 'The latest refresh was ambiguous. Showing the last confirmed aircraft report.'
+      : 'Live refresh missed. Showing the last confirmed aircraft report while retrying.';
+    setMessage(reason, 'warning');
+    submit.disabled = false;
+    submit.textContent = 'TRACK';
+    return true;
   }
 
   function setMessage(text, kind='neutral') {
@@ -221,6 +258,9 @@
 
   function renderLive(data) {
     const ac = data.aircraft;
+    lastLiveFlight = activeFlight;
+    lastLiveSuccessAt = Date.now();
+    lastReportedAgeSeconds = Number.isFinite(ac.positionAgeSeconds) ? ac.positionAgeSeconds : null;
     flightLabel.textContent = data.flightNumber || ac.callsign || 'Flight';
     if (data.route?.origin && data.route?.destination) {
       routeLabel.textContent = airportPlace(data.route.origin) + ' → ' + airportPlace(data.route.destination);
@@ -293,24 +333,41 @@
   async function loadFlight(flight, {silent=false}={}) {
     const normalized = clean(flight);
     if (!normalized) return;
+    if (silent && refreshInFlight) return;
+
     activeFlight = normalized;
     if (!silent) {
+      resetHeldLive();
       submit.disabled = true;
       submit.textContent = 'FINDING…';
       setMessage('Finding the live aircraft…');
     }
+
+    const sequence = ++requestSequence;
+    if (silent) refreshInFlight = true;
 
     try {
       const response = await fetch('/api/flight-tracker?flight=' + encodeURIComponent(normalized), {
         headers:{accept:'application/json'}
       });
       const data = await response.json();
-      if (data.status === 'live') renderLive(data);
-      else renderUnavailable(data);
+
+      if (sequence !== requestSequence || activeFlight !== normalized) return;
+      if (data.status === 'live') {
+        renderLive(data);
+      } else if (!(silent && holdLastLiveOnRefreshMiss(data))) {
+        renderUnavailable(data);
+        if (!silent) resetHeldLive();
+      }
     } catch {
-      submit.disabled = false;
-      submit.textContent = 'TRACK';
-      setMessage('Live aircraft data is temporarily unavailable.', 'error');
+      if (sequence !== requestSequence || activeFlight !== normalized) return;
+      if (!(silent && holdLastLiveOnRefreshMiss({status:'error'}))) {
+        submit.disabled = false;
+        submit.textContent = 'TRACK';
+        setMessage('Live aircraft data is temporarily unavailable.', 'error');
+      }
+    } finally {
+      if (silent) refreshInFlight = false;
     }
   }
 
