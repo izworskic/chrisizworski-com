@@ -285,3 +285,94 @@ test('refresh resilience is bounded and explicit lookups still fail closed', () 
   assert.match(client, /const sequence = \+\+requestSequence/);
   assert.match(client, /sequence !== requestSequence \|\| activeFlight !== normalized/);
 });
+
+
+test('FlightStats state parser extracts scheduled instances and assigned tail evidence', () => {
+  const state = {
+    otherDays:[{
+      flights:[{
+        url:'/flight-tracker/DL/3941?year=2026&month=10&date=07&flightId=1412689007',
+        sortTime:'2026-10-07T18:11:00.000Z',
+        departureAirport:{iata:'DTW',city:'Detroit',name:'Detroit Metro'},
+        arrivalAirport:{iata:'MBS',city:'Saginaw',name:'MBS International'}
+      }]
+    }],
+    flight:{}
+  };
+  const html='x__NEXT_DATA__ = '+JSON.stringify({props:{initialState:{flightTracker:state}}})+';__NEXT_LOADED_PAGES__y';
+  const parsed=api.extractFlightStatsState(html);
+  assert.equal(parsed.otherDays.length,1);
+  const candidates=api.flattenFlightStatsCandidates(parsed.otherDays);
+  assert.equal(candidates[0].flightId,'1412689007');
+  assert.equal(candidates[0].origin.iata,'DTW');
+  assert.equal(candidates[0].destination.iata,'MBS');
+
+  const cleaned=api.cleanScheduledFlight({
+    flightId:1412689007,
+    isScheduled:true,
+    isTracking:false,
+    isLanded:false,
+    flightNote:{canceled:false},
+    schedule:{scheduledDepartureUTC:'2026-10-07T18:11:00.000Z'},
+    status:{status:'Scheduled',statusDescription:'On time',delayStatus:{minutes:0}},
+    departureAirport:{iata:'DTW',city:'Detroit',gate:'C11',terminal:'M'},
+    arrivalAirport:{iata:'MBS',city:'Saginaw'},
+    operatedBy:'Operated by SkyWest Airlines on behalf of Delta Air Lines',
+    additionalFlightInfo:{equipment:{name:'Canadair Regional Jet 900'}},
+    positional:{flexTrack:{tailNumber:'N839SK',equipment:'CR9'}}
+  });
+  assert.equal(cleaned.assignedTail,'N839SK');
+  assert.equal(cleaned.origin.gate,'C11');
+  assert.equal(cleaned.destination.iata,'MBS');
+});
+
+test('scheduled candidate chooser selects a relevant occurrence but asks when nearby opposite-direction legs conflict', () => {
+  const base=Date.parse('2026-10-07T18:30:00.000Z');
+  const flights=[
+    {flightId:'a',sortMs:Date.parse('2026-10-07T18:11:00.000Z'),origin:{iata:'DTW'},destination:{iata:'MBS'}},
+    {flightId:'b',sortMs:Date.parse('2026-10-07T19:46:00.000Z'),origin:{iata:'MBS'},destination:{iata:'DTW'}}
+  ];
+  const choice=api.chooseScheduledCandidate(flights,base,null);
+  assert.equal(choice.ambiguous,true);
+  assert.equal(choice.candidates.length,2);
+  assert.equal(api.chooseScheduledCandidate(flights,base,'b').flightId,'b');
+
+  const morning=api.chooseScheduledCandidate(flights,Date.parse('2026-10-07T11:30:00.000Z'),null);
+  assert.equal(morning.flightId,'a');
+});
+
+test('journey state makes inbound assigned aircraft the answer, not the passenger flight callsign', () => {
+  const scheduled={
+    assignedTail:'N839SK',
+    origin:{iata:'DTW',city:'Detroit'},
+    destination:{iata:'MBS',city:'Saginaw'}
+  };
+  const aircraft={callsign:'SKW5172',onGround:false};
+  const route={origin:{iata:'ORD',city:'Chicago'},destination:{iata:'DTW',city:'Detroit'}};
+  const state=api.buildJourneyState(scheduled,aircraft,route,true,null);
+  assert.equal(state.state,'inbound-aircraft');
+  assert.match(state.headline,/inbound to Detroit/i);
+  assert.match(state.detail,/N839SK/);
+
+  const parked=api.buildJourneyState(scheduled,null,null,false,null);
+  assert.equal(parked.state,'assigned-aircraft-not-visible');
+
+  const live=api.buildJourneyState(scheduled,null,null,true,{callsign:'DAL3941'});
+  assert.equal(live.state,'your-flight-live');
+});
+
+test('redesigned page leads with assigned-aircraft problem and preserves the live map beneath it', () => {
+  assert.match(html, /Flight delayed\?/);
+  assert.match(html, /id="answer-card"/);
+  assert.match(html, /id="answer-headline"/);
+  assert.match(html, /id="answer-tail"/);
+  assert.match(html, /id="answer-current-route"/);
+  assert.match(html, /id="flight-choices"/);
+  assert.ok(html.indexOf('id="answer-card"') < html.indexOf('id="flight-map"'));
+  assert.match(client, /function renderJourney\(data\)/);
+  assert.match(client, /function renderFlightChoices\(data\)/);
+  assert.match(client, /data\.status === 'scheduled'/);
+  assert.match(client, /activeFlightId/);
+  assert.match(client, /Finding the aircraft assigned to your flight/);
+  assert.match(html, /Assignments can change/);
+});
