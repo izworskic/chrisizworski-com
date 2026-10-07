@@ -10,6 +10,8 @@ const {
   normalizeMapboxResponse,
   fetchMapboxTraffic,
   MAPBOX_PROBES,
+  MAPBOX_CACHE_TIMEOUT_MS,
+  MAPBOX_ROUTE_TIMEOUT_MS,
   NYCDOT_LINKS
 }=require('../lib/nyc-crossing/traffic');
 
@@ -152,6 +154,11 @@ test('Mapbox fallback crossings are explicit when live routing is unavailable',(
   const s=buildSnapshot({});
   assert.match(s.routes.find(r=>r.id==='williamsburg').trafficPending,/Mapbox/);
   assert.match(s.routes.find(r=>r.id==='queensboro').trafficPending,/Mapbox/);
+});
+
+test('Mapbox fallback has a strict latency budget',()=>{
+  assert.ok(MAPBOX_CACHE_TIMEOUT_MS <= 1000);
+  assert.ok(MAPBOX_ROUTE_TIMEOUT_MS <= 3000);
 });
 
 test('Mapbox bridge probes are pinned through the intended crossings',()=>{
