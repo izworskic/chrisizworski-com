@@ -43,11 +43,11 @@
         ? '<div class="detail">'+(r.direction||'Current direction')+' · '+scopeLabel(r.etaScope)+speed+delayText(r)+'</div>'+
           '<div class="detail">'+(r.trafficSourceName||'Official traffic source')+(r.reportedAt?' · '+r.reportedAt:'')+'</div>'
         : '<div class="detail">'+(r.trafficPending||'No fresh official reading connected')+'</div>';
-      return '<tr><td><div class="route-name">'+r.name+'</div><div class="detail">'+r.corridor+' · '+r.cost.periodLabel+'</div></td>'+
-        '<td>'+eta+detail+'</td>'+
-        '<td><div class="cost">'+money(r.cost.total)+'</div><div class="detail">Crossing '+money(r.cost.toll)+' · Zone '+money(r.cost.zone)+(r.cost.credit?' · credit −'+money(r.cost.credit):'')+'</div></td>'+
-        '<td><span class="status '+(r.eligibility.state==='ELIGIBLE'?'live':'off')+'">'+r.eligibility.state+'</span><div class="detail">'+r.eligibility.reason+'</div></td>'+
-        '<td><a href="'+r.cameraUrl+'" target="_blank" rel="noopener">511NY ↗</a></td></tr>';
+      return '<tr role="row"><td role="cell" headers="crossing-name"><div class="route-name">'+r.name+'</div><div class="detail">'+r.corridor+' · '+r.cost.periodLabel+'</div></td>'+
+        '<td role="cell" headers="crossing-time"><span class="mobile-label" aria-hidden="true">Live crossing / corridor time</span>'+eta+detail+'</td>'+
+        '<td role="cell" headers="crossing-charge"><span class="mobile-label" aria-hidden="true">Total road charge</span><div class="cost">'+money(r.cost.total)+'</div><div class="detail">Crossing '+money(r.cost.toll)+' · Zone '+money(r.cost.zone)+(r.cost.credit?' · credit −'+money(r.cost.credit):'')+'</div></td>'+
+        '<td role="cell" headers="crossing-vehicle"><span class="mobile-label" aria-hidden="true">Vehicle check</span><span class="status '+(r.eligibility.state==='ELIGIBLE'?'live':'off')+'">'+r.eligibility.state+'</span><div class="detail">'+r.eligibility.reason+'</div></td>'+
+        '<td role="cell" headers="crossing-camera"><span class="mobile-label" aria-hidden="true">Traffic / camera</span><a href="'+r.cameraUrl+'" target="_blank" rel="noopener">511NY ↗</a></td></tr>';
     }).join('');
   }
 
