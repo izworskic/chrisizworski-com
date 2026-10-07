@@ -250,6 +250,48 @@ async function lookupCallsign(callsign) {
   }
 }
 
+function normalizeRegistration(value) {
+  const compact = String(value || '').toUpperCase().replace(/[^A-Z0-9-]/g, '');
+  return /^[A-Z0-9][A-Z0-9-]{2,9}$/.test(compact) ? compact : null;
+}
+
+function sanitizeSeenAircraft(ac, requestedRegistration) {
+  const altitudeRaw = typeof ac?.alt_baro === 'number' ? ac.alt_baro : finiteNumber(ac?.alt_geom);
+  return {
+    callsign:String(ac?.flight || '').trim() || null,
+    hex:String(ac?.hex || '').trim() || null,
+    registration:String(ac?.r || requestedRegistration || '').trim() || requestedRegistration || null,
+    aircraftType:String(ac?.t || '').trim() || null,
+    aircraftTypeName:aircraftTypeName(ac?.t),
+    altitudeFeet:altitudeRaw,
+    onGround:ac?.alt_baro === 'ground' || ac?.on_ground === true,
+    speedKnots:finiteNumber(ac?.gs),
+    trackDegrees:finiteNumber(ac?.track ?? ac?.true_heading ?? ac?.mag_heading),
+    verticalRateFpm:finiteNumber(ac?.baro_rate ?? ac?.geom_rate),
+    lastSeenSeconds:finiteNumber(ac?.seen),
+    sourceType:String(ac?.type || '').trim() || null
+  };
+}
+
+async function lookupRegistration(registration) {
+  try {
+    const data = await getJson(ADSB_BASE + '/v2/reg/' + encodeURIComponent(registration));
+    const aircraft = Array.isArray(data?.ac) ? data.ac : [];
+    if (!aircraft.length) return { status:'none', aircraft:null, seen:null };
+
+    const exact = aircraft.filter(ac => String(ac?.r || '').trim().toUpperCase() === registration);
+    const candidates = exact.length ? exact : aircraft;
+    candidates.sort((a,b) => (finiteNumber(a?.seen_pos) ?? finiteNumber(a?.seen) ?? 9999) - (finiteNumber(b?.seen_pos) ?? finiteNumber(b?.seen) ?? 9999));
+
+    const raw = candidates[0];
+    const positioned = sanitizeAircraft(raw, String(raw?.flight || '').trim() || null);
+    if (positioned) return { status:'positioned', aircraft:positioned, seen:sanitizeSeenAircraft(raw, registration) };
+    return { status:'seen-no-position', aircraft:null, seen:sanitizeSeenAircraft(raw, registration) };
+  } catch {
+    return { status:'error', aircraft:null, seen:null };
+  }
+}
+
 function haversineNm(a, b) {
   const rad = degrees => degrees * Math.PI / 180;
   const lat1 = rad(a.lat);
@@ -440,6 +482,57 @@ function buildNotFound(normalized) {
   };
 }
 
+async function buildRegistrationSnapshot(value) {
+  const registration = normalizeRegistration(value);
+  if (!registration) {
+    return { status:'invalid', code:'invalid-registration', message:'Invalid aircraft registration.' };
+  }
+
+  const resolved = await lookupRegistration(registration);
+  if (resolved.status === 'error') {
+    return { status:'error', registration, message:'Live aircraft data is temporarily unavailable.' };
+  }
+  if (resolved.status === 'none') {
+    return {
+      status:'not-found',
+      registration,
+      message:'The assigned aircraft is not currently reporting a live ADS-B position.',
+      source:{name:'ADSB.lol',url:'https://adsb.lol/',license:'ODbL 1.0'}
+    };
+  }
+  if (resolved.status === 'seen-no-position') {
+    return {
+      status:'seen-no-position',
+      registration,
+      aircraft:resolved.seen,
+      message:'The aircraft is being seen by the network, but no current position is available.',
+      source:{name:'ADSB.lol',url:'https://adsb.lol/',license:'ODbL 1.0'}
+    };
+  }
+
+  const aircraft = resolved.aircraft;
+  const route = await lookupRoute(aircraft);
+  const age = aircraft.positionAgeSeconds;
+  const positionFresh = Number.isFinite(age) && age >= 0 && age <= POSITION_MAX_AGE_SECONDS;
+  return {
+    status:'live',
+    generatedAt:new Date().toISOString(),
+    lookup:'registration',
+    registration,
+    aircraft,
+    route,
+    positionFresh,
+    progress:flightProgress(aircraft, route, positionFresh),
+    source:{
+      name:'ADSB.lol',
+      url:'https://adsb.lol/',
+      api:'https://api.adsb.lol/',
+      license:'ODbL 1.0',
+      note:'Live ADS-B/MLAT position for the assigned aircraft registration.'
+    }
+  };
+}
+
 async function buildSnapshot(value) {
   const normalized = normalizeFlightInput(value);
   if (!normalized.ok) {
@@ -498,8 +591,9 @@ module.exports = async function handler(req, res) {
   }
 
   const value = Array.isArray(req.query?.flight) ? req.query.flight[0] : req.query?.flight;
+  const registration = Array.isArray(req.query?.registration) ? req.query.registration[0] : req.query?.registration;
   try {
-    const body = await buildSnapshot(value);
+    const body = registration ? await buildRegistrationSnapshot(registration) : await buildSnapshot(value);
     res.statusCode = body.status === 'invalid' ? 400 : 200;
     return res.end(JSON.stringify(body));
   } catch (error) {
@@ -515,10 +609,14 @@ module.exports = async function handler(req, res) {
 module.exports._test = {
   cleanFlightInput,
   normalizeFlightInput,
+  normalizeRegistration,
   actualPosition,
   sanitizeAircraft,
+  sanitizeSeenAircraft,
+  lookupRegistration,
   chooseUnique,
   buildSnapshot,
+  buildRegistrationSnapshot,
   haversineNm,
   routeLooksPlausible,
   flightPhase,
