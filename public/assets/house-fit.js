@@ -37,6 +37,19 @@
     return form.elements[name] ? form.elements[name].value : '';
   }
 
+  async function readJsonResponse(response) {
+    const contentType = String(response.headers.get('content-type') || '').toLowerCase();
+    const body = await response.text();
+    if (!contentType.includes('application/json')) {
+      throw new Error('House calculator service returned an unexpected response. Reload and try again.');
+    }
+    try {
+      return JSON.parse(body);
+    } catch {
+      throw new Error('House calculator service returned invalid data. Reload and try again.');
+    }
+  }
+
   function buildPayload() {
     const payload = {
       address: valueOf('address').trim(),
@@ -281,7 +294,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      const data = await response.json();
+      const data = await readJsonResponse(response);
       if (!response.ok) throw new Error(data.message || data.error || 'Calculation failed');
       render(data);
       status.textContent = 'Updated.';
@@ -313,7 +326,7 @@
   async function loadDailyRate() {
     try {
       const response = await fetch('/api/house-fit', { headers: { Accept: 'application/json' } });
-      const data = await response.json();
+      const data = await readJsonResponse(response);
       const rate = Number(data && data.mortgageRate && data.mortgageRate.ratePct);
       if (!response.ok || !Number.isFinite(rate)) throw new Error('Rate unavailable');
       if (!rateTouched) $('ratePct').value = rate.toFixed(3);
