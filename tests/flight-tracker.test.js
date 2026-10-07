@@ -724,3 +724,10 @@ test('last-known aircraft position persists locally but is explicitly stale and 
 test('flight page loads the last-known recovery client asset', () => {
   assert.match(html, /flight-tracker\.js\?v=20261007m/);
 });
+
+
+test('first-use copy tells travelers to enter their own flight even when the inbound aircraft has another flight number', () => {
+  assert.match(html, /Enter the flight number on your ticket/);
+  assert.match(html, /currently flying a different flight number/);
+  assert.match(html, /The inbound trip bringing your plane to you may have a completely different flight number/);
+});
