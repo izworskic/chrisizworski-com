@@ -5,6 +5,7 @@ const VRS_ROUTES_BASE = 'https://vrs-standing-data.adsb.lol/routes';
 const POSITION_MAX_AGE_SECONDS = 90;
 const CACHE_SECONDS = 5;
 const FLIGHTSTATS_BASE = 'https://www.flightstats.com/v2';
+const flightStatsTextCache = new Map();
 
 const IATA_TO_CALLSIGNS = Object.freeze({
   AA: ['AAL'],
@@ -259,6 +260,19 @@ async function getText(url, options = {}, timeoutMs = 6000) {
   }
 }
 
+async function getCachedText(url, ttlMs) {
+  const now = Date.now();
+  const cached = flightStatsTextCache.get(url);
+  if (cached && now - cached.at < ttlMs) return cached.text;
+  const text = await getText(url);
+  flightStatsTextCache.set(url, {at:now,text});
+  if (flightStatsTextCache.size > 40) {
+    const oldest = [...flightStatsTextCache.entries()].sort((a,b) => a[1].at - b[1].at).slice(0,10);
+    for (const [key] of oldest) flightStatsTextCache.delete(key);
+  }
+  return text;
+}
+
 function extractFlightStatsState(html) {
   const marker = '__NEXT_DATA__ = ';
   const startMarker = String(html || '').indexOf(marker);
@@ -369,7 +383,7 @@ async function lookupScheduledFlight(normalized, requestedFlightId = null) {
   try {
     const rootUrl = FLIGHTSTATS_BASE + '/flight-tracker/' +
       encodeURIComponent(normalized.marketingCode) + '/' + encodeURIComponent(normalized.number);
-    const rootHtml = await getText(rootUrl);
+    const rootHtml = await getCachedText(rootUrl, 5 * 60 * 1000);
     const rootState = extractFlightStatsState(rootHtml);
     if (!rootState) return {scheduled:null,candidates:[]};
 
@@ -382,7 +396,7 @@ async function lookupScheduledFlight(normalized, requestedFlightId = null) {
       '&month=' + encodeURIComponent(chosen.month) +
       '&date=' + encodeURIComponent(chosen.date) +
       '&flightId=' + encodeURIComponent(chosen.flightId);
-    const instanceHtml = await getText(instanceUrl);
+    const instanceHtml = await getCachedText(instanceUrl, 30 * 1000);
     const state = extractFlightStatsState(instanceHtml);
     const scheduled = cleanScheduledFlight(state?.flight);
     return {scheduled,candidates,ambiguous:false};
