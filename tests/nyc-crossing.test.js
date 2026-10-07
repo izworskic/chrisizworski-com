@@ -197,6 +197,31 @@ test('Mapbox probe rejects routes that detour far beyond the fixed crossing corr
   }),/sanity checks/);
 });
 
+test('Mapbox accepts the repo-standard MAPBOX_TOKEN environment variable',async()=>{
+  const calls=[];
+  const fetchImpl=async(url,options={})=>{
+    calls.push(String(url));
+    if(String(url).includes('api.mapbox.com')){
+      return {
+        ok:true,
+        json:async()=>({
+          code:'Ok',
+          waypoints:[{distance:1},{distance:1},{distance:1}],
+          routes:[{duration:300,duration_typical:360,distance:2400,legs:[]}]
+        })
+      };
+    }
+    return {ok:true,json:async()=>({result:null})};
+  };
+  const result=await fetchMapboxTraffic({
+    env:{MAPBOX_TOKEN:'repo-standard-token'},
+    fetchImpl,
+    now:new Date('2026-10-06T23:00:00Z')
+  });
+  assert.ok(calls.some(url=>url.includes('access_token=repo-standard-token')));
+  assert.ok(['LIVE','PARTIAL'].includes(result.state));
+});
+
 test('Mapbox traffic is skipped cleanly when no token is configured',async()=>{
   const result=await fetchMapboxTraffic({env:{},fetchImpl:async()=>{throw Error('should not fetch')}});
   assert.equal(result.state,'NOT_CONFIGURED');
