@@ -116,11 +116,3 @@
   .ledger-label small{font-size:10px}
 }
 
-/* Trust hierarchy: arithmetic first, uncertainty second. */
-.ledger-range-row{padding-top:8px;border-top:1px dashed #cfd8d4}
-.ledger-range-row .ledger-label strong{font-size:11px;letter-spacing:.055em;color:#53635c}
-.ledger-range-row .ledger-label small{color:#7a857f}
-.ledger-range-row .ledger-value{font-size:clamp(18px,4.8vw,26px);color:#46564f}
-@media(max-width:430px){
-  .ledger-range-row .ledger-value{font-size:17px}
-}
