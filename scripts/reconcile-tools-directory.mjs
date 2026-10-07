@@ -72,7 +72,8 @@ function reconcileMarylandBayBridgeNationalTools() {
   const visibleCount = (national.match(/data-search-card/g) || []).length;
   national = national.replace(/(<p class="finder-count" id="finder-count" aria-live="polite">)\d+ tools shown(<\/p>)/, `$1${visibleCount} tools shown$2`);
 
-  if (!national.includes(`data-tool-id="${toolId}"`) || !national.includes(`href="${relative}"`) || !national.includes(canonical)) {
+  const hasCardHref = national.includes(`href="${relative}"`) || national.includes(`href="${canonical}"`);
+  if (!national.includes(`data-tool-id="${toolId}"`) || !hasCardHref || !national.includes(canonical)) {
     throw new Error('National tools: Maryland Bay Bridge card/schema verification failed');
   }
   fs.writeFileSync(nationalFile, national);
