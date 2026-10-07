@@ -428,7 +428,7 @@ test('assigned aircraft states use traveler language and live position relations
   assert.match(client, /Your plane appears to be approaching/);
   assert.match(client, /Your plane is moving generally toward/);
   assert.match(client, /Your plane is on the ground at/);
-  assert.match(client, /about ' \+ relationship\.distanceMiles \+ ' miles from/);
+  assert.match(client, /function relationshipDistanceText\(relationship, label\)/);
   assert.match(client, /we have not yet confirmed the origin of its current flight/);
   assert.match(client, /Our live aircraft feed can see/);
   assert.doesNotMatch(client, /current airport-to-airport leg/);
