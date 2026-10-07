@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Michigan Wine Day Planner: Which Wine Region Should You Visit?</title>
+  <meta name="description" content="Starting city, date, time and wine-day style in. One Michigan wine region out — with travel burden, usable tasting time, evidence confidence and a regional planner handoff.">
+  <link rel="canonical" href="https://chrisizworski.com/michigan-wine-day/">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="author" content="Chris Izworski">
+  <meta name="google-adsense-account" content="ca-pub-8222782620788075">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Chris Izworski">
+  <meta property="og:title" content="Michigan Wine Day: Which Wine Region Fits Your Day?">
+  <meta property="og:description" content="Compare Old Mission, Leelanau, Petoskey and Southwest Michigan by the day you actually have — then hand off into a workable regional wine plan.">
+  <meta property="og:url" content="https://chrisizworski.com/michigan-wine-day/">
+  <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/6/63/Old_Mission_Peninsula.jpg">
+  <meta property="og:image:alt" content="Vineyard rows on Old Mission Peninsula above Grand Traverse Bay in Michigan">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Michigan Wine Day: Pick the Right Wine Region">
+  <meta name="twitter:description" content="Start city + date + time + wine style → the Michigan wine region that makes the most sense, with the tradeoff explained.">
+  <meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/6/63/Old_Mission_Peninsula.jpg">
+  <meta name="theme-color" content="#4b1731">
+  <link rel="stylesheet" href="/assets/michigan-wine-day.css?v=20261006a">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/assets/michigan-wine-day.js?v=20261006a"></script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@graph":[
+      {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/","sameAs":["https://github.com/izworskic","https://www.wikidata.org/wiki/Q138283432"]},
+      {"@type":"WebPage","@id":"https://chrisizworski.com/michigan-wine-day/#page","url":"https://chrisizworski.com/michigan-wine-day/","name":"Michigan Wine Day Planner","description":"Decision engine for choosing which Michigan wine region best fits a visitor's origin, day, time window and wine intent.","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},
+      {"@type":"WebApplication","@id":"https://chrisizworski.com/michigan-wine-day/#app","name":"Michigan Wine Day Decision Engine","url":"https://chrisizworski.com/michigan-wine-day/","applicationCategory":"TravelApplication","isAccessibleForFree":true,"creator":{"@id":"https://chrisizworski.com/#person"},"featureList":["Michigan wine-region selection from a starting city","Travel and usable tasting-time feasibility gates","Wine-style and experience fit","Separate evidence confidence","Regional planner handoff"]}
+    ]
+  }
+  </script>
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="/">Chris Izworski</a>
+  <nav aria-label="Primary"><a href="/tools/">Tools</a><a href="/michigan/">Michigan</a></nav>
+</header>
+<main class="wine-shell">
+  <nav class="breadcrumb"><a href="/">Home</a><span>/</span><a href="/tools/">Tools</a><span>/</span>Michigan Wine Day</nav>
+
+  <section class="hero">
+    <p class="eyebrow">Michigan wine-region decision engine</p>
+    <h1>Where should you go wine tasting for the day you actually have?</h1>
+    <p class="lede">Tell us where you're starting, when you're going, how much time you have and what kind of wine day you want. We'll choose the region — then hand you into the regional planner.</p>
+  </section>
+
+  <section class="decision-card" aria-labelledby="trip-inputs">
+    <form id="wineDecisionForm">
+      <h2 id="trip-inputs">Four decisions. Then an answer.</h2>
+      <div class="form-grid">
+        <label class="field">
+          <span>Starting from</span>
+          <input id="origin" name="origin" list="originSuggestions" autocomplete="postal-code" placeholder="Grand Rapids or 49503" maxlength="80" required>
+          <small>City or ZIP only — not a street address.</small>
+        </label>
+        <datalist id="originSuggestions">
+          <option value="Detroit"><option value="Ann Arbor"><option value="Lansing"><option value="Grand Rapids">
+          <option value="Kalamazoo"><option value="Bay City"><option value="Saginaw"><option value="Traverse City">
+          <option value="Petoskey"><option value="St Joseph"><option value="South Haven"><option value="Paw Paw">
+          <option value="Chicago"><option value="South Bend">
+        </datalist>
+        <label class="field">
+          <span>When</span>
+          <input id="tripDate" name="date" type="date" required>
+          <small>Current hours evidence is checked separately from region fit.</small>
+        </label>
+        <label class="field">
+          <span>Time available</span>
+          <select id="window" name="window">
+            <option value="quick">Quick afternoon · 1–5 PM</option>
+            <option value="half">Half day · 10 AM–4 PM</option>
+            <option value="full" selected>Full day · 9 AM–6 PM</option>
+            <option value="custom">Custom window</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>What kind of wine day?</span>
+          <select id="intent" name="intent">
+            <option value="first-trip">Best first trip</option>
+            <option value="serious-wine">Wine first</option>
+            <option value="riesling">Riesling</option>
+            <option value="sparkling">Sparkling</option>
+            <option value="reds">Dry reds</option>
+            <option value="whites">Whites</option>
+            <option value="food">Wine + food</option>
+            <option value="views">Great views</option>
+            <option value="quiet">Quiet / relaxed</option>
+          </select>
+        </label>
+      </div>
+      <div id="customWindow" class="custom-window" hidden>
+        <label class="field"><span>Leave</span><input id="customStart" type="time" value="10:00"></label>
+        <label class="field"><span>Be back by</span><input id="customEnd" type="time" value="18:00"></label>
+      </div>
+      <button class="primary" type="submit">Choose my wine region</button>
+      <p class="form-note">Travel time is part of the decision. A famous region can lose if it leaves too little actual wine-country time.</p>
+    </form>
+  </section>
+
+  <section id="decisionResult" class="result-shell" aria-live="polite">
+    <div class="empty-state">
+      <p class="eyebrow">The decision</p>
+      <h2>Run the four inputs above.</h2>
+      <p>The result will name one best-fit region, explain why it beat the alternative, show evidence confidence separately, and give you the regional day-planner handoff.</p>
+    </div>
+  </section>
+
+  <section class="method">
+    <p class="eyebrow">What the engine is actually comparing</p>
+    <h2>It is not a winery popularity ranking.</h2>
+    <div class="method-grid">
+      <article><strong>1 · Feasibility first</strong><p>Round-trip travel, the usable local window and plausible operating coverage can veto a region before preferences are scored.</p></article>
+      <article><strong>2 · Positive wine evidence</strong><p>Verified Riesling, sparkling, red, white, food, view and experience signals can improve fit. Missing evidence never becomes “doesn't have it.”</p></article>
+      <article><strong>3 · Regional driving reality</strong><p>Old Mission is compact; Leelanau is broader; Petoskey spans several local areas; Southwest Michigan is evaluated by cluster instead of pretending it is one loop.</p></article>
+      <article><strong>4 · Confidence stays separate</strong><p>A region can be a strong fit with medium confidence. Hours freshness and adapter quality do not secretly turn into recommendation points.</p></article>
+    </div>
+  </section>
+
+  <section class="coverage">
+    <p class="eyebrow">Current production coverage</p>
+    <h2>Four Michigan wine-country choices, with regional owners preserved.</h2>
+    <p><a href="https://tcwine.chrisizworski.com/old-mission-peninsula-wineries">Old Mission Peninsula</a> and <a href="https://tcwine.chrisizworski.com/leelanau-peninsula-wine-trail">Leelanau Peninsula</a> stay owned by the Traverse City wine system. <a href="/petoskey-wine/">Petoskey / Tip of the Mitt</a> stays owned by the Petoskey planner. Southwest Michigan uses a smaller cluster adapter built from current official trail and winery sources.</p>
+    <p class="truth-note"><strong>Unknown is not closed.</strong> If a winery's weekly hours, reservation inventory, fee or wine style is not verified, this engine lowers evidence confidence or tells you to confirm. It does not invent a negative fact.</p>
+  </section>
+
+  <section class="sources">
+    <p class="eyebrow">Source policy</p>
+    <h2>Operational claims come from first-party or official sources.</h2>
+    <p>Regional winery facts come from the regional planner datasets, official wine associations and winery-published information. Weather uses the National Weather Service when the selected date is inside its forecast range. Road travel is best-effort OSRM routing with a labeled fallback estimate if the routing service is unavailable. City/ZIP geocoding uses a curated Michigan origin list first and OpenStreetMap Nominatim only for a user-submitted location that is not already supported.</p>
+    <p class="transport-note">Multiple tasting stops require a sober transportation plan. Use a designated driver, shuttle or other sober transportation; this tool does not estimate blood-alcohol level or tell you how much you can drink before driving.</p>
+  </section>
+
+  <footer class="builder">
+    <p>Built and maintained by <a rel="author" href="/chris-izworski/">Chris Izworski</a> as part of the Michigan decision-tool network.</p>
+    <p class="photo-credit">Social preview photo: <a href="https://commons.wikimedia.org/wiki/File:Old_Mission_Peninsula.jpg" rel="noopener">stanthejeep / Wikimedia Commons</a>, CC BY-SA 2.5.</p>
+  </footer>
+</main>
+</body>
+</html>
