@@ -32,7 +32,7 @@ test("first-use surface stays four decisions with progressive custom time", () =
   assert.match(form, /name="window"/);
   assert.match(form, /name="intent"/);
   assert.match(form, /id="customWindow"[^>]+hidden/);
-  assert.doesNotMatch(form, /street address/i);
+  assert.doesNotMatch(form, /name="address"|name="street"|autocomplete="street-address"/i);
 });
 
 test("mobile baseline and result cards protect 390px layouts", () => {
