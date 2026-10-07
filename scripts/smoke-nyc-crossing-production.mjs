@@ -1,4 +1,5 @@
 import { pathToFileURL } from 'node:url';
+import { readFileSync } from 'node:fs';
 import traffic from '../lib/nyc-crossing/traffic.js';
 
 const BASE = String(process.env.NYC_CROSSING_BASE_URL || 'https://chrisizworski.com').replace(/\/$/, '');
@@ -6,6 +7,10 @@ const PAGE_URL = `${BASE}/nyc-crossing/`;
 const ATTEMPTS = Number(process.env.NYC_CROSSING_SMOKE_ATTEMPTS || 36);
 const WAIT_MS = Number(process.env.NYC_CROSSING_SMOKE_WAIT_MS || 10000);
 const TIMEOUT_MS = Number(process.env.NYC_CROSSING_SMOKE_TIMEOUT_MS || 35000);
+// Keep the release marker aligned with the page's cache-busted client asset.
+const CLIENT_SCRIPT = readFileSync(new URL('../public/nyc-crossing/index.html', import.meta.url), 'utf8')
+  .match(/src="(\/assets\/nyc-crossing\.js\?v=[^"]+)"/)?.[1];
+if (!CLIENT_SCRIPT) throw new Error('NYC crossing source page is missing its versioned client script');
 
 const EXPECTED_IDS = [
   'gwb',
@@ -101,7 +106,7 @@ async function verifyOnce(attempt) {
     'NYC DOT real-time traffic feed',
     'NYC Open Data traffic history',
     'Mapbox live traffic routing',
-    '/assets/nyc-crossing.js?v=20261007a',
+    CLIENT_SCRIPT,
   ]) {
     assert(html.includes(marker), `page missing marker: ${marker}`);
   }
