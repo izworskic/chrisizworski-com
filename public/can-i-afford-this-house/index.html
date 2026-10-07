@@ -15,14 +15,14 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Can I Afford THIS House? True Monthly Cost">
   <meta name="twitter:description" content="Mortgage payment versus the real monthly cost of this exact house, including hidden ownership costs and buyer tripwires.">
-  <link rel="stylesheet" href="/assets/house-fit.css?v=20261006j">
+  <link rel="stylesheet" href="/assets/house-fit.css?v=20261006k">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/can-i-afford-this-house/#page","url":"https://chrisizworski.com/can-i-afford-this-house/","name":"Can I Afford This House? True Monthly Cost","description":"A three-input property-specific cost engine that uses the current mortgage-rate benchmark plus public data and transparent assumptions to estimate a home's real monthly carrying cost.","dateModified":"2026-10-06","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/","name":"Chris Izworski"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/can-i-afford-this-house/#app","name":"Can I Afford This House? True Monthly Cost","url":"https://chrisizworski.com/can-i-afford-this-house/","applicationCategory":"FinanceApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"featureList":["Three-input first-run intake","Current mortgage-rate benchmark with post-result override","Mortgage-versus-true-cost Reality Gap","Buyer tripwires","20% down-payment breakpoint","Mortgage principal and interest","Property-tax planning estimate from Census data","Homeowners-insurance planning range","PMI estimate","Maintenance reserve","FEMA flood-zone context","Cash-to-close planning range","Data provenance and limitations"]}]}</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <script defer src="/assets/tool-engagement.js"></script>
-  <script defer src="/assets/house-fit.js?v=20261006j"></script>
+  <script defer src="/assets/house-fit.js?v=20261006k"></script>
 </head>
 <body data-analytics-page="house-fit">
   <header class="site-header">
@@ -69,7 +69,7 @@
         <div class="cost-ledger" aria-label="Monthly cost breakdown">
           <p class="eyebrow">Automatically assembled</p>
           <h3>Monthly cost breakdown</h3>
-          <p class="ledger-range-note">Automatically assembled planning estimates. Verify taxes and insurance before buying.</p>
+          <p class="ledger-range-note">The total is shown as a range because taxes and insurance are not exact future bills yet.</p>
 
           <div class="ledger-row">
             <span class="ledger-sign"></span>
@@ -131,9 +131,9 @@
             <span class="ledger-sign"></span>
             <span class="ledger-label">
               <strong>TOTAL MONTHLY COST</strong>
-              <small>Exact sum of the displayed planning estimates</small>
+              <small>Estimated carrying-cost range</small>
             </span>
-            <strong class="ledger-value" id="planningTotalResult">—</strong>
+            <strong class="ledger-value" id="trueMonthlyResult">—</strong>
           </div>
 
           <div class="ledger-notes">
