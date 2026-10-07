@@ -221,28 +221,30 @@ test('page promise centers mortgage-versus-real-cost differentiation', () => {
   assert.doesNotMatch(html, /Fit Ceiling/i);
 });
 
-test('first result explains the math before supporting detail', () => {
+test('first result is a literal addition problem with a bottom line', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
-  assert.match(html, /id="bottomLineLead"/);
+  assert.match(html, /class="math-problem"/);
+  assert.match(html, /Mortgage only/);
+  assert.match(html, />\+<\/div>/);
+  assert.match(html, /Added ownership costs/);
+  assert.match(html, /class="math-rule"/);
+  assert.match(html, /PLAN ON/);
+  assert.match(html, /id="trueMonthlyResult"/);
   assert.match(html, /id="bottomLineExplain"/);
   assert.match(html, /id="bottomLineExcluded"/);
-  assert.match(html, /1 · Mortgage only/);
-  assert.match(html, /2 · Added ownership costs/);
-  assert.match(html, /3 · Estimated true monthly cost/);
   assert.match(html, /Why this is a range/);
-  assert.ok(html.indexOf('id="bottomLineLead"') < html.indexOf('id="breakdownGrid"'));
-  assert.ok(html.indexOf('id="mortgageOnlyResult"') < html.indexOf('id="breakdownGrid"'));
-  assert.ok(html.indexOf('id="realityGapResult"') < html.indexOf('id="breakdownGrid"'));
+  assert.ok(html.indexOf('id="mortgageOnlyResult"') < html.indexOf('id="trueMonthlyResult"'));
+  assert.ok(html.indexOf('id="trueMonthlyResult"') < html.indexOf('id="breakdownGrid"'));
 });
 
-test('mobile result layout prevents long currency ranges from overflowing cards', () => {
+test('mobile addition layout keeps long currency ranges inside the ledger', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
   const css = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.css'), 'utf8');
   assert.match(html, /name="viewport" content="width=device-width,initial-scale=1"/);
-  assert.match(css, /\.cost-flow\{display:grid;grid-template-columns:1fr/);
-  assert.match(css, /\.cost-step strong\{[^}]*white-space:normal;[^}]*overflow-wrap:anywhere/);
-  assert.match(css, /\.metric strong\{white-space:normal;overflow-wrap:anywhere/);
-  assert.match(css, /@media\(max-width:390px\)/);
+  assert.match(css, /\.math-row\{display:grid;grid-template-columns:28px minmax\(0,1fr\) max-content/);
+  assert.match(css, /\.math-value\{[^}]*white-space:nowrap/);
+  assert.match(css, /@media\(max-width:520px\)\{[\s\S]*\.math-value\{grid-column:2\/-1/);
+  assert.match(css, /\.math-rule\{height:3px/);
 });
 
 test('cost calculation remains finite on edge inputs', () => {
@@ -265,7 +267,7 @@ test('downPaymentBreakpoint helper is stable at exact threshold', () => {
 
 test('result copy explicitly distinguishes included costs from unresolved costs', () => {
   const js = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.js'), 'utf8');
-  assert.match(js, /That difference is the Reality Gap/);
+  assert.match(js, /is the Reality Gap:/);
   assert.match(js, /Still outside this estimate:/);
   assert.match(js, /low end uses the lower tax and insurance assumptions/i);
   assert.match(js, /WIDE RANGE · VERIFY COSTS/);

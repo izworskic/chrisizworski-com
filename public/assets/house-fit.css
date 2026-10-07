@@ -47,3 +47,29 @@
   .cost-step strong{font-size:26px}
   .purchase-facts strong{font-size:23px}
 }
+
+/* House result as a literal addition problem. */
+.math-problem{margin:18px 0 10px;padding:18px;border:1px solid #bfd2ca;border-radius:14px;background:#fff}
+.math-problem>.eyebrow{margin-bottom:14px}
+.math-row{display:grid;grid-template-columns:28px minmax(0,1fr) max-content;gap:10px;align-items:center;padding:13px 0}
+.math-sign{font-family:Georgia,"Times New Roman",serif;font-size:30px;line-height:1;text-align:center;color:#42504a}
+.math-label{min-width:0;display:grid;gap:2px}
+.math-label strong{font-size:14px;color:#25322d}
+.math-label small{font-size:11px;line-height:1.4;color:#74807a}
+.math-value{font-family:Georgia,"Times New Roman",serif;font-size:clamp(22px,5vw,34px);font-weight:700;line-height:1.05;letter-spacing:-.025em;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;color:#17231f}
+.math-rule{height:3px;background:#263a32;margin:2px 0 4px 38px;border-radius:999px}
+.math-total{padding:16px 0 14px}
+.math-total .math-label strong{font-size:13px;letter-spacing:.07em;color:#0b6b50}
+.math-total .math-value{font-size:clamp(27px,6vw,42px);color:#0b6b50}
+.math-explanation{margin:4px 0 0 38px;padding-top:13px;border-top:1px solid var(--line)}
+.math-explanation p{margin:0;font-size:13px;line-height:1.55;color:#42504a}
+.math-explanation .bottom-line-excluded{margin-top:8px;padding-top:8px;border-top:1px solid #e2e6e3;color:#6a5540;font-size:12px}
+@media(max-width:520px){
+  .math-problem{padding:14px}
+  .math-row{grid-template-columns:22px minmax(0,1fr);gap:8px;padding:11px 0}
+  .math-sign{font-size:27px}
+  .math-value{grid-column:2/-1;justify-self:end;font-size:clamp(20px,7vw,28px);margin-top:2px;max-width:100%}
+  .math-total .math-value{font-size:clamp(24px,8vw,32px)}
+  .math-rule{margin-left:30px}
+  .math-explanation{margin-left:30px}
+}
