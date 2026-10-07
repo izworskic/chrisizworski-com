@@ -8,6 +8,42 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
+test('freshness checks the public mirror route in the breakout sitemap, including absent stamps', async () => {
+  const workspace = await fs.mkdtemp(path.join(os.tmpdir(), 'mirror-freshness-'));
+  const write = async (name, content) => {
+    const file = path.join(workspace, name);
+    await fs.mkdir(path.dirname(file), { recursive: true });
+    await fs.writeFile(file, content);
+  };
+  const git = args => execFileSync('git', args, { cwd: workspace, stdio: 'pipe' });
+  const stamp = check => spawnSync(process.execPath, ['scripts/stamp-freshness.mjs', ...(check ? ['--check'] : [])], { cwd: workspace, encoding: 'utf8' });
+  const route = '/national-tools/kilauea-live/';
+  const document = 'public/synced-national-tools/kilauea-live/index.html';
+  try {
+    git(['init', '-q', '--initial-branch=main']);
+    git(['config', 'user.name', 'Freshness Fixture']);
+    git(['config', 'user.email', 'freshness@example.invalid']);
+    await write('scripts/stamp-freshness.mjs', await fs.readFile(path.join(root, 'scripts/stamp-freshness.mjs'), 'utf8'));
+    await write(document, '<script type="application/ld+json">{"dateModified":"2026-09-29"}</script>');
+    await write('vercel.json', JSON.stringify({ rewrites: [{ source: route, destination: '/' + document.slice('public/'.length) }] }));
+    await write('public/sitemap-breakout-live.xml', `<urlset><url><loc>https://chrisizworski.com${route}</loc><lastmod>2026-09-28</lastmod></url></urlset>`);
+    git(['add', '.']);
+    execFileSync('git', ['commit', '-qm', 'Published mirror'], { cwd: workspace, stdio: 'pipe', env: { ...process.env, GIT_AUTHOR_DATE: '2026-09-29T12:00:00-04:00', GIT_COMMITTER_DATE: '2026-09-29T12:00:00-04:00' } });
+    const stale = stamp(true);
+    assert.notEqual(stale.status, 0);
+    assert.match(stale.stdout, /sitemap-breakout-live\.xml.*\/national-tools\/kilauea-live\//);
+    const repaired = stamp(false);
+    assert.equal(repaired.status, 0, repaired.stdout + repaired.stderr);
+    assert.match(await fs.readFile(path.join(workspace, 'public/sitemap-breakout-live.xml'), 'utf8'), /<lastmod>2026-09-29<\/lastmod>/);
+    assert.equal(stamp(true).status, 0);
+    await write(document, '<script type="application/ld+json">{}</script>');
+    const missing = stamp(true);
+    assert.notEqual(missing.status, 0);
+    assert.match(missing.stderr, /sitemap-listed pages carry no dateModified/);
+    assert.match(missing.stderr, /\/national-tools\/kilauea-live\//);
+  } finally { await fs.rm(workspace, { recursive: true, force: true }); }
+});
+
 test('full-history freshness catches a generator-only change without tracked child HTML', async () => {
   const workspace = await fs.mkdtemp(path.join(os.tmpdir(), 'generated-freshness-'));
   const write = async (name, content) => {

@@ -1,0 +1,260 @@
+{
+  "reviewDate": "2026-10-07",
+  "reportUrl": "https://docs.google.com/spreadsheets/d/1XBnQub6vSkgebUyVHDtsyqNPp17iETjrJNQ1HvGkk0g/edit",
+  "auditSourceCommit": "d3cfbcb2bce2fd20ee3f76c4a6834e447c26be79",
+  "evidence": "Live GETs: each public canonical returned 404, while its existing index.html document returned 200 with the matching public canonical and no noindex. These are observed site defects; the aggregate GSC export does not identify its individual affected URLs.",
+  "sitemapAudit": {
+    "canonicalUrlsChecked": 395,
+    "httpFailures": 0,
+    "canonicalMismatches": 0,
+    "unexpectedNoindex": 0
+  },
+  "restoredRoutes": [
+    {
+      "canonical": "https://chrisizworski.com/isle-royale-map/sources/",
+      "ownerDocument": "https://isle-royale-outdoors.vercel.app/isle-royale-map/sources/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/coastal/cape-cod-ma/",
+      "ownerDocument": "https://national-coastal-water.vercel.app/national-tools/coastal/cape-cod-ma/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/coastal/daytona-beach-fl/",
+      "ownerDocument": "https://national-coastal-water.vercel.app/national-tools/coastal/daytona-beach-fl/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/coastal/galveston-tx/",
+      "ownerDocument": "https://national-coastal-water.vercel.app/national-tools/coastal/galveston-tx/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/coastal/gulf-shores-al/",
+      "ownerDocument": "https://national-coastal-water.vercel.app/national-tools/coastal/gulf-shores-al/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/coastal/myrtle-beach-sc/",
+      "ownerDocument": "https://national-coastal-water.vercel.app/national-tools/coastal/myrtle-beach-sc/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/coastal/nags-head-nc/",
+      "ownerDocument": "https://national-coastal-water.vercel.app/national-tools/coastal/nags-head-nc/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/coastal/ocean-city-md/",
+      "ownerDocument": "https://national-coastal-water.vercel.app/national-tools/coastal/ocean-city-md/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/coastal/virginia-beach-va/",
+      "ownerDocument": "https://national-coastal-water.vercel.app/national-tools/coastal/virginia-beach-va/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/fall-color/asheville-nc/",
+      "ownerDocument": "https://national-fall-color.vercel.app/national-tools/fall-color/asheville-nc/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/fall-color/bar-harbor-me/",
+      "ownerDocument": "https://national-fall-color.vercel.app/national-tools/fall-color/bar-harbor-me/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/fall-color/breckenridge-co/",
+      "ownerDocument": "https://national-fall-color.vercel.app/national-tools/fall-color/breckenridge-co/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/fall-color/gatlinburg-tn/",
+      "ownerDocument": "https://national-fall-color.vercel.app/national-tools/fall-color/gatlinburg-tn/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/fall-color/lake-placid-ny/",
+      "ownerDocument": "https://national-fall-color.vercel.app/national-tools/fall-color/lake-placid-ny/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/fall-color/north-conway-nh/",
+      "ownerDocument": "https://national-fall-color.vercel.app/national-tools/fall-color/north-conway-nh/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/fall-color/shenandoah-va/",
+      "ownerDocument": "https://national-fall-color.vercel.app/national-tools/fall-color/shenandoah-va/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/fall-color/stowe-vt/",
+      "ownerDocument": "https://national-fall-color.vercel.app/national-tools/fall-color/stowe-vt/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/frost/atlanta-ga/",
+      "ownerDocument": "https://national-frost.vercel.app/national-tools/frost/atlanta-ga/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/frost/boston-ma/",
+      "ownerDocument": "https://national-frost.vercel.app/national-tools/frost/boston-ma/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/frost/chicago-il/",
+      "ownerDocument": "https://national-frost.vercel.app/national-tools/frost/chicago-il/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/frost/denver-co/",
+      "ownerDocument": "https://national-frost.vercel.app/national-tools/frost/denver-co/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/frost/kansas-city-mo/",
+      "ownerDocument": "https://national-frost.vercel.app/national-tools/frost/kansas-city-mo/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/frost/minneapolis-mn/",
+      "ownerDocument": "https://national-frost.vercel.app/national-tools/frost/minneapolis-mn/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/frost/raleigh-nc/",
+      "ownerDocument": "https://national-frost.vercel.app/national-tools/frost/raleigh-nc/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/frost/salt-lake-city-ut/",
+      "ownerDocument": "https://national-frost.vercel.app/national-tools/frost/salt-lake-city-ut/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/rivers/colorado-river-grand-canyon/",
+      "ownerDocument": "https://national-rivers.vercel.app/national-tools/rivers/colorado-river-grand-canyon/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/rivers/columbia-river-portland/",
+      "ownerDocument": "https://national-rivers.vercel.app/national-tools/rivers/columbia-river-portland/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/rivers/mississippi-river-st-louis/",
+      "ownerDocument": "https://national-rivers.vercel.app/national-tools/rivers/mississippi-river-st-louis/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/rivers/missouri-river-omaha/",
+      "ownerDocument": "https://national-rivers.vercel.app/national-tools/rivers/missouri-river-omaha/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/rivers/ohio-river-cincinnati/",
+      "ownerDocument": "https://national-rivers.vercel.app/national-tools/rivers/ohio-river-cincinnati/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/rivers/potomac-river-washington-dc/",
+      "ownerDocument": "https://national-rivers.vercel.app/national-tools/rivers/potomac-river-washington-dc/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/rivers/rio-grande-albuquerque/",
+      "ownerDocument": "https://national-rivers.vercel.app/national-tools/rivers/rio-grande-albuquerque/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/rivers/yellowstone-river-billings/",
+      "ownerDocument": "https://national-rivers.vercel.app/national-tools/rivers/yellowstone-river-billings/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/snow/bend-or/",
+      "ownerDocument": "https://national-snowpack-melt.vercel.app/national-tools/snow/bend-or/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/snow/boise-id/",
+      "ownerDocument": "https://national-snowpack-melt.vercel.app/national-tools/snow/boise-id/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/snow/bozeman-mt/",
+      "ownerDocument": "https://national-snowpack-melt.vercel.app/national-tools/snow/bozeman-mt/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/snow/denver-co/",
+      "ownerDocument": "https://national-snowpack-melt.vercel.app/national-tools/snow/denver-co/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/snow/jackson-wy/",
+      "ownerDocument": "https://national-snowpack-melt.vercel.app/national-tools/snow/jackson-wy/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/snow/mammoth-lakes-ca/",
+      "ownerDocument": "https://national-snowpack-melt.vercel.app/national-tools/snow/mammoth-lakes-ca/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/snow/reno-nv/",
+      "ownerDocument": "https://national-snowpack-melt.vercel.app/national-tools/snow/reno-nv/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    },
+    {
+      "canonical": "https://chrisizworski.com/national-tools/snow/salt-lake-city-ut/",
+      "ownerDocument": "https://national-snowpack-melt.vercel.app/national-tools/snow/salt-lake-city-ut/index.html",
+      "beforeStatus": 404,
+      "backingStatus": 200
+    }
+  ]
+}

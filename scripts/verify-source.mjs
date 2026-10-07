@@ -26,6 +26,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Oct 7 2026: repair the two dead Michigan Outdoors navigation targets.
+  "/michigan-snow-depth/",
   // Oct 5 2026: existing ice-out shell discovery pilot. Correct child identities in the
   // generator; make planning context, creator attribution and relevant links readable.
   "/national-tools/ice-out/",
