@@ -96,6 +96,30 @@ remain tied to each fixed probe, and incomparable scopes still produce no univer
 `fastest`. The production smoke now prints and validates all five fallbacks with
 their individual distance limits, state/source, and finite typical baselines.
 
+### RFK live route correction — 2026-10-07
+
+The first expanded production release returned four usable probes: Manhattan and
+Verrazzano joined the unchanged Queensboro/Williamsburg probes, while RFK was
+rejected by the existing distance sanity check. A historical Manhattan approach
+anchor could snap across nearby carriageways and ramps. That result stayed
+uncached; its distance limit was not increased.
+
+The RFK probe now starts on the Randalls Island Manhattan approach and pins the
+inbound Harlem River lift span at `[-73.927788, 40.800378]` before continuing to
+the unchanged FDR/East 116th Street endpoint. It retains `APPROACH_SEGMENT` and
+the 900–2,500 m distance limits, with inbound bearings `300,45;300,45;210,60`
+and tighter radiuses `50;30;50`. The other four probes are unchanged. Static
+geometry validation returns a direct short segment, avoiding the carriageway
+loops observed in the earlier anchor candidates. Live Mapbox validation remains
+required after this correction deploys.
+
+Cache version `v4` isolates the corrected geometry. Distance rejection diagnostics
+now include the measured and allowed distance without exposing the token. The
+smoke outage warning refers to crossing fallback coverage, covering Verrazzano
+as well as the East River bridges. Its workflow now waits for this commit’s Vercel
+production status (bounded to 20 minutes) before testing the public origin, so a
+slow deployment is not mistaken for a failed live route.
+
 ## Sources
 
 - Port Authority crossing conditions: https://www.panynj.gov/bridges-tunnels/en/index.html
