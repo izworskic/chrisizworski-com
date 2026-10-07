@@ -28,6 +28,7 @@
   const answerSummary = document.getElementById('answer-summary');
   const answerMeta = document.getElementById('answer-meta');
   const answerSource = document.getElementById('answer-source');
+  const answerNext = document.getElementById('answer-next');
   const routeChoices = document.getElementById('route-choices');
 
   let maplibregl;
@@ -115,18 +116,21 @@
     answerMeta.appendChild(pill);
   }
 
-  function setAnswer({kicker='INBOUND AIRCRAFT',headline,summary='',pills=[],source=''}) {
+  function setAnswer({kicker='INBOUND AIRCRAFT',headline,summary='',pills=[],next='',source=''}) {
     answerCard.hidden = false;
     answerKicker.textContent = kicker;
     answerHeadline.textContent = headline || 'Checking your aircraft…';
     answerSummary.textContent = summary || '';
     clearAnswerMeta();
     pills.filter(Boolean).forEach(addAnswerPill);
+    answerNext.textContent = next || '';
+    answerNext.hidden = !next;
     answerSource.textContent = source || '';
   }
 
   function hideAnswer() {
     answerCard.hidden = true;
+    answerNext.hidden = true;
     routeChoices.hidden = true;
     routeChoices.replaceChildren();
   }
@@ -157,6 +161,13 @@
 
   function airportPlace(ap) {
     return ap?.city || ap?.name || airportCode(ap) || 'Airport';
+  }
+
+  function airportChoiceText(ap) {
+    const city = String(ap?.city || '').trim();
+    const code = String(airportCodeAny(ap) || '').trim();
+    if (city && code) return city + ' (' + code + ')';
+    return city || code || String(ap?.name || '').trim() || 'Airport';
   }
 
   function aircraftIdentity(ac) {
@@ -463,8 +474,9 @@
       setAnswer({
         kicker:delay.toLowerCase().includes('delay') ? 'DELAYED FLIGHT · AIRCRAFT ASSIGNMENT' : 'AIRCRAFT ASSIGNMENT',
         headline:'The airline has not published an aircraft assignment yet.',
-        summary:'We found your scheduled flight, but there is no tail number to follow yet. We will keep checking the assignment while this page is open.',
+        summary:'We found your scheduled flight, but the airline has not published a tail number for us to follow yet.',
         pills,
+        next:'What happens next: we’ll recheck the aircraft assignment every minute while this page is open.',
         source:assignmentSourceText()
       });
       return;
@@ -476,6 +488,7 @@
       headline:'Your assigned aircraft is ' + tail + '.',
       summary:'Now finding where that exact airplane is and what leg it is operating.' + changed,
       pills,
+      next:'What happens next: we’ll follow this exact aircraft and keep checking for an assignment change.',
       source:assignmentSourceText()
     });
   }
@@ -503,6 +516,7 @@
         headline:'This is your aircraft in flight.',
         summary:currentLeg ? 'It is currently operating ' + currentLeg + '.' : 'The assigned aircraft is airborne and reporting a live position.',
         pills,
+        next:'What happens next: this page will keep following your flight to its destination.',
         source:assignmentSourceText()
       });
       return;
@@ -518,6 +532,7 @@
         headline:'Your plane is on the way to ' + originName + '.',
         summary,
         pills:[...pills,currentLeg],
+        next:'What happens next: ' + tail + ' lands at ' + originName + ' → taxis to a gate → turns for your ' + (route || 'next') + ' flight.',
         source:assignmentSourceText()
       });
       return;
@@ -529,6 +544,7 @@
         headline:'Your plane is currently flying ' + currentLeg + '.',
         summary:'That is the aircraft currently assigned to your flight. It is not yet on a leg that ends at ' + airportPlace(userOrigin) + ', so another leg or an aircraft swap may happen before your departure.',
         pills:[...pills,currentLeg],
+        next:'What happens next: keep watching the assignment. This aircraft may operate another leg first, or the airline may swap aircraft before departure.',
         source:assignmentSourceText()
       });
       return;
@@ -539,6 +555,7 @@
       headline:'We found your airplane: ' + tail + '.',
       summary:'It is reporting a live position, but its current airport-to-airport leg is not available yet.',
       pills,
+      next:'What happens next: we’ll keep checking this aircraft’s route and the airline assignment.',
       source:assignmentSourceText()
     });
   }
@@ -548,13 +565,19 @@
     const route = assignmentRoute(assignment);
     const delay = delayLabel(assignment);
     const seen = data?.status === 'seen-no-position';
+    const onGround = data?.aircraft?.onGround === true;
     setAnswer({
       kicker:'YOUR ASSIGNED AIRCRAFT',
-      headline:tail ? 'Your assigned plane is ' + tail + '.' : 'Aircraft assignment found.',
-      summary:seen
-        ? 'The ADS-B network is seeing this aircraft, but it does not currently have a usable position to put on the map. We will keep checking.'
-        : 'This aircraft is not currently reporting a live ADS-B position. It may be parked, outside coverage, or not transmitting a usable position yet.',
+      headline:onGround
+        ? 'Your plane is assigned and on the ground.'
+        : 'Your plane is assigned, but we can’t map it live right now.',
+      summary:onGround
+        ? 'The assigned aircraft is ' + tail + '. It is currently reported on the ground, so there is no airborne route to show yet.'
+        : seen
+          ? 'The ADS-B network is seeing ' + tail + ', but it does not currently have a usable position to put on the map.'
+          : 'The assigned aircraft is ' + tail + '. It may be parked at a gate, outside coverage, or between usable position reports.',
       pills:[route,delay,tail,assignment?.equipment?.name].filter(Boolean),
+      next:'What happens next: we’ll keep checking ' + tail + '. If it starts reporting a usable position, this page will update automatically.',
       source:assignmentSourceText()
     });
     clearLiveMap();
@@ -568,9 +591,9 @@
     routeChoices.replaceChildren();
     routeChoices.hidden = false;
     setAnswer({
-      kicker:'CHOOSE YOUR FLIGHT',
-      headline:'This flight number has more than one route on ' + activeDate + '.',
-      summary:'Choose the route on your ticket so we follow the correct aircraft.',
+      kicker:'WHICH FLIGHT IS YOURS?',
+      headline:'Choose the city pair and departure time on your ticket.',
+      summary:'This flight number is used for more than one leg today. We need the exact leg so we follow the right airplane.',
       pills:[],
       source:'Flight occurrence data: FlightStats public tracker.'
     });
@@ -579,12 +602,25 @@
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'route-choice';
-      const left = document.createElement('strong');
-      left.textContent = [airportCodeAny(option.origin),airportCodeAny(option.destination)].filter(Boolean).join(' → ');
-      const right = document.createElement('span');
+
+      const kicker = document.createElement('span');
+      kicker.className = 'route-choice-kicker';
+      kicker.textContent = 'YOUR FLIGHT';
+
+      const time = document.createElement('strong');
+      time.className = 'route-choice-time';
       const dep = [option.departureTime,option.departureAmPm,option.departureTimezone].filter(Boolean).join(' ');
-      right.textContent = dep || option.sortTime || '';
-      button.append(left,right);
+      time.textContent = dep || option.sortTime || 'Departure time unavailable';
+
+      const cities = document.createElement('span');
+      cities.className = 'route-choice-cities';
+      cities.textContent = airportChoiceText(option.origin) + ' → ' + airportChoiceText(option.destination);
+
+      const codes = document.createElement('span');
+      codes.className = 'route-choice-codes';
+      codes.textContent = [airportCodeAny(option.origin),airportCodeAny(option.destination)].filter(Boolean).join(' → ');
+
+      button.append(kicker,time,cities,codes);
       button.addEventListener('click',() => {
         activeFlightId = option.flightId;
         routeChoices.hidden = true;
