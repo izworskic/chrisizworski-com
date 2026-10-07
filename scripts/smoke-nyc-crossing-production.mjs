@@ -105,6 +105,7 @@ async function verifyOnce() {
     if (route.etaState === 'LIVE' && route.trafficSourceName === 'Mapbox live traffic routing') {
       assert(route.baselineKind === 'MAPBOX_TYPICAL_TRAFFIC', `${id} Mapbox typical baseline missing`);
       assert(Number.isFinite(route.baselineMinutes) && route.baselineMinutes > 0, `${id} Mapbox baseline invalid`);
+      assert(Number.isFinite(route.probeDistanceMeters) && route.probeDistanceMeters >= 1200 && route.probeDistanceMeters <= 5500, `${id} Mapbox probe distance invalid`);
     } else {
       assert(/Mapbox/.test(route.trafficPending || ''), `${id} Mapbox fallback state missing when live route is unavailable`);
     }
