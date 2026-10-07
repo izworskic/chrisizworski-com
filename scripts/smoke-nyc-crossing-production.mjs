@@ -49,7 +49,7 @@ async function verifyOnce() {
   const html = await page.text();
   for (const marker of [
     'Which NYC crossing should you take?',
-    'Compare official live bridge and tunnel conditions',
+    'Compare live bridge and tunnel conditions',
     'NYC DOT real-time traffic feed',
     'NYC Open Data traffic history',
     'Mapbox live traffic routing',
@@ -74,7 +74,8 @@ async function verifyOnce() {
   assert(data.sources?.nycdotTraffic, 'NYC DOT live source missing');
   assert(data.sources?.nycdotHistory, 'NYC DOT history source missing');
   assert(data.sources?.mapbox, 'Mapbox source missing');
-  assert(['LIVE', 'PARTIAL', 'UNAVAILABLE', 'NOT_CONFIGURED'].includes(data.mapboxState), `unexpected mapboxState ${data.mapboxState}`);
+  assert(['LIVE', 'PARTIAL', 'UNAVAILABLE'].includes(data.mapboxState), `unexpected mapboxState ${data.mapboxState}`);
+  assert(data.mapboxState !== 'NOT_CONFIGURED', 'Mapbox production token is not configured');
   assert(['LIVE', 'NO_MATCH', 'UNAVAILABLE', 'NOT_APPLICABLE'].includes(data.baselineState), `unexpected baselineState ${data.baselineState}`);
   assert(data.baselineSource, 'NYC DOT historical baseline source missing');
 
