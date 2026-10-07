@@ -118,7 +118,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007g/);
+  assert.match(html, /flight-tracker\.js\?v=20261007h/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -427,4 +427,42 @@ test('assigned aircraft states use traveler language rather than aviation or fee
   assert.match(client, /Our live aircraft feed can see/);
   assert.doesNotMatch(client, /current airport-to-airport leg/);
   assert.doesNotMatch(client, /The ADS-B network is seeing/);
+});
+
+
+test('same-day occurrence fusion requires the same flight number, same tail, airborne status and not landed', () => {
+  const selected = {
+    flightNumber:'AA3101',
+    tailNumber:'N919NN',
+    flightStatus:{airborne:false,landed:false}
+  };
+  const matching = {
+    flightNumber:'AA3101',
+    tailNumber:'N919NN',
+    origin:{iata:'DFW',city:'Dallas/Fort Worth'},
+    destination:{iata:'DTW',city:'Detroit'},
+    flightStatus:{airborne:true,landed:false}
+  };
+  assert.equal(assignmentApi.isMatchingAirborneOccurrence(matching,selected),true);
+  assert.equal(assignmentApi.isMatchingAirborneOccurrence({...matching,tailNumber:'N920NN'},selected),false);
+  assert.equal(assignmentApi.isMatchingAirborneOccurrence({...matching,flightNumber:'AA999'},selected),false);
+  assert.equal(assignmentApi.isMatchingAirborneOccurrence({...matching,flightStatus:{airborne:false,landed:false}},selected),false);
+  assert.equal(assignmentApi.isMatchingAirborneOccurrence({...matching,flightStatus:{airborne:true,landed:true}},selected),false);
+  const summary=assignmentApi.currentOccurrenceSummary(matching);
+  assert.equal(summary.origin.iata,'DFW');
+  assert.equal(summary.destination.iata,'DTW');
+  assert.equal(summary.evidence.kind,'same-day-same-flight-same-tail-airborne');
+});
+
+test('browser uses a confirmed same-day occurrence only when live route is missing and callsign number agrees', () => {
+  assert.match(client, /function confirmedOccurrenceRoute\(assignment, live\)/);
+  assert.match(client, /assignment\?\.currentAircraftOccurrence/);
+  assert.match(client, /occurrence\?\.flightStatus\?\.airborne !== true/);
+  assert.match(client, /occurrenceTail !== assignmentTail \|\| liveTail !== assignmentTail/);
+  assert.match(client, /flightNumberSuffix\(assignment\?\.flightNumber\)/);
+  assert.match(client, /flightNumberSuffix\(live\?\.aircraft\?\.callsign\)/);
+  assert.match(client, /if \(live\?\.route\?\.origin && live\?\.route\?\.destination\) return live\.route/);
+  assert.match(client, /const currentRoute = resolvedCurrentRoute\(assignment, live\)/);
+  assert.match(client, /inboundToOrigin = currentRoute\?\.destination/);
+  assert.match(client, /routeLabel\.textContent = airportPlace\(currentRoute\.origin\) \+ ' → ' \+ airportPlace\(currentRoute\.destination\)/);
 });
