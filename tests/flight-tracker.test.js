@@ -118,7 +118,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007f/);
+  assert.match(html, /flight-tracker\.js\?v=20261007g/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -381,7 +381,7 @@ test('client answers whether the assigned aircraft is actually inbound to the de
   assert.match(client, /const inboundToOrigin = live\?\.route\?\.destination && userOrigin && sameAirport\(live\.route\.destination,userOrigin\)/);
   assert.match(client, /Your plane is on the way to/);
   assert.match(client, /THIS IS THE PLANE FOR YOUR FLIGHT/);
-  assert.match(client, /It is not yet on a leg that ends at/);
+  assert.match(client, /It is not yet flying into/);
   assert.match(client, /airline recently changed the assigned aircraft/);
 });
 
@@ -417,8 +417,14 @@ test('answer card includes one bounded what-happens-next interpretation instead 
   assert.doesNotMatch(html, /weather panel|gate history|squawk|vertical speed/i);
 });
 
-test('assigned aircraft without a live map is framed as a useful answer rather than a tracker failure', () => {
+test('assigned aircraft states use traveler language rather than aviation or feed jargon', () => {
   assert.match(client, /Your plane is assigned, but we can’t map it live right now/);
   assert.match(client, /Your plane is assigned and on the ground/);
   assert.match(client, /It may be parked at a gate, outside coverage, or between usable position reports/);
+  assert.match(client, /We found your plane:/);
+  assert.match(client, /It’s in the air, and we’re tracking it/);
+  assert.match(client, /we can’t yet confirm where this airplane is coming from or where it’s headed/);
+  assert.match(client, /Our live aircraft feed can see/);
+  assert.doesNotMatch(client, /current airport-to-airport leg/);
+  assert.doesNotMatch(client, /The ADS-B network is seeing/);
 });
