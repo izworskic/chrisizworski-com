@@ -39,7 +39,7 @@ const AIRLINE_NAMES = Object.freeze({
   XP: 'Avelo Airlines',
   AC: 'Air Canada',
   WS: 'WestJet',
-  3M: 'Silver Airways'
+  '3M': 'Silver Airways'
 });
 
 function cleanFlightInput(value) {
