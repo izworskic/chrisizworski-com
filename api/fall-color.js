@@ -20,6 +20,7 @@ const handlers = {
   "old-sow-live": require("../lib/old-sow/route.js"),
   "mackinac-island": require("../lib/mackinac-island/route.js"),
   "detroit-outdoors": require("../lib/detroit-outdoors/route-v2.js"),
+  "house-fit": require("../lib/house-fit/route.js"),
 };
 
 const DETROIT_FREIGHTER_SAFE_CACHE_SECONDS = 60;
