@@ -237,7 +237,7 @@ test('first result uses the detailed monthly breakdown as the ledger', () => {
   assert.match(html, /class="cost-ledger"/);
   assert.match(html, /Automatically assembled/);
   assert.match(html, /Monthly cost breakdown/);
-  assert.match(html, /The total is shown as a range because taxes and insurance are not exact future bills yet/);
+  assert.match(html, /The rows below are the planning estimate\. Tax and insurance uncertainty is shown separately after the total/);
   assert.match(html, /Mortgage principal \+ interest/);
   assert.match(html, /Included because down payment is below 20%/);
   assert.match(html, /Property tax estimate/);
@@ -246,8 +246,12 @@ test('first result uses the detailed monthly breakdown as the ledger', () => {
   assert.match(html, /Automatic planning estimate/);
   assert.match(html, /Maintenance reserve/);
   assert.match(html, /Modeled reserve, not a bill/);
-  assert.match(html, /TOTAL MONTHLY COST/);
+  assert.match(html, /PLANNING TOTAL/);
+  assert.match(html, /Exact sum of the displayed monthly rows/);
+  assert.match(html, /LIKELY MONTHLY RANGE/);
+  assert.match(html, /Tax \+ insurance uncertainty/);
   assert.match(html, /class="ledger-rule"/);
+  assert.match(html, /id="planningTotalResult"/);
   assert.match(html, /id="trueMonthlyResult"/);
   assert.doesNotMatch(html, /Added ownership costs/);
   assert.doesNotMatch(html, /id="breakdownGrid"/);
@@ -255,16 +259,22 @@ test('first result uses the detailed monthly breakdown as the ledger', () => {
   assert.ok(html.indexOf('id="pmiLedgerResult"') < html.indexOf('id="propertyTaxLedgerResult"'));
   assert.ok(html.indexOf('id="propertyTaxLedgerResult"') < html.indexOf('id="insuranceLedgerResult"'));
   assert.ok(html.indexOf('id="insuranceLedgerResult"') < html.indexOf('id="maintenanceLedgerResult"'));
-  assert.ok(html.indexOf('id="maintenanceLedgerResult"') < html.indexOf('id="trueMonthlyResult"'));
+  assert.ok(html.indexOf('id="maintenanceLedgerResult"') < html.indexOf('id="planningTotalResult"'));
+  assert.ok(html.indexOf('id="planningTotalResult"') < html.indexOf('id="trueMonthlyResult"'));
+  assert.match(html, /What reaching 20% down would change/);
+  assert.ok(html.indexOf('id="downPaymentBreakpointPanel"') < html.indexOf('id="range-explainer"'));
 });
 
-test('ledger renders individual midpoint planning values while keeping the final total as a range', () => {
+test('ledger renders midpoint rows, a reconciled planning total, then uncertainty range', () => {
   const js = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.js'), 'utf8');
   assert.match(js, /mortgageOnlyResult'\)\.textContent = moneyMo\(breakdown\.mortgagePI\)/);
   assert.match(js, /propertyTaxLedgerResult'\)\.textContent = moneyMo\(breakdown\.propertyTax\)/);
   assert.match(js, /insuranceLedgerResult'\)\.textContent = moneyMo\(breakdown\.homeInsurance\)/);
   assert.match(js, /maintenanceLedgerResult'\)\.textContent = moneyMo\(breakdown\.maintenance\)/);
   assert.match(js, /pmiLedgerResult'\)\.textContent = moneyMo\(breakdown\.pmi\)/);
+  assert.match(js, /displayedPlanningTotal = \[/);
+  assert.match(js, /Math\.round\(Number\(breakdown\[key\]\) \|\| 0\)/);
+  assert.match(js, /planningTotalResult'\)\.textContent = moneyMo\(displayedPlanningTotal\)/);
   assert.match(js, /trueMonthlyResult'\)\.textContent = monthlyRange\(trueCost\.low, trueCost\.high\)/);
   assert.match(js, /rate\.toFixed\(2\) \+ '% · ' \+ Number\(loan\.termYears \|\| 30\) \+ ' years'/);
 });
@@ -278,6 +288,16 @@ test('mobile ledger keeps long monthly ranges aligned and inside the result', ()
   assert.match(css, /\.ledger-row\[hidden\]\{display:none\}/);
   assert.match(css, /@media\(max-width:350px\)\{[\s\S]*\.ledger-value\{grid-column:2\/-1/);
   assert.match(css, /\.ledger-rule\{height:3px/);
+});
+
+test('displayed ledger planning total equals the sum of the displayed rounded rows', () => {
+  const result = buildDecision(base({ askingPrice: 200000, downPayment: 20000, ratePct: 6.5 }), enrichment);
+  const keys = ['mortgagePI', 'pmi', 'propertyTax', 'homeInsurance', 'maintenance', 'floodInsurance'];
+  const displayedRows = keys.map((key) => Math.round(Number(result.breakdown[key]) || 0));
+  const planningTotal = displayedRows.reduce((sum, value) => sum + value, 0);
+  const mortgage = Math.round(Number(result.breakdown.mortgagePI) || 0);
+  assert.equal(planningTotal - mortgage, displayedRows.slice(1).reduce((sum, value) => sum + value, 0));
+  assert.ok(planningTotal >= 0);
 });
 
 test('cost calculation remains finite on edge inputs', () => {
@@ -300,7 +320,8 @@ test('downPaymentBreakpoint helper is stable at exact threshold', () => {
 
 test('result copy explicitly distinguishes included costs from unresolved costs', () => {
   const js = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.js'), 'utf8');
-  assert.match(js, /Reality Gap:/);
+  assert.match(js, /Reality Gap: \+'/);
+  assert.match(js, /moneyMo\(displayedRealityGap\)/);
   assert.match(js, /Not included:/);
   assert.match(js, /low end uses the lower tax and insurance assumptions/i);
   assert.match(js, /WIDE RANGE · VERIFY COSTS/);
