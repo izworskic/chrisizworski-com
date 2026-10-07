@@ -76,6 +76,8 @@ async function verifyOnce() {
   assert(data.sources?.mapbox, 'Mapbox source missing');
   assert(['LIVE', 'PARTIAL', 'UNAVAILABLE'].includes(data.mapboxState), `unexpected mapboxState ${data.mapboxState}`);
   assert(data.mapboxState !== 'NOT_CONFIGURED', 'Mapbox production token is not configured');
+  assert(!/401|invalid token|not authorized/i.test(String(data.mapboxReason || '')), `Mapbox production authentication failed: ${data.mapboxReason}`);
+  assert(!/403|forbidden/i.test(String(data.mapboxReason || '')), `Mapbox production authorization failed: ${data.mapboxReason}`);
   assert(['LIVE', 'NO_MATCH', 'UNAVAILABLE', 'NOT_APPLICABLE'].includes(data.baselineState), `unexpected baselineState ${data.baselineState}`);
   assert(data.baselineSource, 'NYC DOT historical baseline source missing');
 
