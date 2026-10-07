@@ -8,16 +8,15 @@ const api = require('../api/flight-tracker.js')._test;
 const html = fs.readFileSync(path.join(root,'public','flight-tracker','index.html'),'utf8');
 const client = fs.readFileSync(path.join(root,'public','assets','flight-tracker.js'),'utf8');
 
-test('passenger flight numbers normalize to conservative operating callsign candidates', () => {
+test('passenger flight numbers normalize only to direct unambiguous operating callsigns', () => {
   const delta = api.normalizeFlightInput('dl 1234');
   assert.equal(delta.ok, true);
   assert.equal(delta.display, 'DL1234');
-  assert.deepEqual(delta.callsigns.slice(0,2), ['DAL1234','EDV1234']);
+  assert.deepEqual(delta.callsigns, ['DAL1234']);
 
   const american = api.normalizeFlightInput('AA86');
   assert.equal(american.callsigns[0], 'AAL86');
-  assert.ok(american.callsigns.includes('JIA86'));
-  assert.ok(american.callsigns.includes('ENY86'));
+
 
   const raw = api.normalizeFlightInput('UAL2380');
   assert.equal(raw.ok, true);
