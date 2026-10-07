@@ -15,14 +15,14 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Can I Afford THIS House? True Monthly Cost">
   <meta name="twitter:description" content="Mortgage payment versus the real monthly cost of this exact house, including hidden ownership costs and buyer tripwires.">
-  <link rel="stylesheet" href="/assets/house-fit.css?v=20261006e">
+  <link rel="stylesheet" href="/assets/house-fit.css?v=20261006f">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/can-i-afford-this-house/#page","url":"https://chrisizworski.com/can-i-afford-this-house/","name":"Can I Afford This House? True Monthly Cost","description":"A three-input property-specific cost engine that uses the current mortgage-rate benchmark plus public data and transparent assumptions to estimate a home's real monthly carrying cost.","dateModified":"2026-10-06","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/","name":"Chris Izworski"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/can-i-afford-this-house/#app","name":"Can I Afford This House? True Monthly Cost","url":"https://chrisizworski.com/can-i-afford-this-house/","applicationCategory":"FinanceApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"featureList":["Three-input first-run intake","Current mortgage-rate benchmark with post-result override","Mortgage-versus-true-cost Reality Gap","Buyer tripwires","20% down-payment breakpoint","Mortgage principal and interest","Property-tax planning estimate from Census data","Homeowners-insurance planning range","PMI estimate","Maintenance reserve","FEMA flood-zone context","Cash-to-close planning range","Data provenance and limitations"]}]}</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <script defer src="/assets/tool-engagement.js"></script>
-  <script defer src="/assets/house-fit.js?v=20261006e"></script>
+  <script defer src="/assets/house-fit.js?v=20261006f"></script>
 </head>
 <body data-analytics-page="house-fit">
   <header class="site-header">
@@ -66,31 +66,42 @@
           <div id="confidenceBadge" class="verdict-badge"></div>
         </div>
 
-        <div class="bottom-line" aria-labelledby="bottom-line-title">
+        <div class="math-problem" aria-label="True monthly cost addition">
           <p class="eyebrow">What the mortgage calculator misses</p>
-          <h3 id="bottom-line-title"><span id="bottomLineLead">Plan on — per month.</span></h3>
-          <p id="bottomLineExplain">We start with the mortgage-only payment, then add the property costs a basic mortgage calculator leaves out.</p>
-          <p id="bottomLineExcluded" class="bottom-line-excluded"></p>
-        </div>
 
-        <div class="cost-flow" aria-label="How the monthly cost builds">
-          <article class="cost-step">
-            <span>1 · Mortgage only</span>
-            <strong id="mortgageOnlyResult">—</strong>
-            <small>Principal + interest</small>
-          </article>
-          <div class="cost-flow-symbol" aria-hidden="true">+</div>
-          <article class="cost-step gap-step">
-            <span>2 · Added ownership costs</span>
-            <strong id="realityGapResult">—</strong>
-            <small>Taxes, insurance, PMI if applicable, maintenance</small>
-          </article>
-          <div class="cost-flow-symbol" aria-hidden="true">=</div>
-          <article class="cost-step total-step">
-            <span>3 · Estimated true monthly cost</span>
-            <strong id="trueMonthlyResult">—</strong>
-            <small id="trueMonthlyNote">Before any unresolved costs listed below</small>
-          </article>
+          <div class="math-row">
+            <div class="math-sign" aria-hidden="true"></div>
+            <div class="math-label">
+              <strong>Mortgage only</strong>
+              <small>Principal + interest</small>
+            </div>
+            <div class="math-value" id="mortgageOnlyResult">—</div>
+          </div>
+
+          <div class="math-row">
+            <div class="math-sign" aria-hidden="true">+</div>
+            <div class="math-label">
+              <strong>Added ownership costs</strong>
+              <small>Taxes, insurance, PMI if applicable, maintenance</small>
+            </div>
+            <div class="math-value" id="realityGapResult">—</div>
+          </div>
+
+          <div class="math-rule" aria-hidden="true"></div>
+
+          <div class="math-row math-total">
+            <div class="math-sign" aria-hidden="true"></div>
+            <div class="math-label">
+              <strong>PLAN ON</strong>
+              <small id="trueMonthlyNote">Estimated true monthly cost</small>
+            </div>
+            <div class="math-value" id="trueMonthlyResult">—</div>
+          </div>
+
+          <div class="math-explanation">
+            <p id="bottomLineExplain">The difference between the mortgage-only payment and the total is the Reality Gap.</p>
+            <p id="bottomLineExcluded" class="bottom-line-excluded"></p>
+          </div>
         </div>
 
         <div class="purchase-facts" aria-label="Purchase context">
