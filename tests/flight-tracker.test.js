@@ -118,7 +118,7 @@ test('page leads with the delayed-flight inbound-aircraft problem rather than a 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007m/);
+  assert.match(html, /flight-tracker\.js\?v=20261007n/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -415,7 +415,7 @@ test('answer card includes one bounded what-happens-next interpretation instead 
   assert.match(client, /answerNext\.textContent = next \|\| ''/);
   assert.match(client, /What happens next: .*lands at .*taxis to a gate .*turns for your/s);
   assert.match(client, /What happens next: we’ll recheck the aircraft assignment every minute/);
-  assert.match(client, /What happens next: we’ll keep checking .*If it starts reporting a usable position/s);
+  assert.match(client, /leave the map empty rather than guess/);
   assert.doesNotMatch(html, /weather panel|gate history|squawk|vertical speed/i);
 });
 
@@ -562,10 +562,10 @@ test('landed previous trip overrides stale airborne narrative and becomes the be
   assert.match(client, /previous\?\.flightStatus\?\.landed !== true/);
   assert.match(client, /sameAirport\(previous\.destination, assignment\?\.origin\)/);
   assert.match(client, /function renderArrivedForTurn\(assignment\)/);
-  assert.match(client, /Your plane has arrived in .* and is on the ground/);
-  assert.match(client, /completed .* and .*is still assigned to your/s);
-  assert.match(client, /On ground · between flights/);
-  assert.match(client, /Already at departure airport/);
+  assert.match(client, /is at the gate — live tracking starts at pushback/);
+  assert.match(client, /function previousLegStory\(assignment, previous\)/);
+  assert.match(client, /arrived from/);
+  assert.match(client, /Live tracking starts again at pushback/);
   assert.match(client, /if \(assignmentData && renderArrivedForTurn\(assignmentData\)\) \{\s*resetHeldLive\(\);\s*return true;/s);
   assert.match(client, /if \(renderArrivedForTurn\(assignment\)\) return;/);
 });
@@ -725,6 +725,46 @@ test('flight page loads the last-known recovery client asset', () => {
   assert.match(html, /flight-tracker\.js\?v=20261007m/);
 });
 
+
+test('v2 traveler story shows completed-leg arrival, inbound timing and delay-turn math without inventing a marker', () => {
+  assert.match(html, /id="answer-delay"/);
+  assert.match(html, /\.answer-delay\{/);
+  assert.match(client, /function previousLegStory\(assignment, previous\)/);
+  assert.match(client, /function completedArrivalClock\(occurrence\)/);
+  assert.match(client, /function inboundTimingText\(assignment, inbound, live\)/);
+  assert.match(client, /Your plane lands about .*; your flight departs /);
+  assert.match(client, /function scheduledTurnMinutes\(assignment, inbound\)/);
+  assert.match(client, /function delayWhyText\(assignment, inbound\)/);
+  assert.match(client, /Why is my flight delayed\?/);
+  assert.match(client, /The scheduled turn before your flight is /);
+  assert.match(client, /is at the gate — live tracking starts at pushback/);
+  assert.match(client, /leave the map empty rather than guess/);
+  assert.doesNotMatch(client, /simulated position|estimated marker|predicted marker/i);
+});
+
+test('completed FlightStats occurrence exposes a bounded actual arrival timestamp for the last-leg story', () => {
+  const flight = {
+    flightId:42,
+    flightNote:{hasDepartedRunway:true,landed:true},
+    isTracking:false,
+    isLanded:true,
+    resultHeader:{carrier:{fs:'DL'},flightNumber:'2587'},
+    status:{status:'Landed',delay:{arrival:{minutes:40}}},
+    departureAirport:{fs:'TPA',iata:'TPA',city:'Tampa'},
+    arrivalAirport:{
+      fs:'DTW',iata:'DTW',city:'Detroit',timeZoneRegionName:'America/Detroit',
+      times:{estimatedActual:{title:'Actual',time:'4:23',ampm:'PM',timezone:'EDT'}}
+    },
+    positional:{flexTrack:{tailNumber:'N329DN'}},
+    schedule:{
+      scheduledArrivalUTC:'2026-10-07T19:43:00Z',
+      estimatedActualArrivalUTC:'2026-10-07T20:23:00Z'
+    }
+  };
+  const result=assignmentApi.sanitizeFlight(flight,{display:'DL2587'},'https://example.test');
+  assert.equal(result.schedule.actualArrivalUTC,'2026-10-07T20:23:00Z');
+  assert.equal(result.flightStatus.arrivalDelayMinutes,40);
+});
 
 test('first-use copy tells travelers to enter their own flight even when the inbound aircraft has another flight number', () => {
   assert.match(html, /Enter the flight number on your ticket/);
