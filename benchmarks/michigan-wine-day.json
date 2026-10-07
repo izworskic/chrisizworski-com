@@ -76,6 +76,19 @@
       "regional handoff",
       "statewide usefulness"
     ],
-    "currentMarketFinding": "Official tourism and trail sites are strong at discovery after a region is chosen; route planners are strong after wineries are chosen. The distinct product layer here is choosing the region for a person's actual day and handing that decision into the authoritative regional planner."
+    "currentMarketFinding": "The closest current statewide competitor, MichiganVineyards.com, now offers preference-based region suggestions and sample itineraries, while MichiganWineMap offers a starting-town winery route planner for Lake Michigan Shore. Those products materially overlap discovery and routing, but neither was found combining arbitrary origin, selected date/time-window feasibility, separate evidence confidence, willingness to recommend against distant regions, and a state-preserving handoff into authoritative regional planners. Official tourism and wine-trail sites remain strongest at discovery after a region is chosen.",
+    "closestCompetitors": [
+      {
+        "name": "MichiganVineyards.com",
+        "observed": "Preference-based region suggestions, statewide winery directory and sample regional itineraries.",
+        "gap": "No observed day-specific origin/time feasibility engine or evidence-confidence layer before region selection."
+      },
+      {
+        "name": "Michigan Wine Map",
+        "observed": "Lake Michigan Shore winery trip planner with starting town and requested winery-stop count.",
+        "gap": "Useful downstream route planning, but not a statewide region-choice engine across northern and southwest regions."
+      }
+    ],
+    "researchCheckedAt": "2026-10-06"
   }
 }
