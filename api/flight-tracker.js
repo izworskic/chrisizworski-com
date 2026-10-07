@@ -5,11 +5,11 @@ const POSITION_MAX_AGE_SECONDS = 90;
 const CACHE_SECONDS = 5;
 
 const IATA_TO_CALLSIGNS = Object.freeze({
-  AA: ['AAL','JIA','ENY','RPA','SKW'],
-  DL: ['DAL','EDV','SKW','RPA'],
-  UA: ['UAL','SKW','RPA','GJS','ASH','AWI','UCA'],
+  AA: ['AAL'],
+  DL: ['DAL'],
+  UA: ['UAL'],
   WN: ['SWA'],
-  AS: ['ASA','QXE','SKW'],
+  AS: ['ASA'],
   B6: ['JBU'],
   NK: ['NKS'],
   F9: ['FFT'],
@@ -18,7 +18,7 @@ const IATA_TO_CALLSIGNS = Object.freeze({
   SY: ['SCX'],
   MX: ['MXY'],
   XP: ['VXP'],
-  AC: ['ACA','JZA'],
+  AC: ['ACA'],
   WS: ['WJA'],
   '3M': ['SIL']
 });
