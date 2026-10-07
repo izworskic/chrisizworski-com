@@ -144,7 +144,7 @@ test('flight tracker SEO contract remains concise and canonical', () => {
   assert.ok(description.length <= 158, 'description exceeds 158 characters');
   assert.match(html, /https:\/\/chrisizworski\.com\/flight-tracker\//);
   assert.match(html, /"@id":"https:\/\/chrisizworski\.com\/#person"/);
-  assert.match(html, /"dateModified":"2026-10-06"/);
+  assert.match(html, /"dateModified":"2026-10-07"/);
 });
 
 
