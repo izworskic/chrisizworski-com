@@ -2476,6 +2476,44 @@
       "searchEvidence": {
         "status": "unknown"
       }
+    },
+    {
+      "id": "flight-tracker",
+      "name": "Flight Tracker — Where Is My Plane?",
+      "canonical": "https://chrisizworski.com/flight-tracker/",
+      "aliases": [],
+      "kind": "flagship-live",
+      "cluster": "transportation-live",
+      "primaryIntent": "flight tracker live plane location by flight number",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "united-states"
+      ],
+      "personas": [
+        "air-traveler",
+        "family-tracker",
+        "trip-planner"
+      ],
+      "networkRole": "leaf",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "unknown"
+      }
     }
   ],
   "relationships": [
@@ -3478,6 +3516,14 @@
       "surface": "buyer-travel-context",
       "strength": "optional",
       "reason": "NYC-area home buyers can continue into crossing toll and congestion-pricing context when evaluating the practical cost of a location."
+    },
+    {
+      "from": "flight-tracker",
+      "to": "nyc-crossing",
+      "type": "trip-continuation",
+      "surface": "transportation-live",
+      "strength": "optional",
+      "reason": "Travelers tracking an NYC-bound flight can continue into live bridge and tunnel conditions when the ground trip crosses the metro area."
     }
   ],
   "cannibalizationGroups": [
