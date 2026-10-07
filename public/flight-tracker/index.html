@@ -22,7 +22,7 @@
   <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <script defer src="/assets/tool-engagement.js"></script>
-  <script defer src="/assets/flight-tracker.js?v=20261007n"></script>
+  <script defer src="/assets/flight-tracker.js?v=20261007p"></script>
   <style>
     :root{--ink:#13202b;--muted:#5d6973;--line:#d9e0e5;--paper:#fff;--wash:#f4f7f8;--accent:#18344a;--danger:#9b312b}
     *{box-sizing:border-box}
@@ -154,11 +154,11 @@
       <p class="breadcrumb"><a href="/">Home</a> / <a href="/tools/">Tools</a> / Flight Tracker</p>
       <h1 id="page-title">Where's the Plane for My Flight?</h1>
       <p class="promise">Enter the flight number on your ticket. We’ll find the exact airplane assigned to it—even if that airplane is currently flying a different flight number.</p>
-      <form id="flight-form" autocomplete="off">
+      <form id="flight-form" autocomplete="off" data-1p-ignore="true">
         <label for="flight-number" class="sr-only" style="position:absolute;left:-9999px">Flight number</label>
-        <input id="flight-number" name="flight" inputmode="text" autocapitalize="characters" spellcheck="false" maxlength="9" placeholder="DL1234" aria-label="Flight number">
+        <input id="flight-number" name="flight" inputmode="text" autocapitalize="characters" spellcheck="false" maxlength="9" placeholder="DL1234" aria-label="Flight number" data-1p-ignore="true">
         <label for="flight-date" class="sr-only" style="position:absolute;left:-9999px">Travel date</label>
-        <input id="flight-date" name="date" type="date" aria-label="Travel date">
+        <input id="flight-date" name="date" type="date" aria-label="Travel date" data-1p-ignore="true">
         <button id="track-flight" type="submit">FIND MY PLANE</button>
       </form>
       <p id="tracker-message" role="status" aria-live="polite" hidden></p>
@@ -205,6 +205,6 @@
     </section>
   </main>
 
-  <footer>Built by <a href="/chris-izworski/">Chris Izworski</a> · © 2026 Chris Izworski</footer>
+  <footer data-1p-ignore="true">Built by <a href="/chris-izworski/">Chris Izworski</a> · © 2026 Chris Izworski</footer>
 </body>
 </html>
