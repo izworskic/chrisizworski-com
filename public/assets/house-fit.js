@@ -78,6 +78,7 @@
   }
 
   function render(decision) {
+    const trueCost = decision.trueMonthlyCost || {};
     const gap = decision.realityGap || {};
     const loan = decision.loan || {};
     const cash = decision.cashToClose || {};
@@ -125,7 +126,7 @@
     const displayedMortgage = Math.round(Number(breakdown.mortgagePI) || 0);
     const displayedRealityGap = Math.max(0, displayedPlanningTotal - displayedMortgage);
 
-    $('planningTotalResult').textContent = moneyMo(displayedPlanningTotal);
+    $('trueMonthlyResult').textContent = monthlyRange(trueCost.low, trueCost.high);
     $('cashToCloseResult').textContent = moneyRange(cash.totalLow, cash.totalHigh);
 
     $('matchedAddress').textContent = address && address.matched
@@ -165,7 +166,7 @@
     }
 
     $('realityGapCopy').textContent =
-      'The monthly total is the exact sum of the numbers shown in the ledger. Actual taxes and insurance can still differ from these planning estimates.';
+      'The total range reflects uncertainty in taxes and homeowners insurance. The individual rows are the midpoint planning estimates.';
 
     const driverList = $('uncertaintyDriversList');
     driverList.textContent = '';
