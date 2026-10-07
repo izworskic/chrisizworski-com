@@ -32,6 +32,9 @@ test('breakout sync copies verified pages and routes without owning the national
   }
   const directory='<html><body><p id="directory-owner">hub owns this directory</p></body></html>';
   fs.writeFileSync(path.join(site,'public','synced-national-tools','index.html'),directory);
+  const kilaueaDir=path.join(site,'public','synced-national-tools','kilauea-live');
+  fs.mkdirSync(kilaueaDir,{recursive:true});
+  fs.writeFileSync(path.join(kilaueaDir,'index.html'),'<script type="application/ld+json">{"dateModified":"2026-09-29"}</script>');
   fs.writeFileSync(path.join(site,'public','sitemap-breakout-live.xml'),'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>');
   fs.writeFileSync(path.join(site,'vercel.json'),JSON.stringify({rewrites:[{source:'/national-tools/existing',destination:'/existing.html'},{source:'/national-tools/:path*',destination:'https://national-outdoor-tools-hub.vercel.app/national-tools/:path*'}]}));
 
@@ -68,4 +71,12 @@ test('breakout sync copies verified pages and routes without owning the national
 
   const sitemap=fs.readFileSync(path.join(site,'public','sitemap-breakout-live.xml'),'utf8');
   assert.equal((sitemap.match(/https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\//g)||[]).length,1,'Kilauea sitemap URL must be unique');
+  assert.match(sitemap,/<loc>https:\/\/chrisizworski\.com\/national-tools\/kilauea-live\/<\/loc><lastmod>2026-09-29<\/lastmod>/);
+
+  fs.writeFileSync(path.join(kilaueaDir,'index.html'),'<script type="application/ld+json">{"dateModified":"2026-10-03"}</script>');
+  installBreakoutLive(core,site);
+  assert.match(fs.readFileSync(path.join(site,'public','sitemap-breakout-live.xml'),'utf8'),/<lastmod>2026-10-03<\/lastmod>/,'repeat sync must follow the current page date');
+  fs.writeFileSync(path.join(kilaueaDir,'index.html'),'<script type="application/ld+json">{}</script>');
+  assert.throws(()=>installBreakoutLive(core,site),/Kilauea page dateModified missing/);
+  fs.rmSync(tmp,{recursive:true,force:true});
 });

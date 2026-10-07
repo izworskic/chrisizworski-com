@@ -102,27 +102,62 @@
     },
     {
       "source": "/fall-color/western-upper-peninsula-fall-color",
-      "destination": "/fall-color/porcupine-mountains-fall-color",
+      "destination": "/fall-color/porcupine-mountains-fall-color/",
+      "permanent": true
+    },
+    {
+      "source": "/fall-color/western-upper-peninsula-fall-color/",
+      "destination": "/fall-color/porcupine-mountains-fall-color/",
       "permanent": true
     },
     {
       "source": "/fall-color/eastern-upper-peninsula-fall-color",
-      "destination": "/fall-color/tahquamenon-falls-fall-color",
+      "destination": "/fall-color/tahquamenon-falls-fall-color/",
+      "permanent": true
+    },
+    {
+      "source": "/fall-color/eastern-upper-peninsula-fall-color/",
+      "destination": "/fall-color/tahquamenon-falls-fall-color/",
       "permanent": true
     },
     {
       "source": "/fall-color/sleeping-bear-fall-color",
-      "destination": "/fall-color/sleeping-bear-dunes-fall-color",
+      "destination": "/fall-color/sleeping-bear-dunes-fall-color/",
+      "permanent": true
+    },
+    {
+      "source": "/fall-color/sleeping-bear-fall-color/",
+      "destination": "/fall-color/sleeping-bear-dunes-fall-color/",
       "permanent": true
     },
     {
       "source": "/fall-color/southwest-michigan-fall-color",
-      "destination": "/fall-color/saugatuck-southwest-michigan-fall-color",
+      "destination": "/fall-color/saugatuck-southwest-michigan-fall-color/",
+      "permanent": true
+    },
+    {
+      "source": "/fall-color/southwest-michigan-fall-color/",
+      "destination": "/fall-color/saugatuck-southwest-michigan-fall-color/",
       "permanent": true
     },
     {
       "source": "/fall-color/southeast-michigan-fall-color",
-      "destination": "/fall-color/ann-arbor-irish-hills-fall-color",
+      "destination": "/fall-color/ann-arbor-irish-hills-fall-color/",
+      "permanent": true
+    },
+    {
+      "source": "/fall-color/southeast-michigan-fall-color/",
+      "destination": "/fall-color/ann-arbor-irish-hills-fall-color/",
+      "permanent": true
+    },
+    {
+      "source": "/michigan-outdoors",
+      "destination": "https://michiganoutdoorsnow.chrisizworski.com/",
+      "permanent": true
+    },
+    {
+      "source": "/michigan-outdoors/",
+      "destination": "https://michiganoutdoorsnow.chrisizworski.com/",
       "permanent": true
     },
     {
@@ -1110,8 +1145,24 @@
       "destination": "https://national-aurora.vercel.app/national-tools/aurora/:path*"
     },
     {
+      "source": "/national-tools/rivers/:slug(colorado-river-grand-canyon|columbia-river-portland|mississippi-river-st-louis|missouri-river-omaha|ohio-river-cincinnati|potomac-river-washington-dc|rio-grande-albuquerque|yellowstone-river-billings)",
+      "destination": "https://national-rivers.vercel.app/national-tools/rivers/:slug/index.html"
+    },
+    {
+      "source": "/national-tools/rivers/:slug(colorado-river-grand-canyon|columbia-river-portland|mississippi-river-st-louis|missouri-river-omaha|ohio-river-cincinnati|potomac-river-washington-dc|rio-grande-albuquerque|yellowstone-river-billings)/",
+      "destination": "https://national-rivers.vercel.app/national-tools/rivers/:slug/index.html"
+    },
+    {
       "source": "/national-tools/rivers/:path*",
       "destination": "https://national-rivers.vercel.app/national-tools/rivers/:path*"
+    },
+    {
+      "source": "/national-tools/frost/:slug(atlanta-ga|boston-ma|chicago-il|denver-co|kansas-city-mo|minneapolis-mn|raleigh-nc|salt-lake-city-ut)",
+      "destination": "https://national-frost.vercel.app/national-tools/frost/:slug/index.html"
+    },
+    {
+      "source": "/national-tools/frost/:slug(atlanta-ga|boston-ma|chicago-il|denver-co|kansas-city-mo|minneapolis-mn|raleigh-nc|salt-lake-city-ut)/",
+      "destination": "https://national-frost.vercel.app/national-tools/frost/:slug/index.html"
     },
     {
       "source": "/national-tools/frost/:path*",
@@ -1134,12 +1185,36 @@
       "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/blue-ridge-parkway/index.html"
     },
     {
+      "source": "/national-tools/fall-color/:slug(asheville-nc|bar-harbor-me|breckenridge-co|gatlinburg-tn|lake-placid-ny|north-conway-nh|shenandoah-va|stowe-vt)",
+      "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/:slug/index.html"
+    },
+    {
+      "source": "/national-tools/fall-color/:slug(asheville-nc|bar-harbor-me|breckenridge-co|gatlinburg-tn|lake-placid-ny|north-conway-nh|shenandoah-va|stowe-vt)/",
+      "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/:slug/index.html"
+    },
+    {
       "source": "/national-tools/fall-color/:path*",
       "destination": "https://national-fall-color.vercel.app/national-tools/fall-color/:path*"
     },
     {
+      "source": "/national-tools/coastal/:slug(cape-cod-ma|daytona-beach-fl|galveston-tx|gulf-shores-al|myrtle-beach-sc|nags-head-nc|ocean-city-md|virginia-beach-va)",
+      "destination": "https://national-coastal-water.vercel.app/national-tools/coastal/:slug/index.html"
+    },
+    {
+      "source": "/national-tools/coastal/:slug(cape-cod-ma|daytona-beach-fl|galveston-tx|gulf-shores-al|myrtle-beach-sc|nags-head-nc|ocean-city-md|virginia-beach-va)/",
+      "destination": "https://national-coastal-water.vercel.app/national-tools/coastal/:slug/index.html"
+    },
+    {
       "source": "/national-tools/coastal/:path*",
       "destination": "https://national-coastal-water.vercel.app/national-tools/coastal/:path*"
+    },
+    {
+      "source": "/national-tools/snow/:slug(bend-or|boise-id|bozeman-mt|denver-co|jackson-wy|mammoth-lakes-ca|reno-nv|salt-lake-city-ut)",
+      "destination": "https://national-snowpack-melt.vercel.app/national-tools/snow/:slug/index.html"
+    },
+    {
+      "source": "/national-tools/snow/:slug(bend-or|boise-id|bozeman-mt|denver-co|jackson-wy|mammoth-lakes-ca|reno-nv|salt-lake-city-ut)/",
+      "destination": "https://national-snowpack-melt.vercel.app/national-tools/snow/:slug/index.html"
     },
     {
       "source": "/national-tools/snow/:path*",
@@ -1196,6 +1271,14 @@
     {
       "source": "/white-christmas-michigan/:path*",
       "destination": "https://national-white-christmas.vercel.app/white-christmas-michigan/:path*"
+    },
+    {
+      "source": "/isle-royale-map/sources",
+      "destination": "https://isle-royale-outdoors.vercel.app/isle-royale-map/sources/index.html"
+    },
+    {
+      "source": "/isle-royale-map/sources/",
+      "destination": "https://isle-royale-outdoors.vercel.app/isle-royale-map/sources/index.html"
     },
     {
       "source": "/isle-royale-map/:path*",

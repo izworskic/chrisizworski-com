@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-09-20",
+  "updated": "2026-10-07",
   "id": "boat-launch-search-expansion-2026-08-22",
   "surface": "https://chrisizworski.com/michigan-boat-launches/",
   "status": "ship-and-observe",
@@ -92,7 +92,8 @@
     "finderBehavior",
     "sourceTruth"
   ],
-  "releaseDateModified": "2026-09-20",
+  "releaseDateModified": "2026-10-07",
+  "latestMaintenance": "2026-10-07: replace the broken Michigan Outdoors navigation target with the registered live tool. Preserve the title, description, H1, canonical, and finder behavior; align the freshness pin with the actual maintenance date.",
   "releaseDateModifiedNote": "The dateModified the treated surface must carry. Was hardcoded as 2026-08-22 in the benchmark script, which broke the moment stamp-freshness told the truth about a later content change. Keep it here so the pin and the config cannot disagree. Bump it whenever the treatment re-ships before its window opens; do not bump it once status is running. Same fix as benchmarks/beach-detail-page-one-ctr.json.",
   "latestObserved": {
     "source": "Google Search Console export chrisizworski.com-Performance-on-Search-2026-09-20",
