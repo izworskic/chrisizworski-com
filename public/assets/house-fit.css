@@ -117,8 +117,16 @@
 }
 
 
-/* Opening house inputs: keep price, down payment, and editable daily rate together. */
+/* Opening mortgage what-if module. */
+.rate-whatif{margin-top:16px;padding:15px;border:1px solid #bdd1c8;border-radius:12px;background:#f7fbf9}
+.rate-whatif-head{display:grid;gap:6px;margin-bottom:12px}
+.rate-whatif-head h3{font-family:Georgia,"Times New Roman",serif;font-size:clamp(20px,4.8vw,27px);line-height:1.12;margin:0;color:#1d2c26}
+.rate-whatif-head>p{margin:0;font-size:12px;line-height:1.45;color:#64716b}
+.rate-field{max-width:420px}
 @media(min-width:720px){
-  .core-fields{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .core-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
   .core-fields .field.wide{grid-column:1/-1}
+  .rate-whatif{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.8fr);gap:18px;align-items:end}
+  .rate-whatif-head{margin-bottom:0}
+  .rate-field{max-width:none}
 }
