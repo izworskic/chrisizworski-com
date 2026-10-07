@@ -89,13 +89,51 @@
     const prov = decision.provenance || {};
     const rate = Number(decision.input && decision.input.ratePct);
     const breakdown = decision.breakdown || {};
+    const breakdownRange = decision.breakdownRange || {};
     const unpricedCosts = decision.unpricedCosts || [];
     const drivers = decision.uncertaintyDrivers || [];
 
     $('askingPriceResult').textContent = money0(decision.askingPrice);
-    $('mortgageOnlyResult').textContent = moneyMo(gap.mortgageOnlyMonthly);
+    $('mortgageOnlyResult').textContent = monthlyRange(
+      breakdownRange.mortgagePI && breakdownRange.mortgagePI.low,
+      breakdownRange.mortgagePI && breakdownRange.mortgagePI.high
+    );
+    $('propertyTaxLedgerResult').textContent = monthlyRange(
+      breakdownRange.propertyTax && breakdownRange.propertyTax.low,
+      breakdownRange.propertyTax && breakdownRange.propertyTax.high
+    );
+    $('insuranceLedgerResult').textContent = monthlyRange(
+      breakdownRange.homeInsurance && breakdownRange.homeInsurance.low,
+      breakdownRange.homeInsurance && breakdownRange.homeInsurance.high
+    );
+    $('maintenanceLedgerResult').textContent = monthlyRange(
+      breakdownRange.maintenance && breakdownRange.maintenance.low,
+      breakdownRange.maintenance && breakdownRange.maintenance.high
+    );
+
+    const pmiRow = $('pmiLedgerRow');
+    if (Number(breakdown.pmi) > 0.005) {
+      pmiRow.hidden = false;
+      $('pmiLedgerResult').textContent = monthlyRange(
+        breakdownRange.pmi && breakdownRange.pmi.low,
+        breakdownRange.pmi && breakdownRange.pmi.high
+      );
+    } else {
+      pmiRow.hidden = true;
+    }
+
+    const floodRow = $('floodLedgerRow');
+    if (Number(breakdown.floodInsurance) > 0.005) {
+      floodRow.hidden = false;
+      $('floodLedgerResult').textContent = monthlyRange(
+        breakdownRange.floodInsurance && breakdownRange.floodInsurance.low,
+        breakdownRange.floodInsurance && breakdownRange.floodInsurance.high
+      );
+    } else {
+      floodRow.hidden = true;
+    }
+
     $('trueMonthlyResult').textContent = monthlyRange(trueCost.low, trueCost.high);
-    $('realityGapResult').textContent = monthlyRange(gap.monthlyLow, gap.monthlyHigh);
     $('cashToCloseResult').textContent = moneyRange(cash.totalLow, cash.totalHigh);
 
     $('matchedAddress').textContent = address && address.matched
@@ -117,25 +155,13 @@
       confidence.label === 'Limited by flood premium' ? 'needs' : 'close'
     );
 
-    const included = [];
-    if (Number(breakdown.propertyTax) > 0) included.push('property taxes');
-    if (Number(breakdown.homeInsurance) > 0) included.push('homeowners insurance');
-    if (Number(breakdown.pmi) > 0) included.push('PMI');
-    if (Number(breakdown.maintenance) > 0) included.push('a maintenance reserve');
-    if (Number(breakdown.floodInsurance) > 0) included.push('flood insurance');
-
     $('bottomLineExplain').textContent =
-      'The added ' + monthlyRange(gap.monthlyLow, gap.monthlyHigh) +
-      ' is the Reality Gap: ' + (included.length ? included.join(', ') : 'the modeled ownership costs') +
-      ' that sit on top of principal + interest.';
+      'Reality Gap: ' + monthlyRange(gap.monthlyLow, gap.monthlyHigh) +
+      ' above the mortgage-only payment.';
 
     $('bottomLineExcluded').textContent = unpricedCosts.length
-      ? 'Still outside this estimate: ' + unpricedCosts.map((item) => item.label).join(', ') + '.'
-      : 'No additional unpriced cost categories are currently flagged.';
-
-    $('trueMonthlyNote').textContent = unpricedCosts.length
-      ? 'Estimated true monthly cost · before unresolved costs below'
-      : 'Estimated true monthly cost';
+      ? 'Not included: ' + unpricedCosts.map((item) => item.label).join(', ') + '.'
+      : '';
 
     if (drivers.length) {
       const names = drivers.slice(0, 2).map((driver) => driver.label.toLowerCase());
