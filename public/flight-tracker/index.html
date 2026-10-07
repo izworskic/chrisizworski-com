@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Flight Tracker: See Your Plane Live | Chris Izworski</title>
+  <meta name="description" content="Enter a flight number and see the aircraft's latest reported live position on a simple airport-to-airport map. No simulated movement.">
+  <link rel="canonical" href="https://chrisizworski.com/flight-tracker/">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="google-adsense-account" content="ca-pub-8222782620788075">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Flight Tracker — Where Is My Plane?">
+  <meta property="og:description" content="Enter a flight number. See the aircraft's latest actual reported position on a simple map.">
+  <meta property="og:url" content="https://chrisizworski.com/flight-tracker/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Flight Tracker — Where Is My Plane?">
+  <meta name="twitter:description" content="Flight number in. Actual aircraft position on a map.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@6.3.0/dist/maplibre-gl.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075" crossorigin="anonymous"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebPage","@id":"https://chrisizworski.com/flight-tracker/#page","url":"https://chrisizworski.com/flight-tracker/","name":"Flight Tracker: See Your Plane Live","description":"A stripped-down flight tracker that turns a commercial flight number into the latest actual reported aircraft position on an airport-to-airport map.","dateModified":"2026-10-06","author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@type":"WebSite","url":"https://chrisizworski.com/","name":"Chris Izworski"}},{"@type":"WebApplication","@id":"https://chrisizworski.com/flight-tracker/#app","name":"Flight Tracker — Where Is My Plane?","url":"https://chrisizworski.com/flight-tracker/","applicationCategory":"TravelApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"featureList":["Flight-number lookup","Latest actual ADS-B aircraft position","Airport-to-airport route map","Altitude and groundspeed","Position-age disclosure","No simulated aircraft movement"]}]}</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+  <script defer src="/assets/tool-engagement.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/maplibre-gl@6.3.0/dist/maplibre-gl.js"></script>
+  <script defer src="/assets/flight-tracker.js?v=20261006a"></script>
+  <style>
+    :root{--ink:#13202b;--muted:#5d6973;--line:#d9e0e5;--paper:#fff;--wash:#f4f7f8;--accent:#18344a;--danger:#9b312b}
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--paper);color:var(--ink)}
+    body{overflow-x:hidden}
+    a{color:inherit}
+    .site-header{height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--line);background:#fff}
+    .site-name{font-weight:800;text-decoration:none;letter-spacing:-.02em}
+    .site-nav{display:flex;gap:16px;font-size:14px}.site-nav a{text-decoration:none;color:var(--muted)}
+    main{min-height:calc(100vh - 54px)}
+    .tracker-head{padding:18px 16px 14px;max-width:980px;margin:0 auto}
+    .breadcrumb{font-size:12px;color:var(--muted);margin:0 0 8px}.breadcrumb a{text-decoration:none}
+    h1{font-size:clamp(28px,6vw,46px);line-height:1;letter-spacing:-.045em;margin:0 0 7px}
+    .promise{font-size:15px;line-height:1.4;color:var(--muted);margin:0 0 14px}
+    #flight-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;max-width:650px}
+    #flight-number{width:100%;min-width:0;height:52px;border:2px solid var(--ink);border-radius:10px;padding:0 15px;font:800 20px/1 ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase;letter-spacing:.04em;background:#fff;color:var(--ink)}
+    #flight-number:focus{outline:3px solid rgba(24,52,74,.16);outline-offset:2px}
+    #track-flight{height:52px;border:0;border-radius:10px;padding:0 20px;background:var(--ink);color:#fff;font-weight:900;letter-spacing:.04em;cursor:pointer}
+    #track-flight:disabled{opacity:.65;cursor:wait}
+    #tracker-message{margin:9px 0 0;font-size:13px;color:var(--muted);min-height:18px}
+    #tracker-message[data-kind="error"]{color:var(--danger)}
+    #tracker-message[data-kind="warning"]{color:#805f00}
+    .map-shell{position:relative;width:100%;height:clamp(430px,calc(100vh - 215px),760px);min-height:430px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#dfe7eb}
+    #flight-map{position:absolute;inset:0}
+    .flight-strip{position:absolute;z-index:3;left:12px;right:12px;top:12px;pointer-events:none;display:flex;justify-content:center}
+    .flight-strip-inner{max-width:680px;width:100%;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border:1px solid rgba(19,32,43,.15);border-radius:12px;padding:10px 12px;box-shadow:0 5px 20px rgba(0,0,0,.08)}
+    .flight-main{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+    #flight-label{font-weight:950;font-size:17px;letter-spacing:.02em}
+    #route-label{font-weight:850;font-size:16px;white-space:nowrap}
+    .flight-sub{display:flex;justify-content:space-between;gap:14px;margin-top:4px;color:var(--muted);font-size:12px}
+    #freshness-label[data-stale="true"]{color:#8b3f22;font-weight:800}
+    .source-note{position:absolute;z-index:3;left:10px;bottom:10px;background:rgba(255,255,255,.9);padding:5px 8px;border-radius:7px;font-size:10px;color:#4e5b64;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    .source-note a{font-weight:800}
+    .airport-marker{width:14px;height:14px;border-radius:50%;border:3px solid #fff;background:#18344a;box-shadow:0 1px 6px rgba(0,0,0,.35)}
+    .airport-marker.destination{background:#7d2f26}
+    .plane-marker{width:38px;height:38px;border-radius:50%;background:#fff;border:2px solid #18344a;display:grid;place-items:center;box-shadow:0 2px 10px rgba(0,0,0,.28)}
+    .plane-marker svg{width:25px;height:25px;fill:#18344a}
+    .below{max-width:820px;margin:0 auto;padding:22px 16px 50px;color:var(--muted);font-size:13px;line-height:1.55}
+    .below strong{color:var(--ink)}
+    .below p{margin:0 0 9px}
+    footer{border-top:1px solid var(--line);padding:18px 16px 28px;text-align:center;font-size:12px;color:var(--muted)}
+    footer a{font-weight:800;text-decoration:none}
+    @media (max-width:520px){
+      .site-header{height:48px;padding:0 12px}.site-nav{gap:12px}
+      main{min-height:calc(100vh - 48px)}
+      .tracker-head{padding:14px 12px 11px}
+      h1{font-size:31px}.promise{font-size:13px;margin-bottom:11px}
+      #flight-form{grid-template-columns:1fr 88px;gap:7px}
+      #flight-number{height:48px;font-size:18px;padding:0 12px}
+      #track-flight{height:48px;padding:0 10px;font-size:12px}
+      #tracker-message{margin-top:6px}
+      .map-shell{height:calc(100vh - 196px);min-height:420px}
+      .flight-strip{left:8px;right:8px;top:8px}
+      .flight-main{gap:8px}.flight-sub{gap:8px}
+      #flight-label{font-size:15px}#route-label{font-size:14px}
+      #detail-label{max-width:58%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    }
+  </style>
+</head>
+<body data-analytics-page="flight-tracker">
+  <header class="site-header">
+    <a class="site-name" href="/">Chris Izworski</a>
+    <nav class="site-nav" aria-label="Primary"><a href="/tools/">Tools</a><a href="/guides/">Guides</a></nav>
+  </header>
+
+  <main>
+    <section class="tracker-head" aria-labelledby="page-title">
+      <p class="breadcrumb"><a href="/">Home</a> / <a href="/tools/">Tools</a> / Flight Tracker</p>
+      <h1 id="page-title">Where's My Plane?</h1>
+      <p class="promise">Enter the flight number. See the aircraft's latest actual reported position.</p>
+      <form id="flight-form" autocomplete="off">
+        <label for="flight-number" class="sr-only" style="position:absolute;left:-9999px">Flight number</label>
+        <input id="flight-number" name="flight" inputmode="text" autocapitalize="characters" spellcheck="false" maxlength="9" placeholder="DL1234" aria-label="Flight number">
+        <button id="track-flight" type="submit">TRACK</button>
+      </form>
+      <p id="tracker-message" role="status" aria-live="polite" hidden></p>
+    </section>
+
+    <section class="map-shell" aria-label="Live flight map">
+      <div id="flight-map"></div>
+      <div class="flight-strip" aria-live="polite">
+        <div class="flight-strip-inner">
+          <div class="flight-main"><span id="flight-label">Enter a flight number</span><span id="route-label">Airport → Airport</span></div>
+          <div class="flight-sub"><span id="detail-label">Actual aircraft position</span><span id="freshness-label"></span></div>
+        </div>
+      </div>
+      <div class="source-note">Live position: <a href="https://adsb.lol/" rel="nofollow noopener">ADSB.lol</a> · ODbL</div>
+    </section>
+
+    <section class="below">
+      <p><strong>Actual reports only.</strong> The airplane marker moves only when a new aircraft position is received. The tracker does not animate or invent movement between reports.</p>
+      <p>Common U.S. mainline and regional operating callsigns are checked behind the scenes. If more than one live aircraft could match the number, the tracker shows no plane rather than choosing the wrong one.</p>
+    </section>
+  </main>
+
+  <footer>Built by <a href="/chris-izworski/">Chris Izworski</a> · © 2026 Chris Izworski</footer>
+</body>
+</html>
