@@ -30,14 +30,21 @@ test('mortgage math matches a known 30-year P&I example', () => {
   assert.ok(Math.abs(payment - 1896.20) < 0.75, 'unexpected payment ' + payment);
 });
 
-test('opening form includes editable mortgage rate beside the core house inputs', () => {
+test('opening form includes the full mortgage-rate what-if module before the first build', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
   const formMatch = html.match(/<form id="houseFitForm">([\s\S]*?)<\/form>/);
   assert.ok(formMatch);
   const names = [...formMatch[1].matchAll(/<input[^>]+name="([^"]+)"/g)].map((m) => m[1]);
   assert.deepEqual(names, ['address', 'askingPrice', 'downPayment', 'ratePct']);
+  assert.match(formMatch[1], /class="rate-whatif"/);
+  assert.match(formMatch[1], /Easy what-if/);
+  assert.match(formMatch[1], /Adjust the mortgage rate/);
+  assert.match(formMatch[1], /id="rateMarketSummary"/);
   assert.match(formMatch[1], /id="ratePct" name="ratePct"/);
-  assert.match(formMatch[1], /Loading the latest daily 30-year conforming average/);
+  assert.match(formMatch[1], /Change this to your lender quote if needed/);
+  assert.match(formMatch[1], /Taxes, insurance, PMI and the other modeled monthly costs stay in the calculation/);
+  assert.ok(formMatch[1].indexOf('name="downPayment"') < formMatch[1].indexOf('class="rate-whatif"'));
+  assert.ok(formMatch[1].indexOf('class="rate-whatif"') < formMatch[1].indexOf('BUILD THE TRUE COST'));
   assert.doesNotMatch(html, /id="rateAdjustForm"/);
   assert.doesNotMatch(html, /id="ratePctAdjust"/);
   assert.doesNotMatch(html, /name="monthlyLimit"/);
@@ -50,7 +57,9 @@ test('opening form preloads the daily market rate and only sends an override aft
   assert.match(js, /fetch\('\/api\/house-fit'/);
   assert.match(js, /rateTouched = false/);
   assert.match(js, /if \(rateTouched && Number\.isFinite\(rate\)\) payload\.ratePct = rate/);
-  assert.match(js, /Latest daily average/);
+  assert.match(js, /Current daily 30-year conforming average/);
+  assert.match(js, /rateMarketSummary/);
+  assert.match(js, /Using your rate for this build/);
   assert.match(js, /ratePct'\)\.addEventListener\('input'/);
   assert.doesNotMatch(js, /rateAdjustForm/);
 });
