@@ -639,6 +639,6 @@ test('ergonomic polish removes duplicate tail registration from answer pills', (
 test('mobile journey strip remains compact at the 390px baseline', () => {
   assert.match(html, /@media \(max-width:520px\)/);
   assert.match(html, /\.answer-journey\{grid-template-columns:minmax\(0,1fr\) 18px minmax\(0,1fr\);gap:6px\}/);
-  assert.match(html, /\.journey-primary\{font-size:12px\}/);
-  assert.match(html, /\.journey-secondary\{font-size:9px\}/);
+  assert.match(html, /\.journey-primary\{font-size:12\.5px\}/);
+  assert.match(html, /\.journey-secondary\{font-size:10px\}/);
 });
