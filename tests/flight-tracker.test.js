@@ -82,6 +82,14 @@ test('page is flight number to plane map without dashboard creep', () => {
   assert.doesNotMatch(html, /delay prediction|weather score|airport dashboard|recommendation score/i);
 });
 
+
+test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
+  assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
+  assert.match(html, /flight-tracker\.js\?v=20261006b/);
+  assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
+  assert.match(client, /The flight map could not load/);
+});
+
 test('client plots only API positions and refreshes without simulated motion', () => {
   assert.match(client, /planeMarker\.setLngLat\(\[ac\.lon,ac\.lat\]\)/);
   assert.match(client, /setInterval\(\(\) => \{/);

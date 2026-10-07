@@ -1,4 +1,4 @@
-(() => {
+(async () => {
   'use strict';
 
   const form = document.getElementById('flight-form');
@@ -9,6 +9,19 @@
   const routeLabel = document.getElementById('route-label');
   const detailLabel = document.getElementById('detail-label');
   const freshness = document.getElementById('freshness-label');
+
+  let maplibregl;
+  try {
+    const maplibreModule = await import('https://cdn.jsdelivr.net/npm/maplibre-gl@6.3.0/dist/maplibre-gl.mjs');
+    maplibregl = maplibreModule.default || maplibreModule;
+  } catch (error) {
+    message.hidden = false;
+    message.dataset.kind = 'error';
+    message.textContent = 'The flight map could not load. Refresh the page and try again.';
+    submit.disabled = true;
+    console.error('Flight tracker map failed to load', error);
+    return;
+  }
 
   const map = new maplibregl.Map({
     container:'flight-map',
