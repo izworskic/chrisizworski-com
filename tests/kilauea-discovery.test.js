@@ -56,6 +56,8 @@ test('Kilauea guard keeps the tool in Hawaii and hardens search/share metadata i
   assert.match(directory,/>3 tools shown</);
 
   const directorySchema=JSON.parse(directory.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  const directoryPage=directorySchema['@graph'].find(x=>x['@id']==='https://chrisizworski.com/national-tools/#page');
+  assert.equal(directoryPage.dateModified,'2026-09-01','Kilauea must preserve the parent hub publication date');
   const list=directorySchema['@graph'].find(x=>x['@id']==='https://chrisizworski.com/national-tools/#toollist');
   assert.equal(list.itemListElement.filter(x=>x.url==='https://chrisizworski.com/national-tools/kilauea-live/').length,1);
   assert.equal(list.numberOfItems,list.itemListElement.length);
