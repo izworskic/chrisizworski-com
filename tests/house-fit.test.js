@@ -84,6 +84,17 @@ test('monthly cost automatically includes mortgage tax insurance PMI and mainten
   assert.ok(result.trueMonthlyCost.midpoint >= result.trueMonthlyCost.low);
 });
 
+test('ledger line-item ranges reconcile exactly to the displayed total range', () => {
+  const result = buildDecision(base({ askingPrice: 400000, downPayment: 40000 }), enrichment);
+  const keys = ['mortgagePI', 'propertyTax', 'homeInsurance', 'pmi', 'maintenance', 'floodInsurance'];
+  const low = keys.reduce((sum, key) => sum + result.breakdownRange[key].low, 0);
+  const midpoint = keys.reduce((sum, key) => sum + result.breakdownRange[key].midpoint, 0);
+  const high = keys.reduce((sum, key) => sum + result.breakdownRange[key].high, 0);
+  assert.ok(Math.abs(low - result.trueMonthlyCost.low) < 0.01);
+  assert.ok(Math.abs(midpoint - result.trueMonthlyCost.midpoint) < 0.01);
+  assert.ok(Math.abs(high - result.trueMonthlyCost.high) < 0.01);
+});
+
 test('Reality Gap is true monthly cost minus mortgage principal and interest', () => {
   const result = buildDecision(base({ askingPrice: 400000, downPayment: 40000 }), enrichment);
   const expectedMid = result.trueMonthlyCost.midpoint - result.breakdown.mortgagePI;
@@ -221,30 +232,33 @@ test('page promise centers mortgage-versus-real-cost differentiation', () => {
   assert.doesNotMatch(html, /Fit Ceiling/i);
 });
 
-test('first result is a literal addition problem with a bottom line', () => {
+test('first result is a simple line-item ledger with total underneath', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
-  assert.match(html, /class="math-problem"/);
-  assert.match(html, /Mortgage only/);
-  assert.match(html, />\+<\/div>/);
-  assert.match(html, /Added ownership costs/);
-  assert.match(html, /class="math-rule"/);
-  assert.match(html, /PLAN ON/);
+  assert.match(html, /class="cost-ledger"/);
+  assert.match(html, /Mortgage · principal \+ interest/);
+  assert.match(html, /Property tax/);
+  assert.match(html, /Homeowners insurance/);
+  assert.match(html, />PMI</);
+  assert.match(html, /Maintenance reserve/);
+  assert.match(html, /TOTAL MONTHLY COST/);
+  assert.match(html, /class="ledger-rule"/);
   assert.match(html, /id="trueMonthlyResult"/);
-  assert.match(html, /id="bottomLineExplain"/);
-  assert.match(html, /id="bottomLineExcluded"/);
-  assert.match(html, /Why this is a range/);
-  assert.ok(html.indexOf('id="mortgageOnlyResult"') < html.indexOf('id="trueMonthlyResult"'));
-  assert.ok(html.indexOf('id="trueMonthlyResult"') < html.indexOf('id="breakdownGrid"'));
+  assert.doesNotMatch(html, /Added ownership costs/);
+  assert.doesNotMatch(html, /id="breakdownGrid"/);
+  assert.ok(html.indexOf('id="mortgageOnlyResult"') < html.indexOf('id="propertyTaxLedgerResult"'));
+  assert.ok(html.indexOf('id="propertyTaxLedgerResult"') < html.indexOf('id="insuranceLedgerResult"'));
+  assert.ok(html.indexOf('id="insuranceLedgerResult"') < html.indexOf('id="trueMonthlyResult"'));
 });
 
-test('mobile addition layout keeps long currency ranges inside the ledger', () => {
+test('mobile ledger keeps long monthly ranges aligned and inside the result', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
   const css = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.css'), 'utf8');
   assert.match(html, /name="viewport" content="width=device-width,initial-scale=1"/);
-  assert.match(css, /\.math-row\{display:grid;grid-template-columns:28px minmax\(0,1fr\) max-content/);
-  assert.match(css, /\.math-value\{[^}]*white-space:nowrap/);
-  assert.match(css, /@media\(max-width:520px\)\{[\s\S]*\.math-value\{grid-column:2\/-1/);
-  assert.match(css, /\.math-rule\{height:3px/);
+  assert.match(css, /\.ledger-row\{display:grid;grid-template-columns:22px minmax\(0,1fr\) max-content/);
+  assert.match(css, /\.ledger-value\{[^}]*text-align:right;[^}]*white-space:nowrap/);
+  assert.match(css, /\.ledger-row\[hidden\]\{display:none\}/);
+  assert.match(css, /@media\(max-width:350px\)\{[\s\S]*\.ledger-value\{grid-column:2\/-1/);
+  assert.match(css, /\.ledger-rule\{height:3px/);
 });
 
 test('cost calculation remains finite on edge inputs', () => {
@@ -267,8 +281,8 @@ test('downPaymentBreakpoint helper is stable at exact threshold', () => {
 
 test('result copy explicitly distinguishes included costs from unresolved costs', () => {
   const js = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.js'), 'utf8');
-  assert.match(js, /is the Reality Gap:/);
-  assert.match(js, /Still outside this estimate:/);
+  assert.match(js, /Reality Gap:/);
+  assert.match(js, /Not included:/);
   assert.match(js, /low end uses the lower tax and insurance assumptions/i);
   assert.match(js, /WIDE RANGE · VERIFY COSTS/);
 });
