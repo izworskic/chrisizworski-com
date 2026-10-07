@@ -20,7 +20,7 @@ const IATA_TO_CALLSIGNS = Object.freeze({
   XP: ['VXP'],
   AC: ['ACA','JZA'],
   WS: ['WJA'],
-  3M: ['SIL']
+  '3M': ['SIL']
 });
 
 const AIRLINE_NAMES = Object.freeze({
