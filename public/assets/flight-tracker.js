@@ -1240,8 +1240,9 @@
     const currentLeg = currentRoute?.origin && currentRoute?.destination
       ? airportPlace(currentRoute.origin) + ' → ' + airportPlace(currentRoute.destination)
       : null;
+    const recentInboundRoute = assignmentInboundOccurrenceRoute(assignment, live);
     const inboundOccurrence = live?.confirmedOperatingOccurrence ||
-      assignmentInboundOccurrence(assignment) ||
+      (recentInboundRoute ? assignmentInboundOccurrence(assignment) : null) ||
       assignment?.currentAircraftOccurrence ||
       null;
     const currentOperatingFlight = inboundOccurrence?.flightNumber || null;
