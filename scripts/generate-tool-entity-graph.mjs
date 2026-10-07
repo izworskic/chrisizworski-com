@@ -1,204 +1,145 @@
 #!/usr/bin/env node
-// Make every hub tool a thing Google can resolve, and make the tools directory point AT that thing
-// instead of describing it a second time.
-//
-// THE PROBLEM: /tools/ declared its 36 entries as anonymous inline nodes while the tool pages
-// separately declared their own application nodes. Nothing tied the two together, so a crawler saw
-// two unrelated descriptions of the same tool and no statement that the set belongs to one person.
-// Three tools had no application entity at all — including /soo-locks/, which earns 40% of the
-// estate's clicks.
-//
-// DESIGN: this reads each page's EXISTING entity id rather than imposing a convention, because
-// rewriting sixteen hand-maintained JSON-LD blocks to normalise a fragment would be a large diff
-// for no crawler benefit. It only writes where something is genuinely missing.
-//
-// WHAT IT CANNOT DO: force sitelinks or a knowledge panel. Those are algorithmic. This makes the
-// entity legible and eligible; placement is still Google's call.
-//
+// Publish directory references to the identities the registered destinations actually declare.
+// This improves entity consistency; it cannot force ranking, sitelinks or a knowledge panel.
+// Read-only on destinations: articles, pages and apps keep their existing types and IDs.
+// Unverified off-site and extracted destinations are left as published, never assigned guessed IDs.
 // Run: node scripts/generate-tool-entity-graph.mjs [--check]
 
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 const root = path.resolve(import.meta.dirname, "..");
-const check = process.argv.includes("--check");
 const PERSON = "https://chrisizworski.com/#person";
 const TOOLS_PAGE = "public/tools/index.html";
-
-// Hub-hosted tools. Off-site properties on their own hosts stay inline on /tools/: a cross-host
-// @id would assert an entity this site does not control.
-//
-// /northern-lights-michigan/ is deliberately ABSENT. Its JSON-LD graph is sha256-pinned by
-// tests/seasonal-search-protection.test.js and it is first in the staged backlog for a title and
-// description rewrite. One deliberate change and one repin there, not two.
-const HUB_TOOLS = [
-  { file: "public/soo-locks/index.html", url: "https://chrisizworski.com/soo-locks/", name: "Soo Locks Ship Schedule Today", category: "TravelApplication" },
-  { file: "public/great-lakes-buoys/index.html", url: "https://chrisizworski.com/great-lakes-buoys/", name: "Great Lakes Buoy Dashboard", category: "TravelApplication" },
-  { file: "public/great-lakes-beaches/index.html", url: "https://chrisizworski.com/great-lakes-beaches/", name: "Great Lakes Beach Conditions", category: "TravelApplication" },
-  { file: "public/great-lakes-freighter-tracking/index.html", url: "https://chrisizworski.com/great-lakes-freighter-tracking/" },
-  { file: "public/mackinac-bridge-live/index.html", url: "https://chrisizworski.com/mackinac-bridge-live/" },
-  { file: "public/mackinac-bridge-tolls/index.html", url: "https://chrisizworski.com/mackinac-bridge-tolls/" },
-  { file: "public/michigan-border-wait-times/index.html", url: "https://chrisizworski.com/michigan-border-wait-times/" },
-  { file: "public/michigan-boat-launches/index.html", url: "https://chrisizworski.com/michigan-boat-launches/" },
-  { external: true, id: "https://chrisizworski.com/isle-royale-map/#app", url: "https://chrisizworski.com/isle-royale-map/" },
-  { file: "public/heirloom-variety-matchmaker/index.html", url: "https://chrisizworski.com/heirloom-variety-matchmaker/" },
-  { file: "public/zone-6a-planting-calendar/index.html", url: "https://chrisizworski.com/zone-6a-planting-calendar/" },
-  { file: "public/estivant-pines/index.html", url: "https://chrisizworski.com/estivant-pines/" },
-  { file: "public/fall-color/michigan-leaf-peeping-planner/index.html", url: "https://chrisizworski.com/fall-color/michigan-leaf-peeping-planner/" },
-  { external: true, id: "https://chrisizworski.com/national-tools/aurora/#page", url: "https://chrisizworski.com/national-tools/aurora/" },
-  { external: true, id: "https://chrisizworski.com/national-tools/rivers/#page", url: "https://chrisizworski.com/national-tools/rivers/" },
-  { external: true, id: "https://chrisizworski.com/national-tools/coastal/#page", url: "https://chrisizworski.com/national-tools/coastal/" },
-  { external: true, id: "https://chrisizworski.com/national-tools/snow/#page", url: "https://chrisizworski.com/national-tools/snow/" },
-  { external: true, id: "https://chrisizworski.com/national-tools/white-christmas/#page", url: "https://chrisizworski.com/national-tools/white-christmas/" },
-  { external: true, id: "https://chrisizworski.com/national-tools/frost/#page", url: "https://chrisizworski.com/national-tools/frost/" },
-  { external: true, id: "https://chrisizworski.com/national-tools/planting/#page", url: "https://chrisizworski.com/national-tools/planting/" },
-  { external: true, id: "https://chrisizworski.com/national-tools/fall-color/#page", url: "https://chrisizworski.com/national-tools/fall-color/" },
-];
-
+const REGISTRY = "benchmarks/tool-network-registry.json";
 const APP_TYPES = new Set(["WebApplication", "SoftwareApplication"]);
-const failures = [];
-const notes = [];
-let changed = 0;
+const PAGE_TYPES = new Set(["WebPage", "CollectionPage", "Article", "Dataset", "WebSite"]);
+const APP_ONLY_FIELDS = ["applicationCategory", "applicationSubCategory", "operatingSystem"];
+const typesOf = (node) => [].concat(node?.["@type"] || []);
+const readBlocks = (html) => [...html.matchAll(/<script\b[^>]*\btype\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)];
 
-const readBlocks = (html) => [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
-
-function decode(value) {
-  return value
-    .replaceAll("&amp;", "&").replaceAll("&#x27;", "'").replaceAll("&#39;", "'")
-    .replaceAll("&quot;", '"').replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+function comparableUrl(value) {
+  try {
+    const url = new URL(value);
+    url.hash = "";
+    return url.href.replace(/\/$/, "");
+  } catch { return null; }
 }
 
-function metaDescription(html) {
-  const match = html.match(/<meta name="description" content="([^"]+)"/);
-  return match ? decode(match[1]) : null;
+function* allNodes(value) {
+  if (Array.isArray(value)) {
+    for (const item of value) yield* allNodes(item);
+  } else if (value && typeof value === "object") {
+    yield value;
+    for (const child of Object.values(value)) yield* allNodes(child);
+  }
 }
 
-// Find whatever entity this page already publishes for itself, whatever fragment it happens to use.
-function existingEntityId(html, url) {
+// Only a named entity for THIS destination qualifies. For example, a winery or trail listed on
+// a planner page must not become the identity of the planner itself.
+export function existingEntity(html, url) {
+  const entities = [];
   for (const block of readBlocks(html)) {
-    let parsed;
-    try { parsed = JSON.parse(block[1]); } catch { continue; }
-    for (const node of parsed["@graph"] || [parsed]) {
-      if (!node || typeof node !== "object") continue;
-      const type = node["@type"];
-      const types = Array.isArray(type) ? type : [type];
-      if (!types.some((value) => APP_TYPES.has(String(value)))) continue;
-      if (typeof node["@id"] === "string" && node["@id"].startsWith(url)) return node["@id"];
+    const parsed = JSON.parse(block[1]);
+    for (const node of allNodes(parsed)) {
+      if (typeof node["@id"] !== "string" || comparableUrl(node["@id"]) !== comparableUrl(url)) continue;
+      if (typesOf(node).some((type) => APP_TYPES.has(type) || PAGE_TYPES.has(type))) entities.push(node);
     }
   }
-  return null;
+  const node = entities.find((item) => typesOf(item).some((type) => APP_TYPES.has(type)))
+    || ["WebPage", "CollectionPage", "Article", "Dataset", "WebSite"]
+      .map((type) => entities.find((item) => typesOf(item).includes(type))).find(Boolean);
+  return node ? { id: node["@id"], type: node["@type"] } : null;
 }
 
-async function ensureEntity(tool) {
-  if (tool.external) return tool;
-  const file = path.join(root, tool.file);
-  const html = await readFile(file, "utf8");
-  const found = existingEntityId(html, tool.url);
-  if (found) return { ...tool, id: found };
-
-  const id = `${tool.url}#app`;
-  if (check) {
-    failures.push(`${tool.file}: no resolvable application entity (expected ${id})`);
-    return { ...tool, id: null };
-  }
-
-  const description = metaDescription(html);
-  if (!description) {
-    failures.push(`${tool.file}: no meta description to describe the tool with`);
-    return { ...tool, id: null };
-  }
-  // Deliberately minimal: what it is, who made it, that it is free. No ratings, no prices, nothing
-  // that goes stale or is invented.
-  const node = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "@id": id,
-    name: tool.name,
-    url: tool.url,
-    description,
-    applicationCategory: tool.category,
-    operatingSystem: "Any web browser",
-    isAccessibleForFree: true,
-    creator: { "@id": PERSON },
-    author: { "@id": PERSON },
-  };
-  const addition = `<script type="application/ld+json">${JSON.stringify(node)}</script>\n`;
-  await writeFile(file, html.replace("</head>", `${addition}</head>`));
-  changed++;
-  return { ...tool, id };
+// Derive count and ordering from the list actually displayed, not a separate registry total.
+// Registry entries that are not on this directory do not gain fabricated ListItems here.
+export function updateDirectoryList(list, byUrl) {
+  if (!Array.isArray(list.itemListElement)) throw new Error("Tools ItemList has no itemListElement array");
+  const before = JSON.stringify(list);
+  const linked = new Set();
+  const unresolved = [];
+  list.numberOfItems = list.itemListElement.length;
+  list.itemListElement.forEach((entry, index) => {
+    entry.position = index + 1;
+    const item = entry.item;
+    if (!item || typeof item !== "object" || typeof item.url !== "string") {
+      throw new Error(`Tools ListItem ${index + 1} has no item URL`);
+    }
+    const entity = byUrl.get(comparableUrl(item.url));
+    if (!entity) { unresolved.push(item.url); return; }
+    linked.add(entity.url);
+    // Put resolved values last so a stale old @id cannot overwrite the destination identity.
+    entry.item = { ...item, "@id": entity.id, "@type": entity.type };
+    if ([].concat(entity.type).some((type) => APP_TYPES.has(type))) {
+      entry.item.creator = { "@id": PERSON };
+    } else {
+      for (const field of APP_ONLY_FIELDS) delete entry.item[field];
+    }
+  });
+  return { changed: before !== JSON.stringify(list), linked, unresolved, count: list.itemListElement.length };
 }
 
-async function wireDirectory(resolved) {
-  const file = path.join(root, TOOLS_PAGE);
+export async function generateToolEntityGraph({ repoRoot = root, check = false } = {}) {
+  const registry = JSON.parse(await readFile(path.join(repoRoot, REGISTRY), "utf8"));
+  const resolved = [];
+  const failures = [];
+  const unavailable = [];
+  for (const tool of registry.tools) {
+    const url = new URL(tool.canonical);
+    if (url.origin !== "https://chrisizworski.com") continue;
+    const relative = decodeURIComponent(url.pathname).replace(/^\//, "");
+    const file = path.join("public", relative.endsWith(".html") ? relative : path.join(relative, "index.html"));
+    let html;
+    try { html = await readFile(path.join(repoRoot, file), "utf8"); }
+    catch (error) {
+      if (error.code === "ENOENT") { unavailable.push(tool.canonical); continue; }
+      throw error;
+    }
+    try {
+      const entity = existingEntity(html, tool.canonical);
+      if (entity) resolved.push({ ...tool, ...entity, url: tool.canonical });
+      else unavailable.push(tool.canonical);
+    } catch (error) { failures.push(`${file}: invalid JSON-LD (${error.message})`); }
+  }
+
+  const file = path.join(repoRoot, TOOLS_PAGE);
   let html = await readFile(file, "utf8");
-  const byUrl = new Map(resolved.filter((tool) => tool.id).map((tool) => [tool.url, tool]));
-  const listed = new Set();
-
+  const byUrl = new Map(resolved.map((tool) => [comparableUrl(tool.url), tool]));
+  let result = null;
   for (const block of readBlocks(html)) {
     let parsed;
-    try { parsed = JSON.parse(block[1]); } catch { continue; }
-    const graph = Array.isArray(parsed["@graph"]) ? parsed["@graph"] : null;
-    const nodes = graph || [parsed];
-    const list = nodes.find((node) => node && String(node["@type"]) === "ItemList");
+    try { parsed = JSON.parse(block[1]); }
+    catch (error) { failures.push(`${TOOLS_PAGE}: invalid JSON-LD (${error.message})`); continue; }
+    const list = [...allNodes(parsed)].find((node) => node["@id"] === "https://chrisizworski.com/tools/#toollist" && typesOf(node).includes("ItemList"));
     if (!list) continue;
-
-    let touched = false;
-    for (const entry of list.itemListElement || []) {
-      const url = entry?.item?.url;
-      if (!url) continue;
-      listed.add(url);
-      const tool = byUrl.get(url);
-      if (!tool) continue;
-      if (entry.item["@id"] === tool.id) continue;
-      if (check) {
-        failures.push(`/tools/ lists ${url} without referencing ${tool.id}`);
-        continue;
+    result = updateDirectoryList(list, byUrl);
+    if (result.changed) {
+      if (check) failures.push("/tools/ ItemList count, ordering, entity IDs or types are out of sync; run npm run generate:tool-entities");
+      else {
+        const rendered = JSON.stringify(parsed, null, block[1].includes("\n") ? 2 : undefined);
+        html = html.replace(block[0], () => block[0].replace(block[1], () => rendered));
       }
-      // Reference the entity rather than restating it. Name, url and description stay so the list
-      // reads on its own; the @id is what makes this the SAME thing as the tool's own page.
-      entry.item = { "@id": tool.id, ...entry.item, creator: { "@id": PERSON } };
-      touched = true;
-    }
-
-    if (touched && !check) {
-      const rebuilt = graph ? { ...parsed, "@graph": nodes } : nodes[0];
-      // Re-serialise in the style the block was already written in. Tests elsewhere pin exact
-      // substrings of this JSON, and reformatting the whole block to add one key would rewrite 600
-      // lines and break them for no crawler benefit.
-      const compact = !block[1].includes("\n");
-      const rendered = compact ? JSON.stringify(rebuilt) : JSON.stringify(rebuilt, null, 2);
-      html = html.replace(block[0], `<script type="application/ld+json">${rendered}</script>`);
-      changed++;
     }
     break;
   }
-
-  // Not a failure, but worth saying out loud: a live tool absent from the structured directory is
-  // invisible to a crawler reading it, however good its own page is.
-  for (const tool of resolved) {
-    if (tool.id && !listed.has(tool.url)) notes.push(tool.url);
-  }
-
-  if (!check) await writeFile(file, html);
+  if (!result) failures.push("/tools/: missing named tools ItemList");
+  if (failures.length) throw new Error(`TOOL ENTITY GRAPH FAILED:\n${failures.map((failure) => `  - ${failure}`).join("\n")}`);
+  if (!check && result.changed) await writeFile(file, html);
+  return {
+    resolved: resolved.length,
+    linked: result.linked.size,
+    listed: result.count,
+    changed: result.changed,
+    unavailable,
+  };
 }
 
-const resolved = [];
-for (const tool of HUB_TOOLS) resolved.push(await ensureEntity(tool));
-await wireDirectory(resolved);
-
-if (notes.length) {
-  console.log(`  note: ${notes.length} hub tools carry an entity but are absent from the /tools/ ItemList:`);
-  for (const url of notes) console.log(`    ${url}`);
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  try {
+    const result = await generateToolEntityGraph({ check: process.argv.includes("--check") });
+    console.log(`tool entity graph: ${result.resolved} registered local identities; ${result.linked}/${result.listed} directory entries linked to verified local identities; ${result.changed ? "directory updated" : "directory consistent"}`);
+    if (result.unavailable.length) console.log(`  ${result.unavailable.length} registered central destinations have no local identity source; existing descriptions remain unchanged (no IDs inferred).`);
+  } catch (error) { console.error(error.message); process.exitCode = 1; }
 }
-
-if (failures.length) {
-  console.error("TOOL ENTITY GRAPH FAILED:");
-  for (const failure of failures) console.error(`  - ${failure}`);
-  process.exit(1);
-}
-
-console.log(
-  check
-    ? `tool entity graph: ${resolved.filter((tool) => tool.id).length} hub tools carry a resolvable entity\n`
-    : `tool entity graph: ${resolved.length} hub tools, ${changed} files updated\n`,
-);

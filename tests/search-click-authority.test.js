@@ -29,8 +29,16 @@ test("priority search pages keep their search promise and link the publisher to 
 
 test("canonical Chris Izworski profile remains a ProfilePage for the shared Person entity", () => {
   const html = read("public/chris-izworski/index.html");
-  assert.ok(html.includes('"@type":"ProfilePage"'));
-  assert.ok(html.includes('"mainEntity":{"@id":"https://chrisizworski.com/#person"}'));
+  // Identity is a parsed JSON-LD contract, independent of whitespace formatting.
+  const nodes = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+    .flatMap((match) => {
+      const document = JSON.parse(match[1]);
+      return document["@graph"] || [document];
+    });
+  const profile = nodes.find((node) => node["@id"] === "https://chrisizworski.com/chris-izworski/");
+  assert.ok(profile);
+  assert.equal(profile["@type"], "ProfilePage");
+  assert.deepEqual(profile.mainEntity, { "@id": "https://chrisizworski.com/#person" });
   assert.ok(html.includes("<h1 class=\"page-title\">Chris Izworski: Profile</h1>"));
 });
 

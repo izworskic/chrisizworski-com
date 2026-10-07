@@ -433,7 +433,7 @@ const committedDriftHashEntries = [
   // url / description / alumniOf moved on these routes. Re-crawl after deploy and these pins can
   // go back to the live snapshot.
   ["/chris-izworski-biography/", "2191b790b006cd1c9ff20308aff607b319f9b79cfbec3cd0e0515ffd78c3d526"],
-  ["/chris-izworski-works/", "8091f6064031fa9302054c981a50d16284bb0b84b791eac5936919f177ac42d7"],
+  ["/chris-izworski-works/", "ed8cf7b61157e69d1b8b23bd9d6dbf3545eafb9f48a016eb4823588220f40279"],
   ["/fall-color/ann-arbor-irish-hills-fall-color/", "ee05322133166c076ca3ec0d02389524f703830e1bd5104c15de67d229490a61"],
   ["/fall-color/au-sable-river-fall-color/", "30927270360c024f9f0c63c492fe276aa9a529ad530563d6f3984edc2623b5a4"],
   ["/fall-color/mackinac-island-fall-color/", "3c7e2b336da1380a9b1501e04b5581fed9c9dbd323d94215f52bd344e802da07"],
@@ -497,8 +497,8 @@ const committedDriftHashEntries = [
   ["/great-lakes-beaches/wenonah-park/", "92ef0e15291a5bfebf4e89bb3c75226e8352867d0b7fcb35c631178059c176ff"],
   ["/great-lakes-beaches/whitefish-point/", "1dfa103faf8c639a4235ba668a55393b17623793710471579ffb0eb7ccb11a20"],
   ["/great-lakes-beaches/wilderness-state-park/", "6341bdb514bd1ab07c01233bdc8442e2e84e320bcebe2ec7c182b23b19ab5bb1"],
-  // Authorized Aug. 29 branded-profile freshness update; keep this as a pinned hash, not an exemption.
-  ["/sitemap-reputation.xml", "96bd5bc602607d6c3a8d41dbe16b438fcf8840a3a24cbbaafa60ee1cd914db70"],
+  // Authorized Oct. 7 creator-page freshness update; keep this as a pinned hash, not an exemption.
+  ["/sitemap-reputation.xml", "2557a272e32c40888f155d2a903be82d30ff7f31a87c004876a9c4821951c2fa"],
   ["/zone-6a-planting-calendar/", "3b34180a82558e2df887dc238ad31dc8d1995e465b3e5d81972ddec260414565"],
 ];
 
