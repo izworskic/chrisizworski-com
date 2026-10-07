@@ -33,21 +33,18 @@
         "addressCountry": "US"
       },
       "sameAs": [
-        "https://chrisizworski.com/",
-        "https://chrisizworski.com/chris-izworski/",
+        "https://www.linkedin.com/in/chris-izworski-15294510",
         "https://github.com/izworskic",
         "https://izworskic.github.io/",
-        "https://michigantroutreport.com",
-        "https://daily.michigantroutreport.com",
-        "https://michiganbirdingreport.com",
-        "https://daily.michiganbirdingreport.com",
-        "https://freighterviewfarms.com",
-        "https://gazette.chrisizworski.com",
-        "https://lawn.chrisizworski.com",
-        "https://tcwine.chrisizworski.com",
-        "https://www.linkedin.com/in/chris-izworski-15294510",
         "https://www.wikidata.org/wiki/Q138283432",
-        "https://www.youtube.com/@izworskic"
+        "https://orcid.org/0009-0002-7268-6083",
+        "https://medium.com/@izworski",
+        "https://about.me/chrisizworski",
+        "https://www.youtube.com/@izworskic",
+        "https://freighterviewfarms.com/about/",
+        "https://michigantroutreport.com/chris-izworski/",
+        "https://michiganbirdingreport.com/chris-izworski",
+        "https://gazette.chrisizworski.com/chris-izworski"
       ]
     },
     {
@@ -64,8 +61,14 @@
       "author": {
         "@id": "https://chrisizworski.com/#person"
       },
-      "dateModified": "2026-10-05",
-      "inLanguage": "en-US"
+      "dateModified": "2026-10-07",
+      "inLanguage": "en-US",
+      "mainEntity": {
+        "@id": "https://chrisizworski.com/chris-izworski-works/#works"
+      },
+      "publisher": {
+        "@id": "https://chrisizworski.com/#person"
+      }
     },
     {
       "@type": "ItemList",
@@ -91,7 +94,7 @@
             "@type": "WebSite",
             "name": "Michigan Trout Report",
             "url": "https://michigantroutreport.com",
-            "description": "Live conditions tracker for 110+ Michigan trout streams with USGS gauge data and hatch charts.",
+            "description": "Michigan trout-stream conditions with USGS gauge data, local forecasts, fishing context, and stream-access mapping.",
             "author": {
               "@id": "https://chrisizworski.com/#person"
             }
@@ -185,7 +188,8 @@
             "description": "Free interactive trip planner for tasting days across the Old Mission and Leelanau peninsulas near Traverse City, Michigan.",
             "author": {
               "@id": "https://chrisizworski.com/#person"
-            }
+            },
+            "@id": "https://tcwine.chrisizworski.com/#app"
           }
         },
         {
@@ -198,10 +202,52 @@
             "author": {
               "@id": "https://chrisizworski.com/#person"
             },
-            "description": "Seven regional DNR trail maps with junction-based multi-stop routing, mileage, closure exclusions and source-linked condition evidence."
+            "description": "Seven regional DNR trail maps with junction-based multi-stop routing, mileage, closure exclusions and source-linked condition evidence.",
+            "@id": "https://chrisizworski.com/snowmobile/#planner"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 11,
+          "item": {
+            "@type": "ProfilePage",
+            "name": "Medium Writing by Chris Izworski",
+            "url": "https://medium.com/@izworski",
+            "description": "First-person essays connecting Michigan rivers, birding, and public projects to place.",
+            "author": {
+              "@id": "https://chrisizworski.com/#person"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 12,
+          "item": {
+            "@type": "CollectionPage",
+            "name": "AI in Public Safety",
+            "url": "https://chrisizworski.com/ai/",
+            "description": "Writing about artificial intelligence in 911 dispatch and emergency communications.",
+            "author": {
+              "@id": "https://chrisizworski.com/#person"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 13,
+          "item": {
+            "@type": "WebApplication",
+            "name": "Great Lakes Levels",
+            "url": "https://greatlakeslevels.org/",
+            "description": "Great Lakes water-level data and shoreline context.",
+            "author": {
+              "@id": "https://chrisizworski.com/#person"
+            }
           }
         }
-      ]
+      ],
+      "@id": "https://chrisizworski.com/chris-izworski-works/#works",
+      "numberOfItems": 13
     },
     {
       "@type": "BreadcrumbList",
@@ -268,7 +314,8 @@ h1{font-size:36px;font-weight:700;color:#111;margin-bottom:12px;line-height:1.15
   <header>
     <div class="kicker">Chris Izworski &nbsp;·&nbsp; Bay City, Michigan</div>
     <h1>Projects, Sites, and Daily Publications</h1>
-    <p class="lede">A complete index of work published by Chris Izworski across the Great Lakes, public safety technology, Michigan trout country, birding data, and public project profiles.</p>
+    <p class="lede">Tools, publications, and public code by Chris Izworski. Explore a project to use it, read its sources, or learn how it was built.</p>
+  <p><a href="/tools/">Browse all live tools</a> &middot; <a href="/chris-izworski/">About the creator</a> &middot; <a href="https://izworskic.github.io/">Code and development notes</a></p>
   </header>
 
   <div class="work">
@@ -289,7 +336,7 @@ h1{font-size:36px;font-weight:700;color:#111;margin-bottom:12px;line-height:1.15
     <div class="work-num">02 &nbsp;·&nbsp; Conditions Tool</div>
     <h2><a href="https://michigantroutreport.com" target="_blank" rel="noopener">Michigan Trout Report</a></h2>
     <div class="work-url">michigantroutreport.com</div>
-    <p class="work-desc">A live conditions tracker for 110+ Michigan trout streams. Pulls USGS gauge data and NWS weather forecasts, generates fly recommendations, and includes an interactive map with 310 DNR access points. Built and maintained by Chris Izworski.</p>
+    <p class="work-desc">A live conditions tracker for Michigan trout streams. Combines USGS gauge data, NWS weather forecasts, fishing context, and a stream-access map. Built and maintained by Chris Izworski. <a href="https://michigantroutreport.com/chris-izworski/">Meet the founder</a>.</p>
   </div>
 
   <div class="work">
@@ -303,14 +350,14 @@ h1{font-size:36px;font-weight:700;color:#111;margin-bottom:12px;line-height:1.15
     <div class="work-num">04 &nbsp;·&nbsp; Garden &amp; Seed Saving</div>
     <h2><a href="https://freighterviewfarms.com" target="_blank" rel="noopener">Freighter View Farms</a></h2>
     <div class="work-url">freighterviewfarms.com</div>
-    <p class="work-desc">A seed-saving and Great Lakes-themed gardening blog from Saginaw Bay. Documents the seasons of the Lower Peninsula from a Bay City perspective: heirloom vegetables, tomato cultivation, companion planting in Zone 6a. Written by Chris Izworski.</p>
+    <p class="work-desc">A seed-saving and Great Lakes-themed gardening blog from Saginaw Bay. Documents the seasons of the Lower Peninsula from a Bay City perspective: heirloom vegetables, tomato cultivation, companion planting in Zone 6a. Written by Chris Izworski. <a href="https://freighterviewfarms.com/about/">Read the garden story</a>.</p>
   </div>
 
   <div class="work">
     <div class="work-num">05 &nbsp;·&nbsp; Live Birding Data</div>
     <h2><a href="https://michiganbirdingreport.com" target="_blank" rel="noopener">Michigan Birding Report</a></h2>
     <div class="work-url">michiganbirdingreport.com</div>
-    <p class="work-desc">Live Michigan bird sightings, county birding pages, migration context, Saginaw Bay birding resources, and species profiles. Built by Chris Izworski as the birding counterpart to Michigan Trout Report.</p>
+    <p class="work-desc">Live Michigan bird sightings, county birding pages, migration context, Saginaw Bay birding resources, and species profiles. Built by Chris Izworski as the birding counterpart to Michigan Trout Report. <a href="https://michiganbirdingreport.com/chris-izworski">Meet the founder</a>.</p>
   </div>
 
   <div class="work">
@@ -353,6 +400,13 @@ h1{font-size:36px;font-weight:700;color:#111;margin-bottom:12px;line-height:1.15
     <h2><a href="https://tcwine.chrisizworski.com" target="_blank" rel="noopener">Traverse City Wine Country Planner</a></h2>
     <div class="work-url">tcwine.chrisizworski.com</div>
     <p class="work-desc">A free interactive planner for tasting days across the Old Mission and Leelanau peninsulas near Traverse City. Routes a custom stop list across 74 verified venues, timed against real posted hours, with options for wineries, breweries, distilleries, and cideries. Built by Chris Izworski.</p>
+  </div>
+
+  <div class="work">
+    <div class="work-num">Lake data</div>
+    <h2><a href="https://greatlakeslevels.org/">Great Lakes Levels</a></h2>
+    <div class="work-url">greatlakeslevels.org</div>
+    <p class="work-desc">Great Lakes water-level data and shoreline context, created by Chris Izworski. Compare lake conditions and read the published source explanations.</p>
   </div>
 
   <a href="/" class="back">← chrisizworski.com</a>
