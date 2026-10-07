@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { readFileSync } = require('node:fs');
+const { readFileSync, existsSync } = require('node:fs');
 const path = require('node:path');
 const {
   mortgagePI, normalizeInput, costAtPrice, realityGap, downPaymentBreakpoint, buildDecision,
@@ -87,6 +87,35 @@ test('daily mortgage source uses Optimal Blue conforming non-adjusted index with
   assert.match(source, /Optimal Blue OBMMI via FRED/);
   assert.match(source, /MORTGAGE30US/);
   assert.match(source, /Daily mortgage index was temporarily unavailable/);
+});
+
+test('house API is multiplexed through the existing fall-color dispatcher instead of consuming a Vercel function slot', () => {
+  const root = path.join(__dirname, '..');
+  assert.equal(existsSync(path.join(root, 'api', 'house-fit.js')), false);
+
+  const dispatcher = readFileSync(path.join(root, 'api', 'fall-color.js'), 'utf8');
+  assert.match(dispatcher, /"house-fit": require\("\.\.\/lib\/house-fit\/route\.js"\)/);
+
+  const config = JSON.parse(readFileSync(path.join(root, 'vercel.json'), 'utf8'));
+  assert.ok(config.rewrites.some((item) =>
+    item.source === '/api/house-fit' &&
+    item.destination === '/api/fall-color?view=house-fit'
+  ));
+
+  const route = readFileSync(path.join(root, 'lib', 'house-fit', 'route.js'), 'utf8');
+  assert.match(route, /module\.exports = async function handler/);
+  assert.match(route, /Content-Type', 'application\/json; charset=utf-8'/);
+});
+
+test('house client rejects HTML responses before attempting JSON parsing', () => {
+  const js = readFileSync(path.join(__dirname, '..', 'public', 'assets', 'house-fit.js'), 'utf8');
+  const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
+  assert.match(js, /async function readJsonResponse\(response\)/);
+  assert.match(js, /contentType\.includes\('application\/json'\)/);
+  assert.match(js, /House calculator service returned an unexpected response/);
+  assert.match(js, /await response\.text\(\)/);
+  assert.doesNotMatch(js, /await response\.json\(\)/);
+  assert.match(html, /house-fit\.js\?v=20261007a/);
 });
 
 test('normalization fixes loan term and automatic assumptions instead of exposing extra inputs', () => {
