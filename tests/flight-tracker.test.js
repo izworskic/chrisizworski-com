@@ -23,6 +23,33 @@ test('passenger flight numbers normalize only to direct unambiguous operating ca
   assert.deepEqual(raw.callsigns, ['UAL2380']);
 });
 
+
+test('direct airline coverage includes verified major international and nearby carriers without regional guessing', () => {
+  const expected = {
+    BA:'BAW', LH:'DLH', AF:'AFR', KL:'KLM', EI:'EIN', FI:'ICE', VS:'VIR',
+    TK:'THY', EK:'UAE', QR:'QTR', NH:'ANA', JL:'JAL', SQ:'SIA', QF:'QFA',
+    NZ:'ANZ', AI:'AIC', KE:'KAL', AM:'AMX', AV:'AVA', CM:'CMP', PD:'POE', TS:'TSC'
+  };
+  for (const [iata, icao] of Object.entries(expected)) {
+    const normalized = api.normalizeFlightInput(iata + '123');
+    assert.equal(normalized.ok, true, iata);
+    assert.deepEqual(normalized.callsigns, [icao + '123'], iata);
+  }
+  // The resolver still does not invent same-number regional partner callsigns.
+  assert.deepEqual(api.normalizeFlightInput('DL123').callsigns, ['DAL123']);
+  assert.deepEqual(api.normalizeFlightInput('AA123').callsigns, ['AAL123']);
+  assert.deepEqual(api.normalizeFlightInput('UA123').callsigns, ['UAL123']);
+});
+
+test('common aircraft type designators become passenger-readable names and unknown types stay truthful', () => {
+  assert.equal(api.aircraftTypeName('A321'), 'Airbus A321');
+  assert.equal(api.aircraftTypeName('B38M'), 'Boeing 737 MAX 8');
+  assert.equal(api.aircraftTypeName('BCS3'), 'Airbus A220-300');
+  assert.equal(api.aircraftTypeName('E75L'), 'Embraer E175');
+  assert.equal(api.aircraftTypeName('ZZZZ'), 'ZZZZ');
+  assert.equal(api.aircraftTypeName(null), null);
+});
+
 test('unknown airline and malformed flight numbers fail closed', () => {
   assert.equal(api.normalizeFlightInput('ZZ123').ok, false);
   assert.equal(api.normalizeFlightInput('1234').ok, false);
@@ -48,6 +75,7 @@ test('aircraft sanitizer requires an actual reported position', () => {
   assert.equal(plane.lon,-84.2);
   assert.equal(plane.altitudeFeet,33000);
   assert.equal(plane.positionAgeSeconds,3.6);
+  assert.equal(plane.aircraftTypeName,'Airbus A321');
 });
 
 
@@ -85,7 +113,7 @@ test('page is flight number to plane map without dashboard creep', () => {
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261006c/);
+  assert.match(html, /flight-tracker\.js\?v=20261007a/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -160,6 +188,24 @@ test('straight-line miles left and broad landing window are computed for a credi
   assert.ok(progress.landingEstimate.maxMinutes > 45);
 });
 
+
+test('direct progress is rounded, bounded, and clearly separate from route miles', () => {
+  const route = {
+    plausible:true,
+    origin:{iata:'ATL',lat:33.64,lon:-84.43},
+    destination:{iata:'MCO',lat:28.431,lon:-81.308}
+  };
+  const midway = {
+    lat:31.15,lon:-82.87,onGround:false,altitudeFeet:28000,speedKnots:430,
+    verticalRateFpm:0,trackDegrees:145,positionAgeSeconds:2
+  };
+  const progress=api.flightProgress(midway,route,true);
+  assert.ok(Number.isFinite(progress.directDistanceMiles));
+  assert.ok(progress.directDistanceMiles > progress.remainingMiles);
+  assert.ok(progress.directProgressPercent >= 0 && progress.directProgressPercent <= 100);
+  assert.equal(progress.directProgressPercent % 5,0);
+});
+
 test('untrusted, stale, and no-route positions suppress calculated ETA and distance', () => {
   const plane=testPlane();
   for (const [p,route,fresh] of [
@@ -204,4 +250,19 @@ test('page displays compact live phase, direct miles left and landing window abo
   assert.match(client, /glance\.hidden = true/);
   assert.match(html, /Rough landing window/);
   assert.doesNotMatch(html, /scheduled arrival:|on.time score|delay prediction/i);
+});
+
+
+test('page renders human-readable route, aircraft identity and tiny direct-progress bar without dashboard creep', () => {
+  assert.match(html, /id="route-codes"/);
+  assert.match(html, /id="direct-progress"/);
+  assert.match(html, /id="direct-progress-fill"/);
+  assert.match(html, /id="direct-progress-percent"/);
+  assert.match(client, /function airportPlace\(ap\)/);
+  assert.match(client, /function aircraftIdentity\(ac\)/);
+  assert.match(client, /routeLabel\.textContent = airportPlace/);
+  assert.match(client, /routeCodes\.textContent = airportCode/);
+  assert.match(client, /progressFill\.style\.width/);
+  assert.match(client, /aircraftIdentity\(ac\)/);
+  assert.doesNotMatch(html, /squawk|mach|weather radar|airport dashboard/i);
 });
