@@ -79,6 +79,13 @@ Current role: Solutions Consultant at Prepared.
 - Flight Tracker — Where Is My Plane?: https://chrisizworski.com/flight-tracker/ — enter a commercial flight number to see the aircraft's latest actual reported ADS-B position on a simple airport-to-airport map.
 - NYC Crossing Decision Engine: https://chrisizworski.com/nyc-crossing/
 
+## Home-Buying Decision Tool
+
+- Can I Afford This House? True Monthly Cost: https://chrisizworski.com/can-i-afford-this-house/
+- Purpose: estimate the real monthly carrying cost of a specific house from its address, asking price and down payment, using a daily 30-year conforming mortgage-rate default plus public tax and FEMA context.
+- Primary output: mortgage-only payment versus estimated true monthly cost, the Reality Gap, PMI, the 20% down-payment breakpoint, maintenance, cash-to-close context and costs that still require verification.
+- Scope rule: this is a property-cost planning tool, not lender approval, underwriting, appraisal, investment advice or a generic income-ratio affordability calculator.
+
 ## Owned Project Domains
 
 - Michigan Outdoors Now: https://michiganoutdoorsnow.chrisizworski.com/

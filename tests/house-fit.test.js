@@ -300,6 +300,71 @@ test('engine has no monthly limit, generic income ratio or Fit Ceiling', () => {
   assert.equal(Object.prototype.hasOwnProperty.call(result, 'incomeBenchmark'), false);
 });
 
+test('house page exposes complete search, social-card and app discovery metadata', () => {
+  const root = path.join(__dirname, '..');
+  const html = readFileSync(path.join(root, 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
+
+  assert.match(html, /<title>Can I Afford This House\? True Monthly Cost \| Chris Izworski<\/title>/);
+  assert.match(html, /<meta name="description" content="Enter a house address, asking price and down payment to estimate true monthly cost:/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/can-i-afford-this-house\/">/);
+  assert.match(html, /<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">/);
+  assert.match(html, /<meta name="author" content="Chris Izworski">/);
+  assert.match(html, /<link rel="author" href="https:\/\/chrisizworski\.com\/chris-izworski\/">/);
+
+  assert.match(html, /<meta property="og:site_name" content="Chris Izworski">/);
+  assert.match(html, /<meta property="og:locale" content="en_US">/);
+  assert.match(html, /<meta property="og:image" content="https:\/\/chrisizworski\.com\/og-image\.png">/);
+  assert.match(html, /<meta property="og:image:width" content="1200">/);
+  assert.match(html, /<meta property="og:image:height" content="630">/);
+  assert.match(html, /<meta name="twitter:card" content="summary_large_image">/);
+  assert.match(html, /<meta name="twitter:image" content="https:\/\/chrisizworski\.com\/og-image\.png">/);
+  assert.match(html, /<meta name="twitter:image:alt"/);
+
+  const jsonLd = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+    .map((match) => JSON.parse(match[1]))
+    .find((item) => Array.isArray(item['@graph']) && item['@graph'].some((node) => node['@id'] === 'https://chrisizworski.com/can-i-afford-this-house/#app'));
+  assert.ok(jsonLd, 'House JSON-LD graph should parse');
+
+  const graph = jsonLd['@graph'];
+  const page = graph.find((node) => node['@id'] === 'https://chrisizworski.com/can-i-afford-this-house/#page');
+  const app = graph.find((node) => node['@id'] === 'https://chrisizworski.com/can-i-afford-this-house/#app');
+  const breadcrumb = graph.find((node) => node['@type'] === 'BreadcrumbList');
+  const person = graph.find((node) => node['@id'] === 'https://chrisizworski.com/#person');
+
+  assert.equal(page.datePublished, '2026-10-06');
+  assert.equal(page.dateModified, '2026-10-07');
+  assert.equal(page.inLanguage, 'en-US');
+  assert.equal(page.mainEntity['@id'], app['@id']);
+  assert.equal(app.applicationCategory, 'FinanceApplication');
+  assert.equal(app.offers.price, '0');
+  assert.equal(app.offers.priceCurrency, 'USD');
+  assert.equal(app.creator['@id'], 'https://chrisizworski.com/#person');
+  assert.ok(Array.isArray(app.featureList) && app.featureList.length >= 8);
+  assert.ok(breadcrumb.itemListElement.some((item) => item.item === 'https://chrisizworski.com/tools/'));
+  assert.ok(person.sameAs.includes('https://www.wikidata.org/wiki/Q138283432'));
+});
+
+test('site discovery surfaces describe the current House product rather than the retired Fit Ceiling concept', () => {
+  const root = path.join(__dirname, '..');
+  const tools = readFileSync(path.join(root, 'public', 'tools', 'index.html'), 'utf8');
+  const llms = readFileSync(path.join(root, 'public', 'llms.txt'), 'utf8');
+  const sitemap = readFileSync(path.join(root, 'public', 'sitemap.xml'), 'utf8');
+
+  assert.match(tools, /latest daily 30-year conforming mortgage-rate average/i);
+  assert.match(tools, /Reality Gap/);
+  assert.doesNotMatch(tools, /reverse-solves the purchase price at which estimated monthly ownership cost fits a buyer-chosen limit/);
+  assert.doesNotMatch(tools, /current Freddie Mac 30-year benchmark/);
+
+  assert.match(llms, /## Home-Buying Decision Tool/);
+  assert.match(llms, /https:\/\/chrisizworski\.com\/can-i-afford-this-house\//);
+  assert.match(llms, /property-cost planning tool/);
+
+  assert.match(
+    sitemap,
+    /<loc>https:\/\/chrisizworski\.com\/tools\/<\/loc>\s*<lastmod>2026-10-07<\/lastmod>/
+  );
+});
+
 test('page promise is obvious before the first input and stays out of generic affordability territory', () => {
   const html = readFileSync(path.join(__dirname, '..', 'public', 'can-i-afford-this-house', 'index.html'), 'utf8');
   assert.match(html, /See what this house is really likely to cost each month/);
