@@ -11,12 +11,12 @@ const FIXED_COORDINATES = {
   queensboro: '-73.944306,40.752111;-73.9547,40.7569;-73.9638,40.7603',
   williamsburg: '-73.9586,40.7097;-73.972211,40.713747;-73.9853,40.7181',
   manhattan: '-73.9876,40.70209;-73.99103,40.70835;-73.99485,40.7158',
-  rfk: '-73.92846,40.8011;-73.92956,40.801305;-73.93128,40.79427',
+  rfk: '-73.925666,40.799503;-73.927788,40.800378;-73.93128,40.79427',
   verrazzano: '-74.05227,40.60395;-74.04493,40.60628;-74.03916,40.60818',
 };
 const PROBE_IDS = Object.keys(FIXED_COORDINATES);
 const PROBE_COUNT = PROBE_IDS.length;
-const FIXED_BEARINGS = { manhattan: '340,45;340,45;', rfk: '280,45;280,45;210,60', verrazzano: '67,45;67,45;67,45' };
+const FIXED_BEARINGS = { manhattan: '340,45;340,45;', rfk: '300,45;300,45;210,60', verrazzano: '67,45;67,45;67,45' };
 
 function routeBody(id = 'queensboro') {
   return {
@@ -57,7 +57,7 @@ function harness(respond = id => response(200, routeBody(id))) {
     const coordinates = decodeURIComponent(parsed.pathname.split('/').pop());
     const id = Object.keys(FIXED_COORDINATES).find(key => FIXED_COORDINATES[key] === coordinates);
     assert.ok(id, 'request must retain the exact three fixed bridge coordinates');
-    assert.equal(parsed.searchParams.get('radiuses'), '200;120;200');
+    assert.equal(parsed.searchParams.get('radiuses'), id === 'rfk' ? '50;30;50' : '200;120;200');
     assert.equal(parsed.searchParams.get('bearings'), FIXED_BEARINGS[id] || null, 'only new probes add inbound carriageway constraints');
     assert.equal(parsed.searchParams.get('alternatives'), 'false');
     assert.equal(parsed.searchParams.get('depart_at'), 'now');
@@ -325,6 +325,18 @@ test('new probes keep their own measured segment scopes and do not relabel the o
   assert.equal(traffic.NYCDOT_LINKS['4616340'].scope, 'APPROACH_CORRIDOR');
   assert.equal(traffic.NYCDOT_LINKS['4456452'].scope, 'APPROACH_SEGMENT');
   assert.equal(traffic.NYCDOT_LINKS['4763652'].scope, 'CROSSING_ONLY');
+});
+
+test('RFK middle anchor pins the inbound Harlem River lift span and wrong-carriageway loops stay rejected', () => {
+  const probe = traffic.MAPBOX_PROBES.rfk;
+  assert.deepEqual(probe.coordinates[1], [-73.927788, 40.800378]);
+  assert.equal(probe.bearings, '300,45;300,45;210,60');
+  assert.equal(probe.radiuses, '50;30;50');
+  const valid = routeBody('rfk');
+  valid.routes[0].distance = 1447;
+  assert.equal(traffic.normalizeMapboxResponse('rfk', valid, NOW).mapboxDistanceMeters, 1447);
+  valid.routes[0].distance = 4719;
+  assert.throws(() => traffic.normalizeMapboxResponse('rfk', valid, NOW), /distance 4719 m; allowed 900–2500 m/);
 });
 
 test('legacy LIVE caches covering only the original two bridges cannot hide the three new probes', async () => {

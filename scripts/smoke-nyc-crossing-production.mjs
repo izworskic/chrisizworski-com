@@ -175,7 +175,7 @@ async function runSmoke() {
         ? ' | warning=no fresh live readings at smoke time'
         : '';
       console.log(
-        `NYC crossing production smoke ${result.mapboxHealth} | page=${result.page} | api=${result.api} | traffic=${result.trafficState} | live=${result.liveCount} | baselines=${result.baselineCount} | nycdotLive=${result.nycdotLiveCount} | nycdotBaselines=${result.nycdotBaselineCount} | baselineState=${result.baselineState} | mapbox=${result.mapboxCount || 0} | ${result.mapboxDiagnostics} | baselineReason=${result.baselineReason || 'none'}${suffix}${result.mapboxHealth === 'DEGRADED' ? ' | warning=temporary Mapbox outage; East River fallback coverage is incomplete' : ''}`,
+        `NYC crossing production smoke ${result.mapboxHealth} | page=${result.page} | api=${result.api} | traffic=${result.trafficState} | live=${result.liveCount} | baselines=${result.baselineCount} | nycdotLive=${result.nycdotLiveCount} | nycdotBaselines=${result.nycdotBaselineCount} | baselineState=${result.baselineState} | mapbox=${result.mapboxCount || 0} | ${result.mapboxDiagnostics} | baselineReason=${result.baselineReason || 'none'}${suffix}${result.mapboxHealth === 'DEGRADED' ? ' | warning=temporary Mapbox outage; crossing fallback coverage is incomplete' : ''}`,
       );
       process.exit(0);
     } catch (error) {

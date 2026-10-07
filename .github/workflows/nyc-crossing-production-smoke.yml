@@ -16,12 +16,29 @@ on:
 
 permissions:
   contents: read
+  statuses: read
 
 jobs:
   public-origin:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
     steps:
+      - name: Wait for this commit's production deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for attempt in $(seq 1 80); do
+            if state=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/status" --jq '[.statuses[] | select(.context == "Vercel" and ((.target_url // "") | contains("/chrisizworski-com/")))] | .[0].state // "pending"'); then
+              case "$state" in
+                success) echo "This commit's production deployment is ready."; exit 0 ;;
+                error|failure) echo "Production deployment failed: $state"; exit 1 ;;
+              esac
+            fi
+            echo "Waiting for production deployment ($attempt/80)."
+            sleep 15
+          done
+          echo "Production deployment did not become ready within 20 minutes."
+          exit 1
       - name: Check out source
         uses: actions/checkout@v4
       - name: Set up Node
