@@ -518,7 +518,7 @@
       setAnswer({
         kicker:'YOUR FLIGHT IS AIRBORNE',
         headline:'This is your aircraft in flight.',
-        summary:currentLeg ? 'It is currently operating ' + currentLeg + '.' : 'The assigned aircraft is airborne and reporting a live position.',
+        summary:currentLeg ? 'It is currently flying ' + currentLeg + '.' : 'Your aircraft is in the air, and we are tracking it.',
         pills,
         next:'What happens next: this page will keep following your flight to its destination.',
         source:assignmentSourceText()
@@ -546,9 +546,9 @@
       setAnswer({
         kicker:'YOUR ASSIGNED AIRCRAFT',
         headline:'Your plane is currently flying ' + currentLeg + '.',
-        summary:'That is the aircraft currently assigned to your flight. It is not yet on a leg that ends at ' + airportPlace(userOrigin) + ', so another leg or an aircraft swap may happen before your departure.',
+        summary:'That is the aircraft currently assigned to your flight. It is not yet flying into ' + airportPlace(userOrigin) + ', so it may have another flight to make first, or the airline may swap aircraft before your departure.',
         pills:[...pills,currentLeg],
-        next:'What happens next: keep watching the assignment. This aircraft may operate another leg first, or the airline may swap aircraft before departure.',
+        next:'What happens next: keep watching the assignment. This aircraft may make another flight first, or the airline may swap aircraft before departure.',
         source:assignmentSourceText()
       });
       return;
@@ -556,10 +556,10 @@
 
     setAnswer({
       kicker:'YOUR ASSIGNED AIRCRAFT',
-      headline:'We found your airplane: ' + tail + '.',
-      summary:'It is reporting a live position, but its current airport-to-airport leg is not available yet.',
+      headline:'We found your plane: ' + tail + '.',
+      summary:'It’s in the air, and we’re tracking it. We can see where it is right now, but we can’t yet confirm where this airplane is coming from or where it’s headed.',
       pills,
-      next:'What happens next: we’ll keep checking this aircraft’s route and the airline assignment.',
+      next:'What happens next: keep this page open. We’ll keep checking and show its current trip as soon as we can confirm it.',
       source:assignmentSourceText()
     });
   }
@@ -578,7 +578,7 @@
       summary:onGround
         ? 'The assigned aircraft is ' + tail + '. It is currently reported on the ground, so there is no airborne route to show yet.'
         : seen
-          ? 'The ADS-B network is seeing ' + tail + ', but it does not currently have a usable position to put on the map.'
+          ? 'Our live aircraft feed can see ' + tail + ', but it does not have a current location we can show on the map yet.'
           : 'The assigned aircraft is ' + tail + '. It may be parked at a gate, outside coverage, or between usable position reports.',
       pills:[route,delay,tail,assignment?.equipment?.name].filter(Boolean),
       next:'What happens next: we’ll keep checking ' + tail + '. If it starts reporting a usable position, this page will update automatically.',
