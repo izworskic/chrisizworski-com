@@ -5,6 +5,7 @@ const path = require('node:path');
 
 const root = path.join(__dirname, '..');
 const api = require('../api/flight-tracker.js')._test;
+const assignmentApi = require('../api/flight-assignment.js')._test;
 const html = fs.readFileSync(path.join(root,'public','flight-tracker','index.html'),'utf8');
 const client = fs.readFileSync(path.join(root,'public','assets','flight-tracker.js'),'utf8');
 
@@ -101,19 +102,23 @@ test('resolver never guesses when multiple live candidates remain', () => {
   assert.equal(ambiguous.aircraft,null);
 });
 
-test('page is flight number to plane map without dashboard creep', () => {
-  assert.match(html, /<h1 id="page-title">Where's My Plane\?<\/h1>/);
+test('page leads with the delayed-flight inbound-aircraft problem rather than a generic map', () => {
+  assert.match(html, /<h1 id="page-title">Where's the Plane for My Flight\?<\/h1>/);
+  assert.match(html, /Flight delayed\?/);
   assert.match(html, /id="flight-number"/);
-  assert.match(html, /id="flight-map"/);
-  assert.match(html, /Actual reports only/);
-  assert.match(html, /ADSB\.lol/);
-  assert.doesNotMatch(html, /delay prediction|weather score|airport dashboard|recommendation score/i);
+  assert.match(html, /id="flight-date"/);
+  assert.match(html, /FIND MY PLANE/);
+  assert.match(html, /id="answer-card"/);
+  assert.ok(html.indexOf('id="answer-card"') < html.indexOf('id="flight-map"'));
+  assert.match(html, /Built for delays/);
+  assert.match(html, /Assignments can change/);
+  assert.doesNotMatch(html, /weather score|airport dashboard|recommendation score/i);
 });
 
 
 test('browser loader uses the supported MapLibre ESM bundle instead of the missing classic bundle', () => {
   assert.doesNotMatch(html, /maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.js/);
-  assert.match(html, /flight-tracker\.js\?v=20261007b/);
+  assert.match(html, /flight-tracker\.js\?v=20261007c/);
   assert.match(client, /import\('https:\/\/cdn\.jsdelivr\.net\/npm\/maplibre-gl@6\.3\.0\/dist\/maplibre-gl\.mjs'\)/);
   assert.match(client, /The flight map could not load/);
 });
@@ -284,4 +289,108 @@ test('refresh resilience is bounded and explicit lookups still fail closed', () 
   assert.match(client, /else if \(!\(silent && holdLastLiveOnRefreshMiss\(data\)\)\) \{\s*renderUnavailable\(data\);/s);
   assert.match(client, /const sequence = \+\+requestSequence/);
   assert.match(client, /sequence !== requestSequence \|\| activeFlight !== normalized/);
+});
+
+
+test('assignment parser extracts same-day flight options from FlightStats structured page data', () => {
+  const payload = {
+    props:{initialState:{flightTracker:{otherDays:[
+      {flights:[
+        {
+          url:'/flight-tracker/DL/1234?year=2026&month=10&date=07&flightId=777',
+          sortTime:'2026-10-07T20:30:00.000Z',
+          departureAirport:{iata:'DTW',city:'Detroit'},
+          arrivalAirport:{iata:'MBS',city:'Saginaw'},
+          departureTime:'4:30',departureTimeAmPm:'PM',departureTimezone:'EDT'
+        },
+        {
+          url:'/flight-tracker/DL/1234?year=2026&month=10&date=08&flightId=778',
+          sortTime:'2026-10-08T20:30:00.000Z',
+          departureAirport:{iata:'DTW'},arrivalAirport:{iata:'MBS'}
+        }
+      ]}
+    ]}}}
+  };
+  const htmlFixture = '<script>__NEXT_DATA__ = ' + JSON.stringify(payload) + ';__NEXT_LOADED_PAGES__=[];</script>';
+  const parsed = assignmentApi.parseNextData(htmlFixture);
+  const date = assignmentApi.normalizeDate('2026-10-07');
+  const options = assignmentApi.optionsForDate(parsed,date);
+  assert.equal(options.length,1);
+  assert.equal(options[0].flightId,'777');
+  assert.equal(options[0].origin.iata,'DTW');
+  assert.equal(options[0].destination.iata,'MBS');
+});
+
+test('assignment sanitizer extracts assigned tail, delay, gates and scheduled route without inventing an inbound leg', () => {
+  const flight = {
+    flightId:1412663918,
+    flightNote:{canceled:false,hasDepartedRunway:false,landed:false,message:'Tracking will begin after departure'},
+    isTracking:false,isLanded:false,
+    resultHeader:{carrier:{fs:'AA'},flightNumber:'3276'},
+    status:{
+      statusCode:'D',status:'Delayed',statusDescription:'Delayed',
+      delay:{departure:{minutes:43},arrival:{minutes:20}},
+      lastUpdatedText:'Status Last Updated 2 Minutes Ago'
+    },
+    departureAirport:{
+      fs:'DTW',iata:'DTW',city:'Detroit',name:'Detroit Metro',gate:'A31',terminal:'EM',
+      timeZoneRegionName:'America/Detroit',
+      times:{scheduled:{time:'5:30',ampm:'PM',time24:'17:30',timezone:'EDT'},estimatedActual:{time:'6:13',ampm:'PM',time24:'18:13',timezone:'EDT'}}
+    },
+    arrivalAirport:{fs:'MBS',iata:'MBS',city:'Saginaw',name:'MBS International'},
+    additionalFlightInfo:{equipment:{iata:'CR9',name:'Bombardier CRJ900',title:'Actual'}},
+    positional:{flexTrack:{tailNumber:'N912XJ',equipment:'CR9'}},
+    schedule:{scheduledDepartureUTC:'2026-10-07T21:30:00Z',estimatedActualDepartureUTC:'2026-10-07T22:13:00Z'}
+  };
+  const result=assignmentApi.sanitizeFlight(
+    flight,
+    {display:'DL1234'},
+    'https://www.flightstats.com/v2/flight-tracker/DL/1234?flightId=1'
+  );
+  assert.equal(result.tailNumber,'N912XJ');
+  assert.equal(result.assignmentState,'assigned');
+  assert.equal(result.origin.iata,'DTW');
+  assert.equal(result.destination.iata,'MBS');
+  assert.equal(result.origin.gate,'A31');
+  assert.equal(result.flightStatus.departureDelayMinutes,43);
+  assert.equal(result.equipment.name,'Bombardier CRJ900');
+  assert.equal(result.currentLeg,undefined);
+});
+
+test('registration lookup support is explicit and preserves grounded aircraft without fabricating a position', () => {
+  assert.equal(api.normalizeRegistration(' n463aa '),'N463AA');
+  assert.equal(api.normalizeRegistration('***'),null);
+  const seen=api.sanitizeSeenAircraft({r:'N463AA',t:'A21N',alt_baro:'ground',seen:4.5},'N463AA');
+  assert.equal(seen.registration,'N463AA');
+  assert.equal(seen.onGround,true);
+  assert.equal(seen.aircraftTypeName,'Airbus A321neo');
+  assert.equal(seen.lastSeenSeconds,4.5);
+});
+
+test('client resolves scheduled assignment first, then follows the exact tail by registration', () => {
+  assert.match(client, /fetch\('\/api\/flight-assignment\?' \+ params\.toString\(\)/);
+  assert.match(client, /\/api\/flight-tracker\?registration=/);
+  assert.match(client, /assignedTail = data\.tailNumber \|\| null/);
+  assert.match(client, /assignmentChangedFrom = priorTail && assignedTail && priorTail !== assignedTail/);
+  assert.match(client, /setInterval\(\(\) => \{[\s\S]*loadAssignment\(activeFlight,activeDate,activeFlightId,\{silent:true\}\)[\s\S]*\},60000\)/);
+  assert.match(client, /if \(assignedTail\) loadRegistration\(assignedTail,\{silent:true\}\)/);
+});
+
+test('client answers whether the assigned aircraft is actually inbound to the departure airport', () => {
+  assert.match(client, /const inboundToOrigin = live\?\.route\?\.destination && userOrigin && sameAirport\(live\.route\.destination,userOrigin\)/);
+  assert.match(client, /Your plane is on the way to/);
+  assert.match(client, /THIS IS THE PLANE FOR YOUR FLIGHT/);
+  assert.match(client, /It is not yet on a leg that ends at/);
+  assert.match(client, /airline recently changed the assigned aircraft/);
+});
+
+test('assignment source remains a bounded best-effort dependency with live-flight fallback', () => {
+  const source = fs.readFileSync(path.join(root,'api','flight-assignment.js'),'utf8');
+  assert.match(source, /www\.flightstats\.com\/v2/);
+  assert.match(source, /__NEXT_DATA__ = /);
+  assert.match(source, /tailNumber/);
+  assert.match(source, /source-unavailable/);
+  assert.match(source, /Aircraft assignments can change before departure/);
+  assert.match(client, /AIRCRAFT ASSIGNMENT UNAVAILABLE/);
+  assert.match(client, /loadFlight\(activeFlight,\{silent:false\}\)/);
 });
